@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>王国守望 · UX交互线稿 v0.1</title>
+<style>
+:root{
+  --wood:#3a2e23;--wood2:#57432c;--parch:#e9dcb5;--gold:#f2b23e;--gold2:#c98a1a;
+  --green:#7fb841;--orange:#ef9d3c;--red:#e5484d;--blue:#4fa8ff;--purple:#b96bff;
+  --ink:#241c12;--line:rgba(255,255,255,.45);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:"Microsoft YaHei",system-ui,sans-serif;background:#15181c;color:#e8e4da;display:flex;flex-direction:column;overflow:hidden}
+#top{height:48px;background:#1d2126;border-bottom:1px solid #2c323a;display:flex;align-items:center;gap:14px;padding:0 14px;flex:none}
+#top h1{font-size:15px;color:var(--gold)}
+#top .tg{display:flex;align-items:center;gap:5px;font-size:12px;color:#aab;cursor:pointer;user-select:none}
+#top .tg input{accent-color:var(--gold)}
+#top .sp{flex:1}
+#top .ver{font-size:11px;color:#667}
+#wrap{flex:1;display:flex;min-height:0}
+#nav{width:196px;flex:none;background:#1a1e23;border-right:1px solid #2c323a;overflow-y:auto;padding:10px 8px}
+#nav .grp{font-size:11px;color:#778;margin:10px 6px 4px}
+#nav button{display:block;width:100%;text-align:left;background:none;border:0;color:#cdd2d8;font-size:13px;padding:8px 10px;border-radius:8px;cursor:pointer}
+#nav button:hover{background:#242a31}
+#nav button.on{background:var(--gold);color:#241c12;font-weight:700}
+#nav button .en{display:block;font-size:10px;color:inherit;opacity:.6}
+#stage{flex:1;overflow:auto;display:flex;justify-content:center;align-items:flex-start;padding:22px;background:
+ radial-gradient(1200px 600px at 50% -100px,#232a33,#15181c)}
+.phone{width:375px;height:667px;flex:none;position:relative;background:#000;border-radius:22px;
+ outline:10px solid #262b31;box-shadow:0 24px 60px rgba(0,0,0,.6);overflow:hidden}
+.phone.grid::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:99;
+ background-image:linear-gradient(rgba(120,200,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(120,200,255,.08) 1px,transparent 1px);
+ background-size:25px 25px}
+.phone.safe::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:98;
+ border-top:22px solid rgba(229,72,77,.14);border-bottom:17px solid rgba(229,72,77,.14)}
+.screen{position:absolute;inset:0;background:#101418;overflow:hidden}
+/* 占位组件 */
+.ph{position:absolute;border:1.5px dashed var(--line);background:rgba(130,140,150,.16);border-radius:5px;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;overflow:hidden;z-index:5}
+.ph b{font-size:9px;color:#fff;text-shadow:0 1px 2px #000;text-align:center;line-height:1.25;padding:0 3px;font-weight:600}
+.ph span{font-size:7.5px;font-family:Consolas,monospace;color:#ffe9a8;text-shadow:0 1px 2px #000}
+.ph em{font-size:7px;font-style:normal;font-family:Consolas,monospace;color:rgba(255,255,255,.6)}
+body.noanno .ph span,body.noanno .ph em{display:none}
+.ph.circ{border-radius:50%}
+.ph.dark{background:rgba(20,24,30,.72)}
+.ph.gold{background:rgba(242,178,62,.14);border-color:var(--gold)}
+.ph.red{background:rgba(229,72,77,.12);border-color:var(--red)}
+.ph.blue{background:rgba(79,168,255,.10);border-color:var(--blue)}
+.ph.purple{background:rgba(185,107,255,.10);border-color:var(--purple)}
+.ph.green{background:rgba(127,184,65,.10);border-color:var(--green)}
+.txt{position:absolute;z-index:6;display:flex;align-items:center;justify-content:center;color:#fff;
+ text-shadow:0 1px 2px rgba(0,0,0,.8);text-align:center;line-height:1.2}
+.dim{position:absolute;inset:0;background:rgba(6,8,12,.68);z-index:20}
+.dim.red{background:rgba(80,10,12,.72)}
+.ovl{position:absolute;inset:0;z-index:30}
+.ovl .dim{z-index:0}
+.bar{position:absolute;height:6px;background:rgba(255,255,255,.12);border-radius:3px;z-index:6;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--green);border-radius:3px}
+/* 右侧说明 */
+#notes{width:352px;flex:none;background:#1a1e23;border-left:1px solid #2c323a;overflow-y:auto;padding:14px}
+#notes h2{font-size:15px;color:var(--gold);margin-bottom:8px}
+#notes h3{font-size:12px;color:#8fc; margin:12px 0 5px;border-left:3px solid var(--gold);padding-left:6px}
+#notes p,#notes li{font-size:12px;line-height:1.65;color:#c8cdd4}
+#notes ul{padding-left:16px}
+#notes table{width:100%;border-collapse:collapse;margin:6px 0;font-size:11px}
+#notes th{background:#242a31;color:#9ab;text-align:left;padding:4px 6px;font-weight:600}
+#notes td{border-top:1px solid #2c323a;padding:4px 6px;color:#c8cdd4;vertical-align:top}
+#notes code{font-family:Consolas,monospace;background:#242a31;padding:0 4px;border-radius:4px;color:#ffe9a8;font-size:10.5px}
+/* 资源清单页 */
+#stage .sheet{width:860px;background:#1a1e23;border:1px solid #2c323a;border-radius:14px;padding:20px 24px;margin:0 auto}
+.sheet h2{color:var(--gold);font-size:17px;margin-bottom:4px}
+.sheet p{font-size:12.5px;color:#c8cdd4;line-height:1.7}
+.sheet table{width:100%;border-collapse:collapse;font-size:11.5px;margin:8px 0 18px}
+.sheet th{background:#242a31;color:#9ab;text-align:left;padding:5px 8px;position:sticky;top:0}
+.sheet td{border-top:1px solid #2c323a;padding:5px 8px;color:#c8cdd4}
+.sheet td code{font-family:Consolas,monospace;color:#ffe9a8;font-size:10.5px}
+.sheet .gh{color:#8fc;font-size:13px;margin:14px 0 2px}
+.sw{display:inline-block;width:13px;height:13px;border-radius:3px;vertical-align:-2px;margin-right:4px;border:1px solid rgba(255,255,255,.25)}
+</style>
+</head>
+<body class="">
+<header id="top">
+  <h1>王国守望 · UX 交互线稿</h1>
+  <label class="tg"><input type="checkbox" id="tgAnno" checked>资产标注</label>
+  <label class="tg"><input type="checkbox" id="tgSafe">安全区</label>
+  <label class="tg"><input type="checkbox" id="tgGrid">网格(50px)</label>
+  <div class="sp"></div>
+  <div class="ver">设计分辨率 750×1334 · 线稿半比例 375×667 · v0.1</div>
+</header>
+<div id="wrap">
+  <nav id="nav"></nav>
+  <main id="stage"></main>
+  <aside id="notes"></aside>
+</div>
+<script>
+/* ============ 工具 ============ */
+function ph(id,l,t,w,h,o){o=o||{};var s="left:"+l/2+"px;top:"+t/2+"px;width:"+w/2+"px;height:"+h/2+"px;"+(o.css||"");
+  return '<div class="ph '+(o.cls||"")+'" style="'+s+'"><b>'+(o.txt||"&nbsp;")+'</b><span>'+id+'</span><em>'+w+"×"+h+'</em></div>';}
+function txt(l,t,w,h,inner,cls,css){var s="left:"+l/2+"px;top:"+t/2+"px;width:"+w/2+"px;height:"+h/2+"px;"+(css||"");
+  return '<div class="txt '+(cls||"")+'" style="'+s+'">'+inner+'</div>';}
+function bar(l,t,w,pct,color){return '<div class="bar" style="left:'+l/2+'px;top:'+t/2+'px;width:'+w/2+'px"><i style="width:'+pct+'%;'+(color?'background:'+color:'')+'"></i></div>';}
+function E(sel,html){document.querySelector(sel).innerHTML=html;}
+
+/* ============ 屏幕定义 ============ */
+var SCREENS={};
+
+/* ---- S1 战斗HUD ---- */
+SCREENS.battle={name:"① 关卡战斗 HUD",en:"Battle HUD",render:function(){
+  var s='';
+  s+=ph("bg_ch1_forest",0,0,750,1334,{cls:"dark",css:"background:rgba(46,64,52,.30);border-color:rgba(120,180,110,.4)",txt:"战场背景 · 第1章 腐朽森林(占位)"});
+  /* 顶部: 刘海屏遮挡预留区 */
+  s+=ph("safe_notch",255,0,240,64,{cls:"red",css:"border-radius:0 0 16px 16px;border-top:none",txt:"刘海遮挡预留区(禁放UI)"});
+  /* 顶部栏(刘海下方) */
+  s+=ph("ui_topbar",16,100,718,70,{cls:"dark",txt:""});
+  s+=ph("ui_icon_pause",30,105,60,60,{cls:"gold",txt:"⏸"});
+  s+=txt(110,114,140,40,"00:36",'','font-size:11px;opacity:.75');
+  s+=txt(250,110,300,50,"<b style='color:#ffe08a;font-size:14px'>1-1 腐朽森林·前哨</b>",'','font-size:12px');
+  s+=ph("ui_wave_pill",560,105,150,60,{txt:"波次 3/10"});
+  /* 顶部经验条 + Lv徽章骑条居中 */
+  s+=ph("ui_bar_exp",30,176,690,12,{txt:""});
+  s+=bar(30,176,690,35,"#4fa8ff");
+  s+=ph("ui_lv_badge",330,166,90,32,{cls:"dark",css:"border-radius:10px",txt:"Lv.2"});
+  /* 预警横幅位(仅大波/BOSS) */
+  s+=ph("ui_banner_warn",115,226,520,72,{cls:"gold",txt:"敌军大部队来袭！(仅狂潮/BOSS时显示)"});
+  s+=ph("ui_boss_hp",175,304,400,36,{cls:"red",txt:"BOSS头顶血条(仅BOSS)"});
+  /* 左列: 调试/倍速/统计 */
+  s+=txt(24,210,120,30,"FPS:60",'','font-size:10px;color:#7ee787');
+  s+=ph("ui_btn_speed",24,240,60,60,{cls:"gold",txt:"X1<br>倍速"});
+  s+=ph("ui_btn_stats",24,320,60,60,{cls:"gold",txt:"📊<br>伤害统计"});
+  /* 右下角: 大招按钮区(4×1 右对齐纵列,各英雄独立充能) */
+  for(var i=0;i<4;i++){
+    var x=636,y=740+i*100;
+    s+=ph("hero_{id}_ult_btn",x,y,90,90,{cls:"gold circ",txt:"大招"+(i+1)+"<br>68%"});
+    s+=ph("ui_ring_charge",x,y,90,90,{cls:"circ",css:"background:transparent",txt:""});
+  }
+  s+=txt(546,712,180,22,"大招区(4×1·独立充能)",'','font-size:8.5px;color:#89f');
+  /* 反馈气泡 P2(左列) */
+  s+=ph("ui_icon_chat",24,400,60,60,{cls:"dark",txt:"💬 P2"});
+  /* 防线工事 + 4英雄站位(防线后) + 头顶普攻/技能图标 */
+  s+=ph("bg_line_ch1",0,1180,750,154,{cls:"dark",css:"background:rgba(90,74,50,.30)",txt:"防线工事 · 沙包/木栅+盾徽(王国保卫战风)"});
+  var hxs=[95,240,385,530];
+  for(var j=0;j<4;j++){
+    var x=hxs[j];
+    s+=ph("hero_aila_battle",x,1170,100,120,{cls:"dark",txt:"英雄"+(j+1)+"<br>立绘占位"});
+    s+=ph("hero_{id}_atk_icon",x+1,1162,46,46,{cls:"gold circ",txt:"普攻"});
+    s+=ph("hero_{id}_skill_icon",x+53,1162,46,46,{cls:"blue circ",txt:"技能"});
+    s+=ph("hero_{id}_skill_cd",x+53,1162,46,46,{cls:"blue circ",css:"background:transparent",txt:""});
+  }
+  /* 防线耐久条: 条内居中耐久值 + 右侧百分比 + 盾值胶囊(右→左覆盖) */
+  s+=ph("ui_bar_hp",55,1138,640,20,{txt:""});
+  s+=bar(55,1138,640,90);
+  s+=txt(55,1138,640,20,"900/1000",'','font-size:9px;font-weight:700');
+  s+=ph("ui_bar_shield",567,1136,128,24,{cls:"blue",css:"border-radius:12px;background:rgba(79,168,255,.45)",txt:"100"});
+  s+=txt(698,1136,48,24,"90%",'','font-size:10px;color:#9fe08a');
+  s+=txt(331,810,100,30,"×4英雄",'','font-size:9px;color:#89f');
+  return s;},
+ notes:{
+  layout:["顶部预留刘海遮挡区(高64px，禁放任何UI)；顶栏在其下方：暂停(左) / 关卡名(中) / 波次胶囊(右，波次N/M)。",
+   "顶栏下方为全队共享经验条(690×12，蓝色填充)，Lv 徽章(90×32)骑在经验条正中央。",
+   "左列：FPS(仅Debug包) / 倍速(1x↔2x) / 伤害统计 / 反馈气泡(P2)；无左下角计数栈(耐久/金币/击杀计数已裁剪，金币自动收取只计不显)。",
+   "普攻/技能图标(金/蓝，各46×46，技能带CD环)左右并排，位于耐久条正下方(y1162，与条底留4px)，压住英雄头顶形成锚定、不遮挡耐久条；英雄站位在防线工事之后(防线后一点)。",
+   "防线耐久条(640×20)：条内居中显示耐久值(900/1000)，条右侧显示百分比(90%)；盾值以蓝色胶囊从右向左覆盖耐久条，宽度=盾值/耐久上限比例，盾值数字居中显示，无盾时整条隐藏。盾值唯一来源=基地城墙建筑效果(升级提升耐久上限，每 5 级阶段奖励开局盾值)，伤害先扣盾再扣耐久。",
+   "右侧为大招按钮纵列(4×1 右对齐，共 4 钮，各英雄独立充能环，充能满高亮呼吸、点击直接释放)。",
+   "预警横幅与 BOSS 血条平时隐藏，事件触发时从顶部滑入。"],
+  interact:["暂停→④；大招按钮→直接释放（极简演出）；伤害统计→③；三选一触发→②（全场冻结）。",
+   "点击普攻/技能/未充满大招图标 → 图标侧边弹出属性Tips(⑧)，再点关闭，战斗不暂停。",
+   "耐久<30%：耐久条红光呼吸 + 防线抖动；耐久归零 → ⑤ 失败结算弹窗内看广告复活。"],
+  diff:["参考图右侧为『武器卡+技能槽列』；本项目改为英雄头顶普攻/技能双图标 + 右侧纵列大招按钮(4×1，随英雄解锁逐格点亮)。",
+   "参考图波次 1/20 固定节奏；本项目清场驱动，进度条含义=波序。",
+   "参考图单英雄+宠物；本项目 4 英雄站桩，无宠物。"]
+ }};
+
+/* ---- S2 三选一 ---- */
+SCREENS.pick={name:"② 三选一强化弹窗",en:"Upgrade Pick",render:function(){
+  var s='';
+  s+=SCREENS.battle.render();
+  s+='<div class="ovl"><div class="dim"></div>';
+  s+=ph("ui_banner_title",115,308,520,88,{cls:"gold",txt:"选择强化"});
+  var cards=[
+    {r:"#c9d6df",name:"磨利刀刃",desc:"学习 攻击力+20%",badge:"白·攻击"},
+    {r:"#4fa8ff",name:"连射",desc:"学习 连射(同线串弹+1)",badge:"蓝·普攻"},
+    {r:"#b96bff",name:"分裂",desc:"学习 分裂(命中分裂2支)",badge:"紫·普攻"}
+  ];
+  var xs=[32,275,518];
+  for(var i=0;i<3;i++){var c=cards[i],x=xs[i];
+    s+=ph("ui_card_frame_"+["white","blue","purple"][i],x,428,200,360,{cls:"dark",txt:""});
+    s+=ph("ui_card_header",x,428,200,52,{css:"background:"+c.r+"33;border-color:"+c.r,txt:"<b style='color:"+c.r+"'>"+c.name+"</b>"});
+    s+=ph("ui_gear_ring",x+40,498,120,120,{cls:"circ dark",txt:"卡图标"});
+    s+=ph("fx_card_icon_"+i,x+55,513,90,90,{cls:"circ",txt:"96×96"});
+    s+=ph("ui_badge_hero",x+140,436,56,56,{cls:"circ gold",txt:"英雄"});
+    s+=ph("ui_badge_new",x-16,412,56,56,{cls:"green circ",txt:"新"});
+    s+=txt(x,698,200,60,c.desc,'','font-size:10px;color:#e9dcb5');
+    s+=txt(x,728,200,30,c.badge,'','font-size:9px;opacity:.7');
+  }
+  s+=txt(150,818,450,40,"当局剩余观看次数 1/1",'','font-size:12px;color:#cfe3ff');
+  s+=ph("ui_btn_ad_refresh",130,862,300,76,{cls:"green",txt:"▶ 广告刷新"});
+  s+=ph("ui_btn_diamond_refresh",460,862,180,76,{cls:"gold",txt:"💎2 钻石刷新"});
+  s+=ph("ui_icon_eye",660,968,60,60,{cls:"dark circ",txt:"👁"});
+  s+=txt(150,972,450,60,"（👁长按可透视战场）",'','font-size:10px;opacity:.6');
+  s+='</div>';
+  return s;},
+ notes:{
+  layout:["半透明黑罩(70%)压住战斗场景；撕纸质感金色标题横幅『选择强化』(520×88)。",
+   "3 张卡 200×360，间距 16：顶部稀有度色条(白/蓝/紫)+卡名 → 齿轮环内 90×90 卡图标 → 右上英雄归属角标(56×56 圆形小头像) → 左上『新』角标(首次出现) → 底部描述两行。",
+   "卡池混合抽卡：上阵英雄各自卡池按权重抽 3 张不重复，全局卡无归属角标。"],
+  interact:["点击卡片→学习并恢复战斗；同名卡叠加，右上角不显示层数(叠层在描述文案中体现)。",
+   "刷新：每弹窗内广告刷新×1 + 钻石刷新×1(2钻/次)，用完置灰；跨弹窗重置。",
+   "连升多级：弹窗排队依次弹出。"],
+  diff:["参考图只有广告刷新一个按钮；本项目增加钻石刷新双通道。",
+   "参考图无归属概念；本项目每张卡标注归属英雄头像（按英雄单独强化）。"]
+ }};
+
+/* ---- S3 伤害统计 ---- */
+SCREENS.stats={name:"③ 伤害统计 Tips",en:"Damage Stats",render:function(){
+  var s='';
+  s+=ph("bg_ch1_forest",0,0,750,1334,{cls:"dark",css:"background:rgba(46,64,52,.30);border-color:rgba(120,180,110,.4)",txt:"(战斗场景透底)"});
+  s+=ph("ui_topbar",16,16,718,70,{cls:"dark",txt:""});
+  s+=ph("ui_icon_pause",30,21,60,60,{cls:"gold",txt:"⏸"});
+  s+=txt(250,26,300,50,"<b style='color:#ffe08a;font-size:14px'>1-1 腐朽森林·前哨</b>",'','font-size:12px');
+  s+=ph("ui_wave_pill",560,21,150,60,{txt:"波次 3/10"});
+  s+=ph("ui_btn_stats_on",24,270,60,60,{cls:"gold",css:"border-color:#ffe08a;border-width:3px;background:rgba(242,178,62,.35)",txt:"📊"});
+  var rows=[["艾拉·风羽","82.22%","1.14W",82],["焰·辉","9.31%","1.29K",9],["沃尔·雷霆","8.47%","1.18K",8],["全局卡/防线","0%","0",0]];
+  s+=ph("ui_panel_stats",135,440,360,470,{cls:"dark",txt:""});
+  s+=txt(135,452,360,50,"— 伤害统计 —",'','font-size:13px;color:#ffe08a');
+  for(var i=0;i<rows.length;i++){var r=rows[i],y=510+i*100;
+    s+=ph("hero_{id}_avatar",155,y,70,70,{cls:"dark circ",txt:"头像"});
+    s+=txt(240,y+2,150,40,r[0],'','font-size:11px;text-align:left');
+    s+=txt(380,y+2,100,40,r[1],'','font-size:11px;color:#ffb454;text-align:right');
+    s+=ph("ui_row_bar",240,y+48,225,16,{txt:""});
+    s+=bar(240,y+48,225,r[3],"#f2a13c");
+    s+=txt(240,y+48,225,16,"<b>"+r[2]+"</b>",'','font-size:9px;font-weight:700;text-shadow:0 1px 2px #000');
+  }
+  return s;},
+ notes:{
+  layout:["统计按钮激活态(金色高亮描边)；面板 360×470 半透明，左上区域浮于战场之上，不暂停游戏。",
+   "每行：英雄圆头像 70×70 + 名称 + 百分比 + 占比条(225×16)，伤害数值(自动 W/K 格式化)居中显示在占比条内。"],
+  interact:["再点按钮或点面板收起箭头收起；数据=DamageService 全局累计(普攻/技能/大招分列可作 P2 二级展开)。"],
+  diff:["参考图统计对象是武器/技能(红蜘蛛、制导激光)；本项目统计对象是英雄(按归属英雄聚合)。"]
+ }};
+
+/* ---- S4 暂停 ---- */
+SCREENS.pause={name:"④ 暂停弹窗",en:"Pause",render:function(){
+  var s='';
+  s+=SCREENS.battle.render();
+  s+='<div class="ovl"><div class="dim"></div>';
+  s+=txt(187,400,375,90,"暂 停",'','font-size:34px;font-weight:800;color:#fff;letter-spacing:6px');
+  s+=txt(187,516,375,50,"— 已获得奖励 —",'','font-size:15px;color:#ffe08a');
+  var rw=[["ui_icon_coin","🪙","40"],["fx_icon_exp","EXP","15"],["ui_icon_chest","🎁","1"]];
+  for(var i=0;i<3;i++){var x=207+i*120;
+    s+=ph(rw[i][0],x,570,96,96,{cls:"dark",txt:"<b style='font-size:18px'>"+rw[i][1]+"</b>"});
+    s+=txt(x,640,96,36,rw[i][2],'','font-size:11px');
+  }
+  var tabs=["奖励总览","伤害统计","设置"];
+  for(var t=0;t<3;t++){var tx=25+t*235;
+    s+=ph("ui_tab_item",tx,780,225,72,{cls:t==0?"gold":"dark",txt:tabs[t]});
+  }
+  s+=ph("ui_btn_exit",50,880,300,88,{cls:"gold",txt:"⏻ 退出"});
+  s+=ph("ui_btn_resume",400,880,300,88,{cls:"gold",txt:"▶ 继续战斗"});
+  s+='</div>';
+  return s;},
+ notes:{
+  layout:["大标题『暂停』+ 已获得奖励图标行(金币/关卡经验类道具/宝箱)；底部页签条 + 双按钮。",
+   "设置页签：音乐/音效/振动开关 + 倍速快捷切换；问题上报入口已整体移除（反馈走 TapTap 站内）。"],
+  interact:["退出→二次确认(中途退出无奖励)；继续战斗→恢复；奖励图标点击无响应(仅展示)。"],
+  diff:["与参考图一致，仅奖励内容与页签数按本项目裁剪。"]
+ }};
+
+/* ---- S6 胜利结算 ---- */
+SCREENS.win={name:"⑥ 胜利结算",en:"Victory",render:function(){
+  var s='';
+  s+=SCREENS.battle.render();
+  s+='<div class="ovl"><div class="dim"></div>';
+  s+=txt(187,340,375,90,"挑战成功！",'','font-size:32px;font-weight:800;color:#ffd45e;letter-spacing:3px');
+  for(var i=0;i<3;i++){var x=217+i*110;
+    s+=ph("ui_star",x,450,96,96,{cls:i<3?"gold circ":"dark circ",css:"background:"+(i<3?"rgba(242,178,62,.25)":"rgba(255,255,255,.06)"),txt:"★"});
+  }
+  s+=txt(187,558,375,44,"— 已获得奖励 —",'','font-size:14px;color:#ffe08a');
+  var rw=[["ui_icon_coin","🪙","128"],["fx_icon_equip","🛡","2阶护符"],["ui_icon_diamond","💎","6"],["ui_icon_chest","🎁","1"]];
+  for(var j=0;j<4;j++){var x2=117+j*140;
+    s+=ph(rw[j][0],x2,606,96,96,{cls:"dark",txt:"<b style='font-size:17px'>"+rw[j][1]+"</b>"});
+    s+=txt(x2,676,96,36,rw[j][2],'','font-size:10px');
+  }
+  s+=ph("ui_btn_double",580,714,120,120,{cls:"green circ",txt:"▶<br>双倍<br>3/3"});
+  var tabs=["奖励总览","伤害统计"];
+  for(var t=0;t<2;t++){var tx=40+t*340;
+    s+=ph("ui_tab_item",tx,840,330,72,{cls:t==0?"gold":"dark",txt:tabs[t]});
+  }
+  s+=ph("ui_btn_next",50,940,300,88,{cls:"green",txt:"下一关 ▶"});
+  s+=ph("ui_btn_back",400,940,300,88,{cls:"gold",txt:"返回"});
+  s+='</div>';
+  return s;},
+ notes:{
+  layout:["金星行按星级点亮(≥90% 三星 / 40-90% 两星 / ≤40% 一星)，逐颗弹出动画+音效。",
+   "奖励行：金币/装备/钻石/宝箱；右下角圆形广告按钮『双倍奖励』(剩余次数 3/3=每日3次，可调)。",
+   "页签仅 奖励总览/伤害统计；无体力显示(对比参考图 735/5)。"],
+  interact:["双倍→看完广告金币×2，按钮变已领取；下一关→直接进下一关编队确认；返回→选关地图。"],
+  diff:["参考图有体力条(肉类图标)；本项目无体力系统，位置删除。"]
+ }};
+
+/* ---- S5 失败结算(含广告复活) ---- */
+SCREENS.lose={name:"⑤ 失败结算(含广告复活)",en:"Defeat & Revive",render:function(){
+  var s='';
+  s+=SCREENS.battle.render();
+  s+='<div class="ovl"><div class="dim"></div>';
+  s+=ph("ui_banner_lose_hazard",80,340,590,100,{cls:"red",txt:""});
+  s+=txt(187,350,375,80,"挑战失败",'','font-size:30px;font-weight:800;color:#fff;letter-spacing:4px');
+  s+=txt(187,480,375,44,"— 已获得奖励（保底 30%）—",'','font-size:13px;color:#ffb0a0');
+  var rw=[["ui_icon_coin","🪙","38"],["fx_icon_equip","🛡","无"],["fx_icon_exp","EXP","9"]];
+  for(var i=0;i<3;i++){var x=167+i*160;
+    s+=ph(rw[i][0],x,528,96,96,{cls:"dark",txt:"<b style='font-size:17px'>"+rw[i][1]+"</b>"});
+    s+=txt(x,598,96,36,rw[i][2],'','font-size:10px');
+  }
+  /* 看广告复活按钮：与胜利结算双倍按钮同位同尺寸(右下圆形120×120) */
+  s+=txt(187,668,375,30,"复活：耐久 +30% · 不限次 · 不看广告即接受失败",'','font-size:9.5px;opacity:.7');
+  s+=ph("ui_btn_revive_ad",580,700,120,120,{cls:"green circ",css:"border-width:2.5px",txt:"▶<br>复活<br>+30%"});
+  var tabs=["奖励总览","伤害统计"];
+  for(var t=0;t<2;t++){var tx=40+t*340;
+    s+=ph("ui_tab_item",tx,840,330,72,{cls:t==0?"gold":"dark",txt:tabs[t]});
+  }
+  s+=ph("ui_btn_retry",50,940,300,88,{cls:"green",txt:"↻ 再来一次"});
+  s+=ph("ui_btn_back",400,940,300,88,{cls:"gold",txt:"返回"});
+  s+='</div>';
+  return s;},
+ notes:{
+  layout:["危险条纹横幅标题(参考图同款)；奖励按失败保底 30% 发放；右下角圆形「▶ 复活 +30%」广告按钮(120×120)与胜利结算双倍按钮同位同尺寸——独立复活弹窗已取消。",
+   "失败结算不设问题上报入口；整体内容块(y340~1028)与胜利结算同节奏、以屏幕垂直中心为重心。"],
+  interact:["看广告复活：耐久+30% 继续本局，无限次；不看广告即接受失败（发保底）。【待定】复活瞬间是否附清屏/2s无敌(默认不清屏)。",
+   "再来一次→同一关重开；返回→选关地图；失败不发双倍广告按钮(避免挫败+广告叠加)。"],
+  diff:["参考图失败页仍有 3/3 双倍奖励按钮与体力条；本项目均去除（无体力 + 失败不弹广告）。复活入口与参考图不同：合并进失败结算弹窗页签行，不单独弹层。"]
+ }};
+
+/* ---- S7 技能范围可视化 ---- */
+SCREENS.range={name:"⑦ 英雄索敌范围可视化",en:"Range Visual",render:function(){
+  var s='';
+  s+=ph("bg_ch1_forest",0,0,750,1334,{cls:"dark",css:"background:rgba(46,64,52,.30);border-color:rgba(120,180,110,.4)",txt:"战场背景透底"});
+  s+=ph("bg_line_ch1",0,1180,750,154,{cls:"dark",css:"background:rgba(90,74,50,.30)",txt:"防线"});
+  /* 同心圆：圆心=英雄立绘中心(375,1155)；普攻R520→1040直径，技能R416→832直径；弧线横贯战场，大部分圆在屏外(同参考图6) */
+  s+=ph("fx_range_attack",-145,635,1040,1040,{cls:"blue circ",css:"background:radial-gradient(circle,rgba(79,168,255,.14) 60%,rgba(79,168,255,.05));border-style:dashed;border-width:3px",txt:""});
+  s+=ph("fx_range_skill",-41,739,832,832,{cls:"purple circ",css:"background:transparent;border-style:dashed;border-width:2px",txt:""});
+  s+=ph("hero_aila_battle",320,1080,110,150,{cls:"dark",txt:"英雄<br>(圆心)"});
+  s+=txt(187,110,375,60,"以英雄为圆心的圆形索敌范围",'','font-size:15px;color:#cfe3ff');
+  s+=ph("ui_legend",40,190,300,110,{cls:"dark",txt:"图例：圆心=英雄<br>虚线圆=索敌范围，怪不入圈不攻击"});
+  s+=txt(187,980,375,40,"同心圆：普攻R520(蓝) / 技能R416(紫)，逐英雄配置",'','font-size:10px;opacity:.75');
+  return s;},
+ notes:{
+  layout:["两个虚线圆为同心圆，圆心=英雄立绘中心(设计px 375,1155)：普攻范围(蓝，基准半径520→直径1040)与技能范围(紫，基准416→直径832)；圆内淡色填充。",
+   "与参考图 6 同构：弧线横贯战场、圆大部分延伸到屏外（防线英雄在底部，射程覆盖上方战场），怪物不入圈则英雄不攻击。"],
+  interact:["显示时机(默认，待确认)：① 三选一选卡期间显示所有上阵英雄范围 ② 点按英雄卡短暂显示该英雄 1.5s ③ Debug 开关常显。"],
+  diff:["参考图 6 红色大圆即《向僵尸开炮》主角射程(以英雄为圆心)；本项目改为 蓝=普攻 / 紫=技能 双色区分，圆心必须落在英雄身上。"]
+ }};
+
+/* ---- S8 属性Tips弹层 ---- */
+SCREENS.tips={name:"⑧ 属性Tips弹层",en:"Stat Tips",render:function(){
+  var s='';
+  s+=SCREENS.battle.render();
+  s+='<div class="ovl">';
+  /* 参考截图布局：标题行(图标+名称) + 左标签/右数值两列行 + 底部关闭提示 */
+  function tip(x,y,w,h,title,rows){
+    var t=ph("ui_panel_tip",x,y,w,h,{cls:"dark",txt:""});
+    t+=txt(x+16,y+10,w-32,36,title,'','font-size:11.5px;font-weight:700;color:#ffe08a;text-align:left');
+    var lw=(w-32)*0.42,vw=(w-32)*0.58;
+    for(var i=0;i<rows.length;i++){
+      var ry=y+54+i*32;
+      t+=txt(x+16,ry,lw,28,rows[i][0],'','font-size:10px;color:#cfd6dd;text-align:left');
+      t+=txt(x+16+lw,ry,vw,28,"<b>"+rows[i][1]+"</b>",'','font-size:10px;color:#fff;text-align:right');
+    }
+    t+=txt(x,y+h-32,w,24,"点击空白处关闭",'','font-size:8.5px;opacity:.5');
+    return t;
+  }
+  /* 普攻Tips：锚定英雄1头顶普攻图标 */
+  s+=txt(16,534,300,24,"▼ 锚点：英雄1 头顶普攻图标",'','font-size:9px;color:#89f;text-align:left');
+  s+=tip(16,560,300,300,"🏹 普攻 · 风刃射击 Lv.2",[
+    ["伤害","45"],["攻速","1.2 次/秒"],["索敌范围","520"],["弹道","1 支"],["暴击","5% / 150%"],["目标","最靠下"]
+  ]);
+  /* 技能Tips：锚定英雄2头顶技能图标 */
+  s+=txt(330,304,300,24,"▼ 锚点：英雄2 头顶技能图标",'','font-size:9px;color:#89f;text-align:left');
+  s+=tip(330,330,300,300,"⚡ 技能 · 烈焰爆裂 Lv.3",[
+    ["伤害","288"],["冷却时间","10.0 秒"],["索敌范围","368"],["生效范围","120"],["附加","灼烧 3 秒"],["释放","自动"]
+  ]);
+  /* 大招Tips：锚定右侧大招按钮1(未充满状态点击) */
+  s+=txt(340,674,280,24,"◀ 锚点：大招按钮1(未充满)",'','font-size:9px;color:#89f;text-align:left');
+  s+=tip(340,700,280,270,"✦ 大招 · 箭雨风暴",[
+    ["伤害","900"],["充能","41 / 60"],["状态","未充满"],["生效范围","全屏"],["释放","手动点击"]
+  ]);
+  s+=txt(187,110,375,60,"点击图标 → 侧边弹出数值Tips（布局参照《向僵尸开炮》tips截图）",'','font-size:13px;color:#cfe3ff');
+  s+='</div>';
+  return s;},
+ notes:{
+  layout:["三类Tips面板(ui_panel_tip 九宫格，约280~300宽)：结构照参考截图——首行『图标+名称·等级』(金色) → 左标签/右数值两列行(标签灰白左对齐，数值白色加粗右对齐) → 底部灰字『点击空白处关闭』。",
+   "行字段按类型裁剪：普攻=伤害/攻速/索敌范围/弹道/暴击/目标优先；技能=伤害/冷却时间/索敌范围/生效范围/附加/释放；大招=伤害/充能(当前/上限)/状态/生效范围/释放。",
+   "锚定在触发的图标旁弹出：头顶图标向屏中弹出，大招按钮向左弹出；未充满的大招按钮点击时同样弹出Tips（按钮不发亮、不触发释放）。"],
+  interact:["点击图标弹出，再点图标或点空白处关闭；Tips 为悬浮层，战斗不暂停。",
+   "数值全部读自英雄/卡牌配置表，随局内强化实时刷新（如叠『连射』卡后弹道行即时+1）。"],
+  diff:["《向僵尸开炮》tips截图即此两列布局；本项目复用同构样式，字段按英雄/技能配置表动态生成。"]
+ }};
+
+/* ============ 资源清单数据 ============ */
+var MANIFEST=[
+["A · 通用 UI（ui_*）",[
+ ["ui_topbar","战斗顶栏底(九宫格)","750×70","1","战斗HUD","半透明黑+金描边"],
+ ["ui_wave_pill","波次胶囊","150×60","1","战斗HUD",""],
+ ["ui_bar_exp","顶部共享经验条(cap)","690×12","1","战斗HUD","蓝色填充,Lv徽章骑条居中"],
+ ["ui_lv_badge","等级徽章(Lv.2,骑经验条居中)","90×32","1","战斗HUD",""],
+ ["ui_bar_hp","防线耐久条(cap)","640×20","1","战斗HUD","绿→红渐变;条内居中耐久值,右侧百分比"],
+ ["ui_bar_shield","盾值胶囊(cap,叠于耐久条右段)","≤640×24","1","战斗HUD","宽=盾值/耐久上限,从右向左,默认隐藏;来源=城墙阶段等级奖励"],
+ ["ui_icon_pause","暂停图标","60×60","1","战斗HUD",""],
+ ["ui_btn_speed","倍速按钮(1x/2x两态)","60×60","2","战斗HUD",""],
+ ["ui_btn_stats","伤害统计按钮(常态/激活)","60×60","2","战斗HUD/统计",""],
+ ["ui_icon_chat","反馈气泡按钮","60×60","1","战斗HUD","P2"],
+ ["ui_icon_heart","耐久/生命图标","48×48","1","主城/结算","局内HUD左下角计数已裁剪"],
+ ["ui_icon_coin","金币图标","48×48","1","全局",""],
+ ["ui_icon_diamond","钻石图标","48×48","1","全局",""],
+ ["ui_icon_skull","击杀计数图标","48×48","1","结算/成就","局内HUD左下角计数已裁剪"],
+ ["ui_icon_chest","宝箱图标","96×96","1","结算/主城",""],
+ ["ui_icon_eye","透视战场眼睛按钮","60×60","1","三选一","P1"],
+ ["ui_video_badge","视频广告角标","48×48","1","全部广告位",""],
+ ["ui_banner_title","撕纸标题横幅(金)","520×88","1","三选一/结算","王国保卫战撕纸风"],
+ ["ui_banner_warn","来袭预警横幅","520×72","1","战斗HUD","狂潮/BOSS触发"],
+ ["ui_banner_lose_hazard","危险条纹横幅底","590×100","1","失败结算",""],
+ ["ui_tab_bar / ui_tab_item","页签条+页签(常态/激活)","690×72 / 178×72","1+2态","暂停/结算","九宫格"],
+ ["ui_panel_stats","伤害统计面板底(半透明九宫格)","360×470","1","伤害统计",""],
+ ["ui_panel_tip","属性Tips数值面板底(半透明九宫格)","300×400","1","战斗HUD","普攻/技能/大招通用"],
+ ["ui_row_bar","伤害占比条(cap)","225×16","1","伤害统计","伤害数值居中条内"],
+ ["ui_star","星星(亮/灰)","96×96","2态","胜利结算",""],
+ ["ui_card_frame_white/blue/purple","强化卡框(三稀有度)","200×360","3","三选一","羊皮纸+稀有度描边"],
+ ["ui_card_header","卡头稀有度条","200×52","3色","三选一",""],
+ ["ui_gear_ring","齿轮环(卡图标外框)","120×120","1","三选一",""],
+ ["ui_badge_new","『新』角标","56×56","1","三选一",""],
+ ["ui_badge_hero","卡面英雄归属角标框","56×56","1","三选一","内嵌英雄小头像"],
+ ["ui_btn_primary/green/dark","通用按钮(金/绿/暗，各两态)","240×88","3×2态","全局","九宫格"],
+ ["ui_ring_charge","大招充能环(底/进度)","64×64","2","战斗HUD","圆形进度"],
+ ["ui_legend","范围图例框","300×110","1","范围可视化","可程序绘制"]
+]],
+["B · 英雄（hero_*，×6 名）",[
+ ["hero_{id}_battle","战斗立绘(待机/攻击2帧或Spine)","110×150/帧","6×2+","战斗/编队","AI生成+拆层"],
+ ["hero_{id}_portrait","方头像","128×128","6","英雄卡/养成",""],
+ ["hero_{id}_avatar","圆头像(统计/归属角标)","96×96","6","伤害统计/三选一",""],
+ ["hero_{id}_atk_icon","普攻图标(战斗缩至46×46,头顶左)","96×96","6","战斗HUD",""],
+ ["hero_{id}_skill_icon","技能图标(战斗缩至46×46,头顶右,带CD环)","96×96","6","战斗HUD/养成",""],
+ ["hero_{id}_skill_cd","技能CD环(46×46,程序绘制)","程序","1","战斗HUD","可程序画圆环"],
+ ["hero_{id}_ult_icon","大招图标","96×96","6","英雄卡",""],
+ ["hero_{id}_skill_fx","技能特效(序列帧/粒子)","~300×300","6","战斗",""],
+ ["hero_{id}_ult_fx","大招全屏特效","~750×500","6","战斗","极简演出原则"]
+]],
+["C · 怪物（mob_*，14 小怪+3 精英+3 BOSS）",[
+ ["mob_{id}_walk","行走 2-3 帧","120×120/帧(BOSS 240)","20×2~3","战斗","精英金框tint复用"],
+ ["mob_{id}_attack","攻击 1-2 帧","同上","20×1~2","战斗",""],
+ ["mob_{id}_die","死亡(溶解/爆裂单帧或程序)","同上","20","战斗","可程序淡出省量"],
+ ["mob_boss_hp_frame","BOSS头顶血条框","400×36","1","战斗",""],
+ ["mob_{boss}_spawn_fx","BOSS登场定场特效","~500×300","3","战斗",""]
+]],
+["D · 场景（bg_*）",[
+ ["bg_ch1/ch2/ch3_forest,mountain,swamp","三章战场背景(竖幅完整)","750×1334","3","战斗","主色调:绿/棕橙/灰蓝"],
+ ["bg_line_ch1/ch2/ch3","三章防线工事(沙包木栅/岩壁要塞/墓碑栅栏)","750×154","3","战斗",""],
+ ["bg_deco_top_ch*","顶部装饰条(藤蔓/雾气)","750×24","3","战斗","可选"]
+]],
+["E · 弹道与特效（fx_*）",[
+ ["fx_proj_arrow/fireball/lightning/sniper/cannon/ice","六系弹道贴图","48×48(雷为节段64×16)","6","战斗","追踪弹+旋转"],
+ ["fx_hit_flash","受击闪红遮罩(可程序tint省图)","96×96","1","战斗",""],
+ ["fx_explosion","爆炸序列 4 帧","160×160","4","战斗","分裂/爆炸卡共用"],
+ ["fx_burn_ground","燃烧地面","200×120","1","战斗","火法/炮手"],
+ ["fx_freeze","冻结冰晶","96×96","1","战斗","冰法大招"],
+ ["fx_coin","金币飘落","32×32","1","战斗","自动收取动线"],
+ ["fx_lvup","升级光柱/卡牌升起光效","300×400","1","三选一",""],
+ ["fx_range_attack/skill","索敌范围虚线圈(可程序画)","程序/512","2","范围可视化","优先程序绘制"],
+ ["fx_icon_equip / fx_icon_exp","装备占位/经验图标","96×96","2","结算","装备图标随品质tint"]
+]],
+["F · 字体 / 音频（font_* / sfx_*）",[
+ ["font_number","伤害飘字描边数字","位图字体","1","战斗","免费商用授权核查"],
+ ["font_ui","UI字体(思源黑体/站酷免费商用)","TTF/位图","1","全局",""],
+ ["sfx_shoot_*/sfx_hit/sfx_coin/sfx_lvup/sfx_ult_*/sfx_line_hit/sfx_win/sfx_lose/sfx_btn","战斗与UI音效","—","~15","全局","免费音效库裁剪"],
+ ["bgm_battle/bgm_city","战斗/主城 BGM","—","2","全局","循环点位标注"
+]]]];
+
+/* ============ 设计规范/清单页渲染 ============ */
+function renderManifest(){
+  var h='<div class="sheet"><h2>美术资源清单（Asset Manifest）</h2><p>占位线稿中每个虚线框都标注了 <code>资源ID</code> 与 <code>设计尺寸</code>。美术产出按 ID 落文件即可无缝替换，无需改代码。</p>';
+  var total=0;
+  MANIFEST.forEach(function(g){
+    h+='<div class="gh">'+g[0]+'</div><table><tr><th>资源ID</th><th>说明</th><th>尺寸(设计px)</th><th>数量</th><th>使用界面</th><th>备注</th></tr>';
+    g[1].forEach(function(r){total+=parseInt(r[3])||1;
+      h+='<tr><td><code>'+r[0]+'</code></td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'</td><td>'+(r[5]||"")+'</td></tr>';});
+    h+='</table>';
+  });
+  h+='<p><b>规模合计</b>：清单条目约 '+MANIFEST.reduce(function(a,g){return a+g[1].length},0)+' 类，含帧数/变体总贴图量预估 <b>110~140 张</b>（程序化特效与 tint 复用可压至 ~100）。</p>';
+  h+='<p><b>图集分组建议</b>：<code>atlas_ui</code>(A组) / <code>atlas_hero</code>(B组) / <code>atlas_mob_ch1..3</code>(C组按章拆) / <code>atlas_fx</code>(E组) / 背景D组不打包(独立加载)。</p></div>';
+  return h;
+}
+function renderSpec(){
+  return '<div class="sheet"><h2>设计规范 & 美术对接说明</h2>'+
+  '<h3 class="gh">1 · 画布与安全区</h3><p>设计分辨率 <b>750×1334</b>（线稿以 375×667 半比例渲染）。安全区：顶部 96px（其中刘海遮挡预留区高 64px，禁放任何 UI，顶栏从 y=100 起）/ 底部 68px（手势条），全部 HUD 用 Widget 锚定安全区。长屏(19.5:9~20:9)上下延伸战场背景，UI 位置不变。</p>'+
+  '<h3 class="gh">2 · 字号 / 间距 / 圆角</h3><p>标题 44 / 区块标题 32 / HUD数值 26 / 正文 24 / 角标提示 20（设计px）。间距基准 8 的倍数；圆角：面板 24、按钮 16、卡片 12、图标胶囊 999。</p>'+
+  '<h3 class="gh">3 · 色板 Token</h3><p>'+
+  '<span class="sw" style="background:#3a2e23"></span>木质面板 #3A2E23　<span class="sw" style="background:#e9dcb5"></span>羊皮纸 #E9DCB5　<span class="sw" style="background:#f2b23e"></span>主金 #F2B23E　<span class="sw" style="background:#7fb841"></span>成功绿 #7FB841<br>'+
+  '<span class="sw" style="background:#ef9d3c"></span>警示橙 #EF9D3C　<span class="sw" style="background:#e5484d"></span>危险红 #E5484D　<span class="sw" style="background:#c9d6df"></span>稀有·白 #C9D6DF　<span class="sw" style="background:#4fa8ff"></span>稀有·蓝 #4FA8FF　<span class="sw" style="background:#b96bff"></span>稀有·紫 #B96BFF</p>'+
+  '<h3 class="gh">4 · 命名与导出规范</h3><p>命名 <code>&lt;分类&gt;_&lt;名称&gt;[_&lt;态&gt;].png</code>（如 <code>ui_btn_primary_press.png</code>、<code>mob_goblin_worker_walk_0.png</code>）。一律按设计稿尺寸导出（即 @2x 基准），PNG-32 透明底，单图 ≤512KB；序列帧后缀 <code>_0..n</code>；九宫格资源在清单备注栏标边距。</p>'+
+  '<h3 class="gh">5 · 占位→正式资源替换流程</h3><p>① 本线稿每个虚线框 = 一个资源位（ID+尺寸）→ ② Cocos 侧建 <code>assets/resources/ux/</code> 目录同名落图 → ③ <code>assetMap</code> 配置表 ID→路径，UI 绑定只认 ID → ④ AI 产出原画按清单批量生成 → 后期统一描边/色调 → 覆盖同名文件即完成换肤，零代码改动。</p>'+
+  '<h3 class="gh">6 · 与《向僵尸开炮》参考图的差异对照</h3><table><tr><th>参考图</th><th>本项目</th></tr>'+
+  '<tr><td>右侧武器卡+弹药 30/30</td><td>英雄头顶普攻/技能双图标 + 右侧纵列大招按钮(4×1 右对齐，击杀者独立充能)</td></tr>'+
+  '<tr><td>波次 1/20 固定节奏+倒计时</td><td>波次 N/M 清场驱动，无倒计时，保留本局用时显示</td></tr>'+
+  '<tr><td>单英雄站桩</td><td>4 英雄站防线，耐久条+金币/击杀计数栈</td></tr>'+
+  '<tr><td>三选一仅广告刷新</td><td>广告刷新×1 + 钻石刷新×1，卡面标注归属英雄</td></tr>'+
+  '<tr><td>伤害统计按武器/技能</td><td>按英雄聚合</td></tr>'+
+  '<tr><td>失败直达结算(含双倍/体力)</td><td>失败结算弹窗内含广告复活按钮(+30%耐久，无限次)；不看广告即接受失败；结算无体力、失败无双倍</td></tr>'+
+  '<tr><td>红色射程圈</td><td>以英雄为圆心的同心圆：蓝=普攻 / 紫=技能，选卡决策时显示</td></tr>'+
+  '<tr><td>—(无)</td><td>新增属性Tips：点击普攻/技能/未充满大招图标，侧边弹出数值详情</td></tr>'+
+  '</table></div>';
+}
+
+/* ============ 导航与渲染 ============ */
+var ORDER=["battle","pick","stats","pause","lose","win","range","tips","manifest","spec"];
+var CUR="battle";
+function renderNav(){
+  var h='<div class="grp">战斗界面线稿</div>';
+  ORDER.forEach(function(k){
+    var nm=k=="manifest"?"美术资源清单":k=="spec"?"设计规范 & 对接":SCREENS[k].name;
+    if(k=="manifest")h+='<div class="grp">美术资源阶段</div>';
+    h+='<button data-k="'+k+'" class="'+(CUR==k?"on":"")+'">'+nm+'<span class="en">'+(k=="manifest"?"Asset Manifest":k=="spec"?"Spec & Handoff":SCREENS[k].en)+'</span></button>';
+  });
+  E("#nav",h);
+  document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){CUR=b.dataset.k;renderAll();};});
+}
+function renderAll(){
+  renderNav();
+  var st=document.querySelector("#stage");
+  if(CUR=="manifest"){st.innerHTML=renderManifest();E("#notes",'<h2>资源清单</h2><p>按 A~F 六组列出全部资源位。占位线稿中的每个虚线框 ID 与此清单一一对应；美术按 ID 产出文件后覆盖 <code>resources/ux/</code> 即完成替换。</p><p>资源 ID 中的 <code>{id}</code> 为实例占位：<code>hero_&#123;id&#125;_portrait</code> → <code>hero_aila_portrait</code>、<code>mob_&#123;id&#125;_walk_0</code> → <code>mob_goblin_worker_walk_0</code>。</p><h3>规模预估</h3><p>总贴图 110~140 张；首包只含第1章相关+UI，2/3 章资源走 Asset Bundle 按需加载（对齐产品文档 §12.4 性能预算）。</p>');return;}
+  if(CUR=="spec"){st.innerHTML=renderSpec();E("#notes",'<h2>设计规范</h2><p>画布/安全区/字号/色板/命名/替换流程/参考图差异对照。数值最终以开发期调参为准，ID 与结构不变。</p>');return;}
+  var sc=SCREENS[CUR];
+  st.innerHTML='<div id="phone" class="phone"><div class="screen">'+sc.render()+'</div></div>';
+  var n='<h2>'+sc.name+'</h2>';
+  n+='<h3>布局说明</h3><ul>'+sc.notes.layout.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>';
+  n+='<h3>交互与状态</h3><ul>'+sc.notes.interact.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>';
+  n+='<h3>与参考图差异</h3><ul>'+sc.notes.diff.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>';
+  E("#notes",n);
+  applyToggles();
+}
+function applyToggles(){
+  var p=document.getElementById("phone");
+  if(p){p.classList.toggle("noanno",!document.getElementById("tgAnno").checked);
+    p.classList.toggle("safe",document.getElementById("tgSafe").checked);
+    p.classList.toggle("grid",document.getElementById("tgGrid").checked);}
+  document.body.classList.toggle("noanno",!document.getElementById("tgAnno").checked);
+}
+document.getElementById("tgAnno").onchange=applyToggles;
+document.getElementById("tgSafe").onchange=applyToggles;
+document.getElementById("tgGrid").onchange=applyToggles;
+renderAll();
+</script>
+</body>
+</html>

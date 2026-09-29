@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "target": "ES2018",
+    "module": "ES2015",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "cc": ["C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts"]
+    },
+    "strict": false,
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "lib": ["ES2018", "DOM"]
+  },
+  "include": ["KingdomWatch/assets/scripts/**/*.ts"]
+}
