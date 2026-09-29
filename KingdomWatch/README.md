@@ -53,6 +53,21 @@ npx -y -p typescript@5.4.5 tsc -p tsconfig.check.json
 `"cc"` 路径映射到本机引擎声明 `.../3.8.8/resources/.../bin/.declarations/cc.d.ts`，
 等效于 Creator 内部编译，提前暴露引擎 API 误用。
 
+## 构建与部署（免编辑器 CLI 流程）
+
+```bash
+# 1. 命令行构建 web-mobile（不需要打开 Creator 界面，约 40s）
+"C:/ProgramData/cocos/editors/Creator/3.8.8/CocosCreator.exe" \
+  --project "D:/AI/S4Game/KingdomWatch" \
+  --build "platform=web-mobile;debug=true"
+
+# 2. 部署到 Cloudflare Pages（wrangler 已 OAuth 登录）
+cd build/web-mobile
+npx -y wrangler@3 pages deploy . --project-name=kingdom-watch --branch=main --commit-dirty=true
+```
+
+线上地址：<https://kingdom-watch.pages.dev/> （手机浏览器直接跑；边缘缓存约半分钟生效，可加 `?v=1` 绕过）
+
 ## 构建与上传（TapTap）
 
 1. Creator 菜单「项目 → 构建发布」→ 平台 **Web Mobile** → 构建
