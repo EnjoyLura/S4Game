@@ -4,7 +4,7 @@
  */
 import {
   Camera, Canvas, Color, director, Director, Layers, Node, ResolutionPolicy,
-  sys, UITransform, view,
+  setDisplayStats, sys, UITransform, view,
 } from 'cc';
 import { DESIGN_H, DESIGN_W } from './config/GameConfig';
 import { setLayerDeep } from './ui/UIKit';
@@ -53,8 +53,10 @@ function onSceneLaunched(): void {
   setLayerDeep(canvasNode, Layers.Enum.UI_2D);
 
   // 刘海/手势条安全区（§12.3）：M0 顶栏 y=100 已预留；M1 用 sys.getSafeAreaRect() 做全量映射
+  setDisplayStats(false); // 关闭调试统计面板，避免遮挡底部 HUD
 
   const root = new Node('GameRoot');
+  root.layer = Layers.Enum.UI_2D;
   root.parent = canvasNode;
   root.addComponent(BattleDirector);
 }

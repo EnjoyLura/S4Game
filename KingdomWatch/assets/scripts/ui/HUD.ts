@@ -32,16 +32,16 @@ export class HUD {
   private lastXp = -1;
   private lastReady = false;
 
-  constructor(parent: Node, private dir: BattleDirector) {
-    this.build(parent);
+  constructor(parent: Node, private dir: BattleDirector, bgParent?: Node) {
+    this.build(parent, bgParent);
   }
 
-  private build(parent: Node): void {
+  private build(parent: Node, bgParent?: Node): void {
     const top = new Node('HUD');
     top.setParent(parent);
 
-    /* 背景：战场底色（占位） */
-    gpanel(top, 0, 0, 750, 1334, '#2E4034', undefined, 0, 0).setSiblingIndex(0);
+    /* 背景：战场底色（占位）——必须画在 Field 里（mobs 之前），UIRoot 全屏板会盖住战场 */
+    gpanel(bgParent || top, 0, 0, 750, 1700, '#2E4034', undefined, 0, 0).setSiblingIndex(0);
 
     /* 顶栏 */
     gpanel(top, 0, WY(100, 70), 718, 70, CA('#14181E', 0.72), CA(PAL.gold, 0.9), 1.5, 10);

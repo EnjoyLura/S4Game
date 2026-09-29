@@ -2,7 +2,7 @@
  * 战斗总控（§3.2 状态机）：PREPARE → WAVE_RUNNING ⇄ LEVEL_UP_PAUSE → VICTORY / LINE_BROKEN→失败结算(内含广告复活)
  * dt×倍速步进；暂停/三选一期间全场冻结（§3.2）
  */
-import { _decorator, Component, director, Node } from 'cc';
+import { _decorator, Component, director, Layers, Node } from 'cc';
 import { LEVEL_1_1, LevelDef } from '../config/Mobs';
 import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats } from '../config/Cards';
 import { REVIVE_RATIO, starOf } from '../config/GameConfig';
@@ -18,6 +18,7 @@ import { FloatText } from './FloatText';
 import { AdService } from '../platform/AdService';
 import { HUD } from '../ui/HUD';
 import { Panels } from '../ui/Panels';
+import { setLayerDeep } from '../ui/UIKit';
 
 const { ccclass } = _decorator;
 
@@ -75,8 +76,11 @@ export class BattleDirector extends Component {
     this.waves = new WaveManager(this.levelDef, this.mgr);
     this.dmgSvc.register(this.hero.id, this.hero.name);
 
-    this.hud = new HUD(uiRoot, this);
+    this.hud = new HUD(uiRoot, this, field);
     this.panels = new Panels(uiRoot, this);
+
+    // 兜底：初始构建树（Field/UIRoot/HUD/Panels）全部置于 UI_2D 层，相机才会渲染
+    setLayerDeep(this.node, Layers.Enum.UI_2D);
 
     bus.on(EVT.MOB_KILLED, this.onMobKilled, this);
     bus.on(EVT.LINE_BROKEN, this.onLineBroken, this);

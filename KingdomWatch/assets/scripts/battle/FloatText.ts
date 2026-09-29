@@ -1,5 +1,5 @@
 /** 伤害/金币飘字（池化；暴击大号橙字、普通白色小字 §3.11） */
-import { Color, Label, Node, UIOpacity, tween, Vec3 } from 'cc';
+import { Color, Label, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { Pool } from '../core/ObjectPool';
 
 function col(hex: string): Color {
@@ -16,6 +16,7 @@ export class FloatText {
   constructor(private parent: Node) {
     this.pool = new Pool<FText>(() => {
       const n = new Node('ft');
+      n.layer = Layers.Enum.UI_2D;
       n.setParent(this.parent);
       const l = n.addComponent(Label);
       l.fontSize = 18;

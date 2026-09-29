@@ -3,7 +3,7 @@
  * M0：弓箭手艾拉·风羽 —— 索敌优先最靠下；技能=穿云箭(12s 直线穿透)；大招=箭雨风暴(3轮×12箭)
  * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/词条）
  */
-import { Color, Graphics, Node, UIOpacity, tween, Vec3 } from 'cc';
+import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { HeroStats } from '../config/Cards';
 import { ARCHER_CHARGE_MAX, HERO_Y, PAL, SPAWN_Y } from '../config/GameConfig';
 import { Monster, MonsterManager } from './Monster';
@@ -181,6 +181,7 @@ export class HeroUnit {
     }
     // 光束演出
     const beam = new Node('beam');
+    beam.layer = Layers.Enum.UI_2D;
     beam.setParent(this.node.parent!);
     beam.setPosition(this.x, HERO_Y + (717 + 513) / 2, 0);
     const g = beam.addComponent(Graphics);

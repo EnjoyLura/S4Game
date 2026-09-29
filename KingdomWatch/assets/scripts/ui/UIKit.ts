@@ -2,7 +2,7 @@
  * 程序化 UI 组件库（占位渲染：色块+描边+文字，视觉对齐 UX 线稿 token）
  * 后续美术资源到位后，仅需把 gpanel/gcircle 等替换为 Sprite(assetMap) —— 见 UX/wireframe.html 资源清单
  */
-import { Color, Graphics, Label, Node, UITransform, UIOpacity, tween, Vec3, BlockInputEvents, Widget } from 'cc';
+import { Color, Graphics, Label, Layers, Node, UITransform, UIOpacity, tween, Vec3, BlockInputEvents, Widget } from 'cc';
 import { PAL } from '../config/GameConfig';
 
 export function C(hex: string): Color {
@@ -30,6 +30,7 @@ export function WY(t: number, h: number): number { return 667 - (t + h / 2); }
 
 export function N(name: string, parent: Node | null, x = 0, y = 0, w = 0, h = 0): Node {
   const n = new Node(name);
+  n.layer = Layers.Enum.UI_2D; // 相机只渲染 UI_2D 层（§12.3），动态节点必须显式设层
   if (parent) n.setParent(parent);
   n.setPosition(x, y, 0);
   if (w > 0 || h > 0) n.addComponent(UITransform).setContentSize(w, h);

@@ -2,7 +2,7 @@
  * 怪物（§3.4 行为：松散虫群下行 + 正弦游动 + 自动分离；近战贴线攻击 / 远程停位投掷 / 萨满周期治疗）
  * 受击闪红 + 0.1s 硬直（§3.0）；仅 BOSS 显示血条（M0 1-1 无 BOSS，钩子保留）
  */
-import { Color, Graphics, Label, Node, UIOpacity, tween, Vec3 } from 'cc';
+import { Color, Graphics, Label, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { MobDef } from '../config/Mobs';
 import { LINE_Y, PAL, SPAWN_Y } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
@@ -50,6 +50,7 @@ export class Monster {
     this.node.setScale(1, 1, 1);
     let op = this.node.getComponent(UIOpacity) || this.node.addComponent(UIOpacity);
     op.opacity = 255;
+    this.node.layer = Layers.Enum.UI_2D;
     this.node.setParent(parent);
     this.draw();
   }

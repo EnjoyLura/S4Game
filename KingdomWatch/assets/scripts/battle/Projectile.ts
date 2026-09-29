@@ -2,7 +2,7 @@
  * 弹道（§3.5：可见追踪弹、目标死亡切换目标；子弹道直线随缘命中；对象池强制）
  * 追踪主弹命中前锁定目标；直线弹（齐射/分裂/大招箭/敌方石块）带 ttl 与碰撞去重
  */
-import { Color, Graphics, Node, UIOpacity, tween, Vec3 } from 'cc';
+import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { Monster, MonsterManager } from './Monster';
 import { DamageService } from './DamageService';
 import { LINE_Y, PAL, MAX_PROJS } from '../config/GameConfig';
@@ -78,6 +78,7 @@ export class ProjectileManager {
 
   private makeNode(): Active {
     const n = new Node('proj');
+    n.layer = Layers.Enum.UI_2D;
     n.setParent(this.field);
     const g = n.addComponent(Graphics);
     return { node: n, g, spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<Monster>(), ttl: 0, homing: false };
@@ -197,6 +198,7 @@ export class ProjectileManager {
 
   private boomFx(x: number, y: number, r: number): void {
     const n = new Node('boom');
+    n.layer = Layers.Enum.UI_2D;
     n.setParent(this.field);
     n.setPosition(x, y, 0);
     const g = n.addComponent(Graphics);
