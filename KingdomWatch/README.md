@@ -61,12 +61,29 @@ npx -y -p typescript@5.4.5 tsc -p tsconfig.check.json
   --project "D:/AI/S4Game/KingdomWatch" \
   --build "platform=web-mobile;debug=true"
 
-# 2. 部署到 Cloudflare Pages（wrangler 已 OAuth 登录）
+# 2. 引擎 dpr 钳制补丁（3x 屏 HUD 清晰度，详见下节；每次构建后必须跑）
+cd D:/AI/S4Game/KingdomWatch
+python tools/patch-web-dpr.py
+
+# 3. 部署到 Cloudflare Pages（wrangler 已 OAuth 登录）
 cd build/web-mobile
 npx -y wrangler@3 pages deploy . --project-name=kingdom-watch --branch=main --commit-dirty=true
 ```
 
 线上地址：<https://kingdom-watch.pages.dev/> （手机浏览器直接跑；边缘缓存约半分钟生效，可加 `?v=1` 绕过）
+
+## HUD 清晰度（dpr 补丁）
+
+引擎 3.8.8 的 web 适配器把 `devicePixelRatio` 钳制为 `min(dpr, 2)`，3x 屏上 canvas
+后备缓冲只有 2/3 物理像素，被浏览器 CSS 拉伸后 HUD/文字发糊（2x 屏不受影响）。
+处理方式（两件套，构建后缺一不可）：
+
+1. `build-templates/web-mobile/index.html`：构建模板，含 `viewport-fit=cover` 和
+   预引擎脚本——定义 `window.__KW_DPR_CAP = min(真实dpr, 3)`，URL 加 `?dpr=2` 可回退省电。
+2. `tools/patch-web-dpr.py`：把引擎包 `_virtual_cc-*.js` 里的钳制上限改为读 `__KW_DPR_CAP`。
+
+验证：控制台 `cc.game.canvas.width / cc.game.canvas.clientWidth` 应等于设备 dpr（≤3）。
+性能：3x 全开 fill rate 约为 2x 的 2.25 倍，如低端机掉帧可让用户以 `?dpr=2` 访问。
 
 ## 构建与上传（TapTap）
 
