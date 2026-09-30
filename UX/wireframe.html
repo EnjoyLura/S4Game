@@ -262,8 +262,9 @@ SCREENS.pause={name:"④ 暂停弹窗",en:"Pause",render:function(){
   return s;},
  notes:{
   layout:["大标题『暂停』+ 已获得奖励图标行(金币/关卡经验类道具/宝箱)；底部页签条 + 双按钮。",
+   "页签可点击切换内容页：奖励总览（本图默认态）→ ④-1 伤害统计 / ④-2 设置。",
    "设置页签：音乐/音效/振动开关 + 倍速快捷切换；问题上报入口已整体移除（反馈走 TapTap 站内）。"],
-  interact:["退出→二次确认(中途退出无奖励)；继续战斗→恢复；奖励图标点击无响应(仅展示)。"],
+  interact:["退出→二次确认(中途退出无奖励)；继续战斗→恢复；奖励图标点击无响应(仅展示)；点页签本地切换内容，暂停状态不变。"],
   diff:["与参考图一致，仅奖励内容与页签数按本项目裁剪。"]
  }};
 
@@ -294,7 +295,7 @@ SCREENS.win={name:"⑥ 胜利结算",en:"Victory",render:function(){
  notes:{
   layout:["金星行按星级点亮(≥90% 三星 / 40-90% 两星 / ≤40% 一星)，逐颗弹出动画+音效。",
    "奖励行：金币/装备/钻石/宝箱；右下角圆形广告按钮『双倍奖励』(剩余次数 3/3=每日3次，可调)。",
-   "页签仅 奖励总览/伤害统计；无体力显示(对比参考图 735/5)。"],
+   "页签仅 奖励总览/伤害统计（奖励总览为默认态，统计页内容见 ⑥-1）；无体力显示(对比参考图 735/5)。"],
   interact:["双倍→看完广告金币×2，按钮变已领取；下一关→直接进下一关编队确认；返回→选关地图。"],
   diff:["参考图有体力条(肉类图标)；本项目无体力系统，位置删除。"]
  }};
@@ -325,10 +326,125 @@ SCREENS.lose={name:"⑤ 失败结算(含广告复活)",en:"Defeat & Revive",rend
   return s;},
  notes:{
   layout:["危险条纹横幅标题(参考图同款)；奖励按失败保底 30% 发放；右下角圆形「▶ 复活 +30%」广告按钮(120×120)与胜利结算双倍按钮同位同尺寸——独立复活弹窗已取消。",
-   "失败结算不设问题上报入口；整体内容块(y340~1028)与胜利结算同节奏、以屏幕垂直中心为重心。"],
+   "失败结算不设问题上报入口；整体内容块(y340~1028)与胜利结算同节奏、以屏幕垂直中心为重心。",
+   "页签可点击切换内容页：奖励总览（本图默认态）→ ⑤-1 伤害统计。"],
   interact:["看广告复活：耐久+30% 继续本局，无限次；不看广告即接受失败（发保底）。【待定】复活瞬间是否附清屏/2s无敌(默认不清屏)。",
    "再来一次→同一关重开；返回→选关地图；失败不发双倍广告按钮(避免挫败+广告叠加)。"],
   diff:["参考图失败页仍有 3/3 双倍奖励按钮与体力条；本项目均去除（无体力 + 失败不弹广告）。复活入口与参考图不同：合并进失败结算弹窗页签行，不单独弹层。"]
+ }};
+
+/* ---- S4b/S4c/S5b/S6b 结算页签内容页（伤害统计 / 设置）共用局部渲染器 ---- */
+function tabsBar2(tabs,active,x0,w,gap,y){var s='';for(var t=0;t<tabs.length;t++){
+  s+=ph("ui_tab_item",x0+t*(w+gap),y,w,72,{cls:t==active?"gold":"dark",txt:tabs[t]});}return s;}
+function statRows2(y0,step){
+  var rows=[["艾拉·风羽","100%","1.14W",100],["全局卡/防线","0%","0",0]],s='';
+  for(var i=0;i<rows.length;i++){var r=rows[i],y=y0+i*step;
+    s+=ph("hero_{id}_avatar",40,y,70,70,{cls:"dark circ",txt:"头像"});
+    s+=txt(130,y+2,220,40,r[0],'','font-size:12px;text-align:left');
+    s+=txt(330,y+2,140,40,r[1],'','font-size:12px;color:#ffb454;text-align:right');
+    s+=ph("ui_row_bar",130,y+44,340,16,{txt:""});
+    s+=bar(130,y+44,340,r[3],"#f2a13c");
+    s+=txt(130,y+44,340,16,"<b>"+r[2]+"</b>",'','font-size:9px;font-weight:700;text-shadow:0 1px 2px #000');
+  }
+  return s;
+}
+function swRow(y,icon,name,on,disabled,extra){
+  var s=ph("ui_set_row",40,y,670,64,{cls:"dark",txt:""});
+  s+=txt(60,y,420,64,"<b style='font-size:13px'>"+icon+" "+name+(disabled?" <em style='color:#889;font-size:10px'>未开放</em>":"")+"</b>",'','text-align:left');
+  if(extra){s+=extra;}
+  else{s+=ph("ui_switch",600,y+12,90,40,{cls:disabled?"dark":(on?"gold":"dark"),css:disabled?"opacity:.45":"",txt:(disabled?"—":(on?"ON":"OFF"))});}
+  return s;
+}
+
+/* ---- S4-1 暂停·伤害统计页签 ---- */
+SCREENS.pause_stats={name:"④-1 暂停·伤害统计页签",en:"Pause · Stats",render:function(){
+  var s='';
+  s+=SCREENS.battle.render();
+  s+='<div class="ovl"><div class="dim"></div>';
+  s+=txt(187,400,375,90,"暂 停",'','font-size:34px;font-weight:800;color:#fff;letter-spacing:6px');
+  s+=txt(187,470,375,36,"— 伤害统计（本局） —",'','font-size:14px;color:#ffe08a');
+  s+=statRows2(510,115);
+  s+=tabsBar2(["奖励总览","伤害统计","设置"],1,25,225,10,780);
+  s+=ph("ui_btn_exit",50,880,300,88,{cls:"gold",txt:"⏻ 退出"});
+  s+=ph("ui_btn_resume",400,880,300,88,{cls:"gold",txt:"▶ 继续战斗"});
+  s+='</div>';
+  return s;},
+ notes:{
+  layout:["与 ④ 暂停同壳：标题/页签条/双按钮不动，页签条上方内容区切换为统计行（英雄头像+名称+占比+数值条）。",
+   "行数据同 ③ 伤害统计（DamageService 按英雄聚合，数值 W/K 格式化）；当前单英雄，全局卡/防线固定一行，多英雄解锁后逐行扩展。"],
+  interact:["页签点击即切内容（本地重渲染，暂停状态不变）；继续战斗/退出与 ④ 一致。"],
+  diff:["③ 为战斗中随手呼出的浮层（不暂停）；本页为暂停后的完整统计视图，两者数据同源。"]
+ }};
+
+/* ---- S4-2 暂停·设置页签 ---- */
+SCREENS.pause_settings={name:"④-2 暂停·设置页签",en:"Pause · Settings",render:function(){
+  var s='';
+  s+=SCREENS.battle.render();
+  s+='<div class="ovl"><div class="dim"></div>';
+  s+=txt(187,400,375,90,"暂 停",'','font-size:34px;font-weight:800;color:#fff;letter-spacing:6px');
+  var seg=ph("ui_speed_seg",520,482,170,40,{cls:"dark",txt:""})+ph("ui_speed_1x",522,484,80,36,{cls:"gold",txt:"1x"})+ph("ui_speed_2x",608,484,80,36,{cls:"dark",txt:"2x"});
+  s+=swRow(470,"🎵","音乐",true,false);
+  s+=swRow(548,"🔊","音效",true,false);
+  s+=swRow(626,"📳","振动",false,true);
+  s+=swRow(704,"⏩","战斗倍速",false,false,seg);
+  s+=tabsBar2(["奖励总览","伤害统计","设置"],2,25,225,10,780);
+  s+=ph("ui_btn_exit",50,880,300,88,{cls:"gold",txt:"⏻ 退出"});
+  s+=ph("ui_btn_resume",400,880,300,88,{cls:"gold",txt:"▶ 继续战斗"});
+  s+='</div>';
+  return s;},
+ notes:{
+  layout:["与 ④ 暂停同壳：内容区为 4 行设置行（670×64 行底 + 左标签 + 右开关/分段器）。",
+   "音乐/音效/振动 = 90×40 拨杆开关（ON 金色 / OFF 深灰）；战斗倍速 = 1x/2x 分段器（当前档金色高亮）。",
+   "音乐与振动先占位记忆偏好，随 BGM / 战斗手感批次实装；振动实装前置灰标『未开放』。"],
+  interact:["音效开关即时生效（合成音与资源样本同走此开关）；倍速 1-2 通关解锁，未解锁行显示锁态提示；设置持久化到存档。"],
+  diff:["问题上报入口已整体移除（反馈走 TapTap 站内）。"]
+ }};
+
+/* ---- S5-1 失败·伤害统计页签 ---- */
+SCREENS.lose_stats={name:"⑤-1 失败·伤害统计页签",en:"Defeat · Stats",render:function(){
+  var s='';
+  s+=SCREENS.battle.render();
+  s+='<div class="ovl"><div class="dim"></div>';
+  s+=ph("ui_banner_lose_hazard",80,340,590,100,{cls:"red",txt:""});
+  s+=txt(187,350,375,80,"挑战失败",'','font-size:30px;font-weight:800;color:#fff;letter-spacing:4px');
+  s+=txt(187,480,375,36,"— 伤害统计（本局） —",'','font-size:13px;color:#ffe08a');
+  s+=statRows2(520,120);
+  s+=txt(187,668,375,30,"复活：耐久 +30% · 不限次 · 不看广告即接受失败",'','font-size:9.5px;opacity:.7');
+  s+=ph("ui_btn_revive_ad",580,700,120,120,{cls:"green circ",css:"border-width:2.5px",txt:"▶<br>复活<br>+30%"});
+  s+=tabsBar2(["奖励总览","伤害统计"],1,40,330,10,840);
+  s+=ph("ui_btn_retry",50,940,300,88,{cls:"green",txt:"↻ 再来一次"});
+  s+=ph("ui_btn_back",400,940,300,88,{cls:"gold",txt:"返回"});
+  s+='</div>';
+  return s;},
+ notes:{
+  layout:["与 ⑤ 失败结算同壳：危险横幅/复活说明/复活按钮/页签条/双按钮不动，奖励行位置切换为统计行。",
+   "统计行右缘 x470，避让右下复活圆形按钮(x580)；其余同 ④-1。"],
+  interact:["页签点击即切内容；复活/再来一次/返回与 ⑤ 一致。"],
+  diff:["失败结算同样提供伤害统计（复盘输出），不因失败隐藏。"]
+ }};
+
+/* ---- S6-1 胜利·伤害统计页签 ---- */
+SCREENS.win_stats={name:"⑥-1 胜利·伤害统计页签",en:"Victory · Stats",render:function(){
+  var s='';
+  s+=SCREENS.battle.render();
+  s+='<div class="ovl"><div class="dim"></div>';
+  s+=txt(187,340,375,90,"挑战成功！",'','font-size:32px;font-weight:800;color:#ffd45e;letter-spacing:3px');
+  for(var i=0;i<3;i++){var x=217+i*110;
+    s+=ph("ui_star",x,450,96,96,{cls:i<3?"gold circ":"dark circ",css:"background:"+(i<3?"rgba(242,178,62,.25)":"rgba(255,255,255,.06)"),txt:"★"});
+  }
+  s+=txt(187,558,375,36,"— 伤害统计（本局） —",'','font-size:13px;color:#ffe08a');
+  s+=statRows2(600,120);
+  s+=ph("ui_btn_double",580,714,120,120,{cls:"green circ",txt:"▶<br>双倍<br>3/3"});
+  s+=tabsBar2(["奖励总览","伤害统计"],1,40,330,10,840);
+  s+=ph("ui_btn_next",50,940,300,88,{cls:"green",txt:"下一关 ▶"});
+  s+=ph("ui_btn_back",400,940,300,88,{cls:"gold",txt:"返回"});
+  s+='</div>';
+  return s;},
+ notes:{
+  layout:["与 ⑥ 胜利结算同壳：标题/金星行/双倍按钮/页签条/双按钮不动，奖励行位置切换为统计行。",
+   "统计行右缘 x470，避让右下双倍圆形按钮(x580)；金星行在统计页签下保持展示（星级是胜利核心反馈）。"],
+  interact:["页签点击即切内容；双倍/下一关/返回与 ⑥ 一致。"],
+  diff:["无新增元素；仅内容区切换。"]
  }};
 
 /* ---- S7 技能范围可视化 ---- */
@@ -510,7 +626,7 @@ function renderSpec(){
 }
 
 /* ============ 导航与渲染 ============ */
-var ORDER=["battle","pick","stats","pause","lose","win","range","tips","manifest","spec"];
+var ORDER=["battle","pick","stats","pause","pause_stats","pause_settings","lose","lose_stats","win","win_stats","range","tips","manifest","spec"];
 var CUR="battle";
 function renderNav(){
   var h='<div class="grp">战斗界面线稿</div>';

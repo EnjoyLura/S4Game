@@ -249,6 +249,10 @@ export class BattleDirector extends Component {
         music: sv.music,
         sfx: sv.sfx,
         onToggle: (k: 'music' | 'sfx', v: boolean) => { const s2 = loadSave(); s2[k] = v; saveSave(); },
+        tab: 0,
+        speed: this.speed,
+        speedUnlocked: !!(sv.speedUnlocked || sv.debug),
+        xp: Math.floor(this.xp),
       });
     } else if (this.state === 'paused') {
       this.panels.closeAll();
@@ -272,6 +276,8 @@ export class BattleDirector extends Component {
     this.panels.showLose({
       goldFloor,
       reviveRatio: REVIVE_RATIO,
+      xp: Math.floor(this.xp),
+      tab: 0,
       onRevive: (done: (ok: boolean) => void) => {
         AdService.showRewarded('revive', () => {
           this.line.revive();
@@ -301,6 +307,8 @@ export class BattleDirector extends Component {
       stars,
       gold: reward,
       ratio: this.line.ratio,
+      xp: Math.floor(this.xp),
+      tab: 0,
       onDouble: (done: (ok: boolean) => void) => {
         AdService.showRewarded('double', () => {
           sv.gold += reward;

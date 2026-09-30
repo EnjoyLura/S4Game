@@ -142,45 +142,104 @@ export class Panels {
     label(frame, 0, -140, tag, { size: 13, color: '#BFB392', w: 190, h: 24, shrink: true });
   }
 
-  /* ---------- ④ 暂停 ---------- */
+  /* ---------- 页签条（线稿④-1/④-2/⑤-1/⑥-1）：点页签本地重渲染当前面板 ---------- */
+  private tabsBar(tabs: string[], active: number, y: number, x0: number, w: number, gap: number, onSel: (i: number) => void): void {
+    tabs.forEach((t, i) => {
+      const x = WX(x0 + i * (w + gap), w), cy = WY(y, 72);
+      gpanel(this.modalRoot, x, cy, w, 72, i === active ? CA(PAL.gold, 0.25) : CA('#14181E', 0.85),
+        i === active ? PAL.gold : '#FFFFFF44', 1.5, 12);
+      label(this.modalRoot, x, cy, t, { size: 20, color: i === active ? PAL.gold : '#FFFFFF' });
+      if (i !== active) {
+        const hit = N('tabHit' + i, this.modalRoot, x, cy, w, 72);
+        hit.on(Node.EventType.TOUCH_END, e => { e.propagationStopped = true; onSel(i); });
+      }
+    });
+  }
+
+  /** 伤害统计行（线稿④-1⑤-1⑥-1：头像70 + 名称 + 占比 + 数值条340，数值 W/K 格式化居中条内） */
+  private statsRows(rows: DamageRow[], t0: number, step: number): void {
+    rows.slice(0, 3).forEach((r, i) => {
+      const t = t0 + i * step;
+      const av = gcircle(this.modalRoot, WX(75, 70), WY(t, 70), 35, CA('#2A3240', 1), '#FFFFFF55', 1.5);
+      label(av, 0, 0, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
+      label(this.modalRoot, WX(130, 220), WY(t + 2, 40), r.name,
+        { size: 18, color: '#FFFFFF', align: 'left', w: 220, h: 40, shrink: true });
+      label(this.modalRoot, WX(330, 140), WY(t + 2, 40), (r.pct * 100).toFixed(2) + '%',
+        { size: 18, color: PAL.orange, align: 'right', w: 140, h: 40, shrink: true });
+      const barX = WX(130, 340);
+      gpanel(this.modalRoot, barX, WY(t + 44, 16), 340, 16, CA('#000000', 0.4), undefined, 0, 8);
+      if (r.val > 0) {
+        const fw = Math.max(8, 340 * r.pct);
+        gpanel(this.modalRoot, WX(130, fw), WY(t + 44, 16), fw, 16, CA(PAL.orange, 0.9), undefined, 0, 8);
+      }
+      label(this.modalRoot, barX, WY(t + 44, 16), fmtWk(r.val), { size: 14, color: '#FFFFFF', bold: true });
+    });
+  }
+
+  /** 奖励图标行：[底色, 图标文字, 数值, 设计x] */
+  private rewardIcons(items: [string, string, string, number][]): void {
+    items.forEach(it => {
+      const c = gcircle(this.modalRoot, WX(it[3], 96), WY(530, 96), 42, CA(it[0], 0.25), it[0], 2);
+      label(c, 0, 0, it[1], { size: it[1] === 'EXP' ? 20 : 34, color: it[1] === 'EXP' ? PAL.ink : '#FFFFFF', bold: it[1] === 'EXP' });
+      label(this.modalRoot, WX(it[3], 96), WY(630, 36), it[2], { size: 20, color: '#FFFFFF' });
+    });
+  }
+
+  /* ---------- ④ 暂停（页签：奖励总览/伤害统计/设置，线稿④/④-1/④-2） ---------- */
   showPause(o: {
     onResume: () => void; onExit: () => void;
     music: boolean; sfx: boolean;
     onToggle: (k: 'music' | 'sfx', v: boolean) => void;
+    tab?: number; speed: number; speedUnlocked: boolean; xp: number;
   }): void {
+    const tab = o.tab ?? 0;
     this.closeAll();
     dimLayer(this.modalRoot);
     label(this.modalRoot, 0, WY(400, 90), '暂 停', { size: 46, color: '#FFFFFF', bold: true });
-    label(this.modalRoot, 0, WY(516, 50), '— 本局金币 ' + Math.floor(this.dir.goldEarned) + ' —',
-      { size: 22, color: '#FFE08A' });
-    // 页签：奖励总览 / 伤害统计 / 设置（问题上报已移除）
-    const tabs = ['奖励总览', '伤害统计', '设置'];
-    tabs.forEach((t, i) => {
-      const x = WX(25 + i * 235, 225);
-      gpanel(this.modalRoot, x, WY(780, 72), 225, 72, i === 0 ? CA(PAL.gold, 0.25) : CA('#14181E', 0.85),
-        i === 0 ? PAL.gold : '#FFFFFF44', 1.5, 12);
-      label(this.modalRoot, x, WY(780, 72), t, { size: 20, color: i === 0 ? PAL.gold : '#FFFFFF' });
-    });
-    // 设置开关（音乐/音效）——置于标题与页签之间的空档，避免压住底部按钮
-    const mkToggle = (x: number, name: string, key: 'music' | 'sfx', on: boolean) => {
-      btn(this.modalRoot, x, WY(660, 60), 200, 60, name + '：' + (on ? '开' : '关'),
-        on ? PAL.green : '#5A6472', () => {
-          o.onToggle(key, !on);
-          this.showPause({ ...o, [key]: !on } as typeof o);
-        }, 19);
-    };
-    mkToggle(WX(50, 200), '音乐', 'music', o.music);
-    mkToggle(WX(500, 200), '音效', 'sfx', o.sfx);
+    this.tabsBar(['奖励总览', '伤害统计', '设置'], tab, 780, 25, 225, 10, t => this.showPause({ ...o, tab: t }));
+    if (tab === 0) {
+      label(this.modalRoot, 0, WY(470, 44), '— 已获得奖励 —', { size: 22, color: '#FFE08A' });
+      this.rewardIcons([
+        [PAL.gold, '🪙', String(Math.floor(this.dir.goldEarned)), 280],
+        [PAL.green, 'EXP', String(o.xp), 440],
+      ]);
+    } else if (tab === 1) {
+      label(this.modalRoot, 0, WY(470, 44), '— 伤害统计（本局） —', { size: 22, color: '#FFE08A' });
+      this.statsRows(this.dir.dmgSvc.rows(), 520, 115);
+    } else {
+      // 设置页签：音乐/音效开关即时生效；倍速 1-2 通关解锁；振动随战斗手感批次实装
+      const mkRow = (y: number, name: string, val: string, state: 'on' | 'off' | 'off_lock', cb?: () => void) => {
+        gpanel(this.modalRoot, WX(40, 670), WY(y, 60), 670, 60, CA('#14181E', 0.85), '#FFFFFF33', 1.5, 12);
+        label(this.modalRoot, WX(60, 380), WY(y, 60), name,
+          { size: 20, color: state === 'off_lock' ? '#889099' : '#FFFFFF', align: 'left', w: 380, h: 40, shrink: true });
+        if (cb) {
+          btn(this.modalRoot, WX(560, 110), WY(y + 8, 44), 110, 44, val, state === 'on' ? PAL.green : '#5A6472', cb, 16);
+        } else {
+          gpanel(this.modalRoot, WX(560, 110), WY(y + 8, 44), 110, 44, CA('#000000', 0.3), '#FFFFFF22', 1.5, 22);
+          label(this.modalRoot, WX(560, 110), WY(y + 8, 44), val, { size: 15, color: '#889099' });
+        }
+      };
+      mkRow(496, '🎵 音乐', o.music ? '开' : '关', o.music ? 'on' : 'off',
+        () => { o.onToggle('music', !o.music); this.showPause({ ...o, tab: 2, music: !o.music }); });
+      mkRow(570, '🔊 音效', o.sfx ? '开' : '关', o.sfx ? 'on' : 'off',
+        () => { o.onToggle('sfx', !o.sfx); this.showPause({ ...o, tab: 2, sfx: !o.sfx }); });
+      mkRow(644, '📳 振动', '未开放', 'off_lock');
+      mkRow(718, '⏩ 战斗倍速', o.speedUnlocked ? (o.speed === 2 ? '2x' : '1x') : '1-2 解锁',
+        o.speedUnlocked ? (o.speed === 2 ? 'on' : 'off') : 'off_lock',
+        o.speedUnlocked ? () => { this.dir.toggleSpeed(); this.showPause({ ...o, tab: 2, speed: this.dir.speed }); } : undefined);
+    }
     btn(this.modalRoot, WX(50, 300), WY(880, 88), 300, 88, '⏻ 退出', PAL.gold, o.onExit);
     btn(this.modalRoot, WX(400, 300), WY(880, 88), 300, 88, '▶ 继续战斗', PAL.green, o.onResume);
   }
 
-  /* ---------- ⑥ 胜利结算 ---------- */
+  /* ---------- ⑥ 胜利结算（页签：奖励总览/伤害统计，线稿⑥/⑥-1） ---------- */
   showWin(o: {
-    stars: 1 | 2 | 3; gold: number; ratio: number;
+    stars: 1 | 2 | 3; gold: number; ratio: number; xp: number;
     onDouble: (done: (ok: boolean) => void) => void;
     onNext: () => void; onExit: () => void;
+    tab?: number;
   }): void {
+    const tab = o.tab ?? 0;
     this.closeAll();
     dimLayer(this.modalRoot);
     label(this.modalRoot, 0, WY(340, 90), '挑战成功！', { size: 42, color: '#FFD45E', bold: true });
@@ -191,10 +250,17 @@ export class Panels {
         i < o.stars ? PAL.gold : '#FFFFFF33', 2.5);
       label(this.modalRoot, x, WY(450, 96), '★', { size: 44, color: i < o.stars ? PAL.gold : '#666C77' });
     }
-    label(this.modalRoot, 0, WY(558, 44), '— 已获得奖励 —', { size: 22, color: '#FFE08A' });
-    const coin = gcircle(this.modalRoot, WX(117, 96), WY(606, 96), 42, CA(PAL.gold, 0.25), PAL.gold, 2);
-    label(coin, 0, 0, '🪙', { size: 34 });
-    label(this.modalRoot, WX(117, 96), WY(676, 36), String(o.gold), { size: 20, color: '#FFFFFF' });
+    label(this.modalRoot, 0, WY(558, 44), tab === 0 ? '— 已获得奖励 —' : '— 伤害统计（本局） —', { size: 22, color: '#FFE08A' });
+    if (tab === 0) {
+      const coin = gcircle(this.modalRoot, WX(117, 96), WY(606, 96), 42, CA(PAL.gold, 0.25), PAL.gold, 2);
+      label(coin, 0, 0, '🪙', { size: 34 });
+      label(this.modalRoot, WX(117, 96), WY(676, 36), String(o.gold), { size: 20, color: '#FFFFFF' });
+      const exp = gcircle(this.modalRoot, WX(260, 96), WY(606, 96), 42, CA(PAL.green, 0.25), PAL.green, 2);
+      label(exp, 0, 0, 'EXP', { size: 20, color: PAL.ink, bold: true });
+      label(this.modalRoot, WX(260, 96), WY(676, 36), String(o.xp), { size: 20, color: '#FFFFFF' });
+    } else {
+      this.statsRows(this.dir.dmgSvc.rows(), 600, 120);
+    }
 
     // 双倍广告按钮（与失败页复活按钮同位 580,714 120×120）
     const dbl = gcircle(this.modalRoot, WX(580, 120), WY(714, 120), 58, CA(PAL.green, 0.3), PAL.green, 3);
@@ -209,34 +275,39 @@ export class Panels {
       });
     });
 
-    const tabs = ['奖励总览', '伤害统计'];
-    tabs.forEach((t, i) => {
-      const x = WX(40 + i * 340, 330);
-      gpanel(this.modalRoot, x, WY(840, 72), 330, 72, i === 0 ? CA(PAL.gold, 0.25) : CA('#14181E', 0.85),
-        i === 0 ? PAL.gold : '#FFFFFF44', 1.5, 12);
-      label(this.modalRoot, x, WY(840, 72), t, { size: 20, color: i === 0 ? PAL.gold : '#FFFFFF' });
-    });
+    this.tabsBar(['奖励总览', '伤害统计'], tab, 840, 40, 330, 10, t => this.showWin({ ...o, tab: t }));
     btn(this.modalRoot, WX(50, 300), WY(940, 88), 300, 88, '下一关 ▶', PAL.green, o.onNext);
     btn(this.modalRoot, WX(400, 300), WY(940, 88), 300, 88, '返回', PAL.gold, o.onExit);
   }
 
-  /* ---------- ⑤ 失败结算（含广告复活，与胜利双倍按钮同位） ---------- */
+  /* ---------- ⑤ 失败结算（含广告复活，与胜利双倍按钮同位；页签线稿⑤/⑤-1） ---------- */
   showLose(o: {
-    goldFloor: number; reviveRatio: number;
+    goldFloor: number; reviveRatio: number; xp: number;
     onRevive: (done: (ok: boolean) => void) => void;
     onRetry: () => void; onExit: () => void;
+    tab?: number;
   }): void {
+    const tab = o.tab ?? 0;
     this.closeAll();
     dimLayer(this.modalRoot, 0.7, true);
     gpanel(this.modalRoot, 0, WY(340, 100), 590, 100, CA(PAL.red, 0.18), PAL.red, 2.5, 10);
     label(this.modalRoot, 0, WY(350, 80), '挑战失败', { size: 40, color: '#FFFFFF', bold: true });
-    label(this.modalRoot, 0, WY(480, 44), '— 已获得奖励（保底 30%）—', { size: 20, color: '#FFB0A0' });
-    const coin = gcircle(this.modalRoot, WX(167, 96), WY(528, 96), 42, CA(PAL.gold, 0.25), PAL.gold, 2);
-    label(coin, 0, 0, '🪙', { size: 34 });
-    label(this.modalRoot, WX(167, 96), WY(598, 36), String(o.goldFloor), { size: 20, color: '#FFFFFF' });
+    label(this.modalRoot, 0, WY(480, 44), tab === 0 ? '— 已获得奖励（保底 30%）—' : '— 伤害统计（本局） —', { size: 20, color: tab === 0 ? '#FFB0A0' : '#FFE08A' });
+    if (tab === 0) {
+      const coin = gcircle(this.modalRoot, WX(167, 96), WY(528, 96), 42, CA(PAL.gold, 0.25), PAL.gold, 2);
+      label(coin, 0, 0, '🪙', { size: 34 });
+      label(this.modalRoot, WX(167, 96), WY(598, 36), String(o.goldFloor), { size: 20, color: '#FFFFFF' });
+      const exp = gcircle(this.modalRoot, WX(340, 96), WY(528, 96), 42, CA(PAL.green, 0.25), PAL.green, 2);
+      label(exp, 0, 0, 'EXP', { size: 20, color: PAL.ink, bold: true });
+      label(this.modalRoot, WX(340, 96), WY(598, 36), String(o.xp), { size: 20, color: '#FFFFFF' });
+    } else {
+      this.statsRows(this.dir.dmgSvc.rows(), 520, 110);
+    }
 
-    label(this.modalRoot, 0, WY(668, 30),
-      '复活：耐久 +30% · 不限次 · 不看广告即接受失败', { size: 16, color: '#CCCCCC' });
+    if (tab === 0) {
+      label(this.modalRoot, 0, WY(668, 30),
+        '复活：耐久 +30% · 不限次 · 不看广告即接受失败', { size: 16, color: '#CCCCCC' });
+    }
     const rv = gcircle(this.modalRoot, WX(580, 120), WY(700, 120), 58, CA(PAL.green, 0.3), PAL.green, 3);
     const rvTxt = label(rv, 0, 0, '▶\n复活\n+' + Math.round(o.reviveRatio * 100) + '%', { size: 20, color: PAL.green, bold: true });
     rv.on(Node.EventType.TOUCH_END, e => {
@@ -249,13 +320,7 @@ export class Panels {
       });
     });
 
-    const tabs = ['奖励总览', '伤害统计'];
-    tabs.forEach((t, i) => {
-      const x = WX(40 + i * 340, 330);
-      gpanel(this.modalRoot, x, WY(840, 72), 330, 72, i === 0 ? CA(PAL.gold, 0.25) : CA('#14181E', 0.85),
-        i === 0 ? PAL.gold : '#FFFFFF44', 1.5, 12);
-      label(this.modalRoot, x, WY(840, 72), t, { size: 20, color: i === 0 ? PAL.gold : '#FFFFFF' });
-    });
+    this.tabsBar(['奖励总览', '伤害统计'], tab, 840, 40, 330, 10, t => this.showLose({ ...o, tab: t }));
     btn(this.modalRoot, WX(50, 300), WY(940, 88), 300, 88, '↻ 再来一次', PAL.green, o.onRetry);
     btn(this.modalRoot, WX(400, 300), WY(940, 88), 300, 88, '返回', PAL.gold, o.onExit);
   }

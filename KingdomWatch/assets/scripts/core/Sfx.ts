@@ -115,9 +115,22 @@ class SfxService {
     if (this.clips[name]) { this.playSample(name); return; }
     switch (name) {
       case 'shoot': this.noiseHit(0.07, 0.2, 2400); this.tone('sine', 950, 300, 0.08, 0.1); break;
-      case 'hit': this.noiseHit(0.045, 0.13, 900, 'lowpass'); this.tone('sine', 200, 120, 0.06, 0.1); break;
-      case 'crit': this.tone('square', 330, 90, 0.12, 0.13); this.noiseHit(0.06, 0.15, 1400); this.tone('sine', 200, 110, 0.08, 0.09); break;
-      case 'kill': this.noiseHit(0.09, 0.15, 700, 'lowpass'); this.tone('triangle', 520, 70, 0.16, 0.13); break;
+      // 命中：高频"啪"声（手机扬声器对 200Hz 低频几乎无声，改 3kHz 噪声脆响 + 780Hz 短音），
+      // 随机 ±10% 音高防机枪式单调感
+      case 'hit': {
+        const det = 0.9 + Math.random() * 0.2;
+        this.noiseHit(0.05, 0.26, 3000 * det);
+        this.tone('triangle', 780 * det, 400, 0.06, 0.2);
+        break;
+      }
+      case 'crit': {
+        const det = 0.94 + Math.random() * 0.12;
+        this.tone('square', 560 * det, 170, 0.12, 0.24);
+        this.noiseHit(0.07, 0.22, 2400 * det);
+        this.tone('sine', 320 * det, 150, 0.09, 0.12);
+        break;
+      }
+      case 'kill': this.noiseHit(0.1, 0.2, 800, 'lowpass'); this.tone('triangle', 660, 90, 0.18, 0.18); break;
       case 'ult': this.tone('sawtooth', 130, 55, 0.45, 0.2); this.noiseHit(0.35, 0.11, 500, 'lowpass'); this.tone('sine', 700, 1400, 0.3, 0.05, 0.05); break;
       case 'levelup': [523, 659, 784, 1046].forEach((f, i) => this.tone('sine', f, f, 0.14, 0.13, i * 0.08)); break;
       case 'ready': this.tone('sine', 880, 880, 0.35, 0.11); this.tone('sine', 1318, 1318, 0.4, 0.07, 0.06); break;
