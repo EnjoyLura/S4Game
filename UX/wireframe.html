@@ -516,41 +516,134 @@ SCREENS.tips={name:"⑧ 属性Tips弹层",en:"Stat Tips",render:function(){
   diff:["《向僵尸开炮》tips截图即此两列布局；本项目复用同构样式，字段按英雄/技能配置表动态生成。"]
  }};
 
+/* ---- S9 通用UI组件库 ---- */
+SCREENS.components={name:"⑨ 通用UI组件库",en:"UI Components",render:function(){
+  var s='<div class="ovl"></div>';
+  s+=txt(187,26,375,36,"<b style='color:#ffe08a;font-size:15px'>通用UI组件库 · 一图多用</b>",'','font-size:13px');
+  s+=txt(187,62,375,22,"同一资源 tint / 九宫格 / 缩放复用 —— 美术每类只产出一份",'','font-size:9px;color:#9ab');
+  /* R1 按钮（3态×2色） */
+  var by=96;
+  s+=ph("ui_btn_primary",30,by,160,80,{cls:"gold",txt:"⏻ 退出"});
+  s+=ph("ui_btn_primary@press",200,by,160,80,{cls:"gold",css:"background:rgba(242,178,62,.32)",txt:"按下态"});
+  s+=ph("ui_btn_green",370,by,160,80,{cls:"green",txt:"▶ 继续"});
+  s+=ph("ui_btn_*@disabled",540,by,180,80,{cls:"dark",css:"opacity:.55",txt:"禁用态"});
+  /* R2 面板九宫格（金/白描边变体） */
+  var py=200;
+  s+=ph("ui_panel_dark",30,py,340,96,{cls:"dark",css:"border-color:rgba(242,178,62,.55)",txt:"金描边变体"});
+  s+=ph("ui_panel_dark",400,py,320,96,{cls:"dark",txt:"白描边变体"});
+  /* R3 圆形图标座（3色2态，环宽随尺寸缩放） */
+  var cy=318;
+  s+=ph("ui_circ_icon@gold",30,cy,96,96,{cls:"gold circ",txt:"金环"});
+  s+=ph("ui_circ_icon@blue",140,cy,96,96,{cls:"blue circ",txt:"蓝环"});
+  s+=ph("ui_circ_icon@gray",250,cy,96,96,{cls:"dark circ",css:"opacity:.6",txt:"灰化"});
+  s+=ph("ui_circ_icon@cup",360,cy,96,96,{cls:"gold circ",txt:"充能杯"});
+  s+=ph("ui_circ_icon@badge",470,cy+12,72,72,{cls:"gold circ",txt:"角标"});
+  s+=ph("ui_circ_icon@star",560,cy,96,96,{cls:"gold circ",txt:"★"});
+  /* R4 进度条（一轨一填充，tint 4 用 + 盾值胶囊） */
+  var ry=436;
+  s+=ph("ui_bar_cap",30,ry,340,16,{txt:""});
+  s+=bar(30,ry,340,72,"#4fa8ff");
+  s+=txt(30,ry-20,340,18,"经验·蓝",'','font-size:9px;color:#9ab');
+  s+=ph("ui_bar_cap",400,ry,320,16,{txt:""});
+  s+=bar(400,ry,320,64,"#7fb841");
+  s+=txt(400,ry-20,320,18,"耐久·绿→红",'','font-size:9px;color:#9ab');
+  var ry2=ry+58;
+  s+=ph("ui_bar_cap",30,ry2,340,16,{txt:""});
+  s+=bar(30,ry2,340,46,"#ef9d3c");
+  s+=txt(30,ry2-20,340,18,"伤害占比·橙（数值程序绘制条内居中）",'','font-size:9px;color:#9ab');
+  s+=ph("ui_bar_cap",400,ry2,320,16,{txt:""});
+  s+=bar(400,ry2,320,80,"#f2b23e");
+  s+=txt(400,ry2-20,320,18,"充能/盾值·金蓝",'','font-size:9px;color:#9ab');
+  /* R5 页签 + 旋钮开关 */
+  var ty=548;
+  s+=ph("ui_tab_item@on",30,ty,178,72,{cls:"gold",txt:"激活"});
+  s+=ph("ui_tab_item",220,ty,178,72,{cls:"dark",txt:"常态"});
+  s+=ph("ui_switch@on",430,ty+4,90,44,{cls:"green",css:"border-radius:22px",txt:"开"});
+  s+=ph("ui_switch@off",530,ty+4,90,44,{cls:"dark",css:"border-radius:22px",txt:"关"});
+  s+=ph("ui_switch@disabled",630,ty+4,90,44,{cls:"dark",css:"border-radius:22px;opacity:.55",txt:"禁用"});
+  /* R6 横幅三变体 */
+  s+=ph("ui_banner_warn",30,652,340,72,{cls:"gold",txt:"预警横幅"});
+  s+=ph("ui_banner_hazard",400,652,320,72,{cls:"red",txt:"危险条纹"});
+  s+=ph("ui_banner_title",30,744,340,88,{cls:"gold",txt:"撕纸标题横幅"});
+  s+=ph("ui_wave_pill",400,752,160,60,{cls:"dark",txt:"波次胶囊"});
+  s+=ph("ui_lv_badge",580,756,140,52,{cls:"dark",txt:"Lv徽章"});
+  /* R7 稀有度体系（卡框/卡头/描边同 tint） */
+  var sy=862;
+  s+=ph("ui_card_frame@white",30,sy,110,190,{cls:"dark",txt:"白卡"});
+  s+=ph("ui_card_frame@blue",150,sy,110,190,{cls:"blue",txt:"蓝卡"});
+  s+=ph("ui_card_frame@purple",270,sy,110,190,{cls:"purple",txt:"紫卡"});
+  s+=ph("ui_card_header",390,sy,120,34,{cls:"gold",txt:"卡头条"});
+  s+=ph("ui_gear_ring",390,sy+44,110,110,{cls:"dark circ",txt:"齿轮环"});
+  s+=ph("ui_badge_new",510,sy,72,72,{cls:"green circ",txt:"新"});
+  s+=ph("ui_video_badge",600,sy,72,72,{cls:"green circ",txt:"▶广"});
+  /* R8 通用图标（48/96 同图缩放） */
+  var iy=1074;
+  var ics=[["ui_icon_coin","🪙"],["ui_icon_exp","EXP"],["ui_icon_diamond","💎"],["ui_icon_chest","🎁"],["ui_icon_equip","🛡"],["ui_icon_pause","⏸"],["ui_icon_stats","📊"],["ui_icon_speed","⏩"]];
+  for(var i=0;i<8;i++){
+    s+=ph(ics[i][0],30+(i%4)*180,iy+Math.floor(i/4)*106,96,96,{cls:"dark circ",txt:ics[i][1]});
+  }
+  /* R9 程序绘制清单（无需美术） */
+  s+=txt(187,1302,690,22,"程序绘制（无需美术产出）：CD扇形遮罩 · 充能杯水体/光晕/环绕粒子 · 索敌范围圈 · 弹窗遮罩 · 瞄准线+准星 · 盾值胶囊",'','font-size:9px;color:#8fc;border:1.5px dashed rgba(127,184,65,.4);border-radius:8px;background:rgba(127,184,65,.06)');
+  return s;},
+ notes:{
+  layout:["按钮：ui_btn_primary(金)/ui_btn_green(绿) 各 3 态（常态/按下/禁用），九宫格 120~300 宽缩放复用——退出/返回/暂停双钮/再来一次/继续战斗/下一关/倍速行；圆形广告钮(双倍/复活)=绿座+ui_video_badge。",
+   "面板：ui_panel_dark 半透明深底九宫格（金/白描边两变体）——顶栏/属性Tips/伤害统计面板/弹窗容器/设置行/卡面描述底/页签条底；替代旧清单 ui_topbar·ui_panel_tip·ui_panel_stats·ui_tab_bar（省 4 张图）。",
+   "圆形图标座：ui_circ_icon 金(激活/就绪)/蓝/灰(禁用) 3 色 ×2 态，环宽随尺寸缩放——大招按钮/普攻·技能图标/英雄圆头像/奖励图标座/卡面图标座/归属角标/星底。",
+   "进度条：ui_bar_cap 轨道+填充两图，tint 复用——经验(蓝)/耐久(绿→红)/伤害占比(橙，数值程序绘制条内居中)/盾值胶囊(蓝半透明)/充能(金)。",
+   "页签 ui_tab_item 2 态（激活金底/常态深底）；旋钮开关 ui_switch 3 态（开=绿/关=灰/禁用=置灰）。",
+   "横幅三变体同构：预警金边/撕纸标题(三选一+胜利)/危险条纹(失败)；波次胶囊与 Lv 徽章独立小件。",
+   "稀有度体系：白/蓝/紫统一 tint——卡框、卡头、图标座描边、Tips 数值高亮共用三色。",
+   "图标 A2 组 48/96 两档同图缩放：金币/EXP/钻石/宝箱/装备(品质tint)/暂停/统计/倍速/双刷新/心/骷髅/眼(P1)/反馈(P2)。"],
+  interact:["美术产出一份组件图 → assetMap 按 ID 绑定 → 全部引用处同步换肤；组件改样式只需换一张图。",
+   "程序绘制优先（无需美术，见 R9）：技能CD扇形遮罩、大招充能杯(杯体/水体/光晕/环绕粒子)、索敌范围圈、弹窗遮罩、狙击瞄准线+收缩准星、盾值胶囊。美术阶段可用质感九宫格/序列帧替换增强，ID 不变。"],
+  diff:["旧清单按『界面位置』罗列（ui_topbar/ui_bar_exp/ui_panel_tip…各出一图）；本版合并为通用组件——同形不同用只出一份，总贴图量显著下降，且线稿虚线框 ID 与清单一一对应不变。"]
+ }};
+
 /* ============ 资源清单数据 ============ */
 var MANIFEST=[
-["A · 通用 UI（ui_*）",[
- ["ui_topbar","战斗顶栏底(九宫格)","750×70","1","战斗HUD","半透明黑+金描边"],
- ["ui_wave_pill","波次胶囊","150×60","1","战斗HUD",""],
- ["ui_bar_exp","顶部共享经验条(cap)","690×12","1","战斗HUD","蓝色填充,Lv徽章骑条居中"],
- ["ui_lv_badge","等级徽章(Lv.2,骑经验条居中)","90×32","1","战斗HUD",""],
- ["ui_bar_hp","防线耐久条(cap)","640×20","1","战斗HUD","绿→红渐变;条内居中耐久值,右侧百分比"],
- ["ui_bar_shield","盾值胶囊(cap,叠于耐久条右段)","≤640×24","1","战斗HUD","宽=盾值/耐久上限,从右向左,默认隐藏;来源=城墙阶段等级奖励"],
- ["ui_icon_pause","暂停图标","60×60","1","战斗HUD",""],
- ["ui_btn_speed","倍速按钮(1x/2x两态)","60×60","2","战斗HUD",""],
- ["ui_btn_stats","伤害统计按钮(常态/激活)","60×60","2","战斗HUD/统计",""],
- ["ui_icon_chat","反馈气泡按钮","60×60","1","战斗HUD","P2"],
- ["ui_icon_heart","耐久/生命图标","48×48","1","主城/结算","局内HUD左下角计数已裁剪"],
- ["ui_icon_coin","金币图标","48×48","1","全局",""],
- ["ui_icon_diamond","钻石图标","48×48","1","全局",""],
- ["ui_icon_skull","击杀计数图标","48×48","1","结算/成就","局内HUD左下角计数已裁剪"],
- ["ui_icon_chest","宝箱图标","96×96","1","结算/主城",""],
- ["ui_icon_eye","透视战场眼睛按钮","60×60","1","三选一","P1"],
- ["ui_video_badge","视频广告角标","48×48","1","全部广告位",""],
- ["ui_banner_title","撕纸标题横幅(金)","520×88","1","三选一/结算","王国保卫战撕纸风"],
- ["ui_banner_warn","来袭预警横幅","520×72","1","战斗HUD","狂潮/BOSS触发"],
- ["ui_banner_lose_hazard","危险条纹横幅底","590×100","1","失败结算",""],
- ["ui_tab_bar / ui_tab_item","页签条+页签(常态/激活)","690×72 / 178×72","1+2态","暂停/结算","九宫格"],
- ["ui_panel_stats","伤害统计面板底(半透明九宫格)","360×470","1","伤害统计",""],
- ["ui_panel_tip","属性Tips数值面板底(半透明九宫格)","300×400","1","战斗HUD","普攻/技能/大招通用"],
- ["ui_row_bar","伤害占比条(cap)","225×16","1","伤害统计","伤害数值居中条内"],
- ["ui_star","星星(亮/灰)","96×96","2态","胜利结算",""],
- ["ui_card_frame_white/blue/purple","强化卡框(三稀有度)","200×360","3","三选一","羊皮纸+稀有度描边"],
- ["ui_card_header","卡头稀有度条","200×52","3色","三选一",""],
- ["ui_gear_ring","齿轮环(卡图标外框)","120×120","1","三选一",""],
+["A1 · 通用组件（一份资源多处复用，详见⑨组件库页）",[
+ ["ui_panel_dark","通用面板底(半透明深色九宫格；金/白两描边变体)","任意拉伸·圆角24","1×2","顶栏/属性Tips/伤害统计面板/弹窗容器/设置行/卡面描述底/页签条底","替代旧 ui_topbar·ui_panel_tip·ui_panel_stats·ui_tab_bar，省 4 张"],
+ ["ui_btn_primary","主按钮·金(常态/按下/禁用 3态)","基准 300×88 九宫格","3","退出/返回/暂停双钮/再来一次/倍速行按钮","圆角16；120~300 宽缩放"],
+ ["ui_btn_green","确认按钮·绿(3态)","基准 300×88","3","继续战斗/下一关/再来一次；双倍·复活圆钮同源缩圆",""],
+ ["ui_circ_icon","圆形图标座(金/蓝/灰 3色×2态)","基准 96×96","3×2","大招钮/普攻·技能图标/英雄圆头像/奖励图标座/卡图标座/归属角标(ui_badge_hero)/星底","环宽随尺寸缩放"],
+ ["ui_bar_cap","通用进度条(轨道+填充两图,支持tint)","基准 690×14 横向拉伸","2","经验(蓝)/耐久(绿→红)/伤害占比(橙)/盾值胶囊(蓝半透明)/充能(金)","替代旧 ui_bar_exp·ui_bar_hp·ui_bar_shield·ui_row_bar"],
+ ["ui_tab_item","页签(常态/激活 2态)","178×72","2","暂停3档/胜利·失败2档","页签条底=ui_panel_dark"],
+ ["ui_switch","旋钮开关(开/关/禁用 3态)","90×44","3","设置页 音乐/音效/未开放行",""],
+ ["ui_banner_warn","预警横幅(金边深底)","520×72","1","狂潮/BOSS 预警","横幅三变体同构"],
+ ["ui_banner_title","撕纸标题横幅(金)","520×88","1","三选一『强化选择』/胜利『挑战成功』","王国保卫战撕纸风"],
+ ["ui_banner_hazard","危险条纹横幅(红)","590×100","1","失败结算标题底","旧名 ui_banner_lose_hazard"],
+ ["ui_wave_pill","波次胶囊","150×60","1","顶栏右侧",""],
+ ["ui_lv_badge","等级徽章(Lv.N 骑条)","90×32","1","经验条居中",""],
+ ["ui_star","星(亮/灰 2态)","96×96","2","胜利结算/选关",""],
  ["ui_badge_new","『新』角标","56×56","1","三选一",""],
- ["ui_badge_hero","卡面英雄归属角标框","56×56","1","三选一","内嵌英雄小头像"],
- ["ui_btn_primary/green/dark","通用按钮(金/绿/暗，各两态)","240×88","3×2态","全局","九宫格"],
- ["ui_ring_charge","大招充能环(底/进度)","64×64","2","战斗HUD","圆形进度"],
+ ["ui_video_badge","视频广告角标","48×48","1","双倍/复活/广告刷新",""],
+ ["ui_card_frame","强化卡框(白/蓝/紫 同版式 tint)","200×360","3","三选一","羊皮纸+稀有度描边；旧名 ui_card_frame_white/blue/purple"],
+ ["ui_card_header","卡头稀有度条","200×52","3色","三选一",""],
+ ["ui_gear_ring","卡面齿轮环(内嵌 ui_circ_icon)","120×120","1","三选一",""]
+]],
+["A2 · 通用图标（icon，48/96 两档同图缩放）",[
+ ["ui_icon_coin","金币","48/96","1","奖励行(暂停·胜利·失败)/HUD/主城/GM",""],
+ ["ui_icon_exp","经验","48/96","1","奖励行/升级",""],
+ ["ui_icon_diamond","钻石","48/96","1","钻石刷新/主城",""],
+ ["ui_icon_chest","宝箱","96","1","奖励行/主城",""],
+ ["ui_icon_equip","装备(随品质 tint)","96","1","胜利·失败奖励",""],
+ ["ui_icon_pause","暂停","60","1","顶栏",""],
+ ["ui_icon_stats","伤害统计(常态/激活 2态)","60","2","左列按钮+统计入口","旧名 ui_btn_stats"],
+ ["ui_icon_speed","倍速(1x/2x 2态)","60","2","左列按钮+暂停设置","旧名 ui_btn_speed"],
+ ["ui_icon_refresh_ad","广告刷新","48","1","三选一底部","与 ui_video_badge 组合"],
+ ["ui_icon_refresh_diamond","钻石刷新","48","1","三选一底部",""],
+ ["ui_icon_heart","生命/耐久","48","1","主城/结算",""],
+ ["ui_icon_skull","击杀计数","48","1","结算/成就",""],
+ ["ui_icon_eye","战场透视(P1)","60","1","三选一",""],
+ ["ui_icon_chat","反馈(P2)","60","1","左列",""]
+]],
+["A3 · 程序绘制（无需美术产出，后续可用质感图按同 ID 替换）",[
+ ["ui_dim_mask","弹窗变暗遮罩(纯色半透明)","750×1334","1","暂停/三选一/结算","程序绘制"],
+ ["ui_ring_charge","大招充能杯(杯体/水体/光晕/环绕粒子 4层)","90×90","4层","战斗HUD","全部程序绘制"],
+ ["ui_skill_cd_mask","技能CD扇形遮罩","46×46","1","战斗HUD","程序扇形"],
+ ["fx_range_attack/skill","索敌范围圈(普攻/技能)","程序","2","范围可视化/Tips","程序圆"],
+ ["ui_aim_line","狙击瞄准线+收缩准星","程序","1","战斗·大招","程序线段"],
+ ["ui_shield_cap","盾值胶囊(耐久条上叠层)","程序","1","战斗HUD","亦可用 ui_bar_cap tint"],
  ["ui_legend","范围图例框","300×110","1","范围可视化","可程序绘制"]
 ]],
 ["B · 英雄（hero_*，×6 名）",[
@@ -597,6 +690,7 @@ var MANIFEST=[
 /* ============ 设计规范/清单页渲染 ============ */
 function renderManifest(){
   var h='<div class="sheet"><h2>美术资源清单（Asset Manifest）</h2><p>占位线稿中每个虚线框都标注了 <code>资源ID</code> 与 <code>设计尺寸</code>。美术产出按 ID 落文件即可无缝替换，无需改代码。</p>';
+  h+='<p><b>通用组件复用原则</b>：A1 组每类组件只产出一份（按钮/面板/图标座/进度条…），通过 tint、九宫格拉伸、缩放覆盖全部界面；旧清单按界面罗列的资源已合并（对应关系见备注栏）。美术先做 A1 通用组件 + A2 图标，即可支撑全部现有界面换肤。</p>';
   var total=0;
   MANIFEST.forEach(function(g){
     h+='<div class="gh">'+g[0]+'</div><table><tr><th>资源ID</th><th>说明</th><th>尺寸(设计px)</th><th>数量</th><th>使用界面</th><th>备注</th></tr>';
@@ -604,8 +698,8 @@ function renderManifest(){
       h+='<tr><td><code>'+r[0]+'</code></td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'</td><td>'+(r[5]||"")+'</td></tr>';});
     h+='</table>';
   });
-  h+='<p><b>规模合计</b>：清单条目约 '+MANIFEST.reduce(function(a,g){return a+g[1].length},0)+' 类，含帧数/变体总贴图量预估 <b>110~140 张</b>（程序化特效与 tint 复用可压至 ~100）。</p>';
-  h+='<p><b>图集分组建议</b>：<code>atlas_ui</code>(A组) / <code>atlas_hero</code>(B组) / <code>atlas_mob_ch1..3</code>(C组按章拆) / <code>atlas_fx</code>(E组) / 背景D组不打包(独立加载)。</p></div>';
+  h+='<p><b>规模合计</b>：清单条目约 '+MANIFEST.reduce(function(a,g){return a+g[1].length},0)+' 类，含帧数/变体总贴图量预估 <b>90~115 张</b>（通用组件合并 + 程序化特效 + tint 复用；未合并前约 130）。</p>';
+  h+='<p><b>图集分组建议</b>：<code>atlas_ui</code>(A1+A2 通用组件与图标) / <code>atlas_hero</code>(B组) / <code>atlas_mob_ch1..3</code>(C组按章拆) / <code>atlas_fx</code>(E组) / 背景D组不打包(独立加载)。A3 组程序绘制不进图集。</p></div>';
   return h;
 }
 function renderSpec(){
@@ -630,14 +724,14 @@ function renderSpec(){
 }
 
 /* ============ 导航与渲染 ============ */
-var ORDER=["battle","pick","stats","pause","pause_stats","pause_settings","lose","lose_stats","win","win_stats","range","tips","manifest","spec"];
+var ORDER=["battle","pick","stats","pause","pause_stats","pause_settings","lose","lose_stats","win","win_stats","range","tips","components","manifest","spec"];
 var CUR="battle";
 function renderNav(){
   var h='<div class="grp">战斗界面线稿</div>';
   ORDER.forEach(function(k){
-    var nm=k=="manifest"?"美术资源清单":k=="spec"?"设计规范 & 对接":SCREENS[k].name;
-    if(k=="manifest")h+='<div class="grp">美术资源阶段</div>';
-    h+='<button data-k="'+k+'" class="'+(CUR==k?"on":"")+'">'+nm+'<span class="en">'+(k=="manifest"?"Asset Manifest":k=="spec"?"Spec & Handoff":SCREENS[k].en)+'</span></button>';
+    var nm=k=="components"?"通用UI组件库":k=="manifest"?"美术资源清单":k=="spec"?"设计规范 & 对接":SCREENS[k].name;
+    if(k=="components")h+='<div class="grp">美术资源阶段</div>';
+    h+='<button data-k="'+k+'" class="'+(CUR==k?"on":"")+'">'+nm+'<span class="en">'+(k=="components"?"UI Components":k=="manifest"?"Asset Manifest":k=="spec"?"Spec & Handoff":SCREENS[k].en)+'</span></button>';
   });
   E("#nav",h);
   document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){CUR=b.dataset.k;renderAll();};});
@@ -645,7 +739,7 @@ function renderNav(){
 function renderAll(){
   renderNav();
   var st=document.querySelector("#stage");
-  if(CUR=="manifest"){st.innerHTML=renderManifest();E("#notes",'<h2>资源清单</h2><p>按 A~F 六组列出全部资源位。占位线稿中的每个虚线框 ID 与此清单一一对应；美术按 ID 产出文件后覆盖 <code>resources/ux/</code> 即完成替换。</p><p>资源 ID 中的 <code>{id}</code> 为实例占位：<code>hero_&#123;id&#125;_portrait</code> → <code>hero_aila_portrait</code>、<code>mob_&#123;id&#125;_walk_0</code> → <code>mob_goblin_worker_walk_0</code>。</p><h3>规模预估</h3><p>总贴图 110~140 张；首包只含第1章相关+UI，2/3 章资源走 Asset Bundle 按需加载（对齐产品文档 §12.4 性能预算）。</p>');return;}
+  if(CUR=="manifest"){st.innerHTML=renderManifest();E("#notes",'<h2>资源清单</h2><p>按 A1 通用组件 / A2 通用图标 / A3 程序绘制 + B~F 六大组列出全部资源位。占位线稿中的每个虚线框 ID 与此清单一一对应；美术按 ID 产出文件后覆盖 <code>resources/ux/</code> 即完成替换。</p><p><b>产出顺序建议</b>：先 A1 通用组件 + A2 图标（支撑全部界面骨架换肤）→ 第 1 章英雄/怪物/背景（B/C/D 首章子集）→ 特效 E → 2/3 章资源。</p><p>资源 ID 中的 <code>{id}</code> 为实例占位：<code>hero_&#123;id&#125;_portrait</code> → <code>hero_aila_portrait</code>、<code>mob_&#123;id&#125;_walk_0</code> → <code>mob_goblin_worker_walk_0</code>。</p><h3>规模预估</h3><p>总贴图 90~115 张（通用组件合并后）；首包只含第1章相关+UI，2/3 章资源走 Asset Bundle 按需加载（对齐产品文档 §12.4 性能预算）。</p>');return;}
   if(CUR=="spec"){st.innerHTML=renderSpec();E("#notes",'<h2>设计规范</h2><p>画布/安全区/字号/色板/命名/替换流程/参考图差异对照。数值最终以开发期调参为准，ID 与结构不变。</p>');return;}
   var sc=SCREENS[CUR];
   st.innerHTML='<div id="phone" class="phone"><div class="screen">'+sc.render()+'</div></div>';
