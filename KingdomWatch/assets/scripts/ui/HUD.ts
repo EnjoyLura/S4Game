@@ -350,9 +350,9 @@ export class HUD {
       return;
     }
     g.moveTo(0, 0);
-    // 引擎 Graphics 为 y-down 画布约定：0=3点、π/2=6点、3π/2=12点；ccw=true 角度递增 = 屏幕顺时针。
-    // 经典CD扫表：亮区从12点顺时针生长，暗遮罩边缘随手钟顺时针扫（12→3→6→9），f=剩余CD比例
-    g.arc(0, 0, 22, Math.PI * 1.5 + (1 - f) * Math.PI * 2, Math.PI * 3.5, true);
+    // Graphics 局部坐标 y 向上：π/2=12点、0=3点；ccw=false 按角度递减 = 屏幕顺时针。
+    // 暗遮罩从"指针位"顺时针铺回12点：指针=f·360°处，随CD流逝像时针一样顺时针旋转（12→3→6→9），亮区在12点后顺时针生长
+    g.arc(0, 0, 22, Math.PI / 2 - (1 - f) * Math.PI * 2, Math.PI / 2, false);
     g.close();
     g.fill();
   }
