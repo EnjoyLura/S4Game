@@ -8,7 +8,7 @@
 import { AudioClip, director, Node, resources, AudioSource } from 'cc';
 import { loadSave } from './SaveData';
 
-export type SfxName = 'shoot' | 'hit' | 'crit' | 'kill' | 'ult' | 'levelup' | 'ready';
+export type SfxName = 'shoot' | 'hit' | 'crit' | 'kill' | 'ult' | 'levelup' | 'ready' | 'snipe';
 
 /** 资源占位命名约定：assets/resources/audio/<file>（美术阶段直接放文件即替换） */
 const SAMPLES: Record<SfxName, string> = {
@@ -19,11 +19,12 @@ const SAMPLES: Record<SfxName, string> = {
   ult: 'audio/sfx_ult',
   levelup: 'audio/sfx_levelup',
   ready: 'audio/sfx_ready',
+  snipe: 'audio/sfx_snipe',
 };
 
 /** 资源样本播放音量（合成音量在 switch 内独立调，互不影响） */
 const SAMPLE_GAIN: Record<SfxName, number> = {
-  shoot: 1, hit: 0.8, crit: 0.9, kill: 0.9, ult: 1, levelup: 0.9, ready: 0.9,
+  shoot: 1, hit: 0.8, crit: 0.9, kill: 0.9, ult: 1, levelup: 0.9, ready: 0.9, snipe: 1.25,
 };
 
 class SfxService {
@@ -31,7 +32,7 @@ class SfxService {
   private master: GainNode | null = null;
   private noise: AudioBuffer | null = null;
   private lastAt: Partial<Record<SfxName, number>> = {};
-  private static MIN_GAP: Record<SfxName, number> = { shoot: 0.06, hit: 0.045, crit: 0.09, kill: 0.06, ult: 0, levelup: 0.15, ready: 0.2 };
+  private static MIN_GAP: Record<SfxName, number> = { shoot: 0.06, hit: 0.045, crit: 0.09, kill: 0.06, ult: 0, levelup: 0.15, ready: 0.2, snipe: 0.15 };
   private flagCache = { v: true, at: 0 };
   // 资源样本缓存（未加载/加载失败 → 走合成占位）
   private clips: Partial<Record<SfxName, AudioClip>> = {};
@@ -132,6 +133,13 @@ class SfxService {
       }
       case 'kill': this.noiseHit(0.1, 0.2, 800, 'lowpass'); this.tone('triangle', 660, 90, 0.18, 0.18); break;
       case 'ult': this.tone('sawtooth', 130, 55, 0.45, 0.2); this.noiseHit(0.35, 0.11, 500, 'lowpass'); this.tone('sine', 700, 1400, 0.3, 0.05, 0.05); break;
+      // 重狙（猎杀时刻）：低频枪声砰 + 高频弹头脆响 + 低频余震 + 高频哨尾，量感明显高于普攻
+      case 'snipe':
+        this.tone('square', 160, 45, 0.3, 0.32);
+        this.noiseHit(0.12, 0.34, 2800);
+        this.noiseHit(0.22, 0.2, 900, 'lowpass', 0.02);
+        this.tone('sine', 2200, 300, 0.24, 0.09, 0.04);
+        break;
       case 'levelup': [523, 659, 784, 1046].forEach((f, i) => this.tone('sine', f, f, 0.14, 0.13, i * 0.08)); break;
       case 'ready': this.tone('sine', 880, 880, 0.35, 0.11); this.tone('sine', 1318, 1318, 0.4, 0.07, 0.06); break;
     }

@@ -1,12 +1,44 @@
 /**
  * 战斗 HUD（UX 线稿 ①）：顶栏(暂停/关卡名/波次) + 经验条(Lv骑条居中) + 预警横幅
- * + 左列(倍速/统计/FPS) + 右侧大招纵列 + 防线耐久条(盾值胶囊/百分比) + 头顶普攻技能图标(CD环)
+ * + 左列(倍速/统计/FPS) + 右侧大招纵列(每英雄一钮) + 防线耐久条(盾值胶囊/百分比) + 头顶普攻技能图标(CD环)
  * 点击普攻/技能/未充满大招图标 → 属性Tips（§3.11）
  */
 import { Graphics, Label, Layers, Node, Tween, tween, UIOpacity, Vec3 } from 'cc';
 import { expNeed, LO, PAL } from '../config/GameConfig';
 import { gbar, gcircle, gpanel, label, setText, WY, WYB, WX, Bar, CA } from './UIKit';
 import { BattleDirector } from '../battle/BattleDirector';
+import { HeroBase } from '../battle/Hero';
+
+/** 每英雄一套的大招按钮状态（右侧纵列，底基锚定向上叠放） */
+interface UltUI {
+  ux: number; uy: number;
+  glow: Node;         // 就绪光晕（呼吸）
+  btn: Node;
+  bright: Node;       // 就绪增亮层
+  gray: Node;         // 充能中灰化杯体
+  water: Node;        // 金水（圆杯液面上涨）
+  waterG: Graphics;
+  orbit: Node;        // 就绪环绕粒子
+  chargeTxt: Node;
+  ready: boolean | null;
+  shown: number;      // 金水平滑逼近
+  flash: number;      // 获得充能闪光
+  lastChargeKey: number;
+  lastTarget: number;
+}
+
+/** 每英雄一套的头顶技能图标状态 */
+interface SkillUI {
+  cx: number; cy: number;
+  icon: Node;
+  glyph: Node;
+  gray: Node;
+  pie: Node;
+  pieG: Graphics;
+  cdTxt: Node;
+  cooling: boolean | null;
+  lastCdKey: number;
+}
 
 export class HUD {
   private waveTxt!: Node;
@@ -17,23 +49,9 @@ export class HUD {
   private shieldNode!: Node;
   private shieldG!: Graphics;
   private shieldVal!: Node;
-  private chargeTxt!: Node;
-  private ultBtn!: Node;
-  private ultGlow!: Node;       // 就绪光晕（呼吸）
-  private ultBright!: Node;     // 就绪增亮层
-  private ultGray!: Node;       // 充能中灰化杯体
-  private ultWater!: Node;      // 金水（圆杯液面上涨）
-  private ultWaterG!: Graphics;
-  private ultOrbit!: Node;      // 就绪环绕粒子
-  private skillIcon!: Node;
-  private skillGlyph!: Node;
-  private skillGray!: Node;     // CD 中灰化
-  private skillPie!: Node;      // 扇形冷却遮罩
-  private skillPieG!: Graphics;
-  private skillCdTxt!: Node;    // 中心倒计时
+  private ults: UltUI[] = [];
+  private skills: SkillUI[] = [];
   private hudNode!: Node;
-  private ux = 0; private uy = 0;
-  private scx = 0; private scy = 0;
   private banner!: Node;
   private bannerTxt!: Node;
   private fpsTxt!: Node;
@@ -45,18 +63,11 @@ export class HUD {
   private lastLv = -1;
   private lastHp = -1;
   private lastShield = -1;
-  private lastReady = false;
-  private lastChargeKey = -1;
-  private skillCooling: boolean | null = null;
-  private lastCdKey = -1;
-  // 经验条/充能上涨动画状态（平滑逼近 + 获得时闪光）
+  // 经验条上涨动画状态（平滑逼近 + 获得时闪光）
   private xpShown = 0;
   private xpTarget0 = 0;
   private xpFlash = 0;
   private lastXpTarget = 0;
-  private chargeShown = 0;
-  private chargeFlash = 0;
-  private lastChargeTarget = -1;
 
   constructor(parent: Node, private dir: BattleDirector, bgParent?: Node) {
     this.build(parent, bgParent);
@@ -100,39 +111,9 @@ export class HUD {
     label(statsBtn, 0, 0, '📊', { size: 24 });
     statsBtn.on(Node.EventType.TOUCH_END, () => this.dir.showStats());
 
-    /* 右侧大招按钮（4×1 纵列右对齐、底基锚定；M0 单英雄=第1钮）
+    /* 右侧大招纵列：每英雄一钮，底基锚定向上叠放（线稿① 4×1 纵列右对齐）
        充能中：灰化杯体 + 金水上涨（2% 步进）；就绪：高亮 + 光晕呼吸 + 粒子环绕 */
-    const ux = WX(636, 90), uy = WYB(504, 90);
-    this.ux = ux; this.uy = uy;
-    this.ultGlow = gcircle(top, ux, uy, 56, CA(PAL.gold, 0.16));
-    const glowOp = this.ultGlow.addComponent(UIOpacity);
-    glowOp.opacity = 130;
-    this.ultGlow.active = false;
-    this.ultBtn = gcircle(top, ux, uy, 45, CA(PAL.gold, 0.25), PAL.gold, 2.5);
-    this.ultBright = gcircle(top, ux, uy, 45, CA(PAL.gold, 0.42));
-    this.ultBright.active = false;
-    this.ultGray = gcircle(top, ux, uy, 45, CA('#3A4250', 0.9), '#77808E', 1.5);
-    this.ultWater = new Node('ultWater');
-    this.ultWater.setParent(top);
-    this.ultWater.setPosition(ux, uy, 0);
-    this.ultWaterG = this.ultWater.addComponent(Graphics);
-    this.ultOrbit = new Node('ultOrbit');
-    this.ultOrbit.setParent(top);
-    this.ultOrbit.setPosition(ux, uy, 0);
-    const og = this.ultOrbit.addComponent(Graphics);
-    for (let i = 0; i < 8; i++) {
-      const a = (i / 8) * Math.PI * 2;
-      const rr = 54 + (i % 3) * 5;
-      og.fillColor = CA(i % 2 ? '#FFE08A' : PAL.gold, 0.95);
-      og.circle(Math.cos(a) * rr, Math.sin(a) * rr, 2 + (i % 3) * 0.9);
-      og.fill();
-    }
-    this.ultOrbit.addComponent(UIOpacity);
-    this.ultOrbit.active = false;
-    this.chargeTxt = label(top, ux, uy, '大招\n0%', { size: 18, color: '#FFFFFF', bold: true, w: 90, h: 50 });
-    this.ultBtn.on(Node.EventType.TOUCH_END, () => {
-      if (this.dir.tryCastUlt() === 'charging') this.dir.showTips('ult');
-    });
+    this.dir.heroes.forEach((h, i) => this.ults.push(this.buildUlt(top, i, h)));
 
     /* 防线耐久条（贴屏底、在墙上方）：条内居中耐久值 + 盾值胶囊(右→左) + 右侧百分比 */
     this.hpBar = gbar(top, WX(55, 640), WYB(176, 20), 640, 22, PAL.green);
@@ -145,25 +126,68 @@ export class HUD {
     this.shieldNode.active = false;
     this.pctTxt = label(top, WX(698, 48), WYB(176, 24), '100%', { size: 16, color: '#9FE08A', bold: true });
 
-    /* 英雄头顶 普攻/技能 图标（耐久条正下方，压墙顶，不遮挡耐久条）
+    /* 英雄头顶 普攻/技能 图标（耐久条正下方，压墙顶，不遮挡耐久条；每英雄一套）
        技能 CD 中：灰化 + 扇形冷却遮罩 + 中心倒计时；就绪：高饱和 + 弹跳过渡 */
-    const heroX = this.dir.hero.x;
-    this.scx = heroX + 27; this.scy = WYB(126, 46);
-    const atkIcon = gcircle(top, heroX - 27, this.scy, 23, CA(PAL.gold, 0.3), PAL.gold, 2);
+    this.dir.heroes.forEach((h, i) => this.skills.push(this.buildSkillBadge(top, i, h)));
+  }
+
+  /** 第 i 钮：底基 504，向上每钮 +110；点击就绪即施放，未满→Tips */
+  private buildUlt(top: Node, i: number, hero: HeroBase): UltUI {
+    const ux = WX(636, 90), uy = WYB(504 + i * 110, 90);
+    const glow = gcircle(top, ux, uy, 56, CA(PAL.gold, 0.16));
+    const glowOp = glow.addComponent(UIOpacity);
+    glowOp.opacity = 130;
+    glow.active = false;
+    const btn = gcircle(top, ux, uy, 45, CA(PAL.gold, 0.25), PAL.gold, 2.5);
+    const bright = gcircle(top, ux, uy, 45, CA(PAL.gold, 0.42));
+    bright.active = false;
+    const gray = gcircle(top, ux, uy, 45, CA('#3A4250', 0.9), '#77808E', 1.5);
+    const water = new Node('ultWater' + i);
+    water.setParent(top);
+    water.setPosition(ux, uy, 0);
+    const waterG = water.addComponent(Graphics);
+    const orbit = new Node('ultOrbit' + i);
+    orbit.setParent(top);
+    orbit.setPosition(ux, uy, 0);
+    const og = orbit.addComponent(Graphics);
+    for (let k = 0; k < 8; k++) {
+      const a = (k / 8) * Math.PI * 2;
+      const rr = 54 + (k % 3) * 5;
+      og.fillColor = CA(k % 2 ? '#FFE08A' : PAL.gold, 0.95);
+      og.circle(Math.cos(a) * rr, Math.sin(a) * rr, 2 + (k % 3) * 0.9);
+      og.fill();
+    }
+    orbit.addComponent(UIOpacity);
+    orbit.active = false;
+    const chargeTxt = label(top, ux, uy, '大招\n0%', { size: 18, color: '#FFFFFF', bold: true, w: 90, h: 50 });
+    // 钮下英雄名：双英雄时代区分归属（艾拉/凯尔）
+    label(top, ux, uy - 58, hero.name.slice(0, 2), { size: 13, color: '#CDC2A2', bold: true, w: 90, h: 20 });
+    btn.on(Node.EventType.TOUCH_END, () => {
+      if (this.dir.tryCastUlt(i) === 'charging') this.dir.showTips('ult', i);
+    });
+    return { ux, uy, glow, btn, bright, gray, water, waterG, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
+  }
+
+  /** 头顶图标对：普攻(-27)/技能(+27)，锚定各自英雄 */
+  private buildSkillBadge(top: Node, i: number, hero: HeroBase): SkillUI {
+    const cy = WYB(126, 46);
+    const atkX = hero.x - 27, cx = hero.x + 27;
+    const atkIcon = gcircle(top, atkX, cy, 23, CA(PAL.gold, 0.3), PAL.gold, 2);
     label(atkIcon, 0, 0, '攻', { size: 18, color: PAL.gold, bold: true });
-    atkIcon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('atk'));
-    this.skillIcon = gcircle(top, this.scx, this.scy, 23, CA(PAL.blue, 0.3), PAL.blue, 2);
-    this.skillGlyph = label(this.skillIcon, 0, 0, '技', { size: 18, color: PAL.blue, bold: true });
-    this.skillIcon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('skill'));
-    this.skillGray = gcircle(top, this.scx, this.scy, 23, CA('#3A4250', 0.9), '#77808E', 1.5);
-    this.skillGray.active = false;
-    this.skillPie = new Node('skillPie');
-    this.skillPie.setParent(top);
-    this.skillPie.setPosition(this.scx, this.scy, 0);
-    this.skillPieG = this.skillPie.addComponent(Graphics);
-    this.skillPie.active = false;
-    this.skillCdTxt = label(top, this.scx, this.scy, '', { size: 13, color: '#FFFFFF', bold: true, w: 48, h: 20 });
-    this.skillCdTxt.active = false;
+    atkIcon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('atk', i));
+    const icon = gcircle(top, cx, cy, 23, CA(PAL.blue, 0.3), PAL.blue, 2);
+    const glyph = label(icon, 0, 0, '技', { size: 18, color: PAL.blue, bold: true });
+    icon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('skill', i));
+    const gray = gcircle(top, cx, cy, 23, CA('#3A4250', 0.9), '#77808E', 1.5);
+    gray.active = false;
+    const pie = new Node('skillPie' + i);
+    pie.setParent(top);
+    pie.setPosition(cx, cy, 0);
+    const pieG = pie.addComponent(Graphics);
+    pie.active = false;
+    const cdTxt = label(top, cx, cy, '', { size: 13, color: '#FFFFFF', bold: true, w: 48, h: 20 });
+    cdTxt.active = false;
+    return { cx, cy, icon, glyph, gray, pie, pieG, cdTxt, cooling: null, lastCdKey: -1 };
   }
 
   setWave(cur: number, total: number): void {
@@ -233,50 +257,42 @@ export class HUD {
       this.lastShield = sh;
       this.redrawShield(sh);
     }
-    // 大招充能/就绪（水杯填充 → 就绪光效过渡）
-    const ready = d.hero.ultReady;
-    if (ready !== this.lastReady) {
-      this.lastReady = ready;
-      this.applyUltReady(ready);
+    // 每英雄：大招充能/就绪 + 技能CD
+    d.heroes.forEach((h, i) => {
+      this.syncUlt(h, this.ults[i], dt);
+      this.syncSkillCd(h, this.skills[i]);
+    });
+  }
+
+  /* ---------- 大招图标：水杯充能 / 就绪光效（每英雄） ---------- */
+
+  private syncUlt(hero: HeroBase, u: UltUI, dt: number): void {
+    if (!u) return;
+    const ready = hero.ultReady;
+    if (ready !== u.ready) {
+      u.ready = ready;
+      this.applyUltReady(u, ready);
     }
     if (!ready) {
       // 金水液面平滑上涨；获得充能时水面高光闪亮
-      const cp = d.hero.chargePct;
-      if (cp > this.lastChargeTarget + 0.0001) this.chargeFlash = 0.35;
-      this.lastChargeTarget = cp;
-      this.chargeShown += (cp - this.chargeShown) * Math.min(1, dt * 5);
-      if (cp - this.chargeShown < 0.002) this.chargeShown = cp;
-      this.chargeFlash = Math.max(0, this.chargeFlash - dt);
-      const key = Math.round(this.chargeShown * 60);
-      if (key !== this.lastChargeKey || this.chargeFlash > 0) {
-        this.lastChargeKey = key;
-        this.redrawUltWater(this.chargeShown, this.chargeFlash > 0);
-        setText(this.chargeTxt, '大招\n' + Math.round(cp * 100) + '%');
-      }
-    }
-    // 技能CD（灰化 + 扇形遮罩 + 中心倒计时）
-    const cdLeft = Math.max(0, d.hero.skillCd);
-    const cooling = cdLeft > 0.05;
-    if (cooling !== this.skillCooling) {
-      const first = this.skillCooling === null;
-      this.skillCooling = cooling;
-      this.applySkillCooling(cooling, first);
-    }
-    if (cooling) {
-      const key = Math.floor(cdLeft * 10);   // 0.1s 步进：遮罩重绘 + 倒计时跳动一致
-      if (key !== this.lastCdKey) {
-        this.lastCdKey = key;
-        setText(this.skillCdTxt, cdLeft.toFixed(1) + 's');
-        this.redrawSkillPie(cdLeft / d.hero.skillMax);
+      const cp = hero.chargePct;
+      if (cp > u.lastTarget + 0.0001) u.flash = 0.35;
+      u.lastTarget = cp;
+      u.shown += (cp - u.shown) * Math.min(1, dt * 5);
+      if (cp - u.shown < 0.002) u.shown = cp;
+      u.flash = Math.max(0, u.flash - dt);
+      const key = Math.round(u.shown * 60);
+      if (key !== u.lastChargeKey || u.flash > 0) {
+        u.lastChargeKey = key;
+        this.redrawUltWater(u, u.shown, u.flash > 0);
+        setText(u.chargeTxt, '大招\n' + Math.round(cp * 100) + '%');
       }
     }
   }
 
-  /* ---------- 大招图标：水杯充能 / 就绪光效 ---------- */
-
   /** 金水上涨：圆杯内液面以下的圆缺面（弦 + 下弧采样，避免 arc 方向歧义）；flash=获得瞬间水面高光 */
-  private redrawUltWater(pct: number, flash = false): void {
-    const g = this.ultWaterG;
+  private redrawUltWater(u: UltUI, pct: number, flash = false): void {
+    const g = u.waterG;
     g.clear();
     if (pct <= 0.01) return;
     const R = 43;
@@ -307,38 +323,38 @@ export class HUD {
     g.stroke();
   }
 
-  /** 充能→就绪 状态切换：图标弹跳 + 冲击扩散环 + 光晕呼吸 + 粒子环绕 */
-  private applyUltReady(ready: boolean): void {
-    this.ultGray.active = !ready;
-    this.ultWater.active = !ready;
-    this.ultBright.active = ready;
+  /** 充能→就绪 状态切换：图标弹跳 + 扩散冲击环 + 光晕呼吸 + 粒子环绕 */
+  private applyUltReady(u: UltUI, ready: boolean): void {
+    u.gray.active = !ready;
+    u.water.active = !ready;
+    u.bright.active = ready;
     if (!ready) {
-      this.lastChargeKey = -1;
-      this.chargeShown = 0;
-      this.lastChargeTarget = -1;
-      setText(this.chargeTxt, '大招\n0%');
-      Tween.stopAllByTarget(this.ultBtn);
-      Tween.stopAllByTarget(this.ultGlow);
-      Tween.stopAllByTarget(this.ultOrbit);
-      this.ultBtn.setScale(1, 1, 1);
-      this.ultGlow.active = false;
-      this.ultOrbit.active = false;
+      u.lastChargeKey = -1;
+      u.shown = 0;
+      u.lastTarget = -1;
+      setText(u.chargeTxt, '大招\n0%');
+      Tween.stopAllByTarget(u.btn);
+      Tween.stopAllByTarget(u.glow);
+      Tween.stopAllByTarget(u.orbit);
+      u.btn.setScale(1, 1, 1);
+      u.glow.active = false;
+      u.orbit.active = false;
       return;
     }
-    setText(this.chargeTxt, '大招\n就绪');
-    this.ultGlow.active = true;
-    this.ultOrbit.active = true;
+    setText(u.chargeTxt, '大招\n就绪');
+    u.glow.active = true;
+    u.orbit.active = true;
     // 一次性过渡：弹跳 + 扩散环
-    Tween.stopAllByTarget(this.ultBtn);
-    this.ultBtn.setScale(1, 1, 1);
-    tween(this.ultBtn)
+    Tween.stopAllByTarget(u.btn);
+    u.btn.setScale(1, 1, 1);
+    tween(u.btn)
       .to(0.18, { scale: new Vec3(1.22, 1.22, 1) }, { easing: 'backOut' })
       .to(0.16, { scale: new Vec3(1, 1, 1) })
       .start();
     const burst = new Node('ultBurst');
     burst.layer = Layers.Enum.UI_2D;
     burst.setParent(this.hudNode);
-    burst.setPosition(this.ux, this.uy, 0);
+    burst.setPosition(u.ux, u.uy, 0);
     const bg = burst.addComponent(Graphics);
     bg.strokeColor = CA(PAL.gold, 0.9);
     bg.lineWidth = 4;
@@ -348,18 +364,37 @@ export class HUD {
     tween(burst).to(0.42, { scale: new Vec3(1.55, 1.55, 1) }).start();
     tween(bop).to(0.42, { opacity: 0 }).call(() => burst.destroy()).start();
     // 持续：光晕呼吸 + 粒子逆时针环绕
-    const gop = this.ultGlow.getComponent(UIOpacity)!;
+    const gop = u.glow.getComponent(UIOpacity)!;
     Tween.stopAllByTarget(gop);
     tween(gop).repeatForever(tween(gop).to(0.9, { opacity: 225 }).to(0.9, { opacity: 130 })).start();
-    Tween.stopAllByTarget(this.ultOrbit);
-    tween(this.ultOrbit).repeatForever(tween(this.ultOrbit).by(4.5, { angle: -360 })).start();
+    Tween.stopAllByTarget(u.orbit);
+    tween(u.orbit).repeatForever(tween(u.orbit).by(4.5, { angle: -360 })).start();
   }
 
-  /* ---------- 技能图标：CD 遮罩 / 就绪过渡 ---------- */
+  /* ---------- 技能图标：CD 遮罩 / 就绪过渡（每英雄） ---------- */
+
+  private syncSkillCd(hero: HeroBase, s: SkillUI): void {
+    if (!s) return;
+    const cdLeft = Math.max(0, hero.skillCd);
+    const cooling = cdLeft > 0.05;
+    if (cooling !== s.cooling) {
+      const first = s.cooling === null;
+      s.cooling = cooling;
+      this.applySkillCooling(s, cooling, first);
+    }
+    if (cooling) {
+      const key = Math.floor(cdLeft * 10);   // 0.1s 步进：遮罩重绘 + 倒计时跳动一致
+      if (key !== s.lastCdKey) {
+        s.lastCdKey = key;
+        setText(s.cdTxt, cdLeft.toFixed(1) + 's');
+        this.redrawSkillPie(s, cdLeft / hero.skillMax);
+      }
+    }
+  }
 
   /** 扇形冷却遮罩：覆盖剩余 CD 比例，指针从 12 点顺时针扫过（随 CD 流逝遮罩收缩） */
-  private redrawSkillPie(f: number): void {
-    const g = this.skillPieG;
+  private redrawSkillPie(s: SkillUI, f: number): void {
+    const g = s.pieG;
     g.clear();
     if (f <= 0.004) return;
     g.fillColor = CA('#0B0F16', 0.62);
@@ -376,24 +411,24 @@ export class HUD {
     g.fill();
   }
 
-  private applySkillCooling(cooling: boolean, first: boolean): void {
-    this.skillGray.active = cooling;
-    this.skillPie.active = cooling;
-    this.skillCdTxt.active = cooling;
-    this.skillGlyph.active = !cooling;
-    this.lastCdKey = -1;
+  private applySkillCooling(s: SkillUI, cooling: boolean, first: boolean): void {
+    s.gray.active = cooling;
+    s.pie.active = cooling;
+    s.cdTxt.active = cooling;
+    s.glyph.active = !cooling;
+    s.lastCdKey = -1;
     if (!cooling && !first) {
       // 就绪过渡：弹跳 + 扩散环
-      Tween.stopAllByTarget(this.skillIcon);
-      this.skillIcon.setScale(1, 1, 1);
-      tween(this.skillIcon)
+      Tween.stopAllByTarget(s.icon);
+      s.icon.setScale(1, 1, 1);
+      tween(s.icon)
         .to(0.15, { scale: new Vec3(1.25, 1.25, 1) }, { easing: 'backOut' })
         .to(0.13, { scale: new Vec3(1, 1, 1) })
         .start();
       const burst = new Node('skillBurst');
       burst.layer = Layers.Enum.UI_2D;
       burst.setParent(this.hudNode);
-      burst.setPosition(this.scx, this.scy, 0);
+      burst.setPosition(s.cx, s.cy, 0);
       const bg = burst.addComponent(Graphics);
       bg.strokeColor = CA(PAL.blue, 0.9);
       bg.lineWidth = 3;

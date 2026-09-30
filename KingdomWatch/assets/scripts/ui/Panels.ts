@@ -6,7 +6,7 @@ import { Graphics, Node, tween, UIOpacity, Vec3 } from 'cc';
 import { CardDef, CardStacks, RARITY_COLOR } from '../config/Cards';
 import { HERO_Y, LO, PAL } from '../config/GameConfig';
 import { DamageRow, fmtWk } from '../battle/DamageService';
-import { HeroUnit } from '../battle/Hero';
+import { HeroBase } from '../battle/Hero';
 import { BattleDirector } from '../battle/BattleDirector';
 import { AdService } from '../platform/AdService';
 import { loadSave } from '../core/SaveData';
@@ -125,9 +125,10 @@ export class Panels {
     const icon = gcircle(frame, 0, 50, 48, CA(rarity, 0.14), rarity, 1.5);
     label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 24, color: rarity, bold: true });
 
-    // ③ 右上英雄归属角标 56×56 金圈（全局卡绿色）
+    // ③ 右上英雄归属角标 56×56 金圈（全局卡绿色；弓/狙金圈+姓氏）
+    const ownHero = card.owner === 'archer' ? '弓' : card.owner === 'sniper' ? '狙' : '';
     const ava = gcircle(frame, 68, 144, 28, CA('#2A3240', 1), card.owner === 'global' ? PAL.green : PAL.gold, 2.5);
-    label(ava, 0, 0, card.owner === 'global' ? '全' : '弓',
+    label(ava, 0, 0, card.owner === 'global' ? '全' : ownHero,
       { size: 20, color: card.owner === 'global' ? PAL.green : PAL.gold, bold: true });
 
     // ④ 左上『新』角标 56×56 绿圆，骑在卡角上（首次出现）
@@ -138,7 +139,7 @@ export class Panels {
 
     // ⑤ 描述两行 + ⑥ 底部"稀有度·定位"小字（已学层数并入文案，线稿不设层数行）
     label(frame, 0, -105, card.desc, { size: 15, color: PAL.parch, w: 184, h: 56, shrink: true, lineHeight: 20 });
-    const tag = rName + ' · ' + (card.owner === 'global' ? '全局' : '弓手') + (used > 0 ? ' · 已学 ' + used + ' 层' : '');
+    const tag = rName + ' · ' + (card.owner === 'global' ? '全局' : card.owner === 'sniper' ? '狙击' : '弓手') + (used > 0 ? ' · 已学 ' + used + ' 层' : '');
     label(frame, 0, -140, tag, { size: 13, color: '#BFB392', w: 190, h: 24, shrink: true });
   }
 
@@ -359,16 +360,16 @@ export class Panels {
   }
 
   /* ---------- ⑧ 属性Tips：无遮罩、贴图标侧、点空白关闭、带索敌范围圈（线稿⑧⑦） ---------- */
-  showTips(kind: 'atk' | 'skill' | 'ult', hero: HeroUnit, line: { maxHp: number }): void {
+  showTips(kind: 'atk' | 'skill' | 'ult', hero: HeroBase, line: { maxHp: number }, ultIdx = 0): void {
     void line;
     this.closeAll();
     // 全屏透明捕获层：点任意空白处关闭（不加变暗遮罩，§3.11 战斗不暂停）
     const catcher = N('tipsCatch', this.modalRoot, 0, 0, 750, LO.half * 2 + 200);
     catcher.on(Node.EventType.TOUCH_END, () => this.closeAll());
 
-    // 索敌范围圈：以英雄为圆心，半透明填充 + 圈线（线稿⑦）
+    // 索敌范围圈：以英雄为圆心，半透明填充 + 圈线（线稿⑦）；skillRange=9999 表示全场（狙击），不画圈
     const R = kind === 'atk' ? hero.stats.range : kind === 'skill' ? hero.stats.skillRange : 0;
-    if (R > 0) {
+    if (R > 0 && R < 2000) {
       const rc = N('range', this.modalRoot, hero.x, HERO_Y + 30, R * 2, R * 2);
       const rg = rc.addComponent(Graphics);
       const col = kind === 'atk' ? PAL.gold : PAL.blue;
@@ -382,11 +383,12 @@ export class Panels {
     }
 
     const h = hero.stats;
+    const isArcher = hero.id === 'archer';
     const iconY = WYB(126, 46);
     let px: number, py: number, w = 300, hh = 300, title: string;
     let rows: [string, string][];
     if (kind === 'atk') {
-      title = '🏹 普攻 · 风刃射击';
+      title = isArcher ? '🏹 普攻 · 风刃射击' : '🎯 普攻 · 重弩狙击';
       rows = [
         ['伤害', String(Math.round(h.atk * h.atkMul))],
         ['攻速', h.aspd.toFixed(1) + ' 次/秒'],
@@ -398,18 +400,30 @@ export class Panels {
       px = hero.x - 27 + 23 + 16 + w / 2;
       py = iconY + 23 + 16 + hh / 2;
     } else if (kind === 'skill') {
-      title = '⚡ 技能 · 强化箭矢';
-      rows = [
-        ['效果', '接下来 6 次普攻强化'],
-        ['强化伤害', Math.round(h.atk * h.atkMul * 1.5) + '（×1.5）'],
-        ['强化特性', '金色贯穿 · 攻速+30%'],
-        ['冷却时间', hero.skillCd > 0 ? hero.skillCd.toFixed(1) + ' 秒' : '就绪'],
-        ['索敌范围', String(Math.round(h.skillRange))],
-        ['释放', '自动'],
-      ];
+      if (isArcher) {
+        title = '⚡ 技能 · 强化箭矢';
+        rows = [
+          ['效果', '接下来 6 次普攻强化'],
+          ['强化伤害', Math.round(h.atk * h.atkMul * 1.5) + '（×1.5）'],
+          ['强化特性', '金色贯穿 · 攻速+30%'],
+          ['冷却时间', hero.skillCd > 0 ? hero.skillCd.toFixed(1) + ' 秒' : '就绪'],
+          ['索敌范围', String(Math.round(h.skillRange))],
+          ['释放', '自动'],
+        ];
+      } else {
+        title = '⚡ 技能 · 穿颅射击';
+        rows = [
+          ['效果', '锁定血量最高 · 连续 6 狙'],
+          ['每发伤害', Math.round(h.atk * h.atkMul * 2) + '（×2.0）'],
+          ['特性', '死亡转火 · 全场锁定 · 独立暴击'],
+          ['冷却时间', hero.skillCd > 0 ? hero.skillCd.toFixed(1) + ' 秒' : '就绪'],
+          ['索敌范围', '全场'],
+          ['释放', '自动'],
+        ];
+      }
       px = hero.x + 27 + 23 + 16 + w / 2;
       py = iconY + 23 + 16 + hh / 2;
-    } else {
+    } else if (isArcher) {
       title = '✦ 大招 · 扇形箭雨';
       w = 280; hh = 270;
       rows = [
@@ -422,7 +436,19 @@ export class Panels {
       ];
       // 大招图标半径 45：面板右缘 = 图标圆心 - 45(半径) - 16(间距)
       px = WX(636, 90) - 45 - 16 - w / 2;
-      py = WYB(504, 90);
+      py = WYB(504 + ultIdx * 110, 90);
+    } else {
+      title = '✦ 大招 · 猎杀时刻';
+      w = 280; hh = 270;
+      rows = [
+        ['伤害', '×5.5 必定暴击'],
+        ['特性', '无视物抗 · 锁定全场最高血量'],
+        ['充能', Math.floor(hero.charge) + ' / ' + hero.chargeMax],
+        ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
+        ['释放', '手动点击'],
+      ];
+      px = WX(636, 90) - 45 - 16 - w / 2;
+      py = WYB(504 + ultIdx * 110, 90);
     }
     // 面板整体收敛进可视区
     px = Math.max(-375 + w / 2 + 8, Math.min(375 - w / 2 - 8, px));

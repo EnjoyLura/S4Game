@@ -1,11 +1,13 @@
 /**
  * 英雄单元（§3.7：普攻自动/技能自动CD/大招手动击杀充能）
- * M0：弓箭手艾拉·风羽 —— 索敌优先最靠下；技能=强化箭矢(12s，接下来6次普攻变金色贯穿箭)；大招=扇形箭雨(两排×8箭全贯穿)
- * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/词条）
+ * HeroBase：站位/普攻循环/技能自动CD/击杀+呼吸回能充能；子类实现立绘/普攻/技能/大招
+ * - ArcherHero 艾拉·风羽：强化箭矢(12s，6次普攻金色贯穿) / 扇形箭雨(两排×8箭全贯穿)
+ * - SniperHero 凯尔·鹰眼：穿颅射击(14s，锁定血量最高连续6狙×2/发·死亡转火·全场锁定) / 猎杀时刻(×5.5必暴·无视物抗单发)
+ * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/处决/残血词条）
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { HeroStats } from '../config/Cards';
-import { ARCHER_CHARGE_MAX, HERO_Y, PAL } from '../config/GameConfig';
+import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, HERO_Y, PAL } from '../config/GameConfig';
 import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
@@ -18,23 +20,18 @@ function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); re
 interface PendingShot { t: number; target: Monster | null; dirX: number; dirY: number; emp?: boolean; }
 interface PendingVolley { t: number; row: 0 | 1; }
 
-export class HeroUnit {
-  readonly id = 'archer';
-  readonly name = '艾拉·风羽';
+export abstract class HeroBase {
+  abstract readonly id: string;
+  abstract readonly name: string;
   node = new Node('hero');
   stats: HeroStats;
   charge = 0;
-  readonly chargeMax = ARCHER_CHARGE_MAX;
+  abstract readonly chargeMax: number;
   skillCd = 0;
-  readonly skillMax = 12;
-  /** 技能·强化箭矢：剩余强化普攻次数（>0 时出弓即金色贯穿箭） */
-  empowerLeft = 0;
-  private readonly empowerMax = 6;
+  abstract readonly skillMax: number;
   /** 大招呼吸回能计时（每 3s +1，用户确认的少量自然回能） */
   private regenT = 3;
   private atkT = 0;
-  private serialQueue: PendingShot[] = [];
-  private volleyQueue: PendingVolley[] = [];
   private hx: number;
 
   constructor(parent: Node, x: number, stats: HeroStats) {
@@ -43,9 +40,133 @@ export class HeroUnit {
     this.buildVisual(parent);
   }
 
-  private buildVisual(parent: Node): void {
+  protected abstract buildVisual(parent: Node): void;
+
+  get x(): number { return this.hx; }
+  get effAtk(): number { return this.stats.atk * this.stats.atkMul; }
+  get chargePct(): number { return this.charge / this.chargeMax; }
+  get ultReady(): boolean { return this.charge >= this.chargeMax; }
+  get skillPct(): number { return 1 - this.skillCd / this.skillMax; }
+
+  tick(dt: number, mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
+    void dmg;
+    this.updateQueues(dt, mgr, projs);
+    // 普攻
+    this.atkT -= dt;
+    if (this.atkT <= 0) {
+      const t = mgr.pickTarget(this.x, HERO_Y, this.stats.range);
+      if (t) {
+        this.shoot(t, mgr, projs);
+        this.atkT = this.attackInterval();
+      } else {
+        this.atkT = 0;
+      }
+    }
+    // 技能（自动：CD 好 + 技能范围内有怪）
+    this.skillCd -= dt;
+    if (this.skillCd <= 0 && mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange)) {
+      this.castSkill();
+    }
+    // 大招呼吸回能：每 3 秒少量充能（不与击杀充能冲突；满后停止）
+    this.regenT -= dt;
+    if (this.regenT <= 0) {
+      this.regenT += 3;
+      if (!this.ultReady) this.chargeKill(1);
+    }
+  }
+
+  /** 子类队列推进（连射/技能连狙等） */
+  protected updateQueues(_dt: number, _mgr: MonsterManager, _projs: ProjectileManager): void { void _dt; void _mgr; void _projs; }
+
+  /** 本次普攻后的攻击间隔（弓箭手强化窗口攻速 +30% 时覆写） */
+  protected attackInterval(): number { return 1 / this.stats.aspd; }
+
+  protected abstract shoot(target: Monster, mgr: MonsterManager, projs: ProjectileManager): void;
+  protected abstract castSkill(): void;
+  /** 大招（手动，充能满可放；全场无目标时不消耗充能） */
+  abstract castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean;
+
+  /** 击杀充能（§3.7：击杀者获得怪物配置充能值） */
+  chargeKill(v: number): void {
+    if (this.ultReady) return;
+    const was = this.ultReady;
+    this.charge = Math.min(this.chargeMax, this.charge + v);
+    bus.emit(EVT.CHARGE_CHANGED, this.chargePct, this.ultReady);
+    if (!was && this.ultReady) Sfx.play('ready');
+  }
+
+  /**
+   * 预判拦截瞄准：按目标当前速度解拦截方程，瞄准"子弹到达时目标将所在的位置"。
+   * 目标匀速直线下行 v（停位/攻击态 v=0），子弹速度 s，相对位移 (dx,dy)：
+   *   (v²-s²)t² - 2·dy·v·t + (dx²+dy²) = 0，s>v 时判别式恒 ≥0 必有解。
+   * 理论不可拦截（disc<0）或无正根时退化为瞄准当前位置。
+   */
+  protected lead(target: Monster, bulletSpeed: number): { dirX: number; dirY: number } {
+    const px = this.x, py = HERO_Y + 60;
+    const moving = target.state === 'move';
+    const v = moving ? target.def.speed * (target.slowT > 0 ? 0.8 : 1) : 0;
+    const dx = target.x - px, dy = target.y - py;
+    const a = v * v - bulletSpeed * bulletSpeed;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    let t = dist / bulletSpeed;
+    if (v > 0 && a < -1e-6) {
+      const disc = dy * dy * v * v - a * (dx * dx + dy * dy);
+      if (disc >= 0) {
+        const sq = Math.sqrt(disc);
+        const t1 = (dy * v - sq) / a, t2 = (dy * v + sq) / a;
+        const hit = t1 > 0 && t2 > 0 ? Math.min(t1, t2) : (t1 > 0 ? t1 : t2);
+        if (hit > 0) t = hit;
+      }
+    }
+    const ldx = target.x - px, ldy = target.y - v * t - py;
+    const l = Math.sqrt(ldx * ldx + ldy * ldy) || 1;
+    return { dirX: ldx / l, dirY: ldy / l };
+  }
+
+  /** 瞬击弹道演出：枪口→目标的亮线，快速淡出（狙击技能/大招） */
+  protected tracer(parent: Node, tx: number, ty: number, color: string, width = 3, life = 0.14): void {
+    const n = new Node('tracer');
+    n.layer = Layers.Enum.UI_2D;
+    n.setParent(parent);
+    const g = n.addComponent(Graphics);
+    g.strokeColor = hexc(color);
+    g.lineWidth = width;
+    g.moveTo(this.x, HERO_Y + 60);
+    g.lineTo(tx, ty);
+    g.stroke();
+    const op = n.addComponent(UIOpacity);
+    tween(op).to(life, { opacity: 0 }).call(() => n.destroy()).start();
+  }
+
+  /** 命中词条透传（处决标记/猎手本能：弹道命中时按目标结算） */
+  protected targetBonuses(): PickUp<ProjSpec, 'executeBonus' | 'lowHpBonus'> {
+    const b: { executeBonus?: number; lowHpBonus?: number } = {};
+    if (this.stats.executeBonus) b.executeBonus = this.stats.executeBonus;
+    if (this.stats.lowHpBonus) b.lowHpBonus = this.stats.lowHpBonus;
+    return b;
+  }
+}
+
+type PickUp<T, K extends keyof T> = { [P in K]?: T[P] };
+
+/* ============================================================
+ * 弓箭手 · 艾拉·风羽（线稿 hero_aila_battle 100×120）
+ * ============================================================ */
+export class ArcherHero extends HeroBase {
+  readonly id = 'archer';
+  readonly name = '艾拉·风羽';
+  readonly chargeMax = ARCHER_CHARGE_MAX;
+  readonly skillMax = 12;
+  /** 技能·强化箭矢：剩余强化普攻次数（>0 时出弓即金色贯穿箭） */
+  empowerLeft = 0;
+  private readonly empowerMax = 6;
+  private lastEmp = false;
+  private serialQueue: PendingShot[] = [];
+  private volleyQueue: PendingVolley[] = [];
+
+  protected buildVisual(parent: Node): void {
     const g = this.node.addComponent(Graphics);
-    // 弓箭手艾拉·风羽（线稿 hero_aila_battle 100×120）：背影弓手立于防线工事前，头顶被普攻/技能图标锚定
+    // 背影弓手立于防线工事前，头顶被普攻/技能图标锚定
     const ink = hexc(PAL.ink);
     g.strokeColor = ink;
     g.lineWidth = 3;
@@ -95,65 +216,17 @@ export class HeroUnit {
     g.fillColor = hexc('#2A2118');
     g.roundRect(-19, -78, 15, 16, 4); g.fill(); g.stroke();
     g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
-    this.node.setPosition(this.hx, HERO_Y, 0);
+    this.node.setPosition(this.x, HERO_Y, 0);
     this.node.setParent(parent);
     // 脚下名字牌（立绘靴底下方，随英雄移动）
     label(this.node, 0, -100, this.name, { size: 14, color: PAL.parch, bold: true, w: 140, h: 20 });
   }
 
-  get x(): number { return this.hx; }
-  get effAtk(): number { return this.stats.atk * this.stats.atkMul; }
-  get chargePct(): number { return this.charge / this.chargeMax; }
-  get ultReady(): boolean { return this.charge >= this.chargeMax; }
-  get skillPct(): number { return 1 - this.skillCd / this.skillMax; }
-
-  tick(dt: number, mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
-    // 连射串行子弹：出弓瞬间按当时状态重新预判方向，出弓后直线飞行（不追踪不拐弯）
-    for (let i = this.serialQueue.length - 1; i >= 0; i--) {
-      const q = this.serialQueue[i];
-      q.t -= dt;
-      if (q.t <= 0) {
-        this.serialQueue.splice(i, 1);
-        if (q.target && !q.target.dead) {
-          const ld = this.lead(q.target, q.emp ? 780 : 480);
-          this.fireDir(projs, ld.dirX, ld.dirY, q.emp === true);
-        } else {
-          this.fireDir(projs, q.dirX, q.dirY, q.emp === true);
-        }
-      }
-    }
-    // 大招：贯穿扇形箭雨轮次（两排，第二排延迟错半步）
-    for (let i = this.volleyQueue.length - 1; i >= 0; i--) {
-      const v = this.volleyQueue[i];
-      v.t -= dt;
-      if (v.t <= 0) {
-        this.volleyQueue.splice(i, 1);
-        this.fireFanRow(projs, v.row);
-      }
-    }
-    // 普攻
-    this.atkT -= dt;
-    if (this.atkT <= 0) {
-      const t = mgr.pickTarget(this.x, HERO_Y, this.stats.range);
-      if (t) {
-        const emp = this.shoot(t, mgr, projs, dmg);
-        // 强化箭矢窗口内攻速 +30%（贯穿爽感）
-        this.atkT = emp ? 1 / (this.stats.aspd * 1.3) : 1 / this.stats.aspd;
-      } else {
-        this.atkT = 0;
-      }
-    }
-    // 技能（自动：CD 好 + 技能范围内有怪）
-    this.skillCd -= dt;
-    if (this.skillCd <= 0 && mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange)) {
-      this.castSkill();
-    }
-    // 大招呼吸回能：每 3 秒少量充能（不与击杀充能冲突；满后停止）
-    this.regenT -= dt;
-    if (this.regenT <= 0) {
-      this.regenT += 3;
-      if (!this.ultReady) this.chargeKill(1);
-    }
+  /** 强化箭矢窗口内攻速 +30%（贯穿爽感） */
+  protected attackInterval(): number {
+    const e = this.lastEmp;
+    this.lastEmp = false;
+    return 1 / (this.stats.aspd * (e ? 1.3 : 1));
   }
 
   private spec(base: {
@@ -178,6 +251,7 @@ export class HeroUnit {
       split: this.stats.split,
       slowRatio: this.stats.slowOnHit || 0,
       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
+      ...this.targetBonuses(),
     };
   }
 
@@ -186,39 +260,12 @@ export class HeroUnit {
     projs.fire(this.spec({ x: this.x, y: HERO_Y + 60, dirX, dirY, emp }));
   }
 
-  /**
-   * 预判拦截瞄准：按目标当前速度解拦截方程，瞄准"子弹到达时目标将所在的位置"。
-   * 目标匀速直线下行 v（停位/攻击态 v=0），子弹速度 s，相对位移 (dx,dy)：
-   *   (v²-s²)t² - 2·dy·v·t + (dx²+dy²) = 0，s>v 时判别式恒 ≥0 必有解。
-   * 理论不可拦截（disc<0）或无正根时退化为瞄准当前位置。
-   */
-  private lead(target: Monster, bulletSpeed: number): { dirX: number; dirY: number } {
-    const px = this.x, py = HERO_Y + 60;
-    const moving = target.state === 'move';
-    const v = moving ? target.def.speed * (target.slowT > 0 ? 0.8 : 1) : 0;
-    const dx = target.x - px, dy = target.y - py;
-    const a = v * v - bulletSpeed * bulletSpeed;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    let t = dist / bulletSpeed;
-    if (v > 0 && a < -1e-6) {
-      const disc = dy * dy * v * v - a * (dx * dx + dy * dy);
-      if (disc >= 0) {
-        const sq = Math.sqrt(disc);
-        const t1 = (dy * v - sq) / a, t2 = (dy * v + sq) / a;
-        const hit = t1 > 0 && t2 > 0 ? Math.min(t1, t2) : (t1 > 0 ? t1 : t2);
-        if (hit > 0) t = hit;
-      }
-    }
-    const ldx = target.x - px, ldy = target.y - v * t - py;
-    const l = Math.sqrt(ldx * ldx + ldy * ldy) || 1;
-    return { dirX: ldx / l, dirY: ldy / l };
-  }
-
-  private shoot(target: Monster, mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean {
-    void mgr; void dmg;
+  protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
+    void _mgr;
     // 强化箭矢窗口：本次普攻（含连射/齐射子弹道）全部为金色贯穿箭，按次扣减
     const emp = this.empowerLeft > 0;
     if (emp) this.empowerLeft--;
+    this.lastEmp = emp;
     const bs = emp ? 780 : 480;
     // 主弹：预判拦截点直线射出
     const lead = this.lead(target, bs);
@@ -238,11 +285,37 @@ export class HeroUnit {
         this.fireDir(projs, Math.cos(ang), Math.sin(ang), emp);
       }
     }
-    return emp;
+  }
+
+  protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
+    // 连射串行子弹：出弓瞬间按当时状态重新预判方向，出弓后直线飞行（不追踪不拐弯）
+    for (let i = this.serialQueue.length - 1; i >= 0; i--) {
+      const q = this.serialQueue[i];
+      q.t -= dt;
+      if (q.t <= 0) {
+        this.serialQueue.splice(i, 1);
+        if (q.target && !q.target.dead) {
+          const ld = this.lead(q.target, q.emp ? 780 : 480);
+          this.fireDir(projs, ld.dirX, ld.dirY, q.emp === true);
+        } else {
+          this.fireDir(projs, q.dirX, q.dirY, q.emp === true);
+        }
+      }
+    }
+    // 大招：贯穿扇形箭雨轮次（两排，第二排延迟错半步）
+    for (let i = this.volleyQueue.length - 1; i >= 0; i--) {
+      const v = this.volleyQueue[i];
+      v.t -= dt;
+      if (v.t <= 0) {
+        this.volleyQueue.splice(i, 1);
+        this.fireFanRow(projs, v.row);
+      }
+    }
+    void mgr;
   }
 
   /** 技能·强化箭矢（自动，12s CD）：接下来 6 次普攻变为金色贯穿箭（伤害 ×1.5、无限穿透、弹速 540） */
-  private castSkill(): void {
+  protected castSkill(): void {
     this.skillCd = this.skillMax;
     this.empowerLeft = this.empowerMax;
     // 演出：英雄身上金色环脉冲扩散，标记"箭矢已强化"
@@ -260,22 +333,14 @@ export class HeroUnit {
     tween(pop).to(0.38, { opacity: 0 }).call(() => pulse.destroy()).start();
   }
 
-  /** 击杀充能（§3.7：击杀者获得怪物配置充能值） */
-  chargeKill(v: number): void {
-    if (this.ultReady) return;
-    const was = this.ultReady;
-    this.charge = Math.min(this.chargeMax, this.charge + v);
-    bus.emit(EVT.CHARGE_CHANGED, this.chargePct, this.ultReady);
-    if (!was && this.ultReady) Sfx.play('ready');
-  }
-
   /** 大招·扇形箭雨（手动，击杀充能）：两排 × 8 箭扇形射出，全部无限贯穿 */
-  castUlt(): boolean {
+  castUlt(_mgr: MonsterManager, projs: ProjectileManager, _dmg: DamageService): boolean {
     if (!this.ultReady) return false;
     this.charge = 0;
     this.volleyQueue.push({ t: 0, row: 0 }, { t: 0.35, row: 1 });
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
     Sfx.play('ult');
+    void _dmg;
     return true;
   }
 
@@ -295,5 +360,166 @@ export class HeroUnit {
         color: PAL.gold, heroId: this.id, size: 9, ttl: 3.6, pierce: 999, spark: true,
       });
     }
+  }
+}
+
+/* ============================================================
+ * 狙击游侠 · 凯尔·鹰眼（线稿 hero_kyle_battle 100×120，深蓝）
+ * ============================================================ */
+export class SniperHero extends HeroBase {
+  readonly id = 'sniper';
+  readonly name = '凯尔·鹰眼';
+  readonly chargeMax = SNIPER_CHARGE_MAX;
+  readonly skillMax = 14;
+  /** 技能·穿颅射击连狙队列：剩余发数与下发出膛倒计时 */
+  private volley: { t: number; left: number } | null = null;
+
+  protected buildVisual(parent: Node): void {
+    const g = this.node.addComponent(Graphics);
+    // 背影狙击游侠：深蓝斗篷 + 重弩（线稿 hero_kyle_battle 100×120）
+    const ink = hexc(PAL.ink);
+    g.strokeColor = ink;
+    g.lineWidth = 3;
+    // 斗篷下摆
+    g.fillColor = hexc('#24344F');
+    g.moveTo(-20, 34); g.lineTo(20, 34); g.lineTo(30, -76); g.lineTo(-30, -76);
+    g.close(); g.fill(); g.stroke();
+    // 躯干（胸甲）
+    g.fillColor = hexc('#31486B');
+    g.roundRect(-22, -34, 44, 66, 14);
+    g.fill(); g.stroke();
+    // 腰带 + 搭扣
+    g.fillColor = hexc('#8A6A2F');
+    g.roundRect(-22, -22, 44, 7, 3);
+    g.fill();
+    g.fillColor = hexc(PAL.gold);
+    g.circle(0, -18, 4);
+    g.fill();
+    // 肩甲
+    g.fillColor = hexc('#3E5A85');
+    g.circle(-22, 24, 9); g.fill(); g.stroke();
+    g.circle(22, 24, 9); g.fill(); g.stroke();
+    // 头 + 猎帽（宽檐）
+    g.fillColor = hexc('#E8C39A');
+    g.circle(0, 26, 14); g.fill(); g.stroke();
+    g.fillColor = hexc('#24344F');
+    g.roundRect(-20, 32, 40, 5, 2.5); g.fill(); g.stroke();
+    g.arc(0, 30, 15, 0, Math.PI, false);
+    g.close(); g.fill(); g.stroke();
+    // 箭矢弹匣包（背上左侧）
+    g.fillColor = hexc('#4A3A22');
+    g.moveTo(-30, -12); g.lineTo(-19, -8); g.lineTo(-25, 20); g.lineTo(-36, 16);
+    g.close(); g.fill(); g.stroke();
+    // 重弩（右侧竖持）：弩臂 + 瞄准镜 + 弦
+    g.strokeColor = hexc('#5A4326');
+    g.lineWidth = 6;
+    g.arc(28, -4, 26, -1.15, 1.15, false);
+    g.stroke();
+    g.strokeColor = hexc('#7A5A34');
+    g.lineWidth = 4;
+    g.moveTo(28, -30); g.lineTo(28, 22);
+    g.stroke();
+    g.strokeColor = hexc(PAL.blue);
+    g.lineWidth = 2.5;
+    g.circle(28, -4, 6);
+    g.stroke();
+    g.strokeColor = hexc('#FFFFFFCC');
+    g.lineWidth = 1.5;
+    g.moveTo(28 + 26 * Math.cos(1.15), -4 + 26 * Math.sin(1.15));
+    g.lineTo(28 + 26 * Math.cos(-1.15), -4 + 26 * Math.sin(-1.15));
+    g.stroke();
+    // 靴（下沿没入工事）
+    g.fillColor = hexc('#1A2230');
+    g.roundRect(-19, -78, 15, 16, 4); g.fill(); g.stroke();
+    g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
+    this.node.setPosition(this.x, HERO_Y, 0);
+    this.node.setParent(parent);
+    label(this.node, 0, -100, this.name, { size: 14, color: PAL.parch, bold: true, w: 140, h: 20 });
+  }
+
+  /** 普攻：慢速高伤重弩箭（拦截预判直线，不追踪） */
+  protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
+    void _mgr;
+    const lead = this.lead(target, 760);
+    projs.fire(this.boltSpec(lead.dirX, lead.dirY));
+    Sfx.play('shoot');
+  }
+
+  private boltSpec(dirX: number, dirY: number): ProjSpec {
+    const crit = Math.random() < this.stats.critRate;
+    return {
+      x: this.x, y: HERO_Y + 60,
+      dirX, dirY, speed: 760,
+      dmg: this.effAtk * (crit ? this.stats.critMul : 1), crit,
+      color: '#7FB3FF', heroId: this.id, size: 8,
+      pierce: this.stats.pierce,
+      slowRatio: this.stats.slowOnHit || 0,
+      burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
+      ...this.targetBonuses(),
+    };
+  }
+
+  protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
+    if (!this.volley) return;
+    this.volley.t -= dt;
+    while (this.volley && this.volley.t <= 0) {
+      // 每发出膛瞬间重新锁定全场血量最高目标（死亡自动转火）
+      const tgt = mgr.highestHp();
+      if (!tgt) { this.volley = null; return; }
+      this.snipeShot(tgt, projs, 2, false);
+      this.volley.left--;
+      if (this.volley.left <= 0) { this.volley = null; return; }
+      this.volley.t += 0.28;
+    }
+  }
+
+  /** 瞬击一发：hitscan 弹道线 + 目标词条 + 独立暴击 */
+  private snipeShot(target: Monster, projs: ProjectileManager, mul: number, ignoreRes: boolean): void {
+    const crit = Math.random() < this.stats.critRate;
+    const dmgVal = this.effAtk * mul * (crit ? this.stats.critMul : 1);
+    const hpBefore = target.hp;
+    this.tracer(this.node.parent!, target.x, target.y, crit ? '#BFE3FF' : '#7FB3FF', crit ? 4 : 3, 0.13);
+    target.takeDamage(dmgVal, crit, this.id, ignoreRes);
+    projs.addDamage(this.id, Math.min(dmgVal, hpBefore));
+    projs.sparkAt(target.x, target.y, '#7FB3FF', 4);
+    Sfx.play('shoot');
+  }
+
+  /** 技能·穿颅射击（自动，14s CD）：锁定全场血量最高目标连续 6 狙，每发 200% 攻击，死亡转火 */
+  protected castSkill(): void {
+    this.skillCd = this.skillMax;
+    this.volley = { t: 0, left: 6 };
+    // 演出：英雄身上深蓝环脉冲扩散
+    const pulse = new Node('snipePulse');
+    pulse.layer = Layers.Enum.UI_2D;
+    pulse.setParent(this.node.parent!);
+    pulse.setPosition(this.x, HERO_Y + 20, 0);
+    const pg = pulse.addComponent(Graphics);
+    pg.strokeColor = hexc(PAL.blue);
+    pg.lineWidth = 5;
+    pg.circle(0, 0, 34);
+    pg.stroke();
+    const pop = pulse.addComponent(UIOpacity);
+    tween(pulse).to(0.38, { scale: new Vec3(2.1, 2.1, 1) }).start();
+    tween(pop).to(0.38, { opacity: 0 }).call(() => pulse.destroy()).start();
+  }
+
+  /** 大招·猎杀时刻（手动）：全场血量最高目标 ×5.5 必暴一击，无视物抗，重狙演出 */
+  castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean {
+    if (!this.ultReady) return false;
+    const tgt = mgr.highestHp();
+    if (!tgt) return false;   // 全场无目标：不消耗充能
+    this.charge = 0;
+    bus.emit(EVT.CHARGE_CHANGED, 0, false);
+    // 狙击线演出：粗亮蓝干线 + 白芯内线 + 命中迸溅 + 重狙音效
+    this.tracer(this.node.parent!, tgt.x, tgt.y, '#8FB8FF', 6, 0.24);
+    this.tracer(this.node.parent!, tgt.x, tgt.y, '#FFFFFF', 2.5, 0.14);
+    projs.sparkAt(tgt.x, tgt.y, '#7FB3FF', 14);
+    const dmgVal = this.effAtk * 5.5;
+    const hpBefore = tgt.hp;
+    tgt.takeDamage(dmgVal, true, this.id, true);   // 必暴 + 无视物抗
+    dmg.add(this.id, Math.min(dmgVal, hpBefore));
+    Sfx.play('snipe');
+    return true;
   }
 }

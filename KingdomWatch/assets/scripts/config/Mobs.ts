@@ -24,6 +24,8 @@ export interface MobDef {
   atkRange?: number;
   /** 治疗量（heal 用） */
   healAmount?: number;
+  /** 物理抗性 0~1（狙击大招等 ignoreRes 伤害无视） */
+  physRes?: number;
   elite?: boolean;
 }
 

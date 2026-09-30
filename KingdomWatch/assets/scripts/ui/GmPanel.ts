@@ -189,12 +189,12 @@ export class GmPanel {
       { t: '清空充能', cb: () => { this.dir.gmUltCharge(0); this.refresh(); } },
       { t: '技能CD清零', cb: () => { this.dir.gmSkillReady(); this.refresh(); } },
     ]);
-    const h = this.dir.hero;
     this.infoBox(B,
       `等级 ${this.dir.heroLevel}  经验 ${Math.floor(this.dir.xp)}/${expNeed(this.dir.heroLevel)}\n` +
-      `攻击 ${Math.round(h.effAtk)}  攻速 ${h.stats.aspd}/s  射程 ${h.stats.range}  技能射程 ${h.stats.skillRange}\n` +
-      `暴击 ${Math.round(h.stats.critRate * 100)}%  暴伤 ×${h.stats.critMul}  连射 ${h.stats.serial}  齐射 ${h.stats.fan}\n` +
-      `充能 ${Math.floor(h.charge)}/${h.chargeMax}  技能CD ${Math.max(0, h.skillCd).toFixed(1)}s  强化剩余 ${h.empowerLeft}`);
+      this.dir.heroes.map(h =>
+        `${h.name}：攻 ${Math.round(h.effAtk)}  速 ${h.stats.aspd}/s  程 ${h.stats.range}  暴 ${Math.round(h.stats.critRate * 100)}%  ` +
+        `充能 ${Math.floor(h.charge)}/${h.chargeMax}  技能CD ${Math.max(0, h.skillCd).toFixed(1)}s`
+      ).join('\n'));
   }
 
   /* ---------- 卡片 ---------- */

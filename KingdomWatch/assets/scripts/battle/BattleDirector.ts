@@ -4,13 +4,13 @@
  */
 import { _decorator, Component, director, Layers, Node } from 'cc';
 import { LEVEL_1_1, LevelDef, MOBS, heroSlots } from '../config/Mobs';
-import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats } from '../config/Cards';
+import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats } from '../config/Cards';
 import { REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
 import { loadSave, saveSave } from '../core/SaveData';
 import { MonsterManager } from './Monster';
-import { HeroUnit } from './Hero';
+import { ArcherHero, HeroBase, SniperHero } from './Hero';
 import { LineDefense } from './LineDefense';
 import { WaveManager } from './WaveManager';
 import { ProjectileManager } from './Projectile';
@@ -39,7 +39,10 @@ export class BattleDirector extends Component {
   speed: 1 | 2 = 1;
 
   mgr!: MonsterManager;
-  hero!: HeroUnit;
+  /** 上场英雄（双英雄同场：艾拉·风羽 + 凯尔·鹰眼；编队系统后再做槽位解锁） */
+  heroes: HeroBase[] = [];
+  /** 主英雄（兼容旧引用：GM/统计等以第一名英雄为准） */
+  get hero(): HeroBase { return this.heroes[0]; }
   line!: LineDefense;
   waves!: WaveManager;
   projs!: ProjectileManager;
@@ -86,11 +89,16 @@ export class BattleDirector extends Component {
     };
     this.float = new FloatText(fxLayer);
     this.mgr = new MonsterManager(mobLayer, hitCtx);
-    this.hero = new HeroUnit(field, heroSlots(1)[0], baseArcherStats());
+    // 双英雄同场（§4 站位表 2 人 = ±160）：艾拉·风羽（弓）左槽，凯尔·鹰眼（狙）右槽
+    const slots = heroSlots(2);
+    this.heroes = [
+      new ArcherHero(field, slots[0], baseArcherStats()),
+      new SniperHero(field, slots[1], baseSniperStats()),
+    ];
     this.parts = new Particles(fxLayer);
     this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts);
     this.waves = new WaveManager(this.levelDef, this.mgr);
-    this.dmgSvc.register(this.hero.id, this.hero.name);
+    for (const h of this.heroes) this.dmgSvc.register(h.id, h.name);
 
     this.hud = new HUD(uiRoot, this, field);
     this.panels = new Panels(uiRoot, this);
@@ -145,7 +153,7 @@ export class BattleDirector extends Component {
     for (let i = 0; i < steps; i++) {
       this.waves.tick(sub);
       this.mgr.tick(sub, this.line);
-      this.hero.tick(sub, this.mgr, this.projs, this.dmgSvc);
+      for (const h of this.heroes) h.tick(sub, this.mgr, this.projs, this.dmgSvc);
       this.projs.tick(sub, this.line);
       this.parts.tick(sub);
       this.line.regenPct = this.global.lineRegenPct;
@@ -159,7 +167,8 @@ export class BattleDirector extends Component {
     const d = def as { gold: number; exp: number; charge: number };
     this.goldEarned += d.gold * this.global.goldMul;
     Sfx.play('kill');
-    if (killerId === this.hero.id) this.hero.chargeKill(d.charge);
+    const killer = this.heroes.find(h => h.id === killerId);
+    if (killer) killer.chargeKill(d.charge);
     this.gainXp(d.exp * this.global.xpMul);
   }
 
@@ -215,8 +224,10 @@ export class BattleDirector extends Component {
   }
 
   private applyCard(card: CardDef): void {
+    // 卡按归属路由：'archer'/'sniper' 改写对应英雄属性，'global' 不触及英雄数值
+    const owner = this.heroes.find(h => h.id === card.owner);
     const ctx: CardCtx = {
-      hero: this.hero.stats,
+      hero: owner ? owner.stats : this.heroes[0].stats,
       global: this.global,
       line: {
         healPct: p => this.line.healPct(p),
@@ -227,8 +238,9 @@ export class BattleDirector extends Component {
   }
 
   /* ---------- 大招（手动，充能满可放；未满点图标→Tips） ---------- */
-  tryCastUlt(): 'ok' | 'charging' {
-    if (this.hero.ultReady && this.hero.castUlt()) return 'ok';
+  tryCastUlt(idx = 0): 'ok' | 'charging' {
+    const h = this.heroes[idx];
+    if (h && h.ultReady && h.castUlt(this.mgr, this.projs, this.dmgSvc)) return 'ok';
     return 'charging';
   }
 
@@ -264,8 +276,8 @@ export class BattleDirector extends Component {
     this.panels.showStats(this.dmgSvc.rows());
   }
 
-  showTips(kind: 'atk' | 'skill' | 'ult'): void {
-    this.panels.showTips(kind, this.hero, this.line);
+  showTips(kind: 'atk' | 'skill' | 'ult', idx = 0): void {
+    this.panels.showTips(kind, this.heroes[idx] || this.heroes[0], this.line, idx);
   }
 
   /* ---------- 失败 → 失败结算（广告复活按钮与胜利双倍按钮同位 §3.9） ---------- */
@@ -360,12 +372,12 @@ export class BattleDirector extends Component {
   }
 
   gmUltCharge(v: number): void {
-    this.hero.charge = v;
+    for (const h of this.heroes) h.charge = v;
     this.hud.sync();
   }
 
   gmSkillReady(): void {
-    this.hero.skillCd = 0;
+    for (const h of this.heroes) h.skillCd = 0;
     this.hud.sync();
   }
 

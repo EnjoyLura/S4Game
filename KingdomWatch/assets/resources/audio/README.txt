@@ -10,6 +10,7 @@
   sfx_ult       大招（扇形箭雨）
   sfx_levelup   升级
   sfx_ready     技能/大招就绪
+  sfx_snipe     重狙（狙击·猎杀时刻/穿颅射击连狙）
 
 运行时 Sfx.ts 会自动从 resources 加载这些 AudioClip 并优先播放资源样本；
 未提供的音效继续使用内置 WebAudio 合成占位音，无需改任何代码。

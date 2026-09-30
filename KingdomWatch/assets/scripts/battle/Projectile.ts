@@ -34,6 +34,11 @@ export interface ProjSpec {
   /** 命中词条 */
   slowRatio?: number;
   burnDps?: number;
+  /** 无视物抗（狙击大招等） */
+  ignoreRes?: boolean;
+  /** 目标词条（命中时按目标结算）：对精英/BOSS 加成 / 对残血<30% 加成 */
+  executeBonus?: number;
+  lowHpBonus?: number;
   /** 强化/贯穿金箭：命中迸溅金色粒子 + 加长拖尾 */
   spark?: boolean;
 }
@@ -93,6 +98,16 @@ export class ProjectileManager {
   /** 敌方远程石块：直线落向防线，触线即结算 */
   fireStone(x: number, y: number, dmg: number): void {
     this.fire({ x, y, dirX: 0, dirY: -1, speed: 300, dmg, crit: false, color: '#B2A48B', heroId: 'enemy', size: 9, enemy: true, ttl: 6 });
+  }
+
+  /** 命中点迸溅（狙击等瞬射击打演出用，不产生伤害） */
+  sparkAt(x: number, y: number, color: string, n = 6): void {
+    if (this.parts) this.parts.burst(x, y, color, n);
+  }
+
+  /** 瞬击伤害直接记账（狙击 hitscan 不经弹道命中结算） */
+  addDamage(heroId: string, v: number): void {
+    this.dmg.add(heroId, v);
   }
 
   tick(dt: number, line: { takeDamage: (d: number) => void }): void {
@@ -175,8 +190,12 @@ export class ProjectileManager {
     const sp = a.spec;
     if (sp.enemy) return;
     const hpBefore = m.hp;
-    m.takeDamage(sp.dmg, sp.crit, sp.heroId);
-    this.dmg.add(sp.heroId, Math.min(sp.dmg, hpBefore));
+    // 目标词条在命中时结算：处决标记（精英/BOSS）+ 猎手本能（残血<30%）
+    let final = sp.dmg;
+    if (sp.executeBonus && m.def.elite) final *= 1 + sp.executeBonus;
+    if (sp.lowHpBonus && m.hp < m.maxHp * 0.3) final *= 1 + sp.lowHpBonus;
+    m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true);
+    this.dmg.add(sp.heroId, Math.min(final, hpBefore));
     Sfx.play(sp.crit ? 'crit' : 'hit');
     if (sp.spark && this.parts) this.parts.burst(m.x, m.y, sp.color, 4);
     if (m.dead) return;

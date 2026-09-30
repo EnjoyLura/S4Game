@@ -67,8 +67,9 @@ export const REVIVE_RATIO = 0.3;
 /** 复活后防线短暂无敌缓冲（待定项默认值，§3.9） */
 export const REVIVE_INVULN = 2;
 
-/** 大招充能上限（§3.7，逐英雄配置；M0 弓箭手 60） */
+/** 大招充能上限（§3.7，逐英雄配置；弓箭手 60 / 狙击 55） */
 export const ARCHER_CHARGE_MAX = 60;
+export const SNIPER_CHARGE_MAX = 55;
 
 /** 帧内上限（§12.4 性能预算） */
 export const MAX_MOBS = 60;

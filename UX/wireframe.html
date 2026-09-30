@@ -129,21 +129,21 @@ SCREENS.battle={name:"① 关卡战斗 HUD",en:"Battle HUD",render:function(){
   s+=txt(24,210,120,30,"FPS:60",'','font-size:10px;color:#7ee787');
   s+=ph("ui_btn_speed",24,240,60,60,{cls:"gold",txt:"X1<br>倍速"});
   s+=ph("ui_btn_stats",24,320,60,60,{cls:"gold",txt:"📊<br>伤害统计"});
-  /* 右下角: 大招按钮区(4×1 右对齐纵列,各英雄独立充能) */
-  for(var i=0;i<4;i++){
+  /* 右下角: 大招按钮区(右对齐纵列,各英雄独立充能；M0 双英雄=2钮，编队扩至4钮) */
+  for(var i=0;i<2;i++){
     var x=636,y=740+i*100;
-    s+=ph("hero_{id}_ult_btn",x,y,90,90,{cls:"gold circ",txt:"大招"+(i+1)+"<br>68%"});
+    s+=ph("hero_{id}_ult_btn",x,y,90,90,{cls:"gold circ",txt:"大招"+(i==0?"·艾拉":"·凯尔")+"<br>68%"});
     s+=ph("ui_ring_charge",x,y,90,90,{cls:"circ",css:"background:transparent",txt:""});
   }
-  s+=txt(546,712,180,22,"大招区(4×1·独立充能)",'','font-size:8.5px;color:#89f');
+  s+=txt(546,712,180,22,"大招区(独立充能·纵列叠放)",'','font-size:8.5px;color:#89f');
   /* 反馈气泡 P2(左列) */
   s+=ph("ui_icon_chat",24,400,60,60,{cls:"dark",txt:"💬 P2"});
-  /* 防线工事 + 4英雄站位(防线后) + 头顶普攻/技能图标 */
+  /* 防线工事 + 当前上场英雄站位(防线后，2人=±160) + 头顶普攻/技能图标 */
   s+=ph("bg_line_ch1",0,1180,750,154,{cls:"dark",css:"background:rgba(90,74,50,.30)",txt:"防线工事 · 沙包/木栅+盾徽(王国保卫战风)"});
-  var hxs=[95,240,385,530];
-  for(var j=0;j<4;j++){
-    var x=hxs[j];
-    s+=ph("hero_aila_battle",x,1170,100,120,{cls:"dark",txt:"英雄"+(j+1)+"<br>立绘占位"});
+  var heroes=[["hero_aila_battle","艾拉·风羽(绿)","弓·速射",165],["hero_kyle_battle","凯尔·鹰眼(深蓝)","狙·重弩",485]];
+  for(var j=0;j<heroes.length;j++){
+    var x=heroes[j][3];
+    s+=ph(heroes[j][0],x,1170,100,120,{cls:"dark",txt:heroes[j][1]+"<br>"+heroes[j][2]+"<br>立绘占位"});
     s+=ph("hero_{id}_atk_icon",x+1,1162,46,46,{cls:"gold circ",txt:"普攻"});
     s+=ph("hero_{id}_skill_icon",x+53,1162,46,46,{cls:"blue circ",txt:"技能"});
     s+=ph("hero_{id}_skill_cd",x+53,1162,46,46,{cls:"blue circ",css:"background:transparent",txt:""});

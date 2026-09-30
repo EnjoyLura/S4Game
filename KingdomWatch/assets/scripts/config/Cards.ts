@@ -25,6 +25,8 @@ export interface HeroStats {
   pierce: number;       // 穿透目标数
   slowOnHit: number;    // 命中减速(0=无, 0.2=20%)
   burnOnHit: number;    // 命中点燃每秒伤害系数（0=无，0.2=3s共60%）
+  executeBonus: number; // 对精英/BOSS 伤害加成（处决标记，累加）
+  lowHpBonus: number;   // 对血量<30% 目标伤害加成（猎手本能，累加）
 }
 
 export function baseArcherStats(): HeroStats {
@@ -34,6 +36,18 @@ export function baseArcherStats(): HeroStats {
     critRate: 0.05, critMul: 1.5,
     serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
+    executeBonus: 0, lowHpBonus: 0,
+  };
+}
+
+/** 狙击游侠凯尔·鹰眼（§11.1）：极限单体 140/0.35s/620；技能全场锁定（skillRange 仅作展示口径） */
+export function baseSniperStats(): HeroStats {
+  return {
+    atk: 140, atkMul: 1, aspd: 0.35, range: 620, skillRange: 9999,
+    critRate: 0.05, critMul: 1.5,
+    serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
+    pierce: 0, slowOnHit: 0, burnOnHit: 0,
+    executeBonus: 0, lowHpBonus: 0,
   };
 }
 
@@ -55,7 +69,7 @@ export interface CardDef {
   name: string;
   rarity: Rarity;
   maxStacks: number;
-  /** 归属：'global' 或英雄 id（M0 'archer'） */
+  /** 归属：'global' 或英雄 id（'archer' | 'sniper'），决定改写谁的属性 */
   owner: string;
   /** 前置卡：必须已拥有该卡（叠层≥1）才会进入抽卡池 */
   req?: string;
@@ -93,6 +107,26 @@ export const ARCHER_CARDS: CardDef[] = [
     apply: x => { x.hero.slowOnHit = 0.2; } }),
   c({ id: 'burn', name: '烈焰附魔', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '命中点燃（3s 共 60% 攻击力伤害）',
     apply: x => { x.hero.burnOnHit = 0.2; } }),
+  c({ id: 'instinct_a', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'archer', desc: '对血量 <30% 目标伤害 +100%',
+    apply: x => { x.hero.lowHpBonus += 1; } }),
+];
+
+/* ---------- 狙击游侠 · 凯尔·鹰眼（§6.2/§6.4 普攻流·极限单体） ---------- */
+export const SNIPER_CARDS: CardDef[] = [
+  c({ id: 'heavy_head', name: '重弹头', rarity: 'white', maxStacks: 5, owner: 'sniper', desc: '攻击力 +20%',
+    apply: x => { x.hero.atkMul *= 1.2; } }),
+  c({ id: 'pierce_shot', name: '贯穿重狙', rarity: 'blue', maxStacks: 3, owner: 'sniper', desc: '攻击力 +35%',
+    apply: x => { x.hero.atkMul *= 1.35; } }),
+  c({ id: 'fast_load', name: '快速装填', rarity: 'white', maxStacks: 4, owner: 'sniper', desc: '攻速 +25%',
+    apply: x => { x.hero.aspd *= 1.25; } }),
+  c({ id: 'steady_rest', name: '稳定枪架', rarity: 'white', maxStacks: 4, owner: 'sniper', desc: '暴击率 +15%',
+    apply: x => { x.hero.critRate += 0.15; } }),
+  c({ id: 'lethal_aim', name: '致命瞄准', rarity: 'blue', maxStacks: 3, owner: 'sniper', desc: '暴击伤害 +50%',
+    apply: x => { x.hero.critMul += 0.5; } }),
+  c({ id: 'execute', name: '处决标记', rarity: 'blue', maxStacks: 3, owner: 'sniper', desc: '普攻对精英/BOSS 伤害 +35%',
+    apply: x => { x.hero.executeBonus += 0.35; } }),
+  c({ id: 'instinct_s', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'sniper', desc: '对血量 <30% 目标伤害 +100%',
+    apply: x => { x.hero.lowHpBonus += 1; } }),
 ];
 
 /* ---------- 全局卡（§6.1） ---------- */
@@ -107,8 +141,8 @@ export const GLOBAL_CARDS: CardDef[] = [
     apply: x => { x.global.goldMul *= 1.2; } }),
 ];
 
-/** M0 卡池 = 弓箭手池 + 全局卡 */
-export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...GLOBAL_CARDS];
+/** 当前卡池 = 弓箭手 + 狙击 + 全局（卡按 owner 归属英雄生效） */
+export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...GLOBAL_CARDS];
 
 export interface CardStacks { [cardId: string]: number; }
 

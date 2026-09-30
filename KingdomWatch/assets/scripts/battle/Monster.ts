@@ -169,9 +169,10 @@ export class Monster {
     this.lungeT = 0.2;
   }
 
-  /** 受击；crit 用于飘字样式；返回是否击杀 */
-  takeDamage(amount: number, crit: boolean, killerId: string): boolean {
+  /** 受击；crit 用于飘字样式；ignoreRes=无视物抗（狙击大招等）；返回是否击杀 */
+  takeDamage(amount: number, crit: boolean, killerId: string, ignoreRes = false): boolean {
     if (this.dead) return false;
+    if (this.def.physRes && !ignoreRes) amount *= 1 - this.def.physRes;
     this.hp -= amount;
     this.stunT = Math.max(this.stunT, 0.1);
     this.ctx.dmgNumber(this.x + (Math.random() * 24 - 12), this.y + this.def.radius,
@@ -275,6 +276,16 @@ export class MonsterManager {
       const dx = m.x - x, dy = m.y - y;
       const d2 = dx * dx + dy * dy;
       if (d2 < bd) { bd = d2; best = m; }
+    }
+    return best;
+  }
+
+  /** 全场血量最高存活怪（狙击技能/大招锁定目标） */
+  highestHp(): Monster | null {
+    let best: Monster | null = null;
+    for (const m of this.list) {
+      if (m.dead) continue;
+      if (!best || m.hp > best.hp) best = m;
     }
     return best;
   }
