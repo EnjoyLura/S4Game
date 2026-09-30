@@ -49,7 +49,7 @@ export class HUD {
     const pauseBtn = gpanel(top, WX(30, 60), WY(105, 60), 60, 60, CA(PAL.gold, 0.2), PAL.gold, 2, 12);
     label(pauseBtn, 0, 0, '⏸', { size: 26, color: PAL.gold, bold: true });
     pauseBtn.on(Node.EventType.TOUCH_END, () => this.dir.togglePause());
-    label(top, WX(250, 300), WY(110, 50), this.dir.levelDef.id + ' ' + this.dir.levelDef.name, { size: 22, color: PAL.parch, bold: true });
+    label(top, 0, WY(110, 50), this.dir.levelDef.id + ' ' + this.dir.levelDef.name, { size: 22, color: PAL.parch, bold: true, w: 400, h: 50 });
     gpanel(top, WX(560, 150), WY(105, 60), 150, 60, CA('#FFFFFF', 0.08), CA('#FFFFFF', 0.27), 1.5, 30);
     this.waveTxt = label(top, WX(560, 150), WY(105, 60), '波次 0/10', { size: 20, color: '#FFFFFF', bold: true });
 

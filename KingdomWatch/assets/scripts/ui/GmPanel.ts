@@ -54,6 +54,7 @@ export class GmPanel {
       this.dir.state = 'paused';
       this.resumeOnClose = true;
     }
+    this.btnNode.active = false; // 浮钮藏起，避免透过遮罩压在页签上
     this.rebuild();
   }
 
@@ -62,6 +63,7 @@ export class GmPanel {
     this.layer.destroyAllChildren();
     this.panelRef = null;
     this.body = null;
+    this.btnNode.active = loadSave().debug || this.forceShow;
     if (this.resumeOnClose) {
       this.resumeOnClose = false;
       this.dir.gmResume();

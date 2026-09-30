@@ -244,17 +244,19 @@ export class Panels {
     py = Math.max(-LO.half + hh / 2 + 8, Math.min(LO.half - hh / 2 - 8, py));
 
     gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), CA('#FFFFFF', 0.3), 1.5, 14);
-    label(this.modalRoot, px, py + hh / 2 - 30, '— 伤害统计 —', { size: 22, color: '#FFE08A' });
+    label(this.modalRoot, px, py + hh / 2 - 36, '— 伤害统计 —', { size: 22, color: '#FFE08A' });
+    // 行几何按线稿③：头像70×70(左缘+20) / 名称自105左对齐 / 百分比右缘-15 / 占比条105..330(数值居中条内)
     rows.slice(0, 4).forEach((r, i) => {
-      const y = py + hh / 2 - 66 - i * 100;
-      const cx = px - w / 2 + 46;
-      gcircle(this.modalRoot, cx, y, 32, CA('#2A3240', 1), '#FFFFFF55', 1.5);
-      label(this.modalRoot, cx, y, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
-      label(this.modalRoot, px - w / 2 + 156, y, r.name,
-        { size: 18, color: '#FFFFFF', align: 'left', w: 130, h: 40, shrink: true });
-      label(this.modalRoot, px + w / 2 - 14 - 45, y, (r.pct * 100).toFixed(2) + '%',
-        { size: 18, color: PAL.orange, align: 'right', w: 90, h: 40, shrink: true });
-      const barX = px - w / 2 + 14 + 112.5, barY = y - 46;
+      const cyAv = py + hh / 2 - 105 - i * 100;
+      const cyTx = py + hh / 2 - 97 - i * 100;
+      const cxAv = px - w / 2 + 55;
+      gcircle(this.modalRoot, cxAv, cyAv, 35, CA('#2A3240', 1), '#FFFFFF55', 1.5);
+      label(this.modalRoot, cxAv, cyAv, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
+      label(this.modalRoot, px - w / 2 + 180, cyTx, r.name,
+        { size: 18, color: '#FFFFFF', align: 'left', w: 150, h: 40, shrink: true });
+      label(this.modalRoot, px - w / 2 + 295, cyTx, (r.pct * 100).toFixed(2) + '%',
+        { size: 18, color: PAL.orange, align: 'right', w: 100, h: 40, shrink: true });
+      const barX = px - w / 2 + 217.5, barY = py + hh / 2 - 126 - i * 100;
       gpanel(this.modalRoot, barX, barY, 225, 16, CA('#000000', 0.4), undefined, 0, 8);
       if (r.val > 0) {
         const fw = Math.max(6, 225 * r.pct);
