@@ -57,4 +57,10 @@ export class WaveManager {
       }
     }
   }
+
+  /** GM：跳过本波（清空生成队列并全杀场上怪，恢复模拟后由清场驱动进下一波） */
+  gmSkip(): void {
+    this.queue.length = 0;
+    for (const m of this.mgr.list) if (!m.dead) m.takeDamage(1e12, false, 'gm');
+  }
 }

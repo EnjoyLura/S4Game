@@ -3,7 +3,7 @@
  * dt×倍速步进；暂停/三选一期间全场冻结（§3.2）
  */
 import { _decorator, Component, director, Layers, Node } from 'cc';
-import { LEVEL_1_1, LevelDef } from '../config/Mobs';
+import { LEVEL_1_1, LevelDef, MOBS } from '../config/Mobs';
 import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats } from '../config/Cards';
 import { REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
@@ -18,6 +18,7 @@ import { FloatText } from './FloatText';
 import { AdService } from '../platform/AdService';
 import { HUD } from '../ui/HUD';
 import { Panels } from '../ui/Panels';
+import { GmPanel } from '../ui/GmPanel';
 import { setLayerDeep } from '../ui/UIKit';
 
 const { ccclass } = _decorator;
@@ -44,6 +45,7 @@ export class BattleDirector extends Component {
   float!: FloatText;
   hud!: HUD;
   panels!: Panels;
+  gm!: GmPanel;
 
   global: GlobalStats = { xpMul: 1, goldMul: 1, lineRegenPct: 0 };
   stacks: CardStacks = {};
@@ -86,6 +88,7 @@ export class BattleDirector extends Component {
 
     this.hud = new HUD(uiRoot, this, field);
     this.panels = new Panels(uiRoot, this);
+    this.gm = new GmPanel(uiRoot, this);
 
     // 兜底：初始构建树（Field/UIRoot/HUD/Panels）全部置于 UI_2D 层，相机才会渲染
     setLayerDeep(this.node, Layers.Enum.UI_2D);
@@ -121,6 +124,7 @@ export class BattleDirector extends Component {
       if (this.prepareT <= 0) {
         this.state = 'running';
         this.waves.start();
+        if (this.pickQueue > 0) this.openPick(); // GM 期间升级的排队三选一
       }
       return;
     }
@@ -295,6 +299,89 @@ export class BattleDirector extends Component {
       onNext: () => this.exitBattle(),
       onExit: () => this.exitBattle(),
     });
+  }
+
+  /* ---------- GM 后台（GmPanel 专用入口） ---------- */
+  /** 面板关闭：恢复战斗；升级队列待处理则弹三选一 */
+  gmResume(): void {
+    if (this.state === 'paused') this.state = 'running';
+    if (this.pickQueue > 0) this.openPick();
+  }
+
+  gmSpawn(n: number): void {
+    const defs = Object.values(MOBS);
+    for (let i = 0; i < n; i++) {
+      this.mgr.spawn(defs[Math.floor(Math.random() * defs.length)]);
+    }
+    this.hud.sync();
+  }
+
+  gmKillAll(): void {
+    for (const m of [...this.mgr.list]) if (!m.dead) m.takeDamage(1e12, false, 'gm');
+  }
+
+  gmSkipWave(): void {
+    this.waves.gmSkip();
+  }
+
+  /** 每次补齐整级经验（走真实升级+三选一队列） */
+  gmLevelUp(n: number): void {
+    for (let i = 0; i < n; i++) this.gainXp(this.expNeed(this.heroLevel) - this.xp);
+  }
+
+  gmLearnCard(id: string, times: number): void {
+    const def = M0_POOL.find(c => c.id === id);
+    if (!def) return;
+    for (let i = 0; i < times; i++) {
+      this.applyCard(def);
+      this.stacks[id] = (this.stacks[id] || 0) + 1;
+    }
+    this.hud.sync();
+  }
+
+  gmUltCharge(v: number): void {
+    this.hero.charge = v;
+    this.hud.sync();
+  }
+
+  gmSkillReady(): void {
+    this.hero.skillCd = 0;
+    this.hud.sync();
+  }
+
+  gmAddGold(n: number): void {
+    const sv = loadSave();
+    sv.gold += n;
+    saveSave();
+  }
+
+  gmAddDiamond(n: number): void {
+    const sv = loadSave();
+    sv.diamonds += n;
+    saveSave();
+  }
+
+  gmHealLine(): void {
+    this.line.hp = this.line.maxHp;
+    bus.emit(EVT.LINE_DAMAGED, this.line.hp, this.line.maxHp, this.line.shield);
+  }
+
+  gmShield(v: number): void {
+    if (v > 0) this.line.addShield(v);
+    else this.line.shield = 0;
+    bus.emit(EVT.LINE_DAMAGED, this.line.hp, this.line.maxHp, this.line.shield);
+  }
+
+  gmWin(): void {
+    if (this.state === 'running') bus.emit(EVT.ALL_WAVES_CLEARED);
+  }
+
+  gmLose(): void {
+    if (this.state === 'running') bus.emit(EVT.LINE_BROKEN);
+  }
+
+  gmExit(): void {
+    director.loadScene('Main');
   }
 
   private exitBattle(): void {
