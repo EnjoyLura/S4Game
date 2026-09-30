@@ -10,7 +10,7 @@ import { HeroUnit } from '../battle/Hero';
 import { BattleDirector } from '../battle/BattleDirector';
 import { AdService } from '../platform/AdService';
 import { loadSave } from '../core/SaveData';
-import { btn, CA, dimLayer, gcircle, gpanel, label, N, setText, WY, WYB, WX } from './UIKit';
+import { btn, CA, dimLayer, gcircle, gpanel, gswitch, label, N, setText, WY, WYB, WX } from './UIKit';
 
 interface PickCallbacks {
   onPick: (card: CardDef) => void;
@@ -156,32 +156,34 @@ export class Panels {
     });
   }
 
-  /** 伤害统计行（线稿④-1⑤-1⑥-1：头像70 + 名称 + 占比 + 数值条340，数值 W/K 格式化居中条内） */
+  /** 伤害统计行（线稿④-1⑤-1⑥-1）：整行水平居中（40..710），头像40..110 / 名称130起 / 占比条130..710，数值 W/K 格式化居中条内 */
   private statsRows(rows: DamageRow[], t0: number, step: number): void {
     rows.slice(0, 3).forEach((r, i) => {
       const t = t0 + i * step;
-      const av = gcircle(this.modalRoot, WX(75, 70), WY(t, 70), 35, CA('#2A3240', 1), '#FFFFFF55', 1.5);
+      const av = gcircle(this.modalRoot, WX(40, 70), WY(t, 70), 35, CA('#2A3240', 1), '#FFFFFF55', 1.5);
       label(av, 0, 0, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
       label(this.modalRoot, WX(130, 220), WY(t + 2, 40), r.name,
         { size: 18, color: '#FFFFFF', align: 'left', w: 220, h: 40, shrink: true });
-      label(this.modalRoot, WX(330, 140), WY(t + 2, 40), (r.pct * 100).toFixed(2) + '%',
+      label(this.modalRoot, WX(570, 140), WY(t + 2, 40), (r.pct * 100).toFixed(2) + '%',
         { size: 18, color: PAL.orange, align: 'right', w: 140, h: 40, shrink: true });
-      const barX = WX(130, 340);
-      gpanel(this.modalRoot, barX, WY(t + 44, 16), 340, 16, CA('#000000', 0.4), undefined, 0, 8);
+      const barX = WX(130, 580);
+      gpanel(this.modalRoot, barX, WY(t + 44, 16), 580, 16, CA('#000000', 0.4), undefined, 0, 8);
       if (r.val > 0) {
-        const fw = Math.max(8, 340 * r.pct);
+        const fw = Math.max(8, 580 * r.pct);
         gpanel(this.modalRoot, WX(130, fw), WY(t + 44, 16), fw, 16, CA(PAL.orange, 0.9), undefined, 0, 8);
       }
       label(this.modalRoot, barX, WY(t + 44, 16), fmtWk(r.val), { size: 14, color: '#FFFFFF', bold: true });
     });
   }
 
-  /** 奖励图标行：[底色, 图标文字, 数值, 设计x] */
-  private rewardIcons(items: [string, string, string, number][]): void {
-    items.forEach(it => {
-      const c = gcircle(this.modalRoot, WX(it[3], 96), WY(530, 96), 42, CA(it[0], 0.25), it[0], 2);
+  /** 奖励图标行（整组水平居中，pitch 160）：[底色, 图标文字, 数值] */
+  private rewardIcons(y: number, items: [string, string, string][]): void {
+    const pitch = 160, s = 96;
+    items.forEach((it, i) => {
+      const x = (i - (items.length - 1) / 2) * pitch;
+      const c = gcircle(this.modalRoot, x, WY(y, s), 42, CA(it[0], 0.25), it[0], 2);
       label(c, 0, 0, it[1], { size: it[1] === 'EXP' ? 20 : 34, color: it[1] === 'EXP' ? PAL.ink : '#FFFFFF', bold: it[1] === 'EXP' });
-      label(this.modalRoot, WX(it[3], 96), WY(630, 36), it[2], { size: 20, color: '#FFFFFF' });
+      label(this.modalRoot, x, WY(y + s + 4, 36), it[2], { size: 20, color: '#FFFFFF' });
     });
   }
 
@@ -199,34 +201,36 @@ export class Panels {
     this.tabsBar(['奖励总览', '伤害统计', '设置'], tab, 780, 25, 225, 10, t => this.showPause({ ...o, tab: t }));
     if (tab === 0) {
       label(this.modalRoot, 0, WY(470, 44), '— 已获得奖励 —', { size: 22, color: '#FFE08A' });
-      this.rewardIcons([
-        [PAL.gold, '🪙', String(Math.floor(this.dir.goldEarned)), 280],
-        [PAL.green, 'EXP', String(o.xp), 440],
+      this.rewardIcons(530, [
+        [PAL.gold, '🪙', String(Math.floor(this.dir.goldEarned))],
+        [PAL.green, 'EXP', String(o.xp)],
       ]);
     } else if (tab === 1) {
       label(this.modalRoot, 0, WY(470, 44), '— 伤害统计（本局） —', { size: 22, color: '#FFE08A' });
       this.statsRows(this.dir.dmgSvc.rows(), 520, 115);
     } else {
-      // 设置页签：音乐/音效开关即时生效；倍速 1-2 通关解锁；振动随战斗手感批次实装
-      const mkRow = (y: number, name: string, val: string, state: 'on' | 'off' | 'off_lock', cb?: () => void) => {
+      // 设置页签：左右旋钮开关（线稿④-2）；音乐/音效切换即时生效并写存档；振动随战斗手感批次实装
+      const mkRow = (y: number, name: string, gray: boolean, sw?: { on: boolean; onChange: (v: boolean) => void }) => {
         gpanel(this.modalRoot, WX(40, 670), WY(y, 60), 670, 60, CA('#14181E', 0.85), '#FFFFFF33', 1.5, 12);
         label(this.modalRoot, WX(60, 380), WY(y, 60), name,
-          { size: 20, color: state === 'off_lock' ? '#889099' : '#FFFFFF', align: 'left', w: 380, h: 40, shrink: true });
-        if (cb) {
-          btn(this.modalRoot, WX(560, 110), WY(y + 8, 44), 110, 44, val, state === 'on' ? PAL.green : '#5A6472', cb, 16);
-        } else {
-          gpanel(this.modalRoot, WX(560, 110), WY(y + 8, 44), 110, 44, CA('#000000', 0.3), '#FFFFFF22', 1.5, 22);
-          label(this.modalRoot, WX(560, 110), WY(y + 8, 44), val, { size: 15, color: '#889099' });
-        }
+          { size: 20, color: gray ? '#889099' : '#FFFFFF', align: 'left', w: 380, h: 40, shrink: true });
+        gswitch(this.modalRoot, WX(590, 100), WY(y + 8, 44), 100, 44, sw ? sw.on : false,
+          sw ? sw.onChange : undefined, !sw);
       };
-      mkRow(496, '🎵 音乐', o.music ? '开' : '关', o.music ? 'on' : 'off',
-        () => { o.onToggle('music', !o.music); this.showPause({ ...o, tab: 2, music: !o.music }); });
-      mkRow(570, '🔊 音效', o.sfx ? '开' : '关', o.sfx ? 'on' : 'off',
-        () => { o.onToggle('sfx', !o.sfx); this.showPause({ ...o, tab: 2, sfx: !o.sfx }); });
-      mkRow(644, '📳 振动', '未开放', 'off_lock');
-      mkRow(718, '⏩ 战斗倍速', o.speedUnlocked ? (o.speed === 2 ? '2x' : '1x') : '1-2 解锁',
-        o.speedUnlocked ? (o.speed === 2 ? 'on' : 'off') : 'off_lock',
-        o.speedUnlocked ? () => { this.dir.toggleSpeed(); this.showPause({ ...o, tab: 2, speed: this.dir.speed }); } : undefined);
+      mkRow(496, '🎵 音乐', false, { on: o.music, onChange: v => o.onToggle('music', v) });
+      mkRow(570, '🔊 音效', false, { on: o.sfx, onChange: v => o.onToggle('sfx', v) });
+      mkRow(644, '📳 振动（未开放）', true);
+      // 倍速行：循环按钮 1x/2x（非开关形态）
+      gpanel(this.modalRoot, WX(40, 670), WY(718, 60), 670, 60, CA('#14181E', 0.85), '#FFFFFF33', 1.5, 12);
+      label(this.modalRoot, WX(60, 380), WY(718, 60), '⏩ 战斗倍速' + (o.speedUnlocked ? '' : '（1-2 通关解锁）'),
+        { size: 20, color: o.speedUnlocked ? '#FFFFFF' : '#889099', align: 'left', w: 380, h: 40, shrink: true });
+      if (o.speedUnlocked) {
+        btn(this.modalRoot, WX(590, 100), WY(726, 44), 100, 44, o.speed === 2 ? '2x' : '1x',
+          o.speed === 2 ? PAL.green : '#5A6472',
+          () => { this.dir.toggleSpeed(); this.showPause({ ...o, tab: 2, speed: this.dir.speed }); }, 18);
+      } else {
+        gswitch(this.modalRoot, WX(590, 100), WY(726, 44), 100, 44, false, undefined, true);
+      }
     }
     btn(this.modalRoot, WX(50, 300), WY(880, 88), 300, 88, '⏻ 退出', PAL.gold, o.onExit);
     btn(this.modalRoot, WX(400, 300), WY(880, 88), 300, 88, '▶ 继续战斗', PAL.green, o.onResume);
@@ -252,12 +256,7 @@ export class Panels {
     }
     label(this.modalRoot, 0, WY(558, 44), tab === 0 ? '— 已获得奖励 —' : '— 伤害统计（本局） —', { size: 22, color: '#FFE08A' });
     if (tab === 0) {
-      const coin = gcircle(this.modalRoot, WX(117, 96), WY(606, 96), 42, CA(PAL.gold, 0.25), PAL.gold, 2);
-      label(coin, 0, 0, '🪙', { size: 34 });
-      label(this.modalRoot, WX(117, 96), WY(676, 36), String(o.gold), { size: 20, color: '#FFFFFF' });
-      const exp = gcircle(this.modalRoot, WX(260, 96), WY(606, 96), 42, CA(PAL.green, 0.25), PAL.green, 2);
-      label(exp, 0, 0, 'EXP', { size: 20, color: PAL.ink, bold: true });
-      label(this.modalRoot, WX(260, 96), WY(676, 36), String(o.xp), { size: 20, color: '#FFFFFF' });
+      this.rewardIcons(606, [[PAL.gold, '🪙', String(o.gold)], [PAL.green, 'EXP', String(o.xp)]]);
     } else {
       this.statsRows(this.dir.dmgSvc.rows(), 600, 120);
     }
@@ -294,12 +293,7 @@ export class Panels {
     label(this.modalRoot, 0, WY(350, 80), '挑战失败', { size: 40, color: '#FFFFFF', bold: true });
     label(this.modalRoot, 0, WY(480, 44), tab === 0 ? '— 已获得奖励（保底 30%）—' : '— 伤害统计（本局） —', { size: 20, color: tab === 0 ? '#FFB0A0' : '#FFE08A' });
     if (tab === 0) {
-      const coin = gcircle(this.modalRoot, WX(167, 96), WY(528, 96), 42, CA(PAL.gold, 0.25), PAL.gold, 2);
-      label(coin, 0, 0, '🪙', { size: 34 });
-      label(this.modalRoot, WX(167, 96), WY(598, 36), String(o.goldFloor), { size: 20, color: '#FFFFFF' });
-      const exp = gcircle(this.modalRoot, WX(340, 96), WY(528, 96), 42, CA(PAL.green, 0.25), PAL.green, 2);
-      label(exp, 0, 0, 'EXP', { size: 20, color: PAL.ink, bold: true });
-      label(this.modalRoot, WX(340, 96), WY(598, 36), String(o.xp), { size: 20, color: '#FFFFFF' });
+      this.rewardIcons(528, [[PAL.gold, '🪙', String(o.goldFloor)], [PAL.green, 'EXP', String(o.xp)]]);
     } else {
       this.statsRows(this.dir.dmgSvc.rows(), 520, 110);
     }

@@ -149,6 +149,34 @@ export function btn(parent: Node, x: number, y: number, w: number, h: number, te
   return n;
 }
 
+/** 左右旋钮开关（线稿④-2）：开=绿轨旋钮居右 / 关=灰轨旋钮居左；disabled 置灰不可点 */
+export function gswitch(parent: Node, x: number, y: number, w: number, h: number, on: boolean,
+  onChange?: (v: boolean) => void, disabled = false): Node {
+  const n = N('switch', parent, x, y, w, h);
+  const g = n.addComponent(Graphics);
+  const draw = (v: boolean) => {
+    g.clear();
+    g.fillColor = disabled ? CA('#3A4250', 0.9) : v ? CA(PAL.green, 0.95) : CA('#5A6472', 0.9);
+    g.roundRect(-w / 2, -h / 2, w, h, h / 2);
+    g.fill();
+    const kx = v ? w / 2 - h / 2 : -w / 2 + h / 2;
+    g.fillColor = disabled ? C('#889099') : C('#FFFFFF');
+    g.circle(kx, 0, h / 2 - 3);
+    g.fill();
+  };
+  draw(on);
+  if (!disabled && onChange) {
+    n.on(Node.EventType.TOUCH_END, (e: unknown) => {
+      const ev = e as { propagationStopped?: () => void };
+      if (ev && ev.propagationStopped) ev.propagationStopped();
+      on = !on;
+      draw(on);
+      onChange(on);
+    });
+  }
+  return n;
+}
+
 /** 全屏遮罩（吞点击）：覆盖整个可视区（Fit-Width 高度动态），不能用 Widget 对 0 尺寸父级对齐 */
 export function dimLayer(parent: Node, alpha = 0.68, red = false): Node {
   const H = LO.half * 2 + 240;

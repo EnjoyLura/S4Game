@@ -352,7 +352,11 @@ function swRow(y,icon,name,on,disabled,extra){
   var s=ph("ui_set_row",40,y,670,64,{cls:"dark",txt:""});
   s+=txt(60,y,420,64,"<b style='font-size:13px'>"+icon+" "+name+(disabled?" <em style='color:#889;font-size:10px'>未开放</em>":"")+"</b>",'','text-align:left');
   if(extra){s+=extra;}
-  else{s+=ph("ui_switch",600,y+12,90,40,{cls:disabled?"dark":(on?"gold":"dark"),css:disabled?"opacity:.45":"",txt:(disabled?"—":(on?"ON":"OFF"))});}
+  else{
+    /* 左右旋钮开关：轨道 90×40 圆角，圆形旋钮 开=居右(绿轨) / 关=居左(灰轨) */
+    s+=ph("ui_switch_track",600,y+12,90,40,{cls:on&&!disabled?"gold":"dark",css:disabled?"opacity:.45":"",txt:""});
+    s+=ph("ui_switch_knob",on&&!disabled?650:604,y+14,36,36,{cls:"circ",txt:""});
+  }
   return s;
 }
 
@@ -394,7 +398,7 @@ SCREENS.pause_settings={name:"④-2 暂停·设置页签",en:"Pause · Settings"
   return s;},
  notes:{
   layout:["与 ④ 暂停同壳：内容区为 4 行设置行（670×64 行底 + 左标签 + 右开关/分段器）。",
-   "音乐/音效/振动 = 90×40 拨杆开关（ON 金色 / OFF 深灰）；战斗倍速 = 1x/2x 分段器（当前档金色高亮）。",
+   "音乐/音效/振动 = 90×40 左右旋钮滑动开关：圆形旋钮居右=开（绿轨）/ 居左=关（灰轨）；战斗倍速 = 1x/2x 分段器（当前档金色高亮）。",
    "音乐与振动先占位记忆偏好，随 BGM / 战斗手感批次实装；振动实装前置灰标『未开放』。"],
   interact:["音效开关即时生效（合成音与资源样本同走此开关）；倍速 1-2 通关解锁，未解锁行显示锁态提示；设置持久化到存档。"],
   diff:["问题上报入口已整体移除（反馈走 TapTap 站内）。"]
