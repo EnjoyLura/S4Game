@@ -10,6 +10,7 @@ import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
 import { bus, EVT } from '../core/EventBus';
+import { Sfx } from '../core/Sfx';
 import { label } from '../ui/UIKit';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
@@ -163,6 +164,7 @@ export class HeroUnit {
       size: base.small ? 5 : emp ? 10 : 7,
       small: base.small,
       pierce: emp ? 999 : this.stats.pierce,
+      spark: emp,
       explodeR: this.stats.explodeR > 0 && !base.small ? this.stats.explodeR : 0,
       explodeMul: this.stats.explodeMul,
       split: this.stats.split,
@@ -213,6 +215,7 @@ export class HeroUnit {
     // 主弹：预判拦截点直线射出
     const lead = this.lead(target, bs);
     this.fireDir(projs, lead.dirX, lead.dirY, emp);
+    Sfx.play('shoot');
     // 连射：延迟成串；每发出弓瞬间若目标存活则按当时状态重新预判（出弓后仍直线），目标已亡则沿锁定方向
     for (let i = 1; i <= this.stats.serial; i++) {
       this.serialQueue.push({ t: i * 0.12, target, dirX: lead.dirX, dirY: lead.dirY, emp });
@@ -252,8 +255,10 @@ export class HeroUnit {
   /** 击杀充能（§3.7：击杀者获得怪物配置充能值） */
   chargeKill(v: number): void {
     if (this.ultReady) return;
+    const was = this.ultReady;
     this.charge = Math.min(this.chargeMax, this.charge + v);
     bus.emit(EVT.CHARGE_CHANGED, this.chargePct, this.ultReady);
+    if (!was && this.ultReady) Sfx.play('ready');
   }
 
   /** 大招·扇形箭雨（手动，击杀充能）：两排 × 8 箭扇形射出，全部无限贯穿 */
@@ -262,6 +267,7 @@ export class HeroUnit {
     this.charge = 0;
     this.volleyQueue.push({ t: 0, row: 0 }, { t: 0.35, row: 1 });
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
+    Sfx.play('ult');
     return true;
   }
 
@@ -278,7 +284,7 @@ export class HeroUnit {
         dirX: Math.sin(a), dirY: Math.cos(a),
         speed,
         dmg: this.effAtk * 0.65, crit: Math.random() < this.stats.critRate,
-        color: PAL.gold, heroId: this.id, size: 9, ttl: 3.6, pierce: 999,
+        color: PAL.gold, heroId: this.id, size: 9, ttl: 3.6, pierce: 999, spark: true,
       });
     }
   }

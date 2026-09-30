@@ -6,6 +6,8 @@
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { Monster, MonsterManager } from './Monster';
 import { DamageService } from './DamageService';
+import { Particles } from './Particles';
+import { Sfx } from '../core/Sfx';
 import { LINE_Y, LO, PAL, MAX_PROJS } from '../config/GameConfig';
 
 export interface ProjSpec {
@@ -32,6 +34,8 @@ export interface ProjSpec {
   /** 命中词条 */
   slowRatio?: number;
   burnDps?: number;
+  /** 强化/贯穿金箭：命中迸溅金色粒子 + 加长拖尾 */
+  spark?: boolean;
 }
 
 interface Active {
@@ -40,6 +44,8 @@ interface Active {
   pierceLeft: number;
   hit: Set<Monster>;
   ttl: number;
+  trail: number[];
+  trailMax: number;
 }
 
 const colorCache = new Map<string, Color>();
@@ -48,6 +54,8 @@ function hexc(h: string): Color {
   if (!c) { c = new Color(); Color.fromHEX(c, h); colorCache.set(h, c); }
   return c;
 }
+// 尾迹渐隐上色专用（避免每段新建 Color）
+const scratch = new Color();
 
 export class ProjectileManager {
   private active: Active[] = [];
@@ -55,8 +63,8 @@ export class ProjectileManager {
   private g!: Graphics;
   private dirty = false;
 
-  /** field 为专用弹道图层节点（英雄之上、飘字之下） */
-  constructor(field: Node, private mgr: MonsterManager, private dmg: DamageService) {
+  /** field 为专用弹道图层节点（英雄之上、飘字之下）；parts 为迸溅粒子层 */
+  constructor(field: Node, private mgr: MonsterManager, private dmg: DamageService, private parts?: Particles) {
     field.layer = Layers.Enum.UI_2D;
     this.g = field.addComponent(Graphics);
   }
@@ -68,6 +76,8 @@ export class ProjectileManager {
     a.hit.clear();
     a.pierceLeft = spec.pierce || 0;
     a.ttl = spec.ttl ?? 3.2;
+    a.trail.length = 0;
+    a.trailMax = spec.enemy ? 0 : spec.spark ? 7 : 3;
     const dx = spec.dirX ?? 0, dy = spec.dirY ?? -1;
     const len = Math.sqrt(dx * dx + dy * dy) || 1;
     a.vx = dx / len * spec.speed;
@@ -77,7 +87,7 @@ export class ProjectileManager {
   }
 
   private makeActive(): Active {
-    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<Monster>(), ttl: 0 };
+    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<Monster>(), ttl: 0, trail: [], trailMax: 0 };
   }
 
   /** 敌方远程石块：直线落向防线，触线即结算 */
@@ -113,6 +123,10 @@ export class ProjectileManager {
       if (!done) {
         sp.x += a.vx * dt;
         sp.y += a.vy * dt;
+        if (a.trailMax > 0) {
+          a.trail.push(sp.x, sp.y);
+          while (a.trail.length > a.trailMax * 2) { a.trail.splice(0, 2); }
+        }
         if (sp.enemy && sp.y <= LINE_Y + 12) {
           line.takeDamage(sp.dmg);
           done = true;
@@ -141,12 +155,19 @@ export class ProjectileManager {
       g.circle(s.x, s.y, size);
       g.fill();
       g.stroke();
-      // 运动方向尾迹
-      g.strokeColor = hexc(s.color);
-      g.lineWidth = 2;
-      g.moveTo(s.x, s.y);
-      g.lineTo(s.x - a.vx / spd * size * 2.2, s.y - a.vy / spd * size * 2.2);
-      g.stroke();
+      // 渐隐尾迹：强化金箭长尾、普攻短尾；越旧越细越淡
+      const tr = a.trail;
+      const n = tr.length >> 1;
+      for (let k = 0; k + 1 < n; k++) {
+        const f = (k + 1) / n;
+        scratch.set(hexc(s.color));
+        scratch.a = Math.floor(150 * f);
+        g.strokeColor = scratch;
+        g.lineWidth = Math.max(1, size * 0.85 * f);
+        g.moveTo(tr[k * 2], tr[k * 2 + 1]);
+        g.lineTo(k + 2 < n ? tr[(k + 1) * 2] : s.x, k + 2 < n ? tr[(k + 1) * 2 + 1] : s.y);
+        g.stroke();
+      }
     }
   }
 
@@ -156,6 +177,8 @@ export class ProjectileManager {
     const hpBefore = m.hp;
     m.takeDamage(sp.dmg, sp.crit, sp.heroId);
     this.dmg.add(sp.heroId, Math.min(sp.dmg, hpBefore));
+    Sfx.play(sp.crit ? 'crit' : 'hit');
+    if (sp.spark && this.parts) this.parts.burst(m.x, m.y, sp.color, 4);
     if (m.dead) return;
     if (sp.slowRatio) m.applySlow(sp.slowRatio, 2);
     if (sp.burnDps) m.applyBurn(sp.burnDps, 3);

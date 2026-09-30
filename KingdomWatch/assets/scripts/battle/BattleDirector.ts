@@ -7,12 +7,14 @@ import { LEVEL_1_1, LevelDef, MOBS, heroSlots } from '../config/Mobs';
 import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats } from '../config/Cards';
 import { REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
+import { Sfx } from '../core/Sfx';
 import { loadSave, saveSave } from '../core/SaveData';
 import { MonsterManager } from './Monster';
 import { HeroUnit } from './Hero';
 import { LineDefense } from './LineDefense';
 import { WaveManager } from './WaveManager';
 import { ProjectileManager } from './Projectile';
+import { Particles } from './Particles';
 import { DamageService, DamageRow } from './DamageService';
 import { FloatText } from './FloatText';
 import { AdService } from '../platform/AdService';
@@ -41,6 +43,7 @@ export class BattleDirector extends Component {
   line!: LineDefense;
   waves!: WaveManager;
   projs!: ProjectileManager;
+  parts!: Particles;
   dmgSvc = new DamageService();
   float!: FloatText;
   hud!: HUD;
@@ -84,7 +87,8 @@ export class BattleDirector extends Component {
     this.float = new FloatText(fxLayer);
     this.mgr = new MonsterManager(mobLayer, hitCtx);
     this.hero = new HeroUnit(field, heroSlots(1)[0], baseArcherStats());
-    this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc);
+    this.parts = new Particles(fxLayer);
+    this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts);
     this.waves = new WaveManager(this.levelDef, this.mgr);
     this.dmgSvc.register(this.hero.id, this.hero.name);
 
@@ -143,16 +147,18 @@ export class BattleDirector extends Component {
       this.mgr.tick(sub, this.line);
       this.hero.tick(sub, this.mgr, this.projs, this.dmgSvc);
       this.projs.tick(sub, this.line);
+      this.parts.tick(sub);
       this.line.regenPct = this.global.lineRegenPct;
       this.line.tick(sub);
     }
-    this.hud.sync();
+    this.hud.sync(rawDt);
   }
 
   /* ---------- 击杀 → 金币/经验/充能（§3.7/§3.8/§3.10） ---------- */
   private onMobKilled(def: unknown, killerId: unknown): void {
     const d = def as { gold: number; exp: number; charge: number };
     this.goldEarned += d.gold * this.global.goldMul;
+    Sfx.play('kill');
     if (killerId === this.hero.id) this.hero.chargeKill(d.charge);
     this.gainXp(d.exp * this.global.xpMul);
   }
@@ -169,6 +175,7 @@ export class BattleDirector extends Component {
       this.xp -= need;
       this.heroLevel++;
       this.pickQueue++;
+      Sfx.play('levelup');
       need = this.expNeed(this.heroLevel);
       bus.emit(EVT.LEVEL_UP, this.heroLevel);
     }

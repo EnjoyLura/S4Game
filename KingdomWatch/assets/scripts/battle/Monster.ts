@@ -175,7 +175,7 @@ export class Monster {
     this.hp -= amount;
     this.stunT = Math.max(this.stunT, 0.1);
     this.ctx.dmgNumber(this.x + (Math.random() * 24 - 12), this.y + this.def.radius,
-      String(Math.round(amount)), crit ? '#EF9D3C' : '#FFFFFF', crit);
+      String(Math.round(amount)), crit ? '#FFD75E' : '#FFFFFF', crit);
     this.flash();
     if (this.hp <= 0) {
       this.die(killerId);

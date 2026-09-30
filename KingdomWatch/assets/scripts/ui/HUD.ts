@@ -45,11 +45,18 @@ export class HUD {
   private lastLv = -1;
   private lastHp = -1;
   private lastShield = -1;
-  private lastXp = -1;
   private lastReady = false;
   private lastChargeKey = -1;
   private skillCooling: boolean | null = null;
   private lastCdKey = -1;
+  // 经验条/充能上涨动画状态（平滑逼近 + 获得时闪光）
+  private xpShown = 0;
+  private xpTarget0 = 0;
+  private xpFlash = 0;
+  private lastXpTarget = 0;
+  private chargeShown = 0;
+  private chargeFlash = 0;
+  private lastChargeTarget = -1;
 
   constructor(parent: Node, private dir: BattleDirector, bgParent?: Node) {
     this.build(parent, bgParent);
@@ -186,8 +193,8 @@ export class HUD {
       .start();
   }
 
-  /** 每帧轮询（只在值变化时重绘） */
-  sync(): void {
+  /** 每帧轮询；dt 用于经验/充能的上涨动画（只在值变化或动画未收敛时重绘） */
+  sync(dt = 0): void {
     const d = this.dir;
     // 关卡计时（整秒变化才重排 Label）
     const sec = Math.floor(d.elapsed);
@@ -200,13 +207,18 @@ export class HUD {
       this.lastLv = d.heroLevel;
       setText(this.lvTxt, 'Lv.' + d.heroLevel);
     }
-    // 经验
+    // 经验：平滑上涨 + 获得时闪光（升级重置时快速回落）
     const need = expNeed(d.heroLevel);
-    const xpPct = Math.min(1, d.xp / need);
-    const xpKey = Math.floor(xpPct * 100) * 1000 + d.heroLevel;
-    if (xpKey !== this.lastXp) {
-      this.lastXp = xpKey;
-      this.xpBar.set(xpPct);
+    const xpTarget = Math.min(1, d.xp / need);
+    if (xpTarget > this.lastXpTarget + 0.0001) this.xpFlash = 0.35;
+    this.lastXpTarget = xpTarget;
+    if (xpTarget < this.xpShown - 0.25) this.xpShown = 0;
+    this.xpShown += (xpTarget - this.xpShown) * Math.min(1, dt * (xpTarget > this.xpShown ? 6 : 4));
+    if (Math.abs(xpTarget - this.xpShown) < 0.0015) this.xpShown = xpTarget;
+    this.xpFlash = Math.max(0, this.xpFlash - dt);
+    if (this.xpShown !== this.xpTarget0 || this.xpFlash > 0) {
+      this.xpBar.set(this.xpShown, this.xpFlash > 0 ? '#BFE9FF' : PAL.blue);
+      this.xpTarget0 = this.xpShown;
     }
     // 耐久 + 盾
     const hpKey = Math.round(d.line.hp) * 4 + Math.round(d.line.maxHp);
@@ -228,12 +240,17 @@ export class HUD {
       this.applyUltReady(ready);
     }
     if (!ready) {
-      // 2% 步进重绘：金水液面上涨，整圈最多 50 次 Graphics 重建
+      // 金水液面平滑上涨；获得充能时水面高光闪亮
       const cp = d.hero.chargePct;
-      const key = Math.round(cp * 50);
-      if (key !== this.lastChargeKey) {
+      if (cp > this.lastChargeTarget + 0.0001) this.chargeFlash = 0.35;
+      this.lastChargeTarget = cp;
+      this.chargeShown += (cp - this.chargeShown) * Math.min(1, dt * 5);
+      if (cp - this.chargeShown < 0.002) this.chargeShown = cp;
+      this.chargeFlash = Math.max(0, this.chargeFlash - dt);
+      const key = Math.round(this.chargeShown * 60);
+      if (key !== this.lastChargeKey || this.chargeFlash > 0) {
         this.lastChargeKey = key;
-        this.redrawUltWater(cp);
+        this.redrawUltWater(this.chargeShown, this.chargeFlash > 0);
         setText(this.chargeTxt, '大招\n' + Math.round(cp * 100) + '%');
       }
     }
@@ -257,14 +274,14 @@ export class HUD {
 
   /* ---------- 大招图标：水杯充能 / 就绪光效 ---------- */
 
-  /** 金水上涨：圆杯内液面以下的圆缺面（弦 + 下弧采样，避免 arc 方向歧义） */
-  private redrawUltWater(pct: number): void {
+  /** 金水上涨：圆杯内液面以下的圆缺面（弦 + 下弧采样，避免 arc 方向歧义）；flash=获得瞬间水面高光 */
+  private redrawUltWater(pct: number, flash = false): void {
     const g = this.ultWaterG;
     g.clear();
     if (pct <= 0.01) return;
     const R = 43;
     if (pct >= 0.995) {
-      g.fillColor = CA(PAL.gold, 0.9);
+      g.fillColor = CA(PAL.gold, flash ? 0.98 : 0.9);
       g.circle(0, 0, R);
       g.fill();
       return;
@@ -272,7 +289,7 @@ export class HUD {
     const yc = -R + 2 * R * pct;
     const a = Math.asin(Math.max(-1, Math.min(1, yc / R)));
     const xr = R * Math.cos(a);
-    g.fillColor = CA(PAL.gold, 0.88);
+    g.fillColor = CA(PAL.gold, flash ? 0.95 : 0.88);
     g.moveTo(xr, yc);
     g.lineTo(-xr, yc);
     const thA = Math.PI - a, thB = Math.PI * 2 + a;
@@ -283,8 +300,8 @@ export class HUD {
     }
     g.close();
     g.fill();
-    g.strokeColor = CA('#FFE08A', 0.95);   // 水面高光
-    g.lineWidth = 2.5;
+    g.strokeColor = CA(flash ? '#FFF6D0' : '#FFE08A', 0.95);   // 水面高光
+    g.lineWidth = flash ? 3.5 : 2.5;
     g.moveTo(-xr + 4, yc);
     g.lineTo(xr - 4, yc);
     g.stroke();
@@ -297,6 +314,8 @@ export class HUD {
     this.ultBright.active = ready;
     if (!ready) {
       this.lastChargeKey = -1;
+      this.chargeShown = 0;
+      this.lastChargeTarget = -1;
       setText(this.chargeTxt, '大招\n0%');
       Tween.stopAllByTarget(this.ultBtn);
       Tween.stopAllByTarget(this.ultGlow);
