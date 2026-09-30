@@ -3,7 +3,7 @@
  * dt×倍速步进；暂停/三选一期间全场冻结（§3.2）
  */
 import { _decorator, Component, director, Layers, Node } from 'cc';
-import { LEVEL_1_1, LevelDef, MOBS } from '../config/Mobs';
+import { LEVEL_1_1, LevelDef, MOBS, heroSlots } from '../config/Mobs';
 import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats } from '../config/Cards';
 import { REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
@@ -81,7 +81,7 @@ export class BattleDirector extends Component {
     };
     this.float = new FloatText(fxLayer);
     this.mgr = new MonsterManager(mobLayer, hitCtx);
-    this.hero = new HeroUnit(field, -38, baseArcherStats());
+    this.hero = new HeroUnit(field, heroSlots(1)[0], baseArcherStats());
     this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc);
     this.waves = new WaveManager(this.levelDef, this.mgr);
     this.dmgSvc.register(this.hero.id, this.hero.name);

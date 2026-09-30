@@ -87,5 +87,14 @@ export const LEVEL_1_1: LevelDef = {
   ],
 };
 
-/** 画布 x 4 槽位（§3.1：设计 x≈160/337/513/690 → 画布坐标）；M0 弓箭手站槽 2（近中） */
-export const HERO_SLOTS_X = [-215, -38, 138, 315];
+/** 英雄站位（§3.1，用户确认）：防线横向对称分布，单人必须居中；3 人 ±210 */
+const HERO_SLOT_TABLE: Record<number, number[]> = {
+  1: [0],
+  2: [-160, 160],
+  3: [-210, 0, 210],
+  4: [-255, -85, 85, 255],
+};
+
+export function heroSlots(n: number): number[] {
+  return (HERO_SLOT_TABLE[n] || HERO_SLOT_TABLE[4]).slice(0, Math.max(1, Math.min(4, n)));
+}

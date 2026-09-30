@@ -29,7 +29,8 @@ export interface HeroStats {
 
 export function baseArcherStats(): HeroStats {
   return {
-    atk: 45, atkMul: 1, aspd: 1.2, range: 520, skillRange: 416,
+    // 射程 660 / 技能 560（用户确认加大索敌范围；文档 §3.1 的 520/416 随之作废）
+    atk: 45, atkMul: 1, aspd: 1.2, range: 660, skillRange: 560,
     critRate: 0.05, critMul: 1.5,
     serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
     pierce: 0, slowOnHit: 0, burnOnHit: 0,

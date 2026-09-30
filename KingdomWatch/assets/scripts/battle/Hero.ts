@@ -228,32 +228,61 @@ export class HeroUnit {
   private castSkill(mgr: MonsterManager, dmg: DamageService): void {
     this.skillCd = this.skillMax;
     const d = this.effAtk * 5.2;
+    const span = SPAWN_Y - LINE_Y;
+
+    // 索敌：技能范围内挑最贴近防线的怪（最危险），穿云方向指向它；范围内无怪才保持竖直
+    let dirX = 0, dirY = 1;
+    let target: Monster | null = null;
+    const sr2 = this.stats.skillRange * this.stats.skillRange;
     for (const m of mgr.list) {
       if (m.dead) continue;
-      if (m.y > HERO_Y && Math.abs(m.x - this.x) < 44) {
+      const dx = m.x - this.x, dy = m.y - HERO_Y;
+      if (dx * dx + dy * dy > sr2) continue;
+      if (!target || m.y < target.y) target = m;
+    }
+    if (target) {
+      const dx = target.x - this.x, dy = target.y - HERO_Y;
+      const l = Math.sqrt(dx * dx + dy * dy) || 1;
+      dirX = dx / l; dirY = dy / l;
+    }
+
+    // 伤害：沿穿云方向的穿透走廊（宽 88、长 span+120），命中路径全部敌人
+    for (const m of mgr.list) {
+      if (m.dead) continue;
+      const dx = m.x - this.x, dy = m.y - HERO_Y;
+      const along = dx * dirX + dy * dirY;            // 沿弹道方向投影
+      const perp = Math.abs(dx * dirY - dy * dirX);   // 到弹道线的垂距
+      if (along > 0 && along < span + 120 && perp < 44) {
         const before = m.hp;
         m.takeDamage(d, false, this.id);
         dmg.add(this.id, Math.min(d, before));
       }
     }
-    // 穿云箭演出：一支大箭从英雄位直射天际 + 弹道淡金色闪光带
-    const span = SPAWN_Y - LINE_Y;
+
+    // 演出：淡金闪光走廊沿穿云方向铺开（0.55s 渐隐）+ 大箭 0.5s 飞完全程（可读的释放节奏）
+    const ang = Math.atan2(-dirX, dirY) * 180 / Math.PI; // 素材默认朝上
     const lane = new Node('skillLane');
     lane.layer = Layers.Enum.UI_2D;
     lane.setParent(this.node.parent!);
-    lane.setPosition(this.x, HERO_Y + span / 2, 0);
+    lane.setPosition(this.x + dirX * (span / 2 + 40), HERO_Y + dirY * (span / 2 + 40), 0);
+    lane.angle = ang;
     const lg = lane.addComponent(Graphics);
-    lg.fillColor = new Color(242, 178, 62, 36);
+    lg.fillColor = new Color(242, 178, 62, 60);
     lg.roundRect(-44, -span / 2 - 40, 88, span + 80, 20);
+    lg.fill();
+    lg.fillColor = new Color(255, 224, 140, 85);   // 中心亮芯，深底上可读
+    lg.roundRect(-12, -span / 2 - 40, 24, span + 80, 12);
     lg.fill();
     const lop = lane.addComponent(UIOpacity);
     lop.opacity = 255;
-    tween(lop).to(0.3, { opacity: 0 }).call(() => lane.destroy()).start();
+    tween(lop).to(0.55, { opacity: 0 }).call(() => lane.destroy()).start();
 
     const arrow = new Node('skillArrow');
     arrow.layer = Layers.Enum.UI_2D;
     arrow.setParent(this.node.parent!);
     arrow.setPosition(this.x, HERO_Y + 40, 0);
+    arrow.angle = ang;
+    arrow.setScale(1.35, 1.35, 1);
     const ag = arrow.addComponent(Graphics);
     ag.fillColor = hexc(PAL.gold);
     ag.roundRect(-5, -60, 10, 104, 5);          // 箭杆
@@ -264,9 +293,10 @@ export class HeroUnit {
     ag.moveTo(-14, -60); ag.lineTo(0, -44); ag.lineTo(14, -60); ag.lineTo(9, -72); ag.lineTo(0, -60); ag.lineTo(-9, -72);
     ag.close(); ag.fill();
     const aop = arrow.addComponent(UIOpacity);
+    const fly = span + 200;
     tween(arrow)
-      .to(0.14, { position: new Vec3(this.x, SPAWN_Y + 60, 0) }, { easing: 'sineIn' })
-      .call(() => { tween(aop).to(0.08, { opacity: 0 }).call(() => arrow.destroy()).start(); })
+      .to(0.5, { position: new Vec3(this.x + dirX * fly, HERO_Y + 40 + dirY * fly) }, { easing: 'sineOut' })
+      .call(() => { tween(aop).to(0.12, { opacity: 0 }).call(() => arrow.destroy()).start(); })
       .start();
   }
 
