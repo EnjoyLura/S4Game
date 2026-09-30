@@ -77,27 +77,37 @@ export class Panels {
       }, 22);
   }
 
+  /** 卡面布局严格对齐线稿②：顶部稀有度通栏色带 → 120齿轮环内96图标 → 右上56英雄角标 →
+   *  左上56『新』绿角标(骑角突出卡外) → 底部描述两行 + 稀有度·定位小字（层数并入该行） */
   private buildCard(frame: Node, card: CardDef, stacks: CardStacks): void {
     const rarity = RARITY_COLOR[card.rarity];
     const rName = card.rarity === 'white' ? '白' : card.rarity === 'blue' ? '蓝' : '紫';
-    const tag = card.owner === 'global' ? '全局' : '弓手';
     const used = stacks[card.id] || 0;
-    label(frame, 0, 154, card.name + ' · ' + rName + ' · ' + tag,
-      { size: 19, color: rarity, bold: true, w: 190, h: 44, shrink: true });
-    gcircle(frame, 0, 44, 55, CA('#2A3240', 1), rarity, 2);
-    label(frame, 0, 44, card.id.slice(0, 2).toUpperCase(), { size: 30, color: rarity, bold: true });
-    label(frame, 0, -62, card.desc, { size: 17, color: PAL.parch, w: 176, h: 96, shrink: true, lineHeight: 24 });
-    if (used > 0) {
-      label(frame, 0, -130, '已学习 ' + used + ' 层', { size: 15, color: '#9FB59F' });
-    } else {
-      // 左上角「新」角标（线稿②：首次出现未学习）
-      const badge = gpanel(frame, -70, 158, 44, 30, PAL.gold, undefined, 0, 8);
-      label(badge, 0, 0, '新', { size: 17, color: PAL.ink, bold: true });
-    }
-    // 右上角英雄头像位（线稿②）；全局卡显示绿色「全」
-    const ava = gcircle(frame, 70, 158, 20, CA('#2A3240', 1), card.owner === 'global' ? PAL.green : PAL.gold, 1.5);
+
+    // ① 卡头稀有度色带（200×52 通栏）
+    const header = gpanel(frame, 0, 154, 200, 52, CA(rarity, 0.2), rarity, 2, 0);
+    label(header, 0, 0, card.name, { size: 20, color: rarity, bold: true, w: 186, h: 40, shrink: true });
+
+    // ② 齿轮环 120×120 + 内嵌图标 96×96（环中心卡内 y130）
+    gcircle(frame, 0, 50, 60, CA('#2A3240', 1), rarity, 2);
+    const icon = gcircle(frame, 0, 50, 48, CA(rarity, 0.14), rarity, 1.5);
+    label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 24, color: rarity, bold: true });
+
+    // ③ 右上英雄归属角标 56×56 金圈（全局卡绿色）
+    const ava = gcircle(frame, 68, 144, 28, CA('#2A3240', 1), card.owner === 'global' ? PAL.green : PAL.gold, 2.5);
     label(ava, 0, 0, card.owner === 'global' ? '全' : '弓',
-      { size: 16, color: card.owner === 'global' ? PAL.green : PAL.gold, bold: true });
+      { size: 20, color: card.owner === 'global' ? PAL.green : PAL.gold, bold: true });
+
+    // ④ 左上『新』角标 56×56 绿圆，骑在卡角上（首次出现）
+    if (used === 0) {
+      const badge = gcircle(frame, -88, 168, 28, PAL.green, PAL.ink, 2);
+      label(badge, 0, 0, '新', { size: 20, color: PAL.ink, bold: true });
+    }
+
+    // ⑤ 描述两行 + ⑥ 底部"稀有度·定位"小字（已学层数并入文案，线稿不设层数行）
+    label(frame, 0, -105, card.desc, { size: 15, color: PAL.parch, w: 184, h: 56, shrink: true, lineHeight: 20 });
+    const tag = rName + ' · ' + (card.owner === 'global' ? '全局' : '弓手') + (used > 0 ? ' · 已学 ' + used + ' 层' : '');
+    label(frame, 0, -140, tag, { size: 13, color: '#BFB392', w: 190, h: 24, shrink: true });
   }
 
   /* ---------- ④ 暂停 ---------- */
