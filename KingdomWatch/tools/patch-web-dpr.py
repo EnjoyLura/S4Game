@@ -48,6 +48,15 @@ def main():
         changed += 1
         print('patch-web-dpr: patched', path)
     print('patch-web-dpr: done, %d file(s) patched' % changed)
+
+    # 守卫：index.html 必须带 __KW_DPR_CAP 引导脚本（模板丢失会让补丁形同虚设，
+    # 引擎回退 2x → 3x 屏再次发糊；本回归真实发生过）
+    idx = io.open('build/web-mobile/index.html', encoding='utf-8', errors='ignore').read()
+    if '__KW_DPR_CAP' not in idx:
+        print('patch-web-dpr: FATAL build/web-mobile/index.html 缺少 __KW_DPR_CAP 引导脚本'
+              '（build-templates/web-mobile/index.html 模板被还原？）— 禁止部署')
+        return 1
+    print('patch-web-dpr: index.html bootstrap OK')
     return 0
 
 

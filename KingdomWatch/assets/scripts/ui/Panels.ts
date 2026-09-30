@@ -2,7 +2,7 @@
  * 弹窗面板（UX 线稿 ②~⑤⑧）：三选一 / 暂停 / 胜利结算 / 失败结算(含广告复活) / 伤害统计 / 属性Tips
  * 弹窗内容块均以屏幕垂直中心为重心；三选一期间全场冻结由 BattleDirector 状态控制
  */
-import { Graphics, Node, tween, Vec3 } from 'cc';
+import { Graphics, Node, tween, UIOpacity, Vec3 } from 'cc';
 import { CardDef, CardStacks, RARITY_COLOR } from '../config/Cards';
 import { HERO_Y, LO, PAL } from '../config/GameConfig';
 import { DamageRow, fmtWk } from '../battle/DamageService';
@@ -27,7 +27,11 @@ export class Panels {
     this.modalRoot.setParent(parent);
   }
 
+  /** 三选一选择动画进行中（防连点、防刷新打断丢回调） */
+  private picking = false;
+
   closeAll(): void {
+    this.picking = false;
     this.modalRoot.destroyAllChildren();
   }
 
@@ -41,19 +45,32 @@ export class Panels {
   showPick(cards: CardDef[], stacks: CardStacks, cb: PickCallbacks): void {
     this.closeAll();
     dimLayer(this.modalRoot);
-    gpanel(this.modalRoot, 0, WY(308, 88), 520, 88, CA(PAL.wood, 0.95), PAL.gold, 2.5, 14);
-    label(this.modalRoot, 0, WY(308, 88), '选择强化', { size: 34, color: PAL.gold, bold: true });
+    // 标题淡入
+    const titleBg = gpanel(this.modalRoot, 0, WY(308, 88), 520, 88, CA(PAL.wood, 0.95), PAL.gold, 2.5, 14);
+    label(titleBg, 0, 0, '选择强化', { size: 34, color: PAL.gold, bold: true });
+    const titleOp = titleBg.getComponent(UIOpacity) || titleBg.addComponent(UIOpacity);
+    titleOp.opacity = 0;
+    tween(titleOp).to(0.25, { opacity: 255 }).start();
 
     const xs = [32, 275, 518];
+    const frames: Node[] = [];
     cards.forEach((card, i) => {
       const x = WX(xs[i], 200), y = WY(428, 360);
       const rarity = RARITY_COLOR[card.rarity];
       const frame = gpanel(this.modalRoot, x, y, 200, 360, CA('#14181E', 0.94), rarity, 2.5, 12);
+      frames.push(frame);
       this.buildCard(frame, card, stacks);
       frame.on(Node.EventType.TOUCH_END, e => {
         e.propagationStopped = true;
-        cb.onPick(card);
+        this.pickChoose(frame, frames.filter(f => f !== frame), card, cb);
       });
+      // 入场：自下方滑入 + 淡入，逐张错峰
+      const op = frame.getComponent(UIOpacity) || frame.addComponent(UIOpacity);
+      op.opacity = 0;
+      frame.setPosition(x, y + 70, 0);
+      tween(frame).delay(i * 0.08)
+        .to(0.3, { position: new Vec3(x, y, 0) }, { easing: 'cubicOut' }).start();
+      tween(op).delay(i * 0.08).to(0.25, { opacity: 255 }).start();
     });
 
     label(this.modalRoot, 0, WY(818, 40),
@@ -62,19 +79,34 @@ export class Panels {
 
     btn(this.modalRoot, WX(130, 300), WY(862, 76), 300, 76,
       '▶ 广告刷新', this.pickAdLeft > 0 ? PAL.green : '#5A6472', () => {
-        if (this.pickAdLeft <= 0) return;
+        if (this.picking || this.pickAdLeft <= 0) return;
         this.pickAdLeft--;
         AdService.showRewarded('pick_refresh', () => cb.onRefreshRequest(), () => { this.pickAdLeft++; });
       }, 24);
     btn(this.modalRoot, WX(460, 180), WY(862, 76), 180, 76,
       '💎2 钻石刷新', this.pickDiaLeft > 0 ? PAL.gold : '#5A6472', () => {
-        if (this.pickDiaLeft <= 0) return;
+        if (this.picking || this.pickDiaLeft <= 0) return;
         const sv = loadSave();
         if (sv.diamonds < 2) return;
         sv.diamonds -= 2;
         this.pickDiaLeft--;
         cb.onRefreshRequest();
       }, 22);
+  }
+
+  /** 选择动画：选中卡弹跳、其余卡淡出，随后真实回调（三选一冻结期间 tween 仍走主循环时钟） */
+  private pickChoose(chosen: Node, others: Node[], card: CardDef, cb: PickCallbacks): void {
+    if (this.picking) return;
+    this.picking = true;
+    tween(chosen)
+      .to(0.1, { scale: new Vec3(1.09, 1.09, 1) }, { easing: 'sineOut' })
+      .to(0.09, { scale: new Vec3(1, 1, 1) }, { easing: 'sineIn' })
+      .call(() => { this.picking = false; cb.onPick(card); })
+      .start();
+    for (const o of others) {
+      const op = o.getComponent(UIOpacity) || o.addComponent(UIOpacity);
+      tween(op).to(0.16, { opacity: 70 }).start();
+    }
   }
 
   /** 卡面布局严格对齐线稿②：顶部稀有度通栏色带 → 120齿轮环内96图标 → 右上56英雄角标 →

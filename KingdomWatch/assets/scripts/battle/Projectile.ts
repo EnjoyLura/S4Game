@@ -6,7 +6,7 @@
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { Monster, MonsterManager } from './Monster';
 import { DamageService } from './DamageService';
-import { LINE_Y, PAL, MAX_PROJS } from '../config/GameConfig';
+import { LINE_Y, LO, PAL, MAX_PROJS } from '../config/GameConfig';
 
 export interface ProjSpec {
   x: number; y: number;
@@ -116,7 +116,8 @@ export class ProjectileManager {
         if (sp.enemy && sp.y <= LINE_Y + 12) {
           line.takeDamage(sp.dmg);
           done = true;
-        } else if (a.ttl <= 0 || sp.y > 780 || sp.y < -720 || sp.x < -430 || sp.x > 430) {
+        // 顶界必须盖过 SPAWN_Y(LO.half+60)：大招箭雨从可视区上方出生，越界即回收会让大招整轮哑火
+        } else if (a.ttl <= 0 || sp.y > LO.half + 120 || sp.y < -720 || sp.x < -430 || sp.x > 430) {
           done = true;
         }
       }

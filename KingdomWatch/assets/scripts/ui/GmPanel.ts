@@ -70,6 +70,14 @@ export class GmPanel {
     }
   }
 
+  /** 每帧同步浮钮可见性：面板开着 / 三选一 / 结算期间一律隐藏（BattleDirector.update 驱动） */
+  syncVisibility(): void {
+    const want = this.layer.children.length === 0 &&
+      (this.dir.state === 'running' || this.dir.state === 'prepare' || this.dir.state === 'paused') &&
+      (loadSave().debug || this.forceShow);
+    if (this.btnNode.active !== want) this.btnNode.active = want;
+  }
+
   /* ---------- 终结动作：先关面板再触发（胜利/失败面板在 GM 层之下） ---------- */
   private actWin(): void {
     this.close();

@@ -1,0 +1,5 @@
+# 游戏主包（index.html / assets/main/index.js / cc.js）文件名不带内容哈希，
+# 默认启发式缓存会让手机端滞留旧版本（dpr 引导脚本丢失 / GM 修复不生效均由此起）。
+# 统一强制回源校验（命中改动的文件返回 200，未命中 304），体积代价可接受。
+/*
+  Cache-Control: no-cache

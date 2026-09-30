@@ -119,6 +119,8 @@ export class BattleDirector extends Component {
     // 掉帧毛刺不得放大模拟步长（2x 死亡螺旋根因）；超 1/30s 的模拟步拆细步防子弹穿模
     const dt = Math.min(rawDt, 1 / 30);
 
+    this.gm.syncVisibility(); // 所有状态下都要同步 GM 浮钮（三选一/结算期间隐藏）
+
     if (this.state === 'prepare') {
       this.prepareT -= dt;
       if (this.prepareT <= 0) {

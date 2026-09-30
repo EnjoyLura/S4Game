@@ -85,6 +85,11 @@ npx -y wrangler@3 pages deploy . --project-name=kingdom-watch --branch=main --co
 验证：控制台 `cc.game.canvas.width / cc.game.canvas.clientWidth` 应等于设备 dpr（≤3）。
 性能：3x 全开 fill rate 约为 2x 的 2.25 倍，如低端机掉帧可让用户以 `?dpr=2` 访问。
 
+补丁脚本结尾带守卫：构建产物 index.html 若缺 `__KW_DPR_CAP` 引导脚本直接报错退出（禁止部署）。
+`build-templates/web-mobile/_headers` 对全站下发 `Cache-Control: no-cache`——游戏主包文件名不带内容哈希，
+不加此头手机端会因启发式缓存滞留旧版本（真机"改了没生效/又变糊"均由此起）。排查线上时注意：
+`/index.html` 会 308 跳转到 `/`，curl 验证必须打根路径。
+
 ## 构建与上传（TapTap）
 
 1. Creator 菜单「项目 → 构建发布」→ 平台 **Web Mobile** → 构建
