@@ -57,6 +57,8 @@ export interface CardDef {
   maxStacks: number;
   /** 归属：'global' 或英雄 id（M0 'archer'） */
   owner: string;
+  /** 前置卡：必须已拥有该卡（叠层≥1）才会进入抽卡池 */
+  req?: string;
   desc: string;
   apply: (ctx: CardCtx) => void;
 }
@@ -79,9 +81,9 @@ export const ARCHER_CARDS: CardDef[] = [
     apply: x => { x.hero.split += 2; } }),
   c({ id: 'explode', name: '小范围爆炸', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '普攻命中小范围爆炸（攻击力 40% 溅射）',
     apply: x => { x.hero.explodeR = Math.max(x.hero.explodeR, 70); } }),
-  c({ id: 'explode_r', name: '爆炸范围', rarity: 'blue', maxStacks: 3, owner: 'archer', desc: '爆炸半径 +40%（需已学习爆炸）',
+  c({ id: 'explode_r', name: '爆炸范围', rarity: 'blue', maxStacks: 3, owner: 'archer', req: 'explode', desc: '爆炸半径 +40%（需已学习爆炸）',
     apply: x => { if (x.hero.explodeR > 0) x.hero.explodeR *= 1.4; } }),
-  c({ id: 'explode_w', name: '爆炸威力', rarity: 'blue', maxStacks: 3, owner: 'archer', desc: '爆炸伤害 +50%（需已学习爆炸）',
+  c({ id: 'explode_w', name: '爆炸威力', rarity: 'blue', maxStacks: 3, owner: 'archer', req: 'explode', desc: '爆炸伤害 +50%（需已学习爆炸）',
     apply: x => { if (x.hero.explodeR > 0) x.hero.explodeMul *= 1.5; } }),
   c({ id: 'crit_rate', name: '鹰眼', rarity: 'white', maxStacks: 4, owner: 'archer', desc: '暴击率 +15%',
     apply: x => { x.hero.critRate += 0.15; } }),
@@ -110,9 +112,10 @@ export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...GLOBAL_CARDS];
 
 export interface CardStacks { [cardId: string]: number; }
 
-/** 加权抽 3 张不重复（稀有度权重 + 未达叠层上限） */
+/** 加权抽 3 张不重复（稀有度权重 + 未达叠层上限 + 前置卡未学习的不出现） */
 export function draw3(pool: CardDef[], stacks: CardStacks): CardDef[] {
-  const avail = pool.filter(k => (stacks[k.id] || 0) < k.maxStacks);
+  const avail = pool.filter(k =>
+    (stacks[k.id] || 0) < k.maxStacks && (!k.req || (stacks[k.req] || 0) > 0));
   const picked: CardDef[] = [];
   const rest = avail.slice();
   while (picked.length < 3 && rest.length > 0) {

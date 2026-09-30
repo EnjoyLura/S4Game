@@ -48,12 +48,12 @@ export class FloatText {
     this.active++;
     ft.node.active = true;
     ft.label.string = text;
-    ft.label.fontSize = big ? 27 : 16;
+    ft.label.fontSize = big ? 34 : 20;
     ft.label.lineHeight = ft.label.fontSize * 1.2;
     ft.label.color = col(color, this.colorCache);
     const sy = y + (Math.random() * 12 - 6);                 // 起点微散，减少重叠
-    const drift = (Math.random() * 2 - 1) * (big ? 26 : 10); // 横向漂移弧线
-    const h = big ? 84 : 46;
+    const drift = (Math.random() * 2 - 1) * (big ? 30 : 12); // 横向漂移弧线
+    const h = big ? 104 : 60;
     ft.node.setPosition(x, sy, 0);
     ft.node.angle = big ? Math.random() * 10 - 5 : 0;        // 暴击随机微偏转
     ft.node.setScale(0.3, 0.3, 1);
@@ -63,10 +63,10 @@ export class FloatText {
     ft.to.set(x + drift * 0.45, sy + h * 0.42, 0);
     ft.to2.set(x + drift, sy + h, 0);
     tween(ft.node)
-      .to(0.12, { position: ft.to, scale: new Vec3(big ? 1.3 : 1, big ? 1.3 : 1, 1) }, { easing: 'backOut' })
-      .to(big ? 0.5 : 0.36, { position: ft.to2 }, { easing: 'sineOut' })
+      .to(0.14, { position: ft.to, scale: new Vec3(big ? 1.3 : 1, big ? 1.3 : 1, 1) }, { easing: 'backOut' })
+      .to(big ? 0.62 : 0.5, { position: ft.to2 }, { easing: 'sineOut' })
       .call(() => { this.active--; this.pool.put(ft); })
       .start();
-    tween(op).delay(big ? 0.18 : 0.1).to(big ? 0.45 : 0.32, { opacity: 0 }).start();
+    tween(op).delay(big ? 0.3 : 0.22).to(big ? 0.5 : 0.42, { opacity: 0 }).start();
   }
 }
