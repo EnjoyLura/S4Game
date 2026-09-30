@@ -1,10 +1,30 @@
 /**
- * WebAudio 程序合成音效（零素材）：首次触摸解锁 AudioContext，走存档 sfx 开关。
- * 高频事件（命中/射击）按类型限流，避免全屏怪时的声音糊成一团。
+ * 音效服务（合成占位 + 资源自动替换）：
+ * - 占位：WebAudio 程序合成（零素材），首次触摸解锁 AudioContext，走存档 sfx 开关
+ * - 替换：美术阶段把音频文件放到 assets/resources/audio/（命名见 SAMPLES，如 sfx_shoot.mp3），
+ *   运行时自动优先播放资源样本，无需改代码；缺资源的音效继续走合成占位
+ * - 高频事件（命中/射击）按类型限流，避免全屏怪时的声音糊成一团
  */
+import { AudioClip, director, Node, resources, AudioSource } from 'cc';
 import { loadSave } from './SaveData';
 
 export type SfxName = 'shoot' | 'hit' | 'crit' | 'kill' | 'ult' | 'levelup' | 'ready';
+
+/** 资源占位命名约定：assets/resources/audio/<file>（美术阶段直接放文件即替换） */
+const SAMPLES: Record<SfxName, string> = {
+  shoot: 'audio/sfx_shoot',
+  hit: 'audio/sfx_hit',
+  crit: 'audio/sfx_crit',
+  kill: 'audio/sfx_kill',
+  ult: 'audio/sfx_ult',
+  levelup: 'audio/sfx_levelup',
+  ready: 'audio/sfx_ready',
+};
+
+/** 资源样本播放音量（合成音量在 switch 内独立调，互不影响） */
+const SAMPLE_GAIN: Record<SfxName, number> = {
+  shoot: 1, hit: 0.8, crit: 0.9, kill: 0.9, ult: 1, levelup: 0.9, ready: 0.9,
+};
 
 class SfxService {
   private ctx: AudioContext | null = null;
@@ -13,12 +33,43 @@ class SfxService {
   private lastAt: Partial<Record<SfxName, number>> = {};
   private static MIN_GAP: Record<SfxName, number> = { shoot: 0.06, hit: 0.045, crit: 0.09, kill: 0.06, ult: 0, levelup: 0.15, ready: 0.2 };
   private flagCache = { v: true, at: 0 };
+  // 资源样本缓存（未加载/加载失败 → 走合成占位）
+  private clips: Partial<Record<SfxName, AudioClip>> = {};
+  private tried = false;
+  private srcNode: Node | null = null;
+  private src: AudioSource | null = null;
 
   constructor() {
     // 移动端 H5：AudioContext 必须在用户手势里创建/恢复
     const unlock = () => this.ensure();
     document.addEventListener('touchend', unlock, { passive: true });
     document.addEventListener('mousedown', unlock);
+  }
+
+  /** 预载资源样本（缺文件静默失败，回退合成）；解锁时调用一次 */
+  private preloadSamples(): void {
+    if (this.tried) return;
+    this.tried = true;
+    for (const name of Object.keys(SAMPLES) as SfxName[]) {
+      try {
+        resources.load(SAMPLES[name], AudioClip, (err, clip) => { if (!err && clip) this.clips[name] = clip; });
+      } catch { /* resources bundle 不存在时整体回退合成 */ }
+    }
+  }
+
+  /** 资源样本走常驻 AudioSource oneShot（跨场景自动重建） */
+  private playSample(name: SfxName): void {
+    const clip = this.clips[name];
+    if (!clip) return;
+    const scene = director.getScene();
+    if (!scene) return;
+    if (!this.srcNode || !this.srcNode.isValid || this.srcNode.scene !== scene) {
+      this.srcNode = new Node('sfxPlayer');
+      scene.addChild(this.srcNode);
+      this.src = this.srcNode.addComponent(AudioSource);
+      this.src.playOnAwake = false;
+    }
+    this.src?.playOneShot(clip, SAMPLE_GAIN[name] ?? 1);
   }
 
   private ensure(): AudioContext | null {
@@ -39,6 +90,7 @@ class SfxService {
       const d = this.noise.getChannelData(0);
       for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
     } catch { return null; }
+    this.preloadSamples();
     return this.ctx;
   }
 
@@ -59,9 +111,11 @@ class SfxService {
     this.lastAt[name] = now;
     const c = this.ensure();
     if (!c || c.state !== 'running') return;
+    // 资源优先：美术音频已就位则播放样本，否则合成占位
+    if (this.clips[name]) { this.playSample(name); return; }
     switch (name) {
-      case 'shoot': this.noiseHit(0.07, 0.09, 2400); this.tone('sine', 950, 300, 0.08, 0.05); break;
-      case 'hit': this.noiseHit(0.045, 0.11, 900, 'lowpass'); this.tone('sine', 200, 120, 0.06, 0.09); break;
+      case 'shoot': this.noiseHit(0.07, 0.2, 2400); this.tone('sine', 950, 300, 0.08, 0.1); break;
+      case 'hit': this.noiseHit(0.045, 0.13, 900, 'lowpass'); this.tone('sine', 200, 120, 0.06, 0.1); break;
       case 'crit': this.tone('square', 330, 90, 0.12, 0.13); this.noiseHit(0.06, 0.15, 1400); this.tone('sine', 200, 110, 0.08, 0.09); break;
       case 'kill': this.noiseHit(0.09, 0.15, 700, 'lowpass'); this.tone('triangle', 520, 70, 0.16, 0.13); break;
       case 'ult': this.tone('sawtooth', 130, 55, 0.45, 0.2); this.noiseHit(0.35, 0.11, 500, 'lowpass'); this.tone('sine', 700, 1400, 0.3, 0.05, 0.05); break;

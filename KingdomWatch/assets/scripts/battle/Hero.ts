@@ -30,6 +30,8 @@ export class HeroUnit {
   /** 技能·强化箭矢：剩余强化普攻次数（>0 时出弓即金色贯穿箭） */
   empowerLeft = 0;
   private readonly empowerMax = 6;
+  /** 大招呼吸回能计时（每 3s +1，用户确认的少量自然回能） */
+  private regenT = 3;
   private atkT = 0;
   private serialQueue: PendingShot[] = [];
   private volleyQueue: PendingVolley[] = [];
@@ -145,6 +147,12 @@ export class HeroUnit {
     this.skillCd -= dt;
     if (this.skillCd <= 0 && mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange)) {
       this.castSkill();
+    }
+    // 大招呼吸回能：每 3 秒少量充能（不与击杀充能冲突；满后停止）
+    this.regenT -= dt;
+    if (this.regenT <= 0) {
+      this.regenT += 3;
+      if (!this.ultReady) this.chargeKill(1);
     }
   }
 

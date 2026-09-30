@@ -48,7 +48,8 @@ export class FloatText {
     this.active++;
     ft.node.active = true;
     ft.label.string = text;
-    ft.label.fontSize = big ? 34 : 20;
+    ft.label.fontSize = big ? 44 : 26;
+    ft.label.isBold = true;
     ft.label.lineHeight = ft.label.fontSize * 1.2;
     ft.label.color = col(color, this.colorCache);
     const sy = y + (Math.random() * 12 - 6);                 // 起点微散，减少重叠
