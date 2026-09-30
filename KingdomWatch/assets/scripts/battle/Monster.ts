@@ -36,6 +36,10 @@ export class Monster {
   private ctx!: MonsterHitCtx;
   private holdY = 0;
   private mgrRef: MonsterManager | null = null;
+  /** 受击闪红蒙层（只闪红不变形，用户确认；透明度 tick 手动衰减，零 tween） */
+  private flashNode: Node | null = null;
+  private flashOp: UIOpacity | null = null;
+  private flashT = 0;
 
   init(def: MobDef, parent: Node, x: number, ctx: MonsterHitCtx, mgr?: MonsterManager): void {
     this.def = def;
@@ -48,7 +52,7 @@ export class Monster {
     this.life = Math.random() * 10;
     this.atkT = def.atkInterval;
     this.healT = def.atkInterval;
-    this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = this.lungeT = 0;
+    this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = this.lungeT = this.flashT = 0;
     this.baseX = x;
     this.node.removeFromParent();
     this.node.setPosition(x, SPAWN_Y + 40 + Math.random() * 60, 0);
@@ -100,6 +104,21 @@ export class Monster {
       g.roundRect(-r - 4, -r * 0.9 - 4, r * 2 + 8, r * 1.8 + 8, r * 0.5);
       g.stroke();
     }
+    // 受击闪红蒙层：随体型重绘（半径随怪种复用变化），受击时显示、tick 手动淡出
+    if (!this.flashNode) {
+      this.flashNode = new Node('mobFlash');
+      this.flashNode.layer = Layers.Enum.UI_2D;
+      this.flashNode.setParent(this.node);
+      this.flashOp = this.flashNode.addComponent(UIOpacity);
+    }
+    const fg = this.flashNode.getComponent(Graphics) || this.flashNode.addComponent(Graphics);
+    fg.clear();
+    const fc = this.hex('#E5484D');
+    fc.a = 150;
+    fg.fillColor = fc;
+    fg.roundRect(-r, -r * 0.9, r * 2, r * 1.8, r * 0.45);
+    fg.fill();
+    this.flashNode.active = false;
   }
 
   private hex(h: string): Color {
@@ -115,11 +134,11 @@ export class Monster {
   tick(dt: number, line: { takeDamage: (d: number) => void }, mgr: MonsterManager): void {
     if (this.dead) return;
     this.life += dt;
-    // 受击挤压回弹（手动衰减，受击高峰期零 tween 分配）
-    const sc = this.node.scale.x;
-    if (sc > 1.001) {
-      const k = Math.max(1, sc - dt * 1.4);
-      this.node.setScale(k, 2 - k, 1);
+    // 受击闪红淡出（零 tween，受击高峰期零分配）
+    if (this.flashT > 0 && this.flashOp) {
+      this.flashT -= dt;
+      this.flashOp.opacity = Math.max(0, Math.floor(255 * this.flashT / 0.12));
+      if (this.flashT <= 0 && this.flashNode) this.flashNode.active = false;
     }
     if (this.stunT > 0) { this.stunT -= dt; return; }
     if (this.slowT > 0) this.slowT -= dt;
@@ -186,8 +205,12 @@ export class Monster {
   }
 
   private flash(): void {
-    // 只设缩放，回弹由 tick 手动衰减（逐击 tween 是 GC 与卡顿源）
-    this.node.setScale(1.12, 0.92, 1);
+    // 只闪红不变形（用户确认）；淡出由 tick 手动衰减（零 tween，受击高峰零分配）
+    this.flashT = 0.12;
+    if (this.flashNode && this.flashOp) {
+      this.flashNode.active = true;
+      this.flashOp.opacity = 255;
+    }
   }
 
   private die(killerId: string): void {
