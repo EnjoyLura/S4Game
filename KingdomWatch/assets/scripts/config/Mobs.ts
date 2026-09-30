@@ -60,7 +60,7 @@ export const MOBS: Record<string, MobDef> = {
 export interface SpawnGroup { mob: string; count: number; interval: number; delay?: number; }
 export interface WaveDef { groups: SpawnGroup[]; surge?: boolean; }
 
-/** 关卡 1-1 腐朽森林·前哨：10 波，第 4/8 波为狂潮（§3.3） */
+/** 关卡 1-1 腐朽森林·前哨：10 波，第 4/8 波为狂潮（§3.3）；怪量 = 初版 ×3（用户调整，同步屏上限 80） */
 export interface LevelDef {
   id: string;
   name: string;
@@ -76,16 +76,16 @@ export const LEVEL_1_1: LevelDef = {
   lineHp: 1000,
   baseGold: 60,
   waves: [
-    { groups: [{ mob: 'goblin_worker', count: 6, interval: 1.0 }] },
-    { groups: [{ mob: 'goblin_worker', count: 8, interval: 0.9 }] },
-    { groups: [{ mob: 'goblin_worker', count: 6, interval: 0.8 }, { mob: 'goblin_slinger', count: 2, interval: 1.4, delay: 2 }] },
-    { groups: [{ mob: 'goblin_worker', count: 12, interval: 0.5 }], surge: true },
-    { groups: [{ mob: 'goblin_worker', count: 6, interval: 0.8 }, { mob: 'goblin_slinger', count: 4, interval: 1.2 }] },
-    { groups: [{ mob: 'goblin_slinger', count: 6, interval: 1.0 }, { mob: 'goblin_worker', count: 4, interval: 1.0, delay: 3 }] },
-    { groups: [{ mob: 'goblin_shaman', count: 2, interval: 2 }, { mob: 'goblin_worker', count: 8, interval: 0.7 }] },
-    { groups: [{ mob: 'wolf_rider', count: 8, interval: 0.6 }], surge: true },
-    { groups: [{ mob: 'goblin_worker', count: 10, interval: 0.6 }, { mob: 'goblin_slinger', count: 4, interval: 1.2 }, { mob: 'goblin_shaman', count: 2, interval: 2.5 }] },
-    { groups: [{ mob: 'goblin_brute', count: 1, interval: 1 }, { mob: 'goblin_worker', count: 8, interval: 0.7, delay: 2 }, { mob: 'goblin_slinger', count: 4, interval: 1.4, delay: 4 }] },
+    { groups: [{ mob: 'goblin_worker', count: 18, interval: 1.0 }] },
+    { groups: [{ mob: 'goblin_worker', count: 24, interval: 0.9 }] },
+    { groups: [{ mob: 'goblin_worker', count: 18, interval: 0.8 }, { mob: 'goblin_slinger', count: 6, interval: 1.4, delay: 2 }] },
+    { groups: [{ mob: 'goblin_worker', count: 36, interval: 0.5 }], surge: true },
+    { groups: [{ mob: 'goblin_worker', count: 18, interval: 0.8 }, { mob: 'goblin_slinger', count: 12, interval: 1.2 }] },
+    { groups: [{ mob: 'goblin_slinger', count: 18, interval: 1.0 }, { mob: 'goblin_worker', count: 12, interval: 1.0, delay: 3 }] },
+    { groups: [{ mob: 'goblin_shaman', count: 6, interval: 2 }, { mob: 'goblin_worker', count: 24, interval: 0.7 }] },
+    { groups: [{ mob: 'wolf_rider', count: 24, interval: 0.6 }], surge: true },
+    { groups: [{ mob: 'goblin_worker', count: 30, interval: 0.6 }, { mob: 'goblin_slinger', count: 12, interval: 1.2 }, { mob: 'goblin_shaman', count: 6, interval: 2.5 }] },
+    { groups: [{ mob: 'goblin_brute', count: 3, interval: 1 }, { mob: 'goblin_worker', count: 24, interval: 0.7, delay: 2 }, { mob: 'goblin_slinger', count: 12, interval: 1.4, delay: 4 }] },
   ],
 };
 

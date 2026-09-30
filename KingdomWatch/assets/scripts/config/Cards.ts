@@ -40,10 +40,10 @@ export function baseArcherStats(): HeroStats {
   };
 }
 
-/** 狙击游侠凯尔·鹰眼（§11.1）：极限单体 140/0.35s/620；技能全场锁定（skillRange 仅作展示口径） */
+/** 狙击游侠凯尔·鹰眼（§11.1 + 用户调整）：极限单体 140/0.35s；普攻 900（比弓手 660 更长）、技能索敌 700（不再全场） */
 export function baseSniperStats(): HeroStats {
   return {
-    atk: 140, atkMul: 1, aspd: 0.35, range: 620, skillRange: 9999,
+    atk: 140, atkMul: 1, aspd: 0.35, range: 900, skillRange: 700,
     critRate: 0.05, critMul: 1.5,
     serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
     pierce: 0, slowOnHit: 0, burnOnHit: 0,

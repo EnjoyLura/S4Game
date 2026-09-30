@@ -373,6 +373,8 @@ export class SniperHero extends HeroBase {
   readonly skillMax = 14;
   /** 技能·穿颅射击连狙队列：剩余发数与下发出膛倒计时 */
   private volley: { t: number; left: number } | null = null;
+  /** 大招·猎杀时刻：0.5s 锁定演出（瞄准线实时追踪 + 收缩准星）→ 贯穿弹 */
+  private ultLock: { t: number; target: Monster; node: Node; g: Graphics } | null = null;
 
   protected buildVisual(parent: Node): void {
     const g = this.node.addComponent(Graphics);
@@ -460,17 +462,72 @@ export class SniperHero extends HeroBase {
   }
 
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
-    if (!this.volley) return;
-    this.volley.t -= dt;
-    while (this.volley && this.volley.t <= 0) {
-      // 每发出膛瞬间重新锁定全场血量最高目标（死亡自动转火）
-      const tgt = mgr.highestHp();
-      if (!tgt) { this.volley = null; return; }
-      this.snipeShot(tgt, projs, 2, false);
-      this.volley.left--;
-      if (this.volley.left <= 0) { this.volley = null; return; }
-      this.volley.t += 0.28;
+    // 技能连狙：每发出膛瞬间在技能索敌范围内重新锁定血量最高目标（死亡自动转火）
+    if (this.volley) {
+      this.volley.t -= dt;
+      while (this.volley && this.volley.t <= 0) {
+        const tgt = mgr.highestHpInRange(this.x, HERO_Y, this.stats.skillRange);
+        if (!tgt) { this.volley = null; return; }
+        this.snipeShot(tgt, projs, 2, false);
+        this.volley.left--;
+        if (this.volley.left <= 0) { this.volley = null; return; }
+        this.volley.t += 0.28;
+      }
     }
+    // 大招锁定演出：瞄准线实时追踪 + 准星收缩，0.5s 后发射贯穿弹
+    if (this.ultLock) {
+      const L = this.ultLock;
+      L.t -= dt;
+      if (L.target.dead) {
+        // 锁定目标死亡：转火全场血量最高；全场清空则收线（充能已消耗）
+        const nt = mgr.highestHp();
+        if (!nt) { this.endUltLock(); return; }
+        L.target = nt;
+      }
+      const p = Math.max(0, Math.min(1, 1 - L.t / 0.5));   // 锁定进度 0→1
+      const g = L.g;
+      g.clear();
+      // 瞄准线：枪口 → 目标当前位置，随进度增粗
+      g.strokeColor = hexc('#8FB8FF');
+      g.lineWidth = 1 + 3 * p;
+      g.moveTo(this.x, HERO_Y + 60);
+      g.lineTo(L.target.x, L.target.y);
+      g.stroke();
+      // 收缩准星：圈 + 四向刻度，临发射瞬间闪白
+      const r = 40 - 26 * p;
+      g.strokeColor = hexc(p > 0.85 ? '#FFFFFF' : '#BFE3FF');
+      g.lineWidth = 2.5;
+      g.circle(L.target.x, L.target.y, r);
+      g.stroke();
+      g.moveTo(L.target.x - r - 8, L.target.y); g.lineTo(L.target.x - r + 4, L.target.y);
+      g.moveTo(L.target.x + r - 4, L.target.y); g.lineTo(L.target.x + r + 8, L.target.y);
+      g.moveTo(L.target.x, L.target.y - r - 8); g.lineTo(L.target.x, L.target.y - r + 4);
+      g.moveTo(L.target.x, L.target.y + r - 4); g.lineTo(L.target.x, L.target.y + r + 8);
+      g.stroke();
+      if (L.t <= 0) {
+        this.fireUltBolt(projs, L.target);
+        this.endUltLock();
+      }
+    }
+  }
+
+  private endUltLock(): void {
+    if (this.ultLock) { this.ultLock.node.destroy(); this.ultLock = null; }
+  }
+
+  /** 锁定完成：发射贯穿弹（×5.5 必暴、无视物抗、无限贯穿），拦截预判锁定方向 */
+  private fireUltBolt(projs: ProjectileManager, locked: Monster): void {
+    const lead = this.lead(locked, 1100);
+    projs.fire({
+      x: this.x, y: HERO_Y + 60,
+      dirX: lead.dirX, dirY: lead.dirY, speed: 1100,
+      dmg: this.effAtk * 5.5, crit: true,
+      color: '#9FCBFF', heroId: this.id, size: 12,
+      ttl: 4, pierce: 999, spark: true,
+      ignoreRes: true,
+    });
+    projs.sparkAt(this.x, HERO_Y + 70, '#BFE3FF', 8);
+    Sfx.play('snipe');
   }
 
   /** 瞬击一发：hitscan 弹道线 + 目标词条 + 独立暴击 */
@@ -504,22 +561,20 @@ export class SniperHero extends HeroBase {
     tween(pop).to(0.38, { opacity: 0 }).call(() => pulse.destroy()).start();
   }
 
-  /** 大招·猎杀时刻（手动）：全场血量最高目标 ×5.5 必暴一击，无视物抗，重狙演出 */
-  castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean {
+  /** 大招·猎杀时刻（手动）：锁定全场血量最高目标 0.5s（瞄准线+收缩准星）→ 发射 ×5.5 必暴贯穿弹（无视物抗） */
+  castUlt(mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): boolean {
     if (!this.ultReady) return false;
     const tgt = mgr.highestHp();
     if (!tgt) return false;   // 全场无目标：不消耗充能
     this.charge = 0;
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
-    // 狙击线演出：粗亮蓝干线 + 白芯内线 + 命中迸溅 + 重狙音效
-    this.tracer(this.node.parent!, tgt.x, tgt.y, '#8FB8FF', 6, 0.24);
-    this.tracer(this.node.parent!, tgt.x, tgt.y, '#FFFFFF', 2.5, 0.14);
-    projs.sparkAt(tgt.x, tgt.y, '#7FB3FF', 14);
-    const dmgVal = this.effAtk * 5.5;
-    const hpBefore = tgt.hp;
-    tgt.takeDamage(dmgVal, true, this.id, true);   // 必暴 + 无视物抗
-    dmg.add(this.id, Math.min(dmgVal, hpBefore));
-    Sfx.play('snipe');
+    const lockNode = new Node('ultLock');
+    lockNode.layer = Layers.Enum.UI_2D;
+    lockNode.setParent(this.node.parent!);
+    lockNode.setPosition(0, 0, 0);
+    const g = lockNode.addComponent(Graphics);
+    this.ultLock = { t: 0.5, target: tgt, node: lockNode, g };
+    void _projs; void _dmg;
     return true;
   }
 }

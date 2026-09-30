@@ -415,9 +415,9 @@ export class Panels {
         rows = [
           ['效果', '锁定血量最高 · 连续 6 狙'],
           ['每发伤害', Math.round(h.atk * h.atkMul * 2) + '（×2.0）'],
-          ['特性', '死亡转火 · 全场锁定 · 独立暴击'],
+          ['特性', '死亡转火 · 独立暴击'],
           ['冷却时间', hero.skillCd > 0 ? hero.skillCd.toFixed(1) + ' 秒' : '就绪'],
-          ['索敌范围', '全场'],
+          ['索敌范围', String(Math.round(h.skillRange))],
           ['释放', '自动'],
         ];
       }
@@ -442,10 +442,11 @@ export class Panels {
       w = 280; hh = 270;
       rows = [
         ['伤害', '×5.5 必定暴击'],
-        ['特性', '无视物抗 · 锁定全场最高血量'],
+        ['形态', '0.5 秒锁定 → 贯穿弹'],
+        ['特性', '无限贯穿 · 无视物抗'],
+        ['目标', '全场血量最高'],
         ['充能', Math.floor(hero.charge) + ' / ' + hero.chargeMax],
         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
-        ['释放', '手动点击'],
       ];
       px = WX(636, 90) - 45 - 16 - w / 2;
       py = WYB(504 + ultIdx * 110, 90);

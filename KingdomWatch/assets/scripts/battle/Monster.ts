@@ -280,11 +280,24 @@ export class MonsterManager {
     return best;
   }
 
-  /** 全场血量最高存活怪（狙击技能/大招锁定目标） */
+  /** 全场血量最高存活怪（狙击大招锁定目标） */
   highestHp(): Monster | null {
     let best: Monster | null = null;
     for (const m of this.list) {
       if (m.dead) continue;
+      if (!best || m.hp > best.hp) best = m;
+    }
+    return best;
+  }
+
+  /** 范围内血量最高存活怪（狙击技能·穿颅射击锁定目标） */
+  highestHpInRange(hx: number, hy: number, range: number): Monster | null {
+    let best: Monster | null = null;
+    const r2 = range * range;
+    for (const m of this.list) {
+      if (m.dead) continue;
+      const dx = m.x - hx, dy = m.y - hy;
+      if (dx * dx + dy * dy > r2) continue;
       if (!best || m.hp > best.hp) best = m;
     }
     return best;
