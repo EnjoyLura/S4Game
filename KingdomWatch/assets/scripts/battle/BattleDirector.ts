@@ -51,6 +51,8 @@ export class BattleDirector extends Component {
   stacks: CardStacks = {};
   /** 战局内金币（击杀累积，§3.10 只计不显） */
   goldEarned = 0;
+  /** 关卡计时（游戏秒：只在 running 累计，暂停/三选一冻结，随倍速加快） */
+  elapsed = 0;
   heroLevel = 1;
   xp = 0;
   private pickQueue = 0;
@@ -133,6 +135,7 @@ export class BattleDirector extends Component {
     if (this.state !== 'running') return;
 
     const sdt = dt * this.speed;
+    this.elapsed += sdt;
     const steps = sdt > 1 / 30 ? 2 : 1;
     const sub = sdt / steps;
     for (let i = 0; i < steps; i++) {

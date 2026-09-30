@@ -25,7 +25,9 @@ export class HUD {
   private bannerTxt!: Node;
   private fpsTxt!: Node;
   private speedTxt!: Node;
+  private timeTxt!: Node;
   private lastWave = '';
+  private lastSec = -1;
   private lastHp = -1;
   private lastShield = -1;
   private lastXp = -1;
@@ -49,6 +51,8 @@ export class HUD {
     const pauseBtn = gpanel(top, WX(30, 60), WY(105, 60), 60, 60, CA(PAL.gold, 0.2), PAL.gold, 2, 12);
     label(pauseBtn, 0, 0, '⏸', { size: 26, color: PAL.gold, bold: true });
     pauseBtn.on(Node.EventType.TOUCH_END, () => this.dir.togglePause());
+    // 关卡计时（线稿①：暂停键右侧 00:36）
+    this.timeTxt = label(top, WX(110, 140), WY(114, 40), '00:00', { size: 16, color: '#CDC2A2', align: 'left', w: 140, h: 40 });
     label(top, 0, WY(110, 50), this.dir.levelDef.id + ' ' + this.dir.levelDef.name, { size: 22, color: PAL.parch, bold: true, w: 400, h: 50 });
     gpanel(top, WX(560, 150), WY(105, 60), 150, 60, CA('#FFFFFF', 0.08), CA('#FFFFFF', 0.27), 1.5, 30);
     this.waveTxt = label(top, WX(560, 150), WY(105, 60), '波次 0/10', { size: 20, color: '#FFFFFF', bold: true });
@@ -131,6 +135,12 @@ export class HUD {
   /** 每帧轮询（只在值变化时重绘） */
   sync(): void {
     const d = this.dir;
+    // 关卡计时（整秒变化才重排 Label）
+    const sec = Math.floor(d.elapsed);
+    if (sec !== this.lastSec) {
+      this.lastSec = sec;
+      setText(this.timeTxt, String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0'));
+    }
     // 经验
     const need = expNeed(d.heroLevel);
     const xpPct = Math.min(1, d.xp / need);

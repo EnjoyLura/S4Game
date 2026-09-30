@@ -339,24 +339,26 @@ export class Panels {
       px = hero.x - 27 + 23 + 16 + w / 2;
       py = iconY + 23 + 16 + hh / 2;
     } else if (kind === 'skill') {
-      title = '⚡ 技能 · 穿云箭';
+      title = '⚡ 技能 · 强化箭矢';
       rows = [
-        ['伤害', String(Math.round(h.atk * h.atkMul * 5.2))],
+        ['效果', '接下来 6 次普攻强化'],
+        ['强化伤害', Math.round(h.atk * h.atkMul * 1.5) + '（×1.5）'],
+        ['强化特性', '金色贯穿 · 攻速+30%'],
         ['冷却时间', hero.skillCd > 0 ? hero.skillCd.toFixed(1) + ' 秒' : '就绪'],
         ['索敌范围', String(Math.round(h.skillRange))],
-        ['生效范围', '直线穿透'],
         ['释放', '自动'],
       ];
       px = hero.x + 27 + 23 + 16 + w / 2;
       py = iconY + 23 + 16 + hh / 2;
     } else {
-      title = '✦ 大招 · 箭雨风暴';
+      title = '✦ 大招 · 扇形箭雨';
       w = 280; hh = 270;
       rows = [
-        ['伤害', Math.round(h.atk * h.atkMul * 0.55) + ' × 36'],
+        ['伤害', Math.round(h.atk * h.atkMul * 0.65) + ' × 每箭'],
+        ['形态', '两排扇形 × 每排 8 箭'],
+        ['特性', '无限贯穿'],
         ['充能', Math.floor(hero.charge) + ' / ' + hero.chargeMax],
         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
-        ['生效范围', '全屏 3 轮 × 12 箭'],
         ['释放', '手动点击'],
       ];
       // 大招图标半径 45：面板右缘 = 图标圆心 - 45(半径) - 16(间距)

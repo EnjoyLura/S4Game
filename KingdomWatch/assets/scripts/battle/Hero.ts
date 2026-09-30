@@ -1,11 +1,11 @@
 /**
  * 英雄单元（§3.7：普攻自动/技能自动CD/大招手动击杀充能）
- * M0：弓箭手艾拉·风羽 —— 索敌优先最靠下；技能=穿云箭(12s 直线穿透)；大招=箭雨风暴(3轮×12箭)
+ * M0：弓箭手艾拉·风羽 —— 索敌优先最靠下；技能=强化箭矢(12s，接下来6次普攻变金色贯穿箭)；大招=扇形箭雨(两排×8箭全贯穿)
  * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/词条）
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { HeroStats } from '../config/Cards';
-import { ARCHER_CHARGE_MAX, HERO_Y, LINE_Y, PAL, SPAWN_Y } from '../config/GameConfig';
+import { ARCHER_CHARGE_MAX, HERO_Y, PAL } from '../config/GameConfig';
 import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
@@ -13,8 +13,8 @@ import { bus, EVT } from '../core/EventBus';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
-interface PendingShot { t: number; target: Monster | null; dirX: number; dirY: number; }
-interface PendingVolley { t: number; }
+interface PendingShot { t: number; target: Monster | null; dirX: number; dirY: number; emp?: boolean; }
+interface PendingVolley { t: number; row: 0 | 1; }
 
 export class HeroUnit {
   readonly id = 'archer';
@@ -25,6 +25,9 @@ export class HeroUnit {
   readonly chargeMax = ARCHER_CHARGE_MAX;
   skillCd = 0;
   readonly skillMax = 12;
+  /** 技能·强化箭矢：剩余强化普攻次数（>0 时出弓即金色贯穿箭） */
+  empowerLeft = 0;
+  private readonly empowerMax = 6;
   private atkT = 0;
   private serialQueue: PendingShot[] = [];
   private volleyQueue: PendingVolley[] = [];
@@ -106,27 +109,20 @@ export class HeroUnit {
       if (q.t <= 0) {
         this.serialQueue.splice(i, 1);
         if (q.target && !q.target.dead) {
-          const ld = this.lead(q.target, 480);
-          this.fireDir(projs, dmg, ld.dirX, ld.dirY);
+          const ld = this.lead(q.target, q.emp ? 780 : 480);
+          this.fireDir(projs, ld.dirX, ld.dirY, q.emp === true);
         } else {
-          this.fireDir(projs, dmg, q.dirX, q.dirY);
+          this.fireDir(projs, q.dirX, q.dirY, q.emp === true);
         }
       }
     }
-    // 大招箭雨轮次
+    // 大招：贯穿扇形箭雨轮次（两排，第二排延迟错半步）
     for (let i = this.volleyQueue.length - 1; i >= 0; i--) {
       const v = this.volleyQueue[i];
       v.t -= dt;
       if (v.t <= 0) {
         this.volleyQueue.splice(i, 1);
-        for (let k = 0; k < 12; k++) {
-          projs.fire({
-            x: Math.random() * 680 - 340, y: SPAWN_Y,
-            dirX: 0, dirY: -1, speed: 520,
-            dmg: this.effAtk * 0.55, crit: Math.random() < this.stats.critRate,
-            color: PAL.gold, heroId: this.id, size: 8, ttl: 3.2,
-          });
-        }
+        this.fireFanRow(projs, v.row);
       }
     }
     // 普攻
@@ -134,8 +130,9 @@ export class HeroUnit {
     if (this.atkT <= 0) {
       const t = mgr.pickTarget(this.x, HERO_Y, this.stats.range);
       if (t) {
-        this.shoot(t, mgr, projs, dmg);
-        this.atkT = 1 / this.stats.aspd;
+        const emp = this.shoot(t, mgr, projs, dmg);
+        // 强化箭矢窗口内攻速 +30%（贯穿爽感）
+        this.atkT = emp ? 1 / (this.stats.aspd * 1.3) : 1 / this.stats.aspd;
       } else {
         this.atkT = 0;
       }
@@ -143,25 +140,26 @@ export class HeroUnit {
     // 技能（自动：CD 好 + 技能范围内有怪）
     this.skillCd -= dt;
     if (this.skillCd <= 0 && mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange)) {
-      this.castSkill(mgr, dmg);
+      this.castSkill();
     }
   }
 
-  private spec(_projs: ProjectileManager, _dmg: DamageService, base: {
-    x: number; y: number; dirX?: number; dirY?: number; small?: boolean; dmgMul?: number;
+  private spec(base: {
+    x: number; y: number; dirX?: number; dirY?: number; small?: boolean; dmgMul?: number; emp?: boolean;
   }): ProjSpec {
+    const emp = base.emp === true;
     const crit = Math.random() < this.stats.critRate;
-    const atk = this.effAtk * (base.dmgMul ?? 1) * (crit ? this.stats.critMul : 1);
+    const atk = this.effAtk * (base.dmgMul ?? 1) * (emp ? 1.5 : 1) * (crit ? this.stats.critMul : 1);
     return {
       x: base.x, y: base.y,
       dirX: base.dirX, dirY: base.dirY,
-      speed: base.small ? 360 : 480,
+      speed: base.small ? 360 : emp ? 780 : 480,
       dmg: atk, crit,
-      color: crit ? PAL.orange : PAL.parch,
+      color: emp ? PAL.gold : PAL.parch,   // 暴击不改箭色（用户反馈），只由伤害飘字体现
       heroId: this.id,
-      size: base.small ? 5 : 7,
+      size: base.small ? 5 : emp ? 10 : 7,
       small: base.small,
-      pierce: this.stats.pierce,
+      pierce: emp ? 999 : this.stats.pierce,
       explodeR: this.stats.explodeR > 0 && !base.small ? this.stats.explodeR : 0,
       explodeMul: this.stats.explodeMul,
       split: this.stats.split,
@@ -170,9 +168,9 @@ export class HeroUnit {
     };
   }
 
-  /** 出弓瞬间按拦截预判锁定方向，之后直线飞行（用户确认：不追踪不拐弯） */
-  private fireDir(projs: ProjectileManager, dmg: DamageService, dirX: number, dirY: number): void {
-    projs.fire(this.spec(projs, dmg, { x: this.x, y: HERO_Y + 60, dirX, dirY }));
+  /** 出弓瞬间按拦截预判锁定方向，之后直线飞行（用户确认：不追踪不拐弯）；emp=强化贯穿箭 */
+  private fireDir(projs: ProjectileManager, dirX: number, dirY: number, emp = false): void {
+    projs.fire(this.spec({ x: this.x, y: HERO_Y + 60, dirX, dirY, emp }));
   }
 
   /**
@@ -203,101 +201,49 @@ export class HeroUnit {
     return { dirX: ldx / l, dirY: ldy / l };
   }
 
-  private shoot(target: Monster, mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
-    void mgr;
+  private shoot(target: Monster, mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean {
+    void mgr; void dmg;
+    // 强化箭矢窗口：本次普攻（含连射/齐射子弹道）全部为金色贯穿箭，按次扣减
+    const emp = this.empowerLeft > 0;
+    if (emp) this.empowerLeft--;
+    const bs = emp ? 780 : 480;
     // 主弹：预判拦截点直线射出
-    const lead = this.lead(target, 480);
-    this.fireDir(projs, dmg, lead.dirX, lead.dirY);
+    const lead = this.lead(target, bs);
+    this.fireDir(projs, lead.dirX, lead.dirY, emp);
     // 连射：延迟成串；每发出弓瞬间若目标存活则按当时状态重新预判（出弓后仍直线），目标已亡则沿锁定方向
     for (let i = 1; i <= this.stats.serial; i++) {
-      this.serialQueue.push({ t: i * 0.12, target, dirX: lead.dirX, dirY: lead.dirY });
+      this.serialQueue.push({ t: i * 0.12, target, dirX: lead.dirX, dirY: lead.dirY, emp });
     }
     // 齐射：以预判拦截线为中心的固定扇形子弹道，直线随缘
     if (this.stats.fan > 0) {
       const spread = 10;
+      const baseAng = Math.atan2(lead.dirY, lead.dirX);
       for (let i = 0; i < this.stats.fan; i++) {
         const off = (i - (this.stats.fan - 1) / 2) * spread * Math.PI / 180;
-        const baseAng = Math.atan2(lead.dirY, lead.dirX);
         const ang = baseAng + off;
-        this.fireDir(projs, dmg, Math.cos(ang), Math.sin(ang));
+        this.fireDir(projs, Math.cos(ang), Math.sin(ang), emp);
       }
     }
+    return emp;
   }
 
-  /** 穿云箭：直线穿透，命中路径全部敌人（12s CD，极简演出） */
-  private castSkill(mgr: MonsterManager, dmg: DamageService): void {
+  /** 技能·强化箭矢（自动，12s CD）：接下来 6 次普攻变为金色贯穿箭（伤害 ×1.5、无限穿透、弹速 540） */
+  private castSkill(): void {
     this.skillCd = this.skillMax;
-    const d = this.effAtk * 5.2;
-    const span = SPAWN_Y - LINE_Y;
-
-    // 索敌：技能范围内挑最贴近防线的怪（最危险），穿云方向指向它；范围内无怪才保持竖直
-    let dirX = 0, dirY = 1;
-    let target: Monster | null = null;
-    const sr2 = this.stats.skillRange * this.stats.skillRange;
-    for (const m of mgr.list) {
-      if (m.dead) continue;
-      const dx = m.x - this.x, dy = m.y - HERO_Y;
-      if (dx * dx + dy * dy > sr2) continue;
-      if (!target || m.y < target.y) target = m;
-    }
-    if (target) {
-      const dx = target.x - this.x, dy = target.y - HERO_Y;
-      const l = Math.sqrt(dx * dx + dy * dy) || 1;
-      dirX = dx / l; dirY = dy / l;
-    }
-
-    // 伤害：沿穿云方向的穿透走廊（宽 88、长 span+120），命中路径全部敌人
-    for (const m of mgr.list) {
-      if (m.dead) continue;
-      const dx = m.x - this.x, dy = m.y - HERO_Y;
-      const along = dx * dirX + dy * dirY;            // 沿弹道方向投影
-      const perp = Math.abs(dx * dirY - dy * dirX);   // 到弹道线的垂距
-      if (along > 0 && along < span + 120 && perp < 44) {
-        const before = m.hp;
-        m.takeDamage(d, false, this.id);
-        dmg.add(this.id, Math.min(d, before));
-      }
-    }
-
-    // 演出：淡金闪光走廊沿穿云方向铺开（0.55s 渐隐）+ 大箭 0.5s 飞完全程（可读的释放节奏）
-    const ang = Math.atan2(-dirX, dirY) * 180 / Math.PI; // 素材默认朝上
-    const lane = new Node('skillLane');
-    lane.layer = Layers.Enum.UI_2D;
-    lane.setParent(this.node.parent!);
-    lane.setPosition(this.x + dirX * (span / 2 + 40), HERO_Y + dirY * (span / 2 + 40), 0);
-    lane.angle = ang;
-    const lg = lane.addComponent(Graphics);
-    lg.fillColor = new Color(242, 178, 62, 60);
-    lg.roundRect(-44, -span / 2 - 40, 88, span + 80, 20);
-    lg.fill();
-    lg.fillColor = new Color(255, 224, 140, 85);   // 中心亮芯，深底上可读
-    lg.roundRect(-12, -span / 2 - 40, 24, span + 80, 12);
-    lg.fill();
-    const lop = lane.addComponent(UIOpacity);
-    lop.opacity = 255;
-    tween(lop).to(0.55, { opacity: 0 }).call(() => lane.destroy()).start();
-
-    const arrow = new Node('skillArrow');
-    arrow.layer = Layers.Enum.UI_2D;
-    arrow.setParent(this.node.parent!);
-    arrow.setPosition(this.x, HERO_Y + 40, 0);
-    arrow.angle = ang;
-    arrow.setScale(1.35, 1.35, 1);
-    const ag = arrow.addComponent(Graphics);
-    ag.fillColor = hexc(PAL.gold);
-    ag.roundRect(-5, -60, 10, 104, 5);          // 箭杆
-    ag.fill();
-    ag.moveTo(-12, 44); ag.lineTo(0, 78); ag.lineTo(12, 44); // 箭头
-    ag.close(); ag.fill();
-    ag.fillColor = hexc(PAL.parch);             // 尾羽
-    ag.moveTo(-14, -60); ag.lineTo(0, -44); ag.lineTo(14, -60); ag.lineTo(9, -72); ag.lineTo(0, -60); ag.lineTo(-9, -72);
-    ag.close(); ag.fill();
-    const aop = arrow.addComponent(UIOpacity);
-    const fly = span + 200;
-    tween(arrow)
-      .to(0.5, { position: new Vec3(this.x + dirX * fly, HERO_Y + 40 + dirY * fly) }, { easing: 'sineOut' })
-      .call(() => { tween(aop).to(0.12, { opacity: 0 }).call(() => arrow.destroy()).start(); })
-      .start();
+    this.empowerLeft = this.empowerMax;
+    // 演出：英雄身上金色环脉冲扩散，标记"箭矢已强化"
+    const pulse = new Node('empPulse');
+    pulse.layer = Layers.Enum.UI_2D;
+    pulse.setParent(this.node.parent!);
+    pulse.setPosition(this.x, HERO_Y + 20, 0);
+    const pg = pulse.addComponent(Graphics);
+    pg.strokeColor = hexc(PAL.gold);
+    pg.lineWidth = 5;
+    pg.circle(0, 0, 34);
+    pg.stroke();
+    const pop = pulse.addComponent(UIOpacity);
+    tween(pulse).to(0.38, { scale: new Vec3(2.1, 2.1, 1) }).start();
+    tween(pop).to(0.38, { opacity: 0 }).call(() => pulse.destroy()).start();
   }
 
   /** 击杀充能（§3.7：击杀者获得怪物配置充能值） */
@@ -307,12 +253,30 @@ export class HeroUnit {
     bus.emit(EVT.CHARGE_CHANGED, this.chargePct, this.ultReady);
   }
 
-  /** 箭雨风暴：全屏 3 轮 × 12 箭随机落点（手动，极简演出） */
+  /** 大招·扇形箭雨（手动，击杀充能）：两排 × 8 箭扇形射出，全部无限贯穿 */
   castUlt(): boolean {
     if (!this.ultReady) return false;
     this.charge = 0;
-    for (let i = 0; i < 3; i++) this.volleyQueue.push({ t: i * 0.35 });
+    this.volleyQueue.push({ t: 0, row: 0 }, { t: 0.35, row: 1 });
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
     return true;
+  }
+
+  /** 一排扇形箭：以竖直方向为中心 ±30° 均分；第二排错半步补缝、弹速略慢形成两波 */
+  private fireFanRow(projs: ProjectileManager, row: 0 | 1): void {
+    const n = 8;
+    const spread = 60 * Math.PI / 180;
+    const off = row === 0 ? 0 : 0.5;
+    const speed = row === 0 ? 560 : 480;
+    for (let k = 0; k < n; k++) {
+      const a = -spread / 2 + (spread * (k + off)) / n;   // 相对竖直方向的偏角
+      projs.fire({
+        x: this.x, y: HERO_Y + 60,
+        dirX: Math.sin(a), dirY: Math.cos(a),
+        speed,
+        dmg: this.effAtk * 0.65, crit: Math.random() < this.stats.critRate,
+        color: PAL.gold, heroId: this.id, size: 9, ttl: 3.6, pierce: 999,
+      });
+    }
   }
 }
