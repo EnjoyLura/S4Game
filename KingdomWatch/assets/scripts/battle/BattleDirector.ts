@@ -63,16 +63,24 @@ export class BattleDirector extends Component {
     const uiRoot = new Node('UIRoot');
     uiRoot.setParent(this.node);
 
+    // 渲染分层（稳定遮挡：防线 < 怪 < 弹道 < 飘字；英雄夹在怪与弹道间）
+    this.line = new LineDefense(field, this.levelDef.lineHp);
+    const mobLayer = new Node('MobLayer');
+    mobLayer.setParent(field);
+    const projLayer = new Node('ProjLayer');
+    projLayer.setParent(field);
+    const fxLayer = new Node('FxLayer');
+    fxLayer.setParent(field);
+
     const hitCtx = {
-      floatParent: field,
+      floatParent: fxLayer,
       dmgNumber: (x: number, y: number, text: string, color: string, big?: boolean) =>
         this.float.spawn(x, y, text, color, big),
     };
-    this.float = new FloatText(field);
-    this.line = new LineDefense(field, this.levelDef.lineHp);
-    this.mgr = new MonsterManager(field, hitCtx);
+    this.float = new FloatText(fxLayer);
+    this.mgr = new MonsterManager(mobLayer, hitCtx);
     this.hero = new HeroUnit(field, -38, baseArcherStats());
-    this.projs = new ProjectileManager(field, this.mgr, this.dmgSvc);
+    this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc);
     this.waves = new WaveManager(this.levelDef, this.mgr);
     this.dmgSvc.register(this.hero.id, this.hero.name);
 
@@ -98,12 +106,15 @@ export class BattleDirector extends Component {
     bus.off(EVT.WAVE_CHANGED, this.onWaveChanged, this);
   }
 
-  update(dt: number): void {
-    this.fpsAcc += dt; this.fpsN++;
+  update(rawDt: number): void {
+    this.fpsAcc += rawDt; this.fpsN++;
     if (this.fpsAcc >= 0.5) {
       this.hud.setFps(Math.round(this.fpsN / this.fpsAcc));
       this.fpsAcc = 0; this.fpsN = 0;
     }
+
+    // 掉帧毛刺不得放大模拟步长（2x 死亡螺旋根因）；超 1/30s 的模拟步拆细步防子弹穿模
+    const dt = Math.min(rawDt, 1 / 30);
 
     if (this.state === 'prepare') {
       this.prepareT -= dt;
@@ -116,12 +127,16 @@ export class BattleDirector extends Component {
     if (this.state !== 'running') return;
 
     const sdt = dt * this.speed;
-    this.waves.tick(sdt);
-    this.mgr.tick(sdt, this.line);
-    this.hero.tick(sdt, this.mgr, this.projs, this.dmgSvc);
-    this.projs.tick(sdt, this.line);
-    this.line.regenPct = this.global.lineRegenPct;
-    this.line.tick(sdt);
+    const steps = sdt > 1 / 30 ? 2 : 1;
+    const sub = sdt / steps;
+    for (let i = 0; i < steps; i++) {
+      this.waves.tick(sub);
+      this.mgr.tick(sub, this.line);
+      this.hero.tick(sub, this.mgr, this.projs, this.dmgSvc);
+      this.projs.tick(sub, this.line);
+      this.line.regenPct = this.global.lineRegenPct;
+      this.line.tick(sub);
+    }
     this.hud.sync();
   }
 

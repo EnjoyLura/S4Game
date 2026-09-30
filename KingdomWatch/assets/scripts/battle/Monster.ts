@@ -2,7 +2,7 @@
  * 怪物（§3.4 行为：松散虫群下行 + 正弦游动 + 自动分离；近战贴线攻击 / 远程停位投掷 / 萨满周期治疗）
  * 受击闪红 + 0.1s 硬直（§3.0）；仅 BOSS 显示血条（M0 1-1 无 BOSS，钩子保留）
  */
-import { Color, Graphics, Label, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
+import { Color, Graphics, Label, Layers, Node, Tween, UIOpacity, tween } from 'cc';
 import { MobDef } from '../config/Mobs';
 import { LINE_Y, PAL, SPAWN_Y } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
@@ -29,13 +29,18 @@ export class Monster {
   burnDps = 0;
   /** 0.1s 受击硬直 */
   stunT = 0;
+  /** 冲撞/投掷前摇演出剩余时间（手动衰减，避免逐次创建 tween） */
+  lungeT = 0;
 
   private g!: Graphics;
   private ctx!: MonsterHitCtx;
+  private holdY = 0;
+  private mgrRef: MonsterManager | null = null;
 
-  init(def: MobDef, parent: Node, x: number, ctx: MonsterHitCtx): void {
+  init(def: MobDef, parent: Node, x: number, ctx: MonsterHitCtx, mgr?: MonsterManager): void {
     this.def = def;
     this.ctx = ctx;
+    this.mgrRef = mgr || null;
     this.maxHp = def.hp;
     this.hp = def.hp;
     this.state = 'move';
@@ -43,12 +48,13 @@ export class Monster {
     this.life = Math.random() * 10;
     this.atkT = def.atkInterval;
     this.healT = def.atkInterval;
-    this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = 0;
+    this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = this.lungeT = 0;
     this.baseX = x;
     this.node.removeFromParent();
     this.node.setPosition(x, SPAWN_Y + 40 + Math.random() * 60, 0);
     this.node.setScale(1, 1, 1);
-    let op = this.node.getComponent(UIOpacity) || this.node.addComponent(UIOpacity);
+    const op = this.node.getComponent(UIOpacity) || this.node.addComponent(UIOpacity);
+    Tween.stopAllByTarget(op); // 复用池化对象时掐断上一世的消亡渐隐
     op.opacity = 255;
     this.node.layer = Layers.Enum.UI_2D;
     this.node.setParent(parent);
@@ -109,6 +115,12 @@ export class Monster {
   tick(dt: number, line: { takeDamage: (d: number) => void }, mgr: MonsterManager): void {
     if (this.dead) return;
     this.life += dt;
+    // 受击挤压回弹（手动衰减，受击高峰期零 tween 分配）
+    const sc = this.node.scale.x;
+    if (sc > 1.001) {
+      const k = Math.max(1, sc - dt * 1.4);
+      this.node.setScale(k, 2 - k, 1);
+    }
     if (this.stunT > 0) { this.stunT -= dt; return; }
     if (this.slowT > 0) this.slowT -= dt;
     // 点燃 DoT：每 0.5s 聚合一条（§3.11）
@@ -128,6 +140,7 @@ export class Monster {
       this.node.setPosition(this.baseX, this.node.position.y - this.def.speed * mul * dt, 0);
       const reach = this.def.kind === 'ranged' ? (this.def.atkRange || 0) : this.def.radius * 0.5;
       if (this.node.position.y - LINE_Y <= reach) {
+        this.holdY = this.node.position.y;
         this.state = this.def.kind === 'melee' ? 'attack' : 'hold';
         this.atkT = Math.min(this.atkT, 0.4);
       }
@@ -143,15 +156,17 @@ export class Monster {
           this.lunge();
         }
       }
+      // 冲撞/投掷前摇（手动正弦脉冲，代替逐次 tween）
+      if (this.lungeT > 0) {
+        this.lungeT = Math.max(0, this.lungeT - dt);
+        const pr = 1 - this.lungeT / 0.2;
+        this.node.setPosition(this.node.position.x, this.holdY - Math.sin(pr * Math.PI) * 10, 0);
+      }
     }
   }
 
   private lunge(): void {
-    const p = this.node.position.clone();
-    tween(this.node)
-      .to(0.08, { position: new Vec3(p.x, p.y - 10, 0) })
-      .to(0.12, { position: p })
-      .start();
+    this.lungeT = 0.2;
   }
 
   /** 受击；crit 用于飘字样式；返回是否击杀 */
@@ -170,17 +185,17 @@ export class Monster {
   }
 
   private flash(): void {
+    // 只设缩放，回弹由 tick 手动衰减（逐击 tween 是 GC 与卡顿源）
     this.node.setScale(1.12, 0.92, 1);
-    tween(this.node).to(0.09, { scale: new Vec3(1, 1, 1) }).start();
   }
 
   private die(killerId: string): void {
     this.dead = true;
     bus.emit(EVT.MOB_KILLED, this.def, killerId);
-    let op = this.node.getComponent(UIOpacity) || this.node.addComponent(UIOpacity);
+    const op = this.node.getComponent(UIOpacity) || this.node.addComponent(UIOpacity);
     tween(op)
       .to(0.18, { opacity: 60 })
-      .call(() => { this.node.destroy(); })
+      .call(() => { if (this.mgrRef) this.mgrRef.recycleMob(this); })
       .start();
   }
 
@@ -202,15 +217,24 @@ export class MonsterManager {
   list: Monster[] = [];
   /** 击杀统计（金币累计在 director） */
   killGold = 0;
+  /** 怪物对象池：复用 Node/Graphics，杜绝刷怪波次的组件创建尖峰 */
+  private pool: Monster[] = [];
+  private sepN = 0;
 
   constructor(private field: Node, private ctx: MonsterHitCtx) {}
 
   spawn(def: MobDef): boolean {
     if (this.list.length >= 60) return false; // §12.4 同屏上限
-    const m = new Monster();
-    m.init(def, this.field, Math.random() * 660 - 330, this.ctx);
+    const m = this.pool.pop() || new Monster();
+    m.init(def, this.field, Math.random() * 660 - 330, this.ctx, this);
     this.list.push(m);
     return true;
+  }
+
+  /** 死亡渐隐结束后回池（节点不移除出场景树，只摘下挂载） */
+  recycleMob(m: Monster): void {
+    m.node.removeFromParent();
+    this.pool.push(m);
   }
 
   get aliveCount(): number {
@@ -272,27 +296,33 @@ export class MonsterManager {
 
   tick(dt: number, line: { takeDamage: (d: number) => void }): void {
     for (const m of this.list) m.tick(dt, line, this);
-    // 自动分离（简单排斥半径，§3.1）
-    for (let i = 0; i < this.list.length; i++) {
-      const a = this.list[i];
-      if (a.dead || a.state === 'attack') continue;
-      for (let j = i + 1; j < this.list.length; j++) {
-        const b = this.list[j];
-        if (b.dead || b.state === 'attack') continue;
-        const dx = b.x - a.x, dy = b.y - a.y;
-        const min = a.def.radius + b.def.radius;
-        const d2 = dx * dx + dy * dy;
-        if (d2 > 0.01 && d2 < min * min) {
-          const d = Math.sqrt(d2);
-          const push = (min - d) * 0.5;
-          const nx = dx / d, ny = dy / d;
-          this.nudge(a, -nx * push, -ny * push);
-          this.nudge(b, nx * push, ny * push);
+    // 自动分离（简单排斥半径，§3.1）：隔帧执行减半开销，视觉无感
+    if ((this.sepN++ & 1) === 0) {
+      for (let i = 0; i < this.list.length; i++) {
+        const a = this.list[i];
+        if (a.dead || a.state === 'attack') continue;
+        for (let j = i + 1; j < this.list.length; j++) {
+          const b = this.list[j];
+          if (b.dead || b.state === 'attack') continue;
+          const dx = b.x - a.x, dy = b.y - a.y;
+          const min = a.def.radius + b.def.radius;
+          const d2 = dx * dx + dy * dy;
+          if (d2 > 0.01 && d2 < min * min) {
+            const d = Math.sqrt(d2);
+            const push = (min - d) * 0.5;
+            const nx = dx / d, ny = dy / d;
+            this.nudge(a, -nx * push, -ny * push);
+            this.nudge(b, nx * push, ny * push);
+          }
         }
       }
     }
-    // 清理死亡
-    this.list = this.list.filter(m => !m.dead);
+    // 就地压缩清除死亡（替代 filter，零每帧数组分配）
+    let w = 0;
+    for (let i = 0; i < this.list.length; i++) {
+      if (!this.list[i].dead) this.list[w++] = this.list[i];
+    }
+    this.list.length = w;
   }
 
   private nudge(m: Monster, dx: number, dy: number): void {

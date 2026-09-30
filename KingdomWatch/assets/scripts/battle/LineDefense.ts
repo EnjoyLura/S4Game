@@ -2,7 +2,7 @@
  * 防线（§3.0/§3.11）：耐久 + 盾值胶囊（盾值唯一来源=基地城墙，伤害先扣盾再扣耐久）
  * 受击抖动；耐久<30% 红光呼吸；值变化由 HUD 每帧轮询
  */
-import { Color, Graphics, Node, Tween, tween, Vec3 } from 'cc';
+import { Color, Graphics, Node, Vec3 } from 'cc';
 import { LINE_Y, LO, PAL } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 
@@ -17,6 +17,7 @@ export class LineDefense {
   node = new Node('line');
 
   private flashT = 0;
+  private shakeT = 0;
   private basePos: Vec3 = new Vec3();
 
   constructor(parent: Node, hp: number) {
@@ -66,14 +67,8 @@ export class LineDefense {
   }
 
   private shake(): void {
-    this.flashT = 0.15;
-    Tween.stopAllByTarget(this.node);
-    this.node.setPosition(this.basePos.x, this.basePos.y, 0);
-    tween(this.node)
-      .to(0.05, { position: new Vec3(this.basePos.x + 6, this.basePos.y, 0) })
-      .to(0.1, { position: new Vec3(this.basePos.x - 4, this.basePos.y, 0) })
-      .to(0.06, { position: new Vec3(this.basePos.x, this.basePos.y, 0) })
-      .start();
+    // 手动衰减震屏：群怪齐攻时逐次建 tween 会互相叠加抖动并制造 GC 压力
+    if (this.shakeT <= 0) this.shakeT = 0.21;
   }
 
   healPct(p: number): void {
@@ -104,5 +99,11 @@ export class LineDefense {
       this.hp = Math.min(this.maxHp, this.hp + this.maxHp * this.regenPct * dt);
     }
     if (this.flashT > 0) this.flashT -= dt;
+    if (this.shakeT > 0) {
+      this.shakeT = Math.max(0, this.shakeT - dt);
+      const k = this.shakeT / 0.21;
+      this.node.setPosition(this.basePos.x + Math.sin(k * Math.PI * 3) * 6 * k, this.basePos.y, 0);
+      if (this.shakeT <= 0) this.node.setPosition(this.basePos.x, this.basePos.y, 0);
+    }
   }
 }

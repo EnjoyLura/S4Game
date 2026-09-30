@@ -31,6 +31,8 @@ export class HUD {
   private lastShield = -1;
   private lastXp = -1;
   private lastReady = false;
+  private lastChargeKey = -1;
+  private lastSkillKey = -1;
 
   constructor(parent: Node, private dir: BattleDirector, bgParent?: Node) {
     this.build(parent, bgParent);
@@ -159,6 +161,7 @@ export class HUD {
     if (ready !== this.lastReady) {
       this.lastReady = ready;
       if (ready) {
+        this.lastChargeKey = 50;
         this.chargeRing.set(1, PAL.gold);
         Tween.stopAllByTarget(this.ultBtn);
         tween(this.ultBtn).repeatForever(
@@ -168,14 +171,26 @@ export class HUD {
       } else {
         Tween.stopAllByTarget(this.ultBtn);
         this.ultBtn.setScale(1, 1, 1);
+        this.lastChargeKey = -1; // 复位后强制重绘充能
       }
     }
     if (!ready) {
-      this.chargeRing.set(d.hero.chargePct, PAL.blue);
-      setText(this.chargeTxt, '大招\n' + Math.floor(d.hero.chargePct * 100) + '%');
+      // 2% 步进重绘：充能期从每帧 Graphics 重建 + Label 重排降到最多 50 次/整圈
+      const cp = d.hero.chargePct;
+      const key = Math.round(cp * 50);
+      if (key !== this.lastChargeKey) {
+        this.lastChargeKey = key;
+        this.chargeRing.set(cp, PAL.blue);
+        setText(this.chargeTxt, '大招\n' + Math.round(cp * 100) + '%');
+      }
     }
-    // 技能CD环
-    this.skillRing.set(Math.max(0, Math.min(1, d.hero.skillPct)), PAL.blue);
+    // 技能CD环（同 2% 步进，满CD时零重绘）
+    const sk = Math.max(0, Math.min(1, d.hero.skillPct));
+    const skKey = Math.round(sk * 50);
+    if (skKey !== this.lastSkillKey) {
+      this.lastSkillKey = skKey;
+      this.skillRing.set(sk, PAL.blue);
+    }
   }
 
   /** 盾值胶囊：从耐久条右端向左覆盖，宽度=盾值/耐久上限（§3.11） */

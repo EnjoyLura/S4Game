@@ -1,6 +1,7 @@
 /**
  * 弹道（§3.5：可见追踪弹、目标死亡切换目标；子弹道直线随缘命中；对象池强制）
  * 追踪主弹命中前锁定目标；直线弹（齐射/分裂/大招箭/敌方石块）带 ttl 与碰撞去重
+ * 性能：弹体为纯数据对象（无 Node），全部弹道由单个 Graphics 图层每帧一次重绘（1 draw call）
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { Monster, MonsterManager } from './Monster';
@@ -36,7 +37,6 @@ export interface ProjSpec {
 }
 
 interface Active {
-  node: Node; g: Graphics;
   spec: ProjSpec;
   vx: number; vy: number;
   pierceLeft: number;
@@ -45,20 +45,31 @@ interface Active {
   homing: boolean;
 }
 
-function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
+const colorCache = new Map<string, Color>();
+function hexc(h: string): Color {
+  let c = colorCache.get(h);
+  if (!c) { c = new Color(); Color.fromHEX(c, h); colorCache.set(h, c); }
+  return c;
+}
 
 export class ProjectileManager {
   private active: Active[] = [];
   private free: Active[] = [];
+  private g!: Graphics;
+  private dirty = false;
 
-  constructor(private field: Node, private mgr: MonsterManager, private dmg: DamageService) {}
+  /** field 为专用弹道图层节点（英雄之上、飘字之下） */
+  constructor(field: Node, private mgr: MonsterManager, private dmg: DamageService) {
+    field.layer = Layers.Enum.UI_2D;
+    this.g = field.addComponent(Graphics);
+  }
 
   fire(spec: ProjSpec): void {
     if (this.active.length >= MAX_PROJS) return;
-    const a = this.free.pop() || this.makeNode();
+    const a = this.free.pop() || this.makeActive();
     a.spec = spec;
     a.homing = !!spec.target && !spec.enemy;
-    a.hit = new Set<Monster>();
+    a.hit.clear();
     a.pierceLeft = spec.pierce || 0;
     a.ttl = spec.ttl ?? (a.homing ? 6 : 1.6);
     let dx = spec.dirX ?? 0, dy = spec.dirY ?? 1;
@@ -68,38 +79,12 @@ export class ProjectileManager {
     const len = Math.sqrt(dx * dx + dy * dy) || 1;
     a.vx = dx / len * spec.speed;
     a.vy = dy / len * spec.speed;
-    a.node.setPosition(spec.x, spec.y, 0);
-    a.node.active = true;
-    let op = a.node.getComponent(UIOpacity) || a.node.addComponent(UIOpacity);
-    op.opacity = 255;
-    this.draw(a);
     this.active.push(a);
+    this.dirty = true;
   }
 
-  private makeNode(): Active {
-    const n = new Node('proj');
-    n.layer = Layers.Enum.UI_2D;
-    n.setParent(this.field);
-    const g = n.addComponent(Graphics);
-    return { node: n, g, spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<Monster>(), ttl: 0, homing: false };
-  }
-
-  private draw(a: Active): void {
-    const s = a.spec.size || (a.spec.enemy ? 9 : 7);
-    const g = a.g;
-    g.clear();
-    g.fillColor = hexc(a.spec.color);
-    g.strokeColor = hexc(PAL.ink);
-    g.lineWidth = 1.5;
-    g.circle(0, 0, s);
-    g.fill();
-    g.stroke();
-    g.lineWidth = 2;
-    g.strokeColor = hexc(a.spec.color);
-    const l = Math.sqrt(a.vx * a.vx + a.vy * a.vy) || 1;
-    g.moveTo(0, 0);
-    g.lineTo(-a.vx / l * s * 2.2, -a.vy / l * s * 2.2);
-    g.stroke();
+  private makeActive(): Active {
+    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<Monster>(), ttl: 0, homing: false };
   }
 
   /** 敌方远程石块：直线落向防线，触线即结算 */
@@ -108,6 +93,7 @@ export class ProjectileManager {
   }
 
   tick(dt: number, line: { takeDamage: (d: number) => void }): void {
+    this.dirty = true;
     for (let i = this.active.length - 1; i >= 0; i--) {
       const a = this.active[i];
       const sp = a.spec;
@@ -117,14 +103,14 @@ export class ProjectileManager {
       if (a.homing) {
         const t = sp.target as Monster;
         if (!t || t.dead) {
-          const nt = this.mgr.nearest(a.node.position.x, a.node.position.y, 520);
+          const nt = this.mgr.nearest(sp.x, sp.y, 520);
           if (nt) sp.target = nt;
           else a.homing = false;
         }
         if (a.homing && sp.target) {
           const tg = sp.target as Monster;
-          const dx = tg.x - a.node.position.x;
-          const dy = tg.y - a.node.position.y;
+          const dx = tg.x - sp.x;
+          const dy = tg.y - sp.y;
           const l = Math.sqrt(dx * dx + dy * dy) || 1;
           a.vx = dx / l * sp.speed;
           a.vy = dy / l * sp.speed;
@@ -137,11 +123,12 @@ export class ProjectileManager {
       }
 
       if (!done && !a.homing) {
-        const px = a.node.position.x, py = a.node.position.y;
+        // 扫掠补偿：按本帧位移的一半扩大判定半径，防高速弹穿过薄目标
+        const sweep = (Math.abs(a.vx) + Math.abs(a.vy)) * dt * 0.5;
         for (const m of this.mgr.list) {
           if (m.dead || a.hit.has(m)) continue;
-          const dx = m.x - px, dy = m.y - py;
-          const rr = m.def.radius + (sp.size || 7) * 0.5;
+          const dx = m.x - sp.x, dy = m.y - sp.y;
+          const rr = m.def.radius + (sp.size || 7) * 0.5 + sweep;
           if (dx * dx + dy * dy <= rr * rr) {
             a.hit.add(m);
             this.hitMob(a, m);
@@ -153,16 +140,41 @@ export class ProjectileManager {
       }
 
       if (!done) {
-        a.node.setPosition(a.node.position.x + a.vx * dt, a.node.position.y + a.vy * dt, 0);
-        const p = a.node.position;
-        if (sp.enemy && p.y <= LINE_Y + 12) {
+        sp.x += a.vx * dt;
+        sp.y += a.vy * dt;
+        if (sp.enemy && sp.y <= LINE_Y + 12) {
           line.takeDamage(sp.dmg);
           done = true;
-        } else if (a.ttl <= 0 || p.y > 780 || p.y < -720 || p.x < -430 || p.x > 430) {
+        } else if (a.ttl <= 0 || sp.y > 780 || sp.y < -720 || sp.x < -430 || sp.x > 430) {
           done = true;
         }
       }
       if (done) this.recycle(i, a);
+    }
+    if (this.dirty) { this.render(); this.dirty = false; }
+  }
+
+  /** 全部弹道一次重绘：单 Graphics 单 draw call（原每弹一 Node 一 Graphics） */
+  private render(): void {
+    const g = this.g;
+    g.clear();
+    for (let i = 0; i < this.active.length; i++) {
+      const a = this.active[i];
+      const s = a.spec;
+      const size = s.size || (s.enemy ? 9 : 7);
+      const spd = s.speed || 1;
+      g.fillColor = hexc(s.color);
+      g.strokeColor = hexc(PAL.ink);
+      g.lineWidth = 1.5;
+      g.circle(s.x, s.y, size);
+      g.fill();
+      g.stroke();
+      // 运动方向尾迹
+      g.strokeColor = hexc(s.color);
+      g.lineWidth = 2;
+      g.moveTo(s.x, s.y);
+      g.lineTo(s.x - a.vx / spd * size * 2.2, s.y - a.vy / spd * size * 2.2);
+      g.stroke();
     }
   }
 
@@ -199,7 +211,7 @@ export class ProjectileManager {
   private boomFx(x: number, y: number, r: number): void {
     const n = new Node('boom');
     n.layer = Layers.Enum.UI_2D;
-    n.setParent(this.field);
+    n.setParent(this.g.node.parent!);
     n.setPosition(x, y, 0);
     const g = n.addComponent(Graphics);
     g.strokeColor = hexc(PAL.orange);
@@ -216,9 +228,10 @@ export class ProjectileManager {
       .start();
   }
 
+  /** O(1) 交换移除（倒序遍历，与末位交换安全） */
   private recycle(i: number, a: Active): void {
-    this.active.splice(i, 1);
-    a.node.active = false;
+    this.active[i] = this.active[this.active.length - 1];
+    this.active.pop();
     a.spec = null as unknown as ProjSpec;
     this.free.push(a);
   }
