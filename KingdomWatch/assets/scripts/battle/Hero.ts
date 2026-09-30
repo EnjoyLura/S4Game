@@ -13,7 +13,7 @@ import { bus, EVT } from '../core/EventBus';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
-interface PendingShot { t: number; dirX: number; dirY: number; }
+interface PendingShot { t: number; target: Monster | null; dirX: number; dirY: number; }
 interface PendingVolley { t: number; }
 
 export class HeroUnit {
@@ -99,13 +99,18 @@ export class HeroUnit {
   get skillPct(): number { return 1 - this.skillCd / this.skillMax; }
 
   tick(dt: number, mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
-    // 连射串行子弹（用户确认：子弹一旦发射即直线飞行，不追踪不换目标）
+    // 连射串行子弹：出弓瞬间按当时状态重新预判方向，出弓后直线飞行（不追踪不拐弯）
     for (let i = this.serialQueue.length - 1; i >= 0; i--) {
       const q = this.serialQueue[i];
       q.t -= dt;
       if (q.t <= 0) {
         this.serialQueue.splice(i, 1);
-        projs.fire(this.spec(projs, dmg, { x: this.x, y: HERO_Y + 60, dirX: q.dirX, dirY: q.dirY }));
+        if (q.target && !q.target.dead) {
+          const ld = this.lead(q.target, 480);
+          this.fireDir(projs, dmg, ld.dirX, ld.dirY);
+        } else {
+          this.fireDir(projs, dmg, q.dirX, q.dirY);
+        }
       }
     }
     // 大招箭雨轮次
@@ -165,34 +170,56 @@ export class HeroUnit {
     };
   }
 
-  /** 发射方向在出弓瞬间锁定，之后直线飞行（用户确认：不追踪不拐弯） */
-  private fireMain(projs: ProjectileManager, dmg: DamageService, target: Monster, dirX?: number, dirY?: number): void {
-    if (dirX === undefined || dirY === undefined) {
-      const dx = target.x - this.x, dy = target.y - (HERO_Y + 60);
-      const l = Math.sqrt(dx * dx + dy * dy) || 1;
-      dirX = dx / l; dirY = dy / l;
-    }
+  /** 出弓瞬间按拦截预判锁定方向，之后直线飞行（用户确认：不追踪不拐弯） */
+  private fireDir(projs: ProjectileManager, dmg: DamageService, dirX: number, dirY: number): void {
     projs.fire(this.spec(projs, dmg, { x: this.x, y: HERO_Y + 60, dirX, dirY }));
+  }
+
+  /**
+   * 预判拦截瞄准：按目标当前速度解拦截方程，瞄准"子弹到达时目标将所在的位置"。
+   * 目标匀速直线下行 v（停位/攻击态 v=0），子弹速度 s，相对位移 (dx,dy)：
+   *   (v²-s²)t² - 2·dy·v·t + (dx²+dy²) = 0，s>v 时判别式恒 ≥0 必有解。
+   * 理论不可拦截（disc<0）或无正根时退化为瞄准当前位置。
+   */
+  private lead(target: Monster, bulletSpeed: number): { dirX: number; dirY: number } {
+    const px = this.x, py = HERO_Y + 60;
+    const moving = target.state === 'move';
+    const v = moving ? target.def.speed * (target.slowT > 0 ? 0.8 : 1) : 0;
+    const dx = target.x - px, dy = target.y - py;
+    const a = v * v - bulletSpeed * bulletSpeed;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    let t = dist / bulletSpeed;
+    if (v > 0 && a < -1e-6) {
+      const disc = dy * dy * v * v - a * (dx * dx + dy * dy);
+      if (disc >= 0) {
+        const sq = Math.sqrt(disc);
+        const t1 = (dy * v - sq) / a, t2 = (dy * v + sq) / a;
+        const hit = t1 > 0 && t2 > 0 ? Math.min(t1, t2) : (t1 > 0 ? t1 : t2);
+        if (hit > 0) t = hit;
+      }
+    }
+    const ldx = target.x - px, ldy = target.y - v * t - py;
+    const l = Math.sqrt(ldx * ldx + ldy * ldy) || 1;
+    return { dirX: ldx / l, dirY: ldy / l };
   }
 
   private shoot(target: Monster, mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
     void mgr;
-    // 主弹：朝目标当前位置直线射出
-    this.fireMain(projs, dmg, target);
-    // 连射：同一直线串行追加（延迟成串，方向锁定不随目标移动）
-    const dx = target.x - this.x, dy = target.y - (HERO_Y + 60);
-    const l = Math.sqrt(dx * dx + dy * dy) || 1;
+    // 主弹：预判拦截点直线射出
+    const lead = this.lead(target, 480);
+    this.fireDir(projs, dmg, lead.dirX, lead.dirY);
+    // 连射：延迟成串；每发出弓瞬间若目标存活则按当时状态重新预判（出弓后仍直线），目标已亡则沿锁定方向
     for (let i = 1; i <= this.stats.serial; i++) {
-      this.serialQueue.push({ t: i * 0.12, dirX: dx / l, dirY: dy / l });
+      this.serialQueue.push({ t: i * 0.12, target, dirX: lead.dirX, dirY: lead.dirY });
     }
-    // 齐射：固定扇形子弹道，直线随缘
+    // 齐射：以预判拦截线为中心的固定扇形子弹道，直线随缘
     if (this.stats.fan > 0) {
       const spread = 10;
       for (let i = 0; i < this.stats.fan; i++) {
         const off = (i - (this.stats.fan - 1) / 2) * spread * Math.PI / 180;
-        const baseAng = Math.atan2(dy, dx);
+        const baseAng = Math.atan2(lead.dirY, lead.dirX);
         const ang = baseAng + off;
-        this.fireMain(projs, dmg, target, Math.cos(ang), Math.sin(ang));
+        this.fireDir(projs, dmg, Math.cos(ang), Math.sin(ang));
       }
     }
   }
