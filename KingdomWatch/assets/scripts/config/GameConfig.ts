@@ -29,13 +29,13 @@ export function initLayout(): void {
       const scrH = typeof window !== 'undefined' ? window.innerHeight : vis.height;
       const k = scrH > 0 ? vis.height / scrH : 1; // 屏幕 px → 设计单位
       const topIns = Math.max(0, scrH - (safe.y + safe.height)) * k;
-      const botIns = Math.max(0, safe.y) * k;
       LO.safeTop = Math.min(Math.max(0, topIns), LO.half * 0.12);
-      LO.safeBottom = Math.min(Math.max(0, botIns), LO.half * 0.12);
     }
   } catch (e) { void e; }
+  // 用户确认：防线永远贴物理屏底——不采用浏览器报告的底部安全区（手势条）内缩
+  LO.safeBottom = 0;
   SPAWN_Y = LO.half + 60;
-  LINE_Y = -(LO.half - LO.safeBottom) + 154; // 防线贴屏幕底部（沙包墙高 154）
+  LINE_Y = -LO.half + 154; // 防线贴屏幕底部（沙包墙高 154）
   HERO_Y = LINE_Y - 32;
 }
 

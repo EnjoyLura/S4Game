@@ -24,10 +24,15 @@ export class FloatText {
       n.layer = Layers.Enum.UI_2D;
       n.setParent(this.parent);
       const l = n.addComponent(Label);
+      l.string = '';
       l.fontSize = 18;
       l.lineHeight = 22;
       return { node: n, label: l, target: new Vec3() };
-    }, t => { t.node.setPosition(0, 0, 0); });
+    }, t => {
+      // 回池即隐藏（否则默认文字 "label" 会叠在屏幕中心）
+      t.node.active = false;
+      t.node.setPosition(0, 0, 0);
+    });
     // 预热，避免开局首波伤害的创建尖峰
     const warm: FText[] = [];
     for (let i = 0; i < 10; i++) warm.push(this.pool.get());
@@ -38,6 +43,7 @@ export class FloatText {
     if (this.active >= MAX_ACTIVE) return;
     const ft = this.pool.get();
     this.active++;
+    ft.node.active = true;
     ft.target.set(x, y + 64, 0);
     ft.label.string = text;
     ft.label.fontSize = big ? 26 : 16;

@@ -13,7 +13,7 @@ import { bus, EVT } from '../core/EventBus';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
-interface PendingShot { t: number; target: Monster | null; dirX: number; dirY: number; }
+interface PendingShot { t: number; dirX: number; dirY: number; }
 interface PendingVolley { t: number; }
 
 export class HeroUnit {
@@ -38,23 +38,56 @@ export class HeroUnit {
 
   private buildVisual(parent: Node): void {
     const g = this.node.addComponent(Graphics);
-    // 弓箭手占位立绘：绿色兜帽弓手（王国保卫战取向色）
-    g.fillColor = hexc('#4E7A32');
-    g.strokeColor = hexc(PAL.ink);
+    // 弓箭手艾拉·风羽（线稿 hero_aila_battle 100×120）：背影弓手立于防线工事前，头顶被普攻/技能图标锚定
+    const ink = hexc(PAL.ink);
+    g.strokeColor = ink;
     g.lineWidth = 3;
-    g.roundRect(-22, -55, 44, 95, 16);       // 身体
+    // 披风下摆（上窄下宽的梯形，風感）
+    g.fillColor = hexc('#3E5F2A');
+    g.moveTo(-20, 34); g.lineTo(20, 34); g.lineTo(30, -76); g.lineTo(-30, -76);
+    g.close(); g.fill(); g.stroke();
+    // 躯干
+    g.fillColor = hexc('#4E7A32');
+    g.roundRect(-22, -34, 44, 66, 14);
     g.fill(); g.stroke();
+    // 金色腰带 + 搭扣
+    g.fillColor = hexc(PAL.gold2);
+    g.roundRect(-22, -22, 44, 7, 3);
+    g.fill();
+    g.fillColor = hexc(PAL.gold);
+    g.circle(0, -18, 4);
+    g.fill();
+    // 肩甲
     g.fillColor = hexc('#5E8F3C');
-    g.circle(0, 52, 20);                      // 头
-    g.fill(); g.stroke();
-    g.strokeColor = hexc(PAL.parch);          // 弓
-    g.lineWidth = 4;
-    g.arc(30, 10, 34, -Math.PI * 0.42, Math.PI * 0.42, false);
+    g.circle(-22, 24, 9); g.fill(); g.stroke();
+    g.circle(22, 24, 9); g.fill(); g.stroke();
+    // 头 + 兜帽
+    g.fillColor = hexc('#E8C39A');
+    g.circle(0, 26, 14); g.fill(); g.stroke();
+    g.fillColor = hexc('#4E7A32');
+    g.arc(0, 24, 16, -0.25, Math.PI + 0.25, false);
+    g.close(); g.fill(); g.stroke();
+    // 箭袋（背上左侧）+ 箭羽
+    g.fillColor = hexc('#7A4B22');
+    g.moveTo(-30, -12); g.lineTo(-19, -8); g.lineTo(-25, 20); g.lineTo(-36, 16);
+    g.close(); g.fill(); g.stroke();
+    g.fillColor = hexc(PAL.gold);
+    g.circle(-30, -14, 3.5); g.fill();
+    g.circle(-24, -17, 3.5); g.fill();
+    // 长弓（右侧竖持，弓弦朝后）
+    g.strokeColor = hexc(PAL.parch);
+    g.lineWidth = 4.5;
+    g.arc(28, -4, 30, -1.2, 1.2, false);
     g.stroke();
+    g.strokeColor = hexc('#FFFFFFCC');
     g.lineWidth = 1.5;
-    g.moveTo(30 + 34 * Math.cos(-Math.PI * 0.42), 10 + 34 * Math.sin(-Math.PI * 0.42));
-    g.lineTo(30 + 34 * Math.cos(Math.PI * 0.42), 10 + 34 * Math.sin(Math.PI * 0.42));
+    g.moveTo(28 + 30 * Math.cos(1.2), -4 + 30 * Math.sin(1.2));
+    g.lineTo(28 + 30 * Math.cos(-1.2), -4 + 30 * Math.sin(-1.2));
     g.stroke();
+    // 靴（下沿没入工事）
+    g.fillColor = hexc('#2A2118');
+    g.roundRect(-19, -78, 15, 16, 4); g.fill(); g.stroke();
+    g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
     this.node.setPosition(this.hx, HERO_Y, 0);
     this.node.setParent(parent);
   }
@@ -66,17 +99,13 @@ export class HeroUnit {
   get skillPct(): number { return 1 - this.skillCd / this.skillMax; }
 
   tick(dt: number, mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
-    // 连射串行子弹
+    // 连射串行子弹（用户确认：子弹一旦发射即直线飞行，不追踪不换目标）
     for (let i = this.serialQueue.length - 1; i >= 0; i--) {
       const q = this.serialQueue[i];
       q.t -= dt;
       if (q.t <= 0) {
         this.serialQueue.splice(i, 1);
-        if (q.target && !q.target.dead) {
-          this.fireMain(projs, dmg, q.target);
-        } else {
-          projs.fire(this.spec(projs, dmg, { x: this.x, y: HERO_Y + 60, dirX: q.dirX, dirY: q.dirY }));
-        }
+        projs.fire(this.spec(projs, dmg, { x: this.x, y: HERO_Y + 60, dirX: q.dirX, dirY: q.dirY }));
       }
     }
     // 大招箭雨轮次
@@ -114,13 +143,12 @@ export class HeroUnit {
   }
 
   private spec(_projs: ProjectileManager, _dmg: DamageService, base: {
-    x: number; y: number; target?: Monster | null; dirX?: number; dirY?: number; small?: boolean; dmgMul?: number;
+    x: number; y: number; dirX?: number; dirY?: number; small?: boolean; dmgMul?: number;
   }): ProjSpec {
     const crit = Math.random() < this.stats.critRate;
     const atk = this.effAtk * (base.dmgMul ?? 1) * (crit ? this.stats.critMul : 1);
     return {
       x: base.x, y: base.y,
-      target: base.target ?? null,
       dirX: base.dirX, dirY: base.dirY,
       speed: base.small ? 360 : 480,
       dmg: atk, crit,
@@ -137,23 +165,25 @@ export class HeroUnit {
     };
   }
 
+  /** 发射方向在出弓瞬间锁定，之后直线飞行（用户确认：不追踪不拐弯） */
   private fireMain(projs: ProjectileManager, dmg: DamageService, target: Monster, dirX?: number, dirY?: number): void {
-    projs.fire(this.spec(projs, dmg, {
-      x: this.x, y: HERO_Y + 60,
-      target: dirX === undefined ? target : null,
-      dirX, dirY,
-    }));
+    if (dirX === undefined || dirY === undefined) {
+      const dx = target.x - this.x, dy = target.y - (HERO_Y + 60);
+      const l = Math.sqrt(dx * dx + dy * dy) || 1;
+      dirX = dx / l; dirY = dy / l;
+    }
+    projs.fire(this.spec(projs, dmg, { x: this.x, y: HERO_Y + 60, dirX, dirY }));
   }
 
   private shoot(target: Monster, mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
     void mgr;
-    // 主弹（追踪）
+    // 主弹：朝目标当前位置直线射出
     this.fireMain(projs, dmg, target);
-    // 连射：同一直线串行追加（延迟成串）
+    // 连射：同一直线串行追加（延迟成串，方向锁定不随目标移动）
     const dx = target.x - this.x, dy = target.y - (HERO_Y + 60);
     const l = Math.sqrt(dx * dx + dy * dy) || 1;
     for (let i = 1; i <= this.stats.serial; i++) {
-      this.serialQueue.push({ t: i * 0.12, target, dirX: dx / l, dirY: dy / l });
+      this.serialQueue.push({ t: i * 0.12, dirX: dx / l, dirY: dy / l });
     }
     // 齐射：固定扇形子弹道，直线随缘
     if (this.stats.fan > 0) {
@@ -179,19 +209,38 @@ export class HeroUnit {
         dmg.add(this.id, Math.min(d, before));
       }
     }
-    // 光束演出
-    const beam = new Node('beam');
-    beam.layer = Layers.Enum.UI_2D;
-    beam.setParent(this.node.parent!);
-    beam.setPosition(this.x, HERO_Y + (SPAWN_Y - LINE_Y) / 2, 0);
-    const g = beam.addComponent(Graphics);
+    // 穿云箭演出：一支大箭从英雄位直射天际 + 弹道淡金色闪光带
     const span = SPAWN_Y - LINE_Y;
-    g.fillColor = hexc(PAL.gold);
-    g.roundRect(-14, -span / 2 - 60, 28, span + 120, 10);
-    g.fill();
-    const op = beam.addComponent(UIOpacity);
-    op.opacity = 200;
-    tween(op).to(0.28, { opacity: 0 }).call(() => beam.destroy()).start();
+    const lane = new Node('skillLane');
+    lane.layer = Layers.Enum.UI_2D;
+    lane.setParent(this.node.parent!);
+    lane.setPosition(this.x, HERO_Y + span / 2, 0);
+    const lg = lane.addComponent(Graphics);
+    lg.fillColor = new Color(242, 178, 62, 36);
+    lg.roundRect(-44, -span / 2 - 40, 88, span + 80, 20);
+    lg.fill();
+    const lop = lane.addComponent(UIOpacity);
+    lop.opacity = 255;
+    tween(lop).to(0.3, { opacity: 0 }).call(() => lane.destroy()).start();
+
+    const arrow = new Node('skillArrow');
+    arrow.layer = Layers.Enum.UI_2D;
+    arrow.setParent(this.node.parent!);
+    arrow.setPosition(this.x, HERO_Y + 40, 0);
+    const ag = arrow.addComponent(Graphics);
+    ag.fillColor = hexc(PAL.gold);
+    ag.roundRect(-5, -60, 10, 104, 5);          // 箭杆
+    ag.fill();
+    ag.moveTo(-12, 44); ag.lineTo(0, 78); ag.lineTo(12, 44); // 箭头
+    ag.close(); ag.fill();
+    ag.fillColor = hexc(PAL.parch);             // 尾羽
+    ag.moveTo(-14, -60); ag.lineTo(0, -44); ag.lineTo(14, -60); ag.lineTo(9, -72); ag.lineTo(0, -60); ag.lineTo(-9, -72);
+    ag.close(); ag.fill();
+    const aop = arrow.addComponent(UIOpacity);
+    tween(arrow)
+      .to(0.14, { position: new Vec3(this.x, SPAWN_Y + 60, 0) }, { easing: 'sineIn' })
+      .call(() => { tween(aop).to(0.08, { opacity: 0 }).call(() => arrow.destroy()).start(); })
+      .start();
   }
 
   /** 击杀充能（§3.7：击杀者获得怪物配置充能值） */

@@ -228,28 +228,41 @@ export class Panels {
     btn(this.modalRoot, WX(400, 300), WY(940, 88), 300, 88, '返回', PAL.gold, o.onExit);
   }
 
-  /* ---------- ③ 伤害统计（不暂停，浮层） ---------- */
+  /* ---------- ③ 伤害统计（不暂停；无遮罩、贴统计图标右侧、点空白关闭，与属性Tips同规范） ---------- */
   showStats(rows: DamageRow[]): void {
     this.closeAll();
-    const dim = dimLayer(this.modalRoot, 0.4);
-    dim.on(Node.EventType.TOUCH_END, () => this.closeAll());
-    gpanel(this.modalRoot, WX(135, 360), WY(440, 470), 360, 470, CA('#14181E', 0.92), CA('#FFFFFF', 0.25), 1.5, 14);
-    label(this.modalRoot, WX(135, 360), WY(452, 50), '— 伤害统计 —', { size: 22, color: '#FFE08A' });
+    // 全屏透明捕获层：点任意空白处关闭（不加变暗遮罩）
+    const catcher = N('statsCatch', this.modalRoot, 0, 0, 750, LO.half * 2 + 200);
+    catcher.on(Node.EventType.TOUCH_END, () => this.closeAll());
+
+    const w = 360, hh = 470;
+    // 锚定统计图标（HUD 左列 WX(24,60) WY(320,60)）：面板左缘贴图标右缘，顶对齐
+    const iconCX = WX(24, 60), iconCY = WY(320, 60);
+    let px = iconCX + 30 + 16 + w / 2;
+    let py = iconCY + 30 - hh / 2;
+    px = Math.max(-375 + w / 2 + 8, Math.min(375 - w / 2 - 8, px));
+    py = Math.max(-LO.half + hh / 2 + 8, Math.min(LO.half - hh / 2 - 8, py));
+
+    gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), CA('#FFFFFF', 0.3), 1.5, 14);
+    label(this.modalRoot, px, py + hh / 2 - 30, '— 伤害统计 —', { size: 22, color: '#FFE08A' });
     rows.slice(0, 4).forEach((r, i) => {
-      const y = 510 + i * 100;
-      const cx = WX(155, 70), cy = WY(y, 70);
-      gcircle(this.modalRoot, cx, cy, 32, CA('#2A3240', 1), '#FFFFFF55', 1.5);
-      label(this.modalRoot, cx, cy, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
-      label(this.modalRoot, WX(240, 150), WY(y + 2, 40), r.name, { size: 18, color: '#FFFFFF', align: 'left', w: 150, h: 40, shrink: true });
-      label(this.modalRoot, WX(380, 100), WY(y + 2, 40), (r.pct * 100).toFixed(2) + '%',
-        { size: 18, color: PAL.orange, align: 'right', w: 100, h: 40, shrink: true });
-      const barX = WX(240, 225), barY = WY(y + 48, 16);
+      const y = py + hh / 2 - 66 - i * 100;
+      const cx = px - w / 2 + 46;
+      gcircle(this.modalRoot, cx, y, 32, CA('#2A3240', 1), '#FFFFFF55', 1.5);
+      label(this.modalRoot, cx, y, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
+      label(this.modalRoot, px - w / 2 + 156, y, r.name,
+        { size: 18, color: '#FFFFFF', align: 'left', w: 130, h: 40, shrink: true });
+      label(this.modalRoot, px + w / 2 - 14 - 45, y, (r.pct * 100).toFixed(2) + '%',
+        { size: 18, color: PAL.orange, align: 'right', w: 90, h: 40, shrink: true });
+      const barX = px - w / 2 + 14 + 112.5, barY = y - 46;
       gpanel(this.modalRoot, barX, barY, 225, 16, CA('#000000', 0.4), undefined, 0, 8);
       if (r.val > 0) {
-        gpanel(this.modalRoot, barX - 225 * (1 - r.pct) / 2, barY, Math.max(6, 225 * r.pct), 16, CA(PAL.orange, 0.9), undefined, 0, 8);
+        const fw = Math.max(6, 225 * r.pct);
+        gpanel(this.modalRoot, barX - 112.5 + fw / 2, barY, fw, 16, CA(PAL.orange, 0.9), undefined, 0, 8);
       }
       label(this.modalRoot, barX, barY, fmtWk(r.val), { size: 14, color: '#FFFFFF', bold: true });
     });
+    label(this.modalRoot, px, py - hh / 2 + 14, '点击空白处关闭', { size: 12, color: '#888888' });
   }
 
   /* ---------- ⑧ 属性Tips：无遮罩、贴图标侧、点空白关闭、带索敌范围圈（线稿⑧⑦） ---------- */
@@ -289,8 +302,8 @@ export class Panels {
         ['暴击', Math.round(h.critRate * 100) + '% / ' + Math.round(h.critMul * 100) + '%'],
         ['目标', '最靠下'],
       ];
-      px = hero.x - 27 + 24 + w / 2;
-      py = iconY + 24 + hh / 2;
+      px = hero.x - 27 + 23 + 16 + w / 2;
+      py = iconY + 23 + 16 + hh / 2;
     } else if (kind === 'skill') {
       title = '⚡ 技能 · 穿云箭';
       rows = [
@@ -300,8 +313,8 @@ export class Panels {
         ['生效范围', '直线穿透'],
         ['释放', '自动'],
       ];
-      px = hero.x + 27 + 24 + w / 2;
-      py = iconY + 24 + hh / 2;
+      px = hero.x + 27 + 23 + 16 + w / 2;
+      py = iconY + 23 + 16 + hh / 2;
     } else {
       title = '✦ 大招 · 箭雨风暴';
       w = 280; hh = 270;
@@ -312,7 +325,8 @@ export class Panels {
         ['生效范围', '全屏 3 轮 × 12 箭'],
         ['释放', '手动点击'],
       ];
-      px = WX(636, 90) - 24 - w / 2;
+      // 大招图标半径 45：面板右缘 = 图标圆心 - 45(半径) - 16(间距)
+      px = WX(636, 90) - 45 - 16 - w / 2;
       py = WYB(504, 90);
     }
     // 面板整体收敛进可视区

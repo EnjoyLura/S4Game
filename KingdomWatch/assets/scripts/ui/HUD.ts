@@ -11,7 +11,6 @@ import { BattleDirector } from '../battle/BattleDirector';
 export class HUD {
   private waveTxt!: Node;
   private xpBar!: Bar;
-  private lvTxt!: Node;
   private hpBar!: Bar;
   private hpVal!: Node;
   private pctTxt!: Node;
@@ -54,10 +53,8 @@ export class HUD {
     gpanel(top, WX(560, 150), WY(105, 60), 150, 60, CA('#FFFFFF', 0.08), CA('#FFFFFF', 0.27), 1.5, 30);
     this.waveTxt = label(top, WX(560, 150), WY(105, 60), '波次 0/10', { size: 20, color: '#FFFFFF', bold: true });
 
-    /* 经验条 + Lv 骑条居中 */
+    /* 经验条（用户确认：去掉屏幕中央的 Lv 标签） */
     this.xpBar = gbar(top, WX(30, 690), WY(176, 12), 690, 14, PAL.blue);
-    gpanel(top, WX(330, 90), WY(166, 32), 90, 32, CA('#14181E', 0.9), PAL.blue, 1.5, 10);
-    this.lvTxt = label(top, WX(330, 90), WY(166, 32), 'Lv.1', { size: 18, color: '#FFFFFF', bold: true });
 
     /* 预警横幅 */
     this.banner = gpanel(top, WX(115, 520), WY(226, 72), 520, 72, CA(PAL.gold, 0.22), PAL.gold, 2, 12);
@@ -141,7 +138,6 @@ export class HUD {
     if (xpKey !== this.lastXp) {
       this.lastXp = xpKey;
       this.xpBar.set(xpPct);
-      setText(this.lvTxt, 'Lv.' + d.heroLevel);
     }
     // 耐久 + 盾
     const hpKey = Math.round(d.line.hp) * 4 + Math.round(d.line.maxHp);

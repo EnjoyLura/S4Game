@@ -10,9 +10,7 @@ import { LINE_Y, PAL, MAX_PROJS } from '../config/GameConfig';
 
 export interface ProjSpec {
   x: number; y: number;
-  /** 追踪目标（设了且非敌方则追踪） */
-  target?: Monster | null;
-  /** 直线弹方向（会归一化） */
+  /** 直线弹方向（会归一化）；发射后方向锁定（用户确认：子弹不追踪不换目标） */
   dirX?: number; dirY?: number;
   speed: number;
   dmg: number;
@@ -42,7 +40,6 @@ interface Active {
   pierceLeft: number;
   hit: Set<Monster>;
   ttl: number;
-  homing: boolean;
 }
 
 const colorCache = new Map<string, Color>();
@@ -68,14 +65,10 @@ export class ProjectileManager {
     if (this.active.length >= MAX_PROJS) return;
     const a = this.free.pop() || this.makeActive();
     a.spec = spec;
-    a.homing = !!spec.target && !spec.enemy;
     a.hit.clear();
     a.pierceLeft = spec.pierce || 0;
-    a.ttl = spec.ttl ?? (a.homing ? 6 : 1.6);
-    let dx = spec.dirX ?? 0, dy = spec.dirY ?? 1;
-    if (a.homing && spec.target) {
-      dx = spec.target.x - spec.x; dy = spec.target.y - spec.y;
-    }
+    a.ttl = spec.ttl ?? 3.2;
+    const dx = spec.dirX ?? 0, dy = spec.dirY ?? -1;
     const len = Math.sqrt(dx * dx + dy * dy) || 1;
     a.vx = dx / len * spec.speed;
     a.vy = dy / len * spec.speed;
@@ -84,7 +77,7 @@ export class ProjectileManager {
   }
 
   private makeActive(): Active {
-    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<Monster>(), ttl: 0, homing: false };
+    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<Monster>(), ttl: 0 };
   }
 
   /** 敌方远程石块：直线落向防线，触线即结算 */
@@ -100,30 +93,8 @@ export class ProjectileManager {
       a.ttl -= dt;
       let done = false;
 
-      if (a.homing) {
-        const t = sp.target as Monster;
-        if (!t || t.dead) {
-          const nt = this.mgr.nearest(sp.x, sp.y, 520);
-          if (nt) sp.target = nt;
-          else a.homing = false;
-        }
-        if (a.homing && sp.target) {
-          const tg = sp.target as Monster;
-          const dx = tg.x - sp.x;
-          const dy = tg.y - sp.y;
-          const l = Math.sqrt(dx * dx + dy * dy) || 1;
-          a.vx = dx / l * sp.speed;
-          a.vy = dy / l * sp.speed;
-          if (l <= tg.def.radius + 8) {
-            this.hitMob(a, tg);
-            if (a.pierceLeft > 0) { a.pierceLeft--; a.homing = false; }
-            else done = true;
-          }
-        }
-      }
-
-      if (!done && !a.homing) {
-        // 扫掠补偿：按本帧位移的一半扩大判定半径，防高速弹穿过薄目标
+      // 直线弹：扫掠补偿按本帧位移的一半扩大判定半径，防高速弹穿过薄目标
+      if (!done) {
         const sweep = (Math.abs(a.vx) + Math.abs(a.vy)) * dt * 0.5;
         for (const m of this.mgr.list) {
           if (m.dead || a.hit.has(m)) continue;
