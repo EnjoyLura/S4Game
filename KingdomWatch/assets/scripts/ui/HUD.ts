@@ -80,8 +80,8 @@ export class HUD {
     this.bannerTxt = label(this.banner, 0, 0, '敌军来袭！', { size: 28, color: PAL.gold, bold: true });
     this.banner.active = false;
 
-    /* 左列：FPS / 倍速 / 伤害统计 */
-    this.fpsTxt = label(top, WX(24, 120), WY(210, 30), 'FPS:60', { size: 15, color: '#7EE787', align: 'left' });
+    // 左列：FPS / 倍速 / 伤害统计（FPS 与倍速按钮左缘对齐 = 设计 x24，需固定宽 + shrink 让 left 对齐生效）
+    this.fpsTxt = label(top, WX(24, 120), WY(210, 30), 'FPS:60', { size: 15, color: '#7EE787', align: 'left', w: 120, h: 30, shrink: true });
     const speedBtn = gpanel(top, WX(24, 60), WY(240, 60), 60, 60, CA(PAL.gold, 0.2), PAL.gold, 2, 12);
     this.speedTxt = label(speedBtn, 0, 0, 'X1', { size: 20, color: PAL.gold, bold: true });
     speedBtn.on(Node.EventType.TOUCH_END, () => this.dir.toggleSpeed());
@@ -341,7 +341,9 @@ export class HUD {
       return;
     }
     g.moveTo(0, 0);
-    g.arc(0, 0, 22, Math.PI / 2, Math.PI / 2 + f * Math.PI * 2, false);
+    // 引擎 Graphics 为 y-down 画布约定：0=3点、π/2=6点、3π/2=12点；ccw=true 角度递增 = 屏幕顺时针。
+    // 经典CD扫表：亮区从12点顺时针生长，暗遮罩边缘随手钟顺时针扫（12→3→6→9），f=剩余CD比例
+    g.arc(0, 0, 22, Math.PI * 1.5 + (1 - f) * Math.PI * 2, Math.PI * 3.5, true);
     g.close();
     g.fill();
   }
