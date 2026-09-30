@@ -10,6 +10,7 @@ import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
 import { bus, EVT } from '../core/EventBus';
+import { label } from '../ui/UIKit';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
@@ -93,6 +94,8 @@ export class HeroUnit {
     g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
     this.node.setPosition(this.hx, HERO_Y, 0);
     this.node.setParent(parent);
+    // 脚下名字牌（立绘靴底下方，随英雄移动）
+    label(this.node, 0, -100, this.name, { size: 14, color: PAL.parch, bold: true, w: 140, h: 20 });
   }
 
   get x(): number { return this.hx; }

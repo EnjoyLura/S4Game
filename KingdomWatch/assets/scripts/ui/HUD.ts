@@ -39,8 +39,10 @@ export class HUD {
   private fpsTxt!: Node;
   private speedTxt!: Node;
   private timeTxt!: Node;
+  private lvTxt!: Node;
   private lastWave = '';
   private lastSec = -1;
+  private lastLv = -1;
   private lastHp = -1;
   private lastShield = -1;
   private lastXp = -1;
@@ -67,13 +69,15 @@ export class HUD {
     label(pauseBtn, 0, 0, '⏸', { size: 26, color: PAL.gold, bold: true });
     pauseBtn.on(Node.EventType.TOUCH_END, () => this.dir.togglePause());
     // 关卡计时（线稿①：暂停键右侧 00:36）
-    this.timeTxt = label(top, WX(110, 140), WY(114, 40), '00:00', { size: 16, color: '#CDC2A2', align: 'left', w: 140, h: 40 });
+    this.timeTxt = label(top, WX(110, 140), WY(114, 40), '00:00', { size: 20, color: '#CDC2A2', align: 'left', w: 140, h: 40 });
     label(top, 0, WY(110, 50), this.dir.levelDef.id + ' ' + this.dir.levelDef.name, { size: 22, color: PAL.parch, bold: true, w: 400, h: 50 });
     gpanel(top, WX(560, 150), WY(105, 60), 150, 60, CA('#FFFFFF', 0.08), CA('#FFFFFF', 0.27), 1.5, 30);
     this.waveTxt = label(top, WX(560, 150), WY(105, 60), '波次 0/10', { size: 20, color: '#FFFFFF', bold: true });
 
-    /* 经验条（用户确认：去掉屏幕中央的 Lv 标签） */
-    this.xpBar = gbar(top, WX(30, 690), WY(176, 12), 690, 14, PAL.blue);
+    /* 经验条（下移与顶栏留出间距）+ 居中 Lv 徽章骑条（线稿 ui_lv_badge） */
+    this.xpBar = gbar(top, WX(30, 690), WY(184, 14), 690, 14, PAL.blue);
+    const lvBadge = gpanel(top, WX(330, 90), WY(175, 32), 90, 32, CA('#14181E', 0.92), CA('#FFFFFF', 0.3), 1.5, 10);
+    this.lvTxt = label(lvBadge, 0, 0, 'Lv.1', { size: 16, color: '#FFE08A', bold: true });
 
     /* 预警横幅 */
     this.banner = gpanel(top, WX(115, 520), WY(226, 72), 520, 72, CA(PAL.gold, 0.22), PAL.gold, 2, 12);
@@ -190,6 +194,11 @@ export class HUD {
     if (sec !== this.lastSec) {
       this.lastSec = sec;
       setText(this.timeTxt, String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0'));
+    }
+    // Lv 徽章
+    if (d.heroLevel !== this.lastLv) {
+      this.lastLv = d.heroLevel;
+      setText(this.lvTxt, 'Lv.' + d.heroLevel);
     }
     // 经验
     const need = expNeed(d.heroLevel);
