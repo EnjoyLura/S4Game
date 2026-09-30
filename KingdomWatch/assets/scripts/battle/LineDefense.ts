@@ -3,7 +3,7 @@
  * 受击抖动；耐久<30% 红光呼吸；值变化由 HUD 每帧轮询
  */
 import { Color, Graphics, Node, Tween, tween, Vec3 } from 'cc';
-import { LINE_Y, PAL } from '../config/GameConfig';
+import { LINE_Y, LO, PAL } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
@@ -28,22 +28,24 @@ export class LineDefense {
 
   private buildVisual(parent: Node): void {
     const g = this.node.addComponent(Graphics);
-    // 防线工事：木栅 + 沙包（王国保卫战取向）
+    // 防线工事：木栅 + 沙包（王国保卫战取向）；贴屏幕底部（initLayout 重算 LO）
+    const top = LINE_Y;
+    const bot = -(LO.half - LO.safeBottom);
     g.fillColor = hexc(PAL.wood);
     g.strokeColor = hexc(PAL.ink);
     g.lineWidth = 3;
-    g.roundRect(-375, -667, 750, 154, 0);
+    g.roundRect(-375, bot, 750, top - bot, 0);
     g.fill();
     g.stroke();
     g.fillColor = hexc(PAL.wood2);
     for (let i = 0; i < 10; i++) {
-      g.roundRect(-355 + i * 74, -530, 62, 34, 10);
+      g.roundRect(-355 + i * 74, top - 36, 62, 30, 10);
       g.fill();
       g.stroke();
     }
     // 盾徽
     g.fillColor = hexc(PAL.gold);
-    g.circle(0, -560, 16);
+    g.circle(0, (top + bot) / 2, 16);
     g.fill();
     g.stroke();
     this.node.setParent(parent);

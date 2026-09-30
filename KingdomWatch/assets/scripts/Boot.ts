@@ -6,7 +6,7 @@ import {
   Camera, Canvas, Color, director, Director, Layers, Node, ResolutionPolicy,
   setDisplayStats, sys, UITransform, view,
 } from 'cc';
-import { DESIGN_H, DESIGN_W } from './config/GameConfig';
+import { DESIGN_H, DESIGN_W, initLayout } from './config/GameConfig';
 import { setLayerDeep } from './ui/UIKit';
 import { BattleDirector } from './battle/BattleDirector';
 
@@ -49,6 +49,8 @@ function onSceneLaunched(): void {
   const scene = director.getScene();
   if (!scene || scene.getChildByName('Canvas')) return;
 
+  initLayout(); // 可视区/安全区 → 战场锚点（防线贴屏底、顶栏贴刘海下 §12.3）
+
   const canvasNode = buildCanvas(scene);
   setLayerDeep(canvasNode, Layers.Enum.UI_2D);
 
@@ -58,7 +60,8 @@ function onSceneLaunched(): void {
   const root = new Node('GameRoot');
   root.layer = Layers.Enum.UI_2D;
   root.parent = canvasNode;
-  root.addComponent(BattleDirector);
+  const bd = root.addComponent(BattleDirector);
+  (globalThis as unknown as { __kw?: BattleDirector }).__kw = bd; // 调试句柄：浏览器实测弹窗用
 }
 
 director.on(Director.EVENT_AFTER_SCENE_LAUNCH, onSceneLaunched);

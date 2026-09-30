@@ -173,6 +173,7 @@ export class BattleDirector extends Component {
       },
     };
     this.pickOpts = opts;
+    this.hud.sync(); // 冻结期间 HUD 不轮询，升级瞬间把经验条/等级刷到位
     this.panels.resetPickRefresh();
     this.panels.showPick(draw3(M0_POOL, this.stacks), this.stacks, opts);
   }

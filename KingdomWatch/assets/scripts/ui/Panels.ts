@@ -2,15 +2,15 @@
  * 弹窗面板（UX 线稿 ②~⑤⑧）：三选一 / 暂停 / 胜利结算 / 失败结算(含广告复活) / 伤害统计 / 属性Tips
  * 弹窗内容块均以屏幕垂直中心为重心；三选一期间全场冻结由 BattleDirector 状态控制
  */
-import { Node, tween, Vec3 } from 'cc';
+import { Graphics, Node, tween, Vec3 } from 'cc';
 import { CardDef, CardStacks, RARITY_COLOR } from '../config/Cards';
-import { PAL } from '../config/GameConfig';
+import { HERO_Y, LO, PAL } from '../config/GameConfig';
 import { DamageRow, fmtWk } from '../battle/DamageService';
 import { HeroUnit } from '../battle/Hero';
 import { BattleDirector } from '../battle/BattleDirector';
 import { AdService } from '../platform/AdService';
 import { loadSave } from '../core/SaveData';
-import { btn, CA, dimLayer, gcircle, gpanel, label, setText, WY, WX } from './UIKit';
+import { btn, CA, dimLayer, gcircle, gpanel, label, N, setText, WY, WYB, WX } from './UIKit';
 
 interface PickCallbacks {
   onPick: (card: CardDef) => void;
@@ -51,7 +51,7 @@ export class Panels {
       const frame = gpanel(this.modalRoot, x, y, 200, 360, CA('#14181E', 0.94), rarity, 2.5, 12);
       this.buildCard(frame, card, stacks);
       frame.on(Node.EventType.TOUCH_END, e => {
-        e.propagationStopped();
+        e.propagationStopped = true;
         cb.onPick(card);
       });
     });
@@ -82,11 +82,22 @@ export class Panels {
     const rName = card.rarity === 'white' ? '白' : card.rarity === 'blue' ? '蓝' : '紫';
     const tag = card.owner === 'global' ? '全局' : '弓手';
     const used = stacks[card.id] || 0;
-    label(frame, 0, 154, card.name + ' · ' + rName + ' · ' + tag, { size: 19, color: rarity, bold: true, w: 190, h: 44 });
+    label(frame, 0, 154, card.name + ' · ' + rName + ' · ' + tag,
+      { size: 19, color: rarity, bold: true, w: 190, h: 44, shrink: true });
     gcircle(frame, 0, 44, 55, CA('#2A3240', 1), rarity, 2);
     label(frame, 0, 44, card.id.slice(0, 2).toUpperCase(), { size: 30, color: rarity, bold: true });
-    label(frame, 0, -60, card.desc, { size: 17, color: PAL.parch, w: 180, h: 90 });
-    if (used > 0) label(frame, 0, -130, '已学习 ' + used + ' 层', { size: 15, color: '#9FB59F' });
+    label(frame, 0, -62, card.desc, { size: 17, color: PAL.parch, w: 176, h: 96, shrink: true, lineHeight: 24 });
+    if (used > 0) {
+      label(frame, 0, -130, '已学习 ' + used + ' 层', { size: 15, color: '#9FB59F' });
+    } else {
+      // 左上角「新」角标（线稿②：首次出现未学习）
+      const badge = gpanel(frame, -70, 158, 44, 30, PAL.gold, undefined, 0, 8);
+      label(badge, 0, 0, '新', { size: 17, color: PAL.ink, bold: true });
+    }
+    // 右上角英雄头像位（线稿②）；全局卡显示绿色「全」
+    const ava = gcircle(frame, 70, 158, 20, CA('#2A3240', 1), card.owner === 'global' ? PAL.green : PAL.gold, 1.5);
+    label(ava, 0, 0, card.owner === 'global' ? '全' : '弓',
+      { size: 16, color: card.owner === 'global' ? PAL.green : PAL.gold, bold: true });
   }
 
   /* ---------- ④ 暂停 ---------- */
@@ -108,9 +119,9 @@ export class Panels {
         i === 0 ? PAL.gold : '#FFFFFF44', 1.5, 12);
       label(this.modalRoot, x, WY(780, 72), t, { size: 20, color: i === 0 ? PAL.gold : '#FFFFFF' });
     });
-    // 设置开关（音乐/音效）
+    // 设置开关（音乐/音效）——置于标题与页签之间的空档，避免压住底部按钮
     const mkToggle = (x: number, name: string, key: 'music' | 'sfx', on: boolean) => {
-      btn(this.modalRoot, x, WY(860, 60), 200, 60, name + '：' + (on ? '开' : '关'),
+      btn(this.modalRoot, x, WY(660, 60), 200, 60, name + '：' + (on ? '开' : '关'),
         on ? PAL.green : '#5A6472', () => {
           o.onToggle(key, !on);
           this.showPause({ ...o, [key]: !on } as typeof o);
@@ -147,7 +158,7 @@ export class Panels {
     const dbl = gcircle(this.modalRoot, WX(580, 120), WY(714, 120), 58, CA(PAL.green, 0.3), PAL.green, 3);
     const dblTxt = label(dbl, 0, 0, '▶\n双倍', { size: 24, color: PAL.green, bold: true });
     dbl.on(Node.EventType.TOUCH_END, e => {
-      e.propagationStopped();
+      e.propagationStopped = true;
       o.onDouble(ok => {
         if (ok) {
           dbl.off(Node.EventType.TOUCH_END);
@@ -187,7 +198,7 @@ export class Panels {
     const rv = gcircle(this.modalRoot, WX(580, 120), WY(700, 120), 58, CA(PAL.green, 0.3), PAL.green, 3);
     const rvTxt = label(rv, 0, 0, '▶\n复活\n+' + Math.round(o.reviveRatio * 100) + '%', { size: 20, color: PAL.green, bold: true });
     rv.on(Node.EventType.TOUCH_END, e => {
-      e.propagationStopped();
+      e.propagationStopped = true;
       o.onRevive(ok => {
         if (!ok) {
           setText(rvTxt, '稍后\n重试');
@@ -219,9 +230,9 @@ export class Panels {
       const cx = WX(155, 70), cy = WY(y, 70);
       gcircle(this.modalRoot, cx, cy, 32, CA('#2A3240', 1), '#FFFFFF55', 1.5);
       label(this.modalRoot, cx, cy, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
-      label(this.modalRoot, WX(240, 150), WY(y + 2, 40), r.name, { size: 18, color: '#FFFFFF', align: 'left', w: 150, h: 40 });
+      label(this.modalRoot, WX(240, 150), WY(y + 2, 40), r.name, { size: 18, color: '#FFFFFF', align: 'left', w: 150, h: 40, shrink: true });
       label(this.modalRoot, WX(380, 100), WY(y + 2, 40), (r.pct * 100).toFixed(2) + '%',
-        { size: 18, color: PAL.orange, align: 'right', w: 100, h: 40 });
+        { size: 18, color: PAL.orange, align: 'right', w: 100, h: 40, shrink: true });
       const barX = WX(240, 225), barY = WY(y + 48, 16);
       gpanel(this.modalRoot, barX, barY, 225, 16, CA('#000000', 0.4), undefined, 0, 8);
       if (r.val > 0) {
@@ -231,54 +242,85 @@ export class Panels {
     });
   }
 
-  /* ---------- ⑧ 属性Tips（点击普攻/技能/未充满大招图标弹出，两列布局） ---------- */
+  /* ---------- ⑧ 属性Tips：无遮罩、贴图标侧、点空白关闭、带索敌范围圈（线稿⑧⑦） ---------- */
   showTips(kind: 'atk' | 'skill' | 'ult', hero: HeroUnit, line: { maxHp: number }): void {
     void line;
     this.closeAll();
-    const dim = dimLayer(this.modalRoot, 0.35);
-    dim.on(Node.EventType.TOUCH_END, () => this.closeAll());
+    // 全屏透明捕获层：点任意空白处关闭（不加变暗遮罩，§3.11 战斗不暂停）
+    const catcher = N('tipsCatch', this.modalRoot, 0, 0, 750, LO.half * 2 + 200);
+    catcher.on(Node.EventType.TOUCH_END, () => this.closeAll());
+
+    // 索敌范围圈：以英雄为圆心，半透明填充 + 圈线（线稿⑦）
+    const R = kind === 'atk' ? hero.stats.range : kind === 'skill' ? hero.stats.skillRange : 0;
+    if (R > 0) {
+      const rc = N('range', this.modalRoot, hero.x, HERO_Y + 30, R * 2, R * 2);
+      const rg = rc.addComponent(Graphics);
+      const col = kind === 'atk' ? PAL.gold : PAL.blue;
+      rg.fillColor = CA(col, 0.05);
+      rg.strokeColor = CA(col, 0.8);
+      rg.lineWidth = 3;
+      rg.circle(0, 0, R);
+      rg.fill();
+      rg.stroke();
+      rc.on(Node.EventType.TOUCH_END, () => this.closeAll()); // 圈内点按同样视为"空白处"
+    }
 
     const h = hero.stats;
-    const panel = (
-      x: number, y: number, w: number, hh: number, title: string,
-      rows: [string, string][], anchor: string) => {
-      const px = WX(x, w), py = WY(y, hh);
-      label(this.modalRoot, px, py + hh / 2 + 16, anchor, { size: 14, color: '#8899FF' });
-      gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), CA('#FFFFFF', 0.3), 1.5, 12);
-      label(this.modalRoot, px - w / 2 + 14, py + hh / 2 - 26, title, { size: 18, color: '#FFE08A', bold: true, align: 'left' });
-      rows.forEach((r, i) => {
-        const ry = py + hh / 2 - 60 - i * 30;
-        label(this.modalRoot, px - w / 2 + 14, ry, r[0], { size: 15, color: '#CFD6DD', align: 'left' });
-        label(this.modalRoot, px + w / 2 - 14, ry, r[1], { size: 15, color: '#FFFFFF', bold: true, align: 'right' });
-      });
-      label(this.modalRoot, px, py - hh / 2 + 14, '点击空白处关闭', { size: 12, color: '#888888' });
-    };
-
+    const iconY = WYB(126, 46);
+    let px: number, py: number, w = 300, hh = 300, title: string;
+    let rows: [string, string][];
     if (kind === 'atk') {
-      panel(16, 560, 300, 300, '🏹 普攻 · 风刃射击', [
+      title = '🏹 普攻 · 风刃射击';
+      rows = [
         ['伤害', String(Math.round(h.atk * h.atkMul))],
         ['攻速', h.aspd.toFixed(1) + ' 次/秒'],
         ['索敌范围', String(Math.round(h.range))],
         ['弹道', (1 + h.serial) + ' 支' + (h.fan > 0 ? ' +' + h.fan + ' 齐射' : '')],
         ['暴击', Math.round(h.critRate * 100) + '% / ' + Math.round(h.critMul * 100) + '%'],
         ['目标', '最靠下'],
-      ], '▼ 锚点：头顶普攻图标');
+      ];
+      px = hero.x - 27 + 24 + w / 2;
+      py = iconY + 24 + hh / 2;
     } else if (kind === 'skill') {
-      panel(330, 330, 300, 300, '⚡ 技能 · 穿云箭', [
+      title = '⚡ 技能 · 穿云箭';
+      rows = [
         ['伤害', String(Math.round(h.atk * h.atkMul * 5.2))],
         ['冷却时间', hero.skillCd > 0 ? hero.skillCd.toFixed(1) + ' 秒' : '就绪'],
         ['索敌范围', String(Math.round(h.skillRange))],
         ['生效范围', '直线穿透'],
         ['释放', '自动'],
-      ], '▼ 锚点：头顶技能图标');
+      ];
+      px = hero.x + 27 + 24 + w / 2;
+      py = iconY + 24 + hh / 2;
     } else {
-      panel(340, 700, 280, 270, '✦ 大招 · 箭雨风暴', [
+      title = '✦ 大招 · 箭雨风暴';
+      w = 280; hh = 270;
+      rows = [
         ['伤害', Math.round(h.atk * h.atkMul * 0.55) + ' × 36'],
         ['充能', Math.floor(hero.charge) + ' / ' + hero.chargeMax],
         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
         ['生效范围', '全屏 3 轮 × 12 箭'],
         ['释放', '手动点击'],
-      ], '◀ 锚点：右侧大招按钮');
+      ];
+      px = WX(636, 90) - 24 - w / 2;
+      py = WYB(504, 90);
     }
+    // 面板整体收敛进可视区
+    px = Math.max(-375 + w / 2 + 8, Math.min(375 - w / 2 - 8, px));
+    py = Math.max(-LO.half + hh / 2 + 8, Math.min(LO.half - hh / 2 - 8, py));
+
+    gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), CA('#FFFFFF', 0.3), 1.5, 12);
+    const colW = w * 0.44;
+    // 注意：label 节点锚点在盒子中心，左/右对齐文本需按"边缘±colW/2"定位
+    label(this.modalRoot, px - w / 2 + 14 + (w - 28) / 2, py + hh / 2 - 26, title,
+      { size: 18, color: '#FFE08A', bold: true, align: 'left', w: w - 28, h: 26, shrink: true });
+    rows.forEach((r, i) => {
+      const ry = py + hh / 2 - 60 - i * 30;
+      label(this.modalRoot, px - w / 2 + 14 + colW / 2, ry, r[0],
+        { size: 15, color: '#CFD6DD', align: 'left', w: colW, h: 24, shrink: true });
+      label(this.modalRoot, px + w / 2 - 14 - colW / 2, ry, r[1],
+        { size: 15, color: '#FFFFFF', bold: true, align: 'right', w: colW, h: 24, shrink: true });
+    });
+    label(this.modalRoot, px, py - hh / 2 + 14, '点击空白处关闭', { size: 12, color: '#888888' });
   }
 }

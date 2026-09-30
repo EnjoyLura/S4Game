@@ -5,7 +5,7 @@
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { HeroStats } from '../config/Cards';
-import { ARCHER_CHARGE_MAX, HERO_Y, PAL, SPAWN_Y } from '../config/GameConfig';
+import { ARCHER_CHARGE_MAX, HERO_Y, LINE_Y, PAL, SPAWN_Y } from '../config/GameConfig';
 import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
@@ -183,10 +183,11 @@ export class HeroUnit {
     const beam = new Node('beam');
     beam.layer = Layers.Enum.UI_2D;
     beam.setParent(this.node.parent!);
-    beam.setPosition(this.x, HERO_Y + (717 + 513) / 2, 0);
+    beam.setPosition(this.x, HERO_Y + (SPAWN_Y - LINE_Y) / 2, 0);
     const g = beam.addComponent(Graphics);
+    const span = SPAWN_Y - LINE_Y;
     g.fillColor = hexc(PAL.gold);
-    g.roundRect(-14, -(717 + 513) / 2 - 60, 28, 717 + 513 + 120, 10);
+    g.roundRect(-14, -span / 2 - 60, 28, span + 120, 10);
     g.fill();
     const op = beam.addComponent(UIOpacity);
     op.opacity = 200;

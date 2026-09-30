@@ -2,8 +2,8 @@
  * 程序化 UI 组件库（占位渲染：色块+描边+文字，视觉对齐 UX 线稿 token）
  * 后续美术资源到位后，仅需把 gpanel/gcircle 等替换为 Sprite(assetMap) —— 见 UX/wireframe.html 资源清单
  */
-import { Color, Graphics, Label, Layers, Node, UITransform, UIOpacity, tween, Vec3, BlockInputEvents, Widget } from 'cc';
-import { PAL } from '../config/GameConfig';
+import { Color, Graphics, Label, Layers, Node, UITransform, UIOpacity, tween, Vec3, BlockInputEvents } from 'cc';
+import { LO, PAL } from '../config/GameConfig';
 
 export function C(hex: string): Color {
   const c = new Color();
@@ -24,9 +24,11 @@ function toColor(v: FillLike): Color {
   return typeof v === 'string' ? C(v) : v;
 }
 
-/** 线稿顶基坐标(设计px,左上) → 画布中心坐标 */
+/** 线稿顶基坐标(设计px,左上) → 画布中心坐标；t 从可视区顶（刘海下）起算 */
 export function WX(l: number, w: number): number { return l + w / 2 - 375; }
-export function WY(t: number, h: number): number { return 667 - (t + h / 2); }
+export function WY(t: number, h = 0): number { return (LO.half - LO.safeTop) - t - h / 2; }
+/** 底基坐标：b 从可视区底（手势条上）起算，用于贴底的耐久条/图标/大招列 */
+export function WYB(b: number, h = 0): number { return -(LO.half - LO.safeBottom) + b + h / 2; }
 
 export function N(name: string, parent: Node | null, x = 0, y = 0, w = 0, h = 0): Node {
   const n = new Node(name);
@@ -40,6 +42,8 @@ export function N(name: string, parent: Node | null, x = 0, y = 0, w = 0, h = 0)
 export interface LabelOpts {
   size?: number; color?: string; align?: 'left' | 'center' | 'right'; bold?: boolean;
   w?: number; h?: number; lineHeight?: number;
+  /** SHRINK：文本在 w×h 框内自动缩字号换行，绝不超框（长描述/双列 Tips 用） */
+  shrink?: boolean;
 }
 
 export function label(parent: Node, x: number, y: number, text: string, o: LabelOpts = {}): Node {
@@ -50,6 +54,9 @@ export function label(parent: Node, x: number, y: number, text: string, o: Label
   l.lineHeight = o.lineHeight || (o.size || 20) * 1.25;
   l.color = C(o.color || '#FFFFFF');
   l.isBold = !!o.bold;
+  if (o.shrink && (o.w || 0) > 0 && (o.h || 0) > 0) {
+    l.overflow = Label.Overflow.SHRINK;
+  }
   if (o.align === 'left') l.horizontalAlign = Label.HorizontalAlign.LEFT;
   else if (o.align === 'right') l.horizontalAlign = Label.HorizontalAlign.RIGHT;
   else l.horizontalAlign = Label.HorizontalAlign.CENTER;
@@ -135,24 +142,20 @@ export function btn(parent: Node, x: number, y: number, w: number, h: number, te
   n.name = 'btn_' + text;
   label(n, 0, 0, text, { size, color: '#241C12', bold: true, w, h });
   n.on(Node.EventType.TOUCH_END, (e: unknown) => {
-    const ev = e as { propagationStopped?: () => void; stopPropagation?: () => void };
-    if (ev && typeof ev.propagationStopped === 'function') ev.propagationStopped();
+    const ev = e as { propagationStopped?: boolean };
+    if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
     cb();
   });
   return n;
 }
 
-/** 全屏遮罩（吞点击） */
+/** 全屏遮罩（吞点击）：覆盖整个可视区（Fit-Width 高度动态），不能用 Widget 对 0 尺寸父级对齐 */
 export function dimLayer(parent: Node, alpha = 0.68, red = false): Node {
-  const n = N('dim', parent, 0, 0);
-  const ut = n.addComponent(UITransform);
-  const wd = n.addComponent(Widget);
-  wd.isAlignLeft = wd.isAlignRight = wd.isAlignTop = wd.isAlignBottom = true;
-  wd.left = wd.right = wd.top = wd.bottom = 0;
-  ut.setContentSize(750, 1334);
+  const H = LO.half * 2 + 240;
+  const n = N('dim', parent, 0, 0, 750, H);
   const g = n.addComponent(Graphics);
   g.fillColor = red ? new Color(80, 10, 12, Math.round(255 * alpha)) : new Color(6, 8, 12, Math.round(255 * alpha));
-  g.roundRect(-375, -667, 750, 1334, 0);
+  g.roundRect(-375, -H / 2, 750, H, 0);
   g.fill();
   n.addComponent(BlockInputEvents);
   return n;

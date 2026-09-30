@@ -124,7 +124,8 @@ export class Monster {
 
     const mul = this.slowT > 0 ? 0.8 : 1;
     if (this.state === 'move') {
-      this.node.setPosition(this.baseX + Math.sin(this.life * 1.6) * 10, this.node.position.y - this.def.speed * mul * dt, 0);
+      // 直线行进（用户确认：不蛇形）；横向松散由出生 x 与分离逻辑保证
+      this.node.setPosition(this.baseX, this.node.position.y - this.def.speed * mul * dt, 0);
       const reach = this.def.kind === 'ranged' ? (this.def.atkRange || 0) : this.def.radius * 0.5;
       if (this.node.position.y - LINE_Y <= reach) {
         this.state = this.def.kind === 'melee' ? 'attack' : 'hold';

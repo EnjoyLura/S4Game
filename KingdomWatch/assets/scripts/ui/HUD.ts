@@ -4,8 +4,8 @@
  * 点击普攻/技能/未充满大招图标 → 属性Tips（§3.11）
  */
 import { Graphics, Label, Node, Tween, tween, UIOpacity, Vec3 } from 'cc';
-import { expNeed, PAL } from '../config/GameConfig';
-import { gbar, gcircle, gpanel, gring, label, setText, WY, WX, Bar, Ring, CA } from './UIKit';
+import { expNeed, LO, PAL } from '../config/GameConfig';
+import { gbar, gcircle, gpanel, gring, label, setText, WY, WYB, WX, Bar, Ring, CA } from './UIKit';
 import { BattleDirector } from '../battle/BattleDirector';
 
 export class HUD {
@@ -40,8 +40,8 @@ export class HUD {
     const top = new Node('HUD');
     top.setParent(parent);
 
-    /* 背景：战场底色（占位）——必须画在 Field 里（mobs 之前），UIRoot 全屏板会盖住战场 */
-    gpanel(bgParent || top, 0, 0, 750, 1700, '#2E4034', undefined, 0, 0).setSiblingIndex(0);
+    /* 背景：战场底色（占位）——必须画在 Field 里（mobs 之前）；高度盖满可视区防黑边 */
+    gpanel(bgParent || top, 0, 0, 750, LO.half * 2 + 240, '#2E4034', undefined, 0, 0).setSiblingIndex(0);
 
     /* 顶栏 */
     gpanel(top, 0, WY(100, 70), 718, 70, CA('#14181E', 0.72), CA(PAL.gold, 0.9), 1.5, 10);
@@ -71,8 +71,8 @@ export class HUD {
     label(statsBtn, 0, 0, '📊', { size: 24 });
     statsBtn.on(Node.EventType.TOUCH_END, () => this.dir.showStats());
 
-    /* 右侧大招按钮（4×1 纵列右对齐；M0 单英雄=第1钮） */
-    const ux = WX(636, 90), uy = WY(740, 90);
+    /* 右侧大招按钮（4×1 纵列右对齐、底基锚定；M0 单英雄=第1钮） */
+    const ux = WX(636, 90), uy = WYB(504, 90);
     this.ultBtn = gcircle(top, ux, uy, 45, CA(PAL.gold, 0.25), PAL.gold, 2.5);
     this.chargeTxt = label(this.ultBtn, 0, 0, '大招\n0%', { size: 18, color: '#FFFFFF', bold: true });
     this.chargeRing = gring(top, ux, uy, 45, CA('#FFFFFF', 0.2));
@@ -80,25 +80,25 @@ export class HUD {
       if (this.dir.tryCastUlt() === 'charging') this.dir.showTips('ult');
     });
 
-    /* 防线耐久条：条内居中耐久值 + 盾值胶囊(右→左) + 右侧百分比 */
-    this.hpBar = gbar(top, WX(55, 640), WY(1138, 20), 640, 22, PAL.green);
-    this.hpVal = label(top, WX(55, 640), WY(1138, 20), '1000/1000', { size: 15, color: '#FFFFFF', bold: true });
+    /* 防线耐久条（贴屏底、在墙上方）：条内居中耐久值 + 盾值胶囊(右→左) + 右侧百分比 */
+    this.hpBar = gbar(top, WX(55, 640), WYB(176, 20), 640, 22, PAL.green);
+    this.hpVal = label(top, WX(55, 640), WYB(176, 20), '1000/1000', { size: 15, color: '#FFFFFF', bold: true });
     this.shieldNode = new Node('shield');
     this.shieldNode.setParent(top);
-    this.shieldNode.setPosition(0, WY(1136, 24), 0);
+    this.shieldNode.setPosition(0, WYB(176, 24), 0);
     this.shieldG = this.shieldNode.addComponent(Graphics);
     this.shieldVal = label(this.shieldNode, 0, 0, '100', { size: 14, color: '#FFFFFF', bold: true });
     this.shieldNode.active = false;
-    this.pctTxt = label(top, WX(698, 48), WY(1136, 24), '100%', { size: 16, color: '#9FE08A', bold: true });
+    this.pctTxt = label(top, WX(698, 48), WYB(176, 24), '100%', { size: 16, color: '#9FE08A', bold: true });
 
-    /* 英雄头顶 普攻/技能 图标（耐久条正下方，压头顶，不遮挡） */
+    /* 英雄头顶 普攻/技能 图标（耐久条正下方，压墙顶，不遮挡耐久条） */
     const heroX = this.dir.hero.x;
-    const atkIcon = gcircle(top, heroX - 27, WY(1162, 46), 23, CA(PAL.gold, 0.3), PAL.gold, 2);
+    const atkIcon = gcircle(top, heroX - 27, WYB(126, 46), 23, CA(PAL.gold, 0.3), PAL.gold, 2);
     label(atkIcon, 0, 0, '攻', { size: 18, color: PAL.gold, bold: true });
     atkIcon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('atk'));
-    const skillIcon = gcircle(top, heroX + 27, WY(1162, 46), 23, CA(PAL.blue, 0.3), PAL.blue, 2);
+    const skillIcon = gcircle(top, heroX + 27, WYB(126, 46), 23, CA(PAL.blue, 0.3), PAL.blue, 2);
     label(skillIcon, 0, 0, '技', { size: 18, color: PAL.blue, bold: true });
-    this.skillRing = gring(top, heroX + 27, WY(1162, 46), 23, CA('#FFFFFF', 0.13));
+    this.skillRing = gring(top, heroX + 27, WYB(126, 46), 23, CA('#FFFFFF', 0.13));
     skillIcon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('skill'));
   }
 
@@ -190,7 +190,7 @@ export class HUD {
     g.roundRect(-w / 2, -barH / 2, w, barH, barH / 2);
     g.fill();
     // 耐久条右端(画布 x=27.5+320=347.5) 向左收
-    this.shieldNode.setPosition(347.5 - 2 - w / 2, WY(1136, 24), 0);
+    this.shieldNode.setPosition(347.5 - 2 - w / 2, WYB(176, 24), 0);
     setText(this.shieldVal, String(shield));
   }
 }

@@ -2,15 +2,43 @@
  * 全局数值与坐标（设计分辨率 750×1334，画布坐标原点在屏幕中心、y 向上）
  * 产品文档 §3.1 战场空间 / §11 数值框架
  */
+import { sys, view } from 'cc';
+
 export const DESIGN_W = 750;
 export const DESIGN_H = 1334;
 
-/** 顶部生成带（屏外） */
-export const SPAWN_Y = 717;
-/** 防线判定线（线稿 y1180 顶基 → 画布坐标） */
-export const LINE_Y = -513;
-/** 英雄站位 y（防线后一点） */
-export const HERO_Y = -545;
+/** 可视布局（§12.3 适配）：Fit-Width 下可视半高随屏幕比例变化；安全区=刘海/手势条 */
+export const LO = {
+  half: DESIGN_H / 2,   // 可视半高（设计单位）
+  safeTop: 0,           // 顶部安全区（设计单位）
+  safeBottom: 0,        // 底部安全区（设计单位）
+};
+
+/** 顶部生成带（屏外）／防线判定线／英雄站位 y —— initLayout() 启动时按可视区重算 */
+export let SPAWN_Y = 717;
+export let LINE_Y = -513;
+export let HERO_Y = -545;
+
+/** Boot 场景启动后调用：按可视区与安全区重算战场锚点（防线贴屏底、顶栏贴刘海下） */
+export function initLayout(): void {
+  const vis = view.getVisibleSize();
+  LO.half = vis.height / 2;
+  try {
+    const safe = sys.getSafeAreaRect();
+    if (safe && safe.width > 0 && safe.height > 0) {
+      const scrH = typeof window !== 'undefined' ? window.innerHeight : vis.height;
+      const k = scrH > 0 ? vis.height / scrH : 1; // 屏幕 px → 设计单位
+      const topIns = Math.max(0, scrH - (safe.y + safe.height)) * k;
+      const botIns = Math.max(0, safe.y) * k;
+      LO.safeTop = Math.min(Math.max(0, topIns), LO.half * 0.12);
+      LO.safeBottom = Math.min(Math.max(0, botIns), LO.half * 0.12);
+    }
+  } catch (e) { void e; }
+  SPAWN_Y = LO.half + 60;
+  LINE_Y = -(LO.half - LO.safeBottom) + 154; // 防线贴屏幕底部（沙包墙高 154）
+  HERO_Y = LINE_Y - 32;
+}
+
 /** 远程怪停位线：距防线 ≤300 停位投掷 */
 export const RANGED_RANGE = 300;
 
