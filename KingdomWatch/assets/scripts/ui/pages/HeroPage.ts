@@ -44,8 +44,7 @@ export function buildHeroes(ctx: PageCtx): void {
     /* 大立绘 + 立绘内左右箭头（切换已拥有英雄） */
     const portrait = gpanel(content, CX(160, 280), WY(305, 440), 280, 440, CA('#20262F', 1), '#FFFFFF33', 1.5, 18);
     artSprite(portrait, 0, 0, 280, 440, 'hero_' + hid + '_portrait', { belowIdx: 0 });
-    const ava = label(portrait, 0, 40, '', { size: 120 });
-    artSprite(ava, 0, 0, 190, 190, def.avatar, { sliced: false, hideOnLoad: [ava] });
+    artSprite(portrait, 0, 40, 190, 190, def.avatar, { sliced: false });
     btn(portrait, -105, -20, 70, 70, '◀', PAL.gold, () => { state.hi = (state.hi + owned.length - 1) % owned.length; render(); }, 26);
     btn(portrait, 105, -20, 70, 70, '▶', PAL.gold, () => { state.hi = (state.hi + 1) % owned.length; render(); }, 26);
     portrait.on(Node.EventType.TOUCH_END, () => attrsModal(ctx, hid));
@@ -147,8 +146,8 @@ function slotModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: () => vo
   list.slice(0, 4).forEach((e, i) => {
     const d = EQUIPS[e.defId];
     const row = gpanel(panel, 0, listY - i * 92, 560, 80, CA('#14181E', 0.9), C(QCOLOR[d.quality]), 2, 12);
-    label(row, -180, 0, `${KIND_ICON[kind]} ${d.name}`, { size: 22, color: '#FFF3D6', bold: true, align: 'left', w: 300, h: 32, shrink: true });
-    label(row, -180, 26, `T${d.tier} · Lv.${e.lv} · 攻${d.atk}/命${d.hp}`, { size: 17, color: '#AAB2BD', align: 'left', w: 320, h: 26 });
+    label(row, -180, 12, `${KIND_ICON[kind]} ${d.name}`, { size: 22, color: '#FFF3D6', bold: true, align: 'left', w: 300, h: 32, shrink: true });
+    label(row, -180, -16, `T${d.tier} · Lv.${e.lv} · 攻${d.atk}/命${d.hp}`, { size: 17, color: '#AAB2BD', align: 'left', w: 320, h: 26 });
     btn(row, 200, 0, 130, 56, '穿 戴', PAL.green, () => {
       wearEquip(hid, kind, e.uid);
       ctx.refresh();

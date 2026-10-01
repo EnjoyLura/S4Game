@@ -58,8 +58,7 @@ export function buildUpgrade(ctx: PageCtx): void {
     /* 常驻英雄大立绘 + 脚底名牌 */
     const portrait = gpanel(content, WX(175, 400), WY(300, 430), 400, 430, CA('#20262F', 1), '#FFFFFF33', 1.5, 18);
     artSprite(portrait, 0, 0, 400, 430, 'hero_' + hid + '_portrait', { belowIdx: 0 });
-    const ava = label(portrait, 0, 40, '', { size: 150 });
-    artSprite(ava, 0, 0, 230, 230, def.avatar, { sliced: false, hideOnLoad: [ava] });
+    artSprite(portrait, 0, 40, 230, 230, def.avatar, { sliced: false });
     const foot = gpanel(content, WX(175, 400), WY(700, 80), 400, 80, CA('#3A2E23', 0.94), C(PAL.gold), 2, 16);
     artSprite(foot, 0, 0, 400, 80, 'ui_panel_dark_gold', { belowIdx: 0 });
     label(foot, -105, 0, def.name, { size: 25, color: '#FFF3D6', bold: true, w: 180, h: 40 });

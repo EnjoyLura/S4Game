@@ -38,8 +38,8 @@ export function buildLevels(ctx: PageCtx): void {
     /* 当前关场景大图 + 图内左右切关箭头 */
     const scene = gpanel(content, CX(100, 550), WY(325, 550), 550, 550, CA('#2E4034', 0.8), 'rgba(120,180,110,1)', 1.5, 18);
     artSprite(scene, 0, 0, 550, 550, 'scenes/scene_' + lv.id.replace('-', '_'), { belowIdx: 0, cover: true });
-    label(scene, 0, -30, lv.open ? `${lv.desc}` : '🔒 未解锁', { size: 26, color: '#D8E4CC', w: 500, h: 40, shrink: true });
-    label(scene, 0, 10, lv.open ? '关卡场景大图' : `通关 ${LEVELS[0].id} 解锁`, { size: 20, color: '#9FB494', w: 500, h: 30 });
+    label(scene, 0, -30, lv.open ? `${lv.desc}` : '🔒 未解锁', { size: 26, color: '#EAF2E0', w: 500, h: 40, shrink: true, outline: '#1C2A18', outlineW: 3 });
+    if (!lv.open) label(scene, 0, 10, `通关 ${LEVELS[0].id} 解锁`, { size: 20, color: '#C9D8BC', w: 500, h: 30, outline: '#1C2A18', outlineW: 2 });
     btn(scene, -190, 0, 70, 70, '◀', PAL.gold, () => { st.i = (st.i + LEVELS.length - 1) % LEVELS.length; render(); }, 26);
     btn(scene, 190, 0, 70, 70, '▶', PAL.gold, () => { st.i = (st.i + 1) % LEVELS.length; render(); }, 26);
     if (st.i === 0 && !sv.stars[lv.id]) {

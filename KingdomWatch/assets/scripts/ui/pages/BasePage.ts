@@ -15,7 +15,7 @@ export function buildBase(ctx: PageCtx): void {
   /* 等距基地场景占位 */
   const bg = gpanel(root, 0, WY(90, 1122), 750, 1122, CA('#40503A', 0.5), CA('#8CB46E', 0.6), 1.5, 18);
   artSprite(bg, 0, 0, 750, 1122, 'bg_base_island', { belowIdx: 0, cover: true });
-  label(bg, 0, 60, '奇幻风等距基地场景（浮空岛 · 占位）', { size: 20, color: '#A8BD97', w: 700, h: 30 });
+  label(bg, 0, -480, '奇幻风等距基地场景（浮空岛 · 占位）', { size: 20, color: '#A8BD97', w: 700, h: 30 });
 
   /* 主城（左上） */
   const keep = gpanel(root, CX(225, 300), WY(270, 300), 300, 300, CA('#3A2E23', 0.9), C(PAL.gold), 3, 20);
@@ -87,7 +87,7 @@ function codexModal(ctx: PageCtx): void {
   label(panel, 0, 290, '战斗中首次遇到新怪物自动解锁词条', { size: 18, color: '#8D96A3', w: 560, h: 28 });
   CODEX.forEach((c, i) => {
     const got = codexUnlocked(c.id);
-    const cell = gpanel(panel, -145 + (i % 2) * 290, 215 - Math.floor(i / 2) * 155, 270, 140,
+    const cell = gpanel(panel, -145 + (i % 2) * 290, 160 - Math.floor(i / 2) * 155, 270, 140,
       CA('#14181E', 0.92), got ? C('#4FA8FF') : C('#3A4250'), 2, 14);
     label(cell, -100, 34, got ? '👹' : '❓', { size: 44 });
     label(cell, 10, 34, got ? c.name : '???', { size: 21, color: got ? '#FFF3D6' : '#6B7480', bold: true, w: 170, h: 30, shrink: true });

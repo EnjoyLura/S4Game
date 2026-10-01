@@ -46,6 +46,8 @@ export interface LabelOpts {
   w?: number; h?: number; lineHeight?: number;
   /** SHRINK：文本在 w×h 框内自动缩字号换行，绝不超框（长描述/双列 Tips 用） */
   shrink?: boolean;
+  /** 描边（亮底大图上的说明文字用，如关卡场景图内的波次信息） */
+  outline?: string; outlineW?: number;
 }
 
 export function label(parent: Node, x: number, y: number, text: string, o: LabelOpts = {}): Node {
@@ -58,6 +60,11 @@ export function label(parent: Node, x: number, y: number, text: string, o: Label
   l.isBold = !!o.bold;
   if (o.shrink && (o.w || 0) > 0 && (o.h || 0) > 0) {
     l.overflow = Label.Overflow.SHRINK;
+  }
+  if (o.outline) {
+    l.enableOutline = true;
+    l.outlineColor = C(o.outline);
+    l.outlineWidth = o.outlineW ?? 2;
   }
   if (o.align === 'left') l.horizontalAlign = Label.HorizontalAlign.LEFT;
   else if (o.align === 'right') l.horizontalAlign = Label.HorizontalAlign.RIGHT;
