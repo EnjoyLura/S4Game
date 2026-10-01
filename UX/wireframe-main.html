@@ -138,12 +138,12 @@ SCREENS.shop={name:"① 商店",en:"Shop",render:function(){
     var x=35+i*180;
     s+=ph("ui_shop_tab",x,220,160,64,{cls:tabs[i][1],txt:tabs[i][0]+(i==0?"<br>(选中)":"")});
   }
-  /* 商品卡 2×2（示例：武器页签）卡=图+名+品质阶级角标+价格按钮 */
+  /* 商品卡 2×2（示例：武器页签）卡=图+名+品质阶级角标+价格购买钮（货币小图标在按钮内） */
   var cards=[
-    ["ui_equip_wpn_bow","猎风长弓 · 绿1阶","ui_icon_diamond","800","green",""],
-    ["ui_equip_wpn_crossbow","鹰眼重弩 · 紫2阶","ui_icon_diamond","1,200","purple",""],
-    ["ui_equip_wpn_staff","翡翠法杖","ui_icon_diamond","—","lock","通关 1-3 解锁"],
-    ["ui_equip_wpn_hammer","巨锤 · 已拥有","ui_icon_diamond","已拥有","white","已拥有角标"]
+    ["ui_equip_wpn_bow","猎风长弓 · 绿1阶","💎","800","green","buy"],
+    ["ui_equip_wpn_crossbow","鹰眼重弩 · 紫2阶","💎","1,200","purple","buy"],
+    ["ui_equip_wpn_staff","翡翠法杖","💎","—","lock","lock"],
+    ["ui_equip_wpn_hammer","巨锤 · 已拥有","🪙","已拥有","white","owned"]
   ];
   for(var c=0;c<4;c++){
     var cx=35+(c%2)*350, cy=320+Math.floor(c/2)*330;
@@ -152,8 +152,9 @@ SCREENS.shop={name:"① 商店",en:"Shop",render:function(){
     s+=ph(d[0],cx+100,cy+25,130,130,{cls:d[4],txt:"商品图"});
     s+=ph("ui_badge_tier",cx+8,cy+8,64,30,{cls:"dark",txt:"2阶"});
     s+=txt(cx,cy+160,330,34,d[1],'','font-size:11px');
-    s+=ph(d[2],cx+70,cy+215,44,44,{cls:"circ",txt:""});
-    s+=ph("ui_btn_buy",cx+120,cy+210,180,54,{cls:d[4]=="lock"?"lock":"green",txt:d[3]+(d[4]=="lock"?" 🔒":" 购买")});
+    var bt=d[5]=="buy"?(d[2]+" "+d[3]+" 购买"):d[5]=="lock"?"🔒 未解锁":"已拥有";
+    s+=ph("ui_btn_buy",cx+45,cy+210,240,54,
+      {cls:d[4]=="lock"||d[5]=="owned"?"lock":"green",txt:bt});
   }
   s+=txt(0,990,750,30,"↓ 网格可纵向滚动（材料/装备页签同构，每页 2~4 件）",'','font-size:9px;opacity:.55');
   s+=navbar(0);
@@ -161,7 +162,7 @@ SCREENS.shop={name:"① 商店",en:"Shop",render:function(){
 },notes:{
   layout:[
     "顶栏双货币 + 撕纸标题「商 店」；四页签：武器/英雄(钻石)、装备/材料(金币)——与已确认的货币分配一致。",
-    "商品卡 <code>ui_shop_card</code> 330×300 双列网格：图 130、品质阶级角标 <code>ui_badge_tier</code>、名称、底部价格+购买钮。",
+    "商品卡 <code>ui_shop_card</code> 330×300 双列网格：图 130、品质阶级角标 <code>ui_badge_tier</code>、名称、底部价格购买钮（货币小图标+数字+「购买」同一按钮内）。",
     "品质决定卡框颜色（白/绿/蓝/紫 tint 同一张卡框图）；未解锁商品整卡灰化 + 解锁条件文字。",
     "首批 12 件：武器2 + 英雄2(占位敬请期待) + 装备4 + 材料4；随章节阶段性解锁，不限购不刷新。"
   ],
