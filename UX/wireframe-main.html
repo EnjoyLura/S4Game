@@ -99,14 +99,14 @@ function txt(l,t,w,h,inner,cls,css){var s="left:"+l/2+"px;top:"+t/2+"px;width:"+
 function E(sel,html){document.querySelector(sel).innerHTML=html;}
 
 /* ============ 公共部件 ============ */
-/* 顶栏：金币+钻石双货币（已对齐决策：不加头像/体力，不显示游戏标题） */
+/* 顶栏：金币+钻石双货币（已对齐决策：不加头像/体力，不显示游戏标题，两个资源位靠右） */
 function topbar(){
   var s='';
   s+=ph("ui_topbar_main",0,0,750,90,{cls:"dark",txt:""});
-  s+=ph("ui_icon_coin",28,20,50,50,{cls:"gold circ",txt:"🪙"});
-  s+=txt(84,20,110,50,"1,451",'','font-size:12px');
-  s+=ph("ui_icon_diamond",595,20,50,50,{cls:"blue circ",txt:"💎"});
-  s+=txt(650,20,90,50,"20",'','font-size:12px');
+  s+=ph("ui_icon_coin",430,20,50,50,{cls:"gold circ",txt:"🪙"});
+  s+=txt(486,20,100,50,"1,451",'','font-size:12px');
+  s+=ph("ui_icon_diamond",600,20,50,50,{cls:"blue circ",txt:"💎"});
+  s+=txt(656,20,84,50,"20",'','font-size:12px');
   return s;
 }
 /* 底部导航：五页签 */
