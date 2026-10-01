@@ -182,13 +182,13 @@ SCREENS.shop={name:"① 商店",en:"Shop",render:function(){
 /* ---- M2 英雄 ---- */
 SCREENS.heroes={name:"② 英雄",en:"Heroes",render:function(){
   var s=pagebg()+topbar();
-  /* 英雄切换行 */
-  s+=ph("ui_btn_arrow",45,115,70,70,{cls:"gold circ",txt:"◀"});
-  s+=ph("ui_btn_arrow",635,115,70,70,{cls:"gold circ",txt:"▶"});
+  /* 英雄名行（箭头已移入立绘内） */
   s+=txt(120,105,510,44,"<b style='font-size:15px'>艾拉·风羽</b>&nbsp;&nbsp;<span style='font-size:10px;color:#ffe08a'>弓手 · 远程输出</span>",'','font-size:13px');
   s+=txt(120,150,510,34,"点头像/名字看属性与背景故事",'','font-size:9px;opacity:.6');
-  /* 中央大立绘 + 战力徽章（与右侧槽区留 30 间距，不重叠） */
+  /* 中央大立绘 + 战力徽章（与右侧槽区留 30 间距，不重叠）；切换箭头叠在立绘内两侧 */
   s+=ph("hero_aila_portrait",160,205,280,440,{txt:"英雄大立绘<br>(全身)"});
+  s+=ph("ui_btn_arrow",172,385,70,70,{cls:"gold circ",txt:"◀"});
+  s+=ph("ui_btn_arrow",358,385,70,70,{cls:"gold circ",txt:"▶"});
   s+=ph("ui_power_badge",220,655,180,70,{cls:"gold",txt:"🔥 战力 1,234"});
   /* 左列：属性/故事入口 */
   s+=ph("ui_btn_attrs",30,240,76,76,{cls:"blue circ",txt:"属性"});
@@ -201,14 +201,14 @@ SCREENS.heroes={name:"② 英雄",en:"Heroes",render:function(){
     s+=ph("ui_slot_frame",sx,sy,120,120,{cls:slots[i][1],txt:slots[i][0]+"<br>"+slots[i][2]});
   }
   /* 我的背包 */
-  var bt=["全部","装备","材料"];
+  var bt=["武器","装备","材料"];
   for(var t=0;t<3;t++){
     s+=ph("ui_bag_tab",45+t*225,772,200,58,{cls:t==0?"gold":"",txt:bt[t]+(t==0?"(选中)":"")});
   }
-  var q=["white","green","blue","purple","white","green","blue","","green","purple"];
+  var q=["green","purple","blue","white","green","blue","","green","purple","white"];
   for(var g=0;g<10;g++){
     var gx=22+(g%5)*144, gy=850+Math.floor(g/5)*144;
-    if(q[g]) s+=ph("ui_item_cell",gx,gy,130,130,{cls:q[g],txt:(g<4?"装备":"材料")+"<br>×"+(g+2)});
+    if(q[g]) s+=ph("ui_item_cell",gx,gy,130,130,{cls:q[g],txt:(g<4?"武器":g<6?"装备":"材料")+"<br>×"+(g+2)});
     else s+=ph("ui_item_cell",gx,gy,130,130,{cls:"lock",txt:"+"});
   }
   s+=txt(0,1150,750,26,"↓ 背包可纵向滚动 · 点格子弹物品详情（属性/出售?）",'','font-size:9px;opacity:.55');
@@ -216,13 +216,13 @@ SCREENS.heroes={name:"② 英雄",en:"Heroes",render:function(){
   return s;
 },notes:{
   layout:[
-    "大图环绕式（对齐参考角色页）：单英雄大立绘 <code>hero_aila_portrait</code> 280×440 居左中 + 左右箭头切换英雄，立绘与右侧槽区间距 30 不重叠。",
+    "大图环绕式（对齐参考角色页）：单英雄大立绘 <code>hero_aila_portrait</code> 280×440 居左中，左右切换箭头<b>叠在立绘内两侧</b>垂直居中。",
     "右侧槽区：大武器槽 <code>ui_slot_weapon</code> 250×250（武器占用双格合并为一个大槽）+ 2×2 防具槽 <code>ui_slot_frame</code> 120×120（头盔/饰品/手套/衣服）；品质边框色+阶级角标+等级。",
     "战力徽章 <code>ui_power_badge</code> 立绘正下方（参考图火焰 256 样式）。",
-    "左列「属性」「故事」圆钮；下方「我的背包」页签(全部/装备/材料) + 5 列格子网格 <code>ui_item_cell</code> 130×130。"
+    "左列「属性」「故事」圆钮；下方「我的背包」页签(武器/装备/材料) + 5 列格子网格 <code>ui_item_cell</code> 130×130。"
   ],
   interact:[
-    "◀▶ 切换已拥有英雄；切到未拥有英雄 → 剪影 + 「前往商店解锁」按钮跳转商店英雄页签。",
+    "◀▶ 叠在立绘内两侧，切换已拥有英雄；切到未拥有英雄 → 剪影 + 「前往商店解锁」按钮跳转商店英雄页签。",
     "点装备槽 → 背包选择弹窗（只列该槽位类型，按品质排序）→ 穿戴（原装备回背包）；大武器槽只收武器类物品。",
     "点头像/名字/属性钮 → 属性+背景故事弹窗：战力/攻击/攻速/技能预览/定位/背景故事。",
     "点背包格 → 物品详情弹窗（属性/描述）；装备类额外给「穿戴」按钮。"
