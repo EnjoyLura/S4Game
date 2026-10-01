@@ -193,33 +193,33 @@ SCREENS.heroes={name:"② 英雄",en:"Heroes",render:function(){
   /* 左列：属性/故事入口 */
   s+=ph("ui_btn_attrs",30,240,76,76,{cls:"blue circ",txt:"属性"});
   s+=ph("ui_btn_story",30,340,76,76,{cls:"blue circ",txt:"故事"});
-  /* 右侧槽区：武器槽(高度减半·横扁) + 2×2 防具槽(加大) */
+  /* 右侧槽区：武器槽(高度减半·横扁) + 2×2 防具槽(高度加大) */
   s+=ph("ui_slot_weapon",470,205,250,125,{cls:"green",txt:"武器槽 · 绿2阶"});
   var slots=[["头盔","blue","蓝1阶"],["饰品","","空槽+"],["手套","white","白3阶"],["衣服","purple","紫1阶"]];
   for(var i=0;i<4;i++){
-    var sx=470+(i%2)*140, sy=340+Math.floor(i/2)*150;
-    s+=ph("ui_slot_frame",sx,sy,130,130,{cls:slots[i][1],txt:slots[i][0]+"<br>"+slots[i][2]});
+    var sx=470+(i%2)*140, sy=340+Math.floor(i/2)*160;
+    s+=ph("ui_slot_frame",sx,sy,130,150,{cls:slots[i][1],txt:slots[i][0]+"<br>"+slots[i][2]});
   }
-  /* 我的背包（底部原位） */
+  /* 我的背包（底部原位·高度收小） */
   var bt=["武器","装备","材料"];
   for(var t=0;t<3;t++){
     s+=ph("ui_bag_tab",45+t*225,772,200,58,{cls:t==0?"gold":"",txt:bt[t]+(t==0?"(选中)":"")});
   }
   var q=["green","purple","blue","white","green","blue","","green","purple","white"];
   for(var g=0;g<10;g++){
-    var gx=22+(g%5)*144, gy=850+Math.floor(g/5)*144;
-    if(q[g]) s+=ph("ui_item_cell",gx,gy,130,130,{cls:q[g],txt:(g<4?"武器":g<6?"装备":"材料")+"<br>×"+(g+2)});
-    else s+=ph("ui_item_cell",gx,gy,130,130,{cls:"lock",txt:"+"});
+    var gx=22+(g%5)*144, gy=845+Math.floor(g/5)*132;
+    if(q[g]) s+=ph("ui_item_cell",gx,gy,120,120,{cls:q[g],txt:(g<4?"武器":g<6?"装备":"材料")+"<br>×"+(g+2)});
+    else s+=ph("ui_item_cell",gx,gy,120,120,{cls:"lock",txt:"+"});
   }
-  s+=txt(0,1150,750,26,"↓ 背包可纵向滚动 · 点格子弹物品详情（属性/出售?）",'','font-size:9px;opacity:.55');
+  s+=txt(0,1105,750,26,"↓ 背包可纵向滚动 · 点格子弹物品详情（属性/出售?）",'','font-size:9px;opacity:.55');
   s+=navbar(1);
   return s;
 },notes:{
   layout:[
     "大图环绕式（对齐参考角色页）：单英雄大立绘 <code>hero_aila_portrait</code> 280×440 居中偏左，左右切换箭头<b>叠在立绘内两侧</b>。",
-    "右侧槽区：武器槽 <code>ui_slot_weapon</code> 250×125（高度减半·横扁）+ 2×2 防具槽 <code>ui_slot_frame</code> 130×130（头盔/饰品/手套/衣服）；品质边框色+阶级角标+等级。",
+    "右侧槽区：武器槽 <code>ui_slot_weapon</code> 250×125（高度减半·横扁）+ 2×2 防具槽 <code>ui_slot_frame</code> 130×150（头盔/饰品/手套/衣服）；品质边框色+阶级角标+等级。",
     "战力徽章 <code>ui_power_badge</code> 立绘正下方（参考图火焰 256 样式）。",
-    "左列「属性」「故事」圆钮；下方「我的背包」页签(武器/装备/材料) + 5 列格子网格 <code>ui_item_cell</code> 130×130。"
+    "左列「属性」「故事」圆钮；下方「我的背包」页签(武器/装备/材料) + 5 列格子网格 <code>ui_item_cell</code> 120×120（区域高度收小）。"
   ],
   interact:[
     "◀▶ 叠在立绘内两侧，切换已拥有英雄；切到未拥有英雄 → 剪影 + 「前往商店解锁」按钮跳转商店英雄页签。",
@@ -392,9 +392,9 @@ var MAIN_MANIFEST=[
  ["hero_aila_portrait","艾拉全身立绘","280×470","1","英雄/升级","奇幻手绘，透明底"],
  ["hero_kyle_portrait","凯尔全身立绘","280×470","1","英雄/升级","同上"],
  ["ui_slot_weapon","武器槽框(横扁·品质tint)","250×125","1","英雄","武器专用"],
- ["ui_slot_frame","装备槽框(品质tint)","130×130","1","英雄/升级","白绿蓝紫 tint"],
+ ["ui_slot_frame","装备槽框(品质tint)","130×150","1","英雄/升级","白绿蓝紫 tint"],
  ["ui_bag_tab","背包页签","200×58","1","英雄","复用 ui_shop_tab 缩放"],
- ["ui_item_cell","背包格(品质tint)","130×130","1","英雄","数量角标程序叠"],
+ ["ui_item_cell","背包格(品质tint)","120×120","1","英雄","数量角标程序叠"],
  ["ui_equip_wpn_bow/crossbow/staff/hammer","武器图标","130×130","4","商店/背包",""],
  ["ui_equip_helmet/trinket/gloves/armor","防具图标","130×130","4","商店/背包/英雄",""],
  ["ui_mat_ore/herb/pelt/essence","材料图标","130×130","4","商店/背包",""]
