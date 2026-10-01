@@ -8,6 +8,7 @@ import {
 } from 'cc';
 import { DESIGN_H, DESIGN_W, initLayout } from './config/GameConfig';
 import { setLayerDeep } from './ui/UIKit';
+import { uxPreloadIdle } from './ui/Ux';
 import { BattleDirector } from './battle/BattleDirector';
 
 function hexc(hex: string): Color {
@@ -62,6 +63,10 @@ function onSceneLaunched(): void {
   root.parent = canvasNode;
   const bd = root.addComponent(BattleDirector);
   (globalThis as unknown as { __kw?: BattleDirector }).__kw = bd; // 调试句柄：浏览器实测弹窗用
+
+  // 闲时预载全部 UI 美术：战斗 HUD 先行加载，0.8s 后逐张预热其余资源（弹窗/结算不再当面加载），
+  // 战斗 3s 准备期内即可全部就绪；场景重开（loadScene('Main')）缓存仍在，秒开
+  uxPreloadIdle(800);
 }
 
 director.on(Director.EVENT_AFTER_SCENE_LAUNCH, onSceneLaunched);

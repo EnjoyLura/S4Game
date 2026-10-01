@@ -138,3 +138,50 @@ export function artSetFrame(sp: Sprite, id: string): void {
 export function artIcon(parent: Node, id: string, w: number, h = w): Node {
   return artSprite(parent, 0, 0, w, h, id, { sliced: false });
 }
+
+/* ---------- 闲时预载：弹窗美术不再"当面加载" ---------- */
+
+/** 预载清单 = 代码引用的全部 ux ID + 场景图；新美术落盘后把 ID 加进这里 */
+export const UX_PRELOAD_IDS: string[] = [
+  // 组件
+  'ui_panel_dark_gold', 'ui_panel_dark_white',
+  'ui_btn_primary', 'ui_btn_primary_press', 'ui_btn_primary_disabled',
+  'ui_btn_green', 'ui_btn_green_press', 'ui_btn_green_disabled',
+  'ui_banner_warn', 'ui_banner_title', 'ui_banner_hazard',
+  'ui_wave_pill', 'ui_tab_item', 'ui_tab_item_active',
+  'ui_bar_track', 'ui_bar_fill_white', 'ui_bar_shield',
+  'ui_card_frame_white', 'ui_card_frame_blue', 'ui_card_frame_purple',
+  'ui_card_header_white', 'ui_card_header_blue', 'ui_card_header_purple',
+  'ui_circ_icon_gold', 'ui_circ_icon_gold_active',
+  'ui_circ_icon_blue', 'ui_circ_icon_blue_active',
+  'ui_circ_icon_gray', 'ui_circ_icon_gray_active',
+  'ui_circ_btn_green', 'ui_star', 'ui_star_gray',
+  'ui_badge_new', 'ui_gear_ring',
+  'ui_switch_on', 'ui_switch_off', 'ui_switch_disabled',
+  // 图标
+  'ui_icon_coin', 'ui_icon_exp', 'ui_icon_diamond', 'ui_icon_chest', 'ui_icon_equip',
+  'ui_icon_pause', 'ui_icon_stats', 'ui_icon_speed',
+  'ui_icon_refresh_ad', 'ui_icon_refresh_diamond',
+  'ui_icon_heart', 'ui_icon_skull', 'ui_icon_eye', 'ui_icon_chat', 'icon_alert',
+  // 英雄头像
+  'ui_avatar_archer', 'ui_avatar_sniper',
+  // 场景
+  'scenes/scene_1_1',
+];
+
+let preloadStarted = false;
+
+/** 闲时逐张预载：每张间隔约一帧串行调度，不与当下渲染争抢；重复调用安全（进程内只跑一次）。
+ *  uxFrame 自带缓存与去重——与战斗 HUD 的首屏加载天然合并，不会双份请求 */
+export function uxPreloadIdle(delayMs = 0): void {
+  if (preloadStarted) return;
+  preloadStarted = true;
+  let i = 0;
+  const step = (): void => {
+    if (i >= UX_PRELOAD_IDS.length) return;
+    uxFrame(UX_PRELOAD_IDS[i++], () => {});
+    setTimeout(step, 16);
+  };
+  if (delayMs > 0) setTimeout(step, delayMs);
+  else step();
+}
