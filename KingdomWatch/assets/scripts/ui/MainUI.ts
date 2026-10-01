@@ -1,14 +1,20 @@
 /**
  * 主城母界面（§UX 五主界面）：底部导航 商店/英雄/关卡/升级/基地（左→右）
- * 页签内容按需构建；关卡页承载进入战斗入口（连通 §3.2 战斗流程）。
- * 背景：战场场景图 + 深色压暗，作为主城底图（M2 换专属主城图，同 ID 直接覆盖）。
+ * 顶栏：刘海预留区下方 y100 起，无标题，金币/钻石双货币靠右（§已确认）。
+ * 页签内容整屏重建（PageKit.ctx.refresh）；各页实现见 ui/pages/*（线稿一一对应）。
  */
 import { _decorator, Component, director, Label, Node } from 'cc';
 import { LO, PAL } from '../config/GameConfig';
 import { loadSave } from '../core/SaveData';
 import { flow } from '../core/Flow';
-import { btn, C, CA, gpanel, label, N, WX, WY, WYB } from './UIKit';
+import { btn, C, CA, gpanel, label, N, setText, WX, WY, WYB } from './UIKit';
 import { artSprite } from './Ux';
+import { PageCtx, setGlobalRoot } from './PageKit';
+import { buildShop } from './pages/ShopPage';
+import { buildHeroes } from './pages/HeroPage';
+import { buildLevels } from './pages/LevelsPage';
+import { buildUpgrade } from './pages/UpgradePage';
+import { buildBase } from './pages/BasePage';
 
 const { ccclass } = _decorator;
 
@@ -21,18 +27,14 @@ const TABS: { name: string; icon: string }[] = [
   { name: '基地', icon: '🏰' },
 ];
 
-/** 关卡目录（M0 仅 1-1；后续关卡加进表即可） */
-const LEVELS: { id: string; name: string; desc: string; open: boolean }[] = [
-  { id: '1-1', name: '1-1 腐朽森林·前哨', desc: '10 波 · 哥布林军团', open: true },
-  { id: '1-2', name: '1-2 腐朽森林·深林', desc: '通关 1-1 解锁', open: false },
-];
-
 const NAV_H = 122;
 
 @ccclass('MainUI')
 export class MainUI extends Component {
   private screens!: Node;
   private navItems: { slot: Node; icon: Node; txt: Node }[] = [];
+  private goldLbl: Node | null = null;
+  private diaLbl: Node | null = null;
   private tab = flow.mainTab;
 
   start(): void {
@@ -48,27 +50,39 @@ export class MainUI extends Component {
     this.buildNavBar(root);
 
     this.screens = N('Screens', root, 0, 0, 750, LO.half * 2);
+    setGlobalRoot(root);
     this.switchTab(this.tab);
   }
 
-  /* ---------- 顶栏：标题 + 金币/钻石 ---------- */
+  /* ---------- 顶栏：刘海预留区 + 双货币靠右（无标题） ---------- */
   private buildTopBar(root: Node): void {
-    const bar = gpanel(root, 0, WY(0, 90), 750, 90, CA('#14181E', 0.9), CA(PAL.gold, 0.9), 1.5, 10);
+    // 刘海遮挡预留区（禁放 UI，规范标示）
+    const notch = gpanel(root, 0, WY(0, 64), 240, 64, CA('#E5484D', 0.28), CA('#E5484D', 0.9), 2, 0);
+    label(notch, 0, 0, '刘海遮挡预留区', { size: 18, color: '#FFB0B3' });
+
+    const bar = gpanel(root, 0, WY(100, 90), 750, 90, CA('#14181E', 0.9), CA(PAL.gold, 0.9), 1.5, 10);
     artSprite(bar, 0, 0, 750, 90, 'ui_panel_dark_gold', { belowIdx: 0 });
-    label(bar, 0, 0, '王 国 守 望', { size: 30, color: PAL.gold, bold: true });
 
     const sv = loadSave();
-    const goldRow = N('gold', bar, -268, 0, 180, 44);
-    const goldSeat = gpanel(goldRow, -56, 0, 44, 44, CA(PAL.gold, 0.2), PAL.gold, 2, 22);
-    artSprite(goldSeat, 0, 0, 44, 44, 'ui_circ_icon_gold', { belowIdx: 0 });
-    artSprite(goldSeat, 0, 0, 32, 32, 'ui_icon_coin', { sliced: false });
-    label(goldRow, 24, 0, String(Math.floor(sv.gold)), { size: 22, color: '#FFF3D6', bold: true, align: 'left', w: 130, h: 30 });
+    // 金币（左）+ 钻石（右）并排靠右
+    const goldRow = N('gold', bar, WX(430, 150), 0, 150, 50);
+    const goldSeat = gpanel(goldRow, -50, 0, 50, 50, CA(PAL.gold, 0.2), PAL.gold, 2, 25);
+    artSprite(goldSeat, 0, 0, 50, 50, 'ui_circ_icon_gold', { belowIdx: 0 });
+    artSprite(goldSeat, 0, 0, 36, 36, 'ui_icon_coin', { sliced: false });
+    this.goldLbl = label(goldRow, 32, 0, String(Math.floor(sv.gold)), { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 90, h: 34 });
 
-    const diaRow = N('dia', bar, 268, 0, 180, 44);
-    const diaSeat = gpanel(diaRow, -56, 0, 44, 44, CA(PAL.blue, 0.2), PAL.blue, 2, 22);
-    artSprite(diaSeat, 0, 0, 44, 44, 'ui_circ_icon_gold', { belowIdx: 0 });
-    artSprite(diaSeat, 0, 0, 30, 30, 'ui_icon_diamond', { sliced: false });
-    label(diaRow, 24, 0, String(sv.diamonds), { size: 22, color: '#CFE3FF', bold: true, align: 'left', w: 130, h: 30 });
+    const diaRow = N('dia', bar, WX(600, 140), 0, 140, 50);
+    const diaSeat = gpanel(diaRow, -50, 0, 50, 50, CA(PAL.blue, 0.2), PAL.blue, 2, 25);
+    artSprite(diaSeat, 0, 0, 50, 50, 'ui_circ_icon_gold', { belowIdx: 0 });
+    artSprite(diaSeat, 0, 0, 34, 34, 'ui_icon_diamond', { sliced: false });
+    this.diaLbl = label(diaRow, 32, 0, String(sv.diamonds), { size: 24, color: '#CFE3FF', bold: true, align: 'left', w: 80, h: 34 });
+  }
+
+  /** 货币刷新（购买/升级后同步） */
+  private updateWallet(): void {
+    const sv = loadSave();
+    if (this.goldLbl) setText(this.goldLbl, String(Math.floor(sv.gold)));
+    if (this.diaLbl) setText(this.diaLbl, String(sv.diamonds));
   }
 
   /* ---------- 底部导航（5 页签，美术页签框 + 图标/文字） ---------- */
@@ -115,97 +129,21 @@ export class MainUI extends Component {
   switchTab(i: number): void {
     this.tab = i;
     flow.mainTab = i;
-    this.screens.destroyAllChildren();
     this.highlightTabs();
-    switch (i) {
-      case 0: this.buildShop(); break;
-      case 1: this.buildHeroes(); break;
-      case 2: this.buildLevels(); break;
-      case 3: this.buildUpgrade(); break;
-      case 4: this.buildBase(); break;
+    this.rebuildScreen();
+  }
+
+  /** 页面刷新入口（购买/升级/穿戴后）：整屏重建 + 货币同步 */
+  private rebuildScreen(): void {
+    this.screens.destroyAllChildren();
+    const ctx: PageCtx = { screens: this.screens, refresh: () => this.switchTab(this.tab) };
+    switch (this.tab) {
+      case 0: buildShop(ctx); break;
+      case 1: buildHeroes(ctx); break;
+      case 2: buildLevels(ctx); break;
+      case 3: buildUpgrade(ctx); break;
+      case 4: buildBase(ctx); break;
     }
-  }
-
-  /** 页头：撕纸标题横幅 */
-  private pageTitle(parent: Node, text: string, y: number): void {
-    const banner = gpanel(parent, 0, WY(y, 88), 520, 88, CA(PAL.wood, 0.95), PAL.gold, 2.5, 14);
-    artSprite(banner, 0, 0, 520, 88, 'ui_banner_title', { belowIdx: 0 });
-    label(banner, 0, 0, text, { size: 34, color: '#4A3214', bold: true });
-  }
-
-  /** 占位页通用：标题 + 圆座图标 + 施工提示 */
-  private buildPlaceholder(title: string, icon: string, hint: string): void {
-    this.pageTitle(this.screens, title, 190);
-    const seat = gpanel(this.screens, 0, WY(470, 120), 120, 120, CA('#14181E', 0.8), '#FFFFFF33', 1.5, 24);
-    artSprite(seat, 0, 0, 120, 120, 'ui_circ_icon_gold', { belowIdx: 0 });
-    label(seat, 0, 0, icon, { size: 56 });
-    label(this.screens, 0, WY(620, 40), hint, { size: 22, color: '#CDC2A2' });
-  }
-
-  /* ---------- ① 商店（占位） ---------- */
-  private buildShop(): void {
-    this.buildPlaceholder('商 店', '🛒', '商店施工中 · 敬请期待');
-  }
-
-  /* ---------- ② 英雄（已上阵双英雄展示） ---------- */
-  private buildHeroes(): void {
-    this.pageTitle(this.screens, '英 雄', 190);
-    const heroes = [
-      { avatar: 'ui_avatar_archer', name: '艾拉·风羽', job: '弓手 · 风刃射击' },
-      { avatar: 'ui_avatar_sniper', name: '凯尔·鹰眼', job: '狙击 · 穿颅射击' },
-    ];
-    heroes.forEach((h, i) => {
-      const y = 400 + i * 190;
-      const card = gpanel(this.screens, 0, WY(y, 160), 670, 160, CA('#14181E', 0.9), '#FFFFFF33', 1.5, 14);
-      artSprite(card, 0, 0, 670, 160, 'ui_panel_dark_white', { belowIdx: 0 });
-      const ava = gpanel(card, -252, 0, 116, 116, CA('#2A3240', 1), PAL.gold, 2.5, 58);
-      artSprite(ava, 0, 0, 116, 116, 'ui_circ_icon_gold', { belowIdx: 0 });
-      artSprite(ava, 0, 0, 96, 96, h.avatar, { sliced: false });
-      label(card, -100, 22, h.name, { size: 26, color: '#FFF3D6', bold: true, h: 36 });
-      label(card, -100, -20, h.job, { size: 18, color: '#AAB2BD', h: 28 });
-      label(card, 268, 0, 'Lv.1', { size: 24, color: PAL.gold, bold: true, w: 100, h: 34 });
-    });
-    label(this.screens, 0, WY(880, 36), '编队槽位 · 英雄升级（后续版本开放）', { size: 18, color: '#889099' });
-  }
-
-  /* ---------- ③ 关卡（战斗入口） ---------- */
-  private buildLevels(): void {
-    this.pageTitle(this.screens, '选 择 关 卡', 190);
-    const sv = loadSave();
-    LEVELS.forEach((lv, i) => {
-      const y = 390 + i * 210;
-      const card = gpanel(this.screens, 0, WY(y, 180), 670, 180,
-        CA('#14181E', 0.9), lv.open ? CA(PAL.gold, 0.7) : '#FFFFFF22', 2, 14);
-      artSprite(card, 0, 0, 670, 180, lv.open ? 'ui_panel_dark_gold' : 'ui_panel_dark_white', { belowIdx: 0 });
-      label(card, -110, 42, lv.name, { size: 26, color: lv.open ? '#FFF3D6' : '#889099', bold: true, align: 'left', w: 400, h: 36 });
-      label(card, -110, -2, lv.desc, { size: 18, color: lv.open ? '#AAB2BD' : '#5F6873', align: 'left', w: 400, h: 28 });
-      // 星级（通关存档，§3.9）
-      const stars = sv.stars[lv.id] || 0;
-      for (let s = 0; s < 3; s++) {
-        const star = gpanel(card, -172 + s * 52, -52, 44, 44, CA('#000000', 0.25), undefined, 0, 22);
-        artSprite(star, 0, 0, 44, 44, s < stars ? 'ui_star' : 'ui_star_gray', { sliced: false });
-      }
-      if (lv.open) {
-        // 连通战斗：标记战斗模式后经 loadScene 重建进入 §3.2
-        btn(card, 232, 0, 190, 76, '▶ 进入战斗', PAL.green, () => {
-          flow.mode = 'battle';
-          flow.levelId = lv.id;
-          director.loadScene('Main');
-        }, 24);
-      } else {
-        btn(card, 232, 0, 190, 76, '🔒 未开放', '#5A6472', () => {}, 22);
-      }
-    });
-    label(this.screens, 0, WY(880, 36), '更多关卡（后续版本开放）', { size: 18, color: '#889099' });
-  }
-
-  /* ---------- ④ 升级（占位） ---------- */
-  private buildUpgrade(): void {
-    this.buildPlaceholder('升 级', '⬆️', '强化升级施工中 · 敬请期待');
-  }
-
-  /* ---------- ⑤ 基地（占位） ---------- */
-  private buildBase(): void {
-    this.buildPlaceholder('基 地', '🏰', '基地建设施工中 · 敬请期待');
+    this.updateWallet();
   }
 }

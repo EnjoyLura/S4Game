@@ -3,7 +3,7 @@
  * 约定：assets/resources/ux/<id>.png 与 assets/resources/scenes/<id>.png；
  * 加载失败一律回退程序绘制（调用方先画程序版，美术加载成功后覆盖/隐藏）。
  */
-import { Graphics, Node, resources, Sprite, SpriteFrame, UITransform } from 'cc';
+import { Graphics, Mask, Node, resources, Sprite, SpriteFrame, UITransform } from 'cc';
 import { N } from './UIKit';
 
 /** id → 资源路径：'scenes/x' 原样，其余视为 ux/ 下的清单 ID */
@@ -94,14 +94,23 @@ export interface ArtOpts {
 /** 创建美术 Sprite 节点：立即可用（加载完成前透明），失败则保持透明、由程序绘制兜底 */
 export function artSprite(parent: Node, x: number, y: number, w: number, h: number,
   id: string, o: ArtOpts = {}): Node {
-  const n = N('art:' + id, parent, x, y, w, h);
+  /* cover 用独立裁剪壳包住溢出（Mask 只作用于自己的子树，不牵连面板兄弟节点） */
+  let host: Node = parent;
+  let clip: Node | null = null;
+  if (o.cover) {
+    clip = N('artClip:' + id, parent, x, y, w, h);
+    clip.addComponent(Mask);
+    host = clip;
+    x = 0; y = 0;
+  }
+  const n = N('art:' + id, host, x, y, w, h);
   const sp = n.addComponent(Sprite);
   sp.sizeMode = Sprite.SizeMode.CUSTOM;
   sp.trim = false;
   uxFrame(id, sf => {
     if (!sf || !n.isValid) return;
     sp.spriteFrame = sf;
-    if (o.sliced !== false && SLICE9[id]) {
+    if (SLICE9[id]) {
       const c = SLICE9[id];
       sp.type = Sprite.Type.SLICED;
       applySlice9(id, sf);
@@ -113,15 +122,15 @@ export function artSprite(parent: Node, x: number, y: number, w: number, h: numb
         n.getComponent(UITransform)!.setContentSize(w / sx, h / sy);
       }
     } else if (o.fit !== false || o.cover) {
-      // 等比适配：contain 装进盒子 / cover 盖满盒子（源比例失真是"拉伸变形"的主因）
+      // 等比适配：contain 装进盒子 / cover 盖满盒子并裁掉溢出（源比例失真是"拉伸变形"的主因）
       const r = sf.rect;
       const k = o.cover ? Math.max(w / r.width, h / r.height) : Math.min(w / r.width, h / r.height);
       n.getComponent(UITransform)!.setContentSize(Math.max(r.width * k, 1), Math.max(r.height * k, 1));
     }
     if (o.belowIdx !== undefined) {
-      n.setSiblingIndex(Math.min(o.belowIdx, n.parent!.children.length - 1));
+      (clip || n).setSiblingIndex(Math.min(o.belowIdx, (clip || n).parent!.children.length - 1));
       // 美术已盖住程序面板：关掉父节点 Graphics，避免兜底描边从美术边缘露出
-      const pg = n.parent ? n.parent.getComponent(Graphics) : null;
+      const pg = parent.getComponent(Graphics);
       if (pg) pg.enabled = false;
     }
     (o.hideOnLoad || []).forEach(v => { if (v.isValid) v.active = false; });
