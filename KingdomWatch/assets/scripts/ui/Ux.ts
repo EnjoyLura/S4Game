@@ -17,7 +17,12 @@ const pending = new Map<string, ((sf: SpriteFrame | null) => void)[]>();
 /** 异步取 SpriteFrame（带缓存与去重）；失败回调 null，调用方保持程序绘制 */
 export function uxFrame(id: string, cb: (sf: SpriteFrame | null) => void): void {
   const hit = cache.get(id);
-  if (hit) { cb(hit); return; }
+  if (hit) {
+    // 缓存命中也走微任务：同步回调会在 artSprite 返回前触发，回调里引用
+    // `this.x = artSprite(...)` 的接收变量还是 undefined（闲时预载后的必现竞态）
+    Promise.resolve().then(() => cb(hit));
+    return;
+  }
   const q = pending.get(id);
   if (q) { q.push(cb); return; }
   pending.set(id, [cb]);

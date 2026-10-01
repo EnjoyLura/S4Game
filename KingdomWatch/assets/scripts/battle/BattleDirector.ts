@@ -9,6 +9,7 @@ import { REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
 import { loadSave, saveSave } from '../core/SaveData';
+import { flow } from '../core/Flow';
 import { MonsterManager } from './Monster';
 import { ArcherHero, HeroBase, SniperHero } from './Hero';
 import { LineDefense } from './LineDefense';
@@ -413,10 +414,11 @@ export class BattleDirector extends Component {
   }
 
   gmExit(): void {
-    director.loadScene('Main');
+    this.exitBattle();
   }
 
   private exitBattle(): void {
+    flow.mode = 'main';   // 回主城（停留在关卡页）
     director.loadScene('Main');
   }
 }

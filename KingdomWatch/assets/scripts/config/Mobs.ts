@@ -89,6 +89,13 @@ export const LEVEL_1_1: LevelDef = {
   ],
 };
 
+/** 关卡注册表：新关卡在这里登记，主城关卡页与战斗启动共用 */
+const LEVEL_TABLE: Record<string, LevelDef> = { '1-1': LEVEL_1_1 };
+
+export function getLevelDef(id: string): LevelDef {
+  return LEVEL_TABLE[id] || LEVEL_1_1;
+}
+
 /** 英雄站位（§3.1，用户确认）：防线横向对称分布，单人必须居中；3 人 ±210 */
 const HERO_SLOT_TABLE: Record<number, number[]> = {
   1: [0],
