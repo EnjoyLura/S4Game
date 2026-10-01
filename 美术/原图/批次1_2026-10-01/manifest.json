@@ -152,5 +152,19 @@
     "mode": "RGBA",
     "seconds": 27.8,
     "sha1": "57cdaa99a63f"
+  },
+  "FILL_白填充": {
+    "id": "FILL_白填充",
+    "file": "D:/AI/S4Game/美术/原图/批次1_2026-10-01\\FILL_白填充.png",
+    "prompt": "Keep the exact same art style, rendering and shape language as the progress bars in the reference image. A single sprite: one long rounded horizontal capsule progress bar FILL, spanning nearly the full image width, centered. Neutral silver-white metallic gradient from bright white top to light gray bottom, made for color tinting in a game engine. Crisp hard edges: strictly NO glow, NO bloom, NO halo, NO colored light spill on the background. Transparent background, no track around it, no shadows, no text, no grid lines, no borders.",
+    "type": "edit",
+    "ref": "D:/AI/S4Game/美术/原图/批次1_2026-10-01/B6_进度条.png",
+    "at": "2026-10-01 10:15:57",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 94.1,
+    "sha1": "095c175d6fbf"
   }
 }

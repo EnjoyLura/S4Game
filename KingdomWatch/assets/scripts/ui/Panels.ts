@@ -11,6 +11,15 @@ import { BattleDirector } from '../battle/BattleDirector';
 import { AdService } from '../platform/AdService';
 import { loadSave } from '../core/SaveData';
 import { btn, CA, dimLayer, gcircle, gpanel, gswitch, label, N, setText, WY, WYB, WX } from './UIKit';
+import { artIcon, artSprite } from './Ux';
+
+/** 稀有度 → 美术资源后缀 */
+const RARITY_SUFFIX: Record<string, string> = { white: 'white', blue: 'blue', purple: 'purple' };
+/** 奖励行文字兜底 → A2 图标（有美术时整座替换，失败保持 emoji） */
+const REWARD_ICON: Record<string, string> = {
+  '🪙': 'ui_icon_coin', 'EXP': 'ui_icon_exp', '💎': 'ui_icon_diamond',
+  '🎁': 'ui_icon_chest', '🛡': 'ui_icon_equip',
+};
 
 interface PickCallbacks {
   onPick: (card: CardDef) => void;
@@ -45,9 +54,10 @@ export class Panels {
   showPick(cards: CardDef[], stacks: CardStacks, cb: PickCallbacks): void {
     this.closeAll();
     dimLayer(this.modalRoot);
-    // 标题淡入
+    // 标题淡入（美术：撕纸金横幅，深墨字）
     const titleBg = gpanel(this.modalRoot, 0, WY(308, 88), 520, 88, CA(PAL.wood, 0.95), PAL.gold, 2.5, 14);
-    label(titleBg, 0, 0, '选择强化', { size: 34, color: PAL.gold, bold: true });
+    artSprite(titleBg, 0, 0, 520, 88, 'ui_banner_title', { belowIdx: 0 });
+    label(titleBg, 0, 0, '选择强化', { size: 34, color: '#4A3214', bold: true });
     const titleOp = titleBg.getComponent(UIOpacity) || titleBg.addComponent(UIOpacity);
     titleOp.opacity = 0;
     tween(titleOp).to(0.25, { opacity: 255 }).start();
@@ -58,6 +68,7 @@ export class Panels {
       const x = WX(xs[i], 200), y = WY(428, 360);
       const rarity = RARITY_COLOR[card.rarity];
       const frame = gpanel(this.modalRoot, x, y, 200, 360, CA('#14181E', 0.94), rarity, 2.5, 12);
+      artSprite(frame, 0, 0, 200, 360, 'ui_card_frame_' + (RARITY_SUFFIX[card.rarity] || 'white'), { belowIdx: 0 });
       frames.push(frame);
       this.buildCard(frame, card, stacks);
       frame.on(Node.EventType.TOUCH_END, e => {
@@ -116,14 +127,17 @@ export class Panels {
     const rName = card.rarity === 'white' ? '白' : card.rarity === 'blue' ? '蓝' : '紫';
     const used = stacks[card.id] || 0;
 
-    // ① 卡头稀有度色带（200×52 通栏）
+    // ① 卡头稀有度色带（200×52 通栏；美术缎带，白/银底配深墨字）
+    const suffix = RARITY_SUFFIX[card.rarity] || 'white';
     const header = gpanel(frame, 0, 154, 200, 52, CA(rarity, 0.2), rarity, 2, 0);
-    label(header, 0, 0, card.name, { size: 20, color: rarity, bold: true, w: 186, h: 40, shrink: true });
+    artSprite(header, 0, 0, 200, 52, 'ui_card_header_' + suffix, { belowIdx: 0 });
+    label(header, 0, 0, card.name, { size: 20, color: card.rarity === 'white' ? '#4A3214' : '#FFFFFF', bold: true, w: 186, h: 40, shrink: true });
 
-    // ② 齿轮环 120×120 + 内嵌图标 96×96（环中心卡内 y130）
-    gcircle(frame, 0, 50, 60, CA('#2A3240', 1), rarity, 2);
+    // ② 齿轮环 120×120（美术）+ 内嵌图标 96×96（环中心卡内 y130）
+    const gear = gcircle(frame, 0, 50, 60, CA('#2A3240', 1), rarity, 2);
+    artSprite(gear, 0, 0, 120, 120, 'ui_gear_ring', { sliced: false, belowIdx: 0 });
     const icon = gcircle(frame, 0, 50, 48, CA(rarity, 0.14), rarity, 1.5);
-    label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 24, color: rarity, bold: true });
+    label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 24, color: card.rarity === 'white' ? '#4A3214' : rarity, bold: true });
 
     // ③ 右上英雄归属角标 56×56 金圈（全局卡绿色；弓/狙金圈+姓氏）
     const ownHero = card.owner === 'archer' ? '弓' : card.owner === 'sniper' ? '狙' : '';
@@ -131,25 +145,27 @@ export class Panels {
     label(ava, 0, 0, card.owner === 'global' ? '全' : ownHero,
       { size: 20, color: card.owner === 'global' ? PAL.green : PAL.gold, bold: true });
 
-    // ④ 左上『新』角标 56×56 绿圆，骑在卡角上（首次出现）
+    // ④ 左上『新』角标 56×56（美术爆炸角标自带"新"字；失败回退绿圆+字）
     if (used === 0) {
       const badge = gcircle(frame, -88, 168, 28, PAL.green, PAL.ink, 2);
-      label(badge, 0, 0, '新', { size: 20, color: PAL.ink, bold: true });
+      const bLbl = label(badge, 0, 0, '新', { size: 20, color: PAL.ink, bold: true });
+      artSprite(badge, 0, 0, 56, 56, 'ui_badge_new', { sliced: false, hideOnLoad: [bLbl] });
     }
 
-    // ⑤ 描述两行 + ⑥ 底部"稀有度·定位"小字（已学层数并入文案，线稿不设层数行）
-    label(frame, 0, -105, card.desc, { size: 15, color: PAL.parch, w: 184, h: 56, shrink: true, lineHeight: 20 });
+    // ⑤ 描述两行 + ⑥ 底部"稀有度·定位"小字（卡面为羊皮纸浅底 → 深墨字）
+    label(frame, 0, -105, card.desc, { size: 15, color: '#4A3214', w: 184, h: 56, shrink: true, lineHeight: 20 });
     const tag = rName + ' · ' + (card.owner === 'global' ? '全局' : card.owner === 'sniper' ? '狙击' : '弓手') + (used > 0 ? ' · 已学 ' + used + ' 层' : '');
-    label(frame, 0, -140, tag, { size: 13, color: '#BFB392', w: 190, h: 24, shrink: true });
+    label(frame, 0, -140, tag, { size: 13, color: '#6B5A3A', w: 190, h: 24, shrink: true });
   }
 
   /* ---------- 页签条（线稿④-1/④-2/⑤-1/⑥-1）：点页签本地重渲染当前面板 ---------- */
   private tabsBar(tabs: string[], active: number, y: number, x0: number, w: number, gap: number, onSel: (i: number) => void): void {
     tabs.forEach((t, i) => {
       const x = WX(x0 + i * (w + gap), w), cy = WY(y, 72);
-      gpanel(this.modalRoot, x, cy, w, 72, i === active ? CA(PAL.gold, 0.25) : CA('#14181E', 0.85),
+      const tab = gpanel(this.modalRoot, x, cy, w, 72, i === active ? CA(PAL.gold, 0.25) : CA('#14181E', 0.85),
         i === active ? PAL.gold : '#FFFFFF44', 1.5, 12);
-      label(this.modalRoot, x, cy, t, { size: 20, color: i === active ? PAL.gold : '#FFFFFF' });
+      artSprite(tab, 0, 0, w, 72, i === active ? 'ui_tab_item_active' : 'ui_tab_item', { belowIdx: 0 });
+      label(this.modalRoot, x, cy, t, { size: 20, color: i === active ? '#4A3214' : '#FFFFFF' });
       if (i !== active) {
         const hit = N('tabHit' + i, this.modalRoot, x, cy, w, 72);
         hit.on(Node.EventType.TOUCH_END, e => { e.propagationStopped = true; onSel(i); });
@@ -177,13 +193,17 @@ export class Panels {
     });
   }
 
-  /** 奖励图标行（整组水平居中，pitch 160）：[底色, 图标文字, 数值] */
+  /** 奖励图标行（整组水平居中，pitch 160）：[底色, 图标文字, 数值]
+   *  美术：金座 + A2 图标盖顶（emoji 留作兜底，被图标盖住） */
   private rewardIcons(y: number, items: [string, string, string][]): void {
     const pitch = 160, s = 96;
     items.forEach((it, i) => {
       const x = (i - (items.length - 1) / 2) * pitch;
       const c = gcircle(this.modalRoot, x, WY(y, s), 42, CA(it[0], 0.25), it[0], 2);
       label(c, 0, 0, it[1], { size: it[1] === 'EXP' ? 20 : 34, color: it[1] === 'EXP' ? PAL.ink : '#FFFFFF', bold: it[1] === 'EXP' });
+      artSprite(c, 0, 0, s, s, 'ui_circ_icon_gold', { sliced: false, belowIdx: 0 });
+      const iconId = REWARD_ICON[it[1]];
+      if (iconId) artIcon(c, iconId, 60);
       label(this.modalRoot, x, WY(y + s + 4, 36), it[2], { size: 20, color: '#FFFFFF' });
     });
   }
@@ -212,7 +232,8 @@ export class Panels {
     } else {
       // 设置页签：左右旋钮开关（线稿④-2）；音乐/音效切换即时生效并写存档；振动随战斗手感批次实装
       const mkRow = (y: number, name: string, gray: boolean, sw?: { on: boolean; onChange: (v: boolean) => void }) => {
-        gpanel(this.modalRoot, WX(40, 670), WY(y, 60), 670, 60, CA('#14181E', 0.85), '#FFFFFF33', 1.5, 12);
+        const row = gpanel(this.modalRoot, WX(40, 670), WY(y, 60), 670, 60, CA('#14181E', 0.85), '#FFFFFF33', 1.5, 12);
+        artSprite(row, 0, 0, 670, 60, 'ui_panel_dark_white', { belowIdx: 0 });
         label(this.modalRoot, WX(60, 380), WY(y, 60), name,
           { size: 20, color: gray ? '#889099' : '#FFFFFF', align: 'left', w: 380, h: 40, shrink: true });
         gswitch(this.modalRoot, WX(590, 100), WY(y + 8, 44), 100, 44, sw ? sw.on : false,
@@ -222,7 +243,8 @@ export class Panels {
       mkRow(570, '🔊 音效', false, { on: o.sfx, onChange: v => o.onToggle('sfx', v) });
       mkRow(644, '📳 振动（未开放）', true);
       // 倍速行：循环按钮 1x/2x（非开关形态）
-      gpanel(this.modalRoot, WX(40, 670), WY(718, 60), 670, 60, CA('#14181E', 0.85), '#FFFFFF33', 1.5, 12);
+      const speedRow = gpanel(this.modalRoot, WX(40, 670), WY(718, 60), 670, 60, CA('#14181E', 0.85), '#FFFFFF33', 1.5, 12);
+      artSprite(speedRow, 0, 0, 670, 60, 'ui_panel_dark_white', { belowIdx: 0 });
       label(this.modalRoot, WX(60, 380), WY(718, 60), '⏩ 战斗倍速' + (o.speedUnlocked ? '' : '（1-2 通关解锁）'),
         { size: 20, color: o.speedUnlocked ? '#FFFFFF' : '#889099', align: 'left', w: 380, h: 40, shrink: true });
       if (o.speedUnlocked) {
@@ -247,13 +269,17 @@ export class Panels {
     const tab = o.tab ?? 0;
     this.closeAll();
     dimLayer(this.modalRoot);
-    label(this.modalRoot, 0, WY(340, 90), '挑战成功！', { size: 42, color: '#FFD45E', bold: true });
+    const winTitle = gpanel(this.modalRoot, 0, WY(340, 90), 520, 88, CA(PAL.wood, 0.9), PAL.gold, 2.5, 14);
+    artSprite(winTitle, 0, 0, 520, 88, 'ui_banner_title', { belowIdx: 0 });
+    label(winTitle, 0, 0, '挑战成功！', { size: 40, color: '#4A3214', bold: true });
     for (let i = 0; i < 3; i++) {
       const x = WX(217 + i * 110, 96);
-      gcircle(this.modalRoot, x, WY(450, 96), 44,
-        i < o.stars ? CA(PAL.gold, 0.35) : CA('#FFFFFF', 0.06),
-        i < o.stars ? PAL.gold : '#FFFFFF33', 2.5);
-      label(this.modalRoot, x, WY(450, 96), '★', { size: 44, color: i < o.stars ? PAL.gold : '#666C77' });
+      const lit = i < o.stars;
+      const star = gcircle(this.modalRoot, x, WY(450, 96), 44,
+        lit ? CA(PAL.gold, 0.35) : CA('#FFFFFF', 0.06),
+        lit ? PAL.gold : '#FFFFFF33', 2.5);
+      const glyph = label(star, 0, 0, '★', { size: 44, color: lit ? PAL.gold : '#666C77' });
+      artSprite(star, 0, 0, 96, 96, lit ? 'ui_star' : 'ui_star_gray', { sliced: false, hideOnLoad: [glyph] });
     }
     label(this.modalRoot, 0, WY(558, 44), tab === 0 ? '— 已获得奖励 —' : '— 伤害统计（本局） —', { size: 22, color: '#FFE08A' });
     if (tab === 0) {
@@ -262,9 +288,10 @@ export class Panels {
       this.statsRows(this.dir.dmgSvc.rows(), 600, 120);
     }
 
-    // 双倍广告按钮（与失败页复活按钮同位 580,714 120×120）
+    // 双倍广告按钮（与失败页复活按钮同位 580,714 120×120；美术绿圆钮，文字保留其上）
     const dbl = gcircle(this.modalRoot, WX(580, 120), WY(714, 120), 58, CA(PAL.green, 0.3), PAL.green, 3);
-    const dblTxt = label(dbl, 0, 0, '▶\n双倍', { size: 24, color: PAL.green, bold: true });
+    artSprite(dbl, 0, 0, 120, 120, 'ui_circ_btn_green', { sliced: false, belowIdx: 0 });
+    const dblTxt = label(dbl, 0, 0, '▶\n双倍', { size: 24, color: '#FFFFFF', bold: true });
     dbl.on(Node.EventType.TOUCH_END, e => {
       e.propagationStopped = true;
       o.onDouble(ok => {
@@ -290,7 +317,8 @@ export class Panels {
     const tab = o.tab ?? 0;
     this.closeAll();
     dimLayer(this.modalRoot, 0.7, true);
-    gpanel(this.modalRoot, 0, WY(340, 100), 590, 100, CA(PAL.red, 0.18), PAL.red, 2.5, 10);
+    const loseTitle = gpanel(this.modalRoot, 0, WY(340, 100), 590, 100, CA(PAL.red, 0.18), PAL.red, 2.5, 10);
+    artSprite(loseTitle, 0, 0, 590, 100, 'ui_banner_hazard', { belowIdx: 0 });
     label(this.modalRoot, 0, WY(350, 80), '挑战失败', { size: 40, color: '#FFFFFF', bold: true });
     label(this.modalRoot, 0, WY(480, 44), tab === 0 ? '— 已获得奖励（保底 30%）—' : '— 伤害统计（本局） —', { size: 20, color: tab === 0 ? '#FFB0A0' : '#FFE08A' });
     if (tab === 0) {
@@ -304,7 +332,8 @@ export class Panels {
         '复活：耐久 +30% · 不限次 · 不看广告即接受失败', { size: 16, color: '#CCCCCC' });
     }
     const rv = gcircle(this.modalRoot, WX(580, 120), WY(700, 120), 58, CA(PAL.green, 0.3), PAL.green, 3);
-    const rvTxt = label(rv, 0, 0, '▶\n复活\n+' + Math.round(o.reviveRatio * 100) + '%', { size: 20, color: PAL.green, bold: true });
+    artSprite(rv, 0, 0, 120, 120, 'ui_circ_btn_green', { sliced: false, belowIdx: 0 });
+    const rvTxt = label(rv, 0, 0, '▶\n复活\n+' + Math.round(o.reviveRatio * 100) + '%', { size: 20, color: '#FFFFFF', bold: true });
     rv.on(Node.EventType.TOUCH_END, e => {
       e.propagationStopped = true;
       o.onRevive(ok => {
@@ -335,20 +364,21 @@ export class Panels {
     px = Math.max(-375 + w / 2 + 8, Math.min(375 - w / 2 - 8, px));
     py = Math.max(-LO.half + hh / 2 + 8, Math.min(LO.half - hh / 2 - 8, py));
 
-    gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), CA('#FFFFFF', 0.3), 1.5, 14);
-    label(this.modalRoot, px, py + hh / 2 - 36, '— 伤害统计 —', { size: 22, color: '#FFE08A' });
-    // 行几何按线稿③：头像70×70(左缘+20) / 名称自105左对齐 / 百分比右缘-15 / 占比条105..330(数值居中条内)
+    const statsPanel = gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), CA('#FFFFFF', 0.3), 1.5, 14);
+    artSprite(statsPanel, 0, 0, w, hh, 'ui_panel_dark_white', { belowIdx: 0 });
+    label(this.modalRoot, px, py + hh / 2 - 56, '— 伤害统计 —', { size: 22, color: '#FFE08A' });
+    // 行几何按线稿③（美术白框内收 12）：头像70×70(左缘+32) / 名称自117左对齐 / 百分比右缘-27 / 占比条117..342
     rows.slice(0, 4).forEach((r, i) => {
-      const cyAv = py + hh / 2 - 105 - i * 100;
-      const cyTx = py + hh / 2 - 97 - i * 100;
-      const cxAv = px - w / 2 + 55;
+      const cyAv = py + hh / 2 - 109 - i * 100;
+      const cyTx = py + hh / 2 - 101 - i * 100;
+      const cxAv = px - w / 2 + 67;
       gcircle(this.modalRoot, cxAv, cyAv, 35, CA('#2A3240', 1), '#FFFFFF55', 1.5);
       label(this.modalRoot, cxAv, cyAv, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
-      label(this.modalRoot, px - w / 2 + 180, cyTx, r.name,
+      label(this.modalRoot, px - w / 2 + 192, cyTx, r.name,
         { size: 18, color: '#FFFFFF', align: 'left', w: 150, h: 40, shrink: true });
-      label(this.modalRoot, px - w / 2 + 295, cyTx, (r.pct * 100).toFixed(2) + '%',
+      label(this.modalRoot, px - w / 2 + 307, cyTx, (r.pct * 100).toFixed(2) + '%',
         { size: 18, color: PAL.orange, align: 'right', w: 100, h: 40, shrink: true });
-      const barX = px - w / 2 + 217.5, barY = py + hh / 2 - 126 - i * 100;
+      const barX = px - w / 2 + 229.5, barY = py + hh / 2 - 130 - i * 100;
       gpanel(this.modalRoot, barX, barY, 225, 16, CA('#000000', 0.4), undefined, 0, 8);
       if (r.val > 0) {
         const fw = Math.max(6, 225 * r.pct);
@@ -356,7 +386,7 @@ export class Panels {
       }
       label(this.modalRoot, barX, barY, fmtWk(r.val), { size: 14, color: '#FFFFFF', bold: true });
     });
-    label(this.modalRoot, px, py - hh / 2 + 14, '点击空白处关闭', { size: 12, color: '#888888' });
+    label(this.modalRoot, px, py - hh / 2 + 28, '点击空白处关闭', { size: 12, color: '#888888' });
   }
 
   /* ---------- ⑧ 属性Tips：无遮罩、贴图标侧、点空白关闭、带索敌范围圈（线稿⑧⑦） ---------- */
@@ -455,18 +485,20 @@ export class Panels {
     px = Math.max(-375 + w / 2 + 8, Math.min(375 - w / 2 - 8, px));
     py = Math.max(-LO.half + hh / 2 + 8, Math.min(LO.half - hh / 2 - 8, py));
 
-    gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), CA('#FFFFFF', 0.3), 1.5, 12);
-    const colW = w * 0.44;
+    const tipsPanel = gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), CA('#FFFFFF', 0.3), 1.5, 12);
+    artSprite(tipsPanel, 0, 0, w, hh, 'ui_panel_dark_white', { belowIdx: 0 });
+    const colW = w * 0.40;   // 美术白框较宽，内容内收
+    const pad = 30;
     // 注意：label 节点锚点在盒子中心，左/右对齐文本需按"边缘±colW/2"定位
-    label(this.modalRoot, px - w / 2 + 14 + (w - 28) / 2, py + hh / 2 - 26, title,
-      { size: 18, color: '#FFE08A', bold: true, align: 'left', w: w - 28, h: 26, shrink: true });
+    label(this.modalRoot, px - w / 2 + pad + (w - pad * 2) / 2, py + hh / 2 - 50, title,
+      { size: 18, color: '#FFE08A', bold: true, align: 'left', w: w - pad * 2, h: 26, shrink: true });
     rows.forEach((r, i) => {
-      const ry = py + hh / 2 - 60 - i * 30;
-      label(this.modalRoot, px - w / 2 + 14 + colW / 2, ry, r[0],
+      const ry = py + hh / 2 - 66 - i * 29;
+      label(this.modalRoot, px - w / 2 + pad + colW / 2, ry, r[0],
         { size: 15, color: '#CFD6DD', align: 'left', w: colW, h: 24, shrink: true });
-      label(this.modalRoot, px + w / 2 - 14 - colW / 2, ry, r[1],
+      label(this.modalRoot, px + w / 2 - pad - colW / 2, ry, r[1],
         { size: 15, color: '#FFFFFF', bold: true, align: 'right', w: colW, h: 24, shrink: true });
     });
-    label(this.modalRoot, px, py - hh / 2 + 14, '点击空白处关闭', { size: 12, color: '#888888' });
+    label(this.modalRoot, px, py - hh / 2 + 40, '点击空白处关闭', { size: 12, color: '#888888' });
   }
 }

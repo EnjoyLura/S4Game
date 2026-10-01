@@ -2,25 +2,172 @@
   "batch": "D:/AI/S4Game/美术/原图/批次1_2026-10-01",
   "ux": "D:/AI/S4Game/KingdomWatch/assets/resources/ux",
   "sheets": [
-    { "sheet": "G1_图标A", "cols": 3, "rows": 3, "scale": 0.5, "out": "图标", "copy": "ux",
-      "names": ["ui_icon_coin", "ui_icon_exp", "ui_icon_diamond", "ui_icon_chest", "ui_icon_equip", "ui_icon_pause", "ui_icon_stats", "ui_icon_speed", "ui_icon_refresh_ad"] },
-    { "sheet": "G2_图标B", "cols": 3, "rows": 2, "scale": 0.5, "out": "图标", "copy": "ux",
-      "names": ["ui_icon_refresh_diamond", "ui_icon_heart", "ui_icon_skull", "ui_icon_eye", "ui_icon_chat", "icon_alert"] },
-    { "sheet": "B1_面板横幅", "cols": 2, "rows": 2, "scale": 1.0, "out": "组件", "copy": "ux",
-      "names": ["ui_panel_dark_gold", "ui_panel_dark_white", "ui_banner_title", "ui_banner_warn"] },
-    { "sheet": "B2_徽章胶囊", "cols": 3, "rows": 2, "scale": 1.0, "out": "组件", "copy": "ux",
-      "names": ["ui_banner_hazard", "ui_wave_pill", "ui_lv_badge", "ui_badge_new", "ui_video_badge", "ui_gear_ring"] },
-    { "sheet": "B3_按钮", "cols": 3, "rows": 2, "scale": 1.0, "out": "组件", "copy": "ux",
-      "names": ["ui_btn_primary", "ui_btn_primary_press", "ui_btn_primary_disabled", "ui_btn_green", "ui_btn_green_press", "ui_btn_green_disabled"] },
-    { "sheet": "B4_圆形座", "cols": 3, "rows": 2, "scale": 1.0, "out": "组件", "copy": "ux",
-      "names": ["ui_circ_icon_gold", "ui_circ_icon_blue", "ui_circ_icon_gray", "ui_circ_icon_gold_active", "ui_circ_icon_blue_active", "ui_circ_icon_gray_active"] },
-    { "sheet": "B5_页签开关星", "cols": 3, "rows": 3, "scale": 1.0, "out": "组件", "copy": "ux",
-      "names": ["ui_tab_item", "ui_tab_item_active", "ui_switch_on", "ui_switch_off", "ui_switch_disabled", "ui_star", "ui_star_gray", "ui_circ_btn_green", ""] },
-    { "sheet": "B6_进度条", "cols": 1, "rows": 3, "scale": 0.5, "out": "组件", "copy": "ux",
-      "names": ["ui_bar_track", "ui_bar_fill", "ui_bar_shield"] },
-    { "sheet": "B7_卡面", "cols": 3, "rows": 2, "scale": 1.0, "out": "组件", "copy": "ux",
-      "names": ["ui_card_frame_white", "ui_card_frame_blue", "ui_card_frame_purple", "ui_card_header_white", "ui_card_header_blue", "ui_card_header_purple"] },
-    { "sheet": "SCENE_关卡背景", "cols": 1, "rows": 1, "scale": 1.0, "out": "场景", "copy": "scenes",
-      "names": ["scene_1_1"] }
+    {
+      "sheet": "G1_图标A",
+      "cols": 3,
+      "rows": 3,
+      "scale": 0.5,
+      "out": "图标",
+      "copy": "ux",
+      "names": [
+        "ui_icon_coin",
+        "ui_icon_exp",
+        "ui_icon_diamond",
+        "ui_icon_chest",
+        "ui_icon_equip",
+        "ui_icon_pause",
+        "ui_icon_stats",
+        "ui_icon_speed",
+        "ui_icon_refresh_ad"
+      ]
+    },
+    {
+      "sheet": "G2_图标B",
+      "cols": 3,
+      "rows": 2,
+      "scale": 0.5,
+      "out": "图标",
+      "copy": "ux",
+      "names": [
+        "ui_icon_refresh_diamond",
+        "ui_icon_heart",
+        "ui_icon_skull",
+        "ui_icon_eye",
+        "ui_icon_chat",
+        "icon_alert"
+      ]
+    },
+    {
+      "sheet": "B1_面板横幅",
+      "cols": 2,
+      "rows": 2,
+      "scale": 1.0,
+      "out": "组件",
+      "copy": "ux",
+      "names": [
+        "ui_panel_dark_gold",
+        "ui_panel_dark_white",
+        "ui_banner_title",
+        "ui_banner_warn"
+      ]
+    },
+    {
+      "sheet": "B2_徽章胶囊",
+      "cols": 3,
+      "rows": 2,
+      "scale": 1.0,
+      "out": "组件",
+      "copy": "ux",
+      "names": [
+        "ui_banner_hazard",
+        "ui_wave_pill",
+        "ui_lv_badge",
+        "ui_badge_new",
+        "ui_video_badge",
+        "ui_gear_ring"
+      ]
+    },
+    {
+      "sheet": "B3_按钮",
+      "cols": 3,
+      "rows": 2,
+      "scale": 1.0,
+      "out": "组件",
+      "copy": "ux",
+      "names": [
+        "ui_btn_primary",
+        "ui_btn_primary_press",
+        "ui_btn_primary_disabled",
+        "ui_btn_green",
+        "ui_btn_green_press",
+        "ui_btn_green_disabled"
+      ]
+    },
+    {
+      "sheet": "B4_圆形座",
+      "cols": 3,
+      "rows": 2,
+      "scale": 1.0,
+      "out": "组件",
+      "copy": "ux",
+      "names": [
+        "ui_circ_icon_gold",
+        "ui_circ_icon_blue",
+        "ui_circ_icon_gray",
+        "ui_circ_icon_gold_active",
+        "ui_circ_icon_blue_active",
+        "ui_circ_icon_gray_active"
+      ]
+    },
+    {
+      "sheet": "B5_页签开关星",
+      "cols": 3,
+      "rows": 3,
+      "scale": 1.0,
+      "out": "组件",
+      "copy": "ux",
+      "names": [
+        "ui_tab_item",
+        "ui_tab_item_active",
+        "ui_switch_on",
+        "ui_switch_off",
+        "ui_switch_disabled",
+        "ui_star",
+        "ui_star_gray",
+        "ui_circ_btn_green",
+        ""
+      ]
+    },
+    {
+      "sheet": "B6_进度条",
+      "cols": 1,
+      "rows": 3,
+      "scale": 0.5,
+      "out": "组件",
+      "copy": "ux",
+      "names": [
+        "ui_bar_track",
+        "ui_bar_fill",
+        "ui_bar_shield"
+      ]
+    },
+    {
+      "sheet": "B7_卡面",
+      "cols": 3,
+      "rows": 2,
+      "scale": 1.0,
+      "out": "组件",
+      "copy": "ux",
+      "names": [
+        "ui_card_frame_white",
+        "ui_card_frame_blue",
+        "ui_card_frame_purple",
+        "ui_card_header_white",
+        "ui_card_header_blue",
+        "ui_card_header_purple"
+      ]
+    },
+    {
+      "sheet": "SCENE_关卡背景",
+      "cols": 1,
+      "rows": 1,
+      "scale": 1.0,
+      "out": "场景",
+      "copy": "scenes",
+      "names": [
+        "scene_1_1"
+      ]
+    },
+    {
+      "sheet": "FILL_白填充",
+      "cols": 1,
+      "rows": 1,
+      "scale": 0.5,
+      "out": "组件",
+      "copy": "ux",
+      "names": [
+        "ui_bar_fill_white"
+      ]
+    }
   ]
 }

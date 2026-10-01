@@ -3,9 +3,10 @@
  * + 左列(倍速/统计/FPS) + 右侧大招纵列(每英雄一钮) + 防线耐久条(盾值胶囊/百分比) + 头顶普攻技能图标(CD环)
  * 点击普攻/技能/未充满大招图标 → 属性Tips（§3.11）
  */
-import { Graphics, Label, Layers, Node, Tween, tween, UIOpacity, Vec3 } from 'cc';
+import { Graphics, Label, Layers, Node, Tween, tween, UIOpacity, UITransform, Vec3 } from 'cc';
 import { expNeed, LO, PAL } from '../config/GameConfig';
 import { gbar, gcircle, gpanel, label, setText, WY, WYB, WX, Bar, CA } from './UIKit';
+import { artSprite, uxFrame } from './Ux';
 import { BattleDirector } from '../battle/BattleDirector';
 import { HeroBase } from '../battle/Hero';
 
@@ -18,6 +19,7 @@ interface UltUI {
   gray: Node;         // 充能中灰化杯体
   water: Node;        // 金水（圆杯液面上涨）
   waterG: Graphics;
+  waterR: number;     // 金水半径（美术座内孔更小，加载后收半径）
   orbit: Node;        // 就绪环绕粒子
   chargeTxt: Node;
   ready: boolean | null;
@@ -49,6 +51,8 @@ export class HUD {
   private shieldNode!: Node;
   private shieldG!: Graphics;
   private shieldVal!: Node;
+  private shieldArt!: Node;
+  private shieldArtOk = false;
   private ults: UltUI[] = [];
   private skills: SkillUI[] = [];
   private hudNode!: Node;
@@ -78,37 +82,48 @@ export class HUD {
     top.setParent(parent);
     this.hudNode = top;
 
-    /* 背景：战场底色（占位）——必须画在 Field 里（mobs 之前）；高度盖满可视区防黑边 */
-    gpanel(bgParent || top, 0, 0, 750, LO.half * 2 + 240, '#2E4034', undefined, 0, 0).setSiblingIndex(0);
+    /* 背景：战场底色（占位）——必须画在 Field 里（mobs 之前）；高度盖满可视区防黑边
+       美术：scene_1_1 竖版战场（1152×2048 ≈ 9:16 视口，近零变形），加载成功后盖掉底色 */
+    const bgFlat = gpanel(bgParent || top, 0, 0, 750, LO.half * 2 + 240, '#2E4034', undefined, 0, 0);
+    bgFlat.setSiblingIndex(0);
+    artSprite(bgParent || top, 0, 0, 750, LO.half * 2 + 240, 'scenes/scene_1_1',
+      { sliced: false, hideOnLoad: [bgFlat] }).setSiblingIndex(1);
 
     /* 顶栏 */
-    gpanel(top, 0, WY(100, 70), 718, 70, CA('#14181E', 0.72), CA(PAL.gold, 0.9), 1.5, 10);
+    const topBar = gpanel(top, 0, WY(100, 70), 718, 70, CA('#14181E', 0.72), CA(PAL.gold, 0.9), 1.5, 10);
+    artSprite(topBar, 0, 0, 718, 70, 'ui_panel_dark_gold', { belowIdx: 0 });
     const pauseBtn = gpanel(top, WX(30, 60), WY(105, 60), 60, 60, CA(PAL.gold, 0.2), PAL.gold, 2, 12);
     label(pauseBtn, 0, 0, '⏸', { size: 26, color: PAL.gold, bold: true });
+    artSprite(pauseBtn, 0, 0, 60, 60, 'ui_icon_pause', { sliced: false });
     pauseBtn.on(Node.EventType.TOUCH_END, () => this.dir.togglePause());
     // 关卡计时（线稿①：暂停键右侧 00:36）
     this.timeTxt = label(top, WX(110, 140), WY(114, 40), '00:00', { size: 20, color: '#CDC2A2', align: 'left', w: 140, h: 40 });
     label(top, 0, WY(110, 50), this.dir.levelDef.id + ' ' + this.dir.levelDef.name, { size: 22, color: PAL.parch, bold: true, w: 400, h: 50 });
-    gpanel(top, WX(560, 150), WY(105, 60), 150, 60, CA('#FFFFFF', 0.08), CA('#FFFFFF', 0.27), 1.5, 30);
+    const wavePill = gpanel(top, WX(560, 150), WY(105, 60), 150, 60, CA('#FFFFFF', 0.08), CA('#FFFFFF', 0.27), 1.5, 30);
+    artSprite(wavePill, 0, 0, 150, 60, 'ui_wave_pill', { belowIdx: 0 });
     this.waveTxt = label(top, WX(560, 150), WY(105, 60), '波次 0/10', { size: 20, color: '#FFFFFF', bold: true });
 
     /* 经验条（下移与顶栏留出间距）+ 居中 Lv 徽章骑条（线稿 ui_lv_badge） */
     this.xpBar = gbar(top, WX(30, 690), WY(184, 14), 690, 14, PAL.blue);
     const lvBadge = gpanel(top, WX(330, 90), WY(175, 32), 90, 32, CA('#14181E', 0.92), CA('#FFFFFF', 0.3), 1.5, 10);
+    // ui_lv_badge 美术暂不接：切片烤死了"Lv.1"文字，与动态等级冲突（第二批出无字版再换）
     this.lvTxt = label(lvBadge, 0, 0, 'Lv.1', { size: 16, color: '#FFE08A', bold: true });
 
     /* 预警横幅 */
     this.banner = gpanel(top, WX(115, 520), WY(226, 72), 520, 72, CA(PAL.gold, 0.22), PAL.gold, 2, 12);
+    artSprite(this.banner, 0, 0, 520, 72, 'ui_banner_warn', { belowIdx: 0 });
     this.bannerTxt = label(this.banner, 0, 0, '敌军来袭！', { size: 28, color: PAL.gold, bold: true });
     this.banner.active = false;
 
     // 左列：FPS / 倍速 / 伤害统计（FPS 与倍速按钮左缘对齐 = 设计 x24，需固定宽 + shrink 让 left 对齐生效）
     this.fpsTxt = label(top, WX(24, 120), WY(210, 30), 'FPS:60', { size: 15, color: '#7EE787', align: 'left', w: 120, h: 30, shrink: true });
     const speedBtn = gpanel(top, WX(24, 60), WY(240, 60), 60, 60, CA(PAL.gold, 0.2), PAL.gold, 2, 12);
-    this.speedTxt = label(speedBtn, 0, 0, 'X1', { size: 20, color: PAL.gold, bold: true });
+    artSprite(speedBtn, 0, 0, 60, 60, 'ui_icon_speed', { sliced: false, belowIdx: 0 });
+    this.speedTxt = label(speedBtn, 0, 0, 'X1', { size: 18, color: '#FFFFFF', bold: true });
     speedBtn.on(Node.EventType.TOUCH_END, () => this.dir.toggleSpeed());
     const statsBtn = gpanel(top, WX(24, 60), WY(320, 60), 60, 60, CA(PAL.gold, 0.2), PAL.gold, 2, 12);
-    label(statsBtn, 0, 0, '📊', { size: 24 });
+    const statsGlyph = label(statsBtn, 0, 0, '📊', { size: 24 });
+    artSprite(statsBtn, 0, 0, 60, 60, 'ui_icon_stats', { sliced: false, hideOnLoad: [statsGlyph] });
     statsBtn.on(Node.EventType.TOUCH_END, () => this.dir.showStats());
 
     /* 右侧大招纵列：每英雄一钮，底基锚定向上叠放（线稿① 4×1 纵列右对齐）
@@ -122,8 +137,16 @@ export class HUD {
     this.shieldNode.setParent(top);
     this.shieldNode.setPosition(0, WYB(176, 24), 0);
     this.shieldG = this.shieldNode.addComponent(Graphics);
-    this.shieldVal = label(this.shieldNode, 0, 0, '100', { size: 14, color: '#FFFFFF', bold: true });
     this.shieldNode.active = false;
+    this.shieldVal = label(top, 0, WYB(176, 24), '100', { size: 14, color: '#FFFFFF', bold: true });
+    this.shieldVal.active = false;
+    // 盾值美术胶囊（右缘锚点，自耐久条右端向左伸展），加载后接管程序绘制
+    this.shieldArt = artSprite(top, 345.5, WYB(176, 24), 40, 24, 'ui_bar_shield', { onLoaded: () => {
+      this.shieldArtOk = true;
+      this.shieldArt.getComponent(UITransform)!.setAnchorPoint(1, 0.5);
+      if (this.lastShield >= 0) this.redrawShield(this.lastShield);
+    }});
+    this.shieldArt.active = false;
     this.pctTxt = label(top, WX(698, 48), WYB(176, 24), '100%', { size: 16, color: '#9FE08A', bold: true });
 
     /* 英雄头顶 普攻/技能 图标（耐久条正下方，压墙顶，不遮挡耐久条；每英雄一套）
@@ -131,7 +154,8 @@ export class HUD {
     this.dir.heroes.forEach((h, i) => this.skills.push(this.buildSkillBadge(top, i, h)));
   }
 
-  /** 第 i 钮：底基 504，向上每钮 +110；点击就绪即施放，未满→Tips */
+  /** 第 i 钮：底基 504，向上每钮 +110；点击就绪即施放，未满→Tips
+   *  美术：金座/激活座/灰座三态贴图（u.waterR 在美术到位后收小到内孔） */
   private buildUlt(top: Node, i: number, hero: HeroBase): UltUI {
     const ux = WX(636, 90), uy = WYB(504 + i * 110, 90);
     const glow = gcircle(top, ux, uy, 56, CA(PAL.gold, 0.16));
@@ -142,6 +166,9 @@ export class HUD {
     const bright = gcircle(top, ux, uy, 45, CA(PAL.gold, 0.42));
     bright.active = false;
     const gray = gcircle(top, ux, uy, 45, CA('#3A4250', 0.9), '#77808E', 1.5);
+    artSprite(btn, 0, 0, 90, 90, 'ui_circ_icon_gold', { belowIdx: 0 });
+    artSprite(bright, 0, 0, 90, 90, 'ui_circ_icon_gold_active', { belowIdx: 0 });
+    artSprite(gray, 0, 0, 90, 90, 'ui_circ_icon_gray', { belowIdx: 0 });
     const water = new Node('ultWater' + i);
     water.setParent(top);
     water.setPosition(ux, uy, 0);
@@ -165,20 +192,26 @@ export class HUD {
     btn.on(Node.EventType.TOUCH_END, () => {
       if (this.dir.tryCastUlt(i) === 'charging') this.dir.showTips('ult', i);
     });
-    return { ux, uy, glow, btn, bright, gray, water, waterG, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
+    const ui: UltUI = { ux, uy, glow, btn, bright, gray, water, waterG, waterR: 43, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
+    // 美术金座内孔小于程序圆：到位后收金水半径（缓存命中时同步回调，ui 已就绪）
+    uxFrame('ui_circ_icon_gold', sf => { if (sf) ui.waterR = 27; });
+    return ui;
   }
 
-  /** 头顶图标对：普攻(-27)/技能(+27)，锚定各自英雄 */
+  /** 头顶图标对：普攻(-27)/技能(+27)，锚定各自英雄（美术：金/蓝座 + 灰化座） */
   private buildSkillBadge(top: Node, i: number, hero: HeroBase): SkillUI {
     const cy = WYB(126, 46);
     const atkX = hero.x - 27, cx = hero.x + 27;
     const atkIcon = gcircle(top, atkX, cy, 23, CA(PAL.gold, 0.3), PAL.gold, 2);
     label(atkIcon, 0, 0, '攻', { size: 18, color: PAL.gold, bold: true });
+    artSprite(atkIcon, 0, 0, 46, 46, 'ui_circ_icon_gold', { belowIdx: 0 });
     atkIcon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('atk', i));
     const icon = gcircle(top, cx, cy, 23, CA(PAL.blue, 0.3), PAL.blue, 2);
     const glyph = label(icon, 0, 0, '技', { size: 18, color: PAL.blue, bold: true });
+    artSprite(icon, 0, 0, 46, 46, 'ui_circ_icon_blue', { belowIdx: 0 });
     icon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('skill', i));
     const gray = gcircle(top, cx, cy, 23, CA('#3A4250', 0.9), '#77808E', 1.5);
+    artSprite(gray, 0, 0, 46, 46, 'ui_circ_icon_gray', { belowIdx: 0 });
     gray.active = false;
     const pie = new Node('skillPie' + i);
     pie.setParent(top);
@@ -295,7 +328,7 @@ export class HUD {
     const g = u.waterG;
     g.clear();
     if (pct <= 0.01) return;
-    const R = 43;
+    const R = u.waterR;
     if (pct >= 0.995) {
       g.fillColor = CA(PAL.gold, flash ? 0.98 : 0.9);
       g.circle(0, 0, R);
@@ -440,19 +473,33 @@ export class HUD {
     }
   }
 
-  /** 盾值胶囊：从耐久条右端向左覆盖，宽度=盾值/耐久上限（§3.11） */
+  /** 盾值胶囊：从耐久条右端向左覆盖，宽度=盾值/耐久上限（§3.11）；美术条优先 */
   private redrawShield(shield: number): void {
     const g = this.shieldG;
-    g.clear();
-    if (shield <= 0) { this.shieldNode.active = false; return; }
-    this.shieldNode.active = true;
+    if (shield <= 0) {
+      this.shieldNode.active = false;
+      this.shieldArt.active = false;
+      this.shieldVal.active = false;
+      return;
+    }
+    this.shieldVal.active = true;
     const barW = 640, barH = 24;
     const w = Math.max(40, Math.min(barW - 4, (shield / this.dir.line.maxHp) * barW));
-    g.fillColor = CA(PAL.blue, 0.55);
-    g.roundRect(-w / 2, -barH / 2, w, barH, barH / 2);
-    g.fill();
-    // 耐久条右端(画布 x=27.5+320=347.5) 向左收
-    this.shieldNode.setPosition(347.5 - 2 - w / 2, WYB(176, 24), 0);
+    const cx = 347.5 - 2 - w / 2;   // 耐久条右端(画布 x=347.5) 向左收
+    if (this.shieldArtOk) {
+      this.shieldNode.active = false;
+      this.shieldArt.active = true;
+      this.shieldArt.getComponent(UITransform)!.setContentSize(w, barH);
+    } else {
+      this.shieldArt.active = false;
+      this.shieldNode.active = true;
+      g.clear();
+      g.fillColor = CA(PAL.blue, 0.55);
+      g.roundRect(-w / 2, -barH / 2, w, barH, barH / 2);
+      g.fill();
+      this.shieldNode.setPosition(cx, WYB(176, 24), 0);
+    }
+    this.shieldVal.setPosition(cx, WYB(176, 24), 0);
     setText(this.shieldVal, String(shield));
   }
 }

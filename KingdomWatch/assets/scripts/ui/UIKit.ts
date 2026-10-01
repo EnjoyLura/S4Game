@@ -1,9 +1,11 @@
 /**
  * 程序化 UI 组件库（占位渲染：色块+描边+文字，视觉对齐 UX 线稿 token）
- * 后续美术资源到位后，仅需把 gpanel/gcircle 等替换为 Sprite(assetMap) —— 见 UX/wireframe.html 资源清单
+ * 美术资源已接入：btn/gbar/gswitch 内部优先加载 assets/resources/ux 同名贴图，
+ * 加载失败保持程序绘制兜底 —— 见 UX/wireframe.html 资源清单与 ui/Ux.ts
  */
-import { Color, Graphics, Label, Layers, Node, UITransform, UIOpacity, tween, Vec3, BlockInputEvents } from 'cc';
+import { Color, Graphics, Label, Layers, Node, Sprite, UITransform, UIOpacity, tween, Vec3, BlockInputEvents } from 'cc';
 import { LO, PAL } from '../config/GameConfig';
+import { artSetFrame, artSprite, uxFrame } from './Ux';
 
 export function C(hex: string): Color {
   const c = new Color();
@@ -123,6 +125,28 @@ export function gbar(parent: Node, x: number, y: number, w: number, h: number, f
   const fn = N('fill', bg, 0, 0, w, h);
   const g = fn.addComponent(Graphics);
   const base = toColor(fill);
+  /* 美术条：轨道垫底 + 白填充染色（金/绿/蓝/红全靠 tint）；加载失败保持程序绘制 */
+  let artFillSp: Sprite | null = null;
+  let artFillNode: Node | null = null;
+  let lastPct = 1;
+  const applyArt = (pct: number): void => {
+    if (!artFillNode || !artFillSp) return;
+    const fw = Math.max(0, Math.min(1, pct)) * (w - 4);
+    artFillNode.getComponent(UITransform)!.setContentSize(Math.max(fw, 0.01), h - 4);
+    artFillNode.active = fw > 0.5;
+  };
+  artSprite(bg, 0, 0, w, h, 'ui_bar_track', { belowIdx: 0, onLoaded: () => {
+    const bgG = bg.getComponent(Graphics);
+    if (bgG) bgG.enabled = false;
+  }});
+  artSprite(bg, 0, 0, w, h, 'ui_bar_fill_white', { onLoaded: n => {
+    n.getComponent(UITransform)!.setAnchorPoint(0, 0.5);
+    n.setPosition(-w / 2 + 2, 0, 0);
+    artFillNode = n;
+    artFillSp = n.getComponent(Sprite);
+    g.enabled = false;
+    applyArt(lastPct);
+  }});
   const draw = (pct: number, color?: FillLike) => {
     g.clear();
     const fw = Math.max(0, Math.min(1, pct)) * (w - 4);
@@ -130,6 +154,11 @@ export function gbar(parent: Node, x: number, y: number, w: number, h: number, f
       g.fillColor = color ? toColor(color) : base;
       g.roundRect(-w / 2 + 2, -h / 2 + 2, fw, h - 4, (h - 4) / 2);
       g.fill();
+    }
+    if (artFillSp) {
+      artFillSp.color = color ? toColor(color) : base;
+      lastPct = pct;
+      applyArt(pct);
     }
   };
   draw(1);
@@ -140,7 +169,27 @@ export function btn(parent: Node, x: number, y: number, w: number, h: number, te
   color: FillLike, cb: () => void, size = 22): Node {
   const n = gpanel(parent, x, y, w, h, color, '#FFFFFF66', 2, 14);
   n.name = 'btn_' + text;
-  label(n, 0, 0, text, { size, color: '#241C12', bold: true, w, h });
+  const lbl = label(n, 0, 0, text, { size, color: '#241C12', bold: true, w, h });
+  /* 美术按钮三态：金/绿（含按下/禁用帧）；#5A6472 视为禁用态用灰帧；失败保持程序绘制 */
+  const isColor = (v: string) => typeof color === 'string' && color === v;
+  const style = isColor(PAL.gold) ? 'ui_btn_primary' : isColor(PAL.green) ? 'ui_btn_green'
+    : isColor('#5A6472') ? 'ui_btn_primary_disabled' : null;
+  if (style) {
+    const isDisabled = style.endsWith('_disabled');
+    const normalId = style;
+    const pressId = style.replace('_disabled', '_press');
+    let sp: Sprite | null = null;
+    artSprite(n, 0, 0, w, h, normalId, { belowIdx: 0, onLoaded: () => {
+      sp = (n.getChildByName('art:' + normalId) as Node | null)?.getComponent(Sprite) || null;
+      const l = lbl.getComponent(Label);
+      if (l) l.color = C(isDisabled ? '#AAB2BD' : '#FFF3D6');
+    }});
+    if (!isDisabled) uxFrame(pressId, () => {}); // 预热按下帧，首次按下即换
+    n.on(Node.EventType.TOUCH_START, () => { if (sp) artSetFrame(sp, pressId); });
+    const restore = () => { if (sp) artSetFrame(sp, normalId); };
+    n.on(Node.EventType.TOUCH_CANCEL, restore);
+    n.on(Node.EventType.TOUCH_END, restore);
+  }
   n.on(Node.EventType.TOUCH_END, (e: unknown) => {
     const ev = e as { propagationStopped?: boolean };
     if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
@@ -149,7 +198,8 @@ export function btn(parent: Node, x: number, y: number, w: number, h: number, te
   return n;
 }
 
-/** 左右旋钮开关（线稿④-2）：开=绿轨旋钮居右 / 关=灰轨旋钮居左；disabled 置灰不可点 */
+/** 左右旋钮开关（线稿④-2）：开=绿轨旋钮居右 / 关=灰轨旋钮居左；disabled 置灰不可点
+ *  美术开关 ui_switch_on/off/disabled 三帧切换，加载失败保持程序绘制 */
 export function gswitch(parent: Node, x: number, y: number, w: number, h: number, on: boolean,
   onChange?: (v: boolean) => void, disabled = false): Node {
   const n = N('switch', parent, x, y, w, h);
@@ -165,12 +215,22 @@ export function gswitch(parent: Node, x: number, y: number, w: number, h: number
     g.fill();
   };
   draw(on);
+  const artId = () => disabled ? 'ui_switch_disabled' : on ? 'ui_switch_on' : 'ui_switch_off';
+  let sp: Sprite | null = null;
+  let artOk = false;
+  artSprite(n, 0, 0, w, h, artId(), { onLoaded: node => {
+    sp = node.getComponent(Sprite);
+    artOk = true;
+    g.enabled = false;
+  }});
+  ['ui_switch_on', 'ui_switch_off'].forEach(id => uxFrame(id, () => {})); // 预热
   if (!disabled && onChange) {
     n.on(Node.EventType.TOUCH_END, (e: unknown) => {
       const ev = e as { propagationStopped?: () => void };
       if (ev && ev.propagationStopped) ev.propagationStopped();
       on = !on;
-      draw(on);
+      if (artOk && sp) artSetFrame(sp, artId());
+      else draw(on);
       onChange(on);
     });
   }
