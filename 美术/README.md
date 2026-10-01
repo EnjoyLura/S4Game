@@ -7,9 +7,11 @@
 ```
 美术/
 ├── README.md            ← 本文件（存放规则 + 工具用法）
-├── tools/               ← 沉淀工具（生图编排 / 切片 / 批次配置）
+├── tools/               ← 沉淀工具（生图编排 / 切片 / 抠底 / 九宫格合成 / 批次配置）
 │   ├── art_gen.py       ← 批量生图：读批次 JSON → 调 CLI → 实测尺寸 → 记录 manifest.json
 │   ├── art_slice.py     ← 批量图切片：网格切格 → alpha 裁边 → 缩放 → 落盘
+│   ├── alpha_key.py     ← RGB 生图抠透明底（中转站透明底不保证生效时的兜底）
+│   ├── compose_9slice.py← 九宫格素材重排版：端头等比缩放+中段拉伸，输出游戏渲染比例
 │   └── batch1.json      ← 第一批生成清单（第二批照抄改 prompt 即可）
 ├── 基准/                ← 风格基准图（图生图的 ref，风格一致性的锚）
 │   ├── 图标风格基准.png   ← 图标类图生图参考
@@ -64,12 +66,25 @@ python art_slice.py --sheet ../原图/批次1_2026-10-01/G1_图标A.png \
 gpt-image-2-skill --json transparent verify --input <文件.png> --profile icon --strict
 ```
 
-## 五、第二批（人工美术）迭代指引
+## 五、第二批（人工美术）迭代指引 —— 换图三步，零代码
 
-1. 人工图按「二、命名规则」命名，直接放进 `切图/对应类别/` 并同步 `KingdomWatch/assets/resources/ux/`；同名覆盖即完成替换，无需改代码。
-2. 若人工图也是批量大图，可复用 `art_slice.py`（`--cols/--rows/--names` 照配置）。
-3. prompt 与基准图都留在 `tools/batch*.json` 与 `基准/`，方便 AI 补齐缺失项时保持同风格。
-4. 每批次原图+manifest.json 归档在 `原图/批次N_日期/`，可追溯每张图的生成参数。
+**任意分辨率均可，唯一硬要求：与旧图同比例（宽高比）。** 运行时（`ui/Ux.ts`）会按实际文件
+尺寸自动换算九宫格 insets 与节点缩放，非九宫格图自动等比缩放——分辨率不再敏感。
+
+1. **替换**：人工图按「二、命名规则」命名，直接覆盖 `切图/对应类别/` 与
+   `KingdomWatch/assets/resources/ux/` 的同名文件。图标/头像/星星等非九宫格图到此结束。
+2. **九宫格图跑一次合成**（面板/按钮/页签/横幅/血条轨道）：
+   `python tools/compose_9slice.py` —— 端头等比缩放保圆弧、中段拉伸补宽度，
+   新素材在 `COMPOSE` 表加一行（源文件名 + 目标 2× 渲染尺寸 + 端头宽/边框厚）即可。
+3. **构建发布**：Cocos 构建 → `tools/patch-web-dpr.py` → 部署。
+
+其余要点：
+- 生图返回 RGB 无透明通道时（看 manifest 的 mode），先 `python tools/alpha_key.py <文件>` 再切片。
+- 人工图也是批量大图时复用 `art_slice.py`（`--cols/--rows/--names` 照配置）。
+- prompt 与基准图留在 `tools/batch*.json` 与 `基准/`，AI 补缺失项时保持同风格。
+- 每批次原图+manifest.json 归档 `原图/批次N_日期/`，可追溯。
+- **九宫格出图规范**（给美术的要求）：装饰只放四角，边中点与中心完全平坦；
+  长条类（血条/胶囊）端头圆弧半径 = 半高，中心无任何花纹。
 
 ## 六、清单对应
 

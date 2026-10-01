@@ -31,33 +31,45 @@ export function uxFrame(id: string, cb: (sf: SpriteFrame | null) => void): void 
 }
 
 /**
- * 九宫格内边距（源纹理像素；Cocos SLICED 边框按纹理像素 1:1 渲染）
- * 取值约束：t+b ≤ 最小使用高度、l+r ≤ 最小使用宽度（如按钮最小 100×44 → 边 18），
- * 否则小尺寸下九宫格崩坏。切片源约为设计稿的 1.3~2.9 倍，边值偏小是刻意的。
+ * 九宫格参数表：canon=合成基准尺寸（compose_9slice.py 输出）、inset=基准纹理像素边距、scale=基准→设计换算
+ * 运行时按实际加载文件尺寸自动换算 insets 与节点缩放 —— 换任何分辨率的同名文件都自适应，
+ * 边框始终渲染为设计像素（inset × scale），端头圆弧不再被拉尖。
+ * 约束：inset×scale×2 ≤ 该素材最小渲染宽/高。
  */
-const SLICE9: Record<string, [number, number, number, number]> = {
-  ui_panel_dark_gold: [24, 24, 24, 24],
-  ui_panel_dark_white: [24, 24, 24, 24],
-  ui_btn_primary: [18, 18, 18, 18],
-  ui_btn_primary_press: [18, 18, 18, 18],
-  ui_btn_primary_disabled: [18, 18, 18, 18],
-  ui_btn_green: [18, 18, 18, 18],
-  ui_btn_green_press: [18, 18, 18, 18],
-  ui_btn_green_disabled: [18, 18, 18, 18],
-  ui_banner_warn: [30, 30, 30, 30],
-  ui_banner_title: [100, 100, 40, 40],
-  ui_banner_hazard: [44, 44, 44, 44],
-  ui_wave_pill: [26, 26, 26, 26],
-  ui_tab_item: [30, 30, 30, 30],
-  ui_tab_item_active: [30, 30, 30, 30],
-  ui_bar_track: [20, 20, 4, 4],
-  ui_card_frame_white: [40, 40, 44, 44],
-  ui_card_frame_blue: [40, 40, 44, 44],
-  ui_card_frame_purple: [40, 40, 44, 44],
-  ui_card_header_white: [40, 40, 22, 22],
-  ui_card_header_blue: [40, 40, 22, 22],
-  ui_card_header_purple: [40, 40, 22, 22],
+interface Slice9Def { canon: [number, number]; inset: [number, number, number, number]; scale: number; }
+const SLICE9: Record<string, Slice9Def> = {
+  ui_panel_dark_gold: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
+  ui_panel_dark_white: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
+  ui_btn_primary: { canon: [600, 176], inset: [48, 48, 16, 16], scale: 0.5 },
+  ui_btn_primary_press: { canon: [600, 176], inset: [48, 48, 16, 16], scale: 0.5 },
+  ui_btn_primary_disabled: { canon: [600, 176], inset: [48, 48, 16, 16], scale: 0.5 },
+  ui_btn_green: { canon: [600, 176], inset: [48, 48, 16, 16], scale: 0.5 },
+  ui_btn_green_press: { canon: [600, 176], inset: [48, 48, 16, 16], scale: 0.5 },
+  ui_btn_green_disabled: { canon: [600, 176], inset: [48, 48, 16, 16], scale: 0.5 },
+  ui_banner_warn: { canon: [1040, 144], inset: [43, 43, 10, 10], scale: 0.5 },
+  ui_banner_title: { canon: [1040, 176], inset: [87, 87, 28, 28], scale: 0.5 },
+  ui_banner_hazard: { canon: [1180, 200], inset: [65, 65, 24, 24], scale: 0.5 },
+  ui_wave_pill: { canon: [300, 120], inset: [60, 60, 19, 19], scale: 0.5 },
+  ui_tab_item: { canon: [660, 144], inset: [47, 47, 10, 10], scale: 0.5 },
+  ui_tab_item_active: { canon: [660, 144], inset: [47, 47, 10, 10], scale: 0.5 },
+  ui_bar_track: { canon: [1280, 44], inset: [22, 22, 4, 4], scale: 0.5 },
+  ui_card_frame_white: { canon: [369, 501], inset: [40, 40, 44, 44], scale: 1 },
+  ui_card_frame_blue: { canon: [369, 501], inset: [40, 40, 44, 44], scale: 1 },
+  ui_card_frame_purple: { canon: [369, 501], inset: [40, 40, 44, 44], scale: 1 },
+  ui_card_header_white: { canon: [400, 104], inset: [65, 65, 11, 11], scale: 0.5 },
+  ui_card_header_blue: { canon: [400, 104], inset: [65, 65, 11, 11], scale: 0.5 },
+  ui_card_header_purple: { canon: [400, 104], inset: [65, 65, 11, 11], scale: 0.5 },
 };
+
+/** 按实际文件尺寸换算并写入九宫格 insets（换分辨率文件自适应的关键） */
+export function applySlice9(id: string, sf: SpriteFrame): void {
+  const c = SLICE9[id];
+  if (!c) return;
+  sf.insetLeft = Math.max(0, Math.round(c.inset[0] * sf.width / c.canon[0]));
+  sf.insetRight = Math.max(0, Math.round(c.inset[1] * sf.width / c.canon[0]));
+  sf.insetTop = Math.max(0, Math.round(c.inset[2] * sf.height / c.canon[1]));
+  sf.insetBottom = Math.max(0, Math.round(c.inset[3] * sf.height / c.canon[1]));
+}
 
 export interface ArtOpts {
   /** true=九宫格拉伸（SLICE9 表内 ID 默认 true） */
@@ -85,11 +97,16 @@ export function artSprite(parent: Node, x: number, y: number, w: number, h: numb
     if (!sf || !n.isValid) return;
     sp.spriteFrame = sf;
     if (o.sliced !== false && SLICE9[id]) {
+      const c = SLICE9[id];
       sp.type = Sprite.Type.SLICED;
-      sf.insetLeft = SLICE9[id][0];
-      sf.insetRight = SLICE9[id][1];
-      sf.insetTop = SLICE9[id][2];
-      sf.insetBottom = SLICE9[id][3];
+      applySlice9(id, sf);
+      // 文件分辨率 ≠ 基准时按比例缩放节点：边框渲染像素 = inset×scale 恒定（设计像素）
+      const sx = c.scale * c.canon[0] / sf.width;
+      const sy = c.scale * c.canon[1] / sf.height;
+      if (Math.abs(sx - 1) > 0.01 || Math.abs(sy - 1) > 0.01) {
+        n.setScale(sx, sy, 1);
+        n.getComponent(UITransform)!.setContentSize(w / sx, h / sy);
+      }
     } else if (o.fit !== false || o.cover) {
       // 等比适配：contain 装进盒子 / cover 盖满盒子（源比例失真是"拉伸变形"的主因）
       const r = sf.rect;
@@ -108,9 +125,13 @@ export function artSprite(parent: Node, x: number, y: number, w: number, h: numb
   return n;
 }
 
-/** 给已有 Sprite 换帧（按钮态/开关态）；失败不动 */
+/** 给已有 Sprite 换帧（按钮态/开关态）；失败不动；九宫格 ID 换态帧同步落 insets */
 export function artSetFrame(sp: Sprite, id: string): void {
-  uxFrame(id, sf => { if (sf && sp.isValid) sp.spriteFrame = sf; });
+  uxFrame(id, sf => {
+    if (!sf || !sp.isValid) return;
+    sp.spriteFrame = sf;
+    if (SLICE9[id]) applySlice9(id, sf);
+  });
 }
 
 /** 图标铺满座：A2 图标盖在圆形座上（覆盖程序 emoji 兜底） */
