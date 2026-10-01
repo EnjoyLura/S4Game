@@ -99,13 +99,12 @@ function txt(l,t,w,h,inner,cls,css){var s="left:"+l/2+"px;top:"+t/2+"px;width:"+
 function E(sel,html){document.querySelector(sel).innerHTML=html;}
 
 /* ============ 公共部件 ============ */
-/* 顶栏：金币+钻石双货币（已对齐决策：不加头像/体力） */
+/* 顶栏：金币+钻石双货币（已对齐决策：不加头像/体力，不显示游戏标题） */
 function topbar(){
   var s='';
   s+=ph("ui_topbar_main",0,0,750,90,{cls:"dark",txt:""});
   s+=ph("ui_icon_coin",28,20,50,50,{cls:"gold circ",txt:"🪙"});
   s+=txt(84,20,110,50,"1,451",'','font-size:12px');
-  s+=txt(215,20,320,50,"<b style='color:#f2b23e;font-size:14px'>王 国 守 望</b>",'','font-size:12px');
   s+=ph("ui_icon_diamond",595,20,50,50,{cls:"blue circ",txt:"💎"});
   s+=txt(650,20,90,50,"20",'','font-size:12px');
   return s;
@@ -433,7 +432,7 @@ function renderMainSpec(){
   '<h3 class="gh">1 · 全局决议（六轮对齐确认）</h3>'+
   '<table><tr><th>项</th><th>决议</th></tr>'+
   '<tr><td>美术风格</td><td>保留奇幻手绘风（金框羊皮纸），布局结构对齐参考图</td></tr>'+
-  '<tr><td>顶栏</td><td>金币+钻石双货币，不加头像/体力/钥匙</td></tr>'+
+  '<tr><td>顶栏</td><td>金币+钻石双货币，不加头像/体力/钥匙，不显示游戏标题</td></tr>'+
   '<tr><td>商业化</td><td>纯单机：无抽卡/无充值/无广告位/无限购刷新</td></tr>'+
   '<tr><td>货币分配</td><td>英雄/武器=钻石；装备/材料=金币</td></tr>'+
   '<tr><td>装备体系</td><td>六槽（武器×2+头盔/饰品/手套/衣服）× 品质(白绿蓝紫) × 阶级</td></tr>'+
