@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>王国守望 · 主界面 UX线稿 v1.0</title>
+<style>
+:root{
+  --wood:#3a2e23;--wood2:#57432c;--parch:#e9dcb5;--gold:#f2b23e;--gold2:#c98a1a;
+  --green:#7fb841;--orange:#ef9d3c;--red:#e5484d;--blue:#4fa8ff;--purple:#b96bff;
+  --ink:#241c12;--line:rgba(255,255,255,.45);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:"Microsoft YaHei",system-ui,sans-serif;background:#15181c;color:#e8e4da;display:flex;flex-direction:column;overflow:hidden}
+#top{height:48px;background:#1d2126;border-bottom:1px solid #2c323a;display:flex;align-items:center;gap:14px;padding:0 14px;flex:none}
+#top h1{font-size:15px;color:var(--gold)}
+#top .tg{display:flex;align-items:center;gap:5px;font-size:12px;color:#aab;cursor:pointer;user-select:none}
+#top .tg input{accent-color:var(--gold)}
+#top .sp{flex:1}
+#top .ver{font-size:11px;color:#667}
+#wrap{flex:1;display:flex;min-height:0}
+#nav{width:196px;flex:none;background:#1a1e23;border-right:1px solid #2c323a;overflow-y:auto;padding:10px 8px}
+#nav .grp{font-size:11px;color:#778;margin:10px 6px 4px}
+#nav button{display:block;width:100%;text-align:left;background:none;border:0;color:#cdd2d8;font-size:13px;padding:8px 10px;border-radius:8px;cursor:pointer}
+#nav button:hover{background:#242a31}
+#nav button.on{background:var(--gold);color:#241c12;font-weight:700}
+#nav button .en{display:block;font-size:10px;color:inherit;opacity:.6}
+#stage{flex:1;overflow:auto;display:flex;justify-content:center;align-items:flex-start;padding:22px;background:
+ radial-gradient(1200px 600px at 50% -100px,#232a33,#15181c)}
+.phone{width:375px;height:667px;flex:none;position:relative;background:#000;border-radius:22px;
+ outline:10px solid #262b31;box-shadow:0 24px 60px rgba(0,0,0,.6);overflow:hidden}
+.phone.grid::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:99;
+ background-image:linear-gradient(rgba(120,200,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(120,200,255,.08) 1px,transparent 1px);
+ background-size:25px 25px}
+.phone.safe::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:98;
+ border-top:22px solid rgba(229,72,77,.14);border-bottom:17px solid rgba(229,72,77,.14)}
+.screen{position:absolute;inset:0;background:#101418;overflow:hidden}
+/* 占位组件 */
+.ph{position:absolute;border:1.5px dashed var(--line);background:rgba(130,140,150,.16);border-radius:5px;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;overflow:hidden;z-index:5}
+.ph b{font-size:9px;color:#fff;text-shadow:0 1px 2px #000;text-align:center;line-height:1.25;padding:0 3px;font-weight:600}
+.ph span{font-size:7.5px;font-family:Consolas,monospace;color:#ffe9a8;text-shadow:0 1px 2px #000}
+.ph em{font-size:7px;font-style:normal;font-family:Consolas,monospace;color:rgba(255,255,255,.6)}
+body.noanno .ph span,body.noanno .ph em{display:none}
+.ph.circ{border-radius:50%}
+.ph.dark{background:rgba(20,24,30,.72)}
+.ph.gold{background:rgba(242,178,62,.14);border-color:var(--gold)}
+.ph.red{background:rgba(229,72,77,.12);border-color:var(--red)}
+.ph.blue{background:rgba(79,168,255,.10);border-color:var(--blue)}
+.ph.purple{background:rgba(185,107,255,.10);border-color:var(--purple)}
+.ph.green{background:rgba(127,184,65,.10);border-color:var(--green)}
+.ph.white{background:rgba(201,214,223,.10);border-color:rgba(201,214,223,.8)}
+.ph.lock{background:rgba(90,100,114,.25);border-style:dotted;filter:saturate(.3)}
+.txt{position:absolute;z-index:6;display:flex;align-items:center;justify-content:center;color:#fff;
+ text-shadow:0 1px 2px rgba(0,0,0,.8);text-align:center;line-height:1.2}
+.bar{position:absolute;height:6px;background:rgba(255,255,255,.12);border-radius:3px;z-index:6;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--green);border-radius:3px}
+#notes{width:352px;flex:none;background:#1a1e23;border-left:1px solid #2c323a;overflow-y:auto;padding:14px}
+#notes h2{font-size:15px;color:var(--gold);margin-bottom:8px}
+#notes h3{font-size:12px;color:#8fc; margin:12px 0 5px;border-left:3px solid var(--gold);padding-left:6px}
+#notes p,#notes li{font-size:12px;line-height:1.65;color:#c8cdd4}
+#notes ul{padding-left:16px}
+#notes table{width:100%;border-collapse:collapse;margin:6px 0;font-size:11px}
+#notes th{background:#242a31;color:#9ab;text-align:left;padding:4px 6px;font-weight:600}
+#notes td{border-top:1px solid #2c323a;padding:4px 6px;color:#c8cdd4;vertical-align:top}
+#notes code{font-family:Consolas,monospace;background:#242a31;padding:0 4px;border-radius:4px;color:#ffe9a8;font-size:10.5px}
+#stage .sheet{width:860px;background:#1a1e23;border:1px solid #2c323a;border-radius:14px;padding:20px 24px;margin:0 auto}
+.sheet h2{color:var(--gold);font-size:17px;margin-bottom:4px}
+.sheet p{font-size:12.5px;color:#c8cdd4;line-height:1.7}
+.sheet table{width:100%;border-collapse:collapse;font-size:11.5px;margin:8px 0 18px}
+.sheet th{background:#242a31;color:#9ab;text-align:left;padding:5px 8px;position:sticky;top:0}
+.sheet td{border-top:1px solid #2c323a;padding:5px 8px;color:#c8cdd4}
+.sheet td code{font-family:Consolas,monospace;color:#ffe9a8;font-size:10.5px}
+.sheet .gh{color:#8fc;font-size:13px;margin:14px 0 2px}
+.sw{display:inline-block;width:13px;height:13px;border-radius:3px;vertical-align:-2px;margin-right:4px;border:1px solid rgba(255,255,255,.25)}
+</style>
+</head>
+<body class="">
+<header id="top">
+  <h1>王国守望 · 主界面 UX 线稿</h1>
+  <label class="tg"><input type="checkbox" id="tgAnno" checked>资产标注</label>
+  <label class="tg"><input type="checkbox" id="tgSafe">安全区</label>
+  <label class="tg"><input type="checkbox" id="tgGrid">网格(50px)</label>
+  <div class="sp"></div>
+  <div class="ver">设计分辨率 750×1334 · 线稿半比例 375×667 · v1.0 · 对齐《向僵尸开炮》五主界面</div>
+</header>
+<div id="wrap">
+  <nav id="nav"></nav>
+  <main id="stage"></main>
+  <aside id="notes"></aside>
+</div>
+<script>
+/* ============ 工具（与战斗线稿同款：设计坐标 750×1334，渲染半比例） ============ */
+function ph(id,l,t,w,h,o){o=o||{};var s="left:"+l/2+"px;top:"+t/2+"px;width:"+w/2+"px;height:"+h/2+"px;"+(o.css||"");
+  return '<div class="ph '+(o.cls||"")+'" style="'+s+'"><b>'+(o.txt||"&nbsp;")+'</b><span>'+id+'</span><em>'+w+"×"+h+'</em></div>';}
+function txt(l,t,w,h,inner,cls,css){var s="left:"+l/2+"px;top:"+t/2+"px;width:"+w/2+"px;height:"+h/2+"px;"+(css||"");
+  return '<div class="txt '+(cls||"")+'" style="'+s+'">'+inner+'</div>';}
+function E(sel,html){document.querySelector(sel).innerHTML=html;}
+
+/* ============ 公共部件 ============ */
+/* 顶栏：金币+钻石双货币（已对齐决策：不加头像/体力） */
+function topbar(){
+  var s='';
+  s+=ph("ui_topbar_main",0,0,750,90,{cls:"dark",txt:""});
+  s+=ph("ui_icon_coin",28,20,50,50,{cls:"gold circ",txt:"🪙"});
+  s+=txt(84,20,110,50,"1,451",'','font-size:12px');
+  s+=txt(215,20,320,50,"<b style='color:#f2b23e;font-size:14px'>王 国 守 望</b>",'','font-size:12px');
+  s+=ph("ui_icon_diamond",595,20,50,50,{cls:"blue circ",txt:"💎"});
+  s+=txt(650,20,90,50,"20",'','font-size:12px');
+  return s;
+}
+/* 底部导航：五页签 */
+function navbar(active){
+  var names=["商店","英雄","关卡","升级","基地"],icons=["🛒","🦸","⚔️","⬆️","🏰"],s='';
+  s+=ph("ui_navbar",0,1212,750,122,{cls:"dark",txt:""});
+  for(var i=0;i<5;i++){
+    var x=29+i*140;
+    s+=ph("ui_tab_item"+(i==active?"_active":""),x,1222,132,102,
+      {cls:i==active?"gold":"",txt:icons[i]+"<br>"+names[i]+(i==active?"<br>(高亮)":"")});
+  }
+  return s;
+}
+/* 页面背景：复用场景图+暗化 */
+function pagebg(){return ph("scenes/scene_1_1",0,0,750,1334,{cls:"dark",css:"background:rgba(46,64,52,.30);border-color:rgba(120,180,110,.4)",txt:"主城背景 · 复用关卡场景图+暗化遮罩(占位)"});}
+/* 撕纸标题横幅 */
+function banner(t,y){return ph("ui_banner_title",115,y,520,88,{cls:"gold",txt:t})+"";}
+
+/* ============ 屏幕定义 ============ */
+var SCREENS={};
+
+/* ---- M1 商店 ---- */
+SCREENS.shop={name:"① 商店",en:"Shop",render:function(){
+  var s=pagebg()+topbar();
+  s+=banner("商 店",110);
+  /* 四页签：武器(钻)/英雄(钻)/装备(金)/材料(金) */
+  var tabs=[["武器 ·💎","gold"],["英雄 ·💎",""],["装备 ·🪙",""],["材料 ·🪙",""]];
+  for(var i=0;i<4;i++){
+    var x=35+i*180;
+    s+=ph("ui_shop_tab",x,220,160,64,{cls:tabs[i][1],txt:tabs[i][0]+(i==0?"<br>(选中)":"")});
+  }
+  /* 商品卡 2×2（示例：武器页签）卡=图+名+品质阶级角标+价格按钮 */
+  var cards=[
+    ["ui_equip_wpn_bow","猎风长弓 · 绿1阶","ui_icon_diamond","800","green",""],
+    ["ui_equip_wpn_crossbow","鹰眼重弩 · 紫2阶","ui_icon_diamond","1,200","purple",""],
+    ["ui_equip_wpn_staff","翡翠法杖","ui_icon_diamond","—","lock","通关 1-3 解锁"],
+    ["ui_equip_wpn_hammer","巨锤 · 已拥有","ui_icon_diamond","已拥有","white","已拥有角标"]
+  ];
+  for(var c=0;c<4;c++){
+    var cx=35+(c%2)*350, cy=320+Math.floor(c/2)*330;
+    var d=cards[c];
+    s+=ph("ui_shop_card",cx,cy,330,300,{cls:d[4],txt:""});
+    s+=ph(d[0],cx+100,cy+25,130,130,{cls:d[4],txt:"商品图"});
+    s+=ph("ui_badge_tier",cx+8,cy+8,64,30,{cls:"dark",txt:"2阶"});
+    s+=txt(cx,cy+160,330,34,d[1],'','font-size:11px');
+    s+=ph(d[2],cx+70,cy+215,44,44,{cls:"circ",txt:""});
+    s+=ph("ui_btn_buy",cx+120,cy+210,180,54,{cls:d[4]=="lock"?"lock":"green",txt:d[3]+(d[4]=="lock"?" 🔒":" 购买")});
+  }
+  s+=txt(0,990,750,30,"↓ 网格可纵向滚动（材料/装备页签同构，每页 2~4 件）",'','font-size:9px;opacity:.55');
+  s+=navbar(0);
+  return s;
+},notes:{
+  layout:[
+    "顶栏双货币 + 撕纸标题「商 店」；四页签：武器/英雄(钻石)、装备/材料(金币)——与已确认的货币分配一致。",
+    "商品卡 <code>ui_shop_card</code> 330×300 双列网格：图 130、品质阶级角标 <code>ui_badge_tier</code>、名称、底部价格+购买钮。",
+    "品质决定卡框颜色（白/绿/蓝/紫 tint 同一张卡框图）；未解锁商品整卡灰化 + 解锁条件文字。",
+    "首批 12 件：武器2 + 英雄2(占位敬请期待) + 装备4 + 材料4；随章节阶段性解锁，不限购不刷新。"
+  ],
+  interact:[
+    "页签点击切换货架（滑动无动画直接切换）。",
+    "点商品卡 → 购买确认弹窗（复用 ui_panel_dark_white）：属性预览/价格/持有数 → 确认扣货币入背包。",
+    "货币不足：按钮灰化（disabled 态）+ 点击弹 toast「钻石不足」。",
+    "英雄页签商品=新英雄占位卡「敬请期待」，不可点。"
+  ],
+  diff:[
+    "参考商城是宝箱抽取+钥匙+充值页签 → 本作纯单机，仅保留固定货架购买（已确认不做抽卡/充值）。",
+    "参考商城顶部横幅大图 → 本作用撕纸标题横幅（奇幻风统一）。",
+    "参考商城货币栏含钥匙 → 本作顶栏只保留金币+钻石。"
+  ]
+}};
+
+/* ---- M2 英雄 ---- */
+SCREENS.heroes={name:"② 英雄",en:"Heroes",render:function(){
+  var s=pagebg()+topbar();
+  /* 英雄切换行 */
+  s+=ph("ui_btn_arrow",45,115,70,70,{cls:"gold circ",txt:"◀"});
+  s+=ph("ui_btn_arrow",635,115,70,70,{cls:"gold circ",txt:"▶"});
+  s+=txt(120,105,510,44,"<b style='font-size:15px'>艾拉·风羽</b>&nbsp;&nbsp;<span style='font-size:10px;color:#ffe08a'>弓手 · 远程输出</span>",'','font-size:13px');
+  s+=txt(120,150,510,34,"点头像/名字看属性与背景故事",'','font-size:9px;opacity:.6');
+  /* 中央大立绘 + 战力徽章 */
+  s+=ph("hero_aila_portrait",235,200,280,470,{txt:"英雄大立绘<br>(全身)"});
+  s+=ph("ui_power_badge",285,682,180,70,{cls:"gold",txt:"🔥 战力 1,234"});
+  /* 左列：属性/故事入口 */
+  s+=ph("ui_btn_attrs",30,220,76,76,{cls:"blue circ",txt:"属性"});
+  s+=ph("ui_btn_story",30,316,76,76,{cls:"blue circ",txt:"故事"});
+  /* 右侧六装备槽 2列×3行 */
+  var slots=[["武器1","green","绿2阶"],["武器2","","空槽+"],["头盔","blue","蓝1阶"],["饰品","","空槽+"],["手套","white","白3阶"],["衣服","purple","紫1阶"]];
+  for(var i=0;i<6;i++){
+    var sx=495+(i%2)*112, sy=210+Math.floor(i/2)*112;
+    s+=ph("ui_slot_frame",sx,sy,100,100,{cls:slots[i][1],txt:slots[i][0]+"<br>"+slots[i][2]});
+  }
+  /* 我的背包 */
+  var bt=["全部","装备","材料"];
+  for(var t=0;t<3;t++){
+    s+=ph("ui_bag_tab",45+t*225,772,200,58,{cls:t==0?"gold":"",txt:bt[t]+(t==0?"(选中)":"")});
+  }
+  var q=["white","green","blue","purple","white","green","blue","","green","purple"];
+  for(var g=0;g<10;g++){
+    var gx=22+(g%5)*144, gy=850+Math.floor(g/5)*144;
+    if(q[g]) s+=ph("ui_item_cell",gx,gy,130,130,{cls:q[g],txt:(g<4?"装备":"材料")+"<br>×"+(g+2)});
+    else s+=ph("ui_item_cell",gx,gy,130,130,{cls:"lock",txt:"+"});
+  }
+  s+=txt(0,1150,750,26,"↓ 背包可纵向滚动 · 点格子弹物品详情（属性/出售?）",'','font-size:9px;opacity:.55');
+  s+=navbar(1);
+  return s;
+},notes:{
+  layout:[
+    "大图环绕式（对齐参考角色页）：单英雄大立绘 <code>hero_aila_portrait</code> 280×470 居中 + 左右箭头切换英雄。",
+    "右侧六装备槽 <code>ui_slot_frame</code> 100×100（2列×3行）：武器1/武器2/头盔/饰品/手套/衣服；品质边框色+阶级角标+等级。",
+    "战力徽章 <code>ui_power_badge</code> 立绘下方（参考图火焰 256 样式）。",
+    "左列「属性」「故事」圆钮；下方「我的背包」页签(全部/装备/材料) + 5 列格子网格 <code>ui_item_cell</code> 130×130。"
+  ],
+  interact:[
+    "◀▶ 切换已拥有英雄；切到未拥有英雄 → 剪影 + 「前往商店解锁」按钮跳转商店英雄页签。",
+    "点装备槽 → 背包选择弹窗（只列该槽位类型，按品质排序）→ 穿戴（原装备回背包）。",
+    "点头像/名字/属性钮 → 属性+背景故事弹窗：战力/攻击/攻速/技能预览/定位/背景故事。",
+    "点背包格 → 物品详情弹窗（属性/描述）；装备类额外给「穿戴」按钮。"
+  ],
+  diff:[
+    "参考角色页有时装/枪械外观系统 → 本作换成「属性」「故事」两个入口（外观后续版本再说）。",
+    "参考角色页有宝石镶嵌 → 已确认不做宝石，六槽为武器×2+防具×4。",
+    "参考背包有一键合成 → 本作无宝石无合成，背包纯查看+穿戴。"
+  ]
+}};
+
+/* ---- M3 关卡 ---- */
+SCREENS.levels={name:"③ 关卡",en:"Levels",render:function(){
+  var s=pagebg()+topbar();
+  /* 章节关卡标题 + 左右切关 */
+  s+=ph("ui_btn_arrow",40,115,70,70,{cls:"gold circ",txt:"◀"});
+  s+=ph("ui_btn_arrow",640,115,70,70,{cls:"gold circ",txt:"▶"});
+  s+=ph("ui_chapter_banner",125,105,500,100,{cls:"gold",txt:"第1章 腐朽森林<br><b style='font-size:13px'>1-1 前哨</b>"});
+  /* 当前关场景大图 */
+  s+=ph("scenes/scene_1_1",100,225,550,590,{cls:"dark",css:"background:rgba(46,64,52,.34);border-color:rgba(120,180,110,.45)",txt:"当前关场景大图<br>(波次10 · 哥布林军团)"});
+  s+=ph("ui_badge_new",560,245,70,30,{cls:"red",txt:"NEW"});
+  /* 三档通关星箱 */
+  var chests=[["成功通关","ui_chest_star1","gold","可领取"],["50%血量通关","ui_chest_star2","","未达标"],["完美通关","ui_chest_star3","purple","已领取"]];
+  for(var i=0;i<3;i++){
+    var x=40+i*235;
+    s+=ph("ui_chest_card",x,840,215,180,{cls:chests[i][2],txt:""});
+    s+=ph(chests[i][1],x+62,852,90,90,{cls:chests[i][2],txt:"宝箱"});
+    s+=txt(x,948,215,30,chests[i][0],'','font-size:10px');
+    s+=txt(x,978,215,28,chests[i][3],'','font-size:9px;color:'+(i==0?'#ffe08a':'#9aa'));
+  }
+  /* 开始战斗 */
+  s+=ph("ui_btn_green",125,1042,500,90,{cls:"green",txt:"⚔ 开 始 战 斗"});
+  s+=navbar(2);
+  return s;
+},notes:{
+  layout:[
+    "单关大图式（对齐参考战斗页）：章节横幅 <code>ui_chapter_banner</code> 500×100 + 左右箭头切关。",
+    "当前关场景大图 550×590（复用关卡场景美术，如 scene_1_1）；首通前显示 NEW 角标。",
+    "三档星箱 <code>ui_chest_card</code> 215×180 ×3：成功通关(1★)/50%血量(2★)/完美通关(3★)，映射现有星级判定。",
+    "底部绿色大按钮「开始战斗」→ 直接进入战斗。"
+  ],
+  interact:[
+    "◀▶ 在已解锁关卡范围内切换；已通关关卡可无限回刷（掉落继续生效）。",
+    "星箱状态三态：可领取(金光呼吸)/未达标(灰化+条件文字)/已领取(暗色+对勾)。点击可领取 → 领奖弹窗（金币/钻石）。",
+    "每档奖励一次性：1★=200金 / 2★=60钻 / 3★=150钻（默认值，可调）。",
+    "未解锁的下一关：箭头置灰 + 提示「通关当前关解锁」。"
+  ],
+  diff:[
+    "参考战斗页有普通/精英难度切换 → 已确认本期不做难度。",
+    "参考战斗页三档宝箱=通关/50%血/完美 → 本作完全一致，但奖励改为一次性领金币钻石（无体力消耗概念）。",
+    "参考战斗页左右浮动活动按钮(月卡/首充/通行证) → 纯单机全部不做。",
+    "参考页章节用「10.跨海大桥」数字命名 → 本作保留「第X章 章名 + X-X 关名」命名。"
+  ]
+}};
+
+/* ---- M4 升级 ---- */
+SCREENS.upgrade={name:"④ 升级",en:"Upgrade",render:function(){
+  var s=pagebg()+topbar();
+  /* 英雄切换栏 */
+  s+=ph("ui_hero_avatar",30,105,88,88,{cls:"gold circ",txt:"艾拉<br>(选中)"});
+  s+=ph("ui_hero_avatar",130,105,88,88,{cls:"circ",txt:"凯尔"});
+  s+=ph("ui_hero_avatar",230,105,88,88,{cls:"lock circ",txt:"+<br>未解锁"});
+  s+=txt(340,110,380,44,"<b>艾拉·风羽</b>&nbsp;<span style='color:#ffe08a'>Lv.3</span>",'','font-size:13px');
+  s+=txt(340,155,380,36,"🔥 战力 1,234",'','font-size:11px;color:#ffb;');
+  /* 英雄大图 + 属性汇总 */
+  s+=ph("hero_aila_portrait",60,215,240,400,{txt:"英雄大图<br>(复用立绘)"});
+  s+=ph("ui_panel_stats",320,215,400,400,{cls:"dark",txt:""});
+  s+=txt(340,235,360,36,"<b>属性总览</b>",'','font-size:12px;color:#ffe08a');
+  var rows=[["攻击","142 (+24%)"],["攻速","1.2次/秒"],["技能伤害","96 (+15%)"],["普攻等级","2"],["技能等级","1"],["大招等级","1"]];
+  for(var i=0;i<rows.length;i++){
+    s+=txt(340,280+i*54,160,40,rows[i][0],'','font-size:10px;opacity:.75;justify-content:flex-start;padding-left:20px');
+    s+=txt(500,280+i*54,200,40,rows[i][1],'','font-size:11px;justify-content:flex-end;padding-right:20px');
+  }
+  /* 四页签 */
+  var tabs=[["等级","gold"],["武器",""],["技能",""],["装备",""]];
+  for(var t=0;t<4;t++){
+    s+=ph("ui_up_tab",15+t*182,635,170,64,{cls:tabs[t][1],txt:tabs[t][0]+(t==0?"(选中)":"")});
+  }
+  /* 内容区：等级页签示例 */
+  s+=ph("ui_panel_dark_white",25,715,700,200,{cls:"",txt:""});
+  s+=txt(45,730,400,40,"<b>英雄等级</b>&nbsp;&nbsp;Lv.3 → Lv.4",'','font-size:12px;justify-content:flex-start;padding-left:16px');
+  s+=txt(45,775,660,60,"升级效果：攻击 +8% · 技能伤害 +5%",'','font-size:11px;opacity:.8;justify-content:flex-start;padding-left:16px');
+  s+=ph("ui_icon_coin",45,850,44,44,{cls:"gold circ",txt:"🪙"});
+  s+=txt(95,850,120,44,"320",'','font-size:12px');
+  s+=ph("ui_btn_primary",425,835,300,80,{cls:"gold",txt:"升 级"});
+  /* 武器/技能/装备页签内容缩略示意（切换后同位置显示对应条目列表） */
+  s+=txt(25,940,700,170,"武器页签：武器1 / 武器2 强化条目（材料+金币）<br>技能页签：普攻 / 技能 / 大招 三行（金币）<br>装备页签：已穿戴六槽逐件强化（材料+金币）",'','font-size:10px;opacity:.6');
+  s+=navbar(3);
+  return s;
+},notes:{
+  layout:[
+    "顶部英雄切换栏：头像 88×88（选中金框）+ 未解锁灰色「+」；右侧当前英雄名/等级/战力。",
+    "中部：英雄大图 240×400（复用立绘）+ 右侧属性总览面板 <code>ui_panel_stats</code> 400×400。",
+    "四页签 <code>ui_up_tab</code> 170×64：等级 / 武器 / 技能 / 装备（装备强化入口已确认放这里）。",
+    "内容区 700 宽条目面板：当前值→下一级、效果预览、消耗行（货币icon+数量）、右侧升级大按钮。"
+  ],
+  interact:[
+    "消耗双轨：等级/技能=金币；武器/装备强化=材料+金币（材料不足时材料图标红闪+toast）。",
+    "升级成功：属性面板数字滚动刷新、战力徽章跳动；金币不足按钮灰化。",
+    "等级上限 30 / 武器 20 / 技能 10 / 装备每件 20，满级按钮变「MAX」。",
+    "切换英雄：四页签内容整体切换为该英雄数据。"
+  ],
+  diff:[
+    "参考核心页是技能装配+禁用编辑（战前配技能）→ 本作战斗内技能走三选一卡池，升级页专注数值养成。",
+    "参考核心页有幻形/宠物 → 不做。",
+    "参考页签是方案1~5预设 → 本作四页签为养成模块，不做预设方案。"
+  ]
+}};
+
+/* ---- M5 基地 ---- */
+SCREENS.base={name:"⑤ 基地",en:"Base",render:function(){
+  var s=topbar();
+  /* 等距基地场景 */
+  s+=ph("bg_base_island",0,90,750,1122,{cls:"dark",css:"background:rgba(64,78,58,.34);border-color:rgba(140,180,110,.4)",txt:"奇幻风等距基地场景（浮空岛/营地，整图出图）"});
+  /* 主城 */
+  s+=ph("building_keep",225,270,300,300,{cls:"gold",txt:"主城城堡"});
+  s+=ph("ui_building_plate",265,575,220,56,{cls:"dark",txt:"主城 Lv.2 ▶"});
+  s+=ph("ui_badge_dot",505,275,26,26,{cls:"red circ",css:"background:rgba(229,72,77,.9)",txt:""});
+  /* 研究院 */
+  s+=ph("building_lab",470,680,240,220,{cls:"blue",txt:"研究院"});
+  s+=ph("ui_building_plate",500,905,180,52,{cls:"dark",txt:"研究院 ▶"});
+  s+=ph("ui_badge_dot",690,685,26,26,{cls:"red circ",css:"background:rgba(229,72,77,.9)",txt:""});
+  /* 锁定建筑占位 */
+  s+=ph("building_locked",45,680,220,220,{cls:"lock",txt:"🏗 工坊<br>未开放"});
+  s+=ph("ui_building_plate",60,905,190,52,{cls:"lock",txt:"🔒 未解锁"});
+  s+=navbar(4);
+  return s;
+},notes:{
+  layout:[
+    "整屏等距基地场景图 <code>bg_base_island</code> 750×1122（奇幻风：浮空岛/林间营地）。",
+    "可点建筑：主城 <code>building_keep</code> 300×300（左上）、研究院 <code>building_lab</code> 240×220（右下），各配名牌 <code>ui_building_plate</code>。",
+    "有可升级/新解锁内容时名牌上红点 <code>ui_badge_dot</code>。",
+    "其余建筑灰化锁定占位（工坊等，后续版本：挂机收益/排行榜再议）。"
+  ],
+  interact:[
+    "点主城 → 主城面板：当前等级/效果说明（每级+100防线耐久、每3级+200盾量）/金币升级按钮（上限10级，满级MAX）。",
+    "点研究院 → 怪物图鉴面板：网格（已解锁亮/未解锁剪影+问号）→ 点词条看名称/描述/弱点。",
+    "图鉴解锁：战斗内首次遇到新怪 → 顶部弹「📚 新怪物图鉴已解锁：哥布林投手」toast，并自动解锁词条。",
+    "锁定建筑：点击弹 toast「该建筑将在后续版本开放」。"
+  ],
+  diff:[
+    "参考基地页 9+ 栋建筑（研究所/食堂/历练大厅/排行榜/酒馆…）→ 本作只实装主城+研究院两栋，其余锁定占位。",
+    "参考基地有挂机计时器（左下 04:58:53）→ 已确认本期不做挂机收益。",
+    "参考基地等距科技风 → 本作出一张奇幻风等距场景图，建筑可点击区域用名牌+红点引导。"
+  ]
+}};
+
+/* ---- 主界面新增资源清单 ---- */
+var MAIN_MANIFEST=[
+["G · 主界面通用",[
+ ["ui_topbar_main","主城顶栏框","750×90","1","五页通用","金币/钻石座复用 A2 图标"],
+ ["ui_navbar","底部导航栏","750×122","1","五页通用","页签槽复用 ui_tab_item"],
+ ["ui_banner_title","撕纸标题横幅","520×88","1","主城各页","已产出"],
+ ["ui_power_badge","战力徽章(火焰)","180×70","1","英雄/升级","数字程序叠字"],
+ ["ui_badge_tier","阶级角标","64×30","1","商店/英雄/背包","文字程序叠"],
+ ["ui_badge_dot","红点","26×26","1","基地/导航","可程序画圆"],
+ ["ui_btn_arrow","左右切换箭头钮","70×70","1","英雄/关卡","圆形金框"],
+ ["ui_building_plate","建筑名牌","220×56","1","基地",""]
+]],
+["H · 商店",[
+ ["ui_shop_tab","商店页签(4态)","160×64","1","商店","选中金框 tint"],
+ ["ui_shop_card","商品卡框(品质tint)","330×300","1","商店","白绿蓝紫 tint 复用"],
+ ["ui_btn_buy","购买按钮","180×54","1","商店","复用 btn_green + 价格程序叠"],
+ ["ui_icon_diamond","钻石图标","50×50","1","全局",""]
+]],
+["I · 英雄/背包",[
+ ["hero_aila_portrait","艾拉全身立绘","280×470","1","英雄/升级","奇幻手绘，透明底"],
+ ["hero_kyle_portrait","凯尔全身立绘","280×470","1","英雄/升级","同上"],
+ ["ui_slot_frame","装备槽框(品质tint)","100×100","1","英雄/升级","白绿蓝紫 tint"],
+ ["ui_bag_tab","背包页签","200×58","1","英雄","复用 ui_shop_tab 缩放"],
+ ["ui_item_cell","背包格(品质tint)","130×130","1","英雄","数量角标程序叠"],
+ ["ui_equip_wpn_bow/crossbow/staff/hammer","武器图标","130×130","4","商店/背包",""],
+ ["ui_equip_helmet/trinket/gloves/armor","防具图标","130×130","4","商店/背包/英雄",""],
+ ["ui_mat_ore/herb/pelt/essence","材料图标","130×130","4","商店/背包",""]
+]],
+["J · 关卡",[
+ ["ui_chapter_banner","章节关卡名横幅","500×100","1","关卡","复用 banner_title 拉伸或新出"],
+ ["ui_chest_card","星箱卡框","215×180","1","关卡","状态 tint"],
+ ["ui_chest_star1/2/3","三档宝箱","90×90","3","关卡","金/银/紫三色"],
+ ["ui_btn_green","开始战斗按钮","500×90","复用","关卡","已产出(九宫格)"]
+]],
+["K · 升级",[
+ ["ui_hero_avatar","英雄头像框(选中态)","88×88","1","升级","复用 circ_icon_gold"],
+ ["ui_panel_stats","属性总览面板","400×400","1","升级","复用 panel_dark_white"],
+ ["ui_up_tab","升级页签(4态)","170×64","1","升级","复用 ui_shop_tab 缩放"]
+]],
+["L · 基地",[
+ ["bg_base_island","等距基地场景","750×1122","1","基地","整图，主色调绿棕"],
+ ["building_keep","主城城堡建筑","300×300","1","基地","等距风"],
+ ["building_lab","研究院建筑","240×220","1","基地","等距风"],
+ ["mob_{id}_codex","怪物图鉴头像(裁剪现有怪图)","96×96","20","研究院","复用战斗怪资产裁圆"]
+]]];
+
+function renderMainManifest(){
+  var h='<div class="sheet"><h2>主界面美术资源清单（新增部分）</h2><p>战斗线稿 A~F 组之外，五主界面新增 G~L 六组；所有面板/按钮/页签尽量复用 A1 通用组件（tint + 九宫格）。</p>';
+  var total=0;
+  MAIN_MANIFEST.forEach(function(g){
+    h+='<div class="gh">'+g[0]+'</div><table><tr><th>资源ID</th><th>说明</th><th>尺寸(设计px)</th><th>数量</th><th>使用界面</th><th>备注</th></tr>';
+    g[1].forEach(function(r){total+=parseInt(r[3])||1;
+      h+='<tr><td><code>'+r[0]+'</code></td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'</td><td>'+(r[5]||"")+'</td></tr>';});
+    h+='</table>';
+  });
+  h+='<p><b>新增量合计</b>：约 '+MAIN_MANIFEST.reduce(function(a,g){return a+g[1].length},0)+' 类 / '+total+' 张以内（大量复用现有 A1 组件与 tint）。立绘与场景为手绘重点，图标可批量生成。</p></div>';
+  return h;
+}
+
+function renderMainSpec(){
+  return '<div class="sheet"><h2>五主界面 · 与《向僵尸开炮》参考图对照 & 需求决议</h2>'+
+  '<h3 class="gh">1 · 全局决议（六轮对齐确认）</h3>'+
+  '<table><tr><th>项</th><th>决议</th></tr>'+
+  '<tr><td>美术风格</td><td>保留奇幻手绘风（金框羊皮纸），布局结构对齐参考图</td></tr>'+
+  '<tr><td>顶栏</td><td>金币+钻石双货币，不加头像/体力/钥匙</td></tr>'+
+  '<tr><td>商业化</td><td>纯单机：无抽卡/无充值/无广告位/无限购刷新</td></tr>'+
+  '<tr><td>货币分配</td><td>英雄/武器=钻石；装备/材料=金币</td></tr>'+
+  '<tr><td>装备体系</td><td>六槽（武器×2+头盔/饰品/手套/衣服）× 品质(白绿蓝紫) × 阶级</td></tr>'+
+  '<tr><td>消耗双轨</td><td>等级/技能=金币；武器/装备强化=材料+金币</td></tr>'+
+  '<tr><td>新英雄</td><td>商店占位，五页做完后单独排期实装</td></tr>'+
+  '</table>'+
+  '<h3 class="gh">2 · 页面级差异对照</h3>'+
+  '<table><tr><th>参考图</th><th>本作对应</th></tr>'+
+  '<tr><td>商城：宝箱抽取+钥匙+充值页签</td><td>商店：四页签固定货架（武器/英雄/装备/材料），随章节解锁</td></tr>'+
+  '<tr><td>角色：装备六槽+宝石+背包合成+时装枪械</td><td>英雄：六槽+品质阶级+背包（无宝石/合成/时装），属性+背景故事弹窗</td></tr>'+
+  '<tr><td>战斗：单关大图+普通精英+三档宝箱+体力</td><td>关卡：单关大图+左右切换+三档星箱（一次性奖励），无难度无体力</td></tr>'+
+  '<tr><td>核心：技能装配+方案预设+聚合属性</td><td>升级：按英雄四页签（等级/武器/技能/装备）数值养成</td></tr>'+
+  '<tr><td>基地：9+建筑群+挂机计时</td><td>基地：主城（防线耐久/盾量加成）+研究院（怪物图鉴）+锁定占位</td></tr>'+
+  '</table>'+
+  '<h3 class="gh">3 · 产出顺序建议</h3>'+
+  '<p>线稿确认 → 数据层（存档扩展+物品/商品/掉落配置表）→ 商店+背包穿戴 → 英雄+升级 → 关卡改造+基地 → 战斗侧掉落/图鉴接入 → 联调验收。美术可并行：先 H/I 组图标与立绘（商店/英雄页依赖），J/K 复用为主，L 组场景最后。</p></div>';
+}
+
+/* ============ 导航与渲染（同战斗线稿骨架） ============ */
+var ORDER=["shop","heroes","levels","upgrade","base","mainmanifest","mainspec"];
+var CUR="shop";
+function renderNav(){
+  var h='<div class="grp">主界面线稿</div>';
+  ORDER.forEach(function(k){
+    var nm=k=="mainmanifest"?"主界面资源清单":k=="mainspec"?"需求决议 & 对照":SCREENS[k].name;
+    if(k=="mainmanifest")h+='<div class="grp">美术资源阶段</div>';
+    h+='<button data-k="'+k+'" class="'+(CUR==k?"on":"")+'">'+nm+'<span class="en">'+(k=="mainmanifest"?"Asset Manifest":k=="mainspec"?"Spec & Mapping":SCREENS[k].en)+'</span></button>';
+  });
+  E("#nav",h);
+  document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){CUR=b.dataset.k;renderAll();};});
+}
+function renderAll(){
+  renderNav();
+  var st=document.querySelector("#stage");
+  if(CUR=="mainmanifest"){st.innerHTML=renderMainManifest();E("#notes",'<h2>主界面资源清单</h2><p>G~L 六组为五主界面<b>新增</b>资源位；面板/按钮/页签尽量复用战斗线稿 A1 通用组件（tint + 九宫格）。占位线稿中的每个虚线框 ID 与此清单一一对应。</p><p><b>产出顺序建议</b>：H/I 组图标与双英雄立绘先行（商店/英雄页依赖）→ J/K 组多数复用 → L 组基地场景最后。怪物图鉴头像直接从现有怪图裁剪，不新增绘制。</p>');return;}
+  if(CUR=="mainspec"){st.innerHTML=renderMainSpec();E("#notes",'<h2>需求决议</h2><p>六轮需求对齐的全部关键决议 + 五页与参考图的逐项差异对照。完整需求文档见 <code>KingdomWatch/docs/主界面需求清单.md</code>。</p>');return;}
+  var sc=SCREENS[CUR];
+  st.innerHTML='<div id="phone" class="phone"><div class="screen">'+sc.render()+'</div></div>';
+  var n='<h2>'+sc.name+'</h2>';
+  n+='<h3>布局说明</h3><ul>'+sc.notes.layout.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>';
+  n+='<h3>交互与状态</h3><ul>'+sc.notes.interact.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>';
+  n+='<h3>与参考图差异</h3><ul>'+sc.notes.diff.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>';
+  E("#notes",n);
+  applyToggles();
+}
+function applyToggles(){
+  var p=document.getElementById("phone");
+  if(p){p.classList.toggle("noanno",!document.getElementById("tgAnno").checked);
+    p.classList.toggle("safe",document.getElementById("tgSafe").checked);
+    p.classList.toggle("grid",document.getElementById("tgGrid").checked);}
+  document.body.classList.toggle("noanno",!document.getElementById("tgAnno").checked);
+}
+document.getElementById("tgAnno").onchange=applyToggles;
+document.getElementById("tgSafe").onchange=applyToggles;
+document.getElementById("tgGrid").onchange=applyToggles;
+renderAll();
+</script>
+</body>
+</html>

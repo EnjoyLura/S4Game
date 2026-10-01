@@ -2,7 +2,10 @@
 
 ## 打开方式
 
-直接双击 [wireframe.html](./wireframe.html) 用浏览器打开即可（单文件、零依赖、无外部请求）。
+- 战斗相关界面：双击 [wireframe.html](./wireframe.html)（8 张战斗界面 + 美术清单 + 设计规范）
+- **五主界面**：双击 [wireframe-main.html](./wireframe-main.html)（商店/英雄/关卡/升级/基地 + 主界面新增资源清单 + 需求决议对照）
+
+均为单文件、零依赖、无外部请求。
 
 ## 页面结构
 
