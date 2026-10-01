@@ -1,0 +1,49 @@
+{
+  "name": "批次1修复_2026-10-01",
+  "outdir": "D:/AI/S4Game/美术/原图/批次1修复_2026-10-01",
+  "defaults": {
+    "model": "gpt-image-2",
+    "quality": "high",
+    "background": "transparent",
+    "key": "1k",
+    "size": "1k"
+  },
+  "items": [
+    {
+      "id": "R_BTN_按钮",
+      "type": "edit",
+      "ref": "D:/AI/S4Game/美术/基准/组件风格基准.png",
+      "prompt": "Keep the exact same art style, outline weight, rendering and color palette as the golden button in the reference image. Sprite sheet of exactly 6 wide rounded-rect game buttons arranged in a strict 3x2 grid (3 columns, 2 rows) with generous even spacing, each button the same size and fully inside its own cell, all with empty flat dark navy interiors and NO text. Top row, three states of the same GOLDEN ornate metal button: normal bright polished gold; pressed state slightly darker and flatter gold; disabled state desaturated gray-brown metal. Bottom row, three states of the same GREEN metal button: normal bright green; pressed darker flatter green; disabled desaturated gray-green. IMPORTANT: small compact ornament clusters ONLY tucked into the four corners of each button; the top, bottom, left and right edge midpoints must be completely plain smooth frame with NO diamonds, NO gems, NO bumps anywhere except corners; interiors completely empty and flat. Crisp hard edges: strictly NO glow, NO bloom, NO halo, NO red or colored light spill."
+    },
+    {
+      "id": "R_TAB_页签",
+      "type": "edit",
+      "ref": "D:/AI/S4Game/美术/基准/组件风格基准.png",
+      "prompt": "Keep the exact same art style, rendering and color palette as the UI components in the reference image. Sprite sheet of exactly 2 wide rounded-rect UI tab buttons arranged in a strict 2x1 grid (2 columns, 1 row) with generous even spacing, each fully inside its own cell, same size, empty dark navy interiors, NO text. Left: inactive tab, dark navy with a subtle silver metal border. Right: active tab, bright polished golden metal frame. IMPORTANT: small compact ornament clusters ONLY tucked into the four corners; top and bottom edge midpoints completely plain smooth frame with NO diamonds, NO gems, NO bumps; interiors flat and empty. Crisp hard edges: strictly NO glow, NO bloom, NO halo, NO red or colored light spill."
+    },
+    {
+      "id": "R_WARN_预警横幅",
+      "type": "edit",
+      "ref": "D:/AI/S4Game/美术/基准/组件风格基准.png",
+      "prompt": "Keep the exact same art style, rendering and color palette as the UI components in the reference image. A single wide horizontal warning banner for a fantasy tower defense game: rounded rectangular ornate polished golden metal frame with a completely plain empty dark navy interior, wide banner proportions about 2.5:1. Small compact ornament clusters ONLY tucked into the four corners; top and bottom edge midpoints completely plain smooth gold with NO diamonds, NO gems, NO bumps; interior completely empty with NO stripes, NO emblem, NO icon, NO text. Crisp hard edges: strictly NO glow, NO bloom, NO halo, NO red or colored light spill."
+    },
+    {
+      "id": "R_PANEL_面板",
+      "type": "edit",
+      "ref": "D:/AI/S4Game/美术/基准/组件风格基准.png",
+      "prompt": "Keep the exact same art style, rendering and color palette as the UI components in the reference image. Sprite sheet of exactly 2 wide rectangular game UI panels arranged in a strict 2x1 grid (2 columns, 1 row) with generous even spacing, each fully inside its own cell, semi-transparent dark navy blue fill, rounded corners. Left panel with thin ornate GOLD metal border; right panel with thin ornate bright SILVER WHITE metal border. IMPORTANT: small compact ornament clusters ONLY tucked into the four corners; all edge midpoints completely plain smooth thin frame, absolutely NO diamonds, NO gems, NO bumps anywhere on the edges; interiors completely empty and flat. Crisp hard edges: strictly NO glow, NO bloom, NO halo, NO red or colored light spill."
+    },
+    {
+      "id": "R_AVATAR_ARCHER",
+      "type": "edit",
+      "ref": "D:/AI/S4Game/美术/基准/图标风格基准.png",
+      "prompt": "Keep the exact same art style, outline weight, rendering and color palette as the icons in the reference image. A single circular character portrait avatar icon for a fantasy tower defense game: bust portrait of a young female elf archer hero, wind-touched short silver-green hair, long pointed ears, green leather hood and cloak with a small golden leaf clasp, confident calm expression, facing the viewer. Head and shoulders fill the circle, flat dark desaturated teal background inside the circle, NO outer ring or metal frame around the circle edge, NO text. Crisp hard edges: strictly NO glow, NO bloom, NO halo."
+    },
+    {
+      "id": "R_AVATAR_SNIPER",
+      "type": "edit",
+      "ref": "D:/AI/S4Game/美术/基准/图标风格基准.png",
+      "prompt": "Keep the exact same art style, outline weight, rendering and color palette as the icons in the reference image. A single circular face portrait avatar icon: close-up of a rugged male human sniper hero's FACE, his head large and centered filling the upper two thirds of the circle, sharp hawk-like eyes with thick eyebrows, short dark hair, light stubble, a thin scar across one cheek, wearing a deep blue steel gorget collar with brass buckles at the bottom of the circle, confident stern expression, looking straight at the viewer. Flat medium slate-gray blue background inside the circle, NO outer ring, NO falcon, NO animals, NO helmet, NO text. Crisp hard edges: strictly NO glow, NO bloom, NO halo."
+    }
+  ]
+}

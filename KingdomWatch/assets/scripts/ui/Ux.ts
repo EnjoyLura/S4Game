@@ -3,7 +3,7 @@
  * 约定：assets/resources/ux/<id>.png 与 assets/resources/scenes/<id>.png；
  * 加载失败一律回退程序绘制（调用方先画程序版，美术加载成功后覆盖/隐藏）。
  */
-import { Node, resources, Sprite, SpriteFrame, UITransform } from 'cc';
+import { Graphics, Node, resources, Sprite, SpriteFrame, UITransform } from 'cc';
 import { N } from './UIKit';
 
 /** id → 资源路径：'scenes/x' 原样，其余视为 ux/ 下的清单 ID */
@@ -50,10 +50,7 @@ const SLICE9: Record<string, [number, number, number, number]> = {
   ui_wave_pill: [26, 26, 26, 26],
   ui_tab_item: [30, 30, 30, 30],
   ui_tab_item_active: [30, 30, 30, 30],
-  ui_bar_track: [40, 40, 5, 5],
-  ui_bar_fill: [40, 40, 5, 5],
-  ui_bar_fill_white: [40, 40, 5, 5],
-  ui_bar_shield: [40, 40, 5, 5],
+  ui_bar_track: [20, 20, 4, 4],
   ui_card_frame_white: [40, 40, 44, 44],
   ui_card_frame_blue: [40, 40, 44, 44],
   ui_card_frame_purple: [40, 40, 44, 44],
@@ -65,7 +62,11 @@ const SLICE9: Record<string, [number, number, number, number]> = {
 export interface ArtOpts {
   /** true=九宫格拉伸（SLICE9 表内 ID 默认 true） */
   sliced?: boolean;
-  /** 渲染序：插到第 idx 个子节点之前（面板类=0：垫在既有文字下） */
+  /** 非九宫格等比缩放（contain，默认开）：源宽高比≠盒子时按比例适配，杜绝拉伸变形 */
+  fit?: boolean;
+  /** 等比放大盖满盒子（cover，溢出裁切）：全屏背景防变形用 */
+  cover?: boolean;
+  /** 渲染序：插到第 idx 个子节点之前（面板类=0：垫在既有文字下，并关闭父节点程序描边） */
   belowIdx?: number;
   /** 加载成功后要隐藏的程序绘制节点（整替类：星星/角标/图标钮） */
   hideOnLoad?: Node[];
@@ -89,8 +90,18 @@ export function artSprite(parent: Node, x: number, y: number, w: number, h: numb
       sf.insetRight = SLICE9[id][1];
       sf.insetTop = SLICE9[id][2];
       sf.insetBottom = SLICE9[id][3];
+    } else if (o.fit !== false || o.cover) {
+      // 等比适配：contain 装进盒子 / cover 盖满盒子（源比例失真是"拉伸变形"的主因）
+      const r = sf.rect;
+      const k = o.cover ? Math.max(w / r.width, h / r.height) : Math.min(w / r.width, h / r.height);
+      n.getComponent(UITransform)!.setContentSize(Math.max(r.width * k, 1), Math.max(r.height * k, 1));
     }
-    if (o.belowIdx !== undefined) n.setSiblingIndex(Math.min(o.belowIdx, n.parent!.children.length - 1));
+    if (o.belowIdx !== undefined) {
+      n.setSiblingIndex(Math.min(o.belowIdx, n.parent!.children.length - 1));
+      // 美术已盖住程序面板：关掉父节点 Graphics，避免兜底描边从美术边缘露出
+      const pg = n.parent ? n.parent.getComponent(Graphics) : null;
+      if (pg) pg.enabled = false;
+    }
     (o.hideOnLoad || []).forEach(v => { if (v.isValid) v.active = false; });
     if (o.onLoaded) o.onLoaded(n);
   });

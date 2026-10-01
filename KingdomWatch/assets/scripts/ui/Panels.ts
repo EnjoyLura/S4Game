@@ -10,7 +10,7 @@ import { HeroBase } from '../battle/Hero';
 import { BattleDirector } from '../battle/BattleDirector';
 import { AdService } from '../platform/AdService';
 import { loadSave } from '../core/SaveData';
-import { btn, CA, dimLayer, gcircle, gpanel, gswitch, label, N, setText, WY, WYB, WX } from './UIKit';
+import { btn, CA, dimLayer, gbar, gcircle, gpanel, gswitch, label, N, setText, WY, WYB, WX } from './UIKit';
 import { artIcon, artSprite } from './Ux';
 
 /** 稀有度 → 美术资源后缀 */
@@ -139,11 +139,13 @@ export class Panels {
     const icon = gcircle(frame, 0, 50, 48, CA(rarity, 0.14), rarity, 1.5);
     label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 24, color: card.rarity === 'white' ? '#4A3214' : rarity, bold: true });
 
-    // ③ 右上英雄归属角标 56×56 金圈（全局卡绿色；弓/狙金圈+姓氏）
+    // ③ 右上英雄归属角标 56×56 金圈（全局卡绿色；弓/狙金圈+头像）
     const ownHero = card.owner === 'archer' ? '弓' : card.owner === 'sniper' ? '狙' : '';
     const ava = gcircle(frame, 68, 144, 28, CA('#2A3240', 1), card.owner === 'global' ? PAL.green : PAL.gold, 2.5);
-    label(ava, 0, 0, card.owner === 'global' ? '全' : ownHero,
+    const avaLbl = label(ava, 0, 0, card.owner === 'global' ? '全' : ownHero,
       { size: 20, color: card.owner === 'global' ? PAL.green : PAL.gold, bold: true });
+    if (card.owner === 'archer' || card.owner === 'sniper')
+      artSprite(ava, 0, 0, 46, 46, 'ui_avatar_' + card.owner, { sliced: false, hideOnLoad: [avaLbl] });
 
     // ④ 左上『新』角标 56×56（美术爆炸角标自带"新"字；失败回退绿圆+字）
     if (used === 0) {
@@ -165,7 +167,8 @@ export class Panels {
       const tab = gpanel(this.modalRoot, x, cy, w, 72, i === active ? CA(PAL.gold, 0.25) : CA('#14181E', 0.85),
         i === active ? PAL.gold : '#FFFFFF44', 1.5, 12);
       artSprite(tab, 0, 0, w, 72, i === active ? 'ui_tab_item_active' : 'ui_tab_item', { belowIdx: 0 });
-      label(this.modalRoot, x, cy, t, { size: 20, color: i === active ? '#4A3214' : '#FFFFFF' });
+      // 激活页签金框+深蓝内饰 → 用亮金文字；未激活银框深蓝底 → 白字
+      label(this.modalRoot, x, cy, t, { size: 20, color: i === active ? '#FFE08A' : '#FFFFFF' });
       if (i !== active) {
         const hit = N('tabHit' + i, this.modalRoot, x, cy, w, 72);
         hit.on(Node.EventType.TOUCH_END, e => { e.propagationStopped = true; onSel(i); });
@@ -178,17 +181,16 @@ export class Panels {
     rows.slice(0, 3).forEach((r, i) => {
       const t = t0 + i * step;
       const av = gcircle(this.modalRoot, WX(40, 70), WY(t, 70), 35, CA('#2A3240', 1), '#FFFFFF55', 1.5);
-      label(av, 0, 0, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
+      const avLbl = label(av, 0, 0, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
+      if (r.id === 'archer' || r.id === 'sniper')   // 英雄头像盖字（加载失败保持首字兜底）
+        artSprite(av, 0, 0, 58, 58, 'ui_avatar_' + r.id, { sliced: false, hideOnLoad: [avLbl] });
       label(this.modalRoot, WX(130, 220), WY(t + 2, 40), r.name,
         { size: 18, color: '#FFFFFF', align: 'left', w: 220, h: 40, shrink: true });
       label(this.modalRoot, WX(570, 140), WY(t + 2, 40), (r.pct * 100).toFixed(2) + '%',
         { size: 18, color: PAL.orange, align: 'right', w: 140, h: 40, shrink: true });
       const barX = WX(130, 580);
-      gpanel(this.modalRoot, barX, WY(t + 44, 16), 580, 16, CA('#000000', 0.4), undefined, 0, 8);
-      if (r.val > 0) {
-        const fw = Math.max(8, 580 * r.pct);
-        gpanel(this.modalRoot, WX(130, fw), WY(t + 44, 16), fw, 16, CA(PAL.orange, 0.9), undefined, 0, 8);
-      }
+      const bar = gbar(this.modalRoot, barX, WY(t + 44, 16), 580, 16, PAL.orange);   // 美术轨道+白填充染色
+      bar.set(r.val > 0 ? r.pct : 0);
       label(this.modalRoot, barX, WY(t + 44, 16), fmtWk(r.val), { size: 14, color: '#FFFFFF', bold: true });
     });
   }
@@ -200,8 +202,8 @@ export class Panels {
     items.forEach((it, i) => {
       const x = (i - (items.length - 1) / 2) * pitch;
       const c = gcircle(this.modalRoot, x, WY(y, s), 42, CA(it[0], 0.25), it[0], 2);
-      label(c, 0, 0, it[1], { size: it[1] === 'EXP' ? 20 : 34, color: it[1] === 'EXP' ? PAL.ink : '#FFFFFF', bold: it[1] === 'EXP' });
-      artSprite(c, 0, 0, s, s, 'ui_circ_icon_gold', { sliced: false, belowIdx: 0 });
+      const fb = label(c, 0, 0, it[1], { size: it[1] === 'EXP' ? 20 : 34, color: it[1] === 'EXP' ? PAL.ink : '#FFFFFF', bold: it[1] === 'EXP' });
+      artSprite(c, 0, 0, s, s, 'ui_circ_icon_gold', { sliced: false, belowIdx: 0, hideOnLoad: [fb] });
       const iconId = REWARD_ICON[it[1]];
       if (iconId) artIcon(c, iconId, 60);
       label(this.modalRoot, x, WY(y + s + 4, 36), it[2], { size: 20, color: '#FFFFFF' });
@@ -373,17 +375,16 @@ export class Panels {
       const cyTx = py + hh / 2 - 101 - i * 100;
       const cxAv = px - w / 2 + 67;
       gcircle(this.modalRoot, cxAv, cyAv, 35, CA('#2A3240', 1), '#FFFFFF55', 1.5);
-      label(this.modalRoot, cxAv, cyAv, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
+      const avLbl = label(this.modalRoot, cxAv, cyAv, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
+      if (r.id === 'archer' || r.id === 'sniper')
+        artSprite(this.modalRoot, cxAv, cyAv, 58, 58, 'ui_avatar_' + r.id, { sliced: false, hideOnLoad: [avLbl] });
       label(this.modalRoot, px - w / 2 + 192, cyTx, r.name,
         { size: 18, color: '#FFFFFF', align: 'left', w: 150, h: 40, shrink: true });
       label(this.modalRoot, px - w / 2 + 307, cyTx, (r.pct * 100).toFixed(2) + '%',
         { size: 18, color: PAL.orange, align: 'right', w: 100, h: 40, shrink: true });
       const barX = px - w / 2 + 229.5, barY = py + hh / 2 - 130 - i * 100;
-      gpanel(this.modalRoot, barX, barY, 225, 16, CA('#000000', 0.4), undefined, 0, 8);
-      if (r.val > 0) {
-        const fw = Math.max(6, 225 * r.pct);
-        gpanel(this.modalRoot, barX - 112.5 + fw / 2, barY, fw, 16, CA(PAL.orange, 0.9), undefined, 0, 8);
-      }
+      const bar = gbar(this.modalRoot, barX, barY, 225, 16, PAL.orange);
+      bar.set(r.val > 0 ? r.pct : 0);
       label(this.modalRoot, barX, barY, fmtWk(r.val), { size: 14, color: '#FFFFFF', bold: true });
     });
     label(this.modalRoot, px, py - hh / 2 + 28, '点击空白处关闭', { size: 12, color: '#888888' });

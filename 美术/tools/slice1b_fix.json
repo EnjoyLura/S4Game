@@ -1,0 +1,18 @@
+{
+  "batch": "D:/AI/S4Game/美术/原图/批次1修复_2026-10-01",
+  "ux": "D:/AI/S4Game/KingdomWatch/assets/resources/ux",
+  "sheets": [
+    { "sheet": "R_BTN_按钮", "cols": 3, "rows": 2, "scale": 1.0, "out": "组件", "copy": "ux",
+      "names": ["ui_btn_primary", "ui_btn_primary_press", "ui_btn_primary_disabled", "ui_btn_green", "ui_btn_green_press", "ui_btn_green_disabled"] },
+    { "sheet": "R_TAB_页签", "cols": 2, "rows": 1, "scale": 1.0, "out": "组件", "copy": "ux",
+      "names": ["ui_tab_item", "ui_tab_item_active"] },
+    { "sheet": "R_WARN_预警横幅", "cols": 1, "rows": 1, "scale": 1.0, "out": "组件", "copy": "ux",
+      "names": ["ui_banner_warn"] },
+    { "sheet": "R_PANEL_面板", "cols": 2, "rows": 1, "scale": 1.0, "out": "组件", "copy": "ux",
+      "names": ["ui_panel_dark_gold", "ui_panel_dark_white"] },
+    { "sheet": "R_AVATAR_ARCHER", "cols": 1, "rows": 1, "scale": 0.5, "out": "组件", "copy": "ux",
+      "names": ["ui_avatar_archer"] },
+    { "sheet": "R_AVATAR_SNIPER", "cols": 1, "rows": 1, "scale": 0.5, "out": "组件", "copy": "ux",
+      "names": ["ui_avatar_sniper"] }
+  ]
+}

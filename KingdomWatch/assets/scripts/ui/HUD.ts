@@ -87,14 +87,14 @@ export class HUD {
     const bgFlat = gpanel(bgParent || top, 0, 0, 750, LO.half * 2 + 240, '#2E4034', undefined, 0, 0);
     bgFlat.setSiblingIndex(0);
     artSprite(bgParent || top, 0, 0, 750, LO.half * 2 + 240, 'scenes/scene_1_1',
-      { sliced: false, hideOnLoad: [bgFlat] }).setSiblingIndex(1);
+      { sliced: false, cover: true, hideOnLoad: [bgFlat] }).setSiblingIndex(1);
 
     /* 顶栏 */
     const topBar = gpanel(top, 0, WY(100, 70), 718, 70, CA('#14181E', 0.72), CA(PAL.gold, 0.9), 1.5, 10);
     artSprite(topBar, 0, 0, 718, 70, 'ui_panel_dark_gold', { belowIdx: 0 });
     const pauseBtn = gpanel(top, WX(30, 60), WY(105, 60), 60, 60, CA(PAL.gold, 0.2), PAL.gold, 2, 12);
-    label(pauseBtn, 0, 0, '⏸', { size: 26, color: PAL.gold, bold: true });
-    artSprite(pauseBtn, 0, 0, 60, 60, 'ui_icon_pause', { sliced: false });
+    const pauseLbl = label(pauseBtn, 0, 0, '⏸', { size: 26, color: PAL.gold, bold: true });
+    artSprite(pauseBtn, 0, 0, 60, 60, 'ui_icon_pause', { sliced: false, hideOnLoad: [pauseLbl] });
     pauseBtn.on(Node.EventType.TOUCH_END, () => this.dir.togglePause());
     // 关卡计时（线稿①：暂停键右侧 00:36）
     this.timeTxt = label(top, WX(110, 140), WY(114, 40), '00:00', { size: 20, color: '#CDC2A2', align: 'left', w: 140, h: 40 });
@@ -123,7 +123,7 @@ export class HUD {
     speedBtn.on(Node.EventType.TOUCH_END, () => this.dir.toggleSpeed());
     const statsBtn = gpanel(top, WX(24, 60), WY(320, 60), 60, 60, CA(PAL.gold, 0.2), PAL.gold, 2, 12);
     const statsGlyph = label(statsBtn, 0, 0, '📊', { size: 24 });
-    artSprite(statsBtn, 0, 0, 60, 60, 'ui_icon_stats', { sliced: false, hideOnLoad: [statsGlyph] });
+    artSprite(statsBtn, 0, 0, 60, 60, 'ui_icon_stats', { sliced: false, belowIdx: 0, hideOnLoad: [statsGlyph] });
     statsBtn.on(Node.EventType.TOUCH_END, () => this.dir.showStats());
 
     /* 右侧大招纵列：每英雄一钮，底基锚定向上叠放（线稿① 4×1 纵列右对齐）
@@ -169,6 +169,8 @@ export class HUD {
     artSprite(btn, 0, 0, 90, 90, 'ui_circ_icon_gold', { belowIdx: 0 });
     artSprite(bright, 0, 0, 90, 90, 'ui_circ_icon_gold_active', { belowIdx: 0 });
     artSprite(gray, 0, 0, 90, 90, 'ui_circ_icon_gray', { belowIdx: 0 });
+    // 英雄头像：垫在金水/充能字之下、座环之上（三态座外圈都可见）
+    artSprite(top, ux, uy, 68, 68, 'ui_avatar_' + hero.id, { sliced: false });
     const water = new Node('ultWater' + i);
     water.setParent(top);
     water.setPosition(ux, uy, 0);

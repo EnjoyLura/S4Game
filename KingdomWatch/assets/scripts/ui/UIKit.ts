@@ -139,7 +139,7 @@ export function gbar(parent: Node, x: number, y: number, w: number, h: number, f
     const bgG = bg.getComponent(Graphics);
     if (bgG) bgG.enabled = false;
   }});
-  artSprite(bg, 0, 0, w, h, 'ui_bar_fill_white', { onLoaded: n => {
+  artSprite(bg, 0, 0, w, h, 'ui_bar_fill_white', { fit: false, onLoaded: n => {
     n.getComponent(UITransform)!.setAnchorPoint(0, 0.5);
     n.setPosition(-w / 2 + 2, 0, 0);
     artFillNode = n;
