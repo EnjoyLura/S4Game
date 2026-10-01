@@ -102,11 +102,12 @@ function E(sel,html){document.querySelector(sel).innerHTML=html;}
 /* 顶栏：金币+钻石双货币（已对齐决策：不加头像/体力，不显示游戏标题，两个资源位靠右） */
 function topbar(){
   var s='';
-  s+=ph("ui_topbar_main",0,0,750,90,{cls:"dark",txt:""});
-  s+=ph("ui_icon_coin",430,20,50,50,{cls:"gold circ",txt:"🪙"});
-  s+=txt(486,20,100,50,"1,451",'','font-size:12px');
-  s+=ph("ui_icon_diamond",600,20,50,50,{cls:"blue circ",txt:"💎"});
-  s+=txt(656,20,84,50,"20",'','font-size:12px');
+  s+=ph("safe_notch",255,0,240,64,{cls:"red",css:"border-radius:0 0 16px 16px;border-top:none",txt:"刘海遮挡预留区(禁放UI)"});
+  s+=ph("ui_topbar_main",0,100,750,90,{cls:"dark",txt:""});
+  s+=ph("ui_icon_coin",430,120,50,50,{cls:"gold circ",txt:"🪙"});
+  s+=txt(486,120,100,50,"1,451",'','font-size:12px');
+  s+=ph("ui_icon_diamond",600,120,50,50,{cls:"blue circ",txt:"💎"});
+  s+=txt(656,120,84,50,"20",'','font-size:12px');
   return s;
 }
 /* 底部导航：五页签 */
@@ -121,7 +122,7 @@ function navbar(active){
   return s;
 }
 /* 页面背景：复用场景图+暗化 */
-function pagebg(){return ph("scenes/scene_1_1",0,0,750,1334,{cls:"dark",css:"background:rgba(46,64,52,.30);border-color:rgba(120,180,110,.4);justify-content:flex-end;padding-bottom:130px",txt:"主城背景 · 复用关卡场景图+暗化遮罩(占位)"});}
+function pagebg(){return ph("scenes/scene_1_1",0,0,750,1334,{cls:"dark",css:"background:rgba(46,64,52,.30);border-color:rgba(120,180,110,.4);justify-content:flex-end;padding-bottom:130px",txt:""});}
 /* 撕纸标题横幅 */
 function banner(t,y){return ph("ui_banner_title",115,y,520,88,{cls:"gold",txt:t})+"";}
 
@@ -131,6 +132,8 @@ var SCREENS={};
 /* ---- M1 商店 ---- */
 SCREENS.shop={name:"① 商店",en:"Shop",render:function(){
   var s=pagebg()+topbar();
+  /* 顶栏下移后内容整体 +100（安全区规范） */
+  s+='<div style="position:absolute;left:0;top:50px;width:375px;height:617px">';
   s+=banner("商 店",110);
   /* 四页签：武器(钻)/英雄(钻)/装备(金)/材料(金) */
   var tabs=[["武器 ·💎","gold"],["英雄 ·💎",""],["装备 ·🪙",""],["材料 ·🪙",""]];
@@ -157,6 +160,7 @@ SCREENS.shop={name:"① 商店",en:"Shop",render:function(){
       {cls:d[4]=="lock"||d[5]=="owned"?"lock":"green",txt:bt});
   }
   s+=txt(0,990,750,30,"↓ 网格可纵向滚动（材料/装备页签同构，每页 2~4 件）",'','font-size:9px;opacity:.55');
+  s+='</div>';
   s+=navbar(0);
   return s;
 },notes:{
@@ -182,6 +186,8 @@ SCREENS.shop={name:"① 商店",en:"Shop",render:function(){
 /* ---- M2 英雄 ---- */
 SCREENS.heroes={name:"② 英雄",en:"Heroes",render:function(){
   var s=pagebg()+topbar();
+  /* 顶栏下移后内容整体 +100（安全区规范） */
+  s+='<div style="position:absolute;left:0;top:50px;width:375px;height:617px">';
   /* 英雄名行 */
   s+=txt(120,105,510,44,"<b style='font-size:15px'>艾拉·风羽</b>&nbsp;&nbsp;<span style='font-size:10px;color:#ffe08a'>弓手 · 远程输出</span>",'','font-size:13px');
   s+=txt(120,150,510,34,"点头像/名字看属性与背景故事",'','font-size:9px;opacity:.6');
@@ -211,7 +217,8 @@ SCREENS.heroes={name:"② 英雄",en:"Heroes",render:function(){
     if(q[g]) s+=ph("ui_item_cell",gx,gy,120,120,{cls:q[g],txt:(g<4?"武器":g<6?"装备":"材料")+"<br>×"+(g+2)});
     else s+=ph("ui_item_cell",gx,gy,120,120,{cls:"lock",txt:"+"});
   }
-  s+=txt(0,1105,750,26,"↓ 背包可纵向滚动 · 点格子弹物品详情（属性/出售?）",'','font-size:9px;opacity:.55');
+  s+=txt(0,1085,750,26,"↓ 背包可纵向滚动 · 点格子弹物品详情（属性/出售?）",'','font-size:9px;opacity:.55');
+  s+='</div>';
   s+=navbar(1);
   return s;
 },notes:{
@@ -237,26 +244,26 @@ SCREENS.heroes={name:"② 英雄",en:"Heroes",render:function(){
 /* ---- M3 关卡 ---- */
 SCREENS.levels={name:"③ 关卡",en:"Levels",render:function(){
   var s=pagebg()+topbar();
-  /* 章节关卡标题 */
-  s+=ph("ui_chapter_banner",125,105,500,100,{cls:"gold",txt:"第1章 腐朽森林<br><b style='font-size:13px'>1-1 前哨</b>"});
+  /* 章节关卡标题（顶栏下移后内容整体 +100，场景图压缩 40 保证一屏） */
+  s+=ph("ui_chapter_banner",125,210,500,100,{cls:"gold",txt:"第1章 腐朽森林<br><b style='font-size:13px'>1-1 前哨</b>"});
   /* 当前关场景大图 + 图内左右切关箭头 */
-  s+=ph("scenes/scene_1_1",100,225,550,590,{cls:"dark",css:"background:rgba(46,64,52,.34);border-color:rgba(120,180,110,.45)",txt:"当前关场景大图<br>(波次10 · 哥布林军团)"});
-  s+=ph("ui_btn_arrow",130,485,70,70,{cls:"gold circ",txt:"◀"});
-  s+=ph("ui_btn_arrow",550,485,70,70,{cls:"gold circ",txt:"▶"});
-  s+=ph("ui_badge_new",560,245,70,30,{cls:"red",txt:"NEW"});
+  s+=ph("scenes/scene_1_1",100,325,550,550,{cls:"dark",css:"background:rgba(46,64,52,.34);border-color:rgba(120,180,110,.45)",txt:"当前关场景大图<br>(波次10 · 哥布林军团)"});
+  s+=ph("ui_btn_arrow",130,565,70,70,{cls:"gold circ",txt:"◀"});
+  s+=ph("ui_btn_arrow",550,565,70,70,{cls:"gold circ",txt:"▶"});
+  s+=ph("ui_badge_new",560,345,70,30,{cls:"red",txt:"NEW"});
   /* 星箱进度条（垫在三箱后方，从箱1中心连到箱3中心；金色=已达成段） */
-  s+='<div class="bar" style="left:147px;top:447px;width:470px;z-index:4"><i style="width:33%;background:#f2b23e"></i></div>';
+  s+='<div class="bar" style="left:147px;top:470px;width:470px;z-index:4"><i style="width:33%;background:#f2b23e"></i></div>';
   /* 三档通关星箱 */
   var chests=[["成功通关","ui_chest_star1","gold","可领取"],["50%血量通关","ui_chest_star2","","未达标"],["完美通关","ui_chest_star3","purple","已领取"]];
   for(var i=0;i<3;i++){
     var x=40+i*235;
-    s+=ph("ui_chest_card",x,840,215,180,{cls:chests[i][2],txt:""});
-    s+=ph(chests[i][1],x+62,852,90,90,{cls:chests[i][2],txt:"宝箱"});
-    s+=txt(x,948,215,30,chests[i][0],'','font-size:10px');
-    s+=txt(x,978,215,28,chests[i][3],'','font-size:9px;color:'+(i==0?'#ffe08a':'#9aa'));
+    s+=ph("ui_chest_card",x,890,215,180,{cls:chests[i][2],txt:""});
+    s+=ph(chests[i][1],x+62,902,90,90,{cls:chests[i][2],txt:"宝箱"});
+    s+=txt(x,998,215,30,chests[i][0],'','font-size:10px');
+    s+=txt(x,1028,215,28,chests[i][3],'','font-size:9px;color:'+(i==0?'#ffe08a':'#9aa'));
   }
   /* 开始战斗 */
-  s+=ph("ui_btn_green",125,1042,500,90,{cls:"green",txt:"⚔ 开 始 战 斗"});
+  s+=ph("ui_btn_green",125,1085,500,90,{cls:"green",txt:"⚔ 开 始 战 斗"});
   s+=navbar(2);
   return s;
 },notes:{
@@ -283,17 +290,8 @@ SCREENS.levels={name:"③ 关卡",en:"Levels",render:function(){
 /* ---- M4 升级（v2 重构：英雄栏+大图常驻；等级/武器=数值提升+底部居中；技能/装备=方形槽+点击弹窗） ---- */
 /* 升级页专用背景：无标注文字（避免穿透底部消耗行），ID/尺寸注记沉底被导航栏遮盖 */
 function upBg(){return ph("scenes/scene_1_1",0,0,750,1334,{cls:"dark",css:"background:rgba(46,64,52,.30);border-color:rgba(120,180,110,.4);justify-content:flex-end",txt:""});}
-/* 升级页专用顶部：刘海预留区 + 顶栏下移（对齐战斗界面安全区规范） */
-function upTop(){
-  var s='';
-  s+=ph("safe_notch",255,0,240,64,{cls:"red",css:"border-radius:0 0 16px 16px;border-top:none",txt:"刘海遮挡预留区(禁放UI)"});
-  s+=ph("ui_topbar_main",0,100,750,90,{cls:"dark",txt:""});
-  s+=ph("ui_icon_coin",430,120,50,50,{cls:"gold circ",txt:"🪙"});
-  s+=txt(486,120,100,50,"1,451",'','font-size:12px');
-  s+=ph("ui_icon_diamond",600,120,50,50,{cls:"blue circ",txt:"💎"});
-  s+=txt(656,120,84,50,"20",'','font-size:12px');
-  return s;
-}
+/* 升级页顶部与全局 topbar 统一（刘海预留区 + 顶栏 y100） */
+function upTop(){return topbar();}
 /* 常驻英雄栏：头像切换（名字/战力移至立绘脚底名牌） */
 function upHeroBar(){
   var s='';
@@ -499,6 +497,7 @@ SCREENS.base={name:"⑤ 基地",en:"Base",render:function(){
 /* ---- 主界面新增资源清单 ---- */
 var MAIN_MANIFEST=[
 ["G · 主界面通用",[
+ ["safe_notch","刘海遮挡预留区(规范标示)","240×64","1","五页通用","禁放UI，顶栏整体 y100 起"],
  ["ui_topbar_main","主城顶栏框","750×90","1","五页通用","金币/钻石座复用 A2 图标"],
  ["ui_navbar","底部导航栏","750×122","1","五页通用","页签槽复用 ui_tab_item"],
  ["ui_banner_title","撕纸标题横幅","520×88","1","主城各页","已产出"],
