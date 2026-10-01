@@ -121,7 +121,7 @@ function navbar(active){
   return s;
 }
 /* 页面背景：复用场景图+暗化 */
-function pagebg(){return ph("scenes/scene_1_1",0,0,750,1334,{cls:"dark",css:"background:rgba(46,64,52,.30);border-color:rgba(120,180,110,.4)",txt:"主城背景 · 复用关卡场景图+暗化遮罩(占位)"});}
+function pagebg(){return ph("scenes/scene_1_1",0,0,750,1334,{cls:"dark",css:"background:rgba(46,64,52,.30);border-color:rgba(120,180,110,.4);justify-content:flex-end;padding-bottom:130px",txt:"主城背景 · 复用关卡场景图+暗化遮罩(占位)"});}
 /* 撕纸标题横幅 */
 function banner(t,y){return ph("ui_banner_title",115,y,520,88,{cls:"gold",txt:t})+"";}
 
@@ -280,59 +280,162 @@ SCREENS.levels={name:"③ 关卡",en:"Levels",render:function(){
   ]
 }};
 
-/* ---- M4 升级 ---- */
-SCREENS.upgrade={name:"④ 升级",en:"Upgrade",render:function(){
-  var s=pagebg()+topbar();
-  /* 英雄切换栏 */
+/* ---- M4 升级（四页签布局差异大，分别出线稿） ---- */
+function upHeroBar(){
+  var s='';
   s+=ph("ui_hero_avatar",30,105,88,88,{cls:"gold circ",txt:"艾拉<br>(选中)"});
   s+=ph("ui_hero_avatar",130,105,88,88,{cls:"circ",txt:"凯尔"});
   s+=ph("ui_hero_avatar",230,105,88,88,{cls:"lock circ",txt:"+<br>未解锁"});
   s+=txt(340,110,380,44,"<b>艾拉·风羽</b>&nbsp;<span style='color:#ffe08a'>Lv.3</span>",'','font-size:13px');
   s+=txt(340,155,380,36,"🔥 战力 1,234",'','font-size:11px;color:#ffb;');
-  /* 英雄大图 + 属性汇总 */
+  return s;
+}
+function upTabs(active){
+  var tabs=["等级","武器","技能","装备"], s='';
+  for(var t=0;t<4;t++){
+    s+=ph("ui_up_tab",15+t*182,635,170,64,{cls:t==active?"gold":"",txt:tabs[t]+(t==active?"(选中)":"")});
+  }
+  return s;
+}
+/* 通用升级动作条（等级/武器/装备底部复用：消耗行+大按钮） */
+function upActBar(costCoin,costMat,btnTxt){
+  var s=ph("ui_panel_dark_white",25,715,700,200,{cls:"",txt:""});
+  s+=txt(45,730,300,36,"<b>强化消耗</b>",'','font-size:11px;opacity:.85;justify-content:flex-start;padding-left:16px');
+  s+=ph("ui_icon_coin",45,850,44,44,{cls:"gold circ",txt:"🪙"});
+  s+=txt(95,850,110,44,costCoin,'','font-size:12px');
+  s+=ph("ui_icon_mat",210,850,44,44,{cls:"green circ",txt:"🧱"});
+  s+=txt(260,850,110,44,"×"+costMat,'','font-size:12px');
+  s+=ph("ui_btn_primary",425,835,300,80,{cls:"gold",txt:btnTxt});
+  return s;
+}
+var UP_NOTES={ /* 四页签共享的交互/差异说明 */
+  interact:[
+    "消耗双轨：等级/技能=金币；武器/装备强化=材料+金币（材料不足时材料图标红闪+toast）。",
+    "升级成功：属性数字滚动刷新、战力徽章跳动；消耗不足按钮灰化；满级（等级30/武器20/技能10/装备每件20）按钮变「MAX」。",
+    "切换英雄：当前页签内容整体切换为该英雄数据。"
+  ],
+  diff:[
+    "参考核心页是技能装配+禁用编辑（战前配技能）→ 本作战斗内技能走三选一卡池，升级页专注数值养成。",
+    "参考页签是方案1~5预设 → 本作四页签为养成模块，不做预设方案。"
+  ]
+};
+function mkUp(o){return {name:o.name,en:o.en,render:o.render,notes:{layout:o.layout,interact:UP_NOTES.interact.concat(o.interact||[]),diff:UP_NOTES.diff.concat(o.diff||[])}};}
+
+SCREENS.upgrade=mkUp({name:"④ 升级·等级",en:"Upgrade · Level",render:function(){
+  var s=pagebg()+topbar()+upHeroBar();
+  /* 英雄大图 + 属性总览 */
   s+=ph("hero_aila_portrait",60,215,240,400,{txt:"英雄大图<br>(复用立绘)"});
   s+=ph("ui_panel_stats",320,215,400,400,{cls:"dark",txt:""});
   s+=txt(340,235,360,36,"<b>属性总览</b>",'','font-size:12px;color:#ffe08a');
-  var rows=[["攻击","142 (+24%)"],["攻速","1.2次/秒"],["技能伤害","96 (+15%)"],["普攻等级","2"],["技能等级","1"],["大招等级","1"]];
+  var rows=[["攻击","142 (+24%)"],["攻速","1.2次/秒"],["技能伤害","96 (+15%)"],["普攻等级","3"],["技能等级","2"],["大招等级","1"]];
   for(var i=0;i<rows.length;i++){
     s+=txt(340,280+i*54,160,40,rows[i][0],'','font-size:10px;opacity:.75;justify-content:flex-start;padding-left:20px');
     s+=txt(500,280+i*54,200,40,rows[i][1],'','font-size:11px;justify-content:flex-end;padding-right:20px');
   }
-  /* 四页签 */
-  var tabs=[["等级","gold"],["武器",""],["技能",""],["装备",""]];
-  for(var t=0;t<4;t++){
-    s+=ph("ui_up_tab",15+t*182,635,170,64,{cls:tabs[t][1],txt:tabs[t][0]+(t==0?"(选中)":"")});
-  }
-  /* 内容区：等级页签示例 */
+  /* 内容区：等级升级条目 */
   s+=ph("ui_panel_dark_white",25,715,700,200,{cls:"",txt:""});
   s+=txt(45,730,400,40,"<b>英雄等级</b>&nbsp;&nbsp;Lv.3 → Lv.4",'','font-size:12px;justify-content:flex-start;padding-left:16px');
   s+=txt(45,775,660,60,"升级效果：攻击 +8% · 技能伤害 +5%",'','font-size:11px;opacity:.8;justify-content:flex-start;padding-left:16px');
   s+=ph("ui_icon_coin",45,850,44,44,{cls:"gold circ",txt:"🪙"});
   s+=txt(95,850,120,44,"320",'','font-size:12px');
   s+=ph("ui_btn_primary",425,835,300,80,{cls:"gold",txt:"升 级"});
-  /* 武器/技能/装备页签内容缩略示意（切换后同位置显示对应条目列表） */
-  s+=txt(25,940,700,170,"武器页签：武器强化条目（每英雄一把武器，材料+金币）<br>技能页签：普攻 / 技能 / 大招 三行（金币）<br>装备页签：已穿戴五槽逐件强化（材料+金币）",'','font-size:10px;opacity:.6');
-  s+=navbar(3);
+  s+=upTabs(0)+navbar(3);
   return s;
-},notes:{
-  layout:[
-    "顶部英雄切换栏：头像 88×88（选中金框）+ 未解锁灰色「+」；右侧当前英雄名/等级/战力。",
-    "中部：英雄大图 240×400（复用立绘）+ 右侧属性总览面板 <code>ui_panel_stats</code> 400×400。",
-    "四页签 <code>ui_up_tab</code> 170×64：等级 / 武器 / 技能 / 装备（装备强化入口已确认放这里）。",
-    "内容区 700 宽条目面板：当前值→下一级、效果预览、消耗行（货币icon+数量）、右侧升级大按钮。"
-  ],
-  interact:[
-    "消耗双轨：等级/技能=金币；武器/装备强化=材料+金币（材料不足时材料图标红闪+toast）。",
-    "升级成功：属性面板数字滚动刷新、战力徽章跳动；金币不足按钮灰化。",
-    "等级上限 30 / 武器 20 / 技能 10 / 装备每件 20，满级按钮变「MAX」。",
-    "切换英雄：四页签内容整体切换为该英雄数据。"
-  ],
-  diff:[
-    "参考核心页是技能装配+禁用编辑（战前配技能）→ 本作战斗内技能走三选一卡池，升级页专注数值养成。",
-    "参考核心页有幻形/宠物 → 不做。",
-    "参考页签是方案1~5预设 → 本作四页签为养成模块，不做预设方案。"
-  ]
-}};
+},layout:[
+  "顶部英雄切换栏：头像 88×88（选中金框）+ 未解锁灰色「+」；右侧当前英雄名/等级/战力。",
+  "等级页签：左英雄大图 240×400 + 右属性总览 <code>ui_panel_stats</code> 400×400。",
+  "底部条目面板 700×200：当前值→下一级、效果预览、金币消耗行、右侧「升级」大按钮。"
+]});
+
+SCREENS.upgrade_weapon=mkUp({name:"④ 升级·武器",en:"Upgrade · Weapon",render:function(){
+  var s=pagebg()+topbar()+upHeroBar();
+  /* 左：武器大卡（每英雄唯一，占双槽宽） */
+  s+=ph("hero_aila_weapon",25,215,330,400,{cls:"green",txt:"武器大图<br>风羽长弓<br>(绿2阶)"});
+  s+=ph("ui_lv_badge",255,235,90,36,{cls:"dark",txt:"强化Lv.2"});
+  /* 右：武器属性面板 */
+  s+=ph("ui_panel_stats",385,215,335,400,{cls:"dark",txt:""});
+  s+=txt(405,235,300,36,"<b>风羽长弓 · 绿2阶</b>",'','font-size:12px;color:#ffe08a');
+  s+=txt(405,275,300,30,"每英雄唯一 · 恒穿戴",'','font-size:9px;opacity:.6');
+  var rows=[["攻击","86 (+8/级)"],["攻速","1.2次/秒"],["暴击伤害","+10%"]];
+  for(var i=0;i<rows.length;i++){
+    s+=txt(405,330+i*56,120,40,rows[i][0],'','font-size:10px;opacity:.75;justify-content:flex-start;padding-left:12px');
+    s+=txt(540,330+i*56,160,40,rows[i][1],'','font-size:11px;justify-content:flex-end;padding-right:14px');
+  }
+  s+=txt(405,520,300,34,"<b>▶ 强化 Lv.2 → Lv.3</b>",'','font-size:11px;color:#ffe08a');
+  s+=txt(405,558,300,34,"攻击 +8 · 战力 +45",'','font-size:10px;opacity:.8');
+  /* 内容区：武器强化（金币+材料双耗） */
+  s+=upActBar("1,500",2,"强 化");
+  s+=txt(45,893,340,22,"满级 20 · 材料来自关卡掉落/商店",'','font-size:9px;opacity:.55;justify-content:flex-start;padding-left:16px');
+  s+=upTabs(1)+navbar(3);
+  return s;
+},layout:[
+  "武器页签：左武器大卡 <code>hero_aila_weapon</code> 330×400（品质绿框+强化等级角标；每英雄唯一恒穿戴）。",
+  "右武器属性面板 335×400：攻击/攻速/暴伤 + 下级强化预览。",
+  "底部强化动作条 700×200：金币+强化材料双消耗行 +「强化」大按钮（与装备页签同款动作条）。"
+],diff:[
+  "参考武器页有弹药/部件系统 → 本作武器仅强化数值，无弹药。"
+]});
+
+SCREENS.upgrade_skill=mkUp({name:"④ 升级·技能",en:"Upgrade · Skills",render:function(){
+  var s=pagebg()+topbar()+upHeroBar();
+  /* 竖排三张技能行：普攻/技能/大招（点行选中，详情在底部） */
+  var sk=[
+    ["普攻 · 风羽连射","Lv.3","快速连射两箭","gold","选中"],
+    ["技能 · 穿透箭","Lv.2","贯穿直线的范围伤害","",""],
+    ["大招 · 风暴之眼","Lv.1","全场持续箭雨（充能释放）","",""]
+  ];
+  for(var i=0;i<3;i++){
+    var y=215+i*130;
+    s+=ph("ui_skill_row",25,y,700,120,{cls:sk[i][3],txt:""});
+    s+=ph("hero_{id}_skill_icon",40,y+15,90,90,{cls:i==2?"purple circ":"blue circ",txt:sk[i][0].split(" · ")[0]});
+    s+=txt(150,y+15,300,40,"<b>"+sk[i][0]+"</b>"+(sk[i][4]?"<span style='color:#ffe08a'>（"+sk[i][4]+"）</span>":""),'','font-size:11px;justify-content:flex-start;padding-left:10px');
+    s+=txt(150,y+62,340,34,sk[i][2],'','font-size:9px;opacity:.65;justify-content:flex-start;padding-left:10px');
+    s+=txt(560,y+15,150,90,"<b style='color:#ffe08a'>"+sk[i][1]+"</b><br><span style='font-size:9px;opacity:.6'>上限10</span>",'','font-size:13px');
+  }
+  /* 内容区：选中技能详情+升级 */
+  s+=ph("ui_panel_dark_white",25,715,700,200,{cls:"",txt:""});
+  s+=txt(45,730,400,40,"<b>穿透箭</b>&nbsp;&nbsp;Lv.2 → Lv.3",'','font-size:12px;justify-content:flex-start;padding-left:16px');
+  s+=txt(45,775,660,60,"升级效果：伤害 96 → 110 · CD 8.0s → 7.5s",'','font-size:11px;opacity:.8;justify-content:flex-start;padding-left:16px');
+  s+=ph("ui_icon_coin",45,850,44,44,{cls:"gold circ",txt:"🪙"});
+  s+=txt(95,850,120,44,"400",'','font-size:12px');
+  s+=ph("ui_btn_primary",425,835,300,80,{cls:"gold",txt:"升 级"});
+  s+=upTabs(2)+navbar(3);
+  return s;
+},layout:[
+  "技能页签：竖排三张技能行 <code>ui_skill_row</code> 700×120（普攻/技能/大招，各配 <code>hero_{id}_skill_icon</code> 圆图标+等级+上限），点行选中（金框）。",
+  "底部选中技能详情 700×200：当前→下一级、伤害/CD 预览、金币消耗行、「升级」大按钮。技能=纯金币升级。"
+],diff:[
+  "参考技能页签是三选一装配 → 本作三行=普攻/技能/大招数值养成，装配在战斗内三选一完成。"
+]});
+
+SCREENS.upgrade_equip=mkUp({name:"④ 升级·装备",en:"Upgrade · Equip",render:function(){
+  var s=pagebg()+topbar()+upHeroBar();
+  /* 左：2×2 已穿戴装备槽（点选强化） */
+  var eq=[["头盔","blue","蓝1阶 · 选中","gold"],["饰品","","空槽+",""],["手套","white","白3阶",""],["衣服","purple","紫1阶",""]];
+  for(var i=0;i<4;i++){
+    var x=25+(i%2)*195, y=215+Math.floor(i/2)*195;
+    s+=ph("ui_slot_frame",x,y,180,180,{cls:eq[i][3]||eq[i][1],txt:eq[i][0]+"<br>"+eq[i][2]});
+  }
+  /* 右：选中装备详情 */
+  s+=ph("ui_panel_stats",430,215,290,400,{cls:"dark",txt:""});
+  s+=txt(450,235,250,36,"<b>猎鹰头盔 · 蓝1阶</b>",'','font-size:12px;color:#ffe08a');
+  s+=txt(450,275,250,30,"强化Lv.1 / 上限20",'','font-size:9px;opacity:.6');
+  var rows=[["防御","+5%"],["生命","+50"]];
+  for(var i=0;i<rows.length;i++){
+    s+=txt(450,330+i*56,110,40,rows[i][0],'','font-size:10px;opacity:.75;justify-content:flex-start;padding-left:12px');
+    s+=txt(570,330+i*56,130,40,rows[i][1],'','font-size:11px;justify-content:flex-end;padding-right:14px');
+  }
+  s+=txt(450,520,250,34,"<b>▶ 强化 Lv.1 → Lv.2</b>",'','font-size:11px;color:#ffe08a');
+  s+=txt(450,558,250,34,"防御 +2% · 战力 +18",'','font-size:10px;opacity:.8');
+  /* 内容区：装备强化动作条（金币+材料） */
+  s+=upActBar("1,200",1,"强 化");
+  s+=upTabs(3)+navbar(3);
+  return s;
+},layout:[
+  "装备页签：左 2×2 已穿戴装备槽 <code>ui_slot_frame</code> 180×180（头盔/饰品/手套/衣服，品质框色，选中金框，空槽灰+）。",
+  "右选中装备详情 290×400：名称品质/强化等级、属性加成、下级预览。",
+  "底部强化动作条 700×200：金币+材料双消耗 +「强化」大按钮（与武器页签同款）。"
+]});
 
 /* ---- M5 基地 ---- */
 SCREENS.base={name:"⑤ 基地",en:"Base",render:function(){
@@ -411,7 +514,10 @@ var MAIN_MANIFEST=[
 ["K · 升级",[
  ["ui_hero_avatar","英雄头像框(选中态)","88×88","1","升级","复用 circ_icon_gold"],
  ["ui_panel_stats","属性总览面板","400×400","1","升级","复用 panel_dark_white"],
- ["ui_up_tab","升级页签(4态)","170×64","1","升级","复用 ui_shop_tab 缩放"]
+ ["ui_up_tab","升级页签(4态)","170×64","1","升级","复用 ui_shop_tab 缩放"],
+ ["hero_{id}_weapon","英雄武器大图","330×400","2","升级","每英雄唯一，复用武器图标放大"],
+ ["ui_skill_row","技能行卡","700×120","1","升级","复用 panel_dark_white"],
+ ["ui_icon_mat","强化材料图标","44×44","1","升级/商店","按材料类型换图"]
 ]],
 ["L · 基地",[
  ["bg_base_island","等距基地场景","750×1122","1","基地","整图，主色调绿棕"],
@@ -458,7 +564,7 @@ function renderMainSpec(){
 }
 
 /* ============ 导航与渲染（同战斗线稿骨架） ============ */
-var ORDER=["shop","heroes","levels","upgrade","base","mainmanifest","mainspec"];
+var ORDER=["shop","heroes","levels","upgrade","upgrade_weapon","upgrade_skill","upgrade_equip","base","mainmanifest","mainspec"];
 var CUR="shop";
 function renderNav(){
   var h='<div class="grp">主界面线稿</div>';
