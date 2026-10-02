@@ -41,7 +41,6 @@ export function buildHeroes(ctx: PageCtx): void {
 
     /* 英雄名行 */
     label(content, 0, WY(205, 40), `${def.name}　${def.job}`, { size: 28, color: '#FFF3D6', bold: true, w: 640, h: 40, shrink: true });
-    label(content, 0, WY(250, 30), '点头像/名字看属性与背景故事', { size: 18, color: '#8D96A3', w: 640, h: 30 });
 
     /* 大立绘 + 立绘内左右箭头（切换已拥有英雄） */
     const portrait = gpanel(content, CX(160, 280), WY(305, 440), 280, 440, CA('#20262F', 1), '#FFFFFF33', 1.5, 18);
@@ -101,11 +100,6 @@ export function buildHeroes(ctx: PageCtx): void {
       for (let g = cells.length; g < cap; g++) {
         const empty = gpanel(grid, CX(22 + (g % 5) * 144, 120), WY(945 + Math.floor(g / 5) * 132, 120), 120, 120, CA('#14181E', 0.6), '#FFFFFF22', 1.5, 12);
         label(empty, 0, 0, '+', { size: 44, color: '#5F6873' });
-      }
-      // 提示行放末行下方（导航栏前放不下则省略）
-      const hintT = GRID_TOP + rows * ROW_H + 24;
-      if (hintT < availBottom - 4) {
-        label(grid, 0, WY(hintT, 26), '点格子查看详情', { size: 18, color: '#6B7480', w: 750, h: 26 });
       }
     }
     renderBag();
