@@ -5,7 +5,7 @@
  */
 import { Node } from 'cc';
 import { PAL, LO } from '../../config/GameConfig';
-import { CA, btn, C, gpanel, label, N, WY } from '../UIKit';
+import { CA, btn, C, dimLayer, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
 import { PageCtx, modal, toast, CX, confirmModal } from '../PageKit';
 import {
@@ -169,29 +169,30 @@ function drawEquipAttrs(parent: Node, topY: number, width: number, inst: EquipIn
   return y;
 }
 
-/** 装备详情小面板（对比弹窗两侧 / 装备槽详情弹窗共用）：蓝头（部位名+当前角标+图标+名称/品质/阶Lv）+ 属性区，335×480 */
+/** 装备详情小面板（对比弹窗两侧 / 装备槽详情弹窗共用）：蓝头（图标+当前角标+名称/品质/阶Lv 垂直居中）+ 属性区，335×480 */
 function equipDetailPanel(parent: Node, x: number, y: number, inst: EquipInst, isCur: boolean): Node {
   const d = EQUIPS[inst.defId];
   const p = gpanel(parent, x, y, 335, 480, CA('#14181E', 0.94), C(QCOLOR[d.quality]), 2, 12);
   gpanel(p, 0, 168, 335, 130, CA('#20466E', 0.95), undefined, 0, 10);
-  label(p, -66, 208, KIND_NAME[d.kind], { size: 26, color: '#FFF3D6', bold: true, align: 'left', w: 160, h: 34, shrink: true });
+  equipIcon(p, -120, 168, 76, inst);
   if (isCur) {
-    gpanel(p, 106, 208, 96, 40, CA(PAL.green, 0.95), undefined, 0, 8);
-    label(p, 106, 208, '当前', { size: 20, color: '#FFFFFF', bold: true });
+    gpanel(p, 106, 168, 96, 40, CA(PAL.green, 0.95), undefined, 0, 8);
+    label(p, 106, 168, '当前', { size: 20, color: '#FFFFFF', bold: true });
   }
-  equipIcon(p, -120, 140, 76, inst);
-  label(p, 52, 168, d.name, { size: 18, color: '#E8E0C8', bold: true, align: 'left', w: 200, h: 26, shrink: true });
-  label(p, 52, 138, `品质：${QNAMES[d.quality]}`, { size: 15, color: QCOLOR[d.quality], align: 'left', w: 200, h: 24, shrink: true });
-  label(p, 52, 110, `T${d.tier} 阶 · Lv.${inst.lv}`, { size: 15, color: '#AAB2BD', align: 'left', w: 200, h: 24, shrink: true });
+  label(p, 52, 196, d.name, { size: 18, color: '#E8E0C8', bold: true, align: 'left', w: 200, h: 26, shrink: true });
+  label(p, 52, 166, `品质：${QNAMES[d.quality]}`, { size: 15, color: QCOLOR[d.quality], align: 'left', w: 200, h: 24, shrink: true });
+  label(p, 52, 136, `T${d.tier} 阶 · Lv.${inst.lv}`, { size: 15, color: '#AAB2BD', align: 'left', w: 200, h: 24, shrink: true });
   drawEquipAttrs(p, 62, 305, inst, d);
   return p;
 }
 
-/** 已穿戴装备属性弹窗（复用对比弹窗的单侧详情面板；底部装备锻造，无替换选择） */
+/** 已穿戴装备属性弹窗（复用详情小面板，直接铺在遮罩上不套外层弹窗框；右上 ✕ 关闭，底部装备锻造） */
 function wornEquipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: () => void): void {
   const inst = wornInst(hid, kind)!;
-  const panel = modal(ctx, 460, 610, EQUIPS[inst.defId].name);
-  const p = equipDetailPanel(panel, 0, -30, inst, true);
+  const dim = dimLayer(ctx.screens, 0.68);
+  const p = equipDetailPanel(dim, 0, -80, inst, true);
+  const close = btn(p, 142, 214, 48, 48, '✕', PAL.gold, () => dim.destroy(), 24);
+  close.name = 'btn_close';
   btn(p, 0, -195, 170, 64, '锻 造', PAL.gold, () => equipModal(ctx, hid, kind, rebuild), 22);
 }
 
