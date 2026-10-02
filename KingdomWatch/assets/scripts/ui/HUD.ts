@@ -83,11 +83,14 @@ export class HUD {
     this.hudNode = top;
 
     /* 背景：战场底色（占位）——必须画在 Field 里（mobs 之前）；高度盖满可视区防黑边
-       美术：scene_1_1 竖版战场（1152×2048 ≈ 9:16 视口，近零变形），加载成功后盖掉底色 */
+       美术：scene_1_1 竖版战场（1152×2048 ≈ 9:16 视口，近零变形），加载成功后盖掉底色。
+       cover:true 时 artSprite 返回的是 Mask 裁剪节点内部的 sprite，不能拿它排兄弟序；
+       必须用 belowIdx 让加载回调把裁剪节点本身插到 Field 下标 1（底色之上、防线/怪/英雄之下），
+       否则异步加载完成后 clip 落在 Field 末尾，整张不透明场景图盖住全部战场实体 */
     const bgFlat = gpanel(bgParent || top, 0, 0, 750, LO.half * 2 + 240, '#2E4034', undefined, 0, 0);
     bgFlat.setSiblingIndex(0);
     artSprite(bgParent || top, 0, 0, 750, LO.half * 2 + 240, 'scenes/scene_1_1',
-      { sliced: false, cover: true, hideOnLoad: [bgFlat] }).setSiblingIndex(1);
+      { sliced: false, cover: true, belowIdx: 1, hideOnLoad: [bgFlat] });
 
     /* 顶栏 */
     const topBar = gpanel(top, 0, WY(100, 70), 718, 70, CA('#14181E', 0.72), CA(PAL.gold, 0.9), 1.5, 10);

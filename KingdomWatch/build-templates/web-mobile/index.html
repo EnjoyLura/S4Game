@@ -45,9 +45,8 @@
       try {
         var real = window.devicePixelRatio || 1;
         var q = parseFloat(new URLSearchParams(window.location.search).get('dpr'));
-        // 4x+ 屏（如 vivo V2408A）在 3x 钳制下战斗实体不可见（真机诊断确认逻辑正常、仅渲染缺失），
-        // 这类设备回退 2x 渲染；3x 屏维持 3x 修糊。URL ?dpr= 可强制。
-        window.__KW_DPR_CAP = q > 0 ? q : (real >= 4 ? 2 : Math.min(real, 3));
+        // 3x 屏按原生 3x 渲染修糊；URL ?dpr= 可强制（低端机省电调试）
+        window.__KW_DPR_CAP = q > 0 ? q : Math.min(real, 3);
       } catch (e) { window.__KW_DPR_CAP = 2; }
     })();
   </script>
