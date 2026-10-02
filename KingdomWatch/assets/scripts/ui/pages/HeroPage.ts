@@ -1,6 +1,7 @@
 /**
  * ② 英雄（线稿 heroes）：大图环绕式 —— 单英雄大立绘（左右箭头叠图内）+ 战力徽章 + 属性/故事圆钮
- * 右列装备槽（武器横扁×1 + 2×2 防具）→ 点槽弹背包选择弹窗穿戴；下方背包页签+网格（详情/穿戴/出售）。
+ * 右列装备槽（武器横扁×1 + 2×2 防具）：点已穿槽=装备属性弹窗（锻造），空槽无反应；
+ * 下方背包：点仓库装备=同槽已穿则双面板对比（分解/替换），未穿则单弹窗（穿戴/出售）。
  */
 import { Node } from 'cc';
 import { PAL } from '../../config/GameConfig';
@@ -8,10 +9,11 @@ import { CA, btn, C, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
 import { PageCtx, modal, toast, CX } from '../PageKit';
 import {
-  EquipKind, KIND_NAME, QCOLOR, EQUIPS, MATS, HERO_DEFS,
-  heroStats, sellEquip, wearEquip, takeOff, wornInst,
+  EquipKind, EquipDef, KIND_NAME, QCOLOR, EQUIPS, MATS, HERO_DEFS,
+  heroStats, sellEquip, sellPrice, wearEquip, wornInst, equipAtk, equipHp, tierMul,
 } from '../../core/GameData';
-import { loadSave, saveSave } from '../../core/SaveData';
+import { EquipInst, loadSave, saveSave } from '../../core/SaveData';
+import { equipModal } from './UpgradePage';
 
 const KIND_ICON: Record<EquipKind, string> = { weapon: '🏹', helm: '⛑️', acc: '📿', glove: '🧤', armor: '🥼' };
 const SLOTS_2x2: EquipKind[] = ['helm', 'acc', 'glove', 'armor'];
@@ -111,42 +113,125 @@ function drawSlot(ctx: PageCtx, parent: Node, hid: string, kind: EquipKind, rebu
     label(slot, 0, h * 0.14, KIND_ICON[kind], { size: Math.min(50, h * 0.38) });
     label(slot, 0, -h * 0.26, `${d.name} Lv.${inst.lv}`, { size: Math.min(20, w * 0.078), color: '#E8E0C8', bold: true, w: w - 12, h: 28, shrink: true });
     label(slot, -w / 2 + 10, h / 2 - 18, `T${d.tier}`, { size: 16, color: QCOLOR[d.quality], align: 'left', w: 60, h: 24 });
+    // 已穿戴：点击弹装备属性（无替换选择）；空槽：点击无反应
+    slot.on(Node.EventType.TOUCH_END, (e: unknown) => {
+      const ev = e as { propagationStopped?: () => void };
+      if (ev && ev.propagationStopped) ev.propagationStopped();
+      wornEquipModal(ctx, hid, kind, rebuild);
+    });
   } else {
     label(slot, 0, h * 0.1, '+', { size: 46, color: '#5F6873' });
     label(slot, 0, -h * 0.26, KIND_NAME[kind], { size: 19, color: '#6B7480', w: w - 10, h: 26 });
   }
-  slot.on(Node.EventType.TOUCH_END, (e: unknown) => {
-    const ev = e as { propagationStopped?: () => void };
-    if (ev && ev.propagationStopped) ev.propagationStopped();
-    slotModal(ctx, hid, kind, rebuild);
-  });
 }
 
-/** 槽位弹窗：已穿戴信息 + 仓库候选 + 卸下 */
-function slotModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: () => void): void {
-  const sv = loadSave();
-  const panel = modal(ctx, 620, 640, `${KIND_NAME[kind]}槽 · 选择装备`);
-  const worn = wornInst(hid, kind);
-  if (worn) {
-    const d = EQUIPS[worn.defId];
-    label(panel, 0, 230, `已穿戴：${d.name} Lv.${worn.lv}`, { size: 22, color: '#FFE08A', w: 560, h: 32, shrink: true });
-    btn(panel, 0, 168, 200, 54, '卸 下', '#5A6472', () => { takeOff(hid, kind); ctx.refresh(); }, 22);
-  } else {
-    label(panel, 0, 230, '该槽位为空', { size: 22, color: '#8D96A3', w: 560, h: 32 });
+/** 品质名（与 QCOLOR 下标一一对应） */
+const QNAMES = ['普通', '优秀', '稀有', '史诗'];
+
+/** 装备图标框（含 T阶角标） */
+function equipIcon(parent: Node, x: number, y: number, size: number, inst: EquipInst): void {
+  const d = EQUIPS[inst.defId];
+  const box = gpanel(parent, x, y, size, size, CA('#2A3240', 1), C(QCOLOR[d.quality]), 2.5, 10);
+  label(box, 0, 0, KIND_ICON[d.kind], { size: Math.round(size * 0.46) });
+  label(box, -size / 2 + 8, -size / 2 + 18, `T${d.tier}`, { size: 15, color: QCOLOR[d.quality], bold: true, align: 'left', w: 52, h: 24 });
+}
+
+/** 属性区块（基础属性/附加属性，参考线稿装备详情弹窗）；返回内容底部 y（局部坐标） */
+function drawEquipAttrs(parent: Node, topY: number, width: number, inst: EquipInst, d: EquipDef): number {
+  const big = width > 420;
+  const mul = tierMul(d.tier);
+  const atk0 = Math.round(d.atk * mul), hp0 = Math.round(d.hp * mul);
+  const atkV = equipAtk(inst), hpV = equipHp(inst);
+  const primAtk = atkV >= hpV;
+  const p0 = primAtk ? atk0 : hp0;
+  const pV = primAtk ? atkV : hpV;
+  const sV = primAtk ? hpV : atkV;
+  const rows: [string, string, boolean?][] = [['#bar#', '基础属性'], [primAtk ? '攻击' : '生命', String(p0)]];
+  if (pV - p0 > 0) rows.push(['强化', `+${pV - p0}`, true]);
+  if (sV > 0) { rows.push(['#bar#', '附加属性'], [primAtk ? '生命' : '攻击', String(sV)]); }
+  let y = topY;
+  for (const r of rows) {
+    if (r[0] === '#bar#') {
+      gpanel(parent, 0, y, width, big ? 44 : 34, CA('#565E6A', 0.4), undefined, 0, 6);
+      label(parent, 0, y, r[1], { size: big ? 21 : 16, color: '#C8CDD4', bold: true, align: 'left', w: width - 32, h: big ? 44 : 34, shrink: true });
+      y -= big ? 62 : 50;
+    } else {
+      // shrink 才能让 align 生效（overflow=NONE 时文本按节点中心排）
+      label(parent, -width / 4 + 16, y, r[0], { size: big ? 22 : 17, color: r[2] ? PAL.green : '#E8E0C8', bold: !!r[2], align: 'left', w: width / 2, h: 30, shrink: true });
+      label(parent, width / 4 - 16, y, r[1], { size: (big ? 22 : 17) + 2, color: r[2] ? PAL.green : '#FFE08A', bold: true, align: 'right', w: width / 2, h: 30, shrink: true });
+      y -= big ? 48 : 42;
+    }
   }
-  const list = sv.equips.filter(e => EQUIPS[e.defId]?.kind === kind);
-  const listY = worn ? 100 : 150;
-  if (!list.length) label(panel, 0, listY, '仓库暂无该类型装备 · 去商店看看', { size: 20, color: '#8D96A3', w: 560, h: 30 });
-  list.slice(0, 4).forEach((e, i) => {
-    const d = EQUIPS[e.defId];
-    const row = gpanel(panel, 0, listY - i * 92, 560, 80, CA('#14181E', 0.9), C(QCOLOR[d.quality]), 2, 12);
-    label(row, -180, 12, `${KIND_ICON[kind]} ${d.name}`, { size: 22, color: '#FFF3D6', bold: true, align: 'left', w: 300, h: 32, shrink: true });
-    label(row, -180, -16, `T${d.tier} · Lv.${e.lv} · 攻${d.atk}/命${d.hp}`, { size: 17, color: '#AAB2BD', align: 'left', w: 320, h: 26 });
-    btn(row, 200, 0, 130, 56, '穿 戴', PAL.green, () => {
-      wearEquip(hid, kind, e.uid);
-      ctx.refresh();
-    }, 22);
-  });
+  return y;
+}
+
+/** 已穿戴装备属性弹窗（参考线稿：头部信息+基础/附加属性+底部装备锻造；无替换选择） */
+function wornEquipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: () => void): void {
+  const inst = wornInst(hid, kind)!;
+  const d = EQUIPS[inst.defId];
+  const panel = modal(ctx, 620, 640, d.name);
+  equipIcon(panel, -185, 185, 130, inst);
+  label(panel, 10, 220, `品质：${QNAMES[d.quality]}`, { size: 23, color: QCOLOR[d.quality], bold: true, align: 'left', w: 280, h: 34 });
+  label(panel, 10, 170, `品阶：T${d.tier} 阶`, { size: 22, color: '#E8E0C8', align: 'left', w: 280, h: 32 });
+  label(panel, 10, 120, `等级：${inst.lv}`, { size: 22, color: '#E8E0C8', align: 'left', w: 280, h: 32 });
+  drawEquipAttrs(panel, 40, 560, inst, d);
+  btn(panel, 0, -255, 230, 76, '装备锻造', PAL.gold, () => equipModal(ctx, hid, kind, rebuild), 24);
+}
+
+/** 仓库装备详情弹窗（同槽未穿戴时）：属性 + 穿戴（右）/出售（左） */
+function warehouseEquipModal(ctx: PageCtx, hid: string, inst: EquipInst, rebuild: () => void): void {
+  const d = EQUIPS[inst.defId];
+  const panel = modal(ctx, 620, 640, d.name);
+  equipIcon(panel, -185, 185, 130, inst);
+  label(panel, 10, 220, `品质：${QNAMES[d.quality]}`, { size: 23, color: QCOLOR[d.quality], bold: true, align: 'left', w: 280, h: 34 });
+  label(panel, 10, 170, `品阶：T${d.tier} 阶 · 等级 ${inst.lv}`, { size: 22, color: '#E8E0C8', align: 'left', w: 280, h: 32 });
+  label(panel, 10, 120, `出售价：${sellPrice(inst)} 金币`, { size: 20, color: '#AAB2BD', align: 'left', w: 280, h: 30 });
+  drawEquipAttrs(panel, 40, 560, inst, d);
+  btn(panel, 130, -255, 220, 76, `穿戴·${KIND_NAME[d.kind]}`, PAL.green, () => {
+    wearEquip(hid, d.kind, inst.uid);
+    ctx.refresh();
+  }, 21);
+  btn(panel, -130, -255, 220, 76, '出 售', '#5A6472', () => {
+    const r = sellEquip(inst.uid);
+    toast(r.msg);
+    if (r.ok) ctx.refresh();
+  }, 22);
+  void rebuild;
+}
+
+/** 装备对比弹窗（参考线稿：左=当前已穿戴（锻造），右=新装备（分解/替换）） */
+function compareEquipModal(ctx: PageCtx, hid: string, worn: EquipInst, next: EquipInst, rebuild: () => void): void {
+  const panel = modal(ctx, 720, 640, `${KIND_NAME[EQUIPS[next.defId].kind]} · 对比`);
+  const side = (x: number, inst: EquipInst, isCur: boolean): void => {
+    const d = EQUIPS[inst.defId];
+    const p = gpanel(panel, x, -10, 335, 480, CA('#14181E', 0.94), C(QCOLOR[d.quality]), 2, 12);
+    gpanel(p, 0, 168, 335, 130, CA('#20466E', 0.95), undefined, 0, 10);
+    label(p, -66, 208, KIND_NAME[d.kind], { size: 26, color: '#FFF3D6', bold: true, align: 'left', w: 160, h: 34, shrink: true });
+    if (isCur) {
+      gpanel(p, 106, 208, 96, 40, CA(PAL.green, 0.95), undefined, 0, 8);
+      label(p, 106, 208, '当前', { size: 20, color: '#FFFFFF', bold: true });
+    }
+    equipIcon(p, -112, 140, 84, inst);
+    label(p, 38, 168, d.name, { size: 18, color: '#E8E0C8', bold: true, align: 'left', w: 220, h: 26, shrink: true });
+    label(p, 38, 138, `品质：${QNAMES[d.quality]}`, { size: 15, color: QCOLOR[d.quality], align: 'left', w: 220, h: 24, shrink: true });
+    label(p, 38, 110, `T${d.tier} 阶 · Lv.${inst.lv}`, { size: 15, color: '#AAB2BD', align: 'left', w: 220, h: 24, shrink: true });
+    drawEquipAttrs(p, 62, 305, inst, d);
+    if (isCur) {
+      btn(p, 0, -195, 170, 64, '锻 造', PAL.gold, () => equipModal(ctx, hid, d.kind, rebuild), 22);
+    } else {
+      btn(p, -86, -195, 150, 64, '分 解', PAL.green, () => {
+        const r = sellEquip(inst.uid);
+        toast(r.msg);
+        if (r.ok) ctx.refresh();
+      }, 22);
+      btn(p, 86, -195, 150, 64, '替 换', PAL.orange, () => {
+        wearEquip(hid, d.kind, inst.uid);
+        ctx.refresh();
+      }, 22);
+    }
+  };
+  side(-177, worn, true);
+  side(177, next, false);
 }
 
 /** 背包格：装备=详情（穿戴/出售）；材料=详情 */
@@ -167,30 +252,23 @@ function drawBagCell(ctx: PageCtx, grid: Node, cell: { uid: string; n: number },
   g.on(Node.EventType.TOUCH_END, (e: unknown) => {
     const ev = e as { propagationStopped?: () => void };
     if (ev && ev.propagationStopped) ev.propagationStopped();
-    const panel = modal(ctx, 560, 560, isMat ? name : `${name} · 详情`);
     if (isMat) {
+      const panel = modal(ctx, 560, 560, name);
       const m = MATS[cell.uid];
       label(panel, 0, 150, `持有 ×${loadSave().bag[cell.uid] || 0}`, { size: 22, color: '#FFE08A', w: 500, h: 32 });
       label(panel, 0, 50, m.desc, { size: 20, color: '#C8CDD4', w: 500, h: 60, shrink: true });
       label(panel, 0, -70, '来源：商店购买 / 关卡掉落', { size: 18, color: '#8D96A3', w: 500, h: 28 });
       label(panel, 0, -120, '用途：武器 / 装备强化材料', { size: 18, color: '#8D96A3', w: 500, h: 28 });
-    } else {
-      const cur = loadSave().equips.find(e => e.uid === cell.uid);
-      if (!cur) return;
-      const dd = EQUIPS[cur.defId];
-      label(panel, 0, 150, `${dd.name} · T${dd.tier} · Lv.${cur.lv}`, { size: 24, color: QCOLOR[dd.quality], bold: true, w: 500, h: 34 });
-      label(panel, 0, 80, `攻击 +${dd.atk}　生命 +${dd.hp}`, { size: 22, color: '#E8E0C8', w: 500, h: 32 });
-      label(panel, 0, 30, `出售价：${Math.round([100, 400, 1500, 5000][dd.quality] * Math.pow(3, dd.tier - 1) * (1 + (cur.lv - 1) * 0.1))} 金币`, { size: 20, color: '#AAB2BD', w: 500, h: 30 });
-      btn(panel, 130, -140, 220, 70, `穿戴·${KIND_NAME[dd.kind]}`, PAL.green, () => {
-        wearEquip(hid, dd.kind, cur.uid);
-        ctx.refresh();
-      }, 21);
-      btn(panel, -130, -140, 220, 70, '出 售', '#5A6472', () => {
-        const r = sellEquip(cur.uid);
-        toast(r.msg);
-        if (r.ok) ctx.refresh();
-      }, 22);
+      return;
     }
+    const cur = loadSave().equips.find(e => e.uid === cell.uid);
+    if (!cur) return;
+    const dd = EQUIPS[cur.defId];
+    // 同槽已穿≠自己 → 双面板对比（替换/分解）；点的是已穿戴件 → 属性详情；同槽未穿 → 单弹窗（穿戴/出售）
+    const worn = wornInst(hid, dd.kind);
+    if (worn && worn.uid !== cur.uid) compareEquipModal(ctx, hid, worn, cur, rebuild);
+    else if (worn) wornEquipModal(ctx, hid, dd.kind, rebuild);
+    else warehouseEquipModal(ctx, hid, cur, rebuild);
   });
   void rebuild;
 }

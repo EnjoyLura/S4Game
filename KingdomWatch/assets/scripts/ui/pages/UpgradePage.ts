@@ -10,7 +10,7 @@ import { artSprite } from '../Ux';
 import { PageCtx, modal, toast, fmt } from '../PageKit';
 import { attrsModal } from './HeroPage';
 import {
-  HERO_DEFS, EQUIPS, KIND_NAME, QCOLOR, MAX,
+  EquipKind, HERO_DEFS, EQUIPS, KIND_NAME, QCOLOR, MAX,
   heroStats, heroUpCost, weaponUpCost, skillUpCost, equipUpCost,
   upHero, upWeapon, upSkill, upWornEquip, wornInst,
 } from '../../core/GameData';
@@ -193,7 +193,8 @@ function tabEquips(parent: Node, ctx: PageCtx, hid: string): void {
   label(parent, 0, WY(1040, 26), '点击装备槽弹出强化弹窗（金币+材料）', { size: 18, color: '#6B7480', w: 750, h: 26 });
 }
 
-function equipModal(ctx: PageCtx, hid: string, kind: 'helm' | 'acc' | 'glove' | 'armor', rebuild: () => void): void {
+/** 装备强化弹窗（升级页装备槽 + 英雄页属性弹窗「锻造」共用；含武器实例） */
+export function equipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: () => void): void {
   const inst = wornInst(hid, kind)!;
   const d = EQUIPS[inst.defId];
   const maxed = inst.lv >= MAX.equip;
