@@ -149,10 +149,9 @@ export function buildUpgrade(ctx: PageCtx): void {
   }
 }
 
-/** 羊皮纸卡（与战斗三选一卡同框美术）；alpha<1 表示置灰（空槽位） */
+/** 详情背板：无框暗色圆角板（四个升级页签通用，不带边框美术）；alpha<1 表示置灰（空槽位） */
 function parchmentCard(parent: Node, x: number, y: number, w: number, h: number, alpha = 1): Node {
-  const card = gpanel(parent, x, y, w, h, CA('#14181E', 0.92), '#FFFFFF33', 1.5, 14);
-  artSprite(card, 0, 0, w, h, 'ui_card_frame_white', { belowIdx: 0 });
+  const card = gpanel(parent, x, y, w, h, CA('#14181E', 0.92), undefined, 0, 14);
   if (alpha < 1) (card.addComponent(UIOpacity) as UIOpacity).opacity = Math.round(255 * alpha);
   return card;
 }
