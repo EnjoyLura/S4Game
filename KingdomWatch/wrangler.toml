@@ -1,0 +1,7 @@
+# Cloudflare Pages 部署配置（wrangler pages deploy 读取）
+# 战斗真机诊断回传：functions/report.js（POST /report 写入，GET /report 读回）
+name = "kingdom-watch"
+pages_build_output_dir = "build/web-mobile"
+compatibility_date = "2024-09-01"
+
+kv_namespaces = [{ binding = "KW_DIAG", id = "3054504477854c2bb67bc280b28af4c3" }]

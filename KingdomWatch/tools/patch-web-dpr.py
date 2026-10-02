@@ -13,7 +13,9 @@
 """
 import glob
 import io
+import os
 import re
+import shutil
 import sys
 import time
 
@@ -65,6 +67,14 @@ def main():
         print('patch-web-dpr: entry cache-bust v=%s' % ver)
     else:
         print('patch-web-dpr: WARN System.import pattern not found (%d matches) - cache-bust skipped' % n)
+
+    # Pages Functions（战斗诊断回传）：源码在项目根 functions/（wrangler.toml 约定位置，
+    # wrangler pages deploy 自动编译上传；实测放 build 输出目录内不会被识别为函数）。
+    # 这里只清理构建产物里的历史副本，避免被当静态资源重复上传。
+    dst_fn = 'build/web-mobile/functions'
+    if os.path.isdir(dst_fn):
+        shutil.rmtree(dst_fn)
+        print('patch-web-dpr: removed stale build functions dir')
 
     # 守卫：index.html 必须带 __KW_DPR_CAP 引导脚本（模板丢失会让补丁形同虚设，
     # 引擎回退 2x → 3x 屏再次发糊；本回归真实发生过）

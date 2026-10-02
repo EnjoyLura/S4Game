@@ -84,9 +84,11 @@
   </script>
 
   <!-- 战斗渲染自诊断（真机“战斗空白”定位）：进入战斗后每 2s 把渲染状态（相机/实体/可视区）
-       以绿字显示在画面顶部；主城不显示。定位完成后可整体移除本块。 -->
+       以绿字显示在画面顶部（点按可查看/复制），并通过 sendBeacon 同域回传到 /report
+       （Pages Function 写 KV，远程 curl /report 读取）；主城不显示。定位完成后可整体移除本块。 -->
   <script>
     (function () {
+      var lastT = 0, lastTxt = '', sentN = 0;
       setInterval(function () {
         try {
           var bd = window.__kw;
@@ -94,31 +96,45 @@
           if (!bd || !window.cc) { if (box) box.remove(); return; }
           var vis = cc.view.getVisibleSize();
           var cv = document.getElementById('GameCanvas');
-          var ortho = null, camY = null;
+          var ortho = null, camX = null, camY = null;
           var canvasNode = cc.director.getScene().getChildByName('Canvas');
           var c = canvasNode && canvasNode.getComponent('cc.Canvas');
           if (c && c.cameraComponent) {
             ortho = Math.round(c.cameraComponent.orthoHeight * 10) / 10;
+            camX = Math.round(c.cameraComponent.node.worldPosition.x);
             camY = Math.round(c.cameraComponent.node.worldPosition.y);
           }
-          var heroes = (bd.heroes || []).map(function (h) { return h.node ? Math.round(h.node.worldPosition.y) : '?'; }).join('/');
+          var heroes = (bd.heroes || []).map(function (h) {
+            return h.node ? Math.round(h.node.worldPosition.x) + ',' + Math.round(h.node.worldPosition.y) : '?';
+          }).join('/');
           var lineY = bd.line && bd.line.node ? Math.round(bd.line.node.worldPosition.y) : '?';
           var mobs = bd.mgr && bd.mgr.list ? bd.mgr.list.filter(function (m) { return !m.dead; }).length : '?';
-          var txt = 'KW ' + (bd.state || '?')
+          var txt = 'KW ' + (bd.state || '?') + ' t' + Math.round(bd.elapsed || 0)
             + ' | dpr ' + (window.devicePixelRatio || 1) + (cv ? ' cv ' + cv.width + 'x' + cv.height : '')
             + ' | vis ' + Math.round(vis.width) + 'x' + Math.round(vis.height)
-            + ' | ortho ' + ortho + ' camY ' + camY
+            + ' | ortho ' + ortho + ' cam ' + camX + ',' + camY
             + ' | lineY ' + lineY + ' hp ' + (bd.line ? Math.round(bd.line.hp) + '/' + Math.round(bd.line.maxHp) : '?')
-            + ' | heroY ' + heroes + ' | mobs ' + mobs;
+            + ' | hero ' + heroes + ' | mobs ' + mobs;
           if (!box) {
             box = document.createElement('div');
             box.id = 'kwDbgBox';
-            box.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99998;pointer-events:none;'
+            box.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99998;pointer-events:auto;'
               + 'font:10px/1.3 monospace;color:#9fe88a;background:rgba(0,0,0,.6);padding:3px 6px;'
               + 'white-space:pre-wrap;word-break:break-all;text-align:left;';
             (document.body || document.documentElement).appendChild(box);
           }
           box.textContent = txt;
+          box.onclick = function () { try { prompt('KW 诊断（长按全选复制）', box.textContent); } catch (e) { /* ignore */ } };
+          // 自动回传（KV 免费 1000 写/天）：内容变化≥8s 或 30s 心跳，单会话≤200 条
+          try {
+            var now = Date.now();
+            if (sentN < 200 && ((txt !== lastTxt && now - lastT > 8000) || now - lastT > 30000)) {
+              lastT = now; lastTxt = txt; sentN++;
+              var full = txt + ' | ua ' + String(navigator.userAgent || '').slice(0, 80);
+              if (navigator.sendBeacon) navigator.sendBeacon('/report', full);
+              else fetch('/report', { method: 'POST', body: full, keepalive: true });
+            }
+          } catch (e) { /* ignore */ }
         } catch (e) { /* ignore */ }
       }, 2000);
     })();
