@@ -66,14 +66,16 @@ const SLICE9: Record<string, Slice9Def> = {
   ui_card_header_purple: { canon: [400, 104], inset: [65, 65, 11, 11], scale: 0.5 },
 };
 
-/** 按实际文件尺寸换算并写入九宫格 insets（换分辨率文件自适应的关键） */
+/** 按实际文件尺寸换算并写入九宫格 insets（换分辨率文件自适应的关键）
+ *  必须用 sf.rect：纹理被动态合图打包进图集后 width/height 漂移成图集尺寸（2048），
+ *  rect 恒为源图区域 —— 用 width 重算会把 insets/节点缩放全部算炸（重渲染后边框消失的元凶） */
 export function applySlice9(id: string, sf: SpriteFrame): void {
   const c = SLICE9[id];
   if (!c) return;
-  sf.insetLeft = Math.max(0, Math.round(c.inset[0] * sf.width / c.canon[0]));
-  sf.insetRight = Math.max(0, Math.round(c.inset[1] * sf.width / c.canon[0]));
-  sf.insetTop = Math.max(0, Math.round(c.inset[2] * sf.height / c.canon[1]));
-  sf.insetBottom = Math.max(0, Math.round(c.inset[3] * sf.height / c.canon[1]));
+  sf.insetLeft = Math.max(0, Math.round(c.inset[0] * sf.rect.width / c.canon[0]));
+  sf.insetRight = Math.max(0, Math.round(c.inset[1] * sf.rect.width / c.canon[0]));
+  sf.insetTop = Math.max(0, Math.round(c.inset[2] * sf.rect.height / c.canon[1]));
+  sf.insetBottom = Math.max(0, Math.round(c.inset[3] * sf.rect.height / c.canon[1]));
 }
 
 export interface ArtOpts {
@@ -115,8 +117,9 @@ export function artSprite(parent: Node, x: number, y: number, w: number, h: numb
       sp.type = Sprite.Type.SLICED;
       applySlice9(id, sf);
       // 文件分辨率 ≠ 基准时按比例缩放节点：边框渲染像素 = inset×scale 恒定（设计像素）
-      const sx = c.scale * c.canon[0] / sf.width;
-      const sy = c.scale * c.canon[1] / sf.height;
+      // 用 rect（源图区域）而非 width/height —— 动态合图打包后后者漂移成图集尺寸
+      const sx = c.scale * c.canon[0] / sf.rect.width;
+      const sy = c.scale * c.canon[1] / sf.rect.height;
       if (Math.abs(sx - 1) > 0.01 || Math.abs(sy - 1) > 0.01) {
         n.setScale(sx, sy, 1);
         n.getComponent(UITransform)!.setContentSize(w / sx, h / sy);
