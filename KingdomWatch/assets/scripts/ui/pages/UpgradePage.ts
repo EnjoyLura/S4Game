@@ -1,8 +1,8 @@
 /**
- * ④ 升级（去盒子化重构）：元素浮在地图场景上——大立绘悬浮 + 脚下金色光台座（程序椭圆辉光），
- *   名牌=轻量玻璃条；页签内容=羊皮纸大卡片（与战斗三选一卡同美术语言 ui_card_frame_white，
- *   深墨字）；四页签贴导航栏正上方（底部锚点，随屏高贴合）。
- * 坐标：上半部（英雄栏/立绘）顶部锚点，下半部（名牌/内容/页签）全部底部锚点——任何屏高都贴住导航栏。
+ * ④ 升级（属性预览版式）：大立绘悬浮（缩小档）+ 金色光台座；每个升级页签直接展示
+ *   属性升级预览（属性 当前值 → +提升）、等级效果里程碑、消耗/持有（金币·材料）与升级按钮。
+ *   等级/武器=整卡版式；技能=三张横排卡（各自带升级按钮）；装备=2×2 卡（锻造按钮直达）。
+ * 坐标：上半部顶部锚点，下半部（名牌/内容/页签）底部锚点——任何屏高都贴住导航栏。
  */
 import { Graphics, Node, UIOpacity } from 'cc';
 import { LO, PAL } from '../../config/GameConfig';
@@ -13,25 +13,58 @@ import { attrsModal } from './HeroPage';
 import {
   EquipKind, HERO_DEFS, EQUIPS, KIND_NAME, QCOLOR, MAX,
   heroStats, heroUpCost, weaponUpCost, skillUpCost, equipUpCost,
-  upHero, upWeapon, upSkill, upWornEquip, wornInst,
+  upHero, upWeapon, upSkill, upWornEquip, wornInst, equipAtk, equipHp, matCount,
 } from '../../core/GameData';
 import { loadSave, saveSave } from '../../core/SaveData';
 
-const SKILL_INFO = [
-  { slot: 'atk' as const, name: '普攻 · 连射', icon: '普攻', cls: PAL.blue, desc: '普攻伤害 +10%/级' },
-  { slot: 'skill' as const, name: '技能 · 穿透箭', icon: '技能', cls: PAL.blue, desc: '技能伤害 +10%/级 · CD -0.5s' },
-  { slot: 'ult' as const, name: '大招 · 风暴之眼', icon: '大招', cls: PAL.purple, desc: '大招持续伤害 +10%/级' },
-];
 const KIND_ICON: Record<string, string> = { weapon: '🏹', helm: '⛑️', acc: '📿', glove: '🧤', armor: '🥼' };
 const WORN_4: ('helm' | 'acc' | 'glove' | 'armor')[] = ['helm', 'acc', 'glove', 'armor'];
 
-/* 羊皮纸卡面配色（同 Panels 战斗卡：深墨主字 + 深金次字）；品质字色用加深版（原 QCOLOR 在浅底上看不清） */
+/* 羊皮纸卡面配色（同 Panels 战斗卡）；品质字色用加深版（原 QCOLOR 在浅底上看不清） */
 const INK = '#4A3214';
 const SUB = '#6B5A3A';
+const OK = '#3E7C28';
+const NO = '#B03A2E';
 const QCARD = ['#6B5A3A', '#3E7C28', '#1F6BC4', '#8A3FD0'];
+
+/* 等级效果里程碑（展示性文案，战斗内逐步落地） */
+const MILESTONES: Record<string, { lv: number; txt: string }[]> = {
+  archer: [
+    { lv: 5, txt: '攻击力 +5%' },
+    { lv: 10, txt: '攻速 +10%' },
+    { lv: 15, txt: '普攻10%射出贯穿箭' },
+  ],
+  sniper: [
+    { lv: 5, txt: '攻击力 +8%' },
+    { lv: 10, txt: '暴击率 +10%' },
+    { lv: 15, txt: '大招必定暴击' },
+  ],
+};
 
 /* 页签跨刷新保持（升级后 refresh 重建页面不跳回「等级」） */
 const st: { tab: 0 | 1 | 2 | 3 } = { tab: 0 };
+
+/** 指定等级/武器等级下的三维属性（复刻 heroStats 公式，供升级预览差值） */
+function statsAt(hid: string, lv: number, wpnLv: number): { atk: number; skillDmg: number; hp: number } {
+  const sv = loadSave();
+  const def = HERO_DEFS[hid];
+  const h = sv.heroes[hid];
+  const wornAtk = Object.values(h.worn).reduce((a, uid) => {
+    const inst = sv.equips.find(q => q.uid === uid);
+    return a + (inst ? equipAtk(inst) : 0);
+  }, 0);
+  const wornHp = Object.values(h.worn).reduce((a, uid) => {
+    const inst = sv.equips.find(q => q.uid === uid);
+    return a + (inst ? equipHp(inst) : 0);
+  }, 0);
+  const atk = Math.round(def.baseAtk * (1 + (lv - 1) * 0.08) * (1 + (wpnLv - 1) * 0.06) + wornAtk);
+  const skillDmg = Math.round(atk * (1 + (h.skillLv - 1) * 0.10) * (1 + (lv - 1) * 0.05));
+  const hp = 600 + wornHp + lv * 20;
+  return { atk, skillDmg, hp };
+}
+
+/** 持有材料总数（强化消耗聚合扣强化石→精铁） */
+function matOwned(): number { return matCount('mat_stone') + matCount('mat_iron'); }
 
 export function buildUpgrade(ctx: PageCtx): void {
   const root = ctx.screens;
@@ -61,16 +94,15 @@ export function buildUpgrade(ctx: PageCtx): void {
     });
     label(content, WX(330, 300), WY(229, 40), `${def.name}${sv.heroes[hid].owned ? '' : '（未解锁）'}`, { size: 26, color: '#FFF3D6', bold: true, align: 'left', w: 300, h: 40, shrink: true });
 
-    /* 悬浮大立绘：无面板，角色抠图直接浮在地图场景上（手机屏多出的高度全给立绘），脚下金色光台座 */
+    /* 悬浮大立绘（缩小档：上限 430）+ 脚下金色光台座 */
     const dispTopY = LO.half - 300;
-    const dispBotY = WYB(633, 0);
+    const dispBotY = WYB(681, 0);
     const dispH = dispTopY - dispBotY;
     const dispCy = (dispTopY + dispBotY) / 2;
-    const artH = Math.min(dispH - 30, 560);
-    artSprite(content, 0, dispCy, 620, artH, 'hero_' + hid + '_portrait', { sliced: false });
-    artSprite(content, 0, dispCy, 620, artH, def.avatar, { sliced: false });
-    const artBot = dispCy - artH / 2;
-    const ped = N('upPedestal', content, 0, artBot - 16, 560, 110);
+    const artH = Math.min(dispH - 30, 430);
+    artSprite(content, 0, dispCy, 520, artH, 'hero_' + hid + '_portrait', { sliced: false });
+    artSprite(content, 0, dispCy, 520, artH, def.avatar, { sliced: false });
+    const ped = N('upPedestal', content, 0, dispCy - artH / 2 - 16, 560, 110);
     const g = ped.addComponent(Graphics);
     const ring = (rx: number, ry: number, a: number): void => {
       g.fillColor = CA('#F2D48A', a);
@@ -81,19 +113,19 @@ export function buildUpgrade(ctx: PageCtx): void {
     ring(195, 36, 0.14);
     ring(130, 23, 0.20);
 
-    /* 脚底名牌：轻量玻璃条（半透明深底 + 细金边），名字 / 战力 / 详情 */
-    const foot = gpanel(content, 0, WYB(545, 76), 400, 76, CA('#0B0F16', 0.58), '#E8C87866', 1.5, 38);
+    /* 脚底名牌：轻量玻璃条 */
+    const foot = gpanel(content, 0, WYB(595, 76), 400, 76, CA('#0B0F16', 0.58), '#E8C87866', 1.5, 38);
     label(foot, -105, 0, def.name, { size: 25, color: '#FFF3D6', bold: true, w: 180, h: 40, shrink: true });
     label(foot, 40, 0, `🔥 ${hs.power}`, { size: 24, color: '#FFE08A', bold: true, w: 130, h: 40 });
     btn(foot, 155, 0, 74, 54, '详情', PAL.blue, () => attrsModal(ctx, hid), 20);
 
-    /* 页签内容（羊皮纸大卡片，占满名牌与页签之间的空间） */
+    /* 页签内容（属性预览版式） */
     if (st.tab === 0) tabLevel(content, ctx, hid);
     else if (st.tab === 1) tabWeapon(content, ctx, hid);
     else if (st.tab === 2) tabSkills(content, ctx, hid);
     else tabEquips(content, ctx, hid);
 
-    /* 四页签：贴导航栏正上方（底部锚点，任何屏高都贴合） */
+    /* 四页签：贴导航栏正上方 */
     const tabs = ['等级', '武器', '技能', '装备'];
     tabs.forEach((t, i) => {
       btn(content, WX(15 + i * 182, 170), WYB(130, 64), 170, 64, t,
@@ -102,7 +134,7 @@ export function buildUpgrade(ctx: PageCtx): void {
   }
 }
 
-/** 羊皮纸卡（与战斗三选一卡同框美术）：深色底兜底 + 浅色卡框盖顶；alpha<1 表示置灰（空槽位） */
+/** 羊皮纸卡（与战斗三选一卡同框美术）；alpha<1 表示置灰（空槽位） */
 function parchmentCard(parent: Node, x: number, y: number, w: number, h: number, alpha = 1): Node {
   const card = gpanel(parent, x, y, w, h, CA('#14181E', 0.92), '#FFFFFF33', 1.5, 14);
   artSprite(card, 0, 0, w, h, 'ui_card_frame_white', { belowIdx: 0 });
@@ -110,13 +142,29 @@ function parchmentCard(parent: Node, x: number, y: number, w: number, h: number,
   return card;
 }
 
-/** 金色圆图标座（卡内左侧）：金环美术 + 头像图或 emoji 兜底 */
-function goldIconPlate(parent: Node, x: number, y: number, d: number, avatarId?: string, emoji?: string, emojiSize = 44): Node {
+/** 金色圆图标座：金环美术 + 头像图或 emoji */
+function goldIconPlate(parent: Node, x: number, y: number, d: number, avatarId?: string, emoji?: string, emojiSize = 40): Node {
   const c = gcircle(parent, x, y, d / 2, CA('#2A3240', 1), C(PAL.gold), 3);
   artSprite(c, 0, 0, d, d, 'ui_circ_icon_gold', { belowIdx: 0 });
   if (avatarId) artSprite(c, 0, 0, d * 0.86, d * 0.86, avatarId, { sliced: false });
-  else if (emoji) label(c, 0, 0, emoji, { size: emojiSize });
+  else if (emoji) label(c, 0, 0, emoji, { size: emojiSize, color: '#FFE08A', bold: true });
   return c;
+}
+
+/** 属性预览行：名称左 / 当前值右对齐 / 「+提升」绿字（无变化省略） */
+function statRow(card: Node, y: number, name: string, cur: string, delta: string | null): void {
+  label(card, -105, y, name, { size: 19, color: SUB, align: 'left', w: 130, h: 30, shrink: true });
+  label(card, 40, y, cur, { size: 20, color: INK, bold: true, align: 'right', w: 120, h: 30, shrink: true });
+  if (delta) label(card, 170, y, delta, { size: 20, color: OK, bold: true, align: 'left', w: 120, h: 30, shrink: true });
+}
+
+/** 消耗/持有 chip：图标座 + 「需要/持有」，够=绿 不够=红 */
+function costChip(card: Node, x: number, y: number, icon: string, need: number, own: number, valW: number): void {
+  gcircle(card, x, y, 22, CA(PAL.gold, 0.22), C('#8A6A2A'), 2);
+  label(card, x, y, icon, { size: 22 });
+  const ok = own >= need;
+  label(card, x + 30 + valW / 2, y, `${fmt(need)}/${fmt(own)}`,
+    { size: 20, color: ok ? OK : NO, bold: true, align: 'left', w: valW, h: 44, shrink: true });
 }
 
 function saveCur(hid: string): void { loadSave().curHero = hid; saveSave(); }
@@ -126,110 +174,117 @@ function save(hid: string, r: { ok: boolean; msg: string }, ctx: PageCtx): void 
   if (r.ok) ctx.refresh();
 }
 
-/* ---------- 等级页签：一张羊皮纸大卡（头像座+等级信息+消耗+升级按钮） ---------- */
+/* ---------- 等级页签：属性预览 + 等级效果里程碑 + 消耗/升级 ---------- */
 function tabLevel(parent: Node, ctx: PageCtx, hid: string): void {
   const sv = loadSave();
-  const lv = sv.heroes[hid].lv;
+  const h = sv.heroes[hid];
+  const lv = h.lv;
   const maxed = lv >= MAX.hero;
-  const cost = heroUpCost(lv);
-  const card = parchmentCard(parent, 0, WYB(215, 310), 718, 310);
-  goldIconPlate(card, -250, 50, 130, HERO_DEFS[hid].avatar);
-  label(card, -250, -52, `Lv.${lv}`, { size: 26, color: INK, bold: true, w: 130, h: 34 });
-  /* 文本块左缘 -150（align 需 shrink 生效，盒 = x±w/2 → x = 左缘 + w/2）；避开卡框顶部纹饰整体下移 */
-  label(card, 0, 70, '英雄等级', { size: 26, color: INK, bold: true, align: 'left', w: 300, h: 36, shrink: true });
-  label(card, 0, 22, maxed ? `Lv.${lv}（MAX）` : `Lv.${lv} → Lv.${lv + 1}`, { size: 23, color: '#8A4B12', bold: true, align: 'left', w: 300, h: 34, shrink: true });
-  label(card, 10, -26, '每级提升：攻击 +8% · 技能伤害 +5%', { size: 18, color: SUB, align: 'left', w: 320, h: 28, shrink: true });
-  gcircle(card, -140, -88, 27, CA(PAL.gold, 0.22), C('#8A6A2A'), 2);
-  label(card, -140, -88, '🪙', { size: 26 });
-  label(card, 5, -88, maxed ? '—' : fmt(cost), { size: 26, color: INK, bold: true, align: 'left', w: 220, h: 54, shrink: true });
-  btn(card, 252, -88, 200, 84, maxed ? 'MAX' : '升 级', maxed ? '#5A6472' : PAL.gold,
-    () => { if (!maxed) save(hid, upHero(hid), ctx); }, 26);
-  if (!maxed) gpanel(card, 326, 128, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
+  const cur = statsAt(hid, lv, h.weaponLv);
+  const next = maxed ? cur : statsAt(hid, lv + 1, h.weaponLv);
+  const card = parchmentCard(parent, 0, WYB(215, 360), 718, 360);
+  goldIconPlate(card, -250, 100, 120, HERO_DEFS[hid].avatar);
+  label(card, -250, 18, `Lv.${lv}`, { size: 24, color: INK, bold: true, w: 120, h: 32 });
+  /* 文本块左缘 -170（align 需 shrink 生效，盒 = x±w/2 → x = 左缘 + w/2）；标题下移避开卡框顶饰 */
+  label(card, 30, 112, maxed ? `英雄等级　Lv.${lv}（MAX）` : `英雄等级　Lv.${lv} → Lv.${lv + 1}`,
+    { size: 24, color: INK, bold: true, align: 'left', w: 400, h: 34, shrink: true });
+  statRow(card, 78, '攻击力', String(cur.atk), maxed ? null : `+${next.atk - cur.atk}`);
+  statRow(card, 46, '技能伤害', String(cur.skillDmg), maxed ? null : `+${next.skillDmg - cur.skillDmg}`);
+  statRow(card, 14, '生命', String(cur.hp), maxed ? null : `+${next.hp - cur.hp}`);
+  label(card, -70, -14, '等级效果', { size: 20, color: '#8A4B12', bold: true, align: 'left', w: 200, h: 30, shrink: true });
+  (MILESTONES[hid] || []).forEach((m, i) => {
+    const y = -46 - i * 29;
+    const reached = lv >= m.lv;
+    label(card, -140, y, `${m.lv}级`, { size: 18, color: reached ? INK : '#857050', bold: true, w: 60, h: 26 });
+    label(card, 75, y, (reached ? '✓ ' : '') + m.txt, { size: 18, color: reached ? INK : '#857050', bold: reached, align: 'left', w: 350, h: 26, shrink: true });
+  });
+  costChip(card, -150, -140, '🪙', maxed ? 0 : heroUpCost(lv), sv.gold, 210);
+  btn(card, 265, -140, 170, 68, maxed ? 'MAX' : '升 级', maxed ? '#5A6472' : PAL.gold,
+    () => { if (!maxed) save(hid, upHero(hid), ctx); }, 24);
 }
 
-/* ---------- 武器页签：一张羊皮纸大卡（武器座+强化信息+金币/材料+强化按钮） ---------- */
+/* ---------- 武器页签：属性预览 + 消耗（金币+材料）/强化 ---------- */
 function tabWeapon(parent: Node, ctx: PageCtx, hid: string): void {
   const sv = loadSave();
   const h = sv.heroes[hid];
   const lv = h.weaponLv;
   const maxed = lv >= MAX.weapon;
+  const cur = statsAt(hid, h.lv, lv);
+  const next = maxed ? cur : statsAt(hid, h.lv, lv + 1);
   const c = weaponUpCost(lv);
-  const card = parchmentCard(parent, 0, WYB(215, 310), 718, 310);
-  goldIconPlate(card, -250, 50, 130, undefined, KIND_ICON.weapon, 48);
-  label(card, -250, -52, `Lv.${lv}`, { size: 26, color: INK, bold: true, w: 130, h: 34 });
-  label(card, 20, 70, HERO_DEFS[hid].weaponName, { size: 26, color: INK, bold: true, align: 'left', w: 340, h: 36, shrink: true });
-  label(card, 20, 22, maxed ? `强化 Lv.${lv}（MAX）` : `强化 Lv.${lv} → Lv.${lv + 1}`, { size: 23, color: '#8A4B12', bold: true, align: 'left', w: 340, h: 34, shrink: true });
-  label(card, 0, -26, '每级提升：攻击 +6% · 每5级材料需求 +1', { size: 18, color: SUB, align: 'left', w: 300, h: 28, shrink: true });
-  gcircle(card, -150, -88, 27, CA(PAL.gold, 0.22), C('#8A6A2A'), 2);
-  label(card, -150, -88, '🪙', { size: 26 });
-  label(card, -47, -88, maxed ? '—' : fmt(c.gold), { size: 26, color: INK, bold: true, align: 'left', w: 130, h: 54, shrink: true });
-  gcircle(card, 50, -88, 27, CA(PAL.green, 0.22), C('#3E7C28'), 2);
-  label(card, 50, -88, '🧱', { size: 24 });
-  label(card, 116, -88, maxed ? '—' : `×${c.mat}`, { size: 26, color: '#3E7C28', bold: true, align: 'left', w: 60, h: 54, shrink: true });
-  btn(card, 252, -88, 200, 84, maxed ? 'MAX' : '强 化', maxed ? '#5A6472' : PAL.gold,
-    () => { if (!maxed) save(hid, upWeapon(hid), ctx); }, 26);
-  if (!maxed) gpanel(card, 326, 128, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
+  const card = parchmentCard(parent, 0, WYB(215, 360), 718, 360);
+  goldIconPlate(card, -250, 100, 120, undefined, KIND_ICON.weapon, 46);
+  label(card, -250, 18, `Lv.${lv}`, { size: 24, color: INK, bold: true, w: 120, h: 32 });
+  label(card, 40, 112, maxed ? `${HERO_DEFS[hid].weaponName}　强化 Lv.${lv}（MAX）` : `${HERO_DEFS[hid].weaponName}　强化 Lv.${lv} → Lv.${lv + 1}`,
+    { size: 24, color: INK, bold: true, align: 'left', w: 420, h: 34, shrink: true });
+  statRow(card, 78, '攻击力', String(cur.atk), maxed ? null : `+${next.atk - cur.atk}`);
+  statRow(card, 46, '技能伤害', String(cur.skillDmg), maxed ? null : `+${next.skillDmg - cur.skillDmg}`);
+  statRow(card, 14, '生命', String(cur.hp), null);
+  label(card, 40, -14, '每级提升：攻击 +6% · 每5级材料需求 +1', { size: 17, color: SUB, align: 'left', w: 420, h: 28, shrink: true });
+  costChip(card, -150, -140, '🪙', maxed ? 0 : c.gold, sv.gold, 130);
+  costChip(card, 30, -140, '🧱', maxed ? 0 : c.mat, matOwned(), 80);
+  btn(card, 265, -140, 170, 68, maxed ? 'MAX' : '强 化', maxed ? '#5A6472' : PAL.gold,
+    () => { if (!maxed) save(hid, upWeapon(hid), ctx); }, 24);
 }
 
-/* ---------- 技能页签：羊皮纸卡 ×3（齿轮环图标 + 名称/描述 + N级 + 红点），点击弹升级弹窗 ---------- */
+/* ---------- 技能页签：三张横排卡，各带属性预览行 + 消耗 + 升级按钮（直达，不弹窗） ---------- */
 function tabSkills(parent: Node, ctx: PageCtx, hid: string): void {
   const sv = loadSave();
   const h = sv.heroes[hid];
-  SKILL_INFO.forEach((s, i) => {
-    const lv = s.slot === 'atk' ? h.atkLv : s.slot === 'skill' ? h.skillLv : h.ultLv;
-    const card = parchmentCard(parent, -234 + i * 234, WYB(215, 310), 218, 310);
-    const circ = gcircle(card, 0, 82, 58, CA('#2A3240', 1), C(s.cls), 2.5);
-    artSprite(circ, 0, 0, 116, 116, 'ui_gear_ring', { sliced: false, belowIdx: 0 });
-    label(card, 0, 82, s.icon, { size: 26, color: '#FFE08A', bold: true });
-    label(card, 0, -12, s.name, { size: 20, color: INK, bold: true, w: 190, h: 30, shrink: true });
-    label(card, 0, -58, s.desc, { size: 14, color: SUB, w: 190, h: 56, shrink: true, lineHeight: 19 });
-    label(card, 55, -118, `${lv}级`, { size: 26, color: INK, bold: true, w: 90, h: 36 });
-    if (lv < MAX.skill) gpanel(card, 84, 130, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
-    card.on(Node.EventType.TOUCH_END, () => skillModal(ctx, hid, s.slot, () => ctx.refresh()));
+  const INFOS = [
+    { key: 'atkLv' as const, slot: 'atk' as const, name: '普攻 · 连射', icon: '普攻', dmg: '普攻伤害' },
+    { key: 'skillLv' as const, slot: 'skill' as const, name: '技能 · 穿透箭', icon: '技能', dmg: '技能伤害' },
+    { key: 'ultLv' as const, slot: 'ult' as const, name: '大招 · 风暴之眼', icon: '大招', dmg: '大招伤害' },
+  ];
+  INFOS.forEach((info, i) => {
+    const lv = h[info.key];
+    const maxed = lv >= MAX.skill;
+    const card = parchmentCard(parent, 0, WYB(215 + i * 126, 108), 718, 108);
+    goldIconPlate(card, -300, 0, 76, undefined, info.icon, 22);
+    label(card, -50, 28, maxed ? `${info.name}　Lv.${lv}（MAX）` : `${info.name}　Lv.${lv} → Lv.${lv + 1}`,
+      { size: 21, color: INK, bold: true, align: 'left', w: 400, h: 30, shrink: true });
+    label(card, -50, -14, `${info.dmg}：当前 +${(lv - 1) * 10}% → 升级 +${lv * 10}%`,
+      { size: 17, color: SUB, align: 'left', w: 400, h: 26, shrink: true });
+    if (!maxed) {
+      costChip(card, 60, 0, '🪙', skillUpCost(lv), sv.gold, 110);
+      btn(card, 280, 0, 140, 68, '升 级', PAL.gold, () => save(hid, upSkill(hid, info.slot), ctx), 22);
+      gpanel(card, 332, 42, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
+    } else {
+      btn(card, 280, 0, 140, 68, 'MAX', '#5A6472', () => {}, 22);
+    }
   });
 }
 
-function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', rebuild: () => void): void {
-  const sv = loadSave();
-  const h = sv.heroes[hid];
-  const info = SKILL_INFO.find(s => s.slot === slot)!;
-  const key = slot === 'atk' ? 'atkLv' : slot === 'skill' ? 'skillLv' : 'ultLv';
-  const lv = h[key];
-  const maxed = lv >= MAX.skill;
-  const cost = skillUpCost(lv);
-  const panel = modal(ctx, 590, 500, '技能升级');
-  const circ = gpanel(panel, -130, 70, 120, 120, CA('#2A3240', 1), C(info.cls), 2.5, 60);
-  label(circ, 0, 0, info.icon, { size: 30, color: '#FFE08A', bold: true });
-  label(panel, 30, 90, info.name, { size: 27, color: '#FFF3D6', bold: true, align: 'left', w: 300, h: 40 });
-  label(panel, 30, 40, maxed ? `Lv.${lv}（MAX）` : `Lv.${lv} → Lv.${lv + 1}`, { size: 23, color: '#FFE08A', bold: true, align: 'left', w: 300, h: 36 });
-  label(panel, -40, -30, maxed ? '已达上限' : info.desc, { size: 21, color: '#C8CDD4', align: 'left', w: 460, h: 34 });
-  if (!maxed) {
-    gpanel(panel, -140, -120, 60, 60, CA(PAL.gold, 0.2), C(PAL.gold), 2, 30);
-    label(panel, -140, -120, '🪙', { size: 30 });
-    label(panel, -70, -120, fmt(cost), { size: 26, color: '#FFF3D6', bold: true, align: 'left', w: 140, h: 60 });
-    btn(panel, 120, -115, 180, 90, '升 级', PAL.gold, () => {
-      const r = upSkill(hid, slot);
-      toast(r.msg);
-      if (r.ok) { const d = panel.parent; if (d) d.destroy(); rebuild(); }
-    }, 26);
-  }
-}
-
-/* ---------- 装备页签：羊皮纸卡 ×4（图标座+名称+Lv），空槽置灰，点击弹强化弹窗 ---------- */
+/* ---------- 装备页签：2×2 卡，属性预览 + 消耗 + 锻造按钮（直达）；点击卡弹详情 ---------- */
 function tabEquips(parent: Node, ctx: PageCtx, hid: string): void {
   WORN_4.forEach((kind, i) => {
     const inst = wornInst(hid, kind);
-    const q = inst ? EQUIPS[inst.defId].quality : 0;
-    const card = parchmentCard(parent, -261 + i * 174, WYB(215, 310), 168, 310, inst ? 1 : 0.72);
+    const x = i % 2 === 0 ? -181.5 : 181.5;
+    const y = WYB(i < 2 ? 403 : 215, 172);
+    const card = parchmentCard(parent, x, y, 353, 172, inst ? 1 : 0.72);
     if (inst) {
       const d = EQUIPS[inst.defId];
-      goldIconPlate(card, 0, 88, 96, undefined, KIND_ICON[kind], 42);
-      label(card, 0, -2, d.name, { size: 18, color: INK, bold: true, w: 140, h: 28, shrink: true });
-      label(card, 45, -95, `Lv.${inst.lv}`, { size: 22, color: QCARD[q], bold: true, w: 90, h: 32 });
-      if (inst.lv < MAX.equip) gpanel(card, 62, 132, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
+      const maxed = inst.lv >= MAX.equip;
+      const c = equipUpCost(inst.lv);
+      const atkEq = d.atk > 0;
+      const curV = atkEq ? equipAtk(inst) : equipHp(inst);
+      const nextV = atkEq ? equipAtk({ ...inst, lv: inst.lv + 1 }) : equipHp({ ...inst, lv: inst.lv + 1 });
+      goldIconPlate(card, -140, 40, 68, undefined, KIND_ICON[kind], 32);
+      /* 名称只放装备名（避开卡框顶部中央纹饰）；等级并入属性预览行 */
+      label(card, 22, 40, d.name, { size: 18, color: QCARD[d.quality], bold: true, align: 'left', w: 235, h: 28, shrink: true });
+      label(card, 22, 4, `Lv.${inst.lv} · ${atkEq ? '攻击' : '生命'} ${curV} → ${maxed ? curV : nextV}`,
+        { size: 16, color: SUB, align: 'left', w: 235, h: 26, shrink: true });
+      if (!maxed) {
+        costChip(card, -140, -26, '🪙', c.gold, loadSave().gold, 130);
+        costChip(card, 60, -26, '🧱', c.mat, matOwned(), 80);
+        btn(card, 0, -64, 150, 44, '锻 造', PAL.gold, () => save(hid, upWornEquip(hid, kind), ctx), 18);
+        gpanel(card, 150, 70, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
+      } else {
+        btn(card, 0, -64, 150, 44, 'MAX', '#5A6472', () => {}, 18);
+      }
     } else {
-      label(card, 0, 92, '+', { size: 54, color: INK, bold: true });
-      label(card, 0, -95, KIND_NAME[kind], { size: 18, color: INK, bold: true, w: 140, h: 28 });
+      label(card, 0, 12, '+', { size: 50, color: INK, bold: true });
+      label(card, 0, -55, KIND_NAME[kind], { size: 18, color: INK, bold: true, w: 200, h: 28 });
     }
     card.on(Node.EventType.TOUCH_END, () => {
       if (!inst) { toast('该槽位未穿戴 · 去英雄页装备'); return; }
@@ -238,7 +293,7 @@ function tabEquips(parent: Node, ctx: PageCtx, hid: string): void {
   });
 }
 
-/** 装备强化弹窗（升级页装备槽 + 英雄页属性弹窗「锻造」共用；含武器实例） */
+/** 装备详情弹窗（升级页装备卡 + 英雄页「锻造」共用） */
 export function equipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: () => void): void {
   const inst = wornInst(hid, kind)!;
   const d = EQUIPS[inst.defId];
@@ -249,7 +304,7 @@ export function equipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: 
   label(panel, -170, 60, KIND_ICON[kind], { size: 52 });
   label(panel, 100, 90, `${d.name} · ${QCOLOR[d.quality] === '#C9D6DF' ? '白' : ''}T${d.tier}`, { size: 25, color: '#FFF3D6', bold: true, align: 'left', w: 370, h: 38, shrink: true });
   label(panel, 100, 40, maxed ? `强化Lv.${inst.lv}（MAX）` : `强化Lv.${inst.lv} → Lv.${inst.lv + 1}`, { size: 22, color: '#FFE08A', bold: true, align: 'left', w: 370, h: 34, shrink: true });
-  label(panel, 0, -35, maxed ? '已达上限' : `主属性 +4% · ${d.atk ? '攻击' : '生命'}提升`, { size: 21, color: '#C8CDD4', w: 470, h: 34, shrink: true });
+  label(panel, 0, -35, maxed ? '已达上限' : `主属性 +4%/级 · ${d.atk ? '攻击' : '生命'}提升`, { size: 21, color: '#C8CDD4', w: 470, h: 34, shrink: true });
   if (!maxed) {
     gpanel(panel, -205, -120, 60, 60, CA(PAL.gold, 0.2), C(PAL.gold), 2, 30);
     label(panel, -205, -120, '🪙', { size: 30 });
