@@ -15,6 +15,7 @@ import glob
 import io
 import re
 import sys
+import time
 
 ROOT = 'build/web-mobile/cocos-js'
 
@@ -49,10 +50,25 @@ def main():
         print('patch-web-dpr: patched', path)
     print('patch-web-dpr: done, %d file(s) patched' % changed)
 
+    # 入口缓存熔断：assets/main/index.js 文件名跨构建不变，手机浏览器/webview 可能长期缓存旧代码
+    # （出现过：部署新对比弹窗后手机仍显示旧重叠布局）。给 System.import 注入构建时间戳查询参数，
+    # 每次部署后 index.html（must-revalidate）变化 → 新查询串 → 强制拉新入口；入口内 chunk 均为内容哈希名。
+    idx_path = 'build/web-mobile/index.html'
+    idx = io.open(idx_path, encoding='utf-8', errors='ignore').read()
+    ver = str(int(time.time()))
+    new_idx, n = re.subn(
+        r"System\.import\('\./index\.js(\?v=\d+)?'\)",
+        "System.import('./index.js?v=%s')" % ver,
+        idx)
+    if n == 1:
+        io.open(idx_path, 'w', encoding='utf-8', newline='').write(new_idx)
+        print('patch-web-dpr: entry cache-bust v=%s' % ver)
+    else:
+        print('patch-web-dpr: WARN System.import pattern not found (%d matches) - cache-bust skipped' % n)
+
     # 守卫：index.html 必须带 __KW_DPR_CAP 引导脚本（模板丢失会让补丁形同虚设，
     # 引擎回退 2x → 3x 屏再次发糊；本回归真实发生过）
-    idx = io.open('build/web-mobile/index.html', encoding='utf-8', errors='ignore').read()
-    if '__KW_DPR_CAP' not in idx:
+    if '__KW_DPR_CAP' not in new_idx:
         print('patch-web-dpr: FATAL build/web-mobile/index.html 缺少 __KW_DPR_CAP 引导脚本'
               '（build-templates/web-mobile/index.html 模板被还原？）— 禁止部署')
         return 1

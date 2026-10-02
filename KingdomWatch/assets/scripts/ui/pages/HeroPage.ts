@@ -4,10 +4,10 @@
  * 下方背包：点仓库装备=同槽已穿则双面板对比（分解/替换），未穿则单弹窗（穿戴/出售）。
  */
 import { Node } from 'cc';
-import { PAL } from '../../config/GameConfig';
+import { PAL, LO } from '../../config/GameConfig';
 import { CA, btn, C, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
-import { PageCtx, modal, toast, CX } from '../PageKit';
+import { PageCtx, modal, toast, CX, confirmModal } from '../PageKit';
 import {
   EquipKind, EquipDef, KIND_NAME, QCOLOR, EQUIPS, MATS, HERO_DEFS,
   heroStats, sellEquip, sellPrice, wearEquip, wornInst, equipAtk, equipHp, tierMul,
@@ -76,7 +76,6 @@ export function buildHeroes(ctx: PageCtx): void {
       }, 22);
     });
     const grid = N('bagGrid', content, 0, 0, 750, 300);
-    label(content, 0, WY(1185, 26), '点格子查看详情', { size: 18, color: '#6B7480', w: 750, h: 26 });
 
     function renderBag(): void {
       grid.destroyAllChildren();
@@ -90,12 +89,23 @@ export function buildHeroes(ctx: PageCtx): void {
           if (d && kinds.includes(d.kind) && !Object.values(sv.heroes).some(h => Object.values(h.worn).includes(e.uid))) cells.push({ uid: e.uid, n: 0 });
         });
       }
-      cells.slice(0, 10).forEach((cell, g) => {
+      // 行数按屏幕可视高动态铺满（Fit-Width 高屏可视 > 1334，固定 2 行会与底部导航间留大片空白）
+      const GRID_TOP = 885;   // 首行上缘（行中心 945 − 60）
+      const ROW_H = 132;
+      const availBottom = 2 * LO.half - 150;   // 预留底部导航(122)+边距
+      const rows = Math.max(2, Math.min(5, Math.floor((availBottom - GRID_TOP + 12) / ROW_H)));
+      const cap = rows * 5;
+      cells.slice(0, cap).forEach((cell, g) => {
         drawBagCell(ctx, grid, cell, hid, () => render(), CX(22 + (g % 5) * 144, 120), WY(945 + Math.floor(g / 5) * 132, 120));
       });
-      for (let g = cells.length; g < 10; g++) {
+      for (let g = cells.length; g < cap; g++) {
         const empty = gpanel(grid, CX(22 + (g % 5) * 144, 120), WY(945 + Math.floor(g / 5) * 132, 120), 120, 120, CA('#14181E', 0.6), '#FFFFFF22', 1.5, 12);
         label(empty, 0, 0, '+', { size: 44, color: '#5F6873' });
+      }
+      // 提示行放末行下方（导航栏前放不下则省略）
+      const hintT = GRID_TOP + rows * ROW_H + 24;
+      if (hintT < availBottom - 4) {
+        label(grid, 0, WY(hintT, 26), '点格子查看详情', { size: 18, color: '#6B7480', w: 750, h: 26 });
       }
     }
     renderBag();
@@ -191,12 +201,23 @@ function warehouseEquipModal(ctx: PageCtx, hid: string, inst: EquipInst, rebuild
     wearEquip(hid, d.kind, inst.uid);
     ctx.refresh();
   }, 21);
-  btn(panel, -130, -255, 220, 76, '出 售', '#5A6472', () => {
-    const r = sellEquip(inst.uid);
-    toast(r.msg);
-    if (r.ok) ctx.refresh();
-  }, 22);
+  btn(panel, -130, -255, 220, 76, '出 售', '#5A6472', () => confirmDismantle(ctx, inst, '出 售'), 22);
   void rebuild;
+}
+
+/** 分解/出售二次确认（确认后走 sellEquip；onOk 返回错误串则留在弹窗提示） */
+function confirmDismantle(ctx: PageCtx, inst: EquipInst, okText: string): void {
+  const d = EQUIPS[inst.defId];
+  confirmModal(ctx, '分解确认', [
+    `${d.name} · T${d.tier} 阶 · 等级${inst.lv}`,
+    `品质：${QNAMES[d.quality]} · 分解返还 ${sellPrice(inst)} 金币`,
+    '分解后装备无法恢复',
+  ], okText, () => {
+    const r = sellEquip(inst.uid);
+    if (!r.ok) return r.msg;
+    toast(r.msg);
+    return null;
+  });
 }
 
 /** 装备对比弹窗（参考线稿：左=当前已穿戴（锻造），右=新装备（分解/替换）） */
@@ -211,19 +232,15 @@ function compareEquipModal(ctx: PageCtx, hid: string, worn: EquipInst, next: Equ
       gpanel(p, 106, 208, 96, 40, CA(PAL.green, 0.95), undefined, 0, 8);
       label(p, 106, 208, '当前', { size: 20, color: '#FFFFFF', bold: true });
     }
-    equipIcon(p, -112, 140, 84, inst);
-    label(p, 38, 168, d.name, { size: 18, color: '#E8E0C8', bold: true, align: 'left', w: 220, h: 26, shrink: true });
-    label(p, 38, 138, `品质：${QNAMES[d.quality]}`, { size: 15, color: QCOLOR[d.quality], align: 'left', w: 220, h: 24, shrink: true });
-    label(p, 38, 110, `T${d.tier} 阶 · Lv.${inst.lv}`, { size: 15, color: '#AAB2BD', align: 'left', w: 220, h: 24, shrink: true });
+    equipIcon(p, -120, 140, 76, inst);
+    label(p, 52, 168, d.name, { size: 18, color: '#E8E0C8', bold: true, align: 'left', w: 200, h: 26, shrink: true });
+    label(p, 52, 138, `品质：${QNAMES[d.quality]}`, { size: 15, color: QCOLOR[d.quality], align: 'left', w: 200, h: 24, shrink: true });
+    label(p, 52, 110, `T${d.tier} 阶 · Lv.${inst.lv}`, { size: 15, color: '#AAB2BD', align: 'left', w: 200, h: 24, shrink: true });
     drawEquipAttrs(p, 62, 305, inst, d);
     if (isCur) {
       btn(p, 0, -195, 170, 64, '锻 造', PAL.gold, () => equipModal(ctx, hid, d.kind, rebuild), 22);
     } else {
-      btn(p, -86, -195, 150, 64, '分 解', PAL.green, () => {
-        const r = sellEquip(inst.uid);
-        toast(r.msg);
-        if (r.ok) ctx.refresh();
-      }, 22);
+      btn(p, -86, -195, 150, 64, '分 解', PAL.green, () => confirmDismantle(ctx, inst, '分 解'), 22);
       btn(p, 86, -195, 150, 64, '替 换', PAL.orange, () => {
         wearEquip(hid, d.kind, inst.uid);
         ctx.refresh();

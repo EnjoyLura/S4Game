@@ -202,9 +202,10 @@ export function equipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: 
   const panel = modal(ctx, 590, 500, '装备强化');
   gpanel(panel, -170, 60, 130, 130, CA('#2A3240', 1), C(QCOLOR[d.quality]), 2.5, 16);
   label(panel, -170, 60, KIND_ICON[kind], { size: 52 });
-  label(panel, 30, 90, `${d.name} · ${QCOLOR[d.quality] === '#C9D6DF' ? '白' : ''}T${d.tier}`, { size: 25, color: '#FFF3D6', bold: true, align: 'left', w: 340, h: 38, shrink: true });
-  label(panel, 30, 40, maxed ? `强化Lv.${inst.lv}（MAX）` : `强化Lv.${inst.lv} → Lv.${inst.lv + 1}`, { size: 22, color: '#FFE08A', bold: true, align: 'left', w: 340, h: 34 });
-  label(panel, -40, -30, maxed ? '已达上限' : `主属性 +4% · ${d.atk ? '攻击' : '生命'}提升`, { size: 21, color: '#C8CDD4', align: 'left', w: 460, h: 34 });
+  // 文本块左缘统一 -85（图标右缘 -105 + 20 间距）；shrink 才能让 align 生效（overflow=NONE 时按节点中心排）
+  label(panel, 100, 90, `${d.name} · ${QCOLOR[d.quality] === '#C9D6DF' ? '白' : ''}T${d.tier}`, { size: 25, color: '#FFF3D6', bold: true, align: 'left', w: 370, h: 38, shrink: true });
+  label(panel, 100, 40, maxed ? `强化Lv.${inst.lv}（MAX）` : `强化Lv.${inst.lv} → Lv.${inst.lv + 1}`, { size: 22, color: '#FFE08A', bold: true, align: 'left', w: 370, h: 34, shrink: true });
+  label(panel, 0, -35, maxed ? '已达上限' : `主属性 +4% · ${d.atk ? '攻击' : '生命'}提升`, { size: 21, color: '#C8CDD4', w: 470, h: 34, shrink: true });
   if (!maxed) {
     gpanel(panel, -205, -120, 60, 60, CA(PAL.gold, 0.2), C(PAL.gold), 2, 30);
     label(panel, -205, -120, '🪙', { size: 30 });
