@@ -137,8 +137,8 @@ export function buildUpgrade(ctx: PageCtx): void {
     /* 页签内容（自适应分区版式） */
     if (st.tab === 0) tabLevel(content, ctx, hid, cardH);
     else if (st.tab === 1) tabWeapon(content, ctx, hid, cardH);
-    else if (st.tab === 2) tabSkills(content, ctx, hid);
-    else tabEquips(content, ctx, hid);
+    else if (st.tab === 2) tabSkills(content, ctx, hid, cardH);
+    else tabEquips(content, ctx, hid, cardH);
 
     /* 四页签：贴导航栏正上方 */
     const tabs = ['等级', '武器', '技能', '装备'];
@@ -298,21 +298,23 @@ function tabWeapon(parent: Node, ctx: PageCtx, hid: string, cardH: number): void
   if (!maxed) gpanel(act, 278, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
 }
 
-/* ---------- 技能页签：羊皮纸卡 ×3（固定高度，不拉伸），点击弹升级弹窗 ---------- */
-function tabSkills(parent: Node, ctx: PageCtx, hid: string): void {
+/* ---------- 技能页签：大背板（与等级/武器同卡）+ 技能槽×3 固定高顶对齐，点击弹升级弹窗 ---------- */
+function tabSkills(parent: Node, ctx: PageCtx, hid: string, cardH: number): void {
   const sv = loadSave();
   const h = sv.heroes[hid];
+  const card = parchmentCard(parent, 0, WYB(215, cardH), 718, cardH);
+  const slotCy = cardH / 2 - 24 - 155; // 槽高 310 顶对齐：上缘留 24 内距
   SKILL_INFO.forEach((info, i) => {
     const lv = h[info.key];
-    const card = parchmentCard(parent, -234 + i * 234, WYB(215, 310), 218, 310);
-    const circ = gcircle(card, 0, 82, 58, CA('#2A3240', 1), C(info.cls), 2.5);
+    const slot = zonePanel(card, -234 + i * 234, slotCy, 218, 310);
+    const circ = gcircle(slot, 0, 82, 58, CA('#2A3240', 1), C(info.cls), 2.5);
     artSprite(circ, 0, 0, 116, 116, 'ui_gear_ring', { sliced: false, belowIdx: 0 });
-    label(card, 0, 82, info.icon, { size: 26, color: '#FFE08A', bold: true });
-    label(card, 0, -12, info.name, { size: 22, color: INK, bold: true, w: 196, h: 32, shrink: true });
-    label(card, 0, -60, info.desc, { size: 16, color: SUB, w: 196, h: 64, shrink: true, lineHeight: 21 });
-    label(card, 55, -118, `${lv}级`, { size: 28, color: INK, bold: true, w: 90, h: 36 });
-    if (lv < MAX.skill) gpanel(card, 84, 130, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
-    card.on(Node.EventType.TOUCH_END, () => skillModal(ctx, hid, info.slot, () => ctx.refresh()));
+    label(slot, 0, 82, info.icon, { size: 26, color: '#FFE08A', bold: true });
+    label(slot, 0, -12, info.name, { size: 22, color: INK, bold: true, w: 196, h: 32, shrink: true });
+    label(slot, 0, -60, info.desc, { size: 16, color: SUB, w: 196, h: 64, shrink: true, lineHeight: 21 });
+    label(slot, 55, -118, `${lv}级`, { size: 28, color: INK, bold: true, w: 90, h: 36 });
+    if (lv < MAX.skill) gpanel(slot, 84, 130, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
+    slot.on(Node.EventType.TOUCH_END, () => skillModal(ctx, hid, info.slot, () => ctx.refresh()));
   });
 }
 
@@ -351,23 +353,26 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
   }
 }
 
-/* ---------- 装备页签：羊皮纸卡 ×4（固定高度，不拉伸），点击弹强化弹窗 ---------- */
-function tabEquips(parent: Node, ctx: PageCtx, hid: string): void {
+/* ---------- 装备页签：大背板（与等级/武器同卡）+ 装备槽×4 固定高顶对齐，点击弹强化弹窗 ---------- */
+function tabEquips(parent: Node, ctx: PageCtx, hid: string, cardH: number): void {
+  const card = parchmentCard(parent, 0, WYB(215, cardH), 718, cardH);
+  const slotCy = cardH / 2 - 24 - 155; // 槽高 310 顶对齐：上缘留 24 内距
   WORN_4.forEach((kind, i) => {
     const inst = wornInst(hid, kind);
     const q = inst ? EQUIPS[inst.defId].quality : 0;
-    const card = parchmentCard(parent, -261 + i * 174, WYB(215, 310), 168, 310, inst ? 1 : 0.72);
+    const slot = zonePanel(card, -261 + i * 174, slotCy, 168, 310);
+    if (!inst) (slot.addComponent(UIOpacity) as UIOpacity).opacity = Math.round(255 * 0.72);
     if (inst) {
       const d = EQUIPS[inst.defId];
-      goldIconPlate(card, 0, 88, 96, undefined, KIND_ICON[kind], 42);
-      label(card, 0, -2, d.name, { size: 20, color: QCARD[q], bold: true, w: 144, h: 30, shrink: true });
-      label(card, 45, -95, `Lv.${inst.lv}`, { size: 24, color: QCARD[q], bold: true, w: 90, h: 34 });
-      if (inst.lv < MAX.equip) gpanel(card, 62, 132, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
+      goldIconPlate(slot, 0, 88, 96, undefined, KIND_ICON[kind], 42);
+      label(slot, 0, -2, d.name, { size: 20, color: QCARD[q], bold: true, w: 144, h: 30, shrink: true });
+      label(slot, 45, -95, `Lv.${inst.lv}`, { size: 24, color: QCARD[q], bold: true, w: 90, h: 34 });
+      if (inst.lv < MAX.equip) gpanel(slot, 62, 132, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
     } else {
-      label(card, 0, 88, '+', { size: 54, color: INK, bold: true });
-      label(card, 0, -95, KIND_NAME[kind], { size: 20, color: INK, bold: true, w: 144, h: 30 });
+      label(slot, 0, 88, '+', { size: 54, color: INK, bold: true });
+      label(slot, 0, -95, KIND_NAME[kind], { size: 20, color: INK, bold: true, w: 144, h: 30 });
     }
-    card.on(Node.EventType.TOUCH_END, () => {
+    slot.on(Node.EventType.TOUCH_END, () => {
       if (!inst) { toast('该槽位未穿戴 · 去英雄页装备'); return; }
       equipModal(ctx, hid, kind, () => ctx.refresh());
     });
