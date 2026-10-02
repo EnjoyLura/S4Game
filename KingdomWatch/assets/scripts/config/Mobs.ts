@@ -32,27 +32,27 @@ export interface MobDef {
 export const MOBS: Record<string, MobDef> = {
   goblin_worker: {
     id: 'goblin_worker', name: '哥布林苦工', kind: 'melee',
-    hp: 80, dmg: 30, atkInterval: 2, speed: 60, radius: 22,
+    hp: 160, dmg: 30, atkInterval: 2, speed: 60, radius: 22,
     exp: 8, charge: 1, gold: 2, color: '#7FB841',
   },
   goblin_slinger: {
     id: 'goblin_slinger', name: '哥布林投石手', kind: 'ranged',
-    hp: 60, dmg: 20, atkInterval: 2.5, speed: 45, radius: 20,
+    hp: 120, dmg: 20, atkInterval: 2.5, speed: 45, radius: 20,
     exp: 10, charge: 1, gold: 3, color: '#B2C24B', atkRange: 300,
   },
   goblin_shaman: {
     id: 'goblin_shaman', name: '哥布林萨满', kind: 'heal',
-    hp: 120, dmg: 20, atkInterval: 3, speed: 50, radius: 24,
+    hp: 240, dmg: 20, atkInterval: 3, speed: 50, radius: 24,
     exp: 20, charge: 2, gold: 4, color: '#9B6BFF', healAmount: 40,
   },
   wolf_rider: {
     id: 'wolf_rider', name: '狼骑兵', kind: 'melee',
-    hp: 110, dmg: 35, atkInterval: 1.6, speed: 95, radius: 24,
+    hp: 220, dmg: 35, atkInterval: 1.6, speed: 95, radius: 24,
     exp: 12, charge: 1, gold: 3, color: '#8A8F98',
   },
   goblin_brute: {
     id: 'goblin_brute', name: '大哥布林（精英）', kind: 'melee',
-    hp: 1200, dmg: 80, atkInterval: 2, speed: 35, radius: 34,
+    hp: 2400, dmg: 80, atkInterval: 2, speed: 35, radius: 34,
     exp: 60, charge: 10, gold: 25, color: '#5E8F3C', elite: true,
   },
 };
