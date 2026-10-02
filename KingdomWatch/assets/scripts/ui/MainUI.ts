@@ -3,8 +3,8 @@
  * 顶栏：刘海预留区下方 y100 起，无标题，金币/钻石双货币靠右（§已确认）。
  * 页签内容整屏重建（PageKit.ctx.refresh）；各页实现见 ui/pages/*（线稿一一对应）。
  */
-import { _decorator, Component, director, Label, Node } from 'cc';
-import { LO, PAL } from '../config/GameConfig';
+import { _decorator, Component, Label, Node, view } from 'cc';
+import { initLayout, LO, PAL } from '../config/GameConfig';
 import { loadSave } from '../core/SaveData';
 import { flow } from '../core/Flow';
 import { btn, C, CA, gpanel, label, N, setText, WX, WY, WYB } from './UIKit';
@@ -38,7 +38,36 @@ export class MainUI extends Component {
   private tab = flow.mainTab;
 
   start(): void {
+    // 视口变化（手机地址栏收起/展开、旋转等）：LO.half 只在启动时算过一次，画布被
+    // Cocos 自动重适配后旧值全部失锚 → 重算 initLayout 并整屏重建，布局始终贴合当前可视区
+    view.on('canvas-resize', this.queueRelayout, this);
+    view.on('design-resolution-changed', this.queueRelayout, this);
+    this.rebuildAll();
+  }
+
+  onDestroy(): void {
+    view.off('canvas-resize', this.queueRelayout, this);
+    view.off('design-resolution-changed', this.queueRelayout, this);
+  }
+
+  /** 连续 resize 防抖：0.2s 内只重建一次 */
+  private queueRelayout = (): void => {
+    this.unschedule(this.doRelayout);
+    this.scheduleOnce(this.doRelayout, 0.2);
+  };
+
+  private doRelayout(): void {
+    initLayout();
+    this.rebuildAll();
+  }
+
+  /** 整体重建：背景/顶栏/导航/当前页全部按最新可视区重摆 */
+  private rebuildAll(): void {
     const root = this.node;
+    root.destroyAllChildren();
+    this.navItems = [];
+    this.goldLbl = null;
+    this.diaLbl = null;
 
     // 背景：场景图压暗当主城底图（后续换专属主城图时同 ID 覆盖即可）
     const bg = artSprite(root, 0, 0, 750, LO.half * 2 + 240, 'scenes/scene_1_1', { sliced: false, cover: true });
@@ -51,6 +80,7 @@ export class MainUI extends Component {
 
     this.screens = N('Screens', root, 0, 0, 750, LO.half * 2);
     setGlobalRoot(root);
+    this.tab = flow.mainTab;
     this.switchTab(this.tab);
   }
 
