@@ -64,6 +64,10 @@ const SLICE9: Record<string, Slice9Def> = {
   ui_card_header_white: { canon: [400, 104], inset: [65, 65, 11, 11], scale: 0.5 },
   ui_card_header_blue: { canon: [400, 104], inset: [65, 65, 11, 11], scale: 0.5 },
   ui_card_header_purple: { canon: [400, 104], inset: [65, 65, 11, 11], scale: 0.5 },
+  /* 主城一级背板（PageKit.artPanel）：程序暗板打底，同名美术落图后自动九宫格覆盖 */
+  ui_panel_tabs: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
+  ui_panel_bag: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
+  ui_panel_zone: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
 };
 
 /** 按实际文件尺寸换算并写入九宫格 insets（换分辨率文件自适应的关键）

@@ -6,7 +6,7 @@ import { Node } from 'cc';
 import { PAL } from '../../config/GameConfig';
 import { CA, btn, C, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
-import { PageCtx, confirmModal, fmt, toast, CX, qualityBadge } from '../PageKit';
+import { PageCtx, artPanel, confirmModal, fmt, toast, CX, qualityBadge } from '../PageKit';
 import { EQUIPS, SHOP, SHOP_TABS, ShopDef, ShopTab, QCOLOR, lvReached, shopBuy } from '../../core/GameData';
 import { loadSave } from '../../core/SaveData';
 
@@ -27,6 +27,8 @@ export function buildShop(ctx: PageCtx): void {
 
   function render(): void {
     content.destroyAllChildren();
+    // 页签条背板（L1）垫底，四页签骑在其上
+    artPanel(content, 0, WY(320, 64), 680, 84, 'ui_panel_tabs');
     // 四页签（激活金底/未激活灰底）
     SHOP_TABS.forEach((t, i) => {
       const active = t.key === st.tab;

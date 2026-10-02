@@ -7,7 +7,7 @@ import { Node } from 'cc';
 import { PAL, LO } from '../../config/GameConfig';
 import { CA, btn, C, dimLayer, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
-import { PageCtx, modal, toast, CX, confirmModal } from '../PageKit';
+import { PageCtx, artPanel, modal, toast, CX, confirmModal } from '../PageKit';
 import {
   EquipKind, EquipDef, KIND_NAME, QCOLOR, EQUIPS, MATS, HERO_DEFS,
   heroStats, sellEquip, sellPrice, wearEquip, wornInst, equipAtk, equipHp, tierMul,
@@ -59,13 +59,15 @@ export function buildHeroes(ctx: PageCtx): void {
     btn(content, CX(30, 76), WY(340, 76), 76, 76, '属性', PAL.blue, () => attrsModal(ctx, hid), 20);
     btn(content, CX(30, 76), WY(440, 76), 76, 76, '故事', PAL.blue, () => storyModal(ctx, hid), 20);
 
-    /* 右列槽区：武器横扁 + 2×2 防具 */
+    /* 右列槽区：通用背板（L1）罩住武器横扁 + 2×2 防具，槽卡骑其上 */
+    artPanel(content, CX(505, 360), WY(293, 469), 360, 469, 'ui_panel_zone');
     drawSlot(ctx, content, hid, 'weapon', () => render(), CX(470, 270), WY(305, 125), 270, 125);
     SLOTS_2x2.forEach((k, i) => {
       drawSlot(ctx, content, hid, k, () => render(), CX(470 + (i % 2) * 140, 130), WY(440 + Math.floor(i / 2) * 160, 150), 130, 150);
     });
 
-    /* 我的背包：页签 + 5 列网格 */
+    /* 我的背包：页签条背板（L1）+ 三页签 + 5 列网格大背板 */
+    artPanel(content, -5, WY(872, 58), 650, 78, 'ui_panel_tabs');
     const tabs = [['weapon', '武器'], ['equip', '装备'], ['mat', '材料']] as const;
     tabs.forEach((t, i) => {
       const active = tabs[i][0] === bagSt.tab;
@@ -94,6 +96,8 @@ export function buildHeroes(ctx: PageCtx): void {
       const availBottom = 2 * LO.half - 150;   // 预留底部导航(122)+边距
       const rows = Math.max(2, Math.min(5, Math.floor((availBottom - GRID_TOP + 12) / ROW_H)));
       const cap = rows * 5;
+      // 背包大背板（L1）：行数随屏自适应，板随行数伸缩，格子骑其上
+      artPanel(grid, -5, WY(873, 12 + rows * 132), 700, 12 + rows * 132, 'ui_panel_bag');
       cells.slice(0, cap).forEach((cell, g) => {
         drawBagCell(ctx, grid, cell, hid, () => render(), CX(22 + (g % 5) * 144, 120), WY(945 + Math.floor(g / 5) * 132, 120));
       });

@@ -6,7 +6,7 @@ import { Node, director } from 'cc';
 import { PAL } from '../../config/GameConfig';
 import { CA, btn, C, gbar, gpanel, label, N, WY, WX } from '../UIKit';
 import { artSprite } from '../Ux';
-import { PageCtx, toast, CX } from '../PageKit';
+import { PageCtx, artPanel, toast, CX } from '../PageKit';
 import { CHEST_COND, claimChest } from '../../core/GameData';
 import { loadSave } from '../../core/SaveData';
 import { flow } from '../../core/Flow';
@@ -47,7 +47,8 @@ export function buildLevels(ctx: PageCtx): void {
       label(nb, 0, 0, 'NEW', { size: 16, color: '#FFFFFF', bold: true });
     }
 
-    /* 星箱进度条（垫三箱后方；金色=已达成档数） */
+    /* 星箱区背板（L1）+ 进度条（垫三箱后方；金色=已达成档数） */
+    artPanel(content, 0, WY(878, 204), 690, 204, 'ui_panel_zone');
     gbar(content, CX(147, 470), WY(940, 14), 470, 14, PAL.gold).set((sv.stars[lv.id] || 0) / 3);
 
     /* 三档星箱 */

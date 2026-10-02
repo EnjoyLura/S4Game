@@ -9,7 +9,7 @@ import { Graphics, Node, UIOpacity } from 'cc';
 import { LO, PAL } from '../../config/GameConfig';
 import { CA, btn, C, gcircle, gpanel, label, N, WY, WYB, WX } from '../UIKit';
 import { artSprite } from '../Ux';
-import { PageCtx, modal, toast, fmt } from '../PageKit';
+import { PageCtx, artPanel, modal, toast, fmt } from '../PageKit';
 import { attrsModal } from './HeroPage';
 import {
   EquipKind, HERO_DEFS, EQUIPS, KIND_NAME, QCOLOR, MAX,
@@ -163,7 +163,8 @@ export function buildUpgrade(ctx: PageCtx): void {
     else if (st.tab === 2) tabSkills(content, ctx, hid, cardH);
     else tabEquips(content, ctx, hid, cardH);
 
-    /* 四页签：贴导航栏正上方 */
+    /* 四页签：页签条背板（L1）垫底，贴导航栏正上方 */
+    artPanel(content, -2, WYB(130, 64), 716, 84, 'ui_panel_tabs');
     const tabs = ['等级', '武器', '技能', '装备'];
     tabs.forEach((t, i) => {
       btn(content, WX(15 + i * 182, 170), WYB(130, 64), 170, 64, t,

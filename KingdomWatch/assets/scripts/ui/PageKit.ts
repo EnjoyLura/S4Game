@@ -60,6 +60,16 @@ export function currencyChip(parent: Node, x: number, y: number, cur: 'gold' | '
 /** 千分位格式化 */
 export function fmt(v: number): string { return v.toLocaleString('en-US'); }
 
+/* ---------- 一级内容背板（主城层次规范 L1：场景底图 → 组件分组背板 → 卡片/格子） ----------
+ * 程序暗板+金描边打底，保证无美术时也成体系；美术按文件名替换——
+ * 把同名 PNG 放进 assets/resources/ux/ 即自动九宫格覆盖，零代码改动。已规划 ID：
+ *   ui_panel_tabs（页签条背板）/ ui_panel_bag（背包网格背板）/ ui_panel_zone（通用内容区背板） */
+export function artPanel(parent: Node, x: number, y: number, w: number, h: number, id: string): Node {
+  const p = gpanel(parent, x, y, w, h, CA('#10151D', 0.8), CA(PAL.gold, 0.55), 1.5, 16);
+  artSprite(p, 0, 0, w, h, id, { belowIdx: 0 });
+  return p;
+}
+
 /** 确认弹窗（价格/说明 + 确认/取消），onOk 返回错误消息则不关闭并 toast */
 export function confirmModal(ctx: PageCtx, title: string, lines: string[], okText: string, onOk: () => string | null): void {
   const panel = modal(ctx, 560, 420, title);
