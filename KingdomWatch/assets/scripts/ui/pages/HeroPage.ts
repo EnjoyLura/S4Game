@@ -59,7 +59,7 @@ export function buildHeroes(ctx: PageCtx): void {
     btn(content, CX(30, 76), WY(440, 76), 76, 76, '故事', PAL.blue, () => storyModal(ctx, hid), 20);
 
     /* 右列槽区：武器横扁 + 2×2 防具 */
-    drawSlot(ctx, content, hid, 'weapon', () => render(), CX(470, 250), WY(305, 125), 250, 125);
+    drawSlot(ctx, content, hid, 'weapon', () => render(), CX(470, 270), WY(305, 125), 270, 125);
     SLOTS_2x2.forEach((k, i) => {
       drawSlot(ctx, content, hid, k, () => render(), CX(470 + (i % 2) * 140, 130), WY(440 + Math.floor(i / 2) * 160, 150), 130, 150);
     });
