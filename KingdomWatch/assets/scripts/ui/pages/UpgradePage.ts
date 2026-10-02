@@ -101,25 +101,27 @@ export function buildUpgrade(ctx: PageCtx): void {
         sv.curHero = id; saveCur(id); render();
       });
     });
-    /* 悬浮大立绘（上限 350，整体上移：离名牌一拳，顶不出头像栏）+ 脚下金色光台座 */
+    /* 悬浮大立绘（上限 350，顶部锚定：贴头像栏正下方，消除头顶空白）+ 脚下金色光台座 */
     const dispTopY = LO.half - 300;
     const dispBotY = WYB(681, 0);
     const dispH = dispTopY - dispBotY;
     const artH = Math.max(0, Math.min(dispH - 30, 350));
-    const artCy = Math.min(dispBotY + 110 + artH / 2, dispTopY - artH / 2 - 8);
-    const artBot = artCy - artH / 2;
-    artSprite(content, 0, artCy, 440, artH, 'hero_' + hid + '_portrait', { sliced: false });
-    artSprite(content, 0, artCy, 440, artH, def.avatar, { sliced: false });
-    const ped = N('upPedestal', content, 0, artBot - 16, 480, 100);
-    const g = ped.addComponent(Graphics);
-    const ring = (rx: number, ry: number, a: number): void => {
-      g.fillColor = CA('#F2D48A', a);
-      g.ellipse(0, 0, rx, ry);
-      g.fill();
-    };
-    ring(270, 50, 0.10);
-    ring(195, 36, 0.14);
-    ring(130, 23, 0.20);
+    if (artH >= 60) {
+      const artCy = dispTopY - artH / 2 - 8;
+      const artBot = artCy - artH / 2;
+      artSprite(content, 0, artCy, 440, artH, 'hero_' + hid + '_portrait', { sliced: false });
+      artSprite(content, 0, artCy, 440, artH, def.avatar, { sliced: false });
+      const ped = N('upPedestal', content, 0, artBot - 16, 480, 100);
+      const g = ped.addComponent(Graphics);
+      const ring = (rx: number, ry: number, a: number): void => {
+        g.fillColor = CA('#F2D48A', a);
+        g.ellipse(0, 0, rx, ry);
+        g.fill();
+      };
+      ring(270, 50, 0.10);
+      ring(195, 36, 0.14);
+      ring(130, 23, 0.20);
+    }
 
     /* 脚底名牌：轻量玻璃条 */
     const foot = gpanel(content, 0, WYB(595, 76), 400, 76, CA('#0B0F16', 0.58), '#E8C87866', 1.5, 38);
