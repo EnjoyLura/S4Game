@@ -103,15 +103,17 @@ export function buildUpgrade(ctx: PageCtx): void {
     });
     label(content, WX(330, 300), WY(229, 40), `${def.name}${sv.heroes[hid].owned ? '' : '（未解锁）'}`, { size: 26, color: '#FFF3D6', bold: true, align: 'left', w: 300, h: 40, shrink: true });
 
-    /* 悬浮大立绘（缩小档：上限 430）+ 脚下金色光台座 */
+    /* 悬浮大立绘（缩小档：上限 350，底部锚定贴名牌）+ 脚下金色光台座 */
     const dispTopY = LO.half - 300;
     const dispBotY = WYB(681, 0);
     const dispH = dispTopY - dispBotY;
     const dispCy = (dispTopY + dispBotY) / 2;
-    const artH = Math.min(dispH - 30, 430);
-    artSprite(content, 0, dispCy, 520, artH, 'hero_' + hid + '_portrait', { sliced: false });
-    artSprite(content, 0, dispCy, 520, artH, def.avatar, { sliced: false });
-    const ped = N('upPedestal', content, 0, dispCy - artH / 2 - 16, 560, 110);
+    const artH = Math.min(dispH - 30, 350);
+    const artBot = dispBotY + 24;
+    const artCy = Math.min(dispCy, artBot + artH / 2);
+    artSprite(content, 0, artCy, 440, artH, 'hero_' + hid + '_portrait', { sliced: false });
+    artSprite(content, 0, artCy, 440, artH, def.avatar, { sliced: false });
+    const ped = N('upPedestal', content, 0, artBot - 16, 480, 100);
     const g = ped.addComponent(Graphics);
     const ring = (rx: number, ry: number, a: number): void => {
       g.fillColor = CA('#F2D48A', a);
