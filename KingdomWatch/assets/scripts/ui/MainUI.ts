@@ -54,12 +54,8 @@ export class MainUI extends Component {
     this.switchTab(this.tab);
   }
 
-  /* ---------- 顶栏：刘海预留区 + 双货币靠右（无标题） ---------- */
+  /* ---------- 顶栏：双货币靠右（无标题；刘海安全间距已含在 WY() 坐标系里） ---------- */
   private buildTopBar(root: Node): void {
-    // 刘海遮挡预留区（禁放 UI，规范标示）
-    const notch = gpanel(root, 0, WY(0, 64), 240, 64, CA('#E5484D', 0.28), CA('#E5484D', 0.9), 2, 0);
-    label(notch, 0, 0, '刘海遮挡预留区', { size: 18, color: '#FFB0B3' });
-
     const bar = gpanel(root, 0, WY(100, 90), 750, 90, CA('#14181E', 0.9), CA(PAL.gold, 0.9), 1.5, 10);
     artSprite(bar, 0, 0, 750, 90, 'ui_panel_dark_gold', { belowIdx: 0 });
 

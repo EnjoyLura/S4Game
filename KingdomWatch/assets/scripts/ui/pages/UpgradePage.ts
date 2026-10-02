@@ -74,7 +74,7 @@ export function buildUpgrade(ctx: PageCtx): void {
     /* 四页签（底部导航正上方） */
     const tabs = ['等级', '武器', '技能', '装备'];
     tabs.forEach((t, i) => {
-      btn(content, WX(15 + i * 182, 170), WY(1146, 64), 170, 64, t + (i === st.tab ? '(选中)' : ''),
+      btn(content, WX(15 + i * 182, 170), WY(1146, 64), 170, 64, t,
         i === st.tab ? PAL.gold : '#5A6472', () => { st.tab = i as 0 | 1 | 2 | 3; render(); }, 22);
     });
   }

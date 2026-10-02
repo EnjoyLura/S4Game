@@ -12,10 +12,9 @@ export function buildBase(ctx: PageCtx): void {
   const root = ctx.screens;
   const sv = loadSave();
 
-  /* 等距基地场景占位 */
+  /* 等距基地场景（bg_base_island 美术落图后自动覆盖程序底色） */
   const bg = gpanel(root, 0, WY(90, 1122), 750, 1122, CA('#40503A', 0.5), CA('#8CB46E', 0.6), 1.5, 18);
   artSprite(bg, 0, 0, 750, 1122, 'bg_base_island', { belowIdx: 0, cover: true });
-  label(bg, 0, -480, '奇幻风等距基地场景（浮空岛 · 占位）', { size: 20, color: '#A8BD97', w: 700, h: 30 });
 
   /* 主城（左上） */
   const keep = gpanel(root, CX(225, 300), WY(270, 300), 300, 300, CA('#3A2E23', 0.9), C(PAL.gold), 3, 20);

@@ -4,7 +4,7 @@
  */
 import { Node } from 'cc';
 import { PAL } from '../../config/GameConfig';
-import { CA, btn, C, gpanel, label, N, setText, WY } from '../UIKit';
+import { CA, btn, C, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
 import { PageCtx, modal, toast, CX } from '../PageKit';
 import {
@@ -66,21 +66,15 @@ export function buildHeroes(ctx: PageCtx): void {
 
     /* 我的背包：页签 + 5 列网格 */
     const tabs = [['weapon', '武器'], ['equip', '装备'], ['mat', '材料']] as const;
-    const tabBtns: Node[] = [];
     tabs.forEach((t, i) => {
       const active = tabs[i][0] === bagSt.tab;
-      const b = btn(content, CX(45 + i * 225, 200), WY(872, 58), 200, 58, t[1] + (active ? '(选中)' : ''), active ? PAL.gold : '#5A6472', () => {
+      btn(content, CX(45 + i * 225, 200), WY(872, 58), 200, 58, t[1], active ? PAL.gold : '#5A6472', () => {
         bagSt.tab = t[0];
-        tabBtns.forEach((tb, k) => {
-          const l = tb.children.find(c => c.name === 'lbl');
-          if (l) setText(l, tabs[k][1] + (tabs[k][0] === bagSt.tab ? '(选中)' : ''));
-        });
-        renderBag();
+        render();
       }, 22);
-      tabBtns.push(b);
     });
     const grid = N('bagGrid', content, 0, 0, 750, 300);
-    label(content, 0, WY(1185, 26), '↓ 背包可纵向滚动 · 点格子看详情（穿戴/出售）', { size: 18, color: '#6B7480', w: 750, h: 26 });
+    label(content, 0, WY(1185, 26), '点格子查看详情', { size: 18, color: '#6B7480', w: 750, h: 26 });
 
     function renderBag(): void {
       grid.destroyAllChildren();

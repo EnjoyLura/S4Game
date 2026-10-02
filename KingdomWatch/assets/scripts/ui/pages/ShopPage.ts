@@ -31,7 +31,7 @@ export function buildShop(ctx: PageCtx): void {
     SHOP_TABS.forEach((t, i) => {
       const active = t.key === st.tab;
       const b = btn(content, CX(35 + i * 180, 160), WY(320, 64), 160, 64,
-        t.name + (active ? '(选中)' : ''), active ? PAL.gold : '#5A6472',
+        t.name, active ? PAL.gold : '#5A6472',
         () => { st.tab = t.key; render(); }, 22);
       b.name = 'tab_' + t.key;
     });
