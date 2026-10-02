@@ -25,7 +25,10 @@ function buildCanvas(scene: Node): Node {
   canvasNode.parent = scene;
   canvasNode.layer = Layers.Enum.UI_2D;
   const ut = canvasNode.addComponent(UITransform);
-  ut.setContentSize(DESIGN_W, DESIGN_H);
+  // 画布与相机按实际可视区初始化（竖屏 Fit-Width 可视高大于设计高 1334）；
+  // Canvas 组件激活后仍会自动对齐，这里取同值只为消除硬编码 667 的时序依赖
+  const vis = view.getVisibleSize();
+  ut.setContentSize(DESIGN_W, vis.height);
 
   const canvas = canvasNode.addComponent(Canvas);
   canvas.alignCanvasWithScreen = true;
@@ -36,7 +39,7 @@ function buildCanvas(scene: Node): Node {
   camNode.setPosition(0, 0, 1000);
   const cam = camNode.addComponent(Camera);
   cam.projection = Camera.ProjectionType.ORTHO;
-  cam.orthoHeight = DESIGN_H / 2;
+  cam.orthoHeight = vis.height / 2;
   cam.near = 0;
   cam.far = 2000;
   cam.visibility = Layers.Enum.UI_2D;

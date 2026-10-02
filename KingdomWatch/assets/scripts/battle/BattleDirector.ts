@@ -2,10 +2,10 @@
  * 战斗总控（§3.2 状态机）：PREPARE → WAVE_RUNNING ⇄ LEVEL_UP_PAUSE → VICTORY / LINE_BROKEN→失败结算(内含广告复活)
  * dt×倍速步进；暂停/三选一期间全场冻结（§3.2）
  */
-import { _decorator, Component, director, Layers, Node } from 'cc';
+import { _decorator, Canvas, Component, director, Layers, Node } from 'cc';
 import { LEVEL_1_1, LevelDef, MOBS, heroSlots } from '../config/Mobs';
 import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats } from '../config/Cards';
-import { REVIVE_RATIO, starOf } from '../config/GameConfig';
+import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
 import { loadSave, saveSave } from '../core/SaveData';
@@ -107,6 +107,14 @@ export class BattleDirector extends Component {
 
     // 兜底：初始构建树（Field/UIRoot/HUD/Panels）全部置于 UI_2D 层，相机才会渲染
     setLayerDeep(this.node, Layers.Enum.UI_2D);
+
+    // 真机自检：相机可视半高必须等于布局半高，战场实体才会落在视野内
+    //（真机曾出现“防线/英雄/怪物全不可见”，桌面与模拟均无法复现；不一致时修正并留痕错误浮层）
+    const cam = director.getScene()?.getChildByName('Canvas')?.getComponent(Canvas)?.cameraComponent;
+    if (cam && Math.abs(cam.orthoHeight - LO.half) > 2) {
+      console.error(`[KW] 相机 ortho ${cam.orthoHeight.toFixed(1)} ≠ 布局半高 ${LO.half.toFixed(1)}，已修正`);
+      cam.orthoHeight = LO.half;
+    }
 
     bus.on(EVT.MOB_KILLED, this.onMobKilled, this);
     bus.on(EVT.LINE_BROKEN, this.onLineBroken, this);
