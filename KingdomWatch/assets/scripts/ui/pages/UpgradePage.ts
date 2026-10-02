@@ -29,6 +29,29 @@ const SKILL_INFO = [
   { slot: 'ult' as const, key: 'ultLv' as const, name: '大招 · 风暴之眼', icon: '大招', desc: '大招持续伤害 +10%/级', cls: PAL.purple },
 ];
 
+/* 技能阶段性等级效果（升级弹窗「等级效果」分区展示；已达成的档位打 ✓）
+ * 普攻档位文案为定稿；技能/大招按同节奏起草，数值待战斗侧实现后校准 */
+const SKILL_MILESTONES: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string }[]> = {
+  atk: [
+    { lv: 5, txt: '冷却 -1s' },
+    { lv: 10, txt: '强化普攻 +2发' },
+    { lv: 15, txt: '强化普攻暴击率 +20%' },
+    { lv: 20, txt: '物理穿透 +35%' },
+  ],
+  skill: [
+    { lv: 5, txt: '冷却 -1s' },
+    { lv: 10, txt: '贯穿目标 +1' },
+    { lv: 15, txt: '命中范围 +20%' },
+    { lv: 20, txt: '物理穿透 +35%' },
+  ],
+  ult: [
+    { lv: 5, txt: '冷却 -2s' },
+    { lv: 10, txt: '风暴持续时间 +2s' },
+    { lv: 15, txt: '风暴伤害 +20%' },
+    { lv: 20, txt: '引力范围 +30%' },
+  ],
+};
+
 /* 羊皮纸卡面配色（同 Panels 战斗卡）；品质字色用加深版（原 QCOLOR 在浅底上看不清） */
 const INK = '#4A3214';
 const SUB = '#6B5A3A';
@@ -333,7 +356,7 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
   const lv = h[info.key];
   const maxed = lv >= MAX.skill;
   const cost = skillUpCost(lv);
-  const panel = modal(ctx, 590, 540, '技能升级');
+  const panel = modal(ctx, 590, 570, '技能升级');
   /* 头部：图标左，名称/等级右（align 需 shrink，盒 = x±w/2 → x = 左缘 + w/2） */
   goldIconPlate(panel, -190, 170, 96, undefined, info.icon, 26);
   label(panel, 56, 194, info.name, { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 320, h: 32, shrink: true });
@@ -349,14 +372,18 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
     const nm = slot === 'atk' ? '普攻伤害' : '大招伤害';
     modalRow(zA, 0, nm, `+${(lv - 1) * 10}%`, maxed ? null : `→ +${lv * 10}%`);
   }
-  /* 分区二：每级提升（效果说明） */
-  const hB = 96;
-  const zB = modalZone(panel, (112 - hA) - 16 - hB / 2, hB, '每级提升');
-  const lines = info.desc.split('\n');
-  lines.forEach((t, i) =>
-    label(zB, -35, lines.length > 1 ? 14 - i * 32 : 0, t, { size: 19, color: INK, bold: true, align: 'left', w: 400, h: 28, shrink: true }));
+  /* 分区二：等级效果（阶段性档位，已达成的打 ✓） */
+  const ms = SKILL_MILESTONES[slot];
+  const hB = 44 + ms.length * 28;
+  const zB = modalZone(panel, (112 - hA) - 16 - hB / 2, hB, '等级效果');
+  ms.forEach((m, i) => {
+    const reached = lv >= m.lv;
+    const cy = hB / 2 - 24 - 28 * i;
+    label(zB, -170, cy, `${m.lv}级`, { size: 19, color: reached ? INK : '#7A6A4C', bold: true, w: 70, h: 28 });
+    label(zB, 65, cy, (reached ? '✓ ' : '') + m.txt, { size: 19, color: reached ? INK : '#7A6A4C', bold: reached, align: 'left', w: 380, h: 28, shrink: true });
+  });
   /* 行动条（深条 + 消耗 + 升级按钮） */
-  const act = gpanel(panel, 0, -186, 530, 64, CA('#0B0F16', 0.55), undefined, 0, 12);
+  const act = gpanel(panel, 0, -196, 530, 64, CA('#0B0F16', 0.55), undefined, 0, 12);
   if (!maxed) {
     costChipLight(act, -140, 0, '🪙', cost, sv.gold, 170);
     btn(act, 170, 0, 170, 54, '升 级', PAL.gold, () => {

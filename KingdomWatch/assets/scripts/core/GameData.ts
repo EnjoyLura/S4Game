@@ -78,7 +78,7 @@ export const HERO_DEFS: Record<string, HeroDef> = {
 /* ================= 经济公式（数值默认值，校准只改这里） ================= */
 
 const r10 = (v: number): number => Math.max(10, Math.round(v / 10) * 10);
-export const MAX = { hero: 30, weapon: 20, skill: 10, equip: 20, keep: 10 };
+export const MAX = { hero: 30, weapon: 20, skill: 20, equip: 20, keep: 10 };
 export const heroUpCost = (lv: number): number => r10(100 * Math.pow(lv, 1.35));
 export const weaponUpCost = (lv: number): { gold: number; mat: number } => ({ gold: r10(150 * Math.pow(lv, 1.4)), mat: 1 + Math.floor(lv / 5) });
 export const skillUpCost = (lv: number): number => r10(200 * Math.pow(lv, 1.5));
