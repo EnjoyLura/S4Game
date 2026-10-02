@@ -45,7 +45,9 @@
       try {
         var real = window.devicePixelRatio || 1;
         var q = parseFloat(new URLSearchParams(window.location.search).get('dpr'));
-        window.__KW_DPR_CAP = q > 0 ? q : Math.min(real, 3);
+        // 4x+ 屏（如 vivo V2408A）在 3x 钳制下战斗实体不可见（真机诊断确认逻辑正常、仅渲染缺失），
+        // 这类设备回退 2x 渲染；3x 屏维持 3x 修糊。URL ?dpr= 可强制。
+        window.__KW_DPR_CAP = q > 0 ? q : (real >= 4 ? 2 : Math.min(real, 3));
       } catch (e) { window.__KW_DPR_CAP = 2; }
     })();
   </script>
@@ -109,12 +111,15 @@
           }).join('/');
           var lineY = bd.line && bd.line.node ? Math.round(bd.line.node.worldPosition.y) : '?';
           var mobs = bd.mgr && bd.mgr.list ? bd.mgr.list.filter(function (m) { return !m.dead; }).length : '?';
+          var gpu = '';
+          try { gpu = String(cc.director.root.pipeline.device._renderer || '').slice(0, 40); } catch (e) { /* ignore */ }
           var txt = 'KW ' + (bd.state || '?') + ' t' + Math.round(bd.elapsed || 0)
             + ' | dpr ' + (window.devicePixelRatio || 1) + (cv ? ' cv ' + cv.width + 'x' + cv.height : '')
             + ' | vis ' + Math.round(vis.width) + 'x' + Math.round(vis.height)
             + ' | ortho ' + ortho + ' cam ' + camX + ',' + camY
             + ' | lineY ' + lineY + ' hp ' + (bd.line ? Math.round(bd.line.hp) + '/' + Math.round(bd.line.maxHp) : '?')
-            + ' | hero ' + heroes + ' | mobs ' + mobs;
+            + ' | hero ' + heroes + ' | mobs ' + mobs
+            + (gpu ? ' | gpu ' + gpu : '');
           if (!box) {
             box = document.createElement('div');
             box.id = 'kwDbgBox';
