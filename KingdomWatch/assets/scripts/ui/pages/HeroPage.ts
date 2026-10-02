@@ -152,14 +152,17 @@ function slotModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: () => vo
 /** 背包格：装备=详情（穿戴/出售）；材料=详情 */
 function drawBagCell(ctx: PageCtx, grid: Node, cell: { uid: string; n: number }, hid: string, rebuild: () => void, x: number, y: number): void {
   const isMat = cell.n > 0;
-  const q = isMat ? 0 : EQUIPS[cell.uid].quality;
-  const name = isMat ? MATS[cell.uid].name : EQUIPS[cell.uid].name;
-  const kind = isMat ? null : EQUIPS[cell.uid].kind;
+  // 背包装备格的 uid 是实例 id：先查实例再取定义（直接 EQUIPS[cell.uid] 会查不到并中断整页网格渲染）
+  const inst = isMat ? null : loadSave().equips.find(e => e.uid === cell.uid);
+  const d = inst ? EQUIPS[inst.defId] : null;
+  const q = isMat ? 0 : d?.quality ?? 0;
+  const name = isMat ? MATS[cell.uid].name : d?.name ?? '???';
+  const kind = isMat ? null : d?.kind ?? null;
   const g = gpanel(grid, x, y, 120, 120, CA('#14181E', 0.9), C(QCOLOR[q]), 2.5, 12);
   label(g, 0, -12, kind ? KIND_ICON[kind] : '🧱', { size: 44 });
   label(g, 0, 36, name, { size: 16, color: '#E8E0C8', w: 112, h: 24, shrink: true });
   if (isMat) label(g, 42, -46, `×${cell.n}`, { size: 18, color: '#FFE08A', bold: true, align: 'right', w: 70, h: 24 });
-  else label(g, -42, -46, `Lv.${loadSave().equips.find(e => e.uid === cell.uid)?.lv ?? 1}`, { size: 16, color: QCOLOR[q], align: 'left', w: 70, h: 24 });
+  else label(g, -42, -46, `Lv.${inst?.lv ?? 1}`, { size: 16, color: QCOLOR[q], align: 'left', w: 70, h: 24 });
 
   g.on(Node.EventType.TOUCH_END, (e: unknown) => {
     const ev = e as { propagationStopped?: () => void };
@@ -172,17 +175,18 @@ function drawBagCell(ctx: PageCtx, grid: Node, cell: { uid: string; n: number },
       label(panel, 0, -70, '来源：商店购买 / 关卡掉落', { size: 18, color: '#8D96A3', w: 500, h: 28 });
       label(panel, 0, -120, '用途：武器 / 装备强化材料', { size: 18, color: '#8D96A3', w: 500, h: 28 });
     } else {
-      const inst = loadSave().equips.find(e => e.uid === cell.uid)!;
-      const d = EQUIPS[inst.defId];
-      label(panel, 0, 150, `${d.name} · T${d.tier} · Lv.${inst.lv}`, { size: 24, color: QCOLOR[d.quality], bold: true, w: 500, h: 34 });
-      label(panel, 0, 80, `攻击 +${d.atk}　生命 +${d.hp}`, { size: 22, color: '#E8E0C8', w: 500, h: 32 });
-      label(panel, 0, 30, `出售价：${Math.round([100, 400, 1500, 5000][d.quality] * Math.pow(3, d.tier - 1) * (1 + (inst.lv - 1) * 0.1))} 金币`, { size: 20, color: '#AAB2BD', w: 500, h: 30 });
-      btn(panel, -130, -140, 220, 70, `穿戴·${KIND_NAME[d.kind]}`, PAL.green, () => {
-        wearEquip(hid, d.kind, inst.uid);
+      const cur = loadSave().equips.find(e => e.uid === cell.uid);
+      if (!cur) return;
+      const dd = EQUIPS[cur.defId];
+      label(panel, 0, 150, `${dd.name} · T${dd.tier} · Lv.${cur.lv}`, { size: 24, color: QCOLOR[dd.quality], bold: true, w: 500, h: 34 });
+      label(panel, 0, 80, `攻击 +${dd.atk}　生命 +${dd.hp}`, { size: 22, color: '#E8E0C8', w: 500, h: 32 });
+      label(panel, 0, 30, `出售价：${Math.round([100, 400, 1500, 5000][dd.quality] * Math.pow(3, dd.tier - 1) * (1 + (cur.lv - 1) * 0.1))} 金币`, { size: 20, color: '#AAB2BD', w: 500, h: 30 });
+      btn(panel, 130, -140, 220, 70, `穿戴·${KIND_NAME[dd.kind]}`, PAL.green, () => {
+        wearEquip(hid, dd.kind, cur.uid);
         ctx.refresh();
       }, 21);
-      btn(panel, 130, -140, 220, 70, '出 售', '#5A6472', () => {
-        const r = sellEquip(inst.uid);
+      btn(panel, -130, -140, 220, 70, '出 售', '#5A6472', () => {
+        const r = sellEquip(cur.uid);
         toast(r.msg);
         if (r.ok) ctx.refresh();
       }, 22);

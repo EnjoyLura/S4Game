@@ -179,7 +179,12 @@ export function shopBuy(g: ShopDef): OpResult {
   if (wallet < g.price) return { ok: false, msg: g.currency === 'gold' ? '金币不足' : '钻石不足' };
   if (g.currency === 'gold') sv.gold -= g.price; else sv.diamonds -= g.price;
   if (g.give.kind === 'equip') {
-    sv.equips.push(newEquipInst(g.give.id));
+    const inst = newEquipInst(g.give.id);
+    // 买到的装备若当前英雄对应槽位为空则直接穿上，否则入仓库（英雄页背包可再穿戴）
+    const d = EQUIPS[g.give.id];
+    const cur = sv.heroes[sv.curHero];
+    if (d && cur?.owned && !cur.worn[d.kind]) cur.worn[d.kind] = inst.uid;
+    sv.equips.push(inst);
   } else if (g.give.kind === 'hero' && g.give.id) {
     sv.heroes[g.give.id].owned = true;
     sv.curHero = g.give.id;

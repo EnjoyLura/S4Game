@@ -70,7 +70,7 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
     btn(card, 0, -100, 240, 54, `${cur} ${fmt(g.price)} 购买`, PAL.green, () => {
       confirmModal(ctx, g.name, [
         g.sub,
-        g.give.kind === 'hero' ? '购买后解锁该英雄' : g.give.kind === 'equip' ? '购买后放入装备仓库' : `获得 ${g.give.n || 1} 个`,
+        g.give.kind === 'hero' ? '购买后解锁该英雄' : g.give.kind === 'equip' ? '购买后自动穿戴（槽位已占用则入仓库）' : `获得 ${g.give.n || 1} 个`,
         `价格：${cur} ${fmt(g.price)}`,
       ], '购 买', () => {
         const r = shopBuy(g);

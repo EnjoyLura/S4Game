@@ -64,14 +64,14 @@ export function fmt(v: number): string { return v.toLocaleString('en-US'); }
 export function confirmModal(ctx: PageCtx, title: string, lines: string[], okText: string, onOk: () => string | null): void {
   const panel = modal(ctx, 560, 420, title);
   lines.forEach((t, i) => label(panel, 0, 60 - i * 44, t, { size: 22, color: '#E8E0C8', w: 520, h: 40, shrink: true }));
-  btn(panel, -130, -130, 200, 76, okText, PAL.green, () => {
+  btn(panel, 130, -130, 200, 76, okText, PAL.green, () => {
     const err = onOk();
     if (err) { toast(err); return; }
     const dim = panel.parent;
     if (dim) dim.destroy();
     ctx.refresh();
   }, 24);
-  btn(panel, 130, -130, 200, 76, '取 消', '#5A6472', () => { const d = panel.parent; if (d) d.destroy(); }, 24);
+  btn(panel, -130, -130, 200, 76, '取 消', '#5A6472', () => { const d = panel.parent; if (d) d.destroy(); }, 24);
 }
 
 /** 内容顶基坐标：统一用 WY() 直读线稿设计值（线稿数字即含刘海偏移的绝对 y）；CX 为横向便捷别名 */
