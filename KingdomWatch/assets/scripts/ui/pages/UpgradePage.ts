@@ -276,18 +276,18 @@ function save(hid: string, r: { ok: boolean; msg: string }, ctx: PageCtx): void 
 
 /** 等级效果步骤条（等级/武器页签共用）：奶白板拉通到行动条、不留底部空档（用户确认）；
  * topY = 上方面板底缘，与其拉开 44 留出标题空间（标题完全出板）；botY = 行动条上缘 + 间距。
- * 档位放得下时在板内均匀分布铺满；放不下时紧凑堆叠、可滑动。竖线节点与属性文字左缘同列（-320），
- * 达成档位亮卡、未达成置灰 */
+ * 卡片固定节奏（高 64 / 间距 18，各页签一致——用户确认）整组垂直居中；放不下时顶对齐、可滑动。
+ * 竖线节点与属性文字左缘同列（-320），达成档位亮卡、未达成置灰 */
 function fxStepper(parent: Node, topY: number, botY: number, title: string, ms: { lv: number; txt: string }[], lv: number): void {
   const CARD_H = 64, GAP = 18, PAD = 16;
-  const stackH = ms.length * (CARD_H + GAP) - GAP + PAD * 2;
   const fxTop = topY - 44;
   const fxH = Math.max(150, fxTop - botY);
   const fx = gpanel(parent, 0, botY + fxH / 2, 700, fxH, CA('#E9DFC2', 0.94), undefined, 0, 12);
   zoneTab(parent, -280, fxTop + 17, title);
   const viewH = fxH - 8;
-  const even = stackH <= viewH;
-  const contentH = even ? viewH : Math.max(stackH, viewH);
+  const stackH = ms.length * CARD_H + (ms.length - 1) * GAP;
+  const contentH = Math.max(stackH + PAD * 2, viewH);
+  const off = contentH > viewH ? PAD : (viewH - stackH) / 2;
   const view = N('fxView', fx, 0, 0, 660, viewH);
   view.addComponent(Mask);
   const scroll = view.addComponent(ScrollView);
@@ -297,7 +297,7 @@ function fxStepper(parent: Node, topY: number, botY: number, title: string, ms: 
   scroll.horizontal = false;
   scroll.vertical = true;
   const LINE_X = -320;
-  const yAt = (i: number): number => even ? -(contentH / ms.length) * (i + 0.5) : -(PAD + i * (CARD_H + GAP) + CARD_H / 2);
+  const yAt = (i: number): number => -(off + i * (CARD_H + GAP) + CARD_H / 2);
   const lineG = N('fxLine', ct, 0, 0, 8, contentH).addComponent(Graphics);
   lineG.fillColor = C('#B8A87F');
   lineG.rect(LINE_X - 2, yAt(ms.length - 1), 4, yAt(0) - yAt(ms.length - 1));   // 线仅连首末节点
