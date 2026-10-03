@@ -414,7 +414,7 @@ export class Panels {
       } else {
         title = '⚡ 技能 · 穿颅射击';
         rows = [
-          ['效果', '锁定离防线最近 · 连续 6 狙'],
+          ['效果', '锁定离防线最近 · 连续 ' + Math.round(h.skillShots || 6) + ' 狙'],
           ['每发伤害', Math.round(h.atk * h.atkMul * 2) + '（×2.0）'],
           ['特性', '持续索敌 · 独立暴击'],
           ['冷却时间', hero.skillCd > 0 ? hero.skillCd.toFixed(1) + ' 秒' : '就绪'],
@@ -429,7 +429,7 @@ export class Panels {
       w = 280; hh = 272;
       rows = [
         ['伤害', Math.round(h.atk * h.atkMul * 0.65) + ' × 每箭'],
-        ['形态', '两排扇形 × 每排 8 箭'],
+        ['形态', Math.round(h.ultRounds || 1) > 1 ? Math.round(h.ultRounds) + ' 轮 × 两排扇形 · 每排 8 箭' : '两排扇形 × 每排 8 箭'],
         ['特性', '无限贯穿'],
         ['充能', Math.floor(hero.charge) + ' / ' + hero.chargeMax],
         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
@@ -443,7 +443,7 @@ export class Panels {
       w = 280; hh = 272;
       rows = [
         ['伤害', '×5.5 必定暴击'],
-        ['形态', '0.5 秒锁定 → 贯穿弹'],
+        ['形态', '0.5 秒锁定 → 贯穿弹' + (Math.round(h.ultBolts || 1) > 1 ? ' × ' + Math.round(h.ultBolts) + ' 线' : '')],
         ['特性', '无限贯穿 · 无视物抗'],
         ['目标', '全场血量最高'],
         ['充能', Math.floor(hero.charge) + ' / ' + hero.chargeMax],

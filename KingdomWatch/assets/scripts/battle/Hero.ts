@@ -44,8 +44,9 @@ export abstract class HeroBase {
 
   get x(): number { return this.hx; }
   get effAtk(): number { return this.stats.atk * this.stats.atkMul; }
-  get chargePct(): number { return this.charge / this.chargeMax; }
-  get ultReady(): boolean { return this.charge >= this.chargeMax; }
+  get chargeGoal(): number { return this.chargeMax * (this.stats.chargeMul || 1); }
+  get chargePct(): number { return this.charge / this.chargeGoal; }
+  get ultReady(): boolean { return this.charge >= this.chargeGoal; }
   get skillPct(): number { return 1 - this.skillCd / this.skillMax; }
 
   tick(dt: number, mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
@@ -90,7 +91,7 @@ export abstract class HeroBase {
   chargeKill(v: number): void {
     if (this.ultReady) return;
     const was = this.ultReady;
-    this.charge = Math.min(this.chargeMax, this.charge + v);
+    this.charge = Math.min(this.chargeGoal, this.charge + v);
     bus.emit(EVT.CHARGE_CHANGED, this.chargePct, this.ultReady);
     if (!was && this.ultReady) Sfx.play('ready');
   }
@@ -250,6 +251,7 @@ export class ArcherHero extends HeroBase {
       explodeMul: this.stats.explodeMul,
       split: this.stats.split,
       slowRatio: this.stats.slowOnHit || 0,
+      slowDur: this.stats.slowDur || 2,
       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
       ability: emp,          // 技能弹种标记：击杀弹 60% 词条（普攻击杀不弹）
       ...this.targetBonuses(),
@@ -334,11 +336,12 @@ export class ArcherHero extends HeroBase {
     tween(pop).to(0.38, { opacity: 0 }).call(() => pulse.destroy()).start();
   }
 
-  /** 大招·扇形箭雨（手动，击杀充能）：两排 × 8 箭扇形射出，全部无限贯穿 */
+  /** 大招·扇形箭雨（手动，击杀充能）：两排 × 8 箭扇形射出，全部无限贯穿；多轮箭雨卡追加轮次（间隔 0.8s） */
   castUlt(_mgr: MonsterManager, projs: ProjectileManager, _dmg: DamageService): boolean {
     if (!this.ultReady) return false;
     this.charge = 0;
-    this.volleyQueue.push({ t: 0, row: 0 }, { t: 0.35, row: 1 });
+    const rounds = Math.max(1, Math.round(this.stats.ultRounds || 1));
+    for (let r = 0; r < rounds; r++) this.volleyQueue.push({ t: r * 0.8, row: 0 }, { t: r * 0.8 + 0.35, row: 1 });
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
     Sfx.play('ult');
     void _dmg;
@@ -458,6 +461,7 @@ export class SniperHero extends HeroBase {
       color: '#7FB3FF', heroId: this.id, size: 8,
       pierce: this.stats.pierce,
       slowRatio: this.stats.slowOnHit || 0,
+      slowDur: this.stats.slowDur || 2,
       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
       ...this.targetBonuses(),
     };
@@ -512,7 +516,7 @@ export class SniperHero extends HeroBase {
       g.moveTo(L.target.x, L.target.y + r - 4); g.lineTo(L.target.x, L.target.y + r + 8);
       g.stroke();
       if (L.t <= 0) {
-        this.fireUltBolt(projs, L.target);
+        this.fireUltBolt(projs, mgr, L.target);
         this.endUltLock();
       }
     }
@@ -522,18 +526,28 @@ export class SniperHero extends HeroBase {
     if (this.ultLock) { this.ultLock.node.destroy(); this.ultLock = null; }
   }
 
-  /** 锁定完成：发射贯穿弹（×5.5 必暴、无视物抗、无限贯穿），拦截预判锁定方向 */
-  private fireUltBolt(projs: ProjectileManager, locked: Monster): void {
-    const lead = this.lead(locked, 1100);
-    projs.fire({
-      x: this.x, y: HERO_Y + 60,
-      dirX: lead.dirX, dirY: lead.dirY, speed: 1100,
-      dmg: this.effAtk * 5.5, crit: true,
-      color: '#9FCBFF', heroId: this.id, size: 12,
-      ttl: 4, pierce: 999, spark: true,
-      ignoreRes: true,
-      ult: true, ability: true,   // 大招弹：击杀弹 KAPOW!（60%）
-    });
+  /** 锁定完成：发射贯穿弹（×5.5 必暴、无视物抗、无限贯穿），拦截预判锁定方向；
+   *  额外枪线卡：其余血量最高的目标各补一发 */
+  private fireUltBolt(projs: ProjectileManager, mgr: MonsterManager, locked: Monster): void {
+    const fire1 = (t: Monster): void => {
+      const lead = this.lead(t, 1100);
+      projs.fire({
+        x: this.x, y: HERO_Y + 60,
+        dirX: lead.dirX, dirY: lead.dirY, speed: 1100,
+        dmg: this.effAtk * 5.5, crit: true,
+        color: '#9FCBFF', heroId: this.id, size: 12,
+        ttl: 4, pierce: 999, spark: true,
+        ignoreRes: true,
+        ult: true, ability: true,   // 大招弹：击杀弹 KAPOW!（60%）
+      });
+      projs.sparkAt(t.x, t.y, '#BFE3FF', 5);
+    };
+    fire1(locked);
+    const extra = Math.max(0, Math.round((this.stats.ultBolts || 1) - 1));
+    if (extra > 0) {
+      const others = mgr.list.filter(m => !m.dead && m !== locked).sort((a, b) => b.hp - a.hp).slice(0, extra);
+      for (const t of others) fire1(t);
+    }
     projs.sparkAt(this.x, HERO_Y + 70, '#BFE3FF', 8);
     Sfx.play('snipe');
   }
@@ -553,8 +567,8 @@ export class SniperHero extends HeroBase {
 
   /** 技能·穿颅射击（自动，14s CD）：4 秒窗口内锁定「离防线最近」目标连续 6 狙，每发 200% 攻击；无目标等待不取消 */
   protected castSkill(): void {
-    this.skillCd = this.skillMax;
-    this.volley = { t: 0, left: 6, ttl: 4 };
+    this.skillCd = Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0));   // 冷却缩减卡
+    this.volley = { t: 0, left: Math.max(1, Math.round(this.stats.skillShots || 6)), ttl: 4 };   // 多目标锁定卡加发数
     // 演出：英雄身上深蓝环脉冲扩散
     const pulse = new Node('snipePulse');
     pulse.layer = Layers.Enum.UI_2D;

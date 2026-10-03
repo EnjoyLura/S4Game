@@ -27,6 +27,12 @@ export interface HeroStats {
   burnOnHit: number;    // 命中点燃每秒伤害系数（0=无，0.2=3s共60%）
   executeBonus: number; // 对精英/BOSS 伤害加成（处决标记，累加）
   lowHpBonus: number;   // 对血量<30% 目标伤害加成（猎手本能，累加）
+  slowDur: number;      // 命中减速时长 s（寒霜附魔）
+  ultRounds: number;    // 大招箭雨轮数（弓，多轮箭雨）
+  chargeMul: number;    // 大招充能需求倍率（快速充能，累乘）
+  skillShots: number;   // 穿颅射击连狙发数（狙，多目标锁定）
+  skillCdFlat: number;  // 技能冷却缩减 s（狙，冷却缩减，累加）
+  ultBolts: number;     // 大招枪线条数（狙，额外枪线）
 }
 
 export function baseArcherStats(): HeroStats {
@@ -37,6 +43,7 @@ export function baseArcherStats(): HeroStats {
     serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
+    slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
   };
 }
 
@@ -48,6 +55,7 @@ export function baseSniperStats(): HeroStats {
     serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
+    slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
   };
 }
 
@@ -83,10 +91,8 @@ function c(def: CardDef): CardDef { return def; }
 export const ARCHER_CARDS: CardDef[] = [
   c({ id: 'sharp', name: '磨利刀刃', rarity: 'white', maxStacks: 5, owner: 'archer', desc: '攻击力 +20%',
     apply: x => { x.hero.atkMul *= 1.2; } }),
-  c({ id: 'fury', name: '狂怒', rarity: 'blue', maxStacks: 3, owner: 'archer', desc: '攻击力 +35%',
-    apply: x => { x.hero.atkMul *= 1.35; } }),
-  c({ id: 'swift', name: '迅捷之风', rarity: 'white', maxStacks: 4, owner: 'archer', desc: '攻速 +25%',
-    apply: x => { x.hero.aspd *= 1.25; } }),
+  c({ id: 'swift', name: '迅捷之风', rarity: 'white', maxStacks: 4, owner: 'archer', desc: '攻速 +15%',
+    apply: x => { x.hero.aspd *= 1.15; } }),
   c({ id: 'serial', name: '连射', rarity: 'blue', maxStacks: 3, owner: 'archer', desc: '普攻同线串行追加 1 颗子弹（微延迟成串，独立命中）',
     apply: x => { x.hero.serial += 1; } }),
   c({ id: 'fan', name: '齐射', rarity: 'blue', maxStacks: 3, owner: 'archer', desc: '普攻额外射出 2 支扇形子弹道：主弹道索敌，子弹道直线随缘命中',
@@ -101,32 +107,42 @@ export const ARCHER_CARDS: CardDef[] = [
     apply: x => { if (x.hero.explodeR > 0) x.hero.explodeMul *= 1.5; } }),
   c({ id: 'crit_rate', name: '鹰眼', rarity: 'white', maxStacks: 4, owner: 'archer', desc: '暴击率 +15%',
     apply: x => { x.hero.critRate += 0.15; } }),
-  c({ id: 'crit_dmg', name: '致命一击', rarity: 'blue', maxStacks: 3, owner: 'archer', desc: '暴击伤害 +50%',
-    apply: x => { x.hero.critMul += 0.5; } }),
-  c({ id: 'frost', name: '寒霜附魔', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '命中减速 20% 2s',
-    apply: x => { x.hero.slowOnHit = 0.2; } }),
+  c({ id: 'crit_dmg', name: '致命一击', rarity: 'blue', maxStacks: 3, owner: 'archer', desc: '暴击伤害 +30%',
+    apply: x => { x.hero.critMul += 0.3; } }),
+  c({ id: 'frost', name: '寒霜附魔', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '命中减速 20% 1s',
+    apply: x => { x.hero.slowOnHit = 0.2; x.hero.slowDur = 1; } }),
   c({ id: 'burn', name: '烈焰附魔', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '命中点燃（3s 共 60% 攻击力伤害）',
     apply: x => { x.hero.burnOnHit = 0.2; } }),
   c({ id: 'instinct_a', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'archer', desc: '对血量 <30% 目标伤害 +100%',
     apply: x => { x.hero.lowHpBonus += 1; } }),
+  c({ id: 'rain_rounds', name: '多轮箭雨', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '大招箭雨 +1 轮（可叠至 3 轮）',
+    apply: x => { x.hero.ultRounds += 1; } }),
+  c({ id: 'fast_charge_a', name: '快速充能', rarity: 'blue', maxStacks: 2, owner: 'archer', desc: '大招充能需求 -20%（可叠加）',
+    apply: x => { x.hero.chargeMul *= 0.8; } }),
 ];
 
 /* ---------- 狙击游侠 · 凯尔·鹰眼（§6.2/§6.4 普攻流·极限单体） ---------- */
 export const SNIPER_CARDS: CardDef[] = [
   c({ id: 'heavy_head', name: '重弹头', rarity: 'white', maxStacks: 5, owner: 'sniper', desc: '攻击力 +20%',
     apply: x => { x.hero.atkMul *= 1.2; } }),
-  c({ id: 'pierce_shot', name: '贯穿重狙', rarity: 'blue', maxStacks: 3, owner: 'sniper', desc: '攻击力 +35%',
-    apply: x => { x.hero.atkMul *= 1.35; } }),
-  c({ id: 'fast_load', name: '快速装填', rarity: 'white', maxStacks: 4, owner: 'sniper', desc: '攻速 +25%',
-    apply: x => { x.hero.aspd *= 1.25; } }),
+  c({ id: 'fast_load', name: '快速装填', rarity: 'white', maxStacks: 4, owner: 'sniper', desc: '攻速 +15%',
+    apply: x => { x.hero.aspd *= 1.15; } }),
   c({ id: 'steady_rest', name: '稳定枪架', rarity: 'white', maxStacks: 4, owner: 'sniper', desc: '暴击率 +15%',
     apply: x => { x.hero.critRate += 0.15; } }),
-  c({ id: 'lethal_aim', name: '致命瞄准', rarity: 'blue', maxStacks: 3, owner: 'sniper', desc: '暴击伤害 +50%',
-    apply: x => { x.hero.critMul += 0.5; } }),
+  c({ id: 'lethal_aim', name: '致命瞄准', rarity: 'blue', maxStacks: 3, owner: 'sniper', desc: '暴击伤害 +30%',
+    apply: x => { x.hero.critMul += 0.3; } }),
   c({ id: 'execute', name: '处决标记', rarity: 'blue', maxStacks: 3, owner: 'sniper', desc: '普攻对精英/BOSS 伤害 +35%',
     apply: x => { x.hero.executeBonus += 0.35; } }),
   c({ id: 'instinct_s', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'sniper', desc: '对血量 <30% 目标伤害 +100%',
     apply: x => { x.hero.lowHpBonus += 1; } }),
+  c({ id: 'multi_lock', name: '多目标锁定', rarity: 'blue', maxStacks: 2, owner: 'sniper', desc: '穿颅射击连狙 +2 发（可叠加）',
+    apply: x => { x.hero.skillShots += 2; } }),
+  c({ id: 'cd_cut', name: '冷却缩减', rarity: 'blue', maxStacks: 2, owner: 'sniper', desc: '技能冷却 -2 秒（可叠加）',
+    apply: x => { x.hero.skillCdFlat += 2; } }),
+  c({ id: 'extra_line', name: '额外枪线', rarity: 'purple', maxStacks: 2, owner: 'sniper', desc: '大招额外 +1 条枪线（可叠加）',
+    apply: x => { x.hero.ultBolts += 1; } }),
+  c({ id: 'fast_charge_s', name: '快速充能', rarity: 'blue', maxStacks: 2, owner: 'sniper', desc: '大招充能需求 -20%（可叠加）',
+    apply: x => { x.hero.chargeMul *= 0.8; } }),
 ];
 
 /* ---------- 全局卡（§6.1） ---------- */
@@ -135,10 +151,8 @@ export const GLOBAL_CARDS: CardDef[] = [
     apply: x => { x.line.addMaxMul(1.25); x.line.healPct(0.25); } }),
   c({ id: 'repair', name: '工事修理', rarity: 'blue', maxStacks: 3, owner: 'global', desc: '防线每秒回复 0.5% 最大耐久',
     apply: x => { x.global.lineRegenPct += 0.005; } }),
-  c({ id: 'xp_badge', name: '经验勋章', rarity: 'white', maxStacks: 3, owner: 'global', desc: '经验获取 +25%',
-    apply: x => { x.global.xpMul *= 1.25; } }),
-  c({ id: 'gold_hunter', name: '黄金猎手', rarity: 'white', maxStacks: 3, owner: 'global', desc: '金币获取 +20%',
-    apply: x => { x.global.goldMul *= 1.2; } }),
+  c({ id: 'xp_badge', name: '经验勋章', rarity: 'white', maxStacks: 3, owner: 'global', desc: '经验获取 +10%',
+    apply: x => { x.global.xpMul *= 1.1; } }),
 ];
 
 /** 当前卡池 = 弓箭手 + 狙击 + 全局（卡按 owner 归属英雄生效） */

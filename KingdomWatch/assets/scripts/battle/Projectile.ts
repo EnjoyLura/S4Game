@@ -34,6 +34,7 @@ export interface ProjSpec {
   enemy?: boolean;
   /** 命中词条 */
   slowRatio?: number;
+  slowDur?: number;
   burnDps?: number;
   /** 无视物抗（狙击大招等） */
   ignoreRes?: boolean;
@@ -207,7 +208,7 @@ export class ProjectileManager {
       this.killPop(sp, m.x, m.y + m.def.radius);
       return;
     }
-    if (sp.slowRatio) m.applySlow(sp.slowRatio, 2);
+    if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
     if (sp.burnDps) m.applyBurn(sp.burnDps, 3);
     if (sp.explodeR && sp.explodeR > 0) {
       for (const o of this.mgr.mobsInRadius(m.x, m.y, sp.explodeR)) {
