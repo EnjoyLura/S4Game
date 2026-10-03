@@ -1,12 +1,13 @@
 /**
  * ⑤ 基地（线稿 base）：等距场景占位 + 主城（升级加耐久/盾）+ 研究院（怪物图鉴弹窗）+ 锁定建筑占位
  */
+import { Mask, ScrollView, UITransform } from 'cc';
 import { CA, btn, C, gcircle, gpanel, label, N, WY, WX } from '../UIKit';
 import { artSprite } from '../Ux';
 import { PageCtx, modal, toast, fmt, CX } from '../PageKit';
 import { zoneTab } from './UpgradePage';
 import { PAL } from '../../config/GameConfig';
-import { CODEX, codexUnlocked, keepHp, keepShield, keepUpCost, upKeep, MAX } from '../../core/GameData';
+import { CODEX, CODEX_REWARD, claimCodexReward, codexClaimed, codexUnlocked, keepHp, keepShield, keepUpCost, upKeep, MAX } from '../../core/GameData';
 import { loadSave } from '../../core/SaveData';
 
 const INK = '#4A3214', OK = '#3E7C28', NO = '#B03A2E';
@@ -99,28 +100,75 @@ function keepModal(ctx: PageCtx): void {
   }
 }
 
-/* ---------- 研究院：怪物图鉴弹窗（扁平无框；已解锁奶白卡、未解锁置灰——同步骤条未达卡） ---------- */
+/* ---------- 研究院：怪物图鉴弹窗（扁平无框；两列卡片可滑动查看全部，未领奖励带红点） ---------- */
 function codexModal(ctx: PageCtx): void {
   const panel = modal(ctx, 620, 760, '研究院 · 怪物图鉴', true);
-  label(panel, 0, 290, '战斗中首次遇到新怪物自动解锁词条', { size: 18, color: '#8D96A3', w: 560, h: 28 });
+  label(panel, 0, 290, '关卡内遭遇怪物解锁图鉴 · 首次查看可领钻石奖励', { size: 18, color: '#8D96A3', w: 560, h: 28 });
+  /* 可滑动卡片区（滚动视图，怪物增多后超出即滚） */
+  const VIEW_H = 570, CARD_H = 150, GAP = 16, PAD = 16;
+  const rows = Math.ceil(CODEX.length / 2);
+  const stackH = rows * CARD_H + (rows - 1) * GAP;
+  const contentH = Math.max(stackH + PAD * 2, VIEW_H);
+  const off = contentH > VIEW_H ? PAD : (VIEW_H - stackH) / 2;
+  const view = N('cxView', panel, 0, (270 + -340) / 2, 560, VIEW_H);
+  view.addComponent(Mask);
+  const scroll = view.addComponent(ScrollView);
+  const ct = N('cxContent', view, 0, VIEW_H / 2, 560, contentH);
+  ct.getComponent(UITransform)!.setAnchorPoint(0.5, 1);
+  scroll.content = ct;
+  scroll.horizontal = false;
+  scroll.vertical = true;
   CODEX.forEach((c, i) => {
     const got = codexUnlocked(c.id);
-    const cell = gpanel(panel, -145 + (i % 2) * 290, 160 - Math.floor(i / 2) * 155, 270, 140,
+    const cell = gpanel(ct, i % 2 === 0 ? -142 : 142, -(off + Math.floor(i / 2) * (CARD_H + GAP) + CARD_H / 2), 265, CARD_H,
       got ? CA('#E9DFC2', 0.94) : CA('#D8CBA8', 0.9), undefined, 0, 12);
-    label(cell, -100, 34, got ? '👹' : '❓', { size: 44 });
-    label(cell, 10, 34, got ? c.name : '???', { size: 21, color: got ? INK : '#6B5A3A', bold: true, w: 170, h: 30, shrink: true });
-    label(cell, 0, -34, got ? '点开词条 ▶' : '未解锁', { size: 17, color: got ? OK : '#8A7A5C', w: 240, h: 26 });
+    label(cell, 0, 28, got ? c.icon : '❓', { size: 44 });
+    label(cell, 0, -26, got ? c.name : '???', { size: 20, color: got ? INK : '#6B5A3A', bold: true, w: 240, h: 28, shrink: true });
+    label(cell, 0, -56, got ? '点开词条 ▶' : '未解锁', { size: 16, color: got ? OK : '#8A7A5C', w: 240, h: 24 });
+    if (got && !codexClaimed(c.id)) gpanel(cell, 112, 62, 18, 18, CA('#E5484D', 1), undefined, 0, 9);
     if (got) cell.on(NodeClick(), () => codexDetail(ctx, c.id));
   });
 }
 
+/* ---------- 怪物词条详情（参考图版式：大图标 + 名称 + 标签 + 描述/弱点分区 + 首览奖励领取） ---------- */
 function codexDetail(ctx: PageCtx, id: string): void {
   const c = CODEX.find(x => x.id === id)!;
-  const panel = modal(ctx, 560, 520, c.name, true);
-  gcircle(panel, 0, 130, 60, CA('#2A3240', 1));
-  label(panel, 0, 130, '👹', { size: 56 });
-  label(panel, 0, 20, c.desc, { size: 21, color: '#E8E0C8', w: 500, h: 110, shrink: true });
-  const weak = gpanel(panel, 0, -120, 500, 90, CA('#E9DFC2', 0.94), undefined, 0, 12);
-  label(weak, 0, 18, '弱点', { size: 19, color: NO, bold: true, w: 460, h: 28 });
-  label(weak, 0, -16, c.weak, { size: 21, color: INK, bold: true, w: 460, h: 30 });
+  const W = 620, H = 660, PW = 560;
+  const panel = modal(ctx, W, H, '', true);
+  /* 大图标 + 名称 + 两枚标签（体型/定位，绿/蓝小圆角板） */
+  gcircle(panel, 0, H / 2 - 120, 62, CA('#2A3240', 1));
+  label(panel, 0, H / 2 - 120, c.icon, { size: 60 });
+  label(panel, 0, H / 2 - 210, c.name, { size: 30, color: '#FFF3D6', bold: true, w: 500, h: 40 });
+  const tags: [string, string][] = [[c.tags[0], '#3E7C28'], [c.tags[1], '#1F6BC4']];
+  tags.forEach((t, i) => {
+    const px = i === 0 ? -80 : 80;
+    gpanel(panel, px, H / 2 - 268, 130, 44, CA(t[1], 0.95), undefined, 0, 22);
+    label(panel, px, H / 2 - 268, t[0], { size: 19, color: '#FFF3D6', bold: true, w: 130, h: 44 });
+  });
+  /* 怪物描述 / 弱点（奶白分区板 + 金签出板） */
+  const p1Top = H / 2 - 306;
+  const p1 = gpanel(panel, 0, p1Top - 55, PW, 110, CA('#E9DFC2', 0.94), undefined, 0, 12);
+  zoneTab(panel, -PW / 2 + 70, p1Top + 17, '怪物描述');
+  label(p1, 0, 0, c.desc, { size: 19, color: INK, w: 500, h: 70, shrink: true });
+  const p2Top = p1Top - 110 - 44;
+  const p2 = gpanel(panel, 0, p2Top - 44, PW, 88, CA('#E9DFC2', 0.94), undefined, 0, 12);
+  zoneTab(panel, -PW / 2 + 70, p2Top + 17, '弱点');
+  label(p2, 0, 0, c.weak, { size: 20, color: INK, bold: true, w: 500, h: 40, shrink: true });
+  /* 行动条：首览奖励（💎 +20钻）+ 领取/已领取 */
+  const actCy = -H / 2 + 46;
+  const act = gpanel(panel, 0, actCy, PW, 64, CA('#14181E', 0.72), undefined, 0, 32);
+  gcircle(act, -212, 0, 24, CA(PAL.blue, 0.25));
+  label(act, -212, 0, '💎', { size: 24 });
+  label(act, -128, 0, `+${CODEX_REWARD} 钻`, { size: 22, color: '#CFE3FF', bold: true, align: 'left', w: 120, h: 48, shrink: true });
+  const claimed = codexClaimed(c.id);
+  if (!claimed) {
+    btn(act, 195, 0, 160, 54, '领 取', PAL.gold, () => {
+      const r = claimCodexReward(id);
+      toast(r.msg);
+      if (r.ok) { const d = panel.parent; if (d) d.destroy(); }
+    }, 24, true);
+    gpanel(act, 263, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
+  } else {
+    label(act, 195, 0, '已领取', { size: 22, color: '#AAB2BD', w: 160, h: 40 });
+  }
 }

@@ -52,13 +52,15 @@ export interface SaveData {
   chestClaimed: Record<string, number>;
   /** 已解锁怪物图鉴 */
   codex: string[];
+  /** 已领取首览奖励的图鉴 id（每只怪物一次性） */
+  codexRewards: string[];
 }
 
 const DEFAULTS: SaveData = {
   gold: 500, diamonds: 20, stars: {}, unlocked: '1-1',
   speedUnlocked: false, music: true, sfx: true, debug: true,
   bag: {}, equips: [], heroes: {}, curHero: 'archer',
-  keepLv: 1, chestClaimed: {}, codex: [],
+  keepLv: 1, chestClaimed: {}, codex: [], codexRewards: [],
 };
 
 let cache: SaveData | null = null;

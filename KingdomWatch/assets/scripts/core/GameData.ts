@@ -330,16 +330,29 @@ export function claimChest(levelId: string, stars: number, tier: number): OpResu
 
 /* ================= 怪物图鉴 ================= */
 
-export interface CodexDef { id: string; name: string; desc: string; weak: string; }
+export interface CodexDef { id: string; name: string; icon: string; tags: [string, string]; desc: string; weak: string; }
 export const CODEX: CodexDef[] = [
-  { id: 'goblin_worker', name: '哥布林苦工', desc: '成群结队冲向防线的近战单位，威胁在于数量。', weak: '范围伤害（炮手/火法）' },
-  { id: 'goblin_slinger', name: '哥布林投石手', desc: '远程投掷石块，会躲在近战身后输出。', weak: '快速击杀（弓手/狙击）' },
-  { id: 'goblin_shaman', name: '哥布林萨满', desc: '治疗友军，优先击杀目标。', weak: '集火秒杀（狙击大招）' },
-  { id: 'wolf_rider', name: '狼骑兵', desc: '高速冲锋，很快接近防线。', weak: '减速控制（冰法）' },
-  { id: 'goblin_brute', name: '大哥布林（精英）', desc: '血厚攻高的精英，击杀有装备掉落。', weak: '持续输出 + 控场' },
-  { id: 'goblin_king', name: '哥布林王（BOSS）', desc: '第一章 BOSS，召唤苦工并狂暴冲锋。', weak: '大招爆发窗口' },
+  { id: 'goblin_worker', name: '哥布林苦工', icon: '👺', tags: ['小型', '近战'], desc: '成群结队冲向防线的近战单位，威胁在于数量。', weak: '范围伤害（炮手/火法）' },
+  { id: 'goblin_slinger', name: '哥布林投石手', icon: '🎯', tags: ['小型', '远程'], desc: '远程投掷石块，会躲在近战身后输出。', weak: '快速击杀（弓手/狙击）' },
+  { id: 'goblin_shaman', name: '哥布林萨满', icon: '🔮', tags: ['小型', '辅助'], desc: '治疗友军，优先击杀目标。', weak: '集火秒杀（狙击大招）' },
+  { id: 'wolf_rider', name: '狼骑兵', icon: '🐺', tags: ['中型', '骑兵'], desc: '高速冲锋，很快接近防线。', weak: '减速控制（冰法）' },
+  { id: 'goblin_brute', name: '大哥布林（精英）', icon: '👹', tags: ['大型', '精英'], desc: '血厚攻高的精英，击杀有装备掉落。', weak: '持续输出 + 控场' },
+  { id: 'goblin_king', name: '哥布林王（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '第一章 BOSS，召唤苦工并狂暴冲锋。', weak: '大招爆发窗口' },
 ];
+/** 图鉴首览奖励：每只怪物首次点开词条可领一次（钻石） */
+export const CODEX_REWARD = 20;
 export function codexUnlocked(id: string): boolean { return loadSave().codex.includes(id); }
+export function codexClaimed(id: string): boolean { return loadSave().codexRewards.includes(id); }
+/** 首次查看图鉴领取奖励（每只怪物一次性） */
+export function claimCodexReward(id: string): { ok: boolean; msg: string } {
+  const sv = loadSave();
+  if (!sv.codex.includes(id)) return { ok: false, msg: '尚未解锁该图鉴' };
+  if (sv.codexRewards.includes(id)) return { ok: false, msg: '该奖励已领取' };
+  sv.codexRewards.push(id);
+  sv.diamonds += CODEX_REWARD;
+  saveSave();
+  return { ok: true, msg: `首览奖励 +${CODEX_REWARD} 钻石` };
+}
 /** 战斗首次遇到新怪 → 解锁图鉴（返回 true 表示新解锁，供 toast） */
 export function unlockCodex(id: string): boolean {
   const sv = loadSave();
