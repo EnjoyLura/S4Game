@@ -153,11 +153,18 @@ export function buildUpgrade(ctx: PageCtx): void {
     const cardBot = WYB(232, 0);
     const cardH = Math.max(375, Math.min(pedBot - 93 - cardBot, 620));
 
-    /* 脚底名牌：贴大背板下缘内侧（无边框规范） */
+    /* 脚底名牌：贴大背板下缘内侧（Lv + 名字 + 战力 + 圆形 i 详情钮，无边框规范） */
     const foot = gpanel(content, 0, LO.half - (upT - 55), 400, 76, CA('#0B0F16', 0.58), undefined, 0, 38);
-    label(foot, -105, 0, def.name, { size: 25, color: '#FFF3D6', bold: true, w: 180, h: 40, shrink: true });
-    label(foot, 40, 0, `🔥 ${hs.power}`, { size: 24, color: '#FFE08A', bold: true, w: 130, h: 40 });
-    btn(foot, 155, 0, 74, 54, '详情', PAL.blue, () => attrsModal(ctx, hid), 20);
+    label(foot, -148, 0, `Lv.${sv.heroes[hid].lv}`, { size: 22, color: '#FFE08A', bold: true, align: 'left', w: 76, h: 34 });
+    label(foot, -19, 0, def.name, { size: 25, color: '#FFF3D6', bold: true, align: 'left', w: 170, h: 40, shrink: true });
+    label(foot, 65, 0, `🔥 ${hs.power}`, { size: 24, color: '#FFE08A', bold: true, align: 'right', w: 110, h: 40 });
+    const info = gpanel(foot, 163, 0, 54, 54, CA('#3A4250', 1), undefined, 0, 27);
+    label(info, 0, 0, 'i', { size: 30, color: '#FFFFFF', bold: true });
+    info.on(Node.EventType.TOUCH_END, (e: unknown) => {
+      const ev = e as { propagationStopped?: () => void };
+      if (ev && ev.propagationStopped) ev.propagationStopped();
+      attrsModal(ctx, hid);
+    });
 
     /* 页签内容：等级页签=无大背板新版式（用户确认先做等级页签）；其余页签暂用大卡版式 */
     if (st.tab === 0) tabLevel(content, ctx, hid, LO.half - upT - 16);
@@ -269,7 +276,7 @@ function tabLevel(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
   /* 属性提升（奶白板直接浮于游戏背景，用户确认去大背板） */
   const p1H = 216;
   const p1 = gpanel(parent, 0, topY - p1H / 2, 700, p1H, CA('#E9DFC2', 0.94), undefined, 0, 12);
-  zoneTab(parent, -280, topY, '属性提升');
+  zoneTab(parent, -280, topY + 6, '属性提升');   // 标题悬于面板外上方（用户确认）
   const r1 = (p1H - 56) / 4;
   const rows: [string, string, string | null][] = [
     ['等级', `Lv.${lv}`, maxed ? null : `→ Lv.${lv + 1}`],
@@ -281,7 +288,7 @@ function tabLevel(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
     const y = p1H / 2 - 28 - r1 * i;
     label(p1, -240, y, r[0], { size: 22, color: INK, bold: true, align: 'left', w: 160, h: 30, shrink: true });
     label(p1, 40, y, r[1], { size: 24, color: INK, bold: true, align: 'right', w: 140, h: 30, shrink: true });
-    if (r[2]) label(p1, 230, y, r[2], { size: 24, color: OK, bold: true, align: 'left', w: 160, h: 30, shrink: true });
+    if (r[2]) label(p1, 150, y, r[2], { size: 24, color: OK, bold: true, align: 'right', w: 160, h: 30, shrink: true });
   });
   /* 行动条（消耗 + 升级按钮，深色药丸条） */
   const actH = 64;
@@ -292,11 +299,11 @@ function tabLevel(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
     () => { if (!maxed) save(hid, upHero(hid), ctx); }, 24, true);
   if (!maxed) gpanel(act, 288, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
   /* 等级效果：竖线步骤条（Mask+ScrollView 可滑动）——达成档位卡片亮起，未达成置灰 */
-  const fxTop = topY - p1H - 14;
+  const fxTop = topY - p1H - 20;
   const fxBot = actCy + actH / 2 + 14;
   const fxH = Math.max(150, fxTop - fxBot);
   const fx = gpanel(parent, 0, fxBot + fxH / 2, 700, fxH, CA('#E9DFC2', 0.94), undefined, 0, 12);
-  zoneTab(parent, -280, fxBot + fxH, '等级效果');
+  zoneTab(parent, -280, fxBot + fxH + 6, '等级效果');   // 标题悬于面板外上方（用户确认）
   const ms = MILESTONES[hid] || [];
   const CARD_H = 64, GAP = 18, PAD = 16;
   const needH = ms.length * (CARD_H + GAP) - GAP + PAD * 2;
@@ -328,8 +335,8 @@ function tabLevel(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
     const reached = lv >= m.lv;
     gcircle(ct, LINE_X, yC, 10, reached ? C(PAL.gold) : C('#A5987B'));
     const c = gpanel(ct, 40, yC, 560, CARD_H, reached ? CA('#E8C878', 0.95) : CA('#D8CBA8', 0.5), undefined, 0, 10);
-    label(c, -220, 0, `${m.lv}级`, { size: 20, color: reached ? INK : '#8A7A5C', bold: true, align: 'left', w: 80, h: 30 });
-    label(c, 50, 0, (reached ? '✓ ' : '') + m.txt, { size: 20, color: reached ? INK : '#8A7A5C', bold: reached, align: 'left', w: 440, h: 30, shrink: true });
+    label(c, -196, 0, `${m.lv}级`, { size: 20, color: reached ? INK : '#8A7A5C', bold: true, align: 'left', w: 80, h: 30 });
+    label(c, 47, 0, (reached ? '✓ ' : '') + m.txt, { size: 20, color: reached ? INK : '#8A7A5C', bold: reached, align: 'left', w: 440, h: 30, shrink: true });
   });
 }
 
