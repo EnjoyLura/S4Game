@@ -330,14 +330,14 @@ export function claimChest(levelId: string, stars: number, tier: number): OpResu
 
 /* ================= 怪物图鉴 ================= */
 
-export interface CodexDef { id: string; name: string; icon: string; tags: [string, string]; desc: string; weak: string; }
+export interface CodexDef { id: string; name: string; icon: string; tags: [string, string]; desc: string; traits: string[]; weak: string; }
 export const CODEX: CodexDef[] = [
-  { id: 'goblin_worker', name: '哥布林苦工', icon: '👺', tags: ['小型', '近战'], desc: '成群结队冲向防线的近战单位，威胁在于数量。', weak: '范围伤害（炮手/火法）' },
-  { id: 'goblin_slinger', name: '哥布林投石手', icon: '🎯', tags: ['小型', '远程'], desc: '远程投掷石块，会躲在近战身后输出。', weak: '快速击杀（弓手/狙击）' },
-  { id: 'goblin_shaman', name: '哥布林萨满', icon: '🔮', tags: ['小型', '辅助'], desc: '治疗友军，优先击杀目标。', weak: '集火秒杀（狙击大招）' },
-  { id: 'wolf_rider', name: '狼骑兵', icon: '🐺', tags: ['中型', '骑兵'], desc: '高速冲锋，很快接近防线。', weak: '减速控制（冰法）' },
-  { id: 'goblin_brute', name: '大哥布林（精英）', icon: '👹', tags: ['大型', '精英'], desc: '血厚攻高的精英，击杀有装备掉落。', weak: '持续输出 + 控场' },
-  { id: 'goblin_king', name: '哥布林王（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '第一章 BOSS，召唤苦工并狂暴冲锋。', weak: '大招爆发窗口' },
+  { id: 'goblin_worker', name: '哥布林苦工', icon: '👺', tags: ['小型', '近战'], desc: '成群结队冲向防线的近战单位，威胁在于数量。', traits: ['成群结队冲锋', '近战围攻防线', '单体威胁不高'], weak: '范围伤害（炮手/火法）' },
+  { id: 'goblin_slinger', name: '哥布林投石手', icon: '🎯', tags: ['小型', '远程'], desc: '远程投掷石块，会躲在近战身后输出。', traits: ['远程投石攻击', '躲在近战身后', '血量偏低'], weak: '快速击杀（弓手/狙击）' },
+  { id: 'goblin_shaman', name: '哥布林萨满', icon: '🔮', tags: ['小型', '辅助'], desc: '治疗友军，优先击杀目标。', traits: ['持续治疗友军', '辅助型怪种', '务必优先击杀'], weak: '集火秒杀（狙击大招）' },
+  { id: 'wolf_rider', name: '狼骑兵', icon: '🐺', tags: ['中型', '骑兵'], desc: '高速冲锋，很快接近防线。', traits: ['移动速度极快', '迅速接近防线', '血量中等'], weak: '减速控制（冰法）' },
+  { id: 'goblin_brute', name: '大哥布林（精英）', icon: '👹', tags: ['大型', '精英'], desc: '血厚攻高的精英，击杀有装备掉落。', traits: ['血厚攻高', '精英级怪种', '击杀掉落装备'], weak: '持续输出 + 控场' },
+  { id: 'goblin_king', name: '哥布林王（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '第一章 BOSS，召唤苦工并狂暴冲锋。', traits: ['章节级 BOSS', '召唤苦工助战', '残血进入狂暴'], weak: '大招爆发窗口' },
 ];
 /** 图鉴首览奖励：每只怪物首次点开词条可领一次（钻石） */
 export const CODEX_REWARD = 20;

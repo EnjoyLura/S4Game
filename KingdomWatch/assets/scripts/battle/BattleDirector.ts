@@ -39,6 +39,8 @@ export interface PickOpts {
 export class BattleDirector extends Component {
   levelDef: LevelDef = LEVEL_1_1;
   state: BattleState = 'prepare';
+  /** 未查看的新怪种队列（新怪通知钮 → 介绍弹窗逐个消费） */
+  private newMobQueue: string[] = [];
   speed: 1 | 2 = 1;
 
   mgr!: MonsterManager;
@@ -95,9 +97,13 @@ export class BattleDirector extends Component {
     this.pops = new ComicPop(fxLayer);
     this.mgr = new MonsterManager(mobLayer, hitCtx);
     this.mgr.statMul = DIFF_MUL[Math.min(flow.diff, 2)] || 1;
-    // 首次遭遇新怪种 → 解锁图鉴 + 横幅提示（图鉴页首览奖励由玩家自行领取）
+    // 首次遭遇新怪种 → 解锁图鉴 + 横幅 + 新怪通知钮（介绍弹窗待玩家点击查看）
     this.mgr.onFirstEncounter = def => {
-      if (unlockCodex(def.id)) this.hud.showBanner(`图鉴解锁：${def.name}`, 1.6);
+      if (unlockCodex(def.id)) {
+        this.hud.showBanner(`图鉴解锁：${def.name}`, 1.6);
+        this.newMobQueue.push(def.id);
+        this.hud.showNewMob(true);
+      }
     };
     // 双英雄同场（§4 站位表 2 人 = ±160）：艾拉·风羽（弓）左槽，凯尔·鹰眼（狙）右槽
     const slots = heroSlots(2);
@@ -329,6 +335,16 @@ export class BattleDirector extends Component {
   }
 
   /* ---------- 胜利结算（§3.9 星级 / §3.10 金币） ---------- */
+  /** 新怪通知钮点击：逐个弹出介绍弹窗，看完队列清空再收钮 */
+  showNewMobIntro(): void {
+    const id = this.newMobQueue[0];
+    if (!id) { this.hud.showNewMob(false); return; }
+    this.hud.showMobIntro(id, () => {
+      this.newMobQueue.shift();
+      this.hud.showNewMob(this.newMobQueue.length > 0);
+    });
+  }
+
   private onAllCleared(): void {
     if (this.state !== 'running') return;
     this.state = 'win';

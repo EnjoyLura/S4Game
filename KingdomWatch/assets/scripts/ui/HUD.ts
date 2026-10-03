@@ -9,6 +9,7 @@ import { gbar, gcircle, gpanel, label, setText, WY, WYB, WX, Bar, CA } from './U
 import { artSprite } from './Ux';
 import { BattleDirector } from '../battle/BattleDirector';
 import { HeroBase } from '../battle/Hero';
+import { CODEX } from '../core/GameData';
 
 /** 每英雄一套的大招按钮状态（右侧纵列，底基锚定向上叠放） */
 interface UltUI {
@@ -60,6 +61,7 @@ export class HUD {
   private hudNode!: Node;
   private banner!: Node;
   private bannerTxt!: Node;
+  private newMobBtn!: Node;
   private fpsTxt!: Node;
   private speedTxt!: Node;
   private timeTxt!: Node;
@@ -130,6 +132,14 @@ export class HUD {
     const statsGlyph = label(statsBtn, 0, 0, '📊', { size: 24 });
     artSprite(statsBtn, 0, 0, 60, 60, 'ui_icon_stats', { sliced: false, belowIdx: 0, hideOnLoad: [statsGlyph] });
     statsBtn.on(Node.EventType.TOUCH_END, () => this.dir.showStats());
+
+    /* 新怪通知钮（GM 钮下方，参考 KR）：首遇新怪种时亮出，点击弹怪物介绍弹窗 */
+    this.newMobBtn = gpanel(top, WX(24, 60), WY(480, 60), 60, 60, CA(PAL.gold, 0.92), undefined, 0, 30);
+    label(this.newMobBtn, 0, 0, '👹', { size: 30 });
+    const exMark = gpanel(this.newMobBtn, 20, 20, 22, 22, CA('#E5484D', 0.95), undefined, 0, 11);
+    label(exMark, 0, 0, '!', { size: 16, color: '#FFFFFF', bold: true });
+    this.newMobBtn.active = false;
+    this.newMobBtn.on(Node.EventType.TOUCH_END, () => this.dir.showNewMobIntro());
 
     /* 右侧大招纵列：每英雄一钮，底基锚定向上叠放（线稿① 4×1 纵列右对齐）
        充能中：置灰遮罩盖图标 + 主色能量水上涨（2% 步进）；就绪：高亮 + 光晕呼吸 + 粒子环绕 */
@@ -252,6 +262,38 @@ export class HUD {
       .delay(dur)
       .call(() => { tween(op).to(0.3, { opacity: 0 }).call(() => { this.banner.active = false; }).start(); })
       .start();
+  }
+
+  /** 新怪通知钮显隐（有未查看的新怪种时亮出） */
+  showNewMob(v: boolean): void { this.newMobBtn.active = v; }
+
+  /** 新怪物介绍弹窗（参考 KR「新敌人」：深红题签 + 羊皮纸卡：图标/名称/描述/红色特性条目 + 好的钮） */
+  showMobIntro(id: string, onOk: () => void): void {
+    const c = CODEX.find(x => x.id === id);
+    if (!c) { onOk(); return; }
+    const H = 460;
+    const dim = gpanel(this.hudNode, 0, 0, 750, LO.half * 2 + 240, CA('#000000', 0.55), undefined, 0, 0);
+    dim.on(Node.EventType.TOUCH_END, (e: unknown) => {
+      const ev = e as { propagationStopped?: boolean };
+      if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;  // 挡住战斗 UI 误触
+    });
+    const card = gpanel(dim, 0, -40, 640, H, CA('#E9DFC2', 0.97), undefined, 0, 14);
+    const title = gpanel(dim, 0, -40 + H / 2 - 10, 360, 64, CA('#8B2E2E', 0.95), undefined, 0, 10);
+    label(title, 0, 0, '新 敌 人', { size: 30, color: '#FFE8C8', bold: true, w: 360, h: 64 });
+    const iconPlate = gpanel(card, -195, 40, 170, 170, CA('#2A3240', 1), undefined, 0, 12);
+    label(iconPlate, 0, 0, c.icon, { size: 84 });
+    label(card, 50, 150, c.name, { size: 30, color: '#4A3214', bold: true, align: 'left', w: 300, h: 40 });
+    label(card, 65, 92, c.desc, { size: 18, color: '#4A3214', w: 330, h: 64, shrink: true });
+    c.traits.forEach((t, i) =>
+      label(card, 65, 40 - i * 30, '- ' + t, { size: 18, color: '#B03A2E', bold: true, align: 'left', w: 330, h: 28 }));
+    const ok = gpanel(dim, 170, -40 - H / 2 + 32, 200, 64, CA('#1F6BC4', 0.95), undefined, 0, 12);
+    label(ok, 0, 0, '好的！', { size: 26, color: '#FFF3D6', bold: true, w: 200, h: 64 });
+    ok.on(Node.EventType.TOUCH_END, (e: unknown) => {
+      const ev = e as { propagationStopped?: boolean };
+      if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
+      dim.destroy();
+      onOk();
+    });
   }
 
   /** 每帧轮询；dt 用于经验/充能的上涨动画（只在值变化或动画未收敛时重绘） */
