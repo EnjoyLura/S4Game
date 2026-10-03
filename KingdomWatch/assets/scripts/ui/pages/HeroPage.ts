@@ -39,8 +39,8 @@ export function buildHeroes(ctx: PageCtx): void {
     sv.curHero = hid;
     saveSave();
 
-    /* 上半区全宽大背板（L1，用户确认）：罩住英雄大图+装备栏一整块区域，名字行浮于其上 */
-    artPanel(content, 0, WY(260, 596), 750, 596, 'ui_panel_hero');
+    /* 上半区全宽大背板（L1，用户确认）：罩住英雄大图+装备栏一整块区域，上缘铺满到物理屏顶（越过刘海安全区） */
+    artPanel(content, 0, WY(-LO.safeTop, 856 + LO.safeTop), 750, 856 + LO.safeTop, 'ui_panel_hero');
 
     /* 英雄名行 */
     label(content, 0, WY(205, 40), `${def.name}　${def.job}`, { size: 28, color: '#FFF3D6', bold: true, w: 640, h: 40, shrink: true });
@@ -49,8 +49,8 @@ export function buildHeroes(ctx: PageCtx): void {
     const portrait = gpanel(content, CX(160, 280), WY(305, 440), 280, 440, CA('#20262F', 1), '#FFFFFF33', 1.5, 18);
     artSprite(portrait, 0, 0, 280, 440, 'hero_' + hid + '_portrait', { belowIdx: 0 });
     artSprite(portrait, 0, 40, 190, 190, def.avatar, { sliced: false });
-    btn(portrait, -105, -20, 70, 70, '◀', PAL.gold, () => { state.hi = (state.hi + owned.length - 1) % owned.length; render(); }, 26);
-    btn(portrait, 105, -20, 70, 70, '▶', PAL.gold, () => { state.hi = (state.hi + 1) % owned.length; render(); }, 26);
+    btn(portrait, -105, -20, 70, 70, '◀', PAL.gold, () => { state.hi = (state.hi + owned.length - 1) % owned.length; render(); }, 26, true);
+    btn(portrait, 105, -20, 70, 70, '▶', PAL.gold, () => { state.hi = (state.hi + 1) % owned.length; render(); }, 26, true);
     portrait.on(Node.EventType.TOUCH_END, () => attrsModal(ctx, hid));
 
     /* 战力徽章（立绘正下方） */
@@ -68,7 +68,7 @@ export function buildHeroes(ctx: PageCtx): void {
       drawSlot(ctx, content, hid, k, () => render(), CX(470 + (i % 2) * 140, 130), WY(440 + Math.floor(i / 2) * 160, 150), 130, 150);
     });
 
-    /* 我的背包：页签条背板（L1，用户确认保留）+ 三页签连体（无间隔）；
+    /* 我的背包：页签条背板（L1，用户确认保留）+ 三页签连体纯色板（用户确认：不要边框按钮）；
        背包格区不加背板（用户确认：直接透出游戏背景） */
     artPanel(content, -5, WY(872, 58), 650, 78, 'ui_panel_tabs');
     const tabs = [['weapon', '武器'], ['equip', '装备'], ['mat', '材料']] as const;
@@ -78,7 +78,7 @@ export function buildHeroes(ctx: PageCtx): void {
       btn(content, CX(45 + i * segW, segW), WY(872, 58), segW, 58, t[1], active ? PAL.gold : '#5A6472', () => {
         bagSt.tab = t[0];
         render();
-      }, 22);
+      }, 22, true);
     });
     const grid = N('bagGrid', content, 0, 0, 750, 300);
 

@@ -32,7 +32,7 @@ const NAV_H = 122;
 @ccclass('MainUI')
 export class MainUI extends Component {
   private screens!: Node;
-  private navItems: { slot: Node; icon: Node; txt: Node }[] = [];
+  private navItems: { slot: Node; icon: Node; txt: Node; idle: Node; act: Node }[] = [];
   private goldLbl: Node | null = null;
   private diaLbl: Node | null = null;
   private tab = flow.mainTab;
@@ -84,20 +84,17 @@ export class MainUI extends Component {
     this.switchTab(this.tab);
   }
 
-  /* ---------- 顶栏：双货币靠右（无标题；刘海安全间距已含在 WY() 坐标系里） ---------- */
+  /* ---------- 顶栏：双货币靠右（用户确认：资源栏不要大背板，货币芯片直接浮于场景） ---------- */
   private buildTopBar(root: Node): void {
-    const bar = gpanel(root, 0, WY(100, 90), 750, 90, CA('#14181E', 0.9), CA(PAL.gold, 0.9), 1.5, 10);
-    artSprite(bar, 0, 0, 750, 90, 'ui_panel_dark_gold', { belowIdx: 0 });
-
     const sv = loadSave();
-    // 金币（左）+ 钻石（右）并排靠右
-    const goldRow = N('gold', bar, WX(430, 150), 0, 150, 50);
+    // 金币（左）+ 钻石（右）并排靠右（与原背板中线同高：WY(145,0) = WY(100,90) 中心线）
+    const goldRow = N('gold', root, WX(430, 150), WY(145, 0), 150, 50);
     const goldSeat = gpanel(goldRow, -50, 0, 50, 50, CA(PAL.gold, 0.2), PAL.gold, 2, 25);
     artSprite(goldSeat, 0, 0, 50, 50, 'ui_circ_icon_gold', { belowIdx: 0 });
     artSprite(goldSeat, 0, 0, 36, 36, 'ui_icon_coin', { sliced: false });
     this.goldLbl = label(goldRow, 32, 0, String(Math.floor(sv.gold)), { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 90, h: 34 });
 
-    const diaRow = N('dia', bar, WX(600, 140), 0, 140, 50);
+    const diaRow = N('dia', root, WX(600, 140), WY(145, 0), 140, 50);
     const diaSeat = gpanel(diaRow, -50, 0, 50, 50, CA(PAL.blue, 0.2), PAL.blue, 2, 25);
     artSprite(diaSeat, 0, 0, 50, 50, 'ui_circ_icon_gold', { belowIdx: 0 });
     artSprite(diaSeat, 0, 0, 34, 34, 'ui_icon_diamond', { sliced: false });
@@ -111,39 +108,31 @@ export class MainUI extends Component {
     if (this.diaLbl) setText(this.diaLbl, String(sv.diamonds));
   }
 
-  /* ---------- 底部导航（5 页签，美术页签框 + 图标/文字） ---------- */
+  /* ---------- 底部导航（5 页签；用户确认：导航栏不要边框——平板底 + 高亮板，无页签框美术） ---------- */
   private buildNavBar(root: Node): void {
-    const bar = gpanel(root, 0, WYB(0, NAV_H), 750, NAV_H, CA('#14181E', 0.94), CA(PAL.gold, 0.9), 1.5, 10);
-    artSprite(bar, 0, 0, 750, NAV_H, 'ui_panel_dark_gold', { belowIdx: 0 });
+    const bar = gpanel(root, 0, WYB(0, NAV_H), 750, NAV_H, CA('#14181E', 0.94), undefined, 0, 0);
 
     const w = 132, gap = 8;
     const x0 = (750 - (TABS.length * w + (TABS.length - 1) * gap)) / 2;
     TABS.forEach((t, i) => {
       const cx = WX(x0 + i * (w + gap) + w / 2, 0);
       const slot = N('tab' + i, root, cx, WYB(10, 102), w, 102);
-      gpanel(slot, 0, 0, w, 102, CA('#0B0F16', 0.5), undefined, 0, 12);  // 美术加载失败的兜底
-      artSprite(slot, 0, 0, w, 102, 'ui_tab_item', { belowIdx: 0 });
+      const idle = gpanel(slot, 0, 0, w, 102, CA('#0B0F16', 0.5), undefined, 0, 12);  // 未激活底板
+      const act = gpanel(slot, 0, 0, w, 102, CA(PAL.gold, 0.25), undefined, 0, 12);   // 激活高亮板
+      act.active = false;
       const icon = label(slot, 0, 18, t.icon, { size: 34 });
       const txt = label(slot, 0, -26, t.name, { size: 20, color: '#FFFFFF', bold: true });
       slot.on(Node.EventType.TOUCH_END, () => this.switchTab(i));
-      this.navItems.push({ slot, icon, txt });
+      this.navItems.push({ slot, icon, txt, idle, act });
     });
   }
 
-  /** 页签高亮：激活金框金字 / 未激活银框白字（两套美术同位切换，按需补建） */
+  /** 页签高亮：激活金板金字 / 未激活暗板白字（无边框规范：纯色板，无页签框美术） */
   private highlightTabs(): void {
     this.navItems.forEach((it, k) => {
       const active = k === this.tab;
-      const want = 'art:ui_tab_item' + (active ? '_active' : '');
-      const other = 'art:ui_tab_item' + (active ? '' : '_active');
-      const otherNode = it.slot.getChildByName(other);
-      if (otherNode) otherNode.active = false;
-      const wantNode = it.slot.getChildByName(want);
-      if (wantNode) {
-        wantNode.active = true;
-      } else {
-        artSprite(it.slot, 0, 0, 132, 102, active ? 'ui_tab_item_active' : 'ui_tab_item', { belowIdx: 0 });
-      }
+      it.idle.active = !active;
+      it.act.active = active;
       const iconLbl = it.icon.getComponent(Label);
       const txtLbl = it.txt.getComponent(Label);
       if (txtLbl) txtLbl.color = C(active ? PAL.gold : '#FFFFFF');
