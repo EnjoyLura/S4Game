@@ -168,7 +168,7 @@ export function buildUpgrade(ctx: PageCtx): void {
 
     /* 页签内容：等级页签=无大背板新版式（用户确认先做等级页签）；其余页签暂用大卡版式 */
     if (st.tab === 0) tabLevel(content, ctx, hid, LO.half - upT - 16);
-    else if (st.tab === 1) tabWeapon(content, ctx, hid, cardH);
+    else if (st.tab === 1) tabWeapon(content, ctx, hid, LO.half - upT - 16);
     else if (st.tab === 2) tabSkills(content, ctx, hid, cardH);
     else tabEquips(content, ctx, hid, cardH);
 
@@ -214,13 +214,6 @@ function zonePanel(parent: Node, x: number, y: number, w: number, h: number, dar
 function zoneTab(parent: Node, x: number, y: number, text: string): void {
   gpanel(parent, x, y, 110, 26, CA('#E8C878', 0.92), '#8A6A2A', 1.5, 10);
   label(parent, x, y, text, { size: 18, color: INK, bold: true, w: 110, h: 26 });
-}
-
-/** 属性预览行（分区面板内，面板宽 660）：名称左 / 当前值右对齐 / 「+提升」绿字（无变化省略） */
-function statRow(card: Node, y: number, name: string, cur: string, delta: string | null): void {
-  label(card, -230, y, name, { size: 22, color: INK, bold: true, align: 'left', w: 140, h: 30, shrink: true });
-  label(card, 40, y, cur, { size: 24, color: INK, bold: true, align: 'right', w: 120, h: 30, shrink: true });
-  if (delta) label(card, 195, y, delta, { size: 24, color: OK, bold: true, align: 'left', w: 130, h: 30, shrink: true });
 }
 
 /** 消耗/持有 chip：图标座 + 「需要/持有」，够=绿 不够=红 */
@@ -338,8 +331,8 @@ function tabLevel(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
   });
 }
 
-/* ---------- 武器页签：与等级页签同自适应分区版式（面板拉通整卡宽，无头像） ---------- */
-function tabWeapon(parent: Node, ctx: PageCtx, hid: string, cardH: number): void {
+/* ---------- 武器页签：与等级页签同版式（无大背板）——奶白属性板 + 每级提升板 + 消耗/强化条 ---------- */
+function tabWeapon(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
   const sv = loadSave();
   const h = sv.heroes[hid];
   const lv = h.weaponLv;
@@ -347,35 +340,42 @@ function tabWeapon(parent: Node, ctx: PageCtx, hid: string, cardH: number): void
   const cur = statsAt(hid, h.lv, lv);
   const next = maxed ? cur : statsAt(hid, h.lv, lv + 1);
   const c = weaponUpCost(lv);
-  const card = parchmentCard(parent, 0, WYB(232, cardH), 718, cardH);
-  const p1Top = cardH / 2 - 40;
-  const actCy = -cardH / 2 + 41;
-  const p2Bot = actCy + 43;
-  const span = p1Top - p2Bot - 18;
-  const h2 = Math.max(90, Math.min(span - 158, 150));
-  const h1 = Math.max(140, Math.min(p1Top - (p2Bot + h2) - 18, 260));
-  /* 分区一：武器属性提升（顶签=武器名；首行=强化等级变化） */
-  const st1 = zonePanel(card, 0, p1Top - h1 / 2, 660, h1);
-  zoneTab(card, -275, p1Top, HERO_DEFS[hid].weaponName);
-  const r1 = (h1 - 60) / 3;
-  statRow(st1, h1 / 2 - 30, '强化等级', maxed ? `Lv.${lv}（MAX）` : `Lv.${lv}`, maxed ? null : `→ Lv.${lv + 1}`);
-  statRow(st1, h1 / 2 - 30 - r1, '攻击力', String(cur.atk), maxed ? null : `+${next.atk - cur.atk}`);
-  statRow(st1, h1 / 2 - 30 - r1 * 2, '技能伤害', String(cur.skillDmg), maxed ? null : `+${next.skillDmg - cur.skillDmg}`);
-  statRow(st1, h1 / 2 - 30 - r1 * 3, '生命', String(cur.hp), null);
-  /* 分区二：每级提升（攻击/材料两行） */
-  const st2 = zonePanel(card, 0, p2Bot + h2 / 2, 660, h2);
-  zoneTab(card, -275, p2Bot + h2, '每级提升');
-  label(st2, -265, h2 / 2 - 26, '攻击', { size: 19, color: INK, bold: true, w: 70, h: 28 });
-  label(st2, 10, h2 / 2 - 26, '+6% / 级', { size: 19, color: INK, bold: true, align: 'left', w: 460, h: 28, shrink: true });
-  label(st2, -265, -h2 / 2 + 26, '材料', { size: 19, color: INK, bold: true, w: 70, h: 28 });
-  label(st2, 10, -h2 / 2 + 26, '每5级需求 +1', { size: 19, color: INK, bold: true, align: 'left', w: 460, h: 28, shrink: true });
-  /* 行动条（双消耗 + 强化按钮） */
-  const act = zonePanel(card, 0, actCy, 660, 54, true);
-  costChip(act, -200, 0, '🪙', maxed ? 0 : c.gold, sv.gold, 110);
-  costChip(act, -20, 0, '🧱', maxed ? 0 : c.mat, matOwned(), 70);
-  btn(act, 205, 0, 170, 54, maxed ? 'MAX' : '强 化', maxed ? '#5A6472' : PAL.gold,
+  const botY = WYB(232, 0);
+  /* 属性提升（标题=武器名，完全出板；行结构与等级页签一致；英雄不会受伤——不展示生命） */
+  const p1H = 150;
+  const p1 = gpanel(parent, 0, topY - p1H / 2, 700, p1H, CA('#E9DFC2', 0.94), undefined, 0, 12);
+  zoneTab(parent, -280, topY + 16, HERO_DEFS[hid].weaponName);
+  const rows: [string, string, string | null][] = [
+    ['强化等级', `Lv.${lv}`, maxed ? null : `→ Lv.${lv + 1}`],
+    ['攻击力', String(cur.atk), maxed ? null : `+${next.atk - cur.atk}`],
+    ['技能伤害', String(cur.skillDmg), maxed ? null : `+${next.skillDmg - cur.skillDmg}`],
+  ];
+  rows.forEach((r, i) => {
+    const y = 32 - i * 32;
+    label(p1, -240, y, r[0], { size: 22, color: INK, bold: true, align: 'left', w: 160, h: 30, shrink: true });
+    label(p1, 40, y, r[1], { size: 24, color: INK, bold: true, align: 'right', w: 140, h: 30, shrink: true });
+    if (r[2]) label(p1, 240, y, r[2], { size: 24, color: OK, bold: true, align: 'right', w: 160, h: 30, shrink: true });
+  });
+  /* 行动条（双消耗 + 强化按钮，深色药丸条） */
+  const actH = 64;
+  const actCy = botY + actH / 2;
+  const act = gpanel(parent, 0, actCy, 700, actH, CA('#14181E', 0.72), undefined, 0, 32);
+  costChip(act, -225, 0, '🪙', maxed ? 0 : c.gold, sv.gold, 130);
+  costChip(act, -75, 0, '🧱', maxed ? 0 : c.mat, matOwned(), 70);
+  btn(act, 215, 0, 170, 54, maxed ? 'MAX' : '强 化', maxed ? '#5A6472' : PAL.gold,
     () => { if (!maxed) save(hid, upWeapon(hid), ctx); }, 24, true);
-  if (!maxed) gpanel(act, 278, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
+  if (!maxed) gpanel(act, 288, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
+  /* 每级提升（两行紧凑板，贴行动条上方；标题完全出板，数值右缘同 320 内距） */
+  const p2H = 118;
+  const p2Bot = actCy + actH / 2 + 14;
+  const p2 = gpanel(parent, 0, p2Bot + p2H / 2, 700, p2H, CA('#E9DFC2', 0.94), undefined, 0, 12);
+  zoneTab(parent, -280, p2Bot + p2H + 16, '每级提升');
+  const infos: [string, string][] = [['攻击', '+6% / 级'], ['材料', '每5级需求 +1']];
+  infos.forEach((r, i) => {
+    const y = 16 - i * 32;
+    label(p2, -240, y, r[0], { size: 22, color: INK, bold: true, align: 'left', w: 160, h: 30, shrink: true });
+    label(p2, 240, y, r[1], { size: 22, color: INK, bold: true, align: 'right', w: 220, h: 30, shrink: true });
+  });
 }
 
 /* ---------- 技能页签：大背板（与等级/武器同卡）+ 技能槽×3 固定高顶对齐，点击弹升级弹窗 ---------- */
