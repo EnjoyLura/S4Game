@@ -188,12 +188,12 @@ export class Monster {
     this.lungeT = 0.2;
   }
 
-  /** 受击；crit 用于飘字样式；ignoreRes=无视物抗（狙击大招等）；返回是否击杀 */
+  /** 受击；crit 用于飘字样式；ignoreRes=无视物抗（狙击大招等）；返回是否击杀
+   *  受击只掉血+闪红，不硬直/减速/击退——控制只来自特定 buff（applySlow 等后续技能效果） */
   takeDamage(amount: number, crit: boolean, killerId: string, ignoreRes = false): boolean {
     if (this.dead) return false;
     if (this.def.physRes && !ignoreRes) amount *= 1 - this.def.physRes;
     this.hp -= amount;
-    this.stunT = Math.max(this.stunT, 0.1);
     this.ctx.dmgNumber(this.x + (Math.random() * 24 - 12), this.y + this.def.radius,
       String(Math.round(amount)), crit ? '#FFD75E' : '#FFFFFF', crit);
     this.flash();
