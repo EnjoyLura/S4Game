@@ -17,13 +17,15 @@ interface UltUI {
   btn: Node;
   bright: Node;       // 就绪增亮层
   gray: Node;         // 充能中灰化杯体
-  water: Node;        // 金水（圆杯液面上涨）
+  mask: Node;         // 冷却置灰遮罩：盖住整个图标（头像之上、能量与文字之下）
+  color: string;      // 充能能量色（英雄主色：弓=绿 狙=蓝）
+  water: Node;        // 能量水（圆杯液面上涨，半透明可透出图标）
   waterG: Graphics;
-  waterR: number;     // 金水半径
+  waterR: number;     // 能量水半径
   orbit: Node;        // 就绪环绕粒子
   chargeTxt: Node;
   ready: boolean | null;
-  shown: number;      // 金水平滑逼近
+  shown: number;      // 液面平滑逼近
   flash: number;      // 获得充能闪光
   lastChargeKey: number;
   lastTarget: number;
@@ -130,7 +132,7 @@ export class HUD {
     statsBtn.on(Node.EventType.TOUCH_END, () => this.dir.showStats());
 
     /* 右侧大招纵列：每英雄一钮，底基锚定向上叠放（线稿① 4×1 纵列右对齐）
-       充能中：灰化杯体 + 金水上涨（2% 步进）；就绪：高亮 + 光晕呼吸 + 粒子环绕 */
+       充能中：置灰遮罩盖图标 + 主色能量水上涨（2% 步进）；就绪：高亮 + 光晕呼吸 + 粒子环绕 */
     this.dir.heroes.forEach((h, i) => this.ults.push(this.buildUlt(top, i, h)));
 
     /* 防线耐久条（贴屏底、在墙上方）：条内居中耐久值 + 盾值胶囊(右→左) + 右侧百分比 */
@@ -158,9 +160,11 @@ export class HUD {
   }
 
   /** 第 i 钮：底基 504，向上每钮 +110；点击就绪即施放，未满→Tips
-   *  无边框规范：纯色圆板三态（充能灰/常态金/就绪亮金），不加座环美术 */
+   *  无边框规范：纯色圆板三态（充能灰/常态金/就绪亮金），不加座环美术
+   *  冷却表现（用户确认）：灰色遮罩盖住整个图标置灰；充能能量按英雄主色半透明填充（弓=绿 狙=蓝），隐约透出图标 */
   private buildUlt(top: Node, i: number, hero: HeroBase): UltUI {
     const ux = WX(636, 90), uy = WYB(504 + i * 110, 90);
+    const color = hero.id === 'sniper' ? PAL.blue : PAL.green;
     const glow = gcircle(top, ux, uy, 56, CA(PAL.gold, 0.16));
     const glowOp = glow.addComponent(UIOpacity);
     glowOp.opacity = 130;
@@ -169,8 +173,11 @@ export class HUD {
     const bright = gcircle(top, ux, uy, 45, CA(PAL.gold, 0.42));
     bright.active = false;
     const gray = gcircle(top, ux, uy, 45, CA('#3A4250', 0.9));
-    // 英雄头像：垫在金水/充能字之下
+    // 英雄头像：垫在置灰遮罩/能量水/充能字之下
     artSprite(top, ux, uy, 68, 68, 'ui_avatar_' + hero.id, { sliced: false });
+    // 冷却置灰遮罩：头像之上、能量水与充能字之下；就绪时隐藏
+    const mask = gcircle(top, ux, uy, 46, CA('#3A4250', 0.7));
+    mask.active = false;
     const water = new Node('ultWater' + i);
     water.setParent(top);
     water.setPosition(ux, uy, 0);
@@ -194,7 +201,7 @@ export class HUD {
     btn.on(Node.EventType.TOUCH_END, () => {
       if (this.dir.tryCastUlt(i) === 'charging') this.dir.showTips('ult', i);
     });
-    const ui: UltUI = { ux, uy, glow, btn, bright, gray, water, waterG, waterR: 43, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
+    const ui: UltUI = { ux, uy, glow, btn, bright, gray, mask, color, water, waterG, waterR: 43, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
     return ui;
   }
 
@@ -304,7 +311,7 @@ export class HUD {
       this.applyUltReady(u, ready);
     }
     if (!ready) {
-      // 金水液面平滑上涨；获得充能时水面高光闪亮
+      // 能量水液面平滑上涨；获得充能时水面高光闪亮
       const cp = hero.chargePct;
       if (cp > u.lastTarget + 0.0001) u.flash = 0.35;
       u.lastTarget = cp;
@@ -320,14 +327,15 @@ export class HUD {
     }
   }
 
-  /** 金水上涨：圆杯内液面以下的圆缺面（弦 + 下弧采样，避免 arc 方向歧义）；flash=获得瞬间水面高光 */
+  /** 能量水上涨：圆杯内液面以下的圆缺面（弦 + 下弧采样，避免 arc 方向歧义）；flash=获得瞬间水面高光
+   *  英雄主色半透明（用户确认：能隐约看到底下的图标） */
   private redrawUltWater(u: UltUI, pct: number, flash = false): void {
     const g = u.waterG;
     g.clear();
     if (pct <= 0.01) return;
     const R = u.waterR;
     if (pct >= 0.995) {
-      g.fillColor = CA(PAL.gold, flash ? 0.98 : 0.9);
+      g.fillColor = CA(u.color, flash ? 0.72 : 0.58);
       g.circle(0, 0, R);
       g.fill();
       return;
@@ -335,7 +343,7 @@ export class HUD {
     const yc = -R + 2 * R * pct;
     const a = Math.asin(Math.max(-1, Math.min(1, yc / R)));
     const xr = R * Math.cos(a);
-    g.fillColor = CA(PAL.gold, flash ? 0.95 : 0.88);
+    g.fillColor = CA(u.color, flash ? 0.7 : 0.58);
     g.moveTo(xr, yc);
     g.lineTo(-xr, yc);
     const thA = Math.PI - a, thB = Math.PI * 2 + a;
@@ -346,16 +354,17 @@ export class HUD {
     }
     g.close();
     g.fill();
-    g.strokeColor = CA(flash ? '#FFF6D0' : '#FFE08A', 0.95);   // 水面高光
+    g.strokeColor = CA(flash ? '#FFFFFF' : '#EAF6FF', flash ? 0.95 : 0.65);   // 水面高光（白，主色通吃）
     g.lineWidth = flash ? 3.5 : 2.5;
     g.moveTo(-xr + 4, yc);
     g.lineTo(xr - 4, yc);
     g.stroke();
   }
 
-  /** 充能→就绪 状态切换：图标弹跳 + 扩散冲击环 + 光晕呼吸 + 粒子环绕 */
+  /** 充能→就绪 状态切换：置灰遮罩/能量水 ↔ 高亮 + 光晕呼吸 + 粒子环绕 + 弹跳过渡 */
   private applyUltReady(u: UltUI, ready: boolean): void {
     u.gray.active = !ready;
+    u.mask.active = !ready;
     u.water.active = !ready;
     u.bright.active = ready;
     if (!ready) {
