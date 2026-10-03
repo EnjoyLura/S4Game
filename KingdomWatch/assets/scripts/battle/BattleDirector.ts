@@ -41,7 +41,7 @@ export class BattleDirector extends Component {
   state: BattleState = 'prepare';
   /** 未查看的新怪种队列（新怪通知钮 → 介绍弹窗逐个消费） */
   private newMobQueue: string[] = [];
-  speed: 1 | 2 = 1;
+  speed: 1 | 1.5 = 1;
 
   mgr!: MonsterManager;
   /** 上场英雄（双英雄同场：艾拉·风羽 + 凯尔·鹰眼；编队系统后再做槽位解锁） */
@@ -278,7 +278,7 @@ export class BattleDirector extends Component {
   toggleSpeed(): void {
     const s = loadSave();
     if (!s.speedUnlocked && !s.debug) return;
-    this.speed = this.speed === 1 ? 2 : 1;
+    this.speed = this.speed === 1 ? 1.5 : 1;
     this.hud.setSpeed(this.speed);
   }
 

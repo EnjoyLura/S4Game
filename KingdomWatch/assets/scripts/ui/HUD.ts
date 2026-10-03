@@ -96,18 +96,16 @@ export class HUD {
     artSprite(bgParent || top, 0, 0, 750, LO.half * 2 + 240, 'scenes/scene_1_1',
       { sliced: false, cover: true, belowIdx: 1, hideOnLoad: [bgFlat] });
 
-    /* 顶栏 */
-    const topBar = gpanel(top, 0, WY(100, 70), 718, 70, CA('#14181E', 0.72), CA(PAL.gold, 0.9), 1.5, 10);
-    artSprite(topBar, 0, 0, 718, 70, 'ui_panel_dark_gold', { belowIdx: 0 });
-    const pauseBtn = gpanel(top, WX(30, 60), WY(105, 60), 60, 60, CA(PAL.gold, 0.2), PAL.gold, 2, 12);
-    const pauseLbl = label(pauseBtn, 0, 0, '⏸', { size: 26, color: PAL.gold, bold: true });
+    /* 顶栏（用户调整：去大背板美术/金描边，全宽半透遮罩，参考竞品简洁样式不遮挡视野） */
+    gpanel(top, 0, WY(100, 70), 750, 70, CA('#000000', 0.42), undefined, 0, 0);
+    const pauseBtn = gpanel(top, WX(30, 60), WY(105, 60), 60, 60, CA('#000000', 0.32), undefined, 0, 0);
+    const pauseLbl = label(pauseBtn, 0, 0, '⏸', { size: 26, color: '#FFFFFF', bold: true });
     artSprite(pauseBtn, 0, 0, 60, 60, 'ui_icon_pause', { sliced: false, hideOnLoad: [pauseLbl] });
     pauseBtn.on(Node.EventType.TOUCH_END, () => this.dir.togglePause());
     // 关卡计时（线稿①：暂停键右侧 00:36）
-    this.timeTxt = label(top, WX(110, 140), WY(114, 40), '00:00', { size: 20, color: '#CDC2A2', align: 'left', w: 140, h: 40 });
-    label(top, 0, WY(110, 50), this.dir.levelDef.id + ' ' + this.dir.levelDef.name, { size: 22, color: PAL.parch, bold: true, w: 400, h: 50 });
-    const wavePill = gpanel(top, WX(560, 150), WY(105, 60), 150, 60, CA('#FFFFFF', 0.08), CA('#FFFFFF', 0.27), 1.5, 30);
-    artSprite(wavePill, 0, 0, 150, 60, 'ui_wave_pill', { belowIdx: 0 });
+    this.timeTxt = label(top, WX(110, 140), WY(114, 40), '00:00', { size: 20, color: '#FFFFFF', align: 'left', w: 140, h: 40 });
+    label(top, 0, WY(110, 50), this.dir.levelDef.id + ' ' + this.dir.levelDef.name, { size: 22, color: '#FFFFFF', bold: true, w: 400, h: 50 });
+    gpanel(top, WX(560, 150), WY(105, 60), 150, 60, CA('#000000', 0.32), undefined, 0, 30);
     this.waveTxt = label(top, WX(560, 150), WY(105, 60), '波次 0/10', { size: 20, color: '#FFFFFF', bold: true });
 
     /* 经验条（下移与顶栏留出间距）+ 居中 Lv 徽章骑条（线稿 ui_lv_badge） */
@@ -128,7 +126,7 @@ export class HUD {
     artSprite(speedBtn, 0, 0, 60, 60, 'ui_icon_speed', { sliced: false, belowIdx: 0 });
     this.speedTxt = label(speedBtn, 0, 0, 'X1', { size: 18, color: '#FFFFFF', bold: true });
     speedBtn.on(Node.EventType.TOUCH_END, () => this.dir.toggleSpeed());
-    const statsBtn = gpanel(top, WX(24, 60), WY(320, 60), 60, 60, CA(PAL.gold, 0.2), PAL.gold, 2, 12);
+    const statsBtn = gpanel(top, WX(24, 60), WY(320, 60), 60, 60, CA('#000000', 0.38), undefined, 0, 12);
     const statsGlyph = label(statsBtn, 0, 0, '📊', { size: 24 });
     artSprite(statsBtn, 0, 0, 60, 60, 'ui_icon_stats', { sliced: false, belowIdx: 0, hideOnLoad: [statsGlyph] });
     statsBtn.on(Node.EventType.TOUCH_END, () => this.dir.showStats());
@@ -246,7 +244,7 @@ export class HUD {
     setText(this.fpsTxt, 'FPS:' + n);
   }
 
-  setSpeed(s: 1 | 2): void {
+  setSpeed(s: 1 | 1.5): void {
     setText(this.speedTxt, 'X' + s);
   }
 
@@ -377,7 +375,7 @@ export class HUD {
     if (pct <= 0.01) return;
     const R = u.waterR;
     if (pct >= 0.995) {
-      g.fillColor = CA(u.color, flash ? 0.72 : 0.58);
+      g.fillColor = CA(u.color, flash ? 0.5 : 0.32);   // 用户调整：能量水更透明
       g.circle(0, 0, R);
       g.fill();
       return;
@@ -385,7 +383,7 @@ export class HUD {
     const yc = -R + 2 * R * pct;
     const a = Math.asin(Math.max(-1, Math.min(1, yc / R)));
     const xr = R * Math.cos(a);
-    g.fillColor = CA(u.color, flash ? 0.7 : 0.58);
+    g.fillColor = CA(u.color, flash ? 0.48 : 0.32);
     g.moveTo(xr, yc);
     g.lineTo(-xr, yc);
     const thA = Math.PI - a, thB = Math.PI * 2 + a;

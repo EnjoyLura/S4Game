@@ -224,8 +224,8 @@ export class Panels {
       label(this.modalRoot, WX(60, 380), WY(718, 60), '⏩ 战斗倍速' + (o.speedUnlocked ? '' : '（1-2 通关解锁）'),
         { size: 20, color: o.speedUnlocked ? '#FFFFFF' : '#889099', align: 'left', w: 380, h: 40, shrink: true });
       if (o.speedUnlocked) {
-        btn(this.modalRoot, WX(590, 100), WY(726, 44), 100, 44, o.speed === 2 ? '2x' : '1x',
-          o.speed === 2 ? PAL.green : '#5A6472',
+        btn(this.modalRoot, WX(590, 100), WY(726, 44), 100, 44, o.speed === 1.5 ? '1.5x' : '1x',
+          o.speed === 1.5 ? PAL.green : '#5A6472',
           () => { this.dir.toggleSpeed(); this.showPause({ ...o, tab: 2, speed: this.dir.speed }); }, 18, true);
       } else {
         gswitch(this.modalRoot, WX(590, 100), WY(726, 44), 100, 44, false, undefined, true);
