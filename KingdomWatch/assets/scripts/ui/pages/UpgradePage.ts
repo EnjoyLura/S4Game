@@ -187,7 +187,7 @@ export function buildUpgrade(ctx: PageCtx): void {
     if (st.tab === 0) tabLevel(content, ctx, hid, tabTop);
     else if (st.tab === 1) tabWeapon(content, ctx, hid, tabTop);
     else if (st.tab === 2) tabSkills(content, ctx, hid, tabTop);
-    else tabEquips(content, ctx, hid, cardH);
+    else tabEquips(content, ctx, hid, tabTop);
 
     /* 四页签连体（用户确认与页签栏同做法：无背板、段内直角、仅首/末段外侧圆弧），贴导航栏正上方（NAV 148+10） */
     const segW = 720 / 4, segH = 62, segR = 14;
@@ -464,24 +464,26 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
   fxStepper(panel, p1Top - p1H, actCy + actH / 2 + 14, '等级效果', SKILL_MILESTONES[slot], lv, PW);
 }
 
-/* ---------- 装备页签：大背板（与等级/武器同卡）+ 装备槽×4 固定高顶对齐，点击弹强化弹窗 ---------- */
-function tabEquips(parent: Node, ctx: PageCtx, hid: string, cardH: number): void {
-  const card = parchmentCard(parent, 0, WYB(232, cardH), 718, cardH);
-  const slotCy = cardH / 2 - 24 - 155; // 槽高 310 顶对齐：上缘留 24 内距
+/* ---------- 装备页签：无大背板（用户确认参考技能页签）——装备卡×4 浮于背景：方形品质背板套图标
+ * （像英雄页装备槽）+ 名称 + 居中「几阶·几级」，点击弹强化弹窗 ---------- */
+function tabEquips(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
+  const SLOT_H = 250;
+  const slotCy = topY - SLOT_H / 2;
   WORN_4.forEach((kind, i) => {
     const inst = wornInst(hid, kind);
     const q = inst ? EQUIPS[inst.defId].quality : 0;
-    const slot = zonePanel(card, -261 + i * 174, slotCy, 168, 310);
+    const slot = gpanel(parent, -261 + i * 174, slotCy, 168, SLOT_H, CA('#E9DFC2', 0.94), undefined, 0, 12);
     if (!inst) (slot.addComponent(UIOpacity) as UIOpacity).opacity = Math.round(255 * 0.72);
     if (inst) {
       const d = EQUIPS[inst.defId];
-      goldIconPlate(slot, 0, 88, 96, undefined, KIND_ICON[kind], 42);
-      label(slot, 0, -2, d.name, { size: 20, color: QCARD[q], bold: true, w: 144, h: 30, shrink: true });
-      label(slot, 45, -95, `Lv.${inst.lv}`, { size: 24, color: QCARD[q], bold: true, w: 90, h: 34 });
-      if (inst.lv < MAX.equip) gpanel(slot, 62, 132, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
+      gpanel(slot, 0, 62, 96, 96, CA(QCOLOR[d.quality], 0.55), undefined, 0, 12);   // 方形品质背板（用户确认）
+      label(slot, 0, 62, KIND_ICON[kind], { size: 42 });
+      label(slot, 0, -28, d.name, { size: 20, color: QCARD[q], bold: true, w: 144, h: 30, shrink: true });
+      label(slot, 0, -84, `${d.tier}阶·${inst.lv}级`, { size: 24, color: QCARD[q], bold: true, w: 150, h: 34 });   // 几阶·几级 居中（用户确认）
+      if (inst.lv < MAX.equip) gpanel(slot, 62, 112, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
     } else {
-      label(slot, 0, 88, '+', { size: 54, color: INK, bold: true });
-      label(slot, 0, -95, KIND_NAME[kind], { size: 20, color: INK, bold: true, w: 144, h: 30 });
+      label(slot, 0, 62, '+', { size: 54, color: INK, bold: true });
+      label(slot, 0, -84, KIND_NAME[kind], { size: 20, color: INK, bold: true, w: 144, h: 30 });
     }
     slot.on(Node.EventType.TOUCH_END, () => {
       if (!inst) { toast('该槽位未穿戴 · 去英雄页装备'); return; }
