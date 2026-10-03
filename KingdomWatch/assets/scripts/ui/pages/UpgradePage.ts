@@ -186,7 +186,7 @@ export function buildUpgrade(ctx: PageCtx): void {
     const tabTop = LO.half - upT - LO.safeTop - 60;   // 属性提升标题须完全在大背板下缘之下（用户确认）
     if (st.tab === 0) tabLevel(content, ctx, hid, tabTop);
     else if (st.tab === 1) tabWeapon(content, ctx, hid, tabTop);
-    else if (st.tab === 2) tabSkills(content, ctx, hid, cardH);
+    else if (st.tab === 2) tabSkills(content, ctx, hid, tabTop);
     else tabEquips(content, ctx, hid, cardH);
 
     /* 四页签连体（用户确认与页签栏同做法：无背板、段内直角、仅首/末段外侧圆弧），贴导航栏正上方（NAV 148+10） */
@@ -392,22 +392,20 @@ function tabWeapon(parent: Node, ctx: PageCtx, hid: string, topY: number): void 
   fxStepper(parent, topY - p1H, actCy + actH / 2 + 14, '等级效果', WEAPON_MILESTONES[hid] || [], lv);
 }
 
-/* ---------- 技能页签：大背板（与等级/武器同卡）+ 技能槽×3 固定高顶对齐，点击弹升级弹窗 ---------- */
-function tabSkills(parent: Node, ctx: PageCtx, hid: string, cardH: number): void {
+/* ---------- 技能页签：无大背板（用户确认）——技能卡×3 浮于背景：无框圆图标 + 名称 + 居中等级，点击弹升级弹窗 ---------- */
+function tabSkills(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
   const sv = loadSave();
   const h = sv.heroes[hid];
-  const card = parchmentCard(parent, 0, WYB(232, cardH), 718, cardH);
-  const slotCy = cardH / 2 - 24 - 155; // 槽高 310 顶对齐：上缘留 24 内距
+  const SLOT_H = 250;
+  const slotCy = topY - SLOT_H / 2;
   SKILL_INFO.forEach((info, i) => {
     const lv = h[info.key];
-    const slot = zonePanel(card, -234 + i * 234, slotCy, 218, 310);
-    const circ = gcircle(slot, 0, 82, 58, CA('#2A3240', 1), C(info.cls), 2.5);
-    artSprite(circ, 0, 0, 116, 116, 'ui_gear_ring', { sliced: false, belowIdx: 0 });
-    label(slot, 0, 82, info.icon, { size: 26, color: '#FFE08A', bold: true });
-    label(slot, 0, -12, info.name, { size: 22, color: INK, bold: true, w: 196, h: 32, shrink: true });
-    label(slot, 0, -60, info.desc, { size: 16, color: SUB, w: 196, h: 64, shrink: true, lineHeight: 21 });
-    label(slot, 55, -118, `${lv}级`, { size: 28, color: INK, bold: true, w: 90, h: 36 });
-    if (lv < MAX.skill) gpanel(slot, 84, 130, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
+    const slot = gpanel(parent, -234 + i * 234, slotCy, 218, SLOT_H, CA('#E9DFC2', 0.94), undefined, 0, 12);
+    const circ = gcircle(slot, 0, 62, 58, CA('#2A3240', 1));   // 图标无描边、无齿轮环美术（用户确认）
+    label(circ, 0, 0, info.icon, { size: 26, color: '#FFE08A', bold: true });
+    label(slot, 0, -28, info.name, { size: 22, color: INK, bold: true, w: 196, h: 32, shrink: true });
+    label(slot, 0, -84, `${lv}级`, { size: 28, color: INK, bold: true, w: 120, h: 36 });   // 等级居中（用户确认）
+    if (lv < MAX.skill) gpanel(slot, 84, SLOT_H / 2 - 13, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
     slot.on(Node.EventType.TOUCH_END, () => skillModal(ctx, hid, info.slot, () => ctx.refresh()));
   });
 }
