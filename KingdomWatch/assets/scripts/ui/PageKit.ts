@@ -29,14 +29,25 @@ export function toast(msg: string): void {
 export let GLOBAL_ROOT: Node | null = null;
 export function setGlobalRoot(n: Node): void { GLOBAL_ROOT = n; }
 
-/** 弹窗框架：全屏遮罩 + 面板 + 右上关闭。返回面板节点（调用者往里填内容；面板本地 y 向上为正） */
-export function modal(ctx: PageCtx, w: number, h: number, title: string): Node {
+/** 弹窗框架：全屏遮罩（点空白区域直接关闭）+ 面板 + 右上关闭。返回面板节点（调用者往里填内容；面板本地 y 向上为正）
+ *  flat=true 无边框规范（用户确认：属性/故事弹窗去边框——无金描边、无带框面板美术、关闭钮纯色板） */
+export function modal(ctx: PageCtx, w: number, h: number, title: string, flat = false): Node {
   const dim = dimLayer(ctx.screens, 0.68);
-  const panel = gpanel(dim, 0, -80, w, h, CA('#1B201A', 0.97), CA(PAL.gold, 0.95), 2.5, 18);
-  artSprite(panel, 0, 0, w, h, 'ui_panel_dark_gold', { belowIdx: 0 });
+  dim.on(Node.EventType.TOUCH_END, (e: unknown) => {
+    const ev = e as { propagationStopped?: boolean };
+    if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;  // 不连关下层弹窗
+    dim.destroy();
+  });
+  const panel = gpanel(dim, 0, -80, w, h, CA('#1B201A', 0.97), flat ? undefined : CA(PAL.gold, 0.95), 2.5, 18);
+  if (!flat) artSprite(panel, 0, 0, w, h, 'ui_panel_dark_gold', { belowIdx: 0 });
   if (title) label(panel, 0, h / 2 - 44, title, { size: 28, color: '#FFE08A', bold: true });
-  const close = btn(panel, w / 2 - 40, h / 2 - 40, 56, 56, '✕', PAL.gold, () => dim.destroy(), 26);
+  const close = btn(panel, w / 2 - 40, h / 2 - 40, 56, 56, '✕', PAL.gold, () => dim.destroy(), 26, flat);
   close.name = 'btn_close';
+  /* 面板吞掉触摸：点面板内容（含无 handler 的行）不会落到遮罩上误关弹窗 */
+  panel.on(Node.EventType.TOUCH_END, (e: unknown) => {
+    const ev = e as { propagationStopped?: boolean };
+    if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
+  });
   return panel;
 }
 

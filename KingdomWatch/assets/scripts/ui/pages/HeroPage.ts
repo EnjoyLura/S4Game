@@ -302,7 +302,7 @@ function drawBagCell(ctx: PageCtx, grid: Node, cell: { uid: string; n: number },
 export function attrsModal(ctx: PageCtx, hid: string): void {
   const def = HERO_DEFS[hid];
   const st = heroStats(hid);
-  const panel = modal(ctx, 620, 560, '属性总览');
+  const panel = modal(ctx, 620, 560, '属性总览', true);
   const rows: [string, string][] = [
     ['定位', def.job], ['战力', String(st.power)], ['攻击', String(st.atk)],
     ['攻速', `${st.atkSpd} 次/秒`], ['技能伤害', String(st.skillDmg)], ['生命', String(st.hp)],
@@ -320,7 +320,7 @@ export function attrsModal(ctx: PageCtx, hid: string): void {
 export function storyModal(ctx: PageCtx, hid: string): void {
   const def = HERO_DEFS[hid];
   const owned = !!loadSave().heroes[hid]?.owned;
-  const panel = modal(ctx, 620, 560, `故事 · ${def.name}`);
+  const panel = modal(ctx, 620, 560, `故事 · ${def.name}`, true);
   // 左列：立绘卡（名字叠图底）+ 解锁条件药丸 —— 立绘大图资源尚未落盘，用页面同款方形头像铺卡
   const card = gpanel(panel, -155, 60, 200, 330, CA('#20262F', 1), '#FFFFFF33', 1.5, 14);
   artSprite(card, 0, 48, 190, 190, def.avatar, { sliced: false });
