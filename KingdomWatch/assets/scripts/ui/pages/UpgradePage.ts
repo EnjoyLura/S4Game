@@ -183,8 +183,9 @@ export function buildUpgrade(ctx: PageCtx): void {
     });
 
     /* 页签内容：等级页签=无大背板新版式（用户确认先做等级页签）；其余页签暂用大卡版式 */
-    if (st.tab === 0) tabLevel(content, ctx, hid, LO.half - upT - 16);
-    else if (st.tab === 1) tabWeapon(content, ctx, hid, LO.half - upT - 16);
+    const tabTop = LO.half - upT - LO.safeTop - 60;   // 属性提升标题须完全在大背板下缘之下（用户确认）
+    if (st.tab === 0) tabLevel(content, ctx, hid, tabTop);
+    else if (st.tab === 1) tabWeapon(content, ctx, hid, tabTop);
     else if (st.tab === 2) tabSkills(content, ctx, hid, cardH);
     else tabEquips(content, ctx, hid, cardH);
 
@@ -273,18 +274,20 @@ function save(hid: string, r: { ok: boolean; msg: string }, ctx: PageCtx): void 
   if (r.ok) ctx.refresh();
 }
 
-/** 等级效果步骤条（等级/武器页签共用）：奶白板贴内容高度、不再拉满到底（用户确认）；
+/** 等级效果步骤条（等级/武器页签共用）：奶白板拉通到行动条、不留底部空档（用户确认）；
  * topY = 上方面板底缘，与其拉开 44 留出标题空间（标题完全出板）；botY = 行动条上缘 + 间距。
- * 竖线节点与属性文字左缘同列（-320），达成档位亮卡、未达成置灰，内容超高可滑动 */
+ * 档位放得下时在板内均匀分布铺满；放不下时紧凑堆叠、可滑动。竖线节点与属性文字左缘同列（-320），
+ * 达成档位亮卡、未达成置灰 */
 function fxStepper(parent: Node, topY: number, botY: number, title: string, ms: { lv: number; txt: string }[], lv: number): void {
   const CARD_H = 64, GAP = 18, PAD = 16;
-  const needH = ms.length * (CARD_H + GAP) - GAP + PAD * 2;
+  const stackH = ms.length * (CARD_H + GAP) - GAP + PAD * 2;
   const fxTop = topY - 44;
-  const fxH = Math.max(150, Math.min(fxTop - botY, needH + 8));
-  const fx = gpanel(parent, 0, fxTop - fxH / 2, 700, fxH, CA('#E9DFC2', 0.94), undefined, 0, 12);
+  const fxH = Math.max(150, fxTop - botY);
+  const fx = gpanel(parent, 0, botY + fxH / 2, 700, fxH, CA('#E9DFC2', 0.94), undefined, 0, 12);
   zoneTab(parent, -280, fxTop + 17, title);
   const viewH = fxH - 8;
-  const contentH = Math.max(needH, viewH);
+  const even = stackH <= viewH;
+  const contentH = even ? viewH : Math.max(stackH, viewH);
   const view = N('fxView', fx, 0, 0, 660, viewH);
   view.addComponent(Mask);
   const scroll = view.addComponent(ScrollView);
@@ -294,20 +297,19 @@ function fxStepper(parent: Node, topY: number, botY: number, title: string, ms: 
   scroll.horizontal = false;
   scroll.vertical = true;
   const LINE_X = -320;
+  const yAt = (i: number): number => even ? -(contentH / ms.length) * (i + 0.5) : -(PAD + i * (CARD_H + GAP) + CARD_H / 2);
   const lineG = N('fxLine', ct, 0, 0, 8, contentH).addComponent(Graphics);
   lineG.fillColor = C('#B8A87F');
-  lineG.rect(LINE_X - 2, -(contentH - PAD), 4, contentH - PAD * 2);
+  lineG.rect(LINE_X - 2, yAt(ms.length - 1), 4, yAt(0) - yAt(ms.length - 1));   // 线仅连首末节点
   lineG.fill();
   const lastReached = ms.reduce((acc, m, i) => (lv >= m.lv ? i : acc), -1);
   if (lastReached >= 0) {
-    const y0 = -(PAD + CARD_H / 2);
-    const y1 = -(PAD + lastReached * (CARD_H + GAP) + CARD_H / 2);
     lineG.fillColor = C(PAL.gold);
-    lineG.rect(LINE_X - 2, y1, 4, y0 - y1);
+    lineG.rect(LINE_X - 2, yAt(lastReached), 4, yAt(0) - yAt(lastReached));
     lineG.fill();
   }
   ms.forEach((m, i) => {
-    const yC = -(PAD + i * (CARD_H + GAP) + CARD_H / 2);
+    const yC = yAt(i);
     const reached = lv >= m.lv;
     gcircle(ct, LINE_X, yC, 10, reached ? C(PAL.gold) : C('#A5987B'));
     const c = gpanel(ct, 10, yC, 620, CARD_H, reached ? CA('#E8C878', 0.95) : CA('#D8CBA8', 0.5), undefined, 0, 10);
