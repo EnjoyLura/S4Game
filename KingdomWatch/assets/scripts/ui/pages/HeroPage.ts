@@ -101,7 +101,7 @@ export function buildHeroes(ctx: PageCtx): void {
       // 行数按屏幕可视高动态铺满（Fit-Width 高屏可视 > 1334，固定 2 行会与底部导航间留大片空白）
       const GRID_TOP = 885;   // 首行上缘（行中心 945 − 60）
       const ROW_H = 132;
-      const availBottom = 2 * LO.half - 150;   // 预留底部导航(122)+边距
+      const availBottom = 2 * LO.half - 174;   // 预留底部导航(148)+边距
       const rows = Math.max(2, Math.min(5, Math.floor((availBottom - GRID_TOP + 12) / ROW_H)));
       const cap = rows * 5;
       // 背包格区：无大背板（用户确认），格子直接浮于游戏背景上

@@ -1,9 +1,9 @@
 /**
- * ① 商店（线稿 shop）：撕纸标题 + 四页签（武器💎/英雄💎/装备🪙/材料🪙）+ 商品卡 2×2
+ * ① 商店（线稿 shop）：撕纸标题 + 四页签连体（无背板，仅首/末段外侧圆弧）+ 货架大背板 + 商品卡 2×2
  * 固定货架 12 件，关卡章节阶段性解锁；购买=确认弹窗→扣货币→入包/解锁英雄。
  */
-import { Node } from 'cc';
-import { PAL } from '../../config/GameConfig';
+import { Node, Graphics } from 'cc';
+import { PAL, LO } from '../../config/GameConfig';
 import { CA, btn, C, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
 import { PageCtx, artPanel, confirmModal, fmt, toast, CX, qualityBadge } from '../PageKit';
@@ -27,15 +27,23 @@ export function buildShop(ctx: PageCtx): void {
 
   function render(): void {
     content.destroyAllChildren();
-    // 页签条背板（L1）垫底，四页签骑在其上
-    artPanel(content, 0, WY(320, 64), 680, 84, 'ui_panel_tabs');
-    // 四页签（激活金底/未激活灰底）
+    // 货架大背板（用户确认：商品栏加大背板，从页签下方铺到导航栏上方）
+    const top = 400;
+    const bh = 2 * LO.half - 174 - top;   // 预留底部导航(148)+边距
+    artPanel(content, 0, WY(top, bh), 730, bh, 'ui_panel_zone');
+    // 四页签连体（用户确认参考英雄页：无背板、段内直角、仅首/末段外侧圆弧）
+    const segW = 680 / 4, segH = 64, segR = 14;
     SHOP_TABS.forEach((t, i) => {
       const active = t.key === st.tab;
-      const b = btn(content, CX(35 + i * 180, 160), WY(320, 64), 160, 64,
-        t.name, active ? PAL.gold : '#5A6472',
-        () => { st.tab = t.key; render(); }, 22);
-      b.name = 'tab_' + t.key;
+      const seg = N('tab_' + t.key, content, CX(35 + i * segW, segW), WY(320, segH), segW, segH);
+      const g = seg.addComponent(Graphics);
+      g.fillColor = C(active ? PAL.gold : '#5A6472');
+      g.roundRect(-segW / 2, -segH / 2, segW, segH, i === 0 || i === SHOP_TABS.length - 1 ? segR : 0);
+      if (i === 0) g.rect(segW / 2 - segR, -segH / 2, segR, segH);                    // 并集盖平右侧两角
+      else if (i === SHOP_TABS.length - 1) g.rect(-segW / 2, -segH / 2, segR, segH);  // 并集盖平左侧两角
+      g.fill();
+      label(seg, 0, 0, t.name, { size: 22, color: '#241C12', bold: true, w: segW, h: segH });
+      seg.on(Node.EventType.TOUCH_END, () => { st.tab = t.key; render(); });
     });
     // 商品卡 2×2
     const items = SHOP.filter(s => s.tab === st.tab);

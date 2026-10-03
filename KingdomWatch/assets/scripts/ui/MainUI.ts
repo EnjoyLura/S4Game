@@ -27,7 +27,7 @@ const TABS: { name: string; icon: string }[] = [
   { name: '基地', icon: '🏰' },
 ];
 
-const NAV_H = 122;
+const NAV_H = 148;
 
 @ccclass('MainUI')
 export class MainUI extends Component {
@@ -83,22 +83,23 @@ export class MainUI extends Component {
     this.tab = flow.mainTab;
     this.switchTab(this.tab);
     // 资源栏恒在页面内容上层（英雄页大背板延伸到屏顶，会盖住先建的货币芯片）
-    ['gold', 'dia'].forEach(nm => { const n = root.getChildByName(nm); if (n) n.setSiblingIndex(root.children.length - 1); });
+    ['resBar'].forEach(nm => { const n = root.getChildByName(nm); if (n) n.setSiblingIndex(root.children.length - 1); });
   }
 
-  /* ---------- 顶栏：双货币靠右（用户确认：资源栏不要大背板，货币芯片直接浮于场景） ---------- */
+  /* ---------- 顶栏：双货币靠右（用户确认：半透明底板 + 资源图标不加边框——无描边、无带环座美术） ---------- */
   private buildTopBar(root: Node): void {
     const sv = loadSave();
+    const bar = N('resBar', root, 0, 0, 750, 120);
+    // 半透明药丸底板（垫在两组货币芯片下）
+    gpanel(bar, WX(420, 325), WY(145, 0), 325, 72, CA('#10141A', 0.55), undefined, 0, 36);
     // 金币（左）+ 钻石（右）并排靠右（与原背板中线同高：WY(145,0) = WY(100,90) 中心线）
-    const goldRow = N('gold', root, WX(430, 150), WY(145, 0), 150, 50);
-    const goldSeat = gpanel(goldRow, -50, 0, 50, 50, CA(PAL.gold, 0.2), PAL.gold, 2, 25);
-    artSprite(goldSeat, 0, 0, 50, 50, 'ui_circ_icon_gold', { belowIdx: 0 });
+    const goldRow = N('gold', bar, WX(430, 150), WY(145, 0), 150, 50);
+    const goldSeat = gpanel(goldRow, -50, 0, 50, 50, CA(PAL.gold, 0.2), undefined, 0, 25);
     artSprite(goldSeat, 0, 0, 36, 36, 'ui_icon_coin', { sliced: false });
     this.goldLbl = label(goldRow, 32, 0, String(Math.floor(sv.gold)), { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 90, h: 34 });
 
-    const diaRow = N('dia', root, WX(600, 140), WY(145, 0), 140, 50);
-    const diaSeat = gpanel(diaRow, -50, 0, 50, 50, CA(PAL.blue, 0.2), PAL.blue, 2, 25);
-    artSprite(diaSeat, 0, 0, 50, 50, 'ui_circ_icon_gold', { belowIdx: 0 });
+    const diaRow = N('dia', bar, WX(600, 140), WY(145, 0), 140, 50);
+    const diaSeat = gpanel(diaRow, -50, 0, 50, 50, CA(PAL.blue, 0.2), undefined, 0, 25);
     artSprite(diaSeat, 0, 0, 34, 34, 'ui_icon_diamond', { sliced: false });
     this.diaLbl = label(diaRow, 32, 0, String(sv.diamonds), { size: 24, color: '#CFE3FF', bold: true, align: 'left', w: 80, h: 34 });
   }
@@ -118,12 +119,12 @@ export class MainUI extends Component {
     const x0 = (750 - (TABS.length * w + (TABS.length - 1) * gap)) / 2;
     TABS.forEach((t, i) => {
       const cx = WX(x0 + i * (w + gap) + w / 2, 0);
-      const slot = N('tab' + i, root, cx, WYB(10, 102), w, 102);
-      const idle = gpanel(slot, 0, 0, w, 102, CA('#0B0F16', 0.5), undefined, 0, 12);  // 未激活底板
-      const act = gpanel(slot, 0, 0, w, 102, CA(PAL.gold, 0.25), undefined, 0, 12);   // 激活高亮板
+      const slot = N('tab' + i, root, cx, WYB(12, 124), w, 124);
+      const idle = gpanel(slot, 0, 0, w, 124, CA('#0B0F16', 0.5), undefined, 0, 12);  // 未激活底板
+      const act = gpanel(slot, 0, 0, w, 124, CA(PAL.gold, 0.25), undefined, 0, 12);   // 激活高亮板
       act.active = false;
-      const icon = label(slot, 0, 18, t.icon, { size: 34 });
-      const txt = label(slot, 0, -26, t.name, { size: 20, color: '#FFFFFF', bold: true });
+      const icon = label(slot, 0, 22, t.icon, { size: 34 });
+      const txt = label(slot, 0, -34, t.name, { size: 20, color: '#FFFFFF', bold: true });
       slot.on(Node.EventType.TOUCH_END, () => this.switchTab(i));
       this.navItems.push({ slot, icon, txt, idle, act });
     });
