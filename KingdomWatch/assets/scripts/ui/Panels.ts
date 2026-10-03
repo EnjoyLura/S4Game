@@ -49,7 +49,7 @@ export class Panels {
   }
 
   /* ---------- ② 三选一 ---------- */
-  showPick(cards: CardDef[], stacks: CardStacks, cb: PickCallbacks): void {
+  showPick(cards: CardDef[], _stacks: CardStacks, cb: PickCallbacks): void {
     this.closeAll();
     dimLayer(this.modalRoot);
     // 标题淡入（美术：撕纸金横幅，深墨字）
@@ -66,7 +66,7 @@ export class Panels {
       const x = WX(xs[i], 222), y = WY(428, 360);
       const frame = gpanel(this.modalRoot, x, y, 222, 360, CA('#E9DFC2', 0.96), undefined, 0, 12);
       frames.push(frame);
-      this.buildCard(frame, card, stacks);
+      this.buildCard(frame, card);
       frame.on(Node.EventType.TOUCH_END, e => {
         e.propagationStopped = true;
         this.pickChoose(frame, frames.filter(f => f !== frame), card, cb);
@@ -89,7 +89,7 @@ export class Panels {
         if (this.picking || this.pickAdLeft <= 0) return;
         this.pickAdLeft--;
         AdService.showRewarded('pick_refresh', () => cb.onRefreshRequest(), () => { this.pickAdLeft++; });
-      }, 24);
+      }, 24, true);
     btn(this.modalRoot, WX(460, 180), WY(862, 76), 180, 76,
       '💎2 钻石刷新', this.pickDiaLeft > 0 ? PAL.gold : '#5A6472', () => {
         if (this.picking || this.pickDiaLeft <= 0) return;
@@ -98,7 +98,7 @@ export class Panels {
         sv.diamonds -= 2;
         this.pickDiaLeft--;
         cb.onRefreshRequest();
-      }, 22);
+      }, 22, true);
   }
 
   /** 选择动画：选中卡弹跳、其余卡淡出，随后真实回调（三选一冻结期间 tween 仍走主循环时钟） */
@@ -116,38 +116,28 @@ export class Panels {
     }
   }
 
-  /** 卡面布局（全扁平无美术——用户要求）：顶部稀有度通栏色带 → 圆形图标座 → 右上归属角标 →
-   *  左上『新』角标 → 底部描述两行 + 稀有度·定位小字（层数并入该行） */
-  private buildCard(frame: Node, card: CardDef, stacks: CardStacks): void {
+  /** 卡面布局（扁平无美术；去「新」标与稀有度小字——用户要求：卡面只留 名称/图标/归属/描述）：
+   *  顶部稀有度通栏色带 → 圆形图标座 → 右上归属角标（避开色带与图标座）→ 下半区大号加粗描述（shrink 防超框） */
+  private buildCard(frame: Node, card: CardDef): void {
     const rarity = RARITY_COLOR[card.rarity];
-    const rName = card.rarity === 'white' ? '白' : card.rarity === 'blue' ? '蓝' : '紫';
-    const used = stacks[card.id] || 0;
 
-    // ① 卡头稀有度色带（222×52 通栏扁平色板，白/银底配深墨字）
+    // ① 卡头稀有度色带（222×52 通栏扁平色板）
     const header = gpanel(frame, 0, 154, 222, 52, CA(rarity, 0.85), undefined, 0, 12);
-    label(header, 0, 0, card.name, { size: 20, color: card.rarity === 'white' ? '#4A3214' : '#FFFFFF', bold: true, w: 208, h: 40, shrink: true });
+    label(header, 0, 0, card.name, { size: 22, color: card.rarity === 'white' ? '#4A3214' : '#FFFFFF', bold: true, w: 208, h: 40, shrink: true });
 
-    // ② 图标座 120 圆（无描边无齿轮美术）+ 内嵌图标 96 圆
+    // ② 图标座 120 圆 + 内嵌 96 圆
     const gear = gcircle(frame, 0, 50, 60, CA('#2A3240', 1));
     const icon = gcircle(frame, 0, 50, 48, CA(rarity, 0.16));
-    label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 24, color: card.rarity === 'white' ? '#E8E0C8' : rarity, bold: true });
+    label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 26, color: card.rarity === 'white' ? '#E8E0C8' : rarity, bold: true });
 
-    // ③ 右上归属角标 56×56 扁平圆（全局卡绿字；弓/狙金字）
+    // ③ 右上归属角标（圆心 y94/r24：顶缘 118 离色带底 128 十分距；距图标座圆心 91 > 60+24）
     const ownHero = card.owner === 'archer' ? '弓' : card.owner === 'sniper' ? '狙' : '';
-    const ava = gcircle(frame, 76, 144, 28, CA('#2A3240', 1));
+    const ava = gcircle(frame, 80, 94, 24, CA('#2A3240', 1));
     label(ava, 0, 0, card.owner === 'global' ? '全' : ownHero,
-      { size: 20, color: card.owner === 'global' ? PAL.green : PAL.gold, bold: true });
+      { size: 18, color: card.owner === 'global' ? PAL.green : PAL.gold, bold: true });
 
-    // ④ 左上『新』角标 56×56 扁平绿圆
-    if (used === 0) {
-      const badge = gcircle(frame, -80, 168, 28, PAL.green);
-      label(badge, 0, 0, '新', { size: 20, color: PAL.ink, bold: true });
-    }
-
-    // ⑤ 描述两行 + ⑥ 底部"稀有度·定位"小字（卡面为羊皮纸浅底 → 深墨字）
-    label(frame, 0, -105, card.desc, { size: 15, color: '#4A3214', w: 206, h: 56, shrink: true, lineHeight: 20 });
-    const tag = rName + ' · ' + (card.owner === 'global' ? '全局' : card.owner === 'sniper' ? '狙击' : '弓手') + (used > 0 ? ' · 已学 ' + used + ' 层' : '');
-    label(frame, 0, -140, tag, { size: 13, color: '#6B5A3A', w: 212, h: 24, shrink: true });
+    // ④ 描述（18 号加粗，shrink 保证不超框）
+    label(frame, 0, -95, card.desc, { size: 18, color: '#4A3214', bold: true, w: 206, h: 90, shrink: true, lineHeight: 26 });
   }
 
   /* ---------- 页签条（线稿④-1/④-2/⑤-1/⑥-1）：点页签本地重渲染当前面板（无边框规范：纯色板） ---------- */
@@ -183,17 +173,15 @@ export class Panels {
     });
   }
 
-  /** 奖励图标行（整组水平居中，pitch 160）：[底色, 图标文字, 数值]
-   *  美术：金座 + A2 图标盖顶（emoji 留作兜底，被图标盖住） */
+  /** 奖励图标行（整组水平居中，pitch 160）：[底色, 图标文字, 数值]（扁平无框——用户要求：有色圆座 + 图标/文字兜底） */
   private rewardIcons(y: number, items: [string, string, string][]): void {
     const pitch = 160, s = 96;
     items.forEach((it, i) => {
       const x = (i - (items.length - 1) / 2) * pitch;
-      const c = gcircle(this.modalRoot, x, WY(y, s), 42, CA(it[0], 0.25), it[0], 2);
-      const fb = label(c, 0, 0, it[1], { size: it[1] === 'EXP' ? 20 : 34, color: it[1] === 'EXP' ? PAL.ink : '#FFFFFF', bold: it[1] === 'EXP' });
-      artSprite(c, 0, 0, s, s, 'ui_circ_icon_gold', { sliced: false, belowIdx: 0, hideOnLoad: [fb] });
+      const c = gcircle(this.modalRoot, x, WY(y, s), 42, CA(it[0], 0.25));
       const iconId = REWARD_ICON[it[1]];
       if (iconId) artIcon(c, iconId, 60);
+      else label(c, 0, 0, it[1], { size: it[1] === 'EXP' ? 20 : 34, color: '#FFFFFF', bold: true });
       label(this.modalRoot, x, WY(y + s + 4, 36), it[2], { size: 20, color: '#FFFFFF' });
     });
   }
@@ -222,8 +210,7 @@ export class Panels {
     } else {
       // 设置页签：左右旋钮开关（线稿④-2）；音乐/音效切换即时生效并写存档；振动随战斗手感批次实装
       const mkRow = (y: number, name: string, gray: boolean, sw?: { on: boolean; onChange: (v: boolean) => void }) => {
-        const row = gpanel(this.modalRoot, WX(40, 670), WY(y, 60), 670, 60, CA('#14181E', 0.85), '#FFFFFF33', 1.5, 12);
-        artSprite(row, 0, 0, 670, 60, 'ui_panel_dark_white', { belowIdx: 0 });
+        gpanel(this.modalRoot, WX(40, 670), WY(y, 60), 670, 60, CA('#14181E', 0.85), undefined, 0, 12);
         label(this.modalRoot, WX(60, 380), WY(y, 60), name,
           { size: 20, color: gray ? '#889099' : '#FFFFFF', align: 'left', w: 380, h: 40, shrink: true });
         gswitch(this.modalRoot, WX(590, 100), WY(y + 8, 44), 100, 44, sw ? sw.on : false,
@@ -233,8 +220,7 @@ export class Panels {
       mkRow(570, '🔊 音效', false, { on: o.sfx, onChange: v => o.onToggle('sfx', v) });
       mkRow(644, '📳 振动（未开放）', true);
       // 倍速行：循环按钮 1x/2x（非开关形态）
-      const speedRow = gpanel(this.modalRoot, WX(40, 670), WY(718, 60), 670, 60, CA('#14181E', 0.85), '#FFFFFF33', 1.5, 12);
-      artSprite(speedRow, 0, 0, 670, 60, 'ui_panel_dark_white', { belowIdx: 0 });
+      gpanel(this.modalRoot, WX(40, 670), WY(718, 60), 670, 60, CA('#14181E', 0.85), undefined, 0, 12);
       label(this.modalRoot, WX(60, 380), WY(718, 60), '⏩ 战斗倍速' + (o.speedUnlocked ? '' : '（1-2 通关解锁）'),
         { size: 20, color: o.speedUnlocked ? '#FFFFFF' : '#889099', align: 'left', w: 380, h: 40, shrink: true });
       if (o.speedUnlocked) {
