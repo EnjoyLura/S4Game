@@ -58,10 +58,10 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
   const unlocked = lvReached(g.unlock);
   const owned = g.give.kind === 'hero' && g.give.id ? !!sv.heroes[g.give.id]?.owned : false;
   const q = g.give.kind === 'equip' ? EQUIPS[g.give.id]?.quality ?? 0 : 1;
-  /* 用户确认：商品卡无边框（无描边、无带框面板美术），品质色只保留在图标座上 */
+  /* 用户确认：品质=图标下的方形品质色底板（不用品质色边框）；未解锁=灰色板 */
   const card = gpanel(parent, cx, cy, 330, 300, CA('#14181E', 0.92), undefined, 0, 14);
 
-  const seat = gpanel(card, 0, 60, 130, 130, CA('#2A3240', 1), unlocked ? C(QCOLOR[q]) : C('#5A6472'), 2.5, 14);
+  const seat = gpanel(card, 0, 60, 130, 130, unlocked ? CA(QCOLOR[q], 0.55) : CA('#3A4250', 0.6), undefined, 0, 14);
   label(seat, 0, 0, KIND_ICON[g.tab] || '🎁', { size: 56 });
 
   if (g.give.kind === 'equip') {

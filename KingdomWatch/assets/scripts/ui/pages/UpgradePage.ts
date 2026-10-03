@@ -431,8 +431,8 @@ export function equipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: 
   const maxed = inst.lv >= MAX.equip;
   const c = equipUpCost(inst.lv);
   const panel = modal(ctx, 590, 540, '装备强化');
-  /* 头部：图标左，名称/品质等级右 */
-  gpanel(panel, -190, 170, 100, 100, CA('#2A3240', 1), C(QCOLOR[d.quality]), 2.5, 14);
+  /* 头部：图标左（品质色方形底板，用户确认），名称/品质等级右 */
+  gpanel(panel, -190, 170, 100, 100, CA(QCOLOR[d.quality], 0.55), undefined, 0, 14);
   label(panel, -190, 170, KIND_ICON[kind], { size: 44 });
   label(panel, 56, 194, d.name, { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 320, h: 32, shrink: true });
   label(panel, 56, 156, maxed ? `${QNAMES[d.quality]} · T${d.tier}　强化 Lv.${inst.lv}（MAX）` : `${QNAMES[d.quality]} · T${d.tier}　强化 Lv.${inst.lv} → Lv.${inst.lv + 1}`,

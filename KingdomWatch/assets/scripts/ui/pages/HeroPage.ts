@@ -118,12 +118,15 @@ function drawSlot(ctx: PageCtx, parent: Node, hid: string, kind: EquipKind, rebu
   x: number, y: number, w: number, h: number): void {
   const inst = wornInst(hid, kind);
   const q = inst ? EQUIPS[inst.defId].quality : 0;
-  const slot = gpanel(parent, x, y, w, h, inst ? CA('#14181E', 0.9) : CA('#10151D', 0.8), inst ? C(QCOLOR[q]) : C('#3A4250'), 2.5, 12);
+  /* 用户确认：品质=方形品质色底板（不用品质色边框）；空槽维持暗板 */
+  const slot = inst
+    ? gpanel(parent, x, y, w, h, CA(QCOLOR[q], 0.55), undefined, 0, 12)
+    : gpanel(parent, x, y, w, h, CA('#10151D', 0.8), C('#3A4250'), 2.5, 12);
   if (inst) {
     const d = EQUIPS[inst.defId];
     label(slot, 0, h * 0.14, KIND_ICON[kind], { size: Math.min(50, h * 0.38) });
     label(slot, 0, -h * 0.26, `${d.name} Lv.${inst.lv}`, { size: Math.min(20, w * 0.078), color: '#E8E0C8', bold: true, w: w - 12, h: 28, shrink: true });
-    label(slot, -w / 2 + 10, h / 2 - 18, `T${d.tier}`, { size: 16, color: QCOLOR[d.quality], align: 'left', w: 60, h: 24 });
+    label(slot, -w / 2 + 10, h / 2 - 18, `T${d.tier}`, { size: 16, color: '#FFF3D6', align: 'left', w: 60, h: 24 });
     // 已穿戴：点击弹装备属性（无替换选择）；空槽：点击无反应
     slot.on(Node.EventType.TOUCH_END, (e: unknown) => {
       const ev = e as { propagationStopped?: () => void };
@@ -139,12 +142,12 @@ function drawSlot(ctx: PageCtx, parent: Node, hid: string, kind: EquipKind, rebu
 /** 品质名（与 QCOLOR 下标一一对应） */
 const QNAMES = ['普通', '优秀', '稀有', '史诗'];
 
-/** 装备图标框（含 T阶角标） */
+/** 装备图标框（含 T阶角标）：品质色方形底板 + 图标居中（用户确认） */
 function equipIcon(parent: Node, x: number, y: number, size: number, inst: EquipInst): void {
   const d = EQUIPS[inst.defId];
-  const box = gpanel(parent, x, y, size, size, CA('#2A3240', 1), C(QCOLOR[d.quality]), 2.5, 10);
+  const box = gpanel(parent, x, y, size, size, CA(QCOLOR[d.quality], 0.55), undefined, 0, 10);
   label(box, 0, 0, KIND_ICON[d.kind], { size: Math.round(size * 0.46) });
-  label(box, -size / 2 + 8, -size / 2 + 18, `T${d.tier}`, { size: 15, color: QCOLOR[d.quality], bold: true, align: 'left', w: 52, h: 24 });
+  label(box, -size / 2 + 8, -size / 2 + 18, `T${d.tier}`, { size: 15, color: '#FFF3D6', bold: true, align: 'left', w: 52, h: 24 });
 }
 
 /** 属性区块（基础属性/附加属性，参考线稿装备详情弹窗）；返回内容底部 y（局部坐标） */
@@ -179,7 +182,7 @@ function drawEquipAttrs(parent: Node, topY: number, width: number, inst: EquipIn
 /** 装备详情小面板（对比弹窗两侧 / 装备槽详情弹窗共用）：蓝头（图标+当前角标+名称/品质/阶Lv 垂直居中）+ 属性区，335×480 */
 function equipDetailPanel(parent: Node, x: number, y: number, inst: EquipInst, isCur: boolean): Node {
   const d = EQUIPS[inst.defId];
-  const p = gpanel(parent, x, y, 335, 480, CA('#14181E', 0.94), C(QCOLOR[d.quality]), 2, 12);
+  const p = gpanel(parent, x, y, 335, 480, CA('#14181E', 0.94), undefined, 0, 12);   // 品质由图标座色板与品质文字表达（用户确认去品质描边）
   gpanel(p, 0, 168, 335, 130, CA('#20466E', 0.95), undefined, 0, 10);
   equipIcon(p, -120, 168, 76, inst);
   if (isCur) {
@@ -264,11 +267,11 @@ function drawBagCell(ctx: PageCtx, grid: Node, cell: { uid: string; n: number },
   const q = isMat ? 0 : d?.quality ?? 0;
   const name = isMat ? MATS[cell.uid].name : d?.name ?? '???';
   const kind = isMat ? null : d?.kind ?? null;
-  const g = gpanel(grid, x, y, 120, 120, CA('#14181E', 0.9), C(QCOLOR[q]), 2.5, 12);
+  const g = gpanel(grid, x, y, 120, 120, CA(QCOLOR[q], 0.55), undefined, 0, 12);   // 整格=品质色底板（用户确认）
   label(g, 0, -12, kind ? KIND_ICON[kind] : '🧱', { size: 44 });
   label(g, 0, 36, name, { size: 16, color: '#E8E0C8', w: 112, h: 24, shrink: true });
   if (isMat) label(g, 42, -46, `×${cell.n}`, { size: 18, color: '#FFE08A', bold: true, align: 'right', w: 70, h: 24 });
-  else label(g, -42, -46, `Lv.${inst?.lv ?? 1}`, { size: 16, color: QCOLOR[q], align: 'left', w: 70, h: 24 });
+  else label(g, -42, -46, `Lv.${inst?.lv ?? 1}`, { size: 16, color: '#FFF3D6', align: 'left', w: 70, h: 24 });
 
   g.on(Node.EventType.TOUCH_END, (e: unknown) => {
     const ev = e as { propagationStopped?: () => void };
