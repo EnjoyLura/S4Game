@@ -338,19 +338,19 @@ export class Panels {
     py = Math.max(-LO.half + hh / 2 + 8, Math.min(LO.half - hh / 2 - 8, py));
 
     const statsPanel = gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), undefined, 0, 14);
-    label(this.modalRoot, px, py + hh / 2 - 56, '— 伤害统计 —', { size: 22, color: '#FFE08A' });
-    // 行几何按线稿③（美术白框内收 12）：头像70×70(左缘+32) / 名称自117左对齐 / 百分比右缘-27 / 占比条117..342
+    label(this.modalRoot, px, py + hh / 2 - 40, '— 伤害统计 —', { size: 22, color: '#FFE08A', w: w, h: 30 });   // 全宽盒居中 + 上内边距 40（用户调整）
+    // 行几何：头像/百分比左右内边距相等（16）：头像圆心 = 左缘+51，百分比盒右缘 = 右缘-16
     rows.slice(0, 4).forEach((r, i) => {
       const cyAv = py + hh / 2 - 109 - i * 100;
       const cyTx = py + hh / 2 - 101 - i * 100;
-      const cxAv = px - w / 2 + 67;
+      const cxAv = px - w / 2 + 51;
       gcircle(this.modalRoot, cxAv, cyAv, 35, CA('#2A3240', 1));
       const avLbl = label(this.modalRoot, cxAv, cyAv, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
       if (r.id === 'archer' || r.id === 'sniper')
         artSprite(this.modalRoot, cxAv, cyAv, 58, 58, 'ui_avatar_' + r.id, { sliced: false, hideOnLoad: [avLbl] });
       label(this.modalRoot, px - w / 2 + 192, cyTx, r.name,
         { size: 18, color: '#FFFFFF', align: 'left', w: 150, h: 40, shrink: true });
-      label(this.modalRoot, px - w / 2 + 307, cyTx, (r.pct * 100).toFixed(2) + '%',
+      label(this.modalRoot, px + w / 2 - 66, cyTx, (r.pct * 100).toFixed(2) + '%',
         { size: 18, color: PAL.orange, align: 'right', w: 100, h: 40, shrink: true });
       const barX = px - w / 2 + 229.5, barY = py + hh / 2 - 130 - i * 100;
       const bar = gbar(this.modalRoot, barX, barY, 225, 16, PAL.orange);
@@ -457,17 +457,17 @@ export class Panels {
     py = Math.max(-LO.half + hh / 2 + 8, Math.min(LO.half - hh / 2 - 8, py));
 
     const tipsPanel = gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), undefined, 0, 12);
-    const colW = w * 0.40;   // 美术白框较宽，内容内收
-    const pad = 30;
-    // 注意：label 节点锚点在盒子中心，左/右对齐文本需按"边缘±colW/2"定位
+    // 左右内边距 16（用户调整：原 30 过大）；左列固定 90 + 间距 12，剩余全给数值列（过长 shrink 而非压得过小）
+    const pad = 16, lblW = 90, gap = 12;
+    const valW = w - pad * 2 - lblW - gap;
     label(this.modalRoot, px - w / 2 + pad + (w - pad * 2) / 2, py + hh / 2 - 50, title,
       { size: 18, color: '#FFE08A', bold: true, align: 'left', w: w - pad * 2, h: 26, shrink: true });
     rows.forEach((r, i) => {
-      const ry = py + hh / 2 - 66 - i * 29;
-      label(this.modalRoot, px - w / 2 + pad + colW / 2, ry, r[0],
-        { size: 15, color: '#CFD6DD', align: 'left', w: colW, h: 24, shrink: true });
-      label(this.modalRoot, px + w / 2 - pad - colW / 2, ry, r[1],
-        { size: 15, color: '#FFFFFF', bold: true, align: 'right', w: colW, h: 24, shrink: true });
+      const ry = py + hh / 2 - 80 - i * 28;   // 首行下移避开标题（原 66 与标题重叠）
+      label(this.modalRoot, px - w / 2 + pad + lblW / 2, ry, r[0],
+        { size: 15, color: '#CFD6DD', align: 'left', w: lblW, h: 24, shrink: true });
+      label(this.modalRoot, px + w / 2 - pad - valW / 2, ry, r[1],
+        { size: 15, color: '#FFFFFF', bold: true, align: 'right', w: valW, h: 24, shrink: true });
     });
     label(this.modalRoot, px, py - hh / 2 + 40, '点击空白处关闭', { size: 12, color: '#888888' });
   }
