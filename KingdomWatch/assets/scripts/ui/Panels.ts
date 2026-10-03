@@ -386,7 +386,7 @@ export class Panels {
     const h = hero.stats;
     const isArcher = hero.id === 'archer';
     const iconY = WYB(126, 46);
-    let px: number, py: number, w = 300, hh = 300, title: string;
+    let px: number, py: number, w = 300, hh = 272, title: string;
     let rows: [string, string][];
     if (kind === 'atk') {
       title = isArcher ? '🏹 普攻 · 风刃射击' : '🎯 普攻 · 重弩狙击';
@@ -426,7 +426,7 @@ export class Panels {
       py = iconY + 23 + 16 + hh / 2;
     } else if (isArcher) {
       title = '✦ 大招 · 扇形箭雨';
-      w = 280; hh = 270;
+      w = 280; hh = 272;
       rows = [
         ['伤害', Math.round(h.atk * h.atkMul * 0.65) + ' × 每箭'],
         ['形态', '两排扇形 × 每排 8 箭'],
@@ -440,7 +440,7 @@ export class Panels {
       py = WYB(504 + ultIdx * 110, 90);
     } else {
       title = '✦ 大招 · 猎杀时刻';
-      w = 280; hh = 270;
+      w = 280; hh = 272;
       rows = [
         ['伤害', '×5.5 必定暴击'],
         ['形态', '0.5 秒锁定 → 贯穿弹'],
@@ -460,15 +460,15 @@ export class Panels {
     // 左右内边距 16（用户调整：原 30 过大）；左列固定 90 + 间距 12，剩余全给数值列（过长 shrink 而非压得过小）
     const pad = 16, lblW = 90, gap = 12;
     const valW = w - pad * 2 - lblW - gap;
-    label(this.modalRoot, px - w / 2 + pad + (w - pad * 2) / 2, py + hh / 2 - 50, title,
+    label(this.modalRoot, px - w / 2 + pad + (w - pad * 2) / 2, py + hh / 2 - 41, title,
       { size: 18, color: '#FFE08A', bold: true, align: 'left', w: w - pad * 2, h: 26, shrink: true });
     rows.forEach((r, i) => {
-      const ry = py + hh / 2 - 80 - i * 28;   // 首行下移避开标题（原 66 与标题重叠）
+      const ry = py + hh / 2 - 84 - i * 26;   // 首行与技能名拉开 18（用户调整：原太挤）；行距 26 收紧上下留白
       label(this.modalRoot, px - w / 2 + pad + lblW / 2, ry, r[0],
         { size: 15, color: '#CFD6DD', align: 'left', w: lblW, h: 24, shrink: true });
       label(this.modalRoot, px + w / 2 - pad - valW / 2, ry, r[1],
         { size: 15, color: '#FFFFFF', bold: true, align: 'right', w: valW, h: 24, shrink: true });
     });
-    label(this.modalRoot, px, py - hh / 2 + 40, '点击空白处关闭', { size: 12, color: '#888888' });
+    label(this.modalRoot, px, py - hh / 2 + 20, '点击空白处关闭', { size: 12, color: '#888888' });   // 贴底 20，与末行拉开 14（原 40 与属性行重叠）
   }
 }
