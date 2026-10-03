@@ -101,9 +101,11 @@ export class HUD {
     const pauseLbl = label(pauseBtn, 0, 0, '⏸', { size: 26, color: '#FFFFFF', bold: true });
     artSprite(pauseBtn, 0, 0, 60, 60, 'ui_icon_pause', { sliced: false, hideOnLoad: [pauseLbl] });
     pauseBtn.on(Node.EventType.TOUCH_END, () => this.dir.togglePause());
-    // 关卡计时（线稿①：暂停键右侧 00:36）
-    this.timeTxt = label(top, WX(110, 140), WY(114, 40), '00:00', { size: 20, color: '#FFFFFF', align: 'left', w: 140, h: 40 });
-    label(top, 0, WY(110, 50), this.dir.levelDef.id + ' ' + this.dir.levelDef.name, { size: 22, color: '#FFFFFF', bold: true, w: 400, h: 50 });
+    // 计时/关名：半透小板（与暂停钮/波次签同款，用户调整）
+    gpanel(top, WX(106, 110), WY(112, 44), 110, 44, CA('#000000', 0.32), undefined, 0, 22);
+    this.timeTxt = label(top, WX(106, 110), WY(112, 44), '00:00', { size: 20, color: '#FFFFFF', align: 'center', w: 110, h: 44 });
+    gpanel(top, WX(230, 290), WY(111, 48), 290, 48, CA('#000000', 0.32), undefined, 0, 24);
+    label(top, WX(230, 290), WY(111, 48), this.dir.levelDef.id + ' ' + this.dir.levelDef.name, { size: 22, color: '#FFFFFF', bold: true, w: 290, h: 48, shrink: true });
     gpanel(top, WX(560, 150), WY(105, 60), 150, 60, CA('#000000', 0.32), undefined, 0, 30);
     this.waveTxt = label(top, WX(560, 150), WY(105, 60), '波次 0/10', { size: 20, color: '#FFFFFF', bold: true });
 
