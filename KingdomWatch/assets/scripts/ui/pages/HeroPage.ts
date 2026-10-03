@@ -104,14 +104,10 @@ export function buildHeroes(ctx: PageCtx): void {
       const availBottom = 2 * LO.half - 174;   // 预留底部导航(148)+边距
       const rows = Math.max(2, Math.min(5, Math.floor((availBottom - GRID_TOP + 12) / ROW_H)));
       const cap = rows * 5;
-      // 背包格区：无大背板（用户确认），格子直接浮于游戏背景上
+      // 背包格区：无大背板（用户确认），格子直接浮于游戏背景上；无物品不补空槽（用户确认，参考图末行止于实有物品）
       cells.slice(0, cap).forEach((cell, g) => {
         drawBagCell(ctx, grid, cell, hid, () => render(), CX(22 + (g % 5) * 144, 120), WY(945 + Math.floor(g / 5) * 132, 120));
       });
-      for (let g = cells.length; g < cap; g++) {
-        const empty = gpanel(grid, CX(22 + (g % 5) * 144, 120), WY(945 + Math.floor(g / 5) * 132, 120), 120, 120, CA('#14181E', 0.6), '#FFFFFF22', 1.5, 12);
-        label(empty, 0, 0, '+', { size: 44, color: '#5F6873' });
-      }
     }
     renderBag();
   }

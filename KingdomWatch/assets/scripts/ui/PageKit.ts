@@ -81,18 +81,25 @@ export function artPanel(parent: Node, x: number, y: number, w: number, h: numbe
   return p;
 }
 
-/** 确认弹窗（价格/说明 + 确认/取消），onOk 返回错误消息则不关闭并 toast */
-export function confirmModal(ctx: PageCtx, title: string, lines: string[], okText: string, onOk: () => string | null): void {
-  const panel = modal(ctx, 560, 420, title);
-  lines.forEach((t, i) => label(panel, 0, 60 - i * 44, t, { size: 22, color: '#E8E0C8', w: 520, h: 40, shrink: true }));
-  btn(panel, 130, -130, 200, 76, okText, PAL.green, () => {
+/** 确认弹窗（价格/说明 + 确认/取消），onOk 返回错误消息则不关闭并 toast
+ *  用户确认：无边框（flat）；icon 非空时在弹窗上部居中显示商品图（emoji 兜底，落美术后同座替换） */
+export function confirmModal(ctx: PageCtx, title: string, lines: string[], okText: string, onOk: () => string | null, icon = ''): void {
+  const panel = modal(ctx, 560, icon ? 580 : 420, title, true);
+  if (icon) {
+    const seat = gpanel(panel, 0, 120, 150, 150, CA('#2A3240', 1), undefined, 0, 16);
+    label(seat, 0, 0, icon, { size: 76 });
+  }
+  const top = icon ? -20 : 60;
+  lines.forEach((t, i) => label(panel, 0, top - i * 44, t, { size: 22, color: '#E8E0C8', w: 520, h: 40, shrink: true }));
+  const by = icon ? -210 : -130;
+  btn(panel, 130, by, 200, 76, okText, PAL.green, () => {
     const err = onOk();
     if (err) { toast(err); return; }
     const dim = panel.parent;
     if (dim) dim.destroy();
     ctx.refresh();
-  }, 24);
-  btn(panel, -130, -130, 200, 76, '取 消', '#5A6472', () => { const d = panel.parent; if (d) d.destroy(); }, 24);
+  }, 24, true);
+  btn(panel, -130, by, 200, 76, '取 消', '#5A6472', () => { const d = panel.parent; if (d) d.destroy(); }, 24, true);
 }
 
 /** 内容顶基坐标：统一用 WY() 直读线稿设计值（线稿数字即含刘海偏移的绝对 y）；CX 为横向便捷别名 */

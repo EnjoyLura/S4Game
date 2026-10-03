@@ -58,8 +58,8 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
   const unlocked = lvReached(g.unlock);
   const owned = g.give.kind === 'hero' && g.give.id ? !!sv.heroes[g.give.id]?.owned : false;
   const q = g.give.kind === 'equip' ? EQUIPS[g.give.id]?.quality ?? 0 : 1;
-  const card = gpanel(parent, cx, cy, 330, 300, CA('#14181E', 0.92), unlocked ? C(QCOLOR[q]) : C('#3A4250'), 2, 14);
-  artSprite(card, 0, 0, 330, 300, 'ui_panel_dark_white', { belowIdx: 0 });
+  /* 用户确认：商品卡无边框（无描边、无带框面板美术），品质色只保留在图标座上 */
+  const card = gpanel(parent, cx, cy, 330, 300, CA('#14181E', 0.92), undefined, 0, 14);
 
   const seat = gpanel(card, 0, 60, 130, 130, CA('#2A3240', 1), unlocked ? C(QCOLOR[q]) : C('#5A6472'), 2.5, 14);
   label(seat, 0, 0, KIND_ICON[g.tab] || '🎁', { size: 56 });
@@ -73,9 +73,9 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
 
   const cur = g.currency === 'gold' ? '🪙' : '💎';
   if (!unlocked) {
-    btn(card, 0, -100, 240, 54, `🔒 通关 ${g.unlock} 解锁`, '#5A6472', () => toast(`通关 ${g.unlock} 后解锁`), 19);
+    btn(card, 0, -100, 240, 54, `🔒 通关 ${g.unlock} 解锁`, '#5A6472', () => toast(`通关 ${g.unlock} 后解锁`), 19, true);
   } else if (owned || !g.price) {
-    btn(card, 0, -100, 240, 54, owned ? '已拥有' : '敬请期待', '#5A6472', () => {}, 22);
+    btn(card, 0, -100, 240, 54, owned ? '已拥有' : '敬请期待', '#5A6472', () => {}, 22, true);
   } else {
     btn(card, 0, -100, 240, 54, `${cur} ${fmt(g.price)} 购买`, PAL.green, () => {
       confirmModal(ctx, g.name, [
@@ -85,7 +85,7 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
       ], '购 买', () => {
         const r = shopBuy(g);
         return r.ok ? null : r.msg;
-      });
-    }, 22);
+      }, KIND_ICON[g.tab] || '🎁');
+    }, 22, true);
   }
 }
