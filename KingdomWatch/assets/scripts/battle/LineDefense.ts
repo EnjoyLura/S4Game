@@ -5,6 +5,7 @@
 import { Color, Graphics, Node, Vec3 } from 'cc';
 import { LINE_Y, LO, PAL } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
+import { artSprite } from '../ui/Ux';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
@@ -28,7 +29,9 @@ export class LineDefense {
   }
 
   private buildVisual(parent: Node): void {
-    const g = this.node.addComponent(Graphics);
+    // 程序画稿垫底（木栅+沙包，失败兜底）；defense_wall 美术加载成功后整替（用户城墙图已抠空天空）
+    const prog = new Node('prog');
+    const g = prog.addComponent(Graphics);
     // 防线工事：木栅 + 沙包（王国保卫战取向）；贴屏幕底部（initLayout 重算 LO）
     const top = LINE_Y;
     const bot = -(LO.half - LO.safeBottom);
@@ -45,6 +48,10 @@ export class LineDefense {
       g.stroke();
     }
     // 盾徽已去除（用户调整：防线中间黄点）
+    prog.setParent(this.node);
+    // 城墙美术：原图 2016×864 等比（750 宽 → 321 高），底边贴屏底，垛口升入战场区（渲染序 line < 怪 < 弹道，怪从墙前经过）
+    const h = 750 * 864 / 2016;
+    artSprite(this.node, 0, bot + h / 2, 750, h, 'defense_wall', { sliced: false, hideOnLoad: [prog] });
     this.node.setParent(parent);
   }
 
