@@ -238,7 +238,7 @@ export class ArcherHero extends HeroBase {
     return {
       x: base.x, y: base.y,
       dirX: base.dirX, dirY: base.dirY,
-      speed: base.small ? 360 : emp ? 780 : 480,
+      speed: base.small ? 720 : emp ? 1560 : 960,   // 普攻弹速 ×2（用户调整，含齐射/强化箭）
       dmg: atk, crit,
       color: emp ? PAL.gold : PAL.parch,   // 暴击不改箭色（用户反馈），只由伤害飘字体现
       heroId: this.id,
@@ -267,7 +267,7 @@ export class ArcherHero extends HeroBase {
     const emp = this.empowerLeft > 0;
     if (emp) this.empowerLeft--;
     this.lastEmp = emp;
-    const bs = emp ? 780 : 480;
+    const bs = emp ? 1560 : 960;   // 与 spec 弹速一致（×2）
     // 主弹：预判拦截点直线射出
     const lead = this.lead(target, bs);
     this.fireDir(projs, lead.dirX, lead.dirY, emp);
@@ -296,7 +296,7 @@ export class ArcherHero extends HeroBase {
       if (q.t <= 0) {
         this.serialQueue.splice(i, 1);
         if (q.target && !q.target.dead) {
-          const ld = this.lead(q.target, q.emp ? 780 : 480);
+          const ld = this.lead(q.target, q.emp ? 1560 : 960);
           this.fireDir(projs, ld.dirX, ld.dirY, q.emp === true);
         } else {
           this.fireDir(projs, q.dirX, q.dirY, q.emp === true);
@@ -444,7 +444,7 @@ export class SniperHero extends HeroBase {
   /** 普攻：慢速高伤重弩箭（拦截预判直线，不追踪） */
   protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
     void _mgr;
-    const lead = this.lead(target, 760);
+    const lead = this.lead(target, 1140);   // 普攻弹速 ×1.5（用户调整）
     projs.fire(this.boltSpec(lead.dirX, lead.dirY));
     Sfx.play('shoot');
   }
@@ -453,7 +453,7 @@ export class SniperHero extends HeroBase {
     const crit = Math.random() < this.stats.critRate;
     return {
       x: this.x, y: HERO_Y + 60,
-      dirX, dirY, speed: 760,
+      dirX, dirY, speed: 1140,   // 与 lead 预判一致（×1.5）
       dmg: this.effAtk * (crit ? this.stats.critMul : 1), crit,
       color: '#7FB3FF', heroId: this.id, size: 8,
       pierce: this.stats.pierce,

@@ -60,6 +60,11 @@ export const MOBS: Record<string, MobDef> = {
 export interface SpawnGroup { mob: string; count: number; interval: number; delay?: number; }
 export interface WaveDef { groups: SpawnGroup[]; surge?: boolean; }
 
+/** 全怪血量倍率（用户调整：基础血量 ×2） */
+export const MOB_HP_MUL = 2;
+/** 关卡内阶梯增长（用户调整：向僵尸开炮式持续刷怪）——第 n 波相对第 1 波的数量/血量/伤害增幅系数 = 1 + 率×(n-1) */
+export const WAVE_RAMP = { cnt: 0.12, hp: 0.15, dmg: 0.08 };
+
 /** 关卡 1-1 腐朽森林·前哨：10 波，第 4/8 波为狂潮（§3.3）；怪量 = 初版 ×3（用户调整，同步屏上限 80） */
 export interface LevelDef {
   id: string;

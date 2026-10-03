@@ -168,7 +168,7 @@ export class Panels {
   private statsRows(rows: DamageRow[], t0: number, step: number): void {
     rows.slice(0, 3).forEach((r, i) => {
       const t = t0 + i * step;
-      const av = gcircle(this.modalRoot, WX(40, 70), WY(t, 70), 35, CA('#2A3240', 1), '#FFFFFF55', 1.5);
+      const av = gcircle(this.modalRoot, WX(40, 70), WY(t, 70), 35, CA('#2A3240', 1));
       const avLbl = label(av, 0, 0, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
       if (r.id === 'archer' || r.id === 'sniper')   // 英雄头像盖字（加载失败保持首字兜底）
         artSprite(av, 0, 0, 58, 58, 'ui_avatar_' + r.id, { sliced: false, hideOnLoad: [avLbl] });
@@ -352,15 +352,14 @@ export class Panels {
     px = Math.max(-375 + w / 2 + 8, Math.min(375 - w / 2 - 8, px));
     py = Math.max(-LO.half + hh / 2 + 8, Math.min(LO.half - hh / 2 - 8, py));
 
-    const statsPanel = gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), CA('#FFFFFF', 0.3), 1.5, 14);
-    artSprite(statsPanel, 0, 0, w, hh, 'ui_panel_dark_white', { belowIdx: 0 });
+    const statsPanel = gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), undefined, 0, 14);
     label(this.modalRoot, px, py + hh / 2 - 56, '— 伤害统计 —', { size: 22, color: '#FFE08A' });
     // 行几何按线稿③（美术白框内收 12）：头像70×70(左缘+32) / 名称自117左对齐 / 百分比右缘-27 / 占比条117..342
     rows.slice(0, 4).forEach((r, i) => {
       const cyAv = py + hh / 2 - 109 - i * 100;
       const cyTx = py + hh / 2 - 101 - i * 100;
       const cxAv = px - w / 2 + 67;
-      gcircle(this.modalRoot, cxAv, cyAv, 35, CA('#2A3240', 1), '#FFFFFF55', 1.5);
+      gcircle(this.modalRoot, cxAv, cyAv, 35, CA('#2A3240', 1));
       const avLbl = label(this.modalRoot, cxAv, cyAv, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
       if (r.id === 'archer' || r.id === 'sniper')
         artSprite(this.modalRoot, cxAv, cyAv, 58, 58, 'ui_avatar_' + r.id, { sliced: false, hideOnLoad: [avLbl] });
@@ -472,8 +471,7 @@ export class Panels {
     px = Math.max(-375 + w / 2 + 8, Math.min(375 - w / 2 - 8, px));
     py = Math.max(-LO.half + hh / 2 + 8, Math.min(LO.half - hh / 2 - 8, py));
 
-    const tipsPanel = gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), CA('#FFFFFF', 0.3), 1.5, 12);
-    artSprite(tipsPanel, 0, 0, w, hh, 'ui_panel_dark_white', { belowIdx: 0 });
+    const tipsPanel = gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), undefined, 0, 12);
     const colW = w * 0.40;   // 美术白框较宽，内容内收
     const pad = 30;
     // 注意：label 节点锚点在盒子中心，左/右对齐文本需按"边缘±colW/2"定位

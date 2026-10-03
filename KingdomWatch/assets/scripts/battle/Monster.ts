@@ -3,7 +3,7 @@
  * 受击只闪红不掉速（用户确认：控制效果只属于特定 buff）；仅 BOSS 显示血条（M0 1-1 无 BOSS，钩子保留）
  */
 import { Color, Graphics, Label, Layers, Node, Tween, UIOpacity, tween } from 'cc';
-import { MobDef } from '../config/Mobs';
+import { MOB_HP_MUL, MobDef } from '../config/Mobs';
 import { LINE_Y, PAL, SPAWN_Y } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 
@@ -251,13 +251,20 @@ export class MonsterManager {
 
   /** 难度倍率（普通 1 / 精英 1.6 / 地狱 2.4）：出怪时缩放 hp/dmg（BattleDirector 按 flow.diff 注入） */
   statMul = 1;
+  /** 关卡内阶梯增长（WaveManager 逐波注入）：血量/伤害相对第 1 波的倍率 */
+  rampHp = 1;
+  rampDmg = 1;
   /** 首次遭遇回调（图鉴解锁）：同波次新怪种只报一次（BattleDirector 注入后解锁图鉴+横幅） */
   onFirstEncounter: ((def: MobDef) => void) | null = null;
   private seen = new Set<string>();
 
   spawn(def: MobDef): boolean {
     if (this.list.length >= 60) return false; // §12.4 同屏上限
-    if (this.statMul !== 1) def = { ...def, hp: Math.round(def.hp * this.statMul), dmg: Math.round(def.dmg * this.statMul) };
+    def = {
+      ...def,
+      hp: Math.round(def.hp * MOB_HP_MUL * this.statMul * this.rampHp),
+      dmg: Math.round(def.dmg * this.statMul * this.rampDmg),
+    };
     const m = this.pool.pop() || new Monster();
     m.init(def, this.field, Math.random() * 660 - 330, this.ctx, this);
     this.list.push(m);

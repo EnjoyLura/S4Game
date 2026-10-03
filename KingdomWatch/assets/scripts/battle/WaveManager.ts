@@ -1,7 +1,8 @@
 /**
- * 波次管理（§3.3 清场驱动：当前波全部生成且全部消灭 → 立即下一波，无间歇）
+ * 波次管理（用户调整·向僵尸开炮式持续刷怪）：本波出怪队列放完即开下一波（不等击杀）；
+ * 末波出怪完毕且全场清空才算通关。数量/血量/伤害逐波阶梯增长（WAVE_RAMP）。
  */
-import { LevelDef, MOBS, MobDef } from '../config/Mobs';
+import { LevelDef, MOBS, MobDef, WAVE_RAMP } from '../config/Mobs';
 import { MonsterManager } from './Monster';
 import { bus, EVT } from '../core/EventBus';
 
@@ -11,7 +12,7 @@ export class WaveManager {
   private idx = 0;
   private queue: DueSpawn[] = [];
   private elapsed = 0;
-  /** 全部波清完 */
+  /** 全部波出完且全场清空 */
   finished = false;
 
   constructor(private level: LevelDef, private mgr: MonsterManager) {}
@@ -28,9 +29,14 @@ export class WaveManager {
   private buildQueue(): void {
     this.queue = [];
     this.elapsed = 0;
+    // 阶梯增长：第 idx 波（0 起）数量/血量/伤害放大（血量另乘全怪基础倍率 MOB_HP_MUL，在 MonsterManager.spawn 生效）
     const wave = this.level.waves[Math.min(this.idx, this.total - 1)];
+    this.mgr.rampHp = 1 + WAVE_RAMP.hp * this.idx;
+    this.mgr.rampDmg = 1 + WAVE_RAMP.dmg * this.idx;
+    const cntMul = 1 + WAVE_RAMP.cnt * this.idx;
     for (const g of wave.groups) {
-      for (let i = 0; i < g.count; i++) {
+      const n = Math.max(1, Math.round(g.count * cntMul));
+      for (let i = 0; i < n; i++) {
         this.queue.push({ mob: g.mob, t: (g.delay || 0) + i * g.interval });
       }
     }
@@ -45,20 +51,19 @@ export class WaveManager {
       const def = MOBS[s.mob];
       if (def) this.mgr.spawn(def as MobDef);
     }
-    if (this.queue.length === 0 && this.mgr.aliveCount === 0) {
-      // 清场驱动：本波全部生成且全部消灭 → 立即下一波
+    if (this.queue.length > 0) return;
+    // 出怪队列已空：非末波立即开下一波（不等击杀）；末波等全场清空再结算
+    if (this.idx < this.total - 1) {
       this.idx++;
-      if (this.idx >= this.total) {
-        this.finished = true;
-        bus.emit(EVT.ALL_WAVES_CLEARED);
-      } else {
-        this.buildQueue();
-        bus.emit(EVT.WAVE_CHANGED, this.waveNum, this.total, this.currentSurge);
-      }
+      this.buildQueue();
+      bus.emit(EVT.WAVE_CHANGED, this.waveNum, this.total, this.currentSurge);
+    } else if (this.mgr.aliveCount === 0) {
+      this.finished = true;
+      bus.emit(EVT.ALL_WAVES_CLEARED);
     }
   }
 
-  /** GM：跳过本波（清空生成队列并全杀场上怪，恢复模拟后由清场驱动进下一波） */
+  /** GM：跳过本波（清空生成队列并全杀场上怪；非末波下帧进下一波，末波直接结算） */
   gmSkip(): void {
     this.queue.length = 0;
     for (const m of this.mgr.list) if (!m.dead) m.takeDamage(1e12, false, 'gm');
