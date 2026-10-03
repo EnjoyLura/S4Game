@@ -312,9 +312,17 @@ export function attrsModal(ctx: PageCtx, hid: string): void {
   });
 }
 
-/** 背景故事弹窗（故事从属性总览拆出，故事钮专用） */
+/** 背景故事弹窗（参考图布局：左列英雄大图+名字叠图底+解锁条件药丸，右列故事描述；不展示数值——用户确认） */
 export function storyModal(ctx: PageCtx, hid: string): void {
   const def = HERO_DEFS[hid];
-  const panel = modal(ctx, 620, 420, `故事 · ${def.name}`);
-  label(panel, 0, -30, def.story, { size: 21, color: '#CDC2A2', w: 540, h: 180, shrink: true });
+  const owned = !!loadSave().heroes[hid]?.owned;
+  const panel = modal(ctx, 620, 560, `故事 · ${def.name}`);
+  // 左列：立绘卡（名字叠图底）+ 解锁条件药丸 —— 立绘大图资源尚未落盘，用页面同款方形头像铺卡
+  const card = gpanel(panel, -155, 60, 200, 330, CA('#20262F', 1), '#FFFFFF33', 1.5, 14);
+  artSprite(card, 0, 48, 190, 190, def.avatar, { sliced: false });
+  label(card, 0, -122, def.name, { size: 23, color: '#FFF3D6', bold: true, w: 190, h: 34, outline: '#1A2230', outlineW: 3 });
+  const pill = gpanel(panel, -155, -160, 208, 52, CA('#B85C24', 0.95), undefined, 0, 26);
+  label(pill, 0, 0, owned ? '✓ 已解锁' : `🔒 ${def.shopPrice} 金币解锁`, { size: 21, color: '#FFF3D6', bold: true, w: 200, h: 34 });
+  // 右列：故事描述（多行左对齐）
+  label(panel, 125, 60, def.story, { size: 22, color: '#E8DFC8', w: 290, h: 240, shrink: true, align: 'left' });
 }
