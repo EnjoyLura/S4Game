@@ -13,8 +13,6 @@ import { loadSave } from '../core/SaveData';
 import { btn, CA, dimLayer, gbar, gcircle, gpanel, gswitch, label, N, setText, WY, WYB, WX } from './UIKit';
 import { artIcon, artSprite } from './Ux';
 
-/** 稀有度 → 美术资源后缀 */
-const RARITY_SUFFIX: Record<string, string> = { white: 'white', blue: 'blue', purple: 'purple' };
 /** 奖励行文字兜底 → A2 图标（有美术时整座替换，失败保持 emoji） */
 const REWARD_ICON: Record<string, string> = {
   '🪙': 'ui_icon_coin', 'EXP': 'ui_icon_exp', '💎': 'ui_icon_diamond',
@@ -62,13 +60,11 @@ export class Panels {
     titleOp.opacity = 0;
     tween(titleOp).to(0.25, { opacity: 255 }).start();
 
-    const xs = [32, 275, 518];
+    const xs = [22, 264, 506];
     const frames: Node[] = [];
     cards.forEach((card, i) => {
-      const x = WX(xs[i], 200), y = WY(428, 360);
-      const rarity = RARITY_COLOR[card.rarity];
-      const frame = gpanel(this.modalRoot, x, y, 200, 360, CA('#14181E', 0.94), rarity, 2.5, 12);
-      artSprite(frame, 0, 0, 200, 360, 'ui_card_frame_' + (RARITY_SUFFIX[card.rarity] || 'white'), { belowIdx: 0 });
+      const x = WX(xs[i], 222), y = WY(428, 360);
+      const frame = gpanel(this.modalRoot, x, y, 222, 360, CA('#E9DFC2', 0.96), undefined, 0, 12);
       frames.push(frame);
       this.buildCard(frame, card, stacks);
       frame.on(Node.EventType.TOUCH_END, e => {
@@ -120,44 +116,38 @@ export class Panels {
     }
   }
 
-  /** 卡面布局严格对齐线稿②：顶部稀有度通栏色带 → 120齿轮环内96图标 → 右上56英雄角标 →
-   *  左上56『新』绿角标(骑角突出卡外) → 底部描述两行 + 稀有度·定位小字（层数并入该行） */
+  /** 卡面布局（全扁平无美术——用户要求）：顶部稀有度通栏色带 → 圆形图标座 → 右上归属角标 →
+   *  左上『新』角标 → 底部描述两行 + 稀有度·定位小字（层数并入该行） */
   private buildCard(frame: Node, card: CardDef, stacks: CardStacks): void {
     const rarity = RARITY_COLOR[card.rarity];
     const rName = card.rarity === 'white' ? '白' : card.rarity === 'blue' ? '蓝' : '紫';
     const used = stacks[card.id] || 0;
 
-    // ① 卡头稀有度色带（200×52 通栏；美术缎带，白/银底配深墨字）
-    const suffix = RARITY_SUFFIX[card.rarity] || 'white';
-    const header = gpanel(frame, 0, 154, 200, 52, CA(rarity, 0.2), rarity, 2, 0);
-    artSprite(header, 0, 0, 200, 52, 'ui_card_header_' + suffix, { belowIdx: 0 });
-    label(header, 0, 0, card.name, { size: 20, color: card.rarity === 'white' ? '#4A3214' : '#FFFFFF', bold: true, w: 186, h: 40, shrink: true });
+    // ① 卡头稀有度色带（222×52 通栏扁平色板，白/银底配深墨字）
+    const header = gpanel(frame, 0, 154, 222, 52, CA(rarity, 0.85), undefined, 0, 12);
+    label(header, 0, 0, card.name, { size: 20, color: card.rarity === 'white' ? '#4A3214' : '#FFFFFF', bold: true, w: 208, h: 40, shrink: true });
 
-    // ② 齿轮环 120×120（美术）+ 内嵌图标 96×96（环中心卡内 y130）
-    const gear = gcircle(frame, 0, 50, 60, CA('#2A3240', 1), rarity, 2);
-    artSprite(gear, 0, 0, 120, 120, 'ui_gear_ring', { sliced: false, belowIdx: 0 });
-    const icon = gcircle(frame, 0, 50, 48, CA(rarity, 0.14), rarity, 1.5);
-    label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 24, color: card.rarity === 'white' ? '#4A3214' : rarity, bold: true });
+    // ② 图标座 120 圆（无描边无齿轮美术）+ 内嵌图标 96 圆
+    const gear = gcircle(frame, 0, 50, 60, CA('#2A3240', 1));
+    const icon = gcircle(frame, 0, 50, 48, CA(rarity, 0.16));
+    label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 24, color: card.rarity === 'white' ? '#E8E0C8' : rarity, bold: true });
 
-    // ③ 右上英雄归属角标 56×56 金圈（全局卡绿色；弓/狙金圈+头像）
+    // ③ 右上归属角标 56×56 扁平圆（全局卡绿字；弓/狙金字）
     const ownHero = card.owner === 'archer' ? '弓' : card.owner === 'sniper' ? '狙' : '';
-    const ava = gcircle(frame, 68, 144, 28, CA('#2A3240', 1), card.owner === 'global' ? PAL.green : PAL.gold, 2.5);
-    const avaLbl = label(ava, 0, 0, card.owner === 'global' ? '全' : ownHero,
+    const ava = gcircle(frame, 76, 144, 28, CA('#2A3240', 1));
+    label(ava, 0, 0, card.owner === 'global' ? '全' : ownHero,
       { size: 20, color: card.owner === 'global' ? PAL.green : PAL.gold, bold: true });
-    if (card.owner === 'archer' || card.owner === 'sniper')
-      artSprite(ava, 0, 0, 46, 46, 'ui_avatar_' + card.owner, { sliced: false, hideOnLoad: [avaLbl] });
 
-    // ④ 左上『新』角标 56×56（美术爆炸角标自带"新"字；失败回退绿圆+字）
+    // ④ 左上『新』角标 56×56 扁平绿圆
     if (used === 0) {
-      const badge = gcircle(frame, -88, 168, 28, PAL.green, PAL.ink, 2);
-      const bLbl = label(badge, 0, 0, '新', { size: 20, color: PAL.ink, bold: true });
-      artSprite(badge, 0, 0, 56, 56, 'ui_badge_new', { sliced: false, hideOnLoad: [bLbl] });
+      const badge = gcircle(frame, -80, 168, 28, PAL.green);
+      label(badge, 0, 0, '新', { size: 20, color: PAL.ink, bold: true });
     }
 
     // ⑤ 描述两行 + ⑥ 底部"稀有度·定位"小字（卡面为羊皮纸浅底 → 深墨字）
-    label(frame, 0, -105, card.desc, { size: 15, color: '#4A3214', w: 184, h: 56, shrink: true, lineHeight: 20 });
+    label(frame, 0, -105, card.desc, { size: 15, color: '#4A3214', w: 206, h: 56, shrink: true, lineHeight: 20 });
     const tag = rName + ' · ' + (card.owner === 'global' ? '全局' : card.owner === 'sniper' ? '狙击' : '弓手') + (used > 0 ? ' · 已学 ' + used + ' 层' : '');
-    label(frame, 0, -140, tag, { size: 13, color: '#6B5A3A', w: 190, h: 24, shrink: true });
+    label(frame, 0, -140, tag, { size: 13, color: '#6B5A3A', w: 212, h: 24, shrink: true });
   }
 
   /* ---------- 页签条（线稿④-1/④-2/⑤-1/⑥-1）：点页签本地重渲染当前面板（无边框规范：纯色板） ---------- */
