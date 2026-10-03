@@ -274,29 +274,29 @@ function save(hid: string, r: { ok: boolean; msg: string }, ctx: PageCtx): void 
   if (r.ok) ctx.refresh();
 }
 
-/** 等级效果步骤条（等级/武器页签共用）：奶白板拉通到行动条、不留底部空档（用户确认）；
- * topY = 上方面板底缘，与其拉开 44 留出标题空间（标题完全出板）；botY = 行动条上缘 + 间距。
+/** 等级效果步骤条（等级/武器页签与技能升级弹窗共用）：奶白板拉通到行动条、不留底部空档（用户确认）；
+ * topY = 上方面板底缘，与其拉开 44 留出标题空间（标题完全出板）；botY = 行动条上缘 + 间距；w = 板宽（页签 700 / 弹窗 560）。
  * 卡片固定节奏（高 64 / 间距 18，各页签一致——用户确认）整组垂直居中；放不下时顶对齐、可滑动。
- * 竖线节点与属性文字左缘同列（-320），达成档位亮卡、未达成置灰 */
-function fxStepper(parent: Node, topY: number, botY: number, title: string, ms: { lv: number; txt: string }[], lv: number): void {
+ * 竖线节点与文字左缘同列（左内距 30），达成档位亮卡、未达成置灰 */
+function fxStepper(parent: Node, topY: number, botY: number, title: string, ms: { lv: number; txt: string }[], lv: number, w = 700): void {
   const CARD_H = 64, GAP = 18, PAD = 16;
   const fxTop = topY - 44;
   const fxH = Math.max(150, fxTop - botY);
-  const fx = gpanel(parent, 0, botY + fxH / 2, 700, fxH, CA('#E9DFC2', 0.94), undefined, 0, 12);
-  zoneTab(parent, -280, fxTop + 17, title);
+  const fx = gpanel(parent, 0, botY + fxH / 2, w, fxH, CA('#E9DFC2', 0.94), undefined, 0, 12);
+  zoneTab(parent, -w / 2 + 70, fxTop + 17, title);
   const viewH = fxH - 8;
   const stackH = ms.length * CARD_H + (ms.length - 1) * GAP;
   const contentH = Math.max(stackH + PAD * 2, viewH);
   const off = contentH > viewH ? PAD : (viewH - stackH) / 2;
-  const view = N('fxView', fx, 0, 0, 660, viewH);
+  const view = N('fxView', fx, 0, 0, w - 40, viewH);
   view.addComponent(Mask);
   const scroll = view.addComponent(ScrollView);
-  const ct = N('fxContent', view, 0, viewH / 2, 660, contentH);
+  const ct = N('fxContent', view, 0, viewH / 2, w - 40, contentH);
   ct.getComponent(UITransform)!.setAnchorPoint(0.5, 1);
   scroll.content = ct;
   scroll.horizontal = false;
   scroll.vertical = true;
-  const LINE_X = -320;
+  const LINE_X = -w / 2 + 30;
   const yAt = (i: number): number => -(off + i * (CARD_H + GAP) + CARD_H / 2);
   const lineG = N('fxLine', ct, 0, 0, 8, contentH).addComponent(Graphics);
   lineG.fillColor = C('#B8A87F');
@@ -312,9 +312,9 @@ function fxStepper(parent: Node, topY: number, botY: number, title: string, ms: 
     const yC = yAt(i);
     const reached = lv >= m.lv;
     gcircle(ct, LINE_X, yC, 10, reached ? C(PAL.gold) : C('#A5987B'));
-    const c = gpanel(ct, 10, yC, 620, CARD_H, reached ? CA('#E8C878', 0.95) : CA('#D8CBA8', 0.5), undefined, 0, 10);
-    label(c, -236, 0, `${m.lv}级`, { size: 20, color: reached ? INK : '#8A7A5C', bold: true, align: 'left', w: 80, h: 30 });
-    label(c, 70, 0, (reached ? '✓ ' : '') + m.txt, { size: 20, color: reached ? INK : '#8A7A5C', bold: reached, align: 'left', w: 440, h: 30, shrink: true });
+    const c = gpanel(ct, 10, yC, w - 80, CARD_H, reached ? CA('#E8C878', 0.95) : CA('#D8CBA8', 0.5), undefined, 0, 10);
+    label(c, -w / 2 + 114, 0, `${m.lv}级`, { size: 20, color: reached ? INK : '#8A7A5C', bold: true, align: 'left', w: 80, h: 30 });
+    label(c, 70, 0, (reached ? '✓ ' : '') + m.txt, { size: 20, color: reached ? INK : '#8A7A5C', bold: reached, align: 'left', w: w - 260, h: 30, shrink: true });
   });
 }
 
@@ -410,7 +410,7 @@ function tabSkills(parent: Node, ctx: PageCtx, hid: string, topY: number): void 
   });
 }
 
-/** 技能升级弹窗（分区结构：头部 → 属性提升 → 每级提升 → 消耗/持有 + 升级按钮） */
+/** 技能升级弹窗（与等级/武器页签同版式，用户确认：平弹窗无框美术、无框圆图标、奶白属性板标题出板 + 等级效果步骤条 + 深色行动条） */
 function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', rebuild: () => void): void {
   const sv = loadSave();
   const h = sv.heroes[hid];
@@ -418,44 +418,50 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
   const lv = h[info.key];
   const maxed = lv >= MAX.skill;
   const cost = skillUpCost(lv);
-  const panel = modal(ctx, 590, 570, '技能升级');
-  /* 头部：图标左，名称/等级右（align 需 shrink，盒 = x±w/2 → x = 左缘 + w/2） */
-  goldIconPlate(panel, -190, 170, 96, undefined, info.icon, 26);
-  label(panel, 56, 194, info.name, { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 320, h: 32, shrink: true });
-  label(panel, 56, 156, maxed ? `Lv.${lv}（MAX）` : `Lv.${lv} → Lv.${lv + 1}`, { size: 19, color: '#FFE08A', bold: true, align: 'left', w: 320, h: 30, shrink: true });
-  /* 分区一：属性提升（顶缘固定 112） */
-  const hA = 90;
-  const zA = modalZone(panel, 112 - hA / 2, hA, '属性提升');
+  const W = 620, H = 780, PW = 560;   // PW：弹窗内奶白板/行动条宽
+  const panel = modal(ctx, W, H, '技能升级', true);
+  /* 头部：无框圆图标 + 名称 + 等级变化 */
+  const circ = gcircle(panel, -W / 2 + 66, H / 2 - 90, 44, CA('#2A3240', 1));
+  label(circ, 0, 0, info.icon, { size: 20, color: '#FFE08A', bold: true });
+  label(panel, -W / 2 + 272, H / 2 - 76, info.name, { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 300, h: 32, shrink: true });
+  label(panel, -W / 2 + 272, H / 2 - 112, maxed ? `Lv.${lv}（MAX）` : `Lv.${lv} → Lv.${lv + 1}`, { size: 19, color: '#FFE08A', bold: true, align: 'left', w: 300, h: 30, shrink: true });
+  /* 属性提升（奶白板 + 标题出板；行结构与页签一致） */
+  const p1Top = H / 2 - 180;
+  const p1H = 88;
+  const p1 = gpanel(panel, 0, p1Top - p1H / 2, PW, p1H, CA('#E9DFC2', 0.94), undefined, 0, 12);
+  zoneTab(panel, -PW / 2 + 70, p1Top + 17, '属性提升');
+  let nm: string, curS: string, delta: string | null = null;
   if (slot === 'skill') {
     const cur = statsAt(hid, h.lv, h.weaponLv, lv);
     const next = maxed ? cur : statsAt(hid, h.lv, h.weaponLv, lv + 1);
-    modalRow(zA, 0, '技能伤害', String(cur.skillDmg), maxed ? null : `+${next.skillDmg - cur.skillDmg}`);
+    nm = '技能伤害';
+    curS = String(cur.skillDmg);
+    if (!maxed) delta = `+${next.skillDmg - cur.skillDmg}`;
   } else {
-    const nm = slot === 'atk' ? '普攻伤害' : '大招伤害';
-    modalRow(zA, 0, nm, `+${(lv - 1) * 10}%`, maxed ? null : `→ +${lv * 10}%`);
+    nm = slot === 'atk' ? '普攻伤害' : '大招伤害';
+    curS = `+${(lv - 1) * 10}%`;
+    if (!maxed) delta = `→ +${lv * 10}%`;
   }
-  /* 分区二：等级效果（阶段性档位，已达成的打 ✓） */
-  const ms = SKILL_MILESTONES[slot];
-  const hB = 44 + ms.length * 28;
-  const zB = modalZone(panel, (112 - hA) - 16 - hB / 2, hB, '等级效果');
-  ms.forEach((m, i) => {
-    const reached = lv >= m.lv;
-    const cy = hB / 2 - 24 - 28 * i;
-    label(zB, -170, cy, `${m.lv}级`, { size: 19, color: reached ? INK : '#7A6A4C', bold: true, w: 70, h: 28 });
-    label(zB, 65, cy, (reached ? '✓ ' : '') + m.txt, { size: 19, color: reached ? INK : '#7A6A4C', bold: reached, align: 'left', w: 380, h: 28, shrink: true });
-  });
-  /* 行动条（深条 + 消耗 + 升级按钮） */
-  const act = gpanel(panel, 0, -196, 530, 64, CA('#0B0F16', 0.55), undefined, 0, 12);
+  label(p1, -PW / 2 + 90, 0, nm, { size: 22, color: INK, bold: true, align: 'left', w: 160, h: 30, shrink: true });
+  label(p1, PW / 2 - 310, 0, curS, { size: 24, color: INK, bold: true, align: 'right', w: 140, h: 30, shrink: true });
+  if (delta) label(p1, PW / 2 - 110, 0, delta, { size: 24, color: OK, bold: true, align: 'right', w: 160, h: 30, shrink: true });
+  /* 行动条（深色药丸 + 消耗 + 升级钮，与页签一致） */
+  const actH = 64;
+  const actCy = -H / 2 + 46;
+  const act = gpanel(panel, 0, actCy, PW, actH, CA('#14181E', 0.72), undefined, 0, 32);
   if (!maxed) {
-    costChipLight(act, -140, 0, '🪙', cost, sv.gold, 170);
-    btn(act, 170, 0, 170, 54, '升 级', PAL.gold, () => {
+    costChip(act, -175, 0, '🪙', cost, sv.gold, 130);
+    btn(act, 165, 0, 170, 54, '升 级', PAL.gold, () => {
       const r = upSkill(hid, slot);
       toast(r.msg);
       if (r.ok) { const d2 = panel.parent; if (d2) d2.destroy(); rebuild(); }
     }, 24, true);
+    gpanel(act, 238, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
   } else {
     label(act, 0, 0, '已达等级上限', { size: 22, color: '#AAB2BD' });
   }
+  /* 等级效果：竖线步骤条（与页签共用 fxStepper，弹窗内板宽 560） */
+  fxStepper(panel, p1Top - p1H, actCy + actH / 2 + 14, '等级效果', SKILL_MILESTONES[slot], lv, PW);
 }
 
 /* ---------- 装备页签：大背板（与等级/武器同卡）+ 装备槽×4 固定高顶对齐，点击弹强化弹窗 ---------- */
