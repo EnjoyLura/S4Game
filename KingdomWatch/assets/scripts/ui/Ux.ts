@@ -68,6 +68,7 @@ const SLICE9: Record<string, Slice9Def> = {
   ui_panel_tabs: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
   ui_panel_bag: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
   ui_panel_zone: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
+  ui_panel_hero: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },  // 英雄页上半区全宽大背板
 };
 
 /** 按实际文件尺寸换算并写入九宫格 insets（换分辨率文件自适应的关键）

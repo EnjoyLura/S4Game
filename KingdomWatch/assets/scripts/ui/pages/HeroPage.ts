@@ -1,7 +1,7 @@
 /**
- * ② 英雄（线稿 heroes）：大图环绕式 —— 单英雄大立绘（左右箭头叠图内）+ 战力徽章 + 属性/故事圆钮
+ * ② 英雄（线稿 heroes）：大图环绕式 —— 上半区全宽大背板罩住英雄大立绘（左右箭头叠图内）+ 装备槽 + 战力徽章；
  * 右列装备槽（武器横扁×1 + 2×2 防具）：点已穿槽=装备属性弹窗（锻造），空槽无反应；
- * 下方背包：点仓库装备=同槽已穿则双面板对比（分解/替换），未穿则单弹窗（穿戴/出售）。
+ * 下方背包（无背板直接透出背景，页签背板保留且三页签连体）：点仓库装备=同槽已穿则双面板对比（分解/替换），未穿则单弹窗（穿戴/出售）。
  */
 import { Node } from 'cc';
 import { PAL, LO } from '../../config/GameConfig';
@@ -39,6 +39,9 @@ export function buildHeroes(ctx: PageCtx): void {
     sv.curHero = hid;
     saveSave();
 
+    /* 上半区全宽大背板（L1，用户确认）：罩住英雄大图+装备栏一整块区域，名字行浮于其上 */
+    artPanel(content, 0, WY(260, 596), 750, 596, 'ui_panel_hero');
+
     /* 英雄名行 */
     label(content, 0, WY(205, 40), `${def.name}　${def.job}`, { size: 28, color: '#FFF3D6', bold: true, w: 640, h: 40, shrink: true });
 
@@ -65,12 +68,14 @@ export function buildHeroes(ctx: PageCtx): void {
       drawSlot(ctx, content, hid, k, () => render(), CX(470 + (i % 2) * 140, 130), WY(440 + Math.floor(i / 2) * 160, 150), 130, 150);
     });
 
-    /* 我的背包：页签条背板（L1）+ 三页签 + 5 列网格大背板 */
+    /* 我的背包：页签条背板（L1，用户确认保留）+ 三页签连体（无间隔）；
+       背包格区不加背板（用户确认：直接透出游戏背景） */
     artPanel(content, -5, WY(872, 58), 650, 78, 'ui_panel_tabs');
     const tabs = [['weapon', '武器'], ['equip', '装备'], ['mat', '材料']] as const;
+    const segW = 650 / 3;
     tabs.forEach((t, i) => {
       const active = tabs[i][0] === bagSt.tab;
-      btn(content, CX(45 + i * 225, 200), WY(872, 58), 200, 58, t[1], active ? PAL.gold : '#5A6472', () => {
+      btn(content, CX(45 + i * segW, segW), WY(872, 58), segW, 58, t[1], active ? PAL.gold : '#5A6472', () => {
         bagSt.tab = t[0];
         render();
       }, 22);
@@ -95,9 +100,7 @@ export function buildHeroes(ctx: PageCtx): void {
       const availBottom = 2 * LO.half - 150;   // 预留底部导航(122)+边距
       const rows = Math.max(2, Math.min(5, Math.floor((availBottom - GRID_TOP + 12) / ROW_H)));
       const cap = rows * 5;
-      // 背包大背板（L1）：行数随屏自适应，板随行数伸缩；横向占满格子区全宽
-      //（格子区 22..718，板 12..738 两侧各留 10px，与五列槽区对齐）
-      artPanel(grid, 0, WY(873, 12 + rows * 132), 726, 12 + rows * 132, 'ui_panel_bag');
+      // 背包格区：无大背板（用户确认），格子直接浮于游戏背景上
       cells.slice(0, cap).forEach((cell, g) => {
         drawBagCell(ctx, grid, cell, hid, () => render(), CX(22 + (g % 5) * 144, 120), WY(945 + Math.floor(g / 5) * 132, 120));
       });
