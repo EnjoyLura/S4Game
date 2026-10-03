@@ -251,6 +251,9 @@ export class MonsterManager {
 
   /** 难度倍率（普通 1 / 精英 1.6 / 地狱 2.4）：出怪时缩放 hp/dmg（BattleDirector 按 flow.diff 注入） */
   statMul = 1;
+  /** 首次遭遇回调（图鉴解锁）：同波次新怪种只报一次（BattleDirector 注入后解锁图鉴+横幅） */
+  onFirstEncounter: ((def: MobDef) => void) | null = null;
+  private seen = new Set<string>();
 
   spawn(def: MobDef): boolean {
     if (this.list.length >= 60) return false; // §12.4 同屏上限
@@ -258,6 +261,7 @@ export class MonsterManager {
     const m = this.pool.pop() || new Monster();
     m.init(def, this.field, Math.random() * 660 - 330, this.ctx, this);
     this.list.push(m);
+    if (!this.seen.has(def.id)) { this.seen.add(def.id); this.onFirstEncounter?.(def); }
     return true;
   }
 
