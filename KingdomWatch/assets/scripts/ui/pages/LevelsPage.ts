@@ -1,26 +1,37 @@
 /**
- * ③ 关卡（线稿 levels）：章节横幅 + 当前关场景大图（图内左右切关）+ 三档星箱（进度条连接·一次性领取）
- * 底部「开始战斗」→ 直接进入战斗（flow.mode=battle + loadScene）。
+ * ③ 关卡（线稿 levels）：顶部关卡名 + 三档难度页签（普通/精英/地狱，逐一通关解锁）
+ * + 关卡大图（图内左右切关）+ 三档星箱（按当前难度独立计星）+ 「开始战斗」。
+ * 去边框规范：全部纯色板，无描边、无框体美术。
  */
 import { Node, director } from 'cc';
 import { PAL } from '../../config/GameConfig';
-import { CA, btn, C, gbar, gpanel, label, N, WY, WX } from '../UIKit';
+import { CA, btn, gbar, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
-import { PageCtx, artPanel, toast, CX } from '../PageKit';
-import { CHEST_COND, claimChest } from '../../core/GameData';
+import { PageCtx, artPanel, toast } from '../PageKit';
+import { CHEST_COND, claimChest, starKey } from '../../core/GameData';
 import { loadSave } from '../../core/SaveData';
 import { flow } from '../../core/Flow';
 
-/** 关卡目录（M0 仅 1-1 开放；加关卡进表即可） */
-const LEVELS: { id: string; name: string; desc: string; open: boolean }[] = [
-  { id: '1-1', name: '1-1 前哨', desc: '10 波 · 哥布林军团', open: true },
-  { id: '1-2', name: '1-2 深林', desc: '通关 1-1 解锁', open: false },
+/** 关卡目录（M0 仅 1-1；1-2 通关 1-1 动态解锁） */
+const LEVELS: { id: string; name: string; desc: string }[] = [
+  { id: '1-1', name: '1-1 前哨', desc: '10 波 · 哥布林军团' },
+  { id: '1-2', name: '1-2 深林', desc: '10 波 · 深林伏兵' },
 ];
+const DIFFS = ['普通', '精英', '地狱'];
 
 export function buildLevels(ctx: PageCtx): void {
   const root = ctx.screens;
   const content = N('lvContent', root, 0, 0, 750, 900);
-  const st = { i: 0 };
+  const st = { i: 0, d: 0 };
+
+  /** 关卡是否开放：首关恒开放，其余需上一关（普通难度）通关 */
+  function levelOpen(i: number): boolean {
+    return i === 0 || (loadSave().stars[starKey(LEVELS[i - 1].id, 0)] || 0) >= 1;
+  }
+  /** 难度是否解锁：精英需本关普通有星，地狱需本关精英有星 */
+  function diffUnlocked(i: number, d: number): boolean {
+    return d === 0 ? levelOpen(i) : (loadSave().stars[starKey(LEVELS[i].id, d - 1)] || 0) >= 1;
+  }
 
   render();
 
@@ -28,54 +39,81 @@ export function buildLevels(ctx: PageCtx): void {
     content.destroyAllChildren();
     const sv = loadSave();
     const lv = LEVELS[st.i];
+    const open = levelOpen(st.i);
+    const key = starKey(lv.id, st.d);
+    const stars = sv.stars[key] || 0;
+    const claimed = sv.chestClaimed[key] || 0;
 
-    /* 章节横幅 */
-    const banner = gpanel(content, CX(125, 500), WY(210, 100), 500, 100, CA('#3A2E23', 0.95), C(PAL.gold), 2.5, 16);
-    artSprite(banner, 0, 0, 500, 100, 'ui_banner_title', { belowIdx: 0 });
-    label(banner, 0, 16, '第1章 腐朽森林', { size: 30, color: '#4A3214', bold: true, w: 480, h: 40 });
-    label(banner, 0, -22, lv.name, { size: 24, color: '#6B4A1E', bold: true, w: 480, h: 34 });
+    /* 顶部关卡名 */
+    const banner = gpanel(content, 0, WY(150, 84), 640, 84, CA('#2E2418', 0.92), undefined, 0, 14);
+    label(banner, 0, 20, '第1章 腐朽森林', { size: 19, color: '#C8B080', w: 480, h: 28 });
+    label(banner, 0, -14, lv.name, { size: 30, color: '#F5E6C8', bold: true, w: 480, h: 38 });
 
-    /* 当前关场景大图 + 图内左右切关箭头 */
-    const scene = gpanel(content, CX(100, 550), WY(325, 550), 550, 550, CA('#2E4034', 0.8), 'rgba(120,180,110,1)', 1.5, 18);
-    artSprite(scene, 0, 0, 550, 550, 'scenes/scene_' + lv.id.replace('-', '_'), { belowIdx: 0, cover: true });
-    label(scene, 0, -30, lv.open ? `${lv.desc}` : '🔒 未解锁', { size: 26, color: '#EAF2E0', w: 500, h: 40, shrink: true, outline: '#1C2A18', outlineW: 3 });
-    if (!lv.open) label(scene, 0, 10, `通关 ${LEVELS[0].id} 解锁`, { size: 20, color: '#C9D8BC', w: 500, h: 30, outline: '#1C2A18', outlineW: 2 });
-    btn(scene, -190, 0, 70, 70, '◀', PAL.gold, () => { st.i = (st.i + LEVELS.length - 1) % LEVELS.length; render(); }, 26);
-    btn(scene, 190, 0, 70, 70, '▶', PAL.gold, () => { st.i = (st.i + 1) % LEVELS.length; render(); }, 26);
-    if (st.i === 0 && !sv.stars[lv.id]) {
-      const nb = gpanel(content, CX(560, 70), WY(345, 30), 70, 30, CA('#E5484D', 0.95), undefined, 0, 8);
+    /* 三档难度页签（独立按钮；未解锁带锁，点击提示） */
+    for (let d = 0; d < 3; d++) {
+      const unlocked = diffUnlocked(st.i, d);
+      const active = st.d === d;
+      const tab = gpanel(content, (d - 1) * 174, WY(252, 56), 150, 56,
+        active ? CA(PAL.gold, 0.95) : unlocked ? CA('#2A3240', 0.92) : CA('#20242C', 0.62), undefined, 0, 14);
+      label(tab, 0, 0, unlocked ? DIFFS[d] : '🔒 ' + DIFFS[d], {
+        size: 24, bold: true, color: active ? '#241C12' : unlocked ? '#E8E0C8' : '#6B7480', w: 150, h: 40,
+      });
+      tab.on(Node.EventType.TOUCH_END, () => {
+        if (!unlocked) { toast('通关上一难度解锁'); return; }
+        if (st.d !== d) { st.d = d; render(); }
+      });
+    }
+
+    /* 关卡大图 + 图内左右切关（无边框圆形箭头板） */
+    const scene = gpanel(content, 0, WY(326, 540), 550, 540, CA('#2E4034', 0.85), undefined, 0, 18);
+    artSprite(scene, 0, 0, 550, 540, 'scenes/scene_' + lv.id.replace('-', '_'), { belowIdx: 0, cover: true });
+    if (open) {
+      label(scene, 0, -240, `${lv.desc} · ${DIFFS[st.d]}`, {
+        size: 24, color: '#EAF2E0', w: 500, h: 34, shrink: true, outline: '#1C2A18', outlineW: 3,
+      });
+    } else {
+      label(scene, 0, 16, '🔒 未解锁', { size: 30, color: '#EAF2E0', bold: true, w: 500, h: 40, outline: '#1C2A18', outlineW: 3 });
+      label(scene, 0, -24, `通关 ${LEVELS[0].id} 解锁`, { size: 20, color: '#C9D8BC', w: 500, h: 30, outline: '#1C2A18', outlineW: 2 });
+    }
+    for (const dx of [-205, 205]) {
+      const ar = gpanel(scene, dx, 0, 64, 64, CA('#14181E', 0.55), undefined, 0, 32);
+      label(ar, 0, 0, dx < 0 ? '◀' : '▶', { size: 26, color: '#F5E6C8', bold: true, w: 64, h: 40 });
+      ar.on(Node.EventType.TOUCH_END, () => {
+        st.i = (st.i + (dx < 0 ? LEVELS.length - 1 : 1)) % LEVELS.length;
+        while (st.d > 0 && !diffUnlocked(st.i, st.d)) st.d--;
+        render();
+      });
+    }
+    if (st.i === 0 && !sv.stars['1-1']) {
+      const nb = gpanel(content, 220, WY(346, 30), 70, 30, CA('#E5484D', 0.95), undefined, 0, 8);
       label(nb, 0, 0, 'NEW', { size: 16, color: '#FFFFFF', bold: true });
     }
 
-    /* 星箱区背板（L1）+ 进度条（垫三箱后方；金色=已达成档数） */
-    artPanel(content, 0, WY(878, 204), 690, 204, 'ui_panel_zone');
-    gbar(content, CX(147, 470), WY(940, 14), 470, 14, PAL.gold).set((sv.stars[lv.id] || 0) / 3);
+    /* 星箱区背板 + 达星进度条（按当前难度） */
+    artPanel(content, 0, WY(884, 200), 690, 200, 'ui_panel_zone');
+    gbar(content, 0, WY(902, 14), 470, 14, PAL.gold).set(stars / 3);
 
-    /* 三档星箱 */
-    const stars = sv.stars[lv.id] || 0;
-    const claimed = sv.chestClaimed[lv.id] || 0;
+    /* 三档星箱（无边框，可领取亮徽记红点） */
     const chests = [
-      { q: PAL.gold as string, icon: '📦' },
-      { q: '#C0C8D0', icon: '🎁' },
-      { q: PAL.purple as string, icon: '💎' },
+      { icon: '📦', reward: '200金' },
+      { icon: '🎁', reward: '60钻' },
+      { icon: '💎', reward: '150钻' },
     ];
     for (let t = 0; t < 3; t++) {
       const tier = t + 1;
-      const x = CX(40 + t * 235, 215);
       const canClaim = stars >= tier && claimed < tier;
       const done = claimed >= tier;
-      const card = gpanel(content, x, WY(890, 180), 215, 180,
-        CA('#14181E', 0.92), done ? C('#3A4250') : canClaim ? C(chests[t].q) : C('#3A4250'), canClaim ? 3 : 2, 14);
-      const ic = gpanel(card, 0, 33, 90, 90, CA('#10151D', 0.8), done ? C('#3A4250') : C(chests[t].q), 2, 14);
-      label(ic, 0, 0, done ? '✅' : chests[t].icon, { size: 44 });
-      label(card, 0, -33, CHEST_COND[tier - 1], { size: 19, color: done ? '#6B7480' : '#E8E0C8', w: 200, h: 26 });
-      const reward = ['200金', '60钻', '150钻'][t];
-      label(card, 0, -62, done ? '已领取' : canClaim ? `领取 ${reward}` : `未达标 · ${reward}`, {
-        size: 18, color: done ? '#5F6873' : canClaim ? '#FFE08A' : '#889099', w: 200, h: 26,
+      const card = gpanel(content, (t - 1) * 235, WY(922, 156), 215, 156, CA('#14181E', 0.92), undefined, 0, 12);
+      const ic = gpanel(card, 0, 42, 68, 68, canClaim ? CA('#F0C060', 0.3) : CA('#10151D', 0.8), undefined, 0, 12);
+      label(ic, 0, 0, done ? '✅' : chests[t].icon, { size: 36 });
+      if (canClaim) gpanel(card, 28, 70, 16, 16, CA('#E5484D', 1), undefined, 0, 8);
+      label(card, 0, -16, CHEST_COND[tier - 1], { size: 17, color: done ? '#6B7480' : '#E8E0C8', w: 200, h: 24 });
+      label(card, 0, -46, done ? '已领取' : canClaim ? `领取 ${chests[t].reward}` : `未达标 · ${chests[t].reward}`, {
+        size: 16, color: done ? '#5F6873' : canClaim ? '#FFE08A' : '#889099', w: 200, h: 24,
       });
       if (canClaim) {
         card.on(Node.EventType.TOUCH_END, () => {
-          const r = claimChest(lv.id, stars, tier);
+          const r = claimChest(key, stars, tier);
           toast(r.msg);
           if (r.ok) ctx.refresh();
         });
@@ -83,14 +121,15 @@ export function buildLevels(ctx: PageCtx): void {
     }
 
     /* 开始战斗 */
-    if (lv.open) {
-      btn(content, CX(125, 500), WY(1085, 90), 500, 90, '⚔ 开 始 战 斗', PAL.green, () => {
+    if (open) {
+      btn(content, 0, WY(1096, 80), 500, 80, '⚔ 开 始 战 斗', PAL.green, () => {
         flow.mode = 'battle';
         flow.levelId = lv.id;
+        flow.diff = st.d;
         director.loadScene('Main');
       }, 30);
     } else {
-      btn(content, CX(125, 500), WY(1085, 90), 500, 90, '🔒 通关 1-1 解锁', '#5A6472', () => {}, 24);
+      btn(content, 0, WY(1096, 80), 500, 80, '🔒 通关 1-1 解锁', '#5A6472', () => {}, 24);
     }
   }
 }

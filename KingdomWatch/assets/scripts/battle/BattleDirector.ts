@@ -9,6 +9,7 @@ import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
 import { loadSave, saveSave } from '../core/SaveData';
+import { DIFF_MUL, starKey } from '../core/GameData';
 import { flow } from '../core/Flow';
 import { MonsterManager } from './Monster';
 import { ArcherHero, HeroBase, SniperHero } from './Hero';
@@ -93,6 +94,7 @@ export class BattleDirector extends Component {
     this.float = new FloatText(fxLayer);
     this.pops = new ComicPop(fxLayer);
     this.mgr = new MonsterManager(mobLayer, hitCtx);
+    this.mgr.statMul = DIFF_MUL[Math.min(flow.diff, 2)] || 1;
     // 双英雄同场（§4 站位表 2 人 = ±160）：艾拉·风羽（弓）左槽，凯尔·鹰眼（狙）右槽
     const slots = heroSlots(2);
     this.heroes = [
@@ -330,7 +332,8 @@ export class BattleDirector extends Component {
     const reward = Math.floor(this.goldEarned + this.levelDef.baseGold * (1 + stars * 0.1));
     const sv = loadSave();
     sv.gold += reward;
-    sv.stars[this.levelDef.id] = Math.max(sv.stars[this.levelDef.id] || 0, stars);
+    const sk = starKey(this.levelDef.id, flow.diff);
+    sv.stars[sk] = Math.max(sv.stars[sk] || 0, stars);
     if (this.levelDef.id === '1-2') sv.speedUnlocked = true;
     saveSave();
 

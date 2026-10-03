@@ -249,8 +249,12 @@ export class MonsterManager {
 
   constructor(private field: Node, private ctx: MonsterHitCtx) {}
 
+  /** 难度倍率（普通 1 / 精英 1.6 / 地狱 2.4）：出怪时缩放 hp/dmg（BattleDirector 按 flow.diff 注入） */
+  statMul = 1;
+
   spawn(def: MobDef): boolean {
     if (this.list.length >= 60) return false; // §12.4 同屏上限
+    if (this.statMul !== 1) def = { ...def, hp: Math.round(def.hp * this.statMul), dmg: Math.round(def.dmg * this.statMul) };
     const m = this.pool.pop() || new Monster();
     m.init(def, this.field, Math.random() * 660 - 330, this.ctx, this);
     this.list.push(m);

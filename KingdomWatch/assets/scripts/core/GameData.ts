@@ -44,6 +44,14 @@ export function isMat(id: string): boolean { return !!MATS[id]; }
 export function itemName(id: string): string { return EQUIPS[id]?.name || MATS[id]?.name || id; }
 /** 阶级系数：tier 每 +1 属性×1.8、售价×3 */
 export function tierMul(tier: number): number { return Math.pow(1.8, tier - 1); }
+
+/* ---------- 关卡难度（关卡页三档：普通/精英/地狱，逐一通关解锁） ---------- */
+/** 难度战力倍率：出怪 hp/dmg 缩放（BattleDirector 按 flow.diff 注入 MonsterManager） */
+export const DIFF_MUL = [1, 1.6, 2.4];
+/** 星级/宝箱存档键：普通用原键，精英/地狱加后缀（1-1 / 1-1e / 1-1h），各难度星级独立 */
+export function starKey(levelId: string, diff: number): string {
+  return levelId + (diff === 1 ? 'e' : diff === 2 ? 'h' : '');
+}
 export function equipAtk(e: EquipInst): number { return Math.round((EQUIPS[e.defId]?.atk || 0) * tierMul(EQUIPS[e.defId]?.tier || 1) * (1 + (e.lv - 1) * 0.04)); }
 export function equipHp(e: EquipInst): number { return Math.round((EQUIPS[e.defId]?.hp || 0) * tierMul(EQUIPS[e.defId]?.tier || 1) * (1 + (e.lv - 1) * 0.04)); }
 /** 出售价：白100/绿400/蓝1500/紫5000 ×3^(tier-1)，强化等级小幅加成 */
