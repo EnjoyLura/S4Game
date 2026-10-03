@@ -233,9 +233,9 @@ function zoneTab(parent: Node, x: number, y: number, text: string): void {
   label(parent, x, y, text, { size: 18, color: INK, bold: true, w: 110, h: 26 });
 }
 
-/** 消耗/持有 chip：图标座 + 「需要/持有」，够=绿 不够=红 */
+/** 消耗/持有 chip：图标座 + 「需要/持有」，够=绿 不够=红（图标座无描边——去边框规范） */
 function costChip(card: Node, x: number, y: number, icon: string, need: number, own: number, valW: number): void {
-  gcircle(card, x, y, 24, CA(PAL.gold, 0.22), C('#8A6A2A'), 2);
+  gcircle(card, x, y, 24, CA(PAL.gold, 0.22));
   label(card, x, y, icon, { size: 24 });
   const ok = own >= need;
   label(card, x + 34 + valW / 2, y, `${fmt(need)}/${fmt(own)}`,
@@ -258,9 +258,9 @@ function modalRow(zone: Node, y: number, name: string, cur: string, delta: strin
   if (delta) label(zone, 170, y, delta, { size: 20, color: OK, bold: true, align: 'left', w: 120, h: 30, shrink: true });
 }
 
-/** 弹窗消耗/持有 chip：图标 + 「需要/持有」，够=绿 不够=红 */
+/** 弹窗消耗/持有 chip：图标 + 「需要/持有」，够=绿 不够=红（图标座无描边——去边框规范） */
 function costChipLight(panel: Node, x: number, y: number, icon: string, need: number, own: number, valW: number): void {
-  gcircle(panel, x, y, 22, CA(PAL.gold, 0.2), C(PAL.gold), 2);
+  gcircle(panel, x, y, 22, CA(PAL.gold, 0.2));
   label(panel, x, y, icon, { size: 22 });
   const ok = own >= need;
   label(panel, x + 32 + valW / 2, y, `${fmt(need)}/${fmt(own)}`,
@@ -383,7 +383,7 @@ function tabWeapon(parent: Node, ctx: PageCtx, hid: string, topY: number): void 
   const actH = 64;
   const actCy = botY + actH / 2;
   const act = gpanel(parent, 0, actCy, 700, actH, CA('#14181E', 0.72), undefined, 0, 32);
-  costChip(act, -225, 0, '🪙', maxed ? 0 : c.gold, sv.gold, 130);
+  costChip(act, -255, 0, '🪙', maxed ? 0 : c.gold, sv.gold, 100);
   costChip(act, -75, 0, '🧱', maxed ? 0 : c.mat, matOwned(), 70);
   btn(act, 215, 0, 170, 54, maxed ? 'MAX' : '强 化', maxed ? '#5A6472' : PAL.gold,
     () => { if (!maxed) save(hid, upWeapon(hid), ctx); }, 24, true);
@@ -418,15 +418,15 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
   const lv = h[info.key];
   const maxed = lv >= MAX.skill;
   const cost = skillUpCost(lv);
-  const W = 620, H = 780, PW = 560;   // PW：弹窗内奶白板/行动条宽
+  const W = 620, H = 830, PW = 560;   // PW：弹窗内奶白板/行动条宽；H 加高让标题/关闭上移、与头部拉开（用户确认）
   const panel = modal(ctx, W, H, '技能升级', true);
-  /* 头部：无框圆图标 + 名称 + 等级变化 */
-  const circ = gcircle(panel, -W / 2 + 66, H / 2 - 90, 44, CA('#2A3240', 1));
+  /* 头部：无框圆图标 + 名称 + 等级变化（相对 H/2 下移，离开标题区） */
+  const circ = gcircle(panel, -W / 2 + 66, H / 2 - 104, 44, CA('#2A3240', 1));
   label(circ, 0, 0, info.icon, { size: 20, color: '#FFE08A', bold: true });
-  label(panel, -W / 2 + 272, H / 2 - 76, info.name, { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 300, h: 32, shrink: true });
-  label(panel, -W / 2 + 272, H / 2 - 112, maxed ? `Lv.${lv}（MAX）` : `Lv.${lv} → Lv.${lv + 1}`, { size: 19, color: '#FFE08A', bold: true, align: 'left', w: 300, h: 30, shrink: true });
+  label(panel, -W / 2 + 272, H / 2 - 96, info.name, { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 300, h: 32, shrink: true });
+  label(panel, -W / 2 + 272, H / 2 - 130, maxed ? `Lv.${lv}（MAX）` : `Lv.${lv} → Lv.${lv + 1}`, { size: 19, color: '#FFE08A', bold: true, align: 'left', w: 300, h: 30, shrink: true });
   /* 属性提升（奶白板 + 标题出板；行结构与页签一致） */
-  const p1Top = H / 2 - 180;
+  const p1Top = H / 2 - 184;
   const p1H = 88;
   const p1 = gpanel(panel, 0, p1Top - p1H / 2, PW, p1H, CA('#E9DFC2', 0.94), undefined, 0, 12);
   zoneTab(panel, -PW / 2 + 70, p1Top + 17, '属性提升');
@@ -492,21 +492,14 @@ function tabEquips(parent: Node, ctx: PageCtx, hid: string, topY: number): void 
   });
 }
 
-/** 装备强化弹窗（分区结构：头部 → 属性提升 → 每级提升 → 消耗/持有 + 强化按钮；升级页装备卡 + 英雄页「锻造」共用） */
+/** 装备强化弹窗（参照技能升级弹窗版式：扁平无框 + 奶白分区板 + 深色行动条；升级页装备卡 + 英雄页「锻造」共用） */
 export function equipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: () => void): void {
   const sv = loadSave();
   const inst = wornInst(hid, kind)!;
   const d = EQUIPS[inst.defId];
   const maxed = inst.lv >= MAX.equip;
   const c = equipUpCost(inst.lv);
-  const panel = modal(ctx, 590, 540, '装备强化');
-  /* 头部：图标左（品质色方形底板，用户确认），名称/品质等级右 */
-  gpanel(panel, -190, 170, 100, 100, CA(QCOLOR[d.quality], 0.55), undefined, 0, 14);
-  label(panel, -190, 170, KIND_ICON[kind], { size: 44 });
-  label(panel, 56, 194, d.name, { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 320, h: 32, shrink: true });
-  label(panel, 56, 156, maxed ? `${QNAMES[d.quality]} · T${d.tier}　强化 Lv.${inst.lv}（MAX）` : `${QNAMES[d.quality]} · T${d.tier}　强化 Lv.${inst.lv} → Lv.${inst.lv + 1}`,
-    { size: 18, color: '#FFE08A', bold: true, align: 'left', w: 330, h: 28, shrink: true });
-  /* 分区一：属性提升（顶缘固定 112；主属性几条算几行，行高随行数自适应） */
+  /* 属性行：主属性几条算几行（攻击/生命），行高随行数自适应 */
   const rows: { nm: string; cur: string; delta: string | null }[] = [];
   if (d.atk > 0) {
     const curV = equipAtk(inst);
@@ -518,24 +511,45 @@ export function equipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: 
     const nextV = maxed ? curV : equipHp({ ...inst, lv: inst.lv + 1 });
     rows.push({ nm: '生命', cur: String(curV), delta: maxed ? null : `+${nextV - curV}` });
   }
-  const hA = 46 + rows.length * 44;
-  const zA = modalZone(panel, 112 - hA / 2, hA, '属性提升');
-  rows.forEach((r, i) => modalRow(zA, hA / 2 - 36 - 44 * i, r.nm, r.cur, r.delta));
-  /* 分区二：每级提升 */
-  const hB = 96;
-  const zB = modalZone(panel, (112 - hA) - 16 - hB / 2, hB, '每级提升');
-  label(zB, -35, 14, '主属性 +4% / 级', { size: 19, color: INK, bold: true, align: 'left', w: 400, h: 28, shrink: true });
-  label(zB, -35, -18, '材料 每7级需求 +1', { size: 19, color: INK, bold: true, align: 'left', w: 400, h: 28, shrink: true });
-  /* 行动条（深条 + 双消耗 + 强化按钮） */
-  const act = gpanel(panel, 0, -186, 530, 64, CA('#0B0F16', 0.55), undefined, 0, 12);
+  const W = 620, PW = 560;
+  const p1H = 56 + rows.length * 32;   // 1 行 88 / 2 行 120
+  const H = p1H + 424;                 // 头部 184 + 属性板 + 金签 44 + 每级板 88 + 行动条，随行数收紧
+  const panel = modal(ctx, W, H, '装备强化', true);
+  /* 头部：方形品质背板图标（无边框，同装备页签槽）+ 名称 + 品质/等级行（与技能弹窗同一几何） */
+  gpanel(panel, -W / 2 + 66, H / 2 - 104, 88, 88, CA(QCOLOR[d.quality], 0.55), undefined, 0, 12);
+  label(panel, -W / 2 + 66, H / 2 - 104, KIND_ICON[kind], { size: 40 });
+  label(panel, -W / 2 + 272, H / 2 - 96, d.name, { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 300, h: 32, shrink: true });
+  label(panel, -W / 2 + 272, H / 2 - 130, maxed ? `${QNAMES[d.quality]} · ${d.tier}阶 · Lv.${inst.lv}（MAX）` : `${QNAMES[d.quality]} · ${d.tier}阶 · 强化 Lv.${inst.lv} → Lv.${inst.lv + 1}`,
+    { size: 18, color: '#FFE08A', bold: true, align: 'left', w: 310, h: 28, shrink: true });
+  /* 属性提升（奶白板 + 标题出板；行结构与页签一致） */
+  const p1Top = H / 2 - 184;
+  const p1 = gpanel(panel, 0, p1Top - p1H / 2, PW, p1H, CA('#E9DFC2', 0.94), undefined, 0, 12);
+  zoneTab(panel, -PW / 2 + 70, p1Top + 17, '属性提升');
+  rows.forEach((r, i) => {
+    const y = (rows.length - 1) * 16 - i * 32;
+    label(p1, -PW / 2 + 90, y, r.nm, { size: 22, color: INK, bold: true, align: 'left', w: 160, h: 30, shrink: true });
+    label(p1, PW / 2 - 310, y, r.cur, { size: 24, color: INK, bold: true, align: 'right', w: 140, h: 30, shrink: true });
+    if (r.delta) label(p1, PW / 2 - 110, y, r.delta, { size: 24, color: OK, bold: true, align: 'right', w: 160, h: 30, shrink: true });
+  });
+  /* 每级提升（奶白板；先下移 44 给金签出板空间——与 fxStepper 同规） */
+  const p2Top = p1Top - p1H - 44;
+  const p2 = gpanel(panel, 0, p2Top - 44, PW, 88, CA('#E9DFC2', 0.94), undefined, 0, 12);
+  zoneTab(panel, -PW / 2 + 70, p2Top + 17, '每级提升');
+  label(p2, -100, 16, '主属性 +4% / 级', { size: 20, color: INK, bold: true, align: 'left', w: 340, h: 30, shrink: true });
+  label(p2, -100, -16, '材料 每7级需求 +1', { size: 20, color: INK, bold: true, align: 'left', w: 340, h: 30, shrink: true });
+  /* 行动条（深色药丸 + 双消耗 + 强化钮；双 chip 拉开间距防重叠——用户反馈） */
+  const actH = 64;
+  const actCy = -H / 2 + 46;
+  const act = gpanel(panel, 0, actCy, PW, actH, CA('#14181E', 0.72), undefined, 0, 32);
   if (!maxed) {
-    costChipLight(act, -175, 0, '🪙', c.gold, sv.gold, 110);
-    costChipLight(act, -30, 0, '🧱', c.mat, matOwned(), 70);
-    btn(act, 180, 0, 150, 54, '强 化', PAL.gold, () => {
+    costChip(act, -212, 0, '🪙', c.gold, sv.gold, 100);
+    costChip(act, -30, 0, '🧱', c.mat, matOwned(), 70);
+    btn(act, 195, 0, 160, 54, '强 化', PAL.gold, () => {
       const r = upWornEquip(hid, kind);
       toast(r.msg);
       if (r.ok) { const p2 = panel.parent; if (p2) p2.destroy(); rebuild(); }
     }, 24, true);
+    gpanel(act, 263, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
   } else {
     label(act, 0, 0, '已达强化上限', { size: 22, color: '#AAB2BD' });
   }
