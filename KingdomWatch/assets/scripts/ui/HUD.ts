@@ -6,7 +6,7 @@
 import { Graphics, Label, Layers, Node, Tween, tween, UIOpacity, UITransform, Vec3 } from 'cc';
 import { expNeed, LO, PAL } from '../config/GameConfig';
 import { gbar, gcircle, gpanel, label, setText, WY, WYB, WX, Bar, CA } from './UIKit';
-import { artSprite, uxFrame } from './Ux';
+import { artSprite } from './Ux';
 import { BattleDirector } from '../battle/BattleDirector';
 import { HeroBase } from '../battle/Hero';
 
@@ -19,7 +19,7 @@ interface UltUI {
   gray: Node;         // 充能中灰化杯体
   water: Node;        // 金水（圆杯液面上涨）
   waterG: Graphics;
-  waterR: number;     // 金水半径（美术座内孔更小，加载后收半径）
+  waterR: number;     // 金水半径
   orbit: Node;        // 就绪环绕粒子
   chargeTxt: Node;
   ready: boolean | null;
@@ -158,21 +158,18 @@ export class HUD {
   }
 
   /** 第 i 钮：底基 504，向上每钮 +110；点击就绪即施放，未满→Tips
-   *  美术：金座/激活座/灰座三态贴图（u.waterR 在美术到位后收小到内孔） */
+   *  无边框规范：纯色圆板三态（充能灰/常态金/就绪亮金），不加座环美术 */
   private buildUlt(top: Node, i: number, hero: HeroBase): UltUI {
     const ux = WX(636, 90), uy = WYB(504 + i * 110, 90);
     const glow = gcircle(top, ux, uy, 56, CA(PAL.gold, 0.16));
     const glowOp = glow.addComponent(UIOpacity);
     glowOp.opacity = 130;
     glow.active = false;
-    const btn = gcircle(top, ux, uy, 45, CA(PAL.gold, 0.25), PAL.gold, 2.5);
+    const btn = gcircle(top, ux, uy, 45, CA(PAL.gold, 0.25));
     const bright = gcircle(top, ux, uy, 45, CA(PAL.gold, 0.42));
     bright.active = false;
-    const gray = gcircle(top, ux, uy, 45, CA('#3A4250', 0.9), '#77808E', 1.5);
-    artSprite(btn, 0, 0, 90, 90, 'ui_circ_icon_gold', { belowIdx: 0 });
-    artSprite(bright, 0, 0, 90, 90, 'ui_circ_icon_gold_active', { belowIdx: 0 });
-    artSprite(gray, 0, 0, 90, 90, 'ui_circ_icon_gray', { belowIdx: 0 });
-    // 英雄头像：垫在金水/充能字之下、座环之上（三态座外圈都可见）
+    const gray = gcircle(top, ux, uy, 45, CA('#3A4250', 0.9));
+    // 英雄头像：垫在金水/充能字之下
     artSprite(top, ux, uy, 68, 68, 'ui_avatar_' + hero.id, { sliced: false });
     const water = new Node('ultWater' + i);
     water.setParent(top);
@@ -198,25 +195,20 @@ export class HUD {
       if (this.dir.tryCastUlt(i) === 'charging') this.dir.showTips('ult', i);
     });
     const ui: UltUI = { ux, uy, glow, btn, bright, gray, water, waterG, waterR: 43, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
-    // 美术金座内孔小于程序圆：到位后收金水半径（缓存命中时同步回调，ui 已就绪）
-    uxFrame('ui_circ_icon_gold', sf => { if (sf) ui.waterR = 27; });
     return ui;
   }
 
-  /** 头顶图标对：普攻(-27)/技能(+27)，锚定各自英雄（美术：金/蓝座 + 灰化座） */
+  /** 头顶图标对：普攻(-27)/技能(+27)，锚定各自英雄（无边框规范：纯色圆板 + 字） */
   private buildSkillBadge(top: Node, i: number, hero: HeroBase): SkillUI {
     const cy = WYB(126, 46);
     const atkX = hero.x - 27, cx = hero.x + 27;
-    const atkIcon = gcircle(top, atkX, cy, 23, CA(PAL.gold, 0.3), PAL.gold, 2);
+    const atkIcon = gcircle(top, atkX, cy, 23, CA(PAL.gold, 0.3));
     label(atkIcon, 0, 0, '攻', { size: 18, color: PAL.gold, bold: true });
-    artSprite(atkIcon, 0, 0, 46, 46, 'ui_circ_icon_gold', { belowIdx: 0 });
     atkIcon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('atk', i));
-    const icon = gcircle(top, cx, cy, 23, CA(PAL.blue, 0.3), PAL.blue, 2);
+    const icon = gcircle(top, cx, cy, 23, CA(PAL.blue, 0.3));
     const glyph = label(icon, 0, 0, '技', { size: 18, color: PAL.blue, bold: true });
-    artSprite(icon, 0, 0, 46, 46, 'ui_circ_icon_blue', { belowIdx: 0 });
     icon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('skill', i));
-    const gray = gcircle(top, cx, cy, 23, CA('#3A4250', 0.9), '#77808E', 1.5);
-    artSprite(gray, 0, 0, 46, 46, 'ui_circ_icon_gray', { belowIdx: 0 });
+    const gray = gcircle(top, cx, cy, 23, CA('#3A4250', 0.9));
     gray.active = false;
     const pie = new Node('skillPie' + i);
     pie.setParent(top);

@@ -160,14 +160,12 @@ export class Panels {
     label(frame, 0, -140, tag, { size: 13, color: '#6B5A3A', w: 190, h: 24, shrink: true });
   }
 
-  /* ---------- 页签条（线稿④-1/④-2/⑤-1/⑥-1）：点页签本地重渲染当前面板 ---------- */
+  /* ---------- 页签条（线稿④-1/④-2/⑤-1/⑥-1）：点页签本地重渲染当前面板（无边框规范：纯色板） ---------- */
   private tabsBar(tabs: string[], active: number, y: number, x0: number, w: number, gap: number, onSel: (i: number) => void): void {
     tabs.forEach((t, i) => {
       const x = WX(x0 + i * (w + gap), w), cy = WY(y, 72);
-      const tab = gpanel(this.modalRoot, x, cy, w, 72, i === active ? CA(PAL.gold, 0.25) : CA('#14181E', 0.85),
-        i === active ? PAL.gold : '#FFFFFF44', 1.5, 12);
-      artSprite(tab, 0, 0, w, 72, i === active ? 'ui_tab_item_active' : 'ui_tab_item', { belowIdx: 0 });
-      // 激活页签金框+深蓝内饰 → 用亮金文字；未激活银框深蓝底 → 白字
+      const tab = gpanel(this.modalRoot, x, cy, w, 72, i === active ? CA(PAL.gold, 0.25) : CA('#14181E', 0.85), undefined, 0, 12);
+      // 激活页签金底 → 亮金文字；未激活深蓝底 → 白字
       label(this.modalRoot, x, cy, t, { size: 20, color: i === active ? '#FFE08A' : '#FFFFFF' });
       if (i !== active) {
         const hit = N('tabHit' + i, this.modalRoot, x, cy, w, 72);
@@ -252,13 +250,13 @@ export class Panels {
       if (o.speedUnlocked) {
         btn(this.modalRoot, WX(590, 100), WY(726, 44), 100, 44, o.speed === 2 ? '2x' : '1x',
           o.speed === 2 ? PAL.green : '#5A6472',
-          () => { this.dir.toggleSpeed(); this.showPause({ ...o, tab: 2, speed: this.dir.speed }); }, 18);
+          () => { this.dir.toggleSpeed(); this.showPause({ ...o, tab: 2, speed: this.dir.speed }); }, 18, true);
       } else {
         gswitch(this.modalRoot, WX(590, 100), WY(726, 44), 100, 44, false, undefined, true);
       }
     }
-    btn(this.modalRoot, WX(50, 300), WY(880, 88), 300, 88, '⏻ 退出', PAL.gold, o.onExit);
-    btn(this.modalRoot, WX(400, 300), WY(880, 88), 300, 88, '▶ 继续战斗', PAL.green, o.onResume);
+    btn(this.modalRoot, WX(50, 300), WY(880, 88), 300, 88, '⏻ 退出', PAL.gold, o.onExit, 22, true);
+    btn(this.modalRoot, WX(400, 300), WY(880, 88), 300, 88, '▶ 继续战斗', PAL.green, o.onResume, 22, true);
   }
 
   /* ---------- ⑥ 胜利结算（页签：奖励总览/伤害统计，线稿⑥/⑥-1） ---------- */
@@ -291,8 +289,7 @@ export class Panels {
     }
 
     // 双倍广告按钮（与失败页复活按钮同位 580,714 120×120；美术绿圆钮，文字保留其上）
-    const dbl = gcircle(this.modalRoot, WX(580, 120), WY(714, 120), 58, CA(PAL.green, 0.3), PAL.green, 3);
-    artSprite(dbl, 0, 0, 120, 120, 'ui_circ_btn_green', { sliced: false, belowIdx: 0 });
+    const dbl = gcircle(this.modalRoot, WX(580, 120), WY(714, 120), 58, CA(PAL.green, 0.3));
     const dblTxt = label(dbl, 0, 0, '▶\n双倍', { size: 24, color: '#FFFFFF', bold: true });
     dbl.on(Node.EventType.TOUCH_END, e => {
       e.propagationStopped = true;
@@ -305,8 +302,8 @@ export class Panels {
     });
 
     this.tabsBar(['奖励总览', '伤害统计'], tab, 840, 40, 330, 10, t => this.showWin({ ...o, tab: t }));
-    btn(this.modalRoot, WX(50, 300), WY(940, 88), 300, 88, '下一关 ▶', PAL.green, o.onNext);
-    btn(this.modalRoot, WX(400, 300), WY(940, 88), 300, 88, '返回', PAL.gold, o.onExit);
+    btn(this.modalRoot, WX(50, 300), WY(940, 88), 300, 88, '下一关 ▶', PAL.green, o.onNext, 22, true);
+    btn(this.modalRoot, WX(400, 300), WY(940, 88), 300, 88, '返回', PAL.gold, o.onExit, 22, true);
   }
 
   /* ---------- ⑤ 失败结算（含广告复活，与胜利双倍按钮同位；页签线稿⑤/⑤-1） ---------- */
@@ -333,8 +330,7 @@ export class Panels {
       label(this.modalRoot, 0, WY(668, 30),
         '复活：耐久 +30% · 不限次 · 不看广告即接受失败', { size: 16, color: '#CCCCCC' });
     }
-    const rv = gcircle(this.modalRoot, WX(580, 120), WY(700, 120), 58, CA(PAL.green, 0.3), PAL.green, 3);
-    artSprite(rv, 0, 0, 120, 120, 'ui_circ_btn_green', { sliced: false, belowIdx: 0 });
+    const rv = gcircle(this.modalRoot, WX(580, 120), WY(700, 120), 58, CA(PAL.green, 0.3));
     const rvTxt = label(rv, 0, 0, '▶\n复活\n+' + Math.round(o.reviveRatio * 100) + '%', { size: 20, color: '#FFFFFF', bold: true });
     rv.on(Node.EventType.TOUCH_END, e => {
       e.propagationStopped = true;
@@ -347,8 +343,8 @@ export class Panels {
     });
 
     this.tabsBar(['奖励总览', '伤害统计'], tab, 840, 40, 330, 10, t => this.showLose({ ...o, tab: t }));
-    btn(this.modalRoot, WX(50, 300), WY(940, 88), 300, 88, '↻ 再来一次', PAL.green, o.onRetry);
-    btn(this.modalRoot, WX(400, 300), WY(940, 88), 300, 88, '返回', PAL.gold, o.onExit);
+    btn(this.modalRoot, WX(50, 300), WY(940, 88), 300, 88, '↻ 再来一次', PAL.green, o.onRetry, 22, true);
+    btn(this.modalRoot, WX(400, 300), WY(940, 88), 300, 88, '返回', PAL.gold, o.onExit, 22, true);
   }
 
   /* ---------- ③ 伤害统计（不暂停；无遮罩、贴统计图标右侧、点空白关闭，与属性Tips同规范） ---------- */
