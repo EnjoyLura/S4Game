@@ -44,11 +44,7 @@ export class LineDefense {
       g.fill();
       g.stroke();
     }
-    // 盾徽
-    g.fillColor = hexc(PAL.gold);
-    g.circle(0, (top + bot) / 2, 16);
-    g.fill();
-    g.stroke();
+    // 盾徽已去除（用户调整：防线中间黄点）
     this.node.setParent(parent);
   }
 

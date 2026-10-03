@@ -96,8 +96,7 @@ export class HUD {
     artSprite(bgParent || top, 0, 0, 750, LO.half * 2 + 240, 'scenes/scene_1_1',
       { sliced: false, cover: true, belowIdx: 1, hideOnLoad: [bgFlat] });
 
-    /* 顶栏（用户调整：去大背板美术/金描边，全宽半透遮罩，参考竞品简洁样式不遮挡视野） */
-    gpanel(top, 0, WY(100, 70), 750, 70, CA('#000000', 0.42), undefined, 0, 0);
+    /* 顶栏（用户调整：大背板整条去除，只留暂停钮/波次签半透小板，文字直接浮于场景） */
     const pauseBtn = gpanel(top, WX(30, 60), WY(105, 60), 60, 60, CA('#000000', 0.32), undefined, 0, 0);
     const pauseLbl = label(pauseBtn, 0, 0, '⏸', { size: 26, color: '#FFFFFF', bold: true });
     artSprite(pauseBtn, 0, 0, 60, 60, 'ui_icon_pause', { sliced: false, hideOnLoad: [pauseLbl] });
@@ -375,7 +374,7 @@ export class HUD {
     if (pct <= 0.01) return;
     const R = u.waterR;
     if (pct >= 0.995) {
-      g.fillColor = CA(u.color, flash ? 0.5 : 0.32);   // 用户调整：能量水更透明
+      g.fillColor = CA(u.color, flash ? 0.35 : 0.18);   // 用户调整：能量水再提透明度
       g.circle(0, 0, R);
       g.fill();
       return;
@@ -383,7 +382,7 @@ export class HUD {
     const yc = -R + 2 * R * pct;
     const a = Math.asin(Math.max(-1, Math.min(1, yc / R)));
     const xr = R * Math.cos(a);
-    g.fillColor = CA(u.color, flash ? 0.48 : 0.32);
+    g.fillColor = CA(u.color, flash ? 0.33 : 0.18);
     g.moveTo(xr, yc);
     g.lineTo(-xr, yc);
     const thA = Math.PI - a, thB = Math.PI * 2 + a;
