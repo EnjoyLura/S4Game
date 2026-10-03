@@ -83,6 +83,36 @@ export const HERO_DEFS: Record<string, HeroDef> = {
   },
 };
 
+/* ================= 编队（二级编队界面：4 上阵位；战斗按上阵顺序从左到右站位） ================= */
+
+export const SQUAD_MAX = 4;
+
+/** 当前编队（上阵顺序=站位从左到右）；过滤失效 id */
+export function squadList(): string[] {
+  return (loadSave().squad || []).filter(id => !!HERO_DEFS[id]);
+}
+export function inSquad(hid: string): boolean { return squadList().includes(hid); }
+
+/** 上阵：从左到右占第一个空位（满员/重复返回失败消息） */
+export function deployHero(hid: string): OpResult {
+  if (!HERO_DEFS[hid]) return { ok: false, msg: '英雄不存在' };
+  const sq = squadList();
+  if (sq.includes(hid)) return { ok: false, msg: '该英雄已上阵' };
+  if (sq.length >= SQUAD_MAX) return { ok: false, msg: '编队已满，请先下阵英雄' };
+  loadSave().squad = [...sq, hid];
+  saveSave();
+  return { ok: true, msg: `${HERO_DEFS[hid].name} 已上阵` };
+}
+
+/** 下阵（二次确认由 UI 层负责） */
+export function undeployHero(hid: string): OpResult {
+  const sq = squadList();
+  if (!sq.includes(hid)) return { ok: false, msg: '该英雄未上阵' };
+  loadSave().squad = sq.filter(x => x !== hid);
+  saveSave();
+  return { ok: true, msg: `${HERO_DEFS[hid].name} 已下阵` };
+}
+
 /* ================= 经济公式（数值默认值，校准只改这里） ================= */
 
 const r10 = (v: number): number => Math.max(10, Math.round(v / 10) * 10);

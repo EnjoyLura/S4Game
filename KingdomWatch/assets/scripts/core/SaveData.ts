@@ -46,6 +46,8 @@ export interface SaveData {
   heroes: Record<string, HeroState>;
   /** 当前查看英雄 */
   curHero: string;
+  /** 编队上阵顺序（从左到右=战斗站位序；允许空，战斗侧兜底） */
+  squad: string[];
   /** 主城等级（上限10） */
   keepLv: number;
   /** 星箱领取记录：关卡id -> 已领最高档（0=未领） */
@@ -59,7 +61,7 @@ export interface SaveData {
 const DEFAULTS: SaveData = {
   gold: 500, diamonds: 20, stars: {}, unlocked: '1-1',
   speedUnlocked: false, music: true, sfx: true, debug: true,
-  bag: {}, equips: [], heroes: {}, curHero: 'archer',
+  bag: {}, equips: [], heroes: {}, curHero: 'archer', squad: ['archer', 'sniper'],
   keepLv: 1, chestClaimed: {}, codex: [], codexRewards: [],
 };
 
@@ -81,6 +83,8 @@ export function loadSave(): SaveData {
       sv.heroes[hid] = { owned: hid === 'archer', lv: 1, weaponLv: 1, atkLv: 1, skillLv: 1, ultLv: 1, worn: {} };
     }
   }
+  // 老档无编队字段 → 默认双英雄上阵（与旧版战斗一致）
+  if (!Array.isArray(sv.squad)) sv.squad = ['archer', 'sniper'];
   return sv;
 }
 

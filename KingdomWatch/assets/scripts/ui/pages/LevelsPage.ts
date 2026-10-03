@@ -8,9 +8,10 @@ import { PAL } from '../../config/GameConfig';
 import { CA, btn, gbar, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
 import { PageCtx, artPanel, toast } from '../PageKit';
-import { CHEST_COND, claimChest, starKey } from '../../core/GameData';
+import { CHEST_COND, claimChest, starKey, squadList } from '../../core/GameData';
 import { loadSave } from '../../core/SaveData';
 import { flow } from '../../core/Flow';
+import { openSquadPanel } from '../SquadPanel';
 
 /** 关卡目录（M0 仅 1-1；1-2 通关 1-1 动态解锁） */
 const LEVELS: { id: string; name: string; desc: string }[] = [
@@ -117,9 +118,10 @@ export function buildLevels(ctx: PageCtx): void {
       }
     }
 
-    /* 开始战斗（扁平无框——用户确认） */
+    /* 开始战斗（扁平无框——用户确认）；空编队拦截 */
     if (open) {
       btn(content, 0, WY(1166, 80), 500, 80, '⚔ 开 始 战 斗', PAL.green, () => {
+        if (!squadList().length) { toast('请先上阵英雄'); return; }
         flow.mode = 'battle';
         flow.levelId = lv.id;
         flow.diff = st.d;
@@ -128,5 +130,8 @@ export function buildLevels(ctx: PageCtx): void {
     } else {
       btn(content, 0, WY(1166, 80), 500, 80, '🔒 通关 1-1 解锁', '#5A6472', () => {}, 24, true);
     }
+
+    /* 编队按钮（用户红框指定：开始战斗右下方；二级编队界面） */
+    btn(content, 245, WY(1322, 80), 240, 80, '编 队', PAL.gold, () => openSquadPanel(ctx), 28, true);
   }
 }

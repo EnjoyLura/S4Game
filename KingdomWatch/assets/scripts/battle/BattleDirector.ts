@@ -9,7 +9,7 @@ import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
 import { loadSave, saveSave } from '../core/SaveData';
-import { DIFF_MUL, starKey, unlockCodex } from '../core/GameData';
+import { DIFF_MUL, starKey, squadList, unlockCodex } from '../core/GameData';
 import { flow } from '../core/Flow';
 import { MonsterManager } from './Monster';
 import { ArcherHero, HeroBase, SniperHero } from './Hero';
@@ -105,12 +105,13 @@ export class BattleDirector extends Component {
         this.hud.showNewMob(true);
       }
     };
-    // 双英雄同场（§4 站位表 2 人 = ±160）：艾拉·风羽（弓）左槽，凯尔·鹰眼（狙）右槽
-    const slots = heroSlots(2);
-    this.heroes = [
-      new ArcherHero(field, slots[0], baseArcherStats()),
-      new SniperHero(field, slots[1], baseSniperStats()),
-    ];
+    // 编队上阵（§编队）：按存档上阵顺序从左到右站位（2 人 = ±160 与旧版一致）；空编队兜底双英雄
+    const squad = squadList();
+    const ids = squad.length ? squad : ['archer', 'sniper'];
+    const slots = heroSlots(ids.length);
+    this.heroes = ids.map((hid, i) => hid === 'sniper'
+      ? new SniperHero(field, slots[i], baseSniperStats())
+      : new ArcherHero(field, slots[i], baseArcherStats()));
     this.parts = new Particles(fxLayer);
     this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts);
     this.waves = new WaveManager(this.levelDef, this.mgr);
