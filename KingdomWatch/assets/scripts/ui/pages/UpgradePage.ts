@@ -5,11 +5,11 @@
  *   技能/装备页签=固定高度卡片网格，点击弹升级弹窗（弹窗内同为参考结构）。
  * 坐标：上半部顶部锚点，下半部（名牌/内容/页签）底部锚点——任何屏高都贴住导航栏。
  */
-import { Graphics, Node, UIOpacity } from 'cc';
+import { Graphics, Mask, Node, ScrollView, UITransform, UIOpacity } from 'cc';
 import { LO, PAL } from '../../config/GameConfig';
 import { CA, btn, C, gcircle, gpanel, label, N, WY, WYB, WX } from '../UIKit';
 import { artSprite } from '../Ux';
-import { PageCtx, modal, toast, fmt } from '../PageKit';
+import { PageCtx, artPanel, modal, toast, fmt } from '../PageKit';
 import { attrsModal } from './HeroPage';
 import {
   EquipKind, HERO_DEFS, EQUIPS, KIND_NAME, QCOLOR, MAX,
@@ -112,6 +112,10 @@ export function buildUpgrade(ctx: PageCtx): void {
     const def = HERO_DEFS[hid];
     const hs = heroStats(hid);
 
+    /* 上半大背板（用户确认参考英雄页）：物理屏顶罩住头像栏+大立绘+名牌；高度随屏收缩，保底留给下方强化区 */
+    const upT = Math.max(560, Math.min(800, 2 * LO.half - 620 - LO.safeTop));
+    artPanel(content, 0, WY(-LO.safeTop, upT + LO.safeTop), 750, upT + LO.safeTop, 'ui_panel_hero');
+
     /* 常驻英雄栏：头像切换（未拥有灰锁）；用户确认：头像不加边框（无描边、无带环座美术） */
     (['archer', 'sniper'] as const).forEach((id, i) => {
       const o = sv.heroes[id].owned;
@@ -124,9 +128,9 @@ export function buildUpgrade(ctx: PageCtx): void {
         sv.curHero = id; saveCur(id); render();
       });
     });
-    /* 悬浮大立绘（上限 350，顶部锚定：贴头像栏正下方，消除头顶空白）+ 脚下金色光台座 */
+    /* 悬浮大立绘（上限 350，顶部锚定）+ 脚下金色光台座 —— 罩在上半大背板内 */
     const dispTopY = LO.half - 300;
-    const artH = Math.max(0, Math.min(dispTopY - WYB(681, 0) - 30, 350));
+    const artH = Math.max(0, Math.min(350, upT - 445));
     const hasArt = artH >= 60;
     const artBot = dispTopY - artH - 8;
     if (hasArt) {
@@ -144,20 +148,19 @@ export function buildUpgrade(ctx: PageCtx): void {
       ring(130, 23, 0.20);
     }
 
-    /* 自适应升级大卡：底边贴页签，顶边顶着台座之下（高 375~620 随屏取足，不留死空间） */
+    /* 自适应升级大卡（武器/技能/装备页签仍用）：底边贴页签，顶边顶着台座之下 */
     const pedBot = hasArt ? artBot - 66 : artBot - 8;
     const cardBot = WYB(232, 0);
     const cardH = Math.max(375, Math.min(pedBot - 93 - cardBot, 620));
-    const cardTop = cardBot + cardH;
 
-    /* 脚底名牌：骑行在大卡顶缘（随卡升高） */
-    const foot = gpanel(content, 0, cardTop + 43, 400, 76, CA('#0B0F16', 0.58), '#E8C87866', 1.5, 38);
+    /* 脚底名牌：贴大背板下缘内侧（无边框规范） */
+    const foot = gpanel(content, 0, LO.half - (upT - 55), 400, 76, CA('#0B0F16', 0.58), undefined, 0, 38);
     label(foot, -105, 0, def.name, { size: 25, color: '#FFF3D6', bold: true, w: 180, h: 40, shrink: true });
     label(foot, 40, 0, `🔥 ${hs.power}`, { size: 24, color: '#FFE08A', bold: true, w: 130, h: 40 });
     btn(foot, 155, 0, 74, 54, '详情', PAL.blue, () => attrsModal(ctx, hid), 20);
 
-    /* 页签内容（自适应分区版式） */
-    if (st.tab === 0) tabLevel(content, ctx, hid, cardH);
+    /* 页签内容：等级页签=无大背板新版式（用户确认先做等级页签）；其余页签暂用大卡版式 */
+    if (st.tab === 0) tabLevel(content, ctx, hid, LO.half - upT - 16);
     else if (st.tab === 1) tabWeapon(content, ctx, hid, cardH);
     else if (st.tab === 2) tabSkills(content, ctx, hid, cardH);
     else tabEquips(content, ctx, hid, cardH);
@@ -254,45 +257,80 @@ function save(hid: string, r: { ok: boolean; msg: string }, ctx: PageCtx): void 
   if (r.ok) ctx.refresh();
 }
 
-/* ---------- 等级页签：自适应分区版式（卡高随屏 375~620，面板拉通整卡宽，无头像） ---------- */
-function tabLevel(parent: Node, ctx: PageCtx, hid: string, cardH: number): void {
+/* ---------- 等级页签：无大背板版式（用户确认）——奶白属性板 + 等级效果竖线步骤条（可滑动）+ 消耗/升级条 ---------- */
+function tabLevel(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
   const sv = loadSave();
   const h = sv.heroes[hid];
   const lv = h.lv;
   const maxed = lv >= MAX.hero;
   const cur = statsAt(hid, lv, h.weaponLv);
   const next = maxed ? cur : statsAt(hid, lv + 1, h.weaponLv);
-  const card = parchmentCard(parent, 0, WYB(232, cardH), 718, cardH);
-  /* 内部分区锚点：面板一顶缘 / 行动条中心 / 面板二下缘，多余高度分给两块面板 */
-  const p1Top = cardH / 2 - 40;
-  const actCy = -cardH / 2 + 41;
-  const p2Bot = actCy + 43;
-  const span = p1Top - p2Bot - 18;
-  const h2 = Math.max(90, Math.min(span - 158, 190));
-  const h1 = Math.max(140, Math.min(p1Top - (p2Bot + h2) - 18, 230));
-  /* 分区一：属性提升（首行=等级变化；顶签骑上缘） */
-  const st1 = zonePanel(card, 0, p1Top - h1 / 2, 660, h1);
-  zoneTab(card, -275, p1Top, '属性提升');
-  const r1 = (h1 - 60) / 3;
-  statRow(st1, h1 / 2 - 30, '等级', maxed ? `Lv.${lv}（MAX）` : `Lv.${lv}`, maxed ? null : `→ Lv.${lv + 1}`);
-  statRow(st1, h1 / 2 - 30 - r1, '攻击力', String(cur.atk), maxed ? null : `+${next.atk - cur.atk}`);
-  statRow(st1, h1 / 2 - 30 - r1 * 2, '技能伤害', String(cur.skillDmg), maxed ? null : `+${next.skillDmg - cur.skillDmg}`);
-  statRow(st1, h1 / 2 - 30 - r1 * 3, '生命', String(cur.hp), maxed ? null : `+${next.hp - cur.hp}`);
-  /* 分区二：等级效果 */
-  const st2 = zonePanel(card, 0, p2Bot + h2 / 2, 660, h2);
-  zoneTab(card, -275, p2Bot + h2, '等级效果');
-  const r2 = (h2 - 44) / 2;
-  (MILESTONES[hid] || []).forEach((m, i) => {
-    const reached = lv >= m.lv;
-    label(st2, -265, h2 / 2 - 22 - r2 * i, `${m.lv}级`, { size: 19, color: reached ? INK : '#7A6A4C', bold: true, w: 70, h: 28 });
-    label(st2, 10, h2 / 2 - 22 - r2 * i, (reached ? '✓ ' : '') + m.txt, { size: 19, color: reached ? INK : '#7A6A4C', bold: reached, align: 'left', w: 460, h: 28, shrink: true });
+  const botY = WYB(232, 0);
+  /* 属性提升（奶白板直接浮于游戏背景，用户确认去大背板） */
+  const p1H = 216;
+  const p1 = gpanel(parent, 0, topY - p1H / 2, 700, p1H, CA('#E9DFC2', 0.94), undefined, 0, 12);
+  zoneTab(parent, -280, topY, '属性提升');
+  const r1 = (p1H - 56) / 4;
+  const rows: [string, string, string | null][] = [
+    ['等级', `Lv.${lv}`, maxed ? null : `→ Lv.${lv + 1}`],
+    ['攻击力', String(cur.atk), maxed ? null : `+${next.atk - cur.atk}`],
+    ['技能伤害', String(cur.skillDmg), maxed ? null : `+${next.skillDmg - cur.skillDmg}`],
+    ['生命', String(cur.hp), maxed ? null : `+${next.hp - cur.hp}`],
+  ];
+  rows.forEach((r, i) => {
+    const y = p1H / 2 - 28 - r1 * i;
+    label(p1, -240, y, r[0], { size: 22, color: INK, bold: true, align: 'left', w: 160, h: 30, shrink: true });
+    label(p1, 40, y, r[1], { size: 24, color: INK, bold: true, align: 'right', w: 140, h: 30, shrink: true });
+    if (r[2]) label(p1, 230, y, r[2], { size: 24, color: OK, bold: true, align: 'left', w: 160, h: 30, shrink: true });
   });
-  /* 行动条（消耗 + 升级按钮，深一档底色） */
-  const act = zonePanel(card, 0, actCy, 660, 54, true);
-  costChip(act, -200, 0, '🪙', maxed ? 0 : heroUpCost(lv), sv.gold, 130);
-  btn(act, 205, 0, 170, 54, maxed ? 'MAX' : '升 级', maxed ? '#5A6472' : PAL.gold,
+  /* 行动条（消耗 + 升级按钮，深色药丸条） */
+  const actH = 64;
+  const actCy = botY + actH / 2;
+  const act = gpanel(parent, 0, actCy, 700, actH, CA('#14181E', 0.72), undefined, 0, 32);
+  costChip(act, -210, 0, '🪙', maxed ? 0 : heroUpCost(lv), sv.gold, 130);
+  btn(act, 215, 0, 170, 54, maxed ? 'MAX' : '升 级', maxed ? '#5A6472' : PAL.gold,
     () => { if (!maxed) save(hid, upHero(hid), ctx); }, 24, true);
-  if (!maxed) gpanel(act, 278, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
+  if (!maxed) gpanel(act, 288, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
+  /* 等级效果：竖线步骤条（Mask+ScrollView 可滑动）——达成档位卡片亮起，未达成置灰 */
+  const fxTop = topY - p1H - 14;
+  const fxBot = actCy + actH / 2 + 14;
+  const fxH = Math.max(150, fxTop - fxBot);
+  const fx = gpanel(parent, 0, fxBot + fxH / 2, 700, fxH, CA('#E9DFC2', 0.94), undefined, 0, 12);
+  zoneTab(parent, -280, fxBot + fxH, '等级效果');
+  const ms = MILESTONES[hid] || [];
+  const CARD_H = 64, GAP = 18, PAD = 16;
+  const needH = ms.length * (CARD_H + GAP) - GAP + PAD * 2;
+  const viewH = fxH - 8;
+  const contentH = Math.max(needH, viewH);
+  const view = N('fxView', fx, 0, 0, 660, viewH);
+  view.addComponent(Mask);
+  const scroll = view.addComponent(ScrollView);
+  const ct = N('fxContent', view, 0, viewH / 2, 660, contentH);
+  ct.getComponent(UITransform)!.setAnchorPoint(0.5, 1);
+  scroll.content = ct;
+  scroll.horizontal = false;
+  scroll.vertical = true;
+  const LINE_X = -262;
+  const lineG = N('fxLine', ct, 0, 0, 8, contentH).addComponent(Graphics);
+  lineG.fillColor = C('#B8A87F');
+  lineG.rect(LINE_X - 2, -(contentH - PAD), 4, contentH - PAD * 2);
+  lineG.fill();
+  const lastReached = ms.reduce((acc, m, i) => (lv >= m.lv ? i : acc), -1);
+  if (lastReached >= 0) {
+    const y0 = -(PAD + CARD_H / 2);
+    const y1 = -(PAD + lastReached * (CARD_H + GAP) + CARD_H / 2);
+    lineG.fillColor = C(PAL.gold);
+    lineG.rect(LINE_X - 2, y1, 4, y0 - y1);
+    lineG.fill();
+  }
+  ms.forEach((m, i) => {
+    const yC = -(PAD + i * (CARD_H + GAP) + CARD_H / 2);
+    const reached = lv >= m.lv;
+    gcircle(ct, LINE_X, yC, 10, reached ? C(PAL.gold) : C('#A5987B'));
+    const c = gpanel(ct, 40, yC, 560, CARD_H, reached ? CA('#E8C878', 0.95) : CA('#D8CBA8', 0.5), undefined, 0, 10);
+    label(c, -220, 0, `${m.lv}级`, { size: 20, color: reached ? INK : '#8A7A5C', bold: true, align: 'left', w: 80, h: 30 });
+    label(c, 50, 0, (reached ? '✓ ' : '') + m.txt, { size: 20, color: reached ? INK : '#8A7A5C', bold: reached, align: 'left', w: 440, h: 30, shrink: true });
+  });
 }
 
 /* ---------- 武器页签：与等级页签同自适应分区版式（面板拉通整卡宽，无头像） ---------- */
