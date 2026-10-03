@@ -294,19 +294,27 @@ function drawBagCell(ctx: PageCtx, grid: Node, cell: { uid: string; n: number },
   void rebuild;
 }
 
-/** 属性+背景故事弹窗（点英雄头像/名字/属性/故事钮） */
+/** 属性总览弹窗（参考图抄版：标题栏 + 每行一条全宽浅色条目，名称左/数值右，层次分明；不含背景故事——用户确认） */
 export function attrsModal(ctx: PageCtx, hid: string): void {
   const def = HERO_DEFS[hid];
   const st = heroStats(hid);
-  const panel = modal(ctx, 620, 720, `${def.name} · 属性`);
+  const panel = modal(ctx, 620, 560, '属性总览');
   const rows: [string, string][] = [
     ['定位', def.job], ['战力', String(st.power)], ['攻击', String(st.atk)],
-    ['攻速', `${st.atkSpd}次/秒`], ['技能伤害', String(st.skillDmg)], ['生命', String(st.hp)],
+    ['攻速', `${st.atkSpd} 次/秒`], ['技能伤害', String(st.skillDmg)], ['生命', String(st.hp)],
   ];
   rows.forEach((r, i) => {
-    label(panel, -160, 240 - i * 62, r[0], { size: 22, color: '#AAB2BD', align: 'left', w: 200, h: 34 });
-    label(panel, 150, 240 - i * 62, r[1], { size: 23, color: '#FFF3D6', bold: true, align: 'right', w: 340, h: 34 });
+    const bar = gpanel(panel, 0, 150 - i * 66, 552, 56, CA('#E9DFC2', 0.94), undefined, 0, 8);
+    // label 的 x 是盒子中心（左/右对齐文字贴盒缘）：名称盒心 -142 → 文字左缘 -252（距条左 24）；
+    // 数值盒心 102 → 文字右缘 252（距条右 24）
+    label(bar, -142, 0, r[0], { size: 22, color: '#4A4034', bold: true, align: 'left', w: 220, h: 34, shrink: true });
+    label(bar, 102, 0, r[1], { size: 24, color: '#332B20', bold: true, align: 'right', w: 300, h: 34, shrink: true });
   });
-  label(panel, 0, -240, def.story, { size: 19, color: '#9AA3AE', w: 560, h: 90, shrink: true });
 }
-export function storyModal(ctx: PageCtx, hid: string): void { attrsModal(ctx, hid); }
+
+/** 背景故事弹窗（故事从属性总览拆出，故事钮专用） */
+export function storyModal(ctx: PageCtx, hid: string): void {
+  const def = HERO_DEFS[hid];
+  const panel = modal(ctx, 620, 420, `故事 · ${def.name}`);
+  label(panel, 0, -30, def.story, { size: 21, color: '#CDC2A2', w: 540, h: 180, shrink: true });
+}
