@@ -273,22 +273,20 @@ function tabLevel(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
   const cur = statsAt(hid, lv, h.weaponLv);
   const next = maxed ? cur : statsAt(hid, lv + 1, h.weaponLv);
   const botY = WYB(232, 0);
-  /* 属性提升（奶白板直接浮于游戏背景，用户确认去大背板） */
-  const p1H = 216;
+  /* 属性提升（奶白板浮于背景；英雄不会受伤——强化不展示/不提升生命，用户确认） */
+  const p1H = 150;
   const p1 = gpanel(parent, 0, topY - p1H / 2, 700, p1H, CA('#E9DFC2', 0.94), undefined, 0, 12);
-  zoneTab(parent, -280, topY + 6, '属性提升');   // 标题悬于面板外上方（用户确认）
-  const r1 = (p1H - 56) / 4;
+  zoneTab(parent, -280, topY + 16, '属性提升');   // 标题完全拿出面板外（用户确认）
   const rows: [string, string, string | null][] = [
     ['等级', `Lv.${lv}`, maxed ? null : `→ Lv.${lv + 1}`],
     ['攻击力', String(cur.atk), maxed ? null : `+${next.atk - cur.atk}`],
     ['技能伤害', String(cur.skillDmg), maxed ? null : `+${next.skillDmg - cur.skillDmg}`],
-    ['生命', String(cur.hp), maxed ? null : `+${next.hp - cur.hp}`],
   ];
   rows.forEach((r, i) => {
-    const y = p1H / 2 - 28 - r1 * i;
+    const y = 32 - i * 32;
     label(p1, -240, y, r[0], { size: 22, color: INK, bold: true, align: 'left', w: 160, h: 30, shrink: true });
     label(p1, 40, y, r[1], { size: 24, color: INK, bold: true, align: 'right', w: 140, h: 30, shrink: true });
-    if (r[2]) label(p1, 150, y, r[2], { size: 24, color: OK, bold: true, align: 'right', w: 160, h: 30, shrink: true });
+    if (r[2]) label(p1, 240, y, r[2], { size: 24, color: OK, bold: true, align: 'right', w: 160, h: 30, shrink: true });  // 右缘 320=背板右内距（用户确认）
   });
   /* 行动条（消耗 + 升级按钮，深色药丸条） */
   const actH = 64;
@@ -303,7 +301,7 @@ function tabLevel(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
   const fxBot = actCy + actH / 2 + 14;
   const fxH = Math.max(150, fxTop - fxBot);
   const fx = gpanel(parent, 0, fxBot + fxH / 2, 700, fxH, CA('#E9DFC2', 0.94), undefined, 0, 12);
-  zoneTab(parent, -280, fxBot + fxH + 6, '等级效果');   // 标题悬于面板外上方（用户确认）
+  zoneTab(parent, -280, fxBot + fxH + 16, '等级效果');   // 标题完全拿出面板外（用户确认）
   const ms = MILESTONES[hid] || [];
   const CARD_H = 64, GAP = 18, PAD = 16;
   const needH = ms.length * (CARD_H + GAP) - GAP + PAD * 2;
@@ -317,7 +315,7 @@ function tabLevel(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
   scroll.content = ct;
   scroll.horizontal = false;
   scroll.vertical = true;
-  const LINE_X = -262;
+  const LINE_X = -320;   // 竖线/节点与属性文字左缘同列（用户确认左对齐）
   const lineG = N('fxLine', ct, 0, 0, 8, contentH).addComponent(Graphics);
   lineG.fillColor = C('#B8A87F');
   lineG.rect(LINE_X - 2, -(contentH - PAD), 4, contentH - PAD * 2);
@@ -334,9 +332,9 @@ function tabLevel(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
     const yC = -(PAD + i * (CARD_H + GAP) + CARD_H / 2);
     const reached = lv >= m.lv;
     gcircle(ct, LINE_X, yC, 10, reached ? C(PAL.gold) : C('#A5987B'));
-    const c = gpanel(ct, 40, yC, 560, CARD_H, reached ? CA('#E8C878', 0.95) : CA('#D8CBA8', 0.5), undefined, 0, 10);
-    label(c, -196, 0, `${m.lv}级`, { size: 20, color: reached ? INK : '#8A7A5C', bold: true, align: 'left', w: 80, h: 30 });
-    label(c, 47, 0, (reached ? '✓ ' : '') + m.txt, { size: 20, color: reached ? INK : '#8A7A5C', bold: reached, align: 'left', w: 440, h: 30, shrink: true });
+    const c = gpanel(ct, 10, yC, 620, CARD_H, reached ? CA('#E8C878', 0.95) : CA('#D8CBA8', 0.5), undefined, 0, 10);
+    label(c, -236, 0, `${m.lv}级`, { size: 20, color: reached ? INK : '#8A7A5C', bold: true, align: 'left', w: 80, h: 30 });
+    label(c, 70, 0, (reached ? '✓ ' : '') + m.txt, { size: 20, color: reached ? INK : '#8A7A5C', bold: reached, align: 'left', w: 440, h: 30, shrink: true });
   });
 }
 
