@@ -9,7 +9,7 @@ import { Graphics, Node, UIOpacity } from 'cc';
 import { LO, PAL } from '../../config/GameConfig';
 import { CA, btn, C, gcircle, gpanel, label, N, WY, WYB, WX } from '../UIKit';
 import { artSprite } from '../Ux';
-import { PageCtx, artPanel, modal, toast, fmt } from '../PageKit';
+import { PageCtx, modal, toast, fmt } from '../PageKit';
 import { attrsModal } from './HeroPage';
 import {
   EquipKind, HERO_DEFS, EQUIPS, KIND_NAME, QCOLOR, MAX,
@@ -112,12 +112,11 @@ export function buildUpgrade(ctx: PageCtx): void {
     const def = HERO_DEFS[hid];
     const hs = heroStats(hid);
 
-    /* 常驻英雄栏：头像切换（未拥有灰锁） */
+    /* 常驻英雄栏：头像切换（未拥有灰锁）；用户确认：头像不加边框（无描边、无带环座美术） */
     (['archer', 'sniper'] as const).forEach((id, i) => {
       const o = sv.heroes[id].owned;
       const av = gpanel(content, WX(30 + i * 100, 88), WY(205, 88), 88, 88,
-        CA('#2A3240', 1), id === hid ? C(PAL.gold) : C('#FFFFFF44'), id === hid ? 3 : 1.5, 44);
-      artSprite(av, 0, 0, 88, 88, 'ui_circ_icon_gold', { belowIdx: 0 });
+        CA('#2A3240', 1), undefined, 0, 44);
       artSprite(av, 0, 0, 76, 76, HERO_DEFS[id].avatar, { sliced: false });
       if (!o) { gpanel(av, 0, 0, 88, 88, CA('#0B0F16', 0.6), undefined, 0, 44); label(av, 0, 0, '🔒', { size: 30 }); }
       av.on(Node.EventType.TOUCH_END, () => {
@@ -147,7 +146,7 @@ export function buildUpgrade(ctx: PageCtx): void {
 
     /* 自适应升级大卡：底边贴页签，顶边顶着台座之下（高 375~620 随屏取足，不留死空间） */
     const pedBot = hasArt ? artBot - 66 : artBot - 8;
-    const cardBot = WYB(215, 0);
+    const cardBot = WYB(232, 0);
     const cardH = Math.max(375, Math.min(pedBot - 93 - cardBot, 620));
     const cardTop = cardBot + cardH;
 
@@ -163,12 +162,19 @@ export function buildUpgrade(ctx: PageCtx): void {
     else if (st.tab === 2) tabSkills(content, ctx, hid, cardH);
     else tabEquips(content, ctx, hid, cardH);
 
-    /* 四页签：页签条背板（L1）垫底，贴导航栏正上方 */
-    artPanel(content, -2, WYB(130, 64), 716, 84, 'ui_panel_tabs');
+    /* 四页签连体（用户确认与页签栏同做法：无背板、段内直角、仅首/末段外侧圆弧），贴导航栏正上方（NAV 148+10） */
+    const segW = 720 / 4, segH = 62, segR = 14;
     const tabs = ['等级', '武器', '技能', '装备'];
     tabs.forEach((t, i) => {
-      btn(content, WX(15 + i * 182, 170), WYB(130, 64), 170, 64, t,
-        i === st.tab ? PAL.gold : '#5A6472', () => { st.tab = i as 0 | 1 | 2 | 3; render(); }, 22);
+      const seg = N('tabseg' + i, content, WX(15 + i * segW, segW), WYB(158, segH), segW, segH);
+      const g = seg.addComponent(Graphics);
+      g.fillColor = C(i === st.tab ? PAL.gold : '#5A6472');
+      g.roundRect(-segW / 2, -segH / 2, segW, segH, i === 0 || i === tabs.length - 1 ? segR : 0);
+      if (i === 0) g.rect(segW / 2 - segR, -segH / 2, segR, segH);
+      else if (i === tabs.length - 1) g.rect(-segW / 2, -segH / 2, segR, segH);
+      g.fill();
+      label(seg, 0, 0, t, { size: 22, color: '#241C12', bold: true, w: segW, h: segH });
+      seg.on(Node.EventType.TOUCH_END, () => { st.tab = i as 0 | 1 | 2 | 3; render(); });
     });
   }
 }
@@ -256,7 +262,7 @@ function tabLevel(parent: Node, ctx: PageCtx, hid: string, cardH: number): void 
   const maxed = lv >= MAX.hero;
   const cur = statsAt(hid, lv, h.weaponLv);
   const next = maxed ? cur : statsAt(hid, lv + 1, h.weaponLv);
-  const card = parchmentCard(parent, 0, WYB(215, cardH), 718, cardH);
+  const card = parchmentCard(parent, 0, WYB(232, cardH), 718, cardH);
   /* 内部分区锚点：面板一顶缘 / 行动条中心 / 面板二下缘，多余高度分给两块面板 */
   const p1Top = cardH / 2 - 40;
   const actCy = -cardH / 2 + 41;
@@ -285,7 +291,7 @@ function tabLevel(parent: Node, ctx: PageCtx, hid: string, cardH: number): void 
   const act = zonePanel(card, 0, actCy, 660, 54, true);
   costChip(act, -200, 0, '🪙', maxed ? 0 : heroUpCost(lv), sv.gold, 130);
   btn(act, 205, 0, 170, 54, maxed ? 'MAX' : '升 级', maxed ? '#5A6472' : PAL.gold,
-    () => { if (!maxed) save(hid, upHero(hid), ctx); }, 24);
+    () => { if (!maxed) save(hid, upHero(hid), ctx); }, 24, true);
   if (!maxed) gpanel(act, 278, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
 }
 
@@ -298,7 +304,7 @@ function tabWeapon(parent: Node, ctx: PageCtx, hid: string, cardH: number): void
   const cur = statsAt(hid, h.lv, lv);
   const next = maxed ? cur : statsAt(hid, h.lv, lv + 1);
   const c = weaponUpCost(lv);
-  const card = parchmentCard(parent, 0, WYB(215, cardH), 718, cardH);
+  const card = parchmentCard(parent, 0, WYB(232, cardH), 718, cardH);
   const p1Top = cardH / 2 - 40;
   const actCy = -cardH / 2 + 41;
   const p2Bot = actCy + 43;
@@ -325,7 +331,7 @@ function tabWeapon(parent: Node, ctx: PageCtx, hid: string, cardH: number): void
   costChip(act, -200, 0, '🪙', maxed ? 0 : c.gold, sv.gold, 110);
   costChip(act, -20, 0, '🧱', maxed ? 0 : c.mat, matOwned(), 70);
   btn(act, 205, 0, 170, 54, maxed ? 'MAX' : '强 化', maxed ? '#5A6472' : PAL.gold,
-    () => { if (!maxed) save(hid, upWeapon(hid), ctx); }, 24);
+    () => { if (!maxed) save(hid, upWeapon(hid), ctx); }, 24, true);
   if (!maxed) gpanel(act, 278, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
 }
 
@@ -333,7 +339,7 @@ function tabWeapon(parent: Node, ctx: PageCtx, hid: string, cardH: number): void
 function tabSkills(parent: Node, ctx: PageCtx, hid: string, cardH: number): void {
   const sv = loadSave();
   const h = sv.heroes[hid];
-  const card = parchmentCard(parent, 0, WYB(215, cardH), 718, cardH);
+  const card = parchmentCard(parent, 0, WYB(232, cardH), 718, cardH);
   const slotCy = cardH / 2 - 24 - 155; // 槽高 310 顶对齐：上缘留 24 内距
   SKILL_INFO.forEach((info, i) => {
     const lv = h[info.key];
@@ -391,7 +397,7 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
       const r = upSkill(hid, slot);
       toast(r.msg);
       if (r.ok) { const d2 = panel.parent; if (d2) d2.destroy(); rebuild(); }
-    }, 24);
+    }, 24, true);
   } else {
     label(act, 0, 0, '已达等级上限', { size: 22, color: '#AAB2BD' });
   }
@@ -399,7 +405,7 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
 
 /* ---------- 装备页签：大背板（与等级/武器同卡）+ 装备槽×4 固定高顶对齐，点击弹强化弹窗 ---------- */
 function tabEquips(parent: Node, ctx: PageCtx, hid: string, cardH: number): void {
-  const card = parchmentCard(parent, 0, WYB(215, cardH), 718, cardH);
+  const card = parchmentCard(parent, 0, WYB(232, cardH), 718, cardH);
   const slotCy = cardH / 2 - 24 - 155; // 槽高 310 顶对齐：上缘留 24 内距
   WORN_4.forEach((kind, i) => {
     const inst = wornInst(hid, kind);
@@ -466,7 +472,7 @@ export function equipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: 
       const r = upWornEquip(hid, kind);
       toast(r.msg);
       if (r.ok) { const p2 = panel.parent; if (p2) p2.destroy(); rebuild(); }
-    }, 24);
+    }, 24, true);
   } else {
     label(act, 0, 0, '已达强化上限', { size: 22, color: '#AAB2BD' });
   }
