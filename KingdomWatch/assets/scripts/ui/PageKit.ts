@@ -51,10 +51,10 @@ export function modal(ctx: PageCtx, w: number, h: number, title: string, flat = 
   return panel;
 }
 
-/** 品质徽标（左上角标）：白/绿/蓝/紫 + N阶 */
+/** 品质徽标（左上角标，缩小版——用户确认不与商品图重叠）：白/绿/蓝/紫 + N阶 */
 export function qualityBadge(parent: Node, x: number, y: number, q: Quality, tier: number): Node {
-  const b = gpanel(parent, x, y, 118, 34, CA('#0B0F16', 0.85), C(QCOLOR[q]), 2, 10);
-  label(b, 0, 0, `${QNAME[q]}${tier}阶`, { size: 18, color: QCOLOR[q], bold: true, w: 110, h: 28 });
+  const b = gpanel(parent, x, y, 92, 28, CA('#0B0F16', 0.85), C(QCOLOR[q]), 2, 8);
+  label(b, 0, 0, `${QNAME[q]}${tier}阶`, { size: 16, color: QCOLOR[q], bold: true, w: 86, h: 24 });
   return b;
 }
 

@@ -66,7 +66,7 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
 
   if (g.give.kind === 'equip') {
     const d = EQUIPS[g.give.id];
-    qualityBadge(card, -98, 125, d.quality, d.tier);
+    qualityBadge(card, -115, 125, d.quality, d.tier);   // 缩小后贴卡片左上角，右缘 -69 不压图标座（座左缘 -65）
   }
   label(card, 0, -27, g.name, { size: 24, color: unlocked ? '#FFF3D6' : '#889099', bold: true, w: 310, h: 32, shrink: true });
   label(card, 0, -55, g.sub, { size: 17, color: unlocked ? '#AAB2BD' : '#5F6873', w: 310, h: 26, shrink: true });

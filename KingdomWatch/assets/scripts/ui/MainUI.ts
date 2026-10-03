@@ -3,7 +3,7 @@
  * 顶栏：刘海预留区下方 y100 起，无标题，金币/钻石双货币靠右（§已确认）。
  * 页签内容整屏重建（PageKit.ctx.refresh）；各页实现见 ui/pages/*（线稿一一对应）。
  */
-import { _decorator, Component, Label, Node, view } from 'cc';
+import { _decorator, Color, Component, Graphics, Label, Node, view } from 'cc';
 import { initLayout, LO, PAL } from '../config/GameConfig';
 import { loadSave } from '../core/SaveData';
 import { flow } from '../core/Flow';
@@ -115,19 +115,31 @@ export class MainUI extends Component {
   private buildNavBar(root: Node): void {
     const bar = gpanel(root, 0, WYB(0, NAV_H), 750, NAV_H, CA('#14181E', 0.94), undefined, 0, 0);
 
-    const w = 132, gap = 8;
-    const x0 = (750 - (TABS.length * w + (TABS.length - 1) * gap)) / 2;
+    const w = 138, gap = 0;   // 连体无间隔（用户确认与页签栏同做法）
+    const x0 = (750 - TABS.length * w) / 2;
     TABS.forEach((t, i) => {
-      const cx = WX(x0 + i * (w + gap) + w / 2, 0);
+      const cx = WX(x0 + i * w + w / 2, 0);
       const slot = N('tab' + i, root, cx, WYB(12, 124), w, 124);
-      const idle = gpanel(slot, 0, 0, w, 124, CA('#0B0F16', 0.5), undefined, 0, 12);  // 未激活底板
-      const act = gpanel(slot, 0, 0, w, 124, CA(PAL.gold, 0.25), undefined, 0, 12);   // 激活高亮板
+      const idle = this.segPlate(slot, w, 124, i, TABS.length, CA('#0B0F16', 0.5));  // 未激活底板
+      const act = this.segPlate(slot, w, 124, i, TABS.length, CA(PAL.gold, 0.25));   // 激活高亮板
       act.active = false;
       const icon = label(slot, 0, 22, t.icon, { size: 34 });
       const txt = label(slot, 0, -34, t.name, { size: 20, color: '#FFFFFF', bold: true });
       slot.on(Node.EventType.TOUCH_END, () => this.switchTab(i));
       this.navItems.push({ slot, icon, txt, idle, act });
     });
+  }
+
+  /** 连体段板：段内直角，仅首段左侧/末段右侧留圆弧（与页签栏同做法的并集画法） */
+  private segPlate(parent: Node, w: number, h: number, i: number, n: number, fill: Color): Node {
+    const s = N('plate', parent, 0, 0, w, h);
+    const g = s.addComponent(Graphics);
+    g.fillColor = fill;
+    g.roundRect(-w / 2, -h / 2, w, h, i === 0 || i === n - 1 ? 12 : 0);
+    if (i === 0) g.rect(w / 2 - 12, -h / 2, 12, h);
+    else if (i === n - 1) g.rect(-w / 2, -h / 2, 12, h);
+    g.fill();
+    return s;
   }
 
   /** 页签高亮：激活金板金字 / 未激活暗板白字（无边框规范：纯色板，无页签框美术） */
