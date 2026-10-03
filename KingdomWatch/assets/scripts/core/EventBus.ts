@@ -32,4 +32,5 @@ export const EVT = {
   WAVE_CHANGED: 'wave_changed',    // (cur, total, surge)
   CHARGE_CHANGED: 'charge_changed',// (pct, ready)
   ALL_WAVES_CLEARED: 'all_waves_cleared',
+  COMIC_POP: 'comic_pop',          // (x, y, kind) 漫画拟声词条（词表见 battle/ComicPop.ts）
 } as const;

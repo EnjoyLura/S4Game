@@ -1,6 +1,6 @@
 /**
  * 怪物（§3.4 行为：松散虫群下行 + 正弦游动 + 自动分离；近战贴线攻击 / 远程停位投掷 / 萨满周期治疗）
- * 受击闪红 + 0.1s 硬直（§3.0）；仅 BOSS 显示血条（M0 1-1 无 BOSS，钩子保留）
+ * 受击只闪红不掉速（用户确认：控制效果只属于特定 buff）；仅 BOSS 显示血条（M0 1-1 无 BOSS，钩子保留）
  */
 import { Color, Graphics, Label, Layers, Node, Tween, UIOpacity, tween } from 'cc';
 import { MobDef } from '../config/Mobs';
@@ -27,7 +27,7 @@ export class Monster {
   burnT = 0;
   burnTick = 0;
   burnDps = 0;
-  /** 0.1s 受击硬直 */
+  /** 眩晕硬直（预留：真正的眩晕类 buff 才会写入；受击不再写） */
   stunT = 0;
   /** 冲撞/投掷前摇演出剩余时间（手动衰减，避免逐次创建 tween） */
   lungeT = 0;
@@ -173,6 +173,8 @@ export class Monster {
         } else {
           line.takeDamage(this.def.dmg);
           this.lunge();
+          // 近战/石弹命中防线的概率词条（POW!/SOK!/咚!，30% 概率，ComicPop 内掷骰）
+          bus.emit(EVT.COMIC_POP, this.x, this.y + this.def.radius, this.def.kind === 'ranged' ? 'stoneHit' : 'meleeHit');
         }
       }
       // 冲撞/投掷前摇（手动正弦脉冲，代替逐次 tween）

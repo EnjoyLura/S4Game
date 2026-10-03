@@ -18,6 +18,7 @@ import { ProjectileManager } from './Projectile';
 import { Particles } from './Particles';
 import { DamageService, DamageRow } from './DamageService';
 import { FloatText } from './FloatText';
+import { ComicPop } from './ComicPop';
 import { AdService } from '../platform/AdService';
 import { HUD } from '../ui/HUD';
 import { Panels } from '../ui/Panels';
@@ -50,6 +51,7 @@ export class BattleDirector extends Component {
   parts!: Particles;
   dmgSvc = new DamageService();
   float!: FloatText;
+  pops!: ComicPop;
   hud!: HUD;
   panels!: Panels;
   gm!: GmPanel;
@@ -89,6 +91,7 @@ export class BattleDirector extends Component {
         this.float.spawn(x, y, text, color, big),
     };
     this.float = new FloatText(fxLayer);
+    this.pops = new ComicPop(fxLayer);
     this.mgr = new MonsterManager(mobLayer, hitCtx);
     // 双英雄同场（§4 站位表 2 人 = ±160）：艾拉·风羽（弓）左槽，凯尔·鹰眼（狙）右槽
     const slots = heroSlots(2);
@@ -120,6 +123,7 @@ export class BattleDirector extends Component {
     bus.on(EVT.LINE_BROKEN, this.onLineBroken, this);
     bus.on(EVT.ALL_WAVES_CLEARED, this.onAllCleared, this);
     bus.on(EVT.WAVE_CHANGED, this.onWaveChanged, this);
+    bus.on(EVT.COMIC_POP, this.onComicPop, this);
 
     this.hud.showBanner('敌军来袭！', 2);
     this.state = 'prepare';
@@ -130,6 +134,12 @@ export class BattleDirector extends Component {
     bus.off(EVT.LINE_BROKEN, this.onLineBroken, this);
     bus.off(EVT.ALL_WAVES_CLEARED, this.onAllCleared, this);
     bus.off(EVT.WAVE_CHANGED, this.onWaveChanged, this);
+    bus.off(EVT.COMIC_POP, this.onComicPop, this);
+  }
+
+  /** 漫画拟声词条（各战斗模块 emit，词表/概率/主题色在 ComicPop.POP_DEFS） */
+  private onComicPop(x: unknown, y: unknown, kind: unknown): void {
+    this.pops.pop(x as number, y as number, kind as string);
   }
 
   update(rawDt: number): void {

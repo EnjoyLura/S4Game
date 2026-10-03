@@ -8,6 +8,7 @@ import { Monster, MonsterManager } from './Monster';
 import { DamageService } from './DamageService';
 import { Particles } from './Particles';
 import { Sfx } from '../core/Sfx';
+import { bus, EVT } from '../core/EventBus';
 import { LINE_Y, LO, PAL, MAX_PROJS } from '../config/GameConfig';
 
 export interface ProjSpec {
@@ -41,6 +42,8 @@ export interface ProjSpec {
   lowHpBonus?: number;
   /** 强化/贯穿金箭：命中迸溅金色粒子 + 加长拖尾 */
   spark?: boolean;
+  /** 大招弹（猎杀时刻等）：击杀弹大招专属词条 KAPOW! */
+  ult?: boolean;
 }
 
 interface Active {
@@ -198,7 +201,11 @@ export class ProjectileManager {
     this.dmg.add(sp.heroId, Math.min(final, hpBefore));
     Sfx.play(sp.crit ? 'crit' : 'hit');
     if (sp.spark && this.parts) this.parts.burst(m.x, m.y, sp.color, 4);
-    if (m.dead) return;
+    if (m.dead) {
+      this.killPop(sp, m.x, m.y + m.def.radius, sp.crit, sp.ult === true);
+      return;
+    }
+    if (sp.crit) bus.emit(EVT.COMIC_POP, m.x, m.y + m.def.radius, 'crit');
     if (sp.slowRatio) m.applySlow(sp.slowRatio, 2);
     if (sp.burnDps) m.applyBurn(sp.burnDps, 3);
     if (sp.explodeR && sp.explodeR > 0) {
@@ -207,6 +214,7 @@ export class ProjectileManager {
         const ob = o.hp;
         o.takeDamage(sp.dmg * (sp.explodeMul || 0.4), false, sp.heroId);
         this.dmg.add(sp.heroId, Math.min(sp.dmg * (sp.explodeMul || 0.4), ob));
+        if (o.dead) this.killPop(sp, o.x, o.y + o.def.radius, false, false);
       }
       this.boomFx(m.x, m.y, sp.explodeR);
     }
@@ -220,6 +228,13 @@ export class ProjectileManager {
         });
       }
     }
+  }
+
+  /** 击杀词条：大招专属 KAPOW! > 暴击 爆! > 英雄处决词（OOF!/SHUNT! 箭系、AACK! 枪械）；非英雄击杀（点燃/GM）不弹 */
+  private killPop(sp: ProjSpec, x: number, y: number, crit: boolean, ult: boolean): void {
+    if (sp.heroId !== 'archer' && sp.heroId !== 'sniper') return;
+    const kind = ult ? 'killUlt' : crit ? 'crit' : sp.heroId === 'archer' ? 'killArrow' : 'killSnipe';
+    bus.emit(EVT.COMIC_POP, x, y, kind);
   }
 
   private boomFx(x: number, y: number, r: number): void {
