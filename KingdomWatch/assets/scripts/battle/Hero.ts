@@ -2,7 +2,7 @@
  * 英雄单元（§3.7：普攻自动/技能自动CD/大招手动击杀充能）
  * HeroBase：站位/普攻循环/技能自动CD/击杀+呼吸回能充能；子类实现立绘/普攻/技能/大招
  * - ArcherHero 艾拉·风羽：强化箭矢(12s，6次普攻金色贯穿) / 扇形箭雨(两排×8箭全贯穿)
- * - SniperHero 凯尔·鹰眼：穿颅射击(14s，锁定血量最高连续6狙×2/发·死亡转火·全场锁定) / 猎杀时刻(×5.5必暴·无视物抗单发)
+ * - SniperHero 凯尔·鹰眼：穿颅射击(14s，4秒窗口锁定离防线最近连续6狙×2/发·无目标等待) / 猎杀时刻(×5.5必暴·无视物抗单发)
  * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/处决/残血词条）
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
@@ -373,8 +373,8 @@ export class SniperHero extends HeroBase {
   readonly name = '凯尔·鹰眼';
   readonly chargeMax = SNIPER_CHARGE_MAX;
   readonly skillMax = 14;
-  /** 技能·穿颅射击连狙队列：剩余发数与下发出膛倒计时 */
-  private volley: { t: number; left: number } | null = null;
+  /** 技能·穿颅射击连狙队列：剩余发数、下发出膛倒计时、总索敌窗口（无目标等待不取消） */
+  private volley: { t: number; left: number; ttl: number } | null = null;
   /** 大招·猎杀时刻：0.5s 锁定演出（瞄准线实时追踪 + 收缩准星）→ 贯穿弹 */
   private ultLock: { t: number; target: Monster; node: Node; g: Graphics } | null = null;
 
@@ -464,16 +464,21 @@ export class SniperHero extends HeroBase {
   }
 
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
-    // 技能连狙：每发出膛瞬间在技能索敌范围内重新锁定血量最高目标（死亡自动转火）
+    // 技能连狙：4 秒窗口内每 0.28s 重新锁定「离防线最近」目标（用户调整：不再选血量最高）；
+    // 窗口内暂无目标只等待不取消（如击杀后 0.3s 新怪入圈仍可继续索敌）
     if (this.volley) {
-      this.volley.t -= dt;
-      while (this.volley && this.volley.t <= 0) {
-        const tgt = mgr.highestHpInRange(this.x, HERO_Y, this.stats.skillRange);
-        if (!tgt) { this.volley = null; return; }
-        this.snipeShot(tgt, projs, 2, false);
-        this.volley.left--;
-        if (this.volley.left <= 0) { this.volley = null; return; }
-        this.volley.t += 0.28;
+      this.volley.ttl -= dt;
+      if (this.volley.ttl <= 0) { this.volley = null; }
+      else {
+        this.volley.t -= dt;
+        while (this.volley && this.volley.t <= 0) {
+          const tgt = mgr.nearestToLineInRange(this.x, HERO_Y, this.stats.skillRange);
+          if (!tgt) { this.volley.t += 0.1; break; }   // 0.1s 后重试
+          this.snipeShot(tgt, projs, 2, false);
+          this.volley.left--;
+          if (this.volley.left <= 0) { this.volley = null; break; }
+          this.volley.t += 0.28;
+        }
       }
     }
     // 大招锁定演出：瞄准线实时追踪 + 准星收缩，0.5s 后发射贯穿弹
@@ -546,10 +551,10 @@ export class SniperHero extends HeroBase {
     Sfx.play('shoot');
   }
 
-  /** 技能·穿颅射击（自动，14s CD）：锁定全场血量最高目标连续 6 狙，每发 200% 攻击，死亡转火 */
+  /** 技能·穿颅射击（自动，14s CD）：4 秒窗口内锁定「离防线最近」目标连续 6 狙，每发 200% 攻击；无目标等待不取消 */
   protected castSkill(): void {
     this.skillCd = this.skillMax;
-    this.volley = { t: 0, left: 6 };
+    this.volley = { t: 0, left: 6, ttl: 4 };
     // 演出：英雄身上深蓝环脉冲扩散
     const pulse = new Node('snipePulse');
     pulse.layer = Layers.Enum.UI_2D;

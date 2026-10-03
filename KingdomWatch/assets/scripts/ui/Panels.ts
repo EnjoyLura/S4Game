@@ -292,8 +292,7 @@ export class Panels {
     const tab = o.tab ?? 0;
     this.closeAll();
     dimLayer(this.modalRoot, 0.7, true);
-    const loseTitle = gpanel(this.modalRoot, 0, WY(340, 100), 590, 100, CA(PAL.red, 0.18), PAL.red, 2.5, 10);
-    artSprite(loseTitle, 0, 0, 590, 100, 'ui_banner_hazard', { belowIdx: 0 });
+    gpanel(this.modalRoot, 0, WY(340, 100), 590, 100, CA(PAL.red, 0.18), undefined, 0, 10);
     label(this.modalRoot, 0, WY(350, 80), '挑战失败', { size: 40, color: '#FFFFFF', bold: true });
     label(this.modalRoot, 0, WY(480, 44), tab === 0 ? '— 已获得奖励（保底 30%）—' : '— 伤害统计（本局） —', { size: 20, color: tab === 0 ? '#FFB0A0' : '#FFE08A' });
     if (tab === 0) {
@@ -415,9 +414,9 @@ export class Panels {
       } else {
         title = '⚡ 技能 · 穿颅射击';
         rows = [
-          ['效果', '锁定血量最高 · 连续 6 狙'],
+          ['效果', '锁定离防线最近 · 连续 6 狙'],
           ['每发伤害', Math.round(h.atk * h.atkMul * 2) + '（×2.0）'],
-          ['特性', '死亡转火 · 独立暴击'],
+          ['特性', '持续索敌 · 独立暴击'],
           ['冷却时间', hero.skillCd > 0 ? hero.skillCd.toFixed(1) + ' 秒' : '就绪'],
           ['索敌范围', String(Math.round(h.skillRange))],
           ['释放', '自动'],

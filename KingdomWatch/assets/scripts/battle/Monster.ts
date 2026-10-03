@@ -343,6 +343,21 @@ export class MonsterManager {
     return best;
   }
 
+  /** 范围内离防线最近的存活怪（狙击技能·穿颅射击索敌——用户调整：不再选血量最高） */
+  nearestToLineInRange(hx: number, hy: number, range: number): Monster | null {
+    let best: Monster | null = null;
+    let bestD = Infinity;
+    const r2 = range * range;
+    for (const m of this.list) {
+      if (m.dead) continue;
+      const dx = m.x - hx, dy = m.y - hy;
+      if (dx * dx + dy * dy > r2) continue;
+      const dLine = Math.abs(m.y - LINE_Y);
+      if (dLine < bestD) { bestD = dLine; best = m; }
+    }
+    return best;
+  }
+
   mobsInRadius(x: number, y: number, r: number): Monster[] {
     const out: Monster[] = [];
     const r2 = r * r;
