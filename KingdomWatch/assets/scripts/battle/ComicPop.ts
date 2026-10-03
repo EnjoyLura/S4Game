@@ -1,26 +1,21 @@
 /**
  * 漫画拟声弹字（参考《王国保卫战》词条机制）：
- * 与伤害类型/击杀/暴击/技能事件绑定的结构化反馈，不是随机装饰。
- * 三档触发频率分层——必出（处决/暴击/技能施放）/ 概率（近战/石弹命中防线）/ 大招专属，
- * 主题色与伤害来源挂钩（弓=金、狙=蓝、怪=红、石=土），既热闹又不泛滥。
- * 池化 + 上限丢弃（高频限流同 FloatText）；漫画 punch-in 弹出 + 悬停 + 收缩淡出。
+ * 与事件绑定的结构化反馈，不是随机装饰。触发规则（用户确认）：
+ * 只有技能/大招完成击杀才弹词（60% 概率）；普攻击杀、普通暴击不弹；
+ * 怪物命中防线保留低频概率词（POW!/SOK!/咚!）。
+ * 主题色与伤害来源挂钩（弓=金、狙=蓝、怪=红、石=土）；池化 + 上限丢弃限流。
  */
 import { Color, Label, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { Pool } from '../core/ObjectPool';
 import { PAL } from '../config/GameConfig';
 
-/** 词条表：kind → 词组/主题色/字号/触发概率（1=必出） */
+/** 词条表：kind → 词组/主题色/字号/触发概率（chance<1 时 spawn 掷骰） */
 export const POP_DEFS: Record<string, { words: string[]; color: string; size: number; chance: number }> = {
-  killArrow:  { words: ['OOF!', 'SHUNT!'], color: PAL.gold,  size: 30, chance: 1 },    // 处决·箭系击杀（祖传两词随机）
-  killSnipe:  { words: ['AACK!'],          color: '#7FB3FF', size: 30, chance: 1 },    // 处决·枪械类专属
-  killUlt:    { words: ['KAPOW!'],         color: '#BFE3FF', size: 38, chance: 1 },    // 处决·大招专属
-  crit:       { words: ['爆!'],            color: PAL.orange, size: 40, chance: 1 },   // 暴击·必出（覆盖处决词）
-  meleeHit:   { words: ['POW!', 'SOK!'],   color: PAL.red,   size: 26, chance: 0.3 },  // 伤害·近战概率词
-  stoneHit:   { words: ['咚!'],            color: '#B2A48B', size: 24, chance: 0.35 }, // 伤害·石弹概率词
-  castArcher: { words: ['咻!'],            color: PAL.gold,  size: 28, chance: 1 },    // 技能·强化箭矢施放
-  castRain:   { words: ['唰唰唰!'],        color: PAL.gold,  size: 28, chance: 1 },    // 技能·扇形箭雨施放
-  castSnipe:  { words: ['砰!'],            color: '#7FB3FF', size: 28, chance: 1 },    // 技能·穿颅射击施放
-  castHunt:   { words: ['锁定!'],          color: '#BFE3FF', size: 28, chance: 1 },    // 技能·猎杀时刻锁定
+  skillKillArrow: { words: ['OOF!', 'SHUNT!'], color: PAL.gold,  size: 30, chance: 0.6 }, // 技能击杀·箭系（强化箭矢/箭雨）
+  skillKillSnipe: { words: ['AACK!'],          color: '#7FB3FF', size: 30, chance: 0.6 }, // 技能击杀·穿颅连狙
+  ultKill:        { words: ['KAPOW!'],         color: '#BFE3FF', size: 38, chance: 0.6 }, // 大招击杀·猎杀时刻
+  meleeHit:       { words: ['POW!', 'SOK!'],   color: PAL.red,   size: 26, chance: 0.3 }, // 伤害·近战概率词
+  stoneHit:       { words: ['咚!'],            color: '#B2A48B', size: 24, chance: 0.35 }, // 伤害·石弹概率词
 };
 
 const MAX_ACTIVE = 12;

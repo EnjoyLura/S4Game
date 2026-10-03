@@ -251,6 +251,7 @@ export class ArcherHero extends HeroBase {
       split: this.stats.split,
       slowRatio: this.stats.slowOnHit || 0,
       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
+      ability: emp,          // 技能弹种标记：击杀弹 60% 词条（普攻击杀不弹）
       ...this.targetBonuses(),
     };
   }
@@ -318,7 +319,6 @@ export class ArcherHero extends HeroBase {
   protected castSkill(): void {
     this.skillCd = this.skillMax;
     this.empowerLeft = this.empowerMax;
-    bus.emit(EVT.COMIC_POP, this.x, HERO_Y + 95, 'castArcher');   // 技能施放词条
     // 演出：英雄身上金色环脉冲扩散，标记"箭矢已强化"
     const pulse = new Node('empPulse');
     pulse.layer = Layers.Enum.UI_2D;
@@ -340,7 +340,6 @@ export class ArcherHero extends HeroBase {
     this.charge = 0;
     this.volleyQueue.push({ t: 0, row: 0 }, { t: 0.35, row: 1 });
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
-    bus.emit(EVT.COMIC_POP, this.x, HERO_Y + 95, 'castRain');     // 大招施放词条
     Sfx.play('ult');
     void _dmg;
     return true;
@@ -360,6 +359,7 @@ export class ArcherHero extends HeroBase {
         speed,
         dmg: this.effAtk * 0.65, crit: Math.random() < this.stats.critRate,
         color: PAL.gold, heroId: this.id, size: 9, ttl: 3.6, pierce: 999, spark: true,
+        ability: true,   // 大招箭雨击杀弹 60% 词条
       });
     }
   }
@@ -527,7 +527,7 @@ export class SniperHero extends HeroBase {
       color: '#9FCBFF', heroId: this.id, size: 12,
       ttl: 4, pierce: 999, spark: true,
       ignoreRes: true,
-      ult: true,
+      ult: true, ability: true,   // 大招弹：击杀弹 KAPOW!（60%）
     });
     projs.sparkAt(this.x, HERO_Y + 70, '#BFE3FF', 8);
     Sfx.play('snipe');
@@ -541,7 +541,7 @@ export class SniperHero extends HeroBase {
     this.tracer(this.node.parent!, target.x, target.y, crit ? '#BFE3FF' : '#7FB3FF', crit ? 4 : 3, 0.13);
     target.takeDamage(dmgVal, crit, this.id, ignoreRes);
     projs.addDamage(this.id, Math.min(dmgVal, hpBefore));
-    if (target.dead) bus.emit(EVT.COMIC_POP, target.x, target.y + target.def.radius, crit ? 'crit' : 'killSnipe');
+    if (target.dead) bus.emit(EVT.COMIC_POP, target.x, target.y + target.def.radius, 'skillKillSnipe');  // 技能击杀 60% 词条
     projs.sparkAt(target.x, target.y, '#7FB3FF', 4);
     Sfx.play('shoot');
   }
@@ -550,7 +550,6 @@ export class SniperHero extends HeroBase {
   protected castSkill(): void {
     this.skillCd = this.skillMax;
     this.volley = { t: 0, left: 6 };
-    bus.emit(EVT.COMIC_POP, this.x, HERO_Y + 95, 'castSnipe');    // 技能施放词条
     // 演出：英雄身上深蓝环脉冲扩散
     const pulse = new Node('snipePulse');
     pulse.layer = Layers.Enum.UI_2D;
@@ -579,7 +578,6 @@ export class SniperHero extends HeroBase {
     lockNode.setPosition(0, 0, 0);
     const g = lockNode.addComponent(Graphics);
     this.ultLock = { t: 0.5, target: tgt, node: lockNode, g };
-    bus.emit(EVT.COMIC_POP, tgt.x, tgt.y + tgt.def.radius, 'castHunt');  // 锁定词条悬浮于目标头顶
     void _projs; void _dmg;
     return true;
   }

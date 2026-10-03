@@ -44,6 +44,8 @@ export interface ProjSpec {
   spark?: boolean;
   /** 大招弹（猎杀时刻等）：击杀弹大招专属词条 KAPOW! */
   ult?: boolean;
+  /** 技能/大招弹（强化箭矢/箭雨/连狙窗口等）：击杀弹 60% 词条；普攻击杀不弹（用户确认） */
+  ability?: boolean;
 }
 
 interface Active {
@@ -202,10 +204,9 @@ export class ProjectileManager {
     Sfx.play(sp.crit ? 'crit' : 'hit');
     if (sp.spark && this.parts) this.parts.burst(m.x, m.y, sp.color, 4);
     if (m.dead) {
-      this.killPop(sp, m.x, m.y + m.def.radius, sp.crit, sp.ult === true);
+      this.killPop(sp, m.x, m.y + m.def.radius);
       return;
     }
-    if (sp.crit) bus.emit(EVT.COMIC_POP, m.x, m.y + m.def.radius, 'crit');
     if (sp.slowRatio) m.applySlow(sp.slowRatio, 2);
     if (sp.burnDps) m.applyBurn(sp.burnDps, 3);
     if (sp.explodeR && sp.explodeR > 0) {
@@ -214,7 +215,7 @@ export class ProjectileManager {
         const ob = o.hp;
         o.takeDamage(sp.dmg * (sp.explodeMul || 0.4), false, sp.heroId);
         this.dmg.add(sp.heroId, Math.min(sp.dmg * (sp.explodeMul || 0.4), ob));
-        if (o.dead) this.killPop(sp, o.x, o.y + o.def.radius, false, false);
+        if (o.dead) this.killPop(sp, o.x, o.y + o.def.radius);
       }
       this.boomFx(m.x, m.y, sp.explodeR);
     }
@@ -230,10 +231,12 @@ export class ProjectileManager {
     }
   }
 
-  /** 击杀词条：大招专属 KAPOW! > 暴击 爆! > 英雄处决词（OOF!/SHUNT! 箭系、AACK! 枪械）；非英雄击杀（点燃/GM）不弹 */
-  private killPop(sp: ProjSpec, x: number, y: number, crit: boolean, ult: boolean): void {
+  /** 击杀词条：只有技能/大招弹的击杀才弹（60% 概率在 ComicPop 掷骰）；
+   *  词：大招 KAPOW! > 箭系 OOF!/SHUNT!（金）、连狙 AACK!（蓝）；普攻击杀/普通暴击不弹（用户确认） */
+  private killPop(sp: ProjSpec, x: number, y: number): void {
+    if (!sp.ability && !sp.ult) return;
     if (sp.heroId !== 'archer' && sp.heroId !== 'sniper') return;
-    const kind = ult ? 'killUlt' : crit ? 'crit' : sp.heroId === 'archer' ? 'killArrow' : 'killSnipe';
+    const kind = sp.ult ? 'ultKill' : sp.heroId === 'archer' ? 'skillKillArrow' : 'skillKillSnipe';
     bus.emit(EVT.COMIC_POP, x, y, kind);
   }
 
