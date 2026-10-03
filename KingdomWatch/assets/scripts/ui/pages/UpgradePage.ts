@@ -227,8 +227,8 @@ function zonePanel(parent: Node, x: number, y: number, w: number, h: number, dar
   return gpanel(parent, x, y, w, h, dark ? CA('#3A2A12', 0.18) : CA('#FFF7E0', 0.5), '#8A6A2A66', 1.5, 12);
 }
 
-/** 分区标签：骑在分区面板上缘的小金签（标注该区用途） */
-function zoneTab(parent: Node, x: number, y: number, text: string): void {
+/** 分区标签：骑在分区面板上缘的小金签（标注该区用途；基地页弹窗共用） */
+export function zoneTab(parent: Node, x: number, y: number, text: string): void {
   gpanel(parent, x, y, 110, 26, CA('#E8C878', 0.92), '#8A6A2A', 1.5, 10);
   label(parent, x, y, text, { size: 18, color: INK, bold: true, w: 110, h: 26 });
 }
