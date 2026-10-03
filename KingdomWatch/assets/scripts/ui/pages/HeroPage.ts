@@ -1,9 +1,9 @@
 /**
  * ② 英雄（线稿 heroes）：大图环绕式 —— 上半区全宽大背板罩住英雄大立绘（左右箭头叠图内）+ 装备槽 + 战力徽章；
  * 右列装备槽（武器横扁×1 + 2×2 防具）：点已穿槽=装备属性弹窗（锻造），空槽无反应；
- * 下方背包（无背板直接透出背景，页签背板保留且三页签连体）：点仓库装备=同槽已穿则双面板对比（分解/替换），未穿则单弹窗（穿戴/出售）。
+ * 下方背包（无背板直接透出背景，页签三段连体无背板、仅两端外侧圆弧）：点仓库装备=同槽已穿则双面板对比（分解/替换），未穿则单弹窗（穿戴/出售）。
  */
-import { Node } from 'cc';
+import { Node, Graphics } from 'cc';
 import { PAL, LO } from '../../config/GameConfig';
 import { CA, btn, C, dimLayer, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
@@ -68,17 +68,21 @@ export function buildHeroes(ctx: PageCtx): void {
       drawSlot(ctx, content, hid, k, () => render(), CX(470 + (i % 2) * 140, 130), WY(440 + Math.floor(i / 2) * 160, 150), 130, 150);
     });
 
-    /* 我的背包：页签条背板（L1，用户确认保留）+ 三页签连体纯色板（用户确认：不要边框按钮）；
+    /* 我的背包：三页签连体（用户确认：去页签背板；段内直角，仅首段左侧/末段右侧留圆弧）；
        背包格区不加背板（用户确认：直接透出游戏背景） */
-    artPanel(content, -5, WY(872, 58), 650, 78, 'ui_panel_tabs');
     const tabs = [['weapon', '武器'], ['equip', '装备'], ['mat', '材料']] as const;
-    const segW = 650 / 3;
+    const segW = 650 / 3, segH = 58, segR = 14;
     tabs.forEach((t, i) => {
-      const active = tabs[i][0] === bagSt.tab;
-      btn(content, CX(45 + i * segW, segW), WY(872, 58), segW, 58, t[1], active ? PAL.gold : '#5A6472', () => {
-        bagSt.tab = t[0];
-        render();
-      }, 22, true);
+      const active = t[0] === bagSt.tab;
+      const seg = N('tabseg_' + t[0], content, CX(45 + i * segW, segW), WY(872, segH), segW, segH);
+      const g = seg.addComponent(Graphics);
+      g.fillColor = C(active ? PAL.gold : '#5A6472');
+      g.roundRect(-segW / 2, -segH / 2, segW, segH, i === 1 ? 0 : segR);
+      if (i === 0) g.rect(segW / 2 - segR, -segH / 2, segR, segH);          // 并集盖平右侧两角
+      else if (i === 2) g.rect(-segW / 2, -segH / 2, segR, segH);           // 并集盖平左侧两角
+      g.fill();
+      label(seg, 0, 0, t[1], { size: 22, color: '#241C12', bold: true, w: segW, h: segH });
+      seg.on(Node.EventType.TOUCH_END, () => { bagSt.tab = t[0]; render(); });
     });
     const grid = N('bagGrid', content, 0, 0, 750, 300);
 

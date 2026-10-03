@@ -82,6 +82,8 @@ export class MainUI extends Component {
     setGlobalRoot(root);
     this.tab = flow.mainTab;
     this.switchTab(this.tab);
+    // 资源栏恒在页面内容上层（英雄页大背板延伸到屏顶，会盖住先建的货币芯片）
+    ['gold', 'dia'].forEach(nm => { const n = root.getChildByName(nm); if (n) n.setSiblingIndex(root.children.length - 1); });
   }
 
   /* ---------- 顶栏：双货币靠右（用户确认：资源栏不要大背板，货币芯片直接浮于场景） ---------- */
