@@ -193,6 +193,9 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_card_crit_rate', 'ui_card_crit_dmg', 'ui_card_instinct_a', 'ui_card_fast_charge_a',
   'ui_card_split', 'ui_card_explode', 'ui_card_frost', 'ui_card_burn',
   'ui_card_rain_rounds', 'ui_card_explode_w', 'ui_card_explode_r',
+  // 狙击/通用剩余卡面（生图 skill 产出，2026-10-04）
+  'ui_card_execute', 'ui_card_multi_lock', 'ui_card_cd_cut', 'ui_card_extra_line',
+  'ui_card_wall', 'ui_card_repair', 'ui_card_xp_badge',
   'ui_icon_atk_sniper', 'ui_icon_skill_sniper', 'ui_icon_ult_sniper',
   // 场景
   'scenes/scene_1_1',
