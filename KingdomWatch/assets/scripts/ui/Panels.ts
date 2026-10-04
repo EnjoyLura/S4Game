@@ -10,7 +10,7 @@ import { HeroBase } from '../battle/Hero';
 import { BattleDirector } from '../battle/BattleDirector';
 import { AdService } from '../platform/AdService';
 import { loadSave } from '../core/SaveData';
-import { btn, CA, dimLayer, gbar, gcircle, gpanel, gswitch, label, N, setText, WY, WYB, WX } from './UIKit';
+import { btn, C, CA, dimLayer, gbar, gcircle, gpanel, gswitch, label, N, setText, WY, WYB, WX } from './UIKit';
 import { artIcon, artSprite } from './Ux';
 
 /** 奖励行文字兜底 → A2 图标（有美术时整座替换，失败保持 emoji） */
@@ -180,15 +180,23 @@ export class Panels {
   }
 
   /* ---------- 页签条（线稿④-1/④-2/⑤-1/⑥-1）：点页签本地重渲染当前面板（无边框规范：纯色板） ---------- */
+  /** 页签栏（用户调整：与主界面背包页签同版式）：整条连体无缝分段——激活段金底、未激活灰蓝底，
+   *  段内直角仅首段左侧/末段右侧留圆弧，深色粗体字；总宽沿用调用方参数（gap 摊入段宽） */
   private tabsBar(tabs: string[], active: number, y: number, x0: number, w: number, gap: number, onSel: (i: number) => void): void {
+    const n = tabs.length;
+    const segW = (n * w + (n - 1) * gap) / n, segH = 58, segR = 14;
     tabs.forEach((t, i) => {
-      const x = WX(x0 + i * (w + gap), w), cy = WY(y, 72);
-      const tab = gpanel(this.modalRoot, x, cy, w, 72, i === active ? CA(PAL.gold, 0.25) : CA('#14181E', 0.85), undefined, 0, 12);
-      // 激活页签金底 → 亮金文字；未激活深蓝底 → 白字
-      label(this.modalRoot, x, cy, t, { size: 20, color: i === active ? '#FFE08A' : '#FFFFFF' });
+      const x = WX(x0 + i * segW, segW), cy = WY(y, segH);
+      const seg = N('tabseg' + i, this.modalRoot, x, cy, segW, segH);
+      const g = seg.addComponent(Graphics);
+      g.fillColor = C(i === active ? PAL.gold : '#5A6472');
+      g.roundRect(-segW / 2, -segH / 2, segW, segH, i === 0 || i === n - 1 ? segR : 0);
+      if (i === 0) g.rect(segW / 2 - segR, -segH / 2, segR, segH);            // 首段盖平右侧两角
+      if (i === n - 1 && n > 1) g.rect(-segW / 2, -segH / 2, segR, segH);     // 末段盖平左侧两角
+      g.fill();
+      label(seg, 0, 0, t, { size: 22, color: '#241C12', bold: true, w: segW, h: segH });
       if (i !== active) {
-        const hit = N('tabHit' + i, this.modalRoot, x, cy, w, 72);
-        hit.on(Node.EventType.TOUCH_END, e => { e.propagationStopped = true; onSel(i); });
+        seg.on(Node.EventType.TOUCH_END, e => { e.propagationStopped = true; onSel(i); });
       }
     });
   }
