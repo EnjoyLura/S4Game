@@ -34,6 +34,12 @@ const CARD_ART: Record<string, string> = {
   fast_charge_s: 'ui_card_fast_charge_a', // 快速充能 ← 快速充能（能量体）
 };
 
+/** 淡色品质背板（用户调整：白/绿/蓝/紫/黄五色，按稀有度取用；绿/黄备用待稀有度扩展） */
+const PLATE_BY_RARITY: Record<string, string> = {
+  white: 'ui_card_plate_white', green: 'ui_card_plate_green', blue: 'ui_card_plate_blue',
+  purple: 'ui_card_plate_purple', yellow: 'ui_card_plate_yellow',
+};
+
 export class Panels {
   private modalRoot: Node;
   private pickAdLeft = 1;
@@ -99,7 +105,7 @@ export class Panels {
         if (this.picking || this.pickAdLeft <= 0) return;
         this.pickAdLeft--;
         AdService.showRewarded('pick_refresh', () => cb.onRefreshRequest(), () => { this.pickAdLeft++; });
-      }, 24, true);
+      }, 24);
     btn(this.modalRoot, WX(460, 180), WY(862, 76), 180, 76,
       '💎2 钻石刷新', this.pickDiaLeft > 0 ? PAL.gold : '#5A6472', () => {
         if (this.picking || this.pickDiaLeft <= 0) return;
@@ -108,7 +114,7 @@ export class Panels {
         sv.diamonds -= 2;
         this.pickDiaLeft--;
         cb.onRefreshRequest();
-      }, 22, true);
+      }, 22);
   }
 
   /** 选择动画：选中卡弹跳、其余卡淡出，随后真实回调（三选一冻结期间 tween 仍走主循环时钟） */
@@ -131,9 +137,16 @@ export class Panels {
   private buildCard(frame: Node, card: CardDef): void {
     const rarity = RARITY_COLOR[card.rarity];
 
-    // ① 卡头稀有度色带（222×52 通栏扁平色板）
-    const header = gpanel(frame, 0, 154, 222, 52, CA(rarity, 0.85), undefined, 0, 12);
-    label(header, 0, 0, card.name, { size: 22, color: card.rarity === 'white' ? '#4A3214' : '#FFFFFF', bold: true, w: 208, h: 40, shrink: true });
+    // ⓪ 卡背板：淡色品质背板垫底（缺图回退程序羊皮板）；撕边外圈透明，
+    // 美术到位后清除程序板，避免直边衬底从撕边轮廓外露出
+    artSprite(frame, 0, 0, 222, 360, PLATE_BY_RARITY[card.rarity] || 'ui_card_plate_base', {
+      belowIdx: 0,
+      onLoaded: () => { frame.getComponent(Graphics)?.clear(); },
+    });
+
+    // ① 卡头稀有度色带（200×52 扁平色板：收窄进撕边轮廓内）
+    const header = gpanel(frame, 0, 154, 200, 52, CA(rarity, 0.85), undefined, 0, 12);
+    label(header, 0, 0, card.name, { size: 22, color: card.rarity === 'white' ? '#4A3214' : '#FFFFFF', bold: true, w: 188, h: 40, shrink: true });
 
     // ② 图标座 120 圆 + 内嵌 96 圆（卡面美术图 ui_card_<id>；缺图回退首字母——用户要求：卡面用图标资源）
     const gear = gcircle(frame, 0, 50, 60, CA('#2A3240', 1));
@@ -148,7 +161,7 @@ export class Panels {
     else artSprite(ava, 0, 0, 48, 48, 'ui_avatar_' + card.owner, { sliced: false });
 
     // ④ 描述（18 号加粗，shrink 保证不超框）
-    label(frame, 0, -95, card.desc, { size: 18, color: '#4A3214', bold: true, w: 206, h: 90, shrink: true, lineHeight: 26 });
+    label(frame, 0, -95, card.desc, { size: 18, color: '#4A3214', bold: true, w: 196, h: 90, shrink: true, lineHeight: 26 });
   }
 
   /* ---------- 页签条（线稿④-1/④-2/⑤-1/⑥-1）：点页签本地重渲染当前面板（无边框规范：纯色板） ---------- */
