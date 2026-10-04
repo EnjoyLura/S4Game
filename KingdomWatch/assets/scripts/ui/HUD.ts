@@ -216,28 +216,28 @@ export class HUD {
     return ui;
   }
 
-  /** 头顶图标对：普攻(-27)/技能(+27)，锚定各自英雄（无边框规范：纯色圆板 + 字） */
+  /** 头顶图标对：普攻(-34)/技能(+34)，锚定各自英雄（用户调整：加大 + 远离英雄；无边框规范：纯色圆板 + 字） */
   private buildSkillBadge(top: Node, i: number, hero: HeroBase): SkillUI {
-    const cy = WYB(126, 46);
-    const atkX = hero.x - 27, cx = hero.x + 27;
-    const atkIcon = gcircle(top, atkX, cy, 23, CA(PAL.gold, 0.3));
+    const cy = WYB(152, 56);
+    const atkX = hero.x - 34, cx = hero.x + 34;
+    const atkIcon = gcircle(top, atkX, cy, 28, CA(PAL.gold, 0.3));
     const atkGlyph = label(atkIcon, 0, 0, '攻', { size: 18, color: PAL.gold, bold: true });
     // 普攻图标（美术到位后盖过程序字；缺失保持文字兜底）
-    artSprite(atkIcon, 0, 0, 46, 46, 'ui_icon_atk_' + hero.id, { sliced: false, hideOnLoad: [atkGlyph] });
+    artSprite(atkIcon, 0, 0, 56, 56, 'ui_icon_atk_' + hero.id, { sliced: false, hideOnLoad: [atkGlyph] });
     atkIcon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('atk', i));
-    const icon = gcircle(top, cx, cy, 23, CA(PAL.blue, 0.3));
+    const icon = gcircle(top, cx, cy, 28, CA(PAL.blue, 0.3));
     const glyph = label(icon, 0, 0, '技', { size: 18, color: PAL.blue, bold: true });
     // 技能图标（同上）
-    artSprite(icon, 0, 0, 46, 46, 'ui_icon_skill_' + hero.id, { sliced: false, hideOnLoad: [glyph] });
+    artSprite(icon, 0, 0, 56, 56, 'ui_icon_skill_' + hero.id, { sliced: false, hideOnLoad: [glyph] });
     icon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('skill', i));
-    const gray = gcircle(top, cx, cy, 23, CA('#3A4250', 0.9));
+    const gray = gcircle(top, cx, cy, 28, CA('#3A4250', 0.9));
     gray.active = false;
     const pie = new Node('skillPie' + i);
     pie.setParent(top);
     pie.setPosition(cx, cy, 0);
     const pieG = pie.addComponent(Graphics);
     pie.active = false;
-    const cdTxt = label(top, cx, cy, '', { size: 13, color: '#FFFFFF', bold: true, w: 48, h: 20 });
+    const cdTxt = label(top, cx, cy, '', { size: 13, color: '#FFFFFF', bold: true, w: 56, h: 20 });
     cdTxt.active = false;
     return { cx, cy, icon, glyph, gray, pie, pieG, cdTxt, cooling: null, lastCdKey: -1 };
   }
@@ -485,14 +485,14 @@ export class HUD {
     if (f <= 0.004) return;
     g.fillColor = CA('#0B0F16', 0.62);
     if (f >= 0.996) {
-      g.circle(0, 0, 22);
+      g.circle(0, 0, 27);
       g.fill();
       return;
     }
     g.moveTo(0, 0);
     // Graphics 局部坐标 y 向上：π/2=12点、0=3点；ccw=false 按角度递减 = 屏幕顺时针。
     // 暗遮罩从"指针位"顺时针铺回12点：指针=f·360°处，随CD流逝像时针一样顺时针旋转（12→3→6→9），亮区在12点后顺时针生长
-    g.arc(0, 0, 22, Math.PI / 2 - (1 - f) * Math.PI * 2, Math.PI / 2, false);
+    g.arc(0, 0, 27, Math.PI / 2 - (1 - f) * Math.PI * 2, Math.PI / 2, false);
     g.close();
     g.fill();
   }
