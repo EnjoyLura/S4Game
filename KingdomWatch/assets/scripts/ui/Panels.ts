@@ -195,8 +195,11 @@ export class Panels {
       if (i === n - 1 && n > 1) g.rect(-segW / 2, -segH / 2, segR, segH);     // 末段盖平左侧两角
       g.fill();
       label(seg, 0, 0, t, { size: 22, color: '#241C12', bold: true, w: segW, h: segH });
-      // 页签段美术（用户调整：生图 ui_tab_seg 浅灰 plaque）；加载后盖住程序段，激活段金色 tint
-      const art = artSprite(seg, 0, 0, segW, segH, 'ui_tab_seg', { belowIdx: 0 });
+      // 页签段美术（用户调整：生图 ui_tab_seg 浅灰 plaque）；加载后盖住程序段，激活段金色 tint。
+      // 左右各外扩 12 与邻段重叠（段美术四角透明，上层透出下层填充）→ 页签之间不留间隔（用户反馈）
+      const ov = 12;
+      const li = i > 0 ? ov : 0, ri = i < n - 1 ? ov : 0;
+      const art = artSprite(seg, (ri - li) / 2, 0, segW + li + ri, segH, 'ui_tab_seg', { belowIdx: 0 });
       if (i === active) art.getComponent(Sprite)!.color = C('#F2B23E');
       if (i !== active) {
         seg.on(Node.EventType.TOUCH_END, e => { e.propagationStopped = true; onSel(i); });
@@ -282,7 +285,7 @@ export class Panels {
       }
     }
     dlgConfirm(this.modalRoot, WX(50, 300), WY(880, 88), 300, 88, '⏻ 退出', o.onExit, 22, '#E89A3C', '#C47A28', 'ui_btn_exit');
-    btn(this.modalRoot, WX(400, 300), WY(880, 88), 300, 88, '▶ 继续战斗', PAL.green, o.onResume, 22, true);
+    dlgConfirm(this.modalRoot, WX(400, 300), WY(880, 88), 300, 88, '▶ 继续战斗', o.onResume, 22, '#7FB841', '#5E8F2E', 'ui_btn_cancel');
   }
 
   /* ---------- ⑥ 胜利结算（页签：奖励总览/伤害统计，线稿⑥/⑥-1） ---------- */
