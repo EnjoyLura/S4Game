@@ -24,6 +24,16 @@ interface PickCallbacks {
   onRefreshRequest: () => void;
 }
 
+/** 卡面图标复用表（用户调整：狙击手普攻系六卡复用弓箭手同款图标；未列出的卡仍走 ui_card_<id>） */
+const CARD_ART: Record<string, string> = {
+  heavy_head: 'ui_card_sharp',        // 重弹头 ← 攻击力（剑+绿箭头）
+  fast_load: 'ui_card_swift',         // 快速装填 ← 攻速（弩+绿箭头）
+  steady_rest: 'ui_card_crit_rate',   // 稳定枪架 ← 暴击率（准星）
+  lethal_aim: 'ui_card_crit_dmg',     // 致命瞄准 ← 暴击伤害（骷髅）
+  instinct_s: 'ui_card_instinct_a',   // 猎手本能 ← 猎手本能（猎物）
+  fast_charge_s: 'ui_card_fast_charge_a', // 快速充能 ← 快速充能（能量体）
+};
+
 export class Panels {
   private modalRoot: Node;
   private pickAdLeft = 1;
@@ -129,7 +139,7 @@ export class Panels {
     const gear = gcircle(frame, 0, 50, 60, CA('#2A3240', 1));
     const icon = gcircle(frame, 0, 50, 48, CA(rarity, 0.16));
     const iconLbl = label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 26, color: card.rarity === 'white' ? '#E8E0C8' : rarity, bold: true });
-    artSprite(frame, 0, 50, 124, 124, 'ui_card_' + card.id, { sliced: false, hideOnLoad: [iconLbl] });   // 124>120 座圆：图占满整个圆去黑环（用户反馈）
+    artSprite(frame, 0, 50, 124, 124, CARD_ART[card.id] || ('ui_card_' + card.id), { sliced: false, hideOnLoad: [iconLbl] });   // 124>120 座圆：图占满整个圆去黑环（用户反馈）
 
     // ③ 右上归属角标（圆心 y94/r24：顶缘 118 离色带底 128 十分距；距图标座圆心 91 > 60+24）
     // 英雄卡贴头像图（同英雄页/编队/大招钮），全局卡保持文字（用户要求：三选一卡用上英雄头像）
