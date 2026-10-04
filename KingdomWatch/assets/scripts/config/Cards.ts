@@ -17,8 +17,8 @@ export interface HeroStats {
   skillRange: number;   // 技能索敌范围
   critRate: number;     // 暴击率
   critMul: number;      // 暴击伤害倍率
-  serial: number;       // 连射：同线串行追加子弹数
-  fan: number;          // 齐射：扇形子弹道数
+  serial: number;       // 连射：追加的弹幕排数（每排与首排同列数，列×排网格）
+  fan: number;          // 齐射：弹幕并列列数追加（总列 = 1+fan）
   split: number;        // 分裂：命中分裂小弹道数
   explodeR: number;     // 爆炸半径（0=无爆炸）
   explodeMul: number;   // 爆炸伤害倍率
@@ -93,10 +93,10 @@ export const ARCHER_CARDS: CardDef[] = [
     apply: x => { x.hero.atkMul *= 1.2; } }),
   c({ id: 'swift', name: '迅捷之风', rarity: 'white', maxStacks: 4, owner: 'archer', desc: '攻速 +15%',
     apply: x => { x.hero.aspd *= 1.15; } }),
-  c({ id: 'serial', name: '连射', rarity: 'blue', maxStacks: 3, owner: 'archer', desc: '普攻同线串行追加 1 颗子弹（微延迟成串，独立命中）',
+  c({ id: 'serial', name: '连射', rarity: 'blue', maxStacks: 3, owner: 'archer', desc: '普攻追加 1 排弹幕（微延迟整排再射，弹道数与首排一致，独立命中）',
     apply: x => { x.hero.serial += 1; } }),
-  c({ id: 'fan', name: '齐射', rarity: 'blue', maxStacks: 3, owner: 'archer', desc: '普攻额外射出 2 支扇形子弹道：主弹道索敌，子弹道直线随缘命中',
-    apply: x => { x.hero.fan += 2; } }),
+  c({ id: 'fan', name: '齐射', rarity: 'blue', maxStacks: 3, owner: 'archer', desc: '普攻弹道并列 +1 列（扇形展开，直线随缘命中）',
+    apply: x => { x.hero.fan += 1; } }),
   c({ id: 'split', name: '分裂', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '普攻命中分裂出 2 支小弹道（50% 伤害）',
     apply: x => { x.hero.split += 2; } }),
   c({ id: 'explode', name: '小范围爆炸', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '普攻命中小范围爆炸（攻击力 40% 溅射）',

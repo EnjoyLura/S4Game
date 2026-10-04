@@ -434,7 +434,7 @@ export class Panels {
         ['伤害', String(Math.round(h.atk * h.atkMul))],
         ['攻速', h.aspd.toFixed(1) + ' 次/秒'],
         ['索敌范围', String(Math.round(h.range))],
-        ['弹道', (1 + h.serial) + ' 支' + (h.fan > 0 ? ' +' + h.fan + ' 齐射' : '')],
+        ['弹道', (h.fan + h.serial > 0 ? (1 + h.fan) + '×' + (1 + h.serial) + ' 弹幕' : '1 支')],
         ['暴击', Math.round(h.critRate * 100) + '% / ' + Math.round(h.critMul * 100) + '%'],
         ['目标', '最靠下'],
       ];

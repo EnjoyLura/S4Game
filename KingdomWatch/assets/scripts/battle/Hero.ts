@@ -270,23 +270,23 @@ export class ArcherHero extends HeroBase {
     if (emp) this.empowerLeft--;
     this.lastEmp = emp;
     const bs = emp ? 1560 : 960;   // 与 spec 弹速一致（×2）
-    // 主弹：预判拦截点直线射出
+    // 首排弹幕：预判拦截点直线射出（列 = 1+齐射层）
     const lead = this.lead(target, bs);
-    this.fireDir(projs, lead.dirX, lead.dirY, emp);
+    this.fireRow(projs, lead.dirX, lead.dirY, emp);
     Sfx.play('shoot');
-    // 连射：延迟成串；每发出弓瞬间若目标存活则按当时状态重新预判（出弓后仍直线），目标已亡则沿锁定方向
+    // 连射：后续排延迟成排再射；每排出弓瞬间若目标存活则按当时状态重新预判（出弓后仍直线），目标已亡则沿锁定方向
     for (let i = 1; i <= this.stats.serial; i++) {
       this.serialQueue.push({ t: i * 0.12, target, dirX: lead.dirX, dirY: lead.dirY, emp });
     }
-    // 齐射：以预判拦截线为中心的固定扇形子弹道，直线随缘
-    if (this.stats.fan > 0) {
-      const spread = 10;
-      const baseAng = Math.atan2(lead.dirY, lead.dirX);
-      for (let i = 0; i < this.stats.fan; i++) {
-        const off = (i - (this.stats.fan - 1) / 2) * spread * Math.PI / 180;
-        const ang = baseAng + off;
-        this.fireDir(projs, Math.cos(ang), Math.sin(ang), emp);
-      }
+  }
+
+  /** 一排弹幕（列 = 1+齐射层）：以瞄准线为中心扇形并列展开，直线随缘（齐射×连射 = 列×排网格） */
+  private fireRow(projs: ProjectileManager, dirX: number, dirY: number, emp: boolean): void {
+    const cols = 1 + this.stats.fan;
+    const baseAng = Math.atan2(dirY, dirX);
+    for (let c = 0; c < cols; c++) {
+      const ang = baseAng + (c - (cols - 1) / 2) * 10 * Math.PI / 180;
+      this.fireDir(projs, Math.cos(ang), Math.sin(ang), emp);
     }
   }
 
@@ -299,9 +299,9 @@ export class ArcherHero extends HeroBase {
         this.serialQueue.splice(i, 1);
         if (q.target && !q.target.dead) {
           const ld = this.lead(q.target, q.emp ? 1560 : 960);
-          this.fireDir(projs, ld.dirX, ld.dirY, q.emp === true);
+          this.fireRow(projs, ld.dirX, ld.dirY, q.emp === true);
         } else {
-          this.fireDir(projs, q.dirX, q.dirY, q.emp === true);
+          this.fireRow(projs, q.dirX, q.dirY, q.emp === true);
         }
       }
     }
