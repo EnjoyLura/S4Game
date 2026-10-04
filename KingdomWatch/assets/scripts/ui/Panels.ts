@@ -385,8 +385,9 @@ export class Panels {
       const cxAv = px - w / 2 + 51;
       gcircle(this.modalRoot, cxAv, cyAv, 35, CA('#2A3240', 1));
       const avLbl = label(this.modalRoot, cxAv, cyAv, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
+      // 74 > 70 座圆：头像盖满整个圆去黑环（用户反馈）
       if (r.id === 'archer' || r.id === 'sniper')
-        artSprite(this.modalRoot, cxAv, cyAv, 58, 58, 'ui_avatar_' + r.id, { sliced: false, hideOnLoad: [avLbl] });
+        artSprite(this.modalRoot, cxAv, cyAv, 74, 74, 'ui_avatar_' + r.id, { sliced: false, hideOnLoad: [avLbl] });
       label(this.modalRoot, px - w / 2 + 192, cyTx, r.name,
         { size: 18, color: '#FFFFFF', align: 'left', w: 150, h: 40, shrink: true });
       label(this.modalRoot, px + w / 2 - 66, cyTx, (r.pct * 100).toFixed(2) + '%',
@@ -428,7 +429,7 @@ export class Panels {
     let px: number, py: number, w = 300, hh = 272, title: string;
     let rows: [string, string][];
     if (kind === 'atk') {
-      title = isArcher ? '🏹 普攻 · 风刃射击' : '🎯 普攻 · 重弩狙击';
+      title = isArcher ? '普攻 · 风刃射击' : '普攻 · 重弩狙击';
       rows = [
         ['伤害', String(Math.round(h.atk * h.atkMul))],
         ['攻速', h.aspd.toFixed(1) + ' 次/秒'],
@@ -441,7 +442,7 @@ export class Panels {
       py = iconY + 23 + 16 + hh / 2;
     } else if (kind === 'skill') {
       if (isArcher) {
-        title = '⚡ 技能 · 强化箭矢';
+        title = '技能 · 强化箭矢';
         rows = [
           ['效果', '接下来 6 次普攻强化'],
           ['强化伤害', Math.round(h.atk * h.atkMul * 1.5) + '（×1.5）'],
@@ -451,7 +452,7 @@ export class Panels {
           ['释放', '自动'],
         ];
       } else {
-        title = '⚡ 技能 · 穿颅射击';
+        title = '技能 · 穿颅射击';
         rows = [
           ['效果', '锁定离防线最近 · 连续 ' + Math.round(h.skillShots || 6) + ' 狙'],
           ['每发伤害', Math.round(h.atk * h.atkMul * 2) + '（×2.0）'],
@@ -464,7 +465,7 @@ export class Panels {
       px = hero.x + 27 + 23 + 16 + w / 2;
       py = iconY + 23 + 16 + hh / 2;
     } else if (isArcher) {
-      title = '✦ 大招 · 扇形箭雨';
+      title = '大招 · 扇形箭雨';
       w = 280; hh = 272;
       rows = [
         ['伤害', Math.round(h.atk * h.atkMul * 0.65) + ' × 每箭'],
@@ -478,7 +479,7 @@ export class Panels {
       px = WX(636, 90) - 45 - 16 - w / 2;
       py = WYB(504 + ultIdx * 110, 90);
     } else {
-      title = '✦ 大招 · 猎杀时刻';
+      title = '大招 · 猎杀时刻';
       w = 280; hh = 272;
       rows = [
         ['伤害', '×5.5 必定暴击'],
@@ -495,12 +496,15 @@ export class Panels {
     px = Math.max(-375 + w / 2 + 8, Math.min(375 - w / 2 - 8, px));
     py = Math.max(-LO.half + hh / 2 + 8, Math.min(LO.half - hh / 2 - 8, py));
 
-    const tipsPanel = gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.94), undefined, 0, 12);
+    // 底板 0.86（用户调整：增加透明度，战斗画面更可见）；点空白关闭不受影响
+    const tipsPanel = gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.86), undefined, 0, 12);
     // 左右内边距 16（用户调整：原 30 过大）；左列固定 90 + 间距 12，剩余全给数值列（过长 shrink 而非压得过小）
     const pad = 16, lblW = 90, gap = 12;
     const valW = w - pad * 2 - lblW - gap;
-    label(this.modalRoot, px - w / 2 + pad + (w - pad * 2) / 2, py + hh / 2 - 41, title,
-      { size: 18, color: '#FFE08A', bold: true, align: 'left', w: w - pad * 2, h: 26, shrink: true });
+    // 标题行：普攻/技能/大招用真图标资源（用户调整：去 emoji 字符），36 号略大盖过行高
+    artSprite(tipsPanel, -w / 2 + pad + 18, hh / 2 - 41, 36, 36, 'ui_icon_' + kind + '_' + hero.id, { sliced: false });
+    label(this.modalRoot, px - w / 2 + pad + 44 + (w - pad * 2 - 44) / 2, py + hh / 2 - 41, title,
+      { size: 18, color: '#FFE08A', bold: true, align: 'left', w: w - pad * 2 - 44, h: 26, shrink: true });
     rows.forEach((r, i) => {
       const ry = py + hh / 2 - 84 - i * 26;   // 首行与技能名拉开 18（用户调整：原太挤）；行距 26 收紧上下留白
       label(this.modalRoot, px - w / 2 + pad + lblW / 2, ry, r[0],
