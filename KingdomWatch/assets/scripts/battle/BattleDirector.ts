@@ -41,6 +41,7 @@ export class BattleDirector extends Component {
   state: BattleState = 'prepare';
   /** 未查看的新怪种队列（新怪通知钮 → 介绍弹窗逐个消费） */
   private newMobQueue: string[] = [];
+  private mobIntroOpen = false;   // 新怪弹窗防重入（触控双发时只开一个）
   speed: 1 | 1.5 = 1;
 
   mgr!: MonsterManager;
@@ -338,9 +339,12 @@ export class BattleDirector extends Component {
   /* ---------- 胜利结算（§3.9 星级 / §3.10 金币） ---------- */
   /** 新怪通知钮点击：逐个弹出介绍弹窗，看完队列清空再收钮 */
   showNewMobIntro(): void {
+    if (this.mobIntroOpen) return;
     const id = this.newMobQueue[0];
     if (!id) { this.hud.showNewMob(false); return; }
+    this.mobIntroOpen = true;
     this.hud.showMobIntro(id, () => {
+      this.mobIntroOpen = false;
       this.newMobQueue.shift();
       this.hud.showNewMob(this.newMobQueue.length > 0);
     });

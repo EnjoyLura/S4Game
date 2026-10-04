@@ -69,8 +69,8 @@ const SLICE9: Record<string, Slice9Def> = {
   /* 通用弹窗三件套（生图 Kingdom Rush 风）：九宫格保撕边/折角/雕刻边，中段拉伸 */
   ui_panel_dialog: { canon: [962, 511], inset: [40, 40, 36, 36], scale: 0.5 },
   ui_banner_notice: { canon: [925, 231], inset: [88, 70, 24, 64], scale: 0.5 },
-  ui_btn_confirm: { canon: [814, 207], inset: [36, 36, 24, 40], scale: 0.5 },
-  ui_btn_cancel: { canon: [807, 210], inset: [36, 36, 24, 40], scale: 0.5 },
+  ui_btn_confirm: { canon: [858, 384], inset: [60, 60, 52, 52], scale: 0.5 },
+  ui_btn_cancel: { canon: [858, 384], inset: [60, 60, 52, 52], scale: 0.5 },
   /* 主城一级背板（PageKit.artPanel）：程序暗板打底，同名美术落图后自动九宫格覆盖 */
   ui_panel_tabs: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
   ui_panel_bag: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },

@@ -5,7 +5,7 @@
  */
 import { Graphics, Label, Layers, Node, Tween, tween, UIOpacity, UITransform, Vec3 } from 'cc';
 import { expNeed, LO, PAL } from '../config/GameConfig';
-import { gbar, gcircle, gpanel, label, setText, WY, WYB, WX, Bar, CA } from './UIKit';
+import { dlgConfirm, dlgPanel, dlgTitle, gbar, gcircle, gpanel, label, noticeBtn, setText, WY, WYB, WX, Bar, CA } from './UIKit';
 import { artSprite } from './Ux';
 import { BattleDirector } from '../battle/BattleDirector';
 import { HeroBase } from '../battle/Hero';
@@ -144,11 +144,8 @@ export class HUD {
     sg.fill();
     statsBtn.on(Node.EventType.TOUCH_END, () => this.dir.showStats());
 
-    /* 新怪通知钮（GM 钮下方，参考 KR）：首遇新怪种时亮出，点击弹怪物介绍弹窗 */
-    this.newMobBtn = gpanel(top, WX(24, 60), WY(480, 60), 60, 60, CA(PAL.gold, 0.92), undefined, 0, 30);
-    label(this.newMobBtn, 0, 0, '👹', { size: 30 });
-    const exMark = gpanel(this.newMobBtn, 20, 20, 22, 22, CA('#E5484D', 0.95), undefined, 0, 11);
-    label(exMark, 0, 0, '!', { size: 16, color: '#FFFFFF', bold: true });
+    /* 新怪通知钮（GM 钮下方，参考 KR）：首遇新怪种时亮出，点击弹怪物介绍弹窗（整体美术图标：生图 ui_btn_notice） */
+    this.newMobBtn = noticeBtn(top, WX(24, 60), WY(480, 60), 64, () => this.dir.showNewMobIntro());
     this.newMobBtn.active = false;
     this.newMobBtn.on(Node.EventType.TOUCH_END, () => this.dir.showNewMobIntro());
 
@@ -298,23 +295,15 @@ export class HUD {
       const ev = e as { propagationStopped?: boolean };
       if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;  // 挡住战斗 UI 误触
     });
-    const card = gpanel(dim, 0, -40, 640, H, CA('#E9DFC2', 0.97), undefined, 0, 14);
-    const title = gpanel(dim, 0, -40 + H / 2 - 10, 360, 64, CA('#8B2E2E', 0.95), undefined, 0, 10);
-    label(title, 0, 0, '新 敌 人', { size: 30, color: '#FFE8C8', bold: true, w: 360, h: 64 });
+    const card = dlgPanel(dim, 0, -40, 640, H);   // 生图羊皮弹窗背板（缺图回退程序奶白板）
+    const title = dlgTitle(dim, 0, -40 + H / 2 - 10, 360, '新 敌 人', 30);   // 生图深红折角缎带（自带白字）
     const iconPlate = gpanel(card, -195, 40, 170, 170, CA('#2A3240', 1), undefined, 0, 12);
     label(iconPlate, 0, 0, c.icon, { size: 84 });
     label(card, 50, 150, c.name, { size: 30, color: '#4A3214', bold: true, align: 'left', w: 300, h: 40 });
     label(card, 65, 92, c.desc, { size: 18, color: '#4A3214', w: 330, h: 64, shrink: true });
     c.traits.forEach((t, i) =>
       label(card, 65, 40 - i * 30, '- ' + t, { size: 18, color: '#B03A2E', bold: true, align: 'left', w: 330, h: 28 }));
-    const ok = gpanel(dim, 170, -40 - H / 2 + 32, 200, 64, CA('#1F6BC4', 0.95), undefined, 0, 12);
-    label(ok, 0, 0, '好的！', { size: 26, color: '#FFF3D6', bold: true, w: 200, h: 64 });
-    ok.on(Node.EventType.TOUCH_END, (e: unknown) => {
-      const ev = e as { propagationStopped?: boolean };
-      if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
-      dim.destroy();
-      onOk();
-    });
+    dlgConfirm(dim, 170, -40 - H / 2 + 32, 200, 64, '好的！', () => { dim.destroy(); onOk(); }, 26);
   }
 
   /** 每帧轮询；dt 用于经验/充能的上涨动画（只在值变化或动画未收敛时重绘） */

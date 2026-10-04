@@ -226,14 +226,14 @@ export function dlgTitle(parent: Node, x: number, y: number, w: number, text: st
   return n;
 }
 
-/** 通用确认/取消按钮：扁平圆角 + 底缘深色厚度；生图雕刻钮面（ui_btn_confirm / ui_btn_cancel）
- *  加载后盖住程序面色（文字仍在其上），缺图回退程序板。取消钮传 base/edge 红系 + art='ui_btn_cancel' */
+/** 通用确认按钮：生图雕刻钮面（默认黄 ui_btn_confirm，加载后盖住程序面色，文字仍在其上），
+ *  缺图回退程序黄板；取消钮传 base/edge 绿系 + art='ui_btn_cancel' */
 export function dlgConfirm(parent: Node, x: number, y: number, w: number, h: number,
-  text: string, cb: () => void, size = 24, base = '#3E6FBE', edge = '#2F5591',
+  text: string, cb: () => void, size = 24, base = '#E8AE3A', edge = '#BC8320',
   art = 'ui_btn_confirm'): Node {
   const n = gpanel(parent, x, y, w, h, CA(edge, 1), undefined, 0, 14);
   const face = gpanel(n, 0, 3, w, h - 6, CA(base, 1), undefined, 0, 14);
-  label(face, 0, 0, text, { size, color: '#FFFFFF', bold: true, w: w - 16, h: h - 6, shrink: true });
+  label(face, 0, 0, text, { size, color: '#3A2A10', bold: true, w: w - 16, h: h - 6, shrink: true });
   artSprite(face, 0, 0, w, h - 6, art, { belowIdx: 0 });
   n.on(Node.EventType.TOUCH_END, (e: unknown) => {
     const ev = e as { propagationStopped?: boolean };
@@ -243,15 +243,11 @@ export function dlgConfirm(parent: Node, x: number, y: number, w: number, h: num
   return n;
 }
 
-/** 新怪物通知钮：橙木圆钮（生图 ui_btn_notice）+ 怪物头像盖内圆 + 右上红 ! 角标；
- *  头像缺图只显示空钮面（avatarId 传 null），圆钮缺图回退程序橙圆 */
-export function noticeBtn(parent: Node, x: number, y: number, d: number, avatarId: string | null,
-  cb: () => void): Node {
+/** 新怪物通知钮：整体美术图标（哥布林脸+红!角标一体，生图 ui_btn_notice，用户调整：不做拼装）；
+ *  缺图回退程序橙圆 */
+export function noticeBtn(parent: Node, x: number, y: number, d: number, cb: () => void): Node {
   const n = gcircle(parent, x, y, d / 2, CA('#D98A3E', 1));
   artSprite(n, 0, 0, d + 4, d + 4, 'ui_btn_notice', { sliced: false, belowIdx: 0 });
-  if (avatarId) artSprite(n, 0, 0, d * 0.78, d * 0.78, avatarId, { sliced: false });
-  const badge = gcircle(n, d * 0.3, d * 0.3, d * 0.19, CA('#D8402E', 1));
-  label(badge, 0, 0, '!', { size: Math.round(d * 0.26), color: '#FFFFFF', bold: true });
   n.on(Node.EventType.TOUCH_END, (e: unknown) => {
     const ev = e as { propagationStopped?: boolean };
     if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
