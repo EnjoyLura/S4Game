@@ -170,7 +170,7 @@ export class HUD {
 
   /** 第 i 钮：底基 504，向上每钮 +110；点击就绪即施放，未满→Tips
    *  无边框规范：纯色圆板三态（充能灰/常态金/就绪亮金），不加座环美术
-   *  充能表现（用户调整）：图标占满钮面，未充能区灰罩扇形从12点顺时针覆盖（随充能收缩），中心只显示百分比；就绪亮金+光晕粒子、无文字 */
+   *  充能表现（用户调整）：水位上涨——液面上灰罩/液面下英雄主色能量水（无白色分割线），中心只显示百分比；就绪亮金+光晕粒子、无文字 */
   private buildUlt(top: Node, i: number, hero: HeroBase): UltUI {
     const ux = WX(636, 90), uy = WYB(504 + i * 110, 90);
     const color = hero.id === 'sniper' ? PAL.blue : PAL.green;
@@ -360,7 +360,7 @@ export class HUD {
       this.applyUltReady(u, ready);
     }
     if (!ready) {
-      // 未充能扇形灰罩平滑收缩，百分比与遮罩边缘同步（用户调整：只显示居中百分比）
+      // 水位平滑上涨，百分比与水位同步（用户调整：只显示居中百分比）
       const cp = hero.chargePct;
       u.shown += (cp - u.shown) * Math.min(1, dt * 5);
       if (cp - u.shown < 0.002) u.shown = cp;
@@ -373,22 +373,46 @@ export class HUD {
     }
   }
 
-  /** 充能进度遮罩（用户调整：已充能区露出图标，未充能区灰罩扇形；去掉白色液面分割线）
-   *  与技能 CD 同向：从 12 点顺时针覆盖剩余比例，充能中随进度收缩 */
+  /** 水杯充能（用户反馈：保留水位上涨效果，只去掉白色液面分割线）
+   *  液面以上未充能区灰罩置灰；液面以下已充能区英雄主色能量水、隐约透出干净图标（无灰罩） */
   private redrawUltWater(u: UltUI, pct: number): void {
     const g = u.waterG;
     g.clear();
-    const f = 1 - Math.max(0, Math.min(1, pct));
-    if (f <= 0.004) return;
     const R = u.waterR;
-    g.fillColor = CA('#3A4250', 0.7);
-    if (f >= 0.996) {
+    if (pct >= 0.995) {
+      g.fillColor = CA(u.color, 0.18);   // 用户调整：能量水透明度
       g.circle(0, 0, R);
       g.fill();
       return;
     }
-    g.moveTo(0, 0);
-    g.arc(0, 0, R, Math.PI / 2 - (1 - f) * Math.PI * 2, Math.PI / 2, false);
+    if (pct <= 0.004) {
+      g.fillColor = CA('#3A4250', 0.7);
+      g.circle(0, 0, R);
+      g.fill();
+      return;
+    }
+    const yc = -R + 2 * R * pct;
+    const a = Math.asin(Math.max(-1, Math.min(1, yc / R)));
+    const steps = 28;
+    // 液面以上：灰罩（弦 + 上弧采样）
+    g.fillColor = CA('#3A4250', 0.7);
+    g.moveTo(R * Math.cos(a), yc);
+    g.lineTo(-R * Math.cos(a), yc);
+    for (let i = 0; i <= steps; i++) {
+      const th = Math.PI - a - ((Math.PI - 2 * a) * i) / steps;
+      g.lineTo(R * Math.cos(th), R * Math.sin(th));
+    }
+    g.close();
+    g.fill();
+    // 液面以下：能量水（弦 + 下弧采样，避免 arc 方向歧义）
+    g.fillColor = CA(u.color, 0.18);
+    g.moveTo(R * Math.cos(a), yc);
+    g.lineTo(-R * Math.cos(a), yc);
+    const thA = Math.PI - a, thB = Math.PI * 2 + a;
+    for (let i = 0; i <= steps; i++) {
+      const th = thA + ((thB - thA) * i) / steps;
+      g.lineTo(R * Math.cos(th), R * Math.sin(th));
+    }
     g.close();
     g.fill();
   }
