@@ -129,7 +129,7 @@ export class Panels {
     const gear = gcircle(frame, 0, 50, 60, CA('#2A3240', 1));
     const icon = gcircle(frame, 0, 50, 48, CA(rarity, 0.16));
     const iconLbl = label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 26, color: card.rarity === 'white' ? '#E8E0C8' : rarity, bold: true });
-    artSprite(frame, 0, 50, 100, 100, 'ui_card_' + card.id, { sliced: false, hideOnLoad: [iconLbl] });
+    artSprite(frame, 0, 50, 124, 124, 'ui_card_' + card.id, { sliced: false, hideOnLoad: [iconLbl] });   // 124>120 座圆：图占满整个圆去黑环（用户反馈）
 
     // ③ 右上归属角标（圆心 y94/r24：顶缘 118 离色带底 128 十分距；距图标座圆心 91 > 60+24）
     // 英雄卡贴头像图（同英雄页/编队/大招钮），全局卡保持文字（用户要求：三选一卡用上英雄头像）
