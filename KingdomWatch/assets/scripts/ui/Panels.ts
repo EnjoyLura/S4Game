@@ -195,11 +195,10 @@ export class Panels {
       if (i === n - 1 && n > 1) g.rect(-segW / 2, -segH / 2, segR, segH);     // 末段盖平左侧两角
       g.fill();
       label(seg, 0, 0, t, { size: 22, color: '#241C12', bold: true, w: segW, h: segH });
-      // 页签段美术（用户调整：生图 ui_tab_seg 浅灰 plaque）；加载后盖住程序段，激活段金色 tint。
-      // 左右各外扩 12 与邻段重叠（段美术四角透明，上层透出下层填充）→ 页签之间不留间隔（用户反馈）
-      const ov = 12;
-      const li = i > 0 ? ov : 0, ri = i < n - 1 ? ov : 0;
-      const art = artSprite(seg, (ri - li) / 2, 0, segW + li + ri, segH, 'ui_tab_seg', { belowIdx: 0 });
+      // 页签段美术（用户反馈：段间不得有间隔、选中不得露圆弧）——三段式生图：
+      // 首段 ui_tab_l 左圆右平 / 中段 ui_tab_m 双平 / 末段 ui_tab_r 左平右圆，平铺即无缝，圆弧只在整栏两端
+      const artId = i === 0 ? 'ui_tab_l' : i === n - 1 ? 'ui_tab_r' : 'ui_tab_m';
+      const art = artSprite(seg, 0, 0, segW, segH, artId, { belowIdx: 0 });
       if (i === active) art.getComponent(Sprite)!.color = C('#F2B23E');
       if (i !== active) {
         seg.on(Node.EventType.TOUCH_END, e => { e.propagationStopped = true; onSel(i); });

@@ -69,11 +69,14 @@ const SLICE9: Record<string, Slice9Def> = {
   /* 通用弹窗三件套（生图 Kingdom Rush 风）：九宫格保撕边/折角/雕刻边，中段拉伸 */
   ui_panel_dialog: { canon: [962, 511], inset: [40, 40, 36, 36], scale: 0.5 },
   ui_banner_notice: { canon: [1810, 363], inset: [580, 580, 45, 60], scale: 0.22 },
-  ui_btn_confirm: { canon: [620, 320], inset: [150, 150, 140, 110], scale: 0.1 },
-  ui_btn_cancel: { canon: [619, 320], inset: [150, 150, 140, 110], scale: 0.1 },
-  ui_btn_exit: { canon: [621, 320], inset: [150, 150, 140, 110], scale: 0.1 },
-  ui_btn_close: { canon: [466, 478], inset: [130, 130, 120, 120], scale: 0.1 },
-  ui_tab_seg: { canon: [624, 452], inset: [110, 110, 110, 90], scale: 0.11 },
+  ui_btn_confirm: { canon: [621, 280], inset: [150, 150, 130, 100], scale: 0.12 },
+  ui_btn_cancel: { canon: [617, 280], inset: [150, 150, 130, 100], scale: 0.12 },
+  ui_btn_exit: { canon: [617, 280], inset: [150, 150, 130, 100], scale: 0.12 },
+  ui_btn_close: { canon: [715, 675], inset: [150, 150, 140, 140], scale: 0.08 },
+  /* 页签三段（左圆/中平/右圆，石框）：平铺无缝，框体 1:1 */
+  ui_tab_l: { canon: [562, 347], inset: [160, 85, 55, 70], scale: 0.2 },
+  ui_tab_m: { canon: [547, 347], inset: [58, 85, 55, 70], scale: 0.2 },
+  ui_tab_r: { canon: [563, 347], inset: [85, 160, 55, 70], scale: 0.2 },
   /* 主城一级背板（PageKit.artPanel）：程序暗板打底，同名美术落图后自动九宫格覆盖 */
   ui_panel_tabs: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
   ui_panel_bag: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
@@ -190,7 +193,7 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_circ_btn_green', 'ui_star', 'ui_star_gray',
   'ui_badge_new', 'ui_gear_ring',
   'ui_switch_on', 'ui_switch_off', 'ui_switch_disabled',
-  'ui_btn_exit', 'ui_btn_close', 'ui_tab_seg',
+  'ui_btn_exit', 'ui_btn_close', 'ui_tab_l', 'ui_tab_m', 'ui_tab_r',
   // 图标（暂停/倍速/统计已改程序简约图标，用户调整：不再使用美术资源）
   'ui_icon_coin', 'ui_icon_exp', 'ui_icon_diamond', 'ui_icon_chest', 'ui_icon_equip',
   'ui_icon_refresh_ad', 'ui_icon_refresh_diamond',
