@@ -496,8 +496,8 @@ export class Panels {
     px = Math.max(-375 + w / 2 + 8, Math.min(375 - w / 2 - 8, px));
     py = Math.max(-LO.half + hh / 2 + 8, Math.min(LO.half - hh / 2 - 8, py));
 
-    // 底板 0.86（用户调整：增加透明度，战斗画面更可见）；点空白关闭不受影响
-    const tipsPanel = gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.86), undefined, 0, 12);
+    // 底板 0.78（用户调整：Tips 再增加一点透明度，战斗画面更可见）；点空白关闭不受影响
+    const tipsPanel = gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.78), undefined, 0, 12);
     // 左右内边距 16（用户调整：原 30 过大）；左列固定 90 + 间距 12，剩余全给数值列（过长 shrink 而非压得过小）
     const pad = 16, lblW = 90, gap = 12;
     const valW = w - pad * 2 - lblW - gap;

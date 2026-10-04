@@ -207,6 +207,35 @@ export function btn(parent: Node, x: number, y: number, w: number, h: number, te
   return n;
 }
 
+/* ---------- 通用弹窗三件套（用户参考样例：奶白圆角弹窗板 + 深红提示标题带 + 蓝色确认钮；扁平无边框） ---------- */
+
+/** 通用弹窗背板：奶白大圆角板，深色文字用 PAL.ink 系 */
+export function dlgPanel(parent: Node, x: number, y: number, w: number, h: number): Node {
+  return gpanel(parent, x, y, w, h, CA('#E2DAC0', 1), undefined, 0, 24);
+}
+
+/** 提示标题背板：深红圆角横带 + 白色粗体标题；叠在弹窗背板顶缘（横跨上沿）由调用方定位 */
+export function dlgTitle(parent: Node, x: number, y: number, w: number, text: string,
+  size = 26, color = '#853D39'): Node {
+  const n = gpanel(parent, x, y, w, 56, CA(color, 1), undefined, 0, 14);
+  label(n, 0, 0, text, { size, color: '#FFFFFF', bold: true, w: w - 24, h: 40, shrink: true });
+  return n;
+}
+
+/** 通用确认按钮：扁平圆角 + 底缘深色厚度，默认蓝底白字；其他语义色经 base/edge 覆盖 */
+export function dlgConfirm(parent: Node, x: number, y: number, w: number, h: number,
+  text: string, cb: () => void, size = 24, base = '#3E6FBE', edge = '#2F5591'): Node {
+  const n = gpanel(parent, x, y, w, h, CA(edge, 1), undefined, 0, 14);
+  const face = gpanel(n, 0, 3, w, h - 6, CA(base, 1), undefined, 0, 14);
+  label(face, 0, 0, text, { size, color: '#FFFFFF', bold: true, w: w - 16, h: h - 6, shrink: true });
+  n.on(Node.EventType.TOUCH_END, (e: unknown) => {
+    const ev = e as { propagationStopped?: boolean };
+    if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
+    cb();
+  });
+  return n;
+}
+
 /** 左右旋钮开关（线稿④-2）：开=绿轨旋钮居右 / 关=灰轨旋钮居左；disabled 置灰不可点
  *  美术开关 ui_switch_on/off/disabled 三帧切换，加载失败保持程序绘制 */
 export function gswitch(parent: Node, x: number, y: number, w: number, h: number, on: boolean,
