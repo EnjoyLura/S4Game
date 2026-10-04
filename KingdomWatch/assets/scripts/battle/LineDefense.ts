@@ -49,9 +49,11 @@ export class LineDefense {
     }
     // 盾徽已去除（用户调整：防线中间黄点）
     prog.setParent(this.node);
-    // 城墙美术：原图 2016×864 等比（750 宽 → 321 高），底边贴屏底，垛口升入战场区（渲染序 line < 怪 < 弹道，怪从墙前经过）
+    // 城墙美术：原图 2016×864 等比（750 宽 → 321 高）；底边埋过屏幕物理底缘（含手势条区），
+    // 避免手机上墙底露出背景条（用户反馈：防线底部露背景）；渲染序 line < 怪 < 弹道，怪从墙前经过
     const h = 750 * 864 / 2016;
-    artSprite(this.node, 0, bot + h / 2, 750, h, 'defense_wall', { sliced: false, hideOnLoad: [prog] });
+    const yBot = -(LO.half + 40);
+    artSprite(this.node, 0, yBot + h / 2, 750, h, 'defense_wall', { sliced: false, hideOnLoad: [prog] });
     this.node.setParent(parent);
   }
 
