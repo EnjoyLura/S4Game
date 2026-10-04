@@ -4,7 +4,7 @@
  */
 import { Node, UIOpacity, tween } from 'cc';
 import { PAL } from '../config/GameConfig';
-import { CA, btn, C, dimLayer, gpanel, label, N, WY, WX } from './UIKit';
+import { CA, btn, C, dlgConfirm, dimLayer, gpanel, label, N, WY, WX } from './UIKit';
 import { artSprite } from './Ux';
 import { Quality, QCOLOR, QNAME } from '../core/GameData';
 
@@ -41,7 +41,7 @@ export function modal(ctx: PageCtx, w: number, h: number, title: string, flat = 
   const panel = gpanel(dim, 0, -80, w, h, CA('#1B201A', 0.97), flat ? undefined : CA(PAL.gold, 0.95), 2.5, 18);
   if (!flat) artSprite(panel, 0, 0, w, h, 'ui_panel_dark_gold', { belowIdx: 0 });
   if (title) label(panel, 0, h / 2 - 44, title, { size: 28, color: '#FFE08A', bold: true });
-  const close = btn(panel, w / 2 - 40, h / 2 - 40, 56, 56, '✕', PAL.gold, () => dim.destroy(), 26, flat);
+  const close = dlgConfirm(panel, w / 2 - 40, h / 2 - 40, 56, 56, '✕', () => dim.destroy(), 26, '#8A93A0', '#5F6873', 'ui_btn_close');
   close.name = 'btn_close';
   /* 面板吞掉触摸：点面板内容（含无 handler 的行）不会落到遮罩上误关弹窗 */
   panel.on(Node.EventType.TOUCH_END, (e: unknown) => {

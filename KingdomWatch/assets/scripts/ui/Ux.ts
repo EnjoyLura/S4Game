@@ -68,9 +68,12 @@ const SLICE9: Record<string, Slice9Def> = {
   ui_card_plate_base: { canon: [446, 669], inset: [40, 40, 40, 40], scale: 0.5 },
   /* 通用弹窗三件套（生图 Kingdom Rush 风）：九宫格保撕边/折角/雕刻边，中段拉伸 */
   ui_panel_dialog: { canon: [962, 511], inset: [40, 40, 36, 36], scale: 0.5 },
-  ui_banner_notice: { canon: [1865, 420], inset: [460, 460, 60, 100], scale: 0.22 },
-  ui_btn_confirm: { canon: [887, 283], inset: [50, 50, 45, 50], scale: 0.22 },
-  ui_btn_cancel: { canon: [887, 283], inset: [50, 50, 45, 50], scale: 0.22 },
+  ui_banner_notice: { canon: [1810, 363], inset: [580, 580, 45, 60], scale: 0.22 },
+  ui_btn_confirm: { canon: [597, 191], inset: [55, 55, 50, 45], scale: 0.24 },
+  ui_btn_cancel: { canon: [593, 191], inset: [55, 55, 50, 45], scale: 0.24 },
+  ui_btn_exit: { canon: [594, 191], inset: [55, 55, 50, 45], scale: 0.24 },
+  ui_btn_close: { canon: [434, 452], inset: [90, 90, 85, 85], scale: 0.12 },
+  ui_tab_seg: { canon: [624, 452], inset: [110, 110, 110, 90], scale: 0.11 },
   /* 主城一级背板（PageKit.artPanel）：程序暗板打底，同名美术落图后自动九宫格覆盖 */
   ui_panel_tabs: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
   ui_panel_bag: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
@@ -187,6 +190,7 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_circ_btn_green', 'ui_star', 'ui_star_gray',
   'ui_badge_new', 'ui_gear_ring',
   'ui_switch_on', 'ui_switch_off', 'ui_switch_disabled',
+  'ui_btn_exit', 'ui_btn_close', 'ui_tab_seg',
   // 图标（暂停/倍速/统计已改程序简约图标，用户调整：不再使用美术资源）
   'ui_icon_coin', 'ui_icon_exp', 'ui_icon_diamond', 'ui_icon_chest', 'ui_icon_equip',
   'ui_icon_refresh_ad', 'ui_icon_refresh_diamond',

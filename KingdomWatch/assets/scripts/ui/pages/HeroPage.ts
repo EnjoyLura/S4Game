@@ -5,7 +5,7 @@
  */
 import { Node, Graphics } from 'cc';
 import { PAL, LO } from '../../config/GameConfig';
-import { CA, btn, C, dimLayer, gpanel, label, N, WY } from '../UIKit';
+import { CA, btn, C, dlgConfirm, dimLayer, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
 import { PageCtx, artPanel, modal, toast, CX, confirmModal } from '../PageKit';
 import {
@@ -205,7 +205,7 @@ function wornEquipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: () 
   const inst = wornInst(hid, kind)!;
   const dim = dimLayer(ctx.screens, 0.68);
   const p = equipDetailPanel(dim, 0, -80, inst, true, true);
-  const close = btn(p, 218, 292, 52, 52, '✕', PAL.gold, () => dim.destroy(), 26, true);
+  const close = dlgConfirm(p, 218, 292, 52, 52, '✕', () => dim.destroy(), 26, '#8A93A0', '#5F6873', 'ui_btn_close');
   close.name = 'btn_close';
   btn(p, 0, -255, 240, 76, '锻 造', PAL.gold, () => equipModal(ctx, hid, kind, rebuild), 24, true);
 }

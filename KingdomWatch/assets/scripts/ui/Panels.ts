@@ -2,7 +2,7 @@
  * 弹窗面板（UX 线稿 ②~⑤⑧）：三选一 / 暂停 / 胜利结算 / 失败结算(含广告复活) / 伤害统计 / 属性Tips
  * 弹窗内容块均以屏幕垂直中心为重心；三选一期间全场冻结由 BattleDirector 状态控制
  */
-import { Graphics, Node, tween, UIOpacity, Vec3 } from 'cc';
+import { Graphics, Node, Sprite, tween, UIOpacity, Vec3 } from 'cc';
 import { CardDef, CardStacks, RARITY_COLOR } from '../config/Cards';
 import { HERO_Y, LO, PAL } from '../config/GameConfig';
 import { DamageRow, fmtWk } from '../battle/DamageService';
@@ -10,7 +10,7 @@ import { HeroBase } from '../battle/Hero';
 import { BattleDirector } from '../battle/BattleDirector';
 import { AdService } from '../platform/AdService';
 import { loadSave } from '../core/SaveData';
-import { btn, C, CA, dimLayer, gbar, gcircle, gpanel, gswitch, label, N, setText, WY, WYB, WX } from './UIKit';
+import { btn, C, CA, dlgConfirm, dimLayer, gbar, gcircle, gpanel, gswitch, label, N, setText, WY, WYB, WX } from './UIKit';
 import { artIcon, artSprite } from './Ux';
 
 /** 奖励行文字兜底 → A2 图标（有美术时整座替换，失败保持 emoji） */
@@ -195,6 +195,9 @@ export class Panels {
       if (i === n - 1 && n > 1) g.rect(-segW / 2, -segH / 2, segR, segH);     // 末段盖平左侧两角
       g.fill();
       label(seg, 0, 0, t, { size: 22, color: '#241C12', bold: true, w: segW, h: segH });
+      // 页签段美术（用户调整：生图 ui_tab_seg 浅灰 plaque）；加载后盖住程序段，激活段金色 tint
+      const art = artSprite(seg, 0, 0, segW, segH, 'ui_tab_seg', { belowIdx: 0 });
+      if (i === active) art.getComponent(Sprite)!.color = C('#F2B23E');
       if (i !== active) {
         seg.on(Node.EventType.TOUCH_END, e => { e.propagationStopped = true; onSel(i); });
       }
@@ -278,7 +281,7 @@ export class Panels {
         gswitch(this.modalRoot, WX(590, 100), WY(726, 44), 100, 44, false, undefined, true);
       }
     }
-    btn(this.modalRoot, WX(50, 300), WY(880, 88), 300, 88, '⏻ 退出', PAL.gold, o.onExit, 22, true);
+    dlgConfirm(this.modalRoot, WX(50, 300), WY(880, 88), 300, 88, '⏻ 退出', o.onExit, 22, '#E89A3C', '#C47A28', 'ui_btn_exit');
     btn(this.modalRoot, WX(400, 300), WY(880, 88), 300, 88, '▶ 继续战斗', PAL.green, o.onResume, 22, true);
   }
 
