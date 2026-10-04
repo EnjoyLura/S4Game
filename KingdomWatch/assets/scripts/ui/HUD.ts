@@ -97,9 +97,15 @@ export class HUD {
       { sliced: false, cover: true, belowIdx: 1, hideOnLoad: [bgFlat] });
 
     /* 顶栏（用户调整：大背板整条去除，只留暂停钮/波次签半透小板，文字直接浮于场景） */
-    const pauseBtn = gpanel(top, WX(30, 60), WY(105, 60), 60, 60, CA('#000000', 0.32), undefined, 0, 0);
-    const pauseLbl = label(pauseBtn, 0, 0, '⏸', { size: 26, color: '#FFFFFF', bold: true });
-    artSprite(pauseBtn, 0, 0, 60, 60, 'ui_icon_pause', { sliced: false, hideOnLoad: [pauseLbl] });
+    // 暂停/倍速/统计（用户调整：去金环美术资源，与计时/关名胶囊同款半透底板 + 程序简约白图标）
+    const pauseBtn = gpanel(top, WX(30, 60), WY(105, 60), 60, 60, CA('#000000', 0.32), undefined, 0, 14);
+    const pico = new Node('pauseIco');   // 图标画在子节点：gpanel 自带 Graphics，同节点再加会渲染冲突
+    pico.setParent(pauseBtn);
+    const pg = pico.addComponent(Graphics);
+    pg.fillColor = CA('#FFFFFF', 1);
+    pg.roundRect(-9, -11, 7, 22, 2);
+    pg.roundRect(2, -11, 7, 22, 2);
+    pg.fill();
     pauseBtn.on(Node.EventType.TOUCH_END, () => this.dir.togglePause());
     // 计时/关名：半透小板（与暂停钮/波次签同款，用户调整）
     gpanel(top, WX(106, 110), WY(112, 44), 110, 44, CA('#000000', 0.32), undefined, 0, 22);
@@ -123,13 +129,18 @@ export class HUD {
 
     // 左列：FPS / 倍速 / 伤害统计（FPS 与倍速按钮左缘对齐 = 设计 x24，需固定宽 + shrink 让 left 对齐生效）
     this.fpsTxt = label(top, WX(24, 120), WY(210, 30), 'FPS:60', { size: 15, color: '#7EE787', align: 'left', w: 120, h: 30, shrink: true });
-    const speedBtn = gpanel(top, WX(24, 60), WY(240, 60), 60, 60, CA(PAL.gold, 0.2), PAL.gold, 2, 12);
-    artSprite(speedBtn, 0, 0, 60, 60, 'ui_icon_speed', { sliced: false, belowIdx: 0 });
+    const speedBtn = gpanel(top, WX(24, 60), WY(240, 60), 60, 60, CA('#000000', 0.32), undefined, 0, 14);
     this.speedTxt = label(speedBtn, 0, 0, 'X1', { size: 18, color: '#FFFFFF', bold: true });
     speedBtn.on(Node.EventType.TOUCH_END, () => this.dir.toggleSpeed());
-    const statsBtn = gpanel(top, WX(24, 60), WY(320, 60), 60, 60, CA('#000000', 0.38), undefined, 0, 12);
-    const statsGlyph = label(statsBtn, 0, 0, '📊', { size: 24 });
-    artSprite(statsBtn, 0, 0, 60, 60, 'ui_icon_stats', { sliced: false, belowIdx: 0, hideOnLoad: [statsGlyph] });
+    const statsBtn = gpanel(top, WX(24, 60), WY(320, 60), 60, 60, CA('#000000', 0.32), undefined, 0, 14);
+    const sico = new Node('statsIco');   // 同暂停钮：图标画在子节点
+    sico.setParent(statsBtn);
+    const sg = sico.addComponent(Graphics);
+    sg.fillColor = CA('#FFFFFF', 1);
+    sg.roundRect(-14, 0, 6, 10, 1);    // 三根底对齐白柱（简约柱状图标）
+    sg.roundRect(-3, -6, 6, 16, 1);
+    sg.roundRect(8, -12, 6, 22, 1);
+    sg.fill();
     statsBtn.on(Node.EventType.TOUCH_END, () => this.dir.showStats());
 
     /* 新怪通知钮（GM 钮下方，参考 KR）：首遇新怪种时亮出，点击弹怪物介绍弹窗 */
@@ -374,7 +385,7 @@ export class HUD {
   }
 
   /** 水杯充能（用户反馈：保留水位上涨效果，只去掉白色液面分割线）
-   *  液面以上未充能区灰罩置灰；液面以下已充能区英雄主色能量水、隐约透出干净图标（无灰罩） */
+   *  液面以上未充能区灰白罩置灰；液面以下已充能区英雄主色能量水、隐约透出干净图标（无遮罩） */
   private redrawUltWater(u: UltUI, pct: number): void {
     const g = u.waterG;
     g.clear();
@@ -386,7 +397,7 @@ export class HUD {
       return;
     }
     if (pct <= 0.004) {
-      g.fillColor = CA('#3A4250', 0.7);
+      g.fillColor = CA('#C6CBD3', 0.62);   // 用户调整：未充能遮罩更灰白
       g.circle(0, 0, R);
       g.fill();
       return;
@@ -394,8 +405,8 @@ export class HUD {
     const yc = -R + 2 * R * pct;
     const a = Math.asin(Math.max(-1, Math.min(1, yc / R)));
     const steps = 28;
-    // 液面以上：灰罩（弦 + 上弧采样）
-    g.fillColor = CA('#3A4250', 0.7);
+    // 液面以上：灰白罩（弦 + 上弧采样；用户调整：更灰白）
+    g.fillColor = CA('#C6CBD3', 0.62);
     g.moveTo(R * Math.cos(a), yc);
     g.lineTo(-R * Math.cos(a), yc);
     for (let i = 0; i <= steps; i++) {

@@ -180,9 +180,8 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_circ_btn_green', 'ui_star', 'ui_star_gray',
   'ui_badge_new', 'ui_gear_ring',
   'ui_switch_on', 'ui_switch_off', 'ui_switch_disabled',
-  // 图标
+  // 图标（暂停/倍速/统计已改程序简约图标，用户调整：不再使用美术资源）
   'ui_icon_coin', 'ui_icon_exp', 'ui_icon_diamond', 'ui_icon_chest', 'ui_icon_equip',
-  'ui_icon_pause', 'ui_icon_stats', 'ui_icon_speed',
   'ui_icon_refresh_ad', 'ui_icon_refresh_diamond',
   'ui_icon_heart', 'ui_icon_skull', 'ui_icon_eye', 'ui_icon_chat', 'icon_alert',
   // 英雄头像
