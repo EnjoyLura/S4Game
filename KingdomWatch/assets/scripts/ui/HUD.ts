@@ -184,6 +184,8 @@ export class HUD {
     const gray = gcircle(top, ux, uy, 45, CA('#3A4250', 0.9));
     // 英雄头像：垫在置灰遮罩/能量水/充能字之下
     artSprite(top, ux, uy, 68, 68, 'ui_avatar_' + hero.id, { sliced: false });
+    // 大招图标（美术到位后盖过头像作钮面；缺失保持头像兜底）
+    artSprite(top, ux, uy, 68, 68, 'ui_icon_ult_' + hero.id, { sliced: false });
     // 冷却置灰遮罩：头像之上、能量水与充能字之下；就绪时隐藏
     const mask = gcircle(top, ux, uy, 46, CA('#3A4250', 0.7));
     mask.active = false;
@@ -219,10 +221,14 @@ export class HUD {
     const cy = WYB(126, 46);
     const atkX = hero.x - 27, cx = hero.x + 27;
     const atkIcon = gcircle(top, atkX, cy, 23, CA(PAL.gold, 0.3));
-    label(atkIcon, 0, 0, '攻', { size: 18, color: PAL.gold, bold: true });
+    const atkGlyph = label(atkIcon, 0, 0, '攻', { size: 18, color: PAL.gold, bold: true });
+    // 普攻图标（美术到位后盖过程序字；缺失保持文字兜底）
+    artSprite(atkIcon, 0, 0, 46, 46, 'ui_icon_atk_' + hero.id, { sliced: false, hideOnLoad: [atkGlyph] });
     atkIcon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('atk', i));
     const icon = gcircle(top, cx, cy, 23, CA(PAL.blue, 0.3));
     const glyph = label(icon, 0, 0, '技', { size: 18, color: PAL.blue, bold: true });
+    // 技能图标（同上）
+    artSprite(icon, 0, 0, 46, 46, 'ui_icon_skill_' + hero.id, { sliced: false, hideOnLoad: [glyph] });
     icon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('skill', i));
     const gray = gcircle(top, cx, cy, 23, CA('#3A4250', 0.9));
     gray.active = false;

@@ -187,6 +187,8 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_icon_heart', 'ui_icon_skull', 'ui_icon_eye', 'ui_icon_chat', 'icon_alert',
   // 英雄头像
   'ui_avatar_archer', 'ui_avatar_sniper',
+  // 英雄技能图标（弓箭手已交付；狙击手待美术）
+  'ui_icon_atk_archer', 'ui_icon_skill_archer', 'ui_icon_ult_archer',
   // 场景
   'scenes/scene_1_1',
 ];
