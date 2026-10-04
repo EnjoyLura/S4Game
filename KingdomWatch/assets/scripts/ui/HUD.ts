@@ -20,6 +20,7 @@ interface UltUI {
   gray: Node;         // 充能中灰化杯体
   mask: Node;         // 冷却置灰遮罩：盖住整个图标（头像之上、能量与文字之下）
   color: string;      // 充能能量色（英雄主色：弓=绿 狙=蓝）
+  fx: string;         // 就绪特效主色（淡色：弓=淡绿 狙=淡蓝，用户调整）
   water: Node;        // 能量水（圆杯液面上涨，半透明可透出图标）
   waterG: Graphics;
   waterR: number;     // 能量水半径
@@ -185,12 +186,14 @@ export class HUD {
   private buildUlt(top: Node, i: number, hero: HeroBase): UltUI {
     const ux = WX(636, 90), uy = WYB(504 + i * 110, 90);
     const color = hero.id === 'sniper' ? PAL.blue : PAL.green;
-    const glow = gcircle(top, ux, uy, 56, CA(PAL.gold, 0.16));
+    const fx = hero.id === 'sniper' ? '#8FC7F2' : '#9FDB8C';    // 就绪特效：狙淡蓝 / 弓淡绿（用户调整）
+    const fxHi = hero.id === 'sniper' ? '#CFE9FB' : '#D6F2C9';  // 粒子亮色
+    const glow = gcircle(top, ux, uy, 56, CA(fx, 0.16));
     const glowOp = glow.addComponent(UIOpacity);
     glowOp.opacity = 130;
     glow.active = false;
     const btn = gcircle(top, ux, uy, 45, CA(PAL.gold, 0.25));
-    const bright = gcircle(top, ux, uy, 45, CA(PAL.gold, 0.42));
+    const bright = gcircle(top, ux, uy, 45, CA(fx, 0.42));
     bright.active = false;
     const gray = gcircle(top, ux, uy, 45, CA('#3A4250', 0.9));
     gray.active = false;   // 用户调整：图标占满钮面后不再整体置灰，灰罩只走未充能扇形
@@ -212,7 +215,7 @@ export class HUD {
     for (let k = 0; k < 8; k++) {
       const a = (k / 8) * Math.PI * 2;
       const rr = 54 + (k % 3) * 5;
-      og.fillColor = CA(k % 2 ? '#FFE08A' : PAL.gold, 0.95);
+      og.fillColor = CA(k % 2 ? fxHi : fx, 0.95);
       og.circle(Math.cos(a) * rr, Math.sin(a) * rr, 2 + (k % 3) * 0.9);
       og.fill();
     }
@@ -225,7 +228,7 @@ export class HUD {
     btn.on(Node.EventType.TOUCH_END, () => {
       if (this.dir.tryCastUlt(i) === 'charging') this.dir.showTips('ult', i);
     });
-    const ui: UltUI = { ux, uy, glow, btn, bright, gray, mask, color, water, waterG, waterR: 46, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
+    const ui: UltUI = { ux, uy, glow, btn, bright, gray, mask, color, fx, water, waterG, waterR: 46, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
     return ui;
   }
 
@@ -461,7 +464,7 @@ export class HUD {
     burst.setParent(this.hudNode);
     burst.setPosition(u.ux, u.uy, 0);
     const bg = burst.addComponent(Graphics);
-    bg.strokeColor = CA(PAL.gold, 0.9);
+    bg.strokeColor = CA(u.fx, 0.9);
     bg.lineWidth = 4;
     bg.circle(0, 0, 45);
     bg.stroke();
