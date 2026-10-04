@@ -137,9 +137,9 @@ export class HUD {
     sico.setParent(statsBtn);
     const sg = sico.addComponent(Graphics);
     sg.fillColor = CA('#FFFFFF', 1);
-    sg.roundRect(-14, 0, 6, 10, 1);    // 三根底对齐白柱（简约柱状图标）
-    sg.roundRect(-3, -6, 6, 16, 1);
-    sg.roundRect(8, -12, 6, 22, 1);
+    sg.roundRect(-14, -11, 6, 10, 1);    // 三根底对齐白柱（简约柱状图标，用户反馈：别倒挂）
+    sg.roundRect(-3, -11, 6, 16, 1);
+    sg.roundRect(8, -11, 6, 22, 1);
     sg.fill();
     statsBtn.on(Node.EventType.TOUCH_END, () => this.dir.showStats());
 
@@ -250,7 +250,7 @@ export class HUD {
     pie.setPosition(cx, cy, 0);
     const pieG = pie.addComponent(Graphics);
     pie.active = false;
-    const cdTxt = label(top, cx, cy, '', { size: 13, color: '#FFFFFF', bold: true, w: 56, h: 20 });
+    const cdTxt = label(top, cx, cy, '', { size: 13, color: '#FFFFFF', bold: true, w: 56, h: 20, outline: '#0B0F16', outlineW: 2 });
     cdTxt.active = false;
     return { cx, cy, icon, glyph, gray, pie, pieG, cdTxt, cooling: null, lastCdKey: -1 };
   }
@@ -497,21 +497,27 @@ export class HUD {
     }
   }
 
-  /** 扇形冷却遮罩：覆盖剩余 CD 比例，指针从 12 点顺时针扫过（随 CD 流逝遮罩收缩） */
+  /** 扇形冷却遮罩（用户校准：像时钟——时针固定在12点，分针顺时针转一圈）
+   *  亮区=分针已扫过的 12点→分针（顺时针生长）；暗遮罩=分针→12点 的未恢复区，随 CD 恢复收缩。
+   *  显式采样画扇形（不用引擎 arc，规避方向语义歧义） */
   private redrawSkillPie(s: SkillUI, f: number): void {
     const g = s.pieG;
     g.clear();
     if (f <= 0.004) return;
-    g.fillColor = CA('#0B0F16', 0.62);
+    g.fillColor = CA('#C6CBD3', 0.62);   // 与大招遮罩同款灰白（用户调整）
     if (f >= 0.996) {
       g.circle(0, 0, 27);
       g.fill();
       return;
     }
+    const hand = Math.PI / 2 - (1 - f) * Math.PI * 2;   // 分针角：12点起顺时针扫过 (1-f)·360°
+    const R = 27, steps = 40;
     g.moveTo(0, 0);
-    // Graphics 局部坐标 y 向上：π/2=12点、0=3点；ccw=false 按角度递减 = 屏幕顺时针。
-    // 暗遮罩从"指针位"顺时针铺回12点：指针=f·360°处，随CD流逝像时针一样顺时针旋转（12→3→6→9），亮区在12点后顺时针生长
-    g.arc(0, 0, 27, Math.PI / 2 - (1 - f) * Math.PI * 2, Math.PI / 2, false);
+    g.lineTo(R * Math.cos(hand), R * Math.sin(hand));
+    for (let i = 1; i <= steps; i++) {                  // 从分针继续顺时针采样回 12点
+      const th = hand - (f * Math.PI * 2 * i) / steps;
+      g.lineTo(R * Math.cos(th), R * Math.sin(th));
+    }
     g.close();
     g.fill();
   }
