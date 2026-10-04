@@ -224,7 +224,7 @@ export function dlgTitle(parent: Node, x: number, y: number, w: number, text: st
   const h = Math.max(64, Math.min(100, Math.round(w / 4)));
   const n = gpanel(parent, x, y, w, h, CA(color, 1), undefined, 0, 14);
   // 缎带主带中心略高于几何中心，文字随之微抬
-  label(n, 0, h * 0.07, text, { size, color: '#FFFFFF', bold: true, w: Math.max(w - 150, 120), h: h - 40, shrink: true });
+  label(n, 0, h * 0.07, text, { size, color: '#FFFFFF', bold: true, w: Math.max(w - 170, 120), h: h - 40, shrink: true });
   artSprite(n, 0, 0, w, h, 'ui_banner_notice', { belowIdx: 0 });
   return n;
 }
