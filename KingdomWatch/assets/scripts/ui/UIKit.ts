@@ -220,9 +220,12 @@ export function dlgPanel(parent: Node, x: number, y: number, w: number, h: numbe
  *  叠在弹窗背板顶缘（横跨上沿）由调用方定位 */
 export function dlgTitle(parent: Node, x: number, y: number, w: number, text: string,
   size = 26, color = '#853D39'): Node {
-  const n = gpanel(parent, x, y, w, 56, CA(color, 1), undefined, 0, 14);
-  label(n, 0, 0, text, { size, color: '#FFFFFF', bold: true, w: w - 24, h: 40, shrink: true });
-  artSprite(n, 0, 0, w, 56, 'ui_banner_notice', { belowIdx: 0 });
+  // 高度随宽度按缎带比例（源图 4:1）走，避免 9 宫上下边压扁卷折（用户反馈：标题背板显示不全）
+  const h = Math.max(64, Math.min(100, Math.round(w / 4)));
+  const n = gpanel(parent, x, y, w, h, CA(color, 1), undefined, 0, 14);
+  // 缎带主带中心略高于几何中心，文字随之微抬
+  label(n, 0, h * 0.07, text, { size, color: '#FFFFFF', bold: true, w: Math.max(w - 150, 120), h: h - 40, shrink: true });
+  artSprite(n, 0, 0, w, h, 'ui_banner_notice', { belowIdx: 0 });
   return n;
 }
 

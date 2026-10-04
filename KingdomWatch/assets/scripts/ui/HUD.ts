@@ -303,7 +303,7 @@ export class HUD {
     label(card, 65, 92, c.desc, { size: 18, color: '#4A3214', w: 330, h: 64, shrink: true });
     c.traits.forEach((t, i) =>
       label(card, 65, 40 - i * 30, '- ' + t, { size: 18, color: '#B03A2E', bold: true, align: 'left', w: 330, h: 28 }));
-    dlgConfirm(dim, 170, -40 - H / 2 + 32, 200, 64, '好的！', () => { dim.destroy(); onOk(); }, 26);
+    dlgConfirm(dim, 170, -40 - H / 2 + 64, 200, 64, '好的！', () => { dim.destroy(); onOk(); }, 26);   // 卡内底缘上方（用户调整：原 +32 太靠下压边）
   }
 
   /** 每帧轮询；dt 用于经验/充能的上涨动画（只在值变化或动画未收敛时重绘） */
