@@ -235,9 +235,10 @@ export function dlgConfirm(parent: Node, x: number, y: number, w: number, h: num
   text: string, cb: () => void, size = 24, base = '#E8AE3A', edge = '#BC8320',
   art = 'ui_btn_confirm'): Node {
   const n = gpanel(parent, x, y, w, h, CA(edge, 1), undefined, 0, 14);
-  const face = gpanel(n, 0, 3, w, h - 6, CA(base, 1), undefined, 0, 14);
-  label(face, 0, 0, text, { size, color: '#3A2A10', bold: true, w: w - 16, h: h - 6, shrink: true });
-  artSprite(face, 0, 0, w, h - 6, art, { belowIdx: 0 });
+  // 面与外框同尺寸（无阶梯）：美术钮裁边后盖满整钮，程序底板不再从底部露出（用户反馈）
+  const face = gpanel(n, 0, 0, w, h, CA(base, 1), undefined, 0, 14);
+  label(face, 0, 0, text, { size, color: '#3A2A10', bold: true, w: w - 16, h, shrink: true });
+  artSprite(face, 0, 0, w, h, art, { belowIdx: 0 });
   n.on(Node.EventType.TOUCH_END, (e: unknown) => {
     const ev = e as { propagationStopped?: boolean };
     if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
