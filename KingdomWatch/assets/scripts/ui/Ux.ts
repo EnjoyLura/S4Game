@@ -188,6 +188,11 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_avatar_archer', 'ui_avatar_sniper',
   // 英雄技能图标（双英雄均已交付）
   'ui_icon_atk_archer', 'ui_icon_skill_archer', 'ui_icon_ult_archer',
+  // 三选一卡面图标（弓箭手组 15 张已交付；狙击/全局待图走首字回退）
+  'ui_card_serial', 'ui_card_fan', 'ui_card_sharp', 'ui_card_swift',
+  'ui_card_crit_rate', 'ui_card_crit_dmg', 'ui_card_instinct_a', 'ui_card_fast_charge_a',
+  'ui_card_split', 'ui_card_explode', 'ui_card_frost', 'ui_card_burn',
+  'ui_card_rain_rounds', 'ui_card_explode_w', 'ui_card_explode_r',
   'ui_icon_atk_sniper', 'ui_icon_skill_sniper', 'ui_icon_ult_sniper',
   // 场景
   'scenes/scene_1_1',

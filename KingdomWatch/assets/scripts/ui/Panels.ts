@@ -125,10 +125,11 @@ export class Panels {
     const header = gpanel(frame, 0, 154, 222, 52, CA(rarity, 0.85), undefined, 0, 12);
     label(header, 0, 0, card.name, { size: 22, color: card.rarity === 'white' ? '#4A3214' : '#FFFFFF', bold: true, w: 208, h: 40, shrink: true });
 
-    // ② 图标座 120 圆 + 内嵌 96 圆
+    // ② 图标座 120 圆 + 内嵌 96 圆（卡面美术图 ui_card_<id>；缺图回退首字母——用户要求：卡面用图标资源）
     const gear = gcircle(frame, 0, 50, 60, CA('#2A3240', 1));
     const icon = gcircle(frame, 0, 50, 48, CA(rarity, 0.16));
-    label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 26, color: card.rarity === 'white' ? '#E8E0C8' : rarity, bold: true });
+    const iconLbl = label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 26, color: card.rarity === 'white' ? '#E8E0C8' : rarity, bold: true });
+    artSprite(frame, 0, 50, 100, 100, 'ui_card_' + card.id, { sliced: false, hideOnLoad: [iconLbl] });
 
     // ③ 右上归属角标（圆心 y94/r24：顶缘 118 离色带底 128 十分距；距图标座圆心 91 > 60+24）
     // 英雄卡贴头像图（同英雄页/编队/大招钮），全局卡保持文字（用户要求：三选一卡用上英雄头像）
