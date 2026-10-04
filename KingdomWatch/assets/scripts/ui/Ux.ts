@@ -64,13 +64,8 @@ const SLICE9: Record<string, Slice9Def> = {
   ui_card_header_white: { canon: [400, 104], inset: [65, 65, 11, 11], scale: 0.5 },
   ui_card_header_blue: { canon: [400, 104], inset: [65, 65, 11, 11], scale: 0.5 },
   ui_card_header_purple: { canon: [400, 104], inset: [65, 65, 11, 11], scale: 0.5 },
-  /* 三选一卡背板（撕边羊皮纸，2048×1024 图集切出）：九宫格保撕边四角，中段拉伸纸纹 */
-  ui_card_plate_base: { canon: [591, 427], inset: [40, 40, 40, 40], scale: 0.5 },
-  ui_card_plate_white: { canon: [592, 427], inset: [40, 40, 40, 40], scale: 0.5 },
-  ui_card_plate_green: { canon: [591, 427], inset: [40, 40, 40, 40], scale: 0.5 },
-  ui_card_plate_blue: { canon: [591, 426], inset: [40, 40, 40, 40], scale: 0.5 },
-  ui_card_plate_purple: { canon: [592, 426], inset: [40, 40, 40, 40], scale: 0.5 },
-  ui_card_plate_yellow: { canon: [591, 426], inset: [40, 40, 40, 40], scale: 0.5 },
+  /* 三选一卡背板（撕边羊皮纸，生图 2×2 图集左下变体）：九宫格保撕边与折角，中段拉伸纸纹 */
+  ui_card_plate_base: { canon: [446, 669], inset: [40, 40, 40, 40], scale: 0.5 },
   /* 主城一级背板（PageKit.artPanel）：程序暗板打底，同名美术落图后自动九宫格覆盖 */
   ui_panel_tabs: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
   ui_panel_bag: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
@@ -203,9 +198,8 @@ export const UX_PRELOAD_IDS: string[] = [
   // 狙击/通用剩余卡面（生图 skill 产出，2026-10-04）
   'ui_card_execute', 'ui_card_multi_lock', 'ui_card_cd_cut', 'ui_card_extra_line',
   'ui_card_wall', 'ui_card_repair', 'ui_card_xp_badge',
-  // 三选一卡背板：羊皮底板 + 白/绿/蓝/紫/黄淡色品质背板（缺图回退程序羊皮板）
-  'ui_card_plate_base', 'ui_card_plate_white', 'ui_card_plate_green',
-  'ui_card_plate_blue', 'ui_card_plate_purple', 'ui_card_plate_yellow',
+  // 三选一卡背板：全品质共用羊皮底板（品质色走卡头色带，用户调整）
+  'ui_card_plate_base',
   'ui_icon_atk_sniper', 'ui_icon_skill_sniper', 'ui_icon_ult_sniper',
   // 场景
   'scenes/scene_1_1',

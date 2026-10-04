@@ -34,12 +34,6 @@ const CARD_ART: Record<string, string> = {
   fast_charge_s: 'ui_card_fast_charge_a', // 快速充能 ← 快速充能（能量体）
 };
 
-/** 淡色品质背板（用户调整：白/绿/蓝/紫/黄五色，按稀有度取用；绿/黄备用待稀有度扩展） */
-const PLATE_BY_RARITY: Record<string, string> = {
-  white: 'ui_card_plate_white', green: 'ui_card_plate_green', blue: 'ui_card_plate_blue',
-  purple: 'ui_card_plate_purple', yellow: 'ui_card_plate_yellow',
-};
-
 export class Panels {
   private modalRoot: Node;
   private pickAdLeft = 1;
@@ -100,21 +94,42 @@ export class Panels {
       '当局剩余刷新：广告 ' + this.pickAdLeft + ' 次 · 钻石 ' + this.pickDiaLeft + ' 次',
       { size: 18, color: '#CFE3FF' });
 
-    btn(this.modalRoot, WX(130, 300), WY(862, 76), 300, 76,
-      '▶ 广告刷新', this.pickAdLeft > 0 ? PAL.green : '#5A6472', () => {
+    // 刷新按钮（参考版式：无边框扁平圆角板 + 底缘厚度 + 粗体字；绿=广告 金=钻石 灰=次数用尽）
+    this.pickBtn(this.modalRoot, WX(130, 300), WY(862, 76), 300, 76, '▶ 广告刷新', 24,
+      this.pickAdLeft > 0 ? PAL.green : '#5A6472',
+      this.pickAdLeft > 0 ? '#5E8F2E' : '#454E59',
+      this.pickAdLeft > 0 ? '#20240F' : '#DCE2EA',
+      () => {
         if (this.picking || this.pickAdLeft <= 0) return;
         this.pickAdLeft--;
         AdService.showRewarded('pick_refresh', () => cb.onRefreshRequest(), () => { this.pickAdLeft++; });
-      }, 24);
-    btn(this.modalRoot, WX(460, 180), WY(862, 76), 180, 76,
-      '💎2 钻石刷新', this.pickDiaLeft > 0 ? PAL.gold : '#5A6472', () => {
+      });
+    this.pickBtn(this.modalRoot, WX(460, 180), WY(862, 76), 180, 76, '💎2 钻石刷新', 22,
+      this.pickDiaLeft > 0 ? PAL.gold : '#5A6472',
+      this.pickDiaLeft > 0 ? '#C98A1A' : '#454E59',
+      this.pickDiaLeft > 0 ? '#3A2A10' : '#DCE2EA',
+      () => {
         if (this.picking || this.pickDiaLeft <= 0) return;
         const sv = loadSave();
         if (sv.diamonds < 2) return;
         sv.diamonds -= 2;
         this.pickDiaLeft--;
         cb.onRefreshRequest();
-      }, 22);
+      });
+  }
+
+  /** 三选一刷新按钮：底板画深色缘，面色板上移露出底缘厚度，扁平无边框（参考图版式） */
+  private pickBtn(parent: Node, x: number, y: number, w: number, h: number, text: string,
+    size: number, base: string, edge: string, txt: string, cb: () => void): Node {
+    const n = gpanel(parent, x, y, w, h, CA(edge, 1), undefined, 0, 14);
+    const face = gpanel(n, 0, 3, w, h - 6, CA(base, 1), undefined, 0, 14);
+    label(face, 0, 0, text, { size, color: txt, bold: true, w: w - 16, h: h - 6, shrink: true });
+    n.on(Node.EventType.TOUCH_END, (e: unknown) => {
+      const ev = e as { propagationStopped?: boolean };
+      if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
+      cb();
+    });
+    return n;
   }
 
   /** 选择动画：选中卡弹跳、其余卡淡出，随后真实回调（三选一冻结期间 tween 仍走主循环时钟） */
@@ -137,15 +152,15 @@ export class Panels {
   private buildCard(frame: Node, card: CardDef): void {
     const rarity = RARITY_COLOR[card.rarity];
 
-    // ⓪ 卡背板：淡色品质背板垫底（缺图回退程序羊皮板）；撕边外圈透明，
+    // ⓪ 卡背板：全品质共用同一张羊皮纸板（品质差异只走①色带，用户调整）；撕边外圈透明，
     // 美术到位后清除程序板，避免直边衬底从撕边轮廓外露出
-    artSprite(frame, 0, 0, 222, 360, PLATE_BY_RARITY[card.rarity] || 'ui_card_plate_base', {
+    artSprite(frame, 0, 0, 222, 360, 'ui_card_plate_base', {
       belowIdx: 0,
       onLoaded: () => { frame.getComponent(Graphics)?.clear(); },
     });
 
-    // ① 卡头稀有度色带（200×52 扁平色板：收窄进撕边轮廓内）
-    const header = gpanel(frame, 0, 154, 200, 52, CA(rarity, 0.85), undefined, 0, 12);
+    // ① 卡头品质色带（200×52 扁平色板：收窄进撕边轮廓内，品质色在此表达）
+    const header = gpanel(frame, 0, 154, 200, 52, CA(rarity, 0.92), undefined, 0, 12);
     label(header, 0, 0, card.name, { size: 22, color: card.rarity === 'white' ? '#4A3214' : '#FFFFFF', bold: true, w: 188, h: 40, shrink: true });
 
     // ② 图标座 120 圆 + 内嵌 96 圆（卡面美术图 ui_card_<id>；缺图回退首字母——用户要求：卡面用图标资源）
