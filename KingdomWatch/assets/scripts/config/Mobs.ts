@@ -62,6 +62,8 @@ export interface WaveDef { groups: SpawnGroup[]; surge?: boolean; }
 
 /** 全怪血量倍率（用户调整：基础血量 ×2） */
 export const MOB_HP_MUL = 2;
+/** 全怪伤害倍率（用户调整：降为原来的 1/3） */
+export const MOB_DMG_MUL = 1 / 3;
 /** 关卡内阶梯增长（用户调整：向僵尸开炮式持续刷怪）——第 n 波相对第 1 波的数量/血量/伤害增幅系数 = 1 + 率×(n-1) */
 export const WAVE_RAMP = { cnt: 0.12, hp: 0.15, dmg: 0.08 };
 

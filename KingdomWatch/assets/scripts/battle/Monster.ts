@@ -3,7 +3,7 @@
  * 受击只闪红不掉速（用户确认：控制效果只属于特定 buff）；仅 BOSS 显示血条（M0 1-1 无 BOSS，钩子保留）
  */
 import { Color, Graphics, Label, Layers, Node, Tween, UIOpacity, tween } from 'cc';
-import { MOB_HP_MUL, MobDef } from '../config/Mobs';
+import { MOB_DMG_MUL, MOB_HP_MUL, MobDef } from '../config/Mobs';
 import { LINE_Y, PAL, SPAWN_Y } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 
@@ -263,7 +263,7 @@ export class MonsterManager {
     def = {
       ...def,
       hp: Math.round(def.hp * MOB_HP_MUL * this.statMul * this.rampHp),
-      dmg: Math.round(def.dmg * this.statMul * this.rampDmg),
+      dmg: Math.round(def.dmg * MOB_DMG_MUL * this.statMul * this.rampDmg),
     };
     const m = this.pool.pop() || new Monster();
     m.init(def, this.field, Math.random() * 660 - 330, this.ctx, this);
