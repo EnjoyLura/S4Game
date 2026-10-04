@@ -131,10 +131,10 @@ export class Panels {
     label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 26, color: card.rarity === 'white' ? '#E8E0C8' : rarity, bold: true });
 
     // ③ 右上归属角标（圆心 y94/r24：顶缘 118 离色带底 128 十分距；距图标座圆心 91 > 60+24）
-    const ownHero = card.owner === 'archer' ? '弓' : card.owner === 'sniper' ? '狙' : '';
+    // 英雄卡贴头像图（同英雄页/编队/大招钮），全局卡保持文字（用户要求：三选一卡用上英雄头像）
     const ava = gcircle(frame, 80, 94, 24, CA('#2A3240', 1));
-    label(ava, 0, 0, card.owner === 'global' ? '全' : ownHero,
-      { size: 18, color: card.owner === 'global' ? PAL.green : PAL.gold, bold: true });
+    if (card.owner === 'global') label(ava, 0, 0, '全', { size: 18, color: PAL.green, bold: true });
+    else artSprite(ava, 0, 0, 48, 48, 'ui_avatar_' + card.owner, { sliced: false });
 
     // ④ 描述（18 号加粗，shrink 保证不超框）
     label(frame, 0, -95, card.desc, { size: 18, color: '#4A3214', bold: true, w: 206, h: 90, shrink: true, lineHeight: 26 });
