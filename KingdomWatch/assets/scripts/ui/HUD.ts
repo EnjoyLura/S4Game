@@ -170,7 +170,7 @@ export class HUD {
 
   /** 第 i 钮：底基 504，向上每钮 +110；点击就绪即施放，未满→Tips
    *  无边框规范：纯色圆板三态（充能灰/常态金/就绪亮金），不加座环美术
-   *  冷却表现（用户确认）：灰色遮罩盖住整个图标置灰；充能能量按英雄主色半透明填充（弓=绿 狙=蓝），隐约透出图标 */
+   *  充能表现（用户调整）：图标占满钮面，未充能区灰罩扇形从12点顺时针覆盖（随充能收缩），中心只显示百分比；就绪亮金+光晕粒子、无文字 */
   private buildUlt(top: Node, i: number, hero: HeroBase): UltUI {
     const ux = WX(636, 90), uy = WYB(504 + i * 110, 90);
     const color = hero.id === 'sniper' ? PAL.blue : PAL.green;
@@ -182,11 +182,12 @@ export class HUD {
     const bright = gcircle(top, ux, uy, 45, CA(PAL.gold, 0.42));
     bright.active = false;
     const gray = gcircle(top, ux, uy, 45, CA('#3A4250', 0.9));
-    // 英雄头像：垫在置灰遮罩/能量水/充能字之下（92 > 钮圆 90：头像/大招图标占满整个圆——用户反馈）
+    gray.active = false;   // 用户调整：图标占满钮面后不再整体置灰，灰罩只走未充能扇形
+    // 英雄头像+大招图标：垫在进度灰罩/百分比之下（92 > 钮圆 90：占满整个圆）
     artSprite(top, ux, uy, 92, 92, 'ui_avatar_' + hero.id, { sliced: false });
     // 大招图标（美术到位后盖过头像作钮面；缺失保持头像兜底）
     artSprite(top, ux, uy, 92, 92, 'ui_icon_ult_' + hero.id, { sliced: false });
-    // 冷却置灰遮罩：头像之上、能量水与充能字之下；就绪时隐藏
+    // 旧整圆置灰罩已弃用（被未充能扇形替代），保留节点占位不再激活
     const mask = gcircle(top, ux, uy, 46, CA('#3A4250', 0.7));
     mask.active = false;
     const water = new Node('ultWater' + i);
@@ -206,13 +207,14 @@ export class HUD {
     }
     orbit.addComponent(UIOpacity);
     orbit.active = false;
-    const chargeTxt = label(top, ux, uy, '大招\n0%', { size: 18, color: '#FFFFFF', bold: true, w: 90, h: 50 });
+    // 充能百分比：单行居中（用户调整：去掉"大招"前缀与"就绪"文案，就绪时整行隐藏）
+    const chargeTxt = label(top, ux, uy, '0%', { size: 22, color: '#FFFFFF', bold: true, w: 90, h: 30, outline: '#0B0F16', outlineW: 3 });
     // 钮下英雄名：双英雄时代区分归属（艾拉/凯尔）
     label(top, ux, uy - 58, hero.name.slice(0, 2), { size: 13, color: '#CDC2A2', bold: true, w: 90, h: 20 });
     btn.on(Node.EventType.TOUCH_END, () => {
       if (this.dir.tryCastUlt(i) === 'charging') this.dir.showTips('ult', i);
     });
-    const ui: UltUI = { ux, uy, glow, btn, bright, gray, mask, color, water, waterG, waterR: 43, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
+    const ui: UltUI = { ux, uy, glow, btn, bright, gray, mask, color, water, waterG, waterR: 46, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
     return ui;
   }
 
@@ -358,67 +360,49 @@ export class HUD {
       this.applyUltReady(u, ready);
     }
     if (!ready) {
-      // 能量水液面平滑上涨；获得充能时水面高光闪亮
+      // 未充能扇形灰罩平滑收缩，百分比与遮罩边缘同步（用户调整：只显示居中百分比）
       const cp = hero.chargePct;
-      if (cp > u.lastTarget + 0.0001) u.flash = 0.35;
-      u.lastTarget = cp;
       u.shown += (cp - u.shown) * Math.min(1, dt * 5);
       if (cp - u.shown < 0.002) u.shown = cp;
-      u.flash = Math.max(0, u.flash - dt);
       const key = Math.round(u.shown * 60);
-      if (key !== u.lastChargeKey || u.flash > 0) {
+      if (key !== u.lastChargeKey) {
         u.lastChargeKey = key;
-        this.redrawUltWater(u, u.shown, u.flash > 0);
-        setText(u.chargeTxt, '大招\n' + Math.round(cp * 100) + '%');
+        this.redrawUltWater(u, u.shown);
+        setText(u.chargeTxt, Math.round(u.shown * 100) + '%');
       }
     }
   }
 
-  /** 能量水上涨：圆杯内液面以下的圆缺面（弦 + 下弧采样，避免 arc 方向歧义）；flash=获得瞬间水面高光
-   *  英雄主色半透明（用户确认：能隐约看到底下的图标） */
-  private redrawUltWater(u: UltUI, pct: number, flash = false): void {
+  /** 充能进度遮罩（用户调整：已充能区露出图标，未充能区灰罩扇形；去掉白色液面分割线）
+   *  与技能 CD 同向：从 12 点顺时针覆盖剩余比例，充能中随进度收缩 */
+  private redrawUltWater(u: UltUI, pct: number): void {
     const g = u.waterG;
     g.clear();
-    if (pct <= 0.01) return;
+    const f = 1 - Math.max(0, Math.min(1, pct));
+    if (f <= 0.004) return;
     const R = u.waterR;
-    if (pct >= 0.995) {
-      g.fillColor = CA(u.color, flash ? 0.35 : 0.18);   // 用户调整：能量水再提透明度
+    g.fillColor = CA('#3A4250', 0.7);
+    if (f >= 0.996) {
       g.circle(0, 0, R);
       g.fill();
       return;
     }
-    const yc = -R + 2 * R * pct;
-    const a = Math.asin(Math.max(-1, Math.min(1, yc / R)));
-    const xr = R * Math.cos(a);
-    g.fillColor = CA(u.color, flash ? 0.33 : 0.18);
-    g.moveTo(xr, yc);
-    g.lineTo(-xr, yc);
-    const thA = Math.PI - a, thB = Math.PI * 2 + a;
-    const steps = 28;
-    for (let i = 0; i <= steps; i++) {
-      const th = thA + ((thB - thA) * i) / steps;
-      g.lineTo(R * Math.cos(th), R * Math.sin(th));
-    }
+    g.moveTo(0, 0);
+    g.arc(0, 0, R, Math.PI / 2 - (1 - f) * Math.PI * 2, Math.PI / 2, false);
     g.close();
     g.fill();
-    g.strokeColor = CA(flash ? '#FFFFFF' : '#EAF6FF', flash ? 0.95 : 0.65);   // 水面高光（白，主色通吃）
-    g.lineWidth = flash ? 3.5 : 2.5;
-    g.moveTo(-xr + 4, yc);
-    g.lineTo(xr - 4, yc);
-    g.stroke();
   }
 
-  /** 充能→就绪 状态切换：置灰遮罩/能量水 ↔ 高亮 + 光晕呼吸 + 粒子环绕 + 弹跳过渡 */
+  /** 充能→就绪 状态切换：进度灰罩 ↔ 高亮 + 光晕呼吸 + 粒子环绕（就绪时隐藏百分比，不显示"就绪"文案） */
   private applyUltReady(u: UltUI, ready: boolean): void {
-    u.gray.active = !ready;
-    u.mask.active = !ready;
     u.water.active = !ready;
     u.bright.active = ready;
     if (!ready) {
       u.lastChargeKey = -1;
       u.shown = 0;
       u.lastTarget = -1;
-      setText(u.chargeTxt, '大招\n0%');
+      u.chargeTxt.active = true;
+      setText(u.chargeTxt, '0%');
       Tween.stopAllByTarget(u.btn);
       Tween.stopAllByTarget(u.glow);
       Tween.stopAllByTarget(u.orbit);
@@ -427,7 +411,7 @@ export class HUD {
       u.orbit.active = false;
       return;
     }
-    setText(u.chargeTxt, '大招\n就绪');
+    u.chargeTxt.active = false;
     u.glow.active = true;
     u.orbit.active = true;
     // 一次性过渡：弹跳 + 扩散环
