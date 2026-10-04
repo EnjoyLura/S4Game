@@ -66,6 +66,11 @@ const SLICE9: Record<string, Slice9Def> = {
   ui_card_header_purple: { canon: [400, 104], inset: [65, 65, 11, 11], scale: 0.5 },
   /* 三选一卡背板（撕边羊皮纸，生图 2×2 图集左下变体）：九宫格保撕边与折角，中段拉伸纸纹 */
   ui_card_plate_base: { canon: [446, 669], inset: [40, 40, 40, 40], scale: 0.5 },
+  /* 通用弹窗三件套（生图 Kingdom Rush 风）：九宫格保撕边/折角/雕刻边，中段拉伸 */
+  ui_panel_dialog: { canon: [962, 511], inset: [40, 40, 36, 36], scale: 0.5 },
+  ui_banner_notice: { canon: [925, 231], inset: [88, 70, 24, 64], scale: 0.5 },
+  ui_btn_confirm: { canon: [814, 207], inset: [36, 36, 24, 40], scale: 0.5 },
+  ui_btn_cancel: { canon: [807, 210], inset: [36, 36, 24, 40], scale: 0.5 },
   /* 主城一级背板（PageKit.artPanel）：程序暗板打底，同名美术落图后自动九宫格覆盖 */
   ui_panel_tabs: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
   ui_panel_bag: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
@@ -200,6 +205,8 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_card_wall', 'ui_card_repair', 'ui_card_xp_badge',
   // 三选一卡背板：全品质共用羊皮底板（品质色走卡头色带，用户调整）
   'ui_card_plate_base',
+  // 通用弹窗三件套 + 新怪物通知钮（生图 Kingdom Rush 风）
+  'ui_panel_dialog', 'ui_banner_notice', 'ui_btn_confirm', 'ui_btn_cancel', 'ui_btn_notice',
   'ui_icon_atk_sniper', 'ui_icon_skill_sniper', 'ui_icon_ult_sniper',
   // 场景
   'scenes/scene_1_1',
