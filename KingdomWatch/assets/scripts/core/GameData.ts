@@ -93,13 +93,15 @@ export function squadList(): string[] {
 }
 export function inSquad(hid: string): boolean { return squadList().includes(hid); }
 
-/** 上阵：从左到右占第一个空位（满员/重复返回失败消息） */
+/** 上阵：从左到右占第一个空位（满员/重复返回失败消息）；上阵即拥有（与商店/英雄/升级页同步） */
 export function deployHero(hid: string): OpResult {
   if (!HERO_DEFS[hid]) return { ok: false, msg: '英雄不存在' };
   const sq = squadList();
   if (sq.includes(hid)) return { ok: false, msg: '该英雄已上阵' };
   if (sq.length >= SQUAD_MAX) return { ok: false, msg: '编队已满，请先下阵英雄' };
-  loadSave().squad = [...sq, hid];
+  const sv = loadSave();
+  sv.squad = [...sq, hid];
+  if (sv.heroes[hid]) sv.heroes[hid].owned = true;
   saveSave();
   return { ok: true, msg: `${HERO_DEFS[hid].name} 已上阵` };
 }

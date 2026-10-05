@@ -85,6 +85,10 @@ export function loadSave(): SaveData {
   }
   // 老档无编队字段 → 默认双英雄上阵（与旧版战斗一致）
   if (!Array.isArray(sv.squad)) sv.squad = ['archer', 'sniper'];
+  // 编队即拥有：上阵名单里的英雄一律视为已拥有（修复：上阵英雄在商店/英雄/升级页显示未解锁）
+  for (const hid of sv.squad) {
+    if (sv.heroes[hid]) sv.heroes[hid].owned = true;
+  }
   return sv;
 }
 
