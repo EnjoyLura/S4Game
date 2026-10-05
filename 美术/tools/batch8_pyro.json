@@ -1,0 +1,63 @@
+{
+  "name": "批次8_火法英雄_2026-10-05",
+  "outdir": "D:/AI/S4Game/美术/原图/批次8_火法英雄_2026-10-05",
+  "defaults": { "model": "gpt-image-2", "quality": "high",
+                "background": "transparent", "key": "a3", "size": "1024x1024" },
+  "items": [
+    {
+      "id": "P1_头像焰辉",
+      "type": "generate",
+      "prompt": "Circular game avatar bust portrait: a confident young male fire mage named Yan Hui, short burning-orange hair, orange-red hooded robe with golden trim, a small flame dancing above his raised palm, warm determined smirk. Kingdom Rush inspired hand-painted cartoon game art, painterly shading, crisp shapes readable at small size, warm orange-red color scheme, centered composition filling the circle. Square canvas with the circular portrait on transparent background outside the circle. Strictly NO text, NO border ring, NO glow halo."
+    },
+    {
+      "id": "P2_普攻图标",
+      "type": "generate",
+      "prompt": "Circular game skill icon: a fire mage (seen from behind-side, orange-red robe) hurling a single blazing fireball forward, small flame trail, action shot. Kingdom Rush inspired hand-painted cartoon game art, warm orange-red palette with deep warm-brown backdrop inside the circle, bold readable shapes. Square canvas, circular icon on transparent background outside the circle. Strictly NO text, NO border ring, NO glow halo."
+    },
+    {
+      "id": "P3_技能图标",
+      "type": "generate",
+      "prompt": "Circular game skill icon: three blazing fireballs exploding together in a bright fiery burst with flying embers, intense orange-yellow core. Kingdom Rush inspired hand-painted cartoon game art, warm orange-red palette, bold readable shapes, deep warm-brown backdrop inside the circle. Square canvas, circular icon on transparent background outside the circle. Strictly NO text, NO border ring, NO glow halo."
+    },
+    {
+      "id": "P4_大招图标",
+      "type": "generate",
+      "prompt": "Circular game ultimate icon: flaming meteors falling from a dark sky onto the ground, fiery impact shockwave and embers, dramatic top-down angle. Kingdom Rush inspired hand-painted cartoon game art, warm orange-red palette with deep warm-brown sky, bold readable shapes inside the circle. Square canvas, circular icon on transparent background outside the circle. Strictly NO text, NO border ring, NO glow halo."
+    },
+    {
+      "id": "P5_卡面法术精研",
+      "type": "generate",
+      "prompt": "Square game card icon, full-bleed: an open ancient spellbook with a bright flame rune rising from its pages, orange and gold tones. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size, rich warm background. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo."
+    },
+    {
+      "id": "P6_卡面技能弹体",
+      "type": "generate",
+      "prompt": "Square game card icon, full-bleed: three blazing fireballs flying in tight formation with flame trails, orange and gold tones. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size, rich warm background. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo."
+    },
+    {
+      "id": "P7_卡面法术范围",
+      "type": "generate",
+      "prompt": "Square game card icon, full-bleed: a fiery shockwave ring expanding outward on scorched ground, concentric flame circle, orange and gold tones. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo."
+    },
+    {
+      "id": "P8_卡面战吼",
+      "type": "generate",
+      "prompt": "Square game card icon, full-bleed: a flaming war horn blasting a fiery shout shockwave with embers, orange and gold tones. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo."
+    },
+    {
+      "id": "P9_卡面震慑",
+      "type": "generate",
+      "prompt": "Square game card icon, full-bleed: a heavy impact stun burst — bright yellow-orange impact star with small orbiting stars and cracks, on warm dark backdrop. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo."
+    },
+    {
+      "id": "P10_卡面士气高涨",
+      "type": "generate",
+      "prompt": "Square game card icon, full-bleed: a blazing war banner flag with a bold upward arrow woven in flame, morale boost motif, orange and gold tones. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo."
+    },
+    {
+      "id": "P11_卡面余烬",
+      "type": "generate",
+      "prompt": "Square game card icon, full-bleed: a glowing burning ember heart — cracked charcoal core with intense orange flame veins and drifting sparks. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size, warm dark background. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo."
+    }
+  ]
+}

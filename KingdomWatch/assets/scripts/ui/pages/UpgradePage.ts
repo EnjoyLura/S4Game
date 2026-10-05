@@ -133,7 +133,7 @@ export function buildUpgrade(ctx: PageCtx): void {
     artPanel(content, 0, WY(-LO.safeTop, upT + LO.safeTop), 750, upT + LO.safeTop, 'ui_panel_hero');
 
     /* 常驻英雄栏：头像切换（未拥有灰锁）；用户确认：头像不加边框（无描边、无带环座美术） */
-    (['archer', 'sniper'] as const).forEach((id, i) => {
+    (['archer', 'sniper', 'pyro'] as const).forEach((id, i) => {
       const o = sv.heroes[id].owned;
       const av = gpanel(content, WX(30 + i * 100, 88), WY(205, 88), 88, 88,
         CA('#2A3240', 1), undefined, 0, 44);

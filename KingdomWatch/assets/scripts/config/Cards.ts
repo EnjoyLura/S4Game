@@ -30,9 +30,15 @@ export interface HeroStats {
   slowDur: number;      // 命中减速时长 s（寒霜附魔）
   ultRounds: number;    // 大招箭雨轮数（弓，多轮箭雨）
   chargeMul: number;    // 大招充能需求倍率（快速充能，累乘）
-  skillShots: number;   // 穿颅射击连狙发数（狙，多目标锁定）
-  skillCdFlat: number;  // 技能冷却缩减 s（狙，冷却缩减，累加）
+  skillShots: number;   // 技能弹体数量（狙连狙发数 / 火法爆裂火球数）
+  skillCdFlat: number;  // 技能冷却缩减 s（累加）
   ultBolts: number;     // 大招枪线条数（狙，额外枪线）
+  skillMul: number;     // 技能伤害倍率（法术精研，累乘）
+  skillRangeMul: number;// 技能范围倍率（法术范围，累乘）
+  ultDmgMul: number;    // 大招伤害倍率（战吼，累乘）
+  ultStun: number;      // 大招命中眩晕 s（震慑，覆盖）
+  ultHaste: number;     // 大招后攻速加成标记（士气高涨，0/1）
+  burnMul: number;      // 灼烧伤害倍率（余烬，累乘）
 }
 
 export function baseArcherStats(): HeroStats {
@@ -44,6 +50,7 @@ export function baseArcherStats(): HeroStats {
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1,
   };
 }
 
@@ -56,6 +63,20 @@ export function baseSniperStats(): HeroStats {
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1,
+  };
+}
+
+/** 火焰法师 · 焰·辉（§4 #2：技能流·AOE/橙红）：普攻火球小溅射；普攻 520 / 技能索敌 460 */
+export function basePyroStats(): HeroStats {
+  return {
+    atk: 60, atkMul: 1, aspd: 0.8, range: 520, skillRange: 460,
+    critRate: 0.05, critMul: 1.5,
+    serial: 0, fan: 0, split: 0, explodeR: 60, explodeMul: 0.4,   // 火球自带小溅射
+    pierce: 0, slowOnHit: 0, burnOnHit: 0,
+    executeBonus: 0, lowHpBonus: 0,
+    slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 3, skillCdFlat: 0, ultBolts: 1,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1,
   };
 }
 
@@ -145,6 +166,28 @@ export const SNIPER_CARDS: CardDef[] = [
     apply: x => { x.hero.chargeMul *= 0.8; } }),
 ];
 
+/* ---------- 火焰法师 · 焰·辉（§6.3 技能流 + §6.4 余烬） ---------- */
+export const PYRO_CARDS: CardDef[] = [
+  c({ id: 'pyro_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'pyro', desc: '技能伤害 +40%',
+    apply: x => { x.hero.skillMul *= 1.4; } }),
+  c({ id: 'pyro_shards', name: '技能弹体', rarity: 'blue', maxStacks: 3, owner: 'pyro', desc: '烈焰爆裂火球 +1 颗（可叠加）',
+    apply: x => { x.hero.skillShots += 1; } }),
+  c({ id: 'pyro_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'pyro', desc: '技能冷却 -2 秒（可叠加）',
+    apply: x => { x.hero.skillCdFlat += 2; } }),
+  c({ id: 'pyro_range', name: '法术范围', rarity: 'white', maxStacks: 3, owner: 'pyro', desc: '爆裂范围 +30%',
+    apply: x => { x.hero.skillRangeMul *= 1.3; } }),
+  c({ id: 'pyro_war', name: '战吼', rarity: 'blue', maxStacks: 3, owner: 'pyro', desc: '大招伤害 +50%',
+    apply: x => { x.hero.ultDmgMul *= 1.5; } }),
+  c({ id: 'pyro_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'pyro', desc: '大招充能需求 -25%（可叠加）',
+    apply: x => { x.hero.chargeMul *= 0.75; } }),
+  c({ id: 'pyro_stun', name: '震慑', rarity: 'purple', maxStacks: 2, owner: 'pyro', desc: '陨石命中眩晕 1 秒',
+    apply: x => { x.hero.ultStun = 1; } }),
+  c({ id: 'pyro_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'pyro', desc: '大招释放后攻速 +40% 持续 5 秒',
+    apply: x => { x.hero.ultHaste = 1; } }),
+  c({ id: 'pyro_ember', name: '余烬', rarity: 'purple', maxStacks: 2, owner: 'pyro', desc: '灼烧伤害翻倍',
+    apply: x => { x.hero.burnMul *= 2; } }),
+];
+
 /* ---------- 全局卡（§6.1） ---------- */
 export const GLOBAL_CARDS: CardDef[] = [
   c({ id: 'wall', name: '城墙加固', rarity: 'white', maxStacks: 4, owner: 'global', desc: '防线耐久上限 +25% 并回复 25%',
@@ -155,8 +198,8 @@ export const GLOBAL_CARDS: CardDef[] = [
     apply: x => { x.global.xpMul *= 1.1; } }),
 ];
 
-/** 当前卡池 = 弓箭手 + 狙击 + 全局（卡按 owner 归属英雄生效） */
-export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...GLOBAL_CARDS];
+/** 当前卡池 = 弓箭手 + 狙击 + 火法 + 全局（卡按 owner 归属英雄生效） */
+export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...GLOBAL_CARDS];
 
 export interface CardStacks { [cardId: string]: number; }
 

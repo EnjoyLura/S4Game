@@ -4,7 +4,7 @@
  */
 import { _decorator, Canvas, Component, director, Layers, Node } from 'cc';
 import { LEVEL_1_1, LevelDef, MOBS, heroSlots } from '../config/Mobs';
-import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats } from '../config/Cards';
+import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats } from '../config/Cards';
 import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
@@ -12,7 +12,7 @@ import { loadSave, saveSave } from '../core/SaveData';
 import { DIFF_MUL, starKey, squadList, unlockCodex } from '../core/GameData';
 import { flow } from '../core/Flow';
 import { MonsterManager } from './Monster';
-import { ArcherHero, HeroBase, SniperHero } from './Hero';
+import { ArcherHero, HeroBase, SniperHero, PyroHero } from './Hero';
 import { LineDefense } from './LineDefense';
 import { WaveManager } from './WaveManager';
 import { ProjectileManager } from './Projectile';
@@ -112,7 +112,9 @@ export class BattleDirector extends Component {
     const slots = heroSlots(ids.length);
     this.heroes = ids.map((hid, i) => hid === 'sniper'
       ? new SniperHero(field, slots[i], baseSniperStats())
-      : new ArcherHero(field, slots[i], baseArcherStats()));
+      : hid === 'pyro'
+        ? new PyroHero(field, slots[i], basePyroStats())
+        : new ArcherHero(field, slots[i], baseArcherStats()));
     this.parts = new Particles(fxLayer);
     this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts);
     this.waves = new WaveManager(this.levelDef, this.mgr);
@@ -258,7 +260,9 @@ export class BattleDirector extends Component {
         else { this.panels.closeAll(); this.state = 'running'; }
       },
       onRefreshRequest: () => {
-        this.panels.showPick(draw3(M0_POOL, this.stacks), this.stacks, opts);
+        // §3.8：三选一 = 上阵英雄卡池混合 + 全局卡（未上阵英雄的卡不出现）
+        const pool = M0_POOL.filter(c => c.owner === 'global' || this.heroes.some(h => h.id === c.owner));
+        this.panels.showPick(draw3(pool, this.stacks), this.stacks, opts);
       },
     };
     this.pickOpts = opts;

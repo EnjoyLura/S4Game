@@ -81,6 +81,12 @@ export const HERO_DEFS: Record<string, HeroDef> = {
     story: '前王国猎鹰团首席，一弩定音的沉默猎手。现为防线寻找每一发弩箭的价值。',
     shopPrice: 6800,
   },
+  pyro: {
+    id: 'pyro', name: '焰·辉', job: '火焰 · AOE 爆发', avatar: 'ui_avatar_pyro',
+    baseAtk: 90, atkSpd: 0.8, weaponName: '辉焰法杖', skillName: '烈焰爆裂', ultName: '陨石天降',
+    story: '自灰烬火山走出的流浪法师，掌心蕴火。怪群愈密，他的火焰便烧得愈旺。',
+    shopPrice: 2800,
+  },
 };
 
 /* ================= 编队（二级编队界面：4 上阵位；战斗按上阵顺序从左到右站位） ================= */
@@ -183,6 +189,7 @@ export const SHOP: ShopDef[] = [
   { id: 's_wpn_bow', tab: 'weapon', name: '猎风长弓', sub: '绿1阶 · 速射弓', price: 800, currency: 'diamond', unlock: '1-1', give: { kind: 'equip', id: 'wpn_bow' } },
   { id: 's_wpn_crossbow', tab: 'weapon', name: '鹰眼重弩', sub: '紫2阶 · 重击弩', price: 1200, currency: 'diamond', unlock: '1-2', give: { kind: 'equip', id: 'wpn_crossbow' } },
   { id: 's_hero_sniper', tab: 'hero', name: '凯尔·鹰眼', sub: '狙击 · 重击输出', price: 6800, currency: 'diamond', unlock: '1-5', give: { kind: 'hero', id: 'sniper' } },
+  { id: 's_hero_pyro', tab: 'hero', name: '焰·辉', sub: '火焰 · AOE 爆发', price: 2800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'pyro' } },
   { id: 's_hero_more', tab: 'hero', name: '新英雄', sub: '敬请期待', price: 0, currency: 'diamond', unlock: '', give: { kind: 'hero', id: '' } },
   { id: 's_helm_falcon', tab: 'equip', name: '猎鹰头盔', sub: '蓝1阶 · 头盔', price: 600, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'helm_falcon' } },
   { id: 's_acc_moon', tab: 'equip', name: '月纹坠饰', sub: '绿1阶 · 饰品', price: 300, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'acc_moon' } },
@@ -226,6 +233,7 @@ export function shopBuy(g: ShopDef): OpResult {
     if (d && cur?.owned && !cur.worn[d.kind]) cur.worn[d.kind] = inst.uid;
     sv.equips.push(inst);
   } else if (g.give.kind === 'hero' && g.give.id) {
+    if (!sv.heroes[g.give.id]) sv.heroes[g.give.id] = { owned: true, lv: 1, weaponLv: 1, atkLv: 1, skillLv: 1, ultLv: 1, worn: {} };
     sv.heroes[g.give.id].owned = true;
     sv.curHero = g.give.id;
   } else if (g.give.kind === 'mat') {

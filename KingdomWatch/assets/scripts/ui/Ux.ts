@@ -206,7 +206,7 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_icon_heart', 'ui_icon_skull', 'ui_icon_eye', 'ui_icon_chat', 'icon_alert',
   'ui_icon_lock', 'ui_seat_q0', 'ui_seat_q1', 'ui_seat_q2', 'ui_seat_q3', 'ui_card_shop',
   // 英雄头像
-  'ui_avatar_archer', 'ui_avatar_sniper',
+  'ui_avatar_archer', 'ui_avatar_sniper', 'ui_avatar_pyro',
   // 英雄技能图标（双英雄均已交付）
   'ui_icon_atk_archer', 'ui_icon_skill_archer', 'ui_icon_ult_archer',
   // 三选一卡面图标（弓箭手组 15 张已交付；狙击/全局待图走首字回退）
@@ -222,6 +222,9 @@ export const UX_PRELOAD_IDS: string[] = [
   // 通用弹窗三件套 + 新怪物通知钮（生图 Kingdom Rush 风）
   'ui_panel_dialog', 'ui_banner_notice', 'ui_btn_confirm', 'ui_btn_cancel', 'ui_btn_notice',
   'ui_icon_atk_sniper', 'ui_icon_skill_sniper', 'ui_icon_ult_sniper',
+  'ui_icon_atk_pyro', 'ui_icon_skill_pyro', 'ui_icon_ult_pyro',
+  'ui_card_pyro_spell', 'ui_card_pyro_shards', 'ui_card_pyro_cd', 'ui_card_pyro_range',
+  'ui_card_pyro_war', 'ui_card_pyro_eager', 'ui_card_pyro_stun', 'ui_card_pyro_morale', 'ui_card_pyro_ember',
   // 场景
   'scenes/scene_1_1',
 ];

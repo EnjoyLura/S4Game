@@ -3,11 +3,12 @@
  * HeroBase：站位/普攻循环/技能自动CD/击杀+呼吸回能充能；子类实现立绘/普攻/技能/大招
  * - ArcherHero 艾拉·风羽：强化箭矢(12s，6次普攻金色贯穿) / 扇形箭雨(两排×8箭全贯穿)
  * - SniperHero 凯尔·鹰眼：穿颅射击(14s，4秒窗口锁定离防线最近连续6狙×2/发·无目标等待) / 猎杀时刻(×5.5必暴·无视物抗单发)
+ * - PyroHero 焰·辉：烈焰爆裂(10s，密集处 3 火球爆炸+灼烧) / 陨石天降(5 颗随机轰击+落点灼烧)
  * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/处决/残血词条）
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { HeroStats } from '../config/Cards';
-import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, HERO_Y, PAL } from '../config/GameConfig';
+import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL } from '../config/GameConfig';
 import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
@@ -66,7 +67,7 @@ export abstract class HeroBase {
     // 技能（自动：CD 好 + 技能范围内有怪）
     this.skillCd -= dt;
     if (this.skillCd <= 0 && mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange)) {
-      this.castSkill();
+      this.castSkill(mgr, projs);
     }
     // 大招呼吸回能：每 3 秒少量充能（不与击杀充能冲突；满后停止）
     this.regenT -= dt;
@@ -83,7 +84,7 @@ export abstract class HeroBase {
   protected attackInterval(): number { return 1 / this.stats.aspd; }
 
   protected abstract shoot(target: Monster, mgr: MonsterManager, projs: ProjectileManager): void;
-  protected abstract castSkill(): void;
+  protected abstract castSkill(mgr: MonsterManager, projs: ProjectileManager): void;
   /** 大招（手动，充能满可放；全场无目标时不消耗充能） */
   abstract castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean;
 
@@ -329,7 +330,8 @@ export class ArcherHero extends HeroBase {
   }
 
   /** 技能·强化箭矢（自动，12s CD）：接下来 6 次普攻变为金色贯穿箭（伤害 ×1.5、无限穿透、弹速 540） */
-  protected castSkill(): void {
+  protected castSkill(_mgr: MonsterManager, _projs: ProjectileManager): void {
+    void _mgr; void _projs;
     this.skillCd = this.skillMax;
     this.empowerLeft = this.empowerMax;
     // 演出：英雄身上金色环脉冲扩散，标记"箭矢已强化"
@@ -581,7 +583,8 @@ export class SniperHero extends HeroBase {
   }
 
   /** 技能·穿颅射击（自动，14s CD）：4 秒窗口内锁定「离防线最近」目标连续 6 狙，每发 200% 攻击；无目标等待不取消 */
-  protected castSkill(): void {
+  protected castSkill(_mgr: MonsterManager, _projs: ProjectileManager): void {
+    void _mgr; void _projs;
     this.skillCd = Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0));   // 冷却缩减卡
     this.volley = { t: 0, left: Math.max(1, Math.round(this.stats.skillShots || 6)), ttl: 4 };   // 多目标锁定卡加发数
     // 演出：英雄身上红色环脉冲扩散（与瞬击弹道线同主题）
@@ -612,6 +615,178 @@ export class SniperHero extends HeroBase {
     lockNode.setPosition(0, 0, 0);
     const g = lockNode.addComponent(Graphics);
     this.ultLock = { t: 0.5, target: tgt, node: lockNode, g };
+    void _projs; void _dmg;
+    return true;
+  }
+}
+
+/* ============================================================
+ * 火焰法师 · 焰·辉（§4 #2：技能流·AOE/橙红；线稿 hero_bohu_battle 100×120）
+ * ============================================================ */
+export class PyroHero extends HeroBase {
+  readonly id = 'pyro';
+  readonly name = '焰·辉';
+  readonly chargeMax = PYRO_CHARGE_MAX;
+  readonly skillMax = 10;
+  /** 大招·陨石天降：排队落下的陨石（落点 = 施放时的随机目标，延迟错开） */
+  private meteorQueue: { t: number; x: number }[] = [];
+  /** 士气高涨：大招后攻速加成剩余时间 */
+  private hasteT = 0;
+
+  protected buildVisual(parent: Node): void {
+    const g = this.node.addComponent(Graphics);
+    // 背影火焰法师：橙红法袍 + 辉焰法杖（线稿 hero_bohu_battle 100×120）
+    const ink = hexc(PAL.ink);
+    g.strokeColor = ink;
+    g.lineWidth = 3;
+    // 法袍下摆（上窄下宽，火光渐变靠两段色块）
+    g.fillColor = hexc('#B44A20');
+    g.moveTo(-20, 34); g.lineTo(20, 34); g.lineTo(30, -76); g.lineTo(-30, -76);
+    g.close(); g.fill(); g.stroke();
+    // 躯干（法袍上身）
+    g.fillColor = hexc('#D4662A');
+    g.roundRect(-22, -34, 44, 66, 14);
+    g.fill(); g.stroke();
+    // 金色腰带 + 搭扣
+    g.fillColor = hexc(PAL.gold2);
+    g.roundRect(-22, -22, 44, 7, 3);
+    g.fill();
+    g.fillColor = hexc(PAL.gold);
+    g.circle(0, -18, 4);
+    g.fill();
+    // 肩披
+    g.fillColor = hexc('#E8813A');
+    g.circle(-22, 24, 9); g.fill(); g.stroke();
+    g.circle(22, 24, 9); g.fill(); g.stroke();
+    // 头 + 兜帽（尖顶法师帽）
+    g.fillColor = hexc('#E8C39A');
+    g.circle(0, 26, 14); g.fill(); g.stroke();
+    g.fillColor = hexc('#B44A20');
+    g.moveTo(-17, 30); g.lineTo(17, 30); g.lineTo(4, 52); g.lineTo(-4, 52);
+    g.close(); g.fill(); g.stroke();
+    g.fillColor = hexc(PAL.gold);
+    g.circle(0, 52, 3.5); g.fill();
+    // 法杖（右侧斜持，顶端火焰宝珠）
+    g.strokeColor = hexc('#7A4B22');
+    g.lineWidth = 5;
+    g.moveTo(26, -70); g.lineTo(36, 18);
+    g.stroke();
+    g.fillColor = hexc(PAL.orange);
+    g.circle(38, 26, 9); g.fill(); g.stroke();
+    g.fillColor = hexc(PAL.gold);
+    g.circle(38, 26, 4.5); g.fill();
+    // 靴（下沿没入工事）
+    g.fillColor = hexc('#2A2118');
+    g.roundRect(-19, -78, 15, 16, 4); g.fill(); g.stroke();
+    g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
+    this.node.setPosition(this.x, HERO_Y, 0);
+    this.node.setParent(parent);
+    // 脚下名字牌（立绘靴底下方，随英雄移动）
+    label(this.node, 0, -100, this.name, { size: 14, color: PAL.parch, bold: true, w: 140, h: 20 });
+  }
+
+  /** 士气高涨窗口攻速 +40% */
+  protected attackInterval(): number {
+    return 1 / (this.stats.aspd * (this.hasteT > 0 ? 1.4 : 1));
+  }
+
+  /** 火球弹种统一构造：橙红大弹 + 溅射 + 灼烧（灼烧走余烬倍率） */
+  private spec(base: {
+    x: number; y: number; dirX: number; dirY: number; dmg: number;
+    explodeR: number; burnDps: number; speed: number; size: number;
+    ability?: boolean; ult?: boolean; stun?: number;
+  }): ProjSpec {
+    const crit = Math.random() < this.stats.critRate;
+    return {
+      x: base.x, y: base.y, dirX: base.dirX, dirY: base.dirY,
+      speed: base.speed,
+      dmg: base.dmg * (crit ? this.stats.critMul : 1), crit,
+      color: PAL.orange, heroId: this.id, size: base.size,
+      explodeR: base.explodeR, explodeMul: this.stats.explodeMul,
+      slowRatio: this.stats.slowOnHit || 0,
+      slowDur: this.stats.slowDur || 2,
+      burnDps: base.burnDps * (this.stats.burnMul || 1),
+      spark: true, ability: base.ability, ult: base.ult, stun: base.stun,
+      ...this.targetBonuses(),
+    };
+  }
+
+  /** 普攻·火球：小溅射（自带 60 半径 40% 溅射；法术范围卡不放大普攻溅射） */
+  protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
+    void _mgr;
+    const bs = 700;
+    const lead = this.lead(target, bs);
+    projs.fire(this.spec({
+      x: this.x, y: HERO_Y + 60, dirX: lead.dirX, dirY: lead.dirY,
+      dmg: this.effAtk, explodeR: Math.max(60, this.stats.explodeR),
+      burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
+      speed: bs, size: 9,
+    }));
+    Sfx.play('shoot');
+  }
+
+  /** 技能·烈焰爆裂（自动，10s CD）：锁定技能范围内最密集簇，齐射 3 颗爆裂火球（1.6×攻击、大爆炸 + 灼烧 3s） */
+  protected castSkill(mgr: MonsterManager, projs: ProjectileManager): void {
+    this.skillCd = Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0));   // 冷却缩减卡
+    const R = this.stats.skillRange;
+    const cands = mgr.list.filter(m => !m.dead && Math.hypot(m.x - this.x, m.y - HERO_Y) <= R);
+    if (!cands.length) return;
+    // 密集簇：邻域 130 内同伴最多者为中心
+    let best = cands[0], bestN = -1;
+    for (const m of cands) {
+      let n = 0;
+      for (const o of cands) if (Math.hypot(o.x - m.x, o.y - m.y) <= 130) n++;
+      if (n > bestN) { bestN = n; best = m; }
+    }
+    const shots = Math.max(1, Math.round(this.stats.skillShots || 3));
+    const dmg = this.effAtk * 1.6 * (this.stats.skillMul || 1);
+    const boomR = 110 * (this.stats.skillRangeMul || 1);
+    for (let k = 0; k < shots; k++) {
+      const ox = best.x + (Math.random() * 2 - 1) * 70;
+      const oy = best.y + (Math.random() * 2 - 1) * 70;
+      const dx = ox - this.x, dy = oy - (HERO_Y + 60);
+      const l = Math.hypot(dx, dy) || 1;
+      projs.fire(this.spec({
+        x: this.x, y: HERO_Y + 60, dirX: dx / l, dirY: dy / l,
+        dmg, explodeR: boomR, burnDps: this.effAtk * 0.2,
+        speed: 820, size: 11, ability: true,
+      }));
+    }
+    Sfx.play('skill');
+  }
+
+  protected updateQueues(dt: number, _mgr: MonsterManager, projs: ProjectileManager): void {
+    // 大招陨石：到点从天而降（竖直下坠，命中即爆 + 灼烧 + 震慑眩晕）
+    for (let i = this.meteorQueue.length - 1; i >= 0; i--) {
+      const q = this.meteorQueue[i];
+      q.t -= dt;
+      if (q.t <= 0) {
+        this.meteorQueue.splice(i, 1);
+        projs.fire(this.spec({
+          x: q.x, y: SPAWN_Y + 120, dirX: 0, dirY: -1,
+          dmg: this.effAtk * 3.5 * (this.stats.ultDmgMul || 1),
+          explodeR: 140, burnDps: this.effAtk * 0.3,
+          speed: 1000, size: 14, ability: true, ult: true,
+          stun: this.stats.ultStun || 0,
+        }));
+      }
+    }
+    if (this.hasteT > 0) this.hasteT -= dt;
+  }
+
+  /** 大招·陨石天降（手动，击杀充能）：5 颗陨石随机轰击在场目标，落点灼烧；士气高涨卡给攻速爆发 */
+  castUlt(mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): boolean {
+    if (!this.ultReady) return false;
+    const alive = mgr.list.filter(m => !m.dead);
+    if (!alive.length) return false;   // 全场无目标：不消耗充能
+    this.charge = 0;
+    bus.emit(EVT.CHARGE_CHANGED, 0, false);
+    for (let k = 0; k < 5; k++) {
+      const t = alive[(Math.random() * alive.length) | 0];
+      this.meteorQueue.push({ t: 0.15 + k * 0.22, x: t.x + (Math.random() * 2 - 1) * 40 });
+    }
+    if (this.stats.ultHaste) this.hasteT = 5;
+    Sfx.play('ult');
     void _projs; void _dmg;
     return true;
   }

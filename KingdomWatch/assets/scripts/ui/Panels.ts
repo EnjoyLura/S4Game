@@ -32,6 +32,8 @@ const CARD_ART: Record<string, string> = {
   lethal_aim: 'ui_card_crit_dmg',     // 致命瞄准 ← 暴击伤害（骷髅）
   instinct_s: 'ui_card_instinct_a',   // 猎手本能 ← 猎手本能（猎物）
   fast_charge_s: 'ui_card_fast_charge_a', // 快速充能 ← 快速充能（能量体）
+  pyro_cd: 'ui_card_cd_cut',          // 火法·冷却缩减 ← 冷却缩减（沙漏）
+  pyro_eager: 'ui_card_fast_charge_a', // 火法·激昂 ← 快速充能（能量体）
 };
 
 export class Panels {
