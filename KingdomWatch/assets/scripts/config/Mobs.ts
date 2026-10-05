@@ -137,6 +137,15 @@ export const LEVEL_1_3: LevelDef = {
 /** 关卡注册表：新关卡在这里登记，主城关卡页与战斗启动共用 */
 const LEVEL_TABLE: Record<string, LevelDef> = { '1-1': LEVEL_1_1, '1-2': LEVEL_1_2, '1-3': LEVEL_1_3 };
 
+/** 关卡推进顺序（登记顺序即推进顺序） */
+export const LEVEL_IDS: string[] = Object.keys(LEVEL_TABLE);
+
+/** 下一关 id；已是最后一关返回 null（胜利结算"下一关"直进用） */
+export function nextLevelId(id: string): string | null {
+  const i = LEVEL_IDS.indexOf(id);
+  return i >= 0 && i + 1 < LEVEL_IDS.length ? LEVEL_IDS[i + 1] : null;
+}
+
 export function getLevelDef(id: string): LevelDef {
   return LEVEL_TABLE[id] || LEVEL_1_1;
 }

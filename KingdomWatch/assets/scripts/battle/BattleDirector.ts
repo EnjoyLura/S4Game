@@ -3,7 +3,7 @@
  * dt×倍速步进；暂停/三选一期间全场冻结（§3.2）
  */
 import { _decorator, Canvas, Component, director, Layers, Node } from 'cc';
-import { LEVEL_1_1, LevelDef, MOBS, heroSlots } from '../config/Mobs';
+import { LEVEL_1_1, LevelDef, MOBS, heroSlots, nextLevelId } from '../config/Mobs';
 import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats } from '../config/Cards';
 import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
@@ -398,7 +398,14 @@ export class BattleDirector extends Component {
           done(true);
         }, () => done(false));
       },
-      onNext: () => this.exitBattle(),
+      onNext: () => {
+        // 直进下一关（用户调整：不回主城）；无下一关回关卡页，同难度未解锁降回普通
+        const nid = nextLevelId(this.levelDef.id);
+        if (!nid) { this.exitBattle(); return; }
+        const d = flow.diff > 0 && (loadSave().stars[starKey(nid, flow.diff - 1)] || 0) < 1 ? 0 : flow.diff;
+        flow.mode = 'battle'; flow.levelId = nid; flow.diff = d;
+        director.loadScene('Main');
+      },
       onExit: () => this.exitBattle(),
     });
   }
