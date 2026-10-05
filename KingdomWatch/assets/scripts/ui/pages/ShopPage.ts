@@ -38,9 +38,9 @@ export function buildShop(ctx: PageCtx): void {
 
   function render(): void {
     content.destroyAllChildren();
-    // 货架大背板（用户调整：占满全宽 750；专属美术 ui_panel_shop，缺图回退 ui_panel_zone）
+    // 货架大背板（用户调整：占满全宽 750；底部紧贴导航栏不留间隔；专属美术 ui_panel_shop，缺图回退程序板）
     const top = 400;
-    const bh = 2 * LO.half - 174 - top;   // 预留底部导航(148)+边距
+    const bh = 2 * LO.half - 148 - top;   // 148 = 导航栏高，板底边正好压在导航上沿
     artPanel(content, 0, WY(top, bh), 750, bh, 'ui_panel_shop');
     // 四页签连体（用户确认参考英雄页：无背板、段内直角、仅首/末段外侧圆弧）
     const segW = 680 / 4, segH = 64, segR = 14;
@@ -73,6 +73,7 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
   const card = gpanel(parent, cx, cy, 330, 300, CA('#14181E', 0.92), undefined, 0, 14);
 
   const seat = gpanel(card, 0, 60, 130, 130, CA(QCOLOR[q], 0.55), undefined, 0, 14);   // 品质背板：未解锁同样显示（用户调整）
+  artSprite(seat, 0, 0, 130, 130, 'ui_seat_q' + q, { belowIdx: 0 });   // 品质背板美术（四色 plaque，缺图回退程序色板）
   const iconFallback = label(seat, 0, 0, KIND_ICON[g.tab] || '🎁', { size: 56 });
   const art = itemArt(g);
   if (art) artSprite(seat, 0, 0, 120, 120, art, { sliced: false, hideOnLoad: [iconFallback] });
@@ -87,7 +88,7 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
   const cur = g.currency === 'gold' ? '金币' : '钻石';
   const curArt = g.currency === 'gold' ? 'ui_icon_coin' : 'ui_icon_diamond';
   if (!unlocked) {
-    btn(card, 0, -100, 240, 54, `🔒 通关 ${g.unlock} 解锁`, '#5A6472', () => toast(`通关 ${g.unlock} 后解锁`), 19, true);
+    btn(card, 0, -100, 240, 54, `通关 ${g.unlock} 解锁`, '#5A6472', () => toast(`通关 ${g.unlock} 后解锁`), 19, true, 'ui_icon_lock');
   } else if (owned || !g.price) {
     btn(card, 0, -100, 240, 54, owned ? '已拥有' : '敬请期待', '#5A6472', () => {}, 22, true);
   } else {

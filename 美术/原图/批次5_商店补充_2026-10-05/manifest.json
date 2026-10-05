@@ -1,0 +1,30 @@
+{
+  "D1_品质背板四色": {
+    "id": "D1_品质背板四色",
+    "file": "D:/AI/S4Game/美术/原图/批次5_商店补充_2026-10-05\\D1_品质背板四色.png",
+    "prompt": "Game UI asset sheet: exactly four square plaques with softly rounded corners arranged in a strict 2x2 grid, equal size, wide even spacing between them, viewed straight-on. All four plaques share the identical hand-painted wooden plaque shape, each painted a different solid color: top-left pale silver grey, top-right leaf green, bottom-left sky blue, bottom-right amethyst purple. Kingdom Rush inspired hand-painted cartoon game art, flat painted style with thin dark brown outlines, matte finish, subtle top light band and slightly darker bottom lip on each plaque. Empty flat plaque faces, no items on them. Transparent background, crisp hard edges, strictly NO glow, NO bloom, NO halo, NO text, NO letters, NO symbols.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-05 16:35:14",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 27.7,
+    "sha1": "542fb43a79d3"
+  },
+  "D2_货架大背板无框": {
+    "id": "D2_货架大背板无框",
+    "file": "D:/AI/S4Game/美术/原图/批次5_商店补充_2026-10-05\\D2_货架大背板无框.png",
+    "prompt": "Game UI panel asset: one single tall rectangular dark walnut wood shelf board with square corners and straight edges, its wood surface filling almost the entire frame. Rich hand-painted wood grain, warm dark brown walnut tones, matte flat painted finish, soft painterly shading, a few subtle knots and faint scratches, naturally slightly darker worn edges, completely empty flat center reserved for UI content. Kingdom Rush inspired hand-painted cartoon game art. Transparent background, crisp hard edges. Strictly NO gold trim, NO border line, NO frame, NO metal corner brackets, NO rivets, NO rope, NO glow, NO halo, NO text.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-05 16:35:42",
+    "ok": true,
+    "width": 1152,
+    "height": 1536,
+    "mode": "RGBA",
+    "seconds": 61.9,
+    "sha1": "8ab0fd280db6"
+  }
+}

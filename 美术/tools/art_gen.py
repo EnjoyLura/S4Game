@@ -33,7 +33,7 @@ _EXE_CANDIDATES = [
     r"C:\Program Files\nodejs\gpt-image-2-skill.exe",
 ]
 CLI_EXE = next((p for p in _EXE_CANDIDATES if os.path.exists(p)), CLI)
-PROVIDER = {"1k": "supergpt-1k", "2k": "supergpt-2k"}
+PROVIDER = {"1k": "supergpt-1k", "2k": "supergpt-2k", "a3": "agent3"}
 SIZE_ALIAS = {"1k": "1024x1024", "2k": "2048x2048"}
 
 
