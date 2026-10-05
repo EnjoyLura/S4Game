@@ -70,7 +70,7 @@ interface Stuck {
   size: number; spark: boolean;
   t: number; frozen: boolean;
 }
-const STUCK_TTL = 0.42;
+const STUCK_TTL = 0.24;   // 插箭残留时长（用户调整：0.42s 太长）
 const MAX_STUCK = 48;
 
 const colorCache = new Map<string, Color>();
