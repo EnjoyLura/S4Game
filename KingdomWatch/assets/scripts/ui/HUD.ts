@@ -241,7 +241,7 @@ export class HUD {
     // 技能图标（同上）
     artSprite(icon, 0, 0, 58, 58, 'ui_icon_skill_' + hero.id, { sliced: false, hideOnLoad: [glyph] });
     icon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('skill', i));
-    const gray = gcircle(top, cx, cy, 28, CA('#3A4250', 0.9));
+    const gray = gcircle(top, cx, cy, 28, CA('#3A4250', 0.55));   // 冷却遮罩（用户调整：半透明，隐约透出技能图标）
     gray.active = false;
     const pie = new Node('skillPie' + i);
     pie.setParent(top);

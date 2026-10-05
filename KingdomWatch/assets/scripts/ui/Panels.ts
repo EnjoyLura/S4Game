@@ -173,11 +173,11 @@ export class Panels {
     const iconLbl = label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 26, color: card.rarity === 'white' ? '#E8E0C8' : rarity, bold: true });
     artSprite(frame, 0, 50, 124, 124, CARD_ART[card.id] || ('ui_card_' + card.id), { sliced: false, hideOnLoad: [iconLbl] });   // 124>120 座圆：图占满整个圆去黑环（用户反馈）
 
-    // ③ 右上归属角标（圆心 y94/r24：顶缘 118 离色带底 128 十分距；距图标座圆心 91 > 60+24）
-    // 英雄卡贴头像图（同英雄页/编队/大招钮），全局卡保持文字（用户要求：三选一卡用上英雄头像）
-    const ava = gcircle(frame, 80, 94, 24, CA('#2A3240', 1));
-    if (card.owner === 'global') label(ava, 0, 0, '全', { size: 18, color: PAL.green, bold: true });
-    else artSprite(ava, 0, 0, 48, 48, 'ui_avatar_' + card.owner, { sliced: false });
+    // ③ 右上归属角标：仅英雄专属卡贴头像（用户调整：通用卡不再显示"全"角标）
+    if (card.owner !== 'global') {
+      const ava = gcircle(frame, 80, 94, 24, CA('#2A3240', 1));
+      artSprite(ava, 0, 0, 48, 48, 'ui_avatar_' + card.owner, { sliced: false });
+    }
 
     // ④ 描述（18 号加粗，shrink 保证不超框）
     label(frame, 0, -95, card.desc, { size: 18, color: '#4A3214', bold: true, w: 196, h: 90, shrink: true, lineHeight: 26 });
