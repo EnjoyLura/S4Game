@@ -177,11 +177,11 @@ export class HUD {
     this.dir.heroes.forEach((h, i) => this.skills.push(this.buildSkillBadge(top, i, h)));
   }
 
-  /** 第 i 钮：底基 504，向上每钮 +110；点击就绪即施放，未满→Tips
+  /** 第 i 钮：底基 240（整列下移贴英雄栏，用户调整），向上每钮 +110；从下到上 = 英雄位从左到右。点击就绪即施放，未满→Tips
    *  无边框规范：纯色圆板三态（充能灰/常态金/就绪亮金），不加座环美术
    *  充能表现（用户调整）：水位上涨——液面上灰罩/液面下英雄主色能量水（无白色分割线），中心只显示百分比；就绪亮金+光晕粒子、无文字 */
   private buildUlt(top: Node, i: number, hero: HeroBase): UltUI {
-    const ux = WX(636, 90), uy = WYB(504 + i * 110, 90);
+    const ux = WX(636, 90), uy = WYB(240 + i * 110, 90);
     const color = hero.id === 'sniper' ? PAL.blue : PAL.green;
     const fx = hero.id === 'sniper' ? '#8FC7F2' : '#9FDB8C';    // 就绪特效：狙淡蓝 / 弓淡绿（用户调整）
     const fxHi = hero.id === 'sniper' ? '#CFE9FB' : '#D6F2C9';  // 粒子亮色
