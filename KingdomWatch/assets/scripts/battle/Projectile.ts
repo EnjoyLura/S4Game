@@ -47,6 +47,8 @@ export interface ProjSpec {
   ult?: boolean;
   /** 技能/大招弹（强化箭矢/箭雨/连狙窗口等）：击杀弹 60% 词条；普攻击杀不弹（用户确认） */
   ability?: boolean;
+  /** 生成即免疫碰撞的目标（分裂小弹的来源怪：分裂箭不打目标本体，用户确认） */
+  exclude?: Monster;
 }
 
 interface Active {
@@ -105,6 +107,7 @@ export class ProjectileManager {
     const a = this.free.pop() || this.makeActive();
     a.spec = spec;
     a.hit.clear();
+    if (spec.exclude) a.hit.add(spec.exclude);
     a.pierceLeft = spec.pierce || 0;
     a.ttl = spec.ttl ?? 3.2;
     a.trail.length = 0;
@@ -345,6 +348,7 @@ export class ProjectileManager {
           dirX: Math.random() * 1.6 - 0.8, dirY: 1,
           speed: 360, dmg: sp.dmg * 0.5, crit: false, color: sp.color,
           heroId: sp.heroId, size: 5, ttl: 1.1, small: true,
+          exclude: m,   // 小弹从本体中心出生，不打目标本体（用户确认）
         });
       }
     }
