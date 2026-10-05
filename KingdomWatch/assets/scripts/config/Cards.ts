@@ -71,7 +71,7 @@ export function baseSniperStats(): HeroStats {
 /** 火焰法师 · 焰·辉（§4 #2：技能流·AOE/橙红）：普攻火球小溅射；普攻 520 / 技能索敌 460 */
 export function basePyroStats(): HeroStats {
   return {
-    atk: 60, atkMul: 1, aspd: 0.8, range: 520, skillRange: 460,
+    atk: 60, atkMul: 1, aspd: 0.8, range: 950, skillRange: 850,   // 索敌范围（用户调整：普攻 950 / 技能 850）
     critRate: 0.05, critMul: 1.5,
     serial: 0, fan: 0, split: 0, explodeR: 60, explodeMul: 0.4,   // 火球自带小溅射
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
