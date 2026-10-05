@@ -407,7 +407,7 @@ export class Panels {
       gcircle(this.modalRoot, cxAv, cyAv, 35, CA('#2A3240', 1));
       const avLbl = label(this.modalRoot, cxAv, cyAv, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
       // 74 > 70 座圆：头像盖满整个圆去黑环（用户反馈）
-      if (r.id === 'archer' || r.id === 'sniper')
+      if (r.id === 'archer' || r.id === 'sniper' || r.id === 'pyro' || r.id === 'volt')
         artSprite(this.modalRoot, cxAv, cyAv, 74, 74, 'ui_avatar_' + r.id, { sliced: false, hideOnLoad: [avLbl] });
       label(this.modalRoot, px - w / 2 + 192, cyTx, r.name,
         { size: 18, color: '#FFFFFF', align: 'left', w: 150, h: 40, shrink: true });

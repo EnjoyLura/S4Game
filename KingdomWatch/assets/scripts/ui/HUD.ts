@@ -182,9 +182,14 @@ export class HUD {
    *  充能表现（用户调整）：水位上涨——液面上灰罩/液面下英雄主色能量水（无白色分割线），中心只显示百分比；就绪亮金+光晕粒子、无文字 */
   private buildUlt(top: Node, i: number, hero: HeroBase): UltUI {
     const ux = WX(636, 90), uy = WYB(240 + i * 110, 90);
-    const color = hero.id === 'sniper' ? PAL.blue : PAL.green;
-    const fx = hero.id === 'sniper' ? '#8FC7F2' : '#9FDB8C';    // 就绪特效：狙淡蓝 / 弓淡绿（用户调整）
-    const fxHi = hero.id === 'sniper' ? '#CFE9FB' : '#D6F2C9';  // 粒子亮色
+    // 就绪特效/能量水按英雄主色（用户调整：火橘/雷紫，不再只分狙击蓝/其他绿）
+    const ULT_FX: Record<string, [string, string, string]> = {
+      archer: [PAL.green, '#9FDB8C', '#D6F2C9'],
+      sniper: [PAL.blue, '#8FC7F2', '#CFE9FB'],
+      pyro: [PAL.orange, '#F2A05A', '#F8CFA0'],
+      volt: ['#B96BFF', '#C89AF5', '#E3CCFA'],
+    };
+    const [color, fx, fxHi] = ULT_FX[hero.id] || ULT_FX.archer;
     const glow = gcircle(top, ux, uy, 56, CA(fx, 0.16));
     const glowOp = glow.addComponent(UIOpacity);
     glowOp.opacity = 130;

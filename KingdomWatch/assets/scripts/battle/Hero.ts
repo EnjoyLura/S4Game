@@ -634,7 +634,11 @@ export class PyroHero extends HeroBase {
   readonly chargeMax = PYRO_CHARGE_MAX;
   readonly skillMax = 10;
   /** 大招·陨石天降：排队落下的陨石（落点 = 施放时的随机目标，延迟错开） */
-  private meteorQueue: { t: number; x: number }[] = [];
+  private meteorQueue: { t: number; x: number; y: number }[] = [];
+  /** 落点预警圈：脉冲相位 + 绘图节点（惰性创建，队列清空即销毁） */
+  private warnT = 0;
+  private warnNode: Node | null = null;
+  private warnG: Graphics | null = null;
   /** 士气高涨：大招后攻速加成剩余时间 */
   private hasteT = 0;
 
@@ -762,17 +766,42 @@ export class PyroHero extends HeroBase {
   }
 
   protected updateQueues(dt: number, _mgr: MonsterManager, projs: ProjectileManager): void {
-    // 大招陨石：到点从天而降（竖直下坠，命中即爆 + 灼烧 + 震慑眩晕）
+    // 大招陨石：落点先出脉冲预警圈（用户反馈"没反应"——原版从出生点到命中不足 0.3s，肉眼不可见），到点从屏外坠落
+    this.warnT += dt;
+    if (this.meteorQueue.length) {
+      if (!this.warnNode) {
+        this.warnNode = new Node('ultWarn');
+        this.warnNode.layer = Layers.Enum.UI_2D;
+        this.warnNode.setParent(this.node.parent!);
+        this.warnNode.setPosition(0, 0, 0);
+        this.warnG = this.warnNode.addComponent(Graphics);
+      }
+      const g = this.warnG!;
+      const oc = (a: number): Color => { const c = hexc(PAL.orange); c.a = a; return c; };
+      g.clear();
+      for (const q of this.meteorQueue) {
+        const pulse = 46 + Math.sin(this.warnT * 9) * 7;
+        g.fillColor = oc(38);
+        g.circle(q.x, q.y, pulse); g.fill();
+        g.strokeColor = oc(185); g.lineWidth = 3.5;
+        g.circle(q.x, q.y, pulse); g.stroke();
+        g.strokeColor = oc(215); g.lineWidth = 2.5;
+        g.circle(q.x, q.y, 9 + Math.sin(this.warnT * 9 + 1.6) * 3); g.stroke();
+      }
+    } else if (this.warnNode) {
+      this.warnNode.destroy();
+      this.warnNode = null; this.warnG = null;
+    }
     for (let i = this.meteorQueue.length - 1; i >= 0; i--) {
       const q = this.meteorQueue[i];
       q.t -= dt;
       if (q.t <= 0) {
         this.meteorQueue.splice(i, 1);
         projs.fire(this.spec({
-          x: q.x, y: SPAWN_Y + 120, dirX: 0, dirY: -1,
+          x: q.x, y: SPAWN_Y + 380, dirX: 0, dirY: -1,
           dmg: this.effAtk * 3.5 * (this.stats.ultDmgMul || 1),
           explodeR: 140, burnDps: this.effAtk * 0.3,
-          speed: 1000, size: 14, ability: true, ult: true,
+          speed: 700, size: 16, ability: true, ult: true,
           stun: this.stats.ultStun || 0,
         }));
       }
@@ -789,7 +818,7 @@ export class PyroHero extends HeroBase {
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
     for (let k = 0; k < 5; k++) {
       const t = alive[(Math.random() * alive.length) | 0];
-      this.meteorQueue.push({ t: 0.15 + k * 0.22, x: t.x + (Math.random() * 2 - 1) * 40 });
+      this.meteorQueue.push({ t: 0.4 + k * 0.28, x: t.x + (Math.random() * 2 - 1) * 40, y: t.y });
     }
     if (this.stats.ultHaste) this.hasteT = 5;
     Sfx.play('ult');
