@@ -75,7 +75,7 @@ export function buildLevels(ctx: PageCtx): void {
       });
     } else {
       label(scene, 0, 16, '🔒 未解锁', { size: 30, color: '#EAF2E0', bold: true, w: 500, h: 40, outline: '#1C2A18', outlineW: 3 });
-      label(scene, 0, -24, `通关 ${LEVELS[0].id} 解锁`, { size: 20, color: '#C9D8BC', w: 500, h: 30, outline: '#1C2A18', outlineW: 2 });
+      label(scene, 0, -24, `通关 ${LEVELS[st.i - 1].id} 解锁`, { size: 20, color: '#C9D8BC', w: 500, h: 30, outline: '#1C2A18', outlineW: 2 });   // 上一关（用户调整：按当前关动态显示，而非恒 1-1）
     }
     for (const dx of [-205, 205]) {
       const ar = gpanel(scene, dx, 0, 64, 64, CA('#14181E', 0.55), undefined, 0, 32);
@@ -129,7 +129,7 @@ export function buildLevels(ctx: PageCtx): void {
         director.loadScene('Main');
       }, 30, true);
     } else {
-      btn(content, 0, WY(1166, 80), 500, 80, '🔒 通关 1-1 解锁', '#5A6472', () => {}, 24, true);
+      btn(content, 0, WY(1166, 80), 500, 80, `🔒 通关 ${LEVELS[st.i - 1].id} 解锁`, '#5A6472', () => {}, 24, true);   // 上一关（用户调整：按当前关动态显示）
     }
 
     /* 编队按钮（用户红框指定：开始战斗右下方；二级编队界面） */
