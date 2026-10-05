@@ -633,8 +633,8 @@ export class PyroHero extends HeroBase {
   readonly name = '焰·辉';
   readonly chargeMax = PYRO_CHARGE_MAX;
   readonly skillMax = 10;
-  /** 大招·陨石天降：排队落下的陨石（落点 = 施放时的随机目标，延迟错开） */
-  private meteorQueue: { t: number; x: number; y: number }[] = [];
+  /** 大招·陨石天降：排队落下的陨石（落点 = 施放时的随机目标，延迟错开；fired 后 t 转为剩余坠落秒数，预警圈钉到命中） */
+  private meteorQueue: { t: number; x: number; y: number; fired?: boolean }[] = [];
   /** 落点预警圈：脉冲相位 + 绘图节点（惰性创建，队列清空即销毁） */
   private warnT = 0;
   private warnNode: Node | null = null;
@@ -795,15 +795,20 @@ export class PyroHero extends HeroBase {
     for (let i = this.meteorQueue.length - 1; i >= 0; i--) {
       const q = this.meteorQueue[i];
       q.t -= dt;
-      if (q.t <= 0) {
-        this.meteorQueue.splice(i, 1);
+      if (!q.fired && q.t <= 0) {
+        // 出生点必须在弹道顶界（LO.half+120）之下，否则首帧即被越界回收（上次"只有预警没有陨石"的根因）
+        const top = SPAWN_Y + 50;
+        q.fired = true;
+        q.t = (top - q.y) / 800;   // 预警圈持续到命中
         projs.fire(this.spec({
-          x: q.x, y: SPAWN_Y + 380, dirX: 0, dirY: -1,
+          x: q.x, y: top, dirX: 0, dirY: -1,
           dmg: this.effAtk * 3.5 * (this.stats.ultDmgMul || 1),
           explodeR: 140, burnDps: this.effAtk * 0.3,
-          speed: 700, size: 16, ability: true, ult: true,
+          speed: 800, size: 16, ability: true, ult: true,
           stun: this.stats.ultStun || 0,
         }));
+      } else if (q.fired && q.t <= 0) {
+        this.meteorQueue.splice(i, 1);
       }
     }
     if (this.hasteT > 0) this.hasteT -= dt;
