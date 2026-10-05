@@ -136,6 +136,7 @@ export function gbar(parent: Node, x: number, y: number, w: number, h: number, f
   let artFillSp: Sprite | null = null;
   let artFillNode: Node | null = null;
   let lastPct = 1;
+  let lastColor: Color = base;
   const applyArt = (pct: number): void => {
     if (!artFillNode || !artFillSp) return;
     const fw = Math.max(0, Math.min(1, pct)) * (w - 4);
@@ -152,6 +153,7 @@ export function gbar(parent: Node, x: number, y: number, w: number, h: number, f
     artFillNode = n;
     artFillSp = n.getComponent(Sprite);
     g.enabled = false;
+    artFillSp.color = lastColor;   // 补染色：set 可能发生在美术加载完成前（伤害统计条只 set 一次→一直空白）
     applyArt(lastPct);
   }});
   const draw = (pct: number, color?: FillLike) => {
@@ -163,7 +165,8 @@ export function gbar(parent: Node, x: number, y: number, w: number, h: number, f
       g.fill();
     }
     if (artFillSp) {
-      artFillSp.color = color ? toColor(color) : base;
+      lastColor = color ? toColor(color) : base;
+      artFillSp.color = lastColor;
       lastPct = pct;
       applyArt(pct);
     }
