@@ -111,7 +111,9 @@ export class ProjectileManager {
     a.pierceLeft = spec.pierce || 0;
     a.ttl = spec.ttl ?? 3.2;
     a.trail.length = 0;
-    a.trailMax = spec.enemy ? 0 : spec.spark ? 9 : spec.heroId === 'archer' && !spec.small ? 7 : 3;
+    a.trailMax = spec.enemy ? 0 : spec.spark ? 9
+      : spec.heroId === 'archer' && !spec.small ? 7
+      : spec.heroId === 'sniper' && !spec.small ? 6 : 3;
     const dx = spec.dirX ?? 0, dy = spec.dirY ?? -1;
     const len = Math.sqrt(dx * dx + dy * dy) || 1;
     a.vx = dx / len * spec.speed;
@@ -210,10 +212,13 @@ export class ProjectileManager {
       const a = this.active[i];
       const s = a.spec;
       const size = s.size || (s.enemy ? 9 : 7);
-      const arrow = s.heroId === 'archer' && !s.small && !s.enemy;
+      const flying = !s.small && !s.enemy;
+      const arrow = flying && s.heroId === 'archer';
+      const bolt = flying && s.heroId === 'sniper';
       // 尾迹先画（垫在弹体之下）：锥形渐隐条带 + 亮芯
       if (a.trailMax > 0) this.drawTrail(g, s, a, size, arrow);
       if (arrow) this.drawArrow(g, s, a, size);
+      else if (bolt) this.drawBolt(g, s, a, size);
       else {
         g.fillColor = hexc(s.color);
         g.strokeColor = hexc(PAL.ink);
@@ -267,6 +272,46 @@ export class ProjectileManager {
   private drawArrow(g: Graphics, s: ProjSpec, a: Active, size: number): void {
     const len = Math.sqrt(a.vx * a.vx + a.vy * a.vy) || 1;
     this.drawArrowAt(g, s.x, s.y, a.vx / len, a.vy / len, size, s.spark === true, 1);
+  }
+
+  /** 狙击弹体：重型弩箭——粗短弹杆 + 宽钢弹头 + 尾翼 + 尾珠；大招弹（必暴贯穿）换亮钢蓝 */
+  private drawBolt(g: Graphics, s: ProjSpec, a: Active, size: number): void {
+    const len = Math.sqrt(a.vx * a.vx + a.vy * a.vy) || 1;
+    const ult = s.ult === true;
+    const dx = a.vx / len, dy = a.vy / len;
+    const px = -dy, py = dx;
+    const L = size * 3.6;
+    const tipX = s.x + dx * L * 0.5, tipY = s.y + dy * L * 0.5;
+    const tailX = s.x - dx * L * 0.5, tailY = s.y - dy * L * 0.5;
+    const headL = L * 0.3;
+    const shaftX = tipX - dx * headL, shaftY = tipY - dy * headL;
+    // 弹杆：墨色底杆 + 钢蓝高光
+    g.strokeColor = hexc(PAL.ink);
+    g.lineWidth = size * 0.7;
+    g.moveTo(tailX, tailY); g.lineTo(shaftX, shaftY); g.stroke();
+    g.strokeColor = hexc(ult ? '#9FCBFF' : '#7FB3FF');
+    g.lineWidth = size * 0.36;
+    g.moveTo(tailX, tailY); g.lineTo(shaftX, shaftY); g.stroke();
+    // 重弹头：宽钢三角 + 细墨描边
+    const hw = size * (ult ? 1.0 : 0.9);
+    g.fillColor = hexc(ult ? '#EAF6FF' : '#CFE3FF');
+    g.strokeColor = hexc(PAL.ink);
+    g.lineWidth = 1.5;
+    g.moveTo(tipX, tipY);
+    g.lineTo(shaftX + px * hw, shaftY + py * hw);
+    g.lineTo(shaftX - px * hw, shaftY - py * hw);
+    g.close();
+    g.fill();
+    g.stroke();
+    // 尾翼：两片短翼（蓝灰）+ 尾珠配重
+    const fl = L * 0.22, fw = size * 0.7;
+    g.strokeColor = hexc('#5E7EA8');
+    g.lineWidth = Math.max(2, size * 0.34);
+    g.moveTo(tailX, tailY); g.lineTo(tailX - dx * fl + px * fw, tailY - dy * fl + py * fw); g.stroke();
+    g.moveTo(tailX, tailY); g.lineTo(tailX - dx * fl - px * fw, tailY - dy * fl - py * fw); g.stroke();
+    g.fillColor = hexc(ult ? '#EAF6FF' : '#7FB3FF');
+    g.circle(tailX, tailY, size * 0.22);
+    g.fill();
   }
 
   /** 箭矢绘制核心（飞行弹与插箭残留共用；mul 为整体透明系数） */

@@ -475,6 +475,7 @@ export class SniperHero extends HeroBase {
     void _mgr;
     const lead = this.lead(target, 1140);   // 普攻弹速 ×1.5（用户调整）
     projs.fire(this.boltSpec(lead.dirX, lead.dirY));
+    projs.sparkAt(this.x, HERO_Y + 70, '#BFE3FF', 3);   // 枪口粒子闪光（与大招枪口同款）
     Sfx.play('shoot');
   }
 
