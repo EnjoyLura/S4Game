@@ -88,7 +88,7 @@ export class ProjectileManager {
     a.pierceLeft = spec.pierce || 0;
     a.ttl = spec.ttl ?? 3.2;
     a.trail.length = 0;
-    a.trailMax = spec.enemy ? 0 : spec.spark ? 7 : 3;
+    a.trailMax = spec.enemy ? 0 : spec.spark ? 9 : spec.heroId === 'archer' && !spec.small ? 7 : 3;
     const dx = spec.dirX ?? 0, dy = spec.dirY ?? -1;
     const len = Math.sqrt(dx * dx + dy * dy) || 1;
     a.vx = dx / len * spec.speed;
@@ -169,27 +169,92 @@ export class ProjectileManager {
       const a = this.active[i];
       const s = a.spec;
       const size = s.size || (s.enemy ? 9 : 7);
-      const spd = s.speed || 1;
-      g.fillColor = hexc(s.color);
-      g.strokeColor = hexc(PAL.ink);
-      g.lineWidth = 1.5;
-      g.circle(s.x, s.y, size);
-      g.fill();
-      g.stroke();
-      // 渐隐尾迹：强化金箭长尾、普攻短尾；越旧越细越淡
-      const tr = a.trail;
-      const n = tr.length >> 1;
-      for (let k = 0; k + 1 < n; k++) {
-        const f = (k + 1) / n;
-        scratch.set(hexc(s.color));
-        scratch.a = Math.floor(150 * f);
-        g.strokeColor = scratch;
-        g.lineWidth = Math.max(1, size * 0.85 * f);
-        g.moveTo(tr[k * 2], tr[k * 2 + 1]);
-        g.lineTo(k + 2 < n ? tr[(k + 1) * 2] : s.x, k + 2 < n ? tr[(k + 1) * 2 + 1] : s.y);
+      const arrow = s.heroId === 'archer' && !s.small && !s.enemy;
+      // 尾迹先画（垫在弹体之下）：锥形渐隐条带 + 亮芯
+      if (a.trailMax > 0) this.drawTrail(g, s, a, size, arrow);
+      if (arrow) this.drawArrow(g, s, a, size);
+      else {
+        g.fillColor = hexc(s.color);
+        g.strokeColor = hexc(PAL.ink);
+        g.lineWidth = 1.5;
+        g.circle(s.x, s.y, size);
+        g.fill();
         g.stroke();
       }
     }
+  }
+
+  /** 锥形渐隐尾迹：越旧越窄越淡的软边条带（逐段四边形），叠一条更实的亮芯线；箭矢从箭尾接出避免盖住箭体 */
+  private drawTrail(g: Graphics, s: ProjSpec, a: Active, size: number, arrow: boolean): void {
+    const tr = a.trail;
+    const n = tr.length >> 1;
+    if (n < 2) return;
+    const base = hexc(s.color);
+    let qx = tr[0], qy = tr[1];
+    if (arrow) {
+      const l = Math.sqrt(a.vx * a.vx + a.vy * a.vy) || 1;
+      qx = s.x - a.vx / l * size * 2.3; qy = s.y - a.vy / l * size * 2.3;   // 最新段接到箭尾，条带与箭体首尾相接
+    }
+    for (let k = 1; k < n; k++) {
+      const nx = k + 1 < n ? tr[k * 2] : qx;
+      const ny = k + 1 < n ? tr[k * 2 + 1] : qy;
+      const f = k / (n - 1);
+      scratch.set(base);
+      scratch.a = Math.floor((arrow ? 120 : 110) * f);
+      g.fillColor = scratch;
+      const w = size * (arrow ? 1.35 : 1.0) * f * 0.5;
+      const ang = Math.atan2(ny - qy, nx - qx);
+      const ox = -Math.sin(ang) * w, oy = Math.cos(ang) * w;
+      g.moveTo(qx + ox, qy + oy);
+      g.lineTo(nx + ox, ny + oy);
+      g.lineTo(nx - ox, ny - oy);
+      g.lineTo(qx - ox, qy - oy);
+      g.close();
+      g.fill();
+      // 亮芯：中心细线，让尾迹读起来是“速度”而非“雾”
+      scratch.a = Math.floor((arrow ? 210 : 150) * f);
+      g.strokeColor = scratch;
+      g.lineWidth = Math.max(1, size * (arrow ? 0.6 : 0.85) * f);
+      g.moveTo(qx, qy);
+      g.lineTo(nx, ny);
+      g.stroke();
+      qx = nx; qy = ny;
+    }
+  }
+
+  /** 弓箭手弹体：木杆双线 + 钢头三角 + 尾羽，朝向即飞行方向；强化金箭换金色系 */
+  private drawArrow(g: Graphics, s: ProjSpec, a: Active, size: number): void {
+    const len = Math.sqrt(a.vx * a.vx + a.vy * a.vy) || 1;
+    const dx = a.vx / len, dy = a.vy / len;
+    const px = -dy, py = dx;
+    const L = size * 4.6;
+    const tipX = s.x + dx * L * 0.5, tipY = s.y + dy * L * 0.5;
+    const tailX = s.x - dx * L * 0.5, tailY = s.y - dy * L * 0.5;
+    const shaftX = tipX - dx * L * 0.26, shaftY = tipY - dy * L * 0.26;
+    // 箭杆：墨色底杆 + 亮面高光（木杆质感）
+    g.strokeColor = hexc(PAL.ink);
+    g.lineWidth = size * 0.78;
+    g.moveTo(tailX, tailY); g.lineTo(shaftX, shaftY); g.stroke();
+    g.strokeColor = hexc(s.spark ? PAL.gold : '#B98A4E');
+    g.lineWidth = size * 0.44;
+    g.moveTo(tailX, tailY); g.lineTo(shaftX, shaftY); g.stroke();
+    // 箭头：三角 + 细墨描边
+    const hw = size * 0.85;
+    g.fillColor = hexc(s.spark ? '#FFE9A8' : '#D8D3C4');
+    g.strokeColor = hexc(PAL.ink);
+    g.lineWidth = 1.5;
+    g.moveTo(tipX, tipY);
+    g.lineTo(shaftX + px * hw, shaftY + py * hw);
+    g.lineTo(shaftX - px * hw, shaftY - py * hw);
+    g.close();
+    g.fill();
+    g.stroke();
+    // 尾羽：两片斜羽（砖红羽，在浅色尾迹与土色地面上都跳得出；金箭配米白羽）
+    const fl = L * 0.24, fw = size * 0.8;
+    g.strokeColor = hexc(s.spark ? '#FFF6DC' : '#C9563F');
+    g.lineWidth = Math.max(2, size * 0.38);
+    g.moveTo(tailX, tailY); g.lineTo(tailX - dx * fl + px * fw, tailY - dy * fl + py * fw); g.stroke();
+    g.moveTo(tailX, tailY); g.lineTo(tailX - dx * fl - px * fw, tailY - dy * fl - py * fw); g.stroke();
   }
 
   private hitMob(a: Active, m: Monster): void {
@@ -203,7 +268,7 @@ export class ProjectileManager {
     m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true);
     this.dmg.add(sp.heroId, Math.min(final, hpBefore));
     Sfx.play(sp.crit ? 'crit' : 'hit');
-    if (sp.spark && this.parts) this.parts.burst(m.x, m.y, sp.color, 4);
+    if (this.parts) this.parts.burst(m.x, m.y, sp.color, sp.spark ? 5 : 2);
     if (m.dead) {
       this.killPop(sp, m.x, m.y + m.def.radius);
       return;
