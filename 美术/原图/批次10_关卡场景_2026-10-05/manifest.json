@@ -1,0 +1,30 @@
+{
+  "scene_1_2": {
+    "id": "scene_1_2",
+    "file": "D:/AI/S4Game/美术/原图/批次10_关卡场景_2026-10-05\\scene_1_2.png",
+    "prompt": "Vertical portrait fantasy battlefield background for a tower defense mobile game, Kingdom Rush inspired hand-painted cartoon style. A dim dense deep forest clearing: thick tall pine and oak trunks crowding both left and right edges with dark green canopies overhead shadowing the corners; a single packed-earth path entering from the TOP edge, winding gently left and right as it descends, and exiting at the BOTTOM edge, smooth wide and clearly walkable. On the mossy grass away from the path: fallen mossy logs, glowing red-cap mushrooms, gray rounded rocks, thorny bushes, a few broken wooden fence segments. Mood slightly darker and moodier than a sunny meadow but still colorful and readable, soft painterly shading, clean composition with open space. Absolutely no characters, no monsters, no towers, no buildings, no text, no UI elements, no vignette, no border.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-05 23:35:21",
+    "ok": true,
+    "width": 1152,
+    "height": 2048,
+    "mode": "RGB",
+    "seconds": 102.4,
+    "sha1": "3ba69d96b7ac"
+  },
+  "scene_1_3": {
+    "id": "scene_1_3",
+    "file": "D:/AI/S4Game/美术/原图/批次10_关卡场景_2026-10-05\\scene_1_3.png",
+    "prompt": "Vertical portrait fantasy battlefield background for a tower defense mobile game, Kingdom Rush inspired hand-painted cartoon style. A wild goblin beast den clearing at the heart of a rotten forest: a single trodden dirt path entering from the TOP edge, winding gently left and right as it descends, and exiting at the BOTTOM edge, smooth wide and clearly walkable. On the trampled brownish-green grass away from the path: piles of old bones and skulls, wooden spiked stakes and primitive totem poles, torn banners hanging from crooked posts, dark cave mouths framed by roots at the left and right edges, thorny brambles and poisonous green puffs. Menacing but colorful hand-painted cartoon mood, soft painterly shading, clean composition with open space. Absolutely no characters, no monsters, no towers, no buildings, no text, no UI elements, no vignette, no border.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-05 23:37:03",
+    "ok": true,
+    "width": 1152,
+    "height": 2048,
+    "mode": "RGB",
+    "seconds": 78.7,
+    "sha1": "2f68df4df8d7"
+  }
+}

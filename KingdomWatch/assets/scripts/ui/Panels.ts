@@ -34,12 +34,8 @@ const CARD_ART: Record<string, string> = {
   fast_charge_s: 'ui_card_fast_charge_a', // 快速充能 ← 快速充能（能量体）
   pyro_cd: 'ui_card_cd_cut',          // 火法·冷却缩减 ← 冷却缩减（沙漏）
   pyro_eager: 'ui_card_fast_charge_a', // 火法·激昂 ← 快速充能（能量体）
-  volt_spell: 'ui_card_pyro_spell',   // 雷法·法术精研 ← 法术精研（魔法书）
   volt_cd: 'ui_card_cd_cut',          // 雷法·冷却缩减 ← 冷却缩减（沙漏）
-  volt_range: 'ui_card_pyro_range',   // 雷法·法术范围 ← 法术范围（冲击环）
-  volt_war: 'ui_card_pyro_war',       // 雷法·战吼 ← 战吼（号角）
   volt_eager: 'ui_card_fast_charge_a',// 雷法·激昂 ← 快速充能（能量体）
-  volt_morale: 'ui_card_pyro_morale', // 雷法·士气高涨 ← 士气高涨（旗帜）
 };
 
 export class Panels {
@@ -577,7 +573,7 @@ export class Panels {
     // 标题行：普攻/技能/大招用真图标资源（用户调整：去 emoji 字符），36 号略大盖过行高
     artSprite(tipsPanel, -w / 2 + pad + 18, hh / 2 - 41, 36, 36, 'ui_icon_' + kind + '_' + hero.id, { sliced: false });
     label(this.modalRoot, px - w / 2 + pad + 44 + (w - pad * 2 - 44) / 2, py + hh / 2 - 41, title,
-      { size: 18, color: '#FFE08A', bold: true, align: 'left', w: w - pad * 2 - 44, h: 26, shrink: true });
+      { size: 18, color: '#FFFFFF', bold: true, align: 'left', w: w - pad * 2 - 44, h: 26, shrink: true });
     rows.forEach((r, i) => {
       const ry = py + hh / 2 - 84 - i * 26;   // 首行与技能名拉开 18（用户调整：原太挤）；行距 26 收紧上下留白
       label(this.modalRoot, px - w / 2 + pad + lblW / 2, ry, r[0],

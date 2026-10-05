@@ -225,10 +225,11 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_icon_atk_pyro', 'ui_icon_skill_pyro', 'ui_icon_ult_pyro',
   'ui_icon_atk_volt', 'ui_icon_skill_volt', 'ui_icon_ult_volt',
   'ui_card_volt_shards', 'ui_card_volt_shock',
+  'ui_card_volt_spell', 'ui_card_volt_range', 'ui_card_volt_war', 'ui_card_volt_morale',
   'ui_card_pyro_spell', 'ui_card_pyro_shards', 'ui_card_pyro_cd', 'ui_card_pyro_range',
   'ui_card_pyro_war', 'ui_card_pyro_eager', 'ui_card_pyro_stun', 'ui_card_pyro_morale', 'ui_card_pyro_ember',
   // 场景
-  'scenes/scene_1_1',
+  'scenes/scene_1_1', 'scenes/scene_1_2', 'scenes/scene_1_3',
 ];
 
 let preloadStarted = false;
