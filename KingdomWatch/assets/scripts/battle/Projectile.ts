@@ -49,6 +49,8 @@ export interface ProjSpec {
   ability?: boolean;
   /** 生成即免疫碰撞的目标（分裂小弹的来源怪：分裂箭不打目标本体，用户确认） */
   exclude?: Monster;
+  /** 纯演出弹：不参与碰撞与伤害结算（狙击瞬击的可见重弩箭） */
+  visual?: boolean;
 }
 
 interface Active {
@@ -163,8 +165,8 @@ export class ProjectileManager {
       a.ttl -= dt;
       let done = false;
 
-      // 直线弹：扫掠补偿按本帧位移的一半扩大判定半径，防高速弹穿过薄目标
-      if (!done) {
+      // 直线弹：扫掠补偿按本帧位移的一半扩大判定半径，防高速弹穿过薄目标（纯演出弹不参与碰撞）
+      if (!done && !sp.visual) {
         const sweep = (Math.abs(a.vx) + Math.abs(a.vy)) * dt * 0.5;
         for (const m of this.mgr.list) {
           if (m.dead || a.hit.has(m)) continue;
@@ -386,17 +388,17 @@ export class ProjectileManager {
       this.boomFx(m.x, m.y, sp.explodeR);
     }
     // 分裂箭：与原弹同造型/同弹速/同词条（仅伤害减半、不再连锁分裂），
-    // 只索敌目标前方（更靠近防线，y 更小）的怪，绝不索敌目标身后的怪（用户确认）
+    // 只索敌目标前方（箭矢飞行方向的延伸，y 更大）的怪，绝不往回（防线方向）索敌（用户确认：往前索敌）
     if (sp.split && sp.split > 0 && !sp.small) {
-      const fronts = this.mgr.list.filter(o => !o.dead && o !== m && o.y < m.y);
+      const fronts = this.mgr.list.filter(o => !o.dead && o !== m && o.y > m.y);
       for (let k = 0; k < sp.split; k++) {
         const tgt = fronts.length > 0 ? fronts[(Math.random() * fronts.length) | 0] : null;
-        let dx = 0, dy = -1;   // 前方无人：沿大道朝防线直射（随缘）
+        let dx = 0, dy = 1;   // 前方无人：沿弹道方向继续向前直射（随缘）
         if (tgt) {
           dx = tgt.x - m.x;
           dy = tgt.y - m.y;
           const ft = Math.sqrt(dx * dx + dy * dy) / sp.speed;   // 估算飞行时间
-          dy -= tgt.def.speed * ft;                             // 预判：目标继续向防线行进
+          dy -= tgt.def.speed * ft;                             // 预判：目标继续向防线行进（y 减小）
         }
         const l = Math.sqrt(dx * dx + dy * dy) || 1;
         this.fire({
@@ -405,7 +407,7 @@ export class ProjectileManager {
           dirX: dx / l, dirY: dy / l,
           dmg: sp.dmg * 0.5, crit: false,
           split: 0, small: true, exclude: m,   // 不再连锁分裂；不打目标本体
-          ttl: Math.min(sp.ttl ?? 3.2, 0.8),   // 射空时在近处消散，不长驱直入防线
+          ttl: Math.min(sp.ttl ?? 3.2, 0.8),   // 射空时在近处消散，不无限前飞
         });
       }
     }

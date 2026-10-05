@@ -525,15 +525,15 @@ export class SniperHero extends HeroBase {
       const p = Math.max(0, Math.min(1, 1 - L.t / 0.5));   // 锁定进度 0→1
       const g = L.g;
       g.clear();
-      // 瞄准线：枪口 → 目标当前位置，随进度增粗
-      g.strokeColor = hexc('#8FB8FF');
+      // 瞄准线：枪口 → 目标当前位置，随进度增粗（猎杀时刻主题红）
+      g.strokeColor = hexc(PAL.red);
       g.lineWidth = 1 + 3 * p;
       g.moveTo(this.x, HERO_Y + 60);
       g.lineTo(L.target.x, L.target.y);
       g.stroke();
       // 收缩准星：圈 + 四向刻度，临发射瞬间闪白
       const r = 40 - 26 * p;
-      g.strokeColor = hexc(p > 0.85 ? '#FFFFFF' : '#BFE3FF');
+      g.strokeColor = hexc(p > 0.85 ? '#FFFFFF' : '#FF8A8D');
       g.lineWidth = 2.5;
       g.circle(L.target.x, L.target.y, r);
       g.stroke();
@@ -579,16 +579,24 @@ export class SniperHero extends HeroBase {
     Sfx.play('snipe');
   }
 
-  /** 瞬击一发：hitscan 弹道线 + 目标词条 + 独立暴击 */
+  /** 瞬击一发：hitscan 弹道线 + 可见重弩箭演出弹 + 目标词条 + 独立暴击 */
   private snipeShot(target: Monster, projs: ProjectileManager, mul: number, ignoreRes: boolean): void {
     const crit = Math.random() < this.stats.critRate;
     const dmgVal = this.effAtk * mul * (crit ? this.stats.critMul : 1);
     const hpBefore = target.hp;
-    this.tracer(this.node.parent!, target.x, target.y, crit ? '#BFE3FF' : '#7FB3FF', crit ? 4 : 3, 0.13);
+    this.tracer(this.node.parent!, target.x, target.y, crit ? '#FF8A8D' : PAL.red, crit ? 4 : 3, 0.13);
+    // 可见重弩箭演出弹：伤害已瞬击记账，此弹纯演出不参与结算，红色尾迹呼应弹道线
+    const vx = target.x - this.x, vy = target.y - (HERO_Y + 60);
+    const vl = Math.sqrt(vx * vx + vy * vy) || 1;
+    projs.fire({
+      x: this.x, y: HERO_Y + 60, dirX: vx / vl, dirY: vy / vl, speed: 1800,
+      dmg: 0, crit: false, color: PAL.red, heroId: this.id, size: 8,
+      ttl: 0.6, visual: true,
+    });
     target.takeDamage(dmgVal, crit, this.id, ignoreRes);
     projs.addDamage(this.id, Math.min(dmgVal, hpBefore));
     if (target.dead) bus.emit(EVT.COMIC_POP, target.x, target.y + target.def.radius, 'skillKillSnipe');  // 技能击杀 60% 词条
-    projs.sparkAt(target.x, target.y, '#7FB3FF', 4);
+    projs.sparkAt(target.x, target.y, PAL.red, 4);
     Sfx.play('shoot');
   }
 
@@ -596,13 +604,13 @@ export class SniperHero extends HeroBase {
   protected castSkill(): void {
     this.skillCd = Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0));   // 冷却缩减卡
     this.volley = { t: 0, left: Math.max(1, Math.round(this.stats.skillShots || 6)), ttl: 4 };   // 多目标锁定卡加发数
-    // 演出：英雄身上深蓝环脉冲扩散
+    // 演出：英雄身上红色环脉冲扩散（与瞬击弹道线同主题）
     const pulse = new Node('snipePulse');
     pulse.layer = Layers.Enum.UI_2D;
     pulse.setParent(this.node.parent!);
     pulse.setPosition(this.x, HERO_Y + 20, 0);
     const pg = pulse.addComponent(Graphics);
-    pg.strokeColor = hexc(PAL.blue);
+    pg.strokeColor = hexc(PAL.red);
     pg.lineWidth = 5;
     pg.circle(0, 0, 34);
     pg.stroke();
