@@ -448,11 +448,15 @@ export class Panels {
 
     const h = hero.stats;
     const isArcher = hero.id === 'archer';
+    const cdTotal = hero.skillCdTotal + ' 秒';
+    const goalTxt = String(Math.round(hero.chargeGoal * 10) / 10);
+    const shockTxt = (h.shockOnHit || 0) > 0 ? '感电：受伤 +' + Math.round(h.shockOnHit * 100) + '%' : '';
     const iconY = WYB(126, 46);
     let px: number, py: number, w = 300, hh = 272, title: string;
     let rows: [string, string][];
     if (kind === 'atk') {
-      title = isArcher ? '普攻 · 风刃射击' : '普攻 · 重弩狙击';
+      const atkTitle: Record<string, string> = { archer: '普攻 · 风刃射击', sniper: '普攻 · 重弩狙击', pyro: '普攻 · 烈焰火球', volt: '普攻 · 雷电球' };
+      title = atkTitle[hero.id] || '普攻';
       rows = [
         ['伤害', String(Math.round(h.atk * h.atkMul))],
         ['攻速', h.aspd.toFixed(1) + ' 次/秒'],
@@ -470,17 +474,37 @@ export class Panels {
           ['效果', '接下来 6 次普攻强化'],
           ['强化伤害', Math.round(h.atk * h.atkMul * 1.5) + '（×1.5）'],
           ['强化特性', '金色贯穿 · 攻速+30%'],
-          ['冷却时间', hero.skillCd > 0 ? hero.skillCd.toFixed(1) + ' 秒' : '就绪'],
+          ['冷却时间', cdTotal],
           ['索敌范围', String(Math.round(h.skillRange))],
           ['释放', '自动'],
         ];
-      } else {
+      } else if (hero.id === 'sniper') {
         title = '技能 · 穿颅射击';
         rows = [
           ['效果', '锁定离防线最近 · 连续 ' + Math.round(h.skillShots || 6) + ' 狙'],
           ['每发伤害', Math.round(h.atk * h.atkMul * 2) + '（×2.0）'],
           ['特性', '持续索敌 · 独立暴击'],
-          ['冷却时间', hero.skillCd > 0 ? hero.skillCd.toFixed(1) + ' 秒' : '就绪'],
+          ['冷却时间', cdTotal],
+          ['索敌范围', String(Math.round(h.skillRange))],
+          ['释放', '自动'],
+        ];
+      } else if (hero.id === 'pyro') {
+        title = '技能 · 烈焰爆裂';
+        rows = [
+          ['效果', '锁定最密集敌群 · 齐射 ' + Math.round(h.skillShots || 3) + ' 颗爆裂火球'],
+          ['每发伤害', Math.round(h.atk * h.atkMul * 1.6) + '（×1.6）'],
+          ['特性', '大范围爆炸 + 灼烧'],
+          ['冷却时间', cdTotal],
+          ['索敌范围', String(Math.round(h.skillRange))],
+          ['释放', '自动'],
+        ];
+      } else {
+        title = '技能 · 连锁闪电';
+        rows = [
+          ['效果', '最多连锁 ' + Math.round(h.skillShots || 5) + ' 个目标'],
+          ['每跳伤害', Math.round(h.atk * h.atkMul * 1.4) + '（×1.4）'],
+          ['特性', shockTxt || '跳距 ' + Math.round(260 * (h.skillRangeMul || 1))],
+          ['冷却时间', cdTotal],
           ['索敌范围', String(Math.round(h.skillRange))],
           ['释放', '自动'],
         ];
@@ -494,14 +518,14 @@ export class Panels {
         ['伤害', Math.round(h.atk * h.atkMul * 0.65) + ' × 每箭'],
         ['形态', Math.round(h.ultRounds || 1) > 1 ? Math.round(h.ultRounds) + ' 轮 × 两排扇形 · 每排 8 箭' : '两排扇形 × 每排 8 箭'],
         ['特性', '无限贯穿'],
-        ['充能', Math.floor(hero.charge) + ' / ' + hero.chargeMax],
+        ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
         ['释放', '手动点击'],
       ];
       // 大招图标半径 45：面板右缘 = 图标圆心 - 45(半径) - 16(间距)
       px = WX(636, 90) - 45 - 16 - w / 2;
-      py = WYB(504 + ultIdx * 110, 90);
-    } else {
+      py = WYB(240 + ultIdx * 110, 90);
+    } else if (hero.id === 'sniper') {
       title = '大招 · 猎杀时刻';
       w = 280; hh = 272;
       rows = [
@@ -509,11 +533,37 @@ export class Panels {
         ['形态', '0.5 秒锁定 → 贯穿弹' + (Math.round(h.ultBolts || 1) > 1 ? ' × ' + Math.round(h.ultBolts) + ' 线' : '')],
         ['特性', '无限贯穿 · 无视物抗'],
         ['目标', '全场血量最高'],
-        ['充能', Math.floor(hero.charge) + ' / ' + hero.chargeMax],
+        ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
       ];
       px = WX(636, 90) - 45 - 16 - w / 2;
-      py = WYB(504 + ultIdx * 110, 90);
+      py = WYB(240 + ultIdx * 110, 90);
+    } else if (hero.id === 'pyro') {
+      title = '大招 · 陨石天降';
+      w = 280; hh = 272;
+      rows = [
+        ['伤害', Math.round(h.atk * h.atkMul * 3.5) + ' × 每颗'],
+        ['形态', '5 颗陨石随机轰击全场'],
+        ['特性', '大范围爆炸 + 灼烧' + (h.ultHaste ? ' + 攻速提升 5 秒' : '')],
+        ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
+        ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
+        ['释放', '手动点击'],
+      ];
+      px = WX(636, 90) - 45 - 16 - w / 2;
+      py = WYB(240 + ultIdx * 110, 90);
+    } else {
+      title = '大招 · 天雷灭世';
+      w = 280; hh = 272;
+      rows = [
+        ['伤害', Math.round(h.atk * h.atkMul * 2.2) + ' × 每道'],
+        ['形态', '15 道天雷轰炸全场'],
+        ['特性', '范围爆炸 · 眩晕 1 秒' + (shockTxt ? ' · ' + shockTxt : '')],
+        ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
+        ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
+        ['释放', '手动点击'],
+      ];
+      px = WX(636, 90) - 45 - 16 - w / 2;
+      py = WYB(240 + ultIdx * 110, 90);
     }
     // 面板整体收敛进可视区
     px = Math.max(-375 + w / 2 + 8, Math.min(375 - w / 2 - 8, px));

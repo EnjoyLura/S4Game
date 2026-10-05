@@ -220,8 +220,6 @@ export class HUD {
     orbit.active = false;
     // 充能百分比：单行居中（用户调整：去掉"大招"前缀与"就绪"文案，就绪时整行隐藏）
     const chargeTxt = label(top, ux, uy, '0%', { size: 22, color: '#FFFFFF', bold: true, w: 90, h: 30, outline: '#0B0F16', outlineW: 3 });
-    // 钮下英雄名：双英雄时代区分归属（艾拉/凯尔）
-    label(top, ux, uy - 58, hero.name.slice(0, 2), { size: 13, color: '#CDC2A2', bold: true, w: 90, h: 20 });
     btn.on(Node.EventType.TOUCH_END, () => {
       if (this.dir.tryCastUlt(i) === 'charging') this.dir.showTips('ult', i);
     });
@@ -484,7 +482,7 @@ export class HUD {
       if (key !== s.lastCdKey) {
         s.lastCdKey = key;
         setText(s.cdTxt, cdLeft.toFixed(1) + 's');
-        this.redrawSkillPie(s, cdLeft / hero.skillMax);
+        this.redrawSkillPie(s, cdLeft / hero.skillCdTotal);
       }
     }
   }

@@ -49,7 +49,9 @@ export abstract class HeroBase {
   get chargeGoal(): number { return this.chargeMax * (this.stats.chargeMul || 1); }
   get chargePct(): number { return this.charge / this.chargeGoal; }
   get ultReady(): boolean { return this.charge >= this.chargeGoal; }
-  get skillPct(): number { return 1 - this.skillCd / this.skillMax; }
+  get skillPct(): number { return 1 - this.skillCd / this.skillCdTotal; }
+  /** 技能完整冷却（含冷却缩减卡；与施放时写入 skillCd 的算法一致） */
+  get skillCdTotal(): number { return Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0)); }
 
   /** 伤害统计服务（tick 每帧刷新；直伤型技能/大招用于计入统计） */
   protected lastDmg: DamageService | null = null;
@@ -588,7 +590,7 @@ export class SniperHero extends HeroBase {
   /** 技能·穿颅射击（自动，14s CD）：4 秒窗口内锁定「离防线最近」目标连续 6 狙，每发 200% 攻击；无目标等待不取消 */
   protected castSkill(_mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): void {
     void _mgr; void _projs; void _dmg;
-    this.skillCd = Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0));   // 冷却缩减卡
+    this.skillCd = this.skillCdTotal;   // 冷却缩减卡
     this.volley = { t: 0, left: Math.max(1, Math.round(this.stats.skillShots || 6)), ttl: 4 };   // 多目标锁定卡加发数
     // 演出：英雄身上红色环脉冲扩散（与瞬击弹道线同主题）
     const pulse = new Node('snipePulse');
@@ -731,7 +733,7 @@ export class PyroHero extends HeroBase {
   /** 技能·烈焰爆裂（自动，10s CD）：锁定技能范围内最密集簇，齐射 3 颗爆裂火球（1.6×攻击、大爆炸 + 灼烧 3s） */
   protected castSkill(mgr: MonsterManager, projs: ProjectileManager, _dmg: DamageService): void {
     void _dmg;
-    this.skillCd = Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0));   // 冷却缩减卡
+    this.skillCd = this.skillCdTotal;   // 冷却缩减卡
     const R = this.stats.skillRange;
     const cands = mgr.list.filter(m => !m.dead && Math.hypot(m.x - this.x, m.y - HERO_Y) <= R);
     if (!cands.length) return;
@@ -932,7 +934,7 @@ export class VoltHero extends HeroBase {
   /** 技能·连锁闪电（自动，9s CD）：从技能范围最近目标起跳，最多 skillShots 目标间跳跃（跳距 260×范围卡），每次 1.4×攻击并感电 */
   protected castSkill(mgr: MonsterManager, _projs: ProjectileManager, dmg: DamageService): void {
     void _projs;
-    this.skillCd = Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0));   // 冷却缩减卡
+    this.skillCd = this.skillCdTotal;   // 冷却缩减卡
     const R = this.stats.skillRange;
     const alive = mgr.list.filter(m => !m.dead && Math.hypot(m.x - this.x, m.y - HERO_Y) <= R);
     if (!alive.length) return;
