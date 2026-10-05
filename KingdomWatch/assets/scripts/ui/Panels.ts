@@ -316,22 +316,24 @@ export class Panels {
       this.statsRows(this.dir.dmgSvc.rows(), 600, 120);
     }
 
-    // 双倍广告按钮（与失败页复活按钮同位 580,714 120×120；美术绿圆钮，文字保留其上）
-    const dbl = gcircle(this.modalRoot, WX(580, 120), WY(714, 120), 58, CA(PAL.green, 0.3));
-    const dblTxt = label(dbl, 0, 0, '▶\n双倍', { size: 24, color: '#FFFFFF', bold: true });
+    // 双倍广告按钮（用户调整：方形扁平板同三选一刷新钮样式，置于底部按钮行下方居中；领取后禁点）
+    const dbl = gpanel(this.modalRoot, WX(220, 310), WY(1055, 96), 310, 96, CA('#5E8F2E', 1), undefined, 0, 14);
+    const dblFace = gpanel(dbl, 0, 3, 310, 90, CA(PAL.green, 1), undefined, 0, 14);
+    const dblTxt = label(dblFace, 0, 0, '▶ 看广告双倍', { size: 26, color: '#20240F', bold: true, w: 294, h: 90, shrink: true });
     dbl.on(Node.EventType.TOUCH_END, e => {
       e.propagationStopped = true;
       o.onDouble(ok => {
         if (ok) {
           dbl.off(Node.EventType.TOUCH_END);
-          setText(dblTxt, '已\n领取');
+          setText(dblTxt, '已领取');
         }
       });
     });
 
     this.tabsBar(['奖励总览', '伤害统计'], tab, 840, 40, 330, 10, t => this.showWin({ ...o, tab: t }));
-    btn(this.modalRoot, WX(50, 300), WY(940, 88), 300, 88, '下一关 ▶', PAL.green, o.onNext, 22, true);
-    btn(this.modalRoot, WX(400, 300), WY(940, 88), 300, 88, '返回', PAL.gold, o.onExit, 22, true);
+    // 底部按钮（用户调整：美术资源按钮同暂停弹窗款式；下一关居右、返回居左互换）
+    dlgConfirm(this.modalRoot, WX(400, 300), WY(940, 88), 300, 88, '下一关 ▶', o.onNext, 22, '#7FB841', '#5E8F2E', 'ui_btn_cancel');
+    dlgConfirm(this.modalRoot, WX(50, 300), WY(940, 88), 300, 88, '返回', o.onExit, 22, '#E89A3C', '#C47A28', 'ui_btn_exit');
   }
 
   /* ---------- ⑤ 失败结算（含广告复活，与胜利双倍按钮同位；页签线稿⑤/⑤-1） ---------- */

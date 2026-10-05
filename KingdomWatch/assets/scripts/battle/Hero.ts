@@ -224,7 +224,7 @@ export class ArcherHero extends HeroBase {
     return {
       x: base.x, y: base.y,
       dirX: base.dirX, dirY: base.dirY,
-      speed: base.small ? 720 : emp ? 1560 : 960,   // 普攻弹速 ×2（用户调整，含齐射/强化箭）
+      speed: base.small ? 720 : 960,   // 弹速与普攻一致（强化箭不再加速，用户调整）
       dmg: atk, crit,
       color: emp ? PAL.gold : PAL.parch,   // 暴击不改箭色（用户反馈），只由伤害飘字体现
       heroId: this.id,
@@ -254,7 +254,7 @@ export class ArcherHero extends HeroBase {
     const emp = this.empowerLeft > 0;
     if (emp) this.empowerLeft--;
     this.lastEmp = emp;
-    const bs = emp ? 1560 : 960;   // 与 spec 弹速一致（×2）
+    const bs = 960;   // 与 spec 弹速一致（强化箭同普攻弹速，用户调整）
     // 首排弹幕：预判拦截点直线射出（列 = 1+齐射层）
     const lead = this.lead(target, bs);
     this.fireRow(projs, lead.dirX, lead.dirY, emp);
@@ -309,7 +309,7 @@ export class ArcherHero extends HeroBase {
       if (q.t <= 0) {
         this.serialQueue.splice(i, 1);
         if (q.target && !q.target.dead) {
-          const ld = this.lead(q.target, q.emp ? 1560 : 960);
+          const ld = this.lead(q.target, 960);
           this.fireRow(projs, ld.dirX, ld.dirY, q.emp === true);
         } else {
           this.fireRow(projs, q.dirX, q.dirY, q.emp === true);
