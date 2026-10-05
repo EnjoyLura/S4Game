@@ -69,8 +69,10 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
   const unlocked = lvReached(g.unlock);
   const owned = g.give.kind === 'hero' && g.give.id ? !!sv.heroes[g.give.id]?.owned : false;
   const q = g.give.kind === 'equip' ? EQUIPS[g.give.id]?.quality ?? 0 : 1;
-  /* 用户确认：品质=图标下的方形品质色底板（不用品质色边框）；未解锁=灰色板 */
-  const card = gpanel(parent, cx, cy, 330, 300, CA('#14181E', 0.92), undefined, 0, 14);
+  /* 用户确认：品质=图标下的方形品质色底板（不用品质色边框）；未解锁=灰色板；
+   * 卡背板=参考样例的金色锯齿票根卡（ui_card_shop），缺图回退程序金板 */
+  const card = gpanel(parent, cx, cy, 330, 300, CA('#F2CE6B', 0.96), undefined, 0, 14);
+  artSprite(card, 0, 0, 330, 300, 'ui_card_shop', { belowIdx: 0 });
 
   const seat = gpanel(card, 0, 60, 130, 130, CA(QCOLOR[q], 0.55), undefined, 0, 14);   // 品质背板：未解锁同样显示（用户调整）
   artSprite(seat, 0, 0, 130, 130, 'ui_seat_q' + q, { belowIdx: 0 });   // 品质背板美术（四色 plaque，缺图回退程序色板）
@@ -82,8 +84,8 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
     const d = EQUIPS[g.give.id];
     qualityBadge(card, -115, 125, d.quality, d.tier);   // 缩小后贴卡片左上角，右缘 -69 不压图标座（座左缘 -65）
   }
-  label(card, 0, -27, g.name, { size: 24, color: unlocked ? '#FFF3D6' : '#889099', bold: true, w: 310, h: 32, shrink: true });
-  label(card, 0, -55, g.sub, { size: 17, color: unlocked ? '#AAB2BD' : '#5F6873', w: 310, h: 26, shrink: true });
+  label(card, 0, -27, g.name, { size: 24, color: unlocked ? '#4A3214' : '#8A7452', bold: true, w: 310, h: 32, shrink: true });
+  label(card, 0, -55, g.sub, { size: 17, color: unlocked ? '#7A5C36' : '#9A8A6A', w: 310, h: 26, shrink: true });
 
   const cur = g.currency === 'gold' ? '金币' : '钻石';
   const curArt = g.currency === 'gold' ? 'ui_icon_coin' : 'ui_icon_diamond';

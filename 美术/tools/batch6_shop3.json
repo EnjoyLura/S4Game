@@ -1,0 +1,24 @@
+{
+  "name": "批次6_商店重做_2026-10-05",
+  "outdir": "D:/AI/S4Game/美术/原图/批次6_商店重做_2026-10-05",
+  "defaults": { "model": "gpt-image-2", "quality": "high",
+                "background": "transparent", "key": "a3", "size": "1024x1024" },
+  "items": [
+    {
+      "id": "E1_大背板浅蓝灰",
+      "type": "generate",
+      "size": "1152x1536",
+      "prompt": "Mobile game UI panel background asset: one large vertical rectangular panel with softly rounded corners, light blue-grey color, filling almost the entire frame. Smooth matte surface with a very subtle diagonal fabric texture, slightly lighter in the center and gently darker toward the edges, a thin medium grey-blue outline following the rounded border. Soft smooth cartoon mobile game UI style, clean flat vector-like shading. Completely empty plain center reserved for UI content. Transparent background, crisp hard edges. Strictly NO wood, NO gold, NO ornaments, NO rivets, NO brackets, NO text, NO glow, NO halo."
+    },
+    {
+      "id": "E2_商品卡金色锯齿",
+      "type": "generate",
+      "prompt": "Mobile game UI card asset: one single vertical rectangular shop item card, warm golden yellow gradient background (bright golden center fading to slightly deeper amber at the edges), top and bottom edges cut into a zigzag sawtooth pattern like a ticket stub, left and right edges straight with slightly rounded corners. Soft smooth cartoon mobile game UI style, flat vector-like shading with a very subtle radial light glow in the center of the card. The card face is completely empty for UI content. Transparent background, crisp hard edges. Strictly NO text, NO letters, NO icons, NO items on the card, NO inner border line, NO drop shadow, NO halo."
+    },
+    {
+      "id": "E3_品质图标座四色",
+      "type": "generate",
+      "prompt": "Mobile game UI asset sheet: exactly four small square icon frames with rounded corners arranged in a strict 2x2 grid, all four identical in shape and equal size, wide even spacing between them, viewed straight-on. Each frame has a solid saturated colored interior with a subtle glossy vertical highlight band in the upper half, and a thin dark brown-navy outline following the rounded edge. Frame interior colors: top-left muted steel grey, top-right leaf green, bottom-left sky blue, bottom-right bright purple. Soft smooth cartoon mobile game UI style, flat vector-like shading. The frames are completely empty inside. Transparent background, crisp hard edges, strictly NO text, NO icons inside the frames, NO glow, NO halo."
+    }
+  ]
+}

@@ -82,8 +82,9 @@ const SLICE9: Record<string, Slice9Def> = {
   ui_panel_bag: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
   ui_panel_zone: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
   ui_panel_hero: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },  // 英雄页上半区全宽大背板
-  /* 商店三件（胡桃木货架板/铆钉购买钮/羊皮标题横幅） */
-  ui_panel_shop: { canon: [1500, 2148], inset: [100, 100, 100, 100], scale: 0.5 },
+  /* 商店三件（浅蓝灰底板/金色锯齿卡/羊皮标题横幅）+ 购买钮 */
+  ui_panel_shop: { canon: [1500, 2148], inset: [127, 127, 56, 56], scale: 0.5 },
+  ui_card_shop: { canon: [660, 600], inset: [38, 38, 44, 44], scale: 0.5 },
   ui_btn_buy: { canon: [480, 108], inset: [35, 35, 21, 21], scale: 0.5 },
   ui_banner_shop: { canon: [1040, 176], inset: [45, 45, 38, 32], scale: 0.5 },
 };
@@ -203,7 +204,7 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_icon_coin', 'ui_icon_exp', 'ui_icon_diamond', 'ui_icon_chest', 'ui_icon_equip',
   'ui_icon_refresh_ad', 'ui_icon_refresh_diamond',
   'ui_icon_heart', 'ui_icon_skull', 'ui_icon_eye', 'ui_icon_chat', 'icon_alert',
-  'ui_icon_lock', 'ui_seat_q0', 'ui_seat_q1', 'ui_seat_q2', 'ui_seat_q3',
+  'ui_icon_lock', 'ui_seat_q0', 'ui_seat_q1', 'ui_seat_q2', 'ui_seat_q3', 'ui_card_shop',
   // 英雄头像
   'ui_avatar_archer', 'ui_avatar_sniper',
   // 英雄技能图标（双英雄均已交付）
