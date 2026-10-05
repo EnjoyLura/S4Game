@@ -23,9 +23,9 @@ const bagSt: { tab: 'weapon' | 'equip' | 'mat' } = { tab: 'weapon' };
 export function buildHeroes(ctx: PageCtx): void {
   const root = ctx.screens;
   const sv = loadSave();
-  const owned = (['archer', 'sniper', 'pyro'] as const).filter(id => sv.heroes[id].owned);
-  if (!owned.includes(sv.curHero as 'archer' | 'sniper' | 'pyro')) sv.curHero = owned[0];
-  const state = { hi: Math.max(0, owned.indexOf(sv.curHero as 'archer' | 'sniper' | 'pyro')) };
+  const owned = (['archer', 'sniper', 'pyro', 'volt'] as const).filter(id => sv.heroes[id].owned);
+  if (!owned.includes(sv.curHero as 'archer' | 'sniper' | 'pyro' | 'volt')) sv.curHero = owned[0];
+  const state = { hi: Math.max(0, owned.indexOf(sv.curHero as 'archer' | 'sniper' | 'pyro' | 'volt')) };
 
   const content = N('heroContent', root, 0, 0, 750, 800);
   render();

@@ -29,6 +29,9 @@ export class Monster {
   burnDps = 0;
   /** 眩晕硬直（预留：真正的眩晕类 buff 才会写入；受击不再写） */
   stunT = 0;
+  /** 感电（沃尔·雷霆）：受雷系命中后受伤放大，持续 shockT 秒 */
+  shockT = 0;
+  shockAmp = 0;
   /** 冲撞/投掷前摇演出剩余时间（手动衰减，避免逐次创建 tween） */
   lungeT = 0;
 
@@ -53,6 +56,7 @@ export class Monster {
     this.atkT = def.atkInterval;
     this.healT = def.atkInterval;
     this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = this.lungeT = this.flashT = 0;
+    this.shockT = this.shockAmp = 0;
     this.baseX = x;
     this.node.removeFromParent();
     this.node.setPosition(x, SPAWN_Y + 40 + Math.random() * 60, 0);
@@ -142,6 +146,7 @@ export class Monster {
     }
     if (this.stunT > 0) { this.stunT -= dt; return; }
     if (this.slowT > 0) this.slowT -= dt;
+    if (this.shockT > 0) this.shockT -= dt;
     // 点燃 DoT：每 0.5s 聚合一条（§3.11）
     if (this.burnT > 0) {
       this.burnT -= dt;
@@ -192,9 +197,16 @@ export class Monster {
 
   /** 受击；crit 用于飘字样式；ignoreRes=无视物抗（狙击大招等）；返回是否击杀
    *  受击只掉血+闪红，不硬直/减速/击退——控制只来自特定 buff（applySlow 等后续技能效果） */
+  /** 感电：雷系命中后受伤放大 3s（重复命中刷新时长，取更高倍率） */
+  applyShock(amp: number, dur: number): void {
+    this.shockAmp = Math.max(this.shockAmp, amp);
+    this.shockT = Math.max(this.shockT, dur);
+  }
+
   takeDamage(amount: number, crit: boolean, killerId: string, ignoreRes = false): boolean {
     if (this.dead) return false;
     if (this.def.physRes && !ignoreRes) amount *= 1 - this.def.physRes;
+    if (this.shockT > 0) amount *= 1 + this.shockAmp;
     this.hp -= amount;
     this.ctx.dmgNumber(this.x + (Math.random() * 24 - 12), this.y + this.def.radius,
       String(Math.round(amount)), crit ? '#FFD75E' : '#FFFFFF', crit);

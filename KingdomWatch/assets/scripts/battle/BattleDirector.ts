@@ -4,7 +4,7 @@
  */
 import { _decorator, Canvas, Component, director, Layers, Node } from 'cc';
 import { LEVEL_1_1, LevelDef, MOBS, heroSlots } from '../config/Mobs';
-import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats } from '../config/Cards';
+import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats } from '../config/Cards';
 import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
@@ -12,7 +12,7 @@ import { loadSave, saveSave } from '../core/SaveData';
 import { DIFF_MUL, starKey, squadList, unlockCodex } from '../core/GameData';
 import { flow } from '../core/Flow';
 import { MonsterManager } from './Monster';
-import { ArcherHero, HeroBase, SniperHero, PyroHero } from './Hero';
+import { ArcherHero, HeroBase, SniperHero, PyroHero, VoltHero } from './Hero';
 import { LineDefense } from './LineDefense';
 import { WaveManager } from './WaveManager';
 import { ProjectileManager } from './Projectile';
@@ -114,7 +114,9 @@ export class BattleDirector extends Component {
       ? new SniperHero(field, slots[i], baseSniperStats())
       : hid === 'pyro'
         ? new PyroHero(field, slots[i], basePyroStats())
-        : new ArcherHero(field, slots[i], baseArcherStats()));
+        : hid === 'volt'
+          ? new VoltHero(field, slots[i], baseVoltStats())
+          : new ArcherHero(field, slots[i], baseArcherStats()));
     this.parts = new Particles(fxLayer);
     this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts);
     this.waves = new WaveManager(this.levelDef, this.mgr);

@@ -133,12 +133,12 @@ export function buildUpgrade(ctx: PageCtx): void {
     artPanel(content, 0, WY(-LO.safeTop, upT + LO.safeTop), 750, upT + LO.safeTop, 'ui_panel_hero');
 
     /* 常驻英雄栏：头像切换（未拥有灰锁）；用户确认：头像不加边框（无描边、无带环座美术） */
-    (['archer', 'sniper', 'pyro'] as const).forEach((id, i) => {
+    (['archer', 'sniper', 'pyro', 'volt'] as const).forEach((id, i) => {
       const o = sv.heroes[id].owned;
-      const av = gpanel(content, WX(30 + i * 100, 88), WY(205, 88), 88, 88,
+      const av = gpanel(content, WX(28 + i * 76, 84), WY(205, 84), 84, 84,
         CA('#2A3240', 1), undefined, 0, 44);
-      artSprite(av, 0, 0, 76, 76, HERO_DEFS[id].avatar, { sliced: false });
-      if (!o) { gpanel(av, 0, 0, 88, 88, CA('#0B0F16', 0.6), undefined, 0, 44); label(av, 0, 0, '🔒', { size: 30 }); }
+      artSprite(av, 0, 0, 72, 72, HERO_DEFS[id].avatar, { sliced: false });
+      if (!o) { gpanel(av, 0, 0, 84, 84, CA('#0B0F16', 0.6), undefined, 0, 42); label(av, 0, 0, '🔒', { size: 28 }); }
       av.on(Node.EventType.TOUCH_END, () => {
         if (!o) { toast('前往商店解锁该英雄'); return; }
         sv.curHero = id; saveCur(id); render();

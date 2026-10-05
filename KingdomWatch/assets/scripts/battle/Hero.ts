@@ -4,11 +4,12 @@
  * - ArcherHero 艾拉·风羽：强化箭矢(12s，6次普攻金色贯穿) / 扇形箭雨(两排×8箭全贯穿)
  * - SniperHero 凯尔·鹰眼：穿颅射击(14s，4秒窗口锁定离防线最近连续6狙×2/发·无目标等待) / 猎杀时刻(×5.5必暴·无视物抗单发)
  * - PyroHero 焰·辉：烈焰爆裂(10s，密集处 3 火球爆炸+灼烧) / 陨石天降(5 颗随机轰击+落点灼烧)
+ * - VoltHero 沃尔·雷霆：连锁闪电(9s，最多 5 目标跳跃+感电) / 天雷灭世(15 道落雷+眩晕 1s)
  * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/处决/残血词条）
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { HeroStats } from '../config/Cards';
-import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL } from '../config/GameConfig';
+import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL } from '../config/GameConfig';
 import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
@@ -50,8 +51,10 @@ export abstract class HeroBase {
   get ultReady(): boolean { return this.charge >= this.chargeGoal; }
   get skillPct(): number { return 1 - this.skillCd / this.skillMax; }
 
+  /** 伤害统计服务（tick 每帧刷新；直伤型技能/大招用于计入统计） */
+  protected lastDmg: DamageService | null = null;
   tick(dt: number, mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
-    void dmg;
+    this.lastDmg = dmg;
     this.updateQueues(dt, mgr, projs);
     // 普攻
     this.atkT -= dt;
@@ -67,7 +70,7 @@ export abstract class HeroBase {
     // 技能（自动：CD 好 + 技能范围内有怪）
     this.skillCd -= dt;
     if (this.skillCd <= 0 && mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange)) {
-      this.castSkill(mgr, projs);
+      this.castSkill(mgr, projs, dmg);
     }
     // 大招呼吸回能：每 3 秒少量充能（不与击杀充能冲突；满后停止）
     this.regenT -= dt;
@@ -84,7 +87,7 @@ export abstract class HeroBase {
   protected attackInterval(): number { return 1 / this.stats.aspd; }
 
   protected abstract shoot(target: Monster, mgr: MonsterManager, projs: ProjectileManager): void;
-  protected abstract castSkill(mgr: MonsterManager, projs: ProjectileManager): void;
+  protected abstract castSkill(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void;
   /** 大招（手动，充能满可放；全场无目标时不消耗充能） */
   abstract castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean;
 
@@ -330,8 +333,8 @@ export class ArcherHero extends HeroBase {
   }
 
   /** 技能·强化箭矢（自动，12s CD）：接下来 6 次普攻变为金色贯穿箭（伤害 ×1.5、无限穿透、弹速 540） */
-  protected castSkill(_mgr: MonsterManager, _projs: ProjectileManager): void {
-    void _mgr; void _projs;
+  protected castSkill(_mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): void {
+    void _mgr; void _projs; void _dmg;
     this.skillCd = this.skillMax;
     this.empowerLeft = this.empowerMax;
     // 演出：英雄身上金色环脉冲扩散，标记"箭矢已强化"
@@ -583,8 +586,8 @@ export class SniperHero extends HeroBase {
   }
 
   /** 技能·穿颅射击（自动，14s CD）：4 秒窗口内锁定「离防线最近」目标连续 6 狙，每发 200% 攻击；无目标等待不取消 */
-  protected castSkill(_mgr: MonsterManager, _projs: ProjectileManager): void {
-    void _mgr; void _projs;
+  protected castSkill(_mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): void {
+    void _mgr; void _projs; void _dmg;
     this.skillCd = Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0));   // 冷却缩减卡
     this.volley = { t: 0, left: Math.max(1, Math.round(this.stats.skillShots || 6)), ttl: 4 };   // 多目标锁定卡加发数
     // 演出：英雄身上红色环脉冲扩散（与瞬击弹道线同主题）
@@ -726,7 +729,8 @@ export class PyroHero extends HeroBase {
   }
 
   /** 技能·烈焰爆裂（自动，10s CD）：锁定技能范围内最密集簇，齐射 3 颗爆裂火球（1.6×攻击、大爆炸 + 灼烧 3s） */
-  protected castSkill(mgr: MonsterManager, projs: ProjectileManager): void {
+  protected castSkill(mgr: MonsterManager, projs: ProjectileManager, _dmg: DamageService): void {
+    void _dmg;
     this.skillCd = Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0));   // 冷却缩减卡
     const R = this.stats.skillRange;
     const cands = mgr.list.filter(m => !m.dead && Math.hypot(m.x - this.x, m.y - HERO_Y) <= R);
@@ -788,6 +792,229 @@ export class PyroHero extends HeroBase {
     if (this.stats.ultHaste) this.hasteT = 5;
     Sfx.play('ult');
     void _projs; void _dmg;
+    return true;
+  }
+}
+
+/* ============================================================
+ * 雷电法师 · 沃尔·雷霆（§4 #3：技能流·连锁/紫；线稿 hero_bolt_battle 100×120）
+ * ============================================================ */
+export class VoltHero extends HeroBase {
+  readonly id = 'volt';
+  readonly name = '沃尔·雷霆';
+  readonly chargeMax = VOLT_CHARGE_MAX;
+  readonly skillMax = 9;
+  /** 大招·天雷灭世：排队落下的雷击（目标引用，落雷时已亡则转随机存活目标） */
+  private strikeQueue: { t: number; target: Monster | null }[] = [];
+  /** 士气高涨：大招后攻速加成剩余时间 */
+  private hasteT = 0;
+
+  protected buildVisual(parent: Node): void {
+    const g = this.node.addComponent(Graphics);
+    // 背影雷电法师：紫袍 + 电弧法杖（线稿 hero_bolt_battle 100×120）
+    const ink = hexc(PAL.ink);
+    g.strokeColor = ink;
+    g.lineWidth = 3;
+    // 法袍下摆
+    g.fillColor = hexc('#5B3A8C');
+    g.moveTo(-20, 34); g.lineTo(20, 34); g.lineTo(30, -76); g.lineTo(-30, -76);
+    g.close(); g.fill(); g.stroke();
+    // 躯干（法袍上身）
+    g.fillColor = hexc('#6F4AA8');
+    g.roundRect(-22, -34, 44, 66, 14);
+    g.fill(); g.stroke();
+    // 金色腰带 + 搭扣
+    g.fillColor = hexc(PAL.gold2);
+    g.roundRect(-22, -22, 44, 7, 3);
+    g.fill();
+    g.fillColor = hexc(PAL.gold);
+    g.circle(0, -18, 4);
+    g.fill();
+    // 肩披
+    g.fillColor = hexc('#8460C4');
+    g.circle(-22, 24, 9); g.fill(); g.stroke();
+    g.circle(22, 24, 9); g.fill(); g.stroke();
+    // 头 + 兜帽（尖顶法师帽）
+    g.fillColor = hexc('#E8C39A');
+    g.circle(0, 26, 14); g.fill(); g.stroke();
+    g.fillColor = hexc('#5B3A8C');
+    g.moveTo(-17, 30); g.lineTo(17, 30); g.lineTo(4, 52); g.lineTo(-4, 52);
+    g.close(); g.fill(); g.stroke();
+    g.fillColor = hexc(PAL.gold);
+    g.circle(0, 52, 3.5); g.fill();
+    // 法杖（右侧斜持，顶端电光宝珠）
+    g.strokeColor = hexc('#7A4B22');
+    g.lineWidth = 5;
+    g.moveTo(26, -70); g.lineTo(36, 18);
+    g.stroke();
+    g.fillColor = hexc('#B96BFF');
+    g.circle(38, 26, 9); g.fill(); g.stroke();
+    g.fillColor = hexc('#FFFFFF');
+    g.circle(38, 26, 4); g.fill();
+    // 靴（下沿没入工事）
+    g.fillColor = hexc('#2A2118');
+    g.roundRect(-19, -78, 15, 16, 4); g.fill(); g.stroke();
+    g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
+    this.node.setPosition(this.x, HERO_Y, 0);
+    this.node.setParent(parent);
+    // 脚下名字牌（立绘靴底下方，随英雄移动）
+    label(this.node, 0, -100, this.name, { size: 14, color: PAL.parch, bold: true, w: 140, h: 20 });
+  }
+
+  /** 士气高涨窗口攻速 +40% */
+  protected attackInterval(): number {
+    return 1 / (this.stats.aspd * (this.hasteT > 0 ? 1.4 : 1));
+  }
+
+  /** 闪电弹种统一构造：紫色细弹 + 感电词条 */
+  private spec(base: {
+    x: number; y: number; dirX: number; dirY: number; dmg: number;
+    speed: number; size: number; ability?: boolean; ult?: boolean; stun?: number;
+  }): ProjSpec {
+    const crit = Math.random() < this.stats.critRate;
+    return {
+      x: base.x, y: base.y, dirX: base.dirX, dirY: base.dirY,
+      speed: base.speed,
+      dmg: base.dmg * (crit ? this.stats.critMul : 1), crit,
+      color: '#B96BFF', heroId: this.id, size: base.size,
+      slowRatio: this.stats.slowOnHit || 0,
+      slowDur: this.stats.slowDur || 2,
+      burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
+      spark: true, ability: base.ability, ult: base.ult, stun: base.stun,
+      shockAmp: this.stats.shockOnHit, shockDur: 3,
+      ...this.targetBonuses(),
+    };
+  }
+
+  /** 普攻·闪电弹：快速单体 */
+  protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
+    void _mgr;
+    const bs = 900;
+    const lead = this.lead(target, bs);
+    projs.fire(this.spec({
+      x: this.x, y: HERO_Y + 60, dirX: lead.dirX, dirY: lead.dirY,
+      dmg: this.effAtk, speed: bs, size: 6,
+    }));
+    Sfx.play('shoot');
+  }
+
+  /** 闪电闪现特效：锯齿电弧（约 0.22s 淡出）；thick=大招加粗 */
+  private zapFx(x0: number, y0: number, x1: number, y1: number, thick = 3): void {
+    const bolt = new Node('zap');
+    bolt.layer = Layers.Enum.UI_2D;
+    bolt.setParent(this.node.parent!);
+    bolt.setPosition(0, 0, 0);
+    const g = bolt.addComponent(Graphics);
+    g.strokeColor = hexc('#D9A8FF');
+    g.lineWidth = thick;
+    const segs = 5;
+    g.moveTo(x0, y0);
+    for (let i = 1; i < segs; i++) {
+      const t = i / segs;
+      const mx = x0 + (x1 - x0) * t + (Math.random() * 2 - 1) * 18;
+      const my = y0 + (y1 - y0) * t + (Math.random() * 2 - 1) * 18;
+      g.lineTo(mx, my);
+    }
+    g.lineTo(x1, y1);
+    g.stroke();
+    g.strokeColor = hexc('#FFFFFF');
+    g.lineWidth = Math.max(1.2, thick * 0.4);
+    g.moveTo(x0, y0);
+    g.lineTo(x1, y1);
+    g.stroke();
+    g.fillColor = hexc('#FFFFFF');
+    g.circle(x1, y1, thick * 1.8);
+    g.fill();
+    const op = bolt.addComponent(UIOpacity);
+    tween(op).to(0.22, { opacity: 0 }).call(() => bolt.destroy()).start();
+  }
+
+  /** 技能·连锁闪电（自动，9s CD）：从技能范围最近目标起跳，最多 skillShots 目标间跳跃（跳距 260×范围卡），每次 1.4×攻击并感电 */
+  protected castSkill(mgr: MonsterManager, _projs: ProjectileManager, dmg: DamageService): void {
+    void _projs;
+    this.skillCd = Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0));   // 冷却缩减卡
+    const R = this.stats.skillRange;
+    const alive = mgr.list.filter(m => !m.dead && Math.hypot(m.x - this.x, m.y - HERO_Y) <= R);
+    if (!alive.length) return;
+    alive.sort((a, b) => Math.hypot(a.x - this.x, a.y - HERO_Y) - Math.hypot(b.x - this.x, b.y - HERO_Y));
+    const jumps = Math.max(1, Math.round(this.stats.skillShots || 5));
+    const hop = 260 * (this.stats.skillRangeMul || 1);
+    const hitDmg = this.effAtk * 1.4 * (this.stats.skillMul || 1);
+    const struck = new Set<Monster>();
+    let fromX = this.x, fromY = HERO_Y + 60;
+    let cur = alive[0];
+    for (let k = 0; k < jumps && cur; k++) {
+      struck.add(cur);
+      // 直接结算伤害（连锁无弹道，即时跳）
+      const hpBefore = cur.hp;
+      const done = cur.takeDamage(hitDmg, Math.random() < this.stats.critRate, this.id);
+      dmg.add(this.id, Math.min(hitDmg, hpBefore));
+      if (this.stats.shockOnHit) cur.applyShock(this.stats.shockOnHit, 3);
+      this.zapFx(fromX, fromY, cur.x, cur.y);
+      Sfx.play('hit');
+      fromX = cur.x; fromY = cur.y;
+      // 下一跳：距当前最近且未被打过的（无则终止）
+      let next: Monster | null = null, nd = Infinity;
+      for (const o of mgr.list) {
+        if (o.dead || struck.has(o)) continue;
+        const d = Math.hypot(o.x - fromX, o.y - fromY);
+        if (d < nd && d <= hop) { nd = d; next = o; }
+      }
+      cur = next;
+      void done;
+    }
+  }
+
+  protected updateQueues(dt: number, mgr: MonsterManager, _projs: ProjectileManager): void {
+    void mgr;
+    // 大招落雷：到点对目标位置直击（AOE 90 + 眩晕）；目标已亡则转随机存活目标
+    for (let i = this.strikeQueue.length - 1; i >= 0; i--) {
+      const q = this.strikeQueue[i];
+      q.t -= dt;
+      if (q.t <= 0) {
+        this.strikeQueue.splice(i, 1);
+        let t = q.target && !q.target.dead ? q.target : null;
+        if (!t) {
+          const alive = mgr.list.filter(m => !m.dead);
+          if (!alive.length) continue;
+          t = alive[(Math.random() * alive.length) | 0];
+        }
+        this.thunderStrike(t, mgr);
+      }
+    }
+    if (this.hasteT > 0) this.hasteT -= dt;
+  }
+
+  /** 单道天雷：从屏外竖劈到目标点，90 半径 AOE + 眩晕（无视物抗的雷击走普通结算） */
+  private thunderStrike(t: Monster, mgr: MonsterManager): void {
+    const dmgVal = this.effAtk * 2.2 * (this.stats.ultDmgMul || 1);
+    this.zapFx(t.x, SPAWN_Y + 140, t.x, t.y, 6);
+    for (const o of mgr.mobsInRadius(t.x, t.y, 90)) {
+      if (o.dead) continue;
+      const hpBefore = o.hp;
+      o.takeDamage(dmgVal, false, this.id);
+      if (this.lastDmg) this.lastDmg.add(this.id, Math.min(dmgVal, hpBefore));
+      if (this.stats.ultStun) o.stunT = Math.max(o.stunT, this.stats.ultStun);
+      if (this.stats.shockOnHit) o.applyShock(this.stats.shockOnHit, 3);
+    }
+    void t;
+  }
+
+  /** 大招·天雷灭世（手动，击杀充能）：全屏 15 道落雷（在场目标轮转，目标不足时随机补位），每道 AOE + 眩晕 1s */
+  castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean {
+    if (!this.ultReady) return false;
+    const alive = mgr.list.filter(m => !m.dead);
+    if (!alive.length) return false;   // 全场无目标：不消耗充能
+    this.charge = 0;
+    bus.emit(EVT.CHARGE_CHANGED, 0, false);
+    this.lastDmg = dmg;   // 天雷直伤计入伤害统计（施放时刷新引用）
+    for (let k = 0; k < 15; k++) {
+      const t = alive[k % alive.length];
+      this.strikeQueue.push({ t: 0.1 + k * 0.08, target: t });
+    }
+    if (this.stats.ultHaste) this.hasteT = 5;
+    Sfx.play('ult');
+    void projs;
     return true;
   }
 }

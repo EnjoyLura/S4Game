@@ -38,6 +38,9 @@ export interface ProjSpec {
   burnDps?: number;
   /** 命中眩晕 s（震慑：陨石落点眩晕） */
   stun?: number;
+  /** 雷系感电：命中后目标受伤 +shockAmp 持续 shockDur s */
+  shockAmp?: number;
+  shockDur?: number;
   /** 无视物抗（狙击大招等） */
   ignoreRes?: boolean;
   /** 目标词条（命中时按目标结算）：对精英/BOSS 加成 / 对残血<30% 加成 */
@@ -338,6 +341,7 @@ export class ProjectileManager {
     if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
     if (sp.burnDps) m.applyBurn(sp.burnDps, 3);
     if (sp.stun) m.stunT = Math.max(m.stunT, sp.stun);
+    if (sp.shockAmp) m.applyShock(sp.shockAmp, sp.shockDur ?? 3);
     if (sp.explodeR && sp.explodeR > 0) {
       for (const o of this.mgr.mobsInRadius(m.x, m.y, sp.explodeR)) {
         if (o === m || o.dead) continue;

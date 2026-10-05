@@ -71,6 +71,7 @@ export const REVIVE_INVULN = 2;
 export const ARCHER_CHARGE_MAX = 60;
 export const SNIPER_CHARGE_MAX = 55;
 export const PYRO_CHARGE_MAX = 50;
+export const VOLT_CHARGE_MAX = 50;
 
 /** 帧内上限（§12.4 性能预算；怪量 ×3 后同屏峰值上探，80 仍留裕量） */
 export const MAX_MOBS = 80;

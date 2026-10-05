@@ -87,6 +87,12 @@ export const HERO_DEFS: Record<string, HeroDef> = {
     story: '自灰烬火山走出的流浪法师，掌心蕴火。怪群愈密，他的火焰便烧得愈旺。',
     shopPrice: 2800,
   },
+  volt: {
+    id: 'volt', name: '沃尔·雷霆', job: '雷电 · 连锁控制', avatar: 'ui_avatar_volt',
+    baseAtk: 85, atkSpd: 0.75, weaponName: '雷霆法杖', skillName: '连锁闪电', ultName: '天雷灭世',
+    story: '在雷暴之夜被天雷选中的人，血液里奔流着风暴。他的闪电从不安分——总在敌群间跳跃。',
+    shopPrice: 4200,
+  },
 };
 
 /* ================= 编队（二级编队界面：4 上阵位；战斗按上阵顺序从左到右站位） ================= */
@@ -190,6 +196,7 @@ export const SHOP: ShopDef[] = [
   { id: 's_wpn_crossbow', tab: 'weapon', name: '鹰眼重弩', sub: '紫2阶 · 重击弩', price: 1200, currency: 'diamond', unlock: '1-2', give: { kind: 'equip', id: 'wpn_crossbow' } },
   { id: 's_hero_sniper', tab: 'hero', name: '凯尔·鹰眼', sub: '狙击 · 重击输出', price: 6800, currency: 'diamond', unlock: '1-5', give: { kind: 'hero', id: 'sniper' } },
   { id: 's_hero_pyro', tab: 'hero', name: '焰·辉', sub: '火焰 · AOE 爆发', price: 2800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'pyro' } },
+  { id: 's_hero_volt', tab: 'hero', name: '沃尔·雷霆', sub: '雷电 · 连锁控制', price: 4200, currency: 'diamond', unlock: '1-6', give: { kind: 'hero', id: 'volt' } },
   { id: 's_hero_more', tab: 'hero', name: '新英雄', sub: '敬请期待', price: 0, currency: 'diamond', unlock: '', give: { kind: 'hero', id: '' } },
   { id: 's_helm_falcon', tab: 'equip', name: '猎鹰头盔', sub: '蓝1阶 · 头盔', price: 600, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'helm_falcon' } },
   { id: 's_acc_moon', tab: 'equip', name: '月纹坠饰', sub: '绿1阶 · 饰品', price: 300, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'acc_moon' } },

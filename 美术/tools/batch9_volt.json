@@ -1,0 +1,38 @@
+{
+  "name": "批次9_雷法英雄_2026-10-05",
+  "outdir": "D:/AI/S4Game/美术/原图/批次9_雷法英雄_2026-10-05",
+  "defaults": { "model": "gpt-image-2", "quality": "high",
+                "background": "transparent", "key": "a3", "size": "1024x1024" },
+  "items": [
+    {
+      "id": "V1_头像沃尔",
+      "type": "generate",
+      "prompt": "Circular game avatar bust portrait: a stern older male storm mage named Woer Leiting, grey swept-back hair with a white streak, deep purple hooded robe with golden trim, small lightning arcs crackling between his raised fingers, intense gaze. Kingdom Rush inspired hand-painted cartoon game art, painterly shading, crisp shapes readable at small size, purple and gold color scheme, centered composition filling the circle. Square canvas with the circular portrait on transparent background outside the circle. Strictly NO text, NO border ring, NO glow halo."
+    },
+    {
+      "id": "V2_普攻图标",
+      "type": "generate",
+      "prompt": "Circular game skill icon: a purple-robed storm mage (seen from behind-side) firing a crackling purple lightning bolt forward from his staff, electric sparks along the bolt. Kingdom Rush inspired hand-painted cartoon game art, purple and gold palette with deep storm-blue backdrop inside the circle, bold readable shapes. Square canvas, circular icon on transparent background outside the circle. Strictly NO text, NO border ring, NO glow halo."
+    },
+    {
+      "id": "V3_技能图标",
+      "type": "generate",
+      "prompt": "Circular game skill icon: chain lightning jumping between three small monster silhouettes, jagged bright purple electric arcs connecting them. Kingdom Rush inspired hand-painted cartoon game art, purple and gold palette, bold readable shapes, deep storm-blue backdrop inside the circle. Square canvas, circular icon on transparent background outside the circle. Strictly NO text, NO border ring, NO glow halo."
+    },
+    {
+      "id": "V4_大招图标",
+      "type": "generate",
+      "prompt": "Circular game ultimate icon: multiple bright lightning strikes falling from dark storm clouds onto the ground, electric impact bursts, dramatic wide view. Kingdom Rush inspired hand-painted cartoon game art, purple and gold palette with dark storm sky, bold readable shapes inside the circle. Square canvas, circular icon on transparent background outside the circle. Strictly NO text, NO border ring, NO glow halo."
+    },
+    {
+      "id": "V5_卡面连锁闪电",
+      "type": "generate",
+      "prompt": "Square game card icon, full-bleed: jagged chain lightning arcing between three glowing orbs, bright purple electric arcs on dark storm background. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size, purple palette. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo."
+    },
+    {
+      "id": "V6_卡面感电",
+      "type": "generate",
+      "prompt": "Square game card icon, full-bleed: a cracked electric-charged orb with lightning bolts bursting out and small sparks orbiting, purple and white palette on dark backdrop. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo."
+    }
+  ]
+}

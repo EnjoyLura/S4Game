@@ -39,6 +39,7 @@ export interface HeroStats {
   ultStun: number;      // 大招命中眩晕 s（震慑，覆盖）
   ultHaste: number;     // 大招后攻速加成标记（士气高涨，0/1）
   burnMul: number;      // 灼烧伤害倍率（余烬，累乘）
+  shockOnHit: number;   // 雷系命中感电：目标受伤 +25% 持续 3s（感电卡，0=无）
 }
 
 export function baseArcherStats(): HeroStats {
@@ -50,7 +51,7 @@ export function baseArcherStats(): HeroStats {
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
-    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0,
   };
 }
 
@@ -63,7 +64,7 @@ export function baseSniperStats(): HeroStats {
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
-    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0,
   };
 }
 
@@ -76,7 +77,20 @@ export function basePyroStats(): HeroStats {
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 3, skillCdFlat: 0, ultBolts: 1,
-    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0,
+  };
+}
+
+/** 雷电法师 · 沃尔·雷霆（§4 #3：技能流·连锁/紫）：闪电弹单体；普攻 480 / 技能索敌 480；天雷自带 1s 眩晕 */
+export function baseVoltStats(): HeroStats {
+  return {
+    atk: 55, atkMul: 1, aspd: 0.75, range: 480, skillRange: 480,
+    critRate: 0.05, critMul: 1.5,
+    serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
+    pierce: 0, slowOnHit: 0, burnOnHit: 0,
+    executeBonus: 0, lowHpBonus: 0,
+    slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 5, skillCdFlat: 0, ultBolts: 1,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 1, ultHaste: 0, burnMul: 1, shockOnHit: 0,
   };
 }
 
@@ -188,6 +202,26 @@ export const PYRO_CARDS: CardDef[] = [
     apply: x => { x.hero.burnMul *= 2; } }),
 ];
 
+/* ---------- 雷电法师 · 沃尔·雷霆（§6.3 技能流 + §6.4 感电） ---------- */
+export const VOLT_CARDS: CardDef[] = [
+  c({ id: 'volt_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'volt', desc: '技能伤害 +40%',
+    apply: x => { x.hero.skillMul *= 1.4; } }),
+  c({ id: 'volt_shards', name: '技能弹体', rarity: 'blue', maxStacks: 3, owner: 'volt', desc: '连锁闪电弹跳 +2 目标（可叠加）',
+    apply: x => { x.hero.skillShots += 2; } }),
+  c({ id: 'volt_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'volt', desc: '技能冷却 -2 秒（可叠加）',
+    apply: x => { x.hero.skillCdFlat += 2; } }),
+  c({ id: 'volt_range', name: '法术范围', rarity: 'white', maxStacks: 3, owner: 'volt', desc: '连锁跳跃距离 +30%',
+    apply: x => { x.hero.skillRangeMul *= 1.3; } }),
+  c({ id: 'volt_war', name: '战吼', rarity: 'blue', maxStacks: 3, owner: 'volt', desc: '大招伤害 +50%',
+    apply: x => { x.hero.ultDmgMul *= 1.5; } }),
+  c({ id: 'volt_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'volt', desc: '大招充能需求 -25%（可叠加）',
+    apply: x => { x.hero.chargeMul *= 0.75; } }),
+  c({ id: 'volt_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'volt', desc: '大招释放后攻速 +40% 持续 5 秒',
+    apply: x => { x.hero.ultHaste = 1; } }),
+  c({ id: 'volt_shock', name: '感电', rarity: 'purple', maxStacks: 2, owner: 'volt', desc: '雷系命中感电：目标受伤 +25% 持续 3s（可叠至 +50%）',
+    apply: x => { x.hero.shockOnHit = Math.min(0.5, x.hero.shockOnHit + 0.25); } }),
+];
+
 /* ---------- 全局卡（§6.1） ---------- */
 export const GLOBAL_CARDS: CardDef[] = [
   c({ id: 'wall', name: '城墙加固', rarity: 'white', maxStacks: 4, owner: 'global', desc: '防线耐久上限 +25% 并回复 25%',
@@ -199,7 +233,7 @@ export const GLOBAL_CARDS: CardDef[] = [
 ];
 
 /** 当前卡池 = 弓箭手 + 狙击 + 火法 + 全局（卡按 owner 归属英雄生效） */
-export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...GLOBAL_CARDS];
+export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...VOLT_CARDS, ...GLOBAL_CARDS];
 
 export interface CardStacks { [cardId: string]: number; }
 
