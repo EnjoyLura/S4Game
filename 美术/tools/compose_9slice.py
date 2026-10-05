@@ -49,8 +49,8 @@ COMPOSE = {
     "ui_card_header_white":  ("ui_card_header_white.png",  400, 104, 90, 15, 15),
     "ui_card_header_blue":   ("ui_card_header_blue.png",   400, 104, 90, 15, 15),
     "ui_card_header_purple": ("ui_card_header_purple.png", 400, 104, 90, 15, 15),
-    "ui_panel_shop":   ("ui_panel_shop.png",   1500, 2148,  90,  40,  40),
-    "ui_card_shop":    ("ui_card_shop.png",    660,  600,  60,  70,  70),
+    "ui_panel_shop":   ("ui_panel_shop.png",   1500, 2148,  80,  40,  40),
+    "ui_card_shop":    ("ui_card_shop.png",    660,  600,  80,  40,  40),
     "ui_btn_buy":      ("ui_btn_buy.png",       480,  108,  90,  55,  55),
     "ui_banner_shop":  ("ui_banner_shop.png",  1040,  176, 100,  85,  70),
 }

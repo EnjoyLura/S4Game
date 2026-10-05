@@ -83,8 +83,8 @@ const SLICE9: Record<string, Slice9Def> = {
   ui_panel_zone: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
   ui_panel_hero: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },  // 英雄页上半区全宽大背板
   /* 商店三件（浅蓝灰底板/金色锯齿卡/羊皮标题横幅）+ 购买钮 */
-  ui_panel_shop: { canon: [1500, 2148], inset: [127, 127, 56, 56], scale: 0.5 },
-  ui_card_shop: { canon: [660, 600], inset: [38, 38, 44, 44], scale: 0.5 },
+  ui_panel_shop: { canon: [1500, 2148], inset: [114, 114, 57, 57], scale: 0.5 },
+  ui_card_shop: { canon: [660, 600], inset: [51, 51, 25, 25], scale: 0.5 },
   ui_btn_buy: { canon: [480, 108], inset: [35, 35, 21, 21], scale: 0.5 },
   ui_banner_shop: { canon: [1040, 176], inset: [45, 45, 38, 32], scale: 0.5 },
 };
