@@ -1,0 +1,19 @@
+{
+ "name": "批次3_商店图标_2026-10-05",
+ "outdir": "D:/AI/S4Game/美术/原图/批次3_商店图标_2026-10-05",
+ "defaults": {
+  "model": "gpt-image-2",
+  "quality": "high",
+  "background": "transparent",
+  "key": "1k",
+  "size": "1k"
+ },
+ "items": [
+  {
+   "id": "S3_魔法尘",
+   "type": "edit",
+   "ref": "D:/AI/S4Game/美术/基准/图标风格基准.png",
+   "prompt": "Keep the exact same art style, outline weight, rendering and color palette as the reference image. Exactly ONE single game icon, large and centered in the frame, not a grid, no other objects: a small open burlap pouch spilling glowing teal-green magic dust, a few sparkling dust motes floating above the pouch opening. Kingdom Rush inspired fantasy game art, hand-painted cartoon style, glossy saturated colors, thick dark brown outlines, soft painterly shading. Transparent background, no shadows, no text, no grid lines, no cell borders."
+  }
+ ]
+}

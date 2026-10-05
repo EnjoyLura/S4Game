@@ -178,11 +178,12 @@ export function gbar(parent: Node, x: number, y: number, w: number, h: number, f
 }
 
 export function btn(parent: Node, x: number, y: number, w: number, h: number, text: string,
-  color: FillLike, cb: () => void, size = 22, flat = false): Node {
+  color: FillLike, cb: () => void, size = 22, flat = false, icon = ''): Node {
   /* 无边框规范（用户确认：未特别强调不加边框资源）——程序层一律无描边 */
   const n = gpanel(parent, x, y, w, h, color, undefined, 0, 14);
   n.name = 'btn_' + text;
-  const lbl = label(n, 0, 0, text, { size, color: '#241C12', bold: true, w, h });
+  const lbl = label(n, icon ? w * 0.07 : 0, 0, text, { size, color: '#241C12', bold: true, w, h });
+  if (icon) artSprite(n, -w * 0.26, 0, size + 12, size + 12, icon, { sliced: false });
   /* 美术按钮三态：金/绿（含按下/禁用帧）；#5A6472 视为禁用态用灰帧；失败保持程序绘制；
    * flat=true 连框体美术也不用（纯色板，用户点名去边框的弹窗按钮用） */
   const isColor = (v: string) => typeof color === 'string' && color === v;

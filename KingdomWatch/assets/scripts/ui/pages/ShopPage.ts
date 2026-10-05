@@ -12,6 +12,17 @@ import { loadSave } from '../../core/SaveData';
 
 const KIND_ICON: Record<string, string> = { weapon: '🏹', hero: '🦸', equip: '🛡️', mat: '🧱' };
 
+/** 商品图标美术：装备/材料按产物 defId 对应 ui_item_<id>（切图批次3）；英雄复用头像；缺图回退 KIND_ICON emoji */
+const ITEM_ART: Record<string, string> = {
+  wpn_bow: 'ui_item_wpn_bow', wpn_crossbow: 'ui_item_wpn_crossbow',
+  helm_falcon: 'ui_item_helm_falcon', acc_moon: 'ui_item_acc_moon',
+  glove_wind: 'ui_item_glove_wind', armor_forest: 'ui_item_armor_forest',
+  mat_stone: 'ui_item_mat_stone', mat_iron: 'ui_item_mat_iron',
+  mat_dust: 'ui_item_mat_dust', mat_rune: 'ui_item_mat_rune',
+};
+const itemArt = (g: ShopDef): string =>
+  g.give.kind === 'hero' && g.give.id ? 'ui_avatar_' + g.give.id : ITEM_ART[g.give.id] || '';
+
 /* 页签跨刷新保持（购买后 refresh 重建页面不跳回第一个页签） */
 const st: { tab: ShopTab } = { tab: 'weapon' };
 
@@ -62,7 +73,9 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
   const card = gpanel(parent, cx, cy, 330, 300, CA('#14181E', 0.92), undefined, 0, 14);
 
   const seat = gpanel(card, 0, 60, 130, 130, unlocked ? CA(QCOLOR[q], 0.55) : CA('#3A4250', 0.6), undefined, 0, 14);
-  label(seat, 0, 0, KIND_ICON[g.tab] || '🎁', { size: 56 });
+  const iconFallback = label(seat, 0, 0, KIND_ICON[g.tab] || '🎁', { size: 56 });
+  const art = itemArt(g);
+  if (art) artSprite(seat, 0, 0, 120, 120, art, { sliced: false, hideOnLoad: [iconFallback] });
 
   if (g.give.kind === 'equip') {
     const d = EQUIPS[g.give.id];
@@ -71,21 +84,22 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
   label(card, 0, -27, g.name, { size: 24, color: unlocked ? '#FFF3D6' : '#889099', bold: true, w: 310, h: 32, shrink: true });
   label(card, 0, -55, g.sub, { size: 17, color: unlocked ? '#AAB2BD' : '#5F6873', w: 310, h: 26, shrink: true });
 
-  const cur = g.currency === 'gold' ? '🪙' : '💎';
+  const cur = g.currency === 'gold' ? '金币' : '钻石';
+  const curArt = g.currency === 'gold' ? 'ui_icon_coin' : 'ui_icon_diamond';
   if (!unlocked) {
     btn(card, 0, -100, 240, 54, `🔒 通关 ${g.unlock} 解锁`, '#5A6472', () => toast(`通关 ${g.unlock} 后解锁`), 19, true);
   } else if (owned || !g.price) {
     btn(card, 0, -100, 240, 54, owned ? '已拥有' : '敬请期待', '#5A6472', () => {}, 22, true);
   } else {
-    btn(card, 0, -100, 240, 54, `${cur} ${fmt(g.price)} 购买`, PAL.green, () => {
+    btn(card, 0, -100, 240, 54, `${fmt(g.price)} 购买`, PAL.green, () => {
       confirmModal(ctx, g.name, [
         g.sub,
         g.give.kind === 'hero' ? '购买后解锁该英雄' : g.give.kind === 'equip' ? '购买后自动穿戴（槽位已占用则入仓库）' : `获得 ${g.give.n || 1} 个`,
-        `价格：${cur} ${fmt(g.price)}`,
+        `价格：${fmt(g.price)} ${cur}`,
       ], '购 买', () => {
         const r = shopBuy(g);
         return r.ok ? null : r.msg;
-      }, KIND_ICON[g.tab] || '🎁');
-    }, 22, true);
+      }, KIND_ICON[g.tab] || '🎁', itemArt(g));
+    }, 22, true, curArt);
   }
 }

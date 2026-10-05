@@ -1,0 +1,25 @@
+{
+  "name": "批次3_商店图标_2026-10-05",
+  "outdir": "D:/AI/S4Game/美术/原图/批次3_商店图标_2026-10-05",
+  "defaults": {
+    "model": "gpt-image-2",
+    "quality": "high",
+    "background": "transparent",
+    "key": "1k",
+    "size": "1k"
+  },
+  "items": [
+    {
+      "id": "S1_商品图标表",
+      "type": "edit",
+      "ref": "D:/AI/S4Game/美术/基准/图标风格基准.png",
+      "prompt": "Keep the exact same art style, outline weight, rendering and color palette as the reference image. New sprite sheet of exactly 9 fantasy tower defense shop item icons arranged in a strict 3x3 grid with generous even spacing, each icon fully inside its own cell and never crossing cell borders, every icon facing the viewer and centered in its cell. Row 1 left to right: an elegant wooden longbow with a strung arrow nocked and green fletching, the bow slightly angled; a heavy steel crossbow with dark purple accent plates and a small brass telescopic sight mounted on top. Row 2: a rounded steel falcon-crested helmet with a small blue plume and winged cheek guards; a silver crescent moon pendant amulet on a leather cord with a soft teal gemstone in its center; a single light gray leather archer glove with a hand painted green wind swirl trailing around the wrist. Row 3: a green leather armor vest with leaf pattern stitching and small bronze buckles; a chunky glowing emerald-green magical whetstone crystal with facet cuts; a polished iron ingot bar with bright metallic shine and a slight bevel. Kingdom Rush inspired fantasy game art, hand-painted cartoon style, glossy saturated colors, thick dark brown outlines, soft painterly shading. Transparent background, no shadows, no text, no grid lines, no cell borders."
+    },
+    {
+      "id": "S2_符文碎片",
+      "type": "edit",
+      "ref": "D:/AI/S4Game/美术/基准/图标风格基准.png",
+      "prompt": "Keep the exact same art style, outline weight, rendering and color palette as the reference image. Exactly ONE single game icon, large and centered in the frame, not a grid, no other objects: a broken ancient rune stone shard glowing with purple magic, carved with glowing rune glyphs, two or three chunky fragments clustered together. Kingdom Rush inspired fantasy game art, hand-painted cartoon style, glossy saturated colors, thick dark brown outlines, soft painterly shading. Transparent background, no shadows, no text, no grid lines, no cell borders."
+    }
+  ]
+}

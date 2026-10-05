@@ -83,15 +83,17 @@ export function artPanel(parent: Node, x: number, y: number, w: number, h: numbe
 
 /** 确认弹窗（价格/说明 + 确认/取消），onOk 返回错误消息则不关闭并 toast
  *  用户确认：无边框（flat）；icon 非空时在弹窗上部居中显示商品图（emoji 兜底，落美术后同座替换） */
-export function confirmModal(ctx: PageCtx, title: string, lines: string[], okText: string, onOk: () => string | null, icon = ''): void {
-  const panel = modal(ctx, 560, icon ? 580 : 420, title, true);
-  if (icon) {
+export function confirmModal(ctx: PageCtx, title: string, lines: string[], okText: string, onOk: () => string | null, icon = '', artId = ''): void {
+  const hasSeat = !!(icon || artId);
+  const panel = modal(ctx, 560, hasSeat ? 580 : 420, title, true);
+  if (hasSeat) {
     const seat = gpanel(panel, 0, 120, 150, 150, CA('#2A3240', 1), undefined, 0, 16);
-    label(seat, 0, 0, icon, { size: 76 });
+    const fb = label(seat, 0, 0, icon, { size: 76 });
+    if (artId) artSprite(seat, 0, 0, 142, 142, artId, { sliced: false, hideOnLoad: [fb] });   // 美术落图盖 emoji 兜底
   }
-  const top = icon ? -20 : 60;
+  const top = hasSeat ? -20 : 60;
   lines.forEach((t, i) => label(panel, 0, top - i * 44, t, { size: 22, color: '#E8E0C8', w: 520, h: 40, shrink: true }));
-  const by = icon ? -210 : -130;
+  const by = hasSeat ? -210 : -130;
   btn(panel, 130, by, 200, 76, okText, PAL.green, () => {
     const err = onOk();
     if (err) { toast(err); return; }
