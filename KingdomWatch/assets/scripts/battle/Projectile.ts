@@ -49,8 +49,6 @@ export interface ProjSpec {
   ability?: boolean;
   /** 生成即免疫碰撞的目标（分裂小弹的来源怪：分裂箭不打目标本体，用户确认） */
   exclude?: Monster;
-  /** 纯演出弹：不参与碰撞与伤害结算（狙击瞬击的可见重弩箭） */
-  visual?: boolean;
 }
 
 interface Active {
@@ -62,18 +60,6 @@ interface Active {
   trail: number[];
   trailMax: number;
 }
-
-/** 插在怪身上的箭矢残留（纯视觉演出，不参与判定；怪是池化复用的，冻结后不再跟随） */
-interface Stuck {
-  mob: Monster;
-  ox: number; oy: number;   // 相对怪身偏移
-  x: number; y: number;     // 当前渲染位置
-  dx: number; dy: number;   // 出弓方向（箭头朝向）
-  size: number; spark: boolean;
-  t: number; frozen: boolean;
-}
-const STUCK_TTL = 0.24;   // 插箭残留时长（用户调整：0.42s 太长）
-const MAX_STUCK = 48;
 
 const colorCache = new Map<string, Color>();
 function hexc(h: string): Color {
@@ -93,7 +79,6 @@ function cola(h: string, mul: number): Color {
 
 export class ProjectileManager {
   private active: Active[] = [];
-  private stuck: Stuck[] = [];
   private free: Active[] = [];
   private g!: Graphics;
   private dirty = false;
@@ -145,28 +130,14 @@ export class ProjectileManager {
 
   tick(dt: number, line: { takeDamage: (d: number) => void }): void {
     this.dirty = true;
-    // 插箭残留：随怪移动（怪亡冻结在原地）、到时渐隐回收
-    for (let i = this.stuck.length - 1; i >= 0; i--) {
-      const st = this.stuck[i];
-      st.t -= dt;
-      if (!st.frozen) {
-        if (st.mob.dead) st.frozen = true;
-        else { st.x = st.mob.x + st.ox; st.y = st.mob.y + st.oy; }
-      }
-      if (st.t <= 0) {
-        const last = this.stuck.length - 1;
-        this.stuck[i] = this.stuck[last];
-        this.stuck.pop();
-      }
-    }
     for (let i = this.active.length - 1; i >= 0; i--) {
       const a = this.active[i];
       const sp = a.spec;
       a.ttl -= dt;
       let done = false;
 
-      // 直线弹：扫掠补偿按本帧位移的一半扩大判定半径，防高速弹穿过薄目标（纯演出弹不参与碰撞）
-      if (!done && !sp.visual) {
+      // 直线弹：扫掠补偿按本帧位移的一半扩大判定半径，防高速弹穿过薄目标
+      if (!done) {
         const sweep = (Math.abs(a.vx) + Math.abs(a.vy)) * dt * 0.5;
         for (const m of this.mgr.list) {
           if (m.dead || a.hit.has(m)) continue;
@@ -206,10 +177,6 @@ export class ProjectileManager {
   private render(): void {
     const g = this.g;
     g.clear();
-    // 插箭残留垫底（渐隐）
-    for (const st of this.stuck) {
-      this.drawArrowAt(g, st.x, st.y, st.dx, st.dy, st.size, st.spark, Math.min(1, st.t / (STUCK_TTL * 0.45)));
-    }
     for (let i = 0; i < this.active.length; i++) {
       const a = this.active[i];
       const s = a.spec;
@@ -360,15 +327,6 @@ export class ProjectileManager {
     this.dmg.add(sp.heroId, Math.min(final, hpBefore));
     Sfx.play(sp.crit ? 'crit' : 'hit');
     if (this.parts) this.parts.burst(m.x, m.y, sp.color, sp.spark ? 5 : 2);
-    // 箭矢插在怪身上（0.24s 残留渐隐，随怪移动、怪亡冻结）；分裂箭与原弹同款，同样插
-    if (sp.heroId === 'archer' && this.stuck.length < MAX_STUCK) {
-      const l = Math.sqrt(a.vx * a.vx + a.vy * a.vy) || 1;
-      this.stuck.push({
-        mob: m, ox: sp.x - m.x, oy: sp.y - m.y, x: sp.x, y: sp.y,
-        dx: a.vx / l, dy: a.vy / l, size: sp.size || 7, spark: sp.spark === true,
-        t: STUCK_TTL, frozen: false,
-      });
-    }
     // 暴击/击杀瞬间微顿帧（BattleDirector 限频，防连发变成卡顿）；分裂箭同款，击杀同样触发
     if (sp.crit || m.dead) bus.emit(EVT.HIT_STOP);
     if (m.dead) {

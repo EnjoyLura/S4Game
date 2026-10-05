@@ -579,24 +579,20 @@ export class SniperHero extends HeroBase {
     Sfx.play('snipe');
   }
 
-  /** 瞬击一发：hitscan 弹道线 + 可见重弩箭演出弹 + 目标词条 + 独立暴击 */
+  /** 瞬击一发：红色瞄准线 + 重弩箭真弹道（命中才结算伤害），独立暴击 */
   private snipeShot(target: Monster, projs: ProjectileManager, mul: number, ignoreRes: boolean): void {
     const crit = Math.random() < this.stats.critRate;
     const dmgVal = this.effAtk * mul * (crit ? this.stats.critMul : 1);
-    const hpBefore = target.hp;
     this.tracer(this.node.parent!, target.x, target.y, crit ? '#FF8A8D' : PAL.red, crit ? 4 : 3, 0.13);
-    // 可见重弩箭演出弹：伤害已瞬击记账，此弹纯演出不参与结算，红色尾迹呼应弹道线
-    const vx = target.x - this.x, vy = target.y - (HERO_Y + 60);
-    const vl = Math.sqrt(vx * vx + vy * vy) || 1;
+    const speed = 1800;
+    const lead = this.lead(target, speed);   // 拦截预判：伤害在弩箭命中时才结算（用户确认）
     projs.fire({
-      x: this.x, y: HERO_Y + 60, dirX: vx / vl, dirY: vy / vl, speed: 1800,
-      dmg: 0, crit: false, color: PAL.red, heroId: this.id, size: 8,
-      ttl: 0.6, visual: true,
+      x: this.x, y: HERO_Y + 60,
+      dirX: lead.dirX, dirY: lead.dirY, speed,
+      dmg: dmgVal, crit, color: '#7FB3FF', heroId: this.id, size: 8,
+      ignoreRes,
+      ability: true,   // 技能弹：击杀弹 60% 词条（skillKillSnipe）
     });
-    target.takeDamage(dmgVal, crit, this.id, ignoreRes);
-    projs.addDamage(this.id, Math.min(dmgVal, hpBefore));
-    if (target.dead) bus.emit(EVT.COMIC_POP, target.x, target.y + target.def.radius, 'skillKillSnipe');  // 技能击杀 60% 词条
-    projs.sparkAt(target.x, target.y, PAL.red, 4);
     Sfx.play('shoot');
   }
 
