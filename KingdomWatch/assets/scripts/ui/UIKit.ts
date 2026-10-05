@@ -157,18 +157,20 @@ export function gbar(parent: Node, x: number, y: number, w: number, h: number, f
     applyArt(lastPct);
   }});
   const draw = (pct: number, color?: FillLike) => {
+    // 比例/颜色先记账再绘制：美术异步加载完成时按最后一次 set 补应用
+    // （此前只在美术已加载时才记账，构建即 set 的统计条会被丢成初始满条——全满根因）
+    lastPct = Math.max(0, Math.min(1, pct));
+    lastColor = color ? toColor(color) : base;
     g.clear();
-    const fw = Math.max(0, Math.min(1, pct)) * (w - 4);
+    const fw = lastPct * (w - 4);
     if (fw > 0.5) {
-      g.fillColor = color ? toColor(color) : base;
+      g.fillColor = lastColor;
       g.roundRect(-w / 2 + 2, -h / 2 + 2, fw, h - 4, (h - 4) / 2);
       g.fill();
     }
     if (artFillSp) {
-      lastColor = color ? toColor(color) : base;
       artFillSp.color = lastColor;
-      lastPct = pct;
-      applyArt(pct);
+      applyArt(lastPct);
     }
   };
   draw(1);

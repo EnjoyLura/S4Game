@@ -124,21 +124,6 @@ export abstract class HeroBase {
     return { dirX: ldx / l, dirY: ldy / l };
   }
 
-  /** 瞬击弹道演出：枪口→目标的亮线，快速淡出（狙击技能/大招） */
-  protected tracer(parent: Node, tx: number, ty: number, color: string, width = 3, life = 0.14): void {
-    const n = new Node('tracer');
-    n.layer = Layers.Enum.UI_2D;
-    n.setParent(parent);
-    const g = n.addComponent(Graphics);
-    g.strokeColor = hexc(color);
-    g.lineWidth = width;
-    g.moveTo(this.x, HERO_Y + 60);
-    g.lineTo(tx, ty);
-    g.stroke();
-    const op = n.addComponent(UIOpacity);
-    tween(op).to(life, { opacity: 0 }).call(() => n.destroy()).start();
-  }
-
   /** 命中词条透传（处决标记/猎手本能：弹道命中时按目标结算） */
   protected targetBonuses(): PickUp<ProjSpec, 'executeBonus' | 'lowHpBonus'> {
     const b: { executeBonus?: number; lowHpBonus?: number } = {};
@@ -579,11 +564,10 @@ export class SniperHero extends HeroBase {
     Sfx.play('snipe');
   }
 
-  /** 瞬击一发：红色瞄准线 + 重弩箭真弹道（命中才结算伤害），独立暴击 */
+  /** 瞬击一发：重弩箭真弹道（命中才结算伤害），独立暴击 */
   private snipeShot(target: Monster, projs: ProjectileManager, mul: number, ignoreRes: boolean): void {
     const crit = Math.random() < this.stats.critRate;
     const dmgVal = this.effAtk * mul * (crit ? this.stats.critMul : 1);
-    this.tracer(this.node.parent!, target.x, target.y, crit ? '#FF8A8D' : PAL.red, crit ? 4 : 3, 0.13);
     const speed = 1800;
     const lead = this.lead(target, speed);   // 拦截预判：伤害在弩箭命中时才结算（用户确认）
     projs.fire({
