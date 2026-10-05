@@ -81,10 +81,10 @@ export function basePyroStats(): HeroStats {
   };
 }
 
-/** 雷电法师 · 沃尔·雷霆（§4 #3：技能流·连锁/紫）：闪电弹单体；普攻 480 / 技能索敌 480；天雷自带 1s 眩晕 */
+/** 雷电法师 · 沃尔·雷霆（§4 #3：技能流·连锁/紫）：闪电弹单体；普攻 900 / 技能索敌 800（用户调整）；天雷自带 1s 眩晕 */
 export function baseVoltStats(): HeroStats {
   return {
-    atk: 55, atkMul: 1, aspd: 0.75, range: 480, skillRange: 480,
+    atk: 55, atkMul: 1, aspd: 0.75, range: 900, skillRange: 800,
     critRate: 0.05, critMul: 1.5,
     serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
     pierce: 0, slowOnHit: 0, burnOnHit: 0,

@@ -252,6 +252,8 @@ export class BattleDirector extends Component {
   private openPick(): void {
     if (this.state !== 'running') return;
     this.state = 'pick';
+    // §3.8：三选一 = 上阵英雄卡池混合 + 全局卡（未上阵英雄的卡不出现；首抽与刷新共用同一过滤池）
+    const pool = M0_POOL.filter(c => c.owner === 'global' || this.heroes.some(h => h.id === c.owner));
     const opts: PickOpts = {
       onPick: (card: CardDef) => {
         this.applyCard(card);
@@ -262,15 +264,13 @@ export class BattleDirector extends Component {
         else { this.panels.closeAll(); this.state = 'running'; }
       },
       onRefreshRequest: () => {
-        // §3.8：三选一 = 上阵英雄卡池混合 + 全局卡（未上阵英雄的卡不出现）
-        const pool = M0_POOL.filter(c => c.owner === 'global' || this.heroes.some(h => h.id === c.owner));
         this.panels.showPick(draw3(pool, this.stacks), this.stacks, opts);
       },
     };
     this.pickOpts = opts;
     this.hud.sync(); // 冻结期间 HUD 不轮询，升级瞬间把经验条/等级刷到位
     this.panels.resetPickRefresh();
-    this.panels.showPick(draw3(M0_POOL, this.stacks), this.stacks, opts);
+    this.panels.showPick(draw3(pool, this.stacks), this.stacks, opts);
   }
 
   /** Panels 回调入口：广告/钻石刷新（次数限制在 Panels 内部控制） */
