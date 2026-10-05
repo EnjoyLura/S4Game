@@ -216,7 +216,7 @@ export class Panels {
       const t = t0 + i * step;
       const av = gcircle(this.modalRoot, WX(40, 70), WY(t, 70), 35, CA('#2A3240', 1));
       const avLbl = label(av, 0, 0, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
-      if (r.id === 'archer' || r.id === 'sniper')   // 英雄头像盖字（加载失败保持首字兜底）
+      if (r.id === 'archer' || r.id === 'sniper' || r.id === 'pyro' || r.id === 'volt')   // 英雄头像盖字（加载失败保持首字兜底）
         artSprite(av, 0, 0, 58, 58, 'ui_avatar_' + r.id, { sliced: false, hideOnLoad: [avLbl] });
       label(this.modalRoot, WX(130, 220), WY(t + 2, 40), r.name,
         { size: 18, color: '#FFFFFF', align: 'left', w: 220, h: 40, shrink: true });
@@ -363,13 +363,15 @@ export class Panels {
       label(this.modalRoot, 0, WY(668, 30),
         '复活：耐久 +30% · 不限次 · 不看广告即接受失败', { size: 16, color: '#CCCCCC' });
     }
-    const rv = gcircle(this.modalRoot, WX(580, 120), WY(700, 120), 58, CA(PAL.green, 0.3));
-    const rvTxt = label(rv, 0, 0, '▶\n复活\n+' + Math.round(o.reviveRatio * 100) + '%', { size: 20, color: '#FFFFFF', bold: true });
+    // 复活广告按钮（用户调整：与胜利双倍按钮同位同款——底部按钮行下方居中方板；失败改文案可重试）
+    const rv = gpanel(this.modalRoot, WX(220, 310), WY(1055, 96), 310, 96, CA('#5E8F2E', 1), undefined, 0, 14);
+    const rvFace = gpanel(rv, 0, 3, 310, 90, CA(PAL.green, 1), undefined, 0, 14);
+    const rvTxt = label(rvFace, 0, 0, '▶ 看广告复活 +' + Math.round(o.reviveRatio * 100) + '%', { size: 26, color: '#20240F', bold: true, w: 294, h: 90, shrink: true });
     rv.on(Node.EventType.TOUCH_END, e => {
       e.propagationStopped = true;
       o.onRevive(ok => {
         if (!ok) {
-          setText(rvTxt, '稍后\n重试');
+          setText(rvTxt, '稍后重试');
           tween(rv).to(0.3, { scale: new Vec3(0.92, 0.92, 1) }).to(0.3, { scale: new Vec3(1, 1, 1) }).start();
         }
       });
