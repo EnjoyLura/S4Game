@@ -178,20 +178,25 @@ export class ProjectileManager {
     if (this.dirty) { this.render(); this.dirty = false; }
   }
 
+  /** 渲染帧计数（电球等动态弹体的伪随机相位种子） */
+  private frame = 0;
   /** 全部弹道一次重绘：单 Graphics 单 draw call（原每弹一 Node 一 Graphics） */
   private render(): void {
     const g = this.g;
     g.clear();
+    this.frame++;
     for (let i = 0; i < this.active.length; i++) {
       const a = this.active[i];
       const s = a.spec;
       const size = s.size || (s.enemy ? 9 : 7);
       const arrow = s.heroId === 'archer' && !s.enemy;
       const bolt = s.heroId === 'sniper' && !s.small && !s.enemy;
+      const orb = s.heroId === 'volt' && !s.small && !s.enemy;
       // 尾迹先画（垫在弹体之下）：锥形渐隐条带 + 亮芯
       if (a.trailMax > 0) this.drawTrail(g, s, a, size, arrow);
       if (arrow) this.drawArrow(g, s, a, size);
       else if (bolt) this.drawBolt(g, s, a, size);
+      else if (orb) this.drawOrb(g, s, size, i);
       else {
         g.fillColor = hexc(s.color);
         g.strokeColor = hexc(PAL.ink);
@@ -245,6 +250,50 @@ export class ProjectileManager {
   private drawArrow(g: Graphics, s: ProjSpec, a: Active, size: number): void {
     const len = Math.sqrt(a.vx * a.vx + a.vy * a.vy) || 1;
     this.drawArrowAt(g, s.x, s.y, a.vx / len, a.vy / len, size, s.spark === true, 1);
+  }
+
+  /** 雷法普攻弹体：混沌电球——紫晕 + 墨边紫球 + 呼吸白芯 + 随机乱窜电弧 + 环带闪点（逐帧抖动） */
+  private drawOrb(g: Graphics, s: ProjSpec, size: number, idx: number): void {
+    const seed = this.frame * 7.13 + idx * 31.7;
+    const rnd = (n: number): number => { const x = Math.sin(n) * 43758.5453; return x - Math.floor(x); };
+    // 外晕（混沌能场）
+    g.fillColor = cola(s.color, 0.24);
+    g.circle(s.x, s.y, size * 1.55);
+    g.fill();
+    // 主体：深紫球 + 墨描边
+    g.fillColor = hexc(s.color);
+    g.strokeColor = hexc(PAL.ink);
+    g.lineWidth = 1.5;
+    g.circle(s.x, s.y, size);
+    g.fill();
+    g.stroke();
+    // 白芯（呼吸：0.4~0.6 半径随相位脉动）
+    const core = size * (0.42 + 0.14 * rnd(Math.floor(seed * 0.7)));
+    g.fillColor = cola('#F2E7FF', 0.92);
+    g.circle(s.x, s.y, core);
+    g.fill();
+    // 混沌电弧：3 条从球缘向外的锯齿闪线，方向逐帧乱跳
+    for (let k = 0; k < 3; k++) {
+      const ang = rnd(seed + k * 3.7) * Math.PI * 2;
+      const r0 = size * 0.7, r1 = size * (1.1 + rnd(seed + k * 9.1) * 0.55);
+      const dx = Math.cos(ang), dy = Math.sin(ang);
+      const px = -dy, py = dx;
+      const jitter = (rnd(seed + k * 5.3) * 2 - 1) * size * 0.5;
+      g.strokeColor = cola('#E7CBFF', 0.86);
+      g.lineWidth = 1.6;
+      g.moveTo(s.x + dx * r0, s.y + dy * r0);
+      g.lineTo(s.x + dx * (r0 + r1) * 0.5 + px * jitter, s.y + dy * (r0 + r1) * 0.5 + py * jitter);
+      g.lineTo(s.x + dx * r1, s.y + dy * r1);
+      g.stroke();
+    }
+    // 环带闪点：4 颗随机方位小亮点（半径/亮度逐帧变化）
+    for (let k = 0; k < 4; k++) {
+      const ang = rnd(seed * 1.3 + k * 11.1) * Math.PI * 2;
+      const rr = size * (1.15 + rnd(seed + k * 7.7) * 0.7);
+      g.fillColor = cola(k % 2 ? '#FFFFFF' : '#D9A8FF', 0.35 + rnd(seed + k) * 0.5);
+      g.circle(s.x + Math.cos(ang) * rr, s.y + Math.sin(ang) * rr, 1 + rnd(seed + k * 2.2) * 1.4);
+      g.fill();
+    }
   }
 
   /** 狙击弹体：重型弩箭——粗短弹杆 + 宽钢弹头 + 尾翼 + 尾珠；大招弹（必暴贯穿）换亮钢蓝 */
