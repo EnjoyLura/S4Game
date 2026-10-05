@@ -112,7 +112,7 @@ export class ProjectileManager {
     a.ttl = spec.ttl ?? 3.2;
     a.trail.length = 0;
     a.trailMax = spec.enemy ? 0 : spec.spark ? 9
-      : spec.heroId === 'archer' && !spec.small ? 7
+      : spec.heroId === 'archer' ? 7
       : spec.heroId === 'sniper' && !spec.small ? 6 : 3;
     const dx = spec.dirX ?? 0, dy = spec.dirY ?? -1;
     const len = Math.sqrt(dx * dx + dy * dy) || 1;
@@ -212,9 +212,8 @@ export class ProjectileManager {
       const a = this.active[i];
       const s = a.spec;
       const size = s.size || (s.enemy ? 9 : 7);
-      const flying = !s.small && !s.enemy;
-      const arrow = flying && s.heroId === 'archer';
-      const bolt = flying && s.heroId === 'sniper';
+      const arrow = s.heroId === 'archer' && !s.enemy;
+      const bolt = s.heroId === 'sniper' && !s.small && !s.enemy;
       // 尾迹先画（垫在弹体之下）：锥形渐隐条带 + 亮芯
       if (a.trailMax > 0) this.drawTrail(g, s, a, size, arrow);
       if (arrow) this.drawArrow(g, s, a, size);
@@ -359,8 +358,8 @@ export class ProjectileManager {
     this.dmg.add(sp.heroId, Math.min(final, hpBefore));
     Sfx.play(sp.crit ? 'crit' : 'hit');
     if (this.parts) this.parts.burst(m.x, m.y, sp.color, sp.spark ? 5 : 2);
-    // 箭矢插在怪身上（0.4s 残留渐隐，随怪移动、怪亡冻结）
-    if (sp.heroId === 'archer' && !sp.small && this.stuck.length < MAX_STUCK) {
+    // 箭矢插在怪身上（0.24s 残留渐隐，随怪移动、怪亡冻结）；分裂箭与原弹同款，同样插
+    if (sp.heroId === 'archer' && this.stuck.length < MAX_STUCK) {
       const l = Math.sqrt(a.vx * a.vx + a.vy * a.vy) || 1;
       this.stuck.push({
         mob: m, ox: sp.x - m.x, oy: sp.y - m.y, x: sp.x, y: sp.y,
@@ -368,8 +367,8 @@ export class ProjectileManager {
         t: STUCK_TTL, frozen: false,
       });
     }
-    // 暴击/击杀瞬间微顿帧（BattleDirector 限频，防连发变成卡顿）
-    if (!sp.small && (sp.crit || m.dead)) bus.emit(EVT.HIT_STOP);
+    // 暴击/击杀瞬间微顿帧（BattleDirector 限频，防连发变成卡顿）；分裂箭同款，击杀同样触发
+    if (sp.crit || m.dead) bus.emit(EVT.HIT_STOP);
     if (m.dead) {
       this.killPop(sp, m.x, m.y + m.def.radius);
       return;
@@ -386,14 +385,27 @@ export class ProjectileManager {
       }
       this.boomFx(m.x, m.y, sp.explodeR);
     }
+    // 分裂箭：与原弹同造型/同弹速/同词条（仅伤害减半、不再连锁分裂），
+    // 只索敌目标前方（更靠近防线，y 更小）的怪，绝不索敌目标身后的怪（用户确认）
     if (sp.split && sp.split > 0 && !sp.small) {
+      const fronts = this.mgr.list.filter(o => !o.dead && o !== m && o.y < m.y);
       for (let k = 0; k < sp.split; k++) {
+        const tgt = fronts.length > 0 ? fronts[(Math.random() * fronts.length) | 0] : null;
+        let dx = 0, dy = -1;   // 前方无人：沿大道朝防线直射（随缘）
+        if (tgt) {
+          dx = tgt.x - m.x;
+          dy = tgt.y - m.y;
+          const ft = Math.sqrt(dx * dx + dy * dy) / sp.speed;   // 估算飞行时间
+          dy -= tgt.def.speed * ft;                             // 预判：目标继续向防线行进
+        }
+        const l = Math.sqrt(dx * dx + dy * dy) || 1;
         this.fire({
+          ...sp,
           x: m.x, y: m.y,
-          dirX: Math.random() * 1.6 - 0.8, dirY: 1,
-          speed: 360, dmg: sp.dmg * 0.5, crit: false, color: sp.color,
-          heroId: sp.heroId, size: 5, ttl: 1.1, small: true,
-          exclude: m,   // 小弹从本体中心出生，不打目标本体（用户确认）
+          dirX: dx / l, dirY: dy / l,
+          dmg: sp.dmg * 0.5, crit: false,
+          split: 0, small: true, exclude: m,   // 不再连锁分裂；不打目标本体
+          ttl: Math.min(sp.ttl ?? 3.2, 0.8),   // 射空时在近处消散，不长驱直入防线
         });
       }
     }
