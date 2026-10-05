@@ -9,7 +9,7 @@ import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
 import { loadSave, saveSave } from '../core/SaveData';
-import { DIFF_MUL, starKey, squadList, unlockCodex } from '../core/GameData';
+import { DIFF_MUL, starKey, squadList, unlockCodex, advanceUnlock } from '../core/GameData';
 import { flow } from '../core/Flow';
 import { MonsterManager } from './Monster';
 import { ArcherHero, HeroBase, SniperHero, PyroHero, VoltHero } from './Hero';
@@ -383,6 +383,7 @@ export class BattleDirector extends Component {
     sv.stars[sk] = Math.max(sv.stars[sk] || 0, stars);
     if (this.levelDef.id === '1-2') sv.speedUnlocked = true;
     saveSave();
+    advanceUnlock(this.levelDef.id);   // 通关推进主线解锁（商店英雄/装备的"通关 X 解锁"）
 
     this.panels.showWin({
       stars,

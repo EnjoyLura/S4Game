@@ -69,7 +69,7 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
   const unlocked = lvReached(g.unlock);
   const owned = g.give.kind === 'hero' && g.give.id ? !!sv.heroes[g.give.id]?.owned : false;
   const shown = unlocked || owned;   // 已拥有不受关卡门限制（修复：上阵英雄在商店仍显示解锁行）
-  const q = g.give.kind === 'equip' ? EQUIPS[g.give.id]?.quality ?? 0 : 1;
+  const q = g.give.kind === 'equip' ? EQUIPS[g.give.id]?.quality ?? 0 : g.give.kind === 'hero' ? 3 : 1;   // 英雄一律紫色品质座（用户调整）
   /* 用户确认：品质=图标下的方形品质色底板（不用品质色边框）；未解锁=灰色板；
    * 卡背板=参考样例的金色锯齿票根卡（ui_card_shop），缺图回退程序金板 */
   const card = gpanel(parent, cx, cy, 330, 300, CA('#F2CE6B', 0.96), undefined, 0, 14);

@@ -96,8 +96,46 @@ export const LEVEL_1_1: LevelDef = {
   ],
 };
 
+export const LEVEL_1_2: LevelDef = {
+  id: '1-2',
+  name: '腐朽森林·深林',
+  lineHp: 1000,
+  baseGold: 70,
+  waves: [
+    { groups: [{ mob: 'goblin_worker', count: 20, interval: 0.9 }, { mob: 'goblin_slinger', count: 8, interval: 1.3, delay: 2 }] },
+    { groups: [{ mob: 'goblin_slinger', count: 16, interval: 0.9 }, { mob: 'goblin_worker', count: 16, interval: 0.8 }] },
+    { groups: [{ mob: 'wolf_rider', count: 12, interval: 0.8 }], surge: true },
+    { groups: [{ mob: 'goblin_worker', count: 30, interval: 0.55 }, { mob: 'goblin_shaman', count: 4, interval: 2.2 }] },
+    { groups: [{ mob: 'goblin_slinger', count: 20, interval: 0.8 }, { mob: 'goblin_worker', count: 20, interval: 0.7 }] },
+    { groups: [{ mob: 'wolf_rider', count: 20, interval: 0.6 }, { mob: 'goblin_shaman', count: 4, interval: 2.5 }] },
+    { groups: [{ mob: 'goblin_worker', count: 36, interval: 0.5 }, { mob: 'goblin_slinger', count: 16, interval: 1.0 }, { mob: 'goblin_shaman', count: 6, interval: 2.2 }] },
+    { groups: [{ mob: 'wolf_rider', count: 28, interval: 0.5 }], surge: true },
+    { groups: [{ mob: 'goblin_slinger', count: 24, interval: 0.7 }, { mob: 'goblin_shaman', count: 8, interval: 1.8 }, { mob: 'goblin_worker', count: 24, interval: 0.6 }] },
+    { groups: [{ mob: 'goblin_brute', count: 4, interval: 1.2 }, { mob: 'goblin_worker', count: 30, interval: 0.6, delay: 2 }, { mob: 'goblin_slinger', count: 16, interval: 1.2, delay: 4 }] },
+  ],
+};
+
+export const LEVEL_1_3: LevelDef = {
+  id: '1-3',
+  name: '腐朽森林·兽穴',
+  lineHp: 1100,
+  baseGold: 80,
+  waves: [
+    { groups: [{ mob: 'goblin_worker', count: 24, interval: 0.7 }, { mob: 'goblin_slinger', count: 12, interval: 1.1 }] },
+    { groups: [{ mob: 'wolf_rider', count: 20, interval: 0.55 }, { mob: 'goblin_shaman', count: 4, interval: 2.2 }] },
+    { groups: [{ mob: 'goblin_slinger', count: 24, interval: 0.7 }, { mob: 'goblin_worker', count: 24, interval: 0.6 }], surge: true },
+    { groups: [{ mob: 'goblin_brute', count: 2, interval: 1.5 }, { mob: 'goblin_worker', count: 24, interval: 0.6 }] },
+    { groups: [{ mob: 'wolf_rider', count: 24, interval: 0.5 }, { mob: 'goblin_shaman', count: 6, interval: 2.0 }] },
+    { groups: [{ mob: 'goblin_worker', count: 40, interval: 0.45 }, { mob: 'goblin_slinger', count: 20, interval: 0.9 }], surge: true },
+    { groups: [{ mob: 'goblin_brute', count: 3, interval: 1.3 }, { mob: 'goblin_shaman', count: 6, interval: 1.8 }, { mob: 'goblin_worker', count: 24, interval: 0.6 }] },
+    { groups: [{ mob: 'wolf_rider', count: 32, interval: 0.45 }], surge: true },
+    { groups: [{ mob: 'goblin_slinger', count: 28, interval: 0.6 }, { mob: 'goblin_shaman', count: 8, interval: 1.6 }, { mob: 'goblin_worker', count: 30, interval: 0.5 }] },
+    { groups: [{ mob: 'goblin_brute', count: 6, interval: 1.0 }, { mob: 'wolf_rider', count: 20, interval: 0.6, delay: 2 }, { mob: 'goblin_slinger', count: 20, interval: 1.0, delay: 3 }], surge: true },
+  ],
+};
+
 /** 关卡注册表：新关卡在这里登记，主城关卡页与战斗启动共用 */
-const LEVEL_TABLE: Record<string, LevelDef> = { '1-1': LEVEL_1_1 };
+const LEVEL_TABLE: Record<string, LevelDef> = { '1-1': LEVEL_1_1, '1-2': LEVEL_1_2, '1-3': LEVEL_1_3 };
 
 export function getLevelDef(id: string): LevelDef {
   return LEVEL_TABLE[id] || LEVEL_1_1;

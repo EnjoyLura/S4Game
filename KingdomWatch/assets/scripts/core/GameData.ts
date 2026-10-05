@@ -213,7 +213,17 @@ const LV_ORDER = ['1-1', '1-2', '1-3', '1-4', '1-5'];
 export function lvReached(unlock: string): boolean {
   if (!unlock) return true;
   const sv = loadSave();
+  if (LV_ORDER.indexOf(unlock) < 0) return false;   // 未实装关卡恒锁（如 1-6 的雷法）
   return LV_ORDER.indexOf(sv.unlocked) >= LV_ORDER.indexOf(unlock);
+}
+
+/** 通关推进主线解锁（sv.unlocked = 已通关的最远关卡；商店/关卡页解锁共用） */
+export function advanceUnlock(id: string): void {
+  const sv = loadSave();
+  if (LV_ORDER.indexOf(id) > LV_ORDER.indexOf(sv.unlocked)) {
+    sv.unlocked = id;
+    saveSave();
+  }
 }
 
 /* ================= 操作（全部即时写档） ================= */

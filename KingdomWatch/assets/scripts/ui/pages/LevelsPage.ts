@@ -13,10 +13,11 @@ import { loadSave } from '../../core/SaveData';
 import { flow } from '../../core/Flow';
 import { openSquadPanel } from '../SquadPanel';
 
-/** 关卡目录（M0 仅 1-1；1-2 通关 1-1 动态解锁） */
+/** 关卡目录（与 config/Mobs 的 LEVEL_TABLE 对应；通关上一关解锁下一关） */
 const LEVELS: { id: string; name: string; desc: string }[] = [
   { id: '1-1', name: '1-1 前哨', desc: '10 波 · 哥布林军团' },
   { id: '1-2', name: '1-2 深林', desc: '10 波 · 深林伏兵' },
+  { id: '1-3', name: '1-3 兽穴', desc: '10 波 · 蛮兵巢穴' },
 ];
 const DIFFS = ['普通', '精英', '地狱'];
 
