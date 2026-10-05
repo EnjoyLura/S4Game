@@ -32,6 +32,9 @@ export class Monster {
   /** 感电（沃尔·雷霆）：受雷系命中后受伤放大，持续 shockT 秒 */
   shockT = 0;
   shockAmp = 0;
+  /** 易伤（焰法陨石坑）：站在坑内受伤放大，出坑后短暂残留 */
+  vulnT = 0;
+  vulnAmp = 0;
   /** 冲撞/投掷前摇演出剩余时间（手动衰减，避免逐次创建 tween） */
   lungeT = 0;
 
@@ -57,6 +60,7 @@ export class Monster {
     this.healT = def.atkInterval;
     this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = this.lungeT = this.flashT = 0;
     this.shockT = this.shockAmp = 0;
+    this.vulnT = this.vulnAmp = 0;
     this.baseX = x;
     this.node.removeFromParent();
     this.node.setPosition(x, SPAWN_Y + 40 + Math.random() * 60, 0);
@@ -147,6 +151,7 @@ export class Monster {
     if (this.stunT > 0) { this.stunT -= dt; return; }
     if (this.slowT > 0) this.slowT -= dt;
     if (this.shockT > 0) this.shockT -= dt;
+    if (this.vulnT > 0) this.vulnT -= dt;
     // 点燃 DoT：每 0.5s 聚合一条（§3.11）
     if (this.burnT > 0) {
       this.burnT -= dt;
@@ -203,10 +208,17 @@ export class Monster {
     this.shockT = Math.max(this.shockT, dur);
   }
 
+  /** 易伤：坑内每帧刷新，出坑残留 dur */
+  applyVuln(amp: number, dur: number): void {
+    this.vulnAmp = Math.max(this.vulnAmp, amp);
+    this.vulnT = Math.max(this.vulnT, dur);
+  }
+
   takeDamage(amount: number, crit: boolean, killerId: string, ignoreRes = false): boolean {
     if (this.dead) return false;
     if (this.def.physRes && !ignoreRes) amount *= 1 - this.def.physRes;
     if (this.shockT > 0) amount *= 1 + this.shockAmp;
+    if (this.vulnT > 0) amount *= 1 + this.vulnAmp;
     this.hp -= amount;
     this.ctx.dmgNumber(this.x + (Math.random() * 24 - 12), this.y + this.def.radius,
       String(Math.round(amount)), crit ? '#FFD75E' : '#FFFFFF', crit);

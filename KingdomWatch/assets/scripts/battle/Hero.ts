@@ -624,17 +624,26 @@ export class SniperHero extends HeroBase {
 /* ============================================================
  * 火焰法师 · 焰·辉（§4 #2：技能流·AOE/橙红；线稿 hero_bohu_battle 100×120）
  * ============================================================ */
+/* 大招陨石调参：索敌/轰炸区半径、坑半径与寿命、坑内易伤强度 */
+const ULT_ZONE_R = 130;
+const CRATER_R = 88;
+const CRATER_LIFE = 4;
+const CRATER_VULN = 0.25;
 export class PyroHero extends HeroBase {
   readonly id = 'pyro';
   readonly name = '焰·辉';
   readonly chargeMax = PYRO_CHARGE_MAX;
   readonly skillMax = 10;
-  /** 大招·陨石天降：排队落下的陨石（落点 = 施放时的随机目标，延迟错开；fired 后 t 转为剩余坠落秒数，预警圈钉到命中） */
+  /** 大招·陨石天降：排队落下的陨石（固定范围梅花落点；fired 后 t 转为剩余坠落秒数，预警圈钉到命中，命中即生成陨石坑） */
   private meteorQueue: { t: number; x: number; y: number; fired?: boolean }[] = [];
   /** 落点预警圈：脉冲相位 + 绘图节点（惰性创建，队列清空即销毁） */
   private warnT = 0;
   private warnNode: Node | null = null;
   private warnG: Graphics | null = null;
+  /** 陨石坑：命中后的地面灼烧区（持续灼烧 + 易伤），寿命 CRATER_LIFE 秒 */
+  private craters: { x: number; y: number; t: number }[] = [];
+  private craterNode: Node | null = null;
+  private craterG: Graphics | null = null;
   /** 士气高涨：大招后攻速加成剩余时间 */
   private hasteT = 0;
 
@@ -759,8 +768,8 @@ export class PyroHero extends HeroBase {
     Sfx.play('skill');
   }
 
-  protected updateQueues(dt: number, _mgr: MonsterManager, projs: ProjectileManager): void {
-    // 大招陨石：落点先出脉冲预警圈（用户反馈"没反应"——原版从出生点到命中不足 0.3s，肉眼不可见），到点从屏外坠落
+  protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
+    // 大招陨石：落点先出脉冲预警圈，到点从屏外坠落，命中后留燃烧陨石坑
     this.warnT += dt;
     if (this.meteorQueue.length) {
       if (!this.warnNode) {
@@ -802,22 +811,105 @@ export class PyroHero extends HeroBase {
           stun: this.stats.ultStun || 0,
         }));
       } else if (q.fired && q.t <= 0) {
+        this.craters.push({ x: q.x, y: q.y, t: CRATER_LIFE });
         this.meteorQueue.splice(i, 1);
       }
+    }
+    // 陨石坑：坑内怪持续挂灼烧 + 易伤（出坑残留 0.6s），寿命尽即熄灭
+    if (this.craters.length) {
+      for (let i = this.craters.length - 1; i >= 0; i--) {
+        const c = this.craters[i];
+        c.t -= dt;
+        if (c.t <= 0) { this.craters.splice(i, 1); continue; }
+        for (const m of mgr.list) {
+          if (m.dead || Math.hypot(m.x - c.x, m.y - c.y) > CRATER_R) continue;
+          m.burnT = Math.max(m.burnT, 0.55);
+          m.burnDps = Math.max(m.burnDps, this.effAtk * 0.3);
+          m.applyVuln(CRATER_VULN, 0.6);
+        }
+      }
+      if (!this.craterNode) {
+        this.craterNode = new Node('ultCrater');
+        this.craterNode.layer = Layers.Enum.UI_2D;
+        this.craterNode.setParent(this.node.parent!);
+        // 焦土贴地：插到怪层之下（背景 artClip 之上），硬编码序号会被背景图盖住
+        const kids = this.node.parent!.children;
+        const mobIdx = kids.findIndex(c => c.name === 'MobLayer');
+        this.craterNode.setSiblingIndex(mobIdx === -1 ? 0 : mobIdx);
+        this.craterNode.setPosition(0, 0, 0);
+        this.craterG = this.craterNode.addComponent(Graphics);
+      }
+      const g = this.craterG!;
+      const oc = (h: string, a: number): Color => { const c = hexc(h); c.a = a; return c; };
+      g.clear();
+      for (let i = 0; i < this.craters.length; i++) {
+        const c = this.craters[i];
+        const fade = Math.min(1, c.t / 0.8);   // 末 0.8s 渐灭
+        const glow = 0.55 + Math.sin(this.warnT * 5 + i * 2.1) * 0.2;
+        // 焦黑坑底（两层）
+        g.fillColor = oc('#1C120C', 150 * fade);
+        g.circle(c.x, c.y, CRATER_R); g.fill();
+        g.fillColor = oc('#33200F', 110 * fade);
+        g.circle(c.x, c.y, CRATER_R * 0.8); g.fill();
+        // 熔岩池 + 白热岩芯（呼吸脉动）
+        const pulse = 1 + Math.sin(this.warnT * 6 + i) * 0.06;
+        g.fillColor = oc('#C2401F', (150 + 40 * glow) * fade);
+        g.circle(c.x, c.y, CRATER_R * 0.42 * pulse); g.fill();
+        g.fillColor = oc('#FF7A2E', (170 + 50 * glow) * fade);
+        g.circle(c.x, c.y, CRATER_R * 0.22 * pulse); g.fill();
+        g.fillColor = oc('#FFD24A', (120 + 70 * glow) * fade);
+        g.circle(c.x, c.y, CRATER_R * 0.1 * pulse); g.fill();
+        // 熔岩缘（外圈粗 + 内圈亮）
+        g.strokeColor = oc('#E86A28', 215 * fade); g.lineWidth = 4.5;
+        g.circle(c.x, c.y, CRATER_R * pulse); g.stroke();
+        g.strokeColor = oc('#FFC24A', 160 * fade); g.lineWidth = 2;
+        g.circle(c.x, c.y, CRATER_R * 0.86 * pulse); g.stroke();
+        // 坑内岩浆斑 + 余烬闪点
+        for (let k = 0; k < 3; k++) {
+          const ang = i * 2.4 + k * 2.1;
+          const rr = CRATER_R * 0.5;
+          g.fillColor = oc('#D9481F', (200 * glow + 40) * fade);
+          g.circle(c.x + Math.cos(ang) * rr, c.y + Math.sin(ang) * rr * 0.7, 12 + (k % 2) * 5);
+          g.fill();
+          const ea = ang + 1.1;
+          g.fillColor = oc('#FFE08A', (140 + 90 * Math.sin(this.warnT * 11 + k * 2 + i)) * fade);
+          g.circle(c.x + Math.cos(ea) * rr * 0.8, c.y + Math.sin(ea) * rr * 0.6, 2.2);
+          g.fill();
+        }
+      }
+    } else if (this.craterNode) {
+      this.craterNode.destroy();
+      this.craterNode = null; this.craterG = null;
     }
     if (this.hasteT > 0) this.hasteT -= dt;
   }
 
-  /** 大招·陨石天降（手动，击杀充能）：5 颗陨石随机轰击在场目标，落点灼烧；士气高涨卡给攻速爆发 */
+  /** 大招·陨石天降（手动，击杀充能）：锁定陨石范围内怪物最密集处为固定轰炸区，梅花五点砸下 5 颗陨石；
+   *  每颗命中留燃烧陨石坑（持续灼烧 + 易伤 25%）；士气高涨卡给攻速爆发 */
   castUlt(mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): boolean {
     if (!this.ultReady) return false;
     const alive = mgr.list.filter(m => !m.dead);
     if (!alive.length) return false;   // 全场无目标：不消耗充能
+    // 索敌：陨石范围内同伴最多者为区中心（密集优先），中心钳制在场内
+    let cx = alive[0].x, cyy = alive[0].y, best = -1;
+    for (const m of alive) {
+      let n = 0;
+      for (const o of alive) if (Math.hypot(o.x - m.x, o.y - m.y) <= ULT_ZONE_R) n++;
+      if (n > best) { best = n; cx = m.x; cyy = m.y; }
+    }
+    cx = Math.max(-330, Math.min(330, cx));
+    cyy = Math.max(-640, Math.min(820, cyy));
     this.charge = 0;
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
+    // 固定范围梅花五点：中心 1 + 四向 0.55R，少量抖动避免完全重合
     for (let k = 0; k < 5; k++) {
-      const t = alive[(Math.random() * alive.length) | 0];
-      this.meteorQueue.push({ t: 0.4 + k * 0.28, x: t.x + (Math.random() * 2 - 1) * 40, y: t.y });
+      const ang = -Math.PI / 2 + k * Math.PI / 2;
+      const rr = k === 0 ? 0 : ULT_ZONE_R * 0.55;
+      this.meteorQueue.push({
+        t: 0.5 + k * 0.32,
+        x: cx + Math.cos(ang) * rr + (Math.random() * 2 - 1) * 14,
+        y: cyy + Math.sin(ang) * rr + (Math.random() * 2 - 1) * 14,
+      });
     }
     if (this.stats.ultHaste) this.hasteT = 5;
     Sfx.play('ult');
