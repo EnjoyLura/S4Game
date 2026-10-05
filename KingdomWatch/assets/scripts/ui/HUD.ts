@@ -232,10 +232,10 @@ export class HUD {
     return ui;
   }
 
-  /** 头顶图标对：普攻(-34)/技能(+34)，锚定各自英雄（用户调整：加大 + 远离英雄；无边框规范：纯色圆板 + 字） */
+  /** 脚底图标对：普攻(-40)/技能(+40)，随英雄贴地（中心=靴底上方50，底边齐靴底；无边框规范：纯色圆板 + 字） */
   private buildSkillBadge(top: Node, i: number, hero: HeroBase): SkillUI {
-    const cy = WYB(152, 56);
-    const atkX = hero.x - 34, cx = hero.x + 34;
+    const cy = hero.node.position.y - 50;
+    const atkX = hero.x - 40, cx = hero.x + 40;
     const atkIcon = gcircle(top, atkX, cy, 28, CA(PAL.gold, 0.3));
     const atkGlyph = label(atkIcon, 0, 0, '攻', { size: 18, color: PAL.gold, bold: true });
     // 普攻/技能图标（58 > 底板圆 56：美术圆完全盖住底板，杜绝露出黄/蓝边——用户反馈）

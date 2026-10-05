@@ -1,0 +1,58 @@
+{
+  "ui_card_volt_spell": {
+    "id": "ui_card_volt_spell",
+    "file": "D:/AI/S4Game/美术/原图/批次11_雷法卡面_2026-10-05\\ui_card_volt_spell.png",
+    "prompt": "Square game card icon: an open arcane tome with jagged purple lightning bolts crackling upward from its pages, small white sparks floating. The whole symbol centered and fully contained inside an imaginary circle about 72 percent of the canvas width, transparent margins outside the circle, nothing drawn in the corners. Purple violet and white palette over a dark indigo backdrop inside the circle. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background. Strictly NO text, NO letters, NO border frame, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-05 23:48:41",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 41.4,
+    "sha1": "ca4af7eda0ff"
+  },
+  "ui_card_volt_range": {
+    "id": "ui_card_volt_range",
+    "file": "D:/AI/S4Game/美术/原图/批次11_雷法卡面_2026-10-05\\ui_card_volt_range.png",
+    "prompt": "Square game card icon: an expanding double ring of purple lightning radiating outward like a shockwave, small electric arcs and white sparks between the rings, symbol of increased spell range. The whole symbol centered and fully contained inside an imaginary circle about 72 percent of the canvas width, transparent margins outside the circle, nothing drawn in the corners. Purple violet and white palette over a dark indigo backdrop inside the circle. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background. Strictly NO text, NO letters, NO border frame, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-05 23:49:23",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 100.5,
+    "sha1": "168cc857e444"
+  },
+  "ui_card_volt_war": {
+    "id": "ui_card_volt_war",
+    "file": "D:/AI/S4Game/美术/原图/批次11_雷法卡面_2026-10-05\\ui_card_volt_war.png",
+    "prompt": "Square game card icon: a bronze war horn blasting a shout of purple lightning bolts and white sparks bursting from its mouth, a few small embers replaced by tiny electric stars. The whole symbol centered and fully contained inside an imaginary circle about 72 percent of the canvas width, transparent margins outside the circle, nothing drawn in the corners. Purple violet and white palette over a dark indigo backdrop inside the circle. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background. Strictly NO text, NO letters, NO border frame, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-05 23:51:03",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 47.7,
+    "sha1": "b5966310ea7e"
+  },
+  "ui_card_volt_morale": {
+    "id": "ui_card_volt_morale",
+    "file": "D:/AI/S4Game/美术/原图/批次11_雷法卡面_2026-10-05\\ui_card_volt_morale.png",
+    "prompt": "Square game card icon: a tall battle banner flag with a bold purple lightning bolt emblem on a dark indigo cloth, mounted on a wooden pole with a metal spear tip, small white sparks around the flag. The whole symbol centered and fully contained inside an imaginary circle about 72 percent of the canvas width, transparent margins outside the circle, nothing drawn in the corners. Purple violet and white palette over a dark indigo backdrop inside the circle. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background. Strictly NO text, NO letters, NO border frame, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-05 23:51:51",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 64.8,
+    "sha1": "d4c30c8e7ad5"
+  }
+}
