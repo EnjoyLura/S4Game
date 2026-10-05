@@ -15,7 +15,6 @@ import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
-import { label } from '../ui/UIKit';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
@@ -210,8 +209,6 @@ export class ArcherHero extends HeroBase {
     g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
     this.node.setPosition(this.x, HERO_Y, 0);
     this.node.setParent(parent);
-    // 脚下名字牌（立绘靴底下方，随英雄移动）
-    label(this.node, 0, -100, this.name, { size: 14, color: PAL.parch, bold: true, w: 140, h: 20 });
   }
 
   /** 强化箭矢窗口内攻速 +30%（贯穿爽感） */
@@ -459,7 +456,6 @@ export class SniperHero extends HeroBase {
     g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
     this.node.setPosition(this.x, HERO_Y, 0);
     this.node.setParent(parent);
-    label(this.node, 0, -100, this.name, { size: 14, color: PAL.parch, bold: true, w: 140, h: 20 });
   }
 
   /** 普攻：慢速高伤重弩箭（拦截预判直线，不追踪） */
@@ -690,8 +686,6 @@ export class PyroHero extends HeroBase {
     g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
     this.node.setPosition(this.x, HERO_Y, 0);
     this.node.setParent(parent);
-    // 脚下名字牌（立绘靴底下方，随英雄移动）
-    label(this.node, 0, -100, this.name, { size: 14, color: PAL.parch, bold: true, w: 140, h: 20 });
   }
 
   /** 士气高涨窗口攻速 +40% */
@@ -893,8 +887,6 @@ export class VoltHero extends HeroBase {
     g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
     this.node.setPosition(this.x, HERO_Y, 0);
     this.node.setParent(parent);
-    // 脚下名字牌（立绘靴底下方，随英雄移动）
-    label(this.node, 0, -100, this.name, { size: 14, color: PAL.parch, bold: true, w: 140, h: 20 });
   }
 
   /** 士气高涨窗口攻速 +40% */
