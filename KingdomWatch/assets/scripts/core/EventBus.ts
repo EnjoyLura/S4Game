@@ -33,4 +33,5 @@ export const EVT = {
   CHARGE_CHANGED: 'charge_changed',// (pct, ready)
   ALL_WAVES_CLEARED: 'all_waves_cleared',
   COMIC_POP: 'comic_pop',          // (x, y, kind) 漫画拟声词条（词表见 battle/ComicPop.ts）
+  HIT_STOP: 'hit_stop',            // () 暴击/击杀微顿帧（BattleDirector 限频消费）
 } as const;

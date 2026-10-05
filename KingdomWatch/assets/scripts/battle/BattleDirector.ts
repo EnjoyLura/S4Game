@@ -138,6 +138,7 @@ export class BattleDirector extends Component {
     bus.on(EVT.ALL_WAVES_CLEARED, this.onAllCleared, this);
     bus.on(EVT.WAVE_CHANGED, this.onWaveChanged, this);
     bus.on(EVT.COMIC_POP, this.onComicPop, this);
+    bus.on(EVT.HIT_STOP, this.onHitStop, this);
 
     this.hud.showBanner('敌军来袭！', 2);
     this.state = 'prepare';
@@ -149,11 +150,22 @@ export class BattleDirector extends Component {
     bus.off(EVT.ALL_WAVES_CLEARED, this.onAllCleared, this);
     bus.off(EVT.WAVE_CHANGED, this.onWaveChanged, this);
     bus.off(EVT.COMIC_POP, this.onComicPop, this);
+    bus.off(EVT.HIT_STOP, this.onHitStop, this);
   }
 
   /** 漫画拟声词条（各战斗模块 emit，词表/概率/主题色在 ComicPop.POP_DEFS） */
   private onComicPop(x: unknown, y: unknown, kind: unknown): void {
     this.pops.pop(x as number, y as number, kind as string);
+  }
+
+  // 微顿帧：暴击/击杀瞬间全场时间短暂放缓制造打击感（冷却限频防连发变成卡顿）
+  private hitStopT = 0;
+  private hitStopCd = 0;
+
+  private onHitStop(): void {
+    if (this.hitStopCd > 0) return;
+    this.hitStopT = Math.max(this.hitStopT, 0.07);
+    this.hitStopCd = 0.35;
   }
 
   update(rawDt: number): void {
@@ -165,6 +177,10 @@ export class BattleDirector extends Component {
 
     // 掉帧毛刺不得放大模拟步长（2x 死亡螺旋根因）；超 1/30s 的模拟步拆细步防子弹穿模
     const dt = Math.min(rawDt, 1 / 30);
+
+    // 微顿帧计时走真实时间（顿帧本身不该被自己拖长）
+    this.hitStopCd -= dt;
+    if (this.hitStopT > 0) this.hitStopT -= dt;
 
     this.gm.syncVisibility(); // 所有状态下都要同步 GM 浮钮（三选一/结算期间隐藏）
 
@@ -179,7 +195,7 @@ export class BattleDirector extends Component {
     }
     if (this.state !== 'running') return;
 
-    const sdt = dt * this.speed;
+    const sdt = dt * this.speed * (this.hitStopT > 0 ? 0.12 : 1);
     this.elapsed += sdt;
     const steps = sdt > 1 / 30 ? 2 : 1;
     const sub = sdt / steps;

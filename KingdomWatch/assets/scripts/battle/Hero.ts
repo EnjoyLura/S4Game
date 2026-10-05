@@ -284,10 +284,36 @@ export class ArcherHero extends HeroBase {
   private fireRow(projs: ProjectileManager, dirX: number, dirY: number, emp: boolean): void {
     const cols = 1 + this.stats.fan;
     const baseAng = Math.atan2(dirY, dirX);
+    this.bowFlash(Math.cos(baseAng), Math.sin(baseAng), emp);   // 每排出弓一次弓弦闪光（连射排有节奏感）
     for (let c = 0; c < cols; c++) {
       const ang = baseAng + (c - (cols - 1) / 2) * 10 * Math.PI / 180;
       this.fireDir(projs, Math.cos(ang), Math.sin(ang), emp);
     }
+  }
+
+  /** 出手弓弦闪光：箭矢出弓点的一瞬星芒（约 90ms，主芒顺瞄准方向 + 侧芒 + 亮芯），金箭配金光 */
+  private bowFlash(dx: number, dy: number, emp: boolean): void {
+    const flash = new Node('bowFlash');
+    flash.layer = Layers.Enum.UI_2D;
+    flash.setParent(this.node.parent!);
+    flash.setPosition(this.x, HERO_Y + 60, 0);
+    const g = flash.addComponent(Graphics);
+    g.strokeColor = hexc(emp ? PAL.gold : '#FFF3D6');
+    g.lineWidth = 2.5;
+    g.moveTo(dx * 3, dy * 3); g.lineTo(dx * 15, dy * 15); g.stroke();
+    g.strokeColor = hexc(emp ? '#FFE9A8' : PAL.parch);
+    g.lineWidth = 2;
+    for (const sd of [-1, 1]) {
+      const px = -dy * sd, py = dx * sd;
+      g.moveTo(px * 2.5, py * 2.5); g.lineTo(px * 8 + dx * 4, py * 8 + dy * 4); g.stroke();
+    }
+    g.fillColor = hexc('#FFFFFF');
+    g.circle(0, 0, 2.6);
+    g.fill();
+    const pop = flash.addComponent(UIOpacity);
+    flash.setScale(0.7, 0.7, 1);
+    tween(flash).to(0.09, { scale: new Vec3(1.5, 1.5, 1) }).start();
+    tween(pop).to(0.09, { opacity: 0 }).call(() => flash.destroy()).start();
   }
 
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {

@@ -59,6 +59,18 @@ interface Active {
   trailMax: number;
 }
 
+/** 插在怪身上的箭矢残留（纯视觉演出，不参与判定；怪是池化复用的，冻结后不再跟随） */
+interface Stuck {
+  mob: Monster;
+  ox: number; oy: number;   // 相对怪身偏移
+  x: number; y: number;     // 当前渲染位置
+  dx: number; dy: number;   // 出弓方向（箭头朝向）
+  size: number; spark: boolean;
+  t: number; frozen: boolean;
+}
+const STUCK_TTL = 0.42;
+const MAX_STUCK = 48;
+
 const colorCache = new Map<string, Color>();
 function hexc(h: string): Color {
   let c = colorCache.get(h);
@@ -67,9 +79,17 @@ function hexc(h: string): Color {
 }
 // 尾迹渐隐上色专用（避免每段新建 Color）
 const scratch = new Color();
+// 插箭残留渐隐专用（Graphics 的 fillColor/strokeColor 赋值即拷贝，可复用同一实例）
+const tinted = new Color();
+function cola(h: string, mul: number): Color {
+  tinted.set(hexc(h));
+  tinted.a = Math.round(255 * Math.min(1, Math.max(0, mul)));
+  return tinted;
+}
 
 export class ProjectileManager {
   private active: Active[] = [];
+  private stuck: Stuck[] = [];
   private free: Active[] = [];
   private g!: Graphics;
   private dirty = false;
@@ -118,6 +138,20 @@ export class ProjectileManager {
 
   tick(dt: number, line: { takeDamage: (d: number) => void }): void {
     this.dirty = true;
+    // 插箭残留：随怪移动（怪亡冻结在原地）、到时渐隐回收
+    for (let i = this.stuck.length - 1; i >= 0; i--) {
+      const st = this.stuck[i];
+      st.t -= dt;
+      if (!st.frozen) {
+        if (st.mob.dead) st.frozen = true;
+        else { st.x = st.mob.x + st.ox; st.y = st.mob.y + st.oy; }
+      }
+      if (st.t <= 0) {
+        const last = this.stuck.length - 1;
+        this.stuck[i] = this.stuck[last];
+        this.stuck.pop();
+      }
+    }
     for (let i = this.active.length - 1; i >= 0; i--) {
       const a = this.active[i];
       const sp = a.spec;
@@ -165,6 +199,10 @@ export class ProjectileManager {
   private render(): void {
     const g = this.g;
     g.clear();
+    // 插箭残留垫底（渐隐）
+    for (const st of this.stuck) {
+      this.drawArrowAt(g, st.x, st.y, st.dx, st.dy, st.size, st.spark, Math.min(1, st.t / (STUCK_TTL * 0.45)));
+    }
     for (let i = 0; i < this.active.length; i++) {
       const a = this.active[i];
       const s = a.spec;
@@ -225,23 +263,27 @@ export class ProjectileManager {
   /** 弓箭手弹体：木杆双线 + 钢头三角 + 尾羽，朝向即飞行方向；强化金箭换金色系 */
   private drawArrow(g: Graphics, s: ProjSpec, a: Active, size: number): void {
     const len = Math.sqrt(a.vx * a.vx + a.vy * a.vy) || 1;
-    const dx = a.vx / len, dy = a.vy / len;
+    this.drawArrowAt(g, s.x, s.y, a.vx / len, a.vy / len, size, s.spark === true, 1);
+  }
+
+  /** 箭矢绘制核心（飞行弹与插箭残留共用；mul 为整体透明系数） */
+  private drawArrowAt(g: Graphics, x: number, y: number, dx: number, dy: number, size: number, spark: boolean, mul: number): void {
     const px = -dy, py = dx;
     const L = size * 4.6;
-    const tipX = s.x + dx * L * 0.5, tipY = s.y + dy * L * 0.5;
-    const tailX = s.x - dx * L * 0.5, tailY = s.y - dy * L * 0.5;
+    const tipX = x + dx * L * 0.5, tipY = y + dy * L * 0.5;
+    const tailX = x - dx * L * 0.5, tailY = y - dy * L * 0.5;
     const shaftX = tipX - dx * L * 0.26, shaftY = tipY - dy * L * 0.26;
     // 箭杆：墨色底杆 + 亮面高光（木杆质感）
-    g.strokeColor = hexc(PAL.ink);
+    g.strokeColor = cola(PAL.ink, mul);
     g.lineWidth = size * 0.78;
     g.moveTo(tailX, tailY); g.lineTo(shaftX, shaftY); g.stroke();
-    g.strokeColor = hexc(s.spark ? PAL.gold : '#B98A4E');
+    g.strokeColor = cola(spark ? PAL.gold : '#B98A4E', mul);
     g.lineWidth = size * 0.44;
     g.moveTo(tailX, tailY); g.lineTo(shaftX, shaftY); g.stroke();
     // 箭头：三角 + 细墨描边
     const hw = size * 0.85;
-    g.fillColor = hexc(s.spark ? '#FFE9A8' : '#D8D3C4');
-    g.strokeColor = hexc(PAL.ink);
+    g.fillColor = cola(spark ? '#FFE9A8' : '#D8D3C4', mul);
+    g.strokeColor = cola(PAL.ink, mul);
     g.lineWidth = 1.5;
     g.moveTo(tipX, tipY);
     g.lineTo(shaftX + px * hw, shaftY + py * hw);
@@ -251,7 +293,7 @@ export class ProjectileManager {
     g.stroke();
     // 尾羽：两片斜羽（砖红羽，在浅色尾迹与土色地面上都跳得出；金箭配米白羽）
     const fl = L * 0.24, fw = size * 0.8;
-    g.strokeColor = hexc(s.spark ? '#FFF6DC' : '#C9563F');
+    g.strokeColor = cola(spark ? '#FFF6DC' : '#C9563F', mul);
     g.lineWidth = Math.max(2, size * 0.38);
     g.moveTo(tailX, tailY); g.lineTo(tailX - dx * fl + px * fw, tailY - dy * fl + py * fw); g.stroke();
     g.moveTo(tailX, tailY); g.lineTo(tailX - dx * fl - px * fw, tailY - dy * fl - py * fw); g.stroke();
@@ -269,6 +311,17 @@ export class ProjectileManager {
     this.dmg.add(sp.heroId, Math.min(final, hpBefore));
     Sfx.play(sp.crit ? 'crit' : 'hit');
     if (this.parts) this.parts.burst(m.x, m.y, sp.color, sp.spark ? 5 : 2);
+    // 箭矢插在怪身上（0.4s 残留渐隐，随怪移动、怪亡冻结）
+    if (sp.heroId === 'archer' && !sp.small && this.stuck.length < MAX_STUCK) {
+      const l = Math.sqrt(a.vx * a.vx + a.vy * a.vy) || 1;
+      this.stuck.push({
+        mob: m, ox: sp.x - m.x, oy: sp.y - m.y, x: sp.x, y: sp.y,
+        dx: a.vx / l, dy: a.vy / l, size: sp.size || 7, spark: sp.spark === true,
+        t: STUCK_TTL, frozen: false,
+      });
+    }
+    // 暴击/击杀瞬间微顿帧（BattleDirector 限频，防连发变成卡顿）
+    if (!sp.small && (sp.crit || m.dead)) bus.emit(EVT.HIT_STOP);
     if (m.dead) {
       this.killPop(sp, m.x, m.y + m.def.radius);
       return;
