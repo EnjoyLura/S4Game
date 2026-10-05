@@ -82,6 +82,10 @@ const SLICE9: Record<string, Slice9Def> = {
   ui_panel_bag: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
   ui_panel_zone: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
   ui_panel_hero: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },  // 英雄页上半区全宽大背板
+  /* 商店三件（胡桃木货架板/铆钉购买钮/羊皮标题横幅） */
+  ui_panel_shop: { canon: [1500, 2148], inset: [151, 151, 151, 151], scale: 0.5 },
+  ui_btn_buy: { canon: [480, 108], inset: [35, 35, 21, 21], scale: 0.5 },
+  ui_banner_shop: { canon: [1040, 176], inset: [45, 45, 38, 32], scale: 0.5 },
 };
 
 /** 按实际文件尺寸换算并写入九宫格 insets（换分辨率文件自适应的关键）
@@ -194,6 +198,7 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_badge_new', 'ui_gear_ring',
   'ui_switch_on', 'ui_switch_off', 'ui_switch_disabled',
   'ui_btn_exit', 'ui_btn_close', 'ui_tab_l', 'ui_tab_m', 'ui_tab_r',
+  'ui_panel_shop', 'ui_btn_buy', 'ui_banner_shop',
   // 图标（暂停/倍速/统计已改程序简约图标，用户调整：不再使用美术资源）
   'ui_icon_coin', 'ui_icon_exp', 'ui_icon_diamond', 'ui_icon_chest', 'ui_icon_equip',
   'ui_icon_refresh_ad', 'ui_icon_refresh_diamond',

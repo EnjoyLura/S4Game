@@ -30,7 +30,7 @@ export function buildShop(ctx: PageCtx): void {
   const root = ctx.screens;
 
   const banner = gpanel(root, 0, WY(210, 88), 520, 88, CA('#3A2E23', 0.95), C(PAL.gold), 2.5, 14);
-  artSprite(banner, 0, 0, 520, 88, 'ui_banner_title', { belowIdx: 0 });
+  artSprite(banner, 0, 0, 520, 88, 'ui_banner_shop', { belowIdx: 0 });   // 商店专属标题背板，缺图回退程序板
   label(banner, 0, 0, '商 店', { size: 34, color: '#4A3214', bold: true });
 
   const content = N('shopContent', root, 0, 0, 750, 800);
@@ -38,10 +38,10 @@ export function buildShop(ctx: PageCtx): void {
 
   function render(): void {
     content.destroyAllChildren();
-    // 货架大背板（用户确认：商品栏加大背板，从页签下方铺到导航栏上方）
+    // 货架大背板（用户调整：占满全宽 750；专属美术 ui_panel_shop，缺图回退 ui_panel_zone）
     const top = 400;
     const bh = 2 * LO.half - 174 - top;   // 预留底部导航(148)+边距
-    artPanel(content, 0, WY(top, bh), 730, bh, 'ui_panel_zone');
+    artPanel(content, 0, WY(top, bh), 750, bh, 'ui_panel_shop');
     // 四页签连体（用户确认参考英雄页：无背板、段内直角、仅首/末段外侧圆弧）
     const segW = 680 / 4, segH = 64, segR = 14;
     SHOP_TABS.forEach((t, i) => {
@@ -72,7 +72,7 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
   /* 用户确认：品质=图标下的方形品质色底板（不用品质色边框）；未解锁=灰色板 */
   const card = gpanel(parent, cx, cy, 330, 300, CA('#14181E', 0.92), undefined, 0, 14);
 
-  const seat = gpanel(card, 0, 60, 130, 130, unlocked ? CA(QCOLOR[q], 0.55) : CA('#3A4250', 0.6), undefined, 0, 14);
+  const seat = gpanel(card, 0, 60, 130, 130, CA(QCOLOR[q], 0.55), undefined, 0, 14);   // 品质背板：未解锁同样显示（用户调整）
   const iconFallback = label(seat, 0, 0, KIND_ICON[g.tab] || '🎁', { size: 56 });
   const art = itemArt(g);
   if (art) artSprite(seat, 0, 0, 120, 120, art, { sliced: false, hideOnLoad: [iconFallback] });
@@ -100,6 +100,6 @@ function drawCard(parent: Node, ctx: PageCtx, g: ShopDef, cx: number, cy: number
         const r = shopBuy(g);
         return r.ok ? null : r.msg;
       }, KIND_ICON[g.tab] || '🎁', itemArt(g));
-    }, 22, true, curArt);
+    }, 22, true, curArt, 'ui_btn_buy');
   }
 }

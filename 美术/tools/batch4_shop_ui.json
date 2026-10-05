@@ -1,0 +1,31 @@
+{
+ "name": "批次4_商店组件_2026-10-05",
+ "outdir": "D:/AI/S4Game/美术/原图/批次4_商店组件_2026-10-05",
+ "defaults": {
+  "model": "gpt-image-2",
+  "quality": "high",
+  "background": "transparent",
+  "key": "1k",
+  "size": "1k"
+ },
+ "items": [
+  {
+   "id": "C1_商店大背板",
+   "type": "generate",
+   "size": "1152x1536",
+   "prompt": "Fantasy tower defense game UI backboard panel, portrait orientation, one single large rectangular board filling most of the frame with an even transparent margin around all four edges: flat matte dark walnut-brown wood board, subtle straight fine wood grain, a thin aged-gold trim line running along all four inside edges, small compact gold corner brackets tucked into the four corners only, all edge midpoints completely plain and smooth, interior surface completely empty and flat. Kingdom Rush inspired hand-painted cartoon game art, flat painted style with thin dark brown outlines, matte finish, soft painterly shading. Transparent background, crisp hard edges, strictly NO glow, NO bloom, NO halo, no text, no items, no shelf objects."
+  },
+  {
+   "id": "C2_购买按钮",
+   "type": "generate",
+   "size": "1024x640",
+   "prompt": "Exactly ONE wide rounded-rect fantasy game button, centered, filling most of the frame width with a small even transparent margin: flat painted bright leaf-green lacquer face, thin dark brown outline all around, a subtle lighter green light band across the top, a thin darker green bottom lip edge, one small round gold rivet stud near the left end and one near the right end, the middle surface completely plain smooth and empty, NO text, no icons. Kingdom Rush inspired hand-painted cartoon game art, flat painted style, matte finish, soft painterly shading. Transparent background, crisp hard edges, strictly NO glow, NO bloom, NO halo."
+  },
+  {
+   "id": "C3_商店标题背板",
+   "type": "generate",
+   "size": "1024x640",
+   "prompt": "Exactly ONE wide fantasy game title banner board, centered, filling most of the frame width with a small even transparent margin: aged golden parchment banner with torn hand-painted left and right edges, warm gold-ochre painted cloth surface with subtle woven texture, one small dark iron hanging ring at the left end and one at the right end, thin dark brown outline all around, the center surface completely empty and flat for title text, NO text, no letters, no ornaments in the middle. Kingdom Rush inspired hand-painted cartoon game art, flat painted style, matte finish, soft painterly shading. Transparent background, crisp hard edges, strictly NO glow, NO bloom, NO halo."
+  }
+ ]
+}

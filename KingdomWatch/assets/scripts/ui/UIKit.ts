@@ -178,17 +178,18 @@ export function gbar(parent: Node, x: number, y: number, w: number, h: number, f
 }
 
 export function btn(parent: Node, x: number, y: number, w: number, h: number, text: string,
-  color: FillLike, cb: () => void, size = 22, flat = false, icon = ''): Node {
+  color: FillLike, cb: () => void, size = 22, flat = false, icon = '', art = ''): Node {
   /* 无边框规范（用户确认：未特别强调不加边框资源）——程序层一律无描边 */
   const n = gpanel(parent, x, y, w, h, color, undefined, 0, 14);
   n.name = 'btn_' + text;
   const lbl = label(n, icon ? w * 0.07 : 0, 0, text, { size, color: '#241C12', bold: true, w, h });
   if (icon) artSprite(n, -w * 0.26, 0, size + 12, size + 12, icon, { sliced: false });
   /* 美术按钮三态：金/绿（含按下/禁用帧）；#5A6472 视为禁用态用灰帧；失败保持程序绘制；
-   * flat=true 连框体美术也不用（纯色板，用户点名去边框的弹窗按钮用） */
+   * flat=true 连框体美术也不用（纯色板，用户点名去边框的弹窗按钮用）；
+   * art 指定钮面美术 id（如商店购买钮 ui_btn_buy），字色保持调用方深字不换奶白 */
   const isColor = (v: string) => typeof color === 'string' && color === v;
-  const style = flat ? null : isColor(PAL.gold) ? 'ui_btn_primary' : isColor(PAL.green) ? 'ui_btn_green'
-    : isColor('#5A6472') ? 'ui_btn_primary_disabled' : null;
+  const style = art || (flat ? null : isColor(PAL.gold) ? 'ui_btn_primary' : isColor(PAL.green) ? 'ui_btn_green'
+    : isColor('#5A6472') ? 'ui_btn_primary_disabled' : null);
   if (style) {
     const isDisabled = style.endsWith('_disabled');
     const normalId = style;
@@ -197,7 +198,7 @@ export function btn(parent: Node, x: number, y: number, w: number, h: number, te
     artSprite(n, 0, 0, w, h, normalId, { belowIdx: 0, onLoaded: () => {
       sp = (n.getChildByName('art:' + normalId) as Node | null)?.getComponent(Sprite) || null;
       const l = lbl.getComponent(Label);
-      if (l) l.color = C(isDisabled ? '#AAB2BD' : '#FFF3D6');
+      if (l && !art) l.color = C(isDisabled ? '#AAB2BD' : '#FFF3D6');
     }});
     if (!isDisabled) uxFrame(pressId, () => {}); // 预热按下帧，首次按下即换
     n.on(Node.EventType.TOUCH_START, () => { if (sp) artSetFrame(sp, pressId); });
