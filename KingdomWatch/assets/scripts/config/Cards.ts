@@ -45,6 +45,27 @@ export interface HeroStats {
   pierceChance: number; // 英雄突破：普攻贯穿概率（0~1，累加）
   defIgnore: number;    // 英雄突破：无视防御比例（0~1，累加）
   ultAutoCd: number;    // 英雄突破：大招自动释放间隔 s（0=无；狙90级=25，无需/不消耗充能）
+  normalMul: number;    // 技能升级·普攻伤害倍率（普攻专属乘区，技能/大招不吃）
+  atkLv: number;        // 技能升级等级（战斗内读里程碑：普攻/技能/大招槽）
+  skillLv: number;
+  ultLv: number;
+}
+
+/* ---------- 弓箭手技能升级效果（用户定稿；战斗侧与提示面板共用同一配置） ---------- */
+/** 普攻槽：每级普攻伤害+8%，5级攻速+6%，10级暴击率+5%，15级普攻范围+8%，20级普攻伤害再+20% */
+export function archerAtkCfg(a: number): { normalMul: number; aspdOn: boolean; critOn: boolean; rangeOn: boolean } {
+  return {
+    normalMul: (1 + (a - 1) * 0.08) * (a >= 20 ? 1.2 : 1),
+    aspdOn: a >= 5, critOn: a >= 10, rangeOn: a >= 15,
+  };
+}
+/** 技能槽（强化箭矢）：每级技能伤害+8%，5级冷却-1s，10级强化箭+2发，15级窗口+2s，20级倍率+0.3 */
+export function archerEmpCfg(k: number): { arrows: number; mult: number; dur: number } {
+  return { arrows: 6 + (k >= 10 ? 2 : 0), mult: (1.5 + (k >= 20 ? 0.3 : 0)) * (1 + (k - 1) * 0.08), dur: 12 + (k >= 15 ? 2 : 0) };
+}
+/** 大招槽（扇形箭雨）：每级大招伤害+8%，5级每排+2箭，10级追加第三排，15级充能-10%，20级每箭系数+0.1 */
+export function archerUltCfg(u: number): { arrows: number; rows: number; coeff: number; chargeOn: boolean } {
+  return { arrows: 8 + (u >= 5 ? 2 : 0), rows: 2 + (u >= 10 ? 1 : 0), coeff: (0.65 + (u >= 20 ? 0.1 : 0)) * (1 + (u - 1) * 0.08), chargeOn: u >= 15 };
 }
 
 export function baseArcherStats(): HeroStats {
@@ -57,6 +78,7 @@ export function baseArcherStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
+    normalMul: 1, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -70,6 +92,7 @@ export function baseSniperStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
+    normalMul: 1, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -83,6 +106,7 @@ export function basePyroStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 3, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
+    normalMul: 1, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -96,6 +120,7 @@ export function baseVoltStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 5, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 1, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
+    normalMul: 1, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 

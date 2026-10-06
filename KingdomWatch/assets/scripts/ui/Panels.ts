@@ -3,7 +3,7 @@
  * 弹窗内容块均以屏幕垂直中心为重心；三选一期间全场冻结由 BattleDirector 状态控制
  */
 import { Graphics, Node, Sprite, tween, UIOpacity, Vec3 } from 'cc';
-import { CardDef, CardStacks, RARITY_COLOR } from '../config/Cards';
+import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg } from '../config/Cards';
 import { HERO_Y, LO, PAL } from '../config/GameConfig';
 import { DamageRow, fmtWk } from '../battle/DamageService';
 import { HeroBase } from '../battle/Hero';
@@ -468,9 +468,10 @@ export class Panels {
     } else if (kind === 'skill') {
       if (isArcher) {
         title = '技能 · 强化箭矢';
+        const ec = archerEmpCfg(h.skillLv || 1);
         rows = [
-          ['效果', '接下来 6 次普攻强化'],
-          ['强化伤害', Math.round(h.atk * h.atkMul * 1.5) + '（×1.5）'],
+          ['效果', `窗口 ${ec.dur}s · 接下来 ${ec.arrows} 次普攻强化`],
+          ['强化伤害', Math.round(h.atk * h.atkMul * (h.normalMul || 1) * ec.mult) + `（×${ec.mult.toFixed(2)}）`],
           ['强化特性', '金色贯穿 · 攻速+30%'],
           ['冷却时间', cdTotal],
           ['索敌范围', String(Math.round(h.skillRange))],
@@ -512,9 +513,10 @@ export class Panels {
     } else if (isArcher) {
       title = '大招 · 扇形箭雨';
       w = 280; hh = 272;
+      const uc = archerUltCfg(h.ultLv || 1);
       rows = [
-        ['伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * 0.65) + ' × 每箭'],
-        ['形态', Math.round(h.ultRounds || 1) > 1 ? Math.round(h.ultRounds) + ' 轮 × 两排扇形 · 每排 8 箭' : '两排扇形 × 每排 8 箭'],
+        ['伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * uc.coeff) + ` × 每箭（×${uc.coeff.toFixed(2)}）`],
+        ['形态', (Math.round(h.ultRounds || 1) > 1 ? Math.round(h.ultRounds) + ' 轮 × ' : '') + `${uc.rows} 排扇形 · 每排 ${uc.arrows} 箭`],
         ['特性', '无限贯穿'],
         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],

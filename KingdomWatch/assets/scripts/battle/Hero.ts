@@ -8,7 +8,7 @@
  * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/处决/残血词条）；穿戴词条（攻击/攻速/范围/暴击/充能效率/技能伤害）上场生效
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
-import { HeroStats } from '../config/Cards';
+import { HeroStats, archerEmpCfg, archerUltCfg } from '../config/Cards';
 import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL } from '../config/GameConfig';
 import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
@@ -19,7 +19,7 @@ import { Sfx } from '../core/Sfx';
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
 interface PendingShot { t: number; target: Monster | null; dirX: number; dirY: number; emp?: boolean; }
-interface PendingVolley { t: number; row: 0 | 1; }
+interface PendingVolley { t: number; row: 0 | 1 | 2; }
 
 export abstract class HeroBase {
   abstract readonly id: string;
@@ -150,9 +150,10 @@ export class ArcherHero extends HeroBase {
   readonly name = '艾拉·风羽';
   readonly chargeMax = ARCHER_CHARGE_MAX;
   readonly skillMax = 12;
-  /** 技能·强化箭矢：剩余强化普攻次数（>0 时出弓即金色贯穿箭） */
+  /** 技能·强化箭矢：剩余强化普攻次数（>0 且窗口未过期时出弓即金色贯穿箭） */
   empowerLeft = 0;
-  private readonly empowerMax = 6;
+  /** 强化窗口剩余秒数（技能15级里程碑 +2s；到时未射完的强化次数作废） */
+  empowerT = 0;
   private lastEmp = false;
   private serialQueue: PendingShot[] = [];
   private volleyQueue: PendingVolley[] = [];
@@ -225,7 +226,8 @@ export class ArcherHero extends HeroBase {
   }): ProjSpec {
     const emp = base.emp === true;
     const crit = Math.random() < this.stats.critRate;
-    const atk = this.effAtk * (base.dmgMul ?? 1) * (emp ? 1.5 : 1) * (crit ? this.stats.critMul : 1);
+    const atk = this.effAtk * (this.stats.normalMul || 1) * (base.dmgMul ?? 1)
+      * (emp ? archerEmpCfg(this.stats.skillLv).mult : 1) * (crit ? this.stats.critMul : 1);
     return {
       x: base.x, y: base.y,
       dirX: base.dirX, dirY: base.dirY,
@@ -310,6 +312,11 @@ export class ArcherHero extends HeroBase {
   }
 
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
+    // 强化窗口倒计时：到时未用完的强化次数作废（窗口时长可被技能15级里程碑延长）
+    if (this.empowerT > 0) {
+      this.empowerT -= dt;
+      if (this.empowerT <= 0) this.empowerLeft = 0;
+    }
     // 连射串行子弹：出弓瞬间按当时状态重新预判方向，出弓后直线飞行（不追踪不拐弯）
     for (let i = this.serialQueue.length - 1; i >= 0; i--) {
       const q = this.serialQueue[i];
@@ -336,11 +343,13 @@ export class ArcherHero extends HeroBase {
     void mgr;
   }
 
-  /** 技能·强化箭矢（自动，12s CD）：接下来 6 次普攻变为金色贯穿箭（伤害 ×1.5、无限穿透、弹速 540） */
+  /** 技能·强化箭矢（自动）：窗口内接下来 N 次普攻变为金色贯穿箭（倍率/次数/时长随技能等级成长） */
   protected castSkill(_mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): void {
     void _mgr; void _projs; void _dmg;
-    this.skillCd = this.skillMax;
-    this.empowerLeft = this.empowerMax;
+    const c = archerEmpCfg(this.stats.skillLv);
+    this.skillCd = this.skillCdTotal;   // 含冷却缩减（技能5级里程碑 -1s、冷却缩减卡）
+    this.empowerLeft = c.arrows;
+    this.empowerT = c.dur;
     // 演出：英雄身上金色环脉冲扩散，标记"箭矢已强化"
     const pulse = new Node('empPulse');
     pulse.layer = Layers.Enum.UI_2D;
@@ -361,26 +370,30 @@ export class ArcherHero extends HeroBase {
     if (!this.ultReady) return false;
     this.charge = 0;
     const rounds = Math.max(1, Math.round(this.stats.ultRounds || 1));
-    for (let r = 0; r < rounds; r++) this.volleyQueue.push({ t: r * 0.8, row: 0 }, { t: r * 0.8 + 0.35, row: 1 });
+    const rows = archerUltCfg(this.stats.ultLv).rows;   // 大招10级里程碑：2排 → 3排
+    for (let r = 0; r < rounds; r++) {
+      for (let w = 0; w < rows; w++) this.volleyQueue.push({ t: r * 0.8 + w * 0.35, row: w as 0 | 1 | 2 });
+    }
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
     Sfx.play('ult');
     void _dmg;
     return true;
   }
 
-  /** 一排扇形箭：以竖直方向为中心 ±30° 均分；第二排错半步补缝、弹速略慢形成两波 */
-  private fireFanRow(projs: ProjectileManager, row: 0 | 1): void {
-    const n = 8;
+  /** 一排扇形箭：以竖直方向为中心 ±30° 均分；后排错半步补缝、弹速略慢形成多波；箭数/系数随大招等级成长 */
+  private fireFanRow(projs: ProjectileManager, row: 0 | 1 | 2): void {
+    const uc = archerUltCfg(this.stats.ultLv);
+    const n = uc.arrows;
     const spread = 60 * Math.PI / 180;
-    const off = row === 0 ? 0 : 0.5;
-    const speed = row === 0 ? 560 : 480;
+    const off = row === 0 ? 0 : row === 1 ? 0.5 : 0.25;
+    const speed = row === 0 ? 560 : row === 1 ? 480 : 520;
     for (let k = 0; k < n; k++) {
       const a = -spread / 2 + (spread * (k + off)) / n;   // 相对竖直方向的偏角
       projs.fire({
         x: this.x, y: HERO_Y + 60,
         dirX: Math.sin(a), dirY: Math.cos(a),
         speed,
-        dmg: this.skillAtk * 0.65, crit: Math.random() < this.stats.critRate,
+        dmg: this.skillAtk * uc.coeff, crit: Math.random() < this.stats.critRate,
         color: PAL.gold, heroId: this.id, size: 9, ttl: 3.6, pierce: 999, spark: true,
         ability: true,   // 大招箭雨击杀弹 60% 词条
       });

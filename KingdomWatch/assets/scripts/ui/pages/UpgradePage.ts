@@ -49,11 +49,34 @@ const QCARD = ['#6B5A3A', '#3E7C28', '#1F6BC4', '#8A3FD0'];
 /** 英雄突破步骤条数据（专属表 txt 直用——弓箭手已定稿；未配置英雄回退通用档） */
 const heroMilestones = (hid: string): { lv: number; txt: string }[] => heroBtList(hid).map(m => ({ lv: m.lv, txt: m.txt }));
 const weaponMilestones = (): { lv: number; txt: string }[] => btMs(MAX.weapon, BT_STEP.weapon, `攻击与技能伤害 +${Math.round(BT_WPN * 100)}%`);
-const SKILL_MILESTONES: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string }[]> = {
-  atk: btMs(MAX.skill, BT_STEP.skill, '普攻伤害 +15%'),
-  skill: btMs(MAX.skill, BT_STEP.skill, `技能伤害 +${Math.round(BT_SKL * 100)}%`),
-  ult: btMs(MAX.skill, BT_STEP.skill, '大招伤害 +15%'),
+/* 弓箭手技能升级里程碑（用户定稿：机制型档位取代通用 +15%/5级）；其余英雄维持通用数值档 */
+const SKILL_MS_ARCHER: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string }[]> = {
+  atk: [
+    { lv: 5, txt: '攻速 +6%' },
+    { lv: 10, txt: '暴击率 +5%' },
+    { lv: 15, txt: '普攻范围 +8%' },
+    { lv: 20, txt: '普攻伤害 +20%' },
+  ],
+  skill: [
+    { lv: 5, txt: '冷却 -1s' },
+    { lv: 10, txt: '强化箭 +2 发' },
+    { lv: 15, txt: '强化窗口 +2s' },
+    { lv: 20, txt: '强化箭倍率 +0.3' },
+  ],
+  ult: [
+    { lv: 5, txt: '每排箭数 +2' },
+    { lv: 10, txt: '追加第三排' },
+    { lv: 15, txt: '大招充能 -10%' },
+    { lv: 20, txt: '每箭系数 +0.1' },
+  ],
 };
+const SKILL_GENERIC: Record<'atk' | 'skill' | 'ult', string> = {
+  atk: '普攻伤害 +15%',
+  skill: `技能伤害 +${Math.round(BT_SKL * 100)}%`,
+  ult: '大招伤害 +15%',
+};
+const skillMilestones = (hid: string, slot: 'atk' | 'skill' | 'ult'): { lv: number; txt: string }[] =>
+  hid === 'archer' ? SKILL_MS_ARCHER[slot] : btMs(MAX.skill, BT_STEP.skill, SKILL_GENERIC[slot]);
 
 /* 页签跨刷新保持（升级后 refresh 重建页面不跳回「等级」） */
 const st: { tab: 0 | 1 | 2 | 3 } = { tab: 0 };
@@ -69,7 +92,10 @@ function statsAt(hid: string, lv: number, wpnLv: number, skillLv?: number): { at
   const base = def.baseAtk * (1 + (lv - 1) * 0.08) * (1 + bt.atkPct)
     * (1 + (wpnLv - 1) * 0.06) * (1 + btN(wpnLv, BT_STEP.weapon) * BT_WPN);
   const atk = Math.round(base * (1 + agg.atkPct) + agg.atkFlat);
-  const skillDmg = Math.round(base * (1 + (skl - 1) * 0.10) * (1 + btN(skl, BT_STEP.skill) * BT_SKL) * (1 + bt.skillPct) * (1 + (lv - 1) * 0.05)) + agg.skillDmgFlat;
+  const sklMul = hid === 'archer'
+    ? (1 + (skl - 1) * 0.08)
+    : (1 + (skl - 1) * 0.10) * (1 + btN(skl, BT_STEP.skill) * BT_SKL);
+  const skillDmg = Math.round(base * sklMul * (1 + bt.skillPct) * (1 + (lv - 1) * 0.05)) + agg.skillDmgFlat;
   return { atk, skillDmg };
 }
 
@@ -402,7 +428,8 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
     if (!maxed) delta = `+${next.skillDmg - cur.skillDmg}`;
   } else {
     nm = slot === 'atk' ? '普攻伤害' : '大招伤害';
-    const pct = (l: number): number => (l - 1) * 10 + btN(l, BT_STEP.skill) * 15;   // 每5级突破跳 +15%
+    // 弓箭手每级+8%（5级档换成机制里程碑）；其余英雄每级+10%且每5级+15%
+    const pct = (l: number): number => hid === 'archer' ? (l - 1) * 8 : (l - 1) * 10 + btN(l, BT_STEP.skill) * 15;
     curS = `+${pct(lv)}%`;
     if (!maxed) delta = `→ +${pct(lv + 1)}%`;
   }
@@ -426,7 +453,7 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
     label(act, 0, 0, '已达等级上限', { size: 22, color: '#AAB2BD' });
   }
   /* 等级效果：阶段性突破步骤条（每5级一突破；弹窗内板宽 560） */
-  fxStepper(panel, p1Top - p1H, actCy + actH / 2 + 14, '等级效果', SKILL_MILESTONES[slot], lv, PW);
+  fxStepper(panel, p1Top - p1H, actCy + actH / 2 + 14, '等级效果', skillMilestones(hid, slot), lv, PW);
 }
 
 /* ---------- 装备页签：无大背板（用户确认参考技能页签）——装备卡×4 浮于背景：方形品质背板套图标
