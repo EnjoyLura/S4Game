@@ -22,12 +22,17 @@ const KIND_ICON: Record<string, string> = { weapon: '🏹', helm: '⛑️', acc:
 const WORN_4: ('helm' | 'acc' | 'glove' | 'armor')[] = ['helm', 'acc', 'glove', 'armor'];
 const QNAMES = ['普通', '优秀', '稀有', '史诗'];
 
-/* 技能三槽（页签卡片与升级弹窗共用） */
+/* 技能三槽（页签卡片与升级弹窗共用）；名称按英雄取 HERO_DEFS（弓箭手硬编码名已去掉——用户反馈），图标=各英雄专属切图 */
 const SKILL_INFO = [
-  { slot: 'atk' as const, key: 'atkLv' as const, name: '普攻 · 连射', icon: '普攻', desc: '普攻伤害 +10%/级', cls: PAL.blue },
-  { slot: 'skill' as const, key: 'skillLv' as const, name: '技能 · 穿透箭', icon: '技能', desc: '技能伤害 +10%/级\nCD -0.5s', cls: PAL.blue },
-  { slot: 'ult' as const, key: 'ultLv' as const, name: '大招 · 风暴之眼', icon: '大招', desc: '大招持续伤害 +10%/级', cls: PAL.purple },
+  { slot: 'atk' as const, key: 'atkLv' as const, icon: 'atk', desc: '普攻伤害 +10%/级', cls: PAL.blue },
+  { slot: 'skill' as const, key: 'skillLv' as const, icon: 'skill', desc: '技能伤害 +10%/级\nCD -0.5s', cls: PAL.blue },
+  { slot: 'ult' as const, key: 'ultLv' as const, icon: 'ult', desc: '大招持续伤害 +10%/级', cls: PAL.purple },
 ];
+/** 技能槽显示名：普攻无专属名；技能/大招用各英雄定名（切换英雄即跟随——用户反馈） */
+const skillName = (hid: string, slot: 'atk' | 'skill' | 'ult'): string =>
+  slot === 'atk' ? '普攻' : slot === 'skill' ? HERO_DEFS[hid].skillName : HERO_DEFS[hid].ultName;
+/** 技能槽切图：ui_icon_<atk|skill|ult>_<hid>（切图批次），缺图回退文字 */
+const skillIconId = (hid: string, slot: 'atk' | 'skill' | 'ult'): string => `ui_icon_${slot}_${hid}`;
 
 /* 技能阶段性等级效果（升级弹窗「等级效果」分区展示；已达成的档位打 ✓）
  * 普攻档位文案为定稿；技能/大招按同节奏起草，数值待战斗侧实现后校准 */
@@ -130,7 +135,7 @@ export function buildUpgrade(ctx: PageCtx): void {
       const o = sv.heroes[id].owned;
       const av = gpanel(content, WX(28 + i * 76, 84), WY(205, 84), 84, 84,
         CA('#2A3240', 1), undefined, 0, 44);
-      artSprite(av, 0, 0, 72, 72, HERO_DEFS[id].avatar, { sliced: false });
+      artSprite(av, 0, 0, 84, 84, HERO_DEFS[id].avatar, { sliced: false });   // 头像填满整圆（外围黑环已去掉——用户反馈）
       if (!o) { gpanel(av, 0, 0, 84, 84, CA('#0B0F16', 0.6), undefined, 0, 42); label(av, 0, 0, '🔒', { size: 28 }); }
       av.on(Node.EventType.TOUCH_END, () => {
         if (!o) { toast('前往商店解锁该英雄'); return; }
@@ -395,8 +400,9 @@ function tabSkills(parent: Node, ctx: PageCtx, hid: string, topY: number): void 
     const lv = h[info.key];
     const slot = gpanel(parent, -234 + i * 234, slotCy, 218, SLOT_H, CA('#E9DFC2', 0.94), undefined, 0, 12);
     const circ = gcircle(slot, 0, 62, 58, CA('#2A3240', 1));   // 图标无描边、无齿轮环美术（用户确认）
-    label(circ, 0, 0, info.icon, { size: 26, color: '#FFE08A', bold: true });
-    label(slot, 0, -28, info.name, { size: 22, color: INK, bold: true, w: 196, h: 32, shrink: true });
+    const skFb = label(circ, 0, 0, info.slot === 'atk' ? '普攻' : info.slot === 'skill' ? '技能' : '大招', { size: 26, color: '#FFE08A', bold: true });
+    artSprite(circ, 0, 0, 116, 116, skillIconId(hid, info.slot), { sliced: false, hideOnLoad: [skFb] });   // 铺满圆座（无暗环）
+    label(slot, 0, -28, skillName(hid, info.slot), { size: 22, color: INK, bold: true, w: 196, h: 32, shrink: true });
     label(slot, 0, -84, `${lv}级`, { size: 28, color: INK, bold: true, w: 120, h: 36 });   // 等级居中（用户确认）
     if (lv < MAX.skill) gpanel(slot, 84, SLOT_H / 2 - 13, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
     slot.on(Node.EventType.TOUCH_END, () => skillModal(ctx, hid, info.slot, () => ctx.refresh()));
@@ -415,8 +421,9 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
   const panel = modal(ctx, W, H, '技能升级', true);
   /* 头部：无框圆图标 + 名称 + 等级变化（相对 H/2 下移，离开标题区） */
   const circ = gcircle(panel, -W / 2 + 66, H / 2 - 104, 44, CA('#2A3240', 1));
-  label(circ, 0, 0, info.icon, { size: 20, color: '#FFE08A', bold: true });
-  label(panel, -W / 2 + 272, H / 2 - 96, info.name, { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 300, h: 32, shrink: true });
+  const skFb = label(circ, 0, 0, slot === 'atk' ? '普攻' : slot === 'skill' ? '技能' : '大招', { size: 20, color: '#FFE08A', bold: true });
+  artSprite(circ, 0, 0, 88, 88, skillIconId(hid, slot), { sliced: false, hideOnLoad: [skFb] });   // 铺满圆座
+  label(panel, -W / 2 + 272, H / 2 - 96, skillName(hid, slot), { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 300, h: 32, shrink: true });
   label(panel, -W / 2 + 272, H / 2 - 130, maxed ? `Lv.${lv}（MAX）` : `Lv.${lv} → Lv.${lv + 1}`, { size: 19, color: '#FFE08A', bold: true, align: 'left', w: 300, h: 30, shrink: true });
   /* 属性提升（奶白板 + 标题出板；行结构与页签一致） */
   const p1Top = H / 2 - 184;
