@@ -51,6 +51,7 @@ export interface HeroStats {
   shockAmpMul: number;  // 突破·感电加深倍率（雷30级 1.4：感电增伤 25%→35%）
   shockedBonus: number; // 技能升级·对感电目标伤害加成（雷普攻15级 0.25）
   pitVuln: number;      // 大招陨石坑易伤值（火法 0.25，突破80级加深）
+  burnedBonus: number;  // 技能升级·对灼烧目标伤害加成（火普攻15级 0.25）
   atkLv: number;        // 技能升级等级（战斗内读里程碑：普攻/技能/大招槽）
   skillLv: number;
   ultLv: number;
@@ -104,6 +105,20 @@ export function voltUltCfg(u: number): { boltMul: number; rMul: number; shockOn:
   return { boltMul: (2.2 + (u >= 20 ? 0.4 : 0)) * (1 + (u - 1) * 0.08), rMul: u >= 5 ? 1.2 : 1, shockOn: u >= 10, chargeOn: u >= 15 };
 }
 
+/* ---------- 火法师（焰·辉）技能升级效果（用户定稿；战斗侧与提示面板共用） ---------- */
+/** 普攻槽：每级普攻伤害+8%，5级攻速+6%，10级暴击率+5%，15级对灼烧目标+25%，20级普攻伤害再+20% */
+export function pyroAtkCfg(a: number): { normalMul: number; aspdOn: boolean; critOn: boolean; burnedOn: boolean } {
+  return { normalMul: (1 + (a - 1) * 0.08) * (a >= 20 ? 1.2 : 1), aspdOn: a >= 5, critOn: a >= 10, burnedOn: a >= 15 };
+}
+/** 技能槽（烈焰爆裂）：每级+8%，5级冷却-1s，10级火球+1发，15级爆炸伤害40%→60%，20级每发倍率+0.3 */
+export function pyroSkCfg(k: number): { mul: number; cdOn: boolean; shotsOn: boolean; boomMul: number } {
+  return { mul: (1.6 + (k >= 20 ? 0.3 : 0)) * (1 + (k - 1) * 0.08), cdOn: k >= 5, shotsOn: k >= 10, boomMul: k >= 15 ? 0.6 : 0.4 };
+}
+/** 大招槽（陨石天降）：每级+8%，5级陨石+2颗，10级陨石坑范围+25%，15级充能-10%，20级每颗倍率+0.4 */
+export function pyroUltCfg(u: number): { boltMul: number; meteors: number; craterMul: number; chargeOn: boolean } {
+  return { boltMul: (3.5 + (u >= 20 ? 0.4 : 0)) * (1 + (u - 1) * 0.08), meteors: 5 + (u >= 5 ? 2 : 0), craterMul: u >= 10 ? 1.25 : 1, chargeOn: u >= 15 };
+}
+
 export function baseArcherStats(): HeroStats {
   return {
     // 射程 900 / 技能 800（用户调整；文档 §3.1 的 520/416 作废）
@@ -114,7 +129,7 @@ export function baseArcherStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -128,7 +143,7 @@ export function baseSniperStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -142,7 +157,7 @@ export function basePyroStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 3, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -156,7 +171,7 @@ export function baseVoltStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 5, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 1, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 

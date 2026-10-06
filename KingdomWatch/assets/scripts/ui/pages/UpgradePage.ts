@@ -112,6 +112,27 @@ const SKILL_MS_VOLT: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string }
     { lv: 20, txt: '每道倍率 2.2→2.6' },
   ],
 };
+/* 火法师（焰·辉）技能升级里程碑（用户定稿） */
+const SKILL_MS_PYRO: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string }[]> = {
+  atk: [
+    { lv: 5, txt: '攻速 +6%' },
+    { lv: 10, txt: '暴击率 +5%' },
+    { lv: 15, txt: '对灼烧目标伤害 +25%' },
+    { lv: 20, txt: '普攻伤害 +20%' },
+  ],
+  skill: [
+    { lv: 5, txt: '冷却 -1s' },
+    { lv: 10, txt: '火球 +1 发（累计 4）' },
+    { lv: 15, txt: '爆炸伤害 40%→60%' },
+    { lv: 20, txt: '每发倍率 1.6→1.9' },
+  ],
+  ult: [
+    { lv: 5, txt: '陨石 +2 颗（累计 7）' },
+    { lv: 10, txt: '陨石坑范围 +25%' },
+    { lv: 15, txt: '大招充能 -10%' },
+    { lv: 20, txt: '每颗倍率 3.5→3.9' },
+  ],
+};
 const SKILL_GENERIC: Record<'atk' | 'skill' | 'ult', string> = {
   atk: '普攻伤害 +15%',
   skill: `技能伤害 +${Math.round(BT_SKL * 100)}%`,
@@ -121,7 +142,8 @@ const skillMilestones = (hid: string, slot: 'atk' | 'skill' | 'ult'): { lv: numb
   hid === 'archer' ? SKILL_MS_ARCHER[slot]
     : hid === 'sniper' ? SKILL_MS_SNIPER[slot]
       : hid === 'volt' ? SKILL_MS_VOLT[slot]
-        : btMs(MAX.skill, BT_STEP.skill, SKILL_GENERIC[slot]);
+        : hid === 'pyro' ? SKILL_MS_PYRO[slot]
+          : btMs(MAX.skill, BT_STEP.skill, SKILL_GENERIC[slot]);
 
 /* 页签跨刷新保持（升级后 refresh 重建页面不跳回「等级」） */
 const st: { tab: 0 | 1 | 2 | 3 } = { tab: 0 };
@@ -474,7 +496,7 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
   } else {
     nm = slot === 'atk' ? '普攻伤害' : '大招伤害';
     // 弓箭手每级+8%（5级档换成机制里程碑）；其余英雄每级+10%且每5级+15%
-    const pct = (l: number): number => (hid === 'archer' || hid === 'sniper' || hid === 'volt') ? (l - 1) * 8 : (l - 1) * 10 + btN(l, BT_STEP.skill) * 15;
+    const pct = (l: number): number => (hid === 'archer' || hid === 'sniper' || hid === 'volt' || hid === 'pyro') ? (l - 1) * 8 : (l - 1) * 10 + btN(l, BT_STEP.skill) * 15;
     curS = `+${pct(lv)}%`;
     if (!maxed) delta = `→ +${pct(lv + 1)}%`;
   }

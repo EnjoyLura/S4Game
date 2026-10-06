@@ -4,7 +4,7 @@
  */
 import { _decorator, Canvas, Component, director, Layers, Node } from 'cc';
 import { LEVEL_1_1, LevelDef, MOBS, heroSlots, nextLevelId } from '../config/Mobs';
-import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, HeroStats, archerAtkCfg, sniperAtkCfg, voltAtkCfg, voltSkCfg, voltUltCfg } from '../config/Cards';
+import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, HeroStats, archerAtkCfg, sniperAtkCfg, voltAtkCfg, voltSkCfg, voltUltCfg, pyroAtkCfg, pyroSkCfg, pyroUltCfg } from '../config/Cards';
 import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
@@ -568,6 +568,15 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
     if (bt.ultStunBonus) s.ultStun += bt.ultStunBonus;          // 80级 大招眩晕+0.5s
     if (bt.shockOnAtk) s.shockOnHit = Math.max(s.shockOnHit || 0, bt.shockOnAtk);  // 90级 雷霆之躯
   } else if (hid === 'pyro') {
+    const ac = pyroAtkCfg(hs.atkLv);
+    s.normalMul = ac.normalMul;                       // 普攻伤害：每级+8%、20级再+20%
+    if (ac.aspdOn) s.aspd *= 1.06;                    // 5级 攻速+6%
+    if (ac.critOn) s.critRate = Math.min(1, s.critRate + 0.05);   // 10级 暴击率+5%
+    if (ac.burnedOn) s.burnedBonus = 0.25;            // 15级 对灼烧目标+25%
+    const pc = pyroSkCfg(hs.skillLv);
+    if (pc.cdOn) s.skillCdFlat += 1;                  // 技能5级 冷却-1s
+    if (pc.shotsOn) s.skillShots += 1;                // 技能10级 火球+1
+    if (pyroUltCfg(hs.ultLv).chargeOn) s.chargeMul *= 0.9;   // 大招15级 充能-10%
     if (bt.burnMul !== 1) s.burnMul *= bt.burnMul;              // 30级 火势加深
     if (bt.explodeR) s.explodeR = Math.max(s.explodeR || 0, bt.explodeR);   // 60级 普攻爆炸范围60→90
     if (bt.shotsBonus) s.skillShots += bt.shotsBonus;           // 70级 技能火球+1

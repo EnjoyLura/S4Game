@@ -3,7 +3,7 @@
  * 弹窗内容块均以屏幕垂直中心为重心；三选一期间全场冻结由 BattleDirector 状态控制
  */
 import { Graphics, Node, Sprite, tween, UIOpacity, Vec3 } from 'cc';
-import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg } from '../config/Cards';
+import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg } from '../config/Cards';
 import { HERO_Y, LO, PAL } from '../config/GameConfig';
 import { DamageRow, fmtWk } from '../battle/DamageService';
 import { HeroBase } from '../battle/Hero';
@@ -490,10 +490,11 @@ export class Panels {
         ];
       } else if (hero.id === 'pyro') {
         title = '技能 · 烈焰爆裂';
+        const pc = pyroSkCfg(h.skillLv || 1);
         rows = [
           ['效果', '锁定最密集敌群 · 齐射 ' + Math.round(h.skillShots || 3) + ' 颗爆裂火球'],
-          ['每发伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * 1.6) + '（×1.6）'],
-          ['特性', '大范围爆炸 + 灼烧'],
+          ['每发伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * pc.mul) + '（×' + pc.mul.toFixed(2) + '）'],
+          ['特性', '大范围爆炸 + 灼烧' + (pc.boomMul > 0.4 ? ' · 溅射 +' + Math.round((pc.boomMul - 0.4) * 100) + '%' : '')],
           ['冷却时间', cdTotal],
           ['索敌范围', String(Math.round(h.skillRange))],
           ['释放', '自动'],
@@ -544,11 +545,12 @@ export class Panels {
     } else if (hero.id === 'pyro') {
       title = '大招 · 陨石天降';
       w = 280; hh = 272;
+      const pu = pyroUltCfg(h.ultLv || 1);
       rows = [
-        ['伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * 3.5) + ' × 每颗'],
+        ['伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * pu.boltMul) + ' × 每颗'],
         ['索敌', '锁定怪群最密集处·固定范围'],
-        ['形态', '梅花五点砸落 5 颗陨石' + (h.ultHaste ? ' · 放后攻速提升 5 秒' : '')],
-        ['陨石坑', '燃烧 4 秒：灼烧 + 易伤 25%'],
+        ['形态', (pu.meteors > 5 ? '梅花五点+对角 · ' : '梅花五点砸落 ') + pu.meteors + ' 颗陨石' + (h.ultHaste ? ' · 放后攻速提升 5 秒' : '')],
+        ['陨石坑', '燃烧 4 秒：灼烧 + 易伤 ' + Math.round((h.pitVuln || 0.25) * 100) + '%' + (pu.craterMul > 1 ? ' · 坑范围+' + Math.round((pu.craterMul - 1) * 100) + '%' : '')],
         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
         ['释放', '手动点击'],
       ];

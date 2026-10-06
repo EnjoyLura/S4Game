@@ -305,13 +305,13 @@ export function heroStats(hid: string): HeroStats {
   const bt = heroBtAgg(hid, hs.lv);
   const lvMul = 1 + (hs.lv - 1) * 0.08;
   const wpnMul = (1 + (hs.weaponLv - 1) * 0.06) * (1 + btN(hs.weaponLv, BT_STEP.weapon) * BT_WPN);
-  // 技能槽成长：弓/狙/雷每级+8%（5级一档换成冷却/发数/窗口等里程碑）；其余英雄每级+10%且每5级+15%
-  const sklMul = (hid === 'archer' || hid === 'sniper' || hid === 'volt')
+  // 技能槽成长：弓/狙/雷/火每级+8%（5级一档换成冷却/发数/窗口等里程碑）；其余英雄每级+10%且每5级+15%
+  const sklMul = (hid === 'archer' || hid === 'sniper' || hid === 'volt' || hid === 'pyro')
     ? (1 + (hs.skillLv - 1) * 0.08)
     : (1 + (hs.skillLv - 1) * 0.10) * (1 + btN(hs.skillLv, BT_STEP.skill) * BT_SKL);
   const atk = Math.round(def.baseAtk * lvMul * (1 + bt.atkPct) * wpnMul * (1 + agg.atkPct) + agg.atkFlat);
   const skillDmg = Math.round(def.baseAtk * lvMul * (1 + bt.atkPct) * wpnMul * sklMul * (1 + bt.skillPct) * (1 + (hs.lv - 1) * 0.05)) + agg.skillDmgFlat;
-  const skillAspd = hid === 'archer' && hs.atkLv >= 5 ? 1.06 : 1;   // 技能5级里程碑：攻速+6%
+  const skillAspd = hs.atkLv >= 5 ? 1.06 : 1;   // 普攻槽5级里程碑：攻速+6%（四英雄同构）
   return {
     power: Math.round(atk + skillDmg * 0.5),
     atk, atkSpd: Math.round(def.atkSpd * (1 + bt.aspdPct) * skillAspd * 100) / 100, skillDmg,

@@ -8,7 +8,7 @@
  * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/处决/残血词条）；穿戴词条（攻击/攻速/范围/暴击/充能效率/技能伤害）上场生效
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
-import { HeroStats, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg } from '../config/Cards';
+import { HeroStats, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg } from '../config/Cards';
 import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL } from '../config/GameConfig';
 import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
@@ -746,19 +746,20 @@ export class PyroHero extends HeroBase {
   private spec(base: {
     x: number; y: number; dirX: number; dirY: number; dmg: number;
     explodeR: number; burnDps: number; speed: number; size: number;
-    ability?: boolean; ult?: boolean; stun?: number;
+    ability?: boolean; ult?: boolean; stun?: number; explodeMul?: number;
   }): ProjSpec {
     const crit = Math.random() < this.stats.critRate;
     return {
       x: base.x, y: base.y, dirX: base.dirX, dirY: base.dirY,
       speed: base.speed,
-      dmg: base.dmg * (crit ? this.stats.critMul : 1), crit,
+      dmg: base.dmg * (this.stats.normalMul || 1) * (crit ? this.stats.critMul : 1), crit,
       color: PAL.orange, heroId: this.id, size: base.size,
-      explodeR: base.explodeR, explodeMul: this.stats.explodeMul,
+      explodeR: base.explodeR, explodeMul: base.explodeMul ?? this.stats.explodeMul,
       slowRatio: this.stats.slowOnHit || 0,
       slowDur: this.stats.slowDur || 2,
       burnDps: base.burnDps * (this.stats.burnMul || 1),
       spark: true, ability: base.ability, ult: base.ult, stun: base.stun,
+      burnedBonus: this.stats.burnedBonus || undefined,
       ...this.targetBonuses(),
     };
   }
@@ -791,8 +792,9 @@ export class PyroHero extends HeroBase {
       for (const o of cands) if (Math.hypot(o.x - m.x, o.y - m.y) <= 130) n++;
       if (n > bestN) { bestN = n; best = m; }
     }
+    const pc = pyroSkCfg(this.stats.skillLv);
     const shots = Math.max(1, Math.round(this.stats.skillShots || 3));
-    const dmg = this.skillAtk * 1.6 * (this.stats.skillMul || 1);
+    const dmg = this.skillAtk * pc.mul * (this.stats.skillMul || 1);
     const boomR = 110 * (this.stats.skillRangeMul || 1);
     for (let k = 0; k < shots; k++) {
       const ox = best.x + (Math.random() * 2 - 1) * 70;
@@ -801,7 +803,7 @@ export class PyroHero extends HeroBase {
       const l = Math.hypot(dx, dy) || 1;
       projs.fire(this.spec({
         x: this.x, y: HERO_Y + 60, dirX: dx / l, dirY: dy / l,
-        dmg, explodeR: boomR, burnDps: this.skillAtk * 0.2,
+        dmg, explodeR: boomR, explodeMul: pc.boomMul, burnDps: this.skillAtk * 0.2,
         speed: 820, size: 11, ability: true,
       }));
     }
@@ -811,6 +813,8 @@ export class PyroHero extends HeroBase {
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
     // 大招陨石：落点先出脉冲预警圈，到点从屏外坠落，命中后留燃烧陨石坑
     this.warnT += dt;
+    const uc = pyroUltCfg(this.stats.ultLv);
+    const crR = CRATER_R * uc.craterMul;   // 大招10级：陨石坑范围+25%
     if (this.meteorQueue.length) {
       if (!this.warnNode) {
         this.warnNode = new Node('ultWarn');
@@ -845,7 +849,7 @@ export class PyroHero extends HeroBase {
         q.t = (top - q.y) / 800;   // 预警圈持续到命中
         projs.fire(this.spec({
           x: q.x, y: top, dirX: 0, dirY: -1,
-          dmg: this.skillAtk * 3.5 * (this.stats.ultDmgMul || 1),
+          dmg: this.skillAtk * uc.boltMul * (this.stats.ultDmgMul || 1),
           explodeR: 140, burnDps: this.skillAtk * 0.3,
           speed: 800, size: 16, ability: true, ult: true,
           stun: this.stats.ultStun || 0,
@@ -862,7 +866,7 @@ export class PyroHero extends HeroBase {
         c.t -= dt;
         if (c.t <= 0) { this.craters.splice(i, 1); continue; }
         for (const m of mgr.list) {
-          if (m.dead || Math.hypot(m.x - c.x, m.y - c.y) > CRATER_R) continue;
+          if (m.dead || Math.hypot(m.x - c.x, m.y - c.y) > crR) continue;
           m.burnT = Math.max(m.burnT, 0.55);
           m.burnDps = Math.max(m.burnDps, this.skillAtk * 0.3);
           m.applyVuln(this.stats.pitVuln || CRATER_VULN, 0.6);
@@ -888,26 +892,26 @@ export class PyroHero extends HeroBase {
         const glow = 0.55 + Math.sin(this.warnT * 5 + i * 2.1) * 0.2;
         // 焦黑坑底（两层）
         g.fillColor = oc('#1C120C', 150 * fade);
-        g.circle(c.x, c.y, CRATER_R); g.fill();
+        g.circle(c.x, c.y, crR); g.fill();
         g.fillColor = oc('#33200F', 110 * fade);
-        g.circle(c.x, c.y, CRATER_R * 0.8); g.fill();
+        g.circle(c.x, c.y, crR * 0.8); g.fill();
         // 熔岩池 + 白热岩芯（呼吸脉动）
         const pulse = 1 + Math.sin(this.warnT * 6 + i) * 0.06;
         g.fillColor = oc('#C2401F', (150 + 40 * glow) * fade);
-        g.circle(c.x, c.y, CRATER_R * 0.42 * pulse); g.fill();
+        g.circle(c.x, c.y, crR * 0.42 * pulse); g.fill();
         g.fillColor = oc('#FF7A2E', (170 + 50 * glow) * fade);
-        g.circle(c.x, c.y, CRATER_R * 0.22 * pulse); g.fill();
+        g.circle(c.x, c.y, crR * 0.22 * pulse); g.fill();
         g.fillColor = oc('#FFD24A', (120 + 70 * glow) * fade);
-        g.circle(c.x, c.y, CRATER_R * 0.1 * pulse); g.fill();
+        g.circle(c.x, c.y, crR * 0.1 * pulse); g.fill();
         // 熔岩缘（外圈粗 + 内圈亮）
         g.strokeColor = oc('#E86A28', 215 * fade); g.lineWidth = 4.5;
-        g.circle(c.x, c.y, CRATER_R * pulse); g.stroke();
+        g.circle(c.x, c.y, crR * pulse); g.stroke();
         g.strokeColor = oc('#FFC24A', 160 * fade); g.lineWidth = 2;
-        g.circle(c.x, c.y, CRATER_R * 0.86 * pulse); g.stroke();
+        g.circle(c.x, c.y, crR * 0.86 * pulse); g.stroke();
         // 坑内岩浆斑 + 余烬闪点
         for (let k = 0; k < 3; k++) {
           const ang = i * 2.4 + k * 2.1;
-          const rr = CRATER_R * 0.5;
+          const rr = crR * 0.5;
           g.fillColor = oc('#D9481F', (200 * glow + 40) * fade);
           g.circle(c.x + Math.cos(ang) * rr, c.y + Math.sin(ang) * rr * 0.7, 12 + (k % 2) * 5);
           g.fill();
@@ -941,12 +945,23 @@ export class PyroHero extends HeroBase {
     cyy = Math.max(-640, Math.min(820, cyy));
     this.charge = 0;
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
+    const uc = pyroUltCfg(this.stats.ultLv);
     // 固定范围梅花五点：中心 1 + 四向 0.55R，少量抖动避免完全重合
     for (let k = 0; k < 5; k++) {
       const ang = -Math.PI / 2 + k * Math.PI / 2;
       const rr = k === 0 ? 0 : ULT_ZONE_R * 0.55;
       this.meteorQueue.push({
         t: 0.5 + k * 0.32,
+        x: cx + Math.cos(ang) * rr + (Math.random() * 2 - 1) * 14,
+        y: cyy + Math.sin(ang) * rr + (Math.random() * 2 - 1) * 14,
+      });
+    }
+    // 大招5级升级：追加 2 颗斜向陨石（两条对角线 0.78R），与梅花五点合成七点星
+    for (let k = 0; k < uc.meteors - 5; k++) {
+      const ang = Math.PI / 4 + k * Math.PI;
+      const rr = ULT_ZONE_R * 0.78;
+      this.meteorQueue.push({
+        t: 0.5 + (5 + k) * 0.32,
         x: cx + Math.cos(ang) * rr + (Math.random() * 2 - 1) * 14,
         y: cyy + Math.sin(ang) * rr + (Math.random() * 2 - 1) * 14,
       });
