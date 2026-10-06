@@ -865,7 +865,7 @@ export class PyroHero extends HeroBase {
           if (m.dead || Math.hypot(m.x - c.x, m.y - c.y) > CRATER_R) continue;
           m.burnT = Math.max(m.burnT, 0.55);
           m.burnDps = Math.max(m.burnDps, this.skillAtk * 0.3);
-          m.applyVuln(CRATER_VULN, 0.6);
+          m.applyVuln(this.stats.pitVuln || CRATER_VULN, 0.6);
         }
       }
       if (!this.craterNode) {

@@ -188,7 +188,7 @@ export const BT_SKL = 0.15;   // 技能每次突破：技能伤害 +15%
 export const btN = (lv: number, step: number): number => Math.max(0, Math.floor(lv / step));
 
 /* ---------- 英雄阶段性突破（每英雄可配专属档位；未配置的英雄回退通用档） ---------- */
-export interface HeroBtEff { atkPct?: number; skillPct?: number; aspdPct?: number; rangePct?: number; pierce?: number; defIgnore?: number; critDmg?: number; ultBolts?: number; ultAutoCd?: number; shockAmpMul?: number; chainBonus?: number; skillProc?: number; ultStunBonus?: number; shockOnAtk?: number; }
+export interface HeroBtEff { atkPct?: number; skillPct?: number; aspdPct?: number; rangePct?: number; pierce?: number; defIgnore?: number; critDmg?: number; ultBolts?: number; ultAutoCd?: number; shockAmpMul?: number; shotsBonus?: number; skillProc?: number; ultStunBonus?: number; shockOnAtk?: number; burnMul?: number; explodeR?: number; vulnBonus?: number; burnOnAtk?: number; }
 export interface HeroBt { lv: number; txt: string; eff: HeroBtEff; }
 /** 弓箭手突破表（用户定稿：每 10 级一档 10~90） */
 export const HERO_BT: Record<string, HeroBt[]> = {
@@ -222,10 +222,22 @@ export const HERO_BT: Record<string, HeroBt[]> = {
     { lv: 30, txt: '突破 · 感电加深：感电增伤 +25% → +35%', eff: { shockAmpMul: 1.4 } },
     { lv: 40, txt: '突破 · 普攻/技能索敌范围 +10%', eff: { rangePct: 0.10 } },
     { lv: 50, txt: '突破 · 攻速 +12%', eff: { aspdPct: 0.12 } },
-    { lv: 60, txt: '突破 · 连锁闪电 +2 目标（累计 7）', eff: { chainBonus: 2 } },
+    { lv: 60, txt: '突破 · 连锁闪电 +2 目标（累计 7）', eff: { shotsBonus: 2 } },
     { lv: 70, txt: '突破 · 普攻15%概率释放技能（不占用也不刷新冷却）', eff: { skillProc: 0.15 } },
     { lv: 80, txt: '突破 · 大招眩晕 +0.5s（累计 1.5s）', eff: { ultStunBonus: 0.5 } },
     { lv: 90, txt: '突破 · 雷霆之躯：普攻命中也感电（+25%·3s）', eff: { shockOnAtk: 0.25 } },
+  ],
+  /** 火法师（布洛克·火须）突破表（用户定稿：每 10 级一档 10~90） */
+  pyro: [
+    { lv: 10, txt: '突破 · 攻击力 +15%', eff: { atkPct: 0.15 } },
+    { lv: 20, txt: '突破 · 技能伤害 +15%', eff: { skillPct: 0.15 } },
+    { lv: 30, txt: '突破 · 火势加深：灼烧伤害 +50%', eff: { burnMul: 1.5 } },
+    { lv: 40, txt: '突破 · 普攻/技能索敌范围 +10%', eff: { rangePct: 0.10 } },
+    { lv: 50, txt: '突破 · 攻速 +12%', eff: { aspdPct: 0.12 } },
+    { lv: 60, txt: '突破 · 烈焰溅射：普攻爆炸范围 +50%（60→90）', eff: { explodeR: 90 } },
+    { lv: 70, txt: '突破 · 烈焰爆裂火球 +1 发（累计 4）', eff: { shotsBonus: 1 } },
+    { lv: 80, txt: '突破 · 陨石坑易伤加深：25% → 35%', eff: { vulnBonus: 0.10 } },
+    { lv: 90, txt: '突破 · 烈焰之躯：普攻命中也点燃（灼烧 30%·3s）', eff: { burnOnAtk: 0.3 } },
   ],
 };
 /** 未配专属表的英雄：通用档（攻击与技能伤害 +10%/次，等价旧版节奏） */
@@ -237,10 +249,10 @@ export function heroBtList(hid: string): HeroBt[] {
     eff: { atkPct: BT_ATK, skillPct: BT_ATK },
   }));
 }
-export interface HeroBtAgg { atkPct: number; skillPct: number; aspdPct: number; rangePct: number; pierce: number; defIgnore: number; critDmg: number; ultBolts: number; ultAutoCd: number; shockAmpMul: number; chainBonus: number; skillProc: number; ultStunBonus: number; shockOnAtk: number; }
+export interface HeroBtAgg { atkPct: number; skillPct: number; aspdPct: number; rangePct: number; pierce: number; defIgnore: number; critDmg: number; ultBolts: number; ultAutoCd: number; shockAmpMul: number; shotsBonus: number; skillProc: number; ultStunBonus: number; shockOnAtk: number; burnMul: number; explodeR: number; vulnBonus: number; burnOnAtk: number; }
 /** 已达成突破汇总（等级达档即生效；攻/技/攻速/范围进属性面板，贯穿/防穿进战斗） */
 export function heroBtAgg(hid: string, lv: number): HeroBtAgg {
-  const a: HeroBtAgg = { atkPct: 0, skillPct: 0, aspdPct: 0, rangePct: 0, pierce: 0, defIgnore: 0, critDmg: 0, ultBolts: 0, ultAutoCd: 0, shockAmpMul: 1, chainBonus: 0, skillProc: 0, ultStunBonus: 0, shockOnAtk: 0 };
+  const a: HeroBtAgg = { atkPct: 0, skillPct: 0, aspdPct: 0, rangePct: 0, pierce: 0, defIgnore: 0, critDmg: 0, ultBolts: 0, ultAutoCd: 0, shockAmpMul: 1, shotsBonus: 0, skillProc: 0, ultStunBonus: 0, shockOnAtk: 0, burnMul: 1, explodeR: 0, vulnBonus: 0, burnOnAtk: 0 };
   for (const m of heroBtList(hid)) {
     if (lv < m.lv) continue;
     a.atkPct += m.eff.atkPct || 0;
@@ -253,7 +265,11 @@ export function heroBtAgg(hid: string, lv: number): HeroBtAgg {
     a.ultBolts += m.eff.ultBolts || 0;
     a.ultAutoCd += m.eff.ultAutoCd || 0;
     a.shockAmpMul *= m.eff.shockAmpMul || 1;
-    a.chainBonus += m.eff.chainBonus || 0;
+    a.shotsBonus += m.eff.shotsBonus || 0;
+    a.burnMul *= m.eff.burnMul || 1;
+    a.explodeR = Math.max(a.explodeR, m.eff.explodeR || 0);
+    a.vulnBonus += m.eff.vulnBonus || 0;
+    a.burnOnAtk += m.eff.burnOnAtk || 0;
     a.skillProc += m.eff.skillProc || 0;
     a.ultStunBonus += m.eff.ultStunBonus || 0;
     a.shockOnAtk += m.eff.shockOnAtk || 0;

@@ -563,9 +563,15 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
     if (sc.targetsOn) s.skillShots += 1;              // 技能10级 连锁+1目标
     if (voltUltCfg(hs.ultLv).chargeOn) s.chargeMul *= 0.9;   // 大招15级 充能-10%
     if (bt.shockAmpMul !== 1) s.shockAmpMul = bt.shockAmpMul;   // 30级 感电加深
-    if (bt.chainBonus) s.skillShots += bt.chainBonus;           // 60级 连锁+2目标
+    if (bt.shotsBonus) s.skillShots += bt.shotsBonus;           // 60级 连锁+2目标
     if (bt.skillProc) s.skillProc = bt.skillProc;               // 70级 普攻概率施法
     if (bt.ultStunBonus) s.ultStun += bt.ultStunBonus;          // 80级 大招眩晕+0.5s
     if (bt.shockOnAtk) s.shockOnHit = Math.max(s.shockOnHit || 0, bt.shockOnAtk);  // 90级 雷霆之躯
+  } else if (hid === 'pyro') {
+    if (bt.burnMul !== 1) s.burnMul *= bt.burnMul;              // 30级 火势加深
+    if (bt.explodeR) s.explodeR = Math.max(s.explodeR || 0, bt.explodeR);   // 60级 普攻爆炸范围60→90
+    if (bt.shotsBonus) s.skillShots += bt.shotsBonus;           // 70级 技能火球+1
+    if (bt.vulnBonus) s.pitVuln += bt.vulnBonus;                // 80级 陨石坑易伤加深
+    if (bt.burnOnAtk) s.burnOnHit = Math.max(s.burnOnHit || 0, bt.burnOnAtk);   // 90级 烈焰之躯
   }
 }
