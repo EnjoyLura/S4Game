@@ -5,7 +5,7 @@
  */
 import { Node, Graphics } from 'cc';
 import { PAL, LO } from '../../config/GameConfig';
-import { CA, btn, C, dlgConfirm, dimLayer, gpanel, label, N, WY } from '../UIKit';
+import { CA, btn, C, dimLayer, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
 import { PageCtx, artPanel, modal, toast, CX, confirmModal } from '../PageKit';
 import {
@@ -151,9 +151,9 @@ function equipIcon(parent: Node, x: number, y: number, size: number, inst: Equip
   label(box, -size / 2 + 8, -size / 2 + 18, `T${d.tier}`, { size: 15, color: '#FFF3D6', bold: true, align: 'left', w: 52, h: 24 });
 }
 
-/** 属性区（属性提升版式，用户指定）：一整块奶白板 + 金签标题出板（文字固定「基础属性」）；
- *  行=名称左/数值右（升级页签同构），强化行数值绿色；topY 为奶白板上缘 */
-function drawEquipAttrs(parent: Node, topY: number, width: number, inst: EquipInst, d: EquipDef): number {
+/** 属性区（属性提升版式）：奶白板铺满蓝头以下至按钮上方整块区域（用户确认）；金签标题骑缝板顶
+ *  （文字固定「基础属性」），行=名称左/数值右（升级页签同构），强化行数值绿色；topY/bottomY 为奶白板上/下缘 */
+function drawEquipAttrs(parent: Node, topY: number, bottomY: number, width: number, inst: EquipInst, d: EquipDef): void {
   const big = width > 420;
   const mul = tierMul(d.tier);
   const atk0 = Math.round(d.atk * mul), hp0 = Math.round(d.hp * mul);
@@ -165,18 +165,24 @@ function drawEquipAttrs(parent: Node, topY: number, width: number, inst: EquipIn
   const rows: [string, string, boolean?][] = [[primAtk ? '攻击' : '生命', String(p0)]];
   if (pV - p0 > 0) rows.push(['强化', `+${pV - p0}`, true]);
   if (sV > 0) rows.push([primAtk ? '生命' : '攻击', String(sV)]);
-  const rowH = 32, padT = 40, padB = 30;
-  const h = padT + padB + rows.length * rowH;
-  const cy = topY - h / 2;
-  gpanel(parent, 0, cy, width, h, CA('#E9DFC2', 0.94), undefined, 0, 12);
-  zoneTab(parent, -width / 2 + 70, topY + 16, '基础属性');   // 金签完全出板（属性提升同款）
+  const rowH = 32;
+  const h = topY - bottomY;
+  gpanel(parent, 0, topY - h / 2, width, h, CA('#E9DFC2', 0.94), undefined, 0, 12);
+  zoneTab(parent, -width / 2 + 70, topY, '基础属性');   // 金签骑缝板顶（板满蓝头后签压缝）
   const inset = big ? 30 : 22;
   rows.forEach((r, i) => {
-    const y = cy + h / 2 - padT - rowH / 2 - i * rowH;
+    const y = topY - 48 - i * rowH;
     label(parent, -width / 2 + inset + width * 0.2, y, r[0], { size: big ? 22 : 18, color: INK, bold: true, align: 'left', w: width * 0.4, h: 30, shrink: true });
     label(parent, width / 2 - inset - width * 0.25, y, r[1], { size: (big ? 22 : 18) + 2, color: r[2] ? OK : INK, bold: true, align: 'right', w: width * 0.5, h: 30, shrink: true });
   });
-  return cy - h / 2;
+}
+
+/** 点遮罩空白关闭（✕ 已去掉——用户确认）：只有点在遮罩本体上才关，面板/按钮上的点击冒泡 target 不是遮罩不误关 */
+function closeOnBlankTap(dim: Node): void {
+  dim.on(Node.EventType.TOUCH_END, (e: unknown) => {
+    const ev = e as { target?: Node };
+    if (ev && ev.target === dim) dim.destroy();
+  });
 }
 
 /** 装备详情小面板（对比弹窗两侧 / 装备槽详情弹窗共用）：蓝头（图标+当前角标+名称/品质/阶Lv 垂直居中）+ 属性区
@@ -196,17 +202,17 @@ function equipDetailPanel(parent: Node, x: number, y: number, inst: EquipInst, i
   label(p, tx, hy + 28, d.name, { size: big ? 24 : 18, color: '#E8E0C8', bold: true, align: 'left', w: big ? 280 : 200, h: big ? 34 : 26, shrink: true });
   label(p, tx, hy - 2, `品质：${QNAMES[d.quality]}`, { size: big ? 19 : 15, color: QCOLOR[d.quality], align: 'left', w: big ? 280 : 200, h: big ? 26 : 24, shrink: true });
   label(p, tx, hy - 32, `T${d.tier} 阶 · Lv.${inst.lv}`, { size: big ? 18 : 15, color: '#AAB2BD', align: 'left', w: big ? 280 : 200, h: big ? 24 : 24, shrink: true });
-  drawEquipAttrs(p, big ? 114 : 68, w - (big ? 64 : 30), inst, d);
+  // 奶白板铺满：蓝头下缘 → 按钮上缘上方 7px（用户确认）；按钮顶缘 大版 -217 / 侧栏 -163
+  drawEquipAttrs(p, hy - (big ? 85 : 65), (big ? -217 : -163) + 7, w, inst, d);
   return p;
 }
 
-/** 已穿戴装备属性弹窗（复用详情大面板，直接铺在遮罩上不套外层弹窗框；右上 ✕ 关闭，底部装备锻造；按钮无边框——用户反馈） */
+/** 已穿戴装备属性弹窗（复用详情大面板，直接铺在遮罩上不套外层弹窗框；✕ 已去掉——点遮罩空白关闭，底部装备锻造；按钮无边框） */
 function wornEquipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: () => void): void {
   const inst = wornInst(hid, kind)!;
   const dim = dimLayer(ctx.screens, 0.68);
   const p = equipDetailPanel(dim, 0, -80, inst, true, true);
-  const close = dlgConfirm(p, 218, 292, 52, 52, '✕', () => dim.destroy(), 26, '#8A93A0', '#5F6873', 'ui_btn_close');
-  close.name = 'btn_close';
+  closeOnBlankTap(dim);
   btn(p, 0, -255, 240, 76, '锻 造', PAL.gold, () => equipModal(ctx, hid, kind, rebuild), 24, true);
 }
 
@@ -218,7 +224,7 @@ function warehouseEquipModal(ctx: PageCtx, hid: string, inst: EquipInst, rebuild
   label(panel, 10, 220, `品质：${QNAMES[d.quality]}`, { size: 23, color: QCOLOR[d.quality], bold: true, align: 'left', w: 280, h: 34 });
   label(panel, 10, 170, `品阶：T${d.tier} 阶 · 等级 ${inst.lv}`, { size: 22, color: '#E8E0C8', align: 'left', w: 280, h: 32 });
   label(panel, 10, 120, `出售价：${sellPrice(inst)} 金币`, { size: 20, color: '#AAB2BD', align: 'left', w: 280, h: 30 });
-  drawEquipAttrs(panel, 72, 560, inst, d);
+  drawEquipAttrs(panel, 98, -210, 560, inst, d);   // 奶白板铺满：出售价下方 → 穿戴/出售钮上缘上方 7px
   btn(panel, 130, -255, 220, 76, `穿戴·${KIND_NAME[d.kind]}`, PAL.green, () => {
     wearEquip(hid, d.kind, inst.uid);
     ctx.refresh();
@@ -242,7 +248,7 @@ function confirmDismantle(ctx: PageCtx, inst: EquipInst, okText: string): void {
   });
 }
 
-/** 装备对比弹窗（无外层背板：遮罩上直接铺左右详情小面板，✕ 关闭；按钮无边框——用户反馈） */
+/** 装备对比弹窗（无外层背板：遮罩上直接铺左右详情小面板，点遮罩空白关闭；按钮无边框——用户反馈） */
 function compareEquipModal(ctx: PageCtx, hid: string, worn: EquipInst, next: EquipInst, rebuild: () => void): void {
   const dim = dimLayer(ctx.screens, 0.68);
   const side = (x: number, inst: EquipInst, isCur: boolean): void => {
@@ -260,8 +266,7 @@ function compareEquipModal(ctx: PageCtx, hid: string, worn: EquipInst, next: Equ
   };
   side(-177, worn, true);
   side(177, next, false);
-  const close = dlgConfirm(dim, 335, 268, 52, 52, '✕', () => dim.destroy(), 26, '#8A93A0', '#5F6873', 'ui_btn_close');
-  close.name = 'btn_close';
+  closeOnBlankTap(dim);   // ✕ 已去掉——点遮罩空白关闭（用户确认）
 }
 
 /** 背包格：装备=详情（穿戴/出售）；材料=详情 */
