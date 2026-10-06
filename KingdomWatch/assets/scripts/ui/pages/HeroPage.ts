@@ -3,7 +3,7 @@
  * 右列装备槽（武器横扁×1 + 2×2 防具）：点已穿槽=装备属性弹窗（锻造），空槽无反应；
  * 下方背包（无背板直接透出背景，页签三段连体无背板、仅两端外侧圆弧）：点仓库装备=同槽已穿则双面板对比（分解/替换），未穿则单弹窗（穿戴/出售）。
  */
-import { Node, Graphics } from 'cc';
+import { Node, Graphics, BlockInputEvents } from 'cc';
 import { PAL, LO } from '../../config/GameConfig';
 import { CA, btn, C, dimLayer, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
@@ -151,8 +151,8 @@ function equipIcon(parent: Node, x: number, y: number, size: number, inst: Equip
   label(box, -size / 2 + 8, -size / 2 + 18, `T${d.tier}`, { size: 15, color: '#FFF3D6', bold: true, align: 'left', w: 52, h: 24 });
 }
 
-/** 属性区（属性提升版式）：奶白板铺满蓝头以下至按钮上方整块区域（用户确认）；金签标题骑缝板顶
- *  （文字固定「基础属性」），行=名称左/数值右（升级页签同构），强化行数值绿色；topY/bottomY 为奶白板上/下缘 */
+/** 属性区（属性提升版式）：奶白板铺满蓝头以下至卡底整块区域，按钮落在板上；上缘直角贴蓝头、下弧角保留（用户确认）；
+ *  金签标题骑缝板顶（文字固定「基础属性」），行=名称左/数值右（升级页签同构），强化行数值绿色；topY/bottomY 为奶白板上/下缘 */
 function drawEquipAttrs(parent: Node, topY: number, bottomY: number, width: number, inst: EquipInst, d: EquipDef): void {
   const big = width > 420;
   const mul = tierMul(d.tier);
@@ -168,7 +168,8 @@ function drawEquipAttrs(parent: Node, topY: number, bottomY: number, width: numb
   const rowH = 32;
   const h = topY - bottomY;
   gpanel(parent, 0, topY - h / 2, width, h, CA('#E9DFC2', 0.94), undefined, 0, 12);
-  zoneTab(parent, -width / 2 + 70, topY, '基础属性');   // 金签骑缝板顶（板满蓝头后签压缝）
+  gpanel(parent, 0, topY - 6, width, 12, CA('#E9DFC2', 0.94), undefined, 0, 0);   // 补上弧角→上缘直角贴蓝头（用户确认）
+  zoneTab(parent, -width / 2 + 70, topY, '基础属性');   // 金签骑缝板顶
   const inset = big ? 30 : 22;
   rows.forEach((r, i) => {
     const y = topY - 48 - i * rowH;
@@ -185,14 +186,18 @@ function closeOnBlankTap(dim: Node): void {
   });
 }
 
-/** 装备详情小面板（对比弹窗两侧 / 装备槽详情弹窗共用）：蓝头（图标+当前角标+名称/品质/阶Lv 垂直居中）+ 属性区
- *  big=false 335×480（对比侧栏）；big=true 520×640（独立详情弹窗加大版——用户反馈原弹窗太小内容挤压） */
+/** 装备详情小面板（对比弹窗两侧 / 装备槽详情弹窗共用）：蓝头（图标+当前角标+名称/品质/阶Lv 垂直居中）+ 奶白板直贴蓝头铺到卡底，
+ *  按钮直接落在奶白板上（深色背板与上弧角已去掉——用户确认）
+ *  big=false 335×480（对比侧栏）；big=true 520×640（独立详情弹窗加大版） */
 function equipDetailPanel(parent: Node, x: number, y: number, inst: EquipInst, isCur: boolean, big = false): Node {
   const d = EQUIPS[inst.defId];
   const w = big ? 520 : 335, h = big ? 640 : 480;
-  const p = gpanel(parent, x, y, w, h, CA('#14181E', 0.94), undefined, 0, 12);   // 品质由图标座色板与品质文字表达（用户确认去品质描边）
+  const p = N('eqPanel', parent, x, y, w, h);
+  p.addComponent(BlockInputEvents);   // 卡内点击不上达遮罩（点空白才关闭）
   const hy = h / 2 - (big ? 85 : 72);
-  gpanel(p, 0, hy, w, big ? 170 : 130, CA('#20466E', 0.95), undefined, 0, 10);
+  const hh = big ? 170 : 130;
+  gpanel(p, 0, hy, w, hh, CA('#20466E', 0.95), undefined, 0, 10);
+  gpanel(p, 0, hy - hh / 2 + 5, w, 10, CA('#20466E', 0.95), undefined, 0, 0);   // 补蓝头下弧角（上弧下直）
   equipIcon(p, big ? -170 : -120, hy, big ? 110 : 76, inst);
   if (isCur) {
     gpanel(p, big ? 165 : 106, hy, big ? 110 : 96, big ? 46 : 40, CA(PAL.green, 0.95), undefined, 0, 8);
@@ -202,8 +207,7 @@ function equipDetailPanel(parent: Node, x: number, y: number, inst: EquipInst, i
   label(p, tx, hy + 28, d.name, { size: big ? 24 : 18, color: '#E8E0C8', bold: true, align: 'left', w: big ? 280 : 200, h: big ? 34 : 26, shrink: true });
   label(p, tx, hy - 2, `品质：${QNAMES[d.quality]}`, { size: big ? 19 : 15, color: QCOLOR[d.quality], align: 'left', w: big ? 280 : 200, h: big ? 26 : 24, shrink: true });
   label(p, tx, hy - 32, `T${d.tier} 阶 · Lv.${inst.lv}`, { size: big ? 18 : 15, color: '#AAB2BD', align: 'left', w: big ? 280 : 200, h: big ? 24 : 24, shrink: true });
-  // 奶白板铺满：蓝头下缘 → 按钮上缘上方 7px（用户确认）；按钮顶缘 大版 -217 / 侧栏 -163
-  drawEquipAttrs(p, hy - (big ? 85 : 65), (big ? -217 : -163) + 7, w, inst, d);
+  drawEquipAttrs(p, hy - hh / 2, -h / 2, w, inst, d);   // 奶白板：蓝头下缘直铺到卡底（下弧角保留）
   return p;
 }
 
