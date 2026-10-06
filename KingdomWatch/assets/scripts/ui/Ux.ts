@@ -230,6 +230,8 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_card_pyro_war', 'ui_card_pyro_eager', 'ui_card_pyro_stun', 'ui_card_pyro_morale', 'ui_card_pyro_ember',
   // 场景
   'scenes/scene_1_1', 'scenes/scene_1_2', 'scenes/scene_1_3',
+  // 页签专属背景（商店内景 / 基地庭院）
+  'scenes/bg_shop', 'scenes/bg_base',
 ];
 
 let preloadStarted = false;

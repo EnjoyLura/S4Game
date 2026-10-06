@@ -1,0 +1,17 @@
+{
+  "name": "批次12_页面背景_2026-10-06",
+  "outdir": "D:/AI/S4Game/美术/原图/批次12_页面背景_2026-10-06",
+  "defaults": { "model": "gpt-image-2", "quality": "high", "background": "opaque", "key": "a3", "size": "1152x2048" },
+  "items": [
+    {
+      "id": "bg_shop",
+      "type": "generate",
+      "prompt": "Vertical portrait fantasy armory shop interior background for a mobile game shop page, Kingdom Rush inspired hand-painted cartoon style, three-quarter top-down view. Warm cozy stone-and-timber merchant hall: sturdy wooden shelves and racks lining the LEFT and RIGHT edges stocked with swords, bows, crossbows, shields, helmets and glowing potions; heavy support beams and a vaulted dark timber ceiling at the TOP edge with hanging oil lanterns casting warm golden pools of light; a worn wooden plank floor and a long merchant counter with coin pouches and a rolled scroll near the BOTTOM edge; a few barrels, crates and a rug in the middle floor area kept simple and uncluttered. Rich warm mid-tone palette of amber, walnut brown and muted gold so brighter cards remain readable on top; soft painterly shading, clean composition. Absolutely no people, no characters, no creatures, no text, no letters, no UI elements, no vignette, no border."
+    },
+    {
+      "id": "bg_base",
+      "type": "generate",
+      "prompt": "Vertical portrait fantasy fortress courtyard background for a mobile game home-base page, Kingdom Rush inspired hand-painted cartoon style, three-quarter top-down view. A proud frontier keep courtyard seen from above: a round stone watchtower with a blue peaked roof rising at the TOP edge behind crenellated walls; sturdy wooden palisade and stone ramparts framing the LEFT and RIGHT edges with colorful banners and shields mounted on them; a grassy packed-earth courtyard in the middle with a stone fountain, training dummies, weapon racks, a campfire with a hanging cauldron and two cloth tents arranged around the sides; a cobblestone path entering from the BOTTOM edge and leading up to the tower gate. Cheerful heroic daytime mood, colorful greens and warm stone tones, soft painterly shading, clean composition with open space in the middle. Absolutely no people, no characters, no creatures, no text, no letters, no UI elements, no vignette, no border."
+    }
+  ]
+}

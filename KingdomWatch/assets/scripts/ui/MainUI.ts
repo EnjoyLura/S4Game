@@ -69,9 +69,9 @@ export class MainUI extends Component {
     this.goldLbl = null;
     this.diaLbl = null;
 
-    // 背景：场景图压暗当主城底图（后续换专属主城图时同 ID 覆盖即可）
-    const bg = artSprite(root, 0, 0, 750, LO.half * 2 + 240, 'scenes/scene_1_1', { sliced: false, cover: true });
-    bg.setSiblingIndex(0);
+    // 背景：页签专属底图（商店内景/基地庭院，其余页签沿用主城场景占位），压暗板保证前景可读
+    this.bgNode = null; this.bgId = '';
+    this.applyPageBg(flow.mainTab);
     const dim = gpanel(root, 0, 0, 750, LO.half * 2 + 240, CA('#10141A', 0.62), undefined, 0, 0);
     dim.setSiblingIndex(1);
 
@@ -160,7 +160,29 @@ export class MainUI extends Component {
     this.tab = i;
     flow.mainTab = i;
     this.highlightTabs();
+    this.applyPageBg(i);
     this.rebuildScreen();
+  }
+
+  /** 页签专属背景（商店内景 / 基地庭院；无专属的页签沿用主城场景占位图） */
+  private static BG_BY_TAB: Record<number, string> = { 0: 'scenes/bg_shop', 4: 'scenes/bg_base' };
+  private bgId = '';
+  private bgNode: Node | null = null;
+
+  private bgForTab(i: number): string {
+    return MainUI.BG_BY_TAB[i] || 'scenes/scene_1_1';
+  }
+
+  /** 背景切换：整节点重建（复用 artSprite 的 cover 裁剪与缓存加载），保持垫底层级 */
+  private applyPageBg(i: number): void {
+    const id = this.bgForTab(i);
+    if (id === this.bgId && this.bgNode && this.bgNode.isValid) return;
+    this.bgId = id;
+    if (this.bgNode && this.bgNode.isValid) this.bgNode.destroy();
+    this.bgNode = artSprite(this.node, 0, 0, 750, LO.half * 2 + 240, id, { sliced: false, cover: true });
+    // cover 模式下 artSprite 返回裁剪壳内的美术节点：垫底要挪的是外面的裁剪壳，否则壳盖在 UI 之上
+    const holder = this.bgNode.parent && this.bgNode.parent !== this.node ? this.bgNode.parent : this.bgNode;
+    holder.setSiblingIndex(0);
   }
 
   /** 页面刷新入口（购买/升级/穿戴后）：整屏重建 + 货币同步 */
