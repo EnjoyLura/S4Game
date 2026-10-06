@@ -487,7 +487,20 @@ export class SniperHero extends HeroBase {
     };
   }
 
+  private autoT = -1;   // 突破自动大招计时（-1=未初始化；仅 stats.ultAutoCd>0 时生效）
+
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
+    // 90 级突破：每 25s 自动释放一次大招（无需充能也不消耗充能——用户定稿）；无目标待命，出现即放
+    if (this.stats.ultAutoCd > 0) {
+      if (this.autoT < 0) this.autoT = this.stats.ultAutoCd;
+      if (!this.ultLock) {
+        this.autoT -= dt;
+        if (this.autoT <= 0) {
+          const tgt = mgr.highestHp();
+          if (tgt) { this.autoT = this.stats.ultAutoCd; this.beginUltLock(tgt); }
+        }
+      }
+    }
     // 技能连狙：4 秒窗口内每 0.28s 重新锁定「离防线最近」目标（用户调整：不再选血量最高）；
     // 窗口内暂无目标只等待不取消（如击杀后 0.3s 新怪入圈仍可继续索敌）
     if (this.volley) {
@@ -610,19 +623,24 @@ export class SniperHero extends HeroBase {
 
   /** 大招·猎杀时刻（手动）：锁定全场血量最高目标 0.5s（瞄准线+收缩准星）→ 发射 ×5.5 必暴贯穿弹（无视物抗） */
   castUlt(mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): boolean {
-    if (!this.ultReady) return false;
+    if (!this.ultReady || this.ultLock) return false;   // 锁定中防重入（自动/手动不叠加）
     const tgt = mgr.highestHp();
     if (!tgt) return false;   // 全场无目标：不消耗充能
     this.charge = 0;
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
+    this.beginUltLock(tgt);
+    void _projs; void _dmg;
+    return true;
+  }
+
+  /** 进入大招锁定演出（手动充能释放与 90 级突破自动释放共用） */
+  private beginUltLock(tgt: Monster): void {
     const lockNode = new Node('ultLock');
     lockNode.layer = Layers.Enum.UI_2D;
     lockNode.setParent(this.node.parent!);
     lockNode.setPosition(0, 0, 0);
     const g = lockNode.addComponent(Graphics);
     this.ultLock = { t: 0.5, target: tgt, node: lockNode, g };
-    void _projs; void _dmg;
-    return true;
   }
 }
 

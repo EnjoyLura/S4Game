@@ -520,7 +520,7 @@ function applyEquipAffixes(s: HeroStats, hid: string): void {
 }
 
 /** 英雄等级成长（外线养成→战斗）：每级 +8% 基础攻击、技能伤害平加 +5%基础攻击/级；
- *  阶段性突破按英雄表生效（弓箭手专属表——用户定稿：攻/速/范围/贯穿/防穿；其余英雄通用攻/技档） */
+ *  阶段性突破按英雄表生效（弓/狙专属表——用户定稿；其余英雄通用攻/技档） */
 function applyHeroGrowth(s: HeroStats, hid: string): void {
   const hs = heroState(hid);
   const bt = heroBtAgg(hid, hs.lv);
@@ -532,4 +532,7 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
   s.skillRange = Math.round(s.skillRange * (1 + bt.rangePct));
   s.pierceChance += bt.pierce;
   s.defIgnore += bt.defIgnore;
+  s.critMul += bt.critDmg;
+  s.ultBolts += bt.ultBolts;
+  s.ultAutoCd = bt.ultAutoCd;
 }

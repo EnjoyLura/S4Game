@@ -44,6 +44,7 @@ export interface HeroStats {
   chargeEff: number;    // 装备充能效率词条：击杀充能 ×(1+eff)（累加）
   pierceChance: number; // 英雄突破：普攻贯穿概率（0~1，累加）
   defIgnore: number;    // 英雄突破：无视防御比例（0~1，累加）
+  ultAutoCd: number;    // 英雄突破：大招自动释放间隔 s（0=无；狙90级=25，无需/不消耗充能）
 }
 
 export function baseArcherStats(): HeroStats {
@@ -55,7 +56,7 @@ export function baseArcherStats(): HeroStats {
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
-    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
   };
 }
 
@@ -68,7 +69,7 @@ export function baseSniperStats(): HeroStats {
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
-    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
   };
 }
 
@@ -81,7 +82,7 @@ export function basePyroStats(): HeroStats {
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 3, skillCdFlat: 0, ultBolts: 1,
-    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
   };
 }
 
@@ -94,7 +95,7 @@ export function baseVoltStats(): HeroStats {
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 5, skillCdFlat: 0, ultBolts: 1,
-    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 1, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 1, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
   };
 }
 
