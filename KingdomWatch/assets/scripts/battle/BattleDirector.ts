@@ -4,7 +4,7 @@
  */
 import { _decorator, Canvas, Component, director, Layers, Node } from 'cc';
 import { LEVEL_1_1, LevelDef, MOBS, heroSlots, nextLevelId } from '../config/Mobs';
-import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, HeroStats, archerAtkCfg } from '../config/Cards';
+import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, HeroStats, archerAtkCfg, sniperAtkCfg } from '../config/Cards';
 import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
@@ -542,6 +542,14 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
     if (ac.aspdOn) s.aspd *= 1.06;                    // 5级 攻速+6%
     if (ac.critOn) s.critRate = Math.min(1, s.critRate + 0.05);   // 10级 暴击率+5%
     if (ac.rangeOn) s.range = Math.round(s.range * 1.08);   // 15级 普攻索敌范围+8%（技能索敌不动）
+    if (hs.skillLv >= 5) s.skillCdFlat += 1;          // 技能5级 冷却-1s
+    if (hs.ultLv >= 15) s.chargeMul *= 0.9;           // 大招15级 充能-10%
+  } else if (hid === 'sniper') {
+    const ac = sniperAtkCfg(hs.atkLv);
+    s.normalMul = ac.normalMul;                       // 普攻伤害：每级+8%、20级再+20%
+    if (ac.aspdOn) s.aspd *= 1.06;                    // 5级 攻速+6%
+    if (ac.critOn) s.critRate = Math.min(1, s.critRate + 0.05);   // 10级 暴击率+5%
+    if (ac.fullHpOn) s.fullHpBonus = 0.25;            // 15级 对满血目标+25%
     if (hs.skillLv >= 5) s.skillCdFlat += 1;          // 技能5级 冷却-1s
     if (hs.ultLv >= 15) s.chargeMul *= 0.9;           // 大招15级 充能-10%
   }

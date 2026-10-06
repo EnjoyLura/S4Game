@@ -8,7 +8,7 @@
  * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/处决/残血词条）；穿戴词条（攻击/攻速/范围/暴击/充能效率/技能伤害）上场生效
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
-import { HeroStats, archerEmpCfg, archerUltCfg } from '../config/Cards';
+import { HeroStats, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg } from '../config/Cards';
 import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL } from '../config/GameConfig';
 import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
@@ -490,7 +490,8 @@ export class SniperHero extends HeroBase {
     return {
       x: this.x, y: HERO_Y + 60,
       dirX, dirY, speed: 1140,   // 与 lead 预判一致（×1.5）
-      dmg: this.effAtk * (crit ? this.stats.critMul : 1), crit,
+      dmg: this.effAtk * (this.stats.normalMul || 1) * (crit ? this.stats.critMul : 1), crit,
+      fullHpBonus: this.stats.fullHpBonus || 0,   // 技能15级：对满血目标+25%
       color: '#7FB3FF', heroId: this.id, size: 8,
       pierce: this.stats.pierce,
       slowRatio: this.stats.slowOnHit || 0,
@@ -524,7 +525,7 @@ export class SniperHero extends HeroBase {
         while (this.volley && this.volley.t <= 0) {
           const tgt = mgr.nearestToLineInRange(this.x, HERO_Y, this.stats.skillRange);
           if (!tgt) { this.volley.t += 0.1; break; }   // 0.1s 后重试
-          this.snipeShot(tgt, projs, 2, false);
+          this.snipeShot(tgt, projs, sniperSkCfg(this.stats.skillLv).mul, false);   // 技能升级：每发倍率成长
           this.volley.left--;
           if (this.volley.left <= 0) { this.volley = null; break; }
           this.volley.t += 0.28;
@@ -575,16 +576,18 @@ export class SniperHero extends HeroBase {
   /** 锁定完成：发射贯穿弹（×5.5 必暴、无视物抗、无限贯穿），拦截预判锁定方向；
    *  额外枪线卡：其余血量最高的目标各补一发 */
   private fireUltBolt(projs: ProjectileManager, mgr: MonsterManager, locked: Monster): void {
+    const uc = sniperUltCfg(this.stats.ultLv);   // 大招升级：倍率成长/弹体判定+20%/猎杀标记
     const fire1 = (t: Monster): void => {
       const lead = this.lead(t, 1100);
       projs.fire({
         x: this.x, y: HERO_Y + 60,
         dirX: lead.dirX, dirY: lead.dirY, speed: 1100,
-        dmg: this.skillAtk * 5.5, crit: true,
-        color: '#9FCBFF', heroId: this.id, size: 12,
+        dmg: this.skillAtk * uc.boltMul, crit: true,
+        color: '#9FCBFF', heroId: this.id, size: 12 * uc.rMul,
         ttl: 4, pierce: 999, spark: true,
         ignoreRes: true,
         ult: true, ability: true,   // 大招弹：击杀弹 KAPOW!（60%）
+        markAmp: uc.markAmp || undefined, markDur: uc.markDur,
       });
       projs.sparkAt(t.x, t.y, '#BFE3FF', 5);
     };
@@ -618,7 +621,8 @@ export class SniperHero extends HeroBase {
   protected castSkill(_mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): void {
     void _mgr; void _projs; void _dmg;
     this.skillCd = this.skillCdTotal;   // 冷却缩减卡
-    this.volley = { t: 0, left: Math.max(1, Math.round(this.stats.skillShots || 6)), ttl: 4 };   // 多目标锁定卡加发数
+    const sc = sniperSkCfg(this.stats.skillLv);
+    this.volley = { t: 0, left: Math.max(1, Math.round(this.stats.skillShots || 6)) + (sc.shots - 6), ttl: sc.window };   // 技能升级：+2发/+1s窗口；多目标锁定卡加发数
     // 演出：英雄身上红色环脉冲扩散（与瞬击弹道线同主题）
     const pulse = new Node('snipePulse');
     pulse.layer = Layers.Enum.UI_2D;

@@ -45,9 +45,13 @@ export interface ProjSpec {
   ignoreRes?: boolean;
   /** 无视防御比例（英雄突破，0~1；与 ignoreRes 叠加时以 ignoreRes 优先） */
   resCut?: number;
-  /** 目标词条（命中时按目标结算）：对精英/BOSS 加成 / 对残血<30% 加成 */
+  /** 目标词条（命中时按目标结算）：对精英/BOSS 加成 / 对残血<30% 加成 / 对满血加成（狙技能升级） */
   executeBonus?: number;
   lowHpBonus?: number;
+  fullHpBonus?: number;
+  /** 猎杀标记（狙大招10级）：命中后目标受伤 +markAmp 持续 markDur s */
+  markAmp?: number;
+  markDur?: number;
   /** 强化/贯穿金箭：命中迸溅金色粒子 + 加长拖尾 */
   spark?: boolean;
   /** 大招弹（猎杀时刻等）：击杀弹大招专属词条 KAPOW! */
@@ -416,7 +420,9 @@ export class ProjectileManager {
     let final = sp.dmg;
     if (sp.executeBonus && m.def.elite) final *= 1 + sp.executeBonus;
     if (sp.lowHpBonus && m.hp < m.maxHp * 0.3) final *= 1 + sp.lowHpBonus;
+    if (sp.fullHpBonus && m.hp >= m.maxHp) final *= 1 + sp.fullHpBonus;
     m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true, sp.resCut || 0);
+    if (sp.markAmp) m.applyVuln(sp.markAmp, sp.markDur || 5);   // 猎杀标记：目标受伤+20% 5s
     this.dmg.add(sp.heroId, Math.min(final, hpBefore));
     Sfx.play(sp.crit ? 'crit' : 'hit');
     if (this.parts) this.parts.burst(m.x, m.y, sp.color, sp.spark ? 5 : 2);

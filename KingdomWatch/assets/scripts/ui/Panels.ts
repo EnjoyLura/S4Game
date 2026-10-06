@@ -3,7 +3,7 @@
  * 弹窗内容块均以屏幕垂直中心为重心；三选一期间全场冻结由 BattleDirector 状态控制
  */
 import { Graphics, Node, Sprite, tween, UIOpacity, Vec3 } from 'cc';
-import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg } from '../config/Cards';
+import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg } from '../config/Cards';
 import { HERO_Y, LO, PAL } from '../config/GameConfig';
 import { DamageRow, fmtWk } from '../battle/DamageService';
 import { HeroBase } from '../battle/Hero';
@@ -479,9 +479,10 @@ export class Panels {
         ];
       } else if (hero.id === 'sniper') {
         title = '技能 · 穿颅射击';
+        const sc = sniperSkCfg(h.skillLv || 1);
         rows = [
-          ['效果', '锁定离防线最近 · 连续 ' + Math.round(h.skillShots || 6) + ' 狙'],
-          ['每发伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * 2) + '（×2.0）'],
+          ['效果', `锁定离防线最近 · 连续 ${sc.shots} 狙（${sc.window}s 窗口）`],
+          ['每发伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * sc.mul) + `（×${sc.mul.toFixed(2)}）`],
           ['特性', '持续索敌 · 独立暴击'],
           ['冷却时间', cdTotal],
           ['索敌范围', String(Math.round(h.skillRange))],
@@ -528,10 +529,11 @@ export class Panels {
     } else if (hero.id === 'sniper') {
       title = '大招 · 猎杀时刻';
       w = 280; hh = 272;
+      const uc2 = sniperUltCfg(h.ultLv || 1);
       rows = [
-        ['伤害', '×5.5 必定暴击'],
-        ['形态', '0.5 秒锁定 → 贯穿弹' + (Math.round(h.ultBolts || 1) > 1 ? ' × ' + Math.round(h.ultBolts) + ' 线' : '')],
-        ['特性', '无限贯穿 · 无视物抗'],
+        ['伤害', `×${uc2.boltMul.toFixed(2)} 必定暴击`],
+        ['形态', '0.5 秒锁定 → 贯穿弹' + (Math.round(h.ultBolts || 1) > 1 ? ' × ' + Math.round(h.ultBolts) + ' 线' : '') + (uc2.rMul > 1 ? ' · 弹体+' + Math.round((uc2.rMul - 1) * 100) + '%' : '')],
+        ['特性', '无限贯穿 · 无视物抗' + (uc2.markAmp ? ` · 标记受伤+${Math.round(uc2.markAmp * 100)}% ${uc2.markDur}s` : '')],
         ['目标', '全场血量最高'],
         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],

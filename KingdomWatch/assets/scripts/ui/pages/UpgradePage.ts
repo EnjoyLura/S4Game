@@ -70,13 +70,36 @@ const SKILL_MS_ARCHER: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string
     { lv: 20, txt: '每箭系数 +0.1' },
   ],
 };
+/* 重弩手（凯尔·鹰眼）技能升级里程碑（用户定稿） */
+const SKILL_MS_SNIPER: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string }[]> = {
+  atk: [
+    { lv: 5, txt: '攻速 +6%' },
+    { lv: 10, txt: '暴击率 +5%' },
+    { lv: 15, txt: '对满血目标伤害 +25%' },
+    { lv: 20, txt: '普攻伤害 +20%' },
+  ],
+  skill: [
+    { lv: 5, txt: '冷却 -1s' },
+    { lv: 10, txt: '连狙 +2 发' },
+    { lv: 15, txt: '索敌窗口 +1s' },
+    { lv: 20, txt: '每发倍率 +0.4' },
+  ],
+  ult: [
+    { lv: 5, txt: '大招弹体范围 +20%' },
+    { lv: 10, txt: '猎杀标记：受伤 +20% · 5s' },
+    { lv: 15, txt: '大招充能 -10%' },
+    { lv: 20, txt: '倍率 +1.0' },
+  ],
+};
 const SKILL_GENERIC: Record<'atk' | 'skill' | 'ult', string> = {
   atk: '普攻伤害 +15%',
   skill: `技能伤害 +${Math.round(BT_SKL * 100)}%`,
   ult: '大招伤害 +15%',
 };
 const skillMilestones = (hid: string, slot: 'atk' | 'skill' | 'ult'): { lv: number; txt: string }[] =>
-  hid === 'archer' ? SKILL_MS_ARCHER[slot] : btMs(MAX.skill, BT_STEP.skill, SKILL_GENERIC[slot]);
+  hid === 'archer' ? SKILL_MS_ARCHER[slot]
+    : hid === 'sniper' ? SKILL_MS_SNIPER[slot]
+      : btMs(MAX.skill, BT_STEP.skill, SKILL_GENERIC[slot]);
 
 /* 页签跨刷新保持（升级后 refresh 重建页面不跳回「等级」） */
 const st: { tab: 0 | 1 | 2 | 3 } = { tab: 0 };
@@ -92,7 +115,7 @@ function statsAt(hid: string, lv: number, wpnLv: number, skillLv?: number): { at
   const base = def.baseAtk * (1 + (lv - 1) * 0.08) * (1 + bt.atkPct)
     * (1 + (wpnLv - 1) * 0.06) * (1 + btN(wpnLv, BT_STEP.weapon) * BT_WPN);
   const atk = Math.round(base * (1 + agg.atkPct) + agg.atkFlat);
-  const sklMul = hid === 'archer'
+  const sklMul = (hid === 'archer' || hid === 'sniper')
     ? (1 + (skl - 1) * 0.08)
     : (1 + (skl - 1) * 0.10) * (1 + btN(skl, BT_STEP.skill) * BT_SKL);
   const skillDmg = Math.round(base * sklMul * (1 + bt.skillPct) * (1 + (lv - 1) * 0.05)) + agg.skillDmgFlat;
@@ -429,7 +452,7 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
   } else {
     nm = slot === 'atk' ? '普攻伤害' : '大招伤害';
     // 弓箭手每级+8%（5级档换成机制里程碑）；其余英雄每级+10%且每5级+15%
-    const pct = (l: number): number => hid === 'archer' ? (l - 1) * 8 : (l - 1) * 10 + btN(l, BT_STEP.skill) * 15;
+    const pct = (l: number): number => (hid === 'archer' || hid === 'sniper') ? (l - 1) * 8 : (l - 1) * 10 + btN(l, BT_STEP.skill) * 15;
     curS = `+${pct(lv)}%`;
     if (!maxed) delta = `→ +${pct(lv + 1)}%`;
   }
