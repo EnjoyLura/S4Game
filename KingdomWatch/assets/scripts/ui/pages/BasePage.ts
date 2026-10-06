@@ -94,7 +94,7 @@ function keepModal(ctx: PageCtx): void {
       toast(r.msg);
       if (r.ok) { const d = panel.parent; if (d) d.destroy(); ctx.refresh(); }
     }, 24, true);
-    gpanel(act, 263, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
+    if (sv.gold >= cost) gpanel(act, 263, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);   // 红点=金币够升（用户反馈）
   } else {
     label(act, 0, 0, '已达等级上限', { size: 22, color: '#AAB2BD' });
   }

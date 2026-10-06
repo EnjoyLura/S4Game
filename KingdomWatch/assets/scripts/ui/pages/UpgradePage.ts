@@ -96,8 +96,8 @@ export function buildUpgrade(ctx: PageCtx): void {
     /* 常驻英雄栏：头像切换（未拥有灰锁）；用户确认：头像不加边框（无描边、无带环座美术） */
     (['archer', 'sniper', 'pyro', 'volt'] as const).forEach((id, i) => {
       const o = sv.heroes[id].owned;
-      const av = gpanel(content, WX(28 + i * 76, 84), WY(205, 84), 84, 84,
-        CA('#2A3240', 1), undefined, 0, 44);
+      const av = gpanel(content, WX(28 + i * 108, 84), WY(205, 84), 84, 84,
+        CA('#2A3240', 1), undefined, 0, 44);   // 间距 108=头像84+24 缝（用户反馈：太挤）
       artSprite(av, 0, 0, 84, 84, HERO_DEFS[id].avatar, { sliced: false });   // 头像填满整圆（外围黑环已去掉——用户反馈）
       if (!o) { gpanel(av, 0, 0, 84, 84, CA('#0B0F16', 0.6), undefined, 0, 42); label(av, 0, 0, '🔒', { size: 28 }); }
       av.on(Node.EventType.TOUCH_END, () => {
@@ -310,7 +310,7 @@ function tabLevel(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
   costChip(act, -210, 0, '🪙', maxed ? 0 : heroUpCost(lv), sv.gold, 130);
   btn(act, 215, 0, 170, 54, maxed ? 'MAX' : '升 级', maxed ? '#5A6472' : PAL.gold,
     () => { if (!maxed) save(hid, upHero(hid), ctx); }, 24, true);
-  if (!maxed) gpanel(act, 288, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
+  if (!maxed && sv.gold >= heroUpCost(lv)) gpanel(act, 288, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);   // 红点=当前就能升（买不起不亮——用户反馈）
   /* 等级效果：阶段性突破步骤条（英雄每10级一突破，与武器页签共用 fxStepper；背板贴内容高度、标题完全出板） */
   fxStepper(parent, topY - p1H, actCy + actH / 2 + 14, '等级效果', heroMilestones(), lv);
 }
@@ -348,7 +348,7 @@ function tabWeapon(parent: Node, ctx: PageCtx, hid: string, topY: number): void 
   costChip(act, -75, 0, '🧱', maxed ? 0 : c.mat, matOwned(), 70);
   btn(act, 215, 0, 170, 54, maxed ? 'MAX' : '强 化', maxed ? '#5A6472' : PAL.gold,
     () => { if (!maxed) save(hid, upWeapon(hid), ctx); }, 24, true);
-  if (!maxed) gpanel(act, 288, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
+  if (!maxed && sv.gold >= c.gold && matOwned() >= c.mat) gpanel(act, 288, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);   // 红点=材料金币都够
   /* 等级效果：阶段性突破步骤条（武器每10级一突破，与等级页签共用 fxStepper，展示武器阶段档位） */
   fxStepper(parent, topY - p1H, actCy + actH / 2 + 14, '等级效果', weaponMilestones(), lv);
 }
@@ -421,11 +421,11 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
       toast(r.msg);
       if (r.ok) { const d2 = panel.parent; if (d2) d2.destroy(); rebuild(); }
     }, 24, true);
-    gpanel(act, 238, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
+    if (sv.gold >= cost.gold && matOwned() >= cost.mat) gpanel(act, 238, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);   // 红点=当前就能升
   } else {
     label(act, 0, 0, '已达等级上限', { size: 22, color: '#AAB2BD' });
   }
-  /* 等级效果：竖线步骤条（与页签共用 fxStepper，弹窗内板宽 560） */
+  /* 等级效果：阶段性突破步骤条（每5级一突破；弹窗内板宽 560） */
   fxStepper(panel, p1Top - p1H, actCy + actH / 2 + 14, '等级效果', SKILL_MILESTONES[slot], lv, PW);
 }
 
@@ -512,7 +512,7 @@ export function equipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: 
       toast(r.msg);
       if (r.ok) { const p2 = panel.parent; if (p2) p2.destroy(); rebuild(); }
     }, 24, true);
-    gpanel(act, 263, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
+    if (sv.gold >= c.gold && matOwned() >= c.mat) gpanel(act, 263, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);   // 红点=当前就能升
   } else {
     label(act, 0, 0, '已达强化上限', { size: 22, color: '#AAB2BD' });
   }
