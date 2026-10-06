@@ -106,3 +106,15 @@ export function confirmModal(ctx: PageCtx, title: string, lines: string[], okTex
 
 /** 内容顶基坐标：统一用 WY() 直读线稿设计值（线稿数字即含刘海偏移的绝对 y）；CX 为横向便捷别名 */
 export function CX(l: number, w: number): number { return WX(l, w); }
+
+/** 图内左右切换圆钮（关卡页/英雄页共用——用户确认复用）：无边框深色半透圆板 + 奶白箭头；dir -1=左 1=右 */
+export function circleArrow(parent: Node, x: number, y: number, dir: -1 | 1, cb: () => void): Node {
+  const ar = gpanel(parent, x, y, 64, 64, CA('#14181E', 0.55), undefined, 0, 32);
+  label(ar, 0, 0, dir < 0 ? '◀' : '▶', { size: 26, color: '#F5E6C8', bold: true, w: 64, h: 40 });
+  ar.on(Node.EventType.TOUCH_END, (e: unknown) => {
+    const ev = e as { propagationStopped?: boolean };
+    if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;   // 阻断冒泡：英雄页立绘板监听 TOUCH_END 弹属性总览，箭头点击不能触发
+    cb();
+  });
+  return ar;
+}

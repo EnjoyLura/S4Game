@@ -7,7 +7,7 @@ import { Node, director } from 'cc';
 import { PAL } from '../../config/GameConfig';
 import { CA, btn, gbar, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
-import { PageCtx, artPanel, toast } from '../PageKit';
+import { PageCtx, artPanel, toast, circleArrow } from '../PageKit';
 import { CHEST_COND, claimChest, starKey, squadList } from '../../core/GameData';
 import { loadSave } from '../../core/SaveData';
 import { flow } from '../../core/Flow';
@@ -78,9 +78,7 @@ export function buildLevels(ctx: PageCtx): void {
       label(scene, 0, -24, `通关 ${LEVELS[st.i - 1].id} 解锁`, { size: 20, color: '#C9D8BC', w: 500, h: 30, outline: '#1C2A18', outlineW: 2 });   // 上一关（用户调整：按当前关动态显示，而非恒 1-1）
     }
     for (const dx of [-205, 205]) {
-      const ar = gpanel(scene, dx, 0, 64, 64, CA('#14181E', 0.55), undefined, 0, 32);
-      label(ar, 0, 0, dx < 0 ? '◀' : '▶', { size: 26, color: '#F5E6C8', bold: true, w: 64, h: 40 });
-      ar.on(Node.EventType.TOUCH_END, () => {
+      circleArrow(scene, dx, 0, dx < 0 ? -1 : 1, () => {
         st.i = (st.i + (dx < 0 ? LEVELS.length - 1 : 1)) % LEVELS.length;
         while (st.d > 0 && !diffUnlocked(st.i, st.d)) st.d--;
         render();

@@ -7,7 +7,7 @@ import { Node, Graphics, BlockInputEvents } from 'cc';
 import { PAL, LO } from '../../config/GameConfig';
 import { CA, btn, C, dimLayer, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
-import { PageCtx, artPanel, modal, toast, CX, confirmModal } from '../PageKit';
+import { PageCtx, artPanel, modal, toast, CX, confirmModal, circleArrow } from '../PageKit';
 import {
   EquipKind, EquipDef, KIND_NAME, QCOLOR, EQUIPS, MATS, HERO_DEFS,
   heroStats, sellEquip, sellPrice, wearEquip, wornInst, equipAtk, equipHp, tierMul,
@@ -50,8 +50,8 @@ export function buildHeroes(ctx: PageCtx): void {
     const portrait = gpanel(content, CX(160, 280), WY(305, 440), 280, 440, CA('#20262F', 1), '#FFFFFF33', 1.5, 18);
     artSprite(portrait, 0, 0, 280, 440, 'hero_' + hid + '_portrait', { belowIdx: 0 });
     artSprite(portrait, 0, 40, 190, 190, def.avatar, { sliced: false });
-    btn(portrait, -105, -20, 70, 70, '◀', PAL.gold, () => { state.hi = (state.hi + owned.length - 1) % owned.length; render(); }, 26, true);
-    btn(portrait, 105, -20, 70, 70, '▶', PAL.gold, () => { state.hi = (state.hi + 1) % owned.length; render(); }, 26, true);
+    circleArrow(portrait, -105, -20, -1, () => { state.hi = (state.hi + owned.length - 1) % owned.length; render(); });
+    circleArrow(portrait, 105, -20, 1, () => { state.hi = (state.hi + 1) % owned.length; render(); });
     portrait.on(Node.EventType.TOUCH_END, () => attrsModal(ctx, hid));
 
     /* 战力徽章（立绘正下方） */
