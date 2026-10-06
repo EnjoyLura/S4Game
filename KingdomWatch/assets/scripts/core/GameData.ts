@@ -178,10 +178,17 @@ export function undeployHero(hid: string): OpResult {
 /* ================= 经济公式（数值默认值，校准只改这里） ================= */
 
 const r10 = (v: number): number => Math.max(10, Math.round(v / 10) * 10);
-export const MAX = { hero: 30, weapon: 20, skill: 20, equip: 20, keep: 10 };
-export const heroUpCost = (lv: number): number => r10(100 * Math.pow(lv, 1.35));
+export const MAX = { hero: 90, weapon: 90, skill: 20, equip: 20, keep: 10 };
+/** 阶段性突破（用户确认节奏）：英雄/武器每 10 级、技能每 5 级一次属性跳升，跳升并入属性乘区 */
+export const BT_STEP = { hero: 10, weapon: 10, skill: 5 };
+export const BT_ATK = 0.10;   // 英雄每次突破：攻击与技能伤害基数 +10%
+export const BT_WPN = 0.08;   // 武器每次突破：攻击与技能伤害基数 +8%
+export const BT_SKL = 0.15;   // 技能每次突破：技能伤害 +15%
+/** 已达成突破次数（等级每达 step 整倍数突破一次：lv10 → 1 次、lv90 → 9 次） */
+export const btN = (lv: number, step: number): number => Math.max(0, Math.floor(lv / step));
+export const heroUpCost = (lv: number): number => r10(100 * Math.pow(lv, 1.35));   // 英雄升级只耗金币（用户确认）
 export const weaponUpCost = (lv: number): { gold: number; mat: number } => ({ gold: r10(150 * Math.pow(lv, 1.4)), mat: 1 + Math.floor(lv / 5) });
-export const skillUpCost = (lv: number): number => r10(200 * Math.pow(lv, 1.5));
+export const skillUpCost = (lv: number): { gold: number; mat: number } => ({ gold: r10(200 * Math.pow(lv, 1.5)), mat: 1 + Math.floor(lv / 6) });   // 技能金币+材料（用户确认）
 export const equipUpCost = (lv: number): { gold: number; mat: number } => ({ gold: r10(120 * Math.pow(lv, 1.4)), mat: 1 + Math.floor(lv / 7) });
 export const keepUpCost = (lv: number): number => r10(500 * Math.pow(lv, 1.6));
 /** 主城效果：基础1000耐久，每级+100；每3级+200盾 */
@@ -205,10 +212,11 @@ export function heroStats(hid: string): HeroStats {
   const def = HERO_DEFS[hid];
   const hs = heroState(hid);
   const agg = equipAgg(hid);
-  const lvMul = 1 + (hs.lv - 1) * 0.08;
-  const wpnMul = 1 + (hs.weaponLv - 1) * 0.06;
+  const lvMul = (1 + (hs.lv - 1) * 0.08) * (1 + btN(hs.lv, BT_STEP.hero) * BT_ATK);
+  const wpnMul = (1 + (hs.weaponLv - 1) * 0.06) * (1 + btN(hs.weaponLv, BT_STEP.weapon) * BT_WPN);
+  const sklMul = (1 + (hs.skillLv - 1) * 0.10) * (1 + btN(hs.skillLv, BT_STEP.skill) * BT_SKL);
   const atk = Math.round(def.baseAtk * lvMul * wpnMul * (1 + agg.atkPct) + agg.atkFlat);
-  const skillDmg = Math.round(def.baseAtk * lvMul * wpnMul * (1 + (hs.skillLv - 1) * 0.10) * (1 + (hs.lv - 1) * 0.05)) + agg.skillDmgFlat;
+  const skillDmg = Math.round(def.baseAtk * lvMul * wpnMul * sklMul * (1 + (hs.lv - 1) * 0.05)) + agg.skillDmgFlat;
   return {
     power: Math.round(atk + skillDmg * 0.5),
     atk, atkSpd: def.atkSpd, skillDmg,
@@ -369,15 +377,16 @@ export function upWeapon(hid: string): OpResult {
   return { ok: true, msg: `武器强化至 Lv.${h.weaponLv}` };
 }
 
-/** 技能升级（slot: atk/skill/ult，金币） */
+/** 技能升级（slot: atk/skill/ult，金币+材料——用户确认） */
 export function upSkill(hid: string, slot: 'atk' | 'skill' | 'ult'): OpResult {
   const sv = loadSave();
   const h = sv.heroes[hid];
   const key = slot === 'atk' ? 'atkLv' : slot === 'skill' ? 'skillLv' : 'ultLv';
   if (h[key] >= MAX.skill) return { ok: false, msg: '已达等级上限' };
-  const cost = skillUpCost(h[key]);
-  if (sv.gold < cost) return { ok: false, msg: '金币不足' };
-  sv.gold -= cost;
+  const c = skillUpCost(h[key]);
+  if (sv.gold < c.gold) return { ok: false, msg: '金币不足' };
+  if (!spendMat(c.mat)) return { ok: false, msg: '强化材料不足' };
+  sv.gold -= c.gold;
   h[key]++;
   saveSave();
   return { ok: true, msg: '技能升级成功' };

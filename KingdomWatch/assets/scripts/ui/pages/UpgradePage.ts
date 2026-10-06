@@ -15,6 +15,7 @@ import {
   EquipKind, HERO_DEFS, EQUIPS, KIND_NAME, QCOLOR, MAX,
   heroStats, heroUpCost, weaponUpCost, skillUpCost, equipUpCost,
   upHero, upWeapon, upSkill, upWornEquip, wornInst, equipStat, statFmt, equipAgg, STAT_NAME, StatKey, matCount,
+  BT_STEP, BT_ATK, BT_WPN, BT_SKL, btN,
 } from '../../core/GameData';
 import { loadSave, saveSave } from '../../core/SaveData';
 
@@ -34,28 +35,9 @@ const skillName = (hid: string, slot: 'atk' | 'skill' | 'ult'): string =>
 /** 技能槽切图：ui_icon_<atk|skill|ult>_<hid>（切图批次），缺图回退文字 */
 const skillIconId = (hid: string, slot: 'atk' | 'skill' | 'ult'): string => `ui_icon_${slot}_${hid}`;
 
-/* 技能阶段性等级效果（升级弹窗「等级效果」分区展示；已达成的档位打 ✓）
- * 普攻档位文案为定稿；技能/大招按同节奏起草，数值待战斗侧实现后校准 */
-const SKILL_MILESTONES: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string }[]> = {
-  atk: [
-    { lv: 5, txt: '冷却 -1s' },
-    { lv: 10, txt: '强化普攻 +2发' },
-    { lv: 15, txt: '强化普攻暴击率 +20%' },
-    { lv: 20, txt: '物理穿透 +35%' },
-  ],
-  skill: [
-    { lv: 5, txt: '冷却 -1s' },
-    { lv: 10, txt: '贯穿目标 +1' },
-    { lv: 15, txt: '命中范围 +20%' },
-    { lv: 20, txt: '物理穿透 +35%' },
-  ],
-  ult: [
-    { lv: 5, txt: '冷却 -2s' },
-    { lv: 10, txt: '风暴持续时间 +2s' },
-    { lv: 15, txt: '风暴伤害 +20%' },
-    { lv: 20, txt: '引力范围 +30%' },
-  ],
-};
+/* 阶段性突破档位（真实数值——用户确认节奏：英雄/武器每10级、技能每5级一次跳升，文案与 GameData 公式一致；已达成的档位打 ✓） */
+const btMs = (cap: number, step: number, txt: string): { lv: number; txt: string }[] =>
+  Array.from({ length: Math.floor(cap / step) }, (_, i) => ({ lv: (i + 1) * step, txt: `突破 · ${txt}` }));
 
 /* 羊皮纸卡面配色（同 Panels 战斗卡）；品质字色用加深版（原 QCOLOR 在浅底上看不清） */
 const INK = '#4A3214';
@@ -64,49 +46,30 @@ const OK = '#3E7C28';
 const NO = '#B03A2E';
 const QCARD = ['#6B5A3A', '#3E7C28', '#1F6BC4', '#8A3FD0'];
 
-/* 等级效果里程碑（展示性文案，战斗内逐步落地） */
-const MILESTONES: Record<string, { lv: number; txt: string }[]> = {
-  archer: [
-    { lv: 5, txt: '攻击力 +5%' },
-    { lv: 10, txt: '攻速 +10%' },
-    { lv: 15, txt: '普攻10%射出贯穿箭' },
-  ],
-  sniper: [
-    { lv: 5, txt: '攻击力 +8%' },
-    { lv: 10, txt: '暴击率 +10%' },
-    { lv: 15, txt: '大招必定暴击' },
-  ],
-};
-
-/* 武器强化阶段档位（展示性文案，战斗内逐步落地；武器驱动普攻，档位偏普攻向，数值待战斗侧校准） */
-const WEAPON_MILESTONES: Record<string, { lv: number; txt: string }[]> = {
-  archer: [
-    { lv: 5, txt: '攻速 +8%' },
-    { lv: 10, txt: '攻击力 +12%' },
-    { lv: 15, txt: '普攻20%追加一箭' },
-    { lv: 20, txt: '普攻伤害 +20%' },
-  ],
-  sniper: [
-    { lv: 5, txt: '攻击力 +10%' },
-    { lv: 10, txt: '暴击伤害 +25%' },
-    { lv: 15, txt: '普攻必定命中' },
-    { lv: 20, txt: '普攻伤害 +25%' },
-  ],
+/** 英雄/技能突破步骤条数据（每次跳升值取自 GameData 常量，与属性公式一致） */
+const heroMilestones = (): { lv: number; txt: string }[] => btMs(MAX.hero, BT_STEP.hero, `攻击与技能伤害 +${Math.round(BT_ATK * 100)}%`);
+const weaponMilestones = (): { lv: number; txt: string }[] => btMs(MAX.weapon, BT_STEP.weapon, `攻击与技能伤害 +${Math.round(BT_WPN * 100)}%`);
+const SKILL_MILESTONES: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string }[]> = {
+  atk: btMs(MAX.skill, BT_STEP.skill, '普攻伤害 +15%'),
+  skill: btMs(MAX.skill, BT_STEP.skill, `技能伤害 +${Math.round(BT_SKL * 100)}%`),
+  ult: btMs(MAX.skill, BT_STEP.skill, '大招伤害 +15%'),
 };
 
 /* 页签跨刷新保持（升级后 refresh 重建页面不跳回「等级」） */
 const st: { tab: 0 | 1 | 2 | 3 } = { tab: 0 };
 
-/** 指定等级/武器/技能等级下的三维属性（复刻 heroStats 公式，供升级预览差值） */
+/** 指定等级/武器/技能等级下的三维属性（复刻 heroStats 公式含阶段性突破，供升级预览差值） */
 function statsAt(hid: string, lv: number, wpnLv: number, skillLv?: number): { atk: number; skillDmg: number } {
   const sv = loadSave();
   const def = HERO_DEFS[hid];
   const h = sv.heroes[hid];
   const skl = skillLv ?? h.skillLv;
   const agg = equipAgg(hid);   // 穿戴词条：攻击平加/加成、技能伤害平加
-  const base = def.baseAtk * (1 + (lv - 1) * 0.08) * (1 + (wpnLv - 1) * 0.06);
+  const base = def.baseAtk
+    * (1 + (lv - 1) * 0.08) * (1 + btN(lv, BT_STEP.hero) * BT_ATK)
+    * (1 + (wpnLv - 1) * 0.06) * (1 + btN(wpnLv, BT_STEP.weapon) * BT_WPN);
   const atk = Math.round(base * (1 + agg.atkPct) + agg.atkFlat);
-  const skillDmg = Math.round(base * (1 + (skl - 1) * 0.10) * (1 + (lv - 1) * 0.05)) + agg.skillDmgFlat;
+  const skillDmg = Math.round(base * (1 + (skl - 1) * 0.10) * (1 + btN(skl, BT_STEP.skill) * BT_SKL) * (1 + (lv - 1) * 0.05)) + agg.skillDmgFlat;
   return { atk, skillDmg };
 }
 
@@ -348,8 +311,8 @@ function tabLevel(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
   btn(act, 215, 0, 170, 54, maxed ? 'MAX' : '升 级', maxed ? '#5A6472' : PAL.gold,
     () => { if (!maxed) save(hid, upHero(hid), ctx); }, 24, true);
   if (!maxed) gpanel(act, 288, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
-  /* 等级效果：竖线步骤条（与武器页签共用 fxStepper；背板贴内容高度、标题完全出板） */
-  fxStepper(parent, topY - p1H, actCy + actH / 2 + 14, '等级效果', MILESTONES[hid] || [], lv);
+  /* 等级效果：阶段性突破步骤条（英雄每10级一突破，与武器页签共用 fxStepper；背板贴内容高度、标题完全出板） */
+  fxStepper(parent, topY - p1H, actCy + actH / 2 + 14, '等级效果', heroMilestones(), lv);
 }
 
 /* ---------- 武器页签：与等级页签完全同构版式（用户确认整体复制）——奶白属性板 + 等级效果步骤条 + 消耗/强化条 ---------- */
@@ -386,8 +349,8 @@ function tabWeapon(parent: Node, ctx: PageCtx, hid: string, topY: number): void 
   btn(act, 215, 0, 170, 54, maxed ? 'MAX' : '强 化', maxed ? '#5A6472' : PAL.gold,
     () => { if (!maxed) save(hid, upWeapon(hid), ctx); }, 24, true);
   if (!maxed) gpanel(act, 288, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
-  /* 等级效果：竖线步骤条（与等级页签共用 fxStepper，展示武器阶段档位） */
-  fxStepper(parent, topY - p1H, actCy + actH / 2 + 14, '等级效果', WEAPON_MILESTONES[hid] || [], lv);
+  /* 等级效果：阶段性突破步骤条（武器每10级一突破，与等级页签共用 fxStepper，展示武器阶段档位） */
+  fxStepper(parent, topY - p1H, actCy + actH / 2 + 14, '等级效果', weaponMilestones(), lv);
 }
 
 /* ---------- 技能页签：无大背板（用户确认）——技能卡×3 浮于背景：无框圆图标 + 名称 + 居中等级，点击弹升级弹窗 ---------- */
@@ -439,8 +402,9 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
     if (!maxed) delta = `+${next.skillDmg - cur.skillDmg}`;
   } else {
     nm = slot === 'atk' ? '普攻伤害' : '大招伤害';
-    curS = `+${(lv - 1) * 10}%`;
-    if (!maxed) delta = `→ +${lv * 10}%`;
+    const pct = (l: number): number => (l - 1) * 10 + btN(l, BT_STEP.skill) * 15;   // 每5级突破跳 +15%
+    curS = `+${pct(lv)}%`;
+    if (!maxed) delta = `→ +${pct(lv + 1)}%`;
   }
   label(p1, -PW / 2 + 90, 0, nm, { size: 22, color: INK, bold: true, align: 'left', w: 160, h: 30, shrink: true });
   label(p1, PW / 2 - 310, 0, curS, { size: 24, color: INK, bold: true, align: 'right', w: 140, h: 30, shrink: true });
@@ -450,7 +414,8 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
   const actCy = -H / 2 + 46;
   const act = gpanel(panel, 0, actCy, PW, actH, CA('#14181E', 0.72), undefined, 0, 32);
   if (!maxed) {
-    costChip(act, -175, 0, '🪙', cost, sv.gold, 130);
+    costChip(act, -175, 0, '🪙', cost.gold, sv.gold, 100);
+    costChip(act, -30, 0, '🧱', cost.mat, matOwned(), 70);
     btn(act, 165, 0, 170, 54, '升 级', PAL.gold, () => {
       const r = upSkill(hid, slot);
       toast(r.msg);
