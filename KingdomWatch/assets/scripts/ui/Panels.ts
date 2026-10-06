@@ -480,7 +480,7 @@ export class Panels {
         title = '技能 · 穿颅射击';
         rows = [
           ['效果', '锁定离防线最近 · 连续 ' + Math.round(h.skillShots || 6) + ' 狙'],
-          ['每发伤害', Math.round(h.atk * h.atkMul * 2) + '（×2.0）'],
+          ['每发伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * 2) + '（×2.0）'],
           ['特性', '持续索敌 · 独立暴击'],
           ['冷却时间', cdTotal],
           ['索敌范围', String(Math.round(h.skillRange))],
@@ -490,7 +490,7 @@ export class Panels {
         title = '技能 · 烈焰爆裂';
         rows = [
           ['效果', '锁定最密集敌群 · 齐射 ' + Math.round(h.skillShots || 3) + ' 颗爆裂火球'],
-          ['每发伤害', Math.round(h.atk * h.atkMul * 1.6) + '（×1.6）'],
+          ['每发伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * 1.6) + '（×1.6）'],
           ['特性', '大范围爆炸 + 灼烧'],
           ['冷却时间', cdTotal],
           ['索敌范围', String(Math.round(h.skillRange))],
@@ -500,7 +500,7 @@ export class Panels {
         title = '技能 · 连锁闪电';
         rows = [
           ['效果', '最多连锁 ' + Math.round(h.skillShots || 5) + ' 个目标'],
-          ['每跳伤害', Math.round(h.atk * h.atkMul * 1.4) + '（×1.4）'],
+          ['每跳伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * 1.4) + '（×1.4）'],
           ['特性', shockTxt || '跳距 ' + Math.round(260 * (h.skillRangeMul || 1))],
           ['冷却时间', cdTotal],
           ['索敌范围', String(Math.round(h.skillRange))],
@@ -513,7 +513,7 @@ export class Panels {
       title = '大招 · 扇形箭雨';
       w = 280; hh = 272;
       rows = [
-        ['伤害', Math.round(h.atk * h.atkMul * 0.65) + ' × 每箭'],
+        ['伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * 0.65) + ' × 每箭'],
         ['形态', Math.round(h.ultRounds || 1) > 1 ? Math.round(h.ultRounds) + ' 轮 × 两排扇形 · 每排 8 箭' : '两排扇形 × 每排 8 箭'],
         ['特性', '无限贯穿'],
         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
@@ -540,7 +540,7 @@ export class Panels {
       title = '大招 · 陨石天降';
       w = 280; hh = 272;
       rows = [
-        ['伤害', Math.round(h.atk * h.atkMul * 3.5) + ' × 每颗'],
+        ['伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * 3.5) + ' × 每颗'],
         ['索敌', '锁定怪群最密集处·固定范围'],
         ['形态', '梅花五点砸落 5 颗陨石' + (h.ultHaste ? ' · 放后攻速提升 5 秒' : '')],
         ['陨石坑', '燃烧 4 秒：灼烧 + 易伤 25%'],
@@ -553,7 +553,7 @@ export class Panels {
       title = '大招 · 天雷灭世';
       w = 280; hh = 272;
       rows = [
-        ['伤害', Math.round(h.atk * h.atkMul * 2.2) + ' × 每道'],
+        ['伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * 2.2) + ' × 每道'],
         ['形态', '15 道天雷轰炸全场'],
         ['特性', '范围爆炸 · 眩晕 1 秒' + (shockTxt ? ' · ' + shockTxt : '')],
         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],

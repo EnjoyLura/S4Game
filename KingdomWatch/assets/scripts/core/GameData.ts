@@ -23,20 +23,30 @@ export const MATS: Record<string, MatDef> = {
   mat_rune: { id: 'mat_rune', name: '符文碎片', price: 200, desc: '高阶强化的稀有材料' },
 };
 
+/** 装备词条（用户确认按部位固定归属）：头盔=攻击/攻击加成，饰品=暴击率/暴击伤害，
+ *  手套=攻速/攻击范围，衣服=技能伤害/充能效率，武器=攻击/技能伤害+一条专属（atkPct/critRate/critDmg/chargeEff/atkSpd 之一） */
+export type StatKey = 'atk' | 'atkPct' | 'skillDmg' | 'critRate' | 'critDmg' | 'atkSpd' | 'range' | 'chargeEff';
+export const STAT_NAME: Record<StatKey, string> = {
+  atk: '攻击', atkPct: '攻击加成', skillDmg: '技能伤害', critRate: '暴击率',
+  critDmg: '暴击伤害', atkSpd: '攻速', range: '攻击范围', chargeEff: '充能效率',
+};
+/** 百分比词条（展示 ×100 加 %；其余为整数值） */
+export const PCT_STATS: StatKey[] = ['atkPct', 'critRate', 'critDmg', 'atkSpd', 'chargeEff'];
+
 /** 装备/武器模板（商店购买/掉落按此实例化） */
 export interface EquipDef {
   id: string; name: string; kind: EquipKind; quality: Quality; tier: number;
-  /** 主属性值（lv1 基础；阶级每+1 属性×1.8） */
-  atk: number; hp: number;
+  /** 词条表（lv1 基础值；阶级每+1 数值×1.8，百分比词条同乘） */
+  stats: Partial<Record<StatKey, number>>;
   price: number; unlock: string; // 商店价/解锁关卡
 }
 export const EQUIPS: Record<string, EquipDef> = {
-  wpn_bow: { id: 'wpn_bow', name: '猎风长弓', kind: 'weapon', quality: 1, tier: 1, atk: 24, hp: 0, price: 800, unlock: '1-1' },
-  wpn_crossbow: { id: 'wpn_crossbow', name: '鹰眼重弩', kind: 'weapon', quality: 3, tier: 2, atk: 46, hp: 0, price: 1200, unlock: '1-2' },
-  helm_falcon: { id: 'helm_falcon', name: '猎鹰头盔', kind: 'helm', quality: 2, tier: 1, atk: 0, hp: 60, price: 600, unlock: '1-1' },
-  acc_moon: { id: 'acc_moon', name: '月纹坠饰', kind: 'acc', quality: 1, tier: 1, atk: 8, hp: 30, price: 300, unlock: '1-1' },
-  glove_wind: { id: 'glove_wind', name: '疾风手套', kind: 'glove', quality: 0, tier: 3, atk: 12, hp: 20, price: 900, unlock: '1-2' },
-  armor_forest: { id: 'armor_forest', name: '林语皮甲', kind: 'armor', quality: 3, tier: 1, atk: 0, hp: 140, price: 2400, unlock: '1-2' },
+  wpn_bow: { id: 'wpn_bow', name: '猎风长弓', kind: 'weapon', quality: 1, tier: 1, stats: { atk: 24, skillDmg: 14, atkSpd: 0.08 }, price: 800, unlock: '1-1' },
+  wpn_crossbow: { id: 'wpn_crossbow', name: '鹰眼重弩', kind: 'weapon', quality: 3, tier: 2, stats: { atk: 46, skillDmg: 26, critRate: 0.05 }, price: 1200, unlock: '1-2' },
+  helm_falcon: { id: 'helm_falcon', name: '猎鹰头盔', kind: 'helm', quality: 2, tier: 1, stats: { atk: 10, atkPct: 0.06 }, price: 600, unlock: '1-1' },
+  acc_moon: { id: 'acc_moon', name: '月纹坠饰', kind: 'acc', quality: 1, tier: 1, stats: { critRate: 0.03, critDmg: 0.12 }, price: 300, unlock: '1-1' },
+  glove_wind: { id: 'glove_wind', name: '疾风手套', kind: 'glove', quality: 0, tier: 3, stats: { atkSpd: 0.05, range: 30 }, price: 900, unlock: '1-2' },
+  armor_forest: { id: 'armor_forest', name: '林语皮甲', kind: 'armor', quality: 3, tier: 1, stats: { skillDmg: 30, chargeEff: 0.10 }, price: 2400, unlock: '1-2' },
 };
 
 export function isEquip(id: string): boolean { return !!EQUIPS[id]; }
@@ -45,6 +55,45 @@ export function itemName(id: string): string { return EQUIPS[id]?.name || MATS[i
 /** 阶级系数：tier 每 +1 属性×1.8、售价×3 */
 export function tierMul(tier: number): number { return Math.pow(1.8, tier - 1); }
 
+/** 装备单条词条现值（阶乘×强化成长；百分比取 3 位小数） */
+export function equipStat(e: EquipInst, key: StatKey): number {
+  const d = EQUIPS[e.defId];
+  const v = d?.stats[key];
+  if (!v) return 0;
+  const raw = v * tierMul(d.tier) * (1 + (e.lv - 1) * 0.04);
+  return PCT_STATS.includes(key) ? Math.round(raw * 1000) / 1000 : Math.round(raw);
+}
+export const statFmt = (k: StatKey, v: number): string =>
+  PCT_STATS.includes(k) ? `${Math.round(v * 1000) / 10}%` : String(Math.round(v));
+
+/** 穿戴词条聚合（战斗侧与属性面板共用）：atkFlat/atkPct→攻击，skillDmgFlat→技能伤害，其余同理 */
+export interface EquipAgg {
+  atkFlat: number; atkPct: number; skillDmgFlat: number; critRate: number;
+  critDmg: number; atkSpd: number; rangeFlat: number; chargeEff: number;
+}
+export function equipAgg(hid: string): EquipAgg {
+  const sv = loadSave();
+  const agg: EquipAgg = { atkFlat: 0, atkPct: 0, skillDmgFlat: 0, critRate: 0, critDmg: 0, atkSpd: 0, rangeFlat: 0, chargeEff: 0 };
+  const hs = sv.heroes[hid];
+  if (!hs) return agg;
+  for (const uid of Object.values(hs.worn)) {
+    const inst = sv.equips.find(q => q.uid === uid);
+    if (!inst) continue;
+    for (const k of Object.keys(EQUIPS[inst.defId]?.stats || {}) as StatKey[]) {
+      const v = equipStat(inst, k);
+      if (k === 'atk') agg.atkFlat += v;
+      else if (k === 'atkPct') agg.atkPct += v;
+      else if (k === 'skillDmg') agg.skillDmgFlat += v;
+      else if (k === 'critRate') agg.critRate += v;
+      else if (k === 'critDmg') agg.critDmg += v;
+      else if (k === 'atkSpd') agg.atkSpd += v;
+      else if (k === 'range') agg.rangeFlat += v;
+      else if (k === 'chargeEff') agg.chargeEff += v;
+    }
+  }
+  return agg;
+}
+
 /* ---------- 关卡难度（关卡页三档：普通/精英/地狱，逐一通关解锁） ---------- */
 /** 难度战力倍率：出怪 hp/dmg 缩放（BattleDirector 按 flow.diff 注入 MonsterManager） */
 export const DIFF_MUL = [1, 1.6, 2.4];
@@ -52,8 +101,7 @@ export const DIFF_MUL = [1, 1.6, 2.4];
 export function starKey(levelId: string, diff: number): string {
   return levelId + (diff === 1 ? 'e' : diff === 2 ? 'h' : '');
 }
-export function equipAtk(e: EquipInst): number { return Math.round((EQUIPS[e.defId]?.atk || 0) * tierMul(EQUIPS[e.defId]?.tier || 1) * (1 + (e.lv - 1) * 0.04)); }
-export function equipHp(e: EquipInst): number { return Math.round((EQUIPS[e.defId]?.hp || 0) * tierMul(EQUIPS[e.defId]?.tier || 1) * (1 + (e.lv - 1) * 0.04)); }
+
 /** 出售价：白100/绿400/蓝1500/紫5000 ×3^(tier-1)，强化等级小幅加成 */
 export function sellPrice(e: EquipInst): number {
   const base = [100, 400, 1500, 5000][EQUIPS[e.defId]?.quality ?? 0];
@@ -146,32 +194,24 @@ export const CHEST_COND = ['成功通关', '50%血量通关', '完美通关'];
 /* ================= 属性聚合 ================= */
 
 export interface HeroStats {
-  power: number; atk: number; atkSpd: number; skillDmg: number; hp: number;
+  power: number; atk: number; atkSpd: number; skillDmg: number;
   lv: number; weaponLv: number; atkLv: number; skillLv: number; ultLv: number;
 }
 
 export function heroState(hid: string): HeroState { return loadSave().heroes[hid]; }
 
-/** 实时聚合英雄属性（养成加成全部汇入，战力=攻击+技能*0.5+生命*0.05） */
+/** 实时聚合英雄属性（养成+穿戴词条全部汇入；英雄无生命——用户确认；战力=攻击+技能*0.5） */
 export function heroStats(hid: string): HeroStats {
   const def = HERO_DEFS[hid];
   const hs = heroState(hid);
-  const wornAtk = Object.values(hs.worn).reduce((a, uid) => {
-    const inst = loadSave().equips.find(q => q.uid === uid);
-    return a + (inst ? equipAtk(inst) : 0);
-  }, 0);
-  const wornHp = Object.values(hs.worn).reduce((a, uid) => {
-    const inst = loadSave().equips.find(q => q.uid === uid);
-    return a + (inst ? equipHp(inst) : 0);
-  }, 0);
+  const agg = equipAgg(hid);
   const lvMul = 1 + (hs.lv - 1) * 0.08;
   const wpnMul = 1 + (hs.weaponLv - 1) * 0.06;
-  const atk = Math.round(def.baseAtk * lvMul * wpnMul + wornAtk);
-  const skillDmg = Math.round(atk * (1 + (hs.skillLv - 1) * 0.10) * (1 + (hs.lv - 1) * 0.05));
-  const hp = 600 + wornHp + hs.lv * 20;
+  const atk = Math.round(def.baseAtk * lvMul * wpnMul * (1 + agg.atkPct) + agg.atkFlat);
+  const skillDmg = Math.round(def.baseAtk * lvMul * wpnMul * (1 + (hs.skillLv - 1) * 0.10) * (1 + (hs.lv - 1) * 0.05)) + agg.skillDmgFlat;
   return {
-    power: Math.round(atk + skillDmg * 0.5 + hp * 0.05),
-    atk, atkSpd: def.atkSpd, skillDmg, hp,
+    power: Math.round(atk + skillDmg * 0.5),
+    atk, atkSpd: def.atkSpd, skillDmg,
     lv: hs.lv, weaponLv: hs.weaponLv, atkLv: hs.atkLv, skillLv: hs.skillLv, ultLv: hs.ultLv,
   };
 }

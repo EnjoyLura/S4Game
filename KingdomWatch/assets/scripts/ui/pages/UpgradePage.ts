@@ -14,7 +14,7 @@ import { attrsModal } from './HeroPage';
 import {
   EquipKind, HERO_DEFS, EQUIPS, KIND_NAME, QCOLOR, MAX,
   heroStats, heroUpCost, weaponUpCost, skillUpCost, equipUpCost,
-  upHero, upWeapon, upSkill, upWornEquip, wornInst, equipAtk, equipHp, matCount,
+  upHero, upWeapon, upSkill, upWornEquip, wornInst, equipStat, statFmt, equipAgg, STAT_NAME, StatKey, matCount,
 } from '../../core/GameData';
 import { loadSave, saveSave } from '../../core/SaveData';
 
@@ -93,23 +93,16 @@ const WEAPON_MILESTONES: Record<string, { lv: number; txt: string }[]> = {
 const st: { tab: 0 | 1 | 2 | 3 } = { tab: 0 };
 
 /** 指定等级/武器/技能等级下的三维属性（复刻 heroStats 公式，供升级预览差值） */
-function statsAt(hid: string, lv: number, wpnLv: number, skillLv?: number): { atk: number; skillDmg: number; hp: number } {
+function statsAt(hid: string, lv: number, wpnLv: number, skillLv?: number): { atk: number; skillDmg: number } {
   const sv = loadSave();
   const def = HERO_DEFS[hid];
   const h = sv.heroes[hid];
   const skl = skillLv ?? h.skillLv;
-  const wornAtk = Object.values(h.worn).reduce((a, uid) => {
-    const inst = sv.equips.find(q => q.uid === uid);
-    return a + (inst ? equipAtk(inst) : 0);
-  }, 0);
-  const wornHp = Object.values(h.worn).reduce((a, uid) => {
-    const inst = sv.equips.find(q => q.uid === uid);
-    return a + (inst ? equipHp(inst) : 0);
-  }, 0);
-  const atk = Math.round(def.baseAtk * (1 + (lv - 1) * 0.08) * (1 + (wpnLv - 1) * 0.06) + wornAtk);
-  const skillDmg = Math.round(atk * (1 + (skl - 1) * 0.10) * (1 + (lv - 1) * 0.05));
-  const hp = 600 + wornHp + lv * 20;
-  return { atk, skillDmg, hp };
+  const agg = equipAgg(hid);   // 穿戴词条：攻击平加/加成、技能伤害平加
+  const base = def.baseAtk * (1 + (lv - 1) * 0.08) * (1 + (wpnLv - 1) * 0.06);
+  const atk = Math.round(base * (1 + agg.atkPct) + agg.atkFlat);
+  const skillDmg = Math.round(base * (1 + (skl - 1) * 0.10) * (1 + (lv - 1) * 0.05)) + agg.skillDmgFlat;
+  return { atk, skillDmg };
 }
 
 /** 持有材料总数（强化消耗聚合扣强化石→精铁） */
@@ -499,17 +492,13 @@ export function equipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: 
   const d = EQUIPS[inst.defId];
   const maxed = inst.lv >= MAX.equip;
   const c = equipUpCost(inst.lv);
-  /* 属性行：主属性几条算几行（攻击/生命），行高随行数自适应 */
+  /* 属性行：按部位词条几条算几行（用户确认的词条归属），行高随行数自适应 */
   const rows: { nm: string; cur: string; delta: string | null }[] = [];
-  if (d.atk > 0) {
-    const curV = equipAtk(inst);
-    const nextV = maxed ? curV : equipAtk({ ...inst, lv: inst.lv + 1 });
-    rows.push({ nm: '攻击', cur: String(curV), delta: maxed ? null : `+${nextV - curV}` });
-  }
-  if (d.hp > 0) {
-    const curV = equipHp(inst);
-    const nextV = maxed ? curV : equipHp({ ...inst, lv: inst.lv + 1 });
-    rows.push({ nm: '生命', cur: String(curV), delta: maxed ? null : `+${nextV - curV}` });
+  const keys = (Object.keys(d.stats) as StatKey[]).filter(k => (d.stats[k] ?? 0) > 0);
+  for (const k of keys) {
+    const curV = equipStat(inst, k);
+    const nextV = maxed ? curV : equipStat({ ...inst, lv: inst.lv + 1 }, k);
+    rows.push({ nm: STAT_NAME[k], cur: statFmt(k, curV), delta: maxed ? null : `+${statFmt(k, nextV - curV)}` });
   }
   const W = 620, PW = 560;
   const p1H = 56 + rows.length * 32;   // 1 行 88 / 2 行 120

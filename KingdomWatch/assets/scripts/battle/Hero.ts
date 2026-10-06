@@ -5,7 +5,7 @@
  * - SniperHero 凯尔·鹰眼：穿颅射击(14s，4秒窗口锁定离防线最近连续6狙×2/发·无目标等待) / 猎杀时刻(×5.5必暴·无视物抗单发)
  * - PyroHero 焰·辉：烈焰爆裂(10s，密集处 3 火球爆炸+灼烧) / 陨石天降(5 颗随机轰击+落点灼烧)
  * - VoltHero 沃尔·雷霆：连锁闪电(9s，最多 5 目标跳跃+感电) / 天雷灭世(15 道落雷+眩晕 1s)
- * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/处决/残血词条）
+ * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/处决/残血词条）；穿戴词条（攻击/攻速/范围/暴击/充能效率/技能伤害）上场生效
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { HeroStats } from '../config/Cards';
@@ -45,6 +45,8 @@ export abstract class HeroBase {
 
   get x(): number { return this.hx; }
   get effAtk(): number { return this.stats.atk * this.stats.atkMul; }
+  /** 技能/大招伤害基数（用户确认：技能和大招计算攻击力+技能伤害，普攻只算攻击力） */
+  get skillAtk(): number { return this.effAtk + (this.stats.skillDmgFlat || 0); }
   get chargeGoal(): number { return this.chargeMax * (this.stats.chargeMul || 1); }
   get chargePct(): number { return this.charge / this.chargeGoal; }
   get ultReady(): boolean { return this.charge >= this.chargeGoal; }
@@ -375,7 +377,7 @@ export class ArcherHero extends HeroBase {
         x: this.x, y: HERO_Y + 60,
         dirX: Math.sin(a), dirY: Math.cos(a),
         speed,
-        dmg: this.effAtk * 0.65, crit: Math.random() < this.stats.critRate,
+        dmg: this.skillAtk * 0.65, crit: Math.random() < this.stats.critRate,
         color: PAL.gold, heroId: this.id, size: 9, ttl: 3.6, pierce: 999, spark: true,
         ability: true,   // 大招箭雨击杀弹 60% 词条
       });
@@ -549,7 +551,7 @@ export class SniperHero extends HeroBase {
       projs.fire({
         x: this.x, y: HERO_Y + 60,
         dirX: lead.dirX, dirY: lead.dirY, speed: 1100,
-        dmg: this.effAtk * 5.5, crit: true,
+        dmg: this.skillAtk * 5.5, crit: true,
         color: '#9FCBFF', heroId: this.id, size: 12,
         ttl: 4, pierce: 999, spark: true,
         ignoreRes: true,
@@ -570,7 +572,7 @@ export class SniperHero extends HeroBase {
   /** 瞬击一发：重弩箭真弹道（命中才结算伤害），独立暴击 */
   private snipeShot(target: Monster, projs: ProjectileManager, mul: number, ignoreRes: boolean): void {
     const crit = Math.random() < this.stats.critRate;
-    const dmgVal = this.effAtk * mul * (crit ? this.stats.critMul : 1);
+    const dmgVal = this.skillAtk * mul * (crit ? this.stats.critMul : 1);
     const speed = 1800;
     const lead = this.lead(target, speed);   // 拦截预判：伤害在弩箭命中时才结算（用户确认）
     projs.fire({
@@ -752,7 +754,7 @@ export class PyroHero extends HeroBase {
       if (n > bestN) { bestN = n; best = m; }
     }
     const shots = Math.max(1, Math.round(this.stats.skillShots || 3));
-    const dmg = this.effAtk * 1.6 * (this.stats.skillMul || 1);
+    const dmg = this.skillAtk * 1.6 * (this.stats.skillMul || 1);
     const boomR = 110 * (this.stats.skillRangeMul || 1);
     for (let k = 0; k < shots; k++) {
       const ox = best.x + (Math.random() * 2 - 1) * 70;
@@ -761,7 +763,7 @@ export class PyroHero extends HeroBase {
       const l = Math.hypot(dx, dy) || 1;
       projs.fire(this.spec({
         x: this.x, y: HERO_Y + 60, dirX: dx / l, dirY: dy / l,
-        dmg, explodeR: boomR, burnDps: this.effAtk * 0.2,
+        dmg, explodeR: boomR, burnDps: this.skillAtk * 0.2,
         speed: 820, size: 11, ability: true,
       }));
     }
@@ -805,8 +807,8 @@ export class PyroHero extends HeroBase {
         q.t = (top - q.y) / 800;   // 预警圈持续到命中
         projs.fire(this.spec({
           x: q.x, y: top, dirX: 0, dirY: -1,
-          dmg: this.effAtk * 3.5 * (this.stats.ultDmgMul || 1),
-          explodeR: 140, burnDps: this.effAtk * 0.3,
+          dmg: this.skillAtk * 3.5 * (this.stats.ultDmgMul || 1),
+          explodeR: 140, burnDps: this.skillAtk * 0.3,
           speed: 800, size: 16, ability: true, ult: true,
           stun: this.stats.ultStun || 0,
         }));
@@ -824,7 +826,7 @@ export class PyroHero extends HeroBase {
         for (const m of mgr.list) {
           if (m.dead || Math.hypot(m.x - c.x, m.y - c.y) > CRATER_R) continue;
           m.burnT = Math.max(m.burnT, 0.55);
-          m.burnDps = Math.max(m.burnDps, this.effAtk * 0.3);
+          m.burnDps = Math.max(m.burnDps, this.skillAtk * 0.3);
           m.applyVuln(CRATER_VULN, 0.6);
         }
       }
@@ -1059,7 +1061,7 @@ export class VoltHero extends HeroBase {
     alive.sort((a, b) => Math.hypot(a.x - this.x, a.y - HERO_Y) - Math.hypot(b.x - this.x, b.y - HERO_Y));
     const jumps = Math.max(1, Math.round(this.stats.skillShots || 5));
     const hop = 260 * (this.stats.skillRangeMul || 1);
-    const hitDmg = this.effAtk * 1.4 * (this.stats.skillMul || 1);
+    const hitDmg = this.skillAtk * 1.4 * (this.stats.skillMul || 1);
     const struck = new Set<Monster>();
     let fromX = this.x, fromY = HERO_Y + 60;
     let cur = alive[0];
@@ -1107,7 +1109,7 @@ export class VoltHero extends HeroBase {
 
   /** 单道天雷：从屏外竖劈到目标点，90 半径 AOE + 眩晕（无视物抗的雷击走普通结算） */
   private thunderStrike(t: Monster, mgr: MonsterManager): void {
-    const dmgVal = this.effAtk * 2.2 * (this.stats.ultDmgMul || 1);
+    const dmgVal = this.skillAtk * 2.2 * (this.stats.ultDmgMul || 1);
     this.zapFx(t.x, SPAWN_Y + 140, t.x, t.y, 6);
     for (const o of mgr.mobsInRadius(t.x, t.y, 90)) {
       if (o.dead) continue;

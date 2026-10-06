@@ -40,6 +40,8 @@ export interface HeroStats {
   ultHaste: number;     // 大招后攻速加成标记（士气高涨，0/1）
   burnMul: number;      // 灼烧伤害倍率（余烬，累乘）
   shockOnHit: number;   // 雷系命中感电：目标受伤 +25% 持续 3s（感电卡，0=无）
+  skillDmgFlat: number; // 装备技能伤害词条（平加进技能/大招伤害基数，累加）
+  chargeEff: number;    // 装备充能效率词条：击杀充能 ×(1+eff)（累加）
 }
 
 export function baseArcherStats(): HeroStats {
@@ -51,7 +53,7 @@ export function baseArcherStats(): HeroStats {
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
-    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0,
   };
 }
 
@@ -64,7 +66,7 @@ export function baseSniperStats(): HeroStats {
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
-    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0,
   };
 }
 
@@ -77,7 +79,7 @@ export function basePyroStats(): HeroStats {
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 3, skillCdFlat: 0, ultBolts: 1,
-    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0,
   };
 }
 
@@ -90,7 +92,7 @@ export function baseVoltStats(): HeroStats {
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 5, skillCdFlat: 0, ultBolts: 1,
-    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 1, ultHaste: 0, burnMul: 1, shockOnHit: 0,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 1, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0,
   };
 }
 

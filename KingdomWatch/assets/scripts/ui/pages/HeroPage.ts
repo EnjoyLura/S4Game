@@ -10,7 +10,8 @@ import { artSprite } from '../Ux';
 import { PageCtx, artPanel, modal, toast, CX, confirmModal, circleArrow } from '../PageKit';
 import {
   EquipKind, EquipDef, KIND_NAME, QCOLOR, EQUIPS, MATS, HERO_DEFS,
-  heroStats, sellEquip, sellPrice, wearEquip, wornInst, equipAtk, equipHp, tierMul,
+  heroStats, sellEquip, sellPrice, wearEquip, wornInst, equipStat, statFmt, STAT_NAME,
+  StatKey,
 } from '../../core/GameData';
 import { EquipInst, loadSave, saveSave } from '../../core/SaveData';
 import { equipModal, zoneTab } from './UpgradePage';
@@ -155,16 +156,12 @@ function equipIcon(parent: Node, x: number, y: number, size: number, inst: Equip
  *  金签标题骑缝板顶（文字固定「基础属性」），行=名称左/数值右（升级页签同构），强化行数值绿色；topY/bottomY 为奶白板上/下缘 */
 function drawEquipAttrs(parent: Node, topY: number, bottomY: number, width: number, inst: EquipInst, d: EquipDef): void {
   const big = width > 420;
-  const mul = tierMul(d.tier);
-  const atk0 = Math.round(d.atk * mul), hp0 = Math.round(d.hp * mul);
-  const atkV = equipAtk(inst), hpV = equipHp(inst);
-  const primAtk = atkV >= hpV;
-  const p0 = primAtk ? atk0 : hp0;
-  const pV = primAtk ? atkV : hpV;
-  const sV = primAtk ? hpV : atkV;
-  const rows: [string, string, boolean?][] = [[primAtk ? '攻击' : '生命', String(p0)]];
-  if (pV - p0 > 0) rows.push(['强化', `+${pV - p0}`, true]);
-  if (sV > 0) rows.push([primAtk ? '生命' : '攻击', String(sV)]);
+  const keys = (Object.keys(d.stats) as StatKey[]).filter(k => (d.stats[k] ?? 0) > 0);
+  const rows: [string, string, boolean?][] = keys.map(k => [STAT_NAME[k], statFmt(k, equipStat(inst, k))]);
+  const pk = keys[0];   // 强化行 = 主词条的升级增量（绿字）
+  const d0 = pk ? equipStat(inst, pk) : 0;
+  const d1 = pk ? equipStat({ ...inst, lv: inst.lv + 1 }, pk) : 0;
+  if (pk && d1 > d0) rows.push(['强化', `+${statFmt(pk, d1 - d0)}`, true]);
   const rowH = 32;
   const h = topY - bottomY;
   gpanel(parent, 0, topY - h / 2, width, h, CA('#E9DFC2', 0.94), undefined, 0, 12);
@@ -319,7 +316,7 @@ export function attrsModal(ctx: PageCtx, hid: string): void {
   const panel = modal(ctx, 620, 560, '属性总览', true);
   const rows: [string, string][] = [
     ['定位', def.job], ['战力', String(st.power)], ['攻击', String(st.atk)],
-    ['攻速', `${st.atkSpd} 次/秒`], ['技能伤害', String(st.skillDmg)], ['生命', String(st.hp)],
+    ['攻速', `${st.atkSpd} 次/秒`], ['技能伤害', String(st.skillDmg)],
   ];
   rows.forEach((r, i) => {
     const bar = gpanel(panel, 0, 150 - i * 66, 552, 56, CA('#E9DFC2', 0.94), undefined, 0, 8);

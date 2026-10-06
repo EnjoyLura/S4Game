@@ -4,12 +4,12 @@
  */
 import { _decorator, Canvas, Component, director, Layers, Node } from 'cc';
 import { LEVEL_1_1, LevelDef, MOBS, heroSlots, nextLevelId } from '../config/Mobs';
-import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats } from '../config/Cards';
+import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, HeroStats } from '../config/Cards';
 import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
 import { loadSave, saveSave } from '../core/SaveData';
-import { DIFF_MUL, starKey, squadList, unlockCodex, advanceUnlock } from '../core/GameData';
+import { DIFF_MUL, starKey, squadList, unlockCodex, advanceUnlock, equipAgg } from '../core/GameData';
 import { flow } from '../core/Flow';
 import { MonsterManager } from './Monster';
 import { ArcherHero, HeroBase, SniperHero, PyroHero, VoltHero } from './Hero';
@@ -110,13 +110,16 @@ export class BattleDirector extends Component {
     const squad = squadList();
     const ids = squad.length ? squad : ['archer', 'sniper'];
     const slots = heroSlots(ids.length);
-    this.heroes = ids.map((hid, i) => hid === 'sniper'
-      ? new SniperHero(field, slots[i], baseSniperStats())
-      : hid === 'pyro'
-        ? new PyroHero(field, slots[i], basePyroStats())
-        : hid === 'volt'
-          ? new VoltHero(field, slots[i], baseVoltStats())
-          : new ArcherHero(field, slots[i], baseArcherStats()));
+    this.heroes = ids.map((hid, i) => {
+      const st = hid === 'sniper' ? baseSniperStats()
+        : hid === 'pyro' ? basePyroStats()
+          : hid === 'volt' ? baseVoltStats() : baseArcherStats();
+      applyEquipAffixes(st, hid);   // 穿戴词条上场即生效（用户确认的词条体系）
+      return hid === 'sniper' ? new SniperHero(field, slots[i], st)
+        : hid === 'pyro' ? new PyroHero(field, slots[i], st)
+          : hid === 'volt' ? new VoltHero(field, slots[i], st)
+            : new ArcherHero(field, slots[i], st);
+    });
     this.parts = new Particles(fxLayer);
     this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts);
     this.waves = new WaveManager(this.levelDef, this.mgr);
@@ -221,7 +224,7 @@ export class BattleDirector extends Component {
     this.goldEarned += d.gold * this.global.goldMul;
     Sfx.play('kill');
     const killer = this.heroes.find(h => h.id === killerId);
-    if (killer) killer.chargeKill(d.charge);
+    if (killer) killer.chargeKill(d.charge * (1 + (killer.stats.chargeEff || 0)));   // 充能效率：击杀充能加成（呼吸回能不受加成）
     this.gainXp(d.exp * this.global.xpMul);
   }
 
@@ -501,3 +504,16 @@ export class BattleDirector extends Component {
 
 /** 伤害统计行透出（HUD/Panels 用） */
 export type { DamageRow };
+
+/** 穿戴词条 → 战斗属性（用户确认的部位归属）：攻击=平加+加成累乘，攻速/暴击/充能同理，范围平加 */
+function applyEquipAffixes(s: HeroStats, hid: string): void {
+  const a = equipAgg(hid);
+  s.atk += a.atkFlat;
+  s.atkMul *= 1 + a.atkPct;
+  s.aspd *= 1 + a.atkSpd;
+  s.range += a.rangeFlat;
+  s.critRate = Math.min(1, s.critRate + a.critRate);
+  s.critMul += a.critDmg;
+  s.skillDmgFlat += a.skillDmgFlat;
+  s.chargeEff += a.chargeEff;
+}
