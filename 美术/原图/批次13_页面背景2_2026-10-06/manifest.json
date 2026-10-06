@@ -1,0 +1,44 @@
+{
+  "bg_heroes": {
+    "id": "bg_heroes",
+    "file": "D:/AI/S4Game/美术/原图/批次13_页面背景2_2026-10-06\\bg_heroes.png",
+    "prompt": "Vertical portrait fantasy heroes guild hall background for a mobile game heroes-roster page, Kingdom Rush inspired hand-painted cartoon style, three-quarter top-down view. A grand stone hall for champions: tall colorful heraldic banners of different kingdoms hanging along the LEFT and RIGHT edges between mounted shields, crossed swords and iron torch sconces with warm flames; heavy timber rafters and a vaulted ceiling at the TOP edge with two hanging iron chandeliers casting warm golden pools of light; polished worn stone-tile floor near the BOTTOM edge with a long red-and-gold carpet runner leading in; the middle floor area kept open and simple with only a couple of potted plants and a weapon display stand at a side. Rich warm mid-tone palette of amber, walnut brown, deep red and muted gold so brighter cards remain readable on top; soft painterly shading, clean composition. Absolutely no people, no characters, no creatures, no text, no letters, no UI elements, no vignette, no border.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 13:52:28",
+    "ok": true,
+    "width": 1152,
+    "height": 2048,
+    "mode": "RGB",
+    "seconds": 32.9,
+    "sha1": "c315a88fb959"
+  },
+  "bg_level": {
+    "id": "bg_level",
+    "file": "D:/AI/S4Game/美术/原图/批次13_页面背景2_2026-10-06\\bg_level.png",
+    "prompt": "Vertical portrait fantasy kingdom campaign landscape background for a mobile game level-select page, Kingdom Rush inspired hand-painted cartoon style, high top-down aerial view. A vast colorful realm seen from above: a winding pale dirt road snaking from the BOTTOM edge up through the middle toward distant snowy mountain peaks at the TOP edge; dense dark-green pine forests and rocky cliffs framing the LEFT and RIGHT edges; small simple details beside the road such as a tiny stone bridge over a river, a few farm fields, a ruined watchtower and a lone windmill; the central area kept soft, hazy and uncluttered so map markers remain readable on top. Cheerful heroic daytime mood, slightly muted greens and earthy mid-tones with a warm sunlit haze, soft painterly shading, clean composition. Absolutely no people, no characters, no creatures, no text, no letters, no UI elements, no vignette, no border.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 13:54:37",
+    "ok": true,
+    "width": 1152,
+    "height": 2048,
+    "mode": "RGB",
+    "seconds": 74.5,
+    "sha1": "0aad320e9253"
+  },
+  "bg_upgrade": {
+    "id": "bg_upgrade",
+    "file": "D:/AI/S4Game/美术/原图/批次13_页面背景2_2026-10-06\\bg_upgrade.png",
+    "prompt": "Vertical portrait fantasy royal forge workshop background for a mobile game hero-upgrade page, Kingdom Rush inspired hand-painted cartoon style, three-quarter top-down view. A cozy master blacksmith workshop for upgrading heroes: a glowing stone forge with orange embers and bellows built into the LEFT edge, iron tools, tongs and horseshoes on the RIGHT edge wall beside stacked ingots and a wooden workbench; heavy dark timber beams across the TOP edge with hanging lanterns, coiled rope and drying herb bundles; worn wooden plank floor with scattered wood shavings near the BOTTOM edge and a sturdy anvil with a hammer set to one side; the middle floor kept open and simple. Rich warm mid-tone palette of amber, ember orange, walnut brown and muted brass so brighter parchment panels remain readable on top; soft painterly shading, clean composition. Absolutely no people, no characters, no creatures, no text, no letters, no UI elements, no vignette, no border.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 13:53:50",
+    "ok": true,
+    "width": 1152,
+    "height": 2048,
+    "mode": "RGB",
+    "seconds": 36.3,
+    "sha1": "1ccbb0cf6235"
+  }
+}

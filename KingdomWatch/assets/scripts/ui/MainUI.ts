@@ -165,7 +165,7 @@ export class MainUI extends Component {
   }
 
   /** 页签专属背景（商店内景 / 基地庭院；无专属的页签沿用主城场景占位图） */
-  private static BG_BY_TAB: Record<number, string> = { 0: 'scenes/bg_shop', 4: 'scenes/bg_base' };
+  private static BG_BY_TAB: Record<number, string> = { 0: 'scenes/bg_shop', 1: 'scenes/bg_heroes', 2: 'scenes/bg_level', 3: 'scenes/bg_upgrade', 4: 'scenes/bg_base' };
   private bgId = '';
   private bgNode: Node | null = null;
 
@@ -178,7 +178,11 @@ export class MainUI extends Component {
     const id = this.bgForTab(i);
     if (id === this.bgId && this.bgNode && this.bgNode.isValid) return;
     this.bgId = id;
-    if (this.bgNode && this.bgNode.isValid) this.bgNode.destroy();
+    // 销毁上一张的整个裁剪壳：artSprite cover 返回的是壳内美术节点，只销毁它会留下空壳累积在树上
+    if (this.bgNode && this.bgNode.isValid) {
+      const oldHolder = this.bgNode.parent && this.bgNode.parent !== this.node ? this.bgNode.parent : this.bgNode;
+      oldHolder.destroy();
+    }
     this.bgNode = artSprite(this.node, 0, 0, 750, LO.half * 2 + 240, id, { sliced: false, cover: true });
     // cover 模式下 artSprite 返回裁剪壳内的美术节点：垫底要挪的是外面的裁剪壳，否则壳盖在 UI 之上
     const holder = this.bgNode.parent && this.bgNode.parent !== this.node ? this.bgNode.parent : this.bgNode;

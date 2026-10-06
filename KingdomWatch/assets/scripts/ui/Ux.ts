@@ -231,7 +231,7 @@ export const UX_PRELOAD_IDS: string[] = [
   // 场景
   'scenes/scene_1_1', 'scenes/scene_1_2', 'scenes/scene_1_3',
   // 页签专属背景（商店内景 / 基地庭院）
-  'scenes/bg_shop', 'scenes/bg_base',
+  'scenes/bg_shop', 'scenes/bg_base', 'scenes/bg_heroes', 'scenes/bg_level', 'scenes/bg_upgrade',
 ];
 
 let preloadStarted = false;
