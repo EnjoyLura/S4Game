@@ -470,7 +470,8 @@ function tabEquips(parent: Node, ctx: PageCtx, hid: string, topY: number): void 
     if (inst) {
       const d = EQUIPS[inst.defId];
       gpanel(slot, 0, 62, 96, 96, CA(QCOLOR[d.quality], 0.55), undefined, 0, 12);   // 方形品质背板（用户确认）
-      label(slot, 0, 62, KIND_ICON[kind], { size: 42 });
+      const eqFb = label(slot, 0, 62, KIND_ICON[kind], { size: 42 });
+      artSprite(slot, 0, 62, 84, 84, 'ui_item_' + inst.defId, { hideOnLoad: [eqFb] });   // 装备切图（批次3），缺图回退 emoji
       label(slot, 0, -28, d.name, { size: 20, color: QCARD[q], bold: true, w: 144, h: 30, shrink: true });
       label(slot, 0, -84, `${d.tier}阶·${inst.lv}级`, { size: 24, color: QCARD[q], bold: true, w: 150, h: 34 });   // 几阶·几级 居中（用户确认）
       if (inst.lv < MAX.equip) gpanel(slot, 62, 112, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
@@ -506,7 +507,8 @@ export function equipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: 
   const panel = modal(ctx, W, H, '装备强化', true);
   /* 头部：方形品质背板图标（无边框，同装备页签槽）+ 名称 + 品质/等级行（与技能弹窗同一几何） */
   gpanel(panel, -W / 2 + 66, H / 2 - 104, 88, 88, CA(QCOLOR[d.quality], 0.55), undefined, 0, 12);
-  label(panel, -W / 2 + 66, H / 2 - 104, KIND_ICON[kind], { size: 40 });
+  const hdFb = label(panel, -W / 2 + 66, H / 2 - 104, KIND_ICON[kind], { size: 40 });
+  artSprite(panel, -W / 2 + 66, H / 2 - 104, 78, 78, 'ui_item_' + inst.defId, { hideOnLoad: [hdFb] });   // 装备切图，缺图回退 emoji
   label(panel, -W / 2 + 272, H / 2 - 96, d.name, { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 300, h: 32, shrink: true });
   label(panel, -W / 2 + 272, H / 2 - 130, maxed ? `${QNAMES[d.quality]} · ${d.tier}阶 · Lv.${inst.lv}（MAX）` : `${QNAMES[d.quality]} · ${d.tier}阶 · 强化 Lv.${inst.lv} → Lv.${inst.lv + 1}`,
     { size: 18, color: '#FFE08A', bold: true, align: 'left', w: 310, h: 28, shrink: true });

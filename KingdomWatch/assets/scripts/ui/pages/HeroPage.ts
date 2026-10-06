@@ -126,7 +126,9 @@ function drawSlot(ctx: PageCtx, parent: Node, hid: string, kind: EquipKind, rebu
     : gpanel(parent, x, y, w, h, CA('#10151D', 0.8), C('#3A4250'), 2.5, 12);
   if (inst) {
     const d = EQUIPS[inst.defId];
-    label(slot, 0, h * 0.14, KIND_ICON[kind], { size: Math.min(50, h * 0.38) });
+    const es = Math.min(50, h * 0.38);
+    const fb = label(slot, 0, h * 0.14, KIND_ICON[kind], { size: es });
+    artSprite(slot, 0, h * 0.14, es * 1.4, es * 1.4, 'ui_item_' + inst.defId, { hideOnLoad: [fb] });   // 装备切图（批次3），缺图回退 emoji
     label(slot, 0, -h * 0.26, `${d.name} Lv.${inst.lv}`, { size: Math.min(20, w * 0.078), color: '#E8E0C8', bold: true, w: w - 12, h: 28, shrink: true });
     label(slot, -w / 2 + 10, h / 2 - 18, `T${d.tier}`, { size: 16, color: '#FFF3D6', align: 'left', w: 60, h: 24 });
     // 已穿戴：点击弹装备属性（无替换选择）；空槽：点击无反应
@@ -144,11 +146,12 @@ function drawSlot(ctx: PageCtx, parent: Node, hid: string, kind: EquipKind, rebu
 /** 品质名（与 QCOLOR 下标一一对应） */
 const QNAMES = ['普通', '优秀', '稀有', '史诗'];
 
-/** 装备图标框（含 T阶角标）：品质色方形底板 + 图标居中（用户确认） */
+/** 装备图标框（含 T阶角标）：品质色方形底板 + 图标居中（用户确认）；切图缺图回退 emoji */
 function equipIcon(parent: Node, x: number, y: number, size: number, inst: EquipInst): void {
   const d = EQUIPS[inst.defId];
   const box = gpanel(parent, x, y, size, size, CA(QCOLOR[d.quality], 0.55), undefined, 0, 10);
-  label(box, 0, 0, KIND_ICON[d.kind], { size: Math.round(size * 0.46) });
+  const fb = label(box, 0, 0, KIND_ICON[d.kind], { size: Math.round(size * 0.46) });
+  artSprite(box, 0, 0, size * 0.78, size * 0.78, 'ui_item_' + inst.defId, { hideOnLoad: [fb] });
   label(box, -size / 2 + 8, -size / 2 + 18, `T${d.tier}`, { size: 15, color: '#FFF3D6', bold: true, align: 'left', w: 52, h: 24 });
 }
 
@@ -217,20 +220,19 @@ function wornEquipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: () 
   btn(p, 0, -255, 240, 76, '锻 造', PAL.gold, () => equipModal(ctx, hid, kind, rebuild), 24, true);
 }
 
-/** 仓库装备详情弹窗（同槽未穿戴时）：属性 + 穿戴（右）/出售（左） */
+/** 仓库装备详情弹窗（同槽未穿戴时）：与穿戴详情同款蓝头+奶白板卡直接铺遮罩（无边框背板——用户反馈），
+ *  出售价落在奶白板上，底部 出售/穿戴；点遮罩空白关闭 */
 function warehouseEquipModal(ctx: PageCtx, hid: string, inst: EquipInst, rebuild: () => void): void {
   const d = EQUIPS[inst.defId];
-  const panel = modal(ctx, 620, 640, d.name);
-  equipIcon(panel, -185, 185, 130, inst);
-  label(panel, 10, 220, `品质：${QNAMES[d.quality]}`, { size: 23, color: QCOLOR[d.quality], bold: true, align: 'left', w: 280, h: 34 });
-  label(panel, 10, 170, `品阶：T${d.tier} 阶 · 等级 ${inst.lv}`, { size: 22, color: '#E8E0C8', align: 'left', w: 280, h: 32 });
-  label(panel, 10, 120, `出售价：${sellPrice(inst)} 金币`, { size: 20, color: '#AAB2BD', align: 'left', w: 280, h: 30 });
-  drawEquipAttrs(panel, 98, -210, 560, inst, d);   // 奶白板铺满：出售价下方 → 穿戴/出售钮上缘上方 7px
-  btn(panel, 130, -255, 220, 76, `穿戴·${KIND_NAME[d.kind]}`, PAL.green, () => {
+  const dim = dimLayer(ctx.screens, 0.68);
+  const p = equipDetailPanel(dim, 0, -80, inst, false, true);
+  closeOnBlankTap(dim);
+  label(p, 0, -160, `出售价：${sellPrice(inst)} 金币`, { size: 20, color: INK, bold: true });
+  btn(p, -130, -255, 220, 76, '出 售', '#5A6472', () => confirmDismantle(ctx, inst, '出 售'), 22, true);
+  btn(p, 130, -255, 220, 76, `穿戴·${KIND_NAME[d.kind]}`, PAL.green, () => {
     wearEquip(hid, d.kind, inst.uid);
     ctx.refresh();
-  }, 21);
-  btn(panel, -130, -255, 220, 76, '出 售', '#5A6472', () => confirmDismantle(ctx, inst, '出 售'), 22);
+  }, 21, true);
   void rebuild;
 }
 
@@ -280,7 +282,10 @@ function drawBagCell(ctx: PageCtx, grid: Node, cell: { uid: string; n: number },
   const name = isMat ? MATS[cell.uid].name : d?.name ?? '???';
   const kind = isMat ? null : d?.kind ?? null;
   const g = gpanel(grid, x, y, 120, 120, CA(QCOLOR[q], 0.55), undefined, 0, 12);   // 整格=品质色底板（用户确认）
-  label(g, 0, -12, kind ? KIND_ICON[kind] : '🧱', { size: 44 });
+  const iconFb = label(g, 0, -12, kind ? KIND_ICON[kind] : '🧱', { size: 44 });
+  // 物品切图（批次3）：装备按 defId、材料按物品 id（ui_item_mat_*），缺图回退 emoji
+  if (isMat) artSprite(g, 0, -12, 64, 64, 'ui_item_' + cell.uid, { hideOnLoad: [iconFb] });
+  else if (inst) artSprite(g, 0, -12, 64, 64, 'ui_item_' + inst.defId, { hideOnLoad: [iconFb] });
   label(g, 0, 36, name, { size: 16, color: '#E8E0C8', w: 112, h: 24, shrink: true });
   if (isMat) label(g, 42, -46, `×${cell.n}`, { size: 18, color: '#FFE08A', bold: true, align: 'right', w: 70, h: 24 });
   else label(g, -42, -46, `Lv.${inst?.lv ?? 1}`, { size: 16, color: '#FFF3D6', align: 'left', w: 70, h: 24 });
