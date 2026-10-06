@@ -91,6 +91,27 @@ const SKILL_MS_SNIPER: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string
     { lv: 20, txt: '倍率 +1.0' },
   ],
 };
+/* 雷法师（沃尔·雷霆）技能升级里程碑（用户定稿） */
+const SKILL_MS_VOLT: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string }[]> = {
+  atk: [
+    { lv: 5, txt: '攻速 +6%' },
+    { lv: 10, txt: '暴击率 +5%' },
+    { lv: 15, txt: '对感电目标伤害 +25%' },
+    { lv: 20, txt: '普攻伤害 +20%' },
+  ],
+  skill: [
+    { lv: 5, txt: '冷却 -1s' },
+    { lv: 10, txt: '连锁目标 +1（累计 6）' },
+    { lv: 15, txt: '连锁递增：每跳伤害 +10%' },
+    { lv: 20, txt: '每跳倍率 1.4→1.7' },
+  ],
+  ult: [
+    { lv: 5, txt: '落雷范围 +20%' },
+    { lv: 10, txt: '落雷命中感电 +25% · 3s' },
+    { lv: 15, txt: '大招充能 -10%' },
+    { lv: 20, txt: '每道倍率 2.2→2.6' },
+  ],
+};
 const SKILL_GENERIC: Record<'atk' | 'skill' | 'ult', string> = {
   atk: '普攻伤害 +15%',
   skill: `技能伤害 +${Math.round(BT_SKL * 100)}%`,
@@ -99,7 +120,8 @@ const SKILL_GENERIC: Record<'atk' | 'skill' | 'ult', string> = {
 const skillMilestones = (hid: string, slot: 'atk' | 'skill' | 'ult'): { lv: number; txt: string }[] =>
   hid === 'archer' ? SKILL_MS_ARCHER[slot]
     : hid === 'sniper' ? SKILL_MS_SNIPER[slot]
-      : btMs(MAX.skill, BT_STEP.skill, SKILL_GENERIC[slot]);
+      : hid === 'volt' ? SKILL_MS_VOLT[slot]
+        : btMs(MAX.skill, BT_STEP.skill, SKILL_GENERIC[slot]);
 
 /* 页签跨刷新保持（升级后 refresh 重建页面不跳回「等级」） */
 const st: { tab: 0 | 1 | 2 | 3 } = { tab: 0 };
@@ -452,7 +474,7 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
   } else {
     nm = slot === 'atk' ? '普攻伤害' : '大招伤害';
     // 弓箭手每级+8%（5级档换成机制里程碑）；其余英雄每级+10%且每5级+15%
-    const pct = (l: number): number => (hid === 'archer' || hid === 'sniper') ? (l - 1) * 8 : (l - 1) * 10 + btN(l, BT_STEP.skill) * 15;
+    const pct = (l: number): number => (hid === 'archer' || hid === 'sniper' || hid === 'volt') ? (l - 1) * 8 : (l - 1) * 10 + btN(l, BT_STEP.skill) * 15;
     curS = `+${pct(lv)}%`;
     if (!maxed) delta = `→ +${pct(lv + 1)}%`;
   }

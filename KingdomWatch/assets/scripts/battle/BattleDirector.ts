@@ -4,7 +4,7 @@
  */
 import { _decorator, Canvas, Component, director, Layers, Node } from 'cc';
 import { LEVEL_1_1, LevelDef, MOBS, heroSlots, nextLevelId } from '../config/Mobs';
-import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, HeroStats, archerAtkCfg, sniperAtkCfg } from '../config/Cards';
+import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, HeroStats, archerAtkCfg, sniperAtkCfg, voltAtkCfg, voltSkCfg, voltUltCfg } from '../config/Cards';
 import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
@@ -553,6 +553,15 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
     if (hs.skillLv >= 5) s.skillCdFlat += 1;          // 技能5级 冷却-1s
     if (hs.ultLv >= 15) s.chargeMul *= 0.9;           // 大招15级 充能-10%
   } else if (hid === 'volt') {
+    const ac = voltAtkCfg(hs.atkLv);
+    s.normalMul = ac.normalMul;                       // 普攻伤害：每级+8%、20级再+20%
+    if (ac.aspdOn) s.aspd *= 1.06;                    // 5级 攻速+6%
+    if (ac.critOn) s.critRate = Math.min(1, s.critRate + 0.05);   // 10级 暴击率+5%
+    if (ac.shockedOn) s.shockedBonus = 0.25;          // 15级 对感电目标+25%
+    const sc = voltSkCfg(hs.skillLv);
+    if (sc.cdOn) s.skillCdFlat += 1;                  // 技能5级 冷却-1s
+    if (sc.targetsOn) s.skillShots += 1;              // 技能10级 连锁+1目标
+    if (voltUltCfg(hs.ultLv).chargeOn) s.chargeMul *= 0.9;   // 大招15级 充能-10%
     if (bt.shockAmpMul !== 1) s.shockAmpMul = bt.shockAmpMul;   // 30级 感电加深
     if (bt.chainBonus) s.skillShots += bt.chainBonus;           // 60级 连锁+2目标
     if (bt.skillProc) s.skillProc = bt.skillProc;               // 70级 普攻概率施法

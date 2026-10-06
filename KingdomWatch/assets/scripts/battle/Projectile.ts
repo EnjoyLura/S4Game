@@ -49,6 +49,7 @@ export interface ProjSpec {
   executeBonus?: number;
   lowHpBonus?: number;
   fullHpBonus?: number;
+  shockedBonus?: number;   // 对感电中目标伤害加成（雷普攻15级）
   /** 猎杀标记（狙大招10级）：命中后目标受伤 +markAmp 持续 markDur s */
   markAmp?: number;
   markDur?: number;
@@ -421,6 +422,7 @@ export class ProjectileManager {
     if (sp.executeBonus && m.def.elite) final *= 1 + sp.executeBonus;
     if (sp.lowHpBonus && m.hp < m.maxHp * 0.3) final *= 1 + sp.lowHpBonus;
     if (sp.fullHpBonus && m.hp >= m.maxHp) final *= 1 + sp.fullHpBonus;
+    if (sp.shockedBonus && m.shockT > 0) final *= 1 + sp.shockedBonus;
     m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true, sp.resCut || 0);
     if (sp.markAmp) m.applyVuln(sp.markAmp, sp.markDur || 5);   // 猎杀标记：目标受伤+20% 5s
     this.dmg.add(sp.heroId, Math.min(final, hpBefore));

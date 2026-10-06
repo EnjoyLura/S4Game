@@ -3,7 +3,7 @@
  * 弹窗内容块均以屏幕垂直中心为重心；三选一期间全场冻结由 BattleDirector 状态控制
  */
 import { Graphics, Node, Sprite, tween, UIOpacity, Vec3 } from 'cc';
-import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg } from '../config/Cards';
+import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg } from '../config/Cards';
 import { HERO_Y, LO, PAL } from '../config/GameConfig';
 import { DamageRow, fmtWk } from '../battle/DamageService';
 import { HeroBase } from '../battle/Hero';
@@ -500,10 +500,11 @@ export class Panels {
         ];
       } else {
         title = '技能 · 连锁闪电';
+        const vc = voltSkCfg(h.skillLv || 1);
         rows = [
           ['效果', '最多连锁 ' + Math.round(h.skillShots || 5) + ' 个目标'],
-          ['每跳伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * 1.4) + '（×1.4）'],
-          ['特性', shockTxt || '跳距 ' + Math.round(260 * (h.skillRangeMul || 1))],
+          ['每跳伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * vc.mul) + '（×' + vc.mul.toFixed(2) + '）'],
+          ['特性', (vc.chainInc ? '每跳递增 +' + Math.round(vc.chainInc * 100) + '% · ' : '') + (shockTxt || '跳距 ' + Math.round(260 * (h.skillRangeMul || 1)))],
           ['冷却时间', cdTotal],
           ['索敌范围', String(Math.round(h.skillRange))],
           ['释放', '自动'],
@@ -556,10 +557,11 @@ export class Panels {
     } else {
       title = '大招 · 天雷灭世';
       w = 280; hh = 272;
+      const vu = voltUltCfg(h.ultLv || 1);
       rows = [
-        ['伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * 2.2) + ' × 每道'],
-        ['形态', '15 道天雷轰炸全场'],
-        ['特性', '范围爆炸 · 眩晕 1 秒' + (shockTxt ? ' · ' + shockTxt : '')],
+        ['伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * vu.boltMul) + ' × 每道'],
+        ['形态', '15 道天雷轰炸全场' + (vu.rMul > 1 ? ' · 爆炸范围+' + Math.round((vu.rMul - 1) * 100) + '%' : '')],
+        ['特性', '范围爆炸 · 眩晕 ' + (h.ultStun || 1).toFixed(1) + 's' + (vu.shockOn ? ' · 落雷感电' : shockTxt ? ' · ' + shockTxt : '')],
         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
         ['释放', '手动点击'],

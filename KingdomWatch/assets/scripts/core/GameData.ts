@@ -289,8 +289,8 @@ export function heroStats(hid: string): HeroStats {
   const bt = heroBtAgg(hid, hs.lv);
   const lvMul = 1 + (hs.lv - 1) * 0.08;
   const wpnMul = (1 + (hs.weaponLv - 1) * 0.06) * (1 + btN(hs.weaponLv, BT_STEP.weapon) * BT_WPN);
-  // 技能槽成长：弓箭手每级+8%（5级一档换成冷却/发数/窗口等里程碑）；其余英雄每级+10%且每5级+15%
-  const sklMul = (hid === 'archer' || hid === 'sniper')
+  // 技能槽成长：弓/狙/雷每级+8%（5级一档换成冷却/发数/窗口等里程碑）；其余英雄每级+10%且每5级+15%
+  const sklMul = (hid === 'archer' || hid === 'sniper' || hid === 'volt')
     ? (1 + (hs.skillLv - 1) * 0.08)
     : (1 + (hs.skillLv - 1) * 0.10) * (1 + btN(hs.skillLv, BT_STEP.skill) * BT_SKL);
   const atk = Math.round(def.baseAtk * lvMul * (1 + bt.atkPct) * wpnMul * (1 + agg.atkPct) + agg.atkFlat);

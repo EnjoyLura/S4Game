@@ -8,7 +8,7 @@
  * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/处决/残血词条）；穿戴词条（攻击/攻速/范围/暴击/充能效率/技能伤害）上场生效
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
-import { HeroStats, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg } from '../config/Cards';
+import { HeroStats, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg } from '../config/Cards';
 import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL } from '../config/GameConfig';
 import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
@@ -1035,13 +1035,14 @@ export class VoltHero extends HeroBase {
     return {
       x: base.x, y: base.y, dirX: base.dirX, dirY: base.dirY,
       speed: base.speed,
-      dmg: base.dmg * (crit ? this.stats.critMul : 1), crit,
+      dmg: base.dmg * (this.stats.normalMul || 1) * (crit ? this.stats.critMul : 1), crit,
       color: '#B96BFF', heroId: this.id, size: base.size,
       slowRatio: this.stats.slowOnHit || 0,
       slowDur: this.stats.slowDur || 2,
       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
       spark: true, ability: base.ability, ult: base.ult, stun: base.stun,
       shockAmp: this.shockAmp(), shockDur: 3,
+      shockedBonus: this.stats.shockedBonus || undefined,
       ...this.targetBonuses(),
     };
   }
@@ -1108,7 +1109,8 @@ export class VoltHero extends HeroBase {
     alive.sort((a, b) => Math.hypot(a.x - this.x, a.y - HERO_Y) - Math.hypot(b.x - this.x, b.y - HERO_Y));
     const jumps = Math.max(1, Math.round(this.stats.skillShots || 5));
     const hop = 260 * (this.stats.skillRangeMul || 1);
-    const hitDmg = this.skillAtk * 1.4 * (this.stats.skillMul || 1);
+    const sc = voltSkCfg(this.stats.skillLv);
+    const hitDmg = this.skillAtk * sc.mul * (this.stats.skillMul || 1);
     const struck = new Set<Monster>();
     let fromX = this.x, fromY = HERO_Y + 60;
     let cur = alive[0];
@@ -1116,8 +1118,9 @@ export class VoltHero extends HeroBase {
       struck.add(cur);
       // 直接结算伤害（连锁无弹道，即时跳）
       const hpBefore = cur.hp;
-      const done = cur.takeDamage(hitDmg, Math.random() < this.stats.critRate, this.id);
-      if (dmg) dmg.add(this.id, Math.min(hitDmg, hpBefore));
+      const dmgK = sc.chainInc ? hitDmg * (1 + sc.chainInc * k) : hitDmg;   // 15级：越跳越痛
+      const done = cur.takeDamage(dmgK, Math.random() < this.stats.critRate, this.id);
+      if (dmg) dmg.add(this.id, Math.min(dmgK, hpBefore));
       const sa = this.shockAmp();
       if (sa) cur.applyShock(sa, 3);
       this.zapFx(fromX, fromY, cur.x, cur.y);
@@ -1157,15 +1160,16 @@ export class VoltHero extends HeroBase {
 
   /** 单道天雷：从屏外竖劈到目标点，90 半径 AOE + 眩晕（无视物抗的雷击走普通结算） */
   private thunderStrike(t: Monster, mgr: MonsterManager): void {
-    const dmgVal = this.skillAtk * 2.2 * (this.stats.ultDmgMul || 1);
+    const uc = voltUltCfg(this.stats.ultLv);
+    const dmgVal = this.skillAtk * uc.boltMul * (this.stats.ultDmgMul || 1);
     this.zapFx(t.x, SPAWN_Y + 140, t.x, t.y, 6);
-    for (const o of mgr.mobsInRadius(t.x, t.y, 90)) {
+    for (const o of mgr.mobsInRadius(t.x, t.y, 90 * uc.rMul)) {   // 5级：落雷范围+20%
       if (o.dead) continue;
       const hpBefore = o.hp;
       o.takeDamage(dmgVal, false, this.id);
       if (this.lastDmg) this.lastDmg.add(this.id, Math.min(dmgVal, hpBefore));
       if (this.stats.ultStun) o.stunT = Math.max(o.stunT, this.stats.ultStun);
-      const sa2 = this.shockAmp();
+      const sa2 = Math.max(this.shockAmp(), uc.shockOn ? 0.25 * (this.stats.shockAmpMul || 1) : 0);   // 10级：落雷自带感电（取更优）
       if (sa2) o.applyShock(sa2, 3);
     }
     void t;

@@ -49,6 +49,7 @@ export interface HeroStats {
   fullHpBonus: number;  // 技能升级·对满血目标伤害加成（狙15级 0.25）
   skillProc: number;    // 突破·普攻概率释放技能（雷70级 0.15，不占用不刷新冷却）
   shockAmpMul: number;  // 突破·感电加深倍率（雷30级 1.4：感电增伤 25%→35%）
+  shockedBonus: number; // 技能升级·对感电目标伤害加成（雷普攻15级 0.25）
   atkLv: number;        // 技能升级等级（战斗内读里程碑：普攻/技能/大招槽）
   skillLv: number;
   ultLv: number;
@@ -88,6 +89,20 @@ export function sniperUltCfg(u: number): { boltMul: number; rMul: number; markAm
   };
 }
 
+/* ---------- 雷法师（沃尔·雷霆）技能升级效果（用户定稿；战斗侧与提示面板共用） ---------- */
+/** 普攻槽：每级普攻伤害+8%，5级攻速+6%，10级暴击率+5%，15级对感电目标+25%，20级普攻伤害再+20% */
+export function voltAtkCfg(a: number): { normalMul: number; aspdOn: boolean; critOn: boolean; shockedOn: boolean } {
+  return { normalMul: (1 + (a - 1) * 0.08) * (a >= 20 ? 1.2 : 1), aspdOn: a >= 5, critOn: a >= 10, shockedOn: a >= 15 };
+}
+/** 技能槽（连锁闪电）：每级每跳+8%，5级冷却-1s，10级连锁+1目标，15级连锁递增每跳+10%，20级每跳倍率+0.3 */
+export function voltSkCfg(k: number): { mul: number; cdOn: boolean; targetsOn: boolean; chainInc: number } {
+  return { mul: (1.4 + (k >= 20 ? 0.3 : 0)) * (1 + (k - 1) * 0.08), cdOn: k >= 5, targetsOn: k >= 10, chainInc: k >= 15 ? 0.10 : 0 };
+}
+/** 大招槽（天雷灭世）：每级+8%，5级落雷范围+20%，10级落雷感电+25%·3s，15级充能-10%，20级每道倍率+0.4 */
+export function voltUltCfg(u: number): { boltMul: number; rMul: number; shockOn: boolean; chargeOn: boolean } {
+  return { boltMul: (2.2 + (u >= 20 ? 0.4 : 0)) * (1 + (u - 1) * 0.08), rMul: u >= 5 ? 1.2 : 1, shockOn: u >= 10, chargeOn: u >= 15 };
+}
+
 export function baseArcherStats(): HeroStats {
   return {
     // 射程 900 / 技能 800（用户调整；文档 §3.1 的 520/416 作废）
@@ -98,7 +113,7 @@ export function baseArcherStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -112,7 +127,7 @@ export function baseSniperStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -126,7 +141,7 @@ export function basePyroStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 3, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -140,7 +155,7 @@ export function baseVoltStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 5, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 1, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
