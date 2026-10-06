@@ -9,7 +9,7 @@
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { HeroStats, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
-import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, MORA_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL } from '../config/GameConfig';
+import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, MORA_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL, LO, LINE_Y } from '../config/GameConfig';
 import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
@@ -1330,21 +1330,67 @@ export class FrostHero extends HeroBase {
       m.stunT = Math.max(m.stunT, stun);   // 冻结（硬直）
       m.applySlow(this.slowR(0.5), 3);     // 深度减速
     }
-    // 冰环特效：双圈冰晶扩散
-    const ring = new Node('frostNova');
+    // —— 表现层：地面霜盘（驻留融化）+ 冲击波环 + 中心飞散冰晶 ——
+    const ca = (hex: string, a: number): Color => { const c = hexc(hex); c.a = a; return c; };
+    // 1) 地面霜盘：半透冰蓝圆盘 + 放射冰裂 + 边缘晶刺，驻留 ~0.75s 后融化淡出
+    const decal = new Node('frostDecal');
+    decal.layer = Layers.Enum.UI_2D;
+    decal.setParent(this.node.parent!);
+    decal.setPosition(best.x, best.y, 0);
+    decal.setScale(0.25, 0.25, 1);
+    const dg = decal.addComponent(Graphics);
+    dg.fillColor = ca('#BFE9FF', 42);
+    dg.circle(0, 0, NR * 0.96); dg.fill();
+    dg.strokeColor = ca('#7FD8FF', 120); dg.lineWidth = 5;
+    dg.circle(0, 0, NR * 0.96); dg.stroke();
+    dg.strokeColor = ca('#E8FAFF', 60); dg.lineWidth = 2;
+    for (let k = 0; k < 8; k++) {   // 放射状冰裂
+      const a2 = k * Math.PI / 4 + 0.35;
+      dg.moveTo(Math.cos(a2) * NR * 0.16, Math.sin(a2) * NR * 0.16);
+      dg.lineTo(Math.cos(a2 + 0.12) * NR * 0.78, Math.sin(a2 + 0.12) * NR * 0.78);
+    }
+    dg.stroke();
+    dg.fillColor = ca('#E8FAFF', 120);
+    for (let k = 0; k < 12; k++) {  // 边缘晶刺
+      const a2 = k * Math.PI / 6;
+      const cx2 = Math.cos(a2), cy2 = Math.sin(a2);
+      dg.moveTo(cx2 * NR * 0.96, cy2 * NR * 0.96);
+      dg.lineTo(cx2 * (NR + 18) - cy2 * 7, cy2 * (NR + 18) + cx2 * 7);
+      dg.lineTo(cx2 * (NR + 18) + cy2 * 7, cy2 * (NR + 18) - cx2 * 7);
+      dg.close(); dg.fill();
+    }
+    const dop = decal.addComponent(UIOpacity);
+    tween(decal).to(0.26, { scale: new Vec3(1, 1, 1) }).start();
+    tween(dop).delay(0.75).to(0.7, { opacity: 0 }).call(() => decal.destroy()).start();
+    // 2) 冲击波环：亮圈快速扩散消散
+    const ring = new Node('frostWave');
     ring.layer = Layers.Enum.UI_2D;
     ring.setParent(this.node.parent!);
     ring.setPosition(best.x, best.y, 0);
     const rg = ring.addComponent(Graphics);
-    rg.strokeColor = hexc('#7FD8FF');
-    rg.lineWidth = 6;
-    rg.circle(0, 0, NR); rg.stroke();
-    rg.strokeColor = hexc('#E8FAFF');
-    rg.lineWidth = 3;
-    rg.circle(0, 0, NR * 0.72); rg.stroke();
-    const op = ring.addComponent(UIOpacity);
-    tween(ring).to(0.32, { scale: new Vec3(1.15, 1.15, 1) }).start();
-    tween(op).to(0.32, { opacity: 0 }).call(() => ring.destroy()).start();
+    rg.strokeColor = hexc('#7FD8FF'); rg.lineWidth = 7;
+    rg.circle(0, 0, NR * 0.7); rg.stroke();
+    rg.strokeColor = hexc('#E8FAFF'); rg.lineWidth = 3;
+    rg.circle(0, 0, NR * 0.5); rg.stroke();
+    const rop = ring.addComponent(UIOpacity);
+    tween(ring).to(0.42, { scale: new Vec3(1.5, 1.5, 1) }).start();
+    tween(rop).to(0.42, { opacity: 0 }).call(() => ring.destroy()).start();
+    // 3) 中心飞散冰晶：8 枚小菱形向外飞散
+    for (let k = 0; k < 8; k++) {
+      const a2 = k * Math.PI / 4 + Math.random() * 0.5;
+      const dist = NR * (0.55 + Math.random() * 0.5);
+      const bit = new Node('frostBit');
+      bit.layer = Layers.Enum.UI_2D;
+      bit.setParent(this.node.parent!);
+      bit.setPosition(best.x, best.y, 0);
+      const bg2 = bit.addComponent(Graphics);
+      bg2.fillColor = ca(k % 2 ? '#E8FAFF' : '#7FD8FF', 220);
+      bg2.moveTo(8, 0); bg2.lineTo(0, 3.5); bg2.lineTo(-8, 0); bg2.lineTo(0, -3.5);
+      bg2.close(); bg2.fill();
+      const bop2 = bit.addComponent(UIOpacity);
+      tween(bit).to(0.38, { position: new Vec3(best.x + Math.cos(a2) * dist, best.y + Math.sin(a2) * dist, 0) }).start();
+      tween(bop2).to(0.38, { opacity: 0 }).call(() => bit.destroy()).start();
+    }
     Sfx.play('skill');
   }
 
@@ -1371,20 +1417,51 @@ export class FrostHero extends HeroBase {
       if (this.lastDmg) this.lastDmg.add(this.id, Math.min(d, hpBefore));
       m.applySlow(this.slowR(uc.slowMul), uc.slowDur + (this.stats.ultSlowDur || 0));
     }
-    // 冰蓝闪屏（覆盖全场的淡蓝矩形，快速淡出）
-    const flash = new Node('blizzard');
+    // —— 表现层：白芯闪光 → 冰蓝领域驻留 → 天降冰棱雨 → 三道自防线扩散的冰环 ——
+    const ca = (hex: string, a: number): Color => { const c = hexc(hex); c.a = a; return c; };
+    const W = 620, H = 1500;
+    // 1) 白芯闪光：一瞬间的高光爆点
+    const flash = new Node('blizFlash');
     flash.layer = Layers.Enum.UI_2D;
     flash.setParent(this.node.parent!);
     flash.setPosition(0, 0, 0);
     const fg = flash.addComponent(Graphics);
-    fg.fillColor = hexc('#BFE9FF');
-    fg.rect(-600, -1400, 1200, 2800);
-    fg.fill();
+    fg.fillColor = ca('#FFFFFF', 235);
+    fg.rect(-W, -H, W * 2, H * 2); fg.fill();
     const fop = flash.addComponent(UIOpacity);
-    fop.opacity = 60;
-    tween(fop).to(0.45, { opacity: 0 }).call(() => flash.destroy()).start();
-    // 两道自防线扩散的冰环
-    for (let k = 0; k < 2; k++) {
+    fop.opacity = 0;
+    tween(fop).to(0.08, { opacity: 235 }).to(0.3, { opacity: 0 }).call(() => flash.destroy()).start();
+    // 2) 冰蓝领域：淡蓝幕帐驻留后缓退（读出"绝对零度"的时间感）
+    const field = new Node('blizzard');
+    field.layer = Layers.Enum.UI_2D;
+    field.setParent(this.node.parent!);
+    field.setPosition(0, 0, 0);
+    const bg = field.addComponent(Graphics);
+    bg.fillColor = ca('#BFE9FF', 120);
+    bg.rect(-W, -H, W * 2, H * 2); bg.fill();
+    const bop = field.addComponent(UIOpacity);
+    bop.opacity = 78;
+    tween(bop).delay(0.25).to(0.75, { opacity: 0 }).call(() => field.destroy()).start();
+    // 3) 天降冰棱雨：16 枚细长冰棱随机落点、微倾角下坠，落地即逝
+    for (let k = 0; k < 16; k++) {
+      const x0 = (Math.random() * 2 - 1) * 340;
+      const fall = 0.34 + Math.random() * 0.24;
+      const drop = new Node('blizDrop');
+      drop.layer = Layers.Enum.UI_2D;
+      drop.setParent(this.node.parent!);
+      drop.setPosition(x0, LO.half + 90 + Math.random() * 120, 0);
+      drop.angle = Math.random() * 10 - 5;
+      const drg = drop.addComponent(Graphics);
+      drg.fillColor = ca(k % 2 ? '#E8FAFF' : '#7FD8FF', 225);
+      drg.moveTo(2.5, -20); drg.lineTo(-2.5, -20); drg.lineTo(-1.2, 14); drg.lineTo(1.2, 14);
+      drg.close(); drg.fill();
+      const dropOp = drop.addComponent(UIOpacity);
+      const yEnd = LINE_Y - 60 - Math.random() * 120;
+      tween(drop).delay(k * 0.028).to(fall, { position: new Vec3(x0 + fall * 26, yEnd, 0) }).start();
+      tween(dropOp).delay(k * 0.028).to(fall, { opacity: 0 }).call(() => drop.destroy()).start();
+    }
+    // 4) 三道自防线扩散的冰环（逐道延迟、渐大）
+    for (let k = 0; k < 3; k++) {
       const ring = new Node('blizRing');
       ring.layer = Layers.Enum.UI_2D;
       ring.setParent(this.node.parent!);
@@ -1395,8 +1472,8 @@ export class FrostHero extends HeroBase {
       rg.circle(0, 0, 120);
       rg.stroke();
       const rop = ring.addComponent(UIOpacity);
-      tween(ring).to(0.55 + k * 0.15, { scale: new Vec3(6 + k * 2, 6 + k * 2, 1) }).start();
-      tween(rop).to(0.55 + k * 0.15, { opacity: 0 }).delay(k * 0.1).call(() => ring.destroy()).start();
+      tween(ring).delay(k * 0.1).to(0.55 + k * 0.12, { scale: new Vec3(6 + k * 2, 6 + k * 2, 1) }).start();
+      tween(rop).delay(k * 0.1).to(0.55 + k * 0.12, { opacity: 0 }).call(() => ring.destroy()).start();
     }
     Sfx.play('ult');
     void projs;

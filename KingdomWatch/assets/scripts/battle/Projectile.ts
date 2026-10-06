@@ -202,12 +202,14 @@ export class ProjectileManager {
       const bolt = s.heroId === 'sniper' && !s.small && !s.enemy;
       const orb = s.heroId === 'volt' && !s.small && !s.enemy;
       const fire = s.heroId === 'pyro' && !s.enemy;
+      const shard = s.heroId === 'mora' && !s.small && !s.enemy;
       // 尾迹先画（垫在弹体之下）：锥形渐隐条带 + 亮芯
       if (a.trailMax > 0) this.drawTrail(g, s, a, size, arrow);
       if (arrow) this.drawArrow(g, s, a, size);
       else if (bolt) this.drawBolt(g, s, a, size);
       else if (orb) this.drawOrb(g, s, size, i);
       else if (fire) this.drawFireball(g, s, a, size, i);
+      else if (shard) this.drawShard(g, s, a, size, i);
       else {
         g.fillColor = hexc(s.color);
         g.strokeColor = hexc(PAL.ink);
@@ -342,6 +344,51 @@ export class ProjectileManager {
     g.fill();
   }
 
+  /** 冰法弹体：六棱冰晶——前尖后平的拉长晶体 + 霜晕 + 晶面高光 + 亮白芯 + 双侧冰屑闪点（逐帧微闪） */
+  private drawShard(g: Graphics, s: ProjSpec, a: Active, size: number, idx: number): void {
+    const seed = this.frame * 6.17 + idx * 23.9;
+    const rnd = (n: number): number => { const x = Math.sin(n) * 43758.5453; return x - Math.floor(x); };
+    const l = Math.sqrt(a.vx * a.vx + a.vy * a.vy) || 1;
+    const dx = a.vx / l, dy = a.vy / l, px = -dy, py = dx;
+    const L = size * 3.1;   // 晶体长轴（前尖后截平）
+    const tipX = s.x + dx * L * 0.55, tipY = s.y + dy * L * 0.55;
+    const tailX = s.x - dx * L * 0.45, tailY = s.y - dy * L * 0.45;
+    const w = size * 0.78;
+    // 霜晕（寒气外溢）
+    g.fillColor = cola(s.color, 0.20);
+    g.circle(s.x, s.y, size * 1.6);
+    g.fill();
+    // 晶体主体：拉长菱形，冰蓝 + 墨描边
+    g.fillColor = hexc(s.color);
+    g.strokeColor = hexc(PAL.ink);
+    g.lineWidth = 1.5;
+    g.moveTo(tipX, tipY);
+    g.lineTo(s.x + px * w, s.y + py * w);
+    g.lineTo(tailX + px * w * 0.55, tailY + py * w * 0.55);
+    g.lineTo(tailX - px * w * 0.55, tailY - py * w * 0.55);
+    g.lineTo(s.x - px * w, s.y - py * w);
+    g.close(); g.fill(); g.stroke();
+    // 上半晶面高光：前尖到中部的浅色三角（读出棱面转折）
+    g.fillColor = cola('#E8FAFF', 0.5);
+    g.moveTo(tipX, tipY);
+    g.lineTo(s.x + px * w * 0.9, s.y + py * w * 0.9);
+    g.lineTo(s.x - dx * L * 0.05, s.y - dy * L * 0.05);
+    g.close(); g.fill();
+    // 亮白芯（近前缘，呼吸闪烁）
+    g.fillColor = cola('#FFFFFF', 0.72 + rnd(Math.floor(seed)) * 0.26);
+    g.circle(s.x + dx * L * 0.18, s.y + dy * L * 0.18, size * (0.2 + rnd(Math.floor(seed * 0.6)) * 0.1));
+    g.fill();
+    // 双侧冰屑：垂直于飞行方向的两侧小闪点（相位逐帧跳）
+    for (let k = 0; k < 2; k++) {
+      const t2 = rnd(seed + k * 7.7);
+      g.fillColor = cola(k === 0 ? '#FFFFFF' : '#BFE9FF', 0.32 + t2 * 0.5);
+      g.circle(s.x + px * w * 1.25 * (k === 0 ? 1 : -1) + dx * L * (t2 - 0.3) * 0.4,
+               s.y + py * w * 1.25 * (k === 0 ? 1 : -1) + dy * L * (t2 - 0.3) * 0.4,
+               0.9 + rnd(seed + k * 3.3) * 1.3);
+      g.fill();
+    }
+  }
+
   /** 狙击弹体：重型弩箭——粗短弹杆 + 宽钢弹头 + 尾翼 + 尾珠；大招弹（必暴贯穿）换亮钢蓝 */
   private drawBolt(g: Graphics, s: ProjSpec, a: Active, size: number): void {
     const len = Math.sqrt(a.vx * a.vx + a.vy * a.vy) || 1;
@@ -431,7 +478,10 @@ export class ProjectileManager {
     if (sp.markAmp) m.applyVuln(sp.markAmp, sp.markDur || 5);   // 猎杀标记：目标受伤+20% 5s
     this.dmg.add(sp.heroId, Math.min(final, hpBefore));
     Sfx.play(sp.crit ? 'crit' : 'hit');
-    if (this.parts) this.parts.burst(m.x, m.y, sp.color, sp.spark ? 5 : 2);
+    if (this.parts) {
+      this.parts.burst(m.x, m.y, sp.color, sp.spark ? 5 : 2);
+      if (sp.heroId === 'mora') this.parts.burst(m.x, m.y, '#E8FAFF', 3, 120);   // 冰晶命中追加霜白碎屑
+    }
     // 暴击/击杀瞬间微顿帧（BattleDirector 限频，防连发变成卡顿）；分裂箭同款，击杀同样触发
     if (sp.crit || m.dead) bus.emit(EVT.HIT_STOP);
     if (m.dead) {

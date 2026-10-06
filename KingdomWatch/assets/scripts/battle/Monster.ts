@@ -48,6 +48,9 @@ export class Monster {
   private flashNode: Node | null = null;
   private flashOp: UIOpacity | null = null;
   private flashT = 0;
+  /** 冰霜蒙层：被减速/冻结时罩一层淡蓝冰壳（slowT 驱动，tick 手动开关，零 tween） */
+  private frostNode: Node | null = null;
+  private frostOp: UIOpacity | null = null;
 
   init(def: MobDef, parent: Node, x: number, ctx: MonsterHitCtx, mgr?: MonsterManager): void {
     this.def = def;
@@ -130,6 +133,37 @@ export class Monster {
     fg.roundRect(-r, -r * 0.9, r * 2, r * 1.8, r * 0.45);
     fg.fill();
     this.flashNode.active = false;
+    // 冰霜蒙层：淡蓝冰壳 + 顶部三枚冰晶尖（被减速/冻结时显示）
+    if (!this.frostNode) {
+      this.frostNode = new Node('mobFrost');
+      this.frostNode.layer = Layers.Enum.UI_2D;
+      this.frostNode.setParent(this.node);
+      this.frostOp = this.frostNode.addComponent(UIOpacity);
+    }
+    const frg = this.frostNode.getComponent(Graphics) || this.frostNode.addComponent(Graphics);
+    frg.clear();
+    const fz = this.hex('#8ED4F5');
+    fz.a = 145;
+    frg.fillColor = fz;
+    frg.roundRect(-r, -r * 0.9, r * 2, r * 1.8, r * 0.45);
+    frg.fill();
+    const fzb = this.hex('#E8FAFF');
+    fzb.a = 190;
+    frg.strokeColor = fzb;
+    frg.lineWidth = 2;
+    frg.roundRect(-r, -r * 0.9, r * 2, r * 1.8, r * 0.45);
+    frg.stroke();
+    const fzi = this.hex('#E8FAFF');
+    fzi.a = 170;
+    frg.fillColor = fzi;
+    for (let k = -1; k <= 1; k++) {   // 顶部冰晶尖
+      const bx = k * r * 0.42;
+      frg.moveTo(bx - r * 0.16, r * 0.9);
+      frg.lineTo(bx + r * 0.16, r * 0.9);
+      frg.lineTo(bx + k * r * 0.05, r * 0.9 + r * (k === 0 ? 0.42 : 0.3));
+      frg.close(); frg.fill();
+    }
+    this.frostNode.active = false;
   }
 
   private hex(h: string): Color {
@@ -150,6 +184,12 @@ export class Monster {
       this.flashT -= dt;
       this.flashOp.opacity = Math.max(0, Math.floor(255 * this.flashT / 0.12));
       if (this.flashT <= 0 && this.flashNode) this.flashNode.active = false;
+    }
+    // 冰霜蒙层：被减速（含冻结）期间常亮，解除即熄灭（零分配）
+    if (this.frostNode && this.frostOp) {
+      const frozen = this.slowT > 0;
+      if (this.frostNode.active !== frozen) this.frostNode.active = frozen;
+      if (frozen) this.frostOp.opacity = 255;
     }
     if (this.stunT > 0) { this.stunT -= dt; return; }
     if (this.slowT > 0) this.slowT -= dt;
