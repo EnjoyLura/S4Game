@@ -9,7 +9,7 @@ import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
 import { loadSave, saveSave } from '../core/SaveData';
-import { DIFF_MUL, starKey, squadList, unlockCodex, advanceUnlock, equipAgg } from '../core/GameData';
+import { DIFF_MUL, starKey, squadList, unlockCodex, advanceUnlock, equipAgg, heroState, heroBtAgg } from '../core/GameData';
 import { flow } from '../core/Flow';
 import { MonsterManager } from './Monster';
 import { ArcherHero, HeroBase, SniperHero, PyroHero, VoltHero } from './Hero';
@@ -114,6 +114,7 @@ export class BattleDirector extends Component {
       const st = hid === 'sniper' ? baseSniperStats()
         : hid === 'pyro' ? basePyroStats()
           : hid === 'volt' ? baseVoltStats() : baseArcherStats();
+      applyHeroGrowth(st, hid);     // 英雄等级成长+阶段性突破上场（每级成长按存档等级）
       applyEquipAffixes(st, hid);   // 穿戴词条上场即生效（用户确认的词条体系）
       return hid === 'sniper' ? new SniperHero(field, slots[i], st)
         : hid === 'pyro' ? new PyroHero(field, slots[i], st)
@@ -516,4 +517,19 @@ function applyEquipAffixes(s: HeroStats, hid: string): void {
   s.critMul += a.critDmg;
   s.skillDmgFlat += a.skillDmgFlat;
   s.chargeEff += a.chargeEff;
+}
+
+/** 英雄等级成长（外线养成→战斗）：每级 +8% 基础攻击、技能伤害平加 +5%基础攻击/级；
+ *  阶段性突破按英雄表生效（弓箭手专属表——用户定稿：攻/速/范围/贯穿/防穿；其余英雄通用攻/技档） */
+function applyHeroGrowth(s: HeroStats, hid: string): void {
+  const hs = heroState(hid);
+  const bt = heroBtAgg(hid, hs.lv);
+  const base = s.atk;
+  s.atk = Math.round(base * (1 + (hs.lv - 1) * 0.08) * (1 + bt.atkPct));
+  s.skillDmgFlat += Math.round(base * (hs.lv - 1) * 0.05);
+  s.aspd *= 1 + bt.aspdPct;
+  s.range = Math.round(s.range * (1 + bt.rangePct));
+  s.skillRange = Math.round(s.skillRange * (1 + bt.rangePct));
+  s.pierceChance += bt.pierce;
+  s.defIgnore += bt.defIgnore;
 }

@@ -214,9 +214,9 @@ export class Monster {
     this.vulnT = Math.max(this.vulnT, dur);
   }
 
-  takeDamage(amount: number, crit: boolean, killerId: string, ignoreRes = false): boolean {
+  takeDamage(amount: number, crit: boolean, killerId: string, ignoreRes = false, resCut = 0): boolean {
     if (this.dead) return false;
-    if (this.def.physRes && !ignoreRes) amount *= 1 - this.def.physRes;
+    if (this.def.physRes && !ignoreRes) amount *= 1 - this.def.physRes * (1 - resCut);   // resCut=无视防御比例（英雄突破）
     if (this.shockT > 0) amount *= 1 + this.shockAmp;
     if (this.vulnT > 0) amount *= 1 + this.vulnAmp;
     this.hp -= amount;

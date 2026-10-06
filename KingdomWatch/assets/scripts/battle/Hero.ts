@@ -18,7 +18,7 @@ import { Sfx } from '../core/Sfx';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
-interface PendingShot { t: number; target: Monster | null; dirX: number; dirY: number; emp?: boolean; }
+interface PendingShot { t: number; target: Monster | null; dirX: number; dirY: number; emp?: boolean; bt?: boolean; }
 interface PendingVolley { t: number; row: 0 | 1; }
 
 export abstract class HeroBase {
@@ -221,7 +221,7 @@ export class ArcherHero extends HeroBase {
   }
 
   private spec(base: {
-    x: number; y: number; dirX?: number; dirY?: number; small?: boolean; dmgMul?: number; emp?: boolean;
+    x: number; y: number; dirX?: number; dirY?: number; small?: boolean; dmgMul?: number; emp?: boolean; btPierce?: boolean;
   }): ProjSpec {
     const emp = base.emp === true;
     const crit = Math.random() < this.stats.critRate;
@@ -235,7 +235,8 @@ export class ArcherHero extends HeroBase {
       heroId: this.id,
       size: base.small ? 5 : emp ? 10 : 7,
       small: base.small,
-      pierce: emp ? 999 : this.stats.pierce,
+      pierce: emp || base.btPierce ? 999 : this.stats.pierce,   // btPierce=英雄突破：本次普攻概率贯穿（外观保持普通箭）
+      resCut: this.stats.defIgnore || 0,   // 英雄突破：无视防御比例（全部箭矢）
       spark: emp,
       explodeR: this.stats.explodeR > 0 && !base.small ? this.stats.explodeR : 0,
       explodeMul: this.stats.explodeMul,
@@ -248,9 +249,9 @@ export class ArcherHero extends HeroBase {
     };
   }
 
-  /** 出弓瞬间按拦截预判锁定方向，之后直线飞行（用户确认：不追踪不拐弯）；emp=强化贯穿箭 */
-  private fireDir(projs: ProjectileManager, dirX: number, dirY: number, emp = false): void {
-    projs.fire(this.spec({ x: this.x, y: HERO_Y + 60, dirX, dirY, emp }));
+  /** 出弓瞬间按拦截预判锁定方向，之后直线飞行（用户确认：不追踪不拐弯）；emp=强化贯穿箭；btPierce=突破概率贯穿 */
+  private fireDir(projs: ProjectileManager, dirX: number, dirY: number, emp = false, btPierce = false): void {
+    projs.fire(this.spec({ x: this.x, y: HERO_Y + 60, dirX, dirY, emp, btPierce }));
   }
 
   protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
@@ -259,25 +260,27 @@ export class ArcherHero extends HeroBase {
     const emp = this.empowerLeft > 0;
     if (emp) this.empowerLeft--;
     this.lastEmp = emp;
+    // 英雄突破：本次普攻按概率整排贯穿（概率命中即整排，齐射/连射子弹道随主攻）
+    const bt = !emp && Math.random() < (this.stats.pierceChance || 0);
     const bs = 960;   // 与 spec 弹速一致（强化箭同普攻弹速，用户调整）
     // 首排弹幕：预判拦截点直线射出（列 = 1+齐射层）
     const lead = this.lead(target, bs);
-    this.fireRow(projs, lead.dirX, lead.dirY, emp);
+    this.fireRow(projs, lead.dirX, lead.dirY, emp, bt);
     Sfx.play('shoot');
     // 连射：后续排延迟成排再射；每排出弓瞬间若目标存活则按当时状态重新预判（出弓后仍直线），目标已亡则沿锁定方向
     for (let i = 1; i <= this.stats.serial; i++) {
-      this.serialQueue.push({ t: i * 0.12, target, dirX: lead.dirX, dirY: lead.dirY, emp });
+      this.serialQueue.push({ t: i * 0.12, target, dirX: lead.dirX, dirY: lead.dirY, emp, bt });
     }
   }
 
   /** 一排弹幕（列 = 1+齐射层）：以瞄准线为中心扇形并列展开，直线随缘（齐射×连射 = 列×排网格） */
-  private fireRow(projs: ProjectileManager, dirX: number, dirY: number, emp: boolean): void {
+  private fireRow(projs: ProjectileManager, dirX: number, dirY: number, emp: boolean, bt = false): void {
     const cols = 1 + this.stats.fan;
     const baseAng = Math.atan2(dirY, dirX);
     this.bowFlash(Math.cos(baseAng), Math.sin(baseAng), emp);   // 每排出弓一次弓弦闪光（连射排有节奏感）
     for (let c = 0; c < cols; c++) {
       const ang = baseAng + (c - (cols - 1) / 2) * 10 * Math.PI / 180;
-      this.fireDir(projs, Math.cos(ang), Math.sin(ang), emp);
+      this.fireDir(projs, Math.cos(ang), Math.sin(ang), emp, bt);
     }
   }
 
@@ -315,9 +318,9 @@ export class ArcherHero extends HeroBase {
         this.serialQueue.splice(i, 1);
         if (q.target && !q.target.dead) {
           const ld = this.lead(q.target, 960);
-          this.fireRow(projs, ld.dirX, ld.dirY, q.emp === true);
+          this.fireRow(projs, ld.dirX, ld.dirY, q.emp === true, q.bt === true);
         } else {
-          this.fireRow(projs, q.dirX, q.dirY, q.emp === true);
+          this.fireRow(projs, q.dirX, q.dirY, q.emp === true, q.bt === true);
         }
       }
     }

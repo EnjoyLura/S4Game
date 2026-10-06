@@ -15,7 +15,7 @@ import {
   EquipKind, HERO_DEFS, EQUIPS, KIND_NAME, QCOLOR, MAX,
   heroStats, heroUpCost, weaponUpCost, skillUpCost, equipUpCost,
   upHero, upWeapon, upSkill, upWornEquip, wornInst, equipStat, statFmt, equipAgg, STAT_NAME, StatKey, matCount,
-  BT_STEP, BT_ATK, BT_WPN, BT_SKL, btN,
+  BT_STEP, BT_WPN, BT_SKL, btN, heroBtAgg, heroBtList,
 } from '../../core/GameData';
 import { loadSave, saveSave } from '../../core/SaveData';
 
@@ -46,8 +46,8 @@ const OK = '#3E7C28';
 const NO = '#B03A2E';
 const QCARD = ['#6B5A3A', '#3E7C28', '#1F6BC4', '#8A3FD0'];
 
-/** 英雄/技能突破步骤条数据（每次跳升值取自 GameData 常量，与属性公式一致） */
-const heroMilestones = (): { lv: number; txt: string }[] => btMs(MAX.hero, BT_STEP.hero, `攻击与技能伤害 +${Math.round(BT_ATK * 100)}%`);
+/** 英雄突破步骤条数据（专属表 txt 直用——弓箭手已定稿；未配置英雄回退通用档） */
+const heroMilestones = (hid: string): { lv: number; txt: string }[] => heroBtList(hid).map(m => ({ lv: m.lv, txt: m.txt }));
 const weaponMilestones = (): { lv: number; txt: string }[] => btMs(MAX.weapon, BT_STEP.weapon, `攻击与技能伤害 +${Math.round(BT_WPN * 100)}%`);
 const SKILL_MILESTONES: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string }[]> = {
   atk: btMs(MAX.skill, BT_STEP.skill, '普攻伤害 +15%'),
@@ -65,11 +65,11 @@ function statsAt(hid: string, lv: number, wpnLv: number, skillLv?: number): { at
   const h = sv.heroes[hid];
   const skl = skillLv ?? h.skillLv;
   const agg = equipAgg(hid);   // 穿戴词条：攻击平加/加成、技能伤害平加
-  const base = def.baseAtk
-    * (1 + (lv - 1) * 0.08) * (1 + btN(lv, BT_STEP.hero) * BT_ATK)
+  const bt = heroBtAgg(hid, lv);   // 英雄阶段性突破（弓箭手专属表；攻击/技能/面板轴）
+  const base = def.baseAtk * (1 + (lv - 1) * 0.08) * (1 + bt.atkPct)
     * (1 + (wpnLv - 1) * 0.06) * (1 + btN(wpnLv, BT_STEP.weapon) * BT_WPN);
   const atk = Math.round(base * (1 + agg.atkPct) + agg.atkFlat);
-  const skillDmg = Math.round(base * (1 + (skl - 1) * 0.10) * (1 + btN(skl, BT_STEP.skill) * BT_SKL) * (1 + (lv - 1) * 0.05)) + agg.skillDmgFlat;
+  const skillDmg = Math.round(base * (1 + (skl - 1) * 0.10) * (1 + btN(skl, BT_STEP.skill) * BT_SKL) * (1 + bt.skillPct) * (1 + (lv - 1) * 0.05)) + agg.skillDmgFlat;
   return { atk, skillDmg };
 }
 
@@ -311,8 +311,8 @@ function tabLevel(parent: Node, ctx: PageCtx, hid: string, topY: number): void {
   btn(act, 215, 0, 170, 54, maxed ? 'MAX' : '升 级', maxed ? '#5A6472' : PAL.gold,
     () => { if (!maxed) save(hid, upHero(hid), ctx); }, 24, true);
   if (!maxed && sv.gold >= heroUpCost(lv)) gpanel(act, 288, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);   // 红点=当前就能升（买不起不亮——用户反馈）
-  /* 等级效果：阶段性突破步骤条（英雄每10级一突破，与武器页签共用 fxStepper；背板贴内容高度、标题完全出板） */
-  fxStepper(parent, topY - p1H, actCy + actH / 2 + 14, '等级效果', heroMilestones(), lv);
+  /* 等级效果：阶段性突破步骤条（英雄专属表，弓箭手每10级一档；与武器页签共用 fxStepper） */
+  fxStepper(parent, topY - p1H, actCy + actH / 2 + 14, '等级效果', heroMilestones(hid), lv);
 }
 
 /* ---------- 武器页签：与等级页签完全同构版式（用户确认整体复制）——奶白属性板 + 等级效果步骤条 + 消耗/强化条 ---------- */

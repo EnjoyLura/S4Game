@@ -186,6 +186,48 @@ export const BT_WPN = 0.08;   // 武器每次突破：攻击与技能伤害基�
 export const BT_SKL = 0.15;   // 技能每次突破：技能伤害 +15%
 /** 已达成突破次数（等级每达 step 整倍数突破一次：lv10 → 1 次、lv90 → 9 次） */
 export const btN = (lv: number, step: number): number => Math.max(0, Math.floor(lv / step));
+
+/* ---------- 英雄阶段性突破（每英雄可配专属档位；未配置的英雄回退通用档） ---------- */
+export interface HeroBtEff { atkPct?: number; skillPct?: number; aspdPct?: number; rangePct?: number; pierce?: number; defIgnore?: number; }
+export interface HeroBt { lv: number; txt: string; eff: HeroBtEff; }
+/** 弓箭手突破表（用户定稿：每 10 级一档 10~90） */
+export const HERO_BT: Record<string, HeroBt[]> = {
+  archer: [
+    { lv: 10, txt: '突破 · 攻击力 +10%', eff: { atkPct: 0.10 } },
+    { lv: 20, txt: '突破 · 攻速 +10%', eff: { aspdPct: 0.10 } },
+    { lv: 30, txt: '突破 · 普攻5%概率射出贯穿箭', eff: { pierce: 0.05 } },
+    { lv: 40, txt: '突破 · 技能伤害 +10%', eff: { skillPct: 0.10 } },
+    { lv: 50, txt: '突破 · 普攻/技能索敌范围 +10%', eff: { rangePct: 0.10 } },
+    { lv: 60, txt: '突破 · 普攻贯穿概率 +10%（累计15%）', eff: { pierce: 0.10 } },
+    { lv: 70, txt: '突破 · 攻击力 +15%', eff: { atkPct: 0.15 } },
+    { lv: 80, txt: '突破 · 攻速 +10%', eff: { aspdPct: 0.10 } },
+    { lv: 90, txt: '突破 · 无视25%防御力', eff: { defIgnore: 0.25 } },
+  ],
+};
+/** 未配专属表的英雄：通用档（攻击与技能伤害 +10%/次，等价旧版节奏） */
+export function heroBtList(hid: string): HeroBt[] {
+  if (HERO_BT[hid]) return HERO_BT[hid];
+  return Array.from({ length: Math.floor(MAX.hero / BT_STEP.hero) }, (_, i) => ({
+    lv: (i + 1) * BT_STEP.hero,
+    txt: `突破 · 攻击与技能伤害 +${Math.round(BT_ATK * 100)}%`,
+    eff: { atkPct: BT_ATK, skillPct: BT_ATK },
+  }));
+}
+export interface HeroBtAgg { atkPct: number; skillPct: number; aspdPct: number; rangePct: number; pierce: number; defIgnore: number; }
+/** 已达成突破汇总（等级达档即生效；攻/技/攻速/范围进属性面板，贯穿/防穿进战斗） */
+export function heroBtAgg(hid: string, lv: number): HeroBtAgg {
+  const a: HeroBtAgg = { atkPct: 0, skillPct: 0, aspdPct: 0, rangePct: 0, pierce: 0, defIgnore: 0 };
+  for (const m of heroBtList(hid)) {
+    if (lv < m.lv) continue;
+    a.atkPct += m.eff.atkPct || 0;
+    a.skillPct += m.eff.skillPct || 0;
+    a.aspdPct += m.eff.aspdPct || 0;
+    a.rangePct += m.eff.rangePct || 0;
+    a.pierce += m.eff.pierce || 0;
+    a.defIgnore += m.eff.defIgnore || 0;
+  }
+  return a;
+}
 export const heroUpCost = (lv: number): number => r10(100 * Math.pow(lv, 1.35));   // 英雄升级只耗金币（用户确认）
 export const weaponUpCost = (lv: number): { gold: number; mat: number } => ({ gold: r10(150 * Math.pow(lv, 1.4)), mat: 1 + Math.floor(lv / 5) });
 export const skillUpCost = (lv: number): { gold: number; mat: number } => ({ gold: r10(200 * Math.pow(lv, 1.5)), mat: 1 + Math.floor(lv / 6) });   // 技能金币+材料（用户确认）
@@ -212,14 +254,15 @@ export function heroStats(hid: string): HeroStats {
   const def = HERO_DEFS[hid];
   const hs = heroState(hid);
   const agg = equipAgg(hid);
-  const lvMul = (1 + (hs.lv - 1) * 0.08) * (1 + btN(hs.lv, BT_STEP.hero) * BT_ATK);
+  const bt = heroBtAgg(hid, hs.lv);
+  const lvMul = 1 + (hs.lv - 1) * 0.08;
   const wpnMul = (1 + (hs.weaponLv - 1) * 0.06) * (1 + btN(hs.weaponLv, BT_STEP.weapon) * BT_WPN);
   const sklMul = (1 + (hs.skillLv - 1) * 0.10) * (1 + btN(hs.skillLv, BT_STEP.skill) * BT_SKL);
-  const atk = Math.round(def.baseAtk * lvMul * wpnMul * (1 + agg.atkPct) + agg.atkFlat);
-  const skillDmg = Math.round(def.baseAtk * lvMul * wpnMul * sklMul * (1 + (hs.lv - 1) * 0.05)) + agg.skillDmgFlat;
+  const atk = Math.round(def.baseAtk * lvMul * (1 + bt.atkPct) * wpnMul * (1 + agg.atkPct) + agg.atkFlat);
+  const skillDmg = Math.round(def.baseAtk * lvMul * (1 + bt.atkPct) * wpnMul * sklMul * (1 + bt.skillPct) * (1 + (hs.lv - 1) * 0.05)) + agg.skillDmgFlat;
   return {
     power: Math.round(atk + skillDmg * 0.5),
-    atk, atkSpd: def.atkSpd, skillDmg,
+    atk, atkSpd: Math.round(def.atkSpd * (1 + bt.aspdPct) * 100) / 100, skillDmg,
     lv: hs.lv, weaponLv: hs.weaponLv, atkLv: hs.atkLv, skillLv: hs.skillLv, ultLv: hs.ultLv,
   };
 }

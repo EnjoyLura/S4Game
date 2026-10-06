@@ -43,6 +43,8 @@ export interface ProjSpec {
   shockDur?: number;
   /** 无视物抗（狙击大招等） */
   ignoreRes?: boolean;
+  /** 无视防御比例（英雄突破，0~1；与 ignoreRes 叠加时以 ignoreRes 优先） */
+  resCut?: number;
   /** 目标词条（命中时按目标结算）：对精英/BOSS 加成 / 对残血<30% 加成 */
   executeBonus?: number;
   lowHpBonus?: number;
@@ -414,7 +416,7 @@ export class ProjectileManager {
     let final = sp.dmg;
     if (sp.executeBonus && m.def.elite) final *= 1 + sp.executeBonus;
     if (sp.lowHpBonus && m.hp < m.maxHp * 0.3) final *= 1 + sp.lowHpBonus;
-    m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true);
+    m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true, sp.resCut || 0);
     this.dmg.add(sp.heroId, Math.min(final, hpBefore));
     Sfx.play(sp.crit ? 'crit' : 'hit');
     if (this.parts) this.parts.burst(m.x, m.y, sp.color, sp.spark ? 5 : 2);
