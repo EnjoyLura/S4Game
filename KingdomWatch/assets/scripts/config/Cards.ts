@@ -56,6 +56,9 @@ export interface HeroStats {
   novaStun: number;     // 技能·新星冻结时长 s（冰 0.8，突破80级 1.2）
   freezeProc: number;   // 突破·普攻概率冰冻时长 s（冰70级 0.6，概率固定 15%）
   slowedBonus: number;  // 技能升级·对减速目标伤害加成（冰普攻15级 0.25）
+  slowAmpBonus: number; // 卡·凛冬之息/绝对零度：冰系减速幅度加成（普攻/新星/大招减速比率累加，结算上限 0.9）
+  ultSlowDur: number;   // 卡·绝对零度：大招减速持续 +s（累加）
+  freezeChance: number; // 卡·速冻之心：普攻冰冻几率（冰基础 0.15，累加）
   atkLv: number;        // 技能升级等级（战斗内读里程碑：普攻/技能/大招槽）
   skillLv: number;
   ultLv: number;
@@ -147,7 +150,7 @@ export function baseArcherStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, slowAmpBonus: 0, ultSlowDur: 0, freezeChance: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -161,7 +164,7 @@ export function baseSniperStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, slowAmpBonus: 0, ultSlowDur: 0, freezeChance: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -175,7 +178,7 @@ export function basePyroStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 3, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, slowAmpBonus: 0, ultSlowDur: 0, freezeChance: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -189,7 +192,7 @@ export function baseVoltStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 5, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 1, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, slowAmpBonus: 0, ultSlowDur: 0, freezeChance: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -203,7 +206,7 @@ export function baseMoraStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 1, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, slowAmpBonus: 0, ultSlowDur: 0, freezeChance: 0.15, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -335,6 +338,30 @@ export const VOLT_CARDS: CardDef[] = [
     apply: x => { x.hero.shockOnHit = Math.min(0.5, x.hero.shockOnHit + 0.25); } }),
 ];
 
+/* ---------- 冰霜法师 · 莫拉·寒霜强化卡：减速加深 → 冻结扩化 → 控制转伤害 ---------- */
+export const MORA_CARDS: CardDef[] = [
+  c({ id: 'mora_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'mora', desc: '技能伤害 +40%',
+    apply: x => { x.hero.skillMul *= 1.4; } }),
+  c({ id: 'mora_range', name: '极寒扩散', rarity: 'white', maxStacks: 3, owner: 'mora', desc: '冰环半径 +30%',
+    apply: x => { x.hero.skillRangeMul *= 1.3; } }),
+  c({ id: 'mora_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'mora', desc: '技能冷却 -2 秒（可叠加）',
+    apply: x => { x.hero.skillCdFlat += 2; } }),
+  c({ id: 'mora_chill', name: '凛冬之息', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '冰系减速幅度 +20%（普攻/新星/大招全部生效）',
+    apply: x => { x.hero.slowAmpBonus += 0.2; } }),
+  c({ id: 'mora_freeze', name: '速冻之心', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '普攻冰冻几率 +15%（15%→30%→45%）',
+    apply: x => { x.hero.freezeChance += 0.15; } }),
+  c({ id: 'mora_war', name: '战吼', rarity: 'blue', maxStacks: 3, owner: 'mora', desc: '大招伤害 +50%',
+    apply: x => { x.hero.ultDmgMul *= 1.5; } }),
+  c({ id: 'mora_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '大招释放后攻速 +40% 持续 5 秒',
+    apply: x => { x.hero.ultHaste = 1; } }),
+  c({ id: 'mora_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '大招充能需求 -25%（可叠加）',
+    apply: x => { x.hero.chargeMul *= 0.75; } }),
+  c({ id: 'mora_brittle', name: '碎冰', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '对减速/冻结目标伤害 +30%（可叠至 +60%）',
+    apply: x => { x.hero.slowedBonus += 0.3; } }),
+  c({ id: 'mora_glacier', name: '绝对零度', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '大招减速幅度 +20%、持续 +2 秒（可叠至 90%·8s）',
+    apply: x => { x.hero.slowAmpBonus += 0.2; x.hero.ultSlowDur += 2; } }),
+];
+
 /* ---------- 全局卡（§6.1） ---------- */
 export const GLOBAL_CARDS: CardDef[] = [
   c({ id: 'wall', name: '城墙加固', rarity: 'white', maxStacks: 4, owner: 'global', desc: '防线耐久上限 +25% 并回复 25%',
@@ -345,8 +372,8 @@ export const GLOBAL_CARDS: CardDef[] = [
     apply: x => { x.global.xpMul *= 1.1; } }),
 ];
 
-/** 当前卡池 = 弓箭手 + 狙击 + 火法 + 全局（卡按 owner 归属英雄生效） */
-export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...VOLT_CARDS, ...GLOBAL_CARDS];
+/** 当前卡池 = 弓箭手 + 狙击 + 火法 + 雷法 + 冰法 + 全局（卡按 owner 归属英雄生效） */
+export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...VOLT_CARDS, ...MORA_CARDS, ...GLOBAL_CARDS];
 
 export interface CardStacks { [cardId: string]: number; }
 

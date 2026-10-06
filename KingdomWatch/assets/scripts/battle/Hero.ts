@@ -1268,6 +1268,11 @@ export class FrostHero extends HeroBase {
     this.node.setParent(parent);
   }
 
+  /** 冰系减速幅度 = 基础比率 + 凛冬之息/绝对零度加成（结算上限 90%） */
+  private slowR(base: number): number {
+    return Math.min(0.9, base + (this.stats.slowAmpBonus || 0));
+  }
+
   /** 冰棱弹种统一构造：冰蓝细弹 + 减速词条 */
   private spec(base: {
     x: number; y: number; dirX: number; dirY: number; dmg: number;
@@ -1279,7 +1284,7 @@ export class FrostHero extends HeroBase {
       speed: base.speed,
       dmg: base.dmg * (this.stats.normalMul || 1) * (crit ? this.stats.critMul : 1), crit,
       color: '#7FD8FF', heroId: this.id, size: base.size,
-      slowRatio: this.stats.slowOnHit || 0,
+      slowRatio: this.slowR(this.stats.slowOnHit || 0),
       slowDur: this.stats.slowDur || 2,
       spark: true,
       slowedBonus: this.stats.slowedBonus || undefined,
@@ -1297,7 +1302,8 @@ export class FrostHero extends HeroBase {
       dmg: this.effAtk, speed: bs, size: 6,
     }));
     Sfx.play('shoot');
-    if (this.stats.freezeProc && Math.random() < 0.15) target.stunT = Math.max(target.stunT, this.stats.freezeProc);
+    // 70级突破冰冻：几率走 freezeChance（基础15%，速冻之心卡累加），时长走 freezeProc
+    if (this.stats.freezeProc && Math.random() < (this.stats.freezeChance || 0.15)) target.stunT = Math.max(target.stunT, this.stats.freezeProc);
   }
 
   /** 冰霜新星本体（无弹道即时结算）：技能范围最密集簇心 AOE 伤害 + 冻结 + 深度减速 */
@@ -1322,7 +1328,7 @@ export class FrostHero extends HeroBase {
       m.takeDamage(hitDmg, Math.random() < this.stats.critRate, this.id);
       if (dmg) dmg.add(this.id, Math.min(hitDmg, hpBefore));
       m.stunT = Math.max(m.stunT, stun);   // 冻结（硬直）
-      m.applySlow(0.5, 3);                 // 深度减速
+      m.applySlow(this.slowR(0.5), 3);     // 深度减速
     }
     // 冰环特效：双圈冰晶扩散
     const ring = new Node('frostNova');
@@ -1363,7 +1369,7 @@ export class FrostHero extends HeroBase {
       const d = this.skillAtk * uc.boltMul * (this.stats.ultDmgMul || 1);
       m.takeDamage(d, false, this.id);
       if (this.lastDmg) this.lastDmg.add(this.id, Math.min(d, hpBefore));
-      m.applySlow(uc.slowMul, uc.slowDur);
+      m.applySlow(this.slowR(uc.slowMul), uc.slowDur + (this.stats.ultSlowDur || 0));
     }
     // 冰蓝闪屏（覆盖全场的淡蓝矩形，快速淡出）
     const flash = new Node('blizzard');
