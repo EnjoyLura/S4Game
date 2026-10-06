@@ -3,7 +3,7 @@
  * 弹窗内容块均以屏幕垂直中心为重心；三选一期间全场冻结由 BattleDirector 状态控制
  */
 import { Graphics, Node, Sprite, tween, UIOpacity, Vec3 } from 'cc';
-import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg } from '../config/Cards';
+import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
 import { HERO_Y, LO, PAL } from '../config/GameConfig';
 import { DamageRow, fmtWk } from '../battle/DamageService';
 import { HeroBase } from '../battle/Hero';
@@ -499,6 +499,17 @@ export class Panels {
           ['索敌范围', String(Math.round(h.skillRange))],
           ['释放', '自动'],
         ];
+      } else if (hero.id === 'mora') {
+        title = '技能 · 冰霜新星';
+        const mc = moraSkCfg(h.skillLv || 1);
+        rows = [
+          ['效果', '最密集簇心爆发冰环 · 冻结 ' + ((h.novaStun || 0.8) + mc.stunBonus).toFixed(1) + 's'],
+          ['范围伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * mc.mul) + '（×' + mc.mul.toFixed(2) + '）'],
+          ['特性', '冰环 AOE · 深度减速 50%'],
+          ['冷却时间', cdTotal],
+          ['索敌范围', String(Math.round(h.skillRange))],
+          ['释放', '自动'],
+        ];
       } else {
         title = '技能 · 连锁闪电';
         const vc = voltSkCfg(h.skillLv || 1);
@@ -552,6 +563,20 @@ export class Panels {
         ['形态', (pu.meteors > 5 ? '梅花五点+对角 · ' : '梅花五点砸落 ') + pu.meteors + ' 颗陨石' + (h.ultHaste ? ' · 放后攻速提升 5 秒' : '')],
         ['陨石坑', '燃烧 4 秒：灼烧 + 易伤 ' + Math.round((h.pitVuln || 0.25) * 100) + '%' + (pu.craterMul > 1 ? ' · 坑范围+' + Math.round((pu.craterMul - 1) * 100) + '%' : '')],
         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
+        ['释放', '手动点击'],
+      ];
+      px = WX(636, 90) - 45 - 16 - w / 2;
+      py = WYB(240 + ultIdx * 110, 90);
+    } else if (hero.id === 'mora') {
+      title = '大招 · 极寒领域';
+      w = 280; hh = 272;
+      const mu = moraUltCfg(h.ultLv || 1);
+      rows = [
+        ['伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * mu.boltMul) + ' × 全场'],
+        ['形态', '全屏冰暴 · 一次结算'],
+        ['特性', '深度减速 ' + Math.round(mu.slowMul * 100) + '% · ' + mu.slowDur + 's'],
+        ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
+        ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
         ['释放', '手动点击'],
       ];
       px = WX(636, 90) - 45 - 16 - w / 2;

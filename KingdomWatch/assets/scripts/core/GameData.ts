@@ -141,6 +141,12 @@ export const HERO_DEFS: Record<string, HeroDef> = {
     story: '在雷暴之夜被天雷选中的人，血液里奔流着风暴。他的闪电从不安分——总在敌群间跳跃。',
     shopPrice: 4200,
   },
+  mora: {
+    id: 'mora', name: '莫拉·寒霜', job: '冰霜 · 减速控制', avatar: 'ui_avatar_mora',
+    baseAtk: 80, atkSpd: 0.7, weaponName: '霜华法杖', skillName: '冰霜新星', ultName: '极寒领域',
+    story: '北境冰原走出的年轻冰霜法师，能把空气里的水汽凝成利刃。她走过的地方，敌人都慢了下来。',
+    shopPrice: 4800,
+  },
 };
 
 /* ================= 编队（二级编队界面：4 上阵位；战斗按上阵顺序从左到右站位） ================= */
@@ -188,7 +194,7 @@ export const BT_SKL = 0.15;   // 技能每次突破：技能伤害 +15%
 export const btN = (lv: number, step: number): number => Math.max(0, Math.floor(lv / step));
 
 /* ---------- 英雄阶段性突破（每英雄可配专属档位；未配置的英雄回退通用档） ---------- */
-export interface HeroBtEff { atkPct?: number; skillPct?: number; aspdPct?: number; rangePct?: number; pierce?: number; defIgnore?: number; critDmg?: number; ultBolts?: number; ultAutoCd?: number; shockAmpMul?: number; shotsBonus?: number; skillProc?: number; ultStunBonus?: number; shockOnAtk?: number; burnMul?: number; explodeR?: number; vulnBonus?: number; burnOnAtk?: number; }
+export interface HeroBtEff { atkPct?: number; skillPct?: number; aspdPct?: number; rangePct?: number; pierce?: number; defIgnore?: number; critDmg?: number; ultBolts?: number; ultAutoCd?: number; shockAmpMul?: number; shotsBonus?: number; skillProc?: number; ultStunBonus?: number; shockOnAtk?: number; burnMul?: number; explodeR?: number; vulnBonus?: number; burnOnAtk?: number; slowMul?: number; novaR?: number; freezeProc?: number; stunBonus?: number; slowOnAtk?: number; }
 export interface HeroBt { lv: number; txt: string; eff: HeroBtEff; }
 /** 弓箭手突破表（用户定稿：每 10 级一档 10~90） */
 export const HERO_BT: Record<string, HeroBt[]> = {
@@ -239,6 +245,18 @@ export const HERO_BT: Record<string, HeroBt[]> = {
     { lv: 80, txt: '突破 · 陨石坑易伤加深：25% → 35%', eff: { vulnBonus: 0.10 } },
     { lv: 90, txt: '突破 · 烈焰之躯：普攻命中也点燃（灼烧 30%·3s）', eff: { burnOnAtk: 0.3 } },
   ],
+  /** 冰霜法师（莫拉·寒霜）突破表（定稿节奏：每 10 级一档 10~90） */
+  mora: [
+    { lv: 10, txt: '突破 · 攻击力 +15%', eff: { atkPct: 0.15 } },
+    { lv: 20, txt: '突破 · 技能伤害 +15%', eff: { skillPct: 0.15 } },
+    { lv: 30, txt: '突破 · 冰寒刺骨：减速 25% → 40%', eff: { slowMul: 1.6 } },
+    { lv: 40, txt: '突破 · 普攻/技能索敌范围 +10%', eff: { rangePct: 0.10 } },
+    { lv: 50, txt: '突破 · 攻速 +12%', eff: { aspdPct: 0.12 } },
+    { lv: 60, txt: '突破 · 冰霜新星范围 +25%（150→190）', eff: { novaR: 190 } },
+    { lv: 70, txt: '突破 · 普攻15%概率冰冻 0.6s', eff: { freezeProc: 0.6 } },
+    { lv: 80, txt: '突破 · 冰霜新星冻结 +0.4s（累计 1.2s）', eff: { stunBonus: 0.4 } },
+    { lv: 90, txt: '突破 · 冰寒之躯：普攻必定减速 40%', eff: { slowOnAtk: 0.4 } },
+  ],
 };
 /** 未配专属表的英雄：通用档（攻击与技能伤害 +10%/次，等价旧版节奏） */
 export function heroBtList(hid: string): HeroBt[] {
@@ -249,10 +267,10 @@ export function heroBtList(hid: string): HeroBt[] {
     eff: { atkPct: BT_ATK, skillPct: BT_ATK },
   }));
 }
-export interface HeroBtAgg { atkPct: number; skillPct: number; aspdPct: number; rangePct: number; pierce: number; defIgnore: number; critDmg: number; ultBolts: number; ultAutoCd: number; shockAmpMul: number; shotsBonus: number; skillProc: number; ultStunBonus: number; shockOnAtk: number; burnMul: number; explodeR: number; vulnBonus: number; burnOnAtk: number; }
+export interface HeroBtAgg { atkPct: number; skillPct: number; aspdPct: number; rangePct: number; pierce: number; defIgnore: number; critDmg: number; ultBolts: number; ultAutoCd: number; shockAmpMul: number; shotsBonus: number; skillProc: number; ultStunBonus: number; shockOnAtk: number; burnMul: number; explodeR: number; vulnBonus: number; burnOnAtk: number; slowMul: number; novaR: number; freezeProc: number; stunBonus: number; slowOnAtk: number; }
 /** 已达成突破汇总（等级达档即生效；攻/技/攻速/范围进属性面板，贯穿/防穿进战斗） */
 export function heroBtAgg(hid: string, lv: number): HeroBtAgg {
-  const a: HeroBtAgg = { atkPct: 0, skillPct: 0, aspdPct: 0, rangePct: 0, pierce: 0, defIgnore: 0, critDmg: 0, ultBolts: 0, ultAutoCd: 0, shockAmpMul: 1, shotsBonus: 0, skillProc: 0, ultStunBonus: 0, shockOnAtk: 0, burnMul: 1, explodeR: 0, vulnBonus: 0, burnOnAtk: 0 };
+  const a: HeroBtAgg = { atkPct: 0, skillPct: 0, aspdPct: 0, rangePct: 0, pierce: 0, defIgnore: 0, critDmg: 0, ultBolts: 0, ultAutoCd: 0, shockAmpMul: 1, shotsBonus: 0, skillProc: 0, ultStunBonus: 0, shockOnAtk: 0, burnMul: 1, explodeR: 0, vulnBonus: 0, burnOnAtk: 0, slowMul: 1, novaR: 0, freezeProc: 0, stunBonus: 0, slowOnAtk: 0 };
   for (const m of heroBtList(hid)) {
     if (lv < m.lv) continue;
     a.atkPct += m.eff.atkPct || 0;
@@ -270,6 +288,11 @@ export function heroBtAgg(hid: string, lv: number): HeroBtAgg {
     a.explodeR = Math.max(a.explodeR, m.eff.explodeR || 0);
     a.vulnBonus += m.eff.vulnBonus || 0;
     a.burnOnAtk += m.eff.burnOnAtk || 0;
+    a.slowMul *= m.eff.slowMul || 1;
+    a.novaR = Math.max(a.novaR, m.eff.novaR || 0);
+    a.freezeProc += m.eff.freezeProc || 0;
+    a.stunBonus += m.eff.stunBonus || 0;
+    a.slowOnAtk += m.eff.slowOnAtk || 0;
     a.skillProc += m.eff.skillProc || 0;
     a.ultStunBonus += m.eff.ultStunBonus || 0;
     a.shockOnAtk += m.eff.shockOnAtk || 0;
@@ -306,7 +329,7 @@ export function heroStats(hid: string): HeroStats {
   const lvMul = 1 + (hs.lv - 1) * 0.08;
   const wpnMul = (1 + (hs.weaponLv - 1) * 0.06) * (1 + btN(hs.weaponLv, BT_STEP.weapon) * BT_WPN);
   // 技能槽成长：弓/狙/雷/火每级+8%（5级一档换成冷却/发数/窗口等里程碑）；其余英雄每级+10%且每5级+15%
-  const sklMul = (hid === 'archer' || hid === 'sniper' || hid === 'volt' || hid === 'pyro')
+  const sklMul = (hid === 'archer' || hid === 'sniper' || hid === 'volt' || hid === 'pyro' || hid === 'mora')
     ? (1 + (hs.skillLv - 1) * 0.08)
     : (1 + (hs.skillLv - 1) * 0.10) * (1 + btN(hs.skillLv, BT_STEP.skill) * BT_SKL);
   const atk = Math.round(def.baseAtk * lvMul * (1 + bt.atkPct) * wpnMul * (1 + agg.atkPct) + agg.atkFlat);
@@ -340,6 +363,7 @@ export const SHOP: ShopDef[] = [
   { id: 's_hero_sniper', tab: 'hero', name: '凯尔·鹰眼', sub: '狙击 · 重击输出', price: 6800, currency: 'diamond', unlock: '1-5', give: { kind: 'hero', id: 'sniper' } },
   { id: 's_hero_pyro', tab: 'hero', name: '焰·辉', sub: '火焰 · AOE 爆发', price: 2800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'pyro' } },
   { id: 's_hero_volt', tab: 'hero', name: '沃尔·雷霆', sub: '雷电 · 连锁控制', price: 4200, currency: 'diamond', unlock: '1-6', give: { kind: 'hero', id: 'volt' } },
+  { id: 's_hero_mora', tab: 'hero', name: '莫拉·寒霜', sub: '冰霜 · 减速控制', price: 4800, currency: 'diamond', unlock: '2-10', give: { kind: 'hero', id: 'mora' } },
   { id: 's_hero_more', tab: 'hero', name: '新英雄', sub: '敬请期待', price: 0, currency: 'diamond', unlock: '', give: { kind: 'hero', id: '' } },
   { id: 's_helm_falcon', tab: 'equip', name: '猎鹰头盔', sub: '蓝1阶 · 头盔', price: 600, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'helm_falcon' } },
   { id: 's_acc_moon', tab: 'equip', name: '月纹坠饰', sub: '绿1阶 · 饰品', price: 300, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'acc_moon' } },

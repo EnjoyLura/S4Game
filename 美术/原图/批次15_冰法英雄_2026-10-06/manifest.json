@@ -1,0 +1,58 @@
+{
+  "M1_头像莫拉": {
+    "id": "M1_头像莫拉",
+    "file": "D:/AI/S4Game/美术/原图/批次15_冰法英雄_2026-10-06\\M1_头像莫拉.png",
+    "prompt": "Circular game avatar bust portrait: a calm young female frost mage named Mora Han Shuang, silver-white long hair with small ice-crystal hairpin, pale ice-blue hooded cloak with silver frost trim, delicate frost patterns swirling around her raised palm, serene focused gaze. Kingdom Rush inspired hand-painted cartoon game art, painterly shading, crisp shapes readable at small size, ice-blue and silver-white color scheme, centered composition filling the circle. Square canvas with the circular portrait on transparent background outside the circle. Strictly NO text, NO border ring, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 22:02:58",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 191.5,
+    "sha1": "bd8c1f836c3e"
+  },
+  "M2_普攻图标": {
+    "id": "M2_普攻图标",
+    "file": "D:/AI/S4Game/美术/原图/批次15_冰法英雄_2026-10-06\\M2_普攻图标.png",
+    "prompt": "Circular game skill icon: an ice-blue robed frost mage (seen from behind-side) firing a sharp crystalline ice shard forward from her frost staff, small frost sparkles trailing the shard. Kingdom Rush inspired hand-painted cartoon game art, ice-blue and silver-white palette with deep winter-blue backdrop inside the circle, bold readable shapes. Square canvas, circular icon on transparent background outside the circle. Strictly NO text, NO border ring, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 22:06:09",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 49.7,
+    "sha1": "fa31d563b710"
+  },
+  "M3_技能图标": {
+    "id": "M3_技能图标",
+    "file": "D:/AI/S4Game/美术/原图/批次15_冰法英雄_2026-10-06\\M3_技能图标.png",
+    "prompt": "Circular game skill icon: a frost nova explosion - a ring of ice erupting outward from a frozen center, three small monster silhouettes caught in the ice ring, crystalline shards flying. Kingdom Rush inspired hand-painted cartoon game art, ice-blue and silver-white palette, bold readable shapes, deep winter-blue backdrop inside the circle. Square canvas, circular icon on transparent background outside the circle. Strictly NO text, NO border ring, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 22:06:59",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 107.7,
+    "sha1": "151cc37f2e89"
+  },
+  "M4_大招图标": {
+    "id": "M4_大招图标",
+    "file": "D:/AI/S4Game/美术/原图/批次15_冰法英雄_2026-10-06\\M4_大招图标.png",
+    "prompt": "Circular game ultimate icon: a vast blizzard storm seen from above - swirling snow vortex with ice spikes rising from the frozen ground, dramatic wide view, frozen landscape below. Kingdom Rush inspired hand-painted cartoon game art, ice-blue and white palette with dark arctic sky, bold readable shapes inside the circle. Square canvas, circular icon on transparent background outside the circle. Strictly NO text, NO border ring, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 22:08:47",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 48.5,
+    "sha1": "eb7ac20ca91e"
+  }
+}

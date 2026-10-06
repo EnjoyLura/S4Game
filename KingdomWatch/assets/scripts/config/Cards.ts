@@ -52,6 +52,10 @@ export interface HeroStats {
   shockedBonus: number; // 技能升级·对感电目标伤害加成（雷普攻15级 0.25）
   pitVuln: number;      // 大招陨石坑易伤值（火法 0.25，突破80级加深）
   burnedBonus: number;  // 技能升级·对灼烧目标伤害加成（火普攻15级 0.25）
+  novaR: number;        // 技能·冰霜新星半径（冰 150，突破60级 190）
+  novaStun: number;     // 技能·新星冻结时长 s（冰 0.8，突破80级 1.2）
+  freezeProc: number;   // 突破·普攻概率冰冻时长 s（冰70级 0.6，概率固定 15%）
+  slowedBonus: number;  // 技能升级·对减速目标伤害加成（冰普攻15级 0.25）
   atkLv: number;        // 技能升级等级（战斗内读里程碑：普攻/技能/大招槽）
   skillLv: number;
   ultLv: number;
@@ -119,6 +123,20 @@ export function pyroUltCfg(u: number): { boltMul: number; meteors: number; crate
   return { boltMul: (3.5 + (u >= 20 ? 0.4 : 0)) * (1 + (u - 1) * 0.08), meteors: 5 + (u >= 5 ? 2 : 0), craterMul: u >= 10 ? 1.25 : 1, chargeOn: u >= 15 };
 }
 
+/* ---------- 冰霜法师（莫拉·寒霜）技能升级效果（定稿；战斗侧与提示面板共用） ---------- */
+/** 普攻槽：每级普攻伤害+8%，5级攻速+6%，10级暴击率+5%，15级对减速目标+25%，20级普攻伤害再+20% */
+export function moraAtkCfg(a: number): { normalMul: number; aspdOn: boolean; critOn: boolean; slowedOn: boolean } {
+  return { normalMul: (1 + (a - 1) * 0.08) * (a >= 20 ? 1.2 : 1), aspdOn: a >= 5, critOn: a >= 10, slowedOn: a >= 15 };
+}
+/** 技能槽（冰霜新星）：每级+8%，5级冷却-1s，10级新星范围+20%，15级冻结+0.3s，20级倍率+0.3 */
+export function moraSkCfg(k: number): { mul: number; cdOn: boolean; rMul: number; stunBonus: number } {
+  return { mul: (1.5 + (k >= 20 ? 0.3 : 0)) * (1 + (k - 1) * 0.08), cdOn: k >= 5, rMul: k >= 10 ? 1.2 : 1, stunBonus: k >= 15 ? 0.3 : 0 };
+}
+/** 大招槽（极寒领域）：每级+8%，5级减速50%→60%，10级持续4→6s，15级充能-10%，20级倍率+0.4 */
+export function moraUltCfg(u: number): { boltMul: number; slowMul: number; slowDur: number; chargeOn: boolean } {
+  return { boltMul: (1.8 + (u >= 20 ? 0.4 : 0)) * (1 + (u - 1) * 0.08), slowMul: u >= 5 ? 0.6 : 0.5, slowDur: u >= 10 ? 6 : 4, chargeOn: u >= 15 };
+}
+
 export function baseArcherStats(): HeroStats {
   return {
     // 射程 900 / 技能 800（用户调整；文档 §3.1 的 520/416 作废）
@@ -129,7 +147,7 @@ export function baseArcherStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -143,7 +161,7 @@ export function baseSniperStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 6, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -157,7 +175,7 @@ export function basePyroStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 3, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -171,7 +189,21 @@ export function baseVoltStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 5, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 1, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
+  };
+}
+
+/** 冰霜法师 · 莫拉·寒霜（控制流·冰霜）：冰棱减速；普攻 900 / 技能索敌 800；自带减速 25%·2s */
+export function baseMoraStats(): HeroStats {
+  return {
+    atk: 58, atkMul: 1, aspd: 0.75, range: 900, skillRange: 800,
+    critRate: 0.05, critMul: 1.5,
+    serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
+    pierce: 0, slowOnHit: 0.25, burnOnHit: 0,
+    executeBonus: 0, lowHpBonus: 0,
+    slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 1, skillCdFlat: 0, ultBolts: 1,
+    skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 

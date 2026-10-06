@@ -4,7 +4,7 @@
  */
 import { _decorator, Canvas, Component, director, Layers, Node } from 'cc';
 import { LEVEL_1_1, LevelDef, MOBS, heroSlots, nextLevelId } from '../config/Mobs';
-import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, HeroStats, archerAtkCfg, sniperAtkCfg, voltAtkCfg, voltSkCfg, voltUltCfg, pyroAtkCfg, pyroSkCfg, pyroUltCfg } from '../config/Cards';
+import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, baseMoraStats, HeroStats, archerAtkCfg, sniperAtkCfg, voltAtkCfg, voltSkCfg, voltUltCfg, pyroAtkCfg, pyroSkCfg, pyroUltCfg, moraAtkCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
 import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
@@ -12,7 +12,7 @@ import { loadSave, saveSave } from '../core/SaveData';
 import { DIFF_MUL, starKey, squadList, unlockCodex, advanceUnlock, equipAgg, heroState, heroBtAgg } from '../core/GameData';
 import { flow } from '../core/Flow';
 import { MonsterManager } from './Monster';
-import { ArcherHero, HeroBase, SniperHero, PyroHero, VoltHero } from './Hero';
+import { ArcherHero, HeroBase, SniperHero, PyroHero, VoltHero, FrostHero } from './Hero';
 import { LineDefense } from './LineDefense';
 import { WaveManager } from './WaveManager';
 import { ProjectileManager } from './Projectile';
@@ -113,13 +113,15 @@ export class BattleDirector extends Component {
     this.heroes = ids.map((hid, i) => {
       const st = hid === 'sniper' ? baseSniperStats()
         : hid === 'pyro' ? basePyroStats()
-          : hid === 'volt' ? baseVoltStats() : baseArcherStats();
+          : hid === 'volt' ? baseVoltStats()
+            : hid === 'mora' ? baseMoraStats() : baseArcherStats();
       applyHeroGrowth(st, hid);     // 英雄等级成长+阶段性突破上场（每级成长按存档等级）
       applyEquipAffixes(st, hid);   // 穿戴词条上场即生效（用户确认的词条体系）
       return hid === 'sniper' ? new SniperHero(field, slots[i], st)
         : hid === 'pyro' ? new PyroHero(field, slots[i], st)
           : hid === 'volt' ? new VoltHero(field, slots[i], st)
-            : new ArcherHero(field, slots[i], st);
+            : hid === 'mora' ? new FrostHero(field, slots[i], st)
+              : new ArcherHero(field, slots[i], st);
     });
     this.parts = new Particles(fxLayer);
     this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts);
@@ -582,5 +584,18 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
     if (bt.shotsBonus) s.skillShots += bt.shotsBonus;           // 70级 技能火球+1
     if (bt.vulnBonus) s.pitVuln += bt.vulnBonus;                // 80级 陨石坑易伤加深
     if (bt.burnOnAtk) s.burnOnHit = Math.max(s.burnOnHit || 0, bt.burnOnAtk);   // 90级 烈焰之躯
+  } else if (hid === 'mora') {
+    const ac = moraAtkCfg(hs.atkLv);
+    s.normalMul = ac.normalMul;                       // 普攻伤害：每级+8%、20级再+20%
+    if (ac.aspdOn) s.aspd *= 1.06;                    // 5级 攻速+6%
+    if (ac.critOn) s.critRate = Math.min(1, s.critRate + 0.05);   // 10级 暴击率+5%
+    if (ac.slowedOn) s.slowedBonus = 0.25;            // 15级 对减速目标+25%
+    if (moraSkCfg(hs.skillLv).cdOn) s.skillCdFlat += 1;   // 技能5级 冷却-1s
+    if (moraUltCfg(hs.ultLv).chargeOn) s.chargeMul *= 0.9;   // 大招15级 充能-10%
+    if (bt.slowMul !== 1) s.slowOnHit = (s.slowOnHit || 0) * bt.slowMul;   // 30级 冰寒刺骨
+    if (bt.novaR) s.novaR = Math.max(s.novaR, bt.novaR);   // 60级 新星范围150→190
+    if (bt.freezeProc) s.freezeProc = bt.freezeProc;       // 70级 普攻概率冰冻
+    if (bt.stunBonus) s.novaStun += bt.stunBonus;          // 80级 冻结+0.4s
+    if (bt.slowOnAtk) s.slowOnHit = Math.max(s.slowOnHit || 0, bt.slowOnAtk);   // 90级 冰寒之躯
   }
 }

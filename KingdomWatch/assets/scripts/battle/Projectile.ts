@@ -51,6 +51,7 @@ export interface ProjSpec {
   fullHpBonus?: number;
   shockedBonus?: number;   // 对感电中目标伤害加成（雷普攻15级）
   burnedBonus?: number;   // 对灼烧中目标伤害加成（火普攻15级）
+  slowedBonus?: number;   // 对减速中目标伤害加成（冰普攻15级）
   /** 猎杀标记（狙大招10级）：命中后目标受伤 +markAmp 持续 markDur s */
   markAmp?: number;
   markDur?: number;
@@ -425,6 +426,7 @@ export class ProjectileManager {
     if (sp.fullHpBonus && m.hp >= m.maxHp) final *= 1 + sp.fullHpBonus;
     if (sp.shockedBonus && m.shockT > 0) final *= 1 + sp.shockedBonus;
     if (sp.burnedBonus && m.burnT > 0) final *= 1 + sp.burnedBonus;
+    if (sp.slowedBonus && m.slowT > 0) final *= 1 + sp.slowedBonus;
     m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true, sp.resCut || 0);
     if (sp.markAmp) m.applyVuln(sp.markAmp, sp.markDur || 5);   // 猎杀标记：目标受伤+20% 5s
     this.dmg.add(sp.heroId, Math.min(final, hpBefore));

@@ -24,6 +24,8 @@ export class Monster {
   atkT = 0;
   healT = 0;
   slowT = 0;
+  /** 减速幅度（0.2=减速20%；applySlow 取最强者；移动 mul = 1-slowAmp） */
+  slowAmp = 0.2;
   burnT = 0;
   burnTick = 0;
   burnDps = 0;
@@ -59,6 +61,7 @@ export class Monster {
     this.atkT = def.atkInterval;
     this.healT = def.atkInterval;
     this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = this.lungeT = this.flashT = 0;
+    this.slowAmp = 0.2;
     this.shockT = this.shockAmp = 0;
     this.vulnT = this.vulnAmp = 0;
     this.baseX = x;
@@ -163,7 +166,7 @@ export class Monster {
       if (this.dead) return;
     }
 
-    const mul = this.slowT > 0 ? 0.8 : 1;
+    const mul = this.slowT > 0 ? (1 - this.slowAmp) : 1;
     if (this.state === 'move') {
       // 直线行进（用户确认：不蛇形）；横向松散由出生 x 与分离逻辑保证
       this.node.setPosition(this.baseX, this.node.position.y - this.def.speed * mul * dt, 0);
@@ -251,6 +254,7 @@ export class Monster {
 
   applySlow(ratio: number, dur: number): void {
     this.slowT = Math.max(this.slowT, dur);
+    this.slowAmp = Math.max(this.slowAmp, ratio);
   }
   applyBurn(dps: number, dur: number): void {
     this.burnDps = dps;

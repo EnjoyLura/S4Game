@@ -133,6 +133,27 @@ const SKILL_MS_PYRO: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string }
     { lv: 20, txt: '每颗倍率 3.5→3.9' },
   ],
 };
+/* 冰霜法师（莫拉·寒霜）技能升级里程碑（定稿） */
+const SKILL_MS_MORA: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string }[]> = {
+  atk: [
+    { lv: 5, txt: '攻速 +6%' },
+    { lv: 10, txt: '暴击率 +5%' },
+    { lv: 15, txt: '对减速目标伤害 +25%' },
+    { lv: 20, txt: '普攻伤害 +20%' },
+  ],
+  skill: [
+    { lv: 5, txt: '冷却 -1s' },
+    { lv: 10, txt: '新星范围 +20%' },
+    { lv: 15, txt: '冻结时间 +0.3s' },
+    { lv: 20, txt: '倍率 1.5→1.8' },
+  ],
+  ult: [
+    { lv: 5, txt: '减速 50%→60%' },
+    { lv: 10, txt: '减速持续 4→6s' },
+    { lv: 15, txt: '大招充能 -10%' },
+    { lv: 20, txt: '倍率 1.8→2.2' },
+  ],
+};
 const SKILL_GENERIC: Record<'atk' | 'skill' | 'ult', string> = {
   atk: '普攻伤害 +15%',
   skill: `技能伤害 +${Math.round(BT_SKL * 100)}%`,
@@ -143,7 +164,8 @@ const skillMilestones = (hid: string, slot: 'atk' | 'skill' | 'ult'): { lv: numb
     : hid === 'sniper' ? SKILL_MS_SNIPER[slot]
       : hid === 'volt' ? SKILL_MS_VOLT[slot]
         : hid === 'pyro' ? SKILL_MS_PYRO[slot]
-          : btMs(MAX.skill, BT_STEP.skill, SKILL_GENERIC[slot]);
+          : hid === 'mora' ? SKILL_MS_MORA[slot]
+            : btMs(MAX.skill, BT_STEP.skill, SKILL_GENERIC[slot]);
 
 /* 页签跨刷新保持（升级后 refresh 重建页面不跳回「等级」） */
 const st: { tab: 0 | 1 | 2 | 3 } = { tab: 0 };
@@ -187,7 +209,7 @@ export function buildUpgrade(ctx: PageCtx): void {
     artPanel(content, 0, WY(-LO.safeTop, upT + LO.safeTop), 750, upT + LO.safeTop, 'ui_panel_hero');
 
     /* 常驻英雄栏：头像切换（未拥有灰锁）；用户确认：头像不加边框（无描边、无带环座美术） */
-    (['archer', 'sniper', 'pyro', 'volt'] as const).forEach((id, i) => {
+    (['archer', 'sniper', 'pyro', 'volt', 'mora'] as const).forEach((id, i) => {
       const o = sv.heroes[id].owned;
       const av = gpanel(content, WX(28 + i * 108, 84), WY(205, 84), 84, 84,
         CA('#2A3240', 1), undefined, 0, 44);   // 间距 108=头像84+24 缝（用户反馈：太挤）
@@ -496,7 +518,7 @@ function skillModal(ctx: PageCtx, hid: string, slot: 'atk' | 'skill' | 'ult', re
   } else {
     nm = slot === 'atk' ? '普攻伤害' : '大招伤害';
     // 弓箭手每级+8%（5级档换成机制里程碑）；其余英雄每级+10%且每5级+15%
-    const pct = (l: number): number => (hid === 'archer' || hid === 'sniper' || hid === 'volt' || hid === 'pyro') ? (l - 1) * 8 : (l - 1) * 10 + btN(l, BT_STEP.skill) * 15;
+    const pct = (l: number): number => (hid === 'archer' || hid === 'sniper' || hid === 'volt' || hid === 'pyro' || hid === 'mora') ? (l - 1) * 8 : (l - 1) * 10 + btN(l, BT_STEP.skill) * 15;
     curS = `+${pct(lv)}%`;
     if (!maxed) delta = `→ +${pct(lv + 1)}%`;
   }

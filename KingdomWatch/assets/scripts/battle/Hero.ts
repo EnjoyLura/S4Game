@@ -8,8 +8,8 @@
  * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/处决/残血词条）；穿戴词条（攻击/攻速/范围/暴击/充能效率/技能伤害）上场生效
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
-import { HeroStats, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg } from '../config/Cards';
-import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL } from '../config/GameConfig';
+import { HeroStats, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, MORA_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL } from '../config/GameConfig';
 import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
@@ -1203,6 +1203,195 @@ export class VoltHero extends HeroBase {
       this.strikeQueue.push({ t: 0.1 + k * 0.08, target: t });
     }
     if (this.stats.ultHaste) this.hasteT = 5;
+    Sfx.play('ult');
+    void projs;
+    return true;
+  }
+}
+
+/* ============================================================
+ * 冰霜法师 · 莫拉·寒霜（冰蓝法袍；线稿 hero_frost_battle 100×120）
+ * ============================================================ */
+export class FrostHero extends HeroBase {
+  readonly id = 'mora';
+  readonly name = '莫拉·寒霜';
+  readonly chargeMax = MORA_CHARGE_MAX;
+  readonly skillMax = 10;
+
+  protected buildVisual(parent: Node): void {
+    const g = this.node.addComponent(Graphics);
+    // 背影冰霜法师：冰蓝法袍 + 霜晶法杖（线稿 hero_frost_battle 100×120）
+    const ink = hexc(PAL.ink);
+    g.strokeColor = ink;
+    g.lineWidth = 3;
+    // 法袍下摆
+    g.fillColor = hexc('#3E6E9E');
+    g.moveTo(-20, 34); g.lineTo(20, 34); g.lineTo(30, -76); g.lineTo(-30, -76);
+    g.close(); g.fill(); g.stroke();
+    // 躯干（法袍上身）
+    g.fillColor = hexc('#4E86B8');
+    g.roundRect(-22, -34, 44, 66, 14);
+    g.fill(); g.stroke();
+    // 银色腰带 + 霜晶搭扣
+    g.fillColor = hexc('#9FB6C9');
+    g.roundRect(-22, -22, 44, 7, 3);
+    g.fill();
+    g.fillColor = hexc('#D9F3FF');
+    g.circle(0, -18, 4);
+    g.fill();
+    // 肩披
+    g.fillColor = hexc('#6FA3CF');
+    g.circle(-22, 24, 9); g.fill(); g.stroke();
+    g.circle(22, 24, 9); g.fill(); g.stroke();
+    // 头 + 兜帽（尖顶法师帽 + 霜晶顶珠）
+    g.fillColor = hexc('#EAD9C8');
+    g.circle(0, 26, 14); g.fill(); g.stroke();
+    g.fillColor = hexc('#3E6E9E');
+    g.moveTo(-17, 30); g.lineTo(17, 30); g.lineTo(4, 52); g.lineTo(-4, 52);
+    g.close(); g.fill(); g.stroke();
+    g.fillColor = hexc('#D9F3FF');
+    g.circle(0, 52, 3.5); g.fill();
+    // 法杖（右侧斜持，顶端霜晶宝珠）
+    g.strokeColor = hexc('#5A4632');
+    g.lineWidth = 5;
+    g.moveTo(26, -70); g.lineTo(36, 18);
+    g.stroke();
+    g.fillColor = hexc('#7FD8FF');
+    g.circle(38, 26, 9); g.fill(); g.stroke();
+    g.fillColor = hexc('#FFFFFF');
+    g.circle(38, 26, 4); g.fill();
+    // 靴（下沿没入工事）
+    g.fillColor = hexc('#2A2118');
+    g.roundRect(-19, -78, 15, 16, 4); g.fill(); g.stroke();
+    g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
+    this.node.setPosition(this.x, HERO_Y, 0);
+    this.node.setParent(parent);
+  }
+
+  /** 冰棱弹种统一构造：冰蓝细弹 + 减速词条 */
+  private spec(base: {
+    x: number; y: number; dirX: number; dirY: number; dmg: number;
+    speed: number; size: number;
+  }): ProjSpec {
+    const crit = Math.random() < this.stats.critRate;
+    return {
+      x: base.x, y: base.y, dirX: base.dirX, dirY: base.dirY,
+      speed: base.speed,
+      dmg: base.dmg * (this.stats.normalMul || 1) * (crit ? this.stats.critMul : 1), crit,
+      color: '#7FD8FF', heroId: this.id, size: base.size,
+      slowRatio: this.stats.slowOnHit || 0,
+      slowDur: this.stats.slowDur || 2,
+      spark: true,
+      slowedBonus: this.stats.slowedBonus || undefined,
+      ...this.targetBonuses(),
+    };
+  }
+
+  /** 普攻·冰棱：快速单体 + 减速；70级突破：15% 概率冰冻 0.6s（不消耗） */
+  protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
+    void _mgr;
+    const bs = 850;
+    const lead = this.lead(target, bs);
+    projs.fire(this.spec({
+      x: this.x, y: HERO_Y + 60, dirX: lead.dirX, dirY: lead.dirY,
+      dmg: this.effAtk, speed: bs, size: 6,
+    }));
+    Sfx.play('shoot');
+    if (this.stats.freezeProc && Math.random() < 0.15) target.stunT = Math.max(target.stunT, this.stats.freezeProc);
+  }
+
+  /** 冰霜新星本体（无弹道即时结算）：技能范围最密集簇心 AOE 伤害 + 冻结 + 深度减速 */
+  private castNova(mgr: MonsterManager, dmg?: DamageService): void {
+    const mc = moraSkCfg(this.stats.skillLv);
+    const R = this.stats.skillRange;
+    const cands = mgr.list.filter(m => !m.dead && Math.hypot(m.x - this.x, m.y - HERO_Y) <= R);
+    if (!cands.length) return;
+    // 密集簇：邻域 130 内同伴最多者为中心（与火法烈焰爆裂同款索敌）
+    let best = cands[0], bestN = -1;
+    for (const m of cands) {
+      let n = 0;
+      for (const o of cands) if (Math.hypot(o.x - m.x, o.y - m.y) <= 130) n++;
+      if (n > bestN) { bestN = n; best = m; }
+    }
+    const NR = (this.stats.novaR || 150) * mc.rMul * (this.stats.skillRangeMul || 1);
+    const hitDmg = this.skillAtk * mc.mul * (this.stats.skillMul || 1);
+    const stun = (this.stats.novaStun || 0.8) + mc.stunBonus;
+    for (const m of mgr.mobsInRadius(best.x, best.y, NR)) {
+      if (m.dead) continue;
+      const hpBefore = m.hp;
+      m.takeDamage(hitDmg, Math.random() < this.stats.critRate, this.id);
+      if (dmg) dmg.add(this.id, Math.min(hitDmg, hpBefore));
+      m.stunT = Math.max(m.stunT, stun);   // 冻结（硬直）
+      m.applySlow(0.5, 3);                 // 深度减速
+    }
+    // 冰环特效：双圈冰晶扩散
+    const ring = new Node('frostNova');
+    ring.layer = Layers.Enum.UI_2D;
+    ring.setParent(this.node.parent!);
+    ring.setPosition(best.x, best.y, 0);
+    const rg = ring.addComponent(Graphics);
+    rg.strokeColor = hexc('#7FD8FF');
+    rg.lineWidth = 6;
+    rg.circle(0, 0, NR); rg.stroke();
+    rg.strokeColor = hexc('#E8FAFF');
+    rg.lineWidth = 3;
+    rg.circle(0, 0, NR * 0.72); rg.stroke();
+    const op = ring.addComponent(UIOpacity);
+    tween(ring).to(0.32, { scale: new Vec3(1.15, 1.15, 1) }).start();
+    tween(op).to(0.32, { opacity: 0 }).call(() => ring.destroy()).start();
+    Sfx.play('skill');
+  }
+
+  /** 技能·冰霜新星（自动，10s CD） */
+  protected castSkill(mgr: MonsterManager, _projs: ProjectileManager, dmg: DamageService): void {
+    void _projs;
+    this.skillCd = this.skillCdTotal;   // 冷却缩减卡
+    this.castNova(mgr, dmg);
+  }
+
+  /** 大招·极寒领域（手动，击杀充能）：全屏冰暴——所有敌人受冰伤并深度减速，冰蓝闪屏 + 扩散环 */
+  castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean {
+    if (!this.ultReady) return false;
+    const alive = mgr.list.filter(m => !m.dead);
+    if (!alive.length) return false;   // 全场无目标：不消耗充能
+    this.charge = 0;
+    bus.emit(EVT.CHARGE_CHANGED, 0, false);
+    this.lastDmg = dmg;   // 直伤计入伤害统计（施放时刷新引用）
+    const uc = moraUltCfg(this.stats.ultLv);
+    for (const m of alive) {
+      const hpBefore = m.hp;
+      const d = this.skillAtk * uc.boltMul * (this.stats.ultDmgMul || 1);
+      m.takeDamage(d, false, this.id);
+      if (this.lastDmg) this.lastDmg.add(this.id, Math.min(d, hpBefore));
+      m.applySlow(uc.slowMul, uc.slowDur);
+    }
+    // 冰蓝闪屏（覆盖全场的淡蓝矩形，快速淡出）
+    const flash = new Node('blizzard');
+    flash.layer = Layers.Enum.UI_2D;
+    flash.setParent(this.node.parent!);
+    flash.setPosition(0, 0, 0);
+    const fg = flash.addComponent(Graphics);
+    fg.fillColor = hexc('#BFE9FF');
+    fg.rect(-600, -1400, 1200, 2800);
+    fg.fill();
+    const fop = flash.addComponent(UIOpacity);
+    fop.opacity = 60;
+    tween(fop).to(0.45, { opacity: 0 }).call(() => flash.destroy()).start();
+    // 两道自防线扩散的冰环
+    for (let k = 0; k < 2; k++) {
+      const ring = new Node('blizRing');
+      ring.layer = Layers.Enum.UI_2D;
+      ring.setParent(this.node.parent!);
+      ring.setPosition(this.x, HERO_Y, 0);
+      const rg = ring.addComponent(Graphics);
+      rg.strokeColor = hexc(k === 0 ? '#7FD8FF' : '#E8FAFF');
+      rg.lineWidth = 5;
+      rg.circle(0, 0, 120);
+      rg.stroke();
+      const rop = ring.addComponent(UIOpacity);
+      tween(ring).to(0.55 + k * 0.15, { scale: new Vec3(6 + k * 2, 6 + k * 2, 1) }).start();
+      tween(rop).to(0.55 + k * 0.15, { opacity: 0 }).delay(k * 0.1).call(() => ring.destroy()).start();
+    }
     Sfx.play('ult');
     void projs;
     return true;
