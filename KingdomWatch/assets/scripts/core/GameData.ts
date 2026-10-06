@@ -195,10 +195,10 @@ export const HERO_BT: Record<string, HeroBt[]> = {
   archer: [
     { lv: 10, txt: '突破 · 攻击力 +10%', eff: { atkPct: 0.10 } },
     { lv: 20, txt: '突破 · 攻速 +10%', eff: { aspdPct: 0.10 } },
-    { lv: 30, txt: '突破 · 普攻5%概率射出贯穿箭', eff: { pierce: 0.05 } },
+    { lv: 30, txt: '突破 · 普攻5%概率射出强化箭', eff: { pierce: 0.05 } },
     { lv: 40, txt: '突破 · 技能伤害 +10%', eff: { skillPct: 0.10 } },
     { lv: 50, txt: '突破 · 普攻/技能索敌范围 +10%', eff: { rangePct: 0.10 } },
-    { lv: 60, txt: '突破 · 普攻贯穿概率 +10%（累计15%）', eff: { pierce: 0.10 } },
+    { lv: 60, txt: '突破 · 强化箭概率 +10%（累计15%）', eff: { pierce: 0.10 } },
     { lv: 70, txt: '突破 · 攻击力 +15%', eff: { atkPct: 0.15 } },
     { lv: 80, txt: '突破 · 攻速 +10%', eff: { aspdPct: 0.10 } },
     { lv: 90, txt: '突破 · 无视25%防御力', eff: { defIgnore: 0.25 } },
