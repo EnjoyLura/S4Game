@@ -1041,14 +1041,13 @@ export class VoltHero extends HeroBase {
       slowDur: this.stats.slowDur || 2,
       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
       spark: true, ability: base.ability, ult: base.ult, stun: base.stun,
-      shockAmp: this.stats.shockOnHit, shockDur: 3,
+      shockAmp: this.shockAmp(), shockDur: 3,
       ...this.targetBonuses(),
     };
   }
 
   /** 普攻·闪电弹：快速单体 */
-  protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
-    void _mgr;
+  protected shoot(target: Monster, mgr: MonsterManager, projs: ProjectileManager): void {
     const bs = 900;
     const lead = this.lead(target, bs);
     projs.fire(this.spec({
@@ -1056,6 +1055,8 @@ export class VoltHero extends HeroBase {
       dmg: this.effAtk, speed: bs, size: 6,
     }));
     Sfx.play('shoot');
+    // 70级突破：普攻 15% 概率顺带释放连锁闪电（不占用也不刷新技能冷却）
+    if (this.stats.skillProc && Math.random() < this.stats.skillProc) this.castChain(mgr, this.lastDmg || undefined);
   }
 
   /** 闪电闪现特效：锯齿电弧（约 0.22s 淡出）；thick=大招加粗 */
@@ -1093,6 +1094,14 @@ export class VoltHero extends HeroBase {
   protected castSkill(mgr: MonsterManager, _projs: ProjectileManager, dmg: DamageService): void {
     void _projs;
     this.skillCd = this.skillCdTotal;   // 冷却缩减卡
+    this.castChain(mgr, dmg);
+  }
+
+  /** 感电增伤值 = 感电来源（感电卡/雷霆之躯）× 30级加深倍率 */
+  private shockAmp(): number { return (this.stats.shockOnHit || 0) * (this.stats.shockAmpMul || 1); }
+
+  /** 连锁闪电本体（普攻概率施法复用）：从技能范围最近目标起跳，最多 skillShots 目标间跳跃 */
+  private castChain(mgr: MonsterManager, dmg?: DamageService): void {
     const R = this.stats.skillRange;
     const alive = mgr.list.filter(m => !m.dead && Math.hypot(m.x - this.x, m.y - HERO_Y) <= R);
     if (!alive.length) return;
@@ -1108,8 +1117,9 @@ export class VoltHero extends HeroBase {
       // 直接结算伤害（连锁无弹道，即时跳）
       const hpBefore = cur.hp;
       const done = cur.takeDamage(hitDmg, Math.random() < this.stats.critRate, this.id);
-      dmg.add(this.id, Math.min(hitDmg, hpBefore));
-      if (this.stats.shockOnHit) cur.applyShock(this.stats.shockOnHit, 3);
+      if (dmg) dmg.add(this.id, Math.min(hitDmg, hpBefore));
+      const sa = this.shockAmp();
+      if (sa) cur.applyShock(sa, 3);
       this.zapFx(fromX, fromY, cur.x, cur.y);
       Sfx.play('hit');
       fromX = cur.x; fromY = cur.y;
@@ -1155,7 +1165,8 @@ export class VoltHero extends HeroBase {
       o.takeDamage(dmgVal, false, this.id);
       if (this.lastDmg) this.lastDmg.add(this.id, Math.min(dmgVal, hpBefore));
       if (this.stats.ultStun) o.stunT = Math.max(o.stunT, this.stats.ultStun);
-      if (this.stats.shockOnHit) o.applyShock(this.stats.shockOnHit, 3);
+      const sa2 = this.shockAmp();
+      if (sa2) o.applyShock(sa2, 3);
     }
     void t;
   }

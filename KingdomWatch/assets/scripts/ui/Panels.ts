@@ -448,7 +448,7 @@ export class Panels {
     const isArcher = hero.id === 'archer';
     const cdTotal = hero.skillCdTotal + ' 秒';
     const goalTxt = String(Math.round(hero.chargeGoal * 10) / 10);
-    const shockTxt = (h.shockOnHit || 0) > 0 ? '感电：受伤 +' + Math.round(h.shockOnHit * 100) + '%' : '';
+    const shockTxt = (h.shockOnHit || 0) > 0 ? '感电：受伤 +' + Math.round(h.shockOnHit * (h.shockAmpMul || 1) * 100) + '%' : '';
     const iconY = WYB(126, 46);
     let px: number, py: number, w = 300, hh = 272, title: string;
     let rows: [string, string][];

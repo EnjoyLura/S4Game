@@ -552,5 +552,11 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
     if (ac.fullHpOn) s.fullHpBonus = 0.25;            // 15级 对满血目标+25%
     if (hs.skillLv >= 5) s.skillCdFlat += 1;          // 技能5级 冷却-1s
     if (hs.ultLv >= 15) s.chargeMul *= 0.9;           // 大招15级 充能-10%
+  } else if (hid === 'volt') {
+    if (bt.shockAmpMul !== 1) s.shockAmpMul = bt.shockAmpMul;   // 30级 感电加深
+    if (bt.chainBonus) s.skillShots += bt.chainBonus;           // 60级 连锁+2目标
+    if (bt.skillProc) s.skillProc = bt.skillProc;               // 70级 普攻概率施法
+    if (bt.ultStunBonus) s.ultStun += bt.ultStunBonus;          // 80级 大招眩晕+0.5s
+    if (bt.shockOnAtk) s.shockOnHit = Math.max(s.shockOnHit || 0, bt.shockOnAtk);  // 90级 雷霆之躯
   }
 }
