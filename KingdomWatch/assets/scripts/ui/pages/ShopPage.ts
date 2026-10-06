@@ -1,12 +1,12 @@
 /**
- * ① 商店（线稿 shop）：撕纸标题 + 四页签连体（无背板，仅首/末段外侧圆弧）+ 货架大背板 + 商品卡 2×2
+ * ① 商店（线稿 shop）：撕纸标题 + 四页签连体（无背板，仅首/末段外侧圆弧）+ 商品卡 2×2（无大背板，浮于商店内景背景）
  * 固定货架 12 件，关卡章节阶段性解锁；购买=确认弹窗→扣货币→入包/解锁英雄。
  */
 import { Node, Graphics } from 'cc';
-import { PAL, LO } from '../../config/GameConfig';
+import { PAL } from '../../config/GameConfig';
 import { CA, btn, C, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
-import { PageCtx, artPanel, confirmModal, fmt, toast, CX, qualityBadge } from '../PageKit';
+import { PageCtx, confirmModal, fmt, toast, CX, qualityBadge } from '../PageKit';
 import { EQUIPS, SHOP, SHOP_TABS, ShopDef, ShopTab, QCOLOR, lvReached, shopBuy } from '../../core/GameData';
 import { loadSave } from '../../core/SaveData';
 
@@ -38,10 +38,7 @@ export function buildShop(ctx: PageCtx): void {
 
   function render(): void {
     content.destroyAllChildren();
-    // 货架大背板（用户调整：占满全宽 750；底部紧贴导航栏不留间隔；专属美术 ui_panel_shop，缺图回退程序板）
-    const top = 400;
-    const bh = 2 * LO.half - 148 - top;   // 148 = 导航栏高，板底边正好压在导航上沿
-    artPanel(content, 0, WY(top, bh), 750, bh, 'ui_panel_shop');
+    // 货架大背板已去（用户调整）：商品卡直接浮于商店内景背景上
     // 四页签连体（用户确认参考英雄页：无背板、段内直角、仅首/末段外侧圆弧）
     const segW = 680 / 4, segH = 64, segR = 14;
     SHOP_TABS.forEach((t, i) => {
