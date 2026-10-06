@@ -360,10 +360,10 @@ export interface ShopDef {
 export const SHOP: ShopDef[] = [
   { id: 's_wpn_bow', tab: 'weapon', name: '猎风长弓', sub: '绿1阶 · 速射弓', price: 800, currency: 'diamond', unlock: '1-1', give: { kind: 'equip', id: 'wpn_bow' } },
   { id: 's_wpn_crossbow', tab: 'weapon', name: '鹰眼重弩', sub: '紫2阶 · 重击弩', price: 1200, currency: 'diamond', unlock: '1-2', give: { kind: 'equip', id: 'wpn_crossbow' } },
-  { id: 's_hero_sniper', tab: 'hero', name: '凯尔·鹰眼', sub: '狙击 · 重击输出', price: 6800, currency: 'diamond', unlock: '1-5', give: { kind: 'hero', id: 'sniper' } },
+  { id: 's_hero_sniper', tab: 'hero', name: '凯尔·鹰眼', sub: '狙击 · 重击输出', price: 6800, currency: 'diamond', unlock: '1-2', give: { kind: 'hero', id: 'sniper' } },
   { id: 's_hero_pyro', tab: 'hero', name: '焰·辉', sub: '火焰 · AOE 爆发', price: 2800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'pyro' } },
-  { id: 's_hero_volt', tab: 'hero', name: '沃尔·雷霆', sub: '雷电 · 连锁控制', price: 4200, currency: 'diamond', unlock: '1-6', give: { kind: 'hero', id: 'volt' } },
-  { id: 's_hero_mora', tab: 'hero', name: '莫拉·寒霜', sub: '冰霜 · 减速控制', price: 4800, currency: 'diamond', unlock: '2-10', give: { kind: 'hero', id: 'mora' } },
+  { id: 's_hero_volt', tab: 'hero', name: '沃尔·雷霆', sub: '雷电 · 连锁控制', price: 4200, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'volt' } },
+  { id: 's_hero_mora', tab: 'hero', name: '莫拉·寒霜', sub: '冰霜 · 减速控制', price: 4800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'mora' } },
   { id: 's_hero_more', tab: 'hero', name: '新英雄', sub: '敬请期待', price: 0, currency: 'diamond', unlock: '', give: { kind: 'hero', id: '' } },
   { id: 's_helm_falcon', tab: 'equip', name: '猎鹰头盔', sub: '蓝1阶 · 头盔', price: 600, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'helm_falcon' } },
   { id: 's_acc_moon', tab: 'equip', name: '月纹坠饰', sub: '绿1阶 · 饰品', price: 300, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'acc_moon' } },
@@ -380,7 +380,7 @@ const LV_ORDER = ['1-1', '1-2', '1-3', '1-4', '1-5'];
 export function lvReached(unlock: string): boolean {
   if (!unlock) return true;
   const sv = loadSave();
-  if (LV_ORDER.indexOf(unlock) < 0) return false;   // 未实装关卡恒锁（如 1-6 的雷法）
+  if (LV_ORDER.indexOf(unlock) < 0) return false;   // 未实装关卡恒锁（商店解锁只允许引用 LV_ORDER 内关卡）
   return LV_ORDER.indexOf(sv.unlocked) >= LV_ORDER.indexOf(unlock);
 }
 
