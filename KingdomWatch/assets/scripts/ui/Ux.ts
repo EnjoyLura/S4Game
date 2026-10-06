@@ -232,6 +232,8 @@ export const UX_PRELOAD_IDS: string[] = [
   'scenes/scene_1_1', 'scenes/scene_1_2', 'scenes/scene_1_3',
   // 页签专属背景（商店内景 / 基地庭院）
   'scenes/bg_shop', 'scenes/bg_base', 'scenes/bg_heroes', 'scenes/bg_level', 'scenes/bg_upgrade',
+  // 底部导航图标（美术盖 emoji 兜底）
+  'ui_nav_shop', 'ui_nav_heroes', 'ui_nav_levels', 'ui_nav_upgrade', 'ui_nav_base',
 ];
 
 let preloadStarted = false;

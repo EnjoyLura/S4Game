@@ -1,0 +1,38 @@
+{
+  "name": "批次14_导航图标_2026-10-06",
+  "outdir": "D:/AI/S4Game/美术/原图/批次14_导航图标_2026-10-06",
+  "defaults": {
+    "model": "gpt-image-2",
+    "quality": "high",
+    "background": "transparent",
+    "key": "a3",
+    "size": "1k"
+  },
+  "items": [
+    {
+      "id": "ui_nav_shop",
+      "type": "generate",
+      "prompt": "Single mobile game navigation icon of a plump brown leather coin pouch overflowing with shiny gold coins, two coins leaning against its base, Kingdom Rush inspired hand-painted cartoon game asset style, bold rounded silhouette, rich warm colors with golden rim light, centered composition filling most of the frame, crisp readable at small size, soft painterly shading with clean outlines. Isolated on fully transparent background. Absolutely no text, no letters, no watermark, no border, no background scenery, no ground shadow disc."
+    },
+    {
+      "id": "ui_nav_heroes",
+      "type": "generate",
+      "prompt": "Single mobile game navigation icon of a heroic knight helmet with a tall red feather plume and a golden visor rim, facing three-quarter forward, Kingdom Rush inspired hand-painted cartoon game asset style, bold rounded silhouette, rich warm colors with golden rim light, centered composition filling most of the frame, crisp readable at small size, soft painterly shading with clean outlines. Isolated on fully transparent background. Absolutely no text, no letters, no watermark, no border, no background scenery, no ground shadow disc."
+    },
+    {
+      "id": "ui_nav_levels",
+      "type": "generate",
+      "prompt": "Single mobile game navigation icon of a rolled parchment campaign map showing a winding red route line ending in a small golden marker flag, Kingdom Rush inspired hand-painted cartoon game asset style, bold rounded silhouette, rich warm colors with golden rim light, centered composition filling most of the frame, crisp readable at small size, soft painterly shading with clean outlines. Isolated on fully transparent background. Absolutely no text, no letters, no watermark, no border, no background scenery, no ground shadow disc."
+    },
+    {
+      "id": "ui_nav_upgrade",
+      "type": "generate",
+      "prompt": "Single mobile game navigation icon of a bold golden upward double chevron arrow with a warm glowing aura and a few tiny sparkles, Kingdom Rush inspired hand-painted cartoon game asset style, bold rounded silhouette, rich warm colors with golden rim light, centered composition filling most of the frame, crisp readable at small size, soft painterly shading with clean outlines. Isolated on fully transparent background. Absolutely no text, no letters, no watermark, no border, no background scenery, no ground shadow disc."
+    },
+    {
+      "id": "ui_nav_base",
+      "type": "generate",
+      "prompt": "Single mobile game navigation icon of a small friendly stone fortress gatehouse with one round tower and a blue peaked conical roof, tiny crenellations and a wooden gate, Kingdom Rush inspired hand-painted cartoon game asset style, bold rounded silhouette, rich warm colors with golden rim light, centered composition filling most of the frame, crisp readable at small size, soft painterly shading with clean outlines. Isolated on fully transparent background. Absolutely no text, no letters, no watermark, no border, no background scenery, no ground shadow disc."
+    }
+  ]
+}

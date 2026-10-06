@@ -1,0 +1,72 @@
+{
+  "ui_nav_shop": {
+    "id": "ui_nav_shop",
+    "file": "D:/AI/S4Game/美术/原图/批次14_导航图标_2026-10-06\\ui_nav_shop.png",
+    "prompt": "Single mobile game navigation icon of a plump brown leather coin pouch overflowing with shiny gold coins, two coins leaning against its base, Kingdom Rush inspired hand-painted cartoon game asset style, bold rounded silhouette, rich warm colors with golden rim light, centered composition filling most of the frame, crisp readable at small size, soft painterly shading with clean outlines. Isolated on fully transparent background. Absolutely no text, no letters, no watermark, no border, no background scenery, no ground shadow disc.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 14:25:22",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 47.9,
+    "sha1": "f41a30284416"
+  },
+  "ui_nav_heroes": {
+    "id": "ui_nav_heroes",
+    "file": "D:/AI/S4Game/美术/原图/批次14_导航图标_2026-10-06\\ui_nav_heroes.png",
+    "prompt": "Single mobile game navigation icon of a heroic knight helmet with a tall red feather plume and a golden visor rim, facing three-quarter forward, Kingdom Rush inspired hand-painted cartoon game asset style, bold rounded silhouette, rich warm colors with golden rim light, centered composition filling most of the frame, crisp readable at small size, soft painterly shading with clean outlines. Isolated on fully transparent background. Absolutely no text, no letters, no watermark, no border, no background scenery, no ground shadow disc.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 14:26:10",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 75.6,
+    "sha1": "30269ec16f46"
+  },
+  "ui_nav_levels": {
+    "id": "ui_nav_levels",
+    "file": "D:/AI/S4Game/美术/原图/批次14_导航图标_2026-10-06\\ui_nav_levels.png",
+    "prompt": "Single mobile game navigation icon of a rolled parchment campaign map showing a winding red route line ending in a small golden marker flag, Kingdom Rush inspired hand-painted cartoon game asset style, bold rounded silhouette, rich warm colors with golden rim light, centered composition filling most of the frame, crisp readable at small size, soft painterly shading with clean outlines. Isolated on fully transparent background. Absolutely no text, no letters, no watermark, no border, no background scenery, no ground shadow disc.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 14:49:17",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 36.6,
+    "sha1": "2118047f827d"
+  },
+  "ui_nav_upgrade": {
+    "id": "ui_nav_upgrade",
+    "file": "D:/AI/S4Game/美术/原图/批次14_导航图标_2026-10-06\\ui_nav_upgrade.png",
+    "prompt": "Single mobile game navigation icon of a bold golden upward double chevron arrow with a warm glowing aura and a few tiny sparkles, Kingdom Rush inspired hand-painted cartoon game asset style, bold rounded silhouette, rich warm colors with golden rim light, centered composition filling most of the frame, crisp readable at small size, soft painterly shading with clean outlines. Isolated on fully transparent background. Absolutely no text, no letters, no watermark, no border, no background scenery, no ground shadow disc.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 14:28:08",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 41.1,
+    "sha1": "a28497d1d186"
+  },
+  "ui_nav_base": {
+    "id": "ui_nav_base",
+    "file": "D:/AI/S4Game/美术/原图/批次14_导航图标_2026-10-06\\ui_nav_base.png",
+    "prompt": "Single mobile game navigation icon of a small friendly stone fortress gatehouse with one round tower and a blue peaked conical roof, tiny crenellations and a wooden gate, Kingdom Rush inspired hand-painted cartoon game asset style, bold rounded silhouette, rich warm colors with golden rim light, centered composition filling most of the frame, crisp readable at small size, soft painterly shading with clean outlines. Isolated on fully transparent background. Absolutely no text, no letters, no watermark, no border, no background scenery, no ground shadow disc.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 14:49:53",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 74.5,
+    "sha1": "519c9789a98c"
+  }
+}

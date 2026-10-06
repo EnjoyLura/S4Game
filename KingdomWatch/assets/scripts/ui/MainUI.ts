@@ -3,7 +3,7 @@
  * 顶栏：刘海预留区下方 y100 起，无标题，金币/钻石双货币靠右（§已确认）。
  * 页签内容整屏重建（PageKit.ctx.refresh）；各页实现见 ui/pages/*（线稿一一对应）。
  */
-import { _decorator, Color, Component, Graphics, Label, Node, view } from 'cc';
+import { _decorator, Color, Component, Graphics, Label, Node, Sprite, view } from 'cc';
 import { initLayout, LO, PAL } from '../config/GameConfig';
 import { loadSave } from '../core/SaveData';
 import { flow } from '../core/Flow';
@@ -19,12 +19,12 @@ import { buildBase } from './pages/BasePage';
 const { ccclass } = _decorator;
 
 /** 底部页签定义（左→右） */
-const TABS: { name: string; icon: string }[] = [
-  { name: '商店', icon: '🛒' },
-  { name: '英雄', icon: '🦸' },
-  { name: '关卡', icon: '⚔️' },
-  { name: '升级', icon: '⬆️' },
-  { name: '基地', icon: '🏰' },
+const TABS: { name: string; icon: string; art: string }[] = [
+  { name: '商店', icon: '🛒', art: 'ui_nav_shop' },
+  { name: '英雄', icon: '🦸', art: 'ui_nav_heroes' },
+  { name: '关卡', icon: '⚔️', art: 'ui_nav_levels' },
+  { name: '升级', icon: '⬆️', art: 'ui_nav_upgrade' },
+  { name: '基地', icon: '🏰', art: 'ui_nav_base' },
 ];
 
 const NAV_H = 148;
@@ -32,7 +32,7 @@ const NAV_H = 148;
 @ccclass('MainUI')
 export class MainUI extends Component {
   private screens!: Node;
-  private navItems: { slot: Node; icon: Node; txt: Node; idle: Node; act: Node }[] = [];
+  private navItems: { slot: Node; icon: Node; art: Node | null; txt: Node; idle: Node; act: Node }[] = [];
   private goldLbl: Node | null = null;
   private diaLbl: Node | null = null;
   private tab = flow.mainTab;
@@ -69,11 +69,9 @@ export class MainUI extends Component {
     this.goldLbl = null;
     this.diaLbl = null;
 
-    // 背景：页签专属底图（商店内景/基地庭院，其余页签沿用主城场景占位），压暗板保证前景可读
+    // 背景：页签专属底图，不再整体置暗（用户确认）——前景可读性由各页面自身面板保证
     this.bgNode = null; this.bgId = '';
     this.applyPageBg(flow.mainTab);
-    const dim = gpanel(root, 0, 0, 750, LO.half * 2 + 240, CA('#10141A', 0.62), undefined, 0, 0);
-    dim.setSiblingIndex(1);
 
     this.buildTopBar(root);
     this.buildNavBar(root);
@@ -124,9 +122,10 @@ export class MainUI extends Component {
       const act = this.segPlate(slot, w, 124, i, TABS.length, CA(PAL.gold, 0.25));   // 激活高亮板
       act.active = false;
       const icon = label(slot, 0, 22, t.icon, { size: 34 });
+      const art = artSprite(slot, 0, 24, 64, 64, t.art, { hideOnLoad: [icon] });   // 美术图标落图盖 emoji 兜底
       const txt = label(slot, 0, -34, t.name, { size: 20, color: '#FFFFFF', bold: true });
       slot.on(Node.EventType.TOUCH_END, () => this.switchTab(i));
-      this.navItems.push({ slot, icon, txt, idle, act });
+      this.navItems.push({ slot, icon, art, txt, idle, act });
     });
   }
 
@@ -152,6 +151,8 @@ export class MainUI extends Component {
       const txtLbl = it.txt.getComponent(Label);
       if (txtLbl) txtLbl.color = C(active ? PAL.gold : '#FFFFFF');
       if (iconLbl) iconLbl.color = C(active ? '#FFE08A' : '#FFFFFF');
+      const artSp = it.art ? it.art.getComponent(Sprite) : null;
+      if (artSp) artSp.color = C(active ? '#FFFFFF' : '#AEB6C2');
     });
   }
 
