@@ -13,9 +13,10 @@ import {
   heroStats, sellEquip, sellPrice, wearEquip, wornInst, equipAtk, equipHp, tierMul,
 } from '../../core/GameData';
 import { EquipInst, loadSave, saveSave } from '../../core/SaveData';
-import { equipModal } from './UpgradePage';
+import { equipModal, zoneTab } from './UpgradePage';
 
 const KIND_ICON: Record<EquipKind, string> = { weapon: '🏹', helm: '⛑️', acc: '📿', glove: '🧤', armor: '🥼' };
+const INK = '#4A3214', OK = '#3E7C28';   // 奶白板文字墨色 / 强化增益绿（升级页签同色）
 const SLOTS_2x2: EquipKind[] = ['helm', 'acc', 'glove', 'armor'];
 /* 背包页签跨刷新保持（穿戴/出售后 refresh 重建不跳回「武器」） */
 const bagSt: { tab: 'weapon' | 'equip' | 'mat' } = { tab: 'weapon' };
@@ -150,7 +151,8 @@ function equipIcon(parent: Node, x: number, y: number, size: number, inst: Equip
   label(box, -size / 2 + 8, -size / 2 + 18, `T${d.tier}`, { size: 15, color: '#FFF3D6', bold: true, align: 'left', w: 52, h: 24 });
 }
 
-/** 属性区块（基础属性/附加属性）：行版式对齐属性总览——每条属性一条奶白条形背板，名称左/数值右；标题条与行等宽、节奏统一 */
+/** 属性区（属性提升版式，用户指定）：一整块奶白板 + 金签标题出板（文字固定「基础属性」）；
+ *  行=名称左/数值右（升级页签同构），强化行数值绿色；topY 为奶白板上缘 */
 function drawEquipAttrs(parent: Node, topY: number, width: number, inst: EquipInst, d: EquipDef): number {
   const big = width > 420;
   const mul = tierMul(d.tier);
@@ -160,27 +162,21 @@ function drawEquipAttrs(parent: Node, topY: number, width: number, inst: EquipIn
   const p0 = primAtk ? atk0 : hp0;
   const pV = primAtk ? atkV : hpV;
   const sV = primAtk ? hpV : atkV;
-  const rows: [string, string, boolean?][] = [['#bar#', '基础属性'], [primAtk ? '攻击' : '生命', String(p0)]];
+  const rows: [string, string, boolean?][] = [[primAtk ? '攻击' : '生命', String(p0)]];
   if (pV - p0 > 0) rows.push(['强化', `+${pV - p0}`, true]);
-  if (sV > 0) { rows.push(['#bar#', '附加属性'], [primAtk ? '生命' : '攻击', String(sV)]); }
-  const th = big ? 36 : 30, rh = big ? 48 : 40, gap = big ? 10 : 8;
-  const inset = big ? 24 : 16;
-  let y = topY;
-  for (const r of rows) {
-    if (r[0] === '#bar#') {
-      gpanel(parent, 0, y, width, th, CA('#565E6A', 0.4), undefined, 0, 6);
-      // 标题文字左缘与条板左缘定距对齐（盒心 = 左缘 + 半盒宽）
-      label(parent, -width / 4 + inset, y, r[1], { size: big ? 20 : 16, color: '#C8CDD4', bold: true, align: 'left', w: width / 2, h: th, shrink: true });
-      y -= th + gap;
-    } else {
-      // 属性行：奶白条形背板（同属性总览），名称左/数值右贴条缘 inset
-      const bar = gpanel(parent, 0, y, width, rh, CA('#E9DFC2', 0.94), undefined, 0, 8);
-      label(bar, -width / 4 + inset, 0, r[0], { size: big ? 22 : 17, color: r[2] ? '#3E7C28' : '#4A4034', bold: true, align: 'left', w: width / 2, h: rh - 12, shrink: true });
-      label(bar, width / 4 - inset, 0, r[1], { size: (big ? 22 : 17) + 2, color: r[2] ? '#3E7C28' : '#332B20', bold: true, align: 'right', w: width / 2, h: rh - 12, shrink: true });
-      y -= rh + gap;
-    }
-  }
-  return y;
+  if (sV > 0) rows.push([primAtk ? '生命' : '攻击', String(sV)]);
+  const rowH = 32, padT = 40, padB = 30;
+  const h = padT + padB + rows.length * rowH;
+  const cy = topY - h / 2;
+  gpanel(parent, 0, cy, width, h, CA('#E9DFC2', 0.94), undefined, 0, 12);
+  zoneTab(parent, -width / 2 + 70, topY + 16, '基础属性');   // 金签完全出板（属性提升同款）
+  const inset = big ? 30 : 22;
+  rows.forEach((r, i) => {
+    const y = cy + h / 2 - padT - rowH / 2 - i * rowH;
+    label(parent, -width / 2 + inset + width * 0.2, y, r[0], { size: big ? 22 : 18, color: INK, bold: true, align: 'left', w: width * 0.4, h: 30, shrink: true });
+    label(parent, width / 2 - inset - width * 0.25, y, r[1], { size: (big ? 22 : 18) + 2, color: r[2] ? OK : INK, bold: true, align: 'right', w: width * 0.5, h: 30, shrink: true });
+  });
+  return cy - h / 2;
 }
 
 /** 装备详情小面板（对比弹窗两侧 / 装备槽详情弹窗共用）：蓝头（图标+当前角标+名称/品质/阶Lv 垂直居中）+ 属性区
@@ -200,7 +196,7 @@ function equipDetailPanel(parent: Node, x: number, y: number, inst: EquipInst, i
   label(p, tx, hy + 28, d.name, { size: big ? 24 : 18, color: '#E8E0C8', bold: true, align: 'left', w: big ? 280 : 200, h: big ? 34 : 26, shrink: true });
   label(p, tx, hy - 2, `品质：${QNAMES[d.quality]}`, { size: big ? 19 : 15, color: QCOLOR[d.quality], align: 'left', w: big ? 280 : 200, h: big ? 26 : 24, shrink: true });
   label(p, tx, hy - 32, `T${d.tier} 阶 · Lv.${inst.lv}`, { size: big ? 18 : 15, color: '#AAB2BD', align: 'left', w: big ? 280 : 200, h: big ? 24 : 24, shrink: true });
-  drawEquipAttrs(p, big ? hy - 118 : 62, w - (big ? 64 : 30), inst, d);
+  drawEquipAttrs(p, big ? 114 : 68, w - (big ? 64 : 30), inst, d);
   return p;
 }
 
@@ -222,7 +218,7 @@ function warehouseEquipModal(ctx: PageCtx, hid: string, inst: EquipInst, rebuild
   label(panel, 10, 220, `品质：${QNAMES[d.quality]}`, { size: 23, color: QCOLOR[d.quality], bold: true, align: 'left', w: 280, h: 34 });
   label(panel, 10, 170, `品阶：T${d.tier} 阶 · 等级 ${inst.lv}`, { size: 22, color: '#E8E0C8', align: 'left', w: 280, h: 32 });
   label(panel, 10, 120, `出售价：${sellPrice(inst)} 金币`, { size: 20, color: '#AAB2BD', align: 'left', w: 280, h: 30 });
-  drawEquipAttrs(panel, 76, 560, inst, d);
+  drawEquipAttrs(panel, 72, 560, inst, d);
   btn(panel, 130, -255, 220, 76, `穿戴·${KIND_NAME[d.kind]}`, PAL.green, () => {
     wearEquip(hid, d.kind, inst.uid);
     ctx.refresh();
