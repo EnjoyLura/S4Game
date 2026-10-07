@@ -1,0 +1,72 @@
+{
+  "MC1_卡面法术精研": {
+    "id": "MC1_卡面法术精研",
+    "file": "D:/AI/S4Game/美术/原图/批次16_冰法卡组_2026-10-06\\MC1_卡面法术精研.png",
+    "prompt": "Square game card icon, full-bleed: an open ancient spellbook with a bright frost rune rising from its pages, surrounded by small snowflakes, ice-blue and silver tones. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size, rich cold background. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 23:45:46",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 96.7,
+    "sha1": "2de2420d57bd"
+  },
+  "MC2_卡面极寒扩散": {
+    "id": "MC2_卡面极寒扩散",
+    "file": "D:/AI/S4Game/美术/原图/批次16_冰法卡组_2026-10-06\\MC2_卡面极寒扩散.png",
+    "prompt": "Square game card icon, full-bleed: a frost shockwave ring expanding outward on frozen ground, concentric ice circle with small ice spikes on the rim, cold blue and white tones. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 23:47:23",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 140.3,
+    "sha1": "74932c213eb0"
+  },
+  "MC3_卡面凛冬之息": {
+    "id": "MC3_卡面凛冬之息",
+    "file": "D:/AI/S4Game/美术/原图/批次16_冰法卡组_2026-10-06\\MC3_卡面凛冬之息.png",
+    "prompt": "Square game card icon, full-bleed: a swirling breath of winter wind — curling frost wisp with drifting snowflakes and tiny ice shards, deep blue and pale cyan tones. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 23:49:43",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 50.0,
+    "sha1": "a233e510cd24"
+  },
+  "MC4_卡面速冻之心": {
+    "id": "MC4_卡面速冻之心",
+    "file": "D:/AI/S4Game/美术/原图/批次16_冰法卡组_2026-10-06\\MC4_卡面速冻之心.png",
+    "prompt": "Square game card icon, full-bleed: a heart frozen inside a crystal block of ice, frost cracks spreading across the surface with a small snowflake mark, cold blue tones. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 23:50:33",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 61.3,
+    "sha1": "8a2f9ab58d7c"
+  },
+  "MC5_卡面战吼": {
+    "id": "MC5_卡面战吼",
+    "file": "D:/AI/S4Game/美术/原图/批次16_冰法卡组_2026-10-06\\MC5_卡面战吼.png",
+    "prompt": "Square game card icon, full-bleed: a frost-covered war horn blasting an icy shout shockwave with flying ice shards, cold blue and silver tones. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-06 23:51:35",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 41.0,
+    "sha1": "f53d268cc8e1"
+  }
+}

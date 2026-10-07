@@ -86,6 +86,9 @@ export class HUD {
     const top = new Node('HUD');
     top.setParent(parent);
     this.hudNode = top;
+    // 顶栏簇避让刘海：notchTop 为真实顶部内缩（设计单位），桌面/无刘海=0 无副作用
+    const nt = LO.notchTop;
+    const WYN = (t: number, h = 0): number => WY(t + nt, h);
 
     /* 背景：战场底色（占位）——必须画在 Field 里（mobs 之前）；高度盖满可视区防黑边
        美术：scene_1_1 竖版战场（1152×2048 ≈ 9:16 视口，近零变形），加载成功后盖掉底色。
@@ -94,12 +97,13 @@ export class HUD {
        否则异步加载完成后 clip 落在 Field 末尾，整张不透明场景图盖住全部战场实体 */
     const bgFlat = gpanel(bgParent || top, 0, 0, 750, LO.half * 2 + 240, '#2E4034', undefined, 0, 0);
     bgFlat.setSiblingIndex(0);
-    artSprite(bgParent || top, 0, 0, 750, LO.half * 2 + 240, 'scenes/scene_1_1',
+    const sceneId = 'scenes/scene_' + this.dir.levelDef.id.replace('-', '_');
+    artSprite(bgParent || top, 0, 0, 750, LO.half * 2 + 240, sceneId,
       { sliced: false, cover: true, belowIdx: 1, hideOnLoad: [bgFlat] });
 
     /* 顶栏（用户调整：大背板整条去除，只留暂停钮/波次签半透小板，文字直接浮于场景） */
     // 暂停/倍速/统计（用户调整：去金环美术资源，与计时/关名胶囊同款半透底板 + 程序简约白图标）
-    const pauseBtn = gpanel(top, WX(30, 60), WY(105, 60), 60, 60, CA('#000000', 0.32), undefined, 0, 14);
+    const pauseBtn = gpanel(top, WX(30, 60), WYN(24, 60), 60, 60, CA('#151C19', 0.58), undefined, 0, 14);
     const pico = new Node('pauseIco');   // 图标画在子节点：gpanel 自带 Graphics，同节点再加会渲染冲突
     pico.setParent(pauseBtn);
     const pg = pico.addComponent(Graphics);
@@ -109,31 +113,31 @@ export class HUD {
     pg.fill();
     pauseBtn.on(Node.EventType.TOUCH_END, () => this.dir.togglePause());
     // 计时/关名：半透小板（与暂停钮/波次签同款，用户调整）
-    gpanel(top, WX(106, 110), WY(112, 44), 110, 44, CA('#000000', 0.32), undefined, 0, 22);
-    this.timeTxt = label(top, WX(106, 110), WY(112, 44), '00:00', { size: 20, color: '#FFFFFF', align: 'center', w: 110, h: 44 });
-    gpanel(top, WX(230, 290), WY(111, 48), 290, 48, CA('#000000', 0.32), undefined, 0, 24);
-    label(top, WX(230, 290), WY(111, 48), this.dir.levelDef.id + ' ' + this.dir.levelDef.name, { size: 22, color: '#FFFFFF', bold: true, w: 290, h: 48, shrink: true });
-    gpanel(top, WX(560, 150), WY(105, 60), 150, 60, CA('#000000', 0.32), undefined, 0, 30);
-    this.waveTxt = label(top, WX(560, 150), WY(105, 60), '波次 0/10', { size: 20, color: '#FFFFFF', bold: true });
+    gpanel(top, WX(106, 110), WYN(32, 44), 110, 44, CA('#151C19', 0.58), undefined, 0, 22);
+    this.timeTxt = label(top, WX(106, 110), WYN(32, 44), '00:00', { size: 24, color: '#FFF6DC', font: 'number', align: 'center', w: 110, h: 44 });
+    gpanel(top, WX(230, 290), WYN(31, 48), 290, 48, CA('#151C19', 0.5), undefined, 0, 24);
+    label(top, WX(230, 290), WYN(31, 48), this.dir.levelDef.id + ' ' + this.dir.levelDef.name, { size: 23, color: '#FFF3C7', font: 'title', w: 290, h: 48, shrink: true });
+    gpanel(top, WX(560, 150), WYN(24, 60), 150, 60, CA('#151C19', 0.58), undefined, 0, 30);
+    this.waveTxt = label(top, WX(560, 150), WYN(24, 60), '波次 0/10', { size: 22, color: '#FFF3DC', bold: true, w: 140, h: 38, shrink: true });
 
     /* 经验条（下移与顶栏留出间距）+ 居中 Lv 徽章骑条（线稿 ui_lv_badge） */
-    this.xpBar = gbar(top, WX(30, 690), WY(184, 14), 690, 14, PAL.blue);
-    const lvBadge = gpanel(top, WX(330, 90), WY(175, 32), 90, 32, CA('#14181E', 0.92), CA('#FFFFFF', 0.3), 1.5, 10);
+    this.xpBar = gbar(top, WX(30, 690), WYN(100, 12), 690, 12, '#6CBCC6');
+    const lvBadge = gpanel(top, WX(330, 90), WYN(91, 30), 90, 30, CA('#19261E', 0.94), undefined, 0, 10);
     // ui_lv_badge 美术暂不接：切片烤死了"Lv.1"文字，与动态等级冲突（第二批出无字版再换）
-    this.lvTxt = label(lvBadge, 0, 0, 'Lv.1', { size: 16, color: '#FFE08A', bold: true });
+    this.lvTxt = label(lvBadge, 0, 0, 'Lv.1', { size: 20, color: '#FFE08A', font: 'number' });
 
     /* 预警横幅 */
-    this.banner = gpanel(top, WX(115, 520), WY(226, 72), 520, 72, CA(PAL.gold, 0.22), PAL.gold, 2, 12);
-    artSprite(this.banner, 0, 0, 520, 72, 'ui_banner_warn', { belowIdx: 0 });
-    this.bannerTxt = label(this.banner, 0, 0, '敌军来袭！', { size: 28, color: PAL.gold, bold: true });
+    this.banner = gpanel(top, WX(145, 460), WYN(142, 60), 460, 60, CA('#351F16', 0.75), undefined, 0, 12);
+    this.bannerTxt = label(this.banner, 0, 0, '敌军来袭！', { size: 26, color: '#FFE6A5', bold: true, w: 430, h: 44, shrink: true, outline: '#35261B', outlineW: 2 });
     this.banner.active = false;
 
     // 左列：FPS / 倍速 / 伤害统计（FPS 与倍速按钮左缘对齐 = 设计 x24，需固定宽 + shrink 让 left 对齐生效）
-    this.fpsTxt = label(top, WX(24, 120), WY(210, 30), 'FPS:60', { size: 15, color: '#7EE787', align: 'left', w: 120, h: 30, shrink: true });
-    const speedBtn = gpanel(top, WX(24, 60), WY(240, 60), 60, 60, CA('#000000', 0.32), undefined, 0, 14);
+    this.fpsTxt = label(top, WX(24, 120), WYN(124, 20), 'FPS:60', { size: 15, color: '#7EE787', align: 'left', w: 120, h: 20, shrink: true });
+    this.fpsTxt.active = /[?&](perf|gm)=1(?:&|$)/.test(typeof location === 'undefined' ? '' : location.search);
+    const speedBtn = gpanel(top, WX(24, 60), WYN(160, 60), 60, 60, CA('#151C19', 0.5), undefined, 0, 14);
     this.speedTxt = label(speedBtn, 0, 0, 'X1', { size: 18, color: '#FFFFFF', bold: true });
     speedBtn.on(Node.EventType.TOUCH_END, () => this.dir.toggleSpeed());
-    const statsBtn = gpanel(top, WX(24, 60), WY(320, 60), 60, 60, CA('#000000', 0.32), undefined, 0, 14);
+    const statsBtn = gpanel(top, WX(24, 60), WYN(240, 60), 60, 60, CA('#151C19', 0.5), undefined, 0, 14);
     const sico = new Node('statsIco');   // 同暂停钮：图标画在子节点
     sico.setParent(statsBtn);
     const sg = sico.addComponent(Graphics);
@@ -145,7 +149,7 @@ export class HUD {
     statsBtn.on(Node.EventType.TOUCH_END, () => this.dir.showStats());
 
     /* 新怪通知钮（GM 钮下方，参考 KR）：首遇新怪种时亮出，点击弹怪物介绍弹窗（整体美术图标：生图 ui_btn_notice） */
-    this.newMobBtn = noticeBtn(top, WX(24, 60), WY(480, 60), 64, () => this.dir.showNewMobIntro());
+    this.newMobBtn = noticeBtn(top, WX(24, 60), WYN(480, 60), 64, () => this.dir.showNewMobIntro());
     this.newMobBtn.active = false;
     this.newMobBtn.on(Node.EventType.TOUCH_END, () => this.dir.showNewMobIntro());
 
@@ -155,7 +159,7 @@ export class HUD {
 
     /* 防线耐久条（贴屏底、在墙上方）：条内居中耐久值 + 盾值胶囊(右→左) + 右侧百分比 */
     this.hpBar = gbar(top, WX(55, 640), WYB(176, 20), 640, 22, PAL.green);
-    this.hpVal = label(top, WX(55, 640), WYB(176, 20), '1000/1000', { size: 15, color: '#FFFFFF', bold: true });
+    this.hpVal = label(top, WX(55, 640), WYB(176, 20), '1000/1000', { size: 18, color: '#FFFFFF', font: 'number', outline: '#29452B', outlineW: 1.2 });
     this.shieldNode = new Node('shield');
     this.shieldNode.setParent(top);
     this.shieldNode.setPosition(0, WYB(176, 24), 0);
@@ -171,6 +175,7 @@ export class HUD {
     }});
     this.shieldArt.active = false;
     this.pctTxt = label(top, WX(698, 48), WYB(176, 24), '100%', { size: 16, color: '#9FE08A', bold: true });
+    this.pctTxt.active = false; // 耐久槽已显示当前/最大值，留出右缘触控和战场空间。
 
     /* 英雄头顶 普攻/技能 图标（耐久条正下方，压墙顶，不遮挡耐久条；每英雄一套）
        技能 CD 中：灰化 + 扇形冷却遮罩 + 中心倒计时；就绪：高饱和 + 弹跳过渡 */
@@ -188,6 +193,7 @@ export class HUD {
       sniper: [PAL.blue, '#8FC7F2', '#CFE9FB'],
       pyro: [PAL.orange, '#F2A05A', '#F8CFA0'],
       volt: ['#B96BFF', '#C89AF5', '#E3CCFA'],
+      mora: ['#6FCFEA', '#A0DFF0', '#E4FAFF'],
     };
     const [color, fx, fxHi] = ULT_FX[hero.id] || ULT_FX.archer;
     const glow = gcircle(top, ux, uy, 56, CA(fx, 0.16));
@@ -224,7 +230,7 @@ export class HUD {
     orbit.addComponent(UIOpacity);
     orbit.active = false;
     // 充能百分比：单行居中（用户调整：去掉"大招"前缀与"就绪"文案，就绪时整行隐藏）
-    const chargeTxt = label(top, ux, uy, '0%', { size: 22, color: '#FFFFFF', bold: true, w: 90, h: 30, outline: '#0B0F16', outlineW: 3 });
+    const chargeTxt = label(top, ux, uy, '0%', { size: 27, color: '#FFF7E8', font: 'number', w: 90, h: 38, outline: '#1D2632', outlineW: 2.2 });
     btn.on(Node.EventType.TOUCH_END, () => {
       if (this.dir.tryCastUlt(i) === 'charging') this.dir.showTips('ult', i);
     });
@@ -253,7 +259,7 @@ export class HUD {
     pie.setPosition(cx, cy, 0);
     const pieG = pie.addComponent(Graphics);
     pie.active = false;
-    const cdTxt = label(top, cx, cy, '', { size: 13, color: '#FFFFFF', bold: true, w: 56, h: 20, outline: '#0B0F16', outlineW: 2 });
+    const cdTxt = label(top, cx, cy, '', { size: 19, color: '#FFF7E8', font: 'number', w: 56, h: 28, outline: '#1D2632', outlineW: 1.8 });
     cdTxt.active = false;
     return { cx, cy, icon, glyph, gray, pie, pieG, cdTxt, cooling: null, lastCdKey: -1 };
   }
@@ -333,7 +339,7 @@ export class HUD {
     if (Math.abs(xpTarget - this.xpShown) < 0.0015) this.xpShown = xpTarget;
     this.xpFlash = Math.max(0, this.xpFlash - dt);
     if (this.xpShown !== this.xpTarget0 || this.xpFlash > 0) {
-      this.xpBar.set(this.xpShown, this.xpFlash > 0 ? '#BFE9FF' : PAL.blue);
+      this.xpBar.set(this.xpShown, this.xpFlash > 0 ? '#BFE9FF' : '#6CBCC6');
       this.xpTarget0 = this.xpShown;
     }
     // 耐久 + 盾

@@ -9,6 +9,18 @@
   <meta name="viewport"
         content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1,minimal-ui=true,viewport-fit=cover"/>
 
+  <!-- 刘海/挖孔安全区：Cocos web 适配器 safeAreaEdge 从 documentElement 读这些 CSS 变量
+       （sys.getSafeAreaRect → initLayout 的 LO.notchTop）。viewport-fit=cover 已让页面铺到刘海下，
+       env() 在桌面端/无刘海设备求值为 0，无副作用 -->
+  <style>
+    :root {
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+    }
+  </style>
+
   <!--https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html-->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">

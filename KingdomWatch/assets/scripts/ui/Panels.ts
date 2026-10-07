@@ -151,7 +151,7 @@ export class Panels {
     }
   }
 
-  /** 卡面布局（扁平无美术；去「新」标与稀有度小字——用户要求：卡面只留 名称/图标/归属/描述）：
+  /** 卡面布局（羊皮纸底；去「新」标与稀有度小字——用户要求：卡面只留 名称/图标/归属/描述）：
    *  顶部稀有度通栏色带 → 圆形图标座 → 右上归属角标（避开色带与图标座）→ 下半区大号加粗描述（shrink 防超框） */
   private buildCard(frame: Node, card: CardDef): void {
     const rarity = RARITY_COLOR[card.rarity];
@@ -163,8 +163,11 @@ export class Panels {
       onLoaded: () => { frame.getComponent(Graphics)?.clear(); },
     });
 
-    // ① 卡头品质色带（200×52 扁平色板：收窄进撕边轮廓内，品质色在此表达）
-    const header = gpanel(frame, 0, 154, 200, 52, CA(rarity, 0.92), undefined, 0, 12);
+    // ① 全宽品质色带，与卡片左右缘对齐；仅保留顶角，下沿连成通栏。
+    const header = gpanel(frame, 0, 154, 222, 52, CA(rarity, 0.92), undefined, 0, 12);
+    const headerInk = header.getComponent(Graphics)!;
+    headerInk.rect(-111, -26, 222, 12);
+    headerInk.fill();
     label(header, 0, 0, card.name, { size: 22, color: card.rarity === 'white' ? '#4A3214' : '#FFFFFF', bold: true, w: 188, h: 40, shrink: true });
 
     // ② 图标座 120 圆 + 内嵌 96 圆（卡面美术图 ui_card_<id>；缺图回退首字母——用户要求：卡面用图标资源）

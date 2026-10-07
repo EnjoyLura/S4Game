@@ -18,8 +18,10 @@ import { WaveManager } from './WaveManager';
 import { ProjectileManager } from './Projectile';
 import { Particles } from './Particles';
 import { DamageService, DamageRow } from './DamageService';
-import { FloatText } from './FloatText';
+import { FloatEvent, FloatText } from './FloatText';
 import { ComicPop } from './ComicPop';
+import { ImpactFX } from './ImpactFX';
+import { BattleAmbience } from './BattleAmbience';
 import { AdService } from '../platform/AdService';
 import { HUD } from '../ui/HUD';
 import { Panels } from '../ui/Panels';
@@ -59,6 +61,9 @@ export class BattleDirector extends Component {
   hud!: HUD;
   panels!: Panels;
   gm!: GmPanel;
+  impacts!: ImpactFX;
+  private field!: Node;
+  private ambience!: BattleAmbience;
 
   global: GlobalStats = { xpMul: 1, goldMul: 1, lineRegenPct: 0 };
   stacks: CardStacks = {};
@@ -77,25 +82,35 @@ export class BattleDirector extends Component {
   start(): void {
     const field = new Node('Field');
     field.setParent(this.node);
+    this.field = field;
+    this.ambience = new BattleAmbience(field);
     const uiRoot = new Node('UIRoot');
     uiRoot.setParent(this.node);
 
     // 渲染分层（稳定遮挡：防线 < 怪 < 弹道 < 飘字；英雄夹在怪与弹道间）
+    const groundFxLayer = new Node('GroundFxLayer');
+    groundFxLayer.setParent(field);
     this.line = new LineDefense(field, this.levelDef.lineHp);
     const mobLayer = new Node('MobLayer');
     mobLayer.setParent(field);
+    const heroLayer = new Node('HeroLayer');
+    heroLayer.setParent(field);
     const projLayer = new Node('ProjLayer');
     projLayer.setParent(field);
     const fxLayer = new Node('FxLayer');
     fxLayer.setParent(field);
+    const textLayer = new Node('TextLayer');
+    textLayer.setParent(field);
+    this.impacts = new ImpactFX(fxLayer, groundFxLayer, projLayer);
 
     const hitCtx = {
-      floatParent: fxLayer,
-      dmgNumber: (x: number, y: number, text: string, color: string, big?: boolean) =>
-        this.float.spawn(x, y, text, color, big),
+      floatParent: textLayer,
+      dmgNumber: (x: number, y: number, text: string, color: string, big?: boolean, event?: FloatEvent) =>
+        this.float.spawn(x, y, text, color, big, event),
+      impact: (x: number, y: number, hero: string, heavy: boolean, angle?: number) => this.impacts.hit(x, y, hero, heavy, angle),
     };
-    this.float = new FloatText(fxLayer);
-    this.pops = new ComicPop(fxLayer);
+    this.float = new FloatText(textLayer);
+    this.pops = new ComicPop(textLayer);
     this.mgr = new MonsterManager(mobLayer, hitCtx);
     this.mgr.statMul = DIFF_MUL[Math.min(flow.diff, 2)] || 1;
     // 首次遭遇新怪种 → 解锁图鉴 + 横幅 + 新怪通知钮（介绍弹窗待玩家点击查看）
@@ -117,14 +132,14 @@ export class BattleDirector extends Component {
             : hid === 'mora' ? baseMoraStats() : baseArcherStats();
       applyHeroGrowth(st, hid);     // 英雄等级成长+阶段性突破上场（每级成长按存档等级）
       applyEquipAffixes(st, hid);   // 穿戴词条上场即生效（用户确认的词条体系）
-      return hid === 'sniper' ? new SniperHero(field, slots[i], st)
-        : hid === 'pyro' ? new PyroHero(field, slots[i], st)
-          : hid === 'volt' ? new VoltHero(field, slots[i], st)
-            : hid === 'mora' ? new FrostHero(field, slots[i], st)
-              : new ArcherHero(field, slots[i], st);
+      return hid === 'sniper' ? new SniperHero(heroLayer, slots[i], st)
+        : hid === 'pyro' ? new PyroHero(heroLayer, slots[i], st)
+          : hid === 'volt' ? new VoltHero(heroLayer, slots[i], st)
+            : hid === 'mora' ? new FrostHero(heroLayer, slots[i], st)
+              : new ArcherHero(heroLayer, slots[i], st);
     });
     this.parts = new Particles(fxLayer);
-    this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts);
+    this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts, this.impacts);
     this.waves = new WaveManager(this.levelDef, this.mgr);
     for (const h of this.heroes) this.dmgSvc.register(h.id, h.name);
 
@@ -168,14 +183,14 @@ export class BattleDirector extends Component {
     this.pops.pop(x as number, y as number, kind as string);
   }
 
-  // 微顿帧：暴击/击杀瞬间全场时间短暂放缓制造打击感（冷却限频防连发变成卡顿）
+  // Only meaningful heavy contacts get a short accent; the battlefield never shakes.
   private hitStopT = 0;
   private hitStopCd = 0;
 
   private onHitStop(): void {
     if (this.hitStopCd > 0) return;
-    this.hitStopT = Math.max(this.hitStopT, 0.07);
-    this.hitStopCd = 0.35;
+    this.hitStopT = Math.max(this.hitStopT, 0.032);
+    this.hitStopCd = 0.65;
   }
 
   update(rawDt: number): void {
@@ -189,12 +204,14 @@ export class BattleDirector extends Component {
     const dt = Math.min(rawDt, 1 / 30);
 
     // 微顿帧计时走真实时间（顿帧本身不该被自己拖长）
-    this.hitStopCd -= dt;
-    if (this.hitStopT > 0) this.hitStopT -= dt;
+    const hitStopActive = this.hitStopT > 0;
+    this.hitStopCd = Math.max(0, this.hitStopCd - rawDt);
+    this.hitStopT = Math.max(0, this.hitStopT - rawDt);
 
     this.gm.syncVisibility(); // 所有状态下都要同步 GM 浮钮（三选一/结算期间隐藏）
 
     if (this.state === 'prepare') {
+      this.ambience.tick(dt);
       this.prepareT -= dt;
       if (this.prepareT <= 0) {
         this.state = 'running';
@@ -205,7 +222,9 @@ export class BattleDirector extends Component {
     }
     if (this.state !== 'running') return;
 
-    const sdt = dt * this.speed * (this.hitStopT > 0 ? 0.12 : 1);
+    // Sample before decrement: a 32ms accent must still render one frame at 30fps.
+    const sdt = dt * this.speed * (hitStopActive ? 0.12 : 1);
+    this.ambience.tick(sdt);
     this.elapsed += sdt;
     const steps = sdt > 1 / 30 ? 2 : 1;
     const sub = sdt / steps;
@@ -215,9 +234,12 @@ export class BattleDirector extends Component {
       for (const h of this.heroes) h.tick(sub, this.mgr, this.projs, this.dmgSvc);
       this.projs.tick(sub, this.line);
       this.parts.tick(sub);
+      this.impacts.tick(sub);
       this.line.regenPct = this.global.lineRegenPct;
       this.line.tick(sub);
     }
+    this.float.tick(rawDt);
+    this.pops.tick(rawDt);
     this.hud.sync(rawDt);
   }
 
@@ -234,6 +256,7 @@ export class BattleDirector extends Component {
   private onWaveChanged(cur: unknown, total: unknown, surge: unknown): void {
     this.hud.setWave(cur as number, total as number);
     if (surge) this.hud.showBanner('敌军大部队来袭！', 2);
+    if (surge) Sfx.play('surge');
   }
 
   private gainXp(v: number): void {
@@ -301,7 +324,12 @@ export class BattleDirector extends Component {
   /* ---------- 大招（手动，充能满可放；未满点图标→Tips） ---------- */
   tryCastUlt(idx = 0): 'ok' | 'charging' {
     const h = this.heroes[idx];
-    if (h && h.ultReady && h.castUlt(this.mgr, this.projs, this.dmgSvc)) return 'ok';
+    if (h && h.ultReady && h.castUlt(this.mgr, this.projs, this.dmgSvc)) {
+      // Sniper recoil belongs to the actual shot after its lock-on, not the tap.
+      if (h.id !== 'sniper') h.animateAttack(true);
+      this.impacts.cast(h.x, h.node.position.y + 24, h.id);
+      return 'ok';
+    }
     return 'charging';
   }
 
@@ -381,6 +409,7 @@ export class BattleDirector extends Component {
   private onAllCleared(): void {
     if (this.state !== 'running') return;
     this.state = 'win';
+    Sfx.play('victory');
     const stars = starOf(this.line.ratio);
     const reward = Math.floor(this.goldEarned + this.levelDef.baseGold * (1 + stars * 0.1));
     const sv = loadSave();

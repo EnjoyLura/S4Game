@@ -6,10 +6,13 @@ import { Color, Graphics, Label, Layers, Node, Tween, UIOpacity, tween } from 'c
 import { MOB_DMG_MUL, MOB_HP_MUL, MobDef } from '../config/Mobs';
 import { LINE_Y, PAL, SPAWN_Y } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
+import { BattleSprite } from './BattleSprite';
+import { FloatEvent } from './FloatText';
 
 export type MonsterHitCtx = {
   floatParent: Node;
-  dmgNumber: (x: number, y: number, text: string, color: string, big?: boolean) => void;
+  dmgNumber: (x: number, y: number, text: string, color: string, big?: boolean, event?: FloatEvent) => void;
+  impact?: (x: number, y: number, hero: string, heavy: boolean, angle?: number) => void;
 };
 
 export class Monster {
@@ -51,6 +54,9 @@ export class Monster {
   /** 冰霜蒙层：被减速/冻结时罩一层淡蓝冰壳（slowT 驱动，tick 手动开关，零 tween） */
   private frostNode: Node | null = null;
   private frostOp: UIOpacity | null = null;
+  private art: BattleSprite | null = null;
+  private tint = new Color();
+  private lastTint = '';
 
   init(def: MobDef, parent: Node, x: number, ctx: MonsterHitCtx, mgr?: MonsterManager): void {
     this.def = def;
@@ -71,12 +77,40 @@ export class Monster {
     this.node.removeFromParent();
     this.node.setPosition(x, SPAWN_Y + 40 + Math.random() * 60, 0);
     this.node.setScale(1, 1, 1);
+    this.lastTint = '';
     const op = this.node.getComponent(UIOpacity) || this.node.addComponent(UIOpacity);
     Tween.stopAllByTarget(op); // 复用池化对象时掐断上一世的消亡渐隐
     op.opacity = 255;
     this.node.layer = Layers.Enum.UI_2D;
     this.node.setParent(parent);
     this.draw();
+    this.buildArt();
+  }
+
+  private buildArt(): void {
+    const r = this.def.radius;
+    if (!this.art) {
+      this.art = new BattleSprite(this.node, 'battle_mobs_v2', () => { this.g.enabled = false; });
+    }
+    this.art.node.setPosition(0, -r * 0.82, 0);
+    this.art.show(this.def.id, r * 2.85);
+    Tween.stopAllByTarget(this.art.node);
+    this.art.node.setScale(1, 1, 1); this.art.node.angle = 0;
+    this.art.tint(Color.WHITE);
+    if (this.art.loaded) this.g.enabled = false;
+  }
+
+  private tickArt(): void {
+    if (!this.art?.loaded) return;
+    const moving = this.state === 'move' && this.stunT <= 0;
+    const gait = moving ? Math.sin(this.life * (this.def.id === 'wolf_rider' ? 12 : 8)) : 0;
+    this.art.node.angle = gait * 2.2;
+    this.art.node.setScale(1 + gait * 0.012, 1 + Math.abs(gait) * 0.017, 1);
+    const tint = this.flashT > 0 ? '#FF9990' : this.slowT > 0 ? '#B5E9FA' : this.shockT > 0 ? '#D8B5FF' : '#FFFFFF';
+    if (tint !== this.lastTint) { this.lastTint = tint; Color.fromHEX(this.tint, tint); this.art.tint(this.tint); }
+    // Artwork tint follows the silhouette, replacing rectangular status masks.
+    if (this.flashNode) this.flashNode.active = false;
+    if (this.frostNode) this.frostNode.active = false;
   }
 
   private draw(): void {
@@ -84,6 +118,7 @@ export class Monster {
       this.g = this.node.addComponent(Graphics);
     }
     const g = this.g;
+    g.enabled = true;
     const r = this.def.radius;
     g.clear();
     g.fillColor = this.hex(this.def.color);
@@ -191,6 +226,7 @@ export class Monster {
       if (this.frostNode.active !== frozen) this.frostNode.active = frozen;
       if (frozen) this.frostOp.opacity = 255;
     }
+    this.tickArt();
     if (this.stunT > 0) { this.stunT -= dt; return; }
     if (this.slowT > 0) this.slowT -= dt;
     if (this.shockT > 0) this.shockT -= dt;
@@ -257,14 +293,15 @@ export class Monster {
     this.vulnT = Math.max(this.vulnT, dur);
   }
 
-  takeDamage(amount: number, crit: boolean, killerId: string, ignoreRes = false, resCut = 0): boolean {
+  takeDamage(amount: number, crit: boolean, killerId: string, ignoreRes = false, resCut = 0, impactAngle?: number, heavy = false): boolean {
     if (this.dead) return false;
     if (this.def.physRes && !ignoreRes) amount *= 1 - this.def.physRes * (1 - resCut);   // resCut=无视防御比例（英雄突破）
     if (this.shockT > 0) amount *= 1 + this.shockAmp;
     if (this.vulnT > 0) amount *= 1 + this.vulnAmp;
     this.hp -= amount;
-    this.ctx.dmgNumber(this.x + (Math.random() * 24 - 12), this.y + this.def.radius,
-      String(Math.round(amount)), crit ? '#FFD75E' : '#FFFFFF', crit);
+    this.ctx.dmgNumber(this.x, this.y + this.def.radius * 2.05,
+      String(Math.round(amount)), crit ? '#FF3030' : '#FFFFFF', crit, { target: this, amount, periodic: killerId === 'burn' });
+    this.ctx.impact?.(this.x, this.y + this.def.radius * 0.4, killerId, heavy || crit || this.hp <= 0 && !!this.def.elite, impactAngle);
     this.flash();
     if (this.hp <= 0) {
       this.die(killerId);
@@ -276,6 +313,12 @@ export class Monster {
   private flash(): void {
     // 只闪红不变形（用户确认）；淡出由 tick 手动衰减（零 tween，受击高峰零分配）
     this.flashT = 0.12;
+    if (this.art?.loaded) {
+      this.lastTint = '#FF9990';
+      Color.fromHEX(this.tint, this.lastTint); this.art.tint(this.tint);
+      if (this.flashNode) this.flashNode.active = false;
+      return;
+    }
     if (this.flashNode && this.flashOp) {
       this.flashNode.active = true;
       this.flashOp.opacity = 255;
@@ -284,6 +327,9 @@ export class Monster {
 
   private die(killerId: string): void {
     this.dead = true;
+    if (this.art?.loaded) {
+      tween(this.art.node).to(0.18, { angle: 16 }).start();
+    }
     bus.emit(EVT.MOB_KILLED, this.def, killerId);
     const op = this.node.getComponent(UIOpacity) || this.node.addComponent(UIOpacity);
     tween(op)
@@ -314,8 +360,18 @@ export class MonsterManager {
   /** 怪物对象池：复用 Node/Graphics，杜绝刷怪波次的组件创建尖峰 */
   private pool: Monster[] = [];
   private sepN = 0;
+  private depthT = 0;
+  private depthOrder: Monster[] = [];
+  private shadows: Graphics;
+  private shadowT = 0;
 
-  constructor(private field: Node, private ctx: MonsterHitCtx) {}
+  constructor(private field: Node, private ctx: MonsterHitCtx) {
+    const node = new Node('groupContactShadows');
+    node.layer = Layers.Enum.UI_2D;
+    node.setParent(field);
+    this.shadows = node.addComponent(Graphics);
+    this.shadows.fillColor = new Color(30, 24, 16, 65);
+  }
 
   /** 难度倍率（普通 1 / 精英 1.6 / 地狱 2.4）：出怪时缩放 hp/dmg（BattleDirector 按 flow.diff 注入） */
   statMul = 1;
@@ -470,6 +526,24 @@ export class MonsterManager {
       if (!this.list[i].dead) this.list[w++] = this.list[i];
     }
     this.list.length = w;
+    this.shadowT -= dt;
+    if (this.shadowT <= 0) {
+      this.shadowT = 1 / 20;
+      this.shadows.clear();
+      for (const m of this.list) {
+        const r = m.def.radius;
+        this.shadows.ellipse(m.x, m.y - r * 0.82, r * 0.86, r * 0.25);
+      }
+      if (this.list.length) this.shadows.fill();
+    }
+    this.depthT -= dt;
+    if (this.depthT <= 0) {
+      this.depthT = 0.12;
+      this.depthOrder.length = 0;
+      for (const m of this.list) this.depthOrder.push(m);
+      this.depthOrder.sort((a, b) => (b.y - b.def.radius * 0.82) - (a.y - a.def.radius * 0.82));
+      this.depthOrder.forEach((m, i) => m.node.setSiblingIndex(i + 1));
+    }
   }
 
   private nudge(m: Monster, dx: number, dy: number): void {

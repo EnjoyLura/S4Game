@@ -1,0 +1,18 @@
+{
+  "url": "https://kingdom-watch.pages.dev/?v=1791354190",
+  "deployment": "https://e466e4d3.kingdom-watch.pages.dev",
+  "buildVersion": 1791354190,
+  "viewport": [375, 667],
+  "dpr": 2,
+  "sceneReady": true,
+  "fireFrames": 12,
+  "sharedEffect": "../resources/fx/fire-soft",
+  "burstPool": 16,
+  "pyroUltimate": "ok",
+  "runtimeErrors": [],
+  "failedRequests": [],
+  "atlasSha256": "2164a9a00a3a395f83346c9941abb898f98ad4ab0bebb5dd1adc2e6455debcef",
+  "liveAtlasMatchesSource": true,
+  "screenshot": "online.png",
+  "network": "Isolated Edge browser through existing local proxy, HTTP/1.1."
+}

@@ -1,0 +1,15 @@
+Use case: stylized-concept.
+Asset type: production 2D game VFX animation sprite sheet, ONE continuous small fire explosion, 8 cels in exactly 4 columns and 2 rows.
+Primary request: Replace a muddy photorealistic fire effect with a clean, expertly designed hand-drawn fantasy cartoon fire impact. This is an animation, not eight unrelated explosion concepts.
+Style: bold hand-painted cel animation suitable for a top-down mobile fantasy tower-defense game, clean intentional contours, big readable flame masses, a few beautiful curved internal tongues, disciplined 4-color value design: ivory hot center, golden yellow, saturated orange, deep warm red outer curls. Very thin deep red outline on the outer edges. Broad brush planes, NO microscopic texture. The effect must read clearly when a cel is displayed only 60 pixels wide.
+Canvas: genuine transparent alpha background, no baked black, gray or checkerboard background, no sheet decorations. All 8 frames occupy identical invisible rectangular cells and identical scale, aligned to exactly the same central ground impact point. Entire effects inside each cell with large transparent separation. Maintain the same left-right asymmetric swirl and identifiable lobes from frame to frame. Do not individually zoom or normalize later frames.
+Animation order, left to right then second row:
+1) compact sharp ivory-gold ignition star at center with a small orange lobe at its base; size 35% of max width.
+2) forceful fast expansion into 3-4 chunky orange fire lobes and a clearly bright ivory center; size 75%.
+3) peak explosive shape, broad asymmetric fireball with 4 curling lobes, stronger upward mass, bright center; size 95%.
+4) SAME lobes push outward and upward, ivory center narrows, orange body stays solid and punchy; size 100%.
+5) SAME flame lobes unfold into red-orange curved tongues; small central transparent opening appears, no ivory core; size 100%.
+6) flame tongues stretch and separate outward into 4 elegant tapering wisps, more transparent negative space; size 95%.
+7) the SAME 4 wisps break and curl into short orange-red residual flames; size 85%.
+8) small separated tapering tips in the same outgoing paths, nearly spent; size 70%.
+Constraints: coherent shape progression, consistent camera and center, smooth animated silhouette changes, clean alpha edges, no motion blur, no glow haze, no smoke (smoke is a separate layer), no rocks, no terrain, no people, no text, no labels, no borders. Not a realistic smoke simulation, not a stock photo explosion, not an oily 3D render. Original artwork.

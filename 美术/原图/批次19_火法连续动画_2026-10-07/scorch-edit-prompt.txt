@@ -1,0 +1,4 @@
+Edit target: the provided transparent 3 by 3 component sheet.
+Change ONLY the bottom-left ground-scorch component (row 3, column 1).
+Replace its bright closed glowing orange ring with an irregular, FLAT, mostly solid charcoal scorch mark. Ragged asymmetrical torn patch, broad dark brown-black value shapes, a few short broken reddish fissures near the center. No concentric shape, no complete ring, no luminous oval perimeter, no raised stone rim, no glow or halo. It should read as a small burned area in the ground of a hand-painted fantasy game, not a magic target or a lava portal.
+Keep all eight other components EXACTLY the same: their positions, sizes, colors, shapes, alpha transparency and the 3x3 sheet layout. Preserve genuine transparent alpha. No text, no new scenery.

@@ -1,0 +1,68 @@
+{
+  "source": "hero_sheet.png",
+  "atlas": "battle_heroes_v2.png",
+  "width": 1920,
+  "height": 768,
+  "frames": {
+    "archer_idle": [
+      71,
+      24,
+      241,
+      336
+    ],
+    "sniper_idle": [
+      415,
+      24,
+      322,
+      336
+    ],
+    "pyro_idle": [
+      838,
+      24,
+      244,
+      336
+    ],
+    "volt_idle": [
+      1220,
+      24,
+      247,
+      336
+    ],
+    "mora_idle": [
+      1620,
+      24,
+      216,
+      336
+    ],
+    "archer_attack": [
+      56,
+      408,
+      272,
+      336
+    ],
+    "sniper_attack": [
+      428,
+      408,
+      295,
+      336
+    ],
+    "pyro_attack": [
+      807,
+      408,
+      305,
+      336
+    ],
+    "volt_attack": [
+      1216,
+      408,
+      256,
+      336
+    ],
+    "mora_attack": [
+      1600,
+      408,
+      255,
+      336
+    ]
+  }
+}

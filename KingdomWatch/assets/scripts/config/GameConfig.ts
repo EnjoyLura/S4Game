@@ -10,8 +10,9 @@ export const DESIGN_H = 1334;
 /** 可视布局（§12.3 适配）：Fit-Width 下可视半高随屏幕比例变化；安全区=刘海/手势条 */
 export const LO = {
   half: DESIGN_H / 2,   // 可视半高（设计单位）
-  safeTop: 0,           // 顶部安全区（设计单位）
+  safeTop: 0,           // 顶部安全区（设计单位；主城页走固定预留，此值保持 0，仅英雄/升级页背板拉伸引用）
   safeBottom: 0,        // 底部安全区（设计单位）
+  notchTop: 0,          // 顶部刘海/挖孔真实避让（设计单位；战斗侧顶栏与漂浮字钳制使用）
 };
 
 /** 顶部生成带（屏外）／防线判定线／英雄站位 y —— initLayout() 启动时按可视区重算 */
@@ -26,10 +27,10 @@ export function initLayout(): void {
   try {
     const safe = sys.getSafeAreaRect();
     if (safe && safe.width > 0 && safe.height > 0) {
-      const scrH = typeof window !== 'undefined' ? window.innerHeight : vis.height;
-      const k = scrH > 0 ? vis.height / scrH : 1; // 屏幕 px → 设计单位
-      const topIns = Math.max(0, scrH - (safe.y + safe.height)) * k;
-      LO.safeTop = Math.min(Math.max(0, topIns), LO.half * 0.12);
+      // getSafeAreaRect 与可视区同坐标系（原点左下）：顶内缩 = 可视高 − 安全区顶缘，全程设计单位
+      // （旧版把 CSS px 与设计单位混算再乘 k，非 1:1 屏上恒得 0——刘海保护失效的根因）
+      const topIns = Math.max(0, vis.height - (safe.y + safe.height));
+      LO.notchTop = Math.min(topIns, LO.half * 0.12);
     }
   } catch (e) { void e; }
   // 用户确认：防线永远贴物理屏底——不采用浏览器报告的底部安全区（手势条）内缩

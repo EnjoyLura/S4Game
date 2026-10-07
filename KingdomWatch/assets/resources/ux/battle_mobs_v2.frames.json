@@ -1,0 +1,44 @@
+{
+  "source": "mob_sheet.png",
+  "atlas": "battle_mobs_v2.png",
+  "width": 1536,
+  "height": 1024,
+  "frames": {
+    "goblin_worker": [
+      24,
+      51,
+      464,
+      437
+    ],
+    "goblin_slinger": [
+      536,
+      24,
+      463,
+      464
+    ],
+    "goblin_shaman": [
+      1048,
+      41,
+      464,
+      447
+    ],
+    "wolf_rider": [
+      90,
+      536,
+      331,
+      464
+    ],
+    "goblin_brute": [
+      536,
+      565,
+      464,
+      435
+    ],
+    "goblin_king": [
+      1058,
+      536,
+      444,
+      464
+    ]
+  }
+}

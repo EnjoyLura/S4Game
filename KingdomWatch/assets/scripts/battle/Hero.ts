@@ -15,6 +15,7 @@ import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
+import { BattleSprite } from './BattleSprite';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
@@ -34,6 +35,12 @@ export abstract class HeroBase {
   private regenT = 3;
   private atkT = 0;
   private hx: number;
+  private art: BattleSprite | null = null;
+  private artId = '';
+  private poseT = 0;
+  private poseMax = 0.18;
+  private poseHeavy = false;
+  private idleT = Math.random() * 6;
 
   constructor(parent: Node, x: number, stats: HeroStats) {
     this.hx = x;
@@ -42,6 +49,49 @@ export abstract class HeroBase {
   }
 
   protected abstract buildVisual(parent: Node): void;
+
+  protected attachBattleArt(id: string): void {
+    this.artId = id;
+    const shadow = new Node('heroContactShadow');
+    shadow.layer = Layers.Enum.UI_2D;
+    shadow.setParent(this.node);
+    const sg = shadow.addComponent(Graphics);
+    sg.fillColor = new Color(30, 24, 16, 75);
+    sg.ellipse(0, -74, 30, 8); sg.fill();
+    this.art = new BattleSprite(this.node, 'battle_heroes_v2', () => {
+      const fallback = this.node.getComponent(Graphics);
+      if (fallback) fallback.enabled = false;
+    });
+    this.art.node.setPosition(0, -76, 0);
+    this.art.show(id + '_idle', 146);
+  }
+
+  /** Animate only the artwork; firing/collision coordinates remain fixed. */
+  animateAttack(heavy = false): void {
+    // Fast release, then a slower recovery. Keep a live heavy recoil over a light follow-up.
+    if (!heavy && this.poseHeavy && this.poseT > 0.1) return;
+    this.poseHeavy = heavy;
+    this.poseT = this.poseMax = heavy ? 0.26 : 0.18;
+    this.applyPose();
+  }
+
+  private tickPose(dt: number): void {
+    this.idleT += dt;
+    this.poseT = Math.max(0, this.poseT - dt);
+    this.applyPose();
+  }
+
+  private applyPose(): void {
+    if (!this.art) return;
+    const age = this.poseMax - this.poseT;
+    const kick = this.poseT > 0 ? Math.exp(-age * 17) * Math.min(1, this.poseT / 0.06) : 0;
+    const brace = this.poseT <= 0 && this.atkT > 0 && this.atkT < 0.065 ? 1 - this.atkT / 0.065 : 0;
+    this.art.show(this.artId + (this.poseT > 0.065 || brace > 0 ? '_attack' : '_idle'), 146);
+    const weight = this.artId === 'sniper' ? (this.poseHeavy ? 3.8 : 2.4) : this.poseHeavy ? 2.2 : 1.3;
+    // Foot pivot remains fixed: no sliding, elastic squash or oscillating rebound.
+    this.art.node.angle = -kick * weight + brace * 0.75;
+    this.art.node.setScale(1, 1 + Math.sin(this.idleT * 2.2) * 0.003, 1);
+  }
 
   get x(): number { return this.hx; }
   get effAtk(): number { return this.stats.atk * this.stats.atkMul; }
@@ -58,12 +108,14 @@ export abstract class HeroBase {
   protected lastDmg: DamageService | null = null;
   tick(dt: number, mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
     this.lastDmg = dmg;
+    this.tickPose(dt);
     this.updateQueues(dt, mgr, projs);
     // 普攻
     this.atkT -= dt;
     if (this.atkT <= 0) {
       const t = mgr.pickTarget(this.x, HERO_Y, this.stats.range);
       if (t) {
+        this.animateAttack();
         this.shoot(t, mgr, projs);
         this.atkT = this.attackInterval();
       } else {
@@ -73,6 +125,7 @@ export abstract class HeroBase {
     // 技能（自动：CD 好 + 技能范围内有怪）
     this.skillCd -= dt;
     if (this.skillCd <= 0 && mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange)) {
+      this.animateAttack(true);
       this.castSkill(mgr, projs, dmg);
     }
     // 大招呼吸回能：每 3 秒少量充能（不与击杀充能冲突；满后停止）
@@ -212,6 +265,7 @@ export class ArcherHero extends HeroBase {
     g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
     this.node.setPosition(this.x, HERO_Y, 0);
     this.node.setParent(parent);
+    this.attachBattleArt('archer');
   }
 
   /** 强化箭矢窗口内攻速 +30%（贯穿爽感） */
@@ -268,7 +322,6 @@ export class ArcherHero extends HeroBase {
     // 首排弹幕：预判拦截点直线射出（列 = 1+齐射层）
     const lead = this.lead(target, bs);
     this.fireRow(projs, lead.dirX, lead.dirY, emp);
-    Sfx.play('shoot');
     // 连射：后续排延迟成排再射；每排出弓瞬间若目标存活则按当时状态重新预判（出弓后仍直线），目标已亡则沿锁定方向
     for (let i = 1; i <= this.stats.serial; i++) {
       this.serialQueue.push({ t: i * 0.12, target, dirX: lead.dirX, dirY: lead.dirY, emp });
@@ -277,6 +330,8 @@ export class ArcherHero extends HeroBase {
 
   /** 一排弹幕（列 = 1+齐射层）：以瞄准线为中心扇形并列展开，直线随缘（齐射×连射 = 列×排网格） */
   private fireRow(projs: ProjectileManager, dirX: number, dirY: number, emp: boolean): void {
+    this.animateAttack(emp);
+    Sfx.shoot(this.id);
     const cols = 1 + this.stats.fan;
     const baseAng = Math.atan2(dirY, dirX);
     this.bowFlash(Math.cos(baseAng), Math.sin(baseAng), emp);   // 每排出弓一次弓弦闪光（连射排有节奏感）
@@ -357,12 +412,12 @@ export class ArcherHero extends HeroBase {
     pulse.setPosition(this.x, HERO_Y + 20, 0);
     const pg = pulse.addComponent(Graphics);
     pg.strokeColor = hexc(PAL.gold);
-    pg.lineWidth = 5;
+    pg.lineWidth = 2.5;
     pg.circle(0, 0, 34);
     pg.stroke();
     const pop = pulse.addComponent(UIOpacity);
-    tween(pulse).to(0.38, { scale: new Vec3(2.1, 2.1, 1) }).start();
-    tween(pop).to(0.38, { opacity: 0 }).call(() => pulse.destroy()).start();
+    tween(pulse).to(0.22, { scale: new Vec3(1.55, 1.55, 1) }).start();
+    tween(pop).to(0.22, { opacity: 0 }).call(() => pulse.destroy()).start();
   }
 
   /** 大招·扇形箭雨（手动，击杀充能）：两排 × 8 箭扇形射出，全部无限贯穿；多轮箭雨卡追加轮次（间隔 0.8s） */
@@ -382,6 +437,9 @@ export class ArcherHero extends HeroBase {
 
   /** 一排扇形箭：以竖直方向为中心 ±30° 均分；后排错半步补缝、弹速略慢形成多波；箭数/系数随大招等级成长 */
   private fireFanRow(projs: ProjectileManager, row: 0 | 1 | 2): void {
+    this.animateAttack(true);
+    this.bowFlash(0, 1, true);
+    Sfx.shoot(this.id);
     const uc = archerUltCfg(this.stats.ultLv);
     const n = uc.arrows;
     const spread = 60 * Math.PI / 180;
@@ -474,6 +532,7 @@ export class SniperHero extends HeroBase {
     g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
     this.node.setPosition(this.x, HERO_Y, 0);
     this.node.setParent(parent);
+    this.attachBattleArt('sniper');
   }
 
   /** 普攻：慢速高伤重弩箭（拦截预判直线，不追踪） */
@@ -482,7 +541,7 @@ export class SniperHero extends HeroBase {
     const lead = this.lead(target, 1140);   // 普攻弹速 ×1.5（用户调整）
     projs.fire(this.boltSpec(lead.dirX, lead.dirY));
     projs.sparkAt(this.x, HERO_Y + 70, '#BFE3FF', 3);   // 枪口粒子闪光（与大招枪口同款）
-    Sfx.play('shoot');
+    Sfx.shoot(this.id);
   }
 
   private boltSpec(dirX: number, dirY: number): ProjSpec {
@@ -576,6 +635,7 @@ export class SniperHero extends HeroBase {
   /** 锁定完成：发射贯穿弹（×5.5 必暴、无视物抗、无限贯穿），拦截预判锁定方向；
    *  额外枪线卡：其余血量最高的目标各补一发 */
   private fireUltBolt(projs: ProjectileManager, mgr: MonsterManager, locked: Monster): void {
+    this.animateAttack(true);
     const uc = sniperUltCfg(this.stats.ultLv);   // 大招升级：倍率成长/弹体判定+20%/猎杀标记
     const fire1 = (t: Monster): void => {
       const lead = this.lead(t, 1100);
@@ -589,7 +649,6 @@ export class SniperHero extends HeroBase {
         ult: true, ability: true,   // 大招弹：击杀弹 KAPOW!（60%）
         markAmp: uc.markAmp || undefined, markDur: uc.markDur,
       });
-      projs.sparkAt(t.x, t.y, '#BFE3FF', 5);
     };
     fire1(locked);
     const extra = Math.max(0, Math.round((this.stats.ultBolts || 1) - 1));
@@ -603,6 +662,7 @@ export class SniperHero extends HeroBase {
 
   /** 瞬击一发：重弩箭真弹道（命中才结算伤害），独立暴击 */
   private snipeShot(target: Monster, projs: ProjectileManager, mul: number, ignoreRes: boolean): void {
+    this.animateAttack(true);
     const crit = Math.random() < this.stats.critRate;
     const dmgVal = this.skillAtk * mul * (crit ? this.stats.critMul : 1);
     const speed = 1800;
@@ -614,7 +674,7 @@ export class SniperHero extends HeroBase {
       ignoreRes,
       ability: true,   // 技能弹：击杀弹 60% 词条（skillKillSnipe）
     });
-    Sfx.play('shoot');
+    Sfx.shoot(this.id);
   }
 
   /** 技能·穿颅射击（自动，14s CD）：4 秒窗口内锁定「离防线最近」目标连续 6 狙，每发 200% 攻击；无目标等待不取消 */
@@ -630,12 +690,12 @@ export class SniperHero extends HeroBase {
     pulse.setPosition(this.x, HERO_Y + 20, 0);
     const pg = pulse.addComponent(Graphics);
     pg.strokeColor = hexc(PAL.red);
-    pg.lineWidth = 5;
+    pg.lineWidth = 2.5;
     pg.circle(0, 0, 34);
     pg.stroke();
     const pop = pulse.addComponent(UIOpacity);
-    tween(pulse).to(0.38, { scale: new Vec3(2.1, 2.1, 1) }).start();
-    tween(pop).to(0.38, { opacity: 0 }).call(() => pulse.destroy()).start();
+    tween(pulse).to(0.22, { scale: new Vec3(1.55, 1.55, 1) }).start();
+    tween(pop).to(0.22, { opacity: 0 }).call(() => pulse.destroy()).start();
   }
 
   /** 大招·猎杀时刻（手动）：锁定全场血量最高目标 0.5s（瞄准线+收缩准星）→ 发射 ×5.5 必暴贯穿弹（无视物抗） */
@@ -735,6 +795,7 @@ export class PyroHero extends HeroBase {
     g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
     this.node.setPosition(this.x, HERO_Y, 0);
     this.node.setParent(parent);
+    this.attachBattleArt('pyro');
   }
 
   /** 士气高涨窗口攻速 +40% */
@@ -775,7 +836,7 @@ export class PyroHero extends HeroBase {
       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
       speed: bs, size: 9,
     }));
-    Sfx.play('shoot');
+    Sfx.shoot(this.id);
   }
 
   /** 技能·烈焰爆裂（自动，10s CD）：锁定技能范围内最密集簇，齐射 3 颗爆裂火球（1.6×攻击、大爆炸 + 灼烧 3s） */
@@ -819,7 +880,7 @@ export class PyroHero extends HeroBase {
       if (!this.warnNode) {
         this.warnNode = new Node('ultWarn');
         this.warnNode.layer = Layers.Enum.UI_2D;
-        this.warnNode.setParent(this.node.parent!);
+        this.warnNode.setParent(this.node.parent!.parent?.getChildByName('GroundFxLayer') || this.node.parent!);
         this.warnNode.setPosition(0, 0, 0);
         this.warnG = this.warnNode.addComponent(Graphics);
       }
@@ -872,6 +933,7 @@ export class PyroHero extends HeroBase {
           m.applyVuln(this.stats.pitVuln || CRATER_VULN, 0.6);
         }
       }
+      if (!projs.fireCraters(this.craters, crR, this.warnT)) {
       if (!this.craterNode) {
         this.craterNode = new Node('ultCrater');
         this.craterNode.layer = Layers.Enum.UI_2D;
@@ -921,9 +983,13 @@ export class PyroHero extends HeroBase {
           g.fill();
         }
       }
-    } else if (this.craterNode) {
-      this.craterNode.destroy();
-      this.craterNode = null; this.craterG = null;
+      } else this.craterG?.clear();
+    } else {
+      projs.fireCraters(this.craters, crR, this.warnT);
+      if (this.craterNode) {
+        this.craterNode.destroy();
+        this.craterNode = null; this.craterG = null;
+      }
     }
     if (this.hasteT > 0) this.hasteT -= dt;
   }
@@ -1034,6 +1100,7 @@ export class VoltHero extends HeroBase {
     g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
     this.node.setPosition(this.x, HERO_Y, 0);
     this.node.setParent(parent);
+    this.attachBattleArt('volt');
   }
 
   /** 士气高涨窗口攻速 +40% */
@@ -1070,7 +1137,7 @@ export class VoltHero extends HeroBase {
       x: this.x, y: HERO_Y + 60, dirX: lead.dirX, dirY: lead.dirY,
       dmg: this.effAtk, speed: bs, size: 6,
     }));
-    Sfx.play('shoot');
+    Sfx.shoot(this.id);
     // 70级突破：普攻 15% 概率顺带释放连锁闪电（不占用也不刷新技能冷却）
     if (this.stats.skillProc && Math.random() < this.stats.skillProc) this.castChain(mgr, this.lastDmg || undefined);
   }
@@ -1139,7 +1206,7 @@ export class VoltHero extends HeroBase {
       const sa = this.shockAmp();
       if (sa) cur.applyShock(sa, 3);
       this.zapFx(fromX, fromY, cur.x, cur.y);
-      Sfx.play('hit');
+      Sfx.impact(this.id, false);
       fromX = cur.x; fromY = cur.y;
       // 下一跳：距当前最近且未被打过的（无则终止）
       let next: Monster | null = null, nd = Infinity;
@@ -1178,10 +1245,12 @@ export class VoltHero extends HeroBase {
     const uc = voltUltCfg(this.stats.ultLv);
     const dmgVal = this.skillAtk * uc.boltMul * (this.stats.ultDmgMul || 1);
     this.zapFx(t.x, SPAWN_Y + 140, t.x, t.y, 6);
+    Sfx.impact(this.id, true);
+    bus.emit(EVT.HIT_STOP);
     for (const o of mgr.mobsInRadius(t.x, t.y, 90 * uc.rMul)) {   // 5级：落雷范围+20%
       if (o.dead) continue;
       const hpBefore = o.hp;
-      o.takeDamage(dmgVal, false, this.id);
+      o.takeDamage(dmgVal, false, this.id, false, 0, -Math.PI / 2, true);
       if (this.lastDmg) this.lastDmg.add(this.id, Math.min(dmgVal, hpBefore));
       if (this.stats.ultStun) o.stunT = Math.max(o.stunT, this.stats.ultStun);
       const sa2 = Math.max(this.shockAmp(), uc.shockOn ? 0.25 * (this.stats.shockAmpMul || 1) : 0);   // 10级：落雷自带感电（取更优）
@@ -1266,6 +1335,7 @@ export class FrostHero extends HeroBase {
     g.roundRect(4, -78, 15, 16, 4); g.fill(); g.stroke();
     this.node.setPosition(this.x, HERO_Y, 0);
     this.node.setParent(parent);
+    this.attachBattleArt('mora');
   }
 
   /** 冰系减速幅度 = 基础比率 + 凛冬之息/绝对零度加成（结算上限 90%） */
@@ -1301,7 +1371,7 @@ export class FrostHero extends HeroBase {
       x: this.x, y: HERO_Y + 60, dirX: lead.dirX, dirY: lead.dirY,
       dmg: this.effAtk, speed: bs, size: 6,
     }));
-    Sfx.play('shoot');
+    Sfx.shoot(this.id);
     // 70级突破冰冻：几率走 freezeChance（基础15%，速冻之心卡累加），时长走 freezeProc
     if (this.stats.freezeProc && Math.random() < (this.stats.freezeChance || 0.15)) target.stunT = Math.max(target.stunT, this.stats.freezeProc);
   }
@@ -1401,7 +1471,7 @@ export class FrostHero extends HeroBase {
     this.castNova(mgr, dmg);
   }
 
-  /** 大招·极寒领域（手动，击杀充能）：全屏冰暴——所有敌人受冰伤并深度减速，冰蓝闪屏 + 扩散环 */
+  /** 大招·极寒领域：以敌人身上的碎冰与冰雨读出全场冻结，不闪屏。 */
   castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean {
     if (!this.ultReady) return false;
     const alive = mgr.list.filter(m => !m.dead);
@@ -1413,35 +1483,12 @@ export class FrostHero extends HeroBase {
     for (const m of alive) {
       const hpBefore = m.hp;
       const d = this.skillAtk * uc.boltMul * (this.stats.ultDmgMul || 1);
-      m.takeDamage(d, false, this.id);
+      m.takeDamage(d, false, this.id, false, 0, -Math.PI / 2, true);
       if (this.lastDmg) this.lastDmg.add(this.id, Math.min(d, hpBefore));
       m.applySlow(this.slowR(uc.slowMul), uc.slowDur + (this.stats.ultSlowDur || 0));
     }
-    // —— 表现层：白芯闪光 → 冰蓝领域驻留 → 天降冰棱雨 → 三道自防线扩散的冰环 ——
+    // Local enemy contacts carry the impact; retain only the fine ice rain and one quiet wave.
     const ca = (hex: string, a: number): Color => { const c = hexc(hex); c.a = a; return c; };
-    const W = 620, H = 1500;
-    // 1) 白芯闪光：一瞬间的高光爆点
-    const flash = new Node('blizFlash');
-    flash.layer = Layers.Enum.UI_2D;
-    flash.setParent(this.node.parent!);
-    flash.setPosition(0, 0, 0);
-    const fg = flash.addComponent(Graphics);
-    fg.fillColor = ca('#FFFFFF', 235);
-    fg.rect(-W, -H, W * 2, H * 2); fg.fill();
-    const fop = flash.addComponent(UIOpacity);
-    fop.opacity = 0;
-    tween(fop).to(0.08, { opacity: 235 }).to(0.3, { opacity: 0 }).call(() => flash.destroy()).start();
-    // 2) 冰蓝领域：淡蓝幕帐驻留后缓退（读出"绝对零度"的时间感）
-    const field = new Node('blizzard');
-    field.layer = Layers.Enum.UI_2D;
-    field.setParent(this.node.parent!);
-    field.setPosition(0, 0, 0);
-    const bg = field.addComponent(Graphics);
-    bg.fillColor = ca('#BFE9FF', 120);
-    bg.rect(-W, -H, W * 2, H * 2); bg.fill();
-    const bop = field.addComponent(UIOpacity);
-    bop.opacity = 78;
-    tween(bop).delay(0.25).to(0.75, { opacity: 0 }).call(() => field.destroy()).start();
     // 3) 天降冰棱雨：16 枚细长冰棱随机落点、微倾角下坠，落地即逝
     for (let k = 0; k < 16; k++) {
       const x0 = (Math.random() * 2 - 1) * 340;
@@ -1460,20 +1507,20 @@ export class FrostHero extends HeroBase {
       tween(drop).delay(k * 0.028).to(fall, { position: new Vec3(x0 + fall * 26, yEnd, 0) }).start();
       tween(dropOp).delay(k * 0.028).to(fall, { opacity: 0 }).call(() => drop.destroy()).start();
     }
-    // 4) 三道自防线扩散的冰环（逐道延迟、渐大）
-    for (let k = 0; k < 3; k++) {
+    // A single thin wave; short and translucent so enemy silhouettes stay readable.
+    {
       const ring = new Node('blizRing');
       ring.layer = Layers.Enum.UI_2D;
       ring.setParent(this.node.parent!);
       ring.setPosition(this.x, HERO_Y, 0);
       const rg = ring.addComponent(Graphics);
-      rg.strokeColor = hexc(k === 0 ? '#7FD8FF' : '#E8FAFF');
-      rg.lineWidth = 5;
-      rg.circle(0, 0, 120);
+      rg.strokeColor = ca('#7FD8FF', 100);
+      rg.lineWidth = 0.6;
+      rg.ellipse(0, 0, 90, 55);
       rg.stroke();
       const rop = ring.addComponent(UIOpacity);
-      tween(ring).delay(k * 0.1).to(0.55 + k * 0.12, { scale: new Vec3(6 + k * 2, 6 + k * 2, 1) }).start();
-      tween(rop).delay(k * 0.1).to(0.55 + k * 0.12, { opacity: 0 }).call(() => ring.destroy()).start();
+      tween(ring).to(0.3, { scale: new Vec3(3.4, 3.4, 1) }, { easing: 'quadOut' }).start();
+      tween(rop).to(0.3, { opacity: 0 }).call(() => ring.destroy()).start();
     }
     Sfx.play('ult');
     void projs;

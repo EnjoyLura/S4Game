@@ -1,0 +1,423 @@
+{
+  "checkedAt": "2026-10-07T06:23:42.496Z",
+  "checks": [
+    {
+      "name": "phone-430x932",
+      "width": 430,
+      "height": 932,
+      "dpr": 3,
+      "loaded": {
+        "frames": 12,
+        "pool": 16,
+        "flights": 32,
+        "sharedMaterial": true,
+        "materialName": "../resources/fx/fire-soft",
+        "layers": [
+          "panel",
+          "artClip:scenes/scene_1_1",
+          "environmentMotion",
+          "GroundFxLayer",
+          "line",
+          "MobLayer",
+          "HeroLayer",
+          "ProjLayer",
+          "FxLayer",
+          "TextLayer"
+        ],
+        "mobs": 42
+      },
+      "collision": {
+        "initial": {
+          "hp": 1000,
+          "effects": 0
+        },
+        "collisionStep": 27,
+        "primaryDamage": 100,
+        "neighbourDamage": 40,
+        "flashT": 0.12,
+        "events": [
+          {
+            "kind": "number",
+            "step": 27,
+            "value": "100"
+          },
+          {
+            "kind": "vfx",
+            "step": 27
+          },
+          {
+            "kind": "redFlash",
+            "step": 27
+          },
+          {
+            "kind": "sound",
+            "step": 27
+          },
+          {
+            "kind": "number",
+            "step": 27,
+            "value": "40"
+          },
+          {
+            "kind": "vfx",
+            "step": 27
+          }
+        ],
+        "blasts": 1,
+        "flightsAfterHit": 0,
+        "numbers": [
+          {
+            "text": "100",
+            "color": [
+              255,
+              255,
+              255
+            ]
+          },
+          {
+            "text": "40",
+            "color": [
+              255,
+              255,
+              255
+            ]
+          }
+        ]
+      },
+      "phases": [
+        {
+          "time": 0.055,
+          "age": 0.055,
+          "core": true,
+          "flames": [
+            {
+              "active": true,
+              "frame": "flame_a",
+              "alpha": 163
+            },
+            {
+              "active": true,
+              "frame": "flame_b",
+              "alpha": 72
+            }
+          ],
+          "smoke": [
+            {
+              "active": true,
+              "alpha": 5
+            },
+            {
+              "active": false,
+              "alpha": 255
+            }
+          ],
+          "ground": true,
+          "scorch": 100
+        },
+        {
+          "time": 0.16,
+          "age": 0.16,
+          "core": false,
+          "flames": [
+            {
+              "active": true,
+              "frame": "flame_b",
+              "alpha": 218
+            },
+            {
+              "active": true,
+              "frame": "flame_c",
+              "alpha": 3
+            }
+          ],
+          "smoke": [
+            {
+              "active": true,
+              "alpha": 74
+            },
+            {
+              "active": true,
+              "alpha": 9
+            }
+          ],
+          "ground": true,
+          "scorch": 100
+        },
+        {
+          "time": 0.42,
+          "age": 0.42000000000000004,
+          "core": false,
+          "flames": [
+            {
+              "active": false,
+              "frame": "flame_b",
+              "alpha": 218
+            },
+            {
+              "active": false,
+              "frame": "flame_c",
+              "alpha": 3
+            }
+          ],
+          "smoke": [
+            {
+              "active": true,
+              "alpha": 3
+            },
+            {
+              "active": true,
+              "alpha": 14
+            }
+          ],
+          "ground": true,
+          "scorch": 84
+        }
+      ],
+      "pause": "pass",
+      "selectionPause": "pass",
+      "stress": {
+        "beforeNodes": 573,
+        "dense": {
+          "active": 16,
+          "blasts": 8,
+          "contacts": 8,
+          "pool": 16,
+          "damage": 8960,
+          "nodes": 573,
+          "particles": 90
+        },
+        "firstFrame": {
+          "reused": true,
+          "core": true,
+          "flame": true,
+          "ground": false,
+          "alpha": 162
+        },
+        "freeAfter": 16,
+        "activeAfter": 0
+      },
+      "recording": {
+        "frames": 1274,
+        "maxActive": 13,
+        "maxBlasts": 5,
+        "maxFlights": 4,
+        "maxResidues": 5,
+        "legacyCrater": false,
+        "movement": 0,
+        "cast": "ok",
+        "audio": true,
+        "done": true
+      }
+    },
+    {
+      "name": "phone-375x667",
+      "width": 375,
+      "height": 667,
+      "dpr": 2,
+      "loaded": {
+        "frames": 12,
+        "pool": 16,
+        "flights": 32,
+        "sharedMaterial": true,
+        "materialName": "../resources/fx/fire-soft",
+        "layers": [
+          "panel",
+          "artClip:scenes/scene_1_1",
+          "environmentMotion",
+          "GroundFxLayer",
+          "line",
+          "MobLayer",
+          "HeroLayer",
+          "ProjLayer",
+          "FxLayer",
+          "TextLayer"
+        ],
+        "mobs": 42
+      },
+      "collision": {
+        "initial": {
+          "hp": 1000,
+          "effects": 0
+        },
+        "collisionStep": 27,
+        "primaryDamage": 100,
+        "neighbourDamage": 40,
+        "flashT": 0.12,
+        "events": [
+          {
+            "kind": "number",
+            "step": 27,
+            "value": "100"
+          },
+          {
+            "kind": "vfx",
+            "step": 27
+          },
+          {
+            "kind": "redFlash",
+            "step": 27
+          },
+          {
+            "kind": "sound",
+            "step": 27
+          },
+          {
+            "kind": "number",
+            "step": 27,
+            "value": "40"
+          },
+          {
+            "kind": "vfx",
+            "step": 27
+          }
+        ],
+        "blasts": 1,
+        "flightsAfterHit": 0,
+        "numbers": [
+          {
+            "text": "100",
+            "color": [
+              255,
+              255,
+              255
+            ]
+          },
+          {
+            "text": "40",
+            "color": [
+              255,
+              255,
+              255
+            ]
+          }
+        ]
+      },
+      "phases": [
+        {
+          "time": 0.055,
+          "age": 0.055,
+          "core": true,
+          "flames": [
+            {
+              "active": true,
+              "frame": "flame_a",
+              "alpha": 163
+            },
+            {
+              "active": true,
+              "frame": "flame_b",
+              "alpha": 72
+            }
+          ],
+          "smoke": [
+            {
+              "active": true,
+              "alpha": 5
+            },
+            {
+              "active": false,
+              "alpha": 255
+            }
+          ],
+          "ground": true,
+          "scorch": 100
+        },
+        {
+          "time": 0.16,
+          "age": 0.16,
+          "core": false,
+          "flames": [
+            {
+              "active": true,
+              "frame": "flame_b",
+              "alpha": 218
+            },
+            {
+              "active": true,
+              "frame": "flame_c",
+              "alpha": 3
+            }
+          ],
+          "smoke": [
+            {
+              "active": true,
+              "alpha": 74
+            },
+            {
+              "active": true,
+              "alpha": 9
+            }
+          ],
+          "ground": true,
+          "scorch": 100
+        },
+        {
+          "time": 0.42,
+          "age": 0.42000000000000004,
+          "core": false,
+          "flames": [
+            {
+              "active": false,
+              "frame": "flame_b",
+              "alpha": 218
+            },
+            {
+              "active": false,
+              "frame": "flame_c",
+              "alpha": 3
+            }
+          ],
+          "smoke": [
+            {
+              "active": true,
+              "alpha": 3
+            },
+            {
+              "active": true,
+              "alpha": 14
+            }
+          ],
+          "ground": true,
+          "scorch": 84
+        }
+      ],
+      "pause": "pass",
+      "selectionPause": "pass",
+      "stress": {
+        "beforeNodes": 573,
+        "dense": {
+          "active": 16,
+          "blasts": 8,
+          "contacts": 8,
+          "pool": 16,
+          "damage": 8960,
+          "nodes": 573,
+          "particles": 90
+        },
+        "firstFrame": {
+          "reused": true,
+          "core": true,
+          "flame": true,
+          "ground": false,
+          "alpha": 162
+        },
+        "freeAfter": 16,
+        "activeAfter": 0
+      },
+      "recording": {
+        "frames": 1281,
+        "maxActive": 13,
+        "maxBlasts": 4,
+        "maxFlights": 4,
+        "maxResidues": 5,
+        "legacyCrater": false,
+        "movement": 0,
+        "cast": "ok",
+        "audio": true,
+        "done": true
+      }
+    }
+  ],
+  "errors": [],
+  "shaderErrors": []
+}

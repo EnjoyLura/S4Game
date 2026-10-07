@@ -1,0 +1,16 @@
+Use case: stylized-concept.
+Asset type: transparent 2D fantasy game VFX component atlas, exactly 3 columns by 3 rows, nine separated components, equal invisible cells.
+Input Image 1 is ONLY a style reference showing the new eight-frame flame animation. Make NEW matching support components, do not reproduce the sheet.
+Style: hand-drawn clean cartoon VFX with broad readable color planes, intentional curves, very few internal details, clear silhouette readable at 24-60 pixels on a phone. Warm ivory/yellow/orange/deep red fire; neutral warm slate charcoal smoke. Solid painted forms, no microscopic texture or mottled noise, no realistic simulation or 3D render.
+Reading order:
+1) small irregular ivory-gold impact flash, compact six-point shape with an orange rim, forceful asymmetry, no long thin rays or glow haze.
+2) small upward-facing oval fireball body with a hot ivory center and 3 orange/red curling tongues around it; bold compact silhouette, no circular vortex pattern, no detached sparks.
+3) slender clean orange-gold comet flame streak; bright root at bottom, curling tail extending above it. Transparent outer negative space, no haze.
+4) one tiny tapered gold-orange ember shard, no glow haze.
+5) coherent first dark-smoke shape: four broad asymmetric charcoal/neutral slate cloud lobes, simple painted three-value shading, no fire inside.
+6) SAME smoke shape one step later: lobes puff upward, the lower lobes shrink, one upper curl unfolds; continuous silhouette progression, same overall size and orientation as component 5.
+7) irregular FLAT ground scorch footprint seen from a top-down angled game camera; a thin broad ellipse of uneven dark charcoal, small sparse red-orange fissures, clean broken edge, NO rim, NO pile of stones, NO circular target rings.
+8) low horizontal ochre ground-dust puff, 3 short lobes with a swept outer arc, no surrounding ground or floor.
+9) one small angular hot charcoal fragment with orange edge and one amber fissure, dark readable solid shape.
+Composition: all nine isolated sprites wholly inside their respective cells, centered, generous transparent margins separating components, no overlap. Native genuine transparent alpha background, no black or colored matte or checkerboard.
+Constraints: original artwork, no text, no labels, no grid lines, no scenery, no characters. Match the bold warm painted animation reference. Keep restrained, coherent and sharp.

@@ -6,6 +6,7 @@
 import { Color, Graphics, Label, Layers, Node, Sprite, UITransform, UIOpacity, tween, Vec3, BlockInputEvents } from 'cc';
 import { LO, PAL } from '../config/GameConfig';
 import { artSetFrame, artSprite, uxFrame } from './Ux';
+import { applyFont, FontRole, inferFont } from './Fonts';
 
 export function C(hex: string): Color {
   const c = new Color();
@@ -48,6 +49,7 @@ export interface LabelOpts {
   shrink?: boolean;
   /** 描边（亮底大图上的说明文字用，如关卡场景图内的波次信息） */
   outline?: string; outlineW?: number;
+  font?: FontRole;
 }
 
 export function label(parent: Node, x: number, y: number, text: string, o: LabelOpts = {}): Node {
@@ -60,6 +62,8 @@ export function label(parent: Node, x: number, y: number, text: string, o: Label
   l.isBold = !!o.bold;
   if (o.shrink && (o.w || 0) > 0 && (o.h || 0) > 0) {
     l.overflow = Label.Overflow.SHRINK;
+    l.enableWrapText = true;
+    n.getComponent(UITransform)!.setContentSize(o.w!, o.h!);
   }
   if (o.outline) {
     l.enableOutline = true;
@@ -70,6 +74,10 @@ export function label(parent: Node, x: number, y: number, text: string, o: Label
   else if (o.align === 'right') l.horizontalAlign = Label.HorizontalAlign.RIGHT;
   else l.horizontalAlign = Label.HorizontalAlign.CENTER;
   l.verticalAlign = Label.VerticalAlign.CENTER;
+  // Installing a cached font renders immediately. Apply it after overflow and
+  // fixed bounds, otherwise NONE overflow expands the intended text box.
+  const fontRole = o.font || inferFont(text, l.fontSize, l.isBold);
+  if (fontRole) applyFont(l, fontRole);
   return n;
 }
 
@@ -182,7 +190,7 @@ export function btn(parent: Node, x: number, y: number, w: number, h: number, te
   /* 无边框规范（用户确认：未特别强调不加边框资源）——程序层一律无描边 */
   const n = gpanel(parent, x, y, w, h, color, undefined, 0, 14);
   n.name = 'btn_' + text;
-  const lbl = label(n, icon ? w * 0.07 : 0, 0, text, { size, color: '#241C12', bold: true, w, h });
+  const lbl = label(n, icon ? w * 0.07 : 0, 0, text, { size, color: '#241C12', bold: true, w, h, font: size >= 26 && /[\u3400-\u9FFF]/.test(text) ? 'title' : undefined });
   if (icon) artSprite(n, -w * 0.26, 0, size + 12, size + 12, icon, { sliced: false });
   /* 美术按钮三态：金/绿（含按下/禁用帧）；#5A6472 视为禁用态用灰帧；失败保持程序绘制；
    * flat=true 连框体美术也不用（纯色板，用户点名去边框的弹窗按钮用）；
@@ -231,7 +239,7 @@ export function dlgTitle(parent: Node, x: number, y: number, w: number, text: st
   const h = Math.max(64, Math.min(100, Math.round(w / 4)));
   const n = gpanel(parent, x, y, w, h, CA(color, 1), undefined, 0, 14);
   // 缎带主带中心略高于几何中心，文字随之微抬
-  label(n, 0, h * 0.07, text, { size, color: '#FFFFFF', bold: true, w: Math.max(w - 170, 120), h: h - 40, shrink: true });
+  label(n, 0, h * 0.07, text, { size, color: '#FFFFFF', bold: true, font: 'title', w: Math.max(w - 170, 120), h: h - 40, shrink: true });
   artSprite(n, 0, 0, w, h, 'ui_banner_notice', { belowIdx: 0 });
   return n;
 }

@@ -1,0 +1,521 @@
+{
+  "checkedAt": "2026-10-07T05:01:07.586Z",
+  "checks": [
+    {
+      "name": "four-heroes",
+      "width": 430,
+      "height": 932,
+      "dpr": 3,
+      "squad": [
+        "archer",
+        "pyro",
+        "volt",
+        "mora"
+      ],
+      "loadedHeroes": [
+        [
+          "archer",
+          true
+        ],
+        [
+          "pyro",
+          true
+        ],
+        [
+          "volt",
+          true
+        ],
+        [
+          "mora",
+          true
+        ]
+      ],
+      "activeArchetypes": [
+        "goblin_brute",
+        "goblin_worker",
+        "wolf_rider",
+        "goblin_slinger",
+        "goblin_shaman"
+      ],
+      "casts": [
+        [
+          "archer",
+          "ok"
+        ],
+        [
+          "pyro",
+          "ok"
+        ],
+        [
+          "volt",
+          "ok"
+        ],
+        [
+          "mora",
+          "ok"
+        ]
+      ],
+      "pause": "pass",
+      "typography": {
+        "entries": [
+          {
+            "text": "300",
+            "kind": "normal",
+            "hits": 2,
+            "size": 27,
+            "font": "CombatDigits",
+            "system": false,
+            "color": [
+              255,
+              255,
+              255
+            ],
+            "x": -80,
+            "y": 71.56805555555555
+          },
+          {
+            "text": "950",
+            "kind": "crit",
+            "hits": 1,
+            "size": 40,
+            "font": "CombatDigits",
+            "system": false,
+            "color": [
+              255,
+              48,
+              48
+            ],
+            "x": -180.336,
+            "y": 81.5389941827735
+          },
+          {
+            "text": "18",
+            "kind": "periodic",
+            "hits": 1,
+            "size": 21,
+            "font": "CombatDigits",
+            "system": false,
+            "color": [
+              255,
+              255,
+              255
+            ],
+            "x": -80,
+            "y": 142.7
+          },
+          {
+            "text": "80",
+            "kind": "normal",
+            "hits": 1,
+            "size": 27,
+            "font": "CombatDigits",
+            "system": false,
+            "color": [
+              255,
+              255,
+              255
+            ],
+            "x": 35,
+            "y": 34.96805555555555
+          }
+        ],
+        "hpAfter": 3732,
+        "comic": [
+          {
+            "text": "KAPOW!",
+            "font": "ComicLettering"
+          }
+        ],
+        "hud": [
+          {
+            "text": "02:02",
+            "font": "UINumbers"
+          },
+          {
+            "text": "Lv.1",
+            "font": "UINumbers"
+          },
+          {
+            "text": "1000/1000",
+            "font": "UINumbers"
+          }
+        ]
+      },
+      "letteringReuse": {
+        "sameNode": true,
+        "size": 27,
+        "outline": 2.2,
+        "opacity": 255,
+        "angle": 0,
+        "chineseComic": "UIBody"
+      },
+      "numberMotion": {
+        "results": [
+          {
+            "critical": false,
+            "samples": [
+              {
+                "time": 0.034,
+                "x": 0,
+                "y": 5.999860058309038,
+                "sx": 1.1999888046647231,
+                "sy": 1.1999848396501458,
+                "alpha": 255
+              },
+              {
+                "time": 0.14,
+                "x": 0,
+                "y": 1,
+                "sx": 1,
+                "sy": 1,
+                "alpha": 255
+              },
+              {
+                "time": 0.28,
+                "x": 0,
+                "y": 1,
+                "sx": 1,
+                "sy": 1,
+                "alpha": 255
+              },
+              {
+                "time": 0.37,
+                "x": 0,
+                "y": -1.0247933884297526,
+                "sx": 0.927107438016529,
+                "sy": 0.8582644628099173,
+                "alpha": 152
+              }
+            ],
+            "released": true
+          },
+          {
+            "critical": true,
+            "samples": [
+              {
+                "time": 0.034,
+                "x": 0,
+                "y": 17.567648714580596,
+                "sx": 1.4005441921561268,
+                "sy": 1.4005441921561268,
+                "alpha": 255
+              },
+              {
+                "time": 0.14,
+                "x": 0,
+                "y": 10,
+                "sx": 1.06,
+                "sy": 1.06,
+                "alpha": 255
+              },
+              {
+                "time": 0.34,
+                "x": 0,
+                "y": 10,
+                "sx": 1.06,
+                "sy": 1.06,
+                "alpha": 255
+              },
+              {
+                "time": 0.44,
+                "x": 0,
+                "y": 8.550295857988164,
+                "sx": 1.0046792899408286,
+                "sy": 0.9524319526627218,
+                "alpha": 181
+              }
+            ],
+            "released": true
+          }
+        ],
+        "firstFrame30fps": 1.4069694126477763
+      },
+      "impactFeel": {
+        "frames": 251,
+        "movement": 0,
+        "lean": 2.2,
+        "fullScreenFlash": false,
+        "done": true
+      },
+      "lowFpsAccent": {
+        "contact": 0.004,
+        "recovery": 0.03333333333333333
+      },
+      "lethalExplosion": {
+        "primaryDead": true,
+        "neighbourDamage": 50,
+        "localizedBlast": true,
+        "impactPool": 12,
+        "particles": 32
+      },
+      "recycling": {
+        "pooled": true,
+        "reused": true,
+        "art": true,
+        "opacity": 255,
+        "xpStable": true
+      },
+      "sceneVariants": [],
+      "state": "paused",
+      "poses": [
+        336,
+        336,
+        336,
+        336
+      ]
+    },
+    {
+      "name": "compact-sniper",
+      "width": 375,
+      "height": 667,
+      "dpr": 2,
+      "squad": [
+        "archer",
+        "sniper"
+      ],
+      "loadedHeroes": [
+        [
+          "archer",
+          true
+        ],
+        [
+          "sniper",
+          true
+        ]
+      ],
+      "activeArchetypes": [
+        "wolf_rider",
+        "goblin_brute",
+        "goblin_shaman",
+        "goblin_worker",
+        "goblin_slinger"
+      ],
+      "casts": [
+        [
+          "archer",
+          "ok"
+        ],
+        [
+          "sniper",
+          "ok"
+        ]
+      ],
+      "pause": "pass",
+      "typography": {
+        "entries": [
+          {
+            "text": "300",
+            "kind": "normal",
+            "hits": 2,
+            "size": 27,
+            "font": "CombatDigits",
+            "system": false,
+            "color": [
+              255,
+              255,
+              255
+            ],
+            "x": -80,
+            "y": 51.06805555555555
+          },
+          {
+            "text": "950",
+            "kind": "crit",
+            "hits": 1,
+            "size": 40,
+            "font": "CombatDigits",
+            "system": false,
+            "color": [
+              255,
+              48,
+              48
+            ],
+            "x": -180.336,
+            "y": 61.0389941827735
+          },
+          {
+            "text": "18",
+            "kind": "periodic",
+            "hits": 1,
+            "size": 21,
+            "font": "CombatDigits",
+            "system": false,
+            "color": [
+              255,
+              255,
+              255
+            ],
+            "x": -80,
+            "y": 122.19999999999999
+          },
+          {
+            "text": "80",
+            "kind": "normal",
+            "hits": 1,
+            "size": 27,
+            "font": "CombatDigits",
+            "system": false,
+            "color": [
+              255,
+              255,
+              255
+            ],
+            "x": 35,
+            "y": 59.568055555555546
+          }
+        ],
+        "hpAfter": 3732,
+        "comic": [
+          {
+            "text": "KAPOW!",
+            "font": "ComicLettering"
+          }
+        ],
+        "hud": [
+          {
+            "text": "02:02",
+            "font": "UINumbers"
+          },
+          {
+            "text": "Lv.1",
+            "font": "UINumbers"
+          },
+          {
+            "text": "1000/1000",
+            "font": "UINumbers"
+          }
+        ]
+      },
+      "letteringReuse": {
+        "sameNode": true,
+        "size": 27,
+        "outline": 2.2,
+        "opacity": 255,
+        "angle": 0,
+        "chineseComic": "UIBody"
+      },
+      "numberMotion": {
+        "results": [
+          {
+            "critical": false,
+            "samples": [
+              {
+                "time": 0.034,
+                "x": 0,
+                "y": 5.999860058309038,
+                "sx": 1.1999888046647231,
+                "sy": 1.1999848396501458,
+                "alpha": 255
+              },
+              {
+                "time": 0.14,
+                "x": 0,
+                "y": 1,
+                "sx": 1,
+                "sy": 1,
+                "alpha": 255
+              },
+              {
+                "time": 0.28,
+                "x": 0,
+                "y": 1,
+                "sx": 1,
+                "sy": 1,
+                "alpha": 255
+              },
+              {
+                "time": 0.37,
+                "x": 0,
+                "y": -1.0247933884297526,
+                "sx": 0.927107438016529,
+                "sy": 0.8582644628099173,
+                "alpha": 152
+              }
+            ],
+            "released": true
+          },
+          {
+            "critical": true,
+            "samples": [
+              {
+                "time": 0.034,
+                "x": 0,
+                "y": 17.567648714580596,
+                "sx": 1.4005441921561268,
+                "sy": 1.4005441921561268,
+                "alpha": 255
+              },
+              {
+                "time": 0.14,
+                "x": 0,
+                "y": 10,
+                "sx": 1.06,
+                "sy": 1.06,
+                "alpha": 255
+              },
+              {
+                "time": 0.34,
+                "x": 0,
+                "y": 10,
+                "sx": 1.06,
+                "sy": 1.06,
+                "alpha": 255
+              },
+              {
+                "time": 0.44,
+                "x": 0,
+                "y": 8.550295857988164,
+                "sx": 1.0046792899408286,
+                "sy": 0.9524319526627218,
+                "alpha": 181
+              }
+            ],
+            "released": true
+          }
+        ],
+        "firstFrame30fps": 1.4069694126477763
+      },
+      "impactFeel": {
+        "frames": 256,
+        "movement": 0,
+        "lean": 3.8,
+        "fullScreenFlash": false,
+        "done": true
+      },
+      "lowFpsAccent": {
+        "contact": 0.004,
+        "recovery": 0.03333333333333333
+      },
+      "lethalExplosion": {
+        "primaryDead": true,
+        "neighbourDamage": 40,
+        "localizedBlast": true,
+        "impactPool": 10,
+        "particles": 24
+      },
+      "recycling": {
+        "pooled": true,
+        "reused": true,
+        "art": true,
+        "opacity": 255,
+        "xpStable": true
+      },
+      "sceneVariants": [
+        {
+          "level": "1-2",
+          "loaded": true
+        },
+        {
+          "level": "1-3",
+          "loaded": true
+        }
+      ],
+      "state": "paused",
+      "poses": [
+        336,
+        336
+      ]
+    }
+  ],
+  "errors": []
+}

@@ -12,6 +12,7 @@ export class Particles {
   private free: P[] = [];
   private act: P[] = [];
   private tmp = new Color();
+  private dirty = false;
 
   constructor(parent: Node, private cap = 90) {
     this.node.layer = Layers.Enum.UI_2D;
@@ -22,24 +23,28 @@ export class Particles {
     }
   }
 
-  /** 命中点迸溅：n 粒向上偏置随机散开，带重力下坠与淡出 */
-  burst(x: number, y: number, hex: string, n: number, spd = 170): void {
+  /** Short impact fragments follow the incoming direction; muzzle sparks retain the upward bias. */
+  burst(x: number, y: number, hex: string, n: number, spd = 170, angle?: number): void {
+    this.dirty = true;
     for (let i = 0; i < n; i++) {
       const p = this.free.pop() || this.act.shift();
       if (!p) return;
-      const a = (Math.random() * 1.6 - 0.8) + Math.PI / 2;
+      const a = (Math.random() * 1.6 - 0.8) + (angle ?? Math.PI / 2);
       const s = spd * (0.5 + Math.random() * 0.7);
       p.x = x; p.y = y;
       p.vx = Math.cos(a) * s; p.vy = Math.sin(a) * s;
-      p.max = p.life = 0.3 + Math.random() * 0.18;
-      p.size = 2.5 + Math.random() * 2;
+      p.max = p.life = angle === undefined ? 0.24 + Math.random() * 0.1 : 0.14 + Math.random() * 0.1;
+      p.size = 1.8 + Math.random() * 1.6;
       p.hex = hex;
       this.act.push(p);
     }
   }
 
   tick(dt: number): void {
-    if (this.act.length === 0) return;
+    if (this.act.length === 0) {
+      if (this.dirty) { this.g.clear(); this.dirty = false; }
+      return;
+    }
     for (let i = this.act.length - 1; i >= 0; i--) {
       const p = this.act[i];
       p.life -= dt;

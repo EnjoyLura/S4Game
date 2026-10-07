@@ -3,6 +3,10 @@
 竖屏单机塔防射击 H5 游戏（TapTap 小游戏），Cocos Creator **3.8.8** 构建。
 当前进度：**M0 工程骨架 + 1-1 战斗框架**（代码全部 TypeScript，引擎级 tsc 类型检查通过）。
 
+2026-10-07 战斗表现升级：原创英雄/怪物图集、英雄双姿态、脚底阴影与遮挡排序、紧凑 HUD、命中反馈和职业音效已接入。打击反馈优先采用快速出手、收势、定向碎屑和短促音效；大招不震动战场，冰系不闪屏。完整制作路线、资源规格与剩余验收见 [战斗画面商业级升级方案](docs/战斗画面商业级升级方案.md)。当前英雄为两姿态动画，专业音频与完整骨骼动画仍在后续制作清单。
+
+字体与飘字已统一升级：中文正文/魔幻标题、HUD 数字、厚实斜体伤害字、漫画拟声字均随包加载。战斗飘字用白色普攻、红色暴击，采用快速撑开、全不透明定住、短压缩退场；保留 75ms 伤害合并、空间避让、暴击预留与暂停冻结。资源、动态演示和验证见 [字体与战斗飘字规范](docs/字体与战斗飘字规范.md)。
+
 ## 如何打开 / 运行
 
 1. 打开 Cocos Creator Dashboard（3.8.8）→ 「项目」→「添加」→ 选择本目录 `D:\AI\S4Game\KingdomWatch`
@@ -39,7 +43,7 @@ KingdomWatch/
 
 ## 美术占位与替换机制
 
-M0 所有画面元素（怪物/英雄/防线/UI）均为 **Graphics 程序化占位**（手绘卡通取向配色）。
+英雄和怪物已使用共享纹理图集（`battle_heroes_v2` / `battle_mobs_v2`）及帧矩形清单，场景/防线/UI 按现有同名资源加载。Graphics 保留作为资源加载失败的兜底；命中、弹道及部分环境表现仍由程序绘制。
 后续替换美术时：在 `config/` 增加资产 ID 映射 → 场景节点换 SpriteFrame/Spine，
 布局坐标不变（UIKit 的 `WX/WY` 直接换算线稿 750×1334 坐标，与 `UX/wireframe.html` 一一对应）。
 
@@ -54,6 +58,8 @@ npx -y -p typescript@5.4.5 tsc -p tsconfig.check.json
 等效于 Creator 内部编译，提前暴露引擎 API 误用。
 
 ## 构建与部署（免编辑器 CLI 流程）
+
+默认交付流程（用户要求）：每次游戏改动完成后，构建、补丁和相关检查通过后发布到下方手机体验地址，并验证线上版本。
 
 ```bash
 # 1. 命令行构建 web-mobile（不需要打开 Creator 界面，约 40s）
@@ -71,6 +77,8 @@ npx -y wrangler@3 pages deploy . --project-name=kingdom-watch --branch=main --co
 ```
 
 线上地址：<https://kingdom-watch.pages.dev/> （手机浏览器直接跑；边缘缓存约半分钟生效，可加 `?v=1` 绕过）
+
+Windows 上建议用 `Start-Process -WindowStyle Hidden` 启动 Creator，并重定向输出到 temp 日志以避免管道 EPIPE。若已启用系统代理，发布时给当前 Wrangler 进程设置 `HTTPS_PROXY` 为实际代理地址；Node 不会自动沿用 Windows 系统代理。
 
 ## HUD 清晰度（dpr 补丁）
 

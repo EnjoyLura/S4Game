@@ -8,7 +8,9 @@
 import { AudioClip, director, Node, resources, AudioSource } from 'cc';
 import { loadSave } from './SaveData';
 
-export type SfxName = 'shoot' | 'hit' | 'crit' | 'kill' | 'ult' | 'levelup' | 'ready' | 'snipe';
+export type SfxName = 'shoot' | 'hit' | 'crit' | 'kill' | 'ult' | 'levelup' | 'ready' | 'snipe'
+  | 'bow' | 'crossbow' | 'fire' | 'thunder' | 'frost' | 'skill' | 'wall' | 'surge' | 'victory'
+  | 'pierce' | 'crush' | 'zapHit' | 'icebreak';
 
 /** 资源占位命名约定：assets/resources/audio/<file>（美术阶段直接放文件即替换） */
 const SAMPLES: Record<SfxName, string> = {
@@ -20,11 +22,18 @@ const SAMPLES: Record<SfxName, string> = {
   levelup: 'audio/sfx_levelup',
   ready: 'audio/sfx_ready',
   snipe: 'audio/sfx_snipe',
+  bow: 'audio/sfx_bow', crossbow: 'audio/sfx_crossbow', fire: 'audio/sfx_fire',
+  thunder: 'audio/sfx_thunder', frost: 'audio/sfx_frost', skill: 'audio/sfx_skill',
+  wall: 'audio/sfx_wall', surge: 'audio/sfx_surge', victory: 'audio/sfx_victory',
+  pierce: 'audio/sfx_pierce', crush: 'audio/sfx_crush', zapHit: 'audio/sfx_zap_hit', icebreak: 'audio/sfx_icebreak',
 };
 
 /** 资源样本播放音量（合成音量在 switch 内独立调，互不影响） */
 const SAMPLE_GAIN: Record<SfxName, number> = {
   shoot: 1, hit: 0.8, crit: 0.9, kill: 0.9, ult: 1, levelup: 0.9, ready: 0.9, snipe: 1.25,
+  bow: 0.65, crossbow: 0.75, fire: 0.7, thunder: 0.7, frost: 0.65, skill: 0.85,
+  wall: 0.65, surge: 0.8, victory: 0.85,
+  pierce: 0.85, crush: 0.8, zapHit: 0.7, icebreak: 0.65,
 };
 
 class SfxService {
@@ -32,7 +41,14 @@ class SfxService {
   private master: GainNode | null = null;
   private noise: AudioBuffer | null = null;
   private lastAt: Partial<Record<SfxName, number>> = {};
-  private static MIN_GAP: Record<SfxName, number> = { shoot: 0.06, hit: 0.045, crit: 0.09, kill: 0.06, ult: 0, levelup: 0.15, ready: 0.2, snipe: 0.15 };
+  private static MIN_GAP: Record<SfxName, number> = {
+    shoot: 0.07, hit: 0.075, crit: 0.12, kill: 0.1, ult: 0.12, levelup: 0.15, ready: 0.3, snipe: 0.15,
+    bow: 0.08, crossbow: 0.13, fire: 0.12, thunder: 0.12, frost: 0.12, skill: 0.15,
+    wall: 0.25, surge: 1.5, victory: 1.5,
+    pierce: 0.11, crush: 0.13, zapHit: 0.11, icebreak: 0.11,
+  };
+  private priorityUntil = 0;
+  private lastImpactAt = -1;
   private flagCache = { v: true, at: 0 };
   // 资源样本缓存（未加载/加载失败 → 走合成占位）
   private clips: Partial<Record<SfxName, AudioClip>> = {};
@@ -85,7 +101,10 @@ class SfxService {
       this.ctx = new AC();
       this.master = this.ctx.createGain();
       this.master.gain.value = 0.22;
-      this.master.connect(this.ctx.destination);
+      const limiter = this.ctx.createDynamicsCompressor();
+      limiter.threshold.value = -18; limiter.knee.value = 8; limiter.ratio.value = 5;
+      limiter.attack.value = 0.003; limiter.release.value = 0.12;
+      this.master.connect(limiter); limiter.connect(this.ctx.destination);
       const len = Math.floor(this.ctx.sampleRate * 0.25);
       this.noise = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
       const d = this.noise.getChannelData(0);
@@ -108,20 +127,32 @@ class SfxService {
   play(name: SfxName): void {
     if (!this.enabled()) return;
     const now = performance.now() / 1000;
+    // Let casts/readiness/level-ups read clearly during crowded volleys.
+    const priority = name === 'ult' || name === 'snipe' || name === 'levelup' || name === 'ready' || name === 'surge' || name === 'victory';
+    if (!priority && now < this.priorityUntil && (name === 'hit' || name === 'kill' || name === 'bow' || name === 'crossbow' || name === 'fire' || name === 'thunder' || name === 'frost')) return;
     if (this.lastAt[name] !== undefined && now - this.lastAt[name] < SfxService.MIN_GAP[name]) return;
     this.lastAt[name] = now;
+    if (priority) this.priorityUntil = now + 0.18;
     const c = this.ensure();
     if (!c || c.state !== 'running') return;
     // 资源优先：美术音频已就位则播放样本，否则合成占位
     if (this.clips[name]) { this.playSample(name); return; }
     switch (name) {
       case 'shoot': this.noiseHit(0.07, 0.2, 2400); this.tone('sine', 950, 300, 0.08, 0.1); break;
-      // 命中：高频"啪"声（手机扬声器对 200Hz 低频几乎无声，改 3kHz 噪声脆响 + 780Hz 短音），
-      // 随机 ±10% 音高防机枪式单调感
+      case 'bow': this.noiseHit(0.045, 0.13, 3200); this.tone('triangle', 1120, 340, 0.075, 0.07); break;
+      case 'crossbow': this.noiseHit(0.065, 0.19, 1800); this.tone('triangle', 310, 140, 0.095, 0.13); break;
+      case 'fire': this.noiseHit(0.16, 0.16, 950, 'lowpass'); this.tone('sine', 190, 65, 0.16, 0.09); break;
+      case 'thunder': this.noiseHit(0.045, 0.17, 4200); this.tone('sawtooth', 900, 180, 0.075, 0.065); break;
+      case 'frost': this.tone('sine', 1470, 1080, 0.13, 0.08); this.tone('sine', 2200, 1700, 0.1, 0.035, 0.02); break;
+      case 'skill': this.tone('triangle', 240, 560, 0.14, 0.13); this.noiseHit(0.12, 0.14, 1800); break;
+      case 'wall': this.noiseHit(0.15, 0.22, 620, 'lowpass'); this.tone('triangle', 210, 95, 0.13, 0.14); break;
+      case 'surge': [220, 277, 330].forEach((f, i) => this.tone('triangle', f, f * 0.9, 0.32, 0.12, i * 0.1)); break;
+      case 'victory': [523, 659, 784, 1046, 1318].forEach((f, i) => this.tone('triangle', f, f, 0.22, 0.12, i * 0.1)); break;
+      // Short high-frequency contact over a compact mid-frequency body.
       case 'hit': {
         const det = 0.9 + Math.random() * 0.2;
-        this.noiseHit(0.05, 0.26, 3000 * det);
-        this.tone('triangle', 780 * det, 400, 0.06, 0.2);
+        this.noiseHit(0.025, 0.2, 2600 * det);
+        this.tone('triangle', 620 * det, 260, 0.055, 0.16);
         break;
       }
       case 'crit': {
@@ -132,17 +163,45 @@ class SfxService {
         break;
       }
       case 'kill': this.noiseHit(0.1, 0.2, 800, 'lowpass'); this.tone('triangle', 660, 90, 0.18, 0.18); break;
-      case 'ult': this.tone('sawtooth', 130, 55, 0.45, 0.2); this.noiseHit(0.35, 0.11, 500, 'lowpass'); this.tone('sine', 700, 1400, 0.3, 0.05, 0.05); break;
-      // 重狙（猎杀时刻）：低频枪声砰 + 高频弹头脆响 + 低频余震 + 高频哨尾，量感明显高于普攻
+      case 'pierce': {
+        const det = 0.94 + Math.random() * 0.12;
+        this.noiseHit(0.035, 0.24, 1800 * det);
+        this.tone('triangle', 470 * det, 150, 0.085, 0.23);
+        this.tone('sine', 230, 100, 0.1, 0.12); break;
+      }
+      case 'crush': this.noiseHit(0.055, 0.24, 1100, 'lowpass'); this.tone('triangle', 340, 100, 0.12, 0.22); break;
+      case 'zapHit': this.noiseHit(0.025, 0.17, 3900); this.tone('triangle', 610, 190, 0.075, 0.17); break;
+      case 'icebreak': {
+        const det = 0.93 + Math.random() * 0.14;
+        this.noiseHit(0.035, 0.15, 3400 * det);
+        this.tone('sine', 1700 * det, 950, 0.075, 0.065);
+        this.tone('triangle', 440, 240, 0.055, 0.1); break;
+      }
+      case 'ult': this.tone('triangle', 230, 90, 0.18, 0.19); this.noiseHit(0.08, 0.13, 900, 'lowpass'); break;
+      // Mechanical release + body + short decay; no long whistling tail.
       case 'snipe':
-        this.tone('square', 160, 45, 0.3, 0.32);
-        this.noiseHit(0.12, 0.34, 2800);
-        this.noiseHit(0.22, 0.2, 900, 'lowpass', 0.02);
-        this.tone('sine', 2200, 300, 0.24, 0.09, 0.04);
+        this.noiseHit(0.035, 0.26, 2300);
+        this.tone('triangle', 300, 80, 0.17, 0.3);
+        this.noiseHit(0.12, 0.16, 800, 'lowpass', 0.015);
         break;
       case 'levelup': [523, 659, 784, 1046].forEach((f, i) => this.tone('sine', f, f, 0.14, 0.13, i * 0.08)); break;
       case 'ready': this.tone('sine', 880, 880, 0.35, 0.11); this.tone('sine', 1318, 1318, 0.4, 0.07, 0.06); break;
     }
+  }
+
+  shoot(heroId: string): void {
+    const sounds: Record<string, SfxName> = { archer: 'bow', sniper: 'crossbow', pyro: 'fire', volt: 'thunder', mora: 'frost' };
+    this.play(sounds[heroId] || 'shoot');
+  }
+
+  /** Shared contact budget prevents five simultaneous sound families becoming a wall of noise. */
+  impact(heroId: string, heavy = false): void {
+    const now = performance.now() / 1000;
+    if (!heavy && now < this.priorityUntil || now - this.lastImpactAt < (heavy ? 0.07 : 0.11)) return;
+    this.lastImpactAt = now;
+    const name: SfxName = heroId === 'pyro' ? 'crush' : heroId === 'volt' ? 'zapHit'
+      : heroId === 'mora' ? 'icebreak' : heavy ? 'pierce' : 'hit';
+    this.play(name);
   }
 
   private env(g: GainNode, t: number, a: number, peak: number, d: number): void {
@@ -159,7 +218,7 @@ class SfxService {
     o.type = type;
     o.frequency.setValueAtTime(f0, t);
     o.frequency.exponentialRampToValueAtTime(Math.max(30, f1), t + dur);
-    this.env(g, t, 0.008, peak, dur);
+    this.env(g, t, 0.003, peak, dur);
     o.connect(g); g.connect(this.master!);
     o.start(t); o.stop(t + dur + 0.05);
   }

@@ -1,0 +1,237 @@
+{
+  "width": 1024,
+  "height": 768,
+  "nativeAlpha": true,
+  "padding": 16,
+  "transparentRGBBleed": 4,
+  "sequence": "eight coherent cels, shared scale, ivory-core / central-opening pivot",
+  "sources": {
+    "fire-sequence-source.png": "8f3f04346f676784c99fd5d072af869c8f2defe60a7e4674b105f22ce053e9d7",
+    "fire-components-refined.png": "5a02cfdd8dd316bf5a0291307042f2ce773efdbdafa26a848dc9d7e4ac83852a"
+  },
+  "alignment": {
+    "flame_0": {
+      "sourcePivot": [
+        94.63,
+        123.07
+      ],
+      "scale": 0.39576
+    },
+    "flame_1": {
+      "sourcePivot": [
+        184.29,
+        208.35
+      ],
+      "scale": 0.39576
+    },
+    "flame_2": {
+      "sourcePivot": [
+        229.02,
+        282.11
+      ],
+      "scale": 0.39576
+    },
+    "flame_3": {
+      "sourcePivot": [
+        214.43,
+        287.02
+      ],
+      "scale": 0.39576
+    },
+    "flame_4": {
+      "sourcePivot": [
+        223.0,
+        292.0
+      ],
+      "scale": 0.39576
+    },
+    "flame_5": {
+      "sourcePivot": [
+        200.0,
+        289.0
+      ],
+      "scale": 0.39576
+    },
+    "flame_6": {
+      "sourcePivot": [
+        185.0,
+        265.0
+      ],
+      "scale": 0.39576
+    },
+    "flame_7": {
+      "sourcePivot": [
+        177.0,
+        218.0
+      ],
+      "scale": 0.39576
+    },
+    "core": {
+      "sourcePivot": [
+        134.5,
+        126.5
+      ],
+      "scale": 0.40149
+    },
+    "fireball": {
+      "sourcePivot": [
+        152.0,
+        162.0
+      ],
+      "scale": 0.33333
+    },
+    "streak": {
+      "sourcePivot": [
+        123.5,
+        208.0
+      ],
+      "scale": 0.25962
+    },
+    "ember": {
+      "sourcePivot": [
+        46.5,
+        72.0
+      ],
+      "scale": 0.75
+    },
+    "smoke_a": {
+      "sourcePivot": [
+        176.0,
+        134.0
+      ],
+      "scale": 0.29508
+    },
+    "smoke_b": {
+      "sourcePivot": [
+        145.5,
+        183.0
+      ],
+      "scale": 0.29508
+    },
+    "scorch": {
+      "sourcePivot": [
+        218.0,
+        85.0
+      ],
+      "scale": 0.24771
+    },
+    "dust": {
+      "sourcePivot": [
+        195.0,
+        92.5
+      ],
+      "scale": 0.27692
+    },
+    "chip": {
+      "sourcePivot": [
+        79.0,
+        100.5
+      ],
+      "scale": 0.53731
+    }
+  },
+  "frames": {
+    "flame_0": [
+      0,
+      0,
+      256,
+      256
+    ],
+    "flame_1": [
+      256,
+      0,
+      256,
+      256
+    ],
+    "flame_2": [
+      512,
+      0,
+      256,
+      256
+    ],
+    "flame_3": [
+      768,
+      0,
+      256,
+      256
+    ],
+    "flame_4": [
+      0,
+      256,
+      256,
+      256
+    ],
+    "flame_5": [
+      256,
+      256,
+      256,
+      256
+    ],
+    "flame_6": [
+      512,
+      256,
+      256,
+      256
+    ],
+    "flame_7": [
+      768,
+      256,
+      256,
+      256
+    ],
+    "core": [
+      0,
+      512,
+      128,
+      128
+    ],
+    "fireball": [
+      128,
+      512,
+      128,
+      128
+    ],
+    "streak": [
+      256,
+      512,
+      128,
+      128
+    ],
+    "ember": [
+      384,
+      512,
+      128,
+      128
+    ],
+    "smoke_a": [
+      512,
+      512,
+      128,
+      128
+    ],
+    "smoke_b": [
+      640,
+      512,
+      128,
+      128
+    ],
+    "scorch": [
+      768,
+      512,
+      128,
+      128
+    ],
+    "dust": [
+      896,
+      512,
+      128,
+      128
+    ],
+    "chip": [
+      0,
+      640,
+      128,
+      128
+    ]
+  }
+}

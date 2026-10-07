@@ -1,12 +1,13 @@
 /**
  * 弹道（§3.5：可见追踪弹、目标死亡切换目标；子弹道直线随缘命中；对象池强制）
  * 追踪主弹命中前锁定目标；直线弹（齐射/分裂/大招箭/敌方石块）带 ttl 与碰撞去重
- * 性能：弹体为纯数据对象（无 Node），全部弹道由单个 Graphics 图层每帧一次重绘（1 draw call）
+ * 性能：弹道为池化数据；火球使用固定 Sprite 渲染池，其余弹体由单 Graphics 重绘。
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { Monster, MonsterManager } from './Monster';
 import { DamageService } from './DamageService';
 import { Particles } from './Particles';
+import { ImpactFX } from './ImpactFX';
 import { Sfx } from '../core/Sfx';
 import { bus, EVT } from '../core/EventBus';
 import { LINE_Y, LO, PAL, MAX_PROJS } from '../config/GameConfig';
@@ -98,7 +99,7 @@ export class ProjectileManager {
   private dirty = false;
 
   /** field 为专用弹道图层节点（英雄之上、飘字之下）；parts 为迸溅粒子层 */
-  constructor(field: Node, private mgr: MonsterManager, private dmg: DamageService, private parts?: Particles) {
+  constructor(field: Node, private mgr: MonsterManager, private dmg: DamageService, private parts?: Particles, private impacts?: ImpactFX) {
     field.layer = Layers.Enum.UI_2D;
     this.g = field.addComponent(Graphics);
   }
@@ -135,6 +136,10 @@ export class ProjectileManager {
   /** 命中点迸溅（狙击等瞬射击打演出用，不产生伤害） */
   sparkAt(x: number, y: number, color: string, n = 6): void {
     if (this.parts) this.parts.burst(x, y, color, n);
+  }
+
+  fireCraters(areas: readonly { x: number; y: number; t: number }[], radius: number, clock: number): boolean {
+    return this.impacts?.fireCraters(areas, radius, clock) || false;
   }
 
   /** 瞬击伤害直接记账（狙击 hitscan 不经弹道命中结算） */
@@ -193,6 +198,7 @@ export class ProjectileManager {
   private render(): void {
     const g = this.g;
     g.clear();
+    this.impacts?.beginProjectileFrame();
     this.frame++;
     for (let i = 0; i < this.active.length; i++) {
       const a = this.active[i];
@@ -203,6 +209,7 @@ export class ProjectileManager {
       const orb = s.heroId === 'volt' && !s.small && !s.enemy;
       const fire = s.heroId === 'pyro' && !s.enemy;
       const shard = s.heroId === 'mora' && !s.small && !s.enemy;
+      if (fire && this.impacts?.fireProjectile(s.x, s.y, a.vx, a.vy, size)) continue;
       // 尾迹先画（垫在弹体之下）：锥形渐隐条带 + 亮芯
       if (a.trailMax > 0) this.drawTrail(g, s, a, size, arrow);
       if (arrow) this.drawArrow(g, s, a, size);
@@ -474,24 +481,20 @@ export class ProjectileManager {
     if (sp.shockedBonus && m.shockT > 0) final *= 1 + sp.shockedBonus;
     if (sp.burnedBonus && m.burnT > 0) final *= 1 + sp.burnedBonus;
     if (sp.slowedBonus && m.slowT > 0) final *= 1 + sp.slowedBonus;
-    m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true, sp.resCut || 0);
+    const angle = Math.atan2(a.vy, a.vx);
+    const heavy = !!sp.ult || sp.heroId === 'sniper' && !!sp.ability || sp.heroId === 'pyro' && !!sp.explodeR;
+    m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true, sp.resCut || 0, angle, heavy);
     if (sp.markAmp) m.applyVuln(sp.markAmp, sp.markDur || 5);   // 猎杀标记：目标受伤+20% 5s
     this.dmg.add(sp.heroId, Math.min(final, hpBefore));
-    Sfx.play(sp.crit ? 'crit' : 'hit');
+    Sfx.impact(sp.heroId, heavy || sp.crit);
     if (this.parts) {
-      this.parts.burst(m.x, m.y, sp.color, sp.spark ? 5 : 2);
-      if (sp.heroId === 'mora') this.parts.burst(m.x, m.y, '#E8FAFF', 3, 120);   // 冰晶命中追加霜白碎屑
+      this.parts.burst(m.x, m.y, sp.color, heavy ? 5 : sp.spark ? 3 : 2, heavy ? 230 : 160, angle);
     }
-    // 暴击/击杀瞬间微顿帧（BattleDirector 限频，防连发变成卡顿）；分裂箭同款，击杀同样触发
-    if (sp.crit || m.dead) bus.emit(EVT.HIT_STOP);
+    // Reserve the short time accent for heavy hits and elite finishes.
+    if (heavy || sp.crit && sp.heroId === 'sniper' || m.dead && m.def.elite) bus.emit(EVT.HIT_STOP);
     if (m.dead) {
       this.killPop(sp, m.x, m.y + m.def.radius);
-      return;
     }
-    if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
-    if (sp.burnDps) m.applyBurn(sp.burnDps, 3);
-    if (sp.stun) m.stunT = Math.max(m.stunT, sp.stun);
-    if (sp.shockAmp) m.applyShock(sp.shockAmp, sp.shockDur ?? 3);
     if (sp.explodeR && sp.explodeR > 0) {
       for (const o of this.mgr.mobsInRadius(m.x, m.y, sp.explodeR)) {
         if (o === m || o.dead) continue;
@@ -500,8 +503,15 @@ export class ProjectileManager {
         this.dmg.add(sp.heroId, Math.min(sp.dmg * (sp.explodeMul || 0.4), ob));
         if (o.dead) this.killPop(sp, o.x, o.y + o.def.radius);
       }
-      this.boomFx(m.x, m.y, sp.explodeR);
+      if (this.impacts) this.impacts.blast(m.x, m.y, sp.heroId, sp.explodeR);
+      else this.boomFx(m.x, m.y, sp.explodeR);
     }
+    // Explosions still resolve when the directly struck enemy dies.
+    if (m.dead) return;
+    if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
+    if (sp.burnDps) m.applyBurn(sp.burnDps, 3);
+    if (sp.stun) m.stunT = Math.max(m.stunT, sp.stun);
+    if (sp.shockAmp) m.applyShock(sp.shockAmp, sp.shockDur ?? 3);
     // 分裂箭：与原弹同造型/同弹速/同词条（仅伤害减半、不再连锁分裂），
     // 只索敌目标前方（箭矢飞行方向的延伸，y 更大）的怪，绝不往回（防线方向）索敌（用户确认：往前索敌）
     if (sp.split && sp.split > 0 && !sp.small) {

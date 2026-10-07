@@ -1,84 +1,88 @@
 /**
- * 漫画拟声弹字（参考《王国保卫战》词条机制）：
- * 与事件绑定的结构化反馈，不是随机装饰。触发规则（用户确认）：
- * 只有技能/大招完成击杀才弹词（60% 概率）；普攻击杀、普通暴击不弹；
- * 怪物命中防线保留低频概率词（POW!/SOK!/咚!）。
- * 主题色与伤害来源挂钩（弓=金、狙=蓝、怪=红、石=土）；池化 + 上限丢弃限流。
+ * Event-bound comic lettering. Preserve skill/ultimate kill chances and wall-hit
+ * rules; a small spatial budget keeps simultaneous words readable.
  */
-import { Color, Label, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
+import { Color, Label, Layers, Node, UIOpacity, Vec2 } from 'cc';
 import { Pool } from '../core/ObjectPool';
-import { PAL } from '../config/GameConfig';
+import { PAL, LO } from '../config/GameConfig';
+import { applyFont } from '../ui/Fonts';
 
-/** 词条表：kind → 词组/主题色/字号/触发概率（chance<1 时 spawn 掷骰） */
 export const POP_DEFS: Record<string, { words: string[]; color: string; size: number; chance: number }> = {
-  skillKillArrow: { words: ['OOF!', 'SHUNT!'], color: PAL.gold,  size: 30, chance: 0.6 }, // 技能击杀·箭系（强化箭矢/箭雨）
-  skillKillSnipe: { words: ['AACK!'],          color: '#7FB3FF', size: 30, chance: 0.6 }, // 技能击杀·穿颅连狙
-  ultKill:        { words: ['KAPOW!'],         color: '#BFE3FF', size: 38, chance: 0.6 }, // 大招击杀·猎杀时刻
-  meleeHit:       { words: ['POW!', 'SOK!'],   color: PAL.red,   size: 26, chance: 0.3 }, // 伤害·近战概率词
-  stoneHit:       { words: ['咚!'],            color: '#B2A48B', size: 24, chance: 0.35 }, // 伤害·石弹概率词
+  skillKillArrow: { words: ['OOF!', 'SHUNT!'], color: PAL.gold, size: 32, chance: 0.6 },
+  skillKillSnipe: { words: ['AACK!'], color: '#91C8F4', size: 32, chance: 0.6 },
+  ultKill: { words: ['KAPOW!'], color: '#C8E6FF', size: 40, chance: 0.6 },
+  meleeHit: { words: ['POW!', 'SOK!'], color: PAL.red, size: 28, chance: 0.3 },
+  stoneHit: { words: ['咚!'], color: '#D0BDA0', size: 26, chance: 0.35 },
 };
-
-const MAX_ACTIVE = 12;
-const OUTLINE = '#241C12';
-
-interface Pop { node: Node; label: Label; out: Vec3; }
+const MAX_ACTIVE = 6;
+interface Pop { node: Node; label: Label; opacity: UIOpacity; x: number; y: number; age: number; }
 
 export class ComicPop {
   private pool: Pool<Pop>;
-  private active = 0;
+  private live: Pop[] = [];
   private colorCache = new Map<string, Color>();
+  private sequence = 0;
 
   constructor(private parent: Node) {
     this.pool = new Pool<Pop>(() => {
-      const n = new Node('pop');
-      n.layer = Layers.Enum.UI_2D;
-      n.setParent(this.parent);
-      const l = n.addComponent(Label);
-      l.string = '';
-      l.isBold = true;
-      l.enableOutline = true;
-      l.outlineColor = this.col(OUTLINE);
-      l.outlineWidth = 3.5;
-      return { node: n, label: l, out: new Vec3() };
-    }, t => {
-      t.node.active = false;
-      t.node.setPosition(0, 0, 0);
-      t.node.angle = 0;
-    });
+      const node = new Node('pop');
+      node.layer = Layers.Enum.UI_2D;
+      node.setParent(this.parent);
+      const label = node.addComponent(Label);
+      label.string = '';
+      label.enableWrapText = false;
+      label.enableOutline = true;
+      label.outlineColor = new Color(39, 26, 14, 255);
+      label.outlineWidth = 3;
+      label.enableShadow = true;
+      label.shadowColor = new Color(18, 13, 8, 180);
+      label.shadowOffset = new Vec2(1.5, -2);
+      label.shadowBlur = 0;
+      label.cacheMode = Label.CacheMode.BITMAP;
+      applyFont(label, 'comic');
+      return { node, label, opacity: node.addComponent(UIOpacity), x: 0, y: 0, age: 0 };
+    }, p => { p.node.active = false; p.node.angle = 0; p.opacity.opacity = 255; });
     const warm: Pop[] = [];
-    for (let i = 0; i < 8; i++) warm.push(this.pool.get());
-    for (const p of warm) this.pool.put(p);
+    for (let i = 0; i < MAX_ACTIVE; i++) warm.push(this.pool.get());
+    warm.forEach(p => this.pool.put(p));
   }
 
-  /** 在事件点弹出词条（x,y 为事件坐标；头顶再上浮 46px 由这里统一加） */
   pop(x: number, y: number, kind: string): void {
     const def = POP_DEFS[kind];
-    if (!def || this.active >= MAX_ACTIVE) return;
-    if (Math.random() > def.chance) return;
-    const word = def.words[(Math.random() * def.words.length) | 0];
+    if (!def || this.live.length >= MAX_ACTIVE || Math.random() > def.chance) return;
+    // No stack of repeated exclamations over a single tightly packed kill group.
+    if (this.live.some(p => p.age < 0.18 && Math.abs(p.x - x) < 86 && Math.abs(p.y - (y + 72)) < 70)) return;
+    const word = def.words[Math.floor(Math.random() * def.words.length)];
     const p = this.pool.get();
-    this.active++;
-    p.node.active = true;
     p.label.string = word;
     p.label.fontSize = def.size;
-    p.label.lineHeight = def.size * 1.1;
+    p.label.lineHeight = def.size * 1.4;
+    p.label.isBold = /[\u3400-\u9FFF]/.test(word);
+    applyFont(p.label, p.label.isBold ? 'body' : 'comic');
     p.label.color = this.col(def.color);
-    const sy = y + 46;
-    p.node.setPosition(x + (Math.random() * 28 - 14), sy, 0);
-    p.node.angle = Math.random() * 12 - 6;                     // 美漫字微偏转
-    p.node.setScale(0.2, 0.2, 1);
-    const op = p.node.getComponent(UIOpacity) || p.node.addComponent(UIOpacity);
-    op.opacity = 255;
-    p.out.set(p.node.position.x, sy + 14, 0);
-    // punch-in 弹出（backOut 过冲）→ 悬停 → 收缩淡出
-    tween(p.node)
-      .to(0.13, { scale: new Vec3(1.15, 1.15, 1) }, { easing: 'backOut' })
-      .to(0.08, { scale: new Vec3(1, 1, 1) })
-      .delay(0.14)
-      .to(0.15, { scale: new Vec3(0.45, 0.45, 1), position: p.out })
-      .call(() => { this.active--; this.pool.put(p); })
-      .start();
-    tween(op).delay(0.3).to(0.18, { opacity: 0 }).start();
+    const halfW = word.length * def.size * 0.31 + 12;
+    p.x = Math.max(-345 + halfW, Math.min(330 - halfW, x));
+    p.y = Math.min(LO.half - LO.notchTop - 142, y + 72);
+    p.age = 0;
+    p.node.active = true;
+    p.node.setPosition(p.x, p.y, 0);
+    p.node.angle = this.sequence++ % 2 ? 3 : -3;
+    p.node.setScale(0.72, 0.72, 1);
+    p.opacity.opacity = 255;
+    this.live.push(p);
+  }
+
+  tick(dt: number): void {
+    for (let i = this.live.length - 1; i >= 0; i--) {
+      const p = this.live[i]; p.age += dt;
+      if (p.age >= 0.54) { this.live.splice(i, 1); this.pool.put(p); continue; }
+      const scale = p.age < 0.065 ? 0.72 + 0.4 * (1 - Math.pow(1 - p.age / 0.065, 3))
+        : p.age < 0.15 ? 1.12 - 0.12 * (p.age - 0.065) / 0.085 : 1;
+      const fade = Math.min(1, (0.54 - p.age) / 0.22);
+      p.node.setScale(scale, scale, 1);
+      p.node.setPosition(p.x, p.y + Math.max(0, p.age - 0.15) * 33, 0);
+      p.opacity.opacity = Math.round(255 * fade);
+    }
   }
 
   private col(hex: string): Color {

@@ -6,6 +6,7 @@ import { Color, Graphics, Node, Vec3 } from 'cc';
 import { LINE_Y, LO, PAL } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { artSprite } from '../ui/Ux';
+import { Sfx } from '../core/Sfx';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
@@ -67,6 +68,7 @@ export class LineDefense {
     }
     if (d > 0) this.hp = Math.max(0, this.hp - d);
     bus.emit(EVT.LINE_DAMAGED, this.hp, this.maxHp, this.shield);
+    Sfx.play('wall');
     this.shake();
     if (this.hp <= 0) bus.emit(EVT.LINE_BROKEN);
   }
