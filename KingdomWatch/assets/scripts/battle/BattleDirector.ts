@@ -75,7 +75,7 @@ export class BattleDirector extends Component {
   xp = 0;
   private pickQueue = 0;
   private pickOpts: PickOpts | null = null;
-  private prepareT = 3;
+  private prepareT = 1;   // 进关 1 秒即出怪（用户反馈：3 秒等待太久）
   private fpsAcc = 0;
   private fpsN = 0;
 

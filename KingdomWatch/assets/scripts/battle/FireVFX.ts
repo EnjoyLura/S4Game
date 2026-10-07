@@ -191,7 +191,7 @@ export class FireVFX {
     if (this.clipsActive.length >= CLIP_CAP) return true;
     const clip = this.clipFree.pop();
     if (!clip) return true;
-    const scale = (heavy ? 58 : 44) / PYRO_FLAME_W;
+    const scale = (heavy ? 42 : 30) / PYRO_FLAME_W;
     clip.age = 0; clip.scale = scale;
     clip.part.node.active = true;
     // 格内火焰质心在中心下方 (PYRO_ANCHOR_Y−CELL/2)px：把质心对到命中点，烟雾自然升到上方
