@@ -36,7 +36,11 @@ export class ImpactFX {
   }
 
   hit(x: number, y: number, hero: string, heavy: boolean, angle?: number): void {
-    if (hero === 'pyro' && this.fire.hit(x, y, heavy, angle)) return;
+    if (hero === 'pyro') {
+      // 首选图生视频灼烧序列；未就绪退回引擎火团，再退回矢量描边。
+      if (this.fire.hitClip(x, y, heavy)) return;
+      if (this.fire.hit(x, y, heavy, angle)) return;
+    }
     this.contact(x, y, hero, heavy, angle);
   }
 

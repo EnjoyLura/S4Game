@@ -7,6 +7,7 @@ interface Part { node: Node; sprite: Sprite; frame: string; }
 interface Fragment { part: Part; vx: number; vy: number; spin: number; }
 interface Flight { root: Node; body: Part; tail: Part; }
 interface Residue { root: Node; scorch: Part; embers: Part[]; }
+interface Clip { part: Part; age: number; scale: number; }
 interface Burst {
   root: Node; ground: Node; core: Part; flames: Part[]; smoke: Part[]; dust: Part; scorch: Part;
   fragments: Fragment[]; age: number; life: number; radius: number; angle: number; blast: boolean; heavy: boolean;
@@ -20,6 +21,13 @@ const RESIDUE_CAP = 8;
 const FLAME_IDS = ['flame_0', 'flame_1', 'flame_2', 'flame_3', 'flame_4', 'flame_5', 'flame_6', 'flame_7'];
 // Short ignition, solid peak, then outgoing wisps. Blend only at cel boundaries.
 const FLAME_TIME = [0, 0.018, 0.045, 0.10, 0.155, 0.210, 0.270, 0.320, 0.360];
+// 图生视频命中序列（fx/pyro_hit，16 格 256px）：快攻绽放 → 慢衰余焰烟雾，纯黑底 ADD 混合。
+const CLIP_CAP = 6;
+const PYRO_CELL = 256;
+const PYRO_CELS = 16;
+const PYRO_CEL_DUR = [0.05, 0.05, 0.05, 0.05, 0.075, 0.075, 0.075, 0.075, 0.105, 0.105, 0.105, 0.105, 0.15, 0.15, 0.15, 0.15];
+const PYRO_ANCHOR_Y = 157;  // 首格火焰亮度质心（格内坐标，自顶向下）
+const PYRO_FLAME_W = 116;   // 首格火焰宽度（决定格缩放 → 屏上火焰尺寸）
 const clamp = (v: number): number => Math.max(0, Math.min(1, v));
 const smooth = (v: number): number => { const t = clamp(v); return t * t * (3 - 2 * t); };
 
@@ -28,6 +36,10 @@ export class FireVFX {
   readonly groundRoot: Node;
   loaded = false;
   private frames = new Map<string, SpriteFrame>();
+  private clipFrames = new Map<string, SpriteFrame>();
+  private clipFree: Clip[] = [];
+  private clipsActive: Clip[] = [];
+  private clipLoaded = false;
   private material: Material | null = null;
   private active: Burst[] = [];
   private free: Burst[] = [];
@@ -52,6 +64,26 @@ export class FireVFX {
       const tail = this.part('fireTail', root), body = this.part('fireball', root);
       root.active = false; this.flights.push({ root, body, tail });
     }
+    for (let i = 0; i < CLIP_CAP; i++) {
+      const part = this.part('fireClip' + i, this.root);
+      part.node.active = false;
+      this.clipFree.push({ part, age: 0, scale: 1 });
+    }
+    resources.load('fx/pyro_hit.frames', JsonAsset, (err, data) => {
+      if (err || !data || !this.root.isValid) return;
+      resources.load('fx/pyro_hit/spriteFrame', SpriteFrame, (error, source) => {
+        if (error || !source || !this.root.isValid) return;
+        const rects = (data.json as { frames: Record<string, number[]> }).frames;
+        for (const id of Object.keys(rects)) {
+          const [x, y, w, h] = rects[id];
+          const frame = new SpriteFrame();
+          frame.reset({ texture: source.texture, rect: new Rect(x, y, w, h), originalSize: new Size(w, h), offset: new Vec2() });
+          frame.packable = false;
+          this.clipFrames.set(id, frame);
+        }
+        this.clipLoaded = true;
+      });
+    });
     resources.load('fx/fire_v2.frames', JsonAsset, (err, data) => {
       if (err || !data || !this.root.isValid) return;
       resources.load('fx/fire_v2/spriteFrame', SpriteFrame, (error, source) => {
@@ -76,6 +108,7 @@ export class FireVFX {
     });
     this.root.once(Node.EventType.NODE_DESTROYED, () => {
       this.material?.destroy(); this.frames.forEach(frame => frame.destroy());
+      this.clipFrames.forEach(frame => frame.destroy());
     });
   }
 
@@ -149,6 +182,39 @@ export class FireVFX {
     const burst = this.obtain(false);
     if (burst) this.start(burst, x, y, heavy ? 22 : 14, angle, false, heavy);
     return true;
+  }
+
+  /** 图生视频命中序列：直接命中处的灼烧 + 消散。加载失败/未就绪返回 false 走引擎兜底。 */
+  hitClip(x: number, y: number, heavy: boolean): boolean {
+    if (!this.clipLoaded || !this.material) return false;
+    if (this.clipsActive.length >= CLIP_CAP) return true;
+    const clip = this.clipFree.pop();
+    if (!clip) return true;
+    const scale = (heavy ? 96 : 78) / PYRO_FLAME_W;
+    clip.age = 0; clip.scale = scale;
+    clip.part.node.active = true;
+    // 格内火焰质心在中心下方 (PYRO_ANCHOR_Y−CELL/2)px：把质心对到命中点，烟雾自然升到上方
+    clip.part.node.setPosition(x, y + (PYRO_ANCHOR_Y - PYRO_CELL / 2) * scale, 0);
+    clip.part.node.getComponent(UITransform)!.setContentSize(PYRO_CELL * scale, PYRO_CELL * scale);
+    clip.part.sprite.customMaterial = this.material;
+    clip.part.frame = '';
+    this.clipsActive.push(clip);
+    return true;
+  }
+
+  private renderClip(clip: Clip): void {
+    let acc = 0, index = PYRO_CELS - 1;
+    for (let i = 0; i < PYRO_CELS; i++) {
+      acc += PYRO_CEL_DUR[i];
+      if (clip.age < acc) { index = i; break; }
+    }
+    const id = 'pyro_hit_' + index;
+    if (clip.part.frame !== id) {
+      clip.part.sprite.spriteFrame = this.clipFrames.get(id) || null;
+      clip.part.frame = id;
+    }
+    this.tint.set(255, 255, 255, 255);
+    clip.part.sprite.color = this.tint;
   }
 
   blast(x: number, y: number, radius: number): boolean {
@@ -242,6 +308,14 @@ export class FireVFX {
       if (b.age >= b.life) {
         b.root.active = b.ground.active = false; this.active.splice(i, 1); this.free.push(b);
       } else this.render(b);
+    }
+    let total = 0;
+    for (const d of PYRO_CEL_DUR) total += d;
+    for (let i = this.clipsActive.length - 1; i >= 0; i--) {
+      const clip = this.clipsActive[i]; clip.age += dt;
+      if (clip.age >= total) {
+        clip.part.node.active = false; this.clipsActive.splice(i, 1); this.clipFree.push(clip);
+      } else this.renderClip(clip);
     }
   }
 }
