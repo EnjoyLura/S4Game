@@ -68,5 +68,47 @@
     "mode": "RGBA",
     "seconds": 41.0,
     "sha1": "f53d268cc8e1"
+  },
+  "MC6_卡面士气高涨": {
+    "id": "MC6_卡面士气高涨",
+    "file": "D:/AI/S4Game/美术/原图/批次16_冰法卡组_2026-10-06\\MC6_卡面士气高涨.png",
+    "prompt": "Square game card icon, full-bleed: a frozen war banner flag with a bold upward arrow woven in ice crystals, snowflakes drifting around, cold blue and white tones. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-07 15:54:48",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 36.2,
+    "sha1": "b178294b689d"
+  },
+  "MC7_卡面碎冰": {
+    "id": "MC7_卡面碎冰",
+    "file": "D:/AI/S4Game/美术/原图/批次16_冰法卡组_2026-10-06\\MC7_卡面碎冰.png",
+    "prompt": "Square game card icon, full-bleed: a shattered block of ice bursting apart with sharp crystal fragments flying and deep cracks, cold blue tones with white highlights. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-07 15:55:24",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 47.8,
+    "sha1": "468b1167727a"
+  },
+  "MC8_卡面绝对零度": {
+    "id": "MC8_卡面绝对零度",
+    "file": "D:/AI/S4Game/美术/原图/批次16_冰法卡组_2026-10-06\\MC8_卡面绝对零度.png",
+    "prompt": "Square game card icon, full-bleed: a massive jagged glacier peak under a swirling blizzard spiral, deep frozen blue tones with pale cyan snow streaks. Kingdom Rush inspired hand-painted cartoon game art, bold simple symbol readable at small size. Transparent background around the square icon edges. Strictly NO text, NO letters, NO border frame, NO glow halo.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-07 15:56:12",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "seconds": 35.9,
+    "sha1": "7a9d5b8fe63a"
   }
 }

@@ -36,6 +36,8 @@ const CARD_ART: Record<string, string> = {
   pyro_eager: 'ui_card_fast_charge_a', // 火法·激昂 ← 快速充能（能量体）
   volt_cd: 'ui_card_cd_cut',          // 雷法·冷却缩减 ← 冷却缩减（沙漏）
   volt_eager: 'ui_card_fast_charge_a',// 雷法·激昂 ← 快速充能（能量体）
+  mora_cd: 'ui_card_cd_cut',          // 冰法·冷却缩减 ← 冷却缩减（沙漏）
+  mora_eager: 'ui_card_fast_charge_a',// 冰法·激昂 ← 快速充能（能量体）
 };
 
 export class Panels {
