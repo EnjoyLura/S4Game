@@ -8,6 +8,10 @@ import { LINE_Y, PAL, SPAWN_Y } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { BattleSprite } from './BattleSprite';
 import { FloatEvent } from './FloatText';
+import { getMobAnims, MobClip } from './MobAnim';
+
+/** 攻击序列帧一次性时长（s）：与 lunge 0.2s 前摇错开，收招略长观感更实 */
+const ATK_ANIM = 0.34;
 
 export type MonsterHitCtx = {
   floatParent: Node;
@@ -42,6 +46,9 @@ export class Monster {
   vulnAmp = 0;
   /** 冲撞/投掷前摇演出剩余时间（手动衰减，避免逐次创建 tween） */
   lungeT = 0;
+  /** 攻击序列帧一次性播放剩余时间（atkAnimT>0 时压过步态帧） */
+  private atkAnimT = 0;
+  private anims: Map<string, MobClip> | null = null;
 
   private g!: Graphics;
   private ctx!: MonsterHitCtx;
@@ -70,6 +77,7 @@ export class Monster {
     this.atkT = def.atkInterval;
     this.healT = def.atkInterval;
     this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = this.lungeT = this.flashT = 0;
+    this.atkAnimT = 0;
     this.slowAmp = 0.2;
     this.shockT = this.shockAmp = 0;
     this.vulnT = this.vulnAmp = 0;
@@ -94,14 +102,38 @@ export class Monster {
     }
     this.art.node.setPosition(0, -r * 0.82, 0);
     this.art.show(this.def.id, r * 2.85);
+    getMobAnims(a => { this.anims = a; });
     Tween.stopAllByTarget(this.art.node);
     this.art.node.setScale(1, 1, 1); this.art.node.angle = 0;
     this.art.tint(Color.WHITE);
     if (this.art.loaded) this.g.enabled = false;
   }
 
-  private tickArt(): void {
+  private tickArt(dt: number): void {
     if (!this.art?.loaded) return;
+    const clip = this.anims?.get(this.def.id);
+    if (clip && clip.walk.length) {
+      // 序列帧模式：攻击一次性 > 步态循环（速度映射播放速率，减速同步变慢）> 待机第 0 帧
+      const h = this.def.radius * 2.85;
+      if (this.atkAnimT > 0 && clip.attack.length) {
+        this.atkAnimT = Math.max(0, this.atkAnimT - dt);
+        const p = 1 - this.atkAnimT / ATK_ANIM;
+        this.art.showSeq(clip.attack, Math.min(clip.attack.length - 1, Math.floor(p * clip.attack.length)), h);
+      } else if (this.state === 'move' && this.stunT <= 0) {
+        const slowMul = this.slowT > 0 ? (1 - this.slowAmp) : 1;
+        // 步态节奏：8 帧源片约 2.3s 一个完整步态环；speed/45 映射后小怪轻快、精英沉重
+        const cps = Math.min(1.15, Math.max(0.55, this.def.speed / 45)) * slowMul;
+        this.art.showSeq(clip.walk, Math.floor(this.life * cps * clip.walk.length) % clip.walk.length, h);
+      } else {
+        this.art.showSeq(clip.walk, 0, h);
+      }
+      const tint = this.flashT > 0 ? '#FF9990' : this.slowT > 0 ? '#B5E9FA' : this.shockT > 0 ? '#D8B5FF' : '#FFFFFF';
+      if (tint !== this.lastTint) { this.lastTint = tint; Color.fromHEX(this.tint, tint); this.art.tint(this.tint); }
+      if (this.flashNode) this.flashNode.active = false;
+      if (this.frostNode) this.frostNode.active = false;
+      return;
+    }
+    // 程序化步态兜底（序列帧缺失时保留旧行为）
     const moving = this.state === 'move' && this.stunT <= 0;
     const gait = moving ? Math.sin(this.life * (this.def.id === 'wolf_rider' ? 12 : 8)) : 0;
     this.art.node.angle = gait * 2.2;
@@ -226,7 +258,7 @@ export class Monster {
       if (this.frostNode.active !== frozen) this.frostNode.active = frozen;
       if (frozen) this.frostOp.opacity = 255;
     }
-    this.tickArt();
+    this.tickArt(dt);
     if (this.stunT > 0) { this.stunT -= dt; return; }
     if (this.slowT > 0) this.slowT -= dt;
     if (this.shockT > 0) this.shockT -= dt;
@@ -258,6 +290,7 @@ export class Monster {
       if (this.atkT <= 0) {
         this.atkT = this.def.atkInterval;
         if (this.def.kind === 'heal') {
+          this.atkAnimT = ATK_ANIM;   // 萨满施法也走攻击一次性帧（缺 attack 段则自动退化为待机帧）
           mgr.healAround(this, 160, this.def.healAmount || 40);
         } else {
           line.takeDamage(this.def.dmg);
@@ -277,6 +310,7 @@ export class Monster {
 
   private lunge(): void {
     this.lungeT = 0.2;
+    this.atkAnimT = ATK_ANIM;
   }
 
   /** 受击；crit 用于飘字样式；ignoreRes=无视物抗（狙击大招等）；返回是否击杀

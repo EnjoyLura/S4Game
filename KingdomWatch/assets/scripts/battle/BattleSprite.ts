@@ -5,7 +5,7 @@
 import { Color, JsonAsset, Layers, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
 import { uxFrame } from '../ui/Ux';
 
-type AtlasId = 'battle_mobs_v2' | 'battle_heroes_v2';
+type AtlasId = 'battle_mobs_v2' | 'battle_heroes_v2' | 'battle_mob_anim_v1';
 interface FrameManifest { frames: Record<string, [number, number, number, number]>; }
 interface Atlas { frames: Map<string, SpriteFrame>; }
 const atlases = new Map<AtlasId, Atlas>();
@@ -47,6 +47,9 @@ export class BattleSprite {
   private frame = '';
   private height = 100;
   private atlas: Atlas | null = null;
+  /** 序列帧模式（showSeq 写入；show() 清除回到静态帧） */
+  private seqFrames: SpriteFrame[] | null = null;
+  private seqIndex = -1;
 
   constructor(parent: Node, atlasId: AtlasId, private onLoaded: () => void) {
     this.node.layer = Layers.Enum.UI_2D;
@@ -64,13 +67,35 @@ export class BattleSprite {
   }
 
   show(frame: string, height: number): void {
-    if (frame === this.frame && height === this.height) return;
+    if (frame === this.frame && height === this.height && !this.seqFrames) return;
+    this.seqFrames = null;
     this.frame = frame;
     this.height = height;
     this.apply();
   }
 
+  /** 序列帧模式：按 index 切换预解析帧（高度不变时零 setContentSize；同帧同位零操作） */
+  showSeq(frames: SpriteFrame[], index: number, height: number): void {
+    if (!frames.length) { this.seqFrames = null; return; }
+    const i = index < 0 ? 0 : index >= frames.length ? frames.length - 1 : index;
+    if (this.seqFrames === frames && i === this.seqIndex && height === this.height) return;
+    this.seqFrames = frames;
+    this.seqIndex = i;
+    this.frame = '';
+    this.height = height;
+    if (this.atlas) this.applySeq(frames[i]);
+  }
+
+  private applySeq(sf: SpriteFrame): void {
+    if (!this.node.isValid) return;
+    this.sprite.spriteFrame = sf;
+    this.node.getComponent(UITransform)!.setContentSize(this.height * sf.rect.width / sf.rect.height, this.height);
+    this.node.active = true;
+    if (!this.loaded) { this.loaded = true; this.onLoaded(); }
+  }
+
   private apply(): void {
+    if (this.seqFrames) { this.applySeq(this.seqFrames[this.seqIndex]); return; }
     const sf = this.atlas?.frames.get(this.frame);
     if (!this.node.isValid) return;
     if (!sf) { this.node.active = false; this.loaded = false; return; }

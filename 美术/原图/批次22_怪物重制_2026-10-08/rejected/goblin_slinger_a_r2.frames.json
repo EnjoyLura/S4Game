@@ -1,0 +1,40 @@
+{
+ "frames": {
+  "goblin_slinger_a0": [
+   0,
+   0,
+   160,
+   160
+  ],
+  "goblin_slinger_a1": [
+   160,
+   0,
+   160,
+   160
+  ],
+  "goblin_slinger_a2": [
+   320,
+   0,
+   160,
+   160
+  ],
+  "goblin_slinger_a3": [
+   480,
+   0,
+   160,
+   160
+  ],
+  "goblin_slinger_a4": [
+   640,
+   0,
+   160,
+   160
+  ],
+  "goblin_slinger_a5": [
+   800,
+   0,
+   160,
+   160
+  ]
+ }
+}

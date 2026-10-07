@@ -1,43 +1,43 @@
 {
-  "source": "mob_sheet.png",
+  "source": "batch22 mob sprites (mob_atlas_repack.py)",
   "atlas": "battle_mobs_v2.png",
   "width": 1536,
   "height": 1024,
   "frames": {
     "goblin_worker": [
+      76,
       24,
-      51,
-      464,
-      437
+      359,
+      464
     ],
     "goblin_slinger": [
-      536,
+      566,
       24,
-      463,
+      403,
       464
     ],
     "goblin_shaman": [
-      1048,
-      41,
-      464,
-      447
+      1125,
+      24,
+      310,
+      464
     ],
     "wolf_rider": [
-      90,
+      109,
       536,
-      331,
+      294,
       464
     ],
     "goblin_brute": [
+      579,
       536,
-      565,
-      464,
-      435
+      378,
+      464
     ],
     "goblin_king": [
-      1058,
+      1053,
       536,
-      444,
+      454,
       464
     ]
   }
