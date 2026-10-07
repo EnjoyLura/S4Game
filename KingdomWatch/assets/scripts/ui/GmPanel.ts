@@ -1,7 +1,7 @@
 /**
  * GM 后台（调试用）：按系统分类页签（战斗/英雄/卡片/经济/存档/系统）
  * 入口：左列 GM 浮钮（save.debug 或 URL ?gm=1 时显示）
- * 打开即冻结战斗（running→paused），关闭恢复；升级三选一队列在恢复时弹出
+ * 打开不暂停战斗（用户要求）；期间升级的三选一在关闭时补弹
  */
 import { game, Node, view } from 'cc';
 import { expNeed, LO, PAL } from '../config/GameConfig';
@@ -30,7 +30,6 @@ export class GmPanel {
   private btnNode: Node;
   private forceShow: boolean;
   private tab: Tab = '战斗';
-  private resumeOnClose = false;
   private panelRef: Node | null = null;
   private body: Node | null = null;
   private ry = 0;
@@ -50,10 +49,7 @@ export class GmPanel {
     if (this.layer.children.length > 0) return;
     // 三选一/结算期间不开 GM（直接胜利等操作在这些状态下会被拒，避免误触无反馈）
     if (this.dir.state !== 'running' && this.dir.state !== 'prepare' && this.dir.state !== 'paused') return;
-    if (this.dir.state === 'running') {
-      this.dir.state = 'paused';
-      this.resumeOnClose = true;
-    }
+    // 不冻结战斗（用户要求：面板开着时游戏继续跑）；升级三选一在面板打开期间挂起，关闭时补弹
     this.btnNode.active = false; // 浮钮藏起，避免透过遮罩压在页签上
     this.rebuild();
   }
@@ -64,11 +60,11 @@ export class GmPanel {
     this.panelRef = null;
     this.body = null;
     this.btnNode.active = loadSave().debug || this.forceShow;
-    if (this.resumeOnClose) {
-      this.resumeOnClose = false;
-      this.dir.gmResume();
-    }
+    this.dir.gmResume(); // 面板期间排队的升级三选一在此时弹出
   }
+
+  /** 面板是否打开（BattleDirector 挂起三选一用） */
+  get panelOpen(): boolean { return this.layer.children.length > 0; }
 
   /** 每帧同步浮钮可见性：面板开着 / 三选一 / 结算期间一律隐藏（BattleDirector.update 驱动） */
   syncVisibility(): void {

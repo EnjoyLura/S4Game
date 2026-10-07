@@ -1,0 +1,17 @@
+{
+  "name": "batch21_crater",
+  "outdir": "美术/原图/批次21_陨石坑_2026-10-07",
+  "defaults": { "model": "gpt-image-2", "quality": "high", "background": "transparent", "key": "a3", "size": "1024x1024" },
+  "items": [
+    {
+      "id": "crater_base",
+      "type": "generate",
+      "prompt": "Top-down view of a fresh meteor impact crater on dark brown soil, hand-painted cartoon ground decal for a tower defense game, Kingdom Rush inspired. Circular crater with an irregular raised rim of charred earth clods and a few small rocks, dark charcoal inner bowl slightly deeper at center, thin faint dry cracks radiating outward from the rim. Muted restrained colors: deep browns, charcoal, warm dark umber. Flat hand-painted shading, subtle and grounded. No fire, no flames, no smoke, no glowing lava, no text, no border, no glow halo."
+    },
+    {
+      "id": "crater_glow",
+      "type": "generate",
+      "prompt": "Top-down spider-web of thin glowing lava fissures radiating from a center point, on a pure solid black background. A few tiny hand-painted flames flicker where cracks intersect, the innermost cracks brightest. This is the glow layer of a fresh meteor crater for a cartoon tower defense game. Muted restrained glow: dim ivory core, soft orange, deep warm red outer cracks. Not vivid, not exaggerated, no smoke, no lens flare, no text, no border, flat hand-painted cel look."
+    }
+  ]
+}

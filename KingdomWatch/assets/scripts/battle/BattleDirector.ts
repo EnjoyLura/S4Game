@@ -270,7 +270,7 @@ export class BattleDirector extends Component {
       need = this.expNeed(this.heroLevel);
       bus.emit(EVT.LEVEL_UP, this.heroLevel);
     }
-    if (this.pickQueue > 0 && this.state === 'running') this.openPick();
+    if (this.pickQueue > 0 && this.state === 'running' && !this.gm.panelOpen) this.openPick(); // GM 面板开着时挂起，关闭时补弹
   }
 
   private expNeed(l: number): number {
