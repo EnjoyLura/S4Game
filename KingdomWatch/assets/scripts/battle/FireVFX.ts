@@ -6,7 +6,7 @@ import { Color, EffectAsset, JsonAsset, Layers, Material, Node, Rect, resources,
 interface Part { node: Node; sprite: Sprite; frame: string; }
 interface Fragment { part: Part; vx: number; vy: number; spin: number; }
 interface Flight { root: Node; body: Part; tail: Part; }
-interface Residue { root: Node; mark: Part; glow: Part; }
+interface Residue { mark: Part; glow: Part; }
 interface Clip { part: Part; age: number; scale: number; }
 interface Burst {
   root: Node; ground: Node; core: Part; flames: Part[]; smoke: Part[]; dust: Part; scorch: Part;
@@ -55,12 +55,15 @@ export class FireVFX {
   constructor(parent: Node, groundParent: Node, projectileParent: Node) {
     this.root = this.node('fireVfx', parent);
     this.groundRoot = this.node('fireGround', groundParent);
+    // 坑分两层：焦痕垫底、余烬叠顶。同层兄弟按序渲染，跨坑时先铺全部焦痕再叠全部余烬。
+    const markLayer = this.node('fireCraterMark', this.groundRoot);
+    const glowLayer = this.node('fireCraterGlow', this.groundRoot);
     for (let i = 0; i < CAP; i++) this.free.push(this.create());
     for (let i = 0; i < RESIDUE_CAP; i++) {
-      const root = this.node('fireResidue', this.groundRoot);
-      const mark = this.part('craterMark', root);
-      const glow = this.part('craterGlow', root);
-      root.active = false; this.residues.push({ root, mark, glow });
+      const mark = this.part('craterMark' + i, markLayer);
+      const glow = this.part('craterGlow' + i, glowLayer);
+      mark.node.active = false; glow.node.active = false;
+      this.residues.push({ mark, glow });
     }
     for (let i = 0; i < FLIGHT_CAP; i++) {
       const root = this.node('fireFlight', projectileParent);
@@ -152,23 +155,30 @@ export class FireVFX {
   /** Read-only view of the hero's existing four-second burn areas. */
   craters(areas: readonly { x: number; y: number; t: number }[], radius: number, clock: number): boolean {
     if (!this.loaded) return false;
-    for (let i = 0; i < this.residues.length; i++) {
-      const residue = this.residues[i], c = areas[areas.length - 1 - i];
-      residue.root.active = !!c;
-      if (!c) continue;
-      residue.root.setPosition(c.x, c.y - 6, 0);
+    const slots = this.residues;
+    const n = Math.min(slots.length, areas.length);
+    for (let i = n; i < slots.length; i++) { slots[i].mark.node.active = false; slots[i].glow.node.active = false; }
+    // 所有坑共用 mark 层与 glow 层：先铺全部焦痕、再叠全部余烬，跨坑不再互相盖。
+    for (let i = 0; i < n; i++) {
+      const c = areas[areas.length - 1 - i];
       const seed = Math.sin(c.x * 0.017 + c.y * 0.013);
       const fade = Math.min(1, c.t / 0.8, clamp((4 - c.t) / 0.08));
+      let k = 0;
+      for (let j = 0; j < areas.length; j++) {
+        if (Math.hypot(areas[j].x - c.x, areas[j].y - c.y) < radius) k++;
+      }
+      const atten = 1 / Math.sqrt(Math.max(1, k));   // 近邻越多越衰减，叠点不烧成实心红饼
       if (this.craterLoaded) {
-        // 王国保卫战式焦痕：地面炭斑贴片 + 余烬呼吸光（约 2s 一息），无火苗。
-        // 余烬贴图带 70 亮度门槛：暗斑点透明、亮炭芯脉动，保证焦炭为主体。
-        const angle = seed * 7;
-        this.drawFrame(residue.mark, 'mark', radius * 2.45, 255 * fade, 0, 0, angle, 1, this.craterFrames);
-        const pulse = 0.5 + 0.5 * Math.sin(clock * Math.PI * 1.05 + seed * 2.1);
-        this.drawFrame(residue.glow, 'embers', radius * 2.3, (110 + 145 * pulse) * fade, 0, 0, angle, 1, this.craterFrames);
+        // 沙环已从贴片抠除：叠加只会炭压炭加深，不会出现盖沙拼布。
+        this.drawFrame(slots[i].mark, 'mark', radius * 2.45, 255 * fade, c.x, c.y - 6, seed * 7, 1, this.craterFrames);
       } else {
-        // 贴片未就绪时退回引擎炭印。
-        this.draw(residue.mark, 'scorch', radius * 2.55, 118 * fade, 0, 0, seed * 7, 1.5);
+        this.draw(slots[i].mark, 'scorch', radius * 2.55, 118 * fade * atten, c.x, c.y - 6, seed * 7, 1.5);
+      }
+      if (this.craterLoaded) {
+        const pulse = 0.5 + 0.5 * Math.sin(clock * Math.PI * 1.05 + seed * 2.1);
+        this.drawFrame(slots[i].glow, 'embers', radius * 2.3, (110 + 145 * pulse) * fade * atten, c.x, c.y - 6, seed * 7, 1, this.craterFrames);
+      } else {
+        slots[i].glow.node.active = false;
       }
     }
     return true;

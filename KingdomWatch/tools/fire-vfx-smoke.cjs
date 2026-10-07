@@ -58,7 +58,7 @@ async function recordBattle(page, name) {
         watch.maxActive = Math.max(watch.maxActive, fire.active.length);
         watch.maxBlasts = Math.max(watch.maxBlasts, fire.active.filter(b => b.blast).length);
         watch.maxFlights = Math.max(watch.maxFlights, fire.flightCount);
-        watch.maxResidues = Math.max(watch.maxResidues, fire.residues.filter(r => r.root.active).length);
+        watch.maxResidues = Math.max(watch.maxResidues, fire.residues.filter(r => r.mark.node.active).length);
         watch.legacyCrater ||= !!pyro.craterNode;
         watch.movement = Math.max(watch.movement, Math.hypot(d.field.position.x - origin.x, d.field.position.y - origin.y));
         if (elapsed > 0.55 && watch.cast === null) watch.cast = d.tryCastUlt(d.heroes.indexOf(pyro));
