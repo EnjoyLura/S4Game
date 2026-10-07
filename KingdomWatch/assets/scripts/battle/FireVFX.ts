@@ -6,7 +6,7 @@ import { Color, EffectAsset, JsonAsset, Layers, Material, Node, Rect, resources,
 interface Part { node: Node; sprite: Sprite; frame: string; }
 interface Fragment { part: Part; vx: number; vy: number; spin: number; }
 interface Flight { root: Node; body: Part; tail: Part; }
-interface Residue { root: Node; scorch: Part; embers: Part[]; }
+interface Residue { root: Node; scorch: Part; embers: Part[]; flames: Part[]; }
 interface Clip { part: Part; age: number; scale: number; }
 interface Burst {
   root: Node; ground: Node; core: Part; flames: Part[]; smoke: Part[]; dust: Part; scorch: Part;
@@ -58,7 +58,9 @@ export class FireVFX {
       const root = this.node('fireResidue', this.groundRoot);
       const scorch = this.part('craterScorch', root);
       const embers = Array.from({ length: 3 }, (_, j) => this.part('craterEmber' + j, root));
-      root.active = false; this.residues.push({ root, scorch, embers });
+      // 坑内小火舌：循环 pyro_hit 小格（跳过最大绽放格），低亮度闪烁
+      const flames = Array.from({ length: 2 }, (_, j) => this.part('craterFlame' + j, root));
+      root.active = false; this.residues.push({ root, scorch, embers, flames });
     }
     for (let i = 0; i < FLIGHT_CAP; i++) {
       const root = this.node('fireFlight', projectileParent);
@@ -141,6 +143,19 @@ export class FireVFX {
       const fade = Math.min(1, c.t / 0.8, clamp((4 - c.t) / 0.08));
       const neighbours = areas.reduce((n, a) => n + (Math.hypot(a.x - c.x, a.y - c.y) < radius ? 1 : 0), 0);
       this.draw(residue.scorch, 'scorch', radius * 2.55, 118 * fade / Math.sqrt(Math.max(1, neighbours)), 0, 0, seed * 7, 1.5);
+      // 地面小火舌：出生 0.35s 内渐入（陨石爆闪先撑住第一眼），循环格 2..9，克制不抢戏
+      if (this.clipLoaded) {
+        const fadeIn = clamp((4 - c.t) / 0.35);
+        for (let k = 0; k < residue.flames.length; k++) {
+          const ang = seed * 2.9 + k * 2.63 + 1.2;
+          const fx = Math.cos(ang) * radius * (0.28 + k * 0.20);
+          const fy = Math.sin(ang) * radius * 0.42 + (k - 0.5) * 5;
+          const idx = 2 + (Math.floor(clock * 9 + seed * 11 + k * 3.7) % 6);   // 只用带火焰主体的格，避免循环中断火
+          const flicker = 0.55 + 0.45 * Math.sin(clock * 6.3 + k * 2.4 + seed * 5);
+          this.drawFrame(residue.flames[k], 'pyro_hit_' + idx, radius * (0.26 + 0.04 * flicker),
+            (100 + 90 * flicker) * fade * fadeIn, fx, fy + 4, 0, 1, this.clipFrames);
+        }
+      }
       for (let k = 0; k < residue.embers.length; k++) {
         const phase = (clock * 0.7 + seed * 0.21 + k * 0.31 + 1) % 1;
         const angle = seed * 1.7 + k * 2.1;
@@ -191,7 +206,7 @@ export class FireVFX {
     if (this.clipsActive.length >= CLIP_CAP) return true;
     const clip = this.clipFree.pop();
     if (!clip) return true;
-    const scale = (heavy ? 42 : 30) / PYRO_FLAME_W;
+    const scale = (heavy ? 27 : 21) / PYRO_FLAME_W;
     clip.age = 0; clip.scale = scale;
     clip.part.node.active = true;
     // 格内火焰质心在中心下方 (PYRO_ANCHOR_Y−CELL/2)px：把质心对到命中点，烟雾自然升到上方
@@ -257,10 +272,14 @@ export class FireVFX {
   }
 
   private draw(part: Part, frame: string, width: number, alpha: number, x = 0, y = 0, angle = 0, ratio = 1): void {
+    this.drawFrame(part, frame, width, alpha, x, y, angle, ratio, this.frames);
+  }
+
+  private drawFrame(part: Part, frame: string, width: number, alpha: number, x: number, y: number, angle: number, ratio: number, frames: Map<string, SpriteFrame>): void {
     const visible = alpha > 0.5 && width > 0;
     part.node.active = visible;
     if (!visible) return;
-    if (part.frame !== frame) { part.sprite.spriteFrame = this.frames.get(frame)!; part.frame = frame; }
+    if (part.frame !== frame) { part.sprite.spriteFrame = frames.get(frame) || null; part.frame = frame; }
     part.node.getComponent(UITransform)!.setContentSize(width, width * ratio);
     part.node.setPosition(x, y, 0); part.node.angle = angle;
     this.tint.set(255, 255, 255, Math.round(Math.min(255, alpha))); part.sprite.color = this.tint;
