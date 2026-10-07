@@ -24,10 +24,11 @@ const FLAME_TIME = [0, 0.018, 0.045, 0.10, 0.155, 0.210, 0.270, 0.320, 0.360];
 // 图生视频命中序列（fx/pyro_hit，16 格 256px）：快攻绽放 → 慢衰余焰烟雾，纯黑底 ADD 混合。
 const CLIP_CAP = 6;
 const PYRO_CELL = 256;
-const PYRO_CELS = 16;
-const PYRO_CEL_DUR = [0.05, 0.05, 0.05, 0.05, 0.075, 0.075, 0.075, 0.075, 0.105, 0.105, 0.105, 0.105, 0.15, 0.15, 0.15, 0.15];
-const PYRO_ANCHOR_Y = 157;  // 首格火焰亮度质心（格内坐标，自顶向下）
-const PYRO_FLAME_W = 116;   // 首格火焰宽度（决定格缩放 → 屏上火焰尺寸）
+// 每格时长：快攻绽放 → 慢衰消散；总和必须 < 普攻间隔，否则怪死了火还在原地烧
+const PYRO_CEL_DUR = [0.04, 0.04, 0.04, 0.04, 0.05, 0.05, 0.05, 0.05, 0.065, 0.065, 0.065, 0.065];
+const PYRO_CELS = PYRO_CEL_DUR.length;
+const PYRO_ANCHOR_Y = 172;  // 首格火焰亮度质心（格内坐标，自顶向下）
+const PYRO_FLAME_W = 88;    // 首格火焰宽度（决定格缩放 → 屏上火焰尺寸）
 const clamp = (v: number): number => Math.max(0, Math.min(1, v));
 const smooth = (v: number): number => { const t = clamp(v); return t * t * (3 - 2 * t); };
 
@@ -190,7 +191,7 @@ export class FireVFX {
     if (this.clipsActive.length >= CLIP_CAP) return true;
     const clip = this.clipFree.pop();
     if (!clip) return true;
-    const scale = (heavy ? 96 : 78) / PYRO_FLAME_W;
+    const scale = (heavy ? 58 : 44) / PYRO_FLAME_W;
     clip.age = 0; clip.scale = scale;
     clip.part.node.active = true;
     // 格内火焰质心在中心下方 (PYRO_ANCHOR_Y−CELL/2)px：把质心对到命中点，烟雾自然升到上方
