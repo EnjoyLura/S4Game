@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-07T06:23:42.496Z",
+  "checkedAt": "2026-10-07T17:31:16.293Z",
   "checks": [
     {
       "name": "phone-430x932",
@@ -7,11 +7,11 @@
       "height": 932,
       "dpr": 3,
       "loaded": {
-        "frames": 12,
+        "frames": 17,
         "pool": 16,
         "flights": 32,
         "sharedMaterial": true,
-        "materialName": "../resources/fx/fire-soft",
+        "materialName": "../resources/fx/fire-paint-v2",
         "layers": [
           "panel",
           "artClip:scenes/scene_1_1",
@@ -92,19 +92,19 @@
           "flames": [
             {
               "active": true,
-              "frame": "flame_a",
-              "alpha": 163
+              "frame": "flame_2",
+              "alpha": 248
             },
             {
-              "active": true,
-              "frame": "flame_b",
-              "alpha": 72
+              "active": false,
+              "frame": "flame_3",
+              "alpha": 255
             }
           ],
           "smoke": [
             {
-              "active": true,
-              "alpha": 5
+              "active": false,
+              "alpha": 255
             },
             {
               "active": false,
@@ -112,7 +112,7 @@
             }
           ],
           "ground": true,
-          "scorch": 100
+          "scorch": 85
         },
         {
           "time": 0.16,
@@ -121,27 +121,27 @@
           "flames": [
             {
               "active": true,
-              "frame": "flame_b",
-              "alpha": 218
+              "frame": "flame_4",
+              "alpha": 248
             },
             {
-              "active": true,
-              "frame": "flame_c",
-              "alpha": 3
+              "active": false,
+              "frame": "flame_5",
+              "alpha": 255
             }
           ],
           "smoke": [
             {
               "active": true,
-              "alpha": 74
+              "alpha": 56
             },
             {
               "active": true,
-              "alpha": 9
+              "alpha": 5
             }
           ],
           "ground": true,
-          "scorch": 100
+          "scorch": 85
         },
         {
           "time": 0.42,
@@ -150,13 +150,13 @@
           "flames": [
             {
               "active": false,
-              "frame": "flame_b",
-              "alpha": 218
+              "frame": "flame_7",
+              "alpha": 248
             },
             {
               "active": false,
-              "frame": "flame_c",
-              "alpha": 3
+              "frame": "flame_7",
+              "alpha": 255
             }
           ],
           "smoke": [
@@ -166,24 +166,82 @@
             },
             {
               "active": true,
-              "alpha": 14
+              "alpha": 11
             }
           ],
           "ground": true,
-          "scorch": 84
+          "scorch": 72
+        }
+      ],
+      "celMotion": [
+        {
+          "time": 0,
+          "frame": "flame_0",
+          "alpha": 248,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "time": 0.025,
+          "frame": "flame_1",
+          "alpha": 248,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "time": 0.065,
+          "frame": "flame_2",
+          "alpha": 248,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "time": 0.115,
+          "frame": "flame_3",
+          "alpha": 248,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "time": 0.185,
+          "frame": "flame_4",
+          "alpha": 248,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "time": 0.245,
+          "frame": "flame_5",
+          "alpha": 248,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "time": 0.29,
+          "frame": "flame_6",
+          "alpha": 217,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "time": 0.335,
+          "frame": "flame_7",
+          "alpha": 47,
+          "x": 0,
+          "y": 0
         }
       ],
       "pause": "pass",
       "selectionPause": "pass",
       "stress": {
-        "beforeNodes": 573,
+        "beforeNodes": 557,
         "dense": {
-          "active": 16,
+          "active": 8,
           "blasts": 8,
-          "contacts": 8,
+          "contacts": 0,
           "pool": 16,
           "damage": 8960,
-          "nodes": 573,
+          "nodes": 557,
           "particles": 90
         },
         "firstFrame": {
@@ -191,15 +249,15 @@
           "core": true,
           "flame": true,
           "ground": false,
-          "alpha": 162
+          "alpha": 121
         },
         "freeAfter": 16,
         "activeAfter": 0
       },
       "recording": {
-        "frames": 1274,
-        "maxActive": 13,
-        "maxBlasts": 5,
+        "frames": 1273,
+        "maxActive": 4,
+        "maxBlasts": 4,
         "maxFlights": 4,
         "maxResidues": 5,
         "legacyCrater": false,
@@ -215,11 +273,11 @@
       "height": 667,
       "dpr": 2,
       "loaded": {
-        "frames": 12,
+        "frames": 17,
         "pool": 16,
         "flights": 32,
         "sharedMaterial": true,
-        "materialName": "../resources/fx/fire-soft",
+        "materialName": "../resources/fx/fire-paint-v2",
         "layers": [
           "panel",
           "artClip:scenes/scene_1_1",
@@ -300,19 +358,19 @@
           "flames": [
             {
               "active": true,
-              "frame": "flame_a",
-              "alpha": 163
+              "frame": "flame_2",
+              "alpha": 248
             },
             {
-              "active": true,
-              "frame": "flame_b",
-              "alpha": 72
+              "active": false,
+              "frame": "flame_3",
+              "alpha": 255
             }
           ],
           "smoke": [
             {
-              "active": true,
-              "alpha": 5
+              "active": false,
+              "alpha": 255
             },
             {
               "active": false,
@@ -320,7 +378,7 @@
             }
           ],
           "ground": true,
-          "scorch": 100
+          "scorch": 85
         },
         {
           "time": 0.16,
@@ -329,27 +387,27 @@
           "flames": [
             {
               "active": true,
-              "frame": "flame_b",
-              "alpha": 218
+              "frame": "flame_4",
+              "alpha": 248
             },
             {
-              "active": true,
-              "frame": "flame_c",
-              "alpha": 3
+              "active": false,
+              "frame": "flame_5",
+              "alpha": 255
             }
           ],
           "smoke": [
             {
               "active": true,
-              "alpha": 74
+              "alpha": 56
             },
             {
               "active": true,
-              "alpha": 9
+              "alpha": 5
             }
           ],
           "ground": true,
-          "scorch": 100
+          "scorch": 85
         },
         {
           "time": 0.42,
@@ -358,13 +416,13 @@
           "flames": [
             {
               "active": false,
-              "frame": "flame_b",
-              "alpha": 218
+              "frame": "flame_7",
+              "alpha": 248
             },
             {
               "active": false,
-              "frame": "flame_c",
-              "alpha": 3
+              "frame": "flame_7",
+              "alpha": 255
             }
           ],
           "smoke": [
@@ -374,24 +432,82 @@
             },
             {
               "active": true,
-              "alpha": 14
+              "alpha": 11
             }
           ],
           "ground": true,
-          "scorch": 84
+          "scorch": 72
+        }
+      ],
+      "celMotion": [
+        {
+          "time": 0,
+          "frame": "flame_0",
+          "alpha": 248,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "time": 0.025,
+          "frame": "flame_1",
+          "alpha": 248,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "time": 0.065,
+          "frame": "flame_2",
+          "alpha": 248,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "time": 0.115,
+          "frame": "flame_3",
+          "alpha": 248,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "time": 0.185,
+          "frame": "flame_4",
+          "alpha": 248,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "time": 0.245,
+          "frame": "flame_5",
+          "alpha": 248,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "time": 0.29,
+          "frame": "flame_6",
+          "alpha": 217,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "time": 0.335,
+          "frame": "flame_7",
+          "alpha": 47,
+          "x": 0,
+          "y": 0
         }
       ],
       "pause": "pass",
       "selectionPause": "pass",
       "stress": {
-        "beforeNodes": 573,
+        "beforeNodes": 557,
         "dense": {
-          "active": 16,
+          "active": 8,
           "blasts": 8,
-          "contacts": 8,
+          "contacts": 0,
           "pool": 16,
           "damage": 8960,
-          "nodes": 573,
+          "nodes": 557,
           "particles": 90
         },
         "firstFrame": {
@@ -399,14 +515,14 @@
           "core": true,
           "flame": true,
           "ground": false,
-          "alpha": 162
+          "alpha": 121
         },
         "freeAfter": 16,
         "activeAfter": 0
       },
       "recording": {
-        "frames": 1281,
-        "maxActive": 13,
+        "frames": 1280,
+        "maxActive": 4,
         "maxBlasts": 4,
         "maxFlights": 4,
         "maxResidues": 5,

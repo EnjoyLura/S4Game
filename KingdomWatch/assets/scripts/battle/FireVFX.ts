@@ -176,7 +176,8 @@ export class FireVFX {
       }
       if (this.craterLoaded) {
         const pulse = 0.5 + 0.5 * Math.sin(clock * Math.PI * 1.05 + seed * 2.1);
-        this.drawFrame(slots[i].glow, 'embers', radius * 2.3, (110 + 145 * pulse) * fade * atten, c.x, c.y - 6, seed * 7, 1, this.craterFrames);
+        // 灰晕已从焦痕贴图抠除，炭体收紧后余烬斑同步收窄（2.3→1.7），避免亮斑飘在裸沙上
+        this.drawFrame(slots[i].glow, 'embers', radius * 1.7, (110 + 145 * pulse) * fade * atten, c.x, c.y - 6, seed * 7, 1, this.craterFrames);
       } else {
         slots[i].glow.node.active = false;
       }
