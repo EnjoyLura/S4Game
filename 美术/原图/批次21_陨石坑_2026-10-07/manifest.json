@@ -26,5 +26,47 @@
     "mode": "RGB",
     "seconds": 44.0,
     "sha1": "f6f26d1a74af"
+  },
+  "scorch_cracks": {
+    "id": "scorch_cracks",
+    "file": "美术/原图/批次21_陨石坑_2026-10-07\\scorch_cracks.png",
+    "prompt": "Top-down subtle scorch mark on dry brown dirt ground, hand-painted cartoon ground decal for a tower defense game, Kingdom Rush style. A soft irregular darkened patch of scorched earth with a few thin dark cracks radiating outward from the center, lightly charred middle, tiny ash flecks scattered around. The scorch is faint and blends naturally into the soil, only slightly darker than the surrounding ground. No deep crater, no pit, no raised rim, no rocks, no fire, no flames, no glowing lava, no smoke, no text, no border, flat hand-painted shading.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-07 22:43:17",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGB",
+    "seconds": 54.0,
+    "sha1": "50357ec6fc79"
+  },
+  "kr_mark": {
+    "id": "kr_mark",
+    "file": "美术/原图/批次21_陨石坑_2026-10-07\\kr_mark.png",
+    "prompt": "Top-down view of a fresh meteor scorch mark on a sandy dirt path, hand-painted cartoon tower defense game art, Kingdom Rush inspired style. An irregular round blotch of charred black-brown burnt ground, its center filled with a dense cluster of small glowing red-hot coals and embers, deep crimson and dim orange glow fading to dark char at the edges, a few tiny ash specks scattered around. Compact, flat on the ground, richly textured like a bed of dying coals. No flames, no smoke, no lava cracks, no deep crater, no raised rim, no rocks, no text, no border, flat hand-painted shading, muted colors.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-07 22:57:35",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGB",
+    "seconds": 82.9,
+    "sha1": "9994331cd097"
+  },
+  "kr_embers_glow": {
+    "id": "kr_embers_glow",
+    "file": "美术/原图/批次21_陨石坑_2026-10-07\\kr_embers_glow.png",
+    "prompt": "Top-down cluster of small glowing red-hot coals scattered in a round patch, on a pure solid black background. Deep crimson and dim orange coal dots of varying sizes, densely packed in the middle, sparse toward the edges, like a bed of dying embers. This is the glow layer of a cartoon tower defense game meteor scorch mark. Muted restrained glow, not vivid, not exaggerated, no flames, no smoke, no text, no border, hand-painted cel look.",
+    "type": "generate",
+    "ref": null,
+    "at": "2026-10-07 22:58:58",
+    "ok": true,
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGB",
+    "seconds": 64.1,
+    "sha1": "fafe44471b8f"
   }
 }

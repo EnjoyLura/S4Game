@@ -6,7 +6,7 @@ import { Color, EffectAsset, JsonAsset, Layers, Material, Node, Rect, resources,
 interface Part { node: Node; sprite: Sprite; frame: string; }
 interface Fragment { part: Part; vx: number; vy: number; spin: number; }
 interface Flight { root: Node; body: Part; tail: Part; }
-interface Residue { root: Node; scorch: Part; embers: Part[]; flames: Part[]; }
+interface Residue { root: Node; mark: Part; glow: Part; }
 interface Clip { part: Part; age: number; scale: number; }
 interface Burst {
   root: Node; ground: Node; core: Part; flames: Part[]; smoke: Part[]; dust: Part; scorch: Part;
@@ -38,9 +38,11 @@ export class FireVFX {
   loaded = false;
   private frames = new Map<string, SpriteFrame>();
   private clipFrames = new Map<string, SpriteFrame>();
+  private craterFrames = new Map<string, SpriteFrame>();
   private clipFree: Clip[] = [];
   private clipsActive: Clip[] = [];
   private clipLoaded = false;
+  private craterLoaded = false;
   private material: Material | null = null;
   private active: Burst[] = [];
   private free: Burst[] = [];
@@ -56,11 +58,9 @@ export class FireVFX {
     for (let i = 0; i < CAP; i++) this.free.push(this.create());
     for (let i = 0; i < RESIDUE_CAP; i++) {
       const root = this.node('fireResidue', this.groundRoot);
-      const scorch = this.part('craterScorch', root);
-      const embers = Array.from({ length: 3 }, (_, j) => this.part('craterEmber' + j, root));
-      // 坑内小火舌：循环 pyro_hit 小格（跳过最大绽放格），低亮度闪烁
-      const flames = Array.from({ length: 2 }, (_, j) => this.part('craterFlame' + j, root));
-      root.active = false; this.residues.push({ root, scorch, embers, flames });
+      const mark = this.part('craterMark', root);
+      const glow = this.part('craterGlow', root);
+      root.active = false; this.residues.push({ root, mark, glow });
     }
     for (let i = 0; i < FLIGHT_CAP; i++) {
       const root = this.node('fireFlight', projectileParent);
@@ -85,6 +85,23 @@ export class FireVFX {
           this.clipFrames.set(id, frame);
         }
         this.clipLoaded = true;
+      });
+    });
+    // 坑贴图必须包一层自建 SpriteFrame：直存的 resources 产物会被场景重启时的
+    // 自动释放掏空（texture/uv 全 null → 激活即崩），pyro_hit 同理用包装帧规避。
+    resources.load('fx/crater_mark/spriteFrame', SpriteFrame, (err, markSrc) => {
+      if (err || !markSrc || !this.root.isValid) return;
+      const mark = new SpriteFrame();
+      mark.reset({ texture: markSrc.texture, rect: new Rect(0, 0, markSrc.width, markSrc.height), originalSize: new Size(markSrc.width, markSrc.height), offset: new Vec2() });
+      mark.packable = false;
+      this.craterFrames.set('mark', mark);
+      resources.load('fx/crater_embers/spriteFrame', SpriteFrame, (error, emberSrc) => {
+        if (error || !emberSrc || !this.root.isValid) return;
+        const embers = new SpriteFrame();
+        embers.reset({ texture: emberSrc.texture, rect: new Rect(0, 0, emberSrc.width, emberSrc.height), originalSize: new Size(emberSrc.width, emberSrc.height), offset: new Vec2() });
+        embers.packable = false;
+        this.craterFrames.set('embers', embers);
+        this.craterLoaded = true;
       });
     });
     resources.load('fx/fire_v2.frames', JsonAsset, (err, data) => {
@@ -112,6 +129,7 @@ export class FireVFX {
     this.root.once(Node.EventType.NODE_DESTROYED, () => {
       this.material?.destroy(); this.frames.forEach(frame => frame.destroy());
       this.clipFrames.forEach(frame => frame.destroy());
+      this.craterFrames.forEach(frame => frame.destroy());
     });
   }
 
@@ -141,27 +159,16 @@ export class FireVFX {
       residue.root.setPosition(c.x, c.y - 6, 0);
       const seed = Math.sin(c.x * 0.017 + c.y * 0.013);
       const fade = Math.min(1, c.t / 0.8, clamp((4 - c.t) / 0.08));
-      const neighbours = areas.reduce((n, a) => n + (Math.hypot(a.x - c.x, a.y - c.y) < radius ? 1 : 0), 0);
-      this.draw(residue.scorch, 'scorch', radius * 2.55, 118 * fade / Math.sqrt(Math.max(1, neighbours)), 0, 0, seed * 7, 1.5);
-      // 地面小火舌：出生 0.35s 内渐入（陨石爆闪先撑住第一眼），循环格 2..9，克制不抢戏
-      if (this.clipLoaded) {
-        const fadeIn = clamp((4 - c.t) / 0.35);
-        for (let k = 0; k < residue.flames.length; k++) {
-          const ang = seed * 2.9 + k * 2.63 + 1.2;
-          const fx = Math.cos(ang) * radius * (0.28 + k * 0.20);
-          const fy = Math.sin(ang) * radius * 0.42 + (k - 0.5) * 5;
-          const idx = 2 + (Math.floor(clock * 9 + seed * 11 + k * 3.7) % 6);   // 只用带火焰主体的格，避免循环中断火
-          const flicker = 0.55 + 0.45 * Math.sin(clock * 6.3 + k * 2.4 + seed * 5);
-          this.drawFrame(residue.flames[k], 'pyro_hit_' + idx, radius * (0.26 + 0.04 * flicker),
-            (100 + 90 * flicker) * fade * fadeIn, fx, fy + 4, 0, 1, this.clipFrames);
-        }
-      }
-      for (let k = 0; k < residue.embers.length; k++) {
-        const phase = (clock * 0.7 + seed * 0.21 + k * 0.31 + 1) % 1;
-        const angle = seed * 1.7 + k * 2.1;
-        this.draw(residue.embers[k], 'ember', 12 + Math.sin(phase * Math.PI) * 3,
-          135 * fade * Math.sin(phase * Math.PI), Math.cos(angle) * radius * 0.42,
-          Math.sin(angle) * radius * 0.25 + phase * 8, -12 + k * 12);
+      if (this.craterLoaded) {
+        // 王国保卫战式焦痕：地面炭斑贴片 + 余烬呼吸光（约 2s 一息），无火苗。
+        // 余烬贴图带 70 亮度门槛：暗斑点透明、亮炭芯脉动，保证焦炭为主体。
+        const angle = seed * 7;
+        this.drawFrame(residue.mark, 'mark', radius * 2.45, 255 * fade, 0, 0, angle, 1, this.craterFrames);
+        const pulse = 0.5 + 0.5 * Math.sin(clock * Math.PI * 1.05 + seed * 2.1);
+        this.drawFrame(residue.glow, 'embers', radius * 2.3, (110 + 145 * pulse) * fade, 0, 0, angle, 1, this.craterFrames);
+      } else {
+        // 贴片未就绪时退回引擎炭印。
+        this.draw(residue.mark, 'scorch', radius * 2.55, 118 * fade, 0, 0, seed * 7, 1.5);
       }
     }
     return true;
@@ -276,10 +283,12 @@ export class FireVFX {
   }
 
   private drawFrame(part: Part, frame: string, width: number, alpha: number, x: number, y: number, angle: number, ratio: number, frames: Map<string, SpriteFrame>): void {
-    const visible = alpha > 0.5 && width > 0;
+    const sf = frames.get(frame) || null;
+    const visible = alpha > 0.5 && width > 0 && !!sf;
+    // 先设帧再激活：onEnable 会立即构建网格，激活后再换帧会以旧帧（或空帧）_FLUSH
+    if (part.frame !== frame) { part.sprite.spriteFrame = sf; part.frame = frame; }
     part.node.active = visible;
     if (!visible) return;
-    if (part.frame !== frame) { part.sprite.spriteFrame = frames.get(frame) || null; part.frame = frame; }
     part.node.getComponent(UITransform)!.setContentSize(width, width * ratio);
     part.node.setPosition(x, y, 0); part.node.angle = angle;
     this.tint.set(255, 255, 255, Math.round(Math.min(255, alpha))); part.sprite.color = this.tint;

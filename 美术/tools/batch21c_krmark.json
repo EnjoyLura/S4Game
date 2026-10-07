@@ -1,0 +1,23 @@
+{
+ "name": "batch21c_krmark",
+ "outdir": "美术/原图/批次21_陨石坑_2026-10-07",
+ "defaults": {
+  "model": "gpt-image-2",
+  "quality": "high",
+  "background": "transparent",
+  "key": "a3",
+  "size": "1024x1024"
+ },
+ "items": [
+  {
+   "id": "kr_mark",
+   "type": "generate",
+   "prompt": "Top-down view of a fresh meteor scorch mark on a sandy dirt path, hand-painted cartoon tower defense game art, Kingdom Rush inspired style. An irregular round blotch of charred black-brown burnt ground, its center filled with a dense cluster of small glowing red-hot coals and embers, deep crimson and dim orange glow fading to dark char at the edges, a few tiny ash specks scattered around. Compact, flat on the ground, richly textured like a bed of dying coals. No flames, no smoke, no lava cracks, no deep crater, no raised rim, no rocks, no text, no border, flat hand-painted shading, muted colors."
+  },
+  {
+   "id": "kr_embers_glow",
+   "type": "generate",
+   "prompt": "Top-down cluster of small glowing red-hot coals scattered in a round patch, on a pure solid black background. Deep crimson and dim orange coal dots of varying sizes, densely packed in the middle, sparse toward the edges, like a bed of dying embers. This is the glow layer of a cartoon tower defense game meteor scorch mark. Muted restrained glow, not vivid, not exaggerated, no flames, no smoke, no text, no border, hand-painted cel look."
+  }
+ ]
+}

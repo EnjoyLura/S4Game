@@ -1,0 +1,18 @@
+{
+ "name": "batch21b_scorch",
+ "outdir": "美术/原图/批次21_陨石坑_2026-10-07",
+ "defaults": {
+  "model": "gpt-image-2",
+  "quality": "high",
+  "background": "transparent",
+  "key": "a3",
+  "size": "1024x1024"
+ },
+ "items": [
+  {
+   "id": "scorch_cracks",
+   "type": "generate",
+   "prompt": "Top-down subtle scorch mark on dry brown dirt ground, hand-painted cartoon ground decal for a tower defense game, Kingdom Rush style. A soft irregular darkened patch of scorched earth with a few thin dark cracks radiating outward from the center, lightly charred middle, tiny ash flecks scattered around. The scorch is faint and blends naturally into the soil, only slightly darker than the surrounding ground. No deep crater, no pit, no raised rim, no rocks, no fire, no flames, no glowing lava, no smoke, no text, no border, flat hand-painted shading."
+  }
+ ]
+}
