@@ -101,7 +101,7 @@ export class Monster {
       this.art = new BattleSprite(this.node, 'battle_mobs_v2', () => { this.g.enabled = false; });
     }
     this.art.node.setPosition(0, -r * 0.82, 0);
-    this.art.show(this.def.id, r * 2.85);
+    this.art.show(this.def.id, r * 3.35);   // 显示高度≈3.35×半径（用户反馈 2.85 太瘦弱）
     getMobAnims(a => { this.anims = a; });
     Tween.stopAllByTarget(this.art.node);
     this.art.node.setScale(1, 1, 1); this.art.node.angle = 0;
@@ -114,7 +114,7 @@ export class Monster {
     const clip = this.anims?.get(this.def.id);
     if (clip && clip.walk.length) {
       // 序列帧模式：攻击一次性 > 步态循环（速度映射播放速率，减速同步变慢）> 待机第 0 帧
-      const h = this.def.radius * 2.85;
+      const h = this.def.radius * 3.35;
       if (this.atkAnimT > 0 && clip.attack.length) {
         this.atkAnimT = Math.max(0, this.atkAnimT - dt);
         const p = 1 - this.atkAnimT / ATK_ANIM;
@@ -333,7 +333,7 @@ export class Monster {
     if (this.shockT > 0) amount *= 1 + this.shockAmp;
     if (this.vulnT > 0) amount *= 1 + this.vulnAmp;
     this.hp -= amount;
-    this.ctx.dmgNumber(this.x, this.y + this.def.radius * 2.05,
+    this.ctx.dmgNumber(this.x, this.y + this.def.radius * 2.6,
       String(Math.round(amount)), crit ? '#FF3030' : '#FFFFFF', crit, { target: this, amount, periodic: killerId === 'burn' });
     this.ctx.impact?.(this.x, this.y + this.def.radius * 0.4, killerId, heavy || crit || this.hp <= 0 && !!this.def.elite, impactAngle);
     this.flash();

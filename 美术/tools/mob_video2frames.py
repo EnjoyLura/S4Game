@@ -106,8 +106,8 @@ def main():
     L = min(b[0] for b in ws); T = min(b[1] for b in ws)
     R = max(b[2] for b in ws); B = max(b[3] for b in ws)
     mw, mh = int((R - L) * args.margin), int((B - T) * args.margin)
-    L, T = max(0, L - mw), max(0, T - mh)
-    R, B = min(arr.shape[2], R + mw), min(arr.shape[1], B + mh)
+    L, T = max(0, L - mw), max(0, T - 2 * mh)   # 顶部/左右留裕量防帧间抖动
+    R, B = min(arr.shape[2], R + mw), min(arr.shape[1], B)   # 底部不外扩：内容下缘即脚底基线（外扩会整体腾空）
     print('union bbox: (%d,%d)-(%d,%d)' % (L, T, R, B))
 
     n = args.cells
@@ -117,9 +117,9 @@ def main():
 
     S = args.size
     cw, ch = R - L, B - T
-    scale = min((S - 8) / cw, (S - 16) / ch)   # 上下留 8/8，底部再钉脚
+    scale = min((S - 8) / cw, (S - 16) / ch)   # 顶部留 16 裕量；底部只留 foot_margin 钉脚隙
     dw, dh = round(cw * scale), round(ch * scale)
-    foot_margin = 8
+    foot_margin = 3   # 脚底离格底的唯一间隙（此前 8+底部外扩导致角色踩在影子上的腾空感）
 
     cells = []
     for k, fi in enumerate(picks):
