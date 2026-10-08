@@ -1,0 +1,56 @@
+{
+ "frames": {
+  "goblin_shaman_w0": [
+   0,
+   0,
+   160,
+   160
+  ],
+  "goblin_shaman_w1": [
+   160,
+   0,
+   160,
+   160
+  ],
+  "goblin_shaman_w2": [
+   320,
+   0,
+   160,
+   160
+  ],
+  "goblin_shaman_w3": [
+   480,
+   0,
+   160,
+   160
+  ],
+  "goblin_shaman_w4": [
+   640,
+   0,
+   160,
+   160
+  ],
+  "goblin_shaman_w5": [
+   800,
+   0,
+   160,
+   160
+  ],
+  "goblin_shaman_w6": [
+   960,
+   0,
+   160,
+   160
+  ],
+  "goblin_shaman_w7": [
+   1120,
+   0,
+   160,
+   160
+  ]
+ },
+ "cycle": {
+  "seconds": 0.333,
+  "cells": 8
+ }
+}

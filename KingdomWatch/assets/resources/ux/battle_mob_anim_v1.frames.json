@@ -72,321 +72,333 @@
    160,
    160
   ],
-  "goblin_slinger_w0": [
+  "goblin_worker_w12": [
    0,
+   160,
+   160,
+   160
+  ],
+  "goblin_worker_w13": [
+   160,
+   160,
+   160,
+   160
+  ],
+  "goblin_slinger_w0": [
+   320,
    160,
    160,
    160
   ],
   "goblin_slinger_w1": [
-   160,
+   480,
    160,
    160,
    160
   ],
   "goblin_slinger_w2": [
-   320,
+   640,
    160,
    160,
    160
   ],
   "goblin_slinger_w3": [
-   480,
+   800,
    160,
    160,
    160
   ],
   "goblin_slinger_w4": [
-   640,
+   960,
    160,
    160,
    160
   ],
   "goblin_slinger_w5": [
-   800,
+   1120,
    160,
    160,
    160
   ],
   "goblin_slinger_w6": [
-   960,
+   1280,
    160,
    160,
    160
   ],
   "goblin_slinger_w7": [
-   1120,
+   1440,
    160,
    160,
    160
   ],
   "goblin_slinger_w8": [
-   1280,
+   1600,
    160,
    160,
    160
   ],
   "goblin_slinger_w9": [
-   1440,
+   1760,
    160,
    160,
    160
   ],
   "goblin_slinger_w10": [
-   1600,
-   160,
+   0,
+   320,
    160,
    160
   ],
   "goblin_slinger_w11": [
-   1760,
    160,
+   320,
    160,
    160
   ],
   "goblin_shaman_w0": [
-   0,
+   320,
    320,
    160,
    160
   ],
   "goblin_shaman_w1": [
-   160,
+   480,
    320,
    160,
    160
   ],
   "goblin_shaman_w2": [
-   320,
+   640,
    320,
    160,
    160
   ],
   "goblin_shaman_w3": [
-   480,
+   800,
    320,
    160,
    160
   ],
   "goblin_shaman_w4": [
-   640,
+   960,
    320,
    160,
    160
   ],
   "goblin_shaman_w5": [
-   800,
+   1120,
    320,
    160,
    160
   ],
   "goblin_shaman_w6": [
-   960,
+   1280,
    320,
    160,
    160
   ],
   "goblin_shaman_w7": [
-   1120,
+   1440,
    320,
    160,
    160
   ],
   "wolf_rider_w0": [
-   1280,
+   1600,
    320,
    160,
    160
   ],
   "wolf_rider_w1": [
-   1440,
+   1760,
    320,
    160,
    160
   ],
   "wolf_rider_w2": [
-   1600,
-   320,
+   0,
+   480,
    160,
    160
   ],
   "wolf_rider_w3": [
-   1760,
-   320,
+   160,
+   480,
    160,
    160
   ],
   "wolf_rider_w4": [
-   0,
+   320,
    480,
    160,
    160
   ],
   "wolf_rider_w5": [
-   160,
+   480,
    480,
    160,
    160
   ],
   "wolf_rider_w6": [
-   320,
+   640,
    480,
    160,
    160
   ],
   "wolf_rider_w7": [
-   480,
+   800,
    480,
    160,
    160
   ],
   "wolf_rider_w8": [
-   640,
+   960,
    480,
    160,
    160
   ],
   "wolf_rider_w9": [
-   800,
+   1120,
    480,
    160,
    160
   ],
   "wolf_rider_w10": [
-   960,
+   1280,
    480,
    160,
    160
   ],
   "wolf_rider_w11": [
-   1120,
+   1440,
    480,
    160,
    160
   ],
   "wolf_rider_a0": [
-   1280,
+   1600,
    480,
    160,
    160
   ],
   "wolf_rider_a1": [
-   1440,
+   1760,
    480,
    160,
    160
   ],
   "wolf_rider_a2": [
-   1600,
-   480,
+   0,
+   640,
    160,
    160
   ],
   "wolf_rider_a3": [
-   1760,
-   480,
+   160,
+   640,
    160,
    160
   ],
   "wolf_rider_a4": [
-   0,
+   320,
    640,
    160,
    160
   ],
   "wolf_rider_a5": [
-   160,
+   480,
    640,
    160,
    160
   ],
   "goblin_brute_w0": [
-   320,
+   640,
    640,
    160,
    160
   ],
   "goblin_brute_w1": [
-   480,
+   800,
    640,
    160,
    160
   ],
   "goblin_brute_w2": [
-   640,
-   640,
-   160,
-   160
-  ],
-  "goblin_brute_w3": [
-   800,
-   640,
-   160,
-   160
-  ],
-  "goblin_brute_w4": [
    960,
    640,
    160,
    160
   ],
-  "goblin_brute_w5": [
+  "goblin_brute_w3": [
    1120,
    640,
    160,
    160
   ],
-  "goblin_brute_w6": [
+  "goblin_brute_w4": [
    1280,
    640,
    160,
    160
   ],
-  "goblin_brute_w7": [
+  "goblin_brute_w5": [
    1440,
    640,
    160,
    160
   ],
-  "goblin_brute_w8": [
+  "goblin_brute_w6": [
    1600,
    640,
    160,
    160
   ],
-  "goblin_brute_w9": [
+  "goblin_brute_w7": [
    1760,
    640,
    160,
    160
   ],
-  "goblin_brute_w10": [
+  "goblin_brute_w8": [
    0,
    800,
    160,
    160
   ],
-  "goblin_brute_w11": [
+  "goblin_brute_w9": [
    160,
    800,
    160,
    160
   ],
-  "goblin_brute_w12": [
+  "goblin_brute_w10": [
    320,
    800,
    160,
    160
   ],
-  "goblin_brute_w13": [
+  "goblin_brute_w11": [
    480,
+   800,
+   160,
+   160
+  ],
+  "goblin_brute_w12": [
+   640,
+   800,
+   160,
+   160
+  ],
+  "goblin_brute_w13": [
+   800,
    800,
    160,
    160
   ]
  },
  "cycles": {
-  "goblin_worker": 0.5,
+  "goblin_worker": 0.833,
   "goblin_slinger": 0.5,
   "goblin_shaman": 0.333,
   "wolf_rider": 0.5,

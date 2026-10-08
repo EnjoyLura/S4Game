@@ -1,0 +1,92 @@
+{
+ "frames": {
+  "goblin_worker_w0": [
+   0,
+   0,
+   160,
+   160
+  ],
+  "goblin_worker_w1": [
+   160,
+   0,
+   160,
+   160
+  ],
+  "goblin_worker_w2": [
+   320,
+   0,
+   160,
+   160
+  ],
+  "goblin_worker_w3": [
+   480,
+   0,
+   160,
+   160
+  ],
+  "goblin_worker_w4": [
+   640,
+   0,
+   160,
+   160
+  ],
+  "goblin_worker_w5": [
+   800,
+   0,
+   160,
+   160
+  ],
+  "goblin_worker_w6": [
+   960,
+   0,
+   160,
+   160
+  ],
+  "goblin_worker_w7": [
+   1120,
+   0,
+   160,
+   160
+  ],
+  "goblin_worker_w8": [
+   1280,
+   0,
+   160,
+   160
+  ],
+  "goblin_worker_w9": [
+   1440,
+   0,
+   160,
+   160
+  ],
+  "goblin_worker_w10": [
+   1600,
+   0,
+   160,
+   160
+  ],
+  "goblin_worker_w11": [
+   1760,
+   0,
+   160,
+   160
+  ],
+  "goblin_worker_w12": [
+   1920,
+   0,
+   160,
+   160
+  ],
+  "goblin_worker_w13": [
+   2080,
+   0,
+   160,
+   160
+  ]
+ },
+ "cycle": {
+  "seconds": 0.833,
+  "cells": 14
+ }
+}
