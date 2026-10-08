@@ -118,15 +118,18 @@ export class Monster {
       if (this.atkAnimT > 0 && clip.attack.length) {
         this.atkAnimT = Math.max(0, this.atkAnimT - dt);
         const p = 1 - this.atkAnimT / ATK_ANIM;
-        this.art.showSeq(clip.attack, Math.min(clip.attack.length - 1, Math.floor(p * clip.attack.length)), h);
+        const t = Math.min(clip.attack.length - 1, p * clip.attack.length);
+        const i = Math.floor(t);
+        this.art.showSeq(clip.attack, i, i >= clip.attack.length - 1 ? 0 : t - i, h);
       } else if (this.state === 'move' && this.stunT <= 0) {
         const slowMul = this.slowT > 0 ? (1 - this.slowAmp) : 1;
         // 步态节奏：以源视频步态环真实时长为基准实时播放（相位连贯不踉跄），按移速微调档位，减速同步变慢
         const tempo = Math.min(1.25, Math.max(0.75, this.def.speed / 45));
         const cps = (1 / clip.loopDur) * tempo * slowMul;
-        this.art.showSeq(clip.walk, Math.floor(this.life * cps * clip.walk.length) % clip.walk.length, h);
+        const t = this.life * cps * clip.walk.length;
+        this.art.showSeq(clip.walk, Math.floor(t) % clip.walk.length, t - Math.floor(t), h);
       } else {
-        this.art.showSeq(clip.walk, 0, h);
+        this.art.showSeq(clip.walk, 0, 0, h);
       }
       const tint = this.flashT > 0 ? '#FF9990' : this.slowT > 0 ? '#B5E9FA' : this.shockT > 0 ? '#D8B5FF' : '#FFFFFF';
       if (tint !== this.lastTint) { this.lastTint = tint; Color.fromHEX(this.tint, tint); this.art.tint(this.tint); }

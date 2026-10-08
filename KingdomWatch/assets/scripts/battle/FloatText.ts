@@ -11,9 +11,10 @@ const MERGE_WINDOW = 0.075;
 type Kind = 'normal' | 'crit' | 'periodic';
 interface Motion { attack: number; settle: number; hold: number; life: number; peak: number; rest: number; kick: number; opacity: number; }
 const MOTION: Record<Kind, Motion> = {
-  normal: { attack: 0.035, settle: 0.095, hold: 0.30, life: 0.41, peak: 1.2, rest: 1, kick: 6, opacity: 255 },
-  crit: { attack: 0.032, settle: 0.105, hold: 0.37, life: 0.50, peak: 1.42, rest: 1.06, kick: 9, opacity: 255 },
-  periodic: { attack: 0.025, settle: 0.07, hold: 0.16, life: 0.25, peak: 1.04, rest: 1, kick: 3, opacity: 220 },
+  // hold/exit 已按用户反馈加长（2026-10-08）：停留久一点、收尾慢一点，数字更可读
+  normal: { attack: 0.035, settle: 0.095, hold: 0.42, life: 0.62, peak: 1.2, rest: 1, kick: 6, opacity: 255 },
+  crit: { attack: 0.032, settle: 0.105, hold: 0.50, life: 0.74, peak: 1.42, rest: 1.06, kick: 9, opacity: 255 },
+  periodic: { attack: 0.025, settle: 0.07, hold: 0.24, life: 0.42, peak: 1.04, rest: 1, kick: 3, opacity: 220 },
 };
 export interface FloatEvent { target?: object; amount?: number; periodic?: boolean; }
 interface FText {

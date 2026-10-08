@@ -50,6 +50,13 @@ export class BattleSprite {
   /** 序列帧模式（showSeq 写入；show() 清除回到静态帧） */
   private seqFrames: SpriteFrame[] | null = null;
   private seqIndex = -1;
+  /** 帧间混合进度 [0,1)：>0 时把下一帧按透明度叠在当前帧上，低帧率步态不再顿挫 */
+  private seqFrac = 0;
+  /** 帧间混合层：与主节点同锚点同尺寸，仅 seqFrac>0 时激活（同图集纹理，不破坏合批） */
+  private blendNode: Node | null = null;
+  private blendSprite: Sprite | null = null;
+  private tintCol = new Color(255, 255, 255, 255);
+  private blendCol = new Color();
 
   constructor(parent: Node, atlasId: AtlasId, private onLoaded: () => void) {
     this.node.layer = Layers.Enum.UI_2D;
@@ -69,41 +76,73 @@ export class BattleSprite {
   show(frame: string, height: number): void {
     if (frame === this.frame && height === this.height && !this.seqFrames) return;
     this.seqFrames = null;
+    this.seqFrac = 0;
     this.frame = frame;
     this.height = height;
     this.apply();
   }
 
-  /** 序列帧模式：按 index 切换预解析帧（高度不变时零 setContentSize；同帧同位零操作） */
-  showSeq(frames: SpriteFrame[], index: number, height: number): void {
+  /** 序列帧模式：index=当前帧，frac=向下一帧的混合进度（walk 循环自然回绕，attack 末帧传 0） */
+  showSeq(frames: SpriteFrame[], index: number, frac: number, height: number): void {
     if (!frames.length) { this.seqFrames = null; return; }
     const i = index < 0 ? 0 : index >= frames.length ? frames.length - 1 : index;
-    if (this.seqFrames === frames && i === this.seqIndex && height === this.height) return;
+    const f = Math.max(0, Math.min(0.999, frac));
+    if (this.seqFrames === frames && i === this.seqIndex && f === this.seqFrac && height === this.height) return;
     this.seqFrames = frames;
     this.seqIndex = i;
+    this.seqFrac = f;
     this.frame = '';
     this.height = height;
-    if (this.atlas) this.applySeq(frames[i]);
+    if (this.atlas) this.applySeq();
   }
 
-  private applySeq(sf: SpriteFrame): void {
-    if (!this.node.isValid) return;
+  private applySeq(): void {
+    if (!this.node.isValid || !this.seqFrames) return;
+    const frames = this.seqFrames;
+    const sf = frames[this.seqIndex];
     this.sprite.spriteFrame = sf;
-    this.node.getComponent(UITransform)!.setContentSize(this.height * sf.rect.width / sf.rect.height, this.height);
+    const w = this.height * sf.rect.width / sf.rect.height;
+    this.node.getComponent(UITransform)!.setContentSize(w, this.height);
     this.node.active = true;
+    const next = frames[(this.seqIndex + 1) % frames.length];
+    if (this.seqFrac > 0.004 && next && next !== sf) {
+      if (!this.blendNode) {
+        const n = new Node('seqBlend');
+        n.layer = Layers.Enum.UI_2D;
+        n.setParent(this.node);
+        n.addComponent(UITransform).setAnchorPoint(0.5, 0);
+        this.blendSprite = n.addComponent(Sprite);
+        this.blendSprite.sizeMode = Sprite.SizeMode.CUSTOM;
+        this.blendSprite.trim = false;
+        this.blendNode = n;
+      }
+      this.blendSprite!.spriteFrame = next;
+      this.blendSprite!.node.getComponent(UITransform)!.setContentSize(w, this.height);
+      const c = this.tintCol;
+      this.blendCol.set(c.r, c.g, c.b, Math.round(c.a * this.seqFrac));
+      this.blendSprite!.color = this.blendCol;
+      this.blendNode.active = true;
+    } else if (this.blendNode) {
+      this.blendNode.active = false;
+    }
     if (!this.loaded) { this.loaded = true; this.onLoaded(); }
   }
 
   private apply(): void {
-    if (this.seqFrames) { this.applySeq(this.seqFrames[this.seqIndex]); return; }
+    if (this.seqFrames) { this.applySeq(); return; }
     const sf = this.atlas?.frames.get(this.frame);
     if (!this.node.isValid) return;
     if (!sf) { this.node.active = false; this.loaded = false; return; }
+    if (this.blendNode) this.blendNode.active = false;
     this.sprite.spriteFrame = sf;
     this.node.getComponent(UITransform)!.setContentSize(this.height * sf.rect.width / sf.rect.height, this.height);
     this.node.active = true;
     if (!this.loaded) { this.loaded = true; this.onLoaded(); }
   }
 
-  tint(color: Color): void { this.sprite.color = color; }
+  tint(color: Color): void {
+    this.tintCol.set(color);
+    this.sprite.color = this.tintCol;
+    if (this.seqFrames && this.blendNode?.active) this.applySeq();   // 混合层颜色同步（受击闪红等）
+  }
 }
