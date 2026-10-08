@@ -398,7 +398,7 @@
   ]
  },
  "cycles": {
-  "goblin_worker": 0.833,
+  "goblin_worker": 1.5,
   "goblin_slinger": 0.5,
   "goblin_shaman": 0.333,
   "wolf_rider": 0.5,

@@ -4,6 +4,8 @@
 
 手动生成的素材常带纯色底（如哥布林试作为纯红）。mob_video2frames 的亮度内容阈值
 与暗边填充种子都按黑底设计，红底会整帧被判为内容、周期检测失效。本工具：
+  0. 柱状双底检测：白边+彩色板这类「面板加白边」先裁掉白边，只留面板
+     （多色全局抠除会误伤白色系角色细节——牙齿只差白底 86）；
   1. 取画面边缘带的中位色为背景基准；
   2. 从四边洪水填充「与边界连通且接近背景色」的区域 → alpha=0；
   3. alpha 腐蚀 1px 切掉彩边环（红底会在角色轮廓留 1px 红色混色边），再 0.8px 羽化；
@@ -27,6 +29,36 @@ def est_bg(im: Image.Image) -> tuple:
     a = np.asarray(im.convert('RGB'))
     band = np.concatenate([a[0], a[-1], a[:, 0], a[:, -1]]).reshape(-1, 3)
     return tuple(int(v) for v in np.median(band, axis=0))
+
+
+def detect_panel(f0: np.ndarray, bg: tuple):
+    """柱状双底检测（如白边+红板）：返回面板列窗 (L,R)；单色底返回 None。
+    面板=一条连续列带，带内 ≥85% 像素远离边缘背景色，宽度 ≥25% 画面，
+    且面板主色（顶部样带中位数）≠ 边缘背景色（否则是单色底，裁了反而可能切角色）。"""
+    far = (np.abs(f0.astype(np.int16) - np.array(bg, dtype=np.int16)).sum(axis=2) > 90)
+    frac = far.mean(axis=0)
+    W = len(frac)
+    best = None
+    x = 0
+    while x < W:
+        if frac[x] >= 0.85:
+            y = x
+            while y < W and frac[y] >= 0.85:
+                y += 1
+            if best is None or y - x > best[1] - best[0]:
+                best = (x, y)
+            x = y
+        else:
+            x += 1
+    if not best or best[1] - best[0] < W * 0.25:
+        return None
+    cx = (best[0] + best[1]) // 2
+    band = f0[0:60, max(0, cx - 20):cx + 20].reshape(-1, 3)
+    panel = tuple(int(v) for v in np.median(band, axis=0))
+    if sum(abs(a - b) for a, b in zip(panel, bg)) <= 90:
+        return None
+    L, R = best[0] + 2, best[1] - 2
+    return (L, R) if R - L > 50 else None
 
 
 def key_to_alpha(f: np.ndarray, bg: tuple, tol: int) -> Image.Image:
@@ -61,6 +93,16 @@ def process_video(src: str, dst: str, tol: int) -> None:
     frames = [f for f in reader]
     reader.close()
     bg = est_bg(Image.fromarray(frames[0]))
+    panel = detect_panel(frames[0], bg)
+    if panel:
+        L, R = panel
+        frames = [f[:, L:R] for f in frames]
+        bg = est_bg(Image.fromarray(frames[0]))
+        print('pillarbox panel detected: cols %d..%d, re-estimated bg %s' % (L, R, bg))
+        for i, f in enumerate(frames):
+            far = np.abs(f.astype(np.int16) - np.array(bg, dtype=np.int16)).sum(axis=2) > 90
+            if far[:, :2].sum() > 200 or far[:, -2:].sum() > 200:
+                print('warn: frame %d 内容贴近面板裁剪边，角色可能被切到' % i)
     print('bg color: %s, %d frames @%sfps' % (bg, len(frames), fps))
     writer = imageio.get_writer(dst, fps=fps, codec='libx264', quality=None,
                                 output_params=['-pix_fmt', 'yuv420p', '-crf', '5', '-preset', 'medium'])
