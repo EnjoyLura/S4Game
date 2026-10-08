@@ -46,6 +46,18 @@ def main():
     rows = (total + COLS - 1) // COLS
     atlas = Image.new('RGBA', (COLS * CELL, rows * CELL), (0, 0, 0, 0))
     frames = {}
+    cycles = {}   # mob -> 步态环真实时长（s），运行时按实时速率播放
+    for mob, mode, im in segs:
+        if mode == 'w':
+            jpath = os.path.join(args.batch, '%s_w.frames.json' % mob)
+            if os.path.exists(jpath):
+                try:
+                    with open(jpath, encoding='utf-8') as f:
+                        sec = (json.load(f).get('cycle') or {}).get('seconds')
+                    if sec:
+                        cycles[mob] = sec
+                except (OSError, ValueError):
+                    pass
     sheet = Image.new('RGB', (COLS * (CELL + 6) + 6, rows * (CELL + 6) + 6), (46, 44, 40))
     d = ImageDraw.Draw(sheet)
     idx = 0
@@ -63,8 +75,11 @@ def main():
             idx += 1
     os.makedirs(args.out, exist_ok=True)
     atlas.save(os.path.join(args.out, NAME + '.png'))
+    manifest = {'frames': frames}
+    if cycles:
+        manifest['cycles'] = cycles
     with open(os.path.join(args.out, NAME + '.frames.json'), 'w', encoding='utf-8') as f:
-        json.dump({'frames': frames}, f, ensure_ascii=False, indent=1)
+        json.dump(manifest, f, ensure_ascii=False, indent=1)
     os.makedirs(args.sheet_dir, exist_ok=True)
     sheet.save(os.path.join(args.sheet_dir, 'atlas_sheet.png'))
     print('atlas %dx%d, %d frames -> %s' % (atlas.width, atlas.height, len(frames), args.out))

@@ -6,13 +6,14 @@
 （那会把角色身上的深色皮革/描边抠成半透明）。本工具用「边缘洪水填充」抠纯黑底：
 与边界连通的暗色区 → alpha=0，角色内部暗部不受影响；再对 alpha 做 0.8px 羽化。
 
-流程：解码 → 黑场校正(pedestal) → 按帧率抽稀 → 逐帧抠底 → 全窗口联合包围盒
-（同取景防抖）→ 均匀抽 N 格 → 底部对齐钉进格（脚底基线恒定）→
+流程：解码 → 黑场校正(pedestal) → walk 模式自相关检测步态周期（只在一个完整周期内
+等相位抽帧，保证循环回绕相位衔接；attack 模式整段均匀抽）→ 逐帧抠底 → 选中帧联合
+包围盒（同取景防抖）→ 底部对齐钉进格（脚底基线恒定）→
 输出单怪横向段图集 + frames.json + 接触表。
 
 用法:
   python mob_video2frames.py --video walk_goblin_worker.mp4 --prefix goblin_worker \
-      --mode w --cells 8 [--size 160] [--fps 12] [--keytol 26] [--thresh 18]
+      --mode w --cells 14 [--fps 12] [--keytol 26] [--thresh 18]
 输出:
   <outdir>/<prefix>_<mode>.png           1×N 段图集（RGBA）
   <outdir>/<prefix>_<mode>.frames.json   {"frames": {"<prefix>_<mode>0": [x,y,w,h], ...}}
@@ -45,11 +46,32 @@ def decode(video: str, fps: float):
     if fps > 0 and src_fps > fps:
         step = src_fps / fps
         idxs = [int(i * step) for i in range(int(len(arr) / step))]
-        arr = fixed[idxs]
-        print('resampled to %d frames @%s' % (len(arr), fps))
-    else:
-        arr = fixed
-    return arr
+        fixed = fixed[idxs]
+        print('resampled to %d frames @%s' % (len(fixed), fps))
+    return fixed, src_fps
+
+
+def detect_cycle(arr, thresh: float):
+    """步态周期检测：帧间内容掩码异或能量 D[t] 应呈周期性，自相关取首个显著峰。
+    返回 (period_frames, score, D)；score 低说明无稳定步态（调用方退化为整段采样）。"""
+    lums = (0.299 * arr[..., 0] + 0.587 * arr[..., 1] + 0.114 * arr[..., 2])
+    masks = lums > thresh
+    D = np.zeros(len(arr))
+    for t in range(1, len(arr)):
+        D[t] = np.count_nonzero(masks[t] ^ masks[t - 1])
+    n = len(arr)
+    scores = {}
+    for p in range(max(6, n // 8), n * 2 // 3):
+        a, b = D[p:], D[:n - p]
+        if a.std() < 1e-6 or b.std() < 1e-6:
+            continue
+        scores[p] = float(np.corrcoef(a, b)[0, 1])
+    if not scores:
+        return 0, 0.0, D
+    best = max(scores.values())
+    # 取首个接近最优的峰：避免锁到 2×周期；±3% 容差内的更短峰（左右步近对称）也可接受
+    p = min(q for q, s in scores.items() if s >= best - 0.03)
+    return p, scores[p], D
 
 
 def key_frame(f: np.ndarray, keytol: int) -> Image.Image:
@@ -87,17 +109,40 @@ def main():
     ap.add_argument('--keytol', type=int, default=26, help='洪水填充容差(0-255)')
     ap.add_argument('--thresh', type=int, default=18, help='内容亮度阈值')
     ap.add_argument('--margin', type=float, default=0.05)
+    ap.add_argument('--cycle', choices=['auto', 'all'], default='auto',
+                    help='auto=检测单步态环抽帧（walk 用）；all=整段均匀抽（attack 用）')
     args = ap.parse_args()
 
     outdir = args.outdir or os.path.dirname(os.path.abspath(args.video))
     os.makedirs(outdir, exist_ok=True)
-    arr = decode(args.video, args.fps)
+    cyclic = args.cycle == 'auto' and args.mode == 'w'
+    # 周期检测要在原始帧率上做（12fps 抽稀会砍半周期分辨率），抽帧后再不受 fps 影响
+    arr, src_fps = decode(args.video, 0 if cyclic else args.fps)
 
-    # 内容检测（全帧，用于联合包围盒）
+    n = args.cells
+    meta_cycle = None
+    if cyclic:
+        p, score, D = detect_cycle(arr, args.thresh)
+        if p and score >= 0.35:
+            s = 1 + int(np.argmin(D[1:p + 1]))   # 运动能量最低帧＝触地/蓄力相，作环起点回绕最顺
+            picks = sorted(set((s + round(k * p / n)) % len(arr) for k in range(n)),
+                           key=lambda t: (t - s) % len(arr))   # 按环内相位排序（窗口回绕时不乱时序）
+            meta_cycle = round(p / src_fps, 3)
+            print('cycle: period=%d frames (%.2fs) score=%.2f start=%d -> %d cells'
+                  % (p, p / src_fps, score, s, len(picks)))
+        else:
+            picks = []
+            print('warn: 步态周期不显著 (p=%s score=%.2f)，退化为整段均匀采样' % (p, score))
+    if not cyclic or not picks:
+        picks = sorted(set(round(j * (len(arr) - 1) / (n - 1)) for j in range(n)))[:n]
+        if len(picks) < n:
+            print('note: 帧不足，实际 %d 格' % len(picks))
+
+    # 联合包围盒只取选中帧：单周期内取景一致，裁切更紧且无跨环抖动
     lums = (0.299 * arr[..., 0] + 0.587 * arr[..., 1] + 0.114 * arr[..., 2])
     boxes = []
-    for i in range(len(arr)):
-        ys, xs = np.where(lums[i] > args.thresh)
+    for fi in picks:
+        ys, xs = np.where(lums[fi] > args.thresh)
         boxes.append((xs.min(), ys.min(), xs.max() + 1, ys.max() + 1) if len(xs) > 300 else None)
     ws = [b for b in boxes if b]
     if not ws:
@@ -109,11 +154,6 @@ def main():
     L, T = max(0, L - mw), max(0, T - 2 * mh)   # 顶部/左右留裕量防帧间抖动
     R, B = min(arr.shape[2], R + mw), min(arr.shape[1], B)   # 底部不外扩：内容下缘即脚底基线（外扩会整体腾空）
     print('union bbox: (%d,%d)-(%d,%d)' % (L, T, R, B))
-
-    n = args.cells
-    picks = sorted(set(round(j * (len(arr) - 1) / (n - 1)) for j in range(n)))[:n]
-    if len(picks) < n:
-        print('note: 帧不足，实际 %d 格' % len(picks))
 
     S = args.size
     cw, ch = R - L, B - T
@@ -136,8 +176,11 @@ def main():
         rect['%s_%s%d' % (args.prefix, args.mode, k)] = [k * S, 0, S, S]
     png = os.path.join(outdir, '%s_%s.png' % (args.prefix, args.mode))
     seg.save(png)
+    meta = {'frames': rect}
+    if meta_cycle:
+        meta['cycle'] = {'seconds': meta_cycle, 'cells': len(cells)}   # 运行时按实时速率播步态环
     with open(os.path.join(outdir, '%s_%s.frames.json' % (args.prefix, args.mode)), 'w', encoding='utf-8') as f:
-        json.dump({'frames': rect}, f, ensure_ascii=False, indent=1)
+        json.dump(meta, f, ensure_ascii=False, indent=1)
 
     # 接触表（沙色底模拟路面，审查贴图观感）
     sheet = Image.new('RGB', (len(cells) * (S + 6) + 6, S + 12), (196, 168, 110))

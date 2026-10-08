@@ -47,6 +47,34 @@
    0,
    160,
    160
+  ],
+  "goblin_slinger_w8": [
+   1280,
+   0,
+   160,
+   160
+  ],
+  "goblin_slinger_w9": [
+   1440,
+   0,
+   160,
+   160
+  ],
+  "goblin_slinger_w10": [
+   1600,
+   0,
+   160,
+   160
+  ],
+  "goblin_slinger_w11": [
+   1760,
+   0,
+   160,
+   160
   ]
+ },
+ "cycle": {
+  "seconds": 0.5,
+  "cells": 12
  }
 }

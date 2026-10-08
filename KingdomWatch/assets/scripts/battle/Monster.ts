@@ -121,8 +121,9 @@ export class Monster {
         this.art.showSeq(clip.attack, Math.min(clip.attack.length - 1, Math.floor(p * clip.attack.length)), h);
       } else if (this.state === 'move' && this.stunT <= 0) {
         const slowMul = this.slowT > 0 ? (1 - this.slowAmp) : 1;
-        // 步态节奏：8 帧源片约 2.3s 一个完整步态环；speed/45 映射后小怪轻快、精英沉重
-        const cps = Math.min(1.15, Math.max(0.55, this.def.speed / 45)) * slowMul;
+        // 步态节奏：以源视频步态环真实时长为基准实时播放（相位连贯不踉跄），按移速微调档位，减速同步变慢
+        const tempo = Math.min(1.25, Math.max(0.75, this.def.speed / 45));
+        const cps = (1 / clip.loopDur) * tempo * slowMul;
         this.art.showSeq(clip.walk, Math.floor(this.life * cps * clip.walk.length) % clip.walk.length, h);
       } else {
         this.art.showSeq(clip.walk, 0, h);
