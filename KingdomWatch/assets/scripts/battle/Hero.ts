@@ -328,7 +328,10 @@ export class ArcherHero extends HeroBase {
     }
   }
 
-  /** 一排弹幕（列 = 1+齐射层）：以瞄准线为中心扇形并列展开，直线随缘（齐射×连射 = 列×排网格） */
+  /** 一排弹幕（列 = 1+齐射层）：主箭严格沿瞄准线（与普攻同款拦截预判，恒有一箭锁主目标），
+   *  附加列在主箭两侧交替展开（+10°,-10°,+20°…直线随缘）（齐射×连射 = 列×排网格）。
+   *  旧版整组以瞄准线为中心对称摊开——偶数列（1/3 层）时没有任何箭在瞄准线上，5° 偏移在
+   *  400~900px 交战距离即脱靶 35~79px（怪碰撞半径仅 22~34px），齐射后反而一直打不中主目标 */
   private fireRow(projs: ProjectileManager, dirX: number, dirY: number, emp: boolean): void {
     this.animateAttack(emp);
     Sfx.shoot(this.id);
@@ -336,7 +339,8 @@ export class ArcherHero extends HeroBase {
     const baseAng = Math.atan2(dirY, dirX);
     this.bowFlash(Math.cos(baseAng), Math.sin(baseAng), emp);   // 每排出弓一次弓弦闪光（连射排有节奏感）
     for (let c = 0; c < cols; c++) {
-      const ang = baseAng + (c - (cols - 1) / 2) * 10 * Math.PI / 180;
+      const side = c === 0 ? 0 : Math.ceil(c / 2) * (c % 2 === 1 ? 1 : -1);   // c=0 主箭 0°；其余 +10/-10/+20/-20…
+      const ang = baseAng + side * 10 * Math.PI / 180;
       this.fireDir(projs, Math.cos(ang), Math.sin(ang), emp);
     }
   }

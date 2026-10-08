@@ -246,7 +246,7 @@ export const ARCHER_CARDS: CardDef[] = [
     apply: x => { x.hero.aspd *= 1.15; } }),
   c({ id: 'serial', name: '连射', rarity: 'blue', maxStacks: 3, owner: 'archer', desc: '普攻追加 1 排弹幕（微延迟整排再射，弹道数与首排一致，独立命中）',
     apply: x => { x.hero.serial += 1; } }),
-  c({ id: 'fan', name: '齐射', rarity: 'blue', maxStacks: 3, owner: 'archer', desc: '普攻弹道并列 +1 列（扇形展开，直线随缘命中）',
+  c({ id: 'fan', name: '齐射', rarity: 'blue', maxStacks: 3, owner: 'archer', desc: '普攻弹道并列 +1 列（主箭锁定预判点必中弹道，附加箭扇形展开直线随缘）',
     apply: x => { x.hero.fan += 1; } }),
   c({ id: 'split', name: '分裂', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '普攻命中分裂出 2 支小弹道（50% 伤害）',
     apply: x => { x.hero.split += 2; } }),
