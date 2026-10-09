@@ -47,13 +47,17 @@ def main():
     atlas = Image.new('RGBA', (COLS * CELL, rows * CELL), (0, 0, 0, 0))
     frames = {}
     cycles = {}   # mob -> 步态环真实时长（s），运行时按实时速率播放
+    ground = {}
     for mob, mode, im in segs:
         if mode == 'w':
             jpath = os.path.join(args.batch, '%s_w.frames.json' % mob)
             if os.path.exists(jpath):
                 try:
                     with open(jpath, encoding='utf-8') as f:
-                        sec = (json.load(f).get('cycle') or {}).get('seconds')
+                        clip_meta = json.load(f)
+                        sec = (clip_meta.get('cycle') or {}).get('seconds')
+                    if clip_meta.get('ground'):
+                        ground[mob] = clip_meta['ground']
                     if sec:
                         cycles[mob] = sec
                 except (OSError, ValueError):
@@ -78,6 +82,8 @@ def main():
     manifest = {'frames': frames}
     if cycles:
         manifest['cycles'] = cycles
+    if ground:
+        manifest['ground'] = ground
     with open(os.path.join(args.out, NAME + '.frames.json'), 'w', encoding='utf-8') as f:
         json.dump(manifest, f, ensure_ascii=False, indent=1)
     os.makedirs(args.sheet_dir, exist_ok=True)

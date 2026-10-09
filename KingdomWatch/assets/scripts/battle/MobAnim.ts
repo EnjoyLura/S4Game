@@ -10,11 +10,15 @@ export interface MobClip {
   attack: SpriteFrame[];
   /** 步态环真实时长（s）：源视频一个完整周期；运行时按实时速率播放避免慢动作/快进的踉跄感 */
   loopDur: number;
+  /** 固定地面基线和逐帧左右鞋底点，均为相对于显示高度的比例。 */
+  groundOffset: number;
+  feet: [number, number, number, number][];
 }
 
 interface FrameManifest {
   frames: Record<string, [number, number, number, number]>;
   cycles?: Record<string, number>;
+  ground?: Record<string, { offset: number; feet: [number, number, number, number][] }>;
 }
 
 let defs: Map<string, MobClip> | null = null;
@@ -64,7 +68,9 @@ function parse(manifest: FrameManifest, tex: Texture): Map<string, MobClip> {
         return sf;
       });
     };
-    out.set(mob, { walk: mk(s.w), attack: mk(s.a), loopDur: manifest.cycles?.[mob] || 1 });
+    const contact = manifest.ground?.[mob];
+    out.set(mob, { walk: mk(s.w), attack: mk(s.a), loopDur: manifest.cycles?.[mob] || 1,
+      groundOffset: contact?.offset ?? 3 / 160, feet: contact?.feet || [] });
   }
   return out;
 }

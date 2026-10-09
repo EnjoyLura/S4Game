@@ -10,6 +10,7 @@ import { artSprite } from './Ux';
 import { BattleDirector } from '../battle/BattleDirector';
 import { HeroBase } from '../battle/Hero';
 import { CODEX } from '../core/GameData';
+import { UltEnergyFx } from './UltEnergyFx';
 
 /** 每英雄一套的大招按钮状态（右侧纵列，底基锚定向上叠放） */
 interface UltUI {
@@ -31,6 +32,8 @@ interface UltUI {
   flash: number;      // 获得充能闪光
   lastChargeKey: number;
   lastTarget: number;
+  energy?: UltEnergyFx;
+  energyActive?: boolean;
 }
 
 /** 每英雄一套的头顶技能图标状态 */
@@ -232,9 +235,24 @@ export class HUD {
     // 充能百分比：单行居中（用户调整：去掉"大招"前缀与"就绪"文案，就绪时整行隐藏）
     const chargeTxt = label(top, ux, uy, '0%', { size: 27, color: '#FFF7E8', font: 'number', w: 90, h: 38, outline: '#1D2632', outlineW: 2.2 });
     btn.on(Node.EventType.TOUCH_END, () => {
-      if (this.dir.tryCastUlt(i) === 'charging') this.dir.showTips('ult', i);
+      const result = this.dir.tryCastUlt(i);
+      if (result === 'charging') this.dir.showTips('ult', i);
+      else ui.energy?.release();
     });
     const ui: UltUI = { ux, uy, glow, btn, bright, gray, mask, color, fx, water, waterG, waterR: 46, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
+    // All heroes share the charge, completion, ready and release animation.
+    {
+      // Keep all charge information inside the illustration, with no outer seat.
+      const g = mask.getComponent(Graphics)!;
+      g.clear();
+      g.fillColor = CA('#102235', 0.7);
+      g.circle(0, 0, 46);
+      g.fill();
+      mask.addComponent(UIOpacity);
+      water.addComponent(UIOpacity);
+      chargeTxt.addComponent(UIOpacity);
+      ui.energy = new UltEnergyFx(top, ux, uy, hero.id === 'sniper' ? '#1F9EFF' : color);
+    }
     return ui;
   }
 
@@ -366,6 +384,25 @@ export class HUD {
 
   private syncUlt(hero: HeroBase, u: UltUI, dt: number): void {
     if (!u) return;
+    if (u.energy?.loaded) {
+      if (!u.energyActive) {
+        u.energyActive = true;
+        u.lastChargeKey = -1;
+        Tween.stopAllByTarget(u.btn);
+        Tween.stopAllByTarget(u.glow.getComponent(UIOpacity)!);
+        Tween.stopAllByTarget(u.orbit);
+        u.btn.setScale(1, 1, 1);
+      }
+      u.energy.sync(dt, hero.chargePct, hero.ultReady);
+      u.glow.active = u.bright.active = u.orbit.active = false;
+      u.water.active = false;
+      u.mask.active = !hero.ultReady;
+      const visibility = u.energy.chargeVisibility;
+      u.mask.getComponent(UIOpacity)!.opacity = Math.round(255 * visibility);
+      u.water.getComponent(UIOpacity)!.opacity = Math.round(255 * visibility);
+      u.chargeTxt.getComponent(UIOpacity)!.opacity = Math.round(255 * visibility);
+      u.chargeTxt.active = !hero.ultReady && visibility > 0;
+    }
     const ready = hero.ultReady;
     if (ready !== u.ready) {
       u.ready = ready;
@@ -373,16 +410,28 @@ export class HUD {
     }
     if (!ready) {
       // 水位平滑上涨，百分比与水位同步（用户调整：只显示居中百分比）
-      const cp = hero.chargePct;
+      const cp = Math.max(0, Math.min(1, hero.chargePct));
       u.shown += (cp - u.shown) * Math.min(1, dt * 5);
-      if (cp - u.shown < 0.002) u.shown = cp;
-      const key = Math.round(u.shown * 60);
+      if (Math.abs(cp - u.shown) < 0.002) u.shown = cp;
+      const key = Math.round(u.shown * 100);
       if (key !== u.lastChargeKey) {
         u.lastChargeKey = key;
-        this.redrawUltWater(u, u.shown);
-        setText(u.chargeTxt, Math.round(u.shown * 100) + '%');
+        if (u.energyActive) this.redrawUltEnergyCharge(u, u.shown);
+        else this.redrawUltWater(u, u.shown);
+        setText(u.chargeTxt, Math.min(99, Math.round(u.shown * 100)) + '%');
       }
     }
+  }
+
+  /** 遮罩随蓄能减轻，仅显示百分比。 */
+  private redrawUltEnergyCharge(u: UltUI, pct: number): void {
+    const maskG = u.mask.getComponent(Graphics)!;
+    maskG.clear();
+    maskG.fillColor = CA('#102235', 0.7 - pct * 0.32);
+    maskG.circle(0, 0, 46);
+    maskG.fill();
+    const g = u.waterG;
+    g.clear();
   }
 
   /** 水杯充能（用户反馈：保留水位上涨效果，只去掉白色液面分割线）
@@ -432,6 +481,15 @@ export class HUD {
   /** 充能→就绪 状态切换：进度灰罩 ↔ 高亮 + 光晕呼吸 + 粒子环绕（就绪时隐藏百分比，不显示"就绪"文案） */
   private applyUltReady(u: UltUI, ready: boolean): void {
     u.water.active = !ready;
+    if (u.energy?.loaded) {
+      u.water.active = false;
+      u.mask.active = !ready;
+      u.bright.active = u.glow.active = u.orbit.active = false;
+      u.chargeTxt.active = !ready && u.energy.chargeVisibility > 0;
+      u.lastChargeKey = -1;
+      if (!ready) { u.shown = 0; setText(u.chargeTxt, '0%'); }
+      return;
+    }
     u.bright.active = ready;
     if (!ready) {
       u.lastChargeKey = -1;

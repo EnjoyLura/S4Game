@@ -1,0 +1,59 @@
+{
+  "sources": [
+    {
+      "mob": "goblin_shaman",
+      "source": "C:\\Users\\user\\Downloads\\lens-api-task_Ld0IMk3l9v3F07spI3BCZj8dDhKD6xcX.mp4",
+      "archive": "goblin_shaman.mp4",
+      "fps": 24,
+      "startFrame": 10,
+      "endFrame": 34,
+      "sha256": "5a65a88eeb01ede24a10671e2be69c57e8e686305a30aa6ef9045fea12df14ac",
+      "cells": 24,
+      "cycleSeconds": 1.0
+    },
+    {
+      "mob": "wolf_rider",
+      "source": "C:\\Users\\user\\Downloads\\lens-api-task_tFdmFAddRK8sv08NjfsBbNTQTtpcbPtk.mp4",
+      "archive": "wolf_rider.mp4",
+      "fps": 24,
+      "startFrame": 8,
+      "endFrame": 33,
+      "sha256": "33a1ed3515083abc193bdf3da95546732a469cda2f5e148507ae62b8fd3585ae",
+      "cells": 25,
+      "cycleSeconds": 1.0416666666666667
+    },
+    {
+      "mob": "goblin_brute",
+      "source": "C:\\Users\\user\\Downloads\\lens-api-task_6JhhK8XDVr8kIh5xavgW1KVT99V2sKZT.mp4",
+      "archive": "goblin_brute.mp4",
+      "fps": 24,
+      "startFrame": 33,
+      "endFrame": 55,
+      "sha256": "2e9577a6be8ff1bf44fabd960a72c9efc252899339adf5142cf43fdcecf84c3d",
+      "cells": 22,
+      "cycleSeconds": 0.9166666666666666
+    },
+    {
+      "mob": "goblin_slinger",
+      "source": "C:\\Users\\user\\Downloads\\lens-api-task_YzOxig2FSq8JKRM5H1r1uq1loEshVDnc.mp4",
+      "archive": "goblin_slinger.mp4",
+      "fps": 24,
+      "startFrame": 12,
+      "endFrame": 30,
+      "sha256": "83b39729650fe9d9a7ceb91a89de4581a046f2fb30ff80c1ab15f0a8d2e3cffa",
+      "cells": 18,
+      "cycleSeconds": 0.75
+    },
+    {
+      "mob": "goblin_worker",
+      "source": "C:\\Users\\user\\Downloads\\lens-api-task_Fs2Ym4i4um1Gbyzfv9dP8UMFI2EyZFwc.mp4",
+      "archive": "goblin_worker.mp4",
+      "fps": 24,
+      "startFrame": 21,
+      "endFrame": 40,
+      "sha256": "dfbc7e8bf5ec9291fc92b1aebc6c116644c72c0d3ac7784aa2c395885612663f",
+      "cells": 19,
+      "cycleSeconds": 0.7916666666666666
+    }
+  ]
+}

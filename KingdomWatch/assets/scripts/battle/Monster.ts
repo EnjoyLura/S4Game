@@ -12,6 +12,8 @@ import { getMobAnims, MobClip } from './MobAnim';
 
 /** 攻击序列帧一次性时长（s）：与 lunge 0.2s 前摇错开，收招略长观感更实 */
 const ATK_ANIM = 0.34;
+/** 统一静态/序列帧显示高度，保持脚底锚点与碰撞半径不变。 */
+const MOB_ART_HEIGHT = 3.85;
 
 export type MonsterHitCtx = {
   floatParent: Node;
@@ -28,6 +30,12 @@ export class Monster {
   dead = false;
   baseX = 0;
   life = 0;
+  /** 地面基线固定；脚印只随步态改变位置与重量，不带动角色上下移动。 */
+  groundOffset = 3 / 160;
+  footLeftX = 0;
+  footRightX = 0;
+  footLeftWeight = 0;
+  footRightWeight = 0;
   atkT = 0;
   healT = 0;
   slowT = 0;
@@ -74,6 +82,8 @@ export class Monster {
     this.state = 'move';
     this.dead = false;
     this.life = Math.random() * 10;
+    this.groundOffset = 3 / 160;
+    this.footLeftWeight = this.footRightWeight = 0;
     this.atkT = def.atkInterval;
     this.healT = def.atkInterval;
     this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = this.lungeT = this.flashT = 0;
@@ -101,7 +111,7 @@ export class Monster {
       this.art = new BattleSprite(this.node, 'battle_mobs_v2', () => { this.g.enabled = false; });
     }
     this.art.node.setPosition(0, -r * 0.82, 0);
-    this.art.show(this.def.id, r * 3.35);   // 显示高度≈3.35×半径（用户反馈 2.85 太瘦弱）
+    this.art.show(this.def.id, r * MOB_ART_HEIGHT);
     getMobAnims(a => { this.anims = a; });
     Tween.stopAllByTarget(this.art.node);
     this.art.node.setScale(1, 1, 1); this.art.node.angle = 0;
@@ -114,8 +124,9 @@ export class Monster {
     const clip = this.anims?.get(this.def.id);
     if (clip && clip.walk.length) {
       // 序列帧模式：攻击一次性 > 步态循环（速度映射播放速率，减速同步变慢）> 待机第 0 帧
-      const h = this.def.radius * 3.35;
+      const h = this.def.radius * MOB_ART_HEIGHT;
       if (this.atkAnimT > 0 && clip.attack.length) {
+        this.footLeftWeight = this.footRightWeight = 0;
         this.atkAnimT = Math.max(0, this.atkAnimT - dt);
         const p = 1 - this.atkAnimT / ATK_ANIM;
         const t = Math.min(clip.attack.length - 1, p * clip.attack.length);
@@ -127,9 +138,13 @@ export class Monster {
         const tempo = Math.min(1.25, Math.max(0.75, this.def.speed / 45));
         const cps = (1 / clip.loopDur) * tempo * slowMul;
         const t = this.life * cps * clip.walk.length;
-        this.art.showSeq(clip.walk, Math.floor(t) % clip.walk.length, t - Math.floor(t), h);
+        const index = Math.floor(t) % clip.walk.length;
+        // 原视频已经提供完整步态：避免两帧鞋底叠加形成半透明滑动残影。
+        this.art.showSeq(clip.walk, index, 0, h);
+        this.syncGroundContact(clip, index, t - Math.floor(t));
       } else {
         this.art.showSeq(clip.walk, 0, 0, h);
+        this.syncGroundContact(clip, 0, 0);
       }
       const tint = this.flashT > 0 ? '#FF9990' : this.slowT > 0 ? '#B5E9FA' : this.shockT > 0 ? '#D8B5FF' : '#FFFFFF';
       if (tint !== this.lastTint) { this.lastTint = tint; Color.fromHEX(this.tint, tint); this.art.tint(this.tint); }
@@ -147,6 +162,19 @@ export class Monster {
     // Artwork tint follows the silhouette, replacing rectangular status masks.
     if (this.flashNode) this.flashNode.active = false;
     if (this.frostNode) this.frostNode.active = false;
+  }
+
+  private syncGroundContact(clip: MobClip, index: number, frac: number): void {
+    this.groundOffset = clip.groundOffset;
+    const a = clip.feet[index];
+    const b = clip.feet[(index + 1) % clip.feet.length];
+    if (!a || !b) { this.footLeftWeight = this.footRightWeight = 0; return; }
+    const mix = (i: number): number => a[i] + (b[i] - a[i]) * frac;
+    this.footLeftX = mix(0);
+    this.footRightX = mix(2);
+    // 抬脚阴影变淡，支撑脚阴影变实；阴影始终留在同一地面上。
+    this.footLeftWeight = Math.max(0, Math.min(1, 1 - (mix(1) - this.groundOffset) / 0.055));
+    this.footRightWeight = Math.max(0, Math.min(1, 1 - (mix(3) - this.groundOffset) / 0.055));
   }
 
   private draw(): void {
@@ -401,7 +429,8 @@ export class MonsterManager {
   private depthT = 0;
   private depthOrder: Monster[] = [];
   private shadows: Graphics;
-  private shadowT = 0;
+  private groundShadowColor = new Color(30, 24, 16, 38);
+  private footShadowColor = new Color(26, 20, 13, 100);
 
   constructor(private field: Node, private ctx: MonsterHitCtx) {
     const node = new Node('groupContactShadows');
@@ -564,15 +593,30 @@ export class MonsterManager {
       if (!this.list[i].dead) this.list[w++] = this.list[i];
     }
     this.list.length = w;
-    this.shadowT -= dt;
-    if (this.shadowT <= 0) {
-      this.shadowT = 1 / 20;
-      this.shadows.clear();
-      for (const m of this.list) {
-        const r = m.def.radius;
-        this.shadows.ellipse(m.x, m.y - r * 0.82, r * 0.86, r * 0.25);
+    // 在移动与分离后同步绘制，避免 20Hz 阴影落后于角色而阶梯跳动。
+    this.shadows.clear();
+    this.shadows.fillColor = this.groundShadowColor;
+    for (const m of this.list) {
+      const r = m.def.radius;
+      const footY = m.y - r * 0.82 + r * MOB_ART_HEIGHT * m.groundOffset;
+      this.shadows.ellipse(m.x, footY, r * 1.02, r * 0.20);
+    }
+    if (this.list.length) this.shadows.fill();
+    for (const m of this.list) {
+      const r = m.def.radius, h = r * MOB_ART_HEIGHT;
+      const footY = m.y - r * 0.82 + h * m.groundOffset;
+      if (m.footLeftWeight > 0.02) {
+        this.footShadowColor.a = Math.round(100 * m.footLeftWeight);
+        this.shadows.fillColor = this.footShadowColor;
+        this.shadows.ellipse(m.x + h * m.footLeftX, footY, r * 0.23, r * 0.07);
+        this.shadows.fill();
       }
-      if (this.list.length) this.shadows.fill();
+      if (m.footRightWeight > 0.02) {
+        this.footShadowColor.a = Math.round(100 * m.footRightWeight);
+        this.shadows.fillColor = this.footShadowColor;
+        this.shadows.ellipse(m.x + h * m.footRightX, footY, r * 0.23, r * 0.07);
+        this.shadows.fill();
+      }
     }
     this.depthT -= dt;
     if (this.depthT <= 0) {
