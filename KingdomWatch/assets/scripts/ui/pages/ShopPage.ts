@@ -95,9 +95,9 @@ function buildShopSplash(parent: Node, height: number): void {
     shade.rect(-375, -height / 2 + i * 6, 750, 6.5); shade.fill();
   }
   const signTop = mainResourceTop() + MAIN_RESOURCE_H + 24;
-  const sign = N('shopSign', scene, -211, height / 2 - signTop - 42, 300, 84);
+  const sign = N('shopSign', scene, 0, height / 2 - signTop - 42, 300, 84);   // 标题横幅居中（用户调整）
   artSprite(sign, 0, 0, 300, 84, 'ui_banner_shop');
-  mainLabel(sign, 0, 2, '商 店', { size: 45, font: 'title', color: '#4A2B12', align: 'left', w: 250, h: 60, outline: '#FFE5A3', outlineW: 1.2 });
+  mainLabel(sign, 0, 2, '商 店', { size: 45, font: 'title', color: '#4A2B12', align: 'center', w: 250, h: 60, outline: '#FFE5A3', outlineW: 1.2 });
   // Two shallow timber strips form the bottom of the storefront illustration.
   gpanel(scene, 0, -height / 2 + 7, 750, 14, '#412714', undefined, 0, 0);
   gpanel(scene, 0, -height / 2 + 13, 750, 3, '#B8874C', undefined, 0, 0);

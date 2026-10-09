@@ -3,7 +3,7 @@ import { Node } from 'cc';
 import { loadSave } from '../core/SaveData';
 import { CA, gpanel, N, setText, WY } from './UIKit';
 import { artSprite } from './Ux';
-import { fmt, mainLabel, MAIN_RESOURCE_H, mainResourceTop } from './PageKit';
+import { fmt, mainLabel, MAIN_RESOURCE_H, MAIN_W, mainResourceTop } from './PageKit';
 
 export type ResourceCurrency = 'gold' | 'diamond';
 
@@ -15,11 +15,12 @@ export class ResourceBar {
     this.node = N('resourceWallet', parent);
     const y = WY(mainResourceTop(), MAIN_RESOURCE_H);
     (['gold', 'diamond'] as const).forEach((currency, i) => {
-      const row = gpanel(this.node, (i - 0.5) * 278, y, 254, MAIN_RESOURCE_H,
+      // 左对齐（用户调整）：药丸贴内容左边（对齐标准头板 -MAIN_W/2），不再整组居中
+      const row = gpanel(this.node, -MAIN_W / 2 + 127 + i * 266, y, 254, MAIN_RESOURCE_H,
         CA('#261A12', 0.84), undefined, 0, 16);
       row.name = 'resource:' + currency;
-      artSprite(row, -106, 0, 50, 50, currency === 'gold' ? 'ui_icon_coin' : 'ui_icon_diamond', { sliced: false });
-      const counter = mainLabel(row, -18, 0, '', { size: 28, color: currency === 'gold' ? '#FFF0CB' : '#DCF4FF',
+      artSprite(row, -96, 0, 50, 50, currency === 'gold' ? 'ui_icon_coin' : 'ui_icon_diamond', { sliced: false });   // 图标收进框内（旧 -106 超出药丸左缘 4px）
+      const counter = mainLabel(row, -10, 0, '', { size: 28, color: currency === 'gold' ? '#FFF0CB' : '#DCF4FF',
         bold: true, align: 'left', w: 108, h: 40, outline: '#24150C', outlineW: 1.4 });
       counter.name = 'resourceAmount';
       this.counters.set(currency, counter);
