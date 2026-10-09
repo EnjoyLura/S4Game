@@ -3,7 +3,7 @@
  * 约定：assets/resources/ux/<id>.png 与 assets/resources/scenes/<id>.png；
  * 加载失败一律回退程序绘制（调用方先画程序版，美术加载成功后覆盖/隐藏）。
  */
-import { Graphics, Mask, Node, resources, Sprite, SpriteFrame, UITransform } from 'cc';
+import { Graphics, JsonAsset, Mask, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
 import { N } from './UIKit';
 
 /** id → 资源路径：'scenes/x' 原样，其余视为 ux/ 下的清单 ID */
@@ -179,6 +179,65 @@ export function artIcon(parent: Node, id: string, w: number, h = w): Node {
   return artSprite(parent, 0, 0, w, h, id, { sliced: false });
 }
 
+interface LobbyAtlasManifest { frames: Record<string, [number, number, number, number]>; }
+type LobbyAtlas = Map<string, SpriteFrame>;
+const lobbyAtlases = new Map<string, LobbyAtlas>();
+const lobbyAtlasPending = new Map<string, ((atlas: LobbyAtlas | null) => void)[]>();
+
+/** UI atlases retain their source pixels; the manifest supplies isolated sprite rectangles. */
+function lobbyAtlas(id: string, cb: (atlas: LobbyAtlas | null) => void): void {
+  const cached = lobbyAtlases.get(id);
+  if (cached) { Promise.resolve().then(() => cb(cached)); return; }
+  const waiting = lobbyAtlasPending.get(id);
+  if (waiting) { waiting.push(cb); return; }
+  lobbyAtlasPending.set(id, [cb]);
+  const finish = (atlas: LobbyAtlas | null): void => {
+    if (atlas) lobbyAtlases.set(id, atlas);
+    const callbacks = lobbyAtlasPending.get(id) || [];
+    lobbyAtlasPending.delete(id);
+    callbacks.forEach(f => f(atlas));
+  };
+  resources.load('ux/' + id + '.frames', JsonAsset, (err, asset) => {
+    if (err || !asset) { finish(null); return; }
+    uxFrame(id, source => {
+      if (!source) { finish(null); return; }
+      const frames: LobbyAtlas = new Map();
+      const manifest = asset.json as LobbyAtlasManifest;
+      for (const key of Object.keys(manifest.frames)) {
+        const [x, y, w, h] = manifest.frames[key];
+        const frame = new SpriteFrame();
+        frame.reset({ texture: source.texture, rect: new Rect(x, y, w, h), originalSize: new Size(w, h), offset: new Vec2() });
+        frame.packable = false;
+        frames.set(key, frame);
+      }
+      finish(frames);
+    });
+  });
+}
+
+/** Centered or foot-anchored lobby art, with the same loading behavior as artSprite. */
+export function artAtlasSprite(parent: Node, x: number, y: number, w: number, h: number,
+  id: string, key: string, opts: ArtOpts & { anchorBottom?: boolean } = {}): Node {
+  const node = N('atlas:' + id + ':' + key, parent, x, y, w, h);
+  const transform = node.getComponent(UITransform)!;
+  if (opts.anchorBottom) transform.setAnchorPoint(0.5, 0);
+  const sprite = node.addComponent(Sprite);
+  sprite.sizeMode = Sprite.SizeMode.CUSTOM;
+  sprite.trim = false;
+  lobbyAtlas(id, atlas => {
+    const frame = atlas?.get(key);
+    if (!frame || !node.isValid) return;
+    sprite.spriteFrame = frame;
+    if (opts.fit !== false) {
+      const scale = Math.min(w / frame.rect.width, h / frame.rect.height);
+      transform.setContentSize(frame.rect.width * scale, frame.rect.height * scale);
+    }
+    (opts.hideOnLoad || []).forEach(fallback => { if (fallback.isValid) fallback.active = false; });
+    opts.onLoaded?.(node);
+  });
+  return node;
+}
+
 /* ---------- 闲时预载：弹窗美术不再"当面加载" ---------- */
 
 /** 预载清单 = 代码引用的全部 ux ID + 场景图；新美术落盘后把 ID 加进这里 */
@@ -207,6 +266,7 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_icon_lock', 'ui_seat_q0', 'ui_seat_q1', 'ui_seat_q2', 'ui_seat_q3', 'ui_card_shop',
   // 英雄头像
   'ui_avatar_archer', 'ui_avatar_sniper', 'ui_avatar_pyro', 'ui_avatar_volt',
+  'ui_avatar_mora', 'lobby_heroes_v1', 'lobby_levels_v1', 'lobby_rewards_v1',
   // 英雄技能图标（双英雄均已交付）
   'ui_icon_atk_archer', 'ui_icon_skill_archer', 'ui_icon_ult_archer',
   // 三选一卡面图标（弓箭手组 15 张已交付；狙击/全局待图走首字回退）

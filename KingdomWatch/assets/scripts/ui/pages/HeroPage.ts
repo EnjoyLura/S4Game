@@ -1,13 +1,13 @@
 /**
- * ② 英雄（线稿 heroes）：大图环绕式 —— 上半区全宽大背板罩住英雄大立绘（左右箭头叠图内）+ 装备槽 + 战力徽章；
+ * ② 英雄：头像切换栏 + 大立绘/五件装备 + 独立滚动的五列背包。
  * 右列装备槽（武器横扁×1 + 2×2 防具）：点已穿槽=装备属性弹窗（锻造），空槽无反应；
- * 下方背包（无背板直接透出背景，页签三段连体无背板、仅两端外侧圆弧）：点仓库装备=同槽已穿则双面板对比（分解/替换），未穿则单弹窗（穿戴/出售）。
+ * 背包格突出图标，等级/数量置于角落；点物品保留对比、替换、分解、穿戴和出售操作。
  */
-import { Node, Graphics, BlockInputEvents } from 'cc';
-import { PAL, LO } from '../../config/GameConfig';
+import { Node, BlockInputEvents, Graphics, ScrollView, UIOpacity, Vec2 } from 'cc';
+import { LO, PAL } from '../../config/GameConfig';
 import { CA, btn, C, dimLayer, gpanel, label, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
-import { PageCtx, artPanel, modal, toast, CX, confirmModal, circleArrow } from '../PageKit';
+import { mainLabel, PageCtx, modal, toast, confirmModal, circleArrow, fmt, heroFigure, MAIN_NAV_H, MAIN_RESOURCE_H, mainResourceTop, pageScroll } from '../PageKit';
 import {
   EquipKind, EquipDef, KIND_NAME, QCOLOR, EQUIPS, MATS, HERO_DEFS,
   heroStats, sellEquip, sellPrice, wearEquip, wornInst, equipStat, statFmt, STAT_NAME,
@@ -19,127 +19,235 @@ import { equipModal, zoneTab } from './UpgradePage';
 const KIND_ICON: Record<EquipKind, string> = { weapon: '🏹', helm: '⛑️', acc: '📿', glove: '🧤', armor: '🥼' };
 const INK = '#4A3214', OK = '#3E7C28';   // 奶白板文字墨色 / 强化增益绿（升级页签同色）
 const SLOTS_2x2: EquipKind[] = ['helm', 'acc', 'glove', 'armor'];
+const BAG_SIZE = 120, BAG_STEP = 130, BAG_COL_STEP = 138;
+const SLOT_COLOR = ['#50555A', '#385A2D', '#28547B', '#51356F'];
+const KIND_ART: Record<EquipKind, string> = { weapon: 'ui_item_wpn_bow', helm: 'ui_item_helm_falcon',
+  acc: 'ui_item_acc_moon', glove: 'ui_item_glove_wind', armor: 'ui_item_armor_forest' };
 /* 背包页签跨刷新保持（穿戴/出售后 refresh 重建不跳回「武器」） */
-const bagSt: { tab: 'weapon' | 'equip' | 'mat' } = { tab: 'weapon' };
+const bagSt: { tab: 'weapon' | 'equip' | 'mat'; offsets: Record<string, number> } = { tab: 'equip', offsets: {} };
 
 export function buildHeroes(ctx: PageCtx): void {
   const root = ctx.screens;
   const sv = loadSave();
   const owned = (['archer', 'sniper', 'pyro', 'volt', 'mora'] as const).filter(id => sv.heroes[id].owned);
   if (!owned.includes(sv.curHero as 'archer' | 'sniper' | 'pyro' | 'volt' | 'mora')) sv.curHero = owned[0];
-  const state = { hi: Math.max(0, owned.indexOf(sv.curHero as 'archer' | 'sniper' | 'pyro' | 'volt' | 'mora')) };
-
-  const content = N('heroContent', root, 0, 0, 750, 800);
+  const content = N('heroContent', root);
   render();
 
   function render(): void {
     content.destroyAllChildren();
-    if (state.hi >= owned.length) state.hi = 0;
-    const hid = owned[state.hi];
-    const def = HERO_DEFS[hid];
-    const stats = heroStats(hid);
-    sv.curHero = hid;
-    saveSave();
-
-    /* 上半区全宽大背板（L1，用户确认）：罩住英雄大图+装备栏一整块区域，上缘铺满到物理屏顶（越过刘海安全区） */
-    artPanel(content, 0, WY(-LO.safeTop, 856 + LO.safeTop), 750, 856 + LO.safeTop, 'ui_panel_hero');
-
-    /* 英雄名行 */
-    label(content, 0, WY(205, 40), `${def.name}　${def.job}`, { size: 28, color: '#FFF3D6', bold: true, w: 640, h: 40, shrink: true });
-
-    /* 大立绘 + 立绘内左右箭头（切换已拥有英雄） */
-    const portrait = gpanel(content, CX(160, 280), WY(305, 440), 280, 440, CA('#20262F', 1), '#FFFFFF33', 1.5, 18);
-    artSprite(portrait, 0, 0, 280, 440, 'hero_' + hid + '_portrait', { belowIdx: 0 });
-    artSprite(portrait, 0, 40, 190, 190, def.avatar, { sliced: false });
-    circleArrow(portrait, -105, -20, -1, () => { state.hi = (state.hi + owned.length - 1) % owned.length; render(); });
-    circleArrow(portrait, 105, -20, 1, () => { state.hi = (state.hi + 1) % owned.length; render(); });
-    portrait.on(Node.EventType.TOUCH_END, () => attrsModal(ctx, hid));
-
-    /* 战力徽章（立绘正下方） */
-    const badge = gpanel(content, CX(220, 180), WY(755, 70), 180, 70, CA('#3A2E23', 0.9), C(PAL.gold), 2.5, 35);
-    artSprite(badge, 0, 0, 180, 70, 'ui_banner_title', { belowIdx: 0 });
-    label(badge, 0, 0, `🔥 ${stats.power}`, { size: 26, color: '#FFE08A', bold: true });
-
-    /* 左列：属性 / 故事 圆钮 */
-    btn(content, CX(30, 76), WY(340, 76), 76, 76, '属性', PAL.blue, () => attrsModal(ctx, hid), 20);
-    btn(content, CX(30, 76), WY(440, 76), 76, 76, '故事', PAL.blue, () => storyModal(ctx, hid), 20);
-
-    /* 右列槽区：武器横扁 + 2×2 防具（用户确认：装备栏不需要大背板） */
-    drawSlot(ctx, content, hid, 'weapon', () => render(), CX(470, 270), WY(305, 125), 270, 125);
-    SLOTS_2x2.forEach((k, i) => {
-      drawSlot(ctx, content, hid, k, () => render(), CX(470 + (i % 2) * 140, 130), WY(440 + Math.floor(i / 2) * 160, 150), 130, 150);
-    });
-
-    /* 我的背包：三页签连体（用户确认：去页签背板；段内直角，仅首段左侧/末段右侧留圆弧）；
-       背包格区不加背板（用户确认：直接透出游戏背景） */
-    const tabs = [['weapon', '武器'], ['equip', '装备'], ['mat', '材料']] as const;
-    const segW = 650 / 3, segH = 58, segR = 14;
-    tabs.forEach((t, i) => {
-      const active = t[0] === bagSt.tab;
-      const seg = N('tabseg_' + t[0], content, CX(45 + i * segW, segW), WY(872, segH), segW, segH);
-      const g = seg.addComponent(Graphics);
-      g.fillColor = C(active ? PAL.gold : '#5A6472');
-      g.roundRect(-segW / 2, -segH / 2, segW, segH, i === 1 ? 0 : segR);
-      if (i === 0) g.rect(segW / 2 - segR, -segH / 2, segR, segH);          // 并集盖平右侧两角
-      else if (i === 2) g.rect(-segW / 2, -segH / 2, segR, segH);           // 并集盖平左侧两角
-      g.fill();
-      label(seg, 0, 0, t[1], { size: 22, color: '#241C12', bold: true, w: segW, h: segH });
-      seg.on(Node.EventType.TOUCH_END, () => { bagSt.tab = t[0]; render(); });
-    });
-    const grid = N('bagGrid', content, 0, 0, 750, 300);
-
-    function renderBag(): void {
-      grid.destroyAllChildren();
-      const cells: { uid: string; n: number }[] = [];
-      if (bagSt.tab === 'mat') {
-        for (const id of Object.keys(MATS)) if ((sv.bag[id] || 0) > 0) cells.push({ uid: id, n: sv.bag[id] });
-      } else {
-        const kinds = bagSt.tab === 'weapon' ? ['weapon'] : ['helm', 'acc', 'glove', 'armor'];
-        sv.equips.forEach(e => {
-          const d = EQUIPS[e.defId];
-          if (d && kinds.includes(d.kind) && !Object.values(sv.heroes).some(h => Object.values(h.worn).includes(e.uid))) cells.push({ uid: e.uid, n: 0 });
-        });
-      }
-      // 行数按屏幕可视高动态铺满（Fit-Width 高屏可视 > 1334，固定 2 行会与底部导航间留大片空白）
-      const GRID_TOP = 885;   // 首行上缘（行中心 945 − 60）
-      const ROW_H = 132;
-      const availBottom = 2 * LO.half - 174;   // 预留底部导航(148)+边距
-      const rows = Math.max(2, Math.min(5, Math.floor((availBottom - GRID_TOP + 12) / ROW_H)));
-      const cap = rows * 5;
-      // 背包格区：无大背板（用户确认），格子直接浮于游戏背景上；无物品不补空槽（用户确认，参考图末行止于实有物品）
-      cells.slice(0, cap).forEach((cell, g) => {
-        drawBagCell(ctx, grid, cell, hid, () => render(), CX(22 + (g % 5) * 144, 120), WY(945 + Math.floor(g / 5) * 132, 120));
+    const hid = sv.curHero;
+    const select = (id: string): void => { sv.curHero = id; saveSave(); render(); };
+    const rosterTop = mainResourceTop() + MAIN_RESOURCE_H + 20;
+    const stageTop = rosterTop + 126;
+    const bottom = LO.half * 2 - LO.safeTop - LO.safeBottom - MAIN_NAV_H;
+    // Tall phones expose three bag rows; shorter phones keep the hero readable and scroll only the bag.
+    const stageH = Math.min(610, Math.max(500, bottom - stageTop - 510));
+    const bagTop = stageTop + stageH;
+    buildLobbyRoster(content, rosterTop, hid, select);
+    buildHeroStage(content, ctx, hid, stageTop, stageH, owned, select, render);
+    const cells: { uid: string; n: number }[] = [];
+    if (bagSt.tab === 'mat') {
+      for (const id of Object.keys(MATS)) if ((sv.bag[id] || 0) > 0) cells.push({ uid: id, n: sv.bag[id] });
+    } else {
+      const kinds = bagSt.tab === 'weapon' ? ['weapon'] : ['helm', 'acc', 'glove', 'armor'];
+      sv.equips.forEach(e => {
+        const d = EQUIPS[e.defId];
+        if (d && kinds.includes(d.kind) && !Object.values(sv.heroes).some(h => Object.values(h.worn).includes(e.uid))) cells.push({ uid: e.uid, n: 0 });
       });
     }
-    renderBag();
+    const bagH = bottom - bagTop;
+    const bag = gpanel(content, 0, WY(bagTop, bagH), 730, bagH, '#2D2017', undefined, 0, 10);
+    bag.name = 'heroInventory';
+    gpanel(bag, 0, bagH / 2 - 2, 704, 3, '#A87942', undefined, 0, 1);
+    const header = gpanel(content, 0, WY(bagTop + 6, 50), 706, 50, '#3C291B', undefined, 0, 8);
+    artSprite(header, -315, 0, 42, 42, 'ui_nav_shop', { sliced: false });
+    mainLabel(header, -128, 0, '我的背包', { size: 27, color: '#FFE3A1', bold: true, align: 'left', w: 294, h: 36 });
+    mainLabel(header, 285, 0, `${cells.length}件`, { size: 19, color: '#C9AD86', align: 'right', w: 100, h: 30 });
+    const tabs = [['weapon', '武器'], ['equip', '装备'], ['mat', '材料']] as const;
+    const tabBar = gpanel(content, 0, WY(bagTop + 60, 48), 706, 48, '#21180F', undefined, 0, 8);
+    tabs.forEach(([key, title], i) => {
+      const active = bagSt.tab === key;
+      const slot = gpanel(tabBar, (i - 1) * 234, 0, 230, 44, active ? '#FFC44E' : '#4B3423', undefined, 0, 7);
+      if (active) gpanel(slot, 0, 18, 208, 2, '#FFE9A4', undefined, 0, 1);
+      artSprite(slot, -43, 0, 29, 29, key === 'weapon' ? KIND_ART.weapon : key === 'equip' ? 'ui_icon_equip' : 'ui_item_mat_stone', { sliced: false });
+      mainLabel(slot, 19, 0, title, { size: 23, color: active ? '#462B10' : '#F0D4A2', bold: true, align: 'left', w: 72, h: 30 });
+      slot.on(Node.EventType.TOUCH_END, () => { bagSt.tab = key; render(); });
+    });
+    const gridTop = bagTop + 116;
+    const gridH = bottom - 10 - gridTop;
+    const contentH = Math.ceil(cells.length / 5) * BAG_STEP + 4;
+    const grid = pageScroll(content, 'heroBag', gridTop, bottom - 10, contentH, 706);
+    const scroll = grid.parent!.getComponent(ScrollView)!;
+    const scrollKey = hid + ':' + bagSt.tab;
+    const maxOffset = Math.max(0, contentH - gridH);
+    let handle: Node | null = null;
+    let travel = 0;
+    if (maxOffset > 0) {
+      const track = gpanel(content, 353, WY(gridTop, gridH), 4, gridH, '#21170F', undefined, 0, 2);
+      const thumbH = Math.max(28, gridH * gridH / contentH);
+      travel = gridH - thumbH;
+      handle = gpanel(track, 0, travel / 2, 4, thumbH, '#AA7C42', undefined, 0, 2);
+    }
+    const updateScroll = (): void => {
+      const offset = Math.max(0, Math.min(maxOffset, scroll.getScrollOffset().y));
+      bagSt.offsets[scrollKey] = offset;
+      if (handle) handle.setPosition(0, travel / 2 - travel * offset / maxOffset, 0);
+    };
+    grid.parent!.on('scrolling', updateScroll);
+    const visibleSlots = Math.max(5, Math.min(15, Math.floor(gridH / BAG_STEP) * 5));
+    for (let i = cells.length; i < visibleSlots; i++) {
+      itemSeat(grid, (i % 5 - 2) * BAG_COL_STEP, -(Math.floor(i / 5) * BAG_STEP + BAG_SIZE / 2), BAG_SIZE, BAG_SIZE, 0, false);
+    }
+    cells.forEach((cell, i) => {
+      drawBagCell(ctx, grid, cell, hid, render, (i % 5 - 2) * BAG_COL_STEP, -(Math.floor(i / 5) * BAG_STEP + BAG_SIZE / 2));
+    });
+    if (!cells.length) {
+      const empty = gpanel(grid, 0, -Math.min(gridH / 2, 174), 480, 84, CA('#251B13', 0.93), undefined, 0, 8);
+      mainLabel(empty, 0, 16, '暂无' + tabs.find(t => t[0] === bagSt.tab)![1], { size: 22, color: '#E5C79B', w: 460, h: 32 });
+      mainLabel(empty, 0, -20, '通过关卡掉落或商店补给获得', { size: 17, color: '#B99D76', w: 460, h: 26 });
+    }
+    const scrollOffset = Math.min(maxOffset, bagSt.offsets[scrollKey] || 0);
+    if (scrollOffset > 0) scroll.scrollToOffset(new Vec2(0, scrollOffset), 0);
+    updateScroll();
   }
 }
 
-/** 装备槽（含空态）：点槽 → 选择弹窗（该槽位类型的仓库装备 + 卸下） */
+function buildLobbyRoster(parent: Node, top: number, selected: string, select: (id: string) => void): void {
+  const sv = loadSave();
+  Object.values(HERO_DEFS).forEach((def, i) => {
+    const active = def.id === selected;
+    const owned = !!sv.heroes[def.id]?.owned;
+    const x = (i - 2) * 138;
+    gpanel(parent, x, WY(top + 4, 114), 126, 114, CA('#120D09', 0.74), undefined, 0, 10);
+    const slot = gpanel(parent, x, WY(top, 114), 126, 114, active ? '#FFC64E' : '#4F3927', undefined, 0, 10);
+    const portrait = gpanel(slot, 0, 13, 114, 80, active ? '#3B5828' : '#241E18', undefined, 0, 7);
+    const avatar = artSprite(portrait, 0, 0, 80, 80, def.avatar, { sliced: false });
+    if (!owned) {
+      avatar.addComponent(UIOpacity).opacity = 116;
+      artSprite(slot, 42, -13, 22, 22, 'ui_icon_lock', { sliced: false });
+    }
+    const shortName = def.id === 'pyro' ? def.name.replace('·', '') : def.name.split('·')[0];
+    mainLabel(slot, 0, -40, shortName, { size: 21, color: active ? '#442B12' : owned ? '#F2DFB9' : '#A5947B',
+      bold: true, w: 114, h: 28 });
+    if (active) gpanel(slot, 0, 53, 96, 2, '#FFF0AA', undefined, 0, 1);
+    slot.on(Node.EventType.TOUCH_END, () => {
+      if (!owned) { toast('前往商店解锁该英雄'); return; }
+      select(def.id);
+    });
+  });
+}
+
+function buildHeroStage(parent: Node, ctx: PageCtx, hid: string, top: number, height: number,
+  owned: string[], select: (id: string) => void, rebuild: () => void): void {
+  const sv = loadSave();
+  const def = HERO_DEFS[hid];
+  const stage = N('heroStage', parent, 0, WY(top, height), 730, height);
+  const footY = -height / 2 + 71;
+  const floor = N('heroStoneStage', stage, -154, footY - 5).addComponent(Graphics);
+  floor.fillColor = CA('#160E09', 0.35); floor.ellipse(0, -19, 204, 28); floor.fill();
+  floor.fillColor = C('#6E5842'); floor.ellipse(0, -12, 194, 29); floor.fill();
+  floor.fillColor = C('#B49D76'); floor.ellipse(0, 0, 194, 29); floor.fill();
+  floor.strokeColor = C('#88704F'); floor.lineWidth = 2;
+  for (let i = 0; i < 12; i++) {
+    const a = i * Math.PI / 6;
+    floor.moveTo(Math.cos(a) * 116, Math.sin(a) * 17);
+    floor.lineTo(Math.cos(a) * 190, Math.sin(a) * 28); floor.stroke();
+  }
+  heroFigure(stage, hid, -154, footY, height - 156, { lobby: true, maxWidth: 376 });
+  mainLabel(stage, -166, height / 2 - 30, def.name, { size: 34, color: '#FFF0BD', bold: true,
+    align: 'left', w: 352, h: 44, outline: '#23170F', outlineW: 2 });
+  mainLabel(stage, -166, height / 2 - 67, `Lv.${sv.heroes[hid].lv} · ${def.job.split(' · ')[0]}`,
+    { size: 22, color: '#EAD5AF', align: 'left', w: 352, h: 30, outline: '#23170F', outlineW: 1.5 });
+  const index = owned.indexOf(hid);
+  if (owned.length > 1) {
+    circleArrow(stage, -321, -16, -1, () => select(owned[(index + owned.length - 1) % owned.length]));
+    circleArrow(stage, 31, -16, 1, () => select(owned[(index + 1) % owned.length]));
+  }
+  const power = gpanel(stage, -154, -height / 2 + 30, 306, 44, '#6B3E13', undefined, 0, 12);
+  gpanel(power, 0, 19, 276, 2, '#E1AC52', undefined, 0, 1);
+  artSprite(power, -125, 0, 36, 36, 'ui_icon_atk_' + hid, { sliced: false });
+  mainLabel(power, 16, 0, `战力 ${fmt(heroStats(hid).power)}`, { size: 27, color: '#FFE49C', bold: true,
+    w: 248, h: 36, outline: '#3B210B', outlineW: 1 });
+  mainLabel(stage, 213, height / 2 - 28, '已穿戴', { size: 23, color: '#FFE0A2', bold: true, w: 252, h: 32, outline: '#271A0F', outlineW: 1.5 });
+  drawSlot(ctx, stage, hid, 'weapon', rebuild, 213, height / 2 - 102, 252, 104);
+  const sq = Math.min(124, Math.max(100, (height - 300) / 2));
+  SLOTS_2x2.forEach((kind, i) => {
+    drawSlot(ctx, stage, hid, kind, rebuild, 146 + (i % 2) * 134,
+      height / 2 - (168 + sq / 2 + Math.floor(i / 2) * (sq + 14)), sq, sq);
+  });
+  detailButton(stage, 146, -height / 2 + 55, '属性', false, () => attrsModal(ctx, hid));
+  detailButton(stage, 280, -height / 2 + 55, '故事', true, () => storyModal(ctx, hid));
+}
+
+/** Short circular entries under equipment; the icon carries the action and text stays secondary. */
+function detailButton(parent: Node, x: number, y: number, title: string, book: boolean, onClick: () => void): void {
+  const button = N('heroDetail:' + title, parent, x, y, 104, 86);
+  gpanel(button, 0, 10, 58, 58, '#2C1E12', undefined, 0, 29);
+  const icon = N('detailGlyph', button, 0, 10).addComponent(Graphics);
+  icon.strokeColor = C('#E8CA8C'); icon.fillColor = C('#E8CA8C'); icon.lineWidth = 2.5;
+  if (book) {
+    for (const dir of [-1, 1]) {
+      icon.moveTo(0, 11); icon.lineTo(dir * 17, 17); icon.lineTo(dir * 17, -12);
+      icon.lineTo(0, -17); icon.close(); icon.stroke();
+    }
+    icon.moveTo(0, 11); icon.lineTo(0, -17); icon.stroke();
+  } else {
+    icon.roundRect(-13, -17, 26, 34, 3); icon.stroke();
+    for (let i = 0; i < 3; i++) { icon.moveTo(-7, 9 - i * 9); icon.lineTo(7, 9 - i * 9); icon.stroke(); }
+  }
+  mainLabel(button, 0, -33, title, { size: 21, color: '#F2DDB5', bold: true, w: 96, h: 26, outline: '#21170F', outlineW: 1 });
+  button.on(Node.EventType.TOUCH_START, () => button.setScale(0.94, 0.94, 1));
+  button.on(Node.EventType.TOUCH_CANCEL, () => button.setScale(1, 1, 1));
+  button.on(Node.EventType.TOUCH_END, (e: unknown) => {
+    button.setScale(1, 1, 1);
+    const ev = e as { propagationStopped?: boolean }; if (ev) ev.propagationStopped = true;
+    onClick();
+  });
+}
+
+function itemSeat(parent: Node, x: number, y: number, w: number, h: number, quality: number, filled: boolean): Node {
+  gpanel(parent, x, y - 3, w, h, '#17110C', undefined, 0, 9);
+  const seat = gpanel(parent, x, y, w, h, filled ? SLOT_COLOR[quality] : '#302C24', undefined, 0, 9);
+  if (filled) {
+    gpanel(seat, 0, h / 2 - 4, w - 18, 2, CA(QCOLOR[quality], 0.62), undefined, 0, 1);
+  }
+  return seat;
+}
+
+/** Equipped seats retain their existing detail/forge flow; empty seats remain inactive. */
 function drawSlot(ctx: PageCtx, parent: Node, hid: string, kind: EquipKind, rebuild: () => void,
   x: number, y: number, w: number, h: number): void {
   const inst = wornInst(hid, kind);
   const q = inst ? EQUIPS[inst.defId].quality : 0;
   /* 用户确认：品质=方形品质色底板（不用品质色边框）；空槽维持暗板 */
-  const slot = inst
-    ? gpanel(parent, x, y, w, h, CA(QCOLOR[q], 0.55), undefined, 0, 12)
-    : gpanel(parent, x, y, w, h, CA('#10151D', 0.8), C('#3A4250'), 2.5, 12);
+  const slot = itemSeat(parent, x, y, w, h, q, !!inst);
   if (inst) {
     const d = EQUIPS[inst.defId];
-    const es = Math.min(50, h * 0.38);
-    const fb = label(slot, 0, h * 0.14, KIND_ICON[kind], { size: es });
-    artSprite(slot, 0, h * 0.14, es * 1.4, es * 1.4, 'ui_item_' + inst.defId, { hideOnLoad: [fb] });   // 装备切图（批次3），缺图回退 emoji
-    label(slot, 0, -h * 0.26, `${d.name} Lv.${inst.lv}`, { size: Math.min(20, w * 0.078), color: '#E8E0C8', bold: true, w: w - 12, h: 28, shrink: true });
-    label(slot, -w / 2 + 10, h / 2 - 18, `T${d.tier}`, { size: 16, color: '#FFF3D6', align: 'left', w: 60, h: 24 });
+    const wide = w > 200, ix = wide ? -68 : 0, iy = wide ? 4 : 2;
+    const fb = mainLabel(slot, ix, iy, KIND_ICON[kind], { size: 32 });
+    artSprite(slot, ix, iy, wide ? 98 : w - 20, wide ? 84 : h - 20, 'ui_item_' + inst.defId, { hideOnLoad: [fb] });
+    if (wide) {
+      mainLabel(slot, 53, 12, d.name, { size: 21, color: '#FFF2CE', bold: true, align: 'left', w: 130, h: 30 });
+      mainLabel(slot, 53, -20, `${d.tier}阶 · Lv.${inst.lv}`, { size: 18, color: '#E0D7BD', align: 'left', w: 130, h: 26 });
+    } else {
+      const tier = gpanel(slot, -w / 2 + 24, h / 2 - 17, 38, 22, CA('#1D160F', 0.8), undefined, 0, 5);
+      mainLabel(tier, 0, 0, `${d.tier}阶`, { size: 15, color: '#FFF1D1', bold: true, w: 36, h: 20 });
+      const level = gpanel(slot, w / 2 - 35, -h / 2 + 16, 64, 24, CA('#15110D', 0.74), undefined, 0, 5);
+      mainLabel(level, 0, 0, `Lv.${inst.lv}`, { size: 18, color: '#FFF2CD', bold: true, align: 'right', w: 58, h: 22 });
+    }
     // 已穿戴：点击弹装备属性（无替换选择）；空槽：点击无反应
     slot.on(Node.EventType.TOUCH_END, (e: unknown) => {
-      const ev = e as { propagationStopped?: () => void };
-      if (ev && ev.propagationStopped) ev.propagationStopped();
+      const ev = e as { propagationStopped?: boolean };
+      if (ev) ev.propagationStopped = true;
       wornEquipModal(ctx, hid, kind, rebuild);
     });
   } else {
-    label(slot, 0, h * 0.1, '+', { size: 46, color: '#5F6873' });
-    label(slot, 0, -h * 0.26, KIND_NAME[kind], { size: 19, color: '#6B7480', w: w - 10, h: 26 });
+    const wide = w > 200;
+    const ghost = artSprite(slot, wide ? -68 : 0, wide ? 0 : 7, wide ? 78 : w - 35, wide ? 78 : h - 35, KIND_ART[kind], { sliced: false });
+    ghost.addComponent(UIOpacity).opacity = 48;
+    mainLabel(slot, wide ? 47 : 0, wide ? 0 : -h / 2 + 17, KIND_NAME[kind],
+      { size: 18, color: '#B2A38B', w: wide ? 138 : w - 10, h: 26 });
   }
 }
 
@@ -281,18 +389,19 @@ function drawBagCell(ctx: PageCtx, grid: Node, cell: { uid: string; n: number },
   const q = isMat ? 0 : d?.quality ?? 0;
   const name = isMat ? MATS[cell.uid].name : d?.name ?? '???';
   const kind = isMat ? null : d?.kind ?? null;
-  const g = gpanel(grid, x, y, 120, 120, CA(QCOLOR[q], 0.55), undefined, 0, 12);   // 整格=品质色底板（用户确认）
-  const iconFb = label(g, 0, -12, kind ? KIND_ICON[kind] : '🧱', { size: 44 });
+  const g = itemSeat(grid, x, y, BAG_SIZE, BAG_SIZE, q, true);
+  g.name = 'heroBagItem:' + cell.uid;
+  const iconFb = label(g, 0, 4, kind ? KIND_ICON[kind] : '🧱', { size: 50 });
   // 物品切图（批次3）：装备按 defId、材料按物品 id（ui_item_mat_*），缺图回退 emoji
-  if (isMat) artSprite(g, 0, -12, 64, 64, 'ui_item_' + cell.uid, { hideOnLoad: [iconFb] });
-  else if (inst) artSprite(g, 0, -12, 64, 64, 'ui_item_' + inst.defId, { hideOnLoad: [iconFb] });
-  label(g, 0, 36, name, { size: 16, color: '#E8E0C8', w: 112, h: 24, shrink: true });
-  if (isMat) label(g, 42, -46, `×${cell.n}`, { size: 18, color: '#FFE08A', bold: true, align: 'right', w: 70, h: 24 });
-  else label(g, -42, -46, `Lv.${inst?.lv ?? 1}`, { size: 16, color: '#FFF3D6', align: 'left', w: 70, h: 24 });
+  if (isMat) artSprite(g, 0, 4, 100, 100, 'ui_item_' + cell.uid, { hideOnLoad: [iconFb] });
+  else if (inst) artSprite(g, 0, 4, 100, 100, 'ui_item_' + inst.defId, { hideOnLoad: [iconFb] });
+  const quantity = gpanel(g, 22, -44, 68, 24, CA('#15110D', 0.82), undefined, 0, 5);
+  mainLabel(quantity, 0, 0, isMat ? `×${cell.n}` : `Lv.${inst?.lv ?? 1}`, { size: 18, color: '#FFF1CB',
+    bold: true, align: 'right', w: 62, h: 22, outline: '#15110D', outlineW: 1 });
 
   g.on(Node.EventType.TOUCH_END, (e: unknown) => {
-    const ev = e as { propagationStopped?: () => void };
-    if (ev && ev.propagationStopped) ev.propagationStopped();
+    const ev = e as { propagationStopped?: boolean };
+    if (ev) ev.propagationStopped = true;
     if (isMat) {
       const panel = modal(ctx, 560, 560, name);
       const m = MATS[cell.uid];

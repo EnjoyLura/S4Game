@@ -2,11 +2,104 @@
  * 主界面页面共享工具：toast / 模态弹窗框架 / 品质徽标 / 货币小标
  * 设计坐标与线稿一致：顶基 y 统一 WY(线稿设计值)（线稿数字=含刘海偏移的绝对 y），弹窗面板居中。
  */
-import { Node, UIOpacity, tween } from 'cc';
-import { PAL } from '../config/GameConfig';
-import { CA, btn, C, dlgConfirm, dimLayer, gpanel, label, N, WY, WX } from './UIKit';
+import { Graphics, Mask, Node, ScrollView, UITransform, UIOpacity, tween } from 'cc';
+import { LO, PAL } from '../config/GameConfig';
+import { CA, btn, C, dlgConfirm, dimLayer, gpanel, label, LabelOpts, N, WY, WX } from './UIKit';
 import { artSprite } from './Ux';
-import { Quality, QCOLOR, QNAME } from '../core/GameData';
+import { HERO_DEFS, Quality, QCOLOR, QNAME } from '../core/GameData';
+import { loadSave } from '../core/SaveData';
+import { BattleSprite } from '../battle/BattleSprite';
+
+/** Shared geometry for the five lobby pages, in visible top-origin units. */
+export const MAIN_NAV_H = 128;
+export const MAIN_W = 686;
+export const MAIN_RESOURCE_H = 56;
+/** Leave a fixed notch band even when a mobile browser reports no safe-area inset. */
+export function mainResourceTop(): number { return Math.max(92, LO.notchTop + 20); }
+/** Keep alignment anchored to the intended text box after bundled fonts load. */
+export function mainLabel(parent: Node, x: number, y: number, text: string, opts: LabelOpts = {}): Node {
+  return label(parent, x, y, text, { shrink: true, ...opts });
+}
+export function mainLayout(): { headerTop: number; top: number; bottom: number; height: number } {
+  const headerTop = mainResourceTop();
+  const top = headerTop + MAIN_RESOURCE_H + 100;
+  const bottom = LO.half * 2 - LO.safeTop - LO.safeBottom - MAIN_NAV_H - 20;
+  return { headerTop, top, bottom, height: bottom - top };
+}
+
+/** Quiet inset tabs; labels and touch targets share the same rectangle. */
+export function mainSegments(parent: Node, top: number, names: readonly string[], selected: number,
+  onSelect: (index: number) => void, locked: readonly boolean[] = [], local = false): void {
+  const h = 58, w = MAIN_W / names.length;
+  const bar = gpanel(parent, 0, local ? -top - h / 2 : WY(top, h), MAIN_W, h, CA('#15221F', 0.92), undefined, 0, 16);
+  names.forEach((name, i) => {
+    const active = selected === i;
+    const slot = gpanel(bar, -MAIN_W / 2 + w * (i + 0.5), 0, w - 8, h - 8,
+      active ? '#E8BA60' : CA('#FFFFFF', 0), undefined, 0, 12);
+    mainLabel(slot, 0, 0, (locked[i] ? '锁定 · ' : '') + name,
+      { size: locked[i] ? 18 : 22, color: active ? '#322815' : locked[i] ? '#8D9A91' : '#D8DFD4', bold: active, w: w - 16, h: 40, shrink: true });
+    slot.on(Node.EventType.TOUCH_END, () => onSelect(i));
+  });
+}
+
+/** A top-anchored scroll body, always clipped above the persistent navigation. */
+export function pageScroll(parent: Node, name: string, top: number, bottom: number, contentHeight: number, width = MAIN_W): Node {
+  const height = Math.max(1, bottom - top);
+  const view = N(name + 'View', parent, 0, WY(top, height), width, height);
+  view.addComponent(Mask);
+  const scroll = view.addComponent(ScrollView);
+  const content = N(name + 'Content', view, 0, height / 2, width, Math.max(height, contentHeight));
+  content.getComponent(UITransform)!.setAnchorPoint(0.5, 1);
+  scroll.content = content;
+  scroll.horizontal = false;
+  scroll.vertical = contentHeight > height;
+  return content;
+}
+
+export function sectionTitle(parent: Node, y: number, title: string, note = ''): void {
+  mainLabel(parent, -208, y, title, { size: 23, color: '#FFF0CD', bold: true, align: 'left', w: 270, h: 32, outline: '#203026', outlineW: 1 });
+  if (note) mainLabel(parent, 207, y, note, { size: 17, color: '#E0E5D7', align: 'right', w: 270, h: 28, outline: '#203026', outlineW: 1 });
+}
+
+/** One consistent hero selector on the hero and upgrade pages. */
+export function heroRoster(parent: Node, top: number, selected: string, onSelect: (id: string) => void): void {
+  const sv = loadSave();
+  Object.values(HERO_DEFS).forEach((def, i) => {
+    const owned = !!sv.heroes[def.id]?.owned;
+    const active = def.id === selected;
+    const slot = gpanel(parent, (i - 2) * 138, WY(top, 104), 124, 104,
+      active ? CA('#3D5034', 0.96) : CA('#15221F', 0.84), undefined, 0, 16);
+    const avatar = artSprite(slot, 0, 12, 64, 64, def.avatar, { sliced: false });
+    if (!owned) {
+      avatar.addComponent(UIOpacity).opacity = 95;
+      artSprite(slot, 0, 12, 24, 24, 'ui_icon_lock', { sliced: false });
+    }
+    mainLabel(slot, 0, -32, def.name.split('·')[0], { size: 18, color: active ? '#FFE1A0' : owned ? '#D9DFD4' : '#8D9A91', bold: active, w: 112, h: 24 });
+    if (active) gpanel(slot, 0, -49, 28, 3, '#E8BA60', undefined, 0, 1);
+    slot.on(Node.EventType.TOUCH_END, () => {
+      if (!owned) { toast('前往商店解锁该英雄'); return; }
+      onSelect(def.id);
+    });
+  });
+}
+
+/** Reuse the delivered full-body hero art instead of layering an avatar over it. */
+export function heroFigure(parent: Node, id: string, x: number, footY: number, height: number,
+  opts: { lobby?: boolean; maxWidth?: number } = {}): void {
+  const shadow = N('heroGround', parent, x, footY, 200, 24).addComponent(Graphics);
+  shadow.fillColor = CA('#0B1712', 0.28);
+  shadow.ellipse(0, 0, Math.min(110, height * 0.28), 10);
+  shadow.fill();
+  const fallbackSize = Math.min(height * 0.75, opts.maxWidth ?? Infinity);
+  const fallback = artSprite(parent, x, footY + height / 2, fallbackSize, fallbackSize, HERO_DEFS[id].avatar, { sliced: false });
+  const art = new BattleSprite(parent, opts.lobby ? 'lobby_heroes_v1' : 'battle_heroes_v2', () => {
+    if (fallback.isValid) fallback.active = false;
+    const frame = art.sprite.spriteFrame;
+    if (frame && opts.maxWidth) art.show(id + '_idle', Math.min(height, opts.maxWidth * frame.rect.height / frame.rect.width));
+  });
+  art.node.setPosition(x, footY, 0);
+  art.show(id + '_idle', height);
+}
 
 export interface PageCtx {
   screens: Node;

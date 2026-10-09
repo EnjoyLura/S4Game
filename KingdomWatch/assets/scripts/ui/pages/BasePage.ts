@@ -1,10 +1,10 @@
 /**
- * ⑤ 基地（线稿 base）：等距场景占位 + 主城（升级加耐久/盾）+ 研究院（怪物图鉴弹窗）+ 锁定建筑占位
+ * ⑤ 基地：场景留白 + 主城成长摘要 + 研究院/工坊双列入口。
  */
 import { Mask, ScrollView, UITransform } from 'cc';
-import { CA, btn, C, gcircle, gpanel, label, N, WY, WX } from '../UIKit';
+import { CA, btn, gcircle, gpanel, label, N } from '../UIKit';
 import { artSprite } from '../Ux';
-import { PageCtx, modal, toast, fmt, CX } from '../PageKit';
+import { mainLabel, PageCtx, modal, toast, fmt, mainLayout, pageScroll, sectionTitle } from '../PageKit';
 import { zoneTab } from './UpgradePage';
 import { PAL } from '../../config/GameConfig';
 import { CODEX, CODEX_REWARD, claimCodexReward, codexClaimed, codexUnlocked, keepHp, keepShield, keepUpCost, upKeep, MAX } from '../../core/GameData';
@@ -16,35 +16,42 @@ export function buildBase(ctx: PageCtx): void {
   const root = ctx.screens;
   const sv = loadSave();
 
-  /* 主城（左上）——无大背板（用户确认：建筑直接浮于场景） */
-  const keep = gpanel(root, CX(225, 300), WY(270, 300), 300, 300, CA('#3A2E23', 0.9), C(PAL.gold), 3, 20);
-  artSprite(keep, 0, 0, 300, 300, 'building_keep', { belowIdx: 0 });
-  label(keep, 0, -60, '🏰', { size: 84 });
-  const dot = gpanel(keep, 108, -108, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
-  void dot;
-  keep.on(NodeClick(), () => keepModal(ctx));
+  const layout = mainLayout();
+  const scenicGap = Math.max(160, Math.min(360, layout.height * 0.32));
+  const facilitiesTop = scenicGap + 242;
+  const body = pageScroll(root, 'baseBody', layout.top, layout.bottom, facilitiesTop + 260);
+  const keep = gpanel(body, 0, -(scenicGap + 108), 686, 216, CA('#192C25', 0.96), undefined, 0, 20);
+  artSprite(keep, -272, 54, 88, 88, 'ui_nav_base', { sliced: false });
+  mainLabel(keep, -110, 71, '主城', { size: 28, color: '#FFF0CD', bold: true, align: 'left', w: 220, h: 38 });
+  mainLabel(keep, -110, 33, '远征营地 · 守护王国防线', { size: 18, color: '#B9C9B4', align: 'left', w: 220, h: 28, shrink: true });
+  const level = gpanel(keep, 251, 62, 140, 40, '#405337', undefined, 0, 12);
+  mainLabel(level, 0, 0, `Lv.${sv.keepLv}`, { size: 24, color: '#FFE1A0', bold: true, w: 130, h: 32 });
+  const stats = [['防线耐久', fmt(keepHp(sv.keepLv))], ['阶段护盾', fmt(keepShield(sv.keepLv))]];
+  stats.forEach((s, i) => {
+    const tile = gpanel(keep, -240 + i * 176, -43, 156, 82, CA('#0A1912', 0.56), undefined, 0, 12);
+    mainLabel(tile, 0, 21, s[0], { size: 16, color: '#AEBDA9', w: 144, h: 24 });
+    mainLabel(tile, 0, -14, s[1], { size: 26, color: '#FFF0CD', bold: true, w: 144, h: 34, shrink: true });
+  });
+  btn(keep, 233, -39, 174, 68, sv.keepLv >= MAX.keep ? '查看主城' : '升级主城', '#E8BA60', () => keepModal(ctx), 23, true);
+  mainLabel(keep, 233, -92, sv.keepLv >= MAX.keep ? '主城已满级' : `消耗 ${fmt(keepUpCost(sv.keepLv))} 金币`, { size: 16, color: '#B9C9B4', w: 184, h: 24, shrink: true });
 
-  const plate1 = gpanel(root, CX(265, 220), WY(575, 56), 220, 56, CA('#14181E', 0.94), CA(PAL.gold, 0.9), 2, 12);
-  label(plate1, 0, 0, `主城 Lv.${sv.keepLv} ▶`, { size: 22, color: '#FFE08A', bold: true, w: 200, h: 36 });
-  plate1.on(NodeClick(), () => keepModal(ctx));
-
-  /* 研究院（右下） */
-  const lab = gpanel(root, CX(470, 240), WY(680, 220), 240, 220, CA('#1E2A3A', 0.9), C(PAL.blue), 3, 20);
-  artSprite(lab, 0, 0, 240, 220, 'building_lab', { belowIdx: 0 });
-  label(lab, 0, -40, '🔬', { size: 72 });
+  sectionTitle(body, -facilitiesTop - 16, '营地设施', '建设与探索');
   const unlockedN = CODEX.filter(c => codexUnlocked(c.id)).length;
-  if (unlockedN > 0) gpanel(lab, 92, -82, 26, 26, CA('#E5484D', 0.95), undefined, 0, 13);
+  const rewardsN = CODEX.filter(c => codexUnlocked(c.id) && !codexClaimed(c.id)).length;
+  const lab = gpanel(body, -176, -(facilitiesTop + 44 + 103), 334, 206, CA('#EADFBE', 0.98), undefined, 0, 18);
+  artSprite(lab, -103, 45, 64, 64, 'ui_icon_skull', { sliced: false });
+  mainLabel(lab, 48, 59, '研究院', { size: 24, color: INK, bold: true, align: 'left', w: 176, h: 34 });
+  mainLabel(lab, 48, 23, '怪物图鉴', { size: 18, color: '#6B5A3A', align: 'left', w: 176, h: 28 });
+  mainLabel(lab, 0, -20, `已发现 ${unlockedN} / ${CODEX.length} 种怪物`, { size: 18, color: INK, w: 294, h: 28 });
+  btn(lab, 0, -70, 286, 42, rewardsN ? `查看图鉴 · ${rewardsN} 份奖励` : '查看图鉴', '#BFD0B1', () => codexModal(ctx), 19, true);
+  if (rewardsN > 0) gpanel(lab, 145, 81, 12, 12, '#E5484D', undefined, 0, 6);
   lab.on(NodeClick(), () => codexModal(ctx));
-  const plate2 = gpanel(root, CX(500, 180), WY(905, 52), 180, 52, CA('#14181E', 0.94), CA(PAL.blue, 0.9), 2, 12);
-  label(plate2, 0, 0, `研究院 ▶`, { size: 22, color: '#CFE3FF', bold: true, w: 160, h: 34 });
-  plate2.on(NodeClick(), () => codexModal(ctx));
-
-  /* 锁定建筑占位（工坊） */
-  const lock = gpanel(root, CX(45, 220), WY(680, 220), 220, 220, CA('#10151D', 0.7), '#FFFFFF22', 2, 20);
-  label(lock, 0, -30, '🏗️', { size: 60 });
-  label(lock, 0, 40, '工坊 · 未开放', { size: 20, color: '#889099', w: 200, h: 30 });
-  const plate3 = gpanel(root, CX(60, 190), WY(905, 52), 190, 52, CA('#14181E', 0.8), '#FFFFFF22', 2, 12);
-  label(plate3, 0, 0, '🔒 未解锁', { size: 20, color: '#889099', w: 170, h: 34 });
+  const lock = gpanel(body, 176, -(facilitiesTop + 44 + 103), 334, 206, CA('#192C25', 0.94), undefined, 0, 18);
+  artSprite(lock, -103, 45, 60, 60, 'ui_icon_lock', { sliced: false });
+  mainLabel(lock, 48, 59, '工坊', { size: 24, color: '#B9C9B4', bold: true, align: 'left', w: 176, h: 34 });
+  mainLabel(lock, 48, 23, '营地建设', { size: 18, color: '#9BAD98', align: 'left', w: 176, h: 28 });
+  mainLabel(lock, 0, -20, '更多营地设施即将开放', { size: 18, color: '#9BAD98', w: 294, h: 28 });
+  mainLabel(lock, 0, -70, '尚未开放', { size: 19, color: '#9BAD98', w: 294, h: 30 });
 }
 
 function NodeClick(): string { return 'touch-end'; }
@@ -165,7 +172,7 @@ function codexDetail(ctx: PageCtx, id: string): void {
     btn(act, 195, 0, 160, 54, '领 取', PAL.gold, () => {
       const r = claimCodexReward(id);
       toast(r.msg);
-      if (r.ok) { const d = panel.parent; if (d) d.destroy(); }
+      if (r.ok) { const d = panel.parent; if (d) d.destroy(); ctx.refresh(); }
     }, 24, true);
     gpanel(act, 263, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
   } else {

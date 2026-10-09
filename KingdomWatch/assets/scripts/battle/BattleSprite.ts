@@ -5,7 +5,7 @@
 import { Color, JsonAsset, Layers, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
 import { uxFrame } from '../ui/Ux';
 
-type AtlasId = 'battle_mobs_v2' | 'battle_heroes_v2' | 'battle_mob_anim_v1';
+type AtlasId = 'battle_mobs_v2' | 'battle_heroes_v2' | 'battle_mob_anim_v1' | 'lobby_heroes_v1';
 interface FrameManifest { frames: Record<string, [number, number, number, number]>; }
 interface Atlas { frames: Map<string, SpriteFrame>; }
 const atlases = new Map<AtlasId, Atlas>();
