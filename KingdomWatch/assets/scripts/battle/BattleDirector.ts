@@ -4,7 +4,7 @@
  */
 import { _decorator, Canvas, Component, director, Layers, Node } from 'cc';
 import { LEVEL_1_1, LevelDef, MOBS, heroSlots, nextLevelId } from '../config/Mobs';
-import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, baseMoraStats, HeroStats, archerAtkCfg, sniperAtkCfg, voltAtkCfg, voltSkCfg, voltUltCfg, pyroAtkCfg, pyroSkCfg, pyroUltCfg, moraAtkCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, baseMoraStats, HeroStats, archerAtkCfg, sniperAtkCfg, sniperSkCfg, voltAtkCfg, voltSkCfg, voltUltCfg, pyroAtkCfg, pyroSkCfg, pyroUltCfg, moraAtkCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
 import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
@@ -583,6 +583,7 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
     if (ac.fullHpOn) s.fullHpBonus = 0.25;            // 15级 对满血目标+25%
     if (hs.skillLv >= 5) s.skillCdFlat += 1;          // 技能5级 冷却-1s
     if (hs.ultLv >= 15) s.chargeMul *= 0.9;           // 大招15级 充能-10%
+    s.skillShots += sniperSkCfg(hs.skillLv).shots - 6;   // 技能10级 连狙+2发（折进 stats，与多目标锁定卡同字段——面板/战斗共用）
   } else if (hid === 'volt') {
     const ac = voltAtkCfg(hs.atkLv);
     s.normalMul = ac.normalMul;                       // 普攻伤害：每级+8%、20级再+20%
@@ -622,7 +623,7 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
     if (moraSkCfg(hs.skillLv).cdOn) s.skillCdFlat += 1;   // 技能5级 冷却-1s
     if (moraUltCfg(hs.ultLv).chargeOn) s.chargeMul *= 0.9;   // 大招15级 充能-10%
     if (bt.slowMul !== 1) s.slowOnHit = (s.slowOnHit || 0) * bt.slowMul;   // 30级 冰寒刺骨
-    if (bt.novaR) s.novaR = Math.max(s.novaR, bt.novaR);   // 60级 新星范围150→190
+    if (bt.novaR) s.novaR = Math.max(s.novaR, bt.novaR);   // 60级 领域范围150→190
     if (bt.freezeProc) s.freezeProc = bt.freezeProc;       // 70级 普攻概率冰冻
     if (bt.stunBonus) s.novaStun += bt.stunBonus;          // 80级 冻结+0.4s
     if (bt.slowOnAtk) s.slowOnHit = Math.max(s.slowOnHit || 0, bt.slowOnAtk);   // 90级 冰寒之躯

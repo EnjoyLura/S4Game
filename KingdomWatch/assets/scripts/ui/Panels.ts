@@ -486,7 +486,7 @@ export class Panels {
         title = '技能 · 穿颅射击';
         const sc = sniperSkCfg(h.skillLv || 1);
         rows = [
-          ['效果', `锁定离防线最近 · 连续 ${sc.shots} 狙（${sc.window}s 窗口）`],
+          ['效果', `锁定离防线最近 · 连续 ${Math.round(h.skillShots || 6)} 狙（${sc.window}s 窗口）`],
           ['每发伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * sc.mul) + `（×${sc.mul.toFixed(2)}）`],
           ['特性', '持续索敌 · 独立暴击'],
           ['冷却时间', cdTotal],

@@ -686,7 +686,7 @@ export class SniperHero extends HeroBase {
     void _mgr; void _projs; void _dmg;
     this.skillCd = this.skillCdTotal;   // 冷却缩减卡
     const sc = sniperSkCfg(this.stats.skillLv);
-    this.volley = { t: 0, left: Math.max(1, Math.round(this.stats.skillShots || 6)) + (sc.shots - 6), ttl: sc.window };   // 技能升级：+2发/+1s窗口；多目标锁定卡加发数
+    this.volley = { t: 0, left: Math.max(1, Math.round(this.stats.skillShots || 6)), ttl: sc.window };   // 发数全折在 stats.skillShots（技能10级+2 与多目标锁定卡共用，面板同源）
     // 演出：英雄身上红色环脉冲扩散（与瞬击弹道线同主题）
     const pulse = new Node('snipePulse');
     pulse.layer = Layers.Enum.UI_2D;
