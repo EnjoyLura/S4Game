@@ -552,7 +552,7 @@ export class Panels {
         ['伤害', `×${uc2.boltMul.toFixed(2)} 必定暴击`],
         ['形态', '0.5 秒锁定 → 贯穿弹' + (Math.round(h.ultBolts || 1) > 1 ? ' × ' + Math.round(h.ultBolts) + ' 线' : '') + (uc2.rMul > 1 ? ' · 弹体+' + Math.round((uc2.rMul - 1) * 100) + '%' : '')],
         ['特性', '无限贯穿 · 无视物抗' + (uc2.markAmp ? ` · 标记受伤+${Math.round(uc2.markAmp * 100)}% ${uc2.markDur}s` : '')],
-        ['目标', '全场血量最高'],
+        ['目标', (Math.round(h.ultBolts || 1) > 1 ? '全场血量最高的前 ' + Math.round(h.ultBolts) + ' 个' : '全场血量最高')],
         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
       ];
