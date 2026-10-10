@@ -492,6 +492,10 @@ export class MonsterManager {
 
   /** 死亡渐隐结束后回池（节点不移除出场景树，只摘下挂载） */
   recycleMob(m: Monster): void {
+    // 回池前先出列：三选一/暂停冻结期间淡出 tween 照常完成，尸体条目会滞留 list，
+    // 复用对象再 spawn 时旧条目复活成同引用重复项（双倍 tick/受击、大招补线重复选同一目标）
+    const i = this.list.indexOf(m);
+    if (i >= 0) this.list.splice(i, 1);
     m.node.removeFromParent();
     this.pool.push(m);
   }
