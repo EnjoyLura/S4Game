@@ -3,6 +3,8 @@
  */
 import { Color, Graphics, Layers, Node } from 'cc';
 import { FireVFX } from './FireVFX';
+import { ArcherVFX } from './ArcherVFX';
+import { FrostVFX } from './FrostVFX';
 
 interface Impact { x: number; y: number; life: number; max: number; radius: number; color: string; angle: number; heavy: boolean; hero: string; kind: 'contact' | 'cast' | 'blast'; }
 
@@ -17,9 +19,13 @@ export class ImpactFX {
   private tint = new Color();
   private dirty = false;
   private fire: FireVFX;
+  private archer: ArcherVFX;
+  private frost: FrostVFX;
 
   constructor(parent: Node, groundParent: Node = parent, projectileParent: Node = parent) {
     this.fire = new FireVFX(parent, groundParent, projectileParent);
+    this.archer = new ArcherVFX(parent, projectileParent);
+    this.frost = new FrostVFX(parent, groundParent);
     const node = new Node('impactEnvelopes');
     node.layer = Layers.Enum.UI_2D;
     node.setParent(parent);
@@ -27,7 +33,13 @@ export class ImpactFX {
     for (let i = 0; i < 32; i++) this.free.push({ x: 0, y: 0, life: 0, max: 1, radius: 1, color: '', angle: 0, heavy: false, hero: '', kind: 'contact' });
   }
 
-  beginProjectileFrame(): void { this.fire.beginProjectileFrame(); }
+  beginProjectileFrame(): void { this.fire.beginProjectileFrame(); this.archer.beginProjectileFrame(); }
+  arrowProjectile(x: number, y: number, vx: number, vy: number, size: number, age: number, heavy: boolean): boolean {
+    return this.archer.projectile(x, y, vx, vy, size, age, heavy);
+  }
+  arrowRelease(x: number, y: number, dx: number, dy: number, heavy: boolean): boolean {
+    return this.archer.release(x, y, dx, dy, heavy);
+  }
   fireProjectile(x: number, y: number, vx: number, vy: number, size: number): boolean {
     return this.fire.projectile(x, y, vx, vy, size);
   }
@@ -35,7 +47,12 @@ export class ImpactFX {
     return this.fire.craters(areas, radius, clock);
   }
 
+  frostDomain(x: number, y: number, radius: number, duration: number): void {
+    this.frost.domain(x, y, radius, duration);
+  }
+
   hit(x: number, y: number, hero: string, heavy: boolean, angle?: number): void {
+    if (hero === 'archer' && this.archer.hit(x, y, heavy, angle)) return;
     if (hero === 'pyro') {
       // 首选图生视频灼烧序列；未就绪退回引擎火团，再退回矢量描边。
       if (this.fire.hitClip(x, y, heavy)) return;
@@ -70,6 +87,8 @@ export class ImpactFX {
 
   tick(dt: number): void {
     this.fire.tick(dt);
+    this.archer.tick(dt);
+    this.frost.tick(dt);
     if (!this.dirty && this.active.length === 0) return;
     this.g.clear(); this.dirty = false;
     for (let i = this.active.length - 1; i >= 0; i--) {

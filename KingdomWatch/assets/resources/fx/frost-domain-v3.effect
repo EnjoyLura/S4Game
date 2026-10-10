@@ -1,0 +1,104 @@
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: frost-vs:vert
+      frag: frost-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: one
+          blendDst: one
+          blendSrcAlpha: zero
+          blendDstAlpha: one
+      rasterizerState:
+        cullMode: none
+      properties:
+        frostState: { value: [0, 1.5, 0, 0] }
+}%
+
+CCProgram frost-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+  out vec4 color;
+  out vec2 uv0;
+  vec4 vert () {
+    vec4 p = vec4(a_position, 1.0);
+    #if USE_LOCAL
+      p = cc_matWorld * p;
+    #endif
+    uv0 = a_texCoord;
+    color = a_color;
+    return cc_matViewProj * p;
+  }
+}%
+
+CCProgram frost-fs %{
+  precision highp float;
+  in vec4 color;
+  in vec2 uv0;
+  uniform Frost {
+    vec4 frostState;
+  };
+  #pragma builtin(local)
+  layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
+
+  vec2 turn(vec2 p, float angle) {
+    float c = cos(angle), s = sin(angle);
+    return vec2(c * p.x - s * p.y, s * p.x + c * p.y);
+  }
+  float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+  }
+  float noise(vec2 p) {
+    vec2 i = floor(p), f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+      mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+  }
+  vec3 mistAt(vec2 p) {
+    // Square source stays outside the dynamic atlas. Outside its border contributes no light.
+    float edge = 1.0 - smoothstep(0.91, 1.0, max(abs(p.x), abs(p.y)));
+    return texture(cc_spriteTexture, clamp(p * 0.5 + 0.5, 0.0, 1.0)).rgb * edge;
+  }
+  vec4 frag () {
+    float age = frostState.x, hold = frostState.y, seed = frostState.z;
+    float thaw = clamp((age - hold) / 0.55, 0.0, 1.0);
+    float fade = 1.0 - smoothstep(0.0, 1.0, thaw);
+    float opening = mix(0.52, 1.0, smoothstep(0.0, 0.16, age));
+    vec2 p = (uv0 - 0.5) * 2.0;
+    float r = length(p);
+    vec2 q = p / (opening * (1.0 + thaw * 0.09));
+
+    // Radial shear and small UV ripples make vapor flow instead of spinning a rigid decal.
+    float angle = age * 0.62 + seed + (length(q) - 0.65) * sin(age * 2.3) * 0.32;
+    vec2 drift = vec2(sin(q.y * 8.0 + age * 3.2), cos(q.x * 7.0 - age * 2.7)) * 0.014;
+    vec3 mist = mistAt(turn(q + drift, angle)) * 0.62;
+    mist += mistAt(turn(q * 1.11 - drift, -age * 0.39 - seed + 1.7)) * 0.15;
+    float breakup = noise(p * 7.0 + vec2(age * 0.48 + seed, -age * 0.32));
+    float dissolve = 1.0 - smoothstep(breakup * 0.5, breakup * 0.5 + 0.5, thaw);
+    float appear = smoothstep(0.0, 0.055, age);
+    mist *= (0.82 + breakup * 0.18) * dissolve * appear;
+    mist *= 1.0 + 0.30 * (1.0 - smoothstep(0.04, 0.28, age));
+
+    // A soft, broken freezing front moves once across the ground, then completely disappears.
+    float progress = clamp(age / 0.34, 0.0, 1.0);
+    float waveR = mix(0.08, 0.82, progress);
+    float dist = (r - waveR) / 0.045;
+    float wave = exp(-dist * dist) * (1.0 - smoothstep(0.08, 0.34, age));
+    wave *= smoothstep(0.0, 0.035, age) * smoothstep(0.27, 0.72, breakup) * 0.20;
+    vec3 light = mist + vec3(0.40, 0.78, 0.92) * wave;
+    // The field radius is 0.833 of this 2.4-radius quad. The center has no solid ground layer.
+    float footprint = 1.0 - smoothstep(0.76, 0.87, r);
+    light *= footprint * fade * color.a;
+    return vec4(light * color.rgb, 0.0);
+  }
+}%

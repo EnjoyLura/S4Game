@@ -217,7 +217,7 @@ function lobbyAtlas(id: string, cb: (atlas: LobbyAtlas | null) => void): void {
 
 /** Centered or foot-anchored lobby art, with the same loading behavior as artSprite. */
 export function artAtlasSprite(parent: Node, x: number, y: number, w: number, h: number,
-  id: string, key: string, opts: ArtOpts & { anchorBottom?: boolean } = {}): Node {
+  id: string, key: string, opts: ArtOpts & { anchorBottom?: boolean; sliceBorder?: number; sliceScale?: number } = {}): Node {
   const node = N('atlas:' + id + ':' + key, parent, x, y, w, h);
   const transform = node.getComponent(UITransform)!;
   if (opts.anchorBottom) transform.setAnchorPoint(0.5, 0);
@@ -228,7 +228,15 @@ export function artAtlasSprite(parent: Node, x: number, y: number, w: number, h:
     const frame = atlas?.get(key);
     if (!frame || !node.isValid) return;
     sprite.spriteFrame = frame;
-    if (opts.fit !== false) {
+    if (opts.sliceBorder) {
+      const border = Math.min(0.45, Math.max(0.01, opts.sliceBorder));
+      frame.insetLeft = frame.insetRight = Math.round(frame.rect.width * border);
+      frame.insetTop = frame.insetBottom = Math.round(frame.rect.height * border);
+      sprite.type = Sprite.Type.SLICED;
+      const scale = opts.sliceScale ?? 1;
+      node.setScale(scale, scale, 1);
+      transform.setContentSize(w / scale, h / scale);
+    } else if (opts.fit !== false) {
       const scale = Math.min(w / frame.rect.width, h / frame.rect.height);
       transform.setContentSize(frame.rect.width * scale, frame.rect.height * scale);
     }
@@ -266,7 +274,7 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_icon_lock', 'ui_seat_q0', 'ui_seat_q1', 'ui_seat_q2', 'ui_seat_q3', 'ui_card_shop',
   // 英雄头像
   'ui_avatar_archer', 'ui_avatar_sniper', 'ui_avatar_pyro', 'ui_avatar_volt',
-  'ui_avatar_mora', 'lobby_heroes_v1', 'lobby_levels_v1', 'lobby_rewards_v1',
+  'ui_avatar_mora', 'lobby_heroes_v1', 'lobby_levels_v1', 'lobby_rewards_v1', 'lobby_training_v1', 'lobby_weapons_v1', 'lobby_base_buildings_v1',
   // 英雄技能图标（双英雄均已交付）
   'ui_icon_atk_archer', 'ui_icon_skill_archer', 'ui_icon_ult_archer',
   // 三选一卡面图标（弓箭手组 15 张已交付；狙击/全局待图走首字回退）
@@ -291,7 +299,7 @@ export const UX_PRELOAD_IDS: string[] = [
   // 场景
   'scenes/scene_1_1', 'scenes/scene_1_2', 'scenes/scene_1_3',
   // 页签专属背景（商店内景 / 基地庭院）
-  'scenes/bg_shop', 'scenes/bg_base', 'scenes/bg_heroes', 'scenes/bg_level', 'scenes/bg_upgrade',
+  'scenes/bg_shop', 'scenes/bg_base_lobby_v1', 'scenes/bg_heroes', 'scenes/bg_level', 'scenes/bg_upgrade',
   // 底部导航图标（美术盖 emoji 兜底）
   'ui_nav_shop', 'ui_nav_heroes', 'ui_nav_levels', 'ui_nav_upgrade', 'ui_nav_base',
 ];

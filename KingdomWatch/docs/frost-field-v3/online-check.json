@@ -1,0 +1,22 @@
+{
+  "url": "https://kingdom-watch.pages.dev/?v=1791642923",
+  "deployment": "https://0d03edc4.kingdom-watch.pages.dev",
+  "cache": "no-cache",
+  "files": [
+    {
+      "file": "index.html",
+      "online_matches_local": true,
+      "sha256": "a17b0765be597ccb40bc28b8d73bf117d503b57e93dc8419791942cac2e04ed9"
+    },
+    {
+      "file": "assets/main/index.js",
+      "online_matches_local": true,
+      "sha256": "bedf6a4abd46a88361164b35f6830b3e25606dd688b6bcf948592be00fc39e03"
+    },
+    {
+      "file": "assets/resources/import/c9/c9e5bec1-411d-48dc-98db-445ed5a2a9db.json",
+      "online_matches_local": true,
+      "sha256": "1e483d44d4238966847467407fd0739a40e4d2eaccd3b7a37ac1bc4499240eda"
+    }
+  ]
+}

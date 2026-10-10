@@ -9,6 +9,7 @@ import { bus, EVT } from '../core/EventBus';
 import { BattleSprite } from './BattleSprite';
 import { FloatEvent } from './FloatText';
 import { getMobAnims, MobClip } from './MobAnim';
+import { drawFootIce } from './FrostVFX';
 
 /** 攻击序列帧一次性时长（s）：与 lunge 0.2s 前摇错开，收招略长观感更实 */
 const ATK_ANIM = 0.34;
@@ -46,6 +47,13 @@ export class Monster {
   burnDps = 0;
   /** 眩晕硬直（预留：真正的眩晕类 buff 才会写入；受击不再写） */
   stunT = 0;
+  /** 冰封与雷系眩晕独立；解冻时才启动后续减速。 */
+  freezeT = 0;
+  private freezeAge = 0;
+  private freezeSlowAmp = 0;
+  private freezeSlowDur = 0;
+  private thawT = 0;
+  private walkClock = 0;
   /** 感电（沃尔·雷霆）：受雷系命中后受伤放大，持续 shockT 秒 */
   shockT = 0;
   shockAmp = 0;
@@ -66,9 +74,6 @@ export class Monster {
   private flashNode: Node | null = null;
   private flashOp: UIOpacity | null = null;
   private flashT = 0;
-  /** 冰霜蒙层：被减速/冻结时罩一层淡蓝冰壳（slowT 驱动，tick 手动开关，零 tween） */
-  private frostNode: Node | null = null;
-  private frostOp: UIOpacity | null = null;
   private art: BattleSprite | null = null;
   private tint = new Color();
   private lastTint = '';
@@ -82,12 +87,14 @@ export class Monster {
     this.state = 'move';
     this.dead = false;
     this.life = Math.random() * 10;
+    this.walkClock = this.life;
     this.groundOffset = 3 / 160;
     this.footLeftWeight = this.footRightWeight = 0;
     this.atkT = def.atkInterval;
     this.healT = def.atkInterval;
     this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = this.lungeT = this.flashT = 0;
     this.atkAnimT = 0;
+    this.freezeT = this.freezeAge = this.freezeSlowAmp = this.freezeSlowDur = this.thawT = 0;
     this.slowAmp = 0.2;
     this.shockT = this.shockAmp = 0;
     this.vulnT = this.vulnAmp = 0;
@@ -115,12 +122,19 @@ export class Monster {
     getMobAnims(a => { this.anims = a; });
     Tween.stopAllByTarget(this.art.node);
     this.art.node.setScale(1, 1, 1); this.art.node.angle = 0;
+    this.art.cold(null);
     this.art.tint(Color.WHITE);
     if (this.art.loaded) this.g.enabled = false;
   }
 
   private tickArt(dt: number): void {
     if (!this.art?.loaded) return;
+    if (this.immobilized) {
+      // Hold the current walk/attack cel instead of snapping to idle or continuing a frozen attack.
+      this.syncArtTint();
+      if (this.flashNode) this.flashNode.active = false;
+      return;
+    }
     const clip = this.anims?.get(this.def.id);
     if (clip && clip.walk.length) {
       // 序列帧模式：攻击一次性 > 步态循环（速度映射播放速率，减速同步变慢）> 待机第 0 帧
@@ -132,12 +146,11 @@ export class Monster {
         const t = Math.min(clip.attack.length - 1, p * clip.attack.length);
         const i = Math.floor(t);
         this.art.showSeq(clip.attack, i, i >= clip.attack.length - 1 ? 0 : t - i, h);
-      } else if (this.state === 'move' && this.stunT <= 0) {
-        const slowMul = this.slowT > 0 ? (1 - this.slowAmp) : 1;
+      } else if (this.state === 'move') {
         // 步态节奏：以源视频步态环真实时长为基准实时播放（相位连贯不踉跄），按移速微调档位，减速同步变慢
         const tempo = Math.min(1.25, Math.max(0.75, this.def.speed / 45));
-        const cps = (1 / clip.loopDur) * tempo * slowMul;
-        const t = this.life * cps * clip.walk.length;
+        const cps = (1 / clip.loopDur) * tempo;
+        const t = this.walkClock * cps * clip.walk.length;
         const index = Math.floor(t) % clip.walk.length;
         // 原视频已经提供完整步态：避免两帧鞋底叠加形成半透明滑动残影。
         this.art.showSeq(clip.walk, index, 0, h);
@@ -146,22 +159,29 @@ export class Monster {
         this.art.showSeq(clip.walk, 0, 0, h);
         this.syncGroundContact(clip, 0, 0);
       }
-      const tint = this.flashT > 0 ? '#FF9990' : this.slowT > 0 ? '#B5E9FA' : this.shockT > 0 ? '#D8B5FF' : '#FFFFFF';
-      if (tint !== this.lastTint) { this.lastTint = tint; Color.fromHEX(this.tint, tint); this.art.tint(this.tint); }
+      this.syncArtTint();
       if (this.flashNode) this.flashNode.active = false;
-      if (this.frostNode) this.frostNode.active = false;
       return;
     }
     // 程序化步态兜底（序列帧缺失时保留旧行为）
-    const moving = this.state === 'move' && this.stunT <= 0;
-    const gait = moving ? Math.sin(this.life * (this.def.id === 'wolf_rider' ? 12 : 8)) : 0;
+    const moving = this.state === 'move';
+    const gait = moving ? Math.sin(this.walkClock * (this.def.id === 'wolf_rider' ? 12 : 8)) : 0;
     this.art.node.angle = gait * 2.2;
     this.art.node.setScale(1 + gait * 0.012, 1 + Math.abs(gait) * 0.017, 1);
-    const tint = this.flashT > 0 ? '#FF9990' : this.slowT > 0 ? '#B5E9FA' : this.shockT > 0 ? '#D8B5FF' : '#FFFFFF';
-    if (tint !== this.lastTint) { this.lastTint = tint; Color.fromHEX(this.tint, tint); this.art.tint(this.tint); }
+    this.syncArtTint();
     // Artwork tint follows the silhouette, replacing rectangular status masks.
     if (this.flashNode) this.flashNode.active = false;
-    if (this.frostNode) this.frostNode.active = false;
+  }
+
+  private syncArtTint(): void {
+    const cold = this.freezeT > 0 ? 'frozen' : this.slowT > 0 ? 'slow' : null;
+    this.art?.cold(cold);
+    // Loaded material supplies a real blue mix. Colder multiply tint is only the loading fallback.
+    let tint = '#FFFFFF';
+    if (this.flashT > 0) tint = '#FF9990';
+    else if (cold && !this.art?.coldReady) tint = cold === 'frozen' ? '#91C3ED' : '#BCD8EF';
+    else if (!cold && this.shockT > 0) tint = '#D8B5FF';
+    if (tint !== this.lastTint) { this.lastTint = tint; Color.fromHEX(this.tint, tint); this.art?.tint(this.tint); }
   }
 
   private syncGroundContact(clip: MobClip, index: number, frac: number): void {
@@ -232,37 +252,6 @@ export class Monster {
     fg.roundRect(-r, -r * 0.9, r * 2, r * 1.8, r * 0.45);
     fg.fill();
     this.flashNode.active = false;
-    // 冰霜蒙层：淡蓝冰壳 + 顶部三枚冰晶尖（被减速/冻结时显示）
-    if (!this.frostNode) {
-      this.frostNode = new Node('mobFrost');
-      this.frostNode.layer = Layers.Enum.UI_2D;
-      this.frostNode.setParent(this.node);
-      this.frostOp = this.frostNode.addComponent(UIOpacity);
-    }
-    const frg = this.frostNode.getComponent(Graphics) || this.frostNode.addComponent(Graphics);
-    frg.clear();
-    const fz = this.hex('#8ED4F5');
-    fz.a = 145;
-    frg.fillColor = fz;
-    frg.roundRect(-r, -r * 0.9, r * 2, r * 1.8, r * 0.45);
-    frg.fill();
-    const fzb = this.hex('#E8FAFF');
-    fzb.a = 190;
-    frg.strokeColor = fzb;
-    frg.lineWidth = 2;
-    frg.roundRect(-r, -r * 0.9, r * 2, r * 1.8, r * 0.45);
-    frg.stroke();
-    const fzi = this.hex('#E8FAFF');
-    fzi.a = 170;
-    frg.fillColor = fzi;
-    for (let k = -1; k <= 1; k++) {   // 顶部冰晶尖
-      const bx = k * r * 0.42;
-      frg.moveTo(bx - r * 0.16, r * 0.9);
-      frg.lineTo(bx + r * 0.16, r * 0.9);
-      frg.lineTo(bx + k * r * 0.05, r * 0.9 + r * (k === 0 ? 0.42 : 0.3));
-      frg.close(); frg.fill();
-    }
-    this.frostNode.active = false;
   }
 
   private hex(h: string): Color {
@@ -273,28 +262,47 @@ export class Monster {
 
   get x(): number { return this.node.position.x; }
   get y(): number { return this.node.position.y; }
+  get isBoss(): boolean { return !!this.def.boss || this.def.id === 'goblin_king'; }
+  get immobilized(): boolean { return this.freezeT > 0 || this.stunT > 0; }
+
+  drawIceFeet(g: Graphics): void {
+    if (this.freezeT <= 0 && this.thawT <= 0) return;
+    const r = this.def.radius;
+    const footY = this.y - r * 0.82 + r * MOB_ART_HEIGHT * this.groundOffset;
+    drawFootIce(g, this.x, footY, r, this.freezeAge, this.freezeT, this.thawT);
+  }
 
   /** 单帧推进；返回是否死亡（死亡由 manager 清理） */
   tick(dt: number, line: { takeDamage: (d: number) => void }, mgr: MonsterManager): void {
     if (this.dead) return;
     this.life += dt;
+    const frozenLeft = this.freezeT;
+    const motionDt = Math.max(0, dt - Math.max(this.freezeT, this.stunT));
+    this.thawT = Math.max(0, this.thawT - dt);
+    if (this.slowT > 0) this.slowT = Math.max(0, this.slowT - dt);
+    if (this.slowT <= 0) this.slowAmp = 0.2;
+    if (this.shockT > 0) this.shockT = Math.max(0, this.shockT - dt);
+    if (this.vulnT > 0) this.vulnT = Math.max(0, this.vulnT - dt);
+    if (this.stunT > 0) this.stunT = Math.max(0, this.stunT - dt);
+    if (frozenLeft > 0) {
+      this.freezeAge += Math.min(dt, frozenLeft);
+      this.freezeT = Math.max(0, frozenLeft - dt);
+      if (this.freezeT <= 0) {
+        // Account for the fraction of this simulation step that occurs after thawing.
+        const afterThaw = Math.max(0, dt - frozenLeft);
+        if (this.freezeSlowDur > afterThaw) this.applySlow(this.freezeSlowAmp, this.freezeSlowDur - afterThaw);
+        this.freezeSlowAmp = this.freezeSlowDur = 0;
+        this.thawT = Math.max(0, 0.26 - afterThaw);
+      }
+    }
     // 受击闪红淡出（零 tween，受击高峰期零分配）
     if (this.flashT > 0 && this.flashOp) {
       this.flashT -= dt;
       this.flashOp.opacity = Math.max(0, Math.floor(255 * this.flashT / 0.12));
       if (this.flashT <= 0 && this.flashNode) this.flashNode.active = false;
     }
-    // 冰霜蒙层：被减速（含冻结）期间常亮，解除即熄灭（零分配）
-    if (this.frostNode && this.frostOp) {
-      const frozen = this.slowT > 0;
-      if (this.frostNode.active !== frozen) this.frostNode.active = frozen;
-      if (frozen) this.frostOp.opacity = 255;
-    }
-    this.tickArt(dt);
-    if (this.stunT > 0) { this.stunT -= dt; return; }
-    if (this.slowT > 0) this.slowT -= dt;
-    if (this.shockT > 0) this.shockT -= dt;
-    if (this.vulnT > 0) this.vulnT -= dt;
+    if (this.state === 'move') this.walkClock += motionDt * (this.slowT > 0 ? 1 - this.slowAmp : 1);
+    this.tickArt(motionDt);
     // 点燃 DoT：每 0.5s 聚合一条（§3.11）
     if (this.burnT > 0) {
       this.burnT -= dt;
@@ -306,10 +314,13 @@ export class Monster {
       if (this.dead) return;
     }
 
+    // Control stops movement and attacks, while burn damage and other status timers continue.
+    if (motionDt <= 0) return;
+
     const mul = this.slowT > 0 ? (1 - this.slowAmp) : 1;
     if (this.state === 'move') {
       // 直线行进（用户确认：不蛇形）；横向松散由出生 x 与分离逻辑保证
-      this.node.setPosition(this.baseX, this.node.position.y - this.def.speed * mul * dt, 0);
+      this.node.setPosition(this.baseX, this.node.position.y - this.def.speed * mul * motionDt, 0);
       const reach = this.def.kind === 'ranged' ? (this.def.atkRange || 0) : this.def.radius * 0.5;
       if (this.node.position.y - LINE_Y <= reach) {
         this.holdY = this.node.position.y;
@@ -318,7 +329,7 @@ export class Monster {
       }
     }
     if (this.state === 'attack' || this.state === 'hold') {
-      this.atkT -= dt;
+      this.atkT -= motionDt;
       if (this.atkT <= 0) {
         this.atkT = this.def.atkInterval;
         if (this.def.kind === 'heal') {
@@ -333,7 +344,7 @@ export class Monster {
       }
       // 冲撞/投掷前摇（手动正弦脉冲，代替逐次 tween）
       if (this.lungeT > 0) {
-        this.lungeT = Math.max(0, this.lungeT - dt);
+        this.lungeT = Math.max(0, this.lungeT - motionDt);
         const pr = 1 - this.lungeT / 0.2;
         this.node.setPosition(this.node.position.x, this.holdY - Math.sin(pr * Math.PI) * 10, 0);
       }
@@ -405,8 +416,21 @@ export class Monster {
   }
 
   applySlow(ratio: number, dur: number): void {
+    if (dur <= 0 || ratio <= 0 || this.dead) return;
+    if (this.slowT <= 0) this.slowAmp = 0;
     this.slowT = Math.max(this.slowT, dur);
-    this.slowAmp = Math.max(this.slowAmp, ratio);
+    this.slowAmp = Math.max(this.slowAmp, Math.min(0.9, ratio));
+  }
+
+  /** 精英仍可冰封；Boss 免疫。重复施加延长冰封，解冻减速只在最后一次解除时启动。 */
+  applyFreeze(duration: number, postSlowRatio = 0, postSlowDuration = 0): boolean {
+    if (this.dead || this.isBoss || duration <= 0) return false;
+    if (this.freezeT <= 0) this.freezeAge = 0;
+    this.freezeT = Math.max(this.freezeT, duration);
+    this.thawT = 0;
+    this.freezeSlowAmp = Math.max(this.freezeSlowAmp, postSlowRatio);
+    this.freezeSlowDur = Math.max(this.freezeSlowDur, postSlowDuration);
+    return true;
   }
   applyBurn(dps: number, dur: number): void {
     this.burnDps = dps;
@@ -429,6 +453,7 @@ export class MonsterManager {
   private depthT = 0;
   private depthOrder: Monster[] = [];
   private shadows: Graphics;
+  private iceFeet: Graphics;
   private groundShadowColor = new Color(30, 24, 16, 38);
   private footShadowColor = new Color(26, 20, 13, 100);
 
@@ -438,6 +463,8 @@ export class MonsterManager {
     node.setParent(field);
     this.shadows = node.addComponent(Graphics);
     this.shadows.fillColor = new Color(30, 24, 16, 65);
+    const ice = new Node('frozenFootCrystals'); ice.layer = Layers.Enum.UI_2D; ice.setParent(field);
+    this.iceFeet = ice.addComponent(Graphics);
   }
 
   /** 难度倍率（普通 1 / 精英 1.6 / 地狱 2.4）：出怪时缩放 hp/dmg（BattleDirector 按 flow.diff 注入） */
@@ -560,6 +587,31 @@ export class MonsterManager {
     return out;
   }
 
+  /** Count against the actual effect radius; refine each local cluster with its centroid. */
+  densestArea(hx: number, hy: number, castRange: number, radius: number): { x: number; y: number } | null {
+    const range2 = castRange * castRange, radius2 = radius * radius;
+    let best: { x: number; y: number } | null = null, bestCount = -1, bestDistance = Infinity;
+    const consider = (x: number, y: number): void => {
+      if ((x - hx) ** 2 + (y - hy) ** 2 > range2) return;
+      let count = 0;
+      for (const m of this.list) if (!m.dead && (m.x - x) ** 2 + (m.y - y) ** 2 <= radius2) count++;
+      const distance = (x - hx) ** 2 + (y - hy) ** 2;
+      if (count > bestCount || count === bestCount && distance < bestDistance) {
+        bestCount = count; bestDistance = distance; best = { x, y };
+      }
+    };
+    for (const m of this.list) {
+      if (m.dead || (m.x - hx) ** 2 + (m.y - hy) ** 2 > range2) continue;
+      consider(m.x, m.y);
+      let x = 0, y = 0, n = 0;
+      for (const o of this.list) {
+        if (!o.dead && (o.x - m.x) ** 2 + (o.y - m.y) ** 2 <= radius2) { x += o.x; y += o.y; n++; }
+      }
+      if (n > 1) consider(x / n, y / n);
+    }
+    return best;
+  }
+
   healAround(src: Monster, r: number, amt: number): void {
     for (const m of this.mobsInRadius(src.x, src.y, r)) m.heal(amt);
   }
@@ -626,9 +678,13 @@ export class MonsterManager {
       this.depthOrder.sort((a, b) => (b.y - b.def.radius * 0.82) - (a.y - a.def.radius * 0.82));
       this.depthOrder.forEach((m, i) => m.node.setSiblingIndex(i + 1));
     }
+    this.iceFeet.clear();
+    for (const m of this.list) m.drawIceFeet(this.iceFeet);
+    this.iceFeet.node.setSiblingIndex(this.field.children.length - 1);
   }
 
   private nudge(m: Monster, dx: number, dy: number): void {
+    if (m.immobilized) return;
     const p = m.node.position;
     let nx = Math.max(-355, Math.min(355, p.x + dx));
     let ny = Math.min(SPAWN_Y, p.y + dy);

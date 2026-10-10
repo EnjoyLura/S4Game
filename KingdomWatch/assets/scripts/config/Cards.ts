@@ -52,11 +52,11 @@ export interface HeroStats {
   shockedBonus: number; // 技能升级·对感电目标伤害加成（雷普攻15级 0.25）
   pitVuln: number;      // 大招陨石坑易伤值（火法 0.25，突破80级加深）
   burnedBonus: number;  // 技能升级·对灼烧目标伤害加成（火普攻15级 0.25）
-  novaR: number;        // 技能·冰霜新星半径（冰 150，突破60级 190）
-  novaStun: number;     // 技能·新星冻结时长 s（冰 0.8，突破80级 1.2）
+  novaR: number;        // 技能·冰霜领域半径（冰 150，突破60级 190）
+  novaStun: number;     // 技能·领域冻结时长 s（冰 1.5，突破80级 1.9）
   freezeProc: number;   // 突破·普攻概率冰冻时长 s（冰70级 0.6，概率固定 15%）
   slowedBonus: number;  // 技能升级·对减速目标伤害加成（冰普攻15级 0.25）
-  slowAmpBonus: number; // 卡·凛冬之息/绝对零度：冰系减速幅度加成（普攻/新星/大招减速比率累加，结算上限 0.9）
+  slowAmpBonus: number; // 卡·凛冬之息/绝对零度：冰系减速幅度加成（普攻/领域/大招减速比率累加，结算上限 0.9）
   ultSlowDur: number;   // 卡·绝对零度：大招减速持续 +s（累加）
   freezeChance: number; // 卡·速冻之心：普攻冰冻几率（冰基础 0.15，累加）
   atkLv: number;        // 技能升级等级（战斗内读里程碑：普攻/技能/大招槽）
@@ -131,9 +131,9 @@ export function pyroUltCfg(u: number): { boltMul: number; meteors: number; crate
 export function moraAtkCfg(a: number): { normalMul: number; aspdOn: boolean; critOn: boolean; slowedOn: boolean } {
   return { normalMul: (1 + (a - 1) * 0.08) * (a >= 20 ? 1.2 : 1), aspdOn: a >= 5, critOn: a >= 10, slowedOn: a >= 15 };
 }
-/** 技能槽（冰霜新星）：每级+8%，5级冷却-1s，10级新星范围+20%，15级冻结+0.3s，20级倍率+0.3 */
+/** 技能槽（冰霜领域）：每级+8%，5级冷却-1s，10级领域范围+20%，15级冻结+0.3s，20级倍率+0.3 */
 export function moraSkCfg(k: number): { mul: number; cdOn: boolean; rMul: number; stunBonus: number } {
-  return { mul: (1.5 + (k >= 20 ? 0.3 : 0)) * (1 + (k - 1) * 0.08), cdOn: k >= 5, rMul: k >= 10 ? 1.2 : 1, stunBonus: k >= 15 ? 0.3 : 0 };
+  return { mul: (2 + (k >= 20 ? 0.3 : 0)) * (1 + (k - 1) * 0.08), cdOn: k >= 5, rMul: k >= 10 ? 1.2 : 1, stunBonus: k >= 15 ? 0.3 : 0 };
 }
 /** 大招槽（极寒领域）：每级+8%，5级减速50%→60%，10级持续4→6s，15级充能-10%，20级倍率+0.4 */
 export function moraUltCfg(u: number): { boltMul: number; slowMul: number; slowDur: number; chargeOn: boolean } {
@@ -206,7 +206,7 @@ export function baseMoraStats(): HeroStats {
     executeBonus: 0, lowHpBonus: 0,
     slowDur: 2, ultRounds: 1, chargeMul: 1, skillShots: 1, skillCdFlat: 0, ultBolts: 1,
     skillMul: 1, skillRangeMul: 1, ultDmgMul: 1, ultStun: 0, ultHaste: 0, burnMul: 1, shockOnHit: 0, skillDmgFlat: 0, chargeEff: 0, pierceChance: 0, defIgnore: 0, ultAutoCd: 0,
-    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 0.8, freezeProc: 0, slowedBonus: 0, slowAmpBonus: 0, ultSlowDur: 0, freezeChance: 0.15, atkLv: 1, skillLv: 1, ultLv: 1,
+    normalMul: 1, fullHpBonus: 0, skillProc: 0, shockAmpMul: 1, shockedBonus: 0, pitVuln: 0.25, burnedBonus: 0, novaR: 150, novaStun: 1.5, freezeProc: 0, slowedBonus: 0, slowAmpBonus: 0, ultSlowDur: 0, freezeChance: 0.15, atkLv: 1, skillLv: 1, ultLv: 1,
   };
 }
 
@@ -342,11 +342,11 @@ export const VOLT_CARDS: CardDef[] = [
 export const MORA_CARDS: CardDef[] = [
   c({ id: 'mora_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'mora', desc: '技能伤害 +40%',
     apply: x => { x.hero.skillMul *= 1.4; } }),
-  c({ id: 'mora_range', name: '极寒扩散', rarity: 'white', maxStacks: 3, owner: 'mora', desc: '冰环半径 +30%',
+  c({ id: 'mora_range', name: '极寒扩散', rarity: 'white', maxStacks: 3, owner: 'mora', desc: '冰领域半径 +30%',
     apply: x => { x.hero.skillRangeMul *= 1.3; } }),
   c({ id: 'mora_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'mora', desc: '技能冷却 -2 秒（可叠加）',
     apply: x => { x.hero.skillCdFlat += 2; } }),
-  c({ id: 'mora_chill', name: '凛冬之息', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '冰系减速幅度 +20%（普攻/新星/大招全部生效）',
+  c({ id: 'mora_chill', name: '凛冬之息', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '冰系减速幅度 +20%（普攻/领域/大招全部生效）',
     apply: x => { x.hero.slowAmpBonus += 0.2; } }),
   c({ id: 'mora_freeze', name: '速冻之心', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '普攻冰冻几率 +15%（15%→30%→45%）',
     apply: x => { x.hero.freezeChance += 0.15; } }),

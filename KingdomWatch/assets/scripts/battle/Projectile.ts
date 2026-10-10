@@ -1,7 +1,7 @@
 /**
  * 弹道（§3.5：可见追踪弹、目标死亡切换目标；子弹道直线随缘命中；对象池强制）
  * 追踪主弹命中前锁定目标；直线弹（齐射/分裂/大招箭/敌方石块）带 ttl 与碰撞去重
- * 性能：弹道为池化数据；火球使用固定 Sprite 渲染池，其余弹体由单 Graphics 重绘。
+ * 性能：弹道为池化数据；箭矢/火球使用固定 Sprite 渲染池，其余弹体由单 Graphics 重绘。
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { Monster, MonsterManager } from './Monster';
@@ -72,6 +72,7 @@ interface Active {
   pierceLeft: number;
   hit: Set<Monster>;
   ttl: number;
+  age: number;
   trail: number[];
   trailMax: number;
 }
@@ -112,6 +113,7 @@ export class ProjectileManager {
     if (spec.exclude) a.hit.add(spec.exclude);
     a.pierceLeft = spec.pierce || 0;
     a.ttl = spec.ttl ?? 3.2;
+    a.age = 0;
     a.trail.length = 0;
     a.trailMax = spec.enemy ? 0 : spec.spark ? 9
       : spec.heroId === 'archer' ? 7
@@ -125,7 +127,7 @@ export class ProjectileManager {
   }
 
   private makeActive(): Active {
-    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<Monster>(), ttl: 0, trail: [], trailMax: 0 };
+    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<Monster>(), ttl: 0, age: 0, trail: [], trailMax: 0 };
   }
 
   /** 敌方远程石块：直线落向防线，触线即结算 */
@@ -138,8 +140,17 @@ export class ProjectileManager {
     if (this.parts) this.parts.burst(x, y, color, n);
   }
 
+  /** 每排出弓一次；与弹道共用战斗时钟，暂停/倍速不脱节。未加载时保留原出手闪光。 */
+  arrowRelease(x: number, y: number, dx: number, dy: number, heavy: boolean): boolean {
+    return this.impacts?.arrowRelease(x, y, dx, dy, heavy) || false;
+  }
+
   fireCraters(areas: readonly { x: number; y: number; t: number }[], radius: number, clock: number): boolean {
     return this.impacts?.fireCraters(areas, radius, clock) || false;
+  }
+
+  frostDomain(x: number, y: number, radius: number, duration: number): void {
+    this.impacts?.frostDomain(x, y, radius, duration);
   }
 
   /** 瞬击伤害直接记账（狙击 hitscan 不经弹道命中结算） */
@@ -153,6 +164,7 @@ export class ProjectileManager {
       const a = this.active[i];
       const sp = a.spec;
       a.ttl -= dt;
+      a.age += dt;
       let done = false;
 
       // 直线弹：扫掠补偿按本帧位移的一半扩大判定半径，防高速弹穿过薄目标
@@ -210,6 +222,7 @@ export class ProjectileManager {
       const fire = s.heroId === 'pyro' && !s.enemy;
       const shard = s.heroId === 'mora' && !s.small && !s.enemy;
       if (fire && this.impacts?.fireProjectile(s.x, s.y, a.vx, a.vy, size)) continue;
+      if (arrow && this.impacts?.arrowProjectile(s.x, s.y, a.vx, a.vy, size, a.age, !!s.spark || !!s.ult)) continue;
       // 尾迹先画（垫在弹体之下）：锥形渐隐条带 + 亮芯
       if (a.trailMax > 0) this.drawTrail(g, s, a, size, arrow);
       if (arrow) this.drawArrow(g, s, a, size);

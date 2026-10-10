@@ -1,0 +1,66 @@
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: cold-vs:vert
+      frag: cold-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties:
+        alphaThreshold: { value: 0.001 }
+        coldParams: { value: [0.45, 0.75, 1.35, 0.62] }
+}%
+
+CCProgram cold-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+  out vec4 color;
+  out vec2 uv0;
+  vec4 vert () {
+    vec4 p = vec4(a_position, 1.0);
+    #if USE_LOCAL
+      p = cc_matWorld * p;
+    #endif
+    uv0 = a_texCoord;
+    color = a_color;
+    return cc_matViewProj * p;
+  }
+}%
+
+CCProgram cold-fs %{
+  precision highp float;
+  #include <builtin/internal/embedded-alpha>
+  #include <builtin/internal/alpha-test>
+  in vec4 color;
+  in vec2 uv0;
+  uniform Cold {
+    vec4 coldParams;
+  };
+  #pragma builtin(local)
+  layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
+  vec4 frag () {
+    vec4 o = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+    // Mix toward an ice palette by luminance: even green skin gains blue,
+    // while highlights, painted shadows and transparent silhouettes survive.
+    float light = dot(o.rgb, vec3(0.299, 0.587, 0.114));
+    vec3 ice = clamp(light * coldParams.rgb + vec3(0.02, 0.04, 0.07), 0.0, 1.0);
+    o.rgb = mix(o.rgb, ice, coldParams.a) * color.rgb;
+    o.a *= color.a;
+    ALPHA_TEST(o);
+    return o;
+  }
+}%

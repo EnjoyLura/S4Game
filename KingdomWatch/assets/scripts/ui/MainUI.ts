@@ -6,9 +6,9 @@
 import { _decorator, Component, Graphics, Label, Node, Sprite, UITransform, view } from 'cc';
 import { initLayout, LO, PAL } from '../config/GameConfig';
 import { flow } from '../core/Flow';
-import { btn, C, CA, gpanel, N, setText, WX, WY, WYB } from './UIKit';
+import { btn, C, CA, gpanel, N, WX, WYB } from './UIKit';
 import { artSprite } from './Ux';
-import { mainLabel, MAIN_NAV_H, MAIN_W, MAIN_RESOURCE_H, mainLayout, modal, PageCtx, setGlobalRoot } from './PageKit';
+import { mainLabel, MAIN_NAV_H, modal, PageCtx, setGlobalRoot } from './PageKit';
 import { ResourceBar, ResourceCurrency } from './ResourceBar';
 import { buildShop } from './pages/ShopPage';
 import { buildHeroes } from './pages/HeroPage';
@@ -27,17 +27,12 @@ const TABS: { name: string; icon: string; art: string }[] = [
   { name: '基地', icon: '🏰', art: 'ui_nav_base' },
 ];
 
-const PAGE_NOTES = ['为英雄挑选下一场战斗的补给', '整理装备，打造你的主力英雄', '选择战场，带领编队守住防线', '培养英雄，解锁更强的战斗能力', '建设主城，记录远征中的发现'];
-
 @ccclass('MainUI')
 export class MainUI extends Component {
   private screens!: Node;
   private navItems: { slot: Node; icon: Node; art: Node | null; txt: Node; idle: Node; act: Node }[] = [];
   private resourceBar: ResourceBar | null = null;
   private resourceDialog: Node | null = null;
-  private pageTitle: Node | null = null;
-  private pageNote: Node | null = null;
-  private standardHeader: Node | null = null;
   private navBar: Node | null = null;
   private tab = flow.mainTab;
 
@@ -88,15 +83,10 @@ export class MainUI extends Component {
     ['resBar'].forEach(nm => { const n = root.getChildByName(nm); if (n) n.setSiblingIndex(root.children.length - 1); });
   }
 
-  /* ---------- 统一页名与资源栏 ---------- */
+  /* ---------- 五页共用资源栏；页内标题由场景布局负责 ---------- */
   private buildTopBar(root: Node): void {
-    const { headerTop } = mainLayout();
     const bar = N('resBar', root);
     this.resourceBar = new ResourceBar(bar, currency => this.openResourceSources(currency));
-    const plate = gpanel(bar, 0, WY(headerTop + MAIN_RESOURCE_H + 18, 64), MAIN_W, 64, CA('#15221F', 0.94), undefined, 0, 18);
-    this.standardHeader = plate;
-    this.pageTitle = mainLabel(plate, -4, 12, '', { size: 28, color: '#FFF0CD', font: 'title', align: 'left', w: 638, h: 36 });
-    this.pageNote = mainLabel(plate, -4, -18, '', { size: 16, color: '#AEBDA9', align: 'left', w: 638, h: 24 });
   }
 
   /** 货币刷新（购买/升级后同步） */
@@ -146,16 +136,13 @@ export class MainUI extends Component {
 
   /** 页签高亮：激活金板金字 / 未激活暗板白字（无边框规范：纯色板，无页签框美术） */
   private highlightTabs(): void {
-    const shopStyle = this.tab <= 2;
     if (this.navBar) {
       const bg = this.navBar.getComponent(Graphics)!;
       bg.clear();
-      bg.fillColor = C(shopStyle ? '#3C291C' : '#101D17');
+      bg.fillColor = C('#3C291C');
       bg.rect(-375, -MAIN_NAV_H / 2, 750, MAIN_NAV_H); bg.fill();
-      if (shopStyle) {
-        bg.fillColor = C('#B8803D');
-        bg.rect(-375, MAIN_NAV_H / 2 - 3, 750, 3); bg.fill();
-      }
+      bg.fillColor = C('#B8803D');
+      bg.rect(-375, MAIN_NAV_H / 2 - 3, 750, 3); bg.fill();
     }
     this.navItems.forEach((it, k) => {
       const active = k === this.tab;
@@ -165,18 +152,18 @@ export class MainUI extends Component {
       const txtLbl = it.txt.getComponent(Label);
       const ag = it.act.getComponent(Graphics)!;
       ag.clear();
-      ag.fillColor = shopStyle ? C('#FFC54C') : CA('#E8BA60', 0.16);
+      ag.fillColor = C('#FFC54C');
       ag.roundRect(-63, -52, 126, 104, 18); ag.fill();
       const mark = it.act.children[0];
-      if (mark) mark.active = !shopStyle;
+      if (mark) mark.active = false;
       if (txtLbl) {
-        txtLbl.color = C(shopStyle ? active ? '#442B12' : '#EAD6B6' : active ? PAL.gold : '#FFFFFF');
-        txtLbl.fontSize = shopStyle ? 24 : 20;
+        txtLbl.color = C(active ? '#442B12' : '#EAD6B6');
+        txtLbl.fontSize = 24;
       }
       if (iconLbl) iconLbl.color = C(active ? '#FFE08A' : '#FFFFFF');
       const artSp = it.art ? it.art.getComponent(Sprite) : null;
       if (artSp) artSp.color = C(active ? '#FFFFFF' : '#AEB6C2');
-      if (it.art) it.art.getComponent(UITransform)!.setContentSize(shopStyle ? 62 : 54, shopStyle ? 62 : 54);
+      if (it.art) it.art.getComponent(UITransform)!.setContentSize(62, 62);
     });
   }
 
@@ -184,17 +171,13 @@ export class MainUI extends Component {
   switchTab(i: number): void {
     this.tab = i;
     flow.mainTab = i;
-    if (this.standardHeader) this.standardHeader.active = i > 2;
-    if (this.pageNote) this.pageNote.active = i > 2;
-    if (this.pageTitle) setText(this.pageTitle, TABS[i].name);
-    if (this.pageNote) setText(this.pageNote, PAGE_NOTES[i]);
     this.highlightTabs();
     this.applyPageBg(i);
     this.rebuildScreen();
   }
 
   /** 页签专属背景（商店内景 / 基地庭院；无专属的页签沿用主城场景占位图） */
-  private static BG_BY_TAB: Record<number, string> = { 0: 'scenes/bg_shop', 1: 'scenes/bg_heroes', 2: 'scenes/bg_level', 3: 'scenes/bg_upgrade', 4: 'scenes/bg_base' };
+  private static BG_BY_TAB: Record<number, string> = { 0: 'scenes/bg_shop', 1: 'scenes/bg_heroes', 2: 'scenes/bg_level', 3: 'scenes/bg_upgrade', 4: 'scenes/bg_base_lobby_v1' };
   private bgId = '';
   private bgNode: Node | null = null;
 

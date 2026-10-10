@@ -143,7 +143,7 @@ export const HERO_DEFS: Record<string, HeroDef> = {
   },
   mora: {
     id: 'mora', name: '莫拉·寒霜', job: '冰霜 · 减速控制', avatar: 'ui_avatar_mora',
-    baseAtk: 80, atkSpd: 0.7, weaponName: '霜华法杖', skillName: '冰霜新星', ultName: '极寒领域',
+    baseAtk: 80, atkSpd: 0.7, weaponName: '霜华法杖', skillName: '冰霜领域', ultName: '极寒领域',
     story: '北境冰原走出的年轻冰霜法师，能把空气里的水汽凝成利刃。她走过的地方，敌人都慢了下来。',
     shopPrice: 4800,
   },
@@ -252,9 +252,9 @@ export const HERO_BT: Record<string, HeroBt[]> = {
     { lv: 30, txt: '突破 · 冰寒刺骨：减速 25% → 40%', eff: { slowMul: 1.6 } },
     { lv: 40, txt: '突破 · 普攻/技能索敌范围 +10%', eff: { rangePct: 0.10 } },
     { lv: 50, txt: '突破 · 攻速 +12%', eff: { aspdPct: 0.12 } },
-    { lv: 60, txt: '突破 · 冰霜新星范围 +25%（150→190）', eff: { novaR: 190 } },
+    { lv: 60, txt: '突破 · 冰霜领域范围 +25%（150→190）', eff: { novaR: 190 } },
     { lv: 70, txt: '突破 · 普攻15%概率冰冻 0.6s', eff: { freezeProc: 0.6 } },
-    { lv: 80, txt: '突破 · 冰霜新星冻结 +0.4s（累计 1.2s）', eff: { stunBonus: 0.4 } },
+    { lv: 80, txt: '突破 · 冰霜领域冻结 +0.4s（累计 1.9s）', eff: { stunBonus: 0.4 } },
     { lv: 90, txt: '突破 · 冰寒之躯：普攻必定减速 40%', eff: { slowOnAtk: 0.4 } },
   ],
 };

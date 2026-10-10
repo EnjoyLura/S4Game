@@ -2,7 +2,7 @@
  * All characters use a foot pivot; presentation never moves collision origins.
  * Missing assets retain the existing Graphics fallback.
  */
-import { Color, JsonAsset, Layers, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
+import { Color, EffectAsset, JsonAsset, Layers, Material, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2, Vec4 } from 'cc';
 import { uxFrame } from '../ui/Ux';
 
 type AtlasId = 'battle_mobs_v2' | 'battle_heroes_v2' | 'battle_mob_anim_v1' | 'lobby_heroes_v1';
@@ -10,6 +10,35 @@ interface FrameManifest { frames: Record<string, [number, number, number, number
 interface Atlas { frames: Map<string, SpriteFrame>; }
 const atlases = new Map<AtlasId, Atlas>();
 const pending = new Map<AtlasId, ((atlas: Atlas | null) => void)[]>();
+
+type ColdMode = 'frozen' | 'slow' | null;
+let coldMaterials: { frozen: Material; slow: Material } | null = null;
+let coldLoading = false;
+let coldFailed = false;
+const coldPending: (() => void)[] = [];
+
+/** Two shared status materials, not a shader/material allocation for each monster. */
+function loadColdMaterials(cb: () => void): void {
+  if (coldMaterials || coldFailed) { cb(); return; }
+  coldPending.push(cb);
+  if (coldLoading) return;
+  coldLoading = true;
+  resources.load('fx/mob-cold', EffectAsset, (err, effect) => {
+    if (err || !effect) coldFailed = true;
+    else {
+      // Battle sprites and their status materials are shared across scene restarts.
+      effect.addRef();
+      const frozen = new Material(), slow = new Material();
+      for (const material of [frozen, slow]) material.initialize({ effectAsset: effect, defines: { USE_TEXTURE: true } });
+      frozen.setProperty('coldParams', new Vec4(0.45, 0.75, 1.35, 0.62));
+      slow.setProperty('coldParams', new Vec4(0.60, 0.90, 1.28, 0.38));
+      coldMaterials = { frozen, slow };
+    }
+    coldLoading = false;
+    const callbacks = coldPending.splice(0);
+    callbacks.forEach(f => f());
+  });
+}
 
 function loadAtlas(id: AtlasId, cb: (atlas: Atlas | null) => void): void {
   const cached = atlases.get(id);
@@ -57,6 +86,9 @@ export class BattleSprite {
   private blendSprite: Sprite | null = null;
   private tintCol = new Color(255, 255, 255, 255);
   private blendCol = new Color();
+  private coldMode: ColdMode = null;
+  private coldMaterial: Material | null = null;
+  private coldWaiting = false;
 
   constructor(parent: Node, atlasId: AtlasId, private onLoaded: () => void) {
     this.node.layer = Layers.Enum.UI_2D;
@@ -114,6 +146,7 @@ export class BattleSprite {
         this.blendSprite = n.addComponent(Sprite);
         this.blendSprite.sizeMode = Sprite.SizeMode.CUSTOM;
         this.blendSprite.trim = false;
+        this.blendSprite.customMaterial = this.coldMaterial;
         this.blendNode = n;
       }
       this.blendSprite!.spriteFrame = next;
@@ -144,5 +177,24 @@ export class BattleSprite {
     this.tintCol.set(color);
     this.sprite.color = this.tintCol;
     if (this.seqFrames && this.blendNode?.active) this.applySeq();   // 混合层颜色同步（受击闪红等）
+  }
+
+  get coldReady(): boolean { return !!coldMaterials; }
+
+  cold(mode: ColdMode): void {
+    this.coldMode = mode;
+    if (mode && !coldMaterials && !coldFailed && !this.coldWaiting) {
+      this.coldWaiting = true;
+      loadColdMaterials(() => { this.coldWaiting = false; if (this.node.isValid) this.syncColdMaterial(); });
+    }
+    this.syncColdMaterial();
+  }
+
+  private syncColdMaterial(): void {
+    const material = this.coldMode && coldMaterials ? coldMaterials[this.coldMode] : null;
+    if (this.coldMaterial === material) return;
+    this.coldMaterial = material;
+    this.sprite.customMaterial = material;
+    if (this.blendSprite) this.blendSprite.customMaterial = material;
   }
 }

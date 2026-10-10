@@ -27,6 +27,8 @@ export interface MobDef {
   /** 物理抗性 0~1（狙击大招等 ignoreRes 伤害无视） */
   physRes?: number;
   elite?: boolean;
+  /** Boss 与精英分开标记：冰霜领域只免疫 Boss，精英仍可冰封。 */
+  boss?: boolean;
 }
 
 export const MOBS: Record<string, MobDef> = {

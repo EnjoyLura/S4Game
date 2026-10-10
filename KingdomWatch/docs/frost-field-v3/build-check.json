@@ -1,0 +1,19 @@
+{
+  "build": "web-mobile successful",
+  "dpr_patch": "1791642923",
+  "shader_targets": [
+    "GLSL1",
+    "GLSL3"
+  ],
+  "blend": {
+    "blend": true,
+    "blendSrc": 1,
+    "blendDst": 1,
+    "blendSrcAlpha": 0,
+    "blendDstAlpha": 1
+  },
+  "runtime_texture": "frost_mist_v3",
+  "old_plate_loaded": false,
+  "typecheck": "4 pre-existing errors outside FrostVFX",
+  "gameplay_visual_check": "user manual validation"
+}

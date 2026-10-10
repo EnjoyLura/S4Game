@@ -1,0 +1,53 @@
+{
+  "command": "transparent verify",
+  "ok": true,
+  "passed": true,
+  "profile": "glow",
+  "verification": {
+    "alpha_health_score": 1.0,
+    "alpha_max": 255,
+    "alpha_min": 0,
+    "alpha_noise_score": 0.0009169864114249304,
+    "bbox": {
+      "height": 675,
+      "width": 723,
+      "x": 20,
+      "y": 45
+    },
+    "checkerboard_detected": false,
+    "color_type": "Rgba8",
+    "component_count": 15,
+    "edge_margin_px": 20,
+    "edge_nontransparent_pixels": 0,
+    "edge_nontransparent_ratio": 0.0,
+    "failure_reasons": [],
+    "halo_score": 0.00009924792130742595,
+    "has_alpha": true,
+    "height": 768,
+    "input_has_alpha": true,
+    "is_png": true,
+    "largest_component_pixels": 360634,
+    "largest_component_ratio": 0.9990830135885751,
+    "matte_residue_checked": true,
+    "matte_residue_score": 0.40157283300103214,
+    "nontransparent_pixels": 360965,
+    "opaque_pixels": 270283,
+    "opaque_ratio": 0.4582434760199653,
+    "partial_pixels": 90682,
+    "partial_ratio": 0.1537441677517361,
+    "passed": true,
+    "path": "D:/AI/S4Game/KingdomWatch/assets/resources/fx/frost_domain_v2.png",
+    "profile": "glow",
+    "quality_score": 0.899367620354755,
+    "residue_score": 0.8591136760174439,
+    "stray_pixel_count": 331,
+    "touches_edge": false,
+    "transparent_pixels": 228859,
+    "transparent_ratio": 0.3880123562282986,
+    "transparent_rgb_scrubbed": true,
+    "warnings": [
+      "possible matte-color residue on semi-transparent edge pixels"
+    ],
+    "width": 768
+  }
+}

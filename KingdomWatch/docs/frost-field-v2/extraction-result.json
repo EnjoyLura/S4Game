@@ -1,0 +1,94 @@
+{
+  "command": "transparent extract",
+  "extraction": {
+    "dual_alignment": null,
+    "inputs": {
+      "input": "D:/AI/S4Game/KingdomWatch/docs/frost-field-v2/ice-domain-source.png"
+    },
+    "material": "glow",
+    "matte_color": "#000000",
+    "matte_color_source": "auto-sampled",
+    "matte_decontamination_applied": true,
+    "method": "chroma",
+    "output": {
+      "bytes": 2218903,
+      "files": [
+        {
+          "bytes": 2218903,
+          "index": 0,
+          "path": "D:/AI/S4Game/KingdomWatch/docs/frost-field-v2/ice-domain-alpha.png"
+        }
+      ],
+      "path": "D:/AI/S4Game/KingdomWatch/docs/frost-field-v2/ice-domain-alpha.png"
+    },
+    "rgb_scrubbed": true,
+    "softness": 160.0,
+    "spill_suppression": 0.0,
+    "threshold": 8.0
+  },
+  "history": {
+    "job_id": "job-1791641016097995300-28088"
+  },
+  "material": "glow",
+  "method": "chroma",
+  "ok": true,
+  "output": {
+    "bytes": 2218903,
+    "files": [
+      {
+        "bytes": 2218903,
+        "index": 0,
+        "path": "D:/AI/S4Game/KingdomWatch/docs/frost-field-v2/ice-domain-alpha.png"
+      }
+    ],
+    "path": "D:/AI/S4Game/KingdomWatch/docs/frost-field-v2/ice-domain-alpha.png"
+  },
+  "profile": "glow",
+  "verification": {
+    "alpha_health_score": 1.0,
+    "alpha_max": 255,
+    "alpha_min": 0,
+    "alpha_noise_score": 0.0008714718859646396,
+    "bbox": {
+      "height": 1102,
+      "width": 1187,
+      "x": 32,
+      "y": 73
+    },
+    "checkerboard_detected": false,
+    "color_type": "Rgba8",
+    "component_count": 43,
+    "edge_margin_px": 32,
+    "edge_nontransparent_pixels": 0,
+    "edge_nontransparent_ratio": 0.0,
+    "failure_reasons": [],
+    "halo_score": 0.00078914469175593,
+    "has_alpha": true,
+    "height": 1254,
+    "input_has_alpha": true,
+    "is_png": true,
+    "largest_component_pixels": 964193,
+    "largest_component_ratio": 0.9991285281140354,
+    "matte_residue_checked": true,
+    "matte_residue_score": 0.38803640149244506,
+    "nontransparent_pixels": 965034,
+    "opaque_pixels": 724267,
+    "opaque_ratio": 0.460578461522808,
+    "partial_pixels": 240767,
+    "partial_ratio": 0.1531094119233127,
+    "passed": true,
+    "path": "D:/AI/S4Game/KingdomWatch/docs/frost-field-v2/ice-domain-alpha.png",
+    "profile": "glow",
+    "quality_score": 0.902694117186222,
+    "residue_score": 0.8637638726137933,
+    "stray_pixel_count": 841,
+    "touches_edge": false,
+    "transparent_pixels": 607482,
+    "transparent_ratio": 0.38631212655387925,
+    "transparent_rgb_scrubbed": true,
+    "warnings": [
+      "possible matte-color residue on semi-transparent edge pixels"
+    ],
+    "width": 1254
+  }
+}

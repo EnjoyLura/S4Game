@@ -164,8 +164,8 @@ export abstract class HeroBase {
    */
   protected lead(target: Monster, bulletSpeed: number): { dirX: number; dirY: number } {
     const px = this.x, py = HERO_Y + 60;
-    const moving = target.state === 'move';
-    const v = moving ? target.def.speed * (target.slowT > 0 ? 0.8 : 1) : 0;
+    const moving = target.state === 'move' && !target.immobilized;
+    const v = moving ? target.def.speed * (target.slowT > 0 ? 1 - target.slowAmp : 1) : 0;
     const dx = target.x - px, dy = target.y - py;
     const a = v * v - bulletSpeed * bulletSpeed;
     const dist = Math.sqrt(dx * dx + dy * dy);
@@ -337,7 +337,7 @@ export class ArcherHero extends HeroBase {
     Sfx.shoot(this.id);
     const cols = 1 + this.stats.fan;
     const baseAng = Math.atan2(dirY, dirX);
-    this.bowFlash(Math.cos(baseAng), Math.sin(baseAng), emp);   // 每排出弓一次弓弦闪光（连射排有节奏感）
+    this.bowFlash(projs, Math.cos(baseAng), Math.sin(baseAng), emp);   // 每排出弓一次弓弦闪光（连射排有节奏感）
     for (let c = 0; c < cols; c++) {
       const side = c === 0 ? 0 : Math.ceil(c / 2) * (c % 2 === 1 ? 1 : -1);   // c=0 主箭 0°；其余 +10/-10/+20/-20…
       const ang = baseAng + side * 10 * Math.PI / 180;
@@ -346,7 +346,8 @@ export class ArcherHero extends HeroBase {
   }
 
   /** 出手弓弦闪光：箭矢出弓点的一瞬星芒（约 90ms，主芒顺瞄准方向 + 侧芒 + 亮芯），金箭配金光 */
-  private bowFlash(dx: number, dy: number, emp: boolean): void {
+  private bowFlash(projs: ProjectileManager, dx: number, dy: number, emp: boolean): void {
+    if (projs.arrowRelease(this.x, HERO_Y + 60, dx, dy, emp)) return;
     const flash = new Node('bowFlash');
     flash.layer = Layers.Enum.UI_2D;
     flash.setParent(this.node.parent!);
@@ -442,7 +443,7 @@ export class ArcherHero extends HeroBase {
   /** 一排扇形箭：以竖直方向为中心 ±30° 均分；后排错半步补缝、弹速略慢形成多波；箭数/系数随大招等级成长 */
   private fireFanRow(projs: ProjectileManager, row: 0 | 1 | 2): void {
     this.animateAttack(true);
-    this.bowFlash(0, 1, true);
+    this.bowFlash(projs, 0, 1, true);
     Sfx.shoot(this.id);
     const uc = archerUltCfg(this.stats.ultLv);
     const n = uc.arrows;
@@ -1377,102 +1378,34 @@ export class FrostHero extends HeroBase {
     }));
     Sfx.shoot(this.id);
     // 70级突破冰冻：几率走 freezeChance（基础15%，速冻之心卡累加），时长走 freezeProc
-    if (this.stats.freezeProc && Math.random() < (this.stats.freezeChance || 0.15)) target.stunT = Math.max(target.stunT, this.stats.freezeProc);
+    if (this.stats.freezeProc && Math.random() < (this.stats.freezeChance || 0.15)) target.applyFreeze(this.stats.freezeProc);
   }
 
-  /** 冰霜新星本体（无弹道即时结算）：技能范围最密集簇心 AOE 伤害 + 冻结 + 深度减速 */
-  private castNova(mgr: MonsterManager, dmg?: DamageService): void {
+  /** 冰霜领域：按实际领域半径选择密集区，当场伤害、冰封；解冻后才启动 2s 减速。 */
+  private castFrostField(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
     const mc = moraSkCfg(this.stats.skillLv);
-    const R = this.stats.skillRange;
-    const cands = mgr.list.filter(m => !m.dead && Math.hypot(m.x - this.x, m.y - HERO_Y) <= R);
-    if (!cands.length) return;
-    // 密集簇：邻域 130 内同伴最多者为中心（与火法烈焰爆裂同款索敌）
-    let best = cands[0], bestN = -1;
-    for (const m of cands) {
-      let n = 0;
-      for (const o of cands) if (Math.hypot(o.x - m.x, o.y - m.y) <= 130) n++;
-      if (n > bestN) { bestN = n; best = m; }
-    }
     const NR = (this.stats.novaR || 150) * mc.rMul * (this.stats.skillRangeMul || 1);
+    const center = mgr.densestArea(this.x, HERO_Y, this.stats.skillRange, NR);
+    if (!center) return;
     const hitDmg = this.skillAtk * mc.mul * (this.stats.skillMul || 1);
-    const stun = (this.stats.novaStun || 0.8) + mc.stunBonus;
-    for (const m of mgr.mobsInRadius(best.x, best.y, NR)) {
+    const freeze = (this.stats.novaStun || 1.5) + mc.stunBonus;
+    // Snapshot the cast position: killing the central target cannot move the remaining field.
+    projs.frostDomain(center.x, center.y, NR, freeze);
+    for (const m of mgr.mobsInRadius(center.x, center.y, NR)) {
       if (m.dead) continue;
       const hpBefore = m.hp;
       m.takeDamage(hitDmg, Math.random() < this.stats.critRate, this.id);
-      if (dmg) dmg.add(this.id, Math.min(hitDmg, hpBefore));
-      m.stunT = Math.max(m.stunT, stun);   // 冻结（硬直）
-      m.applySlow(this.slowR(0.5), 3);     // 深度减速
-    }
-    // —— 表现层：地面霜盘（驻留融化）+ 冲击波环 + 中心飞散冰晶 ——
-    const ca = (hex: string, a: number): Color => { const c = hexc(hex); c.a = a; return c; };
-    // 1) 地面霜盘：半透冰蓝圆盘 + 放射冰裂 + 边缘晶刺，驻留 ~0.75s 后融化淡出
-    const decal = new Node('frostDecal');
-    decal.layer = Layers.Enum.UI_2D;
-    decal.setParent(this.node.parent!);
-    decal.setPosition(best.x, best.y, 0);
-    decal.setScale(0.25, 0.25, 1);
-    const dg = decal.addComponent(Graphics);
-    dg.fillColor = ca('#BFE9FF', 42);
-    dg.circle(0, 0, NR * 0.96); dg.fill();
-    dg.strokeColor = ca('#7FD8FF', 120); dg.lineWidth = 5;
-    dg.circle(0, 0, NR * 0.96); dg.stroke();
-    dg.strokeColor = ca('#E8FAFF', 60); dg.lineWidth = 2;
-    for (let k = 0; k < 8; k++) {   // 放射状冰裂
-      const a2 = k * Math.PI / 4 + 0.35;
-      dg.moveTo(Math.cos(a2) * NR * 0.16, Math.sin(a2) * NR * 0.16);
-      dg.lineTo(Math.cos(a2 + 0.12) * NR * 0.78, Math.sin(a2 + 0.12) * NR * 0.78);
-    }
-    dg.stroke();
-    dg.fillColor = ca('#E8FAFF', 120);
-    for (let k = 0; k < 12; k++) {  // 边缘晶刺
-      const a2 = k * Math.PI / 6;
-      const cx2 = Math.cos(a2), cy2 = Math.sin(a2);
-      dg.moveTo(cx2 * NR * 0.96, cy2 * NR * 0.96);
-      dg.lineTo(cx2 * (NR + 18) - cy2 * 7, cy2 * (NR + 18) + cx2 * 7);
-      dg.lineTo(cx2 * (NR + 18) + cy2 * 7, cy2 * (NR + 18) - cx2 * 7);
-      dg.close(); dg.fill();
-    }
-    const dop = decal.addComponent(UIOpacity);
-    tween(decal).to(0.26, { scale: new Vec3(1, 1, 1) }).start();
-    tween(dop).delay(0.75).to(0.7, { opacity: 0 }).call(() => decal.destroy()).start();
-    // 2) 冲击波环：亮圈快速扩散消散
-    const ring = new Node('frostWave');
-    ring.layer = Layers.Enum.UI_2D;
-    ring.setParent(this.node.parent!);
-    ring.setPosition(best.x, best.y, 0);
-    const rg = ring.addComponent(Graphics);
-    rg.strokeColor = hexc('#7FD8FF'); rg.lineWidth = 7;
-    rg.circle(0, 0, NR * 0.7); rg.stroke();
-    rg.strokeColor = hexc('#E8FAFF'); rg.lineWidth = 3;
-    rg.circle(0, 0, NR * 0.5); rg.stroke();
-    const rop = ring.addComponent(UIOpacity);
-    tween(ring).to(0.42, { scale: new Vec3(1.5, 1.5, 1) }).start();
-    tween(rop).to(0.42, { opacity: 0 }).call(() => ring.destroy()).start();
-    // 3) 中心飞散冰晶：8 枚小菱形向外飞散
-    for (let k = 0; k < 8; k++) {
-      const a2 = k * Math.PI / 4 + Math.random() * 0.5;
-      const dist = NR * (0.55 + Math.random() * 0.5);
-      const bit = new Node('frostBit');
-      bit.layer = Layers.Enum.UI_2D;
-      bit.setParent(this.node.parent!);
-      bit.setPosition(best.x, best.y, 0);
-      const bg2 = bit.addComponent(Graphics);
-      bg2.fillColor = ca(k % 2 ? '#E8FAFF' : '#7FD8FF', 220);
-      bg2.moveTo(8, 0); bg2.lineTo(0, 3.5); bg2.lineTo(-8, 0); bg2.lineTo(0, -3.5);
-      bg2.close(); bg2.fill();
-      const bop2 = bit.addComponent(UIOpacity);
-      tween(bit).to(0.38, { position: new Vec3(best.x + Math.cos(a2) * dist, best.y + Math.sin(a2) * dist, 0) }).start();
-      tween(bop2).to(0.38, { opacity: 0 }).call(() => bit.destroy()).start();
+      dmg.add(this.id, Math.min(hitDmg, hpBefore));
+      // Boss still receives the existing area damage, but has no freeze or post-thaw status.
+      m.applyFreeze(freeze, this.slowR(0.5), 2);
     }
     Sfx.play('skill');
   }
 
-  /** 技能·冰霜新星（自动，10s CD） */
-  protected castSkill(mgr: MonsterManager, _projs: ProjectileManager, dmg: DamageService): void {
-    void _projs;
+  /** 技能·冰霜领域（自动，沿用技能冷却与升级数值） */
+  protected castSkill(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
     this.skillCd = this.skillCdTotal;   // 冷却缩减卡
-    this.castNova(mgr, dmg);
+    this.castFrostField(mgr, projs, dmg);
   }
 
   /** 大招·极寒领域：以敌人身上的碎冰与冰雨读出全场冻结，不闪屏。 */

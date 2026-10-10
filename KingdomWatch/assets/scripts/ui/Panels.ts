@@ -505,15 +505,15 @@ export class Panels {
           ['释放', '自动'],
         ];
       } else if (hero.id === 'mora') {
-        title = '技能 · 冰霜新星';
+        title = '技能 · 冰霜领域';
         const mc = moraSkCfg(h.skillLv || 1);
         rows = [
-          ['效果', '最密集簇心爆发冰环 · 冻结 ' + ((h.novaStun || 0.8) + mc.stunBonus).toFixed(1) + 's'],
+          ['效果', '密集区冰封 ' + ((h.novaStun || 1.5) + mc.stunBonus).toFixed(1) + 's · Boss免疫'],
           ['范围伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * mc.mul) + '（×' + mc.mul.toFixed(2) + '）'],
-          ['特性', '冰环 AOE · 深度减速 50%'],
+          ['特性', '解冻后减速 ' + Math.round(Math.min(0.9, 0.5 + (h.slowAmpBonus || 0)) * 100) + '% · 2s'],
           ['冷却时间', cdTotal],
-          ['索敌范围', String(Math.round(h.skillRange))],
-          ['释放', '自动'],
+          ['领域半径', String(Math.round((h.novaR || 150) * mc.rMul * (h.skillRangeMul || 1)))],
+          ['释放', '自动 · 小怪/精英可冰封'],
         ];
       } else {
         title = '技能 · 连锁闪电';

@@ -1,0 +1,14 @@
+{
+  "source_dimensions": [
+    1254,
+    1254
+  ],
+  "runtime_dimensions": [
+    512,
+    512
+  ],
+  "runtime_bytes": 94534,
+  "mode": "RGB, black-backed light map; use only with additive shader",
+  "dark_pixel_fraction": 0.8539,
+  "border_max": 0
+}
