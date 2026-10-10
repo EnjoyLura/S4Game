@@ -1,0 +1,11 @@
+{
+  "taskId": "task_qy8RAi24bLWYFYtL6VML12uQm9lCyljz",
+  "model": "lens-minimax-h3-768p",
+  "requestedDuration": 2,
+  "inputMode": "text-only",
+  "referenceImages": [],
+  "prompt": "prompts/text-only-2s.txt",
+  "revision": "Replace six-point polygonal silhouette with a smooth round footprint and small irregularly spaced perimeter crystals.",
+  "reviewMode": "offline material composite; no live battle inspection",
+  "gameIntegrated": false
+}

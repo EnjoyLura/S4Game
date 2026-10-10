@@ -37,6 +37,10 @@ export interface SaveData {
   music: boolean;
   sfx: boolean;
   debug: boolean;
+  /** GM 开关：技能无冷却（调试用，旧档缺省视为关） */
+  gmNoSkillCd?: boolean;
+  /** GM 开关：大招常满能量（调试用，旧档缺省视为关） */
+  gmUltFull?: boolean;
   /* ---------- 五主界面扩展 ---------- */
   /** 材料背包：物品id -> 数量 */
   bag: Record<string, number>;

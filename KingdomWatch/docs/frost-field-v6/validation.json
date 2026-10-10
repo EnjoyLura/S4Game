@@ -1,0 +1,17 @@
+{
+  "input": "pure text-to-video; no reference image submitted",
+  "frameCount": 56,
+  "sourceFps": 24.0,
+  "sourceDuration": 2.3333333333333335,
+  "playbackDuration": 1.0,
+  "nativeFrameOrderPreserved": true,
+  "fixedCropAndScale": true,
+  "atlasSize": [
+    3072,
+    2688
+  ],
+  "tailOpacityFadeSeconds": 0.12,
+  "lastFrameAlphaMax": 0,
+  "preview": "offline ground-texture composite",
+  "gameIntegrated": false
+}

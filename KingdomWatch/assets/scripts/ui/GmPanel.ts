@@ -185,6 +185,22 @@ export class GmPanel {
       { t: '清空充能', cb: () => { this.dir.gmUltCharge(0); this.refresh(); } },
       { t: '技能CD清零', cb: () => { this.dir.gmSkillReady(); this.refresh(); } },
     ]);
+    // 常开开关：金色=开；写入存档，跨战斗/重启保持
+    const d = this.dir;
+    const tog = (x: number, name: string, on: boolean, cb: () => void): void => {
+      btn(B, x, this.ry, 218, 64, `${name}：${on ? '开' : '关'}`, CA(on ? PAL.gold : PAL.parch, 0.94), cb, 21);
+    };
+    tog(-110, '技能无冷却', d.gmNoSkillCd, () => {
+      d.gmNoSkillCd = !d.gmNoSkillCd;
+      const s = loadSave(); s.gmNoSkillCd = d.gmNoSkillCd; saveSave();
+      this.refresh();
+    });
+    tog(110, '大招常满', d.gmUltFull, () => {
+      d.gmUltFull = !d.gmUltFull;
+      const s = loadSave(); s.gmUltFull = d.gmUltFull; saveSave();
+      this.refresh();
+    });
+    this.ry -= 80;
     this.infoBox(B,
       `等级 ${this.dir.heroLevel}  经验 ${Math.floor(this.dir.xp)}/${expNeed(this.dir.heroLevel)}\n` +
       this.dir.heroes.map(h =>

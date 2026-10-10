@@ -1,0 +1,29 @@
+{
+  "url": "https://kingdom-watch.pages.dev/?v=1791645567",
+  "deployment": "https://cf28f365.kingdom-watch.pages.dev",
+  "cache": "no-cache",
+  "files": [
+    {
+      "file": "index.html",
+      "online_matches_local": true,
+      "sha256": "32a24b37083c6a80241043970276bc332c23edbc81654a01647394c7bb78b197"
+    },
+    {
+      "file": "assets/main/index.js",
+      "online_matches_local": true,
+      "sha256": "ba353e09d344331f7737861e79c9a1a5d2cd70ca5bf2c8d128271d4d34050b73"
+    },
+    {
+      "file": "assets/resources/import/81/81e4d2aa-a344-433e-b0b5-ddc21a134fc6.json",
+      "online_matches_local": true,
+      "sha256": "4f1d6f45fccdc976e21e3f7d0c585f409ce6d0da8b2f159adea60b7fa3a4d9cb"
+    }
+  ],
+  "GLSL_targets": [
+    "1",
+    "3"
+  ],
+  "atlas_transparency": "strict passed without warnings",
+  "gameplay_check": "user manual validation",
+  "typecheck": "4 pre-existing errors outside FrostVFX"
+}

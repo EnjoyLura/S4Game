@@ -55,7 +55,9 @@ def req(method, path, payload=None, raw=False, timeout=60):
 
 
 def submit(args):
-    payload = {'model': args.model, 'seconds': args.seconds, 'ratio': args.ratio}
+    payload = {'model': args.model, 'seconds': args.seconds, 'aspect_ratio': args.ratio}
+    if args.resolution:
+        payload['resolution'] = args.resolution
     if args.prompt_file:
         payload['prompt'] = open(args.prompt_file, encoding='utf-8').read().strip()
     elif args.prompt:
@@ -69,7 +71,7 @@ def submit(args):
         else:
             sys.exit('本地图片需先部署到 美术/vfx_host（wrangler pages deploy）后传 URL')
     d = req('POST', '/v1/videos', payload, timeout=90)
-    if 'error' in d:
+    if 'error' in d or not d.get('id'):
         print('submit error:', json.dumps(d, ensure_ascii=False))
         return None
     print('task:', d['id'], d['status'])
@@ -111,6 +113,7 @@ def main():
     ap.add_argument('--model', default='lens-minimax-h3-768p')
     ap.add_argument('--seconds', type=int, default=1)
     ap.add_argument('--ratio', default='1:1')
+    ap.add_argument('--resolution', help='可选输出分辨率，例如 768p；按模型支持值填写')
     ap.add_argument('--out', default='vfx_clip.mp4')
     ap.add_argument('--resume', help='续查已有 task id')
     ap.add_argument('--max-min', type=int, default=12, help='轮询超时(分钟)')

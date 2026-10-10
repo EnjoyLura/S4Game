@@ -1,0 +1,356 @@
+{
+  "frames": {
+    "frost_domain_video_v6_0": [
+      0,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_1": [
+      384,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_2": [
+      768,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_3": [
+      1152,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_4": [
+      1536,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_5": [
+      1920,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_6": [
+      2304,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_7": [
+      2688,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_8": [
+      0,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_9": [
+      384,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_10": [
+      768,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_11": [
+      1152,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_12": [
+      1536,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_13": [
+      1920,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_14": [
+      2304,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_15": [
+      2688,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_16": [
+      0,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_17": [
+      384,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_18": [
+      768,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_19": [
+      1152,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_20": [
+      1536,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_21": [
+      1920,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_22": [
+      2304,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_23": [
+      2688,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_24": [
+      0,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_25": [
+      384,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_26": [
+      768,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_27": [
+      1152,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_28": [
+      1536,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_29": [
+      1920,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_30": [
+      2304,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_31": [
+      2688,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_32": [
+      0,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_33": [
+      384,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_34": [
+      768,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_35": [
+      1152,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_36": [
+      1536,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_37": [
+      1920,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_38": [
+      2304,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_39": [
+      2688,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_40": [
+      0,
+      1920,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_41": [
+      384,
+      1920,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_42": [
+      768,
+      1920,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_43": [
+      1152,
+      1920,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_44": [
+      1536,
+      1920,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_45": [
+      1920,
+      1920,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_46": [
+      2304,
+      1920,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_47": [
+      2688,
+      1920,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_48": [
+      0,
+      2304,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_49": [
+      384,
+      2304,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_50": [
+      768,
+      2304,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_51": [
+      1152,
+      2304,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_52": [
+      1536,
+      2304,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_53": [
+      1920,
+      2304,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_54": [
+      2304,
+      2304,
+      384,
+      384
+    ],
+    "frost_domain_video_v6_55": [
+      2688,
+      2304,
+      384,
+      384
+    ]
+  },
+  "frameCount": 56,
+  "cellSize": [
+    384,
+    384
+  ],
+  "duration": 1.0,
+  "frameDuration": 0.017857142857142856,
+  "sourceVideo": "../raw/text-only-2s.mp4",
+  "sourceDuration": 2.3333333333333335,
+  "sourceFps": 24.0,
+  "referenceImages": [],
+  "tailOpacityFadeSeconds": 0.12,
+  "status": "awaiting-manual-review",
+  "gameIntegrated": false,
+  "cropPolicy": "one union bbox across the entire original clip",
+  "blend": "straight alpha, SRC_ALPHA / ONE_MINUS_SRC_ALPHA"
+}

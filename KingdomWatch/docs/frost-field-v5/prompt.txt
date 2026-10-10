@@ -1,0 +1,27 @@
+Use case: stylized-concept.
+Asset type: production game VFX ANIMATION SPRITE SHEET, 16 consecutive animation cels of ONE frost-domain spell, with genuine transparent background.
+Reference: the attached ice-field illustration is a MATERIAL, PALETTE and FOOTPRINT reference. Preserve its beautiful sharp cyan ice facets, icy light, frost veins and flying chips. Design a coherent moving spell from it; do not preserve the grey backdrop.
+
+Create a polished 4-column by 4-row sprite sheet on a square high-resolution 2048x2048 canvas. Exactly 16 equal 512x512 cells, strictly aligned in a 4x4 grid. There must be no drawn grid, labels or text. Read in temporal order left to right, top to bottom. Every cell uses the SAME stationary camera, identical ground-plane perspective, the same center at (50%,55%) of its cell, fixed maximum footprint width of 72% of the cell, fixed light direction, and empty gutters. Keep at least 10% clear margin around the complete effect in every cell. No effect crosses cell boundaries. Every pixel outside the painted effect is genuinely transparent alpha, including gutters and the final empty cell. No checkerboard, black, white, grey, magenta or painted background.
+
+Art direction: premium fantasy tower-defense spell VFX, refined handpainted rendering, disciplined large icy planes and translucent cuts. Steep top-down game camera with a little visible height on the crystals. Glacier cyan, deep blue shadow facets, pale blue-white light, crisp knife edges. Cold air is soft and semi-transparent. A thin translucent frost skin and branching crystalline veins bind the center to the rim: the ground will show through it. Leave the central area visually quiet for enemy readability, without an empty geometric hole. No thick raised solid ice plate, no deep pool, no heavy frosted white disk. Naturally uneven elegant crystal clusters rise at six positions around the perimeter, oriented consistently through the animation. No large central pillar. The same recognizable crystals must grow, persist and break over time, not change to unrelated shapes between frames. Camera never rotates and the solid ice field never spins. Only cold currents and shards move.
+
+Motion choreography by cell number (numbers are instructions only; DO NOT render them):
+01: spell begins; a concentrated pale cold flash at the center sends two tiny branching frost veins outward. Footprint still very small. No formed crystals yet.
+02: fast radial frost propagation reaches half radius; delicate frost branches run toward the perimeter; an asymmetric low curl of cold air follows the front.
+03: the frost reaches the full fixed footprint; six perimeter crystal clusters grow upward from their SAME eventual positions, still half their peak height. Chips lift from the front.
+04: impact peak; crystals snap to full height with clear bright cyan-white edges; a short outward veil of frost and scattered sparkling chips convey the instantaneous freeze. Keep the central floor translucent.
+05: hold begins; same frozen crystal geometry settles; peak flash has subsided. Three low cold-air currents curl along different parts of the perimeter.
+06: first held-motion phase; keep every solid crystal exactly in place; cold currents move a little clockwise, and bright glints travel over a few ice ridges.
+07: next phase; cold vapor shape genuinely evolves and curls, light glints advance. A few tiny shards drift upward. Same crystal positions, size and floor pattern.
+08: next phase; vapor streams curl past the next clusters, dissipating behind them while new narrow wisps form. Same fixed crystal geometry. No overall sprite rotation or zoom.
+09: next phase; cold air continues to flow; white-blue specular highlights sweep along a different set of crystal faces. Quiet central frost texture remains unchanged.
+10: last held phase; moving currents return near cell 05's phase for a gentle hold loop, with the identical solid crystal geometry and stationary footprint. No fade yet.
+11: thaw starts with a decisive fracture; fine cracks split the recognizable rim crystals, and some crystal tips begin separating. A sharp narrow burst of pale icy air pushes outward.
+12: crystals shatter into several identifiable separated angular chunks moving outward/upward; bases shrink and crumble. Frost-floor veins start dissolving from the center. Do not expand a whole intact ice ring.
+13: remaining small bases crumble; separated chips have moved farther outward and begun falling; cold vapor is torn into 3 soft curls. Most of the floor frost has dissolved.
+14: only tiny outward-drifting translucent ice fragments, a few pale glints and thin receding wind strands remain. No solid ring or standing crystals.
+15: almost gone; just 2-3 very faint isolated frost motes and a short delicate wisp. Most pixels are completely transparent.
+16: totally empty transparent cell, zero visible effect, clean end of the animation.
+
+This must be a REAL chronological animation with crystal growth, stable held geometry with flowing fog, then physical shattering and dissipating fragments. Not 16 unrelated icons, not static images simply scaled or rotated, not a collection of alternate concepts. No characters, monsters, health bars, numbers, UI, landscape, stone floor, text, runes, border, watermark, contact shadows outside the frost, lens flares, fire, pink or yellow light. The sprite-sheet output is an engine asset, not a presentation page.

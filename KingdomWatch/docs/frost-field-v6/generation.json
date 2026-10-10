@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-11",
+  "videoTool": "美术/tools/art_video_gen.py",
+  "videoModel": "lens-minimax-h3-768p",
+  "input": "first-frame-black.png",
+  "reference": "reference-original.png",
+  "inputUrl": "https://kw-vfx-src.pages.dev/frost_domain_v6_ff.png",
+  "scope": "offline asset review; no game integration",
+  "selectedMode": "text-to-video; no reference",
+  "selectedTask": "task_WMjHOjQ7NvKTfVPEjeqOhdMuOpAk5k46",
+  "selectedPrompt": "prompts/text-only-2s.txt",
+  "selectedVideo": "raw/text-only-2s.mp4",
+  "requestedSeconds": 2,
+  "reviewPlaybackSeconds": 1,
+  "discardedReferenceJobs": [
+    {
+      "task": "task_iISiwOlJJiX6UEMpFkVb6j1lGL5qXkrP",
+      "requestedSeconds": 3,
+      "output": "raw/hold-thaw.mp4",
+      "prompt": "prompts/hold-thaw.txt"
+    },
+    {
+      "task": "task_9tkry7al2vjMahWRLqIuMEHjxaWJF4bd",
+      "requestedSeconds": 1,
+      "output": "raw/retract.mp4",
+      "prompt": "prompts/retract-for-birth.txt"
+    }
+  ]
+}

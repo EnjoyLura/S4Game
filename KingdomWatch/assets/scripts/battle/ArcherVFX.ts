@@ -49,7 +49,7 @@ export class ArcherVFX {
       if (err || !data || !this.root.isValid) return;
       resources.load(path + '/spriteFrame', SpriteFrame, (error, source) => {
         if (error || !source || !this.root.isValid) return;
-        this.sources.push(source.addRef());
+        source.addRef(); this.sources.push(source);
         const rects = (data.json as { frames: Record<string, number[]> }).frames;
         for (const id of ids) {
           if (!rects[id]) continue;
@@ -72,7 +72,11 @@ export class ArcherVFX {
     const node = this.node(name, parent), ui = node.addComponent(UITransform);
     const sprite = node.addComponent(Sprite);
     sprite.sizeMode = Sprite.SizeMode.CUSTOM; sprite.trim = false;
-    if (additive) { sprite.srcBlendFactor = gfx.BlendFactor.SRC_ALPHA; sprite.dstBlendFactor = gfx.BlendFactor.ONE; }
+    if (additive) {
+      // Creator 3.8 stores UI blending in serialized fields; dstBlendFactor has no setter.
+      const blend = sprite as unknown as { _srcBlendFactor: gfx.BlendFactor; _dstBlendFactor: gfx.BlendFactor };
+      blend._srcBlendFactor = gfx.BlendFactor.SRC_ALPHA; blend._dstBlendFactor = gfx.BlendFactor.ONE;
+    }
     return { node, sprite, ui };
   }
 

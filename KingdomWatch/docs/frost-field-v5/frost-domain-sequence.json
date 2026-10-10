@@ -1,0 +1,427 @@
+{
+  "version": 5,
+  "status": "preview-awaiting-user-review",
+  "generator": "built-in imagegen",
+  "frameCount": 16,
+  "atlas": "frost-domain-sequence.png",
+  "grid": [
+    4,
+    4
+  ],
+  "cellSize": [
+    384,
+    384
+  ],
+  "alpha": "straight/native generated alpha",
+  "anchorTopLeft": [
+    0.5,
+    0.5729166666666666
+  ],
+  "anchorCocos": [
+    0.5,
+    0.42708333333333337
+  ],
+  "freezeSeconds": 1.5,
+  "thawSeconds": 0.68,
+  "blendSeconds": 0.04,
+  "timeline": [
+    {
+      "frame": 1,
+      "duration": 0.05
+    },
+    {
+      "frame": 2,
+      "duration": 0.05
+    },
+    {
+      "frame": 3,
+      "duration": 0.05
+    },
+    {
+      "frame": 4,
+      "duration": 0.05
+    },
+    {
+      "frame": 5,
+      "duration": 0.1
+    },
+    {
+      "frame": 6,
+      "duration": 0.1
+    },
+    {
+      "frame": 7,
+      "duration": 0.1
+    },
+    {
+      "frame": 8,
+      "duration": 0.1
+    },
+    {
+      "frame": 9,
+      "duration": 0.1
+    },
+    {
+      "frame": 10,
+      "duration": 0.1
+    },
+    {
+      "frame": 5,
+      "duration": 0.1
+    },
+    {
+      "frame": 6,
+      "duration": 0.1
+    },
+    {
+      "frame": 7,
+      "duration": 0.1
+    },
+    {
+      "frame": 8,
+      "duration": 0.1
+    },
+    {
+      "frame": 9,
+      "duration": 0.1
+    },
+    {
+      "frame": 10,
+      "duration": 0.1
+    },
+    {
+      "frame": 5,
+      "duration": 0.1
+    },
+    {
+      "frame": 11,
+      "duration": 0.08
+    },
+    {
+      "frame": 12,
+      "duration": 0.08
+    },
+    {
+      "frame": 13,
+      "duration": 0.1
+    },
+    {
+      "frame": 14,
+      "duration": 0.12
+    },
+    {
+      "frame": 15,
+      "duration": 0.12
+    },
+    {
+      "frame": 16,
+      "duration": 0.18
+    }
+  ],
+  "frames": [
+    {
+      "name": "frost-01",
+      "rect": [
+        0,
+        0,
+        384,
+        384
+      ],
+      "sourceRect": [
+        0,
+        0,
+        314,
+        314
+      ],
+      "sourceGroundPivot": [
+        173,
+        200
+      ]
+    },
+    {
+      "name": "frost-02",
+      "rect": [
+        384,
+        0,
+        384,
+        384
+      ],
+      "sourceRect": [
+        314,
+        0,
+        627,
+        314
+      ],
+      "sourceGroundPivot": [
+        160,
+        199
+      ]
+    },
+    {
+      "name": "frost-03",
+      "rect": [
+        768,
+        0,
+        384,
+        384
+      ],
+      "sourceRect": [
+        627,
+        0,
+        940,
+        314
+      ],
+      "sourceGroundPivot": [
+        163,
+        205
+      ]
+    },
+    {
+      "name": "frost-04",
+      "rect": [
+        1152,
+        0,
+        384,
+        384
+      ],
+      "sourceRect": [
+        940,
+        0,
+        1254,
+        314
+      ],
+      "sourceGroundPivot": [
+        152,
+        197
+      ]
+    },
+    {
+      "name": "frost-05",
+      "rect": [
+        0,
+        384,
+        384,
+        384
+      ],
+      "sourceRect": [
+        0,
+        314,
+        314,
+        627
+      ],
+      "sourceGroundPivot": [
+        177,
+        188
+      ]
+    },
+    {
+      "name": "frost-06",
+      "rect": [
+        384,
+        384,
+        384,
+        384
+      ],
+      "sourceRect": [
+        314,
+        314,
+        627,
+        627
+      ],
+      "sourceGroundPivot": [
+        171,
+        188
+      ]
+    },
+    {
+      "name": "frost-07",
+      "rect": [
+        768,
+        384,
+        384,
+        384
+      ],
+      "sourceRect": [
+        627,
+        314,
+        940,
+        627
+      ],
+      "sourceGroundPivot": [
+        160,
+        188
+      ]
+    },
+    {
+      "name": "frost-08",
+      "rect": [
+        1152,
+        384,
+        384,
+        384
+      ],
+      "sourceRect": [
+        940,
+        314,
+        1254,
+        627
+      ],
+      "sourceGroundPivot": [
+        156,
+        188
+      ]
+    },
+    {
+      "name": "frost-09",
+      "rect": [
+        0,
+        768,
+        384,
+        384
+      ],
+      "sourceRect": [
+        0,
+        627,
+        314,
+        940
+      ],
+      "sourceGroundPivot": [
+        177,
+        188
+      ]
+    },
+    {
+      "name": "frost-10",
+      "rect": [
+        384,
+        768,
+        384,
+        384
+      ],
+      "sourceRect": [
+        314,
+        627,
+        627,
+        940
+      ],
+      "sourceGroundPivot": [
+        167,
+        188
+      ]
+    },
+    {
+      "name": "frost-11",
+      "rect": [
+        768,
+        768,
+        384,
+        384
+      ],
+      "sourceRect": [
+        627,
+        627,
+        940,
+        940
+      ],
+      "sourceGroundPivot": [
+        160,
+        188
+      ]
+    },
+    {
+      "name": "frost-12",
+      "rect": [
+        1152,
+        768,
+        384,
+        384
+      ],
+      "sourceRect": [
+        940,
+        627,
+        1254,
+        940
+      ],
+      "sourceGroundPivot": [
+        158,
+        188
+      ]
+    },
+    {
+      "name": "frost-13",
+      "rect": [
+        0,
+        1152,
+        384,
+        384
+      ],
+      "sourceRect": [
+        0,
+        940,
+        314,
+        1254
+      ],
+      "sourceGroundPivot": [
+        178,
+        165
+      ]
+    },
+    {
+      "name": "frost-14",
+      "rect": [
+        384,
+        1152,
+        384,
+        384
+      ],
+      "sourceRect": [
+        314,
+        940,
+        627,
+        1254
+      ],
+      "sourceGroundPivot": [
+        168,
+        165
+      ]
+    },
+    {
+      "name": "frost-15",
+      "rect": [
+        768,
+        1152,
+        384,
+        384
+      ],
+      "sourceRect": [
+        627,
+        940,
+        940,
+        1254
+      ],
+      "sourceGroundPivot": [
+        162,
+        165
+      ]
+    },
+    {
+      "name": "frost-16",
+      "rect": [
+        1152,
+        1152,
+        384,
+        384
+      ],
+      "sourceRect": [
+        940,
+        940,
+        1254,
+        1254
+      ],
+      "sourceGroundPivot": [
+        155,
+        165
+      ]
+    }
+  ]
+}

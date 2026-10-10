@@ -1,0 +1,384 @@
+{
+  "frames": {
+    "frost_domain_video_v10_0": [
+      0,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_1": [
+      384,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_2": [
+      768,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_3": [
+      1152,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_4": [
+      1536,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_5": [
+      1920,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_6": [
+      2304,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_7": [
+      2688,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_8": [
+      0,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_9": [
+      384,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_10": [
+      768,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_11": [
+      1152,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_12": [
+      1536,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_13": [
+      1920,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_14": [
+      2304,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_15": [
+      2688,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_16": [
+      0,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_17": [
+      384,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_18": [
+      768,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_19": [
+      1152,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_20": [
+      1536,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_21": [
+      1920,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_22": [
+      2304,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_23": [
+      2688,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_24": [
+      0,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_25": [
+      384,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_26": [
+      768,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_27": [
+      1152,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_28": [
+      1536,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_29": [
+      1920,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_30": [
+      2304,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_31": [
+      2688,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_32": [
+      0,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_33": [
+      384,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_34": [
+      768,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_35": [
+      1152,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_36": [
+      1536,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_37": [
+      1920,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_38": [
+      2304,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_39": [
+      2688,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_40": [
+      0,
+      1920,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_41": [
+      384,
+      1920,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_42": [
+      768,
+      1920,
+      384,
+      384
+    ],
+    "frost_domain_video_v10_43": [
+      1152,
+      1920,
+      384,
+      384
+    ]
+  },
+  "frameCount": 44,
+  "cellSize": [
+    384,
+    384
+  ],
+  "duration": 1.5,
+  "frameDurations": [
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034,
+    0.034
+  ],
+  "sourceModel": "lens-minimax-h3-768p",
+  "sourceVersion": "frost-field-v6",
+  "sourceFrameIndices": [
+    22,
+    22,
+    22,
+    22,
+    22,
+    22,
+    22,
+    22,
+    22,
+    22,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55
+  ],
+  "opening": "400ms small cold seed and outward frost reveal; crystals are revealed as the front reaches their roots",
+  "onsetDuration": 0.4,
+  "onsetFrameCount": 10,
+  "tailDuration": 0.68,
+  "geometry": "one fixed hexagon-to-round inverse map for the entire clip",
+  "warpCenter": [
+    192.0,
+    214.0
+  ],
+  "maxRadialExpansion": 1.1547005383792515,
+  "noPerFrameTracking": true,
+  "newGenerationCalls": 0,
+  "tailFade": "inherited from v6",
+  "status": "awaiting-manual-review",
+  "gameIntegrated": false,
+  "blend": "straight alpha, SRC_ALPHA / ONE_MINUS_SRC_ALPHA"
+}

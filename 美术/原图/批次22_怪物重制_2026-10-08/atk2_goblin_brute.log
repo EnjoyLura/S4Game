@@ -1,0 +1,26 @@
+task: task_Ls1hqHHyxsZjmUBWqGEIwlhzLiqEHnYF queued
+[02:17:41] ('queued', 0)
+[02:17:56] ('queued', 0)
+[02:18:11] ('queued', 0)
+[02:18:26] ('queued', 10)
+[02:18:41] ('queued', 10)
+[02:18:56] ('queued', 10)
+[02:19:12] ('queued', 10)
+[02:19:27] ('queued', 10)
+[02:19:42] ('queued', 10)
+[02:19:57] ('completed', 100)
+Traceback (most recent call last):
+  File "D:\AI\S4Game\美术\tools\art_video_gen.py", line 126, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "D:\AI\S4Game\美术\tools\art_video_gen.py", line 122, in main
+    return poll(task, args.out, args.max_min)
+  File "D:\AI\S4Game\美术\tools\art_video_gen.py", line 91, in poll
+    raw = req('GET', url[len(API):], raw=True, timeout=180)
+  File "D:\AI\S4Game\美术\tools\art_video_gen.py", line 49, in req
+    b = resp.read()
+  File "C:\Users\user\AppData\Local\Python\pythoncore-3.14-64\Lib\http\client.py", line 510, in read
+    s = self._safe_read(self.length)
+  File "C:\Users\user\AppData\Local\Python\pythoncore-3.14-64\Lib\http\client.py", line 671, in _safe_read
+    raise IncompleteRead(data, amt - len(data))
+http.client.IncompleteRead: IncompleteRead(344064 bytes read, 893924 more expected)

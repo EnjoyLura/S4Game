@@ -1,0 +1,15 @@
+{
+  "atlasFrames": 44,
+  "clipSeconds": 1.5,
+  "onsetSeconds": 0.4,
+  "simulationClock": true,
+  "pauseAndSpeedSkip": true,
+  "fixedAnchorAndRadiusScale": true,
+  "poolReuse": true,
+  "lateLoading": true,
+  "sceneCleanup": true,
+  "note": "Actual FrostVFX class tested with engine object stubs; no combat browser run.",
+  "tailSeconds": 0.68,
+  "timingBoundariesChecked": true,
+  "exactDeadlineChecked": true
+}

@@ -1,0 +1,12 @@
+{
+  "url": "https://kingdom-watch.pages.dev/?v=frost-1500ms-1791655830",
+  "deployment": "https://aab0304d.kingdom-watch.pages.dev",
+  "buildVersion": "1791655830",
+  "rootVersionMatches": true,
+  "mainCodeHashMatches": true,
+  "timingJsonHashMatches": true,
+  "clipSeconds": 1.5,
+  "onsetSeconds": 0.4,
+  "tailSeconds": 0.68,
+  "browserCombatRun": false
+}

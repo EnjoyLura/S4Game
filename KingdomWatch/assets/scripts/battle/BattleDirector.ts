@@ -45,6 +45,9 @@ export class BattleDirector extends Component {
   private newMobQueue: string[] = [];
   private mobIntroOpen = false;   // 新怪弹窗防重入（触控双发时只开一个）
   speed: 1 | 1.5 = 1;
+  /** GM 开关：技能无冷却 / 大招常满（读自存档，GmPanel 切换；每帧在英雄 tick 后强制生效） */
+  gmNoSkillCd = !!loadSave().gmNoSkillCd;
+  gmUltFull = !!loadSave().gmUltFull;
 
   mgr!: MonsterManager;
   /** 上场英雄（双英雄同场：艾拉·风羽 + 凯尔·鹰眼；编队系统后再做槽位解锁） */
@@ -232,6 +235,10 @@ export class BattleDirector extends Component {
       this.waves.tick(sub);
       this.mgr.tick(sub, this.line);
       for (const h of this.heroes) h.tick(sub, this.mgr, this.projs, this.dmgSvc);
+      // GM 常开开关：tick 可能重置 CD/扣充能，故 tick 后强制。
+      // 无冷却并非零 CD：压到 1s 内置冷却，避免技能每帧连发（用户反馈）。
+      if (this.gmNoSkillCd) for (const h of this.heroes) h.skillCd = Math.min(h.skillCd, 1);
+      if (this.gmUltFull) for (const h of this.heroes) h.charge = h.chargeMax;
       this.projs.tick(sub, this.line);
       this.parts.tick(sub);
       this.impacts.tick(sub);

@@ -1,0 +1,24 @@
+{
+  "source": "raw/seedance-4s.mp4",
+  "corrected": "raw/ground-projection-corrected.mp4",
+  "sourceSize": [
+    864,
+    496
+  ],
+  "correctedSize": [
+    960,
+    780
+  ],
+  "frameCount": 121,
+  "fps": 24.0,
+  "groundBand": [
+    160.0,
+    435.0
+  ],
+  "groundDepthScale": 1.68,
+  "transitionPixels": 18.0,
+  "padding": 48,
+  "fixedMapForEntireClip": true,
+  "cameraOrFrameTracking": false,
+  "method": "smooth fixed row projection; rear crystal-tip height band preserved"
+}

@@ -1,0 +1,15 @@
+{
+  "sourceModel": "lens-minimax-h3-768p",
+  "sourceVersion": "v6",
+  "newGenerationCalls": 0,
+  "sourceFramesUntouched": true,
+  "fixedWarpAcrossAllFrames": true,
+  "originalStarburstRemoved": true,
+  "onsetSeconds": 0.04,
+  "frameCount": 36,
+  "skillDuration": 0.86,
+  "gifDurationMs": 1540,
+  "lastFrameAlphaMax": 0,
+  "reviewMode": "offline material composite",
+  "gameIntegrated": false
+}

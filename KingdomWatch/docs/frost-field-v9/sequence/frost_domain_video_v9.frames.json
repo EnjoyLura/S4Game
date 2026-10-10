@@ -1,0 +1,317 @@
+{
+  "frames": {
+    "frost_domain_video_v9_0": [
+      0,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_1": [
+      384,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_2": [
+      768,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_3": [
+      1152,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_4": [
+      1536,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_5": [
+      1920,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_6": [
+      2304,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_7": [
+      2688,
+      0,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_8": [
+      0,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_9": [
+      384,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_10": [
+      768,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_11": [
+      1152,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_12": [
+      1536,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_13": [
+      1920,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_14": [
+      2304,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_15": [
+      2688,
+      384,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_16": [
+      0,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_17": [
+      384,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_18": [
+      768,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_19": [
+      1152,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_20": [
+      1536,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_21": [
+      1920,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_22": [
+      2304,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_23": [
+      2688,
+      768,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_24": [
+      0,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_25": [
+      384,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_26": [
+      768,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_27": [
+      1152,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_28": [
+      1536,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_29": [
+      1920,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_30": [
+      2304,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_31": [
+      2688,
+      1152,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_32": [
+      0,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_33": [
+      384,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_34": [
+      768,
+      1536,
+      384,
+      384
+    ],
+    "frost_domain_video_v9_35": [
+      1152,
+      1536,
+      384,
+      384
+    ]
+  },
+  "frameCount": 36,
+  "cellSize": [
+    384,
+    384
+  ],
+  "duration": 0.86,
+  "frameDurations": [
+    0.02,
+    0.02,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.03,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02
+  ],
+  "sourceModel": "lens-minimax-h3-768p",
+  "sourceVersion": "frost-field-v6",
+  "sourceFrameIndices": [
+    22,
+    22,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55
+  ],
+  "opening": "40ms opacity onset from the existing fully formed frame; original frames 0-21 omitted",
+  "geometry": "one fixed hexagon-to-round inverse map for the entire clip",
+  "warpCenter": [
+    192.0,
+    214.0
+  ],
+  "maxRadialExpansion": 1.1547005383792515,
+  "noPerFrameTracking": true,
+  "newGenerationCalls": 0,
+  "tailFade": "inherited from v6",
+  "status": "awaiting-manual-review",
+  "gameIntegrated": false,
+  "blend": "straight alpha, SRC_ALPHA / ONE_MINUS_SRC_ALPHA"
+}

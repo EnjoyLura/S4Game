@@ -1,0 +1,33 @@
+{
+  "taskId": "task_78KxkHZ1DUwcflkk3kIymI3IeTbv3pfg",
+  "model": "lens-seedance-2.0-mini-audio-flex",
+  "requestedDuration": 4,
+  "deliverableVideoDuration": 2,
+  "skillPlaybackDuration": 1,
+  "aspectRatio": "16:9",
+  "inputMode": "text-only",
+  "referenceImagesSubmitted": [],
+  "visualTarget": "User-provided fully expanded ice field with broad rounded ice surface, branching cracks, and prominent faceted perimeter blades; described in text, not supplied to the video API.",
+  "prompt": "prompts/landscape-4s.txt",
+  "revision": "Wider rounded ground footprint, substantial perimeter ice crystals and distant full-object framing with black margins.",
+  "reviewMode": "offline material composite; no live battle inspection",
+  "gameIntegrated": false,
+  "discardedAttempts": [
+    {
+      "taskId": "task_KM2OnjLFmWe1wDqiGhxol9gNcxJEnnxB",
+      "model": "lens-minimax-h3-768p",
+      "video": "raw/text-only-2s.mp4",
+      "reason": "Portrait output still touched both side boundaries during full expansion."
+    },
+    {
+      "model": "lens-seedance-2.0-mini-audio-flex",
+      "requestedDuration": 2,
+      "reason": "Channel rejected durations below four seconds; terminal response reported a refund."
+    }
+  ],
+  "status": "awaiting-manual-review",
+  "actualSourceDuration": 5.041666666666667,
+  "sourceFrameCount": 121,
+  "atlasFrameCount": 56,
+  "fixedProjectionCorrection": "projection-correction.json"
+}

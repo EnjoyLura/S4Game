@@ -1,0 +1,5 @@
+{
+  "name": "kw-vfx-video-input",
+  "compatibility_date": "2026-10-10",
+  "assets": { "directory": "./public" }
+}

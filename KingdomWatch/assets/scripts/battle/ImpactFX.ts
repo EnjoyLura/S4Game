@@ -25,7 +25,7 @@ export class ImpactFX {
   constructor(parent: Node, groundParent: Node = parent, projectileParent: Node = parent) {
     this.fire = new FireVFX(parent, groundParent, projectileParent);
     this.archer = new ArcherVFX(parent, projectileParent);
-    this.frost = new FrostVFX(parent, groundParent);
+    this.frost = new FrostVFX(groundParent);
     const node = new Node('impactEnvelopes');
     node.layer = Layers.Enum.UI_2D;
     node.setParent(parent);

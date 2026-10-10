@@ -2,7 +2,7 @@
  * 帧名约定 <mobId>_w<i>（walk 循环）/ <mobId>_a<i>（attack 一次性，可缺省）。
  * 加载失败返回 null → Monster 走程序化步态兜底，调用方零分支。
  */
-import { JsonAsset, Rect, resources, Size, SpriteFrame, Texture, Vec2 } from 'cc';
+import { JsonAsset, Rect, resources, Size, SpriteFrame, Vec2 } from 'cc';
 import { uxFrame } from '../ui/Ux';
 
 export interface MobClip {
@@ -47,7 +47,7 @@ function finish(d: Map<string, MobClip> | null): void {
   q.forEach(f => f(d));
 }
 
-function parse(manifest: FrameManifest, tex: Texture): Map<string, MobClip> {
+function parse(manifest: FrameManifest, tex: SpriteFrame['texture']): Map<string, MobClip> {
   const segs = new Map<string, { w: [number, string, number][]; a: [number, string, number][] }>();
   for (const name of Object.keys(manifest.frames)) {
     const m = /^(.+)_(w|a)(\d+)$/.exec(name);

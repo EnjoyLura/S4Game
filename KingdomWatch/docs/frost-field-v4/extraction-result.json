@@ -1,0 +1,92 @@
+{
+  "command": "transparent extract",
+  "extraction": {
+    "dual_alignment": null,
+    "inputs": {
+      "input": "D:/AI/S4Game/KingdomWatch/docs/frost-field-v4/ice-layers-matte.png"
+    },
+    "material": "soft-3d",
+    "matte_color": "#fc03fa",
+    "matte_color_source": "auto-sampled",
+    "matte_decontamination_applied": true,
+    "method": "chroma",
+    "output": {
+      "bytes": 631037,
+      "files": [
+        {
+          "bytes": 631037,
+          "index": 0,
+          "path": "D:/AI/S4Game/KingdomWatch/docs/frost-field-v4/ice-layers-alpha.png"
+        }
+      ],
+      "path": "D:/AI/S4Game/KingdomWatch/docs/frost-field-v4/ice-layers-alpha.png"
+    },
+    "rgb_scrubbed": true,
+    "softness": 40.0,
+    "spill_suppression": 1.0,
+    "threshold": 60.0
+  },
+  "history": {
+    "job_id": "job-1791645452716251700-22548"
+  },
+  "material": "soft-3d",
+  "method": "chroma",
+  "ok": true,
+  "output": {
+    "bytes": 631037,
+    "files": [
+      {
+        "bytes": 631037,
+        "index": 0,
+        "path": "D:/AI/S4Game/KingdomWatch/docs/frost-field-v4/ice-layers-alpha.png"
+      }
+    ],
+    "path": "D:/AI/S4Game/KingdomWatch/docs/frost-field-v4/ice-layers-alpha.png"
+  },
+  "profile": "effect",
+  "verification": {
+    "alpha_health_score": 1.0,
+    "alpha_max": 255,
+    "alpha_min": 0,
+    "alpha_noise_score": 0.6602511078969135,
+    "bbox": {
+      "height": 1076,
+      "width": 1055,
+      "x": 42,
+      "y": 84
+    },
+    "checkerboard_detected": false,
+    "color_type": "Rgba8",
+    "component_count": 215,
+    "edge_margin_px": 42,
+    "edge_nontransparent_pixels": 0,
+    "edge_nontransparent_ratio": 0.0,
+    "failure_reasons": [],
+    "halo_score": 0.003903317820147125,
+    "has_alpha": true,
+    "height": 1254,
+    "input_has_alpha": true,
+    "is_png": true,
+    "largest_component_pixels": 73522,
+    "largest_component_ratio": 0.3397488921030864,
+    "matte_residue_checked": true,
+    "matte_residue_score": 0.020489157915930797,
+    "nontransparent_pixels": 216401,
+    "opaque_pixels": 209740,
+    "opaque_ratio": 0.13337861109203342,
+    "partial_pixels": 6661,
+    "partial_ratio": 0.004235886948050131,
+    "passed": true,
+    "path": "D:/AI/S4Game/KingdomWatch/docs/frost-field-v4/ice-layers-alpha.png",
+    "profile": "effect",
+    "quality_score": 0.8294246017647742,
+    "residue_score": 0.7611554092924824,
+    "stray_pixel_count": 142879,
+    "touches_edge": false,
+    "transparent_pixels": 1356115,
+    "transparent_ratio": 0.8623855019599165,
+    "transparent_rgb_scrubbed": true,
+    "warnings": [],
+    "width": 1254
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "sourceSize": [
+    864,
+    496
+  ],
+  "sourceFrames": 121,
+  "threshold": 40,
+  "samples": [
+    {
+      "frame": 34,
+      "bounds": [
+        91,
+        28,
+        797,
+        478
+      ],
+      "leftEdgePixels": 0,
+      "rightEdgePixels": 0,
+      "topEdgePixels": 0,
+      "bottomEdgePixels": 0
+    },
+    {
+      "frame": 43,
+      "bounds": [
+        67,
+        22,
+        810,
+        479
+      ],
+      "leftEdgePixels": 0,
+      "rightEdgePixels": 0,
+      "topEdgePixels": 0,
+      "bottomEdgePixels": 0
+    },
+    {
+      "frame": 54,
+      "bounds": [
+        22,
+        26,
+        839,
+        495
+      ],
+      "leftEdgePixels": 0,
+      "rightEdgePixels": 0,
+      "topEdgePixels": 0,
+      "bottomEdgePixels": 45
+    },
+    {
+      "frame": 66,
+      "bounds": [
+        6,
+        29,
+        843,
+        487
+      ],
+      "leftEdgePixels": 0,
+      "rightEdgePixels": 0,
+      "topEdgePixels": 0,
+      "bottomEdgePixels": 0
+    }
+  ],
+  "expansionTouchesBorder": true
+}
