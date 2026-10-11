@@ -5,6 +5,7 @@ import { Color, Graphics, Layers, Node } from 'cc';
 import { FireVFX } from './FireVFX';
 import { ArcherVFX } from './ArcherVFX';
 import { FrostVFX } from './FrostVFX';
+import { FrostUltTarget, FrostUltimateVFX } from './FrostUltimateVFX';
 
 interface Impact { x: number; y: number; life: number; max: number; radius: number; color: string; angle: number; heavy: boolean; hero: string; kind: 'contact' | 'cast' | 'blast'; }
 
@@ -21,11 +22,13 @@ export class ImpactFX {
   private fire: FireVFX;
   private archer: ArcherVFX;
   private frost: FrostVFX;
+  private frostUltimate: FrostUltimateVFX;
 
-  constructor(parent: Node, groundParent: Node = parent, projectileParent: Node = parent) {
+  constructor(parent: Node, groundParent: Node = parent, projectileParent: Node = parent, depthParent?: Node) {
     this.fire = new FireVFX(parent, groundParent, projectileParent);
     this.archer = new ArcherVFX(parent, projectileParent);
     this.frost = new FrostVFX(groundParent);
+    this.frostUltimate = new FrostUltimateVFX(groundParent, parent, depthParent);
     const node = new Node('impactEnvelopes');
     node.layer = Layers.Enum.UI_2D;
     node.setParent(parent);
@@ -50,6 +53,8 @@ export class ImpactFX {
   frostDomain(x: number, y: number, radius: number, duration: number): void {
     this.frost.domain(x, y, radius, duration);
   }
+
+  frostUlt(targets: readonly FrostUltTarget[]): void { this.frostUltimate.cast(targets); }
 
   hit(x: number, y: number, hero: string, heavy: boolean, angle?: number): void {
     if (hero === 'archer' && this.archer.hit(x, y, heavy, angle)) return;
@@ -89,6 +94,7 @@ export class ImpactFX {
     this.fire.tick(dt);
     this.archer.tick(dt);
     this.frost.tick(dt);
+    this.frostUltimate.tick(dt);
     if (!this.dirty && this.active.length === 0) return;
     this.g.clear(); this.dirty = false;
     for (let i = this.active.length - 1; i >= 0; i--) {

@@ -13,5 +13,8 @@
   "gifDurationMs": 2180,
   "lastFrameAlphaMax": 0,
   "reviewMode": "offline material composite",
-  "gameIntegrated": true
+  "gameIntegrated": true,
+  "userAccepted": true,
+  "acceptedOn": "2026-10-11",
+  "acceptedFeedback": "冰法师技能效果可以了"
 }

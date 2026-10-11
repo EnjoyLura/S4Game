@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-11",
+  "videoTool": "美术/tools/art_video_gen.py",
+  "videoModel": "lens-minimax-h3-768p",
+  "selectedMode": "text-to-video; no reference image submitted",
+  "task": "task_twYt6PUXE43Sye1vpTjnH1vpF5xKXeMa",
+  "requestedSeconds": 2,
+  "requestedRatio": "1:1",
+  "prompt": "prompts/impact-2s.txt",
+  "promptSha256": "d9b6754a8e1f405116074b6b3578d8d6bf784dad0c33f23afbe1aa5c97afe477",
+  "output": "raw/impact-2s.mp4",
+  "scope": "offline single-contact and sparse/dense battlefield material previews; no game integration",
+  "status": "completed",
+  "sourceFps": 24.0,
+  "sourceSize": [
+    768,
+    1344
+  ],
+  "sourceFrames": 56,
+  "sourceDuration": 2.3333333333333335
+}

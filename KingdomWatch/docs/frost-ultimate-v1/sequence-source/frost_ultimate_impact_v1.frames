@@ -1,0 +1,340 @@
+{
+ "frames": {
+  "frost_ultimate_impact_v1_0": [
+   0,
+   0,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_1": [
+   256,
+   0,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_2": [
+   512,
+   0,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_3": [
+   768,
+   0,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_4": [
+   1024,
+   0,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_5": [
+   1280,
+   0,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_6": [
+   1536,
+   0,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_7": [
+   1792,
+   0,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_8": [
+   0,
+   256,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_9": [
+   256,
+   256,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_10": [
+   512,
+   256,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_11": [
+   768,
+   256,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_12": [
+   1024,
+   256,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_13": [
+   1280,
+   256,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_14": [
+   1536,
+   256,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_15": [
+   1792,
+   256,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_16": [
+   0,
+   512,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_17": [
+   256,
+   512,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_18": [
+   512,
+   512,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_19": [
+   768,
+   512,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_20": [
+   1024,
+   512,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_21": [
+   1280,
+   512,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_22": [
+   1536,
+   512,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_23": [
+   1792,
+   512,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_24": [
+   0,
+   768,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_25": [
+   256,
+   768,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_26": [
+   512,
+   768,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_27": [
+   768,
+   768,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_28": [
+   1024,
+   768,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_29": [
+   1280,
+   768,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_30": [
+   1536,
+   768,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_31": [
+   1792,
+   768,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_32": [
+   0,
+   1024,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_33": [
+   256,
+   1024,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_34": [
+   512,
+   1024,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_35": [
+   768,
+   1024,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_36": [
+   1024,
+   1024,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_37": [
+   1280,
+   1024,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_38": [
+   1536,
+   1024,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_39": [
+   1792,
+   1024,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_40": [
+   0,
+   1280,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_41": [
+   256,
+   1280,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_42": [
+   512,
+   1280,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_43": [
+   768,
+   1280,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_44": [
+   1024,
+   1280,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_45": [
+   1280,
+   1280,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_46": [
+   1536,
+   1280,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_47": [
+   1792,
+   1280,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_48": [
+   0,
+   1536,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_49": [
+   256,
+   1536,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_50": [
+   512,
+   1536,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_51": [
+   768,
+   1536,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_52": [
+   1024,
+   1536,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_53": [
+   1280,
+   1536,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_54": [
+   1536,
+   1536,
+   256,
+   256
+  ],
+  "frost_ultimate_impact_v1_55": [
+   1792,
+   1536,
+   256,
+   256
+  ]
+ }
+}

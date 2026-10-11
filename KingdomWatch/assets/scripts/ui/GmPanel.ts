@@ -185,20 +185,25 @@ export class GmPanel {
       { t: '清空充能', cb: () => { this.dir.gmUltCharge(0); this.refresh(); } },
       { t: '技能CD清零', cb: () => { this.dir.gmSkillReady(); this.refresh(); } },
     ]);
-    // 常开开关：金色=开；写入存档，跨战斗/重启保持
+    // 常开开关：金色=开；写入存档，跨战斗/重启保持。
+    // 回调按渲染时的快照做绝对赋值而非读当前值取反：触控双发（本项目已知现象，
+    // 新怪弹窗同款防重入）时两次触发落到同一目标值，不会"点关→又点回开"永远关不掉。
     const d = this.dir;
-    const tog = (x: number, name: string, on: boolean, cb: () => void): void => {
-      btn(B, x, this.ry, 218, 64, `${name}：${on ? '开' : '关'}`, CA(on ? PAL.gold : PAL.parch, 0.94), cb, 21);
-    };
-    tog(-110, '技能无冷却', d.gmNoSkillCd, () => {
-      d.gmNoSkillCd = !d.gmNoSkillCd;
-      const s = loadSave(); s.gmNoSkillCd = d.gmNoSkillCd; saveSave();
-      this.refresh();
+    const tog = (x: number, name: string, on: boolean, apply: (v: boolean) => void): void =>
+      btn(B, x, this.ry, 218, 64, `${name}：${on ? '开' : '关'}`, CA(on ? PAL.gold : PAL.parch, 0.94), () => {
+        apply(!on);
+        this.refresh();
+      }, 21);
+    tog(-110, '技能无冷却', d.gmNoSkillCd, v => {
+      d.gmNoSkillCd = v;
+      const s = loadSave(); s.gmNoSkillCd = v; saveSave();
     });
-    tog(110, '大招常满', d.gmUltFull, () => {
-      d.gmUltFull = !d.gmUltFull;
-      const s = loadSave(); s.gmUltFull = d.gmUltFull; saveSave();
-      this.refresh();
+    tog(110, '大招常满', d.gmUltFull, v => {
+      d.gmUltFull = v;
+      const s = loadSave(); s.gmUltFull = v; saveSave();
+      // 开关即时见效：开启立即充满，关闭立即清空（击杀回能照常，属游戏机制）
+      for (const h of d.heroes) h.charge = v ? h.chargeMax : 0;
+      d.hud.sync();
     });
     this.ry -= 80;
     this.infoBox(B,

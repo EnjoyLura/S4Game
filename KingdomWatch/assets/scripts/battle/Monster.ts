@@ -10,6 +10,7 @@ import { BattleSprite } from './BattleSprite';
 import { FloatEvent } from './FloatText';
 import { getMobAnims, MobClip } from './MobAnim';
 import { drawFootIce } from './FrostVFX';
+import { DepthSprite, depthSprites, setDepthSorter } from './BattleDepth';
 
 /** 攻击序列帧一次性时长（s）：与 lunge 0.2s 前摇错开，收招略长观感更实 */
 const ATK_ANIM = 0.34;
@@ -262,6 +263,7 @@ export class Monster {
 
   get x(): number { return this.node.position.x; }
   get y(): number { return this.node.position.y; }
+  get depthY(): number { return this.y - this.def.radius * 0.82; }
   get isBoss(): boolean { return !!this.def.boss || this.def.id === 'goblin_king'; }
   get immobilized(): boolean { return this.freezeT > 0 || this.stunT > 0; }
 
@@ -451,7 +453,7 @@ export class MonsterManager {
   private pool: Monster[] = [];
   private sepN = 0;
   private depthT = 0;
-  private depthOrder: Monster[] = [];
+  private depthOrder: (Monster | DepthSprite)[] = [];
   private shadows: Graphics;
   private iceFeet: Graphics;
   private groundShadowColor = new Color(30, 24, 16, 38);
@@ -465,6 +467,7 @@ export class MonsterManager {
     this.shadows.fillColor = new Color(30, 24, 16, 65);
     const ice = new Node('frozenFootCrystals'); ice.layer = Layers.Enum.UI_2D; ice.setParent(field);
     this.iceFeet = ice.addComponent(Graphics);
+    setDepthSorter(field, () => this.sortDepth());
   }
 
   /** 难度倍率（普通 1 / 精英 1.6 / 地狱 2.4）：出怪时缩放 hp/dmg（BattleDirector 按 flow.diff 注入） */
@@ -677,13 +680,23 @@ export class MonsterManager {
     this.depthT -= dt;
     if (this.depthT <= 0) {
       this.depthT = 0.12;
-      this.depthOrder.length = 0;
-      for (const m of this.list) this.depthOrder.push(m);
-      this.depthOrder.sort((a, b) => (b.y - b.def.radius * 0.82) - (a.y - a.def.radius * 0.82));
-      this.depthOrder.forEach((m, i) => m.node.setSiblingIndex(i + 1));
+      this.sortDepth();
     }
     this.iceFeet.clear();
     for (const m of this.list) m.drawIceFeet(this.iceFeet);
+    this.iceFeet.node.setSiblingIndex(this.field.children.length - 1);
+  }
+
+  /** Falling ice is ordered by its fixed ground footprint, not its airborne
+   * screen position. Nearby bodies can naturally occlude a farther needle. */
+  private sortDepth(): void {
+    if (!this.field.isValid) return;
+    this.depthOrder.length = 0;
+    for (const m of this.list) this.depthOrder.push(m);
+    for (const d of depthSprites(this.field)) if (d.node.isValid && d.node.active) this.depthOrder.push(d);
+    this.depthOrder.sort((a, b) => b.depthY - a.depthY);
+    this.shadows.node.setSiblingIndex(0);
+    this.depthOrder.forEach((item, i) => item.node.setSiblingIndex(i + 1));
     this.iceFeet.node.setSiblingIndex(this.field.children.length - 1);
   }
 

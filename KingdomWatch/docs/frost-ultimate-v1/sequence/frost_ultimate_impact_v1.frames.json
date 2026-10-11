@@ -1,0 +1,489 @@
+{
+  "frames": {
+    "frost_ultimate_impact_v1_0": [
+      0,
+      0,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_1": [
+      256,
+      0,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_2": [
+      512,
+      0,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_3": [
+      768,
+      0,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_4": [
+      1024,
+      0,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_5": [
+      1280,
+      0,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_6": [
+      1536,
+      0,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_7": [
+      1792,
+      0,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_8": [
+      0,
+      256,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_9": [
+      256,
+      256,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_10": [
+      512,
+      256,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_11": [
+      768,
+      256,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_12": [
+      1024,
+      256,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_13": [
+      1280,
+      256,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_14": [
+      1536,
+      256,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_15": [
+      1792,
+      256,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_16": [
+      0,
+      512,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_17": [
+      256,
+      512,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_18": [
+      512,
+      512,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_19": [
+      768,
+      512,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_20": [
+      1024,
+      512,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_21": [
+      1280,
+      512,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_22": [
+      1536,
+      512,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_23": [
+      1792,
+      512,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_24": [
+      0,
+      768,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_25": [
+      256,
+      768,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_26": [
+      512,
+      768,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_27": [
+      768,
+      768,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_28": [
+      1024,
+      768,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_29": [
+      1280,
+      768,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_30": [
+      1536,
+      768,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_31": [
+      1792,
+      768,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_32": [
+      0,
+      1024,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_33": [
+      256,
+      1024,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_34": [
+      512,
+      1024,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_35": [
+      768,
+      1024,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_36": [
+      1024,
+      1024,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_37": [
+      1280,
+      1024,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_38": [
+      1536,
+      1024,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_39": [
+      1792,
+      1024,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_40": [
+      0,
+      1280,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_41": [
+      256,
+      1280,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_42": [
+      512,
+      1280,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_43": [
+      768,
+      1280,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_44": [
+      1024,
+      1280,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_45": [
+      1280,
+      1280,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_46": [
+      1536,
+      1280,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_47": [
+      1792,
+      1280,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_48": [
+      0,
+      1536,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_49": [
+      256,
+      1536,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_50": [
+      512,
+      1536,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_51": [
+      768,
+      1536,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_52": [
+      1024,
+      1536,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_53": [
+      1280,
+      1536,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_54": [
+      1536,
+      1536,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_55": [
+      1792,
+      1536,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_56": [
+      0,
+      1792,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_57": [
+      256,
+      1792,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_58": [
+      512,
+      1792,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_59": [
+      768,
+      1792,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_60": [
+      1024,
+      1792,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_61": [
+      1280,
+      1792,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_62": [
+      1536,
+      1792,
+      256,
+      256
+    ],
+    "frost_ultimate_impact_v1_63": [
+      1792,
+      1792,
+      256,
+      256
+    ]
+  },
+  "frameCount": 64,
+  "cellSize": [
+    256,
+    256
+  ],
+  "groundAnchorPixels": [
+    124,
+    116
+  ],
+  "frameDurations": [
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.015,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875,
+    0.026875
+  ],
+  "duration": 1.3799999999999997,
+  "sourceVideo": "../raw/impact-2s.mp4",
+  "sourceFps": 24,
+  "sourceFrameCount": 56,
+  "sourceDuration": 2.3333333333333335,
+  "sourceSize": [
+    768,
+    1344
+  ],
+  "requestedRatio": "1:1",
+  "cropPolicy": "fixed whole-clip union bbox (0,131)-(768,1344), uniform fit",
+  "projection": {
+    "yScale": 0.7,
+    "pivot": [
+      124,
+      116
+    ],
+    "fixedForAllFrames": true
+  },
+  "onset": "8 cels / 0.16s, existing first cel revealed from its fixed ground root",
+  "nativeFrameOrderPreserved": true,
+  "pedestal": 7,
+  "edgeFeather": 0.05,
+  "blend": "straight RGBA / SRC_ALPHA / ONE_MINUS_SRC_ALPHA",
+  "gameIntegrated": true,
+  "status": "integrated-without-cold-wave; awaiting-in-game-user-review"
+}

@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-10T19:40:52.199024+00:00",
+  "status": "deployed-awaiting-in-game-user-review",
+  "gameIntegrated": true,
+  "actualBattleBrowserInspected": false,
+  "newAIGenerationCallsThisTurn": 0,
+  "version": "frost-ult-impact-1791661084",
+  "url": "https://kingdom-watch.pages.dev/?v=frost-ult-impact-1791661084",
+  "deployment": "https://8c1f36e1.kingdom-watch.pages.dev",
+  "pools": {
+    "iceImpactPairs": 24,
+    "rainSlots": 128,
+    "paintedChipSlots": 120
+  },
+  "localContacts": "6 small shards/cracks per landing; all 128 drops; short fixed shadows/flash",
+  "fall": {
+    "start": "above combat view",
+    "motion": "0.28u+0.72u^2",
+    "tipAnchor": [
+      0.7076923076923077,
+      0.9906542056074766
+    ],
+    "opacityAtFloor": 0.96,
+    "impactClock": "drop.start+drop.flight",
+    "duration": 2
+  },
+  "gameplay": "same immediate one hit and moraUltCfg slow; no extra damage or freeze",
+  "regularSkillV10Changed": false,
+  "expandingColdWave": false,
+  "checks": {
+    "typeCheck": "passed",
+    "offlineRuntimeCheck": "passed: tools/frost-ultimate-check.cjs",
+    "creatorBuild": "passed: 3.8.8 web-mobile debug",
+    "dprPatch": "passed",
+    "nativeSourceHashes": {
+      "frost_ultimate_impact_v1": "7a5e62b1ff6e4614dc28c542864af038203ff23876e010df117f4579851b4c63",
+      "frost_ultimate_rain_v1": "3f407b8cb3e90cf1bec7b2cf72c3c36a7eff84c59393e27e9e0540eee49cc645",
+      "frost_domain_video_v10": "1df3911b4820af1d6af74ee8f9a1f24250cbd6ba490c9faa5cd9f806a6470726"
+    },
+    "online": {
+      "index.html": {
+        "matchesLocal": true,
+        "sha256": "8c04631d667d3f1b221f69c18abfa19a62716487659037d4211d8c6877513542",
+        "bytes": 5043
+      },
+      "main.js": {
+        "matchesLocal": true,
+        "sha256": "098959e3a28d593708359cb90f531c06faa80a41715c65fc8c78ee353b68bbc5",
+        "bytes": 764615
+      },
+      "resources-config.json": {
+        "matchesLocal": true,
+        "sha256": "9532eb80d87bdfb8fc27f73295838bfc8984fca720882fc9cac40277f8c4bb67",
+        "bytes": 129799
+      },
+      "dpr-engine.js": {
+        "matchesLocal": true,
+        "sha256": "eeeef70cc6cd8bccc4493d60bbc85cddd4f6d0de383c4e8a3b4d48b64323488d",
+        "bytes": 5686956
+      },
+      "frost_ultimate_impact_v1.png": {
+        "matchesLocal": true,
+        "sha256": "7a5e62b1ff6e4614dc28c542864af038203ff23876e010df117f4579851b4c63",
+        "bytes": 1843609
+      },
+      "frost_ultimate_rain_v1.png": {
+        "matchesLocal": true,
+        "sha256": "3f407b8cb3e90cf1bec7b2cf72c3c36a7eff84c59393e27e9e0540eee49cc645",
+        "bytes": 23224
+      },
+      "frost_domain_video_v10.png": {
+        "matchesLocal": true,
+        "sha256": "1df3911b4820af1d6af74ee8f9a1f24250cbd6ba490c9faa5cd9f806a6470726",
+        "bytes": 4396916
+      }
+    }
+  },
+  "remaining": "User manually reviews battle appearance and phone performance."
+}

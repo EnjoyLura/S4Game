@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-10T19:15:02.952971+00:00",
+  "status": "deployed-awaiting-in-game-user-review",
+  "gameIntegrated": true,
+  "actualBattleBrowserInspected": false,
+  "newAIGenerationCallsThisTurn": 0,
+  "removed": [
+    "spreading cold wave",
+    "broad ground wind bands",
+    "old blizRing Tween"
+  ],
+  "kept": [
+    "H3 low ice contact clip",
+    "painted diagonal icicle rain",
+    "short velocity trails",
+    "local ice chips and thin contact haze"
+  ],
+  "gameplay": "same once-per-target damage and moraUltCfg slow; no new freeze or extra rain damage",
+  "checks": {
+    "typeCheck": "passed",
+    "offlineRuntimeCheck": "passed: tools/frost-ultimate-check.cjs",
+    "creatorBuild": "passed: 3.8.8 web-mobile debug",
+    "dprPatch": "passed",
+    "assetNativeBuildHashes": "match source",
+    "online": {
+      "index.html": {
+        "matchesLocal": true,
+        "sha256": "98c01d8d773af4517940b94d41669e75935c250e6c399d4fb869d365671c89dc",
+        "bytes": 5043
+      },
+      "main.js": {
+        "matchesLocal": true,
+        "sha256": "8db0f081fcdc4ba517f2add24fb3c158de209eadca40d7370d722db180506e81",
+        "bytes": 760361
+      },
+      "resources-config.json": {
+        "matchesLocal": true,
+        "sha256": "9532eb80d87bdfb8fc27f73295838bfc8984fca720882fc9cac40277f8c4bb67",
+        "bytes": 129799
+      },
+      "ice-impact.png": {
+        "matchesLocal": true,
+        "sha256": "7a5e62b1ff6e4614dc28c542864af038203ff23876e010df117f4579851b4c63",
+        "bytes": 1843609
+      },
+      "ice-rain.png": {
+        "matchesLocal": true,
+        "sha256": "3f407b8cb3e90cf1bec7b2cf72c3c36a7eff84c59393e27e9e0540eee49cc645",
+        "bytes": 23224
+      }
+    }
+  },
+  "version": "frost-ult-no-wave-1791659417",
+  "url": "https://kingdom-watch.pages.dev/?v=frost-ult-no-wave-1791659417",
+  "deployment": "https://f4b10e4a.kingdom-watch.pages.dev",
+  "pools": {
+    "iceImpactPairs": 8,
+    "rainSlots": 56,
+    "chipSlots": 40,
+    "repeatedCast": "reuse/replace same bounded slots"
+  },
+  "clip": {
+    "atlas": [
+      2048,
+      2048
+    ],
+    "cels": 64,
+    "contactDuration": 1.38,
+    "effectBudgetSeconds": 2,
+    "splitAtRow": 118,
+    "groundAnchorPixels": [
+      124,
+      116
+    ]
+  },
+  "remaining": "User manually reviews live battle appearance."
+}

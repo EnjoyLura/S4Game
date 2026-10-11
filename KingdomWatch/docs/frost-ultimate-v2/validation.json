@@ -1,0 +1,50 @@
+{
+  "status": "offline-composited; awaiting-user-in-game-review",
+  "actualBattleInspected": false,
+  "newAiCalls": 0,
+  "newAiModels": [],
+  "duration": 2,
+  "rainCount": 128,
+  "impactCap": 24,
+  "paintedChipCap": 120,
+  "renderer": "actual FrostUltimateVFX TS states exported with cc double",
+  "spriteTipAnchor": [
+    0.7076923076923077,
+    0.9906542056074766
+  ],
+  "acceleration": "p=0.28u+0.72u²; full opacity at floor; impact starts at start+flight",
+  "contacts": "shadow → local flash/cracks → low ballistic chips on all 128 landings",
+  "scenes": {
+    "sparse": {
+      "enemyCount": 7,
+      "aiImpactInstances": 7,
+      "rainEvents": 128,
+      "size": [
+        640,
+        960
+      ],
+      "gif": "ultimate-sparse-preview.gif",
+      "video": "ultimate-sparse-preview.mp4",
+      "previewDuration": 2.7,
+      "castDuration": 2.0,
+      "finalEffectPixelDifference": 0
+    },
+    "dense": {
+      "enemyCount": 25,
+      "aiImpactInstances": 24,
+      "rainEvents": 128,
+      "size": [
+        640,
+        960
+      ],
+      "gif": "ultimate-dense-preview.gif",
+      "video": "ultimate-dense-preview.mp4",
+      "previewDuration": 2.7,
+      "castDuration": 2.0,
+      "finalEffectPixelDifference": 0
+    }
+  },
+  "mechanics": "existing immediate one-hit full-field damage and slow, no new ticks or freeze",
+  "regularSkillV10Changed": false,
+  "expandingColdWave": false
+}

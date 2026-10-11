@@ -1408,7 +1408,7 @@ export class FrostHero extends HeroBase {
     this.castFrostField(mgr, projs, dmg);
   }
 
-  /** 大招·极寒领域：以敌人身上的碎冰与冰雨读出全场冻结，不闪屏。 */
+  /** 大招·极寒领域：全场一次伤害与减速，脚边碎冰和冰棱雨表现命中。 */
   castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean {
     if (!this.ultReady) return false;
     const alive = mgr.list.filter(m => !m.dead);
@@ -1416,6 +1416,11 @@ export class FrostHero extends HeroBase {
     this.charge = 0;
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
     this.lastDmg = dmg;   // 直伤计入伤害统计（施放时刷新引用）
+    // Capture feet before damage can kill/recycle a target. These are visual
+    // snapshots, independent of the existing damage/slow and monster movement.
+    projs.frostUltimate(alive.map(m => ({ x: m.x,
+      y: m.y - m.def.radius * 0.82 + m.def.radius * 3.85 * m.groundOffset,
+      radius: m.def.radius })));
     const uc = moraUltCfg(this.stats.ultLv);
     for (const m of alive) {
       const hpBefore = m.hp;
@@ -1424,43 +1429,7 @@ export class FrostHero extends HeroBase {
       if (this.lastDmg) this.lastDmg.add(this.id, Math.min(d, hpBefore));
       m.applySlow(this.slowR(uc.slowMul), uc.slowDur + (this.stats.ultSlowDur || 0));
     }
-    // Local enemy contacts carry the impact; retain only the fine ice rain and one quiet wave.
-    const ca = (hex: string, a: number): Color => { const c = hexc(hex); c.a = a; return c; };
-    // 3) 天降冰棱雨：16 枚细长冰棱随机落点、微倾角下坠，落地即逝
-    for (let k = 0; k < 16; k++) {
-      const x0 = (Math.random() * 2 - 1) * 340;
-      const fall = 0.34 + Math.random() * 0.24;
-      const drop = new Node('blizDrop');
-      drop.layer = Layers.Enum.UI_2D;
-      drop.setParent(this.node.parent!);
-      drop.setPosition(x0, LO.half + 90 + Math.random() * 120, 0);
-      drop.angle = Math.random() * 10 - 5;
-      const drg = drop.addComponent(Graphics);
-      drg.fillColor = ca(k % 2 ? '#E8FAFF' : '#7FD8FF', 225);
-      drg.moveTo(2.5, -20); drg.lineTo(-2.5, -20); drg.lineTo(-1.2, 14); drg.lineTo(1.2, 14);
-      drg.close(); drg.fill();
-      const dropOp = drop.addComponent(UIOpacity);
-      const yEnd = LINE_Y - 60 - Math.random() * 120;
-      tween(drop).delay(k * 0.028).to(fall, { position: new Vec3(x0 + fall * 26, yEnd, 0) }).start();
-      tween(dropOp).delay(k * 0.028).to(fall, { opacity: 0 }).call(() => drop.destroy()).start();
-    }
-    // A single thin wave; short and translucent so enemy silhouettes stay readable.
-    {
-      const ring = new Node('blizRing');
-      ring.layer = Layers.Enum.UI_2D;
-      ring.setParent(this.node.parent!);
-      ring.setPosition(this.x, HERO_Y, 0);
-      const rg = ring.addComponent(Graphics);
-      rg.strokeColor = ca('#7FD8FF', 100);
-      rg.lineWidth = 0.6;
-      rg.ellipse(0, 0, 90, 55);
-      rg.stroke();
-      const rop = ring.addComponent(UIOpacity);
-      tween(ring).to(0.3, { scale: new Vec3(3.4, 3.4, 1) }, { easing: 'quadOut' }).start();
-      tween(rop).to(0.3, { opacity: 0 }).call(() => ring.destroy()).start();
-    }
     Sfx.play('ult');
-    void projs;
     return true;
   }
 }

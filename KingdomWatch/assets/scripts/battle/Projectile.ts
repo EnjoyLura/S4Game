@@ -11,6 +11,7 @@ import { ImpactFX } from './ImpactFX';
 import { Sfx } from '../core/Sfx';
 import { bus, EVT } from '../core/EventBus';
 import { LINE_Y, LO, PAL, MAX_PROJS } from '../config/GameConfig';
+import { FrostUltTarget } from './FrostUltimateVFX';
 
 export interface ProjSpec {
   x: number; y: number;
@@ -152,6 +153,8 @@ export class ProjectileManager {
   frostDomain(x: number, y: number, radius: number, duration: number): void {
     this.impacts?.frostDomain(x, y, radius, duration);
   }
+
+  frostUltimate(targets: readonly FrostUltTarget[]): void { this.impacts?.frostUlt(targets); }
 
   /** 瞬击伤害直接记账（狙击 hitscan 不经弹道命中结算） */
   addDamage(heroId: string, v: number): void {

@@ -104,7 +104,7 @@ export class BattleDirector extends Component {
     fxLayer.setParent(field);
     const textLayer = new Node('TextLayer');
     textLayer.setParent(field);
-    this.impacts = new ImpactFX(fxLayer, groundFxLayer, projLayer);
+    this.impacts = new ImpactFX(fxLayer, groundFxLayer, projLayer, mobLayer);
 
     const hitCtx = {
       floatParent: textLayer,
