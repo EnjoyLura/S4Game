@@ -1,0 +1,24 @@
+{
+  "status": "awaiting-user-review",
+  "newAiCalls": 0,
+  "duration": 1.5,
+  "onset": 0.4,
+  "main": 0.42,
+  "tail": 0.68,
+  "frameCount": 44,
+  "fragmentCount": 54,
+  "onsetAndMainPixelIdenticalToV10": true,
+  "groundAnchor": [
+    0.5,
+    0.44270833333333337
+  ],
+  "groundRadius": 126,
+  "downwardInitialVelocity": 18,
+  "gravity": 900,
+  "noUpwardImpulse": true,
+  "allFragmentsReachGroundBeforeFade": true,
+  "lastFrameAlphaMax": 0,
+  "v10SourceHash": "1df3911b4820af1d6af74ee8f9a1f24250cbd6ba490c9faa5cd9f806a6470726",
+  "outputHash": "0b0fe4b67d9216240dce9b90c1e29ba4a17fa3e083e5935554d0195b18968cf8",
+  "review": "offline material composite; no live battle inspected"
+}

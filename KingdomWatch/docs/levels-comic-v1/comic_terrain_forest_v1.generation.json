@@ -1,0 +1,11 @@
+{
+  "key": "comic_terrain_forest_v1",
+  "transparent": true,
+  "references": [
+    "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+    "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_shop_comic_v1.jpg"
+  ],
+  "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. One SINGLE isolated miniature battlefield DIORAMA on a floating oval chunk of ochre earth and chunky sandstone, TRUE TRANSPARENT background. Fixed slightly elevated three-quarter camera about 35 degrees looking downward, the SAME view used for medieval mobile game level islands. Whole island and ALL props comfortably inside square image with 12% transparent margin. The island top is a warm winding dirt road crossing between a few grouped props, the foreground cross section is shallow chunky warm rock, with a few broad angular grass clumps. No pedestal, no frame, no object outside the island, no haze, no particles. Favor strong large masses and clean color separation. Road is broad, unoccupied and easy to read. DEEP FOREST theme: lush clear green and teal rounded tree canopy clumps at left-back and right-back, a broad winding ochre path through center curving to front-center. One short fallen timber at left edge and one simple mossy standing stone at back center with a modest blue cloth strip. A small group of 3 red mushrooms at front-right. Six large tree/grass masses at most, no individual leaf detail. Strong path gap, dark emerald back foliage contrasting sunny lime-green foreground, restrained tan rock base. No gates, buildings, characters or enemies. Keep trees short enough to show the whole road.",
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-9d1d6420-81d9-4d3c-b24c-4fd837882566.png",
+  "tool": "built-in imagegen"
+}

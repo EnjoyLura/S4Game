@@ -1,0 +1,10 @@
+{
+  "key": "comic_chest_closed_v1",
+  "transparent": true,
+  "references": [
+    "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+  ],
+  "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. Single isolated game UI icon on TRUE transparent background, square canvas, entire shape fits inside 12% clear equal margin. Clear silhouette at 24px, no backing disc, no outside shadow. One compact CLOSED medieval treasure chest, warm honey oak, two broad gold reinforcement straps, small centered square gold latch, dark charcoal outline, top visible in three-quarter view, front faces viewer and right side slightly visible. Domed lid, five simple broad wooden panels, 2-3 flat cel-shaded values. Stable squat silhouette, natural well drawn perspective, no floating coins, gems, particles or glow. No extra platform or layered underside.",
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-f08e1428-f7c6-4582-ab74-bb45def249db.png",
+  "tool": "built-in imagegen"
+}

@@ -1,0 +1,9 @@
+{
+  "key": "comic_power_banner_v2",
+  "transparent": true,
+  "prompt": "Use case: stylized-concept. Production art for the approved clean comic medieval fantasy mobile game. Input image 1 is STYLE reference only: match crisp dark espresso outlines, chunky deliberately designed shapes, two or three distinct hard-edged cel shaded values and restrained broad highlights. Readable at small game size, consistent hand drawn contour, limited detail, warm ochre accents. No photorealism, airbrush gradients, plastic shine, bloom, microtexture, excessive ornament, text, typography, watermark or UI screenshot. Asset type: ONE isolated illustrated combat-power ornament on genuine transparent background, wide horizontal silhouette around 3.6:1. Left side is a compact large amber and lemon yellow FLAME emblem drawn with three confident curved tongues and a single ivory center. The flame flows into a short warm orange ochre fabric pennant to its RIGHT, clean slightly swept cloth shape, two subtly tapered notched tail ends, broad plain center reserved for code-rendered digits. Organic curved top and bottom instead of a geometric rectangle, restrained two-tone fabric shading with one simple fold. This is a small game ornament, not a grand scroll. Clear bold contour, visually elegant, feels hand-drawn and energetic, no blur. Whole flame and pennant with 12% clear margin, no text, no numbers, no letters, no surrounding plate, no stone frame, no duplicated bottom edge, no drop shadow outside silhouette.",
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-d388d667-862f-45c7-8170-efba5a5104a5.png",
+  "references": [
+    "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "key": "comic_attributes_v2",
+  "transparent": true,
+  "prompt": "Use case: stylized-concept. Production art for the approved clean comic medieval fantasy mobile game. Input image 1 is STYLE reference only: match crisp dark espresso outlines, chunky deliberately designed shapes, two or three distinct hard-edged cel shaded values and restrained broad highlights. Readable at small game size, consistent hand drawn contour, limited detail, warm ochre accents. No photorealism, airbrush gradients, plastic shine, bloom, microtexture, excessive ornament, text, typography, watermark or UI screenshot. Asset type: ONE isolated medieval character attributes icon, genuine transparent background. A small ivory parchment scroll with short rolled wooden ends, three bold brown drawn horizontal tally bars and one green wax seal near lower corner. Compact broad scroll silhouette, readable at 28px, warm cream parchment and oak details, clear dimensional rolled edge expressed in just two tones. No legible words, no tiny markings, no surrounding button, no rectangular panel, no ground shadow, no glow, 12% transparent margin.",
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-4186efe1-1b04-4f8a-b8d0-49c9fc235178.png",
+  "references": [
+    "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+  ]
+}

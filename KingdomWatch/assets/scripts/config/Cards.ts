@@ -57,7 +57,7 @@ export interface HeroStats {
   freezeProc: number;   // 突破·普攻概率冰冻时长 s（冰70级 0.6，概率固定 15%）
   slowedBonus: number;  // 技能升级·对减速目标伤害加成（冰普攻15级 0.25）
   slowAmpBonus: number; // 卡·凛冬之息/绝对零度：冰系减速幅度加成（普攻/领域/大招减速比率累加，结算上限 0.9）
-  ultSlowDur: number;   // 卡·绝对零度：大招减速持续 +s（累加）
+  ultSlowDur: number;   // 卡·寒冬延续/绝对零度：大招减速持续 +s（累加）
   freezeChance: number; // 卡·速冻之心：普攻冰冻几率（冰基础 0.15，累加）
   atkLv: number;        // 技能升级等级（战斗内读里程碑：普攻/技能/大招槽）
   skillLv: number;
@@ -352,13 +352,15 @@ export const MORA_CARDS: CardDef[] = [
     apply: x => { x.hero.freezeChance += 0.15; } }),
   c({ id: 'mora_war', name: '战吼', rarity: 'blue', maxStacks: 3, owner: 'mora', desc: '大招伤害 +50%',
     apply: x => { x.hero.ultDmgMul *= 1.5; } }),
+  c({ id: 'mora_linger', name: '寒冬延续', rarity: 'blue', maxStacks: 3, owner: 'mora', desc: '大招减速持续时间 +1 秒（可叠加）',
+    apply: x => { x.hero.ultSlowDur += 1; } }),
   c({ id: 'mora_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '大招释放后攻速 +40% 持续 5 秒',
     apply: x => { x.hero.ultHaste = 1; } }),
   c({ id: 'mora_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '大招充能需求 -25%（可叠加）',
     apply: x => { x.hero.chargeMul *= 0.75; } }),
   c({ id: 'mora_brittle', name: '碎冰', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '对减速/冻结目标伤害 +30%（可叠至 +60%）',
     apply: x => { x.hero.slowedBonus += 0.3; } }),
-  c({ id: 'mora_glacier', name: '绝对零度', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '大招减速幅度 +20%、持续 +2 秒（可叠至 90%·8s）',
+  c({ id: 'mora_glacier', name: '绝对零度', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '冰系减速幅度 +20%、大招减速持续 +2 秒（可叠加）',
     apply: x => { x.hero.slowAmpBonus += 0.2; x.hero.ultSlowDur += 2; } }),
 ];
 

@@ -77,6 +77,8 @@ export class BattleDirector extends Component {
   heroLevel = 1;
   xp = 0;
   private pickQueue = 0;
+  /** 大招演出锁：期间三选一不弹（用户要求演出完整），走完后自动补弹 */
+  private ultShowT = 0;
   private pickOpts: PickOpts | null = null;
   private prepareT = 1;   // 进关 1 秒即出怪（用户反馈：3 秒等待太久）
   private fpsAcc = 0;
@@ -245,6 +247,9 @@ export class BattleDirector extends Component {
       this.line.regenPct = this.global.lineRegenPct;
       this.line.tick(sub);
     }
+    // 大招演出锁倒计时；期间排队的升级三选一挂起，锁走完自动补弹
+    if (this.ultShowT > 0) this.ultShowT -= dt;
+    if (this.pickQueue > 0 && this.ultShowT <= 0 && !this.gm.panelOpen && this.state === 'running') this.openPick();
     this.float.tick(rawDt);
     this.pops.tick(rawDt);
     this.hud.sync(rawDt);
@@ -277,7 +282,7 @@ export class BattleDirector extends Component {
       need = this.expNeed(this.heroLevel);
       bus.emit(EVT.LEVEL_UP, this.heroLevel);
     }
-    if (this.pickQueue > 0 && this.state === 'running' && !this.gm.panelOpen) this.openPick(); // GM 面板开着时挂起，关闭时补弹
+    if (this.pickQueue > 0 && this.state === 'running' && !this.gm.panelOpen && this.ultShowT <= 0) this.openPick(); // GM 面板/大招演出期间挂起，结束后补弹
   }
 
   private expNeed(l: number): number {
@@ -335,6 +340,8 @@ export class BattleDirector extends Component {
       // Sniper recoil belongs to the actual shot after its lock-on, not the tap.
       if (h.id !== 'sniper') h.animateAttack(true);
       this.impacts.cast(h.x, h.node.position.y + 24, h.id);
+      // 演出锁：大招期间三选一挂起（时长由各英雄自报），结束后再等 2s 缓冲补弹（用户要求：一结束就弹太突兀）
+      this.ultShowT = Math.max(this.ultShowT, h.ultShowDuration + 2);
       return 'ok';
     }
     return 'charging';
@@ -456,7 +463,7 @@ export class BattleDirector extends Component {
   /** 面板关闭：恢复战斗；升级队列待处理则弹三选一 */
   gmResume(): void {
     if (this.state === 'paused') this.state = 'running';
-    if (this.pickQueue > 0) this.openPick();
+    if (this.pickQueue > 0 && this.ultShowT <= 0) this.openPick();
   }
 
   gmSpawn(n: number): void {

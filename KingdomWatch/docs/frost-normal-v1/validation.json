@@ -1,0 +1,29 @@
+{
+  "status": "awaiting-manual-game-review",
+  "actualBattleInspected": false,
+  "newAiCalls": 0,
+  "texture": "frost_ultimate_rain_v1",
+  "crop": [
+    0,
+    0,
+    65,
+    156
+  ],
+  "sizeAtNormalSize6": [
+    14,
+    33.6
+  ],
+  "aspectPreserved": true,
+  "direction": "velocity tangent",
+  "trail": "age/distance based, 64-unit cap",
+  "card": {
+    "id": "mora_linger",
+    "name": "寒冬延续",
+    "rarity": "blue",
+    "secondsPerStack": 1,
+    "maxStacks": 3
+  },
+  "regularSkill": "original v10 restored, 1.5 seconds",
+  "runtimeChecks": "passed",
+  "typeCheck": "passed"
+}

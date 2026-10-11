@@ -1,0 +1,82 @@
+[
+  {
+    "key": "bg_levels_comic_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\scenes\\bg_levels_comic_v1.jpg",
+    "width": 1086,
+    "height": 1448,
+    "bytes": 325245,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\levels-comic-v1\\sources\\bg_levels_comic_v1.png"
+  },
+  {
+    "key": "comic_terrain_outpost_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\levels_comic_v1\\comic_terrain_outpost_v1.png",
+    "width": 770,
+    "height": 686,
+    "bytes": 692877,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\levels-comic-v1\\sources\\comic_terrain_outpost_v1.png"
+  },
+  {
+    "key": "comic_terrain_forest_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\levels_comic_v1\\comic_terrain_forest_v1.png",
+    "width": 770,
+    "height": 650,
+    "bytes": 626989,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\levels-comic-v1\\sources\\comic_terrain_forest_v1.png"
+  },
+  {
+    "key": "comic_terrain_lair_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\levels_comic_v1\\comic_terrain_lair_v1.png",
+    "width": 770,
+    "height": 683,
+    "bytes": 567331,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\levels-comic-v1\\sources\\comic_terrain_lair_v1.png"
+  },
+  {
+    "key": "comic_swords_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\levels_comic_v1\\comic_swords_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 77199,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\levels-comic-v1\\sources\\comic_swords_v1.png"
+  },
+  {
+    "key": "comic_difficulty_shield_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\levels_comic_v1\\comic_difficulty_shield_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 63275,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\levels-comic-v1\\sources\\comic_difficulty_shield_v1.png"
+  },
+  {
+    "key": "comic_difficulty_skull_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\levels_comic_v1\\comic_difficulty_skull_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 66829,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\levels-comic-v1\\sources\\comic_difficulty_skull_v1.png"
+  },
+  {
+    "key": "comic_chest_closed_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\levels_comic_v1\\comic_chest_closed_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 78294,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\levels-comic-v1\\sources\\comic_chest_closed_v1.png"
+  },
+  {
+    "key": "comic_star_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\levels_comic_v1\\comic_star_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 46823,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\levels-comic-v1\\sources\\comic_star_v1.png"
+  },
+  {
+    "key": "comic_chest_open_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\levels_comic_v1\\comic_chest_open_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 93205,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\levels-comic-v1\\sources\\comic_chest_open_v1.png"
+  }
+]

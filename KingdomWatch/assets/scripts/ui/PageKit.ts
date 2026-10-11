@@ -6,6 +6,7 @@ import { Graphics, Mask, Node, ScrollView, UITransform, UIOpacity, tween } from 
 import { LO, PAL } from '../config/GameConfig';
 import { CA, btn, C, dlgConfirm, dimLayer, gpanel, label, LabelOpts, N, WY, WX } from './UIKit';
 import { artSprite } from './Ux';
+import { COMIC, comicPlate } from './ComicUI';
 import { HERO_DEFS, Quality, QCOLOR, QNAME } from '../core/GameData';
 import { loadSave } from '../core/SaveData';
 import { BattleSprite } from '../battle/BattleSprite';
@@ -112,8 +113,8 @@ export function toast(msg: string): void {
   const scene = GLOBAL_ROOT;
   if (!scene) return;
   const n = N('toast', scene, 0, WY(560, 60), 750, 60);
-  const p = gpanel(n, 0, 0, 460, 60, CA('#14181E', 0.94), CA(PAL.gold, 0.9), 2, 30);
-  label(p, 0, 0, msg, { size: 24, color: '#FFE08A', bold: true, w: 440, h: 40, shrink: true });
+  const p = comicPlate(n, 0, 0, 460, 60, 'dark', { name: 'comicToast', cut: 10 });
+  label(p, 0, 0, msg, { size: 24, font: 'body', color: COMIC.cream, bold: true, w: 440, h: 40, shrink: true });
   const op = n.addComponent(UIOpacity);
   tween(op).delay(1.1).to(0.5, { opacity: 0 }).call(() => n.destroy()).start();
 }

@@ -1,0 +1,9 @@
+{
+  "key": "comic_forge_v2",
+  "transparent": true,
+  "prompt": "Use case: stylized-concept. Production art for the approved clean comic medieval fantasy mobile game. Input image 1 is STYLE reference only: match crisp dark espresso outlines, chunky deliberately designed shapes, two or three distinct hard-edged cel shaded values and restrained broad highlights. Readable at small game size, consistent hand drawn contour, limited detail, warm ochre accents. No photorealism, airbrush gradients, plastic shine, bloom, microtexture, excessive ornament, text, typography, watermark or UI screenshot. Asset type: ONE isolated medieval equipment forge icon, genuine transparent background. Stout slate steel anvil on a short oak block with one gold ochre handled blacksmith hammer resting diagonally across it. Compact distinct silhouette, chunky steel facets and a restrained ivory highlight, readable at 28px, broad flat color planes. No fire, no sparks, no furnace, no smoke, no button surround, no background or cast shadow, no text, 12% transparent margin.",
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-421cced8-6bfc-4a80-978e-525e58f1cbb9.png",
+  "references": [
+    "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+  ]
+}

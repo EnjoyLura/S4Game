@@ -100,6 +100,8 @@ export abstract class HeroBase {
   get chargeGoal(): number { return this.chargeMax * (this.stats.chargeMul || 1); }
   get chargePct(): number { return this.charge / this.chargeGoal; }
   get ultReady(): boolean { return this.charge >= this.chargeGoal; }
+  /** 大招演出时长（三选一挂起窗口，演出完再弹卡）；逐英雄覆盖 */
+  get ultShowDuration(): number { return 1.2; }
   get skillPct(): number { return 1 - this.skillCd / this.skillCdTotal; }
   /** 技能完整冷却（含冷却缩减卡；与施放时写入 skillCd 的算法一致） */
   get skillCdTotal(): number { return Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0)); }
@@ -997,6 +999,12 @@ export class PyroHero extends HeroBase {
       }
     }
     if (this.hasteT > 0) this.hasteT -= dt;
+  }
+
+  /** 大招演出时长：从施放到最后一颗陨石落地（排队间隔 + 弹道飞行）；三选一再等 2s 缓冲由导演统一加 */
+  get ultShowDuration(): number {
+    const uc = pyroUltCfg(this.stats.ultLv);
+    return 0.5 + (uc.meteors - 1) * 0.32 + 1.3;
   }
 
   /** 大招·陨石天降（手动，击杀充能）：锁定陨石范围内怪物最密集处为固定轰炸区，梅花五点砸下 5 颗陨石；

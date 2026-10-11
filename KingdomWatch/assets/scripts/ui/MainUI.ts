@@ -6,9 +6,10 @@
 import { _decorator, Component, Graphics, Label, Node, Sprite, UITransform, view } from 'cc';
 import { initLayout, LO, PAL } from '../config/GameConfig';
 import { flow } from '../core/Flow';
-import { btn, C, CA, gpanel, N, WX, WYB } from './UIKit';
+import { C, CA, gpanel, N, WX, WYB } from './UIKit';
 import { artSprite } from './Ux';
-import { mainLabel, MAIN_NAV_H, modal, PageCtx, setGlobalRoot } from './PageKit';
+import { mainLabel, MAIN_NAV_H, PageCtx, setGlobalRoot } from './PageKit';
+import { COMIC, comicArt, comicButton, comicDialog, comicMark } from './ComicUI';
 import { ResourceBar, ResourceCurrency } from './ResourceBar';
 import { buildShop } from './pages/ShopPage';
 import { buildHeroes } from './pages/HeroPage';
@@ -20,11 +21,11 @@ const { ccclass } = _decorator;
 
 /** 底部页签定义（左→右） */
 const TABS: { name: string; icon: string; art: string }[] = [
-  { name: '商店', icon: '🛒', art: 'ui_nav_shop' },
-  { name: '英雄', icon: '🦸', art: 'ui_nav_heroes' },
-  { name: '关卡', icon: '⚔️', art: 'ui_nav_levels' },
-  { name: '升级', icon: '⬆️', art: 'ui_nav_upgrade' },
-  { name: '基地', icon: '🏰', art: 'ui_nav_base' },
+  { name: '商店', icon: '🛒', art: 'comic_nav_shop_v1' },
+  { name: '英雄', icon: '🦸', art: 'comic_helm_falcon_v1' },
+  { name: '关卡', icon: '⚔️', art: 'comic_nav_map_v1' },
+  { name: '升级', icon: '⬆️', art: '' },
+  { name: '基地', icon: '🏰', art: 'comic_nav_castle_v1' },
 ];
 
 @ccclass('MainUI')
@@ -98,20 +99,19 @@ export class MainUI extends Component {
   private openResourceSources(currency: ResourceCurrency): void {
     if (this.resourceDialog?.isValid) return;
     const gold = currency === 'gold';
-    const ctx: PageCtx = { screens: this.screens, refresh: () => this.switchTab(this.tab) };
-    const panel = modal(ctx, 540, 340, gold ? '获取金币' : '获取钻石', true);
+    const panel = comicDialog(this.node, 540, 340, gold ? '获取金币' : '获取钻石');
     this.resourceDialog = panel.parent;
-    artSprite(panel, -186, 25, 60, 60, gold ? 'ui_icon_coin' : 'ui_icon_diamond', { sliced: false });
+    comicArt(panel, -186, 25, 60, 60, gold ? 'comic_coin_v1' : 'comic_diamond_v1');
     mainLabel(panel, 32, 30, gold ? '通关战斗 · 领取星级宝箱' : '星级宝箱 · 怪物图鉴奖励',
-      { size: 23, color: '#FFF0CD', w: 328, h: 36 });
+      { size: 23, font: 'body', color: COMIC.text, w: 328, h: 36 });
     mainLabel(panel, 0, -30, gold ? '闲置装备也可以在英雄页出售换取金币' : '首次查看已解锁的怪物图鉴可领取钻石',
-      { size: 18, color: '#C2CEB7', w: 474, h: 40 });
-    btn(panel, 0, -111, 330, 64, gold ? '前往关卡' : '前往基地', '#69C238', () => {
+      { size: 18, font: 'body', color: COMIC.sub, w: 474, h: 40 });
+    comicButton(panel, 0, -111, 330, 64, gold ? '前往关卡' : '前往基地', () => {
       const dim = panel.parent;
       this.resourceDialog = null;
       dim?.destroy();
       this.switchTab(gold ? 2 : 4);
-    }, 23, true);
+    }, { tone: 'green', size: 23 });
   }
 
   /* ---------- 底部导航（5 页签；用户确认：导航栏不要边框——平板底 + 高亮板，无页签框美术） ---------- */
@@ -126,9 +126,10 @@ export class MainUI extends Component {
       const act = gpanel(slot, 0, 0, 126, 104, CA('#E8BA60', 0.16), undefined, 0, 18);
       gpanel(act, 0, -48, 32, 3, '#E8BA60', undefined, 0, 1);
       act.active = false;
-      const icon = mainLabel(slot, 0, 17, t.icon, { size: 30 });
-      const art = artSprite(slot, 0, 17, 54, 54, t.art, { hideOnLoad: [icon] });
-      const txt = mainLabel(slot, 0, -27, t.name, { size: 20, color: '#FFFFFF', bold: true });
+      const icon = N('navigationGlyph', slot, 0, 17, 60, 60);
+      const art = t.art ? comicArt(slot, 0, 17, 64, 64, t.art) : null;
+      if (!t.art) comicMark(icon, 0, 0, 'upgrade', 52);
+      const txt = mainLabel(slot, 0, -27, t.name, { size: 24, font: 'body', color: COMIC.cream, bold: true });
       slot.on(Node.EventType.TOUCH_END, () => this.switchTab(i));
       this.navItems.push({ slot, icon, art, txt, idle, act });
     });
@@ -139,9 +140,9 @@ export class MainUI extends Component {
     if (this.navBar) {
       const bg = this.navBar.getComponent(Graphics)!;
       bg.clear();
-      bg.fillColor = C('#3C291C');
+      bg.fillColor = C(COMIC.dark);
       bg.rect(-375, -MAIN_NAV_H / 2, 750, MAIN_NAV_H); bg.fill();
-      bg.fillColor = C('#B8803D');
+      bg.fillColor = C(COMIC.darkLight);
       bg.rect(-375, MAIN_NAV_H / 2 - 3, 750, 3); bg.fill();
     }
     this.navItems.forEach((it, k) => {
@@ -152,18 +153,19 @@ export class MainUI extends Component {
       const txtLbl = it.txt.getComponent(Label);
       const ag = it.act.getComponent(Graphics)!;
       ag.clear();
-      ag.fillColor = C('#FFC54C');
-      ag.roundRect(-63, -52, 126, 104, 18); ag.fill();
+      ag.fillColor = C(COMIC.gold);
+      ag.roundRect(-63, -50, 126, 104, 12); ag.fill();
+      ag.fillColor = C(COMIC.goldLight);
+      ag.roundRect(-50, 47, 100, 3, 1); ag.fill();
       const mark = it.act.children[0];
       if (mark) mark.active = false;
       if (txtLbl) {
-        txtLbl.color = C(active ? '#442B12' : '#EAD6B6');
+        txtLbl.color = C(active ? COMIC.text : COMIC.cream);
         txtLbl.fontSize = 24;
       }
       if (iconLbl) iconLbl.color = C(active ? '#FFE08A' : '#FFFFFF');
       const artSp = it.art ? it.art.getComponent(Sprite) : null;
-      if (artSp) artSp.color = C(active ? '#FFFFFF' : '#AEB6C2');
-      if (it.art) it.art.getComponent(UITransform)!.setContentSize(62, 62);
+      if (artSp) artSp.color = C(active ? '#FFFFFF' : '#D5DCE0');
     });
   }
 
@@ -177,7 +179,7 @@ export class MainUI extends Component {
   }
 
   /** 页签专属背景（商店内景 / 基地庭院；无专属的页签沿用主城场景占位图） */
-  private static BG_BY_TAB: Record<number, string> = { 0: 'scenes/bg_shop', 1: 'scenes/bg_heroes', 2: 'scenes/bg_level', 3: 'scenes/bg_upgrade', 4: 'scenes/bg_base_lobby_v1' };
+  private static BG_BY_TAB: Record<number, string> = { 0: 'scenes/bg_shop_comic_v1', 2: 'scenes/bg_level', 3: 'scenes/bg_upgrade', 4: 'scenes/bg_base_lobby_v1' };
   private bgId = '';
   private bgNode: Node | null = null;
 
@@ -187,7 +189,7 @@ export class MainUI extends Component {
 
   /** 背景切换：整节点重建（复用 artSprite 的 cover 裁剪与缓存加载），保持垫底层级 */
   private applyPageBg(i: number): void {
-    const id = this.bgForTab(i);
+    const id = i === 1 ? 'heroPaperBackdrop' : i === 2 ? 'levelPaperBackdrop' : this.bgForTab(i);
     if (id === this.bgId && this.bgNode && this.bgNode.isValid) return;
     this.bgId = id;
     // 销毁上一张的整个裁剪壳：artSprite cover 返回的是壳内美术节点，只销毁它会留下空壳累积在树上
@@ -195,7 +197,10 @@ export class MainUI extends Component {
       const oldHolder = this.bgNode.parent && this.bgNode.parent !== this.node ? this.bgNode.parent : this.bgNode;
       oldHolder.destroy();
     }
-    this.bgNode = artSprite(this.node, 0, 0, 750, LO.half * 2 + 240, id, { sliced: false, cover: true });
+    if (i === 1 || i === 2) {
+      this.bgNode = gpanel(this.node, 0, 0, 750, LO.half * 2 + 240, COMIC.paper, undefined, 0, 0);
+      this.bgNode.name = i === 1 ? 'heroPageBackdrop' : 'levelPageBackdrop';
+    } else this.bgNode = artSprite(this.node, 0, 0, 750, LO.half * 2 + 240, id, { sliced: false, cover: true });
     // cover 模式下 artSprite 返回裁剪壳内的美术节点：垫底要挪的是外面的裁剪壳，否则壳盖在 UI 之上
     const holder = this.bgNode.parent && this.bgNode.parent !== this.node ? this.bgNode.parent : this.bgNode;
     holder.setSiblingIndex(0);

@@ -1,0 +1,11 @@
+{
+  "key": "comic_terrain_outpost_v1",
+  "transparent": true,
+  "references": [
+    "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+    "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_shop_comic_v1.jpg"
+  ],
+  "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. One SINGLE isolated miniature battlefield DIORAMA on a floating oval chunk of ochre earth and chunky sandstone, TRUE TRANSPARENT background. Fixed slightly elevated three-quarter camera about 35 degrees looking downward, the SAME view used for medieval mobile game level islands. Whole island and ALL props comfortably inside square image with 12% transparent margin. The island top is a warm winding dirt road crossing between a few grouped props, the foreground cross section is shallow chunky warm rock, with a few broad angular grass clumps. No pedestal, no frame, no object outside the island, no haze, no particles. Favor strong large masses and clean color separation. Road is broad, unoccupied and easy to read. OUTPOST theme: a modest wooden palisade gate with small blue cloth at back-left, a stout small timber lookout tower at back-right with red pennant, central ochre road extends from back gate diagonally toward a short two-plank bridge at front-center. Only three round chunky green canopy trees grouped along edges, one blue shield beside the tower. Warm orange oak and light sandstone, bright fresh green trees, saturated blue/red accents. Road occupies most of top surface. Compact crafted scenic storytelling, not a realistic aerial landscape. No enemies, soldiers or hero.",
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-1dad966b-40a0-4994-83f2-8a68697119fe.png",
+  "tool": "built-in imagegen"
+}

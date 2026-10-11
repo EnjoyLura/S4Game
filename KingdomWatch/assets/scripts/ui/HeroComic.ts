@@ -1,0 +1,71 @@
+/** Hero art shares the shop palette, portraits and inventory illustrations. */
+import { Graphics, Node, Sprite, UITransform } from 'cc';
+import { CA, N, WY } from './UIKit';
+import { artSprite } from './Ux';
+import { COMIC, comicArt, comicPortrait } from './ComicUI';
+import { EquipKind } from '../core/GameData';
+
+export const HERO_PASTEL: Record<string, string> = {
+  archer: '#DDEBD0', sniper: '#DBE7F2', pyro: '#F4DDC5', volt: '#E7DEF0', mora: '#D9EDF0',
+};
+export const GEAR_PASTEL = ['#E8E5DC', '#DDEBD0', '#DCE8F1', '#E7DEF0'];
+export const GEAR_ART: Record<string, string> = {
+  wpn_bow: 'comic_wpn_bow_v1', wpn_crossbow: 'comic_wpn_crossbow_v1',
+  helm_falcon: 'comic_helm_falcon_v1', acc_moon: 'comic_acc_moon_v1',
+  glove_wind: 'comic_glove_wind_v1', armor_forest: 'comic_armor_forest_v1',
+  mat_stone: 'comic_mat_stone_v1', mat_iron: 'comic_mat_iron_v1',
+  mat_dust: 'comic_mat_dust_v1', mat_rune: 'comic_mat_rune_v1',
+};
+export const EMPTY_GEAR: Record<EquipKind, string> = {
+  weapon: 'wpn_bow', helm: 'helm_falcon', acc: 'acc_moon', glove: 'glove_wind', armor: 'armor_forest',
+};
+export function heroPortrait(parent: Node, x: number, y: number, size: number, id: string): Node {
+  const key = id === 'archer' ? 'hero_comic_v1/comic_hero_archer_v1' : 'comic_hero_' + id + '_v1';
+  return comicPortrait(parent, x, y, size, key, HERO_PASTEL[id]);
+}
+export function gearArt(parent: Node, x: number, y: number, w: number, h: number, id: string): Node {
+  return comicArt(parent, x, y, w, h, GEAR_ART[id]);
+}
+/** The import pipeline uses a 768px canvas with a 16px transparent foot margin. */
+export function heroComicFigure(parent: Node, id: string, x: number, footY: number, height: number, maxWidth: number): Node {
+  const figure = N('heroFigure:' + id, parent, x, footY);
+  const ground = N('heroGround', figure).addComponent(Graphics);
+  ground.fillColor = CA(COMIC.ink, .24); ground.ellipse(0, -2, Math.min(72, height * .17), 8); ground.fill();
+  artSprite(figure, 0, height / 2, maxWidth, height, 'hero_comic_v1/comic_figure_' + id + '_v1', {
+    sliced: false, onLoaded: art => {
+      const h = art.getComponent(UITransform)!.height;
+      art.setPosition(0, h / 2 - h * 16 / 768, 0);
+    },
+  });
+  return figure;
+}
+/** Illustrated action icons share the same reference as the shop objects. */
+export function heroGlyph(parent: Node, x: number, y: number,
+  kind: 'bag' | 'attrs' | 'book' | 'bolt' | 'left' | 'right' | 'forge', size = 26, color = COMIC.ink): Node {
+  const keys = { bag: 'hero_comic_v2/comic_bag_v2', attrs: 'hero_comic_v2/comic_attributes_v2', book: 'hero_comic_v2/comic_story_v2',
+    forge: 'hero_comic_v2/comic_forge_v2', left: 'hero_comic_v3/comic_cycle_button_v3',
+    right: 'hero_comic_v3/comic_cycle_button_v3', bolt: 'hero_comic_v3/comic_power_plate_v3' };
+  const art = comicArt(parent, x, y, size, size, keys[kind]);
+  if (kind === 'right') art.setScale(-1, 1, 1);
+  return art;
+}
+
+/** The upper illustration stops at the bag and its dais is aligned to the character's foot anchor. */
+export function heroEnvironment(parent: Node, height: number, footX: number, bottomToFoot: number): Node {
+  const upper = N('heroUpperScene', parent, 0, WY(0, height), 750, height);
+  const footY = -height / 2 + bottomToFoot;
+  N('heroPlatformAnchor', upper, footX, footY);
+  artSprite(upper, 0, 0, 750, height, 'scenes/bg_heroes_comic_v3', {
+    sliced: false, cover: true, onLoaded: art => {
+      const rect = art.getComponent(Sprite)!.spriteFrame!.rect;
+      // Top-surface center is calibrated against the final generated illustration.
+      const u = .326, v = .815, px = footX + 375, py = height - bottomToFoot;
+      const k = Math.max(px / (rect.width * u), (750 - px) / (rect.width * (1 - u)),
+        py / (rect.height * v), bottomToFoot / (rect.height * (1 - v)));
+      const w = rect.width * k, h = rect.height * k;
+      art.getComponent(UITransform)!.setContentSize(w, h);
+      art.setPosition(footX + w * (.5 - u), footY + h * (v - .5), 0);
+    },
+  });
+  return upper;
+}

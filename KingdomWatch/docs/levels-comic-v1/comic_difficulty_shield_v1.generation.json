@@ -1,0 +1,10 @@
+{
+  "key": "comic_difficulty_shield_v1",
+  "transparent": true,
+  "references": [
+    "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+  ],
+  "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. Single isolated game UI icon on TRUE transparent background, square canvas, entire shape fits inside 12% clear equal margin. Clear silhouette at 24px, no backing disc, no outside shadow. One stout medieval blue shield, front view, simple gold rim, flat rich blue face split into two restrained values, small single pale ivory diamond motif in center. Clean broad rounded shoulders taper to a point. No wings, crown, extra weapons or ornate scrollwork.",
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-7c9216a9-ecd1-46e8-b21a-62191b8ac216.png",
+  "tool": "built-in imagegen"
+}

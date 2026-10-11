@@ -1,7 +1,7 @@
 /**
  * 弹道（§3.5：可见追踪弹、目标死亡切换目标；子弹道直线随缘命中；对象池强制）
  * 追踪主弹命中前锁定目标；直线弹（齐射/分裂/大招箭/敌方石块）带 ttl 与碰撞去重
- * 性能：弹道为池化数据；箭矢/火球使用固定 Sprite 渲染池，其余弹体由单 Graphics 重绘。
+ * 性能：弹道为池化数据；箭矢/火球/冰棱使用固定 Sprite 渲染池，其余弹体由单 Graphics 重绘。
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { Monster, MonsterManager } from './Monster';
@@ -226,6 +226,7 @@ export class ProjectileManager {
       const shard = s.heroId === 'mora' && !s.small && !s.enemy;
       if (fire && this.impacts?.fireProjectile(s.x, s.y, a.vx, a.vy, size)) continue;
       if (arrow && this.impacts?.arrowProjectile(s.x, s.y, a.vx, a.vy, size, a.age, !!s.spark || !!s.ult)) continue;
+      if (s.heroId === 'mora' && !s.enemy && this.impacts?.iceProjectile(s.x, s.y, a.vx, a.vy, size, a.age)) continue;
       // 尾迹先画（垫在弹体之下）：锥形渐隐条带 + 亮芯
       if (a.trailMax > 0) this.drawTrail(g, s, a, size, arrow);
       if (arrow) this.drawArrow(g, s, a, size);

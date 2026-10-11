@@ -1,0 +1,9 @@
+{
+  "key": "comic_story_v2",
+  "transparent": true,
+  "prompt": "Use case: stylized-concept. Production art for the approved clean comic medieval fantasy mobile game. Input image 1 is STYLE reference only: match crisp dark espresso outlines, chunky deliberately designed shapes, two or three distinct hard-edged cel shaded values and restrained broad highlights. Readable at small game size, consistent hand drawn contour, limited detail, warm ochre accents. No photorealism, airbrush gradients, plastic shine, bloom, microtexture, excessive ornament, text, typography, watermark or UI screenshot. Asset type: ONE isolated fantasy storybook icon, genuine transparent background. A slightly open stout leather book seen in front three-quarter view, dark brown and forest-green cover, warm ivory pages, one short red cloth bookmark. Readable broad page silhouettes, small gold corner accent, a single simple page crease. Small 28px game illustration, no legible text, no rows of tiny pseudo-lettering, no magic, no stars, no floating papers, no button surround, no ground shadow, 12% transparent margin.",
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-fd5ee6b2-7303-47f7-8a11-60aaafd045c4.png",
+  "references": [
+    "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+  ]
+}

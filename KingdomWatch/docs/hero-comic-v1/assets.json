@@ -1,0 +1,58 @@
+[
+  {
+    "key": "bg_heroes_comic_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\scenes\\bg_heroes_comic_v1.jpg",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 313088,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v1\\sources\\bg_heroes_comic_v1.png"
+  },
+  {
+    "key": "comic_hero_archer_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v1\\comic_hero_archer_v1.png",
+    "width": 384,
+    "height": 384,
+    "bytes": 181145,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v1\\sources\\comic_hero_archer_v1.png"
+  },
+  {
+    "key": "comic_figure_archer_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v1\\comic_figure_archer_v1.png",
+    "width": 506,
+    "height": 768,
+    "bytes": 375151,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v1\\sources\\comic_figure_archer_v1.png"
+  },
+  {
+    "key": "comic_figure_sniper_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v1\\comic_figure_sniper_v1.png",
+    "width": 502,
+    "height": 768,
+    "bytes": 384155,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v1\\sources\\comic_figure_sniper_v1.png"
+  },
+  {
+    "key": "comic_figure_pyro_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v1\\comic_figure_pyro_v1.png",
+    "width": 482,
+    "height": 768,
+    "bytes": 385783,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v1\\sources\\comic_figure_pyro_v1.png"
+  },
+  {
+    "key": "comic_figure_volt_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v1\\comic_figure_volt_v1.png",
+    "width": 507,
+    "height": 768,
+    "bytes": 461059,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v1\\sources\\comic_figure_volt_v1.png"
+  },
+  {
+    "key": "comic_figure_mora_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v1\\comic_figure_mora_v1.png",
+    "width": 493,
+    "height": 768,
+    "bytes": 425143,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v1\\sources\\comic_figure_mora_v1.png"
+  }
+]

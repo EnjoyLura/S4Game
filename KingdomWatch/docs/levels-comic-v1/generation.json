@@ -1,0 +1,101 @@
+{
+  "tool": "built-in imagegen",
+  "styleReference": "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+  "sceneReference": "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_shop_comic_v1.jpg",
+  "sources": [
+    {
+      "key": "bg_levels_comic_v1",
+      "transparent": false,
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_shop_comic_v1.jpg"
+      ],
+      "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. Reference is STYLE AND COLOR DEPTH only. Make a DIFFERENT cozy guild expedition MAP ROOM with a low broad wooden planning table, no shop. PORTRAIT 3:4 framing, slightly elevated frontal view. Dark oak roof beams in top corners, warm timber-and-pale-stone walls, navy blue hanging banners at far left and right, an arched bright sky-blue window in upper right with distant green trees and castle roof, broad intentional golden daylight and cooler blue shadow. Central 70% of the image is a broad quiet wooden table surface seen at an overhead angle, reserved for a SEPARATELY OVERLAID mini battlefield island; no objects in that central space. Only a small rolled parchment and compass tucked at extreme far left edge, one small satchel tucked at far right edge. Background architecture occupies upper third. Table surface and short front edge below occupy middle and lower thirds. Clear foreground/midground/background depth and warm-cool balance. Don't paint a map, castle model, diorama, circle or island on the table. No characters, title board, interface, embedded buttons, candles, glow or vignette. Keep middle subdued enough for clean cream UI type.",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-7c1cf049-2bdd-469e-8c52-e60060c12ab1.png"
+    },
+    {
+      "key": "comic_terrain_outpost_v1",
+      "transparent": true,
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+        "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_shop_comic_v1.jpg"
+      ],
+      "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. One SINGLE isolated miniature battlefield DIORAMA on a floating oval chunk of ochre earth and chunky sandstone, TRUE TRANSPARENT background. Fixed slightly elevated three-quarter camera about 35 degrees looking downward, the SAME view used for medieval mobile game level islands. Whole island and ALL props comfortably inside square image with 12% transparent margin. The island top is a warm winding dirt road crossing between a few grouped props, the foreground cross section is shallow chunky warm rock, with a few broad angular grass clumps. No pedestal, no frame, no object outside the island, no haze, no particles. Favor strong large masses and clean color separation. Road is broad, unoccupied and easy to read. OUTPOST theme: a modest wooden palisade gate with small blue cloth at back-left, a stout small timber lookout tower at back-right with red pennant, central ochre road extends from back gate diagonally toward a short two-plank bridge at front-center. Only three round chunky green canopy trees grouped along edges, one blue shield beside the tower. Warm orange oak and light sandstone, bright fresh green trees, saturated blue/red accents. Road occupies most of top surface. Compact crafted scenic storytelling, not a realistic aerial landscape. No enemies, soldiers or hero.",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-1dad966b-40a0-4994-83f2-8a68697119fe.png"
+    },
+    {
+      "key": "comic_terrain_forest_v1",
+      "transparent": true,
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+        "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_shop_comic_v1.jpg"
+      ],
+      "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. One SINGLE isolated miniature battlefield DIORAMA on a floating oval chunk of ochre earth and chunky sandstone, TRUE TRANSPARENT background. Fixed slightly elevated three-quarter camera about 35 degrees looking downward, the SAME view used for medieval mobile game level islands. Whole island and ALL props comfortably inside square image with 12% transparent margin. The island top is a warm winding dirt road crossing between a few grouped props, the foreground cross section is shallow chunky warm rock, with a few broad angular grass clumps. No pedestal, no frame, no object outside the island, no haze, no particles. Favor strong large masses and clean color separation. Road is broad, unoccupied and easy to read. DEEP FOREST theme: lush clear green and teal rounded tree canopy clumps at left-back and right-back, a broad winding ochre path through center curving to front-center. One short fallen timber at left edge and one simple mossy standing stone at back center with a modest blue cloth strip. A small group of 3 red mushrooms at front-right. Six large tree/grass masses at most, no individual leaf detail. Strong path gap, dark emerald back foliage contrasting sunny lime-green foreground, restrained tan rock base. No gates, buildings, characters or enemies. Keep trees short enough to show the whole road.",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-9d1d6420-81d9-4d3c-b24c-4fd837882566.png"
+    },
+    {
+      "key": "comic_terrain_lair_v1",
+      "transparent": true,
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+        "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_shop_comic_v1.jpg"
+      ],
+      "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. One SINGLE isolated miniature battlefield DIORAMA on a floating oval chunk of ochre earth and chunky sandstone, TRUE TRANSPARENT background. Fixed slightly elevated three-quarter camera about 35 degrees looking downward, the SAME view used for medieval mobile game level islands. Whole island and ALL props comfortably inside square image with 12% transparent margin. The island top is a warm winding dirt road crossing between a few grouped props, the foreground cross section is shallow chunky warm rock, with a few broad angular grass clumps. No pedestal, no frame, no object outside the island, no haze, no particles. Favor strong large masses and clean color separation. Road is broad, unoccupied and easy to read. MONSTER LAIR theme: squat dark rocky cave at back-center with an ivory horn-shaped bone lintel and a dark entrance, two small ragged warm-red cloth pennants either side, chunky brown-gray cave rocks, sparse warm green edge shrubs, a small stack of TWO stylized ivory bones at front-right. A broad golden dirt trail leads from cave to front-center. Playful fantasy menace, not horror. Simple clear asymmetrical large shapes and warm/cool color contrast. No characters, skull face-shaped terrain, monster or glowing cave.",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-3ab19f66-7636-4c74-973d-e6a316c94082.png"
+    },
+    {
+      "key": "comic_swords_v1",
+      "transparent": true,
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+      ],
+      "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. Single isolated game UI icon on TRUE transparent background, square canvas, entire shape fits inside 12% clear equal margin. Clear silhouette at 24px, no backing disc, no outside shadow. Pair of TWO short broad silver-steel medieval swords crossed in an X, upward tips, dark charcoal blade edges, pale icy steel facets, chunky warm gold guards, short deep-red leather grips at lower ends. Perfectly readable balanced sword silhouette, no ornamental wings, lightning, bevel soup or sparkle.",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-3f5964b5-98b4-45b5-9348-25ab9304c701.png"
+    },
+    {
+      "key": "comic_difficulty_shield_v1",
+      "transparent": true,
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+      ],
+      "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. Single isolated game UI icon on TRUE transparent background, square canvas, entire shape fits inside 12% clear equal margin. Clear silhouette at 24px, no backing disc, no outside shadow. One stout medieval blue shield, front view, simple gold rim, flat rich blue face split into two restrained values, small single pale ivory diamond motif in center. Clean broad rounded shoulders taper to a point. No wings, crown, extra weapons or ornate scrollwork.",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-7c9216a9-ecd1-46e8-b21a-62191b8ac216.png"
+    },
+    {
+      "key": "comic_difficulty_skull_v1",
+      "transparent": true,
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+      ],
+      "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. Single isolated game UI icon on TRUE transparent background, square canvas, entire shape fits inside 12% clear equal margin. Clear silhouette at 24px, no backing disc, no outside shadow. One small ivory fantasy skull, almost front view slightly tilted, clean chunky silhouette, dark simple eye sockets, broad tan shadow under cheekbone, three simple teeth. Two short dark slate horns, modest red cloth knot directly below jaw. Slightly fierce but friendly cartoon game symbol. No realistic bone cracks, blood, flames, decorative backing or frame.",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-801f71a4-ea4d-4d09-830f-b0491bed1e53.png"
+    },
+    {
+      "key": "comic_chest_closed_v1",
+      "transparent": true,
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+      ],
+      "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. Single isolated game UI icon on TRUE transparent background, square canvas, entire shape fits inside 12% clear equal margin. Clear silhouette at 24px, no backing disc, no outside shadow. One compact CLOSED medieval treasure chest, warm honey oak, two broad gold reinforcement straps, small centered square gold latch, dark charcoal outline, top visible in three-quarter view, front faces viewer and right side slightly visible. Domed lid, five simple broad wooden panels, 2-3 flat cel-shaded values. Stable squat silhouette, natural well drawn perspective, no floating coins, gems, particles or glow. No extra platform or layered underside.",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-f08e1428-f7c6-4582-ab74-bb45def249db.png"
+    },
+    {
+      "key": "comic_star_v1",
+      "transparent": true,
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+      ],
+      "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. Single isolated game UI icon on TRUE transparent background, square canvas, entire shape fits inside 12% clear equal margin. Clear silhouette at 24px, no backing disc, no outside shadow. One simple full FIVE-POINT golden achievement star, straight clean symmetric silhouette, warm yellow front with one broad pale ivory top-left facet and modest ochre bottom-right facet. Crisp dark outline. Very readable at 16px. No sparkle, other objects, border plate, extrusion or stacked contour.",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-c422933e-1d50-4aa3-b1dc-2817a86e2ca3.png"
+    },
+    {
+      "key": "comic_chest_open_v1",
+      "transparent": true,
+      "references": [
+        "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-f08e1428-f7c6-4582-ab74-bb45def249db.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit this CLOSED medieval treasure chest into its OPEN CLAIMED state. Preserve EXACTLY the same squat chest base, gold bands, latch, wood panels, dark espresso outline, restrained flat painted comic fantasy style, camera three-quarter angle and lighting. The hinged domed lid opens backward about 85 degrees so the interior is visible, it stays attached in the correct perspective. Interior is dark brown, a small low pile of simple gold coins visible inside only. Preserve the chest identity and shape. Full chest and open lid comfortably within square canvas with transparent margin. True transparent background. No glow, magical particles, floating coins, text, digits, ground, cast shadow, backing disc or extra plate. Clear at 45px mobile game display. ONE chest only.",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-b0642721-d974-4721-8ff4-12d075f98459.png"
+    }
+  ],
+  "import": "Genuine alpha preserved; original images archived; trim transparent padding and resize proportionally only. No painting, warping or sprite-sheet generation."
+}

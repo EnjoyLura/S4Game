@@ -1,0 +1,85 @@
+{
+  "tool": "built-in imagegen",
+  "styleReference": "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+  "sources": [
+    {
+      "key": "bg_heroes_comic_v2",
+      "transparent": false,
+      "prompt": "Use case: stylized-concept. Production art for the approved clean comic medieval fantasy mobile game. Input image 1 is STYLE reference only: match crisp dark espresso outlines, chunky deliberately designed shapes, two or three distinct hard-edged cel shaded values and restrained broad highlights. Readable at small game size, consistent hand drawn contour, limited detail, warm ochre accents. No photorealism, airbrush gradients, plastic shine, bloom, microtexture, excessive ornament, text, typography, watermark or UI screenshot. Asset type: ONE square upper-screen hero staging background, no characters and no interface. A quiet royal guild training alcove, camera almost frontal with a modest downward view of the floor, not an overhead map. Composition must support a separate full-body character in the LEFT half: low circular warm sandstone standing dais, its oval top surface centered at precisely about 30% of canvas width and 86% of canvas height, broad enough for both boots and a stance, visible elliptical top and short 8cm front riser. Clear gently shaded flat floor around it. A simple muted sage-slate wall behind, broad quiet shaded plaster in the upper 70%, a shallow rounded arch and a few distant timber details at outer edges. A couple of small shields at far right only. The RIGHT half is especially quiet uncluttered medium gray sage wall/floor for separate gear controls. A restrained side light from upper left with modest drawn contact shadows. The dais should feel like a functional standing area not a ceremonial altar, clean top, no runes, no flames, no glow, no fantasy particles. Interior palette muted sage gray, pale warm stone, oak brown, small navy accents. Keep wall/floor perspective believable and readable, frame the complete dais with margin, don't crop it. No gigantic weapons in front, no flag crossing the character position, no large window, no sky, no sun rays, no extreme perspective, no throne, no inventory or backpack region. This is only the upper illustrated environment; lower inventory will be plain code-rendered paper.",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+      ],
+      "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-9a7d22b1-e360-49b7-8cf4-e317b40a9fe5.png",
+      "initialPath": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-7b68ea84-3064-45d9-ac92-0b23d8f6dd92.png",
+      "edit": {
+        "key": "bg_heroes_comic_v2",
+        "tool": "built-in imagegen",
+        "prompt": "Use case: precise-object-edit. Edit this generated clean comic fantasy hero-stage environment. Preserve the crisp outlined, restrained cel-shaded sage wall and warm sandstone palette, quiet guild training room and overall atmosphere. Make ONLY the composition and dais changes needed for portrait upper-screen use: output PORTRAIT 3:4 canvas; substantially extend the quiet plain upper wall, scale the circular standing dais DOWN so its complete oval top is only about 34% of canvas width, and move its top-surface center to x=30% of canvas width, y=89% of canvas height. The whole dais including short riser and shadow must fit without cropping with 10% clear side margin; do not enlarge the dais to fill the foreground. Keep a broad plain sage plaster wall behind a separately rendered hero and controls, extend floor enough to surround the small dais. The standing dais remains a low round sandstone step with a clear oval top and short front riser. Sparse edge timber and stone details only; remove the long blue banner on the left, remove large foreground weapons, barrels and furniture. RIGHT half stays a quiet sage wall. No character, no interface, no text, no windows, no sky, no rays, no bloom or blur, no new decorative objects. Preserve the intentionally simple painted game art.",
+        "references": [
+          "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-7b68ea84-3064-45d9-ac92-0b23d8f6dd92.png"
+        ],
+        "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-9a7d22b1-e360-49b7-8cf4-e317b40a9fe5.png"
+      }
+    },
+    {
+      "key": "comic_cycle_arrow_v2",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Production art for the approved clean comic medieval fantasy mobile game. Input image 1 is STYLE reference only: match crisp dark espresso outlines, chunky deliberately designed shapes, two or three distinct hard-edged cel shaded values and restrained broad highlights. Readable at small game size, consistent hand drawn contour, limited detail, warm ochre accents. No photorealism, airbrush gradients, plastic shine, bloom, microtexture, excessive ornament, text, typography, watermark or UI screenshot. Asset type: ONE isolated LEFT-pointing carved golden directional arrow, genuine transparent background. A compact, thick, slightly curved left arrow shaped like a substantial medieval carved gold and ochre chevron, expressive tapered tips, a clean black outer contour, a broad ivory yellow top facet and a darker amber side facet. Strong silhouette, little illustration craftsmanship rather than a thin UI line. Nearly square footprint, fits in 40px high game display, a small natural asymmetry in the sculpted arrow shape. No circular backing, no button plate, no rectangle or octagonal surround, no cast shadow outside the silhouette, no halo, no chains, no gems, no decorative medallion. One arrow only with 12% transparent margin, no text.",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+      ],
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-66b7a889-e41b-4682-be7f-75e06fabd46d.png"
+    },
+    {
+      "key": "comic_power_banner_v2",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Production art for the approved clean comic medieval fantasy mobile game. Input image 1 is STYLE reference only: match crisp dark espresso outlines, chunky deliberately designed shapes, two or three distinct hard-edged cel shaded values and restrained broad highlights. Readable at small game size, consistent hand drawn contour, limited detail, warm ochre accents. No photorealism, airbrush gradients, plastic shine, bloom, microtexture, excessive ornament, text, typography, watermark or UI screenshot. Asset type: ONE isolated illustrated combat-power ornament on genuine transparent background, wide horizontal silhouette around 3.6:1. Left side is a compact large amber and lemon yellow FLAME emblem drawn with three confident curved tongues and a single ivory center. The flame flows into a short warm orange ochre fabric pennant to its RIGHT, clean slightly swept cloth shape, two subtly tapered notched tail ends, broad plain center reserved for code-rendered digits. Organic curved top and bottom instead of a geometric rectangle, restrained two-tone fabric shading with one simple fold. This is a small game ornament, not a grand scroll. Clear bold contour, visually elegant, feels hand-drawn and energetic, no blur. Whole flame and pennant with 12% clear margin, no text, no numbers, no letters, no surrounding plate, no stone frame, no duplicated bottom edge, no drop shadow outside silhouette.",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+      ],
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-d388d667-862f-45c7-8170-efba5a5104a5.png"
+    },
+    {
+      "key": "comic_bag_v2",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Production art for the approved clean comic medieval fantasy mobile game. Input image 1 is STYLE reference only: match crisp dark espresso outlines, chunky deliberately designed shapes, two or three distinct hard-edged cel shaded values and restrained broad highlights. Readable at small game size, consistent hand drawn contour, limited detail, warm ochre accents. No photorealism, airbrush gradients, plastic shine, bloom, microtexture, excessive ornament, text, typography, watermark or UI screenshot. Asset type: ONE isolated medieval adventure backpack icon, genuine transparent background. Stout olive forest-green canvas satchel with brown leather straps and warm gold buckle, rolled cream blanket neatly tied on top, one broad useful front pocket. Three-quarter view, compact inviting silhouette, solid hand drawn contours, confident broad color planes. Recognizable adventurer bag at 32px, no tiny accessories, no zippers, no face, no skull, no dangling treasures, no magic glow, no background or ground shadow. Entire bag fits square composition with 12% clear margin.",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+      ],
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-cbd0ace1-31e0-41c9-9132-1ac4750adad1.png"
+    },
+    {
+      "key": "comic_attributes_v2",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Production art for the approved clean comic medieval fantasy mobile game. Input image 1 is STYLE reference only: match crisp dark espresso outlines, chunky deliberately designed shapes, two or three distinct hard-edged cel shaded values and restrained broad highlights. Readable at small game size, consistent hand drawn contour, limited detail, warm ochre accents. No photorealism, airbrush gradients, plastic shine, bloom, microtexture, excessive ornament, text, typography, watermark or UI screenshot. Asset type: ONE isolated medieval character attributes icon, genuine transparent background. A small ivory parchment scroll with short rolled wooden ends, three bold brown drawn horizontal tally bars and one green wax seal near lower corner. Compact broad scroll silhouette, readable at 28px, warm cream parchment and oak details, clear dimensional rolled edge expressed in just two tones. No legible words, no tiny markings, no surrounding button, no rectangular panel, no ground shadow, no glow, 12% transparent margin.",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+      ],
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-4186efe1-1b04-4f8a-b8d0-49c9fc235178.png"
+    },
+    {
+      "key": "comic_story_v2",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Production art for the approved clean comic medieval fantasy mobile game. Input image 1 is STYLE reference only: match crisp dark espresso outlines, chunky deliberately designed shapes, two or three distinct hard-edged cel shaded values and restrained broad highlights. Readable at small game size, consistent hand drawn contour, limited detail, warm ochre accents. No photorealism, airbrush gradients, plastic shine, bloom, microtexture, excessive ornament, text, typography, watermark or UI screenshot. Asset type: ONE isolated fantasy storybook icon, genuine transparent background. A slightly open stout leather book seen in front three-quarter view, dark brown and forest-green cover, warm ivory pages, one short red cloth bookmark. Readable broad page silhouettes, small gold corner accent, a single simple page crease. Small 28px game illustration, no legible text, no rows of tiny pseudo-lettering, no magic, no stars, no floating papers, no button surround, no ground shadow, 12% transparent margin.",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+      ],
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-fd5ee6b2-7303-47f7-8a11-60aaafd045c4.png"
+    },
+    {
+      "key": "comic_forge_v2",
+      "transparent": true,
+      "prompt": "Use case: stylized-concept. Production art for the approved clean comic medieval fantasy mobile game. Input image 1 is STYLE reference only: match crisp dark espresso outlines, chunky deliberately designed shapes, two or three distinct hard-edged cel shaded values and restrained broad highlights. Readable at small game size, consistent hand drawn contour, limited detail, warm ochre accents. No photorealism, airbrush gradients, plastic shine, bloom, microtexture, excessive ornament, text, typography, watermark or UI screenshot. Asset type: ONE isolated medieval equipment forge icon, genuine transparent background. Stout slate steel anvil on a short oak block with one gold ochre handled blacksmith hammer resting diagonally across it. Compact distinct silhouette, chunky steel facets and a restrained ivory highlight, readable at 28px, broad flat color planes. No fire, no sparks, no furnace, no smoke, no button surround, no background or cast shadow, no text, 12% transparent margin.",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+      ],
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-421cced8-6bfc-4a80-978e-525e58f1cbb9.png"
+    }
+  ],
+  "import": "Proportional resizing and alpha-aware bounds only. Original generated designs and actual transparency preserved. No perspective deformation.",
+  "platformAnchor": {
+    "u": 0.315,
+    "v": 0.84,
+    "meaning": "center of the top ellipse, normalized from top left; aligned to character foot anchor at runtime"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "key": "bg_levels_comic_v1",
+  "transparent": false,
+  "references": [
+    "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_shop_comic_v1.jpg"
+  ],
+  "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. Reference is STYLE AND COLOR DEPTH only. Make a DIFFERENT cozy guild expedition MAP ROOM with a low broad wooden planning table, no shop. PORTRAIT 3:4 framing, slightly elevated frontal view. Dark oak roof beams in top corners, warm timber-and-pale-stone walls, navy blue hanging banners at far left and right, an arched bright sky-blue window in upper right with distant green trees and castle roof, broad intentional golden daylight and cooler blue shadow. Central 70% of the image is a broad quiet wooden table surface seen at an overhead angle, reserved for a SEPARATELY OVERLAID mini battlefield island; no objects in that central space. Only a small rolled parchment and compass tucked at extreme far left edge, one small satchel tucked at far right edge. Background architecture occupies upper third. Table surface and short front edge below occupy middle and lower thirds. Clear foreground/midground/background depth and warm-cool balance. Don't paint a map, castle model, diorama, circle or island on the table. No characters, title board, interface, embedded buttons, candles, glow or vignette. Keep middle subdued enough for clean cream UI type.",
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-7c1cf049-2bdd-469e-8c52-e60060c12ab1.png",
+  "tool": "built-in imagegen"
+}

@@ -38,6 +38,7 @@ const CARD_ART: Record<string, string> = {
   volt_eager: 'ui_card_fast_charge_a',// 雷法·激昂 ← 快速充能（能量体）
   mora_cd: 'ui_card_cd_cut',          // 冰法·冷却缩减 ← 冷却缩减（沙漏）
   mora_eager: 'ui_card_fast_charge_a',// 冰法·激昂 ← 快速充能（能量体）
+  mora_linger: 'ui_card_cd_cut',       // 冰法·寒冬延续：复用沙漏，表达持续时间
 };
 
 export class Panels {
@@ -579,7 +580,8 @@ export class Panels {
       rows = [
         ['伤害', Math.round((h.atk * h.atkMul + (h.skillDmgFlat || 0)) * mu.boltMul) + ' × 全场'],
         ['形态', '全屏冰暴 · 一次结算'],
-        ['特性', '深度减速 ' + Math.round(mu.slowMul * 100) + '% · ' + mu.slowDur + 's'],
+        ['特性', '深度减速 ' + Math.round(Math.min(0.9, mu.slowMul + (h.slowAmpBonus || 0)) * 100)
+          + '% · ' + (mu.slowDur + (h.ultSlowDur || 0)) + 's'],
         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
         ['释放', '手动点击'],

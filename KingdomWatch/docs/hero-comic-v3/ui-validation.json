@@ -1,0 +1,261 @@
+{
+  "ok": true,
+  "url": "http://127.0.0.1:8765/",
+  "checks": [
+    {
+      "restoredCardsPanelsAndLargerActions": {
+        "titleAbsent": true,
+        "namePlateAbsent": true,
+        "squareCards": true,
+        "equipmentPanel": true,
+        "tabHighlightColors": [
+          [
+            65,
+            75,
+            86
+          ],
+          [
+            255,
+            232,
+            140
+          ],
+          [
+            65,
+            75,
+            86
+          ]
+        ],
+        "largeActions": true,
+        "detailText": [
+          [
+            {
+              "size": 26,
+              "text": "属性"
+            }
+          ],
+          [
+            {
+              "size": 26,
+              "text": "故事"
+            }
+          ]
+        ],
+        "paperBackdrop": true,
+        "upperHeight": 904,
+        "anchor": [
+          -154,
+          5.7906976744185386
+        ],
+        "figureFeet": [
+          -154,
+          5.7906976744185386
+        ],
+        "dais": [
+          -154,
+          5.7906976744185386
+        ],
+        "icons": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    },
+    {
+      "layout": {
+        "size": [
+          750,
+          1625.581395348837
+        ],
+        "resource": {
+          "w": 218,
+          "h": 56,
+          "top": 92,
+          "bottom": 148
+        },
+        "roster": {
+          "w": 126,
+          "h": 114,
+          "top": 168,
+          "bottom": 282
+        },
+        "stage": {
+          "w": 750,
+          "h": 610,
+          "top": 294,
+          "bottom": 904
+        },
+        "bag": {
+          "w": 750,
+          "h": 593.5813953488371,
+          "top": 903.9999999999999,
+          "bottom": 1497.5813953488368
+        },
+        "view": {
+          "w": 706,
+          "h": 467.5813953488371,
+          "top": 1019.9999999999999,
+          "bottom": 1487.5813953488368
+        },
+        "nav": {
+          "w": 138,
+          "h": 104,
+          "top": 1509.581395348837,
+          "bottom": 1613.581395348837
+        },
+        "portraits": [
+          {
+            "w": 72,
+            "h": 72,
+            "ellipse": true
+          },
+          {
+            "w": 72,
+            "h": 72,
+            "ellipse": true
+          },
+          {
+            "w": 72,
+            "h": 72,
+            "ellipse": true
+          },
+          {
+            "w": 72,
+            "h": 72,
+            "ellipse": true
+          },
+          {
+            "w": 72,
+            "h": 72,
+            "ellipse": true
+          }
+        ]
+      },
+      "wornItemsExcludedAcrossHeroes": true
+    },
+    {
+      "heroSelection": 5,
+      "cycleArrows": true,
+      "allFiguresLoaded": true
+    },
+    {
+      "bagScroll": "independent stage and restored per-tab offset"
+    },
+    {
+      "attributesAndStory": "new components open and close"
+    },
+    {
+      "forge": "level +1, 120 gold and one stone charged, wallet reused"
+    },
+    {
+      "dismantle": "cancel does not charge; confirm removes item and returns 1500 gold"
+    },
+    {
+      "replace": "new item worn, previous weapon returns to bag; blank tap closes comparison"
+    },
+    {
+      "warehouse": "sale cancel preserves item, wear fills empty slot"
+    },
+    {
+      "materials": "four types render with count and detail"
+    },
+    {
+      "forgeGuard": "poor",
+      "noUnexpectedCharge": true
+    },
+    {
+      "forgeGuard": "no-mat",
+      "noUnexpectedCharge": true
+    },
+    {
+      "forgeGuard": "max",
+      "noUnexpectedCharge": true
+    },
+    {
+      "smallViewport": [
+        375,
+        667
+      ],
+      "layout": {
+        "size": [
+          750,
+          1334
+        ],
+        "resource": {
+          "w": 218,
+          "h": 56,
+          "top": 92,
+          "bottom": 148
+        },
+        "roster": {
+          "w": 126,
+          "h": 114,
+          "top": 168,
+          "bottom": 282
+        },
+        "stage": {
+          "w": 750,
+          "h": 500,
+          "top": 294,
+          "bottom": 794
+        },
+        "bag": {
+          "w": 750,
+          "h": 412,
+          "top": 794,
+          "bottom": 1206
+        },
+        "view": {
+          "w": 706,
+          "h": 286,
+          "top": 910,
+          "bottom": 1196
+        },
+        "nav": {
+          "w": 138,
+          "h": 104,
+          "top": 1218,
+          "bottom": 1322
+        },
+        "portraits": [
+          {
+            "w": 72,
+            "h": 72,
+            "ellipse": true
+          },
+          {
+            "w": 72,
+            "h": 72,
+            "ellipse": true
+          },
+          {
+            "w": 72,
+            "h": 72,
+            "ellipse": true
+          },
+          {
+            "w": 72,
+            "h": 72,
+            "ellipse": true
+          },
+          {
+            "w": 72,
+            "h": 72,
+            "ellipse": true
+          }
+        ]
+      }
+    },
+    {
+      "emptyBag": "all three categories display only plain text, no placeholder slots"
+    },
+    {
+      "emptyInventory": true,
+      "lockedHeroCannotBeSelected": true
+    }
+  ],
+  "errors": [],
+  "failures": []
+}

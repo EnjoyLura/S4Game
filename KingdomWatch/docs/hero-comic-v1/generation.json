@@ -1,0 +1,101 @@
+{
+  "tool": "built-in imagegen",
+  "styleReference": "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+  "sources": [
+    {
+      "key": "bg_heroes_comic_v1",
+      "prompt": "Use case: stylized-concept. Production art for a 2D medieval fantasy mobile game. Input image 1 is STYLE ONLY: use the same clean comic fantasy style as the approved shop icons, crisp dark espresso outlines, deliberate chunky shapes, restrained two or three hard-edged cel-shaded values, large readable color planes, limited broad upper-left highlights. Hand-drawn game illustration, coherent line weight. Avoid soft airbrush gradients, photorealism, glossy plastic, metallic over-rendering, microtextures, random filigree, sparkle clouds, excessive glow, text, lettering, logo, watermark, UI frames. Asset type: portrait background illustration for a hero equipment screen, 2:3 composition. A quiet, sunlit royal guild armory inside a pale sandstone castle: one broad rounded window toward the upper right showing a little blue sky, a simple indigo banner, two racks with a few recognizable wooden shields and simple medieval equipment along the distant walls. Big plain pale warm gray stone wall areas and a clean flat stone floor. The central and left-middle 60% are uncluttered open staging space for separately rendered characters and gear UI. Gentle warm ivory and muted slate-blue environment, restrained green accents. Clearly designed perspective, two or three simple architectural layers. No characters, no pedestals, no inset panels, no magical glyphs, no dark cave, no decorative borders. Relatively low contrast so crisp character sprites and UI remain the focal point; broad illustrated forms, no artificial depth-of-field.",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+      ],
+      "transparent": false,
+      "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-82d50d22-fd7a-4507-9368-f1da7504f7ca.png"
+    },
+    {
+      "key": "comic_hero_archer_v1",
+      "prompt": "Use case: stylized-concept. Production art for a 2D medieval fantasy mobile game. Input image 1 is STYLE ONLY: use the same clean comic fantasy style as the approved shop icons, crisp dark espresso outlines, deliberate chunky shapes, restrained two or three hard-edged cel-shaded values, large readable color planes, limited broad upper-left highlights. Hand-drawn game illustration, coherent line weight. Avoid soft airbrush gradients, photorealism, glossy plastic, metallic over-rendering, microtextures, random filigree, sparkle clouds, excessive glow, text, lettering, logo, watermark, UI frames. Asset type: one isolated hero half-body portrait on genuine transparent background, square canvas, not a finished circular badge. Image 2 is IDENTITY reference: preserve this young male elf archer's spiky chestnut-brown hair, pointed ears, alert green eyes, green cloak and brown leather armor, simple golden cloak clasp, white-fletched quiver. Bust through chest, clean three-quarter view with clearly visible natural handsome face, quietly determined expression, shoulders broad enough for circular cropping later. One shoulder may include a small part of the oak recurve bow, do not cover his face. The silhouette fits with 8% clear margin on every side, no clipped head or shoulders, no ground shadow, no colored backdrop.",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/ui_avatar_archer.png"
+      ],
+      "transparent": true,
+      "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-877d5dbf-a6d3-4fb6-ae48-4c037da17cb0.png"
+    },
+    {
+      "key": "comic_figure_archer_v1",
+      "prompt": "Use case: stylized-concept. Production art for a 2D medieval fantasy mobile game. Input image 1 is STYLE ONLY: use the same clean comic fantasy style as the approved shop icons, crisp dark espresso outlines, deliberate chunky shapes, restrained two or three hard-edged cel-shaded values, large readable color planes, limited broad upper-left highlights. Hand-drawn game illustration, coherent line weight. Avoid soft airbrush gradients, photorealism, glossy plastic, metallic over-rendering, microtextures, random filigree, sparkle clouds, excessive glow, text, lettering, logo, watermark, UI frames. Asset type: SINGLE full-body hero illustration, isolated on genuine transparent background, portrait 2:3 canvas. Image 2 is the strict face and outfit identity reference; match face, gender, hair, recognizable costume and colors. Front three-quarter view with unobscured face, natural relaxed grounded standing stance, handsome illustrated anatomy about 4.5 to 5 heads tall, sturdy legs, practical costume, uncomplicated broad cloth folds. Whole head, both boots and the entire weapon visible with 8% clear margins. No extra character, no environment, no pedestal, no cast shadow outside the silhouette, no portrait medallion. SUBJECT: young male elf archer, spiky chestnut-brown hair, pointed ears and green cloak over brown leather armor, ivory sleeve accents, leather boots, a simple white-fletched quiver. Holds one stout forest-green and oak recurve bow diagonally at waist height; one hand on its grip, the other relaxed; anatomically correct fingers. No raised attack pose.",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/ui_avatar_archer.png"
+      ],
+      "transparent": true,
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-e07c1784-f1ac-4a4b-80d4-53681530d299.png",
+      "initialPath": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-cc45e397-489f-48d4-8ad5-4549a97ed20f.png",
+      "cleanup": {
+        "tool": "built-in imagegen",
+        "purpose": "Edit the initial full-body illustration to reduce external glow and haze while preserving identity, pose and genuine transparency."
+      }
+    },
+    {
+      "key": "comic_figure_sniper_v1",
+      "prompt": "Use case: stylized-concept. Production art for a 2D medieval fantasy mobile game. Input image 1 is STYLE ONLY: use the same clean comic fantasy style as the approved shop icons, crisp dark espresso outlines, deliberate chunky shapes, restrained two or three hard-edged cel-shaded values, large readable color planes, limited broad upper-left highlights. Hand-drawn game illustration, coherent line weight. Avoid soft airbrush gradients, photorealism, glossy plastic, metallic over-rendering, microtextures, random filigree, sparkle clouds, excessive glow, text, lettering, logo, watermark, UI frames. Asset type: SINGLE full-body hero illustration, isolated on genuine transparent background, portrait 2:3 canvas. Image 2 is the strict face and outfit identity reference; match face, gender, hair, recognizable costume and colors. Front three-quarter view with unobscured face, natural relaxed grounded standing stance, handsome illustrated anatomy about 4.5 to 5 heads tall, sturdy legs, practical costume, uncomplicated broad cloth folds. Whole head, both boots and the entire weapon visible with 8% clear margins. No extra character, no environment, no pedestal, no cast shadow outside the silhouette, no portrait medallion. SUBJECT: young male sniper with silver-white hair, blue eyes, deep blue hood and cloak, brown straps over navy leather armor, steel shoulder pads, practical brown boots. Holds a compact medieval steel-and-oak heavy crossbow in both hands at waist height, aimed slightly down. No modern firearm, no muzzle flash, no oversized weapon.",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_hero_sniper_v1.png"
+      ],
+      "transparent": true,
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-984442a9-954d-421a-ab38-0e62990df8c0.png",
+      "initialPath": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-553a3bd6-b665-49cd-bc35-f4716e48d759.png",
+      "cleanup": {
+        "tool": "built-in imagegen",
+        "purpose": "Edit the initial full-body illustration to reduce external glow and haze while preserving identity, pose and genuine transparency."
+      }
+    },
+    {
+      "key": "comic_figure_pyro_v1",
+      "prompt": "Use case: stylized-concept. Production art for a 2D medieval fantasy mobile game. Input image 1 is STYLE ONLY: use the same clean comic fantasy style as the approved shop icons, crisp dark espresso outlines, deliberate chunky shapes, restrained two or three hard-edged cel-shaded values, large readable color planes, limited broad upper-left highlights. Hand-drawn game illustration, coherent line weight. Avoid soft airbrush gradients, photorealism, glossy plastic, metallic over-rendering, microtextures, random filigree, sparkle clouds, excessive glow, text, lettering, logo, watermark, UI frames. Asset type: SINGLE full-body hero illustration, isolated on genuine transparent background, portrait 2:3 canvas. Image 2 is the strict face and outfit identity reference; match face, gender, hair, recognizable costume and colors. Front three-quarter view with unobscured face, natural relaxed grounded standing stance, handsome illustrated anatomy about 4.5 to 5 heads tall, sturdy legs, practical costume, uncomplicated broad cloth folds. Whole head, both boots and the entire weapon visible with 8% clear margins. No extra character, no environment, no pedestal, no cast shadow outside the silhouette, no portrait medallion. SUBJECT: young male fire mage with orange hair, warm amber eyes, red hood and red-orange robes with a few broad gold trims, brown belt and boots. Holds a compact wooden staff capped by a small faceted amber crystal at his side and a tiny stylized flame over his other palm. No large flame plume or aura.",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_hero_pyro_v1.png"
+      ],
+      "transparent": true,
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-61b053c7-87de-4686-8221-2940661779da.png",
+      "initialPath": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-3244a0cb-fbed-4733-a190-ae6bcf4fab2d.png",
+      "cleanup": {
+        "tool": "built-in imagegen",
+        "purpose": "Edit the initial full-body illustration to reduce external glow and haze while preserving identity, pose and genuine transparency."
+      }
+    },
+    {
+      "key": "comic_figure_volt_v1",
+      "prompt": "Use case: stylized-concept. Production art for a 2D medieval fantasy mobile game. Input image 1 is STYLE ONLY: use the same clean comic fantasy style as the approved shop icons, crisp dark espresso outlines, deliberate chunky shapes, restrained two or three hard-edged cel-shaded values, large readable color planes, limited broad upper-left highlights. Hand-drawn game illustration, coherent line weight. Avoid soft airbrush gradients, photorealism, glossy plastic, metallic over-rendering, microtextures, random filigree, sparkle clouds, excessive glow, text, lettering, logo, watermark, UI frames. Asset type: SINGLE full-body hero illustration, isolated on genuine transparent background, portrait 2:3 canvas. Image 2 is the strict face and outfit identity reference; match face, gender, hair, recognizable costume and colors. Front three-quarter view with unobscured face, natural relaxed grounded standing stance, handsome illustrated anatomy about 4.5 to 5 heads tall, sturdy legs, practical costume, uncomplicated broad cloth folds. Whole head, both boots and the entire weapon visible with 8% clear margins. No extra character, no environment, no pedestal, no cast shadow outside the silhouette, no portrait medallion. SUBJECT: older male lightning wizard, swept silver-gray hair and white beard, purple hood and violet robes with simple broad gold edging, a round purple clasp, brown belt and boots. Holds a compact dark wooden staff with one purple crystal at his side; other hand raised gently with just one small clean cyan electric zigzag between fingertips. No flashy lightning cloud.",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_hero_volt_v1.png"
+      ],
+      "transparent": true,
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-2215e433-f5d6-4b17-9df7-dd0ab2a4e059.png",
+      "initialPath": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-6012fd2f-5749-42c4-beea-993bc1b4f4e3.png",
+      "cleanup": {
+        "tool": "built-in imagegen",
+        "purpose": "Edit the initial full-body illustration to reduce external glow and haze while preserving identity, pose and genuine transparency."
+      }
+    },
+    {
+      "key": "comic_figure_mora_v1",
+      "prompt": "Use case: stylized-concept. Production art for a 2D medieval fantasy mobile game. Input image 1 is STYLE ONLY: use the same clean comic fantasy style as the approved shop icons, crisp dark espresso outlines, deliberate chunky shapes, restrained two or three hard-edged cel-shaded values, large readable color planes, limited broad upper-left highlights. Hand-drawn game illustration, coherent line weight. Avoid soft airbrush gradients, photorealism, glossy plastic, metallic over-rendering, microtextures, random filigree, sparkle clouds, excessive glow, text, lettering, logo, watermark, UI frames. Asset type: SINGLE full-body hero illustration, isolated on genuine transparent background, portrait 2:3 canvas. Image 2 is the strict face and outfit identity reference; match face, gender, hair, recognizable costume and colors. Front three-quarter view with unobscured face, natural relaxed grounded standing stance, handsome illustrated anatomy about 4.5 to 5 heads tall, sturdy legs, practical costume, uncomplicated broad cloth folds. Whole head, both boots and the entire weapon visible with 8% clear margins. No extra character, no environment, no pedestal, no cast shadow outside the silhouette, no portrait medallion. SUBJECT: young adult female frost mage, long silver-white hair, clear blue eyes, ice-blue hood and fitted pale blue robes, white collar accents, a small blue crystal hair ornament, simple steel details and visible dark blue boots. Holds one slim practical staff with a faceted ice-blue crystal at her side; other hand relaxed, no large magic effect. Confident natural stance, modest functional costume.",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_hero_mora_v1.png"
+      ],
+      "transparent": true,
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-bee96785-aedc-49e1-ace4-bebcfa3d48c5.png",
+      "initialPath": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-fe461aa4-7510-4883-9dda-1d9625ceb7c0.png",
+      "cleanup": {
+        "tool": "built-in imagegen",
+        "purpose": "Edit the initial full-body illustration to reduce external glow and haze while preserving identity, pose and genuine transparency."
+      }
+    }
+  ],
+  "import": "Proportional resizing only. Figures have a 768px canvas and 16px foot margin. Background, figures and portrait retain their generated visual design."
+}

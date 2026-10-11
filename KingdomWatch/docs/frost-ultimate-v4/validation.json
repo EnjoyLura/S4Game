@@ -1,0 +1,54 @@
+{
+  "status": "offline-composited; awaiting-user-in-game-review",
+  "actualBattleInspected": false,
+  "newAiCalls": 0,
+  "newAiModels": [],
+  "duration": 2,
+  "rainCap": 128,
+  "impactCap": 24,
+  "impactDuration": 0.68,
+  "paintedChipCap": 120,
+  "renderer": "actual FrostUltimateVFX TS states exported with cc double",
+  "spriteTipAnchor": [
+    0.7076923076923077,
+    0.9871794871794872
+  ],
+  "acceleration": "p=0.25u+0.75u²; solid tip at floor; tangent-aligned angle",
+  "emission": "individual ordered births spread over .94s; main contacts interleaved",
+  "spatial": "128 random full-field points: 16 per depth band, completely shuffled; independent of enemy positions/count; actor/effect depth sorting",
+  "contacts": "shadow → local flash/cracks → low ballistic chips on each landing",
+  "scenes": {
+    "sparse": {
+      "enemyCount": 7,
+      "aiImpactInstances": 24,
+      "rainEvents": 128,
+      "size": [
+        640,
+        960
+      ],
+      "gif": "ultimate-sparse-preview.gif",
+      "video": "ultimate-sparse-preview.mp4",
+      "previewDuration": 2.7,
+      "castDuration": 2.0,
+      "finalEffectPixelDifference": 0
+    },
+    "dense": {
+      "enemyCount": 25,
+      "aiImpactInstances": 24,
+      "rainEvents": 128,
+      "size": [
+        640,
+        960
+      ],
+      "gif": "ultimate-dense-preview.gif",
+      "video": "ultimate-dense-preview.mp4",
+      "previewDuration": 2.7,
+      "castDuration": 2.0,
+      "finalEffectPixelDifference": 0
+    }
+  },
+  "mechanics": "existing immediate one-hit full-field damage and slow, no new ticks or freeze",
+  "denseScene": "all 25 enemies concentrated in upper field",
+  "regularSkill": "v11: v10 first .82s preserved, .68s gravity tail; total 1.5s",
+  "expandingColdWave": false
+}

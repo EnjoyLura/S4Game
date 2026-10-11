@@ -1,0 +1,9 @@
+{
+  "key": "comic_cycle_button_v3",
+  "transparent": true,
+  "references": [
+    "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+  ],
+  "prompt": "Use case: stylized-concept. Production illustration for the existing clean comic medieval fantasy mobile game. Match the supplied reference: crisp dark espresso outlines, confident chunky silhouettes, 2 or 3 restrained hard-edged painted values, broad intentional highlights. Clean readable game art, not photorealism. No soft glow, blurry airbrush, plastic gloss, excessive filigree, tiny engraving, extra shadows outside the silhouette, text, letters, numbers, watermark, or UI screenshot. Input image 1 is STYLE reference only. SINGLE isolated complete LEFT NAVIGATION BUTTON, genuine transparent background. Front view of a stout perfectly CIRCULAR dark slate-blue stone medallion, warm ivory top rim edge, matte gray-blue inner face, centered large simple warm gold LEFT-POINTING CHEVRON inset on the face. The chevron is straight and symmetric, two broad gold facets, not a bent organic arrow and no shaft. Compact confidently outlined silhouette, about 80% of square canvas with equal transparent margin. Readable at 38px mobile game size, bold simple center and subtle stone volume in only 2 tones. One unified disc with ONE outer contour; no stacked bottom plate, no cast drop shadow, no embossed ornamental frame, no ropes, spikes, leaves, gems or glow, no bevel soup. Deliberately polished but restrained game button art matching the shop charcoal and gold UI. ONE button only. No text.",
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-06f6186e-2228-4167-b9be-65728328d4aa.png"
+}

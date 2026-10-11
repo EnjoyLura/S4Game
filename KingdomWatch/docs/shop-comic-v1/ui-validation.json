@@ -1,0 +1,156 @@
+{
+  "ok": true,
+  "url": "http://127.0.0.1:8765/",
+  "checks": [
+    {
+      "layout": "title on plank, compact right wallet, full-width shelf backing",
+      "geometry": {
+        "signU": 0.22499999999999998,
+        "signV": 0.355,
+        "titleRight": -142.50000000000003,
+        "walletLeft": -105,
+        "backdropWidth": 750,
+        "shelfWidth": 734,
+        "sameVerticalCoverage": true
+      }
+    },
+    {
+      "tab": "weapon",
+      "count": 2,
+      "allIllustrationsLoaded": true
+    },
+    {
+      "tab": "hero",
+      "count": 5,
+      "allIllustrationsLoaded": true
+    },
+    {
+      "heroPortraits": [
+        {
+          "width": 154,
+          "height": 154,
+          "hasArtwork": true,
+          "circularMask": true
+        },
+        {
+          "width": 154,
+          "height": 154,
+          "hasArtwork": true,
+          "circularMask": true
+        },
+        {
+          "width": 154,
+          "height": 154,
+          "hasArtwork": true,
+          "circularMask": true
+        },
+        {
+          "width": 154,
+          "height": 154,
+          "hasArtwork": true,
+          "circularMask": true
+        },
+        {
+          "width": 154,
+          "height": 154,
+          "hasArtwork": false,
+          "circularMask": false
+        }
+      ]
+    },
+    {
+      "tab": "equip",
+      "count": 4,
+      "allIllustrationsLoaded": true
+    },
+    {
+      "tab": "mat",
+      "count": 4,
+      "allIllustrationsLoaded": true
+    },
+    {
+      "purchase": "weapon",
+      "charged": 800,
+      "autoEquipped": true
+    },
+    {
+      "purchase": "material",
+      "cancelDoesNotCharge": true,
+      "charged": 50,
+      "quantity": 1
+    },
+    {
+      "purchase": "hero",
+      "charged": 2800,
+      "ownedHeroCannotRepurchase": true
+    },
+    {
+      "sharedWallet": "same nodes and geometry on all 5 pages"
+    },
+    {
+      "resourcePlus": "opens and closes correctly"
+    },
+    {
+      "smallViewport": [
+        375,
+        667
+      ],
+      "lockedItemDoesNotOpenPurchase": true,
+      "insufficientFundsDoesNotCharge": true,
+      "geometry": {
+        "walletTop": 92,
+        "tabsBottom": 220.82,
+        "navTop": -551,
+        "hasDarkSeats": false,
+        "hasOldArt": false
+      },
+      "shopLayout": {
+        "signU": 0.22499999999999998,
+        "signV": 0.355,
+        "titleRight": -112.25000000000003,
+        "walletLeft": -105,
+        "backdropWidth": 750,
+        "shelfWidth": 734,
+        "sameVerticalCoverage": true
+      }
+    }
+  ],
+  "errors": [],
+  "failures": [],
+  "wallet": [
+    {
+      "cur": "gold",
+      "uuid": "Node.516",
+      "x": 4,
+      "y": 692.7906976744185,
+      "w": 218,
+      "h": 56,
+      "icon": "art:shop_comic_v1/comic_coin_v1",
+      "loaded": true,
+      "iconLeft": -103,
+      "iconRight": -59,
+      "textLeft": -51,
+      "textRight": 33,
+      "plusLeft": 62,
+      "plusRight": 102,
+      "plus": true
+    },
+    {
+      "cur": "diamond",
+      "uuid": "Node.522",
+      "x": 234,
+      "y": 692.7906976744185,
+      "w": 218,
+      "h": 56,
+      "icon": "art:shop_comic_v1/comic_diamond_v1",
+      "loaded": true,
+      "iconLeft": -103,
+      "iconRight": -59,
+      "textLeft": -51,
+      "textRight": 33,
+      "plusLeft": 62,
+      "plusRight": 102,
+      "plus": true
+    }
+  ]
+}

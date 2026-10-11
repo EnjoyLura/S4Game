@@ -79,6 +79,7 @@ function load(name) {
     if (id.endsWith('/EventBus')) return { bus:{ emit(...a){events.push(a);} },EVT:{ CHARGE_CHANGED:'charge' } };
     if (id.endsWith('/Sfx')) return { Sfx:{ play(a){sfx.push(a);} } };
     if (id === './FrostVFX') return load('battle/FrostVFX');
+    if (id === './FrostProjectileVFX') return load('battle/FrostProjectileVFX');
     if (id === './FrostUltimateVFX') return load('battle/FrostUltimateVFX');
     if (id === './BattleDepth') return load('battle/BattleDepth');
     return new Proxy({}, { get:()=>class {} });
@@ -106,7 +107,7 @@ function create() {
   return new (load('battle/FrostUltimateVFX').FrostUltimateVFX)(ground,air,depth);
 }
 const targets = Array.from({length:80},(_,i)=>({ x:-290+i%10*61,y:460-Math.floor(i/10)*112,radius:i%8===0?34:22 }));
-const snapshot = fx => JSON.stringify({ age:fx.age,selected:fx.selected.length,
+const snapshot = fx => JSON.stringify({ age:fx.age,hitCount:fx.hits.length,
   hits:fx.hits.map(h=>[h.frameIndex,h.back.node.active,h.front.node.active,h.back.node.position,h.front.node.position]),
   rain:fx.drops.map(d=>[d.part.node.active,d.part.node.position]),
   chips:fx.chips.map(p=>[p.node.active,p.node.position]) });
@@ -121,7 +122,7 @@ seededCast(fx,targets); fx.tick(0.08);
 assert(fx.ground.commands.length>0,'loading fallback is available');
 flush();
 assert.equal(fx.backFrames.length,64); assert.equal(fx.frontFrames.length,64);
-assert.equal(fx.clipLife,1.38); assert.equal(fx.selected.length,24);
+assert.equal(fx.clipLife,1.38); assert.equal(fx.hits.length,24);
 for (let i=0;i<64;i++) {
   assert.equal(fx.backFrames[i].rect.height,118);
   assert.equal(fx.frontFrames[i].rect.height,138);
@@ -142,7 +143,7 @@ for (const h of fx.hits) {
 fx.cast([]); assert.equal(snapshot(fx),beforePause,'empty cast does not reset a running clip');
 for (let i=0;i<100;i++) { fx.cast(targets); fx.tick(.12); }
 assert.equal(nodeCount,initialNodes,'repeated casts allocate no nodes');
-assert.equal(fx.selected.length,24); assert.equal(fx.drops.length,96); assert.equal(fx.chips.length,120);
+assert.equal(fx.hits.length,24); assert.equal(fx.drops.length,128); assert.equal(fx.chips.length,120);
 fx.tick(3);
 assert.equal(fx.running,false);
 assert(fx.hits.every(h=>!h.back.node.active&&!h.front.node.active));
@@ -158,10 +159,14 @@ assert.deepEqual(fast.hits.map(h=>h.frameIndex),slow.hits.map(h=>h.frameIndex),'
 // Physics/contacts: overhead positions respect landing depth, speed up, stay opaque until
 // the tip reaches the fixed endpoint, and only then emit a ground burst.
 const physical = create(); flush(); seededCast(physical,[targets[37]]);
-const drop = physical.drops[0], landing = drop.start+drop.flight;
+// A lower-field sample is on screen for its entire projected descent.
+const contactIndex=physical.hits.findIndex(h=>h.y<physical.skyTop-400);
+assert(contactIndex>=0);
+const contactHit=physical.hits[contactIndex];
+const drop = physical.drops.find(d=>d.x===contactHit.x&&d.y===contactHit.y), landing = drop.start+drop.flight;
 assert(drop.travel>270 && drop.travel<390,'overhead altitude is projected relative to each footprint');
 assert(Math.abs(drop.drift/drop.travel)<0.18,'descent has a modest oblique view');
-assert.equal(physical.hits[0].start,landing,'ground clip starts at its actual needle contact');
+assert.equal(contactHit.start,landing,'ground clip starts at its actual needle contact');
 const at = time => { physical.age=time; physical.render(); return {...drop.part.node.position}; };
 const p1=at(drop.start+drop.flight*.35),p2=at(drop.start+drop.flight*.45);
 const p3=at(drop.start+drop.flight*.75),p4=at(drop.start+drop.flight*.85);
@@ -169,27 +174,49 @@ assert(p3.y-p4.y>p1.y-p2.y,'descent accelerates instead of floating linearly');
 at(landing-.001);
 assert(drop.part.node.active); assert(drop.part.sprite.color.a>=228,'needle does not fade before impact');
 assert(Math.abs(drop.part.node.position.y-drop.y)<6,'tip reaches within one frame of the floor');
-assert.equal(physical.hits[0].back.node.active,false,'no ground burst before contact');
+assert.equal(contactHit.back.node.active,false,'no ground burst before contact');
 assert(Math.abs(drop.part.ui.anchor.x-46/65)<1e-10);
 assert(Math.abs(drop.part.ui.anchor.y-(1-2/156))<1e-10);
 at(landing+.001);
 assert.equal(drop.part.node.active,false,'airborne needle is consumed on impact');
-assert.equal(physical.hits[0].back.node.active,true,'impact begins on the next frame');
-assert(physical.chips.slice(0,5).some(p=>p.node.active),'chips appear immediately, not a separate delayed effect');
+assert.equal(contactHit.back.node.active,true,'impact begins on the next frame');
+assert(physical.chips.slice(contactIndex*5,contactIndex*5+5).some(p=>p.node.active),'chips appear immediately, not a separate delayed effect');
 const activeDrops=physical.drops.slice(0,physical.rainCount);
-assert.equal(physical.rainCount,50,'few enemies no longer get the maximum rain density');
+assert.equal(physical.rainCount,128,'fixed full-field rain even with one enemy');
 assert(activeDrops.every(d=>d.start+d.flight+.56<2),'last contact clears within the storm duration');
 assert(activeDrops.every(d=>d.depth.depthY===d.y),'sprite sorting uses ground depth, never its current altitude');
 assert.equal(drop.part.node.parent,physical.depthParent,'needles share actor depth instead of a top overlay');
 seededCast(physical,targets);
 const rainEvents=physical.drops.slice(0,physical.rainCount);
 assert(rainEvents.every((d,i)=>i===0||d.start>rainEvents[i-1].start),'individual emissions are strictly staggered');
-assert.equal(rainEvents.filter(d=>d.start<.1).length,6,'opening no longer emits all main icicles at once');
+assert.equal(rainEvents.filter(d=>d.start<.1).length,8,'individual opening drops, never a simultaneous salvo');
 assert(Math.max(...physical.hits.map(h=>h.start))-Math.min(...physical.hits.map(h=>h.start))>.85,'main ground hits are spread across the cast');
 const spawnYs=rainEvents.map(d=>d.y+d.travel);
 assert(Math.max(...spawnYs)-Math.min(...spawnYs)>700,'birth positions follow ground depth, not one horizontal strip');
 const near=rainEvents.reduce((a,b)=>a.y<b.y?a:b),far=rainEvents.reduce((a,b)=>a.y>b.y?a:b);
 assert(near.perspective>far.perspective,'subtle depth scale is smaller at the far side');
+// The weather pattern is independent of monsters, including its RNG consumption.
+const stormPlan = f => JSON.stringify({
+  rain:f.drops.map(d=>[d.x,d.y,d.start,d.flight,d.height,d.travel,d.drift,d.seed]),
+  hits:f.hits.map(h=>[h.x,h.y,h.width,h.opacity,h.start])
+});
+const fullPlan=stormPlan(physical);
+seededCast(physical,[{x:300,y:470,radius:48}]);
+assert.equal(stormPlan(physical),fullPlan,'moving or removing enemies cannot move or reduce the rain');
+const low=config.LINE_Y+40,span=config.LO.half-150-config.LO.notchTop-10-low;
+const bands=Array(8).fill(0);
+const bandOf=d=>Math.floor((d.y-low)/span*8);
+for(const d of physical.drops) {
+  assert(d.x>=-325&&d.x<=325&&d.y>=low&&d.y<low+span,'all contacts within full battle area');
+  bands[bandOf(d)]++;
+}
+assert.deepEqual(bands,Array(8).fill(16),'middle and lower screen have the same rain coverage as the upper screen');
+assert(new Set(physical.drops.slice(0,16).map(bandOf)).size>=6,'depth bands are shuffled, not swept row by row');
+for(let seed=1;seed<=20;seed++) {
+  seededCast(physical,targets,seed);const planned=stormPlan(physical);
+  seededCast(physical,[{x:-290,y:-420,radius:22}],seed);
+  assert.equal(stormPlan(physical),planned,'each random seed remains independent of enemy positions');
+}
 physical.tick(3); physical.root.destroy();
 assert.equal(load('battle/BattleDepth').depthSprites(physical.depthParent).length,0,'external depth nodes unregister on effect cleanup');
 const savedFrames = [...fx.ownedFrames];
@@ -251,7 +278,90 @@ for (const ready of [false,true]) {
 const heroSource = fs.readFileSync(path.join(root,'assets/scripts/battle/Hero.ts'),'utf8');
 assert(!heroSource.includes("new Node('blizRing')"),'old expanding ripple removed');
 assert(!heroSource.includes("new Node('blizDrop')"),'old independent Tween rain removed');
-console.log('PASS: 96-cap adaptive density; staggered emissions/contacts; projected overhead depth, actor occlusion, tip-to-ground contact; pause/2x; 100 recasts; final clear; failed/late loads; refs; unchanged hero hit/slow.');
+// The regular skill keeps its real playback clock, fixed anchor and resource lifetime.
+const regular=new (load('battle/FrostVFX').FrostVFX)(new Node('regularGround'));flush();
+assert.equal(regular.life,1.5);assert.equal(regular.frames.length,44);
+assert.equal(regular.source.texture.resource,'fx/frost_domain_video_v10/spriteFrame');
+regular.domain(13,-25,126,1.5);regular.tick(.820001);
+assert.equal(regular.active[0].frameIndex,24,'original video tail begins at .82s');
+assert.equal(regular.active[0].sprite.node.position.y,-25,'tail never shifts the entire ground anchor');
+regular.tick(.68);assert.equal(regular.active.length,0,'regular skill fully clears at 1.5 seconds');
+regular.root.destroy();assert([...sources.values()].every(s=>s.refs===0));
+
+// The dedicated card changes the slow applied by the actual hero, not just its text.
+const linger=cards.M0_POOL.find(c=>c.id==='mora_linger');
+assert(linger&&linger.owner==='mora'&&linger.rarity==='blue');
+assert.equal(cards.draw3([linger],{mora_linger:linger.maxStacks}).length,0,'capped card leaves the draw pool');
+for(const ultLv of [1,10]) {
+  const stats=cards.baseMoraStats();stats.ultLv=ultLv;
+  const before={...stats};
+  for(let layer=0;layer<=linger.maxStacks;layer++) {
+    if(layer)linger.apply({hero:stats});
+    let slow;
+    const target={x:0,y:250,hp:10000,dead:false,def:{radius:22},groundOffset:0,
+      takeDamage(){},applySlow(r,d){slow=[r,d];}};
+    const hero={ultReady:true,charge:50,id:'mora',stats,skillAtk:100,slowR:r=>r};
+    FrostHero.prototype.castUlt.call(hero,{list:[target]},{frostUltimate(){}},{add(){}});
+    assert.deepEqual(slow,[cards.moraUltCfg(ultLv).slowMul,cards.moraUltCfg(ultLv).slowDur+layer]);
+    for(const key of Object.keys(before))if(key!=='ultSlowDur')assert.equal(stats[key],before[key],'no unrelated skill/attack changes');
+  }
+  const glacier=cards.MORA_CARDS.find(c=>c.id==='mora_glacier');glacier.apply({hero:stats});
+  assert.equal(stats.ultSlowDur,linger.maxStacks+2,'existing purple duration upgrade stacks additively');
+}
+
+// Normal projectiles share the actual ultimate texture, preserve its aspect,
+// and leave gameplay positions/velocity/collision data in ProjectileManager.
+const {FrostProjectileVFX}=load('battle/FrostProjectileVFX');
+const ice=new FrostProjectileVFX(new Node('iceProjectileLayer'));
+assert.equal(ice.projectile(0,0,0,850,6,.1),false,'fallback before texture loading');flush();
+assert.equal(ice.frame.texture.resource,'fx/frost_ultimate_rain_v1/spriteFrame');
+assert.equal(ice.frame.rect.height,156);assert.equal(ice.frame.packable,false);
+for(const [vx,vy] of [[0,850],[850,0],[-425,736],[-850,0],[0,-850]]) {
+  ice.beginProjectileFrame();assert(ice.projectile(30,-25,vx,vy,6,.2));
+  const f=ice.flights[0];
+  assert(Math.abs(f.ui.width/f.ui.height-65/156)<1e-9,'crystal is not stretched or flattened');
+  assert.equal(f.node.angle,Math.atan2(vy,vx)*180/Math.PI-90,'painted point follows direction');
+  assert.deepEqual(f.node.position,{x:30,y:-25,z:0},'rendering cannot move the collision centre');
+  const paused=JSON.stringify(ice.trails.commands);ice.beginProjectileFrame();ice.projectile(30,-25,vx,vy,6,.2);
+  assert.equal(JSON.stringify(ice.trails.commands),paused,'same age gives stable trail without frame-number flicker');
+}
+const iceNodes=nodeCount;
+for(let n=0;n<100;n++) {
+  ice.beginProjectileFrame();for(let i=0;i<80;i++)assert(ice.projectile(i,0,0,850,6,.2));
+  assert.equal(ice.projectile(0,0,0,850,6,.2),false,'bounded pool falls back on exhaustion');
+}
+assert.equal(nodeCount,iceNodes,'normal shots create no nodes during repeated frames');
+const {ProjectileManager}=load('battle/Projectile');
+const bridge={beginProjectileFrame:()=>ice.beginProjectileFrame(),iceProjectile:(...args)=>ice.projectile(...args)};
+const projectiles=new ProjectileManager(new Node('projectileTest'),{list:[]},{add(){}},undefined,bridge);
+const shot={x:10,y:-100,dirX:0,dirY:1,speed:850,dmg:58,crit:false,color:'#7FD8FF',heroId:'mora',size:6,slowRatio:.25,slowDur:2};
+projectiles.fire(shot);projectiles.tick(.1,{takeDamage(){}});
+assert.equal(shot.y,-15);assert.equal(shot.dmg,58);assert.equal(shot.slowDur,2);
+assert.equal(ice.flights[0].node.position.y,shot.y,'actual projectile renderer routes frost shots to the pool');
+projectiles.tick(4,{takeDamage(){}});
+assert(ice.flights.every(f=>!f.node.active));assert.equal(ice.trails.commands.length,0,'recycled final shot clears its trail');
+
+const iceDump=process.argv.indexOf('--ice-preview');
+if(iceDump>=0) {
+  const states=[];
+  for(let i=0;i<55;i++) {
+    const t=i/30;
+    ice.beginProjectileFrame();
+    for(const [x,y,vx,vy] of [[-180,-300,0,850],[0,-280,280,802],[170,-280,-280,802]]) {
+      if(y+vy*t<=config.LO.half+120)ice.projectile(x+vx*t,y+vy*t,vx,vy,6,t);
+    }
+    states.push({t,ground:[],trails:[...ice.trails.commands],bodies:ice.flights.slice(0,ice.used).map(f=>({
+      x:f.node.position.x,y:f.node.position.y,w:f.ui.width,h:f.ui.height,angle:f.node.angle,
+      anchor:f.ui.anchor,alpha:255,rect:f.sprite.spriteFrame.rect,resource:f.sprite.spriteFrame.texture.resource
+    }))});
+  }
+  fs.writeFileSync(process.argv[iceDump+1],JSON.stringify(states));
+}
+const iceFrame=ice.frame;ice.root.destroy();assert(iceFrame.destroyed);
+const lateIce=new FrostProjectileVFX(new Node('lateIce'));lateIce.root.destroy();flush();
+assert.equal(lateIce.frame,null);assert([...sources.values()].every(s=>s.refs===0));
+console.log('PASS: 128 fixed full-field contacts; 8 equal depth bands shuffled in time; enemy-independent patterns across 20 seeds; staggered emissions/contacts; actor occlusion; ground contact; pause/2x; recasts; cleanup; failed/late loads; regular 1.5s playback; unchanged hero hit/slow.');
+console.log('PASS: original v10 restored; +1s card applied through real ultimate at levels 1/10 and all stacks; pool cap; painted normal ice shots/aspect/direction/stable trails; real projectile movement; final clear; bounded allocations; late cleanup.');
 
 // Offline previews consume the ACTUAL renderer's sprite and Graphics states.
 // This avoids a second approximate motion model without opening a real battle.
@@ -271,13 +381,13 @@ if (dumpIndex>=0) {
     for (const t of spec.times) {
       storm.age=t;
       if(t>=0 && t<2) {storm.running=true;storm.render();} else storm.hide();
-      frames.push({t,ground:storm.ground.commands,trails:storm.trails.commands,
+      frames.push({t,ground:[...storm.ground.commands],trails:[...storm.trails.commands],
         backs:storm.hits.map(h=>partState(h.back)).filter(Boolean),
         fronts:storm.hits.map(h=>partState(h.front)).filter(Boolean),
         rain:storm.drops.map(d=>{const p=partState(d.part);return p?{...p,depthY:d.y}:null;}).filter(Boolean),
         chips:storm.chips.map(partState).filter(Boolean)});
     }
-    output[name]={...spec,hitCount:storm.selected.length,rainCount:storm.rainCount,frames};
+    output[name]={...spec,hitCount:storm.hits.length,rainCount:storm.rainCount,frames};
     storm.root.destroy();
   }
   fs.writeFileSync(process.argv[dumpIndex+2],JSON.stringify(output));

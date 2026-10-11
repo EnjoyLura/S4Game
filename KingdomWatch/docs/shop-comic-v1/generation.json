@@ -1,0 +1,192 @@
+{
+  "modelPath": "built-in imagegen",
+  "reference": "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+  "prompts": [
+    {
+      "key": "bg_shop_comic_v1",
+      "prompt": "Use case: stylized-concept. Asset type: wide landscape 2:1 illustration used as the TOP SHOP BANNER of a fantasy mobile game. Reference is STYLE ONLY. Clean 2D comic cel-shaded medieval quartermaster's shop interior, crisp dark-brown lines, few large deliberate painted color planes, chunky simplified forms. Warm oak counter foreground, an inviting red-and-ivory striped small canopy, sunlit arch window with sky at the upper-right, one shelf with a chest and neatly arranged potions, one rack of just three weapons at the right. A shield and rolled map on the counter at right. Leave the entire LEFT 40% quietly lit warm wood and a broad dark plank sign without text, for code-rendered shop title; top 25% calm darker beam shadows for overlay currency HUD. Strong composition with right-side merchandise and architectural depth, no character required. Golden ambient daylight, clear warm light and cool slate shadow planes. Less ornament, more readable story. Wide header scene with all major contents visible in mobile 750x380 crop. NO characters, no UI controls, no letters, no numbers, no ornate jewels, no realistic grain, no complicated racks, no orange mist, no photorealistic 3D rendering, no depth-of-field blur, no volumetric god rays, no busy micro-details. A polished hand-drawn game environment coherent with the reference.",
+      "transparent": false
+    },
+    {
+      "key": "comic_coin_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: one thick gold coin, slightly angled, with a simple large embossed three-point crown, golden yellow face, amber shadow plane, ivory edge highlight. Uncomplicated readable circular silhouette.",
+      "transparent": true
+    },
+    {
+      "key": "comic_diamond_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: one chunky cyan diamond gemstone, broad upper crown and pointed bottom, 6 to 8 large geometric planar facets, dark blue shadow face, clean white-blue upper-left highlight. Very clear squat diamond silhouette, no glow.",
+      "transparent": true
+    },
+    {
+      "key": "comic_wpn_bow_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: one forest-green and warm oak recurve longbow with ONE nocked arrow. Diagonal composition rising right, thick limbs, gold simple bindings, ivory arrow feathers, charcoal steel arrowhead. Bowstring is taut and joins both limb ends accurately. No extra spikes, only recognizable bow form.",
+      "transparent": true
+    },
+    {
+      "key": "comic_wpn_crossbow_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: one compact heavy medieval crossbow in three-quarter view, stout warm-oak stock, steel limbs mounted perpendicular at the front, a single bolt centered along the stock, indigo leather grip and a few broad brass bands. Clearly reads as crossbow, no telescopic sight, no gun barrel, no gun parts, no extra strings.",
+      "transparent": true
+    },
+    {
+      "key": "comic_mat_stone_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: small cluster of THREE chunky pale-blue strengthening ore stones, a large central faceted rock and two smaller supporting pieces, dark slate-blue shadow and ivory highlight. Matte mineral with 3 or 4 big facets per rock, no large glowing aura, no floor.",
+      "transparent": true
+    },
+    {
+      "key": "comic_mat_iron_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: TWO stacked trapezoid iron ingots with beveled ends, cool steel gray, dark blue-gray shadow plane, a single broad ivory edge highlight. Stout easily identifiable forging material, not bricks, no tiny etched pattern.",
+      "transparent": true
+    },
+    {
+      "key": "comic_mat_dust_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: a squat small clear glass bottle with a cork and a simple wide indigo band, containing turquoise magical powder. Broad glass faces, a few bright crystalline grains INSIDE bottle, no floating particles outside, no rune letters, no reflections of surroundings. Strong cute practical potion-bottle silhouette.",
+      "transparent": true
+    },
+    {
+      "key": "comic_mat_rune_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: three chunky broken purple-gray rune-stone fragments, main angular stone with ONE simple cyan angular zigzag carved mark, two small dark backing fragments. Thick solid form, a few planes, no actual text, no glow cloud, no blue particles.",
+      "transparent": true
+    },
+    {
+      "key": "comic_helm_falcon_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: one stout medieval steel knight helmet with a simple gold brow trim and a short forest-green plume. Clearly drawn visor slits and single nose guard, ivory steel front light, charcoal side shadow. No face, no head, no extravagant wings, no background.",
+      "transparent": true
+    },
+    {
+      "key": "comic_acc_moon_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: one silver crescent-moon pendant enclosing one small cyan-blue gem, short loop of thick dark cord above, broad clean silver planes and dark-blue shadows. Large readable moon shape, no intricate jewelry chains, no extra symbols.",
+      "transparent": true
+    },
+    {
+      "key": "comic_glove_wind_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: a pair of rugged brown leather adventurer gloves with simple forest-green cuffs and broad brass wrist bands, one glove in front of the other. Strong compact hand silhouette, five fingers on each glove, few simple stitch lines only. No real hands, no excessive straps.",
+      "transparent": true
+    },
+    {
+      "key": "comic_armor_forest_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: one sleeveless stout forest-green leather cuirass for a medieval adventurer, warm brown shoulder patches, simple large center strap with brass buckle, dark-green side panels. Clearly recognizable torso armor, no mannequin, no arms, no legs, no decoration covered in leaves.",
+      "transparent": true
+    },
+    {
+      "key": "comic_nav_shop_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: compact medieval shop stall icon with a red-and-ivory striped canopy, two stout wooden pillars, a simple oak counter and one small gold coin stack. Front three-quarter view, large distinctive awning silhouette. Only the stall, no ground or scenery.",
+      "transparent": true
+    },
+    {
+      "key": "comic_nav_map_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: one partly unrolled ivory parchment adventure map, large curled left and right ends, simple brown dotted route ending at ONE brick-red X and two tiny green triangle mountains. Compact diagonally angled shape, no letters, no floor, no medieval clutter.",
+      "transparent": true
+    },
+    {
+      "key": "comic_nav_castle_v1",
+      "prompt": "Use case: stylized-concept. Asset type: PRODUCTION illustration for an actual 2D fantasy tower-defense game. Reference image is STYLE ONLY; do not reproduce its board, text or UI arrangement. Match its clean COMIC CEL-SHADED art. Crisp dark charcoal/espresso contours, consistent line-weight, chunky heroic fantasy shapes, restrained 2 or 3 hard-edged values per material, a few broad highlights from upper left. Metal has painted flat planes; wood has only 2 or 3 deliberate grain lines; gems have few large facets. Strong clear silhouette readable at 48px. Palette golden amber, forest green, cyan, indigo, warm ivory. Precisely designed solid shapes with deliberate craftsmanship, not generic polished AI illustration. No soft airbrush, photoreal texture, shiny plastic, ornamental gold filigree, tiny engraving, bloom, stars, random floating particles, text, logos, watermarks, UI frames or board. SINGLE isolated inventory object centered on genuine TRANSPARENT background, filling about 80% of square canvas with even clear margins. Fully visible, no clipped edges. Slight three-quarter view. No ground, landscape, base, pedestals or cast shadow outside the object. Broad dark outline and only simple painted interior shading. It is a small game icon, NOT product photography. SUBJECT: one compact chunky stone castle icon with TWO side towers and a taller central blue roof tower, one large arched gate, broad cream stone planes, dark-slate shadow planes, two blue flags. No intricate battlement detail, no grass or ground surrounding it. Memorable readable heroic castle.",
+      "transparent": true
+    },
+    {
+      "key": "comic_hero_sniper_v1",
+      "prompt": "Use case: style-transfer. Asset type: one game shop HERO PORTRAIT SPRITE. Image 1 is art style reference ONLY, the clean comic fantasy board. Image 2 is hero identity reference. Repaint the character into the CLEAN COMIC CEL-SHADED style of image 1. Preserve this same young pale-blond hunter with blue eyes, indigo-blue hood and dark leather, holding her heavy CROSSBOW at the lower right. Replace the sci-fi gun/scope with a compact believable wooden crossbow. Determined expression. Single chest-up bust, head fully inside frame, compact shoulder silhouette, hero gaze toward viewer with slight three-quarter turn. Actual transparent background, no circular background, no outer frame, no text, no realistic skin pores. Fill about 83% of square canvas, evenly spaced margins. Crisp charcoal outlines, bold deliberate shape design, just 2-3 hard-edged shading values per material. Hair is 5-8 chunky shapes with a few lines, not dozens of strands. Eyes expressive but proportionate, not huge baby eyes. Slightly exaggerated heroic game character. Flat painted highlights from upper left. NO soft gradients, photorealism, shiny plastic, glossy figurine rendering, ornament filigree, bloom, particles, fire or frost background. The hero must belong to the same family as the resource and inventory icons. Keep clothes and face simple enough to read at 128 pixels.",
+      "transparent": true,
+      "identityReference": "assets/resources/ux/ui_avatar_sniper.png"
+    },
+    {
+      "key": "comic_hero_pyro_v1",
+      "prompt": "Use case: style-transfer. Asset type: one game shop HERO PORTRAIT SPRITE. Image 1 is art style reference ONLY, the clean comic fantasy board. Image 2 is hero identity reference. Repaint the character into the CLEAN COMIC CEL-SHADED style of image 1. Preserve this same young orange-haired male fire mage in a red hood with broad simple gold trim. Amber eyes, confident face; one raised hand carrying a small clearly drawn 3-shape orange flame, no glow cloud. Single chest-up bust, head fully inside frame, compact shoulder silhouette, hero gaze toward viewer with slight three-quarter turn. Actual transparent background, no circular background, no outer frame, no text, no realistic skin pores. Fill about 83% of square canvas, evenly spaced margins. Crisp charcoal outlines, bold deliberate shape design, just 2-3 hard-edged shading values per material. Hair is 5-8 chunky shapes with a few lines, not dozens of strands. Eyes expressive but proportionate, not huge baby eyes. Slightly exaggerated heroic game character. Flat painted highlights from upper left. NO soft gradients, photorealism, shiny plastic, glossy figurine rendering, ornament filigree, bloom, particles, fire or frost background. The hero must belong to the same family as the resource and inventory icons. Keep clothes and face simple enough to read at 128 pixels.",
+      "transparent": true,
+      "identityReference": "assets/resources/ux/ui_avatar_pyro.png"
+    },
+    {
+      "key": "comic_hero_volt_v1",
+      "prompt": "Use case: style-transfer. Asset type: one game shop HERO PORTRAIT SPRITE. Image 1 is art style reference ONLY, the clean comic fantasy board. Image 2 is hero identity reference. Repaint the character into the CLEAN COMIC CEL-SHADED style of image 1. Preserve this same mature stern male thunder mage with swept-back silver hair, short silver beard and deep purple hood with simple gold trim. One hand and ONE simple cyan lightning zigzag, no tangled electrical web. Single chest-up bust, head fully inside frame, compact shoulder silhouette, hero gaze toward viewer with slight three-quarter turn. Actual transparent background, no circular background, no outer frame, no text, no realistic skin pores. Fill about 83% of square canvas, evenly spaced margins. Crisp charcoal outlines, bold deliberate shape design, just 2-3 hard-edged shading values per material. Hair is 5-8 chunky shapes with a few lines, not dozens of strands. Eyes expressive but proportionate, not huge baby eyes. Slightly exaggerated heroic game character. Flat painted highlights from upper left. NO soft gradients, photorealism, shiny plastic, glossy figurine rendering, ornament filigree, bloom, particles, fire or frost background. The hero must belong to the same family as the resource and inventory icons. Keep clothes and face simple enough to read at 128 pixels.",
+      "transparent": true,
+      "identityReference": "assets/resources/ux/ui_avatar_volt.png"
+    },
+    {
+      "key": "comic_hero_mora_v1",
+      "prompt": "Use case: style-transfer. Asset type: one game shop HERO PORTRAIT SPRITE. Image 1 is art style reference ONLY, the clean comic fantasy board. Image 2 is hero identity reference. Repaint the character into the CLEAN COMIC CEL-SHADED style of image 1. Preserve this same young pale silver-haired female ice mage with blue eyes, a pale-blue hood and dark-blue cape. Small simple ice-blue crystal brooch, one raised hand and ONE compact blue ice crystal. Strong expression, no realistic beauty rendering. Single chest-up bust, head fully inside frame, compact shoulder silhouette, hero gaze toward viewer with slight three-quarter turn. Actual transparent background, no circular background, no outer frame, no text, no realistic skin pores. Fill about 83% of square canvas, evenly spaced margins. Crisp charcoal outlines, bold deliberate shape design, just 2-3 hard-edged shading values per material. Hair is 5-8 chunky shapes with a few lines, not dozens of strands. Eyes expressive but proportionate, not huge baby eyes. Slightly exaggerated heroic game character. Flat painted highlights from upper left. NO soft gradients, photorealism, shiny plastic, glossy figurine rendering, ornament filigree, bloom, particles, fire or frost background. The hero must belong to the same family as the resource and inventory icons. Keep clothes and face simple enough to read at 128 pixels.",
+      "transparent": true,
+      "identityReference": "assets/resources/ux/ui_avatar_mora.png"
+    }
+  ],
+  "sources": [
+    {
+      "key": "bg_shop_comic_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-b685b09f-ecb5-4eaf-81ba-321cfa1b860b.png"
+    },
+    {
+      "key": "comic_coin_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-fdd0882f-bef4-4418-a524-8b50f190c216.png"
+    },
+    {
+      "key": "comic_diamond_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-5e0ac386-1f6c-4393-a5f5-df644c00863d.png"
+    },
+    {
+      "key": "comic_wpn_bow_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-7c24ec1c-fe0f-4f2e-9c8b-ad2faef54bc4.png"
+    },
+    {
+      "key": "comic_wpn_crossbow_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-d1aede27-90c1-44d4-9427-e04b0cfcc0a6.png"
+    },
+    {
+      "key": "comic_mat_stone_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-4253dca4-8f5f-4b98-80b6-b5a5128080e7.png"
+    },
+    {
+      "key": "comic_mat_iron_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-6a36b6bc-e05c-46a3-a200-e7db005bed88.png"
+    },
+    {
+      "key": "comic_mat_dust_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-b0ddf17c-e643-49a3-b9f9-25f18e2009fe.png"
+    },
+    {
+      "key": "comic_mat_rune_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-ee34f9bf-c72c-445c-9b2e-9234bbe2be3f.png"
+    },
+    {
+      "key": "comic_helm_falcon_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-fac3d7d0-2706-41bd-9c30-5d51e03ff0bb.png"
+    },
+    {
+      "key": "comic_acc_moon_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-d32e76a9-a0f7-4c67-bbb3-40765acd1b47.png"
+    },
+    {
+      "key": "comic_glove_wind_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-25bfed64-0aa3-43f0-949b-80dee6defa95.png"
+    },
+    {
+      "key": "comic_armor_forest_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-e606201f-5f7e-4c48-9d77-3e1e2335c18a.png"
+    },
+    {
+      "key": "comic_nav_shop_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-8ef06af2-dfd4-4bf5-9ab4-5b31d40a9bdd.png"
+    },
+    {
+      "key": "comic_nav_map_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-b947edc5-ac1f-4316-91f5-3add96b076f9.png"
+    },
+    {
+      "key": "comic_nav_castle_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-b69469e7-b980-4789-8ea5-3612f0ad7cc2.png"
+    },
+    {
+      "key": "comic_hero_sniper_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-bbee2813-9c89-45c5-a504-f6ad764aa7e4.png"
+    },
+    {
+      "key": "comic_hero_pyro_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-04bd818a-f59b-4dae-a6bd-3a306ed8f0d1.png"
+    },
+    {
+      "key": "comic_hero_volt_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-ca85c74d-f35c-40f0-ac8d-c88eb381a4ac.png"
+    },
+    {
+      "key": "comic_hero_mora_v1",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a11c03-afa8-7ef0-834a-a47cbda4a411\\exec-52f9650c-5f59-43b2-b92f-30df64793d21.png"
+    }
+  ]
+}

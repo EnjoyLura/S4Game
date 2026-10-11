@@ -1,0 +1,58 @@
+[
+  {
+    "key": "bg_heroes_comic_v2",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\scenes\\bg_heroes_comic_v2.jpg",
+    "width": 1086,
+    "height": 1448,
+    "bytes": 231905,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v2\\sources\\bg_heroes_comic_v2.png"
+  },
+  {
+    "key": "comic_cycle_arrow_v2",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v2\\comic_cycle_arrow_v2.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 37063,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v2\\sources\\comic_cycle_arrow_v2.png"
+  },
+  {
+    "key": "comic_power_banner_v2",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v2\\comic_power_banner_v2.png",
+    "width": 640,
+    "height": 251,
+    "bytes": 107220,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v2\\sources\\comic_power_banner_v2.png"
+  },
+  {
+    "key": "comic_bag_v2",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v2\\comic_bag_v2.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 85021,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v2\\sources\\comic_bag_v2.png"
+  },
+  {
+    "key": "comic_attributes_v2",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v2\\comic_attributes_v2.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 62101,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v2\\sources\\comic_attributes_v2.png"
+  },
+  {
+    "key": "comic_story_v2",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v2\\comic_story_v2.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 60541,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v2\\sources\\comic_story_v2.png"
+  },
+  {
+    "key": "comic_forge_v2",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v2\\comic_forge_v2.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 50957,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v2\\sources\\comic_forge_v2.png"
+  }
+]

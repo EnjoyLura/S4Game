@@ -189,11 +189,12 @@ export class GmPanel {
     // 回调按渲染时的快照做绝对赋值而非读当前值取反：触控双发（本项目已知现象，
     // 新怪弹窗同款防重入）时两次触发落到同一目标值，不会"点关→又点回开"永远关不掉。
     const d = this.dir;
-    const tog = (x: number, name: string, on: boolean, apply: (v: boolean) => void): void =>
+    const tog = (x: number, name: string, on: boolean, apply: (v: boolean) => void): void => {
       btn(B, x, this.ry, 218, 64, `${name}：${on ? '开' : '关'}`, CA(on ? PAL.gold : PAL.parch, 0.94), () => {
         apply(!on);
         this.refresh();
       }, 21);
+    };
     tog(-110, '技能无冷却', d.gmNoSkillCd, v => {
       d.gmNoSkillCd = v;
       const s = loadSave(); s.gmNoSkillCd = v; saveSave();

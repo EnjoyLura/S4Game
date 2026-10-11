@@ -1,0 +1,10 @@
+{
+  "key": "comic_difficulty_skull_v1",
+  "transparent": true,
+  "references": [
+    "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+  ],
+  "prompt": "Use case: stylized-concept. Production art for a clean comic medieval fantasy mobile tower-defense game. Match the supplied approved style reference: dark espresso confident outlines, chunky purposeful silhouettes, 2 or 3 hard-edged painted values, restrained broad highlights. Readable, manually designed feeling. No photorealism, airbrush, plastic gloss, gratuitous tiny engravings or microscopic texture, soft glow, external cast shadow, text, letters, numbers, watermark or UI screenshot. Single isolated game UI icon on TRUE transparent background, square canvas, entire shape fits inside 12% clear equal margin. Clear silhouette at 24px, no backing disc, no outside shadow. One small ivory fantasy skull, almost front view slightly tilted, clean chunky silhouette, dark simple eye sockets, broad tan shadow under cheekbone, three simple teeth. Two short dark slate horns, modest red cloth knot directly below jaw. Slightly fierce but friendly cartoon game symbol. No realistic bone cracks, blood, flames, decorative backing or frame.",
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-801f71a4-ea4d-4d09-830f-b0491bed1e53.png",
+  "tool": "built-in imagegen"
+}

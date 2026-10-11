@@ -5,6 +5,7 @@ import { Color, Graphics, Layers, Node } from 'cc';
 import { FireVFX } from './FireVFX';
 import { ArcherVFX } from './ArcherVFX';
 import { FrostVFX } from './FrostVFX';
+import { FrostProjectileVFX } from './FrostProjectileVFX';
 import { FrostUltTarget, FrostUltimateVFX } from './FrostUltimateVFX';
 
 interface Impact { x: number; y: number; life: number; max: number; radius: number; color: string; angle: number; heavy: boolean; hero: string; kind: 'contact' | 'cast' | 'blast'; }
@@ -22,12 +23,14 @@ export class ImpactFX {
   private fire: FireVFX;
   private archer: ArcherVFX;
   private frost: FrostVFX;
+  private frostProjectile: FrostProjectileVFX;
   private frostUltimate: FrostUltimateVFX;
 
   constructor(parent: Node, groundParent: Node = parent, projectileParent: Node = parent, depthParent?: Node) {
     this.fire = new FireVFX(parent, groundParent, projectileParent);
     this.archer = new ArcherVFX(parent, projectileParent);
     this.frost = new FrostVFX(groundParent);
+    this.frostProjectile = new FrostProjectileVFX(projectileParent);
     this.frostUltimate = new FrostUltimateVFX(groundParent, parent, depthParent);
     const node = new Node('impactEnvelopes');
     node.layer = Layers.Enum.UI_2D;
@@ -36,7 +39,12 @@ export class ImpactFX {
     for (let i = 0; i < 32; i++) this.free.push({ x: 0, y: 0, life: 0, max: 1, radius: 1, color: '', angle: 0, heavy: false, hero: '', kind: 'contact' });
   }
 
-  beginProjectileFrame(): void { this.fire.beginProjectileFrame(); this.archer.beginProjectileFrame(); }
+  beginProjectileFrame(): void {
+    this.fire.beginProjectileFrame(); this.archer.beginProjectileFrame(); this.frostProjectile.beginProjectileFrame();
+  }
+  iceProjectile(x: number, y: number, vx: number, vy: number, size: number, age: number): boolean {
+    return this.frostProjectile.projectile(x, y, vx, vy, size, age);
+  }
   arrowProjectile(x: number, y: number, vx: number, vy: number, size: number, age: number, heavy: boolean): boolean {
     return this.archer.projectile(x, y, vx, vy, size, age, heavy);
   }

@@ -1,5 +1,5 @@
 /** H3 shatter contacts and painted ice rain. No expanding cold wave.
- * All positions are cast snapshots; bounded pools use the battle clock.
+ * A full-field storm independent of enemy positions, on the battle clock.
  */
 import { Color, Graphics, JsonAsset, Layers, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
 import { LINE_Y, LO, MAX_MOBS } from '../config/GameConfig';
@@ -20,7 +20,8 @@ interface Drop {
   part: Part; x: number; y: number; start: number; flight: number; travel: number;
   height: number; drift: number; angle: number; seed: number; perspective: number; depth: DepthSprite | null;
 }
-const HIT_CAP = 24, RAIN_CAP = 96, CHIP_CAP = HIT_CAP * 5;
+const HIT_CAP = 24, RAIN_CAP = 128, CHIP_CAP = HIT_CAP * 5;
+const COVERAGE_BANDS = 8;
 const DURATION = 2, HIT_SECONDS = 0.68, IMPACT_RESOURCE = 'fx/frost_ultimate_impact_v1';
 const RAIN_RESOURCE = 'fx/frost_ultimate_rain_v1';
 // Pixel (46, 2) is the painted needle's apex. Its tip, rather than its centre,
@@ -41,7 +42,6 @@ export class FrostUltimateVFX {
   private drops: Drop[] = [];
   private chips: Part[] = [];
   private targets: readonly FrostUltTarget[] = [];
-  private selected: FrostUltTarget[] = [];
   private backFrames: SpriteFrame[] = [];
   private frontFrames: SpriteFrame[] = [];
   private frameEnds: number[] = [];
@@ -80,7 +80,7 @@ export class FrostUltimateVFX {
     for (let i = 0; i < CHIP_CAP; i++) this.chips.push(this.part('iceChip' + i, rainRoot));
     this.root.once(Node.EventType.NODE_DESTROYED, () => {
       this.destroyed = true; this.running = false;
-      this.targets = []; this.selected.length = 0;
+      this.targets = [];
       for (const h of this.hits) for (const p of [h.back, h.front]) {
         if (p.sprite.isValid) p.sprite.spriteFrame = null;
       }
@@ -158,52 +158,30 @@ export class FrostUltimateVFX {
     const top = LO.half - 150 - LO.notchTop, bottom = LINE_Y + 30;
     this.skyTop = top;
     this.targets = targets.filter(t => t.y >= bottom && t.y <= top).slice(0, MAX_MOBS);
-    this.selected.length = 0;
-    if (this.targets.length <= HIT_CAP) this.selected.push(...this.targets);
-    else {
-      let first = this.targets[0];
-      for (const t of this.targets) if (t.y > first.y) first = t;
-      this.selected.push(first);
-      while (this.selected.length < HIT_CAP) {
-        let best: FrostUltTarget | null = null, bestDistance = -1;
-        for (const target of this.targets) {
-          if (this.selected.includes(target)) continue;
-          let nearest = Infinity;
-          for (const picked of this.selected) {
-            const dx = target.x - picked.x, dy = target.y - picked.y;
-            nearest = Math.min(nearest, dx * dx + dy * dy);
-          }
-          if (nearest > bestDistance) { best = target; bestDistance = nearest; }
-        }
-        if (!best) break;
-        this.selected.push(best);
-      }
-    }
     this.hide(); this.age = 0; this.running = true;
-    this.rainCount = Math.min(RAIN_CAP, 48 + this.targets.length * 2);
-    for (let i = 0; i < this.selected.length; i++) {
-      const target = this.selected[i], hit = this.hits[i];
-      hit.x = target.x; hit.y = target.y;
-      hit.width = Math.max(120, Math.min(164, target.radius * 6.1));
-      hit.opacity = this.targets.length > 12 ? 0.82 : 0.94; hit.frameIndex = -1;
+    this.rainCount = RAIN_CAP;
+    const low = bottom + 10, span = Math.max(1, top - 10 - low);
+    // Random within broad depth bands, then shuffle the entire sequence.
+    // Equal coverage prevents a top-heavy storm without visible rows or a
+    // grid. Neither the RNG stream nor any landing depends on monster count.
+    for (let i = 0; i < RAIN_CAP; i++) {
+      const d = this.drops[i], band = Math.floor(i * COVERAGE_BANDS / RAIN_CAP);
+      d.x = (Math.random() * 2 - 1) * 325;
+      d.y = low + (band + Math.random()) * span / COVERAGE_BANDS;
+    }
+    for (let i = RAIN_CAP - 1; i > 0; i--) {
+      const a = this.drops[i], b = this.drops[Math.floor(Math.random() * (i + 1))];
+      const x = a.x, y = a.y; a.x = b.x; a.y = b.y; b.x = x; b.y = y;
     }
     let nextHit = 0;
     for (let i = 0; i < this.rainCount; i++) {
       const d = this.drops[i];
-      // Interleave main contacts with the smaller needles throughout the cast;
-      // selected monsters no longer receive one simultaneous opening salvo.
-      const target = nextHit < this.selected.length && i === Math.floor(nextHit * this.rainCount / this.selected.length)
-        ? this.selected[nextHit] : null;
-      const nearby = this.targets.length && Math.random() < 0.72
-        ? this.targets[Math.floor(Math.random() * this.targets.length)] : null;
-      d.x = target ? target.x : nearby ? nearby.x + (Math.random() - 0.5) * 120 : (Math.random() * 2 - 1) * 315;
-      d.y = target ? target.y : nearby ? nearby.y + (Math.random() - 0.5) * 100
-        : bottom + 25 + Math.random() * Math.max(1, top - bottom - 60);
-      d.x = Math.max(-325, Math.min(325, d.x)); d.y = Math.max(bottom + 10, Math.min(top - 10, d.y));
+      // Larger shatters belong to random rain contacts too, not enemy feet.
+      const mainContact = nextHit < HIT_CAP && i === Math.floor(nextHit * RAIN_CAP / HIT_CAP);
       const depth = clamp((top - d.y) / Math.max(1, top - bottom));
       d.perspective = 0.86 + depth * 0.16;
       d.start = 0.045 + i / Math.max(1, this.rainCount - 1) * 0.94 + Math.random() * 0.004;
-      d.height = (target ? 60 + Math.random() * 12 : 45 + Math.random() * 16) * d.perspective;
+      d.height = (mainContact ? 60 + Math.random() * 12 : 45 + Math.random() * 16) * d.perspective;
       // Project a shared overhead altitude relative to EACH landing point.
       // Formation positions differ with ground depth; there is no fixed
       // screen-top conveyor and no viewport-length-dependent falling speed.
@@ -213,8 +191,10 @@ export class FrostUltimateVFX {
       d.angle = Math.atan2(-d.travel * 1.75, -d.drift) * 180 / Math.PI - 90;
       d.seed = Math.random() * Math.PI * 2;
       if (d.depth) d.depth.depthY = d.y;
-      if (target) {
-        const hit = this.hits[nextHit++]; hit.x = d.x; hit.y = d.y; hit.start = d.start + d.flight;
+      if (mainContact) {
+        const hit = this.hits[nextHit++];
+        hit.x = d.x; hit.y = d.y; hit.start = d.start + d.flight;
+        hit.width = 120 + depth * 24; hit.opacity = 0.86; hit.frameIndex = -1;
       }
     }
     this.render();
@@ -292,7 +272,7 @@ export class FrostUltimateVFX {
       }
       this.ground.fill();
     }
-    for (let i = 0; i < this.selected.length; i++) {
+    for (let i = 0; i < HIT_CAP; i++) {
       const hit = this.hits[i], age = t - hit.start;
       const visible = age >= 0 && age < HIT_SECONDS;
       hit.back.node.active = hit.front.node.active = visible && !!this.atlas;
@@ -348,7 +328,6 @@ export class FrostUltimateVFX {
     for (let k = 0; k < CHIP_CAP; k++) {
       const part = this.chips[k], n = Math.floor(k / 5), i = k % 5;
       part.node.active = false;
-      if (n >= this.selected.length) continue;
       const hit = this.hits[n], age = t - hit.start;
       if (age < 0 || age >= 0.64) continue;
       const a = i / 5 * Math.PI * 2 + n * 0.71, u = Math.min(1, age / (0.52 + i * 0.045));

@@ -250,6 +250,27 @@ export function artAtlasSprite(parent: Node, x: number, y: number, w: number, h:
 
 /** 预载清单 = 代码引用的全部 ux ID + 场景图；新美术落盘后把 ID 加进这里 */
 export const UX_PRELOAD_IDS: string[] = [
+  // The shop and persistent lobby chrome share the selected comic direction.
+  'scenes/bg_shop_comic_v1',
+  'shop_comic_v1/comic_coin_v1',
+  'shop_comic_v1/comic_diamond_v1',
+  'shop_comic_v1/comic_wpn_bow_v1',
+  'shop_comic_v1/comic_wpn_crossbow_v1',
+  'shop_comic_v1/comic_mat_stone_v1',
+  'shop_comic_v1/comic_mat_iron_v1',
+  'shop_comic_v1/comic_mat_dust_v1',
+  'shop_comic_v1/comic_mat_rune_v1',
+  'shop_comic_v1/comic_helm_falcon_v1',
+  'shop_comic_v1/comic_acc_moon_v1',
+  'shop_comic_v1/comic_glove_wind_v1',
+  'shop_comic_v1/comic_armor_forest_v1',
+  'shop_comic_v1/comic_nav_shop_v1',
+  'shop_comic_v1/comic_nav_map_v1',
+  'shop_comic_v1/comic_nav_castle_v1',
+  'shop_comic_v1/comic_hero_sniper_v1',
+  'shop_comic_v1/comic_hero_pyro_v1',
+  'shop_comic_v1/comic_hero_volt_v1',
+  'shop_comic_v1/comic_hero_mora_v1',
   // 组件
   'ui_panel_dark_gold', 'ui_panel_dark_white',
   'ui_btn_primary', 'ui_btn_primary_press', 'ui_btn_primary_disabled',

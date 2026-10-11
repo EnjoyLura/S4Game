@@ -1,0 +1,772 @@
+{
+  "dateUTC": "2026-10-11T07:38:27.211667+00:00",
+  "style": "清爽漫画奇幻",
+  "status": "published",
+  "url": "https://kingdom-watch.pages.dev/?v=hero-comic-v2-1791704046",
+  "deployment": "https://87f8c5e2.kingdom-watch.pages.dev",
+  "generation": {
+    "tool": "built-in imagegen",
+    "newIllustrations": 7,
+    "reusedShopIllustrations": 20,
+    "reusedHeroIllustrations": 6,
+    "singleStyleReference": true
+  },
+  "components": "upper-only illustrated stage, dais-to-feet alignment, circular roster, unframed name/arrows/gear grouping/power, action art, pure-text empty inventory",
+  "typeCheck": "passed",
+  "creatorBuild": "passed: 3.8.8 web-mobile",
+  "dprPatch": "passed",
+  "uiChecks": {
+    "ok": true,
+    "url": "http://127.0.0.1:8765/",
+    "checks": [
+      {
+        "upperArtAndUnframedControls": {
+          "titleAbsent": true,
+          "namePlateAbsent": true,
+          "noFrame": true,
+          "paperBackdrop": true,
+          "upperHeight": 904,
+          "anchor": [
+            -154,
+            5.7906976744185386
+          ],
+          "figureFeet": [
+            -154,
+            5.7906976744185386
+          ],
+          "dais": [
+            -154,
+            5.7906976744185386
+          ],
+          "icons": [
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        }
+      },
+      {
+        "layout": {
+          "size": [
+            750,
+            1625.581395348837
+          ],
+          "resource": {
+            "w": 218,
+            "h": 56,
+            "top": 92,
+            "bottom": 148
+          },
+          "roster": {
+            "w": 126,
+            "h": 114,
+            "top": 168,
+            "bottom": 282
+          },
+          "stage": {
+            "w": 750,
+            "h": 610,
+            "top": 294,
+            "bottom": 904
+          },
+          "bag": {
+            "w": 750,
+            "h": 593.5813953488371,
+            "top": 903.9999999999999,
+            "bottom": 1497.5813953488368
+          },
+          "view": {
+            "w": 706,
+            "h": 467.5813953488371,
+            "top": 1019.9999999999999,
+            "bottom": 1487.5813953488368
+          },
+          "nav": {
+            "w": 138,
+            "h": 104,
+            "top": 1509.581395348837,
+            "bottom": 1613.581395348837
+          },
+          "portraits": [
+            {
+              "w": 82,
+              "h": 82,
+              "ellipse": true
+            },
+            {
+              "w": 82,
+              "h": 82,
+              "ellipse": true
+            },
+            {
+              "w": 82,
+              "h": 82,
+              "ellipse": true
+            },
+            {
+              "w": 82,
+              "h": 82,
+              "ellipse": true
+            },
+            {
+              "w": 82,
+              "h": 82,
+              "ellipse": true
+            }
+          ]
+        },
+        "wornItemsExcludedAcrossHeroes": true
+      },
+      {
+        "heroSelection": 5,
+        "cycleArrows": true,
+        "allFiguresLoaded": true
+      },
+      {
+        "bagScroll": "independent stage and restored per-tab offset"
+      },
+      {
+        "attributesAndStory": "new components open and close"
+      },
+      {
+        "forge": "level +1, 120 gold and one stone charged, wallet reused"
+      },
+      {
+        "dismantle": "cancel does not charge; confirm removes item and returns 1500 gold"
+      },
+      {
+        "replace": "new item worn, previous weapon returns to bag; blank tap closes comparison"
+      },
+      {
+        "warehouse": "sale cancel preserves item, wear fills empty slot"
+      },
+      {
+        "materials": "four types render with count and detail"
+      },
+      {
+        "forgeGuard": "poor",
+        "noUnexpectedCharge": true
+      },
+      {
+        "forgeGuard": "no-mat",
+        "noUnexpectedCharge": true
+      },
+      {
+        "forgeGuard": "max",
+        "noUnexpectedCharge": true
+      },
+      {
+        "smallViewport": [
+          375,
+          667
+        ],
+        "layout": {
+          "size": [
+            750,
+            1334
+          ],
+          "resource": {
+            "w": 218,
+            "h": 56,
+            "top": 92,
+            "bottom": 148
+          },
+          "roster": {
+            "w": 126,
+            "h": 114,
+            "top": 168,
+            "bottom": 282
+          },
+          "stage": {
+            "w": 750,
+            "h": 500,
+            "top": 294,
+            "bottom": 794
+          },
+          "bag": {
+            "w": 750,
+            "h": 412,
+            "top": 794,
+            "bottom": 1206
+          },
+          "view": {
+            "w": 706,
+            "h": 286,
+            "top": 910,
+            "bottom": 1196
+          },
+          "nav": {
+            "w": 138,
+            "h": 104,
+            "top": 1218,
+            "bottom": 1322
+          },
+          "portraits": [
+            {
+              "w": 82,
+              "h": 82,
+              "ellipse": true
+            },
+            {
+              "w": 82,
+              "h": 82,
+              "ellipse": true
+            },
+            {
+              "w": 82,
+              "h": 82,
+              "ellipse": true
+            },
+            {
+              "w": 82,
+              "h": 82,
+              "ellipse": true
+            },
+            {
+              "w": 82,
+              "h": 82,
+              "ellipse": true
+            }
+          ]
+        }
+      },
+      {
+        "emptyBag": "all three categories display only plain text, no placeholder slots"
+      },
+      {
+        "emptyInventory": true,
+        "lockedHeroCannotBeSelected": true
+      }
+    ],
+    "errors": [],
+    "failures": []
+  },
+  "shopRegression": {
+    "ok": true,
+    "url": "http://127.0.0.1:8765/",
+    "checks": [
+      {
+        "layout": "title on plank, compact right wallet, full-width shelf backing",
+        "geometry": {
+          "signU": 0.22499999999999998,
+          "signV": 0.355,
+          "titleRight": -142.50000000000003,
+          "walletLeft": -105,
+          "backdropWidth": 750,
+          "shelfWidth": 734,
+          "sameVerticalCoverage": true
+        }
+      },
+      {
+        "tab": "weapon",
+        "count": 2,
+        "allIllustrationsLoaded": true
+      },
+      {
+        "tab": "hero",
+        "count": 5,
+        "allIllustrationsLoaded": true
+      },
+      {
+        "heroPortraits": [
+          {
+            "width": 154,
+            "height": 154,
+            "hasArtwork": true,
+            "circularMask": true
+          },
+          {
+            "width": 154,
+            "height": 154,
+            "hasArtwork": true,
+            "circularMask": true
+          },
+          {
+            "width": 154,
+            "height": 154,
+            "hasArtwork": true,
+            "circularMask": true
+          },
+          {
+            "width": 154,
+            "height": 154,
+            "hasArtwork": true,
+            "circularMask": true
+          },
+          {
+            "width": 154,
+            "height": 154,
+            "hasArtwork": false,
+            "circularMask": false
+          }
+        ]
+      },
+      {
+        "tab": "equip",
+        "count": 4,
+        "allIllustrationsLoaded": true
+      },
+      {
+        "tab": "mat",
+        "count": 4,
+        "allIllustrationsLoaded": true
+      },
+      {
+        "purchase": "weapon",
+        "charged": 800,
+        "autoEquipped": true
+      },
+      {
+        "purchase": "material",
+        "cancelDoesNotCharge": true,
+        "charged": 50,
+        "quantity": 1
+      },
+      {
+        "purchase": "hero",
+        "charged": 2800,
+        "ownedHeroCannotRepurchase": true
+      },
+      {
+        "sharedWallet": "same nodes and geometry on all 5 pages"
+      },
+      {
+        "resourcePlus": "opens and closes correctly"
+      },
+      {
+        "smallViewport": [
+          375,
+          667
+        ],
+        "lockedItemDoesNotOpenPurchase": true,
+        "insufficientFundsDoesNotCharge": true,
+        "geometry": {
+          "walletTop": 92,
+          "tabsBottom": 220.82,
+          "navTop": -551,
+          "hasDarkSeats": false,
+          "hasOldArt": false
+        },
+        "shopLayout": {
+          "signU": 0.22499999999999998,
+          "signV": 0.355,
+          "titleRight": -112.25000000000003,
+          "walletLeft": -105,
+          "backdropWidth": 750,
+          "shelfWidth": 734,
+          "sameVerticalCoverage": true
+        }
+      }
+    ],
+    "errors": [],
+    "failures": [],
+    "wallet": [
+      {
+        "cur": "gold",
+        "uuid": "Node.151",
+        "x": 4,
+        "y": 692.7906976744185,
+        "w": 218,
+        "h": 56,
+        "icon": "art:shop_comic_v1/comic_coin_v1",
+        "loaded": true,
+        "iconLeft": -103,
+        "iconRight": -59,
+        "textLeft": -51,
+        "textRight": 33,
+        "plusLeft": 62,
+        "plusRight": 102,
+        "plus": true
+      },
+      {
+        "cur": "diamond",
+        "uuid": "Node.157",
+        "x": 234,
+        "y": 692.7906976744185,
+        "w": 218,
+        "h": 56,
+        "icon": "art:shop_comic_v1/comic_diamond_v1",
+        "loaded": true,
+        "iconLeft": -103,
+        "iconRight": -59,
+        "textLeft": -51,
+        "textRight": 33,
+        "plusLeft": 62,
+        "plusRight": 102,
+        "plus": true
+      }
+    ]
+  },
+  "localAssets": {
+    "bg_heroes_comic_v2": {
+      "sha256": "66b41804855b0cdcd6d94132820e7a2d1b3f91a6bddc98b8bf0df38d7f52ca4c",
+      "bytes": 231905,
+      "path": "assets/resources/native/e2/e25c42bf-8945-48b0-9509-5981615fdd6a.jpg"
+    },
+    "comic_cycle_arrow_v2": {
+      "sha256": "760843b89e26f7be020ca3fc66a8ae2e25a22d572e021d741103b4b7031ddf2b",
+      "bytes": 37063,
+      "path": "assets/resources/native/db/db265a4e-06f9-4e78-8f85-1e6a86d84f2c.png"
+    },
+    "comic_power_banner_v2": {
+      "sha256": "cfe2af42ee1af3f337bcfede55fd117101507db2f0f64bcf299a998b2db86976",
+      "bytes": 107220,
+      "path": "assets/resources/native/c6/c69efab8-6b16-42f6-bcbc-3ee92089bae5.png"
+    },
+    "comic_bag_v2": {
+      "sha256": "5165ada235aa81bebc5d15fd266a1260ec8938b4362e5d85e11968a02dcce579",
+      "bytes": 85021,
+      "path": "assets/resources/native/52/52c42fb1-5aa2-48b5-9d39-3600dd1d1d7e.png"
+    },
+    "comic_attributes_v2": {
+      "sha256": "5a58575d0549d65a27781d5bfc57e88309e2082df8fd29883db5e368af4ac1c6",
+      "bytes": 62101,
+      "path": "assets/resources/native/a3/a3c54d54-3691-4aa4-9a18-9567042393f3.png"
+    },
+    "comic_story_v2": {
+      "sha256": "76680d2e1c7933a3824d37fe346fd0f7827b30de8c162b584f46e3d2929e1cde",
+      "bytes": 60541,
+      "path": "assets/resources/native/76/767a65be-71f8-4ee6-a731-a891a9d781ae.png"
+    },
+    "comic_forge_v2": {
+      "sha256": "0a1bd683707a6e4d766279fbf12c1480ee137faa4868ab88a7df8267fc5fff8c",
+      "bytes": 50957,
+      "path": "assets/resources/native/a4/a4ce34c9-b3df-44ad-ba49-7deb7be1e83b.png"
+    },
+    "bg_heroes_comic_v1": {
+      "sha256": "a00ba51d070e866e8aa2b60fdb60be3f477c3528b1f9d4f96135d942b5009712",
+      "bytes": 313088,
+      "path": "assets/resources/native/9c/9ca0e4d4-40ed-4789-a988-7cb1081d90ad.jpg"
+    },
+    "comic_hero_archer_v1": {
+      "sha256": "3779f66058a83d486b6643c0e9a0ff4de7cfdfe9bd5e02a8becef4d18d1019a2",
+      "bytes": 181145,
+      "path": "assets/resources/native/5a/5a337cc8-8169-4621-b897-325bfbd7bd05.png"
+    },
+    "comic_figure_archer_v1": {
+      "sha256": "7a899128f5075e2117b33266de17b71c25fce1d5c8df8b679ed391c6e5963c24",
+      "bytes": 375151,
+      "path": "assets/resources/native/e7/e76aca24-e83a-4f1f-b0cd-852ffc62b76c.png"
+    },
+    "comic_figure_sniper_v1": {
+      "sha256": "4d9aa5844d41afd11edf8d994bd1813750566e88047ade5752071a9419f7c022",
+      "bytes": 384155,
+      "path": "assets/resources/native/22/22d5a589-3361-4fbe-b257-81f66c215a6f.png"
+    },
+    "comic_figure_pyro_v1": {
+      "sha256": "1bb186100bf6f0116bbcf29a2310a578a3aa7f1fe8b55a2f2bc07c7f0e425acf",
+      "bytes": 385783,
+      "path": "assets/resources/native/08/0870731e-8150-41a4-819f-c422ff659f6c.png"
+    },
+    "comic_figure_volt_v1": {
+      "sha256": "39ea59affa2dd4e3086a2f9eaa38844103771c83e007b66f7e64b14c02b96fa9",
+      "bytes": 461059,
+      "path": "assets/resources/native/60/604375e0-ee6e-42da-a5e7-0b8e4c314a3d.png"
+    },
+    "comic_figure_mora_v1": {
+      "sha256": "f3bc97be2caff7012a6e0d3d07849b7bb9721ebb35731f061dd669241c649f56",
+      "bytes": 425143,
+      "path": "assets/resources/native/3e/3e9ac617-0e41-4f1b-9f39-c0884c1d97df.png"
+    },
+    "bg_shop_comic_v1": {
+      "sha256": "9aabc0e55c06ee2b7de441f2ceecc3ee1b4d42db16bf6de2c45da076b9f1d832",
+      "bytes": 361384,
+      "path": "assets/resources/native/b7/b770e961-1615-413d-9153-48a2378da6d8.jpg"
+    },
+    "comic_coin_v1": {
+      "sha256": "035475e9dce04a56070c512fb804474c1224c52aac69f3b785fb1d43619a56bb",
+      "bytes": 75114,
+      "path": "assets/resources/native/91/9133df24-ef54-4ca3-825a-f72bfeba6975.png"
+    },
+    "comic_diamond_v1": {
+      "sha256": "dd1d04ab8400f3e641979547a2a1716c3d526c9d4a1e54b7c7fad29a63e4bc75",
+      "bytes": 48765,
+      "path": "assets/resources/native/a4/a4ce7732-d70a-47e9-8c68-d1c3a8fa666f.png"
+    },
+    "comic_wpn_bow_v1": {
+      "sha256": "e33d58d21aee2937919aaf14bf865271754de6d28632de5b4c713ab9a8fdbc21",
+      "bytes": 47020,
+      "path": "assets/resources/native/d5/d5144da3-22e5-4391-92f4-89a5c9fc89a5.png"
+    },
+    "comic_wpn_crossbow_v1": {
+      "sha256": "e21667430f092ac85ed35ae6b3d7223eb7ce90e2a467d4306b00d274e41fb8e6",
+      "bytes": 60509,
+      "path": "assets/resources/native/51/51af3679-6760-45c5-9caf-9bb95230bd3a.png"
+    },
+    "comic_mat_stone_v1": {
+      "sha256": "d634f1acfba66a1d6199041409d16485d729ce2a3f113367aa5702528d791e60",
+      "bytes": 58274,
+      "path": "assets/resources/native/cb/cb35d9a0-8122-414a-97b1-62be93f8a421.png"
+    },
+    "comic_mat_iron_v1": {
+      "sha256": "4282318b6395d6dfe874ccd6861c7d21b06a9a89551c5babe08e72db0e707476",
+      "bytes": 49586,
+      "path": "assets/resources/native/1f/1ff994d4-dd97-4e97-8d05-67647c9692a2.png"
+    },
+    "comic_mat_dust_v1": {
+      "sha256": "55851335796e02519eda0ff2c78e72d3bdb8ae0779316e31bec2fbf6ea0dc0e8",
+      "bytes": 71026,
+      "path": "assets/resources/native/b1/b1f3739f-b3c6-441a-a2fd-a3a283ed569a.png"
+    },
+    "comic_mat_rune_v1": {
+      "sha256": "77dfbbc2854e0d4a3c539a6f7cef5b8de3d29cbae084ad984ad068824fcf46d0",
+      "bytes": 67676,
+      "path": "assets/resources/native/2e/2ec58d2d-181d-44c1-96a8-dd5af70bcaba.png"
+    },
+    "comic_helm_falcon_v1": {
+      "sha256": "60147f7d0313c73aa2dbf79723e470496dd50e475c3386956609d21b59c3c9f9",
+      "bytes": 65141,
+      "path": "assets/resources/native/29/2996d22c-a972-4cfc-bcb2-9537567bb6f9.png"
+    },
+    "comic_acc_moon_v1": {
+      "sha256": "5ca3122d3616855bd4f103f120e73b57961cc9915a5dc1f420ef557b7a196a84",
+      "bytes": 48350,
+      "path": "assets/resources/native/e3/e35538c7-7bc4-4b9c-ae3b-f78b388f565a.png"
+    },
+    "comic_glove_wind_v1": {
+      "sha256": "d3302f5bd395551eac67be6fc4098bd558318ba9b9d2fe867c330b87b0343539",
+      "bytes": 67312,
+      "path": "assets/resources/native/02/02cf2ca3-2925-4dd3-ba3e-b541dda78fd6.png"
+    },
+    "comic_armor_forest_v1": {
+      "sha256": "4f7b8b8a249efe5dc58ef2719901beeb601d57c95ba76699530b3c208091790e",
+      "bytes": 78833,
+      "path": "assets/resources/native/e8/e8e574df-ad9e-4911-a5dc-7924c0fd3829.png"
+    },
+    "comic_nav_shop_v1": {
+      "sha256": "a655c2014f41975d78ee51400c22e926656b100c4eb9d33227b794762c2b16da",
+      "bytes": 68150,
+      "path": "assets/resources/native/f6/f6b0a363-074e-48ac-80d7-99c345a3efa3.png"
+    },
+    "comic_nav_map_v1": {
+      "sha256": "d3ce887001356123d4ccfc9f34f21089e8c4310abcef9086e37f40f49fe7629f",
+      "bytes": 60521,
+      "path": "assets/resources/native/69/693ed11b-12bb-4887-b783-945f8230fc9c.png"
+    },
+    "comic_nav_castle_v1": {
+      "sha256": "5d0ec1c28616a12940b61fe8d7a61fa932c4b436e38d25d6acf12676397c8835",
+      "bytes": 77944,
+      "path": "assets/resources/native/ca/ca9e658d-ff59-449a-bc11-f7b490ad7370.png"
+    },
+    "comic_hero_sniper_v1": {
+      "sha256": "658a4388c477be8ef4431415dae7836061b34ea2735e50dd961475d93d28530c",
+      "bytes": 166775,
+      "path": "assets/resources/native/a4/a4172b00-8314-47e0-9ef8-f734a3af70f3.png"
+    },
+    "comic_hero_pyro_v1": {
+      "sha256": "419fbc2d168117e970be9a482a71d69160c89f03548f98e80474762099358451",
+      "bytes": 166805,
+      "path": "assets/resources/native/bf/bf587cf3-2fc1-4f20-a32a-bff801dbcf15.png"
+    },
+    "comic_hero_volt_v1": {
+      "sha256": "36dd7d523e6bc9490ddf7b5878f9d0f06f8611d856db7186cf5bd7ece3606b26",
+      "bytes": 181363,
+      "path": "assets/resources/native/fb/fb668788-2d10-410a-b08d-64c4ca3a04ed.png"
+    },
+    "comic_hero_mora_v1": {
+      "sha256": "e0c6d14815d487b679d18bc5b2abec6d29112dfb0d2c03bba505783a8dc5a71b",
+      "bytes": 190056,
+      "path": "assets/resources/native/ab/abff6c4d-3d8b-45f4-ad69-4e13c62f1889.png"
+    }
+  },
+  "onlineFiles": {
+    "index.html": {
+      "matchesLocal": true,
+      "sha256": "3596d91ff2333bf18415a7b327390b45e33c1d2f528fc8b846856233e6fbda8a",
+      "bytes": 5043
+    },
+    "main.js": {
+      "matchesLocal": true,
+      "sha256": "ddd5188def46c78aaa91f31dc9b89cb3bad65f349c3a455b70b895e8c75ffd3b",
+      "bytes": 789443
+    },
+    "resources-config.json": {
+      "matchesLocal": true,
+      "sha256": "8feecc9f22cd1b9c5483066dcfa7f9dc579d0cb8312dade5b1e28bb790c14533",
+      "bytes": 154769
+    },
+    "dpr-engine.js": {
+      "matchesLocal": true,
+      "sha256": "eeeef70cc6cd8bccc4493d60bbc85cddd4f6d0de383c4e8a3b4d48b64323488d",
+      "bytes": 5686956
+    },
+    "bg_heroes_comic_v2": {
+      "matchesLocal": true,
+      "sha256": "66b41804855b0cdcd6d94132820e7a2d1b3f91a6bddc98b8bf0df38d7f52ca4c",
+      "bytes": 231905
+    },
+    "comic_cycle_arrow_v2": {
+      "matchesLocal": true,
+      "sha256": "760843b89e26f7be020ca3fc66a8ae2e25a22d572e021d741103b4b7031ddf2b",
+      "bytes": 37063
+    },
+    "comic_power_banner_v2": {
+      "matchesLocal": true,
+      "sha256": "cfe2af42ee1af3f337bcfede55fd117101507db2f0f64bcf299a998b2db86976",
+      "bytes": 107220
+    },
+    "comic_bag_v2": {
+      "matchesLocal": true,
+      "sha256": "5165ada235aa81bebc5d15fd266a1260ec8938b4362e5d85e11968a02dcce579",
+      "bytes": 85021
+    },
+    "comic_attributes_v2": {
+      "matchesLocal": true,
+      "sha256": "5a58575d0549d65a27781d5bfc57e88309e2082df8fd29883db5e368af4ac1c6",
+      "bytes": 62101
+    },
+    "comic_story_v2": {
+      "matchesLocal": true,
+      "sha256": "76680d2e1c7933a3824d37fe346fd0f7827b30de8c162b584f46e3d2929e1cde",
+      "bytes": 60541
+    },
+    "comic_forge_v2": {
+      "matchesLocal": true,
+      "sha256": "0a1bd683707a6e4d766279fbf12c1480ee137faa4868ab88a7df8267fc5fff8c",
+      "bytes": 50957
+    },
+    "bg_heroes_comic_v1": {
+      "matchesLocal": true,
+      "sha256": "a00ba51d070e866e8aa2b60fdb60be3f477c3528b1f9d4f96135d942b5009712",
+      "bytes": 313088
+    },
+    "comic_hero_archer_v1": {
+      "matchesLocal": true,
+      "sha256": "3779f66058a83d486b6643c0e9a0ff4de7cfdfe9bd5e02a8becef4d18d1019a2",
+      "bytes": 181145
+    },
+    "comic_figure_archer_v1": {
+      "matchesLocal": true,
+      "sha256": "7a899128f5075e2117b33266de17b71c25fce1d5c8df8b679ed391c6e5963c24",
+      "bytes": 375151
+    },
+    "comic_figure_sniper_v1": {
+      "matchesLocal": true,
+      "sha256": "4d9aa5844d41afd11edf8d994bd1813750566e88047ade5752071a9419f7c022",
+      "bytes": 384155
+    },
+    "comic_figure_pyro_v1": {
+      "matchesLocal": true,
+      "sha256": "1bb186100bf6f0116bbcf29a2310a578a3aa7f1fe8b55a2f2bc07c7f0e425acf",
+      "bytes": 385783
+    },
+    "comic_figure_volt_v1": {
+      "matchesLocal": true,
+      "sha256": "39ea59affa2dd4e3086a2f9eaa38844103771c83e007b66f7e64b14c02b96fa9",
+      "bytes": 461059
+    },
+    "comic_figure_mora_v1": {
+      "matchesLocal": true,
+      "sha256": "f3bc97be2caff7012a6e0d3d07849b7bb9721ebb35731f061dd669241c649f56",
+      "bytes": 425143
+    },
+    "bg_shop_comic_v1": {
+      "matchesLocal": true,
+      "sha256": "9aabc0e55c06ee2b7de441f2ceecc3ee1b4d42db16bf6de2c45da076b9f1d832",
+      "bytes": 361384
+    },
+    "comic_coin_v1": {
+      "matchesLocal": true,
+      "sha256": "035475e9dce04a56070c512fb804474c1224c52aac69f3b785fb1d43619a56bb",
+      "bytes": 75114
+    },
+    "comic_diamond_v1": {
+      "matchesLocal": true,
+      "sha256": "dd1d04ab8400f3e641979547a2a1716c3d526c9d4a1e54b7c7fad29a63e4bc75",
+      "bytes": 48765
+    },
+    "comic_wpn_bow_v1": {
+      "matchesLocal": true,
+      "sha256": "e33d58d21aee2937919aaf14bf865271754de6d28632de5b4c713ab9a8fdbc21",
+      "bytes": 47020
+    },
+    "comic_wpn_crossbow_v1": {
+      "matchesLocal": true,
+      "sha256": "e21667430f092ac85ed35ae6b3d7223eb7ce90e2a467d4306b00d274e41fb8e6",
+      "bytes": 60509
+    },
+    "comic_mat_stone_v1": {
+      "matchesLocal": true,
+      "sha256": "d634f1acfba66a1d6199041409d16485d729ce2a3f113367aa5702528d791e60",
+      "bytes": 58274
+    },
+    "comic_mat_iron_v1": {
+      "matchesLocal": true,
+      "sha256": "4282318b6395d6dfe874ccd6861c7d21b06a9a89551c5babe08e72db0e707476",
+      "bytes": 49586
+    },
+    "comic_mat_dust_v1": {
+      "matchesLocal": true,
+      "sha256": "55851335796e02519eda0ff2c78e72d3bdb8ae0779316e31bec2fbf6ea0dc0e8",
+      "bytes": 71026
+    },
+    "comic_mat_rune_v1": {
+      "matchesLocal": true,
+      "sha256": "77dfbbc2854e0d4a3c539a6f7cef5b8de3d29cbae084ad984ad068824fcf46d0",
+      "bytes": 67676
+    },
+    "comic_helm_falcon_v1": {
+      "matchesLocal": true,
+      "sha256": "60147f7d0313c73aa2dbf79723e470496dd50e475c3386956609d21b59c3c9f9",
+      "bytes": 65141
+    },
+    "comic_acc_moon_v1": {
+      "matchesLocal": true,
+      "sha256": "5ca3122d3616855bd4f103f120e73b57961cc9915a5dc1f420ef557b7a196a84",
+      "bytes": 48350
+    },
+    "comic_glove_wind_v1": {
+      "matchesLocal": true,
+      "sha256": "d3302f5bd395551eac67be6fc4098bd558318ba9b9d2fe867c330b87b0343539",
+      "bytes": 67312
+    },
+    "comic_armor_forest_v1": {
+      "matchesLocal": true,
+      "sha256": "4f7b8b8a249efe5dc58ef2719901beeb601d57c95ba76699530b3c208091790e",
+      "bytes": 78833
+    },
+    "comic_nav_shop_v1": {
+      "matchesLocal": true,
+      "sha256": "a655c2014f41975d78ee51400c22e926656b100c4eb9d33227b794762c2b16da",
+      "bytes": 68150
+    },
+    "comic_nav_map_v1": {
+      "matchesLocal": true,
+      "sha256": "d3ce887001356123d4ccfc9f34f21089e8c4310abcef9086e37f40f49fe7629f",
+      "bytes": 60521
+    },
+    "comic_nav_castle_v1": {
+      "matchesLocal": true,
+      "sha256": "5d0ec1c28616a12940b61fe8d7a61fa932c4b436e38d25d6acf12676397c8835",
+      "bytes": 77944
+    },
+    "comic_hero_sniper_v1": {
+      "matchesLocal": true,
+      "sha256": "658a4388c477be8ef4431415dae7836061b34ea2735e50dd961475d93d28530c",
+      "bytes": 166775
+    },
+    "comic_hero_pyro_v1": {
+      "matchesLocal": true,
+      "sha256": "419fbc2d168117e970be9a482a71d69160c89f03548f98e80474762099358451",
+      "bytes": 166805
+    },
+    "comic_hero_volt_v1": {
+      "matchesLocal": true,
+      "sha256": "36dd7d523e6bc9490ddf7b5878f9d0f06f8611d856db7186cf5bd7ece3606b26",
+      "bytes": 181363
+    },
+    "comic_hero_mora_v1": {
+      "matchesLocal": true,
+      "sha256": "e0c6d14815d487b679d18bc5b2abec6d29112dfb0d2c03bba505783a8dc5a71b",
+      "bytes": 190056
+    }
+  },
+  "existingBattleChangesPreserved": [
+    "frost skill v10",
+    "128 staggered ultimate shards",
+    "mora_linger +1 second card",
+    "FrostProjectileVFX"
+  ]
+}

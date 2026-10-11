@@ -1,0 +1,9 @@
+{
+  "key": "bg_heroes_comic_v2",
+  "tool": "built-in imagegen",
+  "prompt": "Use case: precise-object-edit. Edit this generated clean comic fantasy hero-stage environment. Preserve the crisp outlined, restrained cel-shaded sage wall and warm sandstone palette, quiet guild training room and overall atmosphere. Make ONLY the composition and dais changes needed for portrait upper-screen use: output PORTRAIT 3:4 canvas; substantially extend the quiet plain upper wall, scale the circular standing dais DOWN so its complete oval top is only about 34% of canvas width, and move its top-surface center to x=30% of canvas width, y=89% of canvas height. The whole dais including short riser and shadow must fit without cropping with 10% clear side margin; do not enlarge the dais to fill the foreground. Keep a broad plain sage plaster wall behind a separately rendered hero and controls, extend floor enough to surround the small dais. The standing dais remains a low round sandstone step with a clear oval top and short front riser. Sparse edge timber and stone details only; remove the long blue banner on the left, remove large foreground weapons, barrels and furniture. RIGHT half stays a quiet sage wall. No character, no interface, no text, no windows, no sky, no rays, no bloom or blur, no new decorative objects. Preserve the intentionally simple painted game art.",
+  "references": [
+    "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-7b68ea84-3064-45d9-ac92-0b23d8f6dd92.png"
+  ],
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-9a7d22b1-e360-49b7-8cf4-e317b40a9fe5.png"
+}

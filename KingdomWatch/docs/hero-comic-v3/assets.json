@@ -1,0 +1,26 @@
+[
+  {
+    "key": "bg_heroes_comic_v3",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\scenes\\bg_heroes_comic_v3.jpg",
+    "width": 1086,
+    "height": 1448,
+    "bytes": 379562,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v3\\sources\\bg_heroes_comic_v3.png"
+  },
+  {
+    "key": "comic_cycle_button_v3",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v3\\comic_cycle_button_v3.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 75888,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v3\\sources\\comic_cycle_button_v3.png"
+  },
+  {
+    "key": "comic_power_plate_v3",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v3\\comic_power_plate_v3.png",
+    "width": 640,
+    "height": 182,
+    "bytes": 91677,
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-comic-v3\\sources\\comic_power_plate_v3.png"
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "key": "comic_chest_open_v1",
+  "transparent": true,
+  "references": [
+    "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-f08e1428-f7c6-4582-ab74-bb45def249db.png"
+  ],
+  "prompt": "Use case: precise-object-edit. Edit this CLOSED medieval treasure chest into its OPEN CLAIMED state. Preserve EXACTLY the same squat chest base, gold bands, latch, wood panels, dark espresso outline, restrained flat painted comic fantasy style, camera three-quarter angle and lighting. The hinged domed lid opens backward about 85 degrees so the interior is visible, it stays attached in the correct perspective. Interior is dark brown, a small low pile of simple gold coins visible inside only. Preserve the chest identity and shape. Full chest and open lid comfortably within square canvas with transparent margin. True transparent background. No glow, magical particles, floating coins, text, digits, ground, cast shadow, backing disc or extra plate. Clear at 45px mobile game display. ONE chest only.",
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-b0642721-d974-4721-8ff4-12d075f98459.png",
+  "tool": "built-in imagegen"
+}

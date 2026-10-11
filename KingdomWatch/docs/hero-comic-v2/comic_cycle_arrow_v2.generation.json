@@ -1,0 +1,9 @@
+{
+  "key": "comic_cycle_arrow_v2",
+  "transparent": true,
+  "prompt": "Use case: stylized-concept. Production art for the approved clean comic medieval fantasy mobile game. Input image 1 is STYLE reference only: match crisp dark espresso outlines, chunky deliberately designed shapes, two or three distinct hard-edged cel shaded values and restrained broad highlights. Readable at small game size, consistent hand drawn contour, limited detail, warm ochre accents. No photorealism, airbrush gradients, plastic shine, bloom, microtexture, excessive ornament, text, typography, watermark or UI screenshot. Asset type: ONE isolated LEFT-pointing carved golden directional arrow, genuine transparent background. A compact, thick, slightly curved left arrow shaped like a substantial medieval carved gold and ochre chevron, expressive tapered tips, a clean black outer contour, a broad ivory yellow top facet and a darker amber side facet. Strong silhouette, little illustration craftsmanship rather than a thin UI line. Nearly square footprint, fits in 40px high game display, a small natural asymmetry in the sculpted arrow shape. No circular backing, no button plate, no rectangle or octagonal surround, no cast shadow outside the silhouette, no halo, no chains, no gems, no decorative medallion. One arrow only with 12% transparent margin, no text.",
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-66b7a889-e41b-4682-be7f-75e06fabd46d.png",
+  "references": [
+    "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png"
+  ]
+}

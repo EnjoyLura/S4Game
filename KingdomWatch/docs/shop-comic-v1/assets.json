@@ -1,0 +1,142 @@
+[
+  {
+    "key": "bg_shop_comic_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\scenes\\bg_shop_comic_v1.jpg",
+    "width": 1774,
+    "height": 887,
+    "bytes": 361384
+  },
+  {
+    "key": "comic_coin_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_coin_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 75114
+  },
+  {
+    "key": "comic_diamond_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_diamond_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 48765
+  },
+  {
+    "key": "comic_wpn_bow_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_wpn_bow_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 47020
+  },
+  {
+    "key": "comic_wpn_crossbow_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_wpn_crossbow_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 60509
+  },
+  {
+    "key": "comic_mat_stone_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_mat_stone_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 58274
+  },
+  {
+    "key": "comic_mat_iron_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_mat_iron_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 49586
+  },
+  {
+    "key": "comic_mat_dust_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_mat_dust_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 71026
+  },
+  {
+    "key": "comic_mat_rune_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_mat_rune_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 67676
+  },
+  {
+    "key": "comic_helm_falcon_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_helm_falcon_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 65141
+  },
+  {
+    "key": "comic_acc_moon_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_acc_moon_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 48350
+  },
+  {
+    "key": "comic_glove_wind_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_glove_wind_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 67312
+  },
+  {
+    "key": "comic_armor_forest_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_armor_forest_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 78833
+  },
+  {
+    "key": "comic_nav_shop_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_nav_shop_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 68150
+  },
+  {
+    "key": "comic_nav_map_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_nav_map_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 60521
+  },
+  {
+    "key": "comic_nav_castle_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_nav_castle_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 77944
+  },
+  {
+    "key": "comic_hero_sniper_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_hero_sniper_v1.png",
+    "width": 384,
+    "height": 384,
+    "bytes": 166775
+  },
+  {
+    "key": "comic_hero_pyro_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_hero_pyro_v1.png",
+    "width": 384,
+    "height": 384,
+    "bytes": 166805
+  },
+  {
+    "key": "comic_hero_volt_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_hero_volt_v1.png",
+    "width": 384,
+    "height": 384,
+    "bytes": 181363
+  },
+  {
+    "key": "comic_hero_mora_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\shop_comic_v1\\comic_hero_mora_v1.png",
+    "width": 384,
+    "height": 384,
+    "bytes": 190056
+  }
+]

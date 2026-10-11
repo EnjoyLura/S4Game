@@ -1,0 +1,9 @@
+{
+  "key": "bg_heroes_comic_v3",
+  "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-0c20767e-2fdd-46f8-a6a4-fd01363c529a.png",
+  "prompt": "Use case: precise-object-edit. Preserve this generated warm clean comic fantasy guild staging hall EXACTLY: same wood walls and beams, blue banners, right blue window and distant castle, right shield/sword, barrel, lighting, floor and camera. Change ONLY the foreground ROUND STANDING STEP. It is currently too wide. Make the entire existing round sandstone step substantially smaller, with complete oval top WIDTH exactly about one third (34%) of the image width, and position its TOP-SURFACE CENTER at x=30%, y=84% of the image measured from upper-left. Height/front riser stays very LOW, about 8cm, do not add more steps. Preserve its clean circular/oval shape, material and restrained outline. Restore the underlying original perspective tile floor where the oversized old step was removed, so floor tiles remain continuous. The whole smaller standing step must fit comfortably with at least 10% side margin; no cropping, no tall altar. Preserve all architecture, props, exposure, style and palette; no new objects. Do not alter the overall scene composition or canvas 3:4 portrait ratio. No characters, UI or text.",
+  "references": [
+    "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-ea4636b5-9776-43ac-9ab3-a9843055e2e3.png"
+  ],
+  "tool": "built-in imagegen"
+}
