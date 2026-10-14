@@ -542,7 +542,7 @@ export class ArcherHero extends HeroBase {
       for (let w = 0; w < rows; w++) this.volleyQueue.push({ t: r * 0.8 + w * 0.35, row: w as 0 | 1 | 2 });
     }
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
-    Sfx.play('ult');
+    Sfx.cast(this.id, true);
     void _dmg;
     return true;
   }
@@ -990,7 +990,7 @@ export class PyroHero extends HeroBase {
         speed: 820, size: 11, ability: true,
       }));
     }
-    Sfx.play('skill');
+    Sfx.cast(this.id);
   }
 
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
@@ -1162,7 +1162,7 @@ export class PyroHero extends HeroBase {
       });
     }
     if (this.stats.ultHaste) this.hasteT = 5;
-    Sfx.play('ult');
+    Sfx.cast(this.id, true);
     void _projs; void _dmg;
     return true;
   }
@@ -1409,7 +1409,7 @@ export class VoltHero extends HeroBase {
       this.strikeQueue.push({ t: 0.1 + k * 0.08, target: t });
     }
     if (this.stats.ultHaste) this.hasteT = 5;
-    Sfx.play('ult');
+    Sfx.cast(this.id, true);
     void projs;
     return true;
   }
@@ -1534,7 +1534,7 @@ export class FrostHero extends HeroBase {
       // Boss still receives the existing area damage, but has no freeze or post-thaw status.
       m.applyFreeze(freeze, this.slowR(0.5), 2);
     }
-    Sfx.play('skill');
+    Sfx.cast(this.id);
   }
 
   /** 技能·冰霜领域（自动，沿用技能冷却与升级数值） */
@@ -1565,7 +1565,7 @@ export class FrostHero extends HeroBase {
       if (this.lastDmg) this.lastDmg.add(this.id, Math.min(d, hpBefore));
       m.applySlow(this.slowR(uc.slowMul), uc.slowDur + (this.stats.ultSlowDur || 0));
     }
-    Sfx.play('ult');
+    Sfx.cast(this.id, true);
     return true;
   }
 }

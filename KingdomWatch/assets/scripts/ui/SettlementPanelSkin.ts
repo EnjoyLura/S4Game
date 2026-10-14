@@ -7,6 +7,7 @@ import { artSprite } from './Ux';
 import { battleArtIcon, battleArtSprite } from './BattlePanelSkin';
 import { battleProgressBar } from './BattleProgressBar';
 import { pauseTabFace } from './PausePanelSkin';
+import { Sfx } from '../core/Sfx';
 
 const ART = 'settlement_comic_v1/';
 type Outcome = 'win' | 'lose';
@@ -49,7 +50,7 @@ export function settlementTabs(parent: Node, active: number, onSelect: (tab: num
     label(segment, 0, 0, text, { size: 22, bold: true, color: index === active ? '#302719' : '#EFF3F7', w: 280, h: 42 });
     pauseTabFace(segment, index, 2, 302, 46, index === active);
     if (index !== active) segment.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => {
-      e.propagationStopped = true; onSelect(index);
+      e.propagationStopped = true; Sfx.play('ui'); onSelect(index);
     });
   });
 }
@@ -101,7 +102,7 @@ export function settlementButton(parent: Node, x: number, y: number, w: number, 
   node.on(Node.EventType.TOUCH_START, () => { pressed = enabled; apply(); });
   node.on(Node.EventType.TOUCH_CANCEL, () => { pressed = false; apply(); });
   node.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => {
-    e.propagationStopped = true; pressed = false; apply(); if (enabled) onClick();
+    e.propagationStopped = true; pressed = false; apply(); if (enabled) { Sfx.play('ui'); onClick(); }
   });
   return { node, setText: value => setText(caption, value), setEnabled: value => { enabled = value; pressed = false; apply(); } };
 }

@@ -1,0 +1,43 @@
+{
+  "status": "published",
+  "scope": "licensed BGM and sampled sound effects with persistent WebAudio mixing",
+  "checkpointCommit": "fec68d9",
+  "music": {
+    "camp": "Town Theme RPG",
+    "battle": "Battle Theme A",
+    "author": "cynicmusic",
+    "format": "stereo MP3 192kbps",
+    "crossfadeSeconds": 0.65
+  },
+  "soundFiles": 42,
+  "musicFiles": 2,
+  "runtime": "Cocos bundle UUID native URLs, single WebAudio decode cache, separate music and SFX buses, compressor",
+  "polyphony": 14,
+  "firstGestureUnlock": true,
+  "sampleVariants": true,
+  "elementSpecificCasts": true,
+  "musicDucking": true,
+  "pauseSnapshot": true,
+  "backgroundSuspension": true,
+  "saveSettingsImmediate": true,
+  "creditsPage": "audio-credits.html",
+  "creditsEntry": "pause settings",
+  "licenses": [
+    "CC0-1.0",
+    "CC-BY-3.0"
+  ],
+  "paidGenerationCalls": 0,
+  "gameplayValidation": "user manual",
+  "automatedAcceptance": "not run per user instruction",
+  "listeningAcceptance": "pending user manual review",
+  "preserved": [
+    "hero artwork and animation",
+    "combat timings and stats",
+    "projectiles",
+    "procedural launch VFX",
+    "flight tails",
+    "shield and HP layout"
+  ],
+  "game": "https://kingdom-watch.pages.dev/?v=audio-upgrade-v1-1792000789",
+  "deployment": "https://bdd94cd8.kingdom-watch.pages.dev"
+}

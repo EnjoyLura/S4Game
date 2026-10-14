@@ -2,6 +2,7 @@
 import { Graphics, Mask, Node, Sprite } from 'cc';
 import { C, CA, gpanel, label, N } from './UIKit';
 import { artSetFrame, artSprite, uxFrame } from './Ux';
+import { Sfx } from '../core/Sfx';
 
 const SKIN = 'pause_comic_v1/';
 
@@ -35,7 +36,7 @@ export function pauseButton(parent: Node, x: number, y: number, w: number, h: nu
   n.on(Node.EventType.TOUCH_START, () => { pressed = true; tint(); });
   n.on(Node.EventType.TOUCH_CANCEL, () => { pressed = false; tint(); });
   n.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => {
-    e.propagationStopped = true; pressed = false; tint(); onClick();
+    e.propagationStopped = true; pressed = false; tint(); Sfx.play('ui'); onClick();
   });
   return n;
 }
@@ -62,6 +63,7 @@ export function pauseSwitch(parent: Node, x: number, y: number, w: number, h: nu
       e.propagationStopped = true; on = !on;
       if (sprite) artSetFrame(sprite, id()); else draw();
       onChange(on);
+      Sfx.play('ui');
     });
   }
   return n;

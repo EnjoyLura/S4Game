@@ -1,0 +1,1401 @@
+{
+  "files": [
+    {
+      "file": "bow_1.wav",
+      "seconds": 0.24,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "medieval/English Longbow Shoot.wav",
+          "start": 0.095,
+          "seconds": 0.24,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.08,
+          "seconds": 0.18,
+          "gain": 0.13,
+          "delay": 0.012,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "36029f137f110cc817eed7bb82c81cff0ea6e4aa5fb563d860e9aef58376d93a"
+    },
+    {
+      "file": "bow_2.wav",
+      "seconds": 0.24,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "medieval/English Longbow Shoot.wav",
+          "start": 0.435,
+          "seconds": 0.24,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.08,
+          "seconds": 0.18,
+          "gain": 0.13,
+          "delay": 0.012,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "024ec07096db36c59f4883a482904b89d9e92d4362bfeb11ffffde43c946f74e"
+    },
+    {
+      "file": "bow_3.wav",
+      "seconds": 0.24,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "medieval/English Longbow Shoot.wav",
+          "start": 0.765,
+          "seconds": 0.24,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.08,
+          "seconds": 0.18,
+          "gain": 0.13,
+          "delay": 0.012,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "7566da38ef496786769d3c8d7c60e0571c4a50b97a2f16ee5aa6ba4127f47add"
+    },
+    {
+      "file": "crossbow_1.wav",
+      "seconds": 0.28,
+      "peakDBFS": -5.33,
+      "layers": [
+        {
+          "source": "medieval/Crossbow Shoot.wav",
+          "start": 0.31,
+          "seconds": 0.28,
+          "gain": 1,
+          "delay": 0,
+          "rate": 0.93,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-rpg/Audio/metalLatch.ogg",
+          "start": 0,
+          "seconds": 0.16,
+          "gain": 0.21,
+          "delay": 0.035,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "fdadeed2b13d0e041ae59773bab9d7ff67b54c5f8575b7fa53945d01b5933354"
+    },
+    {
+      "file": "crossbow_2.wav",
+      "seconds": 0.28,
+      "peakDBFS": -4.49,
+      "layers": [
+        {
+          "source": "medieval/Crossbow Shoot.wav",
+          "start": 0.83,
+          "seconds": 0.28,
+          "gain": 1,
+          "delay": 0,
+          "rate": 0.93,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-rpg/Audio/metalLatch.ogg",
+          "start": 0,
+          "seconds": 0.16,
+          "gain": 0.21,
+          "delay": 0.035,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "add80c51438e9ea98aec01cce154559d030417634b6bf5cbb656068feeb6bd33"
+    },
+    {
+      "file": "crossbow_3.wav",
+      "seconds": 0.28,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "medieval/Crossbow Shoot.wav",
+          "start": 1.4,
+          "seconds": 0.28,
+          "gain": 1,
+          "delay": 0,
+          "rate": 0.93,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-rpg/Audio/metalLatch.ogg",
+          "start": 0,
+          "seconds": 0.16,
+          "gain": 0.21,
+          "delay": 0.035,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "4658fe809a202a4ec3621a165d1b0573e3a8ddc7c2c70dcbbd5e80d2148e5b2b"
+    },
+    {
+      "file": "fire_1.wav",
+      "seconds": 0.459297,
+      "peakDBFS": -5.42,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/spell_fire_01.ogg",
+          "start": 0,
+          "seconds": 0.35,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1.05,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "medieval/Crossbow Bolt Pass.wav",
+          "start": 0.05,
+          "seconds": 0.17,
+          "gain": 0.13,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "70a38b867d3564ffe15ee5e41f69a08306c1e181c3a28037364304c9d5cef3f7"
+    },
+    {
+      "file": "fire_2.wav",
+      "seconds": 0.457914,
+      "peakDBFS": -5.14,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/spell_fire_02.ogg",
+          "start": 0,
+          "seconds": 0.35,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1.05,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "medieval/Crossbow Bolt Pass.wav",
+          "start": 0.05,
+          "seconds": 0.17,
+          "gain": 0.13,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "46213f1cd96a5123d5a3ccb15a2f5aeff84e57c00b561f8db8f200b0e65285bc"
+    },
+    {
+      "file": "fire_3.wav",
+      "seconds": 0.45517,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/spell_fire_03.ogg",
+          "start": 0,
+          "seconds": 0.35,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1.05,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "medieval/Crossbow Bolt Pass.wav",
+          "start": 0.05,
+          "seconds": 0.17,
+          "gain": 0.13,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "c27844befaaf42fc50afd2d48aab7fee3969b48a5a28bdc62e61d259b49ebd60"
+    },
+    {
+      "file": "thunder_1.wav",
+      "seconds": 0.38,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+          "start": 0,
+          "seconds": 0.27,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=160,lowpass=f=8000"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "de753b5c6b7648c6ab1c2720cd575123178782dcd8da4a505e6dd03b2b55bc57"
+    },
+    {
+      "file": "frost_1.wav",
+      "seconds": 0.45,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage01.flac",
+          "start": 0,
+          "seconds": 0.34,
+          "gain": 0.85,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-ui/Audio/glass_001.ogg",
+          "start": 0,
+          "seconds": 0.19,
+          "gain": 0.22,
+          "delay": 0.015,
+          "rate": 1.1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "0a7dcdaff4937ca7fe1fd67585504372675a96910a7e3ff52dc9de353a3b28b0"
+    },
+    {
+      "file": "zap_hit_1.wav",
+      "seconds": 0.16,
+      "peakDBFS": -3.88,
+      "layers": [
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+          "start": 0.12,
+          "seconds": 0.16,
+          "gain": 1,
+          "delay": 0,
+          "rate": 0.9,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "1b9353dfa8b01e421bc359eb71f2ff22fec97b7822c8fc946a48b3e18ba93d33"
+    },
+    {
+      "file": "icebreak_1.wav",
+      "seconds": 0.25,
+      "peakDBFS": -8.25,
+      "layers": [
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage03.flac",
+          "start": 0,
+          "seconds": 0.25,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-ui/Audio/glass_003.ogg",
+          "start": 0,
+          "seconds": 0.18,
+          "gain": 0.28,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "93963e6bf977efb8ff31baa782d8fcdc06ffebb5a5c67909e99ac3bdd5def8e5"
+    },
+    {
+      "file": "hit_1.wav",
+      "seconds": 0.18,
+      "peakDBFS": -4.21,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/blade_01.ogg",
+          "start": 0,
+          "seconds": 0.18,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-rpg/Audio/chop.ogg",
+          "start": 0,
+          "seconds": 0.14,
+          "gain": 0.33,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "5b72dd087ccd6f00da1f634c6a53c4049eeb71f4be8e28beb39cace6d581cdab"
+    },
+    {
+      "file": "crush_1.wav",
+      "seconds": 0.26,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/spell_fire_04.ogg",
+          "start": 0,
+          "seconds": 0.26,
+          "gain": 0.85,
+          "delay": 0,
+          "rate": 0.86,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "rubberduck-rpg/stones_01.ogg",
+          "start": 0,
+          "seconds": 0.22,
+          "gain": 0.26,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "0cef7d0ea578cbb396b4889a4ecac9cf6524142755b277db5d28f70c3d6e002d"
+    },
+    {
+      "file": "ui_click_1.wav",
+      "seconds": 0.00712,
+      "peakDBFS": -15.79,
+      "layers": [
+        {
+          "source": "kenney-ui/Audio/click_003.ogg",
+          "start": 0,
+          "seconds": 0.12,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "d7354d6aebeb710f5436632caf3a30e4a5d519b83b2741f978ed163135b1c50a"
+    },
+    {
+      "file": "thunder_2.wav",
+      "seconds": 0.38,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+          "start": 0,
+          "seconds": 0.27,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=160,lowpass=f=8000"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "d8c5bf816a65cb336646eafbba94e2d50eec13b12c2a398c41058925d0c18026"
+    },
+    {
+      "file": "frost_2.wav",
+      "seconds": 0.45,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage02.flac",
+          "start": 0,
+          "seconds": 0.34,
+          "gain": 0.85,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-ui/Audio/glass_002.ogg",
+          "start": 0,
+          "seconds": 0.19,
+          "gain": 0.22,
+          "delay": 0.015,
+          "rate": 1.1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "d416de2609a18e955ff4136410fe86a89ad3791906d32837d190cada545ad262"
+    },
+    {
+      "file": "zap_hit_2.wav",
+      "seconds": 0.16,
+      "peakDBFS": -3.88,
+      "layers": [
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+          "start": 0.12,
+          "seconds": 0.16,
+          "gain": 1,
+          "delay": 0,
+          "rate": 0.9,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "d22eafc9c0e4dc640f74f17b35452d00ee0f64d58567696e46a8ec2a1252025f"
+    },
+    {
+      "file": "icebreak_2.wav",
+      "seconds": 0.25,
+      "peakDBFS": -8.13,
+      "layers": [
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage03b.flac",
+          "start": 0,
+          "seconds": 0.25,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-ui/Audio/glass_003.ogg",
+          "start": 0,
+          "seconds": 0.18,
+          "gain": 0.28,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "5805cc0c669a0ceae84bf78dc02b4217f0901f25865cdb03e8ba82869b0b2058"
+    },
+    {
+      "file": "hit_2.wav",
+      "seconds": 0.18,
+      "peakDBFS": -6.19,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/blade_02.ogg",
+          "start": 0,
+          "seconds": 0.18,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-rpg/Audio/chop.ogg",
+          "start": 0,
+          "seconds": 0.14,
+          "gain": 0.33,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "08af07605a3bd461b37bfd48171ebadcf389aaf3a40be44b7c5d7149682f21e6"
+    },
+    {
+      "file": "crush_2.wav",
+      "seconds": 0.26,
+      "peakDBFS": -4.5,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/spell_fire_05.ogg",
+          "start": 0,
+          "seconds": 0.26,
+          "gain": 0.85,
+          "delay": 0,
+          "rate": 0.86,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "rubberduck-rpg/stones_02.ogg",
+          "start": 0,
+          "seconds": 0.22,
+          "gain": 0.26,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "87106551f3f962d79bcb458086b4fbb38081c341e725e01cccdfb2f4d83cf5ed"
+    },
+    {
+      "file": "ui_click_2.wav",
+      "seconds": 0.021769,
+      "peakDBFS": -11.41,
+      "layers": [
+        {
+          "source": "kenney-ui/Audio/click_004.ogg",
+          "start": 0,
+          "seconds": 0.12,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "e66b2d656fc6b3a6e28b6231ba98b1dcf7c8ca500898cfdaf7bdfeac4423835d"
+    },
+    {
+      "file": "crit.wav",
+      "seconds": 0.24,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/blade_03.ogg",
+          "start": 0,
+          "seconds": 0.24,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-rpg/Audio/metalPot2.ogg",
+          "start": 0,
+          "seconds": 0.18,
+          "gain": 0.24,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "f955ddfa292410512520f95199e4db1203eed3277d2d99b4617f7e57caed93b9"
+    },
+    {
+      "file": "pierce.wav",
+      "seconds": 0.22,
+      "peakDBFS": -3.84,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/blade_02.ogg",
+          "start": 0,
+          "seconds": 0.22,
+          "gain": 1,
+          "delay": 0,
+          "rate": 0.82,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-rpg/Audio/chop.ogg",
+          "start": 0,
+          "seconds": 0.14,
+          "gain": 0.4,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "a6206941411946a0f6f0bb11150ae316bf4c63d7b78e43591f09c111a2092860"
+    },
+    {
+      "file": "kill.wav",
+      "seconds": 0.28,
+      "peakDBFS": -13.27,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/creature_die_01.ogg",
+          "start": 0,
+          "seconds": 0.28,
+          "gain": 0.8,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "start": 0,
+          "seconds": 0.16,
+          "gain": 0.22,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "41e4b0d4d748ac76a93275908b6cd6249957c658b760dfbfa642726197fd51a5"
+    },
+    {
+      "file": "wall.wav",
+      "seconds": 0.35,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/stones_03.ogg",
+          "start": 0,
+          "seconds": 0.35,
+          "gain": 1,
+          "delay": 0,
+          "rate": 0.78,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-rpg/Audio/metalPot1.ogg",
+          "start": 0,
+          "seconds": 0.22,
+          "gain": 0.32,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "22d9b107de54c30b7ee7df80e855f21060f342122c83e14b1a57af8af853de79"
+    },
+    {
+      "file": "snipe.wav",
+      "seconds": 0.43,
+      "peakDBFS": -4.45,
+      "layers": [
+        {
+          "source": "medieval/Crossbow Shoot.wav",
+          "start": 0.31,
+          "seconds": 0.32,
+          "gain": 1,
+          "delay": 0,
+          "rate": 0.78,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "medieval/Crossbow Bolt Passby.wav",
+          "start": 0.08,
+          "seconds": 0.25,
+          "gain": 0.38,
+          "delay": 0.012,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "b1dc2d808a0faa291a631d90c942c1cd3d8658ffb5f96eb8c87bec881a2e087a"
+    },
+    {
+      "file": "skill.wav",
+      "seconds": 0.59,
+      "peakDBFS": -3.85,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/spell_01.ogg",
+          "start": 0,
+          "seconds": 0.48,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-ui/Audio/glass_006.ogg",
+          "start": 0,
+          "seconds": 0.26,
+          "gain": 0.28,
+          "delay": 0.025,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "e87347718168236c7be8a48c7da575169a6da77c528686bca483ae5fd7b2e92a"
+    },
+    {
+      "file": "ult.wav",
+      "seconds": 0.76,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/spell_fire_07.ogg",
+          "start": 0,
+          "seconds": 0.65,
+          "gain": 0.85,
+          "delay": 0,
+          "rate": 0.77,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+          "start": 0,
+          "seconds": 0.43,
+          "gain": 0.3,
+          "delay": 0.03,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "rubberduck-rpg/stones_04.ogg",
+          "start": 0,
+          "seconds": 0.33,
+          "gain": 0.3,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "68f128d63fb79507ead0a01cb4285def0e7e8757142257e040ee8fe07fad1cf9"
+    },
+    {
+      "file": "levelup.wav",
+      "seconds": 1.002358,
+      "peakDBFS": -8.76,
+      "layers": [
+        {
+          "source": "kenney-jingles/Audio/Pizzicato jingles/jingles_PIZZI01.ogg",
+          "start": 0,
+          "seconds": 1.8,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "0d532f7d88ab937336df5a5696e00cee60c34b74eda1238c2a656d36acf7bf45"
+    },
+    {
+      "file": "ready.wav",
+      "seconds": 0.649002,
+      "peakDBFS": -7.44,
+      "layers": [
+        {
+          "source": "kenney-ui/Audio/confirmation_002.ogg",
+          "start": 0,
+          "seconds": 0.55,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-ui/Audio/glass_002.ogg",
+          "start": 0,
+          "seconds": 0.26,
+          "gain": 0.22,
+          "delay": 0.06,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "b0335e3760392d20785edf50b42dd2f719e278879d80c8b3988129cbd9a3e1f3"
+    },
+    {
+      "file": "surge.wav",
+      "seconds": 1.040023,
+      "peakDBFS": -9.95,
+      "layers": [
+        {
+          "source": "kenney-jingles/Audio/Pizzicato jingles/jingles_PIZZI15.ogg",
+          "start": 0,
+          "seconds": 1.6,
+          "gain": 1,
+          "delay": 0,
+          "rate": 0.78,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "7ae86abc54bb8a6bbde33e31534aec34b0e734fd8c564baa4cbe5a740f679358"
+    },
+    {
+      "file": "victory.wav",
+      "seconds": 0.494172,
+      "peakDBFS": -8.4,
+      "layers": [
+        {
+          "source": "kenney-jingles/Audio/Pizzicato jingles/jingles_PIZZI00.ogg",
+          "start": 0,
+          "seconds": 3.2,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "cfb4e5ae4e2588ae2f653061e36c5bd0fabfe6fe703b322b60953c0fb873ea00"
+    },
+    {
+      "file": "defeat.wav",
+      "seconds": 0.848118,
+      "peakDBFS": -10.35,
+      "layers": [
+        {
+          "source": "kenney-jingles/Audio/Pizzicato jingles/jingles_PIZZI10.ogg",
+          "start": 0,
+          "seconds": 2.6,
+          "gain": 1,
+          "delay": 0,
+          "rate": 0.94,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "39540b84a4598018ee9645f4b850c45debc54141dcfdb97cf0daa9082cddc3d5"
+    },
+    {
+      "file": "ui_confirm.wav",
+      "seconds": 0.289841,
+      "peakDBFS": -10.65,
+      "layers": [
+        {
+          "source": "kenney-ui/Audio/confirmation_001.ogg",
+          "start": 0,
+          "seconds": 0.3,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": false,
+      "sha256": "b25037b1eacf4a70a9ff4d286421b882e0b39f6f7435d9447d5fa64f6c211df3"
+    },
+    {
+      "file": "bow_ult.wav",
+      "seconds": 0.45,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "medieval/English Longbow Shoot.wav",
+          "start": 0.095,
+          "seconds": 0.24,
+          "gain": 0.8,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "medieval/English Longbow Shoot.wav",
+          "start": 0.435,
+          "seconds": 0.24,
+          "gain": 0.7,
+          "delay": 0.055,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.08,
+          "seconds": 0.3,
+          "gain": 0.3,
+          "delay": 0.04,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "66ba24ca109fb7dd4bb1e70bbfceccfb50a9839f33edb3dd280ca4249e8cb611"
+    },
+    {
+      "file": "fire_skill.wav",
+      "seconds": 0.71,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/spell_fire_04.ogg",
+          "start": 0,
+          "seconds": 0.6,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "rubberduck-rpg/stones_01.ogg",
+          "start": 0,
+          "seconds": 0.22,
+          "gain": 0.18,
+          "delay": 0.04,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "8015855f86c9140153f406318d89670c67b1af00e8cb21d3fc537f6571a13438"
+    },
+    {
+      "file": "frost_skill.wav",
+      "seconds": 0.66,
+      "peakDBFS": -3.6,
+      "layers": [
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage03b.flac",
+          "start": 0,
+          "seconds": 0.55,
+          "gain": 1,
+          "delay": 0,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-ui/Audio/glass_006.ogg",
+          "start": 0,
+          "seconds": 0.26,
+          "gain": 0.25,
+          "delay": 0.04,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "6d914edcb0d0806b54873585e9ea956c202e263649a3d9040dfdcfac6eb17637"
+    },
+    {
+      "file": "fire_ult.wav",
+      "seconds": 0.91,
+      "peakDBFS": -3.25,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/spell_fire_07.ogg",
+          "start": 0,
+          "seconds": 0.8,
+          "gain": 1,
+          "delay": 0,
+          "rate": 0.8,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "rubberduck-rpg/stones_04.ogg",
+          "start": 0,
+          "seconds": 0.4,
+          "gain": 0.35,
+          "delay": 0.06,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "fd8bd0addab05ebd5dbf618132f24a404bb377d823433a2d844ccbf2af6ad374"
+    },
+    {
+      "file": "thunder_ult.wav",
+      "seconds": 0.71,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+          "start": 0,
+          "seconds": 0.6,
+          "gain": 1,
+          "delay": 0,
+          "rate": 0.78,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "rubberduck-rpg/stones_03.ogg",
+          "start": 0,
+          "seconds": 0.35,
+          "gain": 0.23,
+          "delay": 0.03,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "82cb93ae018e8479a4e59071ed737ba52874456c19e5b8ed1623a50f0fc17f5c"
+    },
+    {
+      "file": "frost_ult.wav",
+      "seconds": 0.81,
+      "peakDBFS": -3.0,
+      "layers": [
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage03c.flac",
+          "start": 0,
+          "seconds": 0.7,
+          "gain": 1,
+          "delay": 0,
+          "rate": 0.84,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        },
+        {
+          "source": "kenney-ui/Audio/glass_006.ogg",
+          "start": 0,
+          "seconds": 0.4,
+          "gain": 0.3,
+          "delay": 0.07,
+          "rate": 1,
+          "filters": "highpass=f=65,lowpass=f=12500"
+        }
+      ],
+      "shortRoomTail": true,
+      "sha256": "70764aff2acd5095c7aecd2889112ba75d2e96ca14771a1b7f7a9cb1b8d1d461"
+    },
+    {
+      "file": "bgm_camp.mp3",
+      "source": "town.mp3",
+      "title": "Town Theme RPG",
+      "secondsBeforeEncode": 96.651247,
+      "loopOverlapSeconds": 0.7,
+      "loudnessTargetLUFS": -18,
+      "encoding": "stereo MP3 192kbps 44.1kHz",
+      "sha256": "7015a0cd3217f3dc7787944315ec6428d4396a9de923d48260e7bee34a334d51"
+    },
+    {
+      "file": "bgm_battle.mp3",
+      "source": "battle.mp3",
+      "title": "Battle Theme A",
+      "secondsBeforeEncode": 95.000794,
+      "loopOverlapSeconds": 0.7,
+      "loudnessTargetLUFS": -18,
+      "encoding": "stereo MP3 192kbps 44.1kHz",
+      "sha256": "49764c208d1dfaf98a400a9cf45dd76bb621321542fed89df72315a9c708a1e9"
+    }
+  ],
+  "sources": [
+    {
+      "source": "battle.mp3",
+      "author": "cynicmusic / pixelsphere.org",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/battle-theme-a",
+      "sha256": "6042399782e581d753d616bc703e66483d5eccb5fb687a20c9a552d68c49e620"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "b61131bbed47caec321f5b3ee43ebe47d91c9f5d18084348ce2af73544ca4ecc"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "04226646faf6c81fb56bed3b86e12e6ad7bd28ab763b3a9dac6a10a0382593ab"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage01.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "7fa1b626d12bac9c83c2347f115e6b27fa49b4797aef81ac0c77300e32de6122"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage02.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "582dbad281d44c102eaf0f790f65707e9b83d90d9429d38df757bcba85ca4298"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage03.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "29a459232ba678b391c5c4b7b14c0ffa60c165cfd63172470a14de5efe81f224"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage03b.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "6857dfc6cdd3efee4aa164f8b8402d9e7d7bc2289daf98bd9defc0e823474c64"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage03c.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "3da7975476a6dc1e53a6230f03b37902497b9b89ee1685fedf802697ff0da036"
+    },
+    {
+      "source": "kenney-jingles/Audio/Pizzicato jingles/jingles_PIZZI00.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/music-jingles",
+      "sha256": "b442ade3308a2bbda4b8c572c86f9f1071c7bdbcfb1e6f915d35c605b61bd475"
+    },
+    {
+      "source": "kenney-jingles/Audio/Pizzicato jingles/jingles_PIZZI01.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/music-jingles",
+      "sha256": "3f8f2534a297d19386c233a7ee4fa8737cc40870dd206010263760e1983dde46"
+    },
+    {
+      "source": "kenney-jingles/Audio/Pizzicato jingles/jingles_PIZZI10.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/music-jingles",
+      "sha256": "baf50beffc4cc2dbb92c9d596a22732a8b5249c7648b681c0df6d0af6c561478"
+    },
+    {
+      "source": "kenney-jingles/Audio/Pizzicato jingles/jingles_PIZZI15.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/music-jingles",
+      "sha256": "ae6c65768979a16ec802e8fb911c362a6b1423e92302d59d35dab10407324bc3"
+    },
+    {
+      "source": "kenney-rpg/Audio/chop.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "d00c2b3c9fff07e376145c8c8c45c90e5084ec192f6ce0387db233f7b86f1486"
+    },
+    {
+      "source": "kenney-rpg/Audio/dropLeather.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "097e1d3b74949b0145fda0519d40b7e0773ab82ec4858727f95be830927e1a45"
+    },
+    {
+      "source": "kenney-rpg/Audio/metalLatch.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "ba9ba60b172b3ebc131a940f25793cd2e207aca7af73dc80d637277f060f1708"
+    },
+    {
+      "source": "kenney-rpg/Audio/metalPot1.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "159def979e8e386c2c539f5e99cc30a080eb2dcb6c911fa2e4ccc0785b2522fd"
+    },
+    {
+      "source": "kenney-rpg/Audio/metalPot2.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "8e1f820d217d380fde10e969d109db34303e3f4d11c3951926eddef813d04ae2"
+    },
+    {
+      "source": "kenney-ui/Audio/click_003.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "2fa929138bc3a0f432696588f66eac94b8f6d463905ec8808c6461ce4b054292"
+    },
+    {
+      "source": "kenney-ui/Audio/click_004.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "09e2c1b643b71b9aff9932b4e02d78db116446b9a14b00a5b2a9b28d2668fd8e"
+    },
+    {
+      "source": "kenney-ui/Audio/confirmation_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a"
+    },
+    {
+      "source": "kenney-ui/Audio/confirmation_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "33b17a9a9a2397c62b285c52c33a907fdffb476909c99e42dde603f6a7a8b12c"
+    },
+    {
+      "source": "kenney-ui/Audio/glass_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "183eebee20eb0a532b0b85104d139cbf2673eb66d95c3cc733ac9ea98362e7e8"
+    },
+    {
+      "source": "kenney-ui/Audio/glass_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "08e972c73e53c91d6d310e107e80db60edce78ae47225889a028e628a6f3da49"
+    },
+    {
+      "source": "kenney-ui/Audio/glass_003.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "9a6f16e3c2eff6fe5d017a4755a28306b14555728831cd00d70308e8f9689566"
+    },
+    {
+      "source": "kenney-ui/Audio/glass_006.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "840500be48078f1210f1fd7a9ac4e5665ed9b6f4a2b8dce91a237152a65e94cc"
+    },
+    {
+      "source": "medieval/Crossbow Bolt Pass.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "ac98202fddf710e0a503e8a86aca358845d4d51eb20d832bff3144655ffc8bb9"
+    },
+    {
+      "source": "medieval/Crossbow Bolt Passby.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "6cd8078bc3b003e0a2180f68268a178a5b114586c17fe30c309f9012bfc36381"
+    },
+    {
+      "source": "medieval/Crossbow Shoot.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "d8c68f970540d73ab6fe2db5309166e6dd911876501a16bb4df43498247e19b2"
+    },
+    {
+      "source": "medieval/English Longbow Shoot.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "c25684ccdab3eb13f17a0ffa637fbd175659d092665f16c0bce8510d46c4fbee"
+    },
+    {
+      "source": "medieval/Scythian Recurve Arrow Pass.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "386ef860049508743bbae3d85674733564a1a3c055a84530c55d3f529819bef3"
+    },
+    {
+      "source": "rubberduck-rpg/blade_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "caf7a7cb9b25cda4bd487c1d12d18b74a34bb18c816fd67277cf3c8d7ef32a3a"
+    },
+    {
+      "source": "rubberduck-rpg/blade_02.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "c770afec8f62f14d3d082d5437c5cec28e2751d393df645ddd938eabc2588abd"
+    },
+    {
+      "source": "rubberduck-rpg/blade_03.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "2cd9e6926f4602a4350e703eeae4df520053e290f358ab692632d651ad368a7c"
+    },
+    {
+      "source": "rubberduck-rpg/creature_die_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "b34a816a401c5d80c77a61dabbedef7d1918a01320bbb67286c70f22db4acd43"
+    },
+    {
+      "source": "rubberduck-rpg/spell_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "09821a53c418c5eeeac4fa25bada9d245e822fed302eeeae9ae4151522a45ae5"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "02fa3a2c6e79e868e546802f45127c5cdda69aba6d5a24ac997ea66f81a816cb"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_02.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "bf1eef4993f0adb4bd3a1c1ec91f8f6e4ddeb32d922671a14561846d5b7cab98"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_03.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "2e4edee4ff8d7898198f1ab5213e086965e14a665cb947d53759505e28ddd3e4"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_04.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "64d653cd0cc6eb71bb45a1dfbba29eaa769ed5b663cce275082d6971e4f2ca8e"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_05.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "18025b21a4ecb3b41acc0dccb0697a8930262109ea198ff8c5ef0853d3ed1cfa"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_07.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "bb13cef9c0b0b4ec7f9335c356b14814c88418abd85dd3747cb62469e9ada93f"
+    },
+    {
+      "source": "rubberduck-rpg/stones_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "d11ce95031c2c36ae2a00979620fa95a7a3f5c6d6f2ac86962ed292aa556be8d"
+    },
+    {
+      "source": "rubberduck-rpg/stones_02.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "57dc6b85ee986e68ddc4b7fb2b41cc1c885151677d32439fdb299492a3103a65"
+    },
+    {
+      "source": "rubberduck-rpg/stones_03.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "b86d143d7ef4974c2b97fda9e5d1861482646eec754e15935eeb3680ea0d71da"
+    },
+    {
+      "source": "rubberduck-rpg/stones_04.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "66f1cef820f66d86414d481b37a48a7b7ea11f4a5d7358372ebcfb506af0e652"
+    },
+    {
+      "source": "town.mp3",
+      "author": "cynicmusic / pixelsphere.org",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/town-theme-rpg",
+      "sha256": "2657861d5107d4a3c01ef81cb6a4d61ddd5e7a054b6da57e658373d79d0c3466"
+    }
+  ]
+}

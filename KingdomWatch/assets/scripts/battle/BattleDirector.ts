@@ -8,6 +8,7 @@ import { CardCtx, CardDef, CardStacks, canTakeCard, draw3, GlobalStats, M0_POOL,
 import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
+import { GameAudio } from '../core/GameAudio';
 import { loadSave, saveSave } from '../core/SaveData';
 import { DIFF_MUL, starKey, squadList, unlockCodex, advanceUnlock, equipAgg, heroState, heroBtAgg } from '../core/GameData';
 import { flow } from '../core/Flow';
@@ -85,6 +86,7 @@ export class BattleDirector extends Component {
   private fpsN = 0;
 
   start(): void {
+    GameAudio.enter('battle');
     const field = new Node('Field');
     field.setParent(this.node);
     this.field = field;
@@ -199,6 +201,7 @@ export class BattleDirector extends Component {
   }
 
   update(rawDt: number): void {
+    GameAudio.battleState(this.state);
     this.fpsAcc += rawDt; this.fpsN++;
     if (this.fpsAcc >= 0.5) {
       this.hud.setFps(Math.round(this.fpsN / this.fpsAcc));
@@ -299,6 +302,7 @@ export class BattleDirector extends Component {
     const opts: PickOpts = {
       onPick: (card: CardDef) => {
         if (this.state !== 'pick' || !this.applyCard(card)) return;
+        Sfx.play('confirm');
         this.stacks[card.id] = (this.stacks[card.id] || 0) + 1;
         this.pickQueue--;
         saveSave();
@@ -371,7 +375,7 @@ export class BattleDirector extends Component {
         onExit: () => this.exitBattle(),
         music: sv.music,
         sfx: sv.sfx,
-        onToggle: (k: 'music' | 'sfx', v: boolean) => { const s2 = loadSave(); s2[k] = v; saveSave(); },
+        onToggle: (k: 'music' | 'sfx', v: boolean) => { const s2 = loadSave(); s2[k] = v; saveSave(); GameAudio.settingsChanged(); },
         tab: 0,
         speed: this.speed,
         speedUnlocked: !!(sv.speedUnlocked || sv.debug),
@@ -397,6 +401,7 @@ export class BattleDirector extends Component {
   private onLineBroken(): void {
     if (this.state === 'win' || this.state === 'lose') return;
     this.state = 'lose';
+    Sfx.play('defeat');
     const goldFloor = Math.floor(this.goldEarned * 0.3);
     this.panels.showLose({
       goldFloor,

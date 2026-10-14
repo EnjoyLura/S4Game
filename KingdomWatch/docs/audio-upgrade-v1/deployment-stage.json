@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-upgrade-v1-20261015-020112",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-basic-launch-procedural-v3-20261015-013756",
+  "entryVersion": "1792000789",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=audio-upgrade-v1-1792000789",
+  "scope": "licensed music and sample audio with persistent mixer",
+  "layoutChanged": true,
+  "visualAcceptance": "pending user manual review"
+}

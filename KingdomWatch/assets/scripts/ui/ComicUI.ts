@@ -2,6 +2,7 @@
 import { Color, Graphics, Mask, Node } from 'cc';
 import { C, dimLayer, label, N } from './UIKit';
 import { artSprite } from './Ux';
+import { Sfx } from '../core/Sfx';
 
 export const COMIC = {
   ink: '#302C29', dark: '#29313B', darkLight: '#414B56', darkShade: '#19222C',
@@ -114,6 +115,7 @@ export function comicButton(parent: Node, x: number, y: number, w: number, h: nu
   node.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => {
     face.setPosition(0, 0, 0);
     if (e) e.propagationStopped = true;
+    Sfx.play('ui');
     onClick();
   });
   return node;

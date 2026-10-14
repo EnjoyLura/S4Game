@@ -7,6 +7,7 @@ import { Color, Graphics, Label, Layers, Node, Sprite, UITransform, UIOpacity, t
 import { LO, PAL } from '../config/GameConfig';
 import { artSetFrame, artSprite, uxFrame } from './Ux';
 import { applyFont, FontRole, inferFont } from './Fonts';
+import { Sfx } from '../core/Sfx';
 
 export function C(hex: string): Color {
   const c = new Color();
@@ -217,6 +218,7 @@ export function btn(parent: Node, x: number, y: number, w: number, h: number, te
   n.on(Node.EventType.TOUCH_END, (e: unknown) => {
     const ev = e as { propagationStopped?: boolean };
     if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
+    Sfx.play('ui');
     cb();
   });
   return n;
@@ -257,6 +259,7 @@ export function dlgConfirm(parent: Node, x: number, y: number, w: number, h: num
   n.on(Node.EventType.TOUCH_END, (e: unknown) => {
     const ev = e as { propagationStopped?: boolean };
     if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
+    Sfx.play('ui');
     cb();
   });
   return n;
@@ -270,6 +273,7 @@ export function noticeBtn(parent: Node, x: number, y: number, d: number, cb: () 
   n.on(Node.EventType.TOUCH_END, (e: unknown) => {
     const ev = e as { propagationStopped?: boolean };
     if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
+    Sfx.play('ui');
     cb();
   });
   return n;

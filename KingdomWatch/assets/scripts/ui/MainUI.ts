@@ -6,6 +6,8 @@
 import { _decorator, Component, Graphics, Label, Node, Sprite, UITransform, view } from 'cc';
 import { initLayout, LO, PAL } from '../config/GameConfig';
 import { flow } from '../core/Flow';
+import { GameAudio } from '../core/GameAudio';
+import { Sfx } from '../core/Sfx';
 import { C, CA, gpanel, N, WX, WYB } from './UIKit';
 import { artSprite } from './Ux';
 import { mainLabel, MAIN_NAV_H, PageCtx, setGlobalRoot } from './PageKit';
@@ -38,6 +40,7 @@ export class MainUI extends Component {
   private tab = flow.mainTab;
 
   start(): void {
+    GameAudio.enter('camp');
     // 视口变化（手机地址栏收起/展开、旋转等）：LO.half 只在启动时算过一次，画布被
     // Cocos 自动重适配后旧值全部失锚 → 重算 initLayout 并整屏重建，布局始终贴合当前可视区
     view.on('canvas-resize', this.queueRelayout, this);
@@ -130,7 +133,7 @@ export class MainUI extends Component {
       const art = t.art ? comicArt(slot, 0, 17, 64, 64, t.art) : null;
       if (!t.art) comicMark(icon, 0, 0, 'upgrade', 52);
       const txt = mainLabel(slot, 0, -27, t.name, { size: 24, font: 'body', color: COMIC.cream, bold: true });
-      slot.on(Node.EventType.TOUCH_END, () => this.switchTab(i));
+      slot.on(Node.EventType.TOUCH_END, () => { Sfx.play('ui'); this.switchTab(i); });
       this.navItems.push({ slot, icon, art, txt, idle, act });
     });
   }

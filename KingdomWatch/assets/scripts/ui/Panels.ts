@@ -2,7 +2,7 @@
  * 弹窗面板（UX 线稿 ②~⑤⑧）：三选一 / 暂停 / 胜利结算 / 失败结算(含广告复活) / 伤害统计 / 属性Tips
  * 弹窗内容块均以屏幕垂直中心为重心；三选一期间全场冻结由 BattleDirector 状态控制
  */
-import { Graphics, Node, Sprite, tween, UIOpacity, Vec3 } from 'cc';
+import { Graphics, Node, Sprite, sys, tween, UIOpacity, Vec3 } from 'cc';
 import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
 import { HERO_Y, LO, PAL } from '../config/GameConfig';
 import { DamageRow, fmtWk } from '../battle/DamageService';
@@ -344,6 +344,12 @@ export class Panels {
       } else {
         pauseSwitch(this.modalRoot, WX(590, 100), WY(726, 44), 100, 44, false, undefined, true);
       }
+      const credits = label(this.modalRoot, 0, WY(806, 36), '音乐与音效鸣谢 ↗', {
+        size: 17, color: '#B9D8EA', w: 300, h: 36,
+      });
+      credits.on(Node.EventType.TOUCH_END, () => {
+        sys.openURL(new URL('audio-credits.html', window.location.href).href);
+      });
     }
     pauseButton(this.modalRoot, WX(50, 300), WY(880, 88), 300, 88, '⏻ 退出', o.onExit, 22, 'gold');
     pauseButton(this.modalRoot, WX(400, 300), WY(880, 88), 300, 88, '▶ 继续战斗', o.onResume, 22, 'green');
