@@ -4,7 +4,7 @@ import { LO } from '../config/GameConfig';
 import { dimLayer, N, WY } from './UIKit';
 import { artSprite } from './Ux';
 import { COMIC, comicArt, comicButton, comicDialog, comicMark, comicPlate } from './ComicUI';
-import { heroGlyph, heroPortrait } from './HeroComic';
+import { heroPortrait } from './HeroComic';
 import { mainLabel, PageCtx, toast } from './PageKit';
 import { HERO_DEFS, SQUAD_MAX, deployHero, inSquad, squadList, undeployHero } from '../core/GameData';
 import { loadSave } from '../core/SaveData';
@@ -20,9 +20,6 @@ export function openSquadPanel(ctx: PageCtx): void {
   artSprite(scene, 0, 0, 750, 440, 'scenes/bg_levels_comic_v1', { sliced: false, cover: true });
   const top = Math.max(48, LO.notchTop + 20);
   const close = (): void => { dim.destroy(); ctx.refresh(); };
-  const back = comicButton(dim, -283, WY(top, 70), 126, 70, '', close, { tone: 'dark', name: 'squadBack' });
-  heroGlyph(back, -32, 0, 'left', 42);
-  mainLabel(back, 18, 0, '返回', { size: 24, bold: true, color: COMIC.cream, w: 72, h: 36 });
   mainLabel(dim, 0, WY(top, 70), '出战编队', { size: 36, font: 'body', bold: true, color: COMIC.cream, outline: COMIC.ink, outlineW: 3, w: 290, h: 58 });
   const body = N('squadBody', dim);
   let removeModal: Node | null = null;

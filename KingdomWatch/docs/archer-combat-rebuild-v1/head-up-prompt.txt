@@ -1,0 +1,8 @@
+Use case: precise-object-edit.
+Input image 1 is the edit target: the current transparent archer sprite. Make one further small head-orientation adjustment.
+
+Turn ONLY the head a little farther toward straight UP / top-center of the image, facing away from the camera. The head should now read nearly straight rear-facing, with just a very slight upper-left bias. Rotate his head naturally around the neck another 10–15 degrees. The back of the skull should be centered above the neck; eliminate the visible left cheek and face strip almost entirely. No visible eye or facial profile. Both pointed ears may be partly visible through the hair, with perspective appropriate for an almost directly rear-facing head. Keep the same copper-brown spiky hairstyle, the same head size and placement, natural adult male anatomy and attachment to the shoulders.
+
+Keep the ENTIRE image below the base of the head as close to the input as possible: same exact relaxed held-bow body pose, shoulders, cape silhouette and folds, quiver and white arrows, green-gold recurve bow and string, hand, sleeves, leather bracers, legs, boots and foot positions. Do not rotate the body. Do not change camera, proportions, colors, outlines, shading, canvas dimensions, full-body framing, margins or character scale. Do not draw the bowstring or add an arrow to the bow. Do not create a new design, pose, turnaround sheet or multiple characters.
+
+Preserve genuine RGBA transparent background with all exterior pixels transparent. No ground, backdrop, glow, haze, shadow, text or watermark. The result must be the same complete sprite with only the head pointing closer to straight top-center.

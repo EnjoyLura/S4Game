@@ -1,0 +1,109 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-idle-speed-v1-20261014-001858",
+  "entryVersion": "1791908337",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-idle-speed-v1-1791908337",
+  "preview": "Canvas reads actual manifest duration; GIF frame durations shortened at the same ratio",
+  "status": "published",
+  "deployment": "https://bb634e90.kingdom-watch.pages.dev",
+  "date": "2026-10-14T00:20:14",
+  "timezone": "Asia/Shanghai",
+  "previousLoopSeconds": 4,
+  "newLoopSeconds": 3.0769230769230766,
+  "speedMultiplier": 1.3,
+  "characters": [
+    {
+      "hero": "sniper",
+      "resource": "sniper_idle_subtle_v2",
+      "original": "sniper-stance-idle-v3",
+      "sourceIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "sourceTask": "task_ZfW2nZiUwOEf2dNqB99lQDQqyq1Ealx1",
+      "uniqueFrames": 9,
+      "timelineFrames": 16,
+      "loopSeconds": 3.0769230769230766,
+      "speedComparedToInitialSubtleV2": 1.3,
+      "displayHeight": 153,
+      "readyHeightPx": 467.1111,
+      "groundAnchor": [
+        256,
+        496
+      ],
+      "atlas": [
+        4096,
+        1024
+      ],
+      "atlasBytes": 1276064,
+      "newVideoSubmitted": false,
+      "staticMasterAcceptedByUser": true,
+      "animationAcceptedByUser": false,
+      "gameIntegrated": true,
+      "review": "Source selection and asset production only; effect acceptance by user, no tests/browser/game/online QA"
+    },
+    {
+      "hero": "volt",
+      "resource": "volt_idle_subtle_v2",
+      "original": "volt-stance-idle-v2",
+      "sourceIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "sourceTask": "task_ciPdQdcFk87jCS8UmqSL7tBfPMm7YKGX",
+      "uniqueFrames": 8,
+      "timelineFrames": 14,
+      "loopSeconds": 3.0769230769230766,
+      "speedComparedToInitialSubtleV2": 1.3,
+      "displayHeight": 146,
+      "readyHeightPx": 468.7165,
+      "groundAnchor": [
+        256,
+        496
+      ],
+      "atlas": [
+        4096,
+        512
+      ],
+      "atlasBytes": 1369796,
+      "newVideoSubmitted": false,
+      "staticMasterAcceptedByUser": true,
+      "animationAcceptedByUser": false,
+      "gameIntegrated": true,
+      "review": "Source selection and asset production only; effect acceptance by user, no tests/browser/game/online QA"
+    }
+  ],
+  "animationAcceptedByUser": false,
+  "unchanged": "Frame pixels and order, small amplitude, stance, grip, painted scale, foot pivot, archer and attack timing",
+  "build": {
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "exitCode": 36,
+    "milliseconds": 10503,
+    "finishedLocal": "2026-10-14 00:18:21",
+    "log": "C:/Users/user/AppData/Local/Temp/kw-hero-idle-speed-v1-20261014-out.log"
+  },
+  "dprPatch": "completed",
+  "publication": {
+    "tool": "Wrangler3.114.17",
+    "exitCode": 0,
+    "uploaded": 17,
+    "cached": 1117,
+    "uploadSeconds": 5.08
+  },
+  "review": "User manual review; no tests, browser, game or online QA executed"
+}

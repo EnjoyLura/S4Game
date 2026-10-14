@@ -1,253 +1,252 @@
-/**
- * ⑤ 基地：可点击的主城/研究院/工坊建筑场景，下方固定防线建设台。
- */
-import { Graphics, Mask, Node, ScrollView, Sprite, UITransform, UIOpacity, Vec3, tween } from 'cc';
-import { C, CA, btn, gcircle, gpanel, label, N, WY } from '../UIKit';
+/** A single painted settlement, shared comic controls and save-backed construction / codex. */
+import { Graphics, Mask, Node, ScrollView, Sprite, UITransform, Vec2 } from 'cc';
+import { C, CA, LabelOpts, N, WY } from '../UIKit';
 import { artAtlasSprite, artSprite } from '../Ux';
-import { mainLabel, PageCtx, modal, toast, fmt, mainLayout, mainResourceTop, MAIN_RESOURCE_H, pageScroll } from '../PageKit';
-import { zoneTab } from './UpgradePage';
-import { LO, PAL } from '../../config/GameConfig';
+import { COMIC, comicArt, comicButton, comicDialog, comicMark, comicPlate } from '../ComicUI';
+import { mainLabel as pageLabel, PageCtx, toast, fmt, mainLayout, mainResourceTop, MAIN_RESOURCE_H, pageScroll } from '../PageKit';
+import { LO } from '../../config/GameConfig';
 import { CODEX, CODEX_REWARD, claimCodexReward, codexClaimed, codexUnlocked, keepHp, keepShield, keepUpCost, upKeep, MAX } from '../../core/GameData';
 import { loadSave } from '../../core/SaveData';
 
-const INK = '#4A3214', OK = '#3E7C28';
+const HEART = 'base_comic_v1/comic_keep_heart_v1';
+const SHIELD = 'levels_comic_v1/comic_difficulty_shield_v1';
+const HAMMER = 'upgrade_comic_v1/comic_training_hammer_v1';
+const BOOK = 'hero_comic_v2/comic_story_v2';
+const CASTLE = 'comic_nav_castle_v1';
+let settlementOffset = 0, codexOffset = 0;
+
+function text(parent: Node, x: number, y: number, value: string, opts: LabelOpts = {}): Node {
+  return pageLabel(parent, x, y, value, { font: 'body', color: COMIC.text, ...opts });
+}
+function divider(parent: Node, y: number, width: number): void {
+  const g = N('baseDivider', parent, 0, y).addComponent(Graphics);
+  g.strokeColor = CA(COMIC.sub, .24); g.lineWidth = 1;
+  g.moveTo(-width / 2, 0); g.lineTo(width / 2, 0); g.stroke();
+}
+function tap(node: Node, cb: () => void): void {
+  node.on(Node.EventType.TOUCH_START, () => node.setScale(.985, .985, 1));
+  node.on(Node.EventType.TOUCH_CANCEL, () => node.setScale(1, 1, 1));
+  node.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => {
+    node.setScale(1, 1, 1); if (e) e.propagationStopped = true; cb();
+  });
+}
+function dot(parent: Node, x: number, y: number, value: number, name: string): void {
+  const n = N(name, parent, x, y, 28, 28), g = n.addComponent(Graphics);
+  g.fillColor = C('#D54D38'); g.circle(0, 0, 14); g.fill();
+  g.strokeColor = C(COMIC.card); g.lineWidth = 2; g.circle(0, 0, 14); g.stroke();
+  if (value) text(n, 0, 0, String(value), { size: 17, bold: true, color: COMIC.cream, w: 24, h: 24 });
+}
+
+/** Closing a monster detail returns to its list without accumulating dim layers. */
+function dialog(ctx: PageCtx, w: number, h: number, title: string, name: string, back?: () => void): Node {
+  const panel = comicDialog(ctx.screens, w, h, title); panel.name = name;
+  if (back) {
+    const dim = panel.parent!, close = panel.getChildByName('btn_close')!;
+    const done = (e?: { propagationStopped?: boolean }): void => {
+      if (e) e.propagationStopped = true;
+      if (!dim.isValid) return;
+      dim.destroy(); back();
+    };
+    dim.off(Node.EventType.TOUCH_END); dim.on(Node.EventType.TOUCH_END, done);
+    close.off(Node.EventType.TOUCH_END); close.on(Node.EventType.TOUCH_END, done);
+  }
+  return panel;
+}
 
 export function buildBase(ctx: PageCtx): void {
   const root = N('baseLobby', ctx.screens, 0, 0, 750, LO.half * 2);
   const sv = loadSave(), maxed = sv.keepLv >= MAX.keep, cost = keepUpCost(sv.keepLv);
-  const unlockedN = CODEX.filter(c => codexUnlocked(c.id)).length;
-  const rewardsN = CODEX.filter(c => codexUnlocked(c.id) && !codexClaimed(c.id)).length;
+  const discovered = CODEX.filter(c => codexUnlocked(c.id)).length;
+  const rewards = CODEX.filter(c => codexUnlocked(c.id) && !codexClaimed(c.id)).length;
   const titleTop = mainResourceTop() + MAIN_RESOURCE_H + 20;
-  const boardH = LO.half * 2 < 1450 ? 228 : 248;
-  const boardTop = mainLayout().bottom - boardH;
-  const sceneTop = titleTop + 96, sceneBottom = boardTop - 14;
-  const sceneH = Math.max(580, sceneBottom - sceneTop);
-  const title = basePlaque(root, 0, WY(titleTop, 78), 468, 78);
-  mainLabel(title, 0, 13, '远征营地', { size: 39, font: 'title', bold: true, color: '#FFE5A1', w: 380, h: 49, outline: '#23180E', outlineW: 2 });
-  mainLabel(title, 0, -24, '建设主城 · 记录远征发现', { size: 20, color: '#D4BA8F', w: 400, h: 27 });
+  const sceneTop = titleTop + 76, boardH = 306, boardTop = mainLayout().bottom - boardH, sceneBottom = boardTop - 12;
+  const available = Math.max(1, sceneBottom - sceneTop), sceneH = Math.max(720, available), totalH = sceneTop + sceneH;
+  // The illustration and hit targets share one transform. Architecture is painted on its ground.
+  const upper = N('baseUpperScene', root, 0, WY(0, boardTop), 750, boardTop);
+  upper.addComponent(Mask);
+  const scene = pageScroll(root, 'baseSettlement', sceneTop, sceneBottom, sceneH, 750);
+  const scroll = scene.parent!.getComponent(ScrollView)!; scroll.elastic = false;
+  const maxOffset = sceneH - available;
+  const anchors: { node: Node; u: number; v: number; height: number; width: number }[] = [];
 
-  // Only the settlement scrolls on short screens; wallet, construction board and navigation stay anchored.
-  const scene = pageScroll(root, 'baseSettlement', sceneTop, sceneBottom, sceneH, 724);
-  const keepH = Math.min(420, sceneH * 0.42);
-  const keep = baseBuilding(scene, 'keep', 0, -sceneH * 0.43, 438, keepH, `主城 · Lv.${sv.keepLv}`,
-    maxed ? '主城已满级' : '点击查看建设', () => keepModal(ctx), false, 294);
+  function building(key: string, u: number, v: number, width: number, height: number, title: string,
+    subtitle: string, cb: () => void, locked = false): Node {
+    const n = N('baseBuilding:' + key, scene, 0, 0, width, height + 136);
+    anchors.push({ node: n, u, v, height, width });
+    const foot = -height / 2 + 42;
+    const plate = comicPlate(n, 0, foot - 22, key === 'keep' ? 254 : 246, 52,
+      key === 'keep' && !maxed ? 'gold' : 'dark', { name: 'baseName:' + key });
+    if (locked) comicMark(plate, -80, 0, 'lock', 19, COMIC.cream);
+    text(plate, locked ? 14 : 0, 0, title, { size: 28, bold: true, color: key === 'keep' && !maxed ? COMIC.text : COMIC.cream, w: locked ? 155 : 234, h: 40 });
+    text(n, 0, foot - 62, subtitle, { size: 19, color: COMIC.cream, w: 316, h: 31, outline: COMIC.ink, outlineW: 2 });
+    tap(n, cb); return n;
+  }
+  // Foundation centers are calibrated against the final illustration, not the prompt's requested coordinates.
+  const keep = building('keep', .5, .469, 420, 334, `主城 · Lv.${sv.keepLv}`, maxed ? '主城建设已完成' : '点击查看建设', () => keepModal(ctx));
   if (!maxed && sv.gold >= cost) {
-    const marker = gcircle(keep.root, keep.width * 0.38, keep.foot + keepH * 0.48, 23, C('#F8C554'), '#FFF0A5', 2);
-    mainLabel(marker, 0, 1, '⇧', { size: 32, color: '#6E4214', bold: true, w: 42, h: 42 });
-    const opacity = marker.addComponent(UIOpacity);
-    tween(opacity).to(0.9, { opacity: 145 }).to(0.9, { opacity: 255 }).union().repeatForever().start();
+    const marker = comicPlate(keep, 142, -334 / 2 + 46, 44, 44, 'gold', { name: 'baseKeepReady', cut: 8 });
+    comicArt(marker, 0, 0, 32, 32, HAMMER);
   }
-  const academyH = Math.min(304, sceneH * 0.335);
-  const academy = baseBuilding(scene, 'academy', -181, -sceneH * 0.81, 326, academyH, '研究院',
-    `怪物图鉴 ${unlockedN}/${CODEX.length}`, () => codexModal(ctx), false, 274);
-  if (rewardsN) {
-    const dot = gcircle(academy.root, 115, academy.foot - 6, 13, C('#E34E35'), '#FFD678', 2);
-    mainLabel(dot, 0, 0, String(rewardsN), { size: 16, bold: true, color: '#FFF4D5', w: 23, h: 22 });
-    const tag = basePlaque(academy.root, 0, academy.foot - 86, 230, 30, true);
-    mainLabel(tag, 0, 0, `${rewardsN}份首览奖励可领取`, { size: 17, bold: true, color: INK, w: 218, h: 26 });
-  }
-  baseBuilding(scene, 'workshop', 181, -sceneH * 0.865, 326, Math.min(266, sceneH * 0.295), '工坊',
-    '尚未开放', () => toast('工坊尚未开放'), true, 252);
-
-  const board = N('baseConstruction', root, 0, WY(boardTop, boardH), 714, boardH);
-  const boardFallback = basePlaque(board, 0, 0, 710, boardH);
-  artAtlasSprite(board, 0, 0, 714, boardH, 'lobby_rewards_v1', 'shelf', { fit: false, hideOnLoad: [boardFallback] });
-  mainLabel(board, -203, boardH / 2 - 27, '防线建设', { size: 29, font: 'title', color: '#FFE7AE', bold: true, align: 'left', w: 245, h: 39, outline: '#241A0F', outlineW: 2 });
-  mainLabel(board, 239, boardH / 2 - 27, maxed ? 'Lv.10 · MAX' : `Lv.${sv.keepLv} → Lv.${sv.keepLv + 1}`, { size: 22, color: '#E6C285', w: 180, h: 34, align: 'right', outline: '#241A0F', outlineW: 1 });
-  for (const [i, name, value, icon] of [
-    [0, '防线耐久', keepHp(sv.keepLv), 'ui_icon_heart'],
-    [1, '阶段护盾', keepShield(sv.keepLv), ''],
-  ] as const) {
-    const x = i === 0 ? -171 : 159;
-    if (icon) artSprite(board, x - 98, boardH / 2 - 88, 38, 42, icon, { sliced: false });
-    else {
-      const shield = N('shieldEmblem', board, x - 98, boardH / 2 - 88).addComponent(Graphics);
-      shield.fillColor = C('#83AFBB'); shield.strokeColor = C('#DBD9AA'); shield.lineWidth = 2;
-      shield.moveTo(-16, 16); shield.lineTo(0, 22); shield.lineTo(16, 16); shield.lineTo(13, -5);
-      shield.lineTo(0, -21); shield.lineTo(-13, -5); shield.close(); shield.fill(); shield.stroke();
-      shield.strokeColor = C('#416373'); shield.lineWidth = 3;
-      shield.moveTo(0, 12); shield.lineTo(0, -10); shield.stroke();
-    }
-    mainLabel(board, x - 7, boardH / 2 - 70, name, { size: 20, color: '#D6C0A0', w: 128, h: 28, align: 'left', outline: '#251A10', outlineW: 1.5 });
-    mainLabel(board, x + 4, boardH / 2 - 102, fmt(value), { size: 29, color: '#FFF0C8', bold: true, w: 150, h: 38, align: 'left', outline: '#211A10', outlineW: 2 });
-  }
-  const action = basePlaque(board, 0, -boardH / 2 + 55, 656, 82, true);
-  artSprite(action, -271, 0, 48, 51, 'ui_nav_upgrade', { sliced: false });
-  mainLabel(action, -102, 0, maxed ? '查看主城' : '升级主城', { size: 34, font: 'title', bold: true, color: '#41290F', w: 240, h: 54 });
-  if (!maxed) {
-    artSprite(action, 107, 0, 38, 38, 'ui_icon_coin', { sliced: false });
-    mainLabel(action, 211, 0, fmt(cost), { size: 29, bold: true, color: sv.gold >= cost ? '#523114' : '#984025', w: 148, h: 45 });
-  } else {
-    mainLabel(action, 190, 0, '已满级', { size: 23, color: '#76552D', w: 158, h: 40 });
-  }
-  baseTap(action, () => keepModal(ctx));
-}
-
-/** Building nameplates and construction controls share a single wood/brass treatment. */
-function basePlaque(parent: Node, x: number, y: number, w: number, h: number, gold = false): Node {
-  const node = N('basePlaque', parent, x, y, w, h);
-  const g = node.addComponent(Graphics);
-  const shape = (inset: number, dy = 0): void => {
-    const l = -w / 2 + inset, r = w / 2 - inset, b = -h / 2 + inset + dy, t = h / 2 - inset + dy;
-    const bevel = Math.min(13, h * 0.2);
-    g.moveTo(l + bevel, t); g.lineTo(r - bevel, t); g.lineTo(r, t - bevel); g.lineTo(r, b + bevel);
-    g.lineTo(r - bevel, b); g.lineTo(l + bevel, b); g.lineTo(l, b + bevel); g.lineTo(l, t - bevel); g.close();
+  const academy = building('academy', .27, .715, 326, 252, '研究院',
+    rewards ? `图鉴 ${discovered}/${CODEX.length} · ${rewards}份奖励可领` : `怪物图鉴 ${discovered}/${CODEX.length}`, () => codexModal(ctx));
+  if (rewards) dot(academy, 121, -252 / 2 + 33, rewards, 'baseCodexBadge');
+  building('workshop', .73, .747, 326, 252, '工坊', '尚未开放', () => toast('工坊尚未开放'), true);
+  let artY = 0, mapWidth = 750, mapHeight = totalH;
+  const updateAnchors = (): void => {
+    anchors.forEach(a => a.node.setPosition(mapWidth * (a.u - .5), sceneTop - mapHeight * a.v + a.height / 2 - 42, 0));
   };
-  g.fillColor = CA('#171008', 0.6); shape(0, -4); g.fill();
-  g.fillColor = C(gold ? '#8E5A17' : '#392719'); shape(0); g.fill();
-  g.fillColor = C(gold ? '#E2AD4B' : '#987245'); shape(2); g.fill();
-  g.fillColor = C(gold ? '#FFD05E' : '#4C3421'); shape(5); g.fill();
-  g.strokeColor = C(gold ? '#FFF0A6' : '#BD995E'); g.lineWidth = 1.5; shape(6); g.stroke();
-  return node;
-}
-
-function baseTap(node: Node, cb: () => void): void {
-  node.on(Node.EventType.TOUCH_START, () => node.setScale(0.98, 0.98, 1));
-  node.on(Node.EventType.TOUCH_CANCEL, () => node.setScale(Vec3.ONE));
-  node.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => {
-    node.setScale(Vec3.ONE);
-    if (e) e.propagationStopped = true;
-    cb();
+  const artwork = artSprite(upper, 0, (boardTop - totalH) / 2, 750, totalH, 'scenes/bg_base_comic_v1', {
+    sliced: false, onLoaded: art => {
+      const r = art.getComponent(Sprite)!.spriteFrame!.rect, k = Math.max(750 / r.width, totalH / r.height);
+      mapWidth = r.width * k; mapHeight = r.height * k;
+      art.getComponent(UITransform)!.setContentSize(mapWidth, mapHeight);
+      artY = (boardTop - mapHeight) / 2;
+      art.setPosition(0, artY + Math.max(0, Math.min(maxOffset, scroll.getScrollOffset().y)), 0);
+      updateAnchors();
+    },
   });
+  updateAnchors();
+  let thumb: Node | null = null, thumbH = 0;
+  if (maxOffset > 0) {
+    thumbH = Math.max(36, available * available / sceneH);
+    thumb = N('baseScrollThumb', root, 369, WY(sceneTop, thumbH), 4, thumbH);
+    const g = thumb.addComponent(Graphics); g.fillColor = CA(COMIC.cream, .75); g.roundRect(-2, -thumbH / 2, 4, thumbH, 2); g.fill();
+  }
+  const updateScroll = (): void => {
+    const offset = Math.max(0, Math.min(maxOffset, scroll.getScrollOffset().y)); settlementOffset = offset;
+    artwork.setPosition(0, artY + offset, 0);
+    if (thumb) thumb.setPosition(369, WY(sceneTop, thumbH) - (available - thumbH) * offset / maxOffset, 0);
+  };
+  scroll.node.on(ScrollView.EventType.SCROLLING, updateScroll);
+  scroll.scrollToOffset(new Vec2(0, Math.min(maxOffset, settlementOffset)), 0);
+  updateScroll();
+  const title = text(root, 0, WY(titleTop, 46), '远征营地', { size: 38, bold: true, w: 430, h: 46, outline: COMIC.card, outlineW: 2 });
+  title.name = 'baseTitle';
+  text(root, 0, WY(titleTop + 46, 28), '建设主城 · 记录远征发现', { size: 20, color: COMIC.dark, w: 470, h: 28, outline: COMIC.card, outlineW: 1.5 });
+  const board = comicPlate(root, 0, WY(boardTop, boardH), 750, boardH, 'paper', { name: 'baseConstruction', edge: false });
+  comicArt(board, -319, 118, 38, 38, CASTLE);
+  text(board, -195, 118, '防线建设', { size: 28, bold: true, align: 'left', w: 185, h: 38 });
+  text(board, 253, 118, maxed ? `Lv.${sv.keepLv} · MAX` : `Lv.${sv.keepLv} → Lv.${sv.keepLv + 1}`, { size: 22, color: COMIC.sub, w: 188, h: 34, align: 'right' });
+  divider(board, 88, 688);
+  for (const [i, name, value, icon] of [[0, '防线耐久', keepHp(sv.keepLv), HEART], [1, '阶段护盾', keepShield(sv.keepLv), SHIELD]] as const) {
+    const x = i === 0 ? -172 : 171;
+    comicArt(board, x - 103, 31, 46, 48, icon);
+    text(board, x + 13, 53, name, { size: 22, color: COMIC.sub, w: 174, h: 30, align: 'left' });
+    text(board, x + 13, 17, fmt(value), { size: 31, bold: true, w: 174, h: 40, align: 'left' });
+  }
+  const action = comicButton(board, 0, -86, 680, 82, '', () => keepModal(ctx), { name: 'baseConstructionAction', tone: maxed ? 'dark' : sv.gold >= cost ? 'green' : 'muted' });
+  const face = action.getChildByName('buttonFace')!;
+  comicArt(face, -275, 0, 46, 46, HAMMER);
+  text(face, -119, 0, maxed ? '查看主城' : '升级主城', { size: 31, bold: true, color: COMIC.cream, w: 228, h: 44 });
+  if (!maxed) {
+    comicArt(face, 117, 0, 34, 34, 'comic_coin_v1');
+    text(face, 221, 0, fmt(cost), { size: 26, bold: true, color: COMIC.cream, w: 158, h: 40 });
+  } else text(face, 206, 0, '已满级', { size: 23, color: COMIC.cream, w: 180, h: 38 });
 }
 
-function baseBuilding(parent: Node, key: string, x: number, footY: number, w: number, h: number, name: string,
-  subtitle: string, cb: () => void, locked = false, labelW = 270): { root: Node; foot: number; width: number } {
-  // The broad touch rectangle contains the whole building and its label, without a visible card behind it.
-  const root = N('baseBuilding:' + key, parent, x, footY + h / 2 - 35, w, h + 90);
-  const foot = -h / 2 + 35;
-  const shadow = N('foundationShadow', root, 0, foot + 8).addComponent(Graphics);
-  shadow.fillColor = CA('#2A2E17', 0.18); shadow.ellipse(0, 0, w * 0.35, 13); shadow.fill();
-  const loading = artSprite(root, 0, foot + h / 2, 90, 100, key === 'keep' ? 'ui_nav_base' : key === 'academy' ? 'ui_icon_skull' : 'ui_icon_lock', { sliced: false });
-  artAtlasSprite(root, 0, foot, w, h, 'lobby_base_buildings_v1', key, { anchorBottom: true, hideOnLoad: [loading],
-    onLoaded: art => { if (locked) art.getComponent(Sprite)!.color = C('#9B9B92'); },
-  });
-  const plate = basePlaque(root, 0, foot - 23, labelW, 48);
-  if (locked) artSprite(plate, -66, 0, 24, 28, 'ui_icon_lock');
-  mainLabel(plate, locked ? 8 : 0, 0, name, { size: 28, font: 'title', bold: true, color: locked ? '#C7BBA4' : '#FFEDBC', w: labelW - 38, h: 39, outline: '#24180E', outlineW: 1.5 });
-  mainLabel(root, 0, foot - 60, subtitle, { size: 20, color: locked ? '#B5AC98' : '#FFEAC0', w: labelW + 14, h: 29, outline: '#29301A', outlineW: 2 });
-  baseTap(root, cb);
-  return { root, foot, width: w };
-}
-
-function NodeClick(): string { return 'touch-end'; }
-
-/* ---------- 主城建设：羊皮纸预览 + 木金行动条，使用原有金币升级操作 ---------- */
 function keepModal(ctx: PageCtx): void {
-  const sv = loadSave(), maxed = sv.keepLv >= MAX.keep, cost = keepUpCost(sv.keepLv);
-  const W = 620, H = 590;
-  const panel = modal(ctx, W, H, '', true);
-  const backing = panel.getComponent(Graphics)!;
-  backing.clear(); backing.fillColor = C('#EFDCAD');
-  backing.roundRect(-W / 2, -H / 2, W, H, 18); backing.fill();
-  const paper = artAtlasSprite(panel, 0, 0, W, H, 'lobby_training_v1', 'parchment', { sliceBorder: 0.16, sliceScale: 0.85 });
-  paper.setSiblingIndex(0);
-  mainLabel(panel, 0, H / 2 - 49, '主城建设', { size: 34, font: 'title', color: INK, bold: true, w: 420, h: 46 });
-  mainLabel(panel, 0, H / 2 - 91, maxed ? `Lv.${sv.keepLv} · 已满级` : `Lv.${sv.keepLv} → Lv.${sv.keepLv + 1}`, {
-    size: 26, bold: true, color: '#856030', w: 440, h: 36,
-  });
-  artAtlasSprite(panel, -178, 32, 202, 204, 'lobby_base_buildings_v1', 'keep');
-  mainLabel(panel, -178, -90, '守护王国防线', { size: 20, color: '#82603B', w: 202, h: 30 });
-  const rows = [
-    { name: '防线耐久', cur: keepHp(sv.keepLv), next: maxed ? keepHp(sv.keepLv) : keepHp(sv.keepLv + 1) },
-    { name: '阶段护盾', cur: keepShield(sv.keepLv), next: maxed ? keepShield(sv.keepLv) : keepShield(sv.keepLv + 1) },
-  ];
+  const sv = loadSave(), maxed = sv.keepLv >= MAX.keep, cost = keepUpCost(sv.keepLv), H = 640;
+  const p = dialog(ctx, 660, H, '主城建设', 'baseKeepDialog');
+  text(p, 0, H / 2 - 92, maxed ? `Lv.${sv.keepLv} · 已满级` : `Lv.${sv.keepLv} → Lv.${sv.keepLv + 1}`, { size: 25, bold: true, color: COMIC.sub, w: 500, h: 36 });
+  comicArt(p, -202, 61, 172, 184, CASTLE);
+  text(p, -202, -53, '守护王国防线', { size: 21, color: COMIC.sub, w: 206, h: 32 });
+  const nextLv = maxed ? sv.keepLv : sv.keepLv + 1;
+  const rows = [{ name: '防线耐久', icon: HEART, cur: keepHp(sv.keepLv), next: keepHp(nextLv) },
+    { name: '阶段护盾', icon: SHIELD, cur: keepShield(sv.keepLv), next: keepShield(nextLv) }];
   rows.forEach((r, i) => {
-    const y = 108 - i * 98;
-    mainLabel(panel, 118, y, r.name, { size: 24, bold: true, color: INK, w: 256, h: 34 });
-    mainLabel(panel, 118, y - 35, `${fmt(r.cur)} → ${fmt(r.next)}`, { size: 28, bold: true, color: INK, w: 268, h: 40 });
-    mainLabel(panel, 118, y - 69, maxed ? '已达上限' : r.next > r.cur ? `+${fmt(r.next - r.cur)}` : '本级保持', {
-      size: 21, color: OK, w: 256, h: 30,
-    });
+    const y = 151 - i * 105;
+    comicArt(p, -12, y - 24, 38, 40, r.icon);
+    text(p, 137, y, r.name, { size: 23, bold: true, w: 250, h: 32 });
+    text(p, 137, y - 37, `${fmt(r.cur)} → ${fmt(r.next)}`, { size: 28, bold: true, w: 260, h: 40 });
+    text(p, 137, y - 71, maxed ? '已达上限' : r.next > r.cur ? `+${fmt(r.next - r.cur)}` : '本级保持', { size: 20, color: COMIC.greenShade, w: 250, h: 28 });
   });
-  mainLabel(panel, 0, -144, '耐久每级 +100 · 阶段护盾每3级 +200', { size: 21, color: '#86643D', w: 530, h: 36 });
-  const action = basePlaque(panel, 0, -217, 536, 78);
-  if (maxed) {
-    mainLabel(action, 0, 0, '主城建设已完成', { size: 27, bold: true, color: '#EED5A5', w: 470, h: 42 });
-  } else {
-    artSprite(action, -223, 0, 41, 41, 'ui_icon_coin', { sliced: false });
-    mainLabel(action, -106, 14, fmt(cost), { size: 26, bold: true, color: sv.gold >= cost ? '#FFE39D' : '#FFAA81', w: 154, h: 36, align: 'left' });
-    mainLabel(action, -106, -19, `持有 ${fmt(sv.gold)}`, { size: 17, color: '#CAB08D', w: 154, h: 26, align: 'left' });
-    const upgrade = basePlaque(action, 161, 0, 190, 63, true);
-    mainLabel(upgrade, 0, 0, '升 级', { size: 29, font: 'title', bold: true, color: INK, w: 164, h: 42 });
-    baseTap(upgrade, () => {
-      const r = upKeep(); toast(r.msg);
-      if (r.ok) { panel.parent?.destroy(); ctx.refresh(); }
-    });
-  }
+  divider(p, -103, 578);
+  text(p, 0, -135, '耐久每级 +100 · 阶段护盾每3级 +200', { size: 21, color: COMIC.sub, w: 570, h: 34 });
+  if (!maxed) {
+    comicArt(p, -239, -188, 38, 38, 'comic_coin_v1');
+    text(p, -104, -188, `消耗 ${fmt(cost)}`, { size: 24, bold: true, color: sv.gold >= cost ? COMIC.greenShade : '#AB422E', w: 224, h: 36, align: 'left' });
+    text(p, 180, -188, `持有 ${fmt(sv.gold)}`, { size: 20, color: COMIC.sub, w: 222, h: 34, align: 'right' });
+  } else text(p, 0, -188, '主城等级已达到上限', { size: 23, color: COMIC.sub, w: 560, h: 36 });
+  comicButton(p, 0, -H / 2 + 65, 560, 80, maxed ? '建设已完成' : '确认升级', () => {
+    if (maxed) return;
+    const r = upKeep(); toast(r.msg);
+    if (r.ok) { p.parent?.destroy(); ctx.refresh(); }
+  }, { name: 'baseKeepUpgrade', tone: maxed || sv.gold < cost ? 'muted' : 'green', size: 30 });
 }
 
-/* ---------- 研究院：怪物图鉴弹窗（扁平无框；两列卡片可滑动查看全部，未领奖励带红点） ---------- */
+function monsterArt(parent: Node, id: string, x: number, y: number, w: number, h: number): void {
+  artAtlasSprite(parent, x, y, w, h, 'battle_mobs_v2', id);
+}
+
 function codexModal(ctx: PageCtx): void {
-  const panel = modal(ctx, 620, 760, '研究院 · 怪物图鉴', true);
-  label(panel, 0, 290, '关卡内遭遇怪物解锁图鉴 · 首次查看可领钻石奖励', { size: 18, color: '#8D96A3', w: 560, h: 28 });
-  /* 可滑动卡片区（滚动视图，怪物增多后超出即滚） */
-  const VIEW_H = 570, CARD_H = 182, GAP = 16, PAD = 16;
-  const rows = Math.ceil(CODEX.length / 2);
-  const stackH = rows * CARD_H + (rows - 1) * GAP;
-  const contentH = Math.max(stackH + PAD * 2, VIEW_H);
-  const off = contentH > VIEW_H ? PAD : (VIEW_H - stackH) / 2;
-  const view = N('cxView', panel, 0, (270 + -340) / 2, 560, VIEW_H);
-  view.addComponent(Mask);
-  const scroll = view.addComponent(ScrollView);
-  const ct = N('cxContent', view, 0, VIEW_H / 2, 560, contentH);
-  ct.getComponent(UITransform)!.setAnchorPoint(0.5, 1);
-  scroll.content = ct;
-  scroll.horizontal = false;
-  scroll.vertical = true;
+  const H = Math.min(840, LO.half * 2 - 180);
+  const p = dialog(ctx, 660, H, '研究院 · 怪物图鉴', 'baseCodexDialog');
+  const discovered = CODEX.filter(c => codexUnlocked(c.id)).length, rewards = CODEX.filter(c => codexUnlocked(c.id) && !codexClaimed(c.id)).length;
+  comicArt(p, -262, H / 2 - 101, 38, 38, BOOK);
+  text(p, -89, H / 2 - 101, `已发现 ${discovered}/${CODEX.length}`, { size: 23, bold: true, w: 256, h: 34, align: 'left' });
+  text(p, 187, H / 2 - 101, `${rewards}份奖励待领`, { size: 20, color: rewards ? COMIC.greenShade : COMIC.sub, w: 226, h: 32, align: 'right' });
+  text(p, 0, H / 2 - 140, '战斗中遇见怪物后解锁 · 首览奖励每种仅领一次', { size: 18, color: COMIC.sub, w: 586, h: 30 });
+  const viewH = H - 201, cardH = 210, gap = 16, pad = 8, rows = Math.ceil(CODEX.length / 2);
+  const contentH = Math.max(viewH, rows * (cardH + gap) - gap + pad * 2);
+  const view = N('baseCodexView', p, 0, -72.5, 604, viewH); view.addComponent(Mask);
+  const scroll = view.addComponent(ScrollView); scroll.horizontal = false; scroll.vertical = contentH > viewH; scroll.elastic = false;
+  const content = N('baseCodexContent', view, 0, viewH / 2, 604, contentH); content.getComponent(UITransform)!.setAnchorPoint(.5, 1); scroll.content = content;
   CODEX.forEach((c, i) => {
-    const got = codexUnlocked(c.id);
-    const cell = gpanel(ct, i % 2 === 0 ? -142 : 142, -(off + Math.floor(i / 2) * (CARD_H + GAP) + CARD_H / 2), 265, CARD_H,
-      got ? CA('#E9DFC2', 0.94) : CA('#D8CBA8', 0.9), undefined, 0, 12);
-    const fallback = label(cell, 0, 28, got ? c.icon : '❓', { size: 44 });
-    if (got) artAtlasSprite(cell, 0, 34, 112, 108, 'battle_mobs_v2', c.id, { hideOnLoad: [fallback] });
-    label(cell, 0, -38, got ? c.name : '???', { size: 20, color: got ? INK : '#6B5A3A', bold: true, w: 240, h: 28, shrink: true });
-    label(cell, 0, -71, got ? '点开词条 ▶' : '未解锁', { size: 16, color: got ? OK : '#8A7A5C', w: 240, h: 24 });
-    if (got && !codexClaimed(c.id)) gpanel(cell, 112, 62, 18, 18, CA('#E5484D', 1), undefined, 0, 9);
-    if (got) cell.on(NodeClick(), () => codexDetail(ctx, c.id));
+    const got = codexUnlocked(c.id), claimed = codexClaimed(c.id);
+    const card = comicPlate(content, i % 2 === 0 ? -151 : 151, -(pad + Math.floor(i / 2) * (cardH + gap) + cardH / 2), 286, cardH,
+      got ? 'card' : 'paper', { name: 'baseCodexCard:' + c.id });
+    const backdrop = N('baseMonsterCircle', card, 0, 30).addComponent(Graphics);
+    backdrop.fillColor = C(got ? '#DDE6D2' : '#DED7C6'); backdrop.circle(0, 0, 63); backdrop.fill();
+    if (got) monsterArt(card, c.id, 0, 29, 142, 122);
+    else comicMark(card, 0, 33, 'lock', 43, COMIC.sub);
+    text(card, 0, -48, got ? c.name : '未发现的怪物', { size: 23, bold: true, color: got ? COMIC.text : COMIC.sub, w: 264, h: 34 });
+    text(card, 0, -82, !got ? '战斗中遇见后解锁' : claimed ? '首览奖励已领取' : `首览奖励 +${CODEX_REWARD}钻石`, { size: 18, color: got && !claimed ? COMIC.greenShade : COMIC.sub, w: 264, h: 27 });
+    if (got && !claimed) dot(card, 118, 80, 0, 'baseCodexReward:' + c.id);
+    tap(card, () => {
+      if (!got) { toast('战斗中遇见该怪物后解锁'); return; }
+      p.parent?.destroy(); codexDetail(ctx, c.id);
+    });
   });
+  let thumb: Node | null = null, thumbH = 0;
+  if (contentH > viewH) {
+    thumbH = Math.max(36, viewH * viewH / contentH);
+    thumb = N('baseCodexThumb', p, 313, 0, 4, thumbH);
+    const g = thumb.addComponent(Graphics); g.fillColor = CA(COMIC.sub, .28);
+    g.roundRect(-2, -thumbH / 2, 4, thumbH, 2); g.fill();
+  }
+  const updateScroll = (): void => {
+    codexOffset = Math.max(0, Math.min(contentH - viewH, scroll.getScrollOffset().y));
+    if (thumb) thumb.setPosition(313, -72.5 + viewH / 2 - thumbH / 2 - (viewH - thumbH) * codexOffset / (contentH - viewH), 0);
+  };
+  scroll.node.on(ScrollView.EventType.SCROLLING, updateScroll);
+  scroll.scrollToOffset(new Vec2(0, Math.min(contentH - viewH, codexOffset)), 0);
+  updateScroll();
 }
 
-/* ---------- 怪物词条详情（参考图版式：大图标 + 名称 + 标签 + 描述/弱点分区 + 首览奖励领取） ---------- */
 function codexDetail(ctx: PageCtx, id: string): void {
-  const c = CODEX.find(x => x.id === id)!;
-  const W = 620, H = 660, PW = 560;
-  const panel = modal(ctx, W, H, '', true);
-  /* 大图标 + 名称 + 两枚标签（体型/定位，绿/蓝小圆角板） */
-  gcircle(panel, 0, H / 2 - 120, 62, CA('#2A3240', 1));
-  const fallback = label(panel, 0, H / 2 - 120, c.icon, { size: 60 });
-  artAtlasSprite(panel, 0, H / 2 - 120, 138, 132, 'battle_mobs_v2', c.id, { hideOnLoad: [fallback] });
-  label(panel, 0, H / 2 - 210, c.name, { size: 30, color: '#FFF3D6', bold: true, w: 500, h: 40 });
-  const tags: [string, string][] = [[c.tags[0], '#3E7C28'], [c.tags[1], '#1F6BC4']];
-  tags.forEach((t, i) => {
-    const px = i === 0 ? -80 : 80;
-    gpanel(panel, px, H / 2 - 268, 130, 44, CA(t[1], 0.95), undefined, 0, 22);
-    label(panel, px, H / 2 - 268, t[0], { size: 19, color: '#FFF3D6', bold: true, w: 130, h: 44 });
+  const c = CODEX.find(x => x.id === id); if (!c || !codexUnlocked(id)) return;
+  const H = Math.min(780, LO.half * 2 - 180), p = dialog(ctx, 660, H, c.name, 'baseCodexDetail', () => codexModal(ctx));
+  monsterArt(p, id, -202, H / 2 - 180, 174, 166);
+  c.tags.forEach((tag, i) => {
+    const plate = comicPlate(p, i === 0 ? 29 : 179, H / 2 - 107, 136, 38, i === 0 ? 'gold' : 'dark', { name: 'baseMonsterTag' });
+    text(plate, 0, 0, tag, { size: 20, bold: true, color: i === 0 ? COMIC.text : COMIC.cream, w: 122, h: 30 });
   });
-  /* 怪物描述 / 弱点（奶白分区板 + 金签出板） */
-  const p1Top = H / 2 - 306;
-  const p1 = gpanel(panel, 0, p1Top - 55, PW, 110, CA('#E9DFC2', 0.94), undefined, 0, 12);
-  zoneTab(panel, -PW / 2 + 70, p1Top + 17, '怪物描述');
-  label(p1, 0, 0, c.desc, { size: 19, color: INK, w: 500, h: 70, shrink: true });
-  const p2Top = p1Top - 110 - 44;
-  const p2 = gpanel(panel, 0, p2Top - 44, PW, 88, CA('#E9DFC2', 0.94), undefined, 0, 12);
-  zoneTab(panel, -PW / 2 + 70, p2Top + 17, '弱点');
-  label(p2, 0, 0, c.weak, { size: 20, color: INK, bold: true, w: 500, h: 40, shrink: true });
-  /* 行动条：首览奖励（💎 +20钻）+ 领取/已领取 */
-  const actCy = -H / 2 + 46;
-  const act = gpanel(panel, 0, actCy, PW, 64, CA('#14181E', 0.72), undefined, 0, 32);
-  gcircle(act, -212, 0, 24, CA(PAL.blue, 0.25));
-  label(act, -212, 0, '💎', { size: 24 });
-  label(act, -128, 0, `+${CODEX_REWARD} 钻`, { size: 22, color: '#CFE3FF', bold: true, align: 'left', w: 120, h: 48, shrink: true });
-  const claimed = codexClaimed(c.id);
-  if (!claimed) {
-    btn(act, 195, 0, 160, 54, '领 取', PAL.gold, () => {
-      const r = claimCodexReward(id);
-      toast(r.msg);
-      if (r.ok) { const d = panel.parent; if (d) d.destroy(); ctx.refresh(); }
-    }, 24, true);
-    gpanel(act, 263, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);
-  } else {
-    label(act, 195, 0, '已领取', { size: 22, color: '#AAB2BD', w: 160, h: 40 });
-  }
+  text(p, 102, H / 2 - 160, '行动特征', { size: 23, bold: true, w: 284, h: 34, align: 'left' });
+  text(p, 102, H / 2 - 225, c.traits.join('\n'), { size: 21, color: COMIC.sub, w: 284, h: 116, lineHeight: 30, align: 'left' });
+  divider(p, H / 2 - 297, 578);
+  text(p, -179, H / 2 - 329, '怪物描述', { size: 24, bold: true, w: 216, h: 34, align: 'left' });
+  text(p, 0, H / 2 - 379, c.desc, { size: 22, color: COMIC.sub, w: 574, h: 74, lineHeight: 29, align: 'left' });
+  text(p, -179, H / 2 - 451, '应对弱点', { size: 24, bold: true, w: 216, h: 34, align: 'left' });
+  text(p, 0, H / 2 - 495, c.weak, { size: 23, bold: true, color: COMIC.greenShade, w: 574, h: 52, align: 'left' });
+  divider(p, -H / 2 + 200, 578);
+  comicArt(p, -238, -H / 2 + 152, 48, 48, 'comic_diamond_v1');
+  text(p, -54, -H / 2 + 166, `首览奖励 +${CODEX_REWARD}钻石`, { size: 24, bold: true, w: 298, h: 34, align: 'left' });
+  text(p, -54, -H / 2 + 133, '每种怪物只能领取一次', { size: 19, color: COMIC.sub, w: 298, h: 28, align: 'left' });
+  const claimed = codexClaimed(id);
+  if (claimed) comicMark(p, 222, -H / 2 + 153, 'check', 32, COMIC.greenShade);
+  comicButton(p, 0, -H / 2 + 66, 560, 80, claimed ? '奖励已领取' : '领取首览奖励', () => {
+    if (claimed) return;
+    const r = claimCodexReward(id); toast(r.msg);
+    if (r.ok) { p.parent?.destroy(); ctx.refresh(); codexModal(ctx); }
+  }, { name: 'baseCodexClaim', tone: claimed ? 'muted' : 'green', size: 28 });
 }

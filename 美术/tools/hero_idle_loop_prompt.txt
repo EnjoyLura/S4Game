@@ -1,0 +1,21 @@
+MANDATORY IDLE LOOP CLOSURE:
+The video itself must be a complete natural forward-time cycle, suitable for
+repeating in chronological frame order. Do not simulate a loop by playing motion
+backward, retracing the same deformation, or pausing at a turning pose. Cloth-wave
+propagation, inertia and overlap continue in natural forward time throughout.
+Create one closed, repeatable idle cycle. Begin in the supplied relaxed ready pose,
+complete one gentle breathing and cloth-motion cycle, and settle back into exactly
+that same pose before the clip ends. The ending must match the beginning in head,
+shoulders, hands, weapon direction, cape and robe silhouettes, feet, scale and framing.
+Cloth must return with matching motion direction and gentle speed; do not leave the
+cape or robe blown to a different side at the end. Camera, crop, floor position and
+hand contact and held-prop positions remain fixed. Keep all non-cloth elements still,
+with the same ordinary painted highlights and constant lighting. Only the existing
+clothing surface moves; preserve every other element exactly as drawn.
+Keep the complete character opaque on the unchanged solid background throughout.
+Reserve generous empty background on both sides, below all cape tips and around the
+entire moving silhouette. Every cloth tip must remain fully inside the frame for
+the entire motion cycle. No body part, weapon, cape or robe may touch a frame edge.
+End at the same cycle phase, with the same gentle motion direction and speed as
+the opening. Keep moving through the final instant; do not add a static ending
+hold, freeze, fade, dissolve or abrupt recovery. This is one complete idle cycle.

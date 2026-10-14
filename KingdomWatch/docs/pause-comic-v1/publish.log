@@ -1,0 +1,12 @@
+✨ Compiled Worker successfully
+Uploading... (1600/1629)
+Uploading... (1610/1629)
+Uploading... (1619/1629)
+Uploading... (1629/1629)
+✨ Success! Uploaded 29 files (1600 already uploaded) (5.94 sec)
+
+✨ Uploading _headers
+✨ Uploading Functions bundle
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://04ef8bf6.kingdom-watch.pages.dev
+{"stage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-pause-comic-v1-20261014-232817","priorPublishedStage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-volt-attack-user-v2-live-20261014-213820","entryVersion":"1791991675","project":"kingdom-watch","branch":"main","game":"https://kingdom-watch.pages.dev/?v=pause-comic-v1-1791991675","scope":"pause menu art only","layoutChanged":false,"visualAcceptance":"pending user manual review"}

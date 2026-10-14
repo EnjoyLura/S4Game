@@ -1,0 +1,28 @@
+{
+  "image": "ready-red.png",
+  "transparentImage": "ready-transparent.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "bounds": [
+    29,
+    151,
+    983,
+    1389
+  ],
+  "groundAnchor": [
+    527.0,
+    1389
+  ],
+  "readyHeightPx": 1238,
+  "displayHeight": 170,
+  "backgroundRGB": [
+    251.0,
+    3.0,
+    2.0
+  ],
+  "direction": "rear view; crossbow held level",
+  "imageTool": "built-in imagegen",
+  "prompt": "image-prompt.txt"
+}

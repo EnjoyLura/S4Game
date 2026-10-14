@@ -1,0 +1,31 @@
+{
+  "hero": "sniper",
+  "kind": "attack",
+  "uniqueFrames": 10,
+  "timelineFrames": 19,
+  "sourceFrames": 56,
+  "sourceIndices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "seconds": 0.7916666666666666,
+  "atlas": [
+    4096,
+    1024
+  ],
+  "atlasBytes": 1277913,
+  "resource": "sniper_stance_attack_v1",
+  "paintedHeight": 467.1111,
+  "displayHeight": 153,
+  "gameIntegrated": true,
+  "userAccepted": false,
+  "review": "Production source annotation; effects reviewed manually by user; no browser/game/tests/online QA"
+}

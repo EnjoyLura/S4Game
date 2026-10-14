@@ -1,0 +1,5 @@
+{
+  "reason": "The crossbow and arms lower and never return to the initial ready pose",
+  "action": "Regenerate full source; do not reverse recovery, trim or substitute mismatched final pose",
+  "animationAcceptedByUser": false
+}

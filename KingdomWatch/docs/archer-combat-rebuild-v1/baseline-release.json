@@ -1,0 +1,17 @@
+{
+  "status": "published",
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "preview": "https://kingdom-watch.pages.dev/previews/archer-combat-rebuild-v1/?v=1791826758",
+  "image": "https://kingdom-watch.pages.dev/previews/archer-combat-rebuild-v1/archer-ready-up-left.png?v=1791826758",
+  "deployment": "https://17733887.kingdom-watch.pages.dev",
+  "build": "Cocos Creator 3.8.8 web-mobile completed, BUILD_SUCCESS exit code 36",
+  "dprPatch": "applied; entry cache-bust 1791826758",
+  "publish": "Wrangler Pages main completed, exit code 0; 8 files uploaded, 867 cached",
+  "visualAcceptance": "pending user manual review; no automatic game, interaction or online visual verification performed",
+  "asset": "assets/resources/ux/archer_combat_rebuild_v1/archer-ready-up-left.png",
+  "size": [1024, 1536],
+  "generator": "built-in image_gen.imagegen",
+  "prompt": "ready-prompt.txt; full generation record in generation.json",
+  "scope": "New static archer combat base from the existing lobby identity: rear-quarter upper-left facing, relaxed held-bow ready pose, complete transparent sprite. Mirrored preview uses the same image with a fixed foot pivot. Current battle video animations retain their existing implementation; this new base is prepared for subsequent motion production."
+}

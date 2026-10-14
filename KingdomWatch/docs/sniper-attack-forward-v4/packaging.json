@@ -1,0 +1,56 @@
+{
+  "frames": 44,
+  "releaseIndex": 2,
+  "sourceReleaseFrame": 14,
+  "sourceSize": [
+    768,
+    1344
+  ],
+  "sourceFps": 24.0,
+  "sourceSeconds": 2.3333333333333335,
+  "atlas": [
+    4096,
+    3072
+  ],
+  "atlasBytes": 6360582,
+  "displayHeight": 170,
+  "paintedHeight": 467.5133,
+  "groundAnchor": [
+    256,
+    496
+  ],
+  "resource": "assets\\resources\\ux\\sniper_attack_forward_v4",
+  "cleanVideo": "attack-clean.mp4",
+  "omittedEffectsFrames": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "eventSourceFrame": 8,
+  "calibration": {
+    "reference": "sniper_idle_forward_v2/idle0",
+    "referenceBounds": [
+      137,
+      29,
+      412,
+      497
+    ],
+    "referenceBootWidth": 237,
+    "sourceReferenceBounds": [
+      112,
+      146,
+      768,
+      1204
+    ],
+    "sourceBootWidth": 570,
+    "scaleXY": [
+      0.41578947368421054,
+      0.44139886578449905
+    ],
+    "method": "One constant full-frame aspect correction from the planted boots and head-to-ground height; no per-frame fitting or body-part deformation"
+  },
+  "review": "Source frame annotation for production; effect acceptance by user; no tests, browser, game or online QA"
+}

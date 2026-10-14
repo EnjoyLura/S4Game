@@ -1,0 +1,445 @@
+{
+  "frames": {
+    "volt_idle0": [
+      0,
+      0,
+      256,
+      256
+    ],
+    "volt_idle1": [
+      256,
+      0,
+      256,
+      256
+    ],
+    "volt_idle2": [
+      512,
+      0,
+      256,
+      256
+    ],
+    "volt_idle3": [
+      768,
+      0,
+      256,
+      256
+    ],
+    "volt_idle4": [
+      1024,
+      0,
+      256,
+      256
+    ],
+    "volt_idle5": [
+      1280,
+      0,
+      256,
+      256
+    ],
+    "volt_idle6": [
+      1536,
+      0,
+      256,
+      256
+    ],
+    "volt_idle7": [
+      1792,
+      0,
+      256,
+      256
+    ],
+    "volt_idle8": [
+      0,
+      256,
+      256,
+      256
+    ],
+    "volt_idle9": [
+      256,
+      256,
+      256,
+      256
+    ],
+    "volt_idle10": [
+      512,
+      256,
+      256,
+      256
+    ],
+    "volt_idle11": [
+      768,
+      256,
+      256,
+      256
+    ],
+    "volt_idle12": [
+      1024,
+      256,
+      256,
+      256
+    ],
+    "volt_idle13": [
+      1280,
+      256,
+      256,
+      256
+    ],
+    "volt_idle14": [
+      1536,
+      256,
+      256,
+      256
+    ],
+    "volt_idle15": [
+      1792,
+      256,
+      256,
+      256
+    ],
+    "volt_idle16": [
+      0,
+      512,
+      256,
+      256
+    ],
+    "volt_idle17": [
+      256,
+      512,
+      256,
+      256
+    ],
+    "volt_idle18": [
+      512,
+      512,
+      256,
+      256
+    ],
+    "volt_idle19": [
+      768,
+      512,
+      256,
+      256
+    ],
+    "volt_idle20": [
+      1024,
+      512,
+      256,
+      256
+    ],
+    "volt_idle21": [
+      1280,
+      512,
+      256,
+      256
+    ],
+    "volt_idle22": [
+      1536,
+      512,
+      256,
+      256
+    ],
+    "volt_idle23": [
+      1792,
+      512,
+      256,
+      256
+    ],
+    "volt_attack0": [
+      0,
+      768,
+      256,
+      256
+    ],
+    "volt_attack1": [
+      256,
+      768,
+      256,
+      256
+    ],
+    "volt_attack2": [
+      512,
+      768,
+      256,
+      256
+    ],
+    "volt_attack3": [
+      768,
+      768,
+      256,
+      256
+    ],
+    "volt_attack4": [
+      1024,
+      768,
+      256,
+      256
+    ],
+    "volt_attack5": [
+      1280,
+      768,
+      256,
+      256
+    ],
+    "volt_attack6": [
+      1536,
+      768,
+      256,
+      256
+    ],
+    "volt_attack7": [
+      1792,
+      768,
+      256,
+      256
+    ],
+    "volt_attack8": [
+      0,
+      1024,
+      256,
+      256
+    ],
+    "volt_attack9": [
+      256,
+      1024,
+      256,
+      256
+    ],
+    "volt_attack10": [
+      512,
+      1024,
+      256,
+      256
+    ],
+    "volt_attack11": [
+      768,
+      1024,
+      256,
+      256
+    ],
+    "volt_attack12": [
+      1024,
+      1024,
+      256,
+      256
+    ],
+    "volt_attack13": [
+      1280,
+      1024,
+      256,
+      256
+    ],
+    "volt_attack14": [
+      1536,
+      1024,
+      256,
+      256
+    ],
+    "volt_attack15": [
+      1792,
+      1024,
+      256,
+      256
+    ],
+    "volt_attack16": [
+      0,
+      1280,
+      256,
+      256
+    ],
+    "volt_attack17": [
+      256,
+      1280,
+      256,
+      256
+    ],
+    "volt_attack18": [
+      512,
+      1280,
+      256,
+      256
+    ],
+    "volt_attack19": [
+      768,
+      1280,
+      256,
+      256
+    ],
+    "volt_attack20": [
+      1024,
+      1280,
+      256,
+      256
+    ],
+    "volt_attack21": [
+      1280,
+      1280,
+      256,
+      256
+    ],
+    "volt_attack22": [
+      1536,
+      1280,
+      256,
+      256
+    ],
+    "volt_attack23": [
+      1792,
+      1280,
+      256,
+      256
+    ]
+  },
+  "hero": "volt",
+  "name": "沃尔 · 雷霆",
+  "cellSize": 256,
+  "groundAnchor": [
+    128.0,
+    251
+  ],
+  "readyHeightPx": 156.629,
+  "displayReadyHeight": 146,
+  "animations": {
+    "idle": {
+      "frames": [
+        "volt_idle0",
+        "volt_idle1",
+        "volt_idle2",
+        "volt_idle3",
+        "volt_idle4",
+        "volt_idle5",
+        "volt_idle6",
+        "volt_idle7",
+        "volt_idle8",
+        "volt_idle9",
+        "volt_idle10",
+        "volt_idle11",
+        "volt_idle12",
+        "volt_idle13",
+        "volt_idle14",
+        "volt_idle15",
+        "volt_idle16",
+        "volt_idle17",
+        "volt_idle18",
+        "volt_idle19",
+        "volt_idle20",
+        "volt_idle21",
+        "volt_idle22",
+        "volt_idle23"
+      ],
+      "seconds": 1.333,
+      "loop": true,
+      "loopMethod": "continuous endpoint matched"
+    },
+    "attack": {
+      "frames": [
+        "volt_attack0",
+        "volt_attack1",
+        "volt_attack2",
+        "volt_attack3",
+        "volt_attack4",
+        "volt_attack5",
+        "volt_attack6",
+        "volt_attack7",
+        "volt_attack8",
+        "volt_attack9",
+        "volt_attack10",
+        "volt_attack11",
+        "volt_attack12",
+        "volt_attack13",
+        "volt_attack14",
+        "volt_attack15",
+        "volt_attack16",
+        "volt_attack17",
+        "volt_attack18",
+        "volt_attack19",
+        "volt_attack20",
+        "volt_attack21",
+        "volt_attack22",
+        "volt_attack23"
+      ],
+      "seconds": 0.84,
+      "loop": false,
+      "releaseFrame": 12
+    }
+  },
+  "source": {
+    "idle": "videos-v2/volt-idle.mp4",
+    "attack": "videos-v2/volt-attack.mp4",
+    "fps": [
+      24.0,
+      24.0
+    ],
+    "idleIndices": [
+      0,
+      1,
+      3,
+      4,
+      5,
+      7,
+      8,
+      9,
+      11,
+      12,
+      13,
+      15,
+      16,
+      18,
+      19,
+      20,
+      22,
+      23,
+      24,
+      26,
+      27,
+      28,
+      30,
+      31
+    ],
+    "attackIndices": [
+      0,
+      2,
+      5,
+      7,
+      10,
+      12,
+      14,
+      17,
+      19,
+      22,
+      24,
+      26,
+      29,
+      31,
+      33,
+      36,
+      38,
+      41,
+      43,
+      45,
+      48,
+      50,
+      53,
+      55
+    ],
+    "jointCrop": [
+      0,
+      61,
+      462,
+      686
+    ],
+    "fixedScale": 0.38202247191011235,
+    "fixedFoot": [
+      281.5,
+      684
+    ]
+  },
+  "status": "material review only, not integrated",
+  "blend": "straight RGBA; SRC_ALPHA / ONE_MINUS_SRC_ALPHA",
+  "diagnostics": {
+    "idleEndpointMeanError": 4.841,
+    "footBottomRange": [
+      250,
+      250
+    ]
+  }
+}

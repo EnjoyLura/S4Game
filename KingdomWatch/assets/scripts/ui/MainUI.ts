@@ -24,7 +24,7 @@ const TABS: { name: string; icon: string; art: string }[] = [
   { name: '商店', icon: '🛒', art: 'comic_nav_shop_v1' },
   { name: '英雄', icon: '🦸', art: 'comic_helm_falcon_v1' },
   { name: '关卡', icon: '⚔️', art: 'comic_nav_map_v1' },
-  { name: '升级', icon: '⬆️', art: '' },
+  { name: '升级', icon: '⬆️', art: 'upgrade_comic_v1/comic_training_hammer_v1' },
   { name: '基地', icon: '🏰', art: 'comic_nav_castle_v1' },
 ];
 
@@ -189,7 +189,7 @@ export class MainUI extends Component {
 
   /** 背景切换：整节点重建（复用 artSprite 的 cover 裁剪与缓存加载），保持垫底层级 */
   private applyPageBg(i: number): void {
-    const id = i === 1 ? 'heroPaperBackdrop' : i === 2 ? 'levelPaperBackdrop' : this.bgForTab(i);
+    const id = i === 1 ? 'heroPaperBackdrop' : i === 2 ? 'levelPaperBackdrop' : i === 3 ? 'trainingPaperBackdrop' : i === 4 ? 'basePaperBackdrop' : this.bgForTab(i);
     if (id === this.bgId && this.bgNode && this.bgNode.isValid) return;
     this.bgId = id;
     // 销毁上一张的整个裁剪壳：artSprite cover 返回的是壳内美术节点，只销毁它会留下空壳累积在树上
@@ -197,9 +197,9 @@ export class MainUI extends Component {
       const oldHolder = this.bgNode.parent && this.bgNode.parent !== this.node ? this.bgNode.parent : this.bgNode;
       oldHolder.destroy();
     }
-    if (i === 1 || i === 2) {
+    if (i === 1 || i === 2 || i === 3 || i === 4) {
       this.bgNode = gpanel(this.node, 0, 0, 750, LO.half * 2 + 240, COMIC.paper, undefined, 0, 0);
-      this.bgNode.name = i === 1 ? 'heroPageBackdrop' : 'levelPageBackdrop';
+      this.bgNode.name = i === 1 ? 'heroPageBackdrop' : i === 2 ? 'levelPageBackdrop' : i === 3 ? 'trainingPageBackdrop' : 'basePageBackdrop';
     } else this.bgNode = artSprite(this.node, 0, 0, 750, LO.half * 2 + 240, id, { sliced: false, cover: true });
     // cover 模式下 artSprite 返回裁剪壳内的美术节点：垫底要挪的是外面的裁剪壳，否则壳盖在 UI 之上
     const holder = this.bgNode.parent && this.bgNode.parent !== this.node ? this.bgNode.parent : this.bgNode;

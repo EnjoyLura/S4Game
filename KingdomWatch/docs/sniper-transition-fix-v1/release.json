@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "status": "published",
+  "game": "https://kingdom-watch.pages.dev/?v=sniper-switch-no-fade-1791903506",
+  "preview": "https://kingdom-watch.pages.dev/previews/sniper-attack-forward-v4/?v=1791903506",
+  "deployment": "https://ee0f5d52.kingdom-watch.pages.dev",
+  "stage": "D:/AI/S4Game/KingdomWatch/build/publish-sniper-transition-fix-v1-20261013-225827",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "feedback": "User observed dark flickering when switching between attack and idle",
+  "cause": "Two opacity-faded character images composited with source-over leave background visible during the transition; at 50% opacity each the combined coverage is 75%",
+  "changedFiles": [
+    "assets/scripts/battle/SniperIdleAnimation.ts",
+    "docs/sniper-attack-forward-v4/preview.html"
+  ],
+  "runtime": {
+    "spriteCount": 1,
+    "transitionSeconds": 0,
+    "clipSwitch": "Direct full-opacity frame replacement; no UIOpacity transition or outgoing image overlay",
+    "attackResource": "sniper_attack_forward_v4",
+    "idleResource": "sniper_idle_forward_v2",
+    "attackFrames": 44,
+    "displayHeight": 170,
+    "groundAnchor": [256, 496],
+    "footNode": [0, -76],
+    "facing": "Existing direct full-character left/right mirror",
+    "attackPriority": "Existing attack/recovery and in-range enemy rules retained"
+  },
+  "previewSwitch": "Draw the selected character once at globalAlpha 1; no opacity transition",
+  "media": "Existing images, videos, frame atlases, scale calibration and fire-frame omission reused without regeneration or modification",
+  "archer": "Existing images, idle, attack and displayHeight 185.64 retained",
+  "build": {
+    "platform": "web-mobile",
+    "creator": "3.8.8",
+    "exitCode": 36,
+    "milliseconds": 8273,
+    "finishedLocal": "2026-10-13 22:57:54",
+    "log": "C:/Users/user/AppData/Local/Temp/kw-sniper-transition-fix-v1-20261013-out.log"
+  },
+  "dprPatch": "completed",
+  "entryVersion": 1791903506,
+  "publish": {"tool": "Wrangler 3.114.17", "exitCode": 0, "uploadedFiles": 3, "cachedFiles": 1017, "uploadSeconds": 4.65},
+  "review": "User manual effect review; no tests, game, browser or online QA executed; build and deployment success do not imply visual acceptance"
+}

@@ -1,0 +1,32 @@
+{
+  "ok": true,
+  "url": "https://kingdom-watch.pages.dev/?v=upgrade-comic-1791716054",
+  "realBattleStarted": false,
+  "checks": [
+    {
+      "fourTabs": "online images, shared controls and layout loaded"
+    },
+    {
+      "upgrade": "lv",
+      "from": 9,
+      "to": 10,
+      "cost": {
+        "gold": 1940,
+        "mat": 0
+      }
+    },
+    {
+      "newStaves": "all three published illustrations loaded"
+    },
+    {
+      "shortViewport": [
+        375,
+        600
+      ],
+      "pinnedAction": true,
+      "alignedPlatform": true
+    }
+  ],
+  "errors": [],
+  "failures": []
+}

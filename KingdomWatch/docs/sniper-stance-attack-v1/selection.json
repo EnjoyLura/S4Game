@@ -1,0 +1,11 @@
+{
+  "sourceVideo": "source.mp4",
+  "sourceTask": "task_1ENUQ3Tk2DH61c2fUwMBjPQD28iJtf0Z",
+  "range": [0, 9],
+  "releaseSourceFrame": 9,
+  "recovery": "Source 8 through 0, complete frames, returning to unchanged original grip",
+  "discarded": "Source frames 10 through 55 contain progressive weapon lowering/rotation; not used in the game",
+  "purpose": "Keep the new stance coherent in combat while preserving the original forward crossbow hold",
+  "annotationOnly": true,
+  "userAccepted": false
+}

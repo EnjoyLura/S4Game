@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>雷法师 · 战斗图片</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#17272e;color:#f1f2e7;font:16px system-ui,"Microsoft YaHei",sans-serif}main{max-width:1000px;margin:auto;padding:24px 16px 36px}h1{font-size:25px;margin:0 0 12px}p{line-height:1.7;color:#bbcac8}.pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}figure{margin:0;background:#ff0000;border:1px solid #a73835;border-radius:10px;overflow:hidden}img{display:block;width:100%;height:auto}.mirror{transform:scaleX(-1)}figcaption{text-align:center;background:#243b42;padding:12px;color:#d4ddcf}.links{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px}a{color:#c5dfab}button{margin-top:16px;border:0;border-radius:7px;padding:10px 14px;background:#bfd794;color:#253125;font:600 15px system-ui;cursor:pointer}@media(max-width:520px){main{padding:18px 10px}.pair{gap:8px}figcaption{font-size:14px;padding:9px}}
+</style>
+<main>
+<h1>雷法师 · 战斗图片</h1>
+<p>银发雷法师的紫色金边长袍与紫晶法杖，背面朝战场的备战姿态。下方展示同一张图片与左右镜像。</p>
+<div class="pair"><figure><img src="ready-red.png" alt="雷法师背面备战原图"><figcaption>原向</figcaption></figure><figure><img class="mirror" src="ready-red.png" alt="雷法师背面备战镜像"><figcaption>左右镜像</figcaption></figure></div>
+<button id="swap">交换左右</button>
+<p>本轮为纯红不透明背景的静态战斗图片；待机和攻击动画后续制作。</p>
+<div class="links"><a href="ready-red.png" download="volt-ready-red.png">下载原图</a><a href="portrait-reference.png">英雄立绘参考</a><a href="staff-reference.png">法杖参考</a><a href="image-prompt.txt">生成提示词</a><a href="/">进入正式游戏</a></div>
+</main>
+<script>document.querySelector('#swap').onclick=()=>document.querySelectorAll('.pair img').forEach(im=>im.classList.toggle('mirror'));</script>
+</html>

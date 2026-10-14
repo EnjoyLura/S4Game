@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-15T00:37:55.984771+08:00",
+  "hero": "pyro",
+  "userSourcePath": "C:\\Users\\user\\Downloads\\lens-api-task_WHW1YsGLlVVLTH0fgJbd6F9uFMl5zUJG.mp4",
+  "saved": "source.mp4",
+  "sha256": "3e0ea136416b84b8b2d52ef5c9db0ff6961544da2c03f24071b3f1616bf00b8f",
+  "metadata": {
+    "ffmpeg_version": "7.1-essentials_build-www.gyan.dev built with gcc 14.2.0 (Rev1, Built by MSYS2 project)",
+    "codec": "h264",
+    "pix_fmt": "yuv420p(tv, bt709, progressive)",
+    "audio_codec": "aac",
+    "fps": 24.0,
+    "source_size": [
+      1344,
+      768
+    ],
+    "size": [
+      1344,
+      768
+    ],
+    "rotate": 0,
+    "duration": 2.33
+  },
+  "frames": 56,
+  "duration": 2.3333333333333335,
+  "union": [
+    409,
+    44,
+    919,
+    724
+  ],
+  "background": "green",
+  "paidTaskSubmitted": false,
+  "userVisualAccepted": false,
+  "gameIntegrated": true,
+  "kind": "attack",
+  "resource": "pyro_attack_user_v2"
+}

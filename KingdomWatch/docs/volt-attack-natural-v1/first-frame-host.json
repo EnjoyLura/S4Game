@@ -1,0 +1,8 @@
+{
+  "deployment": "https://f1c96c74.kw-vfx-src.pages.dev",
+  "project": "kw-vfx-src",
+  "branch": "main",
+  "imageUrl": "https://f1c96c74.kw-vfx-src.pages.dev/hero_volt_attack_natural_v1_20261014_ff.png",
+  "newVideoInput": true,
+  "source": "volt-idle-natural-v1/source.mp4:frame0"
+}

@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "tool": "built-in image_gen.imagegen",
+  "selection": "ready-prompt.txt output",
+  "selectedOriginal": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-98e9059d-ce01-45d6-a4e4-2c453913ce60.png",
+  "figureReference": "assets/resources/ux/hero_comic_v1/comic_figure_archer_v1.png",
+  "poseReference": "docs/archer-rear-static-v1/archer-rear-idle.png",
+  "selectedPrompt": "生成一张用于竖屏塔防游戏的弓箭手完整战斗基准立绘，真实RGBA透明背景。\n参考图1：当前英雄大厅立绘，是人物身份、服装、绿金木制反曲弓与清爽漫画画风的唯一身份标准。\n参考图2：只参考它的背部视角和双脚落地站姿；新图要把身体从正背面转向左上方，且让持弓手略抬高、前伸，成为自然的战斗警戒姿态。\n\n只画同一位棕色短发男性精灵，尖耳、绿披风、米白袖子、棕色皮革护腕和长靴、白羽箭袋。人物面朝画面左上方，方向是正上方偏左约30度。镜头在人物身后略带俯视，我们主要看见后脑、背部、肩膀、披风；脸仅露一点左侧轮廓。不是正面，不是正侧面，身体不要朝画面正左方。使用自然的成人漫画比例，轻微俯视透视让角色轮廓紧凑，适合最终显示高度146像素。\n\n姿势是安静而有戒备的“持弓准备”：\n双脚踏实落地，约肩宽，轻微前后错位，膝盖放松，躯干平衡直立，重心在两脚中间。\n左手把弓自然持在身体左前方，握弓手位于下胸部，左肘靠近身体且自然弯曲，左前臂略朝左上方前伸。弓略向远处前倾，符合朝左上方迎敌的姿态，透视合理。\n右手自然停在身体前方准备取箭，后方视角允许手被躯干部分遮住，不要强行把手画在脸旁。\n弓弦保持未拉开的静止状态，弓上不搭箭，全部箭都留在背部箭袋内。这不是瞄准、满弓或放箭姿势。双手、肩肘和武器结构必须自然相连。\n披风主要自然垂落在背后，仅有轻微侧边起伏。不要大幅迎风飞扬，不要盖住全部双脚。\n\n深色清晰轮廓、有限而干净的赛璐璐明暗、大块绿棕材质，准确延续参考1。整体干净清晰，不要人物外部的柔光、色雾、描边光、投影或地面。背景所有像素完全透明，不能画渐变背景、黑色画布或棋盘格。\n单人、单方向、单把弓，完整头顶、完整武器、完整双脚，画布四周保留至少8%透明余量。双脚站位中心放在画布水平中心附近，便于运行时围绕脚底做左右镜像。不要文字、光效、飞箭、多重手臂、肢体拆分图、多视角或图集。",
+  "attempts": [
+    {
+      "prompt": "prompt.txt",
+      "output": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-283cae13-b59b-4b36-a83a-789a804ddef6.png",
+      "status": "not selected: full draw and side-facing pose"
+    },
+    {
+      "prompt": "correction-prompt.txt",
+      "output": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-172a1e11-32d3-4573-8edd-2df6dcd5c2a9.png",
+      "status": "not selected: still drawn bow"
+    },
+    {
+      "prompt": "ready-prompt.txt",
+      "output": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-98e9059d-ce01-45d6-a4e4-2c453913ce60.png",
+      "status": "selected: relaxed held-bow rear-quarter ready pose"
+    },
+    {
+      "prompt": "extraction-prompt.txt",
+      "output": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-c5cfc1d0-6349-419a-83c3-21341668704b.png",
+      "status": "not selected: changed framing; selected source already has transparent exterior"
+    }
+  ],
+  "asset": "assets/resources/ux/archer_combat_rebuild_v1/archer-ready-up-left.png",
+  "processing": "Byte-for-byte copy preserving source RGBA; mirroring and display scaling performed only by preview canvas.",
+  "acceptance": "pending user manual review",
+  "scope": "New static combat base art and mirror preview only."
+}

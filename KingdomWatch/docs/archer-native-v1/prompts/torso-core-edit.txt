@@ -1,0 +1,10 @@
+Edit these 3 existing archer torso puppet parts into one transparent sprite sheet with exactly THREE evenly spaced columns in ONE row, all isolated with generous blank margins, no text no labels. Column1 rear/up torso from reference1, column2 rear three-quarter facing upper-left from ref2, column3 facing upper-right from ref3. Preserve the reference character's exact green folded cape/cowl collar, olive tunic, brown leather belt, colors and comic outline style. CRITICAL: these are torso CORE attachments for skeletal animation. REMOVE ALL WHITE SLEEVES, REMOVE ALL SHOULDER ARMOUR PADS, REMOVE ANY ARM TUBES OR ARM SOCKET PIECES protruding at left/right. The torso should be just sleeveless green cape collar and tunic with belt, neatly tapering inward at both shoulder sides where separately animated upper arms attach. Keep dark outlines on cape and tunic body. No head, no hands, no legs, no long cloak below waist, no weapon. Keep the 3 facing perspectives distinct as supplied, do not mirror the identity. Keep all 3 torso cores same height/relative proportions, comfortably separated.
+
+transparent_background: true
+referenced_image_paths (before core replacement):
+D:/AI/S4Game/KingdomWatch/docs/archer-native-v1/parts/up_torso.png
+D:/AI/S4Game/KingdomWatch/docs/archer-native-v1/parts/left_torso.png
+D:/AI/S4Game/KingdomWatch/docs/archer-native-v1/parts/right_torso.png
+These original crops are reproducible from sources/archer-parts-up.png and sources/archer-body-turns.png, without applying the optional core override.
+Generated original: C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-1a458a7d-9e07-49fe-abc4-1f706bc18548.png
+Preserved workspace copy: sources/archer-torso-cores.png

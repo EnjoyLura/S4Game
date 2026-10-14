@@ -1,19 +1,25 @@
 /**
  * 战斗 HUD（UX 线稿 ①）：顶栏(暂停/关卡名/波次) + 经验条(Lv骑条居中) + 预警横幅
- * + 左列(倍速/统计/FPS) + 右侧大招纵列(每英雄一钮) + 防线耐久条(盾值胶囊/百分比) + 头顶普攻技能图标(CD环)
+ * + 左列(倍速/统计/FPS) + 右侧大招纵列(每英雄一钮) + 防线耐久/蓝色外层护盾 + 头顶普攻技能图标(CD环)
  * 点击普攻/技能/未充满大招图标 → 属性Tips（§3.11）
  */
 import { Graphics, Label, Layers, Node, Tween, tween, UIOpacity, UITransform, Vec3 } from 'cc';
 import { expNeed, LO, PAL } from '../config/GameConfig';
-import { dlgConfirm, dlgPanel, dlgTitle, gbar, gcircle, gpanel, label, noticeBtn, setText, WY, WYB, WX, Bar, CA } from './UIKit';
+import { dlgConfirm, dlgPanel, dlgTitle, gcircle, gpanel, label, noticeBtn, setText, WY, WYB, WX, Bar, CA, N } from './UIKit';
 import { artSprite } from './Ux';
 import { BattleDirector } from '../battle/BattleDirector';
 import { HeroBase } from '../battle/Hero';
 import { CODEX } from '../core/GameData';
 import { UltEnergyFx } from './UltEnergyFx';
+import { battleProgressBar, battleShieldOutline, battleStatusIcon } from './BattleProgressBar';
+
+const LINE_HP_BOTTOM = 212; // Raised 14 design pixels from the previous bar.
+const ULT_BOTTOM = 340; // Leaves room for the two value rows and the ultimate energy halo.
+const ULT_STEP = 110;
 
 /** 每英雄一套的大招按钮状态（右侧纵列，底基锚定向上叠放） */
 interface UltUI {
+  root: Node; baseY: number;
   ux: number; uy: number;
   glow: Node;         // 就绪光晕（呼吸）
   btn: Node;
@@ -38,6 +44,7 @@ interface UltUI {
 
 /** 每英雄一套的头顶技能图标状态 */
 interface SkillUI {
+  root: Node; atkIcon: Node; unlocked: boolean;
   cx: number; cy: number;
   icon: Node;
   glyph: Node;
@@ -54,12 +61,9 @@ export class HUD {
   private xpBar!: Bar;
   private hpBar!: Bar;
   private hpVal!: Node;
-  private pctTxt!: Node;
   private shieldNode!: Node;
-  private shieldG!: Graphics;
+  private shieldBar!: Bar;
   private shieldVal!: Node;
-  private shieldArt!: Node;
-  private shieldArtOk = false;
   private ults: UltUI[] = [];
   private skills: SkillUI[] = [];
   private hudNode!: Node;
@@ -73,8 +77,8 @@ export class HUD {
   private lastWave = '';
   private lastSec = -1;
   private lastLv = -1;
-  private lastHp = -1;
-  private lastShield = -1;
+  private lastHp = '';
+  private lastShield = '';
   // 经验条上涨动画状态（平滑逼近 + 获得时闪光）
   private xpShown = 0;
   private xpTarget0 = 0;
@@ -124,7 +128,7 @@ export class HUD {
     this.waveTxt = label(top, WX(560, 150), WYN(24, 60), '波次 0/10', { size: 22, color: '#FFF3DC', bold: true, w: 140, h: 38, shrink: true });
 
     /* 经验条（下移与顶栏留出间距）+ 居中 Lv 徽章骑条（线稿 ui_lv_badge） */
-    this.xpBar = gbar(top, WX(30, 690), WYN(100, 12), 690, 12, '#6CBCC6');
+    this.xpBar = battleProgressBar(top, WX(30, 690), WYN(100, 12), 690, 12, 'xp');
     const lvBadge = gpanel(top, WX(330, 90), WYN(91, 30), 90, 30, CA('#19261E', 0.94), undefined, 0, 10);
     // ui_lv_badge 美术暂不接：切片烤死了"Lv.1"文字，与动态等级冲突（第二批出无字版再换）
     this.lvTxt = label(lvBadge, 0, 0, 'Lv.1', { size: 20, color: '#FFE08A', font: 'number' });
@@ -160,36 +164,34 @@ export class HUD {
        充能中：置灰遮罩盖图标 + 主色能量水上涨（2% 步进）；就绪：高亮 + 光晕呼吸 + 粒子环绕 */
     this.dir.heroes.forEach((h, i) => this.ults.push(this.buildUlt(top, i, h)));
 
-    /* 防线耐久条（贴屏底、在墙上方）：条内居中耐久值 + 盾值胶囊(右→左) + 右侧百分比 */
-    this.hpBar = gbar(top, WX(55, 640), WYB(176, 20), 640, 22, PAL.green);
-    this.hpVal = label(top, WX(55, 640), WYB(176, 20), '1000/1000', { size: 18, color: '#FFFFFF', font: 'number', outline: '#29452B', outlineW: 1.2 });
-    this.shieldNode = new Node('shield');
-    this.shieldNode.setParent(top);
-    this.shieldNode.setPosition(0, WYB(176, 24), 0);
-    this.shieldG = this.shieldNode.addComponent(Graphics);
-    this.shieldNode.active = false;
-    this.shieldVal = label(top, 0, WYB(176, 24), '100', { size: 14, color: '#FFFFFF', bold: true });
-    this.shieldVal.active = false;
-    // 盾值美术胶囊（右缘锚点，自耐久条右端向左伸展），加载后接管程序绘制
-    this.shieldArt = artSprite(top, 345.5, WYB(176, 24), 40, 24, 'ui_bar_shield', { onLoaded: () => {
-      this.shieldArtOk = true;
-      this.shieldArt.getComponent(UITransform)!.setAnchorPoint(1, 0.5);
-      if (this.lastShield >= 0) this.redrawShield(this.lastShield);
-    }});
-    this.shieldArt.active = false;
-    this.pctTxt = label(top, WX(698, 48), WYB(176, 24), '100%', { size: 16, color: '#9FE08A', bold: true });
-    this.pctTxt.active = false; // 耐久槽已显示当前/最大值，留出右缘触控和战场空间。
+    /* 防线：绿色耐久在内、蓝色盾量包在外；右上两行生命／护盾数值。 */
+    const hpBottom = LINE_HP_BOTTOM;
+    this.hpBar = battleProgressBar(top, 0, WYB(hpBottom, 18), 640, 18, 'health');
+    this.hpBar.node.name = 'lineHealthBar';
+    const valueY = WYB(hpBottom + 46, 24);
+    this.hpVal = label(top, 320, valueY, '1000/1000', { size: 20, color: '#FFFFFF', font: 'number', outline: '#17251D', outlineW: 1.8, align: 'right' });
+    this.hpVal.name = 'lineHealthValue';
+    this.attachLineValueIcon(this.hpVal, 'heart');
+    this.shieldNode = N('lineShield', top);
+    this.shieldBar = battleShieldOutline(this.shieldNode, 0, WYB(hpBottom, 18), 640, 18);
+    const shieldValueY = valueY - 23;
+    this.shieldVal = label(this.shieldNode, 320, shieldValueY, '0', { size: 18, color: '#BCEFFF', font: 'number', outline: '#102A36', outlineW: 1.5, align: 'right' });
+    this.shieldVal.name = 'lineShieldValue';
+    this.attachLineValueIcon(this.shieldVal, 'shield');
 
     /* 英雄头顶 普攻/技能 图标（耐久条正下方，压墙顶，不遮挡耐久条；每英雄一套）
        技能 CD 中：灰化 + 扇形冷却遮罩 + 中心倒计时；就绪：高饱和 + 弹跳过渡 */
     this.dir.heroes.forEach((h, i) => this.skills.push(this.buildSkillBadge(top, i, h)));
   }
 
-  /** 第 i 钮：底基 240（整列下移贴英雄栏，用户调整），向上每钮 +110；从下到上 = 英雄位从左到右。点击就绪即施放，未满→Tips
+  /** 第 i 钮：上移避让生命／护盾两行数值，向上每钮 +110；从下到上 = 英雄位从左到右。点击就绪即施放，未满→Tips
    *  无边框规范：纯色圆板三态（充能灰/常态金/就绪亮金），不加座环美术
    *  充能表现（用户调整）：水位上涨——液面上灰罩/液面下英雄主色能量水（无白色分割线），中心只显示百分比；就绪亮金+光晕粒子、无文字 */
   private buildUlt(top: Node, i: number, hero: HeroBase): UltUI {
-    const ux = WX(636, 90), uy = WYB(240 + i * 110, 90);
+    const ux = WX(636, 90), uy = WYB(ULT_BOTTOM + i * ULT_STEP, 90);
+    const root = new Node('heroUlt:' + hero.id);
+    root.setParent(top); root.active = hero.ultUnlocked;
+    top = root; // 包住头像、百分比、能量和光效，未解锁时整个入口不可见/不可点击。
     // 就绪特效/能量水按英雄主色（用户调整：火橘/雷紫，不再只分狙击蓝/其他绿）
     const ULT_FX: Record<string, [string, string, string]> = {
       archer: [PAL.green, '#9FDB8C', '#D6F2C9'],
@@ -236,10 +238,11 @@ export class HUD {
     const chargeTxt = label(top, ux, uy, '0%', { size: 27, color: '#FFF7E8', font: 'number', w: 90, h: 38, outline: '#1D2632', outlineW: 2.2 });
     btn.on(Node.EventType.TOUCH_END, () => {
       const result = this.dir.tryCastUlt(i);
+      if (result === 'locked') return;
       if (result === 'charging') this.dir.showTips('ult', i);
       else ui.energy?.release();
     });
-    const ui: UltUI = { ux, uy, glow, btn, bright, gray, mask, color, fx, water, waterG, waterR: 46, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
+    const ui: UltUI = { root, baseY: uy, ux, uy, glow, btn, bright, gray, mask, color, fx, water, waterG, waterR: 46, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
     // All heroes share the charge, completion, ready and release animation.
     {
       // Keep all charge information inside the illustration, with no outer seat.
@@ -256,16 +259,21 @@ export class HUD {
     return ui;
   }
 
-  /** 脚底图标对：普攻(-40)/技能(+40)，坐在英雄脚下的墙面（中心=靴底下方32；无边框规范：纯色圆板 + 字） */
+  /** 初始只有居中普攻；学习技能后才展开为普攻/技能两个脚底图标。 */
   private buildSkillBadge(top: Node, i: number, hero: HeroBase): SkillUI {
     const cy = hero.node.position.y - 82;
-    const atkX = hero.x - 40, cx = hero.x + 40;
+    const atkX = hero.x - (hero.skillUnlocked ? 40 : 0), cx = hero.x + 40;
     const atkIcon = gcircle(top, atkX, cy, 28, CA(PAL.gold, 0.3));
+    atkIcon.name = 'heroAtk:' + hero.id;
     const atkGlyph = label(atkIcon, 0, 0, '攻', { size: 18, color: PAL.gold, bold: true });
     // 普攻/技能图标（58 > 底板圆 56：美术圆完全盖住底板，杜绝露出黄/蓝边——用户反馈）
     artSprite(atkIcon, 0, 0, 58, 58, 'ui_icon_atk_' + hero.id, { sliced: false, hideOnLoad: [atkGlyph] });
     atkIcon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('atk', i));
+    const root = new Node('heroSkill:' + hero.id);
+    root.setParent(top); root.active = hero.skillUnlocked;
+    top = root;
     const icon = gcircle(top, cx, cy, 28, CA(PAL.blue, 0.3));
+    icon.name = 'heroSkillIcon:' + hero.id;
     const glyph = label(icon, 0, 0, '技', { size: 18, color: PAL.blue, bold: true });
     // 技能图标（同上）
     artSprite(icon, 0, 0, 58, 58, 'ui_icon_skill_' + hero.id, { sliced: false, hideOnLoad: [glyph] });
@@ -279,7 +287,7 @@ export class HUD {
     pie.active = false;
     const cdTxt = label(top, cx, cy, '', { size: 19, color: '#FFF7E8', font: 'number', w: 56, h: 28, outline: '#1D2632', outlineW: 1.8 });
     cdTxt.active = false;
-    return { cx, cy, icon, glyph, gray, pie, pieG, cdTxt, cooling: null, lastCdKey: -1 };
+    return { root, atkIcon, unlocked: hero.skillUnlocked, cx, cy, icon, glyph, gray, pie, pieG, cdTxt, cooling: null, lastCdKey: -1 };
   }
 
   setWave(cur: number, total: number): void {
@@ -361,21 +369,27 @@ export class HUD {
       this.xpTarget0 = this.xpShown;
     }
     // 耐久 + 盾
-    const hpKey = Math.round(d.line.hp) * 4 + Math.round(d.line.maxHp);
+    const hpKey = Math.ceil(d.line.hp) + '/' + Math.round(d.line.maxHp);
     if (hpKey !== this.lastHp) {
       this.lastHp = hpKey;
-      this.hpBar.set(d.line.ratio, d.line.lowRatio ? PAL.red : PAL.green);
-      setText(this.hpVal, Math.ceil(d.line.hp) + '/' + Math.round(d.line.maxHp));
-      setText(this.pctTxt, Math.round(d.line.ratio * 100) + '%');
+      this.hpBar.set(d.line.ratio, d.line.lowRatio ? '#E64D45' : '#2ACB1D');
+      setText(this.hpVal, hpKey);
     }
-    const sh = Math.round(d.line.shield);
-    if (sh !== this.lastShield) {
-      this.lastShield = sh;
-      this.redrawShield(sh);
+    const shieldKey = d.line.shield + '/' + d.line.maxHp;
+    if (shieldKey !== this.lastShield) {
+      this.lastShield = shieldKey;
+      this.redrawShield(d.line.shield);
     }
     // 每英雄：大招充能/就绪 + 技能CD
+    let ultSlot = 0;
     d.heroes.forEach((h, i) => {
-      this.syncUlt(h, this.ults[i], dt);
+      const ult = this.ults[i];
+      ult.root.active = h.ultUnlocked;
+      if (h.ultUnlocked) {
+        const uy = WYB(ULT_BOTTOM + ultSlot++ * ULT_STEP, 90);
+        if (ult.uy !== uy) { ult.uy = uy; ult.root.setPosition(0, uy - ult.baseY, 0); }
+        this.syncUlt(h, ult, dt);
+      }
       this.syncSkillCd(h, this.skills[i]);
     });
   }
@@ -539,6 +553,13 @@ export class HUD {
 
   private syncSkillCd(hero: HeroBase, s: SkillUI): void {
     if (!s) return;
+    if (s.unlocked !== hero.skillUnlocked) {
+      s.unlocked = hero.skillUnlocked;
+      s.root.active = s.unlocked;
+      s.atkIcon.setPosition(hero.x - (s.unlocked ? 40 : 0), s.cy, 0);
+      s.cooling = null; s.lastCdKey = -1;
+    }
+    if (!s.unlocked) return;
     const cdLeft = Math.max(0, hero.skillCd);
     const cooling = cdLeft > 0.05;
     if (cooling !== s.cooling) {
@@ -610,33 +631,21 @@ export class HUD {
     }
   }
 
-  /** 盾值胶囊：从耐久条右端向左覆盖，宽度=盾值/耐久上限（§3.11）；美术条优先 */
+  /** Follow measured glyph width, including asynchronous font installation and digit changes. */
+  private attachLineValueIcon(value: Node, kind: 'heart' | 'shield'): void {
+    const ui = value.getComponent(UITransform)!, text = value.getComponent(Label)!;
+    ui.setAnchorPoint(1, .5);
+    text.enableWrapText = false;
+    const icon = battleStatusIcon(value, 0, 0, kind);
+    const align = (): void => { icon.setPosition(-ui.width - 16, 0, 0); };
+    value.on(Node.EventType.SIZE_CHANGED, align);
+    text.updateRenderData(true);
+    align();
+  }
+
+  /** 盾量/耐久上限决定右侧外层蓝框的长度；零盾只隐藏蓝框，数值保留 0。 */
   private redrawShield(shield: number): void {
-    const g = this.shieldG;
-    if (shield <= 0) {
-      this.shieldNode.active = false;
-      this.shieldArt.active = false;
-      this.shieldVal.active = false;
-      return;
-    }
-    this.shieldVal.active = true;
-    const barW = 640, barH = 24;
-    const w = Math.max(40, Math.min(barW - 4, (shield / this.dir.line.maxHp) * barW));
-    const cx = 347.5 - 2 - w / 2;   // 耐久条右端(画布 x=347.5) 向左收
-    if (this.shieldArtOk) {
-      this.shieldNode.active = false;
-      this.shieldArt.active = true;
-      this.shieldArt.getComponent(UITransform)!.setContentSize(w, barH);
-    } else {
-      this.shieldArt.active = false;
-      this.shieldNode.active = true;
-      g.clear();
-      g.fillColor = CA(PAL.blue, 0.55);
-      g.roundRect(-w / 2, -barH / 2, w, barH, barH / 2);
-      g.fill();
-      this.shieldNode.setPosition(cx, WYB(176, 24), 0);
-    }
-    this.shieldVal.setPosition(cx, WYB(176, 24), 0);
-    setText(this.shieldVal, String(shield));
+    this.shieldBar.set(shield / Math.max(1, this.dir.line.maxHp));
+    setText(this.shieldVal, String(Math.max(0, Math.ceil(shield))));
   }
 }

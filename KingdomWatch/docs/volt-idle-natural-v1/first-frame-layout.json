@@ -1,0 +1,24 @@
+{
+  "approvedMaster": "D:\\AI\\S4Game\\KingdomWatch\\docs\\volt-stance-idle-v2\\ready-red.png",
+  "masterSha256": "46444515732bd307b321376f4cdbfdde923830139933fe677383973a5ce148ba",
+  "canvasSize": [
+    768,
+    1344
+  ],
+  "uniformScale": 0.5439814814814815,
+  "placement": [
+    149,
+    332
+  ],
+  "contentBounds": [
+    149,
+    332,
+    619,
+    1067
+  ],
+  "imageRegenerated": false,
+  "masterChanged": false,
+  "videoFirstFrame": "video-first-frame.png",
+  "hostFilename": "hero_volt_idle_natural_v1_20261014_ff.png",
+  "purpose": "Unchanged approved master with fixed generous margins for a new natural forward idle cycle"
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "key": "bg_levels_outpost_comic_v2",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\scenes\\bg_levels_outpost_comic_v2.jpg",
+    "width": 1086,
+    "height": 1448,
+    "bytes": 512590
+  },
+  {
+    "key": "bg_levels_forest_comic_v2",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\scenes\\bg_levels_forest_comic_v2.jpg",
+    "width": 1086,
+    "height": 1448,
+    "bytes": 551701
+  },
+  {
+    "key": "bg_levels_lair_comic_v2",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\scenes\\bg_levels_lair_comic_v2.jpg",
+    "width": 1086,
+    "height": 1448,
+    "bytes": 496095
+  }
+]

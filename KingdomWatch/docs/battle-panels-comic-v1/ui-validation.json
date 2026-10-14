@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "url": "http://127.0.0.1:8765/",
+  "realBattleStarted": false,
+  "checks": [
+    "All five comic overlays load; full party including frost hero; proportional bars and separate readable percentage/value columns",
+    "Animated choice calls real director routing, learns frost skill once and resumes",
+    "Refresh: saved diamond cost once, ad loading blocks card/refresh clicks, failed ad retries without consuming quota, successful ad quota persists",
+    "Pause settings persist through tabs and to save; speed cycles; resume calls real director without card unlocks",
+    "Victory actual reward and next-level callback; double request only once, claimed state survives tab changes, no second charge/reward",
+    "Defeat no duplicate revive requests, retry after no-fill, actual +30% durability revive/resume; retry callback retained",
+    "Tips stay open when touched, outside touch closes without pause; 0%, 0.01% and empty stats remain accurate",
+    "No diamond refresh charge with an empty wallet",
+    "375×667 all panels, stats and primary actions fit the viewport",
+    "375×600 all panels, stats and primary actions fit the viewport"
+  ],
+  "errors": [],
+  "failed": []
+}

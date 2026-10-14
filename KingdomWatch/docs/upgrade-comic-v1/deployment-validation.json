@@ -1,0 +1,234 @@
+{
+  "dateUTC": "2026-10-11T11:00:01.857130+00:00",
+  "status": "published",
+  "url": "https://kingdom-watch.pages.dev/?v=upgrade-comic-1791716054",
+  "deployment": "https://5d7616db.kingdom-watch.pages.dev",
+  "typeCheck": "passed",
+  "creatorBuild": "passed: 3.8.8 web-mobile",
+  "dprPatch": "passed",
+  "newArt": 5,
+  "realBattleStarted": false,
+  "checks": {
+    "ui-validation": {
+      "ok": true,
+      "url": "http://127.0.0.1:8765/",
+      "realBattleStarted": false,
+      "checks": [
+        {
+          "fourTabs": "new comic components, circular portraits, pinned action, preserved art proportions"
+        },
+        {
+          "upgrade": "lv",
+          "from": 9,
+          "to": 10,
+          "cost": {
+            "gold": 1940,
+            "mat": 0
+          }
+        },
+        {
+          "milestones": "reached state, paging, detail and close"
+        },
+        {
+          "upgrade": "weaponLv",
+          "from": 1,
+          "to": 2,
+          "cost": {
+            "gold": 150,
+            "mat": 1
+          }
+        },
+        {
+          "upgrade": "atkLv",
+          "from": 1,
+          "to": 2,
+          "cost": {
+            "gold": 200,
+            "mat": 1
+          }
+        },
+        {
+          "upgrade": "skillLv",
+          "from": 1,
+          "to": 2,
+          "cost": {
+            "gold": 200,
+            "mat": 1
+          }
+        },
+        {
+          "upgrade": "ultLv",
+          "from": 1,
+          "to": 2,
+          "cost": {
+            "gold": 200,
+            "mat": 1
+          }
+        },
+        {
+          "upgrade": "w-helm",
+          "from": 1,
+          "to": 2,
+          "cost": {
+            "gold": 120,
+            "mat": 1
+          }
+        },
+        {
+          "upgrade": "w-acc",
+          "from": 1,
+          "to": 2,
+          "cost": {
+            "gold": 120,
+            "mat": 1
+          }
+        },
+        {
+          "upgrade": "w-glove",
+          "from": 1,
+          "to": 2,
+          "cost": {
+            "gold": 120,
+            "mat": 1
+          }
+        },
+        {
+          "upgrade": "w-armor",
+          "from": 1,
+          "to": 2,
+          "cost": {
+            "gold": 120,
+            "mat": 1
+          }
+        },
+        {
+          "navigationAndAttributes": "shared wallet and illustrated nav remain functional"
+        },
+        {
+          "guard": "poor",
+          "noUnexpectedCharge": true
+        },
+        {
+          "guard": "no-mat",
+          "noUnexpectedCharge": true
+        },
+        {
+          "guard": "max",
+          "noUnexpectedCharge": true
+        },
+        {
+          "guard": "empty",
+          "noUnexpectedCharge": true
+        },
+        {
+          "guard": "locked",
+          "noUnexpectedCharge": true
+        },
+        {
+          "shortScreen": [
+            375,
+            667
+          ],
+          "scroll": "touch scroll does not upgrade, remembered offset, platform follows feet, action stays visible"
+        },
+        {
+          "shortScreen": [
+            375,
+            600
+          ],
+          "scroll": "touch scroll does not upgrade, remembered offset, platform follows feet, action stays visible"
+        }
+      ],
+      "errors": [],
+      "failures": []
+    },
+    "online-validation": {
+      "ok": true,
+      "url": "https://kingdom-watch.pages.dev/?v=upgrade-comic-1791716054",
+      "realBattleStarted": false,
+      "checks": [
+        {
+          "fourTabs": "online images, shared controls and layout loaded"
+        },
+        {
+          "upgrade": "lv",
+          "from": 9,
+          "to": 10,
+          "cost": {
+            "gold": 1940,
+            "mat": 0
+          }
+        },
+        {
+          "newStaves": "all three published illustrations loaded"
+        },
+        {
+          "shortViewport": [
+            375,
+            600
+          ],
+          "pinnedAction": true,
+          "alignedPlatform": true
+        }
+      ],
+      "errors": [],
+      "failures": []
+    }
+  },
+  "onlineFiles": {
+    "index.html": {
+      "matchesLocal": true,
+      "bytes": 5043,
+      "sha256": "29a1c9e3910611f8fe2f0ac7b3670eda4c9e7d766e6afc8f6540d4359e436f66",
+      "path": "index.html"
+    },
+    "main.js": {
+      "matchesLocal": true,
+      "bytes": 795492,
+      "sha256": "123f0053355b4983b4775195be2849a55cc89b5394915887850baea199c1d57b",
+      "path": "assets/main/index.js"
+    },
+    "resources-config.json": {
+      "matchesLocal": true,
+      "bytes": 169790,
+      "sha256": "2199cf194306771a8681c12be3914a2ab7db2b817f9c73fc9f1835843ed33306",
+      "path": "assets/resources/config.json"
+    },
+    "dpr-engine.js": {
+      "matchesLocal": true,
+      "bytes": 5686956,
+      "sha256": "eeeef70cc6cd8bccc4493d60bbc85cddd4f6d0de383c4e8a3b4d48b64323488d",
+      "path": "cocos-js/_virtual_cc-y8x7t64p.js"
+    },
+    "bg_upgrade_comic_v1": {
+      "matchesLocal": true,
+      "bytes": 352080,
+      "sha256": "dbf24257dfe8dd0ec3f3263e564385018b48e5d1dcc6754339c0f05dbebe7432",
+      "path": "assets/resources/native/4d/4dd8c838-37ae-4474-9f95-6633151c5335.jpg"
+    },
+    "comic_training_hammer_v1": {
+      "matchesLocal": true,
+      "bytes": 70872,
+      "sha256": "f58c84c511bb9ae12f3047679b9c344e061a7227f892333458413bf6d8a8ab21",
+      "path": "assets/resources/native/37/37e1ede5-c87b-43df-b53b-e26aea9ca80a.png"
+    },
+    "comic_staff_pyro_v1": {
+      "matchesLocal": true,
+      "bytes": 93099,
+      "sha256": "42d071c31f9af3d5c951b847e5b5059925c290803449cd46e2c4b415b8052a26",
+      "path": "assets/resources/native/7f/7faf0482-7d4b-4e59-a16c-a540d39678a5.png"
+    },
+    "comic_staff_volt_v1": {
+      "matchesLocal": true,
+      "bytes": 109224,
+      "sha256": "134e81378cbe6eb002f6d60b82647fa54b65e5f2b3866228e83f40e416f2d08f",
+      "path": "assets/resources/native/5b/5b75090d-1cbd-40ae-a7a5-5b8d4201daf8.png"
+    },
+    "comic_staff_mora_v1": {
+      "matchesLocal": true,
+      "bytes": 100594,
+      "sha256": "1d3adf7441a19f0c1144c30d8531c25b1361208db2aac3d636a667ca5d19135e",
+      "path": "assets/resources/native/30/30189d50-3714-440f-a66b-f85cf074cea6.png"
+    }
+  }
+}

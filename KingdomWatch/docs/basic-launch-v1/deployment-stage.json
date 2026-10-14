@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-basic-launch-v1-20261015-010724",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-pick-comic-v1-20261015-005156",
+  "entryVersion": "1791997605",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=basic-launch-v1-1791997605",
+  "scope": "five hero basic projectile releases: bow/crossbow wind pressure, fire jet, violet lightning and frost crystals",
+  "layoutChanged": false,
+  "visualAcceptance": "pending user manual review"
+}

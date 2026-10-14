@@ -43,6 +43,32 @@ export function uxFrame(id: string, cb: (sf: SpriteFrame | null) => void): void 
  */
 interface Slice9Def { canon: [number, number]; inset: [number, number, number, number]; scale: number; }
 const SLICE9: Record<string, Slice9Def> = {
+  'pick_comic_v1/card_base': { canon: [883, 1477], inset: [140, 140, 80, 180], scale: .25 },
+  'pick_comic_v1/title_plate': { canon: [1940, 247], inset: [240, 240, 80, 80], scale: .25 },
+  'pick_comic_v1/header_strip': { canon: [2093, 312], inset: [220, 220, 98, 60], scale: 1 / 6 },
+  'settlement_comic_v1/panel_win': { canon: [597, 264], inset: [70, 70, 58, 58], scale: .4 },
+  'settlement_comic_v1/panel_lose': { canon: [597, 263], inset: [70, 70, 58, 58], scale: .4 },
+  'settlement_comic_v1/card_win': { canon: [507, 134], inset: [50, 50, 32, 32], scale: .5 },
+  'settlement_comic_v1/card_lose': { canon: [508, 134], inset: [50, 50, 32, 32], scale: .5 },
+  'settlement_comic_v1/button_teal': { canon: [582, 130], inset: [48, 48, 28, 28], scale: .5 },
+  'settlement_comic_v1/button_muted': { canon: [582, 130], inset: [48, 48, 28, 28], scale: .5 },
+  'pause_comic_v1/title_ribbon': { canon: [1014, 150], inset: [140, 140, 48, 48], scale: .45 },
+  'pause_comic_v1/button_gold': { canon: [572, 178], inset: [60, 60, 40, 40], scale: .5 },
+  'pause_comic_v1/button_green': { canon: [571, 175], inset: [60, 60, 40, 40], scale: .5 },
+  'pause_comic_v1/button_muted': { canon: [384, 122], inset: [44, 44, 28, 28], scale: .5 },
+  'pause_comic_v1/tab_neutral': { canon: [1178, 121], inset: [70, 70, 24, 24], scale: 58 / 121 },
+  'pause_comic_v1/tab_gold': { canon: [1180, 124], inset: [70, 70, 24, 24], scale: 58 / 124 },
+  'pause_comic_v1/settings_row': { canon: [1172, 120], inset: [60, 60, 24, 24], scale: .5 },
+  'battle_skin_v2/banner_title': { canon: [1040, 176], inset: [28, 28, 28, 28], scale: .5 },
+  'battle_skin_v2/banner_fail': { canon: [1180, 200], inset: [28, 28, 28, 28], scale: .5 },
+  'battle_skin_v2/card_base': { canon: [446, 720], inset: [24, 24, 24, 24], scale: .5 },
+  'battle_skin_v2/button_green': { canon: [600, 176], inset: [28, 28, 28, 28], scale: .5 },
+  'battle_skin_v2/button_gold': { canon: [600, 176], inset: [28, 28, 28, 28], scale: .5 },
+  'battle_skin_v2/button_muted': { canon: [600, 176], inset: [28, 28, 28, 28], scale: .5 },
+  'battle_skin_v2/tab_l': { canon: [520, 116], inset: [28, 2, 28, 28], scale: .5 },
+  'battle_skin_v2/tab_m': { canon: [520, 116], inset: [2, 2, 28, 28], scale: .5 },
+  'battle_skin_v2/tab_r': { canon: [520, 116], inset: [2, 28, 28, 28], scale: .5 },
+  'battle_skin_v2/bar_track': { canon: [450, 32], inset: [16, 16, 4, 4], scale: .5 },
   ui_panel_dark_gold: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
   ui_panel_dark_white: { canon: [1436, 140], inset: [31, 31, 8, 8], scale: 0.5 },
   ui_btn_primary: { canon: [600, 176], inset: [48, 48, 16, 16], scale: 0.5 },
@@ -252,6 +278,10 @@ export function artAtlasSprite(parent: Node, x: number, y: number, w: number, h:
 export const UX_PRELOAD_IDS: string[] = [
   // The shop and persistent lobby chrome share the selected comic direction.
   'scenes/bg_shop_comic_v1',
+  'scenes/bg_base_comic_v1',
+  'base_comic_v1/comic_keep_heart_v1',
+  ...['banner_title', 'banner_fail', 'card_base', 'button_green', 'button_gold', 'button_muted',
+    'tab_l', 'tab_m', 'tab_r', 'switch_on', 'switch_off', 'switch_disabled', 'bar_track', 'bar_fill'].map(k => 'battle_skin_v2/' + k),
   'shop_comic_v1/comic_coin_v1',
   'shop_comic_v1/comic_diamond_v1',
   'shop_comic_v1/comic_wpn_bow_v1',
@@ -295,7 +325,7 @@ export const UX_PRELOAD_IDS: string[] = [
   'ui_icon_lock', 'ui_seat_q0', 'ui_seat_q1', 'ui_seat_q2', 'ui_seat_q3', 'ui_card_shop',
   // 英雄头像
   'ui_avatar_archer', 'ui_avatar_sniper', 'ui_avatar_pyro', 'ui_avatar_volt',
-  'ui_avatar_mora', 'lobby_heroes_v1', 'lobby_levels_v1', 'lobby_rewards_v1', 'lobby_training_v1', 'lobby_weapons_v1', 'lobby_base_buildings_v1',
+  'ui_avatar_mora', 'lobby_heroes_v1', 'lobby_levels_v1', 'lobby_rewards_v1', 'lobby_training_v1', 'lobby_weapons_v1',
   // 英雄技能图标（双英雄均已交付）
   'ui_icon_atk_archer', 'ui_icon_skill_archer', 'ui_icon_ult_archer',
   // 三选一卡面图标（弓箭手组 15 张已交付；狙击/全局待图走首字回退）
@@ -320,7 +350,7 @@ export const UX_PRELOAD_IDS: string[] = [
   // 场景
   'scenes/scene_1_1', 'scenes/scene_1_2', 'scenes/scene_1_3',
   // 页签专属背景（商店内景 / 基地庭院）
-  'scenes/bg_shop', 'scenes/bg_base_lobby_v1', 'scenes/bg_heroes', 'scenes/bg_level', 'scenes/bg_upgrade',
+  'scenes/bg_shop', 'scenes/bg_heroes', 'scenes/bg_level', 'scenes/bg_upgrade',
   // 底部导航图标（美术盖 emoji 兜底）
   'ui_nav_shop', 'ui_nav_heroes', 'ui_nav_levels', 'ui_nav_upgrade', 'ui_nav_base',
 ];

@@ -1,0 +1,18 @@
+{
+  "ok": true,
+  "url": "https://kingdom-watch.pages.dev/?v=levels-comic-v2-1791711814",
+  "viewport": [
+    375,
+    667
+  ],
+  "realTouchDrag": true,
+  "claimedGold": 200,
+  "offsetRetainedAcross": [
+    "claim refresh",
+    "shop/hero/level roundtrip",
+    "squad done"
+  ],
+  "squadBackRemoved": true,
+  "battleEntered": false,
+  "errors": []
+}

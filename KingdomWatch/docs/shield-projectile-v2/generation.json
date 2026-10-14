@@ -1,0 +1,80 @@
+{
+  "mode": "built-in image_gen",
+  "imageTasks": 4,
+  "videoTasks": 0,
+  "noOtherGameArtworkSubmittedToModel": true,
+  "assets": [
+    {
+      "id": "wind",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-939c2265-1438-44ea-be1f-81895883f40a.png",
+      "workspaceSource": "D:\\AI\\S4Game\\KingdomWatch\\docs\\shield-projectile-v2\\sources\\wind.png",
+      "asset": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\fx\\basic_launch_v2_wind.png",
+      "prompt": "D:\\AI\\S4Game\\KingdomWatch\\docs\\shield-projectile-v2\\prompts\\wind.txt",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaBounds": [
+        0,
+        17,
+        1248,
+        1254
+      ],
+      "sha256": "b98583a11d24447f2dc8d57b8ab376f8c6f14eb09fa8fae2aef21f4d9d6a5b0d",
+      "sourcePixelsAndAlphaPreserved": true
+    },
+    {
+      "id": "fire",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-2d17b685-5591-4d4f-9bef-f33d4c7ad305.png",
+      "workspaceSource": "D:\\AI\\S4Game\\KingdomWatch\\docs\\shield-projectile-v2\\sources\\fire.png",
+      "asset": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\fx\\basic_launch_v2_fire.png",
+      "prompt": "D:\\AI\\S4Game\\KingdomWatch\\docs\\shield-projectile-v2\\prompts\\fire.txt",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaBounds": [
+        31,
+        31,
+        1240,
+        1254
+      ],
+      "sha256": "91a61358697cf9f5e9d57443336e1fe82db3482176022d698c2bd2787114870c",
+      "sourcePixelsAndAlphaPreserved": true
+    },
+    {
+      "id": "volt",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-cb4ecaf7-bebd-468f-90e7-52fef71cbef2.png",
+      "workspaceSource": "D:\\AI\\S4Game\\KingdomWatch\\docs\\shield-projectile-v2\\sources\\volt.png",
+      "asset": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\fx\\basic_launch_v2_volt.png",
+      "prompt": "D:\\AI\\S4Game\\KingdomWatch\\docs\\shield-projectile-v2\\prompts\\volt.txt",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaBounds": [
+        29,
+        27,
+        1232,
+        1254
+      ],
+      "sha256": "96d905e8af48dd56f471eb4fb1b2828574e7cc361d97816111199673b95eae49",
+      "sourcePixelsAndAlphaPreserved": true
+    },
+    {
+      "id": "frost",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-63059e37-74f2-4495-90a0-73d21332dd6d.png",
+      "workspaceSource": "D:\\AI\\S4Game\\KingdomWatch\\docs\\shield-projectile-v2\\sources\\frost.png",
+      "asset": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\fx\\basic_launch_v2_frost.png",
+      "prompt": "D:\\AI\\S4Game\\KingdomWatch\\docs\\shield-projectile-v2\\prompts\\frost.txt",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alphaBounds": [
+        0,
+        19,
+        1253,
+        1254
+      ],
+      "sha256": "4dcf28a1c566d63b454152e81caa3f56ebed699329c34d463d4ade24c8c9e63a",
+      "sourcePixelsAndAlphaPreserved": true
+    }
+  ]
+}

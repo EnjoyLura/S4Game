@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "status": "published",
+  "game": "https://kingdom-watch.pages.dev/?v=sniper-live-archer-84-1791868072",
+  "deployment": "https://d1027637.kingdom-watch.pages.dev",
+  "preview": "https://kingdom-watch.pages.dev/previews/sniper-idle-rebuild-v1/?v=1791868072",
+  "scope": "Formal game integration, replacing old sniper battle art; archer display size reduced",
+  "sniper": {
+    "player": "assets/scripts/battle/SniperIdleAnimation.ts",
+    "entry": "HeroBase.attachBattleArt('sniper')",
+    "resource": "assets/resources/ux/sniper_idle_rebuild_v4",
+    "displayHeight": 170,
+    "uniqueFrames": 56,
+    "timelineFrames": 110,
+    "loopSeconds": 4,
+    "timing": "animation.frameDurations; cosine-eased forward/backward loop",
+    "matte": "Existing v4-alpha1 aperture correction retained",
+    "facing": "Direct left/right mirroring; normal, skill and ultimate shots follow their firing direction",
+    "idle": "Countdown or no enemy in attack range, no pending shot/lock-on and no recovery",
+    "combat": "Freeze the current complete new held-crossbow pose; old battle atlas and UV animation no longer instantiated",
+    "gameplay": "Existing projectiles, damage, attack rates, skills and ultimate retained",
+    "sourceVideo": "Existing H3 v4 source reused; no new generation submitted"
+  },
+  "archer": {
+    "previousDisplayHeight": 221,
+    "displayHeight": 185.64,
+    "scale": 0.84,
+    "reductionPercent": 16,
+    "appliesTo": [
+      "idle",
+      "attack"
+    ],
+    "paintedHeightMatch": true,
+    "footNode": [
+      0,
+      -76
+    ],
+    "images": "Existing PNG atlases unchanged",
+    "timing": "Existing idle and attack timing retained",
+    "reproducible": "Idle packaging script emits 185.64; attack packaging reads the idle height"
+  },
+  "build": "Cocos Creator 3.8.8 web-mobile completed; success exit code 36",
+  "dprPatch": "Applied; entry cache-bust 1791868072",
+  "publish": "Wrangler Pages main completed, exit code 0; 11 uploaded, 905 cached",
+  "review": "User manual game review; no game, browser, online or automatic visual verification performed"
+}

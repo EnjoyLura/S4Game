@@ -4,7 +4,7 @@
  */
 import { _decorator, Canvas, Component, director, Layers, Node } from 'cc';
 import { LEVEL_1_1, LevelDef, MOBS, heroSlots, nextLevelId } from '../config/Mobs';
-import { CardCtx, CardDef, CardStacks, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, baseMoraStats, HeroStats, archerAtkCfg, sniperAtkCfg, sniperSkCfg, voltAtkCfg, voltSkCfg, voltUltCfg, pyroAtkCfg, pyroSkCfg, pyroUltCfg, moraAtkCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+import { CardCtx, CardDef, CardStacks, canTakeCard, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, baseMoraStats, HeroStats, archerAtkCfg, sniperAtkCfg, sniperSkCfg, voltAtkCfg, voltSkCfg, voltUltCfg, pyroAtkCfg, pyroSkCfg, pyroUltCfg, moraAtkCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
 import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
@@ -217,6 +217,7 @@ export class BattleDirector extends Component {
 
     if (this.state === 'prepare') {
       this.ambience.tick(dt);
+      for (const h of this.heroes) h.tickIdle(dt);
       this.prepareT -= dt;
       if (this.prepareT <= 0) {
         this.state = 'running';
@@ -240,7 +241,7 @@ export class BattleDirector extends Component {
       // GM 常开开关：tick 可能重置 CD/扣充能，故 tick 后强制。
       // 无冷却并非零 CD：压到 1s 内置冷却，避免技能每帧连发（用户反馈）。
       if (this.gmNoSkillCd) for (const h of this.heroes) h.skillCd = Math.min(h.skillCd, 1);
-      if (this.gmUltFull) for (const h of this.heroes) h.charge = h.chargeMax;
+      if (this.gmUltFull) for (const h of this.heroes) h.charge = h.ultUnlocked ? h.chargeGoal : 0;
       this.projs.tick(sub, this.line);
       this.parts.tick(sub);
       this.impacts.tick(sub);
@@ -297,10 +298,12 @@ export class BattleDirector extends Component {
     const pool = M0_POOL.filter(c => c.owner === 'global' || this.heroes.some(h => h.id === c.owner));
     const opts: PickOpts = {
       onPick: (card: CardDef) => {
-        this.applyCard(card);
+        if (this.state !== 'pick' || !this.applyCard(card)) return;
         this.stacks[card.id] = (this.stacks[card.id] || 0) + 1;
         this.pickQueue--;
         saveSave();
+        this.hud.sync(); // 选择解锁卡后立即刷新图标，即使后面还有排队三选一。
+        this.state = 'running';
         if (this.pickQueue > 0) this.openPick();
         else { this.panels.closeAll(); this.state = 'running'; }
       },
@@ -319,9 +322,10 @@ export class BattleDirector extends Component {
     if (this.pickOpts) this.pickOpts.onRefreshRequest();
   }
 
-  private applyCard(card: CardDef): void {
+  private applyCard(card: CardDef): boolean {
     // 卡按归属路由：'archer'/'sniper' 改写对应英雄属性，'global' 不触及英雄数值
     const owner = this.heroes.find(h => h.id === card.owner);
+    if ((!owner && card.owner !== 'global') || !canTakeCard(card, this.stacks)) return false;
     const ctx: CardCtx = {
       hero: owner ? owner.stats : this.heroes[0].stats,
       global: this.global,
@@ -331,11 +335,15 @@ export class BattleDirector extends Component {
       },
     };
     card.apply(ctx);
+    if (owner && card.unlocks === 'skill') owner.skillCd = 0;
+    if (owner && card.unlocks === 'ult') owner.charge = 0;
+    return true;
   }
 
   /* ---------- 大招（手动，充能满可放；未满点图标→Tips） ---------- */
-  tryCastUlt(idx = 0): 'ok' | 'charging' {
+  tryCastUlt(idx = 0): 'ok' | 'charging' | 'locked' {
     const h = this.heroes[idx];
+    if (!h?.ultUnlocked) return 'locked';
     if (h && h.ultReady && h.castUlt(this.mgr, this.projs, this.dmgSvc)) {
       // Sniper recoil belongs to the actual shot after its lock-on, not the tap.
       if (h.id !== 'sniper') h.animateAttack(true);
@@ -380,7 +388,9 @@ export class BattleDirector extends Component {
   }
 
   showTips(kind: 'atk' | 'skill' | 'ult', idx = 0): void {
-    this.panels.showTips(kind, this.heroes[idx] || this.heroes[0], this.line, idx);
+    const hero = this.heroes[idx] || this.heroes[0];
+    if (!hero || (kind === 'skill' && !hero.skillUnlocked) || (kind === 'ult' && !hero.ultUnlocked)) return;
+    this.panels.showTips(kind, hero, this.line, idx);
   }
 
   /* ---------- 失败 → 失败结算（广告复活按钮与胜利双倍按钮同位 §3.9） ---------- */
@@ -491,14 +501,14 @@ export class BattleDirector extends Component {
     const def = M0_POOL.find(c => c.id === id);
     if (!def) return;
     for (let i = 0; i < times; i++) {
-      this.applyCard(def);
+      if (!this.applyCard(def)) break;
       this.stacks[id] = (this.stacks[id] || 0) + 1;
     }
     this.hud.sync();
   }
 
   gmUltCharge(v: number): void {
-    for (const h of this.heroes) h.charge = v;
+    for (const h of this.heroes) h.charge = h.ultUnlocked ? Math.min(h.chargeGoal, v) : 0;
     this.hud.sync();
   }
 

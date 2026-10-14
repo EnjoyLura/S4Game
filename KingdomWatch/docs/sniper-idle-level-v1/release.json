@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "status": "published",
+  "preview": "https://kingdom-watch.pages.dev/previews/sniper-idle-level-v1/?v=1791888847",
+  "deployment": "https://6d3e7c4e.kingdom-watch.pages.dev",
+  "scope": "Level-crossbow master image, new idle sequence and standalone mirror/battle-material preview",
+  "gameIntegrated": false,
+  "image": {
+    "tool": "built-in imagegen",
+    "file": "ready-red.png",
+    "background": "Opaque red",
+    "pose": "Rear-view ranger holding a level crossbow at shoulder height",
+    "prompt": "image-prompt.txt"
+  },
+  "video": {
+    "taskId": "task_CUpPtDIDUaGjdCg7k1mMUncewFLpukdi",
+    "model": "lens-minimax-h3-768p",
+    "secondsRequested": 2,
+    "sourceSize": [768, 1344],
+    "sourceFrames": 56,
+    "fps": 24,
+    "sourceSeconds": 2.3333333333333335,
+    "file": "source.mp4",
+    "prompt": "idle-prompt.txt"
+  },
+  "sequence": {
+    "resource": "assets/resources/ux/sniper_idle_level_v1",
+    "uniqueFrames": 56,
+    "timelineFrames": 110,
+    "loopSeconds": 4,
+    "timing": "All adjacent source frames forward/backward, eased endpoint durations",
+    "atlas": [4096, 3584],
+    "cell": [512, 512],
+    "atlasBytes": 8760505,
+    "displayHeight": 170,
+    "matte": "Global red chroma key including enclosed bow gaps; red edge mix removed",
+    "space": "Fixed crop, scale and foot pivot; no per-frame relocation or body/cape splitting"
+  },
+  "archer": "Existing images and timing retained; displayHeight 185.64",
+  "build": "Cocos Creator 3.8.8 web-mobile completed, exit code 36",
+  "dprPatch": "Applied; entry cache-bust 1791888847",
+  "publish": "Wrangler Pages main completed, exit code 0; 18 uploaded, 922 cached",
+  "stage": "build/publish-sniper-idle-level-20261013-1853",
+  "review": "User manual effect review; no tests, game, browser or online visual verification performed"
+}

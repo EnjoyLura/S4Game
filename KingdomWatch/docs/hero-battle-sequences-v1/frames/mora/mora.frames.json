@@ -1,0 +1,445 @@
+{
+  "frames": {
+    "mora_idle0": [
+      0,
+      0,
+      256,
+      256
+    ],
+    "mora_idle1": [
+      256,
+      0,
+      256,
+      256
+    ],
+    "mora_idle2": [
+      512,
+      0,
+      256,
+      256
+    ],
+    "mora_idle3": [
+      768,
+      0,
+      256,
+      256
+    ],
+    "mora_idle4": [
+      1024,
+      0,
+      256,
+      256
+    ],
+    "mora_idle5": [
+      1280,
+      0,
+      256,
+      256
+    ],
+    "mora_idle6": [
+      1536,
+      0,
+      256,
+      256
+    ],
+    "mora_idle7": [
+      1792,
+      0,
+      256,
+      256
+    ],
+    "mora_idle8": [
+      0,
+      256,
+      256,
+      256
+    ],
+    "mora_idle9": [
+      256,
+      256,
+      256,
+      256
+    ],
+    "mora_idle10": [
+      512,
+      256,
+      256,
+      256
+    ],
+    "mora_idle11": [
+      768,
+      256,
+      256,
+      256
+    ],
+    "mora_idle12": [
+      1024,
+      256,
+      256,
+      256
+    ],
+    "mora_idle13": [
+      1280,
+      256,
+      256,
+      256
+    ],
+    "mora_idle14": [
+      1536,
+      256,
+      256,
+      256
+    ],
+    "mora_idle15": [
+      1792,
+      256,
+      256,
+      256
+    ],
+    "mora_idle16": [
+      0,
+      512,
+      256,
+      256
+    ],
+    "mora_idle17": [
+      256,
+      512,
+      256,
+      256
+    ],
+    "mora_idle18": [
+      512,
+      512,
+      256,
+      256
+    ],
+    "mora_idle19": [
+      768,
+      512,
+      256,
+      256
+    ],
+    "mora_idle20": [
+      1024,
+      512,
+      256,
+      256
+    ],
+    "mora_idle21": [
+      1280,
+      512,
+      256,
+      256
+    ],
+    "mora_idle22": [
+      1536,
+      512,
+      256,
+      256
+    ],
+    "mora_idle23": [
+      1792,
+      512,
+      256,
+      256
+    ],
+    "mora_attack0": [
+      0,
+      768,
+      256,
+      256
+    ],
+    "mora_attack1": [
+      256,
+      768,
+      256,
+      256
+    ],
+    "mora_attack2": [
+      512,
+      768,
+      256,
+      256
+    ],
+    "mora_attack3": [
+      768,
+      768,
+      256,
+      256
+    ],
+    "mora_attack4": [
+      1024,
+      768,
+      256,
+      256
+    ],
+    "mora_attack5": [
+      1280,
+      768,
+      256,
+      256
+    ],
+    "mora_attack6": [
+      1536,
+      768,
+      256,
+      256
+    ],
+    "mora_attack7": [
+      1792,
+      768,
+      256,
+      256
+    ],
+    "mora_attack8": [
+      0,
+      1024,
+      256,
+      256
+    ],
+    "mora_attack9": [
+      256,
+      1024,
+      256,
+      256
+    ],
+    "mora_attack10": [
+      512,
+      1024,
+      256,
+      256
+    ],
+    "mora_attack11": [
+      768,
+      1024,
+      256,
+      256
+    ],
+    "mora_attack12": [
+      1024,
+      1024,
+      256,
+      256
+    ],
+    "mora_attack13": [
+      1280,
+      1024,
+      256,
+      256
+    ],
+    "mora_attack14": [
+      1536,
+      1024,
+      256,
+      256
+    ],
+    "mora_attack15": [
+      1792,
+      1024,
+      256,
+      256
+    ],
+    "mora_attack16": [
+      0,
+      1280,
+      256,
+      256
+    ],
+    "mora_attack17": [
+      256,
+      1280,
+      256,
+      256
+    ],
+    "mora_attack18": [
+      512,
+      1280,
+      256,
+      256
+    ],
+    "mora_attack19": [
+      768,
+      1280,
+      256,
+      256
+    ],
+    "mora_attack20": [
+      1024,
+      1280,
+      256,
+      256
+    ],
+    "mora_attack21": [
+      1280,
+      1280,
+      256,
+      256
+    ],
+    "mora_attack22": [
+      1536,
+      1280,
+      256,
+      256
+    ],
+    "mora_attack23": [
+      1792,
+      1280,
+      256,
+      256
+    ]
+  },
+  "hero": "mora",
+  "name": "莫拉 · 寒霜",
+  "cellSize": 256,
+  "groundAnchor": [
+    128.0,
+    251
+  ],
+  "readyHeightPx": 174.647,
+  "displayReadyHeight": 146,
+  "animations": {
+    "idle": {
+      "frames": [
+        "mora_idle0",
+        "mora_idle1",
+        "mora_idle2",
+        "mora_idle3",
+        "mora_idle4",
+        "mora_idle5",
+        "mora_idle6",
+        "mora_idle7",
+        "mora_idle8",
+        "mora_idle9",
+        "mora_idle10",
+        "mora_idle11",
+        "mora_idle12",
+        "mora_idle13",
+        "mora_idle14",
+        "mora_idle15",
+        "mora_idle16",
+        "mora_idle17",
+        "mora_idle18",
+        "mora_idle19",
+        "mora_idle20",
+        "mora_idle21",
+        "mora_idle22",
+        "mora_idle23"
+      ],
+      "seconds": 1.875,
+      "loop": true,
+      "loopMethod": "continuous endpoint matched"
+    },
+    "attack": {
+      "frames": [
+        "mora_attack0",
+        "mora_attack1",
+        "mora_attack2",
+        "mora_attack3",
+        "mora_attack4",
+        "mora_attack5",
+        "mora_attack6",
+        "mora_attack7",
+        "mora_attack8",
+        "mora_attack9",
+        "mora_attack10",
+        "mora_attack11",
+        "mora_attack12",
+        "mora_attack13",
+        "mora_attack14",
+        "mora_attack15",
+        "mora_attack16",
+        "mora_attack17",
+        "mora_attack18",
+        "mora_attack19",
+        "mora_attack20",
+        "mora_attack21",
+        "mora_attack22",
+        "mora_attack23"
+      ],
+      "seconds": 0.84,
+      "loop": false,
+      "releaseFrame": 12
+    }
+  },
+  "source": {
+    "idle": "videos-v2/mora-idle.mp4",
+    "attack": "videos-v2/mora-attack.mp4",
+    "fps": [
+      24.0,
+      24.0
+    ],
+    "idleIndices": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      11,
+      13,
+      15,
+      17,
+      19,
+      21,
+      23,
+      25,
+      27,
+      29,
+      31,
+      33,
+      34,
+      36,
+      38,
+      40,
+      42,
+      44
+    ],
+    "attackIndices": [
+      0,
+      2,
+      5,
+      7,
+      10,
+      12,
+      14,
+      17,
+      19,
+      22,
+      24,
+      26,
+      29,
+      31,
+      33,
+      36,
+      38,
+      41,
+      43,
+      45,
+      48,
+      50,
+      53,
+      55
+    ],
+    "jointCrop": [
+      0,
+      128,
+      437,
+      687
+    ],
+    "fixedScale": 0.42805755395683454,
+    "fixedFoot": [
+      273.0,
+      684
+    ]
+  },
+  "status": "material review only, not integrated",
+  "blend": "straight RGBA; SRC_ALPHA / ONE_MINUS_SRC_ALPHA",
+  "diagnostics": {
+    "idleEndpointMeanError": 4.825,
+    "footBottomRange": [
+      249,
+      250
+    ]
+  }
+}

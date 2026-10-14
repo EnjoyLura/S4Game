@@ -1,0 +1,176 @@
+{
+  "dateUTC": "2026-10-11T14:24:13.387360+00:00",
+  "status": "published",
+  "url": "https://kingdom-watch.pages.dev/?v=battle-skin-v2-1791723401",
+  "deployment": "https://f68998cd.kingdom-watch.pages.dev",
+  "typeCheck": "passed",
+  "creatorBuild": "passed: 3.8.8 web-mobile",
+  "dprPatch": "passed",
+  "newArt": 14,
+  "realBattleStarted": false,
+  "checks": {
+    "ui-validation": {
+      "ok": true,
+      "url": "http://127.0.0.1:8765/",
+      "realBattleStarted": false,
+      "checks": [
+        {
+          "viewport": [
+            430,
+            932
+          ],
+          "originalLayoutAndText": "exact match for all nine views",
+          "tipBackdrop": "original 360×470, #14181E alpha 0.94",
+          "bars": "original 225×16, accurate share, number still in bar"
+        },
+        "Original animated card choice unlocks skill; refresh and persisted diamond cost stay correct",
+        "Original victory buttons/tabs retain next-level callback and guarded double claim",
+        "Original revive placement retains no-fill retry and actual +30% durability/resume",
+        "Original pause title, settings switches, tabs and continue button remain functional",
+        {
+          "viewport": [
+            375,
+            600
+          ],
+          "originalLayoutAndText": "exact match for all nine views",
+          "tipBackdrop": "original 360×470, #14181E alpha 0.94",
+          "bars": "original 225×16, accurate share, number still in bar"
+        }
+      ],
+      "errors": [],
+      "failed": []
+    },
+    "online-validation": {
+      "ok": true,
+      "url": "https://kingdom-watch.pages.dev/?v=battle-skin-v2-1791723401",
+      "realBattleStarted": false,
+      "checks": [
+        {
+          "viewport": [
+            375,
+            600
+          ],
+          "originalLayoutAndText": "exact match for all nine views",
+          "tipBackdrop": "original 360×470, #14181E alpha 0.94",
+          "bars": "original 225×16, accurate share, number still in bar"
+        },
+        "Original animated card choice unlocks skill; refresh and persisted diamond cost stay correct",
+        "Original victory buttons/tabs retain next-level callback and guarded double claim",
+        "Original revive placement retains no-fill retry and actual +30% durability/resume",
+        "Original pause title, settings switches, tabs and continue button remain functional"
+      ],
+      "errors": [],
+      "failed": []
+    }
+  },
+  "onlineFiles": {
+    "index.html": {
+      "matchesLocal": true,
+      "bytes": 5043,
+      "sha256": "f2482c6df8e990f25ec829dcdfea86779ac004f82f2204a9852b54323e9b4d1c",
+      "path": "index.html"
+    },
+    "main.js": {
+      "matchesLocal": true,
+      "bytes": 838272,
+      "sha256": "c7e4318df481d7a77d2aa21d517e0da404f99394449ec7a62aafe91781317ffd",
+      "path": "assets/main/index.js"
+    },
+    "resources-config.json": {
+      "matchesLocal": true,
+      "bytes": 182237,
+      "sha256": "5d26b17c0ff85b01ce7c93ef302fc5b266812f6e1fa0aa7bbe5c7fdc2735e581",
+      "path": "assets/resources/config.json"
+    },
+    "dpr-engine.js": {
+      "matchesLocal": true,
+      "bytes": 5686956,
+      "sha256": "eeeef70cc6cd8bccc4493d60bbc85cddd4f6d0de383c4e8a3b4d48b64323488d",
+      "path": "cocos-js/_virtual_cc-y8x7t64p.js"
+    },
+    "banner_title": {
+      "matchesLocal": true,
+      "bytes": 6352,
+      "sha256": "53a7ad4f672c8d0093ab87381352e64bf33c6795aa84158c4fc772deb57cebef",
+      "path": "assets/resources/native/9b/9bf218fb-b4cc-4c47-afa6-55c8635d9822.png"
+    },
+    "banner_fail": {
+      "matchesLocal": true,
+      "bytes": 7372,
+      "sha256": "4eef2b98f265d9bfb436227a297b39d15e8eddfcb6d9afeced8ba9caae042091",
+      "path": "assets/resources/native/3b/3b430ab2-88df-49b9-b5a9-38ece622e9c4.png"
+    },
+    "card_base": {
+      "matchesLocal": true,
+      "bytes": 9656,
+      "sha256": "f985310fe62e97f17a1fc29ce931e8c6802d40f29661581fb7db2cc2e722c3a6",
+      "path": "assets/resources/native/f0/f030c883-c8d3-4d67-9ca8-0cc081815947.png"
+    },
+    "button_green": {
+      "matchesLocal": true,
+      "bytes": 4711,
+      "sha256": "0e60e6e6aeceefe13912f5ab935e24d5774f5ef3554d24ddf077b8c4df8fe319",
+      "path": "assets/resources/native/96/9663529a-b248-4202-80a1-fabbd6c0bfeb.png"
+    },
+    "button_gold": {
+      "matchesLocal": true,
+      "bytes": 4734,
+      "sha256": "e25788413214903ed5b61cff4faa91e30d8e6244c9160f7d3c314833f09df04a",
+      "path": "assets/resources/native/9f/9f44531a-a24d-4470-a11a-8183ba00a6ab.png"
+    },
+    "button_muted": {
+      "matchesLocal": true,
+      "bytes": 4746,
+      "sha256": "8fa5b0c967379f0d95c446943e9b3948e23210d95c02bd3265921fcb1978e2b0",
+      "path": "assets/resources/native/22/2200e16d-6427-43fe-81ad-a776ed2da121.png"
+    },
+    "tab_l": {
+      "matchesLocal": true,
+      "bytes": 991,
+      "sha256": "d21ff4a72d7534e684fb9d760aed405fb1cf6d546b7334291a089187083771c1",
+      "path": "assets/resources/native/47/4748b8e3-2e73-4a12-b004-1f1a3c32a9dd.png"
+    },
+    "tab_m": {
+      "matchesLocal": true,
+      "bytes": 552,
+      "sha256": "891429e99bb97ea7e769e1012697ad87480237900519ce5603f3e79d8d370b87",
+      "path": "assets/resources/native/08/0898322d-3835-44f5-b73b-684e083a46e8.png"
+    },
+    "tab_r": {
+      "matchesLocal": true,
+      "bytes": 861,
+      "sha256": "dff92f11bd8129a0a2e673c3adbb93d7727a566b6e055e2ee6c2ad11fb00ed85",
+      "path": "assets/resources/native/79/79bcee8d-8f71-4028-a462-73c77b3926a5.png"
+    },
+    "switch_on": {
+      "matchesLocal": true,
+      "bytes": 3998,
+      "sha256": "fb2b22c3ad4b7ac7c94c95276e37c706971b48f4524f1481177029d87d3c6c57",
+      "path": "assets/resources/native/a2/a2229768-aad4-48e1-8648-e6b604aae0a6.png"
+    },
+    "switch_off": {
+      "matchesLocal": true,
+      "bytes": 4002,
+      "sha256": "61c6c7f505d31c021534e7ed9bba95679ce6ae968be56f802a89608e68bc78a0",
+      "path": "assets/resources/native/e2/e23e4480-528c-4e2f-a0da-eb2acee86f3d.png"
+    },
+    "switch_disabled": {
+      "matchesLocal": true,
+      "bytes": 3935,
+      "sha256": "3606df034ea813eca753d66a39750f9f0ec7c83e738a1a5bb56a2342c5be51da",
+      "path": "assets/resources/native/a6/a654ad2e-b240-4513-81ef-c3cdd63134bb.png"
+    },
+    "bar_track": {
+      "matchesLocal": true,
+      "bytes": 1203,
+      "sha256": "d8b5ccbd48172e8375a10482ab0713a6e87dafd57ad75d467636f66285a5d6ad",
+      "path": "assets/resources/native/5b/5b41f8f1-01ac-4d4e-9d17-d8f8de495d5e.png"
+    },
+    "bar_fill": {
+      "matchesLocal": true,
+      "bytes": 691,
+      "sha256": "7c6c95bbb97baf78dcd00fe024a14b61877feff152368fcea2d7f8d2d072177c",
+      "path": "assets/resources/native/a2/a2434f41-438b-422e-9dad-89f06d903a0d.png"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "url": "http://127.0.0.1:8765/previews/archer-native-v1/",
+  "frames": 120,
+  "errors": [],
+  "failed": [],
+  "checks": [
+    "idle, attack, rapid and heavy playback",
+    "three directions",
+    "play/pause and frame scrub",
+    "speed control",
+    "375px layout"
+  ]
+}

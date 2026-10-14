@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-settlement-comic-v1-20261015-001822",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-meters-v1-20261014-234737",
+  "entryVersion": "1791994681",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=settlement-comic-v1-1791994681",
+  "scope": "win/lose settlement artwork and fire-mage idle/attack integration",
+  "layoutChanged": true,
+  "visualAcceptance": "pending user manual review"
+}

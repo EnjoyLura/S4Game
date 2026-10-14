@@ -1,0 +1,10 @@
+{
+  "method": "New forward-time source cycle requested from the approved static master",
+  "sourceVideoTask": "task_PFLqLXlRsFBGgssOVPDIMAngcfd9Xzpb",
+  "actualPrompt": "idle-prompt-effective.txt",
+  "allSourceFramesRetained": true,
+  "reversePlayback": false,
+  "noArtificialHold": true,
+  "note": "Prompt and packaging do not certify visual closure; user reviews the actual new video and ordered frames",
+  "userAccepted": false
+}

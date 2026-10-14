@@ -1,0 +1,16 @@
+[
+  {
+    "key": "bg_base_comic_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\scenes\\bg_base_comic_v1.jpg",
+    "width": 1086,
+    "height": 1448,
+    "bytes": 579696
+  },
+  {
+    "key": "comic_keep_heart_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\base_comic_v1\\comic_keep_heart_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 44853
+  }
+]

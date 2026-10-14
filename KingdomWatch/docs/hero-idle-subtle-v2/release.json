@@ -1,0 +1,123 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-idle-subtle-v2-20261014-001155",
+  "entryVersion": "1791907914",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-idle-subtle-v2-1791907914",
+  "preview": "https://kingdom-watch.pages.dev/previews/hero-idle-subtle-v2/?v=1791907914",
+  "status": "published",
+  "date": "2026-10-14T00:14:00",
+  "timezone": "Asia/Shanghai",
+  "deployment": "https://ca6d51d1.kingdom-watch.pages.dev",
+  "characters": [
+    {
+      "hero": "sniper",
+      "resource": "sniper_idle_subtle_v2",
+      "original": "sniper-stance-idle-v3",
+      "sourceIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "sourceTask": "task_ZfW2nZiUwOEf2dNqB99lQDQqyq1Ealx1",
+      "uniqueFrames": 9,
+      "timelineFrames": 16,
+      "loopSeconds": 4,
+      "displayHeight": 153,
+      "readyHeightPx": 467.1111,
+      "groundAnchor": [
+        256,
+        496
+      ],
+      "atlas": [
+        4096,
+        1024
+      ],
+      "atlasBytes": 1276064,
+      "newVideoSubmitted": false,
+      "staticMasterAcceptedByUser": true,
+      "animationAcceptedByUser": false,
+      "gameIntegrated": true,
+      "review": "Source selection and asset production only; effect acceptance by user, no tests/browser/game/online QA",
+      "selectionRecord": "sniper-motion-selection.json",
+      "retainedMarkerMotion": 0.18721329732247283,
+      "fullClipMarkerMotion": 2.3438832510664622,
+      "pixelProcessing": "Unmodified complete original frame pixels; retained source crop, uniform scale and pivot"
+    },
+    {
+      "hero": "volt",
+      "resource": "volt_idle_subtle_v2",
+      "original": "volt-stance-idle-v2",
+      "sourceIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "sourceTask": "task_ciPdQdcFk87jCS8UmqSL7tBfPMm7YKGX",
+      "uniqueFrames": 8,
+      "timelineFrames": 14,
+      "loopSeconds": 4,
+      "displayHeight": 146,
+      "readyHeightPx": 468.7165,
+      "groundAnchor": [
+        256,
+        496
+      ],
+      "atlas": [
+        4096,
+        512
+      ],
+      "atlasBytes": 1369796,
+      "newVideoSubmitted": false,
+      "staticMasterAcceptedByUser": true,
+      "animationAcceptedByUser": false,
+      "gameIntegrated": true,
+      "review": "Source selection and asset production only; effect acceptance by user, no tests/browser/game/online QA",
+      "selectionRecord": "volt-motion-selection.json",
+      "retainedMarkerMotion": 0.4968515664015934,
+      "fullClipMarkerMotion": 2.3381398486934177,
+      "pixelProcessing": "Unmodified complete original frame pixels; retained source crop, uniform scale and pivot"
+    }
+  ],
+  "staticMastersAcceptedByUser": true,
+  "animationAcceptedByUser": false,
+  "newImageGenerated": false,
+  "newVideoSubmitted": false,
+  "sourceReuse": "Earlier MiniMax H3 videos retained; only quiet continuous prefixes enter the new idle atlases",
+  "unchanged": {
+    "archer": "Images, idle, attack, displayHeight185.64",
+    "sniperAttack": "sniper_stance_attack_v1; same readyHeight467.1111 and displayHeight153",
+    "voltCombat": "Freeze the same current character during casting; new attack frames still pending",
+    "weaponHold": "The two user-approved standing images and grip retained",
+    "gameplay": "Target range, idle gating, pause, projectiles, damage, speed, skills, ultimates and sound"
+  },
+  "legacyPreviewUpdated": "previews/hero-stance-rebuild-v1/ now serves the corrected idle content",
+  "build": {
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "exitCode": 36,
+    "milliseconds": 9672,
+    "finishedLocal": "2026-10-14 00:10:41",
+    "log": "C:/Users/user/AppData/Local/Temp/kw-hero-idle-subtle-v2-20261014-out.log"
+  },
+  "dprPatch": "completed",
+  "publication": {
+    "tool": "Wrangler3.114.17",
+    "exitCode": 0,
+    "uploaded": 28,
+    "cached": 1106,
+    "uploadSeconds": 17.61
+  },
+  "review": "Frame selection for production only. User manually reviews effects. No tests, browser, game or online QA; static-image acceptance does not imply animation acceptance."
+}

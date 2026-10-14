@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "url": "https://kingdom-watch.pages.dev/?v=hero-motion-1791730476",
+  "realBattleStarted": false,
+  "checks": [
+    {
+      "viewport": [
+        375,
+        600
+      ],
+      "pause": "1–4 rows clear subtitle, one another and tabs by at least 12px",
+      "health": "whole health/shield group raised 22 design pixels"
+    }
+  ],
+  "errors": [],
+  "failed": []
+}

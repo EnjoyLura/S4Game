@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shield-projectile-v2-20261015-012351",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-basic-launch-v1-20261015-010724",
+  "entryVersion": "1791998602",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=shield-projectile-v2-1791998602",
+  "scope": "blue shield shell, stacked HP/shield values, raised health and ult icons; painted basic releases and elemental flight wakes",
+  "layoutChanged": true,
+  "visualAcceptance": "pending user manual review"
+}

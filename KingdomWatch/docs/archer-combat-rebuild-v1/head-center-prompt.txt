@@ -1,0 +1,9 @@
+Use case: precise-object-edit
+Asset type: transparent full-body archer combat sprite for a mobile tower-defense game.
+Input image 1 is the EDIT TARGET. Preserve this exact existing character and image composition.
+
+Primary request: subtly turn ONLY the archer's head closer toward the middle (toward the top-center of the image, looking away from us), instead of looking so far to his left. This is a small, natural adjustment of head yaw at the neck, about 15–20 degrees farther away from the viewer. Keep a slight upper-left gaze. Show more back of the head and much less of the left face: a narrow sliver of cheek at most, no clearly visible eye, no broad nose or full facial profile. Keep his existing short spiky copper-brown hairstyle, pointed elf ears, adult male identity, head size and head position. The neck should connect naturally to the unchanged shoulders.
+
+Strict preservation: the entire character below the neck must remain exactly as in the input. Do not change the shoulder pose, torso, cape silhouette or folds, quiver, white arrow fletching, bow, bowstring, left holding hand, sleeves, bracers, legs, boots, grounded stance, proportions, colors, cel shading, or dark outlines. Do not redraw the body in a new pose. Do not raise the bow, draw the string, add a nocked arrow, or change the camera angle. Keep the same full-body framing, portrait canvas, character size, foot positions and margins. One character, one direction, one bow.
+
+Background: preserve genuine RGBA transparency, all exterior pixels transparent, no backdrop, ground, glow, haze, shadow, text, or watermark. The result is the same complete cutout sprite with ONLY the head orientation made slightly more centered.

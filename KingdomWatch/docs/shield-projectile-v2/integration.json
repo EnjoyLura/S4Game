@@ -1,0 +1,81 @@
+{
+  "status": "published",
+  "scope": "blue shield shell, stacked HP/shield values, raised health and ult icons; painted basic releases and elemental flight wakes",
+  "healthBar": {
+    "bottom": 212,
+    "previousBottom": 198,
+    "raisedDesignPixels": 14,
+    "width": 640,
+    "height": 18
+  },
+  "shield": {
+    "display": "hollow blue chamfered band outside the complete HP track",
+    "outerSize": [
+      652,
+      30
+    ],
+    "innerSize": [
+      644,
+      22
+    ],
+    "widthFraction": "shield/maxHp, clamped 0..1",
+    "zero": "outline hidden, numeric value 0 retained",
+    "values": "right aligned above track, heart/HP first row, shield/value second row"
+  },
+  "ultimate": {
+    "previousBottom": 240,
+    "bottom": 340,
+    "step": 110,
+    "compactUnlockedSlots": true
+  },
+  "launch": {
+    "renderer": "four intact painted sprites plus original native moving pressure fronts",
+    "pool": 36,
+    "newNodesPerAttack": 0,
+    "lifetimeSeconds": {
+      "archer": 0.32,
+      "sniper": 0.36,
+      "pyro": 0.36,
+      "volt": 0.3,
+      "mora": 0.38
+    },
+    "sourceOrigin": "same actual projectile origin and normalized aim direction",
+    "fan": "once per row, serial rows each release"
+  },
+  "flight": {
+    "renderer": "one additional Graphics, before painted body sprites",
+    "distanceBased": true,
+    "basicOnly": true,
+    "empoweredArcherBasicIncluded": true,
+    "trailLengths": {
+      "archer": 126,
+      "sniper": 146,
+      "pyro": 112,
+      "volt": 118,
+      "mora": 136
+    },
+    "details": {
+      "archer": "fine wind lines and tiny warm glints",
+      "sniper": "thicker pale-blue airflow",
+      "pyro": "orange tapered wake and backward-flowing embers",
+      "volt": "violet wake and paired branching arcs",
+      "mora": "blue tapered frost wake and small faceted crystals"
+    },
+    "clock": "simulation age/velocity; no render-frame random phase"
+  },
+  "retained": [
+    "hero images/idle/attack media and sizes",
+    "projectile bodies, speed, aim and collision",
+    "damage, attack speed, skills and ultimates",
+    "hit effects, sounds, pause/pick/settlement UI"
+  ],
+  "imageGenerationMode": "built-in image_gen",
+  "newImageTasks": 4,
+  "newVideoTasks": 0,
+  "gameplayTestsRun": false,
+  "browserValidationRun": false,
+  "onlineValidationRun": false,
+  "userVisualAccepted": false,
+  "game": "https://kingdom-watch.pages.dev/?v=shield-projectile-v2-1791998602",
+  "deployment": "https://23086d06.kingdom-watch.pages.dev"
+}

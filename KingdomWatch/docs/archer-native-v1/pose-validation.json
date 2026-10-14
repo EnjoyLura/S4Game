@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "samples": 3000,
+  "maxForeError": 2.1316282072803006e-14,
+  "maxReleaseJump": 0,
+  "checks": [
+    "fixed feet and firing origin",
+    "bounded two-joint arm lengths",
+    "continuous release including rapid re-trigger",
+    "three independently drawn directions",
+    "turn hysteresis and no-target recovery",
+    "rapid re-nock before queued shot"
+  ]
+}

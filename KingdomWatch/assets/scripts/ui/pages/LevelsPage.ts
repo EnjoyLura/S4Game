@@ -1,24 +1,25 @@
-/** Comic expedition lobby: illustrated battlefields and shared, single-contour controls. */
-import { Graphics, Node, Sprite, UIOpacity, UITransform, Vec3, director } from 'cc';
+/** Continuous outdoor scenery, a draggable route, and a reward dock that owns its space. */
+import { EventTouch, Graphics, Mask, Node, ScrollView, Sprite, UIOpacity, UITransform, Vec2, Vec3, director } from 'cc';
 import { LO } from '../../config/GameConfig';
-import { C, CA, N, WY } from '../UIKit';
+import { C, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
 import { COMIC, comicArt, comicButton, comicMark, comicPlate } from '../ComicUI';
-import { heroGlyph } from '../HeroComic';
 import { mainLabel, PageCtx, toast, mainLayout, MAIN_RESOURCE_H } from '../PageKit';
-import { CHEST_COND, claimChest, starKey, squadList } from '../../core/GameData';
+import { CHEST_COND, CHEST_REWARD, claimChest, starKey, squadList } from '../../core/GameData';
 import { loadSave } from '../../core/SaveData';
 import { flow } from '../../core/Flow';
 import { openSquadPanel } from '../SquadPanel';
 
 const LEVELS = [
-  { id: '1-1', name: '1-1 前哨', desc: '10 波 · 哥布林军团', art: 'outpost' },
-  { id: '1-2', name: '1-2 深林', desc: '10 波 · 深林伏兵', art: 'forest' },
-  { id: '1-3', name: '1-3 兽穴', desc: '10 波 · 蛮兵巢穴', art: 'lair' },
+  { id: '1-1', name: '1-1 前哨', short: '前哨', desc: '10 波 · 哥布林军团', art: 'outpost' },
+  { id: '1-2', name: '1-2 深林', short: '深林', desc: '10 波 · 深林伏兵', art: 'forest' },
+  { id: '1-3', name: '1-3 兽穴', short: '兽穴', desc: '10 波 · 蛮兵巢穴', art: 'lair' },
 ];
+// Only the first three levels have battle definitions. Later stops cannot start fallback battles.
+const ROUTE = [...LEVELS, { id: '1-4', short: '待开放' }, { id: '1-5', short: '待开放' }];
 const DIFFS = ['普通', '精英', '地狱'];
 const DIFFICULTY_ART = ['comic_difficulty_shield_v1', 'comic_swords_v1', 'comic_difficulty_skull_v1'];
-const st = { i: 0, d: 0 };
+const st = { i: 0, d: 0, routeOffset: 0 };
 
 function levelArt(parent: Node, x: number, y: number, w: number, h: number, key: string): Node {
   return comicArt(parent, x, y, w, h, 'levels_comic_v1/' + key);
@@ -36,20 +37,25 @@ function star(parent: Node, x: number, y: number, size: number, earned: boolean)
   const art = artSprite(parent, x, y, size, size, 'levels_comic_v1/comic_star_v1', {
     sliced: false, onLoaded: n => { if (!earned) n.getComponent(Sprite)!.color = C(COMIC.muted); },
   });
-  if (!earned) {
-    art.addComponent(UIOpacity).opacity = 95;
-  }
+  if (!earned) art.addComponent(UIOpacity).opacity = 95;
 }
-function switchArrow(parent: Node, x: number, direction: 'left' | 'right', cb: () => void): void {
-  const hit = N('levelSwitch:' + direction, parent, x, 0, 76, 100);
-  heroGlyph(hit, 0, 0, direction, 68);
-  tap(hit, cb);
+/** Let ScrollView capture moves. Cancelled or dragged presses must never select a route stop. */
+function routeTap(node: Node, cb: () => void): void {
+  let cancelled = false;
+  node.on(Node.EventType.TOUCH_START, () => { cancelled = false; });
+  node.on(Node.EventType.TOUCH_CANCEL, () => { cancelled = true; });
+  node.on(Node.EventType.TOUCH_END, (event: EventTouch) => {
+    const touch = event.touch;
+    if (!touch || cancelled || Vec2.distance(touch.getUILocation(), touch.getUIStartLocation()) > 7) return;
+    event.propagationStopped = true;
+    cb();
+  });
 }
 
 export function buildLevels(ctx: PageCtx): void {
   const content = N('levelLobby', ctx.screens, 0, 0, 750, LO.half * 2);
   function levelOpen(i: number): boolean {
-    return i === 0 || (loadSave().stars[starKey(LEVELS[i - 1].id, 0)] || 0) >= 1;
+    return i < LEVELS.length && (i === 0 || (loadSave().stars[starKey(LEVELS[i - 1].id, 0)] || 0) >= 1);
   }
   function diffUnlocked(i: number, d: number): boolean {
     return d === 0 ? levelOpen(i) : (loadSave().stars[starKey(LEVELS[i].id, d - 1)] || 0) >= 1;
@@ -63,28 +69,25 @@ export function buildLevels(ctx: PageCtx): void {
     content.destroyAllChildren();
     const sv = loadSave(), lv = LEVELS[st.i], open = levelOpen(st.i);
     const key = starKey(lv.id, st.d), stars = sv.stars[key] || 0, claimed = sv.chestClaimed[key] || 0;
-    const { headerTop, bottom } = mainLayout();
-    const compact = LO.half * 2 < 1450;
-    const titleTop = headerTop + MAIN_RESOURCE_H + 18;
-    const tabsTop = titleTop + (compact ? 98 : 110);
-    const tabH = compact ? 62 : 68;
-    const sceneTop = tabsTop + tabH + 14;
-    const actionH = compact ? 92 : 100;
-    const actionTop = bottom - actionH;
-    const rewardH = compact ? 218 : 240;
-    const rewardTop = actionTop - rewardH - 16;
-    const selectorTop = rewardTop - 108;
+    const { headerTop, bottom } = mainLayout(), height = LO.half * 2;
+    const titleTop = headerTop + MAIN_RESOURCE_H + 14;
+    const tabsTop = titleTop + 78, tabH = 62, sceneTop = tabsTop + tabH + 12;
+    const actionH = 94, actionTop = bottom - actionH;
+    // The reward content owns real vertical space instead of being squeezed under an expanding diorama.
+    const rewardH = Math.min(420, Math.max(316, height * .27));
+    const rewardTop = actionTop - rewardH - 14, selectorTop = rewardTop - 120;
     const sceneH = Math.max(1, selectorTop - 12 - sceneTop);
 
-    // This scene ends at the reward dock: illustration never leaks behind paper or navigation.
     const upper = N('levelUpperScene', content, 0, WY(0, rewardTop), 750, rewardTop);
-    artSprite(upper, 0, 0, 750, rewardTop, 'scenes/bg_levels_comic_v1', { sliced: false, cover: true });
-    mainLabel(content, 0, WY(titleTop, 28), '第1章 · 腐朽森林', {
-      size: 25, color: '#F5DA9B', w: 460, h: 30, outline: COMIC.ink, outlineW: 2,
+    const terrain = artSprite(upper, 0, 0, 750, rewardTop,
+      'scenes/bg_levels_' + lv.art + '_comic_v2', { sliced: false, cover: true });
+    terrain.name = 'levelTerrain:' + lv.id;
+    mainLabel(content, 0, WY(titleTop, 26), '第1章 · 腐朽森林', {
+      size: 23, color: '#F5DA9B', w: 460, h: 28, outline: COMIC.ink, outlineW: 2,
     });
-    const title = mainLabel(content, 0, WY(titleTop + 32, 58), lv.name, {
-      size: compact ? 46 : 52, font: 'body', color: COMIC.cream, bold: true,
-      w: 620, h: 62, outline: COMIC.ink, outlineW: 3,
+    const title = mainLabel(content, 0, WY(titleTop + 28, 44), lv.name, {
+      size: 42, font: 'body', color: COMIC.cream, bold: true,
+      w: 620, h: 44, outline: COMIC.ink, outlineW: 3,
     });
     title.name = 'levelTitle';
 
@@ -93,10 +96,10 @@ export function buildLevels(ctx: PageCtx): void {
       const unlocked = diffUnlocked(st.i, d), active = st.d === d;
       const slot = comicPlate(difficultyBar, (d - 1) * 232, 0, 222, tabH, active ? 'gold' : 'dark',
         { name: 'levelDifficulty:' + d });
-      levelArt(slot, -65, 0, 42, 42, DIFFICULTY_ART[d]);
+      levelArt(slot, -65, 0, 40, 40, DIFFICULTY_ART[d]);
       mainLabel(slot, 7, 0, name, {
-        size: 29, color: active ? COMIC.text : unlocked ? COMIC.cream : COMIC.muted,
-        bold: true, w: 94, h: 42,
+        size: 28, color: active ? COMIC.text : unlocked ? COMIC.cream : COMIC.muted,
+        bold: true, w: 94, h: 40,
       });
       if (!unlocked) comicMark(slot, 80, 0, 'lock', 20, COMIC.muted);
       tap(slot, () => {
@@ -106,44 +109,46 @@ export function buildLevels(ctx: PageCtx): void {
     });
 
     const scene = N('terrainStage', content, 0, WY(sceneTop, sceneH), 750, sceneH);
-    const ground = N('terrainGround', scene);
-    const loading = mainLabel(scene, 0, 0, '加载战场…', { size: 22, color: COMIC.cream, w: 300, h: 34, outline: COMIC.ink, outlineW: 2 });
-    const island = artSprite(scene, 0, 0, 612, Math.min(sceneH - 8, 612),
-      'levels_comic_v1/comic_terrain_' + lv.art + '_v1', {
-        sliced: false, hideOnLoad: [loading], onLoaded: art => {
-          const t = art.getComponent(UITransform)!, sourceH = art.getComponent(Sprite)!.spriteFrame!.rect.height;
-          ground.setPosition(0, -t.height / 2 + t.height * 24 / sourceH + 9, 0);
-          const shadow = ground.addComponent(Graphics);
-          shadow.fillColor = CA(COMIC.ink, .18);
-          shadow.ellipse(0, 0, t.width * .38, 18); shadow.fill();
-        },
-      });
-    island.name = 'levelTerrain:' + lv.id;
     if (!open) {
-      island.addComponent(UIOpacity).opacity = 170;
       const locked = comicPlate(scene, 0, -sceneH / 2 + 30, 314, 48, 'dark', { name: 'levelLockedHint' });
       comicMark(locked, -123, 0, 'lock', 22);
       mainLabel(locked, 16, 0, '通关 ' + LEVELS[st.i - 1].id + ' 解锁', { size: 22, color: COMIC.cream, w: 258, h: 34 });
     }
-    switchArrow(scene, -330, 'left', () => selectLevel((st.i + LEVELS.length - 1) % LEVELS.length));
-    switchArrow(scene, 330, 'right', () => selectLevel((st.i + 1) % LEVELS.length));
 
-    const selectors = N('levelSelectors', content, 0, WY(selectorTop, 62), 558, 62);
-    const chain = selectors.addComponent(Graphics);
-    chain.strokeColor = C('#C8A66C'); chain.lineWidth = 3;
-    chain.moveTo(-186, 0); chain.lineTo(186, 0); chain.stroke();
-    LEVELS.forEach((level, i) => {
-      const active = st.i === i, unlocked = levelOpen(i);
-      const item = comicPlate(selectors, (i - 1) * 186, 0, 164, 62, active ? 'gold' : 'dark',
+    const viewW = 704, viewH = 80, pitch = 180, itemW = 164, pad = 8;
+    const routeW = pad * 2 + (ROUTE.length - 1) * pitch + itemW;
+    const maxOffset = routeW - viewW;
+    const view = N('levelSelectors', content, 0, WY(selectorTop, viewH), viewW, viewH);
+    view.addComponent(Mask);
+    const scroll = view.addComponent(ScrollView);
+    const route = N('levelRouteContent', view, -viewW / 2, 0, routeW, viewH);
+    route.getComponent(UITransform)!.setAnchorPoint(0, .5);
+    scroll.horizontal = true; scroll.vertical = false;
+    scroll.inertia = true; scroll.brake = .65; scroll.elastic = false;
+    scroll.cancelInnerEvents = true; scroll.content = route;
+    const remember = (): void => { st.routeOffset = Math.min(maxOffset, Math.max(0, -scroll.getScrollOffset().x)); };
+    view.on('scrolling', remember);
+    view.on('scroll-ended', remember);
+    ROUTE.forEach((level, i) => {
+      const active = st.i === i, available = i < LEVELS.length, unlocked = available && levelOpen(i);
+      const item = comicPlate(route, pad + itemW / 2 + i * pitch, 0, itemW, 74, active ? 'gold' : 'dark',
         { name: 'levelSelect:' + level.id });
-      mainLabel(item, unlocked ? 0 : -12, 0, level.id, {
-        size: 28, bold: true, color: active ? COMIC.text : COMIC.cream, w: 104, h: 40,
+      mainLabel(item, unlocked ? 0 : -10, 13, level.id, {
+        size: 27, bold: true, color: active ? COMIC.text : available ? COMIC.cream : COMIC.muted, w: 100, h: 32,
       });
-      if (!unlocked) comicMark(item, 52, 0, 'lock', 20, active ? COMIC.text : COMIC.muted);
-      tap(item, () => { if (!active) selectLevel(i); });
+      mainLabel(item, 0, -20, level.short, { size: 18, color: active ? COMIC.text : '#C8CFD3', w: 144, h: 26 });
+      if (!unlocked) comicMark(item, 53, 13, 'lock', 18, active ? COMIC.text : COMIC.muted);
+      routeTap(item, () => {
+        if (!available) { toast('后续关卡即将开放'); return; }
+        if (!active) selectLevel(i);
+      });
     });
-    mainLabel(content, 0, WY(selectorTop + 72, 30), lv.desc, {
-      size: 23, color: COMIC.cream, w: 530, h: 32, outline: COMIC.ink, outlineW: 2,
+    scroll.scrollToOffset(new Vec2(Math.min(maxOffset, st.routeOffset), 0), 0);
+    mainLabel(content, -116, WY(selectorTop + 88, 24), lv.desc, {
+      size: 21, color: COMIC.cream, w: 450, h: 26, outline: COMIC.ink, outlineW: 2,
+    });
+    mainLabel(content, 239, WY(selectorTop + 88, 24), '左右滑动选关', {
+      size: 18, color: COMIC.cream, w: 220, h: 26, outline: COMIC.ink, outlineW: 2,
     });
 
     const rewards = comicPlate(content, 0, WY(rewardTop, rewardH), 718, rewardH, 'paper',
@@ -158,25 +163,38 @@ export function buildLevels(ctx: PageCtx): void {
     const divider = N('rewardDivider', rewards).addComponent(Graphics);
     divider.strokeColor = C(COMIC.paperShade); divider.lineWidth = 1;
     divider.moveTo(-328, ry(53)); divider.lineTo(328, ry(53)); divider.stroke();
+    const bodyTop = 66, bodyH = rewardH - bodyTop - 14;
     for (let t = 0; t < 3; t++) {
       const tier = t + 1, canClaim = stars >= tier && claimed < tier, done = claimed >= tier;
-      const spot = N('rewardTier' + tier, rewards, (t - 1) * 222, ry(compact ? 124 : 133), 210, rewardH - 54);
-      const chestH = compact ? 91 : 111;
-      const chest = levelArt(spot, 0, 19, 122, chestH, done ? 'comic_chest_open_v1' : 'comic_chest_closed_v1');
+      const spot = N('rewardTier' + tier, rewards, (t - 1) * 222, ry(bodyTop + bodyH / 2), 210, bodyH);
+      const sy = (top: number): number => bodyH / 2 - top;
+      const condition = mainLabel(spot, 0, sy(22), CHEST_COND[t], { size: 20, color: COMIC.sub, w: 208, h: 28 });
+      condition.name = 'rewardCondition' + tier;
+      const chestH = Math.min(126, bodyH * .4), chestCenter = bodyH * .39;
+      const chest = levelArt(spot, 0, sy(chestCenter), 148, chestH, done ? 'comic_chest_open_v1' : 'comic_chest_closed_v1');
+      chest.name = 'rewardChest' + tier;
       if (!done && !canClaim) {
         chest.addComponent(UIOpacity).opacity = 120;
-        comicMark(spot, 43, 5, 'lock', 23, COMIC.sub);
+        comicMark(spot, 48, sy(chestCenter + 10), 'lock', 23, COMIC.sub);
       }
-      if (done) comicMark(spot, 56, 15, 'check', 24, COMIC.greenShade);
+      if (done) comicMark(spot, 62, sy(chestCenter + 14), 'check', 24, COMIC.greenShade);
       if (canClaim) {
-        const dot = N('rewardReady', spot, 58, chestH / 2 + 10).addComponent(Graphics);
+        const dot = N('rewardReady', spot, 66, sy(chestCenter - chestH / 2 + 7)).addComponent(Graphics);
         dot.fillColor = C('#DF5538'); dot.circle(0, 0, 7); dot.fill();
         dot.strokeColor = C(COMIC.card); dot.lineWidth = 2; dot.stroke();
       }
-      mainLabel(spot, 0, -(compact ? 45 : 54), done ? '已领取' : canClaim ? '点击领取' : '未达成', {
-        size: 22, color: done ? COMIC.greenShade : canClaim ? '#895016' : COMIC.sub, bold: true, w: 200, h: 30,
+      const reward: { gold?: number; diamonds?: number } = CHEST_REWARD[t];
+      const valueTop = chestCenter + chestH / 2 + 25;
+      comicArt(spot, -39, sy(valueTop), 28, 28, reward.gold ? 'comic_coin_v1' : 'comic_diamond_v1');
+      const amount = mainLabel(spot, 17, sy(valueTop), String(reward.gold || reward.diamonds), {
+        size: 24, color: COMIC.text, bold: true, w: 82, h: 30,
       });
-      mainLabel(spot, 0, -(compact ? 74 : 84), CHEST_COND[t], { size: 20, color: COMIC.sub, w: 208, h: 26 });
+      amount.name = 'rewardAmount' + tier;
+      const claim = comicPlate(spot, 0, sy(bodyH - 30), 184, 44, canClaim ? 'gold' : done ? 'paper' : 'muted',
+        { name: 'rewardStatus' + tier, edge: !done });
+      mainLabel(claim, 0, 0, done ? '已领取' : canClaim ? '点击领取' : '未达成', {
+        size: 22, color: done ? COMIC.greenShade : canClaim ? COMIC.text : COMIC.sub, bold: true, w: 172, h: 32,
+      });
       if (canClaim) tap(spot, () => {
         const result = claimChest(key, stars, tier);
         toast(result.msg);

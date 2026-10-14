@@ -1,0 +1,133 @@
+{
+  "ok": true,
+  "url": "http://127.0.0.1:8765/",
+  "realBattleStarted": false,
+  "checks": [
+    {
+      "fourTabs": "new comic components, circular portraits, pinned action, preserved art proportions"
+    },
+    {
+      "upgrade": "lv",
+      "from": 9,
+      "to": 10,
+      "cost": {
+        "gold": 1940,
+        "mat": 0
+      }
+    },
+    {
+      "milestones": "reached state, paging, detail and close"
+    },
+    {
+      "upgrade": "weaponLv",
+      "from": 1,
+      "to": 2,
+      "cost": {
+        "gold": 150,
+        "mat": 1
+      }
+    },
+    {
+      "upgrade": "atkLv",
+      "from": 1,
+      "to": 2,
+      "cost": {
+        "gold": 200,
+        "mat": 1
+      }
+    },
+    {
+      "upgrade": "skillLv",
+      "from": 1,
+      "to": 2,
+      "cost": {
+        "gold": 200,
+        "mat": 1
+      }
+    },
+    {
+      "upgrade": "ultLv",
+      "from": 1,
+      "to": 2,
+      "cost": {
+        "gold": 200,
+        "mat": 1
+      }
+    },
+    {
+      "upgrade": "w-helm",
+      "from": 1,
+      "to": 2,
+      "cost": {
+        "gold": 120,
+        "mat": 1
+      }
+    },
+    {
+      "upgrade": "w-acc",
+      "from": 1,
+      "to": 2,
+      "cost": {
+        "gold": 120,
+        "mat": 1
+      }
+    },
+    {
+      "upgrade": "w-glove",
+      "from": 1,
+      "to": 2,
+      "cost": {
+        "gold": 120,
+        "mat": 1
+      }
+    },
+    {
+      "upgrade": "w-armor",
+      "from": 1,
+      "to": 2,
+      "cost": {
+        "gold": 120,
+        "mat": 1
+      }
+    },
+    {
+      "navigationAndAttributes": "shared wallet and illustrated nav remain functional"
+    },
+    {
+      "guard": "poor",
+      "noUnexpectedCharge": true
+    },
+    {
+      "guard": "no-mat",
+      "noUnexpectedCharge": true
+    },
+    {
+      "guard": "max",
+      "noUnexpectedCharge": true
+    },
+    {
+      "guard": "empty",
+      "noUnexpectedCharge": true
+    },
+    {
+      "guard": "locked",
+      "noUnexpectedCharge": true
+    },
+    {
+      "shortScreen": [
+        375,
+        667
+      ],
+      "scroll": "touch scroll does not upgrade, remembered offset, platform follows feet, action stays visible"
+    },
+    {
+      "shortScreen": [
+        375,
+        600
+      ],
+      "scroll": "touch scroll does not upgrade, remembered offset, platform follows feet, action stays visible"
+    }
+  ],
+  "errors": [],
+  "failures": []
+}

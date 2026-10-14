@@ -1,0 +1,839 @@
+[
+  {
+    "sourceFrame": 48,
+    "apertures": [
+      {
+        "seed": [
+          467,
+          184
+        ],
+        "corePixels": 821,
+        "density": 0.5654
+      }
+    ]
+  },
+  {
+    "sourceFrame": 49,
+    "apertures": [
+      {
+        "seed": [
+          470,
+          182
+        ],
+        "corePixels": 792,
+        "density": 0.6
+      }
+    ]
+  },
+  {
+    "sourceFrame": 50,
+    "apertures": [
+      {
+        "seed": [
+          467,
+          184
+        ],
+        "corePixels": 785,
+        "density": 0.5947
+      }
+    ]
+  },
+  {
+    "sourceFrame": 51,
+    "apertures": [
+      {
+        "seed": [
+          467,
+          184
+        ],
+        "corePixels": 783,
+        "density": 0.58
+      }
+    ]
+  },
+  {
+    "sourceFrame": 52,
+    "apertures": [
+      {
+        "seed": [
+          539,
+          154
+        ],
+        "corePixels": 1682,
+        "density": 0.4133
+      },
+      {
+        "seed": [
+          471,
+          158
+        ],
+        "corePixels": 508,
+        "density": 0.3128
+      }
+    ]
+  },
+  {
+    "sourceFrame": 53,
+    "apertures": [
+      {
+        "seed": [
+          552,
+          147
+        ],
+        "corePixels": 1594,
+        "density": 0.4237
+      },
+      {
+        "seed": [
+          472,
+          150
+        ],
+        "corePixels": 540,
+        "density": 0.3639
+      }
+    ]
+  },
+  {
+    "sourceFrame": 54,
+    "apertures": [
+      {
+        "seed": [
+          554,
+          146
+        ],
+        "corePixels": 1626,
+        "density": 0.4399
+      },
+      {
+        "seed": [
+          475,
+          149
+        ],
+        "corePixels": 512,
+        "density": 0.345
+      }
+    ]
+  },
+  {
+    "sourceFrame": 55,
+    "apertures": [
+      {
+        "seed": [
+          555,
+          147
+        ],
+        "corePixels": 1635,
+        "density": 0.4281
+      },
+      {
+        "seed": [
+          466,
+          154
+        ],
+        "corePixels": 531,
+        "density": 0.3576
+      }
+    ]
+  },
+  {
+    "sourceFrame": 56,
+    "apertures": [
+      {
+        "seed": [
+          552,
+          148
+        ],
+        "corePixels": 1561,
+        "density": 0.3901
+      },
+      {
+        "seed": [
+          484,
+          152
+        ],
+        "corePixels": 576,
+        "density": 0.3956
+      }
+    ]
+  },
+  {
+    "sourceFrame": 57,
+    "apertures": [
+      {
+        "seed": [
+          547,
+          150
+        ],
+        "corePixels": 1363,
+        "density": 0.3592
+      },
+      {
+        "seed": [
+          482,
+          154
+        ],
+        "corePixels": 643,
+        "density": 0.4946
+      }
+    ]
+  },
+  {
+    "sourceFrame": 58,
+    "apertures": [
+      {
+        "seed": [
+          474,
+          166
+        ],
+        "corePixels": 750,
+        "density": 0.4638
+      }
+    ]
+  },
+  {
+    "sourceFrame": 59,
+    "apertures": [
+      {
+        "seed": [
+          478,
+          175
+        ],
+        "corePixels": 707,
+        "density": 0.4701
+      }
+    ]
+  },
+  {
+    "sourceFrame": 60,
+    "apertures": [
+      {
+        "seed": [
+          458,
+          194
+        ],
+        "corePixels": 703,
+        "density": 0.4842
+      }
+    ]
+  },
+  {
+    "sourceFrame": 61,
+    "apertures": [
+      {
+        "seed": [
+          527,
+          188
+        ],
+        "corePixels": 837,
+        "density": 0.314
+      },
+      {
+        "seed": [
+          456,
+          189
+        ],
+        "corePixels": 703,
+        "density": 0.4954
+      }
+    ]
+  },
+  {
+    "sourceFrame": 62,
+    "apertures": [
+      {
+        "seed": [
+          513,
+          200
+        ],
+        "corePixels": 623,
+        "density": 0.3461
+      },
+      {
+        "seed": [
+          465,
+          230
+        ],
+        "corePixels": 758,
+        "density": 0.4794
+      }
+    ]
+  },
+  {
+    "sourceFrame": 63,
+    "apertures": [
+      {
+        "seed": [
+          508,
+          204
+        ],
+        "corePixels": 768,
+        "density": 0.3895
+      },
+      {
+        "seed": [
+          460,
+          251
+        ],
+        "corePixels": 678,
+        "density": 0.4484
+      }
+    ]
+  },
+  {
+    "sourceFrame": 64,
+    "apertures": [
+      {
+        "seed": [
+          499,
+          233
+        ],
+        "corePixels": 705,
+        "density": 0.4783
+      },
+      {
+        "seed": [
+          422,
+          265
+        ],
+        "corePixels": 746,
+        "density": 0.614
+      }
+    ]
+  },
+  {
+    "sourceFrame": 65,
+    "apertures": [
+      {
+        "seed": [
+          499,
+          234
+        ],
+        "corePixels": 826,
+        "density": 0.6038
+      },
+      {
+        "seed": [
+          427,
+          292
+        ],
+        "corePixels": 768,
+        "density": 0.6095
+      }
+    ]
+  },
+  {
+    "sourceFrame": 66,
+    "apertures": [
+      {
+        "seed": [
+          537,
+          236
+        ],
+        "corePixels": 1493,
+        "density": 0.6452
+      },
+      {
+        "seed": [
+          425,
+          280
+        ],
+        "corePixels": 797,
+        "density": 0.5535
+      }
+    ]
+  },
+  {
+    "sourceFrame": 67,
+    "apertures": [
+      {
+        "seed": [
+          511,
+          232
+        ],
+        "corePixels": 2447,
+        "density": 0.6741
+      },
+      {
+        "seed": [
+          425,
+          279
+        ],
+        "corePixels": 805,
+        "density": 0.599
+      }
+    ]
+  },
+  {
+    "sourceFrame": 68,
+    "apertures": [
+      {
+        "seed": [
+          483,
+          232
+        ],
+        "corePixels": 1393,
+        "density": 0.4888
+      },
+      {
+        "seed": [
+          426,
+          275
+        ],
+        "corePixels": 774,
+        "density": 0.6282
+      }
+    ]
+  },
+  {
+    "sourceFrame": 69,
+    "apertures": [
+      {
+        "seed": [
+          479,
+          213
+        ],
+        "corePixels": 1034,
+        "density": 0.5385
+      },
+      {
+        "seed": [
+          423,
+          272
+        ],
+        "corePixels": 809,
+        "density": 0.5935
+      }
+    ]
+  },
+  {
+    "sourceFrame": 70,
+    "apertures": [
+      {
+        "seed": [
+          488,
+          202
+        ],
+        "corePixels": 1037,
+        "density": 0.5685
+      },
+      {
+        "seed": [
+          428,
+          264
+        ],
+        "corePixels": 787,
+        "density": 0.583
+      }
+    ]
+  },
+  {
+    "sourceFrame": 71,
+    "apertures": [
+      {
+        "seed": [
+          515,
+          210
+        ],
+        "corePixels": 905,
+        "density": 0.5028
+      },
+      {
+        "seed": [
+          434,
+          256
+        ],
+        "corePixels": 769,
+        "density": 0.6103
+      }
+    ]
+  },
+  {
+    "sourceFrame": 72,
+    "apertures": [
+      {
+        "seed": [
+          494,
+          194
+        ],
+        "corePixels": 859,
+        "density": 0.4971
+      },
+      {
+        "seed": [
+          434,
+          243
+        ],
+        "corePixels": 782,
+        "density": 0.5546
+      }
+    ]
+  },
+  {
+    "sourceFrame": 73,
+    "apertures": [
+      {
+        "seed": [
+          484,
+          191
+        ],
+        "corePixels": 857,
+        "density": 0.4892
+      },
+      {
+        "seed": [
+          433,
+          240
+        ],
+        "corePixels": 726,
+        "density": 0.6588
+      }
+    ]
+  },
+  {
+    "sourceFrame": 74,
+    "apertures": [
+      {
+        "seed": [
+          485,
+          190
+        ],
+        "corePixels": 848,
+        "density": 0.5121
+      },
+      {
+        "seed": [
+          434,
+          240
+        ],
+        "corePixels": 725,
+        "density": 0.636
+      }
+    ]
+  },
+  {
+    "sourceFrame": 75,
+    "apertures": [
+      {
+        "seed": [
+          485,
+          189
+        ],
+        "corePixels": 852,
+        "density": 0.4931
+      },
+      {
+        "seed": [
+          435,
+          238
+        ],
+        "corePixels": 714,
+        "density": 0.6654
+      }
+    ]
+  },
+  {
+    "sourceFrame": 76,
+    "apertures": [
+      {
+        "seed": [
+          436,
+          238
+        ],
+        "corePixels": 710,
+        "density": 0.6801
+      }
+    ]
+  },
+  {
+    "sourceFrame": 77,
+    "apertures": [
+      {
+        "seed": [
+          437,
+          236
+        ],
+        "corePixels": 728,
+        "density": 0.5219
+      }
+    ]
+  },
+  {
+    "sourceFrame": 78,
+    "apertures": [
+      {
+        "seed": [
+          436,
+          234
+        ],
+        "corePixels": 776,
+        "density": 0.6082
+      }
+    ]
+  },
+  {
+    "sourceFrame": 79,
+    "apertures": [
+      {
+        "seed": [
+          503,
+          188
+        ],
+        "corePixels": 1997,
+        "density": 0.5591
+      },
+      {
+        "seed": [
+          435,
+          234
+        ],
+        "corePixels": 815,
+        "density": 0.5594
+      }
+    ]
+  },
+  {
+    "sourceFrame": 80,
+    "apertures": [
+      {
+        "seed": [
+          485,
+          167
+        ],
+        "corePixels": 1890,
+        "density": 0.3296
+      },
+      {
+        "seed": [
+          435,
+          200
+        ],
+        "corePixels": 753,
+        "density": 0.5901
+      }
+    ]
+  },
+  {
+    "sourceFrame": 81,
+    "apertures": [
+      {
+        "seed": [
+          488,
+          205
+        ],
+        "corePixels": 766,
+        "density": 0.5391
+      }
+    ]
+  },
+  {
+    "sourceFrame": 82,
+    "apertures": [
+      {
+        "seed": [
+          461,
+          183
+        ],
+        "corePixels": 776,
+        "density": 0.4755
+      }
+    ]
+  },
+  {
+    "sourceFrame": 83,
+    "apertures": [
+      {
+        "seed": [
+          463,
+          192
+        ],
+        "corePixels": 717,
+        "density": 0.5092
+      }
+    ]
+  },
+  {
+    "sourceFrame": 84,
+    "apertures": [
+      {
+        "seed": [
+          466,
+          181
+        ],
+        "corePixels": 747,
+        "density": 0.5188
+      }
+    ]
+  },
+  {
+    "sourceFrame": 85,
+    "apertures": [
+      {
+        "seed": [
+          535,
+          170
+        ],
+        "corePixels": 711,
+        "density": 0.3257
+      },
+      {
+        "seed": [
+          457,
+          195
+        ],
+        "corePixels": 779,
+        "density": 0.5463
+      }
+    ]
+  },
+  {
+    "sourceFrame": 86,
+    "apertures": [
+      {
+        "seed": [
+          525,
+          164
+        ],
+        "corePixels": 725,
+        "density": 0.3151
+      },
+      {
+        "seed": [
+          457,
+          195
+        ],
+        "corePixels": 780,
+        "density": 0.547
+      }
+    ]
+  },
+  {
+    "sourceFrame": 87,
+    "apertures": [
+      {
+        "seed": [
+          467,
+          182
+        ],
+        "corePixels": 782,
+        "density": 0.5484
+      }
+    ]
+  },
+  {
+    "sourceFrame": 88,
+    "apertures": [
+      {
+        "seed": [
+          467,
+          182
+        ],
+        "corePixels": 781,
+        "density": 0.5477
+      }
+    ]
+  },
+  {
+    "sourceFrame": 89,
+    "apertures": [
+      {
+        "seed": [
+          467,
+          182
+        ],
+        "corePixels": 782,
+        "density": 0.5484
+      }
+    ]
+  },
+  {
+    "sourceFrame": 90,
+    "apertures": [
+      {
+        "seed": [
+          467,
+          182
+        ],
+        "corePixels": 782,
+        "density": 0.5484
+      }
+    ]
+  },
+  {
+    "sourceFrame": 91,
+    "apertures": [
+      {
+        "seed": [
+          467,
+          182
+        ],
+        "corePixels": 775,
+        "density": 0.5435
+      }
+    ]
+  },
+  {
+    "sourceFrame": 92,
+    "apertures": [
+      {
+        "seed": [
+          467,
+          182
+        ],
+        "corePixels": 775,
+        "density": 0.5435
+      }
+    ]
+  },
+  {
+    "sourceFrame": 93,
+    "apertures": [
+      {
+        "seed": [
+          467,
+          182
+        ],
+        "corePixels": 775,
+        "density": 0.5435
+      }
+    ]
+  },
+  {
+    "sourceFrame": 94,
+    "apertures": [
+      {
+        "seed": [
+          467,
+          182
+        ],
+        "corePixels": 775,
+        "density": 0.5435
+      }
+    ]
+  },
+  {
+    "sourceFrame": 95,
+    "apertures": [
+      {
+        "seed": [
+          467,
+          182
+        ],
+        "corePixels": 775,
+        "density": 0.5435
+      }
+    ]
+  },
+  {
+    "sourceFrame": 96,
+    "apertures": [
+      {
+        "seed": [
+          467,
+          182
+        ],
+        "corePixels": 775,
+        "density": 0.5435
+      }
+    ]
+  }
+]

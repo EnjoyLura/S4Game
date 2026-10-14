@@ -1,0 +1,7 @@
+A nearly still, full-body illustrated portrait, using the supplied image exactly. Two-second loop. The subject holds the identical pose from the first frame to the last frame.
+
+Animate ONLY the very bottom tips of the blue cape: an extremely small and slow fabric sway, about 1–2 pixels, caused by a gentle ambient breeze. Everything above the waist is perfectly still. The hood, head, shoulders, elbows, hands, wooden-and-steel crossbow, bowstring, bolt, belts, armor, legs and boots remain absolutely stationary. The cape returns gently to its original shape at the end of the loop.
+
+This is a motion study of fabric on an otherwise static character illustration. There is no character action. The weapon is a static prop, its shape and angle never change. No body movement, arm movement, trigger movement, attack, shooting, recoil, reloading, turning, walking, smoke, flash or projectile.
+
+Preserve every costume detail, the blue and brown palette, strong comic outlines, cel shading, original adult proportions and exact full-body silhouette. Keep the complete head, weapon and both feet visible with the same margins. Camera locked with zero pan, zoom, shake or reframing. Background pure solid black throughout, with no ground, shadows, glow, text, logo or watermark.

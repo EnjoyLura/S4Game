@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-15T00:26:42.962865+08:00",
+  "hero": "mora",
+  "take": "take-a",
+  "userSourcePath": "C:/Users/user/Downloads/lens-api-task_yq8OpM3P7gf4lhvYXH3Op1kRdTvRDPGt.mp4",
+  "saved": "D:\\AI\\S4Game\\KingdomWatch\\docs\\mora-actions-user-v1\\take-a\\source.mp4",
+  "sha256": "585963b20c83f98b6efb3b2027cc5066c82f268cc97579c5090418944451a94a",
+  "metadata": {
+    "ffmpeg_version": "7.1-essentials_build-www.gyan.dev built with gcc 14.2.0 (Rev1, Built by MSYS2 project)",
+    "codec": "h264",
+    "pix_fmt": "yuv420p(tv, bt709, progressive)",
+    "audio_codec": "aac",
+    "fps": 24.0,
+    "source_size": [
+      1344,
+      768
+    ],
+    "size": [
+      1344,
+      768
+    ],
+    "rotate": 0,
+    "duration": 2.33
+  },
+  "frames": 56,
+  "seconds": 2.3333333333333335,
+  "background": "green",
+  "paidTaskSubmitted": false,
+  "gameVisualAcceptedByUser": false,
+  "kind": "attack",
+  "resource": "mora_attack_user_v1",
+  "gameIntegrated": true
+}

@@ -1,0 +1,146 @@
+[
+  {
+    "key": "badge_win",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\settlement_comic_v1\\badge_win.png",
+    "width": 1036,
+    "height": 355,
+    "sourceRect": [
+      109,
+      11,
+      1145,
+      366
+    ],
+    "componentIds": [
+      1
+    ],
+    "bytes": 352506,
+    "sha256": "43eae07e9fcbec0675ef462d46c70ecb4b554552fc04ba4e53d413855707fd0e",
+    "labelOffset": [
+      0.0,
+      -64.5
+    ]
+  },
+  {
+    "key": "badge_lose",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\settlement_comic_v1\\badge_lose.png",
+    "width": 953,
+    "height": 328,
+    "sourceRect": [
+      151,
+      330,
+      1104,
+      658
+    ],
+    "componentIds": [
+      2
+    ],
+    "bytes": 253464,
+    "sha256": "cefa271304ee6bd56d77676d7d4936ae2bb43801dd972b8b214a9a467d6d91e4",
+    "labelOffset": [
+      -0.5,
+      -66.0
+    ]
+  },
+  {
+    "key": "panel_win",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\settlement_comic_v1\\panel_win.png",
+    "width": 597,
+    "height": 264,
+    "sourceRect": [
+      19,
+      666,
+      616,
+      930
+    ],
+    "componentIds": [
+      3
+    ],
+    "bytes": 154889,
+    "sha256": "8892bff9a0dedc0fdb22612c6cbe459fc23615de574a197c33e9108b1e13f140"
+  },
+  {
+    "key": "panel_lose",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\settlement_comic_v1\\panel_lose.png",
+    "width": 597,
+    "height": 263,
+    "sourceRect": [
+      639,
+      666,
+      1236,
+      929
+    ],
+    "componentIds": [
+      4
+    ],
+    "bytes": 157290,
+    "sha256": "3997f2096d9ade24e764a2fe57fc5e74f1db6d2704b43e488d3e846e6bebe2e1"
+  },
+  {
+    "key": "button_teal",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\settlement_comic_v1\\button_teal.png",
+    "width": 582,
+    "height": 130,
+    "sourceRect": [
+      33,
+      945,
+      615,
+      1075
+    ],
+    "componentIds": [
+      5
+    ],
+    "bytes": 70467,
+    "sha256": "2bb3ec623e0c9326be97c4841f2fd9b685351ec3ccc06fccd748ab71a7a147b6"
+  },
+  {
+    "key": "button_muted",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\settlement_comic_v1\\button_muted.png",
+    "width": 582,
+    "height": 130,
+    "sourceRect": [
+      639,
+      945,
+      1221,
+      1075
+    ],
+    "componentIds": [
+      6
+    ],
+    "bytes": 70280,
+    "sha256": "dd706c368b72f7f684df07676dc8ca86eee38c16db52863c701091e07c05f41f"
+  },
+  {
+    "key": "card_win",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\settlement_comic_v1\\card_win.png",
+    "width": 507,
+    "height": 134,
+    "sourceRect": [
+      107,
+      1092,
+      614,
+      1226
+    ],
+    "componentIds": [
+      7
+    ],
+    "bytes": 71426,
+    "sha256": "c132c631e8505ff5f22037baa266a167b919a06130e53f82cc1f139b620ff37a"
+  },
+  {
+    "key": "card_lose",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\settlement_comic_v1\\card_lose.png",
+    "width": 508,
+    "height": 134,
+    "sourceRect": [
+      641,
+      1092,
+      1149,
+      1226
+    ],
+    "componentIds": [
+      8
+    ],
+    "bytes": 72514,
+    "sha256": "35e34eddcac42c79b9b2f9907ad17db6e9b16ce192808b565807ea0b44641d8b"
+  }
+]

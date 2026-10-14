@@ -1,0 +1,11 @@
+{
+  "method": "continuous",
+  "range": [
+    0,
+    55
+  ],
+  "reversePlayback": false,
+  "nativeSourceCycleRequired": true,
+  "reason": "User rejected reversed cloth; preserve the complete natural source cycle in chronological order",
+  "scope": "Structural production constraint; not visual acceptance"
+}

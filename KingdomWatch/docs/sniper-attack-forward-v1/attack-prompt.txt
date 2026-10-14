@@ -1,0 +1,11 @@
+Create one clean two-second medieval CROSSBOW firing and recovery cycle from this exact full-body rear-view blue-hooded ranger image. Same blond hair, royal-blue hood and cape, silver armor, navy clothes, brown leather, proportions, clean comic cel shading and red background. Keep the hero facing away toward the battlefield, slightly left. Keep the crossbow aimed FORWARD away from the viewer, at the same ground-parallel elevation and foreshortened perspective as the first frame.
+
+One single controlled action, with this timing:
+0.00-0.30 seconds: hold the original steady two-handed aiming pose.
+0.30-0.45 seconds: a very small tightening of the grip, then the trigger finger releases the latch ONCE. The ordinary crossbow string and limbs make one quick mechanical release. Hands, forearms and shoulders give a short restrained reaction. This is a medieval crossbow, not a firearm; the stock stays coherent and does not swing or lift.
+0.45-1.40 seconds: settle the small shoulder reaction and make a compact reset of the supporting hand near the weapon. The torso stays stable and the long cape follows the small shoulder motion naturally as one connected garment. No large arm sweep or dramatic recoil.
+1.40-2.00 seconds: both hands return to exactly their initial contact positions, the bow returns to its initial ready state, the character settles into the same pose as the first frame. End with the original stable ready silhouette. Only ONE release in the entire clip.
+
+Both boots, legs and hips remain planted at their initial positions. All arms and hands stay anatomically connected, no extra fingers or changing weapon parts. Head and weapon direction stay fixed, no body turn, step, jump, pose change or camera movement. Keep full-body framing and safe margins around the weapon, cape and boots, with constant lighting.
+
+The game supplies the travelling bolt separately: DO NOT depict any arrow moving through the air or any projectile trail. NO muzzle flash, flare, glowing bow, spark, fire, smoke, blast, particle, impact or text. Show only the character and the mechanical firing gesture. The background stays a uniform opaque pure RED #FF0000 throughout, including internal bow gaps, without texture, scenery, shadow, gradient or red rim light.

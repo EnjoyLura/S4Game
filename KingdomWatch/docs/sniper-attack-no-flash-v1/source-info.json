@@ -1,0 +1,19 @@
+{
+  "ffmpeg_version": "7.1-essentials_build-www.gyan.dev built with gcc 14.2.0 (Rev1, Built by MSYS2 project)",
+  "codec": "h264",
+  "pix_fmt": "yuv420p(progressive)",
+  "audio_codec": "aac",
+  "fps": 24.0,
+  "source_size": [
+    1280,
+    720
+  ],
+  "size": [
+    1280,
+    720
+  ],
+  "rotate": 0,
+  "duration": 4.06,
+  "decodedFrames": 97,
+  "userSource": "C:\\Users\\user\\Downloads\\弓箭手姿势描述 (3).mp4"
+}

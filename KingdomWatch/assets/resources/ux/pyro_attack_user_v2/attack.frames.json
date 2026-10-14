@@ -1,0 +1,1919 @@
+{
+  "hero": "pyro",
+  "frames": {
+    "attack0": [
+      0,
+      0,
+      512,
+      512
+    ],
+    "attack1": [
+      512,
+      0,
+      512,
+      512
+    ],
+    "attack2": [
+      1024,
+      0,
+      512,
+      512
+    ],
+    "attack3": [
+      1536,
+      0,
+      512,
+      512
+    ],
+    "attack4": [
+      2048,
+      0,
+      512,
+      512
+    ],
+    "attack5": [
+      2560,
+      0,
+      512,
+      512
+    ],
+    "attack6": [
+      3072,
+      0,
+      512,
+      512
+    ],
+    "attack7": [
+      3584,
+      0,
+      512,
+      512
+    ],
+    "attack8": [
+      0,
+      512,
+      512,
+      512
+    ],
+    "attack9": [
+      512,
+      512,
+      512,
+      512
+    ],
+    "attack10": [
+      1024,
+      512,
+      512,
+      512
+    ],
+    "attack11": [
+      1536,
+      512,
+      512,
+      512
+    ],
+    "attack12": [
+      2048,
+      512,
+      512,
+      512
+    ],
+    "attack13": [
+      2560,
+      512,
+      512,
+      512
+    ],
+    "attack14": [
+      3072,
+      512,
+      512,
+      512
+    ],
+    "attack15": [
+      3584,
+      512,
+      512,
+      512
+    ],
+    "attack16": [
+      0,
+      1024,
+      512,
+      512
+    ],
+    "attack17": [
+      512,
+      1024,
+      512,
+      512
+    ],
+    "attack18": [
+      1024,
+      1024,
+      512,
+      512
+    ],
+    "attack19": [
+      1536,
+      1024,
+      512,
+      512
+    ],
+    "attack20": [
+      2048,
+      1024,
+      512,
+      512
+    ],
+    "attack21": [
+      2560,
+      1024,
+      512,
+      512
+    ],
+    "attack22": [
+      3072,
+      1024,
+      512,
+      512
+    ],
+    "attack23": [
+      3584,
+      1024,
+      512,
+      512
+    ],
+    "attack24": [
+      0,
+      1536,
+      512,
+      512
+    ],
+    "attack25": [
+      512,
+      1536,
+      512,
+      512
+    ],
+    "attack26": [
+      1024,
+      1536,
+      512,
+      512
+    ],
+    "attack27": [
+      1536,
+      1536,
+      512,
+      512
+    ],
+    "attack28": [
+      2048,
+      1536,
+      512,
+      512
+    ],
+    "attack29": [
+      2560,
+      1536,
+      512,
+      512
+    ],
+    "attack30": [
+      3072,
+      1536,
+      512,
+      512
+    ],
+    "attack31": [
+      3584,
+      1536,
+      512,
+      512
+    ],
+    "attack32": [
+      0,
+      2048,
+      512,
+      512
+    ],
+    "attack33": [
+      512,
+      2048,
+      512,
+      512
+    ],
+    "attack34": [
+      1024,
+      2048,
+      512,
+      512
+    ],
+    "attack35": [
+      1536,
+      2048,
+      512,
+      512
+    ],
+    "attack36": [
+      2048,
+      2048,
+      512,
+      512
+    ],
+    "attack37": [
+      2560,
+      2048,
+      512,
+      512
+    ],
+    "attack38": [
+      3072,
+      2048,
+      512,
+      512
+    ],
+    "attack39": [
+      3584,
+      2048,
+      512,
+      512
+    ],
+    "attack40": [
+      0,
+      2560,
+      512,
+      512
+    ],
+    "attack41": [
+      512,
+      2560,
+      512,
+      512
+    ],
+    "attack42": [
+      1024,
+      2560,
+      512,
+      512
+    ],
+    "attack43": [
+      1536,
+      2560,
+      512,
+      512
+    ],
+    "attack44": [
+      2048,
+      2560,
+      512,
+      512
+    ],
+    "attack45": [
+      2560,
+      2560,
+      512,
+      512
+    ],
+    "attack46": [
+      3072,
+      2560,
+      512,
+      512
+    ],
+    "attack47": [
+      3584,
+      2560,
+      512,
+      512
+    ],
+    "attack48": [
+      0,
+      3072,
+      512,
+      512
+    ],
+    "attack49": [
+      512,
+      3072,
+      512,
+      512
+    ],
+    "attack50": [
+      1024,
+      3072,
+      512,
+      512
+    ],
+    "attack51": [
+      1536,
+      3072,
+      512,
+      512
+    ],
+    "attack52": [
+      2048,
+      3072,
+      512,
+      512
+    ],
+    "attack53": [
+      2560,
+      3072,
+      512,
+      512
+    ],
+    "attack54": [
+      3072,
+      3072,
+      512,
+      512
+    ],
+    "attack55": [
+      3584,
+      3072,
+      512,
+      512
+    ]
+  },
+  "animation": {
+    "frames": [
+      "attack0",
+      "attack1",
+      "attack2",
+      "attack3",
+      "attack4",
+      "attack5",
+      "attack6",
+      "attack7",
+      "attack8",
+      "attack9",
+      "attack10",
+      "attack11",
+      "attack12",
+      "attack13",
+      "attack14",
+      "attack15",
+      "attack16",
+      "attack17",
+      "attack18",
+      "attack19",
+      "attack20",
+      "attack21",
+      "attack22",
+      "attack23",
+      "attack24",
+      "attack25",
+      "attack26",
+      "attack27",
+      "attack28",
+      "attack29",
+      "attack30",
+      "attack31",
+      "attack32",
+      "attack33",
+      "attack34",
+      "attack35",
+      "attack36",
+      "attack37",
+      "attack38",
+      "attack39",
+      "attack40",
+      "attack41",
+      "attack42",
+      "attack43",
+      "attack44",
+      "attack45",
+      "attack46",
+      "attack47",
+      "attack48",
+      "attack49",
+      "attack50",
+      "attack51",
+      "attack52",
+      "attack53",
+      "attack54",
+      "attack55"
+    ],
+    "seconds": 2.3333333333333335,
+    "frameDurations": [
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664
+    ],
+    "loop": false,
+    "releaseIndex": 16,
+    "readyIndex": 55,
+    "recoverySeconds": 1.6666666666666667
+  },
+  "groundAnchor": [
+    256,
+    496
+  ],
+  "cellSize": [
+    512,
+    512
+  ],
+  "readyHeightPx": 468,
+  "displayHeight": 146,
+  "sourceOrder": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55
+  ],
+  "source": {
+    "file": "source.mp4",
+    "take": "attack",
+    "sha256": "3e0ea136416b84b8b2d52ef5c9db0ff6961544da2c03f24071b3f1616bf00b8f",
+    "videoSize": [
+      1344,
+      768
+    ],
+    "fps": 24.0,
+    "frameCount": 56,
+    "indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55
+    ],
+    "jointCrop": [
+      405,
+      40,
+      923,
+      728
+    ],
+    "fixedScale": 0.6892488954344624,
+    "fixedFootSource": [
+      696.5,
+      724
+    ],
+    "greenFieldPerFrame": [
+      [
+        0.0,
+        218.0,
+        13.0
+      ],
+      [
+        1.0,
+        219.0,
+        13.0
+      ],
+      [
+        1.0,
+        219.0,
+        13.0
+      ],
+      [
+        1.0,
+        219.0,
+        12.0
+      ],
+      [
+        1.0,
+        218.0,
+        13.0
+      ],
+      [
+        2.0,
+        217.0,
+        12.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        215.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        215.0,
+        13.0
+      ],
+      [
+        1.0,
+        215.0,
+        13.0
+      ],
+      [
+        1.0,
+        215.0,
+        13.0
+      ],
+      [
+        1.0,
+        215.0,
+        14.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        215.0,
+        13.0
+      ],
+      [
+        1.0,
+        215.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        215.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        215.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        215.0,
+        14.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        215.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        215.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        216.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        1.0,
+        215.0,
+        14.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ],
+      [
+        2.0,
+        216.0,
+        13.0
+      ]
+    ]
+  },
+  "sourceFraming": [
+    {
+      "sourceFrame": 0,
+      "bounds": [
+        455,
+        45,
+        901,
+        724
+      ],
+      "margins": [
+        455,
+        45,
+        443,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 1,
+      "bounds": [
+        455,
+        45,
+        901,
+        724
+      ],
+      "margins": [
+        455,
+        45,
+        443,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 2,
+      "bounds": [
+        455,
+        45,
+        901,
+        724
+      ],
+      "margins": [
+        455,
+        45,
+        443,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 3,
+      "bounds": [
+        455,
+        45,
+        901,
+        724
+      ],
+      "margins": [
+        455,
+        45,
+        443,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 4,
+      "bounds": [
+        455,
+        45,
+        901,
+        724
+      ],
+      "margins": [
+        455,
+        45,
+        443,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 5,
+      "bounds": [
+        455,
+        45,
+        901,
+        724
+      ],
+      "margins": [
+        455,
+        45,
+        443,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 6,
+      "bounds": [
+        459,
+        45,
+        903,
+        724
+      ],
+      "margins": [
+        459,
+        45,
+        441,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 7,
+      "bounds": [
+        463,
+        46,
+        905,
+        724
+      ],
+      "margins": [
+        463,
+        46,
+        439,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 8,
+      "bounds": [
+        467,
+        48,
+        909,
+        724
+      ],
+      "margins": [
+        467,
+        48,
+        435,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 9,
+      "bounds": [
+        472,
+        49,
+        913,
+        724
+      ],
+      "margins": [
+        472,
+        49,
+        431,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 10,
+      "bounds": [
+        478,
+        52,
+        917,
+        724
+      ],
+      "margins": [
+        478,
+        52,
+        427,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 11,
+      "bounds": [
+        479,
+        53,
+        919,
+        724
+      ],
+      "margins": [
+        479,
+        53,
+        425,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 12,
+      "bounds": [
+        466,
+        52,
+        917,
+        724
+      ],
+      "margins": [
+        466,
+        52,
+        427,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 13,
+      "bounds": [
+        445,
+        51,
+        912,
+        724
+      ],
+      "margins": [
+        445,
+        51,
+        432,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 14,
+      "bounds": [
+        419,
+        49,
+        904,
+        724
+      ],
+      "margins": [
+        419,
+        49,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 15,
+      "bounds": [
+        412,
+        49,
+        901,
+        724
+      ],
+      "margins": [
+        412,
+        49,
+        443,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 16,
+      "bounds": [
+        411,
+        49,
+        905,
+        724
+      ],
+      "margins": [
+        411,
+        49,
+        439,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 17,
+      "bounds": [
+        409,
+        49,
+        905,
+        724
+      ],
+      "margins": [
+        409,
+        49,
+        439,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 18,
+      "bounds": [
+        409,
+        49,
+        905,
+        724
+      ],
+      "margins": [
+        409,
+        49,
+        439,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 19,
+      "bounds": [
+        409,
+        49,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        49,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 20,
+      "bounds": [
+        409,
+        48,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        48,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 21,
+      "bounds": [
+        409,
+        48,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        48,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 22,
+      "bounds": [
+        409,
+        47,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        47,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 23,
+      "bounds": [
+        409,
+        47,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        47,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 24,
+      "bounds": [
+        409,
+        47,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        47,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 25,
+      "bounds": [
+        409,
+        47,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        47,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 26,
+      "bounds": [
+        409,
+        47,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        47,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 27,
+      "bounds": [
+        409,
+        47,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        47,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 28,
+      "bounds": [
+        409,
+        47,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        47,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 29,
+      "bounds": [
+        409,
+        47,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        47,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 30,
+      "bounds": [
+        409,
+        47,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        47,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 31,
+      "bounds": [
+        409,
+        48,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        48,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 32,
+      "bounds": [
+        409,
+        48,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        48,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 33,
+      "bounds": [
+        409,
+        48,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        48,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 34,
+      "bounds": [
+        409,
+        48,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        48,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 35,
+      "bounds": [
+        409,
+        48,
+        903,
+        724
+      ],
+      "margins": [
+        409,
+        48,
+        441,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 36,
+      "bounds": [
+        409,
+        49,
+        903,
+        724
+      ],
+      "margins": [
+        409,
+        49,
+        441,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 37,
+      "bounds": [
+        409,
+        49,
+        903,
+        724
+      ],
+      "margins": [
+        409,
+        49,
+        441,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 38,
+      "bounds": [
+        409,
+        49,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        49,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 39,
+      "bounds": [
+        409,
+        49,
+        904,
+        724
+      ],
+      "margins": [
+        409,
+        49,
+        440,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 40,
+      "bounds": [
+        410,
+        49,
+        903,
+        724
+      ],
+      "margins": [
+        410,
+        49,
+        441,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 41,
+      "bounds": [
+        410,
+        49,
+        902,
+        724
+      ],
+      "margins": [
+        410,
+        49,
+        442,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 42,
+      "bounds": [
+        412,
+        49,
+        899,
+        724
+      ],
+      "margins": [
+        412,
+        49,
+        445,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 43,
+      "bounds": [
+        415,
+        48,
+        895,
+        724
+      ],
+      "margins": [
+        415,
+        48,
+        449,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 44,
+      "bounds": [
+        421,
+        47,
+        889,
+        724
+      ],
+      "margins": [
+        421,
+        47,
+        455,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 45,
+      "bounds": [
+        429,
+        47,
+        887,
+        724
+      ],
+      "margins": [
+        429,
+        47,
+        457,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 46,
+      "bounds": [
+        439,
+        46,
+        891,
+        724
+      ],
+      "margins": [
+        439,
+        46,
+        453,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 47,
+      "bounds": [
+        446,
+        45,
+        894,
+        724
+      ],
+      "margins": [
+        446,
+        45,
+        450,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 48,
+      "bounds": [
+        453,
+        45,
+        898,
+        724
+      ],
+      "margins": [
+        453,
+        45,
+        446,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 49,
+      "bounds": [
+        455,
+        44,
+        901,
+        724
+      ],
+      "margins": [
+        455,
+        44,
+        443,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 50,
+      "bounds": [
+        455,
+        45,
+        903,
+        724
+      ],
+      "margins": [
+        455,
+        45,
+        441,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 51,
+      "bounds": [
+        455,
+        45,
+        903,
+        724
+      ],
+      "margins": [
+        455,
+        45,
+        441,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 52,
+      "bounds": [
+        455,
+        45,
+        903,
+        724
+      ],
+      "margins": [
+        455,
+        45,
+        441,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 53,
+      "bounds": [
+        455,
+        45,
+        903,
+        724
+      ],
+      "margins": [
+        455,
+        45,
+        441,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 54,
+      "bounds": [
+        455,
+        45,
+        902,
+        724
+      ],
+      "margins": [
+        455,
+        45,
+        442,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 55,
+      "bounds": [
+        455,
+        45,
+        902,
+        724
+      ],
+      "margins": [
+        455,
+        45,
+        442,
+        44
+      ],
+      "minimumMargin": 44,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    }
+  ],
+  "userProvidedVideo": true,
+  "fullSourceRequired": true,
+  "allSourceFramesRetained": true,
+  "reversePlayback": false,
+  "gameIntegrated": true,
+  "previewOnly": false,
+  "gameVisualAcceptedByUser": false,
+  "pairedResource": "pyro_idle_loop_v2",
+  "processing": {
+    "matte": "Green coverage, screen decontamination and edge spill removal; red/gold materials retained",
+    "spatial": "One shared crop, scale and boot pivot per clip; matching canonical height and ground across clips",
+    "temporal": "All source frames in chronological order; no omission, reversal, synthetic hold or opacity fade"
+  },
+  "blend": "straight RGBA; single full-opacity sprite",
+  "releaseAnnotation": "Reference source frame 16: staff-forward release; actual game spell callback controls timing"
+}

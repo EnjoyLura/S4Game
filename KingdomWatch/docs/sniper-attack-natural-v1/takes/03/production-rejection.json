@@ -1,0 +1,5 @@
+{
+  "reason": "Unrequested bright crossbow emission and reduced weapon height in source",
+  "action": "Regenerate entire clip with additional return-pose reference; do not delete defective frames",
+  "animationAcceptedByUser": false
+}

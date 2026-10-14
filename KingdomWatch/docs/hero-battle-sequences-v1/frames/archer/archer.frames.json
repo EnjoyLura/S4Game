@@ -1,0 +1,445 @@
+{
+  "frames": {
+    "archer_idle0": [
+      0,
+      0,
+      256,
+      256
+    ],
+    "archer_idle1": [
+      256,
+      0,
+      256,
+      256
+    ],
+    "archer_idle2": [
+      512,
+      0,
+      256,
+      256
+    ],
+    "archer_idle3": [
+      768,
+      0,
+      256,
+      256
+    ],
+    "archer_idle4": [
+      1024,
+      0,
+      256,
+      256
+    ],
+    "archer_idle5": [
+      1280,
+      0,
+      256,
+      256
+    ],
+    "archer_idle6": [
+      1536,
+      0,
+      256,
+      256
+    ],
+    "archer_idle7": [
+      1792,
+      0,
+      256,
+      256
+    ],
+    "archer_idle8": [
+      0,
+      256,
+      256,
+      256
+    ],
+    "archer_idle9": [
+      256,
+      256,
+      256,
+      256
+    ],
+    "archer_idle10": [
+      512,
+      256,
+      256,
+      256
+    ],
+    "archer_idle11": [
+      768,
+      256,
+      256,
+      256
+    ],
+    "archer_idle12": [
+      1024,
+      256,
+      256,
+      256
+    ],
+    "archer_idle13": [
+      1280,
+      256,
+      256,
+      256
+    ],
+    "archer_idle14": [
+      1536,
+      256,
+      256,
+      256
+    ],
+    "archer_idle15": [
+      1792,
+      256,
+      256,
+      256
+    ],
+    "archer_idle16": [
+      0,
+      512,
+      256,
+      256
+    ],
+    "archer_idle17": [
+      256,
+      512,
+      256,
+      256
+    ],
+    "archer_idle18": [
+      512,
+      512,
+      256,
+      256
+    ],
+    "archer_idle19": [
+      768,
+      512,
+      256,
+      256
+    ],
+    "archer_idle20": [
+      1024,
+      512,
+      256,
+      256
+    ],
+    "archer_idle21": [
+      1280,
+      512,
+      256,
+      256
+    ],
+    "archer_idle22": [
+      1536,
+      512,
+      256,
+      256
+    ],
+    "archer_idle23": [
+      1792,
+      512,
+      256,
+      256
+    ],
+    "archer_attack0": [
+      0,
+      768,
+      256,
+      256
+    ],
+    "archer_attack1": [
+      256,
+      768,
+      256,
+      256
+    ],
+    "archer_attack2": [
+      512,
+      768,
+      256,
+      256
+    ],
+    "archer_attack3": [
+      768,
+      768,
+      256,
+      256
+    ],
+    "archer_attack4": [
+      1024,
+      768,
+      256,
+      256
+    ],
+    "archer_attack5": [
+      1280,
+      768,
+      256,
+      256
+    ],
+    "archer_attack6": [
+      1536,
+      768,
+      256,
+      256
+    ],
+    "archer_attack7": [
+      1792,
+      768,
+      256,
+      256
+    ],
+    "archer_attack8": [
+      0,
+      1024,
+      256,
+      256
+    ],
+    "archer_attack9": [
+      256,
+      1024,
+      256,
+      256
+    ],
+    "archer_attack10": [
+      512,
+      1024,
+      256,
+      256
+    ],
+    "archer_attack11": [
+      768,
+      1024,
+      256,
+      256
+    ],
+    "archer_attack12": [
+      1024,
+      1024,
+      256,
+      256
+    ],
+    "archer_attack13": [
+      1280,
+      1024,
+      256,
+      256
+    ],
+    "archer_attack14": [
+      1536,
+      1024,
+      256,
+      256
+    ],
+    "archer_attack15": [
+      1792,
+      1024,
+      256,
+      256
+    ],
+    "archer_attack16": [
+      0,
+      1280,
+      256,
+      256
+    ],
+    "archer_attack17": [
+      256,
+      1280,
+      256,
+      256
+    ],
+    "archer_attack18": [
+      512,
+      1280,
+      256,
+      256
+    ],
+    "archer_attack19": [
+      768,
+      1280,
+      256,
+      256
+    ],
+    "archer_attack20": [
+      1024,
+      1280,
+      256,
+      256
+    ],
+    "archer_attack21": [
+      1280,
+      1280,
+      256,
+      256
+    ],
+    "archer_attack22": [
+      1536,
+      1280,
+      256,
+      256
+    ],
+    "archer_attack23": [
+      1792,
+      1280,
+      256,
+      256
+    ]
+  },
+  "hero": "archer",
+  "name": "艾拉 · 风羽",
+  "cellSize": 256,
+  "groundAnchor": [
+    128.0,
+    251
+  ],
+  "readyHeightPx": 181.27,
+  "displayReadyHeight": 146,
+  "animations": {
+    "idle": {
+      "frames": [
+        "archer_idle0",
+        "archer_idle1",
+        "archer_idle2",
+        "archer_idle3",
+        "archer_idle4",
+        "archer_idle5",
+        "archer_idle6",
+        "archer_idle7",
+        "archer_idle8",
+        "archer_idle9",
+        "archer_idle10",
+        "archer_idle11",
+        "archer_idle12",
+        "archer_idle13",
+        "archer_idle14",
+        "archer_idle15",
+        "archer_idle16",
+        "archer_idle17",
+        "archer_idle18",
+        "archer_idle19",
+        "archer_idle20",
+        "archer_idle21",
+        "archer_idle22",
+        "archer_idle23"
+      ],
+      "seconds": 1.958,
+      "loop": true,
+      "loopMethod": "continuous endpoint matched"
+    },
+    "attack": {
+      "frames": [
+        "archer_attack0",
+        "archer_attack1",
+        "archer_attack2",
+        "archer_attack3",
+        "archer_attack4",
+        "archer_attack5",
+        "archer_attack6",
+        "archer_attack7",
+        "archer_attack8",
+        "archer_attack9",
+        "archer_attack10",
+        "archer_attack11",
+        "archer_attack12",
+        "archer_attack13",
+        "archer_attack14",
+        "archer_attack15",
+        "archer_attack16",
+        "archer_attack17",
+        "archer_attack18",
+        "archer_attack19",
+        "archer_attack20",
+        "archer_attack21",
+        "archer_attack22",
+        "archer_attack23"
+      ],
+      "seconds": 0.72,
+      "loop": false,
+      "releaseFrame": 12
+    }
+  },
+  "source": {
+    "idle": "videos-v2/archer-idle.mp4",
+    "attack": "videos-v2/archer-attack.mp4",
+    "fps": [
+      24.0,
+      24.0
+    ],
+    "idleIndices": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26,
+      28,
+      30,
+      32,
+      34,
+      36,
+      38,
+      40,
+      42,
+      44,
+      46
+    ],
+    "attackIndices": [
+      0,
+      2,
+      5,
+      7,
+      10,
+      12,
+      14,
+      17,
+      19,
+      22,
+      24,
+      26,
+      29,
+      31,
+      33,
+      36,
+      38,
+      41,
+      43,
+      45,
+      48,
+      50,
+      53,
+      55
+    ],
+    "jointCrop": [
+      0,
+      209,
+      437,
+      687
+    ],
+    "fixedScale": 0.44320297951582865,
+    "fixedFoot": [
+      268.5,
+      685
+    ]
+  },
+  "status": "material review only, not integrated",
+  "blend": "straight RGBA; SRC_ALPHA / ONE_MINUS_SRC_ALPHA",
+  "diagnostics": {
+    "idleEndpointMeanError": 2.865,
+    "footBottomRange": [
+      250,
+      250
+    ]
+  }
+}

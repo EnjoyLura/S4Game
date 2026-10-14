@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "atlas": "parts.png",
+  "width": 1280,
+  "height": 1024,
+  "frames": {
+    "up_legs": [
+      6,
+      6,
+      184,
+      244
+    ],
+    "up_torso": [
+      262,
+      6,
+      179,
+      244
+    ],
+    "up_head": [
+      518,
+      6,
+      220,
+      244
+    ],
+    "up_cape": [
+      774,
+      6,
+      206,
+      244
+    ],
+    "left_upper_arm": [
+      1030,
+      6,
+      142,
+      244
+    ],
+    "left_forearm": [
+      6,
+      262,
+      110,
+      244
+    ],
+    "left_hand": [
+      262,
+      262,
+      135,
+      169
+    ],
+    "right_upper_arm": [
+      518,
+      262,
+      139,
+      244
+    ],
+    "right_forearm": [
+      774,
+      262,
+      102,
+      244
+    ],
+    "right_hand": [
+      1030,
+      262,
+      172,
+      202
+    ],
+    "bow": [
+      6,
+      518,
+      68,
+      244
+    ],
+    "quiver": [
+      262,
+      518,
+      210,
+      244
+    ],
+    "left_legs": [
+      518,
+      518,
+      201,
+      244
+    ],
+    "left_torso": [
+      774,
+      518,
+      176,
+      244
+    ],
+    "left_head": [
+      1030,
+      518,
+      238,
+      244
+    ],
+    "left_cape": [
+      6,
+      774,
+      200,
+      244
+    ],
+    "right_legs": [
+      262,
+      774,
+      196,
+      244
+    ],
+    "right_torso": [
+      518,
+      774,
+      178,
+      244
+    ],
+    "right_head": [
+      774,
+      774,
+      231,
+      244
+    ],
+    "right_cape": [
+      1030,
+      774,
+      190,
+      244
+    ]
+  },
+  "directions": [
+    "up",
+    "left",
+    "right"
+  ],
+  "groundAnchor": [
+    0,
+    0
+  ],
+  "displayHeight": 146,
+  "source": "approved archer, imagegen puppet component artwork",
+  "animations": "Cocos native node transforms and an analytic two-joint arm solver; no Spine"
+}

@@ -55,9 +55,11 @@ def req(method, path, payload=None, raw=False, timeout=60):
 
 
 def submit(args):
+    resolution = getattr(args, 'resolution', None) or '768p'
+    if resolution != '768p':
+        sys.exit('用户要求项目视频只用 768p；已阻止非 768p 请求，未提交付费任务。')
     payload = {'model': args.model, 'seconds': args.seconds, 'aspect_ratio': args.ratio}
-    if args.resolution:
-        payload['resolution'] = args.resolution
+    payload['resolution'] = resolution
     if args.prompt_file:
         payload['prompt'] = open(args.prompt_file, encoding='utf-8').read().strip()
     elif args.prompt:
@@ -67,12 +69,20 @@ def submit(args):
     if args.image:
         # 公网 API 不收本地文件/DataURL：首帧需先部署到 美术/vfx_host 再传 URL
         if args.image.startswith('http'):
-            payload['images'] = [args.image]
+            payload['images'] = [args.image, *getattr(args, 'additional_images', [])]
         else:
             sys.exit('本地图片需先部署到 美术/vfx_host（wrangler pages deploy）后传 URL')
     d = req('POST', '/v1/videos', payload, timeout=90)
     if 'error' in d or not d.get('id'):
-        print('submit error:', json.dumps(d, ensure_ascii=False))
+        # Provider errors can include unrelated account quota/billing information.
+        message = d.get('message', d.get('error', 'No task id returned'))
+        if isinstance(message, str):
+            try:
+                detail = json.loads(message)
+                message = detail.get('error', detail.get('message', 'Provider rejected the request'))
+            except ValueError:
+                pass
+        print('submit error:', json.dumps({'code':d.get('code'), 'message':message}, ensure_ascii=False))
         return None
     print('task:', d['id'], d['status'])
     return d['id']
@@ -85,18 +95,30 @@ def poll(task, out, max_min):
         st = d.get('status'), d.get('progress')
         print('[%s] %s' % (time.strftime('%H:%M:%S'), st), flush=True)
         if st[0] == 'completed':
-            url = d.get('download_url')
-            if not url:
-                print('no download_url:', json.dumps(d, ensure_ascii=False)[:500])
-                return 1
-            if url.startswith(API):
-                raw = req('GET', url[len(API):], raw=True, timeout=180)
-            else:
-                raw = urllib.request.urlopen(url, timeout=180).read()
-            with open(out, 'wb') as f:
-                f.write(raw)
-            print('saved %s (%d bytes)' % (out, len(raw)))
-            return 0
+            # A completed task may return an artifact error at its signed URL.
+            # Preserve the task and try the documented content route before retrying.
+            candidates = list(dict.fromkeys(url for url in
+                [d.get('download_url'), d.get('content_url')] if url))
+            for url in candidates:
+                if url.startswith(API):
+                    raw = req('GET', url[len(API):], raw=True, timeout=60)
+                elif url.startswith('/'):
+                    raw = req('GET', url, raw=True, timeout=60)
+                else:
+                    raw = urllib.request.urlopen(url, timeout=60).read()
+                # Never write an API JSON error or an HTML page as a source MP4.
+                if len(raw) < 1024 or b'ftyp' not in raw[:128]:
+                    try:
+                        code = json.loads(raw).get('error', {}).get('code', 'non_video_response')
+                    except (ValueError, AttributeError):
+                        code = 'non_video_response'
+                    print('video download unavailable:', code, '; trying recovery route', flush=True)
+                    continue
+                with open(out, 'wb') as f:
+                    f.write(raw)
+                print('saved %s (%d bytes)' % (out, len(raw)))
+                return 0
+            print('completed task has no usable video yet; retrying same task', flush=True)
         if st[0] == 'failed':
             print('FAILED:', json.dumps(d, ensure_ascii=False)[:800])
             return 1
@@ -108,12 +130,14 @@ def poll(task, out, max_min):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--image', help='首帧图（公网 URL；本地文件先部署 vfx_host）')
+    ap.add_argument('--reference-image', dest='additional_images', action='append', default=[],
+                    help='模型允许的额外公网图片参考；按输入顺序传入 images，不假定服务器强制尾帧')
     ap.add_argument('--prompt', help='提示词文本')
     ap.add_argument('--prompt-file', help='提示词文件（UTF-8）')
     ap.add_argument('--model', default='lens-minimax-h3-768p')
     ap.add_argument('--seconds', type=int, default=1)
     ap.add_argument('--ratio', default='1:1')
-    ap.add_argument('--resolution', help='可选输出分辨率，例如 768p；按模型支持值填写')
+    ap.add_argument('--resolution', choices=['768p'], default='768p', help='用户固定要求：仅允许 768p')
     ap.add_argument('--out', default='vfx_clip.mp4')
     ap.add_argument('--resume', help='续查已有 task id')
     ap.add_argument('--max-min', type=int, default=12, help='轮询超时(分钟)')

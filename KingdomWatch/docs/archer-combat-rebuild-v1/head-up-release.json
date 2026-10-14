@@ -1,0 +1,21 @@
+{
+  "status": "published",
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "preview": "https://kingdom-watch.pages.dev/previews/archer-combat-rebuild-v1/?v=1791828720",
+  "image": "https://kingdom-watch.pages.dev/previews/archer-combat-rebuild-v1/archer-ready-up-left-v3.png?v=1791828720",
+  "deployment": "https://74662bf0.kingdom-watch.pages.dev",
+  "build": "Cocos Creator 3.8.8 web-mobile completed, BUILD_SUCCESS exit code 36",
+  "dprPatch": "applied; entry cache-bust 1791828720",
+  "publish": "Wrangler Pages main completed, exit code 0; 11 files uploaded, 872 cached",
+  "visualAcceptance": "pending user manual review; no automatic game, interaction or online visual verification performed",
+  "asset": "assets/resources/ux/archer_combat_rebuild_v1/archer-ready-up-left-v3.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "generator": "built-in image_gen.imagegen",
+  "prompt": "head-up-prompt.txt; full generation record in head-up-generation.json",
+  "scope": "Archer static combat base head further turned toward straight top-center, rear head view, relaxed held-bow pose. Existing preview updated with direct horizontal mirroring around a fixed foot pivot. Current battle video animations retain their existing implementation.",
+  "previousRelease": "baseline-release.json"
+}

@@ -1,0 +1,22 @@
+{
+  "image": "sniper-ready.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "bounds": [
+    74,
+    187,
+    987,
+    1363
+  ],
+  "groundAnchor": [
+    596,
+    1363
+  ],
+  "readyHeightPx": 1176,
+  "displayHeight": 170,
+  "direction": "upper-left; head near top-center",
+  "turning": "direct horizontal mirror",
+  "pose": "steady two-handed crossbow ready"
+}

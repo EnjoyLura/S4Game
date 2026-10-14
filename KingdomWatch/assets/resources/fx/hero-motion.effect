@@ -1,0 +1,91 @@
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: hero-vs:vert
+      frag: hero-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties:
+        alphaThreshold: { value: 0.001 }
+        atlasRect: { value: [0, 0, 1, 1] }
+        bodyMotion: { value: [0, 0, 0, 0] }
+        armMotion: { value: [0, 0, 0, 0] }
+        heroShape: { value: [0.7, 0.4, 0, 1] }
+}%
+
+CCProgram hero-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+  out vec4 color;
+  out vec2 uv0;
+  vec4 vert () {
+    vec4 p = vec4(a_position, 1.0);
+    #if USE_LOCAL
+      p = cc_matWorld * p;
+    #endif
+    uv0 = a_texCoord;
+    color = a_color;
+    return cc_matViewProj * p;
+  }
+}%
+
+CCProgram hero-fs %{
+  precision highp float;
+  #include <builtin/internal/embedded-alpha>
+  #include <builtin/internal/alpha-test>
+  in vec4 color;
+  in vec2 uv0;
+  uniform HeroMotion {
+    vec4 atlasRect;
+    vec4 bodyMotion;
+    vec4 armMotion;
+    vec4 heroShape;
+  };
+  #pragma builtin(local)
+  layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
+  vec4 frag () {
+    vec2 p = (uv0 - atlasRect.xy) / atlasRect.zw;
+    vec2 q = p;
+    // Feet below the ankle stay exactly on the original ground pixels.
+    float upper = 1.0 - smoothstep(0.58, 0.90, p.y);
+    q.x -= bodyMotion.x * upper;
+    q.y += bodyMotion.y * upper;
+    float chest = smoothstep(0.12, 0.32, p.y) * (1.0 - smoothstep(0.64, 0.9, p.y));
+    q.y += bodyMotion.z * chest;
+    // Soft joint weights avoid cut seams: bow/staff shoulder, crossbow upper body.
+    float side = smoothstep(0.43, 0.66, p.x);
+    float high = 1.0 - smoothstep(0.48, 0.70, p.y);
+    float armWeight = mix(side * high, 1.0 - smoothstep(0.28, 0.52, p.y), heroShape.z);
+    vec2 joint = heroShape.xy;
+    vec2 d = q - joint;
+    d.x *= heroShape.w;
+    float a = -armMotion.x * armWeight;
+    float co = cos(a), si = sin(a);
+    q = joint + vec2((co * d.x - si * d.y) / heroShape.w, si * d.x + co * d.y);
+    float edges = (1.0 - smoothstep(0.14, 0.38, p.x)) + smoothstep(0.68, 0.9, p.x);
+    float hem = smoothstep(0.42, 0.65, p.y) * (1.0 - smoothstep(0.80, 0.90, p.y));
+    q.x -= sin(p.y * 8.0 - armMotion.z * 2.2) * bodyMotion.w * edges * hem;
+    if (q.x < 0.0 || q.x > 1.0 || q.y < 0.0 || q.y > 1.0) return vec4(0.0);
+    vec4 o = CCSampleWithAlphaSeparated(cc_spriteTexture, atlasRect.xy + q * atlasRect.zw);
+    float crystal = smoothstep(0.68, 0.85, p.x) * (1.0 - smoothstep(0.13, 0.31, p.y));
+    o.rgb *= 1.0 + armMotion.y * crystal;
+    o *= color;
+    ALPHA_TEST(o);
+    return o;
+  }
+}%

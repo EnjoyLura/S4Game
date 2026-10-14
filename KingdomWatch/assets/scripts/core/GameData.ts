@@ -125,19 +125,19 @@ export const HERO_DEFS: Record<string, HeroDef> = {
   },
   sniper: {
     id: 'sniper', name: '凯尔·鹰眼', job: '狙击 · 重击输出', avatar: 'ui_avatar_sniper',
-    baseAtk: 140, atkSpd: 0.6, weaponName: '鹰眼重弩', skillName: '穿颅射击', ultName: '猎杀时刻',
+    baseAtk: 140, atkSpd: 0.5, weaponName: '鹰眼重弩', skillName: '穿颅射击', ultName: '猎杀时刻',
     story: '前王国猎鹰团首席，一弩定音的沉默猎手。现为防线寻找每一发弩箭的价值。',
     shopPrice: 6800,
   },
   pyro: {
     id: 'pyro', name: '焰·辉', job: '火焰 · AOE 爆发', avatar: 'ui_avatar_pyro',
-    baseAtk: 90, atkSpd: 0.8, weaponName: '辉焰法杖', skillName: '烈焰爆裂', ultName: '陨石天降',
+    baseAtk: 90, atkSpd: 1, weaponName: '辉焰法杖', skillName: '烈焰爆裂', ultName: '陨石天降',
     story: '自灰烬火山走出的流浪法师，掌心蕴火。怪群愈密，他的火焰便烧得愈旺。',
     shopPrice: 2800,
   },
   volt: {
     id: 'volt', name: '沃尔·雷霆', job: '雷电 · 连锁控制', avatar: 'ui_avatar_volt',
-    baseAtk: 85, atkSpd: 0.75, weaponName: '雷霆法杖', skillName: '连锁闪电', ultName: '天雷灭世',
+    baseAtk: 85, atkSpd: 1, weaponName: '雷霆法杖', skillName: '连锁闪电', ultName: '天雷灭世',
     story: '在雷暴之夜被天雷选中的人，血液里奔流着风暴。他的闪电从不安分——总在敌群间跳跃。',
     shopPrice: 4200,
   },

@@ -1,0 +1,23 @@
+Animate the exact supplied blue-hooded heavy-crossbow hero for two seconds in a relaxed, lively but restrained idle cycle. This is a whole-character game idle animation, never firing or reloading. Preserve the supplied comic drawing, staggered boot stance, head direction, silver shoulder plates, leather harness and pouches, and the same two-handed crossbow grip. The crossbow remains a rigid, level-forward prop at shoulder height.
+
+FRAMING IS FIXED TO THE SUPPLIED WIDE-MARGIN FIRST FRAME. Keep exactly this character size and placement. Keep all the surrounding plain red empty space. Do not zoom in, crop, pan, re-center, enlarge the hero, or fill the frame with the figure. Every cape point and weapon tip must remain entirely within the frame at every instant. Maintain generous clear red space to both sides of the entire moving cape. The cape never touches a frame edge.
+
+Make a connected, soft cloth wave move through the middle and lower blue cape: the folds rise slightly, flow down through the fabric, and gently settle back. The pointed ends have delayed, overlapping movement, while the cape attachment at the neck stays fixed. Motion should remain visibly alive across the full hanging cape, not a twitch isolated to one tip. Limit cape-side displacement to a small amount, approximately one percent of figure height. The cape returns to exactly its initial outline by the ending.
+
+Include one small, calm breathing rhythm in the upper-back clothing folds. Keep the hood silhouette, head, shoulder armor, hands, wrists, waist, legs and boot positions steady. The figure does not bounce, shrug, twist, lean, squat, step, turn, aim at a new target, pull a bowstring, recoil or gesture. Arms hold the crossbow unchanged. No projectile, flash, sparks, smoke, glow, particles, shadow or extra object.
+
+Complete the entire idle motion cycle without a cut or missing action: start in the reference pose, breathe and let the connected cape wave settle, then finish in the same pose, cape contour and quiet motion phase as the opening. Locked camera, lighting, scale and opaque uniform red background throughout.
+
+MANDATORY IDLE LOOP CLOSURE:
+Create one closed, repeatable idle cycle. Begin in the supplied relaxed ready pose,
+complete one gentle breathing and cloth-motion cycle, and settle back into exactly
+that same pose before the clip ends. The ending must match the beginning in head,
+shoulders, hands, weapon direction, cape and robe silhouettes, feet, scale and framing.
+Cloth must return with matching motion direction and gentle speed; do not leave the
+cape or robe blown to a different side at the end. Camera, crop, floor position and
+weapon grip remain fixed. Do not add an attack, cast, step, recoil, flash or particle.
+Keep the complete character opaque on the unchanged solid background throughout.
+Reserve generous empty background on both sides, below all cape tips and around the
+entire moving silhouette. Every cloth tip must remain fully inside the frame for
+the entire motion cycle. No body part, weapon, cape or robe may touch a frame edge.
+This is an idle cycle, not an action that stops in a different pose.

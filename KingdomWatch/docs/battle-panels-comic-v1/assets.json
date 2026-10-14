@@ -1,0 +1,16 @@
+[
+  {
+    "key": "comic_victory_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_comic_v1\\comic_victory_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 73972
+  },
+  {
+    "key": "comic_defeat_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_comic_v1\\comic_defeat_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 69528
+  }
+]

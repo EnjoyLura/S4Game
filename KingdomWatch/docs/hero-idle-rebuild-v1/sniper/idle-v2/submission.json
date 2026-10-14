@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-13",
+  "status": "rejected before task creation: insufficient_user_quota",
+  "model": "lens-minimax-h3-768p",
+  "secondsRequested": 2,
+  "ratioRequested": "3:4",
+  "imageUrl": "https://kw-vfx-src.pages.dev/hero_idle_rebuild_sniper_20261013_ff.png",
+  "promptFile": "idle-prompt.txt",
+  "availableYuan": 0.002292,
+  "requiredYuan": 0.117647,
+  "taskId": null,
+  "sourceTool": "美术/tools/art_video_gen.py",
+  "scope": "New two-second idle only: hold weapon and limbs still; subtle cape/breathing; no attack, firing, recoil or reloading. No shortened replacement submitted."
+}

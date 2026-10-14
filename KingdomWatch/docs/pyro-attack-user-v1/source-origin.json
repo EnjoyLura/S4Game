@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-14T22:47:18.308442+08:00",
+  "hero": "pyro",
+  "userSourcePath": "C:\\Users\\user\\Downloads\\video (2).mp4",
+  "saved": "source.mp4",
+  "sha256": "5026888ec9c2df373fdd97d3bf34efbe5f3f19933906742e5cd26f650b75e761",
+  "metadata": {
+    "ffmpeg_version": "7.1-essentials_build-www.gyan.dev built with gcc 14.2.0 (Rev1, Built by MSYS2 project)",
+    "codec": "h264",
+    "pix_fmt": "yuv420p(tv, bt709, progressive)",
+    "audio_codec": "aac",
+    "fps": 24.0,
+    "source_size": [
+      1344,
+      768
+    ],
+    "size": [
+      1344,
+      768
+    ],
+    "rotate": 0,
+    "duration": 2.33
+  },
+  "frames": 56,
+  "duration": 2.3333333333333335,
+  "union": [
+    406,
+    28,
+    918,
+    726
+  ],
+  "background": "green",
+  "paidTaskSubmitted": false,
+  "userVisualAccepted": false,
+  "gameIntegrated": true,
+  "previewOnly": false,
+  "pairedIdleResource": "pyro_idle_user_v1",
+  "gameVisualAcceptedByUser": false
+}

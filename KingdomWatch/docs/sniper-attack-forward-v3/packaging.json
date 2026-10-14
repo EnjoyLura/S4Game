@@ -1,0 +1,33 @@
+{
+  "frames": 45,
+  "releaseIndex": 2,
+  "sourceReleaseFrame": 13,
+  "sourceSize": [
+    768,
+    1344
+  ],
+  "sourceFps": 24.0,
+  "sourceSeconds": 2.3333333333333335,
+  "atlas": [
+    4096,
+    3456
+  ],
+  "atlasBytes": 6760784,
+  "displayHeight": 170,
+  "paintedHeight": 467.5133,
+  "groundAnchor": [
+    256,
+    560
+  ],
+  "resource": "assets\\resources\\ux\\sniper_attack_forward_v3",
+  "cleanVideo": "attack-clean.mp4",
+  "omittedEffectsFrames": [
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "eventSourceFrame": 8,
+  "review": "Source frame annotation for production; effect acceptance by user; no tests, browser, game or online QA"
+}

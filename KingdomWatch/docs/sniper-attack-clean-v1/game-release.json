@@ -1,0 +1,10 @@
+{
+  "status": "published",
+  "gameIntegrated": true,
+  "game": "https://kingdom-watch.pages.dev/?v=sniper-attack-clean-live-v1-1791953086",
+  "preview": "https://kingdom-watch.pages.dev/previews/sniper-attack-clean-v1/?v=1791953086",
+  "deployment": "https://be190d5f.kingdom-watch.pages.dev",
+  "liveRelease": "../sniper-attack-clean-live-v1/release.json",
+  "selectedForGameByUser": true,
+  "gameVisualAcceptedByUser": false
+}

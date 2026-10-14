@@ -1,0 +1,29 @@
+Animate this exact silver-haired, purple-robed illustrated character as one natural, repeatable two-second idle cycle. Preserve the relaxed staggered standing pose, both hand positions and the unchanged rigid staff arrangement.
+
+A small steady breeze sends one gentle wave through the hanging purple robe panels and loose sleeve fabric. Folds evolve with soft inertia and a small overlapping delay, from anchored upper cloth toward the free hems, then the next forward phase restores the original silhouette. The whole middle and lower hanging cloth responds, with motion about one percent of the figure height at the free edges. The gold ornamental patterns remain painted into the same cloth. Tiny quiet breathing appears in the upper-back cloth folds. The broad collar, head, shoulders, hands, wrists, belt, legs, boots and the entire held staff remain steady at the exact reference position and angle. The screen-right hand keeps its original relaxed curled gesture.
+
+Complete exactly one closed cycle in forward physical time. The final silhouette, folds, pose and gentle cloth velocity return to the opening phase through newly evolving forward motion. Do not play any part backward, retrace the same image sequence, stop at a farthest pose, freeze at the end or make the robe unnaturally suck back upward. Fabric waves continue developing naturally from the secured cloth toward its free hems. The end of this cycle is already the beginning of the next cycle; keep a continuous gentle rhythm through the last instant.
+
+Locked camera, framing, character scale, lighting and boot positions. Both feet stay planted. Keep the original painted anatomy, outfit, outlines, colors and comic illustration details. All robe tips, hands, feet and the complete staff stay comfortably inside the generous red margins throughout. Uniform opaque red background. Add no objects, emissions, particles, flashes, sparkles, glow, shadows or text. No action, casting, hand gesture or change of stance.
+
+MANDATORY IDLE LOOP CLOSURE:
+The video itself must be a complete natural forward-time cycle, suitable for
+repeating in chronological frame order. Do not simulate a loop by playing motion
+backward, retracing the same deformation, or pausing at a turning pose. Cloth-wave
+propagation, inertia and overlap continue in natural forward time throughout.
+Create one closed, repeatable idle cycle. Begin in the supplied relaxed ready pose,
+complete one gentle breathing and cloth-motion cycle, and settle back into exactly
+that same pose before the clip ends. The ending must match the beginning in head,
+shoulders, hands, weapon direction, cape and robe silhouettes, feet, scale and framing.
+Cloth must return with matching motion direction and gentle speed; do not leave the
+cape or robe blown to a different side at the end. Camera, crop, floor position and
+hand contact and held-prop positions remain fixed. Keep all non-cloth elements still,
+with the same ordinary painted highlights and constant lighting. Only the existing
+clothing surface moves; preserve every other element exactly as drawn.
+Keep the complete character opaque on the unchanged solid background throughout.
+Reserve generous empty background on both sides, below all cape tips and around the
+entire moving silhouette. Every cloth tip must remain fully inside the frame for
+the entire motion cycle. No body part, weapon, cape or robe may touch a frame edge.
+End at the same cycle phase, with the same gentle motion direction and speed as
+the opening. Keep moving through the final instant; do not add a static ending
+hold, freeze, fade, dissolve or abrupt recovery. This is one complete idle cycle.

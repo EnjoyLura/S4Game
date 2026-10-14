@@ -1,0 +1,41 @@
+{
+  "status": "published",
+  "scope": "texture-free procedural basic releases; measured value icon positions; shield depletion from left to right",
+  "launchRenderer": "custom fragment shader, analytic curves and particle motion; native Graphics loading fallback",
+  "sampledLaunchArtwork": false,
+  "runtimeCarrier": "2x2 white texture used only to submit a Sprite quad; shader has no sampler",
+  "rejectedBaseline": "basic_launch_v2_* painted launch effects, user feedback 2026-10-15",
+  "poolCapacity": 36,
+  "launchSeconds": {
+    "archer": 0.24,
+    "sniper": 0.28,
+    "pyro": 0.25,
+    "volt": 0.22,
+    "mora": 0.28
+  },
+  "clock": "battle simulation age and direction; paused with battle",
+  "statusValues": "right-aligned actual text bounds; left icon follows measured width and asynchronous font changes",
+  "shield": "right anchored outer band; damage removes left to right; shield/maxHP; zero hides shell only",
+  "preserved": [
+    "hero art and animation",
+    "painted projectile bodies",
+    "flight trails",
+    "shield and HP vertical positions",
+    "ultimate icon positions",
+    "damage",
+    "attack rates",
+    "projectile speed",
+    "collisions",
+    "targeting",
+    "skills",
+    "ultimates",
+    "hit effects",
+    "audio"
+  ],
+  "paidGenerationCalls": 0,
+  "gameplayValidation": "user manual",
+  "automatedAcceptance": "not run per user instruction",
+  "visualAcceptance": "pending user manual review",
+  "game": "https://kingdom-watch.pages.dev/?v=basic-launch-procedural-v3-1791999420",
+  "deployment": "https://10714401.kingdom-watch.pages.dev"
+}

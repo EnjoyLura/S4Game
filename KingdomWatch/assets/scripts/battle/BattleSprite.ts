@@ -63,6 +63,16 @@ function loadAtlas(id: AtlasId, cb: (atlas: Atlas | null) => void): void {
         const sf = new SpriteFrame();
         sf.reset({ texture: source.texture, rect: new Rect(x, y, w, h), originalSize: new Size(w, h), offset: new Vec2() });
         frames.set(name, sf);
+        // The continuous hero rig needs transparent breathing room at the edges.
+        // Extend the shared atlas rectangle, never rescale or recenter individual poses.
+        if (id === 'battle_heroes_v2' && name.endsWith('_attack')) {
+          const pad = 12;
+          const ready = new SpriteFrame();
+          ready.reset({ texture: source.texture, rect: new Rect(x - pad, y - pad, w + pad * 2, h + pad * 2),
+            originalSize: new Size(w + pad * 2, h + pad * 2), offset: new Vec2() });
+          ready.packable = false; // UV deformation uses this shared atlas rectangle directly.
+          frames.set(name.replace('_attack', '_combat'), ready);
+        }
       }
       finish({ frames });
     });

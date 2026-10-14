@@ -1,0 +1,28 @@
+{
+  "image": "ready-red.png",
+  "transparentImage": "ready-transparent.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "bounds": [
+    183,
+    150,
+    982,
+    1388
+  ],
+  "groundAnchor": [
+    527.0,
+    1388
+  ],
+  "readyHeightPx": 1238,
+  "displayHeight": 170,
+  "backgroundRGB": [
+    251.0,
+    2.0,
+    1.0
+  ],
+  "direction": "rear view; crossbow aimed forward into the battlefield, slightly left; ground-parallel level aim in foreshortened perspective",
+  "imageTool": "built-in imagegen",
+  "prompt": "image-prompt.txt"
+}

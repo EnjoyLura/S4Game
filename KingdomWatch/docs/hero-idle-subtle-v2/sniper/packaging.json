@@ -1,0 +1,37 @@
+{
+  "hero": "sniper",
+  "resource": "sniper_idle_subtle_v2",
+  "original": "sniper-stance-idle-v3",
+  "sourceIndices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "sourceTask": "task_ZfW2nZiUwOEf2dNqB99lQDQqyq1Ealx1",
+  "uniqueFrames": 9,
+  "timelineFrames": 16,
+  "loopSeconds": 3.0769230769230766,
+  "speedComparedToInitialSubtleV2": 1.3,
+  "displayHeight": 153,
+  "readyHeightPx": 467.1111,
+  "groundAnchor": [
+    256,
+    496
+  ],
+  "atlas": [
+    4096,
+    1024
+  ],
+  "atlasBytes": 1276064,
+  "newVideoSubmitted": false,
+  "staticMasterAcceptedByUser": true,
+  "animationAcceptedByUser": false,
+  "gameIntegrated": true,
+  "review": "Source selection and asset production only; effect acceptance by user, no tests/browser/game/online QA"
+}

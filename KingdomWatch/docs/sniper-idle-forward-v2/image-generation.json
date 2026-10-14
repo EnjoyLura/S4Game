@@ -1,0 +1,11 @@
+{
+  "tool": "built-in imagegen",
+  "generatedSource": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-f977739e-20b0-4b86-a7ed-75231c8cd43a.png",
+  "editTarget": "../sniper-idle-level-v1/ready-red.png",
+  "identityReference": "../../assets/resources/ux/hero_comic_v1/comic_figure_sniper_v1.png",
+  "master": "ready-red.png",
+  "prompt": "image-prompt.txt",
+  "background": "opaque red",
+  "direction": "forward into the battlefield, slightly left; ground-parallel level aim, foreshortened rear perspective",
+  "approval": "User manual review pending"
+}

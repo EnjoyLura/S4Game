@@ -1,0 +1,22 @@
+{
+  "ok": true,
+  "url": "https://kingdom-watch.pages.dev/?v=battle-skin-v2-1791723401",
+  "realBattleStarted": false,
+  "checks": [
+    {
+      "viewport": [
+        375,
+        600
+      ],
+      "originalLayoutAndText": "exact match for all nine views",
+      "tipBackdrop": "original 360×470, #14181E alpha 0.94",
+      "bars": "original 225×16, accurate share, number still in bar"
+    },
+    "Original animated card choice unlocks skill; refresh and persisted diamond cost stay correct",
+    "Original victory buttons/tabs retain next-level callback and guarded double claim",
+    "Original revive placement retains no-fill retry and actual +30% durability/resume",
+    "Original pause title, settings switches, tabs and continue button remain functional"
+  ],
+  "errors": [],
+  "failed": []
+}

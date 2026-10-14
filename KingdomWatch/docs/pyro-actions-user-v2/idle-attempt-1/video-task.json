@@ -1,0 +1,14 @@
+{
+  "taskId": "task_Hq7Z7WUuSPmOOoPTWnLBY5amjEV4nDMP",
+  "model": "lens-minimax-h3-768p",
+  "resolution": "768p",
+  "secondsRequested": 2,
+  "ratio": "16:9",
+  "image": "https://kw-vfx-src.pages.dev/hero_pyro_idle_loop_v2_20261015_ff.png",
+  "prompt": "idle-prompt.txt",
+  "date": "2026-10-15T00:40:04.242407+08:00",
+  "firstFrameUnchanged": true,
+  "closureRequired": true,
+  "reversePlaybackAllowed": false,
+  "userVisualAccepted": false
+}

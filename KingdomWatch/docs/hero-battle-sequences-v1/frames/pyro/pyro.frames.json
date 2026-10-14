@@ -1,0 +1,445 @@
+{
+  "frames": {
+    "pyro_idle0": [
+      0,
+      0,
+      256,
+      256
+    ],
+    "pyro_idle1": [
+      256,
+      0,
+      256,
+      256
+    ],
+    "pyro_idle2": [
+      512,
+      0,
+      256,
+      256
+    ],
+    "pyro_idle3": [
+      768,
+      0,
+      256,
+      256
+    ],
+    "pyro_idle4": [
+      1024,
+      0,
+      256,
+      256
+    ],
+    "pyro_idle5": [
+      1280,
+      0,
+      256,
+      256
+    ],
+    "pyro_idle6": [
+      1536,
+      0,
+      256,
+      256
+    ],
+    "pyro_idle7": [
+      1792,
+      0,
+      256,
+      256
+    ],
+    "pyro_idle8": [
+      0,
+      256,
+      256,
+      256
+    ],
+    "pyro_idle9": [
+      256,
+      256,
+      256,
+      256
+    ],
+    "pyro_idle10": [
+      512,
+      256,
+      256,
+      256
+    ],
+    "pyro_idle11": [
+      768,
+      256,
+      256,
+      256
+    ],
+    "pyro_idle12": [
+      1024,
+      256,
+      256,
+      256
+    ],
+    "pyro_idle13": [
+      1280,
+      256,
+      256,
+      256
+    ],
+    "pyro_idle14": [
+      1536,
+      256,
+      256,
+      256
+    ],
+    "pyro_idle15": [
+      1792,
+      256,
+      256,
+      256
+    ],
+    "pyro_idle16": [
+      0,
+      512,
+      256,
+      256
+    ],
+    "pyro_idle17": [
+      256,
+      512,
+      256,
+      256
+    ],
+    "pyro_idle18": [
+      512,
+      512,
+      256,
+      256
+    ],
+    "pyro_idle19": [
+      768,
+      512,
+      256,
+      256
+    ],
+    "pyro_idle20": [
+      1024,
+      512,
+      256,
+      256
+    ],
+    "pyro_idle21": [
+      1280,
+      512,
+      256,
+      256
+    ],
+    "pyro_idle22": [
+      1536,
+      512,
+      256,
+      256
+    ],
+    "pyro_idle23": [
+      1792,
+      512,
+      256,
+      256
+    ],
+    "pyro_attack0": [
+      0,
+      768,
+      256,
+      256
+    ],
+    "pyro_attack1": [
+      256,
+      768,
+      256,
+      256
+    ],
+    "pyro_attack2": [
+      512,
+      768,
+      256,
+      256
+    ],
+    "pyro_attack3": [
+      768,
+      768,
+      256,
+      256
+    ],
+    "pyro_attack4": [
+      1024,
+      768,
+      256,
+      256
+    ],
+    "pyro_attack5": [
+      1280,
+      768,
+      256,
+      256
+    ],
+    "pyro_attack6": [
+      1536,
+      768,
+      256,
+      256
+    ],
+    "pyro_attack7": [
+      1792,
+      768,
+      256,
+      256
+    ],
+    "pyro_attack8": [
+      0,
+      1024,
+      256,
+      256
+    ],
+    "pyro_attack9": [
+      256,
+      1024,
+      256,
+      256
+    ],
+    "pyro_attack10": [
+      512,
+      1024,
+      256,
+      256
+    ],
+    "pyro_attack11": [
+      768,
+      1024,
+      256,
+      256
+    ],
+    "pyro_attack12": [
+      1024,
+      1024,
+      256,
+      256
+    ],
+    "pyro_attack13": [
+      1280,
+      1024,
+      256,
+      256
+    ],
+    "pyro_attack14": [
+      1536,
+      1024,
+      256,
+      256
+    ],
+    "pyro_attack15": [
+      1792,
+      1024,
+      256,
+      256
+    ],
+    "pyro_attack16": [
+      0,
+      1280,
+      256,
+      256
+    ],
+    "pyro_attack17": [
+      256,
+      1280,
+      256,
+      256
+    ],
+    "pyro_attack18": [
+      512,
+      1280,
+      256,
+      256
+    ],
+    "pyro_attack19": [
+      768,
+      1280,
+      256,
+      256
+    ],
+    "pyro_attack20": [
+      1024,
+      1280,
+      256,
+      256
+    ],
+    "pyro_attack21": [
+      1280,
+      1280,
+      256,
+      256
+    ],
+    "pyro_attack22": [
+      1536,
+      1280,
+      256,
+      256
+    ],
+    "pyro_attack23": [
+      1792,
+      1280,
+      256,
+      256
+    ]
+  },
+  "hero": "pyro",
+  "name": "焰 · 辉",
+  "cellSize": 256,
+  "groundAnchor": [
+    128.0,
+    251
+  ],
+  "readyHeightPx": 180.704,
+  "displayReadyHeight": 146,
+  "animations": {
+    "idle": {
+      "frames": [
+        "pyro_idle0",
+        "pyro_idle1",
+        "pyro_idle2",
+        "pyro_idle3",
+        "pyro_idle4",
+        "pyro_idle5",
+        "pyro_idle6",
+        "pyro_idle7",
+        "pyro_idle8",
+        "pyro_idle9",
+        "pyro_idle10",
+        "pyro_idle11",
+        "pyro_idle12",
+        "pyro_idle13",
+        "pyro_idle14",
+        "pyro_idle15",
+        "pyro_idle16",
+        "pyro_idle17",
+        "pyro_idle18",
+        "pyro_idle19",
+        "pyro_idle20",
+        "pyro_idle21",
+        "pyro_idle22",
+        "pyro_idle23"
+      ],
+      "seconds": 1.792,
+      "loop": true,
+      "loopMethod": "continuous endpoint matched"
+    },
+    "attack": {
+      "frames": [
+        "pyro_attack0",
+        "pyro_attack1",
+        "pyro_attack2",
+        "pyro_attack3",
+        "pyro_attack4",
+        "pyro_attack5",
+        "pyro_attack6",
+        "pyro_attack7",
+        "pyro_attack8",
+        "pyro_attack9",
+        "pyro_attack10",
+        "pyro_attack11",
+        "pyro_attack12",
+        "pyro_attack13",
+        "pyro_attack14",
+        "pyro_attack15",
+        "pyro_attack16",
+        "pyro_attack17",
+        "pyro_attack18",
+        "pyro_attack19",
+        "pyro_attack20",
+        "pyro_attack21",
+        "pyro_attack22",
+        "pyro_attack23"
+      ],
+      "seconds": 0.8,
+      "loop": false,
+      "releaseFrame": 12
+    }
+  },
+  "source": {
+    "idle": "videos-v2/pyro-idle.mp4",
+    "attack": "videos-v2/pyro-attack.mp4",
+    "fps": [
+      24.0,
+      24.0
+    ],
+    "idleIndices": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11,
+      13,
+      15,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26,
+      27,
+      29,
+      31,
+      33,
+      35,
+      37,
+      38,
+      40,
+      42
+    ],
+    "attackIndices": [
+      0,
+      2,
+      5,
+      7,
+      10,
+      12,
+      14,
+      17,
+      19,
+      22,
+      24,
+      26,
+      29,
+      31,
+      33,
+      36,
+      38,
+      41,
+      43,
+      45,
+      48,
+      50,
+      53,
+      55
+    ],
+    "jointCrop": [
+      0,
+      189,
+      456,
+      687
+    ],
+    "fixedScale": 0.44074074074074077,
+    "fixedFoot": [
+      270.0,
+      685
+    ]
+  },
+  "status": "material review only, not integrated",
+  "blend": "straight RGBA; SRC_ALPHA / ONE_MINUS_SRC_ALPHA",
+  "diagnostics": {
+    "idleEndpointMeanError": 7.265,
+    "footBottomRange": [
+      249,
+      249
+    ]
+  }
+}

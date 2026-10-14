@@ -1,0 +1,24 @@
+{
+  "method": "pingpong",
+  "range": [
+    4,
+    53
+  ],
+  "previousSinglePassSeconds": 3.07692307692308,
+  "loopSeconds": 6.15384615384616,
+  "preservesAllApprovedFrames": true,
+  "contract": {
+    "id": "hero-idle-adjacent-loop-v1",
+    "strategy": "All original complete frames forward and backward with eased turns",
+    "allTransitionsAdjacentIncludingWrap": true,
+    "wrapFrames": [
+      1,
+      0
+    ],
+    "noEndToStartCut": true,
+    "noOpacityCrossfade": true,
+    "acceptance": "Structural production constraint only; final effect review by user"
+  },
+  "sourceVideoNewlyGenerated": false,
+  "supersedes": "../sniper-idle-lively-v1/loop-selection.json"
+}

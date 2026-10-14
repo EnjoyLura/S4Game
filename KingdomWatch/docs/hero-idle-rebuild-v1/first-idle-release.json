@@ -1,0 +1,33 @@
+{
+  "status": "published",
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "game": "https://kingdom-watch.pages.dev/?v=archer-size-1791829898",
+  "preview": "https://kingdom-watch.pages.dev/previews/sniper-idle-rebuild-v1/?v=1791829898",
+  "deployment": "https://1b181ee6.kingdom-watch.pages.dev",
+  "build": "Cocos Creator 3.8.8 web-mobile; BUILD_SUCCESS exit code 36",
+  "dprPatch": "applied; entry cache-bust 1791829898",
+  "publish": "Wrangler Pages main exit code 0; 22 uploaded, 882 cached",
+  "archer": {
+    "change": "Uniform display height 146 -> 170; original idle/attack images, frames, timing and foot pivot retained",
+    "scaleRatio": 1.1643835616438356,
+    "newVideo": "local only; not applied or published"
+  },
+  "sniper": {
+    "image": "assets/resources/ux/sniper_combat_rebuild_v1/sniper-ready.png",
+    "imageTool": "built-in image_gen.imagegen",
+    "imagePrompt": "sniper/combat-image-prompt.txt",
+    "videoTool": "美术/tools/art_video_gen.py",
+    "model": "lens-minimax-h3-768p",
+    "taskId": "task_CGyEW2IKZuDUCr9Hhc5VDCGFVsQkbe9R",
+    "videoPrompt": "sniper/idle-prompt.txt",
+    "source": "sniper/source.mp4",
+    "resource": "assets/resources/ux/sniper_idle_rebuild_v1",
+    "uniqueFrames": 24,
+    "timelineFrames": 46,
+    "seconds": 3.2,
+    "loopMethod": "continuous forward/backward slow playback",
+    "scope": "material preview only; current game sniper remains unchanged"
+  },
+  "review": "User manual review; no automatic game, interaction, browser or online visual verification performed"
+}

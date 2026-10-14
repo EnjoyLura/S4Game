@@ -1,0 +1,20 @@
+{
+  "image": "ready-red.png",
+  "imageTool": "built-in imagegen",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGB",
+  "backgroundRGB": [
+    251.0,
+    2.0,
+    1.0
+  ],
+  "groundAnchor": [
+    563.0,
+    1391
+  ],
+  "displayHeight": 153,
+  "userAccepted": false
+}

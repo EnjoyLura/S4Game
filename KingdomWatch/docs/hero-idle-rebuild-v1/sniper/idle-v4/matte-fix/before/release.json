@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "status": "published; awaiting user visual review",
+  "preview": "https://kingdom-watch.pages.dev/previews/sniper-idle-rebuild-v1/?v=1791866090",
+  "deployment": "https://351f00fc.kingdom-watch.pages.dev",
+  "generator": "美术/tools/art_video_gen.py",
+  "model": "lens-minimax-h3-768p",
+  "taskId": "task_SaPsplaFBm5cimEn5E75SnpG2u6QFJFQ",
+  "secondsRequested": 2,
+  "rawVideo": "source.mp4",
+  "rawBytes": 1003978,
+  "source": {
+    "seconds": 2.33,
+    "size": [768, 1344],
+    "fps": 24,
+    "frameCount": 56
+  },
+  "prompt": "idle-prompt.txt",
+  "postprocessing": "Native-resolution full-character black key, shared crop, one final resize, fixed scale and foot pivot. No static-body composite or cape mask. Raw source video preserved.",
+  "sequence": {
+    "resource": "assets/resources/ux/sniper_idle_rebuild_v4",
+    "uniqueFrames": 56,
+    "timelineFrames": 56,
+    "seconds": 2,
+    "playbackFps": 28,
+    "loopMethod": "Full source in original consecutive frame order; all frames retimed uniformly to a two-second loop",
+    "cellSize": [384, 576],
+    "atlas": [3072, 4032],
+    "bytes": 8403540,
+    "fixedFootPivot": true,
+    "fixedScale": true
+  },
+  "supersedes": "v3 rejected by user: simplistic cape-tip motion and displaced cape composite",
+  "archer": "Display height 221 retained; existing images and idle/attack timing retained",
+  "build": "Cocos Creator 3.8.8 web-mobile; build completed with success exit code 36",
+  "dprPatch": "Applied; entry cache-bust 1791866090",
+  "publish": "Wrangler Pages main completed, exit code 0; 13 files uploaded, 903 cached",
+  "scope": "Independent sniper material preview; current game sniper animation is not replaced",
+  "review": "User manual review; no automatic game, interaction, browser or online visual verification performed"
+}

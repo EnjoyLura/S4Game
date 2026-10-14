@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": [
+    "Five heroes: normal attack only on entry, independent learning, no locked charging, fresh run resets",
+    "All five actual ultimate implementations reject locked abilities even with forced full charge",
+    "5000 initial/refresh draws: three unique eligible cards; all skill/ultimate upgrades gated separately; prerequisites and caps preserved",
+    "Director: rejects premature/undeployed upgrades; queued choices and refresh work; GM respects prerequisites/caps; unlock starts ultimate at zero",
+    "High-level sniper automatic ultimate and volt skill proc remain gated until learned"
+  ]
+}

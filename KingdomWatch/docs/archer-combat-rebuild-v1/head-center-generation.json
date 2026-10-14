@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-13",
+  "tool": "built-in image_gen.imagegen",
+  "mode": "edit; precise-object-edit",
+  "input": "assets/resources/ux/archer_combat_rebuild_v1/archer-ready-up-left.png",
+  "selectedOriginal": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-4e84f937-57ff-406d-9006-4abb786bfe34.png",
+  "prompt": "head-center-prompt.txt",
+  "asset": "assets/resources/ux/archer_combat_rebuild_v1/archer-ready-up-left-v2.png",
+  "previewCopy": "docs/archer-combat-rebuild-v1/archer-ready-up-left-v2.png",
+  "size": [1024, 1536],
+  "groundAnchor": [576, 1430],
+  "processing": "Byte-for-byte copy preserving generated RGBA. Original v1 remains preserved. Display scaling and horizontal mirroring only in the preview canvas.",
+  "request": "Head faces a little closer toward the middle. Preserve held-bow pose and prefer direct left/right mirroring.",
+  "acceptance": "pending user manual review",
+  "scope": "Static combat base art head adjustment and mirror preview."
+}

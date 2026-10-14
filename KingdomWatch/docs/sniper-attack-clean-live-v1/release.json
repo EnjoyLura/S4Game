@@ -1,0 +1,62 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-sniper-attack-clean-live-v1-20261014-124527",
+  "entryVersion": "1791953086",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=sniper-attack-clean-live-v1-1791953086",
+  "preview": "https://kingdom-watch.pages.dev/previews/sniper-attack-clean-v1/?v=1791953086",
+  "status": "published",
+  "deployment": "https://be190d5f.kingdom-watch.pages.dev",
+  "date": "2026-10-14T12:47:14+08:00",
+  "integration": {
+    "status": "published",
+    "resource": "sniper_attack_clean_v1",
+    "replaced": "sniper_attack_natural_v1",
+    "sourceFrames": 56,
+    "displayHeight": 153,
+    "readyHeightPx": 467.1111,
+    "groundAnchor": [
+      256,
+      496
+    ],
+    "motionAcceptedByUser": true,
+    "selectedForGameByUser": true,
+    "gameVisualAcceptedByUser": false,
+    "idlePreserved": "sniper_idle_natural_v2",
+    "retainedHeroes": [
+      "archer",
+      "volt"
+    ],
+    "timing": "Actual bolt callback begins release frame 7; preparation plays frames 0-6 before the shot; all forward recovery frames 7-55 retained and adapted to attack interval",
+    "idleRule": "Only when no target is in own attack range, no queued shot, and release/recovery has completed",
+    "damageAndAttackRateChanged": false,
+    "review": "User manual review; no tests, game, browser or online QA"
+  },
+  "previewOnly": false,
+  "gameAttackChanged": true,
+  "selectedForGameByUser": true,
+  "gameVisualAcceptedByUser": false,
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-sniper-attack-clean-live-v1-20261014-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-sniper-attack-clean-live-v1-20261014-err.log",
+    "dprPatch": "completed",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "milliseconds": 9534
+  },
+  "publication": {
+    "tool": "Wrangler 3.114.17",
+    "exitCode": 0,
+    "attempts": 1,
+    "uploaded": 10,
+    "cached": 1562,
+    "uploadSeconds": 4.3
+  },
+  "retained": {
+    "sniperIdle": "sniper_idle_natural_v2",
+    "archer": "existing media, actions and height 185.64",
+    "volt": "existing idle/attack media, timing and height 146"
+  },
+  "review": "User manual game review; no tests, game, browser or online QA"
+}

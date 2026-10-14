@@ -1,0 +1,1940 @@
+{
+  "hero": "volt",
+  "frames": {
+    "idle0": [
+      0,
+      0,
+      512,
+      512
+    ],
+    "idle1": [
+      512,
+      0,
+      512,
+      512
+    ],
+    "idle2": [
+      1024,
+      0,
+      512,
+      512
+    ],
+    "idle3": [
+      1536,
+      0,
+      512,
+      512
+    ],
+    "idle4": [
+      2048,
+      0,
+      512,
+      512
+    ],
+    "idle5": [
+      2560,
+      0,
+      512,
+      512
+    ],
+    "idle6": [
+      3072,
+      0,
+      512,
+      512
+    ],
+    "idle7": [
+      3584,
+      0,
+      512,
+      512
+    ],
+    "idle8": [
+      0,
+      512,
+      512,
+      512
+    ],
+    "idle9": [
+      512,
+      512,
+      512,
+      512
+    ],
+    "idle10": [
+      1024,
+      512,
+      512,
+      512
+    ],
+    "idle11": [
+      1536,
+      512,
+      512,
+      512
+    ],
+    "idle12": [
+      2048,
+      512,
+      512,
+      512
+    ],
+    "idle13": [
+      2560,
+      512,
+      512,
+      512
+    ],
+    "idle14": [
+      3072,
+      512,
+      512,
+      512
+    ],
+    "idle15": [
+      3584,
+      512,
+      512,
+      512
+    ],
+    "idle16": [
+      0,
+      1024,
+      512,
+      512
+    ],
+    "idle17": [
+      512,
+      1024,
+      512,
+      512
+    ],
+    "idle18": [
+      1024,
+      1024,
+      512,
+      512
+    ],
+    "idle19": [
+      1536,
+      1024,
+      512,
+      512
+    ],
+    "idle20": [
+      2048,
+      1024,
+      512,
+      512
+    ],
+    "idle21": [
+      2560,
+      1024,
+      512,
+      512
+    ],
+    "idle22": [
+      3072,
+      1024,
+      512,
+      512
+    ],
+    "idle23": [
+      3584,
+      1024,
+      512,
+      512
+    ],
+    "idle24": [
+      0,
+      1536,
+      512,
+      512
+    ],
+    "idle25": [
+      512,
+      1536,
+      512,
+      512
+    ],
+    "idle26": [
+      1024,
+      1536,
+      512,
+      512
+    ],
+    "idle27": [
+      1536,
+      1536,
+      512,
+      512
+    ],
+    "idle28": [
+      2048,
+      1536,
+      512,
+      512
+    ],
+    "idle29": [
+      2560,
+      1536,
+      512,
+      512
+    ],
+    "idle30": [
+      3072,
+      1536,
+      512,
+      512
+    ],
+    "idle31": [
+      3584,
+      1536,
+      512,
+      512
+    ],
+    "idle32": [
+      0,
+      2048,
+      512,
+      512
+    ],
+    "idle33": [
+      512,
+      2048,
+      512,
+      512
+    ],
+    "idle34": [
+      1024,
+      2048,
+      512,
+      512
+    ],
+    "idle35": [
+      1536,
+      2048,
+      512,
+      512
+    ],
+    "idle36": [
+      2048,
+      2048,
+      512,
+      512
+    ],
+    "idle37": [
+      2560,
+      2048,
+      512,
+      512
+    ],
+    "idle38": [
+      3072,
+      2048,
+      512,
+      512
+    ],
+    "idle39": [
+      3584,
+      2048,
+      512,
+      512
+    ],
+    "idle40": [
+      0,
+      2560,
+      512,
+      512
+    ],
+    "idle41": [
+      512,
+      2560,
+      512,
+      512
+    ],
+    "idle42": [
+      1024,
+      2560,
+      512,
+      512
+    ],
+    "idle43": [
+      1536,
+      2560,
+      512,
+      512
+    ],
+    "idle44": [
+      2048,
+      2560,
+      512,
+      512
+    ],
+    "idle45": [
+      2560,
+      2560,
+      512,
+      512
+    ],
+    "idle46": [
+      3072,
+      2560,
+      512,
+      512
+    ],
+    "idle47": [
+      3584,
+      2560,
+      512,
+      512
+    ],
+    "idle48": [
+      0,
+      3072,
+      512,
+      512
+    ],
+    "idle49": [
+      512,
+      3072,
+      512,
+      512
+    ],
+    "idle50": [
+      1024,
+      3072,
+      512,
+      512
+    ],
+    "idle51": [
+      1536,
+      3072,
+      512,
+      512
+    ],
+    "idle52": [
+      2048,
+      3072,
+      512,
+      512
+    ],
+    "idle53": [
+      2560,
+      3072,
+      512,
+      512
+    ],
+    "idle54": [
+      3072,
+      3072,
+      512,
+      512
+    ],
+    "idle55": [
+      3584,
+      3072,
+      512,
+      512
+    ]
+  },
+  "animation": {
+    "frames": [
+      "idle0",
+      "idle1",
+      "idle2",
+      "idle3",
+      "idle4",
+      "idle5",
+      "idle6",
+      "idle7",
+      "idle8",
+      "idle9",
+      "idle10",
+      "idle11",
+      "idle12",
+      "idle13",
+      "idle14",
+      "idle15",
+      "idle16",
+      "idle17",
+      "idle18",
+      "idle19",
+      "idle20",
+      "idle21",
+      "idle22",
+      "idle23",
+      "idle24",
+      "idle25",
+      "idle26",
+      "idle27",
+      "idle28",
+      "idle29",
+      "idle30",
+      "idle31",
+      "idle32",
+      "idle33",
+      "idle34",
+      "idle35",
+      "idle36",
+      "idle37",
+      "idle38",
+      "idle39",
+      "idle40",
+      "idle41",
+      "idle42",
+      "idle43",
+      "idle44",
+      "idle45",
+      "idle46",
+      "idle47",
+      "idle48",
+      "idle49",
+      "idle50",
+      "idle51",
+      "idle52",
+      "idle53",
+      "idle54",
+      "idle55"
+    ],
+    "seconds": 3.07692307692308,
+    "frameDurations": [
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501,
+      0.05494505494505501
+    ],
+    "loop": true,
+    "loopClosure": {
+      "id": "hero-idle-forward-native-loop-v3",
+      "strategy": "All source frames in chronological order; the source video must naturally complete its own cycle",
+      "reversePlayback": false,
+      "pingPong": false,
+      "nativeSourceCycleRequired": true,
+      "noArtificialHold": true,
+      "uniformFrameTiming": true,
+      "wrapFrames": [
+        55,
+        0
+      ],
+      "noOpacityCrossfade": true,
+      "acceptance": "Forward timing does not certify source closure or visual quality; final effect review by user"
+    }
+  },
+  "sourceOrder": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55
+  ],
+  "groundAnchor": [
+    256,
+    496
+  ],
+  "cellSize": [
+    512,
+    512
+  ],
+  "readyHeightPx": 468.7165,
+  "displayHeight": 146,
+  "source": {
+    "file": "source.mp4",
+    "sha256": "4ff8f7c119ef9db7396ce9466c32d94ab399e503d0e08c01087600845c1ff0fe",
+    "videoSize": [
+      768,
+      1344
+    ],
+    "fps": 24.0,
+    "frameCount": 56,
+    "seconds": 2.3333333333333335,
+    "indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55
+    ],
+    "omittedEffectsFrames": [],
+    "jointCrop": [
+      144,
+      328,
+      656,
+      1072
+    ],
+    "fixedScale": 0.6368430706521739,
+    "fixedFootSource": [
+      426.5,
+      1068
+    ],
+    "redFieldPerFrame": [
+      [
+        227.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        227.0,
+        1.0,
+        1.0
+      ],
+      [
+        227.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        1.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        1.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        227.0,
+        1.0,
+        1.0
+      ],
+      [
+        227.0,
+        1.0,
+        0.0
+      ],
+      [
+        227.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        1.0
+      ],
+      [
+        225.0,
+        1.0,
+        1.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        1.0
+      ],
+      [
+        225.0,
+        1.0,
+        1.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        0.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        1.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        1.0
+      ],
+      [
+        225.0,
+        1.0,
+        1.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        227.0,
+        2.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        1.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        0.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        1.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        227.0,
+        2.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ],
+      [
+        225.0,
+        1.0,
+        0.0
+      ]
+    ]
+  },
+  "processing": {
+    "matte": "Global red key with decontaminated edges and enclosed weapon gaps",
+    "spatial": "One fixed crop, uniform scale and pivot spanning both staggered boots; complete character; no part deformation or frame-by-frame scaling",
+    "temporal": "Complete natural source cycle in chronological order, uniform timing, no reverse playback or endpoint hold"
+  },
+  "blend": "straight RGBA; single sprite, no opacity fade",
+  "review": "Production source annotation; effects reviewed manually by user; no browser/game/tests/online QA",
+  "staticMasterAcceptedByUser": true,
+  "fullSourceRequired": true,
+  "sourceFraming": [
+    {
+      "sourceFrame": 0,
+      "bounds": [
+        148,
+        332,
+        620,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        148,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 1,
+      "bounds": [
+        148,
+        332,
+        615,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        153,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 2,
+      "bounds": [
+        148,
+        332,
+        611,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        157,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 3,
+      "bounds": [
+        148,
+        332,
+        610,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        158,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 4,
+      "bounds": [
+        148,
+        332,
+        610,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        158,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 5,
+      "bounds": [
+        148,
+        332,
+        612,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        156,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 6,
+      "bounds": [
+        148,
+        332,
+        616,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        152,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 7,
+      "bounds": [
+        148,
+        332,
+        621,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        147,
+        276
+      ],
+      "minimumMargin": 147,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 8,
+      "bounds": [
+        148,
+        332,
+        627,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        141,
+        276
+      ],
+      "minimumMargin": 141,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 9,
+      "bounds": [
+        148,
+        332,
+        633,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        135,
+        276
+      ],
+      "minimumMargin": 135,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 10,
+      "bounds": [
+        148,
+        332,
+        638,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        130,
+        276
+      ],
+      "minimumMargin": 130,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 11,
+      "bounds": [
+        148,
+        332,
+        644,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        124,
+        276
+      ],
+      "minimumMargin": 124,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 12,
+      "bounds": [
+        148,
+        332,
+        648,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        120,
+        276
+      ],
+      "minimumMargin": 120,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 13,
+      "bounds": [
+        148,
+        332,
+        651,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        117,
+        276
+      ],
+      "minimumMargin": 117,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 14,
+      "bounds": [
+        148,
+        332,
+        652,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        116,
+        276
+      ],
+      "minimumMargin": 116,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 15,
+      "bounds": [
+        148,
+        332,
+        650,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        118,
+        276
+      ],
+      "minimumMargin": 118,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 16,
+      "bounds": [
+        148,
+        332,
+        646,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        122,
+        276
+      ],
+      "minimumMargin": 122,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 17,
+      "bounds": [
+        148,
+        332,
+        640,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        128,
+        276
+      ],
+      "minimumMargin": 128,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 18,
+      "bounds": [
+        148,
+        332,
+        633,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        135,
+        276
+      ],
+      "minimumMargin": 135,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 19,
+      "bounds": [
+        148,
+        332,
+        624,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        144,
+        276
+      ],
+      "minimumMargin": 144,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 20,
+      "bounds": [
+        148,
+        332,
+        618,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        150,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 21,
+      "bounds": [
+        148,
+        332,
+        614,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        154,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 22,
+      "bounds": [
+        148,
+        332,
+        610,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        158,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 23,
+      "bounds": [
+        148,
+        332,
+        610,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        158,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 24,
+      "bounds": [
+        148,
+        332,
+        612,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        156,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 25,
+      "bounds": [
+        148,
+        332,
+        616,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        152,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 26,
+      "bounds": [
+        148,
+        332,
+        622,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        146,
+        276
+      ],
+      "minimumMargin": 146,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 27,
+      "bounds": [
+        148,
+        332,
+        628,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        140,
+        276
+      ],
+      "minimumMargin": 140,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 28,
+      "bounds": [
+        148,
+        332,
+        634,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        134,
+        276
+      ],
+      "minimumMargin": 134,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 29,
+      "bounds": [
+        148,
+        332,
+        640,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        128,
+        276
+      ],
+      "minimumMargin": 128,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 30,
+      "bounds": [
+        148,
+        332,
+        645,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        123,
+        276
+      ],
+      "minimumMargin": 123,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 31,
+      "bounds": [
+        148,
+        332,
+        649,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        119,
+        276
+      ],
+      "minimumMargin": 119,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 32,
+      "bounds": [
+        148,
+        332,
+        652,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        116,
+        276
+      ],
+      "minimumMargin": 116,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 33,
+      "bounds": [
+        148,
+        332,
+        652,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        116,
+        276
+      ],
+      "minimumMargin": 116,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 34,
+      "bounds": [
+        148,
+        332,
+        650,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        118,
+        276
+      ],
+      "minimumMargin": 118,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 35,
+      "bounds": [
+        148,
+        332,
+        645,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        123,
+        276
+      ],
+      "minimumMargin": 123,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 36,
+      "bounds": [
+        148,
+        332,
+        638,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        130,
+        276
+      ],
+      "minimumMargin": 130,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 37,
+      "bounds": [
+        148,
+        332,
+        631,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        137,
+        276
+      ],
+      "minimumMargin": 137,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 38,
+      "bounds": [
+        148,
+        332,
+        624,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        144,
+        276
+      ],
+      "minimumMargin": 144,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 39,
+      "bounds": [
+        148,
+        332,
+        616,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        152,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 40,
+      "bounds": [
+        148,
+        332,
+        611,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        157,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 41,
+      "bounds": [
+        148,
+        332,
+        610,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        158,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 42,
+      "bounds": [
+        148,
+        332,
+        611,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        157,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 43,
+      "bounds": [
+        148,
+        332,
+        614,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        154,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 44,
+      "bounds": [
+        148,
+        332,
+        619,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        149,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 45,
+      "bounds": [
+        148,
+        332,
+        624,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        144,
+        276
+      ],
+      "minimumMargin": 144,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 46,
+      "bounds": [
+        148,
+        332,
+        632,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        136,
+        276
+      ],
+      "minimumMargin": 136,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 47,
+      "bounds": [
+        148,
+        332,
+        638,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        130,
+        276
+      ],
+      "minimumMargin": 130,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 48,
+      "bounds": [
+        148,
+        332,
+        643,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        125,
+        276
+      ],
+      "minimumMargin": 125,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 49,
+      "bounds": [
+        148,
+        332,
+        648,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        120,
+        276
+      ],
+      "minimumMargin": 120,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 50,
+      "bounds": [
+        148,
+        332,
+        650,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        118,
+        276
+      ],
+      "minimumMargin": 118,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 51,
+      "bounds": [
+        148,
+        332,
+        652,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        116,
+        276
+      ],
+      "minimumMargin": 116,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 52,
+      "bounds": [
+        148,
+        332,
+        650,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        118,
+        276
+      ],
+      "minimumMargin": 118,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 53,
+      "bounds": [
+        148,
+        332,
+        647,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        121,
+        276
+      ],
+      "minimumMargin": 121,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 54,
+      "bounds": [
+        148,
+        332,
+        641,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        127,
+        276
+      ],
+      "minimumMargin": 127,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 55,
+      "bounds": [
+        148,
+        332,
+        634,
+        1068
+      ],
+      "margins": [
+        148,
+        332,
+        134,
+        276
+      ],
+      "minimumMargin": 134,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    }
+  ],
+  "animationAcceptedByUser": false,
+  "loopSelection": {
+    "method": "continuous",
+    "range": [
+      0,
+      55
+    ],
+    "reversePlayback": false,
+    "nativeSourceCycleRequired": true,
+    "reason": "User rejected reversed cloth; preserve the complete natural source cycle in chronological order",
+    "scope": "Structural production constraint; not visual acceptance"
+  },
+  "idleReference": "ux/volt_idle_flow_v1/idle.frames",
+  "calibration": "One uniform source scale preserves the existing painted height and display size; shared foot pivot; no per-frame body normalization"
+}

@@ -1,0 +1,35 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>重弩手与雷法师 · 连贯待机</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#17272e;color:#f1f2e7;font:16px system-ui,'Microsoft YaHei',sans-serif}main{max-width:960px;margin:auto;padding:24px 16px 40px}h1{font-size:25px}h2{font-size:20px;margin-top:28px}p{color:#bbcac8;line-height:1.7}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}canvas{display:block;width:100%;height:auto;border:1px solid #42544c;border-radius:10px;background:#293c3b}figure{margin:0}figcaption{text-align:center;margin:9px 0;color:#c9d5c8}.toolbar,.links{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:18px 0}button{background:#bfd794;color:#253125;border:0;border-radius:7px;padding:10px 14px;cursor:pointer;font:600 15px system-ui}a{color:#c5dfab}input{accent-color:#bfd794;max-width:100%}img,video{display:block;width:100%;max-height:560px;object-fit:contain;background:#ff0000;border-radius:8px}.links{line-height:1.8}
+</style><main>
+<h1>重弩手与雷法师 · 连贯待机</h1>
+<p>保留当前完整动作，取消转折处的长停留，让披风与袍摆持续连贯运动，首尾平滑衔接。</p>
+<div class="toolbar"><button id="play">暂停</button><button id="background">切换浅色背景</button><button id="attack">查看重弩手攻击切换</button><label>待机进度 <input id="progress" type="range" min="0" max="4000" value="0"></label><span id="phase"></span></div>
+<h2>重弩手</h2><div class="pair"><figure><canvas id="sniperLeft"></canvas><figcaption>原向</figcaption></figure><figure><canvas id="sniperRight"></canvas><figcaption>镜像</figcaption></figure></div>
+<h2>雷法师</h2><div class="pair"><figure><canvas id="voltLeft"></canvas><figcaption>原向</figcaption></figure><figure><canvas id="voltRight"></canvas><figcaption>镜像</figcaption></figure></div>
+<h2>弓箭手对照 · 游戏显示尺寸</h2><canvas id="battle"></canvas><p>左侧为当前弓箭手，中间为新重弩手，右侧为新雷法师。</p>
+<h2>新站姿原图</h2><div class="pair"><img src="sniper/ready-red.png" alt="新重弩手站姿"><img src="volt/ready-red.png" alt="新雷法师站姿"></div>
+<h2>新版待机 GIF</h2><div class="pair"><img src="sniper/idle-mirror.gif" alt="重弩手轻微待机循环"><img src="volt/idle-mirror.gif" alt="雷法师轻微待机循环"></div>
+<h2>原始视频对照</h2><p>以下沿用当前原始视频。本次调整后的待机节奏可看上方动画和 GIF。</p><div class="pair"><video src="sniper/source.mp4" controls loop muted playsinline preload="metadata"></video><video src="volt/source.mp4" controls loop muted playsinline preload="metadata"></video></div>
+<div class="links"><a href="/">进入正式游戏</a><a href="sniper/idle-mirror.gif">重弩手待机 GIF</a><a href="volt/idle-mirror.gif">雷法师待机 GIF</a><a href="sniper-attack/attack-mirror.gif">重弩手攻击切换 GIF</a><a href="sniper/image-prompt.txt">重弩手图片提示词</a><a href="volt/image-prompt.txt">雷法师图片提示词</a><a href="sniper/idle-prompt-effective.txt">重弩手待机提示词</a><a href="volt/idle-prompt.txt">雷法师待机提示词</a></div>
+</main><script>
+(async()=>{
+const image=async src=>{const im=new Image();im.src=src;await im.decode();return im};
+const clip=async(dir,kind='idle')=>{const [m,im]=await Promise.all([fetch(dir+'/'+kind+'.frames.json').then(r=>r.json()),image(dir+'/'+kind+'.png')]);let t=0;const ends=m.animation.frames.map((_,i)=>t+=m.animation.frameDurations?.[i]??m.animation.seconds/m.animation.frames.length);return{m,im,ends}};
+const [sniper,volt,archer,shot,floor,wall]=await Promise.all([clip('sniper'),clip('volt'),clip('archer'),clip('sniper-attack','attack'),image('floor.png'),image('wall.png')]);
+let playing=true,light=false,attack=false,time=0,last=performance.now();
+const progress=document.querySelector('#progress');
+const loopSeconds=sniper.m.animation.seconds;progress.max=Math.round(loopSeconds*1000);
+function frame(c,t){let i=0;while(i<c.ends.length-1&&t>=c.ends[i])i++;return c.m.frames[c.m.animation.frames[i]]}
+function context(id,w,h){const el=document.getElementById(id),d=Math.min(devicePixelRatio||1,3);if(el.width!==w*d||el.height!==h*d){el.width=w*d;el.height=h*d}const c=el.getContext('2d');c.setTransform(d,0,0,d,0,0);c.clearRect(0,0,w,h);return c}
+function paint(c,clip,t,x,y,height,dir=1){const rect=frame(clip,t),m=clip.m,s=height/m.readyHeightPx;c.save();c.translate(x,y);c.scale(dir,1);c.drawImage(clip.im,...rect,-m.groundAnchor[0]*s,-m.groundAnchor[1]*s,rect[2]*s,rect[3]*s);c.restore()}
+function panel(id,clip,t,dir){const c=context(id,420,510);c.fillStyle=light?'#e8dfc5':'#293c3b';c.fillRect(0,0,420,510);c.strokeStyle=light?'#b8ac90':'#4a6158';c.beginPath();c.moveTo(15,486);c.lineTo(405,486);c.stroke();paint(c,clip,t,210,486,380,dir)}
+function draw(){let sc=sniper,st=time%sniper.m.animation.seconds,state='待机';if(attack){const p=time%(shot.m.animation.seconds+2);if(p>=1&&p<shot.m.animation.seconds+1){sc=shot;st=p-1;state='重弩手攻击'}else st=0}const vt=time%volt.m.animation.seconds;panel('sniperLeft',sc,st,1);panel('sniperRight',sc,st,-1);panel('voltLeft',volt,vt,1);panel('voltRight',volt,vt,-1);const c=context('battle',750,500);c.drawImage(floor,0,0,750,500);c.drawImage(wall,0,210,750,321);paint(c,archer,time%archer.m.animation.seconds,140,440,archer.m.displayHeight);paint(c,sc,st,370,440,sniper.m.displayHeight);paint(c,volt,vt,600,440,volt.m.displayHeight);progress.value=Math.round(time%loopSeconds*1000);document.querySelector('#phase').textContent=state}
+document.querySelector('#play').onclick=e=>{playing=!playing;e.target.textContent=playing?'暂停':'播放'};
+document.querySelector('#background').onclick=e=>{light=!light;e.target.textContent=light?'切换深色背景':'切换浅色背景';draw()};
+document.querySelector('#attack').onclick=e=>{attack=!attack;time=0;e.target.textContent=attack?'只看待机':'查看重弩手攻击切换';draw()};
+progress.oninput=e=>{playing=false;document.querySelector('#play').textContent='播放';time=Number(e.target.value)/1000;draw()};
+function tick(now){const dt=Math.min((now-last)/1000,.1);last=now;if(playing){time+=dt;draw()}requestAnimationFrame(tick)}draw();requestAnimationFrame(tick);
+})().catch(()=>document.querySelector('h1').textContent='素材加载失败，请刷新重试');
+</script></html>

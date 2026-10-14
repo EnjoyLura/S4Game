@@ -1,0 +1,36 @@
+{
+  "hero": "volt",
+  "resource": "volt_idle_subtle_v2",
+  "original": "volt-stance-idle-v2",
+  "sourceIndices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "sourceTask": "task_ciPdQdcFk87jCS8UmqSL7tBfPMm7YKGX",
+  "uniqueFrames": 8,
+  "timelineFrames": 14,
+  "loopSeconds": 3.0769230769230766,
+  "speedComparedToInitialSubtleV2": 1.3,
+  "displayHeight": 146,
+  "readyHeightPx": 468.7165,
+  "groundAnchor": [
+    256,
+    496
+  ],
+  "atlas": [
+    4096,
+    512
+  ],
+  "atlasBytes": 1369796,
+  "newVideoSubmitted": false,
+  "staticMasterAcceptedByUser": true,
+  "animationAcceptedByUser": false,
+  "gameIntegrated": true,
+  "review": "Source selection and asset production only; effect acceptance by user, no tests/browser/game/online QA"
+}

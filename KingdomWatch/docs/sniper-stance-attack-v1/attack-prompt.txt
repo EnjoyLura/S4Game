@@ -1,0 +1,6 @@
+Animate one compact physical tightening and relaxing of the exact blue-hooded hero in this first frame, two seconds total. Preserve this relaxed staggered standing stance and the exact horizontally held wooden-and-steel prop.
+0.00-0.35s: hold exactly the supplied pose.
+0.35-0.45s: hands, elbows and upper-back muscles make ONE very small inward tightening, a 3-4 pixel connected movement at 768px wide video, while the rigid held object stays in its unchanged initial shape and forward direction.
+0.45-1.20s: arms and upper back gently settle back into the exact initial pose. The cape responds slightly.
+1.20-2.00s: hold the original pose.
+Both boots, legs, pelvis, belt and hood stay fixed, no step, knee bounce, turn, body scale change or sway. Preserve the initial asymmetric foot placement. The short wooden stock, transverse silver limbs, grip, string and bolts form ONE rigid illustration; no part is extended or animated. No aiming sideways/upward. Nothing is emitted or added at any point. No visible mechanical animation, no string pulling, no flash, sparks, light, smoke, projectiles, glow or particles. Keep the same full-body clean comic illustration, colors, proportions and margins. Locked camera, constant lighting and pure opaque flat red #FF0000 background. Begin and end in the first-frame posture.

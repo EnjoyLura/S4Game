@@ -1,0 +1,30 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>重弩手攻击 · 去枪焰与烟尘</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#18272d;color:#eef1e6;font:16px system-ui,'Microsoft YaHei',sans-serif}main{max-width:960px;margin:auto;padding:24px 16px 40px}h1{font-size:26px}h2{font-size:20px;margin-top:28px}p{color:#bdcbc7;line-height:1.8}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}figure{margin:0}canvas{display:block;width:100%;height:auto;border:1px solid #476059;border-radius:10px}figcaption{text-align:center;margin:10px 0;color:#c7d9ce}.tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:20px 0}button,select{padding:10px 13px;border:0;border-radius:7px;background:#c1d797;color:#233026;font:600 15px system-ui;cursor:pointer}input{accent-color:#c1d797}input[type=range]{width:260px;max-width:70vw}a{color:#c1db9c}video{display:block;width:100%;border-radius:10px;background:#293c3b}.note{border-left:3px solid #aec989;background:#24363a;padding:12px 16px}output{color:#d9e5cf}</style>
+<main><h1>重弩手攻击 · 去枪焰与烟尘</h1>
+<p>沿用你认可的攻击动作，清理枪焰、火星与烟尘；弩头被亮光遮住的部分做局部修复。56 帧全部保留，按原来的 24 帧／秒正向播放。</p>
+<p class="note">这版清理后的攻击已应用到正式游戏。人物尺寸和脚底保持一致，下方可继续对照原片。</p><div class="tools"><a href="/">进入正式游戏</a></div>
+<div class="tools"><button id="play">暂停</button><button id="replay">重新播放</button><button id="prev">上一帧</button><button id="next">下一帧</button><label>速度 <select id="speed"><option value="1">正常</option><option value="0.5">0.5 倍</option><option value="0.25">0.25 倍</option></select></label><label><input id="loop" type="checkbox">重复播放</label><button id="background">浅色背景</button></div>
+<div class="tools"><input id="progress" type="range" min="0" max="55" value="0" aria-label="帧进度"><output id="phase">素材加载中…</output></div>
+<div class="pair"><figure><canvas id="original"></canvas><figcaption>原视频 · 含枪焰与烟尘</figcaption></figure><figure><canvas id="cleaned"></canvas><figcaption>清理后 · 同一帧对照</figcaption></figure></div>
+<h2>清理后的左右镜像</h2><div class="pair"><figure><canvas id="left"></canvas><figcaption>原向</figcaption></figure><figure><canvas id="right"></canvas><figcaption>镜像</figcaption></figure></div>
+<h2>清理后视频</h2><video src="attack-cleaned.mp4" controls muted playsinline preload="metadata"></video>
+<h2>原片与清理后同步对照视频</h2><video src="comparison.mp4" controls muted playsinline preload="metadata"></video>
+<div class="tools"><a href="attack-cleaned.mp4" download>下载清理后视频</a><a href="comparison.gif">查看对照 GIF</a><a href="attack-mirror.gif">查看镜像 GIF</a></div>
+</main><script>
+(async()=>{
+const load=async(kind)=>{const m=await fetch(`${kind}.frames.json`).then(r=>{if(!r.ok)throw Error('素材缺失');return r.json()});const images=await Promise.all((m.textures??[`${kind}.png`]).map(async name=>{const im=new Image();im.src=name;await im.decode();return im}));return{m,images}};
+const[original,cleaned]=await Promise.all([load('original'),load('attack')]);
+const count=cleaned.m.animation.frames.length,fps=count/cleaned.m.animation.seconds;
+let frame=0,clock=0,playing=true,speed=1,light=false,last=performance.now();
+const progress=document.querySelector('#progress'),phase=document.querySelector('#phase'),play=document.querySelector('#play');progress.max=count-1;
+function context(id){const el=document.getElementById(id),w=420,h=510,d=Math.min(devicePixelRatio||1,3);if(el.width!==w*d||el.height!==h*d){el.width=w*d;el.height=h*d}const c=el.getContext('2d');c.setTransform(d,0,0,d,0,0);c.fillStyle=light?'#e8dfc5':'#293c3b';c.fillRect(0,0,w,h);c.strokeStyle=light?'#bbaf94':'#476059';c.beginPath();c.moveTo(15,486);c.lineTo(405,486);c.stroke();return c}
+function paint(id,clip,dir=1){const c=context(id),m=clip.m,name=m.animation.frames[frame],rect=m.frames[name],image=clip.images[m.framePages?.[name]??0],s=380/m.readyHeightPx;c.save();c.translate(210,486);c.scale(dir,1);c.drawImage(image,...rect,-m.groundAnchor[0]*s,-m.groundAnchor[1]*s,rect[2]*s,rect[3]*s);c.restore()}
+function draw(){paint('original',original);paint('cleaned',cleaned);paint('left',cleaned);paint('right',cleaned,-1);progress.value=frame;const stage=cleaned.m.animation.phases?.find(p=>frame>=p.startIndex&&frame<p.endIndexExclusive)?.name??'攻击';phase.textContent=`${stage} · 第 ${frame+1}/${count} 帧 · ${(frame/fps).toFixed(2)} 秒`}
+function setPlaying(value){playing=value;play.textContent=value?'暂停':'播放'}
+function seek(value){frame=Math.max(0,Math.min(count-1,value));clock=frame/fps;setPlaying(false);draw()}
+play.onclick=()=>{if(!playing&&frame===count-1){frame=0;clock=0}setPlaying(!playing)};
+document.querySelector('#replay').onclick=()=>{frame=0;clock=0;setPlaying(true);draw()};document.querySelector('#prev').onclick=()=>seek(frame-1);document.querySelector('#next').onclick=()=>seek(frame+1);progress.oninput=e=>seek(Number(e.target.value));document.querySelector('#speed').onchange=e=>{speed=Number(e.target.value)};document.querySelector('#background').onclick=e=>{light=!light;e.target.textContent=light?'深色背景':'浅色背景';draw()};
+function tick(now){const dt=Math.min(.1,(now-last)/1000);last=now;if(playing){clock+=dt*speed;if(clock>=count/fps){if(document.querySelector('#loop').checked)clock%=count/fps;else{clock=(count-1)/fps;setPlaying(false)}}const next=Math.min(count-1,Math.floor(clock*fps));if(next!==frame){frame=next;draw()}}requestAnimationFrame(tick)}draw();requestAnimationFrame(tick);
+})().catch(()=>document.querySelector('#phase').textContent='素材加载失败，请刷新重试');
+</script></html>

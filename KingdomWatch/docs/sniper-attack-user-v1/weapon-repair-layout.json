@@ -1,0 +1,51 @@
+{
+  "size": [
+    709,
+    205
+  ],
+  "roi": [
+    100,
+    290,
+    315,
+    435
+  ],
+  "indices": [
+    7,
+    8,
+    9
+  ],
+  "origin": [
+    16,
+    44
+  ],
+  "stride": 231,
+  "tile": [
+    215,
+    145
+  ],
+  "generatedSize": [
+    2170,
+    725
+  ],
+  "generatedPanelRects": [
+    [
+      49,
+      184,
+      707,
+      627
+    ],
+    [
+      756,
+      184,
+      1414,
+      627
+    ],
+    [
+      1463,
+      184,
+      2122,
+      627
+    ]
+  ],
+  "method": "imagegen local effect removal; sheet layout extraction only; one fixed local ROI per original frame"
+}

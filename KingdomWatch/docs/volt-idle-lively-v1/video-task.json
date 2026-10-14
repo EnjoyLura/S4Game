@@ -1,0 +1,12 @@
+{
+  "hero": "volt",
+  "taskId": "task_nFeFWhnNV3ek4aQABCiGLEQ9PWUxtuZX",
+  "model": "lens-minimax-h3-768p",
+  "secondsRequested": 2,
+  "ratioRequested": "3:4",
+  "imageUrl": "https://3db5fc14.kw-vfx-src.pages.dev/hero_volt_stance_idle_v2_20261013_ff.png",
+  "promptFile": "idle-prompt.txt",
+  "status": "completed",
+  "sourceTool": "美术/tools/art_video_gen.py",
+  "video": "source.mp4"
+}

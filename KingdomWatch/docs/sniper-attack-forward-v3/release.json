@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "status": "published",
+  "game": "https://kingdom-watch.pages.dev/?v=sniper-attack-forward-v3-1791900246",
+  "preview": "https://kingdom-watch.pages.dev/previews/sniper-attack-forward-v3/?v=1791900246",
+  "deployment": "https://3c30f3b9.kingdom-watch.pages.dev",
+  "stage": "D:/AI/S4Game/KingdomWatch/build/publish-sniper-attack-forward-v3-20261013-2203",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "gameIntegrated": true,
+  "player": "assets/scripts/battle/SniperIdleAnimation.ts",
+  "resource": "assets/resources/ux/sniper_attack_forward_v3",
+  "idleResource": "assets/resources/ux/sniper_idle_forward_v2",
+  "video": {
+    "task": "task_rnIbybnJdMOqdRAxyQgdNi4Afv19pzOV",
+    "model": "lens-minimax-h3-768p",
+    "requestedSeconds": 2,
+    "source": "source.mp4",
+    "sourceBytes": 1636678,
+    "sourceSize": [768, 1344],
+    "sourceFps": 24,
+    "sourceFrames": 56,
+    "sourceSeconds": 2.3333333333333335,
+    "cleanVideo": "attack-clean.mp4"
+  },
+  "attack": {
+    "frames": 45,
+    "seconds": 1.875,
+    "loop": false,
+    "sourceRange": [6, 55],
+    "omittedFlashFrames": [8, 9, 10, 11, 12],
+    "eventSourceFrame": 8,
+    "displayReleaseSourceFrame": 13,
+    "releaseIndex": 2,
+    "readyIndex": 44,
+    "recoverySeconds": 1.7916666666666667,
+    "method": "Complete native character frames in forward order; emitted flash frames omitted without body or weapon reconstruction"
+  },
+  "atlas": {
+    "size": [4096, 3456],
+    "cell": [512, 576],
+    "bytes": 6760784,
+    "groundAnchor": [256, 560],
+    "paintedHeight": 467.5133,
+    "displayHeight": 170,
+    "footNode": [0, -76]
+  },
+  "runtime": {
+    "release": "Actual projectile callback starts at releaseIndex; preparation and recovery use the same new character",
+    "attackPriority": "Attack and recovery suppress idle; idle resumes when no enemy is in attack range and pending attacks have finished",
+    "rapidShots": "Do not restart an attack already playing; recovery playback adapts to attack interval",
+    "facing": "Direct full-character left/right mirror following actual attack direction",
+    "clock": "Battle simulation delta; pause freezes playback"
+  },
+  "archer": "Existing image, idle, attack and displayHeight 185.64 preserved",
+  "build": {
+    "platform": "web-mobile",
+    "creator": "3.8.8",
+    "exitCode": 36,
+    "milliseconds": 9090,
+    "finishedLocal": "2026-10-13 22:03:11",
+    "log": "C:/Users/user/AppData/Local/Temp/kw-sniper-attack-forward-v3-20261013-out.log"
+  },
+  "dprPatch": "completed",
+  "entryVersion": 1791900246,
+  "publish": {
+    "tool": "Wrangler 3.114.17",
+    "exitCode": null,
+    "uploadedFiles": 16,
+    "cachedFiles": 984,
+    "uploadSeconds": 18.16,
+    "completionEvidence": "Wrangler log reports Deployment complete with the deployment URL",
+    "log": "C:/Users/user/AppData/Roaming/xdg.config/.wrangler/logs/wrangler-2026-10-13_14-04-11_885.log",
+    "resume": "Tool call was interrupted, but publication completed in the background. On continuation the success log and absence of a running deploy process were reconciled; no duplicate deployment was submitted."
+  },
+  "review": "User manual effect acceptance; no tests, game, browser or online QA executed. Generation, build and deployment success are not recorded as visual acceptance."
+}

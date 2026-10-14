@@ -1,0 +1,18 @@
+{
+  "source": "../sniper-attack-forward-v3/source.mp4",
+  "sourceCopiedAs": "source.mp4",
+  "task": "task_rnIbybnJdMOqdRAxyQgdNi4Afv19pzOV",
+  "newGeneration": false,
+  "range": [6, 55],
+  "omittedOpeningHold": [0, 1, 2, 3, 4, 5],
+  "omittedFlashFrames": [8, 9, 10, 11, 12, 13],
+  "sourceEventFrame": 8,
+  "displayReleaseSourceFrame": 14,
+  "releaseIndex": 2,
+  "frames": 44,
+  "reason": "User identified particles in v3. Source frame 13 retained residual flying sparks and is now omitted along with the flash frames. Source frame 14 is the first retained release pose.",
+  "method": "Retain complete native character frames in forward order; no character reconstruction",
+  "cleanVideo": "attack-clean.mp4",
+  "sourcePreserved": true,
+  "review": "Source annotation for production; user manual effect review; no tests, browser, game or online QA"
+}

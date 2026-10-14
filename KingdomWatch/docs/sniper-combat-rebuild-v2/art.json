@@ -1,0 +1,44 @@
+{
+  "image": "sniper-ready-black.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGB",
+  "alphaRange": [
+    255,
+    255
+  ],
+  "cornerRGB": [
+    [
+      1,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      1,
+      0
+    ],
+    [
+      0,
+      1,
+      0
+    ]
+  ],
+  "sha256": "a5eb0f505c04d745a02efa70c0fbb3d3a23c774f503b1618fa3251c70d02923e",
+  "tool": "built-in imagegen",
+  "transparent_background": false,
+  "generatedSource": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-32f1c067-701b-4881-8fa1-99d43d3934c9.png",
+  "identityReference": "assets/resources/ux/hero_comic_v1/comic_figure_sniper_v1.png",
+  "poseReference": "docs/hero-idle-rebuild-v1/sniper/sniper-ready.png",
+  "prompt": "image-prompt.txt",
+  "direction": "rear view, slightly left of screen-up; centered hood/head",
+  "purpose": "shared source master for new idle and attack videos",
+  "gameIntegrated": false
+}

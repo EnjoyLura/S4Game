@@ -1,0 +1,22 @@
+{
+  "image": "ready-red.png",
+  "imageTool": "Existing confirmed mage master copied unchanged; no image generation this turn",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGB",
+  "backgroundRGB": [
+    250.0,
+    2.0,
+    1.0
+  ],
+  "groundAnchor": [
+    602.5,
+    1458
+  ],
+  "displayHeight": 146,
+  "userAccepted": true,
+  "sourceImage": "../volt-idle-natural-v1/ready-red.png",
+  "imageRegenerated": false
+}

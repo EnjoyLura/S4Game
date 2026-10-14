@@ -1,0 +1,21 @@
+{
+  "rawVideo": "ai-source.mp4",
+  "outputVideo": "source.mp4",
+  "intermediate": "idle-locked.mp4",
+  "sourceSize": [
+    768,
+    1344
+  ],
+  "fps": 24.0,
+  "frames": 56,
+  "staticReference": "First full video frame, unchanged outside the lower cape mask",
+  "motion": "AI-generated motion restricted to lower blue cape cloth and its immediate edge",
+  "region": {
+    "bodyTop": 177,
+    "bodyBottom": 1171,
+    "lowerStartRatio": 0.52,
+    "lowerEndRatio": 0.9
+  },
+  "processing": "Pixel compositing only. No drawing, limb splitting, skeletal deformation, warping, tracking or per-frame resizing. Original AI video preserved.",
+  "manualReview": "Pending user review; no game or browser verification performed"
+}

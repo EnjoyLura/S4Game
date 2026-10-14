@@ -1,0 +1,24 @@
+{
+  "status": "published",
+  "resource": "sniper_attack_clean_v1",
+  "replaced": "sniper_attack_natural_v1",
+  "sourceFrames": 56,
+  "displayHeight": 153,
+  "readyHeightPx": 467.1111,
+  "groundAnchor": [
+    256,
+    496
+  ],
+  "motionAcceptedByUser": true,
+  "selectedForGameByUser": true,
+  "gameVisualAcceptedByUser": false,
+  "idlePreserved": "sniper_idle_natural_v2",
+  "retainedHeroes": [
+    "archer",
+    "volt"
+  ],
+  "timing": "Actual bolt callback begins release frame 7; preparation plays frames 0-6 before the shot; all forward recovery frames 7-55 retained and adapted to attack interval",
+  "idleRule": "Only when no target is in own attack range, no queued shot, and release/recovery has completed",
+  "damageAndAttackRateChanged": false,
+  "review": "User manual review; no tests, game, browser or online QA"
+}

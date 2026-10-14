@@ -1,0 +1,170 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-pick-comic-v1-20261015-005156",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-settlement-comic-v1-20261015-001822",
+  "entryVersion": "1791996687",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=pick-comic-v1-1791996687",
+  "scope": "original pick artwork and lower placement; ice idle/attack; new fire attack and idle loop; sniper 0.5/s, fire and volt 1/s",
+  "layoutChanged": true,
+  "visualAcceptance": "pending user manual review",
+  "status": "published",
+  "mode": "built-in imagegen",
+  "newArtResources": [
+    "pick_comic_v1/card_base",
+    "pick_comic_v1/title_plate",
+    "pick_comic_v1/header_strip"
+  ],
+  "reusedButtons": "pause_comic_v1/button_green, button_gold and button_muted",
+  "externalArtworkCopied": false,
+  "layoutDeltaDesignPixels": 56,
+  "shortScreenClamp": true,
+  "baseAttackRatesPerSecond": {
+    "sniper": 0.5,
+    "pyro": 1,
+    "volt": 1
+  },
+  "baseIntervalsSeconds": {
+    "sniper": 2,
+    "pyro": 1,
+    "volt": 1
+  },
+  "existingAttackSpeedBonusesRetained": true,
+  "gameplayTestsRun": false,
+  "userVisualAccepted": false,
+  "date": "2026-10-15T00:52:41.990057+08:00",
+  "deployment": "https://5894b2f5.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-pick-comic-v1-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-pick-comic-v1-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "original pick artwork and lower placement; ice idle/attack; new fire attack and idle loop; sniper 0.5/s, fire and volt 1/s",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 8771,
+  "deploymentSucceeded": true,
+  "uploadedFiles": 22,
+  "cachedFiles": 1660,
+  "artMode": "built-in imagegen",
+  "artPrompts": [
+    "prompts/card_base.txt",
+    "prompts/title_plate.txt",
+    "prompts/header_strip.txt"
+  ],
+  "mora": {
+    "hero": "mora",
+    "idle": {
+      "kind": "idle",
+      "take": "take-b",
+      "resource": "mora_idle_user_v1",
+      "frames": 56,
+      "fps": 24.0,
+      "seconds": 2.3333333333333335,
+      "atlas": [
+        4096,
+        3584
+      ],
+      "paintedHeight": 468,
+      "displayHeight": 146,
+      "groundAnchor": [
+        256,
+        496
+      ],
+      "fullSourceRetained": true,
+      "reversePlayback": false,
+      "gameVisualAcceptedByUser": false,
+      "paidTaskSubmitted": false
+    },
+    "attack": {
+      "kind": "attack",
+      "take": "take-a",
+      "resource": "mora_attack_user_v1",
+      "frames": 56,
+      "fps": 24.0,
+      "seconds": 2.3333333333333335,
+      "atlas": [
+        4096,
+        3584
+      ],
+      "paintedHeight": 468,
+      "displayHeight": 146,
+      "groundAnchor": [
+        256,
+        496
+      ],
+      "fullSourceRetained": true,
+      "reversePlayback": false,
+      "gameVisualAcceptedByUser": false,
+      "paidTaskSubmitted": false
+    },
+    "gameIntegrated": true,
+    "previewOnly": false,
+    "paidTaskSubmitted": false,
+    "userVisualAccepted": false,
+    "review": "User manual effect review; no tests, gameplay, browser or online QA"
+  },
+  "pyro": {
+    "hero": "pyro",
+    "idle": {
+      "kind": "idle",
+      "take": "idle",
+      "resource": "pyro_idle_loop_v2",
+      "frames": 56,
+      "fps": 24.0,
+      "seconds": 2.3333333333333335,
+      "atlas": [
+        4096,
+        3584
+      ],
+      "paintedHeight": 468,
+      "displayHeight": 146,
+      "groundAnchor": [
+        256,
+        496
+      ],
+      "fullSourceRetained": true,
+      "reversePlayback": false,
+      "gameVisualAcceptedByUser": false,
+      "paidTaskSubmitted": true
+    },
+    "attack": {
+      "kind": "attack",
+      "take": "attack",
+      "resource": "pyro_attack_user_v2",
+      "frames": 56,
+      "fps": 24.0,
+      "seconds": 2.3333333333333335,
+      "atlas": [
+        4096,
+        3584
+      ],
+      "paintedHeight": 468,
+      "displayHeight": 146,
+      "groundAnchor": [
+        256,
+        496
+      ],
+      "fullSourceRetained": true,
+      "reversePlayback": false,
+      "gameVisualAcceptedByUser": false,
+      "paidTaskSubmitted": false
+    },
+    "gameIntegrated": true,
+    "previewOnly": false,
+    "paidTaskSubmitted": true,
+    "userVisualAccepted": false,
+    "review": "User manual effect review; no tests, gameplay, browser or online QA"
+  },
+  "browserValidationRun": false,
+  "onlineValidationRun": false,
+  "retained": [
+    "archer, sniper and volt media",
+    "pause and settlement artwork",
+    "health/shield display",
+    "existing attack-speed bonuses",
+    "projectile, effect and damage-per-hit calculations"
+  ]
+}

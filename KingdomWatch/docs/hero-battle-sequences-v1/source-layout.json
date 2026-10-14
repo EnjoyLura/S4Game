@@ -1,0 +1,122 @@
+{
+  "archer": {
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "sourceBBox": [
+      179,
+      57,
+      1137,
+      1206
+    ],
+    "firstFrameRect": [
+      147,
+      118,
+      474,
+      568
+    ],
+    "footY": 686,
+    "url": "https://kw-vfx-src.pages.dev/hero_seq_v1_archer_ff.png"
+  },
+  "sniper": {
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "sourceBBox": [
+      143,
+      59,
+      1189,
+      1201
+    ],
+    "firstFrameRect": [
+      124,
+      118,
+      520,
+      568
+    ],
+    "footY": 686,
+    "url": "https://kw-vfx-src.pages.dev/hero_seq_v1_sniper_ff.png"
+  },
+  "pyro": {
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "sourceBBox": [
+      173,
+      58,
+      1187,
+      1200
+    ],
+    "firstFrameRect": [
+      132,
+      118,
+      504,
+      568
+    ],
+    "footY": 686,
+    "url": "https://kw-vfx-src.pages.dev/hero_seq_v1_pyro_ff.png"
+  },
+  "volt": {
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "sourceBBox": [
+      150,
+      90,
+      1152,
+      1180
+    ],
+    "firstFrameRect": [
+      123,
+      118,
+      522,
+      568
+    ],
+    "footY": 686,
+    "url": "https://kw-vfx-src.pages.dev/hero_seq_v1_volt_ff.png"
+  },
+  "mora": {
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "sourceBBox": [
+      164,
+      64,
+      1130,
+      1197
+    ],
+    "firstFrameRect": [
+      142,
+      118,
+      484,
+      568
+    ],
+    "footY": 686,
+    "url": "https://kw-vfx-src.pages.dev/hero_seq_v1_mora_ff.png"
+  }
+}

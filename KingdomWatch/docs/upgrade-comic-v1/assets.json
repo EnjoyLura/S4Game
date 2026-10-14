@@ -1,0 +1,37 @@
+[
+  {
+    "key": "bg_upgrade_comic_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\scenes\\bg_upgrade_comic_v1.jpg",
+    "width": 1086,
+    "height": 1448,
+    "bytes": 352080
+  },
+  {
+    "key": "comic_training_hammer_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\upgrade_comic_v1\\comic_training_hammer_v1.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 70872
+  },
+  {
+    "key": "comic_staff_pyro_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\upgrade_comic_v1\\comic_staff_pyro_v1.png",
+    "width": 384,
+    "height": 640,
+    "bytes": 93099
+  },
+  {
+    "key": "comic_staff_volt_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\upgrade_comic_v1\\comic_staff_volt_v1.png",
+    "width": 384,
+    "height": 640,
+    "bytes": 109224
+  },
+  {
+    "key": "comic_staff_mora_v1",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\upgrade_comic_v1\\comic_staff_mora_v1.png",
+    "width": 384,
+    "height": 640,
+    "bytes": 100594
+  }
+]

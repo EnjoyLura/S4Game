@@ -1,0 +1,43 @@
+{
+  "image": "sniper-ready-red.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGB",
+  "alphaRange": [
+    255,
+    255
+  ],
+  "cornerRGB": [
+    [
+      245,
+      6,
+      2
+    ],
+    [
+      247,
+      7,
+      5
+    ],
+    [
+      239,
+      18,
+      2
+    ],
+    [
+      244,
+      15,
+      3
+    ]
+  ],
+  "background": "opaque solid red requested, #FF0000",
+  "sha256": "db5a70cf882723881739cfd62008eb12a84bfb7d6f1df7393bf5bd7530ef0126",
+  "tool": "built-in imagegen",
+  "transparent_background": false,
+  "generatedSource": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-4691b908-f5b1-429c-9590-8fc973674cee.png",
+  "reference": "sniper-ready-black.png",
+  "prompt": "image-prompt-red.txt",
+  "change": "red background; crossbow aims slightly more toward screen-up",
+  "gameIntegrated": false
+}

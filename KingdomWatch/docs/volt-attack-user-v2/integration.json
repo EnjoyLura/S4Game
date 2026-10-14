@@ -1,0 +1,36 @@
+{
+  "status": "published",
+  "date": "2026-10-14T13:31:18.168Z",
+  "resource": "volt_attack_user_v2",
+  "previousResource": "volt_attack_natural_v1",
+  "idleResource": "volt_idle_natural_v1",
+  "frames": 56,
+  "seconds": 2.3333333333333335,
+  "releaseIndex": 14,
+  "readyIndex": 55,
+  "groundAnchor": [
+    256,
+    496
+  ],
+  "cellSize": [
+    512,
+    512
+  ],
+  "paintedHeight": 468.7165,
+  "displayHeight": 146,
+  "reversePlayback": false,
+  "opacityFade": false,
+  "selectedForGameByUser": true,
+  "gameVisualAcceptedByUser": false,
+  "paidTaskSubmitted": false,
+  "player": "Existing whole-character HeroSequenceAnimation, actual spell callback triggers release",
+  "idleRule": "No idle during attack/recovery; idle only when no target within own attack range and no queued attack",
+  "retained": [
+    "volt idle media and timing",
+    "completed sniper idle and attack",
+    "archer media and size",
+    "damage, attack speed, lightning projectiles, effects and sound"
+  ],
+  "game": "https://kingdom-watch.pages.dev/?v=volt-attack-user-v2-1791984777",
+  "deployment": "https://09d9da7e.kingdom-watch.pages.dev"
+}

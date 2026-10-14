@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "url": "https://kingdom-watch.pages.dev/?v=base-comic-1791718629",
+  "realBattleStarted": false,
+  "checks": [
+    {
+      "keep": "confirmation before charge, Lv.2→3, +100 durability / +200 shield",
+      "goldCost": 1520
+    },
+    {
+      "codex": "one-time +20 diamonds, updated wallet/count/list, claimed guard, detail returns to one list"
+    },
+    {
+      "discoveredMonsters": "all six actual battle sprites, list scroll remembers position; workshop remains locked"
+    },
+    {
+      "phone": [
+        375,
+        600
+      ],
+      "scroll": "touch drag cancels building/card click, remembered offset, scene and targets align, fixed construction above nav"
+    }
+  ],
+  "errors": [],
+  "failures": []
+}

@@ -1,0 +1,24 @@
+{
+  "status": "published",
+  "hero": "mora",
+  "idleResource": "mora_idle_user_v1",
+  "attackResource": "mora_attack_user_v1",
+  "frames": {
+    "idle": 56,
+    "attack": 56
+  },
+  "displayHeight": 146,
+  "groundAnchor": [
+    256,
+    496
+  ],
+  "player": "HeroSequenceAnimation; actual projectile, skill and ultimate callbacks",
+  "allSourceFramesRetained": true,
+  "reversePlayback": false,
+  "opacityFade": false,
+  "paidTaskSubmitted": false,
+  "gameVisualAcceptedByUser": false,
+  "game": "https://kingdom-watch.pages.dev/?v=pick-comic-v1-1791996687",
+  "deployment": "https://5894b2f5.kingdom-watch.pages.dev",
+  "userVisualAccepted": false
+}

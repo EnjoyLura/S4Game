@@ -1,0 +1,19 @@
+{
+  "userRequest": "继续完成两人的攻击动作",
+  "heroes": ["sniper", "volt"],
+  "approvedStanceAndWeaponGripRequired": true,
+  "currentIdleResources": {"sniper": "sniper_idle_natural_v2", "volt": "volt_idle_natural_v1"},
+  "voltIdleAcceptedByUser": true,
+  "archerChangesAuthorized": false,
+  "displayHeight": {"sniper": 153, "volt": 146, "archer": 185.64},
+  "projectVideoTool": "美术/tools/art_video_gen.py",
+  "wholeSourceRequired": true,
+  "reversePlayback": false,
+  "opacityTransition": false,
+  "characterBakedEffectsAllowed": false,
+  "attackReturnPoseRequired": true,
+  "sameIdleAttackPaintedScaleAndFootPivotRequired": true,
+  "manualReviewByUser": true,
+  "testsBrowserGameOnlineQARequested": false,
+  "buildAndPublishAuthorized": true
+}

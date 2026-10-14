@@ -1,0 +1,13 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-10-13",
+  "original": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-d0e3e188-9a55-4617-a996-16ed7f729732.png",
+  "prompt": "combat-image-prompt.txt",
+  "references": [
+    "assets/resources/ux/hero_comic_v1/comic_figure_sniper_v1.png",
+    "docs/archer-combat-rebuild-v1/archer-ready-up-left-v3.png"
+  ],
+  "asset": "assets/resources/ux/sniper_combat_rebuild_v1/sniper-ready.png",
+  "processing": "Original RGBA copied unchanged. Only video first-frame preprocessing composites alpha onto black.",
+  "acceptance": "pending user manual review"
+}

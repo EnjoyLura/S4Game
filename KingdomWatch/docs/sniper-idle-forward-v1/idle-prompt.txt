@@ -1,0 +1,9 @@
+Two-second subtle idle animation of the exact full-body rear-view medieval heavy-crossbow ranger in the supplied first frame. Preserve the character design, clean comic cel shading, proportions, blue hood and cape, navy clothes, silver armor and brown leather equipment.
+
+The hero stays planted facing the battlefield away from the viewer, slightly to his left. He holds the single heavy crossbow steadily at shoulder height aimed FORWARD AWAY from the camera, almost straight ahead. The weapon is level with the ground in world space; its stock is foreshortened in this elevated rear view. Preserve the EXACT first-frame weapon angle, depth perspective, wooden stock, steel bow limbs and string throughout. No sideways turn and no upward tilt.
+
+Motion is calm and small: one gentle natural breathing cycle in the shoulders and upper back, a very small connected response of the relaxed elbows and hands, and soft coherent settling of the cape folds. The upper cape follows the shoulders, the lower cape drifts only a little. Keep the whole figure anatomically connected. Both boots, feet and hips stay fixed on the ground. Do not translate or zoom the whole hero. Do not freeze the entire torso and animate only the cape tip. Do not exaggerate breathing or swing the weapon.
+
+This is quiet waiting, not combat. NO firing, trigger pull, recoil, reloading, cocking, drawing, aiming gesture, turning, walking, stepping, arm lifting, arrow movement, muzzle flash, spark, glow, smoke, particle, new object or motion line. Head, hands and weapon remain in their steady ready pose. Keep the camera locked with the same framing and safe margins; no camera pan, orbit, tilt or zoom.
+
+Background remains a uniform fully opaque pure RED #FF0000 field, including all gaps inside the bow and between body parts. No shadow, gradient, scenery, texture or lighting change. Return gently toward the initial relaxed breathing pose by the end.

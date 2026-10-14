@@ -1,0 +1,10 @@
+Animate ONE compact physical bracing-and-settling reaction of the exact full-body character in the supplied image, over two seconds. Begin and end in the exact first-frame ready pose.
+
+0.00-0.35 seconds: the character holds the original two-handed pose steadily.
+0.35-0.50 seconds: the hands, bent elbows and shoulders make one small quick tightening inward toward the torso, like briefly absorbing a vibration. The movement is restrained and connected, visible in the upper arms and upper back. The head stays facing forward.
+0.50-1.25 seconds: the hands, elbows and shoulders gently return to exactly their starting positions; the blue cape follows the small shoulder reaction naturally as one connected piece.
+1.25-2.00 seconds: hold the original settled ready pose, with no second reaction.
+
+THE HELD OBJECT IS A RIGID PROP. Preserve the exact first-frame short wooden stock, curved silver transverse limbs and taut string as one unchanged solid shape. All its pieces stay together in precisely the same first-frame arrangement. The character simply carries the original rigid object through the tiny connected hand movement. Its shape, size, elevation and forward foreshortened direction never change. Do not animate its mechanism or extend any part of it.
+
+Preserve the same blue-hooded blond character, navy clothes, silver armor, leather gloves, belt, boots, clean comic shading, anatomy and silhouette. Both boots, legs and hips are stationary; no step, whole-body movement, torso turn or sideways aim. Camera, framing, margins, lighting and uniform opaque red #FF0000 background stay constant. Only the small arm/shoulder reaction and cape response described above. No emitted object, light effect, flash, glow, smoke, particles or added prop.

@@ -1,0 +1,15 @@
+{
+  "source": "source.mp4",
+  "task": "task_rnIbybnJdMOqdRAxyQgdNi4Afv19pzOV",
+  "range": [6, 55],
+  "omittedOpeningHold": [0, 1, 2, 3, 4, 5],
+  "omittedFlashFrames": [8, 9, 10, 11, 12],
+  "sourceEventFrame": 8,
+  "displayReleaseSourceFrame": 13,
+  "releaseIndex": 2,
+  "frames": 45,
+  "method": "Retain complete native character frames in forward order; omit emitted-effect frames rather than reconstruct body or weapon pixels",
+  "cleanVideo": "attack-clean.mp4",
+  "sourcePreserved": true,
+  "purpose": "Production frame selection and timing; user manual effect acceptance"
+}

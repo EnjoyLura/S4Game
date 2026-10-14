@@ -1,0 +1,59 @@
+{
+  "file": "archer-turn-comparison.gif",
+  "size": [
+    900,
+    740
+  ],
+  "frames": 140,
+  "seconds": 5.6,
+  "frameMs": 40,
+  "turnSeconds": 0.24,
+  "confirmSeconds": 0.12,
+  "deadZonePx": 28,
+  "poses": [
+    "left",
+    "near_left",
+    "center",
+    "near_right",
+    "right"
+  ],
+  "poseAlignment": {
+    "left": {
+      "root": [
+        576,
+        1430
+      ],
+      "height": 1306
+    },
+    "near_left": {
+      "root": [
+        450,
+        986
+      ],
+      "height": 956
+    },
+    "center": {
+      "root": [
+        516,
+        1457
+      ],
+      "height": 1397
+    },
+    "right": {
+      "root": [
+        448,
+        1430
+      ],
+      "height": 1306
+    },
+    "near_right": {
+      "root": [
+        318,
+        986
+      ],
+      "height": 956
+    }
+  },
+  "scope": "Demonstration only; no battle code changed.",
+  "bytes": 907290
+}

@@ -1,0 +1,496 @@
+{
+  "ok": true,
+  "rgba": true,
+  "componentCount": 20,
+  "atlasSize": [
+    1280,
+    1024
+  ],
+  "atlasBytes": 1084100,
+  "atlasSHA256": "9a3f502984c4fac67b951d291c87173fb5c8c608b441753fecfa9a391befaadc",
+  "components": [
+    {
+      "name": "up_legs",
+      "source": "archer-parts-up.png",
+      "cell": [
+        54,
+        9,
+        368,
+        428
+      ],
+      "crop": [
+        1,
+        1,
+        313,
+        418
+      ],
+      "scale": 0.5707434052757794,
+      "size": [
+        184,
+        244
+      ]
+    },
+    {
+      "name": "up_torso",
+      "source": "archer-parts-up.png",
+      "cell": [
+        427,
+        100,
+        744,
+        424
+      ],
+      "crop": [
+        1,
+        1,
+        316,
+        323
+      ],
+      "scale": 0.7391304347826086,
+      "size": [
+        239,
+        244
+      ]
+    },
+    {
+      "name": "up_head",
+      "source": "archer-parts-up.png",
+      "cell": [
+        779,
+        147,
+        1023,
+        418
+      ],
+      "crop": [
+        1,
+        1,
+        243,
+        270
+      ],
+      "scale": 0.8847583643122676,
+      "size": [
+        220,
+        244
+      ]
+    },
+    {
+      "name": "up_cape",
+      "source": "archer-parts-up.png",
+      "cell": [
+        1083,
+        14,
+        1428,
+        425
+      ],
+      "crop": [
+        1,
+        1,
+        344,
+        410
+      ],
+      "scale": 0.5819070904645477,
+      "size": [
+        206,
+        244
+      ]
+    },
+    {
+      "name": "left_upper_arm",
+      "source": "archer-parts-up.png",
+      "cell": [
+        106,
+        441,
+        253,
+        694
+      ],
+      "crop": [
+        1,
+        0,
+        146,
+        253
+      ],
+      "scale": 0.9407114624505929,
+      "size": [
+        142,
+        244
+      ]
+    },
+    {
+      "name": "left_forearm",
+      "source": "archer-parts-up.png",
+      "cell": [
+        493,
+        440,
+        606,
+        697
+      ],
+      "crop": [
+        1,
+        1,
+        113,
+        257
+      ],
+      "scale": 0.9296875,
+      "size": [
+        110,
+        244
+      ]
+    },
+    {
+      "name": "left_hand",
+      "source": "archer-parts-up.png",
+      "cell": [
+        835,
+        490,
+        966,
+        655
+      ],
+      "crop": [
+        1,
+        1,
+        130,
+        164
+      ],
+      "scale": 1,
+      "size": [
+        135,
+        169
+      ]
+    },
+    {
+      "name": "right_upper_arm",
+      "source": "archer-parts-up.png",
+      "cell": [
+        1207,
+        442,
+        1350,
+        695
+      ],
+      "crop": [
+        1,
+        0,
+        142,
+        252
+      ],
+      "scale": 0.9444444444444444,
+      "size": [
+        139,
+        244
+      ]
+    },
+    {
+      "name": "right_forearm",
+      "source": "archer-parts-up.png",
+      "cell": [
+        120,
+        740,
+        245,
+        1046
+      ],
+      "crop": [
+        1,
+        0,
+        124,
+        305
+      ],
+      "scale": 0.780327868852459,
+      "size": [
+        102,
+        244
+      ]
+    },
+    {
+      "name": "right_hand",
+      "source": "archer-parts-up.png",
+      "cell": [
+        478,
+        802,
+        645,
+        1000
+      ],
+      "crop": [
+        0,
+        1,
+        166,
+        197
+      ],
+      "scale": 1,
+      "size": [
+        172,
+        202
+      ]
+    },
+    {
+      "name": "bow",
+      "source": "archer-parts-up.png",
+      "cell": [
+        848,
+        662,
+        955,
+        1069
+      ],
+      "crop": [
+        0,
+        1,
+        106,
+        406
+      ],
+      "scale": 0.5876543209876544,
+      "size": [
+        68,
+        244
+      ]
+    },
+    {
+      "name": "quiver",
+      "source": "archer-parts-up.png",
+      "cell": [
+        1104,
+        708,
+        1402,
+        1055
+      ],
+      "crop": [
+        0,
+        1,
+        297,
+        347
+      ],
+      "scale": 0.6878612716763006,
+      "size": [
+        210,
+        244
+      ]
+    },
+    {
+      "name": "left_legs",
+      "source": "archer-body-turns.png",
+      "cell": [
+        73,
+        16,
+        440,
+        463
+      ],
+      "crop": [
+        1,
+        1,
+        366,
+        447
+      ],
+      "scale": 0.5336322869955157,
+      "size": [
+        201,
+        244
+      ]
+    },
+    {
+      "name": "left_torso",
+      "source": "archer-body-turns.png",
+      "cell": [
+        497,
+        112,
+        838,
+        470
+      ],
+      "crop": [
+        0,
+        1,
+        341,
+        357
+      ],
+      "scale": 0.6685393258426966,
+      "size": [
+        234,
+        244
+      ]
+    },
+    {
+      "name": "left_head",
+      "source": "archer-body-turns.png",
+      "cell": [
+        897,
+        157,
+        1173,
+        440
+      ],
+      "crop": [
+        1,
+        1,
+        275,
+        282
+      ],
+      "scale": 0.8469750889679716,
+      "size": [
+        238,
+        244
+      ]
+    },
+    {
+      "name": "left_cape",
+      "source": "archer-body-turns.png",
+      "cell": [
+        1269,
+        11,
+        1645,
+        472
+      ],
+      "crop": [
+        1,
+        1,
+        376,
+        460
+      ],
+      "scale": 0.5185185185185185,
+      "size": [
+        200,
+        244
+      ]
+    },
+    {
+      "name": "right_legs",
+      "source": "archer-body-turns.png",
+      "cell": [
+        38,
+        481,
+        393,
+        926
+      ],
+      "crop": [
+        1,
+        1,
+        354,
+        444
+      ],
+      "scale": 0.5372460496613995,
+      "size": [
+        196,
+        244
+      ]
+    },
+    {
+      "name": "right_torso",
+      "source": "archer-body-turns.png",
+      "cell": [
+        507,
+        556,
+        840,
+        915
+      ],
+      "crop": [
+        1,
+        1,
+        333,
+        358
+      ],
+      "scale": 0.6666666666666666,
+      "size": [
+        227,
+        244
+      ]
+    },
+    {
+      "name": "right_head",
+      "source": "archer-body-turns.png",
+      "cell": [
+        903,
+        569,
+        1183,
+        865
+      ],
+      "crop": [
+        1,
+        1,
+        279,
+        295
+      ],
+      "scale": 0.8095238095238095,
+      "size": [
+        231,
+        244
+      ]
+    },
+    {
+      "name": "right_cape",
+      "source": "archer-body-turns.png",
+      "cell": [
+        1248,
+        470,
+        1605,
+        931
+      ],
+      "crop": [
+        1,
+        1,
+        356,
+        460
+      ],
+      "scale": 0.5185185185185185,
+      "size": [
+        190,
+        244
+      ]
+    },
+    {
+      "name": "up_torso",
+      "source": "archer-torso-cores.png",
+      "cell": [
+        210,
+        54,
+        659,
+        671
+      ],
+      "crop": [
+        1,
+        1,
+        449,
+        617
+      ],
+      "scale": 0.38636363636363635,
+      "size": [
+        179,
+        244
+      ]
+    },
+    {
+      "name": "left_torso",
+      "source": "archer-torso-cores.png",
+      "cell": [
+        879,
+        48,
+        1329,
+        675
+      ],
+      "crop": [
+        1,
+        1,
+        449,
+        627
+      ],
+      "scale": 0.3801916932907348,
+      "size": [
+        176,
+        244
+      ]
+    },
+    {
+      "name": "right_torso",
+      "source": "archer-torso-cores.png",
+      "cell": [
+        1522,
+        44,
+        1977,
+        676
+      ],
+      "crop": [
+        1,
+        1,
+        455,
+        631
+      ],
+      "scale": 0.37777777777777777,
+      "size": [
+        178,
+        244
+      ]
+    }
+  ]
+}

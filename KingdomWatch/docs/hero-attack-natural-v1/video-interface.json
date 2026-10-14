@@ -1,0 +1,97 @@
+{
+  "source": "https://lensapi.cn/api/pricing",
+  "publicDocs": "https://lensapi.cn/docs/#videos",
+  "model": "lens-minimax-h3-768p",
+  "videoParameters": {
+    "name": "lens-minimax-h3-768p",
+    "aspect_ratios": [
+      "16:9",
+      "4:3",
+      "1:1",
+      "3:4",
+      "9:16"
+    ],
+    "durations": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "resolutions": [
+      "768p"
+    ],
+    "resolution_durations": {
+      "768p": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    "resolution_aspect_ratios": {
+      "768p": [
+        "16:9",
+        "4:3",
+        "1:1",
+        "3:4",
+        "9:16"
+      ]
+    },
+    "min_image_refs": 0,
+    "max_image_refs": 9,
+    "max_video_refs": 0,
+    "max_audio_refs": 3,
+    "min_visual_refs": null,
+    "max_visual_refs": null,
+    "max_total_refs": null,
+    "audio_requires_image": false,
+    "audio_requires_visual": false,
+    "prompt_required": true,
+    "prompt_max_chars": null,
+    "prompt_limit_mode": "NOT_SPECIFIED",
+    "max_reference_image_bytes": 31457280,
+    "max_reference_image_total_bytes": 100663296,
+    "min_reference_image_dimension": null,
+    "max_reference_image_dimension": 16384,
+    "min_reference_image_aspect_ratio": null,
+    "max_reference_image_aspect_ratio": null,
+    "max_reference_video_bytes": 67108864,
+    "max_reference_video_total_bytes": 100663296,
+    "max_reference_audio_bytes": 15728640,
+    "max_reference_audio_total_bytes": 100663296,
+    "reference_video_duration_seconds": 15,
+    "reference_audio_duration_seconds": 15,
+    "max_reference_video_total_seconds": null,
+    "max_reference_audio_total_seconds": null,
+    "defaults": {
+      "duration": 1,
+      "resolution": "768p",
+      "ratio": "16:9"
+    },
+    "video_references_disabled": false
+  },
+  "payload": "images:[firstReference,returnPoseReference]",
+  "serverForcesLastFrame": false
+}

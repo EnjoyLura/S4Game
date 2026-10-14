@@ -1,0 +1,10 @@
+{
+  "method": "New complete forward source cycle requested from the unchanged approved master",
+  "sourceVideoTask": "task_n97psrwE6KUNSVg89NyBmxIKMMRjjZGK",
+  "actualPrompt": "idle-prompt-effective.txt",
+  "allSourceFramesRetained": true,
+  "reversePlayback": false,
+  "noArtificialHold": true,
+  "note": "User reported previous sniper closure defective; new source retained whole; user manual effect review",
+  "userAccepted": false
+}

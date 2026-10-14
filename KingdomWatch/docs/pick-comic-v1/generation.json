@@ -1,0 +1,13 @@
+{
+  "mode": "built-in imagegen",
+  "individualCalls": 3,
+  "referencesSentToImageTool": [],
+  "copiedExternalGameAssets": false,
+  "sources": {
+    "card_base": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-db5658b7-ad9e-4a2b-a22b-f56195d8efc2.png",
+    "title_plate": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-a9eabb95-5782-41c3-b489-20f163bb2940.png",
+    "header_strip": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-087dff79-cd31-4306-8037-5ca302eeb568.png"
+  },
+  "processing": "Trim transparent margins and alpha<8 dust only; preserve source artwork with no redraw or resampling",
+  "userVisualAccepted": false
+}

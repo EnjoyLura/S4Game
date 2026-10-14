@@ -1,0 +1,11 @@
+{
+  "status": "not_submitted",
+  "providerCode": "insufficient_user_quota",
+  "taskCreated": false,
+  "requestedModel": "lens-video-0f4c4ca37ccb",
+  "secondsRequested": 4,
+  "reason": "Project AI video tool rejected submission because the account balance is insufficient.",
+  "userNotified": true,
+  "nextAction": "Resume the prepared video generation after the user replenishes project API credit.",
+  "oldAttackAccepted": false
+}

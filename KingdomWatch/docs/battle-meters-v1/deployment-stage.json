@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-meters-v1-20261014-234737",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-pause-comic-v1-20261014-232817",
+  "entryVersion": "1791992612",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=battle-meters-v1-1791992612",
+  "scope": "battle progress bars and shield display",
+  "layoutChanged": true,
+  "visualAcceptance": "pending user manual review"
+}

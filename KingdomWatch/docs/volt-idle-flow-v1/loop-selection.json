@@ -1,0 +1,52 @@
+{
+  "method": "pingpong",
+  "range": [
+    2,
+    44
+  ],
+  "previousSinglePassSeconds": 3.07692307692308,
+  "loopSeconds": 6.15384615384616,
+  "preservesAllApprovedFrames": true,
+  "contract": {
+    "id": "hero-idle-adjacent-loop-v2",
+    "strategy": "All original complete frames forward and backward with lightly eased turns, no endpoint hold",
+    "noArtificialHold": true,
+    "maximumTurnDurationRatio": 1.1,
+    "allTransitionsAdjacentIncludingWrap": true,
+    "wrapFrames": [
+      1,
+      0
+    ],
+    "noEndToStartCut": true,
+    "noOpacityCrossfade": true,
+    "acceptance": "Structural production constraint only; final effect review by user"
+  },
+  "sourceVideoNewlyGenerated": false,
+  "supersedes": "../volt-idle-lively-v1/loop-selection.json",
+  "timingRevision": {
+    "origin": "../volt-idle-lively-loop-v2",
+    "sourceVideoNewlyGenerated": false,
+    "allCurrentFramesRetained": true,
+    "atlasPixelsRetained": true,
+    "atlasFileSha256": "1461b75b3138469563ec615d02351b33d520d1e6ae65b14f14ebe48c390895dc",
+    "previousMaximumFrameSeconds": 0.31639311844967405,
+    "maximumFrameSeconds": 0.08029929738114801,
+    "normalFrameSeconds": 0.07299936125558909,
+    "seconds": 6.15384615384616,
+    "loopClosure": {
+      "id": "hero-idle-adjacent-loop-v2",
+      "strategy": "All original complete frames forward and backward with lightly eased turns, no endpoint hold",
+      "noArtificialHold": true,
+      "maximumTurnDurationRatio": 1.1,
+      "allTransitionsAdjacentIncludingWrap": true,
+      "wrapFrames": [
+        1,
+        0
+      ],
+      "noEndToStartCut": true,
+      "noOpacityCrossfade": true,
+      "acceptance": "Structural production constraint only; final effect review by user"
+    },
+    "review": "Timing production only; user manual review; no tests, game, browser or online QA"
+  }
+}

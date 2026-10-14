@@ -1,0 +1,16 @@
+{
+  "hero": "volt",
+  "kind": "attack",
+  "taskId": "task_h2LjrEfBSYoxlpqNMQVyaPRz5Xo5zcoV",
+  "model": "lens-minimax-h3-768p",
+  "secondsRequested": 2,
+  "ratioRequested": "3:4",
+  "imageUrl": "https://f1c96c74.kw-vfx-src.pages.dev/hero_volt_attack_natural_v1_20261014_ff.png",
+  "promptFile": "attack-prompt.txt",
+  "status": "completed",
+  "sourceTool": "美术/tools/art_video_gen.py",
+  "fullSourceRequired": true,
+  "reversePlayback": false,
+  "effectsBakedIntoCharacter": false,
+  "video": "source.mp4"
+}

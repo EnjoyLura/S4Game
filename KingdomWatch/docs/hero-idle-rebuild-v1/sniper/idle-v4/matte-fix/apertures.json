@@ -1,0 +1,11 @@
+{
+  "revision": "v4-alpha1",
+  "sourceSize": [768, 1344],
+  "referenceFrame": 4,
+  "trackingBox": [50, 264, 328, 430],
+  "maxTranslation": 24,
+  "apertureSeeds": [[214, 344], [119, 382]],
+  "seedSearchRadius": 6,
+  "keyTolerance": 18,
+  "purpose": "Remove enclosed black-background gaps above and below the crossbow stock. Track only keying seeds; never move or replace character pixels."
+}

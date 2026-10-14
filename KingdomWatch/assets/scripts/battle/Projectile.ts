@@ -12,6 +12,7 @@ import { Sfx } from '../core/Sfx';
 import { bus, EVT } from '../core/EventBus';
 import { LINE_Y, LO, PAL, MAX_PROJS } from '../config/GameConfig';
 import { FrostUltTarget } from './FrostUltimateVFX';
+import { BasicProjectileFlightVFX } from './BasicProjectileFlightVFX';
 
 export interface ProjSpec {
   x: number; y: number;
@@ -76,6 +77,7 @@ interface Active {
   age: number;
   trail: number[];
   trailMax: number;
+  fxSeed: number;
 }
 
 const colorCache = new Map<string, Color>();
@@ -99,11 +101,14 @@ export class ProjectileManager {
   private free: Active[] = [];
   private g!: Graphics;
   private dirty = false;
+  private basicFlight: BasicProjectileFlightVFX;
+  private flightSerial = 0;
 
   /** field 为专用弹道图层节点（英雄之上、飘字之下）；parts 为迸溅粒子层 */
   constructor(field: Node, private mgr: MonsterManager, private dmg: DamageService, private parts?: Particles, private impacts?: ImpactFX) {
     field.layer = Layers.Enum.UI_2D;
     this.g = field.addComponent(Graphics);
+    this.basicFlight = new BasicProjectileFlightVFX(field);
   }
 
   fire(spec: ProjSpec): void {
@@ -115,6 +120,7 @@ export class ProjectileManager {
     a.pierceLeft = spec.pierce || 0;
     a.ttl = spec.ttl ?? 3.2;
     a.age = 0;
+    a.fxSeed = (++this.flightSerial * .61803398875) % 1;
     a.trail.length = 0;
     a.trailMax = spec.enemy ? 0 : spec.spark ? 9
       : spec.heroId === 'archer' ? 7
@@ -128,7 +134,7 @@ export class ProjectileManager {
   }
 
   private makeActive(): Active {
-    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<Monster>(), ttl: 0, age: 0, trail: [], trailMax: 0 };
+    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<Monster>(), ttl: 0, age: 0, trail: [], trailMax: 0, fxSeed: 0 };
   }
 
   /** 敌方远程石块：直线落向防线，触线即结算 */
@@ -144,6 +150,11 @@ export class ProjectileManager {
   /** 每排出弓一次；与弹道共用战斗时钟，暂停/倍速不脱节。未加载时保留原出手闪光。 */
   arrowRelease(x: number, y: number, dx: number, dy: number, heavy: boolean): boolean {
     return this.impacts?.arrowRelease(x, y, dx, dy, heavy) || false;
+  }
+
+  /** One release per actual basic attack/arrow row, including empowered basic arrows. */
+  normalRelease(hero: string, x: number, y: number, dx: number, dy: number, empowered = false): void {
+    this.impacts?.normalRelease(hero, x, y, dx, dy, empowered);
   }
 
   fireCraters(areas: readonly { x: number; y: number; t: number }[], radius: number, clock: number): boolean {
@@ -213,6 +224,7 @@ export class ProjectileManager {
   private render(): void {
     const g = this.g;
     g.clear();
+    this.basicFlight.beginFrame();
     this.impacts?.beginProjectileFrame();
     this.frame++;
     for (let i = 0; i < this.active.length; i++) {
@@ -224,11 +236,14 @@ export class ProjectileManager {
       const orb = s.heroId === 'volt' && !s.small && !s.enemy;
       const fire = s.heroId === 'pyro' && !s.enemy;
       const shard = s.heroId === 'mora' && !s.small && !s.enemy;
+      const basic = !s.enemy && !s.ult && !s.small
+        && (!s.ability || (s.heroId === 'archer' && !!s.spark));
+      const decorated = basic && this.basicFlight.projectile(s.heroId, s.x, s.y, a.vx, a.vy, size, a.age, a.fxSeed);
       if (fire && this.impacts?.fireProjectile(s.x, s.y, a.vx, a.vy, size)) continue;
       if (arrow && this.impacts?.arrowProjectile(s.x, s.y, a.vx, a.vy, size, a.age, !!s.spark || !!s.ult)) continue;
       if (s.heroId === 'mora' && !s.enemy && this.impacts?.iceProjectile(s.x, s.y, a.vx, a.vy, size, a.age)) continue;
       // 尾迹先画（垫在弹体之下）：锥形渐隐条带 + 亮芯
-      if (a.trailMax > 0) this.drawTrail(g, s, a, size, arrow);
+      if (!decorated && a.trailMax > 0) this.drawTrail(g, s, a, size, arrow);
       if (arrow) this.drawArrow(g, s, a, size);
       else if (bolt) this.drawBolt(g, s, a, size);
       else if (orb) this.drawOrb(g, s, size, i);

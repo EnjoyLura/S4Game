@@ -1,0 +1,30 @@
+{
+  "hero": "sniper",
+  "uniqueFrames": 56,
+  "timelineFrames": 56,
+  "seconds": 2.0,
+  "atlas": [
+    3072,
+    4032
+  ],
+  "bytes": 8403540,
+  "resource": "assets/resources/ux/sniper_idle_rebuild_v4",
+  "sourceVideo": {
+    "ffmpeg_version": "7.1-essentials_build-www.gyan.dev built with gcc 14.2.0 (Rev1, Built by MSYS2 project)",
+    "codec": "h264",
+    "pix_fmt": "yuv420p(tv, bt709, progressive)",
+    "audio_codec": "aac",
+    "fps": 24.0,
+    "source_size": [
+      768,
+      1344
+    ],
+    "size": [
+      768,
+      1344
+    ],
+    "rotate": 0,
+    "duration": 2.33
+  },
+  "loopMethod": "full source in original consecutive frame order"
+}

@@ -1,0 +1,265 @@
+{
+  "frames": {
+    "idle0": [
+      0,
+      0,
+      256,
+      384
+    ],
+    "idle1": [
+      256,
+      0,
+      256,
+      384
+    ],
+    "idle2": [
+      512,
+      0,
+      256,
+      384
+    ],
+    "idle3": [
+      768,
+      0,
+      256,
+      384
+    ],
+    "idle4": [
+      1024,
+      0,
+      256,
+      384
+    ],
+    "idle5": [
+      1280,
+      0,
+      256,
+      384
+    ],
+    "idle6": [
+      1536,
+      0,
+      256,
+      384
+    ],
+    "idle7": [
+      1792,
+      0,
+      256,
+      384
+    ],
+    "idle8": [
+      0,
+      384,
+      256,
+      384
+    ],
+    "idle9": [
+      256,
+      384,
+      256,
+      384
+    ],
+    "idle10": [
+      512,
+      384,
+      256,
+      384
+    ],
+    "idle11": [
+      768,
+      384,
+      256,
+      384
+    ],
+    "idle12": [
+      1024,
+      384,
+      256,
+      384
+    ],
+    "idle13": [
+      1280,
+      384,
+      256,
+      384
+    ],
+    "idle14": [
+      1536,
+      384,
+      256,
+      384
+    ],
+    "idle15": [
+      1792,
+      384,
+      256,
+      384
+    ],
+    "idle16": [
+      0,
+      768,
+      256,
+      384
+    ],
+    "idle17": [
+      256,
+      768,
+      256,
+      384
+    ],
+    "idle18": [
+      512,
+      768,
+      256,
+      384
+    ],
+    "idle19": [
+      768,
+      768,
+      256,
+      384
+    ],
+    "idle20": [
+      1024,
+      768,
+      256,
+      384
+    ],
+    "idle21": [
+      1280,
+      768,
+      256,
+      384
+    ],
+    "idle22": [
+      1536,
+      768,
+      256,
+      384
+    ],
+    "idle23": [
+      1792,
+      768,
+      256,
+      384
+    ]
+  },
+  "animation": {
+    "frames": [
+      "idle0",
+      "idle1",
+      "idle2",
+      "idle3",
+      "idle4",
+      "idle5",
+      "idle6",
+      "idle7",
+      "idle8",
+      "idle9",
+      "idle10",
+      "idle11",
+      "idle12",
+      "idle13",
+      "idle14",
+      "idle15",
+      "idle16",
+      "idle17",
+      "idle18",
+      "idle19",
+      "idle20",
+      "idle21",
+      "idle22",
+      "idle23",
+      "idle22",
+      "idle21",
+      "idle20",
+      "idle19",
+      "idle18",
+      "idle17",
+      "idle16",
+      "idle15",
+      "idle14",
+      "idle13",
+      "idle12",
+      "idle11",
+      "idle10",
+      "idle9",
+      "idle8",
+      "idle7",
+      "idle6",
+      "idle5",
+      "idle4",
+      "idle3",
+      "idle2",
+      "idle1"
+    ],
+    "seconds": 3.2,
+    "loop": true
+  },
+  "hero": "sniper",
+  "groundAnchor": [
+    128.0,
+    374
+  ],
+  "readyHeightPx": 236.3966,
+  "displayHeight": 170,
+  "cellSize": [
+    256,
+    384
+  ],
+  "loopMethod": "continuous forward/backward, slow breathing playback",
+  "source": {
+    "file": "source.mp4",
+    "sha256": "c19ee7a4a92287cdd79fa2433b538e2ab7c243c59402619b584fcf2dc68758b2",
+    "videoSize": [
+      768,
+      1344
+    ],
+    "fps": 24.0,
+    "frameCount": 39,
+    "indices": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      8,
+      10,
+      12,
+      13,
+      15,
+      17,
+      18,
+      20,
+      21,
+      23,
+      25,
+      26,
+      28,
+      30,
+      31,
+      33,
+      35,
+      36,
+      38
+    ],
+    "jointCrop": [
+      0,
+      89,
+      512,
+      754
+    ],
+    "fixedScale": 0.39663865546218485,
+    "fixedFootSource": [
+      297.5,
+      750
+    ]
+  },
+  "blend": "straight RGBA; SRC_ALPHA / ONE_MINUS_SRC_ALPHA",
+  "scope": "material preview, awaiting user manual review",
+  "seamSelection": {
+    "endpointMeanError": 5.3457,
+    "medianAdjacentError": 2.1382
+  }
+}

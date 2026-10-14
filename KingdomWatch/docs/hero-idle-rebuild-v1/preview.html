@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>重弩手 · 战斗图片与待机动画</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#17272e;color:#f1f2e7;font:16px system-ui,"Microsoft YaHei",sans-serif}main{max-width:950px;margin:auto;padding:24px 16px 36px}h1{font-size:25px;margin:0 0 12px}h2{font-size:20px;margin:28px 0 12px}p{line-height:1.7;color:#bbcac8}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}figure{margin:0}canvas{display:block;width:100%;height:auto;background:#293c3b;border:1px solid #42544c;border-radius:10px}figcaption{text-align:center;color:#c9d5c8;margin:9px 0 14px}.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:18px 0}button,select,a.action{border:0;border-radius:7px;padding:10px 15px;background:#bfd794;color:#253125;font:600 15px system-ui;text-decoration:none;cursor:pointer}a{color:#c5dfab}input{accent-color:#bfd794;max-width:100%}.links{display:flex;flex-wrap:wrap;gap:16px;line-height:1.9}.reference{display:flex;gap:16px;align-items:center;margin:24px 0}.reference img{max-width:34%;max-height:230px;object-fit:contain}.reference p{margin:0}.wide{width:100%;height:auto;border-radius:10px}small{color:#bbcac8}
+</style>
+<main><h1>重弩手 · 战斗图片与待机动画</h1>
+<p>沿用现有立绘的蓝兜帽、金发、皮甲和木钢重弩。完整人物朝向上方，左右使用同一套图片镜像。</p>
+<h2>战斗图片</h2><div class="pair"><figure><canvas id="staticLeft" width="420" height="510"></canvas><figcaption>原向</figcaption></figure><figure><canvas id="staticRight" width="420" height="510"></canvas><figcaption>镜像</figcaption></figure></div>
+<h2>待机序列帧 · 弩空隙与循环修正版</h2><div class="pair"><figure><canvas id="idleLeft" width="420" height="510"></canvas><figcaption>原向 · 往返循环，首尾减速</figcaption></figure><figure><canvas id="idleRight" width="420" height="510"></canvas><figcaption>镜像 · 同一套帧</figcaption></figure></div>
+<div class="toolbar"><button id="play">暂停</button><button id="bg">切换浅色背景</button><label>速度 <select id="speed"><option value=".75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option></select></label><label>逐帧 <input id="frame" type="range" min="0" value="0"></label><span id="counter"></span></div>
+<h2>AI 源视频</h2><figure><video id="sourceVideo" src="source-v4.mp4" controls loop muted playsinline preload="metadata" style="display:block;width:100%;max-height:510px;background:#000;border:1px solid #42544c;border-radius:10px"></video><figcaption id="sourceInfo">完整源视频，可与上方透明序列帧对照</figcaption></figure>
+<h2>游戏素材合成 · 实际显示尺寸</h2><p>弓箭手保持线上尺寸和动作；重弩手展示这次新素材。</p><canvas id="battle" width="750" height="500"></canvas>
+<div class="reference"><img src="figure-reference.png" alt="重弩手现有英雄立绘"><p>现有英雄立绘，供对照蓝兜帽、金发、皮甲与木钢重弩。</p></div>
+<div class="links"><a href="sniper-ready.png" download>透明战斗 PNG</a><a href="idle-v4-alpha1.png" download>序列帧图集</a><a href="idle-v4-alpha1.frames.json" download>帧与循环数据</a><a href="contact-sheet-v4-alpha1.jpg">全部帧接触表</a><a href="idle-mirror-v4-alpha1.gif">镜像待机 GIF</a><a href="battle-composite-v4-alpha1.gif">场景合成 GIF</a><a href="source-v4.mp4">AI 源视频</a><a href="https://kingdom-watch.pages.dev/?v=sniper-live-archer-84-20261013">打开正式游戏 · 新重弩手</a></div>
+</main><script>
+(async()=>{
+ const loadImage=async src=>{const im=new Image();im.src=src;await im.decode();return im};
+ const [art,m,a,ready,atlas,archer,floor,wall]=await Promise.all([
+  fetch('art.json').then(r=>r.json()),fetch('idle-v4-alpha1.frames.json').then(r=>r.json()),fetch('archer-idle.frames.json').then(r=>r.json()),
+  loadImage('sniper-ready.png'),loadImage('idle-v4-alpha1.png'),loadImage('archer-idle.png'),loadImage('floor.png'),loadImage('wall.png')]);
+ document.querySelector('#sourceInfo').textContent='原始视频 '+(m.source.frameCount/m.source.fps).toFixed(2)+' 秒 · '+m.source.frameCount+' 张完整帧 · 序列帧按 '+m.animation.seconds+' 秒循环播放';
+ let light=false,playing=true,clock=0,speed=1,frameIndex=0,last=performance.now();
+ const slider=document.querySelector('#frame');slider.max=m.animation.frames.length-1;
+ const frameEdges=[0];for(const seconds of (m.animation.frameDurations||Array(m.animation.frames.length).fill(m.animation.seconds/m.animation.frames.length)))frameEdges.push(frameEdges[frameEdges.length-1]+seconds);
+ function frameAtTime(time){let index=0;while(index<m.animation.frames.length-1&&time>=frameEdges[index+1])index++;return index}
+ function context(id,w,h){const canvas=document.querySelector('#'+id),dpr=Math.min(devicePixelRatio||1,3);if(canvas.width!==w*dpr||canvas.height!==h*dpr){canvas.width=w*dpr;canvas.height=h*dpr}const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);return c}
+ function paint(c,image,rect,meta,x,y,height,direction){const s=height/meta.readyHeightPx;c.save();c.translate(x,y);c.scale(direction,1);c.drawImage(image,...rect,-meta.groundAnchor[0]*s,-meta.groundAnchor[1]*s,rect[2]*s,rect[3]*s);c.restore()}
+ function panel(id,image,rect,meta,dir){const c=context(id,420,510);c.fillStyle=light?'#e8dfc5':'#293c3b';c.fillRect(0,0,420,510);c.strokeStyle=light?'#b8ac90':'#4a6158';c.beginPath();c.moveTo(15,486);c.lineTo(405,486);c.stroke();paint(c,image,rect,meta,210,486,380,dir)}
+ function draw(){
+  panel('staticLeft',ready,[0,0,ready.width,ready.height],art,1);panel('staticRight',ready,[0,0,ready.width,ready.height],art,-1);
+  const rect=m.frames[m.animation.frames[frameIndex]];panel('idleLeft',atlas,rect,m,1);panel('idleRight',atlas,rect,m,-1);
+  const c=context('battle',750,500);c.drawImage(floor,0,0,750,500);c.drawImage(wall,0,210,750,321);
+  const ai=Math.floor(clock/a.animation.seconds*a.animation.frames.length)%a.animation.frames.length;
+  paint(c,archer,a.frames[a.animation.frames[ai]],a,210,440,a.displayHeight,1);
+  paint(c,atlas,rect,m,540,440,m.displayHeight,1);
+  slider.value=frameIndex;document.querySelector('#counter').textContent=(frameIndex+1)+' / '+m.animation.frames.length;
+ }
+ document.querySelector('#play').onclick=e=>{playing=!playing;e.target.textContent=playing?'暂停':'播放'};
+ document.querySelector('#bg').onclick=e=>{light=!light;e.target.textContent=light?'切换深色背景':'切换浅色背景';draw()};
+ document.querySelector('#speed').onchange=e=>speed=Number(e.target.value);
+ slider.oninput=e=>{playing=false;document.querySelector('#play').textContent='播放';frameIndex=Number(e.target.value);clock=frameEdges[frameIndex];draw()};
+ function tick(now){const dt=Math.min((now-last)/1000,.1);last=now;if(playing){clock+=dt*speed;frameIndex=frameAtTime(clock%m.animation.seconds);draw()}requestAnimationFrame(tick)}draw();requestAnimationFrame(tick);
+})().catch(e=>{document.querySelector('h1').textContent='素材加载失败，请刷新重试'});
+</script></html>

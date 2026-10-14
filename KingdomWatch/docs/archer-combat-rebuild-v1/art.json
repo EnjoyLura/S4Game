@@ -1,0 +1,24 @@
+{
+  "image": "archer-ready-up-left-v3.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "bounds": [
+    115,
+    114,
+    959,
+    1401
+  ],
+  "groundAnchor": [
+    576,
+    1401
+  ],
+  "readyHeightPx": 1287,
+  "displayHeight": 146,
+  "direction": "upper-left",
+  "headDirection": "near straight upper-center; rear of head with no visible facial profile",
+  "turning": "direct horizontal mirror around the fixed foot pivot",
+  "pose": "held-bow ready, arrows remain in quiver",
+  "animation": "static base only"
+}

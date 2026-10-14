@@ -1,0 +1,114 @@
+{
+  "source": "https://lensapi.cn/api/pricing",
+  "model": "lens-video-0f4c4ca37ccb",
+  "videoParameters": {
+    "name": "特价渠道 MiniMax H3 768p-2k",
+    "aspect_ratios": [
+      "16:9",
+      "9:16",
+      "4:3",
+      "3:4",
+      "1:1",
+      "21:9"
+    ],
+    "durations": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "resolutions": [
+      "768p",
+      "2k"
+    ],
+    "resolution_durations": {
+      "2k": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "768p": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    "resolution_aspect_ratios": {
+      "2k": [
+        "16:9",
+        "9:16",
+        "4:3",
+        "3:4",
+        "1:1",
+        "21:9"
+      ],
+      "768p": [
+        "16:9",
+        "9:16",
+        "4:3",
+        "3:4",
+        "1:1",
+        "21:9"
+      ]
+    },
+    "min_image_refs": 0,
+    "max_image_refs": 9,
+    "max_video_refs": 0,
+    "max_audio_refs": 0,
+    "min_visual_refs": null,
+    "max_visual_refs": null,
+    "max_total_refs": null,
+    "audio_requires_image": false,
+    "audio_requires_visual": false,
+    "prompt_required": true,
+    "prompt_max_chars": null,
+    "prompt_limit_mode": "NOT_SPECIFIED",
+    "max_reference_image_bytes": 20971520,
+    "max_reference_image_total_bytes": 100663296,
+    "min_reference_image_dimension": null,
+    "max_reference_image_dimension": 16384,
+    "min_reference_image_aspect_ratio": null,
+    "max_reference_image_aspect_ratio": null,
+    "max_reference_video_bytes": 67108864,
+    "max_reference_video_total_bytes": 100663296,
+    "max_reference_audio_bytes": 15728640,
+    "max_reference_audio_total_bytes": 100663296,
+    "reference_video_duration_seconds": null,
+    "reference_audio_duration_seconds": null,
+    "max_reference_video_total_seconds": null,
+    "max_reference_audio_total_seconds": null,
+    "defaults": {
+      "duration": 4,
+      "resolution": "768p",
+      "ratio": "16:9"
+    },
+    "video_references_disabled": false
+  },
+  "reason": "Complete restrained source from another supported H3 channel, not chopped or reversed failed source"
+}

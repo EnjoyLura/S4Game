@@ -1,0 +1,12 @@
+✨ Compiled Worker successfully
+Uploading... (1633/1657)
+Uploading... (1641/1657)
+Uploading... (1649/1657)
+Uploading... (1657/1657)
+✨ Success! Uploaded 24 files (1633 already uploaded) (6.22 sec)
+
+✨ Uploading _headers
+✨ Uploading Functions bundle
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://f9b74360.kingdom-watch.pages.dev
+{"stage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-settlement-comic-v1-20261015-001822","priorPublishedStage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-meters-v1-20261014-234737","entryVersion":"1791994681","project":"kingdom-watch","branch":"main","game":"https://kingdom-watch.pages.dev/?v=settlement-comic-v1-1791994681","scope":"win/lose settlement artwork and fire-mage idle/attack integration","layoutChanged":true,"visualAcceptance":"pending user manual review"}

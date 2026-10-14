@@ -1,0 +1,52 @@
+{
+  "hero": "pyro",
+  "idle": {
+    "kind": "idle",
+    "take": "idle",
+    "resource": "pyro_idle_loop_v2",
+    "frames": 56,
+    "fps": 24.0,
+    "seconds": 2.3333333333333335,
+    "atlas": [
+      4096,
+      3584
+    ],
+    "paintedHeight": 468,
+    "displayHeight": 146,
+    "groundAnchor": [
+      256,
+      496
+    ],
+    "fullSourceRetained": true,
+    "reversePlayback": false,
+    "gameVisualAcceptedByUser": false,
+    "paidTaskSubmitted": true
+  },
+  "attack": {
+    "kind": "attack",
+    "take": "attack",
+    "resource": "pyro_attack_user_v2",
+    "frames": 56,
+    "fps": 24.0,
+    "seconds": 2.3333333333333335,
+    "atlas": [
+      4096,
+      3584
+    ],
+    "paintedHeight": 468,
+    "displayHeight": 146,
+    "groundAnchor": [
+      256,
+      496
+    ],
+    "fullSourceRetained": true,
+    "reversePlayback": false,
+    "gameVisualAcceptedByUser": false,
+    "paidTaskSubmitted": false
+  },
+  "gameIntegrated": true,
+  "previewOnly": false,
+  "paidTaskSubmitted": true,
+  "userVisualAccepted": false,
+  "review": "User manual effect review; no tests, gameplay, browser or online QA"
+}

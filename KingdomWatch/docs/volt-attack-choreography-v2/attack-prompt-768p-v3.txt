@@ -1,0 +1,11 @@
+Animate the reference purple-robed lightning mage in one restrained 2-second spell attack. Preserve the exact cel-shaded style, identity, proportions, rear view facing upper-left, left-hand staff grip and open right hand. Locked camera, constant scale and position. Flat uniform red background matching the reference, no scenery, floor or shadow. Keep the full staff, boots, sleeves and robe hems in frame with generous margins throughout.
+
+One compact sequence: steady stance, staff-forward cast, natural return.
+0-0.3s: lift the existing forward heel very slightly, then softly plant it on the SAME spot; keep the toes planted, bend the knee slightly and shift weight only a little. No step or stomp.
+0.3-0.6s: extend the left forearm about half a palm length toward the mage's upper-left facing direction. Tilt the RIGID staff forward only 5-10 degrees, with a tiny torso lean. The right hand makes one small accompanying casting gesture. A clear, quick, compact cast; no overhead swing.
+0.6-1.6s: smoothly withdraw the staff and both hands, returning weight to the original stance. No second attack.
+1.6-2s: sleeves and robe settle gently with natural follow-through into the reference ready pose, without a long frozen pause.
+
+First and final frames must match in head, shoulders, hand positions, staff angle, boot positions, character scale, robe silhouette and cloth motion phase, for a clean idle transition. Continuous forward physical motion, no reversal. Keep the ground anchor fixed; no size changes, drift or jitter.
+
+Character motion ONLY. NO lightning, electric arcs, glow pulses, magic balls, rings, sparks, flames, smoke, dust, projectiles or particles. Crystal color and brightness stay unchanged. No jump, lunge, large squat, body turn, exaggerated breathing, wild cloth, camera motion, zoom, cropping, extra limbs, warped hands, bent staff or black flicker.

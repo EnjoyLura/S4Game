@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-pause-comic-v1-20261014-232817",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-volt-attack-user-v2-live-20261014-213820",
+  "entryVersion": "1791991675",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=pause-comic-v1-1791991675",
+  "scope": "pause menu art only",
+  "layoutChanged": false,
+  "visualAcceptance": "pending user manual review"
+}

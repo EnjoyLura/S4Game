@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "status": "archer size published; new two-second sniper video blocked by insufficient quota",
+  "game": "https://kingdom-watch.pages.dev/?v=archer-size-221-1791854860",
+  "deployment": "https://51bca90f.kingdom-watch.pages.dev",
+  "archer": {
+    "previousDisplayHeight": 170,
+    "displayHeight": 221,
+    "relativeScale": 1.3,
+    "change": "Original idle and attack atlases uniformly enlarged. Existing frames, timing, mirroring and foot pivot retained."
+  },
+  "sniper": {
+    "secondsRequested": 2,
+    "model": "lens-minimax-h3-768p",
+    "taskId": null,
+    "status": "submission rejected: insufficient_user_quota",
+    "prompt": "sniper/idle-v2/idle-prompt.txt",
+    "submission": "sniper/idle-v2/submission.json",
+    "requiredYuan": 0.117647,
+    "availableYuan": 0.002292,
+    "existingVideo": "retained; no new video or shortened replacement generated"
+  },
+  "build": "Cocos Creator 3.8.8 web-mobile; BUILD_SUCCESS exit code 36",
+  "dprPatch": "applied; entry cache-bust 1791854860",
+  "publish": "Wrangler Pages main completed, exit code 0; 7 files uploaded, 897 cached",
+  "review": "User manual review; no automatic game, interaction, browser or online visual verification performed"
+}

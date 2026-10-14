@@ -7,6 +7,7 @@ import { ArcherVFX } from './ArcherVFX';
 import { FrostVFX } from './FrostVFX';
 import { FrostProjectileVFX } from './FrostProjectileVFX';
 import { FrostUltTarget, FrostUltimateVFX } from './FrostUltimateVFX';
+import { BasicAttackLaunchVFX } from './BasicAttackLaunchVFX';
 
 interface Impact { x: number; y: number; life: number; max: number; radius: number; color: string; angle: number; heavy: boolean; hero: string; kind: 'contact' | 'cast' | 'blast'; }
 
@@ -25,6 +26,7 @@ export class ImpactFX {
   private frost: FrostVFX;
   private frostProjectile: FrostProjectileVFX;
   private frostUltimate: FrostUltimateVFX;
+  private basicLaunch: BasicAttackLaunchVFX;
 
   constructor(parent: Node, groundParent: Node = parent, projectileParent: Node = parent, depthParent?: Node) {
     this.fire = new FireVFX(parent, groundParent, projectileParent);
@@ -32,6 +34,7 @@ export class ImpactFX {
     this.frost = new FrostVFX(groundParent);
     this.frostProjectile = new FrostProjectileVFX(projectileParent);
     this.frostUltimate = new FrostUltimateVFX(groundParent, parent, depthParent);
+    this.basicLaunch = new BasicAttackLaunchVFX(parent);
     const node = new Node('impactEnvelopes');
     node.layer = Layers.Enum.UI_2D;
     node.setParent(parent);
@@ -50,6 +53,9 @@ export class ImpactFX {
   }
   arrowRelease(x: number, y: number, dx: number, dy: number, heavy: boolean): boolean {
     return this.archer.release(x, y, dx, dy, heavy);
+  }
+  normalRelease(hero: string, x: number, y: number, dx: number, dy: number, empowered = false): void {
+    this.basicLaunch.release(hero, x, y, dx, dy, empowered);
   }
   fireProjectile(x: number, y: number, vx: number, vy: number, size: number): boolean {
     return this.fire.projectile(x, y, vx, vy, size);
@@ -103,6 +109,7 @@ export class ImpactFX {
     this.archer.tick(dt);
     this.frost.tick(dt);
     this.frostUltimate.tick(dt);
+    this.basicLaunch.tick(dt);
     if (!this.dirty && this.active.length === 0) return;
     this.g.clear(); this.dirty = false;
     for (let i = this.active.length - 1; i >= 0; i--) {

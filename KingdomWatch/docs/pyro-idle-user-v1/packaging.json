@@ -1,0 +1,28 @@
+{
+  "hero": "pyro",
+  "resource": "pyro_idle_user_v1",
+  "frames": 56,
+  "sourceFrames": 56,
+  "seconds": 2.3333333333333335,
+  "fps": 24.0,
+  "atlas": [
+    4096,
+    3584
+  ],
+  "paintedHeight": 468.0,
+  "displayHeight": 146,
+  "groundAnchor": [
+    256,
+    496
+  ],
+  "attackResource": "pyro_attack_user_v1",
+  "allSourceFramesRetained": true,
+  "reversePlayback": false,
+  "gameIntegrated": true,
+  "previewOnly": false,
+  "userVisualAccepted": false,
+  "paidTaskSubmitted": false,
+  "review": "Source material preparation; effect review by user; no tests, gameplay, browser or online QA",
+  "pairedIdleResource": "pyro_idle_user_v1",
+  "gameVisualAcceptedByUser": false
+}

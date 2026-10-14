@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-15T00:49:40.244160+08:00",
+  "hero": "pyro",
+  "saved": "source.mp4",
+  "sha256": "7e37d6bac1d6973dc4b5e9eab47b25978e25b4c028b787e6151853b90ee0de68",
+  "metadata": {
+    "ffmpeg_version": "7.1-essentials_build-www.gyan.dev built with gcc 14.2.0 (Rev1, Built by MSYS2 project)",
+    "codec": "h264",
+    "pix_fmt": "yuv420p(tv, bt709, progressive)",
+    "audio_codec": "aac",
+    "fps": 24.0,
+    "source_size": [
+      1344,
+      768
+    ],
+    "size": [
+      1344,
+      768
+    ],
+    "rotate": 0,
+    "duration": 2.33
+  },
+  "frames": 56,
+  "duration": 2.3333333333333335,
+  "union": [
+    451,
+    38,
+    937,
+    723
+  ],
+  "background": "green",
+  "paidTaskSubmitted": true,
+  "userVisualAccepted": false,
+  "gameIntegrated": true,
+  "kind": "idle",
+  "userProvidedVideo": false,
+  "requestedResolution": "768p",
+  "model": "lens-minimax-h3-768p",
+  "taskId": "task_JJhDtVBxeaehD29ZATmoltZEiq0RjO4l",
+  "firstFrameSha256": "c6541e7f499b04694560a21c73e0aa287efa4c798db0f96f3b7e9a72a25d81ba",
+  "previousIdle": "pyro_idle_user_v1",
+  "reason": "User reported end-to-start jump",
+  "completeNativeForwardCycleRequired": true,
+  "reversePlayback": false,
+  "resource": "pyro_idle_loop_v2"
+}

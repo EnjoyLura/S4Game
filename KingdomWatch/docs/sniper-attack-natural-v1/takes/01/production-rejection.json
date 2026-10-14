@@ -1,0 +1,5 @@
+{
+  "reason": "Generated weapon flash/smoke or magic light despite character-only prompt",
+  "action": "Regenerate the complete source; do not trim, reverse, erase, or publish this take",
+  "userAcceptance": false
+}

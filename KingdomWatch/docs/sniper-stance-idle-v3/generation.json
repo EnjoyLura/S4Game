@@ -1,0 +1,15 @@
+{
+  "hero": "sniper",
+  "imageTool": "built-in imagegen",
+  "editTarget": "../sniper-idle-forward-v2/ready-red.png",
+  "stanceReference": "../archer-idle-v1/frames/idle-00.png",
+  "sourceGeneratedImage": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-d24b82d6-3e7e-4591-90dd-f7606c5b4796.png",
+  "changes": "Relaxed asymmetric staggered stance referenced to current archer; existing hand grip and weapon aim preserved",
+  "image": "ready-red.png",
+  "imagePrompt": "image-prompt.txt",
+  "idlePrompt": "idle-prompt.txt",
+  "resource": "sniper_stance_idle_v3",
+  "displayHeight": 153,
+  "userAccepted": false,
+  "review": "User manual review"
+}

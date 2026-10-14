@@ -1,0 +1,12 @@
+{
+  "hero": "sniper",
+  "taskId": "task_1ENUQ3Tk2DH61c2fUwMBjPQD28iJtf0Z",
+  "model": "lens-minimax-h3-768p",
+  "secondsRequested": 2,
+  "ratioRequested": "3:4",
+  "imageUrl": "https://kw-vfx-src.pages.dev/hero_sniper_stance_idle_v3_20261013_ff.png",
+  "promptFile": "attack-prompt.txt",
+  "status": "completed",
+  "sourceTool": "美术/tools/art_video_gen.py",
+  "video": "source.mp4"
+}

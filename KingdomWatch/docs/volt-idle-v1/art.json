@@ -1,0 +1,29 @@
+{
+  "image": "ready-red.png",
+  "transparentImage": "ready-transparent.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "bounds": [
+    93,
+    107,
+    950,
+    1414
+  ],
+  "groundAnchor": [
+    552.5,
+    1414
+  ],
+  "readyHeightPx": 1307,
+  "displayHeight": 146,
+  "backgroundRGB": [
+    251.0,
+    2.0,
+    1.0
+  ],
+  "direction": "rear view, slightly left; purple-robed thunder mage holding the same rigid crystal staff in the ready pose",
+  "imageTool": "built-in imagegen",
+  "prompt": "image-prompt.txt",
+  "approvedStaticMaster": "../volt-combat-rebuild-v1/ready-red.png"
+}

@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-basic-launch-procedural-v3-20261015-013756",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shield-projectile-v2-20261015-012351",
+  "entryVersion": "1791999420",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=basic-launch-procedural-v3-1791999420",
+  "scope": "procedural basic releases, measured status icons and right-anchored shield depletion",
+  "layoutChanged": true,
+  "visualAcceptance": "pending user manual review"
+}

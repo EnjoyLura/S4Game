@@ -1,0 +1,10 @@
+{
+  "status": "rejected",
+  "usableForPackaging": false,
+  "animationAcceptedByUser": false,
+  "taskId": "task_xS9uVQXeUR0N1jZUJFYQW3GgorQMQYk2",
+  "frames": 107,
+  "reason": "Source video contains two baked-in muzzle flashes around frames 9-11 and 45-47; reload does not clearly follow the requested single mechanical cycle.",
+  "requiredAction": "Regenerate the complete source. Do not omit flashes, crop, reverse, relabel or publish the failed take.",
+  "reviewScope": "Local source production annotation; no game, browser, test or online QA."
+}

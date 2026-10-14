@@ -1,0 +1,14 @@
+{
+  "hero": "sniper",
+  "taskId": "task_HrjD0gRZWi1oceFDsHUi3nd0YKbCekNX",
+  "model": "lens-minimax-h3-768p",
+  "secondsRequested": 2,
+  "ratioRequested": "3:4",
+  "imageUrl": "https://b3b43ec2.kw-vfx-src.pages.dev/hero_sniper_idle_full_v4_20261014_ff.png",
+  "promptFile": "idle-prompt-effective.txt",
+  "basePromptFile": "idle-prompt.txt",
+  "idleLoopRequirement": "hero-idle-adjacent-loop-v1",
+  "status": "completed",
+  "sourceTool": "美术/tools/art_video_gen.py",
+  "video": "source.mp4"
+}

@@ -1,0 +1,156 @@
+[
+  {
+    "key": "title_ribbon",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\pause_comic_v1\\title_ribbon.png",
+    "width": 1014,
+    "height": 150,
+    "sourceRect": [
+      120,
+      34,
+      1134,
+      184
+    ],
+    "bytes": 159687,
+    "sha256": "024d0a6633aae5ed4cd273cb23b902366068d3446d2f06839f4f0ab4b6619709"
+  },
+  {
+    "key": "button_gold",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\pause_comic_v1\\button_gold.png",
+    "width": 572,
+    "height": 178,
+    "sourceRect": [
+      43,
+      210,
+      615,
+      388
+    ],
+    "bytes": 99732,
+    "sha256": "dee3354a66aa34540cd6eb732f2da8913282ae5b4d94319ce535865b6e76c183"
+  },
+  {
+    "key": "button_green",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\pause_comic_v1\\button_green.png",
+    "width": 571,
+    "height": 175,
+    "sourceRect": [
+      640,
+      211,
+      1211,
+      386
+    ],
+    "bytes": 99373,
+    "sha256": "a07a73ac6d62597bea1154790e2b37a7e00fa37c174ee78d6ac5a15547ee6585"
+  },
+  {
+    "key": "tab_neutral",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\pause_comic_v1\\tab_neutral.png",
+    "width": 1178,
+    "height": 121,
+    "sourceRect": [
+      38,
+      427,
+      1216,
+      548
+    ],
+    "bytes": 127671,
+    "sha256": "003b076b2d16a1a512f281612e2dc0a95b2998220cb184ee6f3525660c1f19c1"
+  },
+  {
+    "key": "tab_gold",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\pause_comic_v1\\tab_gold.png",
+    "width": 1180,
+    "height": 124,
+    "sourceRect": [
+      37,
+      585,
+      1217,
+      709
+    ],
+    "bytes": 121892,
+    "sha256": "cedb0bde52913df22b03dfd4cf685163c91c8eb05a1eb532959003858398dc5c"
+  },
+  {
+    "key": "settings_row",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\pause_comic_v1\\settings_row.png",
+    "width": 1172,
+    "height": 120,
+    "sourceRect": [
+      41,
+      743,
+      1213,
+      863
+    ],
+    "bytes": 127972,
+    "sha256": "e350584ba9cd350a935fede064e4a523d5cbed9f71f260e8f49482e759b08b99"
+  },
+  {
+    "key": "switch_on",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\pause_comic_v1\\switch_on.png",
+    "width": 318,
+    "height": 133,
+    "sourceRect": [
+      116,
+      889,
+      434,
+      1022
+    ],
+    "bytes": 54112,
+    "sha256": "7c9fe436f5cadc4e1b72ea936398d91176c0f342b72f8f5f3981c5f4e1c9ae61"
+  },
+  {
+    "key": "switch_off",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\pause_comic_v1\\switch_off.png",
+    "width": 314,
+    "height": 132,
+    "sourceRect": [
+      474,
+      890,
+      788,
+      1022
+    ],
+    "bytes": 54461,
+    "sha256": "d8ebee3ff781aa0e37e23354fab148e255403a7d945c540494fcf8caccce2132"
+  },
+  {
+    "key": "switch_disabled",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\pause_comic_v1\\switch_disabled.png",
+    "width": 314,
+    "height": 133,
+    "sourceRect": [
+      824,
+      889,
+      1138,
+      1022
+    ],
+    "bytes": 50977,
+    "sha256": "19af25d95c42edcaabfefd7efcb6402b677c672fd5bf0a2301a6bde47da6e18e"
+  },
+  {
+    "key": "reward_socket",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\pause_comic_v1\\reward_socket.png",
+    "width": 207,
+    "height": 208,
+    "sourceRect": [
+      314,
+      1029,
+      521,
+      1237
+    ],
+    "bytes": 63150,
+    "sha256": "20d6652f1bbb1db0bb8d7741d3497d6ba68a66f190383b954c544037fcf391ea"
+  },
+  {
+    "key": "button_muted",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\pause_comic_v1\\button_muted.png",
+    "width": 384,
+    "height": 122,
+    "sourceRect": [
+      587,
+      1076,
+      971,
+      1198
+    ],
+    "bytes": 49403,
+    "sha256": "13679217176c4abd09b92ab6e16df99ee903a85b029d253eb4a4a8d4d36ba455"
+  }
+]

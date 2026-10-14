@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-14",
+  "status": "prompt_prepared_only",
+  "paidTaskSubmitted": false,
+  "hero": "volt",
+  "model": "lens-minimax-h3-768p",
+  "resolution": "768p",
+  "secondsRequested": 2,
+  "aspectRatio": "9:16",
+  "inputImage": "video-first-frame.png",
+  "inputBasis": "Previously confirmed mage stance and current accepted idle first frame",
+  "promptEnglish": "attack-prompt-768p-v3.txt",
+  "promptChinese": "attack-prompt-768p-v3.zh.txt",
+  "endFrameReferenceIfSupported": "same as inputImage; do not assume server supports an enforced end frame",
+  "effectsBakedIntoCharacter": false,
+  "returnToStartingPoseRequired": true,
+  "fullSourceRequired": true,
+  "reversePlayback": false,
+  "sniperCompletedByUser": true,
+  "retained": {
+    "sniperIdle": "sniper_idle_natural_v2",
+    "sniperAttack": "sniper_attack_clean_v1",
+    "voltIdle": "volt_idle_natural_v1",
+    "archer": "unchanged"
+  }
+}

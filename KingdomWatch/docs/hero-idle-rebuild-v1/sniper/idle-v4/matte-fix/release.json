@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "revision": "v4-alpha1-loop1",
+  "status": "published; awaiting user visual review",
+  "preview": "https://kingdom-watch.pages.dev/previews/sniper-idle-rebuild-v1/?v=1791866900",
+  "deployment": "https://0cf3fb9b.kingdom-watch.pages.dev",
+  "generator": "美术/tools/art_video_gen.py",
+  "model": "lens-minimax-h3-768p",
+  "taskId": "task_SaPsplaFBm5cimEn5E75SnpG2u6QFJFQ",
+  "newGenerationSubmitted": false,
+  "secondsRequested": 2,
+  "rawVideo": "source.mp4",
+  "rawBytes": 1003978,
+  "source": {
+    "seconds": 2.33,
+    "size": [
+      768,
+      1344
+    ],
+    "fps": 24,
+    "frameCount": 56,
+    "unchanged": true
+  },
+  "matte": {
+    "revision": "v4-alpha1",
+    "config": "matte-fix/apertures.json",
+    "processing": "matte-fix/processing.json",
+    "method": "Supplement external-background keying with tracked seeds in the two crossbow apertures; enclosed negative spaces are removed even when bow strings disconnect them from the external background. Character RGB and positions are not replaced."
+  },
+  "sequence": {
+    "resource": "assets/resources/ux/sniper_idle_rebuild_v4",
+    "uniqueFrames": 56,
+    "timelineFrames": 110,
+    "seconds": 4,
+    "loopMethod": "Adjacent forward/backward source frames; cosine-eased frame durations; loop seam transitions from source frame 1 to source frame 0",
+    "variableFrameDurations": true,
+    "timingField": "animation.frameDurations",
+    "cellSize": [
+      384,
+      576
+    ],
+    "atlas": [
+      3072,
+      4032
+    ],
+    "bytes": 8449382,
+    "fixedFootPivot": true,
+    "fixedScale": true,
+    "allSourceFramesRetained": true
+  },
+  "previewFiles": {
+    "atlas": "idle-v4-alpha1.png",
+    "manifest": "idle-v4-alpha1.frames.json",
+    "cache": "Fresh names for corrected frames; original source video retained"
+  },
+  "previousRelease": "matte-fix/before/release.json",
+  "archer": "Display height 221 and original image, idle and attack retained",
+  "build": "Cocos Creator 3.8.8 web-mobile completed with success exit code 36",
+  "dprPatch": "Applied; entry cache-bust 1791866900",
+  "publish": "Wrangler Pages main completed, exit code 0; 9 files uploaded, 907 cached",
+  "scope": "Independent sniper material preview; game sniper animation not replaced",
+  "review": "Original assets inspected for matte diagnosis. User manual effect acceptance; no game/browser/online verification or automated visual tests."
+}

@@ -1,0 +1,723 @@
+{
+  "ok": true,
+  "url": "http://127.0.0.1:8765/",
+  "checks": [
+    {
+      "phoneLayout": {
+        "viewport": [
+          750,
+          1625.581395348837
+        ],
+        "resource": {
+          "w": 218,
+          "h": 56,
+          "left": -105,
+          "right": 113,
+          "top": 92,
+          "bottom": 148
+        },
+        "title": {
+          "w": 620,
+          "h": 44,
+          "left": -310,
+          "right": 310,
+          "top": 190,
+          "bottom": 234
+        },
+        "difficulty": {
+          "w": 686,
+          "h": 62,
+          "left": -343,
+          "right": 343,
+          "top": 240,
+          "bottom": 302
+        },
+        "stage": {
+          "w": 750,
+          "h": 503.5813953488371,
+          "left": -375,
+          "right": 375,
+          "top": 314,
+          "bottom": 817.5813953488371
+        },
+        "selectors": {
+          "w": 704,
+          "h": 80,
+          "left": -352,
+          "right": 352,
+          "top": 829.5813953488371,
+          "bottom": 909.5813953488371
+        },
+        "rewards": {
+          "w": 718,
+          "h": 420,
+          "left": -359,
+          "right": 359,
+          "top": 949.5813953488371,
+          "bottom": 1369.581395348837
+        },
+        "battle": {
+          "w": 490,
+          "h": 94,
+          "left": -336,
+          "right": 154,
+          "top": 1383.581395348837,
+          "bottom": 1477.581395348837
+        },
+        "squad": {
+          "w": 156,
+          "h": 94,
+          "left": 175,
+          "right": 331,
+          "top": 1383.581395348837,
+          "bottom": 1477.581395348837
+        },
+        "nav": {
+          "w": 138,
+          "h": 104,
+          "left": -69,
+          "right": 69,
+          "top": 1509.581395348837,
+          "bottom": 1613.581395348837
+        },
+        "upper": {
+          "w": 750,
+          "h": 949.5813953488371,
+          "left": -375,
+          "right": 375,
+          "top": 0,
+          "bottom": 949.5813953488371
+        },
+        "paper": true,
+        "noOldArt": true,
+        "terrainLoaded": true,
+        "terrainAspect": 0.75,
+        "sourceAspect": 0.75,
+        "coverMask": true,
+        "tiers": [
+          {
+            "tier": {
+              "w": 210,
+              "h": 340,
+              "left": -327,
+              "right": -117,
+              "top": 1015.5813953488371,
+              "bottom": 1355.581395348837
+            },
+            "condition": {
+              "w": 208,
+              "h": 28,
+              "left": -326,
+              "right": -118,
+              "top": 1023.5813953488371,
+              "bottom": 1051.581395348837
+            },
+            "chest": {
+              "w": 126,
+              "h": 126,
+              "left": -285,
+              "right": -159,
+              "top": 1085.1813953488372,
+              "bottom": 1211.1813953488372
+            },
+            "amount": {
+              "w": 82,
+              "h": 30,
+              "left": -246,
+              "right": -164,
+              "top": 1221.1813953488372,
+              "bottom": 1251.1813953488372
+            },
+            "status": {
+              "w": 184,
+              "h": 44,
+              "left": -314,
+              "right": -130,
+              "top": 1303.581395348837,
+              "bottom": 1347.581395348837
+            }
+          },
+          {
+            "tier": {
+              "w": 210,
+              "h": 340,
+              "left": -105,
+              "right": 105,
+              "top": 1015.5813953488371,
+              "bottom": 1355.581395348837
+            },
+            "condition": {
+              "w": 208,
+              "h": 28,
+              "left": -104,
+              "right": 104,
+              "top": 1023.5813953488371,
+              "bottom": 1051.581395348837
+            },
+            "chest": {
+              "w": 126,
+              "h": 126,
+              "left": -63,
+              "right": 63,
+              "top": 1085.1813953488372,
+              "bottom": 1211.1813953488372
+            },
+            "amount": {
+              "w": 82,
+              "h": 30,
+              "left": -24,
+              "right": 58,
+              "top": 1221.1813953488372,
+              "bottom": 1251.1813953488372
+            },
+            "status": {
+              "w": 184,
+              "h": 44,
+              "left": -92,
+              "right": 92,
+              "top": 1303.581395348837,
+              "bottom": 1347.581395348837
+            }
+          },
+          {
+            "tier": {
+              "w": 210,
+              "h": 340,
+              "left": 117,
+              "right": 327,
+              "top": 1015.5813953488371,
+              "bottom": 1355.581395348837
+            },
+            "condition": {
+              "w": 208,
+              "h": 28,
+              "left": 118,
+              "right": 326,
+              "top": 1023.5813953488371,
+              "bottom": 1051.581395348837
+            },
+            "chest": {
+              "w": 126,
+              "h": 126,
+              "left": 159,
+              "right": 285,
+              "top": 1085.1813953488372,
+              "bottom": 1211.1813953488372
+            },
+            "amount": {
+              "w": 82,
+              "h": 30,
+              "left": 198,
+              "right": 280,
+              "top": 1221.1813953488372,
+              "bottom": 1251.1813953488372
+            },
+            "status": {
+              "w": 184,
+              "h": 44,
+              "left": 130,
+              "right": 314,
+              "top": 1303.581395348837,
+              "bottom": 1347.581395348837
+            }
+          }
+        ],
+        "arrowsRemoved": true
+      }
+    },
+    {
+      "route": "real touch swipe, inertia, masked later stops, no accidental selection, offset retained across difficulty and squad refresh; 1-4/1-5 unavailable"
+    },
+    {
+      "difficulty": "normal, elite and hell use independent stars"
+    },
+    {
+      "selection": "three continuous outdoor scenes; locked-difficulty fallback; map arrows removed"
+    },
+    {
+      "formationArt": {
+        "cards": 5,
+        "withinPanel": true,
+        "largeCards": true,
+        "portraitMasks": true
+      }
+    },
+    {
+      "deploy": "ordered slots, four-hero limit guarded"
+    },
+    {
+      "remove": "cancel preserves squad; confirm removes and closes; new hero appends"
+    },
+    {
+      "start": {
+        "mode": "battle",
+        "levelId": "1-3",
+        "diff": 1
+      },
+      "squadSaved": true,
+      "walletReused": true,
+      "battleWasIntercepted": true
+    },
+    {
+      "rewards": "200 gold and 210 diamonds, once only; incomplete difficulty cannot claim"
+    },
+    {
+      "guards": "locked difficulty, locked level and battle disabled; existing deploy ownership behavior preserved"
+    },
+    {
+      "emptySquad": "start guarded and four empty slots readable"
+    },
+    {
+      "smallPhone": {
+        "viewport": [
+          750,
+          1334
+        ],
+        "resource": {
+          "w": 218,
+          "h": 56,
+          "left": -105,
+          "right": 113,
+          "top": 92,
+          "bottom": 148
+        },
+        "title": {
+          "w": 620,
+          "h": 44,
+          "left": -310,
+          "right": 310,
+          "top": 190,
+          "bottom": 234
+        },
+        "difficulty": {
+          "w": 686,
+          "h": 62,
+          "left": -343,
+          "right": 343,
+          "top": 240,
+          "bottom": 302
+        },
+        "stage": {
+          "w": 750,
+          "h": 271.81999999999994,
+          "left": -375,
+          "right": 375,
+          "top": 314,
+          "bottom": 585.8199999999999
+        },
+        "selectors": {
+          "w": 704,
+          "h": 80,
+          "left": -352,
+          "right": 352,
+          "top": 597.8199999999999,
+          "bottom": 677.8199999999999
+        },
+        "rewards": {
+          "w": 718,
+          "h": 360.18,
+          "left": -359,
+          "right": 359,
+          "top": 717.8199999999999,
+          "bottom": 1078
+        },
+        "battle": {
+          "w": 490,
+          "h": 94,
+          "left": -336,
+          "right": 154,
+          "top": 1092,
+          "bottom": 1186
+        },
+        "squad": {
+          "w": 156,
+          "h": 94,
+          "left": 175,
+          "right": 331,
+          "top": 1092,
+          "bottom": 1186
+        },
+        "nav": {
+          "w": 138,
+          "h": 104,
+          "left": -69,
+          "right": 69,
+          "top": 1218,
+          "bottom": 1322
+        },
+        "upper": {
+          "w": 750,
+          "h": 717.8199999999999,
+          "left": -375,
+          "right": 375,
+          "top": 0,
+          "bottom": 717.8199999999999
+        },
+        "paper": true,
+        "noOldArt": true,
+        "terrainLoaded": true,
+        "terrainAspect": 0.75,
+        "sourceAspect": 0.75,
+        "coverMask": true,
+        "tiers": [
+          {
+            "tier": {
+              "w": 210,
+              "h": 280.18,
+              "left": -327,
+              "right": -117,
+              "top": 783.8199999999999,
+              "bottom": 1064
+            },
+            "condition": {
+              "w": 208,
+              "h": 28,
+              "left": -326,
+              "right": -118,
+              "top": 791.8199999999999,
+              "bottom": 819.8199999999999
+            },
+            "chest": {
+              "w": 112.072,
+              "h": 112.072,
+              "left": -278.036,
+              "right": -165.964,
+              "top": 837.0542,
+              "bottom": 949.1261999999999
+            },
+            "amount": {
+              "w": 82,
+              "h": 30,
+              "left": -246,
+              "right": -164,
+              "top": 959.1261999999999,
+              "bottom": 989.1261999999999
+            },
+            "status": {
+              "w": 184,
+              "h": 44,
+              "left": -314,
+              "right": -130,
+              "top": 1012,
+              "bottom": 1056
+            }
+          },
+          {
+            "tier": {
+              "w": 210,
+              "h": 280.18,
+              "left": -105,
+              "right": 105,
+              "top": 783.8199999999999,
+              "bottom": 1064
+            },
+            "condition": {
+              "w": 208,
+              "h": 28,
+              "left": -104,
+              "right": 104,
+              "top": 791.8199999999999,
+              "bottom": 819.8199999999999
+            },
+            "chest": {
+              "w": 112.072,
+              "h": 112.072,
+              "left": -56.036,
+              "right": 56.036,
+              "top": 837.0542,
+              "bottom": 949.1261999999999
+            },
+            "amount": {
+              "w": 82,
+              "h": 30,
+              "left": -24,
+              "right": 58,
+              "top": 959.1261999999999,
+              "bottom": 989.1261999999999
+            },
+            "status": {
+              "w": 184,
+              "h": 44,
+              "left": -92,
+              "right": 92,
+              "top": 1012,
+              "bottom": 1056
+            }
+          },
+          {
+            "tier": {
+              "w": 210,
+              "h": 280.18,
+              "left": 117,
+              "right": 327,
+              "top": 783.8199999999999,
+              "bottom": 1064
+            },
+            "condition": {
+              "w": 208,
+              "h": 28,
+              "left": 118,
+              "right": 326,
+              "top": 791.8199999999999,
+              "bottom": 819.8199999999999
+            },
+            "chest": {
+              "w": 112.072,
+              "h": 112.072,
+              "left": 165.964,
+              "right": 278.036,
+              "top": 837.0542,
+              "bottom": 949.1261999999999
+            },
+            "amount": {
+              "w": 82,
+              "h": 30,
+              "left": 198,
+              "right": 280,
+              "top": 959.1261999999999,
+              "bottom": 989.1261999999999
+            },
+            "status": {
+              "w": 184,
+              "h": 44,
+              "left": 130,
+              "right": 314,
+              "top": 1012,
+              "bottom": 1056
+            }
+          }
+        ],
+        "arrowsRemoved": true
+      }
+    },
+    {
+      "tabRoundTrip": "shop → hero → levels, shared wallet/nav retained"
+    },
+    {
+      "reducedBrowserHeight": {
+        "viewport": [
+          750,
+          1200
+        ],
+        "resource": {
+          "w": 218,
+          "h": 56,
+          "left": -105,
+          "right": 113,
+          "top": 92,
+          "bottom": 148
+        },
+        "title": {
+          "w": 620,
+          "h": 44,
+          "left": -310,
+          "right": 310,
+          "top": 190,
+          "bottom": 234
+        },
+        "difficulty": {
+          "w": 686,
+          "h": 62,
+          "left": -343,
+          "right": 343,
+          "top": 240,
+          "bottom": 302
+        },
+        "stage": {
+          "w": 750,
+          "h": 174,
+          "left": -375,
+          "right": 375,
+          "top": 314,
+          "bottom": 488
+        },
+        "selectors": {
+          "w": 704,
+          "h": 80,
+          "left": -352,
+          "right": 352,
+          "top": 500,
+          "bottom": 580
+        },
+        "rewards": {
+          "w": 718,
+          "h": 324,
+          "left": -359,
+          "right": 359,
+          "top": 620,
+          "bottom": 944
+        },
+        "battle": {
+          "w": 490,
+          "h": 94,
+          "left": -336,
+          "right": 154,
+          "top": 958,
+          "bottom": 1052
+        },
+        "squad": {
+          "w": 156,
+          "h": 94,
+          "left": 175,
+          "right": 331,
+          "top": 958,
+          "bottom": 1052
+        },
+        "nav": {
+          "w": 138,
+          "h": 104,
+          "left": -69,
+          "right": 69,
+          "top": 1084,
+          "bottom": 1188
+        },
+        "upper": {
+          "w": 750,
+          "h": 620,
+          "left": -375,
+          "right": 375,
+          "top": 0,
+          "bottom": 620
+        },
+        "paper": true,
+        "noOldArt": true,
+        "terrainLoaded": true,
+        "terrainAspect": 0.75,
+        "sourceAspect": 0.75,
+        "coverMask": true,
+        "tiers": [
+          {
+            "tier": {
+              "w": 210,
+              "h": 244,
+              "left": -327,
+              "right": -117,
+              "top": 686,
+              "bottom": 930
+            },
+            "condition": {
+              "w": 208,
+              "h": 28,
+              "left": -326,
+              "right": -118,
+              "top": 694,
+              "bottom": 722
+            },
+            "chest": {
+              "w": 97.60000000000001,
+              "h": 97.60000000000001,
+              "left": -270.8,
+              "right": -173.2,
+              "top": 732.36,
+              "bottom": 829.9599999999999
+            },
+            "amount": {
+              "w": 82,
+              "h": 30,
+              "left": -246,
+              "right": -164,
+              "top": 839.96,
+              "bottom": 869.96
+            },
+            "status": {
+              "w": 184,
+              "h": 44,
+              "left": -314,
+              "right": -130,
+              "top": 878,
+              "bottom": 922
+            }
+          },
+          {
+            "tier": {
+              "w": 210,
+              "h": 244,
+              "left": -105,
+              "right": 105,
+              "top": 686,
+              "bottom": 930
+            },
+            "condition": {
+              "w": 208,
+              "h": 28,
+              "left": -104,
+              "right": 104,
+              "top": 694,
+              "bottom": 722
+            },
+            "chest": {
+              "w": 97.60000000000001,
+              "h": 97.60000000000001,
+              "left": -48.800000000000004,
+              "right": 48.800000000000004,
+              "top": 732.36,
+              "bottom": 829.9599999999999
+            },
+            "amount": {
+              "w": 82,
+              "h": 30,
+              "left": -24,
+              "right": 58,
+              "top": 839.96,
+              "bottom": 869.96
+            },
+            "status": {
+              "w": 184,
+              "h": 44,
+              "left": -92,
+              "right": 92,
+              "top": 878,
+              "bottom": 922
+            }
+          },
+          {
+            "tier": {
+              "w": 210,
+              "h": 244,
+              "left": 117,
+              "right": 327,
+              "top": 686,
+              "bottom": 930
+            },
+            "condition": {
+              "w": 208,
+              "h": 28,
+              "left": 118,
+              "right": 326,
+              "top": 694,
+              "bottom": 722
+            },
+            "chest": {
+              "w": 97.60000000000001,
+              "h": 97.60000000000001,
+              "left": 173.2,
+              "right": 270.8,
+              "top": 732.36,
+              "bottom": 829.9599999999999
+            },
+            "amount": {
+              "w": 82,
+              "h": 30,
+              "left": 198,
+              "right": 280,
+              "top": 839.96,
+              "bottom": 869.96
+            },
+            "status": {
+              "w": 184,
+              "h": 44,
+              "left": 130,
+              "right": 314,
+              "top": 878,
+              "bottom": 922
+            }
+          }
+        ],
+        "arrowsRemoved": true
+      }
+    }
+  ],
+  "errors": [],
+  "failures": [],
+  "screenshots": 18
+}

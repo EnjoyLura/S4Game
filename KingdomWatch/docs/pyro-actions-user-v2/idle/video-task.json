@@ -1,0 +1,20 @@
+{
+  "taskId": "task_JJhDtVBxeaehD29ZATmoltZEiq0RjO4l",
+  "model": "lens-minimax-h3-768p",
+  "resolution": "768p",
+  "secondsRequested": 2,
+  "ratio": "16:9",
+  "image": "https://kw-vfx-src.pages.dev/hero_pyro_idle_loop_v2_20261015_ff.png",
+  "prompt": "idle-prompt.txt",
+  "date": "2026-10-15T00:45:25.530134+08:00",
+  "firstFrameUnchanged": true,
+  "images": [
+    "https://kw-vfx-src.pages.dev/hero_pyro_idle_loop_v2_20261015_ff.png",
+    "https://kw-vfx-src.pages.dev/hero_pyro_idle_loop_v2_20261015_ff.png"
+  ],
+  "identicalStartEndReferencesRequested": true,
+  "providerEnforcesLastFrame": null,
+  "closureRequired": true,
+  "reversePlaybackAllowed": false,
+  "userVisualAccepted": false
+}

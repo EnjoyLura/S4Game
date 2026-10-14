@@ -1,0 +1,34 @@
+{
+  "tool": "image_gen.imagegen",
+  "style": "清爽漫画奇幻",
+  "jobs": [
+    {
+      "key": "comic_victory_v1",
+      "prompt": "Use case: stylized-concept. Asset type: ONE isolated production emblem for a clean comic fantasy mobile game's battle dialog, genuine transparent background. Input 1 is STYLE ONLY: crisp espresso contour, chunky readable silhouette, 2-3 hard cel-shaded value planes, warm ivory highlights, simple purposeful shapes like the approved shop item illustrations. Input 2 is SHIELD IDENTITY and icon simplicity reference only. Centered fully visible subject taking about 76% of a square canvas; generous clear alpha margin all around. Readable at 80 pixels. No text, no letters, numbers or word banners. Avoid airbrush, photoreal texture, plastic rendering, glitter, tiny engraved detail, jewelry, filigree, sparks, glow, bloom, cinematic lighting, cast shadows, ground or opaque background. Outside silhouette truly alpha zero. Subject: a celebratory royal VICTORY emblem: one broad cobalt blue shield with a simple brass gold rim and a single cream diamond in its center; two short crossed silver swords behind the shield, yellow ochre hilts visible at bottom; two compact green laurel branches curve up left and right with only 4-5 large leaf shapes each. Balanced symmetric compact composition, no wide horizontal wings, no circular medallion frame. The shield is largest, laurels secondary, swords restrained. Happy confident practical cartoon game UI illustration.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/levels_comic_v1/comic_difficulty_shield_v1.png"
+      ],
+      "transparent_background": true
+    },
+    {
+      "key": "comic_defeat_v1",
+      "prompt": "Use case: stylized-concept. Asset type: ONE isolated production emblem for a clean comic fantasy mobile game's battle dialog, genuine transparent background. Input 1 is STYLE ONLY: crisp espresso contour, chunky readable silhouette, 2-3 hard cel-shaded value planes, warm ivory highlights, simple purposeful shapes like the approved shop item illustrations. Input 2 is SHIELD IDENTITY and icon simplicity reference only. Centered fully visible subject taking about 76% of a square canvas; generous clear alpha margin all around. Readable at 80 pixels. No text, no letters, numbers or word banners. Avoid airbrush, photoreal texture, plastic rendering, glitter, tiny engraved detail, jewelry, filigree, sparks, glow, bloom, cinematic lighting, cast shadows, ground or opaque background. Outside silhouette truly alpha zero. Subject: a dignified DEFEAT emblem: one broad weathered charcoal-blue steel shield with a thick muted brass rim, a single clear diagonal zigzag crack across the center revealing a dark interior. One short broken sword angled behind the shield, with a triangular missing tip and ochre hilt visible below. A tiny folded rust red cloth strip is tied to the sword hilt, attached and static. Shield intact around its outside, crack readable, no flying fragments or particles. No skull, grave, bones, gore, characters or extra props. Compact balanced front three-quarter icon, restrained navy/gray with warm ochre and rusty red accents, not realistic decay.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/docs/shop-comic-v1/style-reference.png",
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/levels_comic_v1/comic_difficulty_shield_v1.png"
+      ],
+      "transparent_background": true
+    }
+  ],
+  "sources": [
+    {
+      "key": "comic_victory_v1",
+      "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-e38d8c30-74c5-45ef-b8f0-ee49ef6f5643.png"
+    },
+    {
+      "key": "comic_defeat_v1",
+      "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-20e1fc24-9180-47ce-8e57-3d211a23a47e.png"
+    }
+  ]
+}

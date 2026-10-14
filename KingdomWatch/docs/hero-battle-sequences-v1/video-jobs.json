@@ -1,0 +1,82 @@
+[
+  {
+    "hero": "archer",
+    "mode": "idle",
+    "pid": 24020,
+    "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\archer-idle.mp4",
+    "log": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\archer-idle.log",
+    "err": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\archer-idle.err"
+  },
+  {
+    "hero": "archer",
+    "mode": "attack",
+    "pid": 7036,
+    "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\archer-attack.mp4",
+    "log": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\archer-attack.log",
+    "err": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\archer-attack.err"
+  },
+  {
+    "hero": "sniper",
+    "mode": "idle",
+    "pid": 20012,
+    "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\sniper-idle.mp4",
+    "log": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\sniper-idle.log",
+    "err": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\sniper-idle.err"
+  },
+  {
+    "hero": "sniper",
+    "mode": "attack",
+    "pid": 10092,
+    "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\sniper-attack.mp4",
+    "log": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\sniper-attack.log",
+    "err": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\sniper-attack.err"
+  },
+  {
+    "hero": "pyro",
+    "mode": "idle",
+    "pid": 27812,
+    "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\pyro-idle.mp4",
+    "log": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\pyro-idle.log",
+    "err": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\pyro-idle.err"
+  },
+  {
+    "hero": "pyro",
+    "mode": "attack",
+    "pid": 29200,
+    "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\pyro-attack.mp4",
+    "log": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\pyro-attack.log",
+    "err": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\pyro-attack.err"
+  },
+  {
+    "hero": "volt",
+    "mode": "idle",
+    "pid": 25816,
+    "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\volt-idle.mp4",
+    "log": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\volt-idle.log",
+    "err": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\volt-idle.err"
+  },
+  {
+    "hero": "volt",
+    "mode": "attack",
+    "pid": 27660,
+    "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\volt-attack.mp4",
+    "log": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\volt-attack.log",
+    "err": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\volt-attack.err"
+  },
+  {
+    "hero": "mora",
+    "mode": "idle",
+    "pid": 24352,
+    "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\mora-idle.mp4",
+    "log": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\mora-idle.log",
+    "err": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\mora-idle.err"
+  },
+  {
+    "hero": "mora",
+    "mode": "attack",
+    "pid": 29604,
+    "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\mora-attack.mp4",
+    "log": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\mora-attack.log",
+    "err": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-battle-sequences-v1\\videos\\mora-attack.err"
+  }
+]

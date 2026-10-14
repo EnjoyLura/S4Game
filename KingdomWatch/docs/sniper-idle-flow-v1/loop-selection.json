@@ -1,0 +1,50 @@
+{
+  "method": "pingpong",
+  "range": [
+    0,
+    55
+  ],
+  "reason": "Persistent user requirement: preserve all selected motion frames and close through adjacent originals",
+  "scope": "Structural production constraint; not visual acceptance",
+  "contract": {
+    "id": "hero-idle-adjacent-loop-v2",
+    "strategy": "All original complete frames forward and backward with lightly eased turns, no endpoint hold",
+    "noArtificialHold": true,
+    "maximumTurnDurationRatio": 1.1,
+    "allTransitionsAdjacentIncludingWrap": true,
+    "wrapFrames": [
+      1,
+      0
+    ],
+    "noEndToStartCut": true,
+    "noOpacityCrossfade": true,
+    "acceptance": "Structural production constraint only; final effect review by user"
+  },
+  "timingRevision": {
+    "origin": "../sniper-idle-full-v6",
+    "sourceVideoNewlyGenerated": false,
+    "allCurrentFramesRetained": true,
+    "atlasPixelsRetained": true,
+    "atlasFileSha256": "a41ebdb7b12840bf6fdc0df3b3e2d5926e93b7f04d565f0c49ba46c5bb4a545b",
+    "previousMaximumFrameSeconds": 0.2496489311905136,
+    "maximumFrameSeconds": 0.06137108584978039,
+    "normalFrameSeconds": 0.055791896227073076,
+    "seconds": 6.15384615384616,
+    "loopClosure": {
+      "id": "hero-idle-adjacent-loop-v2",
+      "strategy": "All original complete frames forward and backward with lightly eased turns, no endpoint hold",
+      "noArtificialHold": true,
+      "maximumTurnDurationRatio": 1.1,
+      "allTransitionsAdjacentIncludingWrap": true,
+      "wrapFrames": [
+        1,
+        0
+      ],
+      "noEndToStartCut": true,
+      "noOpacityCrossfade": true,
+      "acceptance": "Structural production constraint only; final effect review by user"
+    },
+    "review": "Timing production only; user manual review; no tests, game, browser or online QA"
+  },
+  "sourceVideoNewlyGenerated": false
+}

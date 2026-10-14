@@ -1,0 +1,128 @@
+{
+  "dateUTC": "2026-10-11T11:40:49.434400+00:00",
+  "status": "published",
+  "url": "https://kingdom-watch.pages.dev/?v=base-comic-1791718629",
+  "deployment": "https://e686f968.kingdom-watch.pages.dev",
+  "typeCheck": "passed",
+  "creatorBuild": "passed: 3.8.8 web-mobile",
+  "dprPatch": "passed",
+  "newArt": 2,
+  "realBattleStarted": false,
+  "checks": {
+    "ui-validation": {
+      "ok": true,
+      "url": "http://127.0.0.1:8765/",
+      "realBattleStarted": false,
+      "checks": [
+        {
+          "keep": "confirmation before charge, Lv.2→3, +100 durability / +200 shield",
+          "goldCost": 1520
+        },
+        {
+          "codex": "one-time +20 diamonds, updated wallet/count/list, claimed guard, detail returns to one list"
+        },
+        {
+          "discoveredMonsters": "all six actual battle sprites, list scroll remembers position; workshop remains locked"
+        },
+        {
+          "sharedNavigation": "shop, heroes, levels and upgrade return to base without old art"
+        },
+        {
+          "guard": "poor"
+        },
+        {
+          "guard": "max"
+        },
+        {
+          "guard": "partial"
+        },
+        {
+          "guard": "empty"
+        },
+        {
+          "guard": "claimed"
+        },
+        {
+          "phone": [
+            375,
+            667
+          ],
+          "scroll": "touch drag cancels building/card click, remembered offset, scene and targets align, fixed construction above nav"
+        },
+        {
+          "phone": [
+            375,
+            600
+          ],
+          "scroll": "touch drag cancels building/card click, remembered offset, scene and targets align, fixed construction above nav"
+        }
+      ],
+      "errors": [],
+      "failures": []
+    },
+    "online-validation": {
+      "ok": true,
+      "url": "https://kingdom-watch.pages.dev/?v=base-comic-1791718629",
+      "realBattleStarted": false,
+      "checks": [
+        {
+          "keep": "confirmation before charge, Lv.2→3, +100 durability / +200 shield",
+          "goldCost": 1520
+        },
+        {
+          "codex": "one-time +20 diamonds, updated wallet/count/list, claimed guard, detail returns to one list"
+        },
+        {
+          "discoveredMonsters": "all six actual battle sprites, list scroll remembers position; workshop remains locked"
+        },
+        {
+          "phone": [
+            375,
+            600
+          ],
+          "scroll": "touch drag cancels building/card click, remembered offset, scene and targets align, fixed construction above nav"
+        }
+      ],
+      "errors": [],
+      "failures": []
+    }
+  },
+  "onlineFiles": {
+    "index.html": {
+      "matchesLocal": true,
+      "bytes": 5043,
+      "sha256": "2a5998b43255b1099ba0680b55d2cdcb4707a76a6498778e9d5cb8432fc82485",
+      "path": "index.html"
+    },
+    "main.js": {
+      "matchesLocal": true,
+      "bytes": 796374,
+      "sha256": "bd690b4ad3d278b0b8b3e2aadbe4751c978c9567151b8f5b23c443ec90f526d6",
+      "path": "assets/main/index.js"
+    },
+    "resources-config.json": {
+      "matchesLocal": true,
+      "bytes": 171179,
+      "sha256": "7971a4fee7b1553e32377267d61c2c0c2143db81a572dc609417dd47a6715dae",
+      "path": "assets/resources/config.json"
+    },
+    "dpr-engine.js": {
+      "matchesLocal": true,
+      "bytes": 5686956,
+      "sha256": "eeeef70cc6cd8bccc4493d60bbc85cddd4f6d0de383c4e8a3b4d48b64323488d",
+      "path": "cocos-js/_virtual_cc-y8x7t64p.js"
+    },
+    "bg_base_comic_v1": {
+      "matchesLocal": true,
+      "bytes": 579696,
+      "sha256": "85353d78f4673033e3b4e07d9cac6a239002f19e5e0d8db928a059d9ec34308b",
+      "path": "assets/resources/native/5e/5efc3bd3-967b-4372-be56-ae55868024ca.jpg"
+    },
+    "comic_keep_heart_v1": {
+      "matchesLocal": true,
+      "bytes": 44853,
+      "sha256": "01f1c4941a40116b4b1844930d31d331a15dd184096cb10a0b94ba0ebc95f8f4",
+      "path": "assets/resources/native/33/336749c7-e8cc-4249-aaa3-f3caf4ccd2e5.png"
+    }
+  }
+}

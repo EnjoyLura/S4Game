@@ -1,0 +1,44 @@
+{
+  "state": {
+    "heroCount": 5,
+    "atlases": [
+      [
+        2048,
+        1536
+      ],
+      [
+        2048,
+        1536
+      ],
+      [
+        2048,
+        1536
+      ],
+      [
+        2048,
+        1536
+      ],
+      [
+        2048,
+        1536
+      ]
+    ],
+    "mode": "attack",
+    "playing": false,
+    "manual": 12,
+    "readout": "12"
+  },
+  "errors": [],
+  "stepping": true,
+  "viewports": [
+    [
+      1240,
+      980
+    ],
+    [
+      390,
+      844
+    ]
+  ],
+  "realBattleStarted": false
+}

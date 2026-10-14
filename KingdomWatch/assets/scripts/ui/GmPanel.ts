@@ -5,7 +5,7 @@
  */
 import { game, Node, view } from 'cc';
 import { expNeed, LO, PAL } from '../config/GameConfig';
-import { M0_POOL, RARITY_COLOR } from '../config/Cards';
+import { canTakeCard, M0_POOL, RARITY_COLOR } from '../config/Cards';
 import { loadSave, saveSave } from '../core/SaveData';
 import { BattleDirector } from '../battle/BattleDirector';
 import { btn, CA, dimLayer, gpanel, label, N, WX, WY } from './UIKit';
@@ -203,7 +203,7 @@ export class GmPanel {
       d.gmUltFull = v;
       const s = loadSave(); s.gmUltFull = v; saveSave();
       // 开关即时见效：开启立即充满，关闭立即清空（击杀回能照常，属游戏机制）
-      for (const h of d.heroes) h.charge = v ? h.chargeMax : 0;
+      for (const h of d.heroes) h.charge = v && h.ultUnlocked ? h.chargeGoal : 0;
       d.hud.sync();
     });
     this.ry -= 80;
@@ -231,10 +231,11 @@ export class GmPanel {
   private cardCell(B: Node, x: number, y: number, def: (typeof M0_POOL)[number]): void {
     const cell = gpanel(B, x, y, 320, 68, CA('#232B36', 0.95), RARITY_COLOR[def.rarity], 2, 10);
     const n = this.dir.stacks[def.id] || 0;
+    const eligible = (def.owner === 'global' || this.dir.heroes.some(h => h.id === def.owner)) && canTakeCard(def, this.dir.stacks);
     label(cell, -94, 0, def.name, { size: 19, color: PAL.parch, w: 132, align: 'left' });
     label(cell, 8, 0, `${n}/${def.maxStacks}`, { size: 16, color: n > 0 ? PAL.gold : '#8A93A0', w: 60 });
-    btn(cell, 74, 0, 52, 52, '+1', CA(PAL.parch, 0.92), () => { this.dir.gmLearnCard(def.id, 1); this.refresh(); }, 20);
-    btn(cell, 130, 0, 52, 52, '+5', CA(PAL.parch, 0.92), () => { this.dir.gmLearnCard(def.id, 5); this.refresh(); }, 20);
+    btn(cell, 74, 0, 52, 52, '+1', CA(eligible ? PAL.parch : '#5A6472', 0.92), () => { this.dir.gmLearnCard(def.id, 1); this.refresh(); }, 20);
+    btn(cell, 130, 0, 52, 52, '+5', CA(eligible ? PAL.parch : '#5A6472', 0.92), () => { this.dir.gmLearnCard(def.id, 5); this.refresh(); }, 20);
   }
 
   /* ---------- 经济 ---------- */

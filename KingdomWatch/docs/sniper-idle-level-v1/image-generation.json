@@ -1,0 +1,11 @@
+{
+  "tool": "built-in imagegen",
+  "image": "ready-red.png",
+  "generatedSource": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-0da87583-9d39-47c8-8357-9f1b11c445c0.png",
+  "reference": "docs/sniper-combat-rebuild-v2/sniper-ready-red.png",
+  "prompt": "image-prompt.txt",
+  "transparent_background": false,
+  "requestedChange": "Crossbow held horizontally at shoulder height; opaque red field retained",
+  "videoFirstFrame": "https://kw-vfx-src.pages.dev/hero_sniper_level_idle_20261013_ff.png",
+  "firstFrameDeployment": "https://5792e685.kw-vfx-src.pages.dev"
+}

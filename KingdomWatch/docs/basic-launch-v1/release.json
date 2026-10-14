@@ -1,0 +1,73 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-basic-launch-v1-20261015-010724",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-pick-comic-v1-20261015-005156",
+  "entryVersion": "1791997605",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=basic-launch-v1-1791997605",
+  "scope": "five hero basic projectile releases: bow/crossbow wind pressure, fire jet, violet lightning and frost crystals",
+  "layoutChanged": false,
+  "visualAcceptance": "pending user manual review",
+  "status": "published",
+  "renderer": "BasicAttackLaunchVFX; original native Graphics geometry, no AI generation",
+  "styles": {
+    "archer": {
+      "element": "white/mint wind pressure",
+      "seconds": 0.18
+    },
+    "sniper": {
+      "element": "white/blue wind pressure, 1.28x scale",
+      "seconds": 0.22
+    },
+    "pyro": {
+      "element": "orange/red flame jet, pale yellow core and embers",
+      "seconds": 0.24
+    },
+    "volt": {
+      "element": "violet branched lightning with pale core",
+      "seconds": 0.18
+    },
+    "mora": {
+      "element": "ice-blue frosty air and small faceted crystals",
+      "seconds": 0.25
+    }
+  },
+  "direction": "Normalized actual projectile direction; same world origin as the spawned basic projectile",
+  "triggers": "Archer once per actual basic row including serial and empowered arrows; other four heroes once in shoot",
+  "fanEffectDuplicatedPerArrow": false,
+  "source": "User references for launch style, no copied game assets",
+  "clock": "ImpactFX.tick battle simulation dt; pause, pick, settlement and speed handled by existing battle clock",
+  "poolCapacity": 36,
+  "newNodesPerShot": 0,
+  "newTweensPerShot": 0,
+  "graphicsNodes": 1,
+  "retained": [
+    "all hero imagery and idle/attack atlases",
+    "projectile bodies and flight trails",
+    "basic attack speed and damage",
+    "projectile speed, collision and hit callbacks",
+    "skills, ultimates, sounds and UI"
+  ],
+  "paidImageTasks": 0,
+  "paidVideoTasks": 0,
+  "gameplayTestsRun": false,
+  "browserValidationRun": false,
+  "onlineValidationRun": false,
+  "userVisualAccepted": false,
+  "deployment": "https://4a0cfb2f.kingdom-watch.pages.dev",
+  "date": "2026-10-15T01:08:26.472007+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-basic-launch-v1-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-basic-launch-v1-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "five hero basic projectile releases: bow/crossbow wind pressure, fire jet, violet lightning and frost crystals",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 8193,
+  "deploymentSucceeded": true,
+  "uploadedFiles": 2,
+  "cachedFiles": 1680
+}

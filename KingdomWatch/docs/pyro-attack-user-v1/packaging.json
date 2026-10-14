@@ -1,0 +1,30 @@
+{
+  "hero": "pyro",
+  "resource": "pyro_attack_user_v1",
+  "frames": 56,
+  "sourceFrames": 56,
+  "seconds": 2.333333333333333,
+  "fps": 24.0,
+  "atlas": [
+    4096,
+    3584
+  ],
+  "atlasBytes": 8844100,
+  "paintedHeight": 468.0,
+  "displayHeight": 146,
+  "groundAnchor": [
+    256,
+    496
+  ],
+  "allSourceFramesRetained": true,
+  "reversePlayback": false,
+  "gameIntegrated": true,
+  "previewOnly": false,
+  "userVisualAccepted": false,
+  "paidTaskSubmitted": false,
+  "idleVideoReceived": true,
+  "readyReference": "Static first attack frame, explicitly not an idle animation",
+  "review": "Source material production only; user reviews effects; no tests, gameplay, browser or online QA",
+  "pairedIdleResource": "pyro_idle_user_v1",
+  "gameVisualAcceptedByUser": false
+}

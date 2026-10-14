@@ -1,0 +1,6 @@
+{
+  "accepted": false,
+  "reason": "User rejected the attack: missing readable aim/fire/recock/return or foot plant/staff extension.",
+  "supersededBy": "volt-attack-choreography-v2",
+  "approvedIdlePreserved": "volt-idle-natural-v1"
+}

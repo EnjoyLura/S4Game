@@ -1,0 +1,30 @@
+127.0.0.1 - - [12/Oct/2026 00:13:26] "GET /review.html HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:26] "GET /battle-composite-preview.gif HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:26] "GET /identity-comparison.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:26] "GET /frames/archer/archer-atlas.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:26] "GET /frames/sniper/sniper-atlas.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:26] "GET /sources/archer-avatar.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:26] "GET /sources/sniper-avatar.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:26] "GET /frames/pyro/pyro-atlas.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:26] "GET /sources/pyro-avatar.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:26] "GET /frames/volt/volt-atlas.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:26] "GET /sources/volt-avatar.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:26] "GET /sources/mora-avatar.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:26] "GET /frames/mora/mora-atlas.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:27] code 404, message File not found
+127.0.0.1 - - [12/Oct/2026 00:13:27] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [12/Oct/2026 00:13:53] "GET /review.html HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:53] "GET /battle-composite-preview.gif HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:53] "GET /identity-comparison.jpg HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:53] "GET /sources/archer-avatar.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:53] "GET /sources/sniper-avatar.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:53] "GET /frames/archer/archer-atlas.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:53] "GET /frames/sniper/sniper-atlas.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:53] "GET /sources/pyro-avatar.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:53] "GET /frames/pyro/pyro-atlas.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:53] "GET /sources/volt-avatar.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:53] "GET /frames/volt/volt-atlas.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:53] "GET /sources/mora-avatar.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:53] "GET /frames/mora/mora-atlas.png HTTP/1.1" 200 -
+127.0.0.1 - - [12/Oct/2026 00:13:53] code 404, message File not found
+127.0.0.1 - - [12/Oct/2026 00:13:53] "GET /favicon.ico HTTP/1.1" 404 -

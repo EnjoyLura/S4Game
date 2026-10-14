@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>弓箭手 · 新战斗基准图</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#17272e;color:#f0f2e7;font:16px system-ui,"Microsoft YaHei",sans-serif}main{max-width:920px;margin:auto;padding:24px 16px 32px}h1{font-size:25px;margin:0 0 10px}p{line-height:1.7;color:#bbcac8;margin:0 0 16px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}figure{margin:0}figcaption{text-align:center;color:#c6d2c6;margin:10px 0}canvas{display:block;width:100%;height:auto;border:1px solid #42544c;border-radius:10px}.controls{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}button,a.action{display:inline-block;border:0;border-radius:7px;padding:11px 17px;background:#bfd794;color:#253125;font-size:16px;font-weight:650;text-decoration:none;cursor:pointer}.label{margin:22px 0 10px;color:#c6d2c6}a{color:#c5dfab}.reference{display:flex;gap:16px;align-items:center;margin-top:24px}.reference img{max-height:250px;max-width:38%;object-fit:contain;background:#334238;border-radius:9px}.reference p{margin:0}
+</style>
+<main><h1>弓箭手 · 新战斗基准图</h1><p>头部进一步朝向正上方，以后脑为主。沿用持弓备战姿态，通过整张图片直接左右镜像切换朝向。</p>
+<div class="pair"><figure><canvas id="left" width="420" height="550"></canvas><figcaption>左上 · 原图</figcaption></figure><figure><canvas id="right" width="420" height="550"></canvas><figcaption>右上 · 镜像</figcaption></figure></div>
+<div class="controls"><button id="background">切换浅色背景</button><a class="action" href="archer-ready-up-left-v3.png" download>下载透明 PNG</a></div>
+<div class="label">战场显示尺寸 · 人物高度 146</div><canvas id="small" width="840" height="210"></canvas>
+<div class="reference"><img src="figure-reference.png" alt="现有弓箭手英雄立绘"><p>沿用立绘的棕色短发、尖耳、绿斗篷、米白袖子、棕色皮革与绿金反曲弓。<br>本页展示静态基准姿态，供后续待机与攻击动作制作使用。</p></div></main>
+<script>
+(async()=>{
+const art=await(await fetch('art.json')).json(),image=new Image();image.src=art.image;await image.decode();let light=false;
+function render(canvas,width,height,paintedHeight,directions){
+ const c=canvas.getContext('2d'),dpr=Math.min(devicePixelRatio||1,3);canvas.width=width*dpr;canvas.height=height*dpr;c.setTransform(dpr,0,0,dpr,0,0);c.fillStyle=light?'#e8dfc5':'#293c3b';c.fillRect(0,0,width,height);
+ const ground=height-24,scale=paintedHeight/art.readyHeightPx;c.strokeStyle=light?'#c2b799':'#4a6158';c.beginPath();c.moveTo(16,ground);c.lineTo(width-16,ground);c.stroke();
+ directions.forEach((direction,i)=>{const x=width*(i+.5)/directions.length;c.save();c.translate(x,ground);c.scale(direction,1);c.drawImage(image,-art.groundAnchor[0]*scale,-art.groundAnchor[1]*scale,image.width*scale,image.height*scale);c.restore()});
+}
+function draw(){render(document.querySelector('#left'),420,550,440,[1]);render(document.querySelector('#right'),420,550,440,[-1]);render(document.querySelector('#small'),840,210,146,[1,-1])}
+document.querySelector('#background').onclick=e=>{light=!light;e.target.textContent=light?'切换深色背景':'切换浅色背景';draw()};draw();
+})().catch(()=>{document.querySelector('h1').textContent='图片加载失败，请刷新重试'});
+</script></html>

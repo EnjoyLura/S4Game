@@ -23,7 +23,9 @@ def main():
                   'bg_levels_comic_v1','levels_comic_v1/comic_terrain_','squadFormation','squadRemoveDialog',
                   'squadHeroRoster','heroPageBackdrop','bg_heroes_comic_v3','shopShelfBackdrop']:
         assert token in entry,token
-    assert 'function plaque(' not in entry
+    level_module = entry.split('System.register("chunks:///_virtual/LevelsPage.ts"',1)[1].split('\nSystem.register(',1)[0]
+    assert 'function plaque(' not in level_module
+    assert 'lobby_levels_v1' not in level_module and 'lobby_rewards_v1' not in level_module
     assert "FROST_RESOURCE = 'fx/frost_domain_video_v10'" in entry
     assert 'RAIN_CAP = 128' in entry and 'mora_linger' in entry and 'FrostProjectileVFX' in entry
     engine = next(p for p in (BUILD/'cocos-js').glob('_virtual_cc-*.js') if 'window.__KW_DPR_CAP || 2' in p.read_text(encoding='utf-8'))

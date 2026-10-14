@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-14T13:40:34.732477+08:00",
+  "sourcePath": "C:\\Users\\user\\Downloads\\lens-api-task_WDWmwRB646I8zWM1l9DW3GyMkglvCsCN.mp4",
+  "saved": "source.mp4",
+  "sourceSha256": "de3435ac20362560c1a48fe9234b9e86e1e5e3ebee140d431cb1d8672ff5739a",
+  "metadata": {
+    "ffmpeg_version": "7.1-essentials_build-www.gyan.dev built with gcc 14.2.0 (Rev1, Built by MSYS2 project)",
+    "codec": "h264",
+    "pix_fmt": "yuv420p(tv, bt709, progressive)",
+    "audio_codec": "aac",
+    "fps": 24.0,
+    "source_size": [
+      1344,
+      768
+    ],
+    "size": [
+      1344,
+      768
+    ],
+    "rotate": 0,
+    "duration": 2.33
+  },
+  "frames": 56,
+  "status": "source_analysis_only",
+  "motionAcceptedByUser": false,
+  "userIssue": "雷电特效混入人物攻击视频",
+  "videoTaskSubmittedThisTurn": false,
+  "gameChanged": false,
+  "published": false
+}

@@ -1,0 +1,52 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-meters-v1-20261014-234737",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-pause-comic-v1-20261014-232817",
+  "entryVersion": "1791992612",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=battle-meters-v1-1791992612",
+  "scope": "battle progress bars and shield display",
+  "layoutChanged": true,
+  "visualAcceptance": "pending user manual review",
+  "deployment": "https://70505f10.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-battle-meters-v1-20261014-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-battle-meters-v1-20261014-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "battle progress bars and shield display",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 11098,
+  "uploadedFiles": 2,
+  "cachedFiles": 1627,
+  "deploymentSucceeded": true,
+  "meterRenderer": "Cocos native Graphics",
+  "health": {
+    "width": 640,
+    "height": 18,
+    "bottom": 198,
+    "number": "current/max outside bar"
+  },
+  "shield": {
+    "height": 6,
+    "bottom": 188,
+    "fraction": "shield/maxHp",
+    "zero": "hide entire group",
+    "number": "ceil(shield)"
+  },
+  "damage": {
+    "height": 10,
+    "fraction": "heroDamage/highestHeroDamage",
+    "percentage": "heroDamage/totalDamage",
+    "number": "outside bar, existing fmtWk"
+  },
+  "gameplayTestsRun": false,
+  "browserValidationRun": false,
+  "onlineValidationRun": false,
+  "heroMediaChanged": false,
+  "damageCalculationChanged": false,
+  "paidTaskSubmitted": false
+}

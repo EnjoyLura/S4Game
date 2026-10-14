@@ -1,0 +1,20 @@
+{
+  "status": "source_analysis_only",
+  "date": "2026-10-14",
+  "source": "source.mp4",
+  "frames": 56,
+  "fps": 24,
+  "size": [1344, 768],
+  "durationSeconds": 2.33,
+  "backgroundEffects": ["left-side electric arc", "scattered purple sparks", "staff crystal halo", "background illumination"],
+  "characterContamination": ["crystal white flare", "purple cast light on hood", "left sleeve and robe highlights", "boot highlights"],
+  "globalColorRemovalSuitable": false,
+  "reason": "Electric effects share purple and white colors with the mage's robe and crystal; removing these colors globally damages the character.",
+  "preferredNextStep": "Preserve the full source motion and attempt a separate clean version with silhouette-constrained background removal and localized material-lighting restoration.",
+  "newVideoResolutionIfNeeded": "768p",
+  "paidTaskSubmittedThisTurn": false,
+  "cleanedVideoProduced": false,
+  "gameChanged": false,
+  "published": false,
+  "animationAcceptedByUser": false
+}

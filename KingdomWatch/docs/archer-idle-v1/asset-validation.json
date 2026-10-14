@@ -1,0 +1,42 @@
+{
+  "ok": true,
+  "frameCount": 56,
+  "timelineFrames": 56,
+  "seconds": 3.4583333333333335,
+  "atlas": [
+    1536,
+    2464
+  ],
+  "bytes": 2875829,
+  "sourceVideo": {
+    "ffmpeg_version": "7.1-essentials_build-www.gyan.dev built with gcc 14.2.0 (Rev1, Built by MSYS2 project)",
+    "codec": "h264",
+    "pix_fmt": "yuv420p(progressive)",
+    "audio_codec": "aac",
+    "fps": 24.0,
+    "source_size": [
+      1280,
+      720
+    ],
+    "size": [
+      1280,
+      720
+    ],
+    "rotate": 0,
+    "duration": 4.06
+  },
+  "fixedFoot": [
+    650,
+    720
+  ],
+  "loopMethod": "continuous endpoint matched",
+  "endpointMeanError": 1.851616187325019,
+  "medianAdjacentError": 1.9152496662083056,
+  "bounds": [
+    34,
+    8,
+    361,
+    720
+  ],
+  "scale": 0.4607329842931937
+}

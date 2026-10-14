@@ -1,0 +1,13 @@
+{
+  "hero": "sniper",
+  "sourceIdle": "sniper-idle-natural-v2",
+  "sourceVideoSha256": "54f41fb8a369df84f959c596899340ae7f19a723e5681e272aa167b2bddc2c27",
+  "sourceFrame": 0,
+  "size": [
+    768,
+    1344
+  ],
+  "hostFilename": "hero_sniper_attack_natural_v1_20261014_ff.png",
+  "imageRegenerated": false,
+  "purpose": "Exact RGB first frame of the current idle; identical hero, grips and framing"
+}

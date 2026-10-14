@@ -1,0 +1,62 @@
+{
+  "status": "static artwork review only; no runtime replacement or generated video",
+  "tool": "built-in image_gen.imagegen",
+  "reference": "assets/resources/ux/hero_comic_v1/comic_figure_archer_v1.png",
+  "original": {
+    "path": "images/archer-ready.png",
+    "size": [
+      1017,
+      1546
+    ],
+    "mode": "RGBA",
+    "visibleBoundsAlpha8": [
+      245,
+      11,
+      972,
+      1511
+    ],
+    "sha256": "bd7a95d12dd2457da5dc8b8aadfa2c0ccf177d9ebf33cefac58cdb85504d0c18"
+  },
+  "review": {
+    "path": "images/archer-ready-review.png",
+    "size": [
+      768,
+      768
+    ],
+    "groundAnchor": [
+      384,
+      752
+    ],
+    "paintedHeight": 720
+  },
+  "frame": {
+    "path": "frames/archer-up-ready.png",
+    "size": [
+      256,
+      256
+    ],
+    "groundAnchor": [
+      128,
+      251
+    ],
+    "paintedHeight": 146,
+    "sourceGroundAnchor": [
+      550,
+      1511
+    ],
+    "scale": 0.09733333333333333
+  },
+  "directions": {
+    "up": "review candidate",
+    "upperLeft": "study only",
+    "upperRight": "study only"
+  },
+  "checks": {
+    "rgba": true,
+    "sourcePreserved": true,
+    "transparentMargin": true,
+    "reviewFootMargin": 16,
+    "frameFootMargin": 5,
+    "runtimeChanged": false
+  }
+}

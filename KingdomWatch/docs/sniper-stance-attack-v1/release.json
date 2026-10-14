@@ -1,0 +1,85 @@
+{
+  "folder": "sniper-stance-attack-v1",
+  "kind": "attack",
+  "hero": "sniper",
+  "task": {
+    "hero": "sniper",
+    "taskId": "task_1ENUQ3Tk2DH61c2fUwMBjPQD28iJtf0Z",
+    "model": "lens-minimax-h3-768p",
+    "secondsRequested": 2,
+    "ratioRequested": "3:4",
+    "imageUrl": "https://kw-vfx-src.pages.dev/hero_sniper_stance_idle_v3_20261013_ff.png",
+    "promptFile": "attack-prompt.txt",
+    "status": "completed",
+    "sourceTool": "美术/tools/art_video_gen.py",
+    "video": "source.mp4"
+  },
+  "image": "ready-red.png",
+  "imageTool": "built-in imagegen",
+  "sourceBytes": 1514323,
+  "source": {
+    "file": "source.mp4",
+    "sha256": "fdb6bffb909a57ffe96cab44a0adfe0f07dfb9a86d43201f467bc67e90bd3fc5",
+    "videoSize": [
+      768,
+      1344
+    ],
+    "fps": 24.0,
+    "frameCount": 56,
+    "seconds": 2.3333333333333335,
+    "indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "omittedEffectsFrames": [],
+    "jointCrop": [
+      158,
+      145,
+      750,
+      1202
+    ],
+    "fixedScale": 0.4452918017159199,
+    "fixedFootSource": [
+      422.5,
+      1198
+    ],
+    "releaseFrame": 9
+  },
+  "resource": "sniper_stance_attack_v1",
+  "uniqueFrames": 10,
+  "timelineFrames": 19,
+  "seconds": 0.7916666666666666,
+  "atlas": [
+    4096,
+    1024
+  ],
+  "atlasBytes": 1277913,
+  "groundAnchor": [
+    256,
+    496
+  ],
+  "displayHeight": 153,
+  "readyHeightPx": 467.1111,
+  "processing": {
+    "matte": "Global red key with decontaminated edges and enclosed weapon gaps",
+    "spatial": "One fixed crop, uniform scale and pivot spanning both staggered boots; complete character; no part deformation or frame-by-frame scaling",
+    "temporal": "Small complete-frame reaction and retraced recovery to initial pose; later weapon rotation excluded"
+  },
+  "gameIntegrated": true,
+  "userAccepted": false,
+  "releaseIndex": 9,
+  "recoverySeconds": 0.41666666666666663,
+  "selection": "selection.json",
+  "motionPrompt": "attack-prompt.txt",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-stance-v1-1791906822",
+  "preview": "https://kingdom-watch.pages.dev/previews/hero-stance-rebuild-v1/?v=1791906822",
+  "deployment": "https://739dad09.kingdom-watch.pages.dev"
+}

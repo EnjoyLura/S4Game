@@ -1,0 +1,35 @@
+{
+  "uniqueFrames": 56,
+  "timelineFrames": 110,
+  "loopSeconds": 4,
+  "sourceVideo": {
+    "ffmpeg_version": "7.1-essentials_build-www.gyan.dev built with gcc 14.2.0 (Rev1, Built by MSYS2 project)",
+    "codec": "h264",
+    "pix_fmt": "yuv420p(tv, bt709, progressive)",
+    "audio_codec": "aac",
+    "fps": 24.0,
+    "source_size": [
+      768,
+      1344
+    ],
+    "size": [
+      768,
+      1344
+    ],
+    "rotate": 0,
+    "duration": 2.33
+  },
+  "atlas": [
+    4096,
+    3584
+  ],
+  "cell": [
+    512,
+    512
+  ],
+  "atlasBytes": 8760505,
+  "resource": "assets\\resources\\ux\\sniper_idle_level_v1",
+  "displayHeight": 170,
+  "gameIntegrated": false,
+  "review": "User manual review; no browser, game or automated visual QA"
+}

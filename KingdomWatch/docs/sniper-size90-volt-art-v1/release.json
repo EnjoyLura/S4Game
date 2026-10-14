@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "status": "published",
+  "game": "https://kingdom-watch.pages.dev/?v=sniper-size90-volt-art-1791904451",
+  "voltPreview": "https://kingdom-watch.pages.dev/previews/volt-combat-rebuild-v1/?v=1791904451",
+  "sniperPreview": "https://kingdom-watch.pages.dev/previews/sniper-attack-forward-v4/?v=1791904451",
+  "deployment": "https://5339ba09.kingdom-watch.pages.dev",
+  "stage": "D:/AI/S4Game/KingdomWatch/build/publish-sniper-size90-volt-art-v1-20261013-231411",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "sniper": {
+    "oldDisplayHeight": 170,
+    "scaleFactor": 0.9,
+    "displayHeight": 153,
+    "idleResource": "sniper_idle_forward_v2",
+    "attackResource": "sniper_attack_forward_v4",
+    "manifestsChanged": [
+      "assets/resources/ux/sniper_idle_forward_v2/idle.frames.json",
+      "assets/resources/ux/sniper_attack_forward_v4/attack.frames.json"
+    ],
+    "footNode": [0, -76],
+    "groundAnchor": [256, 496],
+    "scope": "Equal 10% display reduction for idle and attack around the shared foot; image atlases and action timing unchanged",
+    "switch": "Single full-opacity Sprite directly replaces frames; no fade transition",
+    "sourceScript": "docs/sniper-idle-forward-v2/package_idle.py DISPLAY_HEIGHT updated to 153; attack packager derives display height from idle"
+  },
+  "volt": {
+    "image": "D:/AI/S4Game/KingdomWatch/docs/volt-combat-rebuild-v1/ready-red.png",
+    "metadata": "../volt-combat-rebuild-v1/art.json",
+    "prompt": "../volt-combat-rebuild-v1/image-prompt.txt",
+    "tool": "built-in imagegen",
+    "generatedSource": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-54434110-bac2-4d88-9df5-5ce0e8a15f24.png",
+    "size": [1024, 1536],
+    "mode": "RGB",
+    "alphaRange": [255, 255],
+    "bytes": 1597127,
+    "background": "Opaque red master requested",
+    "character": "Silver-haired, silver-bearded mature male thunder mage; deep-purple gold-edged robe, brown belt/pouch/boots, violet crystal staff; rear view slightly toward screen-left",
+    "scope": "Static battle-ready master and original/mirror standalone preview",
+    "gameIntegrated": false,
+    "newIdleOrAttackGenerated": false
+  },
+  "archer": "Existing image, idle, attack and displayHeight 185.64 preserved",
+  "build": {
+    "platform": "web-mobile",
+    "creator": "3.8.8",
+    "exitCode": 36,
+    "milliseconds": 9942,
+    "finishedLocal": "2026-10-13 23:12:37",
+    "log": "C:/Users/user/AppData/Local/Temp/kw-sniper-size90-volt-art-v1-20261013-out.log"
+  },
+  "dprPatch": "completed",
+  "entryVersion": 1791904451,
+  "publish": {"tool": "Wrangler 3.114.17", "exitCode": 0, "uploadedFiles": 11, "cachedFiles": 1015, "uploadSeconds": 6.81},
+  "review": "User manual effect review; source production and file metadata only; no tests, game, browser or online QA executed. Image generation, build and deployment do not imply visual acceptance."
+}

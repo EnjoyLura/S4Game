@@ -1,0 +1,11 @@
+{
+  "method": "continuous",
+  "range": [
+    4,
+    53
+  ],
+  "nearestFullCycleSeamDifference": 9.971015930175781,
+  "medianAdjacentDifference": 4.731986999511719,
+  "sourceSelectionThreshold": 11.829967498779297,
+  "scope": "Production loop-range selection only; not visual acceptance"
+}

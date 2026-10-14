@@ -1,0 +1,1233 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-idle-full-v4-20261014-012234",
+  "entryVersion": "1791912134",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-idle-full-v4-1791912134",
+  "preview": "https://kingdom-watch.pages.dev/previews/hero-idle-full-v4/?v=1791912134",
+  "status": "published",
+  "deployment": "https://7a64204d.kingdom-watch.pages.dev",
+  "date": "2026-10-14T01:24:14+08:00",
+  "timezone": "Asia/Shanghai",
+  "animationAcceptedByUser": false,
+  "newVideoSubmitted": true,
+  "sniper": {
+    "hero": "sniper",
+    "kind": "idle",
+    "uniqueFrames": 56,
+    "timelineFrames": 110,
+    "sourceFrames": 56,
+    "sourceIndices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55
+    ],
+    "seconds": 6.15384615384616,
+    "atlas": [
+      4096,
+      3584
+    ],
+    "atlasBytes": 8274447,
+    "resource": "sniper_idle_full_v6",
+    "paintedHeight": 467.1111,
+    "displayHeight": 153,
+    "gameIntegrated": true,
+    "userAccepted": false,
+    "staticMasterAcceptedByUser": true,
+    "loopStyle": "pingpong",
+    "sourceVideoNewlyGenerated": true,
+    "review": "Production source annotation; effects reviewed manually by user; no browser/game/tests/online QA",
+    "fullSourceRequired": true,
+    "allSourceFramesRetained": true,
+    "motionAcceptedByUser": false
+  },
+  "videoTask": {
+    "hero": "sniper",
+    "taskId": "task_HrjD0gRZWi1oceFDsHUi3nd0YKbCekNX",
+    "model": "lens-minimax-h3-768p",
+    "secondsRequested": 2,
+    "ratioRequested": "3:4",
+    "imageUrl": "https://b3b43ec2.kw-vfx-src.pages.dev/hero_sniper_idle_full_v4_20261014_ff.png",
+    "promptFile": "idle-prompt-effective.txt",
+    "basePromptFile": "idle-prompt.txt",
+    "idleLoopRequirement": "hero-idle-adjacent-loop-v1",
+    "status": "completed",
+    "sourceTool": "美术/tools/art_video_gen.py",
+    "video": "source.mp4"
+  },
+  "firstFrameLayout": {
+    "approvedMaster": "D:\\AI\\S4Game\\KingdomWatch\\docs\\sniper-stance-idle-v3\\ready-red.png",
+    "masterSha256": "5ef90486bc2142cc1aac0c8d472f661d7bc58f88d1f544f77473276531642c09",
+    "videoFirstFrame": "video-first-frame.png",
+    "hostFilename": "hero_sniper_idle_full_v4_20261014_ff.png",
+    "canvasSize": [
+      768,
+      1344
+    ],
+    "uniformScale": 0.6359945872801083,
+    "placement": [
+      -3,
+      182
+    ],
+    "contentBounds": [
+      149,
+      277,
+      619,
+      1067
+    ],
+    "purpose": "Video input overscan from the unchanged approved master; game display height stays 153",
+    "imageRegenerated": false,
+    "masterChanged": false
+  },
+  "firstFrameHost": {
+    "project": "kw-vfx-src",
+    "branch": "main",
+    "deployment": "https://b3b43ec2.kw-vfx-src.pages.dev",
+    "imageUrl": "https://b3b43ec2.kw-vfx-src.pages.dev/hero_sniper_idle_full_v4_20261014_ff.png",
+    "uploaded": 1,
+    "cached": 29,
+    "uploadSeconds": 3.25,
+    "exitCode": 0
+  },
+  "sourceInfo": {
+    "ffmpeg_version": "7.1-essentials_build-www.gyan.dev built with gcc 14.2.0 (Rev1, Built by MSYS2 project)",
+    "codec": "h264",
+    "pix_fmt": "yuv420p(tv, bt709, progressive)",
+    "audio_codec": "aac",
+    "fps": 24.0,
+    "source_size": [
+      768,
+      1344
+    ],
+    "size": [
+      768,
+      1344
+    ],
+    "rotate": 0,
+    "duration": 2.33,
+    "frameCount": 56,
+    "seconds": 2.3333333333333335,
+    "annotationSheets": [
+      "source-contact.jpg",
+      "weapon-contact.jpg"
+    ]
+  },
+  "sourceFraming": [
+    {
+      "sourceFrame": 0,
+      "bounds": [
+        148,
+        277,
+        619,
+        1068
+      ],
+      "margins": [
+        148,
+        277,
+        149,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 1,
+      "bounds": [
+        149,
+        276,
+        619,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        149,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 2,
+      "bounds": [
+        149,
+        276,
+        619,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        149,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 3,
+      "bounds": [
+        149,
+        276,
+        619,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        149,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 4,
+      "bounds": [
+        149,
+        276,
+        619,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        149,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 5,
+      "bounds": [
+        149,
+        276,
+        618,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        150,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 6,
+      "bounds": [
+        149,
+        276,
+        616,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        152,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 7,
+      "bounds": [
+        149,
+        276,
+        616,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        152,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 8,
+      "bounds": [
+        149,
+        276,
+        614,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        154,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 9,
+      "bounds": [
+        148,
+        277,
+        610,
+        1068
+      ],
+      "margins": [
+        148,
+        277,
+        158,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 10,
+      "bounds": [
+        148,
+        277,
+        604,
+        1068
+      ],
+      "margins": [
+        148,
+        277,
+        164,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 11,
+      "bounds": [
+        148,
+        277,
+        604,
+        1068
+      ],
+      "margins": [
+        148,
+        277,
+        164,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 12,
+      "bounds": [
+        148,
+        277,
+        596,
+        1068
+      ],
+      "margins": [
+        148,
+        277,
+        172,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 13,
+      "bounds": [
+        148,
+        278,
+        591,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        177,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 14,
+      "bounds": [
+        148,
+        278,
+        584,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        184,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 15,
+      "bounds": [
+        148,
+        278,
+        584,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        184,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 16,
+      "bounds": [
+        148,
+        278,
+        578,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        190,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 17,
+      "bounds": [
+        148,
+        278,
+        574,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        194,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 18,
+      "bounds": [
+        148,
+        278,
+        572,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        196,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 19,
+      "bounds": [
+        148,
+        278,
+        572,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        196,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 20,
+      "bounds": [
+        148,
+        278,
+        574,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        194,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 21,
+      "bounds": [
+        148,
+        278,
+        580,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        188,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 22,
+      "bounds": [
+        148,
+        278,
+        590,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        178,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 23,
+      "bounds": [
+        148,
+        279,
+        591,
+        1068
+      ],
+      "margins": [
+        148,
+        279,
+        177,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 24,
+      "bounds": [
+        148,
+        279,
+        600,
+        1068
+      ],
+      "margins": [
+        148,
+        279,
+        168,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 25,
+      "bounds": [
+        148,
+        279,
+        608,
+        1068
+      ],
+      "margins": [
+        148,
+        279,
+        160,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 26,
+      "bounds": [
+        148,
+        278,
+        618,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        150,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 27,
+      "bounds": [
+        148,
+        278,
+        618,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        150,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 28,
+      "bounds": [
+        148,
+        278,
+        624,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        144,
+        276
+      ],
+      "minimumMargin": 144,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 29,
+      "bounds": [
+        148,
+        278,
+        630,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        138,
+        276
+      ],
+      "minimumMargin": 138,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 30,
+      "bounds": [
+        148,
+        278,
+        638,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        130,
+        276
+      ],
+      "minimumMargin": 130,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 31,
+      "bounds": [
+        148,
+        278,
+        638,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        130,
+        276
+      ],
+      "minimumMargin": 130,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 32,
+      "bounds": [
+        148,
+        278,
+        644,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        124,
+        276
+      ],
+      "minimumMargin": 124,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 33,
+      "bounds": [
+        148,
+        278,
+        648,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        120,
+        276
+      ],
+      "minimumMargin": 120,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 34,
+      "bounds": [
+        148,
+        278,
+        654,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        114,
+        276
+      ],
+      "minimumMargin": 114,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 35,
+      "bounds": [
+        148,
+        278,
+        654,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        114,
+        276
+      ],
+      "minimumMargin": 114,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 36,
+      "bounds": [
+        148,
+        278,
+        654,
+        1068
+      ],
+      "margins": [
+        148,
+        278,
+        114,
+        276
+      ],
+      "minimumMargin": 114,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 37,
+      "bounds": [
+        148,
+        277,
+        654,
+        1068
+      ],
+      "margins": [
+        148,
+        277,
+        114,
+        276
+      ],
+      "minimumMargin": 114,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 38,
+      "bounds": [
+        148,
+        277,
+        650,
+        1068
+      ],
+      "margins": [
+        148,
+        277,
+        118,
+        276
+      ],
+      "minimumMargin": 118,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 39,
+      "bounds": [
+        148,
+        276,
+        650,
+        1068
+      ],
+      "margins": [
+        148,
+        276,
+        118,
+        276
+      ],
+      "minimumMargin": 118,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 40,
+      "bounds": [
+        148,
+        276,
+        646,
+        1068
+      ],
+      "margins": [
+        148,
+        276,
+        122,
+        276
+      ],
+      "minimumMargin": 122,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 41,
+      "bounds": [
+        148,
+        276,
+        640,
+        1068
+      ],
+      "margins": [
+        148,
+        276,
+        128,
+        276
+      ],
+      "minimumMargin": 128,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 42,
+      "bounds": [
+        148,
+        276,
+        634,
+        1068
+      ],
+      "margins": [
+        148,
+        276,
+        134,
+        276
+      ],
+      "minimumMargin": 134,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 43,
+      "bounds": [
+        148,
+        276,
+        634,
+        1068
+      ],
+      "margins": [
+        148,
+        276,
+        134,
+        276
+      ],
+      "minimumMargin": 134,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 44,
+      "bounds": [
+        148,
+        276,
+        624,
+        1068
+      ],
+      "margins": [
+        148,
+        276,
+        144,
+        276
+      ],
+      "minimumMargin": 144,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 45,
+      "bounds": [
+        149,
+        276,
+        620,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        148,
+        276
+      ],
+      "minimumMargin": 148,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 46,
+      "bounds": [
+        149,
+        276,
+        612,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        156,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 47,
+      "bounds": [
+        149,
+        276,
+        611,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        157,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 48,
+      "bounds": [
+        149,
+        276,
+        603,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        165,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 49,
+      "bounds": [
+        149,
+        276,
+        598,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        170,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 50,
+      "bounds": [
+        149,
+        276,
+        592,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        176,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 51,
+      "bounds": [
+        149,
+        276,
+        592,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        176,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 52,
+      "bounds": [
+        149,
+        276,
+        587,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        181,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 53,
+      "bounds": [
+        149,
+        276,
+        584,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        184,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 54,
+      "bounds": [
+        149,
+        276,
+        582,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        186,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    },
+    {
+      "sourceFrame": 55,
+      "bounds": [
+        149,
+        276,
+        582,
+        1068
+      ],
+      "margins": [
+        149,
+        276,
+        186,
+        276
+      ],
+      "minimumMargin": 149,
+      "requiredMargin": 12,
+      "completeWithinSource": true
+    }
+  ],
+  "allSourceFramesRetained": true,
+  "loopClosure": {
+    "id": "hero-idle-adjacent-loop-v1",
+    "strategy": "All original complete frames forward and backward with eased turns",
+    "allTransitionsAdjacentIncludingWrap": true,
+    "wrapFrames": [
+      1,
+      0
+    ],
+    "noEndToStartCut": true,
+    "noOpacityCrossfade": true,
+    "acceptance": "Structural production constraint only; final effect review by user"
+  },
+  "supersedesRejectedWorkaround": "../hero-idle-cape-fix-v3/release.json",
+  "rejectedVideoAttempts": [
+    {
+      "taskId": "task_N5U6Pqpkd7arYqyTp5wsDCqEGyTgk6lG",
+      "status": "rejected_source",
+      "cause": "Unexpected bright burst from the crossbow around source frames 8-10; emitted rays also reach the video boundary in frames 9-13",
+      "sourceVideoPreserved": true,
+      "framesTrimmed": false,
+      "gameIntegrated": false,
+      "published": false,
+      "nextAction": "Regenerate a full idle video, never cut away defective action frames"
+    },
+    {
+      "taskId": "task_4tAUfJS9GTahvJvODxYVZQ3R7xaeWolA",
+      "status": "rejected_source",
+      "cause": "Unexpected bright weapon burst around source frames 8-13; cloth later approaches source right boundary at frames 29-31",
+      "sourceVideoPreserved": true,
+      "framesTrimmed": false,
+      "gameIntegrated": false,
+      "published": false,
+      "nextAction": "Regenerate a full cloth-led idle using a shorter positive motion specification"
+    }
+  ],
+  "build": {
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "exitCode": 36,
+    "milliseconds": 10018,
+    "finishedLocal": "2026-10-14 01:16:04",
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-hero-idle-full-v4-20261014-out.log"
+  },
+  "dprPatch": "completed",
+  "publication": {
+    "tool": "Wrangler3.114.17",
+    "exitCode": 0,
+    "attempts": 1,
+    "uploaded": 85,
+    "cached": 1240,
+    "uploadSeconds": 53.24
+  },
+  "retained": "Approved static master, stance, grips, game scale and foot pivot, volt idle, archer media and sniper attack",
+  "review": "Source production only; user manual effect review; no tests, browser, game or online QA"
+}

@@ -1,0 +1,14 @@
+{
+  "status": "published",
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-mirror-1791824305",
+  "preview": "https://kingdom-watch.pages.dev/previews/archer-idle-v1/?v=1791824305",
+  "deployment": "https://542ebe1d.kingdom-watch.pages.dev",
+  "build": "Cocos Creator 3.8.8 web-mobile completed; exit code 36 is BUILD_SUCCESS in the installed editor",
+  "dprPatch": "applied; entry cache-bust 1791824305",
+  "publish": "Wrangler Pages main completed, exit code 0",
+  "visualAcceptance": "pending user manual review; no automatic game or interaction verification performed",
+  "scope": "All five heroes mirror their artwork toward the target. Idle advances only when no living target is within ordinary attack range and no pending attack or recovery remains. Out-of-range enemies do not stop idle. Archer holds the complete raised-bow frame during combat; a dedicated attack clip has not been supplied.",
+  "legacyPreview": "archer-native-v1 excluded from a fresh publishing stage; original local build files retained"
+}

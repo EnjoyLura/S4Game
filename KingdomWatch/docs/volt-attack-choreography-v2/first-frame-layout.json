@@ -1,0 +1,13 @@
+{
+  "hero": "volt",
+  "sourceIdle": "volt-idle-natural-v1",
+  "sourceVideoSha256": "4ff8f7c119ef9db7396ce9466c32d94ab399e503d0e08c01087600845c1ff0fe",
+  "sourceFrame": 0,
+  "size": [
+    768,
+    1344
+  ],
+  "hostFilename": "hero_volt_attack_natural_v1_20261014_ff.png",
+  "imageRegenerated": false,
+  "purpose": "Exact RGB first frame of the current idle; identical hero, grips and framing"
+}

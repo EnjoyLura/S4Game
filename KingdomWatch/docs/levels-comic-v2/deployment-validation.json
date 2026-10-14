@@ -1,0 +1,1288 @@
+{
+  "dateUTC": "2026-10-11T17:48:23.600943+08:00",
+  "style": "清爽漫画奇幻",
+  "status": "published",
+  "url": "https://kingdom-watch.pages.dev/?v=levels-comic-v2-1791711814",
+  "deployment": "https://e38614f7.kingdom-watch.pages.dev",
+  "generation": {
+    "tool": "built-in imagegen",
+    "newIllustrations": 3,
+    "previousIllustrationsVerified": 47
+  },
+  "components": "three continuous outdoor scenes; compact header; horizontally draggable masked route with saved offset; reward dock with non-overlapping conditions/chests/amounts/claim controls; squad back button removed",
+  "typeCheck": "passed",
+  "creatorBuild": "passed: 3.8.8 web-mobile",
+  "dprPatch": "passed",
+  "uiChecks": {
+    "ok": true,
+    "url": "http://127.0.0.1:8765/",
+    "checks": [
+      {
+        "phoneLayout": {
+          "viewport": [
+            750,
+            1625.581395348837
+          ],
+          "resource": {
+            "w": 218,
+            "h": 56,
+            "left": -105,
+            "right": 113,
+            "top": 92,
+            "bottom": 148
+          },
+          "title": {
+            "w": 620,
+            "h": 44,
+            "left": -310,
+            "right": 310,
+            "top": 190,
+            "bottom": 234
+          },
+          "difficulty": {
+            "w": 686,
+            "h": 62,
+            "left": -343,
+            "right": 343,
+            "top": 240,
+            "bottom": 302
+          },
+          "stage": {
+            "w": 750,
+            "h": 503.5813953488371,
+            "left": -375,
+            "right": 375,
+            "top": 314,
+            "bottom": 817.5813953488371
+          },
+          "selectors": {
+            "w": 704,
+            "h": 80,
+            "left": -352,
+            "right": 352,
+            "top": 829.5813953488371,
+            "bottom": 909.5813953488371
+          },
+          "rewards": {
+            "w": 718,
+            "h": 420,
+            "left": -359,
+            "right": 359,
+            "top": 949.5813953488371,
+            "bottom": 1369.581395348837
+          },
+          "battle": {
+            "w": 490,
+            "h": 94,
+            "left": -336,
+            "right": 154,
+            "top": 1383.581395348837,
+            "bottom": 1477.581395348837
+          },
+          "squad": {
+            "w": 156,
+            "h": 94,
+            "left": 175,
+            "right": 331,
+            "top": 1383.581395348837,
+            "bottom": 1477.581395348837
+          },
+          "nav": {
+            "w": 138,
+            "h": 104,
+            "left": -69,
+            "right": 69,
+            "top": 1509.581395348837,
+            "bottom": 1613.581395348837
+          },
+          "upper": {
+            "w": 750,
+            "h": 949.5813953488371,
+            "left": -375,
+            "right": 375,
+            "top": 0,
+            "bottom": 949.5813953488371
+          },
+          "paper": true,
+          "noOldArt": true,
+          "terrainLoaded": true,
+          "terrainAspect": 0.75,
+          "sourceAspect": 0.75,
+          "coverMask": true,
+          "tiers": [
+            {
+              "tier": {
+                "w": 210,
+                "h": 340,
+                "left": -327,
+                "right": -117,
+                "top": 1015.5813953488371,
+                "bottom": 1355.581395348837
+              },
+              "condition": {
+                "w": 208,
+                "h": 28,
+                "left": -326,
+                "right": -118,
+                "top": 1023.5813953488371,
+                "bottom": 1051.581395348837
+              },
+              "chest": {
+                "w": 126,
+                "h": 126,
+                "left": -285,
+                "right": -159,
+                "top": 1085.1813953488372,
+                "bottom": 1211.1813953488372
+              },
+              "amount": {
+                "w": 82,
+                "h": 30,
+                "left": -246,
+                "right": -164,
+                "top": 1221.1813953488372,
+                "bottom": 1251.1813953488372
+              },
+              "status": {
+                "w": 184,
+                "h": 44,
+                "left": -314,
+                "right": -130,
+                "top": 1303.581395348837,
+                "bottom": 1347.581395348837
+              }
+            },
+            {
+              "tier": {
+                "w": 210,
+                "h": 340,
+                "left": -105,
+                "right": 105,
+                "top": 1015.5813953488371,
+                "bottom": 1355.581395348837
+              },
+              "condition": {
+                "w": 208,
+                "h": 28,
+                "left": -104,
+                "right": 104,
+                "top": 1023.5813953488371,
+                "bottom": 1051.581395348837
+              },
+              "chest": {
+                "w": 126,
+                "h": 126,
+                "left": -63,
+                "right": 63,
+                "top": 1085.1813953488372,
+                "bottom": 1211.1813953488372
+              },
+              "amount": {
+                "w": 82,
+                "h": 30,
+                "left": -24,
+                "right": 58,
+                "top": 1221.1813953488372,
+                "bottom": 1251.1813953488372
+              },
+              "status": {
+                "w": 184,
+                "h": 44,
+                "left": -92,
+                "right": 92,
+                "top": 1303.581395348837,
+                "bottom": 1347.581395348837
+              }
+            },
+            {
+              "tier": {
+                "w": 210,
+                "h": 340,
+                "left": 117,
+                "right": 327,
+                "top": 1015.5813953488371,
+                "bottom": 1355.581395348837
+              },
+              "condition": {
+                "w": 208,
+                "h": 28,
+                "left": 118,
+                "right": 326,
+                "top": 1023.5813953488371,
+                "bottom": 1051.581395348837
+              },
+              "chest": {
+                "w": 126,
+                "h": 126,
+                "left": 159,
+                "right": 285,
+                "top": 1085.1813953488372,
+                "bottom": 1211.1813953488372
+              },
+              "amount": {
+                "w": 82,
+                "h": 30,
+                "left": 198,
+                "right": 280,
+                "top": 1221.1813953488372,
+                "bottom": 1251.1813953488372
+              },
+              "status": {
+                "w": 184,
+                "h": 44,
+                "left": 130,
+                "right": 314,
+                "top": 1303.581395348837,
+                "bottom": 1347.581395348837
+              }
+            }
+          ],
+          "arrowsRemoved": true
+        }
+      },
+      {
+        "route": "real touch swipe, inertia, masked later stops, no accidental selection, offset retained across difficulty and squad refresh; 1-4/1-5 unavailable"
+      },
+      {
+        "difficulty": "normal, elite and hell use independent stars"
+      },
+      {
+        "selection": "three continuous outdoor scenes; locked-difficulty fallback; map arrows removed"
+      },
+      {
+        "formationArt": {
+          "cards": 5,
+          "withinPanel": true,
+          "largeCards": true,
+          "portraitMasks": true
+        }
+      },
+      {
+        "deploy": "ordered slots, four-hero limit guarded"
+      },
+      {
+        "remove": "cancel preserves squad; confirm removes and closes; new hero appends"
+      },
+      {
+        "start": {
+          "mode": "battle",
+          "levelId": "1-3",
+          "diff": 1
+        },
+        "squadSaved": true,
+        "walletReused": true,
+        "battleWasIntercepted": true
+      },
+      {
+        "rewards": "200 gold and 210 diamonds, once only; incomplete difficulty cannot claim"
+      },
+      {
+        "guards": "locked difficulty, locked level and battle disabled; existing deploy ownership behavior preserved"
+      },
+      {
+        "emptySquad": "start guarded and four empty slots readable"
+      },
+      {
+        "smallPhone": {
+          "viewport": [
+            750,
+            1334
+          ],
+          "resource": {
+            "w": 218,
+            "h": 56,
+            "left": -105,
+            "right": 113,
+            "top": 92,
+            "bottom": 148
+          },
+          "title": {
+            "w": 620,
+            "h": 44,
+            "left": -310,
+            "right": 310,
+            "top": 190,
+            "bottom": 234
+          },
+          "difficulty": {
+            "w": 686,
+            "h": 62,
+            "left": -343,
+            "right": 343,
+            "top": 240,
+            "bottom": 302
+          },
+          "stage": {
+            "w": 750,
+            "h": 271.81999999999994,
+            "left": -375,
+            "right": 375,
+            "top": 314,
+            "bottom": 585.8199999999999
+          },
+          "selectors": {
+            "w": 704,
+            "h": 80,
+            "left": -352,
+            "right": 352,
+            "top": 597.8199999999999,
+            "bottom": 677.8199999999999
+          },
+          "rewards": {
+            "w": 718,
+            "h": 360.18,
+            "left": -359,
+            "right": 359,
+            "top": 717.8199999999999,
+            "bottom": 1078
+          },
+          "battle": {
+            "w": 490,
+            "h": 94,
+            "left": -336,
+            "right": 154,
+            "top": 1092,
+            "bottom": 1186
+          },
+          "squad": {
+            "w": 156,
+            "h": 94,
+            "left": 175,
+            "right": 331,
+            "top": 1092,
+            "bottom": 1186
+          },
+          "nav": {
+            "w": 138,
+            "h": 104,
+            "left": -69,
+            "right": 69,
+            "top": 1218,
+            "bottom": 1322
+          },
+          "upper": {
+            "w": 750,
+            "h": 717.8199999999999,
+            "left": -375,
+            "right": 375,
+            "top": 0,
+            "bottom": 717.8199999999999
+          },
+          "paper": true,
+          "noOldArt": true,
+          "terrainLoaded": true,
+          "terrainAspect": 0.75,
+          "sourceAspect": 0.75,
+          "coverMask": true,
+          "tiers": [
+            {
+              "tier": {
+                "w": 210,
+                "h": 280.18,
+                "left": -327,
+                "right": -117,
+                "top": 783.8199999999999,
+                "bottom": 1064
+              },
+              "condition": {
+                "w": 208,
+                "h": 28,
+                "left": -326,
+                "right": -118,
+                "top": 791.8199999999999,
+                "bottom": 819.8199999999999
+              },
+              "chest": {
+                "w": 112.072,
+                "h": 112.072,
+                "left": -278.036,
+                "right": -165.964,
+                "top": 837.0542,
+                "bottom": 949.1261999999999
+              },
+              "amount": {
+                "w": 82,
+                "h": 30,
+                "left": -246,
+                "right": -164,
+                "top": 959.1261999999999,
+                "bottom": 989.1261999999999
+              },
+              "status": {
+                "w": 184,
+                "h": 44,
+                "left": -314,
+                "right": -130,
+                "top": 1012,
+                "bottom": 1056
+              }
+            },
+            {
+              "tier": {
+                "w": 210,
+                "h": 280.18,
+                "left": -105,
+                "right": 105,
+                "top": 783.8199999999999,
+                "bottom": 1064
+              },
+              "condition": {
+                "w": 208,
+                "h": 28,
+                "left": -104,
+                "right": 104,
+                "top": 791.8199999999999,
+                "bottom": 819.8199999999999
+              },
+              "chest": {
+                "w": 112.072,
+                "h": 112.072,
+                "left": -56.036,
+                "right": 56.036,
+                "top": 837.0542,
+                "bottom": 949.1261999999999
+              },
+              "amount": {
+                "w": 82,
+                "h": 30,
+                "left": -24,
+                "right": 58,
+                "top": 959.1261999999999,
+                "bottom": 989.1261999999999
+              },
+              "status": {
+                "w": 184,
+                "h": 44,
+                "left": -92,
+                "right": 92,
+                "top": 1012,
+                "bottom": 1056
+              }
+            },
+            {
+              "tier": {
+                "w": 210,
+                "h": 280.18,
+                "left": 117,
+                "right": 327,
+                "top": 783.8199999999999,
+                "bottom": 1064
+              },
+              "condition": {
+                "w": 208,
+                "h": 28,
+                "left": 118,
+                "right": 326,
+                "top": 791.8199999999999,
+                "bottom": 819.8199999999999
+              },
+              "chest": {
+                "w": 112.072,
+                "h": 112.072,
+                "left": 165.964,
+                "right": 278.036,
+                "top": 837.0542,
+                "bottom": 949.1261999999999
+              },
+              "amount": {
+                "w": 82,
+                "h": 30,
+                "left": 198,
+                "right": 280,
+                "top": 959.1261999999999,
+                "bottom": 989.1261999999999
+              },
+              "status": {
+                "w": 184,
+                "h": 44,
+                "left": 130,
+                "right": 314,
+                "top": 1012,
+                "bottom": 1056
+              }
+            }
+          ],
+          "arrowsRemoved": true
+        }
+      },
+      {
+        "tabRoundTrip": "shop → hero → levels, shared wallet/nav retained"
+      },
+      {
+        "reducedBrowserHeight": {
+          "viewport": [
+            750,
+            1200
+          ],
+          "resource": {
+            "w": 218,
+            "h": 56,
+            "left": -105,
+            "right": 113,
+            "top": 92,
+            "bottom": 148
+          },
+          "title": {
+            "w": 620,
+            "h": 44,
+            "left": -310,
+            "right": 310,
+            "top": 190,
+            "bottom": 234
+          },
+          "difficulty": {
+            "w": 686,
+            "h": 62,
+            "left": -343,
+            "right": 343,
+            "top": 240,
+            "bottom": 302
+          },
+          "stage": {
+            "w": 750,
+            "h": 174,
+            "left": -375,
+            "right": 375,
+            "top": 314,
+            "bottom": 488
+          },
+          "selectors": {
+            "w": 704,
+            "h": 80,
+            "left": -352,
+            "right": 352,
+            "top": 500,
+            "bottom": 580
+          },
+          "rewards": {
+            "w": 718,
+            "h": 324,
+            "left": -359,
+            "right": 359,
+            "top": 620,
+            "bottom": 944
+          },
+          "battle": {
+            "w": 490,
+            "h": 94,
+            "left": -336,
+            "right": 154,
+            "top": 958,
+            "bottom": 1052
+          },
+          "squad": {
+            "w": 156,
+            "h": 94,
+            "left": 175,
+            "right": 331,
+            "top": 958,
+            "bottom": 1052
+          },
+          "nav": {
+            "w": 138,
+            "h": 104,
+            "left": -69,
+            "right": 69,
+            "top": 1084,
+            "bottom": 1188
+          },
+          "upper": {
+            "w": 750,
+            "h": 620,
+            "left": -375,
+            "right": 375,
+            "top": 0,
+            "bottom": 620
+          },
+          "paper": true,
+          "noOldArt": true,
+          "terrainLoaded": true,
+          "terrainAspect": 0.75,
+          "sourceAspect": 0.75,
+          "coverMask": true,
+          "tiers": [
+            {
+              "tier": {
+                "w": 210,
+                "h": 244,
+                "left": -327,
+                "right": -117,
+                "top": 686,
+                "bottom": 930
+              },
+              "condition": {
+                "w": 208,
+                "h": 28,
+                "left": -326,
+                "right": -118,
+                "top": 694,
+                "bottom": 722
+              },
+              "chest": {
+                "w": 97.60000000000001,
+                "h": 97.60000000000001,
+                "left": -270.8,
+                "right": -173.2,
+                "top": 732.36,
+                "bottom": 829.9599999999999
+              },
+              "amount": {
+                "w": 82,
+                "h": 30,
+                "left": -246,
+                "right": -164,
+                "top": 839.96,
+                "bottom": 869.96
+              },
+              "status": {
+                "w": 184,
+                "h": 44,
+                "left": -314,
+                "right": -130,
+                "top": 878,
+                "bottom": 922
+              }
+            },
+            {
+              "tier": {
+                "w": 210,
+                "h": 244,
+                "left": -105,
+                "right": 105,
+                "top": 686,
+                "bottom": 930
+              },
+              "condition": {
+                "w": 208,
+                "h": 28,
+                "left": -104,
+                "right": 104,
+                "top": 694,
+                "bottom": 722
+              },
+              "chest": {
+                "w": 97.60000000000001,
+                "h": 97.60000000000001,
+                "left": -48.800000000000004,
+                "right": 48.800000000000004,
+                "top": 732.36,
+                "bottom": 829.9599999999999
+              },
+              "amount": {
+                "w": 82,
+                "h": 30,
+                "left": -24,
+                "right": 58,
+                "top": 839.96,
+                "bottom": 869.96
+              },
+              "status": {
+                "w": 184,
+                "h": 44,
+                "left": -92,
+                "right": 92,
+                "top": 878,
+                "bottom": 922
+              }
+            },
+            {
+              "tier": {
+                "w": 210,
+                "h": 244,
+                "left": 117,
+                "right": 327,
+                "top": 686,
+                "bottom": 930
+              },
+              "condition": {
+                "w": 208,
+                "h": 28,
+                "left": 118,
+                "right": 326,
+                "top": 694,
+                "bottom": 722
+              },
+              "chest": {
+                "w": 97.60000000000001,
+                "h": 97.60000000000001,
+                "left": 173.2,
+                "right": 270.8,
+                "top": 732.36,
+                "bottom": 829.9599999999999
+              },
+              "amount": {
+                "w": 82,
+                "h": 30,
+                "left": 198,
+                "right": 280,
+                "top": 839.96,
+                "bottom": 869.96
+              },
+              "status": {
+                "w": 184,
+                "h": 44,
+                "left": 130,
+                "right": 314,
+                "top": 878,
+                "bottom": 922
+              }
+            }
+          ],
+          "arrowsRemoved": true
+        }
+      }
+    ],
+    "errors": [],
+    "failures": [],
+    "screenshots": 18
+  },
+  "localAssets": {
+    "bg_levels_outpost_comic_v2": {
+      "sha256": "8061ada4c0b343625e3e1462de32cc278450c84549fac7e7052aa30a3637e3a1",
+      "bytes": 512590,
+      "path": "assets/resources/native/8b/8be9a4d5-a383-4c7a-8b34-14a354c4ac05.jpg"
+    },
+    "bg_levels_forest_comic_v2": {
+      "sha256": "4a6e2024a8fb96f22a7025a55647c9b91f8ed7a2cc6ffbc6ac8e5365abc3d185",
+      "bytes": 551701,
+      "path": "assets/resources/native/da/daa818cf-663b-48fe-af23-7219fee6b1a0.jpg"
+    },
+    "bg_levels_lair_comic_v2": {
+      "sha256": "9eaf4e02e252905d7088b5ff165692e33252295e4d4020fa9f1e7f89e84e0b05",
+      "bytes": 496095,
+      "path": "assets/resources/native/69/6978b5c5-3022-4076-8cbe-f9716cdade69.jpg"
+    },
+    "bg_levels_comic_v1": {
+      "sha256": "128a637e12a6d231717ff301c82dd003b17e1ab002ff663c3cb51ed3db7b8e35",
+      "bytes": 325245,
+      "path": "assets/resources/native/f1/f176b130-bfe1-469c-9da8-7446a55fe3fa.jpg"
+    },
+    "comic_terrain_outpost_v1": {
+      "sha256": "7d6ce9a8c8713b4725c8da4704993692fccb339a031e4761cee10362498c44be",
+      "bytes": 692877,
+      "path": "assets/resources/native/a8/a826c9d9-b7ff-42b1-8fcf-9e991350b361.png"
+    },
+    "comic_terrain_forest_v1": {
+      "sha256": "091a79e2cfd355dc33489e18dc76facbf2a447967fd21e3ba7cd7a2b9b095df6",
+      "bytes": 626989,
+      "path": "assets/resources/native/a6/a63ac3de-5338-4ae2-a9ba-6b39d8cc87bd.png"
+    },
+    "comic_terrain_lair_v1": {
+      "sha256": "b0918253937dd320532c977f8e761f8afe5f32e84f373aa52ce4dc283eb36bfb",
+      "bytes": 567331,
+      "path": "assets/resources/native/e7/e735abe2-640e-467c-8ff0-eb6f813d1dc8.png"
+    },
+    "comic_swords_v1": {
+      "sha256": "5042bb7aff72311d15b1094fe34a4e241dd3bf3a53a4b95953bc9c7a6875047d",
+      "bytes": 77199,
+      "path": "assets/resources/native/66/6620e3bd-ce8b-4935-9b7e-54a8a43318bf.png"
+    },
+    "comic_difficulty_shield_v1": {
+      "sha256": "b059850a6292edeacbd01d4c158a929f111f25a44256ecc3a09175afe59b4e42",
+      "bytes": 63275,
+      "path": "assets/resources/native/8f/8f9de682-12bb-45e6-a65f-4ebe05a73df0.png"
+    },
+    "comic_difficulty_skull_v1": {
+      "sha256": "8f3dd79491f75503562d32890ec3a27cfa50e5115724f2a0b4fc975ef794e0cd",
+      "bytes": 66829,
+      "path": "assets/resources/native/bf/bfff3ab0-69e7-42d4-9480-af1547542edd.png"
+    },
+    "comic_chest_closed_v1": {
+      "sha256": "180628d7d462c84d63d49fa589c23deec27e905fe5f3123931fffe4c65798e96",
+      "bytes": 78294,
+      "path": "assets/resources/native/ad/adad480f-88c6-4443-bbbf-175c2b44a23e.png"
+    },
+    "comic_star_v1": {
+      "sha256": "fab5438a4ae9aec3fd5606dcad326c05bdcb3e60a3f377a8b9a4887546cb4b21",
+      "bytes": 46823,
+      "path": "assets/resources/native/7e/7e86341d-6566-46c1-8568-0eadbc2e2ed1.png"
+    },
+    "comic_chest_open_v1": {
+      "sha256": "982cf05dd14b01b038ab3bc3c048764d29dfb2a3bbf2dc56da9c33a1a933a9d5",
+      "bytes": 93205,
+      "path": "assets/resources/native/ae/ae0e95aa-57d6-4dc8-b480-48be97e5270c.png"
+    },
+    "bg_heroes_comic_v3": {
+      "sha256": "fa61b256aa863168df722d65768293c1aac7cc99704df0ff8aae6393c4540328",
+      "bytes": 379562,
+      "path": "assets/resources/native/16/1698ad5e-3a59-445b-a2be-2a3ae9ba71a7.jpg"
+    },
+    "comic_cycle_button_v3": {
+      "sha256": "01ff07d8f9c7bcf9259642aa7901424dc0a577ccca630c307834c5ca436a53c2",
+      "bytes": 75888,
+      "path": "assets/resources/native/31/31aae5c1-b0d5-4dfd-891d-b929783c58f9.png"
+    },
+    "comic_power_plate_v3": {
+      "sha256": "49d675e007a04622dde49262ffd1fff635516cde726ca46c69bc34bd85c3bbee",
+      "bytes": 91677,
+      "path": "assets/resources/native/b8/b8154fa0-1dfc-4ac4-9ae2-d28af21697d5.png"
+    },
+    "bg_heroes_comic_v2": {
+      "sha256": "66b41804855b0cdcd6d94132820e7a2d1b3f91a6bddc98b8bf0df38d7f52ca4c",
+      "bytes": 231905,
+      "path": "assets/resources/native/e2/e25c42bf-8945-48b0-9509-5981615fdd6a.jpg"
+    },
+    "comic_cycle_arrow_v2": {
+      "sha256": "760843b89e26f7be020ca3fc66a8ae2e25a22d572e021d741103b4b7031ddf2b",
+      "bytes": 37063,
+      "path": "assets/resources/native/db/db265a4e-06f9-4e78-8f85-1e6a86d84f2c.png"
+    },
+    "comic_power_banner_v2": {
+      "sha256": "cfe2af42ee1af3f337bcfede55fd117101507db2f0f64bcf299a998b2db86976",
+      "bytes": 107220,
+      "path": "assets/resources/native/c6/c69efab8-6b16-42f6-bcbc-3ee92089bae5.png"
+    },
+    "comic_bag_v2": {
+      "sha256": "5165ada235aa81bebc5d15fd266a1260ec8938b4362e5d85e11968a02dcce579",
+      "bytes": 85021,
+      "path": "assets/resources/native/52/52c42fb1-5aa2-48b5-9d39-3600dd1d1d7e.png"
+    },
+    "comic_attributes_v2": {
+      "sha256": "5a58575d0549d65a27781d5bfc57e88309e2082df8fd29883db5e368af4ac1c6",
+      "bytes": 62101,
+      "path": "assets/resources/native/a3/a3c54d54-3691-4aa4-9a18-9567042393f3.png"
+    },
+    "comic_story_v2": {
+      "sha256": "76680d2e1c7933a3824d37fe346fd0f7827b30de8c162b584f46e3d2929e1cde",
+      "bytes": 60541,
+      "path": "assets/resources/native/76/767a65be-71f8-4ee6-a731-a891a9d781ae.png"
+    },
+    "comic_forge_v2": {
+      "sha256": "0a1bd683707a6e4d766279fbf12c1480ee137faa4868ab88a7df8267fc5fff8c",
+      "bytes": 50957,
+      "path": "assets/resources/native/a4/a4ce34c9-b3df-44ad-ba49-7deb7be1e83b.png"
+    },
+    "bg_heroes_comic_v1": {
+      "sha256": "a00ba51d070e866e8aa2b60fdb60be3f477c3528b1f9d4f96135d942b5009712",
+      "bytes": 313088,
+      "path": "assets/resources/native/9c/9ca0e4d4-40ed-4789-a988-7cb1081d90ad.jpg"
+    },
+    "comic_hero_archer_v1": {
+      "sha256": "3779f66058a83d486b6643c0e9a0ff4de7cfdfe9bd5e02a8becef4d18d1019a2",
+      "bytes": 181145,
+      "path": "assets/resources/native/5a/5a337cc8-8169-4621-b897-325bfbd7bd05.png"
+    },
+    "comic_figure_archer_v1": {
+      "sha256": "7a899128f5075e2117b33266de17b71c25fce1d5c8df8b679ed391c6e5963c24",
+      "bytes": 375151,
+      "path": "assets/resources/native/e7/e76aca24-e83a-4f1f-b0cd-852ffc62b76c.png"
+    },
+    "comic_figure_sniper_v1": {
+      "sha256": "4d9aa5844d41afd11edf8d994bd1813750566e88047ade5752071a9419f7c022",
+      "bytes": 384155,
+      "path": "assets/resources/native/22/22d5a589-3361-4fbe-b257-81f66c215a6f.png"
+    },
+    "comic_figure_pyro_v1": {
+      "sha256": "1bb186100bf6f0116bbcf29a2310a578a3aa7f1fe8b55a2f2bc07c7f0e425acf",
+      "bytes": 385783,
+      "path": "assets/resources/native/08/0870731e-8150-41a4-819f-c422ff659f6c.png"
+    },
+    "comic_figure_volt_v1": {
+      "sha256": "39ea59affa2dd4e3086a2f9eaa38844103771c83e007b66f7e64b14c02b96fa9",
+      "bytes": 461059,
+      "path": "assets/resources/native/60/604375e0-ee6e-42da-a5e7-0b8e4c314a3d.png"
+    },
+    "comic_figure_mora_v1": {
+      "sha256": "f3bc97be2caff7012a6e0d3d07849b7bb9721ebb35731f061dd669241c649f56",
+      "bytes": 425143,
+      "path": "assets/resources/native/3e/3e9ac617-0e41-4f1b-9f39-c0884c1d97df.png"
+    },
+    "bg_shop_comic_v1": {
+      "sha256": "9aabc0e55c06ee2b7de441f2ceecc3ee1b4d42db16bf6de2c45da076b9f1d832",
+      "bytes": 361384,
+      "path": "assets/resources/native/b7/b770e961-1615-413d-9153-48a2378da6d8.jpg"
+    },
+    "comic_coin_v1": {
+      "sha256": "035475e9dce04a56070c512fb804474c1224c52aac69f3b785fb1d43619a56bb",
+      "bytes": 75114,
+      "path": "assets/resources/native/91/9133df24-ef54-4ca3-825a-f72bfeba6975.png"
+    },
+    "comic_diamond_v1": {
+      "sha256": "dd1d04ab8400f3e641979547a2a1716c3d526c9d4a1e54b7c7fad29a63e4bc75",
+      "bytes": 48765,
+      "path": "assets/resources/native/a4/a4ce7732-d70a-47e9-8c68-d1c3a8fa666f.png"
+    },
+    "comic_wpn_bow_v1": {
+      "sha256": "e33d58d21aee2937919aaf14bf865271754de6d28632de5b4c713ab9a8fdbc21",
+      "bytes": 47020,
+      "path": "assets/resources/native/d5/d5144da3-22e5-4391-92f4-89a5c9fc89a5.png"
+    },
+    "comic_wpn_crossbow_v1": {
+      "sha256": "e21667430f092ac85ed35ae6b3d7223eb7ce90e2a467d4306b00d274e41fb8e6",
+      "bytes": 60509,
+      "path": "assets/resources/native/51/51af3679-6760-45c5-9caf-9bb95230bd3a.png"
+    },
+    "comic_mat_stone_v1": {
+      "sha256": "d634f1acfba66a1d6199041409d16485d729ce2a3f113367aa5702528d791e60",
+      "bytes": 58274,
+      "path": "assets/resources/native/cb/cb35d9a0-8122-414a-97b1-62be93f8a421.png"
+    },
+    "comic_mat_iron_v1": {
+      "sha256": "4282318b6395d6dfe874ccd6861c7d21b06a9a89551c5babe08e72db0e707476",
+      "bytes": 49586,
+      "path": "assets/resources/native/1f/1ff994d4-dd97-4e97-8d05-67647c9692a2.png"
+    },
+    "comic_mat_dust_v1": {
+      "sha256": "55851335796e02519eda0ff2c78e72d3bdb8ae0779316e31bec2fbf6ea0dc0e8",
+      "bytes": 71026,
+      "path": "assets/resources/native/b1/b1f3739f-b3c6-441a-a2fd-a3a283ed569a.png"
+    },
+    "comic_mat_rune_v1": {
+      "sha256": "77dfbbc2854e0d4a3c539a6f7cef5b8de3d29cbae084ad984ad068824fcf46d0",
+      "bytes": 67676,
+      "path": "assets/resources/native/2e/2ec58d2d-181d-44c1-96a8-dd5af70bcaba.png"
+    },
+    "comic_helm_falcon_v1": {
+      "sha256": "60147f7d0313c73aa2dbf79723e470496dd50e475c3386956609d21b59c3c9f9",
+      "bytes": 65141,
+      "path": "assets/resources/native/29/2996d22c-a972-4cfc-bcb2-9537567bb6f9.png"
+    },
+    "comic_acc_moon_v1": {
+      "sha256": "5ca3122d3616855bd4f103f120e73b57961cc9915a5dc1f420ef557b7a196a84",
+      "bytes": 48350,
+      "path": "assets/resources/native/e3/e35538c7-7bc4-4b9c-ae3b-f78b388f565a.png"
+    },
+    "comic_glove_wind_v1": {
+      "sha256": "d3302f5bd395551eac67be6fc4098bd558318ba9b9d2fe867c330b87b0343539",
+      "bytes": 67312,
+      "path": "assets/resources/native/02/02cf2ca3-2925-4dd3-ba3e-b541dda78fd6.png"
+    },
+    "comic_armor_forest_v1": {
+      "sha256": "4f7b8b8a249efe5dc58ef2719901beeb601d57c95ba76699530b3c208091790e",
+      "bytes": 78833,
+      "path": "assets/resources/native/e8/e8e574df-ad9e-4911-a5dc-7924c0fd3829.png"
+    },
+    "comic_nav_shop_v1": {
+      "sha256": "a655c2014f41975d78ee51400c22e926656b100c4eb9d33227b794762c2b16da",
+      "bytes": 68150,
+      "path": "assets/resources/native/f6/f6b0a363-074e-48ac-80d7-99c345a3efa3.png"
+    },
+    "comic_nav_map_v1": {
+      "sha256": "d3ce887001356123d4ccfc9f34f21089e8c4310abcef9086e37f40f49fe7629f",
+      "bytes": 60521,
+      "path": "assets/resources/native/69/693ed11b-12bb-4887-b783-945f8230fc9c.png"
+    },
+    "comic_nav_castle_v1": {
+      "sha256": "5d0ec1c28616a12940b61fe8d7a61fa932c4b436e38d25d6acf12676397c8835",
+      "bytes": 77944,
+      "path": "assets/resources/native/ca/ca9e658d-ff59-449a-bc11-f7b490ad7370.png"
+    },
+    "comic_hero_sniper_v1": {
+      "sha256": "658a4388c477be8ef4431415dae7836061b34ea2735e50dd961475d93d28530c",
+      "bytes": 166775,
+      "path": "assets/resources/native/a4/a4172b00-8314-47e0-9ef8-f734a3af70f3.png"
+    },
+    "comic_hero_pyro_v1": {
+      "sha256": "419fbc2d168117e970be9a482a71d69160c89f03548f98e80474762099358451",
+      "bytes": 166805,
+      "path": "assets/resources/native/bf/bf587cf3-2fc1-4f20-a32a-bff801dbcf15.png"
+    },
+    "comic_hero_volt_v1": {
+      "sha256": "36dd7d523e6bc9490ddf7b5878f9d0f06f8611d856db7186cf5bd7ece3606b26",
+      "bytes": 181363,
+      "path": "assets/resources/native/fb/fb668788-2d10-410a-b08d-64c4ca3a04ed.png"
+    },
+    "comic_hero_mora_v1": {
+      "sha256": "e0c6d14815d487b679d18bc5b2abec6d29112dfb0d2c03bba505783a8dc5a71b",
+      "bytes": 190056,
+      "path": "assets/resources/native/ab/abff6c4d-3d8b-45f4-ad69-4e13c62f1889.png"
+    }
+  },
+  "onlineFiles": {
+    "index.html": {
+      "matchesLocal": true,
+      "sha256": "e47638c5a9a188760ac1f16d2a02492f338355b248b918e7aa7453624e5bf39e",
+      "bytes": 5043
+    },
+    "main.js": {
+      "matchesLocal": true,
+      "sha256": "277f33a24e8f5c8cf5c3595e505e695c76826f624bcb80a93ffb49b24812b13d",
+      "bytes": 789120
+    },
+    "resources-config.json": {
+      "matchesLocal": true,
+      "sha256": "f7c7976628336a2495d505da6384dd52b2825e76c0379f00d5a1923dba7d885e",
+      "bytes": 166199
+    },
+    "dpr-engine.js": {
+      "matchesLocal": true,
+      "sha256": "eeeef70cc6cd8bccc4493d60bbc85cddd4f6d0de383c4e8a3b4d48b64323488d",
+      "bytes": 5686956
+    },
+    "bg_levels_outpost_comic_v2": {
+      "matchesLocal": true,
+      "sha256": "8061ada4c0b343625e3e1462de32cc278450c84549fac7e7052aa30a3637e3a1",
+      "bytes": 512590
+    },
+    "bg_levels_forest_comic_v2": {
+      "matchesLocal": true,
+      "sha256": "4a6e2024a8fb96f22a7025a55647c9b91f8ed7a2cc6ffbc6ac8e5365abc3d185",
+      "bytes": 551701
+    },
+    "bg_levels_lair_comic_v2": {
+      "matchesLocal": true,
+      "sha256": "9eaf4e02e252905d7088b5ff165692e33252295e4d4020fa9f1e7f89e84e0b05",
+      "bytes": 496095
+    },
+    "bg_levels_comic_v1": {
+      "matchesLocal": true,
+      "sha256": "128a637e12a6d231717ff301c82dd003b17e1ab002ff663c3cb51ed3db7b8e35",
+      "bytes": 325245
+    },
+    "comic_terrain_outpost_v1": {
+      "matchesLocal": true,
+      "sha256": "7d6ce9a8c8713b4725c8da4704993692fccb339a031e4761cee10362498c44be",
+      "bytes": 692877
+    },
+    "comic_terrain_forest_v1": {
+      "matchesLocal": true,
+      "sha256": "091a79e2cfd355dc33489e18dc76facbf2a447967fd21e3ba7cd7a2b9b095df6",
+      "bytes": 626989
+    },
+    "comic_terrain_lair_v1": {
+      "matchesLocal": true,
+      "sha256": "b0918253937dd320532c977f8e761f8afe5f32e84f373aa52ce4dc283eb36bfb",
+      "bytes": 567331
+    },
+    "comic_swords_v1": {
+      "matchesLocal": true,
+      "sha256": "5042bb7aff72311d15b1094fe34a4e241dd3bf3a53a4b95953bc9c7a6875047d",
+      "bytes": 77199
+    },
+    "comic_difficulty_shield_v1": {
+      "matchesLocal": true,
+      "sha256": "b059850a6292edeacbd01d4c158a929f111f25a44256ecc3a09175afe59b4e42",
+      "bytes": 63275
+    },
+    "comic_difficulty_skull_v1": {
+      "matchesLocal": true,
+      "sha256": "8f3dd79491f75503562d32890ec3a27cfa50e5115724f2a0b4fc975ef794e0cd",
+      "bytes": 66829
+    },
+    "comic_chest_closed_v1": {
+      "matchesLocal": true,
+      "sha256": "180628d7d462c84d63d49fa589c23deec27e905fe5f3123931fffe4c65798e96",
+      "bytes": 78294
+    },
+    "comic_star_v1": {
+      "matchesLocal": true,
+      "sha256": "fab5438a4ae9aec3fd5606dcad326c05bdcb3e60a3f377a8b9a4887546cb4b21",
+      "bytes": 46823
+    },
+    "comic_chest_open_v1": {
+      "matchesLocal": true,
+      "sha256": "982cf05dd14b01b038ab3bc3c048764d29dfb2a3bbf2dc56da9c33a1a933a9d5",
+      "bytes": 93205
+    },
+    "bg_heroes_comic_v3": {
+      "matchesLocal": true,
+      "sha256": "fa61b256aa863168df722d65768293c1aac7cc99704df0ff8aae6393c4540328",
+      "bytes": 379562
+    },
+    "comic_cycle_button_v3": {
+      "matchesLocal": true,
+      "sha256": "01ff07d8f9c7bcf9259642aa7901424dc0a577ccca630c307834c5ca436a53c2",
+      "bytes": 75888
+    },
+    "comic_power_plate_v3": {
+      "matchesLocal": true,
+      "sha256": "49d675e007a04622dde49262ffd1fff635516cde726ca46c69bc34bd85c3bbee",
+      "bytes": 91677
+    },
+    "bg_heroes_comic_v2": {
+      "matchesLocal": true,
+      "sha256": "66b41804855b0cdcd6d94132820e7a2d1b3f91a6bddc98b8bf0df38d7f52ca4c",
+      "bytes": 231905
+    },
+    "comic_cycle_arrow_v2": {
+      "matchesLocal": true,
+      "sha256": "760843b89e26f7be020ca3fc66a8ae2e25a22d572e021d741103b4b7031ddf2b",
+      "bytes": 37063
+    },
+    "comic_power_banner_v2": {
+      "matchesLocal": true,
+      "sha256": "cfe2af42ee1af3f337bcfede55fd117101507db2f0f64bcf299a998b2db86976",
+      "bytes": 107220
+    },
+    "comic_bag_v2": {
+      "matchesLocal": true,
+      "sha256": "5165ada235aa81bebc5d15fd266a1260ec8938b4362e5d85e11968a02dcce579",
+      "bytes": 85021
+    },
+    "comic_attributes_v2": {
+      "matchesLocal": true,
+      "sha256": "5a58575d0549d65a27781d5bfc57e88309e2082df8fd29883db5e368af4ac1c6",
+      "bytes": 62101
+    },
+    "comic_story_v2": {
+      "matchesLocal": true,
+      "sha256": "76680d2e1c7933a3824d37fe346fd0f7827b30de8c162b584f46e3d2929e1cde",
+      "bytes": 60541
+    },
+    "comic_forge_v2": {
+      "matchesLocal": true,
+      "sha256": "0a1bd683707a6e4d766279fbf12c1480ee137faa4868ab88a7df8267fc5fff8c",
+      "bytes": 50957
+    },
+    "bg_heroes_comic_v1": {
+      "matchesLocal": true,
+      "sha256": "a00ba51d070e866e8aa2b60fdb60be3f477c3528b1f9d4f96135d942b5009712",
+      "bytes": 313088
+    },
+    "comic_hero_archer_v1": {
+      "matchesLocal": true,
+      "sha256": "3779f66058a83d486b6643c0e9a0ff4de7cfdfe9bd5e02a8becef4d18d1019a2",
+      "bytes": 181145
+    },
+    "comic_figure_archer_v1": {
+      "matchesLocal": true,
+      "sha256": "7a899128f5075e2117b33266de17b71c25fce1d5c8df8b679ed391c6e5963c24",
+      "bytes": 375151
+    },
+    "comic_figure_sniper_v1": {
+      "matchesLocal": true,
+      "sha256": "4d9aa5844d41afd11edf8d994bd1813750566e88047ade5752071a9419f7c022",
+      "bytes": 384155
+    },
+    "comic_figure_pyro_v1": {
+      "matchesLocal": true,
+      "sha256": "1bb186100bf6f0116bbcf29a2310a578a3aa7f1fe8b55a2f2bc07c7f0e425acf",
+      "bytes": 385783
+    },
+    "comic_figure_volt_v1": {
+      "matchesLocal": true,
+      "sha256": "39ea59affa2dd4e3086a2f9eaa38844103771c83e007b66f7e64b14c02b96fa9",
+      "bytes": 461059
+    },
+    "comic_figure_mora_v1": {
+      "matchesLocal": true,
+      "sha256": "f3bc97be2caff7012a6e0d3d07849b7bb9721ebb35731f061dd669241c649f56",
+      "bytes": 425143
+    },
+    "bg_shop_comic_v1": {
+      "matchesLocal": true,
+      "sha256": "9aabc0e55c06ee2b7de441f2ceecc3ee1b4d42db16bf6de2c45da076b9f1d832",
+      "bytes": 361384
+    },
+    "comic_coin_v1": {
+      "matchesLocal": true,
+      "sha256": "035475e9dce04a56070c512fb804474c1224c52aac69f3b785fb1d43619a56bb",
+      "bytes": 75114
+    },
+    "comic_diamond_v1": {
+      "matchesLocal": true,
+      "sha256": "dd1d04ab8400f3e641979547a2a1716c3d526c9d4a1e54b7c7fad29a63e4bc75",
+      "bytes": 48765
+    },
+    "comic_wpn_bow_v1": {
+      "matchesLocal": true,
+      "sha256": "e33d58d21aee2937919aaf14bf865271754de6d28632de5b4c713ab9a8fdbc21",
+      "bytes": 47020
+    },
+    "comic_wpn_crossbow_v1": {
+      "matchesLocal": true,
+      "sha256": "e21667430f092ac85ed35ae6b3d7223eb7ce90e2a467d4306b00d274e41fb8e6",
+      "bytes": 60509
+    },
+    "comic_mat_stone_v1": {
+      "matchesLocal": true,
+      "sha256": "d634f1acfba66a1d6199041409d16485d729ce2a3f113367aa5702528d791e60",
+      "bytes": 58274
+    },
+    "comic_mat_iron_v1": {
+      "matchesLocal": true,
+      "sha256": "4282318b6395d6dfe874ccd6861c7d21b06a9a89551c5babe08e72db0e707476",
+      "bytes": 49586
+    },
+    "comic_mat_dust_v1": {
+      "matchesLocal": true,
+      "sha256": "55851335796e02519eda0ff2c78e72d3bdb8ae0779316e31bec2fbf6ea0dc0e8",
+      "bytes": 71026
+    },
+    "comic_mat_rune_v1": {
+      "matchesLocal": true,
+      "sha256": "77dfbbc2854e0d4a3c539a6f7cef5b8de3d29cbae084ad984ad068824fcf46d0",
+      "bytes": 67676
+    },
+    "comic_helm_falcon_v1": {
+      "matchesLocal": true,
+      "sha256": "60147f7d0313c73aa2dbf79723e470496dd50e475c3386956609d21b59c3c9f9",
+      "bytes": 65141
+    },
+    "comic_acc_moon_v1": {
+      "matchesLocal": true,
+      "sha256": "5ca3122d3616855bd4f103f120e73b57961cc9915a5dc1f420ef557b7a196a84",
+      "bytes": 48350
+    },
+    "comic_glove_wind_v1": {
+      "matchesLocal": true,
+      "sha256": "d3302f5bd395551eac67be6fc4098bd558318ba9b9d2fe867c330b87b0343539",
+      "bytes": 67312
+    },
+    "comic_armor_forest_v1": {
+      "matchesLocal": true,
+      "sha256": "4f7b8b8a249efe5dc58ef2719901beeb601d57c95ba76699530b3c208091790e",
+      "bytes": 78833
+    },
+    "comic_nav_shop_v1": {
+      "matchesLocal": true,
+      "sha256": "a655c2014f41975d78ee51400c22e926656b100c4eb9d33227b794762c2b16da",
+      "bytes": 68150
+    },
+    "comic_nav_map_v1": {
+      "matchesLocal": true,
+      "sha256": "d3ce887001356123d4ccfc9f34f21089e8c4310abcef9086e37f40f49fe7629f",
+      "bytes": 60521
+    },
+    "comic_nav_castle_v1": {
+      "matchesLocal": true,
+      "sha256": "5d0ec1c28616a12940b61fe8d7a61fa932c4b436e38d25d6acf12676397c8835",
+      "bytes": 77944
+    },
+    "comic_hero_sniper_v1": {
+      "matchesLocal": true,
+      "sha256": "658a4388c477be8ef4431415dae7836061b34ea2735e50dd961475d93d28530c",
+      "bytes": 166775
+    },
+    "comic_hero_pyro_v1": {
+      "matchesLocal": true,
+      "sha256": "419fbc2d168117e970be9a482a71d69160c89f03548f98e80474762099358451",
+      "bytes": 166805
+    },
+    "comic_hero_volt_v1": {
+      "matchesLocal": true,
+      "sha256": "36dd7d523e6bc9490ddf7b5878f9d0f06f8611d856db7186cf5bd7ece3606b26",
+      "bytes": 181363
+    },
+    "comic_hero_mora_v1": {
+      "matchesLocal": true,
+      "sha256": "e0c6d14815d487b679d18bc5b2abec6d29112dfb0d2c03bba505783a8dc5a71b",
+      "bytes": 190056
+    }
+  },
+  "battleInspection": "Not entered. Start payload verified by intercepting scene load in isolated browser contexts.",
+  "existingBattleChangesPreserved": [
+    "frost skill v10",
+    "128 staggered ultimate shards",
+    "mora_linger +1 second card",
+    "FrostProjectileVFX"
+  ],
+  "onlineSmoke": {
+    "ok": true,
+    "url": "https://kingdom-watch.pages.dev/?v=levels-comic-v2-1791711814",
+    "viewport": [
+      375,
+      667
+    ],
+    "realTouchDrag": true,
+    "claimedGold": 200,
+    "offsetRetainedAcross": [
+      "claim refresh",
+      "shop/hero/level roundtrip",
+      "squad done"
+    ],
+    "squadBackRemoved": true,
+    "battleEntered": false,
+    "errors": []
+  }
+}

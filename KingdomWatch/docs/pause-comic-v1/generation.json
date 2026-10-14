@@ -1,0 +1,13 @@
+{
+  "tool": "built-in image_gen",
+  "original": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-fc1138f2-85d3-4a10-b50c-614aa3996a82.png",
+  "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\pause-comic-v1\\source-atlas.png",
+  "transparentBackground": true,
+  "references": [
+    "docs/shop-comic-v1/style-reference.png",
+    "user pause screenshot"
+  ],
+  "prompt": "image-prompt.txt",
+  "spriteCount": 11,
+  "processing": "Fixed-region crop only; original color and alpha pixels preserved"
+}

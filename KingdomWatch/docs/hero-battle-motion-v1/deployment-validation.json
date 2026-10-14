@@ -1,0 +1,280 @@
+{
+  "dateUTC": "2026-10-11T15:00:14.417399+00:00",
+  "status": "published",
+  "url": "https://kingdom-watch.pages.dev/?v=hero-motion-1791730476",
+  "deployment": "https://3555dcf9.kingdom-watch.pages.dev",
+  "typeCheck": "passed",
+  "creatorBuild": "passed: 3.8.8 web-mobile",
+  "dprPatch": "passed",
+  "newBitmapAssets": 0,
+  "realBattleStarted": false,
+  "checks": {
+    "ui-validation": {
+      "ok": true,
+      "url": "http://127.0.0.1:8765/",
+      "realBattleStarted": false,
+      "checks": [
+        {
+          "viewport": [
+            430,
+            932
+          ],
+          "pause": "1–4 rows clear subtitle, one another and tabs by at least 12px",
+          "health": "whole health/shield group raised 22 design pixels"
+        },
+        {
+          "heroMotion": [
+            {
+              "id": "archer",
+              "hasMotion": true,
+              "frameStable": true,
+              "nodeStable": true,
+              "simulationOriginStable": true,
+              "maxDelta": 0.020572830635854328,
+              "kickAfter": 0.009577222636866545,
+              "recovered": true
+            },
+            {
+              "id": "pyro",
+              "hasMotion": true,
+              "frameStable": true,
+              "nodeStable": true,
+              "simulationOriginStable": true,
+              "maxDelta": 0.025471123644391074,
+              "kickAfter": 0.009577222636866545,
+              "recovered": true
+            },
+            {
+              "id": "volt",
+              "hasMotion": true,
+              "frameStable": true,
+              "nodeStable": true,
+              "simulationOriginStable": true,
+              "maxDelta": 0.020572830635854328,
+              "kickAfter": 0.009577222636866545,
+              "recovered": true
+            },
+            {
+              "id": "mora",
+              "hasMotion": true,
+              "frameStable": true,
+              "nodeStable": true,
+              "simulationOriginStable": true,
+              "maxDelta": 0.022532147839269025,
+              "kickAfter": 0.009577222636866545,
+              "recovered": true
+            },
+            {
+              "id": "sniper",
+              "hasMotion": true,
+              "frameStable": true,
+              "nodeStable": true,
+              "simulationOriginStable": true,
+              "maxDelta": 0.008826817893162685,
+              "kickAfter": 0.003018819050514521,
+              "recovered": true
+            }
+          ]
+        },
+        {
+          "combatCadence": [
+            {
+              "id": "archer",
+              "shots": 5,
+              "expected": 5,
+              "origin": true,
+              "intervals": [
+                0.8333333333333334,
+                0.8333333333333334,
+                0.8333333333333333,
+                0.8333333333333335
+              ],
+              "gap": 0.8333333333333334,
+              "skill": false,
+              "ult": false
+            },
+            {
+              "id": "pyro",
+              "shots": 4,
+              "expected": 4,
+              "origin": true,
+              "intervals": [
+                1.25,
+                1.25,
+                1.25
+              ],
+              "gap": 1.25,
+              "skill": false,
+              "ult": false
+            },
+            {
+              "id": "volt",
+              "shots": 3,
+              "expected": 3,
+              "origin": true,
+              "intervals": [
+                1.3333333333333333,
+                1.3333333333333333
+              ],
+              "gap": 1.3333333333333333,
+              "skill": false,
+              "ult": false
+            },
+            {
+              "id": "mora",
+              "shots": 3,
+              "expected": 3,
+              "origin": true,
+              "intervals": [
+                1.3333333333333333,
+                1.3333333333333333
+              ],
+              "gap": 1.3333333333333333,
+              "skill": false,
+              "ult": false
+            },
+            {
+              "id": "sniper",
+              "shots": 2,
+              "expected": 2,
+              "origin": true,
+              "intervals": [
+                2.8666666666666667
+              ],
+              "gap": 2.857142857142857,
+              "skill": false,
+              "ult": false
+            }
+          ]
+        },
+        {
+          "gpuPixelChecks": [
+            {
+              "id": "archer",
+              "feet": {
+                "changed": 0,
+                "total": 4851
+              },
+              "body": {
+                "changed": 16267,
+                "total": 55125
+              }
+            },
+            {
+              "id": "pyro",
+              "feet": {
+                "changed": 0,
+                "total": 5379
+              },
+              "body": {
+                "changed": 19017,
+                "total": 61125
+              }
+            },
+            {
+              "id": "volt",
+              "feet": {
+                "changed": 0,
+                "total": 4587
+              },
+              "body": {
+                "changed": 17583,
+                "total": 52125
+              }
+            },
+            {
+              "id": "mora",
+              "feet": {
+                "changed": 0,
+                "total": 4587
+              },
+              "body": {
+                "changed": 17055,
+                "total": 52125
+              }
+            }
+          ]
+        },
+        {
+          "viewport": [
+            375,
+            600
+          ],
+          "pause": "1–4 rows clear subtitle, one another and tabs by at least 12px",
+          "health": "whole health/shield group raised 22 design pixels"
+        },
+        {
+          "viewport": [
+            430,
+            760
+          ],
+          "pause": "1–4 rows clear subtitle, one another and tabs by at least 12px",
+          "health": "whole health/shield group raised 22 design pixels"
+        }
+      ],
+      "errors": [],
+      "failed": []
+    },
+    "online-validation": {
+      "ok": true,
+      "url": "https://kingdom-watch.pages.dev/?v=hero-motion-1791730476",
+      "realBattleStarted": false,
+      "checks": [
+        {
+          "viewport": [
+            375,
+            600
+          ],
+          "pause": "1–4 rows clear subtitle, one another and tabs by at least 12px",
+          "health": "whole health/shield group raised 22 design pixels"
+        }
+      ],
+      "errors": [],
+      "failed": []
+    }
+  },
+  "onlineFiles": {
+    "index": {
+      "matchesLocal": true,
+      "bytes": 5043,
+      "sha256": "c25183ea54e0d8e56cdb94ec00df3b444e8c927f1f3d7f83a5b18d82d233e63f",
+      "path": "index.html"
+    },
+    "main": {
+      "matchesLocal": true,
+      "bytes": 845791,
+      "sha256": "a16d804affbc2ee25fb2c13c8fcddddffd41b57931610c1bcb045d05d4f7a49c",
+      "path": "assets/main/index.js"
+    },
+    "resources": {
+      "matchesLocal": true,
+      "bytes": 182420,
+      "sha256": "282a8d9586b94c294a64caa991f25ab0ba71cfffa479a8221e04b8374f6e1823",
+      "path": "assets/resources/config.json"
+    },
+    "dpr-engine": {
+      "matchesLocal": true,
+      "bytes": 5686956,
+      "sha256": "eeeef70cc6cd8bccc4493d60bbc85cddd4f6d0de383c4e8a3b4d48b64323488d",
+      "path": "cocos-js/_virtual_cc-y8x7t64p.js"
+    },
+    "hero-motion-effect": {
+      "matchesLocal": true,
+      "bytes": 12327,
+      "sha256": "ca73f0b27fb266a92e22c939ce1c653e2c8a2ef5d994d01c72f9f9a29d372dd1",
+      "path": "assets/resources/import/53/532db709-2611-4129-a86f-247167f82b89.json"
+    },
+    "hero-frame-manifest": {
+      "matchesLocal": true,
+      "bytes": 514,
+      "sha256": "4ebfad0d3ff8b53d5af23032e5972476457ca4b924075e74a42f2e8f48c453c5",
+      "path": "assets/resources/import/6f/6f8381d6-0943-4ebc-b6ec-83916770e7f2.json"
+    },
+    "hero-atlas": {
+      "matchesLocal": true,
+      "bytes": 1641358,
+      "sha256": "92809adb421556d2cdd26a4ae96fee4fe407c8a6efce7829a8b29b90ed4a6065",
+      "path": "assets/resources/native/7c/7c437e9f-1675-4fc0-aa0d-256fc67de4ed.png"
+    }
+  }
+}

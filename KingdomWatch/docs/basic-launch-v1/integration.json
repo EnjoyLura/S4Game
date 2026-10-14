@@ -1,0 +1,51 @@
+{
+  "status": "published",
+  "scope": "five hero basic projectile releases: bow/crossbow wind pressure, fire jet, violet lightning and frost crystals",
+  "renderer": "BasicAttackLaunchVFX; original native Graphics geometry, no AI generation",
+  "styles": {
+    "archer": {
+      "element": "white/mint wind pressure",
+      "seconds": 0.18
+    },
+    "sniper": {
+      "element": "white/blue wind pressure, 1.28x scale",
+      "seconds": 0.22
+    },
+    "pyro": {
+      "element": "orange/red flame jet, pale yellow core and embers",
+      "seconds": 0.24
+    },
+    "volt": {
+      "element": "violet branched lightning with pale core",
+      "seconds": 0.18
+    },
+    "mora": {
+      "element": "ice-blue frosty air and small faceted crystals",
+      "seconds": 0.25
+    }
+  },
+  "direction": "Normalized actual projectile direction; same world origin as the spawned basic projectile",
+  "triggers": "Archer once per actual basic row including serial and empowered arrows; other four heroes once in shoot",
+  "fanEffectDuplicatedPerArrow": false,
+  "source": "User references for launch style, no copied game assets",
+  "clock": "ImpactFX.tick battle simulation dt; pause, pick, settlement and speed handled by existing battle clock",
+  "poolCapacity": 36,
+  "newNodesPerShot": 0,
+  "newTweensPerShot": 0,
+  "graphicsNodes": 1,
+  "retained": [
+    "all hero imagery and idle/attack atlases",
+    "projectile bodies and flight trails",
+    "basic attack speed and damage",
+    "projectile speed, collision and hit callbacks",
+    "skills, ultimates, sounds and UI"
+  ],
+  "paidImageTasks": 0,
+  "paidVideoTasks": 0,
+  "gameplayTestsRun": false,
+  "browserValidationRun": false,
+  "onlineValidationRun": false,
+  "userVisualAccepted": false,
+  "game": "https://kingdom-watch.pages.dev/?v=basic-launch-v1-1791997605",
+  "deployment": "https://4a0cfb2f.kingdom-watch.pages.dev"
+}

@@ -1,0 +1,14 @@
+{
+  "method": "New forward-time source cycle requested from the approved static master",
+  "sourceVideoTask": "task_WdcJrkRLheKDenC7WXxjJygSyNe4qAGr",
+  "actualPrompt": "idle-prompt-effective.txt",
+  "allSourceFramesRetained": true,
+  "reversePlayback": false,
+  "noArtificialHold": true,
+  "note": "Prompt and packaging do not certify visual closure; user reviews the actual new video and ordered frames",
+  "userAccepted": true,
+  "animationAcceptedByUser": true,
+  "acceptedFeedback": "雷法师的待机动画很丝滑了",
+  "acceptedOn": "2026-10-14",
+  "motionAcceptedByUser": true
+}

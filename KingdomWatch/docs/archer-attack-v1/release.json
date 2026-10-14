@@ -1,0 +1,18 @@
+{
+  "status": "published",
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "game": "https://kingdom-watch.pages.dev/?v=archer-attack-1791825093",
+  "preview": "https://kingdom-watch.pages.dev/previews/archer-idle-v1/?v=1791825093",
+  "deployment": "https://3aac6687.kingdom-watch.pages.dev",
+  "build": "Cocos Creator 3.8.8 web-mobile completed, BUILD_SUCCESS exit code 36",
+  "dprPatch": "applied; entry cache-bust 1791825093",
+  "publish": "Wrangler Pages main completed, exit code 0; 10 files uploaded, 858 cached",
+  "visualAcceptance": "pending user manual review; no automated game, interaction or online visual verification performed",
+  "source": "User-supplied 弓箭手姿势描述 (1).mp4, copied to source.mp4",
+  "frames": 29,
+  "atlas": [2048, 1408],
+  "atlasBytes": 1740400,
+  "scope": "Complete transparent archer release/recoil/reload frames triggered by actual arrow rows; attack cadence adapts to speed and active gestures are not restarted by overlapping rapid rows. Fixed feet and mirrored facing retained. Idle resumes after recovery only when no living enemy is in ordinary attack range and no arrow rows remain queued.",
+  "legacyPreview": "archer-native-v1 excluded from a fresh publishing stage; original local build files retained"
+}

@@ -1,0 +1,649 @@
+{
+  "dateUTC": "2026-10-11T10:13:45.926901+00:00",
+  "status": "published",
+  "url": "https://kingdom-watch.pages.dev/?v=ability-unlock-1791713109",
+  "deployment": "https://b1990b92.kingdom-watch.pages.dev",
+  "typeCheck": "passed",
+  "creatorBuild": "passed: 3.8.8 web-mobile",
+  "dprPatch": "passed",
+  "newArt": 0,
+  "realBattleStarted": false,
+  "checks": {
+    "logic-validation": {
+      "passed": true,
+      "checks": [
+        "Five heroes: normal attack only on entry, independent learning, no locked charging, fresh run resets",
+        "All five actual ultimate implementations reject locked abilities even with forced full charge",
+        "5000 initial/refresh draws: three unique eligible cards; all skill/ultimate upgrades gated separately; prerequisites and caps preserved",
+        "Director: rejects premature/undeployed upgrades; queued choices and refresh work; GM respects prerequisites/caps; unlock starts ultimate at zero",
+        "High-level sniper automatic ultimate and volt skill proc remain gated until learned"
+      ]
+    },
+    "hud-validation": {
+      "passed": true,
+      "url": "http://127.0.0.1:8765/",
+      "realBattleStarted": false,
+      "checks": [
+        {
+          "viewport": [
+            430,
+            932
+          ],
+          "initial": [
+            {
+              "id": "mora",
+              "x": -255,
+              "y": -690.7906976744185,
+              "atkX": -255,
+              "atkY": -772.7906976744185,
+              "skill": false,
+              "ult": false,
+              "skillX": -215,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -527.7906976744185,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": false,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": true
+            },
+            {
+              "id": "sniper",
+              "x": -85,
+              "y": -690.7906976744185,
+              "atkX": -85,
+              "atkY": -772.7906976744185,
+              "skill": false,
+              "ult": false,
+              "skillX": -45,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -417.79069767441854,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": false,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": true
+            },
+            {
+              "id": "pyro",
+              "x": 85,
+              "y": -690.7906976744185,
+              "atkX": 85,
+              "atkY": -772.7906976744185,
+              "skill": false,
+              "ult": false,
+              "skillX": 125,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -307.79069767441854,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": false,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": true
+            },
+            {
+              "id": "volt",
+              "x": 255,
+              "y": -690.7906976744185,
+              "atkX": 255,
+              "atkY": -772.7906976744185,
+              "skill": false,
+              "ult": false,
+              "skillX": 295,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -197.79069767441854,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": false,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": true
+            }
+          ]
+        },
+        {
+          "cardArt": [
+            "art:ui_icon_skill_mora",
+            "art:ui_icon_ult_mora"
+          ],
+          "animatedChoiceUnlocksSkill": true
+        },
+        {
+          "viewport": [
+            430,
+            932
+          ],
+          "unlocked": [
+            {
+              "id": "mora",
+              "x": -255,
+              "y": -690.7906976744185,
+              "atkX": -295,
+              "atkY": -772.7906976744185,
+              "skill": true,
+              "ult": true,
+              "skillX": -215,
+              "skillCd": true,
+              "ultX": 306,
+              "ultY": -527.7906976744185,
+              "charge": 0,
+              "skillLearned": true,
+              "ultLearned": true,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": false,
+              "hiddenUltChildren": false
+            },
+            {
+              "id": "sniper",
+              "x": -85,
+              "y": -690.7906976744185,
+              "atkX": -85,
+              "atkY": -772.7906976744185,
+              "skill": false,
+              "ult": false,
+              "skillX": -45,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -417.79069767441854,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": false,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": true
+            },
+            {
+              "id": "pyro",
+              "x": 85,
+              "y": -690.7906976744185,
+              "atkX": 85,
+              "atkY": -772.7906976744185,
+              "skill": false,
+              "ult": false,
+              "skillX": 125,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -307.79069767441854,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": false,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": true
+            },
+            {
+              "id": "volt",
+              "x": 255,
+              "y": -690.7906976744185,
+              "atkX": 255,
+              "atkY": -772.7906976744185,
+              "skill": false,
+              "ult": true,
+              "skillX": 295,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -417.79069767441854,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": true,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": false
+            }
+          ]
+        },
+        {
+          "viewport": [
+            375,
+            667
+          ],
+          "initial": [
+            {
+              "id": "archer",
+              "x": 0,
+              "y": -545,
+              "atkX": 0,
+              "atkY": -627,
+              "skill": false,
+              "ult": false,
+              "skillX": 40,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -382,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": false,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": true
+            }
+          ]
+        },
+        {
+          "cardArt": [
+            "art:ui_icon_skill_archer",
+            "art:ui_icon_ult_archer"
+          ],
+          "animatedChoiceUnlocksSkill": true
+        },
+        {
+          "viewport": [
+            375,
+            667
+          ],
+          "unlocked": [
+            {
+              "id": "archer",
+              "x": 0,
+              "y": -545,
+              "atkX": -40,
+              "atkY": -627,
+              "skill": true,
+              "ult": true,
+              "skillX": 40,
+              "skillCd": true,
+              "ultX": 306,
+              "ultY": -382,
+              "charge": 0,
+              "skillLearned": true,
+              "ultLearned": true,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": false,
+              "hiddenUltChildren": false
+            }
+          ]
+        }
+      ],
+      "errors": [],
+      "failed": []
+    },
+    "online-hud-validation": {
+      "passed": true,
+      "url": "https://kingdom-watch.pages.dev/?v=ability-unlock-1791713109",
+      "realBattleStarted": false,
+      "checks": [
+        {
+          "viewport": [
+            430,
+            932
+          ],
+          "initial": [
+            {
+              "id": "mora",
+              "x": -255,
+              "y": -690.7906976744185,
+              "atkX": -255,
+              "atkY": -772.7906976744185,
+              "skill": false,
+              "ult": false,
+              "skillX": -215,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -527.7906976744185,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": false,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": true
+            },
+            {
+              "id": "sniper",
+              "x": -85,
+              "y": -690.7906976744185,
+              "atkX": -85,
+              "atkY": -772.7906976744185,
+              "skill": false,
+              "ult": false,
+              "skillX": -45,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -417.79069767441854,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": false,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": true
+            },
+            {
+              "id": "pyro",
+              "x": 85,
+              "y": -690.7906976744185,
+              "atkX": 85,
+              "atkY": -772.7906976744185,
+              "skill": false,
+              "ult": false,
+              "skillX": 125,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -307.79069767441854,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": false,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": true
+            },
+            {
+              "id": "volt",
+              "x": 255,
+              "y": -690.7906976744185,
+              "atkX": 255,
+              "atkY": -772.7906976744185,
+              "skill": false,
+              "ult": false,
+              "skillX": 295,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -197.79069767441854,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": false,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": true
+            }
+          ]
+        },
+        {
+          "cardArt": [
+            "art:ui_icon_skill_mora",
+            "art:ui_icon_ult_mora"
+          ],
+          "animatedChoiceUnlocksSkill": true
+        },
+        {
+          "viewport": [
+            430,
+            932
+          ],
+          "unlocked": [
+            {
+              "id": "mora",
+              "x": -255,
+              "y": -690.7906976744185,
+              "atkX": -295,
+              "atkY": -772.7906976744185,
+              "skill": true,
+              "ult": true,
+              "skillX": -215,
+              "skillCd": true,
+              "ultX": 306,
+              "ultY": -527.7906976744185,
+              "charge": 0,
+              "skillLearned": true,
+              "ultLearned": true,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": false,
+              "hiddenUltChildren": false
+            },
+            {
+              "id": "sniper",
+              "x": -85,
+              "y": -690.7906976744185,
+              "atkX": -85,
+              "atkY": -772.7906976744185,
+              "skill": false,
+              "ult": false,
+              "skillX": -45,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -417.79069767441854,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": false,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": true
+            },
+            {
+              "id": "pyro",
+              "x": 85,
+              "y": -690.7906976744185,
+              "atkX": 85,
+              "atkY": -772.7906976744185,
+              "skill": false,
+              "ult": false,
+              "skillX": 125,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -307.79069767441854,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": false,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": true
+            },
+            {
+              "id": "volt",
+              "x": 255,
+              "y": -690.7906976744185,
+              "atkX": 255,
+              "atkY": -772.7906976744185,
+              "skill": false,
+              "ult": true,
+              "skillX": 295,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -417.79069767441854,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": true,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": false
+            }
+          ]
+        },
+        {
+          "viewport": [
+            375,
+            667
+          ],
+          "initial": [
+            {
+              "id": "archer",
+              "x": 0,
+              "y": -545,
+              "atkX": 0,
+              "atkY": -627,
+              "skill": false,
+              "ult": false,
+              "skillX": 40,
+              "skillCd": false,
+              "ultX": 306,
+              "ultY": -382,
+              "charge": 0,
+              "skillLearned": false,
+              "ultLearned": false,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": true,
+              "hiddenUltChildren": true
+            }
+          ]
+        },
+        {
+          "cardArt": [
+            "art:ui_icon_skill_archer",
+            "art:ui_icon_ult_archer"
+          ],
+          "animatedChoiceUnlocksSkill": true
+        },
+        {
+          "viewport": [
+            375,
+            667
+          ],
+          "unlocked": [
+            {
+              "id": "archer",
+              "x": 0,
+              "y": -545,
+              "atkX": -40,
+              "atkY": -627,
+              "skill": true,
+              "ult": true,
+              "skillX": 40,
+              "skillCd": true,
+              "ultX": 306,
+              "ultY": -382,
+              "charge": 0,
+              "skillLearned": true,
+              "ultLearned": true,
+              "attackArt": true,
+              "skillArt": true,
+              "hiddenSkillChildren": false,
+              "hiddenUltChildren": false
+            }
+          ]
+        }
+      ],
+      "errors": [],
+      "failed": []
+    }
+  },
+  "onlineFiles": {
+    "index.html": {
+      "matchesLocal": true,
+      "sha256": "edbca3b04389b6b86f347607c1aebf7300057d61138d7ea3c60866f9a915c11d",
+      "bytes": 5043,
+      "path": "index.html"
+    },
+    "main.js": {
+      "matchesLocal": true,
+      "sha256": "0659208bd32e0ff636a2030fb079c1051165f99d3483fdfb5b08163f54b688ea",
+      "bytes": 795001,
+      "path": "assets/main/index.js"
+    },
+    "resources-config.json": {
+      "matchesLocal": true,
+      "sha256": "f7c7976628336a2495d505da6384dd52b2825e76c0379f00d5a1923dba7d885e",
+      "bytes": 166199,
+      "path": "assets/resources/config.json"
+    },
+    "dpr-engine.js": {
+      "matchesLocal": true,
+      "sha256": "eeeef70cc6cd8bccc4493d60bbc85cddd4f6d0de383c4e8a3b4d48b64323488d",
+      "bytes": 5686956,
+      "path": "cocos-js/_virtual_cc-y8x7t64p.js"
+    },
+    "ui_icon_atk_archer": {
+      "matchesLocal": true,
+      "sha256": "8c70a3f4534bc0b0fe846415dce886da0f5bf02495beecf00ef1674d6b98040a",
+      "bytes": 296091,
+      "path": "assets/resources/native/5a/5a68394e-c7e2-4fc8-8e5b-93ae49d6c2ed.png"
+    },
+    "ui_icon_skill_archer": {
+      "matchesLocal": true,
+      "sha256": "6671f18e439b7969ea54153e57bbe22768d13c9b75e9ea88058dc098bae0e69d",
+      "bytes": 315421,
+      "path": "assets/resources/native/39/39bd0f7c-d172-457a-8c19-c255cd674613.png"
+    },
+    "ui_icon_ult_archer": {
+      "matchesLocal": true,
+      "sha256": "a955d3abe9129f4c3d548ff71826e6d5f07ffc72f35d7eb7ab9fc4fcb923bb7f",
+      "bytes": 347263,
+      "path": "assets/resources/native/be/be038358-8e71-479c-94ae-99250cd029da.png"
+    },
+    "ui_icon_atk_sniper": {
+      "matchesLocal": true,
+      "sha256": "7cf3b08124112d015c425d3e0d4c14885d8d5d64e0dcf84f16a8f9e4419b368b",
+      "bytes": 248039,
+      "path": "assets/resources/native/02/02b16a72-25a3-4b17-a597-342c457a2c34.png"
+    },
+    "ui_icon_skill_sniper": {
+      "matchesLocal": true,
+      "sha256": "be59399b0661940daeae62b42b03245000a89ca2930178220bf8782c42bc64b5",
+      "bytes": 287204,
+      "path": "assets/resources/native/dc/dcab8bca-8989-47a9-be19-21f68d304cbc.png"
+    },
+    "ui_icon_ult_sniper": {
+      "matchesLocal": true,
+      "sha256": "c3b1434d1472a766923ed55f5b71f7b7793b4dc5b6e0d3e23073a3e19cff867c",
+      "bytes": 274525,
+      "path": "assets/resources/native/7f/7f98eab3-edc2-4749-8520-e71d88755dcb.png"
+    },
+    "ui_icon_atk_pyro": {
+      "matchesLocal": true,
+      "sha256": "aad443d04cfbcbc8c8184bc346c0a863f5e6bcdebcc2d02addc61a3ca1d94590",
+      "bytes": 56000,
+      "path": "assets/resources/native/76/7608c483-ef0c-4d00-ab98-44cc3da24fb3.png"
+    },
+    "ui_icon_skill_pyro": {
+      "matchesLocal": true,
+      "sha256": "1b7a9719c7516e63493c2df04b5c9d65a813b756498754e0b74d65c6e6726d4f",
+      "bytes": 66864,
+      "path": "assets/resources/native/44/440afb0c-55fa-46fb-8c82-ae2711751e2e.png"
+    },
+    "ui_icon_ult_pyro": {
+      "matchesLocal": true,
+      "sha256": "32308e60fec0d6d4f3f2afb21717da3b7162a7ae28237c1bf337400987d5eb47",
+      "bytes": 70865,
+      "path": "assets/resources/native/81/814e0018-e07c-4773-8892-8c732a26d334.png"
+    },
+    "ui_icon_atk_volt": {
+      "matchesLocal": true,
+      "sha256": "19fcef8fba30b59ccdf51356a5c405b930dcbe2f26b1bdbaa61cd9b44b888eaa",
+      "bytes": 69228,
+      "path": "assets/resources/native/9c/9ce4b3bf-4fc4-4ce9-a982-dfb083aef9cd.png"
+    },
+    "ui_icon_skill_volt": {
+      "matchesLocal": true,
+      "sha256": "9a53e0acf556b9d16c9a22ee19d95c740cb271654008d9f30b0b8da082e6ffca",
+      "bytes": 73477,
+      "path": "assets/resources/native/2d/2d09fa20-6df0-4ebf-a913-6cbfcf8aa680.png"
+    },
+    "ui_icon_ult_volt": {
+      "matchesLocal": true,
+      "sha256": "8b671d1448c3a2fa964f7c6f93bd6655ca30faa563dcb2d266b2854ec3f823c2",
+      "bytes": 75610,
+      "path": "assets/resources/native/f2/f20a82a0-9108-4b37-874b-0dd14511f042.png"
+    },
+    "ui_icon_atk_mora": {
+      "matchesLocal": true,
+      "sha256": "27a17c559eb3d67e65c0694d8468692e563e83217267d51cd92b95c9fae196cc",
+      "bytes": 105496,
+      "path": "assets/resources/native/f4/f493102c-65f6-422f-ba35-c975efad4d4a.png"
+    },
+    "ui_icon_skill_mora": {
+      "matchesLocal": true,
+      "sha256": "d97b095f99b29cf4bff693246fc5b36da829c4eba632386c20fe2f24080f82fb",
+      "bytes": 121488,
+      "path": "assets/resources/native/39/39521acb-26b2-43a4-aa72-4adfdd4e1fdb.png"
+    },
+    "ui_icon_ult_mora": {
+      "matchesLocal": true,
+      "sha256": "74062e08fe4e75bf71137de3d99622e86362c51ca7bf0a86693c8ee791a98f6d",
+      "bytes": 130554,
+      "path": "assets/resources/native/73/737be726-64c9-4f95-a90c-f4d0a263b03a.png"
+    }
+  }
+}

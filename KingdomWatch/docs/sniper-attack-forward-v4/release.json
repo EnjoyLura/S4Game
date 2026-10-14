@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "status": "published",
+  "game": "https://kingdom-watch.pages.dev/?v=sniper-attack-forward-v4-1791903111",
+  "preview": "https://kingdom-watch.pages.dev/previews/sniper-attack-forward-v4/?v=1791903111",
+  "deployment": "https://406d5237.kingdom-watch.pages.dev",
+  "stage": "D:/AI/S4Game/KingdomWatch/build/publish-sniper-attack-forward-v4-20261013-2251",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "gameIntegrated": true,
+  "player": "assets/scripts/battle/SniperIdleAnimation.ts",
+  "resource": "assets/resources/ux/sniper_attack_forward_v4",
+  "idleResource": "assets/resources/ux/sniper_idle_forward_v2",
+  "feedback": "User identified an apparent size jump between attack and idle and residual flying sparks in v3",
+  "source": {
+    "reusedFrom": "../sniper-attack-forward-v3/source.mp4",
+    "task": "task_rnIbybnJdMOqdRAxyQgdNi4Afv19pzOV",
+    "newGeneration": false,
+    "size": [768, 1344],
+    "fps": 24,
+    "frames": 56,
+    "originalPreserved": true
+  },
+  "attack": {
+    "frames": 44,
+    "seconds": 1.8333333333333333,
+    "loop": false,
+    "sourceRange": [6, 55],
+    "omittedEffectsFrames": [8, 9, 10, 11, 12, 13],
+    "sourceEventFrame": 8,
+    "displayReleaseSourceFrame": 14,
+    "releaseIndex": 2,
+    "readyIndex": 43,
+    "recoverySeconds": 1.75
+  },
+  "calibration": {
+    "reference": "sniper_idle_forward_v2/idle0",
+    "referenceBootWidth": 237,
+    "sourceBootWidth": 570,
+    "scaleXY": [0.41578947368421054, 0.44139886578449905],
+    "method": "One constant full-frame aspect correction based on planted boot width and head-to-ground height; no per-frame fitting or body-part deformation",
+    "sharedCanvas": [512, 512],
+    "sharedGroundAnchor": [256, 496],
+    "displayHeight": 170,
+    "readyHeightPx": 467.5133,
+    "footNode": [0, -76]
+  },
+  "atlas": {"size": [4096, 3072], "bytes": 6360582},
+  "runtime": {
+    "transitionSeconds": 0.08,
+    "transition": "Full-frame opacity blend between frozen outgoing pose and incoming action; battle simulation clock freezes under pause",
+    "attack": "Actual projectile callback starts at annotated release frame; attack/recovery suppress idle; rapid overlapping shots do not restart playback",
+    "idle": "Only advances after attack/recovery and pending fire have ended and no enemy is in attack range",
+    "facing": "Direct full-character left/right mirror"
+  },
+  "archer": "Existing image, idle, attack and displayHeight 185.64 preserved",
+  "build": {
+    "platform": "web-mobile",
+    "creator": "3.8.8",
+    "exitCode": 36,
+    "milliseconds": 11067,
+    "finishedLocal": "2026-10-13 22:50:38",
+    "log": "C:/Users/user/AppData/Local/Temp/kw-sniper-attack-forward-v4-20261013-out.log"
+  },
+  "dprPatch": "completed",
+  "entryVersion": 1791903111,
+  "publish": {"tool": "Wrangler 3.114.17", "exitCode": 0, "uploadedFiles": 14, "cachedFiles": 1006, "uploadSeconds": 12.81},
+  "review": "Source annotation and asset production only; effects reviewed manually by user. No tests, browser, game or online QA executed; publication is not recorded as visual acceptance."
+}

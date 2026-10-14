@@ -1,0 +1,20 @@
+Use case: identity-preserve. Edit the attached APPROVED archer artwork into ONE disassembled 2D puppet PARTS SHEET for native game animation. Preserve the EXACT same young male elf identity, short spiky chestnut hair, green cloak, cream sleeves, brown leather armor, green/gold wooden recurved bow and white-feather quiver, exact clean cel shaded comic style. This is production component art, not a new character, not a pose sheet.
+Create a strict FOUR COLUMNS by THREE ROWS invisible grid, exactly 12 isolated pieces. Each piece fully inside its cell with generous genuinely transparent margins. Landscape RGBA sheet. No labels, text, grid, shadows, scenery or background. No piece may cross a cell border. Show every complete piece, including art normally hidden by adjacent body parts, so rotation reveals finished joints. End joints rounded with generous overlap. Do not draw full assembled people.
+All parts use the SAME rear camera as the reference: orthographic, from behind and 25 degrees above, aimed nearly screen UP with slight 10-degree LEFT turn. The anatomical LEFT bow arm is screen left in this view, anatomical RIGHT draw arm is screen right. Reproduce the approved design rather than adding costume details.
+Exact cell order, left to right:
+ROW 1:
+1. LOWER BODY: waist belt and olive trousers, BOTH full legs and BOTH brown leather boots with gold buckles, in the reference's staggered stable stance, left boot slightly forward, right boot slightly back. No cape, no torso, no arms, no head.
+2. TORSO: olive-green rear torso from neck to belt, brown leather shoulder panels, and the SHORT green folded cape collar covering shoulders and upper back, like the upper triangular scarf in the reference. NO head, NO arms, NO long hanging cape, NO quiver, NO legs.
+3. HEAD: same brown spiky rear-view head with pointed ears, back of hair dominant, slight left turn, small visible ear and only a tiny facial edge. Full head including neck stump. No cloak or body.
+4. MAIN CAPE: the long flowing leaf-green cloak below the folded collar, tapered shoulder attachment widening toward pointed irregular hem, matching the approved angled folds. Just the cloth, complete filled opaque shape with cel-shaded folds, NO head, NO torso, NO legs, NO quiver.
+ROW 2:
+5. LEFT UPPER ARM: brown leather shoulder pauldron plus cream sleeve upper arm, a complete isolated part oriented DOWN along the cell, shoulder at top, elbow at bottom. Front/side of arm visible from the reference camera. NO forearm, NO hand, NO bow.
+6. LEFT FOREARM: brown leather forearm bracer and exposed wrist, complete isolated part, elbow at top, wrist at bottom, oriented DOWN. NO upper arm, NO hand.
+7. LEFT HAND: closed left hand gripping an INVISIBLE bow grip, same skin and brown fingerless glove, knuckles and curled fingers visible. Hand alone with a wrist overlap, NO bow or arm.
+8. RIGHT UPPER ARM: cream sleeve upper arm and brown shoulder panel, isolated, shoulder at top and elbow at bottom, oriented DOWN. NO forearm or hand.
+ROW 3:
+9. RIGHT FOREARM: matching brown bracer and wrist, isolated with elbow at top, wrist at bottom, oriented DOWN. NO upper arm or hand.
+10. RIGHT HAND: right hand with two curled fingers pinching an INVISIBLE bowstring, matching fingerless brown glove. Hand alone with a wrist overlap. No drawn bowstring, no arm.
+11. BOW: the approved wooden recurved bow with green wraps and gold fittings, complete long vertical silhouette. Convex curved limb side toward cell LEFT, open side toward RIGHT, grip in middle, both tips complete. NO STRING and NO ARROW and NO HANDS. The game will draw the string separately.
+12. QUIVER: brown leather back quiver with gold buckle and white-feather arrows, entire quiver and arrows isolated, oriented diagonally rising toward cell RIGHT as in the reference. No body or cloak.
+All pieces should be painted at high resolution, solid opaque color inside each piece, transparent outside. No ghosting, no faded or semi-transparent parts. Strong clean dark outlines and restrained details.

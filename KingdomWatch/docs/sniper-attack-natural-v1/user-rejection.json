@@ -1,0 +1,6 @@
+{
+  "accepted": false,
+  "reason": "User rejected the attack: missing readable aim/fire/recock/return or foot plant/staff extension.",
+  "supersededBy": "sniper-attack-choreography-v2",
+  "approvedIdlePreserved": "sniper-idle-natural-v2"
+}

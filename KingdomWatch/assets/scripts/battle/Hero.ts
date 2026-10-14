@@ -16,6 +16,12 @@ import { DamageService } from './DamageService';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
 import { BattleSprite } from './BattleSprite';
+import { HeroBattleMotion } from './HeroBattleMotion';
+import { ArcherIdleAnimation } from './ArcherIdleAnimation';
+import { SniperIdleAnimation } from './SniperIdleAnimation';
+import { VoltIdleAnimation } from './VoltIdleAnimation';
+import { PyroIdleAnimation } from './PyroIdleAnimation';
+import { MoraIdleAnimation } from './MoraIdleAnimation';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
@@ -36,11 +42,14 @@ export abstract class HeroBase {
   private atkT = 0;
   private hx: number;
   private art: BattleSprite | null = null;
-  private artId = '';
-  private poseT = 0;
-  private poseMax = 0.18;
-  private poseHeavy = false;
-  private idleT = Math.random() * 6;
+  private motion: HeroBattleMotion | null = null;
+  private idleArcher: ArcherIdleAnimation | null = null;
+  private idleSniper: SniperIdleAnimation | null = null;
+  private idleVolt: VoltIdleAnimation | null = null;
+  private idlePyro: PyroIdleAnimation | null = null;
+  private idleMora: MoraIdleAnimation | null = null;
+  private poseTarget: Monster | null = null;
+  private attackPoseT = 0;
 
   constructor(parent: Node, x: number, stats: HeroStats) {
     this.hx = x;
@@ -51,46 +60,129 @@ export abstract class HeroBase {
   protected abstract buildVisual(parent: Node): void;
 
   protected attachBattleArt(id: string): void {
-    this.artId = id;
     const shadow = new Node('heroContactShadow');
     shadow.layer = Layers.Enum.UI_2D;
     shadow.setParent(this.node);
     const sg = shadow.addComponent(Graphics);
     sg.fillColor = new Color(30, 24, 16, 75);
     sg.ellipse(0, -74, 30, 8); sg.fill();
+    if (id === 'archer') {
+      this.idleArcher = new ArcherIdleAnimation(this.node, () => {
+        const fallback = this.node.getComponent(Graphics);
+        if (fallback) fallback.enabled = false;
+      });
+      return;
+    }
+    if (id === 'sniper') {
+      this.idleSniper = new SniperIdleAnimation(this.node, () => {
+        const fallback = this.node.getComponent(Graphics);
+        if (fallback) fallback.enabled = false;
+      });
+      return;
+    }
+    if (id === 'volt') {
+      this.idleVolt = new VoltIdleAnimation(this.node, () => {
+        const fallback = this.node.getComponent(Graphics);
+        if (fallback) fallback.enabled = false;
+      });
+      return;
+    }
+    if (id === 'pyro') {
+      this.idlePyro = new PyroIdleAnimation(this.node, () => {
+        const fallback = this.node.getComponent(Graphics);
+        if (fallback) fallback.enabled = false;
+      });
+      return;
+    }
+    if (id === 'mora') {
+      this.idleMora = new MoraIdleAnimation(this.node, () => {
+        const fallback = this.node.getComponent(Graphics);
+        if (fallback) fallback.enabled = false;
+      });
+      return;
+    }
     this.art = new BattleSprite(this.node, 'battle_heroes_v2', () => {
       const fallback = this.node.getComponent(Graphics);
       if (fallback) fallback.enabled = false;
+      this.motion?.tick(0, 0, 0); // Apply the UV bounds even if paused before the first battle tick.
     });
-    this.art.node.setPosition(0, -76, 0);
-    this.art.show(id + '_idle', 146);
+    // Same painted height and foot origin, with 12 source pixels of transparent margin.
+    this.art.node.setPosition(0, -76 - 12 * 146 / 336, 0);
+    this.art.show(id + '_combat', 146 * 360 / 336);
+    this.motion = new HeroBattleMotion(this.art, id);
   }
 
   /** Animate only the artwork; firing/collision coordinates remain fixed. */
-  animateAttack(heavy = false): void {
-    // Fast release, then a slower recovery. Keep a live heavy recoil over a light follow-up.
-    if (!heavy && this.poseHeavy && this.poseT > 0.1) return;
-    this.poseHeavy = heavy;
-    this.poseT = this.poseMax = heavy ? 0.26 : 0.18;
-    this.applyPose();
+  animateAttack(heavy = false, dx?: number, dy?: number): void {
+    this.attackPoseT = Math.max(this.attackPoseT, heavy ? .4 : .18);
+    if (dx !== undefined && dy !== undefined) this.faceAttack(dx, dy);
+    else if (this.poseTarget && !this.poseTarget.dead) {
+      this.faceAttack(this.poseTarget.x - this.x, this.poseTarget.y - HERO_Y - 60);
+    }
+    if (this.idleArcher) {
+      // Generic skill/buff cues do not fire the bow; only actual arrow rows pass a direction.
+      if (dx !== undefined && dy !== undefined) {
+        this.idleArcher.release(1 / (this.stats.aspd * (heavy ? 1.3 : 1)));
+      }
+      return;
+    }
+    if (this.idleSniper) {
+      // Generic skill/lock cues do not shoot; only actual bolt callbacks pass a direction.
+      if (dx !== undefined && dy !== undefined) this.idleSniper.release(1 / this.stats.aspd);
+      return;
+    }
+    if (this.idleVolt) {
+      if (dx !== undefined && dy !== undefined) this.idleVolt.release(this.attackInterval());
+      return;
+    }
+    if (this.idlePyro) {
+      if (dx !== undefined && dy !== undefined) this.idlePyro.release(this.attackInterval());
+      return;
+    }
+    if (this.idleMora) {
+      if (dx !== undefined && dy !== undefined) this.idleMora.release(this.attackInterval());
+      return;
+    }
+    this.motion?.release(heavy);
   }
 
-  private tickPose(dt: number): void {
-    this.idleT += dt;
-    this.poseT = Math.max(0, this.poseT - dt);
-    this.applyPose();
+  /** Mirror the art about its foot pivot; UI, shadow and simulation origins stay fixed. */
+  private faceAttack(dx: number, dy: number): void {
+    if (!Number.isFinite(dx) || !Number.isFinite(dy)) return;
+    const length = Math.hypot(dx, dy);
+    if (!length || Math.abs(dx / length) < .06) return;
+    const art = this.idleArcher?.node || this.idleSniper?.node || this.idleVolt?.node || this.idlePyro?.node || this.idleMora?.node || this.art?.node;
+    // Complete video characters face left by default; remaining sprites face right.
+    const rightScale = this.idleArcher || this.idleSniper || this.idleVolt || this.idlePyro || this.idleMora ? -1 : 1;
+    art?.setScale(dx > 0 ? rightScale : -rightScale, 1, 1);
   }
 
-  private applyPose(): void {
-    if (!this.art) return;
-    const age = this.poseMax - this.poseT;
-    const kick = this.poseT > 0 ? Math.exp(-age * 17) * Math.min(1, this.poseT / 0.06) : 0;
-    const brace = this.poseT <= 0 && this.atkT > 0 && this.atkT < 0.065 ? 1 - this.atkT / 0.065 : 0;
-    this.art.show(this.artId + (this.poseT > 0.065 || brace > 0 ? '_attack' : '_idle'), 146);
-    const weight = this.artId === 'sniper' ? (this.poseHeavy ? 3.8 : 2.4) : this.poseHeavy ? 2.2 : 1.3;
-    // Foot pivot remains fixed: no sliding, elastic squash or oscillating rebound.
-    this.art.node.angle = -kick * weight + brace * 0.75;
-    this.art.node.setScale(1, 1 + Math.sin(this.idleT * 2.2) * 0.003, 1);
+  /** Idle presentation during the entry countdown; no combat timers are advanced. */
+  tickIdle(dt: number): void { this.idleArcher?.tick(dt); this.idleSniper?.tick(dt); this.idleVolt?.tick(dt); this.idlePyro?.tick(dt); this.idleMora?.tick(dt); }
+
+  private tickPose(dt: number, mgr?: MonsterManager): void {
+    this.attackPoseT = Math.max(0, this.attackPoseT - dt);
+    if (mgr) this.poseTarget = mgr.pickTarget(this.x, HERO_Y, this.stats.range);
+    if (this.poseTarget?.dead) this.poseTarget = null;
+    const target = this.poseTarget;
+    const hasTargetInRange = !!target;
+    const idle = !hasTargetInRange && !Number.isFinite(this.queuedShotDelay())
+      && this.attackPoseT <= 0 && !this.motion?.attacking && !this.idleArcher?.attacking
+      && !this.idleSniper?.attacking && !this.idleVolt?.attacking && !this.idlePyro?.attacking && !this.idleMora?.attacking;
+    if (target && this.attackPoseT <= 0 && !this.idleArcher?.attacking && !this.idleSniper?.attacking && !this.idleVolt?.attacking && !this.idlePyro?.attacking && !this.idleMora?.attacking) {
+      this.faceAttack(target.x - this.x, target.y - HERO_Y - 60);
+    }
+    // Read the base interval: Archer.attackInterval consumes its empowerment flag.
+    const leadTime = Math.min(.16, (1 / this.stats.aspd) * .28);
+    const delay = Math.min(this.atkT > 0 ? this.atkT : Infinity, this.queuedShotDelay());
+    const prepare = target && delay < leadTime ? 1 - Math.max(0, delay) / leadTime : 0;
+    if (this.idleArcher) { this.idleArcher.tick(dt, idle, prepare); return; }
+    if (this.idleSniper) { this.idleSniper.tick(dt, idle, prepare); return; }
+    if (this.idleVolt) { this.idleVolt.tick(dt, idle, prepare); return; }
+    if (this.idlePyro) { this.idlePyro.tick(dt, idle, prepare); return; }
+    if (this.idleMora) { this.idleMora.tick(dt, idle, prepare); return; }
+    // Facing now comes from whole-art mirroring, not upper-body leaning.
+    this.motion?.tick(dt, prepare, 0, idle);
   }
 
   get x(): number { return this.hx; }
@@ -98,11 +190,13 @@ export abstract class HeroBase {
   /** 技能/大招伤害基数（用户确认：技能和大招计算攻击力+技能伤害，普攻只算攻击力） */
   get skillAtk(): number { return this.effAtk + (this.stats.skillDmgFlat || 0); }
   get chargeGoal(): number { return this.chargeMax * (this.stats.chargeMul || 1); }
-  get chargePct(): number { return this.charge / this.chargeGoal; }
-  get ultReady(): boolean { return this.charge >= this.chargeGoal; }
+  get skillUnlocked(): boolean { return this.stats.skillUnlocked === true; }
+  get ultUnlocked(): boolean { return this.stats.ultUnlocked === true; }
+  get chargePct(): number { return this.ultUnlocked ? this.charge / this.chargeGoal : 0; }
+  get ultReady(): boolean { return this.ultUnlocked && this.charge >= this.chargeGoal; }
   /** 大招演出时长（三选一挂起窗口，演出完再弹卡）；逐英雄覆盖 */
   get ultShowDuration(): number { return 1.2; }
-  get skillPct(): number { return 1 - this.skillCd / this.skillCdTotal; }
+  get skillPct(): number { return this.skillUnlocked ? 1 - this.skillCd / this.skillCdTotal : 0; }
   /** 技能完整冷却（含冷却缩减卡；与施放时写入 skillCd 的算法一致） */
   get skillCdTotal(): number { return Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0)); }
 
@@ -110,13 +204,14 @@ export abstract class HeroBase {
   protected lastDmg: DamageService | null = null;
   tick(dt: number, mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
     this.lastDmg = dmg;
-    this.tickPose(dt);
+    this.tickPose(dt, mgr);
     this.updateQueues(dt, mgr, projs);
     // 普攻
     this.atkT -= dt;
     if (this.atkT <= 0) {
       const t = mgr.pickTarget(this.x, HERO_Y, this.stats.range);
       if (t) {
+        this.poseTarget = t;
         this.animateAttack();
         this.shoot(t, mgr, projs);
         this.atkT = this.attackInterval();
@@ -125,21 +220,26 @@ export abstract class HeroBase {
       }
     }
     // 技能（自动：CD 好 + 技能范围内有怪）
-    this.skillCd -= dt;
-    if (this.skillCd <= 0 && mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange)) {
-      this.animateAttack(true);
-      this.castSkill(mgr, projs, dmg);
+    if (this.skillUnlocked) {
+      this.skillCd -= dt;
+      if (this.skillCd <= 0 && mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange)) {
+        this.animateAttack(true);
+        this.castSkill(mgr, projs, dmg);
+      }
     }
     // 大招呼吸回能：每 3 秒少量充能（不与击杀充能冲突；满后停止）
-    this.regenT -= dt;
-    if (this.regenT <= 0) {
-      this.regenT += 3;
-      if (!this.ultReady) this.chargeKill(1);
+    if (this.ultUnlocked) {
+      this.regenT -= dt;
+      if (this.regenT <= 0) {
+        this.regenT += 3;
+        if (!this.ultReady) this.chargeKill(1);
+      }
     }
   }
 
   /** 子类队列推进（连射/技能连狙等） */
   protected updateQueues(_dt: number, _mgr: MonsterManager, _projs: ProjectileManager): void { void _dt; void _mgr; void _projs; }
+  protected queuedShotDelay(): number { return Infinity; }
 
   /** 本次普攻后的攻击间隔（弓箭手强化窗口攻速 +30% 时覆写） */
   protected attackInterval(): number { return 1 / this.stats.aspd; }
@@ -151,7 +251,7 @@ export abstract class HeroBase {
 
   /** 击杀充能（§3.7：击杀者获得怪物配置充能值） */
   chargeKill(v: number): void {
-    if (this.ultReady) return;
+    if (!this.ultUnlocked || this.ultReady) return;
     const was = this.ultReady;
     this.charge = Math.min(this.chargeGoal, this.charge + v);
     bus.emit(EVT.CHARGE_CHANGED, this.chargePct, this.ultReady);
@@ -212,6 +312,10 @@ export class ArcherHero extends HeroBase {
   private lastEmp = false;
   private serialQueue: PendingShot[] = [];
   private volleyQueue: PendingVolley[] = [];
+
+  protected queuedShotDelay(): number {
+    return Math.min(Infinity, ...this.serialQueue.map(shot => shot.t), ...this.volleyQueue.map(row => row.t));
+  }
 
   protected buildVisual(parent: Node): void {
     const g = this.node.addComponent(Graphics);
@@ -335,11 +439,12 @@ export class ArcherHero extends HeroBase {
    *  旧版整组以瞄准线为中心对称摊开——偶数列（1/3 层）时没有任何箭在瞄准线上，5° 偏移在
    *  400~900px 交战距离即脱靶 35~79px（怪碰撞半径仅 22~34px），齐射后反而一直打不中主目标 */
   private fireRow(projs: ProjectileManager, dirX: number, dirY: number, emp: boolean): void {
-    this.animateAttack(emp);
+    this.animateAttack(emp, dirX, dirY);
     Sfx.shoot(this.id);
     const cols = 1 + this.stats.fan;
     const baseAng = Math.atan2(dirY, dirX);
-    this.bowFlash(projs, Math.cos(baseAng), Math.sin(baseAng), emp);   // 每排出弓一次弓弦闪光（连射排有节奏感）
+    // One air-pressure release per row, rather than stacking an effect for every fan arrow.
+    projs.normalRelease(this.id, this.x, HERO_Y + 60, dirX, dirY, emp);
     for (let c = 0; c < cols; c++) {
       const side = c === 0 ? 0 : Math.ceil(c / 2) * (c % 2 === 1 ? 1 : -1);   // c=0 主箭 0°；其余 +10/-10/+20/-20…
       const ang = baseAng + side * 10 * Math.PI / 180;
@@ -444,7 +549,7 @@ export class ArcherHero extends HeroBase {
 
   /** 一排扇形箭：以竖直方向为中心 ±30° 均分；后排错半步补缝、弹速略慢形成多波；箭数/系数随大招等级成长 */
   private fireFanRow(projs: ProjectileManager, row: 0 | 1 | 2): void {
-    this.animateAttack(true);
+    this.animateAttack(true, 0, 1);
     this.bowFlash(projs, 0, 1, true);
     Sfx.shoot(this.id);
     const uc = archerUltCfg(this.stats.ultLv);
@@ -546,8 +651,9 @@ export class SniperHero extends HeroBase {
   protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
     void _mgr;
     const lead = this.lead(target, 1140);   // 普攻弹速 ×1.5（用户调整）
+    this.animateAttack(false, lead.dirX, lead.dirY);
     projs.fire(this.boltSpec(lead.dirX, lead.dirY));
-    projs.sparkAt(this.x, HERO_Y + 70, '#BFE3FF', 3);   // 枪口粒子闪光（与大招枪口同款）
+    projs.normalRelease(this.id, this.x, HERO_Y + 60, lead.dirX, lead.dirY);
     Sfx.shoot(this.id);
   }
 
@@ -569,9 +675,15 @@ export class SniperHero extends HeroBase {
 
   private autoT = -1;   // 突破自动大招计时（-1=未初始化；仅 stats.ultAutoCd>0 时生效）
 
+  protected queuedShotDelay(): number {
+    if (this.ultLock) return Math.max(0, this.ultLock.t);
+    if (this.volley) return Math.max(0, this.volley.t);
+    return Infinity;
+  }
+
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
     // 90 级突破：每 25s 自动释放一次大招（无需充能也不消耗充能——用户定稿）；无目标待命，出现即放
-    if (this.stats.ultAutoCd > 0) {
+    if (this.ultUnlocked && this.stats.ultAutoCd > 0) {
       if (this.autoT < 0) this.autoT = this.stats.ultAutoCd;
       if (!this.ultLock) {
         this.autoT -= dt;
@@ -642,7 +754,8 @@ export class SniperHero extends HeroBase {
   /** 锁定完成：发射贯穿弹（×5.5 必暴、无视物抗、无限贯穿），拦截预判锁定方向；
    *  额外枪线卡：其余血量最高的目标各补一发 */
   private fireUltBolt(projs: ProjectileManager, mgr: MonsterManager, locked: Monster): void {
-    this.animateAttack(true);
+    const direction = this.lead(locked, 1100);
+    this.animateAttack(true, direction.dirX, direction.dirY);
     const uc = sniperUltCfg(this.stats.ultLv);   // 大招升级：倍率成长/弹体判定+20%/猎杀标记
     const fire1 = (t: Monster): void => {
       const lead = this.lead(t, 1100);
@@ -663,17 +776,16 @@ export class SniperHero extends HeroBase {
       const others = mgr.list.filter(m => !m.dead && m !== locked).sort((a, b) => b.hp - a.hp).slice(0, extra);
       for (const t of others) fire1(t);
     }
-    projs.sparkAt(this.x, HERO_Y + 70, '#BFE3FF', 8);
     Sfx.play('snipe');
   }
 
   /** 瞬击一发：重弩箭真弹道（命中才结算伤害），独立暴击 */
   private snipeShot(target: Monster, projs: ProjectileManager, mul: number, ignoreRes: boolean): void {
-    this.animateAttack(true);
     const crit = Math.random() < this.stats.critRate;
     const dmgVal = this.skillAtk * mul * (crit ? this.stats.critMul : 1);
     const speed = 1800;
     const lead = this.lead(target, speed);   // 拦截预判：伤害在弩箭命中时才结算（用户确认）
+    this.animateAttack(true, lead.dirX, lead.dirY);
     projs.fire({
       x: this.x, y: HERO_Y + 60,
       dirX: lead.dirX, dirY: lead.dirY, speed,
@@ -837,12 +949,14 @@ export class PyroHero extends HeroBase {
     void _mgr;
     const bs = 700;
     const lead = this.lead(target, bs);
+    this.animateAttack(false, lead.dirX, lead.dirY);
     projs.fire(this.spec({
       x: this.x, y: HERO_Y + 60, dirX: lead.dirX, dirY: lead.dirY,
       dmg: this.effAtk, explodeR: Math.max(60, this.stats.explodeR),
       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
       speed: bs, size: 9,
     }));
+    projs.normalRelease(this.id, this.x, HERO_Y + 60, lead.dirX, lead.dirY);
     Sfx.shoot(this.id);
   }
 
@@ -864,6 +978,7 @@ export class PyroHero extends HeroBase {
     const shots = Math.max(1, Math.round(this.stats.skillShots || 3));
     const dmg = this.skillAtk * pc.mul * (this.stats.skillMul || 1);
     const boomR = 110 * (this.stats.skillRangeMul || 1);
+    this.animateAttack(true, best.x - this.x, best.y - (HERO_Y + 60));
     for (let k = 0; k < shots; k++) {
       const ox = best.x + (Math.random() * 2 - 1) * 70;
       const oy = best.y + (Math.random() * 2 - 1) * 70;
@@ -1022,6 +1137,7 @@ export class PyroHero extends HeroBase {
     }
     cx = Math.max(-330, Math.min(330, cx));
     cyy = Math.max(-640, Math.min(820, cyy));
+    this.animateAttack(true, cx - this.x, cyy - (HERO_Y + 60));
     this.charge = 0;
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
     const uc = pyroUltCfg(this.stats.ultLv);
@@ -1146,13 +1262,15 @@ export class VoltHero extends HeroBase {
   protected shoot(target: Monster, mgr: MonsterManager, projs: ProjectileManager): void {
     const bs = 900;
     const lead = this.lead(target, bs);
+    this.animateAttack(false, lead.dirX, lead.dirY);
     projs.fire(this.spec({
       x: this.x, y: HERO_Y + 60, dirX: lead.dirX, dirY: lead.dirY,
       dmg: this.effAtk, speed: bs, size: 6,
     }));
+    projs.normalRelease(this.id, this.x, HERO_Y + 60, lead.dirX, lead.dirY);
     Sfx.shoot(this.id);
     // 70级突破：普攻 15% 概率顺带释放连锁闪电（不占用也不刷新技能冷却）
-    if (this.stats.skillProc && Math.random() < this.stats.skillProc) this.castChain(mgr, this.lastDmg || undefined);
+    if (this.skillUnlocked && this.stats.skillProc && Math.random() < this.stats.skillProc) this.castChain(mgr, this.lastDmg || undefined);
   }
 
   /** 闪电闪现特效：锯齿电弧（约 0.22s 淡出）；thick=大招加粗 */
@@ -1209,6 +1327,7 @@ export class VoltHero extends HeroBase {
     const struck = new Set<Monster>();
     let fromX = this.x, fromY = HERO_Y + 60;
     let cur = alive[0];
+    this.animateAttack(true, cur.x - this.x, cur.y - (HERO_Y + 60));
     for (let k = 0; k < jumps && cur; k++) {
       struck.add(cur);
       // 直接结算伤害（连锁无弹道，即时跳）
@@ -1247,10 +1366,15 @@ export class VoltHero extends HeroBase {
           if (!alive.length) continue;
           t = alive[(Math.random() * alive.length) | 0];
         }
+        this.animateAttack(true, t.x - this.x, t.y - (HERO_Y + 60));
         this.thunderStrike(t, mgr);
       }
     }
     if (this.hasteT > 0) this.hasteT -= dt;
+  }
+
+  protected queuedShotDelay(): number {
+    return Math.min(Infinity, ...this.strikeQueue.map(strike => strike.t));
   }
 
   /** 单道天雷：从屏外竖劈到目标点，90 半径 AOE + 眩晕（无视物抗的雷击走普通结算） */
@@ -1380,10 +1504,12 @@ export class FrostHero extends HeroBase {
     void _mgr;
     const bs = 850;
     const lead = this.lead(target, bs);
+    this.animateAttack(false, lead.dirX, lead.dirY);
     projs.fire(this.spec({
       x: this.x, y: HERO_Y + 60, dirX: lead.dirX, dirY: lead.dirY,
       dmg: this.effAtk, speed: bs, size: 6,
     }));
+    projs.normalRelease(this.id, this.x, HERO_Y + 60, lead.dirX, lead.dirY);
     Sfx.shoot(this.id);
     // 70级突破冰冻：几率走 freezeChance（基础15%，速冻之心卡累加），时长走 freezeProc
     if (this.stats.freezeProc && Math.random() < (this.stats.freezeChance || 0.15)) target.applyFreeze(this.stats.freezeProc);
@@ -1395,6 +1521,7 @@ export class FrostHero extends HeroBase {
     const NR = (this.stats.novaR || 150) * mc.rMul * (this.stats.skillRangeMul || 1);
     const center = mgr.densestArea(this.x, HERO_Y, this.stats.skillRange, NR);
     if (!center) return;
+    this.animateAttack(true, center.x - this.x, center.y - (HERO_Y + 60));
     const hitDmg = this.skillAtk * mc.mul * (this.stats.skillMul || 1);
     const freeze = (this.stats.novaStun || 1.5) + mc.stunBonus;
     // Snapshot the cast position: killing the central target cannot move the remaining field.
@@ -1421,6 +1548,7 @@ export class FrostHero extends HeroBase {
     if (!this.ultReady) return false;
     const alive = mgr.list.filter(m => !m.dead);
     if (!alive.length) return false;   // 全场无目标：不消耗充能
+    this.animateAttack(true, alive[0].x - this.x, alive[0].y - (HERO_Y + 60));
     this.charge = 0;
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
     this.lastDmg = dmg;   // 直伤计入伤害统计（施放时刷新引用）

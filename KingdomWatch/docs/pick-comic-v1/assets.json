@@ -1,0 +1,56 @@
+[
+  {
+    "key": "card_base",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\pick_comic_v1\\card_base.png",
+    "size": [
+      883,
+      1477
+    ],
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\pick-comic-v1\\sources\\card_base.png",
+    "sourceRect": [
+      52,
+      60,
+      935,
+      1537
+    ],
+    "bytes": 1635363,
+    "sha256": "2107c7129510ab6070a312ba3b06485fed481ef5012fc86b17e2659a30ef5ced",
+    "prompt": "prompts/card_base.txt"
+  },
+  {
+    "key": "title_plate",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\pick_comic_v1\\title_plate.png",
+    "size": [
+      1940,
+      247
+    ],
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\pick-comic-v1\\sources\\title_plate.png",
+    "sourceRect": [
+      36,
+      264,
+      1976,
+      511
+    ],
+    "bytes": 741128,
+    "sha256": "231a4efb0ecda19b4f3a533d37d637422ab376ef68a1313665cd42e13d83f125",
+    "prompt": "prompts/title_plate.txt"
+  },
+  {
+    "key": "header_strip",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\pick_comic_v1\\header_strip.png",
+    "size": [
+      2093,
+      312
+    ],
+    "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\pick-comic-v1\\sources\\header_strip.png",
+    "sourceRect": [
+      42,
+      203,
+      2135,
+      515
+    ],
+    "bytes": 844175,
+    "sha256": "a2caac61d81ea796aae5f3d9877caf9140e19e029ffc26d12e2bc50ff53086db",
+    "prompt": "prompts/header_strip.txt"
+  }
+]

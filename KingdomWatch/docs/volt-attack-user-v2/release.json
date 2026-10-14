@@ -1,0 +1,48 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-volt-attack-user-v2-live-20261014-213820",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-sniper-attack-clean-live-v1-20261014-124527",
+  "entryVersion": "1791984777",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "preview": "https://kingdom-watch.pages.dev/previews/volt-attack-user-v2/?v=1791984777",
+  "game": "https://kingdom-watch.pages.dev/?v=volt-attack-user-v2-1791984777",
+  "previewOnly": false,
+  "gameChanged": true,
+  "paidTaskSubmitted": false,
+  "status": "published",
+  "deployment": "https://09d9da7e.kingdom-watch.pages.dev",
+  "date": "2026-10-14T13:54:12.176Z",
+  "sourceSha256": "98ac0129baa7e97a74ef581de593765a1b8de60f2775f9eee8abb92f7bd09688",
+  "frames": 56,
+  "seconds": 2.3333333333333335,
+  "resource": "volt_attack_user_v2",
+  "displayHeight": 146,
+  "paintedHeight": 468.7165,
+  "fullSourceRetained": true,
+  "reversePlayback": false,
+  "opacityFade": false,
+  "gameIntegrated": true,
+  "selectedForGameByUser": true,
+  "userVisualAccepted": false,
+  "publication": {
+    "exitCode": 0,
+    "tool": "Wrangler"
+  },
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-volt-attack-user-v2-20261014-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-volt-attack-user-v2-20261014-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "gameAttackChanged": true,
+    "milliseconds": 12975
+  },
+  "retained": {
+    "voltIdle": "volt_idle_natural_v1",
+    "sniperIdle": "sniper_idle_natural_v2",
+    "sniperAttack": "sniper_attack_clean_v1",
+    "archer": "existing art, animations and height"
+  },
+  "review": "User manual effect review; source production only; no tests, browser, gameplay or online QA"
+}

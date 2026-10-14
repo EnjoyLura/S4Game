@@ -1,0 +1,10 @@
+{
+  "taskId": "task_N5U6Pqpkd7arYqyTp5wsDCqEGyTgk6lG",
+  "status": "rejected_source",
+  "cause": "Unexpected bright burst from the crossbow around source frames 8-10; emitted rays also reach the video boundary in frames 9-13",
+  "sourceVideoPreserved": true,
+  "framesTrimmed": false,
+  "gameIntegrated": false,
+  "published": false,
+  "nextAction": "Regenerate a full idle video, never cut away defective action frames"
+}

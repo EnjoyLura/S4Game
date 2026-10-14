@@ -1,0 +1,35 @@
+{
+  "hero": "pyro",
+  "frames": {
+    "ready": [
+      0,
+      0,
+      512,
+      512
+    ]
+  },
+  "animation": {
+    "frames": [
+      "ready"
+    ],
+    "seconds": 1,
+    "loop": true
+  },
+  "groundAnchor": [
+    256,
+    496
+  ],
+  "cellSize": [
+    512,
+    512
+  ],
+  "readyHeightPx": 468.0,
+  "displayHeight": 146,
+  "source": {
+    "file": "source.mp4",
+    "sourceFrame": 0
+  },
+  "isStaticReference": true,
+  "isIdleAnimation": false,
+  "gameIntegrated": false
+}

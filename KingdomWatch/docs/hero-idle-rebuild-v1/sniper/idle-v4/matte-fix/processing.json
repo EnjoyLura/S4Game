@@ -1,0 +1,984 @@
+{
+  "spec": {
+    "revision": "v4-alpha1",
+    "sourceSize": [
+      768,
+      1344
+    ],
+    "referenceFrame": 4,
+    "trackingBox": [
+      50,
+      264,
+      328,
+      430
+    ],
+    "maxTranslation": 24,
+    "apertureSeeds": [
+      [
+        214,
+        344
+      ],
+      [
+        119,
+        382
+      ]
+    ],
+    "seedSearchRadius": 6,
+    "keyTolerance": 18,
+    "purpose": "Remove enclosed black-background gaps above and below the crossbow stock. Track only keying seeds; never move or replace character pixels."
+  },
+  "frames": [
+    {
+      "sourceFrame": 0,
+      "translation": [
+        -1,
+        5
+      ],
+      "seeds": [
+        [
+          213,
+          349
+        ],
+        [
+          118,
+          387
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 1,
+      "translation": [
+        -1,
+        5
+      ],
+      "seeds": [
+        [
+          213,
+          349
+        ],
+        [
+          118,
+          387
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 2,
+      "translation": [
+        -1,
+        4
+      ],
+      "seeds": [
+        [
+          213,
+          348
+        ],
+        [
+          118,
+          386
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 3,
+      "translation": [
+        0,
+        2
+      ],
+      "seeds": [
+        [
+          214,
+          346
+        ],
+        [
+          119,
+          384
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 4,
+      "translation": [
+        0,
+        0
+      ],
+      "seeds": [
+        [
+          214,
+          344
+        ],
+        [
+          119,
+          382
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 5,
+      "translation": [
+        1,
+        -3
+      ],
+      "seeds": [
+        [
+          215,
+          341
+        ],
+        [
+          120,
+          379
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 6,
+      "translation": [
+        1,
+        -7
+      ],
+      "seeds": [
+        [
+          215,
+          337
+        ],
+        [
+          120,
+          375
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 7,
+      "translation": [
+        2,
+        -10
+      ],
+      "seeds": [
+        [
+          216,
+          334
+        ],
+        [
+          121,
+          372
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 8,
+      "translation": [
+        3,
+        -14
+      ],
+      "seeds": [
+        [
+          217,
+          330
+        ],
+        [
+          122,
+          368
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 9,
+      "translation": [
+        4,
+        -17
+      ],
+      "seeds": [
+        [
+          218,
+          327
+        ],
+        [
+          123,
+          365
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 10,
+      "translation": [
+        5,
+        -21
+      ],
+      "seeds": [
+        [
+          219,
+          323
+        ],
+        [
+          124,
+          361
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 11,
+      "translation": [
+        6,
+        -23
+      ],
+      "seeds": [
+        [
+          220,
+          321
+        ],
+        [
+          125,
+          359
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 12,
+      "translation": [
+        6,
+        -24
+      ],
+      "seeds": [
+        [
+          220,
+          320
+        ],
+        [
+          125,
+          358
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 13,
+      "translation": [
+        8,
+        -24
+      ],
+      "seeds": [
+        [
+          222,
+          320
+        ],
+        [
+          127,
+          358
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 14,
+      "translation": [
+        10,
+        -24
+      ],
+      "seeds": [
+        [
+          224,
+          320
+        ],
+        [
+          129,
+          358
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 15,
+      "translation": [
+        11,
+        -24
+      ],
+      "seeds": [
+        [
+          225,
+          320
+        ],
+        [
+          130,
+          358
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 16,
+      "translation": [
+        11,
+        -24
+      ],
+      "seeds": [
+        [
+          225,
+          319
+        ],
+        [
+          130,
+          358
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 17,
+      "translation": [
+        13,
+        -24
+      ],
+      "seeds": [
+        [
+          227,
+          319
+        ],
+        [
+          132,
+          358
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 18,
+      "translation": [
+        13,
+        -24
+      ],
+      "seeds": [
+        [
+          227,
+          320
+        ],
+        [
+          132,
+          358
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 19,
+      "translation": [
+        13,
+        -24
+      ],
+      "seeds": [
+        [
+          227,
+          320
+        ],
+        [
+          131,
+          357
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 20,
+      "translation": [
+        14,
+        -24
+      ],
+      "seeds": [
+        [
+          228,
+          319
+        ],
+        [
+          133,
+          357
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 21,
+      "translation": [
+        14,
+        -24
+      ],
+      "seeds": [
+        [
+          228,
+          319
+        ],
+        [
+          133,
+          357
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 22,
+      "translation": [
+        14,
+        -24
+      ],
+      "seeds": [
+        [
+          228,
+          318
+        ],
+        [
+          133,
+          355
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 23,
+      "translation": [
+        14,
+        -24
+      ],
+      "seeds": [
+        [
+          228,
+          318
+        ],
+        [
+          133,
+          355
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 24,
+      "translation": [
+        14,
+        -24
+      ],
+      "seeds": [
+        [
+          227,
+          319
+        ],
+        [
+          133,
+          357
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 25,
+      "translation": [
+        13,
+        -24
+      ],
+      "seeds": [
+        [
+          227,
+          320
+        ],
+        [
+          132,
+          357
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 26,
+      "translation": [
+        10,
+        -24
+      ],
+      "seeds": [
+        [
+          224,
+          318
+        ],
+        [
+          129,
+          358
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 27,
+      "translation": [
+        9,
+        -24
+      ],
+      "seeds": [
+        [
+          223,
+          319
+        ],
+        [
+          128,
+          358
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 28,
+      "translation": [
+        7,
+        -24
+      ],
+      "seeds": [
+        [
+          221,
+          320
+        ],
+        [
+          126,
+          358
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 29,
+      "translation": [
+        7,
+        -21
+      ],
+      "seeds": [
+        [
+          221,
+          323
+        ],
+        [
+          126,
+          361
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 30,
+      "translation": [
+        5,
+        -18
+      ],
+      "seeds": [
+        [
+          219,
+          326
+        ],
+        [
+          124,
+          364
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 31,
+      "translation": [
+        4,
+        -13
+      ],
+      "seeds": [
+        [
+          218,
+          331
+        ],
+        [
+          123,
+          369
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 32,
+      "translation": [
+        3,
+        -10
+      ],
+      "seeds": [
+        [
+          217,
+          334
+        ],
+        [
+          122,
+          372
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 33,
+      "translation": [
+        2,
+        -6
+      ],
+      "seeds": [
+        [
+          216,
+          338
+        ],
+        [
+          121,
+          376
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 34,
+      "translation": [
+        1,
+        -3
+      ],
+      "seeds": [
+        [
+          215,
+          341
+        ],
+        [
+          120,
+          379
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 35,
+      "translation": [
+        1,
+        0
+      ],
+      "seeds": [
+        [
+          215,
+          344
+        ],
+        [
+          120,
+          382
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 36,
+      "translation": [
+        0,
+        3
+      ],
+      "seeds": [
+        [
+          214,
+          347
+        ],
+        [
+          119,
+          385
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 37,
+      "translation": [
+        -1,
+        5
+      ],
+      "seeds": [
+        [
+          213,
+          349
+        ],
+        [
+          118,
+          387
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 38,
+      "translation": [
+        -1,
+        8
+      ],
+      "seeds": [
+        [
+          213,
+          352
+        ],
+        [
+          118,
+          390
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 39,
+      "translation": [
+        -1,
+        10
+      ],
+      "seeds": [
+        [
+          213,
+          354
+        ],
+        [
+          118,
+          392
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 40,
+      "translation": [
+        -2,
+        12
+      ],
+      "seeds": [
+        [
+          212,
+          356
+        ],
+        [
+          117,
+          394
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 41,
+      "translation": [
+        -2,
+        14
+      ],
+      "seeds": [
+        [
+          212,
+          358
+        ],
+        [
+          117,
+          396
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 42,
+      "translation": [
+        -3,
+        15
+      ],
+      "seeds": [
+        [
+          211,
+          359
+        ],
+        [
+          116,
+          397
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 43,
+      "translation": [
+        -3,
+        17
+      ],
+      "seeds": [
+        [
+          211,
+          361
+        ],
+        [
+          116,
+          399
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 44,
+      "translation": [
+        -3,
+        17
+      ],
+      "seeds": [
+        [
+          211,
+          361
+        ],
+        [
+          116,
+          399
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 45,
+      "translation": [
+        -3,
+        18
+      ],
+      "seeds": [
+        [
+          211,
+          362
+        ],
+        [
+          116,
+          400
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 46,
+      "translation": [
+        -3,
+        18
+      ],
+      "seeds": [
+        [
+          211,
+          362
+        ],
+        [
+          116,
+          400
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 47,
+      "translation": [
+        -3,
+        18
+      ],
+      "seeds": [
+        [
+          211,
+          362
+        ],
+        [
+          116,
+          400
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 48,
+      "translation": [
+        -3,
+        17
+      ],
+      "seeds": [
+        [
+          211,
+          361
+        ],
+        [
+          116,
+          399
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 49,
+      "translation": [
+        -3,
+        17
+      ],
+      "seeds": [
+        [
+          211,
+          361
+        ],
+        [
+          116,
+          399
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 50,
+      "translation": [
+        -3,
+        16
+      ],
+      "seeds": [
+        [
+          211,
+          360
+        ],
+        [
+          116,
+          398
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 51,
+      "translation": [
+        -3,
+        15
+      ],
+      "seeds": [
+        [
+          211,
+          359
+        ],
+        [
+          116,
+          397
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 52,
+      "translation": [
+        -3,
+        14
+      ],
+      "seeds": [
+        [
+          211,
+          358
+        ],
+        [
+          116,
+          396
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 53,
+      "translation": [
+        -3,
+        13
+      ],
+      "seeds": [
+        [
+          211,
+          357
+        ],
+        [
+          116,
+          395
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 54,
+      "translation": [
+        -3,
+        12
+      ],
+      "seeds": [
+        [
+          211,
+          356
+        ],
+        [
+          116,
+          394
+        ]
+      ]
+    },
+    {
+      "sourceFrame": 55,
+      "translation": [
+        -3,
+        11
+      ],
+      "seeds": [
+        [
+          211,
+          355
+        ],
+        [
+          116,
+          393
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-14",
+  "hero": "pyro",
+  "status": "image_generated_and_saved",
+  "tool": "built-in image_gen.imagegen",
+  "sourceFile": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-ada736a2-b91c-458e-b316-535c80b494c3.png",
+  "projectFile": "ready-green.png",
+  "references": [
+    "D:/AI/S4Game/KingdomWatch/docs/archer-combat-rebuild-v1/archer-ready-up-left-v3.png",
+    "D:/AI/S4Game/KingdomWatch/assets/resources/ux/hero_comic_v1/comic_figure_pyro_v1.png",
+    "D:/AI/S4Game/KingdomWatch/assets/resources/ux/upgrade_comic_v1/comic_staff_pyro_v1.png"
+  ],
+  "promptFile": "image-prompt.txt",
+  "prompt": "Asset type: one complete static full-body battle-ready character master for a 2D fantasy tower-defense game, usable as a single whole-character image mirrored horizontally and as the first/end frame of future image-to-video motion.\nReference roles: image 1 is the approved GREEN ARCHER, for rear camera, natural staggered standing posture, proportions, dark outlines and cel shading ONLY. Do NOT copy the archer's green palette, bow, quiver, clothes or hair. Image 2 is the PRIMARY hero identity and costume reference. Image 3 is the hero's STAFF design reference.\nCamera and stance: gently elevated rear camera over the hero's back, facing away into the battlefield, almost straight screen-up with a subtle 10-15-degree turn toward screen-left. Head centered over shoulders, primarily back of head/hood, no looking back. Relaxed grounded asymmetrical stance based on archer: screen-left boot slightly farther forward/up the ground plane, screen-right boot modestly back/down, comfortable moderate spacing, soft knees, naturally balanced upright torso, no squat/lunge. Complete plausible legs under clothing, both boots visible. Preserve solid connected anatomy, natural elbow bends and coherent hand grip. Long robe falls by gravity with a restrained asymmetry, no wind blast. One hand holds one rigid staff beside and slightly ahead of the body, near-vertical with a modest forward tilt, crystal around head height, entire staff and tip clearly visible. Free hand loosely raised at waist/lower chest in a calm ready gesture, palm empty.\nStyle: match the existing crisp illustrated mobile-game hero references; confident dark outlines, clear readable silhouettes, two or three broad cel-shaded values per material, clean angular fabric folds and moderate details. Same heroic proportions and elevated rear perspective as archer, not chibi, not photorealistic, not a 3D render.\nFraming: portrait 1024x1536, ONE complete hero with full staff and both feet, occupying about 78-82% of canvas height. Leave generous empty safe margins around head, staff, sleeves, robe hem and boots, including room for future restrained cloth motion. Center the body, keep ground anchor low but fully inside.\nBackground: perfectly flat uniform fully opaque PURE GREEN #00FF00 (RGB 0,255,0) across the ENTIRE background, including spaces between limbs, clothing and staff. No transparency, checkerboard, gradient, vignette, texture, floor, scenery, ground shadow, green reflected light or green rim. The green is chroma-key backdrop only.\nConstraints: one hero and one staff only, exactly two arms and two hands, no duplicates, text, labels, contact sheet or border. No particles, spell effects, beams, sparks, smoke, dust, glowing aura, flame, snow or fog anywhere. Gem is a solid painted faceted gemstone with stable natural highlights and NO emitted light. Static ready pose, not an attack or release pose.\nPRIMARY HERO: the young MALE fire mage of reference 2, bright tousled orange-red hair, recognizable red hood pushed back enough to glimpse orange hair at the nape, warm red layered robe with broad GOLD trim and diamond-shaped gold ornaments, brown leather belt and side pouch, dark undersuit and brown/gold boots. Rear shoulder mantle and hood follow the original red/gold design. Preserve athletic youthful build. Staff in his LEFT hand (screen-left in rear view): dark warm wood, red wraps, gold fittings and angular gold prongs around a faceted orange-red crystal. Reference 2 shows flame in the free palm: REMOVE it completely and leave the right hand relaxed and empty. No painted fire shapes, no flame on the staff, no ambient red light.",
+  "transparentBackground": false,
+  "requestedBackground": "#00FF00",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "originalCopiedWithoutPixelEdits": true,
+  "pose": "Natural elevated rear-view staggered ready stance, based on approved archer",
+  "staffLocation": "screen-left; whole image may be horizontally mirrored",
+  "userVisualAccepted": false,
+  "gameIntegrated": false,
+  "videoGenerationSubmitted": false,
+  "interruptedAttempt": {
+    "usableResultFound": false,
+    "recovered": false
+  },
+  "selectedAttempt": "New individual image generation after user resumed work",
+  "mode": "RGB",
+  "bytes": 1591039,
+  "sha256": "a5a06888f564f62ddda832588cabcebfae48450272217dad49a28329a7989a15",
+  "borderDominantRGB": [
+    5,
+    247,
+    4
+  ],
+  "borderDistinctColors": 166,
+  "alphaExtrema": null
+}

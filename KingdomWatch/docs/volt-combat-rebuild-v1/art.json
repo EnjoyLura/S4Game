@@ -1,0 +1,63 @@
+{
+  "image": "ready-red.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "mode": "RGB",
+  "alphaRange": [
+    255,
+    255
+  ],
+  "cornerRGB": [
+    [
+      248,
+      6,
+      2
+    ],
+    [
+      246,
+      6,
+      4
+    ],
+    [
+      239,
+      20,
+      4
+    ],
+    [
+      243,
+      13,
+      3
+    ]
+  ],
+  "sha256": "9b170083af4315a5fd68ddc055ba3c89c9db58ccdf0f3a5ced8ed17504f70d49",
+  "bytes": 1597127,
+  "tool": "built-in imagegen",
+  "transparent_background": false,
+  "generatedSource": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-54434110-bac2-4d88-9df5-5ce0e8a15f24.png",
+  "prompt": "image-prompt.txt",
+  "references": [
+    {
+      "file": "assets/resources/ux/shop_comic_v1/comic_hero_volt_v1.png",
+      "role": "primary character identity"
+    },
+    {
+      "file": "assets/resources/ux/upgrade_comic_v1/comic_staff_volt_v1.png",
+      "role": "staff design"
+    },
+    {
+      "file": "assets/resources/ux/lobby_heroes_v1.png",
+      "role": "fourth hero costume"
+    },
+    {
+      "file": "docs/sniper-idle-forward-v2/ready-red.png",
+      "role": "rear camera and comic rendering style"
+    }
+  ],
+  "background": "opaque solid red requested, #FF0000",
+  "purpose": "Full-body rear-view thunder mage battle-ready static master, direct left/right mirroring and future animation source",
+  "gameIntegrated": false,
+  "newIdleOrAttackGenerated": false,
+  "review": "Source production and file metadata only; user manual effect review, no tests, browser, game or online QA"
+}

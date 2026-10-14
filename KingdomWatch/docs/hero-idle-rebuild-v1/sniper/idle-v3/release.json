@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "status": "published",
+  "preview": "https://kingdom-watch.pages.dev/previews/sniper-idle-rebuild-v1/?v=1791856122",
+  "deployment": "https://86db594c.kingdom-watch.pages.dev",
+  "generator": "美术/tools/art_video_gen.py",
+  "model": "lens-minimax-h3-768p",
+  "taskId": "task_4Pb5HRGQYTSZM0t7BUsyTVDawJIzkgVP",
+  "secondsRequested": 2,
+  "rawVideo": "ai-source.mp4",
+  "rawBytes": 644533,
+  "deliveredVideo": "source.mp4",
+  "source": {
+    "seconds": 2.33,
+    "size": [
+      768,
+      1344
+    ],
+    "fps": 24,
+    "frameCount": 56
+  },
+  "prompt": "idle-prompt.txt",
+  "postprocessing": "lock_cloth_motion.py; static full first frame with AI motion restricted to lower blue cape cloth; raw generated video preserved",
+  "sequence": {
+    "resource": "assets/resources/ux/sniper_idle_rebuild_v3",
+    "uniqueFrames": 46,
+    "timelineFrames": 46,
+    "seconds": 2,
+    "loopMethod": "continuous endpoint matched",
+    "atlas": [
+      2048,
+      2304
+    ],
+    "bytes": 1149643,
+    "fixedFoot": true,
+    "fixedScale": true
+  },
+  "supersedes": "v2 rejected by user: attack motion still present",
+  "archer": "Display height 221 retained; existing images and idle/attack timing retained",
+  "build": "Cocos Creator 3.8.8 web-mobile; BUILD_SUCCESS exit code 36",
+  "dprPatch": "applied; entry cache-bust 1791856122",
+  "publish": "Wrangler Pages main completed, exit code 0; 13 files uploaded, 899 cached",
+  "scope": "New sniper idle material and independent preview; current game sniper animation awaits user approval before replacement",
+  "review": "User manual review; no automatic game, interaction, browser or online visual verification performed"
+}

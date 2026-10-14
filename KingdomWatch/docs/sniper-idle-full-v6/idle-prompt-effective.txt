@@ -1,0 +1,21 @@
+A calm living comic illustration on a plain red background. Only the BLUE CAPE fabric breathes and sways softly. One small wave travels down through its middle folds and pointed lower ends, then returns to its original contour. Keep the cape attachment fixed at the neck. Use gentle overlapping movement across the full hanging cloth, with a quiet breathing fold in the upper-back fabric.
+
+Every rigid part of the illustration remains exactly motionless: head, silver plates, hands, held objects, harness, belt, legs and boots. Preserve all original painted surfaces and highlights. Keep the character upright in the reference pose at exactly the same position and scale. The blue cloth is the only moving surface. Everything else stays as painted.
+
+Retain the supplied full canvas and its generous empty red margins. Cloth motion is small, with each pointed end remaining comfortably inside the empty space. Fixed camera and constant lighting. Complete one slow cloth-wave and breathing cycle over two seconds, returning to the starting pose and cloth silhouette. The image keeps its exact comic style, anatomy, outfit and all existing details. The entire background stays uniform opaque red.
+
+MANDATORY IDLE LOOP CLOSURE:
+Create one closed, repeatable idle cycle. Begin in the supplied relaxed ready pose,
+complete one gentle breathing and cloth-motion cycle, and settle back into exactly
+that same pose before the clip ends. The ending must match the beginning in head,
+shoulders, hands, weapon direction, cape and robe silhouettes, feet, scale and framing.
+Cloth must return with matching motion direction and gentle speed; do not leave the
+cape or robe blown to a different side at the end. Camera, crop, floor position and
+hand contact and held-prop positions remain fixed. Keep all non-cloth elements still,
+with the same ordinary painted highlights and constant lighting. Only the existing
+clothing surface moves; preserve every other element exactly as drawn.
+Keep the complete character opaque on the unchanged solid background throughout.
+Reserve generous empty background on both sides, below all cape tips and around the
+entire moving silhouette. Every cloth tip must remain fully inside the frame for
+the entire motion cycle. No body part, weapon, cape or robe may touch a frame edge.
+This is an idle cycle, not an action that stops in a different pose.

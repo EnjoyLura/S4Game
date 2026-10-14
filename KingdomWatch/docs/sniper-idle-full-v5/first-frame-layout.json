@@ -1,0 +1,24 @@
+{
+  "approvedMaster": "D:\\AI\\S4Game\\KingdomWatch\\docs\\sniper-stance-idle-v3\\ready-red.png",
+  "masterSha256": "5ef90486bc2142cc1aac0c8d472f661d7bc58f88d1f544f77473276531642c09",
+  "videoFirstFrame": "video-first-frame.png",
+  "hostFilename": "hero_sniper_idle_full_v4_20261014_ff.png",
+  "canvasSize": [
+    768,
+    1344
+  ],
+  "uniformScale": 0.6359945872801083,
+  "placement": [
+    -3,
+    182
+  ],
+  "contentBounds": [
+    149,
+    277,
+    619,
+    1067
+  ],
+  "purpose": "Video input overscan from the unchanged approved master; game display height stays 153",
+  "imageRegenerated": false,
+  "masterChanged": false
+}

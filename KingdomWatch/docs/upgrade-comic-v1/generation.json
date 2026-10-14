@@ -1,0 +1,65 @@
+{
+  "tool": "image_gen.imagegen",
+  "style": "清爽漫画奇幻",
+  "prompts": {
+    "scenePrompt": "Use case: stylized-concept. Production background illustration for the hero training and weapon upgrade page of a clean comic medieval fantasy mobile game. Use the attached shop image ONLY as the approved style and world reference. Confident dark espresso contours, clean broad color shapes, two or three crisp painted values, controlled angular highlights, attractive hand-designed game art; no photographic grain, plastic rendering, excessive engraving, soft AI airbrushing or glow. PORTRAIT 3:4 composition. A sunlit medieval royal training workshop: warm timber beams and small weapon shelves at the far left, sandstone arches, one royal navy-and-gold banner at far left, a cool bright sky and distant blue-roofed castle visible through an arch at upper right, simple sandstone floor visible in the bottom half. Strong warm/cool separation and clear foreground/middle/distant depth, like the shop image. Broad unobstructed hero display area at left-center, x=32% of the frame. A VERY LOW round pale sandstone training dais whose top-center is exactly x=32%, y=85%; the platform should occupy around 32% image width and have a believable elliptical top and a low 5% image-height base, with restrained contact shadow. Keep this dais fully visible. At right-center, quiet slightly darker sandstone wall and floor, with only two small tidy shelves of books and a closed chest far right. Upper 32% deliberately calm, since wallet and five hero cards are overlaid. A few carefully chosen props at extreme edges, no crowded repeated objects. Empty scene with no characters, no staff, no hanging UI panels, no text, no labels, no symbols pretending to be letters, no interface buttons. Ground and platform share one coherent perspective and lighting. Professional clean friendly fantasy game environment.",
+    "iconPrompt": "Use case: stylized-concept. ONE isolated mobile game upgrade icon on genuine transparent background, matching reference image clean comic fantasy item style. A stout practical dark steel smithing hammer with a short warm oak handle, accompanied by ONE simple golden upward chevron behind the head. Clear compact diagonal silhouette, centered and filling 80% canvas. Confident dark espresso outline, broad two-tone metal facets, small controlled highlight, two-color oak handle, gold accent. Readable at 48px, designed by a game artist. No realistic texture, photoreal rendering, glitter, magic glow, tiny ornamentation, particles, floating shadows, pedestal, text, numbers, UI plate or background."
+  },
+  "jobs": [
+    {
+      "key": "comic_training_hammer_v1",
+      "prompt": "Use case: stylized-concept. ONE isolated mobile game upgrade icon on genuine transparent background, matching reference image clean comic fantasy item style. A stout practical dark steel smithing hammer with a short warm oak handle, accompanied by ONE simple golden upward chevron behind the head. Clear compact diagonal silhouette, centered and filling 80% canvas. Confident dark espresso outline, broad two-tone metal facets, small controlled highlight, two-color oak handle, gold accent. Readable at 48px, designed by a game artist. No realistic texture, photoreal rendering, glitter, magic glow, tiny ornamentation, particles, floating shadows, pedestal, text, numbers, UI plate or background."
+    },
+    {
+      "key": "comic_staff_pyro_v1",
+      "prompt": "Use case: stylized-concept. ONE isolated full-length magic staff for a clean comic medieval fantasy mobile game, on genuine transparent background. Match the attached approved style reference: confident dark espresso outline, simple chunky appealing silhouette, broad flat painted colors with two or three crisp shadow values and a few intentional angular highlights. Hand-designed item illustration readable at phone size, absolutely no photographic texture, airbrushed shiny rendering, excessive filigree or tiny engravings. Centered full object, slightly diagonal rising from bottom-left to top-right, occupies 80% height with generous transparent margins. No frame, numbers, text, pedestal, UI, hand, character, particles, external glow or ground shadow. Subject: fire mage staff. Warm reddish oak shaft wrapped with two broad dark-red grip bands and simple brass fittings. Large angular orange-red flame-shaped gemstone at top, held by a sturdy three-prong gold cradle; a small gold/red diamond inset beneath. Low polished shine limited to one edge. Orange warm jewel, muted brass, deep red grips. Gem shape itself suggests fire; do not add flames around it."
+    },
+    {
+      "key": "comic_staff_volt_v1",
+      "prompt": "Use case: stylized-concept. ONE isolated full-length magic staff for a clean comic medieval fantasy mobile game, on genuine transparent background. Match the attached approved style reference: confident dark espresso outline, simple chunky appealing silhouette, broad flat painted colors with two or three crisp shadow values and a few intentional angular highlights. Hand-designed item illustration readable at phone size, absolutely no photographic texture, airbrushed shiny rendering, excessive filigree or tiny engravings. Centered full object, slightly diagonal rising from bottom-left to top-right, occupies 80% height with generous transparent margins. No frame, numbers, text, pedestal, UI, hand, character, particles, external glow or ground shadow. Subject: lightning mage staff. Dark violet shaft with one broad gold spiral band and a simple dark leather hand grip. Large faceted amethyst violet crystal at top held by a strong gold fork with two short angular points, a small purple diamond inset below. One pale violet lightning-shaped highlight INSIDE the crystal; no outside energy. Strong purple-and-muted-gold palette, sturdy balanced staff not delicate jewelry."
+    },
+    {
+      "key": "comic_staff_mora_v1",
+      "prompt": "Use case: stylized-concept. ONE isolated full-length magic staff for a clean comic medieval fantasy mobile game, on genuine transparent background. Match the attached approved style reference: confident dark espresso outline, simple chunky appealing silhouette, broad flat painted colors with two or three crisp shadow values and a few intentional angular highlights. Hand-designed item illustration readable at phone size, absolutely no photographic texture, airbrushed shiny rendering, excessive filigree or tiny engravings. Centered full object, slightly diagonal rising from bottom-left to top-right, occupies 80% height with generous transparent margins. No frame, numbers, text, pedestal, UI, hand, character, particles, external glow or ground shadow. Subject: frost mage staff. Deep navy-blue shaft with two short pale silver braces and dark leather grip. Top has three clean faceted cyan ice crystals, one tall central crystal and two shorter flanking crystals, secured by a sturdy silver star-shaped socket with one small turquoise diamond inset below. Broad cool silver faces and simple white/cyan facets. Compact readable cluster, no tiny ice chips or external glow, no frost fog."
+    }
+  ],
+  "edits": {
+    "refs": [
+      [
+        "comic_staff_pyro_v1",
+        "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-8fe38186-3473-4d5d-8b49-f4d3e1257989.png"
+      ],
+      [
+        "comic_staff_volt_v1",
+        "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-7bf3835c-3b3b-4ce5-ba33-567cb1cdf6c0.png"
+      ],
+      [
+        "comic_staff_mora_v1",
+        "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-6e7a1bd1-f6a2-4714-ad0b-60497f542e33.png"
+      ]
+    ],
+    "prompt": "Edit only the background and external halo of this isolated game staff. Remove ALL the soft colored glow, blurry shadow, fog, bloom and haze outside the dark object outline. Outside the staff silhouette must be completely transparent, alpha zero, right up to its clean antialiased outline. Keep the exact staff design, shape, colors, internal highlights, proportions, rotation, placement and entire staff tip unchanged. Do not repaint, stretch or redesign the object. A clean transparent game item cutout with NO ground shadow or energy haze."
+  },
+  "sources": [
+    {
+      "key": "bg_upgrade_comic_v1",
+      "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-7ef631fe-8a2e-4281-8ffd-fae4ece2a556.png"
+    },
+    {
+      "key": "comic_training_hammer_v1",
+      "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-50ecba28-1496-487c-a0c0-a64fbd27bf06.png"
+    },
+    {
+      "key": "comic_staff_pyro_v1",
+      "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-ec90b06b-1ba3-4e6e-9bad-87101833d01f.png"
+    },
+    {
+      "key": "comic_staff_volt_v1",
+      "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-ec4a5b0d-a771-4e80-96f3-f6c1d5567863.png"
+    },
+    {
+      "key": "comic_staff_mora_v1",
+      "path": "C:/Users/user/.codex/generated_images/01a11c03-afa8-7ef0-834a-a47cbda4a411/exec-9b7a0d81-9495-4aaf-9d5f-1f048c44275d.png"
+    }
+  ]
+}

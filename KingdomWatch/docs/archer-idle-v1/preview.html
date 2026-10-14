@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>弓箭手攻击与待机预览</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#14232c;color:#edf2ed;font:16px system-ui,"Microsoft YaHei",sans-serif}main{max-width:750px;margin:auto;padding:20px 16px 28px}h1{font-size:23px;margin:0 0 8px}p{color:#a9bdc3;margin:0 0 18px;line-height:1.6}canvas{display:block;width:100%;height:auto;background:#263a43;border:1px solid #3c5059;border-radius:12px}.controls{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:16px 0}button{border:0;border-radius:8px;background:#a0cf68;color:#20321d;font-weight:700;font-size:16px;padding:12px 20px;cursor:pointer}.label{color:#c9d8d9;font-size:14px;margin:20px 0 9px}a{color:#a9d876}#state{font-size:14px;color:#b8cdd1}
+</style>
+<main><h1>弓箭手 · 攻击与待机</h1><p>空闲时播放待机；进入攻击状态后播放放箭、收势和取箭回位，按方向左右镜像。选择空闲后，当前攻击完成才恢复待机。</p>
+<canvas id="large" width="750" height="580"></canvas>
+<div class="controls"><button id="play" disabled>暂停</button><span id="state">正在加载…</span></div>
+<div class="controls"><button id="idle" disabled>空闲</button><button id="left" disabled>向左攻击</button><button id="right" disabled>向右攻击</button></div>
+<div class="controls"><label>射箭频率：<select id="rate"><option value="1.2">1.2 次／秒</option><option value="2">2 次／秒</option><option value="4">4 次／秒</option></select></label></div>
+<div class="label">战场中的显示大小</div><canvas id="small" width="750" height="200"></canvas>
+<div class="label"><a href="../../?v=archer-attack-20261013">打开游戏</a></div></main>
+<script>
+(async()=>{
+ const manifest=await (await fetch('idle.frames.json')).json(),attack=await (await fetch('attack.frames.json')).json();
+ const atlas=new Image(),attackAtlas=new Image();atlas.src='idle.png';attackAtlas.src='attack.png';await Promise.all([atlas.decode(),attackAtlas.decode()]);
+ const large=document.querySelector('#large'),small=document.querySelector('#small'),button=document.querySelector('#play'),state=document.querySelector('#state');
+ let clock=0,attackClock=Infinity,attackSeconds=.62,interval=1/1.2,nextShot=0,paused=false,combat=false,facing=1,last=performance.now();
+ const release=()=>{if(attackClock<attackSeconds)return;attackClock=0;attackSeconds=Math.min(attack.animation.recoverySeconds,Math.max(.1,interval*.74))};
+ const draw=(canvas,paintedHeight)=>{
+   const c=canvas.getContext('2d'),dpr=Math.min(devicePixelRatio||1,3),w=750,h=canvas===large?580:200;
+   if(canvas.width!==w*dpr){canvas.width=w*dpr;canvas.height=h*dpr}c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+   c.fillStyle='#263a43';c.fillRect(0,0,w,h);const ground=h-22;
+   c.strokeStyle='#42565d';c.beginPath();c.moveTo(32,ground);c.lineTo(w-32,ground);c.stroke();
+   c.fillStyle='#18272c';c.beginPath();c.ellipse(w/2,ground,paintedHeight*.19,paintedHeight*.04,0,0,Math.PI*2);c.fill();
+   let m=manifest,img=atlas,index=Math.floor(clock/manifest.animation.seconds*manifest.animation.frames.length)%manifest.animation.frames.length;
+   if(attackClock<attackSeconds){m=attack;img=attackAtlas;const first=m.animation.releaseIndex;index=first+Math.min(m.animation.frames.length-first-1,Math.floor(attackClock/attackSeconds*(m.animation.frames.length-first)))}
+   else if(combat){m=attack;img=attackAtlas;const lead=Math.min(.16,interval*.28),prepare=nextShot<lead?1-Math.max(0,nextShot)/lead:0;index=prepare>0?Math.min(m.animation.releaseIndex-1,Math.floor(prepare*m.animation.releaseIndex)):m.animation.frames.length-1}
+   const [x,y,sw,sh]=m.frames[m.animation.frames[index]],scale=paintedHeight/m.readyHeightPx;
+   c.save();c.translate(w/2,ground);c.scale(facing,1);
+   c.drawImage(img,x,y,sw,sh,-m.groundAnchor[0]*scale,-m.groundAnchor[1]*scale,sw*scale,sh*scale);c.restore();
+ };
+ const render=()=>{draw(large,490);draw(small,146)};
+ const status=()=>{state.textContent=paused?'已暂停':combat?'攻击循环 · 待机停止':attackClock<attackSeconds?'攻击收势后恢复待机':'空闲 · 待机循环'};
+ button.disabled=false;status();button.onclick=()=>{paused=!paused;button.textContent=paused?'播放':'暂停';status()};
+ for(const id of ['idle','left','right']){const b=document.querySelector('#'+id);b.disabled=false;b.onclick=()=>{combat=id!=='idle';if(combat){facing=id==='left'?1:-1;release();nextShot=interval}status();render()}};
+ document.querySelector('#rate').onchange=e=>{interval=1/Number(e.target.value)};
+ function tick(now){const dt=Math.min((now-last)/1000,.1);if(!paused){if(attackClock<attackSeconds)attackClock=Math.min(attackSeconds,attackClock+dt);if(combat){nextShot-=dt;if(nextShot<=0){release();nextShot+=interval}}else if(attackClock>=attackSeconds)clock=(clock+dt)%manifest.animation.seconds}last=now;status();render();requestAnimationFrame(tick)}requestAnimationFrame(tick);
+})().catch(e=>{document.querySelector('#state').textContent='加载失败，请刷新重试';console.error(e)});
+</script></html>

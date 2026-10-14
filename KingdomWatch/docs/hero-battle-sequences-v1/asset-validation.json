@@ -1,0 +1,107 @@
+{
+  "heroes": [
+    {
+      "id": "archer",
+      "cells": 48,
+      "atlasSize": [
+        2048,
+        1536
+      ],
+      "atlasBytes": 1909006,
+      "footBottomRange": [
+        250,
+        250
+      ],
+      "idleSeconds": 1.958,
+      "attackSeconds": 0.72,
+      "releaseFrame": 12,
+      "loopMethod": "continuous endpoint matched"
+    },
+    {
+      "id": "sniper",
+      "cells": 48,
+      "atlasSize": [
+        2048,
+        1536
+      ],
+      "atlasBytes": 1592167,
+      "footBottomRange": [
+        249,
+        250
+      ],
+      "idleSeconds": 2.4,
+      "attackSeconds": 0.76,
+      "releaseFrame": 12,
+      "loopMethod": "verified quiet tail, reversible cloak/breathing loop"
+    },
+    {
+      "id": "pyro",
+      "cells": 48,
+      "atlasSize": [
+        2048,
+        1536
+      ],
+      "atlasBytes": 2037472,
+      "footBottomRange": [
+        249,
+        249
+      ],
+      "idleSeconds": 1.792,
+      "attackSeconds": 0.8,
+      "releaseFrame": 12,
+      "loopMethod": "continuous endpoint matched"
+    },
+    {
+      "id": "volt",
+      "cells": 48,
+      "atlasSize": [
+        2048,
+        1536
+      ],
+      "atlasBytes": 1806289,
+      "footBottomRange": [
+        250,
+        250
+      ],
+      "idleSeconds": 1.333,
+      "attackSeconds": 0.84,
+      "releaseFrame": 12,
+      "loopMethod": "continuous endpoint matched"
+    },
+    {
+      "id": "mora",
+      "cells": 48,
+      "atlasSize": [
+        2048,
+        1536
+      ],
+      "atlasBytes": 1985325,
+      "footBottomRange": [
+        249,
+        250
+      ],
+      "idleSeconds": 1.875,
+      "attackSeconds": 0.84,
+      "releaseFrame": 12,
+      "loopMethod": "continuous endpoint matched"
+    }
+  ],
+  "totalCells": 240,
+  "gameIntegrated": false,
+  "all-heroes-preview.gif": {
+    "frames": 120,
+    "durationMs": 5000,
+    "size": [
+      1100,
+      660
+    ]
+  },
+  "battle-composite-preview.gif": {
+    "frames": 119,
+    "durationMs": 5000,
+    "size": [
+      750,
+      596
+    ]
+  }
+}

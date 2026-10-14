@@ -1,0 +1,13 @@
+{
+  "tool": "built-in image_gen",
+  "original": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-e3178d7d-de34-4233-8216-a695e3a88e0a.png",
+  "source": "source-atlas.png",
+  "prompt": "image-prompt.txt",
+  "transparentBackground": true,
+  "processing": "Connected sprite extraction with 2px antialias retention; no redraw or resampling",
+  "references": [
+    "docs/shop-comic-v1/style-reference.png",
+    "user victory reference",
+    "user defeat reference"
+  ]
+}

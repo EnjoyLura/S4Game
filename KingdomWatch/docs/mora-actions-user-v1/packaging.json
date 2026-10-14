@@ -1,0 +1,52 @@
+{
+  "hero": "mora",
+  "idle": {
+    "kind": "idle",
+    "take": "take-b",
+    "resource": "mora_idle_user_v1",
+    "frames": 56,
+    "fps": 24.0,
+    "seconds": 2.3333333333333335,
+    "atlas": [
+      4096,
+      3584
+    ],
+    "paintedHeight": 468,
+    "displayHeight": 146,
+    "groundAnchor": [
+      256,
+      496
+    ],
+    "fullSourceRetained": true,
+    "reversePlayback": false,
+    "gameVisualAcceptedByUser": false,
+    "paidTaskSubmitted": false
+  },
+  "attack": {
+    "kind": "attack",
+    "take": "take-a",
+    "resource": "mora_attack_user_v1",
+    "frames": 56,
+    "fps": 24.0,
+    "seconds": 2.3333333333333335,
+    "atlas": [
+      4096,
+      3584
+    ],
+    "paintedHeight": 468,
+    "displayHeight": 146,
+    "groundAnchor": [
+      256,
+      496
+    ],
+    "fullSourceRetained": true,
+    "reversePlayback": false,
+    "gameVisualAcceptedByUser": false,
+    "paidTaskSubmitted": false
+  },
+  "gameIntegrated": true,
+  "previewOnly": false,
+  "paidTaskSubmitted": false,
+  "userVisualAccepted": false,
+  "review": "User manual effect review; no tests, gameplay, browser or online QA"
+}

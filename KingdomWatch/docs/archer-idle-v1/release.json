@@ -1,0 +1,14 @@
+{
+  "status": "published",
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "game": "https://kingdom-watch.pages.dev/?v=archer-idle-1791823131",
+  "preview": "https://kingdom-watch.pages.dev/previews/archer-idle-v1/?v=1791823131",
+  "deployment": "https://fd0f47e5.kingdom-watch.pages.dev",
+  "build": "Cocos Creator 3.8.8 web-mobile completed",
+  "dprPatch": "applied",
+  "publish": "Wrangler Pages main completed, exit code 0",
+  "visualAcceptance": "user manual review; no further automatic game verification after user instruction",
+  "scope": "Archer idle from the user-provided video; attack and facing animation not implemented",
+  "legacyPreview": "Excluded from deployment using a separate staging directory; original local build files retained"
+}

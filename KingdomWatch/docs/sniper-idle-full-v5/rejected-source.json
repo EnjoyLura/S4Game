@@ -1,0 +1,10 @@
+{
+  "taskId": "task_4tAUfJS9GTahvJvODxYVZQ3R7xaeWolA",
+  "status": "rejected_source",
+  "cause": "Unexpected bright weapon burst around source frames 8-13; cloth later approaches source right boundary at frames 29-31",
+  "sourceVideoPreserved": true,
+  "framesTrimmed": false,
+  "gameIntegrated": false,
+  "published": false,
+  "nextAction": "Regenerate a full cloth-led idle using a shorter positive motion specification"
+}

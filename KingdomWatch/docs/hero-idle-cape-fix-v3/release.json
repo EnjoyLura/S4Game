@@ -1,0 +1,1053 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-idle-cape-fix-v3-20261014-005411",
+  "entryVersion": "1791910443",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-idle-cape-fix-v3-1791910443",
+  "preview": "https://kingdom-watch.pages.dev/previews/hero-idle-cape-fix-v3/?v=1791910443",
+  "status": "published",
+  "deployment": "https://8b0262f6.kingdom-watch.pages.dev",
+  "date": "2026-10-14T00:55:47+08:00",
+  "timezone": "Asia/Shanghai",
+  "motionAcceptedByUser": true,
+  "capeFixAcceptedByUser": false,
+  "newVideoSubmitted": false,
+  "sniper": {
+    "hero": "sniper",
+    "kind": "idle",
+    "uniqueFrames": 23,
+    "timelineFrames": 44,
+    "sourceFrames": 56,
+    "sourceIndices": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26
+    ],
+    "seconds": 2.762951334379909,
+    "atlas": [
+      4096,
+      1536
+    ],
+    "atlasBytes": 3414279,
+    "resource": "sniper_idle_cape_safe_v3",
+    "paintedHeight": 467.1111,
+    "displayHeight": 153,
+    "gameIntegrated": true,
+    "userAccepted": false,
+    "staticMasterAcceptedByUser": true,
+    "loopStyle": "pingpong",
+    "sourceVideoNewlyGenerated": false,
+    "review": "Production source annotation; effects reviewed manually by user; no browser/game/tests/online QA",
+    "motionAcceptedByUser": true,
+    "sourceVideoOrigin": "sniper-idle-lively-v1",
+    "loopClosure": {
+      "id": "hero-idle-adjacent-loop-v1",
+      "strategy": "All original complete frames forward and backward with eased turns",
+      "allTransitionsAdjacentIncludingWrap": true,
+      "wrapFrames": [
+        1,
+        0
+      ],
+      "noEndToStartCut": true,
+      "noOpacityCrossfade": true,
+      "acceptance": "Structural production constraint only; final effect review by user"
+    },
+    "atlasPixelsRetained": false,
+    "atlasFileSha256": "b4b0ef4881579705457f27c69a2bb981bb45ec6afb6f05c88e9223932073546c",
+    "retainedCellPixelsUnmodified": true,
+    "capeFixAcceptedByUser": false,
+    "sourceFraming": {
+      "cause": "The original video clips the cape at its right edge during later frames",
+      "requiredSourceMarginPixels": 12,
+      "selectedContinuousSourceRange": [
+        4,
+        26
+      ],
+      "selectedSourceIndices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "allPriorSourceMargins": [
+        {
+          "sourceFrame": 4,
+          "bounds": [
+            164,
+            146,
+            754,
+            1198
+          ],
+          "margins": [
+            164,
+            146,
+            14,
+            146
+          ],
+          "minimumMargin": 14,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 5,
+          "bounds": [
+            164,
+            146,
+            752,
+            1198
+          ],
+          "margins": [
+            164,
+            146,
+            16,
+            146
+          ],
+          "minimumMargin": 16,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 6,
+          "bounds": [
+            164,
+            146,
+            748,
+            1198
+          ],
+          "margins": [
+            164,
+            146,
+            20,
+            146
+          ],
+          "minimumMargin": 20,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 7,
+          "bounds": [
+            164,
+            146,
+            744,
+            1198
+          ],
+          "margins": [
+            164,
+            146,
+            24,
+            146
+          ],
+          "minimumMargin": 24,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 8,
+          "bounds": [
+            164,
+            145,
+            740,
+            1198
+          ],
+          "margins": [
+            164,
+            145,
+            28,
+            146
+          ],
+          "minimumMargin": 28,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 9,
+          "bounds": [
+            164,
+            144,
+            736,
+            1198
+          ],
+          "margins": [
+            164,
+            144,
+            32,
+            146
+          ],
+          "minimumMargin": 32,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 10,
+          "bounds": [
+            164,
+            144,
+            730,
+            1198
+          ],
+          "margins": [
+            164,
+            144,
+            38,
+            146
+          ],
+          "minimumMargin": 38,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 11,
+          "bounds": [
+            164,
+            144,
+            726,
+            1198
+          ],
+          "margins": [
+            164,
+            144,
+            42,
+            146
+          ],
+          "minimumMargin": 42,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 12,
+          "bounds": [
+            164,
+            144,
+            723,
+            1198
+          ],
+          "margins": [
+            164,
+            144,
+            45,
+            146
+          ],
+          "minimumMargin": 45,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 13,
+          "bounds": [
+            164,
+            144,
+            720,
+            1198
+          ],
+          "margins": [
+            164,
+            144,
+            48,
+            146
+          ],
+          "minimumMargin": 48,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 14,
+          "bounds": [
+            164,
+            144,
+            716,
+            1198
+          ],
+          "margins": [
+            164,
+            144,
+            52,
+            146
+          ],
+          "minimumMargin": 52,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 15,
+          "bounds": [
+            164,
+            144,
+            714,
+            1198
+          ],
+          "margins": [
+            164,
+            144,
+            54,
+            146
+          ],
+          "minimumMargin": 54,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 16,
+          "bounds": [
+            164,
+            144,
+            712,
+            1198
+          ],
+          "margins": [
+            164,
+            144,
+            56,
+            146
+          ],
+          "minimumMargin": 56,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 17,
+          "bounds": [
+            164,
+            144,
+            712,
+            1198
+          ],
+          "margins": [
+            164,
+            144,
+            56,
+            146
+          ],
+          "minimumMargin": 56,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 18,
+          "bounds": [
+            164,
+            144,
+            712,
+            1198
+          ],
+          "margins": [
+            164,
+            144,
+            56,
+            146
+          ],
+          "minimumMargin": 56,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 19,
+          "bounds": [
+            165,
+            144,
+            713,
+            1198
+          ],
+          "margins": [
+            165,
+            144,
+            55,
+            146
+          ],
+          "minimumMargin": 55,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 20,
+          "bounds": [
+            165,
+            144,
+            716,
+            1198
+          ],
+          "margins": [
+            165,
+            144,
+            52,
+            146
+          ],
+          "minimumMargin": 52,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 21,
+          "bounds": [
+            166,
+            143,
+            720,
+            1198
+          ],
+          "margins": [
+            166,
+            143,
+            48,
+            146
+          ],
+          "minimumMargin": 48,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 22,
+          "bounds": [
+            166,
+            143,
+            724,
+            1198
+          ],
+          "margins": [
+            166,
+            143,
+            44,
+            146
+          ],
+          "minimumMargin": 44,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 23,
+          "bounds": [
+            166,
+            143,
+            730,
+            1198
+          ],
+          "margins": [
+            166,
+            143,
+            38,
+            146
+          ],
+          "minimumMargin": 38,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 24,
+          "bounds": [
+            166,
+            143,
+            736,
+            1198
+          ],
+          "margins": [
+            166,
+            143,
+            32,
+            146
+          ],
+          "minimumMargin": 32,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 25,
+          "bounds": [
+            166,
+            143,
+            742,
+            1198
+          ],
+          "margins": [
+            166,
+            143,
+            26,
+            146
+          ],
+          "minimumMargin": 26,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 26,
+          "bounds": [
+            166,
+            144,
+            752,
+            1198
+          ],
+          "margins": [
+            166,
+            144,
+            16,
+            146
+          ],
+          "minimumMargin": 16,
+          "requiredMargin": 12,
+          "completeWithinSource": true
+        },
+        {
+          "sourceFrame": 27,
+          "bounds": [
+            166,
+            144,
+            758,
+            1198
+          ],
+          "margins": [
+            166,
+            144,
+            10,
+            146
+          ],
+          "minimumMargin": 10,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 28,
+          "bounds": [
+            166,
+            144,
+            768,
+            1198
+          ],
+          "margins": [
+            166,
+            144,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 29,
+          "bounds": [
+            166,
+            144,
+            768,
+            1198
+          ],
+          "margins": [
+            166,
+            144,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 30,
+          "bounds": [
+            166,
+            144,
+            768,
+            1198
+          ],
+          "margins": [
+            166,
+            144,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 31,
+          "bounds": [
+            166,
+            145,
+            768,
+            1198
+          ],
+          "margins": [
+            166,
+            145,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 32,
+          "bounds": [
+            166,
+            146,
+            768,
+            1198
+          ],
+          "margins": [
+            166,
+            146,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 33,
+          "bounds": [
+            166,
+            146,
+            768,
+            1198
+          ],
+          "margins": [
+            166,
+            146,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 34,
+          "bounds": [
+            166,
+            147,
+            768,
+            1198
+          ],
+          "margins": [
+            166,
+            147,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 35,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 36,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 37,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 38,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 39,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 40,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 41,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 42,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 43,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 44,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 45,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 46,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 47,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 48,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 49,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 50,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 51,
+          "bounds": [
+            164,
+            148,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            148,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 52,
+          "bounds": [
+            164,
+            147,
+            768,
+            1198
+          ],
+          "margins": [
+            164,
+            147,
+            0,
+            146
+          ],
+          "minimumMargin": 0,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        },
+        {
+          "sourceFrame": 53,
+          "bounds": [
+            164,
+            146,
+            760,
+            1198
+          ],
+          "margins": [
+            164,
+            146,
+            8,
+            146
+          ],
+          "minimumMargin": 8,
+          "requiredMargin": 12,
+          "completeWithinSource": false
+        }
+      ],
+      "retainedCellPixelsUnmodified": true,
+      "newVideoSubmitted": false,
+      "loopClosure": {
+        "id": "hero-idle-adjacent-loop-v1",
+        "strategy": "All original complete frames forward and backward with eased turns",
+        "allTransitionsAdjacentIncludingWrap": true,
+        "wrapFrames": [
+          1,
+          0
+        ],
+        "noEndToStartCut": true,
+        "noOpacityCrossfade": true,
+        "acceptance": "Structural production constraint only; final effect review by user"
+      },
+      "loopSeconds": 2.762951334379909,
+      "timing": "Cycle length scaled to retained frame transitions to preserve average motion cadence",
+      "review": "Source range production only; effect review by user"
+    }
+  },
+  "cause": "Original video later cape frames cross the source image right edge",
+  "build": {
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "exitCode": 36,
+    "milliseconds": 9554,
+    "finishedLocal": "2026-10-14 00:52:21",
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-hero-idle-cape-fix-v3-20261014-out.log"
+  },
+  "dprPatch": "completed",
+  "publication": {
+    "tool": "Wrangler3.114.17",
+    "exitCode": 0,
+    "attempts": 2,
+    "retry": "First upload-token request returned authentication code 10000; same retained stage retried",
+    "uploaded": 47,
+    "cached": 1218,
+    "uploadSeconds": 23.0
+  },
+  "retained": "Intact original cell pixels, display scale and foot pivot, adjacent loop closure, volt idle/archer media/sniper attack",
+  "review": "Source production only; user manual effect review; no tests, browser, game or online QA"
+}

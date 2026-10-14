@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-13",
+  "timezone": "Asia/Shanghai",
+  "status": "published",
+  "preview": "https://kingdom-watch.pages.dev/previews/sniper-idle-rebuild-v1/?v=1791855405",
+  "game": "https://kingdom-watch.pages.dev/?v=sniper-idle-v2-1791855405",
+  "deployment": "https://fd9d4567.kingdom-watch.pages.dev",
+  "generator": "美术/tools/art_video_gen.py",
+  "model": "lens-minimax-h3-768p",
+  "taskId": "task_poRuUzKNI9Hs3cc2B7iEYrnPsdsfU6jV",
+  "secondsRequested": 2,
+  "sourceVideo": {
+    "file": "source.mp4",
+    "actualSeconds": 2.33,
+    "size": [
+      768,
+      1344
+    ],
+    "fps": 24,
+    "bytes": 809905
+  },
+  "prompt": "idle-prompt.txt",
+  "constraints": "Idle only; hold weapon and limbs in the original pose, subtle cloth and breathing; no firing, attack gesture, recoil, reloading or projectile effects.",
+  "sequence": {
+    "resource": "assets/resources/ux/sniper_idle_rebuild_v2",
+    "uniqueFrames": 48,
+    "timelineFrames": 48,
+    "seconds": 2,
+    "loopMethod": "continuous endpoint matched",
+    "atlas": [
+      2048,
+      2304
+    ],
+    "bytes": 3028435,
+    "processing": "Whole character frames; fixed union crop, scale and foot pivot. No per-frame tracking, limb splitting, warping, crossfade or forward/backward loop."
+  },
+  "archer": "Display height retained at 221; original images and idle/attack timing retained; no repeated enlargement.",
+  "build": "Cocos Creator 3.8.8 web-mobile; BUILD_SUCCESS exit code 36",
+  "dprPatch": "applied; entry cache-bust 1791855405",
+  "publish": "Wrangler Pages main completed, exit code 0; 13 files uploaded, 895 cached",
+  "scope": "New two-second sniper idle material and independent preview. Current game sniper animation is unchanged, awaiting user manual review.",
+  "review": "User manual review; no automatic game, interaction, browser or online visual verification performed."
+}

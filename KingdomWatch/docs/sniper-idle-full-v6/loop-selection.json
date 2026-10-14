@@ -1,0 +1,9 @@
+{
+  "method": "pingpong",
+  "range": [
+    0,
+    55
+  ],
+  "reason": "Persistent user requirement: preserve all selected motion frames and close through adjacent originals",
+  "scope": "Structural production constraint; not visual acceptance"
+}

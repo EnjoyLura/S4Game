@@ -1,0 +1,100 @@
+[
+  {
+    "key": "banner_title",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_skin_v2\\banner_title.png",
+    "width": 1040,
+    "height": 176,
+    "bytes": 6352
+  },
+  {
+    "key": "banner_fail",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_skin_v2\\banner_fail.png",
+    "width": 1180,
+    "height": 200,
+    "bytes": 7372
+  },
+  {
+    "key": "card_base",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_skin_v2\\card_base.png",
+    "width": 446,
+    "height": 720,
+    "bytes": 9656
+  },
+  {
+    "key": "button_green",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_skin_v2\\button_green.png",
+    "width": 600,
+    "height": 176,
+    "bytes": 4711
+  },
+  {
+    "key": "button_gold",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_skin_v2\\button_gold.png",
+    "width": 600,
+    "height": 176,
+    "bytes": 4734
+  },
+  {
+    "key": "button_muted",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_skin_v2\\button_muted.png",
+    "width": 600,
+    "height": 176,
+    "bytes": 4746
+  },
+  {
+    "key": "tab_l",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_skin_v2\\tab_l.png",
+    "width": 520,
+    "height": 116,
+    "bytes": 991
+  },
+  {
+    "key": "tab_m",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_skin_v2\\tab_m.png",
+    "width": 520,
+    "height": 116,
+    "bytes": 552
+  },
+  {
+    "key": "tab_r",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_skin_v2\\tab_r.png",
+    "width": 520,
+    "height": 116,
+    "bytes": 861
+  },
+  {
+    "key": "switch_on",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_skin_v2\\switch_on.png",
+    "width": 200,
+    "height": 88,
+    "bytes": 3998
+  },
+  {
+    "key": "switch_off",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_skin_v2\\switch_off.png",
+    "width": 200,
+    "height": 88,
+    "bytes": 4002
+  },
+  {
+    "key": "switch_disabled",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_skin_v2\\switch_disabled.png",
+    "width": 200,
+    "height": 88,
+    "bytes": 3935
+  },
+  {
+    "key": "bar_track",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_skin_v2\\bar_track.png",
+    "width": 450,
+    "height": 32,
+    "bytes": 1203
+  },
+  {
+    "key": "bar_fill",
+    "file": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\battle_skin_v2\\bar_fill.png",
+    "width": 450,
+    "height": 24,
+    "bytes": 691
+  }
+]

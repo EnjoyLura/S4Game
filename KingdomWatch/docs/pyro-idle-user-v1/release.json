@@ -1,0 +1,51 @@
+{
+  "status": "published",
+  "date": "2026-10-15T00:17:41.459710+08:00",
+  "idleResource": "pyro_idle_user_v1",
+  "attackResource": "pyro_attack_user_v1",
+  "previousVisual": "battle_heroes_v2/pyro_combat with HeroBattleMotion",
+  "idleFrames": 56,
+  "idleSeconds": 2.3333333333333335,
+  "attackFrames": 56,
+  "attackReleaseIndex": 14,
+  "groundAnchor": [
+    256,
+    496
+  ],
+  "cellSize": [
+    512,
+    512
+  ],
+  "paintedHeight": 468,
+  "displayHeight": 146,
+  "player": "Existing whole-character HeroSequenceAnimation; actual fireball/skill/ultimate cast callbacks",
+  "idleRule": "Only outside attack/recovery, no target within own attack range and no queued attack",
+  "mirroring": "Whole art about the fixed foot; original left-facing, right-facing via horizontal reflection",
+  "reversePlayback": false,
+  "opacityFade": false,
+  "paidTaskSubmitted": false,
+  "gameVisualAcceptedByUser": false,
+  "retained": [
+    "archer, sniper and volt media and timing",
+    "mora media",
+    "damage, attack speed, target selection, fireball paths, fire effects and sound"
+  ],
+  "game": "https://kingdom-watch.pages.dev/?v=settlement-comic-v1-1791994681",
+  "deployment": "https://f9b74360.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-settlement-comic-v1-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-settlement-comic-v1-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "win/lose settlement artwork and fire-mage idle/attack integration",
+    "gameplayValidation": "user manual",
+    "milliseconds": 8302
+  },
+  "sourceSha256": "6cb244c3280064c9bc002c355b56d4b06e49ba4d21bcddb957dc97820709d932",
+  "publicationReceipt": "../settlement-comic-v1/release.json",
+  "gameplayTestsRun": false,
+  "browserValidationRun": false,
+  "onlineValidationRun": false
+}

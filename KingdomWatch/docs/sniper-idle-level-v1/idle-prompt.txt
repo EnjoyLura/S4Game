@@ -1,0 +1,11 @@
+Create a two-second subtle full-character idle animation using the supplied image as the exact first frame. Preserve the same rear-view blond male ranger, royal-blue hood and cape, navy clothes, brown leather, silver armor, wooden/steel crossbow, comic cel-shaded drawing, proportions and fixed full-body framing.
+
+He is quietly standing ready with the CROSSBOW HELD LEVEL AT SHOULDER HEIGHT. Keep this exact horizontal aiming elevation and direction for the entire clip. The crossbow is one solid rigid weapon with the same two bow limbs, same wood stock and same taut bowstring. Both hands remain securely on their existing grips. Do not lift the weapon or point it at the sky. Do not lower it to the waist.
+
+Idle motion is mild and restrained: a slow small breath visible in the shoulders and upper back; connected forearms follow by a tiny amount while continuing to support the level crossbow. The chest does not inflate dramatically. The head/hood may settle almost imperceptibly. The blue cape follows this little breathing motion gently, including a very small connected movement in its middle folds and hem, without flapping or a strong gust. Keep the cape attached to the shoulders. Motion is subtle in the whole figure, not exaggerated swaying, and not only a single flapping cape tip.
+
+Both feet remain planted at the first-frame locations, hips stable, no stepping, foot sliding, body translation, camera motion, zoom or changes of size. Maintain the rear-facing pose throughout. Gently breathe in and out and return close to the initial neutral posture with low motion at both endpoints, suitable for quiet looping.
+
+This is ONLY IDLE. No trigger pull, bowstring release, recoil, firing, aiming jerk, attack preparation, reloading, picking up a bolt, airborne arrow, muzzle flash, sparks or smoke. No new objects or changing costume/weapon geometry. No disconnected hands, stretched limbs, moving armor pieces, melting bow, floating cape or lighting flicker.
+
+The background stays a perfectly flat, solid pure RED (#FF0000) throughout, identical in every frame, including all negative spaces inside the crossbow. No gradient, shadows, reflections, red glow, scenery, labels or text. Keep the entire crossbow, hood, cape hem and both boots fully visible with the original safety margins. Maintain the sharp clean illustrated style.

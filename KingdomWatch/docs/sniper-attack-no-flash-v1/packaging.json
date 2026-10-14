@@ -1,0 +1,17 @@
+{
+  "frames": 49,
+  "releaseIndex": 4,
+  "atlas": [
+    3584,
+    4032
+  ],
+  "atlasBytes": 7195840,
+  "displayHeight": 170,
+  "groundAnchor": [
+    256,
+    560
+  ],
+  "resource": "assets/resources/ux/sniper_attack_v1",
+  "source": "sniper-attack-no-flash.mp4",
+  "review": "Approved cleaned source; packaged effect will be manually reviewed by user in game."
+}

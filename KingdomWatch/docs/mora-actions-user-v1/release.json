@@ -1,0 +1,39 @@
+{
+  "status": "published",
+  "hero": "mora",
+  "idleResource": "mora_idle_user_v1",
+  "attackResource": "mora_attack_user_v1",
+  "frames": {
+    "idle": 56,
+    "attack": 56
+  },
+  "displayHeight": 146,
+  "groundAnchor": [
+    256,
+    496
+  ],
+  "player": "HeroSequenceAnimation; actual projectile, skill and ultimate callbacks",
+  "allSourceFramesRetained": true,
+  "reversePlayback": false,
+  "opacityFade": false,
+  "paidTaskSubmitted": false,
+  "gameVisualAcceptedByUser": false,
+  "game": "https://kingdom-watch.pages.dev/?v=pick-comic-v1-1791996687",
+  "deployment": "https://5894b2f5.kingdom-watch.pages.dev",
+  "userVisualAccepted": false,
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-pick-comic-v1-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-pick-comic-v1-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "original pick artwork and lower placement; ice idle/attack; new fire attack and idle loop; sniper 0.5/s, fire and volt 1/s",
+    "gameplayValidation": "user manual",
+    "milliseconds": 8771
+  },
+  "receipt": "../pick-comic-v1/release.json",
+  "gameplayTestsRun": false,
+  "browserValidationRun": false,
+  "onlineValidationRun": false
+}
