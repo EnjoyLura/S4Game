@@ -11,6 +11,7 @@ import { C, CA, dimLayer, LabelOpts, label, N, setText, WY, WX } from './UIKit';
 import { artSprite } from './Ux';
 import { COMIC, comicArt, comicButton, comicPlate } from './ComicUI';
 import { heroPortrait } from './HeroComic';
+import { bindButton } from './ButtonFeedback';
 
 interface PickCallbacks { onPick: (card: CardDef) => void; onRefreshRequest: () => void; }
 interface PauseOptions {
@@ -34,7 +35,7 @@ const CARD_ART: Record<string, string> = {
   pyro_cd: 'ui_card_cd_cut', pyro_eager: 'ui_card_fast_charge_a', volt_cd: 'ui_card_cd_cut', volt_eager: 'ui_card_fast_charge_a',
   mora_cd: 'ui_card_cd_cut', mora_eager: 'ui_card_fast_charge_a', mora_linger: 'ui_card_cd_cut',
 };
-const RARITY = { white: '#DED4BA', blue: '#4C92C3', purple: '#8E66BC' };
+const RARITY = { white: '#DED4BA', blue: '#4C92C3', purple: '#8E66BC', gold: '#F2B23E' };
 const ART = 'battle_comic_v1/';
 
 function text(p: Node, x: number, y: number, s: string, o: LabelOpts = {}): Node {
@@ -160,22 +161,22 @@ export class BattleComicPanels {
       const x = (i - (cards.length - 1) / 2) * 230, y = H / 2 - 335;
       const frame = comicPlate(p, x, y, 210, cardH, 'card', { name: 'pickCard:' + card.id, cut: 10 }); frames.push(frame);
       const header = comicPlate(frame, 0, cardH / 2 - 28, 210, 56, 'paper', { fill: RARITY[card.rarity], name: 'pickCardHeader', cut: 10 });
-      text(header, 0, 0, card.name, { size: 25, bold: true, color: card.rarity === 'white' ? COMIC.text : COMIC.cream, w: 192, h: 42 });
+      text(header, 0, 0, card.name, { size: 25, bold: true, color: card.rarity === 'white' || card.rarity === 'gold' ? COMIC.text : COMIC.cream, w: 192, h: 42 });
       const circle = N('pickIconSeat', frame, 0, 65).addComponent(Graphics); circle.fillColor = C('#E6DFCF'); circle.circle(0, 0, 60); circle.fill();
-      const key = card.unlocks ? 'ui_icon_' + card.unlocks + '_' + card.owner : CARD_ART[card.id] || 'ui_card_' + card.id;
+      const key = card.art || (card.unlocks ? 'ui_icon_' + card.unlocks + '_' + card.owner : CARD_ART[card.id] || 'ui_card_' + card.id);
       artSprite(frame, 0, 65, 118, 118, key, { sliced: false });
       if (card.owner !== 'global') {
         heroPortrait(frame, -56, -23, 36, card.owner);
         text(frame, 27, -23, HERO_DEFS[card.owner]?.name.split('·')[0] || '', { size: 21, bold: true, w: 110, h: 32 });
       }
       text(frame, 0, -109, card.desc, { size: 24, bold: true, w: 186, h: 118, lineHeight: 32 });
-      frame.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => {
-        e.propagationStopped = true; if (this.picking || this.pickPending) return;
+      bindButton(frame, () => {
+        if (this.picking || this.pickPending) return;
         this.picking = true;
         tween(frame).to(.08, { scale: new Vec3(1.035, 1.035, 1) }).to(.1, { scale: new Vec3(1, 1, 1) })
           .call(() => { if (version !== this.modalVersion || !frame.isValid) return; this.picking = false; cb.onPick(card); }).start();
         frames.filter(n => n !== frame).forEach(n => tween(n.getComponent(UIOpacity)!).to(.14, { opacity: 95 }).start());
-      });
+      }, { scale: .98, shift: 1, releaseMotion: false, enabled: () => !this.picking && !this.pickPending && op.opacity >= 254 });
       const op = frame.addComponent(UIOpacity); op.opacity = 0;
       tween(op).delay(i * .035).to(.15, { opacity: 255 }).start();
     });

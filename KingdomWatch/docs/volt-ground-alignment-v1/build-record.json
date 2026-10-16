@@ -1,0 +1,10 @@
+{
+  "exitCode": 36,
+  "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-volt-ground-alignment-v1-20261015-out.log",
+  "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-volt-ground-alignment-v1-20261015-err.log",
+  "creator": "3.8.8",
+  "platform": "web-mobile",
+  "dprPatch": "completed",
+  "scope": "align thunder ground ring, synchronize sniper multi-target aim, commit pyro meteors to spread-out warned ground points",
+  "gameplayValidation": "user manual"
+}

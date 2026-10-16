@@ -1,0 +1,334 @@
+--- TrainingLobby before
++++ TrainingLobby after
+@@ -1,16 +1,21 @@
+ /** Shared comic training views. Growth remains in GameData; battle unlocks remain run-local. */
+-import { Graphics, Mask, Node, ScrollView, Sprite, UITransform, UIOpacity, Vec2 } from 'cc';
++import { Graphics, Label, Mask, Node, ScrollView, Sprite, UITransform, UIOpacity, Vec2 } from 'cc';
+ import { LO } from '../config/GameConfig';
+ import { skillBaseMultiplier } from '../config/Cards';
+-import { CA, LabelOpts, N, setText, WY } from './UIKit';
++import { C, CA, LabelOpts, N, setText, WY } from './UIKit';
+ import { artSprite } from './Ux';
+-import { COMIC, comicArt, comicButton, comicDialog, comicMark, comicPlate } from './ComicUI';
++import { COMIC, comicArt, comicButton, comicButtonControl, comicDialog, comicMark, comicPlate } from './ComicUI';
+ import { EMPTY_GEAR, gearArt, heroComicFigure, heroGlyph, heroPortrait } from './HeroComic';
+ import { mainLabel as pageLabel, PageCtx, mainLayout, mainResourceTop, MAIN_RESOURCE_H, pageScroll, fmt, toast } from './PageKit';
+ import { loadSave, saveSave } from '../core/SaveData';
+ import { bindButton } from './ButtonFeedback';
+ import { refreshUI } from './UIMotion';
+ import { MilestoneSwipe } from './MilestoneSwipe';
++import { TrainingWeaponFloat } from './TrainingWeaponFloat';
++import { HoldUpgrade } from './HoldUpgrade';
++import { TrainingGrowthFx } from './TrainingGrowthFx';
++import { uiSound } from './UIAudio';
++import { heroRosterRail, ROSTER_CARD_W } from './HeroRosterRail';
+ import { GrowthTarget, growthAction } from './GrowthFeedback';
+ import {
+   HERO_DEFS, HERO_GROWTH, EQUIPS, EquipKind, KIND_NAME, MAX, OpResult, StatKey, STAT_NAME,
+@@ -78,10 +83,11 @@
+ }
+ 
+ function roster(parent: Node, top: number, hid: string, rebuild: () => void): void {
+-  const sv = loadSave(), row = N('trainingRoster', parent);
+-  Object.values(HERO_DEFS).forEach((def, i) => {
++  const sv = loadSave(), heroes = Object.values(HERO_DEFS);
++  const rail = heroRosterRail(parent, top, 'trainingRoster', heroes.map(def => def.id), hid);
++  heroes.forEach((def, i) => {
+     const owned = sv.heroes[def.id].owned;
+-    const slot = comicPlate(row, (i - 2) * 138, WY(top, 114), 126, 114, hid === def.id ? 'gold' : 'card', { name: 'trainingHero:' + def.id });
++    const slot = comicPlate(rail.content, rail.x(i), 0, ROSTER_CARD_W, 114, hid === def.id ? 'gold' : 'card', { name: 'trainingHero:' + def.id });
+     const avatar = heroPortrait(slot, 0, 14, 72, def.id);
+     if (!owned) { avatar.addComponent(UIOpacity).opacity = 125; comicMark(slot, 43, -8, 'lock', 17, COMIC.sub); }
+     mainLabel(slot, 0, -39, def.id === 'pyro' ? def.name.replace('·', '') : def.name.split('·')[0], {
+@@ -108,19 +114,20 @@
+   });
+ }
+ 
+-function context(parent: Node, top: number, hid: string, data: TrainingData): void {
++function context(parent: Node, top: number, hid: string, data: TrainingData): () => void {
+   const h = loadSave().heroes[hid], def = HERO_DEFS[hid];
+   const name = mainLabel(parent, -156, WY(top + 2, 40), def.name, {
+     size: 30, bold: true, color: COMIC.cream, w: 364, h: 40, align: 'left', outline: COMIC.ink, outlineW: 2,
+   });
+   name.name = 'trainingHeroName';
+-  mainLabel(parent, -156, WY(top + 42, 27), `Lv.${h.lv} · ${def.job.split(' · ')[0]}`, {
++  const level = mainLabel(parent, -156, WY(top + 42, 27), `Lv.${h.lv} · ${def.job.split(' · ')[0]}`, {
+     size: 20, color: COMIC.cream, w: 364, h: 27, align: 'left', outline: COMIC.ink, outlineW: 1.5,
+   });
+   const attrs = comicButton(parent, 260, WY(top + 5, 62), 160, 62, '', () => data.onAttrs(hid), { tone: 'dark', name: 'trainingAttrs' });
+   const face = attrs.getChildByName('buttonFace')!;
+   heroGlyph(face, -44, 0, 'attrs', 38);
+   mainLabel(face, 25, 0, '属性', { size: 25, bold: true, color: COMIC.cream, w: 83, h: 40 });
++  return () => setText(level, `Lv.${h.lv} · ${def.job.split(' · ')[0]}`);
+ }
+ 
+ function rule(parent: Node, y: number, width: number): void {
+@@ -130,24 +137,28 @@
+ }
+ 
+ type PreviewRow = { name: string; cur: string; next: string; gain: string };
++interface PreviewControl { node: Node; refresh: (lv: number, maxed: boolean, rows: PreviewRow[]) => void; }
+ function preview(parent: Node, x: number, y: number, w: number, h: number, title: string,
+-  lv: number, maxed: boolean, rows: PreviewRow[], portrait = false, note = ''): void {
++  lv: number, maxed: boolean, rows: PreviewRow[], portrait = false, note = ''): PreviewControl {
+   const p = comicPlate(parent, x, y, w, h, 'paper', { name: 'trainingPreview' });
+   mainLabel(p, 0, h / 2 - 33, title, { size: 26, bold: true, color: COMIC.text, w: w - 38, h: 38 });
+   const levelY = h / 2 - 81;
+-  mainLabel(p, -w * .18, levelY, `Lv.${lv}`, { size: 26, bold: true, color: COMIC.text, w: w * .32, h: 40 });
+-  mainLabel(p, 0, levelY, maxed ? '·' : '→', { size: 23, color: COMIC.sub, w: 32, h: 38 });
+-  mainLabel(p, w * .18, levelY, maxed ? 'MAX' : `Lv.${lv + 1}`, { size: 26, bold: true, color: COMIC.greenShade, w: w * .32, h: 40 });
++  const current = mainLabel(p, -w * .18, levelY, `Lv.${lv}`, { size: 26, bold: true, color: COMIC.text, w: w * .32, h: 40 });
++  const arrow = mainLabel(p, 0, levelY, maxed ? '·' : '→', { size: 23, color: COMIC.sub, w: 32, h: 38 });
++  const next = mainLabel(p, w * .18, levelY, maxed ? 'MAX' : `Lv.${lv + 1}`, { size: 26, bold: true, color: COMIC.greenShade, w: w * .32, h: 40 });
++  const updates: ((row: PreviewRow, maxed: boolean) => void)[] = [];
+   rule(p, levelY - 30, w - 38);
+   if (portrait) {
+-    const step = Math.min(117, (h - 136) / Math.max(1, rows.length));
++    // Two-line attribute rows leave a dedicated power footer, including short screens.
++    const step = Math.min(98, (h - 216) / Math.max(1, rows.length));
+     rows.forEach((r, i) => {
+       const yy = levelY - 65 - i * step;
+-      mainLabel(p, 0, yy, r.name, { size: 23, bold: true, color: COMIC.text, w: w - 38, h: 32 });
+-      mainLabel(p, -w * .18, yy - 36, r.cur, { size: 25, bold: true, color: COMIC.text, w: w * .31, h: 32 });
+-      mainLabel(p, 0, yy - 36, '→', { size: 20, color: COMIC.sub, w: 30, h: 30 });
+-      mainLabel(p, w * .18, yy - 36, r.next, { size: 25, bold: true, color: COMIC.greenShade, w: w * .31, h: 32 });
+-      mainLabel(p, 0, yy - 67, maxed ? '已达上限' : r.gain, { size: 20, color: COMIC.greenShade, w: w - 38, h: 27 });
++      mainLabel(p, -w * .19, yy, r.name, { size: 21, bold: true, color: COMIC.text, w: w * .42, h: 30 });
++      const gain = mainLabel(p, w * .23, yy, maxed ? '已达上限' : r.gain, { size: 19, color: COMIC.greenShade, w: w * .35, h: 27 });
++      const a = mainLabel(p, -w * .18, yy - 31, r.cur, { size: 25, bold: true, color: COMIC.text, w: w * .31, h: 32 });
++      mainLabel(p, 0, yy - 31, '→', { size: 20, color: COMIC.sub, w: 30, h: 30 });
++      const b = mainLabel(p, w * .18, yy - 31, r.next, { size: 25, bold: true, color: COMIC.greenShade, w: w * .31, h: 32 });
++      updates.push((row, capped) => { setText(a, row.cur); setText(b, row.next); setText(gain, capped ? '已达上限' : row.gain); });
+     });
+   } else {
+     rows.forEach((r, i) => {
+@@ -158,6 +169,10 @@
+     });
+     if (note) mainLabel(p, 0, -h / 2 + 27, note, { size: 19, color: COMIC.sub, w: w - 50, h: 28 });
+   }
++  return { node: p, refresh: (level, capped, values) => {
++    setText(current, `Lv.${level}`); setText(arrow, capped ? '·' : '→'); setText(next, capped ? 'MAX' : `Lv.${level + 1}`);
++    updates.forEach((update, i) => update(values[i], capped));
++  } };
+ }
+ 
+ function comparison(cur: Stats, next: Stats): PreviewRow[] {
+@@ -213,29 +228,55 @@
+ }
+ 
+ function footer(parent: Node, ctx: PageCtx, top: number, text: string,
+-  cost: { gold: number; mat: number } | null, maxed: boolean, action: () => OpResult, growth: GrowthTarget, empty = false): void {
++  cost: { gold: number; mat: number } | null, maxed: boolean, action: () => OpResult, growth: GrowthTarget, empty = false,
++  repeatStep?: (repeating: boolean) => boolean): { refresh: (cost: { gold: number; mat: number }, maxed: boolean) => void; hammer: Node } {
+   const sv = loadSave(), ownMat = matCount('mat_stone') + matCount('mat_iron');
+   const enough = !!cost && sv.gold >= cost.gold && ownMat >= cost.mat;
+   const dock = comicPlate(parent, 0, WY(top - 8, 186), 750, 186, 'paper', { name: 'trainingActionDock', edge: false });
+   rule(dock, 91, 750);
+   const costRow = N('trainingCosts', parent, 0, WY(top, 68), 702, 68);
++  const costs: { need: Node; own: Node }[] = [];
+   if (cost && !maxed && !empty) {
+     const entries = cost.mat ? [{ icon: 'comic_coin_v1', need: cost.gold, own: sv.gold },
+       { icon: 'comic_mat_stone_v1', need: cost.mat, own: ownMat }] : [{ icon: 'comic_coin_v1', need: cost.gold, own: sv.gold }];
+     entries.forEach((r, i) => {
+       const x = entries.length === 1 ? 0 : (i - .5) * 312;
+       comicArt(costRow, x - 98, 0, 42, 42, r.icon);
+-      mainLabel(costRow, x + 20, 13, `消耗 ${fmt(r.need)}`, { size: 24, bold: true, color: r.own >= r.need ? COMIC.greenShade : '#AB422E', w: 186, h: 32, align: 'left' });
+-      mainLabel(costRow, x + 20, -16, `持有 ${fmt(r.own)}`, { size: 18, color: COMIC.sub, w: 186, h: 25, align: 'left' });
++      const need = mainLabel(costRow, x + 20, 13, `消耗 ${fmt(r.need)}`, { size: 24, bold: true, color: r.own >= r.need ? COMIC.greenShade : '#AB422E', w: 186, h: 32, align: 'left' });
++      const own = mainLabel(costRow, x + 20, -16, `持有 ${fmt(r.own)}`, { size: 18, color: COMIC.sub, w: 186, h: 25, align: 'left' });
++      costs.push({ need, own });
+     });
+   } else mainLabel(costRow, 0, 0, empty ? '前往英雄页穿戴装备后强化' : '已达到当前等级上限', { size: 23, color: COMIC.sub, w: 650, h: 38 });
+-  const button = comicButton(parent, 0, WY(top + 80, 88), 680, 88, '', () => {
++  const control = comicButtonControl(parent, 0, WY(top + 80, 88), 680, 88, '', () => {
+     if (empty || maxed) return;
+     const r = growthAction(growth, action); if (r.ok) ctx.refresh();
+   }, { name: 'trainingUpgrade', tone: maxed || empty || !enough ? 'muted' : 'green', enabled: !maxed && !empty, sound: 'confirm' });
++  const button = control.node;
+   const face = button.getChildByName('buttonFace')!;
+-  comicArt(face, -146, 0, 48, 48, HAMMER);
+-  mainLabel(face, 33, 0, empty ? '未穿戴装备' : maxed ? '已满级' : text, { size: 33, bold: true, color: COMIC.cream, w: 350, h: 54 });
++  const hammer = comicArt(face, -146, 0, 48, 48, HAMMER);
++  const caption = mainLabel(face, 33, repeatStep ? 12 : 0, empty ? '未穿戴装备' : maxed ? '已满级' : text,
++    { size: repeatStep ? 30 : 33, bold: true, color: COMIC.cream, w: 350, h: repeatStep ? 42 : 54 });
++  if (repeatStep) {
++    const hint = mainLabel(face, 33, -24, maxed ? '已达到当前上限' : '点击升一级 · 长按连续升级', { size: 17, color: COMIC.cream, w: 410, h: 24 });
++    const hold = button.addComponent(HoldUpgrade); hold.configure(repeatStep);
++    bindButton(button, () => hold.click(), { visual: face, sound: false, enabled: () => !maxed && !empty,
++      onPress: pressed => hold.press(pressed) });
++    return { hammer, refresh: (nextCost, capped) => {
++      const oldMaxed = maxed; maxed = capped;
++      const wallet = loadSave(), mat = matCount('mat_stone') + matCount('mat_iron');
++      const needs = [nextCost.gold, nextCost.mat], owned = [wallet.gold, mat];
++      costs.forEach((row, i) => {
++        setText(row.need, capped ? '已达上限' : `消耗 ${fmt(needs[i])}`);
++        row.need.getComponent(Label)!.color = C(owned[i] >= needs[i] ? COMIC.greenShade : '#AB422E');
++        setText(row.own, `持有 ${fmt(owned[i])}`);
++      });
++      control.setTone(capped || wallet.gold < nextCost.gold || mat < nextCost.mat ? 'muted' : 'green');
++      if (oldMaxed !== capped) control.setEnabled(!capped);
++      setText(caption, capped ? '已满级' : text);
++      setText(hint, capped ? '已达到当前上限' : '点击升一级 · 长按连续升级');
++    } };
++  }
++  return { hammer, refresh: () => {} };
+ }
+ 
+ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
+@@ -250,7 +291,8 @@
+       const env = environment(root, st.tab < 2 ? bodyTop + stageH : bodyTop, st.tab < 2), envY = env.position.y;
+       const title = mainLabel(root, -271, WY(mainResourceTop() + 7, 40), '英雄培养', { size: 30, color: COMIC.cream, bold: true, w: 190, h: 40, outline: COMIC.ink, outlineW: 2 });
+       title.name = 'trainingTitle';
+-      roster(root, rosterTop, hid, render); categories(root, tabTop, render); context(root, contextTop, hid, data);
++      roster(root, rosterTop, hid, render); categories(root, tabTop, render);
++      const refreshContext = context(root, contextTop, hid, data);
+       const body = pageScroll(root, 'trainingBody', bodyTop, footerTop - 12, height, 718);
+       const scroll = body.parent!.getComponent(ScrollView)!;
+       scroll.elastic = false;
+@@ -277,22 +319,56 @@
+         const weapon = st.tab === 1, lv = weapon ? h.weaponLv : h.lv, maxed = lv >= (weapon ? MAX.weapon : MAX.hero);
+         const cur = data.statsAt(hid, h.lv, h.weaponLv), next = maxed ? cur : data.statsAt(hid, h.lv + (weapon ? 0 : 1), h.weaponLv + (weapon ? 1 : 0));
+         const stage = N('trainingDisplay', body, 0, -stageH / 2, 710, stageH), foot = -stageH / 2 + 72;
++        let figure: Node, weaponCaption: Node | null = null;
+         if (weapon) {
+           const equipped = equippedWeapon(hid);
+           mainLabel(stage, -176, stageH / 2 - 25, equipped.name, { size: 26, color: COMIC.cream, bold: true, w: 312, h: 38, outline: COMIC.ink, outlineW: 2 });
+           const item = N('trainingWeapon:' + hid, stage, -176, -10, 310, stageH - 85);
+-          comicArt(item, 0, 12, 280, stageH - 120, equipped.art);
+-          mainLabel(stage, -176, -stageH / 2 + 22, '换装继承培养等级 · Lv.' + h.weaponLv, { size: 17, color: COMIC.cream, outline: COMIC.ink, outlineW: 1.5, w: 314, h: 28 });
++          figure = item;
++          const floating = N('trainingWeaponFloat', item, 0, 0, 280, stageH - 120);
++          comicArt(floating, 0, 12, 280, stageH - 120, equipped.art);
++          floating.addComponent(TrainingWeaponFloat);
++          weaponCaption = mainLabel(stage, -176, -stageH / 2 + 22, '换装继承培养等级 · Lv.' + h.weaponLv, { size: 17, color: COMIC.cream, outline: COMIC.ink, outlineW: 1.5, w: 314, h: 28 });
+         } else {
+-          heroComicFigure(stage, hid, -176, foot, stageH - 102, 318);
+-          const power = N('trainingPower', stage, -176, -stageH / 2 + 28, 304, 64);
+-          comicArt(power, 0, 0, 304, 64, 'hero_comic_v3/comic_power_plate_v3');
+-          mainLabel(power, 27, 0, `战力 ${fmt(heroStats(hid).power)}`, { size: 25, bold: true, color: COMIC.cream, w: 216, h: 38, outline: COMIC.ink, outlineW: 1.5 });
++          figure = heroComicFigure(stage, hid, -176, foot, stageH - 102, 318);
+         }
+-        const paperH = Math.min(stageH - 12, 432);
+-        preview(stage, 185, -stageH / 2 + paperH / 2 + 8, 310, paperH, weapon ? '强化提升' : HERO_GROWTH[HERO_DEFS[hid].growthType].name + '成长', lv, maxed, comparison(cur, next), true);
+-        milestoneShelf(body, ctx, -(stageH + 138), weapon ? '武器突破' : '等级突破', weapon ? data.weaponMilestones(hid) : data.heroMilestones(hid), lv, hid + ':' + st.tab, weapon ? equippedWeapon(hid).art : HAMMER, render, true);
+-        footer(root, ctx, footerTop, weapon ? '强化武器' : '升级英雄', weapon ? weaponUpCost(lv) : { gold: heroUpCost(lv), mat: 0 }, maxed, () => weapon ? upWeapon(hid) : upHero(hid), { kind: weapon ? 'weapon' : 'hero', hid });
++        const paperH = Math.min(stageH - 40, 432);
++        const statsPanel = preview(stage, 185, 16, 310, paperH, weapon ? '强化提升' : HERO_GROWTH[HERO_DEFS[hid].growthType].name + '成长', lv, maxed, comparison(cur, next), true);
++        const power = N('trainingPower', statsPanel.node, 0, -paperH / 2 + 34, 274, 56);
++        comicArt(power, 0, 0, 274, 56, 'hero_comic_v3/comic_power_plate_v3');
++        const powerText = mainLabel(power, 23, 0, `战力 ${fmt(heroStats(hid).power)}`, { size: 23, bold: true, color: COMIC.cream, w: 202, h: 34 });
++        const fx = N('trainingGrowthFx', stage, -176, foot).addComponent(TrainingGrowthFx);
++        fx.configure(figure, power, powerText, heroStats(hid).power);
++        const shelfHost = N('trainingMilestoneHost', body);
++        const refreshShelf = (): void => {
++          for (const child of Array.from(shelfHost.children)) { child.active = false; child.removeFromParent(); child.destroy(); }
++          milestoneShelf(shelfHost, ctx, -(stageH + 138), weapon ? '武器突破' : '等级突破', weapon ? data.weaponMilestones(hid) : data.heroMilestones(hid), weapon ? h.weaponLv : h.lv, hid + ':' + st.tab, weapon ? equippedWeapon(hid).art : HAMMER, render, true);
++        };
++        refreshShelf();
++        const target: GrowthTarget = { kind: weapon ? 'weapon' : 'hero', hid };
++        const action = (): OpResult => weapon ? upWeapon(hid) : upHero(hid);
++        const footerControl = footer(root, ctx, footerTop, weapon ? '强化武器' : '升级英雄', weapon ? weaponUpCost(lv) : { gold: heroUpCost(lv), mat: 0 }, maxed, action, target, false, repeating => {
++          // Keep the same hit target and art alive throughout a continuous gesture.
++          const before = heroStats(hid).power, oldLevel = weapon ? h.weaponLv : h.lv;
++          const milestone = (oldLevel + 1) % 10 === 0;
++          const result = milestone ? growthAction(target, action) : action();
++          if (!result.ok) { if (!milestone) toast(result.msg, { kind: 'warning', title: '暂时无法提升' }); return false; }
++          const level = weapon ? h.weaponLv : h.lv, capped = level >= (weapon ? MAX.weapon : MAX.hero);
++          const current = data.statsAt(hid, h.lv, h.weaponLv);
++          const nextStats = capped ? current : data.statsAt(hid, h.lv + (weapon ? 0 : 1), h.weaponLv + (weapon ? 1 : 0));
++          statsPanel.refresh(level, capped, comparison(current, nextStats)); refreshContext();
++          if (weaponCaption) setText(weaponCaption, '换装继承培养等级 · Lv.' + h.weaponLv);
++          const nextCost = weapon ? weaponUpCost(level) : { gold: heroUpCost(level), mat: 0 };
++          footerControl.refresh(nextCost, capped); ctx.refreshResources?.();
++          fx.pulse(before, heroStats(hid).power, milestone);
++          if (!milestone) uiSound(repeating ? 'confirm' : 'upgrade');
++          if (milestone) refreshShelf();
++          if (capped) { if (!milestone) toast('已达到当前等级上限', { kind: 'success', title: '培养完成' }); return false; }
++          const missing = sv.gold < nextCost.gold ? '金币不足' : matCount('mat_stone') + matCount('mat_iron') < nextCost.mat ? '强化材料不足' : '';
++          if (repeating && missing) toast(missing + '，已停止连续升级', { kind: 'warning', title: '连续升级已停止' });
++          return !missing;
++        });
++        fx.setHammer(footerControl.hammer);
+       } else if (st.tab === 2) {
+         const selected = selectedSkill, shelfH = 200;
+         const shelf = N('trainingSkills', body, 0, -shelfH / 2, 702, shelfH);
+
+--- HeroPage before
++++ HeroPage after
+@@ -15,6 +15,7 @@
+ import { dismissUI, motionIn, refreshUI } from '../UIMotion';
+ import { uiSound } from '../UIAudio';
+ import { growthAction } from '../GrowthFeedback';
++import { heroRosterRail, ROSTER_CARD_W } from '../HeroRosterRail';
+ 
+ const SLOTS: EquipKind[] = ['helm', 'acc', 'glove', 'armor'];
+ const BAG_SIZE = 120, BAG_STEP = 130, BAG_COL_STEP = 138;
+@@ -110,10 +111,11 @@
+ }
+ 
+ function buildLobbyRoster(parent: Node, top: number, selected: string, select: (id: string) => void): void {
+-  const sv = loadSave(), roster = N('heroLobbyRoster', parent);
+-  Object.values(HERO_DEFS).forEach((def, i) => {
++  const sv = loadSave(), heroes = Object.values(HERO_DEFS);
++  const rail = heroRosterRail(parent, top, 'heroLobbyRoster', heroes.map(def => def.id), selected);
++  heroes.forEach((def, i) => {
+     const active = def.id === selected, owned = !!sv.heroes[def.id]?.owned;
+-    const slot = comicPlate(roster, (i - 2) * 138, WY(top, 114), 126, 114, active ? 'gold' : 'paper',
++    const slot = comicPlate(rail.content, rail.x(i), 0, ROSTER_CARD_W, 114, active ? 'gold' : 'paper',
+       { name: 'heroSelect:' + def.id, cut: 9 });
+     pressAction(slot, () => {
+       if (!owned) { toast('前往商店解锁该英雄'); return; }
+@@ -159,13 +161,15 @@
+     font: 'number', bold: true, w: 208, h: 38 });
+   const sq = Math.min(124, Math.max(100, (height - 300) / 2));
+   const equipmentH = 188 + sq * 2;
+-  comicPlate(stage, 213, height / 2 - 10 - equipmentH / 2, 284, equipmentH, 'paper', { name: 'heroEquipment', cut: 14 });
+-  mainLabel(stage, 163, height / 2 - 28, '已穿戴', { size: 22, font: 'body', color: COMIC.text, bold: true, w: 132, h: 32 });
+-  mainLabel(stage, 295, height / 2 - 28, Object.keys(EMPTY_GEAR).filter(k => wornInst(hid, k as EquipKind)).length + '/5',
++  const equipmentY = footY + (height - 185) / 2;
++  const equipment = N('heroEquipmentGroup', stage, 213, equipmentY, 284, equipmentH);
++  comicPlate(equipment, 0, 0, 284, equipmentH, 'paper', { name: 'heroEquipment', cut: 14 });
++  mainLabel(equipment, -50, equipmentH / 2 - 18, '已穿戴', { size: 22, font: 'body', color: COMIC.text, bold: true, w: 132, h: 32 });
++  mainLabel(equipment, 82, equipmentH / 2 - 18, Object.keys(EMPTY_GEAR).filter(k => wornInst(hid, k as EquipKind)).length + '/5',
+     { size: 19, color: COMIC.sub, align: 'right', w: 70, h: 30 });
+-  drawSlot(ctx, stage, hid, 'weapon', 213, height / 2 - 102, 252, 104);
+-  SLOTS.forEach((kind, i) => drawSlot(ctx, stage, hid, kind, 146 + (i % 2) * 134,
+-    height / 2 - (168 + sq / 2 + Math.floor(i / 2) * (sq + 14)), sq, sq));
++  drawSlot(ctx, equipment, hid, 'weapon', 0, equipmentH / 2 - 92, 252, 104);
++  SLOTS.forEach((kind, i) => drawSlot(ctx, equipment, hid, kind, -67 + (i % 2) * 134,
++    equipmentH / 2 - (158 + sq / 2 + Math.floor(i / 2) * (sq + 14)), sq, sq));
+   const details = N('heroDetails', layout, -154, -(height + HERO_DETAIL_H) / 2 + HERO_DETAIL_H / 2, 330, HERO_DETAIL_H);
+   detailButton(details, -86, 0, '属性', 'attrs', () => attrsModal(ctx, hid));
+   detailButton(details, 86, 0, '故事', 'book', () => storyModal(ctx, hid));
+
+--- ComicUI before
++++ ComicUI after
+@@ -112,6 +112,7 @@
+ interface ComicButtonOptions { tone?: Tone; size?: number; color?: string; name?: string; enabled?: boolean; sound?: UISound; }
+ export interface ComicButtonControl {
+   node: Node;
++  setTone: (tone: Tone) => void;
+   setText: (text: string) => void;
+   setEnabled: (enabled: boolean) => void;
+   setBusy: (busy: boolean, text?: string) => void;
+@@ -122,7 +123,7 @@
+   onClick: () => void, opts: ComicButtonOptions = {}): ComicButtonControl {
+   const node = N(opts.name || 'comicButton', parent, x, y, w, h);
+   node.getComponent(UITransform)!.setContentSize(Math.max(44, w), Math.max(44, h));
+-  const tone = opts.tone || 'green';
++  let tone = opts.tone || 'green';
+   const face = comicPlate(node, 0, 0, w, h, tone, { name: 'buttonFace', cut: 9 });
+   let enabled = opts.enabled !== false, busy = false, caption: Node | null = null;
+   const textColor = opts.color || (tone === 'gold' ? COMIC.text : COMIC.cream);
+@@ -151,7 +152,10 @@
+     if (message !== undefined) setCaption(message);
+     setEnabled(enabled);
+   };
+-  return { node, setText: setCaption, setEnabled, setBusy };
++  return { node, setText: setCaption, setEnabled, setBusy, setTone: value => {
++    tone = value;
++    paintPlate(face.getComponent(Graphics)!, w, h, enabled && !busy ? tone : 'muted', { cut: 9 });
++  } };
+ }
+ 
+ /** All lobby/battle faces share press, release, cancellation and disabled feedback. */

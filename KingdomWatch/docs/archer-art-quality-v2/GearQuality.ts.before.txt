@@ -1,0 +1,53 @@
+/** Shared equipment rarity: saturated frames, readable names and restrained comic highlights. */
+import { Graphics, Node } from 'cc';
+import { C, CA, label, N } from './UIKit';
+import { comicPlate } from './ComicUI';
+
+export interface GearQualityStyle { name: string; edge: string; text: string; well: string; light: string; }
+const STYLES: readonly GearQualityStyle[] = [
+  { name: '普通', edge: '#85949C', text: '#455761', well: '#E9EDEB', light: '#D6DFDF' },
+  { name: '优秀', edge: '#459C32', text: '#286A24', well: '#DCECC3', light: '#B1DF7B' },
+  { name: '稀有', edge: '#278CD7', text: '#205E9C', well: '#D3EAF9', light: '#8CD6FF' },
+  { name: '史诗', edge: '#A04DD1', text: '#7631A1', well: '#EBDDFA', light: '#D6A4F2' },
+];
+export function gearQuality(q: number): GearQualityStyle { return STYLES[q] || STYLES[0]; }
+
+/** A single flat cut-corner frame; the colored band never adds an offset backplate. */
+export function gearPlate(parent: Node, x: number, y: number, w: number, h: number, q: number,
+  opts: { name?: string; cut?: number; band?: number } = {}): Node {
+  const style = gearQuality(q), cut = Math.min(opts.cut ?? 8, h / 4, w / 4);
+  const plate = comicPlate(parent, x, y, w, h, 'card', { name: opts.name || 'gearQualityFrame', cut, fill: style.edge });
+  const g = plate.getComponent(Graphics)!;
+  const inset = opts.band ?? (w >= 200 && h >= 200 ? 5 : 4);
+  const l = -w / 2 + inset, r = w / 2 - inset, b = -h / 2 + inset, t = h / 2 - inset;
+  const c = Math.max(2, cut - inset * .55);
+  g.fillColor = C(style.well);
+  g.moveTo(l + c, b); g.lineTo(r - c, b); g.lineTo(r, b + c); g.lineTo(r, t - c);
+  g.lineTo(r - c, t); g.lineTo(l + c, t); g.lineTo(l, t - c); g.lineTo(l, b + c); g.close(); g.fill();
+  return plate;
+}
+
+export function gearQualityTag(parent: Node, x: number, y: number, q: number, tier: number,
+  w = 96, h = 26): Node {
+  const style = gearQuality(q);
+  const plate = comicPlate(parent, x, y, w, h, 'dark', { name: 'gearQualityTag', cut: 5, fill: style.edge });
+  label(plate, 0, 0, style.name + ' · ' + tier + '阶', { size: 15, color: '#FFFFFF', bold: true,
+    font: 'body', outline: style.text, outlineW: .8, w: w - 8, h: h - 2, shrink: true });
+  return plate;
+}
+
+/** Still graphics behind the illustration: no new texture, looping animation or white flash. */
+export function gearQualityHalo(parent: Node, x: number, y: number, w: number, h: number, q: number): void {
+  const style = gearQuality(q), g = N('gearQualityHalo', parent, x, y).addComponent(Graphics);
+  g.fillColor = C(style.light); g.ellipse(0, 0, w / 2, h / 2); g.fill();
+  g.strokeColor = CA(style.edge, .65); g.lineWidth = 2; g.stroke();
+  if (q < 2) return;
+  const glint = (cx: number, cy: number, s: number): void => {
+    g.fillColor = C(style.edge);
+    g.moveTo(cx, cy + s); g.lineTo(cx + s * .28, cy + s * .25); g.lineTo(cx + s * .7, cy);
+    g.lineTo(cx + s * .28, cy - s * .25); g.lineTo(cx, cy - s); g.lineTo(cx - s * .28, cy - s * .25);
+    g.lineTo(cx - s * .7, cy); g.lineTo(cx - s * .28, cy + s * .25); g.close(); g.fill();
+  };
+  glint(w * .42, h * .3, q === 3 ? 9 : 6);
+  if (q === 3) glint(-w * .4, -h * .28, 6);
+}

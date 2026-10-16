@@ -1,0 +1,13 @@
+        }, {
+          key: "ultimateRemaining",
+          get: function get() {
+            return this.ultimateT;
+          }
+        }, {
+          key: "skillPct",
+          key: "ultimateRemaining",
+          get: function get() {
+            return Math.max(_HeroBase.prototype.ultimateRemaining, this.volleyQueue.length ? .01 : 0);
+          }
+        }, {
+          key: "ultShowDuration",

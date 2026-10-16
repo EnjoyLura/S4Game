@@ -1,0 +1,50 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-level-difficulty-loot-v1-20261016-095440",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-boss-warning-base-modal-v1-20261016-092807",
+  "entryVersion": "1792115628",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=level-difficulty-loot-v1-1792115628",
+  "scope": "10/12/15-wave difficulty formations, differentiated rewards, kill equipment drops with touch/30-battle-second pickup and loot preview",
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "dropRates": {
+    "normal": 0,
+    "elite": 0.001,
+    "hell": 0.0018,
+    "eliteMobMultiplier": 8
+  },
+  "pickupSeconds": 30,
+  "pickupClock": "combat time; pauses and choices freeze; speed applies",
+  "persistentInventory": "pickup before animation; unique UID; remaining drops collected on settlement or exit",
+  "assets": "existing inventory art and licensed UI confirmation sample",
+  "validation": {
+    "sourceReview": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "localBundleInspection": true,
+    "testsRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  },
+  "deployment": "https://b9b00f11.kingdom-watch.pages.dev",
+  "date": "2026-10-16T09:55:49.115178+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-level-difficulty-loot-v1-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-level-difficulty-loot-v1-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "difficulty formations, kill equipment drops, pickup animation and reward preview",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 9981,
+  "mainBundleSha256": "b33d564d1546ccc931956479cb55d14afcea626b2b6be489ecf9818970b766cf",
+  "deploymentSucceeded": true,
+  "uploadedFiles": 2,
+  "cachedFiles": 1934
+}

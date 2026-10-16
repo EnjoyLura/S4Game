@@ -1,0 +1,38 @@
+[
+  {
+    "card": "sniper_range",
+    "name": "远距校准",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-9bead2a5-48d0-45cc-a17a-866fb8f2c6ec.png",
+    "asset": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\ui_card_sniper_range_v1.png",
+    "resource": "ui_card_sniper_range_v1",
+    "width": 1254,
+    "height": 1254,
+    "uuid": "37200aa5-8404-4c6c-a8e4-5227062bc110",
+    "mode": "built-in image_gen",
+    "pixels": "unchanged; generated alpha preserved"
+  },
+  {
+    "card": "sniper_pierce",
+    "name": "贯颅弩矢",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-1a9fb8d3-79c9-4d07-925c-1aa88f5852e3.png",
+    "asset": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\ui_card_sniper_pierce_v1.png",
+    "resource": "ui_card_sniper_pierce_v1",
+    "width": 1254,
+    "height": 1254,
+    "uuid": "b7e09812-bb31-4bed-8467-85c0441ec9a5",
+    "mode": "built-in image_gen",
+    "pixels": "unchanged; generated alpha preserved"
+  },
+  {
+    "card": "sniper_mark",
+    "name": "死亡准星",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-4ab518f4-28d2-4bfa-b44b-5c2bd3d3c8de.png",
+    "asset": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\ui_card_sniper_mark_v1.png",
+    "resource": "ui_card_sniper_mark_v1",
+    "width": 1254,
+    "height": 1254,
+    "uuid": "6bcc2f68-627a-4c0a-91cd-bb4b9a1f751e",
+    "mode": "built-in image_gen",
+    "pixels": "unchanged; generated alpha preserved"
+  }
+]

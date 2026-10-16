@@ -12,4 +12,6 @@ export const flow = {
   diff: 0,
   /** 主城最后停留的底部页签（0商店 1英雄 2关卡 3升级 4基地） */
   mainTab: 2,
+  /** One-shot focus when leaving a battle: restore this level/difficulty without starting it. */
+  levelReturn: null as { id: string; diff: number } | null,
 };

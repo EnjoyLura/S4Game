@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-exit-death-v3-20261016-002622",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-pick-motion-v2-20261016-000750",
+  "entryVersion": "1792081454",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=battle-exit-death-v3-1792081454",
+  "scope": "scene exit and retry lifecycle, death audio and burst, wind offset",
+  "layoutChanged": false,
+  "manualAcceptance": "pending user manual review"
+}

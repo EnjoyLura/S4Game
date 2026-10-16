@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-basic-launch-emphasis-v4-20261015-020716",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-upgrade-v1-20261015-020112",
+  "entryVersion": "1792001210",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=basic-launch-emphasis-v4-1792001210",
+  "scope": "larger brighter procedural basic attack releases",
+  "layoutChanged": false,
+  "visualAcceptance": "pending user manual review"
+}

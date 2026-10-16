@@ -23,7 +23,7 @@ ROOT = 'build/web-mobile/cocos-js'
 
 
 def main():
-    targets = glob.glob(ROOT + '/_virtual_cc-*.js') + glob.glob(ROOT + '/cc.js')
+    targets = glob.glob(ROOT + '/_virtual_cc-*.js') + glob.glob(ROOT + '/cc.js') + glob.glob(ROOT + '/cc.*.js')
     if not targets:
         print('patch-web-dpr: no engine bundle found under', ROOT)
         return 1
@@ -52,15 +52,17 @@ def main():
         print('patch-web-dpr: patched', path)
     print('patch-web-dpr: done, %d file(s) patched' % changed)
 
-    # 入口缓存熔断：assets/main/index.js 文件名跨构建不变，手机浏览器/webview 可能长期缓存旧代码
-    # （出现过：部署新对比弹窗后手机仍显示旧重叠布局）。给 System.import 注入构建时间戳查询参数，
-    # 每次部署后 index.html（must-revalidate）变化 → 新查询串 → 强制拉新入口；入口内 chunk 均为内容哈希名。
+    if not any('__KW_DPR_CAP' in io.open(path, encoding='utf-8').read() for path in targets):
+        print('patch-web-dpr: FATAL DPR getter patch missing - publication blocked')
+        return 1
+
+    # Support both development index.js and MD5-versioned production index.<hash>.js.
     idx_path = 'build/web-mobile/index.html'
     idx = io.open(idx_path, encoding='utf-8', errors='ignore').read()
     ver = str(int(time.time()))
     new_idx, n = re.subn(
-        r"System\.import\('\./index\.js(\?v=\d+)?'\)",
-        "System.import('./index.js?v=%s')" % ver,
+        r"System\.import\('\./(index(?:\.[A-Za-z0-9_-]+)?\.js)(\?v=\d+)?'\)",
+        lambda match: "System.import('./%s?v=%s')" % (match.group(1), ver),
         idx)
     if n == 1:
         io.open(idx_path, 'w', encoding='utf-8', newline='').write(new_idx)

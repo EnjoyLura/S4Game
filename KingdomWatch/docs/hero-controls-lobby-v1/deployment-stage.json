@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-controls-lobby-v1-20261015-021908",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-buttons-lobby-v1-20261015-021428",
+  "entryVersion": "1792001902",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-controls-lobby-v1-1792001902",
+  "scope": "hero navigation style, detail action placement and inventory tab centering",
+  "layoutChanged": true,
+  "visualAcceptance": "pending user manual review"
+}

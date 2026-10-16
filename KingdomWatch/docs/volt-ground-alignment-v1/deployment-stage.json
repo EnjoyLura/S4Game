@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-volt-ground-alignment-v1-20261015-222815",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-ultimate-ui-v3-20261015-220214",
+  "entryVersion": "1792074343",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=volt-ground-alignment-v1-1792074343",
+  "scope": "align thunder ground ring, synchronize sniper multi-target aim, commit pyro meteors to spread-out warned ground points",
+  "layoutChanged": false,
+  "manualAcceptance": "pending user manual review"
+}

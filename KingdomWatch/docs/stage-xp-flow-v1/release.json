@@ -1,0 +1,74 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-stage-xp-flow-v1-20261016-003319",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-exit-death-v3-20261016-002622",
+  "entryVersion": "1792081946",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=stage-xp-flow-v1-1792081946",
+  "scope": [
+    "remove stage-level backdrop",
+    "stable-color XP gain",
+    "passive battle XP"
+  ],
+  "layoutChanged": false,
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "levelText": {
+    "backdrop": "removed",
+    "positionSizeFont": "retained",
+    "readability": "2px dark glyph outline, no panel"
+  },
+  "xpBar": {
+    "baseColor": "#6CBCC6",
+    "topLight": "#8FD1D8 at20%",
+    "whiteFlash": "removed",
+    "motion": "existing width smoothing; level-up immediately hands off remaining XP",
+    "initialFill": 0
+  },
+  "passiveXp": {
+    "intervalBattleSeconds": 2,
+    "basePerTick": "max(1, round(expNeed(current stage level) * 0.01))",
+    "bonus": "existing global.xpMul applied",
+    "clock": "same scaled battle delta as elapsed; paused/pick/prepare/leaving/settlement do not accumulate",
+    "grant": "after simulation substeps, only running and not pending victory",
+    "upgrade": "canonical gainXp; normal queue, card pick and ultimate presentation lock apply",
+    "remainder": "retained on pause/revive; new battle starts at zero; no wall-clock catch-up"
+  },
+  "unchanged": [
+    "kill XP",
+    "level XP curve",
+    "combat damage/charge",
+    "hero progression and saves",
+    "other HUD meters and artwork",
+    "prior exit, death and launch-wind fixes"
+  ],
+  "validation": {
+    "sourceReview": true,
+    "tests": false,
+    "simulation": false,
+    "gameLaunch": false,
+    "browser": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user review",
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "builtBundleReview": "Unbacked stageLevelText, zero initial XP fill, passive interval/gain formula and post-step grant present. expNeed method compiled as expNeed$1 calling shared import; no recursion. HUD xpFlash and lastXpTarget removed."
+  },
+  "deployment": "https://34f69f81.kingdom-watch.pages.dev",
+  "date": "2026-10-16T00:33:55.701478+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-stage-xp-flow-v1-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-stage-xp-flow-v1-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "unbacked stage level text, steady-color XP bar and battle-clock passive XP",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 10619,
+  "mainBundleSha256": "5395c327685478c3c2ba8eb7110dbb6be49b43243cf336102300536fe5c09fb0",
+  "deploymentSucceeded": true,
+  "uploadedFiles": 2,
+  "cachedFiles": 1922
+}

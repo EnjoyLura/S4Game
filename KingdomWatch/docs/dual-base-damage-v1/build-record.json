@@ -1,0 +1,10 @@
+{
+  "exitCode": 36,
+  "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-dual-base-damage-v1-20261015-out.log",
+  "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-dual-base-damage-v1-20261015-err.log",
+  "creator": "3.8.8",
+  "platform": "web-mobile",
+  "dprPatch": "completed",
+  "scope": "independent attack and skill damage with role growth; remove green death residue",
+  "gameplayValidation": "user manual"
+}

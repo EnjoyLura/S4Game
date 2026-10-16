@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-enemy-death-burst-v2-20261015-192506",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-enemy-death-v1-20261015-185718",
+  "entryVersion": "1792063380",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=enemy-death-burst-v2-1792063380",
+  "scope": "in-place enemy material burst and fading ground splatter; remove all whole-body falling",
+  "layoutChanged": false,
+  "deathPresentationAcceptance": "pending user manual review"
+}

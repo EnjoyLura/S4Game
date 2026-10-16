@@ -1,0 +1,58 @@
+{
+  "status": "published",
+  "scope": "shared feedback across lobby, battle and modal buttons",
+  "sharedComponent": "assets/scripts/ui/ButtonFeedback.ts",
+  "feedback": {
+    "pressSeconds": 0.065,
+    "scale": 0.965,
+    "downshift": 1.5,
+    "releaseSeconds": 0.12,
+    "flashSeconds": 0.18,
+    "hover": true,
+    "sampledClickAudio": true
+  },
+  "gesture": {
+    "pairedTouchIds": true,
+    "nestedChildOwnership": true,
+    "dragCancelUnits": 12,
+    "routeCancelUnits": 7,
+    "releaseHitTest": "UITransform.hitTest screen coordinates",
+    "globalClickGapMilliseconds": 140,
+    "minimumComicTouchSize": 44,
+    "clearOnDisableDestroyAndAppHide": true
+  },
+  "coverage": [
+    "shared factories",
+    "five lobby pages",
+    "resource bar",
+    "navigation",
+    "squad",
+    "battle HUD",
+    "pick three",
+    "pause",
+    "settlement",
+    "settings",
+    "GM",
+    "legacy helpers"
+  ],
+  "sourceAudit": {
+    "remainingRawTouchEnd": [
+      "blank-area dismissal",
+      "input blockers"
+    ],
+    "duplicateNewMobCallbackRemoved": true
+  },
+  "busy": [
+    "pick refresh",
+    "double reward",
+    "revive",
+    "scene entry"
+  ],
+  "idleFrameUpdate": false,
+  "newGeneratedMedia": false,
+  "layoutChanged": false,
+  "visualAcceptance": "pending user manual review",
+  "automatedTestsOrGameLaunch": false,
+  "game": "https://kingdom-watch.pages.dev/?v=button-feedback-v1-1792002820",
+  "deployment": "https://0d80ed1e.kingdom-watch.pages.dev"
+}

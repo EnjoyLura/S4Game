@@ -1,0 +1,67 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-boss-warning-base-modal-v1-20261016-092807",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-settlement-pause-layout-v2-20261016-012601",
+  "entryVersion": "1792113926",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=boss-warning-base-modal-v1-1792113926",
+  "scope": [
+    "central warning animation",
+    "main castle consecutive upgrades",
+    "codex mask continuity",
+    "entry closed hold 2s"
+  ],
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "warning": {
+    "durationSeconds": 2.35,
+    "reducedMotionSeconds": 1.8,
+    "screenEdgeTint": false,
+    "gameplayDelay": false,
+    "ordinarySurges": "existing banner",
+    "currentConfig": "elite-only; no new Boss stats or entries",
+    "trigger": "once per wave, max(0, first featured group delay - 0.8s)",
+    "pauseAndPick": "hidden and suspended; no delay to upgrade picker",
+    "sound": "existing licensed surge sample, lowpass 3500Hz, gain 0.85, rate 0.95, duration <=1.05s"
+  },
+  "baseModal": {
+    "mask": "one persistent dim layer",
+    "handoff": "retain old opaque content until art and AFTER_DRAW",
+    "keepUpgrade": "replace contents in place, update currencies, refresh page only at final close",
+    "codex": "forward/back and claim return share session; scroll offset retained"
+  },
+  "entry": {
+    "closingSeconds": 0.24,
+    "minimumClosedSeconds": 2,
+    "openingSeconds": 0.32,
+    "coldLoading": "can hold longer until scene first paint; failure path unchanged"
+  },
+  "validation": {
+    "sourceInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "localBundleInspection": true,
+    "tests": "not run by project agreement",
+    "gameplay": "not run; user manual acceptance",
+    "browser": "not opened",
+    "onlineAcceptance": "not run"
+  },
+  "deployment": "https://4174f867.kingdom-watch.pages.dev",
+  "date": "2026-10-16T09:28:45.528530+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-boss-warning-base-modal-v1-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-boss-warning-base-modal-v1-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "central elite/Boss warning, persistent base upgrade/codex modal and two-second entry gate hold",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 9741,
+  "mainBundleSha256": "6573d73c514314e306408f4e09d9604cb22cd95c09647fc4e3c766a00c8023ec",
+  "deploymentSucceeded": true,
+  "uploadedFiles": 8,
+  "cachedFiles": 1928
+}

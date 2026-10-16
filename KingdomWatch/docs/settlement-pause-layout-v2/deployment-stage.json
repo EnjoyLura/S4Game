@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-settlement-pause-layout-v2-20261016-012601",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-entry-art-v2-20261016-005828",
+  "entryVersion": "1792085119",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=settlement-pause-layout-v2-1792085119",
+  "scope": "settlement controls, current-level retry, pause spacing, comic outpost gate, picker response and targeting range",
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review"
+}

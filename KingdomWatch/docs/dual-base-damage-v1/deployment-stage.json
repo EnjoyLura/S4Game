@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-dual-base-damage-v1-20261015-203032",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-enemy-death-burst-v2-20261015-192506",
+  "entryVersion": "1792067398",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=dual-base-damage-v1-1792067398",
+  "scope": "independent attack and skill damage with role growth; remove green death residue",
+  "layoutChanged": false,
+  "manualAcceptance": "pending user manual review"
+}

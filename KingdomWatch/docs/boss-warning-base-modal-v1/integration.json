@@ -1,0 +1,44 @@
+{
+  "status": "published",
+  "scope": [
+    "central warning animation",
+    "main castle consecutive upgrades",
+    "codex mask continuity",
+    "entry closed hold 2s"
+  ],
+  "warning": {
+    "durationSeconds": 2.35,
+    "reducedMotionSeconds": 1.8,
+    "screenEdgeTint": false,
+    "gameplayDelay": false,
+    "ordinarySurges": "existing banner",
+    "currentConfig": "elite-only; no new Boss stats or entries",
+    "trigger": "once per wave, max(0, first featured group delay - 0.8s)",
+    "pauseAndPick": "hidden and suspended; no delay to upgrade picker",
+    "sound": "existing licensed surge sample, lowpass 3500Hz, gain 0.85, rate 0.95, duration <=1.05s"
+  },
+  "baseModal": {
+    "mask": "one persistent dim layer",
+    "handoff": "retain old opaque content until art and AFTER_DRAW",
+    "keepUpgrade": "replace contents in place, update currencies, refresh page only at final close",
+    "codex": "forward/back and claim return share session; scroll offset retained"
+  },
+  "entry": {
+    "closingSeconds": 0.24,
+    "minimumClosedSeconds": 2,
+    "openingSeconds": 0.32,
+    "coldLoading": "can hold longer until scene first paint; failure path unchanged"
+  },
+  "validation": {
+    "sourceInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "localBundleInspection": true,
+    "tests": "not run by project agreement",
+    "gameplay": "not run; user manual acceptance",
+    "browser": "not opened",
+    "onlineAcceptance": "not run"
+  },
+  "game": "https://kingdom-watch.pages.dev/?v=boss-warning-base-modal-v1-1792113926",
+  "deployment": "https://4174f867.kingdom-watch.pages.dev"
+}

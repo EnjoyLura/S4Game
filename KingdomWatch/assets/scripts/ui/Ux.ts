@@ -5,6 +5,7 @@
  */
 import { Graphics, JsonAsset, Mask, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
 import { N } from './UIKit';
+import { trackUIArt } from './UIArtReady';
 
 /** id → 资源路径：'scenes/x' 原样，其余视为 ux/ 下的清单 ID */
 function resPath(id: string): string {
@@ -158,35 +159,38 @@ export function artSprite(parent: Node, x: number, y: number, w: number, h: numb
   const sp = n.addComponent(Sprite);
   sp.sizeMode = Sprite.SizeMode.CUSTOM;
   sp.trim = false;
+  const artReady = trackUIArt(n);
   uxFrame(id, sf => {
-    if (!sf || !n.isValid) return;
-    sp.spriteFrame = sf;
-    if (SLICE9[id]) {
-      const c = SLICE9[id];
-      sp.type = Sprite.Type.SLICED;
-      applySlice9(id, sf);
-      // 文件分辨率 ≠ 基准时按比例缩放节点：边框渲染像素 = inset×scale 恒定（设计像素）
-      // 用 rect（源图区域）而非 width/height —— 动态合图打包后后者漂移成图集尺寸
-      const sx = c.scale * c.canon[0] / sf.rect.width;
-      const sy = c.scale * c.canon[1] / sf.rect.height;
-      if (Math.abs(sx - 1) > 0.01 || Math.abs(sy - 1) > 0.01) {
-        n.setScale(sx, sy, 1);
-        n.getComponent(UITransform)!.setContentSize(w / sx, h / sy);
+    try {
+      if (!sf || !n.isValid) return;
+      sp.spriteFrame = sf;
+      if (SLICE9[id]) {
+        const c = SLICE9[id];
+        sp.type = Sprite.Type.SLICED;
+        applySlice9(id, sf);
+        // 文件分辨率 ≠ 基准时按比例缩放节点：边框渲染像素 = inset×scale 恒定（设计像素）
+        // 用 rect（源图区域）而非 width/height —— 动态合图打包后后者漂移成图集尺寸
+        const sx = c.scale * c.canon[0] / sf.rect.width;
+        const sy = c.scale * c.canon[1] / sf.rect.height;
+        if (Math.abs(sx - 1) > 0.01 || Math.abs(sy - 1) > 0.01) {
+          n.setScale(sx, sy, 1);
+          n.getComponent(UITransform)!.setContentSize(w / sx, h / sy);
+        }
+      } else if (o.fit !== false || o.cover) {
+        // 等比适配：contain 装进盒子 / cover 盖满盒子并裁掉溢出（源比例失真是"拉伸变形"的主因）
+        const r = sf.rect;
+        const k = o.cover ? Math.max(w / r.width, h / r.height) : Math.min(w / r.width, h / r.height);
+        n.getComponent(UITransform)!.setContentSize(Math.max(r.width * k, 1), Math.max(r.height * k, 1));
       }
-    } else if (o.fit !== false || o.cover) {
-      // 等比适配：contain 装进盒子 / cover 盖满盒子并裁掉溢出（源比例失真是"拉伸变形"的主因）
-      const r = sf.rect;
-      const k = o.cover ? Math.max(w / r.width, h / r.height) : Math.min(w / r.width, h / r.height);
-      n.getComponent(UITransform)!.setContentSize(Math.max(r.width * k, 1), Math.max(r.height * k, 1));
-    }
-    if (o.belowIdx !== undefined) {
-      (clip || n).setSiblingIndex(Math.min(o.belowIdx, (clip || n).parent!.children.length - 1));
-      // 美术已盖住程序面板：关掉父节点 Graphics，避免兜底描边从美术边缘露出
-      const pg = parent.getComponent(Graphics);
-      if (pg) pg.enabled = false;
-    }
-    (o.hideOnLoad || []).forEach(v => { if (v.isValid) v.active = false; });
-    if (o.onLoaded) o.onLoaded(n);
+      if (o.belowIdx !== undefined) {
+        (clip || n).setSiblingIndex(Math.min(o.belowIdx, (clip || n).parent!.children.length - 1));
+        // 美术已盖住程序面板：关掉父节点 Graphics，避免兜底描边从美术边缘露出
+        const pg = parent.getComponent(Graphics);
+        if (pg) pg.enabled = false;
+      }
+      (o.hideOnLoad || []).forEach(v => { if (v.isValid) v.active = false; });
+      if (o.onLoaded) o.onLoaded(n);
+    } finally { artReady(); }
   });
   return n;
 }
@@ -250,123 +254,61 @@ export function artAtlasSprite(parent: Node, x: number, y: number, w: number, h:
   const sprite = node.addComponent(Sprite);
   sprite.sizeMode = Sprite.SizeMode.CUSTOM;
   sprite.trim = false;
+  const artReady = trackUIArt(node);
   lobbyAtlas(id, atlas => {
-    const frame = atlas?.get(key);
-    if (!frame || !node.isValid) return;
-    sprite.spriteFrame = frame;
-    if (opts.sliceBorder) {
-      const border = Math.min(0.45, Math.max(0.01, opts.sliceBorder));
-      frame.insetLeft = frame.insetRight = Math.round(frame.rect.width * border);
-      frame.insetTop = frame.insetBottom = Math.round(frame.rect.height * border);
-      sprite.type = Sprite.Type.SLICED;
-      const scale = opts.sliceScale ?? 1;
-      node.setScale(scale, scale, 1);
-      transform.setContentSize(w / scale, h / scale);
-    } else if (opts.fit !== false) {
-      const scale = Math.min(w / frame.rect.width, h / frame.rect.height);
-      transform.setContentSize(frame.rect.width * scale, frame.rect.height * scale);
-    }
-    (opts.hideOnLoad || []).forEach(fallback => { if (fallback.isValid) fallback.active = false; });
-    opts.onLoaded?.(node);
+    try {
+      const frame = atlas?.get(key);
+      if (!frame || !node.isValid) return;
+      sprite.spriteFrame = frame;
+      if (opts.sliceBorder) {
+        const border = Math.min(0.45, Math.max(0.01, opts.sliceBorder));
+        frame.insetLeft = frame.insetRight = Math.round(frame.rect.width * border);
+        frame.insetTop = frame.insetBottom = Math.round(frame.rect.height * border);
+        sprite.type = Sprite.Type.SLICED;
+        const scale = opts.sliceScale ?? 1;
+        node.setScale(scale, scale, 1);
+        transform.setContentSize(w / scale, h / scale);
+      } else if (opts.fit !== false) {
+        const scale = Math.min(w / frame.rect.width, h / frame.rect.height);
+        transform.setContentSize(frame.rect.width * scale, frame.rect.height * scale);
+      }
+      (opts.hideOnLoad || []).forEach(fallback => { if (fallback.isValid) fallback.active = false; });
+      opts.onLoaded?.(node);
+    } finally { artReady(); }
   });
   return node;
 }
 
 /* ---------- 闲时预载：弹窗美术不再"当面加载" ---------- */
 
-/** 预载清单 = 代码引用的全部 ux ID + 场景图；新美术落盘后把 ID 加进这里 */
+/** Small shared set only. Pages, hero atlases and picker cards have their own targeted loaders. */
 export const UX_PRELOAD_IDS: string[] = [
-  // The shop and persistent lobby chrome share the selected comic direction.
-  'scenes/bg_shop_comic_v1',
-  'scenes/bg_base_comic_v1',
-  'base_comic_v1/comic_keep_heart_v1',
-  ...['banner_title', 'banner_fail', 'card_base', 'button_green', 'button_gold', 'button_muted',
-    'tab_l', 'tab_m', 'tab_r', 'switch_on', 'switch_off', 'switch_disabled', 'bar_track', 'bar_fill'].map(k => 'battle_skin_v2/' + k),
   'shop_comic_v1/comic_coin_v1',
   'shop_comic_v1/comic_diamond_v1',
-  'shop_comic_v1/comic_wpn_bow_v1',
-  'shop_comic_v1/comic_wpn_crossbow_v1',
-  'shop_comic_v1/comic_mat_stone_v1',
-  'shop_comic_v1/comic_mat_iron_v1',
-  'shop_comic_v1/comic_mat_dust_v1',
-  'shop_comic_v1/comic_mat_rune_v1',
   'shop_comic_v1/comic_helm_falcon_v1',
-  'shop_comic_v1/comic_acc_moon_v1',
-  'shop_comic_v1/comic_glove_wind_v1',
-  'shop_comic_v1/comic_armor_forest_v1',
   'shop_comic_v1/comic_nav_shop_v1',
   'shop_comic_v1/comic_nav_map_v1',
   'shop_comic_v1/comic_nav_castle_v1',
-  'shop_comic_v1/comic_hero_sniper_v1',
-  'shop_comic_v1/comic_hero_pyro_v1',
-  'shop_comic_v1/comic_hero_volt_v1',
-  'shop_comic_v1/comic_hero_mora_v1',
-  // 组件
-  'ui_panel_dark_gold', 'ui_panel_dark_white',
-  'ui_btn_primary', 'ui_btn_primary_press', 'ui_btn_primary_disabled',
-  'ui_btn_green', 'ui_btn_green_press', 'ui_btn_green_disabled',
-  'ui_banner_warn', 'ui_banner_title', 'ui_banner_hazard',
-  'ui_wave_pill', 'ui_tab_item', 'ui_tab_item_active',
-  'ui_bar_track', 'ui_bar_fill_white', 'ui_bar_shield',
-  'ui_card_frame_white', 'ui_card_frame_blue', 'ui_card_frame_purple',
-  'ui_card_header_white', 'ui_card_header_blue', 'ui_card_header_purple',
-  'ui_circ_icon_gold', 'ui_circ_icon_gold_active',
-  'ui_circ_icon_blue', 'ui_circ_icon_blue_active',
-  'ui_circ_icon_gray', 'ui_circ_icon_gray_active',
-  'ui_circ_btn_green', 'ui_star', 'ui_star_gray',
-  'ui_badge_new', 'ui_gear_ring',
-  'ui_switch_on', 'ui_switch_off', 'ui_switch_disabled',
-  'ui_btn_exit', 'ui_btn_close', 'ui_tab_l', 'ui_tab_m', 'ui_tab_r',
-  'ui_panel_shop', 'ui_btn_buy', 'ui_banner_shop',
-  // 图标（暂停/倍速/统计已改程序简约图标，用户调整：不再使用美术资源）
-  'ui_icon_coin', 'ui_icon_exp', 'ui_icon_diamond', 'ui_icon_chest', 'ui_icon_equip',
-  'ui_icon_refresh_ad', 'ui_icon_refresh_diamond',
-  'ui_icon_heart', 'ui_icon_skull', 'ui_icon_eye', 'ui_icon_chat', 'icon_alert',
-  'ui_icon_lock', 'ui_seat_q0', 'ui_seat_q1', 'ui_seat_q2', 'ui_seat_q3', 'ui_card_shop',
-  // 英雄头像
-  'ui_avatar_archer', 'ui_avatar_sniper', 'ui_avatar_pyro', 'ui_avatar_volt',
-  'ui_avatar_mora', 'lobby_heroes_v1', 'lobby_levels_v1', 'lobby_rewards_v1', 'lobby_training_v1', 'lobby_weapons_v1',
-  // 英雄技能图标（双英雄均已交付）
-  'ui_icon_atk_archer', 'ui_icon_skill_archer', 'ui_icon_ult_archer',
-  // 三选一卡面图标（弓箭手组 15 张已交付；狙击/全局待图走首字回退）
-  'ui_card_serial', 'ui_card_fan', 'ui_card_sharp', 'ui_card_swift',
-  'ui_card_crit_rate', 'ui_card_crit_dmg', 'ui_card_instinct_a', 'ui_card_fast_charge_a',
-  'ui_card_split', 'ui_card_explode', 'ui_card_frost', 'ui_card_burn',
-  'ui_card_rain_rounds', 'ui_card_explode_w', 'ui_card_explode_r',
-  // 狙击/通用剩余卡面（生图 skill 产出，2026-10-04）
-  'ui_card_execute', 'ui_card_multi_lock', 'ui_card_cd_cut', 'ui_card_extra_line',
-  'ui_card_wall', 'ui_card_repair', 'ui_card_xp_badge',
-  // 三选一卡背板：全品质共用羊皮底板（品质色走卡头色带，用户调整）
-  'ui_card_plate_base',
-  // 通用弹窗三件套 + 新怪物通知钮（生图 Kingdom Rush 风）
-  'ui_panel_dialog', 'ui_banner_notice', 'ui_btn_confirm', 'ui_btn_cancel', 'ui_btn_notice',
-  'ui_icon_atk_sniper', 'ui_icon_skill_sniper', 'ui_icon_ult_sniper',
-  'ui_icon_atk_pyro', 'ui_icon_skill_pyro', 'ui_icon_ult_pyro',
-  'ui_icon_atk_volt', 'ui_icon_skill_volt', 'ui_icon_ult_volt',
-  'ui_card_volt_shards', 'ui_card_volt_shock',
-  'ui_card_volt_spell', 'ui_card_volt_range', 'ui_card_volt_war', 'ui_card_volt_morale',
-  'ui_card_pyro_spell', 'ui_card_pyro_shards', 'ui_card_pyro_cd', 'ui_card_pyro_range',
-  'ui_card_pyro_war', 'ui_card_pyro_eager', 'ui_card_pyro_stun', 'ui_card_pyro_morale', 'ui_card_pyro_ember',
-  // 场景
-  'scenes/scene_1_1', 'scenes/scene_1_2', 'scenes/scene_1_3',
-  // 页签专属背景（商店内景 / 基地庭院）
-  'scenes/bg_shop', 'scenes/bg_heroes', 'scenes/bg_level', 'scenes/bg_upgrade',
-  // 底部导航图标（美术盖 emoji 兜底）
-  'ui_nav_shop', 'ui_nav_heroes', 'ui_nav_levels', 'ui_nav_upgrade', 'ui_nav_base',
+  'upgrade_comic_v1/comic_training_hammer_v1',
+  'pick_comic_v1/card_base', 'pick_comic_v1/title_plate',
+  'pause_comic_v1/title_ribbon',
+  'settlement_comic_v1/badge_win', 'settlement_comic_v1/badge_lose',
 ];
 
 let preloadStarted = false;
 
-/** 闲时逐张预载：每张间隔约一帧串行调度，不与当下渲染争抢；重复调用安全（进程内只跑一次）。
- *  uxFrame 自带缓存与去重——与战斗 HUD 的首屏加载天然合并，不会双份请求 */
+/** Actually serialize background downloads; the former 16ms dispatch flooded the downloader.
+ * Visible art always gets to settle before another optional image is requested. */
 export function uxPreloadIdle(delayMs = 0): void {
   if (preloadStarted) return;
   preloadStarted = true;
   let i = 0;
   const step = (): void => {
     if (i >= UX_PRELOAD_IDS.length) return;
-    uxFrame(UX_PRELOAD_IDS[i++], () => {});
-    setTimeout(step, 16);
+    if ((typeof document !== 'undefined' && document.hidden) || pending.size) {
+      setTimeout(step, 250); return;
+    }
+    uxFrame(UX_PRELOAD_IDS[i++], () => { setTimeout(step, 150); });
   };
   if (delayMs > 0) setTimeout(step, delayMs);
   else step();

@@ -1,0 +1,12 @@
+✨ Compiled Worker successfully
+Uploading... (1880/1883)
+Uploading... (1881/1883)
+Uploading... (1882/1883)
+Uploading... (1883/1883)
+✨ Success! Uploaded 3 files (1880 already uploaded) (3.27 sec)
+
+✨ Uploading _headers
+✨ Uploading Functions bundle
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://dda6bc2f.kingdom-watch.pages.dev
+{"stage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-enemy-death-burst-v2-20261015-192506","priorPublishedStage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-enemy-death-v1-20261015-185718","entryVersion":"1792063380","project":"kingdom-watch","branch":"main","game":"https://kingdom-watch.pages.dev/?v=enemy-death-burst-v2-1792063380","scope":"in-place enemy material burst and fading ground splatter; remove all whole-body falling","layoutChanged":false,"deathPresentationAcceptance":"pending user manual review"}

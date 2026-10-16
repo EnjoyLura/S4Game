@@ -1,0 +1,66 @@
+{
+  "mode": "offline file inspection only",
+  "htmlDependencies": [
+    "style.f76d1.css",
+    "index.b2dba.js?v=1792131057",
+    "application.fc634.js",
+    "src/settings.bf8e3.json",
+    "cocos-js/cc.03aac.js?kwengine=8ada3fce8a0efe86",
+    "cocos-js/_virtual_cc-Bp5iGE8z.js?kwengine=8ada3fce8a0efe86",
+    "src/polyfills.bundle.5adbf.js",
+    "src/system.bundle.543e6.js",
+    "src/import-map.4e643.json?kwengine=8ada3fce8a0efe86",
+    "index.b2dba.js?v=1792131057"
+  ],
+  "versionedEngineImports": [
+    {
+      "from": "cc.03aac.js",
+      "to": "./_virtual_cc-Bp5iGE8z.js?kwengine=8ada3fce8a0efe86"
+    },
+    {
+      "from": "spine.wasm-BP65faBu.js",
+      "to": "./_virtual_cc-Bp5iGE8z.js?kwengine=8ada3fce8a0efe86"
+    },
+    {
+      "from": "_virtual_cc-Bp5iGE8z.js",
+      "to": "./spine.wasm-BP65faBu.js?kwengine=8ada3fce8a0efe86"
+    },
+    {
+      "from": "_virtual_cc-Bp5iGE8z.js",
+      "to": "./spine-BGFFnNyc.js?kwengine=8ada3fce8a0efe86"
+    },
+    {
+      "from": "_virtual_cc-Bp5iGE8z.js",
+      "to": "./spine.asm-BCCB8IGt.js?kwengine=8ada3fce8a0efe86"
+    },
+    {
+      "from": "_virtual_cc-Bp5iGE8z.js",
+      "to": "./spine.js-CPHn08RU.js?kwengine=8ada3fce8a0efe86"
+    }
+  ],
+  "optionalWarmupArt": [
+    "shop_comic_v1/comic_coin_v1",
+    "shop_comic_v1/comic_diamond_v1",
+    "shop_comic_v1/comic_helm_falcon_v1",
+    "shop_comic_v1/comic_nav_shop_v1",
+    "shop_comic_v1/comic_nav_map_v1",
+    "shop_comic_v1/comic_nav_castle_v1",
+    "upgrade_comic_v1/comic_training_hammer_v1",
+    "pick_comic_v1/card_base",
+    "pick_comic_v1/title_plate",
+    "pause_comic_v1/title_ribbon",
+    "settlement_comic_v1/badge_win",
+    "settlement_comic_v1/badge_lose"
+  ],
+  "cachePolicyFileCount": 1368,
+  "cachePolicyConflicts": 0,
+  "mainBundle": "assets/main/index.79d58.js",
+  "mainBundleSha256": "322a25cfb3586df24fbb53f8c4c6e69d72249d9b050600f8e16a77a964f26e19",
+  "scriptsBeforeBytes": 7601341,
+  "scriptsAfterBytes": 3562688,
+  "scriptBytesReductionPercent": 53.13,
+  "offlineGzipEstimateReductionPercent": 30.68,
+  "startupTimingMeasured": false,
+  "networkMeasured": false,
+  "gameExecuted": false
+}

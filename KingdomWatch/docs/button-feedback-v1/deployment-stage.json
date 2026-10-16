@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-button-feedback-v1-20261015-023406",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-controls-lobby-v1-20261015-021908",
+  "entryVersion": "1792002820",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=button-feedback-v1-1792002820",
+  "scope": "shared feedback across lobby, battle and modal buttons",
+  "layoutChanged": false,
+  "visualAcceptance": "pending user manual review"
+}

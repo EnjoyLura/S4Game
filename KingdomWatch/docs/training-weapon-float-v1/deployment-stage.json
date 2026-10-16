@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-training-weapon-float-v1-20261016-192832",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-weapon-slot-halves-v1-20261016-155720",
+  "entryVersion": "1792150025",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=training-weapon-float-v1-1792150025",
+  "scope": "weapon float; hero equipment vertical alignment; hold hero/weapon upgrades with local power feedback; higher attribute panels; horizontal hero rosters",
+  "manualAcceptance": "pending user manual review"
+}

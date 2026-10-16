@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-product-details-v1-20261015-135156",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-equipment-unequip-v1-20261015-134605",
+  "entryVersion": "1792043495",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=shop-product-details-v1-1792043495",
+  "scope": "shop product icons open typed details with attributes, descriptions, quantities and purchase state",
+  "layoutChanged": true,
+  "interactionAcceptance": "pending user manual review"
+}

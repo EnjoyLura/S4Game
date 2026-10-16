@@ -1,0 +1,67 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-exit-death-v3-20261016-002622",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-pick-motion-v2-20261016-000750",
+  "entryVersion": "1792081454",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=battle-exit-death-v3-1792081454",
+  "scope": [
+    "exit and retry lifecycle",
+    "monster kill sound and burst",
+    "weapon wind origin offset"
+  ],
+  "layoutChanged": false,
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "exit": {
+    "cause": "MonsterManager accessed hunterMarks.node after Cocos had destroyed scene children; that exception also prevented bus unsubscription. Cleanup scheduled scene-owned VFX nodes again.",
+    "ownership": "Only detached monster pool nodes are manually destroyed, with strict validity and an idempotent guard; depth callback cleared; attached actors, marks, rain and ground/flight nodes stay scene-owned.",
+    "navigation": "Shared leaving guard, freeze ticking/audio, failed request restores flow, stale ad callbacks ignored. Retry re-enters same level and difficulty; exit returns main."
+  },
+  "death": {
+    "body": "No whole-body fall. Original six curved texture patches; 20/30ms hold, accelerated initial separation, late alpha decay, 190/220/240ms body phase, bounded pad.",
+    "air": "8 or 10 airborne chips and six tapered short accents, elemental finishes, neutral physical chips, no green ground stain.",
+    "audio": "15 mono 44.1kHz PCM16 licensed-sample derivatives; physical/fire/volt/frost/heavy x3; roughly 0.15-0.26 seconds. Trigger once at lethal hit, independent death group, 2 voices and 75ms group gap, priority2, no recurring BGM duck. Existing audio mix/limiter/settings retained.",
+    "pause": "Battle clock visuals; stop death voices on pause/pick/navigation; short final-kill tail may finish over settlement.",
+    "gameplay": "No damage, collision, targeting, reward, charge, count or attack-speed change."
+  },
+  "wind": {
+    "archerPixels": 36,
+    "sniperPixels": 42,
+    "direction": "normalized actual shot direction",
+    "renderers": "shared origin for procedural shader and Graphics, plus archer ultimate launch/fallback",
+    "projectileOriginChanged": false,
+    "heroArtChanged": false,
+    "sizeAndStrengthChanged": false
+  },
+  "validation": {
+    "sourceReview": true,
+    "tests": false,
+    "simulation": false,
+    "gameLaunch": false,
+    "browser": false,
+    "onlineVisualAudioAcceptance": false,
+    "manualAcceptance": "pending user review",
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "builtBundleReview": "Wind offsets and cleanup/navigation guards present; prior broken prototype.ultimateRemaining and hunterMarks.node.isValid expressions absent; all 15 death audio paths included in resources config.",
+    "editorLogNotes": "Existing editor window.json recovery error, asset DB timing notices and worker SIGTERM are present; build-project-total finished successfully, exit36."
+  },
+  "deployment": "https://919949b1.kingdom-watch.pages.dev",
+  "date": "2026-10-16T00:27:33.556569+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-battle-exit-death-v3-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-battle-exit-death-v3-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "scene exit ownership fix, kill audio and death snap, forward weapon wind",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 9759,
+  "mainBundleSha256": "cbedcaea61a5749e6586de82efc1c7ed1bee8111c1ee13e6b64ebebef8dfe464",
+  "deploymentSucceeded": true,
+  "uploadedFiles": 35,
+  "cachedFiles": 1889
+}

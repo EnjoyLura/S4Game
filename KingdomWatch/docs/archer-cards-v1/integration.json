@@ -1,0 +1,86 @@
+{
+  "status": "published",
+  "scope": "archer four-rarity cards, attack tradeoffs, five-stack serial and fan, shared per-hero numeric cards",
+  "archerRarities": {
+    "white": [
+      "sharp",
+      "swift"
+    ],
+    "blue": [
+      "crit_rate",
+      "crit_dmg",
+      "serial",
+      "fan",
+      "instinct_a"
+    ],
+    "purple": [
+      "fast_charge_a",
+      "split",
+      "explode",
+      "frost",
+      "burn",
+      "explode_r",
+      "explode_w"
+    ],
+    "gold": [
+      "archer_unlock_ult",
+      "archer_unlock_skill",
+      "rain_rounds"
+    ]
+  },
+  "sharedNumericCards": {
+    "heroes": [
+      "archer",
+      "sniper",
+      "pyro",
+      "volt",
+      "mora"
+    ],
+    "attack": "+20%",
+    "attackSpeed": "+15%",
+    "critRate": "+15%",
+    "critDamage": "+30%",
+    "independentOwnerAndStacks": true,
+    "sameArtPerCardType": true,
+    "legacyArcherSniperIdsPreserved": true,
+    "newMageCopies": 12
+  },
+  "attackTradeoffCards": [
+    "serial",
+    "fan",
+    "split",
+    "explode",
+    "frost",
+    "burn"
+  ],
+  "attackTradeoffPerAcquisition": "current attack multiplier * 0.9; only owning hero",
+  "serialMaxStacks": 5,
+  "fanMaxStacks": 5,
+  "fanStepDegrees": 7,
+  "singleAcquisitionMechanics": [
+    "explode",
+    "frost",
+    "burn"
+  ],
+  "singleAcquisitionReason": "old second stack only reapplied identical state; would now penalize attack with no gain",
+  "prerequisitesPreserved": true,
+  "rarityRelativeWeights": {
+    "white": 0.6,
+    "blue": 0.3,
+    "purple": 0.1,
+    "gold": 0.05
+  },
+  "offerGroupWeightsPreserved": {
+    "stats": 0.3,
+    "combat": 2,
+    "support": 1
+  },
+  "otherHeroExclusiveCardsChanged": false,
+  "globalCardsChanged": false,
+  "damageFormulaChanged": false,
+  "voltVfxPreserved": true,
+  "audioChanged": false,
+  "gameplayValidation": "user manual; no tests, simulation, game, browser or online acceptance run",
+  "game": "https://kingdom-watch.pages.dev/?v=archer-cards-v1-1792069024",
+  "deployment": "https://406a371b.kingdom-watch.pages.dev"
+}

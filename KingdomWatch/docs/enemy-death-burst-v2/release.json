@@ -1,0 +1,55 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-enemy-death-burst-v2-20261015-192506",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-enemy-death-v1-20261015-185718",
+  "entryVersion": "1792063380",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=enemy-death-burst-v2-1792063380",
+  "scope": "in-place enemy material burst and fading ground splatter; remove all whole-body falling",
+  "layoutChanged": false,
+  "deathPresentationAcceptance": "pending user manual review",
+  "status": "published",
+  "visualReference": "user supplied Screenrecording_20261015_190858.mp4; standing burst, fragments, green fading ground residue",
+  "rejectedPriorPresentation": "whole-body fall / rotation / ground settling / corpse hold / long dissolve",
+  "wholeBodyRotationOrTravel": false,
+  "bodyFragmentsUseActualGameMonsterCel": true,
+  "bodyFragmentsPerQuad": 6,
+  "bodyBurstSeconds": {
+    "normal": 0.19,
+    "elite": 0.22,
+    "bossHook": 0.24
+  },
+  "groundResidueSeconds": {
+    "normal": 0.9,
+    "elite": 1.02,
+    "bossHook": 1.15
+  },
+  "sameCelHandoffNoDoubleImage": true,
+  "fallback": "fixed in-place rapid fade for this death, without late shader handoff",
+  "elementalAccents": [
+    "short embers",
+    "small ice chips",
+    "100ms residual electric arcs"
+  ],
+  "simulationClock": true,
+  "cosmeticLimit": 64,
+  "livingLimit": 60,
+  "gameplayRewardsAndAudioChanged": false,
+  "gameplayValidation": "user manual; no tests, game, browser or online acceptance run",
+  "deployment": "https://dda6bc2f.kingdom-watch.pages.dev",
+  "date": "2026-10-15T19:25:47.948949+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-enemy-death-burst-v2-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-enemy-death-burst-v2-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "in-place enemy material burst and fading ground splatter; remove all whole-body falling",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 9908,
+  "deploymentSucceeded": true,
+  "uploadedFiles": 3,
+  "cachedFiles": 1880
+}

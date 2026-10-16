@@ -1,0 +1,63 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-controls-lobby-v1-20261015-021908",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-buttons-lobby-v1-20261015-021428",
+  "entryVersion": "1792001902",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-controls-lobby-v1-1792001902",
+  "scope": "hero navigation style, detail action placement and inventory tab centering",
+  "layoutChanged": true,
+  "visualAcceptance": "pending user manual review",
+  "status": "published",
+  "code": "assets/scripts/ui/pages/HeroPage.ts",
+  "cycleButtons": {
+    "style": "ComicUI dark clipped face with native gold chevron",
+    "size": [
+      64,
+      64
+    ],
+    "positionsPreserved": true
+  },
+  "detailActions": {
+    "location": "below hero power, in character column",
+    "size": [
+      148,
+      50
+    ],
+    "icon": 30,
+    "font": 22,
+    "reservedFooterHeight": 64
+  },
+  "equipmentPanel": {
+    "height": "188 + 2 * squareSlotSize",
+    "bottomPadding": 16
+  },
+  "inventoryTabs": {
+    "icon": 30,
+    "gap": 10,
+    "captionWidth": 44,
+    "iconCenter": -27,
+    "captionCenter": 20,
+    "alignment": "center as complete group"
+  },
+  "heroFigureSizeAndAbsolutePositionPreserved": true,
+  "existingGameplayAudioAndBattleUiPreserved": true,
+  "generatedAssets": false,
+  "automatedTestsOrGameLaunch": false,
+  "deployment": "https://a7e77de6.kingdom-watch.pages.dev",
+  "date": "2026-10-15T02:19:40.331045+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-hero-controls-lobby-v1-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-hero-controls-lobby-v1-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "hero navigation style, detail action placement and inventory tab centering",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 8712,
+  "deploymentSucceeded": true,
+  "uploadedFiles": 2,
+  "cachedFiles": 1783
+}

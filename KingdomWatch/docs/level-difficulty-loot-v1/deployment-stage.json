@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-level-difficulty-loot-v1-20261016-095440",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-boss-warning-base-modal-v1-20261016-092807",
+  "entryVersion": "1792115628",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=level-difficulty-loot-v1-1792115628",
+  "scope": "difficulty formations, kill equipment drops, pickup animation and reward preview",
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review"
+}

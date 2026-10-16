@@ -3,6 +3,9 @@
  * 掉落与购买共用同一物品定义；数值默认值见 docs/主界面需求清单.md（实施时校准只动这张表）
  */
 import { loadSave, saveSave, EquipInst, HeroState } from './SaveData';
+import { DIFFICULTIES, starChestRewards } from '../config/LevelDifficulty';
+import { WEAPONS, weaponFits, weaponUsers } from '../config/Weapons';
+export { WEAPONS, weaponFits, weaponUsers } from '../config/Weapons';
 
 /* ================= 物品定义 ================= */
 
@@ -41,8 +44,7 @@ export interface EquipDef {
   price: number; unlock: string; // 商店价/解锁关卡
 }
 export const EQUIPS: Record<string, EquipDef> = {
-  wpn_bow: { id: 'wpn_bow', name: '猎风长弓', kind: 'weapon', quality: 1, tier: 1, stats: { atk: 24, skillDmg: 14, atkSpd: 0.08 }, price: 800, unlock: '1-1' },
-  wpn_crossbow: { id: 'wpn_crossbow', name: '鹰眼重弩', kind: 'weapon', quality: 3, tier: 2, stats: { atk: 46, skillDmg: 26, critRate: 0.05 }, price: 1200, unlock: '1-2' },
+  ...Object.keys(WEAPONS).reduce((out, id) => { out[id] = { ...WEAPONS[id], kind: 'weapon' }; return out; }, {} as Record<string, EquipDef>),
   helm_falcon: { id: 'helm_falcon', name: '猎鹰头盔', kind: 'helm', quality: 2, tier: 1, stats: { atk: 10, atkPct: 0.06 }, price: 600, unlock: '1-1' },
   acc_moon: { id: 'acc_moon', name: '月纹坠饰', kind: 'acc', quality: 1, tier: 1, stats: { critRate: 0.03, critDmg: 0.12 }, price: 300, unlock: '1-1' },
   glove_wind: { id: 'glove_wind', name: '疾风手套', kind: 'glove', quality: 0, tier: 3, stats: { atkSpd: 0.05, range: 30 }, price: 900, unlock: '1-2' },
@@ -56,11 +58,19 @@ export function itemName(id: string): string { return EQUIPS[id]?.name || MATS[i
 export function tierMul(tier: number): number { return Math.pow(1.8, tier - 1); }
 
 /** 装备单条词条现值（阶乘×强化成长；百分比取 3 位小数） */
-export function equipStat(e: EquipInst, key: StatKey): number {
+export function equipLevel(e: EquipInst, hid?: string): number {
+  if (EQUIPS[e.defId]?.kind !== 'weapon') return e.lv;
+  const sv = loadSave();
+  const owner = hid || Object.keys(sv.heroes).find(id => sv.heroes[id].worn.weapon === e.uid);
+  return owner ? sv.heroes[owner]?.weaponLv || 1 : 1;
+}
+/** Weapon level belongs to the hero. A preview may explicitly supply the next cultivation level. */
+export function equipStat(e: EquipInst, key: StatKey, hid?: string, weaponLevel?: number): number {
   const d = EQUIPS[e.defId];
   const v = d?.stats[key];
   if (!v) return 0;
-  const raw = v * tierMul(d.tier) * (1 + (e.lv - 1) * 0.04);
+  const lv = d.kind === 'weapon' ? weaponLevel ?? equipLevel(e, hid) : e.lv;
+  const raw = v * tierMul(d.tier) * (1 + (lv - 1) * 0.04);
   return PCT_STATS.includes(key) ? Math.round(raw * 1000) / 1000 : Math.round(raw);
 }
 export const statFmt = (k: StatKey, v: number): string =>
@@ -71,7 +81,7 @@ export interface EquipAgg {
   atkFlat: number; atkPct: number; skillDmgFlat: number; critRate: number;
   critDmg: number; atkSpd: number; rangeFlat: number; chargeEff: number;
 }
-export function equipAgg(hid: string): EquipAgg {
+export function equipAgg(hid: string, weaponLevel = heroState(hid)?.weaponLv || 1): EquipAgg {
   const sv = loadSave();
   const agg: EquipAgg = { atkFlat: 0, atkPct: 0, skillDmgFlat: 0, critRate: 0, critDmg: 0, atkSpd: 0, rangeFlat: 0, chargeEff: 0 };
   const hs = sv.heroes[hid];
@@ -80,7 +90,7 @@ export function equipAgg(hid: string): EquipAgg {
     const inst = sv.equips.find(q => q.uid === uid);
     if (!inst) continue;
     for (const k of Object.keys(EQUIPS[inst.defId]?.stats || {}) as StatKey[]) {
-      const v = equipStat(inst, k);
+      const v = equipStat(inst, k, hid, weaponLevel);
       if (k === 'atk') agg.atkFlat += v;
       else if (k === 'atkPct') agg.atkPct += v;
       else if (k === 'skillDmg') agg.skillDmgFlat += v;
@@ -91,12 +101,35 @@ export function equipAgg(hid: string): EquipAgg {
       else if (k === 'chargeEff') agg.chargeEff += v;
     }
   }
+  const wb = weaponBtAgg(hid, weaponLevel);
+  agg.atkSpd += wb.atkSpd; agg.critRate += wb.critRate;
+  agg.critDmg += wb.critDmg; agg.chargeEff += wb.chargeEff;
   return agg;
+}
+
+export function equippedWeapon(hid: string) { return WEAPONS[wornInst(hid, 'weapon')?.defId || '']; }
+export function weaponBtList(hid: string): { lv: number; txt: string }[] {
+  const p = equippedWeapon(hid)?.breakthrough;
+  if (!p) return [];
+  return Array.from({ length: 9 }, (_, i) => {
+    const lv = (i + 1) * 10;
+    return { lv, txt: `攻击+${Math.round(p.atk * 100)}%·技伤+${Math.round(p.skill * 100)}%`
+      + (lv % 30 === 0 ? `\n${STAT_NAME[p.secondary]} +${statFmt(p.secondary, p.bonus)}` : '') };
+  });
+}
+export function weaponBtAgg(hid: string, lv = heroState(hid).weaponLv) {
+  const p = equippedWeapon(hid)?.breakthrough;
+  const result = { atk: 0, skill: 0, atkSpd: 0, critRate: 0, critDmg: 0, chargeEff: 0 };
+  if (p) {
+    result.atk = Math.floor(lv / 10) * p.atk; result.skill = Math.floor(lv / 10) * p.skill;
+    result[p.secondary] = Math.floor(lv / 30) * p.bonus;
+  }
+  return result;
 }
 
 /* ---------- 关卡难度（关卡页三档：普通/精英/地狱，逐一通关解锁） ---------- */
 /** 难度战力倍率：出怪 hp/dmg 缩放（BattleDirector 按 flow.diff 注入 MonsterManager） */
-export const DIFF_MUL = [1, 1.6, 2.4];
+export const DIFF_MUL = DIFFICULTIES.map(row => row.statMul);
 /** 星级/宝箱存档键：普通用原键，精英/地狱加后缀（1-1 / 1-1e / 1-1h），各难度星级独立 */
 export function starKey(levelId: string, diff: number): string {
   return levelId + (diff === 1 ? 'e' : diff === 2 ? 'h' : '');
@@ -104,46 +137,54 @@ export function starKey(levelId: string, diff: number): string {
 
 /** 出售价：白100/绿400/蓝1500/紫5000 ×3^(tier-1)，强化等级小幅加成 */
 export function sellPrice(e: EquipInst): number {
+  if (WEAPONS[e.defId]?.starter) return 0;
   const base = [100, 400, 1500, 5000][EQUIPS[e.defId]?.quality ?? 0];
-  return Math.round(base * Math.pow(3, (EQUIPS[e.defId]?.tier || 1) - 1) * (1 + (e.lv - 1) * 0.1));
+  return Math.round(base * Math.pow(3, (EQUIPS[e.defId]?.tier || 1) - 1) * (1 + (EQUIPS[e.defId]?.kind === 'weapon' ? 0 : e.lv - 1) * 0.1));
 }
 
 /* ================= 英雄配置 ================= */
 
+export type HeroGrowthType = 'normal' | 'skill' | 'ultimate' | 'hybrid';
+export const HERO_GROWTH: Record<HeroGrowthType, { name: string; atk: number; skill: number }> = {
+  normal: { name: '普攻型', atk: 0.08, skill: 0.03 },
+  skill: { name: '技能型', atk: 0.03, skill: 0.08 },
+  ultimate: { name: '大招型', atk: 0.03, skill: 0.08 },
+  hybrid: { name: '全能型', atk: 0.055, skill: 0.055 },
+};
 export interface HeroDef {
   id: string; name: string; job: string; avatar: string;
-  baseAtk: number; atkSpd: number; story: string;
+  baseAtk: number; baseSkillDmg: number; growthType: HeroGrowthType; atkSpd: number; story: string;
   weaponName: string; skillName: string; ultName: string;
   shopPrice: number; // 0=非卖品占位
 }
 export const HERO_DEFS: Record<string, HeroDef> = {
   archer: {
     id: 'archer', name: '艾拉·风羽', job: '弓手 · 远程输出', avatar: 'ui_avatar_archer',
-    baseAtk: 100, atkSpd: 1.2, weaponName: '风羽长弓', skillName: '穿透箭', ultName: '风暴之眼',
+    baseAtk: 45, baseSkillDmg: 100, growthType: 'normal', atkSpd: 1.2, weaponName: '风羽长弓', skillName: '穿透箭', ultName: '风暴之眼',
     story: '翠风游侠，自林间哨塔长大后守卫王国边陲。箭无虚发，风起时箭雨如歌。',
     shopPrice: 0,
   },
   sniper: {
     id: 'sniper', name: '凯尔·鹰眼', job: '狙击 · 重击输出', avatar: 'ui_avatar_sniper',
-    baseAtk: 140, atkSpd: 0.5, weaponName: '鹰眼重弩', skillName: '穿颅射击', ultName: '猎杀时刻',
+    baseAtk: 140, baseSkillDmg: 140, growthType: 'normal', atkSpd: 0.5, weaponName: '鹰眼重弩', skillName: '穿颅射击', ultName: '猎杀时刻',
     story: '前王国猎鹰团首席，一弩定音的沉默猎手。现为防线寻找每一发弩箭的价值。',
     shopPrice: 6800,
   },
   pyro: {
     id: 'pyro', name: '焰·辉', job: '火焰 · AOE 爆发', avatar: 'ui_avatar_pyro',
-    baseAtk: 90, atkSpd: 1, weaponName: '辉焰法杖', skillName: '烈焰爆裂', ultName: '陨石天降',
+    baseAtk: 60, baseSkillDmg: 90, growthType: 'ultimate', atkSpd: 1, weaponName: '辉焰法杖', skillName: '烈焰爆裂', ultName: '陨石天降',
     story: '自灰烬火山走出的流浪法师，掌心蕴火。怪群愈密，他的火焰便烧得愈旺。',
     shopPrice: 2800,
   },
   volt: {
     id: 'volt', name: '沃尔·雷霆', job: '雷电 · 连锁控制', avatar: 'ui_avatar_volt',
-    baseAtk: 85, atkSpd: 1, weaponName: '雷霆法杖', skillName: '连锁闪电', ultName: '天雷灭世',
+    baseAtk: 55, baseSkillDmg: 85, growthType: 'skill', atkSpd: 1, weaponName: '雷霆法杖', skillName: '连锁闪电', ultName: '天雷灭世',
     story: '在雷暴之夜被天雷选中的人，血液里奔流着风暴。他的闪电从不安分——总在敌群间跳跃。',
     shopPrice: 4200,
   },
   mora: {
     id: 'mora', name: '莫拉·寒霜', job: '冰霜 · 减速控制', avatar: 'ui_avatar_mora',
-    baseAtk: 80, atkSpd: 0.7, weaponName: '霜华法杖', skillName: '冰霜领域', ultName: '极寒领域',
+    baseAtk: 58, baseSkillDmg: 80, growthType: 'hybrid', atkSpd: 0.75, weaponName: '霜华法杖', skillName: '冰霜领域', ultName: '极寒领域',
     story: '北境冰原走出的年轻冰霜法师，能把空气里的水汽凝成利刃。她走过的地方，敌人都慢了下来。',
     shopPrice: 4800,
   },
@@ -188,7 +229,6 @@ export const MAX = { hero: 90, weapon: 90, skill: 20, equip: 20, keep: 10 };
 /** 阶段性突破（用户确认节奏）：英雄/武器每 10 级、技能每 5 级一次属性跳升，跳升并入属性乘区 */
 export const BT_STEP = { hero: 10, weapon: 10, skill: 5 };
 export const BT_ATK = 0.10;   // 英雄每次突破：攻击与技能伤害基数 +10%
-export const BT_WPN = 0.08;   // 武器每次突破：攻击与技能伤害基数 +8%
 export const BT_SKL = 0.15;   // 技能每次突破：技能伤害 +15%
 /** 已达成突破次数（等级每达 step 整倍数突破一次：lv10 → 1 次、lv90 → 9 次） */
 export const btN = (lv: number, step: number): number => Math.max(0, Math.floor(lv / step));
@@ -308,7 +348,7 @@ export const keepUpCost = (lv: number): number => r10(500 * Math.pow(lv, 1.6));
 export const keepHp = (lv: number): number => 1000 + lv * 100;
 export const keepShield = (lv: number): number => Math.floor(lv / 3) * 200;
 /** 星箱一次性奖励 */
-export const CHEST_REWARD = [ { gold: 200 }, { diamonds: 60 }, { diamonds: 150 } ];
+export const CHEST_REWARD = starChestRewards('1-1', 0);
 export const CHEST_COND = ['成功通关', '50%血量通关', '完美通关'];
 
 /* ================= 属性聚合 ================= */
@@ -322,23 +362,24 @@ export function heroState(hid: string): HeroState { return loadSave().heroes[hid
 
 /** 实时聚合英雄属性（养成+穿戴词条全部汇入；英雄无生命——用户确认；战力=攻击+技能*0.5） */
 export function heroStats(hid: string): HeroStats {
+  const hs = heroState(hid);
+  return heroStatsAt(hid, hs.lv, hs.weaponLv);
+}
+
+/** 养成预览与实战共用；技能槽等级只影响技能倍率，不再次乘进基础技能伤害。 */
+export function heroStatsAt(hid: string, level: number, weaponLevel: number): HeroStats {
   const def = HERO_DEFS[hid];
   const hs = heroState(hid);
-  const agg = equipAgg(hid);
-  const bt = heroBtAgg(hid, hs.lv);
-  const lvMul = 1 + (hs.lv - 1) * 0.08;
-  const wpnMul = (1 + (hs.weaponLv - 1) * 0.06) * (1 + btN(hs.weaponLv, BT_STEP.weapon) * BT_WPN);
-  // 技能槽成长：弓/狙/雷/火每级+8%（5级一档换成冷却/发数/窗口等里程碑）；其余英雄每级+10%且每5级+15%
-  const sklMul = (hid === 'archer' || hid === 'sniper' || hid === 'volt' || hid === 'pyro' || hid === 'mora')
-    ? (1 + (hs.skillLv - 1) * 0.08)
-    : (1 + (hs.skillLv - 1) * 0.10) * (1 + btN(hs.skillLv, BT_STEP.skill) * BT_SKL);
-  const atk = Math.round(def.baseAtk * lvMul * (1 + bt.atkPct) * wpnMul * (1 + agg.atkPct) + agg.atkFlat);
-  const skillDmg = Math.round(def.baseAtk * lvMul * (1 + bt.atkPct) * wpnMul * sklMul * (1 + bt.skillPct) * (1 + (hs.lv - 1) * 0.05)) + agg.skillDmgFlat;
+  const agg = equipAgg(hid, weaponLevel), wb = weaponBtAgg(hid, weaponLevel);
+  const bt = heroBtAgg(hid, level), growth = HERO_GROWTH[def.growthType];
+  const wpnMul = 1 + (weaponLevel - 1) * 0.06;
+  const atk = Math.round((def.baseAtk * (1 + (level - 1) * growth.atk) * (1 + bt.atkPct) * wpnMul * (1 + wb.atk) + agg.atkFlat) * (1 + agg.atkPct));
+  const skillDmg = Math.round(def.baseSkillDmg * (1 + (level - 1) * growth.skill) * (1 + bt.skillPct) * wpnMul * (1 + wb.skill)) + agg.skillDmgFlat;
   const skillAspd = hs.atkLv >= 5 ? 1.06 : 1;   // 普攻槽5级里程碑：攻速+6%（四英雄同构）
   return {
     power: Math.round(atk + skillDmg * 0.5),
-    atk, atkSpd: Math.round(def.atkSpd * (1 + bt.aspdPct) * skillAspd * 100) / 100, skillDmg,
-    lv: hs.lv, weaponLv: hs.weaponLv, atkLv: hs.atkLv, skillLv: hs.skillLv, ultLv: hs.ultLv,
+    atk, atkSpd: Math.round(def.atkSpd * (1 + bt.aspdPct) * skillAspd * (1 + agg.atkSpd) * 100) / 100, skillDmg,
+    lv: level, weaponLv: weaponLevel, atkLv: hs.atkLv, skillLv: hs.skillLv, ultLv: hs.ultLv,
   };
 }
 
@@ -359,6 +400,8 @@ export interface ShopDef {
 }
 export const SHOP: ShopDef[] = [
   { id: 's_wpn_bow', tab: 'weapon', name: '猎风长弓', sub: '绿1阶 · 速射弓', price: 800, currency: 'diamond', unlock: '1-1', give: { kind: 'equip', id: 'wpn_bow' } },
+  ...['wpn_green_crossbow', 'wpn_green_book', 'wpn_green_staff'].map(id => ({ id: 's_' + id, tab: 'weapon' as ShopTab, name: WEAPONS[id].name,
+    sub: '绿1阶 · ' + weaponUsers(id), price: WEAPONS[id].price, currency: 'diamond' as const, unlock: WEAPONS[id].unlock, give: { kind: 'equip' as const, id } })),
   { id: 's_wpn_crossbow', tab: 'weapon', name: '鹰眼重弩', sub: '紫2阶 · 重击弩', price: 1200, currency: 'diamond', unlock: '1-2', give: { kind: 'equip', id: 'wpn_crossbow' } },
   { id: 's_hero_sniper', tab: 'hero', name: '凯尔·鹰眼', sub: '狙击 · 重击输出', price: 6800, currency: 'diamond', unlock: '1-2', give: { kind: 'hero', id: 'sniper' } },
   { id: 's_hero_pyro', tab: 'hero', name: '焰·辉', sub: '火焰 · AOE 爆发', price: 2800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'pyro' } },
@@ -414,7 +457,7 @@ export function shopBuy(g: ShopDef): OpResult {
     // 买到的装备若当前英雄对应槽位为空则直接穿上，否则入仓库（英雄页背包可再穿戴）
     const d = EQUIPS[g.give.id];
     const cur = sv.heroes[sv.curHero];
-    if (d && cur?.owned && !cur.worn[d.kind]) cur.worn[d.kind] = inst.uid;
+    if (d && cur?.owned && !cur.worn[d.kind] && (d.kind !== 'weapon' || weaponFits(sv.curHero, d.id))) cur.worn[d.kind] = inst.uid;
     sv.equips.push(inst);
   } else if (g.give.kind === 'hero' && g.give.id) {
     if (!sv.heroes[g.give.id]) sv.heroes[g.give.id] = { owned: true, lv: 1, weaponLv: 1, atkLv: 1, skillLv: 1, ultLv: 1, worn: {} };
@@ -440,15 +483,22 @@ export function spendMat(n: number): boolean {
 }
 
 /** 穿戴：指定槽位装上仓库里的装备实例（原装备回仓库） */
-export function wearEquip(hid: string, kind: EquipKind, uid: string): void {
+export function wearEquip(hid: string, kind: EquipKind, uid: string): OpResult {
   const sv = loadSave();
+  const h = sv.heroes[hid], inst = sv.equips.find(e => e.uid === uid), d = inst && EQUIPS[inst.defId];
+  if (!h?.owned || !inst || !d || d.kind !== kind) return { ok: false, msg: '无法穿戴该装备' };
+  if (kind === 'weapon' && !weaponFits(hid, d.id)) return { ok: false, msg: weaponUsers(d.id) };
+  if (Object.keys(sv.heroes).some(id => id !== hid && Object.values(sv.heroes[id].worn).includes(uid))) return { ok: false, msg: '其他英雄正在穿戴该装备' };
   sv.heroes[hid].worn[kind] = uid;
   saveSave();
+  return { ok: true, msg: d.name + ' 已装备' };
 }
-export function takeOff(hid: string, kind: EquipKind): void {
+export function takeOff(hid: string, kind: EquipKind): OpResult {
+  if (kind === 'weapon') return { ok: false, msg: '英雄必须装备武器，请在背包中直接替换' };
   const sv = loadSave();
   sv.heroes[hid].worn[kind] = undefined;
   saveSave();
+  return { ok: true, msg: '装备已卸下' };
 }
 export function wornInst(hid: string, kind: EquipKind): EquipInst | null {
   const uid = loadSave().heroes[hid]?.worn[kind];
@@ -461,7 +511,8 @@ export function sellEquip(uid: string): OpResult {
   const i = sv.equips.findIndex(q => q.uid === uid);
   if (i < 0) return { ok: false, msg: '物品不存在' };
   const e = sv.equips[i];
-  if (Object.values(sv.heroes).some(h => Object.values(h.worn).includes(uid))) return { ok: false, msg: '已穿戴中，请先卸下' };
+  if (WEAPONS[e.defId]?.starter) return { ok: false, msg: '初始武器保留在背包中，不可出售' };
+  if (Object.values(sv.heroes).some(h => Object.values(h.worn).includes(uid))) return { ok: false, msg: EQUIPS[e.defId]?.kind === 'weapon' ? '正在装备，请先替换为其他武器' : '已穿戴中，请先卸下' };
   const gold = sellPrice(e);
   sv.equips.splice(i, 1);
   sv.gold += gold;
@@ -513,6 +564,7 @@ export function upSkill(hid: string, slot: 'atk' | 'skill' | 'ult'): OpResult {
 
 /** 已穿戴装备强化（金币+材料） */
 export function upWornEquip(hid: string, kind: EquipKind): OpResult {
+  if (kind === 'weapon') return upWeapon(hid);
   const e = wornInst(hid, kind);
   if (!e) return { ok: false, msg: '该槽位未穿戴' };
   if (e.lv >= MAX.equip) return { ok: false, msg: '已达强化上限' };
@@ -541,15 +593,19 @@ export function upKeep(): OpResult {
 /** 领星箱奖励（一次性，按已达星数逐档领取到 claimed） */
 export function claimChest(levelId: string, stars: number, tier: number): OpResult {
   const sv = loadSave();
+  if (!Number.isInteger(tier) || tier < 1 || tier > 3) return { ok: false, msg: '无效的奖励档位' };
   const got = sv.chestClaimed[levelId] || 0;
   if (tier <= got) return { ok: false, msg: '该档奖励已领取' };
-  if (stars < tier) return { ok: false, msg: '尚未达成：' + CHEST_COND[tier - 1] };
+  if (Math.min(stars, sv.stars[levelId] || 0) < tier) return { ok: false, msg: '尚未达成：' + CHEST_COND[tier - 1] };
+  const suffix = levelId.slice(-1), difficulty = suffix === 'e' ? 1 : suffix === 'h' ? 2 : 0;
+  const rewards = starChestRewards(difficulty ? levelId.slice(0, -1) : levelId, difficulty);
+  let gold = 0, diamonds = 0;
+  // The save stores the highest claimed tier. Include every unclaimed lower tier when skipping ahead.
+  for (let i = got; i < tier; i++) { gold += rewards[i].gold || 0; diamonds += rewards[i].diamonds || 0; }
   sv.chestClaimed[levelId] = tier;
-  const rw = CHEST_REWARD[tier - 1];
-  if (rw.gold) sv.gold += rw.gold;
-  if (rw.diamonds) sv.diamonds += rw.diamonds;
+  sv.gold += gold; sv.diamonds += diamonds;
   saveSave();
-  const msg = rw.gold ? `+${rw.gold} 金币` : `+${rw.diamonds} 钻石`;
+  const msg = [gold ? `+${gold} 金币` : '', diamonds ? `+${diamonds} 钻石` : ''].filter(Boolean).join('、');
   return { ok: true, msg: '领取成功 ' + msg };
 }
 

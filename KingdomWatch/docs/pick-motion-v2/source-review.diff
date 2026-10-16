@@ -1,0 +1,454 @@
+--- before/assets\scripts\Boot.ts
++++ assets\scripts\Boot.ts
+@@ -15,6 +15,7 @@
+ import { BattleDirector } from './battle/BattleDirector';
+ import { TouchFeedback } from './ui/TouchFeedback';
+ import { motionIn } from './ui/UIMotion';
++import { enteringBattle } from './ui/BattleEntry';
+ 
+ function hexc(hex: string): Color {
+   const c = new Color();
+@@ -81,7 +82,7 @@
+   } else {
+     root.addComponent(MainUI);
+   }
+-  motionIn(root, 'fade');
++  if (!enteringBattle()) motionIn(root, 'fade');
+   const touchLayer = new Node('TouchFeedbackLayer');
+   touchLayer.layer = Layers.Enum.UI_2D;
+   touchLayer.parent = canvasNode;
+--- before/assets\scripts\battle\BattleDirector.ts
++++ assets\scripts\battle\BattleDirector.ts
+@@ -30,6 +30,7 @@
+ import { Panels } from '../ui/Panels';
+ import { GmPanel } from '../ui/GmPanel';
+ import { setLayerDeep } from '../ui/UIKit';
++import { battleEntryReady, enteringBattle } from '../ui/BattleEntry';
+ 
+ const { ccclass } = _decorator;
+ 
+@@ -181,6 +182,7 @@
+ 
+     this.hud.showBanner('敌军来袭！', 2);
+     this.state = 'prepare';
++    battleEntryReady(this.node);
+   }
+ 
+   onDestroy(): void {
+@@ -223,6 +225,8 @@
+   }
+ 
+   update(rawDt: number): void {
++    // Prepare countdown and combat begin only after the full-screen flags have cleared.
++    if (enteringBattle()) return;
+     GameAudio.battleState(this.state);
+     this.fpsAcc += rawDt; this.fpsN++;
+     if (this.fpsAcc >= 0.5) {
+--- before/assets\scripts\battle\Hero.ts
++++ assets\scripts\battle\Hero.ts
+@@ -52,7 +52,8 @@
+   private idleMora: MoraIdleAnimation | null = null;
+   private poseTarget: Monster | null = null;
+   private attackPoseT = 0;
+-  private ultimateT = 0;
++  // Read the instance field directly in overrides: Cocos loose super-getter lowering binds to the prototype.
++  protected ultimateT = 0;
+   private ultimateWindupT = 0;
+ 
+   constructor(parent: Node, x: number, stats: HeroStats) {
+@@ -573,7 +574,7 @@
+     return true;
+   }
+ 
+-  get ultimateRemaining(): number { return Math.max(super.ultimateRemaining, this.volleyQueue.length ? .01 : 0); }
++  get ultimateRemaining(): number { return Math.max(this.ultimateT, this.volleyQueue.length ? .01 : 0); }
+   get ultShowDuration(): number {
+     return ULT_TIMING.archer.duration + (Math.max(1, this.stats.ultRounds || 1) - 1) * ARCHER_ULT_ROUND_GAP
+       + (archerUltCfg(this.stats.ultLv).rows - 2) * ARCHER_ULT_ROW_GAP;
+@@ -706,7 +707,7 @@
+   }
+ 
+   private autoT = -1;   // 突破自动大招计时（-1=未初始化；仅 stats.ultAutoCd>0 时生效）
+-  get ultimateRemaining(): number { return Math.max(super.ultimateRemaining, this.ultLock ? .01 : 0); }
++  get ultimateRemaining(): number { return Math.max(this.ultimateT, this.ultLock ? .01 : 0); }
+ 
+   protected queuedShotDelay(): number {
+     if (this.ultLock) return Math.max(0, this.ultLock.t);
+@@ -1181,7 +1182,7 @@
+   }
+ 
+   /** 大招演出时长：从施放到最后一颗陨石落地（排队间隔 + 弹道飞行）；三选一再等 2s 缓冲由导演统一加 */
+-  get ultimateRemaining(): number { return Math.max(super.ultimateRemaining, this.meteorQueue.length ? .01 : 0); }
++  get ultimateRemaining(): number { return Math.max(this.ultimateT, this.meteorQueue.length ? .01 : 0); }
+   get ultShowDuration(): number {
+     const uc = pyroUltCfg(this.stats.ultLv);
+     if (!this.meteorQueue.length) return Math.max(ULT_TIMING.pyro.duration,
+@@ -1288,7 +1289,7 @@
+   readonly skillMax = 9;
+   /** 大招·天雷灭世：排队落下的雷击（目标引用，落雷时已亡则转随机存活目标） */
+   private strikeQueue: { t: number; target: Monster | null; index: number }[] = [];
+-  get ultimateRemaining(): number { return Math.max(super.ultimateRemaining, this.strikeQueue.length ? .01 : 0); }
++  get ultimateRemaining(): number { return Math.max(this.ultimateT, this.strikeQueue.length ? .01 : 0); }
+   /** 士气高涨：大招后攻速加成剩余时间 */
+   private hasteT = 0;
+ 
+--- before/assets\scripts\ui\HUD.ts
++++ assets\scripts\ui\HUD.ts
+@@ -430,12 +430,14 @@
+       const cp = Math.max(0, Math.min(1, hero.chargePct));
+       u.shown += (cp - u.shown) * Math.min(1, dt * 5);
+       if (Math.abs(cp - u.shown) < 0.002) u.shown = cp;
+-      const key = Math.round(u.shown * 100);
++      // A full reservoir may briefly wait for its own previous cast; never label it 99%.
++      const full = cp >= 1;
++      const key = full ? 101 : Math.round(u.shown * 100);
+       if (key !== u.lastChargeKey) {
+         u.lastChargeKey = key;
+         if (u.energyActive) this.redrawUltEnergyCharge(u, u.shown);
+         else this.redrawUltWater(u, u.shown);
+-        setText(u.chargeTxt, Math.min(99, Math.round(u.shown * 100)) + '%');
++        setText(u.chargeTxt, full ? '施放中' : Math.min(99, Math.round(u.shown * 100)) + '%');
+       }
+     }
+   }
+--- before/assets\scripts\ui\Panels.ts
++++ assets\scripts\ui\Panels.ts
+@@ -11,8 +11,10 @@
+ import { AdService } from '../platform/AdService';
+ import { loadSave, saveSave } from '../core/SaveData';
+ import { COMIC, comicButtonControl, ComicButtonControl } from './ComicUI';
+-import { bindButton } from './ButtonFeedback';
++import { bindButton, ButtonFeedback } from './ButtonFeedback';
+ import { motionIn, retireChildren, stopMotion } from './UIMotion';
++import { whenUIArtReady } from './UIArtReady';
++import { PickMotion } from './PickMotion';
+ import { uiSound } from './UIAudio';
+ import { C, CA, dimLayer, gcircle, gpanel, label, N, setText, WY, WYB, WX } from './UIKit';
+ import { battleArtIcon as artIcon, battleArtSprite as artSprite, battleStatBar as gbar } from './BattlePanelSkin';
+@@ -70,22 +72,28 @@
+   private settlementTab = 0;
+   private reviveHint = '';
+   private activeKind = '';
++  private pickMotion: PickMotion | null = null;
+ 
+   closeAll(animated = false): void {
++    const wasPick = this.activeKind === 'pick';
+     this.activeKind = '';
+     this.settlementKind = null;
+     this.picking = false;
+     this.pickPending = false;
+     this.panelVersion++;
++    this.pickMotion = null;
+     stopMotion(this.modalRoot);
+-    if (animated) retireChildren(this.modalRoot);
+-    else this.modalRoot.destroyAllChildren();
++    if (animated && !wasPick) retireChildren(this.modalRoot);
++    else {
++      if (wasPick) this.modalRoot.children.forEach(c => { c.active = false; });
++      this.modalRoot.destroyAllChildren();
++    }
+   }
+ 
+   private begin(kind: string): boolean {
+     const fresh = kind !== this.activeKind;
+     this.closeAll(); this.activeKind = kind;
+-    motionIn(this.modalRoot, fresh ? 'fade' : 'refresh');
++    if (kind !== 'pick') motionIn(this.modalRoot, fresh ? 'fade' : 'refresh');
+     if (fresh && kind !== 'win' && kind !== 'lose' && kind !== 'pick') uiSound('open');
+     return fresh;
+   }
+@@ -98,76 +106,85 @@
+ 
+   /* ---------- ② 三选一 ---------- */
+   showPick(cards: CardDef[], _stacks: CardStacks, cb: PickCallbacks): void {
+-    const fresh = this.begin('pick');
++    const previous = this.activeKind === 'pick' && this.pickMotion?.node.isValid ? this.pickMotion : null;
++    if (previous) ++this.panelVersion;
++    else { this.begin('pick'); dimLayer(this.modalRoot, .68, false, false); }
+     const version = this.panelVersion;
+-    dimLayer(this.modalRoot, .68, false, fresh);
++    this.picking = false; this.pickPending = true;
+     // Move the complete original layout down together; keep the footer inside short screens.
+     const shift = Math.min(56, Math.max(0, LO.half * 2 - LO.safeTop - LO.safeBottom - 938 - 40));
+     const pickRoot = N('pickRoot', this.modalRoot, 0, -shift);
+-    // 原创纸纹标题，文字和标题淡入保留。
++    // Original paper/title layout; one dedicated controller owns the complete motion.
+     const titleBg = gpanel(pickRoot, 0, WY(308, 88), 520, 88, CA(PAL.parch, 0.95), PAL.gold, 2.5, 14);
+     artSprite(titleBg, 0, 0, 520, 88, 'pick_comic_v1/title_plate', { belowIdx: 0 });
+     label(titleBg, 0, 0, '选择强化', { size: 34, color: '#4A3214', bold: true });
+-    const titleOp = titleBg.getComponent(UIOpacity) || titleBg.addComponent(UIOpacity);
+-    titleOp.opacity = 0;
+-    tween(titleOp).to(0.25, { opacity: 255 }).start();
+-
++    const motion = pickRoot.addComponent(PickMotion);
++    const canInteract = (): boolean => version === this.panelVersion && motion.ready && !this.picking && !this.pickPending;
+     const xs = [22, 264, 506];
+     const frames: Node[] = [];
+     cards.forEach((card, i) => {
+       const x = WX(xs[i], 222), y = WY(428, 360);
+-      const frame = gpanel(pickRoot, x, y, 222, 360, CA('#E9DFC2', 0.96), undefined, 0, 12);
++      // Separate touch/selection shell from the small button compression on its artwork.
++      const frame = N('pickSlot:' + card.id, pickRoot, x, y, 222, 360);
+       frame.name = 'pickCard:' + card.id;
+       frames.push(frame);
+-      this.buildCard(frame, card);
+-      let entered = false;
++      const face = gpanel(frame, 0, 0, 222, 360, '#F5E8CD', undefined, 0, 12);
++      this.buildCard(face, card);
+       bindButton(frame, () => {
+-        this.pickChoose(frame, frames.filter(f => f !== frame), card, cb);
+-      }, { scale: .98, shift: 1, releaseMotion: false, sound: 'confirm', enabled: () => !this.picking && !this.pickPending && entered });
+-      // 入场：自下方滑入 + 淡入，逐张错峰
+-      const op = frame.getComponent(UIOpacity) || frame.addComponent(UIOpacity);
+-      op.opacity = 0;
+-      frame.setPosition(x, y + 70, 0);
+-      tween(frame).delay(i * 0.08)
+-        .to(0.3, { position: new Vec3(x, y, 0) }, { easing: 'cubicOut' }).call(() => { entered = true; }).start();
+-      tween(op).delay(i * 0.08).to(0.25, { opacity: 255 }).start();
+-    });
+-
+-    const refreshNote = label(pickRoot, 0, WY(818, 40),
++        if (!canInteract()) return;
++        this.picking = true;
++        frames.forEach(f => f.getComponent(ButtonFeedback)?.reset());
++        if (!motion.choose(i, () => {
++          if (version !== this.panelVersion || !pickRoot.isValid) return;
++          cb.onPick(card);
++          if (version === this.panelVersion && pickRoot.isValid) { this.picking = false; motion.restore(); }
++        })) this.picking = false;
++      }, { visual: face, scale: .975, shift: 1, releaseMotion: false, sound: 'select', enabled: canInteract });
++    });
++
++    const footer = N('pickRefreshFooter', pickRoot);
++    const refreshNote = label(footer, 0, WY(818, 40),
+       '当局剩余刷新：广告 ' + this.pickAdLeft + ' 次 · 钻石 ' + this.pickDiaLeft + ' 次',
+       { size: 18, color: '#CFE3FF' });
+ 
+     // 复用主界面按钮；沿用广告／钻石刷新不同宽度与原回调。
+-    const adRefresh = this.pickBtn(pickRoot, WX(130, 300), WY(862, 76), 300, 76, '▶ 广告刷新', 24,
++    const requestAd = (): void => {
++      if (!canInteract() || this.pickAdLeft <= 0) return;
++      this.pickPending = true;
++      adRefresh.setBusy(true, '刷新中…'); diamondRefresh.setEnabled(false);
++      this.pickAdLeft--;
++      AdService.showRewarded('pick_refresh', () => {
++        if (version === this.panelVersion) cb.onRefreshRequest();
++      }, () => {
++        if (version === this.panelVersion) { this.pickAdLeft++; this.showPick(cards, _stacks, cb); }
++      });
++    };
++    const adRefresh = this.pickBtn(footer, WX(130, 300), WY(862, 76), 300, 76, '▶ 广告刷新', 24,
+       this.pickAdLeft > 0 ? PAL.green : '#5A6472',
+       this.pickAdLeft > 0 ? '#5E8F2E' : '#454E59',
+       this.pickAdLeft > 0 ? '#20240F' : '#DCE2EA',
+-      () => {
+-        if (this.picking || this.pickPending || this.pickAdLeft <= 0) return;
+-        this.pickPending = true;
+-        adRefresh.setBusy(true, '刷新中…'); diamondRefresh.setEnabled(false);
+-        this.pickAdLeft--;
+-        AdService.showRewarded('pick_refresh', () => {
+-          if (version === this.panelVersion) { this.pickPending = false; cb.onRefreshRequest(); }
+-        }, () => {
+-          if (version === this.panelVersion) { this.pickAdLeft++; this.showPick(cards, _stacks, cb); }
+-        });
+-      });
+-    const diamondRefresh = this.pickBtn(pickRoot, WX(460, 180), WY(862, 76), 180, 76, '💎2 钻石刷新', 22,
++      requestAd);
++    const requestDiamond = (): void => {
++      if (!canInteract() || this.pickDiaLeft <= 0) return;
++      const sv = loadSave();
++      if (sv.diamonds < 2) { setText(refreshNote, '钻石不足，需要 2 钻石'); uiSound('warning'); return; }
++      sv.diamonds -= 2; saveSave(); this.pickDiaLeft--; this.pickPending = true;
++      diamondRefresh.setBusy(true, '刷新中…'); adRefresh.setEnabled(false);
++      cb.onRefreshRequest();
++    };
++    const diamondRefresh = this.pickBtn(footer, WX(460, 180), WY(862, 76), 180, 76, '💎2 钻石刷新', 22,
+       this.pickDiaLeft > 0 ? PAL.gold : '#5A6472',
+       this.pickDiaLeft > 0 ? '#C98A1A' : '#454E59',
+       this.pickDiaLeft > 0 ? '#3A2A10' : '#DCE2EA',
+-      () => {
+-        if (this.picking || this.pickPending || this.pickDiaLeft <= 0) return;
+-        const sv = loadSave();
+-        if (sv.diamonds < 2) { setText(refreshNote, '钻石不足，需要 2 钻石'); return; }
+-        sv.diamonds -= 2;
+-        saveSave();
+-        this.pickDiaLeft--;
+-        this.pickPending = true;
+-        diamondRefresh.setBusy(true, '刷新中…'); adRefresh.setEnabled(false);
+-        cb.onRefreshRequest();
+-      });
++      requestDiamond);
++    bindButton(adRefresh.node, requestAd, { enabled: () => canInteract() && this.pickAdLeft > 0 });
++    bindButton(diamondRefresh.node, requestDiamond, { enabled: () => canInteract() && this.pickDiaLeft > 0 });
++    motion.configure(titleBg, footer, frames);
++    whenUIArtReady(pickRoot, () => {
++      if (version !== this.panelVersion || !pickRoot.isValid) return;
++      this.pickMotion = motion;
++      motion.reveal(previous, () => { if (version === this.panelVersion) this.pickPending = false; });
++    });
+   }
+ 
+   /** Lobby buttons in the existing refresh geometry; availability checks stay in the callbacks. */
+@@ -178,22 +195,6 @@
+       tone, size, enabled: tone !== 'muted', color: tone === 'muted' ? COMIC.text : undefined,
+       name: text.startsWith('▶') ? 'pickAdRefresh' : 'pickDiamondRefresh',
+     });
+-  }
+-
+-  /** 选择动画：选中卡弹跳、其余卡淡出，随后真实回调（三选一冻结期间 tween 仍走主循环时钟） */
+-  private pickChoose(chosen: Node, others: Node[], card: CardDef, cb: PickCallbacks): void {
+-    if (this.picking || this.pickPending) return;
+-    this.picking = true;
+-    const version = this.panelVersion;
+-    tween(chosen)
+-      .to(0.1, { scale: new Vec3(1.09, 1.09, 1) }, { easing: 'sineOut' })
+-      .to(0.09, { scale: new Vec3(1, 1, 1) }, { easing: 'sineIn' })
+-      .call(() => { if (version !== this.panelVersion || !chosen.isValid) return; this.picking = false; cb.onPick(card); })
+-      .start();
+-    for (const o of others) {
+-      const op = o.getComponent(UIOpacity) || o.addComponent(UIOpacity);
+-      tween(op).to(0.16, { opacity: 70 }).start();
+-    }
+   }
+ 
+   /** 卡面布局（羊皮纸底；去「新」标与稀有度小字——用户要求：卡面只留 名称/图标/归属/描述）：
+--- before/assets\scripts\ui\pages\LevelsPage.ts
++++ assets\scripts\ui\pages\LevelsPage.ts
+@@ -1,7 +1,7 @@
+ /** Continuous outdoor scenery, a draggable route, and a reward dock that owns its space. */
+ import { Graphics, Mask, Node, ScrollView, Sprite, UIOpacity, UITransform, Vec2, director } from 'cc';
+ import { LO } from '../../config/GameConfig';
+-import { C, N, setText, WY } from '../UIKit';
++import { C, N, WY } from '../UIKit';
+ import { artSprite } from '../Ux';
+ import { COMIC, comicArt, comicButton, comicButtonControl, comicMark, comicPlate } from '../ComicUI';
+ import { mainLabel, PageCtx, toast, mainLayout, MAIN_RESOURCE_H } from '../PageKit';
+@@ -11,6 +11,7 @@
+ import { openSquadPanel } from '../SquadPanel';
+ import { bindButton } from '../ButtonFeedback';
+ import { refreshUI } from '../UIMotion';
++import { enterBattle, enteringBattle } from '../BattleEntry';
+ 
+ const LEVELS = [
+   { id: '1-1', name: '1-1 前哨', short: '前哨', desc: '10 波 · 哥布林军团', art: 'outpost' },
+@@ -191,30 +192,23 @@
+         });
+       }
+ 
+-      let battleCaption: Node | null = null;
+       const restoreBattleEntry = (): void => {
+         flow.mode = 'main';
+         if (!battleControl.node.isValid) return;
+-        battleControl.setBusy(false);
+-        if (battleCaption?.isValid) setText(battleCaption, '开始战斗');
+         toast('进入战斗失败，请重试', { kind: 'warning', title: '进入战斗失败' });
+       };
+       const battleControl = comicButtonControl(content, -91, WY(actionTop, actionH), 490, actionH, '', () => {
+-        if (!open) return;
++        if (!open || enteringBattle()) return;
+         if (!squadList().length) { toast('请先上阵英雄'); return; }
+-        battleControl.setBusy(true);
+-        if (battleCaption) setText(battleCaption, '进入中…');
+-        flow.mode = 'battle'; flow.levelId = lv.id; flow.diff = st.d;
+-        const loading = director.loadScene('Main', error => {
+-          if (!error) return;
+-          restoreBattleEntry();
+-        });
+-        if (!loading) restoreBattleEntry();
++        enterBattle(done => {
++          flow.mode = 'battle'; flow.levelId = lv.id; flow.diff = st.d;
++          return director.loadScene('Main', done);
++        }, restoreBattleEntry);
+       }, { tone: open ? 'gold' : 'muted', name: 'levelBattle', enabled: open });
+       const battle = battleControl.node;
+       if (open) {
+         levelArt(battle, -161, 0, 62, 62, 'comic_swords_v1');
+-        battleCaption = mainLabel(battle, 30, 0, '开始战斗', { size: 42, font: 'body', color: COMIC.text, bold: true, w: 318, h: 60 });
++        mainLabel(battle, 30, 0, '开始战斗', { size: 42, font: 'body', color: COMIC.text, bold: true, w: 318, h: 60 });
+       } else {
+         comicMark(battle, -178, 0, 'lock', 30, COMIC.sub);
+         mainLabel(battle, 20, 0, '通关 ' + LEVELS[st.i - 1].id + ' 解锁', { size: 27, color: COMIC.text, bold: true, w: 400, h: 44 });
+--- before/assets\scripts\ui\pages\ShopPage.ts
++++ assets\scripts\ui\pages\ShopPage.ts
+@@ -1,13 +1,13 @@
+ /** Shop: illustrated storefront, horizontal categories and a compact three-column shelf. */
+-import { Graphics, Mask, Node, ScrollView, UITransform, UIOpacity } from 'cc';
++import { Graphics, Label, Mask, Node, ScrollView, Tween, tween, UITransform, UIOpacity, Vec3 } from 'cc';
+ import { LO } from '../../config/GameConfig';
+-import { CA, N, WY } from '../UIKit';
++import { C, CA, N, setText, WY } from '../UIKit';
+ import { artSprite } from '../Ux';
+ import { COMIC, comicArt, comicButton, comicDialog, comicMark, comicPlate, comicPortrait } from '../ComicUI';
+ import { mainLabel, PageCtx, fmt, toast, MAIN_NAV_H, MAIN_RESOURCE_H, mainResourceTop, pageScroll } from '../PageKit';
+ import { EQUIPS, HERO_DEFS, KIND_NAME, MATS, SHOP, SHOP_TABS, ShopDef, ShopTab, STAT_NAME, StatKey, equipStat, lvReached, shopBuy, statFmt } from '../../core/GameData';
+ import { loadSave } from '../../core/SaveData';
+-import { dismissUI, refreshUI } from '../UIMotion';
++import { dismissUI, reducedMotion, refreshUI } from '../UIMotion';
+ import { bindButton } from '../ButtonFeedback';
+ 
+ const CARD_W = 218, CARD_H = 308, STEP_X = 232, STEP_Y = 324;
+@@ -222,26 +222,51 @@
+   divider.moveTo(-276, 0); divider.lineTo(276, 0); divider.stroke();
+   const status = owned ? '已拥有该英雄' : !g.price ? '敬请期待' : !unlocked ? '通关 ' + g.unlock + ' 解锁购买'
+     : '每次购买获得 ' + (g.give.n || 1) + (g.give.kind === 'hero' ? ' 名英雄' : g.give.kind === 'equip' ? ' 件装备' : ' 个材料');
+-  mainLabel(panel, 0, bottom + 164, status, { size: 18, color: available ? COMIC.greenShade : COMIC.sub, w: 552, h: 28 });
++  const feedback = N('shopPurchaseFeedback', panel);
++  const statusLabel = mainLabel(feedback, 0, bottom + 164, status, { size: 18, color: available ? COMIC.greenShade : COMIC.sub, w: 552, h: 28 });
++  let walletLabel: Node | null = null, shake: Tween<Node> | null = null, purchasing = false;
++  panel.once(Node.EventType.NODE_DESTROYED, () => { shake?.stop(); shake = null; });
++  const warn = (message: string): void => {
++    setText(statusLabel, message); statusLabel.getComponent(Label)!.color = C('#B34338');
++    shake?.stop(); feedback.setPosition(0, 0, 0);
++    if (!reducedMotion()) shake = tween(feedback)
++      .to(.045, { position: new Vec3(4, 0, 0) }, { easing: 'quadOut' })
++      .to(.07, { position: new Vec3(-4, 0, 0) }, { easing: 'sineInOut' })
++      .to(.06, { position: new Vec3(2, 0, 0) }, { easing: 'sineInOut' })
++      .to(.075, { position: new Vec3() }, { easing: 'quadOut' }).start();
++    toast(message, { kind: 'warning', title: '购买未完成', key: 'purchase:' + g.id,
++      icon: 'shop_comic_v1/' + (g.currency === 'gold' ? 'comic_coin_v1' : 'comic_diamond_v1') });
++  };
+   if (g.price) {
+     const price = fmt(g.price), textW = Math.min(150, price.length * 19), groupW = 35 + 8 + textW;
+-    comicArt(panel, -groupW / 2 + 17.5, bottom + 125, 35, 35, g.currency === 'gold' ? 'comic_coin_v1' : 'comic_diamond_v1');
+-    mainLabel(panel, -groupW / 2 + 43 + textW / 2, bottom + 125, price, { size: 30, font: 'number', color: COMIC.text,
++    comicArt(feedback, -groupW / 2 + 17.5, bottom + 125, 35, 35, g.currency === 'gold' ? 'comic_coin_v1' : 'comic_diamond_v1');
++    mainLabel(feedback, -groupW / 2 + 43 + textW / 2, bottom + 125, price, { size: 30, font: 'number', color: COMIC.text,
+       align: 'left', w: textW, h: 39 });
+     const wallet = g.currency === 'gold' ? sv.gold : sv.diamonds;
+-    mainLabel(panel, 0, bottom + 87, '持有 ' + fmt(wallet) + (g.currency === 'gold' ? ' 金币' : ' 钻石'),
++    walletLabel = mainLabel(feedback, 0, bottom + 87, '持有 ' + fmt(wallet) + (g.currency === 'gold' ? ' 金币' : ' 钻石'),
+       { size: 18, color: wallet >= g.price ? COMIC.sub : '#B34338', w: 552, h: 27 });
+   }
+   comicButton(panel, -139, bottom + 39, 248, 58, '关闭', () => dismissUI(panel.parent), { tone: 'dark', name: 'shopDetailsClose', sound: 'close' });
+-  comicButton(panel, 139, bottom + 39, 248, 58, available ? '购买' : owned ? '已拥有' : !g.price ? '敬请期待' : '尚未解锁', () => {
+-    if (!g.price) return;
++  const attemptPurchase = (): void => {
++    if (!g.price || purchasing) return;
+     if (!lvReached(g.unlock)) { toast('通关 ' + g.unlock + ' 后解锁'); return; }
++    const latest = loadSave(), wallet = g.currency === 'gold' ? latest.gold : latest.diamonds;
++    const currency = g.currency === 'gold' ? '金币' : '钻石';
++    if (wallet < g.price) {
++      if (walletLabel) { setText(walletLabel, '持有 ' + fmt(wallet) + ' ' + currency); walletLabel.getComponent(Label)!.color = C('#B34338'); }
++      warn(currency + '不足，还差 ' + fmt(g.price - wallet) + ' ' + currency); return;
++    }
++    purchasing = true;
+     const result = shopBuy(g);
+-    toast(result.ok ? g.name + (g.give.kind === 'mat' ? ' ×' + (g.give.n || 1) : '') : result.msg,
+-      { kind: result.ok ? 'success' : 'warning', title: result.ok ? g.give.kind === 'hero' ? '招募成功' : '购买成功' : '购买未完成',
+-        key: 'purchase:' + g.id, heroId: result.ok && g.give.kind === 'hero' ? g.give.id : undefined,
+-        icon: result.ok && g.give.kind !== 'hero' ? 'shop_comic_v1/' + itemArt(g) : undefined });
+-    if (!result.ok) return;
++    if (!result.ok) { purchasing = false; warn(result.msg); return; }
++    toast(g.name + (g.give.kind === 'mat' ? ' ×' + (g.give.n || 1) : ''),
++      { kind: 'success', title: g.give.kind === 'hero' ? '招募成功' : '购买成功',
++        key: 'purchase:' + g.id, heroId: g.give.kind === 'hero' ? g.give.id : undefined,
++        icon: g.give.kind !== 'hero' ? 'shop_comic_v1/' + itemArt(g) : undefined });
+     dismissUI(panel.parent, ctx.refresh, false);
+-  }, { tone: 'green', name: 'shopPurchaseConfirm', sound: 'confirm', enabled: available });
+-}
++  };
++  const purchase = comicButton(panel, 139, bottom + 39, 248, 58, available ? '购买' : owned ? '已拥有' : !g.price ? '敬请期待' : '尚未解锁',
++    attemptPurchase, { tone: 'green', name: 'shopPurchaseConfirm', enabled: available });
++  // The semantic result owns its sound, including a failed purchase; no success click first.
++  bindButton(purchase, attemptPurchase, { sound: false });
++}

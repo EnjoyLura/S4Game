@@ -1,0 +1,10 @@
+{
+  "exitCode": 36,
+  "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-card-offer-weights-v1-20261015-out.log",
+  "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-card-offer-weights-v1-20261015-err.log",
+  "creator": "3.8.8",
+  "platform": "web-mobile",
+  "dprPatch": "completed",
+  "scope": "upgrade offers: generic stat weight x0.3; normal attack, skill and ultimate weight x2",
+  "gameplayValidation": "user manual"
+}

@@ -1,0 +1,11 @@
+✨ Compiled Worker successfully
+Uploading... (1783/1785)
+Uploading... (1784/1785)
+Uploading... (1785/1785)
+✨ Success! Uploaded 2 files (1783 already uploaded) (2.48 sec)
+
+✨ Uploading _headers
+✨ Uploading Functions bundle
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://74842ded.kingdom-watch.pages.dev
+{"stage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-ui-experience-v1-20261015-030022","priorPublishedStage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-playback-fix-v1-20261015-024035","entryVersion":"1792004374","project":"kingdom-watch","branch":"main","game":"https://kingdom-watch.pages.dev/?v=ui-experience-v1-1792004374","scope":"semantic UI audio, procedural tap feedback and interruptible page/modal motion","layoutChanged":false,"interactionAcceptance":"pending user manual review"}

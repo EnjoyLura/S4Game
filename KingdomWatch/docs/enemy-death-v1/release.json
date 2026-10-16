@@ -1,0 +1,61 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-enemy-death-v1-20261015-185718",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-notice-feedback-v1-20261015-140642",
+  "entryVersion": "1792061803",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=enemy-death-v1-1792061803",
+  "scope": "directional enemy death, weighted fall, contact dust and elemental silhouette dissolve on simulation clock",
+  "layoutChanged": false,
+  "deathPresentationAcceptance": "pending user manual review",
+  "status": "published",
+  "presentation": [
+    "exact struck whole cel",
+    "ground pivot",
+    "bounded directional impulse",
+    "weighted fall",
+    "contact shadow and dust",
+    "silhouette dissolve",
+    "fully transparent tail"
+  ],
+  "elements": [
+    "physical",
+    "fire and burn",
+    "frost and frozen",
+    "volt"
+  ],
+  "newDeathAnimationClipsGenerated": false,
+  "cosmeticCorpseLimit": 64,
+  "livingEnemyLimit": 60,
+  "corpsesExcludedFrom": [
+    "targeting",
+    "collisions",
+    "separation",
+    "alive count",
+    "wave clear"
+  ],
+  "simulationClock": true,
+  "pausedAndCardPickFreeze": true,
+  "settlementTailOnly": true,
+  "pooledActorsAndMaterials": true,
+  "sceneCleanupIncludesDetachedPool": true,
+  "rewardDamageAndChargeRulesChanged": false,
+  "audio": "existing licensed fatal-hit and kill cues; existing heavy hit-stop rules",
+  "gameplayValidation": "user manual; no tests, game, browser or online acceptance run",
+  "deployment": "https://71b33a61.kingdom-watch.pages.dev",
+  "date": "2026-10-15T18:57:58.070628+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-enemy-death-v1-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-enemy-death-v1-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "directional enemy death, weighted fall, contact dust and elemental silhouette dissolve on simulation clock",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 9755,
+  "deploymentSucceeded": true,
+  "uploadedFiles": 4,
+  "cachedFiles": 1879
+}

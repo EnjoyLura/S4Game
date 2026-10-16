@@ -1,0 +1,1023 @@
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/@types/jsb.d.ts(213,18): error TS2304: Cannot find name 'TypedArray'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/@types/jsb.d.ts(214,17): error TS2304: Cannot find name 'TypedArray'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(38222,32): error TS2314: Generic type 'Map<T>' requires 1 type argument(s).
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(38280,37): error TS2314: Generic type 'Map<T>' requires 1 type argument(s).
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(38281,39): error TS2314: Generic type 'Map<T>' requires 1 type argument(s).
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(45181,24): error TS2304: Cannot find name 'GPUCanvasContext'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(45197,29): error TS2552: Cannot find name 'GPUDevice'. Did you mean 'WebGPUDevice'?
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61894,55): error TS2833: Cannot find namespace '____private'. Did you mean '__private'?
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61910,125): error TS2833: Cannot find namespace '____private'. Did you mean '__private'?
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61959,33): error TS2304: Cannot find name '_Motion'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61960,27): error TS2304: Cannot find name '_Motion'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61962,47): error TS2833: Cannot find namespace '____private'. Did you mean '__private'?
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61964,17): error TS2833: Cannot find namespace '____private'. Did you mean '__private'?
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61967,33): error TS2833: Cannot find namespace '____private'. Did you mean '__private'?
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61974,50): error TS2304: Cannot find name '_VariableDescription'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61977,48): error TS2304: Cannot find name '_Motion'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61978,54): error TS2503: Cannot find namespace '____private'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61984,27): error TS2503: Cannot find namespace '____private'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61987,21): error TS2503: Cannot find namespace '_poseGraphOp'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61990,27): error TS2503: Cannot find namespace '_poseGraphOp'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61992,28): error TS2503: Cannot find namespace '_poseGraphOp'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(61999,19): error TS2503: Cannot find namespace '____private'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(62000,20): error TS2304: Cannot find name '_PoseGraph'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(64833,52): error TS2307: Cannot find module 'pal/audio/type' or its corresponding type declarations.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(64841,58): error TS2307: Cannot find module 'pal/audio/type' or its corresponding type declarations.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(64849,80): error TS2307: Cannot find module 'pal/audio/type' or its corresponding type declarations.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(64864,32): error TS2307: Cannot find module 'pal/audio/type' or its corresponding type declarations.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(64869,33): error TS2307: Cannot find module 'pal/audio/type' or its corresponding type declarations.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(64897,61): error TS2307: Cannot find module 'pal/audio/type' or its corresponding type declarations.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(68131,60): error TS2307: Cannot find module 'pal/input/input-source' or its corresponding type declarations.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(68132,58): error TS2307: Cannot find module 'pal/input/input-source' or its corresponding type declarations.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(68133,59): error TS2307: Cannot find module 'pal/input/input-source' or its corresponding type declarations.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(68134,62): error TS2307: Cannot find module 'pal/input/input-source' or its corresponding type declarations.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(68135,65): error TS2307: Cannot find module 'pal/input/input-source' or its corresponding type declarations.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69055,24): error TS2304: Cannot find name 'GPUBuffer'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69095,25): error TS2304: Cannot find name 'GPUTexture'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69102,35): error TS2304: Cannot find name 'GPUTextureView'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69113,37): error TS2304: Cannot find name 'GPUTextureView'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69121,25): error TS2304: Cannot find name 'GPUSampler'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69144,50): error TS2304: Cannot find name 'GPUSampler'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69180,19): error TS2304: Cannot find name 'GPUTextureView'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69191,29): error TS2304: Cannot find name 'GPUTextureView'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69219,19): error TS2304: Cannot find name 'GPUTextureView'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69274,23): error TS2304: Cannot find name 'GPUQuerySet'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69305,33): error TS2304: Cannot find name 'GPUQuerySet'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69339,24): error TS2304: Cannot find name 'GPUBuffer'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69424,21): error TS2304: Cannot find name 'GPUShaderModule'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69629,30): error TS2304: Cannot find name 'GPUBindGroupLayout'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69634,34): error TS2304: Cannot find name 'GPUBindGroupLayout'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69637,35): error TS2304: Cannot find name 'GPUPipelineLayout'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69647,21): error TS2304: Cannot find name 'GPUPipelineLayout'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69897,48): error TS2304: Cannot find name 'GPUBindGroupLayout'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69921,24): error TS2304: Cannot find name 'GPUBindGroup'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(69922,30): error TS2304: Cannot find name 'GPUBindGroupLayout'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(70020,21): error TS2304: Cannot find name 'GPUDevice'.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(75867,109): error TS2307: Cannot find module 'cc/editor/exotic-animation' or its corresponding type declarations.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(75868,155): error TS2307: Cannot find module 'cc/editor/embedded-player' or its corresponding type declarations.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(75869,60): error TS2307: Cannot find module 'cc/editor/new-gen-anim' or its corresponding type declarations.
+C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/bin/.declarations/cc.d.ts(75870,26): error TS2307: Cannot find module 'cc/editor/serialization' or its corresponding type declarations.
+assets/scripts/battle/ArcherIdleAnimation.ts(35,41): error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/battle/BattleDirector.ts(496,7): error TS2353: Object literal may only specify known properties, and 'tab' does not exist in type '{ goldFloor: number; reviveRatio: number; xp: number; loot?: StageLootSummary; onRevive: (done: (ok: boolean) => void) => void; onRetry: () => void; }'.
+assets/scripts/battle/BattleDirector.ts(549,7): error TS2353: Object literal may only specify known properties, and 'tab' does not exist in type '{ stars: 2 | 1 | 3; gold: number; ratio: number; xp: number; loot?: StageLootSummary; onDouble: (done: (ok: boolean) => void) => void; onNext: () => void; onExit: () => void; }'.
+assets/scripts/battle/BattleDirector.ts(577,25): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/battle/HeroSequenceAnimation.ts(45,49): error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/config/Weapons.ts(30,32): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/core/GameAudio.ts(253,49): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/core/GameAudio.ts(258,54): error TS2550: Property 'finally' does not exist on type 'Promise<[void, void, void]>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+assets/scripts/core/GameAudio.ts(274,8): error TS2550: Property 'finally' does not exist on type 'Promise<void>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+assets/scripts/core/GameData.ts(74,20): error TS2550: Property 'includes' does not exist on type 'StatKey[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/core/GameData.ts(77,13): error TS2550: Property 'includes' does not exist on type 'StatKey[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/core/GameData.ts(89,28): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/core/GameData.ts(201,68): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/core/GameData.ts(207,10): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/core/GameData.ts(219,11): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/core/GameData.ts(491,62): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/core/GameData.ts(515,14): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/core/GameData.ts(515,49): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/core/GameData.ts(625,78): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/core/GameData.ts(626,84): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/core/GameData.ts(630,17): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/core/GameData.ts(631,23): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/core/GameData.ts(640,16): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/ui/ButtonFeedback.ts(39,11): error TS2416: Property 'start' in type 'ButtonFeedback' is not assignable to the same property in base type 'Component'.
+  Type 'Vec2' is not assignable to type '() => void'.
+    Type 'Vec2' provides no match for the signature '(): void'.
+assets/scripts/ui/ButtonFeedback.ts(87,31): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>'.
+      Types of construct signatures are incompatible.
+        Type 'new () => ButtonFeedback' is not assignable to type 'new (...args: any[]) => Component'.
+          Type 'ButtonFeedback' is not assignable to type 'Component'.
+            Property 'start' is private in type 'ButtonFeedback' but not in type 'Component'.
+  Overload 2 of 3, '(className: string): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+  Overload 3 of 3, '(className: string): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+assets/scripts/ui/ButtonFeedback.ts(183,29): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>'.
+      Types of construct signatures are incompatible.
+        Type 'new () => ButtonFeedback' is not assignable to type 'new (...args: any[]) => Component'.
+          Type 'ButtonFeedback' is not assignable to type 'Component'.
+            Property 'start' is private in type 'ButtonFeedback' but not in type 'Component'.
+  Overload 2 of 3, '(className: string): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+  Overload 3 of 3, '(className: string): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+assets/scripts/ui/ButtonFeedback.ts(183,66): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component>): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component>'.
+      Types of construct signatures are incompatible.
+        Type 'new () => ButtonFeedback' is not assignable to type 'new (...args: any[]) => Component'.
+          Type 'ButtonFeedback' is not assignable to type 'Component'.
+            Property 'start' is private in type 'ButtonFeedback' but not in type 'Component'.
+  Overload 2 of 3, '(className: string): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+  Overload 3 of 3, '(className: string): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+assets/scripts/ui/ButtonFeedback.ts(183,83): error TS2339: Property 'configure' does not exist on type 'Component'.
+assets/scripts/ui/Fonts.ts(26,27): error TS2550: Property 'includes' does not exist on type 'Label[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/ui/GrowthFeedback.ts(33,78): error TS2550: Property 'includes' does not exist on type 'StatKey[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/ui/HUD.ts(355,58): error TS2550: Property 'padStart' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/ui/HUD.ts(355,100): error TS2550: Property 'padStart' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/ui/MilestoneSwipe.ts(105,44): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>): Component[]', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>'.
+      Types of construct signatures are incompatible.
+        Type 'new () => ButtonFeedback' is not assignable to type 'new (...args: any[]) => Component'.
+          Type 'ButtonFeedback' is not assignable to type 'Component'.
+            Property 'start' is private in type 'ButtonFeedback' but not in type 'Component'.
+  Overload 2 of 3, '(className: string): Component[]', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+  Overload 3 of 3, '(className: string): Component[]', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+assets/scripts/ui/MilestoneSwipe.ts(105,85): error TS2339: Property 'reset' does not exist on type 'Component'.
+assets/scripts/ui/PageKit.ts(72,10): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/ui/pages/HeroPage.ts(37,14): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/ui/pages/HeroPage.ts(60,40): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/ui/pages/HeroPage.ts(61,24): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/ui/pages/HeroPage.ts(61,59): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/ui/pages/HeroPage.ts(114,42): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/ui/Panels.ts(122,44): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>'.
+      Types of construct signatures are incompatible.
+        Type 'new () => ButtonFeedback' is not assignable to type 'new (...args: any[]) => Component'.
+          Type 'ButtonFeedback' is not assignable to type 'Component'.
+            Property 'start' is private in type 'ButtonFeedback' but not in type 'Component'.
+  Overload 2 of 3, '(className: string): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+  Overload 3 of 3, '(className: string): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+assets/scripts/ui/Panels.ts(122,61): error TS2339: Property 'reset' does not exist on type 'Component'.
+assets/scripts/ui/PickArt.ts(27,73): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/ui/SquadPanel.ts(62,12): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/ui/TouchFeedback.ts(45,87): error TS2550: Property 'includes' does not exist on type 'EventTarget[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+assets/scripts/ui/TrainingLobby.ts(86,42): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+assets/scripts/ui/UINotice.ts(140,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Readonly<Vec3>'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/ArcherIdleAnimation.ts(3,25): error TS2307: Cannot find module '../ui/Ux' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/ArcherIdleAnimation.ts(35,41): error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/battle-entry-art-v2/before/assets/scripts/battle/Hero.ts(12,139): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/Hero.ts(13,41): error TS2307: Cannot find module './Monster' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/Hero.ts(14,45): error TS2307: Cannot find module './Projectile' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/Hero.ts(15,31): error TS2307: Cannot find module './DamageService' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/Hero.ts(16,26): error TS2307: Cannot find module '../core/EventBus' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/Hero.ts(17,21): error TS2307: Cannot find module '../core/Sfx' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/Hero.ts(18,30): error TS2307: Cannot find module './BattleSprite' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/Hero.ts(19,34): error TS2307: Cannot find module './HeroBattleMotion' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/Hero.ts(21,37): error TS2307: Cannot find module './SniperIdleAnimation' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/Hero.ts(22,35): error TS2307: Cannot find module './VoltIdleAnimation' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/Hero.ts(23,35): error TS2307: Cannot find module './PyroIdleAnimation' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/Hero.ts(24,35): error TS2307: Cannot find module './MoraIdleAnimation' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/Hero.ts(25,40): error TS2307: Cannot find module './SniperUltimateVFX' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/Hero.ts(26,86): error TS2307: Cannot find module './UltimateTiming' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/HeroSequenceAnimation.ts(3,25): error TS2307: Cannot find module '../ui/Ux' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/HeroSequenceAnimation.ts(45,49): error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(5,28): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(6,43): error TS2307: Cannot find module './UltimateTiming' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(45,47): error TS2339: Property 'windup' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(45,81): error TS2339: Property 'windup' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(50,50): error TS2339: Property 'hero' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(57,41): error TS2339: Property 'hero' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(60,49): error TS2339: Property 'x' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(60,71): error TS2339: Property 'y' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(75,22): error TS2339: Property 'duration' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(103,62): error TS2339: Property 'windup' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(103,78): error TS2339: Property 'windup' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(105,21): error TS2339: Property 'windup' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(114,45): error TS2339: Property 'windup' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(115,57): error TS2339: Property 'windup' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(115,67): error TS2339: Property 'windup' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(116,17): error TS2339: Property 'x' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(116,26): error TS2339: Property 'y' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(119,21): error TS2339: Property 'hero' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(126,21): error TS2339: Property 'hero' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(127,13): error TS2339: Property 'hero' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(130,20): error TS2339: Property 'hero' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(134,20): error TS2339: Property 'hero' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(143,11): error TS2339: Property 'hero' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(143,34): error TS2339: Property 'hero' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(146,23): error TS2339: Property 'hero' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(151,18): error TS2339: Property 'hero' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(154,21): error TS2339: Property 'hero' does not exist on type 'Cast'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(163,17): error TS2339: Property 'contact' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(164,63): error TS2339: Property 'energy' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(165,11): error TS2339: Property 'hero' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(165,34): error TS2339: Property 'contact' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(166,20): error TS2339: Property 'x' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(166,37): error TS2339: Property 'y' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(169,30): error TS2339: Property 'hero' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(170,27): error TS2339: Property 'x' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(170,53): error TS2339: Property 'y' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(171,27): error TS2339: Property 'x' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(171,59): error TS2339: Property 'y' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(174,21): error TS2339: Property 'hero' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(174,46): error TS2339: Property 'hero' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(176,37): error TS2339: Property 'x' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(178,46): error TS2339: Property 'hero' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(179,19): error TS2339: Property 'x' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(179,51): error TS2339: Property 'y' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(180,21): error TS2339: Property 'hero' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(181,13): error TS2339: Property 'hero' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(181,37): error TS2339: Property 'contact' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(183,20): error TS2339: Property 'x' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(183,46): error TS2339: Property 'y' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(184,20): error TS2339: Property 'x' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(184,53): error TS2339: Property 'y' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(190,11): error TS2339: Property 'hero' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(190,32): error TS2339: Property 'contact' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(192,21): error TS2339: Property 'hero' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(196,23): error TS2339: Property 'x' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/battle/UltimatePresentation.ts(196,50): error TS2339: Property 'y' does not exist on type 'Beat'.
+docs/battle-entry-art-v2/before/assets/scripts/Boot.ts(9,48): error TS2307: Cannot find module './config/GameConfig' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/Boot.ts(10,29): error TS2307: Cannot find module './config/Mobs' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/Boot.ts(11,22): error TS2307: Cannot find module './core/Flow' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/Boot.ts(12,30): error TS2307: Cannot find module './ui/UIKit' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/Boot.ts(13,31): error TS2307: Cannot find module './ui/Ux' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/Boot.ts(14,24): error TS2307: Cannot find module './ui/MainUI' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/Boot.ts(15,32): error TS2307: Cannot find module './battle/BattleDirector' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/Boot.ts(16,31): error TS2307: Cannot find module './ui/TouchFeedback' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/Boot.ts(17,26): error TS2307: Cannot find module './ui/UIMotion' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/Boot.ts(80,8): error TS2339: Property 'levelDef' does not exist on type 'Component'.
+docs/battle-entry-art-v2/before/assets/scripts/config/Cards.ts(5,21): error TS2307: Cannot find module './GameConfig' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/BattleEntry.ts(4,31): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/BattleEntry.ts(5,32): error TS2307: Cannot find module './UIArtReady' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/pages/LevelsPage.ts(3,20): error TS2307: Cannot find module '../../config/GameConfig' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/pages/LevelsPage.ts(4,26): error TS2307: Cannot find module '../UIKit' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/pages/LevelsPage.ts(5,27): error TS2307: Cannot find module '../Ux' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/pages/LevelsPage.ts(6,89): error TS2307: Cannot find module '../ComicUI' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/pages/LevelsPage.ts(7,72): error TS2307: Cannot find module '../PageKit' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/pages/LevelsPage.ts(8,74): error TS2307: Cannot find module '../../core/GameData' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/pages/LevelsPage.ts(9,26): error TS2307: Cannot find module '../../core/SaveData' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/pages/LevelsPage.ts(10,22): error TS2307: Cannot find module '../../core/Flow' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/pages/LevelsPage.ts(11,32): error TS2307: Cannot find module '../SquadPanel' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/pages/LevelsPage.ts(12,28): error TS2307: Cannot find module '../ButtonFeedback' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/pages/LevelsPage.ts(13,27): error TS2307: Cannot find module '../UIMotion' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(7,33): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(8,34): error TS2307: Cannot find module '../battle/DamageService' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(10,32): error TS2307: Cannot find module '../battle/BattleDirector' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(11,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(12,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(13,63): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(14,44): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(15,54): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(16,32): error TS2307: Cannot find module './UIArtReady' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(18,25): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(19,82): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(20,95): error TS2307: Cannot find module './BattlePanelSkin' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(21,66): error TS2307: Cannot find module './PausePanelSkin' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(22,103): error TS2307: Cannot find module './SettlementPanelSkin' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/Panels.ts(136,61): error TS2339: Property 'reset' does not exist on type 'Component'.
+docs/battle-entry-art-v2/before/assets/scripts/ui/PickMotion.ts(3,31): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/battle-entry-art-v2/before/assets/scripts/ui/PickMotion.ts(4,25): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/ArcherVFX.ts(3,27): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(6,67): error TS2307: Cannot find module '../config/Mobs' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(7,324): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(8,42): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(9,26): error TS2307: Cannot find module '../core/EventBus' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(12,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(13,117): error TS2307: Cannot find module '../core/GameData' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(14,22): error TS2307: Cannot find module '../core/Flow' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(17,29): error TS2307: Cannot find module './LineDefense' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(18,29): error TS2307: Cannot find module './WaveManager' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(19,35): error TS2307: Cannot find module './Projectile' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(20,27): error TS2307: Cannot find module './Particles' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(21,42): error TS2307: Cannot find module './DamageService' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(22,39): error TS2307: Cannot find module './FloatText' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(23,26): error TS2307: Cannot find module './ComicPop' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(24,26): error TS2307: Cannot find module './ImpactFX' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(25,32): error TS2307: Cannot find module './BattleAmbience' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(26,38): error TS2307: Cannot find module './UltimatePresentation' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(27,43): error TS2307: Cannot find module './UltimateTiming' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(28,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(29,21): error TS2307: Cannot find module '../ui/HUD' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(30,24): error TS2307: Cannot find module '../ui/Panels' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(31,25): error TS2307: Cannot find module '../ui/GmPanel' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(32,30): error TS2307: Cannot find module '../ui/UIKit' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(33,50): error TS2307: Cannot find module '../ui/BattleEntry' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/BattleDirector.ts(521,25): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/battle-exit-death-v3/before/assets/scripts/battle/FrostUltimateVFX.ts(6,38): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/FrostUltimateVFX.ts(7,32): error TS2307: Cannot find module './FrostVFX' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Hero.ts(11,166): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Hero.ts(12,139): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Hero.ts(14,45): error TS2307: Cannot find module './Projectile' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Hero.ts(15,31): error TS2307: Cannot find module './DamageService' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Hero.ts(16,26): error TS2307: Cannot find module '../core/EventBus' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Hero.ts(18,30): error TS2307: Cannot find module './BattleSprite' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Hero.ts(19,34): error TS2307: Cannot find module './HeroBattleMotion' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Hero.ts(20,37): error TS2307: Cannot find module './ArcherIdleAnimation' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Hero.ts(21,37): error TS2307: Cannot find module './SniperIdleAnimation' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Hero.ts(22,35): error TS2307: Cannot find module './VoltIdleAnimation' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Hero.ts(23,35): error TS2307: Cannot find module './PyroIdleAnimation' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Hero.ts(24,35): error TS2307: Cannot find module './MoraIdleAnimation' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Hero.ts(26,86): error TS2307: Cannot find module './UltimateTiming' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Monster.ts(6,49): error TS2307: Cannot find module '../config/Mobs' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Monster.ts(7,38): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Monster.ts(8,26): error TS2307: Cannot find module '../core/EventBus' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Monster.ts(9,30): error TS2307: Cannot find module './BattleSprite' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Monster.ts(10,28): error TS2307: Cannot find module './FloatText' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Monster.ts(11,38): error TS2307: Cannot find module './MobAnim' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/Monster.ts(12,29): error TS2307: Cannot find module './FrostVFX' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/battle/MonsterDeath.ts(3,30): error TS2307: Cannot find module './BattleSprite' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/core/GameAudio.ts(3,26): error TS2307: Cannot find module './SaveData' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/core/GameAudio.ts(245,49): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/battle-exit-death-v3/before/assets/scripts/core/GameAudio.ts(250,54): error TS2550: Property 'finally' does not exist on type 'Promise<[void, void, void]>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+docs/battle-exit-death-v3/before/assets/scripts/core/GameAudio.ts(266,8): error TS2550: Property 'finally' does not exist on type 'Promise<void>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+docs/battle-exit-death-v3/before/assets/scripts/ui/PickMotion.ts(3,31): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/battle-exit-death-v3/before/assets/scripts/ui/PickMotion.ts(4,25): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/battle-panels-comic-v2/original-layout.ts(6,175): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/battle-panels-comic-v2/original-layout.ts(7,33): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/battle-panels-comic-v2/original-layout.ts(8,34): error TS2307: Cannot find module '../battle/DamageService' or its corresponding type declarations.
+docs/battle-panels-comic-v2/original-layout.ts(9,26): error TS2307: Cannot find module '../battle/Hero' or its corresponding type declarations.
+docs/battle-panels-comic-v2/original-layout.ts(10,32): error TS2307: Cannot find module '../battle/BattleDirector' or its corresponding type declarations.
+docs/battle-panels-comic-v2/original-layout.ts(11,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/battle-panels-comic-v2/original-layout.ts(12,26): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/battle-panels-comic-v2/original-layout.ts(13,114): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/battle-panels-comic-v2/original-layout.ts(14,36): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(6,67): error TS2307: Cannot find module '../config/Mobs' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(7,324): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(8,87): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(10,21): error TS2307: Cannot find module '../core/Sfx' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(11,27): error TS2307: Cannot find module '../core/GameAudio' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(12,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(13,117): error TS2307: Cannot find module '../core/GameData' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(14,22): error TS2307: Cannot find module '../core/Flow' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(15,32): error TS2307: Cannot find module './Monster' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(16,81): error TS2307: Cannot find module './Hero' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(17,29): error TS2307: Cannot find module './LineDefense' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(19,35): error TS2307: Cannot find module './Projectile' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(20,27): error TS2307: Cannot find module './Particles' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(21,42): error TS2307: Cannot find module './DamageService' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(22,39): error TS2307: Cannot find module './FloatText' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(23,26): error TS2307: Cannot find module './ComicPop' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(24,26): error TS2307: Cannot find module './ImpactFX' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(25,32): error TS2307: Cannot find module './BattleAmbience' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(26,38): error TS2307: Cannot find module './UltimatePresentation' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(27,43): error TS2307: Cannot find module './UltimateTiming' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(28,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(29,21): error TS2307: Cannot find module '../ui/HUD' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(30,24): error TS2307: Cannot find module '../ui/Panels' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(31,25): error TS2307: Cannot find module '../ui/GmPanel' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(32,30): error TS2307: Cannot find module '../ui/UIKit' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(34,29): error TS2307: Cannot find module '../ui/PickArt' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/BattleDirector.ts(538,25): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/WaveManager.ts(5,51): error TS2307: Cannot find module '../config/Mobs' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/battle/WaveManager.ts(6,32): error TS2307: Cannot find module './Monster' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/BattleEntry.ts(4,31): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/BattleEntry.ts(5,25): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/BattleEntryWarmup.ts(3,35): error TS2307: Cannot find module '../battle/ArcherIdleAnimation' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/BattleEntryWarmup.ts(4,33): error TS2307: Cannot find module '../battle/HeroSequenceAnimation' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/BattleEntryWarmup.ts(5,25): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/BattleEntryWarmup.ts(6,29): error TS2307: Cannot find module './PickArt' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/ComicUI.ts(3,39): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/ComicUI.ts(4,27): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/ComicUI.ts(5,28): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/ComicUI.ts(6,37): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/ComicUI.ts(7,34): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/MainUI.ts(7,37): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/MainUI.ts(8,22): error TS2307: Cannot find module '../core/Flow' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/MainUI.ts(9,27): error TS2307: Cannot find module '../core/GameAudio' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/MainUI.ts(10,28): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/MainUI.ts(11,38): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/MainUI.ts(12,43): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/MainUI.ts(13,27): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/MainUI.ts(16,47): error TS2307: Cannot find module './ResourceBar' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/MainUI.ts(17,27): error TS2307: Cannot find module './pages/ShopPage' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/MainUI.ts(18,29): error TS2307: Cannot find module './pages/HeroPage' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/MainUI.ts(19,29): error TS2307: Cannot find module './pages/LevelsPage' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/MainUI.ts(20,30): error TS2307: Cannot find module './pages/UpgradePage' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/PageKit.ts(6,25): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/PageKit.ts(7,87): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/PageKit.ts(8,27): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/PageKit.ts(10,51): error TS2307: Cannot find module '../core/GameData' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/PageKit.ts(11,26): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/PageKit.ts(12,30): error TS2307: Cannot find module '../battle/BattleSprite' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/PageKit.ts(13,28): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/PageKit.ts(14,37): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/PageKit.ts(15,25): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/PageKit.ts(16,43): error TS2307: Cannot find module './UINotice' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/PageKit.ts(72,10): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/pages/BasePage.ts(3,41): error TS2307: Cannot find module '../UIKit' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/pages/BasePage.ts(4,43): error TS2307: Cannot find module '../Ux' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/pages/BasePage.ts(7,20): error TS2307: Cannot find module '../../config/GameConfig' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/pages/BasePage.ts(8,129): error TS2307: Cannot find module '../../core/GameData' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/pages/BasePage.ts(9,26): error TS2307: Cannot find module '../../core/SaveData' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/pages/BasePage.ts(10,28): error TS2307: Cannot find module '../ButtonFeedback' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/pages/BasePage.ts(11,27): error TS2307: Cannot find module '../UIMotion' or its corresponding type declarations.
+docs/boss-warning-base-modal-v1/before/assets/scripts/ui/pages/BasePage.ts(12,30): error TS2307: Cannot find module '../GrowthFeedback' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/battle/BattleLoot.ts(5,24): error TS2307: Cannot find module '../config/Mobs' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/battle/BattleLoot.ts(7,27): error TS2307: Cannot find module '../core/GameAudio' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/battle/BattleLoot.ts(9,65): error TS2307: Cannot find module '../core/StageLoot' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/battle/BattleLoot.ts(10,28): error TS2307: Cannot find module '../ui/ButtonFeedback' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/battle/BattleLoot.ts(12,39): error TS2307: Cannot find module '../ui/UIKit' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/battle/BattleLoot.ts(13,36): error TS2307: Cannot find module '../ui/Ux' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/battle/BattleLoot.ts(14,31): error TS2307: Cannot find module '../ui/UIMotion' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/battle/FrostUltimateVFX.ts(5,21): error TS2307: Cannot find module '../core/Sfx' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/battle/FrostUltimateVFX.ts(7,32): error TS2307: Cannot find module './FrostVFX' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/battle/FrostUltimateVFX.ts(8,64): error TS2307: Cannot find module './BattleDepth' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/config/LevelDifficulty.ts(2,79): error TS2307: Cannot find module './Mobs' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/core/GameData.ts(65,20): error TS2550: Property 'includes' does not exist on type 'StatKey[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/hero-weapons-v1/before/assets/scripts/core/GameData.ts(68,13): error TS2550: Property 'includes' does not exist on type 'StatKey[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/hero-weapons-v1/before/assets/scripts/core/GameData.ts(80,28): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/hero-weapons-v1/before/assets/scripts/core/GameData.ts(168,68): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/hero-weapons-v1/before/assets/scripts/core/GameData.ts(174,10): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/hero-weapons-v1/before/assets/scripts/core/GameData.ts(186,11): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/hero-weapons-v1/before/assets/scripts/core/GameData.ts(473,14): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/hero-weapons-v1/before/assets/scripts/core/GameData.ts(473,49): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/hero-weapons-v1/before/assets/scripts/core/GameData.ts(582,78): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/hero-weapons-v1/before/assets/scripts/core/GameData.ts(583,84): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/hero-weapons-v1/before/assets/scripts/core/GameData.ts(587,17): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/hero-weapons-v1/before/assets/scripts/core/GameData.ts(588,23): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/hero-weapons-v1/before/assets/scripts/core/GameData.ts(597,16): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/hero-weapons-v1/before/assets/scripts/ui/BattleEntry.ts(4,31): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/BattleEntry.ts(5,25): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/BattleEntry.ts(6,49): error TS2307: Cannot find module './BattleEntryWarmup' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/GrowthFeedback.ts(4,165): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/GrowthFeedback.ts(6,23): error TS2307: Cannot find module './PageKit' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/GrowthFeedback.ts(7,48): error TS2307: Cannot find module './UINotice' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/GrowthFeedback.ts(37,78): error TS2550: Property 'includes' does not exist on type 'StatKey[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/hero-weapons-v1/before/assets/scripts/ui/HeroComic.ts(3,27): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/HeroComic.ts(4,27): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/HeroComic.ts(5,48): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/LevelLootPreview.ts(6,34): error TS2307: Cannot find module '../core/StageLoot' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/LevelLootPreview.ts(7,29): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/LevelLootPreview.ts(8,71): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/LevelLootPreview.ts(14,43): error TS2339: Property 'baseGold' does not exist on type 'ChallengeDef'.
+docs/hero-weapons-v1/before/assets/scripts/ui/LevelLootPreview.ts(37,142): error TS2345: Argument of type '{ elite: boolean; }' is not assignable to parameter of type 'Pick<MobDef, "elite" | "boss">'.
+  Property 'boss' is missing in type '{ elite: boolean; }' but required in type 'Pick<MobDef, "elite" | "boss">'.
+docs/hero-weapons-v1/before/assets/scripts/ui/LevelLootPreview.ts(45,96): error TS2339: Property 'id' does not exist on type 'ChallengeDef'.
+docs/hero-weapons-v1/before/assets/scripts/ui/LevelLootPreview.ts(46,34): error TS2339: Property 'waves' does not exist on type 'ChallengeDef'.
+docs/hero-weapons-v1/before/assets/scripts/ui/LevelLootPreview.ts(51,139): error TS2345: Argument of type '{ elite: boolean; }' is not assignable to parameter of type 'Pick<MobDef, "elite" | "boss">'.
+  Property 'boss' is missing in type '{ elite: boolean; }' but required in type 'Pick<MobDef, "elite" | "boss">'.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/HeroPage.ts(4,48): error TS2307: Cannot find module '../UIKit' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/HeroPage.ts(5,82): error TS2307: Cannot find module '../ComicUI' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/HeroPage.ts(7,106): error TS2307: Cannot find module '../PageKit' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/HeroPage.ts(13,28): error TS2307: Cannot find module '../ButtonFeedback' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/HeroPage.ts(14,48): error TS2307: Cannot find module '../UIMotion' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/HeroPage.ts(15,25): error TS2307: Cannot find module '../UIAudio' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/HeroPage.ts(35,14): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/HeroPage.ts(58,40): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/HeroPage.ts(59,24): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/HeroPage.ts(59,59): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/HeroPage.ts(113,10): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/ShopPage.ts(4,39): error TS2307: Cannot find module '../UIKit' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/ShopPage.ts(5,27): error TS2307: Cannot find module '../Ux' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/ShopPage.ts(6,97): error TS2307: Cannot find module '../ComicUI' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/ShopPage.ts(7,106): error TS2307: Cannot find module '../PageKit' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/ShopPage.ts(10,53): error TS2307: Cannot find module '../UIMotion' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/ShopPage.ts(11,28): error TS2307: Cannot find module '../ButtonFeedback' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/UpgradePage.ts(6,49): error TS2307: Cannot find module '../UIKit' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/UpgradePage.ts(7,27): error TS2307: Cannot find module '../Ux' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/pages/UpgradePage.ts(8,37): error TS2307: Cannot find module '../PageKit' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(6,175): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(8,34): error TS2307: Cannot find module '../battle/DamageService' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(9,26): error TS2307: Cannot find module '../battle/Hero' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(10,32): error TS2307: Cannot find module '../battle/BattleDirector' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(11,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(13,34): error TS2307: Cannot find module '../core/StageLoot' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(15,63): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(16,44): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(17,54): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(18,32): error TS2307: Cannot find module './UIArtReady' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(19,28): error TS2307: Cannot find module './PickMotion' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(20,25): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(21,29): error TS2307: Cannot find module './PickArt' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(22,82): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(23,95): error TS2307: Cannot find module './BattlePanelSkin' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(24,78): error TS2307: Cannot find module './PausePanelSkin' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(25,103): error TS2307: Cannot find module './SettlementPanelSkin' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/Panels.ts(122,61): error TS2339: Property 'reset' does not exist on type 'Component'.
+docs/hero-weapons-v1/before/assets/scripts/ui/TrainingLobby.ts(4,37): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/TrainingLobby.ts(5,47): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/TrainingLobby.ts(6,27): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/TrainingLobby.ts(7,82): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/TrainingLobby.ts(9,119): error TS2307: Cannot find module './PageKit' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/TrainingLobby.ts(11,28): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/TrainingLobby.ts(12,27): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/TrainingLobby.ts(13,32): error TS2307: Cannot find module './MilestoneSwipe' or its corresponding type declarations.
+docs/hero-weapons-v1/before/assets/scripts/ui/TrainingLobby.ts(87,10): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/hero-weapons-v1/before/Hero.ts(11,166): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(12,139): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(13,41): error TS2307: Cannot find module './Monster' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(14,45): error TS2307: Cannot find module './Projectile' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(15,31): error TS2307: Cannot find module './DamageService' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(16,26): error TS2307: Cannot find module '../core/EventBus' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(17,21): error TS2307: Cannot find module '../core/Sfx' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(18,30): error TS2307: Cannot find module './BattleSprite' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(19,34): error TS2307: Cannot find module './HeroBattleMotion' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(20,37): error TS2307: Cannot find module './ArcherIdleAnimation' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(21,37): error TS2307: Cannot find module './SniperIdleAnimation' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(22,35): error TS2307: Cannot find module './VoltIdleAnimation' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(23,35): error TS2307: Cannot find module './PyroIdleAnimation' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(24,35): error TS2307: Cannot find module './MoraIdleAnimation' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(25,40): error TS2307: Cannot find module './SniperUltimateVFX' or its corresponding type declarations.
+docs/hero-weapons-v1/before/Hero.ts(26,86): error TS2307: Cannot find module './UltimateTiming' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/MilestoneSwipe.ts(3,32): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/MilestoneSwipe.ts(4,25): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/MilestoneSwipe.ts(5,49): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/MilestoneSwipe.ts(69,85): error TS2339: Property 'reset' does not exist on type 'Component'.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/TrainingLobby.ts(3,20): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/TrainingLobby.ts(4,37): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/TrainingLobby.ts(5,47): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/TrainingLobby.ts(6,27): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/TrainingLobby.ts(7,82): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/TrainingLobby.ts(8,79): error TS2307: Cannot find module './HeroComic' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/TrainingLobby.ts(9,119): error TS2307: Cannot find module './PageKit' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/TrainingLobby.ts(10,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/TrainingLobby.ts(11,28): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/TrainingLobby.ts(12,27): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/TrainingLobby.ts(14,44): error TS2307: Cannot find module './GrowthFeedback' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/TrainingLobby.ts(19,8): error TS2307: Cannot find module '../core/GameData' or its corresponding type declarations.
+docs/level-breakthrough-swipe-v1/before/assets/scripts/ui/TrainingLobby.ts(87,10): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(6,67): error TS2307: Cannot find module '../config/Mobs' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(7,324): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(8,87): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(10,21): error TS2307: Cannot find module '../core/Sfx' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(11,27): error TS2307: Cannot find module '../core/GameAudio' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(12,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(14,22): error TS2307: Cannot find module '../core/Flow' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(16,81): error TS2307: Cannot find module './Hero' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(17,29): error TS2307: Cannot find module './LineDefense' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(18,29): error TS2307: Cannot find module './WaveManager' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(19,35): error TS2307: Cannot find module './Projectile' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(20,27): error TS2307: Cannot find module './Particles' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(21,42): error TS2307: Cannot find module './DamageService' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(22,39): error TS2307: Cannot find module './FloatText' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(23,26): error TS2307: Cannot find module './ComicPop' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(24,26): error TS2307: Cannot find module './ImpactFX' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(25,32): error TS2307: Cannot find module './BattleAmbience' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(26,38): error TS2307: Cannot find module './UltimatePresentation' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(27,43): error TS2307: Cannot find module './UltimateTiming' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(28,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(29,21): error TS2307: Cannot find module '../ui/HUD' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(31,25): error TS2307: Cannot find module '../ui/GmPanel' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(32,30): error TS2307: Cannot find module '../ui/UIKit' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(33,50): error TS2307: Cannot find module '../ui/BattleEntry' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(34,29): error TS2307: Cannot find module '../ui/PickArt' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(35,29): error TS2307: Cannot find module '../ui/BossWarning' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/BattleDirector.ts(551,25): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/Monster.ts(6,49): error TS2307: Cannot find module '../config/Mobs' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/Monster.ts(7,38): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/Monster.ts(9,21): error TS2307: Cannot find module '../core/Sfx' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/Monster.ts(10,30): error TS2307: Cannot find module './BattleSprite' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/Monster.ts(11,28): error TS2307: Cannot find module './FloatText' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/Monster.ts(12,38): error TS2307: Cannot find module './MobAnim' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/Monster.ts(13,29): error TS2307: Cannot find module './FrostVFX' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/Monster.ts(14,77): error TS2307: Cannot find module './BattleDepth' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/battle/Monster.ts(15,48): error TS2307: Cannot find module './MonsterDeath' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/Boot.ts(9,48): error TS2307: Cannot find module './config/GameConfig' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/Boot.ts(10,29): error TS2307: Cannot find module './config/Mobs' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/Boot.ts(11,22): error TS2307: Cannot find module './core/Flow' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/Boot.ts(12,30): error TS2307: Cannot find module './ui/UIKit' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/Boot.ts(13,31): error TS2307: Cannot find module './ui/Ux' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/Boot.ts(14,24): error TS2307: Cannot find module './ui/MainUI' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/Boot.ts(16,31): error TS2307: Cannot find module './ui/TouchFeedback' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/Boot.ts(17,26): error TS2307: Cannot find module './ui/UIMotion' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/Boot.ts(18,32): error TS2307: Cannot find module './ui/BattleEntry' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/Boot.ts(19,30): error TS2307: Cannot find module './ui/BattleEntryWarmup' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/core/GameData.ts(5,58): error TS2307: Cannot find module './SaveData' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/core/GameData.ts(64,20): error TS2550: Property 'includes' does not exist on type 'StatKey[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/level-difficulty-loot-v1/before/assets/scripts/core/GameData.ts(67,13): error TS2550: Property 'includes' does not exist on type 'StatKey[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/level-difficulty-loot-v1/before/assets/scripts/core/GameData.ts(79,28): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/level-difficulty-loot-v1/before/assets/scripts/core/GameData.ts(167,68): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/level-difficulty-loot-v1/before/assets/scripts/core/GameData.ts(173,10): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/level-difficulty-loot-v1/before/assets/scripts/core/GameData.ts(185,11): error TS2550: Property 'includes' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2016' or later.
+docs/level-difficulty-loot-v1/before/assets/scripts/core/GameData.ts(472,14): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/level-difficulty-loot-v1/before/assets/scripts/core/GameData.ts(472,49): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/pages/LevelsPage.ts(3,20): error TS2307: Cannot find module '../../config/GameConfig' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/pages/LevelsPage.ts(4,26): error TS2307: Cannot find module '../UIKit' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/pages/LevelsPage.ts(5,27): error TS2307: Cannot find module '../Ux' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/pages/LevelsPage.ts(6,89): error TS2307: Cannot find module '../ComicUI' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/pages/LevelsPage.ts(7,72): error TS2307: Cannot find module '../PageKit' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/pages/LevelsPage.ts(9,26): error TS2307: Cannot find module '../../core/SaveData' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/pages/LevelsPage.ts(10,22): error TS2307: Cannot find module '../../core/Flow' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/pages/LevelsPage.ts(11,32): error TS2307: Cannot find module '../SquadPanel' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/pages/LevelsPage.ts(12,28): error TS2307: Cannot find module '../ButtonFeedback' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/pages/LevelsPage.ts(13,27): error TS2307: Cannot find module '../UIMotion' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/pages/LevelsPage.ts(14,45): error TS2307: Cannot find module '../BattleEntry' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/pages/LevelsPage.ts(15,33): error TS2307: Cannot find module '../BattleEntryWarmup' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(6,175): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(7,33): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(8,34): error TS2307: Cannot find module '../battle/DamageService' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(9,26): error TS2307: Cannot find module '../battle/Hero' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(11,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(12,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(13,63): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(14,44): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(15,54): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(16,32): error TS2307: Cannot find module './UIArtReady' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(17,28): error TS2307: Cannot find module './PickMotion' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(18,25): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(19,29): error TS2307: Cannot find module './PickArt' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(20,82): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(21,95): error TS2307: Cannot find module './BattlePanelSkin' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(22,78): error TS2307: Cannot find module './PausePanelSkin' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/Panels.ts(120,61): error TS2339: Property 'reset' does not exist on type 'Component'.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/SettlementPanelSkin.ts(3,20): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/SettlementPanelSkin.ts(4,34): error TS2307: Cannot find module '../battle/DamageService' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/SettlementPanelSkin.ts(5,34): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/SettlementPanelSkin.ts(6,27): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/SettlementPanelSkin.ts(7,48): error TS2307: Cannot find module './BattlePanelSkin' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/SettlementPanelSkin.ts(8,35): error TS2307: Cannot find module './BattleProgressBar' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/SettlementPanelSkin.ts(9,30): error TS2307: Cannot find module './PausePanelSkin' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/SettlementPanelSkin.ts(10,28): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/level-difficulty-loot-v1/before/assets/scripts/ui/SettlementPanelSkin.ts(11,55): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(3,20): error TS2307: Cannot find module '../../config/GameConfig' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(4,26): error TS2307: Cannot find module '../UIKit' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(5,27): error TS2307: Cannot find module '../Ux' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(6,89): error TS2307: Cannot find module '../ComicUI' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(7,72): error TS2307: Cannot find module '../PageKit' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(8,60): error TS2307: Cannot find module '../../core/GameData' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(9,65): error TS2307: Cannot find module '../../config/LevelDifficulty' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(10,34): error TS2307: Cannot find module '../LevelLootPreview' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(11,26): error TS2307: Cannot find module '../../core/SaveData' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(12,22): error TS2307: Cannot find module '../../core/Flow' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(13,32): error TS2307: Cannot find module '../SquadPanel' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(14,28): error TS2307: Cannot find module '../ButtonFeedback' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(15,27): error TS2307: Cannot find module '../UIMotion' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(16,45): error TS2307: Cannot find module '../BattleEntry' or its corresponding type declarations.
+docs/level-reward-tabs-v1/before/assets/scripts/ui/pages/LevelsPage.ts(17,33): error TS2307: Cannot find module '../BattleEntryWarmup' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(6,67): error TS2307: Cannot find module '../config/Mobs' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(7,324): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(8,42): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(9,26): error TS2307: Cannot find module '../core/EventBus' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(10,21): error TS2307: Cannot find module '../core/Sfx' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(11,27): error TS2307: Cannot find module '../core/GameAudio' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(12,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(13,117): error TS2307: Cannot find module '../core/GameData' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(14,22): error TS2307: Cannot find module '../core/Flow' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(15,32): error TS2307: Cannot find module './Monster' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(17,29): error TS2307: Cannot find module './LineDefense' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(18,29): error TS2307: Cannot find module './WaveManager' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(19,35): error TS2307: Cannot find module './Projectile' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(20,27): error TS2307: Cannot find module './Particles' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(21,42): error TS2307: Cannot find module './DamageService' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(22,39): error TS2307: Cannot find module './FloatText' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(23,26): error TS2307: Cannot find module './ComicPop' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(24,26): error TS2307: Cannot find module './ImpactFX' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(25,32): error TS2307: Cannot find module './BattleAmbience' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(26,38): error TS2307: Cannot find module './UltimatePresentation' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(27,43): error TS2307: Cannot find module './UltimateTiming' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(28,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(31,25): error TS2307: Cannot find module '../ui/GmPanel' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(32,30): error TS2307: Cannot find module '../ui/UIKit' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/BattleDirector.ts(517,25): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(11,166): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(12,139): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(13,41): error TS2307: Cannot find module './Monster' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(14,45): error TS2307: Cannot find module './Projectile' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(15,31): error TS2307: Cannot find module './DamageService' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(16,26): error TS2307: Cannot find module '../core/EventBus' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(17,21): error TS2307: Cannot find module '../core/Sfx' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(18,30): error TS2307: Cannot find module './BattleSprite' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(19,34): error TS2307: Cannot find module './HeroBattleMotion' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(20,37): error TS2307: Cannot find module './ArcherIdleAnimation' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(21,37): error TS2307: Cannot find module './SniperIdleAnimation' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(22,35): error TS2307: Cannot find module './VoltIdleAnimation' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(23,35): error TS2307: Cannot find module './PyroIdleAnimation' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(24,35): error TS2307: Cannot find module './MoraIdleAnimation' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(25,40): error TS2307: Cannot find module './SniperUltimateVFX' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/battle/Hero.ts(26,86): error TS2307: Cannot find module './UltimateTiming' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/Boot.ts(9,48): error TS2307: Cannot find module './config/GameConfig' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/Boot.ts(10,29): error TS2307: Cannot find module './config/Mobs' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/Boot.ts(11,22): error TS2307: Cannot find module './core/Flow' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/Boot.ts(12,30): error TS2307: Cannot find module './ui/UIKit' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/Boot.ts(13,31): error TS2307: Cannot find module './ui/Ux' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/Boot.ts(14,24): error TS2307: Cannot find module './ui/MainUI' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/Boot.ts(16,31): error TS2307: Cannot find module './ui/TouchFeedback' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/ButtonFeedback.ts(3,34): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/ButtonFeedback.ts(39,11): error TS2416: Property 'start' in type 'ButtonFeedback' is not assignable to the same property in base type 'Component'.
+  Type 'Vec2' is not assignable to type '() => void'.
+    Type 'Vec2' provides no match for the signature '(): void'.
+docs/pick-motion-v2/before/assets/scripts/ui/ButtonFeedback.ts(87,31): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>'.
+      Types of construct signatures are incompatible.
+        Type 'new () => ButtonFeedback' is not assignable to type 'new (...args: any[]) => Component'.
+          Type 'ButtonFeedback' is not assignable to type 'Component'.
+            Property 'start' is private in type 'ButtonFeedback' but not in type 'Component'.
+  Overload 2 of 3, '(className: string): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+  Overload 3 of 3, '(className: string): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+docs/pick-motion-v2/before/assets/scripts/ui/ButtonFeedback.ts(183,29): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>'.
+      Types of construct signatures are incompatible.
+        Type 'new () => ButtonFeedback' is not assignable to type 'new (...args: any[]) => Component'.
+          Type 'ButtonFeedback' is not assignable to type 'Component'.
+            Property 'start' is private in type 'ButtonFeedback' but not in type 'Component'.
+  Overload 2 of 3, '(className: string): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+  Overload 3 of 3, '(className: string): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+docs/pick-motion-v2/before/assets/scripts/ui/ButtonFeedback.ts(183,66): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component>): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component>'.
+      Types of construct signatures are incompatible.
+        Type 'new () => ButtonFeedback' is not assignable to type 'new (...args: any[]) => Component'.
+          Type 'ButtonFeedback' is not assignable to type 'Component'.
+            Property 'start' is private in type 'ButtonFeedback' but not in type 'Component'.
+  Overload 2 of 3, '(className: string): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+  Overload 3 of 3, '(className: string): Component', gave the following error.
+    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.
+docs/pick-motion-v2/before/assets/scripts/ui/ButtonFeedback.ts(183,83): error TS2339: Property 'configure' does not exist on type 'Component'.
+docs/pick-motion-v2/before/assets/scripts/ui/HUD.ts(7,34): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/HUD.ts(8,117): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/HUD.ts(9,27): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/HUD.ts(12,23): error TS2307: Cannot find module '../core/GameData' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/HUD.ts(13,29): error TS2307: Cannot find module './UltEnergyFx' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/HUD.ts(14,74): error TS2307: Cannot find module './BattleProgressBar' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/HUD.ts(354,58): error TS2550: Property 'padStart' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/pick-motion-v2/before/assets/scripts/ui/HUD.ts(354,100): error TS2550: Property 'padStart' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/LevelsPage.ts(3,20): error TS2307: Cannot find module '../../config/GameConfig' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/LevelsPage.ts(4,35): error TS2307: Cannot find module '../UIKit' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/LevelsPage.ts(5,27): error TS2307: Cannot find module '../Ux' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/LevelsPage.ts(6,89): error TS2307: Cannot find module '../ComicUI' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/LevelsPage.ts(7,72): error TS2307: Cannot find module '../PageKit' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/LevelsPage.ts(8,74): error TS2307: Cannot find module '../../core/GameData' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/LevelsPage.ts(9,26): error TS2307: Cannot find module '../../core/SaveData' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/LevelsPage.ts(10,22): error TS2307: Cannot find module '../../core/Flow' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/LevelsPage.ts(11,32): error TS2307: Cannot find module '../SquadPanel' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/ShopPage.ts(3,20): error TS2307: Cannot find module '../../config/GameConfig' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/ShopPage.ts(4,27): error TS2307: Cannot find module '../UIKit' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/ShopPage.ts(5,27): error TS2307: Cannot find module '../Ux' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/ShopPage.ts(6,97): error TS2307: Cannot find module '../ComicUI' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/ShopPage.ts(7,106): error TS2307: Cannot find module '../PageKit' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/ShopPage.ts(8,147): error TS2307: Cannot find module '../../core/GameData' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/pages/ShopPage.ts(9,26): error TS2307: Cannot find module '../../core/SaveData' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/Panels.ts(6,175): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/Panels.ts(7,33): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/Panels.ts(8,34): error TS2307: Cannot find module '../battle/DamageService' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/Panels.ts(11,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/Panels.ts(12,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/Panels.ts(13,63): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/Panels.ts(16,25): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/Panels.ts(17,82): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/Panels.ts(18,95): error TS2307: Cannot find module './BattlePanelSkin' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/Panels.ts(19,66): error TS2307: Cannot find module './PausePanelSkin' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/Panels.ts(20,103): error TS2307: Cannot find module './SettlementPanelSkin' or its corresponding type declarations.
+docs/pick-motion-v2/before/assets/scripts/ui/UIMotion.ts(3,25): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(6,67): error TS2307: Cannot find module '../config/Mobs' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(7,324): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(8,87): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(9,26): error TS2307: Cannot find module '../core/EventBus' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(10,21): error TS2307: Cannot find module '../core/Sfx' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(11,27): error TS2307: Cannot find module '../core/GameAudio' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(12,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(13,117): error TS2307: Cannot find module '../core/GameData' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(15,32): error TS2307: Cannot find module './Monster' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(16,81): error TS2307: Cannot find module './Hero' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(17,29): error TS2307: Cannot find module './LineDefense' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(18,29): error TS2307: Cannot find module './WaveManager' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(19,35): error TS2307: Cannot find module './Projectile' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(20,27): error TS2307: Cannot find module './Particles' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(21,42): error TS2307: Cannot find module './DamageService' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(22,39): error TS2307: Cannot find module './FloatText' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(23,26): error TS2307: Cannot find module './ComicPop' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(24,26): error TS2307: Cannot find module './ImpactFX' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(25,32): error TS2307: Cannot find module './BattleAmbience' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(26,38): error TS2307: Cannot find module './UltimatePresentation' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(27,43): error TS2307: Cannot find module './UltimateTiming' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(28,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(29,21): error TS2307: Cannot find module '../ui/HUD' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(31,25): error TS2307: Cannot find module '../ui/GmPanel' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(32,30): error TS2307: Cannot find module '../ui/UIKit' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/battle/BattleDirector.ts(537,25): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/BattleEntry.ts(4,31): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/BattleEntry.ts(5,25): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/BattleEntryWarmup.ts(3,35): error TS2307: Cannot find module '../battle/ArcherIdleAnimation' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/BattleEntryWarmup.ts(4,33): error TS2307: Cannot find module '../battle/HeroSequenceAnimation' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/BattleEntryWarmup.ts(5,25): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/HeroComic.ts(3,27): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/HeroComic.ts(4,27): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/HeroComic.ts(5,48): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/HeroComic.ts(6,27): error TS2307: Cannot find module '../core/GameData' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/pages/LevelsPage.ts(3,20): error TS2307: Cannot find module '../../config/GameConfig' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/pages/LevelsPage.ts(4,26): error TS2307: Cannot find module '../UIKit' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/pages/LevelsPage.ts(5,27): error TS2307: Cannot find module '../Ux' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/pages/LevelsPage.ts(6,89): error TS2307: Cannot find module '../ComicUI' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/pages/LevelsPage.ts(7,72): error TS2307: Cannot find module '../PageKit' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/pages/LevelsPage.ts(8,74): error TS2307: Cannot find module '../../core/GameData' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/pages/LevelsPage.ts(9,26): error TS2307: Cannot find module '../../core/SaveData' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/pages/LevelsPage.ts(11,32): error TS2307: Cannot find module '../SquadPanel' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/pages/LevelsPage.ts(12,28): error TS2307: Cannot find module '../ButtonFeedback' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/pages/LevelsPage.ts(13,27): error TS2307: Cannot find module '../UIMotion' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/Panels.ts(6,175): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/Panels.ts(7,33): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/Panels.ts(8,34): error TS2307: Cannot find module '../battle/DamageService' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/Panels.ts(9,26): error TS2307: Cannot find module '../battle/Hero' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/Panels.ts(11,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/Panels.ts(12,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/Panels.ts(13,63): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/Panels.ts(14,44): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/Panels.ts(15,54): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/Panels.ts(16,32): error TS2307: Cannot find module './UIArtReady' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/Panels.ts(18,25): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/Panels.ts(19,82): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/Panels.ts(20,95): error TS2307: Cannot find module './BattlePanelSkin' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/Panels.ts(136,61): error TS2339: Property 'reset' does not exist on type 'Component'.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/PausePanelSkin.ts(3,22): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/PausePanelSkin.ts(4,48): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/PausePanelSkin.ts(5,28): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/PickMotion.ts(3,31): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/PickMotion.ts(4,25): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/SettlementPanelSkin.ts(3,20): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/SettlementPanelSkin.ts(4,34): error TS2307: Cannot find module '../battle/DamageService' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/SettlementPanelSkin.ts(5,34): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/SettlementPanelSkin.ts(6,27): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/SettlementPanelSkin.ts(7,48): error TS2307: Cannot find module './BattlePanelSkin' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/SettlementPanelSkin.ts(8,35): error TS2307: Cannot find module './BattleProgressBar' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/SettlementPanelSkin.ts(10,28): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/settlement-pause-layout-v2/before/assets/scripts/ui/SettlementPanelSkin.ts(11,43): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(6,67): error TS2307: Cannot find module '../config/Mobs' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(7,324): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(9,26): error TS2307: Cannot find module '../core/EventBus' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(10,21): error TS2307: Cannot find module '../core/Sfx' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(11,27): error TS2307: Cannot find module '../core/GameAudio' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(12,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(13,117): error TS2307: Cannot find module '../core/GameData' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(14,22): error TS2307: Cannot find module '../core/Flow' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(15,32): error TS2307: Cannot find module './Monster' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(16,81): error TS2307: Cannot find module './Hero' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(17,29): error TS2307: Cannot find module './LineDefense' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(18,29): error TS2307: Cannot find module './WaveManager' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(19,35): error TS2307: Cannot find module './Projectile' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(20,27): error TS2307: Cannot find module './Particles' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(21,42): error TS2307: Cannot find module './DamageService' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(22,39): error TS2307: Cannot find module './FloatText' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(23,26): error TS2307: Cannot find module './ComicPop' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(24,26): error TS2307: Cannot find module './ImpactFX' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(25,32): error TS2307: Cannot find module './BattleAmbience' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(26,38): error TS2307: Cannot find module './UltimatePresentation' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(27,43): error TS2307: Cannot find module './UltimateTiming' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(28,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(30,24): error TS2307: Cannot find module '../ui/Panels' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(31,25): error TS2307: Cannot find module '../ui/GmPanel' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(32,30): error TS2307: Cannot find module '../ui/UIKit' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(33,50): error TS2307: Cannot find module '../ui/BattleEntry' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/battle/BattleDirector.ts(524,25): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/stage-xp-flow-v1/before/assets/scripts/ui/BattleProgressBar.ts(3,31): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/ui/HUD.ts(8,117): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/ui/HUD.ts(9,27): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/ui/HUD.ts(11,26): error TS2307: Cannot find module '../battle/Hero' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/ui/HUD.ts(12,23): error TS2307: Cannot find module '../core/GameData' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/ui/HUD.ts(13,29): error TS2307: Cannot find module './UltEnergyFx' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/ui/HUD.ts(15,28): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/stage-xp-flow-v1/before/assets/scripts/ui/HUD.ts(354,58): error TS2550: Property 'padStart' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/stage-xp-flow-v1/before/assets/scripts/ui/HUD.ts(354,100): error TS2550: Property 'padStart' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(6,54): error TS2307: Cannot find module '../config/Mobs' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(7,61): error TS2307: Cannot find module '../config/LevelDifficulty' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(8,324): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(9,87): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(10,38): error TS2307: Cannot find module '../core/EventBus' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(11,21): error TS2307: Cannot find module '../core/Sfx' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(12,27): error TS2307: Cannot find module '../core/GameAudio' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(13,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(14,107): error TS2307: Cannot find module '../core/GameData' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(15,37): error TS2307: Cannot find module '../core/StageLoot' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(16,43): error TS2307: Cannot find module './BattleLoot' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(17,22): error TS2307: Cannot find module '../core/Flow' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(18,32): error TS2307: Cannot find module './Monster' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(19,81): error TS2307: Cannot find module './Hero' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(21,29): error TS2307: Cannot find module './WaveManager' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(22,35): error TS2307: Cannot find module './Projectile' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(23,27): error TS2307: Cannot find module './Particles' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(24,42): error TS2307: Cannot find module './DamageService' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(25,39): error TS2307: Cannot find module './FloatText' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(26,26): error TS2307: Cannot find module './ComicPop' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(27,26): error TS2307: Cannot find module './ImpactFX' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(28,32): error TS2307: Cannot find module './BattleAmbience' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(29,38): error TS2307: Cannot find module './UltimatePresentation' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(30,43): error TS2307: Cannot find module './UltimateTiming' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(31,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(33,24): error TS2307: Cannot find module '../ui/Panels' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(34,25): error TS2307: Cannot find module '../ui/GmPanel' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(35,30): error TS2307: Cannot find module '../ui/UIKit' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(37,29): error TS2307: Cannot find module '../ui/PickArt' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(38,29): error TS2307: Cannot find module '../ui/BossWarning' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/BattleDirector.ts(569,25): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/training-defense-entry-v1/before/assets/scripts/battle/LineDefense.ts(6,33): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/LineDefense.ts(7,26): error TS2307: Cannot find module '../core/EventBus' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/LineDefense.ts(8,27): error TS2307: Cannot find module '../ui/Ux' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/battle/LineDefense.ts(9,21): error TS2307: Cannot find module '../core/Sfx' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/BattleEntry.ts(4,31): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/BattleEntry.ts(5,25): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/BattleEntry.ts(6,49): error TS2307: Cannot find module './BattleEntryWarmup' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/HUD.ts(7,34): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/HUD.ts(8,117): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/HUD.ts(9,27): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/HUD.ts(11,26): error TS2307: Cannot find module '../battle/Hero' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/HUD.ts(12,23): error TS2307: Cannot find module '../core/GameData' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/HUD.ts(13,29): error TS2307: Cannot find module './UltEnergyFx' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/HUD.ts(14,74): error TS2307: Cannot find module './BattleProgressBar' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/HUD.ts(15,28): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/HUD.ts(354,58): error TS2550: Property 'padStart' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/training-defense-entry-v1/before/assets/scripts/ui/HUD.ts(354,100): error TS2550: Property 'padStart' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/training-defense-entry-v1/before/assets/scripts/ui/MilestoneSwipe.ts(3,32): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/MilestoneSwipe.ts(4,25): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/MilestoneSwipe.ts(5,49): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/MilestoneSwipe.ts(69,85): error TS2339: Property 'reset' does not exist on type 'Component'.
+docs/training-defense-entry-v1/before/assets/scripts/ui/TrainingLobby.ts(3,20): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/TrainingLobby.ts(4,37): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/TrainingLobby.ts(5,47): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/TrainingLobby.ts(6,27): error TS2307: Cannot find module './Ux' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/TrainingLobby.ts(7,82): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/TrainingLobby.ts(8,79): error TS2307: Cannot find module './HeroComic' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/TrainingLobby.ts(9,119): error TS2307: Cannot find module './PageKit' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/TrainingLobby.ts(10,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/TrainingLobby.ts(11,28): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/TrainingLobby.ts(12,27): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/TrainingLobby.ts(14,44): error TS2307: Cannot find module './GrowthFeedback' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/TrainingLobby.ts(19,8): error TS2307: Cannot find module '../core/GameData' or its corresponding type declarations.
+docs/training-defense-entry-v1/before/assets/scripts/ui/TrainingLobby.ts(87,10): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(6,67): error TS2307: Cannot find module '../config/Mobs' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(7,324): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(8,42): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(12,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(13,117): error TS2307: Cannot find module '../core/GameData' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(14,22): error TS2307: Cannot find module '../core/Flow' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(15,32): error TS2307: Cannot find module './Monster' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(17,29): error TS2307: Cannot find module './LineDefense' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(18,29): error TS2307: Cannot find module './WaveManager' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(20,27): error TS2307: Cannot find module './Particles' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(21,42): error TS2307: Cannot find module './DamageService' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(22,39): error TS2307: Cannot find module './FloatText' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(23,26): error TS2307: Cannot find module './ComicPop' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(24,26): error TS2307: Cannot find module './ImpactFX' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(25,32): error TS2307: Cannot find module './BattleAmbience' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(26,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(27,21): error TS2307: Cannot find module '../ui/HUD' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(29,25): error TS2307: Cannot find module '../ui/GmPanel' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(30,30): error TS2307: Cannot find module '../ui/UIKit' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/BattleDirector.ts(489,25): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/ultimate-staging-v1/before/assets/scripts/battle/FrostUltimateVFX.ts(5,38): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/FrostUltimateVFX.ts(6,32): error TS2307: Cannot find module './FrostVFX' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/FrostUltimateVFX.ts(7,64): error TS2307: Cannot find module './BattleDepth' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Hero.ts(11,166): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Hero.ts(12,139): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Hero.ts(13,41): error TS2307: Cannot find module './Monster' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Hero.ts(15,31): error TS2307: Cannot find module './DamageService' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Hero.ts(18,30): error TS2307: Cannot find module './BattleSprite' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Hero.ts(19,34): error TS2307: Cannot find module './HeroBattleMotion' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Hero.ts(20,37): error TS2307: Cannot find module './ArcherIdleAnimation' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Hero.ts(21,37): error TS2307: Cannot find module './SniperIdleAnimation' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Hero.ts(22,35): error TS2307: Cannot find module './VoltIdleAnimation' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Hero.ts(23,35): error TS2307: Cannot find module './PyroIdleAnimation' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Hero.ts(24,35): error TS2307: Cannot find module './MoraIdleAnimation' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Projectile.ts(7,41): error TS2307: Cannot find module './Monster' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Projectile.ts(8,31): error TS2307: Cannot find module './DamageService' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Projectile.ts(9,27): error TS2307: Cannot find module './Particles' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Projectile.ts(10,26): error TS2307: Cannot find module './ImpactFX' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Projectile.ts(13,44): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/battle/Projectile.ts(15,42): error TS2307: Cannot find module './BasicProjectileFlightVFX' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/core/GameAudio.ts(3,26): error TS2307: Cannot find module './SaveData' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/core/GameAudio.ts(4,63): error TS2307: Cannot find module './AudioCatalog' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/core/GameAudio.ts(222,49): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
+docs/ultimate-staging-v1/before/assets/scripts/core/GameAudio.ts(227,54): error TS2550: Property 'finally' does not exist on type 'Promise<[void, void, void]>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+docs/ultimate-staging-v1/before/assets/scripts/core/GameAudio.ts(243,8): error TS2550: Property 'finally' does not exist on type 'Promise<void>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+docs/ultimate-staging-v1/before/assets/scripts/core/Sfx.ts(3,25): error TS2307: Cannot find module './AudioCatalog' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/core/Sfx.ts(4,30): error TS2307: Cannot find module './AudioCatalog' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/ui/Panels.ts(6,175): error TS2307: Cannot find module '../config/Cards' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/ui/Panels.ts(7,33): error TS2307: Cannot find module '../config/GameConfig' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/ui/Panels.ts(8,34): error TS2307: Cannot find module '../battle/DamageService' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/ui/Panels.ts(11,27): error TS2307: Cannot find module '../platform/AdService' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/ui/Panels.ts(12,36): error TS2307: Cannot find module '../core/SaveData' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/ui/Panels.ts(13,63): error TS2307: Cannot find module './ComicUI' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/ui/Panels.ts(14,28): error TS2307: Cannot find module './ButtonFeedback' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/ui/Panels.ts(15,54): error TS2307: Cannot find module './UIMotion' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/ui/Panels.ts(16,25): error TS2307: Cannot find module './UIAudio' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/ui/Panels.ts(17,82): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/ui/Panels.ts(18,95): error TS2307: Cannot find module './BattlePanelSkin' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/ui/Panels.ts(19,66): error TS2307: Cannot find module './PausePanelSkin' or its corresponding type declarations.
+docs/ultimate-staging-v1/before/assets/scripts/ui/Panels.ts(20,103): error TS2307: Cannot find module './SettlementPanelSkin' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/Boot.ts(9,48): error TS2307: Cannot find module './config/GameConfig' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/Boot.ts(10,33): error TS2307: Cannot find module './config/LevelDifficulty' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/Boot.ts(11,22): error TS2307: Cannot find module './core/Flow' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/Boot.ts(12,30): error TS2307: Cannot find module './ui/UIKit' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/Boot.ts(14,24): error TS2307: Cannot find module './ui/MainUI' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/Boot.ts(15,32): error TS2307: Cannot find module './battle/BattleDirector' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/Boot.ts(16,31): error TS2307: Cannot find module './ui/TouchFeedback' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/Boot.ts(17,26): error TS2307: Cannot find module './ui/UIMotion' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/Boot.ts(18,32): error TS2307: Cannot find module './ui/BattleEntry' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/Boot.ts(81,8): error TS2339: Property 'levelDef' does not exist on type 'Component'.
+docs/web-load-v1/before/assets/scripts/ui/BattleEntryWarmup.ts(3,35): error TS2307: Cannot find module '../battle/ArcherIdleAnimation' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/BattleEntryWarmup.ts(4,33): error TS2307: Cannot find module '../battle/HeroSequenceAnimation' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/BattleEntryWarmup.ts(6,29): error TS2307: Cannot find module './PickArt' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/pages/LevelsPage.ts(3,20): error TS2307: Cannot find module '../../config/GameConfig' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/pages/LevelsPage.ts(4,26): error TS2307: Cannot find module '../UIKit' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/pages/LevelsPage.ts(6,89): error TS2307: Cannot find module '../ComicUI' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/pages/LevelsPage.ts(7,72): error TS2307: Cannot find module '../PageKit' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/pages/LevelsPage.ts(8,60): error TS2307: Cannot find module '../../core/GameData' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/pages/LevelsPage.ts(9,65): error TS2307: Cannot find module '../../config/LevelDifficulty' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/pages/LevelsPage.ts(10,34): error TS2307: Cannot find module '../LevelLootPreview' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/pages/LevelsPage.ts(11,26): error TS2307: Cannot find module '../../core/SaveData' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/pages/LevelsPage.ts(12,22): error TS2307: Cannot find module '../../core/Flow' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/pages/LevelsPage.ts(13,32): error TS2307: Cannot find module '../SquadPanel' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/pages/LevelsPage.ts(14,28): error TS2307: Cannot find module '../ButtonFeedback' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/pages/LevelsPage.ts(15,27): error TS2307: Cannot find module '../UIMotion' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/pages/LevelsPage.ts(16,45): error TS2307: Cannot find module '../BattleEntry' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/Ux.ts(7,19): error TS2307: Cannot find module './UIKit' or its corresponding type declarations.
+docs/web-load-v1/before/assets/scripts/ui/Ux.ts(8,28): error TS2307: Cannot find module './UIArtReady' or its corresponding type declarations.

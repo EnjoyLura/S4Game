@@ -8,7 +8,7 @@
  * 强化卡实时改写 stats（连射/齐射/分裂/爆炸/处决/残血词条）；穿戴词条（攻击/攻速/范围/暴击/充能效率/技能伤害）上场生效
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
-import { HeroStats, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+import { HeroStats, abilityDamage, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
 import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, MORA_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL, LO, LINE_Y } from '../config/GameConfig';
 import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
@@ -22,11 +22,13 @@ import { SniperIdleAnimation } from './SniperIdleAnimation';
 import { VoltIdleAnimation } from './VoltIdleAnimation';
 import { PyroIdleAnimation } from './PyroIdleAnimation';
 import { MoraIdleAnimation } from './MoraIdleAnimation';
+import { drawSniperUltimateLock } from './SniperUltimateVFX';
+import { ULT_TIMING, ARCHER_ULT_ROW_GAP, ARCHER_ULT_ROUND_GAP, METEOR_ULT_GAP } from './UltimateTiming';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
 interface PendingShot { t: number; target: Monster | null; dirX: number; dirY: number; emp?: boolean; }
-interface PendingVolley { t: number; row: 0 | 1 | 2; }
+interface PendingVolley { t: number; row: 0 | 1 | 2; first?: boolean; last?: boolean; }
 
 export abstract class HeroBase {
   abstract readonly id: string;
@@ -50,6 +52,9 @@ export abstract class HeroBase {
   private idleMora: MoraIdleAnimation | null = null;
   private poseTarget: Monster | null = null;
   private attackPoseT = 0;
+  // Read the instance field directly in overrides: Cocos loose super-getter lowering binds to the prototype.
+  protected ultimateT = 0;
+  private ultimateWindupT = 0;
 
   constructor(parent: Node, x: number, stats: HeroStats) {
     this.hx = x;
@@ -187,15 +192,28 @@ export abstract class HeroBase {
 
   get x(): number { return this.hx; }
   get effAtk(): number { return this.stats.atk * this.stats.atkMul; }
-  /** 技能/大招伤害基数（用户确认：技能和大招计算攻击力+技能伤害，普攻只算攻击力） */
-  get skillAtk(): number { return this.effAtk + (this.stats.skillDmgFlat || 0); }
+  /** 两项独立基础值：攻击力 × 小额系数 + 技能伤害 × 当前技能倍率。 */
+  abilityDamage(skillMultiplier: number, ultimate = false, attackMultiplier?: number): number {
+    return abilityDamage(this.stats, skillMultiplier, ultimate, attackMultiplier);
+  }
   get chargeGoal(): number { return this.chargeMax * (this.stats.chargeMul || 1); }
   get skillUnlocked(): boolean { return this.stats.skillUnlocked === true; }
   get ultUnlocked(): boolean { return this.stats.ultUnlocked === true; }
   get chargePct(): number { return this.ultUnlocked ? this.charge / this.chargeGoal : 0; }
-  get ultReady(): boolean { return this.ultUnlocked && this.charge >= this.chargeGoal; }
+  get ultReady(): boolean { return this.ultUnlocked && this.charge >= this.chargeGoal && this.ultimateRemaining <= 0; }
   /** 大招演出时长（三选一挂起窗口，演出完再弹卡）；逐英雄覆盖 */
-  get ultShowDuration(): number { return 1.2; }
+  get ultShowDuration(): number { return ULT_TIMING[this.id].duration; }
+  get ultimateRemaining(): number { return this.ultimateT; }
+  protected beginUltimate(duration = this.ultShowDuration): void {
+    this.ultimateT = duration;
+    const windup = ULT_TIMING[this.id].windup;
+    this.ultimateWindupT = windup;
+    bus.emit(EVT.ULTIMATE_BEGIN, { hero: this.id, x: this.x, y: HERO_Y + 60, windup, duration });
+    Sfx.prepareUltimate(this.id, windup);
+  }
+  protected ultimateBeat(x: number, y: number, energy = .5, contact = false): void {
+    bus.emit(EVT.ULTIMATE_BEAT, { hero: this.id, x, y, energy, contact });
+  }
   get skillPct(): number { return this.skillUnlocked ? 1 - this.skillCd / this.skillCdTotal : 0; }
   /** 技能完整冷却（含冷却缩减卡；与施放时写入 skillCd 的算法一致） */
   get skillCdTotal(): number { return Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0)); }
@@ -204,11 +222,18 @@ export abstract class HeroBase {
   protected lastDmg: DamageService | null = null;
   tick(dt: number, mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
     this.lastDmg = dmg;
+    this.ultimateWindupT = Math.max(0, this.ultimateWindupT - dt);
+    if (this.ultimateT > 0) {
+      this.ultimateT = Math.max(0, this.ultimateT - dt);
+      if (this.ultimateT === 0 && this.ultReady) {
+        bus.emit(EVT.CHARGE_CHANGED, this.chargePct, true); Sfx.play('ready');
+      }
+    }
     this.tickPose(dt, mgr);
     this.updateQueues(dt, mgr, projs);
     // 普攻
     this.atkT -= dt;
-    if (this.atkT <= 0) {
+    if (this.atkT <= 0 && this.ultimateWindupT <= 0) {
       const t = mgr.pickTarget(this.x, HERO_Y, this.stats.range);
       if (t) {
         this.poseTarget = t;
@@ -222,7 +247,7 @@ export abstract class HeroBase {
     // 技能（自动：CD 好 + 技能范围内有怪）
     if (this.skillUnlocked) {
       this.skillCd -= dt;
-      if (this.skillCd <= 0 && mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange)) {
+      if (this.skillCd <= 0 && this.ultimateWindupT <= 0 && mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange)) {
         this.animateAttack(true);
         this.castSkill(mgr, projs, dmg);
       }
@@ -251,7 +276,7 @@ export abstract class HeroBase {
 
   /** 击杀充能（§3.7：击杀者获得怪物配置充能值） */
   chargeKill(v: number): void {
-    if (!this.ultUnlocked || this.ultReady) return;
+    if (!this.ultUnlocked || this.charge >= this.chargeGoal) return;
     const was = this.ultReady;
     this.charge = Math.min(this.chargeGoal, this.charge + v);
     bus.emit(EVT.CHARGE_CHANGED, this.chargePct, this.ultReady);
@@ -386,8 +411,8 @@ export class ArcherHero extends HeroBase {
   }): ProjSpec {
     const emp = base.emp === true;
     const crit = Math.random() < this.stats.critRate;
-    const atk = this.effAtk * (this.stats.normalMul || 1) * (base.dmgMul ?? 1)
-      * (emp ? archerEmpCfg(this.stats.skillLv).mult : 1) * (crit ? this.stats.critMul : 1);
+    const atk = (emp ? this.abilityDamage(archerEmpCfg(this.stats.skillLv).mult)
+      : this.effAtk * (this.stats.normalMul || 1)) * (base.dmgMul ?? 1) * (crit ? this.stats.critMul : 1);
     return {
       x: base.x, y: base.y,
       dirX: base.dirX, dirY: base.dirY,
@@ -435,7 +460,7 @@ export class ArcherHero extends HeroBase {
   }
 
   /** 一排弹幕（列 = 1+齐射层）：主箭严格沿瞄准线（与普攻同款拦截预判，恒有一箭锁主目标），
-   *  附加列在主箭两侧交替展开（+10°,-10°,+20°…直线随缘）（齐射×连射 = 列×排网格）。
+   *  附加列在主箭两侧交替展开（+7°,-7°,+14°…直线随缘）（齐射×连射 = 列×排网格）。
    *  旧版整组以瞄准线为中心对称摊开——偶数列（1/3 层）时没有任何箭在瞄准线上，5° 偏移在
    *  400~900px 交战距离即脱靶 35~79px（怪碰撞半径仅 22~34px），齐射后反而一直打不中主目标 */
   private fireRow(projs: ProjectileManager, dirX: number, dirY: number, emp: boolean): void {
@@ -446,8 +471,8 @@ export class ArcherHero extends HeroBase {
     // One air-pressure release per row, rather than stacking an effect for every fan arrow.
     projs.normalRelease(this.id, this.x, HERO_Y + 60, dirX, dirY, emp);
     for (let c = 0; c < cols; c++) {
-      const side = c === 0 ? 0 : Math.ceil(c / 2) * (c % 2 === 1 ? 1 : -1);   // c=0 主箭 0°；其余 +10/-10/+20/-20…
-      const ang = baseAng + side * 10 * Math.PI / 180;
+      const side = c === 0 ? 0 : Math.ceil(c / 2) * (c % 2 === 1 ? 1 : -1);   // c=0 主箭 0°；其余 +7/-7/+14/-14/+21…
+      const ang = baseAng + side * 7 * Math.PI / 180;
       this.fireDir(projs, Math.cos(ang), Math.sin(ang), emp);
     }
   }
@@ -458,7 +483,7 @@ export class ArcherHero extends HeroBase {
     const flash = new Node('bowFlash');
     flash.layer = Layers.Enum.UI_2D;
     flash.setParent(this.node.parent!);
-    flash.setPosition(this.x, HERO_Y + 60, 0);
+    flash.setPosition(this.x + dx * 36, HERO_Y + 60 + dy * 36, 0);
     const g = flash.addComponent(Graphics);
     g.strokeColor = hexc(emp ? PAL.gold : '#FFF3D6');
     g.lineWidth = 2.5;
@@ -504,7 +529,7 @@ export class ArcherHero extends HeroBase {
       v.t -= dt;
       if (v.t <= 0) {
         this.volleyQueue.splice(i, 1);
-        this.fireFanRow(projs, v.row);
+        this.fireFanRow(projs, v.row, !!v.first, !!v.last);
       }
     }
     void mgr;
@@ -532,26 +557,34 @@ export class ArcherHero extends HeroBase {
     tween(pop).to(0.22, { opacity: 0 }).call(() => pulse.destroy()).start();
   }
 
-  /** 大招·扇形箭雨（手动，击杀充能）：两排 × 8 箭扇形射出，全部无限贯穿；多轮箭雨卡追加轮次（间隔 0.8s） */
+  /** 蓄风后逐排推进；多轮卡仍追加原有轮次，排/轮间隔由统一时序控制。 */
   castUlt(_mgr: MonsterManager, projs: ProjectileManager, _dmg: DamageService): boolean {
-    if (!this.ultReady) return false;
+    if (!this.ultReady || !_mgr.list.some(m => !m.dead)) return false;
     this.charge = 0;
+    this.beginUltimate();
     const rounds = Math.max(1, Math.round(this.stats.ultRounds || 1));
     const rows = archerUltCfg(this.stats.ultLv).rows;   // 大招10级里程碑：2排 → 3排
     for (let r = 0; r < rounds; r++) {
-      for (let w = 0; w < rows; w++) this.volleyQueue.push({ t: r * 0.8 + w * 0.35, row: w as 0 | 1 | 2 });
+      for (let w = 0; w < rows; w++) this.volleyQueue.push({
+        t: ULT_TIMING.archer.windup + r * ARCHER_ULT_ROUND_GAP + w * ARCHER_ULT_ROW_GAP,
+        row: w as 0 | 1 | 2, first: r === 0 && w === 0, last: r === rounds - 1 && w === rows - 1 });
     }
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
-    Sfx.cast(this.id, true);
-    void _dmg;
+    void projs; void _dmg;
     return true;
   }
 
-  /** 一排扇形箭：以竖直方向为中心 ±30° 均分；后排错半步补缝、弹速略慢形成多波；箭数/系数随大招等级成长 */
-  private fireFanRow(projs: ProjectileManager, row: 0 | 1 | 2): void {
+  get ultimateRemaining(): number { return Math.max(this.ultimateT, this.volleyQueue.length ? .01 : 0); }
+  get ultShowDuration(): number {
+    return ULT_TIMING.archer.duration + (Math.max(1, this.stats.ultRounds || 1) - 1) * ARCHER_ULT_ROUND_GAP
+      + (archerUltCfg(this.stats.ultLv).rows - 2) * ARCHER_ULT_ROW_GAP;
+  }
+  /** 原扇形角度、箭数及弹速保持；每排实发才触发风压与音效。 */
+  private fireFanRow(projs: ProjectileManager, row: 0 | 1 | 2, first: boolean, last: boolean): void {
     this.animateAttack(true, 0, 1);
     this.bowFlash(projs, 0, 1, true);
-    Sfx.shoot(this.id);
+    if (first) Sfx.cast(this.id, true); else Sfx.shoot(this.id);
+    this.ultimateBeat(this.x, HERO_Y + 60, last ? .8 : .55);
     const uc = archerUltCfg(this.stats.ultLv);
     const n = uc.arrows;
     const spread = 60 * Math.PI / 180;
@@ -563,9 +596,9 @@ export class ArcherHero extends HeroBase {
         x: this.x, y: HERO_Y + 60,
         dirX: Math.sin(a), dirY: Math.cos(a),
         speed,
-        dmg: this.skillAtk * uc.coeff, crit: Math.random() < this.stats.critRate,
+        dmg: this.abilityDamage(uc.coeff, true), crit: Math.random() < this.stats.critRate,
         color: PAL.gold, heroId: this.id, size: 9, ttl: 3.6, pierce: 999, spark: true,
-        ability: true,   // 大招箭雨击杀弹 60% 词条
+        ability: true, ult: true,
       });
     }
   }
@@ -581,8 +614,8 @@ export class SniperHero extends HeroBase {
   readonly skillMax = 14;
   /** 技能·穿颅射击连狙队列：剩余发数、下发出膛倒计时、总索敌窗口（无目标等待不取消） */
   private volley: { t: number; left: number; ttl: number } | null = null;
-  /** 大招·猎杀时刻：0.5s 锁定演出（瞄准线实时追踪 + 收缩准星）→ 贯穿弹 */
-  private ultLock: { t: number; target: Monster; node: Node; g: Graphics } | null = null;
+  /** 大招·猎杀时刻：1.1s 锁定演出（瞄准线实时追踪 + 收缩准星）→ 贯穿弹 */
+  private ultLock: { t: number; target: Monster; targets: Monster[]; node: Node; g: Graphics } | null = null;
 
   protected buildVisual(parent: Node): void {
     const g = this.node.addComponent(Graphics);
@@ -674,6 +707,7 @@ export class SniperHero extends HeroBase {
   }
 
   private autoT = -1;   // 突破自动大招计时（-1=未初始化；仅 stats.ultAutoCd>0 时生效）
+  get ultimateRemaining(): number { return Math.max(this.ultimateT, this.ultLock ? .01 : 0); }
 
   protected queuedShotDelay(): number {
     if (this.ultLock) return Math.max(0, this.ultLock.t);
@@ -685,12 +719,11 @@ export class SniperHero extends HeroBase {
     // 90 级突破：每 25s 自动释放一次大招（无需充能也不消耗充能——用户定稿）；无目标待命，出现即放
     if (this.ultUnlocked && this.stats.ultAutoCd > 0) {
       if (this.autoT < 0) this.autoT = this.stats.ultAutoCd;
-      if (!this.ultLock) {
-        this.autoT -= dt;
-        if (this.autoT <= 0) {
-          const tgt = mgr.highestHp();
-          if (tgt) { this.autoT = this.stats.ultAutoCd; this.beginUltLock(tgt); }
-        }
+      // Presentation can defer a due cast, but never lengthens the 25s cooldown itself.
+      this.autoT = Math.max(0, this.autoT - dt);
+      if (this.autoT <= 0 && !this.ultLock && this.ultimateRemaining <= 0) {
+        const tgt = mgr.highestHp();
+        if (tgt) { this.autoT = this.stats.ultAutoCd; this.beginUltLock(tgt, mgr); }
       }
     }
     // 技能连狙：4 秒窗口内每 0.28s 重新锁定「离防线最近」目标（用户调整：不再选血量最高）；
@@ -710,7 +743,7 @@ export class SniperHero extends HeroBase {
         }
       }
     }
-    // 大招锁定演出：瞄准线实时追踪 + 准星收缩，0.5s 后发射贯穿弹
+    // 大招锁定演出：瞄准线实时追踪 + 准星收缩，1.1s 后发射贯穿弹
     if (this.ultLock) {
       const L = this.ultLock;
       L.t -= dt;
@@ -720,28 +753,10 @@ export class SniperHero extends HeroBase {
         if (!nt) { this.endUltLock(); return; }
         L.target = nt;
       }
-      const p = Math.max(0, Math.min(1, 1 - L.t / 0.5));   // 锁定进度 0→1
-      const g = L.g;
-      g.clear();
-      // 瞄准线：枪口 → 目标当前位置，随进度增粗（猎杀时刻主题红）
-      g.strokeColor = hexc(PAL.red);
-      g.lineWidth = 1 + 3 * p;
-      g.moveTo(this.x, HERO_Y + 60);
-      g.lineTo(L.target.x, L.target.y);
-      g.stroke();
-      // 收缩准星：圈 + 四向刻度，临发射瞬间闪白
-      const r = 40 - 26 * p;
-      g.strokeColor = hexc(p > 0.85 ? '#FFFFFF' : '#FF8A8D');
-      g.lineWidth = 2.5;
-      g.circle(L.target.x, L.target.y, r);
-      g.stroke();
-      g.moveTo(L.target.x - r - 8, L.target.y); g.lineTo(L.target.x - r + 4, L.target.y);
-      g.moveTo(L.target.x + r - 4, L.target.y); g.lineTo(L.target.x + r + 8, L.target.y);
-      g.moveTo(L.target.x, L.target.y - r - 8); g.lineTo(L.target.x, L.target.y - r + 4);
-      g.moveTo(L.target.x, L.target.y + r - 4); g.lineTo(L.target.x, L.target.y + r + 8);
-      g.stroke();
+      const p = Math.max(0, Math.min(1, 1 - L.t / ULT_TIMING.sniper.windup));   // 锁定进度 0→1
+      this.drawUltLock(mgr, p);
       if (L.t <= 0) {
-        this.fireUltBolt(projs, mgr, L.target);
+        this.fireUltBolt(projs, L.targets);
         this.endUltLock();
       }
     }
@@ -751,9 +766,33 @@ export class SniperHero extends HeroBase {
     if (this.ultLock) { this.ultLock.node.destroy(); this.ultLock = null; }
   }
 
+  /** Preserve the primary lock; extra lines use the same highest-HP rule as the actual bolts. */
+  private drawUltLock(mgr: MonsterManager, progress: number): void {
+    const L = this.ultLock;
+    if (!L) return;
+    const targets = L.targets, count = 1 + Math.max(0, Math.round((this.stats.ultBolts || 1) - 1));
+    targets.length = 0; targets.push(L.target);
+    // Keep a tiny ranked list rather than allocating/sorting the whole crowd every frame.
+    if (count > 1) for (const m of mgr.list) {
+      if (m.dead || m === L.target) continue;
+      let at = 1;
+      while (at < targets.length && targets[at].hp >= m.hp) at++;
+      if (at >= count) continue;
+      targets.splice(at, 0, m);
+      if (targets.length > count) targets.pop();
+    }
+    L.g.clear();
+    for (let i = 0; i < targets.length; i++) {
+      const target = targets[i];
+      drawSniperUltimateLock(L.g, this.x, HERO_Y + 60, target.x, target.y, progress, i === 0);
+    }
+  }
+
   /** 锁定完成：发射贯穿弹（×5.5 必暴、无视物抗、无限贯穿），拦截预判锁定方向；
    *  额外枪线卡：其余血量最高的目标各补一发 */
-  private fireUltBolt(projs: ProjectileManager, mgr: MonsterManager, locked: Monster): void {
+  private fireUltBolt(projs: ProjectileManager, targets: readonly Monster[]): void {
+    const locked = targets[0];
+    if (!locked) return;
     const direction = this.lead(locked, 1100);
     this.animateAttack(true, direction.dirX, direction.dirY);
     const uc = sniperUltCfg(this.stats.ultLv);   // 大招升级：倍率成长/弹体判定+20%/猎杀标记
@@ -762,27 +801,26 @@ export class SniperHero extends HeroBase {
       projs.fire({
         x: this.x, y: HERO_Y + 60,
         dirX: lead.dirX, dirY: lead.dirY, speed: 1100,
-        dmg: this.skillAtk * uc.boltMul, crit: true,
-        color: '#9FCBFF', heroId: this.id, size: 12 * uc.rMul,
+        dmg: this.abilityDamage(uc.boltMul, true), crit: true,
+        color: '#509DFF', heroId: this.id, size: 12 * uc.rMul,
         ttl: 4, pierce: 999, spark: true,
         ignoreRes: true,
         ult: true, ability: true,   // 大招弹：击杀弹 KAPOW!（60%）
-        markAmp: uc.markAmp || undefined, markDur: uc.markDur,
+        markAmp: Math.max(uc.markAmp, this.stats.ultMarkAmp || 0) || undefined, markDur: uc.markDur,
+        markIcon: (this.stats.ultMarkAmp || 0) > 0,
+        ...this.targetBonuses(),
       });
     };
-    fire1(locked);
-    const extra = Math.max(0, Math.round((this.stats.ultBolts || 1) - 1));
-    if (extra > 0) {
-      const others = mgr.list.filter(m => !m.dead && m !== locked).sort((a, b) => b.hp - a.hp).slice(0, extra);
-      for (const t of others) fire1(t);
-    }
-    Sfx.play('snipe');
+    // Fire at exactly the targets shown in the final lock frame, without selecting again.
+    for (const target of targets) fire1(target);
+    Sfx.cast(this.id, true);
+    this.ultimateBeat(this.x, HERO_Y + 60, .65);
   }
 
   /** 瞬击一发：重弩箭真弹道（命中才结算伤害），独立暴击 */
   private snipeShot(target: Monster, projs: ProjectileManager, mul: number, ignoreRes: boolean): void {
     const crit = Math.random() < this.stats.critRate;
-    const dmgVal = this.skillAtk * mul * (crit ? this.stats.critMul : 1);
+    const dmgVal = this.abilityDamage(mul) * (crit ? this.stats.critMul : 1);
     const speed = 1800;
     const lead = this.lead(target, speed);   // 拦截预判：伤害在弩箭命中时才结算（用户确认）
     this.animateAttack(true, lead.dirX, lead.dirY);
@@ -791,7 +829,9 @@ export class SniperHero extends HeroBase {
       dirX: lead.dirX, dirY: lead.dirY, speed,
       dmg: dmgVal, crit, color: '#7FB3FF', heroId: this.id, size: 8,
       ignoreRes,
+      pierce: this.stats.skillPierce || 0,
       ability: true,   // 技能弹：击杀弹 60% 词条（skillKillSnipe）
+      ...this.targetBonuses(),
     });
     Sfx.shoot(this.id);
   }
@@ -817,35 +857,38 @@ export class SniperHero extends HeroBase {
     tween(pop).to(0.22, { opacity: 0 }).call(() => pulse.destroy()).start();
   }
 
-  /** 大招·猎杀时刻（手动）：锁定全场血量最高目标 0.5s（瞄准线+收缩准星）→ 发射 ×5.5 必暴贯穿弹（无视物抗） */
+  /** 大招·猎杀时刻（手动）：锁定全场血量最高目标 1.1s（瞄准线+收缩准星）→ 发射 ×5.5 必暴贯穿弹（无视物抗） */
   castUlt(mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): boolean {
     if (!this.ultReady || this.ultLock) return false;   // 锁定中防重入（自动/手动不叠加）
     const tgt = mgr.highestHp();
     if (!tgt) return false;   // 全场无目标：不消耗充能
     this.charge = 0;
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
-    this.beginUltLock(tgt);
+    this.beginUltLock(tgt, mgr);
     void _projs; void _dmg;
     return true;
   }
 
   /** 进入大招锁定演出（手动充能释放与 90 级突破自动释放共用） */
-  private beginUltLock(tgt: Monster): void {
+  private beginUltLock(tgt: Monster, mgr: MonsterManager): void {
     const lockNode = new Node('ultLock');
     lockNode.layer = Layers.Enum.UI_2D;
     lockNode.setParent(this.node.parent!);
     lockNode.setPosition(0, 0, 0);
     const g = lockNode.addComponent(Graphics);
-    this.ultLock = { t: 0.5, target: tgt, node: lockNode, g };
+    this.beginUltimate();
+    this.ultLock = { t: ULT_TIMING.sniper.windup, target: tgt, targets: [], node: lockNode, g };
+    this.drawUltLock(mgr, 0);
   }
 }
 
 /* ============================================================
  * 火焰法师 · 焰·辉（§4 #2：技能流·AOE/橙红；线稿 hero_bohu_battle 100×120）
  * ============================================================ */
-/* 大招陨石调参：索敌/轰炸区半径、坑半径与寿命、坑内易伤强度 */
-const ULT_ZONE_R = 130;
-const CRATER_R = 88;
+/* 大招陨石调参：真实爆炸半径、坑半径与寿命、坑内易伤强度 */
+const METEOR_BLAST_R = 140;
+const METEOR_SPEED = 800;
+const CRATER_R = 88 * 1.3 * 1.2;
 const CRATER_LIFE = 4;
 const CRATER_VULN = 0.25;
 export class PyroHero extends HeroBase {
@@ -853,12 +896,14 @@ export class PyroHero extends HeroBase {
   readonly name = '焰·辉';
   readonly chargeMax = PYRO_CHARGE_MAX;
   readonly skillMax = 10;
-  /** 大招·陨石天降：排队落下的陨石（固定范围梅花落点；fired 后 t 转为剩余坠落秒数，预警圈钉到命中，命中即生成陨石坑） */
-  private meteorQueue: { t: number; x: number; y: number; fired?: boolean }[] = [];
-  /** 落点预警圈：脉冲相位 + 绘图节点（惰性创建，队列清空即销毁） */
+  /** Fixed ground points; the projectile's actual arrival removes the warning and creates the crater. */
+  private meteorQueue: { t: number; x: number; y: number; fired?: boolean; first?: boolean; last?: boolean;
+    fallElapsed?: number; fallSeconds?: number }[] = [];
+  /** Fixed landing shadows grow darker as the real meteor approaches; no target rings. */
   private warnT = 0;
   private warnNode: Node | null = null;
   private warnG: Graphics | null = null;
+  private warnTint = hexc('#201A17');
   /** 陨石坑：命中后的地面灼烧区（持续灼烧 + 易伤），寿命 CRATER_LIFE 秒 */
   private craters: { x: number; y: number; t: number }[] = [];
   private craterNode: Node | null = null;
@@ -932,7 +977,7 @@ export class PyroHero extends HeroBase {
     return {
       x: base.x, y: base.y, dirX: base.dirX, dirY: base.dirY,
       speed: base.speed,
-      dmg: base.dmg * (this.stats.normalMul || 1) * (crit ? this.stats.critMul : 1), crit,
+      dmg: base.dmg * (base.ability || base.ult ? 1 : this.stats.normalMul || 1) * (crit ? this.stats.critMul : 1), crit,
       color: PAL.orange, heroId: this.id, size: base.size,
       explodeR: base.explodeR, explodeMul: base.explodeMul ?? this.stats.explodeMul,
       slowRatio: this.stats.slowOnHit || 0,
@@ -976,7 +1021,7 @@ export class PyroHero extends HeroBase {
     }
     const pc = pyroSkCfg(this.stats.skillLv);
     const shots = Math.max(1, Math.round(this.stats.skillShots || 3));
-    const dmg = this.skillAtk * pc.mul * (this.stats.skillMul || 1);
+    const dmg = this.abilityDamage(pc.mul);
     const boomR = 110 * (this.stats.skillRangeMul || 1);
     this.animateAttack(true, best.x - this.x, best.y - (HERO_Y + 60));
     for (let k = 0; k < shots; k++) {
@@ -986,18 +1031,14 @@ export class PyroHero extends HeroBase {
       const l = Math.hypot(dx, dy) || 1;
       projs.fire(this.spec({
         x: this.x, y: HERO_Y + 60, dirX: dx / l, dirY: dy / l,
-        dmg, explodeR: boomR, explodeMul: pc.boomMul, burnDps: this.skillAtk * 0.2,
+        dmg, explodeR: boomR, explodeMul: pc.boomMul, burnDps: this.abilityDamage(0.2, false, 0.04),
         speed: 820, size: 11, ability: true,
       }));
     }
     Sfx.cast(this.id);
   }
 
-  protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
-    // 大招陨石：落点先出脉冲预警圈，到点从屏外坠落，命中后留燃烧陨石坑
-    this.warnT += dt;
-    const uc = pyroUltCfg(this.stats.ultLv);
-    const crR = CRATER_R * uc.craterMul;   // 大招10级：陨石坑范围+25%
+  private drawMeteorWarnings(): void {
     if (this.meteorQueue.length) {
       if (!this.warnNode) {
         this.warnNode = new Node('ultWarn');
@@ -1007,41 +1048,66 @@ export class PyroHero extends HeroBase {
         this.warnG = this.warnNode.addComponent(Graphics);
       }
       const g = this.warnG!;
-      const oc = (a: number): Color => { const c = hexc(PAL.orange); c.a = a; return c; };
       g.clear();
       for (const q of this.meteorQueue) {
-        const pulse = 46 + Math.sin(this.warnT * 9) * 7;
-        g.fillColor = oc(38);
-        g.circle(q.x, q.y, pulse); g.fill();
-        g.strokeColor = oc(185); g.lineWidth = 3.5;
-        g.circle(q.x, q.y, pulse); g.stroke();
-        g.strokeColor = oc(215); g.lineWidth = 2.5;
-        g.circle(q.x, q.y, 9 + Math.sin(this.warnT * 9 + 1.6) * 3); g.stroke();
+        if (!q.fired && q.t > .35) continue;
+        const approach = q.fired ? Math.min(1, (q.fallElapsed || 0) / Math.max(.01, q.fallSeconds || 1)) : 0;
+        const p = approach * approach * (3 - 2 * approach);
+        const radius = METEOR_BLAST_R * (.35 + .43 * p);
+        // Concentric low-alpha ellipses form a soft, grounded shadow, not an outlined AOE indicator.
+        for (let band = 6; band >= 0; band--) {
+          const r = radius * (.49 + band * .085);
+          this.warnTint.a = Math.round((5 + (6 - band) * 1.7) * (.45 + p * .75));
+          g.fillColor = this.warnTint;
+          g.ellipse(q.x, q.y, r, r * .62); g.fill();
+        }
       }
     } else if (this.warnNode) {
+      this.warnNode.active = false;
       this.warnNode.destroy();
       this.warnNode = null; this.warnG = null;
     }
+  }
+
+  protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
+    this.warnT += dt;
+    const uc = pyroUltCfg(this.stats.ultLv);
+    const crR = CRATER_R * uc.craterMul;
     for (let i = this.meteorQueue.length - 1; i >= 0; i--) {
       const q = this.meteorQueue[i];
+      if (q.fired) { q.fallElapsed = (q.fallElapsed || 0) + dt; continue; }
       q.t -= dt;
-      if (!q.fired && q.t <= 0) {
+      if (q.t <= 0 && projs.hasCapacity) {
         // 出生点必须在弹道顶界（LO.half+120）之下，否则首帧即被越界回收（上次"只有预警没有陨石"的根因）
         const top = SPAWN_Y + 50;
-        q.fired = true;
-        q.t = (top - q.y) / 800;   // 预警圈持续到命中
-        projs.fire(this.spec({
+        const spec = this.spec({
           x: q.x, y: top, dirX: 0, dirY: -1,
-          dmg: this.skillAtk * uc.boltMul * (this.stats.ultDmgMul || 1),
-          explodeR: 140, burnDps: this.skillAtk * 0.3,
-          speed: 800, size: 16, ability: true, ult: true,
+          dmg: this.abilityDamage(uc.boltMul, true),
+          explodeR: METEOR_BLAST_R, burnDps: this.abilityDamage(0.3, true, 0.06),
+          speed: METEOR_SPEED, size: 16, ability: true, ult: true,
           stun: this.stats.ultStun || 0,
-        }));
-      } else if (q.fired && q.t <= 0) {
-        this.craters.push({ x: q.x, y: q.y, t: CRATER_LIFE });
-        this.meteorQueue.splice(i, 1);
+        });
+        spec.groundTarget = { x: q.x, y: q.y };
+        spec.onGroundImpact = () => {
+          if (!this.node.isValid) return;
+          const index = this.meteorQueue.indexOf(q);
+          if (index < 0) return;
+          this.meteorQueue.splice(index, 1);
+          this.ultimateBeat(q.x, q.y, q.last ? 1 : q.first ? .85 : .35, true);
+          this.craters.push({ x: q.x, y: q.y, t: CRATER_LIFE });
+          this.drawMeteorWarnings();
+          projs.fireCraters(this.craters, CRATER_R * pyroUltCfg(this.stats.ultLv).craterMul, this.warnT);
+        };
+        // If the projectile budget is full, keep the real warning and retry, never create a phantom crater.
+        q.fired = projs.fire(spec);
+        if (q.fired) {
+          q.fallElapsed = 0; q.fallSeconds = Math.max(.01, (top - q.y) / METEOR_SPEED);
+          this.animateAttack(true, q.x - this.x, q.y - HERO_Y - 60);
+          if (q.first) Sfx.cast(this.id, true);
+        }
       }
     }
+    this.drawMeteorWarnings();
     // 陨石坑：坑内怪持续挂灼烧 + 易伤（出坑残留 0.6s），寿命尽即熄灭
     if (this.craters.length) {
       for (let i = this.craters.length - 1; i >= 0; i--) {
@@ -1051,7 +1117,7 @@ export class PyroHero extends HeroBase {
         for (const m of mgr.list) {
           if (m.dead || Math.hypot(m.x - c.x, m.y - c.y) > crR) continue;
           m.burnT = Math.max(m.burnT, 0.55);
-          m.burnDps = Math.max(m.burnDps, this.skillAtk * 0.3);
+          m.burnDps = Math.max(m.burnDps, this.abilityDamage(0.3, true, 0.06));
           m.applyVuln(this.stats.pitVuln || CRATER_VULN, 0.6);
         }
       }
@@ -1117,54 +1183,100 @@ export class PyroHero extends HeroBase {
   }
 
   /** 大招演出时长：从施放到最后一颗陨石落地（排队间隔 + 弹道飞行）；三选一再等 2s 缓冲由导演统一加 */
+  get ultimateRemaining(): number { return Math.max(this.ultimateT, this.meteorQueue.length ? .01 : 0); }
   get ultShowDuration(): number {
     const uc = pyroUltCfg(this.stats.ultLv);
-    return 0.5 + (uc.meteors - 1) * 0.32 + 1.3;
+    if (!this.meteorQueue.length) return Math.max(ULT_TIMING.pyro.duration,
+      ULT_TIMING.pyro.windup + (uc.meteors - 1) * METEOR_ULT_GAP + (SPAWN_Y + 50 - LINE_Y) / METEOR_SPEED + .8);
+    return Math.max(ULT_TIMING.pyro.duration, this.meteorQueue.reduce((last, q) => Math.max(last,
+      (q.fired ? 0 : Math.max(0, q.t)) + (SPAWN_Y + 50 - q.y) / METEOR_SPEED), 0) + .8);
   }
 
-  /** 大招·陨石天降（手动，击杀充能）：锁定陨石范围内怪物最密集处为固定轰炸区，梅花五点砸下 5 颗陨石；
+  /** 大招·陨石天降：优先覆盖不同怪群，预告后固定落点，不在空中追踪或提前碰撞；
    *  每颗命中留燃烧陨石坑（持续灼烧 + 易伤 25%）；士气高涨卡给攻速爆发 */
   castUlt(mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): boolean {
     if (!this.ultReady) return false;
     const alive = mgr.list.filter(m => !m.dead);
     if (!alive.length) return false;   // 全场无目标：不消耗充能
-    // 索敌：陨石范围内同伴最多者为区中心（密集优先），中心钳制在场内
-    let cx = alive[0].x, cyy = alive[0].y, best = -1;
-    for (const m of alive) {
-      let n = 0;
-      for (const o of alive) if (Math.hypot(o.x - m.x, o.y - m.y) <= ULT_ZONE_R) n++;
-      if (n > best) { best = n; cx = m.x; cyy = m.y; }
-    }
-    cx = Math.max(-330, Math.min(330, cx));
-    cyy = Math.max(-640, Math.min(820, cyy));
-    this.animateAttack(true, cx - this.x, cyy - (HERO_Y + 60));
+    const uc = pyroUltCfg(this.stats.ultLv);
+    const drops = this.planMeteorDrops(alive, uc.meteors, CRATER_R * uc.craterMul);
     this.charge = 0;
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
-    const uc = pyroUltCfg(this.stats.ultLv);
-    // 固定范围梅花五点：中心 1 + 四向 0.55R，少量抖动避免完全重合
-    for (let k = 0; k < 5; k++) {
-      const ang = -Math.PI / 2 + k * Math.PI / 2;
-      const rr = k === 0 ? 0 : ULT_ZONE_R * 0.55;
-      this.meteorQueue.push({
-        t: 0.5 + k * 0.32,
-        x: cx + Math.cos(ang) * rr + (Math.random() * 2 - 1) * 14,
-        y: cyy + Math.sin(ang) * rr + (Math.random() * 2 - 1) * 14,
-      });
-    }
-    // 大招5级升级：追加 2 颗斜向陨石（两条对角线 0.78R），与梅花五点合成七点星
-    for (let k = 0; k < uc.meteors - 5; k++) {
-      const ang = Math.PI / 4 + k * Math.PI;
-      const rr = ULT_ZONE_R * 0.78;
-      this.meteorQueue.push({
-        t: 0.5 + (5 + k) * 0.32,
-        x: cx + Math.cos(ang) * rr + (Math.random() * 2 - 1) * 14,
-        y: cyy + Math.sin(ang) * rr + (Math.random() * 2 - 1) * 14,
-      });
-    }
+    drops.forEach((q, i) => this.meteorQueue.push({ ...q, first: i === 0, last: i === drops.length - 1 }));
+    this.beginUltimate();
+    this.drawMeteorWarnings();
     if (this.stats.ultHaste) this.hasteT = 5;
-    Sfx.cast(this.id, true);
     void _projs; void _dmg;
     return true;
+  }
+
+  private projectedMeteorY(m: Monster, seconds: number): number {
+    if (m.state !== 'move') return m.y;
+    const hold = Math.max(m.freezeT, m.stunT), moving = Math.max(0, seconds - hold);
+    const slowed = Math.min(moving, Math.max(0, m.slowT - hold));
+    const distance = m.def.speed * (moving - slowed * m.slowAmp);
+    const stop = LINE_Y + (m.def.kind === 'ranged' ? m.def.atkRange || 0 : m.def.radius * .5);
+    return Math.max(stop, m.y - distance);
+  }
+
+  /** Greedy new coverage, then spacing; repeat a lone boss only when there is no new group to cover. */
+  private planMeteorDrops(alive: readonly Monster[], count: number, craterRadius: number): { t: number; x: number; y: number }[] {
+    const drops: { t: number; x: number; y: number }[] = [], covered = new Uint8Array(alive.length);
+    const top = SPAWN_Y + 50, r2 = METEOR_BLAST_R ** 2;
+    const spacing = Math.max(craterRadius * 1.6, METEOR_BLAST_R * 1.05);
+    type Choice = { x: number; y: number; score: number; fresh: number };
+    for (let k = 0; k < count; k++) {
+      const delay = ULT_TIMING.pyro.windup + k * METEOR_ULT_GAP;
+      const predicted = alive.map(m => {
+        let y = m.y;
+        // Account for both the stagger and the different fall distance to each target.
+        for (let n = 0; n < 3; n++) y = this.projectedMeteorY(m, delay + (top - y) / METEOR_SPEED);
+        return { x: m.x, y };
+      });
+      const choices: { strict: Choice | null; strictFresh: Choice | null; soft: Choice | null }
+        = { strict: null, strictFresh: null, soft: null };
+      const consider = (rawX: number, rawY: number): void => {
+        const x = Math.max(-330, Math.min(330, rawX));
+        const y = Math.max(LINE_Y + 12, Math.min(LO.half - 24, rawY));
+        let fresh = 0, value = 0, nearest = Infinity;
+        for (let j = 0; j < predicted.length; j++) {
+          const d2 = (predicted[j].x - x) ** 2 + (predicted[j].y - y) ** 2;
+          if (d2 > r2) continue;
+          if (!covered[j]) fresh++;
+          value += (.65 + .35 * (1 - d2 / r2)) / (1 + covered[j] * 2.5);
+        }
+        if (!value) return;
+        const reserve = (point: { x: number; y: number }): void => {
+          nearest = Math.min(nearest, Math.hypot(point.x - x, point.y - y));
+        };
+        drops.forEach(reserve); this.meteorQueue.forEach(reserve);
+        const arrival = delay + (top - y) / METEOR_SPEED;
+        for (const pit of this.craters) if (pit.t > arrival) reserve(pit);
+        const separation = Math.min(1, nearest / spacing);
+        const score = fresh * 100 + value;
+        if (nearest >= spacing) {
+          if (!choices.strict || score > choices.strict.score) choices.strict = { x, y, score, fresh };
+          if (fresh && (!choices.strictFresh || score > choices.strictFresh.score)) choices.strictFresh = { x, y, score, fresh };
+        }
+        const softScore = fresh * 100 + value * (.1 + .9 * separation * separation) + separation * .1;
+        if (!choices.soft || softScore > choices.soft.score) choices.soft = { x, y, score: softScore, fresh };
+      };
+      for (const point of predicted) {
+        consider(point.x, point.y);
+        for (let j = 0; j < 8; j++) {
+          const angle = j * Math.PI / 4 + k * .31, offset = METEOR_BLAST_R * .65;
+          consider(point.x + Math.cos(angle) * offset, point.y + Math.sin(angle) * offset);
+        }
+      }
+      const { strictFresh, strict, soft } = choices;
+      const chosen: Choice = strictFresh || (soft?.fresh ? soft : strict || soft)
+        || { x: predicted[0].x, y: Math.max(LINE_Y + 12, predicted[0].y), score: 0, fresh: 0 };
+      drops.push({ t: delay, x: chosen.x, y: chosen.y });
+      for (let j = 0; j < predicted.length; j++) {
+        if ((predicted[j].x - chosen.x) ** 2 + (predicted[j].y - chosen.y) ** 2 <= r2) covered[j]++;
+      }
+    }
+    return drops;
   }
 }
 
@@ -1177,7 +1289,8 @@ export class VoltHero extends HeroBase {
   readonly chargeMax = VOLT_CHARGE_MAX;
   readonly skillMax = 9;
   /** 大招·天雷灭世：排队落下的雷击（目标引用，落雷时已亡则转随机存活目标） */
-  private strikeQueue: { t: number; target: Monster | null }[] = [];
+  private strikeQueue: { t: number; target: Monster | null; index: number }[] = [];
+  get ultimateRemaining(): number { return Math.max(this.ultimateT, this.strikeQueue.length ? .01 : 0); }
   /** 士气高涨：大招后攻速加成剩余时间 */
   private hasteT = 0;
 
@@ -1270,52 +1383,20 @@ export class VoltHero extends HeroBase {
     projs.normalRelease(this.id, this.x, HERO_Y + 60, lead.dirX, lead.dirY);
     Sfx.shoot(this.id);
     // 70级突破：普攻 15% 概率顺带释放连锁闪电（不占用也不刷新技能冷却）
-    if (this.skillUnlocked && this.stats.skillProc && Math.random() < this.stats.skillProc) this.castChain(mgr, this.lastDmg || undefined);
+    if (this.skillUnlocked && this.stats.skillProc && Math.random() < this.stats.skillProc) this.castChain(mgr, projs, this.lastDmg || undefined);
   }
 
-  /** 闪电闪现特效：锯齿电弧（约 0.22s 淡出）；thick=大招加粗 */
-  private zapFx(x0: number, y0: number, x1: number, y1: number, thick = 3): void {
-    const bolt = new Node('zap');
-    bolt.layer = Layers.Enum.UI_2D;
-    bolt.setParent(this.node.parent!);
-    bolt.setPosition(0, 0, 0);
-    const g = bolt.addComponent(Graphics);
-    g.strokeColor = hexc('#D9A8FF');
-    g.lineWidth = thick;
-    const segs = 5;
-    g.moveTo(x0, y0);
-    for (let i = 1; i < segs; i++) {
-      const t = i / segs;
-      const mx = x0 + (x1 - x0) * t + (Math.random() * 2 - 1) * 18;
-      const my = y0 + (y1 - y0) * t + (Math.random() * 2 - 1) * 18;
-      g.lineTo(mx, my);
-    }
-    g.lineTo(x1, y1);
-    g.stroke();
-    g.strokeColor = hexc('#FFFFFF');
-    g.lineWidth = Math.max(1.2, thick * 0.4);
-    g.moveTo(x0, y0);
-    g.lineTo(x1, y1);
-    g.stroke();
-    g.fillColor = hexc('#FFFFFF');
-    g.circle(x1, y1, thick * 1.8);
-    g.fill();
-    const op = bolt.addComponent(UIOpacity);
-    tween(op).to(0.22, { opacity: 0 }).call(() => bolt.destroy()).start();
-  }
-
-  /** 技能·连锁闪电（自动，9s CD）：从技能范围最近目标起跳，最多 skillShots 目标间跳跃（跳距 260×范围卡），每次 1.4×攻击并感电 */
-  protected castSkill(mgr: MonsterManager, _projs: ProjectileManager, dmg: DamageService): void {
-    void _projs;
+  /** 技能·连锁闪电：即时结算各跳；演出共用池化雷电层与战斗时钟。 */
+  protected castSkill(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
     this.skillCd = this.skillCdTotal;   // 冷却缩减卡
-    this.castChain(mgr, dmg);
+    this.castChain(mgr, projs, dmg);
   }
 
   /** 感电增伤值 = 感电来源（感电卡/雷霆之躯）× 30级加深倍率 */
   private shockAmp(): number { return (this.stats.shockOnHit || 0) * (this.stats.shockAmpMul || 1); }
 
   /** 连锁闪电本体（普攻概率施法复用）：从技能范围最近目标起跳，最多 skillShots 目标间跳跃 */
-  private castChain(mgr: MonsterManager, dmg?: DamageService): void {
+  private castChain(mgr: MonsterManager, projs: ProjectileManager, dmg?: DamageService): void {
     const R = this.stats.skillRange;
     const alive = mgr.list.filter(m => !m.dead && Math.hypot(m.x - this.x, m.y - HERO_Y) <= R);
     if (!alive.length) return;
@@ -1323,11 +1404,13 @@ export class VoltHero extends HeroBase {
     const jumps = Math.max(1, Math.round(this.stats.skillShots || 5));
     const hop = 260 * (this.stats.skillRangeMul || 1);
     const sc = voltSkCfg(this.stats.skillLv);
-    const hitDmg = this.skillAtk * sc.mul * (this.stats.skillMul || 1);
+    const hitDmg = this.abilityDamage(sc.mul);
     const struck = new Set<Monster>();
     let fromX = this.x, fromY = HERO_Y + 60;
     let cur = alive[0];
     this.animateAttack(true, cur.x - this.x, cur.y - (HERO_Y + 60));
+    projs.voltCast(this.x, HERO_Y + 60);
+    Sfx.cast(this.id);
     for (let k = 0; k < jumps && cur; k++) {
       struck.add(cur);
       // 直接结算伤害（连锁无弹道，即时跳）
@@ -1337,7 +1420,7 @@ export class VoltHero extends HeroBase {
       if (dmg) dmg.add(this.id, Math.min(dmgK, hpBefore));
       const sa = this.shockAmp();
       if (sa) cur.applyShock(sa, 3);
-      this.zapFx(fromX, fromY, cur.x, cur.y);
+      projs.voltChain(fromX, fromY, cur.x, cur.y, k);
       Sfx.impact(this.id, false);
       fromX = cur.x; fromY = cur.y;
       // 下一跳：距当前最近且未被打过的（无则终止）
@@ -1352,8 +1435,7 @@ export class VoltHero extends HeroBase {
     }
   }
 
-  protected updateQueues(dt: number, mgr: MonsterManager, _projs: ProjectileManager): void {
-    void mgr;
+  protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
     // 大招落雷：到点对目标位置直击（AOE 90 + 眩晕）；目标已亡则转随机存活目标
     for (let i = this.strikeQueue.length - 1; i >= 0; i--) {
       const q = this.strikeQueue[i];
@@ -1367,7 +1449,9 @@ export class VoltHero extends HeroBase {
           t = alive[(Math.random() * alive.length) | 0];
         }
         this.animateAttack(true, t.x - this.x, t.y - (HERO_Y + 60));
-        this.thunderStrike(t, mgr);
+        if (q.index === 0) Sfx.cast(this.id, true);
+        this.thunderStrike(t, mgr, projs, q.index >= 10 ? 1.16 : 1);
+        this.ultimateBeat(t.x, t.depthY, q.index === 14 ? 1 : q.index === 0 ? .85 : .3, true);
       }
     }
     if (this.hasteT > 0) this.hasteT -= dt;
@@ -1378,10 +1462,10 @@ export class VoltHero extends HeroBase {
   }
 
   /** 单道天雷：从屏外竖劈到目标点，90 半径 AOE + 眩晕（无视物抗的雷击走普通结算） */
-  private thunderStrike(t: Monster, mgr: MonsterManager): void {
+  private thunderStrike(t: Monster, mgr: MonsterManager, projs: ProjectileManager, power = 1): void {
     const uc = voltUltCfg(this.stats.ultLv);
-    const dmgVal = this.skillAtk * uc.boltMul * (this.stats.ultDmgMul || 1);
-    this.zapFx(t.x, SPAWN_Y + 140, t.x, t.y, 6);
+    const dmgVal = this.abilityDamage(uc.boltMul, true);
+    projs.voltThunder(t.x, t.y, SPAWN_Y + 140, t.depthY, 90 * uc.rMul, power);
     Sfx.impact(this.id, true);
     bus.emit(EVT.HIT_STOP);
     for (const o of mgr.mobsInRadius(t.x, t.y, 90 * uc.rMul)) {   // 5级：落雷范围+20%
@@ -1402,14 +1486,15 @@ export class VoltHero extends HeroBase {
     const alive = mgr.list.filter(m => !m.dead);
     if (!alive.length) return false;   // 全场无目标：不消耗充能
     this.charge = 0;
+    this.beginUltimate();
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
     this.lastDmg = dmg;   // 天雷直伤计入伤害统计（施放时刷新引用）
     for (let k = 0; k < 15; k++) {
       const t = alive[k % alive.length];
-      this.strikeQueue.push({ t: 0.1 + k * 0.08, target: t });
+      const group = Math.floor(k / 5), within = k % 5;
+      this.strikeQueue.push({ t: [.65, 1.95, 3.15][group] + within * [.2, .17, .16][group], target: t, index: k });
     }
     if (this.stats.ultHaste) this.hasteT = 5;
-    Sfx.cast(this.id, true);
     void projs;
     return true;
   }
@@ -1423,6 +1508,7 @@ export class FrostHero extends HeroBase {
   readonly name = '莫拉·寒霜';
   readonly chargeMax = MORA_CHARGE_MAX;
   readonly skillMax = 10;
+  private ultimateBurstT = -1;
 
   protected buildVisual(parent: Node): void {
     const g = this.node.addComponent(Graphics);
@@ -1522,7 +1608,7 @@ export class FrostHero extends HeroBase {
     const center = mgr.densestArea(this.x, HERO_Y, this.stats.skillRange, NR);
     if (!center) return;
     this.animateAttack(true, center.x - this.x, center.y - (HERO_Y + 60));
-    const hitDmg = this.skillAtk * mc.mul * (this.stats.skillMul || 1);
+    const hitDmg = this.abilityDamage(mc.mul);
     const freeze = (this.stats.novaStun || 1.5) + mc.stunBonus;
     // Snapshot the cast position: killing the central target cannot move the remaining field.
     projs.frostDomain(center.x, center.y, NR, freeze);
@@ -1543,29 +1629,36 @@ export class FrostHero extends HeroBase {
     this.castFrostField(mgr, projs, dmg);
   }
 
-  /** 大招·极寒领域：全场一次伤害与减速，脚边碎冰和冰棱雨表现命中。 */
+  /** Windup ends at the first rain contacts; one real field hit, unchanged multipliers/slow. */
+  protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
+    if (this.ultimateBurstT < 0) return;
+    this.ultimateBurstT -= dt;
+    if (this.ultimateBurstT > 0) return;
+    this.ultimateBurstT = -1;
+    const alive = mgr.list.filter(m => !m.dead);
+    projs.frostUltimateBurst(alive.map(m => ({ x: m.x, y: m.depthY, radius: m.def.radius })));
+    if (alive[0]) this.animateAttack(true, alive[0].x - this.x, alive[0].y - HERO_Y - 60);
+    const uc = moraUltCfg(this.stats.ultLv);
+    for (const m of alive) {
+      const hpBefore = m.hp, d = this.abilityDamage(uc.boltMul, true);
+      m.takeDamage(d, false, this.id, false, 0, -Math.PI / 2, true);
+      this.lastDmg?.add(this.id, Math.min(d, hpBefore));
+      if (!m.dead) m.applySlow(this.slowR(uc.slowMul), uc.slowDur + (this.stats.ultSlowDur || 0));
+    }
+    Sfx.cast(this.id, true);
+    this.ultimateBeat(this.x, HERO_Y + 60, .8);
+    bus.emit(EVT.HIT_STOP);
+  }
+  protected queuedShotDelay(): number { return this.ultimateBurstT >= 0 ? this.ultimateBurstT : Infinity; }
   castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean {
     if (!this.ultReady) return false;
     const alive = mgr.list.filter(m => !m.dead);
-    if (!alive.length) return false;   // 全场无目标：不消耗充能
-    this.animateAttack(true, alive[0].x - this.x, alive[0].y - (HERO_Y + 60));
-    this.charge = 0;
+    if (!alive.length) return false;
+    this.charge = 0; this.lastDmg = dmg;
+    this.beginUltimate();
+    this.ultimateBurstT = ULT_TIMING.mora.windup;
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
-    this.lastDmg = dmg;   // 直伤计入伤害统计（施放时刷新引用）
-    // Capture feet before damage can kill/recycle a target. These are visual
-    // snapshots, independent of the existing damage/slow and monster movement.
-    projs.frostUltimate(alive.map(m => ({ x: m.x,
-      y: m.y - m.def.radius * 0.82 + m.def.radius * 3.85 * m.groundOffset,
-      radius: m.def.radius })));
-    const uc = moraUltCfg(this.stats.ultLv);
-    for (const m of alive) {
-      const hpBefore = m.hp;
-      const d = this.skillAtk * uc.boltMul * (this.stats.ultDmgMul || 1);
-      m.takeDamage(d, false, this.id, false, 0, -Math.PI / 2, true);
-      if (this.lastDmg) this.lastDmg.add(this.id, Math.min(d, hpBefore));
-      m.applySlow(this.slowR(uc.slowMul), uc.slowDur + (this.stats.ultSlowDur || 0));
-    }
-    Sfx.cast(this.id, true);
+    projs.frostUltimate(alive.map(m => ({ x: m.x, y: m.depthY, radius: m.def.radius })));
     return true;
   }
 }

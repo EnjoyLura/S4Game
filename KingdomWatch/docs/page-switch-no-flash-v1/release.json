@@ -1,0 +1,47 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-page-switch-no-flash-v1-20261015-131751",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-tap-spring-v2-20261015-095154",
+  "entryVersion": "1792041458",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=page-switch-no-flash-v1-1792041458",
+  "scope": "stable page and hero refresh; retain opaque prior surface until replacement art is ready",
+  "layoutChanged": false,
+  "interactionAcceptance": "pending user manual review",
+  "status": "published",
+  "refreshOpacityPulse": false,
+  "retainedPreviousPageOpacity": 255,
+  "artReadiness": [
+    "artSprite",
+    "artAtlasSprite"
+  ],
+  "atomicRefresh": [
+    "main pages",
+    "hero selection and bag",
+    "training and upgrades",
+    "level selection",
+    "shop categories"
+  ],
+  "pageTransition": "incoming page over opaque outgoing page, including background",
+  "staleRequestGuard": true,
+  "buttonSpringAndTapFeedbackRetained": true,
+  "previousAudioRetained": true,
+  "newMediaGenerated": false,
+  "gameplayValidation": "user manual; no tests, browser, game or online acceptance run",
+  "deployment": "https://c3c2cab6.kingdom-watch.pages.dev",
+  "date": "2026-10-15T13:18:38.078421+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-page-switch-no-flash-v1-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-page-switch-no-flash-v1-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "stable page and hero refresh; retain opaque prior surface until replacement art is ready",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 13092,
+  "deploymentSucceeded": true,
+  "uploadedFiles": 2,
+  "cachedFiles": 1880
+}

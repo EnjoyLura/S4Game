@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-pick-motion-v2-20261016-000750",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-ultimate-staging-v1-20261015-234408",
+  "entryVersion": "1792080348",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=pick-motion-v2-1792080348",
+  "scope": "ultimate readiness fix, card choreography, purchase feedback and battle entry flags",
+  "layoutChanged": false,
+  "manualAcceptance": "pending user manual review"
+}

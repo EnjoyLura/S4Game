@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-tap-spring-v2-20261015-095154",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-combat-audio-v2-20261015-094037",
+  "entryVersion": "1792029083",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=tap-spring-v2-1792029083",
+  "scope": "whole-game tap feedback and elastic buttons without whitening",
+  "layoutChanged": false,
+  "interactionAcceptance": "pending user manual review"
+}

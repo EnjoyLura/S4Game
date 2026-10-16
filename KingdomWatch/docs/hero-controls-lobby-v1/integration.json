@@ -1,0 +1,42 @@
+{
+  "status": "published",
+  "scope": "hero navigation style, detail action placement and inventory tab centering",
+  "code": "assets/scripts/ui/pages/HeroPage.ts",
+  "cycleButtons": {
+    "style": "ComicUI dark clipped face with native gold chevron",
+    "size": [
+      64,
+      64
+    ],
+    "positionsPreserved": true
+  },
+  "detailActions": {
+    "location": "below hero power, in character column",
+    "size": [
+      148,
+      50
+    ],
+    "icon": 30,
+    "font": 22,
+    "reservedFooterHeight": 64
+  },
+  "equipmentPanel": {
+    "height": "188 + 2 * squareSlotSize",
+    "bottomPadding": 16
+  },
+  "inventoryTabs": {
+    "icon": 30,
+    "gap": 10,
+    "captionWidth": 44,
+    "iconCenter": -27,
+    "captionCenter": 20,
+    "alignment": "center as complete group"
+  },
+  "heroFigureSizeAndAbsolutePositionPreserved": true,
+  "existingGameplayAudioAndBattleUiPreserved": true,
+  "generatedAssets": false,
+  "visualAcceptance": "pending user manual review",
+  "automatedTestsOrGameLaunch": false,
+  "game": "https://kingdom-watch.pages.dev/?v=hero-controls-lobby-v1-1792001902",
+  "deployment": "https://a7e77de6.kingdom-watch.pages.dev"
+}

@@ -5,16 +5,17 @@ import { Node } from 'cc';
 import { PAL } from '../../config/GameConfig';
 import { CA, btn, gcircle, gpanel, label } from '../UIKit';
 import { artSprite } from '../Ux';
-import { PageCtx, modal, toast, fmt } from '../PageKit';
+import { PageCtx, modal, fmt } from '../PageKit';
 import { buildTrainingLobby } from '../TrainingLobby';
-import { attrsModal } from './HeroPage';
+import { attrsModal, forgeModal } from './HeroPage';
 import {
   EquipKind, HERO_DEFS, EQUIPS, QCOLOR, MAX,
   equipUpCost,
-  upWornEquip, wornInst, equipStat, statFmt, equipAgg, STAT_NAME, StatKey, matCount,
-  BT_STEP, BT_WPN, BT_SKL, btN, heroBtAgg, heroBtList,
+  upWornEquip, wornInst, equipStat, statFmt, STAT_NAME, StatKey, matCount,
+  BT_STEP, BT_SKL, heroBtList, heroStatsAt, weaponBtList,
 } from '../../core/GameData';
 import { loadSave } from '../../core/SaveData';
+import { growthAction } from '../GrowthFeedback';
 
 const KIND_ICON: Record<string, string> = { weapon: '🏹', helm: '⛑️', acc: '📿', glove: '🧤', armor: '🥼' };
 const QNAMES = ['普通', '优秀', '稀有', '史诗'];
@@ -36,7 +37,7 @@ const NO = '#B03A2E';
 
 /** 英雄突破步骤条数据（专属表 txt 直用——弓箭手已定稿；未配置英雄回退通用档） */
 const heroMilestones = (hid: string): { lv: number; txt: string }[] => heroBtList(hid).map(m => ({ lv: m.lv, txt: m.txt }));
-const weaponMilestones = (): { lv: number; txt: string }[] => btMs(MAX.weapon, BT_STEP.weapon, `攻击与技能伤害 +${Math.round(BT_WPN * 100)}%`);
+const weaponMilestones = (hid: string): { lv: number; txt: string }[] => weaponBtList(hid);
 /* 弓箭手技能升级里程碑（用户定稿：机制型档位取代通用 +15%/5级）；其余英雄维持通用数值档 */
 const SKILL_MS_ARCHER: Record<'atk' | 'skill' | 'ult', { lv: number; txt: string }[]> = {
   atk: [
@@ -155,22 +156,9 @@ const skillMilestones = (hid: string, slot: 'atk' | 'skill' | 'ult'): { lv: numb
           : hid === 'mora' ? SKILL_MS_MORA[slot]
             : btMs(MAX.skill, BT_STEP.skill, SKILL_GENERIC[slot]);
 
-/** 指定等级/武器/技能等级下的三维属性（复刻 heroStats 公式含阶段性突破，供升级预览差值） */
-function statsAt(hid: string, lv: number, wpnLv: number, skillLv?: number): { atk: number; skillDmg: number } {
-  const sv = loadSave();
-  const def = HERO_DEFS[hid];
-  const h = sv.heroes[hid];
-  const skl = skillLv ?? h.skillLv;
-  const agg = equipAgg(hid);   // 穿戴词条：攻击平加/加成、技能伤害平加
-  const bt = heroBtAgg(hid, lv);   // 英雄阶段性突破（弓箭手专属表；攻击/技能/面板轴）
-  const base = def.baseAtk * (1 + (lv - 1) * 0.08) * (1 + bt.atkPct)
-    * (1 + (wpnLv - 1) * 0.06) * (1 + btN(wpnLv, BT_STEP.weapon) * BT_WPN);
-  const atk = Math.round(base * (1 + agg.atkPct) + agg.atkFlat);
-  const sklMul = (hid === 'archer' || hid === 'sniper' || hid === 'volt' || hid === 'pyro' || hid === 'mora')
-    ? (1 + (skl - 1) * 0.08)
-    : (1 + (skl - 1) * 0.10) * (1 + btN(skl, BT_STEP.skill) * BT_SKL);
-  const skillDmg = Math.round(base * sklMul * (1 + bt.skillPct) * (1 + (lv - 1) * 0.05)) + agg.skillDmgFlat;
-  return { atk, skillDmg };
+/** 升级预览直接复用两项基础属性，避免与战斗成长产生偏差。 */
+function statsAt(hid: string, lv: number, wpnLv: number): { atk: number; skillDmg: number } {
+  return heroStatsAt(hid, lv, wpnLv);
 }
 
 /** 持有材料总数（强化消耗聚合扣强化石→精铁） */
@@ -200,6 +188,7 @@ function costChip(card: Node, x: number, y: number, icon: string, need: number, 
 
 /** 装备强化弹窗（参照技能升级弹窗版式：扁平无框 + 奶白分区板 + 深色行动条；升级页装备卡 + 英雄页「锻造」共用） */
 export function equipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: () => void): void {
+  if (kind === 'weapon') { forgeModal(ctx, hid, kind); return; }
   const sv = loadSave();
   const inst = wornInst(hid, kind)!;
   const d = EQUIPS[inst.defId];
@@ -248,8 +237,7 @@ export function equipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: 
     costChip(act, -212, 0, '🪙', c.gold, sv.gold, 100);
     costChip(act, -30, 0, '🧱', c.mat, matOwned(), 70);
     btn(act, 195, 0, 160, 54, '强 化', PAL.gold, () => {
-      const r = upWornEquip(hid, kind);
-      toast(r.msg);
+      const r = growthAction({ kind: 'equip', hid, slot: kind }, () => upWornEquip(hid, kind));
       if (r.ok) { const p2 = panel.parent; if (p2) p2.destroy(); rebuild(); }
     }, 24, true);
     if (sv.gold >= c.gold && matOwned() >= c.mat) gpanel(act, 263, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);   // 红点=当前就能升

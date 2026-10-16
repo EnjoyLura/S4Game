@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-level-breakthrough-swipe-v1-20261016-101808",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-level-difficulty-loot-v1-20261016-095440",
+  "entryVersion": "1792117063",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=level-breakthrough-swipe-v1-1792117063",
+  "scope": "hero level and weapon breakthroughs use the existing skill milestone swipe interaction",
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review"
+}

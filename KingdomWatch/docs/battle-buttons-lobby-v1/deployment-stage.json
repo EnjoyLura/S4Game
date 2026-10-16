@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-buttons-lobby-v1-20261015-021428",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-basic-launch-emphasis-v4-20261015-020716",
+  "entryVersion": "1792001544",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=battle-buttons-lobby-v1-1792001544",
+  "scope": "reuse lobby button styling in battle panels",
+  "layoutChanged": false,
+  "visualAcceptance": "pending user manual review"
+}

@@ -1,0 +1,12 @@
+✨ Compiled Worker successfully
+Uploading... (1891/1894)
+Uploading... (1892/1894)
+Uploading... (1893/1894)
+Uploading... (1894/1894)
+✨ Success! Uploaded 3 files (1891 already uploaded) (2.92 sec)
+
+✨ Uploading _headers
+✨ Uploading Functions bundle
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://f2adc10e.kingdom-watch.pages.dev
+{"stage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-volt-ground-alignment-v1-20261015-222815","priorPublishedStage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-ultimate-ui-v3-20261015-220214","entryVersion":"1792074343","project":"kingdom-watch","branch":"main","game":"https://kingdom-watch.pages.dev/?v=volt-ground-alignment-v1-1792074343","scope":"align thunder ground ring, synchronize sniper multi-target aim, commit pyro meteors to spread-out warned ground points","layoutChanged":false,"manualAcceptance":"pending user manual review"}

@@ -1,0 +1,20 @@
+{
+  "status": "published",
+  "scope": "whole-game tap feedback and elastic buttons without whitening",
+  "buttonPressSeconds": 0.07,
+  "buttonDefaultPressScale": 0.94,
+  "buttonReboundPeakScale": 1.022,
+  "buttonReboundSeconds": 0.23,
+  "buttonWhiteOverlay": false,
+  "tapPool": 8,
+  "tapReleaseSeconds": 0.4,
+  "tapSources": [
+    "DOM capture",
+    "Cocos global unhandled touch"
+  ],
+  "previousCombatAudioRetained": true,
+  "newMediaGenerated": false,
+  "gameplayValidation": "user manual; no tests, browser, game or online acceptance run",
+  "game": "https://kingdom-watch.pages.dev/?v=tap-spring-v2-1792029083",
+  "deployment": "https://d07f2c8e.kingdom-watch.pages.dev"
+}

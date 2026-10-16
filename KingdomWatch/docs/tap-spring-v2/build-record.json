@@ -1,0 +1,10 @@
+{
+  "exitCode": 36,
+  "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-tap-spring-v2-20261015-out.log",
+  "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-tap-spring-v2-20261015-err.log",
+  "creator": "3.8.8",
+  "platform": "web-mobile",
+  "dprPatch": "completed",
+  "scope": "whole-game tap feedback and elastic buttons without whitening",
+  "gameplayValidation": "user manual"
+}

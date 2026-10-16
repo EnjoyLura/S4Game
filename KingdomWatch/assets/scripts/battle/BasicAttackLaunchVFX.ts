@@ -9,11 +9,11 @@ interface Procedural {
 }
 interface Release { x: number; y: number; dx: number; dy: number; age: number; scale: number; phase: number; style: Style; quad: Procedural; }
 const STYLES: Record<string, Style> = {
-  archer: { element: 'wind', life: .24, scale: 1, primary: [216, 239, 231], light: [248, 255, 252], dark: [138, 190, 177] },
-  sniper: { element: 'wind', life: .28, scale: 1.2, primary: [210, 234, 246], light: [248, 255, 255], dark: [120, 182, 204] },
-  pyro: { element: 'fire', life: .25, scale: 1, primary: [255, 136, 35], light: [255, 238, 175], dark: [230, 65, 24] },
-  volt: { element: 'volt', life: .22, scale: 1, primary: [180, 126, 245], light: [242, 227, 255], dark: [114, 69, 203] },
-  mora: { element: 'frost', life: .28, scale: 1, primary: [136, 221, 249], light: [229, 253, 255], dark: [55, 157, 218] },
+  archer: { element: 'wind', life: .32, scale: 1.45, primary: [216, 239, 231], light: [248, 255, 252], dark: [138, 190, 177] },
+  sniper: { element: 'wind', life: .36, scale: 1.7, primary: [210, 234, 246], light: [248, 255, 255], dark: [120, 182, 204] },
+  pyro: { element: 'fire', life: .34, scale: 1.5, primary: [255, 136, 35], light: [255, 238, 175], dark: [230, 65, 24] },
+  volt: { element: 'volt', life: .30, scale: 1.5, primary: [180, 126, 245], light: [242, 227, 255], dark: [114, 69, 203] },
+  mora: { element: 'frost', life: .36, scale: 1.5, primary: [136, 221, 249], light: [229, 253, 255], dark: [55, 157, 218] },
 };
 const MODES: Record<Element, number> = { wind: 0, fire: 1, volt: 2, frost: 3 };
 
@@ -75,7 +75,11 @@ export class BasicAttackLaunchVFX {
     // Exhausting a cosmetic pool never blocks or changes a physical shot.
     const a = this.free.pop();
     if (!a) return;
-    a.x = x; a.y = y; a.dx = dx / length; a.dy = dy / length;
+    a.dx = dx / length; a.dy = dy / length;
+    // Keep the pressure front ahead of the weapon, away from the head. Both
+    // shader and Graphics use this cosmetic origin; projectiles keep theirs.
+    const forward = hero === 'archer' ? 36 : hero === 'sniper' ? 42 : 0;
+    a.x = x + a.dx * forward; a.y = y + a.dy * forward;
     a.age = 0; a.style = style; a.scale = style.scale * (empowered ? 1.12 : 1);
     a.phase = (++this.serial * 2.399963) % (Math.PI * 2);
     this.active.push(a);
@@ -120,7 +124,7 @@ export class BasicAttackLaunchVFX {
   }
 
   private color(rgb: RGB, alpha: number): void {
-    this.tint.set(rgb[0], rgb[1], rgb[2], Math.round(Math.max(0, Math.min(255, alpha))));
+    this.tint.set(rgb[0], rgb[1], rgb[2], Math.round(Math.max(0, Math.min(255, alpha * 1.25))));
     this.g.fillColor = this.tint;
     this.g.strokeColor = this.tint;
   }
@@ -165,25 +169,25 @@ export class BasicAttackLaunchVFX {
   }
 
   private wind(a: Release, t: number): void {
-    const open = 1 - Math.pow(1 - t, 3), fade = Math.pow(1 - t, 1.5);
+    const open = 1 - Math.pow(1 - t, 3), fade = Math.pow(1 - t, 1.05);
     const u = 4 + open * 20, span = 7 + open * 23;
     this.color(a.style.primary, 100 * fade);
     this.pressure(a, u - 4, span * .84, 6, 4);
     this.color(a.style.light, 225 * fade);
-    this.pressure(a, u, span, 10, 4 * (1 - t * .7));
+    this.pressure(a, u, span, 10, 5 * (1 - t * .6));
     this.color(a.style.light, 140 * fade);
-    this.pressure(a, u - 8, span * .67, 5, 1.5);
+    this.pressure(a, u - 8, span * .67, 5, 2.3);
     for (let k = 0; k < 2; k++) {
       const side = k === 0 ? -1 : 1;
       this.color(a.style.primary, 145 * fade);
-      this.ribbon(a, -4 + open * 6, side * (5 + open * 7), 24 + open * 14, 1.1 * (1 - t * .65), side * 2.2);
+      this.ribbon(a, -4 + open * 6, side * (5 + open * 7), 24 + open * 14, 1.7 * (1 - t * .6), side * 2.2);
     }
     this.color(a.style.light, 130 * Math.pow(1 - t, 3));
     this.ribbon(a, -3, 0, 22 + open * 9, 1.1, 0);
   }
 
   private fire(a: Release, t: number): void {
-    const fade = Math.pow(1 - t, 1.55), travel = 1 - Math.pow(1 - t, 2);
+    const fade = Math.pow(1 - t, 1.05), travel = 1 - Math.pow(1 - t, 2);
     const u = 1 + travel * 19, length = 24 * (1 - t * .45);
     this.color(a.style.dark, 110 * fade);
     this.ribbon(a, u - 3, 0, length + 7, 7 * (1 - t * .6), Math.sin(t * 8 + a.phase) * 2);
@@ -196,7 +200,7 @@ export class BasicAttackLaunchVFX {
       this.color(a.style.primary, 180 * fade);
       this.ribbon(a, u + 2, side * 5, length * .65, 2.2 * (1 - t), side * (3 + t * 4));
     }
-    for (let k = 0; k < 4; k++) {
+    for (let k = 0; k < 8; k++) {
       const side = k % 2 ? -1 : 1, distance = 7 + travel * (22 + k * 3);
       const v = side * (3 + travel * (3 + k * 2)) + Math.sin(a.phase + k) * 1.5;
       this.color(k % 2 ? a.style.light : a.style.primary, 205 * fade);
@@ -218,15 +222,15 @@ export class BasicAttackLaunchVFX {
   }
 
   private volt(a: Release, t: number): void {
-    const fade = Math.pow(1 - t, 1.25);
+    const fade = Math.pow(1 - t, .95);
     this.color(a.style.dark, 60 * fade);
     this.pressure(a, 3 + t * 8, 5 + t * 10, 4, 3);
     for (let branch = 0; branch < 3; branch++) {
       this.color(a.style.primary, (branch ? 180 : 230) * fade);
-      this.g.lineWidth = (branch ? 2.1 : 3.4) * a.scale;
+      this.g.lineWidth = (branch ? 2.7 : 4.2) * a.scale;
       this.electricPath(a, branch, t);
       this.color(a.style.light, (branch ? 200 : 245) * fade);
-      this.g.lineWidth = (branch ? .8 : 1.2) * a.scale;
+      this.g.lineWidth = (branch ? 1.1 : 1.6) * a.scale;
       this.electricPath(a, branch, t);
     }
     for (let k = 0; k < 3; k++) {
@@ -249,7 +253,7 @@ export class BasicAttackLaunchVFX {
   }
 
   private frost(a: Release, t: number): void {
-    const fade = Math.pow(1 - t, 1.6), travel = 1 - Math.pow(1 - t, 2);
+    const fade = Math.pow(1 - t, 1.05), travel = 1 - Math.pow(1 - t, 2);
     this.color(a.style.primary, 90 * fade);
     this.pressure(a, 3 + travel * 12, 5 + travel * 10, 5, 3);
     this.color(a.style.light, 165 * fade);
@@ -259,7 +263,7 @@ export class BasicAttackLaunchVFX {
       this.color(a.style.primary, 105 * fade);
       this.ribbon(a, 1 + travel * 7, side * (4 + travel * 7), 20 + travel * 13, 1.8 * (1 - t * .6), side * 2);
     }
-    for (let k = 0; k < 4; k++) {
+    for (let k = 0; k < 6; k++) {
       const side = k % 2 ? -1 : 1, u = 5 + travel * (19 + k * 4);
       const v = side * (2 + travel * (3 + k * 2));
       this.crystal(a, u, v, (3 + k * .5) * (1 - t * .3), 1.6 * (1 - t * .3), fade);

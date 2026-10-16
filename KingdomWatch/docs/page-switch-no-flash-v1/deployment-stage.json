@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-page-switch-no-flash-v1-20261015-131751",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-tap-spring-v2-20261015-095154",
+  "entryVersion": "1792041458",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=page-switch-no-flash-v1-1792041458",
+  "scope": "stable page and hero refresh; retain opaque prior surface until replacement art is ready",
+  "layoutChanged": false,
+  "interactionAcceptance": "pending user manual review"
+}

@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-boss-warning-base-modal-v1-20261016-092807",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-settlement-pause-layout-v2-20261016-012601",
+  "entryVersion": "1792113926",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=boss-warning-base-modal-v1-1792113926",
+  "scope": "central elite/Boss warning, persistent base upgrade/codex modal and two-second entry gate hold",
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review"
+}

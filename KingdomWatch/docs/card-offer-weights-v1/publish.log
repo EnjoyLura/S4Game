@@ -1,0 +1,11 @@
+✨ Compiled Worker successfully
+Uploading... (1880/1882)
+Uploading... (1881/1882)
+Uploading... (1882/1882)
+✨ Success! Uploaded 2 files (1880 already uploaded) (2.71 sec)
+
+✨ Uploading _headers
+✨ Uploading Functions bundle
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://65be08bd.kingdom-watch.pages.dev
+{"stage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-card-offer-weights-v1-20261015-134100","priorPublishedStage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-skill-milestone-swipe-v1-20261015-133037","entryVersion":"1792042826","project":"kingdom-watch","branch":"main","game":"https://kingdom-watch.pages.dev/?v=card-offer-weights-v1-1792042826","scope":"upgrade offers: generic stat weight x0.3; normal attack, skill and ultimate weight x2","layoutChanged":false,"interactionAcceptance":"pending user manual review"}

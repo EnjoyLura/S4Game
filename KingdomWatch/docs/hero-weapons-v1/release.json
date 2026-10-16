@@ -1,0 +1,39 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-weapons-v1-20261016-131406",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-training-defense-entry-v1-20261016-124727",
+  "entryVersion": "1792127520",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-weapons-v1-1792127520",
+  "scope": "mandatory starter weapons; four green weapons; per-hero shared weapon cultivation and weapon-specific breakthroughs; gate closed hold 1.5s; frost ultimate rain 256; pyro crater size +20%",
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://f1a21232.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-hero-weapons-v1-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-hero-weapons-v1-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "mandatory starter weapons; four green weapons; per-hero shared weapon cultivation and weapon-specific breakthroughs; gate closed hold 1.5s; frost ultimate rain 256; pyro crater size +20%",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 9193,
+  "date": "2026-10-16T13:14:54.727290+08:00",
+  "mainBundleSha256": "23f4ffaea1e141f17d02e23dd41310a8d215f815575055e7da9ef0c7cc463967",
+  "imagegen": "generation.json",
+  "offlineResourceInspection": "bundle-inspection.json",
+  "validation": {
+    "sourceReview": true,
+    "localBundleInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "testsRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-settlement-pause-layout-v2-20261016-012601",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-entry-art-v2-20261016-005828",
+  "entryVersion": "1792085119",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=settlement-pause-layout-v2-1792085119",
+  "scope": [
+    "lobby paper settlement backplates",
+    "two-action failure footer with ad revive at former return position",
+    "retry routes to same level and difficulty lobby without starting battle",
+    "centered adaptive pause spacing and separate audio credits link",
+    "replace rejected ornate gate with warm-wood outpost gate",
+    "prewarm exact squad pick artwork and give immediate title response",
+    "high-contrast targeting range at the actual distance-check center"
+  ],
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "settlement": {
+    "style": "existing ComicUI paper/card plates and dark text for win/lose; original crown banner, icons and tabs retained",
+    "failureActions": {
+      "left": "ad revive",
+      "right": "retry via current level lobby",
+      "removed": "return button and full-width ad row"
+    },
+    "adState": "busy locks retry, cancellation keeps panel with retry caption, stale callback guards retained",
+    "gameplay": "revive ratio and rewards unchanged"
+  },
+  "navigation": {
+    "mode": "main",
+    "mainTab": 2,
+    "levelReturn": "one-shot id/diff, consumed by LevelsPage and route scroll focuses selected stop",
+    "failureRollback": "restore all flow values and release navigation lock",
+    "nextLevel": "existing victory next-level path unchanged"
+  },
+  "pause": {
+    "referenceHeight": 680,
+    "scale": "min(1,(visible safe height-48)/680)",
+    "rowHeight": 60,
+    "rowCenters": [
+      202,
+      126,
+      50,
+      -26
+    ],
+    "rowGap": 16,
+    "titleToFirstRowGap": 32,
+    "credits": {
+      "y": -100,
+      "height": 44,
+      "lastRowGap": 22,
+      "tabGap": 19
+    },
+    "tabs": {
+      "y": -170,
+      "height": 58
+    },
+    "actions": {
+      "y": -270,
+      "height": 86,
+      "tabGap": 28,
+      "horizontalGap": 50
+    },
+    "stats": "four squad rows in content band, percent and bar separate",
+    "behavior": "music/sfx settings, disabled vibration, speed unlock, pause state and credits destination retained"
+  },
+  "entry": {
+    "resource": "assets/resources/ux/battle_entry_v3/outpost_gate.png",
+    "method": "built-in image_gen style transfer using rejected gate for layout and own outpost/shop environment style references; original output copied unchanged",
+    "palette": "warm matte timber, charcoal iron, small blue fleur-de-lis shield",
+    "removed": "large gold crown/leaves/diamond ornament and program join glint",
+    "unchanged": "240ms close,60ms minimum hold,320ms open,critical first-draw/prewarm/fallback/input guards"
+  },
+  "picker": {
+    "finding": "all chrome/cards waited for art; current parchment and mapped portrait assets absent from old preload list; runtime timing not measured",
+    "prewarm": "shared actual art mapping, squad-owned/global pool, 2 workers with 16ms yields, existing uxFrame cache/deduplication",
+    "entryBarrier": "not included in opaque battle entry first-paint barrier",
+    "response": "immediate title and open sound; complete cards only after their art settles",
+    "firstEntrySeconds": 0.32,
+    "cardStaggerSeconds": 0.035,
+    "cardSettleSeconds": 0.24,
+    "queue": "defer modal creation to after combat substeps rather than inside kill callback",
+    "unchanged": "480ms choose,520ms refresh,ultimate presentation buffer,RNG/card effects/weights and input guards"
+  },
+  "targetRange": {
+    "visibleWhen": "existing attack/skill tips are open",
+    "center": "hero.x,HERO_Y; removes old +30px visual offset",
+    "radius": "existing live hero.stats.range or hero.stats.skillRange",
+    "attackColor": "#FFD16A",
+    "skillColor": "#79D4FF",
+    "fillAlpha": 0.1,
+    "boundary": "17px soft edge,8px dark keyline,4.5px color,1.25px light core",
+    "runtimeCost": "static Graphics drawn only on tips open; no new images or per-frame drawing"
+  },
+  "validation": {
+    "sourceReview": true,
+    "offlineAssetInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "tests": false,
+    "simulation": false,
+    "gameLaunch": false,
+    "browser": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user review",
+    "localBundleInspection": true
+  },
+  "deployment": "https://b5a65859.kingdom-watch.pages.dev",
+  "date": "2026-10-16T01:26:54.653297+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-settlement-pause-layout-v2-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-settlement-pause-layout-v2-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "lobby-paper settlement, retry via current level lobby, spaced pause layout, warm-wood gate, picker response/prewarm and high-contrast targeting range",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 9938,
+  "mainBundleSha256": "6c23f948e1e66ceba9a3e8b045144b8e74b0d5b093d3e21b18b850ca346714d1",
+  "deploymentSucceeded": true,
+  "uploadedFiles": 6,
+  "cachedFiles": 1924
+}

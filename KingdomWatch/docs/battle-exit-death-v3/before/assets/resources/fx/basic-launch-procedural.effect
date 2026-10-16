@@ -1,0 +1,174 @@
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: launch-vs:vert
+      frag: launch-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: one
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties:
+        launchState: { value: [1, 0, 0, 0] }
+        launchColor: { value: [0.85, 0.94, 0.9, 1] }
+}%
+
+CCProgram launch-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+  out vec2 uv0;
+  out vec4 color;
+  vec4 vert () {
+    vec4 p = vec4(a_position, 1.0);
+    #if USE_LOCAL
+      p = cc_matWorld * p;
+    #endif
+    uv0 = a_texCoord;
+    color = a_color;
+    return cc_matViewProj * p;
+  }
+}%
+
+CCProgram launch-fs %{
+  precision highp float;
+  in vec2 uv0;
+  in vec4 color;
+  uniform Launch {
+    vec4 launchState;
+    vec4 launchColor;
+  };
+  float band(float d, float width) {
+    return exp(-d * d / (width * width));
+  }
+  float segment(vec2 p, vec2 a, vec2 b) {
+    vec2 ab = b - a;
+    return length(p - a - ab * clamp(dot(p - a, ab) / max(dot(ab, ab), 0.01), 0.0, 1.0));
+  }
+  // Approximate signed distance in pixels, preserving a thin core as the ring expands.
+  float ellipse(vec2 p, vec2 radius) {
+    float k0 = length(p / radius);
+    float k1 = length(p / (radius * radius));
+    if (k0 < 0.001) return -min(radius.x, radius.y);
+    return k0 * (k0 - 1.0) / max(k1, 0.001);
+  }
+  vec4 frag () {
+    // The quad's origin is the actual projectile release point; +X follows its direction.
+    vec2 p = (uv0 - vec2(0.25, 0.5)) * vec2(128.0, 96.0);
+    float t = clamp(launchState.x, 0.0, 1.0);
+    float mode = launchState.y;
+    float phase = launchState.z;
+    float age = launchState.w;
+    float travel = 1.0 - (1.0 - t) * (1.0 - t);
+    float onset = smoothstep(0.0, 0.04, t);
+    float fade = onset * pow(1.0 - t, 0.95);
+    float ink = 0.0;
+    float core = 0.0;
+    vec3 tint = launchColor.rgb;
+    vec3 hot = vec3(0.96, 1.0, 0.99);
+
+    if (mode < 0.5) {
+      // An open pressure ring with a bright leading edge and a quiet rear half.
+      vec2 q = p - vec2(3.0 + travel * 14.0, 0.0);
+      float d = ellipse(q, vec2(4.0 + travel * 2.0, 7.0 + travel * 16.0));
+      float front = 0.16 + 0.84 * smoothstep(-3.5, 4.5, q.x);
+      ink += (band(d, 3.1) * 0.30 + band(d, 1.15) * 0.60) * front;
+      core += band(d, 0.80) * front * 0.84;
+      // A trailing pressure front opens just after the leading snap.
+      vec2 echo = p - vec2(-3.0 + travel * 9.0, 0.0);
+      float echoDistance = ellipse(echo, vec2(4.0 + travel, 4.0 + travel * 12.0));
+      float echoFront = smoothstep(-3.0, 3.5, echo.x);
+      float echoLife = smoothstep(0.04, 0.20, t) * (1.0 - smoothstep(0.55, 0.95, t));
+      ink += band(echoDistance, 2.3) * echoFront * echoLife * 0.28;
+      core += band(echoDistance, 0.70) * echoFront * echoLife * 0.56;
+      // Two tapering slipstreams peel away. Their center remains empty.
+      float u = clamp((p.x + 3.0 - travel * 3.0) / 32.0, 0.0, 1.0);
+      float gate = smoothstep(0.0, 0.13, u) * (1.0 - smoothstep(0.66, 1.0, u));
+      float curve = 5.0 + travel * 8.0 + sin(u * 3.141593) * 2.2;
+      float side = abs(p.y) - curve;
+      ink += band(side, 2.4) * gate * 0.24;
+      core += band(side, 0.85) * gate * 0.58;
+      float snap = segment(p, vec2(-3.0, 0.0), vec2(26.0, 0.0));
+      core += band(snap, 1.05) * (1.0 - smoothstep(0.10, 0.38, t)) * 0.85;
+    } else if (mode < 1.5) {
+      hot = vec3(1.0, 0.95, 0.75);
+      // A broader forward flame pulse, with its bright core at the release direction.
+      float u = clamp((p.x - travel * 12.0 + 2.0) / 32.0, 0.0, 1.0);
+      float gate = smoothstep(0.0, 0.14, u) * (1.0 - smoothstep(0.64, 1.0, u));
+      float width = 0.8 + 5.4 * sin(u * 3.141593) * (1.0 - t * 0.55);
+      float wave = sin(u * 7.0 - age * 18.0 + phase) * sin(u * 3.141593) * 1.4;
+      float d = abs(p.y - wave);
+      ink += band(d, width * 1.9) * gate * 0.35;
+      ink += band(d, width) * gate * 0.72;
+      core += band(d, width * 0.38) * gate * (1.0 - t * 0.7) * 0.84;
+      for (int i = 0; i < 8; i++) {
+        float k = float(i);
+        float side = mod(k, 2.0) * 2.0 - 1.0;
+        vec2 at = vec2(7.0 + travel * (17.0 + k * 3.0), side * (2.0 + travel * (3.0 + k)));
+        at.y += sin(phase + k * 2.3) * travel * 1.7;
+        float spark = segment(p, at, at + vec2(4.0 - t, side * 0.8));
+        ink += band(spark, 1.5) * 0.34;
+        core += band(spark, 0.70) * 0.76;
+      }
+    } else if (mode < 2.5) {
+      hot = vec3(0.97, 0.94, 1.0);
+      float offset = travel * 6.0;
+      // Connected short electric strands with a white center and purple soft edge.
+      // Shape depends on simulation age, never wall time or random frame changes.
+      for (int branch = 0; branch < 3; branch++) {
+        float b = float(branch);
+        float side = b < 0.5 ? 0.0 : (b < 1.5 ? -1.0 : 1.0);
+        float extent = 36.0 - b * 5.0;
+        vec2 previous = vec2(offset + b * 3.0, 0.0);
+        for (int i = 1; i < 6; i++) {
+          float k = float(i), u = k / 5.0;
+          float jag = sin(k * 2.73 + phase + b * 1.9 + age * 8.0) * 3.6;
+          vec2 next = vec2(offset + b * 3.0 + extent * u, jag + side * u * (9.0 + travel * 4.0));
+          float d = segment(p, previous, next);
+          ink += band(d, 3.0 - b * 0.35) * (0.30 - b * 0.04);
+          core += band(d, 0.95 - b * 0.12) * (0.95 - b * 0.13);
+          previous = next;
+        }
+      }
+      float spark = min(segment(p, vec2(-1.0, 0.0), vec2(8.0, 0.0)),
+                        segment(p, vec2(3.0, -3.0), vec2(3.0, 3.0)));
+      core += band(spark, 0.85) * (1.0 - smoothstep(0.12, 0.5, t)) * 0.6;
+    } else {
+      hot = vec3(0.91, 0.99, 1.0);
+      vec2 q = p - vec2(3.0 + travel * 11.0, 0.0);
+      float d = ellipse(q, vec2(4.0 + travel, 5.0 + travel * 11.0));
+      float front = 0.2 + 0.8 * smoothstep(-3.0, 3.0, q.x);
+      ink += band(d, 3.6) * front * 0.32;
+      core += band(d, 1.05) * front * 0.58;
+      for (int i = 0; i < 6; i++) {
+        float k = float(i), side = mod(k, 2.0) * 2.0 - 1.0;
+        vec2 at = vec2(5.0 + travel * (15.0 + k * 3.0), side * (2.0 + travel * (3.0 + k * 1.9)));
+        vec2 crystal = p - at;
+        float diamond = abs(crystal.x) / (2.8 + k * 0.30) + abs(crystal.y) / 1.6;
+        float facet = 1.0 - smoothstep(0.68, 1.12, diamond);
+        ink += facet * 0.78;
+        core += facet * smoothstep(-0.3, 0.7, crystal.y) * 0.65;
+        ink += band(length(crystal), 3.0) * 0.10;
+      }
+    }
+
+    float strength = clamp((ink + core) * 1.4, 0.0, 1.0);
+    vec3 rgb = mix(tint, hot, clamp(core / max(ink + core, 0.001), 0.0, 1.0) * 0.85);
+    // The effect ends fully transparent and stays well inside its carrier edges.
+    float bounds = (1.0 - smoothstep(42.0, 47.0, abs(p.y)))
+                 * smoothstep(-30.0, -26.0, p.x) * (1.0 - smoothstep(88.0, 94.0, p.x));
+    return vec4(rgb * color.rgb, strength * fade * bounds * color.a);
+  }
+}%

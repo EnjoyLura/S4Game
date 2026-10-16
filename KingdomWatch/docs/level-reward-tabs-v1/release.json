@@ -1,0 +1,37 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-level-reward-tabs-v1-20261016-123714",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-level-breakthrough-swipe-v1-20261016-101808",
+  "entryVersion": "1792125403",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=level-reward-tabs-v1-1792125403",
+  "scope": "star chests on the left and selected by default; level loot on the right",
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://d365a6c6.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-level-reward-tabs-v1-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-level-reward-tabs-v1-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "star chests on the left and selected by default; level loot on the right",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 12664,
+  "date": "2026-10-16T12:38:45.327802+08:00",
+  "mainBundleSha256": "0d41aef83645d820f91a53a55de79d0d20e39a587514645fd2b7ad8d4c1faafb",
+  "validation": {
+    "sourceReview": true,
+    "localBundleInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "testsRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  }
+}

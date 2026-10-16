@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-playback-fix-v1-20261015-024035",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-button-feedback-v1-20261015-023406",
+  "entryVersion": "1792003213",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=audio-playback-fix-v1-1792003213",
+  "scope": "audio gesture capture, preloading and music recovery",
+  "layoutChanged": false,
+  "audioAcceptance": "pending user manual review"
+}

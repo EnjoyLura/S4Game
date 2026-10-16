@@ -1,0 +1,21 @@
+{
+  "tool": "built-in image_gen",
+  "intent": "style-transfer replacement of the rejected gate, matched to actual lobby environments",
+  "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-05edfaa8-4856-4b91-ae4f-d2c8215f072c.png",
+  "runtime": "assets\\resources\\ux\\battle_entry_v3\\outpost_gate.png",
+  "original": "outpost-gate-original.png",
+  "prompt": "gate-art-prompt.txt",
+  "size": [
+    1024,
+    1536
+  ],
+  "bytes": 1753136,
+  "sha256": "147eecc93db2c49a2d7e3896e22f8614ee6b7ec86deef03b93605ce9719f1b00",
+  "references": [
+    "assets/resources/ux/battle_entry_v2/royal_gate.png (rejected edit target; layout only)",
+    "assets/resources/scenes/bg_levels_outpost_comic_v2.jpg (style reference)",
+    "assets/resources/scenes/bg_shop_comic_v1.jpg (style reference)"
+  ],
+  "pixelEditing": "none; complete original copied unchanged; runtime splits two SpriteFrames",
+  "review": "warm timber, smaller flat fleur-de-lis plaque, plain iron; no old blue planks, gold crown or leaf surround; user visual acceptance pending"
+}

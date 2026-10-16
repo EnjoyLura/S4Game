@@ -8,6 +8,9 @@ import { heroPortrait } from './HeroComic';
 import { mainLabel, PageCtx, toast } from './PageKit';
 import { HERO_DEFS, SQUAD_MAX, deployHero, inSquad, squadList, undeployHero } from '../core/GameData';
 import { loadSave } from '../core/SaveData';
+import { bindButton } from './ButtonFeedback';
+import { dismissUI, dismissUIAfterRefresh, motionIn } from './UIMotion';
+import { uiSound } from './UIAudio';
 
 export function openSquadPanel(ctx: PageCtx): void {
   const root = ctx.screens.parent;
@@ -19,11 +22,12 @@ export function openSquadPanel(ctx: PageCtx): void {
   const scene = N('squadUpperScene', dim, 0, WY(0, 440), 750, 440);
   artSprite(scene, 0, 0, 750, 440, 'scenes/bg_levels_comic_v1', { sliced: false, cover: true });
   const top = Math.max(48, LO.notchTop + 20);
-  const close = (): void => { dim.destroy(); ctx.refresh(); };
+  const close = (): void => { dismissUIAfterRefresh(dim, ctx.screens, ctx.refresh); };
   mainLabel(dim, 0, WY(top, 70), '出战编队', { size: 36, font: 'body', bold: true, color: COMIC.cream, outline: COMIC.ink, outlineW: 3, w: 290, h: 58 });
   const body = N('squadBody', dim);
   let removeModal: Node | null = null;
   rebuild();
+  motionIn(body, 'page'); uiSound('open');
 
   function rebuild(): void {
     body.destroyAllChildren();
@@ -43,7 +47,7 @@ export function openSquadPanel(ctx: PageCtx): void {
         mainLabel(slot, 0, -43, def.name.replace('·', ''), { size: 23, color: COMIC.text, bold: true, w: 142, h: 32 });
         mainLabel(slot, 0, -73, 'Lv.' + (sv.heroes[hid]?.lv || 1), { size: 19, color: COMIC.sub, w: 128, h: 26 });
         comicMark(slot, 57, 69, 'check', 20, COMIC.greenShade);
-        slot.on(Node.EventType.TOUCH_END, () => confirmRemove(hid));
+        bindButton(slot, () => confirmRemove(hid));
       } else {
         comicMark(slot, 0, 12, 'plus', 42, '#687582');
         mainLabel(slot, 0, -56, '待上阵', { size: 22, color: '#ADB7BE', w: 134, h: 32 });
@@ -64,10 +68,10 @@ export function openSquadPanel(ctx: PageCtx): void {
       mainLabel(card, 0, -59, 'Lv.' + (sv.heroes[def.id]?.lv || 1), { size: 18, color: COMIC.sub, w: 108, h: 26 });
       mainLabel(card, 0, -85, dep ? '已上阵' : '点击上阵', { size: 17, color: dep ? COMIC.greenShade : COMIC.sub, w: 116, h: 26 });
       if (dep) comicMark(card, 46, 78, 'check', 19, COMIC.greenShade);
-      card.on(Node.EventType.TOUCH_END, () => {
+      bindButton(card, () => {
         if (dep) { confirmRemove(def.id); return; }
         const result = deployHero(def.id);
-        toast(result.msg);
+        toast(result.msg, { kind: result.ok ? 'success' : 'warning', title: result.ok ? '编队已更新' : '暂时无法上阵' });
         if (result.ok) rebuild();
       });
     });
@@ -88,13 +92,12 @@ export function openSquadPanel(ctx: PageCtx): void {
     mainLabel(panel, 51, 29, '将 ' + HERO_DEFS[hid].name + ' 下阵？',
       { size: 25, color: COMIC.text, bold: true, w: 310, h: 40 });
     mainLabel(panel, 51, -21, '之后可以随时重新上阵', { size: 21, color: COMIC.sub, w: 312, h: 36 });
-    comicButton(panel, -126, -114, 222, 76, '取消', () => modal.destroy(),
-      { tone: 'dark', size: 28, name: 'squadRemoveCancel' });
+    comicButton(panel, -126, -114, 222, 76, '取消', () => dismissUI(modal),
+      { tone: 'dark', size: 28, name: 'squadRemoveCancel', sound: 'close' });
     comicButton(panel, 126, -114, 222, 76, '确认下阵', () => {
       const result = undeployHero(hid);
-      modal.destroy();
-      toast(result.msg);
-      if (result.ok) rebuild();
-    }, { tone: 'green', size: 28, name: 'squadRemoveConfirm' });
+      toast(result.msg, { kind: result.ok ? 'success' : 'warning', title: result.ok ? '编队已更新' : '操作未完成' });
+      dismissUI(modal, () => { if (result.ok) rebuild(); }, false);
+    }, { tone: 'green', size: 28, name: 'squadRemoveConfirm', sound: 'confirm' });
   }
 }

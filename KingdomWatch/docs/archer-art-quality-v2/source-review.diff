@@ -1,0 +1,298 @@
+--- assets/scripts/ui/HeroComic.ts (before)
++++ assets/scripts/ui/HeroComic.ts
+@@ -34,15 +34,17 @@
+ export function gearArt(parent: Node, x: number, y: number, w: number, h: number, id: string): Node {
+   return comicArt(parent, x, y, w, h, GEAR_ART[id]);
+ }
+-/** The import pipeline uses a 768px canvas with a 16px transparent foot margin. */
++/** Keep the complete illustration and align its authored transparent foot margin. */
+ export function heroComicFigure(parent: Node, id: string, x: number, footY: number, height: number, maxWidth: number): Node {
+   const figure = N('heroFigure:' + id, parent, x, footY);
+   const ground = N('heroGround', figure).addComponent(Graphics);
+   ground.fillColor = CA(COMIC.ink, .24); ground.ellipse(0, -2, Math.min(72, height * .17), 8); ground.fill();
+-  artSprite(figure, 0, height / 2, maxWidth, height, 'hero_comic_v1/comic_figure_' + id + '_v1', {
++  const key = 'hero_comic_v1/comic_figure_' + id + (id === 'archer' ? '_v2' : '_v1');
++  const footMargin = id === 'archer' ? 14 / 1546 : 16 / 768;
++  artSprite(figure, 0, height / 2, maxWidth, height, key, {
+     sliced: false, onLoaded: art => {
+       const h = art.getComponent(UITransform)!.height;
+-      art.setPosition(0, h / 2 - h * 16 / 768, 0);
++      art.setPosition(0, h / 2 - h * footMargin, 0);
+     },
+   });
+   return figure;
+--- assets/scripts/config/Weapons.ts (before)
++++ assets/scripts/config/Weapons.ts
+@@ -10,12 +10,12 @@
+ }
+ const art = (name: string): string => 'weapons_v1/' + name;
+ export const WEAPONS: Record<string, WeaponSpec> = {
+-  wpn_starter_bow: { id: 'wpn_starter_bow', name: '狩猎木弓', type: 'bow', quality: 0, tier: 1, stats: { atk: 8, skillDmg: 4 }, price: 0, unlock: '', art: art('starter_bow'), starter: true, breakthrough: { atk: .09, skill: .07, secondary: 'atkSpd', bonus: .02 } },
++  wpn_starter_bow: { id: 'wpn_starter_bow', name: '狩猎木弓', type: 'bow', quality: 0, tier: 1, stats: { atk: 8, skillDmg: 4 }, price: 0, unlock: '', art: art('starter_bow_v2'), starter: true, breakthrough: { atk: .09, skill: .07, secondary: 'atkSpd', bonus: .02 } },
+   wpn_starter_crossbow: { id: 'wpn_starter_crossbow', name: '制式轻弩', type: 'crossbow', quality: 0, tier: 1, stats: { atk: 14, skillDmg: 4 }, price: 0, unlock: '', art: art('starter_crossbow'), starter: true, breakthrough: { atk: .10, skill: .06, secondary: 'critRate', bonus: .01 } },
+   wpn_starter_book: { id: 'wpn_starter_book', name: '学徒魔法书', type: 'book', quality: 0, tier: 1, stats: { atk: 4, skillDmg: 12 }, price: 0, unlock: '', art: art('starter_book'), starter: true, breakthrough: { atk: .06, skill: .10, secondary: 'chargeEff', bonus: .02 } },
+   wpn_starter_staff: { id: 'wpn_starter_staff', name: '学徒法杖', type: 'staff', quality: 0, tier: 1, stats: { atk: 6, skillDmg: 10 }, price: 0, unlock: '', art: art('starter_staff'), starter: true, breakthrough: { atk: .07, skill: .09, secondary: 'critDmg', bonus: .04 } },
+   // Existing IDs, ownership and base stats remain valid.
+-  wpn_bow: { id: 'wpn_bow', name: '猎风长弓', type: 'bow', quality: 1, tier: 1, stats: { atk: 24, skillDmg: 14, atkSpd: .08 }, price: 800, unlock: '1-1', art: art('green_bow'), breakthrough: { atk: .10, skill: .08, secondary: 'atkSpd', bonus: .03 } },
++  wpn_bow: { id: 'wpn_bow', name: '猎风长弓', type: 'bow', quality: 1, tier: 1, stats: { atk: 24, skillDmg: 14, atkSpd: .08 }, price: 800, unlock: '1-1', art: art('green_bow_v2'), breakthrough: { atk: .10, skill: .08, secondary: 'atkSpd', bonus: .03 } },
+   wpn_green_crossbow: { id: 'wpn_green_crossbow', name: '巡林轻弩', type: 'crossbow', quality: 1, tier: 1, stats: { atk: 30, skillDmg: 10, critRate: .03 }, price: 800, unlock: '1-1', art: art('green_crossbow'), breakthrough: { atk: .11, skill: .07, secondary: 'critRate', bonus: .015 } },
+   wpn_green_book: { id: 'wpn_green_book', name: '翠纹秘典', type: 'book', quality: 1, tier: 1, stats: { atk: 12, skillDmg: 30, chargeEff: .06 }, price: 800, unlock: '1-1', art: art('green_book'), breakthrough: { atk: .07, skill: .11, secondary: 'chargeEff', bonus: .03 } },
+   wpn_green_staff: { id: 'wpn_green_staff', name: '林语法杖', type: 'staff', quality: 1, tier: 1, stats: { atk: 16, skillDmg: 26, critDmg: .12 }, price: 800, unlock: '1-1', art: art('green_staff'), breakthrough: { atk: .08, skill: .10, secondary: 'critDmg', bonus: .06 } },
+--- assets/scripts/ui/GearQuality.ts (before)
++++ assets/scripts/ui/GearQuality.ts
+@@ -1,4 +1,4 @@
+-/** Shared equipment rarity: saturated frames, readable names and restrained comic highlights. */
++/** Rarity is confined to the illustration's circular well and upper-left tag. */
+ import { Graphics, Node } from 'cc';
+ import { C, CA, label, N } from './UIKit';
+ import { comicPlate } from './ComicUI';
+@@ -12,26 +12,18 @@
+ ];
+ export function gearQuality(q: number): GearQualityStyle { return STYLES[q] || STYLES[0]; }
+ 
+-/** A single flat cut-corner frame; the colored band never adds an offset backplate. */
++/** All equipment uses the same neutral paper face and ink contour. */
+ export function gearPlate(parent: Node, x: number, y: number, w: number, h: number, q: number,
+-  opts: { name?: string; cut?: number; band?: number } = {}): Node {
+-  const style = gearQuality(q), cut = Math.min(opts.cut ?? 8, h / 4, w / 4);
+-  const plate = comicPlate(parent, x, y, w, h, 'card', { name: opts.name || 'gearQualityFrame', cut, fill: style.edge });
+-  const g = plate.getComponent(Graphics)!;
+-  const inset = opts.band ?? (w >= 200 && h >= 200 ? 5 : 4);
+-  const l = -w / 2 + inset, r = w / 2 - inset, b = -h / 2 + inset, t = h / 2 - inset;
+-  const c = Math.max(2, cut - inset * .55);
+-  g.fillColor = C(style.well);
+-  g.moveTo(l + c, b); g.lineTo(r - c, b); g.lineTo(r, b + c); g.lineTo(r, t - c);
+-  g.lineTo(r - c, t); g.lineTo(l + c, t); g.lineTo(l, t - c); g.lineTo(l, b + c); g.close(); g.fill();
+-  return plate;
++  opts: { name?: string; cut?: number } = {}): Node {
++  return comicPlate(parent, x, y, w, h, 'card', { name: opts.name || 'gearItemPlate', cut: opts.cut ?? 8 });
+ }
+ 
+ export function gearQualityTag(parent: Node, x: number, y: number, q: number, tier: number,
+   w = 96, h = 26): Node {
+   const style = gearQuality(q);
+   const plate = comicPlate(parent, x, y, w, h, 'dark', { name: 'gearQualityTag', cut: 5, fill: style.edge });
+-  label(plate, 0, 0, style.name + ' · ' + tier + '阶', { size: 15, color: '#FFFFFF', bold: true,
++  const text = w < 55 ? style.name : w < 90 ? style.name + tier + '阶' : style.name + ' · ' + tier + '阶';
++  label(plate, 0, 0, text, { size: Math.min(15, h * .62), color: '#FFFFFF', bold: true,
+     font: 'body', outline: style.text, outlineW: .8, w: w - 8, h: h - 2, shrink: true });
+   return plate;
+ }
+@@ -39,15 +31,6 @@
+ /** Still graphics behind the illustration: no new texture, looping animation or white flash. */
+ export function gearQualityHalo(parent: Node, x: number, y: number, w: number, h: number, q: number): void {
+   const style = gearQuality(q), g = N('gearQualityHalo', parent, x, y).addComponent(Graphics);
+-  g.fillColor = C(style.light); g.ellipse(0, 0, w / 2, h / 2); g.fill();
+-  g.strokeColor = CA(style.edge, .65); g.lineWidth = 2; g.stroke();
+-  if (q < 2) return;
+-  const glint = (cx: number, cy: number, s: number): void => {
+-    g.fillColor = C(style.edge);
+-    g.moveTo(cx, cy + s); g.lineTo(cx + s * .28, cy + s * .25); g.lineTo(cx + s * .7, cy);
+-    g.lineTo(cx + s * .28, cy - s * .25); g.lineTo(cx, cy - s); g.lineTo(cx - s * .28, cy - s * .25);
+-    g.lineTo(cx - s * .7, cy); g.lineTo(cx - s * .28, cy + s * .25); g.close(); g.fill();
+-  };
+-  glint(w * .42, h * .3, q === 3 ? 9 : 6);
+-  if (q === 3) glint(-w * .4, -h * .28, 6);
++  g.fillColor = C(style.light); g.circle(0, 0, Math.min(w, h) / 2); g.fill();
++  g.strokeColor = CA(style.edge, .45); g.lineWidth = 1; g.stroke();
+ }
+--- assets/scripts/ui/pages/ShopPage.ts (before)
++++ assets/scripts/ui/pages/ShopPage.ts
+@@ -99,7 +99,7 @@
+   const owned = g.give.kind === 'hero' && g.give.id ? !!sv.heroes[g.give.id]?.owned : false;
+   const shown = unlocked || owned;
+   const q = g.give.kind === 'equip' ? EQUIPS[g.give.id]?.quality ?? 0 : g.give.kind === 'hero' ? 3 : 1;
+-  const equipment = g.give.kind === 'equip', quality = gearQuality(q);
++  const equipment = g.give.kind === 'equip';
+   const card = equipment ? gearPlate(parent, x, y, CARD_W, CARD_H, q, { name: 'shopItem:' + g.id, cut: 12 })
+     : comicPlate(parent, x, y, CARD_W, CARD_H, 'card', { name: 'shopItem:' + g.id, cut: 12 });
+   const art = itemArt(g);
+@@ -129,7 +129,7 @@
+     const amount = comicPlate(card, 68, 8, 47, 24, 'dark', { cut: 5 });
+     mainLabel(amount, 0, 0, '×' + (g.give.n || 1), { size: 16, color: COMIC.cream, font: 'number', w: 42, h: 23 });
+   }
+-  mainLabel(card, 0, -35, g.name, { size: 23, color: equipment ? quality.text : COMIC.text, font: 'body', bold: true, w: 194, h: 35 });
++  mainLabel(card, 0, -35, g.name, { size: 23, color: COMIC.text, font: 'body', bold: true, w: 194, h: 35 });
+   mainLabel(card, 0, -68, equipment ? g.sub.replace(/^[白绿蓝紫]\d+阶\s*·\s*/, '') : g.sub,
+     { size: 16, color: COMIC.sub, font: 'body', w: 194, h: 28 });
+   const available = !!g.price && unlocked && !owned;
+@@ -193,14 +193,18 @@
+   panel.name = 'shopProductDetails:' + g.id;
+   const art = itemArt(g);
+   const equipment = g.give.kind === 'equip' ? EQUIPS[g.give.id] : null;
+-  if (equipment) gearPlate(panel, -214, top - 147, 124, 124, equipment.quality);
++  if (equipment) {
++    const well = gearPlate(panel, -214, top - 147, 124, 124, equipment.quality);
++    gearQualityHalo(well, 0, 0, 104, 104, equipment.quality);
++  }
+   if (art) {
+     if (g.give.kind === 'hero') comicPortrait(panel, -214, top - 147, 112, art);
+     else comicArt(panel, -214, top - 147, 112, 112, art);
+   } else comicMark(panel, -214, top - 147, 'lock', 44, COMIC.sub);
+-  const nameColor = equipment ? gearQuality(equipment.quality).text : COMIC.text;
++  if (equipment) gearQualityTag(panel, -233, top - 100, equipment.quality, equipment.tier, 76, 20);
++  const nameColor = COMIC.text;
+   mainLabel(panel, 68, top - 128, g.name, { size: 28, font: 'body', color: nameColor, bold: true, align: 'left', w: 350, h: 40 });
+-  mainLabel(panel, 68, top - 174, info.meta, { size: 19, color: equipment ? nameColor : COMIC.sub,
++  mainLabel(panel, 68, top - 174, info.meta, { size: 19, color: COMIC.sub,
+     bold: !!equipment, align: 'left', w: 350, h: 34 });
+ 
+   // Keep the price/actions fixed; longer hero introductions scroll inside the paper panel.
+--- assets/scripts/ui/pages/HeroPage.ts (before)
++++ assets/scripts/ui/pages/HeroPage.ts
+@@ -16,7 +16,7 @@
+ import { uiSound } from '../UIAudio';
+ import { growthAction } from '../GrowthFeedback';
+ import { heroRosterRail, ROSTER_CARD_W } from '../HeroRosterRail';
+-import { gearPlate, gearQuality } from '../GearQuality';
++import { gearPlate, gearQuality, gearQualityHalo, gearQualityTag } from '../GearQuality';
+ 
+ const SLOTS: EquipKind[] = ['helm', 'acc', 'glove', 'armor'];
+ const BAG_SIZE = 120, BAG_STEP = 130, BAG_COL_STEP = 138;
+@@ -186,10 +186,12 @@
+   bindButton(node, onClick);
+ }
+ 
+-/** Equipment uses the same saturated rarity frame as the shop and drop preview. */
++/** Neutral sockets share a compact circular rarity well with the shop. */
+ function itemSeat(parent: Node, x: number, y: number, w: number, h: number, quality: number, filled: boolean): Node {
+-  return filled ? gearPlate(parent, x, y, w, h, quality, { name: 'heroItemSeat' })
++  const seat = filled ? gearPlate(parent, x, y, w, h, quality, { name: 'heroItemSeat' })
+     : comicPlate(parent, x, y, w, h, 'card', { name: 'heroItemSeat', cut: 8, fill: '#ECE5D8' });
++  if (filled) gearQualityHalo(seat, 0, 0, w * .76, h * .76, quality);
++  return seat;
+ }
+ function badge(parent: Node, x: number, y: number, w: number, text: string): void {
+   const plate = comicPlate(parent, x, y, w, 22, 'dark', { cut: 4, edge: false });
+@@ -205,12 +207,13 @@
+   if (inst && d) gearPlate(slot, 0, 0, w, h, d.quality, { name: 'heroGearSocket' });
+   else comicPlate(slot, 0, 0, w, h, 'card', { name: 'heroGearSocket', cut: 8, fill: '#ECE5D8' });
+   if (inst && d) {
++    gearQualityHalo(slot, wide ? artX : 0, wide ? 0 : 3, wide ? 80 : w * .76, h * .76, d.quality);
+     gearArt(slot, wide ? artX : 0, wide ? 0 : 3, wide ? halfW - 16 : w - 22, wide ? h - 14 : h - 22, inst.defId);
++    gearQualityTag(slot, -w / 2 + 42, h / 2 - 15, d.quality, d.tier, 72, 20);
+     if (wide) {
+-      mainLabel(slot, textX, 14, d.name, { size: 20, color: gearQuality(d.quality).text, font: 'body', bold: true, align: 'center', w: textW, h: 30 });
++      mainLabel(slot, textX, 14, d.name, { size: 20, color: COMIC.text, font: 'body', bold: true, align: 'center', w: textW, h: 30 });
+       mainLabel(slot, textX, -19, d.tier + '阶 · Lv.' + equipLevel(inst, hid), { size: 17, color: COMIC.sub, align: 'center', w: textW, h: 26 });
+     } else {
+-      badge(slot, -w / 2 + 25, h / 2 - 16, 40, d.tier + '阶');
+       badge(slot, w / 2 - 33, -h / 2 + 16, 58, 'Lv.' + inst.lv);
+     }
+     bindButton(slot, () => wornEquipModal(ctx, hid, kind));
+@@ -226,7 +229,7 @@
+ function equipIcon(parent: Node, x: number, y: number, size: number, inst: EquipInst): void {
+   const d = EQUIPS[inst.defId], box = itemSeat(parent, x, y, size, size, d.quality, true);
+   gearArt(box, 0, 0, size * .84, size * .84, inst.defId);
+-  badge(box, -size / 2 + 25, size / 2 - 15, 40, d.tier + '阶');
++  gearQualityTag(box, -size / 2 + 40, size / 2 - 15, d.quality, d.tier, 68, 20);
+ }
+ function drawEquipAttrs(parent: Node, y: number, width: number, inst: EquipInst, d: EquipDef, large: boolean, hid: string): void {
+   const keys = (Object.keys(d.stats) as StatKey[]).filter(k => (d.stats[k] || 0) > 0);
+@@ -250,9 +253,9 @@
+   mainLabel(panel, 0, h / 2 - 30, current ? '当前装备' : '背包装备', { size: big ? 25 : 20, font: 'body', color: COMIC.text, bold: true, w: w - 40, h: 32 });
+   equipIcon(panel, big ? -176 : 0, big ? h / 2 - 113 : h / 2 - 104, big ? 110 : 96, inst);
+   mainLabel(panel, big ? 49 : 0, h / 2 - (big ? 98 : 176), d.name,
+-    { size: big ? 24 : 21, color: gearQuality(d.quality).text, font: 'body', bold: true, align: big ? 'left' : 'center', w: big ? 294 : w - 28, h: 34 });
++    { size: big ? 24 : 21, color: COMIC.text, font: 'body', bold: true, align: big ? 'left' : 'center', w: big ? 294 : w - 28, h: 34 });
+   mainLabel(panel, big ? 49 : 0, h / 2 - (big ? 137 : 212), gearQuality(d.quality).name + ' · ' + d.tier + '阶 · Lv.' + equipLevel(inst, hid),
+-    { size: big ? 19 : 16, color: gearQuality(d.quality).text, bold: true, align: big ? 'left' : 'center', w: big ? 294 : w - 28, h: 28 });
++    { size: big ? 19 : 16, color: COMIC.sub, bold: true, align: big ? 'left' : 'center', w: big ? 294 : w - 28, h: 28 });
+   rule(panel, h / 2 - (big ? 190 : 244), w - 40);
+   drawEquipAttrs(panel, h / 2 - (big ? 230 : 277), w, inst, d, big, hid);
+   if (weapon) {
+@@ -341,7 +344,7 @@
+   const d = EQUIPS[inst.defId], weapon = kind === 'weapon', lv = equipLevel(inst, hid), maxed = lv >= (weapon ? MAX.weapon : MAX.equip), cost = weapon ? weaponUpCost(lv) : equipUpCost(lv);
+   const panel = comicDialog(ctx.screens, 620, 650, weapon ? '武器培养' : '装备强化'); panel.name = 'heroForgeDialog';
+   equipIcon(panel, -218, 205, 112, inst);
+-  mainLabel(panel, 45, 222, d.name, { size: 25, color: gearQuality(d.quality).text, font: 'body', bold: true, align: 'left', w: 330, h: 36 });
++  mainLabel(panel, 45, 222, d.name, { size: 25, color: COMIC.text, font: 'body', bold: true, align: 'left', w: 330, h: 36 });
+   mainLabel(panel, 45, 180, maxed ? gearQuality(d.quality).name + ' · ' + d.tier + '阶 · 已满级' : 'Lv.' + lv + '  →  Lv.' + (lv + 1),
+     { size: 22, color: COMIC.sub, align: 'left', w: 330, h: 32 });
+   rule(panel, 129, 552);
+@@ -379,7 +382,7 @@
+   const d = inst ? EQUIPS[inst.defId] : null;
+   const seat = itemSeat(grid, x, y, BAG_SIZE, BAG_SIZE, d?.quality || 0, !!d); seat.name = 'heroBagItem:' + cell.uid;
+   gearArt(seat, 0, 4, 100, 100, isMat ? cell.uid : inst!.defId);
+-  if (d) badge(seat, -34, 44, 42, d.tier + '阶');
++  if (d) gearQualityTag(seat, -20, 44, d.quality, d.tier, 68, 20);
+   badge(seat, 22, -44, 68, isMat ? '×' + fmt(cell.n) : d?.kind === 'weapon' ? (weaponFits(hid, d.id) ? 'Lv.' + equipLevel(inst!, hid) : '职业不符') : 'Lv.' + inst!.lv);
+   bindButton(seat, () => {
+     if (isMat) {
+--- assets/scripts/ui/LevelLootPreview.ts (before)
++++ assets/scripts/ui/LevelLootPreview.ts
+@@ -8,7 +8,7 @@
+ import { COMIC, comicArt, comicButton, comicDialog, comicDialogContent, comicPlate } from './ComicUI';
+ import { gearArt } from './HeroComic';
+ import { bindButton } from './ButtonFeedback';
+-import { gearPlate, gearQuality, gearQualityTag } from './GearQuality';
++import { gearPlate, gearQuality, gearQualityHalo, gearQualityTag } from './GearQuality';
+ import { dismissUI } from './UIMotion';
+ 
+ const pct = (value: number): string => (value * 100).toFixed(2) + '%';
+@@ -46,7 +46,9 @@
+       const x = (i - (Math.min(6, pool.length) - 1) / 2) * 76;
+       const quality = EQUIPS[row.id].quality;
+       const plate = gearPlate(parent, x, y(185), 64, 64, quality, { name: 'stageLootIcon:' + row.id, cut: 7 });
++      gearQualityHalo(plate, 0, 0, 50, 50, quality);
+       gearArt(plate, 0, 0, 51, 51, row.id);
++      gearQualityTag(plate, -8, 21, quality, EQUIPS[row.id].tier, 40, 14);
+       bindButton(plate, () => showDropItemDetails(modalParent, level, row.id), { sound: false });
+     });
+     label(parent, -75, y(h - 23), '每怪 ' + pct(equipmentDropChance(level.difficulty)) + ' · 精英怪 ' + pct(equipmentDropChance(level.difficulty, { elite: true })),
+@@ -72,10 +74,12 @@
+       const x = (i % 2 - .5) * 290, y = -49 - Math.floor(i / 2) * 112;
+       const quality = gearQuality(EQUIPS[row.id].quality);
+       const card = gearPlate(list, x, y, 278, 98, EQUIPS[row.id].quality, { name: 'lootPoolItem:' + row.id });
++      gearQualityHalo(card, -93, 3, 68, 68, EQUIPS[row.id].quality);
+       gearArt(card, -93, 3, 58, 58, row.id);
+-      label(card, 32, 20, itemName(row.id), { size: 20, color: quality.text, bold: true, w: 172, h: 28, shrink: true });
++      gearQualityTag(card, -101, 35, EQUIPS[row.id].quality, EQUIPS[row.id].tier, 64, 18);
++      label(card, 32, 20, itemName(row.id), { size: 20, color: COMIC.text, bold: true, w: 172, h: 28, shrink: true });
+       label(card, 32, -17, quality.name + ' · ' + Math.round(row.weight / total * 10000) / 100 + '%',
+-        { size: 17, color: quality.text, w: 172, h: 26 });
++        { size: 17, color: COMIC.sub, w: 172, h: 26 });
+       bindButton(card, () => showDropItemDetails(parent, level, row.id, root), { sound: false });
+     });
+   } else label(root, 0, 0, '普通难度获得金币及强化材料\n精英和地狱难度解锁装备击杀掉落', { size: 22, color: COMIC.sub, w: 570, h: 80 });
+@@ -102,14 +106,14 @@
+   } else root = comicDialog(parent, 650, h, '掉落物详情');
+   root.name = 'dropItemDetails:' + id;
+   if (d) {
+-    const style = gearQuality(d.quality);
+     const icon = gearPlate(root, -218, top - 146, 120, 120, d.quality);
++    gearQualityHalo(icon, 0, 0, 96, 96, d.quality);
+     gearArt(icon, 0, 0, 106, 106, id);
+-    label(root, 64, top - 126, d.name, { size: 27, color: style.text, bold: true, font: 'body',
++    gearQualityTag(icon, -18, 45, d.quality, d.tier, 72, 20);
++    label(root, 64, top - 126, d.name, { size: 27, color: COMIC.text, bold: true, font: 'body',
+       w: 350, h: 38, align: 'left', shrink: true });
+-    gearQualityTag(root, -62, top - 170, d.quality, d.tier, 108, 28);
+-    label(root, 149, top - 170, KIND_NAME[d.kind] + ' · 初始 Lv.1', { size: 19, color: COMIC.sub,
+-      w: 240, h: 30, align: 'left', shrink: true });
++    label(root, 64, top - 170, gearQuality(d.quality).name + ' · ' + d.tier + '阶 · ' + KIND_NAME[d.kind] + ' · 初始 Lv.1',
++      { size: 19, color: COMIC.sub, w: 350, h: 30, align: 'left', shrink: true });
+     const keys = (Object.keys(d.stats) as StatKey[]).filter(k => (d.stats[k] || 0) > 0);
+     const list = lootScroll(root, top - 228, -top + 91, 294 + keys.length * 44);
+     label(list, 0, -15, '初始装备属性', { size: 21, color: COMIC.text, bold: true, w: 550, h: 30, align: 'left' });
+@@ -130,7 +134,7 @@
+       { size: 21, color: COMIC.text, bold: true, w: 550, h: 30, align: 'left' });
+     label(list, 0, -cursor - 72, share ? '每次击杀普通怪 ' + exactPct(equipmentDropChance(level.difficulty) * share)
+       + '\n每次击杀精英怪 ' + exactPct(equipmentDropChance(level.difficulty, { elite: true }) * share) : '当前关卡难度不掉落此装备',
+-      { size: 20, color: style.text, bold: true, w: 550, h: 66, lineHeight: 31, align: 'left', shrink: true });
++      { size: 20, color: COMIC.text, bold: true, w: 550, h: 66, lineHeight: 31, align: 'left', shrink: true });
+     label(list, 0, -cursor - 131, '装备成功掉落后，此装备的抽取占比：' + exactPct(share),
+       { size: 17, color: COMIC.sub, w: 550, h: 30, align: 'left', shrink: true });
+     label(list, 0, -cursor - 190, WEAPONS[id] ? weaponUsers(id) + '\n装上后继承该英雄的武器培养等级'
+@@ -162,8 +166,10 @@
+   entries.forEach((row, i) => {
+     const d = EQUIPS[row.id], x = (i % 2 - .5) * 286, y = -46 - Math.floor(i / 2) * 100;
+     const card = d ? gearPlate(list, x, y, 274, 88, d.quality) : comicPlate(list, x, y, 274, 88, 'card');
++    if (d) gearQualityHalo(card, -88, 0, 60, 60, d.quality);
+     gearArt(card, -88, 0, 53, 53, row.id);
+-    label(card, 34, 13, itemName(row.id), { size: 19, color: d ? gearQuality(d.quality).text : COMIC.text, w: 162, h: 28, shrink: true });
++    if (d) gearQualityTag(card, -97, 31, d.quality, d.tier, 68, 18);
++    label(card, 34, 13, itemName(row.id), { size: 19, color: COMIC.text, w: 162, h: 28, shrink: true });
+     label(card, 34, -19, '×' + row.n, { size: 20, color: COMIC.greenShade, bold: true, w: 162, h: 28 });
+   });
+ }

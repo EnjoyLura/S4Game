@@ -1,0 +1,33 @@
+{
+  "status": "published",
+  "scope": "in-place enemy material burst and fading ground splatter; remove all whole-body falling",
+  "visualReference": "user supplied Screenrecording_20261015_190858.mp4; standing burst, fragments, green fading ground residue",
+  "rejectedPriorPresentation": "whole-body fall / rotation / ground settling / corpse hold / long dissolve",
+  "wholeBodyRotationOrTravel": false,
+  "bodyFragmentsUseActualGameMonsterCel": true,
+  "bodyFragmentsPerQuad": 6,
+  "bodyBurstSeconds": {
+    "normal": 0.19,
+    "elite": 0.22,
+    "bossHook": 0.24
+  },
+  "groundResidueSeconds": {
+    "normal": 0.9,
+    "elite": 1.02,
+    "bossHook": 1.15
+  },
+  "sameCelHandoffNoDoubleImage": true,
+  "fallback": "fixed in-place rapid fade for this death, without late shader handoff",
+  "elementalAccents": [
+    "short embers",
+    "small ice chips",
+    "100ms residual electric arcs"
+  ],
+  "simulationClock": true,
+  "cosmeticLimit": 64,
+  "livingLimit": 60,
+  "gameplayRewardsAndAudioChanged": false,
+  "gameplayValidation": "user manual; no tests, game, browser or online acceptance run",
+  "game": "https://kingdom-watch.pages.dev/?v=enemy-death-burst-v2-1792063380",
+  "deployment": "https://dda6bc2f.kingdom-watch.pages.dev"
+}

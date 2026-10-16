@@ -3,12 +3,14 @@ import { assetManager, AudioClip, resources } from 'cc';
 import { loadSave } from './SaveData';
 import { AUDIO_CUES, MUSIC_TRACKS, MusicScene, SfxName } from './AudioCatalog';
 
-interface Voice { source: AudioBufferSourceNode; gain: GainNode; priority: number; group: string; }
+interface PlaybackShape { preparing?: boolean; gain?: number; rate?: number; fadeIn?: number; duration?: number; lowpass?: number; }
+interface Voice { source: AudioBufferSourceNode; gain: GainNode; priority: number; group: string; name: SfxName; started: number; }
 interface MusicVoice { source: AudioBufferSourceNode; gain: GainNode; scene: MusicScene; }
 
 class GameAudioService {
   private ctx: AudioContext | null = null;
   private sfxBus: GainNode | null = null;
+  private combatBus: GainNode | null = null;
   private musicBus: GainNode | null = null;
   private bundleReady: Promise<void> | null = null;
   private buffers = new Map<string, AudioBuffer>();
@@ -20,22 +22,26 @@ class GameAudioService {
   private state = 'running';
   private musicRevision = 0;
   private musicLoading = false;
+  private musicRetry: ReturnType<typeof setTimeout> | null = null;
   private warming = false;
   private lastAt: Partial<Record<SfxName, number>> = {};
   private lastVariant: Partial<Record<SfxName, number>> = {};
   private lastGroup: Record<string, number> = {};
   private accentUntil = 0;
   private duckUntil = 0;
+  private duckGain = 1;
   private duckTimer: ReturnType<typeof setTimeout> | null = null;
   private musicEnabled = true;
   private sfxEnabled = true;
 
   constructor() {
     if (typeof document === 'undefined') return;
-    const unlock = (): void => { this.unlock(); };
-    document.addEventListener('touchend', unlock, { passive: true });
-    document.addEventListener('mousedown', unlock, { passive: true });
-    document.addEventListener('keydown', unlock);
+    const unlock = (event: Event): void => { if (event.isTrusted) this.unlock(); };
+    // Cocos stops DOM mouse/touch/keyboard events at the canvas. Capture on window
+    // before that happens; pointerup/touchend also cover browsers that unlock on release.
+    for (const type of ['pointerdown', 'pointerup', 'mousedown', 'touchend', 'keydown']) {
+      window.addEventListener(type, unlock, { capture: true, passive: true });
+    }
     document.addEventListener('visibilitychange', () => this.visibilityChanged());
     window.addEventListener('pagehide', () => { this.stopVoices(); void this.ctx?.suspend().catch(() => {}); });
     window.addEventListener('pageshow', () => this.visibilityChanged());
@@ -44,7 +50,11 @@ class GameAudioService {
   enter(scene: MusicScene): void {
     if (this.scene !== scene) { this.stopVoices(true); this.scene = scene; this.musicRevision++; }
     this.state = 'running';
+    this.ensureContext();
     this.settingsChanged();
+    // Fetch/decode may run while the context is suspended. Playback still waits
+    // for a real gesture, without making that gesture start every download.
+    if (this.musicEnabled) void this.buffer(MUSIC_TRACKS[scene]).then(() => this.startMusic());
     this.startMusic();
     this.warm();
   }
@@ -53,7 +63,10 @@ class GameAudioService {
   battleState(state: string): void {
     if (this.state === state) return;
     this.state = state;
-    if (state !== 'running' && state !== 'prepare') this.stopVoices(true);
+    if (state !== 'running' && state !== 'prepare') {
+      this.stopVoices(true, state === 'win' || state === 'lose'); this.duckUntil = 0; this.duckGain = 1;
+      if (this.duckTimer !== null) { clearTimeout(this.duckTimer); this.duckTimer = null; }
+    }
     this.musicLevel();
   }
 
@@ -69,16 +82,31 @@ class GameAudioService {
     }
     this.musicLevel();
     if (this.musicEnabled) this.startMusic();
+    else if (this.musicRetry !== null) { clearTimeout(this.musicRetry); this.musicRetry = null; }
+    if (this.sfxEnabled) this.warm();
   }
 
-  play(name: SfxName): void {
+  prepareUltimate(hero: string, seconds: number): void {
+    const names: Record<string, SfxName> = { archer: 'skill', sniper: 'crossbow', pyro: 'fireSkill', volt: 'thunderSkill', mora: 'frostSkill' };
+    if (this.ctx && this.scene === 'battle' && this.state === 'running') this.duck(seconds, .74);
+    this.play(names[hero] || 'skill', { preparing: true, gain: .34, rate: .78,
+      fadeIn: .13, duration: seconds, lowpass: 1800 });
+  }
+  /** A separate two-voice budget keeps kills legible without a crowd of screams. */
+  death(element: 'physical' | 'fire' | 'volt' | 'frost', heavy: boolean): void {
+    const names: Record<string, SfxName> = { fire: 'deathFire', volt: 'deathVolt', frost: 'deathFrost' };
+    this.play(names[element] || (heavy ? 'deathHeavy' : 'kill'), {
+      rate: heavy ? .94 : 1, gain: heavy && element !== 'physical' ? 1.08 : 1,
+    });
+  }
+  play(name: SfxName, shape: PlaybackShape = {}): void {
     if (!this.sfxEnabled || loadSave().sfx === false || typeof document === 'undefined' || document.hidden) return;
     const cue = AUDIO_CUES[name], now = performance.now() / 1000;
-    const combat = cue.group === 'shot' || cue.group === 'impact' || cue.group === 'cast';
+    const combat = cue.group === 'shot' || cue.group === 'impact' || cue.group === 'cast' || cue.group === 'death';
     if (this.scene === 'battle' && combat && this.state !== 'running' && this.state !== 'prepare') return;
     if (now - (this.lastAt[name] ?? -100) < cue.gap) return;
-    if (cue.priority < 2 && now < this.accentUntil) return;
-    const groupGap = cue.group === 'impact' ? .075 : cue.group === 'shot' ? .025 : 0;
+    // Simultaneous heroes must all speak. Only repetitive minor contacts share a gap.
+    const groupGap = cue.group === 'death' ? .075 : cue.group === 'impact' && cue.priority < 2 ? .045 : cue.group === 'ui' ? .035 : 0;
     if (now - (this.lastGroup[cue.group] ?? -100) < groupGap) return;
     const available = cue.files.filter(file => this.buffers.has(file));
     if (!available.length || !this.ctx || this.ctx.state !== 'running') {
@@ -89,53 +117,94 @@ class GameAudioService {
     let index = Math.floor(Math.random() * available.length);
     if (available.length > 1 && index === this.lastVariant[name]) index = (index + 1) % available.length;
     const buffer = this.buffers.get(available[index])!;
-    this.lastVariant[name] = index;
-    this.lastAt[name] = now; this.lastGroup[cue.group] = now;
-    if (cue.priority >= 3) {
-      this.accentUntil = now + .14;
-      this.duck(Math.min(2.6, buffer.duration));
+    const family = this.voices.filter(v => v.name === name);
+    if (combat && family.length >= 2) this.stopVoice(family[0]);
+    const group = this.voices.filter(v => v.group === cue.group);
+    const groupLimit = cue.group === 'death' ? 2 : cue.group === 'shot' ? 7 : cue.group === 'impact' ? 4 : cue.group === 'cast' ? 3 : 6;
+    if (group.length >= groupLimit) {
+      const victim = group.filter(v => v.priority <= cue.priority).sort((a, b) => a.priority - b.priority || a.started - b.started)[0];
+      if (!victim) return;
+      this.stopVoice(victim);
     }
     if (this.voices.length >= 14) {
       const victim = this.voices.filter(v => v.priority <= cue.priority).sort((a, b) => a.priority - b.priority)[0];
       if (!victim) return;
       this.stopVoice(victim);
     }
+    this.lastVariant[name] = index;
+    this.lastAt[name] = now; this.lastGroup[cue.group] = now;
+    if (cue.priority >= 3 && !shape.preparing) {
+      this.accentUntil = now + .14;
+      this.duck(Math.min(1.4, buffer.duration), combat ? .62 : .43);
+    }
     const source = this.ctx.createBufferSource(), gain = this.ctx.createGain();
     source.buffer = buffer;
-    const vary = cue.group === 'shot' || cue.group === 'impact';
-    source.playbackRate.value = vary ? .975 + Math.random() * .05 : 1;
-    gain.gain.value = cue.gain * (vary ? .94 + Math.random() * .06 : 1);
-    source.connect(gain); gain.connect(this.sfxBus!);
-    const voice: Voice = { source, gain, priority: cue.priority, group: cue.group };
+    const vary = cue.group === 'shot' || cue.group === 'impact' || cue.group === 'death';
+    const rate = 'rate' in cue ? cue.rate : 1;
+    source.playbackRate.value = rate * (shape.rate ?? 1) * (vary ? .9875 + Math.random() * .025 : 1);
+    const recent = combat ? this.voices.filter(v => v.group === cue.group && now - v.started < .12).length : 0;
+    const density = 1 / Math.sqrt(1 + recent * .32);
+    const underAccent = combat && cue.priority < 2 && now < this.accentUntil ? .64 : 1;
+    const level = cue.gain * density * underAccent * (shape.gain ?? 1) * (vary ? .96 + Math.random() * .04 : 1);
+    const playDuration = Math.min(buffer.duration / source.playbackRate.value, shape.duration ?? Infinity);
+    if (shape.fadeIn) {
+      const nowAudio = this.ctx.currentTime, attack = Math.min(shape.fadeIn, playDuration * .3);
+      gain.gain.setValueAtTime(0, nowAudio);
+      gain.gain.linearRampToValueAtTime(level, nowAudio + attack);
+      gain.gain.setValueAtTime(level, nowAudio + Math.max(attack, playDuration - .08));
+      gain.gain.linearRampToValueAtTime(0, nowAudio + playDuration);
+    } else gain.gain.value = level;
+    const filter = shape.lowpass ? this.ctx.createBiquadFilter() : null;
+    if (filter) { filter.type = 'lowpass'; filter.frequency.value = shape.lowpass!; filter.Q.value = .6; source.connect(filter); filter.connect(gain); }
+    else source.connect(gain);
+    gain.connect(combat ? this.combatBus! : this.sfxBus!);
+    const voice: Voice = { source, gain, priority: cue.priority, group: cue.group, name, started: now };
     this.voices.push(voice);
     source.onended = () => {
       this.voices = this.voices.filter(v => v !== voice);
-      source.disconnect(); gain.disconnect();
+      source.disconnect(); gain.disconnect(); filter?.disconnect();
     };
     source.start();
+    if (shape.duration) source.stop(this.ctx.currentTime + playDuration + .005);
+  }
+
+  private ensureContext(): boolean {
+    if (this.ctx && this.ctx.state !== 'closed') return true;
+    if (typeof window === 'undefined') return false;
+    const host = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext };
+    const AC = host.AudioContext || host.webkitAudioContext;
+    if (!AC) return false;
+    try {
+      const ctx = this.ctx = new AC();
+      const master = ctx.createGain(), limiter = ctx.createDynamicsCompressor();
+      master.gain.value = .8;
+      // Safety ceiling, not the loudness source: repeated attacks retain their transients.
+      limiter.threshold.value = -3; limiter.knee.value = 2; limiter.ratio.value = 12;
+      limiter.attack.value = .002; limiter.release.value = .09;
+      this.sfxBus = ctx.createGain(); this.musicBus = ctx.createGain();
+      this.sfxBus.gain.value = this.sfxEnabled ? .85 : 0;
+      this.musicBus.gain.value = 0;
+      this.combatBus = ctx.createGain();
+      const lowCut = ctx.createBiquadFilter(), presence = ctx.createBiquadFilter();
+      const air = ctx.createBiquadFilter(), glue = ctx.createDynamicsCompressor();
+      lowCut.type = 'highpass'; lowCut.frequency.value = 65; lowCut.Q.value = .707;
+      presence.type = 'peaking'; presence.frequency.value = 3100; presence.Q.value = .85; presence.gain.value = -2.5;
+      air.type = 'highshelf'; air.frequency.value = 5200; air.gain.value = -2;
+      glue.threshold.value = -14; glue.knee.value = 12; glue.ratio.value = 2.5;
+      glue.attack.value = .008; glue.release.value = .10;
+      this.combatBus.connect(lowCut); lowCut.connect(presence); presence.connect(air);
+      air.connect(glue); glue.connect(this.sfxBus);
+      this.sfxBus.connect(master); this.musicBus.connect(master);
+      master.connect(limiter); limiter.connect(ctx.destination);
+      ctx.onstatechange = () => { if (ctx.state === 'running') { this.startMusic(); this.warm(); } };
+    } catch { this.ctx = null; return false; }
+    return true;
   }
 
   private unlock(): void {
-    if (document.hidden) return;
-    if (!this.ctx) {
-      const host = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext };
-      const AC = host.AudioContext || host.webkitAudioContext;
-      if (!AC) return;
-      try {
-        const ctx = this.ctx = new AC();
-        const master = ctx.createGain(), limiter = ctx.createDynamicsCompressor();
-        master.gain.value = .8;
-        limiter.threshold.value = -8; limiter.knee.value = 6; limiter.ratio.value = 8;
-        limiter.attack.value = .003; limiter.release.value = .14;
-        this.sfxBus = ctx.createGain(); this.musicBus = ctx.createGain();
-        this.sfxBus.gain.value = this.sfxEnabled ? .85 : 0;
-        this.musicBus.gain.value = 0;
-        this.sfxBus.connect(master); this.musicBus.connect(master);
-        master.connect(limiter); limiter.connect(ctx.destination);
-        ctx.onstatechange = () => { if (ctx.state === 'running') this.startMusic(); };
-      } catch { this.ctx = null; return; }
-    }
-    // Creation/resume happens directly inside the trusted browser gesture.
+    if (document.hidden || !this.ensureContext()) return;
+    if (this.ctx!.state === 'running') { this.startMusic(); this.warm(); return; }
+    // Resume is synchronous with the trusted gesture, before Cocos dispatches it.
     void this.ctx.resume().then(() => { this.startMusic(); this.warm(); }).catch(() => {});
   }
 
@@ -157,7 +226,7 @@ class GameAudioService {
     const job = (async (): Promise<AudioBuffer | null> => {
       try {
         await this.ready();
-        const info = resources.getInfoWithPath('audio/v1/' + file, AudioClip);
+        const info = resources.getInfoWithPath('audio/' + (file.includes('/') ? file : 'v1/' + file), AudioClip);
         if (!info) throw new Error('Missing bundled audio: ' + file);
         const url = assetManager.utils.getUrlWithUuid(info.uuid, { isNative: true, nativeExt: file.startsWith('bgm_') ? '.mp3' : '.wav' });
         const response = await fetch(url);
@@ -176,10 +245,11 @@ class GameAudioService {
   }
 
   private warm(): void {
-    if (!this.ctx || this.warming) return;
+    if (!this.ctx || this.warming || !this.sfxEnabled) return;
     this.warming = true;
-    // Small UI/cues first; bounded fetch/decode avoids a mobile CPU spike.
-    const files = Array.from(new Set(['ui_click_1', 'ui_confirm', 'bow_1', 'crossbow_1',
+    // Prepare small UI/cues before interaction; bounded fetch/decode avoids a mobile CPU spike.
+    const files = Array.from(new Set(['ui_click_1', 'ui_confirm', AUDIO_CUES.bow.files[0], AUDIO_CUES.crossbow.files[0],
+      AUDIO_CUES.kill.files[0], AUDIO_CUES.deathFire.files[0], AUDIO_CUES.deathVolt.files[0], AUDIO_CUES.deathFrost.files[0],
       'levelup', 'victory', 'defeat', ...Object.values(AUDIO_CUES).flatMap(cue => [...cue.files])]));
     let next = 0;
     const worker = async (): Promise<void> => {
@@ -190,6 +260,7 @@ class GameAudioService {
 
   private startMusic(): void {
     if (!this.ctx || this.ctx.state !== 'running' || document.hidden || !this.musicEnabled || this.music?.scene === this.scene || this.musicLoading) return;
+    if (this.musicRetry !== null) { clearTimeout(this.musicRetry); this.musicRetry = null; }
     this.musicLoading = true;
     const scene = this.scene, revision = this.musicRevision;
     void this.buffer(MUSIC_TRACKS[scene]).then(buffer => {
@@ -204,6 +275,10 @@ class GameAudioService {
       this.musicLoading = false;
       // A scene may have changed while the previous theme was being decoded.
       if (revision !== this.musicRevision) this.startMusic();
+      else if (this.music?.scene !== this.scene && this.musicEnabled && !document.hidden && this.ctx?.state === 'running') {
+        // A transient download failure must not leave BGM silent until another click.
+        this.musicRetry = setTimeout(() => { this.musicRetry = null; this.startMusic(); }, 16000);
+      }
     });
   }
 
@@ -224,11 +299,12 @@ class GameAudioService {
     if (!this.ctx || !this.musicBus) return;
     const sceneGain = this.scene === 'camp' ? .52 : .42;
     const stateGain = this.state === 'win' || this.state === 'lose' ? .2 : this.state === 'paused' || this.state === 'pick' ? .42 : 1;
-    const duck = performance.now() < this.duckUntil ? .43 : 1;
+    const duck = performance.now() < this.duckUntil ? this.duckGain : 1;
     this.ramp(this.musicBus.gain, this.musicEnabled ? sceneGain * stateGain * duck : 0, .18);
   }
 
-  private duck(seconds: number): void {
+  private duck(seconds: number, gain = .43): void {
+    this.duckGain = performance.now() < this.duckUntil ? Math.min(this.duckGain, gain) : gain;
     this.duckUntil = Math.max(this.duckUntil, performance.now() + (seconds + .12) * 1000);
     if (this.duckTimer !== null) clearTimeout(this.duckTimer);
     this.musicLevel();
@@ -242,16 +318,21 @@ class GameAudioService {
     try { voice.source.stop(this.ctx!.currentTime + .02); } catch { /* Already stopped. */ }
   }
 
-  private stopVoices(combatOnly = false): void {
+  private stopVoices(combatOnly = false, keepDeathTail = false): void {
     for (const voice of [...this.voices]) {
-      if (!combatOnly || voice.group === 'shot' || voice.group === 'impact' || voice.group === 'cast') this.stopVoice(voice);
+      // Let the final kill's sub-260ms finish survive settlement, but never navigation/pause.
+      if (keepDeathTail && voice.group === 'death') continue;
+      if (!combatOnly || voice.group === 'shot' || voice.group === 'impact' || voice.group === 'cast' || voice.group === 'death') this.stopVoice(voice);
     }
   }
 
   private visibilityChanged(): void {
     if (!this.ctx) return;
-    if (document.hidden) { this.stopVoices(); void this.ctx.suspend().catch(() => {}); }
-    else void this.ctx.resume().then(() => this.startMusic()).catch(() => {});
+    if (document.hidden) {
+      if (this.musicRetry !== null) { clearTimeout(this.musicRetry); this.musicRetry = null; }
+      this.stopVoices(); void this.ctx.suspend().catch(() => {});
+    }
+    else void this.ctx.resume().then(() => { this.startMusic(); this.warm(); }).catch(() => {});
   }
 }
 

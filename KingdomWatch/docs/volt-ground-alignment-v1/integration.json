@@ -1,0 +1,39 @@
+{
+  "status": "published",
+  "scope": "align thunder ground ring, synchronize sniper multi-target aim, commit pyro meteors to spread-out warned ground points",
+  "source": "assets/resources/fx/volt-ultimate-procedural.effect",
+  "reference": "C:/Users/user/AppData/Local/Temp/codex-clipboard-62ad5da2-3462-4d09-be5d-f03c3e0be2cc.png",
+  "rootCause": "ground x centered twice, placing origin at carrier right edge",
+  "before": "p -= strikeShape.xy * 0.5; (x was already centered)",
+  "after": "p = vec2(uv0.x - 0.5, 0.5 - uv0.y) * strikeShape.xy;",
+  "anchor": "existing target foot; shared by ground light, cracks and sky contact",
+  "sniper": {
+    "countSource": "hero.stats.ultBolts",
+    "clearGraphics": "once per frame",
+    "aimLinesAndReticles": "one pair per actual target",
+    "maxCardCount": 3,
+    "selection": "original primary; highest-HP remaining live targets; no duplicates",
+    "fireTargets": "same array as final aim frame; no second selection",
+    "originCue": "once, not per line",
+    "manualAndAutoShared": true
+  },
+  "pyro": {
+    "rootCause": "ordinary fireball collides early; independent timer creates crater at warning",
+    "landing": "fixed ground target; projectile arrival drives blast and crater",
+    "warningRadius": 140,
+    "meteorSpeed": 800,
+    "count": "existing 5/7",
+    "selection": "new group coverage, movement prediction, preferred separation 147/176",
+    "fixedAfterWarning": true,
+    "retryWhenProjectilePoolFull": true,
+    "damage": "existing full primary hit and splash multiplier; no blanket AoE multiplier buff",
+    "reference": "C:/Users/user/AppData/Local/Temp/codex-clipboard-515aea7d-4e95-4ec4-a307-c6725f436dfd.png"
+  },
+  "gameplayChanged": "pyro target distribution and ground-impact correction only",
+  "audioAssetsChanged": false,
+  "heroMediaChanged": false,
+  "paidMediaGeneration": false,
+  "validation": "user manual; no tests, simulations, game, browser or online acceptance run",
+  "game": "https://kingdom-watch.pages.dev/?v=volt-ground-alignment-v1-1792074343",
+  "deployment": "https://f2adc10e.kingdom-watch.pages.dev"
+}

@@ -1,0 +1,907 @@
+--- before/assets\scripts\battle\ArcherIdleAnimation.ts
++++ assets\scripts\battle\ArcherIdleAnimation.ts
+@@ -45,6 +45,11 @@
+       finish({ manifest, frames: manifest.animation.frames.map(name => map.get(name)!) });
+     });
+   });
++}
++
++/** Prepare the same shared clip cache from the lobby, without constructing a character. */
++export function preloadArcherClip(id: ClipId): Promise<void> {
++  return new Promise(resolve => loadClip(id, () => resolve()));
+ }
+ 
+ export class ArcherIdleAnimation {
+--- before/assets\scripts\battle\Hero.ts
++++ assets\scripts\battle\Hero.ts
+@@ -888,7 +888,7 @@
+ /* 大招陨石调参：真实爆炸半径、坑半径与寿命、坑内易伤强度 */
+ const METEOR_BLAST_R = 140;
+ const METEOR_SPEED = 800;
+-const CRATER_R = 88;
++const CRATER_R = 88 * 1.3;
+ const CRATER_LIFE = 4;
+ const CRATER_VULN = 0.25;
+ export class PyroHero extends HeroBase {
+@@ -897,12 +897,13 @@
+   readonly chargeMax = PYRO_CHARGE_MAX;
+   readonly skillMax = 10;
+   /** Fixed ground points; the projectile's actual arrival removes the warning and creates the crater. */
+-  private meteorQueue: { t: number; x: number; y: number; fired?: boolean; first?: boolean; last?: boolean }[] = [];
+-  /** 落点预警圈：脉冲相位 + 绘图节点（惰性创建，队列清空即销毁） */
++  private meteorQueue: { t: number; x: number; y: number; fired?: boolean; first?: boolean; last?: boolean;
++    fallElapsed?: number; fallSeconds?: number }[] = [];
++  /** Fixed landing shadows grow darker as the real meteor approaches; no target rings. */
+   private warnT = 0;
+   private warnNode: Node | null = null;
+   private warnG: Graphics | null = null;
+-  private warnTint = hexc(PAL.orange);
++  private warnTint = hexc('#201A17');
+   /** 陨石坑：命中后的地面灼烧区（持续灼烧 + 易伤），寿命 CRATER_LIFE 秒 */
+   private craters: { x: number; y: number; t: number }[] = [];
+   private craterNode: Node | null = null;
+@@ -1049,18 +1050,17 @@
+       const g = this.warnG!;
+       g.clear();
+       for (const q of this.meteorQueue) {
+-        const pulse = .5 + .5 * Math.sin(this.warnT * 9);
+-        // The outer edge is the actual blast radius; only light and the inner sight pulse.
+-        this.warnTint.a = 10 + Math.round(pulse * 7); g.fillColor = this.warnTint;
+-        g.circle(q.x, q.y, METEOR_BLAST_R); g.fill();
+-        this.warnTint.a = q.fired ? 175 : 110; g.strokeColor = this.warnTint; g.lineWidth = 1.6;
+-        g.circle(q.x, q.y, METEOR_BLAST_R); g.stroke();
+-        this.warnTint.a = 180 + Math.round(pulse * 55); g.strokeColor = this.warnTint; g.lineWidth = 2;
+-        g.circle(q.x, q.y, 12 + pulse * 3); g.stroke();
+-        g.moveTo(q.x - 22, q.y); g.lineTo(q.x - 8, q.y);
+-        g.moveTo(q.x + 8, q.y); g.lineTo(q.x + 22, q.y);
+-        g.moveTo(q.x, q.y - 22); g.lineTo(q.x, q.y - 8);
+-        g.moveTo(q.x, q.y + 8); g.lineTo(q.x, q.y + 22); g.stroke();
++        if (!q.fired && q.t > .35) continue;
++        const approach = q.fired ? Math.min(1, (q.fallElapsed || 0) / Math.max(.01, q.fallSeconds || 1)) : 0;
++        const p = approach * approach * (3 - 2 * approach);
++        const radius = METEOR_BLAST_R * (.35 + .43 * p);
++        // Concentric low-alpha ellipses form a soft, grounded shadow, not an outlined AOE indicator.
++        for (let band = 6; band >= 0; band--) {
++          const r = radius * (.49 + band * .085);
++          this.warnTint.a = Math.round((5 + (6 - band) * 1.7) * (.45 + p * .75));
++          g.fillColor = this.warnTint;
++          g.ellipse(q.x, q.y, r, r * .62); g.fill();
++        }
+       }
+     } else if (this.warnNode) {
+       this.warnNode.active = false;
+@@ -1075,7 +1075,7 @@
+     const crR = CRATER_R * uc.craterMul;
+     for (let i = this.meteorQueue.length - 1; i >= 0; i--) {
+       const q = this.meteorQueue[i];
+-      if (q.fired) continue;
++      if (q.fired) { q.fallElapsed = (q.fallElapsed || 0) + dt; continue; }
+       q.t -= dt;
+       if (q.t <= 0 && projs.hasCapacity) {
+         // 出生点必须在弹道顶界（LO.half+120）之下，否则首帧即被越界回收（上次"只有预警没有陨石"的根因）
+@@ -1101,6 +1101,7 @@
+         // If the projectile budget is full, keep the real warning and retry, never create a phantom crater.
+         q.fired = projs.fire(spec);
+         if (q.fired) {
++          q.fallElapsed = 0; q.fallSeconds = Math.max(.01, (top - q.y) / METEOR_SPEED);
+           this.animateAttack(true, q.x - this.x, q.y - HERO_Y - 60);
+           if (q.first) Sfx.cast(this.id, true);
+         }
+--- before/assets\scripts\battle\HeroSequenceAnimation.ts
++++ assets\scripts\battle\HeroSequenceAnimation.ts
+@@ -60,6 +60,11 @@
+       finish({ manifest, frames, frameEnds });
+     }));
+   });
++}
++
++/** Reuse the player's real clip loader while the level lobby is visible. */
++export function preloadHeroClip(directory: string, id: ClipId): Promise<void> {
++  return new Promise(resolve => loadClip(directory, id, () => resolve()));
+ }
+ 
+ function frameAt(clip: Clip, time: number): number {
+--- before/assets\scripts\battle\UltimatePresentation.ts
++++ assets\scripts\battle\UltimatePresentation.ts
+@@ -1,5 +1,5 @@
+ /** Shared, bounded ultimate direction. All geometry follows the battle clock.
+- * Background-only shade; world-only camera kick; no input or HUD transforms.
++ * Local accents and world-only camera kick; scene brightness and HUD stay stable.
+  */
+ import { Color, Graphics, Layers, Node } from 'cc';
+ import { HERO_Y, LO } from '../config/GameConfig';
+@@ -18,7 +18,6 @@
+ }
+ 
+ export class UltimatePresentation {
+-  private shade: Graphics;
+   private air: Graphics;
+   private floor: Graphics;
+   private casts: Cast[] = [];
+@@ -30,10 +29,6 @@
+   private painted = false;
+ 
+   constructor(private field: Node, airParent: Node, groundParent: Node) {
+-    const shade = this.node('ultimateBackgroundFocus', field);
+-    // Behind every combatant and ground contact, above the painted background.
+-    shade.setSiblingIndex(groundParent.getSiblingIndex());
+-    this.shade = shade.addComponent(Graphics);
+     this.floor = this.node('ultimateGroundAccents', groundParent).addComponent(Graphics);
+     this.air = this.node('ultimateGatherAndAfterglow', airParent).addComponent(Graphics);
+   }
+@@ -84,7 +79,7 @@
+   clear(): void {
+     this.casts.length = this.beats.length = 0; this.shakeT = this.shakeCd = 0;
+     this.suspend();
+-    for (const g of [this.shade, this.air, this.floor]) if (g.isValid) g.clear();
++    for (const g of [this.air, this.floor]) if (g.isValid) g.clear();
+     this.painted = false;
+   }
+   private ink(g: Graphics, hero: string, alpha: number, pale = false): void {
+@@ -95,18 +90,10 @@
+   }
+   private render(): void {
+     if (!this.casts.length && !this.beats.length && !this.painted) return;
+-    this.shade.clear(); this.air.clear(); this.floor.clear();
++    this.air.clear(); this.floor.clear();
+     this.painted = !!(this.casts.length || this.beats.length);
+-    let shade = 0;
+     for (const c of this.casts) {
+-      // A maximum, not an additive stack: simultaneous casts cannot black out the field.
+-      const envelope = smooth(0, .12, c.age) * (1 - smooth(c.windup - .08, c.windup + .28, c.age));
+-      shade = Math.max(shade, envelope * 43);
+       if (c.age < c.windup + .4) this.gather(c);
+-    }
+-    if (shade > .5) {
+-      this.tint.set(12, 18, 27, Math.round(shade)); this.shade.fillColor = this.tint;
+-      this.shade.rect(-380, -LO.half - 12, 760, LO.half * 2 + 24); this.shade.fill();
+     }
+     for (const b of this.beats) this.afterglow(b);
+   }
+--- before/assets\scripts\Boot.ts
++++ assets\scripts\Boot.ts
+@@ -16,6 +16,7 @@
+ import { TouchFeedback } from './ui/TouchFeedback';
+ import { motionIn } from './ui/UIMotion';
+ import { enteringBattle } from './ui/BattleEntry';
++import { warmEntryArt } from './ui/BattleEntryWarmup';
+ 
+ function hexc(hex: string): Color {
+   const c = new Color();
+@@ -80,6 +81,7 @@
+     bd.levelDef = getLevelDef(flow.levelId);
+     (globalThis as unknown as { __kw?: BattleDirector }).__kw = bd; // 调试句柄：浏览器实测弹窗用
+   } else {
++    warmEntryArt();
+     root.addComponent(MainUI);
+   }
+   if (!enteringBattle()) motionIn(root, 'fade');
+--- before/assets\scripts\config\Cards.ts
++++ assets\scripts\config\Cards.ts
+@@ -301,7 +301,7 @@
+   return c({
+     id: owner + '_unlock_' + unlocks, name: unlocks === 'skill' ? '解锁技能' : '解锁大招',
+     owner, rarity: owner === 'archer' || owner === 'sniper' ? 'gold' : 'white', maxStacks: 1, unlocks,
+-    desc: '本局学习「' + abilityName + '」' + (unlocks === 'skill' ? '，冷却结束后自动释放' : '，解锁后开始充能，充满后点击释放'),
++    desc: '本局学习「' + abilityName + '」' + (unlocks === 'skill' ? '\n冷却结束后自动释放' : '\n解锁后开始充能\n充满后点击释放'),
+     apply: x => { if (unlocks === 'skill') x.hero.skillUnlocked = true; else x.hero.ultUnlocked = true; },
+   });
+ }
+@@ -321,70 +321,70 @@
+     apply: archerAttackTradeoff(x => { x.hero.serial += 1; }) }),
+   c({ id: 'fan', name: '齐射', rarity: 'blue', maxStacks: 5, owner: 'archer', desc: '普攻额外发射1支箭\n攻击力 -10%\n最多5层',
+     apply: archerAttackTradeoff(x => { x.hero.fan += 1; }) }),
+-  c({ id: 'split', name: '分裂', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '命中分裂2支箭（50%伤害）\n攻击力 -10%',
++  c({ id: 'split', name: '分裂', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '命中分裂 2 支箭\n分裂箭伤害 50%\n攻击力 -10%',
+     apply: archerAttackTradeoff(x => { x.hero.split += 2; }) }),
+-  c({ id: 'explode', name: '小范围爆炸', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中爆炸，40%伤害溅射\n攻击力 -10%',
++  c({ id: 'explode', name: '小范围爆炸', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中触发爆炸\n溅射伤害 40%\n攻击力 -10%',
+     apply: archerAttackTradeoff(x => { x.hero.explodeR = Math.max(x.hero.explodeR, 70); }) }),
+-  c({ id: 'explode_r', name: '爆炸范围', rarity: 'purple', maxStacks: 3, owner: 'archer', req: 'explode', desc: '爆炸半径 +40%（需已学习爆炸）',
++  c({ id: 'explode_r', name: '爆炸范围', rarity: 'purple', maxStacks: 3, owner: 'archer', req: 'explode', desc: '爆炸半径 +40%\n需已学习爆炸',
+     apply: x => { if (x.hero.explodeR > 0) x.hero.explodeR *= 1.4; } }),
+-  c({ id: 'explode_w', name: '爆炸威力', rarity: 'purple', maxStacks: 3, owner: 'archer', req: 'explode', desc: '爆炸伤害 +50%（需已学习爆炸）',
++  c({ id: 'explode_w', name: '爆炸威力', rarity: 'purple', maxStacks: 3, owner: 'archer', req: 'explode', desc: '爆炸伤害 +50%\n需已学习爆炸',
+     apply: x => { if (x.hero.explodeR > 0) x.hero.explodeMul *= 1.5; } }),
+-  c({ id: 'frost', name: '寒霜附魔', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中减速20%，持续1秒\n攻击力 -10%',
++  c({ id: 'frost', name: '寒霜附魔', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中减速 20%\n持续 1 秒\n攻击力 -10%',
+     apply: archerAttackTradeoff(x => { x.hero.slowOnHit = 0.2; x.hero.slowDur = 1; }) }),
+-  c({ id: 'burn', name: '烈焰附魔', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中点燃3秒，共60%攻击力伤害\n攻击力 -10%',
++  c({ id: 'burn', name: '烈焰附魔', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中点燃 3 秒\n共60%攻击力伤害\n攻击力 -10%',
+     apply: archerAttackTradeoff(x => { x.hero.burnOnHit = 0.2; }) }),
+-  c({ id: 'instinct_a', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'archer', desc: '对血量 <30% 目标伤害 +100%',
++  c({ id: 'instinct_a', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'archer', desc: '目标血量低于30%时\n伤害 +100%',
+     apply: x => { x.hero.lowHpBonus += 1; } }),
+-  c({ id: 'rain_rounds', name: '多轮箭雨', rarity: 'gold', maxStacks: 2, owner: 'archer', req: 'archer_unlock_ult', desc: '大招箭雨 +1 轮（可叠至 3 轮）',
++  c({ id: 'rain_rounds', name: '多轮箭雨', rarity: 'gold', maxStacks: 2, owner: 'archer', req: 'archer_unlock_ult', desc: '大招箭雨 +1 轮\n最多 3 轮',
+     apply: x => { x.hero.ultRounds += 1; } }),
+-  c({ id: 'fast_charge_a', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'archer', req: 'archer_unlock_ult', desc: '大招充能需求 -20%（可叠加）',
++  c({ id: 'fast_charge_a', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'archer', req: 'archer_unlock_ult', desc: '大招充能需求 -20%\n可叠加',
+     apply: x => { x.hero.chargeMul *= 0.8; } }),
+ ];
+ 
+ /* ---------- 狙击游侠 · 凯尔·鹰眼（§6.2/§6.4 普攻流·极限单体） ---------- */
+ export const SNIPER_CARDS: CardDef[] = [
+   ...commonHeroCards('sniper'),
+-  c({ id: 'execute', name: '处决标记', rarity: 'blue', maxStacks: 3, owner: 'sniper', desc: '对精英/BOSS伤害 +35%',
++  c({ id: 'execute', name: '处决标记', rarity: 'blue', maxStacks: 3, owner: 'sniper', desc: '对精英和BOSS\n伤害 +35%',
+     apply: x => { x.hero.executeBonus += 0.35; } }),
+-  c({ id: 'instinct_s', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'sniper', desc: '对血量 <30% 目标伤害 +100%',
++  c({ id: 'instinct_s', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'sniper', desc: '目标血量低于30%时\n伤害 +100%',
+     apply: x => { x.hero.lowHpBonus += 1; } }),
+-  c({ id: 'multi_lock', name: '多目标锁定', rarity: 'purple', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_skill', desc: '穿颅射击连狙 +2 发（可叠加）',
++  c({ id: 'multi_lock', name: '多目标锁定', rarity: 'purple', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_skill', desc: '穿颅射击连狙 +2 发\n可叠加',
+     apply: x => { x.hero.skillShots += 2; } }),
+-  c({ id: 'cd_cut', name: '冷却缩减', rarity: 'blue', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_skill', desc: '技能冷却 -2 秒（可叠加）',
++  c({ id: 'cd_cut', name: '冷却缩减', rarity: 'blue', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_skill', desc: '技能冷却 -2 秒\n可叠加',
+     apply: x => { x.hero.skillCdFlat += 2; } }),
+   c({ id: 'sniper_range', name: '远距校准', rarity: 'blue', maxStacks: 3, owner: 'sniper', req: 'sniper_unlock_skill',
+     art: 'ui_card_sniper_range_v1', desc: '技能索敌范围 +30%',
+     apply: x => { x.hero.skillRange *= 1.3; } }),
+   c({ id: 'sniper_pierce', name: '贯颅弩矢', rarity: 'purple', maxStacks: 3, owner: 'sniper', req: 'sniper_unlock_skill',
+-    art: 'ui_card_sniper_pierce_v1', desc: '技能弩箭额外穿透1个目标',
++    art: 'ui_card_sniper_pierce_v1', desc: '技能弩箭额外穿透\n1 个目标',
+     apply: x => { x.hero.skillPierce = (x.hero.skillPierce || 0) + 1; } }),
+-  c({ id: 'extra_line', name: '额外枪线', rarity: 'gold', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招额外 +1 条枪线（可叠加）',
++  c({ id: 'extra_line', name: '额外枪线', rarity: 'gold', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招枪线 +1 条\n可叠加',
+     apply: x => { x.hero.ultBolts += 1; } }),
+-  c({ id: 'fast_charge_s', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招充能需求 -20%（可叠加）',
++  c({ id: 'fast_charge_s', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招充能需求 -20%\n可叠加',
+     apply: x => { x.hero.chargeMul *= 0.8; } }),
+   c({ id: 'sniper_mark', name: '死亡准星', rarity: 'gold', maxStacks: 1, owner: 'sniper', req: 'sniper_unlock_ult',
+-    art: 'ui_card_sniper_mark_v1', desc: '大招命中挂上蓝色准星\n目标受到伤害 +30%，持续5秒',
++    art: 'ui_card_sniper_mark_v1', desc: '大招命中挂上蓝色准星\n目标受到伤害 +30%\n持续 5 秒',
+     apply: x => { x.hero.ultMarkAmp = .3; } }),
+ ];
+ 
+ /* ---------- 火焰法师 · 焰·辉（§6.3 技能流 + §6.4 余烬） ---------- */
+ export const PYRO_CARDS: CardDef[] = [
+   ...commonHeroCards('pyro'),
+-  c({ id: 'pyro_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'pyro', req: 'pyro_unlock_skill', desc: '基础技能伤害 +40%（技能、大招生效）',
++  c({ id: 'pyro_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'pyro', req: 'pyro_unlock_skill', desc: '基础技能伤害 +40%\n技能、大招生效',
+     apply: x => { x.hero.skillMul *= 1.4; } }),
+-  c({ id: 'pyro_shards', name: '技能弹体', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '烈焰爆裂火球 +1 颗（可叠加）',
++  c({ id: 'pyro_shards', name: '技能弹体', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '烈焰爆裂火球 +1 颗\n可叠加',
+     apply: x => { x.hero.skillShots += 1; } }),
+-  c({ id: 'pyro_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '技能冷却 -2 秒（可叠加）',
++  c({ id: 'pyro_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '技能冷却 -2 秒\n可叠加',
+     apply: x => { x.hero.skillCdFlat += 2; } }),
+   c({ id: 'pyro_range', name: '法术范围', rarity: 'white', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '爆裂范围 +30%',
+     apply: x => { x.hero.skillRangeMul *= 1.3; } }),
+   c({ id: 'pyro_war', name: '战吼', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招伤害 +50%',
+     apply: x => { x.hero.ultDmgMul *= 1.5; } }),
+-  c({ id: 'pyro_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招充能需求 -25%（可叠加）',
++  c({ id: 'pyro_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招充能需求 -25%\n可叠加',
+     apply: x => { x.hero.chargeMul *= 0.75; } }),
+   c({ id: 'pyro_stun', name: '震慑', rarity: 'purple', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '陨石命中眩晕 1 秒',
+     apply: x => { x.hero.ultStun = 1; } }),
+-  c({ id: 'pyro_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招释放后攻速 +40% 持续 5 秒',
++  c({ id: 'pyro_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招释放后\n攻速 +40%\n持续 5 秒',
+     apply: x => { x.hero.ultHaste = 1; } }),
+   c({ id: 'pyro_ember', name: '余烬', rarity: 'purple', maxStacks: 2, owner: 'pyro', reqAny: ['pyro_unlock_skill', 'pyro_unlock_ult'], desc: '灼烧伤害翻倍',
+     apply: x => { x.hero.burnMul *= 2; } }),
+@@ -393,56 +393,56 @@
+ /* ---------- 雷电法师 · 沃尔·雷霆（§6.3 技能流 + §6.4 感电） ---------- */
+ export const VOLT_CARDS: CardDef[] = [
+   ...commonHeroCards('volt'),
+-  c({ id: 'volt_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'volt', req: 'volt_unlock_skill', desc: '基础技能伤害 +40%（技能、大招生效）',
++  c({ id: 'volt_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'volt', req: 'volt_unlock_skill', desc: '基础技能伤害 +40%\n技能、大招生效',
+     apply: x => { x.hero.skillMul *= 1.4; } }),
+-  c({ id: 'volt_shards', name: '技能弹体', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '连锁闪电弹跳 +2 目标（可叠加）',
++  c({ id: 'volt_shards', name: '技能弹体', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '连锁闪电\n弹跳目标 +2\n可叠加',
+     apply: x => { x.hero.skillShots += 2; } }),
+-  c({ id: 'volt_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '技能冷却 -2 秒（可叠加）',
++  c({ id: 'volt_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '技能冷却 -2 秒\n可叠加',
+     apply: x => { x.hero.skillCdFlat += 2; } }),
+   c({ id: 'volt_range', name: '法术范围', rarity: 'white', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '连锁跳跃距离 +30%',
+     apply: x => { x.hero.skillRangeMul *= 1.3; } }),
+   c({ id: 'volt_war', name: '战吼', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_ult', desc: '大招伤害 +50%',
+     apply: x => { x.hero.ultDmgMul *= 1.5; } }),
+-  c({ id: 'volt_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', desc: '大招充能需求 -25%（可叠加）',
++  c({ id: 'volt_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', desc: '大招充能需求 -25%\n可叠加',
+     apply: x => { x.hero.chargeMul *= 0.75; } }),
+-  c({ id: 'volt_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', desc: '大招释放后攻速 +40% 持续 5 秒',
++  c({ id: 'volt_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', desc: '大招释放后\n攻速 +40%\n持续 5 秒',
+     apply: x => { x.hero.ultHaste = 1; } }),
+-  c({ id: 'volt_shock', name: '感电', rarity: 'purple', maxStacks: 2, owner: 'volt', desc: '雷系命中感电：目标受伤 +25% 持续 3s（可叠至 +50%）',
++  c({ id: 'volt_shock', name: '感电', rarity: 'purple', maxStacks: 2, owner: 'volt', desc: '雷系命中附加感电\n目标受到伤害 +25%\n持续 3 秒\n最多 +50%',
+     apply: x => { x.hero.shockOnHit = Math.min(0.5, x.hero.shockOnHit + 0.25); } }),
+ ];
+ 
+ /* ---------- 冰霜法师 · 莫拉·寒霜强化卡：减速加深 → 冻结扩化 → 控制转伤害 ---------- */
+ export const MORA_CARDS: CardDef[] = [
+   ...commonHeroCards('mora'),
+-  c({ id: 'mora_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'mora', req: 'mora_unlock_skill', desc: '基础技能伤害 +40%（技能、大招生效）',
++  c({ id: 'mora_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'mora', req: 'mora_unlock_skill', desc: '基础技能伤害 +40%\n技能、大招生效',
+     apply: x => { x.hero.skillMul *= 1.4; } }),
+   c({ id: 'mora_range', name: '极寒扩散', rarity: 'white', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', desc: '冰领域半径 +30%',
+     apply: x => { x.hero.skillRangeMul *= 1.3; } }),
+-  c({ id: 'mora_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', desc: '技能冷却 -2 秒（可叠加）',
++  c({ id: 'mora_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', desc: '技能冷却 -2 秒\n可叠加',
+     apply: x => { x.hero.skillCdFlat += 2; } }),
+-  c({ id: 'mora_chill', name: '凛冬之息', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '冰系减速幅度 +20%（普攻/领域/大招全部生效）',
++  c({ id: 'mora_chill', name: '凛冬之息', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '冰系减速幅度 +20%\n普攻、领域、大招\n全部生效',
+     apply: x => { x.hero.slowAmpBonus += 0.2; } }),
+-  c({ id: 'mora_freeze', name: '速冻之心', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '普攻冰冻几率 +15%（15%→30%→45%）',
++  c({ id: 'mora_freeze', name: '速冻之心', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '普攻冰冻几率 +15%\n15%→30%→45%',
+     apply: x => { x.hero.freezeChance += 0.15; } }),
+   c({ id: 'mora_war', name: '战吼', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_ult', desc: '大招伤害 +50%',
+     apply: x => { x.hero.ultDmgMul *= 1.5; } }),
+-  c({ id: 'mora_linger', name: '寒冬延续', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_ult', desc: '大招减速持续时间 +1 秒（可叠加）',
++  c({ id: 'mora_linger', name: '寒冬延续', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_ult', desc: '大招减速时间 +1 秒\n可叠加',
+     apply: x => { x.hero.ultSlowDur += 1; } }),
+-  c({ id: 'mora_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '大招释放后攻速 +40% 持续 5 秒',
++  c({ id: 'mora_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '大招释放后\n攻速 +40%\n持续 5 秒',
+     apply: x => { x.hero.ultHaste = 1; } }),
+-  c({ id: 'mora_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '大招充能需求 -25%（可叠加）',
++  c({ id: 'mora_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '大招充能需求 -25%\n可叠加',
+     apply: x => { x.hero.chargeMul *= 0.75; } }),
+-  c({ id: 'mora_brittle', name: '碎冰', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '对减速/冻结目标伤害 +30%（可叠至 +60%）',
++  c({ id: 'mora_brittle', name: '碎冰', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '对减速或冻结目标\n伤害 +30%\n最多 +60%',
+     apply: x => { x.hero.slowedBonus += 0.3; } }),
+-  c({ id: 'mora_glacier', name: '绝对零度', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '冰系减速幅度 +20%、大招减速持续 +2 秒（可叠加）',
++  c({ id: 'mora_glacier', name: '绝对零度', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '冰系减速幅度 +20%\n大招减速时间 +2 秒\n可叠加',
+     apply: x => { x.hero.slowAmpBonus += 0.2; x.hero.ultSlowDur += 2; } }),
+ ];
+ 
+ /* ---------- 全局卡（§6.1） ---------- */
+ export const GLOBAL_CARDS: CardDef[] = [
+-  c({ id: 'wall', name: '城墙加固', rarity: 'white', maxStacks: 4, owner: 'global', desc: '防线耐久上限 +25% 并回复 25%',
++  c({ id: 'wall', name: '城墙加固', rarity: 'white', maxStacks: 4, owner: 'global', desc: '防线耐久上限 +25%\n并回复 25% 耐久',
+     apply: x => { x.line.addMaxMul(1.25); x.line.healPct(0.25); } }),
+-  c({ id: 'repair', name: '工事修理', rarity: 'blue', maxStacks: 3, owner: 'global', desc: '防线每秒回复 0.5% 最大耐久',
++  c({ id: 'repair', name: '工事修理', rarity: 'blue', maxStacks: 3, owner: 'global', desc: '防线每秒回复\n0.5% 最大耐久',
+     apply: x => { x.global.lineRegenPct += 0.005; } }),
+   c({ id: 'xp_badge', name: '经验勋章', rarity: 'white', offerGroup: 'stats', maxStacks: 3, owner: 'global', desc: '经验获取 +10%',
+     apply: x => { x.global.xpMul *= 1.1; } }),
+--- before/assets\scripts\ui\BattleEntry.ts
++++ assets\scripts\ui\BattleEntry.ts
+@@ -1,19 +1,26 @@
+-/** Scene-independent, opaque flag wipe. The new battlefield renders before the flags part. */
++/** Painted sliding gates cover only the scene handoff, with no artificial loading hold. */
+ import { _decorator, BlockInputEvents, Camera, Canvas, Color, Component, director, Director,
+-  game, Game, isValid, Graphics, Node, UITransform, view } from 'cc';
++  game, Game, isValid, Graphics, Node, Rect, Size, Sprite, SpriteFrame, UITransform, Vec2, view } from 'cc';
+ import { reducedMotion } from './UIMotion';
+-import { whenUIArtReady } from './UIArtReady';
++import { uxFrame } from './Ux';
++import { ENTRY_GATE_ART, warmBattleScene } from './BattleEntryWarmup';
+ 
+ const { ccclass } = _decorator;
+ const LAYER = 1 << 19;
++const CLOSE_SECONDS = .24;
++const OPEN_SECONDS = .32;
++const MIN_HOLD = .06;
++const ART_WAIT_LIMIT = .9;
+ let active: BattleEntry | null = null;
++let gateFrames: [SpriteFrame, SpriteFrame] | null = null;
+ const clamp = (v: number): number => Math.max(0, Math.min(1, v));
+-const ease = (v: number): number => { const p = clamp(v); return p * p * p * (p * (p * 6 - 15) + 10); };
++const ease = (v: number): number => { const p = clamp(v); return p * p * (3 - 2 * p); };
+ 
+ export function enteringBattle(): boolean { return !!active && isValid(active.node, true); }
+ 
+-/** No caption or button busy skin: this persistent full-screen surface owns repeat-input blocking. */
+-export function enterBattle(load: (done: (error?: Error | null) => void) => boolean, failed: () => void): void {
++/** The persistent opaque surface owns input blocking; the button keeps its normal caption and skin. */
++export function enterBattle(load: (done: (error?: Error | null) => void) => boolean,
++  failed: () => void, firstPaint: Promise<void> = Promise.resolve()): void {
+   if (enteringBattle()) return;
+   const scene = director.getScene(); if (!scene) { failed(); return; }
+   const root = new Node('BattleEntrySurface'); root.layer = LAYER; root.setParent(scene);
+@@ -28,10 +35,10 @@
+   root.addComponent(BlockInputEvents);
+   director.addPersistRootNode(root);
+   const transition = root.addComponent(BattleEntry); active = transition;
+-  transition.configure(camera, load, failed);
++  transition.configure(camera, load, failed, firstPaint);
+ }
+ 
+-/** Called after BattleDirector has constructed its complete tree, including its tracked background. */
++/** BattleDirector has constructed its full tree; its first complete draw must precede the reveal. */
+ export function battleEntryReady(root: Node): void { active?.waitForBattle(root); }
+ 
+ @ccclass('BattleEntry')
+@@ -40,10 +47,13 @@
+   private right!: Node;
+   private leftInk!: Graphics;
+   private rightInk!: Graphics;
+-  private crest!: Graphics;
++  private leftArt!: Sprite;
++  private rightArt!: Sprite;
++  private accents!: Graphics;
+   private camera!: Camera;
+   private phase: 'closing' | 'holding' | 'opening' = 'closing';
+   private age = 0;
++  private builtAge = 0;
+   private coverage = 0;
+   private openingFrom = 1;
+   private width = 0;
+@@ -52,44 +62,89 @@
+   private hidden = false;
+   private preloaded = false;
+   private loadStarted = false;
+-  private built = false;
++  private builtRoot: Node | null = null;
+   private ready = false;
+   private failed = false;
++  private firstPaint!: Promise<void>;
+   private load!: (done: (error?: Error | null) => void) => boolean;
+   private fail!: () => void;
+   private drawReady: (() => void) | null = null;
+-  private tint = new Color();
+ 
+   onLoad(): void {
+     game.on(Game.EVENT_HIDE, this.hide, this); game.on(Game.EVENT_SHOW, this.show, this);
+   }
+-  configure(camera: Camera, load: (done: (error?: Error | null) => void) => boolean, failed: () => void): void {
+-    this.camera = camera; this.load = load; this.fail = failed; this.quiet = reducedMotion();
+-    const ink = (name: string): Graphics => {
++  configure(camera: Camera, load: (done: (error?: Error | null) => void) => boolean,
++    failed: () => void, firstPaint: Promise<void>): void {
++    this.camera = camera; this.load = load; this.fail = failed;
++    this.firstPaint = firstPaint; this.quiet = reducedMotion();
++    const panel = (name: string): Graphics => {
+       const n = new Node(name); n.layer = LAYER; n.setParent(this.node); return n.addComponent(Graphics);
+     };
+-    this.leftInk = ink('leftRoyalFlag'); this.left = this.leftInk.node;
+-    this.rightInk = ink('rightRoyalFlag'); this.right = this.rightInk.node; this.right.setScale(-1, 1, 1);
+-    this.crest = ink('royalShieldSeam'); this.resize(); this.draw(0);
+-    // Scene preloading overlaps the closing motion. Scene replacement waits for complete coverage.
+-    director.preloadScene('Main', error => {
++    this.leftInk = panel('leftRoyalGate'); this.left = this.leftInk.node;
++    this.rightInk = panel('rightRoyalGate'); this.right = this.rightInk.node;
++    this.leftArt = this.makeArt(this.left, 1); this.rightArt = this.makeArt(this.right, 0);
++    this.accents = panel('gateJoinGlint'); this.resize(); this.draw(0);
++    uxFrame(ENTRY_GATE_ART, source => {
++      if (!source || !isValid(this.node, true) || this.phase === 'opening') return;
++      if (!gateFrames) {
++        source.packable = false; source.texture.addRef();
++        const r = source.rect, half = r.width / 2;
++        const frames = [0, 1].map(side => {
++          const frame = new SpriteFrame();
++          frame.reset({ texture: source.texture, rect: new Rect(r.x + half * side, r.y, half, r.height),
++            originalSize: new Size(half, r.height), offset: new Vec2() });
++          frame.packable = false;
++          return frame;
++        });
++        gateFrames = [frames[0], frames[1]];
++      }
++      this.leftArt.spriteFrame = gateFrames[0]; this.rightArt.spriteFrame = gateFrames[1];
++      this.fitArt();
++    });
++    void warmBattleScene().then(ok => {
+       if (!isValid(this.node, true) || this.failed) return;
+-      if (error) this.abort(); else this.preloaded = true;
++      if (ok) this.preloaded = true; else this.abort();
+     });
+   }
++  private makeArt(parent: Node, anchorX: number): Sprite {
++    const n = new Node('paintedGateHalf'); n.layer = LAYER; n.setParent(parent);
++    n.addComponent(UITransform).setAnchorPoint(anchorX, .5);
++    const sprite = n.addComponent(Sprite); sprite.sizeMode = Sprite.SizeMode.CUSTOM; sprite.trim = false;
++    return sprite;
++  }
++  private fitArt(): void {
++    if (!gateFrames) return;
++    const r = gateFrames[0].rect;
++    const scale = Math.max((this.width + 4) / (r.width * 2), (this.height + 4) / r.height);
++    for (const sprite of [this.leftArt, this.rightArt]) {
++      sprite.node.getComponent(UITransform)!.setContentSize(r.width * scale, r.height * scale);
++    }
++  }
+   waitForBattle(root: Node): void {
+-    this.built = true;
+-    whenUIArtReady(root, () => {
+-      if (!isValid(this.node, true) || !isValid(root, true)) return;
+-      this.drawReady = () => { this.drawReady = null; if (isValid(this.node, true)) this.ready = true; };
+-      director.once(Director.EVENT_AFTER_DRAW, this.drawReady);
+-    });
++    this.builtRoot = root; this.builtAge = 0;
++    // Decorative HUD images load independently. Only the background, wall and actual idle clips matter here.
++    void this.firstPaint.then(() => this.queueFirstDraw());
++  }
++  private queueFirstDraw(): void {
++    if (!isValid(this.node, true) || !isValid(this.builtRoot, true) || this.failed || this.ready || this.drawReady) return;
++    this.drawReady = () => {
++      this.drawReady = null;
++      if (isValid(this.node, true) && isValid(this.builtRoot, true)) this.ready = true;
++    };
++    director.once(Director.EVENT_AFTER_DRAW, this.drawReady);
+   }
+   update(dt: number): void {
+     if (this.hidden || !this.left) return;
+-    this.resize(); this.age += Math.min(dt, .05);
++    const delta = Math.min(Math.max(dt, 0), .1);
++    this.resize(); this.age += delta;
++    if (this.builtRoot && !this.ready) {
++      this.builtAge += delta;
++      // A stalled network must not add the former eight-second closed-door wait.
++      if (this.builtAge >= ART_WAIT_LIMIT) this.queueFirstDraw();
++    }
+     if (this.phase === 'closing') {
+-      const p = this.age / (this.quiet ? .08 : .34); this.draw(ease(p));
++      const p = clamp(this.age / (this.quiet ? .08 : CLOSE_SECONDS));
++      this.draw(1 - Math.pow(1 - p, 3));
+       if (p >= 1) { this.phase = 'holding'; this.age = 0; }
+     } else if (this.phase === 'holding') {
+       this.draw(1);
+@@ -98,12 +153,13 @@
+         const started = this.load(error => { if (error && isValid(this.node, true)) this.abort(); });
+         if (!started) this.abort();
+       }
+-      // Failed images retain existing procedural fallbacks; a stalled art request cannot trap the player.
+-      if (this.age >= .14 && (this.ready || (this.built && this.age >= 8))) {
++      if (!this.loadStarted && this.age >= 5) this.abort();
++      if (!this.failed && this.age >= MIN_HOLD && this.ready) {
+         this.phase = 'opening'; this.age = 0;
+       }
+     } else {
+-      const p = this.age / (this.quiet ? .1 : .48); this.draw(this.openingFrom * (1 - ease(p)));
++      const p = this.age / (this.quiet ? .1 : OPEN_SECONDS);
++      this.draw(this.openingFrom * (1 - ease(p)));
+       if (p >= 1) this.finish();
+     }
+   }
+@@ -113,54 +169,28 @@
+     this.width = size.width; this.height = size.height;
+     this.node.getComponent(UITransform)!.setContentSize(size);
+     this.camera.orthoHeight = size.height / 2;
+-    this.paintFlag(this.leftInk); this.paintFlag(this.rightInk);
+-  }
+-  private color(g: Graphics, r: number, green: number, b: number, alpha = 255): void {
+-    this.tint.set(r, green, b, Math.round(alpha)); g.fillColor = this.tint;
+-  }
+-  private paintFlag(g: Graphics): void {
+-    const w = this.width / 2 + 128, h = this.height / 2 + 128, notch = Math.min(110, this.height * .1);
+-    g.clear(); this.color(g, 30, 43, 58);
+-    g.moveTo(-w, -h); g.lineTo(16, -h); g.lineTo(16, -notch); g.lineTo(34, 0);
+-    g.lineTo(16, notch); g.lineTo(16, h); g.lineTo(-w, h); g.close(); g.fill();
+-    // Quiet woven folds and inset piping, all vector geometry; no foreign image assets.
+-    for (let k = 0; k < 6; k++) {
+-      const x = -w + k * w / 6;
+-      this.color(g, 127, 151, 172, k % 2 ? 7 : 13);
+-      g.moveTo(x, -h); g.lineTo(x + w / 7, -h); g.lineTo(x + w / 7 - 45, h); g.lineTo(x - 45, h); g.close(); g.fill();
+-    }
+-    for (let k = 0; k < 2; k++) {
+-      g.strokeColor = k ? new Color(255, 224, 156, 200) : new Color(142, 101, 42, 255);
+-      g.lineWidth = k ? 1.2 : 5;
+-      g.moveTo(8, -h); g.lineTo(8, -notch); g.lineTo(26, 0); g.lineTo(8, notch); g.lineTo(8, h); g.stroke();
+-    }
+-    g.strokeColor = new Color(159, 181, 195, 20); g.lineWidth = 1;
+-    for (let y = -h; y < h; y += 34) { g.moveTo(-w, y); g.lineTo(-20, y + 16); g.stroke(); }
++    this.paintBacking(this.leftInk, -1); this.paintBacking(this.rightInk, 1);
++    this.fitArt();
++  }
++  private paintBacking(g: Graphics, side: number): void {
++    const w = this.width / 2 + 128, h = this.height / 2 + 8;
++    g.clear(); g.fillColor = new Color(23, 49, 79, 255);
++    g.rect(side < 0 ? -w : -1, -h, w + 1, h * 2); g.fill();
++    // Solid backup remains behind the painted resource; never reveal a one-pixel edge or clear frame.
++    g.strokeColor = new Color(173, 128, 52, 255); g.lineWidth = 5;
++    g.moveTo(side * 4, -h); g.lineTo(side * 4, h); g.stroke();
+   }
+   private draw(coverage: number): void {
+     this.coverage = coverage;
+-    const slide = (1 - coverage) * (this.width / 2 + 160);
++    const slide = (1 - coverage) * (this.width / 2 + 8);
+     this.left.setPosition(-slide, 0, 0); this.right.setPosition(slide, 0, 0);
+-    const g = this.crest; g.clear();
+-    const strength = clamp((coverage - .78) / .22); if (!strength) return;
+-    const scale = Math.min(1, this.width / 620) * (this.quiet ? 1 : .96 + strength * .04);
+-    g.node.setScale(scale, scale, 1);
+-    const alpha = 255 * strength;
+-    this.color(g, 22, 32, 45, alpha); g.circle(0, 0, 62); g.fill();
+-    g.strokeColor = new Color(212, 168, 86, Math.round(alpha * .65)); g.lineWidth = 1.4;
+-    g.circle(0, 0, 61); g.stroke();
+-    this.color(g, 43, 60, 77, alpha);
+-    g.moveTo(-34, 35); g.lineTo(0, 47); g.lineTo(34, 35); g.lineTo(30, -15);
+-    g.quadraticCurveTo(23, -36, 0, -49); g.quadraticCurveTo(-23, -36, -30, -15); g.close(); g.fill();
+-    g.strokeColor = new Color(240, 199, 115, Math.round(alpha)); g.lineWidth = 2.6; g.stroke();
+-    this.color(g, 246, 211, 139, alpha);
+-    g.moveTo(0, 24); g.lineTo(12, 1); g.lineTo(0, -23); g.lineTo(-12, 1); g.close(); g.fill();
+-    for (const side of [-1, 1]) {
+-      g.strokeColor = new Color(216, 179, 108, Math.round(alpha * .7)); g.lineWidth = 1.5;
+-      g.moveTo(side * 79, 0); g.lineTo(side * 137, 0); g.stroke();
+-      this.color(g, 235, 197, 123, alpha * .8);
+-      g.moveTo(side * 151, 5); g.lineTo(side * 157, 0); g.lineTo(side * 151, -5); g.lineTo(side * 145, 0); g.close(); g.fill();
+-    }
++    const g = this.accents; g.clear();
++    if (this.quiet || this.phase !== 'holding' || this.age > .16) return;
++    // A compact warm glint at the joined crest, no whole-screen flash or pulsing loading badge.
++    const p = clamp(this.age / .16), alpha = Math.round(90 * Math.sin(p * Math.PI));
++    g.strokeColor = new Color(255, 232, 169, alpha); g.lineWidth = 1.5;
++    const span = Math.min(52, this.width * .07);
++    g.moveTo(0, -span); g.lineTo(0, span); g.moveTo(-span * .35, 0); g.lineTo(span * .35, 0); g.stroke();
+   }
+   private abort(): void {
+     if (this.failed) return;
+--- before/assets\scripts\ui\pages\LevelsPage.ts
++++ assets\scripts\ui\pages\LevelsPage.ts
+@@ -12,6 +12,7 @@
+ import { bindButton } from '../ButtonFeedback';
+ import { refreshUI } from '../UIMotion';
+ import { enterBattle, enteringBattle } from '../BattleEntry';
++import { warmBattlefield } from '../BattleEntryWarmup';
+ 
+ const LEVELS = [
+   { id: '1-1', name: '1-1 前哨', short: '前哨', desc: '10 波 · 哥布林军团', art: 'outpost' },
+@@ -203,7 +204,7 @@
+         enterBattle(done => {
+           flow.mode = 'battle'; flow.levelId = lv.id; flow.diff = st.d;
+           return director.loadScene('Main', done);
+-        }, restoreBattleEntry);
++        }, restoreBattleEntry, warmBattlefield(lv.id, squadList()));
+       }, { tone: open ? 'gold' : 'muted', name: 'levelBattle', enabled: open });
+       const battle = battleControl.node;
+       if (open) {
+@@ -218,6 +219,7 @@
+       comicArt(squad, -36, 9, 43, 43, 'comic_helm_falcon_v1');
+       mainLabel(squad, 23, 10, '编队', { size: 26, bold: true, color: COMIC.cream, w: 84, h: 36 });
+       mainLabel(squad, 0, -27, squadList().length + '/4 已上阵', { size: 18, color: '#C8CFD3', w: 144, h: 26 });
++      if (open) void warmBattlefield(lv.id, squadList());
+     });
+   }
+   render();
+--- before/assets\scripts\ui\Panels.ts
++++ assets\scripts\ui\Panels.ts
+@@ -2,7 +2,7 @@
+  * 弹窗面板（UX 线稿 ②~⑤⑧）：三选一 / 暂停 / 胜利结算 / 失败结算(含广告复活) / 伤害统计 / 属性Tips
+  * 弹窗内容块均以屏幕垂直中心为重心；三选一期间全场冻结由 BattleDirector 状态控制
+  */
+-import { Graphics, Node, Sprite, sys, tween, UIOpacity, Vec3 } from 'cc';
++import { Graphics, Label, Node, Sprite, sys, tween, UIOpacity, Vec3 } from 'cc';
+ import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+ import { HERO_Y, LO, PAL } from '../config/GameConfig';
+ import { DamageRow, fmtWk } from '../battle/DamageService';
+@@ -139,7 +139,7 @@
+           cb.onPick(card);
+           if (version === this.panelVersion && pickRoot.isValid) { this.picking = false; motion.restore(); }
+         })) this.picking = false;
+-      }, { visual: face, scale: .975, shift: 1, releaseMotion: false, sound: 'select', enabled: canInteract });
++      }, { visual: face, scale: .955, shift: 1, releaseMotion: false, sound: false, enabled: canInteract });
+     });
+ 
+     const footer = N('pickRefreshFooter', pickRoot);
+@@ -229,8 +229,12 @@
+       artSprite(ava, 0, 0, 48, 48, 'ui_avatar_' + card.owner, { sliced: false });
+     }
+ 
+-    // ④ 描述（18 号加粗，shrink 保证不超框）
+-    label(frame, 0, -95, card.desc, { size: 18, color: '#4A3214', bold: true, w: 196, h: 90, shrink: true, lineHeight: 26 });
++    // Explicit semantic lines preserve phrases, conditions and units; shrink only guards unusually long new copy.
++    const description = label(frame, 0, -94, card.desc, {
++      size: 18, color: '#4A3214', bold: true, font: 'body', w: 196, h: 112, shrink: true, lineHeight: 25,
++    });
++    description.name = 'pickDescription:' + card.id;
++    description.getComponent(Label)!.enableWrapText = false;
+   }
+ 
+   /* ---------- 页签条（线稿④-1/④-2/⑤-1/⑥-1）：点页签本地重渲染当前面板（无边框规范：纯色板） ---------- */
+--- before/assets\scripts\ui\PickMotion.ts
++++ assets\scripts\ui\PickMotion.ts
+@@ -21,6 +21,8 @@
+   private previous: PickMotion | null = null;
+   private backgrounded = false;
+   private quiet = false;
++  private choiceCue = false;
++  private refreshCue = false;
+   private tint = new Color();
+ 
+   get ready(): boolean { return this.phase === 'idle'; }
+@@ -42,15 +44,18 @@
+   }
+   /** New art is already ready. Refreshes exchange each column with its opaque predecessor. */
+   reveal(previous: PickMotion | null, entered: () => void): void {
+-    this.previous = previous; this.entered = entered;
++    this.previous = previous; this.entered = entered; this.refreshCue = false;
+     this.quiet = reducedMotion(); this.phase = 'enter'; this.age = 0; this.enabled = true;
+-    if (previous) previous.chrome.forEach(c => { if (c.node.isValid) c.node.active = false; });
++    if (previous) {
++      previous.chrome.forEach(c => { if (c.node.isValid) c.node.active = false; });
++      uiSound('open');
++    }
+     else uiSound('open');
+     this.renderEntry();
+   }
+   choose(index: number, done: () => void): boolean {
+     if (!this.ready || !this.cards[index]) return false;
+-    this.phase = 'choose'; this.selected = index; this.age = 0; this.done = done;
++    this.phase = 'choose'; this.selected = index; this.age = 0; this.done = done; this.choiceCue = false;
+     this.cards[index].node.setSiblingIndex(this.node.children.length - 1);
+     this.enabled = true; this.renderChoice(); return true;
+   }
+@@ -68,13 +73,17 @@
+     this.age += Math.min(dt, .05);
+     if (this.phase === 'enter') {
+       this.renderEntry();
+-      if (this.age >= (this.quiet ? .1 : .44)) {
++      if (this.previous && !this.refreshCue && this.age >= (this.quiet ? .04 : .15)) {
++        this.refreshCue = true; uiSound('select');
++      }
++      if (this.age >= (this.quiet ? .1 : this.previous ? .52 : .44)) {
+         this.releasePrevious(); this.restore();
+         const entered = this.entered; this.entered = null; entered?.();
+       }
+     } else if (this.phase === 'choose') {
++      if (!this.choiceCue && this.age >= (this.quiet ? 0 : .1)) { this.choiceCue = true; uiSound('confirm'); }
+       this.renderChoice();
+-      if (this.age >= (this.quiet ? .14 : .46)) {
++      if (this.age >= (this.quiet ? .14 : .48)) {
+         this.phase = 'held'; this.enabled = false;
+         const done = this.done; this.done = null; done?.();
+       }
+@@ -89,6 +98,7 @@
+       c.node.setPosition(c.position.x, c.position.y - (i ? 6 : 8) * (1 - p), c.position.z);
+       c.node.setScale(1 - .012 * (1 - p), 1 - .012 * (1 - p), 1);
+     }
++    if (this.previous) { this.renderRefresh(); return; }
+     for (let i = 0; i < this.cards.length; i++) {
+       const c = this.cards[i], delay = this.quiet ? 0 : .04 + i * .055;
+       if (this.age < delay) continue;
+@@ -103,28 +113,72 @@
+       c.node.setPosition(c.position.x, c.position.y - 22 * (1 - ease), c.position.z);
+     }
+   }
++  /** A tight re-deal: old paper pulls in, then a prepared opaque face springs into each same slot. */
++  private renderRefresh(): void {
++    for (let i = 0; i < this.cards.length; i++) {
++      const c = this.cards[i], old = this.previous?.cards[i];
++      const time = this.age - (this.quiet ? 0 : i * .045), handoff = this.quiet ? 0 : .12;
++      if (time < 0) continue;
++      if (time < handoff && old && isValid(old.node, true)) {
++        const p = out(time / handoff), scale = 1 - .075 * p;
++        old.node.setScale(scale, scale, 1);
++        old.node.setPosition(old.position.x, old.position.y - 12 * p, old.position.z);
++        continue;
++      }
++      c.node.active = true;
++      if (old && isValid(old.node, true)) old.node.active = false;
++      const p = this.quiet ? 1 : clamp((time - handoff) / .28);
++      const scale = this.quiet ? 1 : p < .6 ? .925 + .115 * out(p / .6) : 1.04 - .04 * smooth((p - .6) / .4);
++      c.node.setScale(scale, scale, 1);
++      c.node.setPosition(c.position.x, c.position.y - (this.quiet ? 0 : 26 * (1 - out(p))), c.position.z);
++      c.accent.clear();
++      if (this.quiet) continue;
++      const strength = Math.sin(p * Math.PI);
++      this.tint.set(255, 218, 140, Math.round(200 * strength)); c.accent.strokeColor = this.tint;
++      c.accent.lineWidth = 2;
++      // A travelling edge glint reads as new cards arriving, without washing out their illustration.
++      const y = -174 + 348 * out(p);
++      for (const side of [-1, 1]) {
++        c.accent.moveTo(side * 107, y - 22); c.accent.lineTo(side * 107, y + 22); c.accent.stroke();
++        this.tint.set(255, 225, 162, Math.round(170 * strength)); c.accent.fillColor = this.tint;
++        const x = side * (110 + 9 * strength), r = 1 + 2 * strength;
++        c.accent.moveTo(x, y + r * 2); c.accent.lineTo(x + r, y);
++        c.accent.lineTo(x, y - r * 2); c.accent.lineTo(x - r, y); c.accent.close(); c.accent.fill();
++      }
++    }
++  }
+   private renderChoice(): void {
+-    const progress = out(this.age / (this.quiet ? .1 : .18));
++    const progress = out((this.age - (this.quiet ? 0 : .045)) / (this.quiet ? .1 : .21));
+     for (let i = 0; i < this.cards.length; i++) {
+       const c = this.cards[i], chosen = i === this.selected;
+       c.shade.clear(); c.accent.clear();
+       if (chosen) {
+-        const settle = this.quiet ? 0 : .028 * progress - .006 * smooth((this.age - .22) / .2);
+-        c.node.setScale(1 + settle, 1 + settle, 1);
+-        c.node.setPosition(c.position.x, c.position.y + (this.quiet ? 0 : 14 * progress), c.position.z);
++        // One decisive compress -> spring -> settle, all from this clock, without competing tweens.
++        const scale = this.quiet ? 1 : this.age < .055 ? 1 - .06 * out(this.age / .055)
++          : this.age < .18 ? .94 + .18 * out((this.age - .055) / .125)
++            : 1.12 - .055 * smooth((this.age - .18) / .22);
++        c.node.setScale(scale, scale, 1);
++        c.node.setPosition(c.position.x * (1 - (this.quiet ? 0 : .06 * progress)),
++          c.position.y + (this.quiet ? 0 : 28 * progress), c.position.z);
+         this.drawEdges(c.accent, progress);
+       } else {
+         const side = i < this.selected ? -1 : 1;
+-        c.node.setScale(1 - (this.quiet ? 0 : .015 * progress), 1 - (this.quiet ? 0 : .015 * progress), 1);
+-        c.node.setPosition(c.position.x + (this.quiet ? 0 : side * 7 * progress), c.position.y - (this.quiet ? 0 : 6 * progress), c.position.z);
++        c.node.setScale(1 - (this.quiet ? 0 : .06 * progress), 1 - (this.quiet ? 0 : .06 * progress), 1);
++        c.node.setPosition(c.position.x + (this.quiet ? 0 : side * 32 * progress), c.position.y - (this.quiet ? 0 : 16 * progress), c.position.z);
+         // A dark overlay covers an OPAQUE paper card; the battlefield never bleeds through it.
+-        this.tint.set(13, 20, 28, Math.round(148 * progress)); c.shade.fillColor = this.tint;
++        this.tint.set(13, 20, 28, Math.round(178 * progress)); c.shade.fillColor = this.tint;
+         c.shade.roundRect(-111, -180, 222, 360, 12); c.shade.fill();
+       }
+     }
+   }
+   private drawEdges(g: Graphics, progress: number): void {
+-    const length = 14 + 14 * progress, alpha = (160 + 65 * Math.sin(clamp(this.age / .46) * Math.PI)) * progress;
++    const length = 18 + 24 * progress, alpha = (170 + 65 * Math.sin(clamp(this.age / .48) * Math.PI)) * progress;
++    // Energy stays on the perimeter; the parchment, picture and text never receive a white wash.
++    for (let band = 3; band >= 0; band--) {
++      this.tint.set(255, 201, 86, Math.round((band ? 14 : 170) * progress));
++      g.strokeColor = this.tint; g.lineWidth = band ? 3 + band * 3 : 1.6;
++      g.roundRect(-111 - band, -180 - band, 222 + band * 2, 360 + band * 2, 11); g.stroke();
++    }
+     for (let band = 0; band < 2; band++) {
+       this.tint.set(band ? 249 : 139, band ? 210 : 91, band ? 113 : 30, Math.round(alpha * (band ? 1 : .35)));
+       g.strokeColor = this.tint; g.lineWidth = band ? 1.8 : 5;
+@@ -135,13 +189,21 @@
+       }
+     }
+     if (this.quiet) return;
+-    const t = clamp((this.age - .06) / .4), strength = Math.sin(t * Math.PI);
++    const t = clamp((this.age - .08) / .35), strength = Math.sin(t * Math.PI);
+     this.tint.set(249, 211, 120, Math.round(210 * strength)); g.fillColor = this.tint;
+     for (let k = 0; k < 8; k++) {
+-      const side = k % 2 ? -1 : 1, x = side * (108 + t * (5 + k % 3 * 3));
+-      const y = -140 + Math.floor(k / 2) * 91 + t * 16, r = 1.2 + strength;
++      const side = k % 2 ? -1 : 1, x = side * (110 + out(t) * (12 + k % 3 * 6));
++      const y = -140 + Math.floor(k / 2) * 91 + out(t) * 24, r = 1.4 + strength * 1.6;
+       g.moveTo(x, y + r * 1.6); g.lineTo(x + r * .65, y);
+       g.lineTo(x, y - r * 1.6); g.lineTo(x - r * .65, y); g.close(); g.fill();
++    }
++    // Short tapered corner rays deliver the peak, then disappear before the card commits.
++    const burst = clamp((this.age - .1) / .2), energy = Math.sin(burst * Math.PI);
++    this.tint.set(255, 215, 130, Math.round(185 * energy)); g.fillColor = this.tint;
++    for (const sx of [-1, 1]) for (const sy of [-1, 1]) {
++      const x = sx * (112 + burst * 15), y = sy * (181 + burst * 18);
++      g.moveTo(x, y); g.lineTo(x + sx * (10 + energy * 9), y + sy * (14 + energy * 13));
++      g.lineTo(x + sx * 3, y - sy * 2); g.close(); g.fill();
+     }
+   }
+   private releasePrevious(): void {
+--- /dev/null
++++ assets\scripts\ui\BattleEntryWarmup.ts
+@@ -0,0 +1,57 @@
++/** Entry art first; only the selected battlefield and equipped heroes need a first-paint barrier. */
++import { director } from 'cc';
++import { preloadArcherClip } from '../battle/ArcherIdleAnimation';
++import { preloadHeroClip } from '../battle/HeroSequenceAnimation';
++import { uxFrame } from './Ux';
++
++export const ENTRY_GATE_ART = 'battle_entry_v2/royal_gate';
++const HERO_CLIPS: Record<string, [string, string]> = {
++  sniper: ['sniper_idle_natural_v2', 'sniper_attack_clean_v1'],
++  pyro: ['pyro_idle_loop_v2', 'pyro_attack_user_v2'],
++  volt: ['volt_idle_natural_v1', 'volt_attack_user_v2'],
++  mora: ['mora_idle_user_v1', 'mora_attack_user_v1'],
++};
++const jobs = new Map<string, Promise<void>>();
++let sceneJob: Promise<boolean> | null = null;
++
++function imageReady(id: string): Promise<void> {
++  return new Promise(resolve => uxFrame(id, () => resolve()));
++}
++
++/** Called immediately on reaching the lobby, before the long idle-art queue. */
++export function warmEntryArt(): void { uxFrame(ENTRY_GATE_ART, () => {}); }
++
++export function warmBattleScene(): Promise<boolean> {
++  if (!sceneJob) {
++    sceneJob = new Promise(resolve => director.preloadScene('Main', error => resolve(!error)));
++    sceneJob.then(ok => { if (!ok) sceneJob = null; });
++  }
++  return sceneJob;
++}
++
++/** Failures settle to the existing fallback. Pending work is shared; failed assets may retry later. */
++export function warmBattlefield(levelId: string, heroIds: readonly string[]): Promise<void> {
++  const ids = heroIds.length ? [...heroIds] : ['archer', 'sniper'];
++  const key = levelId + ':' + ids.join(',');
++  const hit = jobs.get(key); if (hit) return hit;
++  warmEntryArt(); void warmBattleScene();
++  const firstPaint = [imageReady('scenes/scene_' + levelId.replace('-', '_')), imageReady('defense_wall')];
++  for (const id of ids) {
++    if (id === 'archer') {
++      firstPaint.push(preloadArcherClip('idle'));
++      // Attack sheets follow idle sheets, so a large combat atlas cannot delay the first hero pose.
++      void preloadArcherClip('idle').then(() => preloadArcherClip('attack'));
++    } else if (HERO_CLIPS[id]) {
++      const [idle, attack] = HERO_CLIPS[id];
++      firstPaint.push(preloadHeroClip(idle, 'idle'));
++      void preloadHeroClip(idle, 'idle').then(() => preloadHeroClip(attack, 'attack'));
++    }
++    // HUD decorations are warm, but never hold an opaque screen hostage.
++    for (const part of ['avatar', 'icon_atk', 'icon_skill', 'icon_ult']) {
++      uxFrame('ui_' + part + '_' + id, () => {});
++    }
++  }
++  const job = Promise.all(firstPaint).then(() => { jobs.delete(key); });
++  jobs.set(key, job);
++  return job;
++}

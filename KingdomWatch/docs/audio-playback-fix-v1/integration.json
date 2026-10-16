@@ -1,0 +1,18 @@
+{
+  "status": "published",
+  "scope": "audio gesture capture, preloading and music recovery",
+  "rootCause": "Cocos canvas stops DOM input propagation before document bubble listeners",
+  "gestureCapture": [
+    "pointerdown",
+    "pointerup",
+    "mousedown",
+    "touchend",
+    "keydown"
+  ],
+  "musicRetryMilliseconds": 16000,
+  "audioAssetsChanged": false,
+  "userSoundPreferencesPreserved": true,
+  "gameplayValidation": "user manual; no tests, browser, game or listening acceptance run",
+  "game": "https://kingdom-watch.pages.dev/?v=audio-playback-fix-v1-1792003213",
+  "deployment": "https://c81a24b9.kingdom-watch.pages.dev"
+}

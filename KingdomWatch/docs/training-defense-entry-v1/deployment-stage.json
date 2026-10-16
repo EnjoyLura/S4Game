@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-training-defense-entry-v1-20261016-124727",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-level-reward-tabs-v1-20261016-123714",
+  "entryVersion": "1792126011",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=training-defense-entry-v1-1792126011",
+  "scope": "smooth milestone gestures; saved keep HP/shield in every new battle; two real foreground seconds of closed-door hold",
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review"
+}

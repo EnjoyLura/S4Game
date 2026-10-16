@@ -1,0 +1,51 @@
+{
+  "status": "published",
+  "scope": [
+    "remove stage-level backdrop",
+    "stable-color XP gain",
+    "passive battle XP"
+  ],
+  "levelText": {
+    "backdrop": "removed",
+    "positionSizeFont": "retained",
+    "readability": "2px dark glyph outline, no panel"
+  },
+  "xpBar": {
+    "baseColor": "#6CBCC6",
+    "topLight": "#8FD1D8 at20%",
+    "whiteFlash": "removed",
+    "motion": "existing width smoothing; level-up immediately hands off remaining XP",
+    "initialFill": 0
+  },
+  "passiveXp": {
+    "intervalBattleSeconds": 2,
+    "basePerTick": "max(1, round(expNeed(current stage level) * 0.01))",
+    "bonus": "existing global.xpMul applied",
+    "clock": "same scaled battle delta as elapsed; paused/pick/prepare/leaving/settlement do not accumulate",
+    "grant": "after simulation substeps, only running and not pending victory",
+    "upgrade": "canonical gainXp; normal queue, card pick and ultimate presentation lock apply",
+    "remainder": "retained on pause/revive; new battle starts at zero; no wall-clock catch-up"
+  },
+  "unchanged": [
+    "kill XP",
+    "level XP curve",
+    "combat damage/charge",
+    "hero progression and saves",
+    "other HUD meters and artwork",
+    "prior exit, death and launch-wind fixes"
+  ],
+  "validation": {
+    "sourceReview": true,
+    "tests": false,
+    "simulation": false,
+    "gameLaunch": false,
+    "browser": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user review",
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "builtBundleReview": "Unbacked stageLevelText, zero initial XP fill, passive interval/gain formula and post-step grant present. expNeed method compiled as expNeed$1 calling shared import; no recursion. HUD xpFlash and lastXpTarget removed."
+  },
+  "game": "https://kingdom-watch.pages.dev/?v=stage-xp-flow-v1-1792081946",
+  "deployment": "https://34f69f81.kingdom-watch.pages.dev"
+}

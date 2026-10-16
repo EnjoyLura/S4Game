@@ -4,37 +4,47 @@ import { CA, N, WY } from './UIKit';
 import { artSprite } from './Ux';
 import { COMIC, comicArt, comicPortrait } from './ComicUI';
 import { EquipKind } from '../core/GameData';
+import { WEAPONS } from '../config/Weapons';
 
 export const HERO_PASTEL: Record<string, string> = {
   archer: '#DDEBD0', sniper: '#DBE7F2', pyro: '#F4DDC5', volt: '#E7DEF0', mora: '#D9EDF0',
 };
 export const GEAR_PASTEL = ['#E8E5DC', '#DDEBD0', '#DCE8F1', '#E7DEF0'];
 export const GEAR_ART: Record<string, string> = {
-  wpn_bow: 'comic_wpn_bow_v1', wpn_crossbow: 'comic_wpn_crossbow_v1',
+  ...Object.keys(WEAPONS).reduce((out, id) => { out[id] = WEAPONS[id].art; return out; }, {} as Record<string, string>),
   helm_falcon: 'comic_helm_falcon_v1', acc_moon: 'comic_acc_moon_v1',
   glove_wind: 'comic_glove_wind_v1', armor_forest: 'comic_armor_forest_v1',
   mat_stone: 'comic_mat_stone_v1', mat_iron: 'comic_mat_iron_v1',
   mat_dust: 'comic_mat_dust_v1', mat_rune: 'comic_mat_rune_v1',
 };
+export function gearArtKey(id: string): string {
+  const key = GEAR_ART[id] || '';
+  return key.includes('/') ? key : 'shop_comic_v1/' + key;
+}
 export const EMPTY_GEAR: Record<EquipKind, string> = {
   weapon: 'wpn_bow', helm: 'helm_falcon', acc: 'acc_moon', glove: 'glove_wind', armor: 'armor_forest',
 };
+/** Shared with picker prewarming, including the shop prefix applied by comicArt. */
+export function heroPortraitKey(id: string): string {
+  return id === 'archer' ? 'hero_comic_v1/comic_hero_archer_v1' : 'shop_comic_v1/comic_hero_' + id + '_v1';
+}
 export function heroPortrait(parent: Node, x: number, y: number, size: number, id: string): Node {
-  const key = id === 'archer' ? 'hero_comic_v1/comic_hero_archer_v1' : 'comic_hero_' + id + '_v1';
-  return comicPortrait(parent, x, y, size, key, HERO_PASTEL[id]);
+  return comicPortrait(parent, x, y, size, heroPortraitKey(id), HERO_PASTEL[id]);
 }
 export function gearArt(parent: Node, x: number, y: number, w: number, h: number, id: string): Node {
   return comicArt(parent, x, y, w, h, GEAR_ART[id]);
 }
-/** The import pipeline uses a 768px canvas with a 16px transparent foot margin. */
+/** Keep the complete illustration and align its authored transparent foot margin. */
 export function heroComicFigure(parent: Node, id: string, x: number, footY: number, height: number, maxWidth: number): Node {
   const figure = N('heroFigure:' + id, parent, x, footY);
   const ground = N('heroGround', figure).addComponent(Graphics);
   ground.fillColor = CA(COMIC.ink, .24); ground.ellipse(0, -2, Math.min(72, height * .17), 8); ground.fill();
-  artSprite(figure, 0, height / 2, maxWidth, height, 'hero_comic_v1/comic_figure_' + id + '_v1', {
+  const key = 'hero_comic_v1/comic_figure_' + id + (id === 'archer' ? '_v2' : '_v1');
+  const footMargin = id === 'archer' ? 14 / 1546 : 16 / 768;
+  artSprite(figure, 0, height / 2, maxWidth, height, key, {
     sliced: false, onLoaded: art => {
       const h = art.getComponent(UITransform)!.height;
-      art.setPosition(0, h / 2 - h * 16 / 768, 0);
+      art.setPosition(0, h / 2 - h * footMargin, 0);
     },
   });
   return figure;

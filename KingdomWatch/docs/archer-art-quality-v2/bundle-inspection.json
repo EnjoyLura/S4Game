@@ -1,0 +1,52 @@
+{
+  "mainBundle": "assets/main/index.a0a53.js",
+  "mainBundleSha256": "b86a74a31f32f194e80e566b85089121e20b4eae5ebc330fda5936e4e04e1058",
+  "mainBundleBytes": 581040,
+  "newBowReferences": {
+    "starter_bow_v2": true,
+    "green_bow_v2": true
+  },
+  "neutralPlateMarker": true,
+  "removedColoredFrameMarker": true,
+  "circularWellAndTag": {
+    "gearQualityHalo": true,
+    "gearQualityTag": true
+  },
+  "images": [
+    {
+      "artKey": "hero_comic_v1/comic_figure_archer_v2",
+      "spriteFrame": "ux/hero_comic_v1/comic_figure_archer_v2/spriteFrame",
+      "inCatalog": true,
+      "nativeImages": [
+        "assets/resources/native/35/35bdd906-6125-4df4-ac4e-f36d5210d654.f76e5.png"
+      ],
+      "nativeHashes": [
+        "e0e62449182fdc8dbbb72ca46d212c0fee7e8157ca2ddff8eeb209922b329bba"
+      ]
+    },
+    {
+      "artKey": "weapons_v1/starter_bow_v2",
+      "spriteFrame": "ux/weapons_v1/starter_bow_v2/spriteFrame",
+      "inCatalog": true,
+      "nativeImages": [
+        "assets/resources/native/95/9541bc49-ab3e-4c56-b122-5cb72e1fd035.77078.png"
+      ],
+      "nativeHashes": [
+        "5fa74b630151885ce11a587d29829f5fa1c78365089e54ebbd2e6d362527ed86"
+      ]
+    },
+    {
+      "artKey": "weapons_v1/green_bow_v2",
+      "spriteFrame": "ux/weapons_v1/green_bow_v2/spriteFrame",
+      "inCatalog": true,
+      "nativeImages": [
+        "assets/resources/native/62/62b1e69c-4919-4f0c-a11e-a63b2facaa1c.75cee.png"
+      ],
+      "nativeHashes": [
+        "fec13a25fd11622b3753bd4793c0f24eef9a8c3851736ac789e5e89805c53383"
+      ]
+    }
+  ],
+  "inspection": "read local source, catalog, compiled text and PNG hashes only; no tests/game/browser/online checks",
+  "manualAcceptance": "pending user"
+}

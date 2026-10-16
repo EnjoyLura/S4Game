@@ -16,4 +16,5 @@ export function registerDepthSprite(parent: Node, node: Node): DepthSprite {
 }
 export function depthSprites(parent: Node): readonly DepthSprite[] { return sprites.get(parent) || []; }
 export function setDepthSorter(parent: Node, sort: () => void): void { sorters.set(parent, sort); }
+export function clearDepthSorter(parent: Node): void { sorters.delete(parent); }
 export function refreshDepth(parent: Node): void { if (parent.isValid) sorters.get(parent)?.(); }

@@ -1,0 +1,10 @@
+{
+  "exitCode": 36,
+  "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-button-feedback-v1-20261015-out.log",
+  "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-button-feedback-v1-20261015-err.log",
+  "creator": "3.8.8",
+  "platform": "web-mobile",
+  "dprPatch": "completed",
+  "scope": "shared feedback across lobby, battle and modal buttons",
+  "gameplayValidation": "user manual"
+}

@@ -1,0 +1,11 @@
+✨ Compiled Worker successfully
+Uploading... (1881/1883)
+Uploading... (1882/1883)
+Uploading... (1883/1883)
+✨ Success! Uploaded 2 files (1881 already uploaded) (2.40 sec)
+
+✨ Uploading _headers
+✨ Uploading Functions bundle
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://3dc79b88.kingdom-watch.pages.dev
+{"stage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-volt-vfx-enhance-v1-20261015-204232","priorPublishedStage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-dual-base-damage-v1-20261015-203032","entryVersion":"1792068139","project":"kingdom-watch","branch":"main","game":"https://kingdom-watch.pages.dev/?v=volt-vfx-enhance-v1-1792068139","scope":"procedural Volt normal projectile, chain lightning and ultimate thunder effects","layoutChanged":false,"manualAcceptance":"pending user manual review"}

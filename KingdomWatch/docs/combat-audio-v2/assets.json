@@ -1,0 +1,2486 @@
+{
+  "version": 2,
+  "files": [
+    {
+      "file": "bow_1.wav",
+      "seconds": 0.19,
+      "peakDBFS": -7.0,
+      "activeRmsTargetDBFS": -20.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "medieval/English Longbow Shoot.wav",
+          "start": 0.105,
+          "seconds": 0.18,
+          "gain": 0.85,
+          "rate": 0.965,
+          "lowpassHz": 5600,
+          "highpassHz": 130,
+          "decaySeconds": 0.07,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.19,
+          "gain": 0.28,
+          "rate": 1,
+          "lowpassHz": 5200,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "f76323f4b8cdc3079628d06942ab1a714b3e8a4913fd35d0980df1e04cbbe008"
+    },
+    {
+      "file": "bow_2.wav",
+      "seconds": 0.19,
+      "peakDBFS": -7.0,
+      "activeRmsTargetDBFS": -20.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "medieval/English Longbow Shoot.wav",
+          "start": 0.443,
+          "seconds": 0.18,
+          "gain": 0.85,
+          "rate": 0.99,
+          "lowpassHz": 5600,
+          "highpassHz": 130,
+          "decaySeconds": 0.07,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.19,
+          "gain": 0.28,
+          "rate": 1,
+          "lowpassHz": 5200,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "9f4081c47f6d2e533e1960ea0a7064e4f87a4e899fff8a17ba0076cd14394e51"
+    },
+    {
+      "file": "bow_3.wav",
+      "seconds": 0.19,
+      "peakDBFS": -7.0,
+      "activeRmsTargetDBFS": -20.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "medieval/English Longbow Shoot.wav",
+          "start": 0.77,
+          "seconds": 0.18,
+          "gain": 0.85,
+          "rate": 1.015,
+          "lowpassHz": 5600,
+          "highpassHz": 130,
+          "decaySeconds": 0.07,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.19,
+          "gain": 0.28,
+          "rate": 1,
+          "lowpassHz": 5200,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "6fa6a45f8c298d612236133e0ea8a7637dc3701189f28145bebac3a9510b6b40"
+    },
+    {
+      "file": "crossbow_1.wav",
+      "seconds": 0.216009,
+      "peakDBFS": -6.0,
+      "activeRmsTargetDBFS": -18.8,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "medieval/Crossbow Shoot.wav",
+          "start": 0.32,
+          "seconds": 0.2,
+          "gain": 0.75,
+          "rate": 0.825,
+          "lowpassHz": 3900,
+          "highpassHz": 105,
+          "decaySeconds": 0.052,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 2800
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_medium_000.ogg",
+          "start": 0,
+          "seconds": 0.13,
+          "gain": 0.32,
+          "rate": 0.85,
+          "lowpassHz": 1900,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_000.ogg",
+          "start": 0,
+          "seconds": 0.15,
+          "gain": 0.31,
+          "rate": 0.9,
+          "lowpassHz": 1100,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.21,
+          "gain": 0.35,
+          "rate": 0.88,
+          "lowpassHz": 4200,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0.006,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "e65b8dc3a721e384bbdfab5ea7ed84bf2bbc3432a59aa7c1436b15a85a455fed"
+    },
+    {
+      "file": "crossbow_2.wav",
+      "seconds": 0.216009,
+      "peakDBFS": -6.0,
+      "activeRmsTargetDBFS": -18.8,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "medieval/Crossbow Shoot.wav",
+          "start": 0.834,
+          "seconds": 0.2,
+          "gain": 0.75,
+          "rate": 0.84,
+          "lowpassHz": 3900,
+          "highpassHz": 105,
+          "decaySeconds": 0.052,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 2800
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_medium_001.ogg",
+          "start": 0,
+          "seconds": 0.13,
+          "gain": 0.32,
+          "rate": 0.85,
+          "lowpassHz": 1900,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_001.ogg",
+          "start": 0,
+          "seconds": 0.15,
+          "gain": 0.31,
+          "rate": 0.9,
+          "lowpassHz": 1100,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.21,
+          "gain": 0.35,
+          "rate": 0.88,
+          "lowpassHz": 4200,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0.006,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "9db00255d09af54a43b147ce689d36e88cf7be9f509029d6afc1f357a8893719"
+    },
+    {
+      "file": "crossbow_3.wav",
+      "seconds": 0.216009,
+      "peakDBFS": -6.14,
+      "activeRmsTargetDBFS": -18.8,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "medieval/Crossbow Shoot.wav",
+          "start": 1.41,
+          "seconds": 0.2,
+          "gain": 0.75,
+          "rate": 0.855,
+          "lowpassHz": 3900,
+          "highpassHz": 105,
+          "decaySeconds": 0.052,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 2800
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_medium_002.ogg",
+          "start": 0,
+          "seconds": 0.13,
+          "gain": 0.32,
+          "rate": 0.85,
+          "lowpassHz": 1900,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_002.ogg",
+          "start": 0,
+          "seconds": 0.15,
+          "gain": 0.31,
+          "rate": 0.9,
+          "lowpassHz": 1100,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.21,
+          "gain": 0.35,
+          "rate": 0.88,
+          "lowpassHz": 4200,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0.006,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "888d7663115ec165c19757cca6c57221c31b21fba1a4af7b7f3d5c91e7458724"
+    },
+    {
+      "file": "fire_1.wav",
+      "seconds": 0.25,
+      "peakDBFS": -7.0,
+      "activeRmsTargetDBFS": -20,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/spell_fire_01.ogg",
+          "start": 0.14,
+          "seconds": 0.25,
+          "gain": 0.65,
+          "rate": 0.86,
+          "lowpassHz": 3700,
+          "highpassHz": 130,
+          "decaySeconds": 0.12,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactSoft_heavy_000.ogg",
+          "start": 0,
+          "seconds": 0.15,
+          "gain": 0.48,
+          "rate": 0.82,
+          "lowpassHz": 1900,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.18,
+          "gain": 0.23,
+          "rate": 0.9,
+          "lowpassHz": 3100,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0.012,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "11a5e9be3695868c7489ec9a1e10cd1aafb2905b8c08ac10dab1b427bcffd2dc"
+    },
+    {
+      "file": "thunder_1.wav",
+      "seconds": 0.14,
+      "peakDBFS": -8.48,
+      "activeRmsTargetDBFS": -20.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_medium_000.ogg",
+          "start": 0,
+          "seconds": 0.14,
+          "gain": 0.68,
+          "rate": 0.82,
+          "lowpassHz": 2300,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+          "start": 0.145,
+          "seconds": 0.095,
+          "gain": 0.36,
+          "rate": 0.8,
+          "lowpassHz": 4100,
+          "highpassHz": 650,
+          "decaySeconds": 0.035,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 2700
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+          "start": 0.145,
+          "seconds": 0.06,
+          "gain": 0.14,
+          "rate": 0.92,
+          "lowpassHz": 4100,
+          "highpassHz": 650,
+          "decaySeconds": 0.035,
+          "delaySeconds": 0.028,
+          "attackSeconds": 0.002,
+          "notchHz": 2700
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.14,
+          "gain": 0.25,
+          "rate": 1.13,
+          "lowpassHz": 4000,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "af55f0bbe96543e3de0202e09eddb188b3cede2d786328f735ac5778d36c2c55"
+    },
+    {
+      "file": "frost_1.wav",
+      "seconds": 0.22,
+      "peakDBFS": -7.5,
+      "activeRmsTargetDBFS": -21,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactSoft_medium_000.ogg",
+          "start": 0,
+          "seconds": 0.13,
+          "gain": 0.52,
+          "rate": 0.95,
+          "lowpassHz": 2800,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactGlass_light_000.ogg",
+          "start": 0,
+          "seconds": 0.14,
+          "gain": 0.32,
+          "rate": 0.78,
+          "lowpassHz": 4400,
+          "highpassHz": 80,
+          "decaySeconds": 0.045,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.22,
+          "gain": 0.34,
+          "rate": 1.16,
+          "lowpassHz": 5100,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/footstep_snow_000.ogg",
+          "start": 0,
+          "seconds": 0.19,
+          "gain": 0.15,
+          "rate": 1,
+          "lowpassHz": 4800,
+          "highpassHz": 400,
+          "decaySeconds": 0.08,
+          "delaySeconds": 0.012,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "7e627b815da0b648392ec6a0bd4a636d81bae23145ea14cb5310426785ac279a"
+    },
+    {
+      "file": "fire_2.wav",
+      "seconds": 0.245488,
+      "peakDBFS": -7.0,
+      "activeRmsTargetDBFS": -20,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/spell_fire_02.ogg",
+          "start": 0.14,
+          "seconds": 0.25,
+          "gain": 0.65,
+          "rate": 0.86,
+          "lowpassHz": 3700,
+          "highpassHz": 130,
+          "decaySeconds": 0.12,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactSoft_heavy_001.ogg",
+          "start": 0,
+          "seconds": 0.15,
+          "gain": 0.48,
+          "rate": 0.82,
+          "lowpassHz": 1900,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.18,
+          "gain": 0.23,
+          "rate": 0.9,
+          "lowpassHz": 3100,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0.012,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "8aa1d99c00379a2ed6306acd96a4b406414f5513e0cafd9b1005d689c28b8c50"
+    },
+    {
+      "file": "thunder_2.wav",
+      "seconds": 0.14,
+      "peakDBFS": -7.39,
+      "activeRmsTargetDBFS": -20.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_medium_001.ogg",
+          "start": 0,
+          "seconds": 0.14,
+          "gain": 0.68,
+          "rate": 0.82,
+          "lowpassHz": 2300,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+          "start": 0.145,
+          "seconds": 0.095,
+          "gain": 0.36,
+          "rate": 0.8,
+          "lowpassHz": 4100,
+          "highpassHz": 650,
+          "decaySeconds": 0.035,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 2700
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+          "start": 0.145,
+          "seconds": 0.06,
+          "gain": 0.14,
+          "rate": 0.92,
+          "lowpassHz": 4100,
+          "highpassHz": 650,
+          "decaySeconds": 0.035,
+          "delaySeconds": 0.028,
+          "attackSeconds": 0.002,
+          "notchHz": 2700
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.14,
+          "gain": 0.25,
+          "rate": 1.13,
+          "lowpassHz": 4000,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "34ce0f4547930ee872c4f926c68f56968264be4312bd46481d0755419f04f677"
+    },
+    {
+      "file": "frost_2.wav",
+      "seconds": 0.22,
+      "peakDBFS": -7.99,
+      "activeRmsTargetDBFS": -21,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactSoft_medium_001.ogg",
+          "start": 0,
+          "seconds": 0.13,
+          "gain": 0.52,
+          "rate": 0.95,
+          "lowpassHz": 2800,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactGlass_light_001.ogg",
+          "start": 0,
+          "seconds": 0.14,
+          "gain": 0.32,
+          "rate": 0.78,
+          "lowpassHz": 4400,
+          "highpassHz": 80,
+          "decaySeconds": 0.045,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.22,
+          "gain": 0.34,
+          "rate": 1.16,
+          "lowpassHz": 5100,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/footstep_snow_001.ogg",
+          "start": 0,
+          "seconds": 0.19,
+          "gain": 0.15,
+          "rate": 1,
+          "lowpassHz": 4800,
+          "highpassHz": 400,
+          "decaySeconds": 0.08,
+          "delaySeconds": 0.012,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "174a2404a2e9e3d83ae463e3be72c745f4bfa97f70ff8f52adf6231a17492ae2"
+    },
+    {
+      "file": "fire_3.wav",
+      "seconds": 0.25195,
+      "peakDBFS": -7.46,
+      "activeRmsTargetDBFS": -20,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/spell_fire_03.ogg",
+          "start": 0.14,
+          "seconds": 0.25,
+          "gain": 0.65,
+          "rate": 0.86,
+          "lowpassHz": 3700,
+          "highpassHz": 130,
+          "decaySeconds": 0.12,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactSoft_heavy_002.ogg",
+          "start": 0,
+          "seconds": 0.15,
+          "gain": 0.48,
+          "rate": 0.82,
+          "lowpassHz": 1900,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.18,
+          "gain": 0.23,
+          "rate": 0.9,
+          "lowpassHz": 3100,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0.012,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "648ff40b74dacd87e7892b68d9c8f4ce2a02e1c58f160cabc9205ea87baa72fb"
+    },
+    {
+      "file": "thunder_3.wav",
+      "seconds": 0.14,
+      "peakDBFS": -8.3,
+      "activeRmsTargetDBFS": -20.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_medium_002.ogg",
+          "start": 0,
+          "seconds": 0.14,
+          "gain": 0.68,
+          "rate": 0.82,
+          "lowpassHz": 2300,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+          "start": 0.145,
+          "seconds": 0.095,
+          "gain": 0.36,
+          "rate": 0.8,
+          "lowpassHz": 4100,
+          "highpassHz": 650,
+          "decaySeconds": 0.035,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 2700
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+          "start": 0.145,
+          "seconds": 0.06,
+          "gain": 0.14,
+          "rate": 0.92,
+          "lowpassHz": 4100,
+          "highpassHz": 650,
+          "decaySeconds": 0.035,
+          "delaySeconds": 0.028,
+          "attackSeconds": 0.002,
+          "notchHz": 2700
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.14,
+          "gain": 0.25,
+          "rate": 1.13,
+          "lowpassHz": 4000,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "1fb33d3a225f17fe52036550e23b47cf588be80b935dde47db679e61ae9b8540"
+    },
+    {
+      "file": "frost_3.wav",
+      "seconds": 0.22,
+      "peakDBFS": -7.5,
+      "activeRmsTargetDBFS": -21,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactSoft_medium_002.ogg",
+          "start": 0,
+          "seconds": 0.13,
+          "gain": 0.52,
+          "rate": 0.95,
+          "lowpassHz": 2800,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactGlass_light_002.ogg",
+          "start": 0,
+          "seconds": 0.14,
+          "gain": 0.32,
+          "rate": 0.78,
+          "lowpassHz": 4400,
+          "highpassHz": 80,
+          "decaySeconds": 0.045,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.22,
+          "gain": 0.34,
+          "rate": 1.16,
+          "lowpassHz": 5100,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/footstep_snow_002.ogg",
+          "start": 0,
+          "seconds": 0.19,
+          "gain": 0.15,
+          "rate": 1,
+          "lowpassHz": 4800,
+          "highpassHz": 400,
+          "decaySeconds": 0.08,
+          "delaySeconds": 0.012,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "e9a4676e9fe5f7dd4435f7e9066d5e0faa3663e15db1e2c286ea9bb2932c6acc"
+    },
+    {
+      "file": "hit_1.wav",
+      "seconds": 0.142698,
+      "peakDBFS": -13.37,
+      "activeRmsTargetDBFS": -23,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_medium_000.ogg",
+          "start": 0,
+          "seconds": 0.16,
+          "gain": 0.8,
+          "rate": 1,
+          "lowpassHz": 3300,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactSoft_medium_000.ogg",
+          "start": 0,
+          "seconds": 0.12,
+          "gain": 0.3,
+          "rate": 1.1,
+          "lowpassHz": 3800,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "c7b1d3bd087a8dd4e7205a64f40f399902ad43ef8e62558f1ff2de102b4d6899"
+    },
+    {
+      "file": "pierce_1.wav",
+      "seconds": 0.135057,
+      "peakDBFS": -11.1,
+      "activeRmsTargetDBFS": -22,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_000.ogg",
+          "start": 0,
+          "seconds": 0.16,
+          "gain": 0.8,
+          "rate": 0.9,
+          "lowpassHz": 2500,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_light_000.ogg",
+          "start": 0,
+          "seconds": 0.1,
+          "gain": 0.25,
+          "rate": 0.88,
+          "lowpassHz": 3200,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "12fda1ce033d1fa1b5c929106d9391a9227b6ecf46e2d15970009d97610b5b43"
+    },
+    {
+      "file": "crush_1.wav",
+      "seconds": 0.188005,
+      "peakDBFS": -11.95,
+      "activeRmsTargetDBFS": -22.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_000.ogg",
+          "start": 0,
+          "seconds": 0.18,
+          "gain": 0.8,
+          "rate": 0.8,
+          "lowpassHz": 1900,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "rubberduck-rpg/spell_fire_01.ogg",
+          "start": 0.14,
+          "seconds": 0.18,
+          "gain": 0.32,
+          "rate": 0.78,
+          "lowpassHz": 3700,
+          "highpassHz": 130,
+          "decaySeconds": 0.12,
+          "delaySeconds": 0.008,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "7a0ca145f6f954af6168d3c546eaac3e7326a0265fc23e68a6b2efe999462899"
+    },
+    {
+      "file": "zap_hit_1.wav",
+      "seconds": 0.100635,
+      "peakDBFS": -14.23,
+      "activeRmsTargetDBFS": -23.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_medium_000.ogg",
+          "start": 0,
+          "seconds": 0.12,
+          "gain": 0.7,
+          "rate": 0.9,
+          "lowpassHz": 2100,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+          "start": 0.145,
+          "seconds": 0.075,
+          "gain": 0.26,
+          "rate": 0.75,
+          "lowpassHz": 4100,
+          "highpassHz": 650,
+          "decaySeconds": 0.035,
+          "delaySeconds": 0.004,
+          "attackSeconds": 0.002,
+          "notchHz": 2700
+        }
+      ],
+      "sha256": "e23eaa60185115ba1999cde09c152042dee14bd7643f33ea9068cb7aa3625a88"
+    },
+    {
+      "file": "icebreak_1.wav",
+      "seconds": 0.146712,
+      "peakDBFS": -11.79,
+      "activeRmsTargetDBFS": -23.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactSoft_heavy_000.ogg",
+          "start": 0,
+          "seconds": 0.15,
+          "gain": 0.68,
+          "rate": 0.88,
+          "lowpassHz": 2600,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactGlass_light_000.ogg",
+          "start": 0,
+          "seconds": 0.13,
+          "gain": 0.37,
+          "rate": 0.85,
+          "lowpassHz": 4400,
+          "highpassHz": 80,
+          "decaySeconds": 0.045,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "8965a1364911a24c10e290d68848f63a88d5827f69d658a48e62dc1f86359e73"
+    },
+    {
+      "file": "hit_2.wav",
+      "seconds": 0.140748,
+      "peakDBFS": -13.27,
+      "activeRmsTargetDBFS": -23,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_medium_001.ogg",
+          "start": 0,
+          "seconds": 0.16,
+          "gain": 0.8,
+          "rate": 1,
+          "lowpassHz": 3300,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactSoft_medium_001.ogg",
+          "start": 0,
+          "seconds": 0.12,
+          "gain": 0.3,
+          "rate": 1.1,
+          "lowpassHz": 3800,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "ec98593cb78d2672c78e5aef5492fc4e79f07b6533da0eccbbaeb3c5ac25b46c"
+    },
+    {
+      "file": "pierce_2.wav",
+      "seconds": 0.139637,
+      "peakDBFS": -10.15,
+      "activeRmsTargetDBFS": -22,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_001.ogg",
+          "start": 0,
+          "seconds": 0.16,
+          "gain": 0.8,
+          "rate": 0.9,
+          "lowpassHz": 2500,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_light_001.ogg",
+          "start": 0,
+          "seconds": 0.1,
+          "gain": 0.25,
+          "rate": 0.88,
+          "lowpassHz": 3200,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "a46457344dc04092ef48924b966eabc577a96e650c91004d8ddeb384a34d8d68"
+    },
+    {
+      "file": "crush_2.wav",
+      "seconds": 0.188005,
+      "peakDBFS": -8.57,
+      "activeRmsTargetDBFS": -22.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_001.ogg",
+          "start": 0,
+          "seconds": 0.18,
+          "gain": 0.8,
+          "rate": 0.8,
+          "lowpassHz": 1900,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "rubberduck-rpg/spell_fire_02.ogg",
+          "start": 0.14,
+          "seconds": 0.18,
+          "gain": 0.32,
+          "rate": 0.78,
+          "lowpassHz": 3700,
+          "highpassHz": 130,
+          "decaySeconds": 0.12,
+          "delaySeconds": 0.008,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "9da07490d0f06e132234fbca1456dbeade918af0494a8c03b27ea0eb59f793fb"
+    },
+    {
+      "file": "zap_hit_2.wav",
+      "seconds": 0.098481,
+      "peakDBFS": -14.26,
+      "activeRmsTargetDBFS": -23.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_medium_001.ogg",
+          "start": 0,
+          "seconds": 0.12,
+          "gain": 0.7,
+          "rate": 0.9,
+          "lowpassHz": 2100,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+          "start": 0.145,
+          "seconds": 0.075,
+          "gain": 0.26,
+          "rate": 0.75,
+          "lowpassHz": 4100,
+          "highpassHz": 650,
+          "decaySeconds": 0.035,
+          "delaySeconds": 0.004,
+          "attackSeconds": 0.002,
+          "notchHz": 2700
+        }
+      ],
+      "sha256": "964b27d8dd92a1214c0bd7aa8e3ac2f31f2305fdf8613970fad5167b5713f8e6"
+    },
+    {
+      "file": "icebreak_2.wav",
+      "seconds": 0.146712,
+      "peakDBFS": -11.34,
+      "activeRmsTargetDBFS": -23.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactSoft_heavy_001.ogg",
+          "start": 0,
+          "seconds": 0.15,
+          "gain": 0.68,
+          "rate": 0.88,
+          "lowpassHz": 2600,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactGlass_light_001.ogg",
+          "start": 0,
+          "seconds": 0.13,
+          "gain": 0.37,
+          "rate": 0.85,
+          "lowpassHz": 4400,
+          "highpassHz": 80,
+          "decaySeconds": 0.045,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "ccd3c950a760d808eabc2a25974f6db8553d5e1bd0958ad34ece47adab4869c2"
+    },
+    {
+      "file": "hit_3.wav",
+      "seconds": 0.137868,
+      "peakDBFS": -11.46,
+      "activeRmsTargetDBFS": -23,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_medium_002.ogg",
+          "start": 0,
+          "seconds": 0.16,
+          "gain": 0.8,
+          "rate": 1,
+          "lowpassHz": 3300,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactSoft_medium_002.ogg",
+          "start": 0,
+          "seconds": 0.12,
+          "gain": 0.3,
+          "rate": 1.1,
+          "lowpassHz": 3800,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "21f4826f3b9483e8b34c36cc5629f9949b0571ae7804fe4f3e188690a14ca954"
+    },
+    {
+      "file": "pierce_3.wav",
+      "seconds": 0.142608,
+      "peakDBFS": -10.37,
+      "activeRmsTargetDBFS": -22,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_002.ogg",
+          "start": 0,
+          "seconds": 0.16,
+          "gain": 0.8,
+          "rate": 0.9,
+          "lowpassHz": 2500,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_light_002.ogg",
+          "start": 0,
+          "seconds": 0.1,
+          "gain": 0.25,
+          "rate": 0.88,
+          "lowpassHz": 3200,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "9e39f420c9dce5208c4a86af8c09e2fd4008e2a7011fdcacd1d04d1f8cde8034"
+    },
+    {
+      "file": "crush_3.wav",
+      "seconds": 0.190454,
+      "peakDBFS": -9.71,
+      "activeRmsTargetDBFS": -22.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_002.ogg",
+          "start": 0,
+          "seconds": 0.18,
+          "gain": 0.8,
+          "rate": 0.8,
+          "lowpassHz": 1900,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "rubberduck-rpg/spell_fire_03.ogg",
+          "start": 0.14,
+          "seconds": 0.18,
+          "gain": 0.32,
+          "rate": 0.78,
+          "lowpassHz": 3700,
+          "highpassHz": 130,
+          "decaySeconds": 0.12,
+          "delaySeconds": 0.008,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "4775148acdf4de827eeefcc68738f749de0c78813fdbbfb65ca696f540b00ec1"
+    },
+    {
+      "file": "zap_hit_3.wav",
+      "seconds": 0.095283,
+      "peakDBFS": -12.99,
+      "activeRmsTargetDBFS": -23.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_medium_002.ogg",
+          "start": 0,
+          "seconds": 0.12,
+          "gain": 0.7,
+          "rate": 0.9,
+          "lowpassHz": 2100,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+          "start": 0.145,
+          "seconds": 0.075,
+          "gain": 0.26,
+          "rate": 0.75,
+          "lowpassHz": 4100,
+          "highpassHz": 650,
+          "decaySeconds": 0.035,
+          "delaySeconds": 0.004,
+          "attackSeconds": 0.002,
+          "notchHz": 2700
+        }
+      ],
+      "sha256": "1d09a4331c8905873d9d76e5a1a07692f9f9a6f802698c1050f96e39b4c0f989"
+    },
+    {
+      "file": "icebreak_3.wav",
+      "seconds": 0.146712,
+      "peakDBFS": -10.96,
+      "activeRmsTargetDBFS": -23.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactSoft_heavy_002.ogg",
+          "start": 0,
+          "seconds": 0.15,
+          "gain": 0.68,
+          "rate": 0.88,
+          "lowpassHz": 2600,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactGlass_light_002.ogg",
+          "start": 0,
+          "seconds": 0.13,
+          "gain": 0.37,
+          "rate": 0.85,
+          "lowpassHz": 4400,
+          "highpassHz": 80,
+          "decaySeconds": 0.045,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "b12326ed2651de2195617fac8ef48341c3d5010f88e6c2f714f232f67c23aa23"
+    },
+    {
+      "file": "pierce_heavy.wav",
+      "seconds": 0.216621,
+      "peakDBFS": -7.69,
+      "activeRmsTargetDBFS": -20,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_003.ogg",
+          "start": 0,
+          "seconds": 0.24,
+          "gain": 0.85,
+          "rate": 0.7,
+          "lowpassHz": 2300,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_medium_003.ogg",
+          "start": 0,
+          "seconds": 0.16,
+          "gain": 0.35,
+          "rate": 0.8,
+          "lowpassHz": 2800,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "a4b771051fa6ae6ddf388b07385f6d92529e65a3f1b8251a39a8ff383d626bb3"
+    },
+    {
+      "file": "fire_heavy.wav",
+      "seconds": 0.44,
+      "peakDBFS": -6.95,
+      "activeRmsTargetDBFS": -20.5,
+      "roomTailSeconds": 0.06,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_003.ogg",
+          "start": 0,
+          "seconds": 0.26,
+          "gain": 0.75,
+          "rate": 0.66,
+          "lowpassHz": 1800,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "rubberduck-rpg/spell_fire_07.ogg",
+          "start": 0.2,
+          "seconds": 0.38,
+          "gain": 0.6,
+          "rate": 0.76,
+          "lowpassHz": 3700,
+          "highpassHz": 130,
+          "decaySeconds": 0.12,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "6e220d65c29cca879001b496cf45b5185c317ac003e5f998eca476491828b184"
+    },
+    {
+      "file": "thunder_heavy.wav",
+      "seconds": 0.28,
+      "peakDBFS": -9.68,
+      "activeRmsTargetDBFS": -20.5,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_004.ogg",
+          "start": 0,
+          "seconds": 0.24,
+          "gain": 0.85,
+          "rate": 0.7,
+          "lowpassHz": 2200,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+          "start": 0.145,
+          "seconds": 0.13,
+          "gain": 0.35,
+          "rate": 0.65,
+          "lowpassHz": 4100,
+          "highpassHz": 650,
+          "decaySeconds": 0.035,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 2700
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.28,
+          "gain": 0.27,
+          "rate": 0.7,
+          "lowpassHz": 3200,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "832f57c9e1767b6c574dee6c53c05af80182c7e3efeb0a1f9826858df4522700"
+    },
+    {
+      "file": "frost_heavy.wav",
+      "seconds": 0.32585,
+      "peakDBFS": -9.37,
+      "activeRmsTargetDBFS": -21,
+      "roomTailSeconds": 0.06,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactSoft_heavy_004.ogg",
+          "start": 0,
+          "seconds": 0.27,
+          "gain": 0.7,
+          "rate": 0.7,
+          "lowpassHz": 2100,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactGlass_light_004.ogg",
+          "start": 0,
+          "seconds": 0.24,
+          "gain": 0.5,
+          "rate": 0.65,
+          "lowpassHz": 4400,
+          "highpassHz": 80,
+          "decaySeconds": 0.045,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.26,
+          "gain": 0.23,
+          "rate": 1,
+          "lowpassHz": 4500,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "02b0a217735937aefd188a0461267d2051d2b98e536dde4f7992acf14e9f3e35"
+    },
+    {
+      "file": "crit.wav",
+      "seconds": 0.199796,
+      "peakDBFS": -8.62,
+      "activeRmsTargetDBFS": -21,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_002.ogg",
+          "start": 0,
+          "seconds": 0.22,
+          "gain": 0.8,
+          "rate": 0.78,
+          "lowpassHz": 2600,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_light_004.ogg",
+          "start": 0,
+          "seconds": 0.13,
+          "gain": 0.24,
+          "rate": 1.1,
+          "lowpassHz": 3800,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "8624c2de6020f937bea596738c1eb440ee9c7251e47821de0dd846313f0196a4"
+    },
+    {
+      "file": "kill.wav",
+      "seconds": 0.137188,
+      "peakDBFS": -17.61,
+      "activeRmsTargetDBFS": -26,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactSoft_medium_004.ogg",
+          "start": 0,
+          "seconds": 0.14,
+          "gain": 0.7,
+          "rate": 1.03,
+          "lowpassHz": 2300,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "82c505d5ac1a290b7b4a005630c2adae7febe8125b3f2b8321f490efbd19870b"
+    },
+    {
+      "file": "wall.wav",
+      "seconds": 0.249932,
+      "peakDBFS": -9.53,
+      "activeRmsTargetDBFS": -20,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_004.ogg",
+          "start": 0,
+          "seconds": 0.28,
+          "gain": 0.7,
+          "rate": 0.62,
+          "lowpassHz": 1700,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_heavy_003.ogg",
+          "start": 0,
+          "seconds": 0.22,
+          "gain": 0.45,
+          "rate": 0.74,
+          "lowpassHz": 2400,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "2f50ae56d68f63d8e9a4faf207c7f025d91c9b10dde02533ce87bcbf79ca9f07"
+    },
+    {
+      "file": "snipe.wav",
+      "seconds": 0.35,
+      "peakDBFS": -5.5,
+      "activeRmsTargetDBFS": -18.2,
+      "roomTailSeconds": 0.06,
+      "layers": [
+        {
+          "source": "medieval/Crossbow Shoot.wav",
+          "start": 0.32,
+          "seconds": 0.26,
+          "gain": 0.7,
+          "rate": 0.74,
+          "lowpassHz": 3600,
+          "highpassHz": 85,
+          "decaySeconds": 0.07,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_003.ogg",
+          "start": 0,
+          "seconds": 0.27,
+          "gain": 0.5,
+          "rate": 0.7,
+          "lowpassHz": 1600,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.29,
+          "gain": 0.48,
+          "rate": 0.75,
+          "lowpassHz": 4200,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "c1afcbea2c2355aa9a8a516e884ea52a9f3a1fa9f18eb48f92b6d8e998125f36"
+    },
+    {
+      "file": "bow_ult.wav",
+      "seconds": 0.4,
+      "peakDBFS": -6.0,
+      "activeRmsTargetDBFS": -18.8,
+      "roomTailSeconds": 0.06,
+      "layers": [
+        {
+          "source": "medieval/English Longbow Shoot.wav",
+          "start": 0.105,
+          "seconds": 0.22,
+          "gain": 0.75,
+          "rate": 0.85,
+          "lowpassHz": 5000,
+          "highpassHz": 110,
+          "decaySeconds": 0.08,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.34,
+          "gain": 0.6,
+          "rate": 0.8,
+          "lowpassHz": 5200,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.21,
+          "gain": 0.19,
+          "rate": 1.1,
+          "lowpassHz": 4600,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0.047,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactSoft_heavy_002.ogg",
+          "start": 0,
+          "seconds": 0.22,
+          "gain": 0.3,
+          "rate": 0.8,
+          "lowpassHz": 1700,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "70cbd2bec7c8c16fcae64b93e78d1a9c5679680bae8db0b3322f4a6dda3dc2c4"
+    },
+    {
+      "file": "fire_skill.wav",
+      "seconds": 0.43,
+      "peakDBFS": -6.0,
+      "activeRmsTargetDBFS": -19,
+      "roomTailSeconds": 0.06,
+      "layers": [
+        {
+          "source": "rubberduck-rpg/spell_fire_04.ogg",
+          "start": 0.2,
+          "seconds": 0.37,
+          "gain": 0.7,
+          "rate": 0.82,
+          "lowpassHz": 3700,
+          "highpassHz": 130,
+          "decaySeconds": 0.12,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_002.ogg",
+          "start": 0,
+          "seconds": 0.24,
+          "gain": 0.5,
+          "rate": 0.78,
+          "lowpassHz": 1800,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.28,
+          "gain": 0.25,
+          "rate": 0.8,
+          "lowpassHz": 3400,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "f16c39e089a0fcb8c000835f0a82982ec7fc34588dd93fd0bda9f931687c3c5f"
+    },
+    {
+      "file": "thunder_skill.wav",
+      "seconds": 0.34,
+      "peakDBFS": -6.0,
+      "activeRmsTargetDBFS": -19,
+      "roomTailSeconds": 0.06,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_002.ogg",
+          "start": 0,
+          "seconds": 0.26,
+          "gain": 0.6,
+          "rate": 0.76,
+          "lowpassHz": 2300,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+          "start": 0.145,
+          "seconds": 0.12,
+          "gain": 0.33,
+          "rate": 0.72,
+          "lowpassHz": 4100,
+          "highpassHz": 650,
+          "decaySeconds": 0.035,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 2700
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+          "start": 0.145,
+          "seconds": 0.08,
+          "gain": 0.2,
+          "rate": 0.85,
+          "lowpassHz": 4100,
+          "highpassHz": 650,
+          "decaySeconds": 0.035,
+          "delaySeconds": 0.055,
+          "attackSeconds": 0.002,
+          "notchHz": 2700
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.28,
+          "gain": 0.3,
+          "rate": 0.83,
+          "lowpassHz": 4000,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "ee74c1d4c63b22632e151a58af47ed5ea33852d666b791a1993f8ad08cf66fac"
+    },
+    {
+      "file": "frost_skill.wav",
+      "seconds": 0.41,
+      "peakDBFS": -6.5,
+      "activeRmsTargetDBFS": -19.5,
+      "roomTailSeconds": 0.06,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactSoft_heavy_001.ogg",
+          "start": 0,
+          "seconds": 0.28,
+          "gain": 0.56,
+          "rate": 0.75,
+          "lowpassHz": 2500,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactGlass_light_001.ogg",
+          "start": 0,
+          "seconds": 0.25,
+          "gain": 0.48,
+          "rate": 0.72,
+          "lowpassHz": 4400,
+          "highpassHz": 80,
+          "decaySeconds": 0.045,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.35,
+          "gain": 0.42,
+          "rate": 0.88,
+          "lowpassHz": 5000,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "3f386882e830bf580964831ba02344e287a55bea19f2b4f28c009fc7e79dd6e6"
+    },
+    {
+      "file": "skill.wav",
+      "seconds": 0.38,
+      "peakDBFS": -7.27,
+      "activeRmsTargetDBFS": -19.5,
+      "roomTailSeconds": 0.06,
+      "layers": [
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.32,
+          "gain": 0.6,
+          "rate": 0.8,
+          "lowpassHz": 4800,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactSoft_heavy_002.ogg",
+          "start": 0,
+          "seconds": 0.25,
+          "gain": 0.6,
+          "rate": 0.78,
+          "lowpassHz": 2400,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "23953df77505ff7618f6ecc8574e4698e968b5d3764cd36894b20cd9df6b6661"
+    },
+    {
+      "file": "fire_ult.wav",
+      "seconds": 0.54,
+      "peakDBFS": -5.0,
+      "activeRmsTargetDBFS": -17.8,
+      "roomTailSeconds": 0.09,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_003.ogg",
+          "start": 0,
+          "seconds": 0.4,
+          "gain": 0.78,
+          "rate": 0.56,
+          "lowpassHz": 1700,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "rubberduck-rpg/spell_fire_07.ogg",
+          "start": 0.2,
+          "seconds": 0.45,
+          "gain": 0.7,
+          "rate": 0.7,
+          "lowpassHz": 3700,
+          "highpassHz": 130,
+          "decaySeconds": 0.12,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        },
+        {
+          "source": "rubberduck-rpg/spell_fire_04.ogg",
+          "start": 0.2,
+          "seconds": 0.32,
+          "gain": 0.2,
+          "rate": 0.85,
+          "lowpassHz": 3700,
+          "highpassHz": 130,
+          "decaySeconds": 0.12,
+          "delaySeconds": 0.05,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.42,
+          "gain": 0.3,
+          "rate": 0.65,
+          "lowpassHz": 3200,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "600f89ad18c36ae81995a7065ab32c0f2cdbc49952338f1aef4c6eee1400e302"
+    },
+    {
+      "file": "thunder_ult.wav",
+      "seconds": 0.55,
+      "peakDBFS": -5.5,
+      "activeRmsTargetDBFS": -18,
+      "roomTailSeconds": 0.09,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_004.ogg",
+          "start": 0,
+          "seconds": 0.4,
+          "gain": 0.8,
+          "rate": 0.58,
+          "lowpassHz": 2100,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+          "start": 0.145,
+          "seconds": 0.13,
+          "gain": 0.4,
+          "rate": 0.63,
+          "lowpassHz": 4100,
+          "highpassHz": 650,
+          "decaySeconds": 0.035,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 2700
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+          "start": 0.145,
+          "seconds": 0.1,
+          "gain": 0.19,
+          "rate": 0.74,
+          "lowpassHz": 4100,
+          "highpassHz": 650,
+          "decaySeconds": 0.035,
+          "delaySeconds": 0.06,
+          "attackSeconds": 0.002,
+          "notchHz": 2700
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.46,
+          "gain": 0.45,
+          "rate": 0.65,
+          "lowpassHz": 3600,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "8850d7079e1410eabfd166e630337b7a4a056b8bb12c65eceba967d9cba74ba2"
+    },
+    {
+      "file": "frost_ult.wav",
+      "seconds": 0.57,
+      "peakDBFS": -6.05,
+      "activeRmsTargetDBFS": -18.5,
+      "roomTailSeconds": 0.09,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactSoft_heavy_004.ogg",
+          "start": 0,
+          "seconds": 0.4,
+          "gain": 0.67,
+          "rate": 0.62,
+          "lowpassHz": 2500,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactGlass_light_002.ogg",
+          "start": 0,
+          "seconds": 0.28,
+          "gain": 0.5,
+          "rate": 0.65,
+          "lowpassHz": 4400,
+          "highpassHz": 80,
+          "decaySeconds": 0.045,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactGlass_light_003.ogg",
+          "start": 0,
+          "seconds": 0.2,
+          "gain": 0.24,
+          "rate": 0.75,
+          "lowpassHz": 4400,
+          "highpassHz": 80,
+          "decaySeconds": 0.045,
+          "delaySeconds": 0.045,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.48,
+          "gain": 0.5,
+          "rate": 0.78,
+          "lowpassHz": 4800,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "39bc3cce338efa44ddb974784bcf4af8799f7bc9575ece6218cd236cdfcaf496"
+    },
+    {
+      "file": "ult.wav",
+      "seconds": 0.52,
+      "peakDBFS": -6.05,
+      "activeRmsTargetDBFS": -18,
+      "roomTailSeconds": 0.09,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_001.ogg",
+          "start": 0,
+          "seconds": 0.4,
+          "gain": 0.8,
+          "rate": 0.6,
+          "lowpassHz": 2200,
+          "highpassHz": 80,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        },
+        {
+          "source": "medieval/Scythian Recurve Arrow Pass.wav",
+          "start": 0.06,
+          "seconds": 0.43,
+          "gain": 0.5,
+          "rate": 0.7,
+          "lowpassHz": 4200,
+          "highpassHz": 240,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0,
+          "attackSeconds": 0.004,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "28c985c9d74228854509df24fc9758c0dd603cf9b22a37324e76872410a6551b"
+    },
+    {
+      "file": "ready.wav",
+      "seconds": 0.27,
+      "peakDBFS": -13.6,
+      "activeRmsTargetDBFS": -24,
+      "roomTailSeconds": 0,
+      "layers": [
+        {
+          "source": "kenney-ui/Audio/confirmation_001.ogg",
+          "start": 0,
+          "seconds": 0.27,
+          "gain": 0.8,
+          "rate": 0.88,
+          "lowpassHz": 4300,
+          "highpassHz": 300,
+          "decaySeconds": 0.16,
+          "delaySeconds": 0,
+          "attackSeconds": 0.002,
+          "notchHz": 0
+        }
+      ],
+      "sha256": "f83f42eef316662e2d57bd79de1950349fc27486f8f89f77abdcb8ec082d9768"
+    }
+  ],
+  "sources": [
+    {
+      "source": "medieval/English Longbow Shoot.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "c25684ccdab3eb13f17a0ffa637fbd175659d092665f16c0bce8510d46c4fbee"
+    },
+    {
+      "source": "medieval/Scythian Recurve Arrow Pass.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "386ef860049508743bbae3d85674733564a1a3c055a84530c55d3f529819bef3"
+    },
+    {
+      "source": "medieval/Crossbow Shoot.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "d8c68f970540d73ab6fe2db5309166e6dd911876501a16bb4df43498247e19b2"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_medium_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "1723a9fd25103ed41af06054814e84e65f4a772bac86ab2dc927da93d9592ff5"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_heavy_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "b33a8f14068aec24ec69ba85e5e87fdc41228975f6a1a3e44a6e7d6fc3d9f8d8"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_medium_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "15271dbe8e2872dbb0ff1aeb7b12b2d2b92b7c1951c88532b9ab9158c36dfc73"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_heavy_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "f92f5cb6ba4ff2766497292ffd90865654317eeca976f5652e0708dbdcdc0dd9"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_medium_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "3f3f1917428b828f733a963167833c707bf88296ff158e1559c57c5cb813d799"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_heavy_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "7993dd4c156b9979ad69f17be5ebe31850b16039a3857f8477141be54dfee1b3"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "02fa3a2c6e79e868e546802f45127c5cdda69aba6d5a24ac997ea66f81a816cb"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_heavy_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "49e7ca88743fca974bb8676ea138b751cfd8f9033b5e7af8736c2a215d6edbc1"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_medium_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "486988aa2d6440ffc4c62a0e8ccf3c23673ba84424bd4723378d451b7255eb5c"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "b61131bbed47caec321f5b3ee43ebe47d91c9f5d18084348ce2af73544ca4ecc"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "04226646faf6c81fb56bed3b86e12e6ad7bd28ab763b3a9dac6a10a0382593ab"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_medium_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "7d3ba0bb5e60a11b5d3e558c141303dcf494256675fbf753c0d252d2cf0481e3"
+    },
+    {
+      "source": "kenney-impact/Audio/impactGlass_light_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "d750cf88097d0c3e69920e6e14496e1444e1a9da01aa4cca8f5ec8cb44c57b4f"
+    },
+    {
+      "source": "kenney-impact/Audio/footstep_snow_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "c05fa4a9dc9a7aabc04996466fb589537e49af76de9998d8f9e6270ec92dcef7"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_02.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "bf1eef4993f0adb4bd3a1c1ec91f8f6e4ddeb32d922671a14561846d5b7cab98"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_heavy_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "4d0096364ba9e46119d2ff6df493fdc101bd2e1efae061da5e5f77a53b3fdcb6"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_medium_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "e71d23abcc3f10d9d6bc9615b2a431fff70b12333a5fcdd9964457564ace4349"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_medium_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "7642a4fd43e547afe4f7adfadb3dabb681c0ff512f52c1674bae30a726841faf"
+    },
+    {
+      "source": "kenney-impact/Audio/impactGlass_light_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "05e513fbd42829060eb37855f8c3866722ec5c39a8937c9bfde518cc609effa2"
+    },
+    {
+      "source": "kenney-impact/Audio/footstep_snow_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "980fb9a1c9227aed7995067b0357f373053337f2416316db8ea0438418542fb4"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_03.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "2e4edee4ff8d7898198f1ab5213e086965e14a665cb947d53759505e28ddd3e4"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_heavy_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "d130ae541951243d3f6ed963d0057450a445ffe117fbf9a084d34eb1635cb563"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_medium_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "6492f9ccbc8d24dcef607bb1b48790b7870961474561f7fe5601e1c73a3018ef"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_medium_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "5069e3571a77d7f7aae9ef71d0364aa245fb7d64a7c8cc9956f221d03088c089"
+    },
+    {
+      "source": "kenney-impact/Audio/impactGlass_light_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "710db7451bb7857b9140dfe6afe4621ea2188ad65eda3919c569d1bb285b933d"
+    },
+    {
+      "source": "kenney-impact/Audio/footstep_snow_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "db52bafdc66304f3b999f2c29227826c65993916e630ac2ffbca17d07b263178"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_light_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "eb45e35b4bed784d3f120de4afec4b0d6ac09d9e143cce8cfcb7d739e1b1f3c3"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_light_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "4b76bf3ccc8e60d19188f3165b778a7817786faa6887c55d9049bcbeef3b425f"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_light_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "b183cf7a5bd783817e0e4b82af34ac6658fa1927049089dadc8b15c2ecc771dc"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_heavy_003.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "4ab53b26f4ea575120dcc1348526c9e0db2afc6af7a442aa0489bdead2ca80b6"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_medium_003.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "635c37cfcd854b187d643d450ff0397798dcc29ae94da32192b814fae6bd854c"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_07.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "bb13cef9c0b0b4ec7f9335c356b14814c88418abd85dd3747cb62469e9ada93f"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_heavy_004.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "f4c0c3eb8ab6517583b8218ed03f28923d1b687379aab4c1d5a6d4c10cf8e500"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_heavy_004.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "e008f0b6b14f62339c8fe9f9b45cbd6317ba4f66604c4899053b8017020a36f0"
+    },
+    {
+      "source": "kenney-impact/Audio/impactGlass_light_004.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "f535b7cb7835400d8d28bcf9e1cf047ce3c0eb7a6456bdb1a4a27acbec1ed2cb"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_light_004.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "e10009f67ddaeb3a59a3e1129cfc1615d84ba60ab578eae07e7092ac223f099c"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_medium_004.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "b0a4dea90eed47accf50b768beff1166f2f1486fb139e4d025b2427637624bca"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_heavy_003.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "af07511902b309b3f6d8f0e1fafbe93869127fb88099ebdc0aa6a00a98dc3cb0"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_04.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "64d653cd0cc6eb71bb45a1dfbba29eaa769ed5b663cce275082d6971e4f2ca8e"
+    },
+    {
+      "source": "kenney-impact/Audio/impactGlass_light_003.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "765290ce32fa108c939a0dbd6fbacbcd05abde622b57b708eb8a64058ef4225a"
+    },
+    {
+      "source": "kenney-ui/Audio/confirmation_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a"
+    }
+  ],
+  "method": "licensed recordings, offline sound design; no paid generation"
+}

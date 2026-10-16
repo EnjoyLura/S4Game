@@ -1,0 +1,39 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-archer-art-quality-v2-20261016-204848",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-equipment-settlement-v1-20261016-202643",
+  "entryVersion": "1792154873",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=archer-art-quality-v2-1792154873",
+  "scope": "new front archer standing illustration and two simplified bows; neutral equipment panels with rarity only on circular wells and upper-left tags",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://65cd05bf.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-archer-art-quality-v2-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-archer-art-quality-v2-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 16467,
+  "date": "2026-10-16T20:49:21.871872+08:00",
+  "mainBundleSha256": "b86a74a31f32f194e80e566b85089121e20b4eae5ebc330fda5936e4e04e1058",
+  "validation": {
+    "sourceReview": true,
+    "staticImageReview": true,
+    "localBundleInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "testsRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "tool": "built-in image_gen",
+  "intent": "original production gate, own-game shield as style/heraldry reference",
+  "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-44230d80-c0e3-4450-b15d-3097842e7660.png",
+  "reference": "assets/resources/ux/levels_comic_v1/comic_difficulty_shield_v1.png",
+  "original": "docs\\battle-entry-art-v2\\royal-gate-original.png",
+  "runtime": "assets\\resources\\ux\\battle_entry_v2\\royal_gate.png",
+  "size": [
+    1024,
+    1536
+  ],
+  "bytes": 2144486,
+  "pixelEditing": "none; runtime uses two half-width SpriteFrames, equal cover scale, no stretching",
+  "prompt": "art-prompt.txt",
+  "videoReference": "C:/Users/user/Downloads/Screenrecording_20261016_003330_com.ironhidegames.mp4",
+  "referenceUse": "offline timing reference only, no pixels or audio from commercial game used"
+}

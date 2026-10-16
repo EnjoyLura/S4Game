@@ -1,0 +1,122 @@
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: death-vs:vert
+      frag: death-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties:
+        alphaThreshold: { value: 0.001 }
+        deathState: { value: [0, 0, 0, 0] }
+        deathRect: { value: [0, 1, 1, -1] }
+        deathShape: { value: [64, 90, 30, 30] }
+        deathStyle: { value: [0.55, 0.46, 0.34, 0] }
+        deathMotion: { value: [0, 1, 0.19, 0] }
+}%
+
+CCProgram death-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+  out vec4 color;
+  out vec2 uv0;
+  vec4 vert () {
+    vec4 p = vec4(a_position, 1.0);
+    #if USE_LOCAL
+      p = cc_matWorld * p;
+    #endif
+    uv0 = a_texCoord;
+    color = a_color;
+    return cc_matViewProj * p;
+  }
+}%
+
+CCProgram death-fs %{
+  precision highp float;
+  #include <builtin/internal/embedded-alpha>
+  #include <builtin/internal/alpha-test>
+  in vec4 color;
+  in vec2 uv0;
+  uniform Death {
+    vec4 deathState;
+    vec4 deathRect;
+    vec4 deathShape;
+    vec4 deathStyle;
+    vec4 deathMotion;
+  };
+  #pragma builtin(local)
+  layout(set = 2, binding = 12) uniform sampler2D cc_spriteTexture;
+  float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+  }
+  vec4 frag () {
+    vec2 local = clamp((uv0 - deathRect.xy) / deathRect.zw, 0.0, 1.0);
+    vec2 p = (local - 0.5) * (deathShape.xy + deathShape.zw * 2.0);
+    float t = max(0.0, deathState.x);
+    float progress = clamp(deathState.y, 0.0, 1.0);
+    float open = smoothstep(0.0, 0.055, t);
+    vec4 result = vec4(0.0);
+    // Six patches of the actual held cel in ONE expanded quad, no body rotation.
+    for (int i = 0; i < 6; i++) {
+      float id = float(i);
+      float col = mod(id, 2.0), row = floor(id / 2.0);
+      vec2 center = (vec2((col + 0.5) * 0.5, (row + 0.5) / 3.0) - 0.5) * deathShape.xy;
+      float n = hash(vec2(id + 1.0, deathState.z));
+      float n2 = hash(vec2(deathState.z, id + 7.0));
+      vec2 radial = normalize(center / deathShape.xy + vec2(0.001));
+      // Fast initial separation, then a short deceleration. No whole-body fall.
+      float kick = 1.0 - exp(-t * 32.0);
+      vec2 travel = radial * (9.0 + n * 5.0) * kick * deathState.w;
+      travel += deathMotion.xy * (6.0 + n2 * 3.0) * kick * deathState.w;
+      travel += vec2(radial.x * 16.0, 18.0 + n2 * 24.0) * t;
+      travel.y -= 180.0 * t * t;
+      float angle = (n * 2.0 - 1.0) * (kick * 0.16 + t * 1.8);
+      float c = cos(angle), s = sin(angle);
+      vec2 relative = p - center - travel;
+      vec2 source = vec2(c * relative.x + s * relative.y, -s * relative.x + c * relative.y)
+        / (1.0 - smoothstep(0.25, 1.0, progress) * 0.38) + center;
+      vec2 q = source / deathShape.xy + 0.5;
+      float cutX = 0.5 + 0.065 * sin(q.y * 5.0 + deathState.z);
+      float cutA = 0.32 + 0.035 * sin(q.x * 7.0 + deathState.z * 1.3);
+      float cutB = 0.68 + 0.035 * sin(q.x * 6.0 + deathState.z * 1.7);
+      float side = col < 0.5 ? cutX - q.x : q.x - cutX;
+      float band = row < 0.5 ? cutA - q.y : row < 1.5 ? min(q.y - cutA, cutB - q.y) : q.y - cutB;
+      float edge = min(side, band);
+      float inside = step(0.0, q.x) * step(q.x, 1.0) * step(0.0, q.y) * step(q.y, 1.0);
+      float mask = step(0.0, edge) * smoothstep(0.0, 0.008, edge + 0.008 * (1.0 - open)) * inside;
+      vec2 sampleUV = deathRect.xy + clamp(q, 0.0, 1.0) * deathRect.zw;
+      vec4 piece = CCSampleWithAlphaSeparated(cc_spriteTexture, sampleUV);
+      float light = dot(piece.rgb, vec3(0.299, 0.587, 0.114));
+      if (deathStyle.a > 2.5) {
+        vec3 ice = clamp(light * vec3(0.58, 0.94, 1.16) + vec3(0.02, 0.05, 0.08), 0.0, 1.0);
+        piece.rgb = mix(piece.rgb, ice, open * 0.48);
+      } else if (deathStyle.a > 0.5 && deathStyle.a < 1.5) {
+        piece.rgb = mix(piece.rgb, vec3(light) * vec3(0.55, 0.32, 0.18), progress * 0.5);
+      }
+      // Retain readable pieces through the snap, then clear them without a corpse.
+      piece.a *= mask * (1.0 - smoothstep(0.23, 1.0, progress));
+      result.rgb = piece.rgb * piece.a + result.rgb * (1.0 - piece.a);
+      result.a = piece.a + result.a * (1.0 - piece.a);
+    }
+    // Un-premultiply for the game's standard straight-alpha blend.
+    result.rgb /= max(result.a, 0.001);
+    result.rgb *= color.rgb;
+    result.a *= color.a;
+    ALPHA_TEST(result);
+    return result;
+  }
+}%

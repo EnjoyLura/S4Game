@@ -1,0 +1,40 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-playback-fix-v1-20261015-024035",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-button-feedback-v1-20261015-023406",
+  "entryVersion": "1792003213",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=audio-playback-fix-v1-1792003213",
+  "scope": "audio gesture capture, preloading and music recovery",
+  "layoutChanged": false,
+  "audioAcceptance": "pending user manual review",
+  "status": "published",
+  "rootCause": "Cocos canvas stops DOM input propagation before document bubble listeners",
+  "gestureCapture": [
+    "pointerdown",
+    "pointerup",
+    "mousedown",
+    "touchend",
+    "keydown"
+  ],
+  "musicRetryMilliseconds": 16000,
+  "audioAssetsChanged": false,
+  "userSoundPreferencesPreserved": true,
+  "gameplayValidation": "user manual; no tests, browser, game or listening acceptance run",
+  "deployment": "https://c81a24b9.kingdom-watch.pages.dev",
+  "date": "2026-10-15T02:41:11.187344+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-audio-playback-fix-v1-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-audio-playback-fix-v1-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "audio gesture capture, preloading and music recovery",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 9348,
+  "deploymentSucceeded": true,
+  "uploadedFiles": 2,
+  "cachedFiles": 1783
+}

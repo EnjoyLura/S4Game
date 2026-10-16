@@ -1,0 +1,108 @@
+{
+  "status": "published",
+  "request": "延长五位英雄大招演出并按已确认方案增强分量",
+  "implementation": {
+    "archer": {
+      "baseSeconds": 3.4,
+      "windupSeconds": 0.55,
+      "rowGapSeconds": 0.52,
+      "roundGapSeconds": 1.35,
+      "additionalRowsAndRoundsExtend": true
+    },
+    "sniper": {
+      "baseSeconds": 3,
+      "windupSeconds": 1.1,
+      "colour": "blue",
+      "allExtraLinesAndReticlesMatchActualTargets": true,
+      "automaticCooldownKeepsTicking": true
+    },
+    "volt": {
+      "baseSeconds": 4.5,
+      "windupSeconds": 0.65,
+      "strikeCount": 15,
+      "groups": [
+        5,
+        5,
+        5
+      ],
+      "groupStartsSeconds": [
+        0.65,
+        1.95,
+        3.15
+      ],
+      "groupGapsSeconds": [
+        0.2,
+        0.17,
+        0.16
+      ],
+      "lastGroupVisualPower": 1.16,
+      "groundAlignmentPreserved": true
+    },
+    "pyro": {
+      "minimumSeconds": 5,
+      "windupSeconds": 0.7,
+      "meteorGapSeconds": 0.48,
+      "counts": [
+        5,
+        7
+      ],
+      "fixedWarnedGroundArrival": true,
+      "distributedCoveragePreserved": true,
+      "predictMovementWithNewDelay": true,
+      "afterLastArrivalSeconds": 0.8
+    },
+    "mora": {
+      "baseSeconds": 4.2,
+      "windupSeconds": 0.5,
+      "visualIcicles": 128,
+      "rainEmissionSeconds": 2.8,
+      "damageApplications": 1,
+      "damageAtWindupEnd": true,
+      "acceptedIceArtAndOrdinarySkillPreserved": true
+    }
+  },
+  "direction": {
+    "sharedBattleClock": true,
+    "minimumReadableWindupSeconds": 0.5,
+    "backgroundShadeMaximumAlpha": 43,
+    "shadeCombinesByMaximum": true,
+    "decorativeEventCap": 18,
+    "worldKickMaximumDesignPixels": 3,
+    "worldKickSeconds": 0.14,
+    "worldKickCooldownSeconds": 0.6,
+    "hudFollowsWorldKick": false,
+    "queueAndInFlightAndAfterglowProtectSettlement": true,
+    "pickBufferAfterPresentationSeconds": 2
+  },
+  "audio": {
+    "existingLicensedSamples": true,
+    "newMedia": false,
+    "windupLowpassHz": 1800,
+    "windupGainMultiplier": 0.34,
+    "releaseAndContactCues": true,
+    "frostTailContactMinimumGapSeconds": 0.45,
+    "peakMusicDuck": 0.62
+  },
+  "balance": {
+    "damageFormulaChanged": false,
+    "damageCoefficientsChanged": false,
+    "projectileCountsChanged": false,
+    "damageAreasChanged": false,
+    "hitAndStunTimingsChanged": true,
+    "windupDefersNewNormalAttacksAndSkills": true,
+    "existingProjectilesKeepSimulating": true
+  },
+  "validation": {
+    "sourceReview": "completed",
+    "cocosBuild": "completed",
+    "dprPatch": "completed",
+    "newTimelineSymbolsInBuiltMainBundle": true,
+    "compilerNotes": "Existing Ux/UIKit circular dependency, CLI option fallback warnings, startup timing labels and build-script worker SIGTERM cleanup; build task finished with exit 36.",
+    "testsRun": false,
+    "simulationsRun": false,
+    "gameOrBrowserOpened": false,
+    "visualAudioAcceptance": "pending user manual review"
+  },
+  "game": "https://kingdom-watch.pages.dev/?v=ultimate-staging-v1-1792079010",
+  "deployment": "https://46bd06bf.kingdom-watch.pages.dev"
+}

@@ -4,7 +4,7 @@
  */
 import { LevelDef, MOBS, MobDef, WAVE_RAMP } from '../config/Mobs';
 import { MonsterManager } from './Monster';
-import { bus, EVT } from '../core/EventBus';
+import { bus, EVT, WaveThreat } from '../core/EventBus';
 
 interface DueSpawn { mob: string; t: number; }
 
@@ -12,6 +12,9 @@ export class WaveManager {
   private idx = 0;
   private queue: DueSpawn[] = [];
   private elapsed = 0;
+  private threat: WaveThreat | null = null;
+  private threatAt = 0;
+  private announced = false;
   /** 全部波出完且全场清空 */
   finished = false;
 
@@ -20,6 +23,7 @@ export class WaveManager {
   get waveNum(): number { return Math.min(this.idx + 1, this.level.waves.length); }
   get total(): number { return this.level.waves.length; }
   get currentSurge(): boolean { return this.level.waves[Math.min(this.idx, this.total - 1)].surge === true; }
+  get hasThreat(): boolean { return !!this.threat; }
 
   start(): void {
     this.buildQueue();
@@ -31,6 +35,13 @@ export class WaveManager {
     this.elapsed = 0;
     // 阶梯增长：第 idx 波（0 起）数量/血量/伤害放大（血量另乘全怪基础倍率 MOB_HP_MUL，在 MonsterManager.spawn 生效）
     const wave = this.level.waves[Math.min(this.idx, this.total - 1)];
+    const special = wave.groups.filter(g => MOBS[g.mob]?.boss || MOBS[g.mob]?.elite);
+    const boss = special.some(g => MOBS[g.mob].boss);
+    const featured = special.filter(g => !boss || MOBS[g.mob].boss);
+    this.threat = featured.length ? { wave: this.waveNum, boss,
+      names: Array.from(new Set(featured.map(g => MOBS[g.mob].name))) } : null;
+    this.threatAt = featured.length ? Math.max(0, Math.min(...featured.map(g => g.delay || 0)) - .8) : 0;
+    this.announced = false;
     this.mgr.rampHp = 1 + WAVE_RAMP.hp * this.idx;
     this.mgr.rampDmg = 1 + WAVE_RAMP.dmg * this.idx;
     const cntMul = 1 + WAVE_RAMP.cnt * this.idx;
@@ -46,6 +57,10 @@ export class WaveManager {
   tick(dt: number): void {
     if (this.finished) return;
     this.elapsed += dt;
+    if (this.threat && !this.announced && this.elapsed >= this.threatAt) {
+      this.announced = true;
+      bus.emit(EVT.WAVE_THREAT, this.threat);
+    }
     while (this.queue.length > 0 && this.queue[0].t <= this.elapsed) {
       const s = this.queue.shift() as DueSpawn;
       const def = MOBS[s.mob];

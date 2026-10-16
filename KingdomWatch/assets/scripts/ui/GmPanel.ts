@@ -9,6 +9,9 @@ import { canTakeCard, M0_POOL, RARITY_COLOR } from '../config/Cards';
 import { loadSave, saveSave } from '../core/SaveData';
 import { BattleDirector } from '../battle/BattleDirector';
 import { btn, CA, dimLayer, gpanel, label, N, WX, WY } from './UIKit';
+import { bindButton } from './ButtonFeedback';
+import { motionIn, retireChildren } from './UIMotion';
+import { uiSound } from './UIAudio';
 
 const TABS = ['战斗', '英雄', '卡片', '经济', '存档', '系统'] as const;
 type Tab = (typeof TABS)[number];
@@ -56,7 +59,7 @@ export class GmPanel {
 
   close(): void {
     if (this.layer.children.length === 0) return;
-    this.layer.destroyAllChildren();
+    retireChildren(this.layer);
     this.panelRef = null;
     this.body = null;
     this.btnNode.active = loadSave().debug || this.forceShow;
@@ -92,8 +95,9 @@ export class GmPanel {
 
   /* ---------- 面板骨架 ---------- */
   private rebuild(): void {
+    const fresh = !this.panelRef?.isValid;
     this.layer.destroyAllChildren();
-    dimLayer(this.layer, 0.62);
+    dimLayer(this.layer, 0.62, false, fresh);
     const ph = 900;
     const panel = gpanel(this.layer, 0, WY(210, ph), 690, ph, CA(PAL.dark, 0.97), PAL.purple, 3, 16);
     this.panelRef = panel;
@@ -109,7 +113,7 @@ export class GmPanel {
       const n = gpanel(panel, x0 + i * (tw + gap), ph / 2 - 132, tw, 60,
         act ? CA(PAL.purple, 0.95) : CA(PAL.dark2, 0.92), act ? PAL.gold : '#FFFFFF33', 2, 12);
       label(n, 0, 0, t, { size: 24, color: act ? PAL.ink : '#C9D6DF', bold: true });
-      n.on(Node.EventType.TOUCH_END, () => { this.tab = t; this.rebuild(); });
+      bindButton(n, () => { if (this.tab !== t) { this.tab = t; this.rebuild(); } }, { sound: 'select' });
     });
 
     const B = N('GmBody', panel, 0, 0);
@@ -120,6 +124,8 @@ export class GmPanel {
     else if (this.tab === '经济') this.tabEconomy(B);
     else if (this.tab === '存档') this.tabSave(B);
     else this.tabSystem(B);
+    motionIn(fresh ? panel : B, fresh ? 'modal' : 'refresh');
+    if (fresh) uiSound('open');
   }
 
   private refresh(): void {

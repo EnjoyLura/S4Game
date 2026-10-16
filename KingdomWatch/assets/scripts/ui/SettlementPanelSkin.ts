@@ -1,37 +1,50 @@
-/** Victory/defeat artwork and a compact centered layout, independent of pause geometry. */
-import { Node, Sprite } from 'cc';
+/** Shared lobby-paper settlement body, with the original victory/defeat heraldry. */
+import { Graphics, Node } from 'cc';
 import { LO } from '../config/GameConfig';
-import { DamageRow, fmtWk } from '../battle/DamageService';
-import { C, gpanel, label, N, setText } from './UIKit';
+import { CA, label, N } from './UIKit';
 import { artSprite } from './Ux';
 import { battleArtIcon, battleArtSprite } from './BattlePanelSkin';
-import { battleProgressBar } from './BattleProgressBar';
-import { pauseTabFace } from './PausePanelSkin';
-import { Sfx } from '../core/Sfx';
+import { bindButton } from './ButtonFeedback';
+import { COMIC, comicButtonControl, comicPlate } from './ComicUI';
+import { StageLootSummary } from '../core/StageLoot';
+import { gearArt } from './HeroComic';
+import { itemName } from '../core/GameData';
+import { showCollectedLoot } from './LevelLootPreview';
+import { SettlementMotion } from './SettlementMotion';
 
 const ART = 'settlement_comic_v1/';
 type Outcome = 'win' | 'lose';
 type Tone = 'gold' | 'green' | 'teal' | 'muted';
 
-export function settlementFrame(parent: Node, outcome: Outcome, level: string, stars = 0, ratio = 0): Node {
+export function settlementFrame(parent: Node, outcome: Outcome, level: string, stars = 0, ratio = 0, animate = false): Node {
   const root = N('settlement:' + outcome, parent);
   const scale = Math.min(1, Math.max(.1, (LO.half * 2 - LO.safeTop - LO.safeBottom - 56) / 900));
   root.setScale(scale, scale, 1);
-  const body = gpanel(root, 0, -42, 660, 320, outcome === 'win' ? '#463426' : '#263749', undefined, 0, 14);
-  body.name = 'settlementBody';
-  artSprite(body, 0, 0, 660, 320, ART + 'panel_' + outcome, { belowIdx: 0 });
+  comicPlate(root, 0, -42, 660, 320, 'paper', { name: 'settlementBody', cut: 14 });
+  label(root, 0, 84, '奖励总览', { size: 25, color: COMIC.text, bold: true, w: 580, h: 34 });
+  const divider = N('settlementRewardDivider', root).addComponent(Graphics);
+  divider.strokeColor = CA(COMIC.sub, .26); divider.lineWidth = 1;
+  divider.moveTo(-290, 60); divider.lineTo(290, 60); divider.stroke();
   const width = 590, source = outcome === 'win' ? [1036, 355, 0, -64.5] : [953, 328, -.5, -66];
   const k = width / source[0];
-  artSprite(root, 0, 350, width, source[1] * k, ART + 'badge_' + outcome, { sliced: false });
-  label(root, source[2] * k, 350 + source[3] * k, outcome === 'win' ? '挑战成功！' : '挑战失败', {
+  const badge = N('settlementHeraldry:' + outcome, root, 0, 350);
+  artSprite(badge, 0, 0, width, source[1] * k, ART + 'badge_' + outcome, { sliced: false });
+  label(badge, source[2] * k, source[3] * k, outcome === 'win' ? '挑战成功！' : '挑战失败', {
     size: 36, font: 'title', color: outcome === 'win' ? '#3D2910' : '#F2F6FF',
     bold: true, w: 330, h: 52, shrink: true, outline: outcome === 'win' ? '#FFE896' : '#253C5E', outlineW: 1.4,
   });
+  const starViews: { node: Node; earned: boolean }[] = [];
   if (outcome === 'win') {
     for (let i = 0; i < 3; i++) {
       const host = N('settlementStar:' + i, root, (i - 1) * 72, 225, 58, 58), lit = i < stars;
-      const fallback = label(host, 0, 0, '★', { size: 48, color: lit ? '#FFD24F' : '#71808D' });
-      battleArtSprite(host, 0, 0, 58, 58, lit ? 'ui_star' : 'ui_star_gray', { sliced: false, hideOnLoad: [fallback] });
+      const gray = label(host, 0, 0, '★', { size: 48, color: '#71808D' });
+      battleArtSprite(host, 0, 0, 58, 58, 'ui_star_gray', { sliced: false, hideOnLoad: [gray] });
+      const earned = N('settlementEarnedStar:' + i, root, (i - 1) * 72, 225, 58, 58);
+      if (lit) {
+        const fallback = label(earned, 0, 0, '★', { size: 48, color: '#FFD24F' });
+        battleArtSprite(earned, 0, 0, 58, 58, 'ui_star', { sliced: false, hideOnLoad: [fallback] });
+      }
+      starViews.push({ node: earned, earned: lit });
     }
   }
   label(root, 0, outcome === 'win' ? 178 : 214, level, {
@@ -40,69 +53,48 @@ export function settlementFrame(parent: Node, outcome: Outcome, level: string, s
   label(root, 0, outcome === 'win' ? 148 : 178,
     outcome === 'win' ? '剩余耐久 ' + Math.round(ratio * 100) + '%' : '保底奖励 30% · 可复活继续本局',
     { size: 17, color: outcome === 'win' ? '#E4D6B7' : '#BFCFDE', w: 620, h: 25, shrink: true });
+  root.addComponent(SettlementMotion).configure(outcome, badge, starViews, animate);
   return root;
 }
 
-export function settlementTabs(parent: Node, active: number, onSelect: (tab: number) => void): void {
-  ['奖励总览', '伤害统计'].forEach((text, index) => {
-    const segment = gpanel(parent, (index - .5) * 302, 88, 302, 46, index === active ? '#F2B23E' : '#5A6472', undefined, 0, 10);
-    segment.name = 'settlementTab:' + index;
-    label(segment, 0, 0, text, { size: 22, bold: true, color: index === active ? '#302719' : '#EFF3F7', w: 280, h: 42 });
-    pauseTabFace(segment, index, 2, 302, 46, index === active);
-    if (index !== active) segment.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => {
-      e.propagationStopped = true; Sfx.play('ui'); onSelect(index);
+export function playSettlement(root: Node): void { root.getComponent(SettlementMotion)?.play(); }
+
+export function settlementRewards(parent: Node, outcome: Outcome, gold: number, xp: number, note: string, loot?: StageLootSummary,
+  animation: { intro?: boolean; goldFrom?: number } = {}): void {
+  const compact = !!(loot && (loot.materials.length || loot.equipment.length));
+  label(parent, 0, compact ? 39 : 32, outcome === 'win' ? '本局累计金币已到账' : '金币保底30% · 已到账', {
+    size: 21, color: COMIC.text, bold: true, w: 580, h: 30,
+  });
+  [['金币', 'ui_icon_coin', gold], ['本局经验', 'ui_icon_exp', xp]].forEach((item, index) => {
+    const card = comicPlate(parent, (index - .5) * 292, compact ? -36 : -70, 246, compact ? 100 : 144, 'card',
+      { name: 'settlementReward:' + index, cut: 9 });
+    label(card, 0, compact ? 32 : 48, String(item[0]), { size: 17, color: COMIC.sub, w: 200, h: 22 });
+    battleArtIcon(card, String(item[1]), compact ? 32 : 64);
+    const number = label(card, 0, compact ? -33 : -49, String(item[2]), { size: compact ? 22 : 25, font: 'number', color: COMIC.text, bold: true, w: 204, h: 28, shrink: true });
+    number.name = index ? 'settlementXpNumber' : 'settlementGoldNumber';
+    parent.getComponent(SettlementMotion)?.addReward(number, Number(item[2]), !!animation.intro
+      || (!index && animation.goldFrom !== undefined && animation.goldFrom !== gold), index ? 0 : animation.goldFrom || 0);
+  });
+  if (compact && loot) {
+    const rows = loot.materials.map(row => ({ id: row.id, text: itemName(row.id) + ' ×' + row.n }));
+    if (loot.equipment.length) rows.push({ id: loot.equipment[0].defId, text: '装备 ×' + loot.equipment.length + ' ›' });
+    const n = rows.length, pitch = Math.min(144, 592 / n);
+    rows.forEach((row, i) => {
+      const card = comicPlate(parent, (i - (n - 1) / 2) * pitch, -124, pitch - 6, 64, 'card', { cut: 6 });
+      gearArt(card, 0, 9, 31, 31, row.id);
+      label(card, 0, -20, row.text, { size: 15, color: COMIC.text, w: pitch - 12, h: 22, shrink: true });
+      bindButton(card, () => showCollectedLoot(parent.parent || parent, loot), { sound: false, scale: .96 });
     });
-  });
+  }
+  label(parent, 0, -178, note, { size: 16, color: COMIC.sub, w: 594, h: 28, shrink: true });
 }
 
-export function settlementRewards(parent: Node, outcome: Outcome, gold: number, xp: number, note: string): void {
-  label(parent, 0, 32, outcome === 'win' ? '通关奖励' : '已获得奖励 · 保底30%', {
-    size: 21, color: outcome === 'win' ? '#FFECA3' : '#D9E7FB', bold: true, w: 580, h: 30,
-  });
-  [['金币', 'ui_icon_coin', gold], ['经验', 'ui_icon_exp', xp]].forEach((item, index) => {
-    const card = gpanel(parent, (index - .5) * 292, -70, 246, 144, '#28313A', undefined, 0, 10);
-    artSprite(card, 0, 0, 246, 144, ART + 'card_' + outcome, { belowIdx: 0 });
-    label(card, 0, 48, String(item[0]), { size: 17, color: '#E9E4D5', w: 200, h: 22 });
-    battleArtIcon(card, String(item[1]), 64);
-    label(card, 0, -49, String(item[2]), { size: 25, font: 'number', color: '#FFFFFF', bold: true, w: 204, h: 30, shrink: true });
-  });
-  label(parent, 0, -178, note, { size: 16, color: '#C4C9CA', w: 594, h: 28, shrink: true });
-}
-
-export function settlementStats(parent: Node, rows: DamageRow[]): void {
-  const shown = rows.slice(0, 5), leader = Math.max(1, ...rows.map(row => row.val));
-  const pitch = Math.min(55, 225 / Math.max(1, shown.length));
-  shown.forEach((row, index) => {
-    const y = 26 - index * pitch, avatar = N('settlementHero:' + row.id, parent, -270, y, 42, 42);
-    const fallback = label(avatar, 0, 0, row.name.slice(0, 1), { size: 25, color: '#FFE27A', bold: true });
-    battleArtSprite(avatar, 0, 0, 42, 42, 'ui_avatar_' + row.id, { sliced: false, hideOnLoad: [fallback] });
-    label(parent, -76, y + 8, row.name, { size: 17, color: '#FFFFFF', align: 'left', w: 296, h: 25, shrink: true });
-    label(parent, 235, y + 8, fmtWk(row.val), { size: 20, font: 'number', color: '#FFE27A', align: 'right', w: 140, h: 25, shrink: true });
-    label(parent, 235, y - 10, (row.pct * 100).toFixed(2) + '%', { size: 11, font: 'number', color: '#BAC5CD', align: 'right', w: 140, h: 13 });
-    const bar = battleProgressBar(parent, 39, y - 24, 528, 8, 'damage');
-    bar.set(row.val > 0 ? row.val / leader : 0);
-    if (index === 0 && row.val > 0) {
-      const tag = gpanel(parent, -270, y + 26, 52, 16, '#F5C85C', undefined, 0, 3);
-      label(tag, 0, 0, 'MVP', { size: 12, font: 'number', color: '#483515', bold: true, w: 50, h: 16 });
-    }
-  });
-}
-
-export interface SettlementButton { node: Node; setText: (text: string) => void; setEnabled: (enabled: boolean) => void; }
+export interface SettlementButton { node: Node; setText: (text: string) => void; setEnabled: (enabled: boolean) => void; setBusy: (busy: boolean, text?: string) => void; }
 export function settlementButton(parent: Node, x: number, y: number, w: number, h: number,
   text: string, tone: Tone, onClick: () => void, enabled = true, name = ''): SettlementButton {
-  const node = gpanel(parent, x, y, w, h, tone === 'green' ? '#65B441' : tone === 'gold' ? '#FFC848' : tone === 'teal' ? '#269DAB' : '#5A6472', undefined, 0, 12);
-  node.name = name || 'settlementButton:' + tone;
-  const caption = label(node, 0, 0, text, { size: 24, bold: true, color: tone === 'teal' || tone === 'muted' ? '#F3FFFA' : '#302719', w: w - 32, h: h - 8, shrink: true,
-    outline: tone === 'teal' ? '#1C6269' : undefined, outlineW: 1 });
-  let sprite: Sprite | null = null, pressed = false;
-  const apply = (): void => { if (sprite) sprite.color = C(!enabled ? '#A7ADB2' : pressed ? '#D3D3D3' : '#FFFFFF'); };
-  const id = tone === 'gold' || tone === 'green' ? 'pause_comic_v1/button_' + tone : ART + 'button_' + tone;
-  artSprite(node, 0, 0, w, h, id, { belowIdx: 0, onLoaded: art => { sprite = art.getComponent(Sprite); apply(); } });
-  node.on(Node.EventType.TOUCH_START, () => { pressed = enabled; apply(); });
-  node.on(Node.EventType.TOUCH_CANCEL, () => { pressed = false; apply(); });
-  node.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => {
-    e.propagationStopped = true; pressed = false; apply(); if (enabled) { Sfx.play('ui'); onClick(); }
+  return comicButtonControl(parent, x, y, w, h, text, onClick, {
+    tone: tone === 'teal' ? 'green' : tone, size: 24, enabled,
+    color: tone === 'muted' ? COMIC.text : undefined,
+    name: name || 'settlementButton:' + tone,
   });
-  return { node, setText: value => setText(caption, value), setEnabled: value => { enabled = value; pressed = false; apply(); } };
 }

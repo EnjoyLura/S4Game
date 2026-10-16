@@ -1,0 +1,34 @@
+{
+  "mode": "source and local built file inspection only; no execution of game modules",
+  "mainBundle": "assets/main/index.bb9fc.js",
+  "mainBundleSha256": "d83144216269ec4cee948c55e963ee264930d9efbef96166b67db3ff12489be5",
+  "compiledComponents": [
+    "TrainingWeaponFloat",
+    "HoldUpgrade",
+    "TrainingGrowthFx",
+    "HeroRosterRail"
+  ],
+  "compiledExcerpts": {
+    "trainingWeaponFloat": "-He/2+72,an=null;if(Ze){var ln=J(q);Ce(tn,-176,He/2-25,ln.name,{size:26,color:b.cream,bold:!0,w:312,h:38,outline:b.ink,outlineW:2});var cn=m(\"trainingWeapon:\"+q,tn,-176,-10,310,He-85);Je=cn;var sn=m(\"trainingWeaponFloat\",cn,0,0,280,He-120);k(sn,0,12,280,He-120,ln.art),sn.addComponent(G),an=Ce(tn,-176,-He/2+22,\"换装继承培养等级 · Lv.\"+D.weaponLv,{size:17,color:b.cream,outline:b.ink,outlineW:1.5,w:314,h:28})}else Je=S(tn,q,-176,rn,He-102,318);var un=Math.min(He-40,432),dn=Se(tn,185,16,310,un,Ze?\"强化提升\":Z[$[q].growthType].name+\"成长\",$e,en,Le(nn,on),!0),hn=m(\"trainingPower\",dn.node,0,-un/2+34,274,56);k(hn,0,0,274,56,\"hero_comic_v3/comic_power_plate_v3\");var mn=Ce(hn,23,0,\"战力 \"+U(ee(q).power),{size:23,bold:!0,color:b.cream,w:202,h:34}),fn=m(\"trainingGrowthFx\",tn,-176,rn).addComponent(j);fn.configure(Je,hn,mn,ee(q).power);var vn=m(\"trainingMilestoneHost\"",
+    "heroEquipmentGroup": ";k(E,0,0,340,84,\"hero_comic_v3/comic_power_plate_v3\"),_(E,31,0,\"战力 \"+O(F(n).power),{size:28,color:b.cream,font:\"number\",bold:!0,w:208,h:38});var I=Math.min(124,Math.max(100,(r-300)/2)),x=188+2*I,q=s(\"heroEquipmentGroup\",h,213,g+(r-185)/2,284,x);v(q,0,0,284,x,\"paper\",{name:\"heroEquipment\",cut:14}),_(q,-50,x/2-18,\"已穿戴\",{size:22,font:\"body\",color:b.text,bold:!0,w:132,h:32}),_(q,82,x/2-18,Object.keys(M).filter((function(e){return R(n,e)})).length+\"/5\",{size:19,color:b.sub,align:\"right\",w:70,h:30}),xe(o,q,n,\"weapon\",0,x/2-92,252,104),be.forEach((function(e,t){return xe(o,q,n,e,t%2*134-67,x/2-(158+I/2+Math.floor(t/2)*(I+14)),I,I)}));var A=s(\"heroDetails\",f,-154,-(r+we)/2+32,330,we);Ie(A,-86,0,\"属性\",\"attrs\",(function(){return Re(o,n)})),Ie(A,86,0,\"故事\",\"book\",(function(){return Ue(o,n)}))}(h,e,u,N,W,l,g);var G=[];if(\"mat\"===Ce.tab)for(var K=0,V=Ob",
+    "trainingGrowthFx": ",on),!0),hn=m(\"trainingPower\",dn.node,0,-un/2+34,274,56);k(hn,0,0,274,56,\"hero_comic_v3/comic_power_plate_v3\");var mn=Ce(hn,23,0,\"战力 \"+U(ee(q).power),{size:23,bold:!0,color:b.cream,w:202,h:34}),fn=m(\"trainingGrowthFx\",tn,-176,rn).addComponent(j);fn.configure(Je,hn,mn,ee(q).power);var vn=m(\"trainingMilestoneHost\",Be),gn=function(){for(var n=0,t=Array.from(vn.children);n<t.length;n++){var i=t[n];i.active=!1,i.removeFromParent(),i.destroy()}ye(vn,e,-(He+138),Ze?\"武器突破\":\"等级突破\",Ze?o.weaponMilestones(q):o.heroMilestones(q),Ze?D.weaponLv:D.lv,q+\":\"+ge.tab,Ze?J(q).art:pe,u,!0)};gn();var pn={kind:Ze?\"weapon\":\"hero\",hid:q},wn=function(){return Ze?fe(q):ve(q)},bn=Ee(s,e,Ie,Ze?\"强化武器\":\"升级英雄\",Ze?te($e):{gold:ie($e),mat:0},en,wn,pn,!1,(function(n){var t=ee(q).power,i=((Ze?D.weaponLv:D.lv)+1)%10==0,r=i?Y(pn,wn):wn();if(!r.ok)return i||H(r.msg,{kind:\"warni",
+    "trainingMilestoneHost": "ic_power_plate_v3\");var mn=Ce(hn,23,0,\"战力 \"+U(ee(q).power),{size:23,bold:!0,color:b.cream,w:202,h:34}),fn=m(\"trainingGrowthFx\",tn,-176,rn).addComponent(j);fn.configure(Je,hn,mn,ee(q).power);var vn=m(\"trainingMilestoneHost\",Be),gn=function(){for(var n=0,t=Array.from(vn.children);n<t.length;n++){var i=t[n];i.active=!1,i.removeFromParent(),i.destroy()}ye(vn,e,-(He+138),Ze?\"武器突破\":\"等级突破\",Ze?o.weaponMilestones(q):o.heroMilestones(q),Ze?D.weaponLv:D.lv,q+\":\"+ge.tab,Ze?J(q).art:pe,u,!0)};gn();var pn={kind:Ze?\"weapon\":\"hero\",hid:q},wn=function(){return Ze?fe(q):ve(q)},bn=Ee(s,e,Ie,Ze?\"强化武器\":\"升级英雄\",Ze?te($e):{gold:ie($e),mat:0},en,wn,pn,!1,(function(n){var t=ee(q).power,i=((Ze?D.weaponLv:D.lv)+1)%10==0,r=i?Y(pn,wn):wn();if(!r.ok)return i||H(r.msg,{kind:\"warning\",title:\"暂时无法提升\"}),!1;var a=Ze?D.weaponLv:D.lv,l=a>=(Ze?oe.weapon:oe.hero),c=o.statsAt(q,"
+  },
+  "review": [
+    "separate weapon float transform, 4s/7 units",
+    "grouped hero equipment center",
+    "stable upgrade button and preview values; real upHero/upWeapon per step",
+    "release suppression after hold; cancellation, hide, disable and page busy stops",
+    "single action per frame, live wallet and stop on insufficient funds/materials or max level",
+    "real heroStats power counter; one bounded visual burst and accumulated gain",
+    "native horizontal scroll and negative horizontal offset conversion; retained old rail write guard",
+    "minimum panel height 374, center 16; panel top remains 4 units inside minimum display"
+  ],
+  "production": true,
+  "md5Cache": true,
+  "visualAcceptance": "pending user manual review",
+  "testsRun": false,
+  "gameRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

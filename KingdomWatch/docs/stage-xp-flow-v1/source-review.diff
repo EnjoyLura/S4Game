@@ -1,0 +1,150 @@
+--- before/assets/scripts/battle/BattleDirector.ts
++++ assets/scripts/battle/BattleDirector.ts
+@@ -5,7 +5,7 @@
+ import { _decorator, Canvas, Component, director, isValid, Layers, Node } from 'cc';
+ import { LEVEL_1_1, LevelDef, MOBS, heroSlots, nextLevelId } from '../config/Mobs';
+ import { CardCtx, CardDef, CardStacks, canTakeCard, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, baseMoraStats, HeroStats, archerAtkCfg, sniperAtkCfg, sniperSkCfg, voltAtkCfg, voltSkCfg, voltUltCfg, pyroAtkCfg, pyroSkCfg, pyroUltCfg, moraAtkCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+-import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
++import { expNeed, LO, PASSIVE_XP_INTERVAL, passiveXpGain, REVIVE_RATIO, starOf } from '../config/GameConfig';
+ import { bus, EVT } from '../core/EventBus';
+ import { Sfx } from '../core/Sfx';
+ import { GameAudio } from '../core/GameAudio';
+@@ -83,6 +83,7 @@
+   elapsed = 0;
+   heroLevel = 1;
+   xp = 0;
++  private passiveXpElapsed = 0;
+   private pickQueue = 0;
+   /** 大招演出锁：期间三选一不弹（用户要求演出完整），走完后自动补弹 */
+   private ultShowT = 0;
+@@ -269,6 +270,7 @@
+     const sdt = dt * readableSpeed * (hitStopActive ? 0.12 : 1);
+     this.ambience.tick(sdt);
+     this.elapsed += sdt;
++    if (!this.pendingWin) this.passiveXpElapsed += sdt;
+     const steps = sdt > 1 / 30 ? 2 : 1;
+     const sub = sdt / steps;
+     for (let i = 0; i < steps; i++) {
+@@ -290,6 +292,8 @@
+     if (this.ultShowT > 0) this.ultShowT = Math.max(0, this.ultShowT - sdt);
+     if (this.ultimateActive) this.ultShowT = Math.max(this.ultShowT, 2);
+     if (this.pendingWin && !this.ultimateActive && this.state === 'running') this.onAllCleared();
++    // Grant after combat steps: a timed level-up must not interrupt a simulation substep.
++    this.grantTimeXp();
+     if (this.pickQueue > 0 && !this.pendingWin && this.ultShowT <= 0 && !this.gm.panelOpen && this.state === 'running') this.openPick();
+     this.float.tick(rawDt);
+     this.pops.tick(rawDt);
+@@ -326,7 +330,16 @@
+   }
+ 
+   private expNeed(l: number): number {
+-    return Math.floor(50 * Math.pow(1.35, l - 1));
++    return expNeed(l);
++  }
++
++  private grantTimeXp(): void {
++    if (this.leaving || this.state !== 'running' || this.pendingWin) return;
++    // Carry the fraction across pauses; no wall-clock timers or background catch-up.
++    while (this.passiveXpElapsed + 1e-8 >= PASSIVE_XP_INTERVAL && this.state === 'running') {
++      this.passiveXpElapsed = Math.max(0, this.passiveXpElapsed - PASSIVE_XP_INTERVAL);
++      this.gainXp(passiveXpGain(this.heroLevel) * this.global.xpMul);
++    }
+   }
+ 
+   /* ---------- 三选一（§3.8：全场冻结，连升排队；广告刷新×1+钻石刷新×1） ---------- */
+--- before/assets/scripts/config/GameConfig.ts
++++ assets/scripts/config/GameConfig.ts
+@@ -63,6 +63,12 @@
+   return Math.floor(50 * Math.pow(1.35, level - 1));
+ }
+ 
++/** 少量关卡时间经验：每2个战斗秒发放当前升级需求约1%，最低1点。 */
++export const PASSIVE_XP_INTERVAL = 2;
++export function passiveXpGain(level: number): number {
++  return Math.max(1, Math.round(expNeed(level) * 0.01));
++}
++
+ /** 复活恢复 30%（可无限次） */
+ export const REVIVE_RATIO = 0.3;
+ /** 复活后防线短暂无敌缓冲（待定项默认值，§3.9） */
+--- before/assets/scripts/ui/BattleProgressBar.ts
++++ assets/scripts/ui/BattleProgressBar.ts
+@@ -34,7 +34,7 @@
+     // Broad, quiet top light; short fills keep their real width and never grow a minimum cap.
+     const lightW = Math.max(0, fw - Math.min(2, fw * .2));
+     if (lightW > 0) {
+-      detail.fillColor = CA('#FFFFFF', kind === 'damage' ? .12 : .22);
++      detail.fillColor = CA(kind === 'xp' ? '#8FD1D8' : '#FFFFFF', kind === 'damage' ? .12 : kind === 'xp' ? .20 : .22);
+       detail.roundRect(left + (fw - lightW) / 2, bottom + fh * .62, lightW, fh * .25, Math.min(r, fh * .12)); detail.fill();
+     }
+     if (kind === 'health' && fw > 70) {
+--- before/assets/scripts/ui/HUD.ts
++++ assets/scripts/ui/HUD.ts
+@@ -1,5 +1,5 @@
+ /**
+- * 战斗 HUD（UX 线稿 ①）：顶栏(暂停/关卡名/波次) + 经验条(Lv骑条居中) + 预警横幅
++ * 战斗 HUD（UX 线稿 ①）：顶栏(暂停/关卡名/波次) + 经验条(无背板Lv居中) + 预警横幅
+  * + 左列(倍速/统计/FPS) + 右侧大招纵列(每英雄一钮) + 防线耐久/蓝色外层护盾 + 头顶普攻技能图标(CD环)
+  * 点击普攻/技能/未充满大招图标 → 属性Tips（§3.11）
+  */
+@@ -80,11 +80,9 @@
+   private lastLv = -1;
+   private lastHp = '';
+   private lastShield = '';
+-  // 经验条上涨动画状态（平滑逼近 + 获得时闪光）
++  // 经验条只平滑改变长度，增长时保持原色。
+   private xpShown = 0;
+   private xpTarget0 = 0;
+-  private xpFlash = 0;
+-  private lastXpTarget = 0;
+ 
+   constructor(parent: Node, private dir: BattleDirector, bgParent?: Node) {
+     this.build(parent, bgParent);
+@@ -128,11 +126,13 @@
+     gpanel(top, WX(560, 150), WYN(24, 60), 150, 60, CA('#151C19', 0.58), undefined, 0, 30);
+     this.waveTxt = label(top, WX(560, 150), WYN(24, 60), '波次 0/10', { size: 22, color: '#FFF3DC', bold: true, w: 140, h: 38, shrink: true });
+ 
+-    /* 经验条（下移与顶栏留出间距）+ 居中 Lv 徽章骑条（线稿 ui_lv_badge） */
++    /* 经验条 + 无背板的居中等级文字，细描边保证战场上可读。 */
+     this.xpBar = battleProgressBar(top, WX(30, 690), WYN(100, 12), 690, 12, 'xp');
+-    const lvBadge = gpanel(top, WX(330, 90), WYN(91, 30), 90, 30, CA('#19261E', 0.94), undefined, 0, 10);
+-    // ui_lv_badge 美术暂不接：切片烤死了"Lv.1"文字，与动态等级冲突（第二批出无字版再换）
+-    this.lvTxt = label(lvBadge, 0, 0, 'Lv.1', { size: 20, color: '#FFE08A', font: 'number' });
++    this.xpBar.set(0);
++    this.lvTxt = label(top, WX(330, 90), WYN(91, 30), 'Lv.1', {
++      size: 20, color: '#FFE08A', font: 'number', outline: '#17251D', outlineW: 2, w: 90, h: 30,
++    });
++    this.lvTxt.name = 'stageLevelText';
+ 
+     /* 预警横幅 */
+     this.banner = gpanel(top, WX(145, 460), WYN(142, 60), 460, 60, CA('#351F16', 0.75), undefined, 0, 12);
+@@ -353,22 +353,20 @@
+       this.lastSec = sec;
+       setText(this.timeTxt, String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0'));
+     }
+-    // Lv 徽章
+-    if (d.heroLevel !== this.lastLv) {
++    // 等级文字保持原位置，无独立背板。
++    const levelChanged = d.heroLevel !== this.lastLv;
++    if (levelChanged) {
+       this.lastLv = d.heroLevel;
+       setText(this.lvTxt, 'Lv.' + d.heroLevel);
+     }
+-    // 经验：平滑上涨 + 获得时闪光（升级重置时快速回落）
++    // 经验：固定青蓝色平滑上涨，升级直接交接剩余经验，避免倒退和变白。
+     const need = expNeed(d.heroLevel);
+     const xpTarget = Math.min(1, d.xp / need);
+-    if (xpTarget > this.lastXpTarget + 0.0001) this.xpFlash = 0.35;
+-    this.lastXpTarget = xpTarget;
+-    if (xpTarget < this.xpShown - 0.25) this.xpShown = 0;
++    if (levelChanged || xpTarget < this.xpShown - 0.25) this.xpShown = xpTarget;
+     this.xpShown += (xpTarget - this.xpShown) * Math.min(1, dt * (xpTarget > this.xpShown ? 6 : 4));
+     if (Math.abs(xpTarget - this.xpShown) < 0.0015) this.xpShown = xpTarget;
+-    this.xpFlash = Math.max(0, this.xpFlash - dt);
+-    if (this.xpShown !== this.xpTarget0 || this.xpFlash > 0) {
+-      this.xpBar.set(this.xpShown, this.xpFlash > 0 ? '#BFE9FF' : '#6CBCC6');
++    if (this.xpShown !== this.xpTarget0) {
++      this.xpBar.set(this.xpShown);
+       this.xpTarget0 = this.xpShown;
+     }
+     // 耐久 + 盾

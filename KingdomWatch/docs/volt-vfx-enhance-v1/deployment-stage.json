@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-volt-vfx-enhance-v1-20261015-204232",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-dual-base-damage-v1-20261015-203032",
+  "entryVersion": "1792068139",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=volt-vfx-enhance-v1-1792068139",
+  "scope": "procedural Volt normal projectile, chain lightning and ultimate thunder effects",
+  "layoutChanged": false,
+  "manualAcceptance": "pending user manual review"
+}

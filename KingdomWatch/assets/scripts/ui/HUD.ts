@@ -1,5 +1,5 @@
 /**
- * 战斗 HUD（UX 线稿 ①）：顶栏(暂停/关卡名/波次) + 经验条(Lv骑条居中) + 预警横幅
+ * 战斗 HUD（UX 线稿 ①）：顶栏(暂停/关卡名/波次) + 经验条(无背板Lv居中) + 预警横幅
  * + 左列(倍速/统计/FPS) + 右侧大招纵列(每英雄一钮) + 防线耐久/蓝色外层护盾 + 头顶普攻技能图标(CD环)
  * 点击普攻/技能/未充满大招图标 → 属性Tips（§3.11）
  */
@@ -12,6 +12,7 @@ import { HeroBase } from '../battle/Hero';
 import { CODEX } from '../core/GameData';
 import { UltEnergyFx } from './UltEnergyFx';
 import { battleProgressBar, battleShieldOutline, battleStatusIcon } from './BattleProgressBar';
+import { bindButton } from './ButtonFeedback';
 
 const LINE_HP_BOTTOM = 212; // Raised 14 design pixels from the previous bar.
 const ULT_BOTTOM = 340; // Leaves room for the two value rows and the ultimate energy halo.
@@ -79,14 +80,13 @@ export class HUD {
   private lastLv = -1;
   private lastHp = '';
   private lastShield = '';
-  // 经验条上涨动画状态（平滑逼近 + 获得时闪光）
+  // 经验条只平滑改变长度，增长时保持原色。
   private xpShown = 0;
   private xpTarget0 = 0;
-  private xpFlash = 0;
-  private lastXpTarget = 0;
 
   constructor(parent: Node, private dir: BattleDirector, bgParent?: Node) {
     this.build(parent, bgParent);
+    this.sync(); // The entry reveal and prepare countdown must already show the actual keep values.
   }
 
   private build(parent: Node, bgParent?: Node): void {
@@ -118,7 +118,7 @@ export class HUD {
     pg.roundRect(-9, -11, 7, 22, 2);
     pg.roundRect(2, -11, 7, 22, 2);
     pg.fill();
-    pauseBtn.on(Node.EventType.TOUCH_END, () => this.dir.togglePause());
+    bindButton(pauseBtn, () => this.dir.togglePause());
     // 计时/关名：半透小板（与暂停钮/波次签同款，用户调整）
     gpanel(top, WX(106, 110), WYN(32, 44), 110, 44, CA('#151C19', 0.58), undefined, 0, 22);
     this.timeTxt = label(top, WX(106, 110), WYN(32, 44), '00:00', { size: 24, color: '#FFF6DC', font: 'number', align: 'center', w: 110, h: 44 });
@@ -127,11 +127,13 @@ export class HUD {
     gpanel(top, WX(560, 150), WYN(24, 60), 150, 60, CA('#151C19', 0.58), undefined, 0, 30);
     this.waveTxt = label(top, WX(560, 150), WYN(24, 60), '波次 0/10', { size: 22, color: '#FFF3DC', bold: true, w: 140, h: 38, shrink: true });
 
-    /* 经验条（下移与顶栏留出间距）+ 居中 Lv 徽章骑条（线稿 ui_lv_badge） */
+    /* 经验条 + 无背板的居中等级文字，细描边保证战场上可读。 */
     this.xpBar = battleProgressBar(top, WX(30, 690), WYN(100, 12), 690, 12, 'xp');
-    const lvBadge = gpanel(top, WX(330, 90), WYN(91, 30), 90, 30, CA('#19261E', 0.94), undefined, 0, 10);
-    // ui_lv_badge 美术暂不接：切片烤死了"Lv.1"文字，与动态等级冲突（第二批出无字版再换）
-    this.lvTxt = label(lvBadge, 0, 0, 'Lv.1', { size: 20, color: '#FFE08A', font: 'number' });
+    this.xpBar.set(0);
+    this.lvTxt = label(top, WX(330, 90), WYN(91, 30), 'Lv.1', {
+      size: 20, color: '#FFE08A', font: 'number', outline: '#17251D', outlineW: 2, w: 90, h: 30,
+    });
+    this.lvTxt.name = 'stageLevelText';
 
     /* 预警横幅 */
     this.banner = gpanel(top, WX(145, 460), WYN(142, 60), 460, 60, CA('#351F16', 0.75), undefined, 0, 12);
@@ -143,7 +145,7 @@ export class HUD {
     this.fpsTxt.active = /[?&](perf|gm)=1(?:&|$)/.test(typeof location === 'undefined' ? '' : location.search);
     const speedBtn = gpanel(top, WX(24, 60), WYN(160, 60), 60, 60, CA('#151C19', 0.5), undefined, 0, 14);
     this.speedTxt = label(speedBtn, 0, 0, 'X1', { size: 18, color: '#FFFFFF', bold: true });
-    speedBtn.on(Node.EventType.TOUCH_END, () => this.dir.toggleSpeed());
+    bindButton(speedBtn, () => this.dir.toggleSpeed());
     const statsBtn = gpanel(top, WX(24, 60), WYN(240, 60), 60, 60, CA('#151C19', 0.5), undefined, 0, 14);
     const sico = new Node('statsIco');   // 同暂停钮：图标画在子节点
     sico.setParent(statsBtn);
@@ -153,12 +155,11 @@ export class HUD {
     sg.roundRect(-3, -11, 6, 16, 1);
     sg.roundRect(8, -11, 6, 22, 1);
     sg.fill();
-    statsBtn.on(Node.EventType.TOUCH_END, () => this.dir.showStats());
+    bindButton(statsBtn, () => this.dir.showStats());
 
     /* 新怪通知钮（GM 钮下方，参考 KR）：首遇新怪种时亮出，点击弹怪物介绍弹窗（整体美术图标：生图 ui_btn_notice） */
     this.newMobBtn = noticeBtn(top, WX(24, 60), WYN(480, 60), 64, () => this.dir.showNewMobIntro());
     this.newMobBtn.active = false;
-    this.newMobBtn.on(Node.EventType.TOUCH_END, () => this.dir.showNewMobIntro());
 
     /* 右侧大招纵列：每英雄一钮，底基锚定向上叠放（线稿① 4×1 纵列右对齐）
        充能中：置灰遮罩盖图标 + 主色能量水上涨（2% 步进）；就绪：高亮 + 光晕呼吸 + 粒子环绕 */
@@ -191,7 +192,9 @@ export class HUD {
     const ux = WX(636, 90), uy = WYB(ULT_BOTTOM + i * ULT_STEP, 90);
     const root = new Node('heroUlt:' + hero.id);
     root.setParent(top); root.active = hero.ultUnlocked;
-    top = root; // 包住头像、百分比、能量和光效，未解锁时整个入口不可见/不可点击。
+    // Scale the complete illustration around its own centre, including energy and percentage.
+    const pressPivot = N('ultPressFace', root, ux, uy, 112, 112);
+    top = N('ultContents', pressPivot, -ux, -uy);
     // 就绪特效/能量水按英雄主色（用户调整：火橘/雷紫，不再只分狙击蓝/其他绿）
     const ULT_FX: Record<string, [string, string, string]> = {
       archer: [PAL.green, '#9FDB8C', '#D6F2C9'],
@@ -236,12 +239,13 @@ export class HUD {
     orbit.active = false;
     // 充能百分比：单行居中（用户调整：去掉"大招"前缀与"就绪"文案，就绪时整行隐藏）
     const chargeTxt = label(top, ux, uy, '0%', { size: 27, color: '#FFF7E8', font: 'number', w: 90, h: 38, outline: '#1D2632', outlineW: 2.2 });
-    btn.on(Node.EventType.TOUCH_END, () => {
+    bindButton(btn, () => {
       const result = this.dir.tryCastUlt(i);
       if (result === 'locked') return;
       if (result === 'charging') this.dir.showTips('ult', i);
       else ui.energy?.release();
-    });
+    }, { visual: pressPivot, scale: .94, shift: 1,
+      enabled: () => hero.ultUnlocked });
     const ui: UltUI = { root, baseY: uy, ux, uy, glow, btn, bright, gray, mask, color, fx, water, waterG, waterR: 46, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
     // All heroes share the charge, completion, ready and release animation.
     {
@@ -268,7 +272,7 @@ export class HUD {
     const atkGlyph = label(atkIcon, 0, 0, '攻', { size: 18, color: PAL.gold, bold: true });
     // 普攻/技能图标（58 > 底板圆 56：美术圆完全盖住底板，杜绝露出黄/蓝边——用户反馈）
     artSprite(atkIcon, 0, 0, 58, 58, 'ui_icon_atk_' + hero.id, { sliced: false, hideOnLoad: [atkGlyph] });
-    atkIcon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('atk', i));
+    bindButton(atkIcon, () => this.dir.showTips('atk', i), { circle: true });
     const root = new Node('heroSkill:' + hero.id);
     root.setParent(top); root.active = hero.skillUnlocked;
     top = root;
@@ -277,7 +281,7 @@ export class HUD {
     const glyph = label(icon, 0, 0, '技', { size: 18, color: PAL.blue, bold: true });
     // 技能图标（同上）
     artSprite(icon, 0, 0, 58, 58, 'ui_icon_skill_' + hero.id, { sliced: false, hideOnLoad: [glyph] });
-    icon.on(Node.EventType.TOUCH_END, () => this.dir.showTips('skill', i));
+    bindButton(icon, () => this.dir.showTips('skill', i), { circle: true });
     const gray = gcircle(top, cx, cy, 28, CA('#3A4250', 0.55));   // 冷却遮罩（用户调整：半透明，隐约透出技能图标）
     gray.active = false;
     const pie = new Node('skillPie' + i);
@@ -350,22 +354,20 @@ export class HUD {
       this.lastSec = sec;
       setText(this.timeTxt, String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0'));
     }
-    // Lv 徽章
-    if (d.heroLevel !== this.lastLv) {
+    // 等级文字保持原位置，无独立背板。
+    const levelChanged = d.heroLevel !== this.lastLv;
+    if (levelChanged) {
       this.lastLv = d.heroLevel;
       setText(this.lvTxt, 'Lv.' + d.heroLevel);
     }
-    // 经验：平滑上涨 + 获得时闪光（升级重置时快速回落）
+    // 经验：固定青蓝色平滑上涨，升级直接交接剩余经验，避免倒退和变白。
     const need = expNeed(d.heroLevel);
     const xpTarget = Math.min(1, d.xp / need);
-    if (xpTarget > this.lastXpTarget + 0.0001) this.xpFlash = 0.35;
-    this.lastXpTarget = xpTarget;
-    if (xpTarget < this.xpShown - 0.25) this.xpShown = 0;
+    if (levelChanged || xpTarget < this.xpShown - 0.25) this.xpShown = xpTarget;
     this.xpShown += (xpTarget - this.xpShown) * Math.min(1, dt * (xpTarget > this.xpShown ? 6 : 4));
     if (Math.abs(xpTarget - this.xpShown) < 0.0015) this.xpShown = xpTarget;
-    this.xpFlash = Math.max(0, this.xpFlash - dt);
-    if (this.xpShown !== this.xpTarget0 || this.xpFlash > 0) {
-      this.xpBar.set(this.xpShown, this.xpFlash > 0 ? '#BFE9FF' : '#6CBCC6');
+    if (this.xpShown !== this.xpTarget0) {
+      this.xpBar.set(this.xpShown);
       this.xpTarget0 = this.xpShown;
     }
     // 耐久 + 盾
@@ -427,12 +429,14 @@ export class HUD {
       const cp = Math.max(0, Math.min(1, hero.chargePct));
       u.shown += (cp - u.shown) * Math.min(1, dt * 5);
       if (Math.abs(cp - u.shown) < 0.002) u.shown = cp;
-      const key = Math.round(u.shown * 100);
+      // A full reservoir may briefly wait for its own previous cast; never label it 99%.
+      const full = cp >= 1;
+      const key = full ? 101 : Math.round(u.shown * 100);
       if (key !== u.lastChargeKey) {
         u.lastChargeKey = key;
         if (u.energyActive) this.redrawUltEnergyCharge(u, u.shown);
         else this.redrawUltWater(u, u.shown);
-        setText(u.chargeTxt, Math.min(99, Math.round(u.shown * 100)) + '%');
+        setText(u.chargeTxt, full ? '施放中' : Math.min(99, Math.round(u.shown * 100)) + '%');
       }
     }
   }

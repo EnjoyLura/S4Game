@@ -1,0 +1,48 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-dual-base-damage-v1-20261015-203032",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-enemy-death-burst-v2-20261015-192506",
+  "entryVersion": "1792067398",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=dual-base-damage-v1-1792067398",
+  "scope": "independent attack and skill damage with role growth; remove green death residue",
+  "layoutChanged": false,
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "baseStats": [
+    "attack",
+    "skillDamage"
+  ],
+  "normalDamage": "attack * normalMultiplier",
+  "abilityDamage": "attack * smallAttackCoefficient + skillDamage * abilityMultiplier",
+  "initialSmallAttackCoefficient": 0.2,
+  "initialGrowthTypes": {
+    "archer": "normal",
+    "sniper": "normal",
+    "pyro": "ultimate",
+    "volt": "skill",
+    "mora": "hybrid"
+  },
+  "baseStatsSharedByBattleAndUI": true,
+  "equipmentSkillDamageRemainsFlat": true,
+  "skillLevelChangesCoefficientNotBaseSkillDamage": true,
+  "greenGroundResidue": false,
+  "wholeBodyFall": false,
+  "gameplayValidation": "user manual; no tests, simulations, browser, game or online acceptance run",
+  "deployment": "https://e07f9fa5.kingdom-watch.pages.dev",
+  "date": "2026-10-15T20:31:14.617265+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-dual-base-damage-v1-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-dual-base-damage-v1-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "independent attack and skill damage with role growth; remove green death residue",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 9363,
+  "deploymentSucceeded": true,
+  "uploadedFiles": 2,
+  "cachedFiles": 1881
+}

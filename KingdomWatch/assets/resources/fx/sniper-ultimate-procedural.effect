@@ -1,0 +1,110 @@
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: hunter-vs:vert
+      frag: hunter-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one
+          blendSrcAlpha: zero
+          blendDstAlpha: one
+      rasterizerState:
+        cullMode: none
+      properties:
+        hunterState: { value: [0, 0, 0, 1] }
+        hunterShape: { value: [160, 112, 1, 1] }
+}%
+CCProgram hunter-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+  out vec2 uv0;
+  out vec4 color;
+  vec4 vert () {
+    vec4 p = vec4(a_position, 1.0);
+    #if USE_LOCAL
+      p = cc_matWorld * p;
+    #endif
+    uv0 = a_texCoord; color = a_color;
+    return cc_matViewProj * p;
+  }
+}%
+CCProgram hunter-fs %{
+  precision highp float;
+  in vec2 uv0;
+  in vec4 color;
+  uniform Hunter {
+    vec4 hunterState;
+    vec4 hunterShape;
+  };
+  float band(float d, float width) { return exp(-d * d / (width * width)); }
+  vec3 blueLight(float d, float width) {
+    return vec3(0.03, 0.26, 1.0) * band(d, width * 6.0) * 0.25
+         + vec3(0.08, 0.55, 1.0) * band(d, width * 2.0) * 0.75
+         + vec3(0.76, 0.94, 1.0) * band(d, width * 0.5);
+  }
+  vec4 frag () {
+    float age = hunterState.x, mode = hunterState.y;
+    vec2 p = (uv0 - vec2(0.5)) * hunterShape.xy;
+    vec3 rgb = vec3(0.0);
+    float opacity = 1.0;
+    if (mode < 0.5) {
+      p.x += hunterShape.x * 0.25;
+      float t = clamp(age / 0.38, 0.0, 1.0), travel = 1.0 - pow(1.0 - t, 3.0);
+      vec2 q = p - vec2(3.0 + travel * 14.0, 0.0);
+      vec2 radii = vec2(6.0 + travel * 2.0, 10.0 + travel * 29.0);
+      float ring = (length(q / radii) - 1.0) * radii.x;
+      float front = 0.2 + 0.8 * smoothstep(-4.0, 4.0, q.x);
+      rgb = blueLight(ring, 1.0) * front;
+      // A second pressure front and a narrow forward flash, without a fire/explosion silhouette.
+      vec2 back = p - vec2(-4.0 + travel * 7.0, 0.0);
+      float echo = (length(back / (radii * vec2(0.72, 0.66))) - 1.0) * radii.x;
+      rgb += blueLight(echo, 0.7) * 0.42 * (1.0 - t);
+      rgb += blueLight(p.y, 2.0) * band(p.x - 24.0, 39.0) * exp(-age * 26.0);
+      opacity = pow(1.0 - t, 1.15);
+    } else if (mode < 1.5) {
+      p.x = uv0.x * hunterShape.x - hunterShape.x + 45.0;
+      float lengthX = max(1.0, hunterShape.z), u = clamp(-p.x / lengthX, 0.0, 1.0);
+      float wake = pow(1.0 - u, 1.5) * smoothstep(-lengthX, -lengthX + 14.0, p.x);
+      float width = 0.9 + (1.0 - u) * 2.3;
+      rgb = blueLight(p.y, width) * wake * (1.0 - smoothstep(-16.0, 0.0, p.x));
+      float side = abs(p.y) - (5.0 + sin(u * 3.141593) * 6.0);
+      rgb += blueLight(side, 0.48) * wake * sin(u * 3.141593) * 0.62;
+      // Spear-like leading blue flare leaves the physical bolt silhouette readable.
+      rgb += blueLight(p.y, 2.4) * band(p.x - 14.0, 17.0) * 0.66;
+      float ripple = sin(u * 23.0 - age * 32.0 + hunterState.z) * 0.12 + 0.88;
+      rgb *= ripple;
+    } else {
+      float t = clamp(age / 0.5, 0.0, 1.0), spread = 1.0 - pow(1.0 - t, 3.0);
+      float pulse = exp(-age * 25.0);
+      rgb = vec3(0.05, 0.35, 1.0) * band(length(p / vec2(0.65, 1.0)), 22.0) * 0.58;
+      rgb += blueLight(p.y, 1.1) * band(p.x - 4.0, 38.0) * pulse;
+      rgb += blueLight(p.x, 0.9) * band(p.y, 23.0) * pulse * 0.75;
+      vec2 radii = vec2(7.0 + spread * 10.0, 10.0 + spread * 28.0);
+      float ring = (length(p / radii) - 1.0) * radii.x;
+      rgb += blueLight(ring, 0.75) * 0.55;
+      for (int i = 0; i < 6; i++) {
+        float k = float(i), angle = k * 1.047198 + hunterState.z;
+        vec2 axis = vec2(cos(angle), sin(angle));
+        vec2 at = axis * (9.0 + spread * (15.0 + mod(k, 3.0) * 5.0));
+        vec2 q = p - at;
+        rgb += blueLight(dot(q, vec2(-axis.y, axis.x)), 0.55)
+             * band(dot(q, axis), 4.5) * (1.0 - t) * 0.7;
+      }
+      opacity = pow(1.0 - t, 1.2);
+    }
+    vec2 edge = abs(uv0 - 0.5) * 2.0;
+    opacity *= (1.0 - smoothstep(0.86, 1.0, edge.x)) * (1.0 - smoothstep(0.84, 1.0, edge.y));
+    return vec4(rgb * color.rgb, opacity * color.a);
+  }
+}%

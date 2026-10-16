@@ -7,7 +7,8 @@ import { _decorator, Component, Graphics, Label, Node, Sprite, UITransform, view
 import { initLayout, LO, PAL } from '../config/GameConfig';
 import { flow } from '../core/Flow';
 import { GameAudio } from '../core/GameAudio';
-import { Sfx } from '../core/Sfx';
+import { bindButton } from './ButtonFeedback';
+import { dismissUI, refreshUI } from './UIMotion';
 import { C, CA, gpanel, N, WX, WYB } from './UIKit';
 import { artSprite } from './Ux';
 import { mainLabel, MAIN_NAV_H, PageCtx, setGlobalRoot } from './PageKit';
@@ -18,6 +19,7 @@ import { buildHeroes } from './pages/HeroPage';
 import { buildLevels } from './pages/LevelsPage';
 import { buildUpgrade } from './pages/UpgradePage';
 import { buildBase } from './pages/BasePage';
+import { levelReturnReady } from './BattleEntry';
 
 const { ccclass } = _decorator;
 
@@ -46,6 +48,7 @@ export class MainUI extends Component {
     view.on('canvas-resize', this.queueRelayout, this);
     view.on('design-resolution-changed', this.queueRelayout, this);
     this.rebuildAll();
+    levelReturnReady(this.node);
   }
 
   onDestroy(): void {
@@ -72,14 +75,12 @@ export class MainUI extends Component {
     this.resourceBar = null;
     this.resourceDialog = null;
 
-    // 背景：页签专属底图，不再整体置暗（用户确认）——前景可读性由各页面自身面板保证
-    this.bgNode = null; this.bgId = '';
-    this.applyPageBg(flow.mainTab);
-
     this.buildTopBar(root);
     this.buildNavBar(root);
 
     this.screens = N('Screens', root, 0, 0, 750, LO.half * 2);
+    // Backgrounds now belong to their page; the shared chrome stays above both page layers.
+    this.screens.setSiblingIndex(0);
     setGlobalRoot(root);
     this.tab = flow.mainTab;
     this.switchTab(this.tab);
@@ -112,8 +113,7 @@ export class MainUI extends Component {
     comicButton(panel, 0, -111, 330, 64, gold ? '前往关卡' : '前往基地', () => {
       const dim = panel.parent;
       this.resourceDialog = null;
-      dim?.destroy();
-      this.switchTab(gold ? 2 : 4);
+      dismissUI(dim, () => this.switchTab(gold ? 2 : 4));
     }, { tone: 'green', size: 23 });
   }
 
@@ -133,7 +133,7 @@ export class MainUI extends Component {
       const art = t.art ? comicArt(slot, 0, 17, 64, 64, t.art) : null;
       if (!t.art) comicMark(icon, 0, 0, 'upgrade', 52);
       const txt = mainLabel(slot, 0, -27, t.name, { size: 24, font: 'body', color: COMIC.cream, bold: true });
-      slot.on(Node.EventType.TOUCH_END, () => { Sfx.play('ui'); this.switchTab(i); });
+      bindButton(slot, () => { if (this.tab !== i) this.switchTab(i); }, { scale: .975, radius: 12, sound: 'select' });
       this.navItems.push({ slot, icon, art, txt, idle, act });
     });
   }
@@ -174,52 +174,46 @@ export class MainUI extends Component {
 
   /* ---------- 页签切换：内容整屏重建 ---------- */
   switchTab(i: number): void {
+    const previous = this.tab;
     this.tab = i;
     flow.mainTab = i;
     this.highlightTabs();
-    this.applyPageBg(i);
-    this.rebuildScreen();
+    this.rebuildScreen(i === previous ? 0 : i > previous ? 1 : -1);
   }
 
   /** 页签专属背景（商店内景 / 基地庭院；无专属的页签沿用主城场景占位图） */
   private static BG_BY_TAB: Record<number, string> = { 0: 'scenes/bg_shop_comic_v1', 2: 'scenes/bg_level', 3: 'scenes/bg_upgrade', 4: 'scenes/bg_base_lobby_v1' };
-  private bgId = '';
-  private bgNode: Node | null = null;
 
   private bgForTab(i: number): string {
     return MainUI.BG_BY_TAB[i] || 'scenes/scene_1_1';
   }
 
-  /** 背景切换：整节点重建（复用 artSprite 的 cover 裁剪与缓存加载），保持垫底层级 */
+  /** Background and content are retained/replaced together, with no exposed paper interval. */
   private applyPageBg(i: number): void {
     const id = i === 1 ? 'heroPaperBackdrop' : i === 2 ? 'levelPaperBackdrop' : i === 3 ? 'trainingPaperBackdrop' : i === 4 ? 'basePaperBackdrop' : this.bgForTab(i);
-    if (id === this.bgId && this.bgNode && this.bgNode.isValid) return;
-    this.bgId = id;
-    // 销毁上一张的整个裁剪壳：artSprite cover 返回的是壳内美术节点，只销毁它会留下空壳累积在树上
-    if (this.bgNode && this.bgNode.isValid) {
-      const oldHolder = this.bgNode.parent && this.bgNode.parent !== this.node ? this.bgNode.parent : this.bgNode;
-      oldHolder.destroy();
-    }
+    const parent = this.screens;
+    let bg: Node;
     if (i === 1 || i === 2 || i === 3 || i === 4) {
-      this.bgNode = gpanel(this.node, 0, 0, 750, LO.half * 2 + 240, COMIC.paper, undefined, 0, 0);
-      this.bgNode.name = i === 1 ? 'heroPageBackdrop' : i === 2 ? 'levelPageBackdrop' : i === 3 ? 'trainingPageBackdrop' : 'basePageBackdrop';
-    } else this.bgNode = artSprite(this.node, 0, 0, 750, LO.half * 2 + 240, id, { sliced: false, cover: true });
-    // cover 模式下 artSprite 返回裁剪壳内的美术节点：垫底要挪的是外面的裁剪壳，否则壳盖在 UI 之上
-    const holder = this.bgNode.parent && this.bgNode.parent !== this.node ? this.bgNode.parent : this.bgNode;
+      bg = gpanel(parent, 0, 0, 750, LO.half * 2 + 240, COMIC.paper, undefined, 0, 0);
+      bg.name = i === 1 ? 'heroPageBackdrop' : i === 2 ? 'levelPageBackdrop' : i === 3 ? 'trainingPageBackdrop' : 'basePageBackdrop';
+    } else bg = artSprite(parent, 0, 0, 750, LO.half * 2 + 240, id, { sliced: false, cover: true });
+    const holder = bg.parent && bg.parent !== parent ? bg.parent : bg;
     holder.setSiblingIndex(0);
   }
 
   /** 页面刷新入口（购买/升级/穿戴后）：整屏重建 + 货币同步 */
-  private rebuildScreen(): void {
-    this.screens.destroyAllChildren();
-    const ctx: PageCtx = { screens: this.screens, refresh: () => this.switchTab(this.tab) };
-    switch (this.tab) {
-      case 0: buildShop(ctx); break;
-      case 1: buildHeroes(ctx); break;
-      case 2: buildLevels(ctx); break;
-      case 3: buildUpgrade(ctx); break;
-      case 4: buildBase(ctx); break;
-    }
-    this.updateWallet();
+  private rebuildScreen(direction = 0): void {
+    refreshUI(this.screens, () => {
+      this.applyPageBg(this.tab);
+      const ctx: PageCtx = { screens: this.screens, refresh: () => this.switchTab(this.tab), refreshResources: () => this.updateWallet() };
+      switch (this.tab) {
+        case 0: buildShop(ctx); break;
+        case 1: buildHeroes(ctx); break;
+        case 2: buildLevels(ctx); break;
+        case 3: buildUpgrade(ctx); break;
+        case 4: buildBase(ctx); break;
+      }
+      this.updateWallet();
+    }, direction);
   }
 }

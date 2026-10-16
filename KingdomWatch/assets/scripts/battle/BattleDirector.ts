@@ -2,15 +2,18 @@
  * 战斗总控（§3.2 状态机）：PREPARE → WAVE_RUNNING ⇄ LEVEL_UP_PAUSE → VICTORY / LINE_BROKEN→失败结算(内含广告复活)
  * dt×倍速步进；暂停/三选一期间全场冻结（§3.2）
  */
-import { _decorator, Canvas, Component, director, Layers, Node } from 'cc';
-import { LEVEL_1_1, LevelDef, MOBS, heroSlots, nextLevelId } from '../config/Mobs';
+import { _decorator, Canvas, Component, director, isValid, Layers, Node } from 'cc';
+import { MobDef, MOBS, heroSlots, nextLevelId } from '../config/Mobs';
+import { ChallengeDef, DIFFICULTIES, getChallengeDef } from '../config/LevelDifficulty';
 import { CardCtx, CardDef, CardStacks, canTakeCard, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, baseMoraStats, HeroStats, archerAtkCfg, sniperAtkCfg, sniperSkCfg, voltAtkCfg, voltSkCfg, voltUltCfg, pyroAtkCfg, pyroSkCfg, pyroUltCfg, moraAtkCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
-import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
-import { bus, EVT } from '../core/EventBus';
+import { expNeed, LO, PASSIVE_XP_INTERVAL, passiveXpGain, REVIVE_RATIO, starOf } from '../config/GameConfig';
+import { bus, EVT, WaveThreat } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
 import { GameAudio } from '../core/GameAudio';
 import { loadSave, saveSave } from '../core/SaveData';
-import { DIFF_MUL, starKey, squadList, unlockCodex, advanceUnlock, equipAgg, heroState, heroBtAgg } from '../core/GameData';
+import { starKey, squadList, unlockCodex, advanceUnlock, equipAgg, heroState, heroStats, heroBtAgg, keepHp, keepShield } from '../core/GameData';
+import { grantStageMaterials } from '../core/StageLoot';
+import { BattleLoot, DeathPosition } from './BattleLoot';
 import { flow } from '../core/Flow';
 import { MonsterManager } from './Monster';
 import { ArcherHero, HeroBase, SniperHero, PyroHero, VoltHero, FrostHero } from './Hero';
@@ -23,11 +26,16 @@ import { FloatEvent, FloatText } from './FloatText';
 import { ComicPop } from './ComicPop';
 import { ImpactFX } from './ImpactFX';
 import { BattleAmbience } from './BattleAmbience';
+import { UltimatePresentation } from './UltimatePresentation';
+import { UltimateCue, UltimateBeat } from './UltimateTiming';
 import { AdService } from '../platform/AdService';
 import { HUD } from '../ui/HUD';
 import { Panels } from '../ui/Panels';
 import { GmPanel } from '../ui/GmPanel';
 import { setLayerDeep } from '../ui/UIKit';
+import { battleEntryReady, enteringBattle, leaveBattle } from '../ui/BattleEntry';
+import { warmPickArt } from '../ui/PickArt';
+import { BossWarning } from '../ui/BossWarning';
 
 const { ccclass } = _decorator;
 
@@ -40,7 +48,7 @@ export interface PickOpts {
 
 @ccclass('BattleDirector')
 export class BattleDirector extends Component {
-  levelDef: LevelDef = LEVEL_1_1;
+  levelDef: ChallengeDef = getChallengeDef('1-1', 0);
   state: BattleState = 'prepare';
   /** 未查看的新怪种队列（新怪通知钮 → 介绍弹窗逐个消费） */
   private newMobQueue: string[] = [];
@@ -68,15 +76,25 @@ export class BattleDirector extends Component {
   impacts!: ImpactFX;
   private field!: Node;
   private ambience!: BattleAmbience;
+  private ultPresentation!: UltimatePresentation;
+  private bossWarning!: BossWarning;
+  private loot!: BattleLoot;
+  private pendingWin = false;
+  private leaving = false;
 
   global: GlobalStats = { xpMul: 1, goldMul: 1, lineRegenPct: 0 };
   stacks: CardStacks = {};
   /** 战局内金币（击杀累积，§3.10 只计不显） */
   goldEarned = 0;
+  /** Cumulative target paid this run, shared by defeats, revival and eventual victory. */
+  private goldSettled = 0;
+  private doubleRewarded = false;
+  private xpEarned = 0;
   /** 关卡计时（游戏秒：只在 running 累计，暂停/三选一冻结，随倍速加快） */
   elapsed = 0;
   heroLevel = 1;
   xp = 0;
+  private passiveXpElapsed = 0;
   private pickQueue = 0;
   /** 大招演出锁：期间三选一不弹（用户要求演出完整），走完后自动补弹 */
   private ultShowT = 0;
@@ -97,7 +115,9 @@ export class BattleDirector extends Component {
     // 渲染分层（稳定遮挡：防线 < 怪 < 弹道 < 飘字；英雄夹在怪与弹道间）
     const groundFxLayer = new Node('GroundFxLayer');
     groundFxLayer.setParent(field);
-    this.line = new LineDefense(field, this.levelDef.lineHp);
+    // Snapshot the current keep for every new battle, including direct next-level navigation.
+    const keepLv = loadSave().keepLv;
+    this.line = new LineDefense(field, keepHp(keepLv), keepShield(keepLv));
     const mobLayer = new Node('MobLayer');
     mobLayer.setParent(field);
     const heroLayer = new Node('HeroLayer');
@@ -109,6 +129,7 @@ export class BattleDirector extends Component {
     const textLayer = new Node('TextLayer');
     textLayer.setParent(field);
     this.impacts = new ImpactFX(fxLayer, groundFxLayer, projLayer, mobLayer);
+    this.ultPresentation = new UltimatePresentation(field, fxLayer, groundFxLayer);
 
     const hitCtx = {
       floatParent: textLayer,
@@ -119,7 +140,7 @@ export class BattleDirector extends Component {
     this.float = new FloatText(textLayer);
     this.pops = new ComicPop(textLayer);
     this.mgr = new MonsterManager(mobLayer, hitCtx);
-    this.mgr.statMul = DIFF_MUL[Math.min(flow.diff, 2)] || 1;
+    this.mgr.statMul = DIFFICULTIES[this.levelDef.difficulty].statMul;
     // 首次遭遇新怪种 → 解锁图鉴 + 横幅 + 新怪通知钮（介绍弹窗待玩家点击查看）
     this.mgr.onFirstEncounter = def => {
       if (unlockCodex(def.id)) {
@@ -151,6 +172,13 @@ export class BattleDirector extends Component {
     for (const h of this.heroes) this.dmgSvc.register(h.id, h.name);
 
     this.hud = new HUD(uiRoot, this, field);
+    const lootLayer = new Node('EquipmentDrops');
+    lootLayer.setParent(field);
+    lootLayer.setSiblingIndex(textLayer.getSiblingIndex());
+    this.loot = new BattleLoot(lootLayer, uiRoot, this.levelDef,
+      () => !this.leaving && this.state === 'running' && !this.gm?.panelOpen && !this.mobIntroOpen,
+      text => this.hud.showBanner(text, 2.6));
+    this.bossWarning = new BossWarning(uiRoot);
     this.panels = new Panels(uiRoot, this);
     this.gm = new GmPanel(uiRoot, this);
 
@@ -169,20 +197,31 @@ export class BattleDirector extends Component {
     bus.on(EVT.LINE_BROKEN, this.onLineBroken, this);
     bus.on(EVT.ALL_WAVES_CLEARED, this.onAllCleared, this);
     bus.on(EVT.WAVE_CHANGED, this.onWaveChanged, this);
+    bus.on(EVT.WAVE_THREAT, this.onWaveThreat, this);
     bus.on(EVT.COMIC_POP, this.onComicPop, this);
     bus.on(EVT.HIT_STOP, this.onHitStop, this);
+    bus.on(EVT.ULTIMATE_BEGIN, this.onUltimateBegin, this);
+    bus.on(EVT.ULTIMATE_BEAT, this.onUltimateBeat, this);
 
     this.hud.showBanner('敌军来袭！', 2);
     this.state = 'prepare';
+    void warmPickArt(ids); // Also covers direct next-level navigation without a lobby visit.
+    battleEntryReady(this.node);
   }
 
   onDestroy(): void {
+    this.leaving = true;
     bus.off(EVT.MOB_KILLED, this.onMobKilled, this);
     bus.off(EVT.LINE_BROKEN, this.onLineBroken, this);
     bus.off(EVT.ALL_WAVES_CLEARED, this.onAllCleared, this);
     bus.off(EVT.WAVE_CHANGED, this.onWaveChanged, this);
+    bus.off(EVT.WAVE_THREAT, this.onWaveThreat, this);
     bus.off(EVT.COMIC_POP, this.onComicPop, this);
     bus.off(EVT.HIT_STOP, this.onHitStop, this);
+    bus.off(EVT.ULTIMATE_BEGIN, this.onUltimateBegin, this);
+    bus.off(EVT.ULTIMATE_BEAT, this.onUltimateBeat, this);
+    this.mgr?.destroy();
+    this.ultPresentation?.clear();
   }
 
   /** 漫画拟声词条（各战斗模块 emit，词表/概率/主题色在 ComicPop.POP_DEFS） */
@@ -190,7 +229,18 @@ export class BattleDirector extends Component {
     this.pops.pop(x as number, y as number, kind as string);
   }
 
-  // Only meaningful heavy contacts get a short accent; the battlefield never shakes.
+  private onUltimateBegin(value: unknown): void {
+    const cue = value as UltimateCue;
+    this.ultPresentation.begin(cue);
+    this.ultShowT = Math.max(this.ultShowT, cue.duration + 2);
+  }
+  private onUltimateBeat(value: unknown): void {
+    if (this.state === 'running') this.ultPresentation.beat(value as UltimateBeat);
+  }
+  private get ultimateActive(): boolean {
+    return this.ultPresentation.active || this.heroes.some(h => h.ultimateRemaining > 0) || this.projs.ultimateInFlight;
+  }
+  // Only meaningful heavy contacts get a short accent; ultimate peaks add a bounded world kick.
   private hitStopT = 0;
   private hitStopCd = 0;
 
@@ -201,6 +251,9 @@ export class BattleDirector extends Component {
   }
 
   update(rawDt: number): void {
+    if (this.leaving) return;
+    // Prepare countdown and combat begin only after the full-screen flags have cleared.
+    if (enteringBattle()) return;
     GameAudio.battleState(this.state);
     this.fpsAcc += rawDt; this.fpsN++;
     if (this.fpsAcc >= 0.5) {
@@ -229,12 +282,20 @@ export class BattleDirector extends Component {
       }
       return;
     }
-    if (this.state !== 'running') return;
+    if (this.state !== 'running') {
+      this.loot.suspend();
+      this.bossWarning.tick(0, false);
+      this.ultPresentation.suspend();
+      if (this.state === 'win' || this.state === 'lose') this.mgr.tickDeaths(dt);
+      return;
+    }
 
     // Sample before decrement: a 32ms accent must still render one frame at 30fps.
-    const sdt = dt * this.speed * (hitStopActive ? 0.12 : 1);
+    const readableSpeed = Math.min(this.speed, this.ultPresentation.windupSpeedLimit);
+    const sdt = dt * readableSpeed * (hitStopActive ? 0.12 : 1);
     this.ambience.tick(sdt);
     this.elapsed += sdt;
+    if (!this.pendingWin) this.passiveXpElapsed += sdt;
     const steps = sdt > 1 / 30 ? 2 : 1;
     const sub = sdt / steps;
     for (let i = 0; i < steps; i++) {
@@ -248,22 +309,29 @@ export class BattleDirector extends Component {
       this.projs.tick(sub, this.line);
       this.parts.tick(sub);
       this.impacts.tick(sub);
+      this.ultPresentation.tick(sub);
       this.line.regenPct = this.global.lineRegenPct;
       this.line.tick(sub);
     }
+    if (this.state === 'running') this.loot.tick(sdt);
     // 大招演出锁倒计时；期间排队的升级三选一挂起，锁走完自动补弹
-    if (this.ultShowT > 0) this.ultShowT -= dt;
-    if (this.pickQueue > 0 && this.ultShowT <= 0 && !this.gm.panelOpen && this.state === 'running') this.openPick();
+    if (this.ultShowT > 0) this.ultShowT = Math.max(0, this.ultShowT - sdt);
+    if (this.ultimateActive) this.ultShowT = Math.max(this.ultShowT, 2);
+    if (this.pendingWin && !this.ultimateActive && this.state === 'running') this.onAllCleared();
+    // Grant after combat steps: a timed level-up must not interrupt a simulation substep.
+    this.grantTimeXp();
+    if (this.pickQueue > 0 && !this.pendingWin && this.ultShowT <= 0 && !this.gm.panelOpen && this.state === 'running') this.openPick();
     this.float.tick(rawDt);
     this.pops.tick(rawDt);
     this.hud.sync(rawDt);
+    this.bossWarning.tick(rawDt, this.state === 'running' && !this.gm.panelOpen);
   }
 
   /* ---------- 击杀 → 金币/经验/充能（§3.7/§3.8/§3.10） ---------- */
-  private onMobKilled(def: unknown, killerId: unknown): void {
-    const d = def as { gold: number; exp: number; charge: number };
-    this.goldEarned += d.gold * this.global.goldMul;
-    Sfx.play('kill');
+  private onMobKilled(def: unknown, killerId: unknown, position: unknown): void {
+    const d = def as MobDef;
+    this.goldEarned += d.gold * this.global.goldMul * DIFFICULTIES[this.levelDef.difficulty].goldMul;
+    if (killerId !== 'gm' && position && this.state === 'running') this.loot.onKill(d, position as DeathPosition);
     const killer = this.heroes.find(h => h.id === killerId);
     if (killer) killer.chargeKill(d.charge * (1 + (killer.stats.chargeEff || 0)));   // 充能效率：击杀充能加成（呼吸回能不受加成）
     this.gainXp(d.exp * this.global.xpMul);
@@ -271,11 +339,16 @@ export class BattleDirector extends Component {
 
   private onWaveChanged(cur: unknown, total: unknown, surge: unknown): void {
     this.hud.setWave(cur as number, total as number);
-    if (surge) this.hud.showBanner('敌军大部队来袭！', 2);
-    if (surge) Sfx.play('surge');
+    if (surge && !this.waves.hasThreat) {
+      this.hud.showBanner('敌军大部队来袭！', 2);
+      Sfx.play('surge');
+    }
   }
 
+  private onWaveThreat(threat: unknown): void { this.bossWarning.show(threat as WaveThreat); }
+
   private gainXp(v: number): void {
+    this.xpEarned += v;
     this.xp += v;
     let need = this.expNeed(this.heroLevel);
     while (this.xp >= need) {
@@ -286,16 +359,25 @@ export class BattleDirector extends Component {
       need = this.expNeed(this.heroLevel);
       bus.emit(EVT.LEVEL_UP, this.heroLevel);
     }
-    if (this.pickQueue > 0 && this.state === 'running' && !this.gm.panelOpen && this.ultShowT <= 0) this.openPick(); // GM 面板/大招演出期间挂起，结束后补弹
+    // update() drains this queue after combat substeps; never build a modal inside a hit/death callback.
   }
 
   private expNeed(l: number): number {
-    return Math.floor(50 * Math.pow(1.35, l - 1));
+    return expNeed(l);
+  }
+
+  private grantTimeXp(): void {
+    if (this.leaving || this.state !== 'running' || this.pendingWin) return;
+    // Carry the fraction across pauses; no wall-clock timers or background catch-up.
+    while (this.passiveXpElapsed + 1e-8 >= PASSIVE_XP_INTERVAL && this.state === 'running') {
+      this.passiveXpElapsed = Math.max(0, this.passiveXpElapsed - PASSIVE_XP_INTERVAL);
+      this.gainXp(passiveXpGain(this.heroLevel) * this.global.xpMul);
+    }
   }
 
   /* ---------- 三选一（§3.8：全场冻结，连升排队；广告刷新×1+钻石刷新×1） ---------- */
   private openPick(): void {
-    if (this.state !== 'running') return;
+    if (this.state !== 'running' || this.pendingWin || this.ultShowT > 0) return;
     this.state = 'pick';
     // §3.8：三选一 = 上阵英雄卡池混合 + 全局卡（未上阵英雄的卡不出现；首抽与刷新共用同一过滤池）
     const pool = M0_POOL.filter(c => c.owner === 'global' || this.heroes.some(h => h.id === c.owner));
@@ -309,7 +391,7 @@ export class BattleDirector extends Component {
         this.hud.sync(); // 选择解锁卡后立即刷新图标，即使后面还有排队三选一。
         this.state = 'running';
         if (this.pickQueue > 0) this.openPick();
-        else { this.panels.closeAll(); this.state = 'running'; }
+        else { this.panels.closeAll(true); this.state = 'running'; }
       },
       onRefreshRequest: () => {
         this.panels.showPick(draw3(pool, this.stacks), this.stacks, opts);
@@ -346,12 +428,11 @@ export class BattleDirector extends Component {
 
   /* ---------- 大招（手动，充能满可放；未满点图标→Tips） ---------- */
   tryCastUlt(idx = 0): 'ok' | 'charging' | 'locked' {
+    if (this.state !== 'running' || this.pendingWin) return 'charging';
     const h = this.heroes[idx];
     if (!h?.ultUnlocked) return 'locked';
     if (h && h.ultReady && h.castUlt(this.mgr, this.projs, this.dmgSvc)) {
-      // Sniper recoil belongs to the actual shot after its lock-on, not the tap.
-      if (h.id !== 'sniper') h.animateAttack(true);
-      this.impacts.cast(h.x, h.node.position.y + 24, h.id);
+      // Each hero owns its actual release cue; tapping starts only its windup.
       // 演出锁：大招期间三选一挂起（时长由各英雄自报），结束后再等 2s 缓冲补弹（用户要求：一结束就弹太突兀）
       this.ultShowT = Math.max(this.ultShowT, h.ultShowDuration + 2);
       return 'ok';
@@ -371,7 +452,7 @@ export class BattleDirector extends Component {
       this.state = 'paused';
       const sv = loadSave();
       this.panels.showPause({
-        onResume: () => { this.panels.closeAll(); this.state = 'running'; },
+        onResume: () => { this.panels.closeAll(true); this.state = 'running'; },
         onExit: () => this.exitBattle(),
         music: sv.music,
         sfx: sv.sfx,
@@ -382,7 +463,7 @@ export class BattleDirector extends Component {
         xp: Math.floor(this.xp),
       });
     } else if (this.state === 'paused') {
-      this.panels.closeAll();
+      this.panels.closeAll(true);
       this.state = 'running';
     }
   }
@@ -397,27 +478,31 @@ export class BattleDirector extends Component {
     this.panels.showTips(kind, hero, this.line, idx);
   }
 
-  /* ---------- 失败 → 失败结算（广告复活按钮与胜利双倍按钮同位 §3.9） ---------- */
+  /* ---------- 失败 → 复活留在本局，重试先回当前关卡页 ---------- */
   private onLineBroken(): void {
     if (this.state === 'win' || this.state === 'lose') return;
-    this.state = 'lose';
+    this.state = 'lose'; this.pendingWin = false;
+    this.bossWarning.clear();
+    this.ultPresentation.clear();
     Sfx.play('defeat');
-    const goldFloor = Math.floor(this.goldEarned * 0.3);
+    const goldFloor = Math.floor((this.levelDef.baseGold + this.goldEarned) * .3);
+    this.creditBattleGold(goldFloor);
+    const loot = this.loot.collectAll();
     this.panels.showLose({
       goldFloor,
+      loot,
       reviveRatio: REVIVE_RATIO,
-      xp: Math.floor(this.xp),
-      tab: 0,
+      xp: Math.floor(this.xpEarned),
       onRevive: (done: (ok: boolean) => void) => {
         AdService.showRewarded('revive', () => {
+          if (this.leaving || !isValid(this, true)) return;
           this.line.revive();
-          this.panels.closeAll();
+          this.panels.closeAll(true);
           this.state = 'running';
           done(true);
-        }, () => done(false));
+        }, () => { if (!this.leaving && isValid(this, true)) done(false); });
       },
       onRetry: () => this.exitBattle(),
-      onExit: () => this.exitBattle(),
     });
   }
 
@@ -437,13 +522,18 @@ export class BattleDirector extends Component {
 
   private onAllCleared(): void {
     if (this.state !== 'running') return;
+    if (this.ultimateActive) { this.pendingWin = true; return; }
+    this.pendingWin = false; this.ultPresentation.clear();
     this.state = 'win';
+    this.bossWarning.clear();
     Sfx.play('victory');
     const stars = starOf(this.line.ratio);
     const reward = Math.floor(this.goldEarned + this.levelDef.baseGold * (1 + stars * 0.1));
     const sv = loadSave();
-    sv.gold += reward;
-    const sk = starKey(this.levelDef.id, flow.diff);
+    this.creditBattleGold(reward);
+    const loot = this.loot.collectAll();
+    loot.materials = grantStageMaterials(this.levelDef);
+    const sk = starKey(this.levelDef.id, this.levelDef.difficulty);
     sv.stars[sk] = Math.max(sv.stars[sk] || 0, stars);
     if (this.levelDef.id === '1-2') sv.speedUnlocked = true;
     saveSave();
@@ -451,24 +541,24 @@ export class BattleDirector extends Component {
 
     this.panels.showWin({
       stars,
+      loot,
       gold: reward,
       ratio: this.line.ratio,
-      xp: Math.floor(this.xp),
-      tab: 0,
+      xp: Math.floor(this.xpEarned),
       onDouble: (done: (ok: boolean) => void) => {
         AdService.showRewarded('double', () => {
-          sv.gold += reward;
-          saveSave();
+          if (this.leaving || !isValid(this, true) || this.doubleRewarded) return;
+          this.doubleRewarded = true;
+          this.creditBattleGold(reward * 2);
           done(true);
-        }, () => done(false));
+        }, () => { if (!this.leaving && isValid(this, true)) done(false); });
       },
       onNext: () => {
         // 直进下一关（用户调整：不回主城）；无下一关回关卡页，同难度未解锁降回普通
         const nid = nextLevelId(this.levelDef.id);
         if (!nid) { this.exitBattle(); return; }
         const d = flow.diff > 0 && (loadSave().stars[starKey(nid, flow.diff - 1)] || 0) < 1 ? 0 : flow.diff;
-        flow.mode = 'battle'; flow.levelId = nid; flow.diff = d;
-        director.loadScene('Main');
+        this.changeScene('battle', nid, d);
       },
       onExit: () => this.exitBattle(),
     });
@@ -558,36 +648,63 @@ export class BattleDirector extends Component {
   }
 
   private exitBattle(): void {
-    flow.mode = 'main';   // 回主城（停留在关卡页）
-    director.loadScene('Main');
+    this.changeScene('main', this.levelDef.id, flow.diff);
+  }
+
+  /** Pay only the unpaid difference; UI rebuilds and repeated losses cannot mint the same reward twice. */
+  private creditBattleGold(total: number): void {
+    const target = Math.max(0, Math.floor(total)), amount = Math.max(0, target - this.goldSettled);
+    if (!amount) return;
+    loadSave().gold += amount;
+    this.goldSettled = target;
+    saveSave();
+  }
+
+  /** One pending navigation per battle, including settlement double taps. */
+  private changeScene(mode: 'main' | 'battle', levelId = flow.levelId, diff = flow.diff): void {
+    if (this.leaving || enteringBattle() || !isValid(this, true)) return;
+    this.loot.collectAll();
+    const previous = { ...flow };
+    this.leaving = true;
+    GameAudio.battleState('leaving');
+    flow.mode = mode; flow.levelId = levelId; flow.diff = diff;
+    if (mode === 'main') {
+      flow.mainTab = 2;
+      flow.levelReturn = { id: levelId, diff };
+    }
+    const failed = (error?: Error | null): void => {
+      if (!error || !isValid(this, true)) return;
+      Object.assign(flow, previous); this.leaving = false;
+      GameAudio.battleState(this.state);
+      this.hud.showBanner('切换失败，请重试', 2);
+      console.warn('[Battle] Scene navigation failed', error);
+    };
+    if (mode === 'main') {
+      leaveBattle(done => director.loadScene('Main', done),
+        () => failed(new Error('Scene return transition failed')));
+    } else if (!director.loadScene('Main', failed)) failed(new Error('Scene request rejected'));
   }
 }
 
 /** 伤害统计行透出（HUD/Panels 用） */
 export type { DamageRow };
 
-/** 穿戴词条 → 战斗属性（用户确认的部位归属）：攻击=平加+加成累乘，攻速/暴击/充能同理，范围平加 */
+/** 基础数值由 heroStats 聚合；这里仅补齐范围、暴击、充能等装备词条。 */
 function applyEquipAffixes(s: HeroStats, hid: string): void {
   const a = equipAgg(hid);
-  s.atk += a.atkFlat;
-  s.atkMul *= 1 + a.atkPct;
-  s.aspd *= 1 + a.atkSpd;
+  // 攻击、技能伤害和攻速已由 heroStats 聚合，避免装备被算两次。
   s.range += a.rangeFlat;
   s.critRate = Math.min(1, s.critRate + a.critRate);
   s.critMul += a.critDmg;
-  s.skillDmgFlat += a.skillDmgFlat;
   s.chargeEff += a.chargeEff;
 }
 
-/** 英雄等级成长（外线养成→战斗）：每级 +8% 基础攻击、技能伤害平加 +5%基础攻击/级；
- *  阶段性突破按英雄表生效（弓/狙专属表——用户定稿；其余英雄通用攻/技档） */
+/** 两项基础值沿用面板的定位成长、武器成长及装备聚合；机制突破在下方应用。 */
 function applyHeroGrowth(s: HeroStats, hid: string): void {
   const hs = heroState(hid);
   const bt = heroBtAgg(hid, hs.lv);
-  const base = s.atk;
-  s.atk = Math.round(base * (1 + (hs.lv - 1) * 0.08) * (1 + bt.atkPct));
-  s.skillDmgFlat += Math.round(base * (hs.lv - 1) * 0.05);
-  s.aspd *= 1 + bt.aspdPct;
+  const basis = heroStats(hid);
+  s.atk = basis.atk; s.skillDmg = basis.skillDmg; s.aspd = basis.atkSpd;
   s.range = Math.round(s.range * (1 + bt.rangePct));
   s.skillRange = Math.round(s.skillRange * (1 + bt.rangePct));
   s.pierceChance += bt.pierce;
@@ -599,7 +716,6 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
   if (hid === 'archer') {
     const ac = archerAtkCfg(hs.atkLv);
     s.normalMul = ac.normalMul;                       // 普攻伤害：每级+8%、20级再+20%（技能/大招不吃）
-    if (ac.aspdOn) s.aspd *= 1.06;                    // 5级 攻速+6%
     if (ac.critOn) s.critRate = Math.min(1, s.critRate + 0.05);   // 10级 暴击率+5%
     if (ac.rangeOn) s.range = Math.round(s.range * 1.08);   // 15级 普攻索敌范围+8%（技能索敌不动）
     if (hs.skillLv >= 5) s.skillCdFlat += 1;          // 技能5级 冷却-1s
@@ -607,7 +723,6 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
   } else if (hid === 'sniper') {
     const ac = sniperAtkCfg(hs.atkLv);
     s.normalMul = ac.normalMul;                       // 普攻伤害：每级+8%、20级再+20%
-    if (ac.aspdOn) s.aspd *= 1.06;                    // 5级 攻速+6%
     if (ac.critOn) s.critRate = Math.min(1, s.critRate + 0.05);   // 10级 暴击率+5%
     if (ac.fullHpOn) s.fullHpBonus = 0.25;            // 15级 对满血目标+25%
     if (hs.skillLv >= 5) s.skillCdFlat += 1;          // 技能5级 冷却-1s
@@ -616,7 +731,6 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
   } else if (hid === 'volt') {
     const ac = voltAtkCfg(hs.atkLv);
     s.normalMul = ac.normalMul;                       // 普攻伤害：每级+8%、20级再+20%
-    if (ac.aspdOn) s.aspd *= 1.06;                    // 5级 攻速+6%
     if (ac.critOn) s.critRate = Math.min(1, s.critRate + 0.05);   // 10级 暴击率+5%
     if (ac.shockedOn) s.shockedBonus = 0.25;          // 15级 对感电目标+25%
     const sc = voltSkCfg(hs.skillLv);
@@ -631,7 +745,6 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
   } else if (hid === 'pyro') {
     const ac = pyroAtkCfg(hs.atkLv);
     s.normalMul = ac.normalMul;                       // 普攻伤害：每级+8%、20级再+20%
-    if (ac.aspdOn) s.aspd *= 1.06;                    // 5级 攻速+6%
     if (ac.critOn) s.critRate = Math.min(1, s.critRate + 0.05);   // 10级 暴击率+5%
     if (ac.burnedOn) s.burnedBonus = 0.25;            // 15级 对灼烧目标+25%
     const pc = pyroSkCfg(hs.skillLv);
@@ -646,7 +759,6 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
   } else if (hid === 'mora') {
     const ac = moraAtkCfg(hs.atkLv);
     s.normalMul = ac.normalMul;                       // 普攻伤害：每级+8%、20级再+20%
-    if (ac.aspdOn) s.aspd *= 1.06;                    // 5级 攻速+6%
     if (ac.critOn) s.critRate = Math.min(1, s.critRate + 0.05);   // 10级 暴击率+5%
     if (ac.slowedOn) s.slowedBonus = 0.25;            // 15级 对减速目标+25%
     if (moraSkCfg(hs.skillLv).cdOn) s.skillCdFlat += 1;   // 技能5级 冷却-1s

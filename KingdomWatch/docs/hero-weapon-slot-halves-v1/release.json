@@ -1,0 +1,38 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-weapon-slot-halves-v1-20261016-155720",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-web-load-v1-20261016-141552",
+  "entryVersion": "1792137366",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-weapon-slot-halves-v1-1792137366",
+  "scope": "hero equipped weapon socket: equal left illustration and right centered name halves",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://4edecc76.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-hero-weapon-slot-halves-v1-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-hero-weapon-slot-halves-v1-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 15710,
+  "date": "2026-10-16T15:57:57.186514+08:00",
+  "mainBundleSha256": "49b83102d9b5a5548f1660c579c0715489bf5df28731a7d9224fe85df936913d",
+  "validation": {
+    "sourceReview": true,
+    "localBundleInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "testsRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  }
+}

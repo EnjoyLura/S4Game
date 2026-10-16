@@ -1,0 +1,585 @@
+--- before/assets/resources/fx/basic-launch-procedural.effect
++++ assets/resources/fx/basic-launch-procedural.effect
+@@ -65,7 +65,7 @@
+     return k0 * (k0 - 1.0) / max(k1, 0.001);
+   }
+   vec4 frag () {
+-    // The quad's origin is the actual projectile release point; +X follows its direction.
++    // The cosmetic origin is offset ahead of wind weapons; +X follows the shot direction.
+     vec2 p = (uv0 - vec2(0.25, 0.5)) * vec2(128.0, 96.0);
+     float t = clamp(launchState.x, 0.0, 1.0);
+     float mode = launchState.y;
+--- before/assets/resources/fx/mob-death.effect
++++ assets/resources/fx/mob-death.effect
+@@ -68,7 +68,7 @@
+     vec2 p = (local - 0.5) * (deathShape.xy + deathShape.zw * 2.0);
+     float t = max(0.0, deathState.x);
+     float progress = clamp(deathState.y, 0.0, 1.0);
+-    float open = smoothstep(0.0, 0.07, t);
++    float open = smoothstep(0.0, 0.055, t);
+     vec4 result = vec4(0.0);
+     // Six patches of the actual held cel in ONE expanded quad, no body rotation.
+     for (int i = 0; i < 6; i++) {
+@@ -78,15 +78,17 @@
+       float n = hash(vec2(id + 1.0, deathState.z));
+       float n2 = hash(vec2(deathState.z, id + 7.0));
+       vec2 radial = normalize(center / deathShape.xy + vec2(0.001));
+-      vec2 velocity = vec2(radial.x * (45.0 + n * 20.0), 32.0 + n2 * 40.0 + radial.y * 15.0);
+-      velocity += deathMotion.xy * 22.0 * deathState.w;
+-      vec2 travel = velocity * t;
+-      travel.y -= 300.0 * t * t;
+-      float angle = (n * 2.0 - 1.0) * t * 2.6;
++      // Fast initial separation, then a short deceleration. No whole-body fall.
++      float kick = 1.0 - exp(-t * 32.0);
++      vec2 travel = radial * (9.0 + n * 5.0) * kick * deathState.w;
++      travel += deathMotion.xy * (6.0 + n2 * 3.0) * kick * deathState.w;
++      travel += vec2(radial.x * 16.0, 18.0 + n2 * 24.0) * t;
++      travel.y -= 180.0 * t * t;
++      float angle = (n * 2.0 - 1.0) * (kick * 0.16 + t * 1.8);
+       float c = cos(angle), s = sin(angle);
+       vec2 relative = p - center - travel;
+       vec2 source = vec2(c * relative.x + s * relative.y, -s * relative.x + c * relative.y)
+-        / (1.0 - progress * 0.38) + center;
++        / (1.0 - smoothstep(0.25, 1.0, progress) * 0.38) + center;
+       vec2 q = source / deathShape.xy + 0.5;
+       float cutX = 0.5 + 0.065 * sin(q.y * 5.0 + deathState.z);
+       float cutA = 0.32 + 0.035 * sin(q.x * 7.0 + deathState.z * 1.3);
+@@ -105,7 +107,8 @@
+       } else if (deathStyle.a > 0.5 && deathStyle.a < 1.5) {
+         piece.rgb = mix(piece.rgb, vec3(light) * vec3(0.55, 0.32, 0.18), progress * 0.5);
+       }
+-      piece.a *= mask * pow(1.0 - progress, 1.15);
++      // Retain readable pieces through the snap, then clear them without a corpse.
++      piece.a *= mask * (1.0 - smoothstep(0.23, 1.0, progress));
+       result.rgb = piece.rgb * piece.a + result.rgb * (1.0 - piece.a);
+       result.a = piece.a + result.a * (1.0 - piece.a);
+     }
+--- before/assets/scripts/battle/ArcherVFX.ts
++++ assets/scripts/battle/ArcherVFX.ts
+@@ -193,7 +193,9 @@
+   }
+ 
+   release(x: number, y: number, dx: number, dy: number, heavy: boolean): boolean {
+-    return this.start(x, y, Math.atan2(dy, dx), heavy, true);
++    const length = Math.hypot(dx, dy);
++    if (!Number.isFinite(length) || length < .001) return false;
++    return this.start(x + dx / length * 36, y + dy / length * 36, Math.atan2(dy, dx), heavy, true);
+   }
+ 
+   hit(x: number, y: number, heavy: boolean, angle = Math.PI / 2): boolean {
+--- before/assets/scripts/battle/BasicAttackLaunchVFX.ts
++++ assets/scripts/battle/BasicAttackLaunchVFX.ts
+@@ -75,7 +75,11 @@
+     // Exhausting a cosmetic pool never blocks or changes a physical shot.
+     const a = this.free.pop();
+     if (!a) return;
+-    a.x = x; a.y = y; a.dx = dx / length; a.dy = dy / length;
++    a.dx = dx / length; a.dy = dy / length;
++    // Keep the pressure front ahead of the weapon, away from the head. Both
++    // shader and Graphics use this cosmetic origin; projectiles keep theirs.
++    const forward = hero === 'archer' ? 36 : hero === 'sniper' ? 42 : 0;
++    a.x = x + a.dx * forward; a.y = y + a.dy * forward;
+     a.age = 0; a.style = style; a.scale = style.scale * (empowered ? 1.12 : 1);
+     a.phase = (++this.serial * 2.399963) % (Math.PI * 2);
+     this.active.push(a);
+--- before/assets/scripts/battle/BattleDepth.ts
++++ assets/scripts/battle/BattleDepth.ts
+@@ -16,4 +16,5 @@
+ }
+ export function depthSprites(parent: Node): readonly DepthSprite[] { return sprites.get(parent) || []; }
+ export function setDepthSorter(parent: Node, sort: () => void): void { sorters.set(parent, sort); }
++export function clearDepthSorter(parent: Node): void { sorters.delete(parent); }
+ export function refreshDepth(parent: Node): void { if (parent.isValid) sorters.get(parent)?.(); }
+--- before/assets/scripts/battle/BattleDirector.ts
++++ assets/scripts/battle/BattleDirector.ts
+@@ -2,7 +2,7 @@
+  * 战斗总控（§3.2 状态机）：PREPARE → WAVE_RUNNING ⇄ LEVEL_UP_PAUSE → VICTORY / LINE_BROKEN→失败结算(内含广告复活)
+  * dt×倍速步进；暂停/三选一期间全场冻结（§3.2）
+  */
+-import { _decorator, Canvas, Component, director, Layers, Node } from 'cc';
++import { _decorator, Canvas, Component, director, isValid, Layers, Node } from 'cc';
+ import { LEVEL_1_1, LevelDef, MOBS, heroSlots, nextLevelId } from '../config/Mobs';
+ import { CardCtx, CardDef, CardStacks, canTakeCard, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, baseMoraStats, HeroStats, archerAtkCfg, sniperAtkCfg, sniperSkCfg, voltAtkCfg, voltSkCfg, voltUltCfg, pyroAtkCfg, pyroSkCfg, pyroUltCfg, moraAtkCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+ import { LO, REVIVE_RATIO, starOf } from '../config/GameConfig';
+@@ -73,6 +73,7 @@
+   private ambience!: BattleAmbience;
+   private ultPresentation!: UltimatePresentation;
+   private pendingWin = false;
++  private leaving = false;
+ 
+   global: GlobalStats = { xpMul: 1, goldMul: 1, lineRegenPct: 0 };
+   stacks: CardStacks = {};
+@@ -186,7 +187,7 @@
+   }
+ 
+   onDestroy(): void {
+-    this.mgr?.destroy();
++    this.leaving = true;
+     bus.off(EVT.MOB_KILLED, this.onMobKilled, this);
+     bus.off(EVT.LINE_BROKEN, this.onLineBroken, this);
+     bus.off(EVT.ALL_WAVES_CLEARED, this.onAllCleared, this);
+@@ -195,6 +196,7 @@
+     bus.off(EVT.HIT_STOP, this.onHitStop, this);
+     bus.off(EVT.ULTIMATE_BEGIN, this.onUltimateBegin, this);
+     bus.off(EVT.ULTIMATE_BEAT, this.onUltimateBeat, this);
++    this.mgr?.destroy();
+     this.ultPresentation?.clear();
+   }
+ 
+@@ -225,6 +227,7 @@
+   }
+ 
+   update(rawDt: number): void {
++    if (this.leaving) return;
+     // Prepare countdown and combat begin only after the full-screen flags have cleared.
+     if (enteringBattle()) return;
+     GameAudio.battleState(this.state);
+@@ -297,7 +300,6 @@
+   private onMobKilled(def: unknown, killerId: unknown): void {
+     const d = def as { gold: number; exp: number; charge: number };
+     this.goldEarned += d.gold * this.global.goldMul;
+-    Sfx.play('kill');
+     const killer = this.heroes.find(h => h.id === killerId);
+     if (killer) killer.chargeKill(d.charge * (1 + (killer.stats.chargeEff || 0)));   // 充能效率：击杀充能加成（呼吸回能不受加成）
+     this.gainXp(d.exp * this.global.xpMul);
+@@ -444,13 +446,14 @@
+       tab: 0,
+       onRevive: (done: (ok: boolean) => void) => {
+         AdService.showRewarded('revive', () => {
++          if (this.leaving || !isValid(this, true)) return;
+           this.line.revive();
+           this.panels.closeAll(true);
+           this.state = 'running';
+           done(true);
+-        }, () => done(false));
++        }, () => { if (!this.leaving && isValid(this, true)) done(false); });
+       },
+-      onRetry: () => this.exitBattle(),
++      onRetry: () => this.changeScene('battle', this.levelDef.id, flow.diff),
+       onExit: () => this.exitBattle(),
+     });
+   }
+@@ -493,18 +496,18 @@
+       tab: 0,
+       onDouble: (done: (ok: boolean) => void) => {
+         AdService.showRewarded('double', () => {
++          if (this.leaving || !isValid(this, true)) return;
+           sv.gold += reward;
+           saveSave();
+           done(true);
+-        }, () => done(false));
++        }, () => { if (!this.leaving && isValid(this, true)) done(false); });
+       },
+       onNext: () => {
+         // 直进下一关（用户调整：不回主城）；无下一关回关卡页，同难度未解锁降回普通
+         const nid = nextLevelId(this.levelDef.id);
+         if (!nid) { this.exitBattle(); return; }
+         const d = flow.diff > 0 && (loadSave().stars[starKey(nid, flow.diff - 1)] || 0) < 1 ? 0 : flow.diff;
+-        flow.mode = 'battle'; flow.levelId = nid; flow.diff = d;
+-        director.loadScene('Main');
++        this.changeScene('battle', nid, d);
+       },
+       onExit: () => this.exitBattle(),
+     });
+@@ -594,8 +597,24 @@
+   }
+ 
+   private exitBattle(): void {
+-    flow.mode = 'main';   // 回主城（停留在关卡页）
+-    director.loadScene('Main');
++    this.changeScene('main');
++  }
++
++  /** One pending navigation per battle, including settlement double taps. */
++  private changeScene(mode: 'main' | 'battle', levelId = flow.levelId, diff = flow.diff): void {
++    if (this.leaving || !isValid(this, true)) return;
++    const previous = { mode: flow.mode, levelId: flow.levelId, diff: flow.diff };
++    this.leaving = true;
++    GameAudio.battleState('leaving');
++    flow.mode = mode; flow.levelId = levelId; flow.diff = diff;
++    const failed = (error?: Error | null): void => {
++      if (!error || !isValid(this, true)) return;
++      Object.assign(flow, previous); this.leaving = false;
++      GameAudio.battleState(this.state);
++      this.hud.showBanner('切换失败，请重试', 2);
++      console.warn('[Battle] Scene navigation failed', error);
++    };
++    if (!director.loadScene('Main', failed)) failed(new Error('Scene request rejected'));
+   }
+ }
+ 
+--- before/assets/scripts/battle/FrostUltimateVFX.ts
++++ assets/scripts/battle/FrostUltimateVFX.ts
+@@ -88,13 +88,13 @@
+         if (p.sprite.isValid) p.sprite.spriteFrame = null;
+       }
+       for (const d of this.drops) if (d.part.sprite.isValid) d.part.sprite.spriteFrame = null;
+-      for (const d of this.drops) if (d.part.node.isValid) d.part.node.destroy();
++      // Rain nodes remain owned by MobLayer/rainRoot during scene teardown.
+       for (const p of this.chips) if (p.sprite.isValid) p.sprite.spriteFrame = null;
+       this.ownedFrames.forEach(f => f.destroy()); this.ownedFrames.length = 0;
+       this.sources.forEach(f => f.decRef()); this.sources.length = 0;
+       this.backFrames.length = this.frontFrames.length = this.frameEnds.length = 0;
+       this.rainFrame = this.chipFrame = null; this.atlas = null;
+-      if (this.groundRoot.isValid) this.groundRoot.destroy();
++      // GroundFxLayer owns groundRoot and already tears it down with the scene.
+     });
+     this.loadImpact(); this.loadRain();
+   }
+--- before/assets/scripts/battle/Hero.ts
++++ assets/scripts/battle/Hero.ts
+@@ -483,7 +483,7 @@
+     const flash = new Node('bowFlash');
+     flash.layer = Layers.Enum.UI_2D;
+     flash.setParent(this.node.parent!);
+-    flash.setPosition(this.x, HERO_Y + 60, 0);
++    flash.setPosition(this.x + dx * 36, HERO_Y + 60 + dy * 36, 0);
+     const g = flash.addComponent(Graphics);
+     g.strokeColor = hexc(emp ? PAL.gold : '#FFF3D6');
+     g.lineWidth = 2.5;
+--- before/assets/scripts/battle/Monster.ts
++++ assets/scripts/battle/Monster.ts
+@@ -2,15 +2,16 @@
+  * 怪物（§3.4 行为：松散虫群下行 + 正弦游动 + 自动分离；近战贴线攻击 / 远程停位投掷 / 萨满周期治疗）
+  * 受击只闪红不掉速（用户确认：控制效果只属于特定 buff）；仅 BOSS 显示血条（M0 1-1 无 BOSS，钩子保留）
+  */
+-import { Color, Graphics, Label, Layers, Node, Tween, UIOpacity } from 'cc';
++import { Color, Graphics, isValid, Label, Layers, Node, Tween, UIOpacity } from 'cc';
+ import { MOB_DMG_MUL, MOB_HP_MUL, MobDef } from '../config/Mobs';
+ import { LINE_Y, PAL, SPAWN_Y } from '../config/GameConfig';
+ import { bus, EVT } from '../core/EventBus';
++import { Sfx } from '../core/Sfx';
+ import { BattleSprite } from './BattleSprite';
+ import { FloatEvent } from './FloatText';
+ import { getMobAnims, MobClip } from './MobAnim';
+ import { drawFootIce } from './FrostVFX';
+-import { DepthSprite, depthSprites, setDepthSorter } from './BattleDepth';
++import { clearDepthSorter, DepthSprite, depthSprites, setDepthSorter } from './BattleDepth';
+ import { MonsterDeath, warmMonsterDeath } from './MonsterDeath';
+ 
+ /** 攻击序列帧一次性时长（s）：与 lunge 0.2s 前摇错开，收招略长观感更实 */
+@@ -464,6 +465,7 @@
+       killer: killerId, angle, heavy, force: Math.min(1.5, amount / this.maxHp),
+       elite: !!this.def.elite, boss: this.isBoss, frozen: this.freezeT > 0,
+     });
++    if (killerId !== 'gm') Sfx.death(killerId, this.freezeT > 0, heavy || !!this.def.elite || this.isBoss);
+     this.flashT = this.lungeT = this.atkAnimT = 0;
+     this.freezeT = this.thawT = this.slowT = this.stunT = this.burnT = this.shockT = 0;
+     this.footLeftWeight = this.footRightWeight = 0;
+@@ -519,6 +521,7 @@
+   private shadows: Graphics;
+   private iceFeet: Graphics;
+   private hunterMarks: Graphics;
++  private disposed = false;
+   private groundShadowColor = new Color(30, 24, 16, 38);
+   private footShadowColor = new Color(26, 20, 13, 100);
+ 
+@@ -548,6 +551,7 @@
+   private seen = new Set<string>();
+ 
+   spawn(def: MobDef): boolean {
++    if (this.disposed) return false;
+     if (this.aliveCount >= 60) return false; // Corpses do not consume living-enemy capacity.
+     def = {
+       ...def,
+@@ -563,6 +567,7 @@
+ 
+   /** Called only when the simulation-clock death presentation has completed. */
+   recycleMob(m: Monster): void {
++    if (this.disposed) return;
+     const i = this.list.indexOf(m);
+     if (i >= 0) this.list.splice(i, 1);
+     const d = this.dying.indexOf(m);
+@@ -572,14 +577,18 @@
+   }
+ 
+   destroy(): void {
+-    // Detached pooled nodes otherwise outlive the scene, along with their materials.
+-    const all = new Set([...this.list, ...this.dying, ...this.pool]);
++    if (this.disposed) return;
++    this.disposed = true;
++    clearDepthSorter(this.field);
++    // Cocos destroys child nodes before BattleDirector.onDestroy. Only detached
++    // pool entries belong to this cleanup; the scene owns actors and Graphics.
++    for (const m of this.pool) if (isValid(m.node, true) && !m.node.parent) m.node.destroy();
+     this.list.length = this.dying.length = this.pool.length = this.depthOrder.length = 0;
+-    for (const m of all) if (m.node.isValid) m.node.destroy();
+-    if (this.hunterMarks.node.isValid) this.hunterMarks.node.destroy();
++    this.seen.clear(); this.onFirstEncounter = null;
+   }
+ 
+   refreshHunterMarks(): void {
++    if (this.disposed || !isValid(this.hunterMarks, true)) return;
+     this.hunterMarks.clear();
+     for (const m of this.list) m.drawHunterMark(this.hunterMarks);
+   }
+@@ -705,6 +714,7 @@
+   }
+ 
+   tick(dt: number, line: { takeDamage: (d: number) => void }): void {
++    if (this.disposed) return;
+     this.advanceDeaths(dt);
+     for (const m of this.list) m.tick(dt, line, this);
+     // 自动分离（简单排斥半径，§3.1）：隔帧执行减半开销，视觉无感
+@@ -804,6 +814,7 @@
+   /** Falling ice is ordered by its fixed ground footprint, not its airborne
+    * screen position. Nearby bodies can naturally occlude a farther needle. */
+   private sortDepth(): void {
++    if (this.disposed) return;
+     if (!this.field.isValid) return;
+     this.depthOrder.length = 0;
+     for (const m of this.list) this.depthOrder.push(m);
+--- before/assets/scripts/battle/MonsterDeath.ts
++++ assets/scripts/battle/MonsterDeath.ts
+@@ -13,7 +13,7 @@
+ const smooth = (v: number): number => { const t = limit(v); return t * t * (3 - 2 * t); };
+ const noise = (seed: number): number => { const n = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return n - Math.floor(n); };
+ const PALETTES: Record<DeathElement, readonly [number, number, number, number]> = {
+-  physical: [0.45, 0.57, 0.20, 0], fire: [1, 0.41, 0.10, 1],
++  physical: [0.78, 0.66, 0.43, 0], fire: [1, 0.41, 0.10, 1],
+   volt: [0.64, 0.51, 0.91, 2], frost: [0.48, 0.82, 0.96, 3],
+ };
+ export function warmMonsterDeath(): void {
+@@ -92,13 +92,13 @@
+     this.footX = this.root.position.x;
+     this.footY = this.root.position.y - radius * 0.82 + this.height * groundOffset;
+     this.bodyX = this.footX; this.bodyY = this.footY + this.height * 0.36;
+-    this.heavy = hit.heavy;
++    this.heavy = hit.heavy || hit.elite || hit.boss;
+     this.element = hit.killer === 'pyro' || hit.killer === 'burn' ? 'fire'
+       : hit.killer === 'mora' || hit.frozen ? 'frost' : hit.killer === 'volt' ? 'volt' : 'physical';
+     const angle = hit.angle ?? Math.PI / 2;
+     this.dx = Math.cos(angle); this.dy = Math.sin(angle);
+-    this.force = (hit.heavy ? 1.15 : 0.9) * (1 + Math.min(0.5, hit.force) * 0.15);
+-    this.holdAt = hit.heavy || hit.elite || hit.boss ? 0.035 : 0.025;
++    this.force = (this.heavy ? 1.15 : 1) * (1 + Math.min(0.5, hit.force) * 0.15);
++    this.holdAt = this.heavy ? 0.030 : 0.020;
+     this.burstDuration = hit.boss ? 0.24 : hit.elite ? 0.22 : 0.19;
+     this.total = this.holdAt + Math.max(this.burstDuration, this.element === 'fire' ? 0.37 : 0.32);
+     this.hasArt = this.art.loaded && !!this.art.sprite.spriteFrame;
+@@ -107,7 +107,7 @@
+     this.art.freezePose(); this.art.setDeathMaterial(null); this.art.cold(null); this.art.tint(Color.WHITE);
+     if (this.hasArt) {
+       const sf = this.art.sprite.spriteFrame!, uv = sf.uv;
+-      const w = this.height * sf.rect.width / sf.rect.height, pad = Math.min(38, radius * 1.35);
++      const w = this.height * sf.rect.width / sf.rect.height, pad = Math.min(48, radius * 1.75);
+       this.rect.set(uv[0], uv[1], uv[2] - uv[0], uv[5] - uv[1]);
+       this.shape.set(w, this.height, pad, pad);
+       this.burst.spriteFrame = sf;
+@@ -164,15 +164,16 @@
+   }
+   drawAir(g: Graphics): void {
+     if (!this.active) return;
++    this.drawSnap(g);
+     if (this.element === 'volt') this.drawElectric(g);
+-    const count = this.element === 'fire' || this.element === 'frost' ? 7 : this.heavy ? 6 : 4;
++    const count = this.heavy ? 10 : 8;
+     for (let i = 0; i < count; i++) {
+       const n = noise(this.seed + i * 3.17), n2 = noise(this.seed + i * 7.13 + 3);
+       const time = this.age - this.holdAt - n * 0.025;
+       const life = this.element === 'fire' ? 0.25 + n * 0.09 : 0.22 + n * 0.07;
+       if (time < 0 || time > life) continue;
+       const t = time / life, fade = Math.pow(1 - t, 1.3) * Math.min(1, time / 0.015);
+-      const vx = (n - 0.5) * 120 + this.dx * 23 * this.force, vy = 35 + n2 * 65 + this.dy * 10;
++      const vx = (n - 0.5) * 185 + this.dx * 42 * this.force, vy = 45 + n2 * 80 + this.dy * 16;
+       const x = this.bodyX + (n2 - 0.5) * this.radius * 0.6 + vx * time;
+       const y = this.bodyY - this.height * 0.15 + vy * time - (this.element === 'fire' ? 25 : 340) * time * time;
+       const r = (this.element === 'frost' ? 1.7 + n * 2.1 : 1.2 + n * 1.5) * (1 - t * 0.4);
+@@ -187,9 +188,27 @@
+         this.fill(g, 255, 129 + n * 65, 48, 225 * fade);
+         g.ellipse(x, y, r * 0.55, r * 1.25); g.fill();
+       } else {
+-        this.fill(g, 48, 62, 29, 210 * fade); g.ellipse(x, y, r * 1.15, r * 0.8); g.fill();
+-        this.fill(g, 105, 131, 46, 180 * fade); g.ellipse(x - r * 0.2, y + r * 0.15, r * 0.65, r * 0.45); g.fill();
++        this.fill(g, 86, 68, 49, 215 * fade);
++        g.moveTo(x - r, y - r * .5); g.lineTo(x + r * .8, y - r * .6);
++        g.lineTo(x + r, y + r * .5); g.lineTo(x - r * .5, y + r * .8); g.close(); g.fill();
++        this.fill(g, 206, 177, 124, 185 * fade);
++        g.ellipse(x - r * .2, y + r * .2, r * .65, r * .25); g.fill();
+       }
++    }
++  }
++  /** Six tapered airborne accents punctuate the split, never a ground stain or body flash. */
++  private drawSnap(g: Graphics): void {
++    const time = this.age - this.holdAt;
++    if (time < 0 || time > .105) return;
++    const t = time / .105, p = PALETTES[this.element];
++    this.fill(g, p[0] * 255, p[1] * 255, p[2] * 255, 195 * (1 - t) * Math.min(1, time / .012));
++    for (let i = 0; i < 6; i++) {
++      const a = i * Math.PI / 3 + this.seed, ux = Math.cos(a), uy = Math.sin(a);
++      const r = this.radius * (.35 + t * .7), length = (this.heavy ? 13 : 9) * (1 - t * .45);
++      const x = this.bodyX + ux * r + this.dx * t * 7, y = this.bodyY + uy * r * .8 + this.dy * t * 7;
++      g.moveTo(x + ux * length, y + uy * length);
++      g.lineTo(x - uy * 1.1, y + ux * 1.1);
++      g.lineTo(x - ux * 2, y - uy * 2); g.close(); g.fill();
+     }
+   }
+   private drawElectric(g: Graphics): void {
+--- before/assets/scripts/battle/SniperUltimateVFX.ts
++++ assets/scripts/battle/SniperUltimateVFX.ts
+@@ -102,7 +102,7 @@
+     this.root.once(Node.EventType.NODE_DESTROYED, () => {
+       this.destroyed = true;
+       for (const q of this.all) { if (q.sprite.isValid) q.sprite.spriteFrame = null; q.material?.destroy(); }
+-      if (this.flightRoot.isValid) this.flightRoot.destroy();
++      // ProjLayer owns flightRoot; never schedule a second scene-child teardown.
+       this.carrier.destroy(); this.texture.destroy();
+       this.active.length = this.free.length = this.all.length = this.flights.length = 0;
+     });
+--- before/assets/scripts/battle/VoltUltimateVFX.ts
++++ assets/scripts/battle/VoltUltimateVFX.ts
+@@ -69,7 +69,7 @@
+         q.material?.destroy();
+       }
+       this.active.length = this.free.length = this.all.length = 0;
+-      if (this.floorRoot.isValid) this.floorRoot.destroy();
++      // GroundFxLayer owns floorRoot and destroys it before this sky layer.
+       this.carrier.destroy(); this.texture.destroy();
+     });
+   }
+--- before/assets/scripts/core/AudioCatalog.ts
++++ assets/scripts/core/AudioCatalog.ts
+@@ -1,5 +1,6 @@
+ /** Sample families share a mix budget; variants keep repeated volleys from sounding identical. */
+ const combat = (...files: string[]): readonly string[] => files.map(file => 'v2/' + file);
++const deaths = (kind: string): readonly string[] => [1, 2, 3].map(i => `death-v3/${kind}_${i}`);
+ export const AUDIO_CUES = {
+   shoot: { files: combat('bow_1', 'bow_2', 'bow_3'), gain: .9, gap: .07, group: 'shot', priority: 1 },
+   bow: { files: combat('bow_1', 'bow_2', 'bow_3'), gain: .9, gap: .07, group: 'shot', priority: 1 },
+@@ -17,7 +18,11 @@
+   thunderHeavy: { files: combat('thunder_heavy'), gain: .82, gap: .10, group: 'impact', priority: 2 },
+   frostHeavy: { files: combat('frost_heavy'), gain: .82, gap: .16, group: 'impact', priority: 2 },
+   crit: { files: combat('crit'), gain: .83, gap: .13, group: 'impact', priority: 2 },
+-  kill: { files: combat('kill'), gain: .45, gap: .24, group: 'impact', priority: 0 },
++  kill: { files: deaths('physical'), gain: .88, gap: .075, group: 'death', priority: 2 },
++  deathFire: { files: deaths('fire'), gain: .86, gap: .075, group: 'death', priority: 2 },
++  deathVolt: { files: deaths('volt'), gain: .84, gap: .075, group: 'death', priority: 2 },
++  deathFrost: { files: deaths('frost'), gain: .86, gap: .075, group: 'death', priority: 2 },
++  deathHeavy: { files: deaths('heavy'), gain: .92, gap: .10, group: 'death', priority: 2 },
+   wall: { files: combat('wall'), gain: .9, gap: .25, group: 'impact', priority: 2 },
+   snipe: { files: combat('snipe'), gain: .96, gap: .18, group: 'cast', priority: 3 },
+   skill: { files: combat('skill'), gain: .9, gap: .18, group: 'cast', priority: 2 },
+--- before/assets/scripts/core/GameAudio.ts
++++ assets/scripts/core/GameAudio.ts
+@@ -64,7 +64,7 @@
+     if (this.state === state) return;
+     this.state = state;
+     if (state !== 'running' && state !== 'prepare') {
+-      this.stopVoices(true); this.duckUntil = 0; this.duckGain = 1;
++      this.stopVoices(true, state === 'win' || state === 'lose'); this.duckUntil = 0; this.duckGain = 1;
+       if (this.duckTimer !== null) { clearTimeout(this.duckTimer); this.duckTimer = null; }
+     }
+     this.musicLevel();
+@@ -92,14 +92,21 @@
+     this.play(names[hero] || 'skill', { preparing: true, gain: .34, rate: .78,
+       fadeIn: .13, duration: seconds, lowpass: 1800 });
+   }
++  /** A separate two-voice budget keeps kills legible without a crowd of screams. */
++  death(element: 'physical' | 'fire' | 'volt' | 'frost', heavy: boolean): void {
++    const names: Record<string, SfxName> = { fire: 'deathFire', volt: 'deathVolt', frost: 'deathFrost' };
++    this.play(names[element] || (heavy ? 'deathHeavy' : 'kill'), {
++      rate: heavy ? .94 : 1, gain: heavy && element !== 'physical' ? 1.08 : 1,
++    });
++  }
+   play(name: SfxName, shape: PlaybackShape = {}): void {
+     if (!this.sfxEnabled || loadSave().sfx === false || typeof document === 'undefined' || document.hidden) return;
+     const cue = AUDIO_CUES[name], now = performance.now() / 1000;
+-    const combat = cue.group === 'shot' || cue.group === 'impact' || cue.group === 'cast';
++    const combat = cue.group === 'shot' || cue.group === 'impact' || cue.group === 'cast' || cue.group === 'death';
+     if (this.scene === 'battle' && combat && this.state !== 'running' && this.state !== 'prepare') return;
+     if (now - (this.lastAt[name] ?? -100) < cue.gap) return;
+     // Simultaneous heroes must all speak. Only repetitive minor contacts share a gap.
+-    const groupGap = cue.group === 'impact' && cue.priority < 2 ? .045 : cue.group === 'ui' ? .035 : 0;
++    const groupGap = cue.group === 'death' ? .075 : cue.group === 'impact' && cue.priority < 2 ? .045 : cue.group === 'ui' ? .035 : 0;
+     if (now - (this.lastGroup[cue.group] ?? -100) < groupGap) return;
+     const available = cue.files.filter(file => this.buffers.has(file));
+     if (!available.length || !this.ctx || this.ctx.state !== 'running') {
+@@ -113,7 +120,7 @@
+     const family = this.voices.filter(v => v.name === name);
+     if (combat && family.length >= 2) this.stopVoice(family[0]);
+     const group = this.voices.filter(v => v.group === cue.group);
+-    const groupLimit = cue.group === 'shot' ? 7 : cue.group === 'impact' ? 4 : cue.group === 'cast' ? 3 : 6;
++    const groupLimit = cue.group === 'death' ? 2 : cue.group === 'shot' ? 7 : cue.group === 'impact' ? 4 : cue.group === 'cast' ? 3 : 6;
+     if (group.length >= groupLimit) {
+       const victim = group.filter(v => v.priority <= cue.priority).sort((a, b) => a.priority - b.priority || a.started - b.started)[0];
+       if (!victim) return;
+@@ -132,7 +139,7 @@
+     }
+     const source = this.ctx.createBufferSource(), gain = this.ctx.createGain();
+     source.buffer = buffer;
+-    const vary = cue.group === 'shot' || cue.group === 'impact';
++    const vary = cue.group === 'shot' || cue.group === 'impact' || cue.group === 'death';
+     const rate = 'rate' in cue ? cue.rate : 1;
+     source.playbackRate.value = rate * (shape.rate ?? 1) * (vary ? .9875 + Math.random() * .025 : 1);
+     const recent = combat ? this.voices.filter(v => v.group === cue.group && now - v.started < .12).length : 0;
+@@ -242,6 +249,7 @@
+     this.warming = true;
+     // Prepare small UI/cues before interaction; bounded fetch/decode avoids a mobile CPU spike.
+     const files = Array.from(new Set(['ui_click_1', 'ui_confirm', AUDIO_CUES.bow.files[0], AUDIO_CUES.crossbow.files[0],
++      AUDIO_CUES.kill.files[0], AUDIO_CUES.deathFire.files[0], AUDIO_CUES.deathVolt.files[0], AUDIO_CUES.deathFrost.files[0],
+       'levelup', 'victory', 'defeat', ...Object.values(AUDIO_CUES).flatMap(cue => [...cue.files])]));
+     let next = 0;
+     const worker = async (): Promise<void> => {
+@@ -310,9 +318,11 @@
+     try { voice.source.stop(this.ctx!.currentTime + .02); } catch { /* Already stopped. */ }
+   }
+ 
+-  private stopVoices(combatOnly = false): void {
++  private stopVoices(combatOnly = false, keepDeathTail = false): void {
+     for (const voice of [...this.voices]) {
+-      if (!combatOnly || voice.group === 'shot' || voice.group === 'impact' || voice.group === 'cast') this.stopVoice(voice);
++      // Let the final kill's sub-260ms finish survive settlement, but never navigation/pause.
++      if (keepDeathTail && voice.group === 'death') continue;
++      if (!combatOnly || voice.group === 'shot' || voice.group === 'impact' || voice.group === 'cast' || voice.group === 'death') this.stopVoice(voice);
+     }
+   }
+ 
+--- before/assets/scripts/core/Sfx.ts
++++ assets/scripts/core/Sfx.ts
+@@ -13,6 +13,11 @@
+   prepareUltimate(heroId: string, seconds: number): void { GameAudio.prepareUltimate(heroId, seconds); },
+   play(name: SfxName): void { GameAudio.play(name); },
+   shoot(heroId: string): void { GameAudio.play(SHOTS[heroId] || 'shoot'); },
++  death(heroId: string, frozen = false, heavy = false): void {
++    const element = heroId === 'pyro' || heroId === 'burn' ? 'fire'
++      : heroId === 'mora' || frozen ? 'frost' : heroId === 'volt' ? 'volt' : 'physical';
++    GameAudio.death(element, heavy);
++  },
+   cast(heroId: string, ultimate = false): void {
+     GameAudio.play(ultimate ? ULTIMATES[heroId] || 'ult' : SKILLS[heroId] || 'skill');
+   },
+--- before/assets/scripts/ui/PickMotion.ts
++++ assets/scripts/ui/PickMotion.ts
+@@ -1,5 +1,5 @@
+ /** Original paper-card choreography. One clock owns layout; card artwork stays opaque. */
+-import { _decorator, Color, Component, game, Game, Graphics, Node, Vec3 } from 'cc';
++import { _decorator, Color, Component, game, Game, Graphics, isValid, Node, Vec3 } from 'cc';
+ import { reducedMotion } from './UIMotion';
+ import { uiSound } from './UIAudio';
+ 
+@@ -146,7 +146,9 @@
+   }
+   private releasePrevious(): void {
+     const previous = this.previous; this.previous = null;
+-    if (previous?.node.isValid) { previous.node.active = false; previous.node.destroy(); }
++    if (isValid(previous, true) && isValid(previous!.node, true)) {
++      previous!.node.active = false; previous!.node.destroy();
++    }
+   }
+   private hide = (): void => { this.backgrounded = true; };
+   private show = (): void => { this.backgrounded = false; };
+--- before/build-templates/web-mobile/audio-credits.html
++++ build-templates/web-mobile/audio-credits.html
+@@ -24,4 +24,12 @@
+ https://kenney.nl/assets/impact-sounds
+ Additional modifications: transient selection, low-mid body layering, pitch, band limiting, resonance reduction, short shaped envelopes, family-level mixing.
+ Original recordings and complete per-file edit recipes: docs/combat-audio-v2.
+-</pre><p><a href="javascript:history.back()">返回游戏</a></p></html>+
++Monster death audio v3
++Short body/rupture accents and fire, ice, electricity finishes, with three variations each.
++Sources: Kenney Impact Sounds &amp; RPG Audio (CC0), rubberduck RPG audio (CC0),
++Iwan 'qubodup' Gabovitch Ice &amp; Electricity Magic (CC-BY-3.0, links above).
++Additional modifications: transient editing, filtering, resonance reduction, pitch,
++layering and short decay envelopes. No long screams or synthesized tones.
++Exact source hashes and per-file recipes: docs/battle-exit-death-v3/audio-assets.json.
++</pre><p><a href="javascript:history.back()">返回游戏</a></p></html>

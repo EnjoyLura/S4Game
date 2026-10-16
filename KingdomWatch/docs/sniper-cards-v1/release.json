@@ -1,0 +1,91 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-sniper-cards-v1-20261015-211959",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-archer-cards-v1-20261015-205719",
+  "entryVersion": "1792070276",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=sniper-cards-v1-1792070276",
+  "scope": "sniper card rarities, skill range and piercing, 30 percent ultimate vulnerability with overhead red reticle, three generated icons",
+  "layoutChanged": false,
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "rarities": {
+    "white": [
+      "heavy_head",
+      "fast_load"
+    ],
+    "blue": [
+      "steady_rest",
+      "lethal_aim",
+      "execute",
+      "instinct_s",
+      "cd_cut",
+      "sniper_range"
+    ],
+    "purple": [
+      "multi_lock",
+      "fast_charge_s",
+      "sniper_pierce"
+    ],
+    "gold": [
+      "sniper_unlock_ult",
+      "sniper_unlock_skill",
+      "extra_line",
+      "sniper_mark"
+    ]
+  },
+  "newCards": {
+    "sniper_range": {
+      "name": "远距校准",
+      "effect": "skill acquisition range * 1.3",
+      "maxStacks": 3,
+      "requires": "sniper_unlock_skill"
+    },
+    "sniper_pierce": {
+      "name": "贯颅弩矢",
+      "effect": "skill bolt pierces one additional target",
+      "maxStacks": 3,
+      "requires": "sniper_unlock_skill"
+    },
+    "sniper_mark": {
+      "name": "死亡准星",
+      "effect": "ultimate hit applies 30% vulnerability for 5 seconds with overhead red reticle",
+      "maxStacks": 1,
+      "requires": "sniper_unlock_ult"
+    }
+  },
+  "mark30PercentConfirmedByUser": true,
+  "markAppliesAfterUltimateHit": true,
+  "markAffectsAllIncomingDamage": true,
+  "markAndCraterHaveIndependentTimers": true,
+  "sameCategoryVulnerabilityUsesStrongestNotMultiplication": true,
+  "markStacksWithLevel10ByTakingMax": true,
+  "markRenderer": "one shared Graphics under floating text parent; battle simulation clock; immediate apply/death cleanup; pool reset",
+  "executeAndInstinctApplyToNormalSkillUltimate": true,
+  "executeIncludesBossWithoutEliteFlag": true,
+  "sharedNumericCardsPreserved": true,
+  "archerCardsPreserved": true,
+  "voltVfxPreserved": true,
+  "heroMediaChanged": false,
+  "audioChanged": false,
+  "newArtMode": "built-in image_gen; 3 separate generated circular PNGs; alpha and original pixels preserved",
+  "artManifest": "art-manifest.json",
+  "completePrompts": "image-prompts.json",
+  "gameplayValidation": "user manual; no tests, simulations, browser, game or online acceptance run",
+  "deployment": "https://a3b466ac.kingdom-watch.pages.dev",
+  "date": "2026-10-15T21:20:45.083828+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-sniper-cards-v1-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-sniper-cards-v1-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "sniper card rarities, skill range and piercing, 30 percent ultimate vulnerability with overhead red reticle, three generated icons",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 10338,
+  "deploymentSucceeded": true,
+  "uploadedFiles": 10,
+  "cachedFiles": 1882
+}

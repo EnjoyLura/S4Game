@@ -1,0 +1,108 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-archer-cards-v1-20261015-205719",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-volt-vfx-enhance-v1-20261015-204232",
+  "entryVersion": "1792069024",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=archer-cards-v1-1792069024",
+  "scope": "archer four-rarity cards, attack tradeoffs, five-stack serial and fan, shared per-hero numeric cards",
+  "layoutChanged": false,
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "archerRarities": {
+    "white": [
+      "sharp",
+      "swift"
+    ],
+    "blue": [
+      "crit_rate",
+      "crit_dmg",
+      "serial",
+      "fan",
+      "instinct_a"
+    ],
+    "purple": [
+      "fast_charge_a",
+      "split",
+      "explode",
+      "frost",
+      "burn",
+      "explode_r",
+      "explode_w"
+    ],
+    "gold": [
+      "archer_unlock_ult",
+      "archer_unlock_skill",
+      "rain_rounds"
+    ]
+  },
+  "sharedNumericCards": {
+    "heroes": [
+      "archer",
+      "sniper",
+      "pyro",
+      "volt",
+      "mora"
+    ],
+    "attack": "+20%",
+    "attackSpeed": "+15%",
+    "critRate": "+15%",
+    "critDamage": "+30%",
+    "independentOwnerAndStacks": true,
+    "sameArtPerCardType": true,
+    "legacyArcherSniperIdsPreserved": true,
+    "newMageCopies": 12
+  },
+  "attackTradeoffCards": [
+    "serial",
+    "fan",
+    "split",
+    "explode",
+    "frost",
+    "burn"
+  ],
+  "attackTradeoffPerAcquisition": "current attack multiplier * 0.9; only owning hero",
+  "serialMaxStacks": 5,
+  "fanMaxStacks": 5,
+  "fanStepDegrees": 7,
+  "singleAcquisitionMechanics": [
+    "explode",
+    "frost",
+    "burn"
+  ],
+  "singleAcquisitionReason": "old second stack only reapplied identical state; would now penalize attack with no gain",
+  "prerequisitesPreserved": true,
+  "rarityRelativeWeights": {
+    "white": 0.6,
+    "blue": 0.3,
+    "purple": 0.1,
+    "gold": 0.05
+  },
+  "offerGroupWeightsPreserved": {
+    "stats": 0.3,
+    "combat": 2,
+    "support": 1
+  },
+  "otherHeroExclusiveCardsChanged": false,
+  "globalCardsChanged": false,
+  "damageFormulaChanged": false,
+  "voltVfxPreserved": true,
+  "audioChanged": false,
+  "gameplayValidation": "user manual; no tests, simulation, game, browser or online acceptance run",
+  "deployment": "https://406a371b.kingdom-watch.pages.dev",
+  "date": "2026-10-15T20:57:53.845258+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-archer-cards-v1-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-archer-cards-v1-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "archer four-rarity cards, attack tradeoffs, five-stack serial and fan, shared per-hero numeric cards",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 10877,
+  "deploymentSucceeded": true,
+  "uploadedFiles": 2,
+  "cachedFiles": 1881
+}

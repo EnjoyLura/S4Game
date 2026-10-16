@@ -1,0 +1,251 @@
+/** A single painted settlement, shared comic controls and save-backed construction / codex. */
+import { Graphics, Mask, Node, ScrollView, Sprite, UITransform, Vec2 } from 'cc';
+import { C, CA, LabelOpts, N, WY } from '../UIKit';
+import { artAtlasSprite, artSprite } from '../Ux';
+import { COMIC, comicArt, comicButton, comicDialog, comicMark, comicPlate } from '../ComicUI';
+import { mainLabel as pageLabel, PageCtx, toast, fmt, mainLayout, mainResourceTop, MAIN_RESOURCE_H, pageScroll } from '../PageKit';
+import { LO } from '../../config/GameConfig';
+import { CODEX, CODEX_REWARD, claimCodexReward, codexClaimed, codexUnlocked, keepHp, keepShield, keepUpCost, upKeep, MAX } from '../../core/GameData';
+import { loadSave } from '../../core/SaveData';
+import { bindButton } from '../ButtonFeedback';
+import { dismissUI } from '../UIMotion';
+import { growthAction } from '../GrowthFeedback';
+
+const HEART = 'base_comic_v1/comic_keep_heart_v1';
+const SHIELD = 'levels_comic_v1/comic_difficulty_shield_v1';
+const HAMMER = 'upgrade_comic_v1/comic_training_hammer_v1';
+const BOOK = 'hero_comic_v2/comic_story_v2';
+const CASTLE = 'comic_nav_castle_v1';
+let settlementOffset = 0, codexOffset = 0;
+
+function text(parent: Node, x: number, y: number, value: string, opts: LabelOpts = {}): Node {
+  return pageLabel(parent, x, y, value, { font: 'body', color: COMIC.text, ...opts });
+}
+function divider(parent: Node, y: number, width: number): void {
+  const g = N('baseDivider', parent, 0, y).addComponent(Graphics);
+  g.strokeColor = CA(COMIC.sub, .24); g.lineWidth = 1;
+  g.moveTo(-width / 2, 0); g.lineTo(width / 2, 0); g.stroke();
+}
+function tap(node: Node, cb: () => void): void {
+  bindButton(node, cb, { scale: .98 });
+}
+function dot(parent: Node, x: number, y: number, value: number, name: string): void {
+  const n = N(name, parent, x, y, 28, 28), g = n.addComponent(Graphics);
+  g.fillColor = C('#D54D38'); g.circle(0, 0, 14); g.fill();
+  g.strokeColor = C(COMIC.card); g.lineWidth = 2; g.circle(0, 0, 14); g.stroke();
+  if (value) text(n, 0, 0, String(value), { size: 17, bold: true, color: COMIC.cream, w: 24, h: 24 });
+}
+
+/** Closing a monster detail returns to its list without accumulating dim layers. */
+function dialog(ctx: PageCtx, w: number, h: number, title: string, name: string, back?: () => void): Node {
+  const panel = comicDialog(ctx.screens, w, h, title); panel.name = name;
+  if (back) {
+    const dim = panel.parent!, close = panel.getChildByName('btn_close')!;
+    const done = (e?: { propagationStopped?: boolean }): void => {
+      if (e) e.propagationStopped = true;
+      if (!dim.isValid) return;
+      dismissUI(dim, back);
+    };
+    dim.off(Node.EventType.TOUCH_END); dim.on(Node.EventType.TOUCH_END, done);
+    bindButton(close, done, { sound: 'close' });
+  }
+  return panel;
+}
+
+export function buildBase(ctx: PageCtx): void {
+  const root = N('baseLobby', ctx.screens, 0, 0, 750, LO.half * 2);
+  const sv = loadSave(), maxed = sv.keepLv >= MAX.keep, cost = keepUpCost(sv.keepLv);
+  const discovered = CODEX.filter(c => codexUnlocked(c.id)).length;
+  const rewards = CODEX.filter(c => codexUnlocked(c.id) && !codexClaimed(c.id)).length;
+  const titleTop = mainResourceTop() + MAIN_RESOURCE_H + 20;
+  const sceneTop = titleTop + 76, boardH = 306, boardTop = mainLayout().bottom - boardH, sceneBottom = boardTop - 12;
+  const available = Math.max(1, sceneBottom - sceneTop), sceneH = Math.max(720, available), totalH = sceneTop + sceneH;
+  // The illustration and hit targets share one transform. Architecture is painted on its ground.
+  const upper = N('baseUpperScene', root, 0, WY(0, boardTop), 750, boardTop);
+  upper.addComponent(Mask);
+  const scene = pageScroll(root, 'baseSettlement', sceneTop, sceneBottom, sceneH, 750);
+  const scroll = scene.parent!.getComponent(ScrollView)!; scroll.elastic = false;
+  const maxOffset = sceneH - available;
+  const anchors: { node: Node; u: number; v: number; height: number; width: number }[] = [];
+
+  function building(key: string, u: number, v: number, width: number, height: number, title: string,
+    subtitle: string, cb: () => void, locked = false): Node {
+    const n = N('baseBuilding:' + key, scene, 0, 0, width, height + 136);
+    anchors.push({ node: n, u, v, height, width });
+    const foot = -height / 2 + 42;
+    const plate = comicPlate(n, 0, foot - 22, key === 'keep' ? 254 : 246, 52,
+      key === 'keep' && !maxed ? 'gold' : 'dark', { name: 'baseName:' + key });
+    if (locked) comicMark(plate, -80, 0, 'lock', 19, COMIC.cream);
+    text(plate, locked ? 14 : 0, 0, title, { size: 28, bold: true, color: key === 'keep' && !maxed ? COMIC.text : COMIC.cream, w: locked ? 155 : 234, h: 40 });
+    text(n, 0, foot - 62, subtitle, { size: 19, color: COMIC.cream, w: 316, h: 31, outline: COMIC.ink, outlineW: 2 });
+    tap(n, cb); return n;
+  }
+  // Foundation centers are calibrated against the final illustration, not the prompt's requested coordinates.
+  const keep = building('keep', .5, .469, 420, 334, `主城 · Lv.${sv.keepLv}`, maxed ? '主城建设已完成' : '点击查看建设', () => keepModal(ctx));
+  if (!maxed && sv.gold >= cost) {
+    const marker = comicPlate(keep, 142, -334 / 2 + 46, 44, 44, 'gold', { name: 'baseKeepReady', cut: 8 });
+    comicArt(marker, 0, 0, 32, 32, HAMMER);
+  }
+  const academy = building('academy', .27, .715, 326, 252, '研究院',
+    rewards ? `图鉴 ${discovered}/${CODEX.length} · ${rewards}份奖励可领` : `怪物图鉴 ${discovered}/${CODEX.length}`, () => codexModal(ctx));
+  if (rewards) dot(academy, 121, -252 / 2 + 33, rewards, 'baseCodexBadge');
+  building('workshop', .73, .747, 326, 252, '工坊', '尚未开放', () => toast('工坊尚未开放'), true);
+  let artY = 0, mapWidth = 750, mapHeight = totalH;
+  const updateAnchors = (): void => {
+    anchors.forEach(a => a.node.setPosition(mapWidth * (a.u - .5), sceneTop - mapHeight * a.v + a.height / 2 - 42, 0));
+  };
+  const artwork = artSprite(upper, 0, (boardTop - totalH) / 2, 750, totalH, 'scenes/bg_base_comic_v1', {
+    sliced: false, onLoaded: art => {
+      const r = art.getComponent(Sprite)!.spriteFrame!.rect, k = Math.max(750 / r.width, totalH / r.height);
+      mapWidth = r.width * k; mapHeight = r.height * k;
+      art.getComponent(UITransform)!.setContentSize(mapWidth, mapHeight);
+      artY = (boardTop - mapHeight) / 2;
+      art.setPosition(0, artY + Math.max(0, Math.min(maxOffset, scroll.getScrollOffset().y)), 0);
+      updateAnchors();
+    },
+  });
+  updateAnchors();
+  let thumb: Node | null = null, thumbH = 0;
+  if (maxOffset > 0) {
+    thumbH = Math.max(36, available * available / sceneH);
+    thumb = N('baseScrollThumb', root, 369, WY(sceneTop, thumbH), 4, thumbH);
+    const g = thumb.addComponent(Graphics); g.fillColor = CA(COMIC.cream, .75); g.roundRect(-2, -thumbH / 2, 4, thumbH, 2); g.fill();
+  }
+  const updateScroll = (): void => {
+    const offset = Math.max(0, Math.min(maxOffset, scroll.getScrollOffset().y)); settlementOffset = offset;
+    artwork.setPosition(0, artY + offset, 0);
+    if (thumb) thumb.setPosition(369, WY(sceneTop, thumbH) - (available - thumbH) * offset / maxOffset, 0);
+  };
+  scroll.node.on(ScrollView.EventType.SCROLLING, updateScroll);
+  scroll.scrollToOffset(new Vec2(0, Math.min(maxOffset, settlementOffset)), 0);
+  updateScroll();
+  const title = text(root, 0, WY(titleTop, 46), '远征营地', { size: 38, bold: true, w: 430, h: 46, outline: COMIC.card, outlineW: 2 });
+  title.name = 'baseTitle';
+  text(root, 0, WY(titleTop + 46, 28), '建设主城 · 记录远征发现', { size: 20, color: COMIC.dark, w: 470, h: 28, outline: COMIC.card, outlineW: 1.5 });
+  const board = comicPlate(root, 0, WY(boardTop, boardH), 750, boardH, 'paper', { name: 'baseConstruction', edge: false });
+  comicArt(board, -319, 118, 38, 38, CASTLE);
+  text(board, -195, 118, '防线建设', { size: 28, bold: true, align: 'left', w: 185, h: 38 });
+  text(board, 253, 118, maxed ? `Lv.${sv.keepLv} · MAX` : `Lv.${sv.keepLv} → Lv.${sv.keepLv + 1}`, { size: 22, color: COMIC.sub, w: 188, h: 34, align: 'right' });
+  divider(board, 88, 688);
+  for (const [i, name, value, icon] of [[0, '防线耐久', keepHp(sv.keepLv), HEART], [1, '阶段护盾', keepShield(sv.keepLv), SHIELD]] as const) {
+    const x = i === 0 ? -172 : 171;
+    comicArt(board, x - 103, 31, 46, 48, icon);
+    text(board, x + 13, 53, name, { size: 22, color: COMIC.sub, w: 174, h: 30, align: 'left' });
+    text(board, x + 13, 17, fmt(value), { size: 31, bold: true, w: 174, h: 40, align: 'left' });
+  }
+  const action = comicButton(board, 0, -86, 680, 82, '', () => keepModal(ctx), { name: 'baseConstructionAction', tone: maxed ? 'dark' : sv.gold >= cost ? 'green' : 'muted' });
+  const face = action.getChildByName('buttonFace')!;
+  comicArt(face, -275, 0, 46, 46, HAMMER);
+  text(face, -119, 0, maxed ? '查看主城' : '升级主城', { size: 31, bold: true, color: COMIC.cream, w: 228, h: 44 });
+  if (!maxed) {
+    comicArt(face, 117, 0, 34, 34, 'comic_coin_v1');
+    text(face, 221, 0, fmt(cost), { size: 26, bold: true, color: COMIC.cream, w: 158, h: 40 });
+  } else text(face, 206, 0, '已满级', { size: 23, color: COMIC.cream, w: 180, h: 38 });
+}
+
+function keepModal(ctx: PageCtx): void {
+  const sv = loadSave(), maxed = sv.keepLv >= MAX.keep, cost = keepUpCost(sv.keepLv), H = 640;
+  const p = dialog(ctx, 660, H, '主城建设', 'baseKeepDialog');
+  text(p, 0, H / 2 - 92, maxed ? `Lv.${sv.keepLv} · 已满级` : `Lv.${sv.keepLv} → Lv.${sv.keepLv + 1}`, { size: 25, bold: true, color: COMIC.sub, w: 500, h: 36 });
+  comicArt(p, -202, 61, 172, 184, CASTLE);
+  text(p, -202, -53, '守护王国防线', { size: 21, color: COMIC.sub, w: 206, h: 32 });
+  const nextLv = maxed ? sv.keepLv : sv.keepLv + 1;
+  const rows = [{ name: '防线耐久', icon: HEART, cur: keepHp(sv.keepLv), next: keepHp(nextLv) },
+    { name: '阶段护盾', icon: SHIELD, cur: keepShield(sv.keepLv), next: keepShield(nextLv) }];
+  rows.forEach((r, i) => {
+    const y = 151 - i * 105;
+    comicArt(p, -12, y - 24, 38, 40, r.icon);
+    text(p, 137, y, r.name, { size: 23, bold: true, w: 250, h: 32 });
+    text(p, 137, y - 37, `${fmt(r.cur)} → ${fmt(r.next)}`, { size: 28, bold: true, w: 260, h: 40 });
+    text(p, 137, y - 71, maxed ? '已达上限' : r.next > r.cur ? `+${fmt(r.next - r.cur)}` : '本级保持', { size: 20, color: COMIC.greenShade, w: 250, h: 28 });
+  });
+  divider(p, -103, 578);
+  text(p, 0, -135, '耐久每级 +100 · 阶段护盾每3级 +200', { size: 21, color: COMIC.sub, w: 570, h: 34 });
+  if (!maxed) {
+    comicArt(p, -239, -188, 38, 38, 'comic_coin_v1');
+    text(p, -104, -188, `消耗 ${fmt(cost)}`, { size: 24, bold: true, color: sv.gold >= cost ? COMIC.greenShade : '#AB422E', w: 224, h: 36, align: 'left' });
+    text(p, 180, -188, `持有 ${fmt(sv.gold)}`, { size: 20, color: COMIC.sub, w: 222, h: 34, align: 'right' });
+  } else text(p, 0, -188, '主城等级已达到上限', { size: 23, color: COMIC.sub, w: 560, h: 36 });
+  comicButton(p, 0, -H / 2 + 65, 560, 80, maxed ? '建设已完成' : '确认升级', () => {
+    if (maxed) return;
+    const r = growthAction({ kind: 'keep' }, () => upKeep());
+    if (r.ok) dismissUI(p.parent, ctx.refresh, false);
+  }, { name: 'baseKeepUpgrade', tone: maxed || sv.gold < cost ? 'muted' : 'green', size: 30, enabled: !maxed });
+}
+
+function monsterArt(parent: Node, id: string, x: number, y: number, w: number, h: number): void {
+  artAtlasSprite(parent, x, y, w, h, 'battle_mobs_v2', id);
+}
+
+function codexModal(ctx: PageCtx): void {
+  const H = Math.min(840, LO.half * 2 - 180);
+  const p = dialog(ctx, 660, H, '研究院 · 怪物图鉴', 'baseCodexDialog');
+  const discovered = CODEX.filter(c => codexUnlocked(c.id)).length, rewards = CODEX.filter(c => codexUnlocked(c.id) && !codexClaimed(c.id)).length;
+  comicArt(p, -262, H / 2 - 101, 38, 38, BOOK);
+  text(p, -89, H / 2 - 101, `已发现 ${discovered}/${CODEX.length}`, { size: 23, bold: true, w: 256, h: 34, align: 'left' });
+  text(p, 187, H / 2 - 101, `${rewards}份奖励待领`, { size: 20, color: rewards ? COMIC.greenShade : COMIC.sub, w: 226, h: 32, align: 'right' });
+  text(p, 0, H / 2 - 140, '战斗中遇见怪物后解锁 · 首览奖励每种仅领一次', { size: 18, color: COMIC.sub, w: 586, h: 30 });
+  const viewH = H - 201, cardH = 210, gap = 16, pad = 8, rows = Math.ceil(CODEX.length / 2);
+  const contentH = Math.max(viewH, rows * (cardH + gap) - gap + pad * 2);
+  const view = N('baseCodexView', p, 0, -72.5, 604, viewH); view.addComponent(Mask);
+  const scroll = view.addComponent(ScrollView); scroll.horizontal = false; scroll.vertical = contentH > viewH; scroll.elastic = false;
+  const content = N('baseCodexContent', view, 0, viewH / 2, 604, contentH); content.getComponent(UITransform)!.setAnchorPoint(.5, 1); scroll.content = content;
+  CODEX.forEach((c, i) => {
+    const got = codexUnlocked(c.id), claimed = codexClaimed(c.id);
+    const card = comicPlate(content, i % 2 === 0 ? -151 : 151, -(pad + Math.floor(i / 2) * (cardH + gap) + cardH / 2), 286, cardH,
+      got ? 'card' : 'paper', { name: 'baseCodexCard:' + c.id });
+    const backdrop = N('baseMonsterCircle', card, 0, 30).addComponent(Graphics);
+    backdrop.fillColor = C(got ? '#DDE6D2' : '#DED7C6'); backdrop.circle(0, 0, 63); backdrop.fill();
+    if (got) monsterArt(card, c.id, 0, 29, 142, 122);
+    else comicMark(card, 0, 33, 'lock', 43, COMIC.sub);
+    text(card, 0, -48, got ? c.name : '未发现的怪物', { size: 23, bold: true, color: got ? COMIC.text : COMIC.sub, w: 264, h: 34 });
+    text(card, 0, -82, !got ? '战斗中遇见后解锁' : claimed ? '首览奖励已领取' : `首览奖励 +${CODEX_REWARD}钻石`, { size: 18, color: got && !claimed ? COMIC.greenShade : COMIC.sub, w: 264, h: 27 });
+    if (got && !claimed) dot(card, 118, 80, 0, 'baseCodexReward:' + c.id);
+    tap(card, () => {
+      if (!got) { toast('战斗中遇见该怪物后解锁'); return; }
+      dismissUI(p.parent, () => codexDetail(ctx, c.id), false);
+    });
+  });
+  let thumb: Node | null = null, thumbH = 0;
+  if (contentH > viewH) {
+    thumbH = Math.max(36, viewH * viewH / contentH);
+    thumb = N('baseCodexThumb', p, 313, 0, 4, thumbH);
+    const g = thumb.addComponent(Graphics); g.fillColor = CA(COMIC.sub, .28);
+    g.roundRect(-2, -thumbH / 2, 4, thumbH, 2); g.fill();
+  }
+  const updateScroll = (): void => {
+    codexOffset = Math.max(0, Math.min(contentH - viewH, scroll.getScrollOffset().y));
+    if (thumb) thumb.setPosition(313, -72.5 + viewH / 2 - thumbH / 2 - (viewH - thumbH) * codexOffset / (contentH - viewH), 0);
+  };
+  scroll.node.on(ScrollView.EventType.SCROLLING, updateScroll);
+  scroll.scrollToOffset(new Vec2(0, Math.min(contentH - viewH, codexOffset)), 0);
+  updateScroll();
+}
+
+function codexDetail(ctx: PageCtx, id: string): void {
+  const c = CODEX.find(x => x.id === id); if (!c || !codexUnlocked(id)) return;
+  const H = Math.min(780, LO.half * 2 - 180), p = dialog(ctx, 660, H, c.name, 'baseCodexDetail', () => codexModal(ctx));
+  monsterArt(p, id, -202, H / 2 - 180, 174, 166);
+  c.tags.forEach((tag, i) => {
+    const plate = comicPlate(p, i === 0 ? 29 : 179, H / 2 - 107, 136, 38, i === 0 ? 'gold' : 'dark', { name: 'baseMonsterTag' });
+    text(plate, 0, 0, tag, { size: 20, bold: true, color: i === 0 ? COMIC.text : COMIC.cream, w: 122, h: 30 });
+  });
+  text(p, 102, H / 2 - 160, '行动特征', { size: 23, bold: true, w: 284, h: 34, align: 'left' });
+  text(p, 102, H / 2 - 225, c.traits.join('\n'), { size: 21, color: COMIC.sub, w: 284, h: 116, lineHeight: 30, align: 'left' });
+  divider(p, H / 2 - 297, 578);
+  text(p, -179, H / 2 - 329, '怪物描述', { size: 24, bold: true, w: 216, h: 34, align: 'left' });
+  text(p, 0, H / 2 - 379, c.desc, { size: 22, color: COMIC.sub, w: 574, h: 74, lineHeight: 29, align: 'left' });
+  text(p, -179, H / 2 - 451, '应对弱点', { size: 24, bold: true, w: 216, h: 34, align: 'left' });
+  text(p, 0, H / 2 - 495, c.weak, { size: 23, bold: true, color: COMIC.greenShade, w: 574, h: 52, align: 'left' });
+  divider(p, -H / 2 + 200, 578);
+  comicArt(p, -238, -H / 2 + 152, 48, 48, 'comic_diamond_v1');
+  text(p, -54, -H / 2 + 166, `首览奖励 +${CODEX_REWARD}钻石`, { size: 24, bold: true, w: 298, h: 34, align: 'left' });
+  text(p, -54, -H / 2 + 133, '每种怪物只能领取一次', { size: 19, color: COMIC.sub, w: 298, h: 28, align: 'left' });
+  const claimed = codexClaimed(id);
+  if (claimed) comicMark(p, 222, -H / 2 + 153, 'check', 32, COMIC.greenShade);
+  comicButton(p, 0, -H / 2 + 66, 560, 80, claimed ? '奖励已领取' : '领取首览奖励', () => {
+    if (claimed) return;
+    const r = claimCodexReward(id); toast(r.msg, { kind: r.ok ? 'reward' : 'warning', title: r.ok ? '首览奖励已领取' : '暂时无法领取', icon: r.ok ? 'shop_comic_v1/comic_diamond_v1' : undefined });
+    if (r.ok) dismissUI(p.parent, () => { ctx.refresh(); codexModal(ctx); }, false);
+  }, { name: 'baseCodexClaim', tone: claimed ? 'muted' : 'green', size: 28, enabled: !claimed });
+}

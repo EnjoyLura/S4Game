@@ -34,7 +34,7 @@ export function battleProgressBar(parent: Node, x: number, y: number, w: number,
     // Broad, quiet top light; short fills keep their real width and never grow a minimum cap.
     const lightW = Math.max(0, fw - Math.min(2, fw * .2));
     if (lightW > 0) {
-      detail.fillColor = CA('#FFFFFF', kind === 'damage' ? .12 : .22);
+      detail.fillColor = CA(kind === 'xp' ? '#8FD1D8' : '#FFFFFF', kind === 'damage' ? .12 : kind === 'xp' ? .20 : .22);
       detail.roundRect(left + (fw - lightW) / 2, bottom + fh * .62, lightW, fh * .25, Math.min(r, fh * .12)); detail.fill();
     }
     if (kind === 'health' && fw > 70) {

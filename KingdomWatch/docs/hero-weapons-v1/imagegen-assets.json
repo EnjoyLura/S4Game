@@ -1,0 +1,173 @@
+{
+  "tool": "image_gen.imagegen (built-in)",
+  "assets": [
+    {
+      "name": "starter_bow",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-593cfc6f-03f2-4aa1-8a3d-e307caa2dfc9.png",
+      "saved": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\weapons_v1\\starter_bow.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        16,
+        15,
+        1242,
+        1240
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "sha256": "91a2e9e039c5e4575529c5c3bd35eea444b01b597eb83a81b6f5155ebc3aea2c",
+      "pixelEdits": false
+    },
+    {
+      "name": "starter_crossbow",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-2c759051-c934-4a44-a660-5ce0bf5aa656.png",
+      "saved": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\weapons_v1\\starter_crossbow.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        0,
+        39,
+        1254,
+        1236
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "sha256": "4ecf2e9763648cf03f158ab9fe2210574c153ba625a5d8800fc406b2ee950cef",
+      "pixelEdits": false
+    },
+    {
+      "name": "starter_book",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-ecebff82-c7ef-4555-a449-4a80102a6806.png",
+      "saved": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\weapons_v1\\starter_book.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        41,
+        29,
+        1240,
+        1254
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "sha256": "59eabd13b6e4d2cd85110251e2d496215d317e6b76bcd1a980232033e502e39c",
+      "pixelEdits": false
+    },
+    {
+      "name": "starter_staff",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-fd3dd769-43c4-4d6e-b2d4-97f33fe0c6cc.png",
+      "saved": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\weapons_v1\\starter_staff.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        27,
+        37,
+        1240,
+        1215
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "sha256": "479f997a119ae743e15e6c8848b1ca509fc23d112bc6e35149d8b53a8c240b56",
+      "pixelEdits": false
+    },
+    {
+      "name": "green_bow",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-73b9d945-861f-4b94-ac0b-c94395a711d2.png",
+      "saved": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\weapons_v1\\green_bow.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        0,
+        11,
+        1235,
+        1237
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "sha256": "5924c41a0ac337d60d47d0a4b0078e079b369efb883cd11be6d3920576c5b543",
+      "pixelEdits": false
+    },
+    {
+      "name": "green_crossbow",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-ee6ae673-63c6-4260-9be6-fb0202fd5fa1.png",
+      "saved": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\weapons_v1\\green_crossbow.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        15,
+        21,
+        1238,
+        1254
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "sha256": "d31400c8e48bd4f2c447cc4d037adadcd1a5871a2ed6e21012d005e36954a3ef",
+      "pixelEdits": false
+    },
+    {
+      "name": "green_book",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-9c8074a1-8637-4826-9267-52600c5eb793.png",
+      "saved": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\weapons_v1\\green_book.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        0,
+        46,
+        1238,
+        1254
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "sha256": "139913117bbe8d062997d487b58b678864b2663dfbf7573efe440d5f84a3a518",
+      "pixelEdits": false
+    },
+    {
+      "name": "green_staff",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-a33cc7a1-8e2c-4985-a445-057c0021f6b4.png",
+      "saved": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\weapons_v1\\green_staff.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        63,
+        23,
+        1224,
+        1235
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "sha256": "48455e56569f8783282ec871a6d516b2b07cb63b9875f4d1bea2878ce6ce8f52",
+      "pixelEdits": false
+    }
+  ]
+}

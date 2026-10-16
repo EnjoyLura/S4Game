@@ -1,0 +1,25 @@
+{
+  "status": "published",
+  "scope": "semantic UI audio, procedural tap feedback and interruptible page/modal motion",
+  "tapPool": 8,
+  "tapReleaseSeconds": 0.38,
+  "pageEnterSeconds": 0.2,
+  "modalEnterSeconds": 0.18,
+  "dismissSeconds": 0.12,
+  "refreshOpacityStart": 0.94,
+  "semanticUISounds": [
+    "tap",
+    "select",
+    "open",
+    "close",
+    "toggle",
+    "confirm"
+  ],
+  "uiSoundCoalescing": "one semantic cue per synchronous action; 35ms UI group gap",
+  "reducedMotion": true,
+  "layoutChanged": false,
+  "newMediaGenerated": false,
+  "gameplayValidation": "user manual; no tests, browser, game or online acceptance run",
+  "game": "https://kingdom-watch.pages.dev/?v=ui-experience-v1-1792004374",
+  "deployment": "https://74842ded.kingdom-watch.pages.dev"
+}

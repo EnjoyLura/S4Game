@@ -1,0 +1,41 @@
+{
+  "mode": "source and local artifact review only; no game execution",
+  "sourceScope": "drawSlot only; square slots retain their existing branch",
+  "socket": {
+    "width": 252,
+    "height": 104,
+    "halfWidth": 126,
+    "artCenter": [
+      -63,
+      0
+    ],
+    "artBounds": [
+      -118,
+      -8,
+      -45,
+      45
+    ],
+    "textCenterX": 63,
+    "textBoundsX": [
+      8,
+      118
+    ],
+    "nameBoundsY": [
+      -1,
+      29
+    ],
+    "metadataBoundsY": [
+      -32,
+      -6
+    ],
+    "labelOverflow": "existing SHRINK"
+  },
+  "mainBundle": "assets/main/index.31b86.js",
+  "mainBundleSha256": "49b83102d9b5a5548f1660c579c0715489bf5df28731a7d9224fe85df936913d",
+  "sourceSha256": "4184aa3c957e0ded76a33928d64eaa5aa9a07234de5157f889afbaa846c68480",
+  "compiledSlot": "heroEquipped:\"+t,o,r,a,l,u);(v(w,0,0,l,u,\"card\",{name:\"heroGearSocket\",cut:8,fill:c?x[d.quality]:\"#ECE5D8\"}),c&&d)?(E(w,f?m:0,f?0:3,f?h-16:l-22,f?u-14:u-22,c.defId),f?(_(w,g,14,d.name,{size:20,color:b.text,font:\"body\",bold:!0,align:\"center\",w:p,h:30}),_(w,g,-19,d.tier+\"阶 · Lv.\"+N(c,n),{size:17,color:b.sub,align:\"center\",w:p,h:26})):(Ie(w,-l/2+25,u/2-16,40,d.tier+\"阶\"),Ie(w,l/2-33,-u/2+16,58,\"Lv.\"+c.lv)),ae(w,(function(){return qe(e,n,t)}))):(E(w,f?m:0,f?0:12,f?62:48,f?62:48,M[t]).addComponent(i).opacity=80,_(w,f?g:0,f?10:-u/2+20,P[t],{size:17,color:b.sub,w:f?p:l-10,h:25}),f&&_(w,g,-20,\"未穿戴\",{size:15,color:b.sub,w:p,h:24}))}",
+  "production": true,
+  "md5Cache": true,
+  "DPRPatch": "completed by tools/build-web.ps1",
+  "visualAcceptance": "pending user manual review"
+}

@@ -1,0 +1,49 @@
+{
+  "status": "published",
+  "scope": "typed non-blocking notifications and growth feedback with actual values, merge behavior and semantic audio",
+  "noticeKinds": [
+    "info",
+    "success",
+    "warning",
+    "reward",
+    "upgrade"
+  ],
+  "upgradeTargets": [
+    "hero",
+    "weapon",
+    "normal attack",
+    "skill",
+    "ultimate",
+    "worn equipment",
+    "keep"
+  ],
+  "upgradePresentation": [
+    "existing artwork",
+    "before/after levels",
+    "up to two primary stat gains",
+    "number animation",
+    "small spring",
+    "six glints",
+    "breakthrough line"
+  ],
+  "actualValues": [
+    "heroStats",
+    "equipStat",
+    "normal attack configs",
+    "ultimate damage configs",
+    "keepHp",
+    "keepShield"
+  ],
+  "singleActiveNotice": true,
+  "sameGrowthTargetMergesBaselineAndLatestValues": true,
+  "inputInterception": false,
+  "artReadyBeforeEntrance": true,
+  "backgroundAndDestroyCleanup": true,
+  "idleUpdateDisabled": true,
+  "reducedMotionSupported": true,
+  "audio": "existing licensed cues; semantic selection coalesces button cue; existing cooldowns and settings retained",
+  "gameplayAndEconomyChanged": false,
+  "gameplayValidation": "user manual; no tests, game, browser or online acceptance run",
+  "game": "https://kingdom-watch.pages.dev/?v=notice-feedback-v1-1792044385",
+  "deployment": "https://a47023fc.kingdom-watch.pages.dev"
+}

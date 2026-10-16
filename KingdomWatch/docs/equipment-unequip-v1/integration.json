@@ -1,0 +1,28 @@
+{
+  "status": "published",
+  "scope": "equipped-item dialogs: unequip action with inventory, slot and hero-stat refresh",
+  "source": "assets/scripts/ui/pages/HeroPage.ts",
+  "equippedDetailActions": [
+    "卸下装备",
+    "装备锻造"
+  ],
+  "comparisonCurrentItemActions": [
+    "卸下",
+    "锻造"
+  ],
+  "existingDataOperation": "takeOff",
+  "equipmentInstanceRetained": true,
+  "persistImmediately": true,
+  "staleDialogUidGuard": true,
+  "inventoryCategoryAndScrollReset": true,
+  "refresh": [
+    "equipped slots",
+    "equipped count",
+    "inventory",
+    "hero attributes",
+    "hero power"
+  ],
+  "gameplayValidation": "user manual; no tests, game, browser or online acceptance run",
+  "game": "https://kingdom-watch.pages.dev/?v=equipment-unequip-v1-1792043153",
+  "deployment": "https://16ae7449.kingdom-watch.pages.dev"
+}

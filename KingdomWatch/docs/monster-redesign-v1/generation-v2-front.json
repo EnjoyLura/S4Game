@@ -1,0 +1,37 @@
+{
+  "tool": "Built-in image_gen.imagegen",
+  "use_case": "stylized-concept",
+  "revision": "v2-front",
+  "user_feedback_on_v1": "Too AI-looking and not facing directly forward. V1 is rejected, retained as historical reference only.",
+  "change": "New straight-on front-facing images; replace fragmented polygon shading with broad hand-inked comic shapes. Opaque magenta backdrop, full body and equipment.",
+  "visual_review": "Both images inspected: face/torso front-facing, complete body and weapon visible. User approval pending.",
+  "processing": "Original tool output copied without pixel editing. No video, game integration or deployment.",
+  "assets": [
+    {
+      "file": "goblin-worker-solid-v2-front.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "sha256": "ca4410a7aa5ebe6e0c363ee42586f605d80e0d2bbe60d6e94af6078f64242dae",
+      "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-5b44eda9-7b26-48bd-a7dc-5ba7ab4dd0de.png",
+      "prompt": "prompts/goblin-worker-v2-front.txt",
+      "reference_images": []
+    },
+    {
+      "file": "goblin-slinger-solid-v2-front.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "sha256": "bf1f0b590fcb01b6e92f8e54f1b0a45957545bff9ca41454266dfeded3dc510b",
+      "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-86b93ce8-d415-430f-a325-518f509e1f73.png",
+      "prompt": "prompts/goblin-slinger-v2-front.txt",
+      "reference_images": [
+        "goblin-worker-solid-v2-front.png"
+      ]
+    }
+  ]
+}

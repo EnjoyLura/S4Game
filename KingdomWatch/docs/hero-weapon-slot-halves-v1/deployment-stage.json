@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-weapon-slot-halves-v1-20261016-155720",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-web-load-v1-20261016-141552",
+  "entryVersion": "1792137366",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-weapon-slot-halves-v1-1792137366",
+  "scope": "hero equipped weapon socket: equal left illustration and right centered name halves",
+  "manualAcceptance": "pending user manual review"
+}

@@ -1,0 +1,44 @@
+"""Prepare the established Cocos/DPR/Pages release without gameplay acceptance."""
+from pathlib import Path
+import json
+
+OUT = Path(__file__).resolve().parent
+GAME = OUT.parents[1]
+PRIOR = GAME/'docs/archer-cards-v1'
+SCOPE = 'sniper card rarities, skill range and piercing, 30 percent ultimate vulnerability with overhead red reticle, three generated icons'
+for name in ['build_game.ps1', 'publish.ps1']:
+    content = (PRIOR/name).read_text(encoding='utf-8-sig')
+    content = content.replace('docs/volt-vfx-enhance-v1/deployment-stage.json', '__PRIOR__')
+    content = content.replace('kwArcherCards', 'kwSniperCards').replace('archer-cards-v1', 'sniper-cards-v1')
+    content = content.replace('__PRIOR__', 'docs/archer-cards-v1/deployment-stage.json')
+    content = content.replace('archer four-rarity cards, attack tradeoffs, five-stack serial and fan, shared per-hero numeric cards', SCOPE)
+    (OUT/name).write_text(content, encoding='utf-8')
+(OUT/'integration.json').write_text(json.dumps({
+    'status': 'prepared', 'scope': SCOPE,
+    'rarities': {
+        'white': ['heavy_head', 'fast_load'],
+        'blue': ['steady_rest', 'lethal_aim', 'execute', 'instinct_s', 'cd_cut', 'sniper_range'],
+        'purple': ['multi_lock', 'fast_charge_s', 'sniper_pierce'],
+        'gold': ['sniper_unlock_ult', 'sniper_unlock_skill', 'extra_line', 'sniper_mark'],
+    },
+    'newCards': {
+        'sniper_range': {'name': '远距校准', 'effect': 'skill acquisition range * 1.3', 'maxStacks': 3, 'requires': 'sniper_unlock_skill'},
+        'sniper_pierce': {'name': '贯颅弩矢', 'effect': 'skill bolt pierces one additional target', 'maxStacks': 3, 'requires': 'sniper_unlock_skill'},
+        'sniper_mark': {'name': '死亡准星', 'effect': 'ultimate hit applies 30% vulnerability for 5 seconds with overhead red reticle',
+            'maxStacks': 1, 'requires': 'sniper_unlock_ult'},
+    },
+    'mark30PercentConfirmedByUser': True,
+    'markAppliesAfterUltimateHit': True,
+    'markAffectsAllIncomingDamage': True,
+    'markAndCraterHaveIndependentTimers': True,
+    'sameCategoryVulnerabilityUsesStrongestNotMultiplication': True,
+    'markStacksWithLevel10ByTakingMax': True,
+    'markRenderer': 'one shared Graphics under floating text parent; battle simulation clock; immediate apply/death cleanup; pool reset',
+    'executeAndInstinctApplyToNormalSkillUltimate': True,
+    'executeIncludesBossWithoutEliteFlag': True,
+    'sharedNumericCardsPreserved': True, 'archerCardsPreserved': True,
+    'voltVfxPreserved': True, 'heroMediaChanged': False, 'audioChanged': False,
+    'newArtMode': 'built-in image_gen; 3 separate generated circular PNGs; alpha and original pixels preserved',
+    'artManifest': 'art-manifest.json', 'completePrompts': 'image-prompts.json',
+    'gameplayValidation': 'user manual; no tests, simulations, browser, game or online acceptance run',
+}, ensure_ascii=False, indent=2), encoding='utf-8')

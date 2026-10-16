@@ -1,0 +1,78 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-button-feedback-v1-20261015-023406",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-controls-lobby-v1-20261015-021908",
+  "entryVersion": "1792002820",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=button-feedback-v1-1792002820",
+  "scope": "shared feedback across lobby, battle and modal buttons",
+  "layoutChanged": false,
+  "visualAcceptance": "pending user manual review",
+  "status": "published",
+  "sharedComponent": "assets/scripts/ui/ButtonFeedback.ts",
+  "feedback": {
+    "pressSeconds": 0.065,
+    "scale": 0.965,
+    "downshift": 1.5,
+    "releaseSeconds": 0.12,
+    "flashSeconds": 0.18,
+    "hover": true,
+    "sampledClickAudio": true
+  },
+  "gesture": {
+    "pairedTouchIds": true,
+    "nestedChildOwnership": true,
+    "dragCancelUnits": 12,
+    "routeCancelUnits": 7,
+    "releaseHitTest": "UITransform.hitTest screen coordinates",
+    "globalClickGapMilliseconds": 140,
+    "minimumComicTouchSize": 44,
+    "clearOnDisableDestroyAndAppHide": true
+  },
+  "coverage": [
+    "shared factories",
+    "five lobby pages",
+    "resource bar",
+    "navigation",
+    "squad",
+    "battle HUD",
+    "pick three",
+    "pause",
+    "settlement",
+    "settings",
+    "GM",
+    "legacy helpers"
+  ],
+  "sourceAudit": {
+    "remainingRawTouchEnd": [
+      "blank-area dismissal",
+      "input blockers"
+    ],
+    "duplicateNewMobCallbackRemoved": true
+  },
+  "busy": [
+    "pick refresh",
+    "double reward",
+    "revive",
+    "scene entry"
+  ],
+  "idleFrameUpdate": false,
+  "newGeneratedMedia": false,
+  "automatedTestsOrGameLaunch": false,
+  "deployment": "https://0d80ed1e.kingdom-watch.pages.dev",
+  "date": "2026-10-15T02:34:41.252800+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-button-feedback-v1-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-button-feedback-v1-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "shared feedback across lobby, battle and modal buttons",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 9209,
+  "deploymentSucceeded": true,
+  "uploadedFiles": 2,
+  "cachedFiles": 1783
+}

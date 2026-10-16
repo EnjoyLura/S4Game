@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-notice-feedback-v1-20261015-140642",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-product-details-v1-20261015-135156",
+  "entryVersion": "1792044385",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=notice-feedback-v1-1792044385",
+  "scope": "typed non-blocking notifications and growth feedback with actual values, merge behavior and semantic audio",
+  "layoutChanged": true,
+  "interactionAcceptance": "pending user manual review"
+}

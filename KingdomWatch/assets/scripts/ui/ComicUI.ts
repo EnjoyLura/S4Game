@@ -1,8 +1,10 @@
 /** Clean comic fantasy: precise shared geometry, with illustration reserved for objects. */
-import { Color, Graphics, Mask, Node } from 'cc';
+import { Color, Graphics, Label, Mask, Node, UITransform } from 'cc';
 import { C, dimLayer, label, N } from './UIKit';
 import { artSprite } from './Ux';
-import { Sfx } from '../core/Sfx';
+import { bindButton } from './ButtonFeedback';
+import { dismissUI, motionIn } from './UIMotion';
+import { uiSound, UISound } from './UIAudio';
 
 export const COMIC = {
   ink: '#302C29', dark: '#29313B', darkLight: '#414B56', darkShade: '#19222C',
@@ -31,11 +33,9 @@ function polygon(g: Graphics, points: number[][], fill: string | Color, stroke =
   if (stroke) { g.strokeColor = C(COMIC.ink); g.lineWidth = 2.4; g.stroke(); }
 }
 
-/** One flat face and one contour; offset plates and bottom bevels create unwanted doubled edges. */
-export function comicPlate(parent: Node, x: number, y: number, w: number, h: number,
-  tone: Tone = 'paper', opts: { name?: string; cut?: number; edge?: boolean; fill?: string } = {}): Node {
-  const node = N(opts.name || 'comicPlate', parent, x, y, w, h);
-  const g = node.addComponent(Graphics);
+function paintPlate(g: Graphics, w: number, h: number, tone: Tone,
+  opts: { cut?: number; edge?: boolean; fill?: string } = {}): void {
+  g.clear();
   const [face, light] = TONES[tone];
   const c = Math.min(opts.cut ?? 9, h / 4, w / 4);
   const l = -w / 2, r = w / 2, b = -h / 2, t = h / 2;
@@ -48,6 +48,13 @@ export function comicPlate(parent: Node, x: number, y: number, w: number, h: num
   if (h > 30) {
     polygon(g, [[l + c + 3, t - 3], [r - c - 3, t - 3], [r - c - 5, t - 5], [l + c + 5, t - 5]], light);
   }
+}
+
+/** One flat face and one contour; offset plates and bottom bevels create unwanted doubled edges. */
+export function comicPlate(parent: Node, x: number, y: number, w: number, h: number,
+  tone: Tone = 'paper', opts: { name?: string; cut?: number; edge?: boolean; fill?: string } = {}): Node {
+  const node = N(opts.name || 'comicPlate', parent, x, y, w, h);
+  paintPlate(node.addComponent(Graphics), w, h, tone, opts);
   return node;
 }
 
@@ -102,36 +109,79 @@ export function comicMark(parent: Node, x: number, y: number, kind: 'plus' | 'lo
   return node;
 }
 
-/** Button states share an exact silhouette; the face lowers two pixels under the finger. */
-export function comicButton(parent: Node, x: number, y: number, w: number, h: number, text: string,
-  onClick: () => void, opts: { tone?: Tone; size?: number; color?: string; name?: string } = {}): Node {
+interface ComicButtonOptions { tone?: Tone; size?: number; color?: string; name?: string; enabled?: boolean; sound?: UISound; }
+export interface ComicButtonControl {
+  node: Node;
+  setTone: (tone: Tone) => void;
+  setText: (text: string) => void;
+  setEnabled: (enabled: boolean) => void;
+  setBusy: (busy: boolean, text?: string) => void;
+}
+
+/** The lobby face and feedback, with state controls for asynchronous battle rewards. */
+export function comicButtonControl(parent: Node, x: number, y: number, w: number, h: number, text: string,
+  onClick: () => void, opts: ComicButtonOptions = {}): ComicButtonControl {
   const node = N(opts.name || 'comicButton', parent, x, y, w, h);
-  const tone = opts.tone || 'green';
+  node.getComponent(UITransform)!.setContentSize(Math.max(44, w), Math.max(44, h));
+  let tone = opts.tone || 'green';
   const face = comicPlate(node, 0, 0, w, h, tone, { name: 'buttonFace', cut: 9 });
-  if (text) label(face, 0, 1, text, { size: opts.size ?? 24, color: opts.color || (tone === 'gold' ? COMIC.text : COMIC.cream),
-    bold: true, font: 'body', w: w - 16, h: h - 10, shrink: true });
-  node.on(Node.EventType.TOUCH_START, () => face.setPosition(0, -2, 0));
-  node.on(Node.EventType.TOUCH_CANCEL, () => face.setPosition(0, 0, 0));
-  node.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => {
-    face.setPosition(0, 0, 0);
-    if (e) e.propagationStopped = true;
-    Sfx.play('ui');
-    onClick();
+  let enabled = opts.enabled !== false, busy = false, caption: Node | null = null;
+  const textColor = opts.color || (tone === 'gold' ? COMIC.text : COMIC.cream);
+  const setCaption = (value: string): void => {
+    if (caption) { caption.getComponent(Label)!.string = value; return; }
+    if (value) caption = label(face, 0, 1, value, { size: opts.size ?? 24, color: enabled ? textColor : '#344139',
+      bold: true, font: 'body', w: w - 16, h: h - 10, shrink: true });
+  };
+  const setEnabled = (value: boolean): void => {
+    enabled = value;
+    feedback.reset();
+    paintPlate(face.getComponent(Graphics)!, w, h, enabled && !busy ? tone : 'muted', { cut: 9 });
+    if (caption) caption.getComponent(Label)!.color = C(enabled && !busy ? textColor : '#344139');
+  };
+  const feedback = bindButton(node, onClick, { visual: face, sound: opts.sound, enabled: () => enabled && !busy,
+    onPress: pressed => {
+      // Several lobby callers add custom captions/icons after creating the button.
+      // Keep those visuals on the moving face while the root remains a stable touch target.
+      if (pressed) node.children.filter(child => child !== face).forEach(child => child.setParent(face));
+    },
   });
-  return node;
+  setCaption(text);
+  if (!enabled) setEnabled(false);
+  const setBusy = (value: boolean, message?: string): void => {
+    busy = value;
+    if (message !== undefined) setCaption(message);
+    setEnabled(enabled);
+  };
+  return { node, setText: setCaption, setEnabled, setBusy, setTone: value => {
+    tone = value;
+    paintPlate(face.getComponent(Graphics)!, w, h, enabled && !busy ? tone : 'muted', { cut: 9 });
+  } };
+}
+
+/** All lobby/battle faces share press, release, cancellation and disabled feedback. */
+export function comicButton(parent: Node, x: number, y: number, w: number, h: number, text: string,
+  onClick: () => void, opts: ComicButtonOptions = {}): Node {
+  return comicButtonControl(parent, x, y, w, h, text, onClick, opts).node;
 }
 
 /** Purchase/resource dialogs use the same quiet paper and code-rendered typography as the shelf. */
 export function comicDialog(parent: Node, w: number, h: number, title: string): Node {
   const dim = dimLayer(parent, 0.66);
   dim.name = 'comicModal';
-  dim.on(Node.EventType.TOUCH_END, () => dim.destroy());
-  const panel = comicPlate(dim, 0, 0, w, h, 'paper', { name: 'comicDialog', cut: 14 });
+  dim.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => { if (e) e.propagationStopped = true; dismissUI(dim); });
+  return comicDialogContent(dim, w, h, title, () => dismissUI(dim));
+}
+
+/** Content-only variant: related views can keep one continuous backdrop during navigation. */
+export function comicDialogContent(parent: Node, w: number, h: number, title: string,
+  onClose: () => void, animated = true): Node {
+  const panel = comicPlate(parent, 0, 0, w, h, 'paper', { name: 'comicDialog', cut: 14 });
   panel.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => {
     if (e) e.propagationStopped = true;
   });
   label(panel, 0, h / 2 - 42, title, { size: 30, bold: true, font: 'body', color: COMIC.text, w: w - 140, h: 42, shrink: true });
-  const close = comicButton(panel, w / 2 - 35, h / 2 - 35, 44, 44, '', () => dim.destroy(), { tone: 'dark', name: 'btn_close' });
+  const close = comicButton(panel, w / 2 - 35, h / 2 - 35, 44, 44, '', onClose, { tone: 'dark', name: 'btn_close', sound: 'close' });
   comicMark(close.getChildByName('buttonFace')!, 0, 0, 'close', 20);
+  if (animated) { motionIn(panel, 'modal'); uiSound('open'); }
   return panel;
 }

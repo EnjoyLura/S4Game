@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-web-load-v1-20261016-141552",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-weapons-v1-20261016-131406",
+  "entryVersion": "1792131057",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=web-load-v1-1792131057",
+  "scope": "production minification; content-versioned browser cache; startup preloads; visible page before background hero/UI art",
+  "manualAcceptance": "pending user manual review"
+}

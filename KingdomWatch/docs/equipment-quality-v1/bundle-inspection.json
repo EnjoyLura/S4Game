@@ -1,0 +1,29 @@
+{
+  "mainBundle": "assets/main/index.e9ead.js",
+  "mainBundleSha256": "837a57050572d6f179376c87417b5d820cd85b6f7491ca095eb58c2c559672ec",
+  "mainBundleBytes": 581172,
+  "markers": {
+    "gearQualityFrame": true,
+    "gearQualityTag": true,
+    "gearQualityHalo": true,
+    "dropItemDetails:": true,
+    "lootPoolItem:": true,
+    "codexSilhouette:": true,
+    "levelReturnReady": true,
+    "waitForDestination": true,
+    "settlementHeraldry:": true,
+    "settlementEarnedStar:": true,
+    "settlementGoldNumber": true,
+    "settlementRewardDivider": true,
+    "creditBattleGold": true,
+    "goldSettled": true,
+    "doubleRewarded": true,
+    "xpEarned": true
+  },
+  "removedSettlementMarkers": {
+    "settlementTab:": false,
+    "settlementHero:": false
+  },
+  "typecheck": "existing ButtonFeedback start collision and documentation snapshot diagnostics; no new module diagnostics",
+  "inspection": "static local artifact text only; no script/game/browser executed"
+}

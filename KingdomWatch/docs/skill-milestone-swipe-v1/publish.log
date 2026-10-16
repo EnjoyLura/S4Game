@@ -1,0 +1,11 @@
+✨ Compiled Worker successfully
+Uploading... (1880/1882)
+Uploading... (1881/1882)
+Uploading... (1882/1882)
+✨ Success! Uploaded 2 files (1880 already uploaded) (2.55 sec)
+
+✨ Uploading _headers
+✨ Uploading Functions bundle
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://a090a208.kingdom-watch.pages.dev
+{"stage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-skill-milestone-swipe-v1-20261015-133037","priorPublishedStage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-page-switch-no-flash-v1-20261015-131751","entryVersion":"1792042204","project":"kingdom-watch","branch":"main","game":"https://kingdom-watch.pages.dev/?v=skill-milestone-swipe-v1-1792042204","scope":"skill breakthrough cards: horizontal drag, snap, edge resistance and vertical-scroll handoff","layoutChanged":false,"interactionAcceptance":"pending user manual review"}

@@ -98,6 +98,7 @@ export class BattleSprite {
   private blendCol = new Color();
   private coldMode: ColdMode = null;
   private coldMaterial: Material | null = null;
+  private deathMaterial: Material | null = null;
   private coldWaiting = false;
 
   constructor(parent: Node, atlasId: AtlasId, private onLoaded: () => void) {
@@ -191,6 +192,19 @@ export class BattleSprite {
 
   get coldReady(): boolean { return !!coldMaterials; }
 
+  /** Death holds the exact struck cel; no walk/attack blend survives into the corpse. */
+  freezePose(): void {
+    this.seqFrac = 0;
+    if (this.blendNode) this.blendNode.active = false;
+    // The fatal burst samples this atlas rectangle; dynamic packing must not relocate it.
+    if (this.sprite.spriteFrame) this.sprite.spriteFrame.packable = false;
+  }
+
+  setDeathMaterial(material: Material | null): void {
+    this.deathMaterial = material;
+    this.syncColdMaterial();
+  }
+
   cold(mode: ColdMode): void {
     this.coldMode = mode;
     if (mode && !coldMaterials && !coldFailed && !this.coldWaiting) {
@@ -201,7 +215,7 @@ export class BattleSprite {
   }
 
   private syncColdMaterial(): void {
-    const material = this.coldMode && coldMaterials ? coldMaterials[this.coldMode] : null;
+    const material = this.deathMaterial || (this.coldMode && coldMaterials ? coldMaterials[this.coldMode] : null);
     if (this.coldMaterial === material) return;
     this.coldMaterial = material;
     this.sprite.customMaterial = material;

@@ -62,6 +62,11 @@ function loadClip(directory: string, id: ClipId, callback: (clip: Clip | null) =
   });
 }
 
+/** Reuse the player's real clip loader while the level lobby is visible. */
+export function preloadHeroClip(directory: string, id: ClipId): Promise<void> {
+  return new Promise(resolve => loadClip(directory, id, () => resolve()));
+}
+
 function frameAt(clip: Clip, time: number): number {
   let first = 0, last = clip.frames.length - 1;
   while (first < last) {

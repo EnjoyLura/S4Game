@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-entry-art-v2-20261016-005828",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-stage-xp-flow-v1-20261016-003319",
+  "entryVersion": "1792083196",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=battle-entry-art-v2-1792083196",
+  "scope": "battle entry art, meteor/picker feedback",
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review"
+}

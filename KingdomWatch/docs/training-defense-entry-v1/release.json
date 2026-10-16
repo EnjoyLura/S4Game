@@ -1,0 +1,37 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-training-defense-entry-v1-20261016-124727",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-level-reward-tabs-v1-20261016-123714",
+  "entryVersion": "1792126011",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=training-defense-entry-v1-1792126011",
+  "scope": "smooth milestone gestures; saved keep HP/shield in every new battle; two real foreground seconds of closed-door hold",
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://1a74d63e.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-training-defense-entry-v1-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-training-defense-entry-v1-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "smooth milestone gestures; saved keep HP/shield in every new battle; two real foreground seconds of closed-door hold",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 9147,
+  "date": "2026-10-16T12:48:12.964990+08:00",
+  "mainBundleSha256": "b338ab5dbaac4e4d3e3954479d376a3bef77bc3a2abd15593f9514e4ef736b47",
+  "validation": {
+    "sourceReview": true,
+    "localBundleInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "testsRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  }
+}

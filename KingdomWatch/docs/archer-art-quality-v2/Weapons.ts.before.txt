@@ -1,0 +1,35 @@
+/** Pure weapon catalog: also safe to read while migrating the save (no GameData dependency). */
+export type WeaponType = 'bow' | 'crossbow' | 'book' | 'staff';
+export const WEAPON_TYPE_NAME: Record<WeaponType, string> = { bow: '弓', crossbow: '弩', book: '魔法书', staff: '法杖' };
+export interface WeaponSpec {
+  id: string; name: string; type: WeaponType; quality: 0 | 1 | 3; tier: number;
+  stats: { atk: number; skillDmg: number; atkSpd?: number; critRate?: number; critDmg?: number; chargeEff?: number };
+  price: number; unlock: string; art: string; starter?: boolean;
+  /** Per ten levels; secondary bonus at 30/60/90. All rates are additive. */
+  breakthrough: { atk: number; skill: number; secondary: 'atkSpd' | 'critRate' | 'chargeEff' | 'critDmg'; bonus: number };
+}
+const art = (name: string): string => 'weapons_v1/' + name;
+export const WEAPONS: Record<string, WeaponSpec> = {
+  wpn_starter_bow: { id: 'wpn_starter_bow', name: '狩猎木弓', type: 'bow', quality: 0, tier: 1, stats: { atk: 8, skillDmg: 4 }, price: 0, unlock: '', art: art('starter_bow'), starter: true, breakthrough: { atk: .09, skill: .07, secondary: 'atkSpd', bonus: .02 } },
+  wpn_starter_crossbow: { id: 'wpn_starter_crossbow', name: '制式轻弩', type: 'crossbow', quality: 0, tier: 1, stats: { atk: 14, skillDmg: 4 }, price: 0, unlock: '', art: art('starter_crossbow'), starter: true, breakthrough: { atk: .10, skill: .06, secondary: 'critRate', bonus: .01 } },
+  wpn_starter_book: { id: 'wpn_starter_book', name: '学徒魔法书', type: 'book', quality: 0, tier: 1, stats: { atk: 4, skillDmg: 12 }, price: 0, unlock: '', art: art('starter_book'), starter: true, breakthrough: { atk: .06, skill: .10, secondary: 'chargeEff', bonus: .02 } },
+  wpn_starter_staff: { id: 'wpn_starter_staff', name: '学徒法杖', type: 'staff', quality: 0, tier: 1, stats: { atk: 6, skillDmg: 10 }, price: 0, unlock: '', art: art('starter_staff'), starter: true, breakthrough: { atk: .07, skill: .09, secondary: 'critDmg', bonus: .04 } },
+  // Existing IDs, ownership and base stats remain valid.
+  wpn_bow: { id: 'wpn_bow', name: '猎风长弓', type: 'bow', quality: 1, tier: 1, stats: { atk: 24, skillDmg: 14, atkSpd: .08 }, price: 800, unlock: '1-1', art: art('green_bow'), breakthrough: { atk: .10, skill: .08, secondary: 'atkSpd', bonus: .03 } },
+  wpn_green_crossbow: { id: 'wpn_green_crossbow', name: '巡林轻弩', type: 'crossbow', quality: 1, tier: 1, stats: { atk: 30, skillDmg: 10, critRate: .03 }, price: 800, unlock: '1-1', art: art('green_crossbow'), breakthrough: { atk: .11, skill: .07, secondary: 'critRate', bonus: .015 } },
+  wpn_green_book: { id: 'wpn_green_book', name: '翠纹秘典', type: 'book', quality: 1, tier: 1, stats: { atk: 12, skillDmg: 30, chargeEff: .06 }, price: 800, unlock: '1-1', art: art('green_book'), breakthrough: { atk: .07, skill: .11, secondary: 'chargeEff', bonus: .03 } },
+  wpn_green_staff: { id: 'wpn_green_staff', name: '林语法杖', type: 'staff', quality: 1, tier: 1, stats: { atk: 16, skillDmg: 26, critDmg: .12 }, price: 800, unlock: '1-1', art: art('green_staff'), breakthrough: { atk: .08, skill: .10, secondary: 'critDmg', bonus: .06 } },
+  wpn_crossbow: { id: 'wpn_crossbow', name: '鹰眼重弩', type: 'crossbow', quality: 3, tier: 2, stats: { atk: 46, skillDmg: 26, critRate: .05 }, price: 1200, unlock: '1-2', art: 'shop_comic_v1/comic_wpn_crossbow_v1', breakthrough: { atk: .12, skill: .08, secondary: 'critRate', bonus: .02 } },
+};
+export const STARTER_WEAPON: Record<string, string> = {
+  archer: 'wpn_starter_bow', sniper: 'wpn_starter_crossbow', pyro: 'wpn_starter_book', volt: 'wpn_starter_staff', mora: 'wpn_starter_staff',
+};
+export function weaponFits(hid: string, id: string): boolean {
+  const type = WEAPONS[id]?.type;
+  return hid === 'archer' ? type === 'bow' : hid === 'sniper' ? type === 'crossbow'
+    : ['pyro', 'volt', 'mora'].includes(hid) && (type === 'book' || type === 'staff');
+}
+export function weaponUsers(id: string): string {
+  const type = WEAPONS[id]?.type;
+  return type === 'bow' ? '弓手专用' : type === 'crossbow' ? '重弩手专用' : '火 / 雷 / 冰法师通用';
+}

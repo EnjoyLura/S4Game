@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-archer-cards-v1-20261015-205719",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-volt-vfx-enhance-v1-20261015-204232",
+  "entryVersion": "1792069024",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=archer-cards-v1-1792069024",
+  "scope": "archer four-rarity cards, attack tradeoffs, five-stack serial and fan, shared per-hero numeric cards",
+  "layoutChanged": false,
+  "manualAcceptance": "pending user manual review"
+}

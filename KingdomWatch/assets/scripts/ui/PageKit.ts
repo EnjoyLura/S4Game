@@ -2,7 +2,7 @@
  * 主界面页面共享工具：toast / 模态弹窗框架 / 品质徽标 / 货币小标
  * 设计坐标与线稿一致：顶基 y 统一 WY(线稿设计值)（线稿数字=含刘海偏移的绝对 y），弹窗面板居中。
  */
-import { Graphics, Mask, Node, ScrollView, UITransform, UIOpacity, tween } from 'cc';
+import { Graphics, Mask, Node, ScrollView, UITransform, UIOpacity } from 'cc';
 import { LO, PAL } from '../config/GameConfig';
 import { CA, btn, C, dlgConfirm, dimLayer, gpanel, label, LabelOpts, N, WY, WX } from './UIKit';
 import { artSprite } from './Ux';
@@ -10,6 +10,10 @@ import { COMIC, comicPlate } from './ComicUI';
 import { HERO_DEFS, Quality, QCOLOR, QNAME } from '../core/GameData';
 import { loadSave } from '../core/SaveData';
 import { BattleSprite } from '../battle/BattleSprite';
+import { bindButton } from './ButtonFeedback';
+import { dismissUI, motionIn } from './UIMotion';
+import { uiSound } from './UIAudio';
+import { NoticeOptions, showNotice } from './UINotice';
 
 /** Shared geometry for the five lobby pages, in visible top-origin units. */
 export const MAIN_NAV_H = 128;
@@ -39,7 +43,7 @@ export function mainSegments(parent: Node, top: number, names: readonly string[]
       active ? '#E8BA60' : CA('#FFFFFF', 0), undefined, 0, 12);
     mainLabel(slot, 0, 0, (locked[i] ? '锁定 · ' : '') + name,
       { size: locked[i] ? 18 : 22, color: active ? '#322815' : locked[i] ? '#8D9A91' : '#D8DFD4', bold: active, w: w - 16, h: 40, shrink: true });
-    slot.on(Node.EventType.TOUCH_END, () => onSelect(i));
+    bindButton(slot, () => onSelect(i), { scale: .96, shift: 1, sound: 'select' });
   });
 }
 
@@ -77,10 +81,10 @@ export function heroRoster(parent: Node, top: number, selected: string, onSelect
     }
     mainLabel(slot, 0, -32, def.name.split('·')[0], { size: 18, color: active ? '#FFE1A0' : owned ? '#D9DFD4' : '#8D9A91', bold: active, w: 112, h: 24 });
     if (active) gpanel(slot, 0, -49, 28, 3, '#E8BA60', undefined, 0, 1);
-    slot.on(Node.EventType.TOUCH_END, () => {
+    bindButton(slot, () => {
       if (!owned) { toast('前往商店解锁该英雄'); return; }
       onSelect(def.id);
-    });
+    }, { sound: 'select' });
   });
 }
 
@@ -106,17 +110,13 @@ export interface PageCtx {
   screens: Node;
   /** 全屏刷新（页签内容整屏重建 + 顶栏货币刷新） */
   refresh: () => void;
+  /** Update shared currencies without replacing the page or its open dialog. */
+  refreshResources?: () => void;
 }
 
-/** 轻提示：屏幕上中部浮字，1.6s 后淡出销毁 */
-export function toast(msg: string): void {
-  const scene = GLOBAL_ROOT;
-  if (!scene) return;
-  const n = N('toast', scene, 0, WY(560, 60), 750, 60);
-  const p = comicPlate(n, 0, 0, 460, 60, 'dark', { name: 'comicToast', cut: 10 });
-  label(p, 0, 0, msg, { size: 24, font: 'body', color: COMIC.cream, bold: true, w: 440, h: 40, shrink: true });
-  const op = n.addComponent(UIOpacity);
-  tween(op).delay(1.1).to(0.5, { opacity: 0 }).call(() => n.destroy()).start();
+/** Shared non-blocking notices survive page content rebuilds. */
+export function toast(msg: string, options: NoticeOptions = {}): void {
+  if (GLOBAL_ROOT?.isValid) showNotice(GLOBAL_ROOT, msg, options);
 }
 
 /** MainUI 注入的全局根（toast 挂载点，独立于页签容器不被整屏重建） */
@@ -130,18 +130,19 @@ export function modal(ctx: PageCtx, w: number, h: number, title: string, flat = 
   dim.on(Node.EventType.TOUCH_END, (e: unknown) => {
     const ev = e as { propagationStopped?: boolean };
     if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;  // 不连关下层弹窗
-    dim.destroy();
+    dismissUI(dim);
   });
   const panel = gpanel(dim, 0, -80, w, h, CA('#1B201A', 0.97), flat ? undefined : CA(PAL.gold, 0.95), 2.5, 18);
   if (!flat) artSprite(panel, 0, 0, w, h, 'ui_panel_dark_gold', { belowIdx: 0 });
   if (title) label(panel, 0, h / 2 - 44, title, { size: 28, color: '#FFE08A', bold: true });
-  const close = dlgConfirm(panel, w / 2 - 40, h / 2 - 40, 56, 56, '✕', () => dim.destroy(), 26, '#8A93A0', '#5F6873', 'ui_btn_close');
+  const close = dlgConfirm(panel, w / 2 - 40, h / 2 - 40, 56, 56, '✕', () => dismissUI(dim), 26, '#8A93A0', '#5F6873', 'ui_btn_close');
   close.name = 'btn_close';
   /* 面板吞掉触摸：点面板内容（含无 handler 的行）不会落到遮罩上误关弹窗 */
   panel.on(Node.EventType.TOUCH_END, (e: unknown) => {
     const ev = e as { propagationStopped?: boolean };
     if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
   });
+  motionIn(panel, 'modal'); uiSound('open');
   return panel;
 }
 
@@ -190,12 +191,11 @@ export function confirmModal(ctx: PageCtx, title: string, lines: string[], okTex
   const by = hasSeat ? -210 : -130;
   btn(panel, 130, by, 200, 76, okText, PAL.green, () => {
     const err = onOk();
-    if (err) { toast(err); return; }
+    if (err) { toast(err, { kind: 'warning' }); return; }
     const dim = panel.parent;
-    if (dim) dim.destroy();
-    ctx.refresh();
+    uiSound('confirm'); dismissUI(dim, ctx.refresh, false);
   }, 24, true);
-  btn(panel, -130, by, 200, 76, '取 消', '#5A6472', () => { const d = panel.parent; if (d) d.destroy(); }, 24, true);
+  btn(panel, -130, by, 200, 76, '取 消', '#5A6472', () => dismissUI(panel.parent), 24, true);
 }
 
 /** 内容顶基坐标：统一用 WY() 直读线稿设计值（线稿数字即含刘海偏移的绝对 y）；CX 为横向便捷别名 */
@@ -205,10 +205,6 @@ export function CX(l: number, w: number): number { return WX(l, w); }
 export function circleArrow(parent: Node, x: number, y: number, dir: -1 | 1, cb: () => void): Node {
   const ar = gpanel(parent, x, y, 64, 64, CA('#14181E', 0.55), undefined, 0, 32);
   label(ar, 0, 0, dir < 0 ? '◀' : '▶', { size: 26, color: '#F5E6C8', bold: true, w: 64, h: 40 });
-  ar.on(Node.EventType.TOUCH_END, (e: unknown) => {
-    const ev = e as { propagationStopped?: boolean };
-    if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;   // 阻断冒泡：英雄页立绘板监听 TOUCH_END 弹属性总览，箭头点击不能触发
-    cb();
-  });
+  bindButton(ar, cb, { circle: true });
   return ar;
 }

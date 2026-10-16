@@ -1,0 +1,37 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-level-breakthrough-swipe-v1-20261016-101808",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-level-difficulty-loot-v1-20261016-095440",
+  "entryVersion": "1792117063",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=level-breakthrough-swipe-v1-1792117063",
+  "scope": "hero level and weapon breakthroughs use the existing skill milestone swipe interaction",
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://8c610a5f.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-level-breakthrough-swipe-v1-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-level-breakthrough-swipe-v1-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "hero level and weapon breakthroughs use the existing skill milestone swipe interaction",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 9589,
+  "date": "2026-10-16T10:19:13.715106+08:00",
+  "mainBundleSha256": "dfcc47062ea2943072bb5a3ba3022e4432611212aac71caaf2cbaafb7f8d3415",
+  "validation": {
+    "sourceReview": true,
+    "localBundleInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "testsRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  }
+}

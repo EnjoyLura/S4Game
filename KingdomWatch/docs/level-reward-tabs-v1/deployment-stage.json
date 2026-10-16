@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-level-reward-tabs-v1-20261016-123714",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-level-breakthrough-swipe-v1-20261016-101808",
+  "entryVersion": "1792125403",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=level-reward-tabs-v1-1792125403",
+  "scope": "star chests on the left and selected by default; level loot on the right",
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review"
+}

@@ -7,7 +7,8 @@ import { Color, Graphics, Label, Layers, Node, Sprite, UITransform, UIOpacity, t
 import { LO, PAL } from '../config/GameConfig';
 import { artSetFrame, artSprite, uxFrame } from './Ux';
 import { applyFont, FontRole, inferFont } from './Fonts';
-import { Sfx } from '../core/Sfx';
+import { bindButton } from './ButtonFeedback';
+import { motionIn } from './UIMotion';
 
 export function C(hex: string): Color {
   const c = new Color();
@@ -202,25 +203,13 @@ export function btn(parent: Node, x: number, y: number, w: number, h: number, te
   if (style) {
     const isDisabled = style.endsWith('_disabled');
     const normalId = style;
-    const pressId = style.replace('_disabled', '_press');
-    let sp: Sprite | null = null;
     artSprite(n, 0, 0, w, h, normalId, { belowIdx: 0, onLoaded: () => {
-      sp = (n.getChildByName('art:' + normalId) as Node | null)?.getComponent(Sprite) || null;
       const l = lbl.getComponent(Label);
       if (l && !art) l.color = C(isDisabled ? '#AAB2BD' : '#FFF3D6');
     }});
-    if (!isDisabled) uxFrame(pressId, () => {}); // 预热按下帧，首次按下即换
-    n.on(Node.EventType.TOUCH_START, () => { if (sp) artSetFrame(sp, pressId); });
-    const restore = () => { if (sp) artSetFrame(sp, normalId); };
-    n.on(Node.EventType.TOUCH_CANCEL, restore);
-    n.on(Node.EventType.TOUCH_END, restore);
   }
-  n.on(Node.EventType.TOUCH_END, (e: unknown) => {
-    const ev = e as { propagationStopped?: boolean };
-    if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
-    Sfx.play('ui');
-    cb();
-  });
+  // Keep the original face and its colours; press feedback comes from physical motion.
+  bindButton(n, cb);
   return n;
 }
 
@@ -256,12 +245,7 @@ export function dlgConfirm(parent: Node, x: number, y: number, w: number, h: num
   const face = gpanel(n, 0, 0, w, h, CA(base, 1), undefined, 0, 14);
   label(face, 0, 0, text, { size, color: '#3A2A10', bold: true, w: w - 16, h, shrink: true });
   artSprite(face, 0, 0, w, h, art, { belowIdx: 0 });
-  n.on(Node.EventType.TOUCH_END, (e: unknown) => {
-    const ev = e as { propagationStopped?: boolean };
-    if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
-    Sfx.play('ui');
-    cb();
-  });
+  bindButton(n, cb, { visual: face });
   return n;
 }
 
@@ -270,12 +254,7 @@ export function dlgConfirm(parent: Node, x: number, y: number, w: number, h: num
 export function noticeBtn(parent: Node, x: number, y: number, d: number, cb: () => void): Node {
   const n = gcircle(parent, x, y, d / 2, CA('#D98A3E', 1));
   artSprite(n, 0, 0, d + 4, d + 4, 'ui_btn_notice', { sliced: false, belowIdx: 0 });
-  n.on(Node.EventType.TOUCH_END, (e: unknown) => {
-    const ev = e as { propagationStopped?: boolean };
-    if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;
-    Sfx.play('ui');
-    cb();
-  });
+  bindButton(n, cb, { circle: true });
   return n;
 }
 
@@ -306,20 +285,18 @@ export function gswitch(parent: Node, x: number, y: number, w: number, h: number
   }});
   ['ui_switch_on', 'ui_switch_off'].forEach(id => uxFrame(id, () => {})); // 预热
   if (!disabled && onChange) {
-    n.on(Node.EventType.TOUCH_END, (e: unknown) => {
-      const ev = e as { propagationStopped?: () => void };
-      if (ev && ev.propagationStopped) ev.propagationStopped();
+    bindButton(n, () => {
       on = !on;
       if (artOk && sp) artSetFrame(sp, artId());
       else draw(on);
       onChange(on);
-    });
+    }, { radius: h / 2, sound: 'toggle', soundAfterAction: true });
   }
   return n;
 }
 
 /** 全屏遮罩（吞点击）：覆盖整个可视区（Fit-Width 高度动态），不能用 Widget 对 0 尺寸父级对齐 */
-export function dimLayer(parent: Node, alpha = 0.68, red = false): Node {
+export function dimLayer(parent: Node, alpha = 0.68, red = false, animated = true): Node {
   const H = LO.half * 2 + 240;
   const n = N('dim', parent, 0, 0, 750, H);
   const g = n.addComponent(Graphics);
@@ -327,6 +304,7 @@ export function dimLayer(parent: Node, alpha = 0.68, red = false): Node {
   g.roundRect(-375, -H / 2, 750, H, 0);
   g.fill();
   n.addComponent(BlockInputEvents);
+  if (animated) motionIn(n, 'fade');
   return n;
 }
 

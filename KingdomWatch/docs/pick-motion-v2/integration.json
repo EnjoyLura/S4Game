@@ -1,0 +1,66 @@
+{
+  "status": "published",
+  "scope": [
+    "ultimate charge readiness compiler regression",
+    "original three-choice motion",
+    "insufficient currency purchase feedback",
+    "full-screen battle entry"
+  ],
+  "ultimateBug": {
+    "rootCause": "Cocos loose super-getter lowering reads HeroBase.prototype.ultimateRemaining with the prototype as receiver; ultimateT is instance-only, producing undefined then NaN and making <= 0 false.",
+    "affected": [
+      "archer",
+      "sniper",
+      "pyro",
+      "volt"
+    ],
+    "mora": "base getter already reads its own instance timer",
+    "fix": "protected ultimateT read directly in each derived getter; retain real ultimate queue guards",
+    "hud": "full energy held by a prior cast displays 施放中 rather than capped 99%",
+    "builtBundleReview": "four direct this.ultimateT reads, no prototype.ultimateRemaining remains"
+  },
+  "picker": {
+    "reference": "user supplied Screenrecording_20261015_233949.mp4, inspected extracted frames only",
+    "approach": "original choreography; timing reference only, retain own parchment and resources",
+    "entrySeconds": 0.44,
+    "staggerSeconds": 0.055,
+    "risePixels": 22,
+    "selectionSeconds": 0.46,
+    "selectedLiftPixels": 14,
+    "selectedPeakScale": 1.028,
+    "sideCards": "opaque paper with a dark overlay, small outward settle",
+    "refresh": "retain old columns until replacement art and each entry are ready",
+    "inputs": "locked while preparing, entering, choosing or awaiting reward; callback once with panel version checks"
+  },
+  "purchase": {
+    "validation": "fresh save wallet before shopBuy, both gold and diamonds",
+    "feedback": "inline exact shortage, updated balance, restrained 4px price-area shake and semantic warning notice/audio",
+    "failure": "keep dialog open, no deduction or grant, no confirm sound",
+    "success": "canonical shopBuy, semantic success cue, duplicate guard and existing refresh"
+  },
+  "battleEntry": {
+    "implementation": "Cocos persistent Canvas and independent camera/layer, two vector cloth flag panels with inset gold piping and shield crest",
+    "closingSeconds": 0.34,
+    "minimumHoldSeconds": 0.14,
+    "openingSeconds": 0.48,
+    "loading": "preload overlaps closure; scene launch only after opaque coverage; reveal after tracked artwork and a draw boundary",
+    "button": "unchanged caption and normal elastic press, no busy skin or 进入中 state",
+    "combat": "entry countdown held until transition exits",
+    "recovery": "load failures reopen the retained page and warn; art that stalls beyond eight seconds reveals existing fallbacks",
+    "lifecycle": "blocks repeat touches, freezes in background, resizes with viewport, reduced-motion route, listener/camera/persistent node cleanup"
+  },
+  "assets": "no added bitmap, audio or video assets; own vector graphics and existing licensed sounds",
+  "validation": {
+    "sourceAndBuiltBundleReview": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "tests": false,
+    "simulation": false,
+    "gameLaunch": false,
+    "browser": false,
+    "onlineVisualAudioAcceptance": false,
+    "manualAcceptance": "pending user review"
+  },
+  "game": "https://kingdom-watch.pages.dev/?v=pick-motion-v2-1792080348",
+  "deployment": "https://2483cd03.kingdom-watch.pages.dev"
+}

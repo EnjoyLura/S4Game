@@ -1,0 +1,50 @@
+{
+  "status": "published",
+  "scope": "larger brighter procedural basic attack releases for all five heroes",
+  "launchRenderer": "texture-free procedural shader with native Graphics loading fallback",
+  "sampledLaunchArtwork": false,
+  "launchSeconds": {
+    "archer": 0.32,
+    "sniper": 0.36,
+    "pyro": 0.34,
+    "volt": 0.3,
+    "mora": 0.36
+  },
+  "launchScale": {
+    "archer": 1.45,
+    "sniper": 1.7,
+    "pyro": 1.5,
+    "volt": 1.5,
+    "mora": 1.5
+  },
+  "shaderOpacityMultiplier": 1.4,
+  "shaderFadeExponent": 0.95,
+  "wind": "two staggered open pressure fronts, stronger slipstreams and snap core",
+  "fire": "broader forward flame pulse and 8 embers",
+  "volt": "3 connected electric strands with bilateral branches",
+  "frost": "stronger mist front and 6 larger crystal facets",
+  "poolCapacity": 36,
+  "clock": "battle simulation age and direction",
+  "paidGenerationCalls": 0,
+  "layoutChanged": false,
+  "preserved": [
+    "hero art and animation",
+    "painted projectile bodies",
+    "flight trails",
+    "damage",
+    "attack rates",
+    "projectile speed",
+    "collisions",
+    "targeting",
+    "skills",
+    "ultimates",
+    "hit effects",
+    "HP and shield layout",
+    "BGM and sampled audio"
+  ],
+  "gameplayValidation": "user manual",
+  "automatedAcceptance": "not run per user instruction",
+  "visualAcceptance": "pending user manual review",
+  "game": "https://kingdom-watch.pages.dev/?v=basic-launch-emphasis-v4-1792001210",
+  "deployment": "https://a04a5ac5.kingdom-watch.pages.dev"
+}

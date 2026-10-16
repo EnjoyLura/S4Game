@@ -1,0 +1,80 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-entry-art-v2-20261016-005828",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-stage-xp-flow-v1-20261016-003319",
+  "entryVersion": "1792083196",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=battle-entry-art-v2-1792083196",
+  "scope": [
+    "faster original painted battle-entry gates",
+    "pyro crater size and meteor shadow warnings",
+    "remove all hero ultimate dimming",
+    "stronger card choice and refresh choreography",
+    "semantic description lines for all card families"
+  ],
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "entry": {
+    "closingSeconds": 0.24,
+    "openingSeconds": 0.32,
+    "minimumHoldSeconds": 0.06,
+    "warmMinimumMotionSeconds": 0.62,
+    "firstPaintArtWaitCapSecondsAfterSceneBuilt": 0.9,
+    "actualDuration": "motion + engine scene handoff; cold network may still need resources or use the existing visual fallback",
+    "art": "assets/resources/ux/battle_entry_v2/royal_gate.png",
+    "method": "original built-in image_gen, own shield style reference, unchanged pixels; two non-packable half-width shared frames, equal cover scale",
+    "prewarm": "gate immediately on lobby; selected level background, wall, equipped heroes idle cache and HUD on level page; attack clips after idle",
+    "readiness": "critical first-paint resources then AFTER_DRAW; decorative HUD icons do not block; scene handoff only at full opacity; prepare countdown waits until reveal ends",
+    "input": "persistent canvas input lock, duplicate entry guard, reduced motion, hidden/show freeze and failure reopen retained"
+  },
+  "pyro": {
+    "craterRadiusBefore": 88,
+    "craterRadiusAfter": 114.4,
+    "factor": 1.3,
+    "growth": "radius and diameter +30%, area +69%; artwork and actual burn/vulnerability range scale together, original level multipliers retained",
+    "landingWarnings": "soft charcoal ellipse at exact fixed landing center, size/alpha progress with real flight time; show shortly before firing, remove on actual ground impact; no rings, crosshair or orange pulse",
+    "unchanged": "meteor immediate blast radius140, damage, quantity, flight speed, crater lifetime4s and burn/vulnerability values"
+  },
+  "ultimates": {
+    "screenDimming": "removed shade node and draw path for every hero",
+    "retained": "local charge/impact light, beat cadence, world-only small shake, damage and charge"
+  },
+  "cards": {
+    "choiceSeconds": 0.48,
+    "choice": "0.94 compression ->1.12 peak ->1.065 settle, lift28px and inward6%, unselected cards shift32px and darken on opaque art; perimeter light, corner sparks and one confirm at100ms",
+    "refreshSeconds": 0.52,
+    "refresh": "45ms stagger,120ms old-card contraction and same-frame prepared opaque replacement,280ms spring925->1.04->1; moving edge glints and open/select cues",
+    "text": "semantic authored lines for all families and unlock cards, explicit 18px body font/25px line-height in196x112 box, wrap disabled with shrink safety; formulas, ownership, rarity, weights and effects retained",
+    "accessibility": "reduced motion, hide/show freezing, single-owner transforms, duplicate action lock retained"
+  },
+  "validation": {
+    "sourceReview": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "builtBundleReview": "Painted gate resource, preload clip exports, fast transition constants and critical draw barrier, 1.3 crater factor and ground-shadow draw, no ultimateBackgroundFocus, authored description lines/no-wrap label and separate refresh/choice choreography present. No runtime validation performed.",
+    "tests": false,
+    "simulation": false,
+    "gameLaunch": false,
+    "browser": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user review"
+  },
+  "deployment": "https://d04cba51.kingdom-watch.pages.dev",
+  "date": "2026-10-16T00:59:09.677387+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-battle-entry-art-v2-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-battle-entry-art-v2-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "painted fast battle entry, meteor shadows and larger craters, no ultimate dimming, decisive pick feedback",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 10394,
+  "mainBundleSha256": "473f75f280d925e39509fe945c463ca267eb601403dab37caae0c4d3d4f66a29",
+  "deploymentSucceeded": true,
+  "uploadedFiles": 6,
+  "cachedFiles": 1921
+}

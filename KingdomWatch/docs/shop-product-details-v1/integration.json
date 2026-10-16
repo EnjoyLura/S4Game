@@ -1,0 +1,43 @@
+{
+  "status": "published",
+  "scope": "shop product icons open typed details with attributes, descriptions, quantities and purchase state",
+  "source": "assets/scripts/ui/pages/ShopPage.ts",
+  "categories": [
+    "weapon",
+    "hero",
+    "equip",
+    "mat"
+  ],
+  "lockedOwnedAndPlaceholderDetailsAccessible": true,
+  "sharedDetailForIconAndPriceButton": true,
+  "browseDoesNotPurchase": true,
+  "equipmentPreview": "equipStat at level 1, including tier multiplier; statFmt for percentages",
+  "heroDetails": [
+    "role",
+    "story",
+    "initial attack",
+    "initial attack speed",
+    "skill",
+    "ultimate",
+    "per-battle ability unlock note"
+  ],
+  "materialDetails": [
+    "configured description",
+    "owned count",
+    "purchase quantity",
+    "inventory location"
+  ],
+  "fixedFooter": [
+    "status or quantity",
+    "currency",
+    "price",
+    "wallet",
+    "close",
+    "purchase"
+  ],
+  "scrollableInfo": true,
+  "purchaseOperation": "existing shopBuy",
+  "gameplayValidation": "user manual; no tests, game, browser or online acceptance run",
+  "game": "https://kingdom-watch.pages.dev/?v=shop-product-details-v1-1792043495",
+  "deployment": "https://84056597.kingdom-watch.pages.dev"
+}

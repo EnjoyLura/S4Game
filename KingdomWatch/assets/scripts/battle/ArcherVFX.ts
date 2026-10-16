@@ -193,7 +193,9 @@ export class ArcherVFX {
   }
 
   release(x: number, y: number, dx: number, dy: number, heavy: boolean): boolean {
-    return this.start(x, y, Math.atan2(dy, dx), heavy, true);
+    const length = Math.hypot(dx, dy);
+    if (!Number.isFinite(length) || length < .001) return false;
+    return this.start(x + dx / length * 36, y + dy / length * 36, Math.atan2(dy, dx), heavy, true);
   }
 
   hit(x: number, y: number, heavy: boolean, angle = Math.PI / 2): boolean {

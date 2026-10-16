@@ -5,6 +5,7 @@ import { ArtOpts, artSprite, artSetFrame, uxFrame } from './Ux';
 import { heroPortrait } from './HeroComic';
 import { PAL } from '../config/GameConfig';
 import { battleProgressBar } from './BattleProgressBar';
+import { bindButton } from './ButtonFeedback';
 
 const SKIN = 'battle_skin_v2/';
 const ART: Record<string, string> = {
@@ -62,10 +63,10 @@ export function battleSwitch(parent: Node, x: number, y: number, w: number, h: n
   let sp: Sprite | null = null;
   artSprite(n, 0, 0, w, h, id(), { onLoaded: art => { sp = art.getComponent(Sprite); g.enabled = false; } });
   ['switch_on', 'switch_off'].forEach(key => uxFrame(SKIN + key, () => {}));
-  if (!disabled && onChange) n.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => {
-    e.propagationStopped = true; on = !on;
+  if (!disabled && onChange) bindButton(n, () => {
+    on = !on;
     if (sp) artSetFrame(sp, id()); else draw(); onChange(on);
-  });
+  }, { radius: h / 2, sound: 'toggle', soundAfterAction: true });
   return n;
 }
 

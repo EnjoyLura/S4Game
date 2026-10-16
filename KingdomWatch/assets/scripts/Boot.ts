@@ -7,12 +7,17 @@ import {
   setDisplayStats, sys, UITransform, view,
 } from 'cc';
 import { DESIGN_H, DESIGN_W, initLayout } from './config/GameConfig';
-import { getLevelDef } from './config/Mobs';
+import { getChallengeDef } from './config/LevelDifficulty';
 import { flow } from './core/Flow';
 import { setLayerDeep } from './ui/UIKit';
 import { uxPreloadIdle } from './ui/Ux';
 import { MainUI } from './ui/MainUI';
 import { BattleDirector } from './battle/BattleDirector';
+import { TouchFeedback } from './ui/TouchFeedback';
+import { motionIn } from './ui/UIMotion';
+import { enteringBattle } from './ui/BattleEntry';
+import { warmEntryArt } from './ui/BattleEntryWarmup';
+import { deferUIWarmup } from './ui/IdleWarmup';
 
 function hexc(hex: string): Color {
   const c = new Color();
@@ -74,15 +79,20 @@ function onSceneLaunched(): void {
   // 双模式：主城 MainUI（底部导航五主界面）/ 战斗 BattleDirector；经 flow 标记 + loadScene 重建切换
   if (flow.mode === 'battle') {
     const bd = root.addComponent(BattleDirector);
-    bd.levelDef = getLevelDef(flow.levelId);
+    bd.levelDef = getChallengeDef(flow.levelId, flow.diff);
     (globalThis as unknown as { __kw?: BattleDirector }).__kw = bd; // 调试句柄：浏览器实测弹窗用
   } else {
     root.addComponent(MainUI);
+    deferUIWarmup(root, () => { warmEntryArt(); uxPreloadIdle(8000); });
   }
+  if (!enteringBattle()) motionIn(root, 'fade');
+  const touchLayer = new Node('TouchFeedbackLayer');
+  touchLayer.layer = Layers.Enum.UI_2D;
+  touchLayer.parent = canvasNode;
+  touchLayer.addComponent(UITransform).setContentSize(vis.width, vis.height);
+  touchLayer.addComponent(TouchFeedback);
 
-  // 闲时预载全部 UI 美术：首屏先行加载，0.8s 后逐张预热其余资源（弹窗/结算不再当面加载），
-  // 进程内只跑一次；场景重开（loadScene('Main')）缓存仍在，主城↔战斗往返秒开
-  uxPreloadIdle(800);
+  // Page artwork loads first. Only a small current-art set warms later, one image at a time.
 }
 
 director.on(Director.EVENT_AFTER_SCENE_LAUNCH, onSceneLaunched);

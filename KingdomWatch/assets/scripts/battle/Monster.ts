@@ -2,15 +2,17 @@
  * 怪物（§3.4 行为：松散虫群下行 + 正弦游动 + 自动分离；近战贴线攻击 / 远程停位投掷 / 萨满周期治疗）
  * 受击只闪红不掉速（用户确认：控制效果只属于特定 buff）；仅 BOSS 显示血条（M0 1-1 无 BOSS，钩子保留）
  */
-import { Color, Graphics, Label, Layers, Node, Tween, UIOpacity, tween } from 'cc';
+import { Color, Graphics, isValid, Label, Layers, Node, Tween, UIOpacity } from 'cc';
 import { MOB_DMG_MUL, MOB_HP_MUL, MobDef } from '../config/Mobs';
 import { LINE_Y, PAL, SPAWN_Y } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
+import { Sfx } from '../core/Sfx';
 import { BattleSprite } from './BattleSprite';
 import { FloatEvent } from './FloatText';
 import { getMobAnims, MobClip } from './MobAnim';
 import { drawFootIce } from './FrostVFX';
-import { DepthSprite, depthSprites, setDepthSorter } from './BattleDepth';
+import { clearDepthSorter, DepthSprite, depthSprites, setDepthSorter } from './BattleDepth';
+import { MonsterDeath, warmMonsterDeath } from './MonsterDeath';
 
 /** 攻击序列帧一次性时长（s）：与 lunge 0.2s 前摇错开，收招略长观感更实 */
 const ATK_ANIM = 0.34;
@@ -61,6 +63,12 @@ export class Monster {
   /** 易伤（焰法陨石坑）：站在坑内受伤放大，出坑后短暂残留 */
   vulnT = 0;
   vulnAmp = 0;
+  /** 猎杀标记独立计时；同类易伤取高，不能让火坑续长红色准星。 */
+  hunterMarkT = 0;
+  hunterMarkAmp = 0;
+  private hunterMarkVisual = false;
+  private hunterMarkAge = 0;
+  private hunterMarkTint = new Color();
   /** 冲撞/投掷前摇演出剩余时间（手动衰减，避免逐次创建 tween） */
   lungeT = 0;
   /** 攻击序列帧一次性播放剩余时间（atkAnimT>0 时压过步态帧） */
@@ -76,10 +84,12 @@ export class Monster {
   private flashOp: UIOpacity | null = null;
   private flashT = 0;
   private art: BattleSprite | null = null;
+  private deathMotion: MonsterDeath | null = null;
   private tint = new Color();
   private lastTint = '';
 
   init(def: MobDef, parent: Node, x: number, ctx: MonsterHitCtx, mgr?: MonsterManager): void {
+    this.deathMotion?.reset();
     this.def = def;
     this.ctx = ctx;
     this.mgrRef = mgr || null;
@@ -99,10 +109,13 @@ export class Monster {
     this.slowAmp = 0.2;
     this.shockT = this.shockAmp = 0;
     this.vulnT = this.vulnAmp = 0;
+    this.hunterMarkT = this.hunterMarkAmp = this.hunterMarkAge = 0;
+    this.hunterMarkVisual = false;
     this.baseX = x;
     this.node.removeFromParent();
     this.node.setPosition(x, SPAWN_Y + 40 + Math.random() * 60, 0);
     this.node.setScale(1, 1, 1);
+    this.node.angle = 0;
     this.lastTint = '';
     const op = this.node.getComponent(UIOpacity) || this.node.addComponent(UIOpacity);
     Tween.stopAllByTarget(op); // 复用池化对象时掐断上一世的消亡渐隐
@@ -117,6 +130,7 @@ export class Monster {
     const r = this.def.radius;
     if (!this.art) {
       this.art = new BattleSprite(this.node, 'battle_mobs_v2', () => { this.g.enabled = false; });
+      this.deathMotion = new MonsterDeath(this.node, this.art);
     }
     this.art.node.setPosition(0, -r * 0.82, 0);
     this.art.show(this.def.id, r * MOB_ART_HEIGHT);
@@ -277,6 +291,7 @@ export class Monster {
   /** 单帧推进；返回是否死亡（死亡由 manager 清理） */
   tick(dt: number, line: { takeDamage: (d: number) => void }, mgr: MonsterManager): void {
     if (this.dead) return;
+    this.deathMotion?.prepare();
     this.life += dt;
     const frozenLeft = this.freezeT;
     const motionDt = Math.max(0, dt - Math.max(this.freezeT, this.stunT));
@@ -285,6 +300,11 @@ export class Monster {
     if (this.slowT <= 0) this.slowAmp = 0.2;
     if (this.shockT > 0) this.shockT = Math.max(0, this.shockT - dt);
     if (this.vulnT > 0) this.vulnT = Math.max(0, this.vulnT - dt);
+    if (this.hunterMarkT > 0) {
+      this.hunterMarkAge += dt;
+      this.hunterMarkT = Math.max(0, this.hunterMarkT - dt);
+      if (this.hunterMarkT <= 0) { this.hunterMarkAmp = 0; this.hunterMarkVisual = false; }
+    }
     if (this.stunT > 0) this.stunT = Math.max(0, this.stunT - dt);
     if (frozenLeft > 0) {
       this.freezeAge += Math.min(dt, frozenLeft);
@@ -372,18 +392,49 @@ export class Monster {
     this.vulnT = Math.max(this.vulnT, dur);
   }
 
+  applyHunterMark(amp: number, dur: number, visual: boolean): void {
+    if (this.dead || amp <= 0 || dur <= 0) return;
+    if (this.hunterMarkT <= 0) {
+      this.hunterMarkAmp = 0; this.hunterMarkVisual = false; this.hunterMarkAge = 0;
+    }
+    this.hunterMarkAmp = Math.max(this.hunterMarkAmp, amp);
+    this.hunterMarkT = Math.max(this.hunterMarkT, dur);
+    this.hunterMarkVisual = this.hunterMarkVisual || visual;
+    if (this.hunterMarkVisual) this.mgrRef?.refreshHunterMarks();
+  }
+
+  /** One shared Graphics layer draws marks above the complete current monster frame. */
+  drawHunterMark(g: Graphics): void {
+    if (this.dead || this.hunterMarkT <= 0 || !this.hunterMarkVisual) return;
+    const x = this.x, y = this.y + this.def.radius * (MOB_ART_HEIGHT - .82) + 19;
+    const r = 11 + 4 * Math.exp(-this.hunterMarkAge * 18);
+    const alpha = Math.round(255 * Math.min(1, this.hunterMarkT / .2));
+    for (let band = 0; band < 2; band++) {
+      this.hunterMarkTint.set(band ? 63 : 10, band ? 163 : 34, band ? 255 : 65, band ? alpha : alpha * .8);
+      g.strokeColor = this.hunterMarkTint; g.lineWidth = band ? 2.2 : 5;
+      g.circle(x, y, r); g.stroke();
+      g.moveTo(x - r - 5, y); g.lineTo(x - r + 4, y);
+      g.moveTo(x + r - 4, y); g.lineTo(x + r + 5, y);
+      g.moveTo(x, y - r - 5); g.lineTo(x, y - r + 4);
+      g.moveTo(x, y + r - 4); g.lineTo(x, y + r + 5); g.stroke();
+    }
+    this.hunterMarkTint.set(183, 233, 255, alpha); g.fillColor = this.hunterMarkTint;
+    g.circle(x, y, 1.8); g.fill();
+  }
+
   takeDamage(amount: number, crit: boolean, killerId: string, ignoreRes = false, resCut = 0, impactAngle?: number, heavy = false): boolean {
     if (this.dead) return false;
     if (this.def.physRes && !ignoreRes) amount *= 1 - this.def.physRes * (1 - resCut);   // resCut=无视防御比例（英雄突破）
     if (this.shockT > 0) amount *= 1 + this.shockAmp;
-    if (this.vulnT > 0) amount *= 1 + this.vulnAmp;
+    const vulnerability = Math.max(this.vulnT > 0 ? this.vulnAmp : 0, this.hunterMarkT > 0 ? this.hunterMarkAmp : 0);
+    if (vulnerability > 0) amount *= 1 + vulnerability;
     this.hp -= amount;
     this.ctx.dmgNumber(this.x, this.y + this.def.radius * 2.6,
       String(Math.round(amount)), crit ? '#FF3030' : '#FFFFFF', crit, { target: this, amount, periodic: killerId === 'burn' });
     this.ctx.impact?.(this.x, this.y + this.def.radius * 0.4, killerId, heavy || crit || this.hp <= 0 && !!this.def.elite, impactAngle);
     this.flash();
     if (this.hp <= 0) {
-      this.die(killerId);
+      this.die(killerId, impactAngle, heavy || crit, amount);
       return true;
     }
     return false;
@@ -404,18 +455,28 @@ export class Monster {
     }
   }
 
-  private die(killerId: string): void {
+  private die(killerId: string, angle: number | undefined, heavy: boolean, amount: number): void {
     this.dead = true;
-    if (this.art?.loaded) {
-      tween(this.art.node).to(0.18, { angle: 16 }).start();
-    }
-    bus.emit(EVT.MOB_KILLED, this.def, killerId);
-    const op = this.node.getComponent(UIOpacity) || this.node.addComponent(UIOpacity);
-    tween(op)
-      .to(0.18, { opacity: 60 })
-      .call(() => { if (this.mgrRef) this.mgrRef.recycleMob(this); })
-      .start();
+    const marked = this.hunterMarkVisual;
+    this.hunterMarkT = this.hunterMarkAmp = this.hunterMarkAge = 0;
+    this.hunterMarkVisual = false;
+    if (marked) this.mgrRef?.refreshHunterMarks();
+    this.deathMotion?.begin(this.def.radius, this.groundOffset, {
+      killer: killerId, angle, heavy, force: Math.min(1.5, amount / this.maxHp),
+      elite: !!this.def.elite, boss: this.isBoss, frozen: this.freezeT > 0,
+    });
+    if (killerId !== 'gm') Sfx.death(killerId, this.freezeT > 0, heavy || !!this.def.elite || this.isBoss);
+    this.flashT = this.lungeT = this.atkAnimT = 0;
+    this.freezeT = this.thawT = this.slowT = this.stunT = this.burnT = this.shockT = 0;
+    this.footLeftWeight = this.footRightWeight = 0;
+    if (this.flashNode) this.flashNode.active = false;
+    // Gameplay death and rewards are immediate. The remaining body is cosmetic only.
+    bus.emit(EVT.MOB_KILLED, this.def, killerId, { x: this.x, y: this.y, radius: this.def.radius });
   }
+
+  tickDeath(dt: number): boolean { return this.deathMotion?.tick(dt) ?? true; }
+  drawDeathGround(g: Graphics): void { this.deathMotion?.drawGround(g); }
+  drawDeathAir(g: Graphics): void { this.deathMotion?.drawAir(g); }
 
   applySlow(ratio: number, dur: number): void {
     if (dur <= 0 || ratio <= 0 || this.dead) return;
@@ -451,15 +512,21 @@ export class MonsterManager {
   killGold = 0;
   /** 怪物对象池：复用 Node/Graphics，杜绝刷怪波次的组件创建尖峰 */
   private pool: Monster[] = [];
+  /** Corpses have no targeting/collision/wave role; a separate bounded visual list. */
+  private dying: Monster[] = [];
+  private deathAir: Graphics;
   private sepN = 0;
   private depthT = 0;
   private depthOrder: (Monster | DepthSprite)[] = [];
   private shadows: Graphics;
   private iceFeet: Graphics;
+  private hunterMarks: Graphics;
+  private disposed = false;
   private groundShadowColor = new Color(30, 24, 16, 38);
   private footShadowColor = new Color(26, 20, 13, 100);
 
   constructor(private field: Node, private ctx: MonsterHitCtx) {
+    warmMonsterDeath();
     const node = new Node('groupContactShadows');
     node.layer = Layers.Enum.UI_2D;
     node.setParent(field);
@@ -467,6 +534,10 @@ export class MonsterManager {
     this.shadows.fillColor = new Color(30, 24, 16, 65);
     const ice = new Node('frozenFootCrystals'); ice.layer = Layers.Enum.UI_2D; ice.setParent(field);
     this.iceFeet = ice.addComponent(Graphics);
+    const deathAir = new Node('deathFragments'); deathAir.layer = Layers.Enum.UI_2D; deathAir.setParent(field);
+    this.deathAir = deathAir.addComponent(Graphics);
+    const marks = new Node('hunterMarks'); marks.layer = Layers.Enum.UI_2D; marks.setParent(ctx.floatParent);
+    marks.setSiblingIndex(0); this.hunterMarks = marks.addComponent(Graphics);
     setDepthSorter(field, () => this.sortDepth());
   }
 
@@ -480,7 +551,8 @@ export class MonsterManager {
   private seen = new Set<string>();
 
   spawn(def: MobDef): boolean {
-    if (this.list.length >= 60) return false; // §12.4 同屏上限
+    if (this.disposed) return false;
+    if (this.aliveCount >= 60) return false; // Corpses do not consume living-enemy capacity.
     def = {
       ...def,
       hp: Math.round(def.hp * MOB_HP_MUL * this.statMul * this.rampHp),
@@ -493,14 +565,32 @@ export class MonsterManager {
     return true;
   }
 
-  /** 死亡渐隐结束后回池（节点不移除出场景树，只摘下挂载） */
+  /** Called only when the simulation-clock death presentation has completed. */
   recycleMob(m: Monster): void {
-    // 回池前先出列：三选一/暂停冻结期间淡出 tween 照常完成，尸体条目会滞留 list，
-    // 复用对象再 spawn 时旧条目复活成同引用重复项（双倍 tick/受击、大招补线重复选同一目标）
+    if (this.disposed) return;
     const i = this.list.indexOf(m);
     if (i >= 0) this.list.splice(i, 1);
+    const d = this.dying.indexOf(m);
+    if (d >= 0) this.dying.splice(d, 1);
     m.node.removeFromParent();
-    this.pool.push(m);
+    if (this.pool.indexOf(m) < 0) this.pool.push(m);
+  }
+
+  destroy(): void {
+    if (this.disposed) return;
+    this.disposed = true;
+    clearDepthSorter(this.field);
+    // Cocos destroys child nodes before BattleDirector.onDestroy. Only detached
+    // pool entries belong to this cleanup; the scene owns actors and Graphics.
+    for (const m of this.pool) if (isValid(m.node, true) && !m.node.parent) m.node.destroy();
+    this.list.length = this.dying.length = this.pool.length = this.depthOrder.length = 0;
+    this.seen.clear(); this.onFirstEncounter = null;
+  }
+
+  refreshHunterMarks(): void {
+    if (this.disposed || !isValid(this.hunterMarks, true)) return;
+    this.hunterMarks.clear();
+    for (const m of this.list) m.drawHunterMark(this.hunterMarks);
   }
 
   get aliveCount(): number {
@@ -624,6 +714,8 @@ export class MonsterManager {
   }
 
   tick(dt: number, line: { takeDamage: (d: number) => void }): void {
+    if (this.disposed) return;
+    this.advanceDeaths(dt);
     for (const m of this.list) m.tick(dt, line, this);
     // 自动分离（简单排斥半径，§3.1）：隔帧执行减半开销，视觉无感
     if ((this.sepN++ & 1) === 0) {
@@ -646,12 +738,39 @@ export class MonsterManager {
         }
       }
     }
-    // 就地压缩清除死亡（替代 filter，零每帧数组分配）
+    this.collectDeaths();
+    this.drawPresentation(dt);
+  }
+
+  /** Settlement can finish already-dead bodies without resuming combat.
+   * Paused and card-pick states never call this, so their whole battlefield freezes. */
+  tickDeaths(dt: number): void {
+    if (this.advanceDeaths(dt)) this.drawPresentation(dt);
+  }
+
+  private collectDeaths(): void {
     let w = 0;
     for (let i = 0; i < this.list.length; i++) {
-      if (!this.list[i].dead) this.list[w++] = this.list[i];
+      const m = this.list[i];
+      if (m.dead) this.dying.push(m);
+      else this.list[w++] = m;
     }
     this.list.length = w;
+    // Cosmetic pressure only: targeting, damage, loot and spawning never wait on this budget.
+    while (this.dying.length > 64) this.recycleMob(this.dying[0]);
+  }
+
+  private advanceDeaths(dt: number): boolean {
+    this.collectDeaths();
+    const changed = this.dying.length > 0;
+    for (let i = this.dying.length - 1; i >= 0; i--) {
+      const m = this.dying[i];
+      if (m.tickDeath(dt)) this.recycleMob(m);
+    }
+    return changed;
+  }
+
+  private drawPresentation(dt: number): void {
     // 在移动与分离后同步绘制，避免 20Hz 阴影落后于角色而阶梯跳动。
     this.shadows.clear();
     this.shadows.fillColor = this.groundShadowColor;
@@ -677,6 +796,9 @@ export class MonsterManager {
         this.shadows.fill();
       }
     }
+    for (const m of this.dying) m.drawDeathGround(this.shadows);
+    this.deathAir.clear();
+    for (const m of this.dying) m.drawDeathAir(this.deathAir);
     this.depthT -= dt;
     if (this.depthT <= 0) {
       this.depthT = 0.12;
@@ -684,19 +806,24 @@ export class MonsterManager {
     }
     this.iceFeet.clear();
     for (const m of this.list) m.drawIceFeet(this.iceFeet);
+    this.refreshHunterMarks();
+    this.deathAir.node.setSiblingIndex(this.field.children.length - 1);
     this.iceFeet.node.setSiblingIndex(this.field.children.length - 1);
   }
 
   /** Falling ice is ordered by its fixed ground footprint, not its airborne
    * screen position. Nearby bodies can naturally occlude a farther needle. */
   private sortDepth(): void {
+    if (this.disposed) return;
     if (!this.field.isValid) return;
     this.depthOrder.length = 0;
     for (const m of this.list) this.depthOrder.push(m);
+    for (const m of this.dying) this.depthOrder.push(m);
     for (const d of depthSprites(this.field)) if (d.node.isValid && d.node.active) this.depthOrder.push(d);
     this.depthOrder.sort((a, b) => b.depthY - a.depthY);
     this.shadows.node.setSiblingIndex(0);
     this.depthOrder.forEach((item, i) => item.node.setSiblingIndex(i + 1));
+    this.deathAir.node.setSiblingIndex(this.field.children.length - 1);
     this.iceFeet.node.setSiblingIndex(this.field.children.length - 1);
   }
 

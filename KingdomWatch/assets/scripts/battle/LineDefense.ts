@@ -22,9 +22,10 @@ export class LineDefense {
   private shakeT = 0;
   private basePos: Vec3 = new Vec3();
 
-  constructor(parent: Node, hp: number) {
+  constructor(parent: Node, hp: number, shield = 0) {
     this.maxHp = hp;
     this.hp = hp;
+    this.shield = Math.max(0, shield);
     this.buildVisual(parent);
     this.basePos = this.node.position.clone();
   }

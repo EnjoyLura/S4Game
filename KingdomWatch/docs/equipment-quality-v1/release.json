@@ -1,0 +1,38 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-equipment-settlement-v1-20261016-202643",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-training-weapon-float-v1-20261016-192832",
+  "entryVersion": "1792153462",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=equipment-settlement-v1-1792153462",
+  "scope": "equipment rarity; clickable drop previews; locked monster silhouettes; battle-exit gates; animated reward-only settlement; durable defeat floor and revival deduplication; brighter blue sniper aim",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://7e389c0d.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-equipment-quality-settlement-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-equipment-quality-settlement-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 16310,
+  "date": "2026-10-16T20:27:57.625881+08:00",
+  "mainBundleSha256": "837a57050572d6f179376c87417b5d820cd85b6f7491ca095eb58c2c559672ec",
+  "validation": {
+    "sourceReview": true,
+    "localBundleInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "testsRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  }
+}

@@ -3,6 +3,7 @@
  * M0 子集：货币、关卡进度、倍速解锁、Debug 开关
  * 五主界面扩展：背包/装备实例/英雄养成/主城等级/星箱领取/图鉴（老档缺键走 DEFAULTS 迁移）
  */
+import { STARTER_WEAPON, weaponFits } from '../config/Weapons';
 const KEY = 'kw_save_v1';
 
 /** 装备/武器实例（掉落与商店共用物品表定义，实例持有强化等级） */
@@ -60,6 +61,7 @@ export interface SaveData {
   codex: string[];
   /** 已领取首览奖励的图鉴 id（每只怪物一次性） */
   codexRewards: string[];
+  weaponSystemVersion?: number;
 }
 
 const DEFAULTS: SaveData = {
@@ -81,7 +83,7 @@ export function loadSave(): SaveData {
   }
   const sv = cache;
   // 老档/缺英雄补默认（未拥有的英雄 hero 状态也建好，商店解锁只翻 owned）
-  if (!sv.heroes || !sv.heroes.archer) sv.heroes = { ...DEFAULTS.heroes };
+  if (!sv.heroes) sv.heroes = {};
   for (const hid of ['archer', 'sniper', 'pyro', 'volt', 'mora']) {
     if (!sv.heroes[hid]) {
       sv.heroes[hid] = { owned: hid === 'archer', lv: 1, weaponLv: 1, atkLv: 1, skillLv: 1, ultLv: 1, worn: {} };
@@ -93,6 +95,31 @@ export function loadSave(): SaveData {
   for (const hid of sv.squad) {
     if (sv.heroes[hid]) sv.heroes[hid].owned = true;
   }
+  // One owned instance per slot; never replace a valid, compatible existing weapon.
+  if (!Array.isArray(sv.equips)) sv.equips = [];
+  const used = new Set<string>();
+  let changed = sv.weaponSystemVersion !== 1;
+  for (const hid of Object.keys(STARTER_WEAPON)) {
+    const h = sv.heroes[hid];
+    h.worn = h.worn || {};
+    const old = sv.equips.find(e => e.uid === h.worn.weapon);
+    const level = Math.max(1, Math.min(90, Math.floor(Number(h.weaponLv) || 1)));
+    // Old item-forge investment is promoted once; future weapons have no private cultivation level.
+    const promoted = sv.weaponSystemVersion === 1 ? level : Math.max(level, Math.min(90, Math.floor(Number(old?.lv) || 1)));
+    if (h.weaponLv !== promoted) { h.weaponLv = promoted; changed = true; }
+    if (old && weaponFits(hid, old.defId) && !used.has(old.uid)) { used.add(old.uid); continue; }
+    const uid = 'starter_weapon_' + hid;
+    let starter = sv.equips.find(e => e.uid === uid);
+    if (!starter || !weaponFits(hid, starter.defId) || used.has(uid)) {
+      let safeUid = uid, suffix = 0;
+      while (sv.equips.some(e => e.uid === safeUid)) safeUid = uid + '_recovered_' + (++suffix);
+      starter = { uid: safeUid, defId: STARTER_WEAPON[hid], lv: 1 };
+      sv.equips.push(starter);
+    }
+    h.worn.weapon = starter.uid; used.add(starter.uid); changed = true;
+  }
+  sv.weaponSystemVersion = 1;
+  if (changed) saveSave();
   return sv;
 }
 

@@ -1,0 +1,27 @@
+{
+  "status": "published",
+  "scope": "10/12/15-wave difficulty formations, differentiated rewards, kill equipment drops with touch/30-battle-second pickup and loot preview",
+  "dropRates": {
+    "normal": 0,
+    "elite": 0.001,
+    "hell": 0.0018,
+    "eliteMobMultiplier": 8
+  },
+  "pickupSeconds": 30,
+  "pickupClock": "combat time; pauses and choices freeze; speed applies",
+  "persistentInventory": "pickup before animation; unique UID; remaining drops collected on settlement or exit",
+  "assets": "existing inventory art and licensed UI confirmation sample",
+  "validation": {
+    "sourceReview": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "localBundleInspection": true,
+    "testsRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  },
+  "game": "https://kingdom-watch.pages.dev/?v=level-difficulty-loot-v1-1792115628",
+  "deployment": "https://b9b00f11.kingdom-watch.pages.dev"
+}

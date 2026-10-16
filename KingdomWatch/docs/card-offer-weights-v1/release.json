@@ -1,0 +1,51 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-card-offer-weights-v1-20261015-134100",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-skill-milestone-swipe-v1-20261015-133037",
+  "entryVersion": "1792042826",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=card-offer-weights-v1-1792042826",
+  "scope": "upgrade offers: generic stat weight x0.3; normal attack, skill and ultimate weight x2",
+  "layoutChanged": false,
+  "interactionAcceptance": "pending user manual review",
+  "status": "published",
+  "typeWeightMultipliers": {
+    "stats": 0.3,
+    "combat": 2,
+    "support": 1
+  },
+  "reducedCards": [
+    "sharp",
+    "swift",
+    "crit_rate",
+    "crit_dmg",
+    "heavy_head",
+    "fast_load",
+    "steady_rest",
+    "lethal_aim",
+    "xp_badge"
+  ],
+  "effectiveWeight": "original rarity weight multiplied by offer-group weight",
+  "sharedByFirstOfferAndRefresh": true,
+  "eligibilityAndStackLimitsRetained": true,
+  "threeDistinctOffersRetained": true,
+  "cardEffectsChanged": false,
+  "previousMilestoneSwipeRetained": true,
+  "gameplayValidation": "user manual; no tests, sampling simulations, game, browser or online acceptance run",
+  "deployment": "https://65be08bd.kingdom-watch.pages.dev",
+  "date": "2026-10-15T13:41:32.930217+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-card-offer-weights-v1-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-card-offer-weights-v1-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "upgrade offers: generic stat weight x0.3; normal attack, skill and ultimate weight x2",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 8946,
+  "deploymentSucceeded": true,
+  "uploadedFiles": 2,
+  "cachedFiles": 1880
+}

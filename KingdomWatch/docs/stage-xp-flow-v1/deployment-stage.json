@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-stage-xp-flow-v1-20261016-003319",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-exit-death-v3-20261016-002622",
+  "entryVersion": "1792081946",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=stage-xp-flow-v1-1792081946",
+  "scope": "stage level HUD and passive XP",
+  "layoutChanged": false,
+  "manualAcceptance": "pending user manual review"
+}

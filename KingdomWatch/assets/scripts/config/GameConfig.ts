@@ -63,6 +63,12 @@ export function expNeed(level: number): number {
   return Math.floor(50 * Math.pow(1.35, level - 1));
 }
 
+/** 少量关卡时间经验：每2个战斗秒发放当前升级需求约1%，最低1点。 */
+export const PASSIVE_XP_INTERVAL = 2;
+export function passiveXpGain(level: number): number {
+  return Math.max(1, Math.round(expNeed(level) * 0.01));
+}
+
 /** 复活恢复 30%（可无限次） */
 export const REVIVE_RATIO = 0.3;
 /** 复活后防线短暂无敌缓冲（待定项默认值，§3.9） */
@@ -77,4 +83,6 @@ export const MORA_CHARGE_MAX = 50;
 
 /** 帧内上限（§12.4 性能预算；怪量 ×3 后同屏峰值上探，80 仍留裕量） */
 export const MAX_MOBS = 80;
+/** Visual ice rain count; damage remains one field-wide hit. Shared with the ability tooltip. */
+export const FROST_ULT_RAIN_COUNT = 256;
 export const MAX_PROJS = 80;

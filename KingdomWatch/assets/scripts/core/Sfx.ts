@@ -5,15 +5,23 @@ export type { SfxName } from './AudioCatalog';
 
 const SHOTS: Record<string, SfxName> = { archer: 'bow', sniper: 'crossbow', pyro: 'fire', volt: 'thunder', mora: 'frost' };
 const ULTIMATES: Record<string, SfxName> = { archer: 'bowUlt', sniper: 'snipe', pyro: 'fireUlt', volt: 'thunderUlt', mora: 'frostUlt' };
+const SKILLS: Record<string, SfxName> = { archer: 'skill', sniper: 'snipe', pyro: 'fireSkill', volt: 'thunderSkill', mora: 'frostSkill' };
+const HITS: Record<string, SfxName> = { archer: 'hit', sniper: 'pierce', pyro: 'crush', volt: 'zapHit', mora: 'icebreak' };
+const HEAVY_HITS: Record<string, SfxName> = { archer: 'crit', sniper: 'pierceHeavy', pyro: 'fireHeavy', volt: 'thunderHeavy', mora: 'frostHeavy' };
 
 export const Sfx = {
+  prepareUltimate(heroId: string, seconds: number): void { GameAudio.prepareUltimate(heroId, seconds); },
   play(name: SfxName): void { GameAudio.play(name); },
   shoot(heroId: string): void { GameAudio.play(SHOTS[heroId] || 'shoot'); },
+  death(heroId: string, frozen = false, heavy = false): void {
+    const element = heroId === 'pyro' || heroId === 'burn' ? 'fire'
+      : heroId === 'mora' || frozen ? 'frost' : heroId === 'volt' ? 'volt' : 'physical';
+    GameAudio.death(element, heavy);
+  },
   cast(heroId: string, ultimate = false): void {
-    GameAudio.play(ultimate ? ULTIMATES[heroId] || 'ult' : heroId === 'pyro' ? 'fireSkill' : heroId === 'mora' ? 'frostSkill' : 'skill');
+    GameAudio.play(ultimate ? ULTIMATES[heroId] || 'ult' : SKILLS[heroId] || 'skill');
   },
   impact(heroId: string, heavy = false): void {
-    GameAudio.play(heroId === 'pyro' ? 'crush' : heroId === 'volt' ? 'zapHit'
-      : heroId === 'mora' ? 'icebreak' : heavy ? 'pierce' : 'hit');
+    GameAudio.play(heavy ? HEAVY_HITS[heroId] || 'crit' : HITS[heroId] || 'hit');
   },
 };

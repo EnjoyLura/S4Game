@@ -2,7 +2,8 @@
  * A full-field storm independent of enemy positions, on the battle clock.
  */
 import { Color, Graphics, JsonAsset, Layers, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
-import { LINE_Y, LO, MAX_MOBS } from '../config/GameConfig';
+import { Sfx } from '../core/Sfx';
+import { FROST_ULT_RAIN_COUNT, LINE_Y, LO, MAX_MOBS } from '../config/GameConfig';
 import { drawIceCrystal } from './FrostVFX';
 import { DepthSprite, registerDepthSprite, refreshDepth } from './BattleDepth';
 
@@ -20,9 +21,9 @@ interface Drop {
   part: Part; x: number; y: number; start: number; flight: number; travel: number;
   height: number; drift: number; angle: number; seed: number; perspective: number; depth: DepthSprite | null;
 }
-const HIT_CAP = 24, RAIN_CAP = 128, CHIP_CAP = HIT_CAP * 5;
+const HIT_CAP = 24, RAIN_CAP = FROST_ULT_RAIN_COUNT, CHIP_CAP = HIT_CAP * 5;
 const COVERAGE_BANDS = 8;
-const DURATION = 2, HIT_SECONDS = 0.68, IMPACT_RESOURCE = 'fx/frost_ultimate_impact_v1';
+const DURATION = 4.2, HIT_SECONDS = 0.68, IMPACT_RESOURCE = 'fx/frost_ultimate_impact_v1';
 const RAIN_RESOURCE = 'fx/frost_ultimate_rain_v1';
 // Pixel (46, 2) is the painted needle's apex. Its tip, rather than its centre,
 // reaches the ground snapshot; chips continue to rotate around their centres.
@@ -53,6 +54,8 @@ export class FrostUltimateVFX {
   private split = 118;
   private clipLife = 1.38;
   private age = 0;
+  private contactAt = -10;
+  private nextAudio = 0;
   private running = false;
   private destroyed = false;
   private skyTop = 0;
@@ -85,13 +88,13 @@ export class FrostUltimateVFX {
         if (p.sprite.isValid) p.sprite.spriteFrame = null;
       }
       for (const d of this.drops) if (d.part.sprite.isValid) d.part.sprite.spriteFrame = null;
-      for (const d of this.drops) if (d.part.node.isValid) d.part.node.destroy();
+      // Rain nodes remain owned by MobLayer/rainRoot during scene teardown.
       for (const p of this.chips) if (p.sprite.isValid) p.sprite.spriteFrame = null;
       this.ownedFrames.forEach(f => f.destroy()); this.ownedFrames.length = 0;
       this.sources.forEach(f => f.decRef()); this.sources.length = 0;
       this.backFrames.length = this.frontFrames.length = this.frameEnds.length = 0;
       this.rainFrame = this.chipFrame = null; this.atlas = null;
-      if (this.groundRoot.isValid) this.groundRoot.destroy();
+      // GroundFxLayer owns groundRoot and already tears it down with the scene.
     });
     this.loadImpact(); this.loadRain();
   }
@@ -158,7 +161,7 @@ export class FrostUltimateVFX {
     const top = LO.half - 150 - LO.notchTop, bottom = LINE_Y + 30;
     this.skyTop = top;
     this.targets = targets.filter(t => t.y >= bottom && t.y <= top).slice(0, MAX_MOBS);
-    this.hide(); this.age = 0; this.running = true;
+    this.hide(); this.age = 0; this.running = true; this.contactAt = -10; this.nextAudio = .8;
     this.rainCount = RAIN_CAP;
     const low = bottom + 10, span = Math.max(1, top - 10 - low);
     // Random within broad depth bands, then shuffle the entire sequence.
@@ -180,7 +183,7 @@ export class FrostUltimateVFX {
       const mainContact = nextHit < HIT_CAP && i === Math.floor(nextHit * RAIN_CAP / HIT_CAP);
       const depth = clamp((top - d.y) / Math.max(1, top - bottom));
       d.perspective = 0.86 + depth * 0.16;
-      d.start = 0.045 + i / Math.max(1, this.rainCount - 1) * 0.94 + Math.random() * 0.004;
+      d.start = .2 + i / Math.max(1, this.rainCount - 1) * 2.8 + Math.random() * 0.004;
       d.height = (mainContact ? 60 + Math.random() * 12 : 45 + Math.random() * 16) * d.perspective;
       // Project a shared overhead altitude relative to EACH landing point.
       // Formation positions differ with ground depth; there is no fixed
@@ -200,9 +203,18 @@ export class FrostUltimateVFX {
     this.render();
   }
 
+  burst(targets: readonly FrostUltTarget[]): void {
+    this.targets = targets; this.contactAt = this.age;
+  }
   tick(dt: number): void {
     if (!this.running || this.destroyed || dt <= 0) return;
+    const before = this.age;
     this.age += dt;
+    for (const hit of this.hits) {
+      if (hit.start > before && hit.start <= this.age && this.age >= this.nextAudio) {
+        Sfx.impact('mora', true); this.nextAudio = this.age + .45; break;
+      }
+    }
     if (this.age >= DURATION) { this.running = false; this.hide(); return; }
     this.render();
   }
@@ -264,8 +276,9 @@ export class FrostUltimateVFX {
     if (!this.running) return;
     const t = this.age;
     // Small immediate contact lights only; no spreading ring or cold-wave sheet.
-    if (t < 0.22) {
-      this.tint.set(170, 231, 255, Math.round(62 * Math.pow(1 - t / 0.22, 1.5)));
+    const contactAge = t - this.contactAt;
+    if (contactAge >= 0 && contactAge < .22) {
+      this.tint.set(170, 231, 255, Math.round(62 * Math.pow(1 - contactAge / .22, 1.5)));
       this.ground.fillColor = this.tint;
       for (const target of this.targets) {
         this.ground.ellipse(target.x, target.y, target.radius * 0.72, target.radius * 0.22);

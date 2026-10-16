@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-sniper-cards-v1-20261015-211959",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-archer-cards-v1-20261015-205719",
+  "entryVersion": "1792070276",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=sniper-cards-v1-1792070276",
+  "scope": "sniper card rarities, skill range and piercing, 30 percent ultimate vulnerability with overhead red reticle, three generated icons",
+  "layoutChanged": false,
+  "manualAcceptance": "pending user manual review"
+}

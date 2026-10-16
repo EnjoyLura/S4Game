@@ -1,0 +1,11 @@
+✨ Compiled Worker successfully
+Uploading... (1880/1882)
+Uploading... (1881/1882)
+Uploading... (1882/1882)
+✨ Success! Uploaded 2 files (1880 already uploaded) (2.27 sec)
+
+✨ Uploading _headers
+✨ Uploading Functions bundle
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://16ae7449.kingdom-watch.pages.dev
+{"stage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-equipment-unequip-v1-20261015-134605","priorPublishedStage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-card-offer-weights-v1-20261015-134100","entryVersion":"1792043153","project":"kingdom-watch","branch":"main","game":"https://kingdom-watch.pages.dev/?v=equipment-unequip-v1-1792043153","scope":"equipped-item dialogs: unequip action with inventory, slot and hero-stat refresh","layoutChanged":true,"interactionAcceptance":"pending user manual review"}

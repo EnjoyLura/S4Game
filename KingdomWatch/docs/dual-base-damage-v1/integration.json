@@ -1,0 +1,26 @@
+{
+  "status": "published",
+  "scope": "independent attack and skill damage with role growth; remove green death residue",
+  "baseStats": [
+    "attack",
+    "skillDamage"
+  ],
+  "normalDamage": "attack * normalMultiplier",
+  "abilityDamage": "attack * smallAttackCoefficient + skillDamage * abilityMultiplier",
+  "initialSmallAttackCoefficient": 0.2,
+  "initialGrowthTypes": {
+    "archer": "normal",
+    "sniper": "normal",
+    "pyro": "ultimate",
+    "volt": "skill",
+    "mora": "hybrid"
+  },
+  "baseStatsSharedByBattleAndUI": true,
+  "equipmentSkillDamageRemainsFlat": true,
+  "skillLevelChangesCoefficientNotBaseSkillDamage": true,
+  "greenGroundResidue": false,
+  "wholeBodyFall": false,
+  "gameplayValidation": "user manual; no tests, simulations, browser, game or online acceptance run",
+  "game": "https://kingdom-watch.pages.dev/?v=dual-base-damage-v1-1792067398",
+  "deployment": "https://e07f9fa5.kingdom-watch.pages.dev"
+}

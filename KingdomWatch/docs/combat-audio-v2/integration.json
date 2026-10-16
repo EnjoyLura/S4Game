@@ -1,0 +1,12 @@
+{
+  "status": "published",
+  "scope": "five-hero combat sound redesign and density-aware mix",
+  "newAudioFiles": 48,
+  "audioResourcePath": "audio/v2",
+  "newPaidGeneration": false,
+  "previousUIExperiencePreserved": true,
+  "acceptance": "pending user manual listening",
+  "gameplayValidation": "user manual; no tests, browser, game or online acceptance run",
+  "game": "https://kingdom-watch.pages.dev/?v=combat-audio-v2-1792028413",
+  "deployment": "https://e12a1be9.kingdom-watch.pages.dev"
+}

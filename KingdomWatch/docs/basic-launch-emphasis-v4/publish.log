@@ -1,0 +1,12 @@
+✨ Compiled Worker successfully
+Uploading... (1782/1785)
+Uploading... (1783/1785)
+Uploading... (1784/1785)
+Uploading... (1785/1785)
+✨ Success! Uploaded 3 files (1782 already uploaded) (2.47 sec)
+
+✨ Uploading _headers
+✨ Uploading Functions bundle
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://a04a5ac5.kingdom-watch.pages.dev
+{"stage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-basic-launch-emphasis-v4-20261015-020716","priorPublishedStage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-upgrade-v1-20261015-020112","entryVersion":"1792001210","project":"kingdom-watch","branch":"main","game":"https://kingdom-watch.pages.dev/?v=basic-launch-emphasis-v4-1792001210","scope":"larger brighter procedural basic attack releases","layoutChanged":false,"visualAcceptance":"pending user manual review"}

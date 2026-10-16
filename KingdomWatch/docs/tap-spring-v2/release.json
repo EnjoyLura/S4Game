@@ -1,0 +1,42 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-tap-spring-v2-20261015-095154",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-combat-audio-v2-20261015-094037",
+  "entryVersion": "1792029083",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=tap-spring-v2-1792029083",
+  "scope": "whole-game tap feedback and elastic buttons without whitening",
+  "layoutChanged": false,
+  "interactionAcceptance": "pending user manual review",
+  "status": "published",
+  "buttonPressSeconds": 0.07,
+  "buttonDefaultPressScale": 0.94,
+  "buttonReboundPeakScale": 1.022,
+  "buttonReboundSeconds": 0.23,
+  "buttonWhiteOverlay": false,
+  "tapPool": 8,
+  "tapReleaseSeconds": 0.4,
+  "tapSources": [
+    "DOM capture",
+    "Cocos global unhandled touch"
+  ],
+  "previousCombatAudioRetained": true,
+  "newMediaGenerated": false,
+  "gameplayValidation": "user manual; no tests, browser, game or online acceptance run",
+  "deployment": "https://d07f2c8e.kingdom-watch.pages.dev",
+  "date": "2026-10-15T09:52:50.943008+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-tap-spring-v2-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-tap-spring-v2-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "whole-game tap feedback and elastic buttons without whitening",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 9287,
+  "deploymentSucceeded": true,
+  "uploadedFiles": 2,
+  "cachedFiles": 1880
+}

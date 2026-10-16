@@ -1,0 +1,47 @@
+{
+  "tool": "image_gen.imagegen (built-in)",
+  "assets": [
+    {
+      "name": "banner",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-aaa57368-c641-4758-9d18-c1b98bfeeb37.png",
+      "saved": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\boss_warning_v1\\banner.png",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "alphaBounds": [
+        11,
+        21,
+        2162,
+        700
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "sha256": "9f9587e9fd9ac0cf4fdf67eea78bccb5028e585a78d0a1dd9844a2f3aac3d2f9",
+      "pixelEdits": false
+    },
+    {
+      "name": "crest",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-d3f27faf-f8ad-46dd-8908-79431afda282.png",
+      "saved": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\boss_warning_v1\\crest.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        0,
+        8,
+        1246,
+        1254
+      ],
+      "alphaRange": [
+        0,
+        255
+      ],
+      "sha256": "58b82326bb34f40cbccb442e03ac209655e11e1a66bbc8b9b760dd0212b525c3",
+      "pixelEdits": false
+    }
+  ]
+}

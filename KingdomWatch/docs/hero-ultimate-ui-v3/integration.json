@@ -1,0 +1,44 @@
+{
+  "status": "published",
+  "scope": "violet thunder ultimate, blue sniper ultimate, opaque page handoff and formation close without blank frames",
+  "volt": {
+    "renderer": "VoltUltimateVFX",
+    "material": "fx/volt-ultimate-procedural",
+    "pool": 12,
+    "skyLife": 0.31,
+    "groundLife": 0.58,
+    "fractures": 24,
+    "anchor": "target foot",
+    "neighborEnergyNormalization": true
+  },
+  "sniper": {
+    "renderer": "SniperUltimateVFX",
+    "material": "fx/sniper-ultimate-procedural",
+    "flightPool": 12,
+    "accentPool": 24,
+    "lockSeconds": 0.5,
+    "wakeMax": 245,
+    "releaseLife": 0.32,
+    "hitLife": 0.28,
+    "aimAndReticle": "blue",
+    "overheadVulnerabilityMark": "blue",
+    "cardArtworkRegenerated": false
+  },
+  "ui": {
+    "pageFade": false,
+    "candidateOpacity": "full; below retained page",
+    "nestedReadiness": true,
+    "waitForDraw": true,
+    "slidePixels": 8,
+    "slideSeconds": 0.16,
+    "squadClose": "refresh destination while opaque; remove only after destination is drawn"
+  },
+  "clock": "battle simulation dt",
+  "paidMediaGeneration": false,
+  "gameplayChanged": false,
+  "audioChanged": false,
+  "heroMediaChanged": false,
+  "validation": "user manual; no tests, simulations, game, browser or online acceptance run",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-ultimate-ui-v3-1792072877",
+  "deployment": "https://2d7234ec.kingdom-watch.pages.dev"
+}

@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-equipment-settlement-v1-20261016-202643",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-training-weapon-float-v1-20261016-192832",
+  "entryVersion": "1792153462",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=equipment-settlement-v1-1792153462",
+  "scope": "equipment rarity; clickable drop previews; locked monster silhouettes; battle-exit gates; animated reward-only settlement; durable defeat floor and revival deduplication; brighter blue sniper aim",
+  "manualAcceptance": "pending user manual review"
+}

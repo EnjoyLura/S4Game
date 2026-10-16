@@ -1,0 +1,25 @@
+{
+  "status": "published",
+  "scope": "stable page and hero refresh; retain opaque prior surface until replacement art is ready",
+  "refreshOpacityPulse": false,
+  "retainedPreviousPageOpacity": 255,
+  "artReadiness": [
+    "artSprite",
+    "artAtlasSprite"
+  ],
+  "atomicRefresh": [
+    "main pages",
+    "hero selection and bag",
+    "training and upgrades",
+    "level selection",
+    "shop categories"
+  ],
+  "pageTransition": "incoming page over opaque outgoing page, including background",
+  "staleRequestGuard": true,
+  "buttonSpringAndTapFeedbackRetained": true,
+  "previousAudioRetained": true,
+  "newMediaGenerated": false,
+  "gameplayValidation": "user manual; no tests, browser, game or online acceptance run",
+  "game": "https://kingdom-watch.pages.dev/?v=page-switch-no-flash-v1-1792041458",
+  "deployment": "https://c3c2cab6.kingdom-watch.pages.dev"
+}

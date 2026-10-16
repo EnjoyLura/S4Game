@@ -1,0 +1,11 @@
+✨ Compiled Worker successfully
+Uploading... (1783/1785)
+Uploading... (1784/1785)
+Uploading... (1785/1785)
+✨ Success! Uploaded 2 files (1783 already uploaded) (2.54 sec)
+
+✨ Uploading _headers
+✨ Uploading Functions bundle
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://c81a24b9.kingdom-watch.pages.dev
+{"stage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-playback-fix-v1-20261015-024035","priorPublishedStage":"D:\\AI\\S4Game\\KingdomWatch\\build\\publish-button-feedback-v1-20261015-023406","entryVersion":"1792003213","project":"kingdom-watch","branch":"main","game":"https://kingdom-watch.pages.dev/?v=audio-playback-fix-v1-1792003213","scope":"audio gesture capture, preloading and music recovery","layoutChanged":false,"audioAcceptance":"pending user manual review"}

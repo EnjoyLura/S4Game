@@ -1,0 +1,911 @@
+{
+  "sampleRate": 44100,
+  "channels": 1,
+  "method": "licensed recordings; short body + rupture + elemental finish; offline band limiting and envelopes",
+  "assets": [
+    {
+      "file": "physical_1.wav",
+      "seconds": 0.1629,
+      "peakDBFS": -9.33,
+      "activeRmsTargetDBFS": -20.4,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_000.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.92,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.13,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_light_000.ogg",
+          "gain": 0.22,
+          "seconds": 0.13,
+          "rate": 1.12,
+          "lowpassHz": 3200,
+          "highpassHz": 95,
+          "decaySeconds": 0.055,
+          "delaySeconds": 0.012,
+          "start": 0
+        }
+      ],
+      "sha256": "6277947b9071309a8fe386501742fadd20b35a452dfe067d40d7355a6812e35e"
+    },
+    {
+      "file": "heavy_1.wav",
+      "seconds": 0.1963,
+      "peakDBFS": -8.47,
+      "activeRmsTargetDBFS": -19.8,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_000.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.92,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.13,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_light_000.ogg",
+          "gain": 0.22,
+          "seconds": 0.13,
+          "rate": 1.12,
+          "lowpassHz": 3200,
+          "highpassHz": 95,
+          "decaySeconds": 0.055,
+          "delaySeconds": 0.012,
+          "start": 0
+        },
+        {
+          "source": "rubberduck-rpg/creature_die_01.ogg",
+          "gain": 0.13,
+          "seconds": 0.22,
+          "rate": 0.91,
+          "lowpassHz": 2400,
+          "highpassHz": 180,
+          "decaySeconds": 0.1,
+          "delaySeconds": 0.012,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactSoft_heavy_004.ogg",
+          "gain": 0.33,
+          "seconds": 0.2,
+          "rate": 0.78,
+          "lowpassHz": 1800,
+          "highpassHz": 95,
+          "decaySeconds": 0.08,
+          "delaySeconds": 0,
+          "start": 0
+        }
+      ],
+      "sha256": "f0415f8e9a2166af8577aa38154e0ce052bd27390c06927f0de34f3e91afec52"
+    },
+    {
+      "file": "fire_1.wav",
+      "seconds": 0.2502,
+      "peakDBFS": -7.72,
+      "activeRmsTargetDBFS": -20.8,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_000.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.92,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.13,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "rubberduck-rpg/spell_fire_01.ogg",
+          "gain": 0.35,
+          "seconds": 0.25,
+          "rate": 0.9,
+          "lowpassHz": 3400,
+          "highpassHz": 180,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0.008,
+          "start": 0.14
+        }
+      ],
+      "sha256": "6b1e0ab7756f186dd6b9a9705956a8f01de1167a0f66d888e6d2b4a4d8dfd99c"
+    },
+    {
+      "file": "volt_1.wav",
+      "seconds": 0.1629,
+      "peakDBFS": -9.89,
+      "activeRmsTargetDBFS": -21,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_000.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.92,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.13,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_light_000.ogg",
+          "gain": 0.22,
+          "seconds": 0.13,
+          "rate": 1.12,
+          "lowpassHz": 3200,
+          "highpassHz": 95,
+          "decaySeconds": 0.055,
+          "delaySeconds": 0.012,
+          "start": 0
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+          "gain": 0.18,
+          "seconds": 0.105,
+          "rate": 0.85,
+          "lowpassHz": 3400,
+          "highpassHz": 700,
+          "decaySeconds": 0.032,
+          "delaySeconds": 0.008,
+          "start": 0.145
+        }
+      ],
+      "sha256": "d92d31f10b4a5134a6aecc597b37b2bcb2c57b0d830261cf6c420e7dd847f7f5"
+    },
+    {
+      "file": "frost_1.wav",
+      "seconds": 0.2148,
+      "peakDBFS": -8.9,
+      "activeRmsTargetDBFS": -21,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_000.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.92,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.13,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactGlass_light_000.ogg",
+          "gain": 0.36,
+          "seconds": 0.21,
+          "rate": 0.8,
+          "lowpassHz": 4100,
+          "highpassHz": 260,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0.006,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/footstep_snow_000.ogg",
+          "gain": 0.2,
+          "seconds": 0.2,
+          "rate": 1.08,
+          "lowpassHz": 3800,
+          "highpassHz": 380,
+          "decaySeconds": 0.07,
+          "delaySeconds": 0.018,
+          "start": 0
+        }
+      ],
+      "sha256": "edd256646f6cb7002af084aac1dcc96a59e23d1686c467d0e8cb5e7efd6e0eb9"
+    },
+    {
+      "file": "physical_2.wav",
+      "seconds": 0.1615,
+      "peakDBFS": -8.71,
+      "activeRmsTargetDBFS": -20.4,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_001.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.9450000000000001,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.17,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_light_001.ogg",
+          "gain": 0.22,
+          "seconds": 0.13,
+          "rate": 1.145,
+          "lowpassHz": 3200,
+          "highpassHz": 95,
+          "decaySeconds": 0.055,
+          "delaySeconds": 0.012,
+          "start": 0
+        }
+      ],
+      "sha256": "29173801d0970dbf02e8a1a792b6db3dc34a3155a828863f2b1579b9dc31312d"
+    },
+    {
+      "file": "heavy_2.wav",
+      "seconds": 0.1963,
+      "peakDBFS": -7.5,
+      "activeRmsTargetDBFS": -19.8,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_001.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.9450000000000001,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.17,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_light_001.ogg",
+          "gain": 0.22,
+          "seconds": 0.13,
+          "rate": 1.145,
+          "lowpassHz": 3200,
+          "highpassHz": 95,
+          "decaySeconds": 0.055,
+          "delaySeconds": 0.012,
+          "start": 0
+        },
+        {
+          "source": "rubberduck-rpg/creature_die_01.ogg",
+          "gain": 0.13,
+          "seconds": 0.22,
+          "rate": 0.9450000000000001,
+          "lowpassHz": 2400,
+          "highpassHz": 180,
+          "decaySeconds": 0.1,
+          "delaySeconds": 0.012,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactSoft_heavy_004.ogg",
+          "gain": 0.33,
+          "seconds": 0.2,
+          "rate": 0.78,
+          "lowpassHz": 1800,
+          "highpassHz": 95,
+          "decaySeconds": 0.08,
+          "delaySeconds": 0,
+          "start": 0
+        }
+      ],
+      "sha256": "4fc7c5f667d5741d6faa1a1d3c2e5f586dd9e6e5ec9821d89dfc57cbc740cc3a"
+    },
+    {
+      "file": "fire_2.wav",
+      "seconds": 0.258,
+      "peakDBFS": -7.5,
+      "activeRmsTargetDBFS": -20.8,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_001.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.9450000000000001,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.17,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "rubberduck-rpg/spell_fire_02.ogg",
+          "gain": 0.35,
+          "seconds": 0.25,
+          "rate": 0.93,
+          "lowpassHz": 3400,
+          "highpassHz": 180,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0.008,
+          "start": 0.14
+        }
+      ],
+      "sha256": "fcdcf59f688e3d14ccf1f1420a7f9d17605f9ae82a006cee54b2149150f11056"
+    },
+    {
+      "file": "volt_2.wav",
+      "seconds": 0.1615,
+      "peakDBFS": -9.05,
+      "activeRmsTargetDBFS": -21,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_001.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.9450000000000001,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.17,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_light_001.ogg",
+          "gain": 0.22,
+          "seconds": 0.13,
+          "rate": 1.145,
+          "lowpassHz": 3200,
+          "highpassHz": 95,
+          "decaySeconds": 0.055,
+          "delaySeconds": 0.012,
+          "start": 0
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+          "gain": 0.18,
+          "seconds": 0.105,
+          "rate": 0.885,
+          "lowpassHz": 3400,
+          "highpassHz": 700,
+          "decaySeconds": 0.032,
+          "delaySeconds": 0.008,
+          "start": 0.145
+        }
+      ],
+      "sha256": "e49493251c19b4d679b14cca013d46e01c0ea22d2ee2dbee066953c3acfafa54"
+    },
+    {
+      "file": "frost_2.wav",
+      "seconds": 0.2149,
+      "peakDBFS": -8.24,
+      "activeRmsTargetDBFS": -21,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_001.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.9450000000000001,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.17,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactGlass_light_001.ogg",
+          "gain": 0.36,
+          "seconds": 0.21,
+          "rate": 0.8250000000000001,
+          "lowpassHz": 4100,
+          "highpassHz": 260,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0.006,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/footstep_snow_001.ogg",
+          "gain": 0.2,
+          "seconds": 0.2,
+          "rate": 1.08,
+          "lowpassHz": 3800,
+          "highpassHz": 380,
+          "decaySeconds": 0.07,
+          "delaySeconds": 0.018,
+          "start": 0
+        }
+      ],
+      "sha256": "5e0ee5cc8d0a7cf0413bb08bbf4d59efbc57402db98a7f9f96471d7e804f2c44"
+    },
+    {
+      "file": "physical_3.wav",
+      "seconds": 0.1471,
+      "peakDBFS": -7.5,
+      "activeRmsTargetDBFS": -20.4,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_002.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.9700000000000001,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.21,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_light_002.ogg",
+          "gain": 0.22,
+          "seconds": 0.13,
+          "rate": 1.1700000000000002,
+          "lowpassHz": 3200,
+          "highpassHz": 95,
+          "decaySeconds": 0.055,
+          "delaySeconds": 0.012,
+          "start": 0
+        }
+      ],
+      "sha256": "8962bb26bd537fb7c74dcd408c312d7c6cd31102d52b29fcd84b2acdde9e24c5"
+    },
+    {
+      "file": "heavy_3.wav",
+      "seconds": 0.1963,
+      "peakDBFS": -7.71,
+      "activeRmsTargetDBFS": -19.8,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_002.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.9700000000000001,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.21,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_light_002.ogg",
+          "gain": 0.22,
+          "seconds": 0.13,
+          "rate": 1.1700000000000002,
+          "lowpassHz": 3200,
+          "highpassHz": 95,
+          "decaySeconds": 0.055,
+          "delaySeconds": 0.012,
+          "start": 0
+        },
+        {
+          "source": "rubberduck-rpg/creature_die_01.ogg",
+          "gain": 0.13,
+          "seconds": 0.22,
+          "rate": 0.98,
+          "lowpassHz": 2400,
+          "highpassHz": 180,
+          "decaySeconds": 0.1,
+          "delaySeconds": 0.012,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactSoft_heavy_004.ogg",
+          "gain": 0.33,
+          "seconds": 0.2,
+          "rate": 0.78,
+          "lowpassHz": 1800,
+          "highpassHz": 95,
+          "decaySeconds": 0.08,
+          "delaySeconds": 0,
+          "start": 0
+        }
+      ],
+      "sha256": "6a0afd277e6eb1608566bb2e942f75e4ccda8f307b9312d0ea4f08e593558a84"
+    },
+    {
+      "file": "fire_3.wav",
+      "seconds": 0.258,
+      "peakDBFS": -7.52,
+      "activeRmsTargetDBFS": -20.8,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_002.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.9700000000000001,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.21,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "rubberduck-rpg/spell_fire_03.ogg",
+          "gain": 0.35,
+          "seconds": 0.25,
+          "rate": 0.96,
+          "lowpassHz": 3400,
+          "highpassHz": 180,
+          "decaySeconds": 0.09,
+          "delaySeconds": 0.008,
+          "start": 0.14
+        }
+      ],
+      "sha256": "6189d58ab3bfa9a2f3e39d10a0a092d0fdd8a3e35fa683b8cfe268ee84b0c51f"
+    },
+    {
+      "file": "volt_3.wav",
+      "seconds": 0.1471,
+      "peakDBFS": -7.5,
+      "activeRmsTargetDBFS": -21,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_002.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.9700000000000001,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.21,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactWood_light_002.ogg",
+          "gain": 0.22,
+          "seconds": 0.13,
+          "rate": 1.1700000000000002,
+          "lowpassHz": 3200,
+          "highpassHz": 95,
+          "decaySeconds": 0.055,
+          "delaySeconds": 0.012,
+          "start": 0
+        },
+        {
+          "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+          "gain": 0.18,
+          "seconds": 0.105,
+          "rate": 0.9199999999999999,
+          "lowpassHz": 3400,
+          "highpassHz": 700,
+          "decaySeconds": 0.032,
+          "delaySeconds": 0.008,
+          "start": 0.145
+        }
+      ],
+      "sha256": "7fa3a5acc9f45dee051077ea871f986610832b217baa1debf8428b0e5d1c8714"
+    },
+    {
+      "file": "frost_3.wav",
+      "seconds": 0.2149,
+      "peakDBFS": -7.5,
+      "activeRmsTargetDBFS": -21,
+      "layers": [
+        {
+          "source": "kenney-impact/Audio/impactPunch_heavy_002.ogg",
+          "gain": 0.72,
+          "seconds": 0.16,
+          "rate": 0.9700000000000001,
+          "lowpassHz": 2450,
+          "highpassHz": 95,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0,
+          "start": 0
+        },
+        {
+          "source": "kenney-rpg/Audio/dropLeather.ogg",
+          "gain": 0.34,
+          "seconds": 0.17,
+          "rate": 1.21,
+          "lowpassHz": 3400,
+          "highpassHz": 95,
+          "decaySeconds": 0.075,
+          "delaySeconds": 0.009,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/impactGlass_light_002.ogg",
+          "gain": 0.36,
+          "seconds": 0.21,
+          "rate": 0.8500000000000001,
+          "lowpassHz": 4100,
+          "highpassHz": 260,
+          "decaySeconds": 0.065,
+          "delaySeconds": 0.006,
+          "start": 0
+        },
+        {
+          "source": "kenney-impact/Audio/footstep_snow_002.ogg",
+          "gain": 0.2,
+          "seconds": 0.2,
+          "rate": 1.08,
+          "lowpassHz": 3800,
+          "highpassHz": 380,
+          "decaySeconds": 0.07,
+          "delaySeconds": 0.018,
+          "start": 0
+        }
+      ],
+      "sha256": "fa694dc12e8a5f7281f88bc87d0a0e962ad88a6862bb535022fbb38497e021f3"
+    }
+  ],
+  "sources": [
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactPunch_heavy_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "b33a8f14068aec24ec69ba85e5e87fdc41228975f6a1a3e44a6e7d6fc3d9f8d8"
+    },
+    {
+      "source": "docs\\audio-upgrade-v1\\sources\\kenney-rpg\\Audio\\dropLeather.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "097e1d3b74949b0145fda0519d40b7e0773ab82ec4858727f95be830927e1a45"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactWood_light_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "eb45e35b4bed784d3f120de4afec4b0d6ac09d9e143cce8cfcb7d739e1b1f3c3"
+    },
+    {
+      "source": "docs\\audio-upgrade-v1\\sources\\rubberduck-rpg\\creature_die_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "b34a816a401c5d80c77a61dabbedef7d1918a01320bbb67286c70f22db4acd43"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactSoft_heavy_004.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "e008f0b6b14f62339c8fe9f9b45cbd6317ba4f66604c4899053b8017020a36f0"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\rubberduck-rpg\\spell_fire_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "02fa3a2c6e79e868e546802f45127c5cdda69aba6d5a24ac997ea66f81a816cb"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\ice-electric\\qubodupIceAndElectricitySpells\\qubodupElectricityDamage01.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "b61131bbed47caec321f5b3ee43ebe47d91c9f5d18084348ce2af73544ca4ecc"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactGlass_light_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "d750cf88097d0c3e69920e6e14496e1444e1a9da01aa4cca8f5ec8cb44c57b4f"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\footstep_snow_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "c05fa4a9dc9a7aabc04996466fb589537e49af76de9998d8f9e6270ec92dcef7"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactPunch_heavy_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "f92f5cb6ba4ff2766497292ffd90865654317eeca976f5652e0708dbdcdc0dd9"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactWood_light_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "4b76bf3ccc8e60d19188f3165b778a7817786faa6887c55d9049bcbeef3b425f"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\rubberduck-rpg\\spell_fire_02.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "bf1eef4993f0adb4bd3a1c1ec91f8f6e4ddeb32d922671a14561846d5b7cab98"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\ice-electric\\qubodupIceAndElectricitySpells\\qubodupElectricityDamage02.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "04226646faf6c81fb56bed3b86e12e6ad7bd28ab763b3a9dac6a10a0382593ab"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactGlass_light_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "05e513fbd42829060eb37855f8c3866722ec5c39a8937c9bfde518cc609effa2"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\footstep_snow_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "980fb9a1c9227aed7995067b0357f373053337f2416316db8ea0438418542fb4"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactPunch_heavy_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "7993dd4c156b9979ad69f17be5ebe31850b16039a3857f8477141be54dfee1b3"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactWood_light_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "b183cf7a5bd783817e0e4b82af34ac6658fa1927049089dadc8b15c2ecc771dc"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\rubberduck-rpg\\spell_fire_03.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "2e4edee4ff8d7898198f1ab5213e086965e14a665cb947d53759505e28ddd3e4"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactGlass_light_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "710db7451bb7857b9140dfe6afe4621ea2188ad65eda3919c569d1bb285b933d"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\footstep_snow_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "db52bafdc66304f3b999f2c29227826c65993916e630ac2ffbca17d07b263178"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-weapons-v1-20261016-131406",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-training-defense-entry-v1-20261016-124727",
+  "entryVersion": "1792127520",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-weapons-v1-1792127520",
+  "scope": "mandatory starter weapons; four green weapons; per-hero shared weapon cultivation and weapon-specific breakthroughs; gate closed hold 1.5s; frost ultimate rain 256; pyro crater size +20%",
+  "layoutChanged": true,
+  "manualAcceptance": "pending user manual review"
+}

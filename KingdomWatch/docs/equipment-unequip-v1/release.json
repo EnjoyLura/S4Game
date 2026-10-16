@@ -1,0 +1,50 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-equipment-unequip-v1-20261015-134605",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-card-offer-weights-v1-20261015-134100",
+  "entryVersion": "1792043153",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=equipment-unequip-v1-1792043153",
+  "scope": "equipped-item dialogs: unequip action with inventory, slot and hero-stat refresh",
+  "layoutChanged": true,
+  "interactionAcceptance": "pending user manual review",
+  "status": "published",
+  "source": "assets/scripts/ui/pages/HeroPage.ts",
+  "equippedDetailActions": [
+    "卸下装备",
+    "装备锻造"
+  ],
+  "comparisonCurrentItemActions": [
+    "卸下",
+    "锻造"
+  ],
+  "existingDataOperation": "takeOff",
+  "equipmentInstanceRetained": true,
+  "persistImmediately": true,
+  "staleDialogUidGuard": true,
+  "inventoryCategoryAndScrollReset": true,
+  "refresh": [
+    "equipped slots",
+    "equipped count",
+    "inventory",
+    "hero attributes",
+    "hero power"
+  ],
+  "gameplayValidation": "user manual; no tests, game, browser or online acceptance run",
+  "deployment": "https://16ae7449.kingdom-watch.pages.dev",
+  "date": "2026-10-15T13:46:37.409184+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-equipment-unequip-v1-20261015-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-equipment-unequip-v1-20261015-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "dprPatch": "completed",
+    "scope": "equipped-item dialogs: unequip action with inventory, slot and hero-stat refresh",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 8412,
+  "deploymentSucceeded": true,
+  "uploadedFiles": 2,
+  "cachedFiles": 1880
+}

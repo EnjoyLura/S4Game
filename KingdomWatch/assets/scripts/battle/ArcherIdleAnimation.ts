@@ -47,6 +47,11 @@ function loadClip(id: ClipId, callback: (value: IdleClip | null) => void): void 
   });
 }
 
+/** Prepare the same shared clip cache from the lobby, without constructing a character. */
+export function preloadArcherClip(id: ClipId): Promise<void> {
+  return new Promise(resolve => loadClip(id, () => resolve()));
+}
+
 export class ArcherIdleAnimation {
   readonly node = new Node('archerIdleAnimation');
   readonly sprite: Sprite;

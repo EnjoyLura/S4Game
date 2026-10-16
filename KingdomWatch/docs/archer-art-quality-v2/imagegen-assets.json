@@ -1,0 +1,83 @@
+[
+  {
+    "name": "archer-standing-v2",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-b00ab273-28ae-43a2-949a-8d383caed44e.png",
+    "asset": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\hero_comic_v1\\comic_figure_archer_v2.png",
+    "artKey": "hero_comic_v1/comic_figure_archer_v2",
+    "uuid": "35bdd906-6125-4df4-ac4e-f36d5210d654",
+    "size": [
+      1017,
+      1546
+    ],
+    "mode": "RGBA",
+    "alphaRange": [
+      0,
+      255
+    ],
+    "alphaBBox": [
+      0,
+      10,
+      991,
+      1532
+    ],
+    "bottomMargin": 14,
+    "sha256": "e0e62449182fdc8dbbb72ca46d212c0fee7e8157ca2ddff8eeb209922b329bba",
+    "sourceSha256": "e0e62449182fdc8dbbb72ca46d212c0fee7e8157ca2ddff8eeb209922b329bba",
+    "pixelEdits": false,
+    "previousPreserved": "hero_comic_v1/comic_figure_archer_v1"
+  },
+  {
+    "name": "starter-bow-v2",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-26971005-edbd-45d0-8e98-ac2176606a3e.png",
+    "asset": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\weapons_v1\\starter_bow_v2.png",
+    "artKey": "weapons_v1/starter_bow_v2",
+    "uuid": "9541bc49-ab3e-4c56-b122-5cb72e1fd035",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alphaRange": [
+      0,
+      255
+    ],
+    "alphaBBox": [
+      61,
+      16,
+      1234,
+      1216
+    ],
+    "bottomMargin": 38,
+    "sha256": "5fa74b630151885ce11a587d29829f5fa1c78365089e54ebbd2e6d362527ed86",
+    "sourceSha256": "5fa74b630151885ce11a587d29829f5fa1c78365089e54ebbd2e6d362527ed86",
+    "pixelEdits": false,
+    "previousPreserved": "weapons_v1/starter_bow"
+  },
+  {
+    "name": "green-bow-v2",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-32f9bc62-8163-4653-9129-9857f5cca89e.png",
+    "asset": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\weapons_v1\\green_bow_v2.png",
+    "artKey": "weapons_v1/green_bow_v2",
+    "uuid": "62b1e69c-4919-4f0c-a11e-a63b2facaa1c",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alphaRange": [
+      0,
+      255
+    ],
+    "alphaBBox": [
+      105,
+      20,
+      1204,
+      1224
+    ],
+    "bottomMargin": 30,
+    "sha256": "fec13a25fd11622b3753bd4793c0f24eef9a8c3851736ac789e5e89805c53383",
+    "sourceSha256": "fec13a25fd11622b3753bd4793c0f24eef9a8c3851736ac789e5e89805c53383",
+    "pixelEdits": false,
+    "previousPreserved": "weapons_v1/green_bow"
+  }
+]

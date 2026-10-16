@@ -1,0 +1,46 @@
+{
+  "status": "published",
+  "scope": "reuse lobby ComicUI button styling in pick, pause and settlement panels",
+  "renderer": "shared ComicUI comicPlate and comicButtonControl",
+  "buttonFace": "single flat face, 2.4px dark outline, 9px clipped corners, narrow top highlight",
+  "pressFeedbackDesignPixels": 2,
+  "buttonColors": {
+    "gold": "#FFC848",
+    "green": "#65B441",
+    "dark": "#29313B",
+    "muted": "#ABB0AC"
+  },
+  "updatedControls": [
+    "pick ad and diamond refresh",
+    "pause exit and resume",
+    "pause speed",
+    "pause settings switches and row plates",
+    "pause and settlement connected tabs",
+    "settlement back, retry, next, double reward and revive"
+  ],
+  "dynamicButtonText": true,
+  "disabledButtonInputGuard": true,
+  "layoutChanged": false,
+  "paidGenerationCalls": 0,
+  "preserved": [
+    "lobby appearance and behavior",
+    "dialog positions and sizes",
+    "button captions and font sizes",
+    "refresh button width difference",
+    "connected tab geometry",
+    "ad callbacks and duplicate click guards",
+    "save persistence and rewards",
+    "title art",
+    "reward icons",
+    "pick card art and animations",
+    "damage statistics",
+    "hero art and animations",
+    "combat and VFX",
+    "BGM and audio"
+  ],
+  "gameplayValidation": "user manual",
+  "automatedAcceptance": "not run per user instruction",
+  "visualAcceptance": "pending user manual review",
+  "game": "https://kingdom-watch.pages.dev/?v=battle-buttons-lobby-v1-1792001544",
+  "deployment": "https://63fe634f.kingdom-watch.pages.dev"
+}
