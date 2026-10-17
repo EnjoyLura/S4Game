@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-lobby-art-v5-20261017-031337",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-attribute-paper-v6-20261017-024717",
+  "entryVersion": "1792177958",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-lobby-art-v5-1792177958",
+  "scope": "hero main roster, information, equipped panel, full-size square sockets, detail actions and bag; shared hero modal paper/navy titles and near-white attribute groups with action margins; brighten shop attributes to near-white",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://3bffc8a4.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-hero-lobby-art-v5-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-hero-lobby-art-v5-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 17531,
+  "mainSha256": "09e03a837d47c640a39516179679fab5c78b352094d967f38e9b9910a035e985",
+  "date": "2026-10-17T03:14:21.071728+08:00",
+  "testsRun": false,
+  "gameRun": false,
+  "simulationRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

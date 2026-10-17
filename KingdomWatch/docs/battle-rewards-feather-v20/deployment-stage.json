@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-rewards-feather-v20-20261017-143456",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-growth-feedback-v19-20261017-142313",
+  "entryVersion": "1792218866",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=battle-rewards-feather-v20-1792218866",
+  "scope": "shared feathered double-rule battle reward tiers with actual equipment; compact translucent growth feedback with main comparison and secondary deltas",
+  "manualAcceptance": "pending user manual review"
+}

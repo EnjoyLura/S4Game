@@ -1,0 +1,139 @@
+ M KingdomWatch/AGENTS.md
+ M KingdomWatch/README.md
+ M KingdomWatch/assets/scripts/battle/BattleDirector.ts
+ M KingdomWatch/assets/scripts/config/LevelDifficulty.ts
+ M KingdomWatch/assets/scripts/config/Mobs.ts
+ M KingdomWatch/assets/scripts/core/AudioCatalog.ts
+ M KingdomWatch/assets/scripts/core/Flow.ts
+ M KingdomWatch/assets/scripts/core/GameAudio.ts
+ M KingdomWatch/assets/scripts/core/GameData.ts
+ M KingdomWatch/assets/scripts/ui/BattleEntryWarmup.ts
+ M KingdomWatch/assets/scripts/ui/ComicUI.ts
+ M KingdomWatch/assets/scripts/ui/GearQuality.ts
+ M KingdomWatch/assets/scripts/ui/GrowthFeedback.ts
+ M KingdomWatch/assets/scripts/ui/HUD.ts
+ M KingdomWatch/assets/scripts/ui/HeroComic.ts
+ M KingdomWatch/assets/scripts/ui/HeroRosterRail.ts
+ M KingdomWatch/assets/scripts/ui/LevelLootPreview.ts
+ M KingdomWatch/assets/scripts/ui/MainUI.ts
+ M KingdomWatch/assets/scripts/ui/PageKit.ts
+ M KingdomWatch/assets/scripts/ui/ResourceBar.ts
+ M KingdomWatch/assets/scripts/ui/SettlementMotion.ts
+ M KingdomWatch/assets/scripts/ui/SquadPanel.ts
+ M KingdomWatch/assets/scripts/ui/TrainingGrowthFx.ts
+ M KingdomWatch/assets/scripts/ui/TrainingLobby.ts
+ M KingdomWatch/assets/scripts/ui/UIAudio.ts
+ M KingdomWatch/assets/scripts/ui/UINotice.ts
+ M KingdomWatch/assets/scripts/ui/pages/BasePage.ts
+ M KingdomWatch/assets/scripts/ui/pages/HeroPage.ts
+ M KingdomWatch/assets/scripts/ui/pages/LevelsPage.ts
+ M KingdomWatch/assets/scripts/ui/pages/ShopPage.ts
+ M KingdomWatch/assets/scripts/ui/pages/UpgradePage.ts
+ M KingdomWatch/tools/prepare-web-release.py
+ M "\347\276\216\346\234\257/tools/__pycache__/art_video_gen.cpython-312.pyc"
+?? KingdomWatch/assets/resources/audio/feedback-v15.meta
+?? KingdomWatch/assets/resources/audio/feedback-v15/
+?? KingdomWatch/assets/resources/scenes/bg_campaign_forest_v1.png
+?? KingdomWatch/assets/resources/scenes/bg_campaign_forest_v1.png.meta
+?? KingdomWatch/assets/resources/scenes/bg_campaign_lair_v1.png
+?? KingdomWatch/assets/resources/scenes/bg_campaign_lair_v1.png.meta
+?? KingdomWatch/assets/resources/scenes/bg_campaign_outpost_v1.png
+?? KingdomWatch/assets/resources/scenes/bg_campaign_outpost_v1.png.meta
+?? KingdomWatch/assets/resources/ux/campaign_chrome_v1.meta
+?? KingdomWatch/assets/resources/ux/campaign_chrome_v1/
+?? KingdomWatch/assets/resources/ux/preparation_art_v2.meta
+?? KingdomWatch/assets/resources/ux/preparation_art_v2/
+?? KingdomWatch/assets/scripts/config/Campaign.ts
+?? KingdomWatch/assets/scripts/config/Campaign.ts.meta
+?? KingdomWatch/assets/scripts/ui/BaseChrome.ts
+?? KingdomWatch/assets/scripts/ui/BaseChrome.ts.meta
+?? KingdomWatch/assets/scripts/ui/BrowserBack.ts
+?? KingdomWatch/assets/scripts/ui/BrowserBack.ts.meta
+?? KingdomWatch/assets/scripts/ui/CampaignCheckpointArt.ts
+?? KingdomWatch/assets/scripts/ui/CampaignCheckpointArt.ts.meta
+?? KingdomWatch/assets/scripts/ui/CampaignChrome.ts
+?? KingdomWatch/assets/scripts/ui/CampaignChrome.ts.meta
+?? KingdomWatch/assets/scripts/ui/CampaignRoute.ts
+?? KingdomWatch/assets/scripts/ui/CampaignRoute.ts.meta
+?? KingdomWatch/assets/scripts/ui/CelebrationInk.ts
+?? KingdomWatch/assets/scripts/ui/CelebrationInk.ts.meta
+?? KingdomWatch/assets/scripts/ui/ConstructionPulse.ts
+?? KingdomWatch/assets/scripts/ui/ConstructionPulse.ts.meta
+?? KingdomWatch/assets/scripts/ui/DetailDialog.ts
+?? KingdomWatch/assets/scripts/ui/DetailDialog.ts.meta
+?? KingdomWatch/assets/scripts/ui/FeedbackSurface.ts
+?? KingdomWatch/assets/scripts/ui/FeedbackSurface.ts.meta
+?? KingdomWatch/assets/scripts/ui/HeroChrome.ts
+?? KingdomWatch/assets/scripts/ui/HeroChrome.ts.meta
+?? KingdomWatch/assets/scripts/ui/LobbyChrome.ts
+?? KingdomWatch/assets/scripts/ui/LobbyChrome.ts.meta
+?? KingdomWatch/assets/scripts/ui/PositiveFeedback.ts
+?? KingdomWatch/assets/scripts/ui/PositiveFeedback.ts.meta
+?? KingdomWatch/assets/scripts/ui/RewardCollectFx.ts
+?? KingdomWatch/assets/scripts/ui/RewardCollectFx.ts.meta
+?? KingdomWatch/assets/scripts/ui/RewardPopup.ts
+?? KingdomWatch/assets/scripts/ui/RewardPopup.ts.meta
+?? KingdomWatch/assets/scripts/ui/SquadChrome.ts
+?? KingdomWatch/assets/scripts/ui/SquadChrome.ts.meta
+?? KingdomWatch/assets/scripts/ui/TrainingChrome.ts
+?? KingdomWatch/assets/scripts/ui/TrainingChrome.ts.meta
+?? KingdomWatch/assets/scripts/ui/TrainingResultPulse.ts
+?? KingdomWatch/assets/scripts/ui/TrainingResultPulse.ts.meta
+?? KingdomWatch/docs/audio-levels-v1/
+?? KingdomWatch/docs/base-art-concept-v13/
+?? KingdomWatch/docs/base-art-live-v13/
+?? KingdomWatch/docs/battle-modal-art-concept-v18/
+?? KingdomWatch/docs/battle-rewards-feather-v20/
+?? KingdomWatch/docs/campaign-art-concept-v7/
+?? KingdomWatch/docs/campaign-chapters-v1/
+?? KingdomWatch/docs/campaign-main-art-v8/
+?? KingdomWatch/docs/campaign-route-compact-v3/
+?? KingdomWatch/docs/campaign-soft-finish-v9/
+?? KingdomWatch/docs/campaign-ui-polish-v2/
+?? KingdomWatch/docs/chapter-banner-art-v1/
+?? KingdomWatch/docs/chapter-checkpoints-v1/
+?? KingdomWatch/docs/chapter-route-fill-v2/
+?? KingdomWatch/docs/chapter-route-header-v3/
+?? KingdomWatch/docs/chapter-route-layout-v1/
+?? KingdomWatch/docs/chapter-route-live-v1/
+?? KingdomWatch/docs/chapter-route-overlay-v4/
+?? KingdomWatch/docs/feedback-polish-v17/
+?? KingdomWatch/docs/gear-slots-fill-v3/
+?? KingdomWatch/docs/growth-feedback-v19/
+?? KingdomWatch/docs/hero-art-concept-v4/
+?? KingdomWatch/docs/hero-battle-sequences-v1/__pycache__/
+?? KingdomWatch/docs/hero-detail-shared-v6/
+?? KingdomWatch/docs/hero-idle-rebuild-v1/__pycache__/
+?? KingdomWatch/docs/hero-lobby-art-v5/
+?? KingdomWatch/docs/hero-stance-rebuild-v1/__pycache__/
+?? KingdomWatch/docs/levels-comic-v1/__pycache__/
+?? KingdomWatch/docs/levels-comic-v2/__pycache__/
+?? KingdomWatch/docs/lobby-ui-quiet-v1/
+?? KingdomWatch/docs/lobby-ui-quiet-v2/
+?? KingdomWatch/docs/locked-stage-confirm-v11/
+?? KingdomWatch/docs/mora-actions-user-v1/__pycache__/
+?? KingdomWatch/docs/positive-feedback-v15/
+?? KingdomWatch/docs/preparation-art-v2/
+?? KingdomWatch/docs/pyro-actions-user-v2/__pycache__/
+?? KingdomWatch/docs/pyro-attack-user-v1/__pycache__/
+?? KingdomWatch/docs/pyro-idle-user-v1/__pycache__/
+?? KingdomWatch/docs/reward-banner-notice-v14/
+?? KingdomWatch/docs/reward-chests-v1/
+?? KingdomWatch/docs/shop-art-concept-v2/
+?? KingdomWatch/docs/shop-attribute-paper-v6/
+?? KingdomWatch/docs/shop-comic-v1/__pycache__/prepare_art.cpython-314.pyc
+?? KingdomWatch/docs/shop-controls-quiet-v4/
+?? KingdomWatch/docs/shop-main-art-v3/
+?? KingdomWatch/docs/shop-price-buttons-v5/
+?? KingdomWatch/docs/sniper-attack-forward-v1/__pycache__/
+?? KingdomWatch/docs/sniper-idle-forward-v2/__pycache__/
+?? KingdomWatch/docs/squad-trim-v10/
+?? KingdomWatch/docs/stage-loot-layout-v2/
+?? KingdomWatch/docs/startup-component-fix-v16/
+?? KingdomWatch/docs/toast-middle-rise-v18/
+?? KingdomWatch/docs/upgrade-art-concept-v12/
+?? KingdomWatch/docs/upgrade-art-live-v12/
+?? KingdomWatch/docs/volt-idle-v1/__pycache__/
+?? "\347\276\216\346\234\257/tools/__pycache__/art_video_gen.cpython-314.pyc"
+?? "\347\276\216\346\234\257/tools/__pycache__/hero_frame_bounds.cpython-314.pyc"
+?? "\347\276\216\346\234\257/tools/__pycache__/hero_idle_loop.cpython-314.pyc"

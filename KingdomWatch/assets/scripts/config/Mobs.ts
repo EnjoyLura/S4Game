@@ -2,6 +2,7 @@
  * 怪物与关卡配置（§5 第 1 章 / §11.2 怪物基准，全配置化）
  */
 import { PAL } from './GameConfig';
+import { CAMPAIGN_CHAPTERS, CAMPAIGN_LEVEL_IDS, CAMPAIGN_STAGES } from './Campaign';
 
 export interface MobDef {
   id: string;
@@ -76,10 +77,12 @@ export interface LevelDef {
   /** 防线耐久（已含城墙加成前的关卡基础值；M0 直配） */
   lineHp: number;
   baseGold: number;
+  /** Chapter/stage growth, multiplied by the selected difficulty in BattleDirector. */
+  statMul?: number;
   waves: WaveDef[];
 }
 
-export const LEVEL_1_1: LevelDef = {
+const OUTPOST_TEMPLATE: LevelDef = {
   id: '1-1',
   name: '腐朽森林·前哨',
   lineHp: 1000,
@@ -98,7 +101,7 @@ export const LEVEL_1_1: LevelDef = {
   ],
 };
 
-export const LEVEL_1_2: LevelDef = {
+const FOREST_TEMPLATE: LevelDef = {
   id: '1-2',
   name: '腐朽森林·深林',
   lineHp: 1000,
@@ -117,7 +120,7 @@ export const LEVEL_1_2: LevelDef = {
   ],
 };
 
-export const LEVEL_1_3: LevelDef = {
+const LAIR_TEMPLATE: LevelDef = {
   id: '1-3',
   name: '腐朽森林·兽穴',
   lineHp: 1100,
@@ -136,11 +139,40 @@ export const LEVEL_1_3: LevelDef = {
   ],
 };
 
-/** 关卡注册表：新关卡在这里登记，主城关卡页与战斗启动共用 */
-const LEVEL_TABLE: Record<string, LevelDef> = { '1-1': LEVEL_1_1, '1-2': LEVEL_1_2, '1-3': LEVEL_1_3 };
+/** Three chapter formations, with ten progressively stronger encounters in each chapter. */
+const TEMPLATES = [OUTPOST_TEMPLATE, FOREST_TEMPLATE, LAIR_TEMPLATE];
+const PATROLS = ['goblin_worker', 'goblin_slinger', 'wolf_rider', 'goblin_worker', 'goblin_shaman',
+  'goblin_slinger', 'wolf_rider', 'goblin_shaman', 'wolf_rider', 'goblin_brute'];
+const LEVEL_TABLE: Record<string, LevelDef> = {};
+for (const stage of CAMPAIGN_STAGES) {
+  const chapter = CAMPAIGN_CHAPTERS[stage.chapter - 1], base = TEMPLATES[stage.chapter - 1];
+  const step = stage.stage - 1;
+  const waves = base.waves.map((wave, index) => {
+    const groups = wave.groups.map(g => ({ ...g,
+      count: Math.ceil(g.count * (1 + step * .035)),
+      interval: Math.max(.35, g.interval * (1 - step * .012)),
+    }));
+    const add = (mob: string, count: number, interval: number, delay: number): void => {
+      const existing = groups.find(g => g.mob === mob);
+      if (existing) existing.count += count;
+      else groups.push({ mob, count, interval, delay });
+    };
+    // Change encounter composition as well as stats; chapter entry retains its baseline formation.
+    if (step > 0 && index === 5) {
+      const mob = PATROLS[step];
+      add(mob, mob === 'goblin_brute' ? 1 + stage.chapter : mob === 'goblin_shaman' ? 2 + stage.chapter : 4 + stage.chapter * 2, 1.3, 3);
+    }
+    if (stage.stage === 5 && index === 4) add('goblin_brute', stage.chapter, 1.8, 4);
+    if (stage.stage === 10 && index === 9) add('goblin_brute', stage.chapter + 1, 1.6, 4);
+    return { groups, surge: wave.surge || (stage.stage === 5 && index === 4) || (stage.stage === 10 && index === 9) };
+  });
+  LEVEL_TABLE[stage.id] = { id: stage.id, name: chapter.name + ' · ' + stage.name,
+    lineHp: base.lineHp, baseGold: 60 + (stage.chapter - 1) * 80 + step * 8,
+    statMul: Number((1 + (stage.chapter - 1) * .55 + step * .055).toFixed(3)), waves };
+}
 
 /** 关卡推进顺序（登记顺序即推进顺序） */
-export const LEVEL_IDS: string[] = Object.keys(LEVEL_TABLE);
+export const LEVEL_IDS: readonly string[] = CAMPAIGN_LEVEL_IDS;
 
 /** 下一关 id；已是最后一关返回 null（胜利结算"下一关"直进用） */
 export function nextLevelId(id: string): string | null {
@@ -149,7 +181,7 @@ export function nextLevelId(id: string): string | null {
 }
 
 export function getLevelDef(id: string): LevelDef {
-  return LEVEL_TABLE[id] || LEVEL_1_1;
+  return LEVEL_TABLE[id] || LEVEL_TABLE['1-1'];
 }
 
 /** 英雄站位（§3.1，用户确认）：防线横向对称分布，单人必须居中；3 人 ±210 */

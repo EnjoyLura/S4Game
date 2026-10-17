@@ -1,0 +1,83 @@
+--- before/assets/scripts/ui/UINotice.ts
++++ assets/scripts/ui/UINotice.ts
+@@ -1,4 +1,4 @@
+-/** A non-blocking game toast: translucent text, slide up, hold, then fade away. */
++/** A non-blocking game notice: feathered sides, twin rules, slide up and fade upward. */
+ import { _decorator, Component, game, Game, Graphics, isValid, Node, UIOpacity } from 'cc';
+ import { LO } from '../config/GameConfig';
+ import { CA, label, N } from './UIKit';
+@@ -52,6 +52,20 @@
+ }
+ const out = (t: number): number => 1 - Math.pow(1 - Math.min(1,Math.max(0,t)),3);
+ 
++/** Static alpha bands feather both ends, including the two parallel rules at each edge. */
++function fadedNotice(parent: Node, width: number, height: number): void {
++  const g=N('gameToastFadedBackground',parent,0,0,width,height).addComponent(Graphics), bands=80;
++  for(let i=0;i<bands;i++) {
++    const u=(i+.5)/bands, edge=Math.min(1,(1-Math.abs(u*2-1))/.38);
++    const fade=edge*edge*(3-2*edge), x=-width/2+i*width/bands, strip=width/bands;
++    g.fillColor=CA('#101B24',.76*fade);g.rect(x,-height/2,strip,height);g.fill();
++    for(const side of [-1,1]) {
++      g.fillColor=CA('#F2D692',.64*fade);g.rect(x,side*height/2-(side>0?1.5:0),strip,1.5);g.fill();
++      g.fillColor=CA('#F2D692',.28*fade);g.rect(x,side*(height/2-5)-.5,strip,1);g.fill();
++    }
++  }
++}
++
+ @ccclass('UINotice')
+ export class UINotice extends Component {
+   private card: Node | null = null;
+@@ -63,6 +77,7 @@
+   private ready = false;
+   private revision = 0;
+   private height = 64;
++  private entryDistance = 0;
+ 
+   onLoad(): void {
+     game.on(Game.EVENT_HIDE,this.clear,this);
+@@ -85,26 +100,26 @@
+     const version = ++this.revision;
+     this.options = options; this.message = message;
+     const lines = wrapNotice(noticeText(message,options));
+-    const width = Math.min(640,Math.max(300,Math.max(...lines.map(units))*22+48));
+-    this.height = Math.max(64,lines.length*28+24);
+-    // Rest above the shared navigation; the first frame starts fully below the physical screen.
+-    this.node.setPosition(0,-LO.half+LO.safeBottom+152+this.height/2,0);
++    const width = Math.min(710,Math.max(580,Math.max(...lines.map(units))*22+138));
++    this.height = Math.max(68,lines.length*28+30);
++    // Settle in the upper middle, clear of the resource strip; start fully below the screen.
++    const restingY=Math.min(LO.half*.24,LO.half-LO.notchTop-this.height/2-160);
++    this.node.setPosition(0,restingY,0);
++    this.entryDistance=LO.half+restingY+this.height/2+24;
+     this.node.setSiblingIndex(this.node.parent!.children.length-1);
+     const card = this.card = N('gameToast',this.node,0,0,width,this.height);
+-    const backdrop = card.addComponent(Graphics);
+-    backdrop.fillColor = CA('#101B24',.78);
+-    backdrop.roundRect(-width/2,-this.height/2,width,this.height,12); backdrop.fill();
++    fadedNotice(card,width,this.height);
+     const caption = label(card,0,0,lines.join('\n'),{ size:22,font:'body',color:'#FFF8E8',
+-      w:width-40,h:this.height-20,lineHeight:28,shrink:true,outline:'#101820',outlineW:.7 });
++      w:width-112,h:this.height-24,lineHeight:28,shrink:true,outline:'#101820',outlineW:.7 });
+     caption.name = 'gameToastText';
+     this.fade = card.addComponent(UIOpacity); this.fade.opacity = 0;
+     const hold = kind === 'warning' ? 2.3 : kind === 'upgrade' || kind === 'reward' ? 2 : 1.8;
+-    this.duration = .28+hold+Math.max(0,lines.length-2)*.3;
++    this.duration = .38+hold+Math.max(0,lines.length-2)*.3;
+     this.enabled = true;
+     if (kind === 'upgrade' || kind === 'reward' || kind === 'warning' || kind === 'success') uiSound(kind);
+     whenUIArtReady(card,() => {
+       if (version !== this.revision || this.card !== card) return;
+-      this.age = continuing ? .28 : 0; this.ready = true; this.render();
++      this.age = continuing ? .38 : 0; this.ready = true; this.render();
+     });
+   }
+ 
+@@ -120,7 +135,7 @@
+     const reduced = reducedMotion(), ending = Math.min(1,Math.max(0,(this.age-this.duration)/.32));
+     this.fade.opacity = Math.round(255*Math.min(1,this.age/(reduced ? .08 : .12))*(1-ending));
+     this.card.setScale(1,1,1);
+-    this.card.setPosition(0,reduced ? 0 : -(LO.safeBottom+this.height+176)*(1-out(this.age/.28)),0);
++    this.card.setPosition(0,reduced ? 0 : -this.entryDistance*(1-out(this.age/.38))+36*ending,0);
+   }
+ 
+   private removeDisplay(): void {

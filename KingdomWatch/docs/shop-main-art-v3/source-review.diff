@@ -1,0 +1,499 @@
+--- before/assets/scripts/ui/MainUI.ts
++++ assets/scripts/ui/MainUI.ts
+@@ -3,7 +3,7 @@
+  * 统一顶栏、资源芯片和底部导航；五页使用相同内容边距与安全区。
+  * 页签内容整屏重建（PageKit.ctx.refresh）；各页实现见 ui/pages/*（线稿一一对应）。
+  */
+-import { _decorator, Component, Graphics, Label, Node, Sprite, UITransform, view } from 'cc';
++import { _decorator, Component, Label, Node, Sprite, UITransform, view } from 'cc';
+ import { initLayout, LO, PAL } from '../config/GameConfig';
+ import { flow } from '../core/Flow';
+ import { GameAudio } from '../core/GameAudio';
+@@ -20,6 +20,7 @@
+ import { buildUpgrade } from './pages/UpgradePage';
+ import { buildBase } from './pages/BasePage';
+ import { levelReturnReady } from './BattleEntry';
++import { paintLobbyFace, paintLobbyStrip } from './LobbyChrome';
+ 
+ const { ccclass } = _decorator;
+ 
+@@ -117,7 +118,7 @@
+     }, { tone: 'green', size: 23 });
+   }
+ 
+-  /* ---------- 底部导航（5 页签；用户确认：导航栏不要边框——平板底 + 高亮板，无页签框美术） ---------- */
++  /* ---------- Five shared navigation tabs: navy strip, gold selection and faint separators. ---------- */
+   private buildNavBar(root: Node): void {
+     this.navBar = gpanel(root, 0, WYB(0, MAIN_NAV_H), 750, MAIN_NAV_H, CA('#101D17', 0.98), undefined, 0, 0);
+     const w = 138;
+@@ -137,13 +138,10 @@
+     });
+   }
+ 
+-  /** 页签高亮：激活金板金字 / 未激活暗板白字（无边框规范：纯色板，无页签框美术） */
++  /** Selection shares the shop concept's narrow bevel; separators remain behind the touch slots. */
+   private highlightTabs(): void {
+     if (this.navBar) {
+-      const bg = this.navBar.getComponent(Graphics)!;
+-      bg.clear();
+-      bg.fillColor = C(COMIC.dark);
+-      bg.rect(-375, -MAIN_NAV_H / 2, 750, MAIN_NAV_H); bg.fill();
++      paintLobbyStrip(this.navBar, 750, MAIN_NAV_H, [-207, -69, 69, 207]);
+     }
+     this.navItems.forEach((it, k) => {
+       const active = k === this.tab;
+@@ -151,17 +149,14 @@
+       it.act.active = active;
+       const iconLbl = it.icon.getComponent(Label);
+       const txtLbl = it.txt.getComponent(Label);
+-      const ag = it.act.getComponent(Graphics)!;
+-      ag.clear();
+-      ag.fillColor = C(COMIC.gold);
+-      ag.roundRect(-63, -50, 126, 104, 12); ag.fill();
++      paintLobbyFace(it.act, 126, 104, 'gold');
+       if (txtLbl) {
+         txtLbl.color = C(active ? COMIC.text : COMIC.cream);
+         txtLbl.fontSize = 24;
+       }
+       if (iconLbl) iconLbl.color = C(active ? '#FFE08A' : '#FFFFFF');
+       const artSp = it.art ? it.art.getComponent(Sprite) : null;
+-      if (artSp) artSp.color = C(active ? '#FFFFFF' : '#D5DCE0');
++      if (artSp) artSp.color = C(active ? '#FFFFFF' : '#E1E8EA');
+     });
+   }
+ 
+--- before/assets/scripts/ui/pages/ShopPage.ts
++++ assets/scripts/ui/pages/ShopPage.ts
+@@ -10,9 +10,11 @@
+ import { loadSave } from '../../core/SaveData';
+ import { dismissUI, reducedMotion, refreshUI } from '../UIMotion';
+ import { bindButton } from '../ButtonFeedback';
+-import { gearPlate, gearQuality, gearQualityHalo } from '../GearQuality';
+-
+-const CARD_W = 218, CARD_H = 308, STEP_X = 232, STEP_Y = 324;
++import { gearQuality } from '../GearQuality';
++import { paintLobbyFace, paintLobbyStrip, paintShopCategory, paintShopModal, shopAttributeGroup,
++  shopDetailRule, shopProductCard, shopQualitySocket, shopSectionEmblem } from '../LobbyChrome';
++
++const CARD_W = 218, CARD_H = 330, STEP_X = 232, STEP_Y = 346;
+ const TAB_ART = ['comic_wpn_bow_v1', 'comic_helm_falcon_v1', 'comic_armor_forest_v1', 'comic_mat_stone_v1'];
+ const CATEGORY_TITLES = ['远征武器', '英雄招募', '冒险装备', '强化材料'];
+ const HALO = ['#E1E4DE', '#DCEBD0', '#DCEAF3', '#E7DFF0'];
+@@ -31,7 +33,7 @@
+ export function buildShop(ctx: PageCtx): void {
+   const screenH = LO.half * 2 - LO.safeTop - LO.safeBottom;
+   const splashH = Math.min(430, screenH * .27);
+-  const tabTop = splashH - 4, goodsTop = tabTop + 82, goodsBottom = screenH - MAIN_NAV_H;
++  const tabTop = splashH - 4, goodsTop = tabTop + 90, goodsBottom = screenH - MAIN_NAV_H;
+   buildShopSplash(ctx.screens, splashH);
+   const content = N('shopCatalog', ctx.screens);
+   render();
+@@ -79,10 +81,12 @@
+   const bar = comicPlate(parent, 0, WY(top, 90), 750, 90, 'dark', {
+     name: 'shopTabs', cut: 0, edge: false, highlight: false,
+   });
++  paintLobbyStrip(bar, 750, 90, [-178, 0, 178]);
+   SHOP_TABS.forEach((tab, i) => {
+     const node = comicButton(bar, (i - 1.5) * 178, 0, 172, 70, '', () => select(i),
+       { tone: i === selected ? 'gold' : 'dark', name: 'shopTab:' + tab.key, sound: 'select', quiet: true });
+     const face = node.getChildByName('buttonFace')!;
++    paintShopCategory(face, 172, 70, i === selected);
+     comicArt(face, -48, 0, 40, 40, TAB_ART[i]);
+     mainLabel(face, 23, 0, tab.name, { size: 25, font: 'body', bold: true,
+       color: i === selected ? COMIC.text : COMIC.cream, w: 80, h: 37, align: 'left' });
+@@ -95,40 +99,40 @@
+   const shown = unlocked || owned;
+   const q = g.give.kind === 'equip' ? EQUIPS[g.give.id]?.quality ?? 0 : g.give.kind === 'hero' ? 3 : 1;
+   const equipment = g.give.kind === 'equip';
+-  const card = comicSurface(parent, x, y, CARD_W, CARD_H, 'card', { name: 'shopItem:' + g.id, radius: 14 });
++  const card = shopProductCard(parent, x, y, CARD_W, CARD_H, 'shopItem:' + g.id);
+   const art = itemArt(g);
+-  const icon = N('shopItemInfo:' + g.id, card, 0, 65, 158, 158);
++  const icon = N('shopItemInfo:' + g.id, card, 0, 64, 180, 180);
+   if (g.give.kind === 'hero') {
+-    const picture = comicPortrait(icon, 0, 0, 154, art, HALO[q]);
++    const picture = comicPortrait(icon, 0, 0, 176, art, HALO[q]);
+     if (!shown) picture.addComponent(UIOpacity).opacity = 200;
+     if (!art) comicMark(picture, 0, 0, 'lock', 44, '#93998E');
+   } else {
+-    gearQualityHalo(icon, 0, 0, 158, 158, q);
++    shopQualitySocket(icon, 0, 0, 180, q);
+     if (art) {
+-      const picture = comicArt(icon, 0, 0, 132, 132, art);
++      const picture = comicArt(icon, 0, 0, 154, 154, art);
+       if (!shown) picture.addComponent(UIOpacity).opacity = 200;
+     } else comicMark(icon, 0, 2, 'lock', 44, '#93998E');
+   }
+   bindButton(icon, () => openProductDetails(ctx, g), { sound: 'open' });
+-  if (owned) comicMark(card, 82, 128, 'check', 20, '#458A35');
+-  else if (!unlocked && g.price) comicMark(card, 82, 128, 'lock', 18, '#879087');
++  if (owned) comicMark(card, 84, 145, 'check', 20, '#458A35');
++  else if (!unlocked && g.price) comicMark(card, 84, 145, 'lock', 18, '#879087');
+   if (g.give.kind !== 'hero') {
+-    const amount = comicSurface(card, 68, 8, 47, 24, 'dark', { name: 'shopItemCount', radius: 7 });
++    const amount = comicSurface(card, 76, -17, 47, 24, 'dark', { name: 'shopItemCount', radius: 7 });
+     mainLabel(amount, 0, 0, '×' + (g.give.n || 1), { size: 16, color: COMIC.cream, font: 'number', w: 42, h: 23 });
+   }
+-  mainLabel(card, 0, -35, g.name, { size: 23, color: COMIC.text, font: 'body', bold: true, w: 194, h: 35 });
+-  mainLabel(card, 0, -68, equipment ? g.sub.replace(/^[白绿蓝紫]\d+阶\s*·\s*/, '') : g.sub,
++  mainLabel(card, 0, -46, g.name, { size: 23, color: COMIC.text, font: 'body', bold: true, w: 194, h: 32 });
++  mainLabel(card, 0, -80, equipment ? g.sub.replace(/^[白绿蓝紫]\d+阶\s*·\s*/, '') : g.sub,
+     { size: 16, color: COMIC.sub, font: 'body', w: 194, h: 28 });
+   const available = !!g.price && unlocked && !owned;
+   const text = available ? '' : owned ? '已拥有' : !g.price ? '敬请期待' : '通关 ' + g.unlock + ' 解锁';
+   if (!available) {
+-    const status = N('shopBuy:' + g.id, card, 0, -117, 192, 48);
++    const status = N('shopBuy:' + g.id, card, 0, -130, 192, 50);
+     mainLabel(status, 0, 0, text, { size: owned || !g.price ? 21 : 16, color: owned ? COMIC.greenShade : COMIC.sub,
+       bold: owned, font: 'body', w: 184, h: 38 });
+     if (!owned && g.price) bindButton(status, () => toast('通关 ' + g.unlock + ' 后解锁'), { sound: false });
+     return;
+   }
+-  const purchase = comicButton(card, 0, -117, 192, 48, text, () => {
++  const purchase = comicButton(card, 0, -130, 192, 50, text, () => {
+     if (owned || !g.price) return;
+     if (!unlocked) { toast('通关 ' + g.unlock + ' 后解锁'); return; }
+     openProductDetails(ctx, g);
+@@ -137,6 +141,7 @@
+   if (available) {
+     const price = fmt(g.price), textW = Math.min(122, price.length * 16), groupW = 29 + 6 + textW;
+     const face = purchase.getChildByName('buttonFace')!;
++    paintLobbyFace(face, 192, 50, 'green');
+     comicArt(face, -groupW / 2 + 14.5, 0, 29, 29, g.currency === 'gold' ? 'comic_coin_v1' : 'comic_diamond_v1');
+     mainLabel(face, -groupW / 2 + 35 + textW / 2, 0, price, { size: 26, font: 'number', color: COMIC.cream,
+       align: 'left', w: textW, h: 35, outline: '#376C29', outlineW: 1 });
+@@ -182,54 +187,83 @@
+ function openProductDetails(ctx: PageCtx, g: ShopDef): void {
+   const sv = loadSave(), info = productInfo(g), owned = g.give.kind === 'hero' && !!sv.heroes[g.give.id]?.owned;
+   const unlocked = lvReached(g.unlock), available = !!g.price && unlocked && !owned;
+-  const height = Math.min(780, LO.half * 2 - LO.notchTop * 2 - 48), top = height / 2, bottom = -top;
++  const groups: { title: string; rows: [string, string][] }[] = [];
++  const attributes = info.rows.filter(([name]) => !name.startsWith('每') && !name.startsWith('持有') && name !== '适用英雄');
++  const traits = info.rows.filter(([name]) => name.startsWith('每'));
++  const inventory = info.rows.filter(([name]) => name.startsWith('持有'));
++  if (attributes.length) groups.push({ title: g.give.kind === 'equip' ? '初始属性' : g.give.kind === 'hero' ? '英雄能力' : '数量信息', rows: attributes });
++  if (traits.length) groups.push({ title: '武器特性', rows: traits });
++  if (inventory.length) groups.push({ title: '持有情况', rows: inventory });
++  const deliveryH = Math.max(50, Math.ceil(info.delivery.length / 28) * 25);
++  const contentH = groups.reduce((sum, group) => sum + 38 + group.rows.length * 38 + 12 + 14, 0) + 38 + deliveryH + 8;
++  const height = Math.min(1120, Math.max(760, 304 + contentH + 202), LO.half * 2 - LO.notchTop * 2 - 48);
++  const top = height / 2, bottom = -top;
+   const panel = comicDialog(ctx.screens.parent || ctx.screens, 620, height, '商品详情');
+   panel.name = 'shopProductDetails:' + g.id;
++  paintShopModal(panel, 620, height);
++  const title = panel.children.find(child => !!child.getComponent(Label))!;
++  title.setPosition(0, top - 36, 0);
++  const titleLabel = title.getComponent(Label)!;
++  titleLabel.fontSize = 32; titleLabel.lineHeight = 40; titleLabel.color = C(COMIC.cream);
++  titleLabel.enableOutline = true; titleLabel.outlineColor = C('#152736'); titleLabel.outlineWidth = 1.2;
++  const closeIcon = panel.getChildByName('btn_close')!;
++  closeIcon.setPosition(275, top - 38, 0);
++  paintLobbyFace(closeIcon.getChildByName('buttonFace')!, 44, 44, 'dark');
+   const art = itemArt(g);
+   const equipment = g.give.kind === 'equip' ? EQUIPS[g.give.id] : null;
+-  if (equipment) {
+-    const well = gearPlate(panel, -214, top - 147, 124, 124, equipment.quality);
+-    gearQualityHalo(well, 0, 0, 124, 124, equipment.quality);
+-  } else if (g.give.kind === 'mat') gearQualityHalo(panel, -214, top - 147, 112, 112, 1);
++  if (equipment || g.give.kind === 'mat') shopQualitySocket(panel, -192, top - 180, 168, equipment?.quality ?? 1);
+   if (art) {
+-    if (g.give.kind === 'hero') comicPortrait(panel, -214, top - 147, 112, art);
+-    else comicArt(panel, -214, top - 147, 96, 96, art);
+-  } else comicMark(panel, -214, top - 147, 'lock', 44, COMIC.sub);
+-  const nameColor = COMIC.text;
+-  mainLabel(panel, 68, top - 128, g.name, { size: 28, font: 'body', color: nameColor, bold: true, align: 'left', w: 350, h: 40 });
+-  mainLabel(panel, 68, top - 174, info.meta, { size: 19, color: COMIC.sub,
+-    bold: !!equipment, align: 'left', w: 350, h: 34 });
+-
+-  // Keep the price/actions fixed; longer hero introductions scroll inside the paper panel.
+-  const bodyH = height - 410, bodyTop = top - 226;
++    if (g.give.kind === 'hero') comicPortrait(panel, -192, top - 180, 168, art);
++    else comicArt(panel, -192, top - 180, 148, 148, art);
++  } else comicMark(panel, -192, top - 180, 'lock', 50, COMIC.sub);
++  mainLabel(panel, 84, top - 121, g.name, { size: 34, font: 'body', color: '#172D3B', bold: true, align: 'left', w: 336, h: 46 });
++  mainLabel(panel, 84, top - 159, info.meta, { size: 19, font: 'body', color: COMIC.sub,
++    bold: !!equipment, align: 'left', w: 336, h: 28 });
++  const users = info.rows.find(([name]) => name === '适用英雄')?.[1];
++  if (users) {
++    const badge = N('shopProductUsers',panel,80,top-194,328,28), bg = badge.addComponent(Graphics);
++    bg.fillColor = CA('#CEAA61',.2); bg.roundRect(-164,-14,328,28,5); bg.fill();
++    mainLabel(badge,0,0,users,{size:19,font:'body',color:'#796540',bold:true,align:'left',w:310,h:26});
++  }
++  mainLabel(panel, 84, top - (users ? 239 : 222), info.description, { size: 19, font: 'body', color: '#635744',
++    align: 'left', w: 336, h: users ? 62 : 94, lineHeight: 25 });
++  shopDetailRule(panel, top - 284);
++
++  // Natural content height fits ordinary product details. Only a shorter viewport scrolls this body.
++  // Price/actions always occupy their own fixed area and never cover an attribute row.
++  const bodyH = Math.max(1,height-506), bodyTop = top - 304;
+   const view = N('shopProductInfoView', panel, 0, bodyTop - bodyH / 2, 552, bodyH);
+   view.addComponent(Mask);
+   const scroll = view.addComponent(ScrollView);
+-  const contentH = 96 + (info.rows.length ? 40 + info.rows.length * 44 : 0) + 96;
+   const content = N('shopProductInfoContent', view, 0, bodyH / 2, 552, Math.max(bodyH, contentH));
+   content.getComponent(UITransform)!.setAnchorPoint(.5, 1);
+   scroll.content = content; scroll.horizontal = false; scroll.vertical = contentH > bodyH;
+-  mainLabel(content, 0, -42, info.description, { size: 21, color: COMIC.text, align: 'left', w: 536, h: 84, lineHeight: 29 });
+-  let cursor = 96;
+-  if (info.rows.length) {
+-    mainLabel(content, 0, -cursor - 15, g.give.kind === 'equip' ? '初始装备属性' : g.give.kind === 'hero' ? '英雄能力' : '数量信息',
+-      { size: 21, color: COMIC.text, bold: true, align: 'left', w: 536, h: 30 });
+-    cursor += 40;
+-    info.rows.forEach(([name, value], i) => {
+-      const row = comicPlate(content, 0, -cursor - 20, 544, 38, i % 2 ? 'paper' : 'card', { cut: 5, edge: false });
+-      mainLabel(row, -130, 0, name, { size: 20, color: COMIC.sub, align: 'left', w: 250, h: 30 });
+-      mainLabel(row, 130, 0, value, { size: 22, color: COMIC.text, bold: true, align: 'right', w: 250, h: 32 });
+-      cursor += 44;
++  let cursor = 0;
++  const section = (text: string): void => {
++    shopSectionEmblem(content,-261,-cursor-15);
++    mainLabel(content,-93,-cursor-15,text,{size:25,font:'body',color:'#1D303E',bold:true,align:'left',w:300,h:32});
++    cursor += 38;
++  };
++  groups.forEach(group => {
++    section(group.title);
++    const groupH = group.rows.length*38+12;
++    const well = shopAttributeGroup(content,-cursor-groupH/2,group.rows.length);
++    group.rows.forEach(([name,value],i) => {
++      const row = well.children[i];
++      mainLabel(row,-105,0,name,{size:19,font:'body',color:'#74664F',align:'left',w:292,h:30});
++      mainLabel(row,164,0,value,{size:23,font:/^[+\d.% /]+$/.test(value)?'number':'body',
++        color:value.startsWith('+')?'#33772F':'#243746',bold:true,align:'right',w:180,h:32});
+     });
+-  }
+-  mainLabel(content, 0, -cursor - 48, info.delivery, { size: 19, color: COMIC.sub, align: 'left', w: 536, h: 80, lineHeight: 27 });
+-  const divider = N('shopProductFooterRule', panel, 0, bottom + 182).addComponent(Graphics);
+-  divider.strokeColor = CA(COMIC.sub, .25); divider.lineWidth = 1;
+-  divider.moveTo(-276, 0); divider.lineTo(276, 0); divider.stroke();
++    cursor += groupH+14;
++  });
++  section('获取说明');
++  mainLabel(content,0,-cursor-deliveryH/2,info.delivery,{size:18,font:'body',color:'#74664F',
++    align:'left',w:530,h:deliveryH,lineHeight:25});
++  shopDetailRule(panel,bottom+189);
+   const status = owned ? '已拥有该英雄' : !g.price ? '敬请期待' : !unlocked ? '通关 ' + g.unlock + ' 解锁购买'
+     : '每次购买获得 ' + (g.give.n || 1) + (g.give.kind === 'hero' ? ' 名英雄' : g.give.kind === 'equip' ? ' 件装备' : ' 个材料');
+   const feedback = N('shopPurchaseFeedback', panel);
+-  const statusLabel = mainLabel(feedback, 0, bottom + 164, status, { size: 18, color: available ? COMIC.greenShade : COMIC.sub, w: 552, h: 28 });
++  const statusLabel = mainLabel(feedback, 0, bottom + 87, status, { size: 17, font:'body', color: available ? COMIC.greenShade : COMIC.sub, w: 552, h: 24 });
+   let walletLabel: Node | null = null, shake: Tween<Node> | null = null, purchasing = false;
+   panel.once(Node.EventType.NODE_DESTROYED, () => { shake?.stop(); shake = null; });
+   const warn = (message: string): void => {
+@@ -244,15 +278,17 @@
+       icon: 'shop_comic_v1/' + (g.currency === 'gold' ? 'comic_coin_v1' : 'comic_diamond_v1') });
+   };
+   if (g.price) {
+-    const price = fmt(g.price), textW = Math.min(150, price.length * 19), groupW = 35 + 8 + textW;
+-    comicArt(feedback, -groupW / 2 + 17.5, bottom + 125, 35, 35, g.currency === 'gold' ? 'comic_coin_v1' : 'comic_diamond_v1');
+-    mainLabel(feedback, -groupW / 2 + 43 + textW / 2, bottom + 125, price, { size: 30, font: 'number', color: COMIC.text,
+-      align: 'left', w: textW, h: 39 });
++    const price = fmt(g.price), textW = Math.min(160, price.length * 23), groupW = 40 + 10 + textW;
++    comicArt(feedback, -groupW / 2 + 20, bottom + 153, 40, 40, g.currency === 'gold' ? 'comic_coin_v1' : 'comic_diamond_v1');
++    mainLabel(feedback, -groupW / 2 + 50 + textW / 2, bottom + 153, price, { size: 36, font: 'number', color: '#1B3040',
++      align: 'left', w: textW, h: 46 });
+     const wallet = g.currency === 'gold' ? sv.gold : sv.diamonds;
+-    walletLabel = mainLabel(feedback, 0, bottom + 87, '持有 ' + fmt(wallet) + (g.currency === 'gold' ? ' 金币' : ' 钻石'),
+-      { size: 18, color: wallet >= g.price ? COMIC.sub : '#B34338', w: 552, h: 27 });
+-  }
+-  comicButton(panel, -139, bottom + 39, 248, 58, '关闭', () => dismissUI(panel.parent), { tone: 'dark', name: 'shopDetailsClose', sound: 'close' });
++    walletLabel = mainLabel(feedback, 0, bottom + 116, '持有 ' + fmt(wallet) + (g.currency === 'gold' ? ' 金币' : ' 钻石'),
++      { size: 18, font:'body', color: wallet >= g.price ? COMIC.sub : '#B34338', w: 552, h: 24 });
++  }
++  const close = comicButton(panel, -139, bottom + 42, 248, 60, '关闭', () => dismissUI(panel.parent),
++    { tone: 'dark', name: 'shopDetailsClose', sound: 'close', size:26 });
++  paintLobbyFace(close.getChildByName('buttonFace')!,248,60,'dark');
+   const attemptPurchase = (): void => {
+     if (!g.price || purchasing) return;
+     if (!lvReached(g.unlock)) { toast('通关 ' + g.unlock + ' 后解锁'); return; }
+@@ -271,8 +307,9 @@
+         icon: g.give.kind !== 'hero' ? 'shop_comic_v1/' + itemArt(g) : undefined });
+     dismissUI(panel.parent, ctx.refresh, false);
+   };
+-  const purchase = comicButton(panel, 139, bottom + 39, 248, 58, available ? '购买' : owned ? '已拥有' : !g.price ? '敬请期待' : '尚未解锁',
+-    attemptPurchase, { tone: 'green', name: 'shopPurchaseConfirm', enabled: available });
++  const purchase = comicButton(panel, 139, bottom + 42, 248, 60, available ? '购买' : owned ? '已拥有' : !g.price ? '敬请期待' : '尚未解锁',
++    attemptPurchase, { tone: 'green', name: 'shopPurchaseConfirm', enabled: available, size:26 });
++  paintLobbyFace(purchase.getChildByName('buttonFace')!,248,60,available?'green':'muted');
+   // The semantic result owns its sound, including a failed purchase; no success click first.
+   bindButton(purchase, attemptPurchase, { sound: false });
+ }
+--- before/assets/scripts/ui/LobbyChrome.ts
++++ assets/scripts/ui/LobbyChrome.ts
+@@ -0,0 +1,177 @@
++/** Shop cards, product details and shared navigation, drawn once at their actual UI size. */
++import { Color, Graphics, Node } from 'cc';
++import { C, CA, N } from './UIKit';
++import { gearQuality } from './GearQuality';
++
++type Point = readonly [number, number];
++type Finish = 'gold' | 'green' | 'dark' | 'muted';
++const FINISHES = {
++  gold: { ink: '#63491D', rim: '#D7A03B', light: '#FFF0A8', top: '#FFDA65', bottom: '#EDB437', shade: '#C48C2D' },
++  green: { ink: '#293D25', rim: '#477E31', light: '#B0DE7D', top: '#73BA48', bottom: '#49932F', shade: '#38772B' },
++  dark: { ink: '#14212C', rim: '#3C5261', light: '#8BABB8', top: '#344D60', bottom: '#1C2D3B', shade: '#132330' },
++  muted: { ink: '#626C65', rim: '#8C988B', light: '#DADECB', top: '#BCC3AC', bottom: '#9FA88F', shade: '#828F79' },
++};
++
++function polygon(g: Graphics, points: readonly Point[], fill: Color | string): void {
++  g.fillColor = typeof fill === 'string' ? C(fill) : fill;
++  g.moveTo(points[0][0], points[0][1]);
++  for (let i = 1; i < points.length; i++) g.lineTo(points[i][0], points[i][1]);
++  g.close(); g.fill();
++}
++function cutRect(w: number, h: number, c: number): Point[] {
++  return [[-w/2+c,-h/2],[w/2-c,-h/2],[w/2,-h/2+c],[w/2,h/2-c],
++    [w/2-c,h/2],[-w/2+c,h/2],[-w/2,h/2-c],[-w/2,-h/2+c]];
++}
++function stroke(g: Graphics, points: readonly Point[], color: Color | string, width = 1): void {
++  g.strokeColor = typeof color === 'string' ? C(color) : color; g.lineWidth = width;
++  g.moveTo(points[0][0], points[0][1]);
++  for (let i = 1; i < points.length; i++) g.lineTo(points[i][0], points[i][1]);
++  g.stroke();
++}
++
++/** Each gradient band respects the silhouette; no masks, textures or per-frame drawing. */
++function gradient(g: Graphics, w: number, h: number, c: number, bottom: string, top: string, round = false): void {
++  const lo = C(bottom), hi = C(top), bands = 32;
++  const left = (y: number): number => {
++    const dy = Math.max(0, Math.abs(y) - (h/2-c));
++    return -w/2 + (round ? c-Math.sqrt(Math.max(0,c*c-dy*dy)) : dy);
++  };
++  for (let i = 0; i < bands; i++) {
++    const y0 = -h/2+i*h/bands, y1 = -h/2+(i+1)*h/bands;
++    polygon(g, [[left(y0),y0],[-left(y0),y0],[-left(y1),y1],[left(y1),y1]],
++      Color.lerp(new Color(),lo,hi,(i+.5)/bands));
++  }
++}
++
++/** A narrow integral bevel, without offset shadow plates or extra touch nodes. */
++export function paintLobbyFace(node: Node, w: number, h: number, finish: Finish): void {
++  const g = node.getComponent(Graphics) || node.addComponent(Graphics); g.clear();
++  const p = FINISHES[finish], c = Math.min(10,h*.2);
++  polygon(g,cutRect(w,h,c),p.ink);
++  polygon(g,cutRect(w-3,h-3,c-1),p.rim);
++  polygon(g,cutRect(w-6,h-6,c-2),p.light);
++  gradient(g,w-10,h-10,c-3,p.bottom,p.top);
++  // Two restrained facets sit within the silhouette and move with the button face.
++  polygon(g,[[-w/2+5,-h/2+c],[-w/2+c,-h/2+5],[w/2-c,-h/2+5],
++    [w/2-5,-h/2+c],[w/2-7,-h/2+10],[-w/2+7,-h/2+10]],p.shade);
++  stroke(g,[[-w/2+5,h/2-c],[-w/2+c,h/2-4],[w/2-c,h/2-4],[w/2-5,h/2-c]],p.light,1.2);
++}
++
++/** Paper frame and inset navy title: gold belongs to the frame, never to the action buttons. */
++export function paintShopModal(node: Node, w: number, h: number): void {
++  const g = node.getComponent(Graphics) || node.addComponent(Graphics); g.clear();
++  polygon(g,cutRect(w,h,22),'#695331');
++  polygon(g,cutRect(w-3,h-3,21),'#C99946');
++  polygon(g,cutRect(w-7,h-7,19),'#FFE5A0');
++  polygon(g,cutRect(w-12,h-12,17),'#D9B26B');
++  gradient(g,w-16,h-16,15,'#F4E4BF','#FFF4D9');
++  stroke(g,[[-w/2+10,-h/2+25],[-w/2+10,h/2-25],[-w/2+25,h/2-10],
++    [w/2-25,h/2-10],[w/2-10,h/2-25]],CA('#FFFCEB',.85),1.3);
++  // Sparse paper folds stay at the perimeter, clear of the product and all reading columns.
++  for (const dir of [-1,1]) {
++    const x = dir*(w/2-18);
++    for (let i = 0; i < 4; i++) {
++      const y = -h/2+100+i*74;
++      stroke(g,[[x,y-24],[x-dir*11,y-12],[x,y]],CA('#D6B77F',.11),1.5);
++    }
++  }
++  const header = N('shopProductTitleBar',node,0,h/2-37,500,72), hg = header.addComponent(Graphics);
++  header.setSiblingIndex(0);
++  const banner = (width: number, height: number, fill: string): void => {
++    const a = width/2, b = height/2;
++    hg.fillColor = C(fill); hg.moveTo(-a,b); hg.lineTo(a,b);
++    hg.bezierCurveTo(a-2,b-13,a-8,b-20,a-22,b-23);
++    hg.bezierCurveTo(a-10,b-36,a-31,-b,a-54,-b);
++    hg.lineTo(-a+54,-b);
++    hg.bezierCurveTo(-a+31,-b,-a+10,b-36,-a+22,b-23);
++    hg.bezierCurveTo(-a+8,b-20,-a+2,b-13,-a,b); hg.close(); hg.fill();
++  };
++  banner(500,72,'#9C7537'); banner(495,67,'#F6D18A'); banner(487,59,'#1D3141');
++  polygon(hg,[[-237,28],[237,28],[221,12],[-221,12]],CA('#6D8E9E',.15));
++  stroke(hg,[[-192,-28],[192,-28]],CA('#A0BECA',.2));
++  for (const y of [-36,36]) {
++    polygon(hg,[[0,y+8],[8,y],[0,y-8],[-8,y]],'#A87D39');
++    polygon(hg,[[0,y+5],[5,y],[0,y-5],[-5,y]],'#FFDF90');
++  }
++}
++
++/** A small fleur emblem gives each heading a shared visual anchor without another title plate. */
++export function shopSectionEmblem(parent: Node, x: number, y: number): void {
++  const g = N('shopSectionEmblem',parent,x,y,28,30).addComponent(Graphics);
++  polygon(g,[[0,14],[6,5],[3,-3],[-3,-3],[-6,5]],'#9B6B29');
++  polygon(g,[[0,11],[3,5],[0,-1],[-3,5]],'#F4CB69');
++  for (const dir of [-1,1]) {
++    polygon(g,[[dir*2,-2],[dir*7,8],[dir*13,2],[dir*11,-5],[dir*6,-4],[dir*3,-9]],'#9B6B29');
++    polygon(g,[[dir*4,-2],[dir*8,5],[dir*10,1],[dir*8,-2]],'#EABD59');
++  }
++  polygon(g,[[-4,-4],[4,-4],[5,-8],[0,-13],[-5,-8]],'#B18A42');
++}
++
++/** Section well with inset attribute strips; no repeated dark outlines around each line. */
++export function shopAttributeGroup(parent: Node, y: number, rows: number): Node {
++  const height = rows*38+12, node = N('shopAttributeGroup',parent,0,y,552,height);
++  const g = node.addComponent(Graphics);
++  gradient(g,552,height,10,'#FBEED1','#FFF8E5',true);
++  for (let i = 0; i < rows; i++) {
++    const row = N('shopAttributeStrip',node,0,height/2-25-i*38,530,34), rg = row.addComponent(Graphics);
++    gradient(rg,530,34,6,i%2 ? '#F0DEB7' : '#F4E4BF',i%2 ? '#F7E9C9' : '#F9EDCF',true);
++  }
++  return node;
++}
++
++export function shopDetailRule(parent: Node, y: number): void {
++  const g = N('shopDetailRule',parent,0,y,552,14).addComponent(Graphics);
++  for (const dir of [-1,1]) {
++    stroke(g,[[dir*11,0],[dir*270,0]],CA('#C09A52',.65));
++    polygon(g,[[dir*272,2],[dir*274,0],[dir*272,-2],[dir*270,0]],'#CFA65D');
++  }
++  polygon(g,[[0,7],[6,0],[0,-7],[-6,0]],'#D5AF66');
++}
++
++/** Navy strip with a quiet top edge and short separators between actual touch slots. */
++export function paintLobbyStrip(node: Node, w: number, h: number, separators: readonly number[]): void {
++  const g = node.getComponent(Graphics) || node.addComponent(Graphics); g.clear();
++  gradient(g,w,h,0,'#192633','#2C4050');
++  stroke(g,[[-w/2,h/2-1],[w/2,h/2-1]],CA('#BDCFD9',.24));
++  stroke(g,[[-w/2,-h/2+1],[w/2,-h/2+1]],CA('#101D28',.5));
++  for (const x of separators) {
++    const extent = h*.35;
++    stroke(g,[[x,-extent],[x,extent]],CA('#C7D7DF',.075));
++    stroke(g,[[x,-extent*.62],[x,extent*.62]],CA('#C7D7DF',.075));
++  }
++}
++
++/** Inactive categories belong to the strip; only the selected category gets a gold face. */
++export function paintShopCategory(node: Node, w: number, h: number, selected: boolean): void {
++  const g = node.getComponent(Graphics) || node.addComponent(Graphics); g.clear();
++  if (selected) paintLobbyFace(node,w,h,'gold');
++}
++
++/** Neutral warm card, with a soft tonal face and just two faint paper corner folds. */
++export function shopProductCard(parent: Node, x: number, y: number, w: number, h: number, name: string): Node {
++  const node = N(name,parent,x,y,w,h), g = node.addComponent(Graphics);
++  gradient(g,w,h,16,'#FAEDD0','#FFF8E6',true);
++  stroke(g,[[-w/2+17,h/2-3],[w/2-17,h/2-3]],CA('#FFFFFF',.7),1.3);
++  for (const dir of [-1,1]) {
++    const px = dir*(w/2-7), py = h/2-9;
++    stroke(g,[[px,py-18],[px,py-6],[px-dir*6,py],[px-dir*19,py]],CA('#D7BB81',.22));
++    polygon(g,[[px-dir*3,py-4],[px-dir*13,py-4],[px-dir*3,py-14]],CA('#E3CB96',.17));
++  }
++  return node;
++}
++
++/** Full-size rarity socket matching the shop concept; native text remains outside the artwork. */
++export function shopQualitySocket(parent: Node, x: number, y: number, side: number, quality: number): Node {
++  const style = gearQuality(quality), node = N('shopQualitySocket',parent,x,y,side,side), g = node.addComponent(Graphics);
++  const c = Math.max(5,side*.045), edge = C(style.edge), light = C(style.light);
++  const deep = ['#3D4B53','#164820','#133B61','#3D1B62'][quality] || '#3D4B53';
++  polygon(g,cutRect(side,side,c),'#263329');
++  polygon(g,cutRect(side-3,side-3,c-1),edge);
++  polygon(g,cutRect(side-7,side-7,c-2),Color.lerp(new Color(),edge,light,.65));
++  gradient(g,side-12,side-12,c-3,deep,style.edge);
++  const a = side/2;
++  stroke(g,[[-a+4,a-c],[-a+c,a-4],[a-c,a-4]],style.light,1.2);
++  stroke(g,[[a-4,a-c],[a-4,-a+c],[a-c,-a+4],[-a+c,-a+4]],CA(deep,.85),1.5);
++  polygon(g,[[-a+10,a-11],[-a+25,a-11],[-a+10,a-26]],CA(style.light,.23));
++  return node;
++}

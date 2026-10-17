@@ -1,0 +1,113 @@
+--- before/assets/scripts/ui/PositiveFeedback.ts
++++ assets/scripts/ui/PositiveFeedback.ts
+@@ -1,12 +1,12 @@
+ /** Receipt-only growth celebration. One reusable, non-blocking surface survives page refreshes. */
+-import { _decorator, Component, game, Game, Graphics, isValid, Label, Node, UIOpacity } from 'cc';
++import { _decorator, Component, game, Game, isValid, Label, Node, UIOpacity, UITransform } from 'cc';
+ import { LO } from '../config/GameConfig';
+-import { CA, label, N } from './UIKit';
++import { label, N } from './UIKit';
+ import { reducedMotion } from './UIMotion';
+ import { uiSound } from './UIAudio';
+ import { NoticeStat } from './UINotice';
+ import { whenUIArtReady } from './UIArtReady';
+-import { celebrationRays } from './CelebrationInk';
++import { celebrationLight, lightEnvelope, noticeSurface } from './FeedbackSurface';
+ 
+ const { ccclass } = _decorator;
+ const clamp = (v: number): number => Math.max(0, Math.min(1, v));
+@@ -25,7 +25,9 @@
+ class PositiveFeedback extends Component {
+   private receipt: GrowthReceipt | null = null;
+   private display: Node | null = null;
+-  private ink!: Graphics;
++  private surface: Node | null = null;
++  private surfaceHeight = 0;
++  private glimmer!: Node;
+   private fade!: UIOpacity;
+   private heading!: Label;
+   private levels!: Label;
+@@ -39,7 +41,7 @@
+   private sinceCue = 10;
+   private hidden = false;
+   private quiet = false;
+-  private height = 190;
++  private height = 142;
+   private lift = 0;
+   private last = '';
+   onLoad(): void {
+@@ -56,18 +58,25 @@
+     const r = this.receipt;
+     if (!merged) { this.appearanceAge = 0; this.displayedPower = r.power?.before || 0; }
+     this.fromPower = this.displayedPower;
+-    this.quiet = reducedMotion(); this.height = r.milestone ? 224 : 190;
+-    // Keep the center celebration clear of the upper-middle info/warning notice lane.
+-    this.lift = -LO.half * .1;
++    this.quiet = reducedMotion(); this.height = r.milestone ? 192 : 142;
++    this.lift = LO.half * .12;
+     if (!this.display) {
+-      this.display = N('growthCelebration', this.node, 0, this.lift, 710, this.height);
+-      this.ink = this.display.addComponent(Graphics); this.fade = this.display.addComponent(UIOpacity);
++      this.display = N('growthCelebration', this.node, 0, this.lift, 680, this.height);
++      this.fade = this.display.addComponent(UIOpacity);
++      this.glimmer = celebrationLight(this.display, 'growthTitleLight', 0, 40, 500, 96);
+       const text = (y: number, size: number, color: string, h = 32): Label =>
+         label(this.display!, 0, y, '', { size, color, bold: true, w: 642, h, shrink: true,
+-          outline: '#142431', outlineW: 1.5 }).getComponent(Label)!;
+-      this.heading = text(62, 27, '#FFE6A0'); this.levels = text(22, 29, '#FFF7DE');
+-      this.power = text(-16, 26, '#BFEF8B'); this.stats = text(-53, 19, '#F1E8D3');
+-      this.extra = text(-88, 20, '#FFE6A0', 42);
++          outline: '#142431', outlineW: .8 }).getComponent(Label)!;
++      this.heading = text(40, 24, '#FFE4A0'); this.levels = text(0, 22, '#FFF7DE');
++      this.levels.node.setPosition(-154, 0, 0); this.levels.node.getComponent(UITransform)!.setContentSize(210, 32);
++      this.power = text(0, 31, '#C2EE9F', 42);
++      this.power.node.setPosition(98, 0, 0); this.power.node.getComponent(UITransform)!.setContentSize(340, 42);
++      this.stats = text(-37, 18, '#E9E3D4'); this.extra = text(-75, 19, '#FFE6A0', 30);
++    }
++    if (this.surfaceHeight !== this.height) {
++      if (this.surface) { this.surface.active = false; this.surface.destroy(); }
++      this.surface = noticeSurface(this.display, 680, this.height); this.surface.setSiblingIndex(0);
++      this.surfaceHeight = this.height;
+     }
+     this.heading.string = (r.milestone ? '阶段突破' : r.title) + ' · ' + r.name;
+     this.extra.string = r.milestone || '';
+@@ -90,7 +99,8 @@
+     const r = this.receipt; if (!r || !this.display) return;
+     const end = r.milestone ? 2.45 : 1.85, leaving = clamp((this.age - end + .28) / .28);
+     this.fade.opacity = Math.round(255 * (this.quiet ? 1 : out(this.appearanceAge / .12)) * (1 - leaving));
+-    this.display.setPosition(0, this.lift - (this.quiet ? 0 : 18 * (1 - out(this.appearanceAge / .24))) + (this.quiet ? 0 : leaving * 24), 0);
++    const entry = LO.half + this.lift + this.height / 2 + 24;
++    this.display.setPosition(0, this.lift - (this.quiet ? 0 : entry * (1 - out(this.appearanceAge / .32))) + (this.quiet ? 0 : leaving * 30), 0);
+     const progress = this.quiet ? 1 : out(this.age / .45);
+     this.levels.string = 'Lv.' + r.level.before + '  →  Lv.' + r.level.after;
+     const p = r.power;
+@@ -100,27 +110,11 @@
+       : r.keep ? '防线建设完成' : '成长已生效';
+     const stats = r.stats.slice(0, 2).map(s => s.name + ' +' + value(Math.max(0, s.after - s.before), s)).join('     ');
+     if (stats !== this.last) { this.stats.string = stats; this.last = stats; }
+-    const g = this.ink; g.clear();
+-    // The same feathered visual language as notices, with a gold impact pulse for successful growth.
+-    for (let i = 0; i < 50; i++) {
+-      const x = -355 + i * 14.2, edge = clamp(Math.min(i + .5, 49.5 - i) / 10), alpha = edge * edge * (3 - 2 * edge);
+-      g.fillColor = CA('#142431', alpha * .88); g.rect(x, -this.height / 2, 14.3, this.height); g.fill();
+-      g.fillColor = CA('#F7CE73', alpha * .7);
+-      for (const sign of [-1, 1]) { g.rect(x, sign * this.height / 2, 14.3, 1.5); g.rect(x, sign * (this.height / 2 - 4), 14.3, .6); }
+-      g.fill();
+-    }
+-    if (this.quiet || this.age > .8) return;
+-    const burst = clamp(this.age / .8), spread = out(burst), fade = 1 - burst;
+-    for (let i = 0; i < (r.milestone || r.keep ? 22 : 12); i++) {
+-      const a = i * 2.39996, x = Math.cos(a) * (240 + spread * 100), y = Math.sin(a) * (60 + spread * 95);
+-      const size = (i % 3 + 3) * fade;
+-      g.fillColor = CA(i % 2 ? '#FFD062' : '#FFF2BD', fade * .9);
+-      g.moveTo(x, y + size); g.lineTo(x + size * .5, y); g.lineTo(x, y - size); g.lineTo(x - size * .5, y); g.close(); g.fill();
+-    }
++    lightEnvelope(this.glimmer, this.quiet ? 1 : this.appearanceAge - .24, .7, r.milestone ? .26 : .16);
+   }
+   private clear(): void {
+     if (this.display) { this.display.active = false; this.display.destroy(); }
+-    this.display = null; this.receipt = null; this.enabled = false;
++    this.display = null; this.surface = null; this.surfaceHeight = 0; this.receipt = null; this.enabled = false;
+   }
+   private hide = (): void => { this.hidden = true; };
+   private show = (): void => { this.hidden = false; };

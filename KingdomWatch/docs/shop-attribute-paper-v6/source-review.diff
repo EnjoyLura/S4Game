@@ -1,0 +1,79 @@
+--- before/assets/scripts/ui/pages/ShopPage.ts
++++ assets/scripts/ui/pages/ShopPage.ts
+@@ -194,7 +194,9 @@
+   if (inventory.length) groups.push({ title: '持有情况', rows: inventory });
+   const deliveryH = Math.max(50, Math.ceil(info.delivery.length / 28) * 25);
+   const contentH = groups.reduce((sum, group) => sum + 38 + group.rows.length * 38 + 12 + 14, 0) + 38 + deliveryH + 8;
+-  const height = Math.min(1120, Math.max(760, 304 + contentH + 202), LO.half * 2 - LO.notchTop * 2 - 48);
++  // Reserve the extra paper below both actions as part of the fixed purchase area.
++  const footerInset = 20, footerH = 202 + footerInset;
++  const height = Math.min(1120, Math.max(760, 304 + contentH + footerH), LO.half * 2 - LO.notchTop * 2 - 48);
+   const top = height / 2, bottom = -top;
+   const panel = comicDialog(ctx.screens.parent || ctx.screens, 620, height, '商品详情');
+   panel.name = 'shopProductDetails:' + g.id;
+@@ -226,7 +228,7 @@
+ 
+   // Natural content height fits ordinary product details. Only a shorter viewport scrolls this body.
+   // Price/actions always occupy their own fixed area and never cover an attribute row.
+-  const bodyH = Math.max(1,height-506), bodyTop = top - 304;
++  const bodyH = Math.max(1,height-304-footerH), bodyTop = top - 304;
+   const view = N('shopProductInfoView', panel, 0, bodyTop - bodyH / 2, 552, bodyH);
+   view.addComponent(Mask);
+   const scroll = view.addComponent(ScrollView);
+@@ -254,11 +256,11 @@
+   section('获取说明');
+   mainLabel(content,0,-cursor-deliveryH/2,info.delivery,{size:18,font:'body',color:'#74664F',
+     align:'left',w:530,h:deliveryH,lineHeight:25});
+-  shopDetailRule(panel,bottom+189);
++  shopDetailRule(panel,bottom+189+footerInset);
+   const status = owned ? '已拥有该英雄' : !g.price ? '敬请期待' : !unlocked ? '通关 ' + g.unlock + ' 解锁购买'
+     : '每次购买获得 ' + (g.give.n || 1) + (g.give.kind === 'hero' ? ' 名英雄' : g.give.kind === 'equip' ? ' 件装备' : ' 个材料');
+   const feedback = N('shopPurchaseFeedback', panel);
+-  const statusLabel = mainLabel(feedback, 0, bottom + 87, status, { size: 17, font:'body', color: available ? COMIC.greenShade : COMIC.sub, w: 552, h: 24 });
++  const statusLabel = mainLabel(feedback, 0, bottom + 87 + footerInset, status, { size: 17, font:'body', color: available ? COMIC.greenShade : COMIC.sub, w: 552, h: 24 });
+   let walletLabel: Node | null = null, shake: Tween<Node> | null = null, purchasing = false;
+   panel.once(Node.EventType.NODE_DESTROYED, () => { shake?.stop(); shake = null; });
+   const warn = (message: string): void => {
+@@ -274,14 +276,14 @@
+   };
+   if (g.price) {
+     const price = fmt(g.price), textW = Math.min(160, price.length * 23), groupW = 40 + 10 + textW;
+-    comicArt(feedback, -groupW / 2 + 20, bottom + 153, 40, 40, g.currency === 'gold' ? 'comic_coin_v1' : 'comic_diamond_v1');
+-    mainLabel(feedback, -groupW / 2 + 50 + textW / 2, bottom + 153, price, { size: 36, font: 'number', color: '#1B3040',
++    comicArt(feedback, -groupW / 2 + 20, bottom + 153 + footerInset, 40, 40, g.currency === 'gold' ? 'comic_coin_v1' : 'comic_diamond_v1');
++    mainLabel(feedback, -groupW / 2 + 50 + textW / 2, bottom + 153 + footerInset, price, { size: 36, font: 'number', color: '#1B3040',
+       align: 'left', w: textW, h: 46 });
+     const wallet = g.currency === 'gold' ? sv.gold : sv.diamonds;
+-    walletLabel = mainLabel(feedback, 0, bottom + 116, '持有 ' + fmt(wallet) + (g.currency === 'gold' ? ' 金币' : ' 钻石'),
++    walletLabel = mainLabel(feedback, 0, bottom + 116 + footerInset, '持有 ' + fmt(wallet) + (g.currency === 'gold' ? ' 金币' : ' 钻石'),
+       { size: 18, font:'body', color: wallet >= g.price ? COMIC.sub : '#B34338', w: 552, h: 24 });
+   }
+-  comicButton(panel, -139, bottom + 39, 248, 58, '关闭', () => dismissUI(panel.parent),
++  comicButton(panel, -139, bottom + 39 + footerInset, 248, 58, '关闭', () => dismissUI(panel.parent),
+     { tone: 'dark', name: 'shopDetailsClose', sound: 'close' });
+   const attemptPurchase = (): void => {
+     if (!g.price || purchasing) return;
+@@ -301,7 +303,7 @@
+         icon: g.give.kind !== 'hero' ? 'shop_comic_v1/' + itemArt(g) : undefined });
+     dismissUI(panel.parent, ctx.refresh, false);
+   };
+-  const purchase = comicButton(panel, 139, bottom + 39, 248, 58, available ? '购买' : owned ? '已拥有' : !g.price ? '敬请期待' : '尚未解锁',
++  const purchase = comicButton(panel, 139, bottom + 39 + footerInset, 248, 58, available ? '购买' : owned ? '已拥有' : !g.price ? '敬请期待' : '尚未解锁',
+     attemptPurchase, { tone: 'green', name: 'shopPurchaseConfirm', enabled: available });
+   // The semantic result owns its sound, including a failed purchase; no success click first.
+   bindButton(purchase, attemptPurchase, { sound: false });
+--- before/assets/scripts/ui/LobbyChrome.ts
++++ assets/scripts/ui/LobbyChrome.ts
+@@ -85,9 +85,11 @@
+   polygon(g,[[-4,-4],[4,-4],[5,-8],[0,-13],[-5,-8]],'#B18A42');
+ }
+ 
+-/** Layout-only group: all attributes read directly on the modal paper, without row or group plates. */
++/** One light paper well per attribute group; rows stay unboxed. */
+ export function shopAttributeGroup(parent: Node, y: number, rows: number): Node {
+   const height = rows*38+12, node = N('shopAttributeGroup',parent,0,y,552,height);
++  const g = node.addComponent(Graphics);
++  gradient(g,552,height,10,'#FBEED1','#FFF8E5',true);
+   for (let i = 0; i < rows; i++) {
+     N('shopAttributeRow',node,0,height/2-25-i*38,530,34);
+   }

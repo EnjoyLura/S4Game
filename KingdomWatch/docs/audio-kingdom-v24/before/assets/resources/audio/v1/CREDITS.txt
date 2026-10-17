@@ -1,0 +1,20 @@
+Kingdom Watch audio credits
+==========================
+Town Theme RPG / Battle Theme A — cynicmusic, cynicmusic.com / pixelsphere.org (CC0)
+https://opengameart.org/content/town-theme-rpg
+https://opengameart.org/content/battle-theme-a
+Medieval Weapon Textures — Ben Jaszczak & Brian Nelson / Still North Media (CC0)
+https://opengameart.org/content/medieval-sound-effects-weapon-textures
+RPG Audio, Interface Sounds, Music Jingles — Kenney (CC0)
+https://kenney.nl/assets/rpg-audio
+https://kenney.nl/assets/interface-sounds
+https://kenney.nl/assets/music-jingles
+80 CC0 RPG SFX — rubberduck (CC0)
+https://opengameart.org/node/86018
+Ice and Electricity Magic — Iwan 'qubodup' Gabovitch (CC BY 3.0)
+https://opengameart.org/users/qubodup
+https://opengameart.org/content/ice-electricity-magic
+https://creativecommons.org/licenses/by/3.0/
+Modifications: selected excerpts, layering, EQ, resampling/pitch, short room tails,
+normalization, fades and music loop overlaps. No endorsement is implied.
+CC0: https://creativecommons.org/publicdomain/zero/1.0/

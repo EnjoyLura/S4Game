@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-lobby-ui-quiet-v2-20261016-214310",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-lobby-ui-quiet-v1-20261016-212841",
+  "entryVersion": "1792158037",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=lobby-ui-quiet-v2-1792158037",
+  "scope": "quiet shop, hero, base and chapter navigation; shared round hero selector, neutral item surfaces, wallet and bottom navigation",
+  "manualAcceptance": "pending user manual review"
+}

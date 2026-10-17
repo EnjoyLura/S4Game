@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-checkpoints-v1-20261016-232148",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-overlay-v4-20261016-231651",
+  "entryVersion": "1792164056",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=chapter-checkpoints-v1-1792164056",
+  "scope": "chapter-specific outpost shield, forest timber signpost and lair iron-and-tusk checkpoint art; prior map and lock fixes retained",
+  "manualAcceptance": "pending user manual review"
+}

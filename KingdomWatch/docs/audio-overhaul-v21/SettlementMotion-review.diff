@@ -1,0 +1,44 @@
+--- before/assets/scripts/ui/SettlementMotion.ts
++++ assets/scripts/ui/SettlementMotion.ts
+@@ -24,6 +24,7 @@
+   private backlight!: Node;
+   private win = false;
+   private intro = false;
++  private outcomeCue = false;
+   private quiet = false;
+   private age = 0;
+   private hidden = false;
+@@ -41,6 +42,7 @@
+   configure(outcome: 'win' | 'lose', badge: Node, stars: { node: Node; earned: boolean }[], intro: boolean): void {
+     this.win = outcome === 'win'; this.badge = badge; this.badgeAt.set(badge.position);
+     this.quiet = reducedMotion(); this.intro = intro && !this.quiet;
++    this.outcomeCue = intro; // Reduced animation still receives outcome audio; redraws never repeat it.
+     this.stars = stars.map(star => ({ ...star, position: star.node.position.clone(), sounded: false }));
+     this.earnedStars = stars.filter(star => star.earned).length;
+     this.endAt = this.intro ? (this.win ? 2.05 : 1.65) : 0;
+@@ -71,12 +73,15 @@
+   play(): void {
+     if (this.started) return;
+     this.started = true;
+-    if (!this.intro && !this.rewards.length) return;
++    if (!this.intro && !this.rewards.length && !this.outcomeCue) return;
+     whenUIArtReady(this.node, () => {
+       if (!isValid(this.node, true)) return;
+       this.drawReady = () => {
+         this.drawReady = null;
+         if (!isValid(this.node, true)) return;
++        if (this.outcomeCue) {
++          this.outcomeCue = false; uiSound(this.win ? 'victory' : 'defeat');
++        }
+         this.age = 0; this.enabled = true; this.render();
+       };
+       director.once(Director.EVENT_AFTER_DRAW, this.drawReady);
+@@ -146,7 +151,7 @@
+       const land = clamp((t - row.duration) / .18);
+       const scale = 1 + (p < 1 ? Math.sin(p * Math.PI) * .045 : Math.sin(land * Math.PI) * .13);
+       row.node.setScale(scale, scale, 1);
+-      if (p >= 1 && !this.rewardCue) { this.rewardCue = true; uiSound('reward'); }
++      if (p >= 1 && !this.rewardCue) { this.rewardCue = true; uiSound('rewardLand'); }
+     }
+   }
+ 

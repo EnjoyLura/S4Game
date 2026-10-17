@@ -1,0 +1,154 @@
+/** A receipt-only reward surface: the caller has already persisted the grant. */
+import { _decorator, Component, director, Director, game, Game, Graphics, isValid, Label, Node, Vec3 } from 'cc';
+import { COMIC, comicArt, comicButton, comicDialogContent, comicPlate } from './ComicUI';
+import { CA, dimLayer, N } from './UIKit';
+import { mainLabel } from './PageKit';
+import { dismissUI, motionIn, reducedMotion } from './UIMotion';
+import { whenUIArtReady } from './UIArtReady';
+import { uiSound } from './UIAudio';
+
+const { ccclass } = _decorator;
+export interface RewardPopupItem { name: string; icon: string; amount: number; }
+interface RewardRow { node: Node; text: Label; amount: number; at: Vec3; delay: number; last: number; }
+const clamp = (value: number): number => Math.max(0, Math.min(1, value));
+const ease = (value: number): number => 1 - (1 - clamp(value)) ** 3;
+const spring = (value: number): number => { const p = clamp(value) - 1; return 1 + 2.2 * p ** 3 + 1.2 * p * p; };
+
+@ccclass('RewardPopupMotion')
+class RewardPopupMotion extends Component {
+  private rows: RewardRow[] = [];
+  private ink!: Graphics;
+  private age = 0;
+  private hidden = false;
+  private quiet = false;
+  private cue = false;
+  private closing = false;
+  private drawReady: (() => void) | null = null;
+
+  onLoad(): void {
+    this.enabled = false;
+    game.on(Game.EVENT_HIDE, this.hide, this); game.on(Game.EVENT_SHOW, this.show, this);
+  }
+
+  configure(rows: { node: Node; text: Node; amount: number }[]): void {
+    this.quiet = reducedMotion();
+    this.ink = N('rewardPopupAccents', this.node).addComponent(Graphics);
+    this.rows = rows.map((row, index) => ({ node: row.node, text: row.text.getComponent(Label)!,
+      amount: row.amount, at: row.node.position.clone(), delay: .06 + index * .1, last: -1 }));
+    if (!this.quiet) this.render();
+  }
+
+  play(): void {
+    whenUIArtReady(this.node, () => {
+      if (this.closing || !isValid(this.node, true)) return;
+      this.drawReady = () => {
+        this.drawReady = null;
+        if (this.closing || !isValid(this.node, true)) return;
+        uiSound('reward');
+        if (this.quiet) { this.finish(); return; }
+        this.age = 0; this.enabled = true;
+      };
+      director.once(Director.EVENT_AFTER_DRAW, this.drawReady);
+    });
+  }
+
+  update(dt: number): void {
+    if (this.hidden) return;
+    this.age += Math.min(.06, Math.max(0, dt));
+    this.render();
+    if (this.age >= 1.05) this.finish();
+  }
+
+  private render(): void {
+    const g = this.ink; g.clear();
+    for (const row of this.rows) {
+      const t = this.age - row.delay, pop = spring(t / .32), progress = ease((t - .15) / .48);
+      const scale = .9 + .1 * pop;
+      row.node.setScale(scale, scale, 1);
+      row.node.setPosition(row.at.x, row.at.y - 12 * (1 - ease(t / .3)), row.at.z);
+      const value = Math.round(row.amount * progress);
+      if (value !== row.last) { row.text.string = '+' + value.toLocaleString('en-US'); row.last = value; }
+      const land = clamp((t - .63) / .2);
+      row.text.node.setScale(1 + Math.sin(land * Math.PI) * .12, 1 + Math.sin(land * Math.PI) * .12, 1);
+      const hit = clamp((t - .12) / .55);
+      if (hit <= 0 || hit >= 1) continue;
+      const x = row.at.x, y = row.at.y + 16, spread = ease(hit), fade = 1 - hit;
+      g.strokeColor = CA(COMIC.goldShade, fade * .55); g.lineWidth = 2;
+      g.circle(x, y, 44 + spread * 17); g.stroke();
+      for (let i = 0; i < 8; i++) {
+        const angle = i * Math.PI / 4 + .2, distance = 48 + spread * 25;
+        const px = x + Math.cos(angle) * distance, py = y + Math.sin(angle) * distance * .85;
+        const size = fade * 4;
+        g.fillColor = CA(i % 2 ? COMIC.goldShade : COMIC.gold, fade);
+        g.moveTo(px, py + size); g.lineTo(px + size * .5, py);
+        g.lineTo(px, py - size); g.lineTo(px - size * .5, py); g.close(); g.fill();
+      }
+    }
+    if (!this.cue && this.age >= .67) { this.cue = true; uiSound('confirm'); }
+  }
+
+  finish(): void {
+    for (const row of this.rows) {
+      if (!isValid(row.node, true)) continue;
+      row.node.setPosition(row.at); row.node.setScale(1, 1, 1);
+      row.text.string = '+' + row.amount.toLocaleString('en-US'); row.text.node.setScale(1, 1, 1);
+    }
+    this.ink?.clear(); this.enabled = false;
+  }
+
+  stop(): void {
+    this.closing = true;
+    if (this.drawReady) director.off(Director.EVENT_AFTER_DRAW, this.drawReady);
+    this.drawReady = null; this.finish();
+  }
+  private hide = (): void => { this.hidden = true; };
+  private show = (): void => { this.hidden = false; };
+  onDestroy(): void {
+    this.closing = true;
+    if (this.drawReady) director.off(Director.EVENT_AFTER_DRAW, this.drawReady);
+    this.drawReady = null;
+    game.off(Game.EVENT_HIDE, this.hide, this); game.off(Game.EVENT_SHOW, this.show, this);
+    this.rows.length = 0;
+  }
+}
+
+/** Display only the positive amounts present in this receipt. */
+export function showRewardPopup(parent: Node, source: string, chestCount: number,
+  items: readonly RewardPopupItem[], onClose?: () => void): Node {
+  const rewards = items.filter(item => Number.isFinite(item.amount) && item.amount > 0);
+  const dim = dimLayer(parent, .66, false, false);
+  dim.name = 'rewardPopup';
+  let closing = false, motion: RewardPopupMotion | null = null;
+  const close = (): void => {
+    if (closing) return;
+    closing = true; motion?.stop();
+    dismissUI(dim, onClose);
+  };
+  dim.on(Node.EventType.TOUCH_END, (event: { propagationStopped?: boolean }) => {
+    event.propagationStopped = true; close();
+  });
+  const panel = comicDialogContent(dim, 640, 500, '获得奖励', close, false);
+  panel.name = 'rewardPopupPanel';
+  mainLabel(panel, 0, 166, source, { size: 21, color: COMIC.sub, w: 550, h: 28 });
+  mainLabel(panel, 0, 132, '已一键领取 ' + chestCount + ' 个宝箱', {
+    size: 20, color: COMIC.greenShade, bold: true, w: 550, h: 26,
+  });
+  const rows: { node: Node; text: Node; amount: number }[] = [];
+  rewards.forEach((reward, index) => {
+    const card = comicPlate(panel, (index - (rewards.length - 1) / 2) * 264, 0, 228, 210, 'card',
+      { name: 'rewardPopupItem:' + index, cut: 12 });
+    mainLabel(card, 0, 77, reward.name, { size: 23, bold: true, color: COMIC.text, w: 204, h: 30 });
+    const well = N('rewardIconWell', card, 0, 16).addComponent(Graphics);
+    well.fillColor = CA(COMIC.goldLight, .5); well.circle(0, 0, 44); well.fill();
+    comicArt(card, 0, 16, 76, 76, reward.icon);
+    const text = mainLabel(card, 0, -64, '+' + reward.amount.toLocaleString('en-US'), {
+      size: 35, bold: true, font: 'number', color: COMIC.greenShade, w: 206, h: 46,
+    });
+    rows.push({ node: card, text, amount: reward.amount });
+  });
+  mainLabel(panel, 0, -136, '奖励已到账', { size: 20, color: COMIC.sub, w: 550, h: 28 });
+  comicButton(panel, 0, -199, 440, 64, '收下', close, { tone: 'gold', size: 27, sound: 'confirm', name: 'rewardPopupConfirm' });
+  motion = panel.addComponent(RewardPopupMotion);
+  motion.configure(rows); motionIn(panel, 'modal'); motion.play();
+  return dim;
+}

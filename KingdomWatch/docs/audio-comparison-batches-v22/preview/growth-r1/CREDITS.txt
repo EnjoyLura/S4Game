@@ -1,0 +1,18 @@
+CC BY 3.0 attribution:
+Sound package from Heroes of Hawks Haven by Tuomo Untinen, shared by Reemax.
+https://opengameart.org/content/rpg-sound-package
+
+CC0 sources used in this comparison:
+Julie Damsgaard / Spring Spring, Power-Up Sound Effects
+https://opengameart.org/content/power-up-sound-effects
+congusbongus, New thing get!
+https://opengameart.org/content/new-thing-get
+Robin Lamb, UI Sound Effects (Button Clicks, User Feedback, Notifications)
+https://opengameart.org/content/ui-sound-effects-button-clicks-user-feedback-notifications
+m1chiboi, UI Soundpack (bleeps and clicks)
+https://opengameart.org/content/ui-soundpack-by-m1chiboi-bleeps-and-clicks
+EZduzziteh, UI Click Sounds (Sci Fi)
+https://opengameart.org/content/ui-click-sounds-sci-fi
+
+Other than those sources, comparison baseline v21 credits are at ../CREDITS.txt.
+Modifications for this comparison: decode to mono 44.1kHz / 16bit PCM, remove near-silence, apply 2ms edge fades, scalar gain for matched active RMS. No added synthesis, EQ, compression or limiting. Preview candidates are not yet selected or integrated into the game.

@@ -1,0 +1,114 @@
+[
+  {
+    "file": "R01-old.wav",
+    "sha256": "210c22c53bfa78e0e1ca7e199f0cfd657d245f8e34ef3a7d1d64345baaef851f",
+    "seconds": 4.0,
+    "peakDBFS": -7.92,
+    "activeRMSDBFS": -25.3,
+    "clippedSamples": 0
+  },
+  {
+    "file": "R01-new.wav",
+    "sha256": "10b3ffdfd7dcf067db67f963549981c77791ec214c61fb6ef53fd2b51261c9ab",
+    "seconds": 4.0,
+    "peakDBFS": -3.0,
+    "activeRMSDBFS": -24.773,
+    "clippedSamples": 0
+  },
+  {
+    "file": "R02-old.wav",
+    "sha256": "9e3c67a1a1a43df1b87ddb326b6e813de8c547e7f7812d5e109522006f92293c",
+    "seconds": 4.0,
+    "peakDBFS": -7.202,
+    "activeRMSDBFS": -23.282,
+    "clippedSamples": 0
+  },
+  {
+    "file": "R02-new.wav",
+    "sha256": "8b40c34ee9494a5a217ce19e1e992371c60e4ed11c4efdb2527b82dff2b63d9d",
+    "seconds": 4.0,
+    "peakDBFS": -3.0,
+    "activeRMSDBFS": -22.745,
+    "clippedSamples": 0
+  },
+  {
+    "file": "R03-old.wav",
+    "sha256": "6d97dbf69d001c49e6333fefb231add650b1b54b1416a4ec52969a5203f547af",
+    "seconds": 4.0,
+    "peakDBFS": -4.12,
+    "activeRMSDBFS": -20.17,
+    "clippedSamples": 0
+  },
+  {
+    "file": "R03-new.wav",
+    "sha256": "80190d7229b7332c05c14d0adc3fe9d658fa3dbbd0bbe26bb1c72d9386277096",
+    "seconds": 4.0,
+    "peakDBFS": -3.251,
+    "activeRMSDBFS": -20.001,
+    "clippedSamples": 0
+  },
+  {
+    "file": "R04-old.wav",
+    "sha256": "2388fe40443707822e16e2f3cf4beb94c959495746db8e0f2404f2e28b0963ad",
+    "seconds": 4.0,
+    "peakDBFS": -6.815,
+    "activeRMSDBFS": -20.541,
+    "clippedSamples": 0
+  },
+  {
+    "file": "R04-new.wav",
+    "sha256": "57ae6cbdb56cffaa755c94bcba2e0fe95b886aca187930f5defc14b466604a2a",
+    "seconds": 4.0,
+    "peakDBFS": -3.0,
+    "activeRMSDBFS": -20.643,
+    "clippedSamples": 0
+  },
+  {
+    "file": "R05-old.wav",
+    "sha256": "e19a8c331e4f21d4161778f8a2187373623ab10f0b3a45b1876cd5535134ebd7",
+    "seconds": 4.0,
+    "peakDBFS": -7.735,
+    "activeRMSDBFS": -22.005,
+    "clippedSamples": 0
+  },
+  {
+    "file": "R05-new.wav",
+    "sha256": "b3169a00a6a53f1f1df369a30dde4d87c0d7ad086c0549067f57dc431b234d10",
+    "seconds": 4.0,
+    "peakDBFS": -3.0,
+    "activeRMSDBFS": -21.863,
+    "clippedSamples": 0
+  },
+  {
+    "file": "R06-old.wav",
+    "sha256": "e74a870edc54d6a9fe3d09b8ccaaa3aafa63b6d596982ed28cc71eb9d5f6ab36",
+    "seconds": 8.0,
+    "peakDBFS": -6.739,
+    "activeRMSDBFS": -20.0,
+    "clippedSamples": 0
+  },
+  {
+    "file": "R06-new.wav",
+    "sha256": "bd08cac5767a7f3cbf838987e42671112e63ff61c0833ff0a165e948099a5109",
+    "seconds": 5.0,
+    "peakDBFS": -6.381,
+    "activeRMSDBFS": -19.846,
+    "clippedSamples": 0
+  },
+  {
+    "file": "R07-old.wav",
+    "sha256": "134d576c820857228a092e06149774437e10b1948482dabf0fe0fb5558967909",
+    "seconds": 6.0,
+    "peakDBFS": -4.914,
+    "activeRMSDBFS": -20.024,
+    "clippedSamples": 0
+  },
+  {
+    "file": "R07-new.wav",
+    "sha256": "1fae1cd33ca98defff2dc8d7370e4a3d908a35a9c95f418bbd93944fb302c13e",
+    "seconds": 4.0,
+    "peakDBFS": -4.398,
+    "activeRMSDBFS": -19.843,
+    "clippedSamples": 0
+  }
+]

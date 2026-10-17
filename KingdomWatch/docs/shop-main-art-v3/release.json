@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-main-art-v3-20261017-021901",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-gear-slots-fill-v3-20261017-015825",
+  "entryVersion": "1792174641",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=shop-main-art-v3-1792174641",
+  "scope": "shop categories, product cards, full square rarity sockets, beveled price buttons; shared lobby navigation and faint separators; product modal paper frame, navy title, showcase, grouped attributes, fixed purchase area; green/navy actions without gold edging",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://8e6081ca.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-shop-main-art-v3-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-shop-main-art-v3-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 17032,
+  "mainSha256": "b8505ea09fab655381cf8a1d353ed90e5a0406662037cee239ba915465b48376",
+  "date": "2026-10-17T02:19:41.623901+08:00",
+  "testsRun": false,
+  "gameRun": false,
+  "simulationRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

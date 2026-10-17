@@ -5,6 +5,7 @@ import { reducedMotion } from './UIMotion';
 import { uxFrame } from './Ux';
 import { ENTRY_GATE_ART, warmBattleScene } from './BattleEntryWarmup';
 import { whenUIArtReady } from './UIArtReady';
+import { GameAudio } from '../core/GameAudio';
 
 const { ccclass } = _decorator;
 const LAYER = 1 << 19;
@@ -104,6 +105,7 @@ export class BattleEntry extends Component {
     this.rightInk = panel('rightOutpostGate'); this.right = this.rightInk.node;
     this.leftArt = this.makeArt(this.left, 1); this.rightArt = this.makeArt(this.right, 0);
     this.resize(); this.draw(0);
+    GameAudio.play('gateSlide');
     uxFrame(ENTRY_GATE_ART, source => {
       if (!source || !isValid(this.node, true) || this.phase === 'opening') return;
       if (!gateFrames) {
@@ -174,7 +176,11 @@ export class BattleEntry extends Component {
     if (this.phase === 'closing') {
       const p = clamp(this.age / (this.quiet ? .08 : CLOSE_SECONDS));
       this.draw(1 - Math.pow(1 - p, 3));
-      if (p >= 1) { this.phase = 'holding'; this.age = 0; }
+      if (p >= 1) {
+        this.phase = 'holding'; this.age = 0;
+        // Follow actual visual closure, including reduced motion; never use a delayed timer.
+        GameAudio.play('gateClose');
+      }
     } else if (this.phase === 'holding') {
       this.draw(1);
       if (this.preloaded && !this.loadStarted && !this.failed) {

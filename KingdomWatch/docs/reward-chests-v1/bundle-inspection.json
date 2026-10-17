@@ -1,0 +1,43 @@
+{
+  "mainBundle": "assets/main/index.cca3a.js",
+  "mainBundleBytes": 590925,
+  "mainBundleSha256": "96170260e480f70ba22a267e36ec15792eaadb91a8bd1bc189fdd1866fac2e16",
+  "compiledTextMarkers": {
+    "rewardPopupPanel": true,
+    "rewardPopupItem:": true,
+    "rewardPopupConfirm": true,
+    "rewardPopupAccents": true,
+    "获得奖励": true,
+    "已一键领取 ": true,
+    "奖励已到账": true,
+    "一键领取": true,
+    "当前关卡尚无可领取的宝箱": true,
+    "chapterStageRoute": true,
+    "chapterSelect:": true,
+    "守望堡垒": true,
+    "深林腹地": true,
+    "巢穴核心": true
+  },
+  "retainedChapterSources": {
+    "assets/scripts/config/Campaign.ts": true,
+    "assets/scripts/config/Campaign.ts.meta": true,
+    "assets/scripts/config/Mobs.ts": true,
+    "assets/scripts/config/LevelDifficulty.ts": true,
+    "assets/scripts/core/Flow.ts": true,
+    "assets/scripts/battle/BattleDirector.ts": true,
+    "assets/scripts/ui/HUD.ts": true,
+    "assets/scripts/ui/BattleEntryWarmup.ts": true
+  },
+  "typeReview": {
+    "fullProjectPassed": false,
+    "diagnosticFiles": [
+      "assets/scripts/ui/ButtonFeedback.ts",
+      "assets/scripts/ui/MilestoneSwipe.ts",
+      "assets/scripts/ui/Panels.ts",
+      "assets/scripts/ui/UINotice.ts"
+    ],
+    "note": "existing ButtonFeedback/type cascade and UINotice diagnostics; no diagnostics in this change"
+  },
+  "inspection": "local source hashes and compiled text only; no tests, simulation, game, browser or online acceptance",
+  "manualAcceptance": "pending user"
+}

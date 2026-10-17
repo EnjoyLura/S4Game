@@ -1,0 +1,11 @@
+--- before/assets/scripts/ui/CampaignRoute.ts
++++ assets/scripts/ui/CampaignRoute.ts
+@@ -96,7 +96,7 @@
+     campaignCheckpointReward(item,chapter===0 ? 31 : 44,50);
+   }
+   if (selected) {
+-    const tag = campaignChapterPlate(item, 0, -86, 152, 32);
++    const tag = campaignChapterPlate(item, 0, -76, 152, 32);
+     tag.name = 'selectedCheckpointName';
+     mainLabel(tag,0,0,name,{size:20,font:'body',bold:true,color:'#FFF6DC',w:126,h:26});
+   }

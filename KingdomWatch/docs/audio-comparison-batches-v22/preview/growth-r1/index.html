@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>王国守望 · 升级反馈重选</title>
+  <link rel="stylesheet" href="../style.css?v=growth-r1">
+  <script src="app.js?v=growth-r1" defer></script>
+  <style>.pair.many{grid-template-columns:repeat(4,minmax(0,1fr))}.pair.many .ab{grid-column:1/-1;min-height:38px}.pair.many button{min-width:0;padding:8px 7px;font-size:14px}.pair.many button small{overflow-wrap:anywhere}@media(max-width:560px){.pair.many{grid-template-columns:repeat(2,minmax(0,1fr))}.pair.many .ab{grid-column:1/-1}}</style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">王国守望 / 音效试听</p>
+      <h1>重选 · 升级反馈</h1>
+      <p class="intro">只重找你标记不满意的 3 项。每项有旧版和 3 个新候选。</p>
+      <div class="counts"><span>本组 3 项</span><span>每项 4 个试听</span><span id="choice-count">已选 0 / 3</span></div>
+    </header>
+
+    <section class="guide">
+      <p><strong>本页新候选已被否定。</strong><a href="../cartoon-r1/?v=cartoon-r1">前往最新：免费卡通风成长音效</a>。</p>
+      <p><strong>旧版</strong>是当前游戏 v21。新候选来自不同作者的公开音效库，按原素材格式转换，并做相近响度处理。</p>
+      <p>点声音按钮试听，再选旧版或 A / B / C。若还是不合适，可选“都不满意”。备注可写希望的感觉。</p>
+      <details><summary>查看作者、来源、授权与修改</summary>
+        <p>每条候选的原文件和来源页写在对应音效卡下。只做格式转换、去近静音、响度匹配和 2ms 首尾淡变，不重作、不加效果、不压缩。候选来自 CC BY 3.0 或 CC0 素材，署名信息收录于作者鸣谢。</p>
+        <p><a href="CREDITS.txt">查看本组素材署名</a></p>
+        <p>所有选择仅存在当前浏览器，不会自动发送。点“复制选择”后把文字贴给我。</p>
+      </details>
+      <p><a href="../">返回第一批：领奖、购买、招募与成长</a></p>
+    </section>
+
+    <div id="cards" aria-busy="true"><p>正在载入三项升级音效…</p></div>
+    <noscript><p>请启用 JavaScript 后试听；页面不会自动播放音效。</p></noscript>
+
+    <section class="results">
+      <h2>把选择发给我</h2>
+      <p>每项选一个版本；也可以先选“未决定”。</p>
+      <div class="actions"><button id="copy-results" class="gold" disabled>复制选择</button><button id="download-results" disabled>下载选择记录</button></div>
+      <textarea id="result-text" rows="6" readonly aria-label="选择结果"></textarea>
+      <p id="save-status" role="status">选择会保存在当前浏览器。</p>
+    </section>
+  <p class="footnote"><a href="../../../?v=audio-overhaul-v21-1792220287">正式游戏 · 当前音效 v21</a></p>
+  </main>
+  <footer class="player-bar"><button id="stop" type="button">停止播放</button><span id="play-status" role="status" aria-live="polite">尚未播放</span></footer>
+</body>
+</html>

@@ -1,6 +1,8 @@
 /** Global decorative taps: DOM capture for UI and engine input for unhandled game space. */
-import { _decorator, Color, Component, EventTouch, game, Game, Graphics, input, Input, Vec2, view } from 'cc';
+import { _decorator, Color, Component, EventTouch, game, Game, Graphics, input, Input, isValid, Vec2, view } from 'cc';
 import { reducedMotion } from './UIMotion';
+import { queueTapSound } from './UIAudio';
+import { enteringBattle } from './BattleEntry';
 
 const { ccclass } = _decorator;
 type Driver = 'dom' | 'engine';
@@ -21,6 +23,7 @@ export class TouchFeedback extends Component {
   private unlisten: (() => void)[] = [];
   private serial = 0;
   private point = new Vec2();
+  private cancelTapSound: (() => void) | null = null;
 
   onLoad(): void {
     this.ink = this.node.addComponent(Graphics);
@@ -128,12 +131,21 @@ export class TouchFeedback extends Component {
     if (!tap) return;
     if (Math.hypot(x-tap.startX, y-tap.startY) > tolerance) { tap.active = false; this.draw(); return; }
     tap.released = true; tap.age = 0;
+    // Clicks share the existing button sample; drags, holds and transition blockers stay quiet.
+    if (performance.now() - tap.began < 450 && !enteringBattle()) {
+      this.cancelTapSound?.();
+      this.cancelTapSound = queueTapSound(() => isValid(this.node, true) && this.node.activeInHierarchy
+        && !enteringBattle() && (typeof document === 'undefined' || !document.hidden));
+    }
     this.draw();
   }
   private cancel(driver: Driver, id: number): void {
     for (const tap of this.taps) if (tap.driver === driver && tap.id === id && !tap.released) tap.active = false;
   }
-  private clear(): void { this.taps.forEach(t => { t.active = false; }); this.ink?.clear(); this.enabled = false; }
+  private clear(): void {
+    this.cancelTapSound?.(); this.cancelTapSound = null;
+    this.taps.forEach(t => { t.active = false; }); this.ink?.clear(); this.enabled = false;
+  }
   private tint(r: number, g: number, b: number, a: number): Color { return this.color.set(r, g, b, Math.round(Math.max(0, a))); }
 
   update(dt: number): void {
@@ -178,6 +190,7 @@ export class TouchFeedback extends Component {
   }
 
   onDestroy(): void {
+    this.cancelTapSound?.(); this.cancelTapSound = null;
     this.unlisten.forEach(off => off());
     input.off(Input.EventType.TOUCH_START, this.engineDown, this);
     input.off(Input.EventType.TOUCH_MOVE, this.engineMove, this);

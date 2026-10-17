@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-controls-quiet-v4-20261017-023641",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-main-art-v3-20261017-021901",
+  "entryVersion": "1792175777",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=shop-controls-quiet-v4-1792175777",
+  "scope": "restore original modal close and buy buttons, shop category faces and rounded flat gold lobby navigation selection; stronger dividers; plain attribute text without row or group plates; raise both BGM and SFX another 1 dB relative to previous mix",
+  "manualAcceptance": "pending user manual review"
+}

@@ -1,0 +1,14 @@
+{
+  "bundle": "build\\web-mobile\\assets\\main\\index.98da6.js",
+  "sha256": "717c42a488534de881185a853c02a1427975c78cad8a659e31379abecb204522",
+  "markers": {
+    "policyExport": true,
+    "growthDebounce": true,
+    "sharedReward": true,
+    "sharedGrowth": true,
+    "reducedVoiceBudget": true,
+    "reducedPickupRate": true,
+    "noNumericGrowthCue": true
+  },
+  "gameOrAudioPlaybackPerformed": false
+}

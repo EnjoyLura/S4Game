@@ -1,0 +1,39 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-lobby-ui-quiet-v1-20261016-212841",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-reward-chests-v1-20261016-211040",
+  "entryVersion": "1792157282",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=lobby-ui-quiet-v1-1792157282",
+  "scope": "quiet upgrade lobby and level reward shelf; circular hero and skill selections, tonal milestone cards and borderless reward statuses",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://92ac8ce2.kingdom-watch.pages.dev",
+  "date": "2026-10-16T21:29:21.662155+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-lobby-ui-quiet-v1-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-lobby-ui-quiet-v1-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 16396,
+  "mainBundleSha256": "0b81aadb00232c465a82ad4ff9d70182fbea16635cd8e1cac339b78eb863b927",
+  "validation": {
+    "sourceReview": true,
+    "localBundleInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "testsRun": false,
+    "simulationRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  }
+}

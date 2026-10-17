@@ -1,0 +1,24 @@
+Some of the sounds and/or music was created by David McKee (VIRiX Dreamcore).
+Some of the sounds in this project were created by ViRiX Dreamcore (David McKee), https://soundcloud.com/virix
+
+New candidates: CC BY 3.0. https://creativecommons.org/licenses/by/3.0/
+The source author also offers CC BY 4.0 for UI SFX Pack 2 Sample. This preview elects CC BY 3.0.
+Source pages:
+https://opengameart.org/content/ui-sfx-pack-2-sample
+https://opengameart.org/content/ui-and-item-sound-effect-jingles-sample-2
+https://opengameart.org/content/ui-and-item-sounds-sample-1
+Changes: mono 44.1kHz 16bit transcode, near-silence trim, 2ms edge fades, scalar active-body loudness matching.
+D04 only: pitch-preserving 1.25x tempo of the complete source phrase. No generated melodies, EQ or limiting.
+
+Current v21 baseline credits: ../../audio-credits.html
+Little Robot Sound Factory, Fantasy Sound Effects Library, CC BY 3.0:
+https://opengameart.org/content/fantasy-sound-effects-library
+https://www.littlerobotsoundfactory.com/
+Kenney, Music Jingles / RPG Audio / Interface Sounds / Impact Sounds, CC0:
+https://kenney.nl/assets/music-jingles
+https://kenney.nl/assets/rpg-audio
+https://kenney.nl/assets/interface-sounds
+https://kenney.nl/assets/impact-sounds
+Other v21 sources and full editing recipes: repository docs/audio-overhaul-v21/assets.json and CREDITS.txt.
+The original v21 mixes have only scalar loudness matching in this preview. The production game is unchanged.
+No creator endorses this project. All candidates await user listening and selection.

@@ -1,0 +1,31 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-growth-feedback-v19-20261017-142313",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-toast-middle-rise-v18-20261017-141200",
+  "entryVersion": "1792218107",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=growth-feedback-v19-1792218107",
+  "scope": "readable growth receipts with old/new/delta columns, real animated values and landing cue; earned comparison hold and local hero/keep impact",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://1653bd59.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-growth-feedback-v19-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-growth-feedback-v19-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 18342,
+  "date": "2026-10-17T14:23:45.680100+08:00",
+  "gameRun": false,
+  "testsRun": false,
+  "browserRun": false,
+  "audioAudition": false,
+  "onlineAcceptance": false
+}

@@ -1,0 +1,20 @@
+{
+  "tool": "built-in image_gen",
+  "useCase": "ui-mockup",
+  "references": [
+    "C:/Users/user/AppData/Local/Temp/codex-clipboard-91e738c7-2854-439e-b1a8-585d939194dd.png",
+    "C:/Users/user/AppData/Local/Temp/codex-clipboard-fc61614e-4d57-45b6-99aa-a0d2d1b2e64c.png"
+  ],
+  "referenceRoles": [
+    "Upgrade page composition, hero identity, content and displayed values",
+    "Common paper frame, navy title and near-white group backing only"
+  ],
+  "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-4cf1029a-1f9d-4f43-ab4e-623bf803a416.png",
+  "output": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-main-v12.png",
+  "prompt": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-main-prompt.txt",
+  "sha256": "e8988f45c1c8bdd8f8ed9a703e070a091639854a8fe648dac037c18b10ccf7e2",
+  "pixelsUnmodified": true,
+  "integratedIntoRuntime": false,
+  "statisticsAreIllustrative": true,
+  "visualReview": "Generated original inspected directly: full game viewport with no desktop taskbar; five portraits, four training tabs, full-body archer on dais, navy-titled growth panel with continuous near-white stat well, three visible milestone cards and partial fourth, costs, upgrade action and complete navigation. Runtime text, exact role identity and original flat button geometry remain authoritative."
+}

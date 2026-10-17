@@ -1,0 +1,137 @@
+--- before/assets/scripts/ui/pages/LevelsPage.ts
++++ assets/scripts/ui/pages/LevelsPage.ts
+@@ -5,7 +5,7 @@
+ import { C, CA, N, WY } from '../UIKit';
+ import { artSprite } from '../Ux';
+ import { COMIC, comicArt, comicButton, comicButtonControl, comicMark, comicSurface } from '../ComicUI';
+-import { mainLabel, PageCtx, toast, mainLayout, MAIN_RESOURCE_H, pageScroll } from '../PageKit';
++import { mainLabel, PageCtx, toast, mainLayout, MAIN_RESOURCE_H, MAIN_NAV_H, pageScroll } from '../PageKit';
+ import { CHEST_COND, claimAllChests, starKey, squadList } from '../../core/GameData';
+ import { DIFFICULTIES, equipmentDropChance, getChallengeDef, starChestRewards } from '../../config/LevelDifficulty';
+ import { showDropItemDetails, showStageLootDetails } from '../LevelLootPreview';
+@@ -19,7 +19,7 @@
+ import { deferUIWarmup } from '../IdleWarmup';
+ import { showRewardPopup } from '../RewardPopup';
+ import { gearArt, heroPortrait } from '../HeroComic';
+-import { CampaignRouteMotion, ROUTE_ART, ROUTE_CONTENT_H, ROUTE_H, ROUTE_TOP, routePoint, routeStop } from '../CampaignRoute';
++import { CampaignRouteMotion, ROUTE_ART, ROUTE_H, ROUTE_W, routePoint, routeStop } from '../CampaignRoute';
+ 
+ const LEVELS = CAMPAIGN_STAGES;
+ const DIFFS = ['普通', '精英', '地狱'];
+@@ -64,13 +64,17 @@
+   }
+   while (st.d > 0 && !difficultyOpen(st.i, st.d)) st.d--;
+   const content = N('campaignRouteLobby', ctx.screens, 0, 0, 750, LO.half * 2);
+-  let mapScroll: ScrollView | null = null, mapViewH = 0;
++  let mapScroll: ScrollView | null = null;
+   let pins: Node | null = null, dock: Node | null = null, drawer: Node | null = null, shade: Node | null = null;
+   let header: Node | null = null, closing = false, claiming = false;
+   let sheetTop = 0, sheetH = 0, sheetOffset = 0;
+-  const { headerTop, bottom } = mainLayout();
++  const { headerTop } = mainLayout();
++  const bottom = LO.half * 2 - LO.safeTop - LO.safeBottom - MAIN_NAV_H;
+   const chapterTop = headerTop + MAIN_RESOURCE_H + 14;
+   const dockTop = bottom - 102;
++  // Keep every checkpoint below the fixed header without adding blank terrain margins.
++  const mapTop = chapterTop + 96, mapViewH = Math.max(1, dockTop - mapTop);
++  const mapHeight = Math.max(ROUTE_H, mapViewH);
+   const modalParent = ctx.screens.parent!;
+   const currentChapter = (): number => Math.floor(st.i / 10);
+   function levelOpen(i: number): boolean {
+@@ -84,13 +88,13 @@
+   }
+   function scrollMap(offset: number, animated: boolean): void {
+     mapScroll?.stopAutoScroll();
+-    mapScroll?.scrollToOffset(new Vec2(0, Math.max(0, Math.min(ROUTE_CONTENT_H - mapViewH, offset))),
++    mapScroll?.scrollToOffset(new Vec2(0, Math.max(0, Math.min(mapHeight - mapViewH, offset))),
+       animated && !reducedMotion() ? .26 : 0);
+   }
+   function focusMap(animated: boolean): void {
+-    const p = routePoint(LEVELS[st.i].stage);
++    const p = routePoint(LEVELS[st.i].stage, mapHeight);
+     const target = st.drawer ? Math.max(chapterTop + 160, sheetTop - 92) : chapterTop + (dockTop - chapterTop) * .62;
+-    scrollMap(p.top - target, animated);
++    scrollMap(mapTop + p.top - target, animated);
+   }
+   function warmSelected(): void {
+     if (levelOpen(st.i)) {
+@@ -135,7 +139,7 @@
+       // Map progression is always normal-mode progression; each drawer keeps its own difficulty stars.
+       const open = campaignLevelOpen(level.id, sv.stars), earned = sv.stars[level.id] || 0;
+       const ready = DIFFS.some((_, d) => (sv.stars[starKey(level.id, d)] || 0) > (sv.chestClaimed[starKey(level.id, d)] || 0));
+-      const item = routeStop(pins!, level.stage, level.order === st.i, open, earned, level.name, ready);
++      const item = routeStop(pins!, level.stage, level.order === st.i, open, earned, level.name, ready, mapHeight);
+       bindButton(item, () => {
+         if (closing || enteringBattle()) return;
+         if (!open) { toast('通关 ' + LEVELS[level.order - 1].id + ' 普通难度后解锁'); return; }
+@@ -317,30 +321,27 @@
+     refreshUI(content, () => {
+       mapScroll = null; drawer = null; shade = null; sheetOffset = 0; closing = false;
+       const chapter = currentChapter();
+-      const backing = N('campaignTerrainBacking', content, 0, 0, 750, LO.half * 2).addComponent(Graphics);
+-      backing.fillColor = C(chapter === 2 ? '#777456' : '#688C4C'); backing.rect(-375, -LO.half, 750, LO.half * 2); backing.fill();
+-      const map = pageScroll(content, 'campaignTerrain', 0, dockTop, ROUTE_CONTENT_H, 750);
+-      mapViewH = dockTop;
+-      artSprite(map, 0, -ROUTE_TOP - ROUTE_H / 2, 750, ROUTE_H, ROUTE_ART[chapter], { sliced: false });
++      const backing = artSprite(content, 0, 0, 750, LO.half * 2 + 240, ROUTE_ART[chapter], { sliced: false, cover: true });
++      backing.name = 'campaignTerrainBackdrop';
++      const map = pageScroll(content, 'campaignTerrain', mapTop, dockTop, mapHeight, 750);
++      artSprite(map, 0, -mapHeight / 2, ROUTE_W * mapHeight / ROUTE_H, mapHeight, ROUTE_ART[chapter], { sliced: false });
+       mapScroll = map.parent!.getComponent(ScrollView)!;
+       mapScroll.inertia = true; mapScroll.brake = .65; mapScroll.elastic = false; mapScroll.cancelInnerEvents = true;
+       map.parent!.on('scrolling', saveOffset); map.parent!.on('scroll-ended', saveOffset);
+       pins = N('campaignLiveCheckpoints', map);
+       renderPins();
+       const top = N('campaignTopChrome', content, 0, WY(0, chapterTop + 98), 750, chapterTop + 98);
+-      const ink = top.addComponent(Graphics); ink.fillColor = CA(COMIC.darkShade, .90);
+-      ink.rect(-375, -(chapterTop + 98) / 2, 750, chapterTop + 98); ink.fill();
+       top.addComponent(BlockInputEvents);
+       comicArt(top, -307, (chapterTop + 98) / 2 - headerTop - 28, 46, 46, 'comic_nav_map_v1');
+       mainLabel(top, -225, (chapterTop + 98) / 2 - headerTop - 28, '远征地图',
+-        { size: 24, color: COMIC.cream, bold: true, w: 142, h: 40 });
++        { size: 24, color: COMIC.cream, bold: true, w: 142, h: 40, outline: COMIC.darkShade, outlineW: 2 });
+       header = N('campaignHeader', content); renderHeader();
+       dock = N('campaignDock', content); renderDock();
+       if (st.drawer) {
+         if (st.offsets[chapter] === null) {
+-          const p = routePoint(LEVELS[st.i].stage);
+-          st.offsets[chapter] = Math.max(0, Math.min(ROUTE_CONTENT_H - mapViewH,
+-            p.top - chapterTop - (dockTop - chapterTop) * .62));
++          const p = routePoint(LEVELS[st.i].stage, mapHeight);
++          st.offsets[chapter] = Math.max(0, Math.min(mapHeight - mapViewH,
++            mapTop + p.top - chapterTop - (dockTop - chapterTop) * .62));
+         }
+         openDrawer(false);
+       }
+--- before/assets/scripts/ui/CampaignRoute.ts
++++ assets/scripts/ui/CampaignRoute.ts
+@@ -8,16 +8,14 @@
+ export const ROUTE_ART = ['outpost', 'forest', 'lair'].map(name => 'scenes/bg_campaign_' + name + '_v1');
+ export const ROUTE_W = 750;
+ export const ROUTE_H = 1500;
+-export const ROUTE_TOP = 150;
+-export const ROUTE_CONTENT_H = ROUTE_TOP + ROUTE_H + 70;
+ /** Image-normalized road clearings, ordered from the entrance to the chapter finale. */
+ const ROAD_POINTS = [
+   [.28, .88], [.61, .805], [.79, .72], [.50, .59], [.26, .465],
+   [.31, .397], [.77, .335], [.56, .25], [.81, .19], [.77, .12],
+ ] as const;
+-export function routePoint(stage: number): { x: number; top: number } {
++export function routePoint(stage: number, mapHeight = ROUTE_H): { x: number; top: number } {
+   const point = ROAD_POINTS[Math.max(0, Math.min(9, stage - 1))];
+-  return { x: (point[0] - .5) * ROUTE_W, top: ROUTE_TOP + point[1] * ROUTE_H };
++  return { x: (point[0] - .5) * ROUTE_W * mapHeight / ROUTE_H, top: point[1] * mapHeight };
+ }
+ 
+ const { ccclass } = _decorator;
+@@ -70,8 +68,8 @@
+ }
+ 
+ export function routeStop(parent: Node, stage: number, selected: boolean, open: boolean, earned: number,
+-  name: string, claimable: boolean): Node {
+-  const p = routePoint(stage), item = N('campaignStop:' + stage, parent, p.x, -p.top, 112, 128);
++  name: string, claimable: boolean, mapHeight = ROUTE_H): Node {
++  const p = routePoint(stage, mapHeight), item = N('campaignStop:' + stage, parent, p.x, -p.top, 112, 128);
+   const shadow = N('checkpointShadow', item).addComponent(Graphics);
+   shadow.fillColor = CA(COMIC.ink, .28); shadow.ellipse(0, -29, 43, 14); shadow.fill();
+   if (selected) N('campaignSelectionGlow', item).addComponent(CampaignRouteMotion).glow();

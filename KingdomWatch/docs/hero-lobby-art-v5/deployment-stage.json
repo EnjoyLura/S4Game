@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-lobby-art-v5-20261017-031337",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-attribute-paper-v6-20261017-024717",
+  "entryVersion": "1792177958",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-lobby-art-v5-1792177958",
+  "scope": "hero main roster, information, equipped panel, full-size square sockets, detail actions and bag; shared hero modal paper/navy titles and near-white attribute groups with action margins; brighten shop attributes to near-white",
+  "manualAcceptance": "pending user manual review"
+}

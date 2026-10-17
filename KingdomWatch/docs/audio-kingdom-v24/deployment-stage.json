@@ -1,0 +1,15 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-kingdom-v24-20261017-181337",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-reduction-v23-20261017-174956",
+  "entryVersion": "1792231961",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=audio-kingdom-v24-1792231961",
+  "preview": "https://kingdom-watch.pages.dev/previews/audio-kingdom-v24/",
+  "priorPreviewFilesPreserved": 727,
+  "scope": "All 31 active cues replaced with 44 new recordings/arrangements; v23 density policy unchanged",
+  "manualAcceptance": "Pending user listening; no game/browser/audio playback performed",
+  "deployment": "https://b4b579bb.kingdom-watch.pages.dev",
+  "published": true,
+  "publicationNote": "Wrangler reported deployment complete; no online/game/browser/audio listening acceptance performed"
+}

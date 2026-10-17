@@ -1,0 +1,197 @@
+{
+  "reference": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-e239edc5-b7f6-4583-ba68-26880618a363.png",
+  "difficultyIconCount": 3,
+  "userCorrection": "one icon each for normal, elite and hell; shared selection and lock treatment",
+  "assets": [
+    {
+      "id": "chest_bronze_v2",
+      "tool": "built-in image_gen",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-74962002-f8a1-4655-942d-3613755336c9.png",
+      "asset": "assets/resources/ux/preparation_art_v2/chest_bronze_v2.png",
+      "prompt": "prompts/chest_bronze_v2.txt",
+      "mode": "RGBA",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "spriteRect": [
+        94,
+        202,
+        1100,
+        894
+      ],
+      "sourceSha256": "a82ba8f32ed7b7b3e0415573e5c24eae9fc84b36493f156b951ab0a4477380e3",
+      "assetSha256": "a82ba8f32ed7b7b3e0415573e5c24eae9fc84b36493f156b951ab0a4477380e3",
+      "originalPixelsUnchanged": true,
+      "alphaRange": [
+        0,
+        255
+      ],
+      "uuid": "476eeafb-dba1-46b8-9b04-41f3fd53ed29",
+      "bytes": 1364502
+    },
+    {
+      "id": "chest_sapphire_v2",
+      "tool": "built-in image_gen",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-bcb95e42-a734-4525-a648-5788a0202aa9.png",
+      "asset": "assets/resources/ux/preparation_art_v2/chest_sapphire_v2.png",
+      "prompt": "prompts/chest_sapphire_v2.txt",
+      "mode": "RGBA",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "spriteRect": [
+        71,
+        181,
+        1158,
+        936
+      ],
+      "sourceSha256": "215ce3ff59717ee88ece8787c5a720c4e58d1ae5e99d7700d00434d936d0d434",
+      "assetSha256": "215ce3ff59717ee88ece8787c5a720c4e58d1ae5e99d7700d00434d936d0d434",
+      "originalPixelsUnchanged": true,
+      "alphaRange": [
+        0,
+        255
+      ],
+      "uuid": "dbe53fed-d76c-42c7-bd9e-55429b26514b",
+      "bytes": 1437497
+    },
+    {
+      "id": "chest_crimson_v2",
+      "tool": "built-in image_gen",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-dfcac415-5065-4b3d-9775-8f4d41fe637e.png",
+      "asset": "assets/resources/ux/preparation_art_v2/chest_crimson_v2.png",
+      "prompt": "prompts/chest_crimson_v2.txt",
+      "mode": "RGBA",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "spriteRect": [
+        50,
+        173,
+        1182,
+        969
+      ],
+      "sourceSha256": "c3ea947a6b9f3190b9443e1748c88e048210e1e094bc19f25ad85ba72e1af946",
+      "assetSha256": "c3ea947a6b9f3190b9443e1748c88e048210e1e094bc19f25ad85ba72e1af946",
+      "originalPixelsUnchanged": true,
+      "alphaRange": [
+        0,
+        255
+      ],
+      "uuid": "63111c0d-c77c-4cf3-a256-74968196ce99",
+      "bytes": 1540623
+    },
+    {
+      "id": "difficulty_normal_v2",
+      "tool": "built-in image_gen",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-6f6fa295-836a-4376-a325-594c41fcb6c6.png",
+      "asset": "assets/resources/ux/preparation_art_v2/difficulty_normal_v2.png",
+      "prompt": "prompts/difficulty_normal_v2.txt",
+      "mode": "RGBA",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "spriteRect": [
+        137,
+        210,
+        980,
+        833
+      ],
+      "sourceSha256": "489a366090430a04001b8c35e92ffe4a01e04648b2445a7827e78ee92949aed7",
+      "assetSha256": "489a366090430a04001b8c35e92ffe4a01e04648b2445a7827e78ee92949aed7",
+      "originalPixelsUnchanged": true,
+      "alphaRange": [
+        0,
+        255
+      ],
+      "uuid": "10e14461-648e-4dab-8f98-e28469baac9d",
+      "bytes": 794000
+    },
+    {
+      "id": "difficulty_elite_v2",
+      "tool": "built-in image_gen",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-04ec0150-4506-47bd-a567-397b4f25e722.png",
+      "asset": "assets/resources/ux/preparation_art_v2/difficulty_elite_v2.png",
+      "prompt": "prompts/difficulty_elite_v2.txt",
+      "mode": "RGBA",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "spriteRect": [
+        175,
+        170,
+        904,
+        908
+      ],
+      "sourceSha256": "a8fdb096eb3306d2cab59a965f8e7b3c5c63f03b765ba484f5eb3d024a9d525f",
+      "assetSha256": "a8fdb096eb3306d2cab59a965f8e7b3c5c63f03b765ba484f5eb3d024a9d525f",
+      "originalPixelsUnchanged": true,
+      "alphaRange": [
+        0,
+        255
+      ],
+      "uuid": "006efc8a-7ab6-4ed7-86af-999ceb619ace",
+      "bytes": 810325
+    },
+    {
+      "id": "difficulty_hell_v2",
+      "tool": "built-in image_gen",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-7da196b6-97a5-4f08-bd85-d91a09e5f7ab.png",
+      "asset": "assets/resources/ux/preparation_art_v2/difficulty_hell_v2.png",
+      "prompt": "prompts/difficulty_hell_v2.txt",
+      "mode": "RGBA",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "spriteRect": [
+        110,
+        148,
+        1034,
+        942
+      ],
+      "sourceSha256": "12d7bc344230015371f3914241cc95a41423b1f28d1c8c134488384dee118908",
+      "assetSha256": "12d7bc344230015371f3914241cc95a41423b1f28d1c8c134488384dee118908",
+      "originalPixelsUnchanged": true,
+      "alphaRange": [
+        0,
+        255
+      ],
+      "uuid": "0b9808ab-deef-4671-b628-b91c38e84072",
+      "bytes": 981530
+    },
+    {
+      "id": "claim_button_v2",
+      "tool": "built-in image_gen",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-770c783b-fcd9-4525-80a0-8172382bc311.png",
+      "asset": "assets/resources/ux/preparation_art_v2/claim_button_v2.png",
+      "prompt": "prompts/claim_button_v2.txt",
+      "mode": "RGBA",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "spriteRect": [
+        37,
+        166,
+        2098,
+        374
+      ],
+      "sourceSha256": "0756fda731ec76ca6b389edeaca81c1ead984de031e6c5c23aba6098d5885483",
+      "assetSha256": "0756fda731ec76ca6b389edeaca81c1ead984de031e6c5c23aba6098d5885483",
+      "originalPixelsUnchanged": true,
+      "alphaRange": [
+        0,
+        255
+      ],
+      "uuid": "474200b7-e31b-477c-b0f7-1773b1a0ac8b",
+      "bytes": 901102
+    }
+  ],
+  "acceptance": "pending user manual review"
+}

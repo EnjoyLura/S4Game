@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-header-v3-20261016-230443",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-fill-v2-20261016-223850",
+  "entryVersion": "1792161784",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=chapter-route-header-v3-1792161784",
+  "scope": "remove fixed header terrain picture; retain one scrollable route map and use a plain paper header",
+  "manualAcceptance": "pending user manual review"
+}

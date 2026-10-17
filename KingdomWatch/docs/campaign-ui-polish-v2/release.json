@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-campaign-ui-polish-v2-20261017-002147",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-stage-loot-layout-v2-20261016-235755",
+  "entryVersion": "1792167614",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=campaign-ui-polish-v2-1792167614",
+  "scope": "chapter map top clearance and taller dock; native material polish; no-scroll preparation; closed drawer on battle return and tab changes; squad mobile Back",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://d3e1a2fa.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-campaign-ui-polish-v2-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-campaign-ui-polish-v2-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "mainSha256": "699f11cb97f4d70d8b1432ab3d43ea3e076956d922dc0c833c81f3fc2666a071",
+  "creatorBuildMilliseconds": 17273,
+  "date": "2026-10-17T00:22:28.926518+08:00",
+  "testsRun": false,
+  "simulationRun": false,
+  "gameRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

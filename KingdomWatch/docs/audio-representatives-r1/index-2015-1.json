@@ -1,0 +1,6246 @@
+{
+  "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+  "bytes": 9037755976,
+  "entries": [
+    {
+      "name": "Alexander Kopeikin - Moscow Ambience/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 0
+    },
+    {
+      "name": "Alexander Kopeikin - Moscow Ambience/crowd, concert hall lobby, stand-up party, people talking and toasting, XY stereo.wav",
+      "method": 8,
+      "crc": 275388598,
+      "compressed": 129437838,
+      "uncompressed": 138713180,
+      "offset": 95
+    },
+    {
+      "name": "Alexander Kopeikin - Moscow Ambience/ambience detail, renewal works in old tenant building, changing floor tiles, ORTF stereo.wav",
+      "method": 8,
+      "crc": 3775610044,
+      "compressed": 101760622,
+      "uncompressed": 109651356,
+      "offset": 129438113
+    },
+    {
+      "name": "Alexander Kopeikin - Moscow Ambience/traffic, discrete car passes on narrow street, daytime, summer, ORTF stereo.wav",
+      "method": 8,
+      "crc": 3978276525,
+      "compressed": 70266641,
+      "uncompressed": 77663612,
+      "offset": 231198922
+    },
+    {
+      "name": "Alexander Kopeikin - Moscow Ambience/room tone, large cafe in university, loud conversations, A-B stereo.wav",
+      "method": 8,
+      "crc": 1501732182,
+      "compressed": 71053470,
+      "uncompressed": 76245116,
+      "offset": 301465737
+    },
+    {
+      "name": "Alexander Kopeikin - Moscow Ambience/Moscow metro, platform, trains arrive and depart, Rechnoi Vokzal station, ORTF stereo.wav",
+      "method": 8,
+      "crc": 3986886044,
+      "compressed": 65549001,
+      "uncompressed": 72723884,
+      "offset": 372519373
+    },
+    {
+      "name": "Alexander Kopeikin - Transitions HD/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 438068558
+    },
+    {
+      "name": "Alexander Kopeikin - Transitions HD/transition elastic 102.wav",
+      "method": 8,
+      "crc": 1240553722,
+      "compressed": 638253,
+      "uncompressed": 922044,
+      "offset": 438068652
+    },
+    {
+      "name": "Alexander Kopeikin - Transitions HD/transition elastic 013.wav",
+      "method": 8,
+      "crc": 812220147,
+      "compressed": 467293,
+      "uncompressed": 746924,
+      "offset": 438707025
+    },
+    {
+      "name": "Alexander Kopeikin - Transitions HD/transition shutter 002.wav",
+      "method": 8,
+      "crc": 2607365478,
+      "compressed": 459034,
+      "uncompressed": 737484,
+      "offset": 439174438
+    },
+    {
+      "name": "Alexander Kopeikin - Transitions HD/transition elastic 076.wav",
+      "method": 8,
+      "crc": 2663252230,
+      "compressed": 697938,
+      "uncompressed": 977724,
+      "offset": 439633592
+    },
+    {
+      "name": "Alexander Kopeikin - Transitions HD/transition t04 soft 016.wav",
+      "method": 8,
+      "crc": 2577263047,
+      "compressed": 592754,
+      "uncompressed": 903612,
+      "offset": 440331650
+    },
+    {
+      "name": "Alexander Kopeikin - Transitions HD/transition shutter 009.wav",
+      "method": 8,
+      "crc": 724454732,
+      "compressed": 611349,
+      "uncompressed": 912956,
+      "offset": 440924525
+    },
+    {
+      "name": "Alexander Kopeikin - Transitions HD/transition elastic 032.wav",
+      "method": 8,
+      "crc": 1736599569,
+      "compressed": 648374,
+      "uncompressed": 922204,
+      "offset": 441535994
+    },
+    {
+      "name": "Alexander Kopeikin - Transitions HD/transition t05 hard 002.wav",
+      "method": 8,
+      "crc": 124054427,
+      "compressed": 313499,
+      "uncompressed": 577436,
+      "offset": 442184488
+    },
+    {
+      "name": "Alexander Kopeikin - Transitions HD/transition shutter 017.wav",
+      "method": 8,
+      "crc": 3073985662,
+      "compressed": 424304,
+      "uncompressed": 691644,
+      "offset": 442498108
+    },
+    {
+      "name": "Alexander Kopeikin - Transitions HD/transition t07 two-step 007.wav",
+      "method": 8,
+      "crc": 1620564559,
+      "compressed": 675286,
+      "uncompressed": 1005116,
+      "offset": 442922532
+    },
+    {
+      "name": "BeautifulNoise - Intensity by Design/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 443597943
+    },
+    {
+      "name": "BeautifulNoise - Intensity by Design/BN_Intensity by Design_036 Tension by Metal 4.wav",
+      "method": 8,
+      "crc": 3174335883,
+      "compressed": 63671528,
+      "uncompressed": 80221580,
+      "offset": 443598038
+    },
+    {
+      "name": "BeautifulNoise - Intensity by Design/BN_Intensity by Design_039 Tension by Stone 2.wav",
+      "method": 8,
+      "crc": 2093123277,
+      "compressed": 82263352,
+      "uncompressed": 102891708,
+      "offset": 507269710
+    },
+    {
+      "name": "BeautifulNoise - Intensity by Design/BN_Intensity by Design_017 Tension by Brass 1.wav",
+      "method": 8,
+      "crc": 1486832271,
+      "compressed": 50471165,
+      "uncompressed": 62719148,
+      "offset": 589533206
+    },
+    {
+      "name": "BeautifulNoise - Intensity by Design/BN_Intensity by Design_016 High Pitch Tone Osc Crunchy.wav",
+      "method": 8,
+      "crc": 2565067005,
+      "compressed": 89471813,
+      "uncompressed": 107711772,
+      "offset": 640004515
+    },
+    {
+      "name": "BeautifulNoise - Intensity by Design/BN_Intensity by Design_052 Tonal Brass Metal 2.wav",
+      "method": 8,
+      "crc": 1898218851,
+      "compressed": 56504115,
+      "uncompressed": 67542348,
+      "offset": 729476481
+    },
+    {
+      "name": "Carlo Ascrizzi - Race Cars Essential Library/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 785980741
+    },
+    {
+      "name": "Carlo Ascrizzi - Race Cars Essential Library/Car Door_OpenClose_Exterior_01.M.wav",
+      "method": 8,
+      "crc": 3759829477,
+      "compressed": 518096,
+      "uncompressed": 670076,
+      "offset": 785980844
+    },
+    {
+      "name": "Carlo Ascrizzi - Race Cars Essential Library/Engine,Start,Accelerate,Stop,Hood_03.M.wav",
+      "method": 8,
+      "crc": 862417543,
+      "compressed": 6029179,
+      "uncompressed": 6716172,
+      "offset": 786499079
+    },
+    {
+      "name": "Carlo Ascrizzi - Race Cars Essential Library/By,Stands,Stereo_04.wav",
+      "method": 8,
+      "crc": 1151408261,
+      "compressed": 8761799,
+      "uncompressed": 10481356,
+      "offset": 792528403
+    },
+    {
+      "name": "Coll Anderson - Battle Crowd/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 801290328
+    },
+    {
+      "name": "Coll Anderson - Battle Crowd/EFX EXT GROUP Call Out Help Make Weapons 01.wav",
+      "method": 8,
+      "crc": 1334878847,
+      "compressed": 3410413,
+      "uncompressed": 3962688,
+      "offset": 801290415
+    },
+    {
+      "name": "Coll Anderson - Battle Crowd/EFX EXT GROUP Marching Puddle Mud 01.wav",
+      "method": 8,
+      "crc": 1438683600,
+      "compressed": 10379280,
+      "uncompressed": 11554322,
+      "offset": 804700962
+    },
+    {
+      "name": "Coll Anderson - Battle Crowd/EFX EXT GROUP Battle End Agony Moans 02 A.wav",
+      "method": 8,
+      "crc": 3230175536,
+      "compressed": 16708237,
+      "uncompressed": 20835420,
+      "offset": 815080369
+    },
+    {
+      "name": "Coll Anderson - Battle Crowd/EFX EXT GROUP Battle Approach 01 A.wav",
+      "method": 8,
+      "crc": 3154483839,
+      "compressed": 12587886,
+      "uncompressed": 15359618,
+      "offset": 831788738
+    },
+    {
+      "name": "Coll Anderson - Battle Crowd/EFX EXT GROUP Battle Steady Fighting 03 A.wav",
+      "method": 8,
+      "crc": 273330351,
+      "compressed": 12528959,
+      "uncompressed": 14773206,
+      "offset": 844376749
+    },
+    {
+      "name": "Coll Anderson - Battle Crowd/EFX EXT GROUP Battle Movement Forrest 01 A.wav",
+      "method": 8,
+      "crc": 4057868732,
+      "compressed": 17250121,
+      "uncompressed": 20912482,
+      "offset": 856905840
+    },
+    {
+      "name": "Coll Anderson - Battle Crowd/EFX EXT GROUP Female Celebration Scream 01 A .wav",
+      "method": 8,
+      "crc": 4003437390,
+      "compressed": 13994077,
+      "uncompressed": 14848606,
+      "offset": 874156094
+    },
+    {
+      "name": "Coll Anderson - Battle Crowd/EFX EXT GROUP Agony Scream 02 A.wav",
+      "method": 8,
+      "crc": 1221431498,
+      "compressed": 8526719,
+      "uncompressed": 9680738,
+      "offset": 888150307
+    },
+    {
+      "name": "Coll Anderson - Battle Crowd/EFX EXT GROUP Battle Celebration 02 A.wav",
+      "method": 8,
+      "crc": 1225410999,
+      "compressed": 13061967,
+      "uncompressed": 14104054,
+      "offset": 896677148
+    },
+    {
+      "name": "Coll Anderson - Battle Crowd/EFX EXT GROUP Unrest Murmur 01 A .wav",
+      "method": 8,
+      "crc": 1261994116,
+      "compressed": 18241863,
+      "uncompressed": 22185650,
+      "offset": 909739243
+    },
+    {
+      "name": "Coll Anderson - Battle Crowd/EFX EXT GROUP Battle Cry 03 A.wav",
+      "method": 8,
+      "crc": 2071505786,
+      "compressed": 3726469,
+      "uncompressed": 4144868,
+      "offset": 927981230
+    },
+    {
+      "name": "Coll Anderson - Battle Crowd/EFX EXT GROUP Begging 02.wav",
+      "method": 8,
+      "crc": 1837400277,
+      "compressed": 72142709,
+      "uncompressed": 87620044,
+      "offset": 931707819
+    },
+    {
+      "name": "Coll Anderson - Car Destruction/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1003850643
+    },
+    {
+      "name": "Coll Anderson - Car Destruction/EFX EXT Shattered Glass Impact 10 A.wav",
+      "method": 8,
+      "crc": 1927172727,
+      "compressed": 2217303,
+      "uncompressed": 2669804,
+      "offset": 1003850733
+    },
+    {
+      "name": "Coll Anderson - Car Destruction/EFX EXT Car Impacts and Scrapes 19 A.wav",
+      "method": 8,
+      "crc": 4174528612,
+      "compressed": 2053354,
+      "uncompressed": 2476028,
+      "offset": 1006068165
+    },
+    {
+      "name": "Coll Anderson - Car Destruction/EFX EXT Metal Impact Smash Move 07 B.M.wav",
+      "method": 8,
+      "crc": 2024942498,
+      "compressed": 1628768,
+      "uncompressed": 2801916,
+      "offset": 1008121649
+    },
+    {
+      "name": "Coll Anderson - Car Destruction/EFX EXT Metal Impact Drop 01 A.wav",
+      "method": 8,
+      "crc": 2548135271,
+      "compressed": 3552598,
+      "uncompressed": 6286508,
+      "offset": 1009750549
+    },
+    {
+      "name": "Coll Anderson - Car Destruction/EFX EXT Car Windshield Ripping 04 A.wav",
+      "method": 8,
+      "crc": 4141469111,
+      "compressed": 1566586,
+      "uncompressed": 1885276,
+      "offset": 1013303271
+    },
+    {
+      "name": "Coll Anderson - Deer/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1014869986
+    },
+    {
+      "name": "Coll Anderson - Deer/EFX INT Leg skinning 01 B.wav",
+      "method": 8,
+      "crc": 3562857360,
+      "compressed": 3794796,
+      "uncompressed": 4521516,
+      "offset": 1014870065
+    },
+    {
+      "name": "Coll Anderson - Deer/EFX INT Blood spurt on carcass 01 B.wav",
+      "method": 8,
+      "crc": 3065109605,
+      "compressed": 4526076,
+      "uncompressed": 5542796,
+      "offset": 1018664969
+    },
+    {
+      "name": "Coll Anderson - Deer/EFX INT Knife sharpen 01 D.wav",
+      "method": 8,
+      "crc": 4076685915,
+      "compressed": 1164749,
+      "uncompressed": 1475836,
+      "offset": 1023191163
+    },
+    {
+      "name": "Coll Anderson - Deer/EFX INT Meat drops 03 B.wav",
+      "method": 8,
+      "crc": 736866522,
+      "compressed": 3331672,
+      "uncompressed": 4149260,
+      "offset": 1024356021
+    },
+    {
+      "name": "Coll Anderson - Deer/EFX INT Skil saw on carcass 01 B.wav",
+      "method": 8,
+      "crc": 2651841078,
+      "compressed": 8465157,
+      "uncompressed": 9471228,
+      "offset": 1027687799
+    },
+    {
+      "name": "Coll Anderson - Deer/EFX INT Cavity Cutting 06 B.wav",
+      "method": 8,
+      "crc": 2682726845,
+      "compressed": 2549417,
+      "uncompressed": 3180284,
+      "offset": 1036153071
+    },
+    {
+      "name": "Coll Anderson - Deer/EFX INT Sawing leg bone 01 C.wav",
+      "method": 8,
+      "crc": 3993620424,
+      "compressed": 7898712,
+      "uncompressed": 9510572,
+      "offset": 1038702598
+    },
+    {
+      "name": "Coll Anderson - Deer/EFX INT Full Skin pull 01 C.wav",
+      "method": 8,
+      "crc": 1738126940,
+      "compressed": 7152689,
+      "uncompressed": 8425292,
+      "offset": 1046601421
+    },
+    {
+      "name": "Coll Anderson - Deer/EFX INT Wet leg cut off 01 B.wav",
+      "method": 8,
+      "crc": 2418785815,
+      "compressed": 6719103,
+      "uncompressed": 8197436,
+      "offset": 1053754220
+    },
+    {
+      "name": "Coll Anderson - Deer/EFX INT Cavity Cutting 06 D.wav",
+      "method": 8,
+      "crc": 2987035055,
+      "compressed": 2511788,
+      "uncompressed": 3180444,
+      "offset": 1060473434
+    },
+    {
+      "name": "Coll Anderson - Dog/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1062985332
+    },
+    {
+      "name": "Coll Anderson - Dog/EFX INT Dog Drinking 02 B.wav",
+      "method": 8,
+      "crc": 4164241121,
+      "compressed": 7878412,
+      "uncompressed": 8969308,
+      "offset": 1062985410
+    },
+    {
+      "name": "Coll Anderson - Dog/EFX INT Dog Snarling 24 C.wav",
+      "method": 8,
+      "crc": 1610602364,
+      "compressed": 3929990,
+      "uncompressed": 4496924,
+      "offset": 1070863929
+    },
+    {
+      "name": "Coll Anderson - Dog/EFX INT Dog Wimper 06 A.M.wav",
+      "method": 8,
+      "crc": 3810184369,
+      "compressed": 943794,
+      "uncompressed": 1219500,
+      "offset": 1074794026
+    },
+    {
+      "name": "Coll Anderson - Dog/EFX INT Mutt Growl 42 B.wav",
+      "method": 8,
+      "crc": 3656536148,
+      "compressed": 1202927,
+      "uncompressed": 1420860,
+      "offset": 1075737927
+    },
+    {
+      "name": "Coll Anderson - Dog/EFX INT Dog Growl 33 A.M.wav",
+      "method": 8,
+      "crc": 3832506492,
+      "compressed": 2693313,
+      "uncompressed": 3213468,
+      "offset": 1076940959
+    },
+    {
+      "name": "Coll Anderson - Dog/EFX INT Dog Fight 01 A.M.wav",
+      "method": 8,
+      "crc": 2059085107,
+      "compressed": 4640450,
+      "uncompressed": 4907676,
+      "offset": 1079634378
+    },
+    {
+      "name": "Coll Anderson - Dog/EFX INT Dog Wimper 26 A.M.wav",
+      "method": 8,
+      "crc": 4102047635,
+      "compressed": 1672664,
+      "uncompressed": 1951020,
+      "offset": 1084274934
+    },
+    {
+      "name": "Coll Anderson - Gore/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1085947705
+    },
+    {
+      "name": "Coll Anderson - Gore/EFX SD Organic Gore Russle 05 B.M.wav",
+      "method": 8,
+      "crc": 4111149183,
+      "compressed": 2603901,
+      "uncompressed": 3288444,
+      "offset": 1085947784
+    },
+    {
+      "name": "Coll Anderson - Gore/EFX SD GORE Fast Rip 01 B.M.wav",
+      "method": 8,
+      "crc": 971748476,
+      "compressed": 1491666,
+      "uncompressed": 2655532,
+      "offset": 1088551801
+    },
+    {
+      "name": "Coll Anderson - Gore/EFX SD GORE Snap 05 C.M.wav",
+      "method": 8,
+      "crc": 3503636986,
+      "compressed": 704945,
+      "uncompressed": 978268,
+      "offset": 1090043577
+    },
+    {
+      "name": "Coll Anderson - Gore/EFX SD GORE Flesh Pry 05 C.M.wav",
+      "method": 8,
+      "crc": 3708201285,
+      "compressed": 369264,
+      "uncompressed": 485660,
+      "offset": 1090748628
+    },
+    {
+      "name": "Coll Anderson - Gore/EFX SD Flesh Pry Gristle 05.wav",
+      "method": 8,
+      "crc": 2849435717,
+      "compressed": 865028,
+      "uncompressed": 1244924,
+      "offset": 1091118003
+    },
+    {
+      "name": "Coll Anderson - Gore/EFX SD GORE Chop 02 C.M.wav",
+      "method": 8,
+      "crc": 2670011090,
+      "compressed": 546757,
+      "uncompressed": 778172,
+      "offset": 1091983141
+    },
+    {
+      "name": "Coll Anderson - Gore/EFX SD GORE Punch 02 B.M.wav",
+      "method": 8,
+      "crc": 2225663379,
+      "compressed": 575464,
+      "uncompressed": 904508,
+      "offset": 1092530004
+    },
+    {
+      "name": "Coll Anderson - Guns/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1093105575
+    },
+    {
+      "name": "Coll Anderson - Guns/EFX INT AR-15 M4 Charging Handle With Mag 01_A.wav",
+      "method": 8,
+      "crc": 2970097194,
+      "compressed": 6072618,
+      "uncompressed": 7702412,
+      "offset": 1093105654
+    },
+    {
+      "name": "Coll Anderson - Guns/EFX EXT .50 Cal Pistol Shots 02 A.wav",
+      "method": 8,
+      "crc": 3371277043,
+      "compressed": 3575494,
+      "uncompressed": 4665916,
+      "offset": 1099178401
+    },
+    {
+      "name": "Coll Anderson - Guns/EFX EXT M4 Shots 02 B.wav",
+      "method": 8,
+      "crc": 2716639691,
+      "compressed": 6705991,
+      "uncompressed": 9239532,
+      "offset": 1102754011
+    },
+    {
+      "name": "Coll Anderson - Guns/EFX INT Unloading Magazine Singles 01.wav",
+      "method": 8,
+      "crc": 719420402,
+      "compressed": 2506696,
+      "uncompressed": 3235756,
+      "offset": 1109460106
+    },
+    {
+      "name": "Coll Anderson - Guns/EFX EXT .38 Plus Power Shots 04 B.wav",
+      "method": 8,
+      "crc": 2095382050,
+      "compressed": 16359706,
+      "uncompressed": 23447916,
+      "offset": 1111966922
+    },
+    {
+      "name": "Coll Anderson - Guns/EFX EXT Mortar Explosion 08.wav",
+      "method": 8,
+      "crc": 749971230,
+      "compressed": 4029640,
+      "uncompressed": 5690172,
+      "offset": 1128326744
+    },
+    {
+      "name": "Coll Anderson - Guns/EFX EXT .22 Long Rifle Shots 01 A.wav",
+      "method": 8,
+      "crc": 3349595523,
+      "compressed": 19715276,
+      "uncompressed": 25976284,
+      "offset": 1132356494
+    },
+    {
+      "name": "Coll Anderson - House/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1152071886
+    },
+    {
+      "name": "Coll Anderson - House/EFX INT Knife Cutting 05.wav",
+      "method": 8,
+      "crc": 1982466747,
+      "compressed": 1371950,
+      "uncompressed": 2638876,
+      "offset": 1152071966
+    },
+    {
+      "name": "Coll Anderson - House/EFX INT HOUSE Wall Light Switch Close 07.wav",
+      "method": 8,
+      "crc": 208976522,
+      "compressed": 4712444,
+      "uncompressed": 7124364,
+      "offset": 1153444024
+    },
+    {
+      "name": "Coll Anderson - House/EFX EXT Bulkhead Door O_C Close Med 04.wav",
+      "method": 8,
+      "crc": 591434409,
+      "compressed": 5730007,
+      "uncompressed": 11423932,
+      "offset": 1158156592
+    },
+    {
+      "name": "Coll Anderson - House/EFX EXT Sliding Glass Door O_C Far Soft 02.wav",
+      "method": 8,
+      "crc": 2328182808,
+      "compressed": 10099793,
+      "uncompressed": 20319724,
+      "offset": 1163886721
+    },
+    {
+      "name": "Coll Anderson - House/EFX INT HOUSE DOOR Bedroom Wood O_C Close Medium 01.wav",
+      "method": 8,
+      "crc": 1382715414,
+      "compressed": 6213693,
+      "uncompressed": 8244076,
+      "offset": 1173986640
+    },
+    {
+      "name": "Coll Anderson - House/EFX INT HOUSE Kitchen Cupbord O_C Close Medium 01.wav",
+      "method": 8,
+      "crc": 1321491887,
+      "compressed": 4969321,
+      "uncompressed": 6952540,
+      "offset": 1180200468
+    },
+    {
+      "name": "Coll Anderson - House/EFX INT HOUSE DOOR Front O_C Far Soft 01.wav",
+      "method": 8,
+      "crc": 2692983037,
+      "compressed": 9609656,
+      "uncompressed": 13079868,
+      "offset": 1185169922
+    },
+    {
+      "name": "Coll Anderson - House/EFX INT HOUSE Modern Window Close Crank 01.wav",
+      "method": 8,
+      "crc": 473543892,
+      "compressed": 16828450,
+      "uncompressed": 21581948,
+      "offset": 1194779702
+    },
+    {
+      "name": "Coll Anderson - House/EFX INT HOUSE Bathroom Sink On Off Close 01.wav",
+      "method": 8,
+      "crc": 3478001322,
+      "compressed": 19661973,
+      "uncompressed": 25777020,
+      "offset": 1211608278
+    },
+    {
+      "name": "Coll Anderson - House/EFX INT HOUSE Clean Wood Creek 01.wav",
+      "method": 8,
+      "crc": 1506492755,
+      "compressed": 12022277,
+      "uncompressed": 16188940,
+      "offset": 1231270378
+    },
+    {
+      "name": "Coll Anderson - Metal Plate/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1243292772
+    },
+    {
+      "name": "Coll Anderson - Metal Plate/EFX SD Metal plate Tubular sweep 02 A.wav",
+      "method": 8,
+      "crc": 2561848175,
+      "compressed": 23417605,
+      "uncompressed": 25453884,
+      "offset": 1243292858
+    },
+    {
+      "name": "Coll Anderson - Metal Plate/EFX SD Metal plate iron grind 02 A.wav",
+      "method": 8,
+      "crc": 2621281496,
+      "compressed": 29617881,
+      "uncompressed": 33919100,
+      "offset": 1266710590
+    },
+    {
+      "name": "Coll Anderson - Metal Plate/EFX SD Metal plate bang 01 B.M.wav",
+      "method": 8,
+      "crc": 2422411438,
+      "compressed": 1336119,
+      "uncompressed": 1642556,
+      "offset": 1296328595
+    },
+    {
+      "name": "Coll Anderson - Metal Plate/EFX SD Metal plate jet bys 02 A.wav",
+      "method": 8,
+      "crc": 568016996,
+      "compressed": 25366005,
+      "uncompressed": 28717084,
+      "offset": 1297664834
+    },
+    {
+      "name": "Coll Anderson - Metal Plate/EFX SD Metal plate thunder 01 C.M.wav",
+      "method": 8,
+      "crc": 1101517305,
+      "compressed": 5938628,
+      "uncompressed": 6550780,
+      "offset": 1323030960
+    },
+    {
+      "name": "Coll Anderson - Metal Plate/EFX SD Metal plate duct tape pull 03 C.M.wav",
+      "method": 8,
+      "crc": 267684322,
+      "compressed": 841585,
+      "uncompressed": 1021020,
+      "offset": 1328969711
+    },
+    {
+      "name": "Coll Anderson - Monster Zombie Vocal/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1329811426
+    },
+    {
+      "name": "Coll Anderson - Monster Zombie Vocal/EFX SD Aggressive Zombie 32 C.wav",
+      "method": 8,
+      "crc": 2300724051,
+      "compressed": 1854646,
+      "uncompressed": 3816716,
+      "offset": 1329811521
+    },
+    {
+      "name": "Coll Anderson - Monster Zombie Vocal/EFX SD Female Ragging Creature 03 A.wav",
+      "method": 8,
+      "crc": 733240023,
+      "compressed": 4759320,
+      "uncompressed": 6000844,
+      "offset": 1331666295
+    },
+    {
+      "name": "Coll Anderson - Monster Zombie Vocal/EFX SD Aggressive Zombie 02 C.wav",
+      "method": 8,
+      "crc": 1192180244,
+      "compressed": 2195378,
+      "uncompressed": 4791788,
+      "offset": 1336425749
+    },
+    {
+      "name": "Coll Anderson - Monster Zombie Vocal/EFX SD Rage Monster 13 B.wav",
+      "method": 8,
+      "crc": 1023543412,
+      "compressed": 1893000,
+      "uncompressed": 1986588,
+      "offset": 1338621255
+    },
+    {
+      "name": "Coll Anderson - Monster Zombie Vocal/EFX SD Aggressive Zombie 34 C.wav",
+      "method": 8,
+      "crc": 979421842,
+      "compressed": 5533848,
+      "uncompressed": 11961964,
+      "offset": 1340514378
+    },
+    {
+      "name": "Coll Anderson - Monster Zombie Vocal/EFX SD Monster Voices 11 A.wav",
+      "method": 8,
+      "crc": 4111995296,
+      "compressed": 5478224,
+      "uncompressed": 6901820,
+      "offset": 1346048354
+    },
+    {
+      "name": "Coll Anderson - Pig/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1351526703
+    },
+    {
+      "name": "Coll Anderson - Pig/EFX SD Pig 07 Squeal 20.wav",
+      "method": 8,
+      "crc": 3066034740,
+      "compressed": 4900953,
+      "uncompressed": 5450044,
+      "offset": 1351526781
+    },
+    {
+      "name": "Coll Anderson - Pig/EFX SD Pig 08 Squeal 03.wav",
+      "method": 8,
+      "crc": 750247405,
+      "compressed": 3268484,
+      "uncompressed": 3524284,
+      "offset": 1356427839
+    },
+    {
+      "name": "Coll Anderson - Pig/EFX SD Pig 02 Snort 12.wav",
+      "method": 8,
+      "crc": 1070898758,
+      "compressed": 6993281,
+      "uncompressed": 7630668,
+      "offset": 1359696428
+    },
+    {
+      "name": "Coll Anderson - Pig/EFX SD Pig 02 Snort 18.wav",
+      "method": 8,
+      "crc": 908507531,
+      "compressed": 1019424,
+      "uncompressed": 1146620,
+      "offset": 1366689813
+    },
+    {
+      "name": "Coll Anderson - Pig/EFX SD Pig 07 Squeal 08.wav",
+      "method": 8,
+      "crc": 4099326628,
+      "compressed": 4200925,
+      "uncompressed": 4834604,
+      "offset": 1367709341
+    },
+    {
+      "name": "Coll Anderson - Pig/EFX SD Pig 01 Snort 01.wav",
+      "method": 8,
+      "crc": 1495103240,
+      "compressed": 9047943,
+      "uncompressed": 10119084,
+      "offset": 1371910371
+    },
+    {
+      "name": "Coll Anderson - Slapstick Comedy/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1380958418
+    },
+    {
+      "name": "Coll Anderson - Slapstick Comedy/EFX INT Crash Layer Drumset 04.wav",
+      "method": 8,
+      "crc": 1360738754,
+      "compressed": 7319675,
+      "uncompressed": 10048108,
+      "offset": 1380958509
+    },
+    {
+      "name": "Coll Anderson - Slapstick Comedy/EFX INT Xylophone Tip toe 05.wav",
+      "method": 8,
+      "crc": 3208020964,
+      "compressed": 3619182,
+      "uncompressed": 4898924,
+      "offset": 1388278309
+    },
+    {
+      "name": "Coll Anderson - Slapstick Comedy/EFX INT Clown Horn 01 .wav",
+      "method": 8,
+      "crc": 368448849,
+      "compressed": 7538126,
+      "uncompressed": 10638188,
+      "offset": 1391897614
+    },
+    {
+      "name": "Coll Anderson - Slapstick Comedy/EFX INT Siren Whistle 02.wav",
+      "method": 8,
+      "crc": 817636500,
+      "compressed": 5176489,
+      "uncompressed": 6473628,
+      "offset": 1399435857
+    },
+    {
+      "name": "Coll Anderson - Slapstick Comedy/EFX INT Airborne Rising and Falling 02.wav",
+      "method": 8,
+      "crc": 2491234027,
+      "compressed": 2764495,
+      "uncompressed": 3425900,
+      "offset": 1404612465
+    },
+    {
+      "name": "Coll Anderson - Slapstick Comedy/EFX SD Heads Hit Together 02.wav",
+      "method": 8,
+      "crc": 910476807,
+      "compressed": 563038,
+      "uncompressed": 925084,
+      "offset": 1407377093
+    },
+    {
+      "name": "Coll Anderson - Slapstick Comedy/EFX INT Goofy Spring Bounces 04.wav",
+      "method": 8,
+      "crc": 2122167594,
+      "compressed": 3295867,
+      "uncompressed": 4243788,
+      "offset": 1407940254
+    },
+    {
+      "name": "Coll Anderson - Sliding Whoosh By/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1411236247
+    },
+    {
+      "name": "Coll Anderson - Sliding Whoosh By/EFX SD Sliding Whoosh By 15.wav",
+      "method": 8,
+      "crc": 2046901669,
+      "compressed": 2277334,
+      "uncompressed": 2534396,
+      "offset": 1411236339
+    },
+    {
+      "name": "Coll Anderson - Sliding Whoosh By/EFX SD Sliding Whoosh By 21.wav",
+      "method": 8,
+      "crc": 1705204615,
+      "compressed": 3747200,
+      "uncompressed": 4084700,
+      "offset": 1413513796
+    },
+    {
+      "name": "Coll Anderson - Sliding Whoosh By/EFX SD Sliding Whoosh By 34.wav",
+      "method": 8,
+      "crc": 2316246098,
+      "compressed": 2887969,
+      "uncompressed": 3161900,
+      "offset": 1417261119
+    },
+    {
+      "name": "Coll Anderson - Sliding Whoosh By/EFX SD Sliding Whoosh By 06.wav",
+      "method": 8,
+      "crc": 77341937,
+      "compressed": 1714991,
+      "uncompressed": 1937660,
+      "offset": 1420149211
+    },
+    {
+      "name": "Coll Anderson - Traditional Sirens/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1421864325
+    },
+    {
+      "name": "Coll Anderson - Traditional Sirens/EFX EXT Emergency Siren Distant 18 B.wav",
+      "method": 8,
+      "crc": 3825580984,
+      "compressed": 600670,
+      "uncompressed": 1039116,
+      "offset": 1421864418
+    },
+    {
+      "name": "Coll Anderson - Traditional Sirens/EFX EXT Police Siren 01 Doppler By Slow 01.wav",
+      "method": 8,
+      "crc": 3839161920,
+      "compressed": 19789455,
+      "uncompressed": 23856716,
+      "offset": 1422465221
+    },
+    {
+      "name": "Coll Anderson - Traditional Sirens/EFX EXT Emergency Siren 02 A.wav",
+      "method": 8,
+      "crc": 686994438,
+      "compressed": 1206094,
+      "uncompressed": 1678396,
+      "offset": 1442254815
+    },
+    {
+      "name": "Coll Anderson - Traditional Sirens/EFX EXT Emergency Siren 10 B.wav",
+      "method": 8,
+      "crc": 377219550,
+      "compressed": 1168716,
+      "uncompressed": 2143068,
+      "offset": 1443461034
+    },
+    {
+      "name": "Coll Anderson - Traditional Sirens/EFX INT Emergency Radio Broadcast 07.wav",
+      "method": 8,
+      "crc": 329816208,
+      "compressed": 6215418,
+      "uncompressed": 12699916,
+      "offset": 1444629875
+    },
+    {
+      "name": "Detunized - AroundBridges/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1450845426
+    },
+    {
+      "name": "Detunized - AroundBridges/BeamBarrier_ExpGap01.wav",
+      "method": 8,
+      "crc": 1449126570,
+      "compressed": 14105375,
+      "uncompressed": 14768748,
+      "offset": 1450845510
+    },
+    {
+      "name": "Detunized - AroundBridges/Bridges-Steps01.wav",
+      "method": 8,
+      "crc": 1186863469,
+      "compressed": 17086375,
+      "uncompressed": 17383180,
+      "offset": 1464950993
+    },
+    {
+      "name": "Detunized - AroundBridges/Bridges-Wind08.wav",
+      "method": 8,
+      "crc": 2210223261,
+      "compressed": 10581782,
+      "uncompressed": 11104988,
+      "offset": 1482037471
+    },
+    {
+      "name": "Detunized - CityTraffic/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1492619355
+    },
+    {
+      "name": "Detunized - CityTraffic/Spot_C_03.wav",
+      "method": 8,
+      "crc": 2666650684,
+      "compressed": 26428774,
+      "uncompressed": 28187148,
+      "offset": 1492619437
+    },
+    {
+      "name": "Detunized - CityTraffic/Local_Train_Close_01.wav",
+      "method": 8,
+      "crc": 2756178649,
+      "compressed": 21112560,
+      "uncompressed": 22911580,
+      "offset": 1519048306
+    },
+    {
+      "name": "Detunized - CityTraffic/Reflective_01.wav",
+      "method": 8,
+      "crc": 3167212920,
+      "compressed": 42527493,
+      "uncompressed": 45698876,
+      "offset": 1540160972
+    },
+    {
+      "name": "Detunized - Computer Noises/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1582688564
+    },
+    {
+      "name": "Detunized - Computer Noises/external HD 1_mono.wav",
+      "method": 8,
+      "crc": 4036477166,
+      "compressed": 15349981,
+      "uncompressed": 16292124,
+      "offset": 1582688650
+    },
+    {
+      "name": "Detunized - Computer Noises/Atari PC2 - Floppy Failure 3.wav",
+      "method": 8,
+      "crc": 3747743575,
+      "compressed": 4541437,
+      "uncompressed": 5148588,
+      "offset": 1598038739
+    },
+    {
+      "name": "Detunized - Computer Noises/external HD 4_dual channel.wav",
+      "method": 8,
+      "crc": 2904486249,
+      "compressed": 36409000,
+      "uncompressed": 37788028,
+      "offset": 1602580294
+    },
+    {
+      "name": "Detunized - DanishBunkers/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1638989410
+    },
+    {
+      "name": "Detunized - DanishBunkers/Tyboroen North_inside bunker 01.wav",
+      "method": 8,
+      "crc": 2852054989,
+      "compressed": 80731390,
+      "uncompressed": 87191708,
+      "offset": 1638989494
+    },
+    {
+      "name": "Detunized - DanishBunkers/Batterie1_inside bunker 05.wav",
+      "method": 8,
+      "crc": 4111706584,
+      "compressed": 80182636,
+      "uncompressed": 81713068,
+      "offset": 1719721003
+    },
+    {
+      "name": "Detunized - DanishBunkers/Steijnberg_bunker field 03.wav",
+      "method": 8,
+      "crc": 1176405723,
+      "compressed": 67967486,
+      "uncompressed": 71818028,
+      "offset": 1799903753
+    },
+    {
+      "name": "Detunized - HumBuzz/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1867871353
+    },
+    {
+      "name": "Detunized - HumBuzz/HumBuzz-Tonal-02.wav",
+      "method": 8,
+      "crc": 3420414490,
+      "compressed": 2765082,
+      "uncompressed": 3021596,
+      "offset": 1867871431
+    },
+    {
+      "name": "Detunized - HumBuzz/HumBuzz-Hum-17.wav",
+      "method": 8,
+      "crc": 3839808698,
+      "compressed": 1224454,
+      "uncompressed": 1282268,
+      "offset": 1870636611
+    },
+    {
+      "name": "Detunized - HumBuzz/HumBuzz-Buzz-03.wav",
+      "method": 8,
+      "crc": 1102731533,
+      "compressed": 2172712,
+      "uncompressed": 2599004,
+      "offset": 1871861161
+    },
+    {
+      "name": "Detunized - JustWater/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1874033970
+    },
+    {
+      "name": "Detunized - JustWater/Reddevitzer_Hoeft_03.wav",
+      "method": 8,
+      "crc": 777627247,
+      "compressed": 12712877,
+      "uncompressed": 13985484,
+      "offset": 1874034050
+    },
+    {
+      "name": "Detunized - JustWater/Helfenberger_Grund_02.wav",
+      "method": 8,
+      "crc": 2197488347,
+      "compressed": 7859700,
+      "uncompressed": 8334556,
+      "offset": 1886747031
+    },
+    {
+      "name": "Detunized - JustWater/Roeder_Pearls_01.wav",
+      "method": 8,
+      "crc": 1647487231,
+      "compressed": 5067146,
+      "uncompressed": 5347292,
+      "offset": 1894606836
+    },
+    {
+      "name": "Detunized - Newsreel Noises/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1899674082
+    },
+    {
+      "name": "Detunized - Newsreel Noises/Cadenced_buzz-hum.wav",
+      "method": 8,
+      "crc": 690339963,
+      "compressed": 1312436,
+      "uncompressed": 1399660,
+      "offset": 1899674168
+    },
+    {
+      "name": "Detunized - Newsreel Noises/Crackle_steady.wav",
+      "method": 8,
+      "crc": 3113106420,
+      "compressed": 2957409,
+      "uncompressed": 3275308,
+      "offset": 1900986711
+    },
+    {
+      "name": "Detunized - Newsreel Noises/Impulse_buzz tone.wav",
+      "method": 8,
+      "crc": 525411706,
+      "compressed": 3126856,
+      "uncompressed": 3281532,
+      "offset": 1903944224
+    },
+    {
+      "name": "Detunized - PassingTrains/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 1907071187
+    },
+    {
+      "name": "Detunized - PassingTrains/express_train_02_medium_squeaking_long_tails.wav",
+      "method": 8,
+      "crc": 4167343395,
+      "compressed": 89800618,
+      "uncompressed": 102306028,
+      "offset": 1907071271
+    },
+    {
+      "name": "Detunized - PassingTrains/freight_train_close_01_mics_on_rails.wav",
+      "method": 8,
+      "crc": 391245949,
+      "compressed": 221758,
+      "uncompressed": 346108,
+      "offset": 1996872021
+    },
+    {
+      "name": "Detunized - PassingTrains/contact_mics_on_rails_01.wav",
+      "method": 8,
+      "crc": 1024904306,
+      "compressed": 12186147,
+      "uncompressed": 14455036,
+      "offset": 1997093903
+    },
+    {
+      "name": "Detunized - WindTurbines/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 2009280162
+    },
+    {
+      "name": "Detunized - WindTurbines/Detunized_WindTurbines_Ventilation_07.wav",
+      "method": 8,
+      "crc": 3356672213,
+      "compressed": 31933876,
+      "uncompressed": 32474988,
+      "offset": 2009280245
+    },
+    {
+      "name": "Detunized - WindTurbines/Detunized_WindTurbines_Blade_11.wav",
+      "method": 8,
+      "crc": 1654469130,
+      "compressed": 22163056,
+      "uncompressed": 22588284,
+      "offset": 2041214245
+    },
+    {
+      "name": "Detunized - WindTurbines/Detunized_WindTurbines_LatticeTower_03.wav",
+      "method": 8,
+      "crc": 1552218125,
+      "compressed": 22596875,
+      "uncompressed": 23071372,
+      "offset": 2063377419
+    },
+    {
+      "name": "Eiravaein Works - Crepitus/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 2085974419
+    },
+    {
+      "name": "Eiravaein Works - Crepitus/Crepitus,knuckles,hand,multiple,dense,deep.M.wav",
+      "method": 8,
+      "crc": 917135519,
+      "compressed": 135463,
+      "uncompressed": 197804,
+      "offset": 2085974504
+    },
+    {
+      "name": "Eiravaein Works - Crepitus/Crepitus,flex,pop,snap,crack,multiple,hands,lighttodeep,gritty,MS.wav",
+      "method": 8,
+      "crc": 3899758526,
+      "compressed": 309284,
+      "uncompressed": 701212,
+      "offset": 2086110100
+    },
+    {
+      "name": "Eiravaein Works - Crepitus/Crepitus,fingers,flex,pop,snap,crack,singles,variety.M.wav",
+      "method": 8,
+      "crc": 1367170486,
+      "compressed": 291637,
+      "uncompressed": 524604,
+      "offset": 2086419538
+    },
+    {
+      "name": "Eiravaein Works - Epona/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 2086711318
+    },
+    {
+      "name": "Eiravaein Works - Epona/Epona,vocalizations,medium,nasal,whiny,playful,wavering,elongated.M.wav",
+      "method": 8,
+      "crc": 578684622,
+      "compressed": 1379868,
+      "uncompressed": 1576960,
+      "offset": 2086711400
+    },
+    {
+      "name": "Eiravaein Works - Epona/Epona,barks,taper,vocalization,inhale,agitated.M.wav",
+      "method": 8,
+      "crc": 925932042,
+      "compressed": 613289,
+      "uncompressed": 760160,
+      "offset": 2088091421
+    },
+    {
+      "name": "Eiravaein Works - Epona/Epona,bark,vocalization,light,close,complaining,choppy,elongated,teeth clicks.M.wav",
+      "method": 8,
+      "crc": 3480919737,
+      "compressed": 2123247,
+      "uncompressed": 2492112,
+      "offset": 2088704844
+    },
+    {
+      "name": "Eiravaein Works - Epona/Epona,bark,light,vocalization,light,wavering.M.wav",
+      "method": 8,
+      "crc": 447908802,
+      "compressed": 404027,
+      "uncompressed": 492416,
+      "offset": 2090828256
+    },
+    {
+      "name": "Eiravaein Works - Epona/Epona,growling,gutteral,turning toward,exhale.M.wav",
+      "method": 8,
+      "crc": 898310929,
+      "compressed": 646056,
+      "uncompressed": 729328,
+      "offset": 2091232415
+    },
+    {
+      "name": "Eiravaein Works - Ilmarinen/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 2091878604
+    },
+    {
+      "name": "Eiravaein Works - Ilmarinen/Ilmarinen,blacksmith,forge,hotiron,water,squelch,sizzle,rough,popping.M.wav",
+      "method": 8,
+      "crc": 4013799854,
+      "compressed": 566738,
+      "uncompressed": 677436,
+      "offset": 2091878690
+    },
+    {
+      "name": "Eiravaein Works - Ilmarinen/Ilmarinen,blacksmith,forge,handgrinder,blade,gritty,scrape,slow,shudder,buzz,wide.wav",
+      "method": 8,
+      "crc": 3273904530,
+      "compressed": 679828,
+      "uncompressed": 834044,
+      "offset": 2092445589
+    },
+    {
+      "name": "Eiravaein Works - Ilmarinen/Ilmarinen,blacksmith,forge,lighthammer,anvil,hotiron,rattle,taphammer,belts,gears,ambiance.wav",
+      "method": 8,
+      "crc": 4222718551,
+      "compressed": 5255333,
+      "uncompressed": 6263260,
+      "offset": 2093125588
+    },
+    {
+      "name": "Eiravaein Works - Ilmarinen/Ilmarinen,blacksmith,forge,hammer,anvil,strike,loose,ringing,splash,iron,thin.M.wav",
+      "method": 8,
+      "crc": 786071257,
+      "compressed": 117803,
+      "uncompressed": 137164,
+      "offset": 2098381101
+    },
+    {
+      "name": "Eiravaein Works - Start Select/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 2098499073
+    },
+    {
+      "name": "Eiravaein Works - Start Select/StartSelect,UI,set3,pure,warm,simple,quick,tonal,deaction.wav",
+      "method": 8,
+      "crc": 3101216496,
+      "compressed": 1060082,
+      "uncompressed": 1768460,
+      "offset": 2098499162
+    },
+    {
+      "name": "Eiravaein Works - Start Select/StartSelect,UI,set57,camera mechanics,servo,clicks clacks,meaty,operative,forward.wav",
+      "method": 8,
+      "crc": 228123849,
+      "compressed": 307375,
+      "uncompressed": 446540,
+      "offset": 2099559394
+    },
+    {
+      "name": "Eiravaein Works - Start Select/StartSelect,UI,set17,schick,mechanical,percussive,ding,shudder,holdrelease.wav",
+      "method": 8,
+      "crc": 470217460,
+      "compressed": 607571,
+      "uncompressed": 876956,
+      "offset": 2099866943
+    },
+    {
+      "name": "Eiravaein Works - Start Select/StartSelect,UI,set100,lady,vocalizations,crunchy,multipitched,multitimbral,back.wav",
+      "method": 8,
+      "crc": 4284167898,
+      "compressed": 364007,
+      "uncompressed": 591036,
+      "offset": 2100474681
+    },
+    {
+      "name": "Eiravaein Works - Start Select/StartSelect,UI,set34,mechanical,subtle,percussive,thick,bright,holdrelease.wav",
+      "method": 8,
+      "crc": 940565121,
+      "compressed": 228946,
+      "uncompressed": 283276,
+      "offset": 2100838860
+    },
+    {
+      "name": "Eiravaein Works - Start Select/StartSelect,UI,set16,frequency shaping,zippy,robotic,evolving,dense,deaction.wav",
+      "method": 8,
+      "crc": 1081788250,
+      "compressed": 326628,
+      "uncompressed": 409468,
+      "offset": 2101067973
+    },
+    {
+      "name": "Eiravaein Works - Start Select/StartSelect,UI,set1,strings,ethnic,tonal,plucked,aura,hold_release.wav",
+      "method": 8,
+      "crc": 2084186530,
+      "compressed": 1022438,
+      "uncompressed": 1236588,
+      "offset": 2101394770
+    },
+    {
+      "name": "Eiravaein Works - Start Select/StartSelect,UI,set93,talking tones,bright percussion,playful,toonish,light ambience,select.wav",
+      "method": 8,
+      "crc": 1119872451,
+      "compressed": 806136,
+      "uncompressed": 1071260,
+      "offset": 2102417367
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan I/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 2103223686
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan I/IceBlocks,impact,cracked,tinypieces,scatter,slide,concrete,chunky,ambiance.M.wav",
+      "method": 8,
+      "crc": 308892689,
+      "compressed": 303053,
+      "uncompressed": 406876,
+      "offset": 2103223771
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan I/HandRippingApple,softattack,twist,clean,alternate.M.wav",
+      "method": 8,
+      "crc": 3650831847,
+      "compressed": 231849,
+      "uncompressed": 336780,
+      "offset": 2103526989
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan I/UltrathinCellophane,crumble,quick,fullspectrum,crunchy,delicate,crispy,collapse,light.M.wav",
+      "method": 8,
+      "crc": 1907252132,
+      "compressed": 275480,
+      "uncompressed": 333420,
+      "offset": 2103758978
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan I/Cup Wobbling,glass,abrupt attack,wide wobble,long release,extra hit.M.wav",
+      "method": 8,
+      "crc": 3675995045,
+      "compressed": 393495,
+      "uncompressed": 499356,
+      "offset": 2104034634
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan I/RamuneBottle,open,marble,punch,decompress,ping,glass.wav",
+      "method": 8,
+      "crc": 1577691147,
+      "compressed": 175871,
+      "uncompressed": 224236,
+      "offset": 2104428287
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan I/UltrathinCellophane,crumble,long,fullspectrum,crunchy,delicate,crispy,crushing,fluctuating,layer2.M.wav",
+      "method": 8,
+      "crc": 475666497,
+      "compressed": 2345814,
+      "uncompressed": 2603788,
+      "offset": 2104604299
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan I/AeroratedIcedTea,fast rise,gritty,release.M.wav",
+      "method": 8,
+      "crc": 1284423945,
+      "compressed": 299503,
+      "uncompressed": 376444,
+      "offset": 2106950301
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan II/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 2107249936
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan II/Liquids,gingerbeer,pour,plop,gurgling,fizzy,effervescent,close.M.wav",
+      "method": 8,
+      "crc": 1866055353,
+      "compressed": 4321617,
+      "uncompressed": 5018684,
+      "offset": 2107250022
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan II/AeroratedIce,crackle,three,pulses,gurgling,dynamic,harsh,medium.M.wav",
+      "method": 8,
+      "crc": 224501394,
+      "compressed": 1468707,
+      "uncompressed": 1986236,
+      "offset": 2111571793
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan II/Crowd,ambience,bar perspective,Danish,English,accents,drinking,joyful,casual,party started,groups,laughter,small room,stone,plaster,glass.wav",
+      "method": 8,
+      "crc": 252289341,
+      "compressed": 129284025,
+      "uncompressed": 137336428,
+      "offset": 2113040655
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan II/Switchblades,OTF,quality,close,unsheath,mechanical,tight,spring,ringing.M.wav",
+      "method": 8,
+      "crc": 1128672371,
+      "compressed": 327501,
+      "uncompressed": 589932,
+      "offset": 2242324907
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan II/Apparel,bracelet,silver,ceramic,glass,leather,adjusting,clamorous,alternate.M.wav",
+      "method": 8,
+      "crc": 522986017,
+      "compressed": 351947,
+      "uncompressed": 434524,
+      "offset": 2242652571
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan II/BuckwheatHulls,grains,course,sack,pounded,meaty.M.wav",
+      "method": 8,
+      "crc": 1453482072,
+      "compressed": 1220182,
+      "uncompressed": 1411532,
+      "offset": 2243004685
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan II/FencingFoil,swoosh,roomambience,lively,quick,aggressive.M.wav",
+      "method": 8,
+      "crc": 544732586,
+      "compressed": 175174,
+      "uncompressed": 242924,
+      "offset": 2244225006
+    },
+    {
+      "name": "Eiravaein Works - Vaeyan II/Apparel,bracelet,silver,ceramic,glass,leather,shake,single,bright,alternate.M.wav",
+      "method": 8,
+      "crc": 2894278341,
+      "compressed": 120060,
+      "uncompressed": 160396,
+      "offset": 2244400327
+    },
+    {
+      "name": "Giorgio Riolo - SILENTSCAPES/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 2244520554
+    },
+    {
+      "name": "Giorgio Riolo - SILENTSCAPES/SFXW001_outdoor_early morning cityscape with air conditioning system.wav",
+      "method": 8,
+      "crc": 3252252844,
+      "compressed": 60746074,
+      "uncompressed": 70355420,
+      "offset": 2244520641
+    },
+    {
+      "name": "Giorgio Riolo - SILENTSCAPES/SFXW001_indoor_roomtone_entrance hall.wav",
+      "method": 8,
+      "crc": 1688417740,
+      "compressed": 20018149,
+      "uncompressed": 24070252,
+      "offset": 2305266874
+    },
+    {
+      "name": "Giorgio Riolo - SILENTSCAPES/SFXW001_indoor_basement neutral sound.wav",
+      "method": 8,
+      "crc": 3212941172,
+      "compressed": 93073802,
+      "uncompressed": 103806300,
+      "offset": 2325285151
+    },
+    {
+      "name": "Giorgio Riolo - SILENTSCAPES/SFXW001_outdoor_gas station_car park.wav",
+      "method": 8,
+      "crc": 3405573879,
+      "compressed": 27993485,
+      "uncompressed": 33658108,
+      "offset": 2418359081
+    },
+    {
+      "name": "Giorgio Riolo - SILENTSCAPES/SFXW001_indoor_server room.wav",
+      "method": 8,
+      "crc": 2191760876,
+      "compressed": 59531394,
+      "uncompressed": 69201100,
+      "offset": 2446352693
+    },
+    {
+      "name": "Giorgio Riolo - SILENTSCAPES/SFXW001_indoor_train_trip_passenger coach.wav",
+      "method": 8,
+      "crc": 3589378808,
+      "compressed": 35875274,
+      "uncompressed": 41228252,
+      "offset": 2505884204
+    },
+    {
+      "name": "Giorgio Riolo - SILENTSCAPES/SFXW001_outdoor_city park at night with distan traffic.wav",
+      "method": 8,
+      "crc": 3744721408,
+      "compressed": 63835532,
+      "uncompressed": 72326876,
+      "offset": 2541759610
+    },
+    {
+      "name": "Giorgio Riolo - SILENTSCAPES/SFXW001_outdoor_urban courtyard neutral ambience.wav",
+      "method": 8,
+      "crc": 4290099473,
+      "compressed": 52059826,
+      "uncompressed": 58386316,
+      "offset": 2605595287
+    },
+    {
+      "name": "Julian Ray - Background Machinery/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 2657655252
+    },
+    {
+      "name": "Julian Ray - Background Machinery/BM Light Machinery 09.wav",
+      "method": 8,
+      "crc": 2886180664,
+      "compressed": 9202737,
+      "uncompressed": 9760924,
+      "offset": 2657655344
+    },
+    {
+      "name": "Julian Ray - Background Machinery/BM Futuristic Machinery 14.wav",
+      "method": 8,
+      "crc": 298734269,
+      "compressed": 4210198,
+      "uncompressed": 4282732,
+      "offset": 2666858198
+    },
+    {
+      "name": "Julian Ray - Background Machinery/BM Ambient Machinery 08.wav",
+      "method": 8,
+      "crc": 1741732419,
+      "compressed": 7366895,
+      "uncompressed": 7463212,
+      "offset": 2671068518
+    },
+    {
+      "name": "Julian Ray - Background Machinery/BM Heavy Machinery 25.wav",
+      "method": 8,
+      "crc": 7715852,
+      "compressed": 4367865,
+      "uncompressed": 4544028,
+      "offset": 2678435532
+    },
+    {
+      "name": "Julian Ray - Background Machinery/BM Ambient Machinery 21.wav",
+      "method": 8,
+      "crc": 1237698919,
+      "compressed": 5343984,
+      "uncompressed": 5503804,
+      "offset": 2682803514
+    },
+    {
+      "name": "Julian Ray - Background Machinery/BM Heavy Machinery 18.wav",
+      "method": 8,
+      "crc": 185335071,
+      "compressed": 9238867,
+      "uncompressed": 9579436,
+      "offset": 2688147617
+    },
+    {
+      "name": "Julian Ray - Background Machinery/BM Light Machinery 14.wav",
+      "method": 8,
+      "crc": 209566814,
+      "compressed": 13332713,
+      "uncompressed": 13842780,
+      "offset": 2697386601
+    },
+    {
+      "name": "Julian Ray - Background Machinery/BM Futuristic Machinery 09.wav",
+      "method": 8,
+      "crc": 2639908658,
+      "compressed": 2446060,
+      "uncompressed": 2514028,
+      "offset": 2710719431
+    },
+    {
+      "name": "Julian Ray - Space - The Finest FX_Sounds of Space/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 2713165613
+    },
+    {
+      "name": "Julian Ray - Space - The Finest FX_Sounds of Space/SOS 073.wav",
+      "method": 8,
+      "crc": 2400343992,
+      "compressed": 48650076,
+      "uncompressed": 49171660,
+      "offset": 2713165722
+    },
+    {
+      "name": "Julian Ray - Space - The Finest FX_Sounds of Space/SOS 090.wav",
+      "method": 8,
+      "crc": 1402602123,
+      "compressed": 6978310,
+      "uncompressed": 7882508,
+      "offset": 2761815918
+    },
+    {
+      "name": "Julian Ray - Space - The Finest FX_Sounds of Space/SOS 033.wav",
+      "method": 8,
+      "crc": 478147509,
+      "compressed": 47693855,
+      "uncompressed": 48079676,
+      "offset": 2768794348
+    },
+    {
+      "name": "Julian Ray - Space - The Finest FX_Sounds of Space/SOS 002.wav",
+      "method": 8,
+      "crc": 741193360,
+      "compressed": 35353523,
+      "uncompressed": 35680316,
+      "offset": 2816488323
+    },
+    {
+      "name": "Julian Ray - Space - The Finest FX_Sounds of Space/SOS 079.wav",
+      "method": 8,
+      "crc": 1214322212,
+      "compressed": 47680124,
+      "uncompressed": 48608748,
+      "offset": 2851841966
+    },
+    {
+      "name": "Julian Ray - Space - The Finest FX_Sounds of Space/SOS 053.wav",
+      "method": 8,
+      "crc": 538809188,
+      "compressed": 53078138,
+      "uncompressed": 53776428,
+      "offset": 2899522210
+    },
+    {
+      "name": "Julian Ray - Space - The Finest FX_Sounds of Space/SOS 085.wav",
+      "method": 8,
+      "crc": 3840018594,
+      "compressed": 13795739,
+      "uncompressed": 14732764,
+      "offset": 2952600468
+    },
+    {
+      "name": "Julian Ray - Space - The Finest FX_Sounds of Space/SOS 020.wav",
+      "method": 8,
+      "crc": 1323868942,
+      "compressed": 32979805,
+      "uncompressed": 33044188,
+      "offset": 2966396327
+    },
+    {
+      "name": "Kpow Sounds - Industrial Disquiet Soundpack/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 2999376252
+    },
+    {
+      "name": "Kpow Sounds - Industrial Disquiet Soundpack/10 INDUSTRY NIGHT - Light Buzz - Constant Electrical Flutter - Distant Traffic Wash - Open sound.wav",
+      "method": 8,
+      "crc": 533356759,
+      "compressed": 134285260,
+      "uncompressed": 151773156,
+      "offset": 2999376354
+    },
+    {
+      "name": "Kpow Sounds - Industrial Disquiet Soundpack/16 INDUSTRY NIGHT - Fans Whine Buzz - Interior Clanking.wav",
+      "method": 8,
+      "crc": 171916924,
+      "compressed": 129147158,
+      "uncompressed": 141277188,
+      "offset": 3133661816
+    },
+    {
+      "name": "Kpow Sounds - Industrial Disquiet Soundpack/20 INDUSTRY DAY - From Exterior Internal Mechanical Stamping - Hell's Industrial Machine.wav",
+      "method": 8,
+      "crc": 3907528586,
+      "compressed": 94937631,
+      "uncompressed": 103664148,
+      "offset": 3262809135
+    },
+    {
+      "name": "Kpow Sounds - Industrial Disquiet Soundpack/01 INDUSTRIAL DAY Loud hum Birds Forklift Horn and Drive bys.wav",
+      "method": 8,
+      "crc": 2248766646,
+      "compressed": 134341002,
+      "uncompressed": 143830532,
+      "offset": 3357746960
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3492088128
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/ui_SoundPack04 - Back Version4.wav",
+      "method": 8,
+      "crc": 379684875,
+      "compressed": 473816,
+      "uncompressed": 1168780,
+      "offset": 3492088214
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/UI_SoundPack13_Select_version10.wav",
+      "method": 8,
+      "crc": 3687341181,
+      "compressed": 5928260,
+      "uncompressed": 13279964,
+      "offset": 3492562150
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/ui_SoundPack04 - Scroll Version04.wav",
+      "method": 8,
+      "crc": 1180504024,
+      "compressed": 946883,
+      "uncompressed": 2322524,
+      "offset": 3498490531
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/UI_SoundPack11_Error_v3.wav",
+      "method": 8,
+      "crc": 243139298,
+      "compressed": 507067,
+      "uncompressed": 2033340,
+      "offset": 3499437537
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/UI_SoundPack13_Back_version01.wav",
+      "method": 8,
+      "crc": 1299681751,
+      "compressed": 1528730,
+      "uncompressed": 2898028,
+      "offset": 3499944717
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/UI_SoundPack8_Error_v1.wav",
+      "method": 8,
+      "crc": 4091704193,
+      "compressed": 892620,
+      "uncompressed": 2608700,
+      "offset": 3501473566
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/UI_SoundPack13_Scroll_version05.wav",
+      "method": 8,
+      "crc": 4062908333,
+      "compressed": 5938378,
+      "uncompressed": 12414924,
+      "offset": 3502366298
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/UI_SoundPack8_Back_v3.wav",
+      "method": 8,
+      "crc": 1498515566,
+      "compressed": 1393313,
+      "uncompressed": 4629484,
+      "offset": 3508304797
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/ui_SoundPack04 - Select Version03.wav",
+      "method": 8,
+      "crc": 3014394460,
+      "compressed": 1221442,
+      "uncompressed": 2608716,
+      "offset": 3509698221
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/UI_SoundPack8_Scroll_v2.wav",
+      "method": 8,
+      "crc": 1395383317,
+      "compressed": 1316964,
+      "uncompressed": 4051388,
+      "offset": 3510919786
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/ui_SoundPack04 - Error V14.wav",
+      "method": 8,
+      "crc": 2017297287,
+      "compressed": 1707059,
+      "uncompressed": 3186716,
+      "offset": 3512236863
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/UI_SoundPack8_Select_v2.wav",
+      "method": 8,
+      "crc": 144483418,
+      "compressed": 1068738,
+      "uncompressed": 3187148,
+      "offset": 3513944038
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/UI_SoundPack13_Error_version01.wav",
+      "method": 8,
+      "crc": 107282019,
+      "compressed": 801789,
+      "uncompressed": 2033404,
+      "offset": 3515012889
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/UI_SoundPack11_Back_v1.wav",
+      "method": 8,
+      "crc": 309718606,
+      "compressed": 1211060,
+      "uncompressed": 3761884,
+      "offset": 3515814798
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/UI_SoundPack11_Scroll_v09.wav",
+      "method": 8,
+      "crc": 1064284882,
+      "compressed": 1959354,
+      "uncompressed": 6936524,
+      "offset": 3517025970
+    },
+    {
+      "name": "Kpow Sounds - UI SOUNDPACKS/UI_SoundPack11_Select_v14.wav",
+      "method": 8,
+      "crc": 1162946850,
+      "compressed": 386456,
+      "uncompressed": 3187020,
+      "offset": 3518985439
+    },
+    {
+      "name": "Mattia Cellotto - Crunch Mode/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3519372010
+    },
+    {
+      "name": "Mattia Cellotto - Crunch Mode/Egg,Break,Creature,Crunch,Crack,Various02.wav",
+      "method": 8,
+      "crc": 1034991662,
+      "compressed": 1239741,
+      "uncompressed": 1444012,
+      "offset": 3519372098
+    },
+    {
+      "name": "Mattia Cellotto - Crunch Mode/Celery,Bite,Crunch,Slow,Bone,Break,Stick,Creak,Various07.wav",
+      "method": 8,
+      "crc": 297184026,
+      "compressed": 442537,
+      "uncompressed": 552284,
+      "offset": 3520611972
+    },
+    {
+      "name": "Mattia Cellotto - Crunch Mode/Bread,Curst,Bite,Mouth,Close,Chew,Crunch,Various21.wav",
+      "method": 8,
+      "crc": 4182659116,
+      "compressed": 706706,
+      "uncompressed": 841308,
+      "offset": 3521054657
+    },
+    {
+      "name": "Mattia Cellotto - Crunch Mode/Bell,Pepper,Crunch,Crack,Break02.wav",
+      "method": 8,
+      "crc": 497923750,
+      "compressed": 704891,
+      "uncompressed": 837852,
+      "offset": 3521761505
+    },
+    {
+      "name": "Mattia Cellotto - Crunch Mode/Green,Onions,Frozen,Crunch01.wav",
+      "method": 8,
+      "crc": 3884707005,
+      "compressed": 643075,
+      "uncompressed": 751948,
+      "offset": 3522466520
+    },
+    {
+      "name": "Mattia Cellotto - Crunch Mode/Leeks,Break,Bone,Crack,Body,Arm13.wav",
+      "method": 8,
+      "crc": 3839432870,
+      "compressed": 624883,
+      "uncompressed": 822492,
+      "offset": 3523109715
+    },
+    {
+      "name": "Mattia Cellotto - Crunch Mode/Ice,Impact,Throw,Snowball,Step,Snow,Stalactite,Various12.M.wav",
+      "method": 8,
+      "crc": 1682400442,
+      "compressed": 150046,
+      "uncompressed": 191100,
+      "offset": 3523734723
+    },
+    {
+      "name": "Mattia Cellotto - Crunch Mode/Ice,Creak,Sheet,Crunch,Step,Snow,Various10.wav",
+      "method": 8,
+      "crc": 16372484,
+      "compressed": 610718,
+      "uncompressed": 751948,
+      "offset": 3523884919
+    },
+    {
+      "name": "Mattia Cellotto - Crunch Mode/Bread,Pizza,Curst,Crunch,Focaccia,Baked,Burnt,Various02.wav",
+      "method": 8,
+      "crc": 2816644022,
+      "compressed": 503406,
+      "uncompressed": 690700,
+      "offset": 3524495771
+    },
+    {
+      "name": "Mattia Cellotto - Crunch Mode/Frozen,Celery,Crunch,Break,Ice,Sheet,Various01.wav",
+      "method": 8,
+      "crc": 1637929290,
+      "compressed": 1159388,
+      "uncompressed": 1422588,
+      "offset": 3524999324
+    },
+    {
+      "name": "Mattia Cellotto - The Borax Experiment/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3526158850
+    },
+    {
+      "name": "Mattia Cellotto - The Borax Experiment/Borax,Impact,Slime,Gore,Various22.wav",
+      "method": 8,
+      "crc": 2534024555,
+      "compressed": 987624,
+      "uncompressed": 1142812,
+      "offset": 3526158947
+    },
+    {
+      "name": "Mattia Cellotto - The Borax Experiment/Gore,Slime,Creature,Meat,Blood,Short,Movement,Various13.wav",
+      "method": 8,
+      "crc": 3698260565,
+      "compressed": 564779,
+      "uncompressed": 693884,
+      "offset": 3527146705
+    },
+    {
+      "name": "Mattia Cellotto - The Borax Experiment/Borax,Impact,Slime,Gore,Various16.wav",
+      "method": 8,
+      "crc": 3239964247,
+      "compressed": 486828,
+      "uncompressed": 607596,
+      "offset": 3527711640
+    },
+    {
+      "name": "Mattia Cellotto - The Borax Experiment/Borax,Impact,Slime,Gore,Various63.wav",
+      "method": 8,
+      "crc": 3312641154,
+      "compressed": 991866,
+      "uncompressed": 1185884,
+      "offset": 3528198602
+    },
+    {
+      "name": "Mattia Cellotto - The Borax Experiment/Gore,Slime,Creature,Meat,Blood,Short,Movement,Various45.wav",
+      "method": 8,
+      "crc": 3580377080,
+      "compressed": 484805,
+      "uncompressed": 721564,
+      "offset": 3529190602
+    },
+    {
+      "name": "Mattia Cellotto - The Borax Experiment/Gore,Slime,Creature,Meat,Blood,Medium,Movement,Various09.wav",
+      "method": 8,
+      "crc": 1880447091,
+      "compressed": 805006,
+      "uncompressed": 1093772,
+      "offset": 3529675563
+    },
+    {
+      "name": "Mattia Cellotto - The Borax Experiment/Gore,Slime,Creature,Meat,Blood,Long,Movement,Various19.wav",
+      "method": 8,
+      "crc": 153836627,
+      "compressed": 1420261,
+      "uncompressed": 1702780,
+      "offset": 3530480726
+    },
+    {
+      "name": "Mattia Cellotto - The Borax Experiment/Borax,Impact,Slime,Gore,Various05.wav",
+      "method": 8,
+      "crc": 3709553576,
+      "compressed": 381139,
+      "uncompressed": 450700,
+      "offset": 3531901142
+    },
+    {
+      "name": "Mattia Cellotto - The Borax Experiment/Gore,Slime,Creature,Meat,Blood,Short,Movement,Various56.wav",
+      "method": 8,
+      "crc": 3629378495,
+      "compressed": 578764,
+      "uncompressed": 721564,
+      "offset": 3532282415
+    },
+    {
+      "name": "Mattia Cellotto - The Borax Experiment/Jelly,Movement,Gore,Liquid,Splat,Impact,Slime,Various09.wav",
+      "method": 8,
+      "crc": 3746777357,
+      "compressed": 287534,
+      "uncompressed": 364732,
+      "offset": 3532861335
+    },
+    {
+      "name": "Mechanical Wave - Ambience and Weather/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3533149025
+    },
+    {
+      "name": "Mechanical Wave - Ambience and Weather/Rain Thunder So Far_MB 06.wav",
+      "method": 8,
+      "crc": 3718784755,
+      "compressed": 44727042,
+      "uncompressed": 49347292,
+      "offset": 3533149122
+    },
+    {
+      "name": "Mechanical Wave - Ambience and Weather/City Day Far Highway Rumble_MB 02.wav",
+      "method": 8,
+      "crc": 2680123341,
+      "compressed": 40869000,
+      "uncompressed": 41952812,
+      "offset": 3577876290
+    },
+    {
+      "name": "Mechanical Wave - Ambience and Weather/Country Night Front_MB 01.wav",
+      "method": 8,
+      "crc": 188118963,
+      "compressed": 39376249,
+      "uncompressed": 41214316,
+      "offset": 3618745424
+    },
+    {
+      "name": "Mechanical Wave - Ambience and Weather/Heavy Wind Thunder Rain_MB 01.wav",
+      "method": 8,
+      "crc": 582721187,
+      "compressed": 91064057,
+      "uncompressed": 99015660,
+      "offset": 3658121799
+    },
+    {
+      "name": "Mechanical Wave - Ambience and Weather/Turtledove at Train Station_MB 01.wav",
+      "method": 8,
+      "crc": 3909106655,
+      "compressed": 19654623,
+      "uncompressed": 20586812,
+      "offset": 3749185986
+    },
+    {
+      "name": "Mechanical Wave - Foley Session 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3768840743
+    },
+    {
+      "name": "Mechanical Wave - Foley Session 01/Zipper Case_VS 02.wav",
+      "method": 8,
+      "crc": 3805460644,
+      "compressed": 2044984,
+      "uncompressed": 2305564,
+      "offset": 3768840836
+    },
+    {
+      "name": "Mechanical Wave - Foley Session 01/Audiotape Manipulation_VS 01.wav",
+      "method": 8,
+      "crc": 1850925210,
+      "compressed": 1657711,
+      "uncompressed": 1875276,
+      "offset": 3770885934
+    },
+    {
+      "name": "Mechanical Wave - Foley Session 01/Aluminum Can Drop On Floor_VS 02.wav",
+      "method": 8,
+      "crc": 3225494324,
+      "compressed": 3059976,
+      "uncompressed": 4151692,
+      "offset": 3772543770
+    },
+    {
+      "name": "Mechanical Wave - Foley Session 01/Chain Metal Drop On Floor_VS 02.wav",
+      "method": 8,
+      "crc": 3562258488,
+      "compressed": 403100,
+      "uncompressed": 516236,
+      "offset": 3775603875
+    },
+    {
+      "name": "Mechanical Wave - Foley Session 01/Metal Case Detuned Boing Spring_VS 06.wav",
+      "method": 8,
+      "crc": 2218968926,
+      "compressed": 1463669,
+      "uncompressed": 1792908,
+      "offset": 3776007103
+    },
+    {
+      "name": "Mechanical Wave - Hits Whoosh/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3777470906
+    },
+    {
+      "name": "Mechanical Wave - Hits Whoosh/Action Swish_HW 02.wav",
+      "method": 8,
+      "crc": 1203586015,
+      "compressed": 1441129,
+      "uncompressed": 2576428,
+      "offset": 3777470994
+    },
+    {
+      "name": "Mechanical Wave - Hits Whoosh/Fast Action Swish_HW 05.wav",
+      "method": 8,
+      "crc": 2770120616,
+      "compressed": 1001346,
+      "uncompressed": 1336796,
+      "offset": 3778912233
+    },
+    {
+      "name": "Mechanical Wave - Hits Whoosh/Action Swirl Whoosh_HW 04.wav",
+      "method": 8,
+      "crc": 1934888607,
+      "compressed": 551365,
+      "uncompressed": 654044,
+      "offset": 3779913694
+    },
+    {
+      "name": "Mechanical Wave - Hits Whoosh/Heavy Sci-Fi Hit_HW 09.wav",
+      "method": 8,
+      "crc": 2096888468,
+      "compressed": 4508483,
+      "uncompressed": 6218204,
+      "offset": 3780465176
+    },
+    {
+      "name": "Mechanical Wave - Hits Whoosh/Swirl Whoosh_HW 42.wav",
+      "method": 8,
+      "crc": 2796017473,
+      "compressed": 5915240,
+      "uncompressed": 6929052,
+      "offset": 3784973773
+    },
+    {
+      "name": "Mechanical Wave - Rock Brick and Dirt/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3790889123
+    },
+    {
+      "name": "Mechanical Wave - Rock Brick and Dirt/Smash Rock On Debris_RBD 04.wav",
+      "method": 8,
+      "crc": 1419315940,
+      "compressed": 1188068,
+      "uncompressed": 1591964,
+      "offset": 3790889219
+    },
+    {
+      "name": "Mechanical Wave - Rock Brick and Dirt/Hit Rock Debris_RBD 02.wav",
+      "method": 8,
+      "crc": 675058260,
+      "compressed": 684962,
+      "uncompressed": 1124348,
+      "offset": 3792077414
+    },
+    {
+      "name": "Mechanical Wave - Rock Brick and Dirt/Scree Rock_RBD 06.wav",
+      "method": 8,
+      "crc": 1976522898,
+      "compressed": 5025897,
+      "uncompressed": 5673468,
+      "offset": 3792762498
+    },
+    {
+      "name": "Mechanical Wave - Rock Brick and Dirt/Debris Brick_RBD 02.wav",
+      "method": 8,
+      "crc": 2805017344,
+      "compressed": 660270,
+      "uncompressed": 715116,
+      "offset": 3797788512
+    },
+    {
+      "name": "Mechanical Wave - Rock Brick and Dirt/Drop Rock On Rock Debris_RBD 03.wav",
+      "method": 8,
+      "crc": 4200564539,
+      "compressed": 1332648,
+      "uncompressed": 1819772,
+      "offset": 3798448901
+    },
+    {
+      "name": "Mechanical Wave - Sci-Fi-Invaders/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3799781680
+    },
+    {
+      "name": "Mechanical Wave - Sci-Fi-Invaders/Heavy Magical Explosion_SI 03.wav",
+      "method": 8,
+      "crc": 840583241,
+      "compressed": 1710034,
+      "uncompressed": 2604492,
+      "offset": 3799781772
+    },
+    {
+      "name": "Mechanical Wave - Sci-Fi-Invaders/Creature Scream_SI 07.wav",
+      "method": 8,
+      "crc": 3276004320,
+      "compressed": 3118887,
+      "uncompressed": 4407116,
+      "offset": 3801491931
+    },
+    {
+      "name": "Mechanical Wave - Sci-Fi-Invaders/Dark Drone_SI 03.wav",
+      "method": 8,
+      "crc": 967826533,
+      "compressed": 11747888,
+      "uncompressed": 12773260,
+      "offset": 3804610935
+    },
+    {
+      "name": "Mechanical Wave - Sci-Fi-Invaders/Alien Talking Communication_SI 03.wav",
+      "method": 8,
+      "crc": 2936645309,
+      "compressed": 4287609,
+      "uncompressed": 4647132,
+      "offset": 3816358935
+    },
+    {
+      "name": "Mechanical Wave - Sci-Fi-Invaders/Shut Off Engine_SI 03.wav",
+      "method": 8,
+      "crc": 2416378857,
+      "compressed": 3319189,
+      "uncompressed": 4517404,
+      "offset": 3820646673
+    },
+    {
+      "name": "Mechanical Wave - Undoing-Computer/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3823965979
+    },
+    {
+      "name": "Mechanical Wave - Undoing-Computer/Crush Rattle Metal Scrap Debris_UC 04.wav",
+      "method": 8,
+      "crc": 1893419713,
+      "compressed": 1731855,
+      "uncompressed": 1988844,
+      "offset": 3823966072
+    },
+    {
+      "name": "Mechanical Wave - Undoing-Computer/Bouncing Metal Rattle Scrap Debris_UC 06.wav",
+      "method": 8,
+      "crc": 2997730536,
+      "compressed": 1140883,
+      "uncompressed": 1358924,
+      "offset": 3825698061
+    },
+    {
+      "name": "Mechanical Wave - Undoing-Computer/Hit Impact Hard Metal Scrap Debris_UC 01.wav",
+      "method": 8,
+      "crc": 2976871989,
+      "compressed": 2493798,
+      "uncompressed": 5286524,
+      "offset": 3826839081
+    },
+    {
+      "name": "Mechanical Wave - Undoing-Computer/Drop Fall Metal Rattle Scrap Debris_UC 10.wav",
+      "method": 8,
+      "crc": 798694315,
+      "compressed": 447540,
+      "uncompressed": 552428,
+      "offset": 3829333016
+    },
+    {
+      "name": "Mechanical Wave - Undoing-Computer/Hit Impact Metal Scrap Debris_UC 06.wav",
+      "method": 8,
+      "crc": 3808611749,
+      "compressed": 507925,
+      "uncompressed": 580300,
+      "offset": 3829780694
+    },
+    {
+      "name": "Mechanical Wave - Vegetable Massacres/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3830288751
+    },
+    {
+      "name": "Mechanical Wave - Vegetable Massacres/Drenched Manipulation_VM 03.wav",
+      "method": 8,
+      "crc": 239479211,
+      "compressed": 1161833,
+      "uncompressed": 1284652,
+      "offset": 3830288847
+    },
+    {
+      "name": "Mechanical Wave - Vegetable Massacres/Juicy Crack and Break_VM 01.wav",
+      "method": 8,
+      "crc": 2224777248,
+      "compressed": 658688,
+      "uncompressed": 773612,
+      "offset": 3831450807
+    },
+    {
+      "name": "Mechanical Wave - Vegetable Massacres/Break and Crack_VM 03.wav",
+      "method": 8,
+      "crc": 560799380,
+      "compressed": 985238,
+      "uncompressed": 1068892,
+      "offset": 3832109622
+    },
+    {
+      "name": "Mechanical Wave - Vegetable Massacres/Tear and Break_VM 12.wav",
+      "method": 8,
+      "crc": 2019745524,
+      "compressed": 1467277,
+      "uncompressed": 1628604,
+      "offset": 3833094981
+    },
+    {
+      "name": "Mechanical Wave - Vegetable Massacres/Juicy Burst_VM 03.wav",
+      "method": 8,
+      "crc": 3197257910,
+      "compressed": 413734,
+      "uncompressed": 539884,
+      "offset": 3834562378
+    },
+    {
+      "name": "Membrans - Analog Tape Noise Sound Pack 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3834976229
+    },
+    {
+      "name": "Membrans - Analog Tape Noise Sound Pack 01/Analog Tape Noise 12.wav",
+      "method": 8,
+      "crc": 4223488464,
+      "compressed": 105761,
+      "uncompressed": 191130,
+      "offset": 3834976330
+    },
+    {
+      "name": "Membrans - Analog Tape Noise Sound Pack 01/Analog Tape Noise 27.wav",
+      "method": 8,
+      "crc": 4156472516,
+      "compressed": 120107,
+      "uncompressed": 158420,
+      "offset": 3835082216
+    },
+    {
+      "name": "Membrans - Astro Droid Sound Pack 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3835202448
+    },
+    {
+      "name": "Membrans - Astro Droid Sound Pack 01/Astro Droid 26.wav",
+      "method": 8,
+      "crc": 153453102,
+      "compressed": 93141,
+      "uncompressed": 147336,
+      "offset": 3835202543
+    },
+    {
+      "name": "Membrans - Astro Droid Sound Pack 01/Astro Droid 11.wav",
+      "method": 8,
+      "crc": 74740829,
+      "compressed": 45970,
+      "uncompressed": 60122,
+      "offset": 3835295797
+    },
+    {
+      "name": "Membrans - Bone Crackings Sound Pack 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3835341880
+    },
+    {
+      "name": "Membrans - Bone Crackings Sound Pack 01/Bone Cracking 18.wav",
+      "method": 8,
+      "crc": 2916859153,
+      "compressed": 259059,
+      "uncompressed": 277066,
+      "offset": 3835341978
+    },
+    {
+      "name": "Membrans - Bone Crackings Sound Pack 01/Bone Cracking 34.wav",
+      "method": 8,
+      "crc": 1248748922,
+      "compressed": 394573,
+      "uncompressed": 458008,
+      "offset": 3835601155
+    },
+    {
+      "name": "Membrans - Cartoon Arrow Sound Pack 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3835995846
+    },
+    {
+      "name": "Membrans - Cartoon Arrow Sound Pack 01/Cartoon Arrow 09.wav",
+      "method": 8,
+      "crc": 2952741296,
+      "compressed": 335416,
+      "uncompressed": 435258,
+      "offset": 3835995943
+    },
+    {
+      "name": "Membrans - Cartoon Arrow Sound Pack 01/Cartoon Arrow 44.wav",
+      "method": 8,
+      "crc": 3284668772,
+      "compressed": 576659,
+      "uncompressed": 744152,
+      "offset": 3836331476
+    },
+    {
+      "name": "Membrans - Firecrackers Sound Pack 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3836908252
+    },
+    {
+      "name": "Membrans - Firecrackers Sound Pack 01/Firecracker, Medium Distance 07.wav",
+      "method": 8,
+      "crc": 3229208750,
+      "compressed": 709488,
+      "uncompressed": 883720,
+      "offset": 3836908348
+    },
+    {
+      "name": "Membrans - Firecrackers Sound Pack 01/Whistling Firecracker 08.wav",
+      "method": 8,
+      "crc": 980013262,
+      "compressed": 1038411,
+      "uncompressed": 1188328,
+      "offset": 3837617967
+    },
+    {
+      "name": "Membrans - Ice Cold Sound Pack 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3838656502
+    },
+    {
+      "name": "Membrans - Ice Cold Sound Pack 01/Ice Cube In The Glass 09.wav",
+      "method": 8,
+      "crc": 3392889943,
+      "compressed": 295400,
+      "uncompressed": 337514,
+      "offset": 3838656594
+    },
+    {
+      "name": "Membrans - Ice Cold Sound Pack 01/Ice Cube Moving 04.wav",
+      "method": 8,
+      "crc": 381759532,
+      "compressed": 630969,
+      "uncompressed": 723466,
+      "offset": 3838952114
+    },
+    {
+      "name": "Membrans - Monster Pack 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3839583197
+    },
+    {
+      "name": "Membrans - Monster Pack 01/Monster 31.wav",
+      "method": 8,
+      "crc": 843358882,
+      "compressed": 1711344,
+      "uncompressed": 1852948,
+      "offset": 3839583282
+    },
+    {
+      "name": "Membrans - Monster Pack 01/Monster 20.wav",
+      "method": 8,
+      "crc": 410613858,
+      "compressed": 1089969,
+      "uncompressed": 1206100,
+      "offset": 3841294725
+    },
+    {
+      "name": "Membrans - Pops Sound Pack 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3842384793
+    },
+    {
+      "name": "Membrans - Pops Sound Pack 01/Pop 41.wav",
+      "method": 8,
+      "crc": 325835912,
+      "compressed": 102856,
+      "uncompressed": 159150,
+      "offset": 3842384881
+    },
+    {
+      "name": "Membrans - Pops Sound Pack 01/Pop 31.wav",
+      "method": 8,
+      "crc": 1841168677,
+      "compressed": 83397,
+      "uncompressed": 118710,
+      "offset": 3842487835
+    },
+    {
+      "name": "Membrans - Rally Cars Sound Pack 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3842571330
+    },
+    {
+      "name": "Membrans - Rally Cars Sound Pack 01/Rally Car Pass By 16.wav",
+      "method": 8,
+      "crc": 3752807326,
+      "compressed": 4003041,
+      "uncompressed": 4147772,
+      "offset": 3842571424
+    },
+    {
+      "name": "Membrans - Rally Cars Sound Pack 02/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3846574583
+    },
+    {
+      "name": "Membrans - Rally Cars Sound Pack 02/Sport Car Revving 01.wav",
+      "method": 8,
+      "crc": 129338907,
+      "compressed": 2606994,
+      "uncompressed": 2821150,
+      "offset": 3846574677
+    },
+    {
+      "name": "Membrans - Scanners Sound Pack 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3849181789
+    },
+    {
+      "name": "Membrans - Scanners Sound Pack 01/Scan 10.wav",
+      "method": 8,
+      "crc": 2060788637,
+      "compressed": 151143,
+      "uncompressed": 157326,
+      "offset": 3849181881
+    },
+    {
+      "name": "Membrans - Spaceship Interface Sound Pack 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3849333127
+    },
+    {
+      "name": "Membrans - Spaceship Interface Sound Pack 01/Spaceship Interface 10.wav",
+      "method": 8,
+      "crc": 40666122,
+      "compressed": 305506,
+      "uncompressed": 319376,
+      "offset": 3849333230
+    },
+    {
+      "name": "Membrans - Spaceship Interface Sound Pack 01/Spaceship Interface 74.wav",
+      "method": 8,
+      "crc": 2805295347,
+      "compressed": 127026,
+      "uncompressed": 155808,
+      "offset": 3849638865
+    },
+    {
+      "name": "Membrans - Spaceship Interface Sound Pack 01/Spaceship Interface 33.wav",
+      "method": 8,
+      "crc": 1015696778,
+      "compressed": 264130,
+      "uncompressed": 299788,
+      "offset": 3849766020
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3850030279
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.1 Hit #2 96 HK1.wav",
+      "method": 8,
+      "crc": 1444404925,
+      "compressed": 64895,
+      "uncompressed": 115782,
+      "offset": 3850030381
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq1.15 Hit #3 96 HK1.wav",
+      "method": 8,
+      "crc": 3323540043,
+      "compressed": 80450,
+      "uncompressed": 115944,
+      "offset": 3850095403
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.27 Hit #2 96 HK1.wav",
+      "method": 8,
+      "crc": 13056516,
+      "compressed": 53500,
+      "uncompressed": 103480,
+      "offset": 3850175980
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.1 whoosh #1 96 HK1.wav",
+      "method": 8,
+      "crc": 428599103,
+      "compressed": 65178,
+      "uncompressed": 115830,
+      "offset": 3850229608
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq1.15 Hit #1 96 HK1.wav",
+      "method": 8,
+      "crc": 3351554581,
+      "compressed": 75724,
+      "uncompressed": 115944,
+      "offset": 3850294916
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq1.15 whoosh #1 96 HK1.wav",
+      "method": 8,
+      "crc": 3460395200,
+      "compressed": 69462,
+      "uncompressed": 115992,
+      "offset": 3850370767
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.27 Hit #1 96 HK1.wav",
+      "method": 8,
+      "crc": 2790562538,
+      "compressed": 70496,
+      "uncompressed": 103480,
+      "offset": 3850440359
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.1 Hit #1 96 HK1.wav",
+      "method": 8,
+      "crc": 4215998125,
+      "compressed": 75800,
+      "uncompressed": 115782,
+      "offset": 3850510983
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.27 Hit #3 96 HK1.wav",
+      "method": 8,
+      "crc": 3476451885,
+      "compressed": 53584,
+      "uncompressed": 103480,
+      "offset": 3850586910
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.27 whoosh #1 96 HK1.wav",
+      "method": 8,
+      "crc": 3957627694,
+      "compressed": 81521,
+      "uncompressed": 103520,
+      "offset": 3850640622
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.1 Hit #3 96 HK1.wav",
+      "method": 8,
+      "crc": 653806059,
+      "compressed": 79798,
+      "uncompressed": 115782,
+      "offset": 3850722274
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq1.15 Hit #2 96 HK1.wav",
+      "method": 8,
+      "crc": 865235521,
+      "compressed": 59777,
+      "uncompressed": 115944,
+      "offset": 3850802199
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3850862103
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/HKAP2 Seq1.2 Hits 1.wav",
+      "method": 8,
+      "crc": 2977770251,
+      "compressed": 166486,
+      "uncompressed": 476748,
+      "offset": 3850862205
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/HKAP2 Spin Whoosh 2a.wav",
+      "method": 8,
+      "crc": 1039699232,
+      "compressed": 98256,
+      "uncompressed": 187270,
+      "offset": 3851028816
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/HKAP2 Seq2.13 Whoosh 6.wav",
+      "method": 8,
+      "crc": 892623775,
+      "compressed": 94286,
+      "uncompressed": 820280,
+      "offset": 3851127198
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/HKAP2 Seq1.1 Hits 4.wav",
+      "method": 8,
+      "crc": 2764181166,
+      "compressed": 161099,
+      "uncompressed": 427438,
+      "offset": 3851221612
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/HKAP2 Seq2.13 Whoosh 7.wav",
+      "method": 8,
+      "crc": 2195545502,
+      "compressed": 94674,
+      "uncompressed": 820280,
+      "offset": 3851382836
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/HKAP2 Seq2.13 Hit 1.wav",
+      "method": 8,
+      "crc": 3175508390,
+      "compressed": 457635,
+      "uncompressed": 820240,
+      "offset": 3851477638
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/HKAP2 Spin Hit 1a.wav",
+      "method": 8,
+      "crc": 4215259051,
+      "compressed": 691428,
+      "uncompressed": 1071718,
+      "offset": 3851935398
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/HKAP2 Seq2.13 Hit 2.wav",
+      "method": 8,
+      "crc": 2982731272,
+      "compressed": 214746,
+      "uncompressed": 820240,
+      "offset": 3852626949
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/HKAP2 Seq1.2 SWT 11.wav",
+      "method": 8,
+      "crc": 984167734,
+      "compressed": 267518,
+      "uncompressed": 476772,
+      "offset": 3852841820
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/HKAP2 Seq2.13 Hit 3.wav",
+      "method": 8,
+      "crc": 1225422689,
+      "compressed": 107573,
+      "uncompressed": 820240,
+      "offset": 3853109463
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/HKAP2 Whoosh land 1a.wav",
+      "method": 8,
+      "crc": 1651464020,
+      "compressed": 131265,
+      "uncompressed": 768978,
+      "offset": 3853217161
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/HKAP2 Seq2.13 Whoosh 5.wav",
+      "method": 8,
+      "crc": 3674686224,
+      "compressed": 222337,
+      "uncompressed": 820288,
+      "offset": 3853348552
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/HKAP2 Seq1.2 Whoosh 5.wav",
+      "method": 8,
+      "crc": 3408913162,
+      "compressed": 241378,
+      "uncompressed": 476756,
+      "offset": 3853571017
+    },
+    {
+      "name": "NoizBoy - Hong Kong Action Kit - Hit Kit #2/HKAP2 Seq1.2 SWT 10.wav",
+      "method": 8,
+      "crc": 1561248183,
+      "compressed": 107619,
+      "uncompressed": 476756,
+      "offset": 3853812522
+    },
+    {
+      "name": "Original Sounds - Docks/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3853920266
+    },
+    {
+      "name": "Original Sounds - Docks/Trucks On Docks Passing In Cu And Charging Containers.wav",
+      "method": 8,
+      "crc": 2998752583,
+      "compressed": 70043643,
+      "uncompressed": 71965388,
+      "offset": 3853920348
+    },
+    {
+      "name": "Original Sounds - Docks/Container Ship Being Loaded In The Hold Impacts With Nice Reverb.wav",
+      "method": 8,
+      "crc": 3930353746,
+      "compressed": 53151683,
+      "uncompressed": 57105404,
+      "offset": 3923964130
+    },
+    {
+      "name": "RDGSFX001 - Drones/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 3977115963
+    },
+    {
+      "name": "RDGSFX001 - Drones/Drone Airy Cavern.wav",
+      "method": 8,
+      "crc": 1653056504,
+      "compressed": 65683083,
+      "uncompressed": 68198908,
+      "offset": 3977116040
+    },
+    {
+      "name": "RDGSFX001 - Drones/Drone Rising Skys.wav",
+      "method": 8,
+      "crc": 3662320764,
+      "compressed": 64362511,
+      "uncompressed": 67915916,
+      "offset": 4042799221
+    },
+    {
+      "name": "RDGSFX001 - Drones/Drone Fluttering Madness.wav",
+      "method": 8,
+      "crc": 1123482334,
+      "compressed": 65627565,
+      "uncompressed": 68039100,
+      "offset": 4107161830
+    },
+    {
+      "name": "RDGSFX001 - Drones/Drone Rising Bells.wav",
+      "method": 8,
+      "crc": 185706096,
+      "compressed": 66832757,
+      "uncompressed": 68832588,
+      "offset": 4172789500
+    },
+    {
+      "name": "RDGSFX001 - Drones/Drone Space Rain.wav",
+      "method": 8,
+      "crc": 903159407,
+      "compressed": 65410241,
+      "uncompressed": 68174284,
+      "offset": 4239622356
+    },
+    {
+      "name": "RDGSFX002 - Creatures/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 4305032694
+    },
+    {
+      "name": "RDGSFX002 - Creatures/Creature Hiss 4.M.wav",
+      "method": 8,
+      "crc": 3234262228,
+      "compressed": 711994,
+      "uncompressed": 929628,
+      "offset": 4305032774
+    },
+    {
+      "name": "RDGSFX002 - Creatures/Growl Dry 14.M.wav",
+      "method": 8,
+      "crc": 2687044533,
+      "compressed": 693553,
+      "uncompressed": 841836,
+      "offset": 4305744869
+    },
+    {
+      "name": "RDGSFX002 - Creatures/Hisses Dry 11.M.wav",
+      "method": 8,
+      "crc": 2083356462,
+      "compressed": 556068,
+      "uncompressed": 673996,
+      "offset": 4306438520
+    },
+    {
+      "name": "RDGSFX002 - Creatures/Creature Roar 13.M.wav",
+      "method": 8,
+      "crc": 1052191175,
+      "compressed": 961117,
+      "uncompressed": 1176044,
+      "offset": 4306994687
+    },
+    {
+      "name": "RDGSFX002 - Creatures/Alien Creature 3.M.wav",
+      "method": 8,
+      "crc": 578648396,
+      "compressed": 3105,
+      "uncompressed": 12236,
+      "offset": 4307955906
+    },
+    {
+      "name": "RDGSFX002 - Creatures/Creature Combo 13.M.wav",
+      "method": 8,
+      "crc": 3303199595,
+      "compressed": 3359127,
+      "uncompressed": 4060556,
+      "offset": 4307959113
+    },
+    {
+      "name": "RDGSFX002 - Creatures/Roar Dry 5.M.wav",
+      "method": 8,
+      "crc": 3947959727,
+      "compressed": 488618,
+      "uncompressed": 609244,
+      "offset": 4311318343
+    },
+    {
+      "name": "RDGSFX002 - Creatures/Hisses Dry 16.M.wav",
+      "method": 8,
+      "crc": 15860333,
+      "compressed": 826407,
+      "uncompressed": 1008172,
+      "offset": 4311807057
+    },
+    {
+      "name": "RDGSFX002 - Creatures/Creature Screeches 12.M.wav",
+      "method": 8,
+      "crc": 4129482114,
+      "compressed": 1713853,
+      "uncompressed": 2189500,
+      "offset": 4312633563
+    },
+    {
+      "name": "RDGSFX003 - Industrial_Warehouse/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 4314347523
+    },
+    {
+      "name": "RDGSFX003 - Industrial_Warehouse/Industrial Warehouse_Southern Perspective 2.wav",
+      "method": 8,
+      "crc": 3340671836,
+      "compressed": 162417370,
+      "uncompressed": 173039068,
+      "offset": 4314347614
+    },
+    {
+      "name": "RDGSFX003 - Industrial_Warehouse/Industrial Warehouse_Mid Perspective 1.wav",
+      "method": 8,
+      "crc": 3161942535,
+      "compressed": 165406601,
+      "uncompressed": 173038956,
+      "offset": 4476765122
+    },
+    {
+      "name": "RDGSFX004 - LA Parking Garages/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 4642171856
+    },
+    {
+      "name": "RDGSFX004 - LA Parking Garages/Beverly Center Parking Garage_North Side.wav",
+      "method": 8,
+      "crc": 3786494733,
+      "compressed": 161893539,
+      "uncompressed": 173040844,
+      "offset": 4642171945
+    },
+    {
+      "name": "RDGSFX004 - LA Parking Garages/Sherman Oaks Galleria Parking Garage_1st Floor.wav",
+      "method": 8,
+      "crc": 4010889388,
+      "compressed": 158850444,
+      "uncompressed": 173041820,
+      "offset": 4804065617
+    },
+    {
+      "name": "RDGSFX004 - LA Parking Garages/Glendale Galleria Parking Garage_South Side.wav",
+      "method": 8,
+      "crc": 3094986157,
+      "compressed": 160951822,
+      "uncompressed": 173041436,
+      "offset": 4962916200
+    },
+    {
+      "name": "RDGSFX005 - Squeaks and Creaks_v2/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 5123868158
+    },
+    {
+      "name": "RDGSFX005 - Squeaks and Creaks_v2/SQUEAKS AND CREAKS Leather Jacket Creaks 05.M.wav",
+      "method": 8,
+      "crc": 1846361604,
+      "compressed": 5309617,
+      "uncompressed": 13863580,
+      "offset": 5123868250
+    },
+    {
+      "name": "RDGSFX005 - Squeaks and Creaks_v2/SQUEAKS AND CREAKS Water Bottle Squeaks Long 02.M.wav",
+      "method": 8,
+      "crc": 186225151,
+      "compressed": 6594981,
+      "uncompressed": 18438908,
+      "offset": 5129178008
+    },
+    {
+      "name": "RDGSFX005 - Squeaks and Creaks_v2/SQUEAKS AND CREAKS Headphone Squeaks Short 01.M.wav",
+      "method": 8,
+      "crc": 1767276782,
+      "compressed": 3481504,
+      "uncompressed": 9562300,
+      "offset": 5135773134
+    },
+    {
+      "name": "RDGSFX005 - Squeaks and Creaks_v2/SQUEAKS AND CREAKS Balloon Squeaks Medium 05.M.wav",
+      "method": 8,
+      "crc": 2243561176,
+      "compressed": 2976847,
+      "uncompressed": 6921292,
+      "offset": 5139254781
+    },
+    {
+      "name": "RDGSFX005 - Squeaks and Creaks_v2/SQUEAKS AND CREAKS Mic Stand Short 01.M.wav",
+      "method": 8,
+      "crc": 2498941796,
+      "compressed": 3484758,
+      "uncompressed": 10440044,
+      "offset": 5142231770
+    },
+    {
+      "name": "RDGSFX005 - Squeaks and Creaks_v2/SQUEAKS AND CREAKS Window Rubs 02.M.wav",
+      "method": 8,
+      "crc": 2516357055,
+      "compressed": 5907663,
+      "uncompressed": 18741916,
+      "offset": 5145716663
+    },
+    {
+      "name": "RDGSFX005 - Squeaks and Creaks_v2/SQUEAKS AND CREAKS Pint Glass 05.M.wav",
+      "method": 8,
+      "crc": 3897326474,
+      "compressed": 2349303,
+      "uncompressed": 6497276,
+      "offset": 5151624457
+    },
+    {
+      "name": "RDGSFX005 - Squeaks and Creaks_v2/SQUEAKS AND CREAKS Hardwood Floor Creaks Long 01.M.wav",
+      "method": 8,
+      "crc": 924099560,
+      "compressed": 2866847,
+      "uncompressed": 7925660,
+      "offset": 5153973890
+    },
+    {
+      "name": "RDGSFX005 - Squeaks and Creaks_v2/SQUEAKS AND CREAKS Plastic Wrapper Long 03.M.wav",
+      "method": 8,
+      "crc": 1480473160,
+      "compressed": 3622411,
+      "uncompressed": 9295756,
+      "offset": 5156840883
+    },
+    {
+      "name": "RDGSFX005 - Squeaks and Creaks_v2/SQUEAKS AND CREAKS Ice Cube Tray Squeaks 03.M.wav",
+      "method": 8,
+      "crc": 3484538768,
+      "compressed": 5775538,
+      "uncompressed": 15126476,
+      "offset": 5160463434
+    },
+    {
+      "name": "RDGSFX006 - California Beaches/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 5166239113
+    },
+    {
+      "name": "RDGSFX006 - California Beaches/California Beaches, San Simeon_Elephant Seals.wav",
+      "method": 8,
+      "crc": 3729016279,
+      "compressed": 97813869,
+      "uncompressed": 103830620,
+      "offset": 5166239202
+    },
+    {
+      "name": "RDGSFX006 - California Beaches/California Beaches, San Simeon_Top of Rocks, Many waves crashing 2.wav",
+      "method": 8,
+      "crc": 3508222639,
+      "compressed": 79288883,
+      "uncompressed": 86528444,
+      "offset": 5264053209
+    },
+    {
+      "name": "RDGSFX006 - California Beaches/California Beaches, Malibu_Underneath Boardwalk, High Tide, 3ft from water 1.wav",
+      "method": 8,
+      "crc": 619891653,
+      "compressed": 81094087,
+      "uncompressed": 86528396,
+      "offset": 5343342251
+    },
+    {
+      "name": "RDGSFX007 - Rips and Tears v.2/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 5424436507
+    },
+    {
+      "name": "RDGSFX007 - Rips and Tears v.2/RIPS AND TEARS Paper Bag Rips 05.wav",
+      "method": 8,
+      "crc": 3137189537,
+      "compressed": 2979492,
+      "uncompressed": 9191228,
+      "offset": 5424436596
+    },
+    {
+      "name": "RDGSFX007 - Rips and Tears v.2/RIPS AND TEARS Cardboard Rip 04.wav",
+      "method": 8,
+      "crc": 809275238,
+      "compressed": 2989878,
+      "uncompressed": 7320860,
+      "offset": 5427416213
+    },
+    {
+      "name": "RDGSFX007 - Rips and Tears v.2/RIPS AND TEARS Craft Paper Rip 02.wav",
+      "method": 8,
+      "crc": 238239600,
+      "compressed": 2786542,
+      "uncompressed": 8566716,
+      "offset": 5430406215
+    },
+    {
+      "name": "RDGSFX007 - Rips and Tears v.2/RIPS AND TEARS Carpet Tear 02.wav",
+      "method": 8,
+      "crc": 2192987406,
+      "compressed": 3348432,
+      "uncompressed": 6290412,
+      "offset": 5433192883
+    },
+    {
+      "name": "RDGSFX007 - Rips and Tears v.2/RIPS AND TEARS DESIGNED Humanoid Guts 04.wav",
+      "method": 8,
+      "crc": 65126968,
+      "compressed": 1833681,
+      "uncompressed": 1996140,
+      "offset": 5436541437
+    },
+    {
+      "name": "RDGSFX007 - Rips and Tears v.2/RIPS AND TEARS Bread Tear 05.wav",
+      "method": 8,
+      "crc": 3467364272,
+      "compressed": 4041705,
+      "uncompressed": 8738876,
+      "offset": 5438375251
+    },
+    {
+      "name": "RDGSFX007 - Rips and Tears v.2/RIPS AND TEARS T-Shirt Rip 02.wav",
+      "method": 8,
+      "crc": 330293851,
+      "compressed": 3144075,
+      "uncompressed": 10372268,
+      "offset": 5442417077
+    },
+    {
+      "name": "RDGSFX007 - Rips and Tears v.2/RIPS AND TEARS Large Envelope Rips CNTCT 06.wav",
+      "method": 8,
+      "crc": 280707618,
+      "compressed": 5028894,
+      "uncompressed": 10545052,
+      "offset": 5445561274
+    },
+    {
+      "name": "RDGSFX007 - Rips and Tears v.2/RIPS AND TEARS DESIGNED Robot Arm Rotation.wav",
+      "method": 8,
+      "crc": 3594957509,
+      "compressed": 2491716,
+      "uncompressed": 3303484,
+      "offset": 5450590304
+    },
+    {
+      "name": "RDGSFX007 - Rips and Tears v.2/RIPS AND TEARS Foam Board Rip 05.wav",
+      "method": 8,
+      "crc": 4262098918,
+      "compressed": 4240802,
+      "uncompressed": 10421500,
+      "offset": 5453082155
+    },
+    {
+      "name": "RDGSFX008 - The Metal Shelf/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 5457323082
+    },
+    {
+      "name": "RDGSFX008 - The Metal Shelf/Metal Shelf Tonal Texture 07.wav",
+      "method": 8,
+      "crc": 3890356420,
+      "compressed": 15712371,
+      "uncompressed": 17532380,
+      "offset": 5457323168
+    },
+    {
+      "name": "RDGSFX008 - The Metal Shelf/Metal Shelf Hit 02.wav",
+      "method": 8,
+      "crc": 230584909,
+      "compressed": 2452890,
+      "uncompressed": 3204124,
+      "offset": 5473035657
+    },
+    {
+      "name": "RDGSFX008 - The Metal Shelf/Metal Shelf Low Movement 02.wav",
+      "method": 8,
+      "crc": 28487239,
+      "compressed": 7251622,
+      "uncompressed": 7969084,
+      "offset": 5475488655
+    },
+    {
+      "name": "RDGSFX008 - The Metal Shelf/Metal Moans 04.wav",
+      "method": 8,
+      "crc": 4130982512,
+      "compressed": 2413946,
+      "uncompressed": 2730252,
+      "offset": 5482740394
+    },
+    {
+      "name": "RDGSFX008 - The Metal Shelf/Metal Shelf Creaking 01.wav",
+      "method": 8,
+      "crc": 3580843247,
+      "compressed": 4364653,
+      "uncompressed": 5944908,
+      "offset": 5485154444
+    },
+    {
+      "name": "RDGSFX008 - The Metal Shelf/Falling Rocks on Metal 04.wav",
+      "method": 8,
+      "crc": 1245728103,
+      "compressed": 3765656,
+      "uncompressed": 4524252,
+      "offset": 5489519210
+    },
+    {
+      "name": "RDGSFX008 - The Metal Shelf/Metal Shelf Rubber Band Hits 03.wav",
+      "method": 8,
+      "crc": 1328346674,
+      "compressed": 8309818,
+      "uncompressed": 9660780,
+      "offset": 5493284981
+    },
+    {
+      "name": "RDGSFX008 - The Metal Shelf/Metal Shelf Hit 16.wav",
+      "method": 8,
+      "crc": 1846371596,
+      "compressed": 8943574,
+      "uncompressed": 9968572,
+      "offset": 5501594920
+    },
+    {
+      "name": "RDGSFX008 - The Metal Shelf/Metal Shelf Scrape 14.wav",
+      "method": 8,
+      "crc": 2312403535,
+      "compressed": 4665793,
+      "uncompressed": 5071404,
+      "offset": 5510538602
+    },
+    {
+      "name": "RDGSFX008 - The Metal Shelf/Metal Shelf Hit 10.wav",
+      "method": 8,
+      "crc": 2369780845,
+      "compressed": 2908315,
+      "uncompressed": 3210252,
+      "offset": 5515204506
+    },
+    {
+      "name": "RDGSFX009 - Twisted Zither/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 5518112929
+    },
+    {
+      "name": "RDGSFX009 - Twisted Zither/ZITHER Tone 15.wav",
+      "method": 8,
+      "crc": 2655952975,
+      "compressed": 13211395,
+      "uncompressed": 14090524,
+      "offset": 5518113014
+    },
+    {
+      "name": "RDGSFX009 - Twisted Zither/ZITHER General Movement 01 U87.wav",
+      "method": 8,
+      "crc": 794950472,
+      "compressed": 6429270,
+      "uncompressed": 7395132,
+      "offset": 5531324512
+    },
+    {
+      "name": "RDGSFX009 - Twisted Zither/ZITHER Metal Brush Scrapes 04 CNTCT.wav",
+      "method": 8,
+      "crc": 2108069122,
+      "compressed": 2551071,
+      "uncompressed": 2898236,
+      "offset": 5537753901
+    },
+    {
+      "name": "RDGSFX009 - Twisted Zither/ZITHER String Plucks 01 CNTCT.wav",
+      "method": 8,
+      "crc": 3646742269,
+      "compressed": 3046189,
+      "uncompressed": 3814892,
+      "offset": 5540305096
+    },
+    {
+      "name": "RDGSFX009 - Twisted Zither/ZITHER Coin Scrapes 03 CNTCT.wav",
+      "method": 8,
+      "crc": 3144595158,
+      "compressed": 3737213,
+      "uncompressed": 4752780,
+      "offset": 5543351403
+    },
+    {
+      "name": "RDGSFX009 - Twisted Zither/ZITHER African Shaker Movements 01 U87.wav",
+      "method": 8,
+      "crc": 132806232,
+      "compressed": 2691998,
+      "uncompressed": 2935436,
+      "offset": 5547088733
+    },
+    {
+      "name": "RDGSFX009 - Twisted Zither/ZITHER General Movement 02 U87.wav",
+      "method": 8,
+      "crc": 454874531,
+      "compressed": 1850934,
+      "uncompressed": 2316668,
+      "offset": 5549780858
+    },
+    {
+      "name": "RDGSFX009 - Twisted Zither/ZITHER String Plucks 10 CNTCT.wav",
+      "method": 8,
+      "crc": 3889892302,
+      "compressed": 2622538,
+      "uncompressed": 3169340,
+      "offset": 5551631911
+    },
+    {
+      "name": "RDGSFX009 - Twisted Zither/ZITHER Coin Scrapes 04 U87.wav",
+      "method": 8,
+      "crc": 2408307836,
+      "compressed": 3466341,
+      "uncompressed": 5442012,
+      "offset": 5554254567
+    },
+    {
+      "name": "RDGSFX009 - Twisted Zither/ZITHER Mallet Hits 14 CNTCT.wav",
+      "method": 8,
+      "crc": 745865989,
+      "compressed": 2734222,
+      "uncompressed": 4085324,
+      "offset": 5557721023
+    },
+    {
+      "name": "Resonant - Sounds of Hong Kong/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 5560455361
+    },
+    {
+      "name": "Resonant - Sounds of Hong Kong/reso HK amb Pedestrian Crossing.wav",
+      "method": 8,
+      "crc": 1178371084,
+      "compressed": 50941929,
+      "uncompressed": 54797068,
+      "offset": 5560455450
+    },
+    {
+      "name": "Resonant - Sounds of Hong Kong/reso HK amb Tram Past with Bell.wav",
+      "method": 8,
+      "crc": 40077560,
+      "compressed": 4546457,
+      "uncompressed": 5055068,
+      "offset": 5611397503
+    },
+    {
+      "name": "Robert Cordova - Base/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 5615944084
+    },
+    {
+      "name": "Robert Cordova - Base/Two week old Baby 01.wav",
+      "method": 8,
+      "crc": 1085365084,
+      "compressed": 2218542,
+      "uncompressed": 2817900,
+      "offset": 5615944164
+    },
+    {
+      "name": "Robert Cordova - Base/Chain Link Fence 04.wav",
+      "method": 8,
+      "crc": 97826589,
+      "compressed": 1130432,
+      "uncompressed": 1264476,
+      "offset": 5618162810
+    },
+    {
+      "name": "Robert Cordova - Base/Wood Rattle 27.wav",
+      "method": 8,
+      "crc": 2501133885,
+      "compressed": 397875,
+      "uncompressed": 473852,
+      "offset": 5619293345
+    },
+    {
+      "name": "Robert Cordova - Base/Printer 02.wav",
+      "method": 8,
+      "crc": 2069378624,
+      "compressed": 644888,
+      "uncompressed": 679868,
+      "offset": 5619691318
+    },
+    {
+      "name": "Robert Cordova - Base/Abacus 02.wav",
+      "method": 8,
+      "crc": 4169130011,
+      "compressed": 149609,
+      "uncompressed": 169212,
+      "offset": 5620336300
+    },
+    {
+      "name": "Robert Cordova - Base/Waves 03.wav",
+      "method": 8,
+      "crc": 1193860552,
+      "compressed": 3438396,
+      "uncompressed": 3688140,
+      "offset": 5620486002
+    },
+    {
+      "name": "Robert Cordova - Base/Paper Rip 02.wav",
+      "method": 8,
+      "crc": 2401972637,
+      "compressed": 658518,
+      "uncompressed": 710668,
+      "offset": 5623924490
+    },
+    {
+      "name": "Robert Cordova - Base/Wind-up Toy 02.wav",
+      "method": 8,
+      "crc": 2929874660,
+      "compressed": 1244316,
+      "uncompressed": 1362812,
+      "offset": 5624583104
+    },
+    {
+      "name": "Robert Cordova - Base/Wood Rattle 10.wav",
+      "method": 8,
+      "crc": 1143119321,
+      "compressed": 314570,
+      "uncompressed": 356972,
+      "offset": 5625827518
+    },
+    {
+      "name": "Secret Source - 001 Boat Pulley/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 5626142186
+    },
+    {
+      "name": "Secret Source - 001 Boat Pulley/BOAT_078-PU020_Swing_2_Pulleys_Medium.wav",
+      "method": 8,
+      "crc": 1180823905,
+      "compressed": 26794242,
+      "uncompressed": 34558220,
+      "offset": 5626142276
+    },
+    {
+      "name": "Secret Source - 001 Boat Pulley/BOAT_011-PU003_Med_Pull_Drop_Hang_w_3_Pound_Weight_ST.wav",
+      "method": 8,
+      "crc": 2551638525,
+      "compressed": 9689307,
+      "uncompressed": 10888364,
+      "offset": 5652936649
+    },
+    {
+      "name": "Secret Source - 001 Boat Pulley/BOAT_042-PU011_Fast_Pulley_Tension_Release_w_Wood_Creaks_Series.wav",
+      "method": 8,
+      "crc": 3745182699,
+      "compressed": 31758091,
+      "uncompressed": 42335308,
+      "offset": 5662626103
+    },
+    {
+      "name": "Secret Source - 001 Boat Pulley/BOAT_082-PU021_Swing_2_Pulleys_Fast.wav",
+      "method": 8,
+      "crc": 3047950959,
+      "compressed": 51444507,
+      "uncompressed": 63319372,
+      "offset": 5694384351
+    },
+    {
+      "name": "Secret Source - 002 1964 Mercury Montclair /",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 5745828987
+    },
+    {
+      "name": "Secret Source - 002 1964 Mercury Montclair /AUTO_64MM163-MM021_Int_Onbrd_Drive_Fast_Idle_Away_Turn_Stop_Rvrs_Turn.wav",
+      "method": 8,
+      "crc": 1146013818,
+      "compressed": 11009307,
+      "uncompressed": 11913040,
+      "offset": 5745829089
+    },
+    {
+      "name": "Secret Source - 002 1964 Mercury Montclair /AUTO_64MM344-MM050_Int_Onbrd_Downhill_Swerve_Drive_Rvrs_Uphill_02.wav",
+      "method": 8,
+      "crc": 3004991622,
+      "compressed": 9075448,
+      "uncompressed": 10073548,
+      "offset": 5756838571
+    },
+    {
+      "name": "Secret Source - 002 1964 Mercury Montclair /AUTO_64MM445-MM065_Ext_Doppler_Horns_W_Eng.wav",
+      "method": 8,
+      "crc": 640970770,
+      "compressed": 4551345,
+      "uncompressed": 4961292,
+      "offset": 5765914190
+    },
+    {
+      "name": "Secret Source - 002 1964 Mercury Montclair /AUTO_64MM025-MM005_Ext_Drive_03_Med_Strt_Idle_Away_Distant_Stop.wav",
+      "method": 8,
+      "crc": 2347602063,
+      "compressed": 12428386,
+      "uncompressed": 14067308,
+      "offset": 5770465683
+    },
+    {
+      "name": "Secret Source - 003 Jaws Of Life/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 5782894238
+    },
+    {
+      "name": "Secret Source - 003 Jaws Of Life/JOL_0194_MetalDestruction_15_DPA4061.wav",
+      "method": 8,
+      "crc": 2708172225,
+      "compressed": 1428037,
+      "uncompressed": 1521356,
+      "offset": 5782894329
+    },
+    {
+      "name": "Secret Source - 003 Jaws Of Life/JOL_0187_MetalDestruction_14_Holophone_5ch.wav",
+      "method": 8,
+      "crc": 3280381257,
+      "compressed": 3366485,
+      "uncompressed": 3700732,
+      "offset": 5784322497
+    },
+    {
+      "name": "Secret Source - 003 Jaws Of Life/JOL_0707_GlassImpact_02_COMP.wav",
+      "method": 8,
+      "crc": 568091135,
+      "compressed": 639007,
+      "uncompressed": 762380,
+      "offset": 5787689119
+    },
+    {
+      "name": "Secret Source - 003 Jaws Of Life/JOL_0753_GlassImpact_07_Senn8020.wav",
+      "method": 8,
+      "crc": 58245394,
+      "compressed": 360562,
+      "uncompressed": 406588,
+      "offset": 5788328249
+    },
+    {
+      "name": "Sound Ex Machina - Basketball Game Pro/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 5788688938
+    },
+    {
+      "name": "Sound Ex Machina - Basketball Game Pro/Score 4 - Score, Applause, Cheers, Yells, Whistlings.wav",
+      "method": 8,
+      "crc": 3890400787,
+      "compressed": 5623830,
+      "uncompressed": 6357020,
+      "offset": 5788689035
+    },
+    {
+      "name": "Sound Ex Machina - Basketball Game Pro/Crowd Applause 4 - Light Applause, Cheer.wav",
+      "method": 8,
+      "crc": 1592042293,
+      "compressed": 5712841,
+      "uncompressed": 6646284,
+      "offset": 5794313018
+    },
+    {
+      "name": "Sound Ex Machina - Basketball Game Pro/Lost Opportunities 3 - Lost Opportunity, Dribbles, Clap, Tense.wav",
+      "method": 8,
+      "crc": 1856074831,
+      "compressed": 9809410,
+      "uncompressed": 10971388,
+      "offset": 5800026000
+    },
+    {
+      "name": "Sound Ex Machina - Basketball Game Pro/Referee Whistles - Game Ambience, Dribbles, Referee Whistle, Crowd, Applause (total).wav",
+      "method": 8,
+      "crc": 530242233,
+      "compressed": 42356769,
+      "uncompressed": 45287788,
+      "offset": 5809835573
+    },
+    {
+      "name": "Sound Ex Machina - Basketball Game Pro/Referee Whistles 11 - Referee Whistle, Crowd Ambience  2.wav",
+      "method": 8,
+      "crc": 567312527,
+      "compressed": 3994746,
+      "uncompressed": 4483980,
+      "offset": 5852192527
+    },
+    {
+      "name": "Sound Ex Machina - Kitchen Sounds 1.2/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 5856187430
+    },
+    {
+      "name": "Sound Ex Machina - Kitchen Sounds 1.2/Arranging Glasses 06.wav",
+      "method": 8,
+      "crc": 2240907343,
+      "compressed": 1389092,
+      "uncompressed": 2320556,
+      "offset": 5856187526
+    },
+    {
+      "name": "Sound Ex Machina - Kitchen Sounds 1.2/Microwave Oven in Operaton 01.wav",
+      "method": 8,
+      "crc": 1511545595,
+      "compressed": 11288926,
+      "uncompressed": 12557724,
+      "offset": 5857576738
+    },
+    {
+      "name": "Sound Ex Machina - Kitchen Sounds 1.2/Filling a Glass with Water 02.wav",
+      "method": 8,
+      "crc": 293112759,
+      "compressed": 1729613,
+      "uncompressed": 3400460,
+      "offset": 5868865793
+    },
+    {
+      "name": "Sound Ex Machina - Kitchen Sounds 1.2/Arranging Bottles 01.wav",
+      "method": 8,
+      "crc": 642878850,
+      "compressed": 6854186,
+      "uncompressed": 8663196,
+      "offset": 5870595535
+    },
+    {
+      "name": "Sound Ex Machina - Kitchen Sounds 1.2/Faucet Running Water 01.wav",
+      "method": 8,
+      "crc": 36363340,
+      "compressed": 4794997,
+      "uncompressed": 9241772,
+      "offset": 5877449841
+    },
+    {
+      "name": "Sound Ex Machina - Kitchen Sounds 1.2/Boiling Water in a Coffee Pot.wav",
+      "method": 8,
+      "crc": 3571860051,
+      "compressed": 63518516,
+      "uncompressed": 69728076,
+      "offset": 5882244961
+    },
+    {
+      "name": "Sound Ex Machina - Kitchen Sounds 1.2/Draging Kitchen Cabinets 04.wav",
+      "method": 8,
+      "crc": 370954250,
+      "compressed": 1298026,
+      "uncompressed": 1526972,
+      "offset": 5945763606
+    },
+    {
+      "name": "Sound Ex Machina - Kitchen Sounds 1.2/Espresso Machine 02.wav",
+      "method": 8,
+      "crc": 859115814,
+      "compressed": 9524248,
+      "uncompressed": 11548620,
+      "offset": 5947061759
+    },
+    {
+      "name": "Sound Ex Machina - Kitchen Sounds 1.2/Refrigerator - Closing the Door 03.wav",
+      "method": 8,
+      "crc": 4146200706,
+      "compressed": 4350932,
+      "uncompressed": 5347644,
+      "offset": 5956586126
+    },
+    {
+      "name": "Sound Ex Machina - Kitchen Sounds 1.2/Rubbing Carrots 01.wav",
+      "method": 8,
+      "crc": 2083293789,
+      "compressed": 9954230,
+      "uncompressed": 10970108,
+      "offset": 5960937192
+    },
+    {
+      "name": "Sound Ex Machina - Laughs/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 5970891540
+    },
+    {
+      "name": "Sound Ex Machina - Laughs/Two women laughing 02.wav",
+      "method": 8,
+      "crc": 2293392690,
+      "compressed": 8247367,
+      "uncompressed": 18469500,
+      "offset": 5970891624
+    },
+    {
+      "name": "Sound Ex Machina - Laughs/Middle-aged half hearted male laughter 06.M.wav",
+      "method": 8,
+      "crc": 2345698559,
+      "compressed": 3679324,
+      "uncompressed": 5209644,
+      "offset": 5979139100
+    },
+    {
+      "name": "Sound Ex Machina - Laughs/Audience applauding 28.wav",
+      "method": 8,
+      "crc": 689318463,
+      "compressed": 2575962,
+      "uncompressed": 3040348,
+      "offset": 5982818555
+    },
+    {
+      "name": "Sound Ex Machina - Laughs/Female hearty cackling laughter.M.wav",
+      "method": 8,
+      "crc": 1077876380,
+      "compressed": 3294518,
+      "uncompressed": 4054476,
+      "offset": 5985394627
+    },
+    {
+      "name": "Sound Ex Machina - Laughs/Joyful male laughter 01.M.wav",
+      "method": 8,
+      "crc": 4145444853,
+      "compressed": 2495820,
+      "uncompressed": 3079468,
+      "offset": 5988689266
+    },
+    {
+      "name": "Sound Ex Machina - Laughs/Audience applauding 40.wav",
+      "method": 8,
+      "crc": 3465186107,
+      "compressed": 3085235,
+      "uncompressed": 3544812,
+      "offset": 5991185199
+    },
+    {
+      "name": "Sound Ex Machina - Laughs/Female suppressed giggly laughter 03.M.wav",
+      "method": 8,
+      "crc": 3062491616,
+      "compressed": 1525106,
+      "uncompressed": 2322076,
+      "offset": 5994270544
+    },
+    {
+      "name": "Sound Ex Machina - Laughs/Audience applauding 09.wav",
+      "method": 8,
+      "crc": 804200153,
+      "compressed": 3573906,
+      "uncompressed": 4049260,
+      "offset": 5995795776
+    },
+    {
+      "name": "Sound Ex Machina - Laughs/Male joyful giggly laughter 01.M.wav",
+      "method": 8,
+      "crc": 1341628442,
+      "compressed": 2951610,
+      "uncompressed": 3620156,
+      "offset": 5999369792
+    },
+    {
+      "name": "Sound Ex Machina - Laughs/Male cackling and giggling 03.M.wav",
+      "method": 8,
+      "crc": 4164154122,
+      "compressed": 3021659,
+      "uncompressed": 3837276,
+      "offset": 6002321522
+    },
+    {
+      "name": "Sound Ex Machina - Water Flow/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6005343300
+    },
+    {
+      "name": "Sound Ex Machina - Water Flow/Turbulent water flow (close perspective) 06.wav",
+      "method": 8,
+      "crc": 2500888570,
+      "compressed": 60973240,
+      "uncompressed": 65763244,
+      "offset": 6005343388
+    },
+    {
+      "name": "Sound Ex Machina - Water Flow/Calm small river flow (close perspective) 01.wav",
+      "method": 8,
+      "crc": 1751414403,
+      "compressed": 19200906,
+      "uncompressed": 22216332,
+      "offset": 6066316763
+    },
+    {
+      "name": "Sound Ex Machina - Water Flow/Small waterfall (close perspective) 02.wav",
+      "method": 8,
+      "crc": 3387992587,
+      "compressed": 65227038,
+      "uncompressed": 68070156,
+      "offset": 6085517805
+    },
+    {
+      "name": "Sound Ex Machina - Water Flow/Rapid small river flow (close perspective) 02.wav",
+      "method": 8,
+      "crc": 354141044,
+      "compressed": 31286134,
+      "uncompressed": 33031564,
+      "offset": 6150744973
+    },
+    {
+      "name": "Sound Ex Machina - Water Flow/Rapid large river flow (distant perspective) 02.wav",
+      "method": 8,
+      "crc": 1785545243,
+      "compressed": 27478226,
+      "uncompressed": 28851324,
+      "offset": 6182031244
+    },
+    {
+      "name": "SoundMorph - Bloody Nightmare/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6209509609
+    },
+    {
+      "name": "SoundMorph - Bloody Nightmare/Bloody Nightmare - Zenith Stingers_22.wav",
+      "method": 8,
+      "crc": 3015419913,
+      "compressed": 5682499,
+      "uncompressed": 7281212,
+      "offset": 6209509697
+    },
+    {
+      "name": "SoundMorph - Bloody Nightmare/Bloody Nightmare - Death Pacts_32.wav",
+      "method": 8,
+      "crc": 3526624152,
+      "compressed": 6057074,
+      "uncompressed": 7493484,
+      "offset": 6215192325
+    },
+    {
+      "name": "SoundMorph - Bloody Nightmare/Bloody Nightmare - Horror Impacts - LFO Thunder.wav",
+      "method": 8,
+      "crc": 1668586388,
+      "compressed": 7020456,
+      "uncompressed": 8644220,
+      "offset": 6221249524
+    },
+    {
+      "name": "SoundMorph - Bloody Nightmare/Bloody Nightmare - Horror Impacts - Robotic Scream.wav",
+      "method": 8,
+      "crc": 2903266542,
+      "compressed": 6432204,
+      "uncompressed": 8284396,
+      "offset": 6228270119
+    },
+    {
+      "name": "SoundMorph - Bloody Nightmare/Bloody Nightmare - Choppers_03.wav",
+      "method": 8,
+      "crc": 3883157558,
+      "compressed": 4114928,
+      "uncompressed": 5463852,
+      "offset": 6234702465
+    },
+    {
+      "name": "SoundMorph - Doom Drones/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6238817515
+    },
+    {
+      "name": "SoundMorph - Doom Drones/amb_doomdrones_mood_repeater_04.wav",
+      "method": 8,
+      "crc": 2868484505,
+      "compressed": 19259195,
+      "uncompressed": 20544652,
+      "offset": 6238817598
+    },
+    {
+      "name": "SoundMorph - Doom Drones/amb_doomdrones_statiq_01.wav",
+      "method": 8,
+      "crc": 258461887,
+      "compressed": 24092343,
+      "uncompressed": 25561548,
+      "offset": 6258076911
+    },
+    {
+      "name": "SoundMorph - Doom Drones/amb_doomdrones_digital_spaces.wav",
+      "method": 8,
+      "crc": 503914843,
+      "compressed": 8544191,
+      "uncompressed": 9261852,
+      "offset": 6282169365
+    },
+    {
+      "name": "SoundMorph - Doom Drones/amb_doomdrones_stream_09.wav",
+      "method": 8,
+      "crc": 2767666515,
+      "compressed": 34145778,
+      "uncompressed": 37201132,
+      "offset": 6290713672
+    },
+    {
+      "name": "SoundMorph - Doom Drones/amb_doomdrones_athena.wav",
+      "method": 8,
+      "crc": 3741646145,
+      "compressed": 12227641,
+      "uncompressed": 13051308,
+      "offset": 6324859561
+    },
+    {
+      "name": "SoundMorph - Future Weapons/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6337087310
+    },
+    {
+      "name": "SoundMorph - Future Weapons/Alliance-AssaultRifle_05-Single_Shot-04.wav",
+      "method": 8,
+      "crc": 3826069143,
+      "compressed": 1769738,
+      "uncompressed": 2947836,
+      "offset": 6337087396
+    },
+    {
+      "name": "SoundMorph - Future Weapons/Resistance-AssaultRifle_03-Single_Shot-04.wav",
+      "method": 8,
+      "crc": 1666434560,
+      "compressed": 2400284,
+      "uncompressed": 3692780,
+      "offset": 6338857263
+    },
+    {
+      "name": "SoundMorph - Future Weapons/Utilities-Mine or System activation-13.wav",
+      "method": 8,
+      "crc": 2333903273,
+      "compressed": 2667618,
+      "uncompressed": 4147212,
+      "offset": 6341257678
+    },
+    {
+      "name": "SoundMorph - Future Weapons/Blaster Machine_Gun-01-Burst-03.wav",
+      "method": 8,
+      "crc": 269286034,
+      "compressed": 3233935,
+      "uncompressed": 4710572,
+      "offset": 6343925424
+    },
+    {
+      "name": "SoundMorph - Future Weapons/Utilities-Sensor-02.wav",
+      "method": 8,
+      "crc": 10625586,
+      "compressed": 15928595,
+      "uncompressed": 17850492,
+      "offset": 6347159480
+    },
+    {
+      "name": "SoundMorph - Modular UI - By Richard Devine/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6363088184
+    },
+    {
+      "name": "SoundMorph - Modular UI - By Richard Devine/Modular UI - Data Transmissions-001.wav",
+      "method": 8,
+      "crc": 2194827055,
+      "compressed": 8370515,
+      "uncompressed": 9420972,
+      "offset": 6363088286
+    },
+    {
+      "name": "SoundMorph - Modular UI - By Richard Devine/Modular UI - Source Recordings - Beeps - Clean - 002.wav",
+      "method": 8,
+      "crc": 1986984159,
+      "compressed": 52590218,
+      "uncompressed": 61210860,
+      "offset": 6371458942
+    },
+    {
+      "name": "SoundMorph - Modular UI - By Richard Devine/Modular UI - Calculations and Text-011.wav",
+      "method": 8,
+      "crc": 1224933947,
+      "compressed": 9898123,
+      "uncompressed": 11460204,
+      "offset": 6424049318
+    },
+    {
+      "name": "SoundMorph - Modular UI - By Richard Devine/Modular UI - Micro Gestures-021.wav",
+      "method": 8,
+      "crc": 3837980660,
+      "compressed": 9462445,
+      "uncompressed": 11672156,
+      "offset": 6433947585
+    },
+    {
+      "name": "SoundMorph - Modular UI - By Richard Devine/Modular UI - Text Type-Hi Tech-003.wav",
+      "method": 8,
+      "crc": 1535051751,
+      "compressed": 7644634,
+      "uncompressed": 9559004,
+      "offset": 6443410167
+    },
+    {
+      "name": "SoundMorph - Road Riders/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6451054941
+    },
+    {
+      "name": "SoundMorph - Road Riders/designed_passbys_alien_space_6.wav",
+      "method": 8,
+      "crc": 3304997896,
+      "compressed": 4007889,
+      "uncompressed": 4574828,
+      "offset": 6451055024
+    },
+    {
+      "name": "SoundMorph - Road Riders/lightbike_takeoff_03.wav",
+      "method": 8,
+      "crc": 3407700181,
+      "compressed": 4863883,
+      "uncompressed": 5697292,
+      "offset": 6455063030
+    },
+    {
+      "name": "SoundMorph - Road Riders/designed_passbys_the_freq_shifter_2.wav",
+      "method": 8,
+      "crc": 393137956,
+      "compressed": 5407282,
+      "uncompressed": 6266732,
+      "offset": 6459927020
+    },
+    {
+      "name": "SoundMorph - Road Riders/ducati_panigale_2012_follow_by_5.wav",
+      "method": 8,
+      "crc": 560823982,
+      "compressed": 6802658,
+      "uncompressed": 7828604,
+      "offset": 6465334424
+    },
+    {
+      "name": "SoundMorph - Road Riders/LIGHTBIKE ACCELERATE 02.wav",
+      "method": 8,
+      "crc": 3366068043,
+      "compressed": 6653721,
+      "uncompressed": 6973948,
+      "offset": 6472137201
+    },
+    {
+      "name": "SoundMorph - Robotic Lifeforms/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6478791032
+    },
+    {
+      "name": "SoundMorph - Robotic Lifeforms/industrial_balloon_spins.wav",
+      "method": 8,
+      "crc": 65193803,
+      "compressed": 14113275,
+      "uncompressed": 17412012,
+      "offset": 6478791121
+    },
+    {
+      "name": "SoundMorph - Robotic Lifeforms/footstep_a_mech_mega_02.wav",
+      "method": 8,
+      "crc": 3942405170,
+      "compressed": 828677,
+      "uncompressed": 1151052,
+      "offset": 6492904513
+    },
+    {
+      "name": "SoundMorph - Robotic Lifeforms/servo_ice_lense_04.wav",
+      "method": 8,
+      "crc": 1324448923,
+      "compressed": 1101354,
+      "uncompressed": 2106972,
+      "offset": 6493733306
+    },
+    {
+      "name": "SoundMorph - Robotic Lifeforms/mechanism_tiny_bot_layer_05.wav",
+      "method": 8,
+      "crc": 1813837882,
+      "compressed": 4035878,
+      "uncompressed": 4762172,
+      "offset": 6494834771
+    },
+    {
+      "name": "SoundMorph - Robotic Lifeforms/power_move_mech_18.wav",
+      "method": 8,
+      "crc": 4057925134,
+      "compressed": 3131783,
+      "uncompressed": 3482124,
+      "offset": 6498870769
+    },
+    {
+      "name": "SoundMorph - Robotic Lifeforms/footstep_a_mech_mega_01.wav",
+      "method": 8,
+      "crc": 2989507750,
+      "compressed": 1049622,
+      "uncompressed": 1430972,
+      "offset": 6502002663
+    },
+    {
+      "name": "SoundMorph - Sinematic/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6503052401
+    },
+    {
+      "name": "SoundMorph - Sinematic/Sinematic - Stingers_11.wav",
+      "method": 8,
+      "crc": 2095048203,
+      "compressed": 3669471,
+      "uncompressed": 4830812,
+      "offset": 6503052482
+    },
+    {
+      "name": "SoundMorph - Sinematic/Sinematic - Risers_02.wav",
+      "method": 8,
+      "crc": 2830076293,
+      "compressed": 7105208,
+      "uncompressed": 8118956,
+      "offset": 6506722061
+    },
+    {
+      "name": "SoundMorph - Sinematic/Sinematic - Source Recordings - Synth - Rectified Electric_03.wav",
+      "method": 8,
+      "crc": 2811363839,
+      "compressed": 1926664,
+      "uncompressed": 2774076,
+      "offset": 6513827375
+    },
+    {
+      "name": "SoundMorph - Sinematic/Sinematic - Complex Tech Hits - 04.wav",
+      "method": 8,
+      "crc": 812401142,
+      "compressed": 4133080,
+      "uncompressed": 5160540,
+      "offset": 6515754185
+    },
+    {
+      "name": "SoundMorph - Sinematic/Sinematic - Source Recordings - Tape Duct Rips.wav",
+      "method": 8,
+      "crc": 153669539,
+      "compressed": 7030947,
+      "uncompressed": 8691868,
+      "offset": 6519887384
+    },
+    {
+      "name": "SoundMorph - Solar Sky/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6526918462
+    },
+    {
+      "name": "SoundMorph - Solar Sky/passby_SpaceShip_Big_Cargo_04.wav",
+      "method": 8,
+      "crc": 4173693484,
+      "compressed": 35410578,
+      "uncompressed": 39622396,
+      "offset": 6526918543
+    },
+    {
+      "name": "SoundMorph - Solar Sky/passby_SpaceShip-01_speed_variations_Slow.wav",
+      "method": 8,
+      "crc": 467343343,
+      "compressed": 9760357,
+      "uncompressed": 11344972,
+      "offset": 6562329235
+    },
+    {
+      "name": "SoundMorph - Solar Sky/amb_SpaceShip_rumble_low_pulse.wav",
+      "method": 8,
+      "crc": 4145332257,
+      "compressed": 30265997,
+      "uncompressed": 31067948,
+      "offset": 6572089718
+    },
+    {
+      "name": "SoundMorph - Solar Sky/shut_down_SpaceShip_22.wav",
+      "method": 8,
+      "crc": 4090649193,
+      "compressed": 20902281,
+      "uncompressed": 22052876,
+      "offset": 6602355830
+    },
+    {
+      "name": "SoundMorph - Solar Sky/door_SpaceShip_hatchway_04.wav",
+      "method": 8,
+      "crc": 3929577341,
+      "compressed": 2189243,
+      "uncompressed": 2603388,
+      "offset": 6623258218
+    },
+    {
+      "name": "SoundMorph - Users of Tommorow/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6625447572
+    },
+    {
+      "name": "SoundMorph - Users of Tommorow/alarm_loops_08.wav",
+      "method": 8,
+      "crc": 2148063981,
+      "compressed": 2531883,
+      "uncompressed": 2900908,
+      "offset": 6625447661
+    },
+    {
+      "name": "SoundMorph - Users of Tommorow/hologram_screens_01.wav",
+      "method": 8,
+      "crc": 3289707857,
+      "compressed": 5501197,
+      "uncompressed": 6192124,
+      "offset": 6627979651
+    },
+    {
+      "name": "SoundMorph - Users of Tommorow/confirm_beepy_02.wav",
+      "method": 8,
+      "crc": 3457291626,
+      "compressed": 846183,
+      "uncompressed": 1310476,
+      "offset": 6633480960
+    },
+    {
+      "name": "SoundMorph - Users of Tommorow/glitch_interface_crunchanator_12.wav",
+      "method": 8,
+      "crc": 2058273247,
+      "compressed": 1003421,
+      "uncompressed": 1378652,
+      "offset": 6634327252
+    },
+    {
+      "name": "SoundMorph - Users of Tommorow/calculations_n_text_spaced_02.wav",
+      "method": 8,
+      "crc": 50131084,
+      "compressed": 1687315,
+      "uncompressed": 2215260,
+      "offset": 6635330798
+    },
+    {
+      "name": "Soundopolis - Blades/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6637018235
+    },
+    {
+      "name": "Soundopolis - Blades/Knife_Sword_Shing_Fienup_001.wav",
+      "method": 8,
+      "crc": 4077304102,
+      "compressed": 452833,
+      "uncompressed": 676460,
+      "offset": 6637018314
+    },
+    {
+      "name": "Soundopolis - Blades/Machete_Hit_Ring_Fienup_001.wav",
+      "method": 8,
+      "crc": 4030119931,
+      "compressed": 818310,
+      "uncompressed": 1387964,
+      "offset": 6637471258
+    },
+    {
+      "name": "Soundopolis - Blades/Knife_Sword_Hit_Multiple_Fienup_003.wav",
+      "method": 8,
+      "crc": 71445340,
+      "compressed": 620090,
+      "uncompressed": 752508,
+      "offset": 6638289678
+    },
+    {
+      "name": "Soundopolis - Blades/Knife_Sword_Drop_Wood_Fienup_001.wav",
+      "method": 8,
+      "crc": 872802055,
+      "compressed": 307877,
+      "uncompressed": 493292,
+      "offset": 6638909886
+    },
+    {
+      "name": "Soundopolis - Burps and Farts/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6639217878
+    },
+    {
+      "name": "Soundopolis - Burps and Farts/Fart_Short_Fienup_009.wav",
+      "method": 8,
+      "crc": 2374604153,
+      "compressed": 418780,
+      "uncompressed": 444748,
+      "offset": 6639217966
+    },
+    {
+      "name": "Soundopolis - Burps and Farts/Fart_Long_Fienup_007.wav",
+      "method": 8,
+      "crc": 2875673219,
+      "compressed": 1346489,
+      "uncompressed": 1496716,
+      "offset": 6639636859
+    },
+    {
+      "name": "Soundopolis - Burps and Farts/Fart_Long_Fienup_002.wav",
+      "method": 8,
+      "crc": 1369976246,
+      "compressed": 589937,
+      "uncompressed": 660044,
+      "offset": 6640983460
+    },
+    {
+      "name": "Soundopolis - Burps and Farts/Burp_Long_Fienup_022.wav",
+      "method": 8,
+      "crc": 3800609666,
+      "compressed": 784216,
+      "uncompressed": 890380,
+      "offset": 6641573509
+    },
+    {
+      "name": "Soundopolis - Burps and Farts/Burp_Short_Fienup_009.wav",
+      "method": 8,
+      "crc": 1991255200,
+      "compressed": 308170,
+      "uncompressed": 382860,
+      "offset": 6642357837
+    },
+    {
+      "name": "Soundopolis - CB Radio/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6642666120
+    },
+    {
+      "name": "Soundopolis - CB Radio/CB Radio_Freq 06_Static_Fienup_001.wav",
+      "method": 8,
+      "crc": 424667399,
+      "compressed": 15063731,
+      "uncompressed": 15461660,
+      "offset": 6642666201
+    },
+    {
+      "name": "Soundopolis - CB Radio/CB Radio_Freq 08_Static_Fienup_001.wav",
+      "method": 8,
+      "crc": 942773610,
+      "compressed": 22902345,
+      "uncompressed": 23714572,
+      "offset": 6657730051
+    },
+    {
+      "name": "Soundopolis - CB Radio/CB Radio_Starting Up_Fienup_001.wav",
+      "method": 8,
+      "crc": 3485552024,
+      "compressed": 35020083,
+      "uncompressed": 36846204,
+      "offset": 6680632515
+    },
+    {
+      "name": "Soundopolis - Foley Plus_Full/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6715652714
+    },
+    {
+      "name": "Soundopolis - Foley Plus_Full/Sizzle_Frying Pan_Fienup_001.wav",
+      "method": 8,
+      "crc": 1859040844,
+      "compressed": 6418564,
+      "uncompressed": 7080668,
+      "offset": 6715652802
+    },
+    {
+      "name": "Soundopolis - Foley Plus_Full/Lighter_Blue Flame_E_Light_Fienup_001.wav",
+      "method": 8,
+      "crc": 205615836,
+      "compressed": 3551670,
+      "uncompressed": 4320412,
+      "offset": 6722071486
+    },
+    {
+      "name": "Soundopolis - Foley Plus_Full/Cans_Aluminum_Rummage_Fienup_002.wav",
+      "method": 8,
+      "crc": 311099279,
+      "compressed": 18547554,
+      "uncompressed": 20807500,
+      "offset": 6725623285
+    },
+    {
+      "name": "Soundopolis - Foley Plus_Full/Champagne_Cork_Pop_Fienup_001.wav",
+      "method": 8,
+      "crc": 2312631602,
+      "compressed": 83615,
+      "uncompressed": 96508,
+      "offset": 6744170963
+    },
+    {
+      "name": "Soundopolis - Foley Plus_Full/Computer_Keyboard_Type_Fienup_002.wav",
+      "method": 8,
+      "crc": 3560455152,
+      "compressed": 32802229,
+      "uncompressed": 41770284,
+      "offset": 6744254699
+    },
+    {
+      "name": "Soundopolis - Glass Smash Full/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6777057053
+    },
+    {
+      "name": "Soundopolis - Glass Smash Full/Glass_Break_Pane_702T_Fienup_005.wav",
+      "method": 8,
+      "crc": 307734687,
+      "compressed": 1109497,
+      "uncompressed": 1352588,
+      "offset": 6777057142
+    },
+    {
+      "name": "Soundopolis - Glass Smash Full/Glass_Break_ChampagneBottle_D50_Fienup_003.wav",
+      "method": 8,
+      "crc": 1101653829,
+      "compressed": 1024010,
+      "uncompressed": 1395740,
+      "offset": 6778166764
+    },
+    {
+      "name": "Soundopolis - Glass Smash Full/Glass_Break_BeerBottle_702T_Fienup_002.wav",
+      "method": 8,
+      "crc": 2124315329,
+      "compressed": 1456364,
+      "uncompressed": 1881596,
+      "offset": 6779190909
+    },
+    {
+      "name": "Soundopolis - Glass Smash Full/Glass_Break_Vase_D50_Fienup_003.wav",
+      "method": 8,
+      "crc": 1577998451,
+      "compressed": 3167546,
+      "uncompressed": 4966764,
+      "offset": 6780647404
+    },
+    {
+      "name": "Soundopolis - Glass Smash Full/Glass_Break_WineBottle_702T_Fienup_004.wav",
+      "method": 8,
+      "crc": 2193966339,
+      "compressed": 1055815,
+      "uncompressed": 1318780,
+      "offset": 6783815074
+    },
+    {
+      "name": "Soundopolis - Gore Toolkit HD/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6784871020
+    },
+    {
+      "name": "Soundopolis - Gore Toolkit HD/Bloody_Squish_Fienup_CLASSIC_006.wav",
+      "method": 8,
+      "crc": 1248881845,
+      "compressed": 22136211,
+      "uncompressed": 45878236,
+      "offset": 6784871108
+    },
+    {
+      "name": "Soundopolis - Gore Toolkit HD/Whoosh_Swing_Fishing Pole_Full_Fienup_CLASSIC_001.wav",
+      "method": 8,
+      "crc": 4002057651,
+      "compressed": 267225,
+      "uncompressed": 593228,
+      "offset": 6807007443
+    },
+    {
+      "name": "Soundopolis - Gore Toolkit HD/Slice_Crunchy_Fienup_002.wav",
+      "method": 8,
+      "crc": 1891708263,
+      "compressed": 428684,
+      "uncompressed": 1054060,
+      "offset": 6807274809
+    },
+    {
+      "name": "Soundopolis - Gore Toolkit HD/Punch_Spurt Blood_Fienup_001.wav",
+      "method": 8,
+      "crc": 1861416929,
+      "compressed": 225885,
+      "uncompressed": 335036,
+      "offset": 6807703609
+    },
+    {
+      "name": "Soundopolis - Gore Toolkit HD/Flesh_Cut_Watermelon_Fienup_CLASSIC_001.wav",
+      "method": 8,
+      "crc": 2170037083,
+      "compressed": 2313114,
+      "uncompressed": 5060652,
+      "offset": 6807929614
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Rain_01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 6810242859
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Rain_01/Rain_Splatty_Heavy_Fienup_002.wav",
+      "method": 8,
+      "crc": 2343839799,
+      "compressed": 61458765,
+      "uncompressed": 67932524,
+      "offset": 6810242952
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Rain_01/Rain_Medium_Fienup_008.wav",
+      "method": 8,
+      "crc": 2784992949,
+      "compressed": 66435222,
+      "uncompressed": 72632348,
+      "offset": 6871701843
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Rain_01/Rain_Splatty_Puddle_Drips_Fienup_003.wav",
+      "method": 8,
+      "crc": 3591122374,
+      "compressed": 53542322,
+      "uncompressed": 61673100,
+      "offset": 6938137184
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Rain_01/Rain_Heavy_Fienup_005.wav",
+      "method": 8,
+      "crc": 448265604,
+      "compressed": 63371829,
+      "uncompressed": 66135788,
+      "offset": 6991679639
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Rain_01/Rain_Light_Fienup_003.wav",
+      "method": 8,
+      "crc": 729292232,
+      "compressed": 120133160,
+      "uncompressed": 138452556,
+      "offset": 7055051586
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Thunder/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 7175184864
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Thunder/Thunder_Rumble_Mid_Fienup_024.wav",
+      "method": 8,
+      "crc": 3276678628,
+      "compressed": 2679007,
+      "uncompressed": 2963964,
+      "offset": 7175184957
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Thunder/Thunder_Boom_Fienup_005.wav",
+      "method": 8,
+      "crc": 3599630925,
+      "compressed": 18559182,
+      "uncompressed": 21312316,
+      "offset": 7177864090
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Thunder/Thunder_Rumble_Deep_Fienup_003.wav",
+      "method": 8,
+      "crc": 51116704,
+      "compressed": 19054136,
+      "uncompressed": 21361548,
+      "offset": 7196423392
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Thunder/Thunderstorm_Distant_Fienup_001.wav",
+      "method": 8,
+      "crc": 682568630,
+      "compressed": 97193486,
+      "uncompressed": 110298380,
+      "offset": 7215477655
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Thunder/Thunder_Crack_Fienup_016.wav",
+      "method": 8,
+      "crc": 3984182097,
+      "compressed": 15387973,
+      "uncompressed": 17522652,
+      "offset": 7312671269
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Wind_01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 7328059363
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Wind_01/Wind_Forest_Fienup_001.wav",
+      "method": 8,
+      "crc": 1908516514,
+      "compressed": 121422766,
+      "uncompressed": 134696620,
+      "offset": 7328059456
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Wind_01/Wind_Heavy_Fienup_001.wav",
+      "method": 8,
+      "crc": 2534813679,
+      "compressed": 79827864,
+      "uncompressed": 86495676,
+      "offset": 7449482341
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Wind_01/Wind_Trees_Cattails_Fienup_004.wav",
+      "method": 8,
+      "crc": 1524908954,
+      "compressed": 41172030,
+      "uncompressed": 46086668,
+      "offset": 7529310323
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Wind_01/Wind_INT_Window Whistle_Fienup_003.wav",
+      "method": 8,
+      "crc": 3785690486,
+      "compressed": 95414498,
+      "uncompressed": 111577580,
+      "offset": 7570482480
+    },
+    {
+      "name": "Soundopolis - Natures Fury_Wind_01/Wind_Trees_Cattails_Fienup_001.wav",
+      "method": 8,
+      "crc": 1347246990,
+      "compressed": 27624312,
+      "uncompressed": 30442140,
+      "offset": 7665897109
+    },
+    {
+      "name": "Soundopolis - Percussion 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 7693521548
+    },
+    {
+      "name": "Soundopolis - Percussion 01/Banjo_Drum_Hit_Fienup_016.wav",
+      "method": 8,
+      "crc": 4193932031,
+      "compressed": 1152218,
+      "uncompressed": 1419372,
+      "offset": 7693521634
+    },
+    {
+      "name": "Soundopolis - Percussion 01/HandDrum_Reverse_SlowDown_Fienup_003.wav",
+      "method": 8,
+      "crc": 2876964032,
+      "compressed": 4086374,
+      "uncompressed": 4219388,
+      "offset": 7694673967
+    },
+    {
+      "name": "Soundopolis - Percussion 01/Timpani_Hit_Fienup_001.wav",
+      "method": 8,
+      "crc": 2129005592,
+      "compressed": 3772119,
+      "uncompressed": 5079964,
+      "offset": 7698760467
+    },
+    {
+      "name": "Soundopolis - Percussion 01/Bell_Waiter_Fienup_001.wav",
+      "method": 8,
+      "crc": 3994246714,
+      "compressed": 1622343,
+      "uncompressed": 2031196,
+      "offset": 7702532698
+    },
+    {
+      "name": "Soundopolis - Percussion 01/Gyro_Fienup_002.wav",
+      "method": 8,
+      "crc": 3265087718,
+      "compressed": 150178,
+      "uncompressed": 170252,
+      "offset": 7704155153
+    },
+    {
+      "name": "Soundopolis - Sci-Fi Electric/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 7704305436
+    },
+    {
+      "name": "Soundopolis - Sci-Fi Electric/Texture_Interference_Grainy_LapsteelPickUps_Fienup_003.wav",
+      "method": 8,
+      "crc": 3058239377,
+      "compressed": 4515454,
+      "uncompressed": 4691404,
+      "offset": 7704305524
+    },
+    {
+      "name": "Soundopolis - Sci-Fi Electric/StreetLight_Buzz_Fienup_002.wav",
+      "method": 8,
+      "crc": 2382256769,
+      "compressed": 13113411,
+      "uncompressed": 14508172,
+      "offset": 7708821124
+    },
+    {
+      "name": "Soundopolis - Sci-Fi Electric/Electrical_Current_MouthNoises_Fienup_001.wav",
+      "method": 8,
+      "crc": 34736342,
+      "compressed": 3433213,
+      "uncompressed": 3638076,
+      "offset": 7721934654
+    },
+    {
+      "name": "Soundopolis - Sci-Fi Electric/Electrical_Current_Texture_Fienup_004.wav",
+      "method": 8,
+      "crc": 2033221392,
+      "compressed": 14121189,
+      "uncompressed": 14827468,
+      "offset": 7725368000
+    },
+    {
+      "name": "Soundopolis - Sci-Fi Electric/Texture_Alien_Bugs_Fienup_003.wav",
+      "method": 8,
+      "crc": 1226451284,
+      "compressed": 24068181,
+      "uncompressed": 27919260,
+      "offset": 7739489318
+    },
+    {
+      "name": "Soundopolis - Tools:Construction 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 7763557620
+    },
+    {
+      "name": "Soundopolis - Tools:Construction 01/Hammer_Multiple_Exterior_Fienup_013.wav",
+      "method": 8,
+      "crc": 2297287,
+      "compressed": 761380,
+      "uncompressed": 872356,
+      "offset": 7763557714
+    },
+    {
+      "name": "Soundopolis - Tools:Construction 01/CircularSaw_Cut_Wood_Fienup_001.wav",
+      "method": 8,
+      "crc": 2368236043,
+      "compressed": 3659490,
+      "uncompressed": 3889402,
+      "offset": 7764319227
+    },
+    {
+      "name": "Soundopolis - Tools:Construction 01/PowerDrill_Run_Stop_Fienup_010.wav",
+      "method": 8,
+      "crc": 552460217,
+      "compressed": 428031,
+      "uncompressed": 455742,
+      "offset": 7767978846
+    },
+    {
+      "name": "Soundopolis - Tools:Construction 01/Jackhammer_Fienup_001.wav",
+      "method": 8,
+      "crc": 1685469673,
+      "compressed": 51797259,
+      "uncompressed": 53519380,
+      "offset": 7768407005
+    },
+    {
+      "name": "Soundopolis - Tools:Construction 01/Demolition_Home_Fienup_007.wav",
+      "method": 8,
+      "crc": 1629805167,
+      "compressed": 97313519,
+      "uncompressed": 103734254,
+      "offset": 7820204383
+    },
+    {
+      "name": "Soundopolis - Underwater/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 7917518026
+    },
+    {
+      "name": "Soundopolis - Underwater/Underwater_Breathing_Fienup_002.wav",
+      "method": 8,
+      "crc": 809941510,
+      "compressed": 526793,
+      "uncompressed": 548604,
+      "offset": 7917518109
+    },
+    {
+      "name": "Soundopolis - Underwater/Underwater_Golfball_Bounce_Fienup_001.wav",
+      "method": 8,
+      "crc": 1413405480,
+      "compressed": 1402716,
+      "uncompressed": 1529564,
+      "offset": 7918045020
+    },
+    {
+      "name": "Soundopolis - Underwater/Underwater_Motion_Fienup_024.wav",
+      "method": 8,
+      "crc": 2246730577,
+      "compressed": 2641254,
+      "uncompressed": 3018700,
+      "offset": 7919447860
+    },
+    {
+      "name": "Soundopolis - Underwater/Underwater_Bubbles_Fienup_026.wav",
+      "method": 8,
+      "crc": 3005685052,
+      "compressed": 1003132,
+      "uncompressed": 1138060,
+      "offset": 7922089229
+    },
+    {
+      "name": "Soundopolis - Underwater/Underwater_Bubbles_Deep_Fienup_016.wav",
+      "method": 8,
+      "crc": 1193533953,
+      "compressed": 886226,
+      "uncompressed": 930284,
+      "offset": 7923092477
+    },
+    {
+      "name": "Soundopolis - Water 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 7923978824
+    },
+    {
+      "name": "Soundopolis - Water 01/WaterPipe_Smoke_Fienup_003.wav",
+      "method": 8,
+      "crc": 2642926605,
+      "compressed": 1445634,
+      "uncompressed": 1556924,
+      "offset": 7923978905
+    },
+    {
+      "name": "Soundopolis - Water 01/Water_Drain_Sewer_Fienup_005.wav",
+      "method": 8,
+      "crc": 2103997037,
+      "compressed": 22732191,
+      "uncompressed": 25298380,
+      "offset": 7925424650
+    },
+    {
+      "name": "Soundopolis - Water 01/Water_Splash_SeaLion_Fienup_001.wav",
+      "method": 8,
+      "crc": 72139541,
+      "compressed": 2706823,
+      "uncompressed": 2981532,
+      "offset": 7948156954
+    },
+    {
+      "name": "Soundopolis - Water 01/Splash_Dive_Fienup_002.wav",
+      "method": 8,
+      "crc": 1363905961,
+      "compressed": 10015453,
+      "uncompressed": 11930572,
+      "offset": 7950863893
+    },
+    {
+      "name": "Soundopolis - Water 01/Water_Fountain_Fienup_002.wav",
+      "method": 8,
+      "crc": 2170095963,
+      "compressed": 35615892,
+      "uncompressed": 39589468,
+      "offset": 7960879453
+    },
+    {
+      "name": "Soundopolis - Water Ambiences 01/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 7996495455
+    },
+    {
+      "name": "Soundopolis - Water Ambiences 01/River_Dam_Light_Fienup_001.wav",
+      "method": 8,
+      "crc": 1412587103,
+      "compressed": 40986297,
+      "uncompressed": 45046780,
+      "offset": 7996495546
+    },
+    {
+      "name": "Soundopolis - Water Ambiences 01/Lake_Huron_Mackinaw_Evening_Fienup_002.wav",
+      "method": 8,
+      "crc": 2426471375,
+      "compressed": 82668267,
+      "uncompressed": 90270044,
+      "offset": 8037481964
+    },
+    {
+      "name": "Soundopolis - Water Ambiences 01/Waterfall_Rainforest_Fienup_002.wav",
+      "method": 8,
+      "crc": 1250650592,
+      "compressed": 29510027,
+      "uncompressed": 31764716,
+      "offset": 8120150364
+    },
+    {
+      "name": "Soundopolis - Water Ambiences 01/Beach_Ocean_Waves_Fienup_001.wav",
+      "method": 8,
+      "crc": 3899079006,
+      "compressed": 107882468,
+      "uncompressed": 117132716,
+      "offset": 8149660517
+    },
+    {
+      "name": "Soundopolis - Water Ambiences 01/River_Huron_Lapping_Fienup_002.wav",
+      "method": 8,
+      "crc": 3108678425,
+      "compressed": 15730345,
+      "uncompressed": 18051772,
+      "offset": 8257543108
+    },
+    {
+      "name": "TheLibrarybyEmptySea - Gateway Part1/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 8273273578
+    },
+    {
+      "name": "TheLibrarybyEmptySea - Gateway Part1/basement_parking_garage_gate_metal_general_perspective_open_close_03.wav",
+      "method": 8,
+      "crc": 2668861012,
+      "compressed": 21306206,
+      "uncompressed": 24116636,
+      "offset": 8273273673
+    },
+    {
+      "name": "TheLibrarybyEmptySea - Gateway Part1/patio_door_wood_glass_INT_hinge_creak_open_close_08.wav",
+      "method": 8,
+      "crc": 3659478877,
+      "compressed": 2450881,
+      "uncompressed": 2944028,
+      "offset": 8294580046
+    },
+    {
+      "name": "TheLibrarybyEmptySea - Gateway Part1/hotel_door_metal_deadbolt_unlock_02.wav",
+      "method": 8,
+      "crc": 3438898664,
+      "compressed": 475678,
+      "uncompressed": 583852,
+      "offset": 8297031077
+    },
+    {
+      "name": "TheLibrarybyEmptySea - Gateway Part1/bearproof_trashcan_metal_open_close_10.wav",
+      "method": 8,
+      "crc": 1438174333,
+      "compressed": 4268779,
+      "uncompressed": 4645228,
+      "offset": 8297506889
+    },
+    {
+      "name": "TheLibrarybyEmptySea - Gateway Part1/wood_door_viewing_slide_speakeasy_open_close_01.wav",
+      "method": 8,
+      "crc": 3284529818,
+      "compressed": 2002120,
+      "uncompressed": 2331340,
+      "offset": 8301775805
+    },
+    {
+      "name": "TheLibrarybyEmptySea - Robobiotics/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 8303778071
+    },
+    {
+      "name": "TheLibrarybyEmptySea - Robobiotics/TheLibrarybyMTC_Robo_Motor_CoffeeGrinderB_001.wav",
+      "method": 8,
+      "crc": 1058828078,
+      "compressed": 3035813,
+      "uncompressed": 3290620,
+      "offset": 8303778164
+    },
+    {
+      "name": "TheLibrarybyEmptySea - Robobiotics/TheLibrarybyMTC_Robo_Servo_PowerWindow_035.wav",
+      "method": 8,
+      "crc": 4138452411,
+      "compressed": 842345,
+      "uncompressed": 919036,
+      "offset": 8306814119
+    },
+    {
+      "name": "TheLibrarybyEmptySea - Robobiotics/TheLibrarybyMTC_Robo_LaserBlast_Medium_027.wav",
+      "method": 8,
+      "crc": 3848505710,
+      "compressed": 332162,
+      "uncompressed": 368172,
+      "offset": 8307656603
+    },
+    {
+      "name": "TheLibrarybyEmptySea - Robobiotics/TheLibrarybyMTC_Robo_Metal_HatchDeep_006.wav",
+      "method": 8,
+      "crc": 406127585,
+      "compressed": 7175205,
+      "uncompressed": 7858268,
+      "offset": 8307988904
+    },
+    {
+      "name": "TheLibrarybyEmptySea - Robobiotics/TheLibrarybyMTC_Robo_Foley_Joints_Mvmt_002.wav",
+      "method": 8,
+      "crc": 456827727,
+      "compressed": 3969345,
+      "uncompressed": 4662492,
+      "offset": 8315164246
+    },
+    {
+      "name": "TheLibrarybyEmptySea - SeaMonsters 2/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 8319133730
+    },
+    {
+      "name": "TheLibrarybyEmptySea - SeaMonsters 2/TheLibrarybyMTC_TinyMonster_Pain_199_96k.wav",
+      "method": 8,
+      "crc": 2749620683,
+      "compressed": 2143286,
+      "uncompressed": 2488556,
+      "offset": 8319133825
+    },
+    {
+      "name": "TheLibrarybyEmptySea - SeaMonsters 2/TheLibrarybyMTC_GroanyMonster_Pain_118_96k.wav",
+      "method": 8,
+      "crc": 2683006220,
+      "compressed": 11208233,
+      "uncompressed": 11793340,
+      "offset": 8321277250
+    },
+    {
+      "name": "TheLibrarybyEmptySea - SeaMonsters 2/TheLibrarybyMTC_GrowlMonster_Effort_92_96k.wav",
+      "method": 8,
+      "crc": 22966777,
+      "compressed": 1098605,
+      "uncompressed": 1211852,
+      "offset": 8332485624
+    },
+    {
+      "name": "TheLibrarybyEmptySea - SeaMonsters 2/TheLibrarybyMTC_ScreechMonster_Roar_34_96k.wav",
+      "method": 8,
+      "crc": 2969570055,
+      "compressed": 2208144,
+      "uncompressed": 2380812,
+      "offset": 8333584370
+    },
+    {
+      "name": "TheLibrarybyEmptySea - SeaMonsters 2/TheLibrarybyMTC_GrowlMonster_Roar_26_96k.wav",
+      "method": 8,
+      "crc": 1885542900,
+      "compressed": 1631276,
+      "uncompressed": 1753164,
+      "offset": 8335792655
+    },
+    {
+      "name": "TheLibrarybyEmptySea - UI1/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 8337424070
+    },
+    {
+      "name": "TheLibrarybyEmptySea - UI1/TheLibrarybyMTC_UI_Splat_01.wav",
+      "method": 8,
+      "crc": 1926472587,
+      "compressed": 613525,
+      "uncompressed": 783004,
+      "offset": 8337424155
+    },
+    {
+      "name": "TheLibrarybyEmptySea - UI1/TheLibrarybyMTC_UI_GlassTicks_25.wav",
+      "method": 8,
+      "crc": 1819885570,
+      "compressed": 80941,
+      "uncompressed": 103708,
+      "offset": 8338037796
+    },
+    {
+      "name": "TheLibrarybyEmptySea - UI1/TheLibrarybyMTC_UI_Computer_094.wav",
+      "method": 8,
+      "crc": 3218327282,
+      "compressed": 265529,
+      "uncompressed": 306540,
+      "offset": 8338118858
+    },
+    {
+      "name": "TheLibrarybyEmptySea - UI1/TheLibrarybyMTC_UI_Droplet_06.wav",
+      "method": 8,
+      "crc": 2354578619,
+      "compressed": 694906,
+      "uncompressed": 890812,
+      "offset": 8338384507
+    },
+    {
+      "name": "TheLibrarybyEmptySea - UI1/TheLibrarybyMTC_UI_Alert_01.wav",
+      "method": 8,
+      "crc": 1884530619,
+      "compressed": 784779,
+      "uncompressed": 964588,
+      "offset": 8339079531
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 8339864426
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Grill Run Barefoot Male - 14.wav",
+      "method": 8,
+      "crc": 537182379,
+      "compressed": 73848,
+      "uncompressed": 92684,
+      "offset": 8339864520
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Board Jump Barefoot Male - 11.wav",
+      "method": 8,
+      "crc": 2613188585,
+      "compressed": 157106,
+      "uncompressed": 195772,
+      "offset": 8339938511
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Grill Walk Barefoot Male - 15.wav",
+      "method": 8,
+      "crc": 4053739327,
+      "compressed": 74179,
+      "uncompressed": 98876,
+      "offset": 8340095761
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Grill Land Barefoot Male - 5.wav",
+      "method": 8,
+      "crc": 2782066795,
+      "compressed": 171724,
+      "uncompressed": 208204,
+      "offset": 8340170084
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Grill Run Barefoot Male - 21.wav",
+      "method": 8,
+      "crc": 2029797028,
+      "compressed": 72865,
+      "uncompressed": 91148,
+      "offset": 8340341951
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Board Walk Barefoot Male - 2.wav",
+      "method": 8,
+      "crc": 4274692719,
+      "compressed": 102851,
+      "uncompressed": 135724,
+      "offset": 8340414959
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Plate Walk Barefoot Male - 3.wav",
+      "method": 8,
+      "crc": 948530660,
+      "compressed": 144255,
+      "uncompressed": 181996,
+      "offset": 8340517953
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Plate Run Barefoot Male - 12.wav",
+      "method": 8,
+      "crc": 2575808454,
+      "compressed": 73922,
+      "uncompressed": 91084,
+      "offset": 8340662351
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Grill Walk Barefoot Male - 13.wav",
+      "method": 8,
+      "crc": 4077110250,
+      "compressed": 79027,
+      "uncompressed": 112748,
+      "offset": 8340736416
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Grill Rattle Barefoot Male - 18.wav",
+      "method": 8,
+      "crc": 2354137715,
+      "compressed": 75390,
+      "uncompressed": 98492,
+      "offset": 8340815587
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Board Walk Barefoot Male - 24.wav",
+      "method": 8,
+      "crc": 2873458364,
+      "compressed": 107558,
+      "uncompressed": 143452,
+      "offset": 8340891123
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Grill Jump Barefoot Male - 3.wav",
+      "method": 8,
+      "crc": 1744363701,
+      "compressed": 163235,
+      "uncompressed": 195884,
+      "offset": 8340998825
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Board Run Barefoot Male - 1.wav",
+      "method": 8,
+      "crc": 358690996,
+      "compressed": 73239,
+      "uncompressed": 92572,
+      "offset": 8341162203
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Plate Run Barefoot Male - 14.wav",
+      "method": 8,
+      "crc": 2815450217,
+      "compressed": 106072,
+      "uncompressed": 129580,
+      "offset": 8341235584
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Plate Walk Barefoot Male - 2.wav",
+      "method": 8,
+      "crc": 2981416088,
+      "compressed": 139230,
+      "uncompressed": 175836,
+      "offset": 8341341799
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Plate Run Barefoot Male - 17.wav",
+      "method": 8,
+      "crc": 3851886524,
+      "compressed": 99863,
+      "uncompressed": 126508,
+      "offset": 8341481172
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Plate Walk Barefoot Male - 1.wav",
+      "method": 8,
+      "crc": 1204882165,
+      "compressed": 158608,
+      "uncompressed": 191228,
+      "offset": 8341581178
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Plate Jump Barefoot Male - 17.wav",
+      "method": 8,
+      "crc": 4087378442,
+      "compressed": 167347,
+      "uncompressed": 214316,
+      "offset": 8341739929
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Plate Land Barefoot Male - 1.wav",
+      "method": 8,
+      "crc": 3714838904,
+      "compressed": 192960,
+      "uncompressed": 237420,
+      "offset": 8341907420
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Grill Slide Barefoot Male - 16.wav",
+      "method": 8,
+      "crc": 404755106,
+      "compressed": 110416,
+      "uncompressed": 148284,
+      "offset": 8342100523
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Board Walk Barefoot Male - 27.wav",
+      "method": 8,
+      "crc": 575075284,
+      "compressed": 111540,
+      "uncompressed": 144988,
+      "offset": 8342211084
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Plate Slide Barefoot Male - 11.wav",
+      "method": 8,
+      "crc": 1236298449,
+      "compressed": 151609,
+      "uncompressed": 192908,
+      "offset": 8342322768
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Grill Walk Barefoot Male - 1.wav",
+      "method": 8,
+      "crc": 1675694320,
+      "compressed": 88326,
+      "uncompressed": 160460,
+      "offset": 8342474522
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Grill Run Barefoot Male - 17.wav",
+      "method": 8,
+      "crc": 11511272,
+      "compressed": 85383,
+      "uncompressed": 108092,
+      "offset": 8342562991
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Board Land Barefoot Male - 1.wav",
+      "method": 8,
+      "crc": 3370026503,
+      "compressed": 154632,
+      "uncompressed": 199164,
+      "offset": 8342648517
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Board Run Barefoot Male - 17.wav",
+      "method": 8,
+      "crc": 954652159,
+      "compressed": 106606,
+      "uncompressed": 135708,
+      "offset": 8342803292
+    },
+    {
+      "name": "Timothy McHugh -  Barefoot on Metal/FOOTSTEP - Metal Board Run Barefoot Male - 10.wav",
+      "method": 8,
+      "crc": 3060343429,
+      "compressed": 77683,
+      "uncompressed": 103372,
+      "offset": 8342910041
+    },
+    {
+      "name": "Timothy McHugh - Cafe Ambiances/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 8342987867
+    },
+    {
+      "name": "Timothy McHugh - Cafe Ambiances/AMBIENT - Small Cafe Interior - 01.wav",
+      "method": 8,
+      "crc": 526008807,
+      "compressed": 133098612,
+      "uncompressed": 145097260,
+      "offset": 8342987957
+    },
+    {
+      "name": "Timothy McHugh - Cafe Ambiances/AMBIENT - Beer Garden Large Crowd Talk On Benches Exterior - 02.wav",
+      "method": 8,
+      "crc": 1501893416,
+      "compressed": 136014266,
+      "uncompressed": 146187356,
+      "offset": 8476086697
+    },
+    {
+      "name": "Timothy McHugh - Cafe Ambiances/AMBIENT - Busy Large Restaurant Interior - 01.wav",
+      "method": 8,
+      "crc": 3972455706,
+      "compressed": 148167725,
+      "uncompressed": 158075628,
+      "offset": 8612101120
+    },
+    {
+      "name": "Timothy McHugh - Crowd Laughter/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 8760268984
+    },
+    {
+      "name": "Timothy McHugh - Crowd Laughter/WALLA - Crowd laugh and shout - Interior - Medium - 30.wav",
+      "method": 8,
+      "crc": 1789833468,
+      "compressed": 1158552,
+      "uncompressed": 1337964,
+      "offset": 8760269074
+    },
+    {
+      "name": "Timothy McHugh - Crowd Laughter/WALLA - Crowd laugh and shout - Interior - Louder - 9.wav",
+      "method": 8,
+      "crc": 2903526711,
+      "compressed": 1647923,
+      "uncompressed": 1907052,
+      "offset": 8761427774
+    },
+    {
+      "name": "Timothy McHugh - Crowd Laughter/WALLA - Crowd laugh and shout - Interior - Medium - 22.wav",
+      "method": 8,
+      "crc": 743163054,
+      "compressed": 1133403,
+      "uncompressed": 1291820,
+      "offset": 8763075844
+    },
+    {
+      "name": "Timothy McHugh - Crowd Laughter/WALLA - Crowd laugh and shout - Interior - Louder - 14.wav",
+      "method": 8,
+      "crc": 1173141369,
+      "compressed": 1768142,
+      "uncompressed": 2005500,
+      "offset": 8764209395
+    },
+    {
+      "name": "Timothy McHugh - Crowd Laughter/WALLA - Crowd laugh and shout - Interior - Softer - 7.wav",
+      "method": 8,
+      "crc": 248894253,
+      "compressed": 1472423,
+      "uncompressed": 1771660,
+      "offset": 8765977685
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 8767450255
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - large metal knife muted ring - 1.wav",
+      "method": 8,
+      "crc": 2040677120,
+      "compressed": 381405,
+      "uncompressed": 494092,
+      "offset": 8767450348
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - bone break wet juicy - hard - 2.wav",
+      "method": 8,
+      "crc": 2789063423,
+      "compressed": 200885,
+      "uncompressed": 327628,
+      "offset": 8767831889
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - wood beating flesh wet blood splat - medium - 11.wav",
+      "method": 8,
+      "crc": 1623701286,
+      "compressed": 325132,
+      "uncompressed": 423452,
+      "offset": 8768032909
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - medium metal blade wet impact in to flesh and removed - 6.wav",
+      "method": 8,
+      "crc": 717555905,
+      "compressed": 329435,
+      "uncompressed": 461132,
+      "offset": 8768358193
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - wood beating flesh wet blood splat - soft - 4.wav",
+      "method": 8,
+      "crc": 4194446856,
+      "compressed": 352411,
+      "uncompressed": 474204,
+      "offset": 8768687789
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - metal knife swing - 4.wav",
+      "method": 8,
+      "crc": 3427318006,
+      "compressed": 145973,
+      "uncompressed": 185724,
+      "offset": 8769040349
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - wood beating flesh wet blood splat - soft - 14.wav",
+      "method": 8,
+      "crc": 89570994,
+      "compressed": 237381,
+      "uncompressed": 306348,
+      "offset": 8769186447
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - large metal blade wet stab slash and remove from flesh - medium - 14.wav",
+      "method": 8,
+      "crc": 1654802093,
+      "compressed": 233310,
+      "uncompressed": 308892,
+      "offset": 8769423978
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - large metal blade wet stab slash and remove from flesh - hard - 4.wav",
+      "method": 8,
+      "crc": 1532876559,
+      "compressed": 712818,
+      "uncompressed": 994140,
+      "offset": 8769657460
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - metal knife swing - 5.wav",
+      "method": 8,
+      "crc": 2215470151,
+      "compressed": 248435,
+      "uncompressed": 321260,
+      "offset": 8770370447
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - flesh and bone crunch wet - hard - 4.wav",
+      "method": 8,
+      "crc": 4281164930,
+      "compressed": 847040,
+      "uncompressed": 1351788,
+      "offset": 8770619007
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - bone break and flesh tear dry - soft - 5.wav",
+      "method": 8,
+      "crc": 1781263797,
+      "compressed": 294233,
+      "uncompressed": 404748,
+      "offset": 8771466187
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - crunchy flesh impact and blood squirt - hard -  8.wav",
+      "method": 8,
+      "crc": 1895426682,
+      "compressed": 345272,
+      "uncompressed": 447052,
+      "offset": 8771760564
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - large metal knife muted ring - 34.wav",
+      "method": 8,
+      "crc": 3038142352,
+      "compressed": 136373,
+      "uncompressed": 173772,
+      "offset": 8772105989
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - flesh guts gore impact blood squirt wet - medium - 104.wav",
+      "method": 8,
+      "crc": 42135032,
+      "compressed": 325001,
+      "uncompressed": 446828,
+      "offset": 8772242499
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - large metal blade wet stab slash and remove from flesh - hard - 1.wav",
+      "method": 8,
+      "crc": 1865327973,
+      "compressed": 673680,
+      "uncompressed": 924828,
+      "offset": 8772567658
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - flesh guts gore movements wet - 22.wav",
+      "method": 8,
+      "crc": 1442219822,
+      "compressed": 657274,
+      "uncompressed": 909804,
+      "offset": 8773241507
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - large metal knife ring - 8.wav",
+      "method": 8,
+      "crc": 2134409545,
+      "compressed": 526224,
+      "uncompressed": 672652,
+      "offset": 8773898919
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - small metal blade flesh movement with rip and gouge wet - 1.wav",
+      "method": 8,
+      "crc": 2003410917,
+      "compressed": 305945,
+      "uncompressed": 379340,
+      "offset": 8774425273
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - flesh and bone crunch - hard - 5.wav",
+      "method": 8,
+      "crc": 1298096667,
+      "compressed": 318548,
+      "uncompressed": 424892,
+      "offset": 8774731381
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - large metal knife muted ring - 13.wav",
+      "method": 8,
+      "crc": 3660710141,
+      "compressed": 183836,
+      "uncompressed": 244604,
+      "offset": 8775050065
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - flesh guts gore impact blood squirt wet - hard - 49.wav",
+      "method": 8,
+      "crc": 2406733544,
+      "compressed": 877780,
+      "uncompressed": 1239868,
+      "offset": 8775234038
+    },
+    {
+      "name": "Timothy McHugh - Gorification [HD]/gore - metal knife swing - 17.wav",
+      "method": 8,
+      "crc": 2037917837,
+      "compressed": 84526,
+      "uncompressed": 105948,
+      "offset": 8776111973
+    },
+    {
+      "name": "Tracklist - GDC #GameAudio Giveaway.pdf",
+      "method": 8,
+      "crc": 193663653,
+      "compressed": 85871,
+      "uncompressed": 111549,
+      "offset": 8776196625
+    },
+    {
+      "name": "Varazuvi - California Foley/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 8776282593
+    },
+    {
+      "name": "Varazuvi - California Foley/coins2.wav",
+      "method": 8,
+      "crc": 3828595180,
+      "compressed": 268615,
+      "uncompressed": 335596,
+      "offset": 8776282679
+    },
+    {
+      "name": "Varazuvi - California Foley/door28.wav",
+      "method": 8,
+      "crc": 2059736798,
+      "compressed": 348035,
+      "uncompressed": 427756,
+      "offset": 8776551390
+    },
+    {
+      "name": "Varazuvi - California Foley/stone29.wav",
+      "method": 8,
+      "crc": 1683198077,
+      "compressed": 22070127,
+      "uncompressed": 31218556,
+      "offset": 8776899521
+    },
+    {
+      "name": "Varazuvi - California Foley/Key19.wav",
+      "method": 8,
+      "crc": 2643809679,
+      "compressed": 486786,
+      "uncompressed": 600060,
+      "offset": 8798969745
+    },
+    {
+      "name": "Varazuvi - Hollywood Dragons/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 8799456626
+    },
+    {
+      "name": "Varazuvi - Hollywood Dragons/Dragon Roaring 4.wav",
+      "method": 8,
+      "crc": 1603947436,
+      "compressed": 2753402,
+      "uncompressed": 3688940,
+      "offset": 8799456713
+    },
+    {
+      "name": "Varazuvi - Hollywood Dragons/Dragon Mouth Flutter 2.wav",
+      "method": 8,
+      "crc": 3674964599,
+      "compressed": 629358,
+      "uncompressed": 1320540,
+      "offset": 8802210222
+    },
+    {
+      "name": "Varazuvi - Hollywood Dragons/Dragon Long Huff 2.wav",
+      "method": 8,
+      "crc": 2004807649,
+      "compressed": 2573493,
+      "uncompressed": 3550556,
+      "offset": 8802839693
+    },
+    {
+      "name": "Varazuvi - Hollywood Dragons/Dragon Short Huff.wav",
+      "method": 8,
+      "crc": 3852083500,
+      "compressed": 771207,
+      "uncompressed": 1468108,
+      "offset": 8805413295
+    },
+    {
+      "name": "Varazuvi - Natural Environments/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 8806184610
+    },
+    {
+      "name": "Varazuvi - Natural Environments/RainLoopHeavy.wav",
+      "method": 8,
+      "crc": 3438665359,
+      "compressed": 4560177,
+      "uncompressed": 5201852,
+      "offset": 8806184700
+    },
+    {
+      "name": "Varazuvi - Natural Environments/RainLoopLight.wav",
+      "method": 8,
+      "crc": 493960094,
+      "compressed": 4195037,
+      "uncompressed": 5217244,
+      "offset": 8810744984
+    },
+    {
+      "name": "Varazuvi - Natural Environments/Environment-DeforestationTreesBeingCutDown.wav",
+      "method": 8,
+      "crc": 3586487702,
+      "compressed": 5070150,
+      "uncompressed": 6039116,
+      "offset": 8814940128
+    },
+    {
+      "name": "Varazuvi - Natural Environments/CloudsMoving.wav",
+      "method": 8,
+      "crc": 1758689365,
+      "compressed": 4347506,
+      "uncompressed": 7490364,
+      "offset": 8820010414
+    },
+    {
+      "name": "Varazuvi - Natural Variety/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 8824358026
+    },
+    {
+      "name": "Varazuvi - Natural Variety/PlantGrowth.wav",
+      "method": 8,
+      "crc": 2989654853,
+      "compressed": 3009301,
+      "uncompressed": 4187132,
+      "offset": 8824358111
+    },
+    {
+      "name": "Varazuvi - Natural Variety/AnimalDiggingDirt.wav",
+      "method": 8,
+      "crc": 422926954,
+      "compressed": 2046798,
+      "uncompressed": 2375500,
+      "offset": 8827367512
+    },
+    {
+      "name": "Varazuvi - Natural Variety/Animal-DeerPullingBarkFromTree.wav",
+      "method": 8,
+      "crc": 1195385004,
+      "compressed": 1696911,
+      "uncompressed": 2203516,
+      "offset": 8829414416
+    },
+    {
+      "name": "Varazuvi - Natural Variety/Insect-Ants.wav",
+      "method": 8,
+      "crc": 252349333,
+      "compressed": 2047046,
+      "uncompressed": 2658348,
+      "offset": 8831111446
+    },
+    {
+      "name": "Varazuvi - Underwater Whale/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 8833158592
+    },
+    {
+      "name": "Varazuvi - Underwater Whale/Whale Call Low (echo) 9.wav",
+      "method": 8,
+      "crc": 2947605305,
+      "compressed": 1505599,
+      "uncompressed": 2688844,
+      "offset": 8833158678
+    },
+    {
+      "name": "Varazuvi - Underwater Whale/Whale Call-Answer Close (echo) 7.wav",
+      "method": 8,
+      "crc": 3709760376,
+      "compressed": 3835859,
+      "uncompressed": 5229804,
+      "offset": 8834664390
+    },
+    {
+      "name": "Varazuvi - Underwater Whale/Whale Call High (echo) 14.wav",
+      "method": 8,
+      "crc": 1845557267,
+      "compressed": 2053967,
+      "uncompressed": 3159516,
+      "offset": 8838500371
+    },
+    {
+      "name": "Varazuvi - Underwater Whale/Whale Call Mid (echo) 8.wav",
+      "method": 8,
+      "crc": 4219046037,
+      "compressed": 2196894,
+      "uncompressed": 3344028,
+      "offset": 8840554453
+    },
+    {
+      "name": "Whatisvalis - unEarthy Ambience/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 8842751460
+    },
+    {
+      "name": "Whatisvalis - unEarthy Ambience/amb_JD_drone_clattering_machine.wav",
+      "method": 8,
+      "crc": 3451755507,
+      "compressed": 42424266,
+      "uncompressed": 43252380,
+      "offset": 8842751550
+    },
+    {
+      "name": "Whatisvalis - unEarthy Ambience/amb_JD_drone_spinning_top.wav",
+      "method": 8,
+      "crc": 4150698563,
+      "compressed": 49252096,
+      "uncompressed": 50591580,
+      "offset": 8885175941
+    },
+    {
+      "name": "Whatisvalis - unEarthy Ambience/amb_JD_drone_pulsing_darkness.wav",
+      "method": 8,
+      "crc": 2748793368,
+      "compressed": 51926254,
+      "uncompressed": 54673516,
+      "offset": 8934428156
+    },
+    {
+      "name": "Whatisvalis - unEarthy Ambience/amb_JD_drone_gates_ofmydian.wav",
+      "method": 8,
+      "crc": 1716599180,
+      "compressed": 51291630,
+      "uncompressed": 54227468,
+      "offset": 8986354533
+    },
+    {
+      "name": "sonniss - please read.txt",
+      "method": 8,
+      "crc": 543864176,
+      "compressed": 826,
+      "uncompressed": 3028,
+      "offset": 9037646284
+    }
+  ]
+}

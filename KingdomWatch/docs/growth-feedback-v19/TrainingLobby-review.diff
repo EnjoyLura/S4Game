@@ -1,0 +1,88 @@
+--- before/assets/scripts/ui/TrainingLobby.ts
++++ assets/scripts/ui/TrainingLobby.ts
+@@ -14,6 +14,8 @@
+ import { TrainingWeaponFloat } from './TrainingWeaponFloat';
+ import { HoldUpgrade } from './HoldUpgrade';
+ import { TrainingGrowthFx } from './TrainingGrowthFx';
++import { TrainingResultPulse } from './TrainingResultPulse';
++import { feedbackSurface } from './FeedbackSurface';
+ import { uiSound } from './UIAudio';
+ import { heroRosterRail } from './HeroRosterRail';
+ import { GrowthTarget, growthAction } from './GrowthFeedback';
+@@ -137,7 +139,7 @@
+ }
+ 
+ type PreviewRow = { name: string; cur: string; next: string; gain: string };
+-interface PreviewControl { node: Node; refresh: (lv: number, maxed: boolean, rows: PreviewRow[]) => void; }
++interface PreviewControl { node: Node; refresh: (lv: number, maxed: boolean, rows: PreviewRow[], achieved?: { level: number; rows: PreviewRow[] }) => void; }
+ function preview(parent: Node, x: number, y: number, w: number, h: number, title: string,
+   lv: number, maxed: boolean, rows: PreviewRow[], portrait = false, note = ''): PreviewControl {
+   const p=trainingPaper(parent,x,y,w,h,'trainingPreview',title);
+@@ -145,17 +147,21 @@
+   const current = mainLabel(p, -w * .18, levelY, `Lv.${lv}`, { size: 26, bold: true, color: TRAINING_INK, w: w * .32, h: 40 });
+   const arrow = mainLabel(p, 0, levelY, maxed ? '·' : '→', { size: 23, color: COMIC.sub, w: 32, h: 38 });
+   const next = mainLabel(p, w * .18, levelY, maxed ? 'MAX' : `Lv.${lv + 1}`, { size: 26, bold: true, color: COMIC.greenShade, w: w * .32, h: 40 });
++  const stamp = mainLabel(p,0,h/2-66,'',{size:16,bold:true,color:'#95712C',w:w-64,h:22}).getComponent(Label)!;
++  const changedLabels: Node[] = [next], lights: Node[] = [];
+   const updates: ((row: PreviewRow, maxed: boolean) => void)[] = [];
+   if (portrait) {
+     const groupH=h-206, step=groupH/Math.max(1,rows.length);
+     const group=lobbyAttributeWell(p,0,-22,w-32,groupH,'trainingPortraitAttributeWhite');
+     rows.forEach((r, i) => {
+       const yy = groupH/2-step*(i+.5)+15;
++      lights.push(feedbackSurface(group,'trainingResultHighlight','feather',0,yy-13,w-44,Math.min(74,step-8),'#F4CA59',.7));
+       mainLabel(group, -w * .19, yy, r.name, { size: 21, bold: true, color: TRAINING_INK, w: w * .42, h: 30 });
+       const gain = mainLabel(group, w * .23, yy, maxed ? '已达上限' : r.gain, { size: 19, color: COMIC.greenShade, w: w * .35, h: 27 });
+       const a = mainLabel(group, -w * .18, yy - 31, r.cur, { size: 25, bold: true, color: TRAINING_INK, w: w * .31, h: 32 });
+       mainLabel(group, 0, yy - 31, '→', { size: 20, color: TRAINING_SUB, w: 30, h: 30 });
+       const b = mainLabel(group, w * .18, yy - 31, r.next, { size: 25, bold: true, color: COMIC.greenShade, w: w * .31, h: 32 });
++      changedLabels.push(b,gain);
+       updates.push((row, capped) => { setText(a, row.cur); setText(b, row.next); setText(gain, capped ? '已达上限' : row.gain); });
+     });
+     if (rows.length>1) trainingRule(group,0,w-66);
+@@ -164,16 +170,26 @@
+     const group=lobbyAttributeWell(p,0,h/2-126-groupH/2,w-36,groupH,'trainingWideAttributeWhite');
+     rows.forEach((r, i) => {
+       const yy = groupH/2-8-step*(i+.5);
++      lights.push(feedbackSurface(group,'trainingResultHighlight','feather',0,yy,w-50,40,'#F4CA59',.7));
+       mainLabel(group, -w * .285, yy, r.name, { size: 23, bold: true, color: TRAINING_INK, w: w * .29, h: 32, align: 'left' });
+       const a=mainLabel(group, w * .02, yy, `${r.cur} → ${r.next}`, { size: 25, bold: true, color: TRAINING_INK, w: w * .38, h: 34 });
+       const gain=mainLabel(group, w * .335, yy, maxed ? 'MAX' : r.gain, { size: 23, bold: true, color: COMIC.greenShade, w: w * .18, h: 32 });
++      changedLabels.push(gain);
+       updates.push((row,capped)=>{setText(a,`${row.cur} → ${row.next}`);setText(gain,capped?'MAX':row.gain);});
+     });
+     if (note) mainLabel(p, 0, -h / 2 + 35, note, { size: 18, color: TRAINING_SUB, w: w - 50, h: 44,lineHeight:23 });
+   }
+-  return { node: p, refresh: (level, capped, values) => {
+-    setText(current, `Lv.${level}`); setText(arrow, capped ? '·' : '→'); setText(next, capped ? 'MAX' : `Lv.${level + 1}`);
+-    updates.forEach((update, i) => update(values[i], capped));
++  const pulse = p.addComponent(TrainingResultPulse); pulse.configure(changedLabels,lights,stamp);
++  return { node: p, refresh: (level, capped, values, achieved) => {
++    const restore = (): void => {
++      setText(current, `Lv.${level}`); setText(arrow, capped ? '·' : '→'); setText(next, capped ? 'MAX' : `Lv.${level + 1}`);
++      updates.forEach((update, i) => update(values[i], capped));
++    };
++    if (achieved) pulse.present(() => {
++      setText(current,`Lv.${achieved.level}`);setText(arrow,'→');setText(next,`Lv.${level}`);
++      updates.forEach((update,i)=>update(achieved.rows[i],false));
++    },restore);
++    else restore();
+   } };
+ }
+ 
+@@ -380,13 +396,14 @@
+         const footerControl = footer(root, ctx, footerTop, weapon ? '强化武器' : '升级英雄', weapon ? weaponUpCost(lv) : { gold: heroUpCost(lv), mat: 0 }, maxed, action, target, false, repeating => {
+           // Keep the same hit target and art alive throughout a continuous gesture.
+           const before = heroStats(hid).power, oldLevel = weapon ? h.weaponLv : h.lv;
++          const beforeStats = data.statsAt(hid,h.lv,h.weaponLv);
+           const milestone = (oldLevel + 1) % 10 === 0;
+           const result = growthAction(target, action, repeating);
+           if (!result.ok) return false;
+           const level = weapon ? h.weaponLv : h.lv, capped = level >= (weapon ? MAX.weapon : MAX.hero);
+           const current = data.statsAt(hid, h.lv, h.weaponLv);
+           const nextStats = capped ? current : data.statsAt(hid, h.lv + (weapon ? 0 : 1), h.weaponLv + (weapon ? 1 : 0));
+-          statsPanel.refresh(level, capped, comparison(current, nextStats)); refreshContext();
++          statsPanel.refresh(level, capped, comparison(current, nextStats), { level: oldLevel, rows: comparison(beforeStats,current) }); refreshContext();
+           if (weaponCaption) setText(weaponCaption, '换装继承培养等级 · Lv.' + h.weaponLv);
+           const nextCost = weapon ? weaponUpCost(level) : { gold: heroUpCost(level), mat: 0 };
+           footerControl.refresh(nextCost, capped); ctx.refreshResources?.();

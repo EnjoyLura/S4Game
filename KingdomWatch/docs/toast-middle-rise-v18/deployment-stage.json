@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-toast-middle-rise-v18-20261017-141200",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-feedback-polish-v17-20261017-135339",
+  "entryVersion": "1792217049",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=toast-middle-rise-v18-1792217049",
+  "scope": "ordinary and growth toasts appear at screen center, rise to upper-middle, hold, then fade upward; separate battle modal art and motion design preview",
+  "preview": "https://kingdom-watch.pages.dev/previews/battle-modal-v18/",
+  "manualAcceptance": "pending user manual review"
+}

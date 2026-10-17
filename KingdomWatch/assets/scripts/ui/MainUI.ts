@@ -16,10 +16,11 @@ import { COMIC, comicArt, comicButton, comicDialog, comicMark } from './ComicUI'
 import { ResourceBar, ResourceCurrency } from './ResourceBar';
 import { buildShop } from './pages/ShopPage';
 import { buildHeroes } from './pages/HeroPage';
-import { buildLevels } from './pages/LevelsPage';
+import { buildLevels, closeLevelPreparation } from './pages/LevelsPage';
 import { buildUpgrade } from './pages/UpgradePage';
 import { buildBase } from './pages/BasePage';
 import { levelReturnReady } from './BattleEntry';
+import { paintLobbyStrip } from './LobbyChrome';
 
 const { ccclass } = _decorator;
 
@@ -117,7 +118,7 @@ export class MainUI extends Component {
     }, { tone: 'green', size: 23 });
   }
 
-  /* ---------- 底部导航（5 页签；用户确认：导航栏不要边框——平板底 + 高亮板，无页签框美术） ---------- */
+  /* ---------- Five shared navigation tabs: navy strip, gold selection and faint separators. ---------- */
   private buildNavBar(root: Node): void {
     this.navBar = gpanel(root, 0, WYB(0, MAIN_NAV_H), 750, MAIN_NAV_H, CA('#101D17', 0.98), undefined, 0, 0);
     const w = 138;
@@ -127,7 +128,6 @@ export class MainUI extends Component {
       const slot = N('tab' + i, root, cx, WYB(12, 104), w, 104);
       const idle = gpanel(slot, 0, 0, 126, 104, CA('#FFFFFF', 0), undefined, 0, 18);
       const act = gpanel(slot, 0, 0, 126, 104, CA('#E8BA60', 0.16), undefined, 0, 18);
-      gpanel(act, 0, -48, 32, 3, '#E8BA60', undefined, 0, 1);
       act.active = false;
       const icon = N('navigationGlyph', slot, 0, 17, 60, 60);
       const art = t.art ? comicArt(slot, 0, 17, 64, 64, t.art) : null;
@@ -138,15 +138,10 @@ export class MainUI extends Component {
     });
   }
 
-  /** 页签高亮：激活金板金字 / 未激活暗板白字（无边框规范：纯色板，无页签框美术） */
+  /** Original flat gold selection; clearer separators remain behind the touch slots. */
   private highlightTabs(): void {
     if (this.navBar) {
-      const bg = this.navBar.getComponent(Graphics)!;
-      bg.clear();
-      bg.fillColor = C(COMIC.dark);
-      bg.rect(-375, -MAIN_NAV_H / 2, 750, MAIN_NAV_H); bg.fill();
-      bg.fillColor = C(COMIC.darkLight);
-      bg.rect(-375, MAIN_NAV_H / 2 - 3, 750, 3); bg.fill();
+      paintLobbyStrip(this.navBar, 750, MAIN_NAV_H, [-207, -69, 69, 207]);
     }
     this.navItems.forEach((it, k) => {
       const active = k === this.tab;
@@ -158,10 +153,6 @@ export class MainUI extends Component {
       ag.clear();
       ag.fillColor = C(COMIC.gold);
       ag.roundRect(-63, -50, 126, 104, 12); ag.fill();
-      ag.fillColor = C(COMIC.goldLight);
-      ag.roundRect(-50, 47, 100, 3, 1); ag.fill();
-      const mark = it.act.children[0];
-      if (mark) mark.active = false;
       if (txtLbl) {
         txtLbl.color = C(active ? COMIC.text : COMIC.cream);
         txtLbl.fontSize = 24;
@@ -175,6 +166,7 @@ export class MainUI extends Component {
   /* ---------- 页签切换：内容整屏重建 ---------- */
   switchTab(i: number): void {
     const previous = this.tab;
+    if (i !== 2) closeLevelPreparation();
     this.tab = i;
     flow.mainTab = i;
     this.highlightTabs();

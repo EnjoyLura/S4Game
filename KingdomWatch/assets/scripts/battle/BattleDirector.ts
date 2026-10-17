@@ -140,7 +140,7 @@ export class BattleDirector extends Component {
     this.float = new FloatText(textLayer);
     this.pops = new ComicPop(textLayer);
     this.mgr = new MonsterManager(mobLayer, hitCtx);
-    this.mgr.statMul = DIFFICULTIES[this.levelDef.difficulty].statMul;
+    this.mgr.statMul = DIFFICULTIES[this.levelDef.difficulty].statMul * (this.levelDef.statMul || 1);
     // 首次遭遇新怪种 → 解锁图鉴 + 横幅 + 新怪通知钮（介绍弹窗待玩家点击查看）
     this.mgr.onFirstEncounter = def => {
       if (unlockCodex(def.id)) {
@@ -341,7 +341,6 @@ export class BattleDirector extends Component {
     this.hud.setWave(cur as number, total as number);
     if (surge && !this.waves.hasThreat) {
       this.hud.showBanner('敌军大部队来袭！', 2);
-      Sfx.play('surge');
     }
   }
 
@@ -384,7 +383,7 @@ export class BattleDirector extends Component {
     const opts: PickOpts = {
       onPick: (card: CardDef) => {
         if (this.state !== 'pick' || !this.applyCard(card)) return;
-        Sfx.play('confirm');
+        // PickMotion owns the single confirmation at the selected card's landing.
         this.stacks[card.id] = (this.stacks[card.id] || 0) + 1;
         this.pickQueue--;
         saveSave();
@@ -460,7 +459,8 @@ export class BattleDirector extends Component {
         tab: 0,
         speed: this.speed,
         speedUnlocked: !!(sv.speedUnlocked || sv.debug),
-        xp: Math.floor(this.xp),
+        xp: Math.floor(this.xpEarned),
+        loot: this.loot.summary(),
       });
     } else if (this.state === 'paused') {
       this.panels.closeAll(true);
@@ -484,7 +484,6 @@ export class BattleDirector extends Component {
     this.state = 'lose'; this.pendingWin = false;
     this.bossWarning.clear();
     this.ultPresentation.clear();
-    Sfx.play('defeat');
     const goldFloor = Math.floor((this.levelDef.baseGold + this.goldEarned) * .3);
     this.creditBattleGold(goldFloor);
     const loot = this.loot.collectAll();
@@ -526,7 +525,6 @@ export class BattleDirector extends Component {
     this.pendingWin = false; this.ultPresentation.clear();
     this.state = 'win';
     this.bossWarning.clear();
-    Sfx.play('victory');
     const stars = starOf(this.line.ratio);
     const reward = Math.floor(this.goldEarned + this.levelDef.baseGold * (1 + stars * 0.1));
     const sv = loadSave();

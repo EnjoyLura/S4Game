@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-gear-slots-fill-v3-20261017-015825",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-preparation-art-v2-20261017-014305",
+  "entryVersion": "1792173338",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=gear-slots-fill-v3-1792173338",
+  "scope": "remove rarity corner labels; fill equipment and inventory sockets edge to edge; weapon square same size as equipment",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://c7f3cdc9.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-gear-slots-fill-v3-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-gear-slots-fill-v3-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 18126,
+  "mainSha256": "699498b61729aacd7faf886a52c236b0434a4e03cef2f98a34cb8a258c7e7003",
+  "date": "2026-10-17T01:59:01.383621+08:00",
+  "testsRun": false,
+  "gameRun": false,
+  "simulationRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

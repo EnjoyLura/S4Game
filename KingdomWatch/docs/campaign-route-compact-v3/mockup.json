@@ -1,0 +1,18 @@
+{
+  "tool": "built-in image_gen",
+  "purpose": "design mockup only; not a gameplay screenshot or acceptance",
+  "inputReferences": [
+    "C:/Users/user/AppData/Local/Temp/codex-clipboard-5a7f4611-bd6e-41b1-ab36-5da4e1fe15ad.png",
+    "C:/Users/user/AppData/Local/Temp/codex-clipboard-955699c5-a60a-49ff-8364-e3532c1c6cfe.png"
+  ],
+  "finalSource": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-ef32b57f-8809-4bab-bb09-a7ec985c6204.png",
+  "finalCopy": "docs/campaign-route-compact-v3/mockup-final.png",
+  "sourceSha256": "81c7f6b6738f9147921b961ce353849012153cb3b800df073c892c1a03ea5f97",
+  "copiedSha256": "81c7f6b6738f9147921b961ce353849012153cb3b800df073c892c1a03ea5f97",
+  "prompts": [
+    "mockup-prompt.txt",
+    "mockup-correction-prompt.txt"
+  ],
+  "visualReview": "design draft reviewed for requested structure, stage labels 1-10 and rarity colors; no game or browser executed",
+  "pixelEditing": false
+}

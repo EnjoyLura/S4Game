@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-stage-loot-layout-v2-20261016-235755",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-checkpoints-v1-20261016-232148",
+  "entryVersion": "1792166231",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=stage-loot-layout-v2-1792166231",
+  "scope": "guaranteed currency and material icons; local rarity wells and complete gear pool; quality-only tags; preparation drawer keeps terrain offset",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://55c79237.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-stage-loot-layout-v2-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-stage-loot-layout-v2-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "mainSha256": "a8ba61792ddba9cd139a24afe6e433a0cf2cb022387ba1f7b7657c2f820e8fba",
+  "creatorBuildMilliseconds": 21703,
+  "date": "2026-10-16T23:58:34.849746+08:00",
+  "testsRun": false,
+  "simulationRun": false,
+  "gameRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

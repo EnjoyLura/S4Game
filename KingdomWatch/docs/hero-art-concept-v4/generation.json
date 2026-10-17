@@ -1,0 +1,38 @@
+{
+  "tool": "built-in image_gen",
+  "useCase": "ui-mockup",
+  "references": [
+    "C:/Users/user/AppData/Local/Temp/codex-clipboard-e3f2767f-5b84-4546-a671-cf3f6f85ddcc.png",
+    "C:/Users/user/AppData/Local/Temp/codex-clipboard-1fe27809-0ab2-445c-84df-4766cb172f11.png"
+  ],
+  "referenceRoles": [
+    "Current hero page content, identity, guild interior and equipment",
+    "Current modal material and title style only; ignore red annotations and shop flow"
+  ],
+  "outputs": [
+    {
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-0b6d3bae-d30d-406b-9fff-ee376f01a9ef.png",
+      "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-art-concept-v4\\hero-main-v4.png",
+      "prompt": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-art-concept-v4\\hero-main-prompt.txt",
+      "sha256": "cffd97e3af21cc82242f63a96b28d79fae57c40a9c7bc1692214da6b93f5e592",
+      "pixelsUnmodified": true
+    },
+    {
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-8704332c-f30c-4ee8-8925-29ad1143613e.png",
+      "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-art-concept-v4\\hero-attributes-v4.png",
+      "prompt": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-art-concept-v4\\hero-attributes-prompt.txt",
+      "sha256": "f7e52a92c227da1d5c2c3707f204b61305a25a2ec36c15992eef51d23df12d84",
+      "pixelsUnmodified": true
+    },
+    {
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-b7e3d430-592e-4803-a92b-6b0bb578c158.png",
+      "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-art-concept-v4\\hero-equipment-v4.png",
+      "prompt": "D:\\AI\\S4Game\\KingdomWatch\\docs\\hero-art-concept-v4\\hero-equipment-prompt.txt",
+      "sha256": "46bbc4104fe173af7ad29ca4b4e83294cf1f4c542f89ba0fe36191156a44235d",
+      "pixelsUnmodified": true
+    }
+  ],
+  "integratedIntoRuntime": false,
+  "statisticsAreIllustrative": true,
+  "visualReview": "All three generated originals directly inspected. Main page has five equipment slots and empty inventory. Attribute modal uses a continuous pale group backing. Equipment modal has complete actions and clear paper margin below. Implemented original flat buttons and rounded navigation selection remain authoritative."
+}

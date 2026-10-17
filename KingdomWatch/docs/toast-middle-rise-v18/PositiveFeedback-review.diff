@@ -1,0 +1,21 @@
+--- before/assets/scripts/ui/PositiveFeedback.ts
++++ assets/scripts/ui/PositiveFeedback.ts
+@@ -59,7 +59,7 @@
+     if (!merged) { this.appearanceAge = 0; this.displayedPower = r.power?.before || 0; }
+     this.fromPower = this.displayedPower;
+     this.quiet = reducedMotion(); this.height = r.milestone ? 192 : 142;
+-    this.lift = LO.half * .12;
++    this.lift = Math.min(LO.half * .36, LO.half - LO.notchTop - this.height / 2 - 160);
+     if (!this.display) {
+       this.display = N('growthCelebration', this.node, 0, this.lift, 680, this.height);
+       this.fade = this.display.addComponent(UIOpacity);
+@@ -99,7 +99,8 @@
+     const r = this.receipt; if (!r || !this.display) return;
+     const end = r.milestone ? 2.45 : 1.85, leaving = clamp((this.age - end + .28) / .28);
+     this.fade.opacity = Math.round(255 * (this.quiet ? 1 : out(this.appearanceAge / .12)) * (1 - leaving));
+-    const entry = LO.half + this.lift + this.height / 2 + 24;
++    // At appearanceAge zero the screen-space center is y=0, matching ordinary notices.
++    const entry = this.lift;
+     this.display.setPosition(0, this.lift - (this.quiet ? 0 : entry * (1 - out(this.appearanceAge / .32))) + (this.quiet ? 0 : leaving * 30), 0);
+     const progress = this.quiet ? 1 : out(this.age / .45);
+     this.levels.string = 'Lv.' + r.level.before + '  →  Lv.' + r.level.after;

@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-lobby-ui-quiet-v1-20261016-212841",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-reward-chests-v1-20261016-211040",
+  "entryVersion": "1792157282",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=lobby-ui-quiet-v1-1792157282",
+  "scope": "quiet upgrade lobby and level reward shelf; circular hero and skill selections, tonal milestone cards and borderless reward statuses",
+  "manualAcceptance": "pending user manual review"
+}

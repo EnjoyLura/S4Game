@@ -1,0 +1,39 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-lobby-ui-quiet-v2-20261016-214310",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-lobby-ui-quiet-v1-20261016-212841",
+  "entryVersion": "1792158037",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=lobby-ui-quiet-v2-1792158037",
+  "scope": "quiet shop, hero, base and chapter navigation; shared round hero selector, neutral item surfaces, wallet and bottom navigation",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://5d251447.kingdom-watch.pages.dev",
+  "date": "2026-10-16T21:43:49.919030+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-lobby-ui-quiet-v2-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-lobby-ui-quiet-v2-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 17548,
+  "mainBundleSha256": "5ea89dc5e5ad14e58253bbdf5641b079b49fc6097eb02809ee394f9eb1ca7fb2",
+  "validation": {
+    "sourceReview": true,
+    "localBundleInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "testsRun": false,
+    "simulationRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  }
+}

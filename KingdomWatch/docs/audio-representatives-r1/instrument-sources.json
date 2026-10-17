@@ -1,0 +1,107 @@
+{
+  "revision": "440300901dfe9275fd84e0b7763af1f8443ae62e",
+  "license": "CC0-1.0",
+  "source": "https://github.com/sgossner/VSCO-2-CE",
+  "files": [
+    {
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/LICENSE",
+      "sha256": "36ffd9dc085d529a7e60e1276d73ae5a030b020313e6c5408593a6ae2af39673"
+    },
+    {
+      "path": "Readme.txt",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Readme.txt",
+      "sha256": "101ddb88eb013900cc911834ecbdfbd49497bcd913bf09417160b9677952bb38"
+    },
+    {
+      "path": "Percussion/Marimba/Marimba_hit_Outrigger_C4_loud_01.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Percussion/Marimba/Marimba_hit_Outrigger_C4_loud_01.wav",
+      "sha256": "4af539d47a452d7fad26e171b1c8adcca272cee97191f040d192680462c880b8"
+    },
+    {
+      "path": "Percussion/Marimba/Marimba_hit_Outrigger_G4_loud_01.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Percussion/Marimba/Marimba_hit_Outrigger_G4_loud_01.wav",
+      "sha256": "36f39f9f24789001add2b4c440defb7641178b0e8449c5cb7f1960bccaf0aaaf"
+    },
+    {
+      "path": "Percussion/Glock/glock_medium_C5.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Percussion/Glock/glock_medium_C5.wav",
+      "sha256": "635f898e0bcb6975b96b18efd9c896f6f1b97ff12174a339ada4814e49675660"
+    },
+    {
+      "path": "Percussion/Glock/glock_medium_G5.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Percussion/Glock/glock_medium_G5.wav",
+      "sha256": "7045c0ef7260e2f1ad11a64406cf7575ed898d1207a91104d33d78caefac63e4"
+    },
+    {
+      "path": "Strings/Harp/KSHarp_C5_mf.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Strings/Harp/KSHarp_C5_mf.wav",
+      "sha256": "7c8b862f6fd3f1442ed87537af976d84bda8c05a5b4900e8907d570b5202a517"
+    },
+    {
+      "path": "Strings/Harp/KSHarp_A4_mf.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Strings/Harp/KSHarp_A4_mf.wav",
+      "sha256": "3665f3975cad4a33f46784aa4f896f4b4319ba2b7831e892d975bc38c9f09f23"
+    },
+    {
+      "path": "Strings/Harp/KSHarp_E5_mf.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Strings/Harp/KSHarp_E5_mf.wav",
+      "sha256": "95dd9ddb0bd15bee7687906e00f25aafcaa43020cc9501f0e8b6cabf0e9a53ec"
+    },
+    {
+      "path": "Brass/Trumpet/stac/Sum_SHTrumpet_stac_C3_v3_rr1.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Brass/Trumpet/stac/Sum_SHTrumpet_stac_C3_v3_rr1.wav",
+      "sha256": "6ee12d20bfc94165d3d900e40274c8d4343e683fed2fee64f1bfcb5e94d99aa4"
+    },
+    {
+      "path": "Brass/Trumpet/stac/Sum_SHTrumpet_stac_G3_v3_rr1.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Brass/Trumpet/stac/Sum_SHTrumpet_stac_G3_v3_rr1.wav",
+      "sha256": "fc88e87885839b5fb45e2fb63cc70afef0b3c0f13c129c7d0ee4aee3458f293d"
+    },
+    {
+      "path": "Brass/Trumpet/stac/Sum_SHTrumpet_stac_D4_v3_rr1.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Brass/Trumpet/stac/Sum_SHTrumpet_stac_D4_v3_rr1.wav",
+      "sha256": "7dcf2aec74e544c9cd139e2713c8a8bf358c26633b2fb3be254e998a0b010df9"
+    },
+    {
+      "path": "Brass/Trumpet/sus/Sum_SHTrumpet_sus_G3_v3_rr1.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Brass/Trumpet/sus/Sum_SHTrumpet_sus_G3_v3_rr1.wav",
+      "sha256": "e916631d4ef5c7d2afa356b76cb0d3a18ba2702d1229535edf4fb6d73c2e521c"
+    },
+    {
+      "path": "Brass/F Horn/sus/MOHorn_sus_C3_v2_1.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Brass/F%20Horn/sus/MOHorn_sus_C3_v2_1.wav",
+      "sha256": "c0c0b157dcde094c4417b7c165d645897cde9ea6d74247bbab0c0e75355e78c3"
+    },
+    {
+      "path": "Woodwinds/Bassoon/stac/PSBassoon_C3_v1_rr1.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Woodwinds/Bassoon/stac/PSBassoon_C3_v1_rr1.wav",
+      "sha256": "efe8a7222f32181cdb752a9acc8860e47ec2a9e2f9b6dc4538f44747eed5786c"
+    },
+    {
+      "path": "Woodwinds/Bassoon/stac/PSBassoon_G2_v1_rr1.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Woodwinds/Bassoon/stac/PSBassoon_G2_v1_rr1.wav",
+      "sha256": "0d339309b43f78279c1aedb729c596b33c5a6324b45441acb76f893983b64ae2"
+    },
+    {
+      "path": "Percussion/Timpani/Timpani2_Hit_v3_rr1_Sum.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Percussion/Timpani/Timpani2_Hit_v3_rr1_Sum.wav",
+      "sha256": "69e5d604effd3f29c86117d22ad2335f73e43f5d47868dc57d8fa593975ee241"
+    },
+    {
+      "path": "Percussion/Snare2-HitSN_v3_rr1_Sum.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Percussion/Snare2-HitSN_v3_rr1_Sum.wav",
+      "sha256": "3df96009d655dd4fe43c635bd3c20314a1e0cbdf9f571ee8a66207f9ef917d08"
+    },
+    {
+      "path": "Percussion/cymbal-crashshort_v1.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Percussion/cymbal-crashshort_v1.wav",
+      "sha256": "af0d5f0eb7f2226a1c592e5cda8e2dc0588cadbc851999ed39e3f36276acc7c9"
+    },
+    {
+      "path": "Percussion/BellTree_Stroke1_v1_Sum.wav",
+      "url": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/440300901dfe9275fd84e0b7763af1f8443ae62e/Percussion/BellTree_Stroke1_v1_Sum.wav",
+      "sha256": "2597516c86677708c0696ab303e81158ab1d69baa109635ceef204aa68d753e3"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+Use case: precise-object-edit. Reference1 is the exact edit target, a completed KingdomWatch base modal concept. Reference2 is the final base MAIN screen for the upper shared resource bars only.
+Change ONLY the two TOP resource bars of reference1 to match reference2: plain navy/charcoal rounded rectangular faces, NO gold outlines or cut-corner borders; gold "1,322", diamond "240", original green plus buttons. Keep their existing reference1 screen positions and the same dimmed-over-background appearance. Background wallet values must be exactly1,322 and240. Do NOT change ANY foreground dialog geometry, title, paper frame, monster artwork, text, cards, reward states, button labels, bottom spacing or dimensions. No additional information, no removed content.
+
+Keep the output portrait and the same dimensions as reference1.

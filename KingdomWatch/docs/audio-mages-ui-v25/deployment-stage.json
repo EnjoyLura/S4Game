@@ -1,0 +1,24 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-mages-ui-v25-20261017-183407",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-kingdom-v24-20261017-181337",
+  "entryVersion": "1792233165",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "published": true,
+  "deployment": "https://a8a9b018.kingdom-watch.pages.dev",
+  "uploadedFiles": 61,
+  "alreadyUploadedFiles": 2430,
+  "totalObjects": 2491,
+  "game": "https://kingdom-watch.pages.dev/?v=audio-mages-ui-v25-1792233165",
+  "preview": "https://kingdom-watch.pages.dev/previews/audio-mages-ui-v25/",
+  "priorPreviewFilesPreserved": 752,
+  "staticHttpCheck": {
+    "gameStatus": 200,
+    "gameEntryFound": "index.3e4e1.js?v=1792233165",
+    "previewStatus": 200,
+    "previewContainsV25": true,
+    "method": "curl static HTTP GET; no browser or audio playback"
+  },
+  "manualAcceptance": "Pending user; no game/browser/audio playback performed",
+  "publicationNote": "Wrangler reported Deployment complete; 61 files uploaded and 2430 already uploaded; no game/browser/audio listening acceptance performed"
+}

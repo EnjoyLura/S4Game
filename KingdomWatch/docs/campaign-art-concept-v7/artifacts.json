@@ -1,0 +1,27 @@
+{
+  "tool": "built-in image_gen",
+  "status": "concept previews only; not implemented",
+  "artifacts": [
+    {
+      "file": "campaign-map.png",
+      "width": 882,
+      "height": 1783,
+      "bytes": 3006596,
+      "sha256": "7e75f5654178aed9963e152dc9c55b1539b9529327077827744e1749ebf73bc4"
+    },
+    {
+      "file": "battle-preparation.png",
+      "width": 883,
+      "height": 1782,
+      "bytes": 1973598,
+      "sha256": "43cbddf48f50ba176cd43a3b482ebcb875f85f2b3419b31e983cec2f007f2b1c"
+    },
+    {
+      "file": "squad-formation.png",
+      "width": 882,
+      "height": 1783,
+      "bytes": 1995083,
+      "sha256": "524dca33888692da47fe0506d0a01e3574d76c0cba7e936d7ce734a81554ae34"
+    }
+  ]
+}

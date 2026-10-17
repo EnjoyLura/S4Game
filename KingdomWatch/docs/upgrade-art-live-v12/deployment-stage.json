@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-upgrade-art-live-v12-20261017-115943",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-locked-stage-confirm-v11-20261017-112251",
+  "entryVersion": "1792209414",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=upgrade-art-live-v12-1792209414",
+  "scope": "four cultivation pages and shared attributes, milestone, weapon cultivation and equipment enhancement dialog artwork",
+  "manualAcceptance": "pending user manual review"
+}

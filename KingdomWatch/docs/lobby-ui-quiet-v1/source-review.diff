@@ -1,0 +1,318 @@
+--- before/assets/scripts/ui/ComicUI.ts
++++ assets/scripts/ui/ComicUI.ts
+@@ -34,7 +34,7 @@
+ }
+ 
+ function paintPlate(g: Graphics, w: number, h: number, tone: Tone,
+-  opts: { cut?: number; edge?: boolean; fill?: string } = {}): void {
++  opts: { cut?: number; edge?: boolean; fill?: string; highlight?: boolean } = {}): void {
+   g.clear();
+   const [face, light] = TONES[tone];
+   const c = Math.min(opts.cut ?? 9, h / 4, w / 4);
+@@ -45,16 +45,26 @@
+     [r - c, t], [l + c, t], [l, t - c], [l, b + c],
+   ];
+   polygon(g, shape, opts.fill || face, edge);
+-  if (h > 30) {
++  if (h > 30 && opts.highlight !== false) {
+     polygon(g, [[l + c + 3, t - 3], [r - c - 3, t - 3], [r - c - 5, t - 5], [l + c + 5, t - 5]], light);
+   }
+ }
+ 
+ /** One flat face and one contour; offset plates and bottom bevels create unwanted doubled edges. */
+ export function comicPlate(parent: Node, x: number, y: number, w: number, h: number,
+-  tone: Tone = 'paper', opts: { name?: string; cut?: number; edge?: boolean; fill?: string } = {}): Node {
++  tone: Tone = 'paper', opts: { name?: string; cut?: number; edge?: boolean; fill?: string; highlight?: boolean } = {}): Node {
+   const node = N(opts.name || 'comicPlate', parent, x, y, w, h);
+   paintPlate(node.addComponent(Graphics), w, h, tone, opts);
++  return node;
++}
++
++/** Tonal grouping for quiet lobby cards: one fill, without a contour or decorative edge. */
++export function comicSurface(parent: Node, x: number, y: number, w: number, h: number,
++  tone: Tone = 'card', opts: { name?: string; radius?: number; fill?: string } = {}): Node {
++  const node = N(opts.name || 'comicSurface', parent, x, y, w, h);
++  const g = node.addComponent(Graphics);
++  g.fillColor = C(opts.fill || TONES[tone][0]);
++  g.roundRect(-w / 2, -h / 2, w, h, Math.min(opts.radius ?? 12, w / 2, h / 2)); g.fill();
+   return node;
+ }
+ 
+@@ -109,7 +119,7 @@
+   return node;
+ }
+ 
+-interface ComicButtonOptions { tone?: Tone; size?: number; color?: string; name?: string; enabled?: boolean; sound?: UISound; }
++interface ComicButtonOptions { tone?: Tone; size?: number; color?: string; name?: string; enabled?: boolean; sound?: UISound; quiet?: boolean; }
+ export interface ComicButtonControl {
+   node: Node;
+   setTone: (tone: Tone) => void;
+@@ -124,7 +134,8 @@
+   const node = N(opts.name || 'comicButton', parent, x, y, w, h);
+   node.getComponent(UITransform)!.setContentSize(Math.max(44, w), Math.max(44, h));
+   let tone = opts.tone || 'green';
+-  const face = comicPlate(node, 0, 0, w, h, tone, { name: 'buttonFace', cut: 9 });
++  const paintOptions = { cut: 9, edge: !opts.quiet, highlight: !opts.quiet };
++  const face = comicPlate(node, 0, 0, w, h, tone, { name: 'buttonFace', ...paintOptions });
+   let enabled = opts.enabled !== false, busy = false, caption: Node | null = null;
+   const textColor = opts.color || (tone === 'gold' ? COMIC.text : COMIC.cream);
+   const setCaption = (value: string): void => {
+@@ -135,7 +146,7 @@
+   const setEnabled = (value: boolean): void => {
+     enabled = value;
+     feedback.reset();
+-    paintPlate(face.getComponent(Graphics)!, w, h, enabled && !busy ? tone : 'muted', { cut: 9 });
++    paintPlate(face.getComponent(Graphics)!, w, h, enabled && !busy ? tone : 'muted', paintOptions);
+     if (caption) caption.getComponent(Label)!.color = C(enabled && !busy ? textColor : '#344139');
+   };
+   const feedback = bindButton(node, onClick, { visual: face, sound: opts.sound, enabled: () => enabled && !busy,
+@@ -154,7 +165,7 @@
+   };
+   return { node, setText: setCaption, setEnabled, setBusy, setTone: value => {
+     tone = value;
+-    paintPlate(face.getComponent(Graphics)!, w, h, enabled && !busy ? tone : 'muted', { cut: 9 });
++    paintPlate(face.getComponent(Graphics)!, w, h, enabled && !busy ? tone : 'muted', paintOptions);
+   } };
+ }
+ 
+--- before/assets/scripts/ui/TrainingLobby.ts
++++ assets/scripts/ui/TrainingLobby.ts
+@@ -4,7 +4,7 @@
+ import { skillBaseMultiplier } from '../config/Cards';
+ import { C, CA, LabelOpts, N, setText, WY } from './UIKit';
+ import { artSprite } from './Ux';
+-import { COMIC, comicArt, comicButton, comicButtonControl, comicDialog, comicMark, comicPlate } from './ComicUI';
++import { COMIC, comicArt, comicButton, comicButtonControl, comicDialog, comicMark, comicPlate, comicSurface } from './ComicUI';
+ import { EMPTY_GEAR, gearArt, heroComicFigure, heroGlyph, heroPortrait } from './HeroComic';
+ import { mainLabel as pageLabel, PageCtx, mainLayout, mainResourceTop, MAIN_RESOURCE_H, pageScroll, fmt, toast } from './PageKit';
+ import { loadSave, saveSave } from '../core/SaveData';
+@@ -87,11 +87,19 @@
+   const rail = heroRosterRail(parent, top, 'trainingRoster', heroes.map(def => def.id), hid);
+   heroes.forEach((def, i) => {
+     const owned = sv.heroes[def.id].owned;
+-    const slot = comicPlate(rail.content, rail.x(i), 0, ROSTER_CARD_W, 114, hid === def.id ? 'gold' : 'card', { name: 'trainingHero:' + def.id });
+-    const avatar = heroPortrait(slot, 0, 14, 72, def.id);
++    const active = hid === def.id;
++    const slot = N('trainingHero:' + def.id, rail.content, rail.x(i), 0, ROSTER_CARD_W, 114);
++    if (active) {
++      const ring = N('trainingHeroSelection', slot, 0, 14).addComponent(Graphics);
++      ring.fillColor = CA(COMIC.goldLight, .28); ring.circle(0, 0, 45); ring.fill();
++      ring.strokeColor = C(COMIC.gold); ring.lineWidth = 3.5; ring.stroke();
++      comicSurface(slot, 0, -40, 108, 28, 'gold', { name: 'trainingHeroNameTag', radius: 14 });
++    }
++    const avatar = heroPortrait(slot, 0, 14, 82, def.id);
+     if (!owned) { avatar.addComponent(UIOpacity).opacity = 125; comicMark(slot, 43, -8, 'lock', 17, COMIC.sub); }
+     mainLabel(slot, 0, -39, def.id === 'pyro' ? def.name.replace('·', '') : def.name.split('·')[0], {
+-      size: 20, bold: true, color: owned ? COMIC.text : COMIC.sub, w: 110, h: 28,
++      size: 20, bold: true, color: active ? COMIC.text : owned ? COMIC.cream : '#C8C5BA', w: 110, h: 28,
++      outline: active ? undefined : COMIC.ink, outlineW: active ? 0 : 2,
+     });
+     tap(slot, () => {
+       if (!owned) { toast('前往商店解锁该英雄'); return; }
+@@ -102,12 +110,12 @@
+ }
+ 
+ function categories(parent: Node, top: number, rebuild: () => void): void {
+-  const bar = N('trainingCategories', parent, 0, WY(top, 68), 750, 68);
++  const bar = comicSurface(parent, 0, WY(top, 68), 690, 68, 'dark', { name: 'trainingCategories', radius: 12 });
+   ['等级', '武器', '技能', '装备'].forEach((title, i) => {
+     const active = st.tab === i;
+-    const slot = comicButton(bar, (i - 1.5) * 174, 0, 168, 68, '', () => {
++    const slot = comicButton(bar, (i - 1.5) * 174, 0, 168, 60, '', () => {
+       if (st.tab !== i) { st.tab = i; rebuild(); }
+-    }, { name: 'trainingTab:' + i, tone: active ? 'gold' : 'dark', sound: 'select' });
++    }, { name: 'trainingTab:' + i, tone: active ? 'gold' : 'dark', sound: 'select', quiet: true });
+     const face = slot.getChildByName('buttonFace')!;
+     comicArt(face, -47, 0, 38, 40, TAB_ART[i]);
+     mainLabel(face, 22, 0, title, { size: 27, bold: true, color: active ? COMIC.text : COMIC.cream, w: 78, h: 40 });
+@@ -123,31 +131,26 @@
+   const level = mainLabel(parent, -156, WY(top + 42, 27), `Lv.${h.lv} · ${def.job.split(' · ')[0]}`, {
+     size: 20, color: COMIC.cream, w: 364, h: 27, align: 'left', outline: COMIC.ink, outlineW: 1.5,
+   });
+-  const attrs = comicButton(parent, 260, WY(top + 5, 62), 160, 62, '', () => data.onAttrs(hid), { tone: 'dark', name: 'trainingAttrs' });
++  const attrs = comicButton(parent, 260, WY(top + 5, 62), 160, 62, '', () => data.onAttrs(hid), { tone: 'dark', name: 'trainingAttrs', quiet: true });
+   const face = attrs.getChildByName('buttonFace')!;
+   heroGlyph(face, -44, 0, 'attrs', 38);
+   mainLabel(face, 25, 0, '属性', { size: 25, bold: true, color: COMIC.cream, w: 83, h: 40 });
+   return () => setText(level, `Lv.${h.lv} · ${def.job.split(' · ')[0]}`);
+ }
+ 
+-function rule(parent: Node, y: number, width: number): void {
+-  const g = N('trainingDivider', parent, 0, y).addComponent(Graphics);
+-  g.strokeColor = CA(COMIC.sub, .24); g.lineWidth = 1;
+-  g.moveTo(-width / 2, 0); g.lineTo(width / 2, 0); g.stroke();
+-}
+-
+ type PreviewRow = { name: string; cur: string; next: string; gain: string };
+ interface PreviewControl { node: Node; refresh: (lv: number, maxed: boolean, rows: PreviewRow[]) => void; }
+ function preview(parent: Node, x: number, y: number, w: number, h: number, title: string,
+   lv: number, maxed: boolean, rows: PreviewRow[], portrait = false, note = ''): PreviewControl {
+-  const p = comicPlate(parent, x, y, w, h, 'paper', { name: 'trainingPreview' });
++  // Only the preview sitting over the illustrated scene needs a paper fill.
++  const p = portrait ? comicSurface(parent, x, y, w, h, 'paper', { name: 'trainingPreview', radius: 16 })
++    : N('trainingPreview', parent, x, y, w, h);
+   mainLabel(p, 0, h / 2 - 33, title, { size: 26, bold: true, color: COMIC.text, w: w - 38, h: 38 });
+   const levelY = h / 2 - 81;
+   const current = mainLabel(p, -w * .18, levelY, `Lv.${lv}`, { size: 26, bold: true, color: COMIC.text, w: w * .32, h: 40 });
+   const arrow = mainLabel(p, 0, levelY, maxed ? '·' : '→', { size: 23, color: COMIC.sub, w: 32, h: 38 });
+   const next = mainLabel(p, w * .18, levelY, maxed ? 'MAX' : `Lv.${lv + 1}`, { size: 26, bold: true, color: COMIC.greenShade, w: w * .32, h: 40 });
+   const updates: ((row: PreviewRow, maxed: boolean) => void)[] = [];
+-  rule(p, levelY - 30, w - 38);
+   if (portrait) {
+     // Two-line attribute rows leave a dedicated power footer, including short screens.
+     const step = Math.min(98, (h - 216) / Math.max(1, rows.length));
+@@ -183,7 +186,7 @@
+ 
+ function milestoneShelf(parent: Node, ctx: PageCtx, y: number, title: string, ms: Milestone[], lv: number,
+   stateKey: string, icon: string, rebuild: () => void, swipe = false): void {
+-  const shelf = comicPlate(parent, 0, y, 702, 244, 'paper', { name: 'trainingMilestones' });
++  const shelf = N('trainingMilestones', parent, 0, y, 702, 244);
+   comicArt(shelf, -308, 90, 34, 34, HAMMER);
+   mainLabel(shelf, -164, 90, title, { size: 25, bold: true, color: COMIC.text, w: 230, h: 38, align: 'left' });
+   const upcoming = ms.findIndex(m => m.lv > lv), nextIndex = upcoming < 0 ? ms.length : upcoming;
+@@ -204,14 +207,18 @@
+   }
+   (swipe ? ms : ms.slice(start, start + 3)).forEach((m, i) => {
+     const reached = lv >= m.lv, target = (swipe ? i : start + i) === nextIndex;
+-    const node = comicPlate(cards, swipe ? i * 194 : (i - 1) * 194, swipe ? 0 : -27, 180, 166, target ? 'gold' : 'card', { name: 'milestone' + m.lv });
++    const node = comicSurface(cards, swipe ? i * 194 : (i - 1) * 194, swipe ? 0 : -27, 180, 166,
++      target ? 'gold' : 'card', { name: 'milestone' + m.lv, radius: 14, fill: target ? '#FFE094' : undefined });
+     mainLabel(node, 0, 55, `${m.lv}级`, { size: 23, bold: true, color: COMIC.text, w: 150, h: 32 });
+     const art = icon.startsWith('ui_icon') ? artSprite(node, 0, 15, 46, 46, icon, { sliced: false }) : comicArt(node, 0, 15, 46, 46, icon);
+     if (!reached && !target) art.addComponent(UIOpacity).opacity = 120;
+     if (reached) comicMark(node, 55, 18, 'check', 19, COMIC.greenShade);
+     else if (!target) comicMark(node, 55, 18, 'lock', 16, COMIC.sub);
+     mainLabel(node, 0, -30, m.txt.replace(/^突破 · /, ''), { size: 18, color: COMIC.text, w: 160, h: 46, lineHeight: 23 });
+-    mainLabel(node, 0, -66, reached ? '已解锁' : target ? '下一阶段' : '未解锁', { size: 17, color: reached ? COMIC.greenShade : COMIC.sub, w: 150, h: 24 });
++    if (target) comicSurface(node, 0, -66, 136, 24, 'gold', { name: 'milestoneNext', radius: 12 });
++    mainLabel(node, 0, -66, reached ? '已解锁' : target ? '下一阶段' : '未解锁', {
++      size: 17, color: reached ? COMIC.greenShade : target ? COMIC.text : COMIC.sub, w: 150, h: 24,
++    });
+     tap(node, () => {
+       const p = comicDialog(ctx.screens, 560, 310, `${title} · ${m.lv}级`);
+       mainLabel(p, 0, 16, m.txt.replace(/^突破 · /, ''), { size: 26, bold: true, color: COMIC.text, w: 480, h: 94, lineHeight: 34 });
+@@ -232,8 +239,9 @@
+   repeatStep?: (repeating: boolean) => boolean): { refresh: (cost: { gold: number; mat: number }, maxed: boolean) => void; hammer: Node } {
+   const sv = loadSave(), ownMat = matCount('mat_stone') + matCount('mat_iron');
+   const enough = !!cost && sv.gold >= cost.gold && ownMat >= cost.mat;
+-  const dock = comicPlate(parent, 0, WY(top - 8, 186), 750, 186, 'paper', { name: 'trainingActionDock', edge: false });
+-  rule(dock, 91, 750);
++  comicPlate(parent, 0, WY(top - 8, 186), 750, 186, 'paper', {
++    name: 'trainingActionDock', edge: false, highlight: false, cut: 0,
++  });
+   const costRow = N('trainingCosts', parent, 0, WY(top, 68), 702, 68);
+   const costs: { need: Node; own: Node }[] = [];
+   if (cost && !maxed && !empty) {
+@@ -287,7 +295,7 @@
+       const rosterTop = mainResourceTop() + MAIN_RESOURCE_H + 20;
+       const tabTop = rosterTop + 126, contextTop = tabTop + 82;
+       const bodyTop = contextTop + 82, footerTop = mainLayout().bottom - 168;
+-      const available = Math.max(1, footerTop - 12 - bodyTop), height = Math.max(st.tab === 2 ? 704 : 674, available), stageH = height - 260;
++      const available = Math.max(1, footerTop - 12 - bodyTop), height = Math.max(st.tab === 2 ? 736 : 674, available), stageH = height - 260;
+       const env = environment(root, st.tab < 2 ? bodyTop + stageH : bodyTop, st.tab < 2), envY = env.position.y;
+       const title = mainLabel(root, -271, WY(mainResourceTop() + 7, 40), '英雄培养', { size: 30, color: COMIC.cream, bold: true, w: 190, h: 40, outline: COMIC.ink, outlineW: 2 });
+       title.name = 'trainingTitle';
+@@ -370,13 +378,20 @@
+         });
+         fx.setHammer(footerControl.hammer);
+       } else if (st.tab === 2) {
+-        const selected = selectedSkill, shelfH = 200;
++        const selected = selectedSkill, shelfH = 216;
+         const shelf = N('trainingSkills', body, 0, -shelfH / 2, 702, shelfH);
+         SKILLS.forEach((slot, i) => {
+-          const choice = comicPlate(shelf, (i - 1) * 236, 0, 222, shelfH, selected === slot ? 'gold' : 'card', { name: 'skillChoice:' + slot });
+-          artSprite(choice, 0, 24, 112, 112, data.skillIconId(hid, slot), { sliced: false });
+-          mainLabel(choice, 0, -49, ['普攻', '技能', '大招'][i], { size: 25, color: COMIC.text, bold: true, w: 194, h: 34 });
+-          mainLabel(choice, 0, -79, `Lv.${h[SLOT_KEY[slot]]}`, { size: 20, color: COMIC.sub, w: 180, h: 27 });
++          const active = selected === slot;
++          const choice = N('skillChoice:' + slot, shelf, (i - 1) * 236, 0, 222, shelfH);
++          if (active) {
++            const halo = N('trainingSkillSelection', choice, 0, 20).addComponent(Graphics);
++            halo.fillColor = CA(COMIC.gold, .13); halo.circle(0, 0, 73); halo.fill();
++            halo.strokeColor = C(COMIC.gold); halo.lineWidth = 3; halo.stroke();
++            comicSurface(choice, 0, -59, 132, 32, 'gold', { name: 'trainingSkillNameTag', radius: 16 });
++          }
++          artSprite(choice, 0, 20, 136, 136, data.skillIconId(hid, slot), { sliced: false });
++          mainLabel(choice, 0, -59, ['普攻', '技能', '大招'][i], { size: 25, color: COMIC.text, bold: true, w: 194, h: 34 });
++          mainLabel(choice, 0, -91, `Lv.${h[SLOT_KEY[slot]]}`, { size: 20, color: COMIC.sub, w: 180, h: 27 });
+           tap(choice, () => { if (selected !== slot) { st.skills[hid] = slot; render(); } });
+         });
+         const lv = h[SLOT_KEY[selected]], maxed = lv >= MAX.skill;
+@@ -396,13 +411,14 @@
+         footer(root, ctx, footerTop, '升级' + (selected === 'atk' ? '普攻' : selected === 'skill' ? '技能' : '大招'), skillUpCost(lv), maxed, () => upSkill(hid, selected), { kind: selected, hid });
+       } else {
+         const selected = selectedEquip, rackH = 360;
+-        const cabinet = comicPlate(body, 0, -rackH / 2, 702, rackH, 'paper', { name: 'equippedCabinet' });
++        const cabinet = N('equippedCabinet', body, 0, -rackH / 2, 702, rackH);
+         comicArt(cabinet, -302, 147, 38, 38, 'comic_armor_forest_v1');
+         mainLabel(cabinet, -112, 147, '已穿戴装备', { size: 25, bold: true, color: COMIC.text, w: 304, h: 38, align: 'left' });
+         mainLabel(cabinet, 269, 147, `${WORN.filter(kind => !!wornInst(hid, kind)).length}/4`, { size: 20, color: COMIC.sub, w: 110, h: 30, align: 'right' });
+         WORN.forEach((kind, i) => {
+           const inst = wornInst(hid, kind), d = inst ? EQUIPS[inst.defId] : null;
+-          const choice = comicPlate(cabinet, i % 2 === 0 ? -164 : 164, i < 2 ? 44 : -101, 312, 132, selected === kind ? 'gold' : 'card', { name: 'wornChoice:' + kind });
++          const choice = comicSurface(cabinet, i % 2 === 0 ? -164 : 164, i < 2 ? 44 : -101, 312, 132,
++            selected === kind ? 'gold' : 'card', { name: 'wornChoice:' + kind, radius: 14, fill: selected === kind ? '#FFE094' : undefined });
+           const item = gearArt(choice, -89, 0, 100, 100, inst ? inst.defId : EMPTY_GEAR[kind]);
+           if (!inst) item.addComponent(UIOpacity).opacity = 85;
+           mainLabel(choice, 53, 29, d ? d.name : KIND_NAME[kind], { size: 23, color: COMIC.text, bold: true, w: 174, h: 32, align: 'left' });
+@@ -419,7 +435,7 @@
+           });
+           preview(body, 0, -(rackH + 16 + paperH / 2), 702, paperH, d.name + ' · 强化提升', inst.lv, maxed, rows, false, '主属性 +4% / 级');
+         } else {
+-          const p = comicPlate(body, 0, -(rackH + 16 + paperH / 2), 702, paperH, 'paper', { name: 'trainingEmpty' });
++          const p = N('trainingEmpty', body, 0, -(rackH + 16 + paperH / 2), 702, paperH);
+           mainLabel(p, 0, 26, KIND_NAME[selected] + ' · 未穿戴', { size: 27, bold: true, color: COMIC.text, w: 640, h: 42 });
+           mainLabel(p, 0, -25, '前往英雄页，从背包选择装备穿戴', { size: 22, color: COMIC.sub, w: 630, h: 58 });
+         }
+--- before/assets/scripts/ui/pages/LevelsPage.ts
++++ assets/scripts/ui/pages/LevelsPage.ts
+@@ -4,7 +4,7 @@
+ import { CAMPAIGN_CHAPTERS, CAMPAIGN_STAGES, campaignDifficultyOpen, campaignLevelOpen } from '../../config/Campaign';
+ import { C, CA, N, WY } from '../UIKit';
+ import { artSprite } from '../Ux';
+-import { COMIC, comicArt, comicButton, comicButtonControl, comicMark, comicPlate } from '../ComicUI';
++import { COMIC, comicArt, comicButton, comicButtonControl, comicMark, comicPlate, comicSurface } from '../ComicUI';
+ import { mainLabel, PageCtx, toast, mainLayout, MAIN_RESOURCE_H, pageScroll } from '../PageKit';
+ import { CHEST_COND, claimAllChests, starKey, squadList } from '../../core/GameData';
+ import { DIFFICULTIES, getChallengeDef, starChestRewards } from '../../config/LevelDifficulty';
+@@ -202,8 +202,8 @@
+         size: 18, color: open ? COMIC.paperShade : COMIC.goldLight, w: 652, h: 28,
+       });
+ 
+-      const rewards = comicPlate(content, 0, WY(rewardTop, rewardH), 718, rewardH, 'paper',
+-        { name: 'rewardShelf', cut: 14 });
++      const rewards = comicPlate(content, 0, WY(rewardTop, rewardH), 750, rewardH, 'paper',
++        { name: 'rewardShelf', cut: 0, edge: false, highlight: false });
+       const ry = (top: number): number => rewardH / 2 - top;
+       levelArt(rewards, -311, ry(28), 32, 32, 'comic_chest_closed_v1');
+       mainLabel(rewards, -180, ry(28), '关卡奖励', {
+@@ -211,12 +211,13 @@
+       });
+       mainLabel(rewards, 147, ry(28), stars + '/3 星', { size: 22, color: COMIC.sub, w: 88, h: 30 });
+       for (let i = 0; i < 3; i++) star(rewards, 218 + i * 36, ry(27), 31, i < stars);
+-      const divider = N('rewardDivider', rewards).addComponent(Graphics);
+-      divider.strokeColor = C(COMIC.paperShade); divider.lineWidth = 1;
+-      divider.moveTo(-328, ry(53)); divider.lineTo(328, ry(53)); divider.stroke();
++      comicSurface(rewards, 0, ry(80), 652, 44, 'paper', { name: 'rewardTabs', radius: 12, fill: '#EAD9B7' });
+       ['星级宝箱' + (stars > claimed ? ' · 可领取' : ''), '关卡掉落'].forEach((text, index) => {
+-        const tab = comicPlate(rewards, (index - .5) * 326, ry(80), 320, 40, st.rewardTab === index ? 'gold' : 'dark');
+-        mainLabel(tab, 0, 0, text, { size: 21, color: st.rewardTab === index ? COMIC.text : COMIC.cream, bold: true, w: 302, h: 30 });
++        const active = st.rewardTab === index;
++        const tab = comicPlate(rewards, (index - .5) * 326, ry(80), 320, 40, active ? 'gold' : 'paper', {
++          name: 'rewardTab:' + index, edge: false, highlight: false, fill: active ? COMIC.gold : '#EAD9B7',
++        });
++        mainLabel(tab, 0, 0, text, { size: 21, color: active ? COMIC.text : COMIC.sub, bold: true, w: 302, h: 30 });
+         tap(tab, () => { if (st.rewardTab !== index) { st.rewardTab = index; render(); } });
+       });
+       const bodyTop = 114, bodyH = rewardH - bodyTop - 14;
+@@ -250,8 +251,8 @@
+             size: 24, color: COMIC.text, bold: true, w: 82, h: 30,
+           });
+           amount.name = 'rewardAmount' + tier;
+-          const claim = comicPlate(spot, 0, sy(bodyH - 30), 184, 44, canClaim ? 'gold' : done ? 'paper' : 'muted',
+-            { name: 'rewardStatus' + tier, edge: !done });
++          const claim = N('rewardStatus' + tier, spot, 0, sy(bodyH - 30), 184, 44);
++          if (canClaim) comicSurface(claim, 0, 0, 140, 34, 'gold', { name: 'rewardClaimHint', radius: 17 });
+           mainLabel(claim, 0, 0, done ? '已领取' : canClaim ? '一键领取' : '未达成', {
+             size: 22, color: done ? COMIC.greenShade : canClaim ? COMIC.text : COMIC.sub, bold: true, w: 172, h: 32,
+           });

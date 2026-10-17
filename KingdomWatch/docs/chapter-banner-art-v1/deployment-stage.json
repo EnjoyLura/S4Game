@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-banner-art-v1-20261017-011922",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-campaign-route-compact-v3-20261017-004118",
+  "entryVersion": "1792171089",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=chapter-banner-art-v1-1792171089",
+  "scope": "remove map title and scroll icon; reference-matched transparent navy-gold chapter banner with live heading, progress and arrows",
+  "manualAcceptance": "pending user manual review"
+}

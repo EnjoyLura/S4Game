@@ -1,0 +1,102 @@
+/** Chapter-specific checkpoint silhouettes; static vector art keeps map labels crisp. */
+import { Graphics, Node } from 'cc';
+import { C, N } from './UIKit';
+import { COMIC } from './ComicUI';
+
+type Point = readonly [number, number];
+function shape(g: Graphics, points: readonly Point[], fill: string, edge?: string, width = 2): void {
+  g.fillColor = C(fill);
+  g.moveTo(points[0][0], points[0][1]);
+  for (let i = 1; i < points.length; i++) g.lineTo(points[i][0], points[i][1]);
+  g.close(); g.fill();
+  if (edge) { g.strokeColor = C(edge); g.lineWidth = width; g.stroke(); }
+}
+function stroke(g: Graphics, points: readonly Point[], color: string, width = 2): void {
+  g.strokeColor = C(color); g.lineWidth = width;
+  g.moveTo(points[0][0], points[0][1]);
+  for (let i = 1; i < points.length; i++) g.lineTo(points[i][0], points[i][1]);
+  g.stroke();
+}
+function rivet(g: Graphics, x: number, y: number, color: string): void {
+  g.fillColor = C(COMIC.darkShade); g.circle(x, y, 3.2); g.fill();
+  g.fillColor = C(color); g.circle(x - .5, y + .6, 1.8); g.fill();
+}
+
+/** Perspective stone drums replace the flat gray ovals under checkpoint signs. */
+function pedestal(g: Graphics, active: boolean, open: boolean): void {
+  g.fillColor = C(open ? '#48545F' : '#4A535A');
+  g.strokeColor = C('#253039'); g.lineWidth = 2;
+  g.moveTo(-39,-22); g.lineTo(-39,-31);
+  g.bezierCurveTo(-37,-47,37,-47,39,-31); g.lineTo(39,-22); g.close(); g.fill(); g.stroke();
+  g.fillColor = C(open ? '#A0A9AA' : '#818A8C'); g.ellipse(0,-22,39,13); g.fill(); g.stroke();
+  stroke(g, [[-30,-17],[-17,-12],[13,-12],[29,-17]], open ? '#D5D7C9' : '#A7AFAE', 1.8);
+  stroke(g, [[-20,-34],[-20,-39]], '#26343D', 1.8);
+  stroke(g, [[17,-35],[17,-40]], '#26343D', 1.8);
+  if (active) {
+    g.strokeColor = C('#F3CF6A'); g.lineWidth = 2;
+    g.ellipse(0,-22,38,12); g.stroke();
+  }
+}
+
+function outpost(g: Graphics, active: boolean, open: boolean): void {
+  pedestal(g, active, open);
+  shape(g, [[-7,-24],[7,-24],[7,50],[-7,50]], open ? '#625240' : '#5B5E59', COMIC.darkShade);
+  shape(g, [[-29,53],[29,53],[29,0],[0,-23],[-29,0]],
+    active ? COMIC.gold : open ? '#277AC0' : '#53616C', active ? COMIC.goldShade : COMIC.darkShade, 3);
+  shape(g, [[-29,53],[-23,47],[-23,3],[0,-15],[0,-23],[-29,0]], active ? '#D89A29' : open ? '#1B5697' : '#394953');
+  shape(g, [[-23,47],[23,47],[18,39],[-18,39]], active ? '#FFE785' : open ? '#51A6DB' : '#71818A');
+  shape(g, [[23,47],[29,53],[29,0],[0,-23],[0,-15],[23,3]], active ? '#E8B13B' : open ? '#205F9F' : '#42545E');
+  stroke(g, [[-23,47],[23,47],[23,3],[0,-15],[-23,3],[-23,47]],
+    active ? COMIC.goldLight : open ? '#A7D9F3' : '#9BA4AA', 2);
+  rivet(g, -19, 40, active ? COMIC.goldLight : '#C5D1D6');
+  rivet(g, 19, 40, active ? COMIC.goldLight : '#C5D1D6');
+}
+
+function forest(g: Graphics, active: boolean, open: boolean): void {
+  const ink = open ? '#3F2B20' : '#3E433C';
+  const wood = open ? '#A56C38' : '#706D5A';
+  const lit = open ? '#D7A565' : '#9B9780';
+  pedestal(g, active, open);
+  shape(g, [[-7,-31],[7,-28],[10,46],[-5,57],[-10,48]], open ? '#765037' : '#5F6051', ink, 2.4);
+  shape(g, [[-42,49],[29,52],[47,36],[40,25],[47,9],[31,-3],[-42,-1],[-37,23]],
+    wood, active ? COMIC.gold : ink, active ? 3.5 : 3);
+  shape(g, [[-39,14],[38,16],[47,9],[31,-3],[-42,-1]], open ? '#79502E' : '#5B5C50');
+  stroke(g, [[-37,44],[26,47],[38,37]], lit, 2.5);
+  stroke(g, [[-37,23],[-20,22],[14,25],[40,25]], ink, 2);
+  stroke(g, [[-32,35],[-23,34],[-18,36]], lit, 1.7);
+  stroke(g, [[21,10],[29,12],[36,11]], lit, 1.6);
+  stroke(g, [[-29,6],[-19,7]], lit, 1.5);
+  rivet(g, -30, 39, open ? '#C8BD95' : '#9A9D8C');
+  rivet(g, 30, 35, open ? '#C8BD95' : '#9A9D8C');
+  rivet(g, -29, 8, open ? '#C8BD95' : '#9A9D8C');
+  const moss = open ? '#63813C' : '#6A735A';
+  shape(g, [[-44,45],[-46,54],[-35,52],[-29,43],[-37,45],[-38,36]], moss, ink, 1.4);
+  shape(g, [[30,-2],[39,4],[41,-3],[35,-9],[29,-7]], moss, ink, 1.2);
+}
+
+function lair(g: Graphics, active: boolean, open: boolean): void {
+  const rim = active ? COMIC.gold : open ? '#816149' : '#78817C';
+  const bone = open ? '#E6D5AE' : '#9C9F91';
+  const dark = '#282B2B';
+  pedestal(g, active, open);
+  shape(g, [[-8,-28],[8,-28],[7,47],[0,60],[-7,47]], open ? '#5C493B' : '#535A53', dark, 2.5);
+  shape(g, [[-30,49],[-8,55],[0,49],[8,55],[30,49],[37,32],[30,-4],[0,-18],[-30,-4],[-37,32]],
+    open ? '#393D3B' : '#515B58', rim, active ? 3.5 : 3);
+  shape(g, [[-36,49],[-46,56],[-45,32],[-41,12],[-29,-7],[-34,17],[-31,33]],
+    bone, dark, 2.5);
+  shape(g, [[36,49],[46,56],[45,32],[41,12],[29,-7],[34,17],[31,33]],
+    bone, dark, 2.5);
+  stroke(g, [[-41,45],[-40,29],[-36,15]], open ? '#B7A27E' : '#777F74', 1.8);
+  stroke(g, [[41,45],[40,29],[36,15]], open ? '#B7A27E' : '#777F74', 1.8);
+  stroke(g, [[-22,43],[-9,47]], open ? '#A18A69' : '#939B8F', 2);
+  stroke(g, [[22,43],[9,47]], open ? '#A18A69' : '#939B8F', 2);
+  rivet(g, -22, 35, rim); rivet(g, 22, 35, rim);
+  shape(g, [[-7,1],[0,7],[7,1],[0,-7]], open ? active ? '#FFD163' : '#C3643D' : '#7F8980', dark, 1.5);
+}
+
+export function paintCampaignCheckpoint(parent: Node, chapter: number, active: boolean, open: boolean): void {
+  const theme = Math.max(0, Math.min(2, Math.floor(chapter)));
+  const names = ['campaignCheckpointOutpost', 'campaignCheckpointForest', 'campaignCheckpointLair'];
+  const g = N(names[theme], parent).addComponent(Graphics);
+  [outpost, forest, lair][theme](g, active, open);
+}

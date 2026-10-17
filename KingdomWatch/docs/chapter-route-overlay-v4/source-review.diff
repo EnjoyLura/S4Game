@@ -1,0 +1,104 @@
+--- before/assets/scripts/ui/pages/LevelsPage.ts
++++ assets/scripts/ui/pages/LevelsPage.ts
+@@ -72,8 +72,8 @@
+   const bottom = LO.half * 2 - LO.safeTop - LO.safeBottom - MAIN_NAV_H;
+   const chapterTop = headerTop + MAIN_RESOURCE_H + 14;
+   const dockTop = bottom - 102;
+-  // Keep every checkpoint below the fixed header without adding blank terrain margins.
+-  const mapTop = chapterTop + 96, mapViewH = Math.max(1, dockTop - mapTop);
++  // One scrolling terrain fills the screen behind the floating header controls.
++  const mapTop = 0, mapViewH = Math.max(1, dockTop - mapTop);
+   const mapHeight = Math.max(ROUTE_H, mapViewH);
+   const modalParent = ctx.screens.parent!;
+   const currentChapter = (): number => Math.floor(st.i / 10);
+@@ -160,11 +160,13 @@
+     mainLabel(paper, -158, 27, open ? '当前关卡' : '尚未解锁', { size: 18, color: COMIC.sub, bold: true, w: 354, h: 28, align: 'left' });
+     mainLabel(paper, -158, -8, lv.id + ' ' + lv.name, { size: 30, color: COMIC.text, bold: true, w: 354, h: 44, align: 'left' });
+     const button = comicButton(paper, 211, 1, 264, 78, '', () => {
+-      if (closing || enteringBattle()) return;
++      if (!levelOpen(st.i) || closing || enteringBattle()) return;
+       saveOffset(); openDrawer();
+-    }, { tone: 'gold', name: 'campaignPrepare' });
+-    levelArt(button, -85, 0, 44, 44, 'comic_swords_v1');
+-    mainLabel(button, 25, 0, '出战准备', { size: 29, bold: true, color: COMIC.text, w: 178, h: 42 });
++    }, { tone: open ? 'gold' : 'muted', name: 'campaignPrepare', enabled: open });
++    if (open) levelArt(button, -85, 0, 44, 44, 'comic_swords_v1');
++    else comicMark(button, -85, 0, 'lock', 30, COMIC.sub);
++    mainLabel(button, 25, 0, open ? '出战准备' : '尚未解锁',
++      { size: 29, bold: true, color: open ? COMIC.text : COMIC.sub, w: 178, h: 42 });
+   }
+   function openDrawer(animate = true): void {
+     const existed = !!drawer;
+@@ -321,8 +323,6 @@
+     refreshUI(content, () => {
+       mapScroll = null; drawer = null; shade = null; sheetOffset = 0; closing = false;
+       const chapter = currentChapter();
+-      // The header is a plain UI surface; terrain belongs only to the scrolling map.
+-      comicSurface(content, 0, WY(0, mapTop), 750, mapTop, 'paper', { radius: 0, name: 'campaignHeaderSurface' });
+       const map = pageScroll(content, 'campaignTerrain', mapTop, dockTop, mapHeight, 750);
+       artSprite(map, 0, -mapHeight / 2, ROUTE_W * mapHeight / ROUTE_H, mapHeight, ROUTE_ART[chapter], { sliced: false });
+       mapScroll = map.parent!.getComponent(ScrollView)!;
+@@ -330,11 +330,26 @@
+       map.parent!.on('scrolling', saveOffset); map.parent!.on('scroll-ended', saveOffset);
+       pins = N('campaignLiveCheckpoints', map);
+       renderPins();
++      const firstStage = LEVELS[chapter * 10];
++      if (!levelOpen(firstStage.order)) {
++        const locked = N('campaignLockedTerrainShade', content, 0, WY(mapTop, mapViewH), 750, mapViewH);
++        const ink = locked.addComponent(Graphics);
++        ink.fillColor = CA(COMIC.darkShade, .48);
++        ink.rect(-375, -mapViewH / 2, 750, mapViewH); ink.fill();
++        const badgeTop = chapterTop + 96 + Math.max(0, dockTop - chapterTop - 96) * .43;
++        const badge = N('campaignChapterLocked', content, 0, WY(badgeTop), 650, 186);
++        comicMark(badge, 0, 50, 'lock', 54, COMIC.cream);
++        mainLabel(badge, 0, -8, CAMPAIGN_CHAPTERS[chapter].name + ' · 尚未解锁',
++          { size: 32, color: COMIC.cream, bold: true, w: 610, h: 46, outline: COMIC.darkShade, outlineW: 2 });
++        const previous = LEVELS[firstStage.order - 1];
++        mainLabel(badge, 0, -54, '通关 ' + previous.id + ' ' + previous.name + ' 后解锁',
++          { size: 23, color: '#E7D2A5', w: 630, h: 38, outline: COMIC.darkShade, outlineW: 2 });
++      }
+       const top = N('campaignTopChrome', content, 0, WY(0, chapterTop + 98), 750, chapterTop + 98);
+       top.addComponent(BlockInputEvents);
+       comicArt(top, -307, (chapterTop + 98) / 2 - headerTop - 28, 46, 46, 'comic_nav_map_v1');
+       mainLabel(top, -225, (chapterTop + 98) / 2 - headerTop - 28, '远征地图',
+-        { size: 24, color: COMIC.text, bold: true, w: 142, h: 40 });
++        { size: 24, color: COMIC.cream, bold: true, w: 142, h: 40, outline: COMIC.darkShade, outlineW: 2 });
+       header = N('campaignHeader', content); renderHeader();
+       dock = N('campaignDock', content); renderDock();
+       if (st.drawer) {
+--- before/assets/scripts/ui/CampaignRoute.ts
++++ assets/scripts/ui/CampaignRoute.ts
+@@ -70,24 +70,25 @@
+ export function routeStop(parent: Node, stage: number, selected: boolean, open: boolean, earned: number,
+   name: string, claimable: boolean, mapHeight = ROUTE_H): Node {
+   const p = routePoint(stage, mapHeight), item = N('campaignStop:' + stage, parent, p.x, -p.top, 112, 128);
++  const highlighted = selected && open;
+   const shadow = N('checkpointShadow', item).addComponent(Graphics);
+   shadow.fillColor = CA(COMIC.ink, .28); shadow.ellipse(0, -29, 43, 14); shadow.fill();
+-  if (selected) N('campaignSelectionGlow', item).addComponent(CampaignRouteMotion).glow();
++  if (highlighted) N('campaignSelectionGlow', item).addComponent(CampaignRouteMotion).glow();
+   const g = N('campaignCheckpointFace', item).addComponent(Graphics);
+   g.fillColor = C(open ? '#909CA4' : '#777F83'); g.strokeColor = C(COMIC.darkShade); g.lineWidth = 2;
+   g.ellipse(0, -23, 37, 12); g.fill(); g.stroke();
+-  g.fillColor = C(selected ? COMIC.gold : open ? '#277AC0' : '#53616C');
+-  g.strokeColor = C(selected ? COMIC.goldShade : COMIC.darkShade); g.lineWidth = 3;
++  g.fillColor = C(highlighted ? COMIC.gold : open ? '#277AC0' : '#53616C');
++  g.strokeColor = C(highlighted ? COMIC.goldShade : COMIC.darkShade); g.lineWidth = 3;
+   g.moveTo(-27, 53); g.lineTo(27, 53); g.lineTo(27, 0); g.lineTo(0, -23); g.lineTo(-27, 0);
+   g.close(); g.fill(); g.stroke();
+-  g.lineWidth = 2; g.strokeColor = C(selected ? COMIC.goldLight : open ? '#A7D9F3' : '#9BA4AA');
++  g.lineWidth = 2; g.strokeColor = C(highlighted ? COMIC.goldLight : open ? '#A7D9F3' : '#9BA4AA');
+   g.moveTo(-21, 47); g.lineTo(21, 47); g.lineTo(21, 3); g.lineTo(0, -15); g.lineTo(-21, 3); g.close(); g.stroke();
+-  mainLabel(item, 0, 23, String(stage), { size: 30, bold: true, font: 'number', color: selected ? COMIC.text : COMIC.cream,
+-    w: 48, h: 40, outline: selected ? undefined : COMIC.darkShade, outlineW: 2 });
++  mainLabel(item, 0, 23, String(stage), { size: 30, bold: true, font: 'number', color: highlighted ? COMIC.text : COMIC.cream,
++    w: 48, h: 40, outline: highlighted ? undefined : COMIC.darkShade, outlineW: 2 });
+   if (!open) comicMark(item, 0, -13, 'lock', 18, '#E4E5DF');
+   if (stage === 10) {
+-    comicSurface(item, 0, 65, 58, 22, selected ? 'gold' : 'dark', { radius: 11, name: 'chapterFinale' });
+-    mainLabel(item, 0, 65, '章末', { size: 14, bold: true, color: selected ? COMIC.text : COMIC.cream, w: 52, h: 20 });
++    comicSurface(item, 0, 65, 58, 22, highlighted ? 'gold' : 'dark', { radius: 11, name: 'chapterFinale' });
++    mainLabel(item, 0, 65, '章末', { size: 14, bold: true, color: highlighted ? COMIC.text : COMIC.cream, w: 52, h: 20 });
+   }
+   // Stars stay below the pin, with a quiet empty state instead of three large disabled icons.
+   if (open) {

@@ -1,0 +1,39 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-fill-v2-20261016-223850",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-live-v1-20261016-222617",
+  "entryVersion": "1792161462",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=chapter-route-fill-v2-1792161462",
+  "scope": "remove full header dimmer and terrain padding; fill chapter background and join stage dock to navigation",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://06bf2f30.kingdom-watch.pages.dev",
+  "date": "2026-10-16T22:39:30.222361+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-chapter-route-fill-v2-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-chapter-route-fill-v2-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 16826,
+  "mainBundleSha256": "4f75823a7d0829e857f098e4f8a0869429d3a9896b93e857005cde243f37885e",
+  "validation": {
+    "sourceReview": true,
+    "localArtifactInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "testsRun": false,
+    "simulationRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  }
+}

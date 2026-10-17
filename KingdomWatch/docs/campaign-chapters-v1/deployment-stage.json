@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-campaign-chapters-v1-20261016-210231",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-archer-art-quality-v2-20261016-204848",
+  "entryVersion": "1792155684",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=campaign-chapters-v1-1792155684",
+  "scope": "three chapter scenes with ten stages each; chapter route layout, sequential progression, shared battlefield mapping and chapter-tier rewards",
+  "manualAcceptance": "pending user manual review"
+}

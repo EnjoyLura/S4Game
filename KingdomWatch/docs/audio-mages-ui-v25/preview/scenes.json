@@ -1,0 +1,38 @@
+[
+  {
+    "id": "pyro",
+    "title": "火法师",
+    "detail": "短促气流与低频焰流",
+    "seconds": 6.7,
+    "video": "media/pyro.mp4",
+    "poster": "media/pyro.jpg",
+    "sha256": "b9a820fadac5e604ea60b57b8ab792854210ac63068b98f505a1d6bf103489e1"
+  },
+  {
+    "id": "volt",
+    "title": "雷法师",
+    "detail": "圆润的雷击主体，减少电流碎裂",
+    "seconds": 6.7,
+    "video": "media/volt.mp4",
+    "poster": "media/volt.jpg",
+    "sha256": "6791512280f31b03915626ee76c74adcfaff3aa419ae140f32d963a1d0f24caf"
+  },
+  {
+    "id": "mora",
+    "title": "冰法师",
+    "detail": "柔和的竖琴共鸣，去掉尖锐碎片",
+    "seconds": 6.7,
+    "video": "media/mora.mp4",
+    "poster": "media/mora.jpg",
+    "sha256": "f5fa6595449300b287073f631834379f31d7c2608c21e9a17d02d50dd6137382"
+  },
+  {
+    "id": "gate",
+    "title": "进入关卡 · 木门合拢",
+    "detail": "滑动 → 实际闭合落点 → 停留 → 开门",
+    "seconds": 3.3,
+    "video": "media/gate.mp4",
+    "poster": "media/gate.jpg",
+    "sha256": "fc47454d1bdba3eae4bed6946c627d0de85dab85e04a1b8532420bada88e757f"
+  }
+]

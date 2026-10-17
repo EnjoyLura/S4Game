@@ -1,0 +1,30 @@
+{
+  "production": true,
+  "md5Cache": true,
+  "engineRevision": "8ada3fce8a0efe86",
+  "entry": "index.862cb.js?v=1792155684",
+  "immutableAssets": 1359,
+  "startupPreloads": [
+    [
+      "index.862cb.js?v=1792155684",
+      "script"
+    ],
+    [
+      "application.e9cb8.js",
+      "script"
+    ],
+    [
+      "src/settings.b8913.json",
+      "fetch"
+    ],
+    [
+      "cocos-js/cc.03aac.js?kwengine=8ada3fce8a0efe86",
+      "script"
+    ],
+    [
+      "cocos-js/_virtual_cc-Bp5iGE8z.js?kwengine=8ada3fce8a0efe86",
+      "script"
+    ]
+  ],
+  "validation": "offline preparation only; no game or browser executed"
+}

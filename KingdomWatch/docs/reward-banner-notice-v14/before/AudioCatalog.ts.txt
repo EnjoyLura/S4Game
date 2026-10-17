@@ -1,0 +1,53 @@
+/** Sample families share a mix budget; variants keep repeated volleys from sounding identical. */
+const combat = (...files: string[]): readonly string[] => files.map(file => 'v2/' + file);
+const deaths = (kind: string): readonly string[] => [1, 2, 3].map(i => `death-v3/${kind}_${i}`);
+export const AUDIO_CUES = {
+  shoot: { files: combat('bow_1', 'bow_2', 'bow_3'), gain: .9, gap: .07, group: 'shot', priority: 1 },
+  bow: { files: combat('bow_1', 'bow_2', 'bow_3'), gain: .9, gap: .07, group: 'shot', priority: 1 },
+  crossbow: { files: combat('crossbow_1', 'crossbow_2', 'crossbow_3'), gain: .94, gap: .09, group: 'shot', priority: 1 },
+  fire: { files: combat('fire_1', 'fire_2', 'fire_3'), gain: .88, gap: .09, group: 'shot', priority: 1 },
+  thunder: { files: combat('thunder_1', 'thunder_2', 'thunder_3'), gain: .87, gap: .09, group: 'shot', priority: 1 },
+  frost: { files: combat('frost_1', 'frost_2', 'frost_3'), gain: .88, gap: .09, group: 'shot', priority: 1 },
+  hit: { files: combat('hit_1', 'hit_2', 'hit_3'), gain: .68, gap: .08, group: 'impact', priority: 0 },
+  pierce: { files: combat('pierce_1', 'pierce_2', 'pierce_3'), gain: .74, gap: .09, group: 'impact', priority: 1 },
+  crush: { files: combat('crush_1', 'crush_2', 'crush_3'), gain: .71, gap: .10, group: 'impact', priority: 1 },
+  zapHit: { files: combat('zap_hit_1', 'zap_hit_2', 'zap_hit_3'), gain: .68, gap: .09, group: 'impact', priority: 0 },
+  icebreak: { files: combat('icebreak_1', 'icebreak_2', 'icebreak_3'), gain: .7, gap: .09, group: 'impact', priority: 0 },
+  pierceHeavy: { files: combat('pierce_heavy'), gain: .84, gap: .14, group: 'impact', priority: 2 },
+  fireHeavy: { files: combat('fire_heavy'), gain: .82, gap: .14, group: 'impact', priority: 2 },
+  thunderHeavy: { files: combat('thunder_heavy'), gain: .82, gap: .10, group: 'impact', priority: 2 },
+  frostHeavy: { files: combat('frost_heavy'), gain: .82, gap: .16, group: 'impact', priority: 2 },
+  crit: { files: combat('crit'), gain: .83, gap: .13, group: 'impact', priority: 2 },
+  kill: { files: deaths('physical'), gain: .88, gap: .075, group: 'death', priority: 2 },
+  deathFire: { files: deaths('fire'), gain: .86, gap: .075, group: 'death', priority: 2 },
+  deathVolt: { files: deaths('volt'), gain: .84, gap: .075, group: 'death', priority: 2 },
+  deathFrost: { files: deaths('frost'), gain: .86, gap: .075, group: 'death', priority: 2 },
+  deathHeavy: { files: deaths('heavy'), gain: .92, gap: .10, group: 'death', priority: 2 },
+  wall: { files: combat('wall'), gain: .9, gap: .25, group: 'impact', priority: 2 },
+  snipe: { files: combat('snipe'), gain: .96, gap: .18, group: 'cast', priority: 3 },
+  skill: { files: combat('skill'), gain: .9, gap: .18, group: 'cast', priority: 2 },
+  ult: { files: combat('ult'), gain: 1, gap: .28, group: 'cast', priority: 3 },
+  bowUlt: { files: combat('bow_ult'), gain: .96, gap: .28, group: 'cast', priority: 3 },
+  fireSkill: { files: combat('fire_skill'), gain: .92, gap: .18, group: 'cast', priority: 2 },
+  thunderSkill: { files: combat('thunder_skill'), gain: .92, gap: .18, group: 'cast', priority: 2 },
+  frostSkill: { files: combat('frost_skill'), gain: .92, gap: .18, group: 'cast', priority: 2 },
+  fireUlt: { files: combat('fire_ult'), gain: 1, gap: .28, group: 'cast', priority: 3 },
+  thunderUlt: { files: combat('thunder_ult'), gain: .98, gap: .28, group: 'cast', priority: 3 },
+  frostUlt: { files: combat('frost_ult'), gain: .98, gap: .28, group: 'cast', priority: 3 },
+  levelup: { files: ['levelup'], gain: .83, gap: .6, group: 'cue', priority: 4 },
+  ready: { files: combat('ready'), gain: .65, gap: .7, group: 'cue', priority: 3 },
+  surge: { files: ['surge'], gain: .8, gap: 1.8, group: 'cue', priority: 4 },
+  victory: { files: ['victory'], gain: .95, gap: 2, group: 'cue', priority: 5 },
+  defeat: { files: ['defeat'], gain: .85, gap: 2, group: 'cue', priority: 5 },
+  ui: { files: ['ui_click_1', 'ui_click_2'], gain: .65, gap: .07, group: 'ui', priority: 2 },
+  uiSelect: { files: ['ui_click_2'], gain: .58, rate: 1.08, gap: .09, group: 'ui', priority: 2 },
+  uiOpen: { files: ['ui_confirm'], gain: .38, rate: 1.08, gap: .14, group: 'ui', priority: 2 },
+  uiClose: { files: ['ui_click_2'], gain: .45, rate: .86, gap: .12, group: 'ui', priority: 2 },
+  uiToggle: { files: ['ui_click_1'], gain: .65, rate: 1.15, gap: .09, group: 'ui', priority: 2 },
+  uiConfirm: { files: ['ui_confirm'], gain: .68, rate: 1, gap: .15, group: 'ui', priority: 2 },
+  confirm: { files: ['ui_confirm'], gain: .75, gap: .15, group: 'ui', priority: 3 },
+} as const;
+
+export type SfxName = keyof typeof AUDIO_CUES;
+export type MusicScene = 'camp' | 'battle';
+export const MUSIC_TRACKS = { camp: 'bgm_camp', battle: 'bgm_battle' } as const;

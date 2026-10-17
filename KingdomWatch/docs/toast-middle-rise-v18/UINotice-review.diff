@@ -1,0 +1,16 @@
+--- before/assets/scripts/ui/UINotice.ts
++++ assets/scripts/ui/UINotice.ts
+@@ -94,10 +94,10 @@
+     const lines = wrapNotice(noticeText(message,options));
+     const width = Math.min(710,Math.max(580,Math.max(...lines.map(units))*22+138));
+     this.height = Math.max(68,lines.length*28+30);
+-    // Settle in the upper middle, clear of the resource strip; start fully below the screen.
+-    const restingY=Math.min(LO.half*.24,LO.half-LO.notchTop-this.height/2-160);
++    // Appear at screen center, then settle higher while staying below the resource strip.
++    const restingY=Math.min(LO.half*.36,LO.half-LO.notchTop-this.height/2-160);
+     this.node.setPosition(0,restingY,0);
+-    this.entryDistance=LO.half+restingY+this.height/2+24;
++    this.entryDistance=restingY;
+     this.node.setSiblingIndex(this.node.parent!.children.length-1);
+     const card = this.card = N('gameToast',this.node,0,0,width,this.height);
+     fadedNotice(card,width,this.height);

@@ -1,0 +1,277 @@
+{
+  "revision": "cartoon-r1",
+  "title": "免费卡通风 · 成长音效",
+  "baseline": "当前正式游戏 v21",
+  "items": [
+    {
+      "id": "D01",
+      "name": "升级成功",
+      "purpose": "单次升级的正向反馈。两条保留完整乐句和尾音，不用于每次连升。",
+      "old": {
+        "label": "旧版 · 当前 v21",
+        "source": "assets\\resources\\audio\\v21\\growth.wav",
+        "audio": {
+          "file": "audio/D01-old.wav",
+          "sha256": "203443468dc3944a51e51bff371b7aae86d1ba83bda2ed0993edd11b4ee9889f",
+          "seconds": 1.02,
+          "channels": 2,
+          "sampleRate": 44100,
+          "bits": 16,
+          "peakDBFS": -7.175,
+          "activeRMSDBFS": -21.0,
+          "clippedSamples": 0
+        }
+      },
+      "options": [
+        {
+          "key": "A",
+          "label": "候选 A",
+          "author": "Tim Beek",
+          "pack": "Casual SoundFX Pack",
+          "sourceURL": "https://timbeek.itch.io/casual-soundfx-pack",
+          "license": "CC-BY-4.0",
+          "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+          "credit": "Audio by timbeek.com",
+          "creditURL": "https://timbeek.com/",
+          "sourceFile": "Positive Holy1.wav",
+          "edit": "保留立体声与原音色；去近静音、2ms 边缘淡变和标量增益匹配。无变调、变速、叠加、EQ或压缩。",
+          "audio": {
+            "file": "audio/D01-A.wav",
+            "sha256": "b692b33073a491d103b9fb00a935b5427a6fe2872fc72d39767362b213026472",
+            "seconds": 3.6186,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bits": 16,
+            "peakDBFS": -5.815,
+            "activeRMSDBFS": -21.0,
+            "clippedSamples": 0
+          }
+        },
+        {
+          "key": "B",
+          "label": "候选 B",
+          "author": "Tim Beek",
+          "pack": "Casual SoundFX Pack",
+          "sourceURL": "https://timbeek.itch.io/casual-soundfx-pack",
+          "license": "CC-BY-4.0",
+          "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+          "credit": "Audio by timbeek.com",
+          "creditURL": "https://timbeek.com/",
+          "sourceFile": "Positive Holy2.wav",
+          "edit": "保留立体声与原音色；去近静音、2ms 边缘淡变和标量增益匹配。无变调、变速、叠加、EQ或压缩。",
+          "audio": {
+            "file": "audio/D01-B.wav",
+            "sha256": "41b085536b1fd301965a46cb82751325546301ea62bee46d8c847d459c8f59a9",
+            "seconds": 2.8802,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bits": 16,
+            "peakDBFS": -7.701,
+            "activeRMSDBFS": -21.0,
+            "clippedSamples": 0
+          }
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "D02",
+      "name": "长按连续升级",
+      "purpose": "短反馈。可先听单次，再听每 240ms 一次的五连升示例。",
+      "old": {
+        "label": "旧版 · 当前 v21",
+        "source": "assets\\resources\\audio\\v21\\growth_tick.wav",
+        "audio": {
+          "file": "audio/D02-old.wav",
+          "sha256": "5c7896adc4501d16831d09aba470fa5783ea53f407bbb7872816f316ba421dd2",
+          "seconds": 0.337,
+          "channels": 2,
+          "sampleRate": 44100,
+          "bits": 16,
+          "peakDBFS": -4.49,
+          "activeRMSDBFS": -21.0,
+          "clippedSamples": 0
+        }
+      },
+      "options": [
+        {
+          "key": "A",
+          "label": "候选 A",
+          "author": "Dustyroom",
+          "pack": "Free Casual Game Sounds",
+          "sourceURL": "https://dustyroom.com/free-casual-game-sounds/",
+          "license": "CC0-1.0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "credit": "Sound effects by Dustyroom",
+          "creditURL": "https://dustyroom.com/",
+          "sourceFile": "DM-CGS-21.wav",
+          "edit": "保留立体声与原音色；去近静音、2ms 边缘淡变和标量增益匹配。无变调、变速、叠加、EQ或压缩。",
+          "audio": {
+            "file": "audio/D02-A.wav",
+            "sha256": "3664cb6c3b6d801623db23ea4efb7bf7189e708c3862766b9d7445b92dae248f",
+            "seconds": 0.0811,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bits": 16,
+            "peakDBFS": -10.218,
+            "activeRMSDBFS": -21.0,
+            "clippedSamples": 0
+          }
+        },
+        {
+          "key": "B",
+          "label": "候选 B",
+          "author": "Dustyroom",
+          "pack": "Free Casual Game Sounds",
+          "sourceURL": "https://dustyroom.com/free-casual-game-sounds/",
+          "license": "CC0-1.0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "credit": "Sound effects by Dustyroom",
+          "creditURL": "https://dustyroom.com/",
+          "sourceFile": "DM-CGS-32.wav",
+          "edit": "保留立体声与原音色；去近静音、2ms 边缘淡变和标量增益匹配。无变调、变速、叠加、EQ或压缩。",
+          "audio": {
+            "file": "audio/D02-B.wav",
+            "sha256": "5e739bcff45cc61743048968a94ab21a33781b8dd3478baa435f9f4c3acd09bf",
+            "seconds": 0.111,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bits": 16,
+            "peakDBFS": -14.947,
+            "activeRMSDBFS": -21.0,
+            "clippedSamples": 0
+          }
+        }
+      ],
+      "examples": [
+        {
+          "key": "old",
+          "label": "五连升 · 旧版",
+          "count": 5,
+          "intervalMS": 240,
+          "audio": {
+            "file": "audio/D02-old-repeat.wav",
+            "sha256": "305726f33a8e0a9382c1ff27472584df8b04980d5111af43c9d012eced1e694e",
+            "seconds": 1.297,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bits": 16,
+            "peakDBFS": -4.488,
+            "activeRMSDBFS": -21.001,
+            "clippedSamples": 0
+          }
+        },
+        {
+          "key": "A",
+          "label": "五连升 · A",
+          "count": 5,
+          "intervalMS": 240,
+          "audio": {
+            "file": "audio/D02-A-repeat.wav",
+            "sha256": "146e18f128e15336f1f37841b29c80e273c8c9547d9a1261a98edf4f98082581",
+            "seconds": 1.0411,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bits": 16,
+            "peakDBFS": -10.218,
+            "activeRMSDBFS": -21.0,
+            "clippedSamples": 0
+          }
+        },
+        {
+          "key": "B",
+          "label": "五连升 · B",
+          "count": 5,
+          "intervalMS": 240,
+          "audio": {
+            "file": "audio/D02-B-repeat.wav",
+            "sha256": "00c97001cc210133f9b383baa15c1f3b568e4cb576b6953e57f319257a823050",
+            "seconds": 1.071,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bits": 16,
+            "peakDBFS": -14.947,
+            "activeRMSDBFS": -21.0,
+            "clippedSamples": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "D03",
+      "name": "升级数字落点",
+      "purpose": "数值停止滚动时的一次短确认；与升级乐句分开选择。",
+      "old": {
+        "label": "旧版 · 当前 v21",
+        "source": "assets\\resources\\audio\\v21\\growth_land.wav",
+        "audio": {
+          "file": "audio/D03-old.wav",
+          "sha256": "3cc182663194ab29df1971eaef597b16334b19cf3802da8a36c9ac905289a411",
+          "seconds": 0.4184,
+          "channels": 2,
+          "sampleRate": 44100,
+          "bits": 16,
+          "peakDBFS": -3.529,
+          "activeRMSDBFS": -21.0,
+          "clippedSamples": 0
+        }
+      },
+      "options": [
+        {
+          "key": "A",
+          "label": "候选 A",
+          "author": "Dustyroom",
+          "pack": "Free Casual Game Sounds",
+          "sourceURL": "https://dustyroom.com/free-casual-game-sounds/",
+          "license": "CC0-1.0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "credit": "Sound effects by Dustyroom",
+          "creditURL": "https://dustyroom.com/",
+          "sourceFile": "DM-CGS-07.wav",
+          "edit": "保留立体声与原音色；去近静音、2ms 边缘淡变和标量增益匹配。无变调、变速、叠加、EQ或压缩。",
+          "audio": {
+            "file": "audio/D03-A.wav",
+            "sha256": "8baf1dfe5e8c42944bdb4a102eac4203df660162db87ba9ed7b37b49abdadc51",
+            "seconds": 0.2924,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bits": 16,
+            "peakDBFS": -10.21,
+            "activeRMSDBFS": -21.0,
+            "clippedSamples": 0
+          }
+        },
+        {
+          "key": "B",
+          "label": "候选 B",
+          "author": "Dustyroom",
+          "pack": "Free Casual Game Sounds",
+          "sourceURL": "https://dustyroom.com/free-casual-game-sounds/",
+          "license": "CC0-1.0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "credit": "Sound effects by Dustyroom",
+          "creditURL": "https://dustyroom.com/",
+          "sourceFile": "DM-CGS-41.wav",
+          "edit": "保留立体声与原音色；去近静音、2ms 边缘淡变和标量增益匹配。无变调、变速、叠加、EQ或压缩。",
+          "audio": {
+            "file": "audio/D03-B.wav",
+            "sha256": "df57e5f416ea092c88ace9649c3d4808ce697bb093138c39cd1ff450f2bec513",
+            "seconds": 0.2328,
+            "channels": 2,
+            "sampleRate": 44100,
+            "bits": 16,
+            "peakDBFS": -7.135,
+            "activeRMSDBFS": -21.0,
+            "clippedSamples": 0
+          }
+        }
+      ],
+      "examples": []
+    }
+  ],
+  "currentBatchCount": 3,
+  "candidateCount": 6,
+  "auditionedByAgent": false,
+  "gameReplaced": false,
+  "selectionBasis": "Source author descriptions and offline duration/signal inspection; user listening pending."
+}

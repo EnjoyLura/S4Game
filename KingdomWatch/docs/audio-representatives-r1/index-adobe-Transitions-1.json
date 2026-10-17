@@ -1,0 +1,318 @@
+{
+  "url": "https://download.adobe.com/pub/adobe/audition/loopology/Adobe_Sound_Effects-Transitions.zip",
+  "bytes": 5579358,
+  "entries": [
+    {
+      "name": "Production Element Title Transition Laser Short 01.wav",
+      "method": 8,
+      "crc": 376300818,
+      "compressed": 174015,
+      "uncompressed": 340694,
+      "offset": 0
+    },
+    {
+      "name": "__MACOSX/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 174131
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Laser Short 01.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 174186
+    },
+    {
+      "name": "Production Element Title Transition Laser 03.wav",
+      "method": 8,
+      "crc": 1342725465,
+      "compressed": 268412,
+      "uncompressed": 419170,
+      "offset": 174448
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Laser 03.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 442970
+    },
+    {
+      "name": "Production Element Title Transition Laser 02.wav",
+      "method": 8,
+      "crc": 276295856,
+      "compressed": 267303,
+      "uncompressed": 411342,
+      "offset": 443226
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Laser 02.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 710639
+    },
+    {
+      "name": "Production Element Title Transition Crystal Glow 01.wav",
+      "method": 8,
+      "crc": 2333993416,
+      "compressed": 555172,
+      "uncompressed": 666400,
+      "offset": 710895
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Crystal Glow 01.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 1266184
+    },
+    {
+      "name": "Production Element Title Transition Digital Bleep 01.wav",
+      "method": 8,
+      "crc": 562856868,
+      "compressed": 57940,
+      "uncompressed": 110816,
+      "offset": 1266447
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Digital Bleep 01.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 1324505
+    },
+    {
+      "name": "Production Element Title Transition Blast Energy 02.wav",
+      "method": 8,
+      "crc": 3235379319,
+      "compressed": 179042,
+      "uncompressed": 279332,
+      "offset": 1324769
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Blast Energy 02.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 1503928
+    },
+    {
+      "name": "Production Element Title Transition Laser Horn 04.wav",
+      "method": 8,
+      "crc": 1910233481,
+      "compressed": 472790,
+      "uncompressed": 915680,
+      "offset": 1504191
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Laser Horn 04.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 1977096
+    },
+    {
+      "name": "Production Element Title Transition Data Transmission Computer 05.wav",
+      "method": 8,
+      "crc": 2665071875,
+      "compressed": 173932,
+      "uncompressed": 245218,
+      "offset": 1977357
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Data Transmission Computer 05.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 2151420
+    },
+    {
+      "name": "Production Element Title Transition Bell Swell 09.wav",
+      "method": 8,
+      "crc": 2207542384,
+      "compressed": 401324,
+      "uncompressed": 629324,
+      "offset": 2151697
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Bell Swell 09.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 2553136
+    },
+    {
+      "name": "Production Element Title Transition Data Transmission Computer 03.wav",
+      "method": 8,
+      "crc": 995336133,
+      "compressed": 80420,
+      "uncompressed": 101858,
+      "offset": 2553397
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Data Transmission Computer 03.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 2633948
+    },
+    {
+      "name": "Production Element Title Transition Bell Element 06.wav",
+      "method": 8,
+      "crc": 3241113926,
+      "compressed": 365136,
+      "uncompressed": 401652,
+      "offset": 2634225
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Bell Element 06.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 2999478
+    },
+    {
+      "name": "Production Element Title Transition Bell Chime 02.wav",
+      "method": 8,
+      "crc": 1603021045,
+      "compressed": 877334,
+      "uncompressed": 1150180,
+      "offset": 2999741
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Bell Chime 02.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 3877190
+    },
+    {
+      "name": "LICENSE.pdf",
+      "method": 8,
+      "crc": 232932192,
+      "compressed": 32175,
+      "uncompressed": 36062,
+      "offset": 3877451
+    },
+    {
+      "name": "__MACOSX/._LICENSE.pdf",
+      "method": 8,
+      "crc": 3979084060,
+      "compressed": 145,
+      "uncompressed": 222,
+      "offset": 3909699
+    },
+    {
+      "name": "LICENSE-FR.pdf",
+      "method": 8,
+      "crc": 3443431216,
+      "compressed": 29931,
+      "uncompressed": 38274,
+      "offset": 3909928
+    },
+    {
+      "name": "__MACOSX/._LICENSE-FR.pdf",
+      "method": 8,
+      "crc": 3979084060,
+      "compressed": 145,
+      "uncompressed": 222,
+      "offset": 3939935
+    },
+    {
+      "name": "Production Element Title Transition Communication Distortion Scanner 04.wav",
+      "method": 8,
+      "crc": 2545239392,
+      "compressed": 352552,
+      "uncompressed": 398922,
+      "offset": 3940167
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Communication Distortion Scanner 04.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 4292856
+    },
+    {
+      "name": "Production Element Title Transition Delay Short 17.wav",
+      "method": 8,
+      "crc": 622571925,
+      "compressed": 410801,
+      "uncompressed": 599256,
+      "offset": 4293139
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Delay Short 17.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 4704056
+    },
+    {
+      "name": "Production Element Title Transition Delay Short 14.wav",
+      "method": 8,
+      "crc": 3084316687,
+      "compressed": 353695,
+      "uncompressed": 558528,
+      "offset": 4704318
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Delay Short 14.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 5058129
+    },
+    {
+      "name": "Production Element Title Transition Communication Distortion Scanner 02.wav",
+      "method": 8,
+      "crc": 359848231,
+      "compressed": 374496,
+      "uncompressed": 526194,
+      "offset": 5058391
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Communication Distortion Scanner 02.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 5433024
+    },
+    {
+      "name": "Production Element Title Transition Blurp 03.wav",
+      "method": 8,
+      "crc": 4257965761,
+      "compressed": 141185,
+      "uncompressed": 251438,
+      "offset": 5433307
+    },
+    {
+      "name": "__MACOSX/._Production Element Title Transition Blurp 03.wav",
+      "method": 8,
+      "crc": 3215224535,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 5574602
+    }
+  ]
+}

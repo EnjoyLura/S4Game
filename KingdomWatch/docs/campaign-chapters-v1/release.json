@@ -1,0 +1,40 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-campaign-chapters-v1-20261016-210231",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-archer-art-quality-v2-20261016-204848",
+  "entryVersion": "1792155684",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=campaign-chapters-v1-1792155684",
+  "scope": "three chapter scenes with ten stages each; chapter route layout, sequential progression, shared battlefield mapping and chapter-tier rewards",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://86b6fef9.kingdom-watch.pages.dev",
+  "checkpoint": "d888caf",
+  "date": "2026-10-16T21:03:13.525051+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-campaign-chapters-v1-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-campaign-chapters-v1-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 17566,
+  "mainBundleSha256": "cc19c3de3385476c2e323467101848c0c16a9c508880e09bf71d9faa6599ae8f",
+  "validation": {
+    "sourceReview": true,
+    "localBundleInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "testsRun": false,
+    "simulationRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  }
+}

@@ -1,0 +1,22 @@
+--- before/assets/scripts/ui/pages/LevelsPage.ts
++++ assets/scripts/ui/pages/LevelsPage.ts
+@@ -321,8 +321,8 @@
+     refreshUI(content, () => {
+       mapScroll = null; drawer = null; shade = null; sheetOffset = 0; closing = false;
+       const chapter = currentChapter();
+-      const backing = artSprite(content, 0, 0, 750, LO.half * 2 + 240, ROUTE_ART[chapter], { sliced: false, cover: true });
+-      backing.name = 'campaignTerrainBackdrop';
++      // The header is a plain UI surface; terrain belongs only to the scrolling map.
++      comicSurface(content, 0, WY(0, mapTop), 750, mapTop, 'paper', { radius: 0, name: 'campaignHeaderSurface' });
+       const map = pageScroll(content, 'campaignTerrain', mapTop, dockTop, mapHeight, 750);
+       artSprite(map, 0, -mapHeight / 2, ROUTE_W * mapHeight / ROUTE_H, mapHeight, ROUTE_ART[chapter], { sliced: false });
+       mapScroll = map.parent!.getComponent(ScrollView)!;
+@@ -334,7 +334,7 @@
+       top.addComponent(BlockInputEvents);
+       comicArt(top, -307, (chapterTop + 98) / 2 - headerTop - 28, 46, 46, 'comic_nav_map_v1');
+       mainLabel(top, -225, (chapterTop + 98) / 2 - headerTop - 28, '远征地图',
+-        { size: 24, color: COMIC.cream, bold: true, w: 142, h: 40, outline: COMIC.darkShade, outlineW: 2 });
++        { size: 24, color: COMIC.text, bold: true, w: 142, h: 40 });
+       header = N('campaignHeader', content); renderHeader();
+       dock = N('campaignDock', content); renderDock();
+       if (st.drawer) {

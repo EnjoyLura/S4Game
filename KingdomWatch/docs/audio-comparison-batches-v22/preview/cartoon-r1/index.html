@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>王国守望 · 免费卡通风音效试听</title>
+  <link rel="stylesheet" href="../style.css?v=cartoon-r1">
+  <script src="app.js?v=cartoon-r1" defer></script>
+  <style>
+    .pair.many{grid-template-columns:repeat(3,minmax(0,1fr))}.pair.many .ab{grid-column:1/-1;min-height:38px}
+    .pair.many button{min-width:0;padding:9px 6px}.pair.many small{overflow-wrap:anywhere}
+    .examples{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.examples button{flex:1;font-size:13px;min-width:92px}
+    .source-chip{color:#b9c9d1;font-size:12px;margin:10px 0}.tools{margin-bottom:20px}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">王国守望 / 音效试听 / cartoon-r1</p>
+      <h1>免费卡通风 · 成长音效</h1>
+      <p class="intro">按欧美卡通、轻奇幻方向重新选素材。先听 6 条，判断这次的音色是否对味。</p>
+      <div class="counts"><span>3 个用途 · 各 2 个候选</span><span>免费素材</span><span id="choice-count">已选 0 / 3</span></div>
+    </header>
+    <section class="guide" aria-label="素材与试听说明">
+      <p><strong>单次升级：</strong><a href="https://timbeek.itch.io/casual-soundfx-pack" target="_blank" rel="noopener noreferrer">Tim Beek · Casual SoundFX</a>，使用免费 CC BY 4.0 版本，已署名。</p>
+      <p><strong>连升 / 数字落点：</strong><a href="https://dustyroom.com/free-casual-game-sounds/" target="_blank" rel="noopener noreferrer">Dustyroom · Free Casual Game Sounds</a>，CC0。</p>
+      <p>旧版取当前游戏 v21。每项三个版本使用相近参考音量；新候选保留原有立体声和尾音。连续升级另有五连升示例。</p>
+      <details><summary>来源与处理说明</summary>
+        <p>候选取作者发布的成品音效，只去近静音、做极短首尾淡变与增益匹配；未变调、加速、重作或叠加。五连升示例使用同一音效每 240ms 播放一次。</p>
+        <p>依作者用途说明及离线文件分析初选，实际听感由你确认。尚未接入正式游戏；此前选择保留的领奖、购买、招募、突破、主城升级继续保留 v21。</p>
+        <p><a href="CREDITS.txt">完整鸣谢与修改</a> · <a href="licenses/Tim-Beek-CC-BY-4.0.pdf">Tim Beek 随包许可</a> · <a href="licenses/Dustyroom-CC0.pdf">Dustyroom 随包许可</a></p>
+      </details>
+    </section>
+    <section class="tools" aria-label="播放控制">
+      <button type="button" id="play-batch-old" disabled>连听三条旧版</button>
+      <button type="button" id="play-batch-new" class="gold" disabled>连听六条新候选</button>
+      <label class="volume">试听音量 <input id="volume" type="range" min="0" max="1" step="0.05" value="0.7" aria-label="试听音量"><output id="volume-value">70%</output></label>
+    </section>
+    <div id="cards" aria-busy="true"><p>正在载入试听清单…</p></div>
+    <noscript><p>请启用 JavaScript 后试听；页面不会自动播放。</p></noscript>
+    <section class="results">
+      <h2>把选择发给我</h2>
+      <p>可逐项选择，也可以先听完后，只告诉我整体音色是否接近你想要的方向。</p>
+      <div class="actions"><button id="copy-results" class="gold" disabled>复制选择</button><button id="download-results" disabled>下载选择记录</button></div>
+      <textarea id="result-text" rows="7" readonly aria-label="选择结果"></textarea>
+      <p id="save-status" role="status">选择仅保存在当前浏览器，不会自动发送。</p>
+    </section>
+    <p class="footnote"><a href="../">第 1 批记录</a> · <a href="../growth-r1/">上一轮（新候选已否定）</a> · <a href="../../../?v=audio-overhaul-v21-1792220287">正式游戏 · v21</a></p>
+  </main>
+  <footer class="player-bar"><button id="stop" type="button">停止播放</button><span id="play-status" role="status" aria-live="polite">尚未播放</span></footer>
+</body>
+</html>

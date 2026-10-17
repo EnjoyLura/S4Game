@@ -1,0 +1,83 @@
+[
+  {
+    "file": "assets/ground.png",
+    "source": "assets/resources/scenes/scene_1_1.png",
+    "sha256": "cfbc3f0dd31532f8f48e3060122855184aac72a1505d1a11c5eded7a698e7e50",
+    "unchangedCopy": true
+  },
+  {
+    "file": "assets/victory-banner.png",
+    "source": "assets/resources/ux/settlement_comic_v1/badge_win.png",
+    "sha256": "43eae07e9fcbec0675ef462d46c70ecb4b554552fc04ba4e53d413855707fd0e",
+    "unchangedCopy": true
+  },
+  {
+    "file": "assets/defeat-banner.png",
+    "source": "assets/resources/ux/settlement_comic_v1/badge_lose.png",
+    "sha256": "cefa271304ee6bd56d77676d7d4936ae2bb43801dd972b8b214a9a467d6d91e4",
+    "unchangedCopy": true
+  },
+  {
+    "file": "assets/star.png",
+    "source": "assets/resources/ux/levels_comic_v1/comic_star_v1.png",
+    "sha256": "fab5438a4ae9aec3fd5606dcad326c05bdcb3e60a3f377a8b9a4887546cb4b21",
+    "unchangedCopy": true
+  },
+  {
+    "file": "assets/coin.png",
+    "source": "assets/resources/ux/shop_comic_v1/comic_coin_v1.png",
+    "sha256": "035475e9dce04a56070c512fb804474c1224c52aac69f3b785fb1d43619a56bb",
+    "unchangedCopy": true
+  },
+  {
+    "file": "assets/experience.png",
+    "source": "assets/resources/ux/hero_comic_v2/comic_attributes_v2.png",
+    "sha256": "5a58575d0549d65a27781d5bfc57e88309e2082df8fd29883db5e368af4ac1c6",
+    "unchangedCopy": true
+  },
+  {
+    "file": "assets/stone.png",
+    "source": "assets/resources/ux/shop_comic_v1/comic_mat_stone_v1.png",
+    "sha256": "d634f1acfba66a1d6199041409d16485d729ce2a3f113367aa5702528d791e60",
+    "unchangedCopy": true
+  },
+  {
+    "file": "assets/victory.wav",
+    "source": "assets/resources/audio/v1/victory.wav",
+    "sha256": "cfb4e5ae4e2588ae2f653061e36c5bd0fabfe6fe703b322b60953c0fb873ea00",
+    "unchangedCopy": true
+  },
+  {
+    "file": "assets/defeat.wav",
+    "source": "assets/resources/audio/v1/defeat.wav",
+    "sha256": "39540b84a4598018ee9645f4b850c45debc54141dcfdb97cf0daa9082cddc3d5",
+    "unchangedCopy": true
+  },
+  {
+    "file": "assets/star.wav",
+    "source": "assets/resources/audio/feedback-v15/star.wav",
+    "sha256": "0d2c030131150388676628d367e0cfb120999a10e05bf852382f28ea91447d62",
+    "unchangedCopy": true
+  },
+  {
+    "file": "pause-v18.png",
+    "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-e0625641-ffed-4f35-91a0-64f270bb6375.png",
+    "generator": "built-in image_gen",
+    "originalOutputPreserved": true,
+    "sha256": "f8eed5f9a8ce84178045afa2fd80eff76a43f776b058e6541790f379103b172c"
+  },
+  {
+    "file": "victory-v18.png",
+    "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-bc638eab-465f-4bda-b6d1-a734db98039a.png",
+    "generator": "built-in image_gen",
+    "originalOutputPreserved": true,
+    "sha256": "b49cdcdac10e86aa68d09e65f0f0cf872c59abee5663b77cfa272ce74a22f737"
+  },
+  {
+    "file": "defeat-v18.png",
+    "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-9e5cc1a2-494b-44b1-80da-d74684d134a1.png",
+    "generator": "built-in image_gen",
+    "originalOutputPreserved": true,
+    "sha256": "3c2ce39d4b878fa4c643a344426cfdf465459c95d94145470a465a3f350d7cf0"
+  }
+]

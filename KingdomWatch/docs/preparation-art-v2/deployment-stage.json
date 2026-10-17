@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-preparation-art-v2-20261017-014305",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-banner-art-v1-20261017-011922",
+  "entryVersion": "1792172540",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=preparation-art-v2-1792172540",
+  "scope": "three difficulty icons, three painted chests and claim button; fixed two equipment rows with no drawer scroll; bold heading; shared square rarity backplates for equipment and materials",
+  "manualAcceptance": "pending user manual review"
+}

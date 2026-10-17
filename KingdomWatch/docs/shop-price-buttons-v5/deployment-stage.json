@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-price-buttons-v5-20261017-024106",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-controls-quiet-v4-20261017-023641",
+  "entryVersion": "1792176036",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=shop-price-buttons-v5-1792176036",
+  "scope": "restore every shop card gold/diamond price button to original single-face ComicUI style and 192x48 dimensions; remove unused bevel painter; retain previous UI restoration and +1 dB audio",
+  "manualAcceptance": "pending user manual review"
+}

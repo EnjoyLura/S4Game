@@ -1,0 +1,127 @@
+--- before/assets/scripts/ui/SquadPanel.ts
++++ assets/scripts/ui/SquadPanel.ts
+@@ -2,7 +2,7 @@
+ import { Node, UIOpacity } from 'cc';
+ import { LO } from '../config/GameConfig';
+ import { dimLayer, N, WY } from './UIKit';
+-import { COMIC, comicArt, comicButton, comicDialog, comicMark, comicPlate } from './ComicUI';
++import { COMIC, comicArt, comicButton, comicMark, comicPlate } from './ComicUI';
+ import { heroPortrait } from './HeroComic';
+ import { mainLabel, PageCtx, toast } from './PageKit';
+ import { HERO_DEFS, SQUAD_MAX, deployHero, inSquad, squadList, undeployHero } from '../core/GameData';
+@@ -13,6 +13,7 @@
+ import { bindBrowserBack } from './BrowserBack';
+ import { campaignChapterArrow, campaignChapterPlate, paintCampaignMapAction } from './CampaignChrome';
+ import { paintSquadCard, paintSquadFrame, squadDivider, squadHallBackground, squadPortraitRim, squadWatermark } from './SquadChrome';
++import { detailActionY, detailDialog, detailFooter } from './DetailDialog';
+ 
+ export function openSquadPanel(ctx: PageCtx): void {
+   const root = ctx.screens.parent;
+@@ -114,21 +115,22 @@
+ 
+   function confirmRemove(hid: string): void {
+     if (removeModal?.isValid) return;
+-    const panel = comicDialog(dim, 548, 360, '下阵确认');
+-    panel.name = 'squadRemoveDialog';
++    const panel = detailDialog(dim, 548, 360, '下阵确认', 'squadRemoveDialog');
+     const modal = panel.parent!;
+     removeModal = modal;
+     bindBrowserBack(modal, () => dismissUI(modal));
+     heroPortrait(panel, -165, 13, 100, hid);
+     mainLabel(panel, 51, 29, '将 ' + HERO_DEFS[hid].name + ' 下阵？',
+-      { size: 25, color: COMIC.text, bold: true, w: 310, h: 40 });
++      { size: 25, color: '#1D303E', bold: true, w: 310, h: 40 });
+     mainLabel(panel, 51, -21, '之后可以随时重新上阵', { size: 21, color: COMIC.sub, w: 312, h: 36 });
+-    comicButton(panel, -126, -114, 222, 76, '取消', () => dismissUI(modal),
+-      { tone: 'dark', size: 28, name: 'squadRemoveCancel', sound: 'close' });
+-    comicButton(panel, 126, -114, 222, 76, '确认下阵', () => {
++    detailFooter(panel);
++    const actionY = detailActionY(panel);
++    comicButton(panel, -126, actionY, 222, 58, '取消', () => dismissUI(modal),
++      { tone: 'dark', size: 25, name: 'squadRemoveCancel', sound: 'close' });
++    comicButton(panel, 126, actionY, 222, 58, '确认下阵', () => {
+       const result = undeployHero(hid);
+       toast(result.msg, { kind: result.ok ? 'success' : 'warning', title: result.ok ? '编队已更新' : '操作未完成' });
+       dismissUI(modal, () => { if (result.ok) rebuild(); }, false);
+-    }, { tone: 'green', size: 28, name: 'squadRemoveConfirm', sound: 'confirm' });
++    }, { tone: 'green', size: 25, name: 'squadRemoveConfirm', sound: 'confirm' });
+   }
+ }
+--- before/assets/scripts/ui/pages/LevelsPage.ts
++++ assets/scripts/ui/pages/LevelsPage.ts
+@@ -96,6 +96,12 @@
+   function levelOpen(i: number): boolean {
+     return !!LEVELS[i] && campaignLevelOpen(LEVELS[i].id, loadSave().stars);
+   }
++  function notifyLockedLevel(i: number): void {
++    const level = LEVELS[i], previous = LEVELS[i - 1];
++    if (!level || !previous) return;
++    toast('请先通关 ' + previous.id + ' ' + previous.name + '（普通难度）',
++      { kind: 'warning', title: level.id + ' ' + level.name + ' 尚未解锁', key: 'campaignLockedLevel:' + level.id });
++  }
+   function difficultyOpen(i: number, d: number): boolean {
+     return !!LEVELS[i] && campaignDifficultyOpen(LEVELS[i].id, d, loadSave().stars);
+   }
+@@ -157,13 +163,13 @@
+       const item = routeStop(pins!, level.stage, level.order === st.i, open, earned, level.name, ready, mapHeight, currentChapter());
+       bindButton(item, () => {
+         if (closing || enteringBattle()) return;
+-        if (!open) { toast('通关 ' + LEVELS[level.order - 1].id + ' 普通难度后解锁'); return; }
++        if (!levelOpen(level.order)) { notifyLockedLevel(level.order); return; }
+         if (!st.drawer) saveOffset();
+         st.i = level.order; st.selected[currentChapter()] = level.stage - 1;
+         while (st.d > 0 && !difficultyOpen(st.i, st.d)) st.d--;
+         renderPins(); renderDock(); openDrawer();
+         warmSelected();
+-      }, { dragThreshold: 7, scale: .97, sound: 'select' });
++      }, { dragThreshold: 7, scale: .97, sound: open ? 'select' : false });
+     });
+   }
+   function renderDock(): void {
+@@ -173,9 +179,10 @@
+     // Only the controls float above the terrain; there is no current-stage bar or full-width paper.
+     const actionY = WY(dockTop + 10, 82);
+     const button = comicButton(dock, 0, actionY, 354, 82, '', () => {
+-      if (!levelOpen(st.i) || closing || enteringBattle()) return;
++      if (closing || enteringBattle()) return;
++      if (!levelOpen(st.i)) { notifyLockedLevel(st.i); return; }
+       saveOffset(); openDrawer();
+-    }, { tone: open ? 'gold' : 'muted', name: 'campaignPrepare', enabled: open });
++    }, { tone: open ? 'gold' : 'muted', name: 'campaignPrepare', sound: open ? 'tap' : 'warning' });
+     const prepareFace = button.getChildByName('buttonFace')!;
+     paintCampaignMapAction(prepareFace,354,82,'gold',open);
+     if (open) levelArt(prepareFace,-113,1,53,53,'comic_swords_v1');
+--- before/assets/scripts/ui/pages/HeroPage.ts
++++ assets/scripts/ui/pages/HeroPage.ts
+@@ -161,8 +161,8 @@
+   mainLabel(power, 31, 0, '战力 ' + fmt(heroStats(hid).power), { size: 28, color: COMIC.cream,
+     font: 'number', bold: true, w: 208, h: 38 });
+   const sq = Math.min(124, Math.max(100, (height - 300) / 2));
+-  // Align the equipment panel to the stage top; its two actions share the panel's lower section.
+-  const equipmentH = 86 + sq * 3 + 76;
++  // Keep the raised equipment panel compact; detail actions sit outside its lower edge.
++  const equipmentH = 86 + sq * 3;
+   const equipmentY = height / 2 - 12 - equipmentH / 2;
+   const equipment = N('heroEquipmentGroup', stage, 213, equipmentY, 284, equipmentH);
+   heroPaper(equipment,0,0,284,equipmentH,'heroEquipment');
+@@ -172,7 +172,7 @@
+   drawSlot(ctx, equipment, hid, 'weapon', 0, equipmentH / 2 - 44 - sq / 2, 252, sq);
+   SLOTS.forEach((kind, i) => drawSlot(ctx, equipment, hid, kind, -67 + (i % 2) * 134,
+     equipmentH / 2 - (58 + sq * 1.5 + Math.floor(i / 2) * (sq + 14)), sq, sq));
+-  const details = N('heroDetails', equipment, 0, -equipmentH / 2 + 38, 260, 52);
++  const details = N('heroDetails', stage, 213, equipmentY - equipmentH / 2 - 38, 260, 52);
+   detailButton(details, -68, 0, '属性', 'attrs', () => attrsModal(ctx, hid));
+   detailButton(details, 68, 0, '故事', 'book', () => storyModal(ctx, hid));
+ }
+--- before/assets/scripts/ui/UINotice.ts
++++ assets/scripts/ui/UINotice.ts
+@@ -137,7 +137,8 @@
+     const reduced = reducedMotion(), ending = Math.max(0, (this.age - this.duration) / .22);
+     this.fade.opacity = Math.round(255 * Math.min(1, this.age / (reduced ? .08 : .14)) * (1 - ending));
+     const settle = this.age < .16 ? .97 + .042 * out(this.age / .16) : 1 + .012 * (1 - out((this.age - .16) / .14));
+-    this.card.setScale(reduced ? 1 : settle * (1 - .01 * ending));
++    const scale = reduced ? 1 : settle * (1 - .01 * ending);
++    this.card.setScale(scale, scale, 1);
+     this.card.setPosition(0, reduced ? 0 : -12 * (1 - out(this.age / .22)) + 9 * ending, 0);
+     const progress = reduced ? 1 : out((this.age - .06) / .38);
+     if (this.levelLabel && this.options.level) {

@@ -1,0 +1,158 @@
+{
+  "url": "https://download.adobe.com/pub/adobe/audition/loopology/Adobe_Sound_Effects-Alerts.zip",
+  "bytes": 1080607,
+  "entries": [
+    {
+      "name": "Multimedia Internet CD-Rom Flash Wipe Electronic 15.wav",
+      "method": 8,
+      "crc": 1892623033,
+      "compressed": 190275,
+      "uncompressed": 228002,
+      "offset": 0
+    },
+    {
+      "name": "__MACOSX/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 190392
+    },
+    {
+      "name": "__MACOSX/._Multimedia Internet CD-Rom Flash Wipe Electronic 15.wav",
+      "method": 8,
+      "crc": 2775562235,
+      "compressed": 133,
+      "uncompressed": 212,
+      "offset": 190447
+    },
+    {
+      "name": "Multimedia Internet CD-Rom Flash Animation Cartoon 02.wav",
+      "method": 8,
+      "crc": 1335994030,
+      "compressed": 126146,
+      "uncompressed": 206770,
+      "offset": 190708
+    },
+    {
+      "name": "__MACOSX/._Multimedia Internet CD-Rom Flash Animation Cartoon 02.wav",
+      "method": 8,
+      "crc": 2775562235,
+      "compressed": 133,
+      "uncompressed": 212,
+      "offset": 316973
+    },
+    {
+      "name": "Multimedia Internet CD-Rom Flash Pop Up 03.wav",
+      "method": 8,
+      "crc": 1170519319,
+      "compressed": 85642,
+      "uncompressed": 100794,
+      "offset": 317236
+    },
+    {
+      "name": "__MACOSX/._Multimedia Internet CD-Rom Flash Pop Up 03.wav",
+      "method": 8,
+      "crc": 2775562235,
+      "compressed": 133,
+      "uncompressed": 212,
+      "offset": 402986
+    },
+    {
+      "name": "Multimedia Internet CD-Rom Flash Animation Cartoon 01.wav",
+      "method": 8,
+      "crc": 1157177894,
+      "compressed": 273301,
+      "uncompressed": 322666,
+      "offset": 403238
+    },
+    {
+      "name": "__MACOSX/._Multimedia Internet CD-Rom Flash Animation Cartoon 01.wav",
+      "method": 8,
+      "crc": 2775562235,
+      "compressed": 133,
+      "uncompressed": 212,
+      "offset": 676658
+    },
+    {
+      "name": "Multimedia Internet CD-Rom Flash Digital Toy Beep Electronic 01.wav",
+      "method": 8,
+      "crc": 106564014,
+      "compressed": 116417,
+      "uncompressed": 398658,
+      "offset": 676921
+    },
+    {
+      "name": "__MACOSX/._Multimedia Internet CD-Rom Flash Digital Toy Beep Electronic 01.wav",
+      "method": 8,
+      "crc": 2775562235,
+      "compressed": 133,
+      "uncompressed": 212,
+      "offset": 793467
+    },
+    {
+      "name": "Multimedia Internet CD-Rom Flash Beep High Pitch 05.wav",
+      "method": 8,
+      "crc": 3406739918,
+      "compressed": 92945,
+      "uncompressed": 108562,
+      "offset": 793740
+    },
+    {
+      "name": "__MACOSX/._Multimedia Internet CD-Rom Flash Beep High Pitch 05.wav",
+      "method": 8,
+      "crc": 2775562235,
+      "compressed": 133,
+      "uncompressed": 212,
+      "offset": 886802
+    },
+    {
+      "name": "LICENSE.pdf",
+      "method": 8,
+      "crc": 232932192,
+      "compressed": 32175,
+      "uncompressed": 36062,
+      "offset": 887063
+    },
+    {
+      "name": "__MACOSX/._LICENSE.pdf",
+      "method": 8,
+      "crc": 3979084060,
+      "compressed": 145,
+      "uncompressed": 222,
+      "offset": 919311
+    },
+    {
+      "name": "LICENSE-FR.pdf",
+      "method": 8,
+      "crc": 3443431216,
+      "compressed": 29931,
+      "uncompressed": 38274,
+      "offset": 919540
+    },
+    {
+      "name": "__MACOSX/._LICENSE-FR.pdf",
+      "method": 8,
+      "crc": 3979084060,
+      "compressed": 145,
+      "uncompressed": 222,
+      "offset": 949547
+    },
+    {
+      "name": "Multimedia Internet CD-Rom Flash Animation Cartoon 21.wav",
+      "method": 8,
+      "crc": 3854175234,
+      "compressed": 128376,
+      "uncompressed": 171914,
+      "offset": 949779
+    },
+    {
+      "name": "__MACOSX/._Multimedia Internet CD-Rom Flash Animation Cartoon 21.wav",
+      "method": 8,
+      "crc": 2775562235,
+      "compressed": 133,
+      "uncompressed": 212,
+      "offset": 1078274
+    }
+  ]
+}

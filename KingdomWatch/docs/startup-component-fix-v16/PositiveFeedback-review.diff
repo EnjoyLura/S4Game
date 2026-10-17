@@ -1,0 +1,57 @@
+--- before/assets/scripts/ui/PositiveFeedback.ts
++++ assets/scripts/ui/PositiveFeedback.ts
+@@ -1,5 +1,5 @@
+ /** Receipt-only growth celebration. One reusable, non-blocking surface survives page refreshes. */
+-import { _decorator, Component, director, Director, game, Game, Graphics, isValid, Label, Node, UIOpacity, Vec3 } from 'cc';
++import { _decorator, Component, game, Game, Graphics, isValid, Label, Node, UIOpacity } from 'cc';
+ import { LO } from '../config/GameConfig';
+ import { CA, label, N } from './UIKit';
+ import { reducedMotion } from './UIMotion';
+@@ -137,47 +137,3 @@
+     (host.getComponent(PositiveFeedback) || host.addComponent(PositiveFeedback)).present(receipt);
+   }));
+ }
+-
+-@ccclass('ConstructionPulse')
+-class ConstructionPulse extends Component {
+-  private icon!: Node;
+-  private scale = new Vec3();
+-  private ink!: Graphics;
+-  private age = 0;
+-  private radius = 90;
+-  private hidden = false;
+-  private afterDraw: (() => void) | null = null;
+-  onLoad(): void { this.enabled = false; game.on(Game.EVENT_HIDE, this.hide, this); game.on(Game.EVENT_SHOW, this.show, this); }
+-  configure(icon: Node, radius: number): void {
+-    this.icon = icon; this.radius = radius; this.scale.set(icon.scale); this.ink = this.node.addComponent(Graphics);
+-    whenUIArtReady(this.node.parent!, () => {
+-      if (!isValid(this.node, true)) return;
+-      this.afterDraw = () => { this.afterDraw = null; if (isValid(this.node, true)) this.enabled = true; };
+-      director.once(Director.EVENT_AFTER_DRAW, this.afterDraw);
+-    });
+-  }
+-  update(dt: number): void {
+-    if (this.hidden) return;
+-    if (!isValid(this.icon, true)) { this.node.destroy(); return; }
+-    this.age += Math.min(.06, Math.max(0, dt)); const p = clamp(this.age / 1.15);
+-    const scale = 1 + Math.sin(Math.PI * clamp(this.age / .38)) * .08;
+-    this.icon.setScale(this.scale.x * scale, this.scale.y * scale, this.scale.z);
+-    this.ink.clear(); celebrationRays(this.ink, 0, 0, this.radius, this.age, 1.15);
+-    this.ink.strokeColor = CA('#EFC869', (1 - p) * .85); this.ink.lineWidth = 3 * (1 - p) + 1;
+-    this.ink.circle(0, 0, this.radius * (.48 + out(p) * .45)); this.ink.stroke();
+-    if (p >= 1) { this.icon.setScale(this.scale); this.node.destroy(); }
+-  }
+-  private hide = (): void => { this.hidden = true; };
+-  private show = (): void => { this.hidden = false; };
+-  onDestroy(): void {
+-    if (this.afterDraw) director.off(Director.EVENT_AFTER_DRAW, this.afterDraw);
+-    if (isValid(this.icon, true)) this.icon.setScale(this.scale);
+-    game.off(Game.EVENT_HIDE, this.hide, this); game.off(Game.EVENT_SHOW, this.show, this);
+-  }
+-}
+-
+-export function constructionPulse(icon: Node, radius: number): void {
+-  if (reducedMotion() || !icon.parent) return;
+-  const glow = N('constructionSuccessGlow', icon.parent, icon.position.x, icon.position.y);
+-  glow.setSiblingIndex(icon.getSiblingIndex()); glow.addComponent(ConstructionPulse).configure(icon, radius);
+-}

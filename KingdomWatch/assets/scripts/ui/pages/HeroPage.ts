@@ -1,12 +1,12 @@
 /** Hero lobby: comic portraits, full-body art, five gear seats and a separately scrolling bag. */
 import { BlockInputEvents, Graphics, Node, ScrollView, UIOpacity, Vec2 } from 'cc';
 import { LO } from '../../config/GameConfig';
-import { C, CA, dimLayer, gpanel, N, WY } from '../UIKit';
-import { COMIC, comicArt, comicButton, comicDialog, comicMark, comicPlate } from '../ComicUI';
+import { C, dimLayer, gpanel, N, WY } from '../UIKit';
+import { COMIC, comicArt, comicButton, comicSurface } from '../ComicUI';
 import { EMPTY_GEAR, gearArt, heroComicFigure, heroEnvironment, heroGlyph, heroPortrait } from '../HeroComic';
 import { fmt, mainLabel, MAIN_NAV_H, MAIN_RESOURCE_H, mainResourceTop, PageCtx, pageScroll, toast } from '../PageKit';
 import {
-  EquipDef, EquipKind, EQUIPS, HERO_DEFS, HERO_GROWTH, KIND_NAME, MATS, MAX, StatKey, STAT_NAME,
+  EquipKind, EQUIPS, HERO_DEFS, HERO_GROWTH, KIND_NAME, MATS, MAX, StatKey, STAT_NAME,
   equipStat, equipUpCost, heroStats, matCount, sellEquip, sellPrice, statFmt, takeOff, upWornEquip, wearEquip, wornInst,
   equipLevel, weaponFits, weaponUsers, WEAPONS, weaponUpCost, upWeapon, heroStatsAt,
 } from '../../core/GameData';
@@ -15,21 +15,19 @@ import { bindButton } from '../ButtonFeedback';
 import { dismissUI, motionIn, refreshUI } from '../UIMotion';
 import { uiSound } from '../UIAudio';
 import { growthAction } from '../GrowthFeedback';
-import { heroRosterRail, ROSTER_CARD_W } from '../HeroRosterRail';
-import { gearPlate, gearQuality, gearQualityHalo, gearQualityTag } from '../GearQuality';
+import { heroRosterRail } from '../HeroRosterRail';
+import { gearQuality } from '../GearQuality';
+import { lobbyAttributeWell, shopQualitySocket } from '../LobbyChrome';
+import { HERO_INK, heroActionY, heroDialog, heroInventoryPaper, heroLobbyPortrait, heroModalSkin, heroPaper, heroWhiteWell } from '../HeroChrome';
+
+import { DETAIL_ACTION_FOOTER, detailBody, detailFooter, detailGroup, detailGroupHeight, detailHeight, detailOverview, detailParagraph, detailSection } from '../DetailDialog';
+import { TRAINING_INK, TRAINING_SUB, trainingComparison } from '../TrainingChrome';
 
 const SLOTS: EquipKind[] = ['helm', 'acc', 'glove', 'armor'];
 const BAG_SIZE = 120, BAG_STEP = 130, BAG_COL_STEP = 138;
-const HERO_DETAIL_H = 64;
 const matOwned = (): number => matCount('mat_stone') + matCount('mat_iron');
 const BAG_TABS = [['weapon', '武器', 'wpn_bow'], ['equip', '装备', 'armor_forest'], ['mat', '材料', 'mat_stone']] as const;
 const bagSt: { tab: 'weapon' | 'equip' | 'mat'; offsets: Record<string, number> } = { tab: 'equip', offsets: {} };
-
-function rule(parent: Node, y: number, width: number): void {
-  const g = N('heroDivider', parent, 0, y).addComponent(Graphics);
-  g.strokeColor = CA(COMIC.sub, .25); g.lineWidth = 1;
-  g.moveTo(-width / 2, 0); g.lineTo(width / 2, 0); g.stroke();
-}
 
 export function buildHeroes(ctx: PageCtx): void {
   const root = ctx.screens, sv = loadSave();
@@ -46,8 +44,8 @@ export function buildHeroes(ctx: PageCtx): void {
       const rosterTop = mainResourceTop() + MAIN_RESOURCE_H + 20, stageTop = rosterTop + 126;
       const bottom = LO.half * 2 - LO.safeTop - LO.safeBottom - MAIN_NAV_H;
       const stageH = Math.min(610, Math.max(500, bottom - stageTop - 510));
-      const bagTop = stageTop + stageH + HERO_DETAIL_H;
-      heroEnvironment(body, bagTop, -154, 97 + HERO_DETAIL_H);
+      const bagTop = stageTop + stageH;
+      heroEnvironment(body, bagTop, -154, 97);
       buildLobbyRoster(body, rosterTop, hid, select);
       buildHeroStage(body, ctx, hid, stageTop, stageH, owned, select);
       const cells: { uid: string; n: number }[] = [];
@@ -62,17 +60,22 @@ export function buildHeroes(ctx: PageCtx): void {
         });
       }
       const bagH = bottom - bagTop;
-      comicPlate(body, 0, WY(bagTop, bagH), 750, bagH, 'paper', { name: 'heroInventory', cut: 0, edge: false });
+      heroInventoryPaper(body,WY(bagTop,bagH),bagH);
       const header = N('heroBagHeader', body, 0, WY(bagTop + 6, 50), 706, 50);
       heroGlyph(header, -316, 0, 'bag', 42);
-      mainLabel(header, -123, 0, '我的背包', { size: 26, color: COMIC.text, bold: true, font: 'body', align: 'left', w: 298, h: 36 });
+      mainLabel(header, -123, 0, '我的背包', { size: 26, color: HERO_INK, bold: true, font: 'body', align: 'left', w: 298, h: 36 });
       mainLabel(header, 285, 0, cells.length + '件', { size: 18, color: COMIC.sub, align: 'right', w: 100, h: 30 });
-      const tabBar = N('heroBagTabs', body, 0, WY(bagTop + 60, 48), 706, 48);
+      const tabBar = comicSurface(body, 0, WY(bagTop + 60, 48), 706, 48, 'dark', { name: 'heroBagTabs', radius: 12 });
       BAG_TABS.forEach(([key, title, art], i) => {
         const active = bagSt.tab === key;
-        const tab = comicButton(tabBar, (i - 1) * 234, 0, 228, 46, '',
-          () => { if (bagSt.tab !== key) { bagSt.tab = key; render(); } }, { tone: active ? 'gold' : 'dark', name: 'heroBagTab:' + key, sound: 'select' });
+        const tab = comicButton(tabBar, (i - 1) * (698/3), 0, 698/3, 48, '',
+          () => { if (bagSt.tab !== key) { bagSt.tab = key; render(); } }, { tone: active ? 'gold' : 'dark', name: 'heroBagTab:' + key, sound: 'select', quiet: true });
         const face = tab.getChildByName('buttonFace')!;
+        // One continuous navy rail; the touch slots have no independent cut-corner plates.
+        const paint = face.getComponent(Graphics)!; paint.clear();
+        if (active) {
+          paint.fillColor = C(COMIC.gold); paint.roundRect(-698/6+2,-20,698/3-4,40,8); paint.fill();
+        }
         // Center the complete icon + gap + two-character caption, not its label box alone.
         gearArt(face, -27, 0, 30, 30, art);
         mainLabel(face, 20, 0, title, { size: 22, font: 'body', color: active ? COMIC.text : COMIC.cream,
@@ -99,9 +102,13 @@ export function buildHeroes(ctx: PageCtx): void {
       cells.forEach((cell, i) => drawBagCell(ctx, grid, cell, hid,
         (i % 5 - 2) * BAG_COL_STEP, -(Math.floor(i / 5) * BAG_STEP + BAG_SIZE / 2)));
       if (!cells.length) {
-        const empty = N('heroBagEmpty', grid, 0, -gridH / 2, 480, 84);
-        mainLabel(empty, 0, 16, '暂无' + BAG_TABS.find(t => t[0] === bagSt.tab)![1], { size: 22, color: COMIC.text, bold: true, w: 460, h: 32 });
-        mainLabel(empty, 0, -20, '通过关卡掉落或商店补给获得', { size: 17, color: COMIC.sub, w: 460, h: 26 });
+        const illustrated = gridH >= 190;
+        const empty = N('heroBagEmpty', grid, 0, -gridH / 2, 480, illustrated?200:84);
+        if (illustrated) {
+          heroGlyph(empty,0,42,'bag',94).addComponent(UIOpacity).opacity = 55;
+        }
+        mainLabel(empty, 0, illustrated?-28:16, '暂无' + BAG_TABS.find(t => t[0] === bagSt.tab)![1], { size: 22, color: HERO_INK, bold: true, w: 460, h: 32 });
+        mainLabel(empty, 0, illustrated?-62:-20, '通过关卡掉落或商店补给获得', { size: 17, color: COMIC.sub, w: 460, h: 26 });
       }
       const offset = Math.min(maxOffset, bagSt.offsets[scrollKey] || 0);
       if (offset > 0) scroll.scrollToOffset(new Vec2(0, offset), 0);
@@ -112,41 +119,36 @@ export function buildHeroes(ctx: PageCtx): void {
 
 function buildLobbyRoster(parent: Node, top: number, selected: string, select: (id: string) => void): void {
   const sv = loadSave(), heroes = Object.values(HERO_DEFS);
-  const rail = heroRosterRail(parent, top, 'heroLobbyRoster', heroes.map(def => def.id), selected);
+  const rail = heroRosterRail(parent, top, 'heroLobbyRoster', heroes.map(def => def.id), selected,
+    { cardWidth:120,step:134,center:true });
   heroes.forEach((def, i) => {
     const active = def.id === selected, owned = !!sv.heroes[def.id]?.owned;
-    const slot = comicPlate(rail.content, rail.x(i), 0, ROSTER_CARD_W, 114, active ? 'gold' : 'paper',
-      { name: 'heroSelect:' + def.id, cut: 9 });
+    const slot = heroLobbyPortrait(rail.content, rail.x(i), def.id, active, owned, rail.cardWidth);
+    slot.name = 'heroSelect:' + def.id;
     pressAction(slot, () => {
       if (!owned) { toast('前往商店解锁该英雄'); return; }
       select(def.id);
     });
-    const face = slot, avatar = heroPortrait(face, 0, 14, 72, def.id);
-    if (!owned) { avatar.addComponent(UIOpacity).opacity = 125; comicMark(face, 43, -8, 'lock', 17, '#777C75'); }
-    const shortName = def.id === 'pyro' ? def.name.replace('·', '') : def.name.split('·')[0];
-    mainLabel(face, 0, -39, shortName, { size: 20, font: 'body', color: owned ? COMIC.text : COMIC.sub,
-      bold: true, w: 112, h: 28 });
   });
 }
 
 function buildHeroStage(parent: Node, ctx: PageCtx, hid: string, top: number, height: number,
   owned: string[], select: (id: string) => void): void {
   const sv = loadSave(), def = HERO_DEFS[hid];
-  // Reserve a separate footer so detail actions belong to the hero without moving or shrinking the figure.
-  const layout = N('heroStage', parent, 0, WY(top, height + HERO_DETAIL_H), 750, height + HERO_DETAIL_H);
-  const stage = N('heroShowcase', layout, 0, HERO_DETAIL_H / 2, 750, height);
+  const layout = N('heroStage', parent, 0, WY(top, height), 750, height);
+  const stage = N('heroShowcase', layout, 0, 0, 750, height);
   const footY = -height / 2 + 97;
   heroComicFigure(stage, hid, -154, footY, height - 185, 376);
-  mainLabel(stage, -162, height / 2 - 30, def.name, { size: 32, color: COMIC.cream, outline: '#51483B', outlineW: 2.5,
+  mainLabel(stage, -162, height / 2 - 30, def.name, { size: 34, color: '#FFFDF2', outline: '#3D342A', outlineW: 2,
     font: 'body', bold: true, align: 'left', w: 326, h: 44 });
   mainLabel(stage, -162, height / 2 - 67, 'Lv.' + sv.heroes[hid].lv + ' · ' + def.job.split(' · ')[0],
-    { size: 21, color: COMIC.cream, outline: '#51483B', outlineW: 2, align: 'left', w: 326, h: 30 });
+    { size: 20, color: '#FFE7AF', outline: '#3D342A', outlineW: 1.5, align: 'left', w: 326, h: 30 });
   const index = owned.indexOf(hid);
   if (owned.length > 1) {
     for (const direction of [-1, 1]) {
       const arrow = comicButton(stage, direction < 0 ? -321 : 31, -16, 64, 64, '',
         () => select(owned[(index + owned.length + direction) % owned.length]),
-        { tone: 'dark', name: 'heroCycle:' + (direction < 0 ? 'left' : 'right'), sound: 'select' });
+        { tone: 'dark', name: 'heroCycle:' + (direction < 0 ? 'left' : 'right'), sound: 'select', quiet: true });
       const chevron = N('heroCycleChevron', arrow.getChildByName('buttonFace')!).addComponent(Graphics);
       chevron.fillColor = C(COMIC.gold);
       chevron.moveTo(direction * -5, 15); chevron.lineTo(direction * 11, 0);
@@ -160,23 +162,24 @@ function buildHeroStage(parent: Node, ctx: PageCtx, hid: string, top: number, he
   mainLabel(power, 31, 0, '战力 ' + fmt(heroStats(hid).power), { size: 28, color: COMIC.cream,
     font: 'number', bold: true, w: 208, h: 38 });
   const sq = Math.min(124, Math.max(100, (height - 300) / 2));
-  const equipmentH = 188 + sq * 2;
-  const equipmentY = footY + (height - 185) / 2;
+  // Keep the raised equipment panel compact; detail actions sit outside its lower edge.
+  const equipmentH = 86 + sq * 3;
+  const equipmentY = height / 2 - 12 - equipmentH / 2;
   const equipment = N('heroEquipmentGroup', stage, 213, equipmentY, 284, equipmentH);
-  comicPlate(equipment, 0, 0, 284, equipmentH, 'paper', { name: 'heroEquipment', cut: 14 });
-  mainLabel(equipment, -50, equipmentH / 2 - 18, '已穿戴', { size: 22, font: 'body', color: COMIC.text, bold: true, w: 132, h: 32 });
-  mainLabel(equipment, 82, equipmentH / 2 - 18, Object.keys(EMPTY_GEAR).filter(k => wornInst(hid, k as EquipKind)).length + '/5',
+  heroPaper(equipment,0,0,284,equipmentH,'heroEquipment');
+  mainLabel(equipment, -50, equipmentH / 2 - 22, '已穿戴', { size: 22, font: 'body', color: HERO_INK, bold: true, w: 132, h: 32 });
+  mainLabel(equipment, 82, equipmentH / 2 - 22, Object.keys(EMPTY_GEAR).filter(k => wornInst(hid, k as EquipKind)).length + '/5',
     { size: 19, color: COMIC.sub, align: 'right', w: 70, h: 30 });
-  drawSlot(ctx, equipment, hid, 'weapon', 0, equipmentH / 2 - 92, 252, 104);
+  drawSlot(ctx, equipment, hid, 'weapon', 0, equipmentH / 2 - 44 - sq / 2, 252, sq);
   SLOTS.forEach((kind, i) => drawSlot(ctx, equipment, hid, kind, -67 + (i % 2) * 134,
-    equipmentH / 2 - (158 + sq / 2 + Math.floor(i / 2) * (sq + 14)), sq, sq));
-  const details = N('heroDetails', layout, -154, -(height + HERO_DETAIL_H) / 2 + HERO_DETAIL_H / 2, 330, HERO_DETAIL_H);
-  detailButton(details, -86, 0, '属性', 'attrs', () => attrsModal(ctx, hid));
-  detailButton(details, 86, 0, '故事', 'book', () => storyModal(ctx, hid));
+    equipmentH / 2 - (58 + sq * 1.5 + Math.floor(i / 2) * (sq + 14)), sq, sq));
+  const details = N('heroDetails', stage, 213, equipmentY - equipmentH / 2 - 38, 260, 52);
+  detailButton(details, -68, 0, '属性', 'attrs', () => attrsModal(ctx, hid));
+  detailButton(details, 68, 0, '故事', 'book', () => storyModal(ctx, hid));
 }
 
 function detailButton(parent: Node, x: number, y: number, title: string, glyph: 'attrs' | 'book', onClick: () => void): void {
-  const button = comicButton(parent, x, y, 148, 50, '', onClick, { tone: 'dark', name: 'heroDetail:' + title });
+  const button = comicButton(parent, x, y, 124, 52, '', onClick, { tone: 'dark', name: 'heroDetail:' + title });
   const face = button.getChildByName('buttonFace')!;
   heroGlyph(face, -27, 0, glyph, 30);
   mainLabel(face, 20, 0, title, { size: 22, color: COMIC.cream, font: 'body', bold: true, w: 44, h: 30 });
@@ -186,15 +189,15 @@ function pressAction(node: Node, onClick: () => void): void {
   bindButton(node, onClick);
 }
 
-/** Neutral sockets share a compact circular rarity well with the shop. */
+/** Filled item sockets use their entire square for rarity, without a second inset card. */
 function itemSeat(parent: Node, x: number, y: number, w: number, h: number, quality: number, filled: boolean): Node {
-  const seat = filled ? gearPlate(parent, x, y, w, h, quality, { name: 'heroItemSeat' })
-    : comicPlate(parent, x, y, w, h, 'card', { name: 'heroItemSeat', cut: 8, fill: '#ECE5D8' });
-  if (filled) gearQualityHalo(seat, 0, 0, w * .76, h * .76, quality);
+  const seat = N('heroItemSeat',parent,x,y,w,h);
+  if (filled) shopQualitySocket(seat,0,0,Math.min(w,h),quality);
+  else heroWhiteWell(seat,0,w,h);
   return seat;
 }
 function badge(parent: Node, x: number, y: number, w: number, text: string): void {
-  const plate = comicPlate(parent, x, y, w, 22, 'dark', { cut: 4, edge: false });
+  const plate = comicSurface(parent, x, y, w, 22, 'dark', { name: 'heroItemBadge', radius: 7 });
   mainLabel(plate, 0, 0, text, { size: 15, color: COMIC.cream, font: 'number', w: w - 6, h: 21 });
 }
 
@@ -204,22 +207,22 @@ function drawSlot(ctx: PageCtx, parent: Node, hid: string, kind: EquipKind, x: n
   // The weapon illustration and its text each own half of the socket.
   const halfW = w / 2, artX = -w / 4, textX = w / 4, textW = halfW - 16;
   const slot = N('heroEquipped:' + kind, parent, x, y, w, h);
-  if (inst && d) gearPlate(slot, 0, 0, w, h, d.quality, { name: 'heroGearSocket' });
-  else comicPlate(slot, 0, 0, w, h, 'card', { name: 'heroGearSocket', cut: 8, fill: '#ECE5D8' });
+  if (wide && d) heroWhiteWell(slot,0,w,h);
+  else if (!d) comicSurface(slot,0,0,w,h,'card',{name:'heroGearSocket',radius:10,fill:'#F1EBDD'});
   if (inst && d) {
-    gearQualityHalo(slot, wide ? artX : 0, wide ? 0 : 3, wide ? 80 : w * .76, h * .76, d.quality);
-    gearArt(slot, wide ? artX : 0, wide ? 0 : 3, wide ? halfW - 16 : w - 22, wide ? h - 14 : h - 22, inst.defId);
-    gearQualityTag(slot, -w / 2 + 42, h / 2 - 15, d.quality, d.tier, 72, 20);
+    // The weapon's left square matches the four equipment sockets, edge to edge.
+    shopQualitySocket(slot,wide?artX:0,0,h,d.quality);
+    gearArt(slot, wide ? artX : 0, 0, h * .88, h * .88, inst.defId);
     if (wide) {
-      mainLabel(slot, textX, 14, d.name, { size: 20, color: COMIC.text, font: 'body', bold: true, align: 'center', w: textW, h: 30 });
-      mainLabel(slot, textX, -19, d.tier + '阶 · Lv.' + equipLevel(inst, hid), { size: 17, color: COMIC.sub, align: 'center', w: textW, h: 26 });
+      mainLabel(slot, textX, 14, d.name, { size: 20, color: HERO_INK, font: 'body', bold: true, align: 'center', w: textW, h: 30 });
+      mainLabel(slot, textX, -19, 'Lv.' + equipLevel(inst, hid), { size: 17, color: COMIC.sub, align: 'center', w: textW, h: 26 });
     } else {
       badge(slot, w / 2 - 33, -h / 2 + 16, 58, 'Lv.' + inst.lv);
     }
     bindButton(slot, () => wornEquipModal(ctx, hid, kind));
   } else {
     const picture = gearArt(slot, wide ? artX : 0, wide ? 0 : 12, wide ? 62 : 48, wide ? 62 : 48, EMPTY_GEAR[kind]);
-    picture.addComponent(UIOpacity).opacity = 80;
+    picture.addComponent(UIOpacity).opacity = 60;
     mainLabel(slot, wide ? textX : 0, wide ? 10 : -h / 2 + 20, KIND_NAME[kind],
       { size: 17, color: COMIC.sub, w: wide ? textW : w - 10, h: 25 });
     if (wide) mainLabel(slot, textX, -20, '未穿戴', { size: 15, color: COMIC.sub, w: textW, h: 24 });
@@ -228,44 +231,49 @@ function drawSlot(ctx: PageCtx, parent: Node, hid: string, kind: EquipKind, x: n
 
 function equipIcon(parent: Node, x: number, y: number, size: number, inst: EquipInst): void {
   const d = EQUIPS[inst.defId], box = itemSeat(parent, x, y, size, size, d.quality, true);
-  gearArt(box, 0, 0, size * .84, size * .84, inst.defId);
-  gearQualityTag(box, -size / 2 + 40, size / 2 - 15, d.quality, d.tier, 68, 20);
+  gearArt(box, 0, 0, size - 20, size - 20, inst.defId);
 }
-function drawEquipAttrs(parent: Node, y: number, width: number, inst: EquipInst, d: EquipDef, large: boolean, hid: string): void {
+function equipmentRows(inst: EquipInst, hid: string): [string, string][] {
+  const d = EQUIPS[inst.defId];
   const keys = (Object.keys(d.stats) as StatKey[]).filter(k => (d.stats[k] || 0) > 0);
-  const rows = keys.map(k => ({ name: STAT_NAME[k], value: statFmt(k, equipStat(inst, k, hid)), green: false }));
+  const rows: [string, string][] = keys.map(k => [STAT_NAME[k],statFmt(k,equipStat(inst,k,hid))]);
   const pk = keys[0], delta = pk ? equipStat({ ...inst, lv: inst.lv + 1 }, pk) - equipStat(inst, pk) : 0;
-  if (d.kind !== 'weapon' && pk && delta > 0 && inst.lv < MAX.equip) rows.push({ name: '下一级' + STAT_NAME[pk], value: '+' + statFmt(pk, delta), green: true });
-  rows.forEach((row, i) => {
-    const ry = y - i * 34, inset = 22;
-    mainLabel(parent, -width / 2 + inset + width * .22, ry, row.name,
-      { size: large ? 21 : 17, color: COMIC.sub, align: 'left', w: width * .44, h: 30 });
-    mainLabel(parent, width / 2 - inset - width * .22, ry, row.value,
-      { size: large ? 23 : 19, color: row.green ? COMIC.greenShade : COMIC.text, bold: true, align: 'right', w: width * .44, h: 30 });
-  });
+  if (d.kind !== 'weapon' && pk && delta > 0 && inst.lv < MAX.equip)
+    rows.push(['下一级'+STAT_NAME[pk],'+'+statFmt(pk,delta)]);
+  return rows;
+}
+function equipmentContentH(inst: EquipInst, hid: string, width: number): number {
+  const weapon = EQUIPS[inst.defId].kind === 'weapon';
+  return detailGroupHeight(equipmentRows(inst,hid).length,width)
+    + (weapon ? detailGroupHeight(2,width)+(width<400?36:0) : 0);
 }
 
-/** Direct equipment cards without another surrounding frame; blank taps close comparisons. */
-function equipDetailPanel(parent: Node, x: number, y: number, inst: EquipInst, current: boolean, big = false, hid = loadSave().curHero): Node {
-  const d = EQUIPS[inst.defId], weapon = d.kind === 'weapon', w = big ? 568 : 335, h = weapon ? (big ? 740 : 650) : (big ? 620 : 520);
-  const panel = comicPlate(parent, x, y, w, h, 'paper', { name: 'heroEquipmentCard:' + (current ? 'current' : 'next'), cut: 12 });
+/** Equipment uses the product detail shell, showcase and content flow, without a second outer frame. */
+function equipDetailPanel(parent: Node, x: number, y: number, inst: EquipInst, current: boolean,
+  big = false, hid = loadSave().curHero, fixedHeight = 0): Node {
+  const d = EQUIPS[inst.defId], weapon = d.kind === 'weapon', w = big?620:335;
+  const footerH = !big || !current ? 168 : DETAIL_ACTION_FOOTER;
+  const contentH = equipmentContentH(inst,hid,w), h = fixedHeight || detailHeight(contentH,footerH,640,w);
+  const panel = N('heroEquipmentCard:'+(current?'current':'next'),parent,x,y,w,h);
+  heroModalSkin(panel,w,h,current?'当前装备':'背包装备');
   panel.addComponent(BlockInputEvents);
-  mainLabel(panel, 0, h / 2 - 30, current ? '当前装备' : '背包装备', { size: big ? 25 : 20, font: 'body', color: COMIC.text, bold: true, w: w - 40, h: 32 });
-  equipIcon(panel, big ? -176 : 0, big ? h / 2 - 113 : h / 2 - 104, big ? 110 : 96, inst);
-  mainLabel(panel, big ? 49 : 0, h / 2 - (big ? 98 : 176), d.name,
-    { size: big ? 24 : 21, color: COMIC.text, font: 'body', bold: true, align: big ? 'left' : 'center', w: big ? 294 : w - 28, h: 34 });
-  mainLabel(panel, big ? 49 : 0, h / 2 - (big ? 137 : 212), gearQuality(d.quality).name + ' · ' + d.tier + '阶 · Lv.' + equipLevel(inst, hid),
-    { size: big ? 19 : 16, color: COMIC.sub, bold: true, align: big ? 'left' : 'center', w: big ? 294 : w - 28, h: 28 });
-  rule(panel, h / 2 - (big ? 190 : 244), w - 40);
-  drawEquipAttrs(panel, h / 2 - (big ? 230 : 277), w, inst, d, big, hid);
+  detailOverview(panel,d.name,gearQuality(d.quality).name+' · '+KIND_NAME[d.kind]+' · Lv.'+equipLevel(inst,hid),
+    weapon?weaponUsers(d.id)+' · 必备武器':KIND_NAME[d.kind],
+    weapon?'换装继承培养 Lv.'+loadSave().heroes[hid].weaponLv:'穿戴后生效，可通过装备锻造提升属性。',
+    (root,px,py,side) => equipIcon(root,px,py,side,inst));
+  const content = detailBody(panel,contentH,footerH,'heroEquipment');
+  let cursor = detailGroup(content,0,'装备属性',equipmentRows(inst,hid),w);
   if (weapon) {
     const p = WEAPONS[d.id].breakthrough;
-    mainLabel(panel, 0, big ? -34 : -112, weaponUsers(d.id) + ' · 必备武器\n换装继承培养 Lv.' + loadSave().heroes[hid].weaponLv
-      + `\n每10级：攻击 +${Math.round(p.atk * 100)}% / 技伤 +${Math.round(p.skill * 100)}%`
-      + `\n每30级：${STAT_NAME[p.secondary]} +${statFmt(p.secondary, p.bonus)}`,
-      { size: big ? 19 : 16, color: COMIC.sub, w: w - 42, h: 112, lineHeight: big ? 28 : 25 });
+    cursor = detailGroup(content,cursor,'武器特性',[
+      ['每10级 · 攻击 / 技伤',`+${Math.round(p.atk*100)}% / +${Math.round(p.skill*100)}%`],
+      ['每30级 · '+STAT_NAME[p.secondary],'+'+statFmt(p.secondary,p.bonus)],
+    ],w);
+    if (!big) mainLabel(content,0,-cursor-14,'换装继承培养 Lv.'+loadSave().heroes[hid].weaponLv,
+      {size:16,color:COMIC.sub,w:w-68,h:28});
   }
-  motionIn(panel, 'modal');
+  detailFooter(panel,footerH);
+  motionIn(panel,'modal');
   return panel;
 }
 function equipmentDim(ctx: PageCtx, name: string): Node {
@@ -276,11 +284,12 @@ function equipmentDim(ctx: PageCtx, name: string): Node {
 }
 function wornEquipModal(ctx: PageCtx, hid: string, kind: EquipKind): void {
   const inst = wornInst(hid, kind); if (!inst) return;
-  const weapon = kind === 'weapon', by = weapon ? -315 : -255;
+  const weapon = kind === 'weapon';
   const dim = equipmentDim(ctx, 'heroWornDialog'), panel = equipDetailPanel(dim, 0, 0, inst, true, true, hid);
-  comicButton(panel, -132, by, 228, 58, weapon ? '更换武器' : '卸下装备', () => weapon ? openWeaponBag(ctx, hid, dim) : unequipFromDialog(ctx, hid, kind, inst, dim),
+  const by = heroActionY(panel);
+  comicButton(panel, -139, by, 248, 58, weapon ? '更换武器' : '卸下装备', () => weapon ? openWeaponBag(ctx, hid, dim) : unequipFromDialog(ctx, hid, kind, inst, dim),
     { name: 'heroUnequip', tone: 'dark', size: 23, sound: 'confirm' });
-  const button = comicButton(panel, 132, by, 228, 58, '', () => forgeModal(ctx, hid, kind), { name: 'heroForgeOpen', tone: 'gold' });
+  const button = comicButton(panel, 139, by, 248, 58, '', () => forgeModal(ctx, hid, kind), { name: 'heroForgeOpen', tone: 'gold' });
   heroGlyph(button.getChildByName('buttonFace')!, -78, 0, 'forge', 26);
   mainLabel(button.getChildByName('buttonFace')!, 22, 0, weapon ? '武器培养' : '装备锻造', { size: 23, color: COMIC.text, font: 'body', bold: true, w: 160, h: 34 });
 }
@@ -308,28 +317,34 @@ function unequipFromDialog(ctx: PageCtx, hid: string, kind: EquipKind, inst: Equ
 }
 function warehouseEquipModal(ctx: PageCtx, hid: string, inst: EquipInst): void {
   const d = EQUIPS[inst.defId], dim = equipmentDim(ctx, 'heroWarehouseDialog');
-  const panel = equipDetailPanel(dim, 0, 0, inst, false, true, hid), weapon = d.kind === 'weapon', by = weapon ? -315 : -255;
+  const panel = equipDetailPanel(dim, 0, 0, inst, false, true, hid), weapon = d.kind === 'weapon', by = heroActionY(panel);
   const starter = !!WEAPONS[d.id]?.starter, fits = !weapon || weaponFits(hid, d.id);
-  mainLabel(panel, 0, by + 75, starter ? '初始武器 · 永久保留' : '出售价 ' + fmt(sellPrice(inst)) + ' 金币', { size: 20, color: COMIC.sub, w: 500, h: 30 });
-  comicButton(panel, -132, by, 228, 58, starter ? '初始武器' : '出售', () => confirmDismantle(ctx, inst, '出售'), { tone: 'dark', enabled: !starter, name: 'heroSellOpen' });
-  comicButton(panel, 132, by, 228, 58, fits ? '穿戴' : '职业不符', () => replaceEquip(ctx, hid, inst, dim), { name: 'heroWear', enabled: fits, tone: fits ? 'green' : 'muted', sound: 'confirm' });
+  mainLabel(panel, 0, by + 66, starter ? '初始武器 · 永久保留' : '出售价 ' + fmt(sellPrice(inst)) + ' 金币', { size: 20, color: COMIC.sub, w: 500, h: 30 });
+  comicButton(panel, -139, by, 248, 58, starter ? '初始武器' : '出售', () => confirmDismantle(ctx, inst, '出售'), { tone: 'dark', enabled: !starter, name: 'heroSellOpen' });
+  comicButton(panel, 139, by, 248, 58, fits ? '穿戴' : '职业不符', () => replaceEquip(ctx, hid, inst, dim), { name: 'heroWear', enabled: fits, tone: fits ? 'green' : 'muted', sound: 'confirm' });
 }
 function confirmDismantle(ctx: PageCtx, inst: EquipInst, action: '出售' | '分解'): void {
-  const d = EQUIPS[inst.defId], panel = comicDialog(ctx.screens, 568, 528, action + '确认'); panel.name = 'heroSellConfirm';
-  equipIcon(panel, 0, 113, 110, inst);
-  mainLabel(panel, 0, 28, d.name + ' · ' + d.tier + '阶' + (d.kind === 'weapon' ? '' : ' · Lv.' + inst.lv), { size: 23, color: COMIC.text, font: 'body', bold: true, w: 510, h: 34 });
-  mainLabel(panel, 0, -24, '返还 ' + fmt(sellPrice(inst)) + ' 金币', { size: 24, color: COMIC.greenShade, bold: true, w: 510, h: 34 });
-  mainLabel(panel, 0, -73, action + '后装备无法恢复', { size: 19, color: COMIC.sub, w: 510, h: 30 });
-  comicButton(panel, -126, -188, 210, 58, '取消', () => dismissUI(panel.parent), { tone: 'dark', name: 'heroSellCancel', sound: 'close' });
-  comicButton(panel, 126, -188, 210, 58, action, () => {
+  const d = EQUIPS[inst.defId], contentH = detailGroupHeight(1)+38+50+8;
+  const panel = heroDialog(ctx.screens,620,detailHeight(contentH),action+'确认','heroSellConfirm');
+  detailOverview(panel,d.name,gearQuality(d.quality).name+' · '+KIND_NAME[d.kind]+' · Lv.'+inst.lv,
+    d.kind==='weapon'?weaponUsers(d.id):undefined,action+'后装备无法恢复。',
+    (root,x,y,side) => equipIcon(root,x,y,side,inst));
+  const content = detailBody(panel,contentH,DETAIL_ACTION_FOOTER,'heroSell');
+  const cursor = detailGroup(content,0,'返还内容',[['金币',fmt(sellPrice(inst))]]);
+  detailParagraph(content,cursor,'操作说明',action+'后装备无法恢复，请确认后操作。',50);
+  detailFooter(panel);
+  comicButton(panel, -139, heroActionY(panel), 248, 58, '取消', () => dismissUI(panel.parent), { tone: 'dark', name: 'heroSellCancel', sound: 'close' });
+  comicButton(panel, 139, heroActionY(panel), 248, 58, action, () => {
     const result = sellEquip(inst.uid); toast(result.msg, { kind: result.ok ? 'success' : 'warning', title: result.ok ? action + '成功' : '操作未完成' });
     if (result.ok) dismissUI(panel.parent, ctx.refresh, false);
   }, { name: 'heroSellConfirmAction', tone: 'green', sound: 'confirm' });
 }
 function compareEquipModal(ctx: PageCtx, hid: string, worn: EquipInst, next: EquipInst): void {
   const dim = equipmentDim(ctx, 'heroCompareDialog');
-  const weapon = EQUIPS[worn.defId].kind === 'weapon', by = weapon ? -280 : -215, starter = !!WEAPONS[next.defId]?.starter;
-  const left = equipDetailPanel(dim, -177, 0, worn, true, false, hid), right = equipDetailPanel(dim, 177, 0, next, false, false, hid);
+  const weapon = EQUIPS[worn.defId].kind === 'weapon', starter = !!WEAPONS[next.defId]?.starter;
+  const height = detailHeight(Math.max(equipmentContentH(worn,hid,335),equipmentContentH(next,hid,335)),168,640,335);
+  const left = equipDetailPanel(dim,-177,0,worn,true,false,hid,height), right = equipDetailPanel(dim,177,0,next,false,false,hid,height);
+  const by = heroActionY(left);
   comicButton(left, -81, by, 144, 56, weapon ? '当前装备' : '卸下', () => unequipFromDialog(ctx, hid, EQUIPS[worn.defId].kind, worn, dim),
     { tone: 'dark', enabled: !weapon, name: 'heroUnequip', sound: 'confirm' });
   comicButton(left, 81, by, 144, 56, weapon ? '培养' : '锻造', () => forgeModal(ctx, hid, EQUIPS[worn.defId].kind), { tone: 'gold', name: 'heroForgeOpen' });
@@ -342,56 +357,66 @@ function compareEquipModal(ctx: PageCtx, hid: string, worn: EquipInst, next: Equ
 export function forgeModal(ctx: PageCtx, hid: string, kind: EquipKind): void {
   const sv = loadSave(), inst = wornInst(hid, kind); if (!inst) return;
   const d = EQUIPS[inst.defId], weapon = kind === 'weapon', lv = equipLevel(inst, hid), maxed = lv >= (weapon ? MAX.weapon : MAX.equip), cost = weapon ? weaponUpCost(lv) : equipUpCost(lv);
-  const panel = comicDialog(ctx.screens, 620, 650, weapon ? '武器培养' : '装备强化'); panel.name = 'heroForgeDialog';
-  equipIcon(panel, -218, 205, 112, inst);
-  mainLabel(panel, 45, 222, d.name, { size: 25, color: COMIC.text, font: 'body', bold: true, align: 'left', w: 330, h: 36 });
-  mainLabel(panel, 45, 180, maxed ? gearQuality(d.quality).name + ' · ' + d.tier + '阶 · 已满级' : 'Lv.' + lv + '  →  Lv.' + (lv + 1),
-    { size: 22, color: COMIC.sub, align: 'left', w: 330, h: 32 });
-  rule(panel, 129, 552);
   const basis = weapon ? heroStats(hid) : null, nextBasis = weapon ? heroStatsAt(hid, sv.heroes[hid].lv, maxed ? lv : lv + 1) : null;
   const keys = weapon ? ['atk', 'skillDmg'] as StatKey[] : (Object.keys(d.stats) as StatKey[]).filter(k => (d.stats[k] || 0) > 0);
-  keys.forEach((key, i) => {
-    const y = 91 - i * 42;
-    mainLabel(panel, -188, y, STAT_NAME[key], { size: 21, color: COMIC.sub, align: 'left', w: 160, h: 34 });
+  const attrH=38+keys.length*44+16+14, materialsH=maxed?0:38+128+14;
+  const contentH = attrH+materialsH, footerH = maxed?DETAIL_ACTION_FOOTER:166;
+  const height = detailHeight(contentH,footerH), bottom = -height/2;
+  const panel = heroDialog(ctx.screens,620,height,weapon?'武器培养':'装备强化','heroForgeDialog');
+  detailOverview(panel,d.name,gearQuality(d.quality).name+' · '+KIND_NAME[d.kind]+' · '+(maxed?'已满级':'Lv.'+lv+' → Lv.'+(lv+1)),
+    weapon?weaponUsers(d.id):KIND_NAME[d.kind],
+    weapon?'与升级页共用培养等级 · 更换武器不掉级':'主属性 +4% / 级 · 材料需求每7级递增',
+    (root,x,y,side) => equipIcon(root,x,y,side,inst));
+  const content = detailBody(panel,contentH,footerH,'heroForge');
+  let cursor=detailSection(content,0,'强化属性');
+  cursor+=trainingComparison(content,-cursor,552,keys.map(key => {
     const cur = weapon ? basis![key as 'atk' | 'skillDmg'] : equipStat(inst, key), next = weapon ? nextBasis![key as 'atk' | 'skillDmg'] : equipStat({ ...inst, lv: lv + 1 }, key);
-    mainLabel(panel, -23, y, statFmt(key, cur), { size: 23, color: COMIC.text, align: 'right', w: 134, h: 34 });
-    mainLabel(panel, 174, y, maxed ? 'MAX' : '→ ' + statFmt(key, next),
-      { size: 23, color: COMIC.greenShade, bold: true, align: 'right', w: 176, h: 34 });
-  });
-  mainLabel(panel, 0, -66, weapon ? '与升级页共用培养等级 · 更换武器不掉级' : '主属性 +4% / 级 · 材料需求每7级递增', { size: 18, color: COMIC.sub, w: 550, h: 30 });
-  rule(panel, -102, 552);
+    return {name:STAT_NAME[key],cur:statFmt(key,cur),next:maxed?'MAX':statFmt(key,next),gain:'+'+statFmt(key,next-cur)};
+  }),maxed)+14;
+  detailFooter(panel,footerH);
   if (!maxed) {
     const enoughGold = sv.gold >= cost.gold, enoughMat = matOwned() >= cost.mat;
-    costEntry(panel, -210, -148, 'gold', fmt(cost.gold) + ' / ' + fmt(sv.gold), enoughGold);
-    costEntry(panel, -210, -194, 'mat_stone', cost.mat + ' / ' + fmt(matOwned()), enoughMat);
-    comicButton(panel, 0, -269, 386, 60, '强化', () => {
+    cursor=detailSection(content,cursor,'消耗材料');
+    const materials=lobbyAttributeWell(content,0,-cursor-64,552,128,'heroForgeMaterialsWhite');
+    const entries=[{id:'gold',name:'金币',need:cost.gold,own:sv.gold,enough:enoughGold},
+      {id:'mat_stone',name:'强化材料',need:cost.mat,own:matOwned(),enough:enoughMat}];
+    entries.forEach((entry,i)=>{
+      const y=35-i*44;
+      if (entry.id==='gold') comicArt(materials,-232,y,34,34,'comic_coin_v1');
+      else gearArt(materials,-232,y,34,34,entry.id);
+      mainLabel(materials,-135,y,entry.name,{size:20,font:'body',color:TRAINING_SUB,align:'left',w:134,h:30});
+      mainLabel(materials,151,y,fmt(entry.need)+' / '+fmt(entry.own),
+        {size:23,font:'number',bold:true,color:entry.enough?TRAINING_INK:'#B34338',align:'right',w:204,h:32});
+    });
+    mainLabel(materials,165,-47,'需求 / 持有',{size:16,font:'body',color:TRAINING_SUB,align:'right',w:170,h:24});
+    mainLabel(panel,0,bottom+119,weapon?'与升级页共用培养等级':'材料需求每7级递增',
+      {size:18,font:'body',color:TRAINING_SUB,w:552,h:28});
+    comicButton(panel, 0, heroActionY(panel), 386, 60, '强化', () => {
       const result = growthAction(weapon ? { kind: 'weapon', hid } : { kind: 'equip', hid, slot: kind }, () => weapon ? upWeapon(hid) : upWornEquip(hid, kind));
       if (result.ok) dismissUI(panel.parent, ctx.refresh, false);
-    }, { tone: enoughGold && enoughMat ? 'gold' : 'muted', name: 'heroForgeAction', sound: 'confirm' });
-  } else mainLabel(panel, 0, -185, '已达强化上限', { size: 24, color: COMIC.sub, bold: true, w: 500, h: 40 });
+    }, { tone: enoughGold && enoughMat ? 'green' : 'muted', name: 'heroForgeAction', sound: false });
+  } else comicButton(panel,0,heroActionY(panel),248,58,'已达强化上限',() => dismissUI(panel.parent),
+    {tone:'dark',name:'heroForgeMaxClose',sound:'close'});
 }
-function costEntry(parent: Node, x: number, y: number, id: string, text: string, enough: boolean): void {
-  if (id === 'gold') comicArt(parent, x, y, 32, 32, 'comic_coin_v1');
-  else gearArt(parent, x, y, 32, 32, id);
-  mainLabel(parent, x + 85, y, id === 'gold' ? '金币' : '材料', { size: 20, color: COMIC.sub, align: 'left', w: 92, h: 30 });
-  mainLabel(parent, 110, y, text, { size: 22, color: enough ? COMIC.greenShade : '#B34338', font: 'number', align: 'right', w: 300, h: 32 });
-}
-
 function drawBagCell(ctx: PageCtx, grid: Node, cell: { uid: string; n: number }, hid: string, x: number, y: number): void {
   const isMat = cell.n > 0, inst = isMat ? null : loadSave().equips.find(e => e.uid === cell.uid);
   const d = inst ? EQUIPS[inst.defId] : null;
-  const seat = itemSeat(grid, x, y, BAG_SIZE, BAG_SIZE, d?.quality || 0, !!d); seat.name = 'heroBagItem:' + cell.uid;
+  const seat = itemSeat(grid, x, y, BAG_SIZE, BAG_SIZE, isMat ? 1 : d?.quality || 0, isMat || !!d); seat.name = 'heroBagItem:' + cell.uid;
   gearArt(seat, 0, 4, 100, 100, isMat ? cell.uid : inst!.defId);
-  if (d) gearQualityTag(seat, -20, 44, d.quality, d.tier, 68, 20);
   badge(seat, 22, -44, 68, isMat ? '×' + fmt(cell.n) : d?.kind === 'weapon' ? (weaponFits(hid, d.id) ? 'Lv.' + equipLevel(inst!, hid) : '职业不符') : 'Lv.' + inst!.lv);
   bindButton(seat, () => {
     if (isMat) {
-      const mat = MATS[cell.uid], panel = comicDialog(ctx.screens, 568, 548, mat.name); panel.name = 'heroMaterialDialog';
-      gearArt(panel, 0, 118, 136, 136, cell.uid);
-      mainLabel(panel, 0, 24, '持有 ×' + fmt(loadSave().bag[cell.uid] || 0), { size: 24, color: COMIC.text, bold: true, w: 510, h: 34 });
-      mainLabel(panel, 0, -33, mat.desc, { size: 22, color: COMIC.text, w: 510, h: 54 });
-      mainLabel(panel, 0, -105, '来源：商店购买 / 关卡掉落', { size: 18, color: COMIC.sub, w: 510, h: 28 });
-      mainLabel(panel, 0, -151, '用途：武器 / 装备强化材料', { size: 18, color: COMIC.sub, w: 510, h: 28 });
+      const mat = MATS[cell.uid], contentH = detailGroupHeight(1)+38+86+8;
+      const panel = heroDialog(ctx.screens,620,detailHeight(contentH),'材料详情','heroMaterialDialog');
+      detailOverview(panel,mat.name,'强化材料',undefined,mat.desc,(root,x,y,side) => {
+        shopQualitySocket(root,x,y,side,1); gearArt(root,x,y,side-20,side-20,cell.uid);
+      });
+      const content = detailBody(panel,contentH,DETAIL_ACTION_FOOTER,'heroMaterial');
+      const cursor = detailGroup(content,0,'持有情况',[['持有数量','×'+fmt(loadSave().bag[cell.uid] || 0)]]);
+      detailParagraph(content,cursor,'获取与用途','来源：商店购买 / 关卡掉落\n用途：武器 / 装备强化材料',86,620,true);
+      detailFooter(panel);
+      comicButton(panel,0,heroActionY(panel),248,58,'关闭',() => dismissUI(panel.parent),
+        {tone:'dark',name:'heroMaterialClose',sound:'close'});
       return;
     }
     const current = loadSave().equips.find(e => e.uid === cell.uid); if (!current) return;
@@ -404,27 +429,32 @@ function drawBagCell(ctx: PageCtx, grid: Node, cell: { uid: string; n: number },
 }
 
 export function attrsModal(ctx: PageCtx, hid: string): void {
-  const def = HERO_DEFS[hid], stats = heroStats(hid), panel = comicDialog(ctx.screens, 620, 620, '属性总览'); panel.name = 'heroAttrsDialog';
-  heroPortrait(panel, -216, 188, 86, hid);
-  mainLabel(panel, 48, 205, def.name, { size: 28, font: 'body', color: COMIC.text, bold: true, align: 'left', w: 360, h: 38 });
-  mainLabel(panel, 48, 164, 'Lv.' + loadSave().heroes[hid].lv, { size: 22, color: COMIC.sub, align: 'left', w: 360, h: 32 });
+  const def = HERO_DEFS[hid], stats = heroStats(hid);
   const rows: [string, string][] = [
     ['定位', HERO_GROWTH[def.growthType].name + ' · ' + def.job], ['战力', fmt(stats.power)], ['攻击力', fmt(stats.atk)],
     ['攻速', stats.atkSpd + ' 次/秒'], ['技能伤害', fmt(stats.skillDmg)],
   ];
-  rows.forEach((row, i) => {
-    const bar = comicPlate(panel, 0, 84 - i * 64, 552, 54, i % 2 ? 'paper' : 'card', { cut: 5, edge: false });
-    mainLabel(bar, -200, 0, row[0], { size: 22, color: COMIC.sub, align: 'left', w: 104, h: 34 });
-    mainLabel(bar, 60, 0, row[1], { size: 24, color: COMIC.text, bold: true, align: 'right', w: 384, h: 34 });
-  });
+  const contentH = detailGroupHeight(rows.length);
+  const panel = heroDialog(ctx.screens,620,detailHeight(contentH),'属性总览','heroAttrsDialog');
+  detailOverview(panel,def.name,'Lv.'+loadSave().heroes[hid].lv+' · '+def.job.split(' · ')[0],
+    HERO_GROWTH[def.growthType].name,def.job,(root,x,y,side) => heroPortrait(root,x,y,side,hid));
+  const content = detailBody(panel,contentH,DETAIL_ACTION_FOOTER,'heroAttrs');
+  detailGroup(content,0,'英雄属性',rows);
+  detailFooter(panel);
+  comicButton(panel,0,heroActionY(panel),248,58,'关闭',() => dismissUI(panel.parent),
+    {tone:'dark',name:'heroAttrsClose',sound:'close'});
 }
 export function storyModal(ctx: PageCtx, hid: string): void {
   const def = HERO_DEFS[hid], owned = !!loadSave().heroes[hid]?.owned;
-  const panel = comicDialog(ctx.screens, 640, 560, '故事 · ' + def.name); panel.name = 'heroStoryDialog';
-  const card = comicPlate(panel, -174, 24, 220, 318, 'card', { name: 'heroStoryFigure', cut: 10 });
-  heroComicFigure(card, hid, 0, -102, 254, 200);
-  mainLabel(card, 0, -135, def.name, { size: 22, color: COMIC.text, font: 'body', bold: true, w: 202, h: 32 });
-  const status = comicPlate(panel, -174, -170, 220, 40, owned ? 'green' : 'muted', { cut: 7 });
-  mainLabel(status, 0, 0, owned ? '已解锁' : '商店解锁', { size: 21, color: COMIC.cream, font: 'body', bold: true, w: 204, h: 30 });
-  mainLabel(panel, 129, 40, def.story, { size: 22, color: COMIC.text, font: 'body', w: 288, h: 244, align: 'left', lineHeight: 35 });
+  const textH = Math.max(140,Math.ceil(def.story.length/28)*25+20), contentH = 38+textH+8, footerH = 168;
+  const panel = heroDialog(ctx.screens,620,detailHeight(contentH,footerH),'英雄故事','heroStoryDialog');
+  detailOverview(panel,def.name,def.job,undefined,HERO_GROWTH[def.growthType].name,
+    (root,x,y,side) => heroPortrait(root,x,y,side,hid));
+  const content = detailBody(panel,contentH,footerH,'heroStory');
+  detailParagraph(content,0,'背景故事',def.story,textH,620,true);
+  detailFooter(panel,footerH);
+  mainLabel(panel,0,heroActionY(panel)+66,owned?'已解锁':'商店解锁',
+    {size:20,color:owned?COMIC.greenShade:COMIC.sub,bold:true,w:500,h:28});
+  comicButton(panel,0,heroActionY(panel),248,58,'关闭',() => dismissUI(panel.parent),
+    {tone:'dark',name:'heroStoryClose',sound:'close'});
 }

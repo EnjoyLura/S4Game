@@ -1,0 +1,7 @@
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-representatives-r1/preview/media/R01-new.mp4'
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-representatives-r1/preview/media/R02-new.mp4'
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-representatives-r1/preview/media/R03-new.mp4'
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-representatives-r1/preview/media/R04-new.mp4'
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-representatives-r1/preview/media/R05-new.mp4'
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-representatives-r1/preview/media/R06-new.mp4'
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-representatives-r1/preview/media/R07-new.mp4'

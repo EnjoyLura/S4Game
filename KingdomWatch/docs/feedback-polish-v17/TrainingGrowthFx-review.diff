@@ -1,0 +1,78 @@
+--- before/assets/scripts/ui/TrainingGrowthFx.ts
++++ assets/scripts/ui/TrainingGrowthFx.ts
+@@ -3,7 +3,7 @@
+ import { CA, label, N } from './UIKit';
+ import { COMIC } from './ComicUI';
+ import { reducedMotion } from './UIMotion';
+-import { celebrationRays } from './CelebrationInk';
++import { celebrationLight, lightEnvelope } from './FeedbackSurface';
+ 
+ const { ccclass } = _decorator;
+ const ease = (t: number): number => 1 - Math.pow(1 - Math.max(0, Math.min(1, t)), 3);
+@@ -14,7 +14,6 @@
+   private badge!: Node;
+   private counter!: Label;
+   private ink!: Graphics;
+-  private backlight!: Graphics;
+   private backlightNode!: Node;
+   private hidden = false;
+   private gain!: Node;
+@@ -39,8 +38,9 @@
+     this.figure = figure; this.badge = badge; this.counter = counter.getComponent(Label)!;
+     this.figureScale.set(figure.scale); this.badgeScale.set(badge.scale);
+     this.from = this.target = this.displayed = this.base = power;
+-    this.backlightNode = N('trainingGrowthBacklight', this.node.parent!, this.node.position.x, this.node.position.y);
+-    this.backlightNode.setSiblingIndex(0); this.backlight = this.backlightNode.addComponent(Graphics);
++    this.backlightNode = celebrationLight(this.node.parent!, 'trainingGrowthBacklight',
++      this.node.position.x, this.node.position.y + 148, 260, 400);
++    this.backlightNode.setSiblingIndex(0);
+     this.ink = N('trainingUpgradeBurst', this.node).addComponent(Graphics);
+     this.gain = label(this.node, 0, 70, '', { size: 27, color: COMIC.greenLight, bold: true,
+       font: 'number', outline: COMIC.ink, outlineW: 2, w: 320, h: 44, shrink: true });
+@@ -64,30 +64,23 @@
+     const text = '战力 ' + Math.round(this.displayed).toLocaleString('en-US');
+     if (text !== this.lastText) { this.counter.string = text; this.lastText = text; }
+     const bounce = quiet ? 0 : Math.sin(Math.PI * Math.min(1, this.age / .32));
+-    this.figure.setScale(this.figureScale.x * (1 + bounce * (this.breakthrough ? .045 : .025)),
+-      this.figureScale.y * (1 + bounce * (this.breakthrough ? .045 : .025)), this.figureScale.z);
++    this.figure.setScale(this.figureScale.x * (1 + bounce * (this.breakthrough ? .018 : .008)),
++      this.figureScale.y * (1 + bounce * (this.breakthrough ? .018 : .008)), this.figureScale.z);
+     this.badge.setScale(this.badgeScale.x * (1 + bounce * .055), this.badgeScale.y * (1 + bounce * .055), this.badgeScale.z);
+     if (this.hammer && isValid(this.hammer)) this.hammer.angle = -10 * bounce;
+     this.gain.setPosition(0, 70 + (quiet ? 0 : 18 * ease(this.age / .6)), 0);
+     this.gainFade.opacity = Math.round(255 * Math.min(1, this.age / .06) * Math.max(0, Math.min(1, (1.1 - this.age) / .24)));
+     this.ink.clear();
+-    this.backlight.clear();
++    lightEnvelope(this.backlightNode, quiet ? 1 : this.age, .85, this.breakthrough ? .44 : .24);
+     if (!quiet && this.age < .85) {
+       const p = this.age / .85, fade = 1 - p, spread = this.breakthrough ? 1.35 : 1;
+-      celebrationRays(this.backlight, 0, 160, this.breakthrough ? 200 : 150, this.age, .85);
+-      // Warm tapered light rises behind the figure, leaving the face and stats readable.
+-      const b = this.backlight;
+-      for (let i = 0; i < 18; i++) {
+-        b.fillColor = CA('#FFE38E', fade * (1 - i / 18) * (this.breakthrough ? .075 : .04));
+-        b.rect(-76 + i * 3, i * 17, 152 - i * 6, 18); b.fill();
+-      }
+-      this.ink.strokeColor = CA(COMIC.gold, fade * .85); this.ink.lineWidth = 3;
++      this.ink.strokeColor = CA(COMIC.gold, fade * .6); this.ink.lineWidth = 1.7;
+       this.ink.ellipse(0, 4, (60 + p * 65) * spread, 12 + p * 17); this.ink.stroke();
+-      this.ink.strokeColor = CA(COMIC.goldLight, fade * .55); this.ink.lineWidth = 1.5;
++      this.ink.strokeColor = CA(COMIC.goldLight, fade * .35); this.ink.lineWidth = 1;
+       this.ink.ellipse(0, 4, (45 + p * 52) * spread, 8 + p * 13); this.ink.stroke();
+       this.ink.strokeColor = CA(COMIC.goldLight, fade * .8); this.ink.lineWidth = 2.4;
+-      for (let i = 0; i < 10; i++) {
+-        const a = i * Math.PI * 2 / 10, x = Math.cos(a) * (36 + p * 45) * spread;
++      for (let i = 0; i < 6; i++) {
++        const a = i * Math.PI * 2 / 6, x = Math.cos(a) * (36 + p * 45) * spread;
+         const y = 16 + Math.sin(a) * 15 + p * (34 + (i % 3) * 13);
+         this.ink.moveTo(x, y); this.ink.lineTo(x + Math.cos(a) * 3, y + 7 * fade);
+       }
+@@ -101,7 +94,7 @@
+     if (this.badge && isValid(this.badge)) this.badge.setScale(this.badgeScale);
+     if (this.hammer && isValid(this.hammer)) this.hammer.angle = 0;
+     this.ink?.clear();
+-    this.backlight?.clear();
++    if (this.backlightNode) this.backlightNode.active = false;
+     if (this.gainFade) this.gainFade.opacity = 0;
+   }
+   private hide = (): void => { this.hidden = true; };

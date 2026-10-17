@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#172934">
+  <title>王国守望 · 代表声音 r1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header>
+    <span class="eyebrow">KINGDOM WATCH / SOUND DIRECTION 01</span>
+    <h1>先听这 7 个声音</h1>
+    <p>先确定声音方向，再拓展。专业实录素材与实录乐器短乐句，配上动作分镜，判断是否对味。</p>
+    <span class="status">待你确认 · 尚未替换正式游戏</span>
+  </header>
+  <section class="player-panel" aria-label="场景预览">
+    <div class="player-heading"><h2 id="now-title">整组新方案 · 约 30 秒</h2><span id="version">新方案 r1</span></div>
+    <video id="player" controls playsinline preload="none" poster="media/R04.jpg"></video>
+    <div class="transport">
+      <button id="all-new" class="primary">▶ 整组新方案</button>
+      <button id="all-old">▶ 整组旧版 v21</button>
+      <button id="stop">停止</button>
+      <label class="volume">音量 <input type="range" id="volume" min="0" max="1" step="0.05" value="0.7"></label>
+    </div>
+    <p class="hint" id="now-hint">没有背景音乐。请先把设备音量调到舒适程度，再判断材质、力度和节奏。</p>
+    <div id="play-error" role="status" hidden></div>
+  </section>
+  <section aria-label="逐项选择">
+    <div class="section-heading"><h2>逐项听，留下直觉</h2><span>不用一次全部通过</span></div>
+    <div id="cases"><p>正在加载代表声音…</p></div>
+  </section>
+  <section class="feedback">
+    <h2>这一组的整体感觉</h2>
+    <textarea id="notes" rows="3" placeholder="例如：R01 可以；R04 还是像通知铃；R06 想更有气势。"></textarea>
+    <div class="transport"><button id="copy" class="primary">复制反馈</button><button id="export">导出反馈</button></div>
+    <p class="hint" id="save-status">选择只保存在当前浏览器。复制反馈发给我后，我才会按你确认的方向继续。</p>
+  </section>
+  <details class="sources">
+    <summary>来源与制作说明</summary>
+    <p>战斗素材来自 <a href="https://sonniss.com/gameaudiogdc/" target="_blank" rel="noopener">Sonniss GDC 免费专业素材</a>（Membrans、NoizBoy）；旋律音色来自 <a href="https://github.com/sgossner/VSCO-2-CE" target="_blank" rel="noopener">VSCO 2 Community Edition</a> 实录乐器（CC0）。短乐句为本轮重新编排，不是 AI 生成音频。</p>
+    <p>保留原始录音、来源、许可及编排记录。Sonniss 素材仅嵌入同步画面的成片，不提供独立音效下载。旧版取自游戏 v21，转换为同一场景的参考音量；原游戏文件未修改。</p>
+    <p>分镜只用于比较声音的搭配，不代表新的游戏界面或正式动画。当前仅完成素材、同步和电平的离线检查，听感由你确认。</p>
+    <a href="CREDITS.html">查看完整来源</a>
+  </details>
+  <footer>代表声音 r1 · 确认后再扩展</footer>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

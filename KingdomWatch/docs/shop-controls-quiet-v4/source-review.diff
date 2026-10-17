@@ -1,0 +1,180 @@
+--- before/assets/scripts/ui/LobbyChrome.ts
++++ assets/scripts/ui/LobbyChrome.ts
+@@ -4,12 +4,10 @@
+ import { gearQuality } from './GearQuality';
+ 
+ type Point = readonly [number, number];
+-type Finish = 'gold' | 'green' | 'dark' | 'muted';
++type Finish = 'gold' | 'green';
+ const FINISHES = {
+   gold: { ink: '#63491D', rim: '#D7A03B', light: '#FFF0A8', top: '#FFDA65', bottom: '#EDB437', shade: '#C48C2D' },
+   green: { ink: '#293D25', rim: '#477E31', light: '#B0DE7D', top: '#73BA48', bottom: '#49932F', shade: '#38772B' },
+-  dark: { ink: '#14212C', rim: '#3C5261', light: '#8BABB8', top: '#344D60', bottom: '#1C2D3B', shade: '#132330' },
+-  muted: { ink: '#626C65', rim: '#8C988B', light: '#DADECB', top: '#BCC3AC', bottom: '#9FA88F', shade: '#828F79' },
+ };
+ 
+ function polygon(g: Graphics, points: readonly Point[], fill: Color | string): void {
+@@ -107,14 +105,11 @@
+   polygon(g,[[-4,-4],[4,-4],[5,-8],[0,-13],[-5,-8]],'#B18A42');
+ }
+ 
+-/** Section well with inset attribute strips; no repeated dark outlines around each line. */
++/** Layout-only group: all attributes read directly on the modal paper, without row or group plates. */
+ export function shopAttributeGroup(parent: Node, y: number, rows: number): Node {
+   const height = rows*38+12, node = N('shopAttributeGroup',parent,0,y,552,height);
+-  const g = node.addComponent(Graphics);
+-  gradient(g,552,height,10,'#FBEED1','#FFF8E5',true);
+   for (let i = 0; i < rows; i++) {
+-    const row = N('shopAttributeStrip',node,0,height/2-25-i*38,530,34), rg = row.addComponent(Graphics);
+-    gradient(rg,530,34,6,i%2 ? '#F0DEB7' : '#F4E4BF',i%2 ? '#F7E9C9' : '#F9EDCF',true);
++    N('shopAttributeRow',node,0,height/2-25-i*38,530,34);
+   }
+   return node;
+ }
+@@ -122,10 +117,10 @@
+ export function shopDetailRule(parent: Node, y: number): void {
+   const g = N('shopDetailRule',parent,0,y,552,14).addComponent(Graphics);
+   for (const dir of [-1,1]) {
+-    stroke(g,[[dir*11,0],[dir*270,0]],CA('#C09A52',.65));
+-    polygon(g,[[dir*272,2],[dir*274,0],[dir*272,-2],[dir*270,0]],'#CFA65D');
++    stroke(g,[[dir*11,0],[dir*270,0]],'#AC7F37',1.8);
++    polygon(g,[[dir*272,2.5],[dir*274.5,0],[dir*272,-2.5],[dir*269.5,0]],'#AC7F37');
+   }
+-  polygon(g,[[0,7],[6,0],[0,-7],[-6,0]],'#D5AF66');
++  polygon(g,[[0,7],[6,0],[0,-7],[-6,0]],'#B58A40');
+ }
+ 
+ /** Navy strip with a quiet top edge and short separators between actual touch slots. */
+@@ -136,15 +131,9 @@
+   stroke(g,[[-w/2,-h/2+1],[w/2,-h/2+1]],CA('#101D28',.5));
+   for (const x of separators) {
+     const extent = h*.35;
+-    stroke(g,[[x,-extent],[x,extent]],CA('#C7D7DF',.075));
+-    stroke(g,[[x,-extent*.62],[x,extent*.62]],CA('#C7D7DF',.075));
++    stroke(g,[[x,-extent],[x,extent]],CA('#C7D7DF',.22),1.2);
++    stroke(g,[[x,-extent*.62],[x,extent*.62]],CA('#C7D7DF',.10),1.2);
+   }
+-}
+-
+-/** Inactive categories belong to the strip; only the selected category gets a gold face. */
+-export function paintShopCategory(node: Node, w: number, h: number, selected: boolean): void {
+-  const g = node.getComponent(Graphics) || node.addComponent(Graphics); g.clear();
+-  if (selected) paintLobbyFace(node,w,h,'gold');
+ }
+ 
+ /** Neutral warm card, with a soft tonal face and just two faint paper corner folds. */
+--- before/assets/scripts/ui/pages/ShopPage.ts
++++ assets/scripts/ui/pages/ShopPage.ts
+@@ -11,7 +11,7 @@
+ import { dismissUI, reducedMotion, refreshUI } from '../UIMotion';
+ import { bindButton } from '../ButtonFeedback';
+ import { gearQuality } from '../GearQuality';
+-import { paintLobbyFace, paintLobbyStrip, paintShopCategory, paintShopModal, shopAttributeGroup,
++import { paintLobbyFace, paintLobbyStrip, paintShopModal, shopAttributeGroup,
+   shopDetailRule, shopProductCard, shopQualitySocket, shopSectionEmblem } from '../LobbyChrome';
+ 
+ const CARD_W = 218, CARD_H = 330, STEP_X = 232, STEP_Y = 346;
+@@ -86,7 +86,6 @@
+     const node = comicButton(bar, (i - 1.5) * 178, 0, 172, 70, '', () => select(i),
+       { tone: i === selected ? 'gold' : 'dark', name: 'shopTab:' + tab.key, sound: 'select', quiet: true });
+     const face = node.getChildByName('buttonFace')!;
+-    paintShopCategory(face, 172, 70, i === selected);
+     comicArt(face, -48, 0, 40, 40, TAB_ART[i]);
+     mainLabel(face, 23, 0, tab.name, { size: 25, font: 'body', bold: true,
+       color: i === selected ? COMIC.text : COMIC.cream, w: 80, h: 37, align: 'left' });
+@@ -206,9 +205,6 @@
+   const titleLabel = title.getComponent(Label)!;
+   titleLabel.fontSize = 32; titleLabel.lineHeight = 40; titleLabel.color = C(COMIC.cream);
+   titleLabel.enableOutline = true; titleLabel.outlineColor = C('#152736'); titleLabel.outlineWidth = 1.2;
+-  const closeIcon = panel.getChildByName('btn_close')!;
+-  closeIcon.setPosition(275, top - 38, 0);
+-  paintLobbyFace(closeIcon.getChildByName('buttonFace')!, 44, 44, 'dark');
+   const art = itemArt(g);
+   const equipment = g.give.kind === 'equip' ? EQUIPS[g.give.id] : null;
+   if (equipment || g.give.kind === 'mat') shopQualitySocket(panel, -192, top - 180, 168, equipment?.quality ?? 1);
+@@ -286,9 +282,8 @@
+     walletLabel = mainLabel(feedback, 0, bottom + 116, '持有 ' + fmt(wallet) + (g.currency === 'gold' ? ' 金币' : ' 钻石'),
+       { size: 18, font:'body', color: wallet >= g.price ? COMIC.sub : '#B34338', w: 552, h: 24 });
+   }
+-  const close = comicButton(panel, -139, bottom + 42, 248, 60, '关闭', () => dismissUI(panel.parent),
+-    { tone: 'dark', name: 'shopDetailsClose', sound: 'close', size:26 });
+-  paintLobbyFace(close.getChildByName('buttonFace')!,248,60,'dark');
++  comicButton(panel, -139, bottom + 39, 248, 58, '关闭', () => dismissUI(panel.parent),
++    { tone: 'dark', name: 'shopDetailsClose', sound: 'close' });
+   const attemptPurchase = (): void => {
+     if (!g.price || purchasing) return;
+     if (!lvReached(g.unlock)) { toast('通关 ' + g.unlock + ' 后解锁'); return; }
+@@ -307,9 +302,8 @@
+         icon: g.give.kind !== 'hero' ? 'shop_comic_v1/' + itemArt(g) : undefined });
+     dismissUI(panel.parent, ctx.refresh, false);
+   };
+-  const purchase = comicButton(panel, 139, bottom + 42, 248, 60, available ? '购买' : owned ? '已拥有' : !g.price ? '敬请期待' : '尚未解锁',
+-    attemptPurchase, { tone: 'green', name: 'shopPurchaseConfirm', enabled: available, size:26 });
+-  paintLobbyFace(purchase.getChildByName('buttonFace')!,248,60,available?'green':'muted');
++  const purchase = comicButton(panel, 139, bottom + 39, 248, 58, available ? '购买' : owned ? '已拥有' : !g.price ? '敬请期待' : '尚未解锁',
++    attemptPurchase, { tone: 'green', name: 'shopPurchaseConfirm', enabled: available });
+   // The semantic result owns its sound, including a failed purchase; no success click first.
+   bindButton(purchase, attemptPurchase, { sound: false });
+ }
+--- before/assets/scripts/ui/MainUI.ts
++++ assets/scripts/ui/MainUI.ts
+@@ -3,7 +3,7 @@
+  * 统一顶栏、资源芯片和底部导航；五页使用相同内容边距与安全区。
+  * 页签内容整屏重建（PageKit.ctx.refresh）；各页实现见 ui/pages/*（线稿一一对应）。
+  */
+-import { _decorator, Component, Label, Node, Sprite, UITransform, view } from 'cc';
++import { _decorator, Component, Graphics, Label, Node, Sprite, UITransform, view } from 'cc';
+ import { initLayout, LO, PAL } from '../config/GameConfig';
+ import { flow } from '../core/Flow';
+ import { GameAudio } from '../core/GameAudio';
+@@ -20,7 +20,7 @@
+ import { buildUpgrade } from './pages/UpgradePage';
+ import { buildBase } from './pages/BasePage';
+ import { levelReturnReady } from './BattleEntry';
+-import { paintLobbyFace, paintLobbyStrip } from './LobbyChrome';
++import { paintLobbyStrip } from './LobbyChrome';
+ 
+ const { ccclass } = _decorator;
+ 
+@@ -138,7 +138,7 @@
+     });
+   }
+ 
+-  /** Selection shares the shop concept's narrow bevel; separators remain behind the touch slots. */
++  /** Original flat gold selection; clearer separators remain behind the touch slots. */
+   private highlightTabs(): void {
+     if (this.navBar) {
+       paintLobbyStrip(this.navBar, 750, MAIN_NAV_H, [-207, -69, 69, 207]);
+@@ -149,14 +149,17 @@
+       it.act.active = active;
+       const iconLbl = it.icon.getComponent(Label);
+       const txtLbl = it.txt.getComponent(Label);
+-      paintLobbyFace(it.act, 126, 104, 'gold');
++      const ag = it.act.getComponent(Graphics)!;
++      ag.clear();
++      ag.fillColor = C(COMIC.gold);
++      ag.roundRect(-63, -50, 126, 104, 12); ag.fill();
+       if (txtLbl) {
+         txtLbl.color = C(active ? COMIC.text : COMIC.cream);
+         txtLbl.fontSize = 24;
+       }
+       if (iconLbl) iconLbl.color = C(active ? '#FFE08A' : '#FFFFFF');
+       const artSp = it.art ? it.art.getComponent(Sprite) : null;
+-      if (artSp) artSp.color = C(active ? '#FFFFFF' : '#E1E8EA');
++      if (artSp) artSp.color = C(active ? '#FFFFFF' : '#D5DCE0');
+     });
+   }
+ 
+--- before/assets/scripts/core/GameAudio.ts
++++ assets/scripts/core/GameAudio.ts
+@@ -3,8 +3,8 @@
+ import { loadSave } from './SaveData';
+ import { AUDIO_CUES, MUSIC_TRACKS, MusicScene, SfxName } from './AudioCatalog';
+ 
+-// +3 dB for both buses; keep the existing mix balance and output limiter.
+-const AUDIO_LEVEL_BOOST = Math.SQRT2;
++// Another +1 dB for both buses, relative to the previous mix; keep balance and output limiting.
++const AUDIO_LEVEL_BOOST = Math.SQRT2 * Math.pow(10, 1 / 20);
+ const SFX_BUS_GAIN = .85 * AUDIO_LEVEL_BOOST;
+ const MUSIC_SCENE_GAIN = { camp: .52 * AUDIO_LEVEL_BOOST, battle: .42 * AUDIO_LEVEL_BOOST } as const;
+ 

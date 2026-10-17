@@ -1,0 +1,75 @@
+/** Hero-only layout accents; game text stays native and buttons keep ComicUI feedback. */
+import { Graphics, Label, Node, UIOpacity, UITransform } from 'cc';
+import { HERO_DEFS } from '../core/GameData';
+import { C, CA, N } from './UIKit';
+import { COMIC, comicDialog, comicMark, comicSurface } from './ComicUI';
+import { heroPortrait } from './HeroComic';
+import { mainLabel } from './PageKit';
+import { lobbyAttributeWell, paintLobbyModal, paintLobbyPaper, shopSectionEmblem } from './LobbyChrome';
+
+export const HERO_INK = '#1D3141';
+
+export function heroPaper(parent: Node, x: number, y: number, w: number, h: number, name: string): Node {
+  const node = N(name,parent,x,y,w,h);
+  paintLobbyPaper(node,w,h,true);
+  return node;
+}
+
+/** Works on the existing modal node so dismissal, backdrop and animations remain intact. */
+export function heroModalSkin(panel: Node, w: number, h: number, title: string, close = true): void {
+  paintLobbyModal(panel,w,h,{white:true,headerName:'heroModalTitleBar',headerWidth:close ? w-124 : w-26});
+  const existing = panel.children.find(child => !!child.getComponent(Label));
+  const caption = existing || mainLabel(panel,0,h/2-36,title,{font:'body',bold:true});
+  caption.setPosition(0,h/2-36,0);
+  caption.getComponent(UITransform)!.setContentSize(w-(close ? 146 : 46),42);
+  const label = caption.getComponent(Label)!;
+  label.string = title; label.fontSize = w < 400 ? 23 : 30; label.lineHeight = 40;
+  label.isBold = true; label.color = C(COMIC.cream); label.enableOutline = false;
+}
+
+export function heroDialog(parent: Node, w: number, h: number, title: string, name: string): Node {
+  const panel = comicDialog(parent,w,h,title);
+  panel.name = name; heroModalSkin(panel,w,h,title);
+  return panel;
+}
+
+/** 30+ units of paper remain under 58-unit actions, including comparison cards. */
+export function heroActionY(panel: Node): number { return -panel.getComponent(UITransform)!.height/2+60; }
+
+export function heroWhiteWell(parent: Node, y: number, w: number, h: number): Node {
+  return lobbyAttributeWell(parent,0,y,w,h,'heroAttributeWhite');
+}
+
+export function heroRule(parent: Node, y: number, width: number): void {
+  const g = N('heroPaperRule',parent,0,y,width,12).addComponent(Graphics);
+  g.strokeColor = C('#B58A40'); g.lineWidth = 1.3;
+  for (const dir of [-1,1]) {
+    g.moveTo(dir*10,0); g.lineTo(dir*(width/2-4),0); g.stroke();
+  }
+  g.fillColor = C('#B58A40'); g.moveTo(0,5); g.lineTo(4,0); g.lineTo(0,-5); g.lineTo(-4,0); g.close(); g.fill();
+}
+
+export function heroSection(parent: Node, y: number, title: string, width: number): void {
+  shopSectionEmblem(parent,-width/2+12,y);
+  mainLabel(parent,20,y,title,{size:width<400?20:24,font:'body',bold:true,color:HERO_INK,
+    align:'left',w:width-48,h:32});
+}
+
+/** Same rail dimensions and portrait art, with a fine outer rim and an uncluttered name capsule. */
+export function heroLobbyPortrait(parent: Node, x: number, id: string, active: boolean, owned: boolean, width: number): Node {
+  const slot = N('heroLobbyPortrait:'+id,parent,x,0,width,114);
+  const rim = N('heroPortraitRim',slot,0,14,94,94).addComponent(Graphics);
+  rim.fillColor = CA('#182A38',owned ? .76 : .45); rim.circle(0,0,46); rim.fill();
+  rim.strokeColor = C(active?'#C68B30':'#718593'); rim.lineWidth = active?3:1.2; rim.stroke();
+  if (active) {
+    rim.strokeColor = C('#FFE5A0'); rim.lineWidth = 1.5; rim.circle(0,0,43); rim.stroke();
+    comicSurface(slot,0,-40,108,28,'gold',{name:'heroRosterNameTag',radius:14});
+  }
+  const avatar = heroPortrait(slot,0,14,82,id);
+  if (!owned) { avatar.addComponent(UIOpacity).opacity = 125; comicMark(slot,43,-8,'lock',17,COMIC.sub); }
+  const def = HERO_DEFS[id];
+  mainLabel(slot,0,-39,id==='pyro'?def.name.replace('·',''):def.name.split('·')[0],{
+    size:20,font:'body',bold:true,color:active?HERO_INK:owned?COMIC.cream:'#C8C5BA',w:110,h:28,
+    outline:active?undefined:COMIC.ink,outlineW:active?0:1.6});
+  return slot;
+}

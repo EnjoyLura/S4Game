@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-detail-shared-v6-20261017-032835",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-lobby-art-v5-20261017-031337",
+  "entryVersion": "1792178853",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=hero-detail-shared-v6-1792178853",
+  "scope": "reuse actual product detail component across hero dialogs: paper, inset title, showcase, white content groups, flowing body and fixed actions; repair inventory outer corners and continuous category strip",
+  "manualAcceptance": "pending user manual review"
+}

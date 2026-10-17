@@ -1,0 +1,20 @@
+--- before/assets/scripts/ui/PositiveFeedback.ts
++++ assets/scripts/ui/PositiveFeedback.ts
+@@ -103,7 +103,7 @@
+     });
+     this.node.setSiblingIndex(this.node.parent!.children.length - 1);
+     if (milestone || next.keep || !merged || this.sinceCue >= .18) {
+-      uiSound(next.keep ? 'construction' : milestone ? 'breakthrough' : next.repeating ? 'growthTick' : 'upgrade');
++      uiSound(milestone ? 'breakthrough' : merged || next.repeating ? 'growthTick' : next.keep ? 'construction' : 'upgrade');
+       this.sinceCue = 0;
+     }
+     this.enabled = true; this.render();
+@@ -182,7 +182,7 @@
+     this.sweepFade.opacity = this.quiet ? 0 : Math.round(255 * Math.sin(Math.PI * sweep) * .25);
+     if (!this.landed && this.numberAge >= .62) {
+       this.landed = true;
+-      if (!this.quiet) uiSound('starFinish');
++      uiSound('growthLand');
+     }
+   }
+ 

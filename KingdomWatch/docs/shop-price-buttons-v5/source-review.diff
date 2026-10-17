@@ -1,0 +1,71 @@
+--- before/assets/scripts/ui/pages/ShopPage.ts
++++ assets/scripts/ui/pages/ShopPage.ts
+@@ -11,7 +11,7 @@
+ import { dismissUI, reducedMotion, refreshUI } from '../UIMotion';
+ import { bindButton } from '../ButtonFeedback';
+ import { gearQuality } from '../GearQuality';
+-import { paintLobbyFace, paintLobbyStrip, paintShopModal, shopAttributeGroup,
++import { paintLobbyStrip, paintShopModal, shopAttributeGroup,
+   shopDetailRule, shopProductCard, shopQualitySocket, shopSectionEmblem } from '../LobbyChrome';
+ 
+ const CARD_W = 218, CARD_H = 330, STEP_X = 232, STEP_Y = 346;
+@@ -125,13 +125,13 @@
+   const available = !!g.price && unlocked && !owned;
+   const text = available ? '' : owned ? '已拥有' : !g.price ? '敬请期待' : '通关 ' + g.unlock + ' 解锁';
+   if (!available) {
+-    const status = N('shopBuy:' + g.id, card, 0, -130, 192, 50);
++    const status = N('shopBuy:' + g.id, card, 0, -130, 192, 48);
+     mainLabel(status, 0, 0, text, { size: owned || !g.price ? 21 : 16, color: owned ? COMIC.greenShade : COMIC.sub,
+       bold: owned, font: 'body', w: 184, h: 38 });
+     if (!owned && g.price) bindButton(status, () => toast('通关 ' + g.unlock + ' 后解锁'), { sound: false });
+     return;
+   }
+-  const purchase = comicButton(card, 0, -130, 192, 50, text, () => {
++  const purchase = comicButton(card, 0, -130, 192, 48, text, () => {
+     if (owned || !g.price) return;
+     if (!unlocked) { toast('通关 ' + g.unlock + ' 后解锁'); return; }
+     openProductDetails(ctx, g);
+@@ -140,7 +140,6 @@
+   if (available) {
+     const price = fmt(g.price), textW = Math.min(122, price.length * 16), groupW = 29 + 6 + textW;
+     const face = purchase.getChildByName('buttonFace')!;
+-    paintLobbyFace(face, 192, 50, 'green');
+     comicArt(face, -groupW / 2 + 14.5, 0, 29, 29, g.currency === 'gold' ? 'comic_coin_v1' : 'comic_diamond_v1');
+     mainLabel(face, -groupW / 2 + 35 + textW / 2, 0, price, { size: 26, font: 'number', color: COMIC.cream,
+       align: 'left', w: textW, h: 35, outline: '#376C29', outlineW: 1 });
+--- before/assets/scripts/ui/LobbyChrome.ts
++++ assets/scripts/ui/LobbyChrome.ts
+@@ -4,12 +4,6 @@
+ import { gearQuality } from './GearQuality';
+ 
+ type Point = readonly [number, number];
+-type Finish = 'gold' | 'green';
+-const FINISHES = {
+-  gold: { ink: '#63491D', rim: '#D7A03B', light: '#FFF0A8', top: '#FFDA65', bottom: '#EDB437', shade: '#C48C2D' },
+-  green: { ink: '#293D25', rim: '#477E31', light: '#B0DE7D', top: '#73BA48', bottom: '#49932F', shade: '#38772B' },
+-};
+-
+ function polygon(g: Graphics, points: readonly Point[], fill: Color | string): void {
+   g.fillColor = typeof fill === 'string' ? C(fill) : fill;
+   g.moveTo(points[0][0], points[0][1]);
+@@ -39,20 +33,6 @@
+     polygon(g, [[left(y0),y0],[-left(y0),y0],[-left(y1),y1],[left(y1),y1]],
+       Color.lerp(new Color(),lo,hi,(i+.5)/bands));
+   }
+-}
+-
+-/** A narrow integral bevel, without offset shadow plates or extra touch nodes. */
+-export function paintLobbyFace(node: Node, w: number, h: number, finish: Finish): void {
+-  const g = node.getComponent(Graphics) || node.addComponent(Graphics); g.clear();
+-  const p = FINISHES[finish], c = Math.min(10,h*.2);
+-  polygon(g,cutRect(w,h,c),p.ink);
+-  polygon(g,cutRect(w-3,h-3,c-1),p.rim);
+-  polygon(g,cutRect(w-6,h-6,c-2),p.light);
+-  gradient(g,w-10,h-10,c-3,p.bottom,p.top);
+-  // Two restrained facets sit within the silhouette and move with the button face.
+-  polygon(g,[[-w/2+5,-h/2+c],[-w/2+c,-h/2+5],[w/2-c,-h/2+5],
+-    [w/2-5,-h/2+c],[w/2-7,-h/2+10],[-w/2+7,-h/2+10]],p.shade);
+-  stroke(g,[[-w/2+5,h/2-c],[-w/2+c,h/2-4],[w/2-c,h/2-4],[w/2-5,h/2-c]],p.light,1.2);
+ }
+ 
+ /** Paper frame and inset navy title: gold belongs to the frame, never to the action buttons. */

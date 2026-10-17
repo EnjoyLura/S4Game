@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": [],
+    "lib": ["ES2020", "DOM"]
+  },
+  "include": ["../../assets/scripts/**/*.ts", "../../temp/declarations/*.d.ts"],
+  "exclude": []
+}

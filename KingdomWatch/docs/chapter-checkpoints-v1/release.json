@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-checkpoints-v1-20261016-232148",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-overlay-v4-20261016-231651",
+  "entryVersion": "1792164056",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=chapter-checkpoints-v1-1792164056",
+  "scope": "chapter-specific outpost shield, forest timber signpost and lair iron-and-tusk checkpoint art; prior map and lock fixes retained",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://18977a07.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-chapter-checkpoints-v1-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-chapter-checkpoints-v1-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "mainSha256": "56eaad73547a154307de9650ab513e9b9050ad36a74ea6dfc6adede04f7f1d5a",
+  "creatorBuildMilliseconds": 17129,
+  "date": "2026-10-16T23:22:26.588722+08:00",
+  "testsRun": false,
+  "simulationRun": false,
+  "gameRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

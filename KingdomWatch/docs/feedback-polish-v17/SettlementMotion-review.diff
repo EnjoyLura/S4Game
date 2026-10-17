@@ -1,0 +1,53 @@
+--- before/assets/scripts/ui/SettlementMotion.ts
++++ assets/scripts/ui/SettlementMotion.ts
+@@ -4,7 +4,8 @@
+ import { reducedMotion } from './UIMotion';
+ import { whenUIArtReady } from './UIArtReady';
+ import { uiSound } from './UIAudio';
+-import { celebrationConfetti, celebrationRays } from './CelebrationInk';
++import { celebrationConfetti } from './CelebrationInk';
++import { celebrationLight, lightEnvelope } from './FeedbackSurface';
+ 
+ const { ccclass } = _decorator;
+ const clamp = (v: number): number => Math.max(0, Math.min(1, v));
+@@ -20,7 +21,7 @@
+   private stars: StarView[] = [];
+   private rewards: RewardView[] = [];
+   private ink!: Graphics;
+-  private backlight!: Graphics;
++  private backlight!: Node;
+   private win = false;
+   private intro = false;
+   private quiet = false;
+@@ -43,8 +44,8 @@
+     this.stars = stars.map(star => ({ ...star, position: star.node.position.clone(), sounded: false }));
+     this.earnedStars = stars.filter(star => star.earned).length;
+     this.endAt = this.intro ? (this.win ? 2.05 : 1.65) : 0;
+-    const backlight = N('settlementVictoryBacklight', this.node); backlight.setSiblingIndex(0);
+-    this.backlight = backlight.addComponent(Graphics);
++    this.backlight = celebrationLight(this.node, 'settlementVictoryBacklight', 0, 340, 680, 420);
++    this.backlight.setSiblingIndex(0);
+     this.ink = N('settlementAccents', this.node).addComponent(Graphics);
+     if (this.intro) {
+       badge.setScale(this.win ? .82 : .94, this.win ? .82 : .94, 1);
+@@ -89,16 +90,16 @@
+       this.badge.setPosition(this.badgeAt); this.badge.setScale(1, 1, 1); this.badge.angle = 0;
+       this.stars.forEach(star => { star.node.active = star.earned; star.node.setPosition(star.position); star.node.setScale(1, 1, 1); });
+       this.rewards.forEach(row => { row.label.string = String(row.target); row.node.setScale(1, 1, 1); });
+-      this.ink.clear(); this.backlight.clear(); this.enabled = false;
++      this.ink.clear(); this.backlight.active = false; this.enabled = false;
+     }
+   }
+ 
+   private render(): void {
+     const g = this.ink; g.clear();
+-    this.backlight.clear();
++    this.backlight.active = false;
+     if (this.win && this.intro) {
+-      celebrationRays(this.backlight, 0, 340, 360, this.age, 1.85);
+-      celebrationConfetti(g, this.age, 320, 690, 42);
++      lightEnvelope(this.backlight, this.age, 1.85, .32);
++      celebrationConfetti(g, this.age, 320, 690, 10);
+     }
+     if (this.intro) {
+       const p = clamp((this.age - .03) / (this.win ? .48 : .5)), spring = back(p);

@@ -1,0 +1,42 @@
+Kingdom Watch audio credits
+==========================
+Town Theme RPG / Battle Theme A — cynicmusic, cynicmusic.com / pixelsphere.org (CC0)
+https://opengameart.org/content/town-theme-rpg
+https://opengameart.org/content/battle-theme-a
+Medieval Weapon Textures — Ben Jaszczak & Brian Nelson / Still North Media (CC0)
+https://opengameart.org/content/medieval-sound-effects-weapon-textures
+RPG Audio, Interface Sounds, Music Jingles — Kenney (CC0)
+https://kenney.nl/assets/rpg-audio
+https://kenney.nl/assets/interface-sounds
+https://kenney.nl/assets/music-jingles
+80 CC0 RPG SFX — rubberduck (CC0)
+https://opengameart.org/node/86018
+Ice and Electricity Magic — Iwan 'qubodup' Gabovitch (CC BY 3.0)
+https://opengameart.org/users/qubodup
+https://opengameart.org/content/ice-electricity-magic
+https://creativecommons.org/licenses/by/3.0/
+Modifications: selected excerpts, layering, EQ, resampling/pitch, short room tails,
+normalization, fades and music loop overlaps. No endorsement is implied.
+CC0: https://creativecommons.org/publicdomain/zero/1.0/
+
+
+Comic fantasy audio v24 (2026-10-17)
+Original editing, sound design and short orchestral arrangements for Kingdom Watch.
+Sonniss GameAudioGDC 2015 official free recordings:
+Mechanical Wave, NoizBoy, Mattia Cellotto, Eiravaein Works, Soundopolis,
+Varazuvi and Robert Cordova. Licensed under the GameAudioGDC EULA v2.0.
+https://sonniss.com/gameaudiogdc/
+https://sonniss.com/gdc-bundle-license/
+Used only within this game and synchronized audiovisual project demonstrations.
+No sound-library redistribution or AI/ML training. Original recording authorship remains with the owners.
+
+VSCO 2 Community Edition (CC0 1.0): Versilian Studios / Sam Gossner and contributors.
+https://github.com/sgossner/VSCO-2-CE
+Pinned source revision: 440300901dfe9275fd84e0b7763af1f8443ae62e.
+Original D-major action/reward/fanfare phrases and D-minor defeat phrase.
+Additional recordings: Still North Media (Ben Jaszczak & Brian Nelson), rubberduck,
+and Kenney (all CC0; source URLs and previous credits retained above).
+Modifications: excerpt selection, high/low-pass filtering, slight pitch changes, layered foley,
+sampled note arrangement, fades, scalar level matching, at most 4 dB offline look-ahead peak reduction.
+Complete per-file sources and editing recipes: docs/audio-kingdom-v24/used-sources.json and manifest.json.
+No source author or reference-game endorsement is implied.

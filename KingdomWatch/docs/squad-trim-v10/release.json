@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-ui-detail-layout-v10-20261017-110238",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-campaign-soft-finish-v9-20261017-041837",
+  "entryVersion": "1792206126",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=ui-detail-layout-v10-1792206126",
+  "scope": "formation dividers and deployed-card rims; checkpoint palette, gray stars and name below base; compact hero rail; top-aligned equipment with contained detail actions and higher backpack; opaque difficulty refresh; shared loot item detail dialog",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://1f67244a.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-ui-detail-layout-v10-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-ui-detail-layout-v10-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 16840,
+  "mainSha256": "c15012129a0bb7572d182b3f254fecf06638c8bc6d2601aca70a1e07513adb98",
+  "date": "2026-10-17T11:03:12.023154+08:00",
+  "testsRun": false,
+  "gameRun": false,
+  "simulationRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

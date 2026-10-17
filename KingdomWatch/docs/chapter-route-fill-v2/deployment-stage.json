@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-fill-v2-20261016-223850",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-live-v1-20261016-222617",
+  "entryVersion": "1792161462",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=chapter-route-fill-v2-1792161462",
+  "scope": "remove full header dimmer and terrain padding; fill chapter background and join stage dock to navigation",
+  "manualAcceptance": "pending user manual review"
+}

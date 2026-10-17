@@ -1,10 +1,8 @@
-/** Non-blocking, bounded feedback above page rebuilds. No input listeners or full-screen flashes. */
-import { _decorator, Component, game, Game, Graphics, isValid, Label, Node, UIOpacity } from 'cc';
+/** A non-blocking game notice: feathered sides, twin rules, slide up and fade upward. */
+import { _decorator, Component, game, Game, isValid, Node, UIOpacity } from 'cc';
 import { LO } from '../config/GameConfig';
-import { CA, label, N } from './UIKit';
-import { COMIC, comicPlate } from './ComicUI';
-import { heroPortrait } from './HeroComic';
-import { artSprite } from './Ux';
+import { label, N } from './UIKit';
+import { noticeSurface } from './FeedbackSurface';
 import { whenUIArtReady } from './UIArtReady';
 import { reducedMotion } from './UIMotion';
 import { uiSound } from './UIAudio';
@@ -17,40 +15,64 @@ export interface NoticeOptions {
   kind?: NoticeKind; title?: string; key?: string; icon?: string; heroId?: string;
   level?: { before: number; after: number }; stats?: NoticeStat[]; milestone?: string;
 }
-const ACCENT: Record<NoticeKind, string> = {
-  info: '#9CC5E3', success: '#A7DC68', warning: '#EDB66B', reward: COMIC.gold, upgrade: COMIC.gold,
-};
-const HEADINGS: Record<NoticeKind, string> = {
-  info: '提示', success: '操作成功', warning: '温馨提示', reward: '奖励已领取', upgrade: '升级成功',
-};
-interface ValueLine { label: Label; stat: NoticeStat; from: number; displayed: number; }
+
 function numberText(value: number, format: NoticeNumberFormat = 'integer'): string {
   if (format === 'percent') return (Math.round(value * 1000) / 10) + '%';
   if (format === 'speed') return (Math.round(value * 100) / 100) + '次/秒';
   return Math.round(value).toLocaleString('en-US');
 }
-const out = (t: number): number => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
+
+/** Keep real upgrade feedback in text while repeated long-press results coalesce. */
+function noticeText(message: string, options: NoticeOptions): string {
+  if (options.kind === 'upgrade') {
+    const level = options.level ? '  Lv.' + options.level.before + ' → Lv.' + options.level.after : '';
+    const rows = [message + ' · ' + (options.title || '升级成功') + level];
+    const stats = options.stats?.slice(0,2).map(s => s.name + ' +' + numberText(s.after - s.before,s.format));
+    if (stats?.length) rows.push(stats.join(' · '));
+    if (options.milestone) rows.push(options.milestone);
+    return rows.join('\n');
+  }
+  return options.title && options.title !== message && !message.startsWith(options.title)
+    ? options.title + '\n' + message : message;
+}
+
+const units = (value: string): number =>
+  Array.from(value).reduce((sum,c) => sum + (/[\x00-\x7F]/.test(c) ? .55 : 1),0);
+function wrapNotice(value: string): string[] {
+  const lines: string[] = [];
+  value.split('\n').forEach(line => {
+    let current = '', width = 0;
+    for (const ch of Array.from(line)) {
+      const next = units(ch);
+      if (width + next > 26 && current) { lines.push(current.trim()); current = ''; width = 0; }
+      current += ch; width += next;
+    }
+    if (current.trim()) lines.push(current.trim());
+  });
+  return lines.length ? lines : [''];
+}
+const out = (t: number): number => 1 - Math.pow(1 - Math.min(1,Math.max(0,t)),3);
+
+/** One bilinearly filtered alpha surface, without overdraw seams between strips. */
+function fadedNotice(parent: Node, width: number, height: number): void {
+  noticeSurface(parent, width, height);
+}
 
 @ccclass('UINotice')
 export class UINotice extends Component {
   private card: Node | null = null;
   private fade!: UIOpacity;
-  private effect!: Graphics;
-  private rail!: Graphics;
-  private levelLabel: Label | null = null;
-  private values: ValueLine[] = [];
   private options: NoticeOptions | null = null;
   private message = '';
   private age = 0;
   private duration = 2;
   private ready = false;
   private revision = 0;
-  private height = 98;
-  private levelFrom = 1;
-  private displayedLevel = 1;
+  private height = 64;
+  private entryDistance = 0;
 
   onLoad(): void {
-    game.on(Game.EVENT_HIDE, this.clear, this);
+    game.on(Game.EVENT_HIDE,this.clear,this);
     this.enabled = false;
   }
 
@@ -59,144 +81,69 @@ export class UINotice extends Component {
     const continuing = !!this.card && this.ready && this.options?.kind === kind &&
       (requested.key ? this.options.key === requested.key : this.message === message);
     const previous = continuing ? this.options : null;
-    const values = continuing ? new Map(this.values.map(v => [v.stat.name, v.displayed])) : new Map<string, number>();
-    const levelFrom = continuing ? this.displayedLevel : requested.level?.before || 1;
     const options: NoticeOptions = { ...requested, kind };
     if (continuing && kind === 'upgrade' && requested.level && previous?.level) {
       options.level = { before: previous.level.before, after: requested.level.after };
-      options.stats = requested.stats?.map(s => ({ ...s, before: previous.stats?.find(p => p.name === s.name)?.before ?? s.before }));
+      options.stats = requested.stats?.map(s => ({ ...s,
+        before: previous.stats?.find(p => p.name === s.name)?.before ?? s.before }));
       options.milestone = requested.milestone || previous.milestone;
     }
     this.removeDisplay();
     const version = ++this.revision;
-    this.options = options; this.message = message; this.ready = false;
-    this.levelFrom = levelFrom; this.displayedLevel = levelFrom;
-    const rich = kind === 'upgrade', rows = options.stats?.slice(0, 2) || [], accent = ACCENT[kind];
-    this.height = rich ? (rows.length ? 192 : 128) + (options.milestone ? 38 : 0) : 98;
-    const width = rich ? 610 : 570;
-    this.node.setPosition(0, LO.half - Math.max(184, LO.notchTop + 36) - this.height / 2, 0);
-    this.node.setSiblingIndex(this.node.parent!.children.length - 1);
-    const card = this.card = comicPlate(this.node, 0, 0, width, this.height, 'dark', { name: 'notice:' + kind, cut: 12 });
+    this.options = options; this.message = message;
+    const lines = wrapNotice(noticeText(message,options));
+    const width = Math.min(710,Math.max(580,Math.max(...lines.map(units))*22+138));
+    this.height = Math.max(68,lines.length*28+30);
+    // Appear at screen center, then settle higher while staying below the resource strip.
+    const restingY=Math.min(LO.half*.36,LO.half-LO.notchTop-this.height/2-160);
+    this.node.setPosition(0,restingY,0);
+    this.entryDistance=restingY;
+    this.node.setSiblingIndex(this.node.parent!.children.length-1);
+    const card = this.card = N('gameToast',this.node,0,0,width,this.height);
+    fadedNotice(card,width,this.height);
+    const caption = label(card,0,0,lines.join('\n'),{ size:22,font:'body',color:'#FFF8E8',
+      w:width-112,h:this.height-24,lineHeight:28,shrink:true,outline:'#101820',outlineW:.7 });
+    caption.name = 'gameToastText';
     this.fade = card.addComponent(UIOpacity); this.fade.opacity = 0;
-    const stripe = N('noticeAccent', card).addComponent(Graphics);
-    stripe.fillColor = CA(accent, .9);
-    stripe.roundRect(-width / 2 + 8, -this.height / 2 + 18, 3, this.height - 36, 1.5); stripe.fill();
-    const iconX = rich ? -245 : -238, iconY = rich ? this.height / 2 - 52 : 0;
-    const badge = N('noticeBadge', card, iconX, iconY), ink = badge.addComponent(Graphics);
-    ink.fillColor = CA(accent, .15); ink.circle(0, 0, rich ? 38 : 25); ink.fill();
-    ink.strokeColor = CA(accent, .65); ink.lineWidth = 1.5; ink.stroke();
-    this.drawSymbol(ink, kind, accent, rich ? 17 : 12);
-    if (options.heroId) heroPortrait(badge, 0, 0, rich ? 66 : 46, options.heroId);
-    else if (options.icon) artSprite(badge, 0, 0, rich ? 62 : 44, rich ? 62 : 44, options.icon, { sliced: false });
-
-    if (rich) {
-      label(card, -67, this.height / 2 - 30, options.title || HEADINGS[kind],
-        { size: 27, color: accent, bold: true, font: 'body', align: 'left', w: 236, h: 36, shrink: true });
-      label(card, -67, this.height / 2 - 66, message,
-        { size: 20, color: COMIC.cream, font: 'body', align: 'left', w: 236, h: 30, shrink: true });
-      if (options.level) this.levelLabel = label(card, 174, this.height / 2 - 49, '',
-        { size: 29, color: accent, bold: true, font: 'number', w: 206, h: 44, shrink: true }).getComponent(Label)!;
-      rows.forEach((stat, i) => {
-        const x = (i - (rows.length - 1) / 2) * 274;
-        const seat = comicPlate(card, x, this.height / 2 - 132, 258, 60, 'dark', { cut: 5, edge: false, fill: COMIC.darkShade });
-        label(seat, -3, 15, stat.name, { size: 17, color: '#BDCAD1', font: 'body', w: 230, h: 23, shrink: true });
-        const value = label(seat, -43, -12, '', { size: 25, color: COMIC.cream, bold: true, font: 'number', w: 140, h: 33, shrink: true }).getComponent(Label)!;
-        label(seat, 80, -12, '+' + numberText(stat.after - stat.before, stat.format),
-          { size: 18, color: ACCENT.success, bold: true, font: 'number', w: 90, h: 28, shrink: true });
-        const from = values.get(stat.name) ?? stat.before;
-        this.values.push({ label: value, stat, from, displayed: from });
-      });
-      if (options.milestone) label(card, 0, -this.height / 2 + 25, options.milestone,
-        { size: 18, color: accent, font: 'body', w: 550, h: 30, shrink: true });
-    } else {
-      label(card, 35, 20, options.title || HEADINGS[kind],
-        { size: 22, color: accent, bold: true, font: 'body', align: 'left', w: 454, h: 30, shrink: true });
-      label(card, 35, -15, message, { size: 21, color: COMIC.cream, font: 'body', align: 'left', w: 454, h: 44, shrink: true });
-    }
-    this.rail = N('noticeLifetime', card).addComponent(Graphics);
-    this.effect = N('noticeGlints', card, iconX, iconY).addComponent(Graphics);
-    this.duration = rich ? 2.45 : kind === 'warning' ? 2.65 : kind === 'reward' ? 2.35 : 2.05;
+    const hold = kind === 'warning' ? 2.3 : kind === 'upgrade' || kind === 'reward' ? 2 : 1.8;
+    this.duration = .38+hold+Math.max(0,lines.length-2)*.3;
     this.enabled = true;
-    // Choose the result sound synchronously, coalescing with the pressed button's cue.
     if (kind === 'upgrade' || kind === 'reward' || kind === 'warning' || kind === 'success') uiSound(kind);
-    whenUIArtReady(card, () => {
+    whenUIArtReady(card,() => {
       if (version !== this.revision || this.card !== card) return;
-      this.age = continuing ? .32 : 0; this.ready = true; this.render();
+      this.age = continuing ? .38 : 0; this.ready = true; this.render();
     });
   }
 
   update(dt: number): void {
     if (!this.ready || !this.card) return;
-    this.age += Math.min(dt, .1);
-    if (this.age >= this.duration + .22) { this.clear(); return; }
+    this.age += Math.min(dt,.1);
+    if (this.age >= this.duration+.32) { this.clear(); return; }
     this.render();
   }
 
   private render(): void {
-    if (!this.card || !this.options) return;
-    const reduced = reducedMotion(), ending = Math.max(0, (this.age - this.duration) / .22);
-    this.fade.opacity = Math.round(255 * Math.min(1, this.age / (reduced ? .08 : .14)) * (1 - ending));
-    const settle = this.age < .16 ? .97 + .042 * out(this.age / .16) : 1 + .012 * (1 - out((this.age - .16) / .14));
-    this.card.setScale(reduced ? 1 : settle * (1 - .01 * ending));
-    this.card.setPosition(0, reduced ? 0 : -12 * (1 - out(this.age / .22)) + 9 * ending, 0);
-    const progress = reduced ? 1 : out((this.age - .06) / .38);
-    if (this.levelLabel && this.options.level) {
-      this.displayedLevel = this.levelFrom + (this.options.level.after - this.levelFrom) * progress;
-      this.levelLabel.string = 'Lv.' + this.options.level.before + ' → ' + Math.round(this.displayedLevel);
-    }
-    this.values.forEach(value => {
-      value.displayed = value.from + (value.stat.after - value.from) * progress;
-      value.label.string = numberText(value.displayed, value.stat.format);
-    });
-    const rich = this.options.kind === 'upgrade', width = rich ? 610 : 570, accent = ACCENT[this.options.kind || 'info'];
-    this.rail.clear(); this.rail.fillColor = CA(accent, .5);
-    this.rail.rect(-width / 2 + 20, -this.height / 2 + 7, (width - 40) * Math.max(0, 1 - this.age / this.duration), 2); this.rail.fill();
-    this.effect.clear();
-    if (!reduced && (rich || this.options.kind === 'reward') && this.age < .65) {
-      const phase = Math.min(1, this.age / .65), radius = 32 + phase * 24;
-      this.effect.strokeColor = CA(accent, (1 - phase) * .8); this.effect.lineWidth = 1.7;
-      for (let i = 0; i < 6; i++) {
-        const angle = i * Math.PI / 3 + .25, length = 5 * (1 - phase);
-        const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius;
-        this.effect.moveTo(x - length, y); this.effect.lineTo(x + length, y);
-        this.effect.moveTo(x, y - length); this.effect.lineTo(x, y + length);
-      }
-      this.effect.stroke();
-    }
-  }
-
-  private drawSymbol(g: Graphics, kind: NoticeKind, color: string, s: number): void {
-    g.strokeColor = CA(color, 1); g.lineWidth = 3;
-    if (kind === 'success') {
-      g.moveTo(-s * .7, 0); g.lineTo(-s * .15, -s * .45); g.lineTo(s * .8, s * .5); g.stroke();
-    } else if (kind === 'upgrade') {
-      for (const y of [-s * .3, s * .35]) { g.moveTo(-s * .6, y - s * .2); g.lineTo(0, y + s * .35); g.lineTo(s * .6, y - s * .2); g.stroke(); }
-    } else if (kind === 'reward') {
-      for (let i = 0; i < 8; i++) {
-        const angle = Math.PI / 2 + i * Math.PI / 4, r = i % 2 ? s * .35 : s;
-        if (!i) g.moveTo(Math.cos(angle) * r, Math.sin(angle) * r); else g.lineTo(Math.cos(angle) * r, Math.sin(angle) * r);
-      }
-      g.close(); g.stroke();
-    } else {
-      g.moveTo(0, kind === 'warning' ? s * .65 : -s * .65); g.lineTo(0, kind === 'warning' ? -s * .15 : s * .15); g.stroke();
-      g.fillColor = CA(color, 1); g.circle(0, kind === 'warning' ? -s * .65 : s * .65, 1.8); g.fill();
-    }
+    if (!this.card) return;
+    const reduced = reducedMotion(), ending = Math.min(1,Math.max(0,(this.age-this.duration)/.32));
+    this.fade.opacity = Math.round(255*Math.min(1,this.age/(reduced ? .08 : .12))*(1-ending));
+    this.card.setScale(1,1,1);
+    this.card.setPosition(0,reduced ? 0 : -this.entryDistance*(1-out(this.age/.38))+36*ending,0);
   }
 
   private removeDisplay(): void {
     ++this.revision;
     if (this.card?.isValid) { this.card.active = false; this.card.destroy(); }
-    this.card = null; this.levelLabel = null; this.values = []; this.ready = false; this.options = null;
+    this.card = null; this.ready = false; this.options = null;
   }
   private clear = (): void => { this.removeDisplay(); this.enabled = false; };
   onDisable(): void { this.removeDisplay(); }
-  onDestroy(): void { game.off(Game.EVENT_HIDE, this.clear, this); this.removeDisplay(); }
+  onDestroy(): void { game.off(Game.EVENT_HIDE,this.clear,this); this.removeDisplay(); }
 }
 
 export function showNotice(root: Node, message: string, options: NoticeOptions = {}): void {
-  if (!isValid(root, true)) return;
+  if (!isValid(root,true)) return;
   let host = root.getChildByName('noticeLayer');
-  if (host && !isValid(host, true)) host = null;
-  if (!host) host = N('noticeLayer', root);
-  (host.getComponent(UINotice) || host.addComponent(UINotice)).show(message, options);
+  if (host && !isValid(host,true)) host = null;
+  if (!host) host = N('noticeLayer',root);
+  (host.getComponent(UINotice) || host.addComponent(UINotice)).show(message,options);
 }

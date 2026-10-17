@@ -1,0 +1,17 @@
+--- before/assets/scripts/battle/BattleLoot.ts
++++ assets/scripts/battle/BattleLoot.ts
+@@ -174,11 +174,13 @@
+     if (drop.root.isValid) { drop.root.active = false; drop.root.destroy(); }
+   }
+   suspend(): void { this.receiver.active = false; }
++  /** Pause reads already-stored pickups without collecting or rolling any pending drops. */
++  summary(): StageLootSummary { return { equipment: this.picked.slice(), materials: [] }; }
+   /** Settlement, exit and repeated cleanup share this idempotent grant path. */
+   collectAll(): StageLootSummary {
+     for (const drop of this.drops) { if (!drop.claimed) this.pick(drop, false); else this.remove(drop); }
+     this.drops.length = 0;
+     this.suspend();
+-    return { equipment: this.picked.slice(), materials: [] };
++    return this.summary();
+   }
+ }

@@ -1,0 +1,190 @@
+{
+  "revision": "representatives-r1",
+  "title": "王国守望 · 代表声音",
+  "status": "等待用户试听确认，尚未扩展或替换游戏音效",
+  "items": [
+    {
+      "id": "R01",
+      "name": "弓箭普攻与命中",
+      "listenFor": "听弓弦、掠过和命中的分层，以及连续三次是否疲劳。",
+      "source": "Sonniss professional recordings + VSCO 2 CE",
+      "recipe": {
+        "events": "Three bow releases at 0,1.02,2.04; material impact at +0.24s",
+        "design": "Sonniss Membrans cartoon arrow / NoizBoy whoosh and short impact"
+      },
+      "clips": {
+        "old": {
+          "file": "media/R01-old.mp4",
+          "seconds": 4,
+          "sha256": "81ce95ef37b9c383ba3fec7620eaa4543846ddeb529516421ffd6b9bdf965948",
+          "bytes": 120207
+        },
+        "new": {
+          "file": "media/R01-new.mp4",
+          "seconds": 4,
+          "sha256": "07ab41e4fbdbdc1d9164eb545c0940121430e3de3342feb2b0e129943963e44d",
+          "bytes": 135515
+        }
+      },
+      "poster": "media/R01.jpg"
+    },
+    {
+      "id": "R02",
+      "name": "寒冰法术",
+      "listenFor": "听施法到命中是否干净，冰晶的材质是否合适。",
+      "source": "Sonniss professional recordings + VSCO 2 CE",
+      "recipe": {
+        "events": "Short pull then ice crystal impact at 0.24s",
+        "design": "Recorded glass/ice transient, harp pull, quiet glock tail"
+      },
+      "clips": {
+        "old": {
+          "file": "media/R02-old.mp4",
+          "seconds": 4,
+          "sha256": "bdeeefd435b028ca6f58ad4a4ce9e78459ca9b38a9721cee5be60eb58ad0f5aa",
+          "bytes": 86964
+        },
+        "new": {
+          "file": "media/R02-new.mp4",
+          "seconds": 4,
+          "sha256": "85cff993c661132665463fd266dd1e0fb9c1d9eee7abf73e8ad527e3a3fc9721",
+          "bytes": 101997
+        }
+      },
+      "poster": "media/R02.jpg"
+    },
+    {
+      "id": "R03",
+      "name": "三选一出现与选中",
+      "listenFor": "前半段三张卡出现，后半段选中落定。",
+      "source": "Sonniss professional recordings + VSCO 2 CE",
+      "recipe": {
+        "events": "Three cards reveal at 0,.085,.17s; choose at 1.04s",
+        "design": "Marimba and harp, dry card-sized whoosh"
+      },
+      "clips": {
+        "old": {
+          "file": "media/R03-old.mp4",
+          "seconds": 4,
+          "sha256": "81c4837567b68b75f64c502e99952a4ecfc9b95217df73efe4eb2ed1fa6fbfc4",
+          "bytes": 125659
+        },
+        "new": {
+          "file": "media/R03-new.mp4",
+          "seconds": 4,
+          "sha256": "9f22e43c2fff11bfd7779945d7db8cc54f5e82ef3d7ae65f118dc573c8150ffb",
+          "bytes": 121465
+        }
+      },
+      "poster": "media/R03.jpg"
+    },
+    {
+      "id": "R04",
+      "name": "英雄升级",
+      "listenFor": "听上升过程和最后落点，是否让数值增加更明确。",
+      "source": "Original phrase performed with VSCO 2 CE recordings",
+      "recipe": {
+        "events": "Rise at 0,.11,.23s; new numeric value lands at .39s",
+        "design": "Original C major phrase: marimba, harp and soft horn foundation"
+      },
+      "clips": {
+        "old": {
+          "file": "media/R04-old.mp4",
+          "seconds": 4,
+          "sha256": "9af00200dc537dbd9cce96422a14c5063a43c119d39e4f03c824ac8f38c27346",
+          "bytes": 93090
+        },
+        "new": {
+          "file": "media/R04-new.mp4",
+          "seconds": 4,
+          "sha256": "4891a784c135c8746d6620429be1a61ea16589ae9235694abae65f86427a3164",
+          "bytes": 105522
+        }
+      },
+      "poster": "media/R04.jpg"
+    },
+    {
+      "id": "R05",
+      "name": "获得奖励",
+      "listenFor": "听揭晓和收获感，是否明亮又不刺耳。",
+      "source": "Original phrase performed with VSCO 2 CE recordings",
+      "recipe": {
+        "events": "Reward reveal at 0; item and quantity land at .3s",
+        "design": "Original harp flourish, small glock chord and sparse bell tree"
+      },
+      "clips": {
+        "old": {
+          "file": "media/R05-old.mp4",
+          "seconds": 4,
+          "sha256": "84b93d2aeb31e23b47fae0d345b121e857b7d6f66e31c6fc6b05ef3d513ef901",
+          "bytes": 153131
+        },
+        "new": {
+          "file": "media/R05-new.mp4",
+          "seconds": 4,
+          "sha256": "7e1721ba59dc39be54b9701692586c173f7cc6f676ef2d44f72284eb6f3ee7b0",
+          "bytes": 121205
+        }
+      },
+      "poster": "media/R05.jpg"
+    },
+    {
+      "id": "R06",
+      "name": "关卡胜利",
+      "listenFor": "听短号角的庆祝感，是否符合王国的轻奇幻风格。",
+      "source": "Original phrase performed with VSCO 2 CE recordings",
+      "recipe": {
+        "events": "Fanfare pickups 0,.19,.38,.63s; crown and chord at .91s",
+        "design": "Original trumpet fanfare, horn C major cadence, timpani and soft cymbal"
+      },
+      "clips": {
+        "old": {
+          "file": "media/R06-old.mp4",
+          "seconds": 8,
+          "sha256": "960ea56b0479dff80adcabd9bc01e3ae80fb13144d38213c7ced59197bb659b9",
+          "bytes": 280066
+        },
+        "new": {
+          "file": "media/R06-new.mp4",
+          "seconds": 5,
+          "sha256": "989451ba0d88cd0ed44e7286333f22201929a54d4f9a9b48303925ad6220941d",
+          "bytes": 168365
+        }
+      },
+      "poster": "media/R06.jpg"
+    },
+    {
+      "id": "R07",
+      "name": "关卡失败",
+      "listenFor": "听情绪收束，是否愿意立刻再挑战。",
+      "source": "Original phrase performed with VSCO 2 CE recordings",
+      "recipe": {
+        "events": "Falling bassoon phrase then quiet minor landing at .95s",
+        "design": "Original restrained minor woodwind cue; no comic fail horn"
+      },
+      "clips": {
+        "old": {
+          "file": "media/R07-old.mp4",
+          "seconds": 6,
+          "sha256": "588c1ec70dad9cd1a6aec6c4da9f9407af54f9c74758f6237b0f7669a82c8744",
+          "bytes": 212211
+        },
+        "new": {
+          "file": "media/R07-new.mp4",
+          "seconds": 4,
+          "sha256": "bf4d0b1ef3bef107894627b14c8b236c3a4494c520005387bc5b54d21b36fc21",
+          "bytes": 152985
+        }
+      },
+      "poster": "media/R07.jpg"
+    }
+  ],
+  "montage": {
+    "new": "media/all-new.mp4",
+    "old": "media/all-old.mp4",
+    "seconds": 29,
+    "oldSeconds": 34
+  },
+  "methods": "Recorded instruments and professionally recorded SFX; original short phrases; no AI-generated audio, no oscillator synthesis, no loudness-boost approval claim.",
+  "subjectiveListening": "Not performed. User will audition."
+}

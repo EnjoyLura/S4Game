@@ -1,0 +1,310 @@
+{
+  "mainBundle": "assets/main/index.6e0d7.js",
+  "mainSha256": "5d60e6f203e50afdda8d164cf8d6fe65f6b9c2ef5ca51219989670651fb3732d",
+  "sourceHashes": {
+    "assets/scripts/ui/pages/LevelsPage.ts": "7ac9a613cd3a549af925bca92cc5c189e6a9d0c0582a301ae67682f6f4fb284c",
+    "assets/scripts/ui/CampaignChrome.ts": "46ca7ab420dbbcb902691cbdfd045f849cd6688db5fd056c0d6e7d8536b159bb",
+    "assets/scripts/ui/LevelLootPreview.ts": "65ec761c971311846a8ea70c58588322f1b0931b450e94d26c056d9e3622f799",
+    "assets/scripts/ui/GearQuality.ts": "cc348dd31865283c548f5384162a19440224589b0cc4eb39465c709595d0ef35",
+    "assets/scripts/ui/pages/ShopPage.ts": "a5943037618b1744cc370731408f77a7bc77a1c802a884abf894672df52e6873",
+    "assets/scripts/ui/pages/HeroPage.ts": "55976295afde18ca1eda9a8290647958d02742b64139605e13b458c67432e46e"
+  },
+  "sourceReview": {
+    "difficultyIconsExactlyThree": true,
+    "threeIllustratedChests": true,
+    "paintedClaimAllButton": true,
+    "actualClaimTransactionUnchanged": true,
+    "boldNativeHeading": true,
+    "noDrawerScrollOrScale": true,
+    "commonDrawerHeightAcrossDifficulties": true,
+    "twoRowsAlwaysReserved": true,
+    "allConfiguredEquipmentVisible": true,
+    "normalDifficultyEmptyState": true,
+    "removedGuaranteedSubtitle": true,
+    "centeredProbabilityTitle": true,
+    "materialAmountPrefix": true,
+    "squareRaritySockets": true,
+    "shopMaterialsShareRaritySocket": true,
+    "bagMaterialsShareRaritySocket": true,
+    "dockUnchanged": true,
+    "drawerNeverRecentersMap": true,
+    "noSquadInsideDrawer": true,
+    "remainingScriptsUnchanged": true,
+    "allArtPackagedUnchanged": true
+  },
+  "assets": [
+    {
+      "id": "chest_bronze_v2",
+      "sha256": "a82ba8f32ed7b7b3e0415573e5c24eae9fc84b36493f156b951ab0a4477380e3",
+      "nativePaths": [
+        "assets/resources/native/47/476eeafb-dba1-46b8-9b04-41f3fd53ed29.82386.png"
+      ],
+      "sourceUnchanged": true,
+      "registered": true,
+      "sourceRectRetained": true,
+      "importedRectRetained": true,
+      "originalSize": {
+        "width": 1254,
+        "height": 1254
+      },
+      "capInsets": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "chest_sapphire_v2",
+      "sha256": "215ce3ff59717ee88ece8787c5a720c4e58d1ae5e99d7700d00434d936d0d434",
+      "nativePaths": [
+        "assets/resources/native/db/dbe53fed-d76c-42c7-bd9e-55429b26514b.54fc3.png"
+      ],
+      "sourceUnchanged": true,
+      "registered": true,
+      "sourceRectRetained": true,
+      "importedRectRetained": true,
+      "originalSize": {
+        "width": 1254,
+        "height": 1254
+      },
+      "capInsets": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "chest_crimson_v2",
+      "sha256": "c3ea947a6b9f3190b9443e1748c88e048210e1e094bc19f25ad85ba72e1af946",
+      "nativePaths": [
+        "assets/resources/native/63/63111c0d-c77c-4cf3-a256-74968196ce99.48248.png"
+      ],
+      "sourceUnchanged": true,
+      "registered": true,
+      "sourceRectRetained": true,
+      "importedRectRetained": true,
+      "originalSize": {
+        "width": 1254,
+        "height": 1254
+      },
+      "capInsets": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "difficulty_normal_v2",
+      "sha256": "489a366090430a04001b8c35e92ffe4a01e04648b2445a7827e78ee92949aed7",
+      "nativePaths": [
+        "assets/resources/native/10/10e14461-648e-4dab-8f98-e28469baac9d.ce758.png"
+      ],
+      "sourceUnchanged": true,
+      "registered": true,
+      "sourceRectRetained": true,
+      "importedRectRetained": true,
+      "originalSize": {
+        "width": 1254,
+        "height": 1254
+      },
+      "capInsets": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "difficulty_elite_v2",
+      "sha256": "a8fdb096eb3306d2cab59a965f8e7b3c5c63f03b765ba484f5eb3d024a9d525f",
+      "nativePaths": [
+        "assets/resources/native/00/006efc8a-7ab6-4ed7-86af-999ceb619ace.2e666.png"
+      ],
+      "sourceUnchanged": true,
+      "registered": true,
+      "sourceRectRetained": true,
+      "importedRectRetained": true,
+      "originalSize": {
+        "width": 1254,
+        "height": 1254
+      },
+      "capInsets": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "difficulty_hell_v2",
+      "sha256": "12d7bc344230015371f3914241cc95a41423b1f28d1c8c134488384dee118908",
+      "nativePaths": [
+        "assets/resources/native/0b/0b9808ab-deef-4671-b628-b91c38e84072.16e64.png"
+      ],
+      "sourceUnchanged": true,
+      "registered": true,
+      "sourceRectRetained": true,
+      "importedRectRetained": true,
+      "originalSize": {
+        "width": 1254,
+        "height": 1254
+      },
+      "capInsets": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "claim_button_v2",
+      "sha256": "0756fda731ec76ca6b389edeaca81c1ead984de031e6c5c23aba6098d5885483",
+      "nativePaths": [
+        "assets/resources/native/47/474200b7-e31b-477c-b0f7-1773b1a0ac8b.e2ab7.png"
+      ],
+      "sourceUnchanged": true,
+      "registered": true,
+      "sourceRectRetained": true,
+      "importedRectRetained": true,
+      "originalSize": {
+        "width": 2172,
+        "height": 724
+      },
+      "capInsets": [
+        120,
+        55,
+        120,
+        55
+      ]
+    }
+  ],
+  "compiledMarkers": {
+    "preparation_art_v2/": true,
+    "chest_bronze_v2": true,
+    "chest_sapphire_v2": true,
+    "chest_crimson_v2": true,
+    "claim_button_v2": true,
+    "campaignPreparationContent": true,
+    "campaignEquipmentTwoRows": true,
+    "gearQualitySquare": true,
+    "campaignClaimAll:": true,
+    "campaignMapSquad": true,
+    "campaignChapterLocked": true,
+    "__kingdomWatchOverlayBack": true
+  },
+  "retainedSources": {
+    "assets/scripts/Boot.ts": true,
+    "assets/scripts/battle/ArcherIdleAnimation.ts": true,
+    "assets/scripts/battle/ArcherNativeRig.ts": true,
+    "assets/scripts/battle/ArcherRigPose.ts": true,
+    "assets/scripts/battle/ArcherVFX.ts": true,
+    "assets/scripts/battle/BasicAttackLaunchVFX.ts": true,
+    "assets/scripts/battle/BasicProjectileFlightVFX.ts": true,
+    "assets/scripts/battle/BattleAmbience.ts": true,
+    "assets/scripts/battle/BattleDepth.ts": true,
+    "assets/scripts/battle/BattleDirector.ts": true,
+    "assets/scripts/battle/BattleLoot.ts": true,
+    "assets/scripts/battle/BattleSprite.ts": true,
+    "assets/scripts/battle/ComicPop.ts": true,
+    "assets/scripts/battle/DamageService.ts": true,
+    "assets/scripts/battle/FireVFX.ts": true,
+    "assets/scripts/battle/FloatText.ts": true,
+    "assets/scripts/battle/FrostProjectileVFX.ts": true,
+    "assets/scripts/battle/FrostUltimateVFX.ts": true,
+    "assets/scripts/battle/FrostVFX.ts": true,
+    "assets/scripts/battle/Hero.ts": true,
+    "assets/scripts/battle/HeroBattleMotion.ts": true,
+    "assets/scripts/battle/HeroSequenceAnimation.ts": true,
+    "assets/scripts/battle/ImpactFX.ts": true,
+    "assets/scripts/battle/LineDefense.ts": true,
+    "assets/scripts/battle/MobAnim.ts": true,
+    "assets/scripts/battle/Monster.ts": true,
+    "assets/scripts/battle/MonsterDeath.ts": true,
+    "assets/scripts/battle/MoraIdleAnimation.ts": true,
+    "assets/scripts/battle/Particles.ts": true,
+    "assets/scripts/battle/Projectile.ts": true,
+    "assets/scripts/battle/PyroIdleAnimation.ts": true,
+    "assets/scripts/battle/SniperIdleAnimation.ts": true,
+    "assets/scripts/battle/SniperUltimateVFX.ts": true,
+    "assets/scripts/battle/UltimatePresentation.ts": true,
+    "assets/scripts/battle/UltimateTiming.ts": true,
+    "assets/scripts/battle/VoltIdleAnimation.ts": true,
+    "assets/scripts/battle/VoltUltimateVFX.ts": true,
+    "assets/scripts/battle/VoltVFX.ts": true,
+    "assets/scripts/battle/WaveManager.ts": true,
+    "assets/scripts/config/Campaign.ts": true,
+    "assets/scripts/config/Cards.ts": true,
+    "assets/scripts/config/GameConfig.ts": true,
+    "assets/scripts/config/LevelDifficulty.ts": true,
+    "assets/scripts/config/Mobs.ts": true,
+    "assets/scripts/config/Weapons.ts": true,
+    "assets/scripts/core/AudioCatalog.ts": true,
+    "assets/scripts/core/EventBus.ts": true,
+    "assets/scripts/core/Flow.ts": true,
+    "assets/scripts/core/GameAudio.ts": true,
+    "assets/scripts/core/GameData.ts": true,
+    "assets/scripts/core/ObjectPool.ts": true,
+    "assets/scripts/core/SaveData.ts": true,
+    "assets/scripts/core/Sfx.ts": true,
+    "assets/scripts/core/StageLoot.ts": true,
+    "assets/scripts/platform/AdService.ts": true,
+    "assets/scripts/ui/BattleComicPanels.ts": true,
+    "assets/scripts/ui/BattleEntry.ts": true,
+    "assets/scripts/ui/BattleEntryWarmup.ts": true,
+    "assets/scripts/ui/BattlePanelSkin.ts": true,
+    "assets/scripts/ui/BattleProgressBar.ts": true,
+    "assets/scripts/ui/BossWarning.ts": true,
+    "assets/scripts/ui/BrowserBack.ts": true,
+    "assets/scripts/ui/ButtonFeedback.ts": true,
+    "assets/scripts/ui/CampaignCheckpointArt.ts": true,
+    "assets/scripts/ui/CampaignRoute.ts": true,
+    "assets/scripts/ui/ComicUI.ts": true,
+    "assets/scripts/ui/Fonts.ts": true,
+    "assets/scripts/ui/GmPanel.ts": true,
+    "assets/scripts/ui/GrowthFeedback.ts": true,
+    "assets/scripts/ui/HeroComic.ts": true,
+    "assets/scripts/ui/HeroRosterRail.ts": true,
+    "assets/scripts/ui/HoldUpgrade.ts": true,
+    "assets/scripts/ui/HUD.ts": true,
+    "assets/scripts/ui/IdleWarmup.ts": true,
+    "assets/scripts/ui/MainUI.ts": true,
+    "assets/scripts/ui/MilestoneSwipe.ts": true,
+    "assets/scripts/ui/PageKit.ts": true,
+    "assets/scripts/ui/Panels.ts": true,
+    "assets/scripts/ui/PausePanelSkin.ts": true,
+    "assets/scripts/ui/PickArt.ts": true,
+    "assets/scripts/ui/PickMotion.ts": true,
+    "assets/scripts/ui/ResourceBar.ts": true,
+    "assets/scripts/ui/RewardPopup.ts": true,
+    "assets/scripts/ui/SettlementMotion.ts": true,
+    "assets/scripts/ui/SettlementPanelSkin.ts": true,
+    "assets/scripts/ui/SquadPanel.ts": true,
+    "assets/scripts/ui/TouchFeedback.ts": true,
+    "assets/scripts/ui/TrainingGrowthFx.ts": true,
+    "assets/scripts/ui/TrainingLobby.ts": true,
+    "assets/scripts/ui/TrainingWeaponFloat.ts": true,
+    "assets/scripts/ui/UIArtReady.ts": true,
+    "assets/scripts/ui/UIAudio.ts": true,
+    "assets/scripts/ui/UIKit.ts": true,
+    "assets/scripts/ui/UIMotion.ts": true,
+    "assets/scripts/ui/UINotice.ts": true,
+    "assets/scripts/ui/UltEnergyFx.ts": true,
+    "assets/scripts/ui/Ux.ts": true,
+    "assets/scripts/ui/pages/BasePage.ts": true,
+    "assets/scripts/ui/pages/UpgradePage.ts": true
+  },
+  "typeReview": {
+    "fullProjectPassed": false,
+    "samePriorPrimaryDiagnostics": true,
+    "primaryDiagnosticCount": 10,
+    "changedModulesHaveDiagnostics": false
+  },
+  "testsRun": false,
+  "gameRun": false,
+  "simulationRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

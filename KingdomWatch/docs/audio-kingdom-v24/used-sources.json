@@ -1,0 +1,364 @@
+{
+  "bow": {
+    "path": "docs/audio-overhaul-v21/sources/medieval/English Longbow Shoot.wav",
+    "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+    "license": "CC0-1.0",
+    "url": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+    "sha256": "c25684ccdab3eb13f17a0ffa637fbd175659d092665f16c0bce8510d46c4fbee"
+  },
+  "swish": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Hits Whoosh/Fast Action Swish_HW 05.wav",
+    "original": "Mechanical Wave - Hits Whoosh/Fast Action Swish_HW 05.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 2770120616,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "2ef515c463c04c2d518afb74d44336f51ed0912c46c9e00431a3ed13f927f87d"
+  },
+  "crossbow": {
+    "path": "docs/audio-overhaul-v21/sources/medieval/Crossbow Shoot.wav",
+    "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+    "license": "CC0-1.0",
+    "url": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+    "sha256": "d8c68f970540d73ab6fe2db5309166e6dd911876501a16bb4df43498247e19b2"
+  },
+  "wood": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Robert Cordova - Base/Wood Rattle 10.wav",
+    "original": "Robert Cordova - Base/Wood Rattle 10.wav",
+    "author": "Robert Cordova",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 1143119321,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "ec0c0b0c5c09ebb61035f10963a90e338e88454a39bc2f7c8384e316519ec68e"
+  },
+  "swing": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Hits Whoosh/Action Swish_HW 02.wav",
+    "original": "Mechanical Wave - Hits Whoosh/Action Swish_HW 02.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 1203586015,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "1eb3e50adffabcc46ca3ed30f520eb19b234f9808acf4e760ec9ea8391e9b609"
+  },
+  "flame1": {
+    "path": "docs/audio-overhaul-v21/sources/rubberduck-rpg/spell_fire_01.ogg",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "url": "https://opengameart.org/node/86018",
+    "sha256": "02fa3a2c6e79e868e546802f45127c5cdda69aba6d5a24ac997ea66f81a816cb"
+  },
+  "lighter": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Soundopolis - Foley Plus_Full/Lighter_Blue Flame_E_Light_Fienup_001.wav",
+    "original": "Soundopolis - Foley Plus_Full/Lighter_Blue Flame_E_Light_Fienup_001.wav",
+    "author": "Soundopolis",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 205615836,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "066282f97ab395db2b34a1098fd4cb5e7503d811c574bfbb321f2102a3c38cd8"
+  },
+  "huff": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Varazuvi - Hollywood Dragons/Dragon Short Huff.wav",
+    "original": "Varazuvi - Hollywood Dragons/Dragon Short Huff.wav",
+    "author": "Varazuvi",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 3852083500,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "e18e34e08d5806a82197f41d971c778c58e727c60047fd0dedf01565058337a6"
+  },
+  "electric": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Soundopolis - Sci-Fi Electric/Electrical_Current_MouthNoises_Fienup_001.wav",
+    "original": "Soundopolis - Sci-Fi Electric/Electrical_Current_MouthNoises_Fienup_001.wav",
+    "author": "Soundopolis",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 34736342,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "00015928834f739afa4178fe712a676945cbba580503b8a3f2a573a8376767dd"
+  },
+  "hit1": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.1 Hit #2 96 HK1.wav",
+    "original": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.1 Hit #2 96 HK1.wav",
+    "author": "NoizBoy",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 1444404925,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "7a1edb60e69894a868be3ff2f7b729df0face74300cb71e8081cf864081369a8"
+  },
+  "ice": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mattia Cellotto - Crunch Mode/Ice,Impact,Throw,Snowball,Step,Snow,Stalactite,Various12.M.wav",
+    "original": "Mattia Cellotto - Crunch Mode/Ice,Impact,Throw,Snowball,Step,Snow,Stalactite,Various12.M.wav",
+    "author": "Mattia Cellotto",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 1682400442,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "5740efa408b0a3134f3b9cf16c4d08c6f7cb84b2ec26d5598489b53dcbd4b6ec"
+  },
+  "Percussion/Glock/glock_medium_G5.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Percussion/Glock/glock_medium_G5.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "7045c0ef7260e2f1ad11a64406cf7575ed898d1207a91104d33d78caefac63e4"
+  },
+  "flame2": {
+    "path": "docs/audio-overhaul-v21/sources/rubberduck-rpg/spell_fire_02.ogg",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "url": "https://opengameart.org/node/86018",
+    "sha256": "bf1eef4993f0adb4bd3a1c1ec91f8f6e4ddeb32d922671a14561846d5b7cab98"
+  },
+  "hit2": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq1.15 Hit #3 96 HK1.wav",
+    "original": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq1.15 Hit #3 96 HK1.wav",
+    "author": "NoizBoy",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 3323540043,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "4dbf0c4376cf7a07ad9991cba5032ade8dcb5fe1010557c20014355d2149e942"
+  },
+  "icecrack": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mattia Cellotto - Crunch Mode/Frozen,Celery,Crunch,Break,Ice,Sheet,Various01.wav",
+    "original": "Mattia Cellotto - Crunch Mode/Frozen,Celery,Crunch,Break,Ice,Sheet,Various01.wav",
+    "author": "Mattia Cellotto",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 1637929290,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "c2e7aae0f1ea0808033d4b2bb9af4b2f23afd0e77cf9f6afe522a3a688a21eca"
+  },
+  "flame3": {
+    "path": "docs/audio-overhaul-v21/sources/rubberduck-rpg/spell_fire_03.ogg",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "url": "https://opengameart.org/node/86018",
+    "sha256": "2e4edee4ff8d7898198f1ab5213e086965e14a665cb947d53759505e28ddd3e4"
+  },
+  "hit3": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.27 Hit #2 96 HK1.wav",
+    "original": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.27 Hit #2 96 HK1.wav",
+    "author": "NoizBoy",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 13056516,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "4d6c8d31bc4562ac310590661670b4f6f97dbdc8f6d0272822f548393a9d4181"
+  },
+  "iceblock": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Eiravaein Works - Vaeyan I/IceBlocks,impact,cracked,tinypieces,scatter,slide,concrete,chunky,ambiance.M.wav",
+    "original": "Eiravaein Works - Vaeyan I/IceBlocks,impact,cracked,tinypieces,scatter,slide,concrete,chunky,ambiance.M.wav",
+    "author": "Eiravaein Works",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 308892689,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "afda7f4bfd44dac48b8f4cdbc39e4f6966700ef32502dfedf5ab88fccc073db4"
+  },
+  "flame4": {
+    "path": "docs/audio-overhaul-v21/sources/rubberduck-rpg/spell_fire_04.ogg",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "url": "https://opengameart.org/node/86018",
+    "sha256": "64d653cd0cc6eb71bb45a1dfbba29eaa769ed5b663cce275082d6971e4f2ca8e"
+  },
+  "thunder": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Soundopolis - Natures Fury_Thunder/Thunder_Crack_Fienup_016.wav",
+    "original": "Soundopolis - Natures Fury_Thunder/Thunder_Crack_Fienup_016.wav",
+    "author": "Soundopolis",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 3984182097,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "5e86c0071fc0556fc6e5da127c6dd403d6389372d1d35a46031cd89f159373c7"
+  },
+  "rockdrop": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Rock Brick and Dirt/Drop Rock On Rock Debris_RBD 03.wav",
+    "original": "Mechanical Wave - Rock Brick and Dirt/Drop Rock On Rock Debris_RBD 03.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 4200564539,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "d52813a926fb68e7dd9e6b5712c857c6369e2da079ea4b5f9ee49b7e2e282383"
+  },
+  "debris": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Rock Brick and Dirt/Debris Brick_RBD 02.wav",
+    "original": "Mechanical Wave - Rock Brick and Dirt/Debris Brick_RBD 02.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 2805017344,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "93c2e7a3b0993b859d50a7562e09d4fb4c90c448d0de78da324889b14684a7a1"
+  },
+  "rock": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Rock Brick and Dirt/Hit Rock Debris_RBD 02.wav",
+    "original": "Mechanical Wave - Rock Brick and Dirt/Hit Rock Debris_RBD 02.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 675058260,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "b8fc22424f383573089facf17779315175b6b47c5d517be5865a183692aac5de"
+  },
+  "current": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Soundopolis - Sci-Fi Electric/Electrical_Current_Texture_Fienup_004.wav",
+    "original": "Soundopolis - Sci-Fi Electric/Electrical_Current_Texture_Fienup_004.wav",
+    "author": "Soundopolis",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 2033221392,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "7f2be886bf165b1faee9f18cb104e764d9168725772b31160eb96e07d25aaf93"
+  },
+  "Percussion/Glock/glock_medium_C5.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Percussion/Glock/glock_medium_C5.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "635f898e0bcb6975b96b18efd9c896f6f1b97ff12174a339ada4814e49675660"
+  },
+  "flame7": {
+    "path": "docs/audio-overhaul-v21/sources/rubberduck-rpg/spell_fire_07.ogg",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "url": "https://opengameart.org/node/86018",
+    "sha256": "bb13cef9c0b0b4ec7f9335c356b14814c88418abd85dd3747cb62469e9ada93f"
+  },
+  "book": {
+    "path": "docs/audio-overhaul-v21/sources/kenney-rpg/Audio/bookOpen.ogg",
+    "author": "Kenney",
+    "license": "CC0-1.0",
+    "url": "https://kenney.nl/assets/rpg-audio",
+    "sha256": "953390534377222bee89ac8cd9e60a58fdc037c71a4d7c18c43cd647c7f34ba8"
+  },
+  "page": {
+    "path": "docs/audio-overhaul-v21/sources/kenney-rpg/Audio/bookFlip2.ogg",
+    "author": "Kenney",
+    "license": "CC0-1.0",
+    "url": "https://kenney.nl/assets/rpg-audio",
+    "sha256": "3409042acbfaebc24c1a6327dc073e36f9250841712e96c5040da566a97df73c"
+  },
+  "page2": {
+    "path": "docs/audio-overhaul-v21/sources/kenney-rpg/Audio/bookFlip3.ogg",
+    "author": "Kenney",
+    "license": "CC0-1.0",
+    "url": "https://kenney.nl/assets/rpg-audio",
+    "sha256": "c85db5dceb3f1df073e960630277eaa88a5afda0477c1ddd68dad707621767be"
+  },
+  "Percussion/Marimba/Marimba_hit_Outrigger_G4_loud_01.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Percussion/Marimba/Marimba_hit_Outrigger_G4_loud_01.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "36f39f9f24789001add2b4c440defb7641178b0e8449c5cb7f1960bccaf0aaaf"
+  },
+  "Strings/Harp/KSHarp_E5_mf.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Strings/Harp/KSHarp_E5_mf.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "95dd9ddb0bd15bee7687906e00f25aafcaa43020cc9501f0e8b6cabf0e9a53ec"
+  },
+  "Percussion/Marimba/Marimba_hit_Outrigger_C4_loud_01.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Percussion/Marimba/Marimba_hit_Outrigger_C4_loud_01.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "4af539d47a452d7fad26e171b1c8adcca272cee97191f040d192680462c880b8"
+  },
+  "Brass/F Horn/sus/MOHorn_sus_C3_v2_1.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Brass/F Horn/sus/MOHorn_sus_C3_v2_1.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "c0c0b157dcde094c4417b7c165d645897cde9ea6d74247bbab0c0e75355e78c3"
+  },
+  "coins": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Varazuvi - California Foley/coins2.wav",
+    "original": "Varazuvi - California Foley/coins2.wav",
+    "author": "Varazuvi",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 3828595180,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "9e2fdc3ab9ec64f3303dae7e88ac44757bba25c5b58464eb97fb3cd43e2012a1"
+  },
+  "Strings/Harp/KSHarp_C5_mf.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Strings/Harp/KSHarp_C5_mf.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "7c8b862f6fd3f1442ed87537af976d84bda8c05a5b4900e8907d570b5202a517"
+  },
+  "Brass/Trumpet/stac/Sum_SHTrumpet_stac_G3_v3_rr1.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Brass/Trumpet/stac/Sum_SHTrumpet_stac_G3_v3_rr1.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "fc88e87885839b5fb45e2fb63cc70afef0b3c0f13c129c7d0ee4aee3458f293d"
+  },
+  "Brass/Trumpet/stac/Sum_SHTrumpet_stac_D4_v3_rr1.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Brass/Trumpet/stac/Sum_SHTrumpet_stac_D4_v3_rr1.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "7dcf2aec74e544c9cd139e2713c8a8bf358c26633b2fb3be254e998a0b010df9"
+  },
+  "timpani": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Percussion/Timpani/Timpani2_Hit_v3_rr1_Sum.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "69e5d604effd3f29c86117d22ad2335f73e43f5d47868dc57d8fa593975ee241"
+  },
+  "Brass/Trumpet/sus/Sum_SHTrumpet_sus_G3_v3_rr1.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Brass/Trumpet/sus/Sum_SHTrumpet_sus_G3_v3_rr1.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "e916631d4ef5c7d2afa356b76cb0d3a18ba2702d1229535edf4fb6d73c2e521c"
+  },
+  "snare": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Percussion/Snare2-HitSN_v3_rr1_Sum.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "3df96009d655dd4fe43c635bd3c20314a1e0cbdf9f571ee8a66207f9ef917d08"
+  },
+  "cymbal": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Percussion/cymbal-crashshort_v1.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "af0d5f0eb7f2226a1c592e5cda8e2dc0588cadbc851999ed39e3f36276acc7c9"
+  },
+  "Woodwinds/Bassoon/stac/PSBassoon_C3_v1_rr1.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Woodwinds/Bassoon/stac/PSBassoon_C3_v1_rr1.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "efe8a7222f32181cdb752a9acc8860e47ec2a9e2f9b6dc4538f44747eed5786c"
+  },
+  "Woodwinds/Bassoon/stac/PSBassoon_G2_v1_rr1.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Woodwinds/Bassoon/stac/PSBassoon_G2_v1_rr1.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "0d339309b43f78279c1aedb729c596b33c5a6324b45441acb76f893983b64ae2"
+  },
+  "Strings/Harp/KSHarp_A4_mf.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Strings/Harp/KSHarp_A4_mf.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "3665f3975cad4a33f46784aa4f896f4b4319ba2b7831e892d975bc38c9f09f23"
+  }
+}

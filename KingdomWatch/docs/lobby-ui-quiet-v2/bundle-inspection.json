@@ -1,0 +1,67 @@
+{
+  "mainBundle": "assets/main/index.c4983.js",
+  "mainBundleBytes": 591975,
+  "mainBundleSha256": "5ea89dc5e5ad14e58253bbdf5641b079b49fc6097eb02809ee394f9eb1ca7fb2",
+  "compiledTextMarkers": {
+    "comicSurface": true,
+    "heroRosterSelection": true,
+    "heroRosterNameTag": true,
+    "trainingSkillSelection": true,
+    "milestoneNext": true,
+    "shopItemCount": true,
+    "heroItemBadge": true,
+    "baseStat:": true,
+    "chapterTabs": true,
+    "levelNodeFace": true,
+    "levelSelectionHalo": true,
+    "rewardTabs": true,
+    "rewardClaimHint": true,
+    "rewardPopupPanel": true,
+    "rewardPopupConfirm": true,
+    "chapterStageRoute": true,
+    "巢穴核心": true
+  },
+  "retiredDecorationAbsent": {
+    "trainingDivider": true,
+    "rewardDivider": true,
+    "shelfRule": true,
+    "storeCounterEdge": true
+  },
+  "retainedChapterRewardAndSharedStyleSources": {
+    "assets/scripts/config/Campaign.ts": true,
+    "assets/scripts/config/Campaign.ts.meta": true,
+    "assets/scripts/config/Mobs.ts": true,
+    "assets/scripts/config/LevelDifficulty.ts": true,
+    "assets/scripts/core/GameData.ts": true,
+    "assets/scripts/core/Flow.ts": true,
+    "assets/scripts/battle/BattleDirector.ts": true,
+    "assets/scripts/ui/HUD.ts": true,
+    "assets/scripts/ui/BattleEntryWarmup.ts": true,
+    "assets/scripts/ui/RewardPopup.ts": true,
+    "assets/scripts/ui/RewardPopup.ts.meta": true,
+    "assets/scripts/ui/ComicUI.ts": true
+  },
+  "currentSourceHashesMatch": {
+    "assets/scripts/ui/pages/ShopPage.ts": true,
+    "assets/scripts/ui/pages/HeroPage.ts": true,
+    "assets/scripts/ui/pages/BasePage.ts": true,
+    "assets/scripts/ui/pages/LevelsPage.ts": true,
+    "assets/scripts/ui/HeroComic.ts": true,
+    "assets/scripts/ui/TrainingLobby.ts": true,
+    "assets/scripts/ui/ResourceBar.ts": true,
+    "assets/scripts/ui/MainUI.ts": true
+  },
+  "typeReview": {
+    "fullProjectPassed": false,
+    "matchesPreviousDiagnostics": true,
+    "diagnosticFiles": [
+      "assets/scripts/ui/ButtonFeedback.ts",
+      "assets/scripts/ui/MilestoneSwipe.ts",
+      "assets/scripts/ui/Panels.ts",
+      "assets/scripts/ui/UINotice.ts"
+    ],
+    "changedModulesHaveDiagnostics": false
+  },
+  "inspection": "source diff, local hashes and compiled text only; no tests, simulation, game, browser or online acceptance",
+  "manualAcceptance": "pending user"
+}

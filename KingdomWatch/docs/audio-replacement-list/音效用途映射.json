@@ -1,0 +1,818 @@
+{
+  "date": "2026-10-17",
+  "items": [
+    {
+      "id": "A01",
+      "group": "界面操作",
+      "name": "通用按钮点击",
+      "search": "按钮 点击 轻触",
+      "cues": [
+        "ui"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "A02",
+      "group": "界面操作",
+      "name": "页签/英雄/列表选中切换",
+      "search": "游戏 UI 切换 选择",
+      "cues": [
+        "uiSelect"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "A03",
+      "group": "界面操作",
+      "name": "打开弹窗",
+      "search": "界面 弹出 展开",
+      "cues": [
+        "uiOpen"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "A04",
+      "group": "界面操作",
+      "name": "关闭弹窗/返回",
+      "search": "界面 收起 关闭",
+      "cues": [
+        "uiClose"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "A05",
+      "group": "界面操作",
+      "name": "设置开关切换",
+      "search": "开关 toggle",
+      "cues": [
+        "uiToggle"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "A06",
+      "group": "界面操作",
+      "name": "确认操作",
+      "search": "游戏 UI 确认",
+      "cues": [
+        "uiConfirm"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "A07",
+      "group": "界面操作",
+      "name": "普通操作成功提示",
+      "search": "成功 positive notification",
+      "cues": [
+        "uiConfirm"
+      ],
+      "note": "目前与确认操作共用，可继续共用",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "A08",
+      "group": "界面操作",
+      "name": "普通警告/失败提示：未解锁、金币不足等",
+      "search": "错误 警告 拒绝 error",
+      "cues": [
+        "uiClose"
+      ],
+      "note": "目前与关闭弹窗共用，可独立替换",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "B01",
+      "group": "三选一",
+      "name": "战斗内等级提升、获得三选一机会",
+      "search": "升级 level up",
+      "cues": [
+        "levelup"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "B02",
+      "group": "三选一",
+      "name": "三选一卡牌出现",
+      "search": "魔法 卡牌 展开 reveal",
+      "cues": [
+        "pickOpen"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "B03",
+      "group": "三选一",
+      "name": "三选一刷新换牌",
+      "search": "卡牌 翻牌 洗牌 shuffle",
+      "cues": [
+        "pickRefresh"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "B04",
+      "group": "三选一",
+      "name": "三选一选中卡牌",
+      "search": "卡牌 选中 获得能力 power up",
+      "cues": [
+        "pickChoose"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "C01",
+      "group": "奖励购买结算",
+      "name": "获得奖励弹窗",
+      "search": "领奖 宝箱 奖励 reward",
+      "cues": [
+        "reward"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "C02",
+      "group": "奖励购买结算",
+      "name": "奖励数量滚动结束的短落点",
+      "search": "金币 入账 叮 coin",
+      "cues": [
+        "rewardLand"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "C03",
+      "group": "奖励购买结算",
+      "name": "购买商品成功",
+      "search": "购买 金币 落袋 purchase",
+      "cues": [
+        "purchase"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "C04",
+      "group": "奖励购买结算",
+      "name": "购买/招募英雄成功",
+      "search": "英雄 解锁 招募 summon",
+      "cues": [
+        "recruit"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "C05",
+      "group": "奖励购买结算",
+      "name": "关卡胜利",
+      "search": "胜利 通关 victory fanfare",
+      "cues": [
+        "victory"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "C06",
+      "group": "奖励购买结算",
+      "name": "关卡失败",
+      "search": "失败 defeat game over",
+      "cues": [
+        "defeat"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "C07",
+      "group": "奖励购买结算",
+      "name": "结算星星逐颗出现",
+      "search": "星星 点亮 星级 star",
+      "cues": [
+        "star"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "C08",
+      "group": "奖励购买结算",
+      "name": "最后一颗星落定",
+      "search": "三星 完成 奖章 achievement",
+      "cues": [
+        "starFinish"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "C09",
+      "group": "奖励购买结算",
+      "name": "战斗中装备掉落出现",
+      "search": "装备 掉落 loot drop",
+      "cues": [
+        "lootDrop"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "C10",
+      "group": "奖励购买结算",
+      "name": "战斗中装备拾取入包",
+      "search": "物品 拾取 item pickup",
+      "cues": [
+        "lootPickup"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "D01",
+      "group": "养成升级",
+      "name": "英雄/武器/普攻/技能/大招/装备升级成功",
+      "search": "升级 强化 level up power up",
+      "cues": [
+        "growth"
+      ],
+      "note": "这些培养操作目前共用；先选一条即可，想分开时注明具体用途",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "D02",
+      "group": "养成升级",
+      "name": "长按连续升级的短反馈",
+      "search": "连续 强化 tick",
+      "cues": [
+        "growthTick"
+      ],
+      "note": "需要短促、耐听",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "D03",
+      "group": "养成升级",
+      "name": "升级数值变化结束的短落点",
+      "search": "数值 提升 完成 positive ding",
+      "cues": [
+        "growthLand"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "D04",
+      "group": "养成升级",
+      "name": "培养阶段突破",
+      "search": "突破 成就 achievement",
+      "cues": [
+        "breakthrough"
+      ],
+      "note": "包括主城护盾阶段突破",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "D05",
+      "group": "养成升级",
+      "name": "主城升级成功",
+      "search": "建筑 建设 完工 castle upgrade",
+      "cues": [
+        "construction"
+      ],
+      "note": "普通主城升级",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "E01",
+      "group": "战斗通用",
+      "name": "防线受到攻击",
+      "search": "城墙 石墙 受击 wall impact",
+      "cues": [
+        "wall"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "E02",
+      "group": "战斗通用",
+      "name": "大招充能完毕",
+      "search": "技能 就绪 ready",
+      "cues": [
+        "ready"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "E03",
+      "group": "战斗通用",
+      "name": "大招起手蓄力",
+      "search": "魔法 蓄力 charge up",
+      "cues": [
+        "charge"
+      ],
+      "note": "目前五英雄共用同一素材并调整音高；先找一条",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "E04",
+      "group": "战斗通用",
+      "name": "敌军大部队/精英/BOSS 来袭警报",
+      "search": "敌军 来袭 boss warning",
+      "cues": [
+        "surge"
+      ],
+      "note": "目前不同来袭提示共用",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F01",
+      "group": "弓箭手·艾拉",
+      "name": "弓箭手·艾拉·普攻发射",
+      "search": "弓弦 放箭 bow shot",
+      "cues": [
+        "bow"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F02",
+      "group": "弓箭手·艾拉",
+      "name": "弓箭手·艾拉·普通命中",
+      "search": "箭矢 命中 arrow impact",
+      "cues": [
+        "hit"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F03",
+      "group": "弓箭手·艾拉",
+      "name": "弓箭手·艾拉·重击/暴击命中",
+      "search": "箭矢 暴击 重击 critical",
+      "cues": [
+        "crit"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F04",
+      "group": "弓箭手·艾拉",
+      "name": "弓箭手·艾拉·技能释放",
+      "search": "箭矢 强化 魔法 buff",
+      "cues": [
+        "skill"
+      ],
+      "note": "现有 skill 音源已预留，弓箭手技能目前没有独立触发；收到素材后补接",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F05",
+      "group": "弓箭手·艾拉",
+      "name": "弓箭手·艾拉·大招释放",
+      "search": "箭雨 多箭 volley",
+      "cues": [
+        "bowUlt"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F06",
+      "group": "重弩手·凯尔",
+      "name": "重弩手·凯尔·普攻发射",
+      "search": "弩箭 发射 crossbow",
+      "cues": [
+        "crossbow"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F07",
+      "group": "重弩手·凯尔",
+      "name": "重弩手·凯尔·普通命中",
+      "search": "弩箭 穿刺 命中",
+      "cues": [
+        "pierce"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F08",
+      "group": "重弩手·凯尔",
+      "name": "重弩手·凯尔·重击/暴击命中",
+      "search": "弩箭 重击 穿透",
+      "cues": [
+        "pierceHeavy"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F09",
+      "group": "重弩手·凯尔",
+      "name": "重弩手·凯尔·技能释放",
+      "search": "弩箭 连射 volley",
+      "cues": [
+        "crossbow"
+      ],
+      "note": "当前技能每发复用普攻声；可以继续共用或提供独立素材",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F10",
+      "group": "重弩手·凯尔",
+      "name": "重弩手·凯尔·大招释放",
+      "search": "重弩 蓄力 狙击 重射",
+      "cues": [
+        "snipe"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F11",
+      "group": "火法师·焰辉",
+      "name": "火法师·焰辉·普攻发射",
+      "search": "火球 发射 fireball",
+      "cues": [
+        "fire"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F12",
+      "group": "火法师·焰辉",
+      "name": "火法师·焰辉·普通命中",
+      "search": "火焰 命中 火球 爆炸",
+      "cues": [
+        "crush"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F13",
+      "group": "火法师·焰辉",
+      "name": "火法师·焰辉·重击/暴击命中",
+      "search": "火焰 重爆炸 explosion",
+      "cues": [
+        "fireHeavy"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F14",
+      "group": "火法师·焰辉",
+      "name": "火法师·焰辉·技能释放",
+      "search": "烈焰 爆裂 fire burst",
+      "cues": [
+        "fireSkill"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F15",
+      "group": "火法师·焰辉",
+      "name": "火法师·焰辉·大招释放",
+      "search": "陨石 轰击 meteor",
+      "cues": [
+        "fireUlt"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F16",
+      "group": "雷法师·沃尔",
+      "name": "雷法师·沃尔·普攻发射",
+      "search": "电弧 发射 electric zap",
+      "cues": [
+        "thunder"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F17",
+      "group": "雷法师·沃尔",
+      "name": "雷法师·沃尔·普通命中",
+      "search": "电击 命中 zap hit",
+      "cues": [
+        "zapHit"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F18",
+      "group": "雷法师·沃尔",
+      "name": "雷法师·沃尔·重击/暴击命中",
+      "search": "雷电 重击 thunder impact",
+      "cues": [
+        "thunderHeavy"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F19",
+      "group": "雷法师·沃尔",
+      "name": "雷法师·沃尔·技能释放",
+      "search": "连锁 闪电 chain lightning",
+      "cues": [
+        "thunderSkill"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F20",
+      "group": "雷法师·沃尔",
+      "name": "雷法师·沃尔·大招释放",
+      "search": "天雷 落雷 thunder strike",
+      "cues": [
+        "thunderUlt"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F21",
+      "group": "冰法师·莫拉",
+      "name": "冰法师·莫拉·普攻发射",
+      "search": "冰晶 发射 ice projectile",
+      "cues": [
+        "frost"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F22",
+      "group": "冰法师·莫拉",
+      "name": "冰法师·莫拉·普通命中",
+      "search": "冰晶 命中 ice hit",
+      "cues": [
+        "icebreak"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F23",
+      "group": "冰法师·莫拉",
+      "name": "冰法师·莫拉·重击/暴击命中",
+      "search": "冰块 碎裂 ice shatter",
+      "cues": [
+        "frostHeavy"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F24",
+      "group": "冰法师·莫拉",
+      "name": "冰法师·莫拉·技能释放",
+      "search": "冰霜 领域 frost magic",
+      "cues": [
+        "frostSkill"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "F25",
+      "group": "冰法师·莫拉",
+      "name": "冰法师·莫拉·大招释放",
+      "search": "全场 冰雨 暴风雪 ice storm",
+      "cues": [
+        "frostUlt"
+      ],
+      "note": "",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "G01",
+      "group": "敌人死亡",
+      "name": "普通物理击杀/敌人倒下",
+      "search": "怪物 倒下 physical kill",
+      "cues": [
+        "kill"
+      ],
+      "note": "优先短促的材质声；不要求角色喊叫",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "G02",
+      "group": "敌人死亡",
+      "name": "火焰击杀",
+      "search": "火焰 消散 burn death",
+      "cues": [
+        "deathFire"
+      ],
+      "note": "优先短促的材质声；不要求角色喊叫",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "G03",
+      "group": "敌人死亡",
+      "name": "雷电击杀",
+      "search": "电流 消散 electric death",
+      "cues": [
+        "deathVolt"
+      ],
+      "note": "优先短促的材质声；不要求角色喊叫",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "G04",
+      "group": "敌人死亡",
+      "name": "冰霜击杀",
+      "search": "冰冻 碎裂 frozen shatter",
+      "cues": [
+        "deathFrost"
+      ],
+      "note": "优先短促的材质声；不要求角色喊叫",
+      "status": "未提供",
+      "chosenSource": ""
+    },
+    {
+      "id": "G05",
+      "group": "敌人死亡",
+      "name": "精英/BOSS/重击击杀的厚重落点",
+      "search": "重型 怪物 倒地 heavy kill",
+      "cues": [
+        "deathHeavy"
+      ],
+      "note": "优先短促的材质声；不要求角色喊叫",
+      "status": "未提供",
+      "chosenSource": ""
+    }
+  ],
+  "reserved": [
+    {
+      "cue": "shoot",
+      "meaning": "通用普攻回退",
+      "reuse": "F01"
+    },
+    {
+      "cue": "confirm",
+      "meaning": "旧通用确认接口",
+      "reuse": "A06"
+    },
+    {
+      "cue": "ult",
+      "meaning": "未知英雄的大招回退",
+      "reuse": "任一通用大招素材"
+    }
+  ],
+  "catalogCoverage": [
+    "bow",
+    "bowUlt",
+    "breakthrough",
+    "charge",
+    "confirm",
+    "construction",
+    "crit",
+    "crossbow",
+    "crush",
+    "deathFire",
+    "deathFrost",
+    "deathHeavy",
+    "deathVolt",
+    "defeat",
+    "fire",
+    "fireHeavy",
+    "fireSkill",
+    "fireUlt",
+    "frost",
+    "frostHeavy",
+    "frostSkill",
+    "frostUlt",
+    "growth",
+    "growthLand",
+    "growthTick",
+    "hit",
+    "icebreak",
+    "kill",
+    "levelup",
+    "lootDrop",
+    "lootPickup",
+    "pickChoose",
+    "pickOpen",
+    "pickRefresh",
+    "pierce",
+    "pierceHeavy",
+    "purchase",
+    "ready",
+    "recruit",
+    "reward",
+    "rewardLand",
+    "shoot",
+    "skill",
+    "snipe",
+    "star",
+    "starFinish",
+    "surge",
+    "thunder",
+    "thunderHeavy",
+    "thunderSkill",
+    "thunderUlt",
+    "ui",
+    "uiClose",
+    "uiConfirm",
+    "uiOpen",
+    "uiSelect",
+    "uiToggle",
+    "ult",
+    "victory",
+    "wall",
+    "zapHit"
+  ],
+  "newAudioProvided": false
+}

@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-feedback-polish-v17-20261017-135339",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-startup-component-fix-v16-20261017-133109",
+  "entryVersion": "1792216357",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=feedback-polish-v17-1792216357",
+  "scope": "fix reward acknowledgement Set spread crash; smooth continuous toast gradients and restrained reward/growth/victory/construction light",
+  "manualAcceptance": "pending user manual review"
+}

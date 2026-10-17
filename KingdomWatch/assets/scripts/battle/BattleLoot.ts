@@ -71,7 +71,7 @@ export class BattleLoot {
     this.drops.push(drop);
     this.render(drop);
     if (!this.announced) { this.announced = true; this.notice('装备掉落！点击拾取，30秒后自动收入背包'); }
-    GameAudio.play('confirm', { gain: .3, rate: 1.18, lowpass: 4200, duration: .22 });
+    GameAudio.play('lootDrop');
   }
 
   private pick(drop: Drop, animate: boolean): void {
@@ -90,7 +90,7 @@ export class BattleLoot {
     this.receiverColor = drop.color;
     this.receiver.active = true;
     setText(this.count, '装备 +' + this.picked.length);
-    GameAudio.play('confirm', { gain: .58, rate: .94 + Math.random() * .08, lowpass: 5100, duration: .28 });
+    GameAudio.play('lootPickup');
   }
 
   tick(dt: number): void {
@@ -174,11 +174,13 @@ export class BattleLoot {
     if (drop.root.isValid) { drop.root.active = false; drop.root.destroy(); }
   }
   suspend(): void { this.receiver.active = false; }
+  /** Pause reads already-stored pickups without collecting or rolling any pending drops. */
+  summary(): StageLootSummary { return { equipment: this.picked.slice(), materials: [] }; }
   /** Settlement, exit and repeated cleanup share this idempotent grant path. */
   collectAll(): StageLootSummary {
     for (const drop of this.drops) { if (!drop.claimed) this.pick(drop, false); else this.remove(drop); }
     this.drops.length = 0;
     this.suspend();
-    return { equipment: this.picked.slice(), materials: [] };
+    return this.summary();
   }
 }

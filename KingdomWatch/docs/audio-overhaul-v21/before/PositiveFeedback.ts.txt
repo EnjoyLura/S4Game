@@ -1,0 +1,205 @@
+/** Readable, receipt-driven growth feedback. Consecutive upgrades merge their real deltas. */
+import { _decorator, Component, game, Game, isValid, Label, Node, UIOpacity } from 'cc';
+import { LO } from '../config/GameConfig';
+import { C, label, N } from './UIKit';
+import { reducedMotion } from './UIMotion';
+import { uiSound } from './UIAudio';
+import { NoticeStat } from './UINotice';
+import { whenUIArtReady } from './UIArtReady';
+import { celebrationLight, feedbackSurface, growthSurface, lightEnvelope } from './FeedbackSurface';
+
+const { ccclass } = _decorator;
+const clamp = (v: number): number => Math.max(0, Math.min(1, v));
+const out = (v: number): number => 1 - (1 - clamp(v)) ** 3;
+export interface GrowthReceipt {
+  key: string; name: string; title: string; level: { before: number; after: number };
+  stats: NoticeStat[]; power?: { before: number; after: number }; milestone?: string;
+  keep?: boolean; repeating?: boolean;
+}
+interface NumberRow {
+  node: Node; fade: UIOpacity; name: Label; before: Label; after: Label; gain: Label;
+  start: number; value: number; key: string;
+}
+interface DeltaRow { node: Node; fade: UIOpacity; name: Label; gain: Label; }
+function value(v: number, stat: NoticeStat): string {
+  return stat.format === 'percent' ? (Math.round(v * 10000) / 100) + '%'
+    : stat.format === 'speed' ? String(Math.round(v * 100) / 100) : Math.round(v).toLocaleString('en-US');
+}
+const put = (target: Label, text: string): void => { if (target.string !== text) target.string = text; };
+const mainStat = (r: GrowthReceipt): NoticeStat => r.power && r.power.after !== r.power.before
+  ? { name: '战力', before: r.power.before, after: r.power.after }
+  : r.stats[0] || { name: '等级', before: r.level.before, after: r.level.after };
+const details = (r: GrowthReceipt): NoticeStat[] => r.power && r.power.after !== r.power.before ? r.stats : r.stats.slice(1);
+
+@ccclass('PositiveFeedback')
+class PositiveFeedback extends Component {
+  private receipt: GrowthReceipt | null = null;
+  private display: Node | null = null;
+  private fade!: UIOpacity;
+  private title!: Label;
+  private nameText!: Label;
+  private levels!: Label;
+  private extra!: Label;
+  private main!: NumberRow;
+  private rows: DeltaRow[] = [];
+  private glimmer!: Node;
+  private sweep!: Node;
+  private sweepFade!: UIOpacity;
+  private age = 0;
+  private appearanceAge = 0;
+  private numberAge = 0;
+  private sinceCue = 10;
+  private landed = false;
+  private countingFast = false;
+  private hidden = false;
+  private quiet = false;
+  private height = 208;
+  private lift = 0;
+  private layout = '';
+
+  onLoad(): void {
+    this.enabled = false;
+    game.on(Game.EVENT_HIDE, this.hide, this); game.on(Game.EVENT_SHOW, this.show, this);
+  }
+
+  present(next: GrowthReceipt): void {
+    const previous = this.receipt;
+    const merged = !!previous && previous.key === next.key && !!this.display && this.age < 2.2;
+    const milestone = !!next.milestone && (!merged || next.milestone !== previous!.milestone);
+    // Keep a stat gained earlier in a hold even when the latest level doesn't change it.
+    const stats = merged ? previous!.stats.map(s => ({ ...s, after: next.stats.find(n => n.name === s.name)?.after ?? s.after })) : next.stats;
+    if (merged) for (const stat of next.stats) if (!stats.some(s => s.name === stat.name)) stats.push({ ...stat });
+    this.receipt = merged ? { ...next, stats, milestone: next.milestone || previous!.milestone,
+      level: { before: previous!.level.before, after: next.level.after },
+      power: next.power && previous!.power ? { before: previous!.power.before, after: next.power.after } : next.power } : next;
+    const r = this.receipt, secondary = details(r);
+    this.quiet = reducedMotion();
+    this.height = 174 + Math.ceil(secondary.length / 2) * 34 + (r.milestone ? 38 : 0);
+    this.lift = Math.min(LO.half * .36, LO.half - LO.notchTop - this.height / 2 - 160);
+    const layout = r.key + ':' + secondary.length + ':' + !!r.milestone;
+    const shown = new Map<string, number>();
+    if (merged) shown.set(this.main.key, this.main.value);
+    if (layout !== this.layout || !this.display) { this.build(secondary.length); this.layout = layout; }
+    if (!merged) this.appearanceAge = 0;
+    this.countingFast = merged;
+    this.age = this.numberAge = 0; this.landed = false;
+    put(this.title, r.milestone ? '阶段突破' : r.keep ? '主城升级成功' : r.title);
+    put(this.nameText, r.name);
+    put(this.levels, 'Lv.' + r.level.before + '  →  Lv.' + r.level.after);
+    put(this.extra, r.milestone || '');
+    const prepare = (row: NumberRow, stat: NoticeStat): void => {
+      row.key = stat.name; row.start = shown.get(stat.name) ?? stat.before; row.value = row.start;
+      put(row.name, stat.name); put(row.before, value(stat.before, stat));
+      const gain = stat.after - stat.before;
+      put(row.gain, (gain >= 0 ? '+' : '−') + value(Math.abs(gain), stat));
+      row.after.color = C(gain >= 0 ? '#D0F5A8' : '#FFC1A8');
+    };
+    prepare(this.main, mainStat(r));
+    this.rows.forEach((row, i) => {
+      const stat = secondary[i], gain = stat.after - stat.before;
+      put(row.name, stat.name);
+      put(row.gain, (gain >= 0 ? '+' : '−') + value(Math.abs(gain), stat));
+      row.gain.color = C(gain >= 0 ? '#D0F5A8' : '#FFC1A8');
+    });
+    this.node.setSiblingIndex(this.node.parent!.children.length - 1);
+    if (milestone || next.keep || !merged || this.sinceCue >= .18) {
+      uiSound(next.keep ? 'construction' : milestone ? 'breakthrough' : next.repeating ? 'growthTick' : 'upgrade');
+      this.sinceCue = 0;
+    }
+    this.enabled = true; this.render();
+  }
+
+  private build(count: number): void {
+    if (this.display) { this.display.active = false; this.display.destroy(); }
+    const display = this.display = N('growthCelebration', this.node, 0, this.lift, 718, this.height);
+    this.fade = display.addComponent(UIOpacity);
+    growthSurface(display, 718, this.height);
+    const top = this.height / 2, primaryY = top - 112;
+    feedbackSurface(display, 'mainValueWarmth', 'feather', 0, primaryY, 636, 56, '#BB7C26', .11);
+    this.glimmer = celebrationLight(display, 'growthTitleLight', 0, top - 26, 460, 78);
+    this.sweep = feedbackSurface(display, 'valueLandingLight', 'halo', -240, primaryY, 170, 70, '#FFF1B5');
+    this.sweepFade = this.sweep.addComponent(UIOpacity); this.sweepFade.opacity = 0;
+    const text = (parent: Node, x: number, y: number, size: number, color: string, w: number, h = 34, font: 'body' | 'number' = 'body'): Label =>
+      label(parent, x, y, '', { size, color, bold: true, w, h, font, shrink: true,
+        outline: '#0C1722', outlineW: 1.5 }).getComponent(Label)!;
+    this.title = text(display, 0, top - 26, 32, '#FFE49A', 400, 40);
+    for (const side of [-1, 1]) feedbackSurface(display, 'titleRule', 'line', side * 259, top - 26, 84, 2, '#E4BC69', .65);
+    this.nameText = text(display, -136, top - 66, 20, '#D1DADF', 336, 28);
+    this.levels = text(display, 192, top - 66, 23, '#FFF4D6', 246, 30, 'number');
+    const node = N('growthMainNumbers', display, 0, primaryY), fade = node.addComponent(UIOpacity);
+    const name = text(node, -257, 0, 22, '#E5EAF0', 100, 34);
+    const before = text(node, -157, 0, 25, '#BFCBD3', 118, 36, 'number');
+    put(text(node, -76, 0, 23, '#D9C48F', 40), '→');
+    const after = text(node, 47, 0, 44, '#D0F5A8', 186, 56, 'number');
+    const gain = text(node, 244, 0, 33, '#FFE298', 144, 48, 'number');
+    this.main = { node, fade, name, before, after, gain, start: 0, value: 0, key: '' };
+    // Secondary stats show only the earned delta; the page already carries their full comparison.
+    this.rows = Array.from({ length: count }, (_, i) => {
+      const inRow = Math.min(2, count - Math.floor(i / 2) * 2);
+      const node = N('growthDeltaSummary', display, ((i % 2) - (inRow - 1) / 2) * 292, top - 166 - Math.floor(i / 2) * 34);
+      return { node, fade: node.addComponent(UIOpacity),
+        name: text(node, -42, 0, 20, '#E5EAF0', 160, 30),
+        gain: text(node, 92, 0, 24, '#D0F5A8', 86, 32, 'number') };
+    });
+    this.extra = text(display, 0, -top + 23, 19, '#FFE29C', 624, 28);
+  }
+
+  update(dt: number): void {
+    if (this.hidden) return;
+    const step = Math.min(.06, Math.max(0, dt));
+    this.age += step; this.appearanceAge += step; this.numberAge += step; this.sinceCue += step;
+    if (this.age >= (this.receipt?.milestone ? 3 : 2.6)) { this.clear(); return; }
+    this.render();
+  }
+
+  private render(): void {
+    const r = this.receipt; if (!r || !this.display) return;
+    const end = r.milestone ? 3 : 2.6, leaving = clamp((this.age - end + .3) / .3);
+    this.fade.opacity = Math.round(255 * (this.quiet ? 1 : out(this.appearanceAge / .13)) * (1 - leaving));
+    this.display.setPosition(0, this.lift * (this.quiet ? 1 : out(this.appearanceAge / .36)) + (this.quiet ? 0 : leaving * 30), 0);
+    const primary = mainStat(r);
+    const renderRow = (row: NumberRow, stat: NoticeStat, delay: number, large: boolean): void => {
+      const p = this.quiet ? 1 : out((this.numberAge - (this.countingFast ? 0 : delay)) / (this.countingFast ? .15 : .44));
+      row.value = row.start + (stat.after - row.start) * p;
+      put(row.after, value(row.value, stat));
+      const impact = this.quiet ? 0 : Math.sin(Math.PI * clamp((this.numberAge - (this.countingFast ? .1 : delay + .36)) / .22));
+      const scale = 1 + impact * (large ? .09 : .055);
+      row.after.node.setScale(scale, scale, 1); row.gain.node.setScale(scale, scale, 1);
+      row.fade.opacity = Math.round(255 * (this.quiet ? 1 : out((this.appearanceAge - delay) / .15)));
+    };
+    renderRow(this.main, primary, .16, true);
+    this.rows.forEach((row, i) => {
+      const delay = .27 + Math.floor(i / 2) * .09;
+      row.fade.opacity = Math.round(255 * (this.quiet ? 1 : out((this.appearanceAge - delay) / .15)));
+      const impact = this.quiet ? 0 : Math.sin(Math.PI * clamp((this.numberAge - (this.countingFast ? .1 : delay + .36)) / .22));
+      row.gain.node.setScale(1 + impact * .055, 1 + impact * .055, 1);
+    });
+    const titlePulse = this.quiet ? 0 : Math.sin(Math.PI * clamp(this.appearanceAge / .32));
+    this.title.node.setScale(1 + titlePulse * .055, 1 + titlePulse * .055, 1);
+    lightEnvelope(this.glimmer, this.quiet ? 1 : this.appearanceAge, .7, .42);
+    const sweep = clamp((this.numberAge - .24) / .46);
+    this.sweep.setPosition(-240 + sweep * 480, this.height / 2 - 112, 0);
+    this.sweepFade.opacity = this.quiet ? 0 : Math.round(255 * Math.sin(Math.PI * sweep) * .25);
+    if (!this.landed && this.numberAge >= .62) {
+      this.landed = true;
+      if (!this.quiet) uiSound('starFinish');
+    }
+  }
+
+  private clear(): void {
+    if (this.display) { this.display.active = false; this.display.destroy(); }
+    this.display = null; this.rows = []; this.layout = ''; this.receipt = null; this.enabled = false;
+  }
+  private hide = (): void => { this.hidden = true; };
+  private show = (): void => { this.hidden = false; };
+  onDestroy(): void { game.off(Game.EVENT_HIDE, this.hide, this); game.off(Game.EVENT_SHOW, this.show, this); }
+}
+
+export function showPositiveFeedback(root: Node, receipt: GrowthReceipt): void {
+  if (!isValid(root, true)) return;
+  void Promise.resolve().then(() => whenUIArtReady(root, () => {
+    if (!isValid(root, true)) return;
+    const host = root.getChildByName('positiveFeedbackLayer') || N('positiveFeedbackLayer', root);
+    (host.getComponent(PositiveFeedback) || host.addComponent(PositiveFeedback)).present(receipt);
+  }));
+}

@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-ui-detail-layout-v10-20261017-110238",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-campaign-soft-finish-v9-20261017-041837",
+  "entryVersion": "1792206126",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=ui-detail-layout-v10-1792206126",
+  "scope": "formation dividers and deployed-card rims; checkpoint palette, gray stars and name below base; compact hero rail; top-aligned equipment with contained detail actions and higher backpack; opaque difficulty refresh; shared loot item detail dialog",
+  "manualAcceptance": "pending user manual review"
+}

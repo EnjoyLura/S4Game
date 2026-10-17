@@ -1,0 +1,689 @@
+--- before/assets/scripts/ui/pages/LevelsPage.ts
++++ assets/scripts/ui/pages/LevelsPage.ts
+@@ -1,5 +1,5 @@
+ /** Scrollable chapter terrain with live checkpoints and a local preparation drawer. */
+-import { BlockInputEvents, Graphics, Node, ScrollView, Sprite, UIOpacity, Vec2, director } from 'cc';
++import { BlockInputEvents, Graphics, Node, ScrollView, Sprite, UIOpacity, UITransform, Vec2, director } from 'cc';
+ import { LO } from '../../config/GameConfig';
+ import { CAMPAIGN_CHAPTERS, CAMPAIGN_STAGES, campaignDifficultyOpen, campaignLevelOpen } from '../../config/Campaign';
+ import { C, CA, N, WY } from '../UIKit';
+@@ -20,12 +20,17 @@
+ import { showRewardPopup } from '../RewardPopup';
+ import { heroPortrait } from '../HeroComic';
+ import { CampaignRouteMotion, ROUTE_ART, ROUTE_H, ROUTE_W, routePoint, routeStop } from '../CampaignRoute';
++import { campaignChapterArrow, campaignChapterPlate, campaignDifficultyFace, campaignDockPaper,
++  campaignPaper, campaignRewardChest, campaignTerrainCrown, paintCampaignAction } from '../CampaignChrome';
+ 
+ const LEVELS = CAMPAIGN_STAGES;
+ const DIFFS = ['普通', '精英', '地狱'];
+ const CHAPTER_NUMERALS = ['一', '二', '三'];
+ const st = { i: 0, d: 0, initialized: false, drawer: false,
+   selected: [0, 0, 0], offsets: [null, null, null] as (number | null)[] };
++let dismissPreparation: (() => void) | null = null;
++/** Tab navigation always returns to the plain chapter map, while local squad refresh keeps its parent. */
++export function closeLevelPreparation(): void { st.drawer = false; dismissPreparation?.(); }
+ function clear(node: Node): void {
+   for (const child of [...node.children]) { child.active = false; child.removeFromParent(); child.destroy(); }
+ }
+@@ -59,7 +64,7 @@
+       st.i = index; st.d = Math.max(0, Math.min(2, Math.floor(focus.diff)));
+       st.selected[Math.floor(index / 10)] = index % 10;
+       st.offsets[Math.floor(index / 10)] = null;
+-      st.drawer = true;
++      st.drawer = false;
+     }
+   }
+   while (st.d > 0 && !difficultyOpen(st.i, st.d)) st.d--;
+@@ -67,16 +72,28 @@
+   let mapScroll: ScrollView | null = null;
+   let pins: Node | null = null, dock: Node | null = null, drawer: Node | null = null, shade: Node | null = null;
+   let header: Node | null = null, closing = false, claiming = false;
+-  let sheetTop = 0, sheetH = 0, sheetOffset = 0;
++  let sheetTop = 0, sheetH = 0;
+   const { headerTop } = mainLayout();
+   const bottom = LO.half * 2 - LO.safeTop - LO.safeBottom - MAIN_NAV_H;
+   const chapterTop = headerTop + MAIN_RESOURCE_H + 14;
+-  const dockTop = bottom - 102;
++  const dockH = 150, dockTop = bottom - dockH;
+   // One scrolling terrain fills the screen behind the floating header controls.
+   const mapTop = 0, mapViewH = Math.max(1, dockTop - mapTop);
+   const mapHeight = Math.max(ROUTE_H, mapViewH);
++  // The complete finale badge and its touch bounds must fit below the floating header at scroll offset zero.
++  const mapClearTop = chapterTop + 110;
++  const mapInsetTop = Math.max(0, mapClearTop + 84 - routePoint(10, mapHeight).top);
++  const mapContentH = mapInsetTop + mapHeight;
+   const modalParent = ctx.screens.parent!;
+   const currentChapter = (): number => Math.floor(st.i / 10);
++  dismissPreparation = (): void => {
++    if (!content.isValid) return;
++    for (const overlay of [drawer,shade]) {
++      if (overlay?.isValid) { overlay.active = false; overlay.removeFromParent(); overlay.destroy(); }
++    }
++    drawer = null; shade = null; closing = false;
++    renderDock();
++  };
+   function levelOpen(i: number): boolean {
+     return !!LEVELS[i] && campaignLevelOpen(LEVELS[i].id, loadSave().stars);
+   }
+@@ -88,13 +105,13 @@
+   }
+   function scrollMap(offset: number, animated: boolean): void {
+     mapScroll?.stopAutoScroll();
+-    mapScroll?.scrollToOffset(new Vec2(0, Math.max(0, Math.min(mapHeight - mapViewH, offset))),
++    mapScroll?.scrollToOffset(new Vec2(0, Math.max(0, Math.min(mapContentH - mapViewH, offset))),
+       animated && !reducedMotion() ? .26 : 0);
+   }
+   function focusMap(animated: boolean): void {
+     const p = routePoint(LEVELS[st.i].stage, mapHeight);
+     const target = chapterTop + (dockTop - chapterTop) * .62;
+-    scrollMap(mapTop + p.top - target, animated);
++    scrollMap(mapTop + mapInsetTop + p.top - target, animated);
+   }
+   function warmSelected(): void {
+     if (levelOpen(st.i)) {
+@@ -109,18 +126,17 @@
+     const stages = LEVELS.slice(currentChapter() * 10, currentChapter() * 10 + 10);
+     const cleared = stages.filter(stage => (sv.stars[stage.id] || 0) > 0).length;
+     const stars = stages.reduce((sum, stage) => sum + (sv.stars[stage.id] || 0), 0);
+-    const bar = comicSurface(header, 0, WY(chapterTop, 86), 694, 86, 'dark', { radius: 18, name: 'campaignChapterHeader' });
++    const bar = campaignChapterPlate(header, 0, WY(chapterTop, 90), 694, 90);
+     bar.addComponent(BlockInputEvents);
+     mainLabel(bar, 0, 17, '第' + CHAPTER_NUMERALS[currentChapter()] + '章 · ' + chapter.name,
+-      { size: 31, bold: true, color: COMIC.cream, w: 470, h: 42 });
+-    mainLabel(bar, 0, -20, '已通关 ' + cleared + '/10     ★ ' + stars + '/30',
+-      { size: 21, color: '#E7D2A5', w: 450, h: 30 });
++      { size: 32, bold: true, color: '#FFF0C7', w: 470, h: 42 });
++    mainLabel(bar, -73, -22, '已通关 ' + cleared + '/10', { size: 21, color: COMIC.cream, w: 210, h: 30 });
++    star(bar, 63, -22, 26, true);
++    mainLabel(bar, 125, -22, stars + '/30', { size: 21, color: COMIC.cream, w: 86, h: 30, align: 'left' });
+     ([-1, 1] as const).forEach(dir => {
+       const available = currentChapter() + dir >= 0 && currentChapter() + dir < CAMPAIGN_CHAPTERS.length;
+       const arrow = N('campaignChapterArrow:' + dir, bar, dir * 303, 0, 66, 66);
+-      const g = arrow.addComponent(Graphics);
+-      g.fillColor = C(available ? COMIC.gold : '#647078');
+-      g.moveTo(dir * 11, 0); g.lineTo(-dir * 8, 16); g.lineTo(-dir * 8, -16); g.close(); g.fill();
++      campaignChapterArrow(arrow, dir, available);
+       bindButton(arrow, () => {
+         if (!available || closing || enteringBattle()) return;
+         saveOffset(); st.drawer = false;
+@@ -155,15 +171,16 @@
+     if (!dock) return;
+     clear(dock); dock.active = !st.drawer;
+     const lv = LEVELS[st.i], open = levelOpen(st.i);
+-    const paper = comicSurface(dock, 0, WY(dockTop, 102), 750, 112, 'paper', { name: 'campaignCurrentStage', radius: 0 });
++    const paper = campaignDockPaper(dock, 0, WY(dockTop, dockH), 750, dockH);
+     paper.addComponent(BlockInputEvents);
+-    mainLabel(paper, -158, 27, open ? '当前关卡' : '尚未解锁', { size: 18, color: COMIC.sub, bold: true, w: 354, h: 28, align: 'left' });
+-    mainLabel(paper, -158, -8, lv.id + ' ' + lv.name, { size: 30, color: COMIC.text, bold: true, w: 354, h: 44, align: 'left' });
+-    const button = comicButton(paper, 211, 1, 264, 78, '', () => {
++    mainLabel(paper, -158, 36, open ? '当前关卡' : '尚未解锁', { size: 20, color: COMIC.sub, bold: true, w: 354, h: 30, align: 'left' });
++    mainLabel(paper, -158, -11, lv.id + ' ' + lv.name, { size: 33, color: COMIC.text, bold: true, w: 354, h: 48, align: 'left' });
++    const button = comicButton(paper, 211, 0, 264, 106, '', () => {
+       if (!levelOpen(st.i) || closing || enteringBattle()) return;
+       saveOffset(); openDrawer();
+     }, { tone: open ? 'gold' : 'muted', name: 'campaignPrepare', enabled: open });
+-    if (open) levelArt(button, -85, 0, 44, 44, 'comic_swords_v1');
++    paintCampaignAction(button.getChildByName('buttonFace')!, 264, 106, open);
++    if (open) levelArt(button, -85, 0, 50, 50, 'comic_swords_v1');
+     else comicMark(button, -85, 0, 'lock', 30, COMIC.sub);
+     mainLabel(button, 25, 0, open ? '出战准备' : '尚未解锁',
+       { size: 29, bold: true, color: open ? COMIC.text : COMIC.sub, w: 178, h: 42 });
+@@ -174,8 +191,8 @@
+     mapScroll?.stopAutoScroll();
+     if (mapScroll) st.offsets[currentChapter()] = Math.max(0, mapScroll.getScrollOffset().y);
+     st.drawer = true; dock!.active = false;
+-    // Short screens scroll the paper content, never shrink checkpoints or the battle button.
+-    sheetH = Math.min(828, Math.max(280, bottom - chapterTop - 210));
++    // All sections fit on the paper. Short viewports use a compact layout instead of an inner ScrollView.
++    sheetH = Math.min(1050, Math.max(360, bottom - headerTop - MAIN_RESOURCE_H - 8));
+     sheetTop = bottom - sheetH;
+     if (!shade) {
+       shade = N('campaignDrawerShade', content, 0, WY(chapterTop + 94, dockTop - chapterTop - 94), 750, dockTop - chapterTop - 94);
+@@ -186,8 +203,7 @@
+       bindButton(shade, closeDrawer, { motion: false, sound: false });
+     }
+     if (!drawer) {
+-      drawer = comicSurface(content, 0, WY(sheetTop, sheetH), 750, sheetH + 10, 'paper',
+-        { name: 'campaignPreparationDrawer', radius: 24 });
++      drawer = campaignPaper(content, 0, WY(sheetTop, sheetH), 750, sheetH + 10, 'campaignPreparationDrawer', 24);
+       drawer.addComponent(BlockInputEvents);
+       drawer.addComponent(CampaignRouteMotion);
+     }
+@@ -201,7 +217,7 @@
+       if (!content.isValid) return;
+       if (drawer?.isValid) { drawer.active = false; drawer.removeFromParent(); drawer.destroy(); }
+       if (shade?.isValid) { shade.active = false; shade.removeFromParent(); shade.destroy(); }
+-      drawer = null; shade = null; closing = false; st.drawer = false; sheetOffset = 0;
++      drawer = null; shade = null; closing = false; st.drawer = false;
+       renderDock();
+     });
+   }
+@@ -213,32 +229,26 @@
+       const key = starKey(lv.id, st.d), stars = sv.stars[key] || 0, claimed = sv.chestClaimed[key] || 0;
+       const y = (top: number): number => sheetH / 2 - top;
+       comicSurface(panel, 0, y(16), 44, 4, 'paper', { fill: '#BBA27D', radius: 2 });
+-      mainLabel(panel, -29, y(53), lv.id + ' ' + lv.name, { size: 33, bold: true, color: COMIC.text, w: 612, h: 48, align: 'left' });
++      mainLabel(panel, -29, y(53), lv.id + ' ' + lv.name, { size: 36, bold: true, color: COMIC.text, w: 612, h: 50, align: 'left' });
+       mainLabel(panel, -12, y(94), challenge.waves.length + ' 波 · ' + DIFFICULTIES[st.d].formation,
+         { size: 19, color: COMIC.sub, w: 644, h: 30, align: 'left' });
+       const close = N('campaignDrawerClose', panel, 324, y(48), 58, 58);
+       comicMark(close, 0, 0, 'close', 28, COMIC.sub); bindButton(close, closeDrawer, { sound: false });
+-      const bodyTop = 117, footerH = 102, viewH = Math.max(1, sheetH - bodyTop - footerH);
+-      const equipmentRows = Math.ceil(challenge.gearPool.length / 6);
+-      const chanceTop = equipmentRows ? 562 + (equipmentRows - 1) * 96 + 64 : 550;
+-      const squadTop = chanceTop + 54, portraitsTop = squadTop + 66;
+-      const bodyH = portraitsTop + 56;
+-      const body = pageScroll(panel, 'campaignPreparation', 0, viewH, bodyH, 690);
+-      // pageScroll uses screen coordinates; translate only its local view into this paper.
+-      const view = body.parent!;
+-      view.setPosition(0, y(bodyTop + viewH / 2), 0);
+-      const scroll = view.getComponent(ScrollView)!;
+-      scroll.inertia = true; scroll.elastic = false; scroll.brake = .7; scroll.cancelInnerEvents = true;
+-      scroll.scrollToOffset(new Vec2(0, Math.min(sheetOffset, Math.max(0, bodyH - viewH))), 0);
+-      view.on('scrolling', () => { sheetOffset = Math.max(0, scroll.getScrollOffset().y); });
++      const bodyTop = 117, footerH = 102, available = Math.max(1, sheetH - bodyTop - footerH);
++      const columns = sheetH < 940 ? Math.max(6, challenge.gearPool.length) : 6;
++      const equipmentRows = Math.ceil(challenge.gearPool.length / columns), iconSize = columns > 6 ? 62 : 74;
++      const chanceTop = equipmentRows ? 562 + (equipmentRows-1)*(iconSize+12) + 56 : 505;
++      const squadTop = chanceTop + 45, portraitsTop = squadTop + 68;
++      const bodyH = portraitsTop + 48, scale = Math.min(1, available / bodyH);
++      const extra = Math.max(0,available-bodyH)/3;
++      const body = N('campaignPreparationContent', panel, 0, y(bodyTop), 690, bodyH + extra*2);
++      body.getComponent(UITransform)!.setAnchorPoint(.5,1); body.setScale(scale,scale,1);
+       const by = (top: number): number => -top;
+-      comicSurface(body, 0, by(29), 678, 54, 'paper', { fill: '#E8D8B8', radius: 14 });
+       DIFFS.forEach((name, d) => {
+         const active = st.d === d, unlocked = difficultyOpen(st.i, d);
+-        const slot = comicSurface(body, (d - 1) * 226, by(29), 218, 50, active ? 'gold' : 'paper',
+-          { name: 'campaignDifficulty:' + d, fill: active ? COMIC.gold : '#E8D8B8', radius: 12 });
+-        if (!unlocked) comicMark(slot, -62, 0, 'lock', 20, COMIC.sub);
+-        mainLabel(slot, unlocked ? 0 : 13, 0, name, { size: 25, bold: true, color: active ? COMIC.text : COMIC.sub, w: 148, h: 38 });
++        const slot = N('campaignDifficulty:' + d, body, (d-1)*226, by(29), 218, 54);
++        campaignDifficultyFace(slot, 218, 54, active, unlocked);
++        mainLabel(slot, 15, 0, name, { size: 25, bold: true, color: active ? COMIC.text : COMIC.sub, w: 142, h: 38 });
+         bindButton(slot, () => {
+           if (!unlocked) { toast(d ? '通关上一难度解锁' : '通关前置关卡后解锁'); return; }
+           if (st.d !== d) { st.d = d; renderSheet(); }
+@@ -246,13 +256,14 @@
+       });
+ 
+       mainLabel(body, -194, by(87), '星级宝箱', { size: 27, bold: true, color: COMIC.text, w: 286, h: 38, align: 'left' });
+-      mainLabel(body, 227, by(87), stars + '/3 ★', { size: 23, bold: true, color: COMIC.sub, w: 210, h: 34, align: 'right' });
++      mainLabel(body, 199, by(87), stars + '/3', { size: 23, bold: true, color: COMIC.text, w: 210, h: 34, align: 'right' });
++      star(body, 321, by(87), 28, true);
+       const rewards = starChestRewards(lv.id, st.d);
+       for (let t = 0; t < 3; t++) {
+         const tier = t + 1, done = claimed >= tier, canClaim = stars >= tier && !done;
+         const spot = N('campaignStarChest:' + tier, body, (t - 1) * 226, by(218), 218, 216);
+         mainLabel(spot, 0, 86, CHEST_COND[t], { size: 19, color: COMIC.sub, w: 214, h: 30 });
+-        const chest = levelArt(spot, 0, 22, 122, 96, done ? 'comic_chest_open_v1' : 'comic_chest_closed_v1');
++        const chest = campaignRewardChest(spot, 0, 22, 122, t, done);
+         if (!done && !canClaim) chest.addComponent(UIOpacity).opacity = 160;
+         if (done) comicMark(spot, 51, 4, 'check', 23, COMIC.greenShade);
+         const reward = rewards[t];
+@@ -273,32 +284,38 @@
+           ], () => { claiming = false; });
+         }, { dragThreshold: 7 });
+       }
+-      mainLabel(body, -194, by(345), '关卡掉落', { size: 27, bold: true, color: COMIC.text, w: 286, h: 38, align: 'left' });
+-      const details = N('campaignDropDetails', body, 283, by(345), 106, 44);
++      mainLabel(body, -194, by(345+extra), '关卡掉落', { size: 27, bold: true, color: COMIC.text, w: 286, h: 38, align: 'left' });
++      const details = N('campaignDropDetails', body, 283, by(345+extra), 106, 44);
+       mainLabel(details, 0, 0, '详情 ›', { size: 20, color: COMIC.sub, w: 100, h: 34 });
+       bindButton(details, () => showStageLootDetails(modalParent, challenge), { dragThreshold: 7 });
+-      mainLabel(body, -194, by(382), '通关必得', { size: 19, bold: true, color: COMIC.sub, w: 286, h: 28, align: 'left' });
+-      stageGuaranteedRewards(body, 0, by(442), 664, challenge, id => showDropItemDetails(modalParent, challenge, id));
+-      mainLabel(body, -194, by(502), '击杀概率装备', { size: 19, bold: true, color: COMIC.sub, w: 286, h: 28, align: 'left' });
++      mainLabel(body, -194, by(382+extra), '通关必得', { size: 19, bold: true, color: COMIC.sub, w: 286, h: 28, align: 'left' });
++      stageGuaranteedRewards(body, 0, by(442+extra), 664, challenge, id => showDropItemDetails(modalParent, challenge, id));
++      if (equipmentRows) mainLabel(body, -194, by(502+extra), '击杀概率装备', { size: 19, bold: true, color: COMIC.sub, w: 286, h: 28, align: 'left' });
+       challenge.gearPool.forEach((row, i) => {
+-        const icon = stageDropIcon(body, (i % 6 - 2.5) * 106, by(562 + Math.floor(i / 6) * 96), 80, row.id);
++        const icon = stageDropIcon(body, (i%columns-(columns-1)/2)*(664/columns),
++          by(562 + Math.floor(i/columns)*(iconSize+12)+extra), iconSize, row.id);
+         bindButton(icon, () => showDropItemDetails(modalParent, challenge, row.id), { dragThreshold: 7, sound: false });
+       });
+       if (challenge.gearPool.length) {
+         const pct = (n: number): string => (n * 100).toFixed(2) + '%';
+-        mainLabel(body, 0, by(chanceTop), '普通怪 ' + pct(equipmentDropChance(st.d)) + ' · 精英怪 ' + pct(equipmentDropChance(st.d, { elite: true })),
++        mainLabel(body, 0, by(chanceTop+extra), '普通怪 ' + pct(equipmentDropChance(st.d)) + ' · 精英怪 ' + pct(equipmentDropChance(st.d, { elite: true })),
+           { size: 17, color: COMIC.sub, w: 660, h: 28 });
+-      } else mainLabel(body, 0, by(chanceTop), '挑战精英 / 地狱解锁装备掉落', { size: 19, color: COMIC.sub, w: 660, h: 34 });
++      } else mainLabel(body, 0, by(chanceTop+extra), '挑战精英 / 地狱解锁装备掉落', { size: 19, color: COMIC.sub, w: 660, h: 34 });
+ 
+-      mainLabel(body, -194, by(squadTop), '出战阵容 ' + squadList().length + '/4', { size: 25, bold: true, color: COMIC.text, w: 286, h: 36, align: 'left' });
+-      const squad = N('campaignSquadEdit', body, 283, by(squadTop), 106, 44);
++      mainLabel(body, -194, by(squadTop+extra*2), '出战阵容 ' + squadList().length + '/4', { size: 25, bold: true, color: COMIC.text, w: 286, h: 36, align: 'left' });
++      const squad = N('campaignSquadEdit', body, 283, by(squadTop+extra*2), 106, 44);
+       mainLabel(squad, 0, 0, '编队 ›', { size: 20, color: COMIC.sub, w: 100, h: 34 });
+       const editSquad = (): void => openSquadPanel({ ...ctx, refresh: () => { renderSheet(); warmSelected(); ctx.refreshResources?.(); } });
+       bindButton(squad, editSquad, { dragThreshold: 7 });
+       const heroes = squadList();
+       for (let i = 0; i < 4; i++) {
+-        const slot = N('campaignSquadPortrait:' + i, body, (i - 1.5) * 152, by(portraitsTop), 86, 86);
+-        if (heroes[i]) heroPortrait(slot, 0, 0, 80, heroes[i]);
++        const slot = N('campaignSquadPortrait:' + i, body, (i - 1.5) * 152, by(portraitsTop+extra*2), 86, 86);
++        if (heroes[i]) {
++          const rim = N('campaignSquadGoldRim', slot).addComponent(Graphics);
++          rim.fillColor = C('#4B422E'); rim.circle(0,0,44); rim.fill();
++          rim.strokeColor = C('#E6BD63'); rim.lineWidth = 2; rim.circle(0,0,42); rim.stroke();
++          heroPortrait(slot, 0, 0, 80, heroes[i]);
++        }
+         else {
+           const g = slot.addComponent(Graphics); g.fillColor = C('#E5D6B8'); g.circle(0, 0, 38); g.fill();
+           comicMark(slot, 0, 0, 'plus', 23, COMIC.sub);
+@@ -317,6 +334,7 @@
+           if (content.isValid) toast('进入战斗失败，请重试', { kind: 'warning', title: '进入战斗失败' });
+         }, warmBattlefield(lv.id, squadList()));
+       }, { tone: open ? 'gold' : 'muted', name: 'campaignStartBattle', enabled: open });
++      paintCampaignAction(battle.node.getChildByName('buttonFace')!, 664, 78, open);
+       if (open) levelArt(battle.node, -124, 0, 52, 52, 'comic_swords_v1');
+       else comicMark(battle.node, -139, 0, 'lock', 28, COMIC.sub);
+       mainLabel(battle.node, 30, 0, open ? '开始战斗' : '通关前置关卡解锁',
+@@ -325,14 +343,15 @@
+   }
+   function renderWorld(): void {
+     refreshUI(content, () => {
+-      mapScroll = null; drawer = null; shade = null; sheetOffset = 0; closing = false;
++      mapScroll = null; drawer = null; shade = null; closing = false;
+       const chapter = currentChapter();
+-      const map = pageScroll(content, 'campaignTerrain', mapTop, dockTop, mapHeight, 750);
+-      artSprite(map, 0, -mapHeight / 2, ROUTE_W * mapHeight / ROUTE_H, mapHeight, ROUTE_ART[chapter], { sliced: false });
++      const map = pageScroll(content, 'campaignTerrain', mapTop, dockTop, mapContentH, 750);
++      campaignTerrainCrown(map, mapInsetTop, chapter);
++      artSprite(map, 0, -mapInsetTop - mapHeight / 2, ROUTE_W * mapHeight / ROUTE_H, mapHeight, ROUTE_ART[chapter], { sliced: false });
+       mapScroll = map.parent!.getComponent(ScrollView)!;
+       mapScroll.inertia = true; mapScroll.brake = .65; mapScroll.elastic = false; mapScroll.cancelInnerEvents = true;
+       map.parent!.on('scrolling', saveOffset); map.parent!.on('scroll-ended', saveOffset);
+-      pins = N('campaignLiveCheckpoints', map);
++      pins = N('campaignLiveCheckpoints', map, 0, -mapInsetTop);
+       renderPins();
+       const firstStage = LEVELS[chapter * 10];
+       if (!levelOpen(firstStage.order)) {
+@@ -351,16 +370,18 @@
+       }
+       const top = N('campaignTopChrome', content, 0, WY(0, chapterTop + 98), 750, chapterTop + 98);
+       top.addComponent(BlockInputEvents);
+-      comicArt(top, -307, (chapterTop + 98) / 2 - headerTop - 28, 46, 46, 'comic_nav_map_v1');
+-      mainLabel(top, -225, (chapterTop + 98) / 2 - headerTop - 28, '远征地图',
+-        { size: 24, color: COMIC.cream, bold: true, w: 142, h: 40, outline: COMIC.darkShade, outlineW: 2 });
++      const titleY = (chapterTop + 98) / 2 - headerTop - 28;
++      const titleFlag = campaignChapterPlate(top, -251, titleY, 248, 58); titleFlag.name = 'campaignTitleFlag';
++      comicArt(top, -333, titleY, 56, 56, 'comic_nav_map_v1');
++      mainLabel(top, -217, titleY, '远征地图',
++        { size: 24, color: '#FFF0C7', bold: true, w: 154, h: 40, outline: COMIC.darkShade, outlineW: 1 });
+       header = N('campaignHeader', content); renderHeader();
+       dock = N('campaignDock', content); renderDock();
+       if (st.drawer) {
+         if (st.offsets[chapter] === null) {
+           const p = routePoint(LEVELS[st.i].stage, mapHeight);
+-          st.offsets[chapter] = Math.max(0, Math.min(mapHeight - mapViewH,
+-            mapTop + p.top - chapterTop - (dockTop - chapterTop) * .62));
++          st.offsets[chapter] = Math.max(0, Math.min(mapContentH - mapViewH,
++            mapTop + mapInsetTop + p.top - chapterTop - (dockTop - chapterTop) * .62));
+         }
+         scrollMap(st.offsets[chapter]!, false);
+         openDrawer(false);
+--- before/assets/scripts/ui/CampaignRoute.ts
++++ assets/scripts/ui/CampaignRoute.ts
+@@ -5,6 +5,7 @@
+ import { mainLabel } from './PageKit';
+ import { reducedMotion } from './UIMotion';
+ import { paintCampaignCheckpoint } from './CampaignCheckpointArt';
++import { campaignChapterPlate } from './CampaignChrome';
+ 
+ export const ROUTE_ART = ['outpost', 'forest', 'lair'].map(name => 'scenes/bg_campaign_' + name + '_v1');
+ export const ROUTE_W = 750;
+@@ -79,7 +80,10 @@
+   const goldShield = chapter === 0 && highlighted;
+   mainLabel(item, 0, 23, String(stage), { size: 30, bold: true, font: 'number', color: goldShield ? COMIC.text : COMIC.cream,
+     w: 48, h: 40, outline: goldShield ? undefined : COMIC.darkShade, outlineW: 2 });
+-  if (!open) comicMark(item, 0, -13, 'lock', 18, '#E4E5DF');
++  if (!open) {
++    comicSurface(item, 0, -17, 28, 28, 'dark', { radius: 6, name: 'campaignLockSeal' });
++    comicMark(item, 0, -15, 'lock', 22, '#EEF0E8');
++  }
+   if (stage === 10) {
+     comicSurface(item, 0, 65, 58, 22, highlighted ? 'gold' : 'dark', { radius: 11, name: 'chapterFinale' });
+     mainLabel(item, 0, 65, '章末', { size: 14, bold: true, color: highlighted ? COMIC.text : COMIC.cream, w: 52, h: 20 });
+@@ -87,13 +91,17 @@
+   // Stars stay below the pin, with a quiet empty state instead of three large disabled icons.
+   if (open) {
+     for (let s = 0; s < 3; s++) {
+-      const star = N('checkpointStar:' + s, item, (s - 1) * 22, -40).addComponent(Graphics);
++      const star = N('checkpointStar:' + s, item, (s - 1) * 26, -43).addComponent(Graphics);
+       star.fillColor = C(s < earned ? COMIC.gold : '#68747D'); star.strokeColor = C(COMIC.darkShade); star.lineWidth = 1.7;
+       for (let k = 0; k < 10; k++) {
+-        const a = Math.PI / 2 + k * Math.PI / 5, r = k % 2 ? 5 : 11;
++        const a = Math.PI / 2 + k * Math.PI / 5, r = k % 2 ? 6 : 14;
+         if (k === 0) star.moveTo(Math.cos(a) * r, Math.sin(a) * r); else star.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+       }
+       star.close(); star.fill(); star.stroke();
++      if (s < earned) {
++        star.fillColor = C('#FFF0A7'); star.moveTo(0,12); star.lineTo(-3,4); star.lineTo(-12,4);
++        star.lineTo(-5,0); star.lineTo(0,2); star.close(); star.fill();
++      }
+     }
+   }
+   if (claimable) {
+@@ -103,7 +111,8 @@
+   }
+   if (selected) {
+     const side = p.x > 75 ? -1 : 1;
+-    const tag = comicSurface(item, side * (chapter === 0 ? 123 : 139), 3, 152, 38, 'dark', { name: 'selectedCheckpointName', radius: 12 });
++    const tag = campaignChapterPlate(item, side * (chapter === 0 ? 123 : 139), 3, 152, 40);
++    tag.name = 'selectedCheckpointName';
+     mainLabel(tag, 0, 0, name, { size: 21, bold: true, color: COMIC.cream, w: 138, h: 30 });
+   }
+   return item;
+--- before/assets/scripts/ui/CampaignCheckpointArt.ts
++++ assets/scripts/ui/CampaignCheckpointArt.ts
+@@ -22,12 +22,30 @@
+   g.fillColor = C(color); g.circle(x - .5, y + .6, 1.8); g.fill();
+ }
+ 
++/** Perspective stone drums replace the flat gray ovals under checkpoint signs. */
++function pedestal(g: Graphics, active: boolean, open: boolean): void {
++  g.fillColor = C(open ? '#48545F' : '#4A535A');
++  g.strokeColor = C('#253039'); g.lineWidth = 2;
++  g.moveTo(-39,-22); g.lineTo(-39,-31);
++  g.bezierCurveTo(-37,-47,37,-47,39,-31); g.lineTo(39,-22); g.close(); g.fill(); g.stroke();
++  g.fillColor = C(open ? '#A0A9AA' : '#818A8C'); g.ellipse(0,-22,39,13); g.fill(); g.stroke();
++  stroke(g, [[-30,-17],[-17,-12],[13,-12],[29,-17]], open ? '#D5D7C9' : '#A7AFAE', 1.8);
++  stroke(g, [[-20,-34],[-20,-39]], '#26343D', 1.8);
++  stroke(g, [[17,-35],[17,-40]], '#26343D', 1.8);
++  if (active) {
++    g.strokeColor = C('#F3CF6A'); g.lineWidth = 2;
++    g.ellipse(0,-22,38,12); g.stroke();
++  }
++}
++
+ function outpost(g: Graphics, active: boolean, open: boolean): void {
+-  g.fillColor = C(open ? '#909CA4' : '#777F83'); g.strokeColor = C(COMIC.darkShade); g.lineWidth = 2;
+-  g.ellipse(0, -23, 37, 12); g.fill(); g.stroke();
++  pedestal(g, active, open);
+   shape(g, [[-7,-24],[7,-24],[7,50],[-7,50]], open ? '#625240' : '#5B5E59', COMIC.darkShade);
+   shape(g, [[-29,53],[29,53],[29,0],[0,-23],[-29,0]],
+     active ? COMIC.gold : open ? '#277AC0' : '#53616C', active ? COMIC.goldShade : COMIC.darkShade, 3);
++  shape(g, [[-29,53],[-23,47],[-23,3],[0,-15],[0,-23],[-29,0]], active ? '#D89A29' : open ? '#1B5697' : '#394953');
++  shape(g, [[-23,47],[23,47],[18,39],[-18,39]], active ? '#FFE785' : open ? '#51A6DB' : '#71818A');
++  shape(g, [[23,47],[29,53],[29,0],[0,-23],[0,-15],[23,3]], active ? '#E8B13B' : open ? '#205F9F' : '#42545E');
+   stroke(g, [[-23,47],[23,47],[23,3],[0,-15],[-23,3],[-23,47]],
+     active ? COMIC.goldLight : open ? '#A7D9F3' : '#9BA4AA', 2);
+   rivet(g, -19, 40, active ? COMIC.goldLight : '#C5D1D6');
+@@ -38,7 +56,7 @@
+   const ink = open ? '#3F2B20' : '#3E433C';
+   const wood = open ? '#A56C38' : '#706D5A';
+   const lit = open ? '#D7A565' : '#9B9780';
+-  g.fillColor = C(open ? '#526B39' : '#636B55'); g.ellipse(0, -26, 34, 9); g.fill();
++  pedestal(g, active, open);
+   shape(g, [[-7,-31],[7,-28],[10,46],[-5,57],[-10,48]], open ? '#765037' : '#5F6051', ink, 2.4);
+   shape(g, [[-42,49],[29,52],[47,36],[40,25],[47,9],[31,-3],[-42,-1],[-37,23]],
+     wood, active ? COMIC.gold : ink, active ? 3.5 : 3);
+@@ -60,8 +78,7 @@
+   const rim = active ? COMIC.gold : open ? '#816149' : '#78817C';
+   const bone = open ? '#E6D5AE' : '#9C9F91';
+   const dark = '#282B2B';
+-  shape(g, [[-36,-25],[-25,-18],[24,-17],[36,-27],[19,-33],[-18,-33]],
+-    open ? '#655648' : '#5A605A', dark);
++  pedestal(g, active, open);
+   shape(g, [[-8,-28],[8,-28],[7,47],[0,60],[-7,47]], open ? '#5C493B' : '#535A53', dark, 2.5);
+   shape(g, [[-30,49],[-8,55],[0,49],[8,55],[30,49],[37,32],[30,-4],[0,-18],[-30,-4],[-37,32]],
+     open ? '#393D3B' : '#515B58', rim, active ? 3.5 : 3);
+--- before/assets/scripts/ui/CampaignChrome.ts
++++ assets/scripts/ui/CampaignChrome.ts
+@@ -0,0 +1,153 @@
++/** Local campaign materials; no bitmap text, extra downloads or looping decorative effects. */
++import { Color, Graphics, Node } from 'cc';
++import { C, CA, N } from './UIKit';
++import { COMIC, comicMark } from './ComicUI';
++
++type Point = readonly [number, number];
++function face(g: Graphics, points: readonly Point[], fill: string, edge?: string, width = 2): void {
++  g.fillColor = C(fill); g.moveTo(points[0][0], points[0][1]);
++  points.slice(1).forEach(p => g.lineTo(p[0], p[1])); g.close(); g.fill();
++  if (edge) { g.strokeColor = C(edge); g.lineWidth = width; g.stroke(); }
++}
++function cut(w: number, h: number, c: number): Point[] {
++  return [[-w/2+c,-h/2],[w/2-c,-h/2],[w/2,-h/2+c],[w/2,h/2-c],
++    [w/2-c,h/2],[-w/2+c,h/2],[-w/2,h/2-c],[-w/2,-h/2+c]];
++}
++function line(g: Graphics, points: readonly Point[], color: string, width = 2): void {
++  g.strokeColor = C(color); g.lineWidth = width; g.moveTo(points[0][0], points[0][1]);
++  points.slice(1).forEach(p => g.lineTo(p[0], p[1])); g.stroke();
++}
++
++/** The short forest extension belongs to the scrolling terrain, behind the floating controls. */
++export function campaignTerrainCrown(parent: Node, height: number, chapter: number): void {
++  if (height <= 0) return;
++  const g = N('campaignScrollingCanopy', parent).addComponent(Graphics);
++  const palettes = [['#638B55','#3E6944','#1C4A3D'], ['#456D50','#294E3D','#153E32'], ['#665F48','#454B3D','#293E34']];
++  const colors = palettes[chapter] || palettes[0];
++  g.fillColor = C(colors[0]); g.rect(-375, -height - 16, 750, height + 16); g.fill();
++  for (let layer = 0; layer < 2; layer++) {
++    for (let i = 0; i < 13; i++) {
++      const x = -400 + i * 68 + layer * 29, base = -height - 20 + layer * 22;
++      const h = height * (.48 + ((i * 7 + layer * 3) % 5) * .09);
++      face(g, [[x-42,base],[x-23,base+h*.34],[x-34,base+h*.34],[x-13,base+h*.68],
++        [x-21,base+h*.68],[x,base+h],[x+21,base+h*.68],[x+13,base+h*.68],
++        [x+34,base+h*.34],[x+23,base+h*.34],[x+42,base]], colors[layer + 1]);
++    }
++  }
++}
++
++export function campaignChapterPlate(parent: Node, x: number, y: number, w: number, h: number): Node {
++  const node = N('campaignChapterHeader', parent, x, y, w, h), g = node.addComponent(Graphics);
++  face(g, cut(w,h,24), '#242E39', '#101B24', 3);
++  face(g, [[-w/2+25,h/2-4],[w/2-25,h/2-4],[w/2-8,6],[-w/2+8,6]], '#374654');
++  face(g, [[-w/2+7,4],[w/2-7,4],[w/2-25,-h/2+4],[-w/2+25,-h/2+4]], '#202A35');
++  line(g, [[-w/2+7,0],[-w/2+27,h/2-5],[w/2-27,h/2-5],[w/2-7,0]], '#7D8B92', 1.6);
++  line(g, [[-w/2+27,-h/2+5],[w/2-27,-h/2+5]], '#5F6C73', 1.5);
++  return node;
++}
++
++export function campaignChapterArrow(parent: Node, dir: number, enabled: boolean): void {
++  const g = N('campaignCarvedArrow', parent).addComponent(Graphics);
++  const dark = enabled ? '#705023' : '#35434B', light = enabled ? '#FFE4A0' : '#75848B';
++  face(g, [[dir*12,0],[-dir*7,19],[-dir*4,1],[-dir*7,-19]], enabled ? '#DBAD5C' : '#52636B', dark, 2);
++  face(g, [[dir*10,0],[-dir*6,17],[-dir*3,1]], light);
++}
++
++/** Warm paper with restrained edge light, without boxing every individual field. */
++export function campaignPaper(parent: Node, x: number, y: number, w: number, h: number, name: string, radius = 22): Node {
++  const node = N(name, parent, x, y, w, h), g = node.addComponent(Graphics);
++  const r = Math.min(radius, h/2);
++  const top = C('#FFF6E0'), bottom = C('#EEDCBD');
++  for (let i = 0; i < 18; i++) {
++    const bandH = h / 18, bandY = h/2 - (i+1)*bandH;
++    g.fillColor = Color.lerp(new Color(), top, bottom, i/17);
++    if (i === 0 || i === 17) g.roundRect(-w/2, bandY, w, bandH + 1, Math.min(r, bandH/2));
++    else g.rect(-w/2, bandY, w, bandH + 1);
++    g.fill();
++  }
++  // Cover the square band ends with the same rounded silhouette at the two short ends.
++  g.fillColor = C('#FFF6E0'); g.roundRect(-w/2, h/2-r*2, w, r*2, r); g.fill();
++  g.fillColor = C('#EEDCBD'); g.roundRect(-w/2, -h/2, w, r*2, r); g.fill();
++  g.strokeColor = CA('#FFF9E9', .9); g.lineWidth = 2;
++  g.moveTo(-w/2+r, h/2-2); g.lineTo(w/2-r, h/2-2); g.stroke();
++  return node;
++}
++
++export function paintCampaignAction(node: Node, w: number, h: number, enabled: boolean): void {
++  const g = node.getComponent(Graphics)!; g.clear();
++  face(g, cut(w,h,12), enabled ? '#BD852A' : '#69736D', COMIC.ink, 2.2);
++  face(g, cut(w-6,h-6,10), enabled ? '#F3B638' : '#A2AAA0');
++  face(g, [[-w/2+5,1],[w/2-5,1],[w/2-5,h/2-14],[w/2-14,h/2-5],[-w/2+14,h/2-5],[-w/2+5,h/2-14]],
++    enabled ? '#FFD764' : '#C4C9BC');
++  face(g, [[-w/2+6,-h/2+14],[-w/2+14,-h/2+6],[w/2-14,-h/2+6],[w/2-6,-h/2+14],[w/2-6,-h/2+19],[-w/2+6,-h/2+19]],
++    enabled ? '#EAA728' : '#8E998E');
++  line(g, [[-w/2+8,h/2-15],[-w/2+15,h/2-7],[w/2-15,h/2-7],[w/2-8,h/2-15]], enabled ? '#FFF0A9' : '#D8DED0', 2);
++}
++
++export function campaignDockPaper(parent: Node, x: number, y: number, w: number, h: number): Node {
++  const node = N('campaignCurrentStage', parent, x, y, w, h), g = node.addComponent(Graphics);
++  g.fillColor = C('#202B36'); g.rect(-w/2,-h/2,w,h); g.fill();
++  const paper = campaignPaper(node, 0, 0, w-26, h-14, 'campaignCurrentParchment', 8);
++  const art = N('campaignDockCastleWatermark', paper, 4, -7).addComponent(Graphics);
++  art.fillColor = CA('#AF9870', .14);
++  art.ellipse(0,-28,119,19); art.fill();
++  for (const [cx,cy,cw,ch] of [[-55,-13,27,42],[-15,-5,34,65],[27,-17,39,38],[65,-2,29,68]]) {
++    art.rect(cx-cw/2,cy-ch/2,cw,ch); art.fill();
++    art.moveTo(cx-cw*.66,cy+ch/2); art.lineTo(cx,cy+ch/2+18); art.lineTo(cx+cw*.66,cy+ch/2); art.close(); art.fill();
++  }
++  return node;
++}
++
++export function campaignDifficultyFace(node: Node, w: number, h: number, selected: boolean, open: boolean): void {
++  const g = node.addComponent(Graphics);
++  face(g, cut(w,h,11), selected ? '#F8C547' : '#E5D4B1', selected ? '#A17A31' : undefined, 1.7);
++  if (selected) {
++    face(g, [[-w/2+5,1],[w/2-5,1],[w/2-5,h/2-12],[w/2-12,h/2-5],[-w/2+12,h/2-5],[-w/2+5,h/2-12]], '#FFE380');
++    line(g, [[-w/2+12,h/2-4],[w/2-12,h/2-4]], '#FFF0B1', 1.6);
++  }
++  if (!open) comicMark(node, -64, 0, 'lock', 23, COMIC.sub);
++  else {
++    const flag = N('campaignDifficultyBanner', node, -64, 0).addComponent(Graphics);
++    line(flag, [[-12,15],[14,15]], '#5C4024', 3.5);
++    face(flag, [[-8,12],[10,12],[10,-15],[1,-8],[-8,-15]], selected ? '#A77A2F' : '#92866C', '#674D29', 1.5);
++    line(flag, [[-3,9],[-3,-4]], '#FBE196', 1.5);
++  }
++}
++
++/** Three reward tiers share a silhouette, with wood, blue enamel and red enamel lids. */
++export function campaignRewardChest(parent: Node, x: number, y: number, w: number, tier: number, opened: boolean): Node {
++  const node = N('campaignRewardChest:' + tier, parent, x, y, 118, 102), g = node.addComponent(Graphics);
++  const scale = w / 118; node.setScale(scale,scale,1);
++  const colors = ['#A46A31','#397DAB','#B54639'], lights = ['#CB9757','#66B0D6','#DF7860'];
++  const darks = ['#6C4124','#24536F','#7B302B'];
++  const i = Math.max(0,Math.min(2,tier)), trim = '#DCA443', ink = '#4A3324';
++  g.fillColor = CA('#655438',.16); g.ellipse(2,-43,50,5); g.fill();
++  face(g,[[-46,-5],[28,-5],[28,-44],[-46,-44]], colors[i],ink,2.4);
++  face(g,[[28,-5],[48,8],[48,-31],[28,-44]],darks[i],ink,2.2);
++  face(g,[[-45,-18],[28,-18],[28,-24],[-45,-24]],trim);
++  face(g,[[28,-18],[48,-5],[48,-11],[28,-24]],'#B77D30');
++  if (opened) {
++    face(g,[[-46,0],[-36,37],[36,42],[28,4]],darks[i],ink,2.4);
++    face(g,[[-39,3],[-31,30],[27,34],[22,7]],'#463C2C');
++    g.fillColor = C('#FFE19A'); g.ellipse(-3,3,37,8); g.fill();
++  } else {
++    g.fillColor = C(lights[i]); g.strokeColor = C(ink); g.lineWidth = 2.4;
++    g.moveTo(-46,-5); g.lineTo(-46,11); g.bezierCurveTo(-46,43,28,43,28,11);
++    g.lineTo(28,-5); g.close(); g.fill(); g.stroke();
++    face(g,[[28,-5],[48,8],[48,22],[28,11]],darks[i],ink,2);
++    for (const cx of [-32,14]) {
++      g.fillColor = C(trim); g.moveTo(cx-5,-5); g.lineTo(cx-5,12);
++      g.bezierCurveTo(cx-5,23,cx-2,30,cx+5,32); g.lineTo(cx+9,30);
++      g.bezierCurveTo(cx+3,25,cx+3,18,cx+3,11); g.lineTo(cx+3,-5); g.close(); g.fill();
++    }
++    line(g,[[-43,8],[26,8]],'#805729',1.8);
++  }
++  for (const cx of [-32,14]) {
++    face(g,[[cx-5,-7],[cx+4,-7],[cx+4,-43],[cx-5,-43]],trim,ink,1.3);
++    g.fillColor = C('#FFE5A4'); g.circle(cx-1,-33,2); g.fill();
++  }
++  face(g,[[-47,-6],[29,-6],[29,-12],[-47,-12]],'#E6B755',ink,1.2);
++  face(g,[[-15,-13],[1,-13],[1,-29],[-7,-34],[-15,-29]],'#F3CE76',ink,1.8);
++  g.fillColor = C('#5C4029'); g.circle(-7,-21,3.4); g.fill(); g.rect(-9,-27,4,6); g.fill();
++  return node;
++}
+--- before/assets/scripts/ui/MainUI.ts
++++ assets/scripts/ui/MainUI.ts
+@@ -16,7 +16,7 @@
+ import { ResourceBar, ResourceCurrency } from './ResourceBar';
+ import { buildShop } from './pages/ShopPage';
+ import { buildHeroes } from './pages/HeroPage';
+-import { buildLevels } from './pages/LevelsPage';
++import { buildLevels, closeLevelPreparation } from './pages/LevelsPage';
+ import { buildUpgrade } from './pages/UpgradePage';
+ import { buildBase } from './pages/BasePage';
+ import { levelReturnReady } from './BattleEntry';
+@@ -168,6 +168,7 @@
+   /* ---------- 页签切换：内容整屏重建 ---------- */
+   switchTab(i: number): void {
+     const previous = this.tab;
++    if (i !== 2) closeLevelPreparation();
+     this.tab = i;
+     flow.mainTab = i;
+     this.highlightTabs();
+--- before/assets/scripts/ui/SquadPanel.ts
++++ assets/scripts/ui/SquadPanel.ts
+@@ -11,6 +11,7 @@
+ import { bindButton } from './ButtonFeedback';
+ import { dismissUI, dismissUIAfterRefresh, motionIn } from './UIMotion';
+ import { uiSound } from './UIAudio';
++import { bindBrowserBack } from './BrowserBack';
+ 
+ export function openSquadPanel(ctx: PageCtx): void {
+   const root = ctx.screens.parent;
+@@ -22,7 +23,14 @@
+   const scene = N('squadUpperScene', dim, 0, WY(0, 440), 750, 440);
+   artSprite(scene, 0, 0, 750, 440, 'scenes/bg_levels_comic_v1', { sliced: false, cover: true });
+   const top = Math.max(48, LO.notchTop + 20);
+-  const close = (): void => { dismissUIAfterRefresh(dim, ctx.screens, ctx.refresh); };
++  let closing = false;
++  let releaseBack = (): void => {};
++  const close = (): void => {
++    if (closing || !dim.isValid) return;
++    closing = true; releaseBack();
++    dismissUIAfterRefresh(dim, ctx.screens, ctx.refresh);
++  };
++  releaseBack = bindBrowserBack(dim, close);
+   mainLabel(dim, 0, WY(top, 70), '出战编队', { size: 36, font: 'body', bold: true, color: COMIC.cream, outline: COMIC.ink, outlineW: 3, w: 290, h: 58 });
+   const body = N('squadBody', dim);
+   let removeModal: Node | null = null;
+@@ -88,6 +96,7 @@
+     panel.name = 'squadRemoveDialog';
+     const modal = panel.parent!;
+     removeModal = modal;
++    bindBrowserBack(modal, () => dismissUI(modal));
+     heroPortrait(panel, -165, 13, 100, hid);
+     mainLabel(panel, 51, 29, '将 ' + HERO_DEFS[hid].name + ' 下阵？',
+       { size: 25, color: COMIC.text, bold: true, w: 310, h: 40 });
+--- before/assets/scripts/ui/BrowserBack.ts
++++ assets/scripts/ui/BrowserBack.ts
+@@ -0,0 +1,45 @@
++/** One same-document history boundary makes mobile Back dismiss the top registered view first. */
++import { _decorator, Component, Node } from 'cc';
++const { ccclass } = _decorator;
++type BackView = { owner: Node; close: () => void };
++const views: BackView[] = [];
++let installed = false, armed = false, token = 0;
++const STATE_KEY = '__kingdomWatchOverlayBack';
++
++function arm(): void {
++  if (armed || typeof window === 'undefined') return;
++  try {
++    const state = window.history.state;
++    window.history.pushState({ ...(state && typeof state === 'object' ? state : {}), [STATE_KEY]: ++token }, '');
++    armed = true;
++  } catch (_) { /* Embedded hosts may not expose history; in-game close controls remain available. */ }
++}
++
++function pop(): void {
++  if (!armed || window.history.state?.[STATE_KEY] === token) return;
++  armed = false;
++  while (views.length && !views[views.length-1].owner.isValid) views.pop();
++  const top = views.pop();
++  if (!top) return;
++  // A confirmation nested inside the squad uses the same boundary, then restores it for its parent.
++  if (views.length) arm();
++  top.close();
++}
++
++@ccclass('BrowserBackLifetime')
++class BrowserBackLifetime extends Component {
++  release: (() => void) | null = null;
++  onDestroy(): void { this.release?.(); this.release = null; }
++}
++
++export function bindBrowserBack(owner: Node, close: () => void): () => void {
++  if (typeof window === 'undefined') return () => {};
++  if (!installed) { window.addEventListener('popstate', pop); installed = true; }
++  const entry = { owner, close }; views.push(entry); arm();
++  const release = (): void => {
++    const index = views.indexOf(entry); if (index >= 0) views.splice(index,1);
++  };
++  owner.addComponent(BrowserBackLifetime).release = release;
++  // Keep a single reusable boundary on button-close; repeated opens never accumulate history entries.
++  return release;
++}

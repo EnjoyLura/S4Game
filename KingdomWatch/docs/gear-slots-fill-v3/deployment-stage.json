@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-gear-slots-fill-v3-20261017-015825",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-preparation-art-v2-20261017-014305",
+  "entryVersion": "1792173338",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=gear-slots-fill-v3-1792173338",
+  "scope": "remove rarity corner labels; fill equipment and inventory sockets edge to edge; weapon square same size as equipment",
+  "manualAcceptance": "pending user manual review"
+}

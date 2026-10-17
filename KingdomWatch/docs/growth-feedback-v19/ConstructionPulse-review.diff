@@ -1,0 +1,24 @@
+--- before/assets/scripts/ui/ConstructionPulse.ts
++++ assets/scripts/ui/ConstructionPulse.ts
+@@ -32,11 +32,19 @@
+     if (this.hidden) return;
+     if (!isValid(this.icon, true)) { this.node.destroy(); return; }
+     this.age += Math.min(.06, Math.max(0, dt)); const p = clamp(this.age / 1.15);
+-    const scale = 1 + Math.sin(Math.PI * clamp(this.age / .38)) * .025;
++    const scale = 1 + Math.sin(Math.PI * clamp(this.age / .38)) * .045;
+     this.icon.setScale(this.scale.x * scale, this.scale.y * scale, this.scale.z);
+-    this.ink.clear(); lightEnvelope(this.light, this.age, 1.15, .45);
++    this.ink.clear(); lightEnvelope(this.light, this.age, 1.15, .62);
+     this.ink.strokeColor = CA('#EFC869', (1 - p) * .65); this.ink.lineWidth = 1.6;
+     this.ink.circle(0, 0, this.radius * (.48 + out(p) * .45)); this.ink.stroke();
++    for (let i = 0; i < 8; i++) {
++      const t = clamp((this.age - .1 - i % 3 * .04) / .7);
++      if (t <= 0 || t >= 1) continue;
++      const angle = i * Math.PI / 4, reach = this.radius * (.45 + t * .5);
++      this.ink.fillColor = CA('#FFF1C0', Math.sin(Math.PI * t) * .8);
++      this.ink.circle(Math.cos(angle) * reach, Math.sin(angle) * reach + t * 14, 1.8);
++      this.ink.fill();
++    }
+     if (p >= 1) { this.icon.setScale(this.scale); this.node.destroy(); }
+   }
+   private hide = (): void => { this.hidden = true; };

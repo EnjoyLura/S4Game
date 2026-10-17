@@ -1,7 +1,12 @@
 /** One persistent WebAudio mix for the web game; no scene-owned players or synthesized placeholders. */
 import { assetManager, AudioClip, resources } from 'cc';
 import { loadSave } from './SaveData';
-import { AUDIO_CUES, MUSIC_TRACKS, MusicScene, SfxName } from './AudioCatalog';
+import { AUDIO_CUES, MUSIC_TRACKS, MusicScene, resolveAudioCue, SfxName } from './AudioCatalog';
+
+// Keep the established master level. Impact comes from source transients and mix space.
+const AUDIO_LEVEL_BOOST = Math.SQRT2 * Math.pow(10, 1 / 20);
+const SFX_BUS_GAIN = .85 * AUDIO_LEVEL_BOOST;
+const MUSIC_SCENE_GAIN = { camp: .52 * AUDIO_LEVEL_BOOST, battle: .42 * AUDIO_LEVEL_BOOST } as const;
 
 interface PlaybackShape { preparing?: boolean; gain?: number; rate?: number; fadeIn?: number; duration?: number; lowpass?: number; }
 interface Voice { source: AudioBufferSourceNode; gain: GainNode; priority: number; group: string; name: SfxName; started: number; }
@@ -48,7 +53,9 @@ class GameAudioService {
   }
 
   enter(scene: MusicScene): void {
-    if (this.scene !== scene) { this.stopVoices(true); this.scene = scene; this.musicRevision++; }
+    // Only the persistent gate's short collision tail crosses the covered scene swap.
+    this.stopVoices(false, false, true);
+    if (this.scene !== scene) { this.scene = scene; this.musicRevision++; }
     this.state = 'running';
     this.ensureContext();
     this.settingsChanged();
@@ -64,7 +71,7 @@ class GameAudioService {
     if (this.state === state) return;
     this.state = state;
     if (state !== 'running' && state !== 'prepare') {
-      this.stopVoices(true, state === 'win' || state === 'lose'); this.duckUntil = 0; this.duckGain = 1;
+      this.stopVoices(state !== 'leaving', state === 'win' || state === 'lose'); this.duckUntil = 0; this.duckGain = 1;
       if (this.duckTimer !== null) { clearTimeout(this.duckTimer); this.duckTimer = null; }
     }
     this.musicLevel();
@@ -74,7 +81,7 @@ class GameAudioService {
     const save = loadSave();
     this.musicEnabled = save.music !== false;
     this.sfxEnabled = save.sfx !== false;
-    if (this.sfxBus && this.ctx) this.ramp(this.sfxBus.gain, this.sfxEnabled ? .85 : 0, .03);
+    if (this.sfxBus && this.ctx) this.ramp(this.sfxBus.gain, this.sfxEnabled ? SFX_BUS_GAIN : 0, .03);
     if (!this.sfxEnabled) this.stopVoices();
     if (!this.musicEnabled) {
       this.musicRevision++;
@@ -87,27 +94,31 @@ class GameAudioService {
   }
 
   prepareUltimate(hero: string, seconds: number): void {
-    const names: Record<string, SfxName> = { archer: 'skill', sniper: 'crossbow', pyro: 'fireSkill', volt: 'thunderSkill', mora: 'frostSkill' };
     if (this.ctx && this.scene === 'battle' && this.state === 'running') this.duck(seconds, .74);
-    this.play(names[hero] || 'skill', { preparing: true, gain: .34, rate: .78,
-      fadeIn: .13, duration: seconds, lowpass: 1800 });
+    const rates: Record<string, number> = { archer: 1.08, sniper: .94, pyro: .9, volt: 1.12, mora: 1 };
+    this.play('charge', { preparing: true, gain: .6, rate: rates[hero] || 1,
+      fadeIn: .07, duration: seconds, lowpass: 6500 });
   }
-  /** A separate two-voice budget keeps kills legible without a crowd of screams. */
-  death(element: 'physical' | 'fire' | 'volt' | 'frost', heavy: boolean): void {
-    const names: Record<string, SfxName> = { fire: 'deathFire', volt: 'deathVolt', frost: 'deathFrost' };
-    this.play(names[element] || (heavy ? 'deathHeavy' : 'kill'), {
-      rate: heavy ? .94 : 1, gain: heavy && element !== 'physical' ? 1.08 : 1,
-    });
+  /** Only elite/BOSS defeats get a shared landing, regardless of the killing element. */
+  death(_element: 'physical' | 'fire' | 'volt' | 'frost', significant: boolean): void {
+    if (significant) this.play('deathHeavy', { rate: .94 });
   }
   play(name: SfxName, shape: PlaybackShape = {}): void {
+    const resolved = resolveAudioCue(name);
+    if (!resolved) return;
+    name = resolved;
     if (!this.sfxEnabled || loadSave().sfx === false || typeof document === 'undefined' || document.hidden) return;
     const cue = AUDIO_CUES[name], now = performance.now() / 1000;
     const combat = cue.group === 'shot' || cue.group === 'impact' || cue.group === 'cast' || cue.group === 'death';
     if (this.scene === 'battle' && combat && this.state !== 'running' && this.state !== 'prepare') return;
     if (now - (this.lastAt[name] ?? -100) < cue.gap) return;
-    // Simultaneous heroes must all speak. Only repetitive minor contacts share a gap.
-    const groupGap = cue.group === 'death' ? .075 : cue.group === 'impact' && cue.priority < 2 ? .045 : cue.group === 'ui' ? .035 : 0;
+    // Automatic volleys share space; they never queue up to play after the action.
+    const groupGap = cue.group === 'shot' ? .12 : cue.group === 'impact' ? .2
+      : cue.group === 'death' ? .5 : cue.group === 'cast' && cue.priority < 3 ? .24
+      : cue.group === 'ui' ? .08 : 0;
     if (now - (this.lastGroup[cue.group] ?? -100) < groupGap) return;
+    if (name === 'lootPickup' && now - (this.lastAt[name] ?? -100) < .6) return;
+    if (cue.group === 'shot' && now < this.accentUntil) return;
     const available = cue.files.filter(file => this.buffers.has(file));
     if (!available.length || !this.ctx || this.ctx.state !== 'running') {
       // Never queue late shots/hits; prepare the sample for the next actual event.
@@ -117,16 +128,24 @@ class GameAudioService {
     let index = Math.floor(Math.random() * available.length);
     if (available.length > 1 && index === this.lastVariant[name]) index = (index + 1) % available.length;
     const buffer = this.buffers.get(available[index])!;
+    // Full celebrations replace their predecessor instead of stacking long melodies.
+    // Shared reward/growth phrases replace their predecessor rather than piling up.
+    if (cue.group === 'cue' && cue.priority >= 4) {
+      for (const voice of [...this.voices]) if (voice.group === 'cue' && voice.priority <= cue.priority) this.stopVoice(voice);
+    }
+    if (cue.group === 'card') {
+      for (const voice of [...this.voices]) if (voice.group === 'card' || voice.name === 'levelup') this.stopVoice(voice);
+    }
     const family = this.voices.filter(v => v.name === name);
     if (combat && family.length >= 2) this.stopVoice(family[0]);
     const group = this.voices.filter(v => v.group === cue.group);
-    const groupLimit = cue.group === 'death' ? 2 : cue.group === 'shot' ? 7 : cue.group === 'impact' ? 4 : cue.group === 'cast' ? 3 : 6;
+    const groupLimit = cue.group === 'death' || cue.group === 'card' || cue.group === 'cue' || cue.group === 'impact' || cue.group === 'transition' ? 1 : 2;
     if (group.length >= groupLimit) {
       const victim = group.filter(v => v.priority <= cue.priority).sort((a, b) => a.priority - b.priority || a.started - b.started)[0];
       if (!victim) return;
       this.stopVoice(victim);
     }
-    if (this.voices.length >= 14) {
+    if (this.voices.length >= 8) {
       const victim = this.voices.filter(v => v.priority <= cue.priority).sort((a, b) => a.priority - b.priority)[0];
       if (!victim) return;
       this.stopVoice(victim);
@@ -134,8 +153,14 @@ class GameAudioService {
     this.lastVariant[name] = index;
     this.lastAt[name] = now; this.lastGroup[cue.group] = now;
     if (cue.priority >= 3 && !shape.preparing) {
-      this.accentUntil = now + .14;
-      this.duck(Math.min(1.4, buffer.duration), combat ? .62 : .43);
+      this.accentUntil = now + .24;
+      this.duck(Math.min(combat ? .9 : 3.4, buffer.duration), combat ? .64 : .4);
+      // Make room in already-playing ordinary contact tails as well as future hits.
+      if (combat) for (const voice of this.voices) {
+        if ((voice.group === 'shot' || voice.group === 'impact') && voice.priority < 2 && now - voice.started > .035) {
+          this.ramp(voice.gain.gain, voice.gain.gain.value * .55, .018);
+        }
+      }
     }
     const source = this.ctx.createBufferSource(), gain = this.ctx.createGain();
     source.buffer = buffer;
@@ -143,8 +168,8 @@ class GameAudioService {
     const rate = 'rate' in cue ? cue.rate : 1;
     source.playbackRate.value = rate * (shape.rate ?? 1) * (vary ? .9875 + Math.random() * .025 : 1);
     const recent = combat ? this.voices.filter(v => v.group === cue.group && now - v.started < .12).length : 0;
-    const density = 1 / Math.sqrt(1 + recent * .32);
-    const underAccent = combat && cue.priority < 2 && now < this.accentUntil ? .64 : 1;
+    const density = 1 / Math.sqrt(1 + recent * .42);
+    const underAccent = combat && cue.priority < 2 && now < this.accentUntil ? .62 : 1;
     const level = cue.gain * density * underAccent * (shape.gain ?? 1) * (vary ? .96 + Math.random() * .04 : 1);
     const playDuration = Math.min(buffer.duration / source.playbackRate.value, shape.duration ?? Infinity);
     if (shape.fadeIn) {
@@ -182,16 +207,16 @@ class GameAudioService {
       limiter.threshold.value = -3; limiter.knee.value = 2; limiter.ratio.value = 12;
       limiter.attack.value = .002; limiter.release.value = .09;
       this.sfxBus = ctx.createGain(); this.musicBus = ctx.createGain();
-      this.sfxBus.gain.value = this.sfxEnabled ? .85 : 0;
+      this.sfxBus.gain.value = this.sfxEnabled ? SFX_BUS_GAIN : 0;
       this.musicBus.gain.value = 0;
       this.combatBus = ctx.createGain();
       const lowCut = ctx.createBiquadFilter(), presence = ctx.createBiquadFilter();
       const air = ctx.createBiquadFilter(), glue = ctx.createDynamicsCompressor();
-      lowCut.type = 'highpass'; lowCut.frequency.value = 65; lowCut.Q.value = .707;
-      presence.type = 'peaking'; presence.frequency.value = 3100; presence.Q.value = .85; presence.gain.value = -2.5;
-      air.type = 'highshelf'; air.frequency.value = 5200; air.gain.value = -2;
-      glue.threshold.value = -14; glue.knee.value = 12; glue.ratio.value = 2.5;
-      glue.attack.value = .008; glue.release.value = .10;
+      lowCut.type = 'highpass'; lowCut.frequency.value = 60; lowCut.Q.value = .707;
+      presence.type = 'peaking'; presence.frequency.value = 3400; presence.Q.value = .85; presence.gain.value = -1;
+      air.type = 'highshelf'; air.frequency.value = 8000; air.gain.value = -1.5;
+      glue.threshold.value = -11; glue.knee.value = 8; glue.ratio.value = 2;
+      glue.attack.value = .016; glue.release.value = .12;
       this.combatBus.connect(lowCut); lowCut.connect(presence); presence.connect(air);
       air.connect(glue); glue.connect(this.sfxBus);
       this.sfxBus.connect(master); this.musicBus.connect(master);
@@ -247,10 +272,15 @@ class GameAudioService {
   private warm(): void {
     if (!this.ctx || this.warming || !this.sfxEnabled) return;
     this.warming = true;
-    // Prepare small UI/cues before interaction; bounded fetch/decode avoids a mobile CPU spike.
-    const files = Array.from(new Set(['ui_click_1', 'ui_confirm', AUDIO_CUES.bow.files[0], AUDIO_CUES.crossbow.files[0],
-      AUDIO_CUES.kill.files[0], AUDIO_CUES.deathFire.files[0], AUDIO_CUES.deathVolt.files[0], AUDIO_CUES.deathFrost.files[0],
-      'levelup', 'victory', 'defeat', ...Object.values(AUDIO_CUES).flatMap(cue => [...cue.files])]));
+    // Decode only retained/shared sources; muted recordings stay available on disk.
+    const first: SfxName[] = ['ui', 'gateSlide', 'gateClose', 'pickOpen', 'pickChoose', 'growth', 'reward',
+      'victory', 'defeat', 'breakthrough', 'bow', 'crossbow', 'fire', 'thunder', 'frost'];
+    const files: string[] = [], unique = new Set<string>();
+    for (const name of [...first, ...Object.keys(AUDIO_CUES) as SfxName[]]) {
+      const resolved = resolveAudioCue(name);
+      if (!resolved) continue;
+      for (const file of AUDIO_CUES[resolved].files) if (!unique.has(file)) { unique.add(file); files.push(file); }
+    }
     let next = 0;
     const worker = async (): Promise<void> => {
       while (next < files.length) { const file = files[next++]; await this.buffer(file); }
@@ -297,7 +327,7 @@ class GameAudioService {
 
   private musicLevel(): void {
     if (!this.ctx || !this.musicBus) return;
-    const sceneGain = this.scene === 'camp' ? .52 : .42;
+    const sceneGain = MUSIC_SCENE_GAIN[this.scene];
     const stateGain = this.state === 'win' || this.state === 'lose' ? .2 : this.state === 'paused' || this.state === 'pick' ? .42 : 1;
     const duck = performance.now() < this.duckUntil ? this.duckGain : 1;
     this.ramp(this.musicBus.gain, this.musicEnabled ? sceneGain * stateGain * duck : 0, .18);
@@ -318,10 +348,11 @@ class GameAudioService {
     try { voice.source.stop(this.ctx!.currentTime + .02); } catch { /* Already stopped. */ }
   }
 
-  private stopVoices(combatOnly = false, keepDeathTail = false): void {
+  private stopVoices(combatOnly = false, keepDeathTail = false, keepGateTail = false): void {
     for (const voice of [...this.voices]) {
-      // Let the final kill's sub-260ms finish survive settlement, but never navigation/pause.
+      // Let the final kill's short material tail survive settlement, never navigation/pause.
       if (keepDeathTail && voice.group === 'death') continue;
+      if (keepGateTail && voice.group === 'transition') continue;
       if (!combatOnly || voice.group === 'shot' || voice.group === 'impact' || voice.group === 'cast' || voice.group === 'death') this.stopVoice(voice);
     }
   }

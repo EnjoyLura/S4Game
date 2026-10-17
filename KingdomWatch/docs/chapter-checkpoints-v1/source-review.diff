@@ -1,0 +1,154 @@
+--- before/assets/scripts/ui/pages/LevelsPage.ts
++++ assets/scripts/ui/pages/LevelsPage.ts
+@@ -139,7 +139,7 @@
+       // Map progression is always normal-mode progression; each drawer keeps its own difficulty stars.
+       const open = campaignLevelOpen(level.id, sv.stars), earned = sv.stars[level.id] || 0;
+       const ready = DIFFS.some((_, d) => (sv.stars[starKey(level.id, d)] || 0) > (sv.chestClaimed[starKey(level.id, d)] || 0));
+-      const item = routeStop(pins!, level.stage, level.order === st.i, open, earned, level.name, ready, mapHeight);
++      const item = routeStop(pins!, level.stage, level.order === st.i, open, earned, level.name, ready, mapHeight, currentChapter());
+       bindButton(item, () => {
+         if (closing || enteringBattle()) return;
+         if (!open) { toast('通关 ' + LEVELS[level.order - 1].id + ' 普通难度后解锁'); return; }
+--- before/assets/scripts/ui/CampaignRoute.ts
++++ assets/scripts/ui/CampaignRoute.ts
+@@ -4,6 +4,7 @@
+ import { COMIC, comicMark, comicSurface } from './ComicUI';
+ import { mainLabel } from './PageKit';
+ import { reducedMotion } from './UIMotion';
++import { paintCampaignCheckpoint } from './CampaignCheckpointArt';
+ 
+ export const ROUTE_ART = ['outpost', 'forest', 'lair'].map(name => 'scenes/bg_campaign_' + name + '_v1');
+ export const ROUTE_W = 750;
+@@ -68,23 +69,16 @@
+ }
+ 
+ export function routeStop(parent: Node, stage: number, selected: boolean, open: boolean, earned: number,
+-  name: string, claimable: boolean, mapHeight = ROUTE_H): Node {
++  name: string, claimable: boolean, mapHeight = ROUTE_H, chapter = 0): Node {
+   const p = routePoint(stage, mapHeight), item = N('campaignStop:' + stage, parent, p.x, -p.top, 112, 128);
+   const highlighted = selected && open;
+   const shadow = N('checkpointShadow', item).addComponent(Graphics);
+   shadow.fillColor = CA(COMIC.ink, .28); shadow.ellipse(0, -29, 43, 14); shadow.fill();
+   if (highlighted) N('campaignSelectionGlow', item).addComponent(CampaignRouteMotion).glow();
+-  const g = N('campaignCheckpointFace', item).addComponent(Graphics);
+-  g.fillColor = C(open ? '#909CA4' : '#777F83'); g.strokeColor = C(COMIC.darkShade); g.lineWidth = 2;
+-  g.ellipse(0, -23, 37, 12); g.fill(); g.stroke();
+-  g.fillColor = C(highlighted ? COMIC.gold : open ? '#277AC0' : '#53616C');
+-  g.strokeColor = C(highlighted ? COMIC.goldShade : COMIC.darkShade); g.lineWidth = 3;
+-  g.moveTo(-27, 53); g.lineTo(27, 53); g.lineTo(27, 0); g.lineTo(0, -23); g.lineTo(-27, 0);
+-  g.close(); g.fill(); g.stroke();
+-  g.lineWidth = 2; g.strokeColor = C(highlighted ? COMIC.goldLight : open ? '#A7D9F3' : '#9BA4AA');
+-  g.moveTo(-21, 47); g.lineTo(21, 47); g.lineTo(21, 3); g.lineTo(0, -15); g.lineTo(-21, 3); g.close(); g.stroke();
+-  mainLabel(item, 0, 23, String(stage), { size: 30, bold: true, font: 'number', color: highlighted ? COMIC.text : COMIC.cream,
+-    w: 48, h: 40, outline: highlighted ? undefined : COMIC.darkShade, outlineW: 2 });
++  paintCampaignCheckpoint(item, chapter, highlighted, open);
++  const goldShield = chapter === 0 && highlighted;
++  mainLabel(item, 0, 23, String(stage), { size: 30, bold: true, font: 'number', color: goldShield ? COMIC.text : COMIC.cream,
++    w: 48, h: 40, outline: goldShield ? undefined : COMIC.darkShade, outlineW: 2 });
+   if (!open) comicMark(item, 0, -13, 'lock', 18, '#E4E5DF');
+   if (stage === 10) {
+     comicSurface(item, 0, 65, 58, 22, highlighted ? 'gold' : 'dark', { radius: 11, name: 'chapterFinale' });
+@@ -103,13 +97,13 @@
+     }
+   }
+   if (claimable) {
+-    const dot = N('campaignChestReady', item, 29, 48).addComponent(Graphics);
++    const dot = N('campaignChestReady', item, chapter === 0 ? 29 : 44, 48).addComponent(Graphics);
+     dot.fillColor = C('#D9533C'); dot.strokeColor = C(COMIC.cream); dot.lineWidth = 2;
+     dot.circle(0, 0, 7); dot.fill(); dot.stroke();
+   }
+   if (selected) {
+     const side = p.x > 75 ? -1 : 1;
+-    const tag = comicSurface(item, side * 123, 3, 152, 38, 'dark', { name: 'selectedCheckpointName', radius: 12 });
++    const tag = comicSurface(item, side * (chapter === 0 ? 123 : 139), 3, 152, 38, 'dark', { name: 'selectedCheckpointName', radius: 12 });
+     mainLabel(tag, 0, 0, name, { size: 21, bold: true, color: COMIC.cream, w: 138, h: 30 });
+   }
+   return item;
+--- before/assets/scripts/ui/CampaignCheckpointArt.ts
++++ assets/scripts/ui/CampaignCheckpointArt.ts
+@@ -0,0 +1,85 @@
++/** Chapter-specific checkpoint silhouettes; static vector art keeps map labels crisp. */
++import { Graphics, Node } from 'cc';
++import { C, N } from './UIKit';
++import { COMIC } from './ComicUI';
++
++type Point = readonly [number, number];
++function shape(g: Graphics, points: readonly Point[], fill: string, edge?: string, width = 2): void {
++  g.fillColor = C(fill);
++  g.moveTo(points[0][0], points[0][1]);
++  for (let i = 1; i < points.length; i++) g.lineTo(points[i][0], points[i][1]);
++  g.close(); g.fill();
++  if (edge) { g.strokeColor = C(edge); g.lineWidth = width; g.stroke(); }
++}
++function stroke(g: Graphics, points: readonly Point[], color: string, width = 2): void {
++  g.strokeColor = C(color); g.lineWidth = width;
++  g.moveTo(points[0][0], points[0][1]);
++  for (let i = 1; i < points.length; i++) g.lineTo(points[i][0], points[i][1]);
++  g.stroke();
++}
++function rivet(g: Graphics, x: number, y: number, color: string): void {
++  g.fillColor = C(COMIC.darkShade); g.circle(x, y, 3.2); g.fill();
++  g.fillColor = C(color); g.circle(x - .5, y + .6, 1.8); g.fill();
++}
++
++function outpost(g: Graphics, active: boolean, open: boolean): void {
++  g.fillColor = C(open ? '#909CA4' : '#777F83'); g.strokeColor = C(COMIC.darkShade); g.lineWidth = 2;
++  g.ellipse(0, -23, 37, 12); g.fill(); g.stroke();
++  shape(g, [[-7,-24],[7,-24],[7,50],[-7,50]], open ? '#625240' : '#5B5E59', COMIC.darkShade);
++  shape(g, [[-29,53],[29,53],[29,0],[0,-23],[-29,0]],
++    active ? COMIC.gold : open ? '#277AC0' : '#53616C', active ? COMIC.goldShade : COMIC.darkShade, 3);
++  stroke(g, [[-23,47],[23,47],[23,3],[0,-15],[-23,3],[-23,47]],
++    active ? COMIC.goldLight : open ? '#A7D9F3' : '#9BA4AA', 2);
++  rivet(g, -19, 40, active ? COMIC.goldLight : '#C5D1D6');
++  rivet(g, 19, 40, active ? COMIC.goldLight : '#C5D1D6');
++}
++
++function forest(g: Graphics, active: boolean, open: boolean): void {
++  const ink = open ? '#3F2B20' : '#3E433C';
++  const wood = open ? '#A56C38' : '#706D5A';
++  const lit = open ? '#D7A565' : '#9B9780';
++  g.fillColor = C(open ? '#526B39' : '#636B55'); g.ellipse(0, -26, 34, 9); g.fill();
++  shape(g, [[-7,-31],[7,-28],[10,46],[-5,57],[-10,48]], open ? '#765037' : '#5F6051', ink, 2.4);
++  shape(g, [[-42,49],[29,52],[47,36],[40,25],[47,9],[31,-3],[-42,-1],[-37,23]],
++    wood, active ? COMIC.gold : ink, active ? 3.5 : 3);
++  shape(g, [[-39,14],[38,16],[47,9],[31,-3],[-42,-1]], open ? '#79502E' : '#5B5C50');
++  stroke(g, [[-37,44],[26,47],[38,37]], lit, 2.5);
++  stroke(g, [[-37,23],[-20,22],[14,25],[40,25]], ink, 2);
++  stroke(g, [[-32,35],[-23,34],[-18,36]], lit, 1.7);
++  stroke(g, [[21,10],[29,12],[36,11]], lit, 1.6);
++  stroke(g, [[-29,6],[-19,7]], lit, 1.5);
++  rivet(g, -30, 39, open ? '#C8BD95' : '#9A9D8C');
++  rivet(g, 30, 35, open ? '#C8BD95' : '#9A9D8C');
++  rivet(g, -29, 8, open ? '#C8BD95' : '#9A9D8C');
++  const moss = open ? '#63813C' : '#6A735A';
++  shape(g, [[-44,45],[-46,54],[-35,52],[-29,43],[-37,45],[-38,36]], moss, ink, 1.4);
++  shape(g, [[30,-2],[39,4],[41,-3],[35,-9],[29,-7]], moss, ink, 1.2);
++}
++
++function lair(g: Graphics, active: boolean, open: boolean): void {
++  const rim = active ? COMIC.gold : open ? '#816149' : '#78817C';
++  const bone = open ? '#E6D5AE' : '#9C9F91';
++  const dark = '#282B2B';
++  shape(g, [[-36,-25],[-25,-18],[24,-17],[36,-27],[19,-33],[-18,-33]],
++    open ? '#655648' : '#5A605A', dark);
++  shape(g, [[-8,-28],[8,-28],[7,47],[0,60],[-7,47]], open ? '#5C493B' : '#535A53', dark, 2.5);
++  shape(g, [[-30,49],[-8,55],[0,49],[8,55],[30,49],[37,32],[30,-4],[0,-18],[-30,-4],[-37,32]],
++    open ? '#393D3B' : '#515B58', rim, active ? 3.5 : 3);
++  shape(g, [[-36,49],[-46,56],[-45,32],[-41,12],[-29,-7],[-34,17],[-31,33]],
++    bone, dark, 2.5);
++  shape(g, [[36,49],[46,56],[45,32],[41,12],[29,-7],[34,17],[31,33]],
++    bone, dark, 2.5);
++  stroke(g, [[-41,45],[-40,29],[-36,15]], open ? '#B7A27E' : '#777F74', 1.8);
++  stroke(g, [[41,45],[40,29],[36,15]], open ? '#B7A27E' : '#777F74', 1.8);
++  stroke(g, [[-22,43],[-9,47]], open ? '#A18A69' : '#939B8F', 2);
++  stroke(g, [[22,43],[9,47]], open ? '#A18A69' : '#939B8F', 2);
++  rivet(g, -22, 35, rim); rivet(g, 22, 35, rim);
++  shape(g, [[-7,1],[0,7],[7,1],[0,-7]], open ? active ? '#FFD163' : '#C3643D' : '#7F8980', dark, 1.5);
++}
++
++export function paintCampaignCheckpoint(parent: Node, chapter: number, active: boolean, open: boolean): void {
++  const theme = Math.max(0, Math.min(2, Math.floor(chapter)));
++  const names = ['campaignCheckpointOutpost', 'campaignCheckpointForest', 'campaignCheckpointLair'];
++  const g = N(names[theme], parent).addComponent(Graphics);
++  [outpost, forest, lair][theme](g, active, open);
++}

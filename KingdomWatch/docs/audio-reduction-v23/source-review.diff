@@ -1,0 +1,248 @@
+--- before/assets/scripts/battle/BattleDirector.ts
++++ assets/scripts/battle/BattleDirector.ts
+@@ -342,5 +342,4 @@
+     if (surge && !this.waves.hasThreat) {
+       this.hud.showBanner('敌军大部队来袭！', 2);
+-      Sfx.play('surge');
+     }
+   }
+--- before/assets/scripts/battle/Monster.ts
++++ assets/scripts/battle/Monster.ts
+@@ -466,5 +466,5 @@
+       elite: !!this.def.elite, boss: this.isBoss, frozen: this.freezeT > 0,
+     });
+-    if (killerId !== 'gm') Sfx.death(killerId, this.freezeT > 0, heavy || !!this.def.elite || this.isBoss);
++    if (killerId !== 'gm') Sfx.death(killerId, this.freezeT > 0, !!this.def.elite || this.isBoss);
+     this.flashT = this.lungeT = this.atkAnimT = 0;
+     this.freezeT = this.thawT = this.slowT = this.stunT = this.burnT = this.shockT = 0;
+--- before/assets/scripts/core/AudioCatalog.ts
++++ assets/scripts/core/AudioCatalog.ts
+@@ -67,4 +67,23 @@
+ 
+ export type SfxName = keyof typeof AUDIO_CUES;
++
++/** Fewer independent messages: retain original sources so the policy is reversible. */
++const SILENT_CUES = new Set<SfxName>([
++  'uiSelect', 'uiOpen', 'uiClose',
++  'levelup', 'growthTick', 'growthLand', 'rewardLand', 'star', 'starFinish',
++  'hit', 'pierce', 'crush', 'zapHit', 'icebreak',
++  'kill', 'deathFire', 'deathVolt', 'deathFrost',
++  'charge', 'ready', 'lootDrop',
++]);
++const SHARED_CUES: Partial<Record<SfxName, SfxName>> = {
++  shoot: 'bow', ult: 'bowUlt',
++  uiToggle: 'ui', uiConfirm: 'ui', confirm: 'ui', pickRefresh: 'ui',
++  purchase: 'reward', recruit: 'reward', construction: 'growth',
++};
++
++export function resolveAudioCue(name: SfxName): SfxName | null {
++  return SILENT_CUES.has(name) ? null : SHARED_CUES[name] || name;
++}
++
+ export type MusicScene = 'camp' | 'battle';
+ export const MUSIC_TRACKS = { camp: 'bgm_camp', battle: 'bgm_battle' } as const;
+--- before/assets/scripts/core/GameAudio.ts
++++ assets/scripts/core/GameAudio.ts
+@@ -2,5 +2,5 @@
+ import { assetManager, AudioClip, resources } from 'cc';
+ import { loadSave } from './SaveData';
+-import { AUDIO_CUES, MUSIC_TRACKS, MusicScene, SfxName } from './AudioCatalog';
++import { AUDIO_CUES, MUSIC_TRACKS, MusicScene, resolveAudioCue, SfxName } from './AudioCatalog';
+ 
+ // Keep the established master level. Impact comes from source transients and mix space.
+@@ -99,12 +99,12 @@
+       fadeIn: .07, duration: seconds, lowpass: 6500 });
+   }
+-  /** A separate two-voice budget keeps kills legible without a crowd of screams. */
+-  death(element: 'physical' | 'fire' | 'volt' | 'frost', heavy: boolean): void {
+-    const names: Record<string, SfxName> = { fire: 'deathFire', volt: 'deathVolt', frost: 'deathFrost' };
+-    this.play(names[element] || (heavy ? 'deathHeavy' : 'kill'), {
+-      rate: heavy ? .94 : 1, gain: heavy && element !== 'physical' ? 1.08 : 1,
+-    });
++  /** Only elite/BOSS defeats get a shared landing, regardless of the killing element. */
++  death(_element: 'physical' | 'fire' | 'volt' | 'frost', significant: boolean): void {
++    if (significant) this.play('deathHeavy', { rate: .94 });
+   }
+   play(name: SfxName, shape: PlaybackShape = {}): void {
++    const resolved = resolveAudioCue(name);
++    if (!resolved) return;
++    name = resolved;
+     if (!this.sfxEnabled || loadSave().sfx === false || typeof document === 'undefined' || document.hidden) return;
+     const cue = AUDIO_CUES[name], now = performance.now() / 1000;
+@@ -112,7 +112,11 @@
+     if (this.scene === 'battle' && combat && this.state !== 'running' && this.state !== 'prepare') return;
+     if (now - (this.lastAt[name] ?? -100) < cue.gap) return;
+-    // Simultaneous heroes must all speak. Only repetitive minor contacts share a gap.
+-    const groupGap = cue.group === 'death' ? .075 : cue.group === 'impact' && cue.priority < 2 ? .045 : cue.group === 'ui' ? .035 : 0;
++    // Automatic volleys share space; they never queue up to play after the action.
++    const groupGap = cue.group === 'shot' ? .12 : cue.group === 'impact' ? .2
++      : cue.group === 'death' ? .5 : cue.group === 'cast' && cue.priority < 3 ? .24
++      : cue.group === 'ui' ? .08 : 0;
+     if (now - (this.lastGroup[cue.group] ?? -100) < groupGap) return;
++    if (name === 'lootPickup' && now - (this.lastAt[name] ?? -100) < .6) return;
++    if (cue.group === 'shot' && now < this.accentUntil) return;
+     const available = cue.files.filter(file => this.buffers.has(file));
+     if (!available.length || !this.ctx || this.ctx.state !== 'running') {
+@@ -125,5 +129,5 @@
+     const buffer = this.buffers.get(available[index])!;
+     // Full celebrations replace their predecessor instead of stacking long melodies.
+-    // Star / numeric / held-upgrade ticks use the short UI lane and do not cut the main phrase.
++    // Shared reward/growth phrases replace their predecessor rather than piling up.
+     if (cue.group === 'cue' && cue.priority >= 4) {
+       for (const voice of [...this.voices]) if (voice.group === 'cue' && voice.priority <= cue.priority) this.stopVoice(voice);
+@@ -135,6 +139,5 @@
+     if (combat && family.length >= 2) this.stopVoice(family[0]);
+     const group = this.voices.filter(v => v.group === cue.group);
+-    const groupLimit = cue.group === 'death' || cue.group === 'card' || cue.group === 'cue' ? 2
+-      : cue.group === 'shot' ? 6 : cue.group === 'impact' ? 4 : cue.group === 'cast' ? 3 : 4;
++    const groupLimit = cue.group === 'death' || cue.group === 'card' || cue.group === 'cue' || cue.group === 'impact' ? 1 : 2;
+     if (group.length >= groupLimit) {
+       const victim = group.filter(v => v.priority <= cue.priority).sort((a, b) => a.priority - b.priority || a.started - b.started)[0];
+@@ -142,5 +145,5 @@
+       this.stopVoice(victim);
+     }
+-    if (this.voices.length >= 14) {
++    if (this.voices.length >= 8) {
+       const victim = this.voices.filter(v => v.priority <= cue.priority).sort((a, b) => a.priority - b.priority)[0];
+       if (!victim) return;
+@@ -269,11 +272,13 @@
+     if (!this.ctx || this.warming || !this.sfxEnabled) return;
+     this.warming = true;
+-    // Prepare small UI/cues before interaction; bounded fetch/decode avoids a mobile CPU spike.
+-    const first: SfxName[] = ['ui', 'uiConfirm', 'pickOpen', 'pickChoose', 'pickRefresh',
+-      'growth', 'growthTick', 'growthLand', 'reward', 'rewardLand', 'purchase',
+-      'victory', 'defeat', 'construction', 'breakthrough', 'recruit',
+-      'bow', 'crossbow', 'fire', 'thunder', 'frost', 'hit', 'pierce', 'crush', 'zapHit', 'icebreak'];
+-    const files = Array.from(new Set([...first.flatMap(name => [...AUDIO_CUES[name].files]),
+-      ...Object.values(AUDIO_CUES).flatMap(cue => [...cue.files])]));
++    // Decode only retained/shared sources; muted recordings stay available on disk.
++    const first: SfxName[] = ['ui', 'pickOpen', 'pickChoose', 'growth', 'reward',
++      'victory', 'defeat', 'breakthrough', 'bow', 'crossbow', 'fire', 'thunder', 'frost'];
++    const files: string[] = [], unique = new Set<string>();
++    for (const name of [...first, ...Object.keys(AUDIO_CUES) as SfxName[]]) {
++      const resolved = resolveAudioCue(name);
++      if (!resolved) continue;
++      for (const file of AUDIO_CUES[resolved].files) if (!unique.has(file)) { unique.add(file); files.push(file); }
++    }
+     let next = 0;
+     const worker = async (): Promise<void> => {
+--- before/assets/scripts/ui/ComicUI.ts
++++ assets/scripts/ui/ComicUI.ts
+@@ -120,5 +120,5 @@
+ }
+ 
+-interface ComicButtonOptions { tone?: Tone; size?: number; color?: string; name?: string; enabled?: boolean; sound?: UISound; quiet?: boolean; }
++interface ComicButtonOptions { tone?: Tone; size?: number; color?: string; name?: string; enabled?: boolean; sound?: UISound | false; quiet?: boolean; }
+ export interface ComicButtonControl {
+   node: Node;
+--- before/assets/scripts/ui/PositiveFeedback.ts
++++ assets/scripts/ui/PositiveFeedback.ts
+@@ -49,6 +49,5 @@
+   private appearanceAge = 0;
+   private numberAge = 0;
+-  private sinceCue = 10;
+-  private landed = false;
++  private pendingGrowthCue: 'upgrade' | 'construction' | null = null;
+   private countingFast = false;
+   private hidden = false;
+@@ -83,5 +82,5 @@
+     if (!merged) this.appearanceAge = 0;
+     this.countingFast = merged;
+-    this.age = this.numberAge = 0; this.landed = false;
++    this.age = this.numberAge = 0;
+     put(this.title, r.milestone ? '阶段突破' : r.keep ? '主城升级成功' : r.title);
+     put(this.nameText, r.name);
+@@ -103,8 +102,10 @@
+     });
+     this.node.setSiblingIndex(this.node.parent!.children.length - 1);
+-    if (milestone || next.keep || !merged || this.sinceCue >= .18) {
+-      uiSound(milestone ? 'breakthrough' : merged || next.repeating ? 'growthTick' : next.keep ? 'construction' : 'upgrade');
+-      this.sinceCue = 0;
+-    }
++    const growthCue = next.keep ? 'construction' : 'upgrade';
++    if (milestone) { this.pendingGrowthCue = null; uiSound('breakthrough'); }
++    else if (next.repeating) {
++      // Every successful hold step refreshes this deadline; only its final receipt sounds.
++      this.pendingGrowthCue = r.milestone ? null : growthCue;
++    } else if (!merged) { this.pendingGrowthCue = null; uiSound(growthCue); }
+     this.enabled = true; this.render();
+   }
+@@ -148,5 +149,8 @@
+     if (this.hidden) return;
+     const step = Math.min(.06, Math.max(0, dt));
+-    this.age += step; this.appearanceAge += step; this.numberAge += step; this.sinceCue += step;
++    this.age += step; this.appearanceAge += step; this.numberAge += step;
++    if (this.pendingGrowthCue && this.numberAge >= .38) {
++      uiSound(this.pendingGrowthCue); this.pendingGrowthCue = null;
++    }
+     if (this.age >= (this.receipt?.milestone ? 3 : 2.6)) { this.clear(); return; }
+     this.render();
+@@ -181,15 +185,11 @@
+     this.sweep.setPosition(-240 + sweep * 480, this.height / 2 - 112, 0);
+     this.sweepFade.opacity = this.quiet ? 0 : Math.round(255 * Math.sin(Math.PI * sweep) * .25);
+-    if (!this.landed && this.numberAge >= .62) {
+-      this.landed = true;
+-      uiSound('growthLand');
+-    }
+   }
+ 
+   private clear(): void {
+     if (this.display) { this.display.active = false; this.display.destroy(); }
+-    this.display = null; this.rows = []; this.layout = ''; this.receipt = null; this.enabled = false;
+-  }
+-  private hide = (): void => { this.hidden = true; };
++    this.display = null; this.rows = []; this.layout = ''; this.receipt = null; this.pendingGrowthCue = null; this.enabled = false;
++  }
++  private hide = (): void => { this.hidden = true; this.pendingGrowthCue = null; };
+   private show = (): void => { this.hidden = false; };
+   onDestroy(): void { game.off(Game.EVENT_HIDE, this.hide, this); game.off(Game.EVENT_SHOW, this.show, this); }
+--- before/assets/scripts/ui/TrainingLobby.ts
++++ assets/scripts/ui/TrainingLobby.ts
+@@ -295,5 +295,5 @@
+     if (empty || maxed) return;
+     const r = growthAction(growth, action); if (r.ok) ctx.refresh();
+-  }, { name: 'trainingUpgrade', tone: maxed || empty || !enough ? 'muted' : 'green', enabled: !maxed && !empty, sound: 'confirm' });
++  }, { name: 'trainingUpgrade', tone: maxed || empty || !enough ? 'muted' : 'green', enabled: !maxed && !empty, sound: false });
+   const button = control.node;
+   const face = button.getChildByName('buttonFace')!;
+--- before/assets/scripts/ui/UIAudio.ts
++++ assets/scripts/ui/UIAudio.ts
+@@ -1,5 +1,5 @@
+ /** One semantic UI cue per action, even when that action opens/closes another surface. */
+ import { Sfx } from '../core/Sfx';
+-import { SfxName } from '../core/AudioCatalog';
++import { resolveAudioCue, SfxName } from '../core/AudioCatalog';
+ 
+ export type UISound = 'tap' | 'select' | 'open' | 'close' | 'toggle' | 'confirm' | 'success' | 'warning' | 'reward' | 'upgrade'
+@@ -8,5 +8,5 @@
+ const cues: Record<UISound, SfxName> = {
+   tap: 'ui', select: 'uiSelect', open: 'uiOpen', close: 'uiClose', toggle: 'uiToggle', confirm: 'uiConfirm',
+-  success: 'uiConfirm', warning: 'uiClose', reward: 'reward', upgrade: 'growth',
++  success: 'uiConfirm', warning: 'ui', reward: 'reward', upgrade: 'growth',
+   growthTick: 'growthTick', breakthrough: 'breakthrough', purchase: 'purchase', recruit: 'recruit', construction: 'construction', star: 'star', starFinish: 'starFinish',
+   growthLand: 'growthLand', rewardLand: 'rewardLand', pickOpen: 'pickOpen', pickRefresh: 'pickRefresh', pickChoose: 'pickChoose',
+@@ -20,4 +20,6 @@
+ 
+ export function uiSound(kind: UISound): void {
++  // A silent decoration must not swallow an action's actual click/success cue.
++  if (!resolveAudioCue(cues[kind])) return;
+   if (!pending || rank[kind] >= rank[pending]) pending = kind;
+   if (scheduled) return;
+--- before/assets/scripts/ui/pages/BasePage.ts
++++ assets/scripts/ui/pages/BasePage.ts
+@@ -235,5 +235,5 @@
+       const r = growthAction({ kind: 'keep' }, () => upKeep());
+       if (r.ok) { session.markDirty(); keepModal(ctx, session, true); }
+-    },{name:'baseKeepUpgrade',tone:maxed||sv.gold<cost?'muted':'green',size:27,enabled:!maxed});
++    },{name:'baseKeepUpgrade',tone:maxed||sv.gold<cost?'muted':'green',size:27,enabled:!maxed,sound:false});
+   });
+ }
+--- before/assets/scripts/ui/pages/HeroPage.ts
++++ assets/scripts/ui/pages/HeroPage.ts
+@@ -395,5 +395,5 @@
+       const result = growthAction(weapon ? { kind: 'weapon', hid } : { kind: 'equip', hid, slot: kind }, () => weapon ? upWeapon(hid) : upWornEquip(hid, kind));
+       if (result.ok) dismissUI(panel.parent, ctx.refresh, false);
+-    }, { tone: enoughGold && enoughMat ? 'green' : 'muted', name: 'heroForgeAction', sound: 'confirm' });
++    }, { tone: enoughGold && enoughMat ? 'green' : 'muted', name: 'heroForgeAction', sound: false });
+   } else comicButton(panel,0,heroActionY(panel),248,58,'已达强化上限',() => dismissUI(panel.parent),
+     {tone:'dark',name:'heroForgeMaxClose',sound:'close'});

@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-upgrade-art-live-v12-20261017-115943",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-locked-stage-confirm-v11-20261017-112251",
+  "entryVersion": "1792209414",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=upgrade-art-live-v12-1792209414",
+  "scope": "four cultivation pages and shared attributes, milestone, weapon cultivation and equipment enhancement dialog artwork",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://81792a4d.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-upgrade-art-live-v12-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-upgrade-art-live-v12-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 17697,
+  "mainSha256": "d332de14f1b38356721f05634b0c78cc2bc071f8df6d14d08d1cf21b8ffc1620",
+  "date": "2026-10-17T12:00:16.021771+08:00",
+  "testsRun": false,
+  "simulationRun": false,
+  "gameRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

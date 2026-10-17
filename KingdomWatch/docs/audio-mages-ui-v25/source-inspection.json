@@ -1,0 +1,30 @@
+{
+  "changedOriginals": [
+    "assets/scripts/core/AudioCatalog.ts",
+    "assets/scripts/core/GameAudio.ts",
+    "assets/scripts/ui/BattleEntry.ts",
+    "assets/scripts/ui/TouchFeedback.ts",
+    "assets/scripts/ui/UIAudio.ts",
+    "assets/resources/audio/README.txt",
+    "assets/resources/audio/v1/CREDITS.txt"
+  ],
+  "unchangedOriginalFiles": 607,
+  "approvedCuesUnchanged": [
+    "bow",
+    "crossbow",
+    "snipe",
+    "skill",
+    "bowUlt",
+    "pierceHeavy",
+    "crit",
+    "ui"
+  ],
+  "allPriorAudioAndMetadataUnchanged": true,
+  "mageFiles": 18,
+  "gateFiles": 2,
+  "allMageHighBandAndLevelsReduced": true,
+  "typeDiagnosticsBefore": 10,
+  "typeDiagnosticsAfter": 10,
+  "newTypeDiagnostics": 0,
+  "noTestsGameBrowserOrAudioPlaybackPerformed": true
+}

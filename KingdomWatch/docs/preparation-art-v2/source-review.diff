@@ -1,0 +1,459 @@
+--- before/assets/scripts/ui/pages/LevelsPage.ts
++++ assets/scripts/ui/pages/LevelsPage.ts
+@@ -19,7 +19,8 @@
+ import { deferUIWarmup } from '../IdleWarmup';
+ import { showRewardPopup } from '../RewardPopup';
+ import { CampaignRouteMotion, ROUTE_ART, ROUTE_H, ROUTE_W, routePoint, routeStop } from '../CampaignRoute';
+-import { campaignChapterArrow, campaignChapterBanner, campaignTerrainCrown, paintCampaignAction } from '../CampaignChrome';
++import { campaignChapterArrow, campaignChapterBanner, campaignDifficultyFace, campaignPreparationArt,
++  campaignTerrainCrown, paintCampaignAction } from '../CampaignChrome';
+ 
+ const LEVELS = CAMPAIGN_STAGES;
+ const DIFFS = ['普通', '精英', '地狱'];
+@@ -70,7 +71,7 @@
+   let mapScroll: ScrollView | null = null;
+   let pins: Node | null = null, dock: Node | null = null, drawer: Node | null = null, shade: Node | null = null;
+   let header: Node | null = null, closing = false, claiming = false;
+-  let sheetTop = 0, sheetH = 0, sheetOffset = 0;
++  let sheetTop = 0, sheetH = 0;
+   const { headerTop } = mainLayout();
+   const bottom = LO.half * 2 - LO.safeTop - LO.safeBottom - MAIN_NAV_H;
+   const chapterTop = headerTop + MAIN_RESOURCE_H + 14;
+@@ -194,8 +195,8 @@
+     mapScroll?.stopAutoScroll();
+     if (mapScroll) st.offsets[currentChapter()] = Math.max(0, mapScroll.getScrollOffset().y);
+     st.drawer = true; dock!.active = false;
+-    // Restore the original paper proportions and fixed-size content; do not scale it to fill the screen.
+-    sheetH = Math.min(828, Math.max(280, bottom - chapterTop - 210));
++    // Every difficulty uses the same fully exposed paper, including two equipment rows.
++    sheetH = Math.min(928, bottom - Math.max(20, LO.notchTop + 12));
+     sheetTop = bottom - sheetH;
+     if (!shade) {
+       shade = N('campaignDrawerShade', content, 0, WY(chapterTop + 94, dockTop - chapterTop - 94), 750, dockTop - chapterTop - 94);
+@@ -221,7 +222,7 @@
+       if (!content.isValid) return;
+       if (drawer?.isValid) { drawer.active = false; drawer.removeFromParent(); drawer.destroy(); }
+       if (shade?.isValid) { shade.active = false; shade.removeFromParent(); shade.destroy(); }
+-      drawer = null; shade = null; closing = false; st.drawer = false; sheetOffset = 0;
++      drawer = null; shade = null; closing = false; st.drawer = false;
+       renderDock();
+     });
+   }
+@@ -233,53 +234,55 @@
+       const key = starKey(lv.id, st.d), stars = sv.stars[key] || 0, claimed = sv.chestClaimed[key] || 0;
+       const y = (top: number): number => sheetH / 2 - top;
+       comicSurface(panel, 0, y(16), 44, 4, 'paper', { fill: '#BBA27D', radius: 2 });
+-      mainLabel(panel, -29, y(53), lv.id + ' ' + lv.name, { size: 33, bold: true, color: COMIC.text, w: 612, h: 48, align: 'left' });
++      mainLabel(panel, -29, y(53), lv.id + ' ' + lv.name, { size: 33, font: 'body', bold: true, color: COMIC.text, w: 612, h: 48, align: 'left' });
+       mainLabel(panel, -12, y(94), challenge.waves.length + ' 波 · ' + DIFFICULTIES[st.d].formation,
+         { size: 19, color: COMIC.sub, w: 644, h: 30, align: 'left' });
+       const close = N('campaignDrawerClose', panel, 324, y(48), 58, 58);
+       comicMark(close, 0, 0, 'close', 28, COMIC.sub); bindButton(close, closeDrawer, { sound: false });
+-      const bodyTop = 117, footerH = 102, viewH = Math.max(1, sheetH - bodyTop - footerH);
+-      const equipmentRows = Math.ceil(challenge.gearPool.length / 6);
+-      const chanceTop = equipmentRows ? 562 + (equipmentRows-1)*96 + 64 : 514;
+-      const bodyH = chanceTop + 34;
+-      const body = pageScroll(panel, 'campaignPreparation', 0, viewH, bodyH, 690);
+-      const view = body.parent!;
+-      view.setPosition(0, y(bodyTop + viewH / 2), 0);
+-      const scroll = view.getComponent(ScrollView)!;
+-      scroll.inertia = true; scroll.elastic = false; scroll.brake = .7; scroll.cancelInnerEvents = true;
+-      scroll.scrollToOffset(new Vec2(0, Math.min(sheetOffset, Math.max(0, bodyH-viewH))), 0);
+-      view.on('scrolling', () => { sheetOffset = Math.max(0,scroll.getScrollOffset().y); });
++      // Intrinsic component sizes, no content scroll or whole-page scale. Short portrait screens use tighter gaps.
++      const compact = sheetH < 900;
++      const layout = compact
++        ? { bodyTop: 104, tabs: 24, tabH: 48, stars: 70, chest: 162, chestLabel: 60, chestArt: 10,
++          chestW: 106, chestH: 72, amount: -42, claim: -79, drops: 286, materials: 334,
++          equipment: 391, row: 434, rowStep: 70, icon: 60, chance: 548 }
++        : { bodyTop: 112, tabs: 29, tabH: 54, stars: 89, chest: 220, chestLabel: 88, chestArt: 18,
++          chestW: 128, chestH: 108, amount: -49, claim: -89, drops: 362, materials: 415,
++          equipment: 474, row: 530, rowStep: 96, icon: 80, chance: 684 };
++      const body = N('campaignPreparationContent', panel, 0, y(layout.bodyTop));
+       const by = (top: number): number => -top;
+-      comicSurface(body, 0, by(29), 678, 54, 'paper', { fill: '#E8D8B8', radius: 14 });
+       DIFFS.forEach((name, d) => {
+         const active = st.d === d, unlocked = difficultyOpen(st.i, d);
+-        const slot = comicSurface(body, (d-1)*226, by(29), 218, 50, active ? 'gold' : 'paper',
+-          { name: 'campaignDifficulty:' + d, fill: active ? COMIC.gold : '#E8D8B8', radius: 12 });
+-        if (!unlocked) comicMark(slot, -62, 0, 'lock', 20, COMIC.sub);
+-        mainLabel(slot, unlocked ? 0 : 13, 0, name, { size: 25, bold: true, color: active ? COMIC.text : COMIC.sub, w: 148, h: 38 });
++        const slot = N('campaignDifficulty:' + d, body, (d-1)*226, by(layout.tabs), 218, layout.tabH);
++        campaignDifficultyFace(slot, 218, layout.tabH, active, unlocked, d);
++        mainLabel(slot, 18, 0, name, { size: 25, font: 'body', bold: true,
++          color: active ? COMIC.text : COMIC.sub, w: 140, h: 38 });
+         bindButton(slot, () => {
+           if (!unlocked) { toast(d ? '通关上一难度解锁' : '通关前置关卡后解锁'); return; }
+           if (st.d !== d) { st.d = d; renderSheet(); }
+         }, { sound: 'select', dragThreshold: 7 });
+       });
+ 
+-      mainLabel(body, -194, by(87), '星级宝箱', { size: 27, bold: true, color: COMIC.text, w: 286, h: 38, align: 'left' });
+-      mainLabel(body, 199, by(87), stars + '/3', { size: 23, bold: true, color: COMIC.text, w: 210, h: 34, align: 'right' });
+-      star(body, 321, by(87), 28, true);
++      mainLabel(body, -194, by(layout.stars), '星级宝箱', { size: 27, font: 'body', bold: true, color: COMIC.text, w: 286, h: compact ? 32 : 38, align: 'left' });
++      mainLabel(body, 199, by(layout.stars), stars + '/3', { size: 23, bold: true, color: COMIC.text, w: 210, h: 34, align: 'right' });
++      star(body, 321, by(layout.stars), 28, true);
+       const rewards = starChestRewards(lv.id, st.d);
+       for (let t = 0; t < 3; t++) {
+         const tier = t + 1, done = claimed >= tier, canClaim = stars >= tier && !done;
+-        const spot = N('campaignStarChest:' + tier, body, (t - 1) * 226, by(218), 218, 216);
+-        mainLabel(spot, 0, 86, CHEST_COND[t], { size: 19, color: COMIC.sub, w: 214, h: 30 });
+-        const chest = levelArt(spot, 0, 22, 122, 96, done ? 'comic_chest_open_v1' : 'comic_chest_closed_v1');
++        const spot = N('campaignStarChest:' + tier, body, (t - 1) * 226, by(layout.chest), 218, 216);
++        mainLabel(spot, 0, layout.chestLabel, CHEST_COND[t], { size: 19, color: COMIC.sub, w: 214, h: compact ? 26 : 30 });
++        const chest = campaignPreparationArt(spot, 0, layout.chestArt, layout.chestW, layout.chestH,
++          ['chest_bronze_v2','chest_sapphire_v2','chest_crimson_v2'][t]);
+         if (!done && !canClaim) chest.addComponent(UIOpacity).opacity = 160;
+-        if (done) comicMark(spot, 51, 4, 'check', 23, COMIC.greenShade);
++        if (done) { chest.addComponent(UIOpacity).opacity = 180; comicMark(spot, 52, layout.chestArt-28, 'check', 23, COMIC.greenShade); }
+         const reward = rewards[t];
+-        comicArt(spot, -38, -44, 28, 28, reward.gold ? 'comic_coin_v1' : 'comic_diamond_v1');
+-        mainLabel(spot, 16, -44, String(reward.gold || reward.diamonds), { size: 25, bold: true, color: COMIC.text, w: 88, h: 32 });
+-        if (canClaim) comicSurface(spot, 0, -84, 144, 34, 'gold', { radius: 17 });
+-        mainLabel(spot, 0, -84, done ? '已领取' : canClaim ? '一键领取' : '未达成',
+-          { size: 21, bold: canClaim, color: done ? COMIC.greenShade : COMIC.sub, w: 192, h: 30 });
++        comicArt(spot, -38, layout.amount, 28, 28, reward.gold ? 'comic_coin_v1' : 'comic_diamond_v1');
++        mainLabel(spot, 16, layout.amount, String(reward.gold || reward.diamonds), { size: compact ? 22 : 25, bold: true, color: COMIC.text, w: 88, h: compact ? 28 : 32 });
++        const claim = comicSurface(spot, 0, layout.claim, 154, 36, canClaim ? 'gold' : 'paper',
++          { name: 'campaignClaimAll:' + tier, radius: 6, fill: done ? '#E4DFC0' : canClaim ? COMIC.gold : COMIC.paper });
++        if (canClaim) campaignPreparationArt(claim, 0, 0, 154, 36, 'claim_button_v2', true, true);
++        if (done) comicMark(claim, -51, 0, 'check', 17, COMIC.greenShade);
++        mainLabel(claim, done ? 10 : 0, 0, done ? '已领取' : canClaim ? '一键领取' : '未达成',
++          { size: 20, font: 'body', bold: canClaim || done, color: done ? COMIC.greenShade : canClaim ? COMIC.text : COMIC.sub, w: 140, h: 30 });
+         if (canClaim) bindButton(spot, () => {
+           if (claiming) return;
+           claiming = true;
+@@ -292,22 +295,26 @@
+           ], () => { claiming = false; });
+         }, { dragThreshold: 7 });
+       }
+-      mainLabel(body, -194, by(345), '关卡掉落', { size: 27, bold: true, color: COMIC.text, w: 286, h: 38, align: 'left' });
+-      const details = N('campaignDropDetails', body, 283, by(345), 106, 44);
++      mainLabel(body, -194, by(layout.drops), '关卡掉落', { size: 27, font: 'body', bold: true, color: COMIC.text, w: 286, h: 38, align: 'left' });
++      const details = N('campaignDropDetails', body, 283, by(layout.drops), 106, 44);
+       mainLabel(details, 0, 0, '详情 ›', { size: 20, color: COMIC.sub, w: 100, h: 34 });
+       bindButton(details, () => showStageLootDetails(modalParent, challenge), { dragThreshold: 7 });
+-      mainLabel(body, -194, by(382), '通关必得', { size: 19, bold: true, color: COMIC.sub, w: 286, h: 28, align: 'left' });
+-      stageGuaranteedRewards(body, 0, by(442), 664, challenge, id => showDropItemDetails(modalParent, challenge, id));
+-      if (equipmentRows) mainLabel(body, -194, by(502), '击杀概率装备', { size: 19, bold: true, color: COMIC.sub, w: 286, h: 28, align: 'left' });
++      stageGuaranteedRewards(body, 0, by(layout.materials), 664, challenge,
++        id => showDropItemDetails(modalParent, challenge, id), compact ? 64 : 76);
++      mainLabel(body, 0, by(layout.equipment), '概率掉落装备',
++        { size: 19, font: 'body', bold: true, color: COMIC.sub, w: 660, h: 28 });
++      const equipment = N('campaignEquipmentTwoRows', body, 0, by(layout.row), 664, layout.rowStep + layout.icon);
+       challenge.gearPool.forEach((row, i) => {
+-        const icon = stageDropIcon(body, (i%6-2.5)*106, by(562+Math.floor(i/6)*96), 80, row.id);
++        const rowIndex = Math.floor(i/6), columns = Math.min(6, challenge.gearPool.length-rowIndex*6);
++        const icon = stageDropIcon(equipment, (i%6-(columns-1)/2)*106, -rowIndex*layout.rowStep, layout.icon, row.id);
+         bindButton(icon, () => showDropItemDetails(modalParent, challenge, row.id), { dragThreshold: 7, sound: false });
+       });
+       if (challenge.gearPool.length) {
+         const pct = (n: number): string => (n * 100).toFixed(2) + '%';
+-        mainLabel(body, 0, by(chanceTop), '普通怪 ' + pct(equipmentDropChance(st.d)) + ' · 精英怪 ' + pct(equipmentDropChance(st.d, { elite: true })),
++        mainLabel(body, 0, by(layout.chance), '普通怪 ' + pct(equipmentDropChance(st.d)) + ' · 精英怪 ' + pct(equipmentDropChance(st.d, { elite: true })),
+           { size: 17, color: COMIC.sub, w: 660, h: 28 });
+-      } else mainLabel(body, 0, by(chanceTop), '挑战精英 / 地狱解锁装备掉落', { size: 19, color: COMIC.sub, w: 660, h: 34 });
++      } else mainLabel(equipment, 0, -layout.rowStep/2, '普通难度不掉落装备\n挑战精英 / 地狱解锁装备掉落',
++        { size: 19, color: COMIC.sub, w: 660, h: 68, lineHeight: 32 });
+       const battle = comicButtonControl(panel, 0, y(sheetH - 51), 664, 78, '', () => {
+         if (!open || closing || enteringBattle()) return;
+         if (!campaignDifficultyOpen(lv.id, challenge.difficulty, loadSave().stars)) { toast('请先通关前置关卡或难度'); return; }
+@@ -324,12 +331,12 @@
+       if (open) levelArt(battle.node, -124, 0, 52, 52, 'comic_swords_v1');
+       else comicMark(battle.node, -139, 0, 'lock', 28, COMIC.sub);
+       mainLabel(battle.node, 30, 0, open ? '开始战斗' : '通关前置关卡解锁',
+-        { size: open ? 36 : 26, bold: true, color: COMIC.text, w: 414, h: 50 });
++        { size: open ? 36 : 26, font: 'body', bold: true, color: COMIC.text, w: 414, h: 50 });
+     });
+   }
+   function renderWorld(): void {
+     refreshUI(content, () => {
+-      mapScroll = null; drawer = null; shade = null; sheetOffset = 0; closing = false;
++      mapScroll = null; drawer = null; shade = null; closing = false;
+       const chapter = currentChapter();
+       const map = pageScroll(content, 'campaignTerrain', mapTop, bottom, mapContentH, 750);
+       campaignTerrainCrown(map, mapInsetTop, chapter);
+--- before/assets/scripts/ui/CampaignChrome.ts
++++ assets/scripts/ui/CampaignChrome.ts
+@@ -1,5 +1,5 @@
+ /** Campaign materials with live text over a painted chapter backplate. */
+-import { Color, Graphics, Node, Sprite } from 'cc';
++import { Color, Graphics, Node, Sprite, UITransform, UIOpacity } from 'cc';
+ import { C, CA, N } from './UIKit';
+ import { COMIC, comicMark } from './ComicUI';
+ import { artSprite } from './Ux';
+@@ -109,19 +109,36 @@
+   return node;
+ }
+ 
+-export function campaignDifficultyFace(node: Node, w: number, h: number, selected: boolean, open: boolean): void {
++/** Shared loading barrier, tight imported sprite rectangle and native UI overlays. */
++export function campaignPreparationArt(parent: Node, x: number, y: number, w: number, h: number,
++  key: string, stretch = false, behind = false): Node {
++  return artSprite(parent, x, y, w, h, 'preparation_art_v2/' + key, {
++    sliced: false, fit: !stretch, belowIdx: behind ? 0 : undefined,
++    onLoaded: art => {
++      const sprite = art.getComponent(Sprite)!; sprite.trim = true;
++      if (stretch && sprite.spriteFrame) {
++        // Keep the painted bevel proportional while extending only the quiet button center.
++        sprite.type = Sprite.Type.SLICED;
++        const scale = h / sprite.spriteFrame.rect.height;
++        art.setScale(scale, scale, 1);
++        art.getComponent(UITransform)!.setContentSize(w / scale, h / scale);
++      }
++    },
++  });
++}
++
++export function campaignDifficultyFace(node: Node, w: number, h: number, selected: boolean, open: boolean, difficulty = 0): void {
+   const g = node.addComponent(Graphics);
+   face(g, cut(w,h,11), selected ? '#F8C547' : '#E5D4B1', selected ? '#A17A31' : undefined, 1.7);
+   if (selected) {
+     face(g, [[-w/2+5,1],[w/2-5,1],[w/2-5,h/2-12],[w/2-12,h/2-5],[-w/2+12,h/2-5],[-w/2+5,h/2-12]], '#FFE380');
+     line(g, [[-w/2+12,h/2-4],[w/2-12,h/2-4]], '#FFF0B1', 1.6);
+   }
+-  if (!open) comicMark(node, -64, 0, 'lock', 23, COMIC.sub);
+-  else {
+-    const flag = N('campaignDifficultyBanner', node, -64, 0).addComponent(Graphics);
+-    line(flag, [[-12,15],[14,15]], '#5C4024', 3.5);
+-    face(flag, [[-8,12],[10,12],[10,-15],[1,-8],[-8,-15]], selected ? '#A77A2F' : '#92866C', '#674D29', 1.5);
+-    line(flag, [[-3,9],[-3,-4]], '#FBE196', 1.5);
++  const id = ['normal','elite','hell'][difficulty] || 'normal';
++  const icon = campaignPreparationArt(node, -65, 0, 40, 40, 'difficulty_' + id + '_v2');
++  if (!open) {
++    icon.addComponent(UIOpacity).opacity = 105;
++    comicMark(node, -48, -13, 'lock', 16, COMIC.sub);
+   }
+ }
+ 
+--- before/assets/scripts/ui/LevelLootPreview.ts
++++ assets/scripts/ui/LevelLootPreview.ts
+@@ -27,17 +27,20 @@
+ 
+ /** Guaranteed clear rewards remain visible at every difficulty, separate from the equipment roll. */
+ export function stageGuaranteedRewards(parent: Node, x: number, y: number, width: number, level: ChallengeDef,
+-  onSelect: (id: string) => void): void {
++  onSelect: (id: string) => void, height = 76): void {
+   const entries = [{ id: 'coin', n: level.baseGold }, ...level.materials];
+   const gap = 12, w = (width - gap * (entries.length - 1)) / entries.length;
+   entries.forEach((row, i) => {
+-    const card = comicSurface(parent, x + (i - (entries.length - 1) / 2) * (w + gap), y, w, 76, 'card',
++    const card = comicSurface(parent, x + (i - (entries.length - 1) / 2) * (w + gap), y, w, height, 'card',
+       { name: 'stageGuaranteedReward:' + row.id, radius: 12, fill: row.id === 'coin' ? '#F8DFA8' : COMIC.card });
+     if (row.id === 'coin') comicArt(card, -w / 2 + 29, 0, 44, 44, 'comic_coin_v1');
+-    else gearArt(card, -w / 2 + 29, 0, 44, 44, row.id);
++    else {
++      gearQualityHalo(card, -w / 2 + 29, 0, 46, 46, 1);
++      gearArt(card, -w / 2 + 29, 0, 39, 39, row.id);
++    }
+     label(card, 26, 15, row.id === 'coin' ? '基础金币' : itemName(row.id),
+       { size: 16, color: COMIC.sub, w: w - 60, h: 23, shrink: true });
+-    label(card, 26, -14, row.n.toLocaleString() + (row.id === 'coin' ? '+' : ''),
++    label(card, 26, -14, row.id === 'coin' ? row.n.toLocaleString() + '+' : '×' + row.n.toLocaleString(),
+       { size: 22, color: COMIC.text, bold: true, w: w - 60, h: 30, shrink: true });
+     bindButton(card, () => onSelect(row.id), { dragThreshold: 7, sound: false });
+   });
+@@ -45,25 +48,22 @@
+ 
+ /** Local rarity wells for stage drops; the surrounding paper stays neutral and unframed. */
+ export function stageDropIcon(parent: Node, x: number, y: number, size: number, id: string): Node {
+-  const d = EQUIPS[id], quality = gearQuality(d.quality);
+-  const tile = comicSurface(parent, x, y, size, size, 'card',
+-    { name: 'stageDropQualityTile:' + id, radius: 11, fill: quality.well });
+-  const accent = N('stageDropQualityAccent', tile).addComponent(Graphics);
+-  accent.fillColor = C(quality.edge);
+-  accent.roundRect(-size / 2 + 10, -size / 2 + 4, size - 20, 4, 2); accent.fill();
+-  gearArt(tile, 0, -1, size * .8, size * .8, id);
+-  gearQualityTag(tile, -size * .17, size * .35, d.quality, d.tier, size * .58, size * .23);
++  const d = EQUIPS[id], tile = N('stageDropQualityTile:' + id, parent, x, y, size, size);
++  gearQualityHalo(tile, 0, 0, size, size, d.quality);
++  gearArt(tile, 0, 0, size * .84, size * .84, id);
+   return tile;
+ }
+ export function stageLootPreview(parent: Node, h: number, level: ChallengeDef, modalParent: Node): void {
+   const y = (top: number): number => h / 2 - top;
+   const entries = [{ id: 'coin', n: level.baseGold }, ...level.materials];
+-  label(parent, -229, y(15), '通关必得', { size: 18, color: COMIC.sub, bold: true, w: 160, h: 26, align: 'left' });
+   entries.forEach((row, i) => {
+     const x = (i - (entries.length - 1) / 2) * 150;
+     const icon = N('guaranteedLoot:' + row.id, parent, x, y(56), 76, 68);
+     if (row.id === 'coin') comicArt(icon, 0, 0, 43, 43, 'comic_coin_v1');
+-    else gearArt(icon, 0, 0, 43, 43, row.id);
++    else {
++      gearQualityHalo(icon, 0, 0, 48, 48, 1);
++      gearArt(icon, 0, 0, 40, 40, row.id);
++    }
+     bindButton(icon, () => showDropItemDetails(modalParent, level, row.id), { sound: false });
+     label(parent, x, y(92), row.id === 'coin' ? '基础金币 ' + row.n + '+' : itemName(row.id) + ' ×' + row.n,
+       { size: 17, color: COMIC.text, bold: true, w: 148, h: 24, shrink: true });
+@@ -71,7 +71,7 @@
+   const line = N('lootPreviewDivider', parent).addComponent(Graphics);
+   line.strokeColor = C(COMIC.paperShade); line.lineWidth = 1;
+   line.moveTo(-320, y(113)); line.lineTo(320, y(113)); line.stroke();
+-  label(parent, -217, y(136), '击杀概率掉落', { size: 18, color: COMIC.sub, bold: true, w: 188, h: 26, align: 'left' });
++  label(parent, 0, y(136), '概率掉落装备', { size: 18, color: COMIC.sub, bold: true, w: 600, h: 26 });
+   const pool = level.gearPool;
+   if (pool.length) {
+     pool.slice(0, 6).forEach((row, i) => {
+@@ -92,19 +92,18 @@
+     { size: 20, color: COMIC.sub, w: 570, h: 28 });
+   const rows = Math.ceil(level.gearPool.length / 2);
+   const list = lootScroll(root, top - 116, -top + 100, rows ? 260 + rows * 116 : 258);
+-  label(list, 0, -16, '通关必得', { size: 21, color: COMIC.text, bold: true, w: 584, h: 30, align: 'left' });
+-  stageGuaranteedRewards(list, 0, -76, 584, level, id => showDropItemDetails(parent, level, id, root));
+-  label(list, 0, -135, '金币另有战斗击杀收益，材料随通关结算发放',
++  stageGuaranteedRewards(list, 0, -48, 584, level, id => showDropItemDetails(parent, level, id, root));
++  label(list, 0, -107, '金币另有战斗击杀收益，材料随通关结算发放',
+     { size: 16, color: COMIC.sub, w: 584, h: 26, shrink: true });
+   if (level.gearPool.length) {
+-    label(list, 0, -177, '击杀概率装备', { size: 21, color: COMIC.text, bold: true, w: 584, h: 30, align: 'left' });
+-    label(list, 0, -213, '普通怪 ' + pct(equipmentDropChance(level.difficulty)) + ' / 精英怪 ' + pct(equipmentDropChance(level.difficulty, { elite: true })),
++    label(list, 0, -149, '概率掉落装备', { size: 21, color: COMIC.text, bold: true, w: 584, h: 30 });
++    label(list, 0, -185, '普通怪 ' + pct(equipmentDropChance(level.difficulty)) + ' / 精英怪 ' + pct(equipmentDropChance(level.difficulty, { elite: true })),
+       { size: 20, color: COMIC.greenShade, bold: true, w: 584, h: 30 });
+-    label(list, 0, -245, '下方百分比为装备掉落后，各件装备的抽取占比',
++    label(list, 0, -217, '下方百分比为装备掉落后，各件装备的抽取占比',
+       { size: 16, color: COMIC.sub, w: 584, h: 26, shrink: true });
+     const total = level.gearPool.reduce((sum, row) => sum + row.weight, 0);
+     level.gearPool.forEach((row, i) => {
+-      const x = (i % 2 - .5) * 298, y = -318 - Math.floor(i / 2) * 116;
++      const x = (i % 2 - .5) * 298, y = -290 - Math.floor(i / 2) * 116;
+       const quality = gearQuality(EQUIPS[row.id].quality);
+       const card = comicSurface(list, x, y, 286, 104, 'card', { name: 'lootPoolItem:' + row.id, radius: 12 });
+       stageDropIcon(card, -96, 0, 78, row.id);
+@@ -174,12 +173,15 @@
+   } else {
+     const amount = id === 'coin' ? level.baseGold : level.materials.find(row => row.id === id)?.n || 0;
+     if (id === 'coin') comicArt(root, 0, top - 139, 94, 94, 'comic_coin_v1');
+-    else gearArt(root, 0, top - 139, 94, 94, id);
++    else {
++      gearQualityHalo(root, 0, top - 139, 108, 108, 1);
++      gearArt(root, 0, top - 139, 94, 94, id);
++    }
+     label(root, 0, top - 218, id === 'coin' ? '基础金币 ' + amount + '+' : mat.name + ' ×' + amount,
+       { size: 25, color: COMIC.text, bold: true, w: 550, h: 36 });
+     label(root, 0, top - 284, id === 'coin' ? '通关结算获得基础金币，战斗击杀收益另计。' : mat.desc,
+       { size: 21, color: COMIC.text, w: 550, h: 64, lineHeight: 30, shrink: true });
+-    label(root, 0, -top + 114, DIFFICULTIES[level.difficulty].name + ' · ' + level.id + ' 通关必得',
++    label(root, 0, -top + 114, DIFFICULTIES[level.difficulty].name + ' · ' + level.id + ' 关卡奖励',
+       { size: 19, color: COMIC.greenShade, w: 550, h: 30 });
+   }
+   comicButton(root, 0, -top + 43, 372, 56, back ? '返回掉落列表' : '关闭', close,
+@@ -197,7 +199,7 @@
+   entries.forEach((row, i) => {
+     const d = EQUIPS[row.id], x = (i % 2 - .5) * 286, y = -46 - Math.floor(i / 2) * 100;
+     const card = d ? gearPlate(list, x, y, 274, 88, d.quality) : comicPlate(list, x, y, 274, 88, 'card');
+-    if (d) gearQualityHalo(card, -88, 0, 60, 60, d.quality);
++    gearQualityHalo(card, -88, 0, 60, 60, d ? d.quality : 1);
+     gearArt(card, -88, 0, 53, 53, row.id);
+     if (d) gearQualityTag(card, -97, 31, d.quality, d.tier, 68, 18);
+     label(card, 34, 13, itemName(row.id), { size: 19, color: COMIC.text, w: 162, h: 28, shrink: true });
+--- before/assets/scripts/ui/GearQuality.ts
++++ assets/scripts/ui/GearQuality.ts
+@@ -1,6 +1,6 @@
+-/** Rarity is confined to the illustration's circular well and upper-left tag. */
+-import { Graphics, Node } from 'cc';
+-import { C, CA, label, N } from './UIKit';
++/** Shared square rarity sockets for equipment and materials; surrounding cards stay neutral. */
++import { Color, Graphics, Node } from 'cc';
++import { C, label, N } from './UIKit';
+ import { comicPlate } from './ComicUI';
+ 
+ export interface GearQualityStyle { name: string; edge: string; text: string; well: string; light: string; }
+@@ -27,9 +27,25 @@
+   return plate;
+ }
+ 
+-/** Still graphics behind the illustration: no new texture, looping animation or white flash. */
++/** Legacy entry point shared by shop, inventory and loot; only the illustration's socket is colored. */
+ export function gearQualityHalo(parent: Node, x: number, y: number, w: number, h: number, q: number): void {
+-  const style = gearQuality(q), g = N('gearQualityHalo', parent, x, y).addComponent(Graphics);
+-  g.fillColor = C(style.light); g.circle(0, 0, Math.min(w, h) / 2); g.fill();
+-  g.strokeColor = CA(style.edge, .45); g.lineWidth = 1; g.stroke();
++  const style = gearQuality(q), side = Math.min(w, h), half = side / 2;
++  const g = N('gearQualitySquare', parent, x, y, side, side).addComponent(Graphics);
++  const cut = Math.min(5, side * .055);
++  const shape = (inset: number): void => {
++    const a = half - inset, c = Math.max(1, cut - inset * .35);
++    g.moveTo(-a+c,-a); g.lineTo(a-c,-a); g.lineTo(a,-a+c); g.lineTo(a,a-c);
++    g.lineTo(a-c,a); g.lineTo(-a+c,a); g.lineTo(-a,a-c); g.lineTo(-a,-a+c); g.close();
++  };
++  g.fillColor = C('#26312D'); shape(0); g.fill();
++  g.fillColor = C(style.edge); shape(1.5); g.fill();
++  const deep = C(['#46535B','#173D1F','#163A59','#38204F'][q] || '#46535B');
++  const rim = C(style.edge), inner = side - 8;
++  for (let i = 0; i < 16; i++) {
++    g.fillColor = Color.lerp(new Color(), deep, rim, .16 + i / 15 * .34);
++    g.rect(-half+4, -half+4+i*inner/16, inner, inner/16+.25); g.fill();
++  }
++  g.strokeColor = C(style.light); g.lineWidth = Math.max(1, side * .012);
++  g.moveTo(-half+6,half-3); g.lineTo(half-6,half-3); g.stroke();
++  g.moveTo(-half+3,-half+6); g.lineTo(-half+3,half-6); g.stroke();
+ }
+--- before/assets/scripts/ui/pages/ShopPage.ts
++++ assets/scripts/ui/pages/ShopPage.ts
+@@ -103,13 +103,9 @@
+     if (!shown) picture.addComponent(UIOpacity).opacity = 200;
+     if (!art) comicMark(picture, 0, 0, 'lock', 44, '#93998E');
+   } else {
+-    if (equipment) gearQualityHalo(icon, 0, -2, 150, 138, q);
+-    else {
+-      const halo = N('itemHalo', icon, 0, -2).addComponent(Graphics);
+-      halo.fillColor = CA(HALO[q], .9); halo.ellipse(0, 0, 78, 69); halo.fill();
+-    }
++    gearQualityHalo(icon, 0, -2, 150, 150, q);
+     if (art) {
+-      const picture = comicArt(icon, 0, 0, 146, 144, art);
++      const picture = comicArt(icon, 0, 0, 132, 132, art);
+       if (!shown) picture.addComponent(UIOpacity).opacity = 200;
+     } else comicMark(icon, 0, 2, 'lock', 44, '#93998E');
+   }
+@@ -197,10 +193,10 @@
+   if (equipment) {
+     const well = gearPlate(panel, -214, top - 147, 124, 124, equipment.quality);
+     gearQualityHalo(well, 0, 0, 104, 104, equipment.quality);
+-  }
++  } else if (g.give.kind === 'mat') gearQualityHalo(panel, -214, top - 147, 112, 112, 1);
+   if (art) {
+     if (g.give.kind === 'hero') comicPortrait(panel, -214, top - 147, 112, art);
+-    else comicArt(panel, -214, top - 147, 112, 112, art);
++    else comicArt(panel, -214, top - 147, 96, 96, art);
+   } else comicMark(panel, -214, top - 147, 'lock', 44, COMIC.sub);
+   if (equipment) gearQualityTag(panel, -233, top - 100, equipment.quality, equipment.tier, 76, 20);
+   const nameColor = COMIC.text;
+--- before/assets/scripts/ui/pages/HeroPage.ts
++++ assets/scripts/ui/pages/HeroPage.ts
+@@ -183,12 +183,12 @@
+   bindButton(node, onClick);
+ }
+ 
+-/** Neutral sockets share a compact circular rarity well with the shop. */
++/** Neutral outer sockets share the shop's square rarity backplates. */
+ function itemSeat(parent: Node, x: number, y: number, w: number, h: number, quality: number, filled: boolean, quiet = false): Node {
+   const seat = quiet ? comicSurface(parent, x, y, w, h, 'card', { name: 'heroItemSeat', radius: 12, fill: filled ? undefined : '#ECE5D8' })
+     : filled ? gearPlate(parent, x, y, w, h, quality, { name: 'heroItemSeat' })
+     : comicPlate(parent, x, y, w, h, 'card', { name: 'heroItemSeat', cut: 8, fill: '#ECE5D8' });
+-  if (filled) gearQualityHalo(seat, 0, 0, w * .76, h * .76, quality);
++  if (filled) gearQualityHalo(seat, 0, 0, w * .84, h * .84, quality);
+   return seat;
+ }
+ function badge(parent: Node, x: number, y: number, w: number, text: string): void {
+@@ -377,14 +377,15 @@
+ function drawBagCell(ctx: PageCtx, grid: Node, cell: { uid: string; n: number }, hid: string, x: number, y: number): void {
+   const isMat = cell.n > 0, inst = isMat ? null : loadSave().equips.find(e => e.uid === cell.uid);
+   const d = inst ? EQUIPS[inst.defId] : null;
+-  const seat = itemSeat(grid, x, y, BAG_SIZE, BAG_SIZE, d?.quality || 0, !!d, true); seat.name = 'heroBagItem:' + cell.uid;
++  const seat = itemSeat(grid, x, y, BAG_SIZE, BAG_SIZE, isMat ? 1 : d?.quality || 0, isMat || !!d, true); seat.name = 'heroBagItem:' + cell.uid;
+   gearArt(seat, 0, 4, 100, 100, isMat ? cell.uid : inst!.defId);
+   if (d) gearQualityTag(seat, -20, 44, d.quality, d.tier, 68, 20);
+   badge(seat, 22, -44, 68, isMat ? '×' + fmt(cell.n) : d?.kind === 'weapon' ? (weaponFits(hid, d.id) ? 'Lv.' + equipLevel(inst!, hid) : '职业不符') : 'Lv.' + inst!.lv);
+   bindButton(seat, () => {
+     if (isMat) {
+       const mat = MATS[cell.uid], panel = comicDialog(ctx.screens, 568, 548, mat.name); panel.name = 'heroMaterialDialog';
+-      gearArt(panel, 0, 118, 136, 136, cell.uid);
++      gearQualityHalo(panel, 0, 118, 136, 136, 1);
++      gearArt(panel, 0, 118, 118, 118, cell.uid);
+       mainLabel(panel, 0, 24, '持有 ×' + fmt(loadSave().bag[cell.uid] || 0), { size: 24, color: COMIC.text, bold: true, w: 510, h: 34 });
+       mainLabel(panel, 0, -33, mat.desc, { size: 22, color: COMIC.text, w: 510, h: 54 });
+       mainLabel(panel, 0, -105, '来源：商店购买 / 关卡掉落', { size: 18, color: COMIC.sub, w: 510, h: 28 });

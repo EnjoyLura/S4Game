@@ -63,6 +63,11 @@ def main():
         for url, kind in preloads) + '\n  <!-- /KW startup preloads -->\n'
     html = html.replace('</head>', links + '</head>')
     html_path.write_text(html, encoding='utf-8', newline='')
+    # The in-game credits entry is a stable URL. Cocos MD5-renames template HTML,
+    # so also publish the original path with its complete attribution notice.
+    credits_source = GAME / 'build-templates/web-mobile/audio-credits.html'
+    credits = credits_source.read_bytes()
+    (WEB / 'audio-credits.html').write_bytes(credits)
     # Avoid global no-cache: overlapping Pages header values are joined, not overridden.
     # Conversely, never grant immutable caching to an unversioned resource directory.
     asset_paths = [path for path in (WEB / 'assets').rglob('*') if path.is_file()]
@@ -75,6 +80,8 @@ def main():
 /
   Cache-Control: no-cache
 /index.html
+  Cache-Control: no-cache
+/audio-credits.html
   Cache-Control: no-cache
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
@@ -96,6 +103,7 @@ def main():
     (WEB / '_headers').write_text(headers, encoding='utf-8', newline='')
     record = {'production': True, 'md5Cache': True, 'engineRevision': revision,
         'entry': start, 'immutableAssets': len(asset_paths), 'startupPreloads': preloads,
+        'audioCredits': {'path': 'audio-credits.html', 'sha256': hashlib.sha256(credits).hexdigest()},
         'validation': 'offline preparation only; no game or browser executed'}
     (WEB / 'web-release.json').write_text(json.dumps(record, indent=2), encoding='utf-8')
     print(json.dumps(record))

@@ -1,16 +1,14 @@
-/** Shared lobby-paper settlement body, with the original victory/defeat heraldry. */
-import { Graphics, Node } from 'cc';
+/** Shared feathered battle receipts, with the original victory/defeat heraldry. */
+import { Node } from 'cc';
 import { LO } from '../config/GameConfig';
-import { CA, label, N } from './UIKit';
+import { label, N } from './UIKit';
 import { artSprite } from './Ux';
-import { battleArtIcon, battleArtSprite } from './BattlePanelSkin';
-import { bindButton } from './ButtonFeedback';
-import { COMIC, comicButtonControl, comicPlate } from './ComicUI';
+import { battleArtSprite } from './BattlePanelSkin';
+import { COMIC, comicButtonControl } from './ComicUI';
 import { StageLootSummary } from '../core/StageLoot';
-import { gearArt } from './HeroComic';
-import { itemName } from '../core/GameData';
 import { showCollectedLoot } from './LevelLootPreview';
 import { SettlementMotion } from './SettlementMotion';
+import { battleRewardPanel } from './BattleRewardPanel';
 
 const ART = 'settlement_comic_v1/';
 type Outcome = 'win' | 'lose';
@@ -20,11 +18,6 @@ export function settlementFrame(parent: Node, outcome: Outcome, level: string, s
   const root = N('settlement:' + outcome, parent);
   const scale = Math.min(1, Math.max(.1, (LO.half * 2 - LO.safeTop - LO.safeBottom - 56) / 900));
   root.setScale(scale, scale, 1);
-  comicPlate(root, 0, -42, 660, 320, 'paper', { name: 'settlementBody', cut: 14 });
-  label(root, 0, 84, '奖励总览', { size: 25, color: COMIC.text, bold: true, w: 580, h: 34 });
-  const divider = N('settlementRewardDivider', root).addComponent(Graphics);
-  divider.strokeColor = CA(COMIC.sub, .26); divider.lineWidth = 1;
-  divider.moveTo(-290, 60); divider.lineTo(290, 60); divider.stroke();
   const width = 590, source = outcome === 'win' ? [1036, 355, 0, -64.5] : [953, 328, -.5, -66];
   const k = width / source[0];
   const badge = N('settlementHeraldry:' + outcome, root, 0, 350);
@@ -61,32 +54,13 @@ export function playSettlement(root: Node): void { root.getComponent(SettlementM
 
 export function settlementRewards(parent: Node, outcome: Outcome, gold: number, xp: number, note: string, loot?: StageLootSummary,
   animation: { intro?: boolean; goldFrom?: number } = {}): void {
-  const compact = !!(loot && (loot.materials.length || loot.equipment.length));
-  label(parent, 0, compact ? 39 : 32, outcome === 'win' ? '本局累计金币已到账' : '金币保底30% · 已到账', {
-    size: 21, color: COMIC.text, bold: true, w: 580, h: 30,
+  battleRewardPanel(parent, {
+    top: 122, heading: outcome === 'win' ? '通关奖励' : '已获得奖励', gold, xp, loot, note,
+    onInspect: loot ? () => showCollectedLoot(parent.parent || parent, loot) : undefined,
+    onCounter: (kind, number, target) => parent.getComponent(SettlementMotion)?.addReward(number, target,
+      !!animation.intro || (kind === 'gold' && animation.goldFrom !== undefined && animation.goldFrom !== gold),
+      kind === 'gold' ? animation.goldFrom || 0 : 0),
   });
-  [['金币', 'ui_icon_coin', gold], ['本局经验', 'ui_icon_exp', xp]].forEach((item, index) => {
-    const card = comicPlate(parent, (index - .5) * 292, compact ? -36 : -70, 246, compact ? 100 : 144, 'card',
-      { name: 'settlementReward:' + index, cut: 9 });
-    label(card, 0, compact ? 32 : 48, String(item[0]), { size: 17, color: COMIC.sub, w: 200, h: 22 });
-    battleArtIcon(card, String(item[1]), compact ? 32 : 64);
-    const number = label(card, 0, compact ? -33 : -49, String(item[2]), { size: compact ? 22 : 25, font: 'number', color: COMIC.text, bold: true, w: 204, h: 28, shrink: true });
-    number.name = index ? 'settlementXpNumber' : 'settlementGoldNumber';
-    parent.getComponent(SettlementMotion)?.addReward(number, Number(item[2]), !!animation.intro
-      || (!index && animation.goldFrom !== undefined && animation.goldFrom !== gold), index ? 0 : animation.goldFrom || 0);
-  });
-  if (compact && loot) {
-    const rows = loot.materials.map(row => ({ id: row.id, text: itemName(row.id) + ' ×' + row.n }));
-    if (loot.equipment.length) rows.push({ id: loot.equipment[0].defId, text: '装备 ×' + loot.equipment.length + ' ›' });
-    const n = rows.length, pitch = Math.min(144, 592 / n);
-    rows.forEach((row, i) => {
-      const card = comicPlate(parent, (i - (n - 1) / 2) * pitch, -124, pitch - 6, 64, 'card', { cut: 6 });
-      gearArt(card, 0, 9, 31, 31, row.id);
-      label(card, 0, -20, row.text, { size: 15, color: COMIC.text, w: pitch - 12, h: 22, shrink: true });
-      bindButton(card, () => showCollectedLoot(parent.parent || parent, loot), { sound: false, scale: .96 });
-    });
-  }
-  label(parent, 0, -178, note, { size: 16, color: COMIC.sub, w: 594, h: 28, shrink: true });
 }
 
 export interface SettlementButton { node: Node; setText: (text: string) => void; setEnabled: (enabled: boolean) => void; setBusy: (busy: boolean, text?: string) => void; }

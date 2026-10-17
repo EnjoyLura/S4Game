@@ -1,0 +1,92 @@
+[
+  {
+    "id": "archer",
+    "title": "弓箭手",
+    "detail": "弓弦、掠风与箭雨",
+    "seconds": 6.7,
+    "video": "media/archer.mp4",
+    "poster": "media/archer.jpg",
+    "sha256": "e48c7d375b6b37f90f66d84cc094d580423806476671b091c7ab8b13326a9566"
+  },
+  {
+    "id": "sniper",
+    "title": "重弩手",
+    "detail": "木质机关与有重量的贯穿",
+    "seconds": 6.7,
+    "video": "media/sniper.mp4",
+    "poster": "media/sniper.jpg",
+    "sha256": "fce2024a03c2eb44d96b9970f31f4a3afe7b05c38b8400057c4c484661edbfad"
+  },
+  {
+    "id": "pyro",
+    "title": "火法师",
+    "detail": "扑燃、焰流与流星落点",
+    "seconds": 6.7,
+    "video": "media/pyro.mp4",
+    "poster": "media/pyro.jpg",
+    "sha256": "dffe5aa10123ca10978935620c622d93d962e80a5e30a3cc4311117e1b51bd4f"
+  },
+  {
+    "id": "volt",
+    "title": "雷法师",
+    "detail": "短电弧、连锁与雷暴",
+    "seconds": 6.7,
+    "video": "media/volt.mp4",
+    "poster": "media/volt.jpg",
+    "sha256": "135f6d611245b7dd833e3c7e8b6a56234b37a635a0dc2ac1a1f9ff256d74d3ae"
+  },
+  {
+    "id": "mora",
+    "title": "冰法师",
+    "detail": "碎冰、结晶与暴风雪",
+    "seconds": 6.7,
+    "video": "media/mora.mp4",
+    "poster": "media/mora.jpg",
+    "sha256": "b0e8a07146fc62c7c7fe5ccf45f8c1261a8d77cf85988cdf82da3d9d1113ede1"
+  },
+  {
+    "id": "cards",
+    "title": "点击与三选一",
+    "detail": "操作轻声，卡牌展开与选中各一次",
+    "seconds": 4.2,
+    "video": "media/cards.mp4",
+    "poster": "media/cards.jpg",
+    "sha256": "8bb3f598a5d9a4c4262145f02b914d5dd2cc0c7f63a7596f89e51011498ea408"
+  },
+  {
+    "id": "growth",
+    "title": "升级与阶段突破",
+    "detail": "普通成长短句；长按结束集中反馈；突破更饱满",
+    "seconds": 5.6,
+    "video": "media/growth.mp4",
+    "poster": "media/growth.jpg",
+    "sha256": "1648f8385dcc7c6c7c725e803b2a67fd16aa8ce17885500a7f9f1375461f4d11"
+  },
+  {
+    "id": "reward",
+    "title": "收获与拾取",
+    "detail": "领奖、购买和招募共用一次收获短句",
+    "seconds": 3.5,
+    "video": "media/reward.mp4",
+    "poster": "media/reward.jpg",
+    "sha256": "c0c7ab66b0ae6fc8aca43bc8d518497aec559a22eb61c2f7052e78b0491ab251"
+  },
+  {
+    "id": "threat",
+    "title": "战场重要提示",
+    "detail": "只保留精英 / 首领警报、倒地与防线受击",
+    "seconds": 5.8,
+    "video": "media/threat.mp4",
+    "poster": "media/threat.jpg",
+    "sha256": "d10624dc29338fd415fe5aeb9a6699b80330636cbfd25f1fcfcd97350f8c6351"
+  },
+  {
+    "id": "result",
+    "title": "胜利与失败",
+    "detail": "短铜管凯旋；下行木管收束",
+    "seconds": 6.0,
+    "video": "media/result.mp4",
+    "poster": "media/result.jpg",
+    "sha256": "8ee4c3f7b359546a5501dd9475eb3e7e0c3474a9c38c140b03e472ed41b97e55"
+  }
+]

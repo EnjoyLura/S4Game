@@ -1,0 +1,117 @@
+/** Terrain pixels and live checkpoint state are deliberately independent. */
+import { _decorator, Component, game, Game, Graphics, Node, Tween, tween, Vec3 } from 'cc';
+import { C, CA, N } from './UIKit';
+import { COMIC, comicMark, comicSurface } from './ComicUI';
+import { mainLabel } from './PageKit';
+import { reducedMotion } from './UIMotion';
+
+export const ROUTE_ART = ['outpost', 'forest', 'lair'].map(name => 'scenes/bg_campaign_' + name + '_v1');
+export const ROUTE_W = 750;
+export const ROUTE_H = 1500;
+export const ROUTE_TOP = 150;
+export const ROUTE_CONTENT_H = ROUTE_TOP + ROUTE_H + 70;
+/** Image-normalized road clearings, ordered from the entrance to the chapter finale. */
+const ROAD_POINTS = [
+  [.28, .88], [.61, .805], [.79, .72], [.50, .59], [.26, .465],
+  [.31, .397], [.77, .335], [.56, .25], [.81, .19], [.77, .12],
+] as const;
+export function routePoint(stage: number): { x: number; top: number } {
+  const point = ROAD_POINTS[Math.max(0, Math.min(9, stage - 1))];
+  return { x: (point[0] - .5) * ROUTE_W, top: ROUTE_TOP + point[1] * ROUTE_H };
+}
+
+const { ccclass } = _decorator;
+
+/** One small local breathing accent, paused in the background and cleaned with the page. */
+@ccclass('CampaignRouteMotion')
+export class CampaignRouteMotion extends Component {
+  private age = 0;
+  private ink: Graphics | null = null;
+  private hidden = false;
+  private movement: Tween<Node> | null = null;
+  onLoad(): void {
+    game.on(Game.EVENT_HIDE, this.hide, this); game.on(Game.EVENT_SHOW, this.show, this);
+  }
+  glow(): void {
+    this.ink = this.node.addComponent(Graphics);
+    this.paint(0); this.enabled = !reducedMotion();
+  }
+  update(dt: number): void {
+    if (this.hidden || !this.ink) return;
+    this.age += Math.min(.06, dt);
+    this.paint((Math.sin(this.age * 2.4) + 1) / 2);
+  }
+  private paint(p: number): void {
+    const g = this.ink!; g.clear();
+    g.fillColor = CA(COMIC.gold, .10 + p * .10); g.ellipse(0, -22, 53 + p * 3, 22 + p * 2); g.fill();
+    g.lineWidth = 3; g.strokeColor = CA(COMIC.goldLight, .75 + p * .25);
+    g.ellipse(0, -22, 46 + p * 3, 17 + p); g.stroke();
+    g.lineWidth = 2; g.strokeColor = C(COMIC.gold); g.ellipse(0, -22, 48, 19); g.stroke();
+  }
+  private hide = (): void => { this.hidden = true; };
+  private show = (): void => { this.hidden = false; };
+  /** Short drawer motion is owned here and cancelled when its page is destroyed. */
+  enter(): void {
+    if (reducedMotion()) return;
+    const target = this.node.position.clone();
+    this.node.setPosition(target.x, target.y - 56, target.z);
+    this.movement = tween(this.node).to(.25, { position: target }, { easing: 'cubicOut' }).start();
+  }
+  leave(done: () => void): void {
+    this.movement?.stop();
+    if (reducedMotion()) { done(); return; }
+    const at = this.node.position;
+    this.movement = tween(this.node).to(.16, { position: new Vec3(at.x, at.y - 74, at.z) }, { easing: 'quadIn' }).call(done).start();
+  }
+  onDestroy(): void {
+    this.movement?.stop(); this.movement = null;
+    game.off(Game.EVENT_HIDE, this.hide, this); game.off(Game.EVENT_SHOW, this.show, this);
+  }
+}
+
+export function routeStop(parent: Node, stage: number, selected: boolean, open: boolean, earned: number,
+  name: string, claimable: boolean): Node {
+  const p = routePoint(stage), item = N('campaignStop:' + stage, parent, p.x, -p.top, 112, 128);
+  const shadow = N('checkpointShadow', item).addComponent(Graphics);
+  shadow.fillColor = CA(COMIC.ink, .28); shadow.ellipse(0, -29, 43, 14); shadow.fill();
+  if (selected) N('campaignSelectionGlow', item).addComponent(CampaignRouteMotion).glow();
+  const g = N('campaignCheckpointFace', item).addComponent(Graphics);
+  g.fillColor = C(open ? '#909CA4' : '#777F83'); g.strokeColor = C(COMIC.darkShade); g.lineWidth = 2;
+  g.ellipse(0, -23, 37, 12); g.fill(); g.stroke();
+  g.fillColor = C(selected ? COMIC.gold : open ? '#277AC0' : '#53616C');
+  g.strokeColor = C(selected ? COMIC.goldShade : COMIC.darkShade); g.lineWidth = 3;
+  g.moveTo(-27, 53); g.lineTo(27, 53); g.lineTo(27, 0); g.lineTo(0, -23); g.lineTo(-27, 0);
+  g.close(); g.fill(); g.stroke();
+  g.lineWidth = 2; g.strokeColor = C(selected ? COMIC.goldLight : open ? '#A7D9F3' : '#9BA4AA');
+  g.moveTo(-21, 47); g.lineTo(21, 47); g.lineTo(21, 3); g.lineTo(0, -15); g.lineTo(-21, 3); g.close(); g.stroke();
+  mainLabel(item, 0, 23, String(stage), { size: 30, bold: true, font: 'number', color: selected ? COMIC.text : COMIC.cream,
+    w: 48, h: 40, outline: selected ? undefined : COMIC.darkShade, outlineW: 2 });
+  if (!open) comicMark(item, 0, -13, 'lock', 18, '#E4E5DF');
+  if (stage === 10) {
+    comicSurface(item, 0, 65, 58, 22, selected ? 'gold' : 'dark', { radius: 11, name: 'chapterFinale' });
+    mainLabel(item, 0, 65, '章末', { size: 14, bold: true, color: selected ? COMIC.text : COMIC.cream, w: 52, h: 20 });
+  }
+  // Stars stay below the pin, with a quiet empty state instead of three large disabled icons.
+  if (open) {
+    for (let s = 0; s < 3; s++) {
+      const star = N('checkpointStar:' + s, item, (s - 1) * 22, -40).addComponent(Graphics);
+      star.fillColor = C(s < earned ? COMIC.gold : '#68747D'); star.strokeColor = C(COMIC.darkShade); star.lineWidth = 1.7;
+      for (let k = 0; k < 10; k++) {
+        const a = Math.PI / 2 + k * Math.PI / 5, r = k % 2 ? 5 : 11;
+        if (k === 0) star.moveTo(Math.cos(a) * r, Math.sin(a) * r); else star.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+      }
+      star.close(); star.fill(); star.stroke();
+    }
+  }
+  if (claimable) {
+    const dot = N('campaignChestReady', item, 29, 48).addComponent(Graphics);
+    dot.fillColor = C('#D9533C'); dot.strokeColor = C(COMIC.cream); dot.lineWidth = 2;
+    dot.circle(0, 0, 7); dot.fill(); dot.stroke();
+  }
+  if (selected) {
+    const side = p.x > 75 ? -1 : 1;
+    const tag = comicSurface(item, side * 123, 3, 152, 38, 'dark', { name: 'selectedCheckpointName', radius: 12 });
+    mainLabel(tag, 0, 0, name, { size: 21, bold: true, color: COMIC.cream, w: 138, h: 30 });
+  }
+  return item;
+}

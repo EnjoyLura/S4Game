@@ -1,6 +1,6 @@
-/** Rarity is confined to the illustration's circular well and upper-left tag. */
-import { Graphics, Node } from 'cc';
-import { C, CA, label, N } from './UIKit';
+/** Shared square rarity sockets for equipment and materials; surrounding cards stay neutral. */
+import { Color, Graphics, Node } from 'cc';
+import { C, N } from './UIKit';
 import { comicPlate } from './ComicUI';
 
 export interface GearQualityStyle { name: string; edge: string; text: string; well: string; light: string; }
@@ -18,19 +18,25 @@ export function gearPlate(parent: Node, x: number, y: number, w: number, h: numb
   return comicPlate(parent, x, y, w, h, 'card', { name: opts.name || 'gearItemPlate', cut: opts.cut ?? 8 });
 }
 
-export function gearQualityTag(parent: Node, x: number, y: number, q: number, tier: number,
-  w = 96, h = 26): Node {
-  const style = gearQuality(q);
-  const plate = comicPlate(parent, x, y, w, h, 'dark', { name: 'gearQualityTag', cut: 5, fill: style.edge });
-  const text = w < 55 ? style.name : w < 90 ? style.name + tier + '阶' : style.name + ' · ' + tier + '阶';
-  label(plate, 0, 0, text, { size: Math.min(15, h * .62), color: '#FFFFFF', bold: true,
-    font: 'body', outline: style.text, outlineW: .8, w: w - 8, h: h - 2, shrink: true });
-  return plate;
-}
-
-/** Still graphics behind the illustration: no new texture, looping animation or white flash. */
+/** Legacy entry point shared by shop, inventory and loot; only the illustration's socket is colored. */
 export function gearQualityHalo(parent: Node, x: number, y: number, w: number, h: number, q: number): void {
-  const style = gearQuality(q), g = N('gearQualityHalo', parent, x, y).addComponent(Graphics);
-  g.fillColor = C(style.light); g.circle(0, 0, Math.min(w, h) / 2); g.fill();
-  g.strokeColor = CA(style.edge, .45); g.lineWidth = 1; g.stroke();
+  const style = gearQuality(q), side = Math.min(w, h), half = side / 2;
+  const g = N('gearQualitySquare', parent, x, y, side, side).addComponent(Graphics);
+  const cut = Math.min(5, side * .055);
+  const shape = (inset: number): void => {
+    const a = half - inset, c = Math.max(1, cut - inset * .35);
+    g.moveTo(-a+c,-a); g.lineTo(a-c,-a); g.lineTo(a,-a+c); g.lineTo(a,a-c);
+    g.lineTo(a-c,a); g.lineTo(-a+c,a); g.lineTo(-a,a-c); g.lineTo(-a,-a+c); g.close();
+  };
+  g.fillColor = C('#26312D'); shape(0); g.fill();
+  g.fillColor = C(style.edge); shape(1.5); g.fill();
+  const deep = C(['#46535B','#173D1F','#163A59','#38204F'][q] || '#46535B');
+  const rim = C(style.edge), inner = side - 8;
+  for (let i = 0; i < 16; i++) {
+    g.fillColor = Color.lerp(new Color(), deep, rim, .16 + i / 15 * .34);
+    g.rect(-half+4, -half+4+i*inner/16, inner, inner/16+.25); g.fill();
+  }
+  g.strokeColor = C(style.light); g.lineWidth = Math.max(1, side * .012);
+  g.moveTo(-half+6,half-3); g.lineTo(half-6,half-3); g.stroke();
+  g.moveTo(-half+3,-half+6); g.lineTo(-half+3,half-6); g.stroke();
 }

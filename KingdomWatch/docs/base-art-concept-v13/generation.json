@@ -1,0 +1,107 @@
+{
+  "tool": "built-in image_gen",
+  "skill": "C:/Users/user/.codex/skills/.system/imagegen/SKILL.md",
+  "useCase": "ui-mockup",
+  "date": "2026-10-17",
+  "conceptOnly": true,
+  "runtimeChanged": false,
+  "onlineGameModified": false,
+  "pixelsUnmodifiedAfterGeneration": true,
+  "buildRun": false,
+  "testsRun": false,
+  "browserRun": false,
+  "statesAreIllustrative": true,
+  "actualValuesSource": [
+    "assets/scripts/core/GameData.ts",
+    "assets/scripts/ui/pages/BasePage.ts"
+  ],
+  "review": "All final originals inspected inline. Five complete portrait screens, shared ivory/navy dialogs, continuous near-white grouped content, readable real codex text, six list entries with correct discovered/claimed/hidden states, full creature silhouettes, reward diamond correction, disabled/active actions and bottom paper margins. The main page retains original rounded resource bars and plain gold rounded navigation selection. Implementation must continue to reuse original shared resource/button geometry and original runtime illustrations; concepts are not runtime screenshots.",
+  "assets": [
+    {
+      "key": "main",
+      "name": "基地主页",
+      "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-03d2a8d0-f1d8-4d4f-9303-a2c78eeaa70d.png",
+      "output": "D:/AI/S4Game/KingdomWatch/docs/base-art-concept-v13/base-main-v13.png",
+      "initial": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-b4b4d496-c301-4fb3-be02-45e015aa0c47.png",
+      "editPrompt": "D:/AI/S4Game/KingdomWatch/docs/base-art-concept-v13/main-resource-correction-prompt.txt",
+      "prompt": "D:/AI/S4Game/KingdomWatch/docs/base-art-concept-v13/main-prompt.txt",
+      "references": [
+        "C:/Users/user/AppData/Local/Temp/codex-clipboard-8aee7eb2-0c96-41ea-849f-57456b24a411.png",
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-weapon-dialog-v12.png"
+      ],
+      "width": 887,
+      "height": 1774,
+      "sha256": "f7f59d7461b602fe7602c846fe3615ca5323570ef7c9131657b34684694b4167",
+      "bytes": 2289908
+    },
+    {
+      "key": "keep",
+      "name": "主城建设弹窗",
+      "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-08500cc2-b228-4446-b57c-eb889edea6ef.png",
+      "output": "D:/AI/S4Game/KingdomWatch/docs/base-art-concept-v13/base-keep-dialog-v13.png",
+      "prompt": "D:/AI/S4Game/KingdomWatch/docs/base-art-concept-v13/keep-prompt.txt",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-weapon-dialog-v12.png",
+        "C:/Users/user/AppData/Local/Temp/codex-clipboard-8aee7eb2-0c96-41ea-849f-57456b24a411.png"
+      ],
+      "width": 882,
+      "height": 1783,
+      "sha256": "dd813cf2242064f688868f41db565bafaab0832d118b559f5dee6174bbccff55",
+      "bytes": 1633129
+    },
+    {
+      "key": "list",
+      "name": "研究院图鉴列表",
+      "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-f4f89679-b2c9-461c-ad5a-faa6fdf82768.png",
+      "output": "D:/AI/S4Game/KingdomWatch/docs/base-art-concept-v13/base-codex-list-v13.png",
+      "initial": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-12444da6-7c18-45f6-9e4e-aa022027e6ec.png",
+      "editPrompt": "D:/AI/S4Game/KingdomWatch/docs/base-art-concept-v13/list-correction-prompt.txt",
+      "prompt": "D:/AI/S4Game/KingdomWatch/docs/base-art-concept-v13/list-prompt.txt",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-weapon-dialog-v12.png",
+        "D:/AI/S4Game/KingdomWatch/docs/base-comic-v1/online-codex-list.png",
+        "C:/Users/user/AppData/Local/Temp/codex-clipboard-8aee7eb2-0c96-41ea-849f-57456b24a411.png"
+      ],
+      "width": 882,
+      "height": 1783,
+      "sha256": "afdb39822a85ab8c812a13650e038b78290d2eda6d7477438ee4b1c8c4bee99e",
+      "bytes": 1743217
+    },
+    {
+      "key": "worker",
+      "name": "普通怪物详情",
+      "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-7929dda3-0e29-47a0-8c4a-0fa678661745.png",
+      "output": "D:/AI/S4Game/KingdomWatch/docs/base-art-concept-v13/base-monster-dialog-v13.png",
+      "initial": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-94436dfa-a1d3-4b54-b6f0-245a9f70d5c5.png",
+      "editPrompt": "D:/AI/S4Game/KingdomWatch/docs/base-art-concept-v13/worker-correction-prompt.txt",
+      "prompt": "D:/AI/S4Game/KingdomWatch/docs/base-art-concept-v13/worker-prompt.txt",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-weapon-dialog-v12.png",
+        "D:/AI/S4Game/KingdomWatch/docs/base-comic-v1/online-codex-list.png",
+        "C:/Users/user/AppData/Local/Temp/codex-clipboard-8aee7eb2-0c96-41ea-849f-57456b24a411.png"
+      ],
+      "width": 882,
+      "height": 1783,
+      "sha256": "8316d41257c607f2c051564e855610887f42ee58465851ecf37f077cb182b082",
+      "bytes": 1733997
+    },
+    {
+      "key": "boss",
+      "name": "BOSS详情",
+      "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-42682275-e331-4cb0-a666-0f6aaf87e709.png",
+      "output": "D:/AI/S4Game/KingdomWatch/docs/base-art-concept-v13/base-boss-dialog-v13.png",
+      "initial": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-3953b6fa-9756-4fd3-b80d-89d616337733.png",
+      "editPrompt": "D:/AI/S4Game/KingdomWatch/docs/base-art-concept-v13/boss-correction-prompt.txt",
+      "prompt": "D:/AI/S4Game/KingdomWatch/docs/base-art-concept-v13/boss-prompt.txt",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-weapon-dialog-v12.png",
+        "D:/AI/S4Game/KingdomWatch/docs/base-comic-v1/online-codex-boss-detail.png",
+        "C:/Users/user/AppData/Local/Temp/codex-clipboard-8aee7eb2-0c96-41ea-849f-57456b24a411.png"
+      ],
+      "width": 941,
+      "height": 1672,
+      "sha256": "6ae07cda6aa231f5131fd9a9598f410706e992dc48fb464e51e517af93dd20d2",
+      "bytes": 1779032
+    }
+  ]
+}

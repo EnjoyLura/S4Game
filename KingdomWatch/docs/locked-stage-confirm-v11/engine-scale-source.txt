@@ -1,0 +1,25 @@
+Cocos Creator 3.8.8 bundled engine source: C:/ProgramData/cocos/editors/Creator/3.8.8/resources/resources/3d/engine/cocos/scene-graph/node.ts Lines 2539–2562:
+    public setScale(scale: Readonly<Vec3>): void;
+
+    /**
+     * @en Set scale in local coordinate system
+     * @zh 设置本地缩放
+     * @param x X axis scale
+     * @param y Y axis scale
+     * @param z Z axis scale
+     */
+    public setScale(x: number, y: number, z?: number): void;
+
+    public setScale (val: Readonly<Vec3> | number, y?: number, z?: number): void {
+        const localScale = this._lscale;
+
+        if (y === undefined) {
+            Vec3.copy(localScale, val as Vec3);
+        } else {
+            if (z === undefined) {
+                z = localScale.z;
+            }
+            Vec3.set(localScale, val as number, y, z);
+        }
+
+        this.invalidateChildren(TransformBit.SCALE);

@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-campaign-route-compact-v3-20261017-004118",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-campaign-ui-polish-v2-20261017-002147",
+  "entryVersion": "1792168692",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=campaign-route-compact-v3-1792168692",
+  "scope": "denser chapter checkpoints; no title or dock backplate; centered preparation with squad to right; original unscaled drawer without squad",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://633f1207.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-campaign-route-compact-v3-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-campaign-route-compact-v3-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "mainSha256": "fd41f82148e71b94f23c870a169d1cdc0a35efee6e62bf7dde7ca1ccbedf1de7",
+  "creatorBuildMilliseconds": 17376,
+  "date": "2026-10-17T00:42:33.205312+08:00",
+  "testsRun": false,
+  "simulationRun": false,
+  "gameRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

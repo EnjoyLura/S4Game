@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-controls-quiet-v4-20261017-023641",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-main-art-v3-20261017-021901",
+  "entryVersion": "1792175777",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=shop-controls-quiet-v4-1792175777",
+  "scope": "restore original modal close and buy buttons, shop category faces and rounded flat gold lobby navigation selection; stronger dividers; plain attribute text without row or group plates; raise both BGM and SFX another 1 dB relative to previous mix",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://040e433e.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-shop-controls-audio-v4-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-shop-controls-audio-v4-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 16779,
+  "mainSha256": "3ed9bc8f695823f62de5d2272e1852912e31232f23c5f25dfec2ea9050c1fe3c",
+  "date": "2026-10-17T02:37:17.319288+08:00",
+  "testsRun": false,
+  "gameRun": false,
+  "simulationRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

@@ -1,0 +1,768 @@
+{
+  "sourceChanged": [
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/core/AudioCatalog.ts",
+    "assets/scripts/core/GameAudio.ts",
+    "assets/scripts/ui/ComicUI.ts",
+    "assets/scripts/ui/PositiveFeedback.ts",
+    "assets/scripts/ui/TrainingLobby.ts",
+    "assets/scripts/ui/UIAudio.ts",
+    "assets/scripts/ui/pages/BasePage.ts",
+    "assets/scripts/ui/pages/HeroPage.ts"
+  ],
+  "unchangedOriginalFiles": 515,
+  "allAudioAndMetadataUnchanged": true,
+  "catalogDefinitionsUnchanged": true,
+  "originalCueCount": 61,
+  "silentCueCount": 21,
+  "sharedCueCount": 9,
+  "remainingCanonicalCueCount": 31,
+  "canonicalCues": [
+    "bow",
+    "bowUlt",
+    "breakthrough",
+    "crit",
+    "crossbow",
+    "deathHeavy",
+    "defeat",
+    "fire",
+    "fireHeavy",
+    "fireSkill",
+    "fireUlt",
+    "frost",
+    "frostHeavy",
+    "frostSkill",
+    "frostUlt",
+    "growth",
+    "lootPickup",
+    "pickChoose",
+    "pickOpen",
+    "pierceHeavy",
+    "reward",
+    "skill",
+    "snipe",
+    "surge",
+    "thunder",
+    "thunderHeavy",
+    "thunderSkill",
+    "thunderUlt",
+    "ui",
+    "victory",
+    "wall"
+  ],
+  "silentCues": [
+    "uiSelect",
+    "uiOpen",
+    "uiClose",
+    "levelup",
+    "growthTick",
+    "growthLand",
+    "rewardLand",
+    "star",
+    "starFinish",
+    "hit",
+    "pierce",
+    "crush",
+    "zapHit",
+    "icebreak",
+    "kill",
+    "deathFire",
+    "deathVolt",
+    "deathFrost",
+    "charge",
+    "ready",
+    "lootDrop"
+  ],
+  "aliases": {
+    "shoot": "bow",
+    "ult": "bowUlt",
+    "uiToggle": "ui",
+    "uiConfirm": "ui",
+    "confirm": "ui",
+    "pickRefresh": "ui",
+    "purchase": "reward",
+    "recruit": "reward",
+    "construction": "growth"
+  },
+  "gameOrAudioPlaybackPerformed": false,
+  "items": [
+    {
+      "id": "A01",
+      "name": "通用按钮点击",
+      "previousCues": [
+        "ui"
+      ],
+      "currentCues": [
+        "ui"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "A02",
+      "name": "页签/英雄/列表选中切换",
+      "previousCues": [
+        "uiSelect"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "A03",
+      "name": "打开弹窗",
+      "previousCues": [
+        "uiOpen"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "A04",
+      "name": "关闭弹窗/返回",
+      "previousCues": [
+        "uiClose"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "A05",
+      "name": "设置开关切换",
+      "previousCues": [
+        "uiToggle"
+      ],
+      "currentCues": [
+        "ui"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "A06",
+      "name": "确认操作",
+      "previousCues": [
+        "uiConfirm"
+      ],
+      "currentCues": [
+        "ui"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "A07",
+      "name": "普通操作成功提示",
+      "previousCues": [
+        "uiConfirm"
+      ],
+      "currentCues": [
+        "ui"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "A08",
+      "name": "普通警告/失败提示：未解锁、金币不足等",
+      "previousCues": [
+        "uiClose"
+      ],
+      "currentCues": [
+        "ui"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "B01",
+      "name": "战斗内等级提升、获得三选一机会",
+      "previousCues": [
+        "levelup"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "B02",
+      "name": "三选一卡牌出现",
+      "previousCues": [
+        "pickOpen"
+      ],
+      "currentCues": [
+        "pickOpen"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "B03",
+      "name": "三选一刷新换牌",
+      "previousCues": [
+        "pickRefresh"
+      ],
+      "currentCues": [
+        "ui"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "B04",
+      "name": "三选一选中卡牌",
+      "previousCues": [
+        "pickChoose"
+      ],
+      "currentCues": [
+        "pickChoose"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "C01",
+      "name": "获得奖励弹窗",
+      "previousCues": [
+        "reward"
+      ],
+      "currentCues": [
+        "reward"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "C02",
+      "name": "奖励数量滚动结束的短落点",
+      "previousCues": [
+        "rewardLand"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "C03",
+      "name": "购买商品成功",
+      "previousCues": [
+        "purchase"
+      ],
+      "currentCues": [
+        "reward"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "C04",
+      "name": "购买/招募英雄成功",
+      "previousCues": [
+        "recruit"
+      ],
+      "currentCues": [
+        "reward"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "C05",
+      "name": "关卡胜利",
+      "previousCues": [
+        "victory"
+      ],
+      "currentCues": [
+        "victory"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "C06",
+      "name": "关卡失败",
+      "previousCues": [
+        "defeat"
+      ],
+      "currentCues": [
+        "defeat"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "C07",
+      "name": "结算星星逐颗出现",
+      "previousCues": [
+        "star"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "C08",
+      "name": "最后一颗星落定",
+      "previousCues": [
+        "starFinish"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "C09",
+      "name": "战斗中装备掉落出现",
+      "previousCues": [
+        "lootDrop"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "C10",
+      "name": "战斗中装备拾取入包",
+      "previousCues": [
+        "lootPickup"
+      ],
+      "currentCues": [
+        "lootPickup"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "D01",
+      "name": "英雄/武器/普攻/技能/大招/装备升级成功",
+      "previousCues": [
+        "growth"
+      ],
+      "currentCues": [
+        "growth"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "D02",
+      "name": "长按连续升级的短反馈",
+      "previousCues": [
+        "growthTick"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "D03",
+      "name": "升级数值变化结束的短落点",
+      "previousCues": [
+        "growthLand"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "D04",
+      "name": "培养阶段突破",
+      "previousCues": [
+        "breakthrough"
+      ],
+      "currentCues": [
+        "breakthrough"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "D05",
+      "name": "主城升级成功",
+      "previousCues": [
+        "construction"
+      ],
+      "currentCues": [
+        "growth"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "E01",
+      "name": "防线受到攻击",
+      "previousCues": [
+        "wall"
+      ],
+      "currentCues": [
+        "wall"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "E02",
+      "name": "大招充能完毕",
+      "previousCues": [
+        "ready"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "E03",
+      "name": "大招起手蓄力",
+      "previousCues": [
+        "charge"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "E04",
+      "name": "敌军大部队/精英/BOSS 来袭警报",
+      "previousCues": [
+        "surge"
+      ],
+      "currentCues": [
+        "surge"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F01",
+      "name": "弓箭手·艾拉·普攻发射",
+      "previousCues": [
+        "bow"
+      ],
+      "currentCues": [
+        "bow"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F02",
+      "name": "弓箭手·艾拉·普通命中",
+      "previousCues": [
+        "hit"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "F03",
+      "name": "弓箭手·艾拉·重击/暴击命中",
+      "previousCues": [
+        "crit"
+      ],
+      "currentCues": [
+        "crit"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F04",
+      "name": "弓箭手·艾拉·技能释放",
+      "previousCues": [
+        "skill"
+      ],
+      "currentCues": [
+        "skill"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F05",
+      "name": "弓箭手·艾拉·大招释放",
+      "previousCues": [
+        "bowUlt"
+      ],
+      "currentCues": [
+        "bowUlt"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F06",
+      "name": "重弩手·凯尔·普攻发射",
+      "previousCues": [
+        "crossbow"
+      ],
+      "currentCues": [
+        "crossbow"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F07",
+      "name": "重弩手·凯尔·普通命中",
+      "previousCues": [
+        "pierce"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "F08",
+      "name": "重弩手·凯尔·重击/暴击命中",
+      "previousCues": [
+        "pierceHeavy"
+      ],
+      "currentCues": [
+        "pierceHeavy"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F09",
+      "name": "重弩手·凯尔·技能释放",
+      "previousCues": [
+        "crossbow"
+      ],
+      "currentCues": [
+        "crossbow"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F10",
+      "name": "重弩手·凯尔·大招释放",
+      "previousCues": [
+        "snipe"
+      ],
+      "currentCues": [
+        "snipe"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F11",
+      "name": "火法师·焰辉·普攻发射",
+      "previousCues": [
+        "fire"
+      ],
+      "currentCues": [
+        "fire"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F12",
+      "name": "火法师·焰辉·普通命中",
+      "previousCues": [
+        "crush"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "F13",
+      "name": "火法师·焰辉·重击/暴击命中",
+      "previousCues": [
+        "fireHeavy"
+      ],
+      "currentCues": [
+        "fireHeavy"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F14",
+      "name": "火法师·焰辉·技能释放",
+      "previousCues": [
+        "fireSkill"
+      ],
+      "currentCues": [
+        "fireSkill"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F15",
+      "name": "火法师·焰辉·大招释放",
+      "previousCues": [
+        "fireUlt"
+      ],
+      "currentCues": [
+        "fireUlt"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F16",
+      "name": "雷法师·沃尔·普攻发射",
+      "previousCues": [
+        "thunder"
+      ],
+      "currentCues": [
+        "thunder"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F17",
+      "name": "雷法师·沃尔·普通命中",
+      "previousCues": [
+        "zapHit"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "F18",
+      "name": "雷法师·沃尔·重击/暴击命中",
+      "previousCues": [
+        "thunderHeavy"
+      ],
+      "currentCues": [
+        "thunderHeavy"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F19",
+      "name": "雷法师·沃尔·技能释放",
+      "previousCues": [
+        "thunderSkill"
+      ],
+      "currentCues": [
+        "thunderSkill"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F20",
+      "name": "雷法师·沃尔·大招释放",
+      "previousCues": [
+        "thunderUlt"
+      ],
+      "currentCues": [
+        "thunderUlt"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F21",
+      "name": "冰法师·莫拉·普攻发射",
+      "previousCues": [
+        "frost"
+      ],
+      "currentCues": [
+        "frost"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F22",
+      "name": "冰法师·莫拉·普通命中",
+      "previousCues": [
+        "icebreak"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "F23",
+      "name": "冰法师·莫拉·重击/暴击命中",
+      "previousCues": [
+        "frostHeavy"
+      ],
+      "currentCues": [
+        "frostHeavy"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F24",
+      "name": "冰法师·莫拉·技能释放",
+      "previousCues": [
+        "frostSkill"
+      ],
+      "currentCues": [
+        "frostSkill"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "F25",
+      "name": "冰法师·莫拉·大招释放",
+      "previousCues": [
+        "frostUlt"
+      ],
+      "currentCues": [
+        "frostUlt"
+      ],
+      "status": "保留或共用"
+    },
+    {
+      "id": "G01",
+      "name": "普通物理击杀/敌人倒下",
+      "previousCues": [
+        "kill"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "G02",
+      "name": "火焰击杀",
+      "previousCues": [
+        "deathFire"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "G03",
+      "name": "雷电击杀",
+      "previousCues": [
+        "deathVolt"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "G04",
+      "name": "冰霜击杀",
+      "previousCues": [
+        "deathFrost"
+      ],
+      "currentCues": [
+        null
+      ],
+      "status": "静音"
+    },
+    {
+      "id": "G05",
+      "name": "精英/BOSS/重击击杀的厚重落点",
+      "previousCues": [
+        "deathHeavy"
+      ],
+      "currentCues": [
+        "deathHeavy"
+      ],
+      "status": "保留或共用"
+    }
+  ],
+  "typeDiagnostics": {
+    "before": 12,
+    "after": 10,
+    "added": [],
+    "note": "Full-project existing diagnostics remain; changed modules have no new errors"
+  }
+}

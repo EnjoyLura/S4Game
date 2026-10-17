@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-campaign-art-v8-20261017-040048",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hero-detail-shared-v6-20261017-032835",
+  "entryVersion": "1792180744",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=campaign-art-v8-1792180744",
+  "scope": "campaign map plaques, themed checkpoints, stone bases and state marks; centered prepare and right squad controls; paper preparation with local 1.5-row loot scroll; formation title, four position cards, five hero cards, hall background and done control",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://631cdb6a.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-campaign-main-art-v8-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-campaign-main-art-v8-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 17467,
+  "mainSha256": "990f0d39e7bcd104f0bf0d94abdd4cafdce682e51d1f18aaaa01c6abcc29cebb",
+  "date": "2026-10-17T04:01:34.248575+08:00",
+  "testsRun": false,
+  "gameRun": false,
+  "simulationRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

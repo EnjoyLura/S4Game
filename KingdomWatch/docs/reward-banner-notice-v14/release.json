@@ -1,0 +1,33 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-reward-banner-notice-v14-20261017-125852",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-base-art-live-v13-20261017-123735",
+  "entryVersion": "1792213062",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=reward-banner-notice-v14-1792213062",
+  "scope": "full-width reward celebration banner with reward cue, upper-middle feathered twin-line notices with upward fade",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://01f798d9.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-reward-banner-notice-v14-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-reward-banner-notice-v14-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 17264,
+  "mainSha256": "815f4bf21a2a0cde53baf7c50b188b9c7797d31ce54a8039540818256c39b4dc",
+  "date": "2026-10-17T12:59:28.162584+08:00",
+  "testsRun": false,
+  "simulationRun": false,
+  "gameRun": false,
+  "browserRun": false,
+  "audioAudition": false,
+  "onlineAcceptance": false
+}

@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-attribute-paper-v6-20261017-024717",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-price-buttons-v5-20261017-024106",
+  "entryVersion": "1792176402",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=shop-attribute-paper-v6-1792176402",
+  "scope": "restore one light paper backing per attribute group with unboxed rows; reserve 20 extra units below detail actions; retain original flat button and navigation selection styles",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://b39583cb.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-shop-attribute-paper-v6-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-shop-attribute-paper-v6-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 18791,
+  "mainSha256": "a23baaceefa64d13c27ba97378dd6183d63decab7451cbc3cec1af08f949823d",
+  "date": "2026-10-17T02:48:25.475981+08:00",
+  "testsRun": false,
+  "gameRun": false,
+  "simulationRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

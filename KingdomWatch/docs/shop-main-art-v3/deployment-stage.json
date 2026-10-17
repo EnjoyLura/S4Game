@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-main-art-v3-20261017-021901",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-gear-slots-fill-v3-20261017-015825",
+  "entryVersion": "1792174641",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=shop-main-art-v3-1792174641",
+  "scope": "shop categories, product cards, full square rarity sockets, beveled price buttons; shared lobby navigation and faint separators; product modal paper frame, navy title, showcase, grouped attributes, fixed purchase area; green/navy actions without gold edging",
+  "manualAcceptance": "pending user manual review"
+}

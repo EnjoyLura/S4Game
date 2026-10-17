@@ -4,8 +4,8 @@ import { LO } from '../config/GameConfig';
 import { skillBaseMultiplier } from '../config/Cards';
 import { C, CA, LabelOpts, N, setText, WY } from './UIKit';
 import { artSprite } from './Ux';
-import { COMIC, comicArt, comicButton, comicButtonControl, comicDialog, comicMark, comicPlate } from './ComicUI';
-import { EMPTY_GEAR, gearArt, heroComicFigure, heroGlyph, heroPortrait } from './HeroComic';
+import { COMIC, comicArt, comicButton, comicButtonControl, comicMark, comicPlate, comicSurface } from './ComicUI';
+import { EMPTY_GEAR, gearArt, heroComicFigure, heroGlyph } from './HeroComic';
 import { mainLabel as pageLabel, PageCtx, mainLayout, mainResourceTop, MAIN_RESOURCE_H, pageScroll, fmt, toast } from './PageKit';
 import { loadSave, saveSave } from '../core/SaveData';
 import { bindButton } from './ButtonFeedback';
@@ -14,9 +14,16 @@ import { MilestoneSwipe } from './MilestoneSwipe';
 import { TrainingWeaponFloat } from './TrainingWeaponFloat';
 import { HoldUpgrade } from './HoldUpgrade';
 import { TrainingGrowthFx } from './TrainingGrowthFx';
+import { TrainingResultPulse } from './TrainingResultPulse';
+import { feedbackSurface } from './FeedbackSurface';
 import { uiSound } from './UIAudio';
-import { heroRosterRail, ROSTER_CARD_W } from './HeroRosterRail';
+import { heroRosterRail } from './HeroRosterRail';
 import { GrowthTarget, growthAction } from './GrowthFeedback';
+import { heroLobbyPortrait } from './HeroChrome';
+import { lobbyAttributeWell, shopQualitySocket } from './LobbyChrome';
+import { DETAIL_ACTION_FOOTER, detailBody, detailDialog, detailFooter, detailGroup,
+  detailGroupHeight, detailHeight, detailOverview } from './DetailDialog';
+import { TRAINING_INK, TRAINING_SUB, trainingCard, trainingPaper, trainingRule } from './TrainingChrome';
 import {
   HERO_DEFS, HERO_GROWTH, EQUIPS, EquipKind, KIND_NAME, MAX, OpResult, StatKey, STAT_NAME,
   heroStats, heroUpCost, weaponUpCost, skillUpCost, equipUpCost, equipStat, statFmt,
@@ -84,15 +91,13 @@ function environment(parent: Node, height: number, display: boolean): Node {
 
 function roster(parent: Node, top: number, hid: string, rebuild: () => void): void {
   const sv = loadSave(), heroes = Object.values(HERO_DEFS);
-  const rail = heroRosterRail(parent, top, 'trainingRoster', heroes.map(def => def.id), hid);
+  const rail = heroRosterRail(parent, top, 'trainingRoster', heroes.map(def => def.id), hid,
+    {cardWidth:120,step:134,center:true});
   heroes.forEach((def, i) => {
     const owned = sv.heroes[def.id].owned;
-    const slot = comicPlate(rail.content, rail.x(i), 0, ROSTER_CARD_W, 114, hid === def.id ? 'gold' : 'card', { name: 'trainingHero:' + def.id });
-    const avatar = heroPortrait(slot, 0, 14, 72, def.id);
-    if (!owned) { avatar.addComponent(UIOpacity).opacity = 125; comicMark(slot, 43, -8, 'lock', 17, COMIC.sub); }
-    mainLabel(slot, 0, -39, def.id === 'pyro' ? def.name.replace('·', '') : def.name.split('·')[0], {
-      size: 20, bold: true, color: owned ? COMIC.text : COMIC.sub, w: 110, h: 28,
-    });
+    const active = hid === def.id;
+    const slot = heroLobbyPortrait(rail.content, rail.x(i), def.id, active, owned, rail.cardWidth);
+    slot.name = 'trainingHero:' + def.id;
     tap(slot, () => {
       if (!owned) { toast('前往商店解锁该英雄'); return; }
       if (hid === def.id) return;
@@ -102,16 +107,19 @@ function roster(parent: Node, top: number, hid: string, rebuild: () => void): vo
 }
 
 function categories(parent: Node, top: number, rebuild: () => void): void {
-  const bar = N('trainingCategories', parent, 0, WY(top, 68), 750, 68);
+  const bar = comicSurface(parent, 0, WY(top, 68), 702, 68, 'dark', { name: 'trainingCategories', radius: 12 });
   ['等级', '武器', '技能', '装备'].forEach((title, i) => {
     const active = st.tab === i;
-    const slot = comicButton(bar, (i - 1.5) * 174, 0, 168, 68, '', () => {
+    const slot = comicButton(bar, (i - 1.5) * 174, 0, 168, 60, '', () => {
       if (st.tab !== i) { st.tab = i; rebuild(); }
-    }, { name: 'trainingTab:' + i, tone: active ? 'gold' : 'dark', sound: 'select' });
+    }, { name: 'trainingTab:' + i, tone: active ? 'gold' : 'dark', sound: 'select', quiet: true });
     const face = slot.getChildByName('buttonFace')!;
     comicArt(face, -47, 0, 38, 40, TAB_ART[i]);
     mainLabel(face, 22, 0, title, { size: 27, bold: true, color: active ? COMIC.text : COMIC.cream, w: 78, h: 40 });
   });
+  const dividers=N('trainingTabDividers',bar).addComponent(Graphics);
+  dividers.strokeColor=CA('#D3DFE5',.18);dividers.lineWidth=1;
+  for (const x of [-174,0,174]) {dividers.moveTo(x,-20);dividers.lineTo(x,20);dividers.stroke();}
 }
 
 function context(parent: Node, top: number, hid: string, data: TrainingData): () => void {
@@ -123,55 +131,65 @@ function context(parent: Node, top: number, hid: string, data: TrainingData): ()
   const level = mainLabel(parent, -156, WY(top + 42, 27), `Lv.${h.lv} · ${def.job.split(' · ')[0]}`, {
     size: 20, color: COMIC.cream, w: 364, h: 27, align: 'left', outline: COMIC.ink, outlineW: 1.5,
   });
-  const attrs = comicButton(parent, 260, WY(top + 5, 62), 160, 62, '', () => data.onAttrs(hid), { tone: 'dark', name: 'trainingAttrs' });
+  const attrs = comicButton(parent, 260, WY(top + 5, 62), 160, 62, '', () => data.onAttrs(hid), { tone: 'dark', name: 'trainingAttrs', quiet: true });
   const face = attrs.getChildByName('buttonFace')!;
   heroGlyph(face, -44, 0, 'attrs', 38);
   mainLabel(face, 25, 0, '属性', { size: 25, bold: true, color: COMIC.cream, w: 83, h: 40 });
   return () => setText(level, `Lv.${h.lv} · ${def.job.split(' · ')[0]}`);
 }
 
-function rule(parent: Node, y: number, width: number): void {
-  const g = N('trainingDivider', parent, 0, y).addComponent(Graphics);
-  g.strokeColor = CA(COMIC.sub, .24); g.lineWidth = 1;
-  g.moveTo(-width / 2, 0); g.lineTo(width / 2, 0); g.stroke();
-}
-
 type PreviewRow = { name: string; cur: string; next: string; gain: string };
-interface PreviewControl { node: Node; refresh: (lv: number, maxed: boolean, rows: PreviewRow[]) => void; }
+interface PreviewControl { node: Node; refresh: (lv: number, maxed: boolean, rows: PreviewRow[], achieved?: { level: number; rows: PreviewRow[] }) => void; }
 function preview(parent: Node, x: number, y: number, w: number, h: number, title: string,
   lv: number, maxed: boolean, rows: PreviewRow[], portrait = false, note = ''): PreviewControl {
-  const p = comicPlate(parent, x, y, w, h, 'paper', { name: 'trainingPreview' });
-  mainLabel(p, 0, h / 2 - 33, title, { size: 26, bold: true, color: COMIC.text, w: w - 38, h: 38 });
-  const levelY = h / 2 - 81;
-  const current = mainLabel(p, -w * .18, levelY, `Lv.${lv}`, { size: 26, bold: true, color: COMIC.text, w: w * .32, h: 40 });
+  const p=trainingPaper(parent,x,y,w,h,'trainingPreview',title);
+  const levelY = h / 2 - 94;
+  const current = mainLabel(p, -w * .18, levelY, `Lv.${lv}`, { size: 26, bold: true, color: TRAINING_INK, w: w * .32, h: 40 });
   const arrow = mainLabel(p, 0, levelY, maxed ? '·' : '→', { size: 23, color: COMIC.sub, w: 32, h: 38 });
   const next = mainLabel(p, w * .18, levelY, maxed ? 'MAX' : `Lv.${lv + 1}`, { size: 26, bold: true, color: COMIC.greenShade, w: w * .32, h: 40 });
+  const stamp = mainLabel(p,0,h/2-66,'',{size:16,bold:true,color:'#95712C',w:w-64,h:22}).getComponent(Label)!;
+  const changedLabels: Node[] = [next], lights: Node[] = [];
   const updates: ((row: PreviewRow, maxed: boolean) => void)[] = [];
-  rule(p, levelY - 30, w - 38);
   if (portrait) {
-    // Two-line attribute rows leave a dedicated power footer, including short screens.
-    const step = Math.min(98, (h - 216) / Math.max(1, rows.length));
+    const groupH=h-206, step=groupH/Math.max(1,rows.length);
+    const group=lobbyAttributeWell(p,0,-22,w-32,groupH,'trainingPortraitAttributeWhite');
     rows.forEach((r, i) => {
-      const yy = levelY - 65 - i * step;
-      mainLabel(p, -w * .19, yy, r.name, { size: 21, bold: true, color: COMIC.text, w: w * .42, h: 30 });
-      const gain = mainLabel(p, w * .23, yy, maxed ? '已达上限' : r.gain, { size: 19, color: COMIC.greenShade, w: w * .35, h: 27 });
-      const a = mainLabel(p, -w * .18, yy - 31, r.cur, { size: 25, bold: true, color: COMIC.text, w: w * .31, h: 32 });
-      mainLabel(p, 0, yy - 31, '→', { size: 20, color: COMIC.sub, w: 30, h: 30 });
-      const b = mainLabel(p, w * .18, yy - 31, r.next, { size: 25, bold: true, color: COMIC.greenShade, w: w * .31, h: 32 });
+      const yy = groupH/2-step*(i+.5)+15;
+      lights.push(feedbackSurface(group,'trainingResultHighlight','feather',0,yy-13,w-44,Math.min(74,step-8),'#F4CA59',.7));
+      mainLabel(group, -w * .19, yy, r.name, { size: 21, bold: true, color: TRAINING_INK, w: w * .42, h: 30 });
+      const gain = mainLabel(group, w * .23, yy, maxed ? '已达上限' : r.gain, { size: 19, color: COMIC.greenShade, w: w * .35, h: 27 });
+      const a = mainLabel(group, -w * .18, yy - 31, r.cur, { size: 25, bold: true, color: TRAINING_INK, w: w * .31, h: 32 });
+      mainLabel(group, 0, yy - 31, '→', { size: 20, color: TRAINING_SUB, w: 30, h: 30 });
+      const b = mainLabel(group, w * .18, yy - 31, r.next, { size: 25, bold: true, color: COMIC.greenShade, w: w * .31, h: 32 });
+      changedLabels.push(b,gain);
       updates.push((row, capped) => { setText(a, row.cur); setText(b, row.next); setText(gain, capped ? '已达上限' : row.gain); });
     });
+    if (rows.length>1) trainingRule(group,0,w-66);
   } else {
+    const step=44, groupH=rows.length*step+16;
+    const group=lobbyAttributeWell(p,0,h/2-126-groupH/2,w-36,groupH,'trainingWideAttributeWhite');
     rows.forEach((r, i) => {
-      const yy = levelY - 69 - i * 38;
-      mainLabel(p, -w * .285, yy, r.name, { size: 23, bold: true, color: COMIC.text, w: w * .29, h: 32, align: 'left' });
-      mainLabel(p, w * .02, yy, `${r.cur} → ${r.next}`, { size: 25, bold: true, color: COMIC.text, w: w * .38, h: 34 });
-      mainLabel(p, w * .335, yy, maxed ? 'MAX' : r.gain, { size: 23, bold: true, color: COMIC.greenShade, w: w * .18, h: 32 });
+      const yy = groupH/2-8-step*(i+.5);
+      lights.push(feedbackSurface(group,'trainingResultHighlight','feather',0,yy,w-50,40,'#F4CA59',.7));
+      mainLabel(group, -w * .285, yy, r.name, { size: 23, bold: true, color: TRAINING_INK, w: w * .29, h: 32, align: 'left' });
+      const a=mainLabel(group, w * .02, yy, `${r.cur} → ${r.next}`, { size: 25, bold: true, color: TRAINING_INK, w: w * .38, h: 34 });
+      const gain=mainLabel(group, w * .335, yy, maxed ? 'MAX' : r.gain, { size: 23, bold: true, color: COMIC.greenShade, w: w * .18, h: 32 });
+      changedLabels.push(gain);
+      updates.push((row,capped)=>{setText(a,`${row.cur} → ${row.next}`);setText(gain,capped?'MAX':row.gain);});
     });
-    if (note) mainLabel(p, 0, -h / 2 + 27, note, { size: 19, color: COMIC.sub, w: w - 50, h: 28 });
+    if (note) mainLabel(p, 0, -h / 2 + 35, note, { size: 18, color: TRAINING_SUB, w: w - 50, h: 44,lineHeight:23 });
   }
-  return { node: p, refresh: (level, capped, values) => {
-    setText(current, `Lv.${level}`); setText(arrow, capped ? '·' : '→'); setText(next, capped ? 'MAX' : `Lv.${level + 1}`);
-    updates.forEach((update, i) => update(values[i], capped));
+  const pulse = p.addComponent(TrainingResultPulse); pulse.configure(changedLabels,lights,stamp);
+  return { node: p, refresh: (level, capped, values, achieved) => {
+    const restore = (): void => {
+      setText(current, `Lv.${level}`); setText(arrow, capped ? '·' : '→'); setText(next, capped ? 'MAX' : `Lv.${level + 1}`);
+      updates.forEach((update, i) => update(values[i], capped));
+    };
+    if (achieved) pulse.present(() => {
+      setText(current,`Lv.${achieved.level}`);setText(arrow,'→');setText(next,`Lv.${level}`);
+      updates.forEach((update,i)=>update(achieved.rows[i],false));
+    },restore);
+    else restore();
   } };
 }
 
@@ -181,11 +199,19 @@ function comparison(cur: Stats, next: Stats): PreviewRow[] {
   }));
 }
 
+function skillArt(parent: Node, x: number, y: number, side: number, icon: string): Node {
+  const circle=N('trainingSkillArt',parent,x,y,side,side);
+  const mask=circle.addComponent(Mask);mask.type=Mask.Type.GRAPHICS_ELLIPSE;mask.segments=96;
+  artSprite(circle,0,0,side,side,icon,{sliced:false});
+  return circle;
+}
+
 function milestoneShelf(parent: Node, ctx: PageCtx, y: number, title: string, ms: Milestone[], lv: number,
-  stateKey: string, icon: string, rebuild: () => void, swipe = false): void {
-  const shelf = comicPlate(parent, 0, y, 702, 244, 'paper', { name: 'trainingMilestones' });
+  stateKey: string, icon: string, rebuild: () => void, swipe = false, subject = title): void {
+  const shelf = N('trainingMilestones', parent, 0, y, 702, 244);
+  trainingRule(shelf,120,690);
   comicArt(shelf, -308, 90, 34, 34, HAMMER);
-  mainLabel(shelf, -164, 90, title, { size: 25, bold: true, color: COMIC.text, w: 230, h: 38, align: 'left' });
+  mainLabel(shelf, -164, 90, title, { size: 25, bold: true, color: TRAINING_INK, w: 230, h: 38, align: 'left' });
   const upcoming = ms.findIndex(m => m.lv > lv), nextIndex = upcoming < 0 ? ms.length : upcoming;
   const start = Math.min(Math.max(0, st.milestones[stateKey] ?? Math.min(nextIndex, Math.max(0, ms.length - 3))), Math.max(0, ms.length - 3));
   st.milestones[stateKey] = start;
@@ -204,18 +230,33 @@ function milestoneShelf(parent: Node, ctx: PageCtx, y: number, title: string, ms
   }
   (swipe ? ms : ms.slice(start, start + 3)).forEach((m, i) => {
     const reached = lv >= m.lv, target = (swipe ? i : start + i) === nextIndex;
-    const node = comicPlate(cards, swipe ? i * 194 : (i - 1) * 194, swipe ? 0 : -27, 180, 166, target ? 'gold' : 'card', { name: 'milestone' + m.lv });
-    mainLabel(node, 0, 55, `${m.lv}级`, { size: 23, bold: true, color: COMIC.text, w: 150, h: 32 });
-    const art = icon.startsWith('ui_icon') ? artSprite(node, 0, 15, 46, 46, icon, { sliced: false }) : comicArt(node, 0, 15, 46, 46, icon);
+    const node = trainingCard(cards, swipe ? i * 194 : (i - 1) * 194, swipe ? 0 : -27, 180, 166,
+      'milestone'+m.lv,target,target);
+    mainLabel(node, 0, 55, `${m.lv}级`, { size: 23, bold: true, color: TRAINING_INK, w: 150, h: 32 });
+    const art = icon.startsWith('ui_icon') ? skillArt(node, 0, 15, 46, icon) : comicArt(node, 0, 15, 46, 46, icon);
     if (!reached && !target) art.addComponent(UIOpacity).opacity = 120;
     if (reached) comicMark(node, 55, 18, 'check', 19, COMIC.greenShade);
     else if (!target) comicMark(node, 55, 18, 'lock', 16, COMIC.sub);
-    mainLabel(node, 0, -30, m.txt.replace(/^突破 · /, ''), { size: 18, color: COMIC.text, w: 160, h: 46, lineHeight: 23 });
-    mainLabel(node, 0, -66, reached ? '已解锁' : target ? '下一阶段' : '未解锁', { size: 17, color: reached ? COMIC.greenShade : COMIC.sub, w: 150, h: 24 });
+    mainLabel(node, 0, -30, m.txt.replace(/^突破 · /, ''), { size: 18, color: TRAINING_INK, w: 160, h: 46, lineHeight: 23 });
+    if (target) comicSurface(node, 0, -66, 136, 24, 'gold', { name: 'milestoneNext', radius: 12 });
+    mainLabel(node, 0, -66, reached ? '已解锁' : target ? '下一阶段' : '未解锁', {
+      size: 17, color: reached ? COMIC.greenShade : target ? COMIC.text : COMIC.sub, w: 150, h: 24,
+    });
     tap(node, () => {
-      const p = comicDialog(ctx.screens, 560, 310, `${title} · ${m.lv}级`);
-      mainLabel(p, 0, 16, m.txt.replace(/^突破 · /, ''), { size: 26, bold: true, color: COMIC.text, w: 480, h: 94, lineHeight: 34 });
-      mainLabel(p, 0, -81, reached ? '已解锁 · 效果已生效' : `达到${m.lv}级自动解锁`, { size: 22, color: reached ? COMIC.greenShade : COMIC.sub, w: 480, h: 38 });
+      const contentH=detailGroupHeight(1),height=detailHeight(contentH,DETAIL_ACTION_FOOTER,560);
+      const p=detailDialog(ctx.screens,620,height,`${title} · ${m.lv}级`,'trainingMilestoneDialog');
+      const hid=stateKey.split(':')[0],def=HERO_DEFS[hid];
+      detailOverview(p,subject,def.name+' · '+title,undefined,'当前 Lv.'+lv,(root,x,y,side)=>{
+        if (icon.startsWith('ui_icon')) skillArt(root,x,y,side,icon);
+        else comicArt(root,x,y,side,side,icon);
+      });
+      const content=detailBody(p,contentH,DETAIL_ACTION_FOOTER,'trainingMilestone');
+      detailGroup(content,0,'突破效果',[['效果',m.txt.replace(/^突破 · /,'')]]);
+      detailFooter(p);
+      mainLabel(p,0,-height/2+76,reached?'已解锁':'未解锁',
+        {size:24,bold:true,color:reached?COMIC.greenShade:TRAINING_INK,w:520,h:34});
+      mainLabel(p,0,-height/2+39,reached?'效果已生效':`达到${m.lv}级自动解锁`,
+        {size:19,color:TRAINING_SUB,w:520,h:28});
     });
   });
   if (swipe) return;
@@ -232,8 +273,11 @@ function footer(parent: Node, ctx: PageCtx, top: number, text: string,
   repeatStep?: (repeating: boolean) => boolean): { refresh: (cost: { gold: number; mat: number }, maxed: boolean) => void; hammer: Node } {
   const sv = loadSave(), ownMat = matCount('mat_stone') + matCount('mat_iron');
   const enough = !!cost && sv.gold >= cost.gold && ownMat >= cost.mat;
-  const dock = comicPlate(parent, 0, WY(top - 8, 186), 750, 186, 'paper', { name: 'trainingActionDock', edge: false });
-  rule(dock, 91, 750);
+  comicPlate(parent, 0, WY(top - 8, 186), 750, 186, 'paper', {
+    name: 'trainingActionDock', edge: false, highlight: false, cut: 0, fill:'#FFF9EC',
+  });
+  const divider=N('trainingFooterDivider',parent,0,WY(top-8,1));
+  trainingRule(divider,0,690);
   const costRow = N('trainingCosts', parent, 0, WY(top, 68), 702, 68);
   const costs: { need: Node; own: Node }[] = [];
   if (cost && !maxed && !empty) {
@@ -250,7 +294,7 @@ function footer(parent: Node, ctx: PageCtx, top: number, text: string,
   const control = comicButtonControl(parent, 0, WY(top + 80, 88), 680, 88, '', () => {
     if (empty || maxed) return;
     const r = growthAction(growth, action); if (r.ok) ctx.refresh();
-  }, { name: 'trainingUpgrade', tone: maxed || empty || !enough ? 'muted' : 'green', enabled: !maxed && !empty, sound: 'confirm' });
+  }, { name: 'trainingUpgrade', tone: maxed || empty || !enough ? 'muted' : 'green', enabled: !maxed && !empty, sound: false });
   const button = control.node;
   const face = button.getChildByName('buttonFace')!;
   const hammer = comicArt(face, -146, 0, 48, 48, HAMMER);
@@ -286,8 +330,9 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
       const sv = loadSave(), hid = sv.curHero, h = sv.heroes[hid], def = HERO_DEFS[hid];
       const rosterTop = mainResourceTop() + MAIN_RESOURCE_H + 20;
       const tabTop = rosterTop + 126, contextTop = tabTop + 82;
-      const bodyTop = contextTop + 82, footerTop = mainLayout().bottom - 168;
-      const available = Math.max(1, footerTop - 12 - bodyTop), height = Math.max(st.tab === 2 ? 704 : 674, available), stageH = height - 260;
+      const bodyTop = contextTop + 82, footerTop = mainLayout().bottom - 180;
+      const available = Math.max(1, footerTop - 12 - bodyTop), height = Math.max(st.tab === 2 ? 736 : 674, available), stageH = height - 260;
+      comicPlate(root,0,0,750,LO.half*2,'paper',{name:'trainingPaperBackground',edge:false,highlight:false,cut:0,fill:'#FFF9EC'});
       const env = environment(root, st.tab < 2 ? bodyTop + stageH : bodyTop, st.tab < 2), envY = env.position.y;
       const title = mainLabel(root, -271, WY(mainResourceTop() + 7, 40), '英雄培养', { size: 30, color: COMIC.cream, bold: true, w: 190, h: 40, outline: COMIC.ink, outlineW: 2 });
       title.name = 'trainingTitle';
@@ -332,7 +377,7 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
         } else {
           figure = heroComicFigure(stage, hid, -176, foot, stageH - 102, 318);
         }
-        const paperH = Math.min(stageH - 40, 432);
+        const paperH = Math.min(stageH - 20, 432);
         const statsPanel = preview(stage, 185, 16, 310, paperH, weapon ? '强化提升' : HERO_GROWTH[HERO_DEFS[hid].growthType].name + '成长', lv, maxed, comparison(cur, next), true);
         const power = N('trainingPower', statsPanel.node, 0, -paperH / 2 + 34, 274, 56);
         comicArt(power, 0, 0, 274, 56, 'hero_comic_v3/comic_power_plate_v3');
@@ -342,7 +387,8 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
         const shelfHost = N('trainingMilestoneHost', body);
         const refreshShelf = (): void => {
           for (const child of Array.from(shelfHost.children)) { child.active = false; child.removeFromParent(); child.destroy(); }
-          milestoneShelf(shelfHost, ctx, -(stageH + 138), weapon ? '武器突破' : '等级突破', weapon ? data.weaponMilestones(hid) : data.heroMilestones(hid), weapon ? h.weaponLv : h.lv, hid + ':' + st.tab, weapon ? equippedWeapon(hid).art : HAMMER, render, true);
+          milestoneShelf(shelfHost, ctx, -(stageH + 138), weapon ? '武器突破' : '等级突破', weapon ? data.weaponMilestones(hid) : data.heroMilestones(hid), weapon ? h.weaponLv : h.lv, hid + ':' + st.tab, weapon ? equippedWeapon(hid).art : HAMMER, render, true,
+            weapon?equippedWeapon(hid).name:HERO_GROWTH[def.growthType].name+'成长');
         };
         refreshShelf();
         const target: GrowthTarget = { kind: weapon ? 'weapon' : 'hero', hid };
@@ -350,18 +396,18 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
         const footerControl = footer(root, ctx, footerTop, weapon ? '强化武器' : '升级英雄', weapon ? weaponUpCost(lv) : { gold: heroUpCost(lv), mat: 0 }, maxed, action, target, false, repeating => {
           // Keep the same hit target and art alive throughout a continuous gesture.
           const before = heroStats(hid).power, oldLevel = weapon ? h.weaponLv : h.lv;
+          const beforeStats = data.statsAt(hid,h.lv,h.weaponLv);
           const milestone = (oldLevel + 1) % 10 === 0;
-          const result = milestone ? growthAction(target, action) : action();
-          if (!result.ok) { if (!milestone) toast(result.msg, { kind: 'warning', title: '暂时无法提升' }); return false; }
+          const result = growthAction(target, action, repeating);
+          if (!result.ok) return false;
           const level = weapon ? h.weaponLv : h.lv, capped = level >= (weapon ? MAX.weapon : MAX.hero);
           const current = data.statsAt(hid, h.lv, h.weaponLv);
           const nextStats = capped ? current : data.statsAt(hid, h.lv + (weapon ? 0 : 1), h.weaponLv + (weapon ? 1 : 0));
-          statsPanel.refresh(level, capped, comparison(current, nextStats)); refreshContext();
+          statsPanel.refresh(level, capped, comparison(current, nextStats), { level: oldLevel, rows: comparison(beforeStats,current) }); refreshContext();
           if (weaponCaption) setText(weaponCaption, '换装继承培养等级 · Lv.' + h.weaponLv);
           const nextCost = weapon ? weaponUpCost(level) : { gold: heroUpCost(level), mat: 0 };
           footerControl.refresh(nextCost, capped); ctx.refreshResources?.();
           fx.pulse(before, heroStats(hid).power, milestone);
-          if (!milestone) uiSound(repeating ? 'confirm' : 'upgrade');
           if (milestone) refreshShelf();
           if (capped) { if (!milestone) toast('已达到当前等级上限', { kind: 'success', title: '培养完成' }); return false; }
           const missing = sv.gold < nextCost.gold ? '金币不足' : matCount('mat_stone') + matCount('mat_iron') < nextCost.mat ? '强化材料不足' : '';
@@ -370,13 +416,14 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
         });
         fx.setHammer(footerControl.hammer);
       } else if (st.tab === 2) {
-        const selected = selectedSkill, shelfH = 200;
+        const selected = selectedSkill, shelfH = 216;
         const shelf = N('trainingSkills', body, 0, -shelfH / 2, 702, shelfH);
         SKILLS.forEach((slot, i) => {
-          const choice = comicPlate(shelf, (i - 1) * 236, 0, 222, shelfH, selected === slot ? 'gold' : 'card', { name: 'skillChoice:' + slot });
-          artSprite(choice, 0, 24, 112, 112, data.skillIconId(hid, slot), { sliced: false });
-          mainLabel(choice, 0, -49, ['普攻', '技能', '大招'][i], { size: 25, color: COMIC.text, bold: true, w: 194, h: 34 });
-          mainLabel(choice, 0, -79, `Lv.${h[SLOT_KEY[slot]]}`, { size: 20, color: COMIC.sub, w: 180, h: 27 });
+          const active = selected === slot;
+          const choice = trainingCard(shelf,(i-1)*236,0,222,shelfH,'skillChoice:'+slot,active,active);
+          skillArt(choice,0,22,132,data.skillIconId(hid,slot));
+          mainLabel(choice, 0, -57, ['普攻', '技能', '大招'][i], { size: 25, color: TRAINING_INK, bold: true, w: 194, h: 34 });
+          mainLabel(choice, 0, -87, `Lv.${h[SLOT_KEY[slot]]}`, { size: 20, color: TRAINING_SUB, w: 180, h: 27 });
           tap(choice, () => { if (selected !== slot) { st.skills[hid] = slot; render(); } });
         });
         const lv = h[SLOT_KEY[selected]], maxed = lv >= MAX.skill;
@@ -392,22 +439,24 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
         const paperH = height - shelfH - 280;
         preview(body, 0, -(shelfH + 12 + paperH / 2), 702, paperH, data.skillName(hid, selected), lv, maxed, rows, false,
           selected === 'atk' ? '每5级获得阶段突破' : '局内仍需三选一解锁；每5级获得阶段突破');
-        milestoneShelf(body, ctx, -(height - 122), '技能突破', data.skillMilestones(hid, selected), lv, hid + ':skill:' + selected, data.skillIconId(hid, selected), render, true);
+        milestoneShelf(body, ctx, -(height - 122), '技能突破', data.skillMilestones(hid, selected), lv, hid + ':skill:' + selected, data.skillIconId(hid, selected), render, true,data.skillName(hid,selected));
         footer(root, ctx, footerTop, '升级' + (selected === 'atk' ? '普攻' : selected === 'skill' ? '技能' : '大招'), skillUpCost(lv), maxed, () => upSkill(hid, selected), { kind: selected, hid });
       } else {
         const selected = selectedEquip, rackH = 360;
-        const cabinet = comicPlate(body, 0, -rackH / 2, 702, rackH, 'paper', { name: 'equippedCabinet' });
+        const cabinet = trainingPaper(body,0,-rackH/2,702,rackH,'equippedCabinet');
         comicArt(cabinet, -302, 147, 38, 38, 'comic_armor_forest_v1');
-        mainLabel(cabinet, -112, 147, '已穿戴装备', { size: 25, bold: true, color: COMIC.text, w: 304, h: 38, align: 'left' });
+        mainLabel(cabinet, -112, 147, '已穿戴装备', { size: 25, bold: true, color: TRAINING_INK, w: 304, h: 38, align: 'left' });
         mainLabel(cabinet, 269, 147, `${WORN.filter(kind => !!wornInst(hid, kind)).length}/4`, { size: 20, color: COMIC.sub, w: 110, h: 30, align: 'right' });
         WORN.forEach((kind, i) => {
           const inst = wornInst(hid, kind), d = inst ? EQUIPS[inst.defId] : null;
-          const choice = comicPlate(cabinet, i % 2 === 0 ? -164 : 164, i < 2 ? 44 : -101, 312, 132, selected === kind ? 'gold' : 'card', { name: 'wornChoice:' + kind });
-          const item = gearArt(choice, -89, 0, 100, 100, inst ? inst.defId : EMPTY_GEAR[kind]);
+          const choice = trainingCard(cabinet,i%2===0?-164:164,i<2?44:-101,312,132,'wornChoice:'+kind,selected===kind);
+          if (inst && d) shopQualitySocket(choice,-89,0,108,d.quality);
+          const item = gearArt(choice, -89, 0, inst?94:78, inst?94:78, inst ? inst.defId : EMPTY_GEAR[kind]);
           if (!inst) item.addComponent(UIOpacity).opacity = 85;
-          mainLabel(choice, 53, 29, d ? d.name : KIND_NAME[kind], { size: 23, color: COMIC.text, bold: true, w: 174, h: 32, align: 'left' });
-          mainLabel(choice, 53, -7, d ? `${QUALITY[d.quality]} · ${d.tier}阶` : '未穿戴', { size: 18, color: COMIC.sub, w: 174, h: 27, align: 'left' });
-          if (inst) mainLabel(choice, 53, -40, `Lv.${inst.lv}`, { size: 21, bold: true, color: COMIC.text, w: 174, h: 29, align: 'left' });
+          if (selected===kind) comicMark(choice,135,43,'check',17,COMIC.greenShade);
+          mainLabel(choice, 53, 26, d ? d.name : KIND_NAME[kind], { size: 23, color: TRAINING_INK, bold: true, w: 174, h: 32, align: 'left' });
+          mainLabel(choice, 53, -7, d ? QUALITY[d.quality] : '未穿戴', { size: 18, color: COMIC.sub, w: 174, h: 27, align: 'left' });
+          if (inst) mainLabel(choice, 53, -40, `Lv.${inst.lv}`, { size: 21, bold: true, color: TRAINING_INK, w: 174, h: 29, align: 'left' });
           tap(choice, () => { if (selected !== kind) { st.equips[hid] = kind; render(); } });
         });
         const inst = wornInst(hid, selected), d = inst ? EQUIPS[inst.defId] : null, maxed = !!inst && inst.lv >= MAX.equip;
@@ -419,8 +468,8 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
           });
           preview(body, 0, -(rackH + 16 + paperH / 2), 702, paperH, d.name + ' · 强化提升', inst.lv, maxed, rows, false, '主属性 +4% / 级');
         } else {
-          const p = comicPlate(body, 0, -(rackH + 16 + paperH / 2), 702, paperH, 'paper', { name: 'trainingEmpty' });
-          mainLabel(p, 0, 26, KIND_NAME[selected] + ' · 未穿戴', { size: 27, bold: true, color: COMIC.text, w: 640, h: 42 });
+          const p = trainingPaper(body,0,-(rackH+16+paperH/2),702,paperH,'trainingEmpty');
+          mainLabel(p, 0, 26, KIND_NAME[selected] + ' · 未穿戴', { size: 27, bold: true, color: TRAINING_INK, w: 640, h: 42 });
           mainLabel(p, 0, -25, '前往英雄页，从背包选择装备穿戴', { size: 22, color: COMIC.sub, w: 630, h: 58 });
         }
         footer(root, ctx, footerTop, '强化装备', inst ? equipUpCost(inst.lv) : null, maxed, () => upWornEquip(hid, selected), { kind: 'equip', hid, slot: selected }, !inst);

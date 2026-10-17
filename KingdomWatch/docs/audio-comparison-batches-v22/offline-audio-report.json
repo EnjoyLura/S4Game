@@ -1,0 +1,13 @@
+{
+  "pairs": 8,
+  "distinctNewHashes": 8,
+  "totalPurposes": 61,
+  "duplicatePurposes": 0,
+  "maxLoudnessDifferenceDB": 0.0,
+  "maxPeakDBFS": -5.529,
+  "clippedSamples": 0,
+  "candidateSeconds": 13.309,
+  "playedAudio": false,
+  "ranBrowser": false,
+  "replacedGame": false
+}

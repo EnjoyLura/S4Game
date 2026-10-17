@@ -1,0 +1,11 @@
+--- before/assets/scripts/ui/pages/BasePage.ts
++++ assets/scripts/ui/pages/BasePage.ts
+@@ -16,7 +16,7 @@
+ import { lobbyAttributeWell, shopDetailRule } from '../LobbyChrome';
+ import { BASE_INK, BASE_SUB, baseCodexCard, baseDiscoveryProgress, basePlaque, baseTextGroup } from '../BaseChrome';
+ import { showRewardPopup } from '../RewardPopup';
+-import { constructionPulse } from '../PositiveFeedback';
++import { constructionPulse } from '../ConstructionPulse';
+ 
+ const HEART = 'base_comic_v1/comic_keep_heart_v1';
+ const SHIELD = 'levels_comic_v1/comic_difficulty_shield_v1';

@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-locked-stage-confirm-v11-20261017-112251",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-ui-detail-layout-v10-20261017-110238",
+  "entryVersion": "1792207332",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=locked-stage-confirm-v11-1792207332",
+  "scope": "common squad removal confirmation shell; visible notices with explicit scale vector; locked stage and preparation requirement warnings; hero actions outside equipment panel",
+  "manualAcceptance": "pending user manual review"
+}

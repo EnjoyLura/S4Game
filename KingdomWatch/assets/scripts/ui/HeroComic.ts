@@ -1,9 +1,9 @@
 /** Hero art shares the shop palette, portraits and inventory illustrations. */
-import { Graphics, Node, Sprite, UITransform } from 'cc';
-import { CA, N, WY } from './UIKit';
+import { Graphics, Node, Sprite, UIOpacity, UITransform } from 'cc';
+import { C, CA, label, N, WY } from './UIKit';
 import { artSprite } from './Ux';
-import { COMIC, comicArt, comicPortrait } from './ComicUI';
-import { EquipKind } from '../core/GameData';
+import { COMIC, comicArt, comicMark, comicPortrait, comicSurface } from './ComicUI';
+import { EquipKind, HERO_DEFS } from '../core/GameData';
 import { WEAPONS } from '../config/Weapons';
 
 export const HERO_PASTEL: Record<string, string> = {
@@ -30,6 +30,28 @@ export function heroPortraitKey(id: string): string {
 }
 export function heroPortrait(parent: Node, x: number, y: number, size: number, id: string): Node {
   return comicPortrait(parent, x, y, size, heroPortraitKey(id), HERO_PASTEL[id]);
+}
+
+/** Shared free-standing portrait treatment; the surrounding rail still owns scrolling. */
+export function heroRosterPortrait(parent: Node, x: number, id: string, active: boolean, owned: boolean, width: number): Node {
+  const slot = N('heroRosterPortrait:' + id, parent, x, 0, width, 114);
+  if (active) {
+    const ring = N('heroRosterSelection', slot, 0, 14).addComponent(Graphics);
+    ring.fillColor = CA(COMIC.goldLight, .28); ring.circle(0, 0, 45); ring.fill();
+    ring.strokeColor = C(COMIC.gold); ring.lineWidth = 3.5; ring.stroke();
+    comicSurface(slot, 0, -40, 108, 28, 'gold', { name: 'heroRosterNameTag', radius: 14 });
+  }
+  const avatar = heroPortrait(slot, 0, 14, 82, id);
+  if (!owned) {
+    avatar.addComponent(UIOpacity).opacity = 125;
+    comicMark(slot, 43, -8, 'lock', 17, COMIC.sub);
+  }
+  const def = HERO_DEFS[id];
+  label(slot, 0, -39, id === 'pyro' ? def.name.replace('·', '') : def.name.split('·')[0], {
+    size: 20, bold: true, font: 'body', color: active ? COMIC.text : owned ? COMIC.cream : '#C8C5BA',
+    w: 110, h: 28, shrink: true, outline: active ? undefined : COMIC.ink, outlineW: active ? 0 : 2,
+  });
+  return slot;
 }
 export function gearArt(parent: Node, x: number, y: number, w: number, h: number, id: string): Node {
   return comicArt(parent, x, y, w, h, GEAR_ART[id]);

@@ -1,0 +1,33 @@
+/** Small deterministic, finite celebration primitives. No textures, timers or gameplay state. */
+import { Graphics } from 'cc';
+import { CA } from './UIKit';
+const clamp = (v: number): number => Math.max(0, Math.min(1, v));
+
+export function celebrationRays(g: Graphics, x: number, y: number, radius: number, age: number, duration = 1.5): void {
+  const p = clamp(age / duration), alpha = Math.sin(Math.PI * p) * .18;
+  if (age < 0 || p >= 1) return;
+  for (let i = 0; i < 14; i++) {
+    const a = i * Math.PI * 2 / 14 + p * .12, half = .065 + (i % 3) * .012;
+    const r = radius * (.78 + p * .22), inner = radius * .15;
+    g.fillColor = CA(i % 2 ? '#FFD878' : '#FFF1BD', alpha);
+    g.moveTo(x + Math.cos(a - half) * inner, y + Math.sin(a - half) * inner);
+    g.lineTo(x + Math.cos(a - half) * r, y + Math.sin(a - half) * r);
+    g.lineTo(x + Math.cos(a + half) * r, y + Math.sin(a + half) * r);
+    g.lineTo(x + Math.cos(a + half) * inner, y + Math.sin(a + half) * inner); g.close(); g.fill();
+  }
+}
+
+export function celebrationConfetti(g: Graphics, age: number, originY: number, width = 600, count = 32): void {
+  for (let i = 0; i < count; i++) {
+    const t = age - .12 - (i % 6) * .035, p = clamp(t / 1.45);
+    if (t <= 0 || p >= 1) continue;
+    const side = i % 2 ? 1 : -1, spread = .5 + ((i * 17) % 23) / 46;
+    const x = side * (width * .44 - p * width * .32 * spread);
+    const y = originY + Math.sin(p * Math.PI) * (100 + (i % 7) * 14) - p * p * 240;
+    const s = (3 + i % 3) * Math.min(1, (1 - p) * 4), a = i * .8 + p * 5;
+    const dx = Math.cos(a) * s, dy = Math.sin(a) * s;
+    g.fillColor = CA(['#FFE293', '#F2BC4C', '#F5F0CD', '#A8D9EA'][i % 4], Math.min(1, (1 - p) * 3) * .85);
+    g.moveTo(x - dx - dy * .4, y - dy + dx * .4); g.lineTo(x + dx - dy * .4, y + dy + dx * .4);
+    g.lineTo(x + dx + dy * .4, y + dy - dx * .4); g.lineTo(x - dx + dy * .4, y - dy - dx * .4); g.close(); g.fill();
+  }
+}

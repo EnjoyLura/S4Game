@@ -6,7 +6,7 @@ export type FlowMode = 'main' | 'battle';
 
 export const flow = {
   mode: 'main' as FlowMode,
-  /** 进入战斗的关卡 ID（当前仅 1-1；多关卡后由关卡页写入） */
+  /** 进入战斗的章节关卡 ID（1-1..3-10，由关卡页写入） */
   levelId: '1-1',
   /** 关卡难度：0 普通 / 1 精英 / 2 地狱（关卡页写入，战斗读取注入出怪倍率与星级后缀键） */
   diff: 0,

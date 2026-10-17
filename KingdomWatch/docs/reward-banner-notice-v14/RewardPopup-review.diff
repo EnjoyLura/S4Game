@@ -1,0 +1,136 @@
+--- before/assets/scripts/ui/RewardPopup.ts
++++ assets/scripts/ui/RewardPopup.ts
+@@ -1,11 +1,13 @@
+ /** A receipt-only reward surface: the caller has already persisted the grant. */
+-import { _decorator, Component, director, Director, game, Game, Graphics, isValid, Label, Node, Vec3 } from 'cc';
+-import { COMIC, comicArt, comicButton, comicDialogContent, comicPlate } from './ComicUI';
+-import { CA, dimLayer, N } from './UIKit';
++import { _decorator, Color, Component, director, Director, game, Game, Graphics, isValid, Label, Node, Vec3 } from 'cc';
++import { LO } from '../config/GameConfig';
++import { COMIC, comicArt } from './ComicUI';
++import { C, CA, dimLayer, N } from './UIKit';
+ import { mainLabel } from './PageKit';
+ import { dismissUI, motionIn, reducedMotion } from './UIMotion';
+ import { whenUIArtReady } from './UIArtReady';
+ import { uiSound } from './UIAudio';
++import { shopQualitySocket } from './LobbyChrome';
+ 
+ const { ccclass } = _decorator;
+ export interface RewardPopupItem { name: string; icon: string; amount: number; }
+@@ -21,7 +23,6 @@
+   private age = 0;
+   private hidden = false;
+   private quiet = false;
+-  private cue = false;
+   private closing = false;
+   private drawReady: (() => void) | null = null;
+ 
+@@ -72,7 +73,7 @@
+       row.text.node.setScale(1 + Math.sin(land * Math.PI) * .12, 1 + Math.sin(land * Math.PI) * .12, 1);
+       const hit = clamp((t - .12) / .55);
+       if (hit <= 0 || hit >= 1) continue;
+-      const x = row.at.x, y = row.at.y + 16, spread = ease(hit), fade = 1 - hit;
++      const x = row.at.x, y = row.at.y + 2, spread = ease(hit), fade = 1 - hit;
+       g.strokeColor = CA(COMIC.goldShade, fade * .55); g.lineWidth = 2;
+       g.circle(x, y, 44 + spread * 17); g.stroke();
+       for (let i = 0; i < 8; i++) {
+@@ -84,7 +85,6 @@
+         g.lineTo(px, py - size); g.lineTo(px - size * .5, py); g.close(); g.fill();
+       }
+     }
+-    if (!this.cue && this.age >= .67) { this.cue = true; uiSound('confirm'); }
+   }
+ 
+   finish(): void {
+@@ -112,11 +112,43 @@
+   }
+ }
+ 
++/** A full-width celebration band, deliberately independent of paper detail dialogs. */
++function rewardBanner(panel: Node, height: number): void {
++  const g=N('rewardCelebrationBand',panel,0,0,750,height).addComponent(Graphics);
++  const low=C('#293542'),high=C('#172633'),bands=48;
++  for(let i=0;i<bands;i++) {
++    const color=Color.lerp(new Color(),low,high,(i+.5)/bands);color.a=225;
++    g.fillColor=color;g.rect(-375,-height/2+i*height/bands,750,height/bands);g.fill();
++  }
++  for(const side of [-1,1]) {
++    g.fillColor=CA('#DCA84C',.9);g.rect(-375,side*height/2-1,750,2);g.fill();
++    g.fillColor=CA('#FFF0B5',.34);g.rect(-375,side*(height/2-4),750,1);g.fill();
++  }
++  const title=N('rewardCelebrationTitle',panel,0,height/2,420,110),ink=title.addComponent(Graphics);
++  const polygon=(points:number[][],color:string):void => {
++    ink.fillColor=C(color);ink.moveTo(points[0][0],points[0][1]);
++    points.slice(1).forEach(p=>ink.lineTo(p[0],p[1]));ink.close();ink.fill();
++  };
++  ink.fillColor=CA('#172633',.9);ink.circle(0,0,49);ink.fill();
++  ink.strokeColor=CA('#F6C35E',.85);ink.lineWidth=4;ink.circle(0,0,46);ink.stroke();
++  ink.strokeColor=CA('#F6C35E',.35);ink.lineWidth=1.5;ink.circle(0,0,38);ink.stroke();
++  for(const side of [-1,1]) {
++    polygon([[side*81,29],[side*201,40],[side*165,4],[side*84,-14]],'#A3722C');
++    polygon([[side*83,23],[side*177,29],[side*146,0],[side*85,-10]],'#E4B24E');
++    polygon([[side*79,-4],[side*166,-9],[side*143,-34],[side*83,-22]],'#B18439');
++  }
++  polygon([[-162,29],[171,29],[158,12],[176,-7],[161,-29],[-170,-29],[-158,-10],[-177,8]],'#9B672B');
++  polygon([[-158,25],[164,25],[152,10],[169,-7],[157,-25],[-164,-25],[-152,-9],[-169,7]],'#EAB64E');
++  polygon([[-158,25],[164,25],[152,10],[-165,10]],'#FFDE83');
++  mainLabel(title,0,0,'恭喜获得',{size:34,bold:true,font:'body',color:'#FFF9E9',w:310,h:48,
++    outline:'#8F5C24',outlineW:1.5});
++}
++
+ /** Display only the positive amounts present in this receipt. */
+ export function showRewardPopup(parent: Node, source: string, chestCount: number,
+   items: readonly RewardPopupItem[], onClose?: () => void): Node {
+   const rewards = items.filter(item => Number.isFinite(item.amount) && item.amount > 0);
+-  const dim = dimLayer(parent, .66, false, false);
++  const dim = dimLayer(parent, .72, false, false);
+   dim.name = 'rewardPopup';
+   let closing = false, motion: RewardPopupMotion | null = null;
+   const close = (): void => {
+@@ -127,27 +159,31 @@
+   dim.on(Node.EventType.TOUCH_END, (event: { propagationStopped?: boolean }) => {
+     event.propagationStopped = true; close();
+   });
+-  const panel = comicDialogContent(dim, 640, 500, '获得奖励', close, false);
+-  panel.name = 'rewardPopupPanel';
+-  mainLabel(panel, 0, 166, source, { size: 21, color: COMIC.sub, w: 550, h: 28 });
+-  mainLabel(panel, 0, 132, '已一键领取 ' + chestCount + ' 个宝箱', {
+-    size: 20, color: COMIC.greenShade, bold: true, w: 550, h: 26,
++  const columns=Math.min(4,Math.max(1,rewards.length)), rowCount=Math.max(1,Math.ceil(rewards.length/columns));
++  const height=242+rowCount*170;
++  const panel = N('rewardPopupPanel',dim,0,0,750,height);
++  rewardBanner(panel,height);
++  const fit=Math.min(1,(LO.half*2-LO.notchTop*2-120)/(height+110));
++  panel.setScale(fit,fit,1);
++  mainLabel(panel, 0, height/2-55, source, { size: 20, color: '#E0D6BC', w: 620, h: 28 });
++  mainLabel(panel, 0, height/2-86, '已领取 ' + chestCount + ' 个宝箱', {
++    size: 18, color: '#C4C9C9', w: 620, h: 26,
+   });
+   const rows: { node: Node; text: Node; amount: number }[] = [];
+   rewards.forEach((reward, index) => {
+-    const card = comicPlate(panel, (index - (rewards.length - 1) / 2) * 264, 0, 228, 210, 'card',
+-      { name: 'rewardPopupItem:' + index, cut: 12 });
+-    mainLabel(card, 0, 77, reward.name, { size: 23, bold: true, color: COMIC.text, w: 204, h: 30 });
+-    const well = N('rewardIconWell', card, 0, 16).addComponent(Graphics);
+-    well.fillColor = CA(COMIC.goldLight, .5); well.circle(0, 0, 44); well.fill();
+-    comicArt(card, 0, 16, 76, 76, reward.icon);
+-    const text = mainLabel(card, 0, -64, '+' + reward.amount.toLocaleString('en-US'), {
+-      size: 35, bold: true, font: 'number', color: COMIC.greenShade, w: 206, h: 46,
++    const row=Math.floor(index/columns),count=Math.min(columns,rewards.length-row*columns);
++    const card=N('rewardPopupItem:'+index,panel,((index%columns)-(count-1)/2)*166,
++      (rowCount-1)*85-row*170-4,140,158);
++    shopQualitySocket(card,0,0,126,2);
++    comicArt(card, 0, 2, 104, 104, reward.icon);
++    mainLabel(card, 0, -83, reward.name, { size: 20, color: '#FFF3D6', w: 150, h: 30 });
++    const text = mainLabel(card, 0, -43, '+' + reward.amount.toLocaleString('en-US'), {
++      size: 26, bold: true, font: 'number', color: '#FFFFFF', align:'right',w:110,h:34,
++      outline:'#142431',outlineW:2,
+     });
+     rows.push({ node: card, text, amount: reward.amount });
+   });
+-  mainLabel(panel, 0, -136, '奖励已到账', { size: 20, color: COMIC.sub, w: 550, h: 28 });
+-  comicButton(panel, 0, -199, 440, 64, '收下', close, { tone: 'gold', size: 27, sound: 'confirm', name: 'rewardPopupConfirm' });
++  mainLabel(panel, 0, -height/2+30, '点击任意位置收下', { size: 19, color: '#C4C9C9', w: 620, h: 28 });
+   motion = panel.addComponent(RewardPopupMotion);
+   motion.configure(rows); motionIn(panel, 'modal'); motion.play();
+   return dim;

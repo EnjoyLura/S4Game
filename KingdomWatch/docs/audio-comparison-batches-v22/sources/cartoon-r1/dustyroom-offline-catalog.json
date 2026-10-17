@@ -1,0 +1,452 @@
+[
+  {
+    "file": "DM-CGS-01.wav",
+    "seconds": 0.028,
+    "centroid": 6133,
+    "flatness": 0.0722,
+    "early": 3316,
+    "late": 3316,
+    "attacks": 0
+  },
+  {
+    "file": "DM-CGS-02.wav",
+    "seconds": 0.503,
+    "centroid": 406,
+    "flatness": 0.0,
+    "early": 387,
+    "late": 344,
+    "attacks": 3
+  },
+  {
+    "file": "DM-CGS-03.wav",
+    "seconds": 0.215,
+    "centroid": 314,
+    "flatness": 0.0,
+    "early": 301,
+    "late": 301,
+    "attacks": 0
+  },
+  {
+    "file": "DM-CGS-04.wav",
+    "seconds": 1.004,
+    "centroid": 8563,
+    "flatness": 0.0329,
+    "early": 5038,
+    "late": 9840,
+    "attacks": 3
+  },
+  {
+    "file": "DM-CGS-05.wav",
+    "seconds": 2.003,
+    "centroid": 33,
+    "flatness": 0.0,
+    "early": 43,
+    "late": 0,
+    "attacks": 7
+  },
+  {
+    "file": "DM-CGS-06.wav",
+    "seconds": 1.555,
+    "centroid": 1309,
+    "flatness": 0.0,
+    "early": 1291,
+    "late": 43,
+    "attacks": 19
+  },
+  {
+    "file": "DM-CGS-07.wav",
+    "seconds": 0.292,
+    "centroid": 893,
+    "flatness": 0.0001,
+    "early": 559,
+    "late": 1119,
+    "attacks": 1
+  },
+  {
+    "file": "DM-CGS-08.wav",
+    "seconds": 0.844,
+    "centroid": 1657,
+    "flatness": 0.0141,
+    "early": 516,
+    "late": 3682,
+    "attacks": 15
+  },
+  {
+    "file": "DM-CGS-09.wav",
+    "seconds": 2.0,
+    "centroid": 99,
+    "flatness": 0.0,
+    "early": 43,
+    "late": 86,
+    "attacks": 15
+  },
+  {
+    "file": "DM-CGS-10.wav",
+    "seconds": 1.403,
+    "centroid": 52,
+    "flatness": 0.0,
+    "early": 43,
+    "late": 43,
+    "attacks": 12
+  },
+  {
+    "file": "DM-CGS-11.wav",
+    "seconds": 2.65,
+    "centroid": 611,
+    "flatness": 0.0001,
+    "early": 430,
+    "late": 775,
+    "attacks": 1
+  },
+  {
+    "file": "DM-CGS-12.wav",
+    "seconds": 1.897,
+    "centroid": 351,
+    "flatness": 0.0,
+    "early": 344,
+    "late": 344,
+    "attacks": 10
+  },
+  {
+    "file": "DM-CGS-13.wav",
+    "seconds": 0.949,
+    "centroid": 438,
+    "flatness": 0.0,
+    "early": 344,
+    "late": 387,
+    "attacks": 2
+  },
+  {
+    "file": "DM-CGS-14.wav",
+    "seconds": 0.24,
+    "centroid": 29,
+    "flatness": 0.0,
+    "early": 0,
+    "late": 0,
+    "attacks": 2
+  },
+  {
+    "file": "DM-CGS-15.wav",
+    "seconds": 0.254,
+    "centroid": 936,
+    "flatness": 0.0,
+    "early": 990,
+    "late": 516,
+    "attacks": 3
+  },
+  {
+    "file": "DM-CGS-16.wav",
+    "seconds": 0.178,
+    "centroid": 360,
+    "flatness": 0.0,
+    "early": 516,
+    "late": 344,
+    "attacks": 1
+  },
+  {
+    "file": "DM-CGS-17.wav",
+    "seconds": 0.472,
+    "centroid": 544,
+    "flatness": 0.0127,
+    "early": 258,
+    "late": 215,
+    "attacks": 6
+  },
+  {
+    "file": "DM-CGS-18.wav",
+    "seconds": 0.988,
+    "centroid": 1250,
+    "flatness": 0.0003,
+    "early": 990,
+    "late": 1335,
+    "attacks": 10
+  },
+  {
+    "file": "DM-CGS-19.wav",
+    "seconds": 0.331,
+    "centroid": 5078,
+    "flatness": 0.0283,
+    "early": 947,
+    "late": 516,
+    "attacks": 1
+  },
+  {
+    "file": "DM-CGS-20.wav",
+    "seconds": 0.097,
+    "centroid": 8422,
+    "flatness": 0.2153,
+    "early": 8247,
+    "late": 366,
+    "attacks": 1
+  },
+  {
+    "file": "DM-CGS-21.wav",
+    "seconds": 0.121,
+    "centroid": 870,
+    "flatness": 0.0,
+    "early": 732,
+    "late": 990,
+    "attacks": 0
+  },
+  {
+    "file": "DM-CGS-22.wav",
+    "seconds": 0.218,
+    "centroid": 261,
+    "flatness": 0.0,
+    "early": 172,
+    "late": 301,
+    "attacks": 1
+  },
+  {
+    "file": "DM-CGS-23.wav",
+    "seconds": 1.551,
+    "centroid": 306,
+    "flatness": 0.0,
+    "early": 215,
+    "late": 344,
+    "attacks": 1
+  },
+  {
+    "file": "DM-CGS-24.wav",
+    "seconds": 1.147,
+    "centroid": 261,
+    "flatness": 0.0,
+    "early": 258,
+    "late": 258,
+    "attacks": 4
+  },
+  {
+    "file": "DM-CGS-25.wav",
+    "seconds": 1.499,
+    "centroid": 206,
+    "flatness": 0.0,
+    "early": 258,
+    "late": 215,
+    "attacks": 12
+  },
+  {
+    "file": "DM-CGS-26.wav",
+    "seconds": 0.5,
+    "centroid": 779,
+    "flatness": 0.0,
+    "early": 452,
+    "late": 1033,
+    "attacks": 6
+  },
+  {
+    "file": "DM-CGS-27.wav",
+    "seconds": 0.4,
+    "centroid": 1051,
+    "flatness": 0.0,
+    "early": 1033,
+    "late": 904,
+    "attacks": 3
+  },
+  {
+    "file": "DM-CGS-28.wav",
+    "seconds": 0.702,
+    "centroid": 1119,
+    "flatness": 0.0,
+    "early": 387,
+    "late": 990,
+    "attacks": 3
+  },
+  {
+    "file": "DM-CGS-29.wav",
+    "seconds": 0.599,
+    "centroid": 261,
+    "flatness": 0.0001,
+    "early": 64,
+    "late": 64,
+    "attacks": 3
+  },
+  {
+    "file": "DM-CGS-30.wav",
+    "seconds": 0.498,
+    "centroid": 286,
+    "flatness": 0.0,
+    "early": 689,
+    "late": 129,
+    "attacks": 1
+  },
+  {
+    "file": "DM-CGS-31.wav",
+    "seconds": 0.272,
+    "centroid": 405,
+    "flatness": 0.0,
+    "early": 344,
+    "late": 430,
+    "attacks": 1
+  },
+  {
+    "file": "DM-CGS-32.wav",
+    "seconds": 0.187,
+    "centroid": 420,
+    "flatness": 0.0,
+    "early": 301,
+    "late": 473,
+    "attacks": 0
+  },
+  {
+    "file": "DM-CGS-33.wav",
+    "seconds": 1.26,
+    "centroid": 3237,
+    "flatness": 0.0102,
+    "early": 2153,
+    "late": 3079,
+    "attacks": 2
+  },
+  {
+    "file": "DM-CGS-34.wav",
+    "seconds": 0.14,
+    "centroid": 5995,
+    "flatness": 0.0087,
+    "early": 4995,
+    "late": 4392,
+    "attacks": 0
+  },
+  {
+    "file": "DM-CGS-35.wav",
+    "seconds": 0.204,
+    "centroid": 416,
+    "flatness": 0.0,
+    "early": 344,
+    "late": 344,
+    "attacks": 3
+  },
+  {
+    "file": "DM-CGS-36.wav",
+    "seconds": 0.404,
+    "centroid": 394,
+    "flatness": 0.0,
+    "early": 129,
+    "late": 559,
+    "attacks": 7
+  },
+  {
+    "file": "DM-CGS-37.wav",
+    "seconds": 0.299,
+    "centroid": 979,
+    "flatness": 0.0,
+    "early": 732,
+    "late": 861,
+    "attacks": 1
+  },
+  {
+    "file": "DM-CGS-38.wav",
+    "seconds": 0.333,
+    "centroid": 425,
+    "flatness": 0.0,
+    "early": 516,
+    "late": 129,
+    "attacks": 1
+  },
+  {
+    "file": "DM-CGS-39.wav",
+    "seconds": 0.394,
+    "centroid": 1438,
+    "flatness": 0.0143,
+    "early": 64,
+    "late": 107,
+    "attacks": 1
+  },
+  {
+    "file": "DM-CGS-40.wav",
+    "seconds": 0.048,
+    "centroid": 4457,
+    "flatness": 0.009,
+    "early": 3057,
+    "late": 4651,
+    "attacks": 0
+  },
+  {
+    "file": "DM-CGS-41.wav",
+    "seconds": 0.233,
+    "centroid": 922,
+    "flatness": 0.0,
+    "early": 473,
+    "late": 559,
+    "attacks": 1
+  },
+  {
+    "file": "DM-CGS-42.wav",
+    "seconds": 0.383,
+    "centroid": 472,
+    "flatness": 0.0001,
+    "early": 258,
+    "late": 258,
+    "attacks": 3
+  },
+  {
+    "file": "DM-CGS-43.wav",
+    "seconds": 2.0,
+    "centroid": 92,
+    "flatness": 0.0,
+    "early": 86,
+    "late": 86,
+    "attacks": 9
+  },
+  {
+    "file": "DM-CGS-44.wav",
+    "seconds": 0.126,
+    "centroid": 2904,
+    "flatness": 0.0,
+    "early": 4134,
+    "late": 4134,
+    "attacks": 0
+  },
+  {
+    "file": "DM-CGS-45.wav",
+    "seconds": 2.0,
+    "centroid": 1382,
+    "flatness": 0.0,
+    "early": 1378,
+    "late": 2110,
+    "attacks": 3
+  },
+  {
+    "file": "DM-CGS-46.wav",
+    "seconds": 0.361,
+    "centroid": 771,
+    "flatness": 0.0004,
+    "early": 1033,
+    "late": 602,
+    "attacks": 3
+  },
+  {
+    "file": "DM-CGS-47.wav",
+    "seconds": 0.24,
+    "centroid": 389,
+    "flatness": 0.0002,
+    "early": 430,
+    "late": 301,
+    "attacks": 1
+  },
+  {
+    "file": "DM-CGS-48.wav",
+    "seconds": 2.0,
+    "centroid": 17,
+    "flatness": 0.0,
+    "early": 43,
+    "late": 0,
+    "attacks": 15
+  },
+  {
+    "file": "DM-CGS-49.wav",
+    "seconds": 2.257,
+    "centroid": 19,
+    "flatness": 0.0,
+    "early": 0,
+    "late": 0,
+    "attacks": 4
+  },
+  {
+    "file": "DM-CGS-50.wav",
+    "seconds": 1.074,
+    "centroid": 180,
+    "flatness": 0.0004,
+    "early": 129,
+    "late": 129,
+    "attacks": 3
+  }
+]

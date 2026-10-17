@@ -5,6 +5,7 @@
  */
 import { Graphics, Label, Layers, Node, Tween, tween, UIOpacity, UITransform, Vec3 } from 'cc';
 import { expNeed, LO, PAL } from '../config/GameConfig';
+import { battleSceneKey } from '../config/Campaign';
 import { dlgConfirm, dlgPanel, dlgTitle, gcircle, gpanel, label, noticeBtn, setText, WY, WYB, WX, Bar, CA, N } from './UIKit';
 import { artSprite } from './Ux';
 import { BattleDirector } from '../battle/BattleDirector';
@@ -104,7 +105,7 @@ export class HUD {
        否则异步加载完成后 clip 落在 Field 末尾，整张不透明场景图盖住全部战场实体 */
     const bgFlat = gpanel(bgParent || top, 0, 0, 750, LO.half * 2 + 240, '#2E4034', undefined, 0, 0);
     bgFlat.setSiblingIndex(0);
-    const sceneId = 'scenes/scene_' + this.dir.levelDef.id.replace('-', '_');
+    const sceneId = battleSceneKey(this.dir.levelDef.id);
     artSprite(bgParent || top, 0, 0, 750, LO.half * 2 + 240, sceneId,
       { sliced: false, cover: true, belowIdx: 1, hideOnLoad: [bgFlat] });
 

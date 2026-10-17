@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-reward-chests-v1-20261016-211040",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-campaign-chapters-v1-20261016-210231",
+  "entryVersion": "1792156156",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=reward-chests-v1-1792156156",
+  "scope": "claim all currently earned chests for the selected level and difficulty; credited reward receipt popup with finite card, count and local sparkle animation",
+  "manualAcceptance": "pending user manual review"
+}

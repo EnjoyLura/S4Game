@@ -5,6 +5,7 @@
 import { loadSave, saveSave, EquipInst, HeroState } from './SaveData';
 import { DIFFICULTIES, starChestRewards } from '../config/LevelDifficulty';
 import { WEAPONS, weaponFits, weaponUsers } from '../config/Weapons';
+import { CAMPAIGN_LEVEL_IDS } from '../config/Campaign';
 export { WEAPONS, weaponFits, weaponUsers } from '../config/Weapons';
 
 /* ================= 物品定义 ================= */
@@ -419,7 +420,7 @@ export const SHOP: ShopDef[] = [
 ];
 
 /** 关卡顺序表（解锁比较用） */
-const LV_ORDER = ['1-1', '1-2', '1-3', '1-4', '1-5'];
+const LV_ORDER = CAMPAIGN_LEVEL_IDS;
 export function lvReached(unlock: string): boolean {
   if (!unlock) return true;
   const sv = loadSave();
@@ -590,15 +591,29 @@ export function upKeep(): OpResult {
   return { ok: true, msg: `主城升至 Lv.${sv.keepLv}` };
 }
 
+/** Actual credited values are returned for presentation; popup animations never grant currency. */
+export type ChestClaimResult = { ok: true; msg: string; gold: number; diamonds: number;
+  chestCount: number; fromTier: number; toTier: number } | { ok: false; msg: string };
+
+/** Claim every currently earned chest for one level/difficulty, using persisted stars. */
+export function claimAllChests(levelId: string): ChestClaimResult {
+  const earned = loadSave().stars[levelId] || 0;
+  const tier = Math.max(0, Math.min(3, Math.floor(Number.isFinite(earned) ? earned : 0)));
+  if (!tier) return { ok: false, msg: '当前关卡尚无可领取的宝箱' };
+  return claimChest(levelId, tier, tier);
+}
+
 /** 领星箱奖励（一次性，按已达星数逐档领取到 claimed） */
-export function claimChest(levelId: string, stars: number, tier: number): OpResult {
+export function claimChest(levelId: string, stars: number, tier: number): ChestClaimResult {
   const sv = loadSave();
   if (!Number.isInteger(tier) || tier < 1 || tier > 3) return { ok: false, msg: '无效的奖励档位' };
   const got = sv.chestClaimed[levelId] || 0;
   if (tier <= got) return { ok: false, msg: '该档奖励已领取' };
   if (Math.min(stars, sv.stars[levelId] || 0) < tier) return { ok: false, msg: '尚未达成：' + CHEST_COND[tier - 1] };
   const suffix = levelId.slice(-1), difficulty = suffix === 'e' ? 1 : suffix === 'h' ? 2 : 0;
-  const rewards = starChestRewards(difficulty ? levelId.slice(0, -1) : levelId, difficulty);
+  const baseId = difficulty ? levelId.slice(0, -1) : levelId;
+  if (!CAMPAIGN_LEVEL_IDS.includes(baseId)) return { ok: false, msg: '无效的关卡奖励' };
+  const rewards = starChestRewards(baseId, difficulty);
   let gold = 0, diamonds = 0;
   // The save stores the highest claimed tier. Include every unclaimed lower tier when skipping ahead.
   for (let i = got; i < tier; i++) { gold += rewards[i].gold || 0; diamonds += rewards[i].diamonds || 0; }
@@ -606,7 +621,7 @@ export function claimChest(levelId: string, stars: number, tier: number): OpResu
   sv.gold += gold; sv.diamonds += diamonds;
   saveSave();
   const msg = [gold ? `+${gold} 金币` : '', diamonds ? `+${diamonds} 钻石` : ''].filter(Boolean).join('、');
-  return { ok: true, msg: '领取成功 ' + msg };
+  return { ok: true, msg: '领取成功 ' + msg, gold, diamonds, chestCount: tier - got, fromTier: got + 1, toTier: tier };
 }
 
 /* ================= 怪物图鉴 ================= */

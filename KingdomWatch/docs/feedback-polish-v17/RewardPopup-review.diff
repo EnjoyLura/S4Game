@@ -1,0 +1,219 @@
+--- before/assets/scripts/ui/RewardPopup.ts
++++ assets/scripts/ui/RewardPopup.ts
+@@ -1,8 +1,8 @@
+ /** A receipt-only reward surface: the caller has already persisted the grant. */
+-import { _decorator, Color, Component, director, Director, game, Game, Graphics, isValid, Label, Node, Vec3 } from 'cc';
++import { _decorator, Component, director, Director, game, Game, Graphics, isValid, Label, Node, UIOpacity, Vec3 } from 'cc';
+ import { LO } from '../config/GameConfig';
+-import { COMIC, comicArt } from './ComicUI';
+-import { C, CA, dimLayer, N } from './UIKit';
++import { comicArt } from './ComicUI';
++import { CA, dimLayer, N } from './UIKit';
+ import { GLOBAL_ROOT, mainLabel } from './PageKit';
+ import { dismissUI, motionIn, reducedMotion } from './UIMotion';
+ import { whenUIArtReady } from './UIArtReady';
+@@ -11,26 +11,27 @@
+ import { heroComicFigure } from './HeroComic';
+ import { HERO_DEFS, Quality } from '../core/GameData';
+ import { UISound } from './UIAudio';
+-import { celebrationConfetti, celebrationRays } from './CelebrationInk';
++import { celebrationConfetti } from './CelebrationInk';
++import { celebrationLight, feedbackSurface, lightEnvelope } from './FeedbackSurface';
+ import { collectRewardFx } from './RewardCollectFx';
+ import { bindBrowserBack } from './BrowserBack';
+ 
+ const { ccclass } = _decorator;
+ export interface RewardPopupItem { name: string; icon: string; amount: number; quality?: Quality; }
+ export interface RewardPresentation { title?: string; subtitle?: string; heroId?: string; sound?: UISound; }
+-interface RewardRow { node: Node; text: Label; amount: number; at: Vec3; delay: number; last: number; revealOnly?: boolean; }
++interface RewardRow { node: Node; text: Label; fade: UIOpacity; amount: number; at: Vec3; delay: number; revealOnly?: boolean; }
+ const clamp = (value: number): number => Math.max(0, Math.min(1, value));
+ const ease = (value: number): number => 1 - (1 - clamp(value)) ** 3;
+-const spring = (value: number): number => { const p = clamp(value) - 1; return 1 + 2.2 * p ** 3 + 1.2 * p * p; };
+ 
+ @ccclass('RewardPopupMotion')
+ class RewardPopupMotion extends Component {
+   private rows: RewardRow[] = [];
+   private ink!: Graphics;
+-  private backdrop!: Graphics;
++  private backdrop!: Node;
++  private hint!: UIOpacity;
+   private title: Node | null = null;
+   private sound: UISound = 'reward';
+-  private endAt = 1.9;
++  private endAt = 1.35;
+   private age = 0;
+   private hidden = false;
+   private quiet = false;
+@@ -42,15 +43,18 @@
+     game.on(Game.EVENT_HIDE, this.hide, this); game.on(Game.EVENT_SHOW, this.show, this);
+   }
+ 
+-  configure(rows: { node: Node; text: Node; amount: number; revealOnly?: boolean }[], title: Node, sound: UISound): void {
++  configure(rows: { node: Node; text: Node; amount: number; revealOnly?: boolean }[], title: Node, hint: Node, sound: UISound): void {
+     this.quiet = reducedMotion();
+     this.title = title; this.sound = sound;
+-    const back = N('rewardBacklight', this.node); back.setSiblingIndex(1);
+-    this.backdrop = back.addComponent(Graphics);
++    this.hint = hint.addComponent(UIOpacity);
++    this.backdrop = celebrationLight(this.node, 'rewardBacklight', 0, 8,
++      sound === 'recruit' ? 650 : 510, sound === 'recruit' ? 570 : 380);
++    this.backdrop.setSiblingIndex(1);
+     this.ink = N('rewardPopupAccents', this.node).addComponent(Graphics);
+     this.rows = rows.map((row, index) => ({ node: row.node, text: row.text.getComponent(Label)!,
+-      amount: row.amount, at: row.node.position.clone(), delay: .08 + index * .13, last: -1, revealOnly: row.revealOnly }));
+-    this.endAt = Math.max(1.9, .95 + rows.length * .13);
++      fade: row.node.addComponent(UIOpacity), amount: row.amount, at: row.node.position.clone(),
++      delay: .1 + index * .09, revealOnly: row.revealOnly }));
++    this.endAt = Math.max(1.35, .9 + rows.length * .09);
+     if (!this.quiet) this.render();
+   }
+ 
+@@ -77,38 +81,29 @@
+ 
+   private render(): void {
+     const g = this.ink; g.clear();
+-    this.backdrop.clear();
+-    celebrationRays(this.backdrop, 0, 0, this.sound === 'recruit' ? 310 : 255, this.age, 1.8);
+-    celebrationConfetti(g, this.age, this.title!.position.y - 20, 690, this.sound === 'recruit' ? 44 : 30);
+-    const titleScale = .92 + .08 * spring(this.age / .4);
++    lightEnvelope(this.backdrop, this.age - .04, 1.3, this.sound === 'recruit' ? .5 : .35);
++    celebrationConfetti(g, this.age, this.title!.position.y - 28, 570, this.sound === 'recruit' ? 10 : 6);
++    this.hint.opacity = Math.round(255 * ease((this.age - .55 - this.rows.length * .09) / .22));
++    const titleScale = .98 + .02 * ease(this.age / .28);
+     this.title!.setScale(titleScale, titleScale, 1);
+     for (const row of this.rows) {
+-      const t = this.age - row.delay, pop = spring(t / .32), progress = ease((t - .15) / .48);
+-      const scale = .72 + .28 * pop;
++      const t = this.age - row.delay, pop = ease(t / .28);
++      const settle = Math.sin(Math.PI * clamp((t - .18) / .22)) * .025;
++      const scale = .88 + .12 * pop + settle;
++      row.fade.opacity = Math.round(255 * ease(t / .16));
+       row.node.setScale(scale, scale, 1);
+-      row.node.setPosition(row.at.x, row.at.y - 12 * (1 - ease(t / .3)), row.at.z);
+-      const value = Math.round(row.amount * progress);
+-      if (!row.revealOnly && value !== row.last) { row.text.string = '+' + value.toLocaleString('en-US'); row.last = value; }
+-      const land = clamp((t - .63) / .2);
+-      row.text.node.setScale(1 + Math.sin(land * Math.PI) * .12, 1 + Math.sin(land * Math.PI) * .12, 1);
+-      const hit = clamp((t - .12) / .55);
++      row.node.setPosition(row.at.x, row.at.y - 10 * (1 - pop), row.at.z);
++      // Actual granted quantity is visible from reveal; never count through fictitious rewards.
++      const hit = clamp((t - .18) / .55);
+       if (hit <= 0 || hit >= 1) continue;
+       const x = row.at.x, y = row.at.y + 2, spread = ease(hit), fade = 1 - hit;
+-      g.strokeColor = CA(COMIC.goldShade, fade * .55); g.lineWidth = 2;
+-      g.circle(x, y, 44 + spread * 17); g.stroke();
+-      for (let i = 0; i < 8; i++) {
+-        const angle = i * Math.PI / 4 + .2, distance = 48 + spread * 25;
+-        const px = x + Math.cos(angle) * distance, py = y + Math.sin(angle) * distance * .85;
+-        const size = fade * 4;
+-        g.fillColor = CA(i % 2 ? COMIC.goldShade : COMIC.gold, fade);
++      for (let i = 0; i < 4; i++) {
++        const angle = i * Math.PI / 2 + .55, distance = 65 + spread * 13;
++        const px = x + Math.cos(angle) * distance, py = y + Math.sin(angle) * distance;
++        const size = Math.sin(hit * Math.PI) * (i % 2 ? 3 : 4.5);
++        g.fillColor = CA('#FFF0BD', fade * .7);
+         g.moveTo(px, py + size); g.lineTo(px + size * .5, py);
+         g.lineTo(px, py - size); g.lineTo(px - size * .5, py); g.close(); g.fill();
+-      }
+-      // A narrow traveling glint stays inside each square icon.
+-      if (!row.revealOnly) {
+-        const sweep = clamp((t - .12) / .4), sx = x - 58 + sweep * 116;
+-        g.strokeColor = CA('#FFF2BA', Math.sin(sweep * Math.PI) * .55); g.lineWidth = 3;
+-        g.moveTo(sx, y - 54); g.lineTo(Math.min(x + 58, sx + 14), y + 54); g.stroke();
+       }
+     }
+   }
+@@ -117,11 +112,14 @@
+     for (const row of this.rows) {
+       if (!isValid(row.node, true)) continue;
+       row.node.setPosition(row.at); row.node.setScale(1, 1, 1);
++      row.fade.opacity = 255;
+       if (!row.revealOnly) row.text.string = '+' + row.amount.toLocaleString('en-US');
+       row.text.node.setScale(1, 1, 1);
+     }
+     if (this.title?.isValid) this.title.setScale(1, 1, 1);
+-    this.ink?.clear(); this.backdrop?.clear(); this.enabled = false;
++    this.ink?.clear(); if (this.backdrop) this.backdrop.active = false;
++    if (this.hint) this.hint.opacity = 255;
++    this.enabled = false;
+   }
+ 
+   stop(): void {
+@@ -142,34 +140,16 @@
+ 
+ /** A full-width celebration band, deliberately independent of paper detail dialogs. */
+ function rewardBanner(panel: Node, height: number, heading: string): Node {
+-  const g=N('rewardCelebrationBand',panel,0,0,750,height).addComponent(Graphics);
+-  const low=C('#293542'),high=C('#172633'),bands=48;
+-  for(let i=0;i<bands;i++) {
+-    const color=Color.lerp(new Color(),low,high,(i+.5)/bands);color.a=225;
+-    g.fillColor=color;g.rect(-375,-height/2+i*height/bands,750,height/bands);g.fill();
+-  }
+-  for(const side of [-1,1]) {
+-    g.fillColor=CA('#DCA84C',.9);g.rect(-375,side*height/2-1,750,2);g.fill();
+-    g.fillColor=CA('#FFF0B5',.34);g.rect(-375,side*(height/2-4),750,1);g.fill();
+-  }
+-  const title=N('rewardCelebrationTitle',panel,0,height/2,420,110),ink=title.addComponent(Graphics);
+-  const polygon=(points:number[][],color:string):void => {
+-    ink.fillColor=C(color);ink.moveTo(points[0][0],points[0][1]);
+-    points.slice(1).forEach(p=>ink.lineTo(p[0],p[1]));ink.close();ink.fill();
+-  };
+-  ink.fillColor=CA('#172633',.9);ink.circle(0,0,49);ink.fill();
+-  ink.strokeColor=CA('#F6C35E',.85);ink.lineWidth=4;ink.circle(0,0,46);ink.stroke();
+-  ink.strokeColor=CA('#F6C35E',.35);ink.lineWidth=1.5;ink.circle(0,0,38);ink.stroke();
+-  for(const side of [-1,1]) {
+-    polygon([[side*81,29],[side*201,40],[side*165,4],[side*84,-14]],'#A3722C');
+-    polygon([[side*83,23],[side*177,29],[side*146,0],[side*85,-10]],'#E4B24E');
+-    polygon([[side*79,-4],[side*166,-9],[side*143,-34],[side*83,-22]],'#B18439');
+-  }
+-  polygon([[-162,29],[171,29],[158,12],[176,-7],[161,-29],[-170,-29],[-158,-10],[-177,8]],'#9B672B');
+-  polygon([[-158,25],[164,25],[152,10],[169,-7],[157,-25],[-164,-25],[-152,-9],[-169,7]],'#EAB64E');
+-  polygon([[-158,25],[164,25],[152,10],[-165,10]],'#FFDE83');
+-  mainLabel(title,0,0,heading,{size:34,bold:true,font:'body',color:'#FFF9E9',w:310,h:48,
+-    outline:'#8F5C24',outlineW:1.5});
++  feedbackSurface(panel, 'rewardCelebrationBand', 'band', 0, 0, 750, height + 90, '#152633', .9);
++  feedbackSurface(panel, 'rewardLowerRule', 'line', 0, -height/2, 750, 2, '#DDBA72', .62);
++  const title=N('rewardCelebrationTitle',panel,0,height/2,650,88);
++  feedbackSurface(title, 'titleWarmLight', 'halo', 0, 0, 520, 110, '#FFD178', .22);
++  for (const side of [-1, 1]) {
++    feedbackSurface(title, 'titleRule', 'line', side * 258, 0, 150, 2, '#EFD18B', .85);
++    feedbackSurface(title, 'titleInnerRule', 'line', side * 258, -5, 126, 1, '#EFD18B', .36);
++  }
++  mainLabel(title,0,0,heading,{size:40,bold:true,font:'body',color:'#FFE6A4',w:360,h:56,
++    outline:'#352C23',outlineW:1});
+   return title;
+ }
+ 
+@@ -179,11 +159,18 @@
+   const rewards = items.filter(item => Number.isFinite(item.amount) && item.amount > 0);
+   const dim = dimLayer(parent, .72, false, false);
+   dim.name = 'rewardPopup';
+-  let closing = false, motion: RewardPopupMotion | null = null;
++  let closing = false, acknowledged = false, motion: RewardPopupMotion | null = null;
+   const close = (): void => {
+     if (closing) return;
+     closing = true; motion?.stop();
+-    dismissUI(dim, () => { collectRewardFx(GLOBAL_ROOT, rewards); onClose?.(); }, false);
++    dismissUI(dim, () => {
++      if (acknowledged) return;
++      acknowledged = true;
++      // Release the caller's claim lock before starting optional wallet decoration.
++      try { onClose?.(); }
++      catch (error) { console.warn('[RewardPopup] acknowledgement callback failed', error); }
++      collectRewardFx(GLOBAL_ROOT, rewards);
++    }, false);
+   };
+   bindBrowserBack(dim, close);
+   dim.on(Node.EventType.TOUCH_END, (event: { propagationStopped?: boolean }) => {
+@@ -220,8 +207,8 @@
+     });
+     rows.push({ node: card, text, amount: reward.amount });
+   });
+-  mainLabel(panel, 0, -height/2+30, '点击任意位置收下', { size: 19, color: '#C4C9C9', w: 620, h: 28 });
++  const hint = mainLabel(panel, 0, -height/2+30, '点击任意位置收下', { size: 19, color: '#C4C9C9', w: 620, h: 28 });
+   motion = panel.addComponent(RewardPopupMotion);
+-  motion.configure(rows,title,presentation.sound || 'reward'); motionIn(panel, 'modal'); motion.play();
++  motion.configure(rows,title,hint,presentation.sound || 'reward'); motionIn(panel, 'modal'); motion.play();
+   return dim;
+ }

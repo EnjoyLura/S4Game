@@ -1,0 +1,197 @@
+--- before/assets/scripts/ui/RewardPopup.ts
++++ assets/scripts/ui/RewardPopup.ts
+@@ -3,15 +3,22 @@
+ import { LO } from '../config/GameConfig';
+ import { COMIC, comicArt } from './ComicUI';
+ import { C, CA, dimLayer, N } from './UIKit';
+-import { mainLabel } from './PageKit';
++import { GLOBAL_ROOT, mainLabel } from './PageKit';
+ import { dismissUI, motionIn, reducedMotion } from './UIMotion';
+ import { whenUIArtReady } from './UIArtReady';
+ import { uiSound } from './UIAudio';
+ import { shopQualitySocket } from './LobbyChrome';
++import { heroComicFigure } from './HeroComic';
++import { HERO_DEFS, Quality } from '../core/GameData';
++import { UISound } from './UIAudio';
++import { celebrationConfetti, celebrationRays } from './CelebrationInk';
++import { collectRewardFx } from './RewardCollectFx';
++import { bindBrowserBack } from './BrowserBack';
+ 
+ const { ccclass } = _decorator;
+-export interface RewardPopupItem { name: string; icon: string; amount: number; }
+-interface RewardRow { node: Node; text: Label; amount: number; at: Vec3; delay: number; last: number; }
++export interface RewardPopupItem { name: string; icon: string; amount: number; quality?: Quality; }
++export interface RewardPresentation { title?: string; subtitle?: string; heroId?: string; sound?: UISound; }
++interface RewardRow { node: Node; text: Label; amount: number; at: Vec3; delay: number; last: number; revealOnly?: boolean; }
+ const clamp = (value: number): number => Math.max(0, Math.min(1, value));
+ const ease = (value: number): number => 1 - (1 - clamp(value)) ** 3;
+ const spring = (value: number): number => { const p = clamp(value) - 1; return 1 + 2.2 * p ** 3 + 1.2 * p * p; };
+@@ -20,6 +27,10 @@
+ class RewardPopupMotion extends Component {
+   private rows: RewardRow[] = [];
+   private ink!: Graphics;
++  private backdrop!: Graphics;
++  private title: Node | null = null;
++  private sound: UISound = 'reward';
++  private endAt = 1.9;
+   private age = 0;
+   private hidden = false;
+   private quiet = false;
+@@ -31,11 +42,15 @@
+     game.on(Game.EVENT_HIDE, this.hide, this); game.on(Game.EVENT_SHOW, this.show, this);
+   }
+ 
+-  configure(rows: { node: Node; text: Node; amount: number }[]): void {
++  configure(rows: { node: Node; text: Node; amount: number; revealOnly?: boolean }[], title: Node, sound: UISound): void {
+     this.quiet = reducedMotion();
++    this.title = title; this.sound = sound;
++    const back = N('rewardBacklight', this.node); back.setSiblingIndex(1);
++    this.backdrop = back.addComponent(Graphics);
+     this.ink = N('rewardPopupAccents', this.node).addComponent(Graphics);
+     this.rows = rows.map((row, index) => ({ node: row.node, text: row.text.getComponent(Label)!,
+-      amount: row.amount, at: row.node.position.clone(), delay: .06 + index * .1, last: -1 }));
++      amount: row.amount, at: row.node.position.clone(), delay: .08 + index * .13, last: -1, revealOnly: row.revealOnly }));
++    this.endAt = Math.max(1.9, .95 + rows.length * .13);
+     if (!this.quiet) this.render();
+   }
+ 
+@@ -45,7 +60,7 @@
+       this.drawReady = () => {
+         this.drawReady = null;
+         if (this.closing || !isValid(this.node, true)) return;
+-        uiSound('reward');
++        uiSound(this.sound);
+         if (this.quiet) { this.finish(); return; }
+         this.age = 0; this.enabled = true;
+       };
+@@ -57,18 +72,23 @@
+     if (this.hidden) return;
+     this.age += Math.min(.06, Math.max(0, dt));
+     this.render();
+-    if (this.age >= 1.05) this.finish();
++    if (this.age >= this.endAt) this.finish();
+   }
+ 
+   private render(): void {
+     const g = this.ink; g.clear();
++    this.backdrop.clear();
++    celebrationRays(this.backdrop, 0, 0, this.sound === 'recruit' ? 310 : 255, this.age, 1.8);
++    celebrationConfetti(g, this.age, this.title!.position.y - 20, 690, this.sound === 'recruit' ? 44 : 30);
++    const titleScale = .92 + .08 * spring(this.age / .4);
++    this.title!.setScale(titleScale, titleScale, 1);
+     for (const row of this.rows) {
+       const t = this.age - row.delay, pop = spring(t / .32), progress = ease((t - .15) / .48);
+-      const scale = .9 + .1 * pop;
++      const scale = .72 + .28 * pop;
+       row.node.setScale(scale, scale, 1);
+       row.node.setPosition(row.at.x, row.at.y - 12 * (1 - ease(t / .3)), row.at.z);
+       const value = Math.round(row.amount * progress);
+-      if (value !== row.last) { row.text.string = '+' + value.toLocaleString('en-US'); row.last = value; }
++      if (!row.revealOnly && value !== row.last) { row.text.string = '+' + value.toLocaleString('en-US'); row.last = value; }
+       const land = clamp((t - .63) / .2);
+       row.text.node.setScale(1 + Math.sin(land * Math.PI) * .12, 1 + Math.sin(land * Math.PI) * .12, 1);
+       const hit = clamp((t - .12) / .55);
+@@ -84,6 +104,12 @@
+         g.moveTo(px, py + size); g.lineTo(px + size * .5, py);
+         g.lineTo(px, py - size); g.lineTo(px - size * .5, py); g.close(); g.fill();
+       }
++      // A narrow traveling glint stays inside each square icon.
++      if (!row.revealOnly) {
++        const sweep = clamp((t - .12) / .4), sx = x - 58 + sweep * 116;
++        g.strokeColor = CA('#FFF2BA', Math.sin(sweep * Math.PI) * .55); g.lineWidth = 3;
++        g.moveTo(sx, y - 54); g.lineTo(Math.min(x + 58, sx + 14), y + 54); g.stroke();
++      }
+     }
+   }
+ 
+@@ -91,9 +117,11 @@
+     for (const row of this.rows) {
+       if (!isValid(row.node, true)) continue;
+       row.node.setPosition(row.at); row.node.setScale(1, 1, 1);
+-      row.text.string = '+' + row.amount.toLocaleString('en-US'); row.text.node.setScale(1, 1, 1);
++      if (!row.revealOnly) row.text.string = '+' + row.amount.toLocaleString('en-US');
++      row.text.node.setScale(1, 1, 1);
+     }
+-    this.ink?.clear(); this.enabled = false;
++    if (this.title?.isValid) this.title.setScale(1, 1, 1);
++    this.ink?.clear(); this.backdrop?.clear(); this.enabled = false;
+   }
+ 
+   stop(): void {
+@@ -113,7 +141,7 @@
+ }
+ 
+ /** A full-width celebration band, deliberately independent of paper detail dialogs. */
+-function rewardBanner(panel: Node, height: number): void {
++function rewardBanner(panel: Node, height: number, heading: string): Node {
+   const g=N('rewardCelebrationBand',panel,0,0,750,height).addComponent(Graphics);
+   const low=C('#293542'),high=C('#172633'),bands=48;
+   for(let i=0;i<bands;i++) {
+@@ -140,13 +168,14 @@
+   polygon([[-162,29],[171,29],[158,12],[176,-7],[161,-29],[-170,-29],[-158,-10],[-177,8]],'#9B672B');
+   polygon([[-158,25],[164,25],[152,10],[169,-7],[157,-25],[-164,-25],[-152,-9],[-169,7]],'#EAB64E');
+   polygon([[-158,25],[164,25],[152,10],[-165,10]],'#FFDE83');
+-  mainLabel(title,0,0,'恭喜获得',{size:34,bold:true,font:'body',color:'#FFF9E9',w:310,h:48,
++  mainLabel(title,0,0,heading,{size:34,bold:true,font:'body',color:'#FFF9E9',w:310,h:48,
+     outline:'#8F5C24',outlineW:1.5});
++  return title;
+ }
+ 
+ /** Display only the positive amounts present in this receipt. */
+ export function showRewardPopup(parent: Node, source: string, chestCount: number,
+-  items: readonly RewardPopupItem[], onClose?: () => void): Node {
++  items: readonly RewardPopupItem[], onClose?: () => void, presentation: RewardPresentation = {}): Node {
+   const rewards = items.filter(item => Number.isFinite(item.amount) && item.amount > 0);
+   const dim = dimLayer(parent, .72, false, false);
+   dim.name = 'rewardPopup';
+@@ -154,27 +183,35 @@
+   const close = (): void => {
+     if (closing) return;
+     closing = true; motion?.stop();
+-    dismissUI(dim, onClose);
++    dismissUI(dim, () => { collectRewardFx(GLOBAL_ROOT, rewards); onClose?.(); }, false);
+   };
++  bindBrowserBack(dim, close);
+   dim.on(Node.EventType.TOUCH_END, (event: { propagationStopped?: boolean }) => {
+     event.propagationStopped = true; close();
+   });
+   const columns=Math.min(4,Math.max(1,rewards.length)), rowCount=Math.max(1,Math.ceil(rewards.length/columns));
+-  const height=242+rowCount*170;
++  const hero = presentation.heroId && HERO_DEFS[presentation.heroId] ? presentation.heroId : undefined;
++  const height=hero ? 636 : 242+rowCount*170;
+   const panel = N('rewardPopupPanel',dim,0,0,750,height);
+-  rewardBanner(panel,height);
++  const title = rewardBanner(panel,height,presentation.title || '恭喜获得');
+   const fit=Math.min(1,(LO.half*2-LO.notchTop*2-120)/(height+110));
+   panel.setScale(fit,fit,1);
+   mainLabel(panel, 0, height/2-55, source, { size: 20, color: '#E0D6BC', w: 620, h: 28 });
+-  mainLabel(panel, 0, height/2-86, '已领取 ' + chestCount + ' 个宝箱', {
++  mainLabel(panel, 0, height/2-86, presentation.subtitle || (chestCount > 0 ? '已领取 ' + chestCount + ' 个宝箱' : '奖励已到账'), {
+     size: 18, color: '#C4C9C9', w: 620, h: 26,
+   });
+-  const rows: { node: Node; text: Node; amount: number }[] = [];
+-  rewards.forEach((reward, index) => {
++  const rows: { node: Node; text: Node; amount: number; revealOnly?: boolean }[] = [];
++  if (hero) {
++    const reveal = N('recruitedHero:' + hero,panel,0,-16,350,410);
++    heroComicFigure(reveal,hero,0,-158,350,276);
++    mainLabel(reveal,0,-188,HERO_DEFS[hero].name,{size:32,bold:true,color:'#FFE7A2',w:560,h:44});
++    const text = mainLabel(reveal,0,-227,'已解锁 · 可加入出战编队',{size:21,color:'#C9EAA7',w:560,h:32});
++    rows.push({node:reveal,text,amount:1,revealOnly:true});
++  } else rewards.forEach((reward, index) => {
+     const row=Math.floor(index/columns),count=Math.min(columns,rewards.length-row*columns);
+     const card=N('rewardPopupItem:'+index,panel,((index%columns)-(count-1)/2)*166,
+       (rowCount-1)*85-row*170-4,140,158);
+-    shopQualitySocket(card,0,0,126,2);
++    shopQualitySocket(card,0,0,126,reward.quality ?? 2);
+     comicArt(card, 0, 2, 104, 104, reward.icon);
+     mainLabel(card, 0, -83, reward.name, { size: 20, color: '#FFF3D6', w: 150, h: 30 });
+     const text = mainLabel(card, 0, -43, '+' + reward.amount.toLocaleString('en-US'), {
+@@ -185,6 +222,6 @@
+   });
+   mainLabel(panel, 0, -height/2+30, '点击任意位置收下', { size: 19, color: '#C4C9C9', w: 620, h: 28 });
+   motion = panel.addComponent(RewardPopupMotion);
+-  motion.configure(rows); motionIn(panel, 'modal'); motion.play();
++  motion.configure(rows,title,presentation.sound || 'reward'); motionIn(panel, 'modal'); motion.play();
+   return dim;
+ }

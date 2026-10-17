@@ -1,0 +1,30 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-feedback-polish-v17-20261017-135339",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-startup-component-fix-v16-20261017-133109",
+  "entryVersion": "1792216357",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=feedback-polish-v17-1792216357",
+  "scope": "fix reward acknowledgement Set spread crash; smooth continuous toast gradients and restrained reward/growth/victory/construction light",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://e5031b50.kingdom-watch.pages.dev",
+  "creatorBuildMilliseconds": 20955,
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-feedback-polish-v17-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-feedback-polish-v17-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "date": "2026-10-17T13:54:12.957079+08:00",
+  "gameRun": false,
+  "testsRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

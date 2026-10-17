@@ -1,0 +1,30 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-startup-component-fix-v16-20261017-133109",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-positive-feedback-v15-20261017-131821",
+  "entryVersion": "1792215028",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=startup-component-fix-v16-1792215028",
+  "scope": "fix Cocos Error 3615 by splitting ConstructionPulse into a separate script and registration UUID",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://9ca4e00e.kingdom-watch.pages.dev",
+  "creatorBuildMilliseconds": 16333,
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-startup-component-fix-v16-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-startup-component-fix-v16-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "date": "2026-10-17T13:31:46.059584+08:00",
+  "gameRun": false,
+  "testsRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

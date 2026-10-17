@@ -4,6 +4,8 @@ import { CA, N } from './UIKit';
 import { reducedMotion } from './UIMotion';
 import { whenUIArtReady } from './UIArtReady';
 import { uiSound } from './UIAudio';
+import { celebrationConfetti } from './CelebrationInk';
+import { celebrationLight, lightEnvelope } from './FeedbackSurface';
 
 const { ccclass } = _decorator;
 const clamp = (v: number): number => Math.max(0, Math.min(1, v));
@@ -19,8 +21,10 @@ export class SettlementMotion extends Component {
   private stars: StarView[] = [];
   private rewards: RewardView[] = [];
   private ink!: Graphics;
+  private backlight!: Node;
   private win = false;
   private intro = false;
+  private outcomeCue = false;
   private quiet = false;
   private age = 0;
   private hidden = false;
@@ -38,9 +42,12 @@ export class SettlementMotion extends Component {
   configure(outcome: 'win' | 'lose', badge: Node, stars: { node: Node; earned: boolean }[], intro: boolean): void {
     this.win = outcome === 'win'; this.badge = badge; this.badgeAt.set(badge.position);
     this.quiet = reducedMotion(); this.intro = intro && !this.quiet;
+    this.outcomeCue = intro; // Reduced animation still receives outcome audio; redraws never repeat it.
     this.stars = stars.map(star => ({ ...star, position: star.node.position.clone(), sounded: false }));
     this.earnedStars = stars.filter(star => star.earned).length;
-    this.endAt = this.intro ? 1.65 : 0;
+    this.endAt = this.intro ? (this.win ? 2.05 : 1.65) : 0;
+    this.backlight = celebrationLight(this.node, 'settlementVictoryBacklight', 0, 340, 680, 420);
+    this.backlight.setSiblingIndex(0);
     this.ink = N('settlementAccents', this.node).addComponent(Graphics);
     if (this.intro) {
       badge.setScale(this.win ? .82 : .94, this.win ? .82 : .94, 1);
@@ -66,12 +73,15 @@ export class SettlementMotion extends Component {
   play(): void {
     if (this.started) return;
     this.started = true;
-    if (!this.intro && !this.rewards.length) return;
+    if (!this.intro && !this.rewards.length && !this.outcomeCue) return;
     whenUIArtReady(this.node, () => {
       if (!isValid(this.node, true)) return;
       this.drawReady = () => {
         this.drawReady = null;
         if (!isValid(this.node, true)) return;
+        if (this.outcomeCue) {
+          this.outcomeCue = false; uiSound(this.win ? 'victory' : 'defeat');
+        }
         this.age = 0; this.enabled = true; this.render();
       };
       director.once(Director.EVENT_AFTER_DRAW, this.drawReady);
@@ -85,12 +95,17 @@ export class SettlementMotion extends Component {
       this.badge.setPosition(this.badgeAt); this.badge.setScale(1, 1, 1); this.badge.angle = 0;
       this.stars.forEach(star => { star.node.active = star.earned; star.node.setPosition(star.position); star.node.setScale(1, 1, 1); });
       this.rewards.forEach(row => { row.label.string = String(row.target); row.node.setScale(1, 1, 1); });
-      this.ink.clear(); this.enabled = false;
+      this.ink.clear(); this.backlight.active = false; this.enabled = false;
     }
   }
 
   private render(): void {
     const g = this.ink; g.clear();
+    this.backlight.active = false;
+    if (this.win && this.intro) {
+      lightEnvelope(this.backlight, this.age, 1.85, .32);
+      celebrationConfetti(g, this.age, 320, 690, 10);
+    }
     if (this.intro) {
       const p = clamp((this.age - .03) / (this.win ? .48 : .5)), spring = back(p);
       const scale = this.win ? .82 + .18 * spring : .94 + .06 * spring;
@@ -111,15 +126,15 @@ export class SettlementMotion extends Component {
         const t = this.age - (.34 + i * .19);
         if (t < 0) return;
         star.node.active = true;
-        const p = clamp(t / .29), scale = .42 + .58 * back(p);
+        const p = clamp(t / .29), scale = .28 + .72 * back(p);
         star.node.setScale(scale, scale, 1);
         star.node.setPosition(star.position.x, star.position.y + 22 * (1 - out(t / .16)), star.position.z);
-        if (t >= .15 && !star.sounded) { star.sounded = true; uiSound(i === this.earnedStars - 1 ? 'confirm' : 'select'); }
+        if (t >= .15 && !star.sounded) { star.sounded = true; uiSound(i === this.earnedStars - 1 ? 'starFinish' : 'star'); }
         const hit = clamp((t - .14) / .43);
         if (hit > 0 && hit < 1) {
           const x = star.position.x, y = star.position.y;
           g.strokeColor = CA('#F6C54E', (1 - hit) * .55); g.lineWidth = 2 * (1 - hit) + .5;
-          g.circle(x, y, 23 + out(hit) * 8); g.stroke();
+          g.circle(x, y, 23 + out(hit) * 26); g.stroke();
           for (let k = 0; k < 6; k++) {
             const angle = k * Math.PI / 3 + .25, distance = 28 + out(hit) * 23;
             this.diamond(x + Math.cos(angle) * distance, y + Math.sin(angle) * distance * .48 + 4,
@@ -136,7 +151,7 @@ export class SettlementMotion extends Component {
       const land = clamp((t - row.duration) / .18);
       const scale = 1 + (p < 1 ? Math.sin(p * Math.PI) * .045 : Math.sin(land * Math.PI) * .13);
       row.node.setScale(scale, scale, 1);
-      if (p >= 1 && !this.rewardCue) { this.rewardCue = true; uiSound('reward'); }
+      if (p >= 1 && !this.rewardCue) { this.rewardCue = true; uiSound('rewardLand'); }
     }
   }
 

@@ -1,0 +1,15 @@
+--- before/assets/scripts/ui/FeedbackSurface.ts
++++ assets/scripts/ui/FeedbackSurface.ts
+@@ -56,10 +56,10 @@
+   return node;
+ }
+ 
+-/** Dense center keeps numbers readable; only the empty ends feather into the scene. */
++/** Translucent growth receipt with smooth empty ends; outlined figures stay readable. */
+ export function growthSurface(parent: Node, width: number, height: number): Node {
+   const node = N('growthResultSurface', parent);
+-  feedbackSurface(node, 'readableCenter', 'growth', 0, 0, width, height, '#101F2B', .985);
++  feedbackSurface(node, 'readableCenter', 'growth', 0, 0, width, height, '#101F2B', .68);
+   for (const side of [-1, 1]) {
+     feedbackSurface(node, 'outerRule', 'line', 0, side * (height / 2 - 1), width, 2.4, '#F1CE81', .9);
+     feedbackSurface(node, 'innerRule', 'line', 0, side * (height / 2 - 5), width, 1, '#F1CE81', .38);

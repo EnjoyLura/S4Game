@@ -1,0 +1,74 @@
+[
+  {
+    "file": "assets/resources/audio/feedback-v15/tick.wav",
+    "seconds": 0.19,
+    "sampleRate": 24000,
+    "peak": 0.6599932859279153,
+    "bytes": 9164,
+    "sha256": "7f77209013d3cc2a692d16f1adf4a9c547b0fac6f285cd4c77cdfa1e61cfabf3",
+    "auditioned": false
+  },
+  {
+    "file": "assets/resources/audio/feedback-v15/star.wav",
+    "seconds": 0.27,
+    "sampleRate": 24000,
+    "peak": 0.6599932859279153,
+    "bytes": 13004,
+    "sha256": "0d2c030131150388676628d367e0cfb120999a10e05bf852382f28ea91447d62",
+    "auditioned": false
+  },
+  {
+    "file": "assets/resources/audio/feedback-v15/growth.wav",
+    "seconds": 0.62,
+    "sampleRate": 24000,
+    "peak": 0.7900021362956633,
+    "bytes": 29804,
+    "sha256": "89fd6ca11a937e61d0ba3ec44a7d6f663b89a76f58284260052dcd709bee5fec",
+    "auditioned": false
+  },
+  {
+    "file": "assets/resources/audio/feedback-v15/purchase.wav",
+    "seconds": 0.76,
+    "sampleRate": 24000,
+    "peak": 0.7900021362956633,
+    "bytes": 36524,
+    "sha256": "858ec88d0fa3c42f89e339e7fdfb11f2746d44f0c3df77b01cb5877235171643",
+    "auditioned": false
+  },
+  {
+    "file": "assets/resources/audio/feedback-v15/reward.wav",
+    "seconds": 1.12,
+    "sampleRate": 24000,
+    "peak": 0.7900021362956633,
+    "bytes": 53804,
+    "sha256": "9e5ce7d80287629c4ff879fce803bce9ea4957462b4c06bb1696218346436dc3",
+    "auditioned": false
+  },
+  {
+    "file": "assets/resources/audio/feedback-v15/breakthrough.wav",
+    "seconds": 1.32,
+    "sampleRate": 24000,
+    "peak": 0.7900021362956633,
+    "bytes": 63404,
+    "sha256": "d7258dbb44446914dbdf84c06ff0f59d9cbe1deb2d7f63ac4eec1d9e954d9bc3",
+    "auditioned": false
+  },
+  {
+    "file": "assets/resources/audio/feedback-v15/recruit.wav",
+    "seconds": 1.66,
+    "sampleRate": 24000,
+    "peak": 0.7900021362956633,
+    "bytes": 79724,
+    "sha256": "1dd6f0026c8304f16466183d129da7706548e0d5b74021f31250705365f69e20",
+    "auditioned": false
+  },
+  {
+    "file": "assets/resources/audio/feedback-v15/construction.wav",
+    "seconds": 1.42,
+    "sampleRate": 24000,
+    "peak": 0.7900021362956633,
+    "bytes": 68204,
+    "sha256": "d0489268e36442fe1631f40f5b80724fd10c40d2302b42d86bfd9b4fe96edfaf",
+    "auditioned": false
+  }
+]

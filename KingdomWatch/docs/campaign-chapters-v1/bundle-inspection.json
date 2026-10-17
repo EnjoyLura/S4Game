@@ -1,0 +1,72 @@
+{
+  "mainBundle": "assets/main/index.afa4f.js",
+  "mainBundleSha256": "cc19c3de3385476c2e323467101848c0c16a9c508880e09bf71d9faa6599ae8f",
+  "mainBundleBytes": 585515,
+  "chapterStageCounts": [
+    10,
+    10,
+    10
+  ],
+  "compiledStageNames": {
+    "1-1": true,
+    "1-2": true,
+    "1-3": true,
+    "1-4": true,
+    "1-5": true,
+    "1-6": true,
+    "1-7": true,
+    "1-8": true,
+    "1-9": true,
+    "1-10": true,
+    "2-1": true,
+    "2-2": true,
+    "2-3": true,
+    "2-4": true,
+    "2-5": true,
+    "2-6": true,
+    "2-7": true,
+    "2-8": true,
+    "2-9": true,
+    "2-10": true,
+    "3-1": true,
+    "3-2": true,
+    "3-3": true,
+    "3-4": true,
+    "3-5": true,
+    "3-6": true,
+    "3-7": true,
+    "3-8": true,
+    "3-9": true,
+    "3-10": true
+  },
+  "compiledMarkers": {
+    "chapterSelect:": true,
+    "chapterStageRoute": true,
+    "chapterRoutePath": true,
+    "selectedStage": true,
+    "scenes/scene_1_1": true,
+    "scenes/scene_1_2": true,
+    "scenes/scene_1_3": true
+  },
+  "existingSceneFiles": {
+    "scene_1_1.png": true,
+    "scene_1_2.jpg": true,
+    "scene_1_3.jpg": true,
+    "bg_levels_outpost_comic_v2.jpg": true,
+    "bg_levels_forest_comic_v2.jpg": true,
+    "bg_levels_lair_comic_v2.jpg": true
+  },
+  "inspection": "read local configuration, compiled text and asset paths only; no game/test/browser/online acceptance",
+  "manualAcceptance": "pending user",
+  "typeReview": {
+    "fullProjectPassed": false,
+    "scope": "assets/scripts with Cocos declarations and ES2020",
+    "diagnosticFiles": [
+      "assets/scripts/ui/ButtonFeedback.ts",
+      "assets/scripts/ui/MilestoneSwipe.ts",
+      "assets/scripts/ui/Panels.ts",
+      "assets/scripts/ui/UINotice.ts"
+    ],
+    "note": "existing ButtonFeedback lifecycle field/type cascade and UINotice overload diagnostics remain; no diagnostics in changed modules"
+  }
+}

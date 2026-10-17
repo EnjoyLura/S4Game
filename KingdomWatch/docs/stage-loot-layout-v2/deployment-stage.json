@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-stage-loot-layout-v2-20261016-235755",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-checkpoints-v1-20261016-232148",
+  "entryVersion": "1792166231",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=stage-loot-layout-v2-1792166231",
+  "scope": "guaranteed currency and material icons; local rarity wells and complete gear pool; quality-only tags; preparation drawer keeps terrain offset",
+  "manualAcceptance": "pending user manual review"
+}

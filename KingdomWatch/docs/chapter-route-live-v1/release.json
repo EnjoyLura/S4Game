@@ -1,0 +1,39 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-live-v1-20261016-222617",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-levels-v1-20261016-215731",
+  "entryVersion": "1792160607",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=chapter-route-live-v1-1792160607",
+  "scope": "three chapter terrain maps; scrollable live checkpoints and stage preparation drawer; existing progression and reward transactions retained",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://3c530d93.kingdom-watch.pages.dev",
+  "date": "2026-10-16T22:27:30.977730+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-chapter-route-live-v1-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-chapter-route-live-v1-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 16380,
+  "mainBundleSha256": "29876ea6e3c261b001eefcd167c9386c4cce96ff0ffbeb9527b03022e9ab5e4e",
+  "validation": {
+    "sourceReview": true,
+    "localArtifactInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "testsRun": false,
+    "simulationRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  }
+}

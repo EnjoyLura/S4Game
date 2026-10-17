@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-levels-v1-20261016-215731",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-lobby-ui-quiet-v2-20261016-214310",
+  "entryVersion": "1792158868",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=audio-levels-v1-1792158868",
+  "scope": "BGM and SFX buses +3.01 dB; existing audio, attribution and mix dynamics retained",
+  "manualAcceptance": "pending user manual review"
+}

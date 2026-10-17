@@ -1,0 +1,32 @@
+{
+  "tool": "built-in image_gen",
+  "useCase": "ui-mockup",
+  "referenceRoles": [
+    "current shop content/layout/game identity",
+    "current detail content/purchase flow",
+    "approved UI polish and square rarity sockets"
+  ],
+  "references": [
+    "C:/Users/user/AppData/Local/Temp/codex-clipboard-8eccf5b0-94c9-4cf7-be37-94ab1517a34c.png",
+    "C:/Users/user/AppData/Local/Temp/codex-clipboard-b1734dde-af8b-4690-8421-fb935ca61bd8.png",
+    "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-e239edc5-b7f6-4583-ba68-26880618a363.png"
+  ],
+  "outputs": [
+    {
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-1e82aa82-348d-4996-ae76-e4226f6f72ef.png",
+      "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\shop-art-concept-v2\\shop-main-v2.png",
+      "prompt": "D:\\AI\\S4Game\\KingdomWatch\\docs\\shop-art-concept-v2\\shop-main-prompt.txt",
+      "sha256": "490c6550e7c0141f41593e7ecfb2d71d57a4e4ad27f366cf63a58710949fd0e6",
+      "pixelsUnmodified": true
+    },
+    {
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-d82595ea-aab5-4f90-8507-eb79828d14c7.png",
+      "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\shop-art-concept-v2\\shop-product-modal-v2.png",
+      "prompt": "D:\\AI\\S4Game\\KingdomWatch\\docs\\shop-art-concept-v2\\shop-modal-prompt.txt",
+      "sha256": "d59096d7d38baf8729b834edd97a8a701ffd3874fda7f023edbd59b8e7526e29",
+      "pixelsUnmodified": true
+    }
+  ],
+  "integratedIntoRuntime": false,
+  "visualReview": "Both final generated PNGs inspected directly; five products, square rarity sockets with no corner labels, readable modal attributes and complete purchase area. Text remains conceptual artwork; native text will be used when implemented."
+}

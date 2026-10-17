@@ -1,0 +1,31 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-header-v3-20261016-230443",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-fill-v2-20261016-223850",
+  "entryVersion": "1792161784",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=chapter-route-header-v3-1792161784",
+  "scope": "remove fixed header terrain picture; retain one scrollable route map and use a plain paper header",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://43ff2245.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-chapter-route-header-v3-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-chapter-route-header-v3-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "mainSha256": "ed5ff20b55215951383f56c7d81d6d7791563805a8c399f430d09e69f3275758",
+  "creatorBuildMilliseconds": 17726,
+  "date": "2026-10-16T23:05:21.504487+08:00",
+  "testsRun": false,
+  "gameRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

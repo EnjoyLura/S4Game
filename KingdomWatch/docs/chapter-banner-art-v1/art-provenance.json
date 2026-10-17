@@ -1,0 +1,34 @@
+{
+  "tool": "built-in image_gen",
+  "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-8674bc34-9feb-43f0-b7b9-69edaa09878f.png",
+  "asset": "assets/resources/ux/campaign_chrome_v1/chapter_banner_v1.png",
+  "prompt": "banner-prompt.txt",
+  "reference": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-e239edc5-b7f6-4583-ba68-26880618a363.png",
+  "mode": "RGBA",
+  "sourceSize": [
+    2098,
+    749
+  ],
+  "spriteRect": [
+    16,
+    216,
+    2068,
+    298
+  ],
+  "alphaRange": [
+    0,
+    255
+  ],
+  "alphaBBoxAt4": [
+    19,
+    217,
+    2080,
+    512
+  ],
+  "sourceSha256": "553e1f538b15c9105f92d3a56c987dbf504f31bddde4f0673101abf4dbf57497",
+  "assetSha256": "553e1f538b15c9105f92d3a56c987dbf504f31bddde4f0673101abf4dbf57497",
+  "originalPixelsUnchanged": true,
+  "assetUuid": "0044baa2-086f-404e-8cf6-9b45a7410bd2",
+  "bytes": 780446,
+  "acceptance": "pending user manual review"
+}

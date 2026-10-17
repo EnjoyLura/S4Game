@@ -1,0 +1,202 @@
+{
+  "arrow": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Membrans - Cartoon Arrow Sound Pack 01/Cartoon Arrow 44.wav",
+    "original": "Membrans - Cartoon Arrow Sound Pack 01/Cartoon Arrow 44.wav",
+    "author": "Membrans",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 3284668772,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "9cc3cb9a2d177c9c83b42c94f682ad844f49b79bcbaba0c6cba3714b27dabaab"
+  },
+  "swish": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Hits Whoosh/Fast Action Swish_HW 05.wav",
+    "original": "Mechanical Wave - Hits Whoosh/Fast Action Swish_HW 05.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 2770120616,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "2ef515c463c04c2d518afb74d44336f51ed0912c46c9e00431a3ed13f927f87d"
+  },
+  "swing": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Hits Whoosh/Action Swish_HW 02.wav",
+    "original": "Mechanical Wave - Hits Whoosh/Action Swish_HW 02.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 1203586015,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "1eb3e50adffabcc46ca3ed30f520eb19b234f9808acf4e760ec9ea8391e9b609"
+  },
+  "hit1": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.1 Hit #2 96 HK1.wav",
+    "original": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.1 Hit #2 96 HK1.wav",
+    "author": "NoizBoy",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 1444404925,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "7a1edb60e69894a868be3ff2f7b729df0face74300cb71e8081cf864081369a8"
+  },
+  "hit2": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq1.15 Hit #3 96 HK1.wav",
+    "original": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq1.15 Hit #3 96 HK1.wav",
+    "author": "NoizBoy",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 3323540043,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "4dbf0c4376cf7a07ad9991cba5032ade8dcb5fe1010557c20014355d2149e942"
+  },
+  "hit3": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.27 Hit #2 96 HK1.wav",
+    "original": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq 2.27 Hit #2 96 HK1.wav",
+    "author": "NoizBoy",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 13056516,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "4d6c8d31bc4562ac310590661670b4f6f97dbdc8f6d0272822f548393a9d4181"
+  },
+  "ice": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mattia Cellotto - Crunch Mode/Ice,Impact,Throw,Snowball,Step,Snow,Stalactite,Various12.M.wav",
+    "original": "Mattia Cellotto - Crunch Mode/Ice,Impact,Throw,Snowball,Step,Snow,Stalactite,Various12.M.wav",
+    "author": "Mattia Cellotto",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 1682400442,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "5740efa408b0a3134f3b9cf16c4d08c6f7cb84b2ec26d5598489b53dcbd4b6ec"
+  },
+  "icecrack": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mattia Cellotto - Crunch Mode/Frozen,Celery,Crunch,Break,Ice,Sheet,Various01.wav",
+    "original": "Mattia Cellotto - Crunch Mode/Frozen,Celery,Crunch,Break,Ice,Sheet,Various01.wav",
+    "author": "Mattia Cellotto",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 1637929290,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "c2e7aae0f1ea0808033d4b2bb9af4b2f23afd0e77cf9f6afe522a3a688a21eca"
+  },
+  "iceblock": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Eiravaein Works - Vaeyan I/IceBlocks,impact,cracked,tinypieces,scatter,slide,concrete,chunky,ambiance.M.wav",
+    "original": "Eiravaein Works - Vaeyan I/IceBlocks,impact,cracked,tinypieces,scatter,slide,concrete,chunky,ambiance.M.wav",
+    "author": "Eiravaein Works",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 308892689,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "afda7f4bfd44dac48b8f4cdbc39e4f6966700ef32502dfedf5ab88fccc073db4"
+  },
+  "lighter": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Soundopolis - Foley Plus_Full/Lighter_Blue Flame_E_Light_Fienup_001.wav",
+    "original": "Soundopolis - Foley Plus_Full/Lighter_Blue Flame_E_Light_Fienup_001.wav",
+    "author": "Soundopolis",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 205615836,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "066282f97ab395db2b34a1098fd4cb5e7503d811c574bfbb321f2102a3c38cd8"
+  },
+  "huff": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Varazuvi - Hollywood Dragons/Dragon Short Huff.wav",
+    "original": "Varazuvi - Hollywood Dragons/Dragon Short Huff.wav",
+    "author": "Varazuvi",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 3852083500,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "e18e34e08d5806a82197f41d971c778c58e727c60047fd0dedf01565058337a6"
+  },
+  "electric": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Soundopolis - Sci-Fi Electric/Electrical_Current_MouthNoises_Fienup_001.wav",
+    "original": "Soundopolis - Sci-Fi Electric/Electrical_Current_MouthNoises_Fienup_001.wav",
+    "author": "Soundopolis",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 34736342,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "00015928834f739afa4178fe712a676945cbba580503b8a3f2a573a8376767dd"
+  },
+  "current": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Soundopolis - Sci-Fi Electric/Electrical_Current_Texture_Fienup_004.wav",
+    "original": "Soundopolis - Sci-Fi Electric/Electrical_Current_Texture_Fienup_004.wav",
+    "author": "Soundopolis",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 2033221392,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "7f2be886bf165b1faee9f18cb104e764d9168725772b31160eb96e07d25aaf93"
+  },
+  "thunder": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Soundopolis - Natures Fury_Thunder/Thunder_Crack_Fienup_016.wav",
+    "original": "Soundopolis - Natures Fury_Thunder/Thunder_Crack_Fienup_016.wav",
+    "author": "Soundopolis",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 3984182097,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "5e86c0071fc0556fc6e5da127c6dd403d6389372d1d35a46031cd89f159373c7"
+  },
+  "rock": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Rock Brick and Dirt/Hit Rock Debris_RBD 02.wav",
+    "original": "Mechanical Wave - Rock Brick and Dirt/Hit Rock Debris_RBD 02.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 675058260,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "b8fc22424f383573089facf17779315175b6b47c5d517be5865a183692aac5de"
+  },
+  "rockdrop": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Rock Brick and Dirt/Drop Rock On Rock Debris_RBD 03.wav",
+    "original": "Mechanical Wave - Rock Brick and Dirt/Drop Rock On Rock Debris_RBD 03.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 4200564539,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "d52813a926fb68e7dd9e6b5712c857c6369e2da079ea4b5f9ee49b7e2e282383"
+  },
+  "debris": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Rock Brick and Dirt/Debris Brick_RBD 02.wav",
+    "original": "Mechanical Wave - Rock Brick and Dirt/Debris Brick_RBD 02.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 2805017344,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "93c2e7a3b0993b859d50a7562e09d4fb4c90c448d0de78da324889b14684a7a1"
+  },
+  "wood": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Robert Cordova - Base/Wood Rattle 10.wav",
+    "original": "Robert Cordova - Base/Wood Rattle 10.wav",
+    "author": "Robert Cordova",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 1143119321,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "ec0c0b0c5c09ebb61035f10963a90e338e88454a39bc2f7c8384e316519ec68e"
+  },
+  "coins": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Varazuvi - California Foley/coins2.wav",
+    "original": "Varazuvi - California Foley/coins2.wav",
+    "author": "Varazuvi",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 3828595180,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "9e2fdc3ab9ec64f3303dae7e88ac44757bba25c5b58464eb97fb3cd43e2012a1"
+  },
+  "paper": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Robert Cordova - Base/Paper Rip 02.wav",
+    "original": "Robert Cordova - Base/Paper Rip 02.wav",
+    "author": "Robert Cordova",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 2401972637,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "3638057d3e05ced6d9e6508f673ae51c44ebebcda0baa0dce72d2cfac883e27c"
+  }
+}

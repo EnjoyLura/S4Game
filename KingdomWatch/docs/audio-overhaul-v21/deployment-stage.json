@@ -1,0 +1,11 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-overhaul-v21-20261017-150108",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-rewards-feather-v20-20261017-143456",
+  "entryVersion": "1792220287",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=audio-overhaul-v21-1792220287",
+  "preview": "https://kingdom-watch.pages.dev/previews/audio-overhaul-v21/?v=1792220287",
+  "scope": "83 edited licensed audio samples: five-hero combat, distinct card picker, reward/purchase/recruit, victory/defeat and growth; synchronized semantic cues, voice priorities, dynamic mix and manual old/new listening page",
+  "manualAcceptance": "pending user manual review"
+}

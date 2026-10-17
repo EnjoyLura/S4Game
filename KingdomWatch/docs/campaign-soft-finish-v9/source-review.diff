@@ -1,0 +1,303 @@
+--- before/assets/scripts/ui/CampaignChrome.ts
++++ assets/scripts/ui/CampaignChrome.ts
+@@ -5,6 +5,7 @@
+ import { artSprite } from './Ux';
+ 
+ type Point = readonly [number, number];
++export const CAMPAIGN_TEXT = { ink:'#192C37', body:'#2D302F', secondary:'#555248', heading:'#4A3E2B' } as const;
+ function face(g: Graphics, points: readonly Point[], fill: string, edge?: string, width = 2): void {
+   g.fillColor = C(fill); g.moveTo(points[0][0], points[0][1]);
+   points.slice(1).forEach(p => g.lineTo(p[0], p[1])); g.close(); g.fill();
+@@ -17,6 +18,18 @@
+ function line(g: Graphics, points: readonly Point[], color: string, width = 2): void {
+   g.strokeColor = C(color); g.lineWidth = width; g.moveTo(points[0][0], points[0][1]);
+   points.slice(1).forEach(p => g.lineTo(p[0], p[1])); g.stroke();
++}
++
++/** Small color steps follow the cut silhouette, keeping light continuous across the button face. */
++function smoothCutFace(g: Graphics, w: number, h: number, corner: number, top: string, bottom: string): void {
++  const light = C(top), dark = C(bottom), steps = Math.ceil(h*1.5), stepH = h/steps;
++  const edgeX = (y: number): number => w/2-Math.max(0,Math.abs(y)-(h/2-corner));
++  for (let i = 0; i < steps; i++) {
++    const y1 = h/2-i*stepH, y0 = h/2-(i+1)*stepH;
++    g.fillColor = Color.lerp(new Color(),light,dark,i/(steps-1));
++    g.moveTo(-edgeX(y0),y0); g.lineTo(edgeX(y0),y0); g.lineTo(edgeX(y1),y1); g.lineTo(-edgeX(y1),y1);
++    g.close(); g.fill();
++  }
+ }
+ 
+ /** The short forest extension belongs to the scrolling terrain, behind the floating controls. */
+@@ -76,29 +89,24 @@
+ export function paintCampaignMapAction(node: Node, w: number, h: number, tone: 'gold' | 'navy', enabled = true): void {
+   const g = node.getComponent(Graphics)!; g.clear();
+   const gold = tone === 'gold' && enabled;
+-  const outer = enabled ? '#B88632' : '#6D7B78', edge = enabled ? '#FFE5A0' : '#C9D1C4';
++  const outer = enabled ? '#A78139' : '#6D7B78', edge = enabled ? '#E9C987' : '#C9D1C4';
+   const points = cut(w,h,13);
+   g.fillColor = CA('#101F28',.35); g.moveTo(points[0][0],points[0][1]-4);
+   points.slice(1).forEach(([x,y]) => g.lineTo(x,y-4)); g.close(); g.fill();
+   face(g,points,outer,'#172630',2.4);
+-  face(g,cut(w-5,h-5,11),gold ? '#F5BB37' : enabled ? '#183346' : '#97A398',edge,1.3);
+-  face(g,cut(w-12,h-12,8),gold ? '#FFC941' : enabled ? '#1D3B4E' : '#AAB4A4');
+-  face(g,[[-w/2+7,2],[w/2-7,2],[w/2-7,h/2-14],[w/2-14,h/2-7],[-w/2+14,h/2-7],[-w/2+7,h/2-14]],
+-    gold ? '#FFDA6B' : enabled ? '#294B5F' : '#C7CDBF');
+-  face(g,[[-w/2+7,-h/2+14],[-w/2+14,-h/2+7],[w/2-14,-h/2+7],[w/2-7,-h/2+14],[w/2-7,-h/2+20],[-w/2+7,-h/2+20]],
+-    gold ? '#E8A526' : enabled ? '#142B3C' : '#8C9A90');
+-  line(g,[[-w/2+8,h/2-15],[-w/2+15,h/2-8],[w/2-15,h/2-8],[w/2-8,h/2-15]],gold ? '#FFF3B1' : '#7A9DAA',1.5);
+-}
+-
+-/** The drawer uses one near-white paper surface with a fine warm rim. */
++  face(g,cut(w-5,h-5,11),gold ? '#EDB53D' : enabled ? '#193548' : '#97A398',edge,1.1);
++  smoothCutFace(g,w-11,h-11,8,gold ? '#FFDB6A' : enabled ? '#2D4C5E' : '#B9C2B0',
++    gold ? '#F4BC3C' : enabled ? '#203B4E' : '#9CA99D');
++  // A narrow bevel carries the depth; broad rectangular light/dark strips are gone.
++  line(g,[[-w/2+8,h/2-15],[-w/2+15,h/2-7],[w/2-15,h/2-7],[w/2-8,h/2-15]],gold ? '#FFF0AA' : '#708E9B',1.1);
++  line(g,[[-w/2+15,-h/2+5],[w/2-15,-h/2+5]],gold ? '#CC9A31' : '#172E3E',1);
++}
++
++/** Near-white paper with a neutral edge, without the former double yellow rim. */
+ export function campaignPreparationPanel(parent: Node, x: number, y: number, w: number, h: number): Node {
+   const node = N('campaignPreparationDrawer',parent,x,y,w,h), g = node.addComponent(Graphics);
+-  g.fillColor = C('#FFF8E7'); g.strokeColor = C('#D2B981'); g.lineWidth = 1.7;
++  g.fillColor = C('#FFF8E7'); g.strokeColor = C('#EAE5D8'); g.lineWidth = .7;
+   g.roundRect(-w/2,-h/2,w,h,24); g.fill(); g.stroke();
+-  g.strokeColor = C('#F0D9AC'); g.lineWidth = 1.5;
+-  g.roundRect(-w/2+5,-h/2+5,w-10,h-10,20); g.stroke();
+-  g.strokeColor = CA('#FFFFFF',.92); g.lineWidth = 2;
+-  g.moveTo(-w/2+24,h/2-7); g.lineTo(w/2-24,h/2-7); g.stroke();
+   return node;
+ }
+ 
+@@ -124,8 +132,9 @@
+ export function campaignEquipmentHeading(parent: Node, y: number): void {
+   const g = N('campaignEquipmentDivider',parent,0,y).addComponent(Graphics);
+   for (const side of [-1,1]) {
+-    line(g,[[side*111,0],[side*156,0]],'#CDB98E',1);
+-    face(g,[[side*105,0],[side*100,4],[side*95,0],[side*100,-4]],'#8B7958');
++    line(g,[[side*95,0],[side*136,0]],'#B7A581',1);
++    line(g,[[side*136,0],[side*154,0]],'#D9CEB5',.8);
++    face(g,[[side*88,0],[side*84,3.5],[side*80,0],[side*84,-3.5]],'#978561');
+   }
+ }
+ 
+--- before/assets/scripts/ui/CampaignCheckpointArt.ts
++++ assets/scripts/ui/CampaignCheckpointArt.ts
+@@ -52,7 +52,7 @@
+ function outpost(g: Graphics, active: boolean, open: boolean): void {
+   pedestal(g, active, open);
+   shape(g, [[-6,-24],[7,-24],[7,46],[-6,46]], '#48515A', '#24323B');
+-  const rim = active ? '#F8D470' : open ? '#91BDDA' : '#89979E';
++  const rim = active ? '#DDBF73' : open ? '#5D8BA6' : '#748892';
+   const edge = active ? '#7C5521' : '#1C2A34';
+   const contour: Point[] = [[-32,55],[32,55],[32,0],[0,-24],[-32,0]];
+   shape(g, contour.map(([x,y]) => [x+1,y-3] as Point), '#26343F', '#17232B', 2);
+@@ -62,15 +62,15 @@
+   shape(g, [[-25,48],[25,48],[25,3],[0,-16],[-25,3]], active ? '#EFB83B' : open ? '#1F70B4' : '#4C5D68');
+   const light = C(active ? '#FFDD6B' : open ? '#369BDA' : '#71838C');
+   const dark = C(active ? '#E6AB31' : open ? '#18548F' : '#43525E');
+-  for (let i = 0; i < 12; i++) {
+-    g.fillColor = Color.lerp(new Color(),light,dark,i/11);
+-    g.rect(-25,3+(11-i)*3.75,50,3.9); g.fill();
++  for (let i = 0; i < 48; i++) {
++    g.fillColor = Color.lerp(new Color(),light,dark,i/47);
++    g.rect(-25,3+(47-i)*.9375,50,.95); g.fill();
+   }
+-  shape(g, [[-30,53],[30,53],[24,47],[-24,47]], active ? '#FFF1AA' : open ? '#81C5E9' : '#A3AFB1');
++  shape(g, [[-30,53],[30,53],[24,47],[-24,47]], active ? '#EBC66E' : open ? '#5B99C0' : '#819198');
+   shape(g, [[25,48],[31,54],[31,0],[0,-23],[0,-16],[25,3]],
+-    active ? '#E8B840' : open ? '#3F8CC0' : '#6B7B83');
+-  stroke(g, [[-25,48],[25,48],[25,3],[0,-16],[-25,3],[-25,48]],rim,1.5);
+-  stroke(g, [[-29,52],[29,52]],active ? '#FFF7D0' : '#D4E7E8',1.2);
++    active ? '#DDB03D' : open ? '#2C6E9E' : '#5B6D78');
++  stroke(g, [[-25,48],[25,48],[25,3],[0,-16],[-25,3],[-25,48]],rim,1);
++  stroke(g, [[-27,51],[-11,51]],active ? '#F5DE9D' : '#A9BDC7',.8);
+   rivet(g,-22,42,active ? '#FFE89B' : '#CEDCE2');
+   rivet(g,22,42,active ? '#FFE89B' : '#CEDCE2');
+   stroke(g, [[-23,12],[-21,16]], active ? '#FDE094' : open ? '#79AFD0' : '#839198',.8);
+@@ -84,10 +84,10 @@
+   stroke(g,[[-3,-20],[-1,2]],open ? '#B18A50' : '#879075',1.3);
+   const board: Point[] = [[-42,49],[29,52],[47,36],[40,25],[47,9],[31,-3],[-42,-1],[-37,23]];
+   shape(g,board.map(([x,y]) => [x+1,y-4] as Point),shade,ink,2.3);
+-  shape(g,board,wood,active ? '#F2CC67' : ink,active ? 3 : 2.3);
++  shape(g,board,wood,active ? '#D6B86C' : ink,active ? 2 : 2.3);
+   shape(g,[[-39,27],[39,29],[44,36],[28,48],[-39,45]],open ? '#BE8A50' : '#84816B');
+   shape(g,[[-39,14],[38,16],[44,9],[30,1],[-39,2]],shade);
+-  stroke(g,[[-37,45],[26,48],[39,37]],light,2);
++  stroke(g,[[-37,45],[26,48],[39,37]],light,1.3);
+   stroke(g,[[-37,23],[-20,22],[14,25],[40,25]],ink,1.7);
+   stroke(g,[[-36,20],[-16,19],[18,22]],light,1);
+   for (const points of [ [[-32,35],[-25,34],[-18,36]], [[21,10],[29,12],[36,11]],
+@@ -106,19 +106,19 @@
+ }
+ 
+ function lair(g: Graphics, active: boolean, open: boolean): void {
+-  const rim = active ? '#F6D575' : open ? '#AB8B61' : '#8D9A92';
++  const rim = active ? '#D5BB75' : open ? '#9D8564' : '#809088';
+   const bone = open ? '#E7D9B9' : '#B0B5A4', dark = '#242D2D';
+   pedestal(g, active, open);
+   shape(g,[[-8,-28],[8,-28],[7,47],[0,60],[-7,47]],'#4C5046',dark,2);
+   const plate: Point[] = [[-30,49],[-8,55],[0,49],[8,55],[30,49],[37,32],[30,-4],[0,-18],[-30,-4],[-37,32]];
+   shape(g,plate.map(([x,y]) => [x,y-3] as Point),'#1C2426',dark,2.5);
+-  shape(g,plate,open ? '#3D4442' : '#52605A',rim,active ? 3 : 2.2);
++  shape(g,plate,open ? '#3D4442' : '#52605A',rim,active ? 2 : 1.6);
+   shape(g,[[-24,43],[-9,48],[0,43],[9,48],[24,43],[29,30],[23,0],[0,-11],[-23,0],[-29,30]],
+     open ? '#252F31' : '#404E4B','#747D6A',1.2);
+   shape(g,[[-24,43],[-9,48],[0,43],[9,48],[24,43],[20,37],[-20,37]],open ? '#61685A' : '#79877A');
+   shape(g,[[-36,49],[-46,56],[-45,32],[-41,12],[-29,-7],[-34,17],[-31,33]],bone,dark,2.2);
+   shape(g,[[36,49],[46,56],[45,32],[41,12],[29,-7],[34,17],[31,33]],bone,dark,2.2);
+-  stroke(g,[[-42,47],[-41,29],[-36,15]],open ? '#FFF2D7' : '#D1D3BD',1.4);
++  stroke(g,[[-42,47],[-41,29],[-36,15]],open ? '#D2C5A8' : '#B5BDAA',1);
+   stroke(g,[[41,45],[40,29],[36,15]],open ? '#AB9673' : '#7D8C7B',1.6);
+   stroke(g,[[-22,43],[-9,47]],rim,1.4); stroke(g,[[22,43],[9,47]],rim,1.4);
+   rivet(g,-22,35,rim); rivet(g,22,35,rim);
+--- before/assets/scripts/ui/pages/LevelsPage.ts
++++ assets/scripts/ui/pages/LevelsPage.ts
+@@ -1,5 +1,5 @@
+ /** Scrollable chapter terrain with live checkpoints and a local preparation drawer. */
+-import { BlockInputEvents, Graphics, Mask, Node, ScrollView, Sprite, UITransform, UIOpacity, Vec2, director } from 'cc';
++import { BlockInputEvents, Graphics, Label, Mask, Node, ScrollView, Sprite, UITransform, UIOpacity, Vec2, director } from 'cc';
+ import { LO } from '../../config/GameConfig';
+ import { CAMPAIGN_CHAPTERS, CAMPAIGN_STAGES, campaignDifficultyOpen, campaignLevelOpen } from '../../config/Campaign';
+ import { C, CA, N, WY } from '../UIKit';
+@@ -19,7 +19,7 @@
+ import { deferUIWarmup } from '../IdleWarmup';
+ import { showRewardPopup } from '../RewardPopup';
+ import { CampaignRouteMotion, ROUTE_ART, ROUTE_H, ROUTE_W, routePoint, routeStop } from '../CampaignRoute';
+-import { campaignChapterArrow, campaignChapterBanner, campaignChestBackdrop, campaignDifficultyFace, campaignEquipmentHeading,
++import { CAMPAIGN_TEXT, campaignChapterArrow, campaignChapterBanner, campaignChestBackdrop, campaignDifficultyFace, campaignEquipmentHeading,
+   campaignPreparationArt, campaignPreparationPanel, campaignTerrainCrown, paintCampaignMapAction } from '../CampaignChrome';
+ 
+ const LEVELS = CAMPAIGN_STAGES;
+@@ -236,20 +236,20 @@
+       const key = starKey(lv.id, st.d), stars = sv.stars[key] || 0, claimed = sv.chestClaimed[key] || 0;
+       const y = (top: number): number => sheetH / 2 - top;
+       comicSurface(panel, 0, y(17), 56, 5, 'paper', { fill: '#A38C63', radius: 2 });
+-      mainLabel(panel, -29, y(53), lv.id + ' ' + lv.name, { size: 34, font: 'body', bold: true, color: '#182C37', w: 612, h: 48, align: 'left' });
++      mainLabel(panel, -29, y(53), lv.id + ' ' + lv.name, { size: 34, font: 'body', bold: true, color: CAMPAIGN_TEXT.ink, w: 612, h: 48, align: 'left' });
+       mainLabel(panel, -12, y(94), challenge.waves.length + ' 波 · ' + DIFFICULTIES[st.d].formation,
+-        { size: 19, color: COMIC.sub, w: 644, h: 30, align: 'left' });
++        { size: 19, font: 'body', color: CAMPAIGN_TEXT.body, w: 644, h: 30, align: 'left' });
+       const close = N('campaignDrawerClose', panel, 324, y(48), 58, 58);
+-      comicMark(close, 0, 0, 'close', 28, COMIC.sub); bindButton(close, closeDrawer, { sound: false });
++      comicMark(close, 0, 0, 'close', 28, CAMPAIGN_TEXT.secondary); bindButton(close, closeDrawer, { sound: false });
+       // Intrinsic component sizes. Only the one-and-a-half-row equipment viewport scrolls.
+       const compact = sheetH < 900;
+       const layout = compact
+         ? { bodyTop: 104, tabs: 24, tabH: 48, stars: 70, chest: 162, chestLabel: 60, chestArt: 10,
+           chestW: 112, chestH: 80, amount: -48, claim: -85, claimH: 38, drops: 300, materials: 346,
+-          equipment: 402, row: 430, rowStep: 72, icon: 60, chance: 568 }
++          equipment: 408, row: 430, rowStep: 72, icon: 60, chance: 568 }
+         : { bodyTop: 112, tabs: 29, tabH: 54, stars: 90, chest: 210, chestLabel: 74, chestArt: 4,
+           chestW: 134, chestH: 106, amount: -64, claim: -104, claimH: 44, drops: 377, materials: 432,
+-          equipment: 491, row: 519, rowStep: 94, icon: 82, chance: 690 };
++          equipment: 498, row: 519, rowStep: 94, icon: 82, chance: 690 };
+       const body = N('campaignPreparationContent', panel, 0, y(layout.bodyTop));
+       const by = (top: number): number => -top;
+       DIFFS.forEach((name, d) => {
+@@ -257,35 +257,35 @@
+         const slot = N('campaignDifficulty:' + d, body, (d-1)*226, by(layout.tabs), 218, layout.tabH);
+         campaignDifficultyFace(slot, 218, layout.tabH, active, unlocked, d);
+         mainLabel(slot, 18, 0, name, { size: 25, font: 'body', bold: true,
+-          color: active ? COMIC.text : COMIC.sub, w: 140, h: 38 });
++          color: active ? CAMPAIGN_TEXT.ink : CAMPAIGN_TEXT.secondary, w: 140, h: 38 });
+         bindButton(slot, () => {
+           if (!unlocked) { toast(d ? '通关上一难度解锁' : '通关前置关卡后解锁'); return; }
+           if (st.d !== d) { st.d = d; renderSheet(); }
+         }, { sound: 'select', dragThreshold: 7 });
+       });
+ 
+-      mainLabel(body, -194, by(layout.stars), '星级宝箱', { size: 27, font: 'body', bold: true, color: '#182C37', w: 286, h: compact ? 32 : 38, align: 'left' });
+-      mainLabel(body, 199, by(layout.stars), stars + '/3', { size: 23, bold: true, color: COMIC.text, w: 210, h: 34, align: 'right' });
++      mainLabel(body, -194, by(layout.stars), '星级宝箱', { size: 27, font: 'body', bold: true, color: CAMPAIGN_TEXT.ink, w: 286, h: compact ? 32 : 38, align: 'left' });
++      mainLabel(body, 199, by(layout.stars), stars + '/3', { size: 23, bold: true, color: CAMPAIGN_TEXT.ink, w: 210, h: 34, align: 'right' });
+       star(body, 321, by(layout.stars), 28, true);
+       campaignChestBackdrop(body,by(layout.chest+27),compact);
+       const rewards = starChestRewards(lv.id, st.d);
+       for (let t = 0; t < 3; t++) {
+         const tier = t + 1, done = claimed >= tier, canClaim = stars >= tier && !done;
+         const spot = N('campaignStarChest:' + tier, body, (t - 1) * 226, by(layout.chest), 218, 216);
+-        mainLabel(spot, 0, layout.chestLabel, CHEST_COND[t], { size: 19, color: COMIC.sub, w: 214, h: compact ? 26 : 30 });
++        mainLabel(spot, 0, layout.chestLabel, CHEST_COND[t], { size: 19, font: 'body', color: CAMPAIGN_TEXT.body, w: 214, h: compact ? 26 : 30 });
+         const chest = campaignPreparationArt(spot, 0, layout.chestArt, layout.chestW, layout.chestH,
+           ['chest_bronze_v2','chest_sapphire_v2','chest_crimson_v2'][t]);
+         if (!done && !canClaim) chest.addComponent(UIOpacity).opacity = 205;
+         if (done) { chest.addComponent(UIOpacity).opacity = 215; comicMark(spot, 52, layout.chestArt-28, 'check', 23, COMIC.greenShade); }
+         const reward = rewards[t];
+         comicArt(spot, -38, layout.amount, 28, 28, reward.gold ? 'comic_coin_v1' : 'comic_diamond_v1');
+-        mainLabel(spot, 16, layout.amount, String(reward.gold || reward.diamonds), { size: compact ? 22 : 25, bold: true, color: COMIC.text, w: 88, h: compact ? 28 : 32 });
++        mainLabel(spot, 16, layout.amount, String(reward.gold || reward.diamonds), { size: compact ? 22 : 25, bold: true, color: CAMPAIGN_TEXT.ink, w: 88, h: compact ? 28 : 32 });
+         const claim = comicSurface(spot,0,layout.claim,188,layout.claimH,canClaim ? 'gold' : 'paper',
+           {name:'campaignClaimAll:'+tier,radius:6,fill:done ? '#EAE8D3' : canClaim ? COMIC.gold : '#FFF8E7'});
+         if (canClaim) campaignPreparationArt(claim,0,0,188,layout.claimH,'claim_button_v2',true,true);
+         if (done) comicMark(claim,-60,0,'check',18,COMIC.greenShade);
+         mainLabel(claim, done ? 10 : 0, 0, done ? '已领取' : canClaim ? '一键领取' : '未达成',
+-          { size:compact ? 20 : 22,font:'body',bold:canClaim || done,color:done ? COMIC.greenShade : canClaim ? '#1D2B32' : COMIC.sub,w:166,h:32 });
++          { size:compact ? 20 : 22,font:'body',bold:canClaim || done,color:done ? COMIC.greenShade : canClaim ? CAMPAIGN_TEXT.ink : CAMPAIGN_TEXT.secondary,w:166,h:32 });
+         if (canClaim) bindButton(claim, () => {
+           if (claiming) return;
+           claiming = true;
+@@ -298,15 +298,16 @@
+           ], () => { claiming = false; });
+         }, { dragThreshold: 7 });
+       }
+-      mainLabel(body, -194, by(layout.drops), '关卡掉落', { size: 27, font: 'body', bold: true, color: '#182C37', w: 286, h: 38, align: 'left' });
++      mainLabel(body, -194, by(layout.drops), '关卡掉落', { size: 27, font: 'body', bold: true, color: CAMPAIGN_TEXT.ink, w: 286, h: 38, align: 'left' });
+       const details = N('campaignDropDetails', body, 283, by(layout.drops), 106, 44);
+-      mainLabel(details, 0, 0, '详情 ›', { size: 20, color: COMIC.sub, w: 100, h: 34 });
++      mainLabel(details, 0, 0, '详情 ›', { size: 20, font: 'body', color: CAMPAIGN_TEXT.body, w: 100, h: 34 });
+       bindButton(details, () => showStageLootDetails(modalParent, challenge), { dragThreshold: 7 });
+       stageGuaranteedRewards(body, 0, by(layout.materials), 664, challenge,
+         id => showDropItemDetails(modalParent, challenge, id), compact ? 64 : 80, true);
+       campaignEquipmentHeading(body,by(layout.equipment));
+-      mainLabel(body, 0, by(layout.equipment), '概率掉落装备',
+-        { size:19,font:'body',bold:true,color:'#756443',w:184,h:28 });
++      const equipmentTitle = mainLabel(body, 0, by(layout.equipment), '概率掉落装备',
++        { size:20,font:'body',bold:true,color:CAMPAIGN_TEXT.heading,w:170,h:30 });
++      equipmentTitle.getComponent(Label)!.spacingX = 1.4;
+       const equipmentH = layout.icon*1.5+(layout.rowStep-layout.icon)+12;
+       const equipmentView = N('campaignEquipmentScrollView',body,0,by(layout.row+equipmentH/2),664,equipmentH);
+       equipmentView.addComponent(Mask);
+@@ -327,9 +328,9 @@
+       if (challenge.gearPool.length) {
+         const pct = (n: number): string => (n * 100).toFixed(2) + '%';
+         mainLabel(body, 0, by(layout.chance), '普通怪 ' + pct(equipmentDropChance(st.d)) + ' · 精英怪 ' + pct(equipmentDropChance(st.d, { elite: true })),
+-          { size: 17, color: COMIC.sub, w: 660, h: 28 });
++          { size: 17, font: 'body', color: CAMPAIGN_TEXT.body, w: 660, h: 28 });
+       } else mainLabel(equipment,0,-equipmentH/2,'普通难度不掉落装备\n挑战精英 / 地狱解锁装备掉落',
+-        { size: 19, color: COMIC.sub, w: 660, h: 68, lineHeight: 32 });
++        { size: 19, font: 'body', color: CAMPAIGN_TEXT.secondary, w: 660, h: 68, lineHeight: 32 });
+       const battle = comicButtonControl(panel, 0, y(sheetH - 51), 664, 78, '', () => {
+         if (!open || closing || enteringBattle()) return;
+         if (!campaignDifficultyOpen(lv.id, challenge.difficulty, loadSave().stars)) { toast('请先通关前置关卡或难度'); return; }
+@@ -347,7 +348,7 @@
+       if (open) levelArt(battleFace,-124,0,55,55,'comic_swords_v1');
+       else comicMark(battleFace,-139,0,'lock',28,COMIC.sub);
+       mainLabel(battleFace,30,0,open ? '开始战斗' : '通关前置关卡解锁',
+-        { size: open ? 36 : 26, font: 'body', bold: true, color: COMIC.text, w: 414, h: 50 });
++        { size: open ? 36 : 26, font: 'body', bold: true, color: CAMPAIGN_TEXT.ink, w: 414, h: 50 });
+     });
+   }
+   function renderWorld(): void {
+--- before/assets/scripts/ui/LevelLootPreview.ts
++++ assets/scripts/ui/LevelLootPreview.ts
+@@ -10,7 +10,7 @@
+ import { bindButton } from './ButtonFeedback';
+ import { gearPlate, gearQuality, gearQualityHalo } from './GearQuality';
+ import { dismissUI } from './UIMotion';
+-import { paintCampaignRewardCard } from './CampaignChrome';
++import { CAMPAIGN_TEXT, paintCampaignRewardCard } from './CampaignChrome';
+ 
+ const pct = (value: number): string => (value * 100).toFixed(2) + '%';
+ /** Keep expanded loot catalogs inside the existing dialog, including smaller viewports. */
+@@ -45,9 +45,9 @@
+       gearArt(card,iconX,0,campaign ? iconSize*.85 : 39,campaign ? iconSize*.85 : 39,row.id);
+     }
+     label(card,textX,15,row.id === 'coin' ? '基础金币' : itemName(row.id),
+-      {size:campaign ? 18 : 16,color:COMIC.sub,w:textW,h:campaign ? 25 : 23,shrink:true});
++      {size:campaign ? 18 : 16,color:campaign ? CAMPAIGN_TEXT.body : COMIC.sub,w:textW,h:campaign ? 25 : 23,shrink:true});
+     label(card,textX,-14,row.id === 'coin' ? row.n.toLocaleString()+'+' : '×'+row.n.toLocaleString(),
+-      {size:campaign ? 24 : 22,color:campaign ? '#192F3B' : COMIC.text,bold:true,w:textW,h:30,shrink:true});
++      {size:campaign ? 24 : 22,color:campaign ? CAMPAIGN_TEXT.ink : COMIC.text,bold:true,w:textW,h:30,shrink:true});
+     bindButton(card, () => onSelect(row.id), { dragThreshold: 7, sound: false });
+   });
+ }

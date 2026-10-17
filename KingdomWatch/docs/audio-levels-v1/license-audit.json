@@ -1,0 +1,1319 @@
+{
+  "checkedOn": "2026-10-16",
+  "basis": "Author publication pages and official CC deeds inspected; not independent title verification",
+  "sources": [
+    {
+      "source": "battle.mp3",
+      "author": "cynicmusic / pixelsphere.org",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/battle-theme-a",
+      "sha256": "6042399782e581d753d616bc703e66483d5eccb5fb687a20c9a552d68c49e620"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "b61131bbed47caec321f5b3ee43ebe47d91c9f5d18084348ce2af73544ca4ecc"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "04226646faf6c81fb56bed3b86e12e6ad7bd28ab763b3a9dac6a10a0382593ab"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage01.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "7fa1b626d12bac9c83c2347f115e6b27fa49b4797aef81ac0c77300e32de6122"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage02.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "582dbad281d44c102eaf0f790f65707e9b83d90d9429d38df757bcba85ca4298"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage03.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "29a459232ba678b391c5c4b7b14c0ffa60c165cfd63172470a14de5efe81f224"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage03b.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "6857dfc6cdd3efee4aa164f8b8402d9e7d7bc2289daf98bd9defc0e823474c64"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupIceDamage03c.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "3da7975476a6dc1e53a6230f03b37902497b9b89ee1685fedf802697ff0da036"
+    },
+    {
+      "source": "kenney-jingles/Audio/Pizzicato jingles/jingles_PIZZI00.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/music-jingles",
+      "sha256": "b442ade3308a2bbda4b8c572c86f9f1071c7bdbcfb1e6f915d35c605b61bd475"
+    },
+    {
+      "source": "kenney-jingles/Audio/Pizzicato jingles/jingles_PIZZI01.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/music-jingles",
+      "sha256": "3f8f2534a297d19386c233a7ee4fa8737cc40870dd206010263760e1983dde46"
+    },
+    {
+      "source": "kenney-jingles/Audio/Pizzicato jingles/jingles_PIZZI10.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/music-jingles",
+      "sha256": "baf50beffc4cc2dbb92c9d596a22732a8b5249c7648b681c0df6d0af6c561478"
+    },
+    {
+      "source": "kenney-jingles/Audio/Pizzicato jingles/jingles_PIZZI15.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/music-jingles",
+      "sha256": "ae6c65768979a16ec802e8fb911c362a6b1423e92302d59d35dab10407324bc3"
+    },
+    {
+      "source": "kenney-rpg/Audio/chop.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "d00c2b3c9fff07e376145c8c8c45c90e5084ec192f6ce0387db233f7b86f1486"
+    },
+    {
+      "source": "kenney-rpg/Audio/dropLeather.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "097e1d3b74949b0145fda0519d40b7e0773ab82ec4858727f95be830927e1a45"
+    },
+    {
+      "source": "kenney-rpg/Audio/metalLatch.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "ba9ba60b172b3ebc131a940f25793cd2e207aca7af73dc80d637277f060f1708"
+    },
+    {
+      "source": "kenney-rpg/Audio/metalPot1.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "159def979e8e386c2c539f5e99cc30a080eb2dcb6c911fa2e4ccc0785b2522fd"
+    },
+    {
+      "source": "kenney-rpg/Audio/metalPot2.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "8e1f820d217d380fde10e969d109db34303e3f4d11c3951926eddef813d04ae2"
+    },
+    {
+      "source": "kenney-ui/Audio/click_003.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "2fa929138bc3a0f432696588f66eac94b8f6d463905ec8808c6461ce4b054292"
+    },
+    {
+      "source": "kenney-ui/Audio/click_004.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "09e2c1b643b71b9aff9932b4e02d78db116446b9a14b00a5b2a9b28d2668fd8e"
+    },
+    {
+      "source": "kenney-ui/Audio/confirmation_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a"
+    },
+    {
+      "source": "kenney-ui/Audio/confirmation_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "33b17a9a9a2397c62b285c52c33a907fdffb476909c99e42dde603f6a7a8b12c"
+    },
+    {
+      "source": "kenney-ui/Audio/glass_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "183eebee20eb0a532b0b85104d139cbf2673eb66d95c3cc733ac9ea98362e7e8"
+    },
+    {
+      "source": "kenney-ui/Audio/glass_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "08e972c73e53c91d6d310e107e80db60edce78ae47225889a028e628a6f3da49"
+    },
+    {
+      "source": "kenney-ui/Audio/glass_003.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "9a6f16e3c2eff6fe5d017a4755a28306b14555728831cd00d70308e8f9689566"
+    },
+    {
+      "source": "kenney-ui/Audio/glass_006.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "840500be48078f1210f1fd7a9ac4e5665ed9b6f4a2b8dce91a237152a65e94cc"
+    },
+    {
+      "source": "medieval/Crossbow Bolt Pass.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "ac98202fddf710e0a503e8a86aca358845d4d51eb20d832bff3144655ffc8bb9"
+    },
+    {
+      "source": "medieval/Crossbow Bolt Passby.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "6cd8078bc3b003e0a2180f68268a178a5b114586c17fe30c309f9012bfc36381"
+    },
+    {
+      "source": "medieval/Crossbow Shoot.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "d8c68f970540d73ab6fe2db5309166e6dd911876501a16bb4df43498247e19b2"
+    },
+    {
+      "source": "medieval/English Longbow Shoot.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "c25684ccdab3eb13f17a0ffa637fbd175659d092665f16c0bce8510d46c4fbee"
+    },
+    {
+      "source": "medieval/Scythian Recurve Arrow Pass.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "386ef860049508743bbae3d85674733564a1a3c055a84530c55d3f529819bef3"
+    },
+    {
+      "source": "rubberduck-rpg/blade_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "caf7a7cb9b25cda4bd487c1d12d18b74a34bb18c816fd67277cf3c8d7ef32a3a"
+    },
+    {
+      "source": "rubberduck-rpg/blade_02.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "c770afec8f62f14d3d082d5437c5cec28e2751d393df645ddd938eabc2588abd"
+    },
+    {
+      "source": "rubberduck-rpg/blade_03.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "2cd9e6926f4602a4350e703eeae4df520053e290f358ab692632d651ad368a7c"
+    },
+    {
+      "source": "rubberduck-rpg/creature_die_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "b34a816a401c5d80c77a61dabbedef7d1918a01320bbb67286c70f22db4acd43"
+    },
+    {
+      "source": "rubberduck-rpg/spell_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "09821a53c418c5eeeac4fa25bada9d245e822fed302eeeae9ae4151522a45ae5"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "02fa3a2c6e79e868e546802f45127c5cdda69aba6d5a24ac997ea66f81a816cb"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_02.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "bf1eef4993f0adb4bd3a1c1ec91f8f6e4ddeb32d922671a14561846d5b7cab98"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_03.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "2e4edee4ff8d7898198f1ab5213e086965e14a665cb947d53759505e28ddd3e4"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_04.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "64d653cd0cc6eb71bb45a1dfbba29eaa769ed5b663cce275082d6971e4f2ca8e"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_05.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "18025b21a4ecb3b41acc0dccb0697a8930262109ea198ff8c5ef0853d3ed1cfa"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_07.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "bb13cef9c0b0b4ec7f9335c356b14814c88418abd85dd3747cb62469e9ada93f"
+    },
+    {
+      "source": "rubberduck-rpg/stones_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "d11ce95031c2c36ae2a00979620fa95a7a3f5c6d6f2ac86962ed292aa556be8d"
+    },
+    {
+      "source": "rubberduck-rpg/stones_02.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "57dc6b85ee986e68ddc4b7fb2b41cc1c885151677d32439fdb299492a3103a65"
+    },
+    {
+      "source": "rubberduck-rpg/stones_03.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "b86d143d7ef4974c2b97fda9e5d1861482646eec754e15935eeb3680ea0d71da"
+    },
+    {
+      "source": "rubberduck-rpg/stones_04.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "66f1cef820f66d86414d481b37a48a7b7ea11f4a5d7358372ebcfb506af0e652"
+    },
+    {
+      "source": "town.mp3",
+      "author": "cynicmusic / pixelsphere.org",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/town-theme-rpg",
+      "sha256": "2657861d5107d4a3c01ef81cb6a4d61ddd5e7a054b6da57e658373d79d0c3466"
+    },
+    {
+      "source": "medieval/English Longbow Shoot.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "c25684ccdab3eb13f17a0ffa637fbd175659d092665f16c0bce8510d46c4fbee"
+    },
+    {
+      "source": "medieval/Scythian Recurve Arrow Pass.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "386ef860049508743bbae3d85674733564a1a3c055a84530c55d3f529819bef3"
+    },
+    {
+      "source": "medieval/Crossbow Shoot.wav",
+      "author": "Ben Jaszczak & Brian Nelson / Still North Media",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/content/medieval-sound-effects-weapon-textures",
+      "sha256": "d8c68f970540d73ab6fe2db5309166e6dd911876501a16bb4df43498247e19b2"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_medium_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "1723a9fd25103ed41af06054814e84e65f4a772bac86ab2dc927da93d9592ff5"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_heavy_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "b33a8f14068aec24ec69ba85e5e87fdc41228975f6a1a3e44a6e7d6fc3d9f8d8"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_medium_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "15271dbe8e2872dbb0ff1aeb7b12b2d2b92b7c1951c88532b9ab9158c36dfc73"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_heavy_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "f92f5cb6ba4ff2766497292ffd90865654317eeca976f5652e0708dbdcdc0dd9"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_medium_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "3f3f1917428b828f733a963167833c707bf88296ff158e1559c57c5cb813d799"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_heavy_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "7993dd4c156b9979ad69f17be5ebe31850b16039a3857f8477141be54dfee1b3"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "02fa3a2c6e79e868e546802f45127c5cdda69aba6d5a24ac997ea66f81a816cb"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_heavy_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "49e7ca88743fca974bb8676ea138b751cfd8f9033b5e7af8736c2a215d6edbc1"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_medium_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "486988aa2d6440ffc4c62a0e8ccf3c23673ba84424bd4723378d451b7255eb5c"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage01.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "b61131bbed47caec321f5b3ee43ebe47d91c9f5d18084348ce2af73544ca4ecc"
+    },
+    {
+      "source": "ice-electric/qubodupIceAndElectricitySpells/qubodupElectricityDamage02.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "04226646faf6c81fb56bed3b86e12e6ad7bd28ab763b3a9dac6a10a0382593ab"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_medium_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "7d3ba0bb5e60a11b5d3e558c141303dcf494256675fbf753c0d252d2cf0481e3"
+    },
+    {
+      "source": "kenney-impact/Audio/impactGlass_light_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "d750cf88097d0c3e69920e6e14496e1444e1a9da01aa4cca8f5ec8cb44c57b4f"
+    },
+    {
+      "source": "kenney-impact/Audio/footstep_snow_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "c05fa4a9dc9a7aabc04996466fb589537e49af76de9998d8f9e6270ec92dcef7"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_02.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "bf1eef4993f0adb4bd3a1c1ec91f8f6e4ddeb32d922671a14561846d5b7cab98"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_heavy_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "4d0096364ba9e46119d2ff6df493fdc101bd2e1efae061da5e5f77a53b3fdcb6"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_medium_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "e71d23abcc3f10d9d6bc9615b2a431fff70b12333a5fcdd9964457564ace4349"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_medium_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "7642a4fd43e547afe4f7adfadb3dabb681c0ff512f52c1674bae30a726841faf"
+    },
+    {
+      "source": "kenney-impact/Audio/impactGlass_light_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "05e513fbd42829060eb37855f8c3866722ec5c39a8937c9bfde518cc609effa2"
+    },
+    {
+      "source": "kenney-impact/Audio/footstep_snow_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "980fb9a1c9227aed7995067b0357f373053337f2416316db8ea0438418542fb4"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_03.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "2e4edee4ff8d7898198f1ab5213e086965e14a665cb947d53759505e28ddd3e4"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_heavy_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "d130ae541951243d3f6ed963d0057450a445ffe117fbf9a084d34eb1635cb563"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_medium_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "6492f9ccbc8d24dcef607bb1b48790b7870961474561f7fe5601e1c73a3018ef"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_medium_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "5069e3571a77d7f7aae9ef71d0364aa245fb7d64a7c8cc9956f221d03088c089"
+    },
+    {
+      "source": "kenney-impact/Audio/impactGlass_light_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "710db7451bb7857b9140dfe6afe4621ea2188ad65eda3919c569d1bb285b933d"
+    },
+    {
+      "source": "kenney-impact/Audio/footstep_snow_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "db52bafdc66304f3b999f2c29227826c65993916e630ac2ffbca17d07b263178"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_light_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "eb45e35b4bed784d3f120de4afec4b0d6ac09d9e143cce8cfcb7d739e1b1f3c3"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_light_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "4b76bf3ccc8e60d19188f3165b778a7817786faa6887c55d9049bcbeef3b425f"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_light_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "b183cf7a5bd783817e0e4b82af34ac6658fa1927049089dadc8b15c2ecc771dc"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_heavy_003.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "4ab53b26f4ea575120dcc1348526c9e0db2afc6af7a442aa0489bdead2ca80b6"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_medium_003.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "635c37cfcd854b187d643d450ff0397798dcc29ae94da32192b814fae6bd854c"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_07.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "bb13cef9c0b0b4ec7f9335c356b14814c88418abd85dd3747cb62469e9ada93f"
+    },
+    {
+      "source": "kenney-impact/Audio/impactPunch_heavy_004.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "f4c0c3eb8ab6517583b8218ed03f28923d1b687379aab4c1d5a6d4c10cf8e500"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_heavy_004.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "e008f0b6b14f62339c8fe9f9b45cbd6317ba4f66604c4899053b8017020a36f0"
+    },
+    {
+      "source": "kenney-impact/Audio/impactGlass_light_004.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "f535b7cb7835400d8d28bcf9e1cf047ce3c0eb7a6456bdb1a4a27acbec1ed2cb"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_light_004.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "e10009f67ddaeb3a59a3e1129cfc1615d84ba60ab578eae07e7092ac223f099c"
+    },
+    {
+      "source": "kenney-impact/Audio/impactSoft_medium_004.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "b0a4dea90eed47accf50b768beff1166f2f1486fb139e4d025b2427637624bca"
+    },
+    {
+      "source": "kenney-impact/Audio/impactWood_heavy_003.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "af07511902b309b3f6d8f0e1fafbe93869127fb88099ebdc0aa6a00a98dc3cb0"
+    },
+    {
+      "source": "rubberduck-rpg/spell_fire_04.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "64d653cd0cc6eb71bb45a1dfbba29eaa769ed5b663cce275082d6971e4f2ca8e"
+    },
+    {
+      "source": "kenney-impact/Audio/impactGlass_light_003.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "765290ce32fa108c939a0dbd6fbacbcd05abde622b57b708eb8a64058ef4225a"
+    },
+    {
+      "source": "kenney-ui/Audio/confirmation_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/interface-sounds",
+      "sha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactPunch_heavy_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "b33a8f14068aec24ec69ba85e5e87fdc41228975f6a1a3e44a6e7d6fc3d9f8d8"
+    },
+    {
+      "source": "docs\\audio-upgrade-v1\\sources\\kenney-rpg\\Audio\\dropLeather.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/rpg-audio",
+      "sha256": "097e1d3b74949b0145fda0519d40b7e0773ab82ec4858727f95be830927e1a45"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactWood_light_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "eb45e35b4bed784d3f120de4afec4b0d6ac09d9e143cce8cfcb7d739e1b1f3c3"
+    },
+    {
+      "source": "docs\\audio-upgrade-v1\\sources\\rubberduck-rpg\\creature_die_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "b34a816a401c5d80c77a61dabbedef7d1918a01320bbb67286c70f22db4acd43"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactSoft_heavy_004.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "e008f0b6b14f62339c8fe9f9b45cbd6317ba4f66604c4899053b8017020a36f0"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\rubberduck-rpg\\spell_fire_01.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "02fa3a2c6e79e868e546802f45127c5cdda69aba6d5a24ac997ea66f81a816cb"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\ice-electric\\qubodupIceAndElectricitySpells\\qubodupElectricityDamage01.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "b61131bbed47caec321f5b3ee43ebe47d91c9f5d18084348ce2af73544ca4ecc"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactGlass_light_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "d750cf88097d0c3e69920e6e14496e1444e1a9da01aa4cca8f5ec8cb44c57b4f"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\footstep_snow_000.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "c05fa4a9dc9a7aabc04996466fb589537e49af76de9998d8f9e6270ec92dcef7"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactPunch_heavy_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "f92f5cb6ba4ff2766497292ffd90865654317eeca976f5652e0708dbdcdc0dd9"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactWood_light_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "4b76bf3ccc8e60d19188f3165b778a7817786faa6887c55d9049bcbeef3b425f"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\rubberduck-rpg\\spell_fire_02.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "bf1eef4993f0adb4bd3a1c1ec91f8f6e4ddeb32d922671a14561846d5b7cab98"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\ice-electric\\qubodupIceAndElectricitySpells\\qubodupElectricityDamage02.flac",
+      "author": "Iwan 'qubodup' Gabovitch",
+      "license": "CC-BY-3.0",
+      "page": "https://opengameart.org/content/ice-electricity-magic",
+      "sha256": "04226646faf6c81fb56bed3b86e12e6ad7bd28ab763b3a9dac6a10a0382593ab"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactGlass_light_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "05e513fbd42829060eb37855f8c3866722ec5c39a8937c9bfde518cc609effa2"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\footstep_snow_001.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "980fb9a1c9227aed7995067b0357f373053337f2416316db8ea0438418542fb4"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactPunch_heavy_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "7993dd4c156b9979ad69f17be5ebe31850b16039a3857f8477141be54dfee1b3"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactWood_light_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "b183cf7a5bd783817e0e4b82af34ac6658fa1927049089dadc8b15c2ecc771dc"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\rubberduck-rpg\\spell_fire_03.ogg",
+      "author": "rubberduck",
+      "license": "CC0-1.0",
+      "page": "https://opengameart.org/node/86018",
+      "sha256": "2e4edee4ff8d7898198f1ab5213e086965e14a665cb947d53759505e28ddd3e4"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\impactGlass_light_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "710db7451bb7857b9140dfe6afe4621ea2188ad65eda3919c569d1bb285b933d"
+    },
+    {
+      "source": "docs\\combat-audio-v2\\sources\\kenney-impact\\Audio\\footstep_snow_002.ogg",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "sha256": "db52bafdc66304f3b999f2c29227826c65993916e630ac2ffbca17d07b263178"
+    }
+  ],
+  "assetRecipes": [
+    {
+      "asset": "assets/resources/audio/v1/bow_1.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/bow_2.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/bow_3.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/crossbow_1.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/crossbow_2.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/crossbow_3.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/fire_1.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/fire_2.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/fire_3.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/thunder_1.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/frost_1.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/zap_hit_1.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/icebreak_1.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/hit_1.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/crush_1.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/ui_click_1.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/thunder_2.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/frost_2.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/zap_hit_2.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/icebreak_2.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/hit_2.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/crush_2.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/ui_click_2.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/crit.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/pierce.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/kill.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/wall.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/snipe.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/skill.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/ult.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/levelup.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/ready.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/surge.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/victory.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/defeat.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/ui_confirm.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/bow_ult.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/fire_skill.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/frost_skill.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/fire_ult.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/thunder_ult.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/frost_ult.wav",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/bgm_camp.mp3",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v1/bgm_battle.mp3",
+      "recipe": "docs/audio-upgrade-v1/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/bow_1.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/bow_2.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/bow_3.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/crossbow_1.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/crossbow_2.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/crossbow_3.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/fire_1.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/thunder_1.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/frost_1.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/fire_2.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/thunder_2.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/frost_2.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/fire_3.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/thunder_3.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/frost_3.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/hit_1.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/pierce_1.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/crush_1.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/zap_hit_1.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/icebreak_1.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/hit_2.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/pierce_2.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/crush_2.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/zap_hit_2.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/icebreak_2.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/hit_3.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/pierce_3.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/crush_3.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/zap_hit_3.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/icebreak_3.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/pierce_heavy.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/fire_heavy.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/thunder_heavy.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/frost_heavy.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/crit.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/kill.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/wall.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/snipe.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/bow_ult.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/fire_skill.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/thunder_skill.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/frost_skill.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/skill.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/fire_ult.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/thunder_ult.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/frost_ult.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/ult.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/v2/ready.wav",
+      "recipe": "docs/combat-audio-v2/assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/physical_1.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/heavy_1.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/fire_1.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/volt_1.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/frost_1.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/physical_2.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/heavy_2.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/fire_2.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/volt_2.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/frost_2.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/physical_3.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/heavy_3.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/fire_3.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/volt_3.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    },
+    {
+      "asset": "assets/resources/audio/death-v3/frost_3.wav",
+      "recipe": "docs/battle-exit-death-v3/audio-assets.json",
+      "matchesRecordedHash": true
+    }
+  ],
+  "creditsPage": "audio-credits.html",
+  "creditsEntry": "pause settings",
+  "publishedLicenseFamilies": [
+    "CC0-1.0",
+    "CC-BY-3.0"
+  ]
+}

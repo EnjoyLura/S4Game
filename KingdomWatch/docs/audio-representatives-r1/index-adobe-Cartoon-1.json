@@ -1,0 +1,382 @@
+{
+  "url": "https://download.adobe.com/pub/adobe/audition/loopology/Adobe_Sound_Effects-Cartoon.zip",
+  "bytes": 4626788,
+  "entries": [
+    {
+      "name": "Cartoon Balloon Hit Hand Hit Multiple 01.wav",
+      "method": 8,
+      "crc": 471041642,
+      "compressed": 146530,
+      "uncompressed": 286554,
+      "offset": 0
+    },
+    {
+      "name": "__MACOSX/",
+      "method": 0,
+      "crc": 0,
+      "compressed": 0,
+      "uncompressed": 0,
+      "offset": 146636
+    },
+    {
+      "name": "__MACOSX/._Cartoon Balloon Hit Hand Hit Multiple 01.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 146691
+    },
+    {
+      "name": "Cartoon Jack In The Box Song And Pop Quickly 01.wav",
+      "method": 8,
+      "crc": 3432092921,
+      "compressed": 793247,
+      "uncompressed": 1512408,
+      "offset": 146943
+    },
+    {
+      "name": "__MACOSX/._Cartoon Jack In The Box Song And Pop Quickly 01.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 940303
+    },
+    {
+      "name": "Cartoon Toy Honk Electronic 02.wav",
+      "method": 8,
+      "crc": 2744724091,
+      "compressed": 94700,
+      "uncompressed": 204220,
+      "offset": 940562
+    },
+    {
+      "name": "__MACOSX/._Cartoon Toy Honk Electronic 02.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 1035358
+    },
+    {
+      "name": "Cartoon Kiss Short Squeaky Cartoon Kiss 04.wav",
+      "method": 8,
+      "crc": 3740781760,
+      "compressed": 82845,
+      "uncompressed": 133222,
+      "offset": 1035600
+    },
+    {
+      "name": "__MACOSX/._Cartoon Kiss Short Squeaky Cartoon Kiss 04.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 1118553
+    },
+    {
+      "name": "Cartoon Balloon Release Air 01.wav",
+      "method": 8,
+      "crc": 2870581179,
+      "compressed": 450170,
+      "uncompressed": 621292,
+      "offset": 1118807
+    },
+    {
+      "name": "__MACOSX/._Cartoon Balloon Release Air 01.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 1569073
+    },
+    {
+      "name": "Cartoon Weird Noise Short Mouth Popping 02.wav",
+      "method": 8,
+      "crc": 2862649690,
+      "compressed": 15493,
+      "uncompressed": 40022,
+      "offset": 1569315
+    },
+    {
+      "name": "__MACOSX/._Cartoon Weird Noise Short Mouth Popping 02.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 1584916
+    },
+    {
+      "name": "Cartoon Kiss Short Squeaky Cartoon Kiss 02.wav",
+      "method": 8,
+      "crc": 1724536939,
+      "compressed": 62580,
+      "uncompressed": 99558,
+      "offset": 1585170
+    },
+    {
+      "name": "__MACOSX/._Cartoon Kiss Short Squeaky Cartoon Kiss 02.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 1647858
+    },
+    {
+      "name": "Cartoon Male Dumb Giggle 01.wav",
+      "method": 8,
+      "crc": 3377105403,
+      "compressed": 277191,
+      "uncompressed": 359966,
+      "offset": 1648112
+    },
+    {
+      "name": "__MACOSX/._Cartoon Male Dumb Giggle 01.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 1925396
+    },
+    {
+      "name": "Cartoon Kiss Short Squeaky Cartoon Kiss 03.wav",
+      "method": 8,
+      "crc": 1958956109,
+      "compressed": 59330,
+      "uncompressed": 110918,
+      "offset": 1925635
+    },
+    {
+      "name": "__MACOSX/._Cartoon Kiss Short Squeaky Cartoon Kiss 03.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 1985073
+    },
+    {
+      "name": "LICENSE.pdf",
+      "method": 8,
+      "crc": 232932192,
+      "compressed": 32175,
+      "uncompressed": 36062,
+      "offset": 1985327
+    },
+    {
+      "name": "__MACOSX/._LICENSE.pdf",
+      "method": 8,
+      "crc": 3979084060,
+      "compressed": 145,
+      "uncompressed": 222,
+      "offset": 2017575
+    },
+    {
+      "name": "Cartoon Human Female Kiss Squeaky Kiss 01.wav",
+      "method": 8,
+      "crc": 2698293854,
+      "compressed": 83555,
+      "uncompressed": 134882,
+      "offset": 2017804
+    },
+    {
+      "name": "__MACOSX/._Cartoon Human Female Kiss Squeaky Kiss 01.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 2101466
+    },
+    {
+      "name": "LICENSE-FR.pdf",
+      "method": 8,
+      "crc": 3443431216,
+      "compressed": 29931,
+      "uncompressed": 38274,
+      "offset": 2101719
+    },
+    {
+      "name": "__MACOSX/._LICENSE-FR.pdf",
+      "method": 8,
+      "crc": 3979084060,
+      "compressed": 145,
+      "uncompressed": 222,
+      "offset": 2131726
+    },
+    {
+      "name": "Cartoon Party Noise Blowers Air Blowing 05.wav",
+      "method": 8,
+      "crc": 3786409803,
+      "compressed": 171185,
+      "uncompressed": 242022,
+      "offset": 2131958
+    },
+    {
+      "name": "__MACOSX/._Cartoon Party Noise Blowers Air Blowing 05.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 2303251
+    },
+    {
+      "name": "Cartoon Horn Small Hand Horn Honking 07.wav",
+      "method": 8,
+      "crc": 822760558,
+      "compressed": 52621,
+      "uncompressed": 98326,
+      "offset": 2303505
+    },
+    {
+      "name": "__MACOSX/._Cartoon Horn Small Hand Horn Honking 07.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 2356231
+    },
+    {
+      "name": "Cartoon Trombone 03.wav",
+      "method": 8,
+      "crc": 1467409147,
+      "compressed": 139139,
+      "uncompressed": 208154,
+      "offset": 2356482
+    },
+    {
+      "name": "__MACOSX/._Cartoon Trombone 03.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 2495706
+    },
+    {
+      "name": "Cartoon Toy Noisemaker Honk 01.wav",
+      "method": 8,
+      "crc": 1015800846,
+      "compressed": 196850,
+      "uncompressed": 243988,
+      "offset": 2495937
+    },
+    {
+      "name": "__MACOSX/._Cartoon Toy Noisemaker Honk 01.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 2692883
+    },
+    {
+      "name": "Cartoon Whistle Motor Whistle 01.wav",
+      "method": 8,
+      "crc": 2685840269,
+      "compressed": 128713,
+      "uncompressed": 194546,
+      "offset": 2693125
+    },
+    {
+      "name": "__MACOSX/._Cartoon Whistle Motor Whistle 01.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 2821936
+    },
+    {
+      "name": "Cartoon Toy Squeaky Toy Squeaks 01.wav",
+      "method": 8,
+      "crc": 85178331,
+      "compressed": 72481,
+      "uncompressed": 100230,
+      "offset": 2822180
+    },
+    {
+      "name": "__MACOSX/._Cartoon Toy Squeaky Toy Squeaks 01.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 2894761
+    },
+    {
+      "name": "Cartoon Drum Cymbal Crash 02.wav",
+      "method": 8,
+      "crc": 1801416385,
+      "compressed": 954741,
+      "uncompressed": 2479026,
+      "offset": 2895007
+    },
+    {
+      "name": "__MACOSX/._Cartoon Drum Cymbal Crash 02.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 3849842
+    },
+    {
+      "name": "Cartoon Whistle Motor Whistle Long 01.wav",
+      "method": 8,
+      "crc": 833666903,
+      "compressed": 222527,
+      "uncompressed": 324118,
+      "offset": 3850082
+    },
+    {
+      "name": "__MACOSX/._Cartoon Whistle Motor Whistle Long 01.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 4072712
+    },
+    {
+      "name": "Cartoon Balloon Popping 04 .wav",
+      "method": 8,
+      "crc": 2598507911,
+      "compressed": 40650,
+      "uncompressed": 162760,
+      "offset": 4072961
+    },
+    {
+      "name": "__MACOSX/._Cartoon Balloon Popping 04 .wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 4113704
+    },
+    {
+      "name": "Cartoon Voice And Away We Go Nerdy 01.wav",
+      "method": 8,
+      "crc": 2057944642,
+      "compressed": 408420,
+      "uncompressed": 675970,
+      "offset": 4113943
+    },
+    {
+      "name": "__MACOSX/._Cartoon Voice And Away We Go Nerdy 01.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 4522466
+    },
+    {
+      "name": "Cartoon Frying Pan Cartoon  Pan Hit 02.wav",
+      "method": 8,
+      "crc": 227579596,
+      "compressed": 98999,
+      "uncompressed": 202732,
+      "offset": 4522715
+    },
+    {
+      "name": "__MACOSX/._Cartoon Frying Pan Cartoon  Pan Hit 02.wav",
+      "method": 8,
+      "crc": 3178224425,
+      "compressed": 135,
+      "uncompressed": 212,
+      "offset": 4621818
+    }
+  ]
+}

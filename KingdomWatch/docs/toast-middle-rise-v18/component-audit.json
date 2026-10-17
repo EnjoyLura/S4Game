@@ -1,0 +1,172 @@
+{
+  "kind": "static-source-AST-inspection",
+  "scripts": 116,
+  "conflicts": [],
+  "componentScripts": [
+    {
+      "file": "assets/scripts/battle/BattleDirector.ts",
+      "components": [
+        {
+          "name": "BattleDirector",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/BattleEntry.ts",
+      "components": [
+        {
+          "name": "BattleEntry",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/BrowserBack.ts",
+      "components": [
+        {
+          "name": "BrowserBackLifetime",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/ButtonFeedback.ts",
+      "components": [
+        {
+          "name": "ButtonFeedback",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/CampaignRoute.ts",
+      "components": [
+        {
+          "name": "CampaignRouteMotion",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/ConstructionPulse.ts",
+      "components": [
+        {
+          "name": "ConstructionPulse",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/HoldUpgrade.ts",
+      "components": [
+        {
+          "name": "HoldUpgrade",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/MainUI.ts",
+      "components": [
+        {
+          "name": "MainUI",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/PickMotion.ts",
+      "components": [
+        {
+          "name": "PickMotion",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/PositiveFeedback.ts",
+      "components": [
+        {
+          "name": "PositiveFeedback",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/RewardCollectFx.ts",
+      "components": [
+        {
+          "name": "RewardCollectFx",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/RewardPopup.ts",
+      "components": [
+        {
+          "name": "RewardPopupMotion",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/SettlementMotion.ts",
+      "components": [
+        {
+          "name": "SettlementMotion",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/TouchFeedback.ts",
+      "components": [
+        {
+          "name": "TouchFeedback",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/TrainingGrowthFx.ts",
+      "components": [
+        {
+          "name": "TrainingGrowthFx",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/TrainingWeaponFloat.ts",
+      "components": [
+        {
+          "name": "TrainingWeaponFloat",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/UIMotion.ts",
+      "components": [
+        {
+          "name": "UIMotion",
+          "registered": true
+        }
+      ]
+    },
+    {
+      "file": "assets/scripts/ui/UINotice.ts",
+      "components": [
+        {
+          "name": "UINotice",
+          "registered": true
+        }
+      ]
+    }
+  ],
+  "gameExecuted": false,
+  "browserExecuted": false,
+  "testsExecuted": false
+}

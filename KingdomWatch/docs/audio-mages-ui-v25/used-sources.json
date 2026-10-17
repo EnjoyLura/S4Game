@@ -1,0 +1,135 @@
+{
+  "huff": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Varazuvi - Hollywood Dragons/Dragon Short Huff.wav",
+    "original": "Varazuvi - Hollywood Dragons/Dragon Short Huff.wav",
+    "author": "Varazuvi",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 3852083500,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "e18e34e08d5806a82197f41d971c778c58e727c60047fd0dedf01565058337a6"
+  },
+  "flame1": {
+    "path": "docs/audio-overhaul-v21/sources/rubberduck-rpg/spell_fire_01.ogg",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "url": "https://opengameart.org/node/86018",
+    "sha256": "02fa3a2c6e79e868e546802f45127c5cdda69aba6d5a24ac997ea66f81a816cb"
+  },
+  "timpani": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Percussion/Timpani/Timpani2_Hit_v3_rr1_Sum.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "69e5d604effd3f29c86117d22ad2335f73e43f5d47868dc57d8fa593975ee241"
+  },
+  "current": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Soundopolis - Sci-Fi Electric/Electrical_Current_Texture_Fienup_004.wav",
+    "original": "Soundopolis - Sci-Fi Electric/Electrical_Current_Texture_Fienup_004.wav",
+    "author": "Soundopolis",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 2033221392,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "7f2be886bf165b1faee9f18cb104e764d9168725772b31160eb96e07d25aaf93"
+  },
+  "Strings/Harp/KSHarp_E5_mf.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Strings/Harp/KSHarp_E5_mf.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "95dd9ddb0bd15bee7687906e00f25aafcaa43020cc9501f0e8b6cabf0e9a53ec"
+  },
+  "swish": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Hits Whoosh/Fast Action Swish_HW 05.wav",
+    "original": "Mechanical Wave - Hits Whoosh/Fast Action Swish_HW 05.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 2770120616,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "2ef515c463c04c2d518afb74d44336f51ed0912c46c9e00431a3ed13f927f87d"
+  },
+  "flame2": {
+    "path": "docs/audio-overhaul-v21/sources/rubberduck-rpg/spell_fire_02.ogg",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "url": "https://opengameart.org/node/86018",
+    "sha256": "bf1eef4993f0adb4bd3a1c1ec91f8f6e4ddeb32d922671a14561846d5b7cab98"
+  },
+  "flame3": {
+    "path": "docs/audio-overhaul-v21/sources/rubberduck-rpg/spell_fire_03.ogg",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "url": "https://opengameart.org/node/86018",
+    "sha256": "2e4edee4ff8d7898198f1ab5213e086965e14a665cb947d53759505e28ddd3e4"
+  },
+  "flame4": {
+    "path": "docs/audio-overhaul-v21/sources/rubberduck-rpg/spell_fire_04.ogg",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "url": "https://opengameart.org/node/86018",
+    "sha256": "64d653cd0cc6eb71bb45a1dfbba29eaa769ed5b663cce275082d6971e4f2ca8e"
+  },
+  "flame7": {
+    "path": "docs/audio-overhaul-v21/sources/rubberduck-rpg/spell_fire_07.ogg",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "url": "https://opengameart.org/node/86018",
+    "sha256": "bb13cef9c0b0b4ec7f9335c356b14814c88418abd85dd3747cb62469e9ada93f"
+  },
+  "thunder": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Soundopolis - Natures Fury_Thunder/Thunder_Crack_Fienup_016.wav",
+    "original": "Soundopolis - Natures Fury_Thunder/Thunder_Crack_Fienup_016.wav",
+    "author": "Soundopolis",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 3984182097,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "5e86c0071fc0556fc6e5da127c6dd403d6389372d1d35a46031cd89f159373c7"
+  },
+  "Strings/Harp/KSHarp_C5_mf.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Strings/Harp/KSHarp_C5_mf.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "7c8b862f6fd3f1442ed87537af976d84bda8c05a5b4900e8907d570b5202a517"
+  },
+  "wood": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Robert Cordova - Base/Wood Rattle 10.wav",
+    "original": "Robert Cordova - Base/Wood Rattle 10.wav",
+    "author": "Robert Cordova",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 1143119321,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "ec0c0b0c5c09ebb61035f10963a90e338e88454a39bc2f7c8384e316519ec68e"
+  },
+  "Strings/Harp/KSHarp_A4_mf.wav": {
+    "path": "docs/audio-representatives-r1/sources/VSCO2CE/Strings/Harp/KSHarp_A4_mf.wav",
+    "author": "Versilian Studios / Sam Gossner and contributors",
+    "license": "CC0-1.0",
+    "url": "https://github.com/sgossner/VSCO-2-CE",
+    "sha256": "3665f3975cad4a33f46784aa4f896f4b4319ba2b7831e892d975bc38c9f09f23"
+  },
+  "swing": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Hits Whoosh/Action Swish_HW 02.wav",
+    "original": "Mechanical Wave - Hits Whoosh/Action Swish_HW 02.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 1203586015,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "1eb3e50adffabcc46ca3ed30f520eb19b234f9808acf4e760ec9ea8391e9b609"
+  },
+  "gate": {
+    "path": "docs/audio-mages-ui-v25/sources/Coll Anderson - House/EFX INT HOUSE DOOR Bedroom Wood O_C Close Medium 01.wav",
+    "original": "Coll Anderson - House/EFX INT HOUSE DOOR Bedroom Wood O_C Close Medium 01.wav",
+    "author": "Coll Anderson",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "archiveCRC32": 1382715414,
+    "sha256": "9f7181a51b271fc5ab641eb9b2768e4d10e13e9e853e097ba4cce3bc3143790e"
+  }
+}

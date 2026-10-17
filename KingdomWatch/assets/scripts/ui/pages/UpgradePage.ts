@@ -1,24 +1,14 @@
 /**
  * ④ 升级：四页共用铁匠铺培养界面；保留英雄/基地调用的装备强化弹窗。
  */
-import { Node } from 'cc';
-import { PAL } from '../../config/GameConfig';
-import { CA, btn, gcircle, gpanel, label } from '../UIKit';
-import { artSprite } from '../Ux';
-import { PageCtx, modal, fmt } from '../PageKit';
+import { PageCtx } from '../PageKit';
 import { buildTrainingLobby } from '../TrainingLobby';
 import { attrsModal, forgeModal } from './HeroPage';
 import {
-  EquipKind, HERO_DEFS, EQUIPS, QCOLOR, MAX,
-  equipUpCost,
-  upWornEquip, wornInst, equipStat, statFmt, STAT_NAME, StatKey, matCount,
+  EquipKind, HERO_DEFS, MAX,
   BT_STEP, BT_SKL, heroBtList, heroStatsAt, weaponBtList,
 } from '../../core/GameData';
-import { loadSave } from '../../core/SaveData';
-import { growthAction } from '../GrowthFeedback';
 
-const KIND_ICON: Record<string, string> = { weapon: '🏹', helm: '⛑️', acc: '📿', glove: '🧤', armor: '🥼' };
-const QNAMES = ['普通', '优秀', '稀有', '史诗'];
 
 /** 技能槽显示名：普攻无专属名；技能/大招用各英雄定名（切换英雄即跟随——用户反馈） */
 const skillName = (hid: string, slot: 'atk' | 'skill' | 'ult'): string =>
@@ -30,10 +20,6 @@ const skillIconId = (hid: string, slot: 'atk' | 'skill' | 'ult'): string => `ui_
 const btMs = (cap: number, step: number, txt: string): { lv: number; txt: string }[] =>
   Array.from({ length: Math.floor(cap / step) }, (_, i) => ({ lv: (i + 1) * step, txt: `突破 · ${txt}` }));
 
-/* 羊皮纸卡面配色（同 Panels 战斗卡）；品质字色用加深版（原 QCOLOR 在浅底上看不清） */
-const INK = '#4A3214';
-const OK = '#3E7C28';
-const NO = '#B03A2E';
 
 /** 英雄突破步骤条数据（专属表 txt 直用——弓箭手已定稿；未配置英雄回退通用档） */
 const heroMilestones = (hid: string): { lv: number; txt: string }[] => heroBtList(hid).map(m => ({ lv: m.lv, txt: m.txt }));
@@ -161,8 +147,6 @@ function statsAt(hid: string, lv: number, wpnLv: number): { atk: number; skillDm
   return heroStatsAt(hid, lv, wpnLv);
 }
 
-/** 持有材料总数（强化消耗聚合扣强化石→精铁） */
-function matOwned(): number { return matCount('mat_stone') + matCount('mat_iron'); }
 
 export function buildUpgrade(ctx: PageCtx): void {
   buildTrainingLobby(ctx, {
@@ -171,77 +155,7 @@ export function buildUpgrade(ctx: PageCtx): void {
   });
 }
 
-/** 分区标签：骑在分区面板上缘的小金签（标注该区用途；基地页弹窗共用） */
-export function zoneTab(parent: Node, x: number, y: number, text: string): void {
-  gpanel(parent, x, y, 110, 26, CA('#E8C878', 0.92), '#8A6A2A', 1.5, 10);
-  label(parent, x, y, text, { size: 18, color: INK, bold: true, w: 110, h: 26 });
-}
-
-/** 消耗/持有 chip：图标座 + 「需要/持有」，够=绿 不够=红（图标座无描边——去边框规范） */
-function costChip(card: Node, x: number, y: number, icon: string, need: number, own: number, valW: number): void {
-  gcircle(card, x, y, 24, CA(PAL.gold, 0.22));
-  label(card, x, y, icon, { size: 24 });
-  const ok = own >= need;
-  label(card, x + 34 + valW / 2, y, `${fmt(need)}/${fmt(own)}`,
-    { size: 22, color: ok ? OK : NO, bold: true, align: 'left', w: valW, h: 48, shrink: true });
-}
-
-/** 装备强化弹窗（参照技能升级弹窗版式：扁平无框 + 奶白分区板 + 深色行动条；升级页装备卡 + 英雄页「锻造」共用） */
+/** Retained entry point shares the common forge; its caller still owns refresh. */
 export function equipModal(ctx: PageCtx, hid: string, kind: EquipKind, rebuild: () => void): void {
-  if (kind === 'weapon') { forgeModal(ctx, hid, kind); return; }
-  const sv = loadSave();
-  const inst = wornInst(hid, kind)!;
-  const d = EQUIPS[inst.defId];
-  const maxed = inst.lv >= MAX.equip;
-  const c = equipUpCost(inst.lv);
-  /* 属性行：按部位词条几条算几行（用户确认的词条归属），行高随行数自适应 */
-  const rows: { nm: string; cur: string; delta: string | null }[] = [];
-  const keys = (Object.keys(d.stats) as StatKey[]).filter(k => (d.stats[k] ?? 0) > 0);
-  for (const k of keys) {
-    const curV = equipStat(inst, k);
-    const nextV = maxed ? curV : equipStat({ ...inst, lv: inst.lv + 1 }, k);
-    rows.push({ nm: STAT_NAME[k], cur: statFmt(k, curV), delta: maxed ? null : `+${statFmt(k, nextV - curV)}` });
-  }
-  const W = 620, PW = 560;
-  const p1H = 56 + rows.length * 32;   // 1 行 88 / 2 行 120
-  const H = p1H + 424;                 // 头部 184 + 属性板 + 金签 44 + 每级板 88 + 行动条，随行数收紧
-  const panel = modal(ctx, W, H, '装备强化', true);
-  /* 头部：方形品质背板图标（无边框，同装备页签槽）+ 名称 + 品质/等级行（与技能弹窗同一几何） */
-  gpanel(panel, -W / 2 + 66, H / 2 - 104, 88, 88, CA(QCOLOR[d.quality], 0.55), undefined, 0, 12);
-  const hdFb = label(panel, -W / 2 + 66, H / 2 - 104, KIND_ICON[kind], { size: 40 });
-  artSprite(panel, -W / 2 + 66, H / 2 - 104, 78, 78, 'ui_item_' + inst.defId, { hideOnLoad: [hdFb] });   // 装备切图，缺图回退 emoji
-  label(panel, -W / 2 + 272, H / 2 - 96, d.name, { size: 24, color: '#FFF3D6', bold: true, align: 'left', w: 300, h: 32, shrink: true });
-  label(panel, -W / 2 + 272, H / 2 - 130, maxed ? `${QNAMES[d.quality]} · ${d.tier}阶 · Lv.${inst.lv}（MAX）` : `${QNAMES[d.quality]} · ${d.tier}阶 · 强化 Lv.${inst.lv} → Lv.${inst.lv + 1}`,
-    { size: 18, color: '#FFE08A', bold: true, align: 'left', w: 310, h: 28, shrink: true });
-  /* 属性提升（奶白板 + 标题出板；行结构与页签一致） */
-  const p1Top = H / 2 - 184;
-  const p1 = gpanel(panel, 0, p1Top - p1H / 2, PW, p1H, CA('#E9DFC2', 0.94), undefined, 0, 12);
-  zoneTab(panel, -PW / 2 + 70, p1Top + 17, '属性提升');
-  rows.forEach((r, i) => {
-    const y = (rows.length - 1) * 16 - i * 32;
-    label(p1, -PW / 2 + 90, y, r.nm, { size: 22, color: INK, bold: true, align: 'left', w: 160, h: 30, shrink: true });
-    label(p1, PW / 2 - 310, y, r.cur, { size: 24, color: INK, bold: true, align: 'right', w: 140, h: 30, shrink: true });
-    if (r.delta) label(p1, PW / 2 - 110, y, r.delta, { size: 24, color: OK, bold: true, align: 'right', w: 160, h: 30, shrink: true });
-  });
-  /* 每级提升（奶白板；先下移 44 给金签出板空间——与 fxStepper 同规） */
-  const p2Top = p1Top - p1H - 44;
-  const p2 = gpanel(panel, 0, p2Top - 44, PW, 88, CA('#E9DFC2', 0.94), undefined, 0, 12);
-  zoneTab(panel, -PW / 2 + 70, p2Top + 17, '每级提升');
-  label(p2, -100, 16, '主属性 +4% / 级', { size: 20, color: INK, bold: true, align: 'left', w: 340, h: 30, shrink: true });
-  label(p2, -100, -16, '材料 每7级需求 +1', { size: 20, color: INK, bold: true, align: 'left', w: 340, h: 30, shrink: true });
-  /* 行动条（深色药丸 + 双消耗 + 强化钮；双 chip 拉开间距防重叠——用户反馈） */
-  const actH = 64;
-  const actCy = -H / 2 + 46;
-  const act = gpanel(panel, 0, actCy, PW, actH, CA('#14181E', 0.72), undefined, 0, 32);
-  if (!maxed) {
-    costChip(act, -212, 0, '🪙', c.gold, sv.gold, 100);
-    costChip(act, -30, 0, '🧱', c.mat, matOwned(), 70);
-    btn(act, 195, 0, 160, 54, '强 化', PAL.gold, () => {
-      const r = growthAction({ kind: 'equip', hid, slot: kind }, () => upWornEquip(hid, kind));
-      if (r.ok) { const p2 = panel.parent; if (p2) p2.destroy(); rebuild(); }
-    }, 24, true);
-    if (sv.gold >= c.gold && matOwned() >= c.mat) gpanel(act, 263, 18, 24, 24, CA('#E5484D', 0.95), undefined, 0, 12);   // 红点=当前就能升
-  } else {
-    label(act, 0, 0, '已达强化上限', { size: 22, color: '#AAB2BD' });
-  }
+  forgeModal({ ...ctx, refresh: rebuild }, hid, kind);
 }

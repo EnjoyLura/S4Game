@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-overlay-v4-20261016-231651",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-header-v3-20261016-230443",
+  "entryVersion": "1792163687",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=chapter-route-overlay-v4-1792163687",
+  "scope": "floating header over one terrain map; locked checkpoint style and disabled preparation; locked chapter map shade and condition",
+  "manualAcceptance": "pending user manual review"
+}

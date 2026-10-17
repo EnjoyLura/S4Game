@@ -1,0 +1,253 @@
+{
+  "revision": "growth-r1",
+  "title": "第 2 批 · 重选升级反馈",
+  "baseline": "当前正式游戏 v21",
+  "items": [
+    {
+      "id": "D01",
+      "name": "升级成功",
+      "purpose": "单次升级：英雄、武器、技能、装备等",
+      "old": {
+        "label": "旧版 · 当前 v21",
+        "source": "assets\\resources\\audio\\v21\\growth.wav",
+        "audio": {
+          "file": "audio/D01-old.wav",
+          "sha256": "172789295cd18571b11a6f4d840cf59b8d0e6e07a25f335f44a24c7a21157ced",
+          "seconds": 1.02,
+          "peakDBFS": -8.175,
+          "activeRMSDBFS": -22.0,
+          "clippedSamples": 0,
+          "firstSample": 0,
+          "lastSample": 0
+        }
+      },
+      "options": [
+        {
+          "key": "A",
+          "label": "候选 A",
+          "author": "Tuomo Untinen / Reemax",
+          "license": "CC-BY-3.0",
+          "licenseURL": "https://creativecommons.org/licenses/by/3.0/",
+          "sourceURL": "https://opengameart.org/content/rpg-sound-package",
+          "sourceFile": "RPG升级乐句",
+          "edit": "只做格式统一、去近静音、2ms 首尾淡变与响度匹配；不重作、不加效果、不压缩。",
+          "audio": {
+            "file": "audio/D01-A.wav",
+            "sha256": "92fa7718b1087e2c8a100ef41c829f8954155df948ba5ac18df337333ed13529",
+            "seconds": 3.1347,
+            "peakDBFS": -6.557,
+            "activeRMSDBFS": -22.0,
+            "clippedSamples": 0,
+            "firstSample": 0,
+            "lastSample": 0
+          }
+        },
+        {
+          "key": "B",
+          "label": "候选 B",
+          "author": "Julie Damsgaard / Spring Spring",
+          "license": "CC0-1.0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "sourceURL": "https://opengameart.org/content/power-up-sound-effects",
+          "sourceFile": "Power-Up 升级音",
+          "edit": "只做格式统一、去近静音、2ms 首尾淡变与响度匹配；不重作、不加效果、不压缩。",
+          "audio": {
+            "file": "audio/D01-B.wav",
+            "sha256": "f5b78c8ddec61e65eb8b08ee2a89c45c46056b488507dbe6ecce6a841b002775",
+            "seconds": 1.8768,
+            "peakDBFS": -7.529,
+            "activeRMSDBFS": -22.0,
+            "clippedSamples": 0,
+            "firstSample": 0,
+            "lastSample": 0
+          }
+        },
+        {
+          "key": "C",
+          "label": "候选 C",
+          "author": "congusbongus",
+          "license": "CC0-1.0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "sourceURL": "https://opengameart.org/content/new-thing-get",
+          "sourceFile": "New thing get",
+          "edit": "只做格式统一、去近静音、2ms 首尾淡变与响度匹配；不重作、不加效果、不压缩。",
+          "audio": {
+            "file": "audio/D01-C.wav",
+            "sha256": "7339a6c889d0fdf7d2790c14dd55b00988aa1215159e34d7e4767cd36392966b",
+            "seconds": 5.2565,
+            "peakDBFS": -4.973,
+            "activeRMSDBFS": -22.0,
+            "clippedSamples": 0,
+            "firstSample": 0,
+            "lastSample": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "D02",
+      "name": "长按连续升级",
+      "purpose": "连续升级时的短提示音",
+      "old": {
+        "label": "旧版 · 当前 v21",
+        "source": "assets\\resources\\audio\\v21\\growth_tick.wav",
+        "audio": {
+          "file": "audio/D02-old.wav",
+          "sha256": "6285b9bd778257254daad58855dece64d0d8b6fba691e5c4d7ce487fe85e96f2",
+          "seconds": 0.337,
+          "peakDBFS": -5.49,
+          "activeRMSDBFS": -22.0,
+          "clippedSamples": 0,
+          "firstSample": 0,
+          "lastSample": 0
+        }
+      },
+      "options": [
+        {
+          "key": "A",
+          "label": "候选 A",
+          "author": "m1chiboi",
+          "license": "CC0-1.0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "sourceURL": "https://opengameart.org/content/ui-soundpack-by-m1chiboi-bleeps-and-clicks",
+          "sourceFile": "UI click 1",
+          "edit": "只做格式统一、去近静音、2ms 首尾淡变与响度匹配；不重作、不加效果、不压缩。",
+          "audio": {
+            "file": "audio/D02-A.wav",
+            "sha256": "3ee9e915b62b30dea4d52ccca3c5edd66372ecee5c262430233109e718741e19",
+            "seconds": 0.1524,
+            "peakDBFS": -6.031,
+            "activeRMSDBFS": -22.0,
+            "clippedSamples": 0,
+            "firstSample": 0,
+            "lastSample": 0
+          }
+        },
+        {
+          "key": "B",
+          "label": "候选 B",
+          "author": "Robin Lamb",
+          "license": "CC0-1.0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "sourceURL": "https://opengameart.org/content/ui-sound-effects-button-clicks-user-feedback-notifications",
+          "sourceFile": "UI click 1",
+          "edit": "只做格式统一、去近静音、2ms 首尾淡变与响度匹配；不重作、不加效果、不压缩。",
+          "audio": {
+            "file": "audio/D02-B.wav",
+            "sha256": "65cbf33ebce0959c689b203185327314e2de8abea126fc0572df150fa4e5af34",
+            "seconds": 0.4838,
+            "peakDBFS": -3.516,
+            "activeRMSDBFS": -22.0,
+            "clippedSamples": 0,
+            "firstSample": 0,
+            "lastSample": 0
+          }
+        },
+        {
+          "key": "C",
+          "label": "候选 C",
+          "author": "EZduzziteh",
+          "license": "CC0-1.0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "sourceURL": "https://opengameart.org/content/ui-click-sounds-sci-fi",
+          "sourceFile": "Sci-fi UI click 1",
+          "edit": "只做格式统一、去近静音、2ms 首尾淡变与响度匹配；不重作、不加效果、不压缩。",
+          "audio": {
+            "file": "audio/D02-C.wav",
+            "sha256": "06c55b106e246a177a6b7cbc5bf078b77d10a50d25bf2a57367c05771eaec762",
+            "seconds": 0.4135,
+            "peakDBFS": -4.735,
+            "activeRMSDBFS": -22.0,
+            "clippedSamples": 0,
+            "firstSample": 0,
+            "lastSample": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "D03",
+      "name": "升级数字落点",
+      "purpose": "数字滚动结束时的短落点音",
+      "old": {
+        "label": "旧版 · 当前 v21",
+        "source": "assets\\resources\\audio\\v21\\growth_land.wav",
+        "audio": {
+          "file": "audio/D03-old.wav",
+          "sha256": "562fd7f4f64f25216af75d06cd1000cc1df9eaf65b1a2edf782caa3d29b9960a",
+          "seconds": 0.4184,
+          "peakDBFS": -4.529,
+          "activeRMSDBFS": -22.0,
+          "clippedSamples": 0,
+          "firstSample": 0,
+          "lastSample": 0
+        }
+      },
+      "options": [
+        {
+          "key": "A",
+          "label": "候选 A",
+          "author": "m1chiboi",
+          "license": "CC0-1.0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "sourceURL": "https://opengameart.org/content/ui-soundpack-by-m1chiboi-bleeps-and-clicks",
+          "sourceFile": "UI bleep 1",
+          "edit": "只做格式统一、去近静音、2ms 首尾淡变与响度匹配；不重作、不加效果、不压缩。",
+          "audio": {
+            "file": "audio/D03-A.wav",
+            "sha256": "d1e6e912936b94f028c5b18fc9d49623ff37fe1ab348b3d1167580d058ebc435",
+            "seconds": 0.216,
+            "peakDBFS": -13.602,
+            "activeRMSDBFS": -22.0,
+            "clippedSamples": 0,
+            "firstSample": 0,
+            "lastSample": 0
+          }
+        },
+        {
+          "key": "B",
+          "label": "候选 B",
+          "author": "Robin Lamb",
+          "license": "CC0-1.0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "sourceURL": "https://opengameart.org/content/ui-sound-effects-button-clicks-user-feedback-notifications",
+          "sourceFile": "Ding",
+          "edit": "只做格式统一、去近静音、2ms 首尾淡变与响度匹配；不重作、不加效果、不压缩。",
+          "audio": {
+            "file": "audio/D03-B.wav",
+            "sha256": "75815366b806977eebc333fe427eaf4b15b5f097d6d018283e5c15685d219d6e",
+            "seconds": 0.6682,
+            "peakDBFS": -4.762,
+            "activeRMSDBFS": -22.0,
+            "clippedSamples": 0,
+            "firstSample": 0,
+            "lastSample": 0
+          }
+        },
+        {
+          "key": "C",
+          "label": "候选 C",
+          "author": "EZduzziteh",
+          "license": "CC0-1.0",
+          "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "sourceURL": "https://opengameart.org/content/ui-click-sounds-sci-fi",
+          "sourceFile": "Sci-fi UI click 4",
+          "edit": "只做格式统一、去近静音、2ms 首尾淡变与响度匹配；不重作、不加效果、不压缩。",
+          "audio": {
+            "file": "audio/D03-C.wav",
+            "sha256": "54bfc85c98dbd703deb86160940dcc66ff87f6117c5ca003aa3867e3ef16e096",
+            "seconds": 0.4281,
+            "peakDBFS": -8.668,
+            "activeRMSDBFS": -22.0,
+            "clippedSamples": 0,
+            "firstSample": 0,
+            "lastSample": 0
+          }
+        }
+      ]
+    }
+  ],
+  "currentBatchCount": 3,
+  "auditionedByAgent": false,
+  "gameReplaced": false
+}

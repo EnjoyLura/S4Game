@@ -1,0 +1,31 @@
+--- before/assets/scripts/ui/pages/ShopPage.ts
++++ assets/scripts/ui/pages/ShopPage.ts
+@@ -13,6 +13,7 @@
+ import { gearQuality } from '../GearQuality';
+ import { paintLobbyStrip, shopProductCard, shopQualitySocket } from '../LobbyChrome';
+ import { detailBody, detailDialog, detailFooter, detailGroup, detailGroupHeight, detailHeight, detailOverview, detailParagraph } from '../DetailDialog';
++import { showRewardPopup } from '../RewardPopup';
+ 
+ const CARD_W = 218, CARD_H = 330, STEP_X = 232, STEP_Y = 346;
+ const TAB_ART = ['comic_wpn_bow_v1', 'comic_helm_falcon_v1', 'comic_armor_forest_v1', 'comic_mat_stone_v1'];
+@@ -251,11 +252,15 @@
+     purchasing = true;
+     const result = shopBuy(g);
+     if (!result.ok) { purchasing = false; warn(result.msg); return; }
+-    toast(g.name + (g.give.kind === 'mat' ? ' ×' + (g.give.n || 1) : ''),
+-      { kind: 'success', title: g.give.kind === 'hero' ? '招募成功' : '购买成功',
+-        key: 'purchase:' + g.id, heroId: g.give.kind === 'hero' ? g.give.id : undefined,
+-        icon: g.give.kind !== 'hero' ? 'shop_comic_v1/' + itemArt(g) : undefined });
+-    dismissUI(panel.parent, ctx.refresh, false);
++    dismissUI(panel.parent, () => {
++      ctx.refresh();
++      showRewardPopup(ctx.screens.parent || ctx.screens, g.name, 0, [{ name: g.name, icon: itemArt(g), amount: g.give.n || 1,
++        quality: g.give.kind === 'equip' ? EQUIPS[g.give.id]?.quality : undefined }], undefined,
++      { title: g.give.kind === 'hero' ? '英雄加入' : '购买成功',
++        subtitle: g.give.kind === 'hero' ? '新的伙伴已加入远征' : '已收入背包 · 可前往英雄页使用',
++        heroId: g.give.kind === 'hero' ? g.give.id : undefined,
++        sound: g.give.kind === 'hero' ? 'recruit' : 'purchase' });
++    }, false);
+   };
+   const purchase = comicButton(panel, 139, bottom + 39 + footerInset, 248, 58, available ? '购买' : owned ? '已拥有' : !g.price ? '敬请期待' : '尚未解锁',
+     attemptPurchase, { tone: 'green', name: 'shopPurchaseConfirm', enabled: available });

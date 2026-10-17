@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-base-art-live-v13-20261017-123735",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-upgrade-art-live-v12-20261017-115943",
+  "entryVersion": "1792211757",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=base-art-live-v13-1792211757",
+  "scope": "base main, common keep and codex dialog artwork, lower translucent game toasts, closer stage nameplates",
+  "manualAcceptance": "pending user manual review"
+}

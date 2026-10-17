@@ -1,0 +1,33 @@
+--- before/assets/scripts/ui/RewardCollectFx.ts
++++ assets/scripts/ui/RewardCollectFx.ts
+@@ -23,6 +23,7 @@
+     if (!wallet) { this.node.destroy(); return; }
+     this.ink = this.node.addComponent(Graphics);
+     icons.forEach((icon, group) => {
++      if (typeof icon !== 'string') return;
+       const currency = icon.includes('diamond') ? 'diamond' : 'gold';
+       const target = wallet.getChildByName('resource:' + currency), text = target?.getChildByName('resourceAmount');
+       if (!target || !text) return;
+@@ -66,9 +67,18 @@
+ }
+ 
+ export function collectRewardFx(root: Node | null, items: readonly { icon: string; amount: number }[]): void {
+-  if (!root?.isValid || reducedMotion()) return;
+-  const icons = [...new Set(items.filter(i => i.amount > 0 && /comic_(coin|diamond)_v1$/.test(i.icon)).map(i => i.icon))];
++  if (!root || !isValid(root, true) || reducedMotion()) return;
++  // Creator's loose spread transform compiles [...Set] to [].concat(Set), not its values.
++  const icons = Array.from(new Set(items.filter(i => Number.isFinite(i.amount) && i.amount > 0 &&
++    typeof i.icon === 'string' && /comic_(coin|diamond)_v1$/.test(i.icon)).map(i => i.icon)));
+   if (!icons.length) return;
+-  root.getChildByName('rewardCollectFx')?.destroy();
+-  N('rewardCollectFx', root).addComponent(RewardCollectFx).configure(root, icons);
++  const previous = root.getChildByName('rewardCollectFx');
++  if (previous) { previous.active = false; previous.removeFromParent(); previous.destroy(); }
++  const host = N('rewardCollectFx', root);
++  // Receipt acknowledgement must never depend on an optional decorative effect.
++  try { host.addComponent(RewardCollectFx).configure(root, icons); }
++  catch (error) {
++    host.active = false; host.destroy();
++    console.warn('[RewardCollectFx] decoration skipped', error);
++  }
+ }

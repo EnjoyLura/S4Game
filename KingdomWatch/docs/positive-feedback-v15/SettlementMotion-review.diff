@@ -1,0 +1,67 @@
+--- before/assets/scripts/ui/SettlementMotion.ts
++++ assets/scripts/ui/SettlementMotion.ts
+@@ -4,6 +4,7 @@
+ import { reducedMotion } from './UIMotion';
+ import { whenUIArtReady } from './UIArtReady';
+ import { uiSound } from './UIAudio';
++import { celebrationConfetti, celebrationRays } from './CelebrationInk';
+ 
+ const { ccclass } = _decorator;
+ const clamp = (v: number): number => Math.max(0, Math.min(1, v));
+@@ -19,6 +20,7 @@
+   private stars: StarView[] = [];
+   private rewards: RewardView[] = [];
+   private ink!: Graphics;
++  private backlight!: Graphics;
+   private win = false;
+   private intro = false;
+   private quiet = false;
+@@ -40,7 +42,9 @@
+     this.quiet = reducedMotion(); this.intro = intro && !this.quiet;
+     this.stars = stars.map(star => ({ ...star, position: star.node.position.clone(), sounded: false }));
+     this.earnedStars = stars.filter(star => star.earned).length;
+-    this.endAt = this.intro ? 1.65 : 0;
++    this.endAt = this.intro ? (this.win ? 2.05 : 1.65) : 0;
++    const backlight = N('settlementVictoryBacklight', this.node); backlight.setSiblingIndex(0);
++    this.backlight = backlight.addComponent(Graphics);
+     this.ink = N('settlementAccents', this.node).addComponent(Graphics);
+     if (this.intro) {
+       badge.setScale(this.win ? .82 : .94, this.win ? .82 : .94, 1);
+@@ -85,12 +89,17 @@
+       this.badge.setPosition(this.badgeAt); this.badge.setScale(1, 1, 1); this.badge.angle = 0;
+       this.stars.forEach(star => { star.node.active = star.earned; star.node.setPosition(star.position); star.node.setScale(1, 1, 1); });
+       this.rewards.forEach(row => { row.label.string = String(row.target); row.node.setScale(1, 1, 1); });
+-      this.ink.clear(); this.enabled = false;
++      this.ink.clear(); this.backlight.clear(); this.enabled = false;
+     }
+   }
+ 
+   private render(): void {
+     const g = this.ink; g.clear();
++    this.backlight.clear();
++    if (this.win && this.intro) {
++      celebrationRays(this.backlight, 0, 340, 360, this.age, 1.85);
++      celebrationConfetti(g, this.age, 320, 690, 42);
++    }
+     if (this.intro) {
+       const p = clamp((this.age - .03) / (this.win ? .48 : .5)), spring = back(p);
+       const scale = this.win ? .82 + .18 * spring : .94 + .06 * spring;
+@@ -111,15 +120,15 @@
+         const t = this.age - (.34 + i * .19);
+         if (t < 0) return;
+         star.node.active = true;
+-        const p = clamp(t / .29), scale = .42 + .58 * back(p);
++        const p = clamp(t / .29), scale = .28 + .72 * back(p);
+         star.node.setScale(scale, scale, 1);
+         star.node.setPosition(star.position.x, star.position.y + 22 * (1 - out(t / .16)), star.position.z);
+-        if (t >= .15 && !star.sounded) { star.sounded = true; uiSound(i === this.earnedStars - 1 ? 'confirm' : 'select'); }
++        if (t >= .15 && !star.sounded) { star.sounded = true; uiSound(i === this.earnedStars - 1 ? 'starFinish' : 'star'); }
+         const hit = clamp((t - .14) / .43);
+         if (hit > 0 && hit < 1) {
+           const x = star.position.x, y = star.position.y;
+           g.strokeColor = CA('#F6C54E', (1 - hit) * .55); g.lineWidth = 2 * (1 - hit) + .5;
+-          g.circle(x, y, 23 + out(hit) * 8); g.stroke();
++          g.circle(x, y, 23 + out(hit) * 26); g.stroke();
+           for (let k = 0; k < 6; k++) {
+             const angle = k * Math.PI / 3 + .25, distance = 28 + out(hit) * 23;
+             this.diamond(x + Math.cos(angle) * distance, y + Math.sin(angle) * distance * .48 + 4,

@@ -1,0 +1,35 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>音乐与音效鸣谢</title><style>body{margin:32px auto;max-width:760px;padding:0 20px;background:#192129;color:#f5e8cd;font:16px/1.7 system-ui}pre{white-space:pre-wrap;overflow-wrap:anywhere}a{color:#a7d8ff}</style><h1>音乐与音效鸣谢</h1><p>感谢以下音乐人与声音创作者。</p><pre>Kingdom Watch audio credits
+==========================
+Town Theme RPG / Battle Theme A — cynicmusic, cynicmusic.com / pixelsphere.org (CC0)
+https://opengameart.org/content/town-theme-rpg
+https://opengameart.org/content/battle-theme-a
+Medieval Weapon Textures — Ben Jaszczak &amp; Brian Nelson / Still North Media (CC0)
+https://opengameart.org/content/medieval-sound-effects-weapon-textures
+RPG Audio, Interface Sounds, Music Jingles — Kenney (CC0)
+https://kenney.nl/assets/rpg-audio
+https://kenney.nl/assets/interface-sounds
+https://kenney.nl/assets/music-jingles
+80 CC0 RPG SFX — rubberduck (CC0)
+https://opengameart.org/node/86018
+Ice and Electricity Magic — Iwan &#x27;qubodup&#x27; Gabovitch (CC BY 3.0)
+https://opengameart.org/users/qubodup
+https://opengameart.org/content/ice-electricity-magic
+https://creativecommons.org/licenses/by/3.0/
+Modifications: selected excerpts, layering, EQ, resampling/pitch, short room tails,
+normalization, fades and music loop overlaps. No endorsement is implied.
+CC0: https://creativecommons.org/publicdomain/zero/1.0/
+
+Combat audio redesign v2
+Impact Sounds — Kenney (CC0)
+https://kenney.nl/assets/impact-sounds
+Additional modifications: transient selection, low-mid body layering, pitch, band limiting, resonance reduction, short shaped envelopes, family-level mixing.
+Original recordings and complete per-file edit recipes: docs/combat-audio-v2.
+
+Monster death audio v3
+Short body/rupture accents and fire, ice, electricity finishes, with three variations each.
+Sources: Kenney Impact Sounds &amp; RPG Audio (CC0), rubberduck RPG audio (CC0),
+Iwan 'qubodup' Gabovitch Ice &amp; Electricity Magic (CC-BY-3.0, links above).
+Additional modifications: transient editing, filtering, resonance reduction, pitch,
+layering and short decay envelopes. No long screams or synthesized tones.
+Exact source hashes and per-file recipes: docs/battle-exit-death-v3/audio-assets.json.
+</pre><p><a href="javascript:history.back()">返回游戏</a></p></html>

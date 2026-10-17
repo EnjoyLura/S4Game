@@ -1,0 +1,19 @@
+--- before/assets/scripts/core/AudioCatalog.ts
++++ assets/scripts/core/AudioCatalog.ts
+@@ -35,7 +35,15 @@
+   thunderUlt: { files: combat('thunder_ult'), gain: .98, gap: .28, group: 'cast', priority: 3 },
+   frostUlt: { files: combat('frost_ult'), gain: .98, gap: .28, group: 'cast', priority: 3 },
+   levelup: { files: ['levelup'], gain: .83, gap: .6, group: 'cue', priority: 4 },
+-  reward: { files: ['levelup'], gain: .94, rate: 1.12, gap: .55, group: 'cue', priority: 5 },
++  reward: { files: ['feedback-v15/reward'], gain: .82, gap: .7, group: 'cue', priority: 5 },
++  growth: { files: ['feedback-v15/growth'], gain: .72, gap: .55, group: 'cue', priority: 4 },
++  growthTick: { files: ['feedback-v15/tick'], gain: .45, gap: .18, group: 'ui', priority: 3 },
++  breakthrough: { files: ['feedback-v15/breakthrough'], gain: .82, gap: 1.1, group: 'cue', priority: 5 },
++  purchase: { files: ['feedback-v15/purchase'], gain: .76, gap: .6, group: 'cue', priority: 5 },
++  recruit: { files: ['feedback-v15/recruit'], gain: .86, gap: 1.5, group: 'cue', priority: 5 },
++  construction: { files: ['feedback-v15/construction'], gain: .84, gap: 1.1, group: 'cue', priority: 5 },
++  star: { files: ['feedback-v15/star'], gain: .62, gap: .16, group: 'ui', priority: 3 },
++  starFinish: { files: ['feedback-v15/star'], gain: .7, rate: 1.26, gap: .16, group: 'ui', priority: 3 },
+   ready: { files: combat('ready'), gain: .65, gap: .7, group: 'cue', priority: 3 },
+   surge: { files: ['surge'], gain: .8, gap: 1.8, group: 'cue', priority: 4 },
+   victory: { files: ['victory'], gain: .95, gap: 2, group: 'cue', priority: 5 },

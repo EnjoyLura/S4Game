@@ -1,0 +1,12 @@
+{
+  "exitCode": 36,
+  "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-campaign-route-compact-v3-20261017-out.log",
+  "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-campaign-route-compact-v3-20261017-err.log",
+  "creator": "3.8.8",
+  "platform": "web-mobile",
+  "debug": false,
+  "md5Cache": true,
+  "dprPatch": "completed",
+  "preparation": "tools/prepare-web-release.py",
+  "gameplayValidation": "user manual"
+}

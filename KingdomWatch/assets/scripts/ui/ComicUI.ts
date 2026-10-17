@@ -34,7 +34,7 @@ function polygon(g: Graphics, points: number[][], fill: string | Color, stroke =
 }
 
 function paintPlate(g: Graphics, w: number, h: number, tone: Tone,
-  opts: { cut?: number; edge?: boolean; fill?: string } = {}): void {
+  opts: { cut?: number; edge?: boolean; fill?: string; highlight?: boolean } = {}): void {
   g.clear();
   const [face, light] = TONES[tone];
   const c = Math.min(opts.cut ?? 9, h / 4, w / 4);
@@ -45,16 +45,26 @@ function paintPlate(g: Graphics, w: number, h: number, tone: Tone,
     [r - c, t], [l + c, t], [l, t - c], [l, b + c],
   ];
   polygon(g, shape, opts.fill || face, edge);
-  if (h > 30) {
+  if (h > 30 && opts.highlight !== false) {
     polygon(g, [[l + c + 3, t - 3], [r - c - 3, t - 3], [r - c - 5, t - 5], [l + c + 5, t - 5]], light);
   }
 }
 
 /** One flat face and one contour; offset plates and bottom bevels create unwanted doubled edges. */
 export function comicPlate(parent: Node, x: number, y: number, w: number, h: number,
-  tone: Tone = 'paper', opts: { name?: string; cut?: number; edge?: boolean; fill?: string } = {}): Node {
+  tone: Tone = 'paper', opts: { name?: string; cut?: number; edge?: boolean; fill?: string; highlight?: boolean } = {}): Node {
   const node = N(opts.name || 'comicPlate', parent, x, y, w, h);
   paintPlate(node.addComponent(Graphics), w, h, tone, opts);
+  return node;
+}
+
+/** Tonal grouping for quiet lobby cards: one fill, without a contour or decorative edge. */
+export function comicSurface(parent: Node, x: number, y: number, w: number, h: number,
+  tone: Tone = 'card', opts: { name?: string; radius?: number; fill?: string } = {}): Node {
+  const node = N(opts.name || 'comicSurface', parent, x, y, w, h);
+  const g = node.addComponent(Graphics);
+  g.fillColor = C(opts.fill || TONES[tone][0]);
+  g.roundRect(-w / 2, -h / 2, w, h, Math.min(opts.radius ?? 12, w / 2, h / 2)); g.fill();
   return node;
 }
 
@@ -109,7 +119,7 @@ export function comicMark(parent: Node, x: number, y: number, kind: 'plus' | 'lo
   return node;
 }
 
-interface ComicButtonOptions { tone?: Tone; size?: number; color?: string; name?: string; enabled?: boolean; sound?: UISound; }
+interface ComicButtonOptions { tone?: Tone; size?: number; color?: string; name?: string; enabled?: boolean; sound?: UISound | false; quiet?: boolean; }
 export interface ComicButtonControl {
   node: Node;
   setTone: (tone: Tone) => void;
@@ -124,7 +134,8 @@ export function comicButtonControl(parent: Node, x: number, y: number, w: number
   const node = N(opts.name || 'comicButton', parent, x, y, w, h);
   node.getComponent(UITransform)!.setContentSize(Math.max(44, w), Math.max(44, h));
   let tone = opts.tone || 'green';
-  const face = comicPlate(node, 0, 0, w, h, tone, { name: 'buttonFace', cut: 9 });
+  const paintOptions = { cut: 9, edge: !opts.quiet, highlight: !opts.quiet };
+  const face = comicPlate(node, 0, 0, w, h, tone, { name: 'buttonFace', ...paintOptions });
   let enabled = opts.enabled !== false, busy = false, caption: Node | null = null;
   const textColor = opts.color || (tone === 'gold' ? COMIC.text : COMIC.cream);
   const setCaption = (value: string): void => {
@@ -135,7 +146,7 @@ export function comicButtonControl(parent: Node, x: number, y: number, w: number
   const setEnabled = (value: boolean): void => {
     enabled = value;
     feedback.reset();
-    paintPlate(face.getComponent(Graphics)!, w, h, enabled && !busy ? tone : 'muted', { cut: 9 });
+    paintPlate(face.getComponent(Graphics)!, w, h, enabled && !busy ? tone : 'muted', paintOptions);
     if (caption) caption.getComponent(Label)!.color = C(enabled && !busy ? textColor : '#344139');
   };
   const feedback = bindButton(node, onClick, { visual: face, sound: opts.sound, enabled: () => enabled && !busy,
@@ -154,7 +165,7 @@ export function comicButtonControl(parent: Node, x: number, y: number, w: number
   };
   return { node, setText: setCaption, setEnabled, setBusy, setTone: value => {
     tone = value;
-    paintPlate(face.getComponent(Graphics)!, w, h, enabled && !busy ? tone : 'muted', { cut: 9 });
+    paintPlate(face.getComponent(Graphics)!, w, h, enabled && !busy ? tone : 'muted', paintOptions);
   } };
 }
 

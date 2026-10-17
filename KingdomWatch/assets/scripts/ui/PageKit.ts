@@ -7,7 +7,7 @@ import { LO, PAL } from '../config/GameConfig';
 import { CA, btn, C, dlgConfirm, dimLayer, gpanel, label, LabelOpts, N, WY, WX } from './UIKit';
 import { artSprite } from './Ux';
 import { COMIC, comicPlate } from './ComicUI';
-import { HERO_DEFS, Quality, QCOLOR, QNAME } from '../core/GameData';
+import { HERO_DEFS, Quality, QCOLOR } from '../core/GameData';
 import { loadSave } from '../core/SaveData';
 import { BattleSprite } from '../battle/BattleSprite';
 import { bindButton } from './ButtonFeedback';
@@ -146,10 +146,10 @@ export function modal(ctx: PageCtx, w: number, h: number, title: string, flat = 
   return panel;
 }
 
-/** 品质徽标（左上角标，缩小版——用户确认不与商品图重叠）：白/绿/蓝/紫 + N阶 */
-export function qualityBadge(parent: Node, x: number, y: number, q: Quality, tier: number): Node {
+/** 品质徽标只显示品质名称，与装备等级分开。 */
+export function qualityBadge(parent: Node, x: number, y: number, q: Quality, _tier: number): Node {
   const b = gpanel(parent, x, y, 92, 28, CA('#0B0F16', 0.85), C(QCOLOR[q]), 2, 8);
-  label(b, 0, 0, `${QNAME[q]}${tier}阶`, { size: 16, color: QCOLOR[q], bold: true, w: 86, h: 24 });
+  label(b, 0, 0, ['普通', '优秀', '稀有', '史诗'][q], { size: 16, color: QCOLOR[q], bold: true, w: 86, h: 24 });
   return b;
 }
 

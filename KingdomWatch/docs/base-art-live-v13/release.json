@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-base-art-live-v13-20261017-123735",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-upgrade-art-live-v12-20261017-115943",
+  "entryVersion": "1792211757",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=base-art-live-v13-1792211757",
+  "scope": "base main, common keep and codex dialog artwork, lower translucent game toasts, closer stage nameplates",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://8a7f7dae.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-base-art-live-v13-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-base-art-live-v13-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 16959,
+  "mainSha256": "ded0d43f135157bbcaf4c67142c96ae361595e42eb19e97f39fa58d5a8b41112",
+  "date": "2026-10-17T12:38:11.664601+08:00",
+  "testsRun": false,
+  "simulationRun": false,
+  "gameRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

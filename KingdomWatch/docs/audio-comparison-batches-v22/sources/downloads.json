@@ -1,0 +1,44 @@
+[
+  {
+    "id": "virix-ui-2",
+    "download": "https://opengameart.org/sites/default/files/UI%20SFX%20Pack%202%20sample.zip",
+    "page": "https://opengameart.org/content/ui-sfx-pack-2-sample",
+    "sha256": "51f517ffdf163035a52134bc79677fc43b979bb71f9e27e36c397ee8da7dfcc1",
+    "files": [
+      "Jingle 026.wav",
+      "Menu Select 1.wav",
+      "Notification 2.wav",
+      "Click 1.wav",
+      "Jingle 011.wav"
+    ]
+  },
+  {
+    "id": "virix-jingles",
+    "download": "https://opengameart.org/sites/default/files/Menu%20and%20Item%20Jingles%20Sampe%202_0.zip",
+    "page": "https://opengameart.org/content/ui-and-item-sound-effect-jingles-sample-2",
+    "sha256": "a488d2a4f82312dc7c3001e016b9749a2a799e603672b0d4a5d175caa0eb869f",
+    "files": [
+      "Menu2A.wav",
+      "Item2A.wav"
+    ]
+  },
+  {
+    "id": "virix-ui-1",
+    "download": "https://opengameart.org/sites/default/files/Menu%20FX%20example.zip",
+    "page": "https://opengameart.org/content/ui-and-item-sounds-sample-1",
+    "sha256": "952cc407885b5291bffe0b59ce482bf1e463000ba244ff943f8f0ce4629df3e3",
+    "files": [
+      "Menu FX example/",
+      "Menu FX example/Item1A.wav",
+      "Menu FX example/Item1B.wav",
+      "Menu FX example/Menu1A.wav",
+      "Menu FX example/Menu1B.wav"
+    ]
+  },
+  {
+    "id": "virix-ui-pack",
+    "download": "https://opengameart.org/sites/default/files/UI%20pack%201.zip",
+    "page": "https://opengameart.org/content/ui-sound-effects-pack",
+    "sha256": "7a3524922389679484e71712c26cb2efc96eeccdf42c178c23a21ef825a7eecb"
+  }
+]

@@ -1,0 +1,27 @@
+--- before/assets/scripts/battle/BattleDirector.ts
++++ assets/scripts/battle/BattleDirector.ts
+@@ -384,7 +384,7 @@
+     const opts: PickOpts = {
+       onPick: (card: CardDef) => {
+         if (this.state !== 'pick' || !this.applyCard(card)) return;
+-        Sfx.play('confirm');
++        // PickMotion owns the single confirmation at the selected card's landing.
+         this.stacks[card.id] = (this.stacks[card.id] || 0) + 1;
+         this.pickQueue--;
+         saveSave();
+@@ -485,7 +485,6 @@
+     this.state = 'lose'; this.pendingWin = false;
+     this.bossWarning.clear();
+     this.ultPresentation.clear();
+-    Sfx.play('defeat');
+     const goldFloor = Math.floor((this.levelDef.baseGold + this.goldEarned) * .3);
+     this.creditBattleGold(goldFloor);
+     const loot = this.loot.collectAll();
+@@ -527,7 +526,6 @@
+     this.pendingWin = false; this.ultPresentation.clear();
+     this.state = 'win';
+     this.bossWarning.clear();
+-    Sfx.play('victory');
+     const stars = starOf(this.line.ratio);
+     const reward = Math.floor(this.goldEarned + this.levelDef.baseGold * (1 + stars * 0.1));
+     const sv = loadSave();

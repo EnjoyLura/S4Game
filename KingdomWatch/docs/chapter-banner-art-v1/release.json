@@ -1,0 +1,66 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-banner-art-v1-20261017-011922",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-campaign-route-compact-v3-20261017-004118",
+  "entryVersion": "1792171089",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=chapter-banner-art-v1-1792171089",
+  "scope": "remove map title and scroll icon; reference-matched transparent navy-gold chapter banner with live heading, progress and arrows",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://8c4c000e.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-chapter-banner-art-v1-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-chapter-banner-art-v1-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "mainSha256": "fcc9198c4bdcd6a451071129a16b13b40bb1781f54a4c6883f78b629255883a8",
+  "creatorBuildMilliseconds": 18428,
+  "date": "2026-10-17T01:20:24.689259+08:00",
+  "asset": {
+    "tool": "built-in image_gen",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-8674bc34-9feb-43f0-b7b9-69edaa09878f.png",
+    "asset": "assets/resources/ux/campaign_chrome_v1/chapter_banner_v1.png",
+    "prompt": "banner-prompt.txt",
+    "reference": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-e239edc5-b7f6-4583-ba68-26880618a363.png",
+    "mode": "RGBA",
+    "sourceSize": [
+      2098,
+      749
+    ],
+    "spriteRect": [
+      16,
+      216,
+      2068,
+      298
+    ],
+    "alphaRange": [
+      0,
+      255
+    ],
+    "alphaBBoxAt4": [
+      19,
+      217,
+      2080,
+      512
+    ],
+    "sourceSha256": "553e1f538b15c9105f92d3a56c987dbf504f31bddde4f0673101abf4dbf57497",
+    "assetSha256": "553e1f538b15c9105f92d3a56c987dbf504f31bddde4f0673101abf4dbf57497",
+    "originalPixelsUnchanged": true,
+    "assetUuid": "0044baa2-086f-404e-8cf6-9b45a7410bd2",
+    "bytes": 780446,
+    "acceptance": "pending user manual review"
+  },
+  "testsRun": false,
+  "simulationRun": false,
+  "gameRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

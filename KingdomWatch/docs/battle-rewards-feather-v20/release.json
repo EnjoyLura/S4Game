@@ -1,0 +1,31 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-battle-rewards-feather-v20-20261017-143456",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-growth-feedback-v19-20261017-142313",
+  "entryVersion": "1792218866",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=battle-rewards-feather-v20-1792218866",
+  "scope": "shared feathered double-rule battle reward tiers with actual equipment; compact translucent growth feedback with main comparison and secondary deltas",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://4facac31.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-battle-rewards-growth-v20-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-battle-rewards-growth-v20-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 16994,
+  "date": "2026-10-17T14:35:35.764621+08:00",
+  "gameRun": false,
+  "testsRun": false,
+  "browserRun": false,
+  "audioAudition": false,
+  "onlineAcceptance": false
+}

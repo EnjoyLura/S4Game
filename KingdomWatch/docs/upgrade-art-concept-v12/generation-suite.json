@@ -1,0 +1,103 @@
+{
+  "tool": "built-in image_gen",
+  "useCase": "ui-mockup",
+  "conceptOnly": true,
+  "runtimeChanged": false,
+  "date": "2026-10-17",
+  "styleAnchor": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-main-v12.png",
+  "originalLevelProvenance": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/generation.json",
+  "pixelsUnmodifiedAfterGeneration": true,
+  "statisticsAreIllustrative": true,
+  "review": "All originals inspected inline: complete portrait viewports; three distinct cultivation tabs; consistent compact circular hero roster; square full-slot quality plates without quality corner labels; continuous near-white grouped attributes; four common-paper/navy-title dialogs and bottom margins. Weapon material color corrected through a targeted image_gen edit. Exact live statistics, wording, role identities and original single-face button geometry remain implementation source of truth.",
+  "assets": [
+    {
+      "key": "weapon",
+      "name": "武器培养页",
+      "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-0e28b726-337b-46b4-a888-fca5919b48e5.png",
+      "output": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-weapon-v12.png",
+      "prompt": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/weapon-prompt.txt",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-main-v12.png",
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-comic-v1/upgrade-weapon-archer.png"
+      ],
+      "sha256": "9b26f0192cdd60df2d96c3f379d90bfc420d8c0076220ccfd3ecd9ecbe5ec5d7"
+    },
+    {
+      "key": "skill",
+      "name": "技能培养页",
+      "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-1d2a0167-2b90-41d0-9f70-86e852276ac0.png",
+      "output": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-skill-v12.png",
+      "prompt": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/skill-prompt.txt",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-main-v12.png",
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-comic-v1/upgrade-skill.png"
+      ],
+      "sha256": "0eeffe518442af3cde34206a6e8e6edff03594a8e559c2612b20482368560f7b"
+    },
+    {
+      "key": "equipment",
+      "name": "装备培养页",
+      "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-40b16abc-96c8-44bf-88fe-a954385cf612.png",
+      "output": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-equipment-v12.png",
+      "prompt": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/equipment-prompt.txt",
+      "references": [
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-main-v12.png",
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-comic-v1/upgrade-equip.png"
+      ],
+      "sha256": "900574c7e98c09015958bad6a7a6323ad499d1eac5ceefb8144af4b6fedc57af"
+    },
+    {
+      "key": "attributes-dialog",
+      "name": "属性总览弹窗",
+      "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-b649fc97-9599-473a-b92b-729faecd0fdf.png",
+      "output": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-attributes-dialog-v12.png",
+      "prompt": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/attributes-dialog-prompt.txt",
+      "references": [
+        "C:/Users/user/AppData/Local/Temp/codex-clipboard-fc61614e-4d57-45b6-99aa-a0d2d1b2e64c.png",
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-main-v12.png"
+      ],
+      "sha256": "3ce12a9cc57328f147a895b7633cac675ba0688d9c030089c57becc248a00ae6"
+    },
+    {
+      "key": "milestone-dialog",
+      "name": "突破详情弹窗",
+      "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-b2ede335-4c8e-455e-9df0-8ea77a80bf62.png",
+      "output": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-milestone-dialog-v12.png",
+      "prompt": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/milestone-dialog-prompt.txt",
+      "references": [
+        "C:/Users/user/AppData/Local/Temp/codex-clipboard-fc61614e-4d57-45b6-99aa-a0d2d1b2e64c.png",
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-main-v12.png",
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-comic-v1/upgrade-skill.png"
+      ],
+      "sha256": "5fc30fe5074b85e71c9c1e7cb1f0b372017f10ea496435e45ec500104d876635"
+    },
+    {
+      "key": "weapon-dialog",
+      "name": "武器培养弹窗",
+      "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-ccb4b6be-7b51-4a66-87f9-906fcb8e3637.png",
+      "output": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-weapon-dialog-v12.png",
+      "prompt": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/weapon-dialog-prompt.txt",
+      "references": [
+        "C:/Users/user/AppData/Local/Temp/codex-clipboard-fc61614e-4d57-45b6-99aa-a0d2d1b2e64c.png",
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-main-v12.png",
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-comic-v1/upgrade-weapon-archer.png"
+      ],
+      "initialSource": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-97fc15bd-f7a2-4700-963a-d446d0dacc0f.png",
+      "correctionPrompt": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/weapon-dialog-correction-prompt.txt",
+      "sha256": "b418c1ce451e5611a068a1c011ad8785d62de0fc3b5b42b2d96f089c1a7fa51c"
+    },
+    {
+      "key": "equipment-dialog",
+      "name": "装备强化弹窗",
+      "source": "C:/Users/user/.codex/generated_images/01a12e7c-9e87-72e0-b3ff-bca4a58686b3/exec-2b7c7156-9a3a-4fb4-a6db-30ab7e3b4f83.png",
+      "output": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-equipment-dialog-v12.png",
+      "prompt": "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/equipment-dialog-prompt.txt",
+      "references": [
+        "C:/Users/user/AppData/Local/Temp/codex-clipboard-fc61614e-4d57-45b6-99aa-a0d2d1b2e64c.png",
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-art-concept-v12/upgrade-main-v12.png",
+        "D:/AI/S4Game/KingdomWatch/docs/upgrade-comic-v1/upgrade-equip.png"
+      ],
+      "sha256": "7f57bc3a9458c6808f5d847fb8b532f6783edfa25b98666feeae8d1cce7f0b52"
+    }
+  ]
+}

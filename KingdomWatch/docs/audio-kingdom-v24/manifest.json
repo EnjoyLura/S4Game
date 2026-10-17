@@ -1,0 +1,3078 @@
+{
+  "version": "v24",
+  "files": [
+    {
+      "file": "bow_1.wav",
+      "label": "弓箭普攻",
+      "cue": "bow",
+      "seconds": 0.235,
+      "channels": 1,
+      "bytes": 20772,
+      "maxOfflinePeakReductionDB": 1.801,
+      "peakDBFS": -6.2,
+      "oversampledPeakDBFS": -6.17,
+      "activeRMSDBFS": -23.86,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "be87d54fc961ac6dc5e72beb8f4d6e94907985c820e55bc34a451c86fb4a1daa",
+      "layers": [
+        {
+          "source": "bow",
+          "sourceStart": 0.105,
+          "duration": 0.235,
+          "rate": 1,
+          "gain": 0.95,
+          "at": 0,
+          "highpass": 140,
+          "lowpass": 12500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swish",
+          "sourceStart": 0.154637,
+          "duration": 0.16,
+          "rate": 1.058,
+          "gain": 0.18,
+          "at": 0.008,
+          "highpass": 800,
+          "lowpass": 8000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "bow_2.wav",
+      "label": "弓箭普攻",
+      "cue": "bow",
+      "seconds": 0.235,
+      "channels": 1,
+      "bytes": 20772,
+      "maxOfflinePeakReductionDB": 3.497,
+      "peakDBFS": -6.2,
+      "oversampledPeakDBFS": -5.93,
+      "activeRMSDBFS": -25.09,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "831bd5ffea3833ecb453add52e42b21e90d86cd40b621b72c24be0ceb745f384",
+      "layers": [
+        {
+          "source": "bow",
+          "sourceStart": 0.443,
+          "duration": 0.235,
+          "rate": 1,
+          "gain": 0.95,
+          "at": 0,
+          "highpass": 140,
+          "lowpass": 12500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swish",
+          "sourceStart": 0.154637,
+          "duration": 0.16,
+          "rate": 1.076,
+          "gain": 0.18,
+          "at": 0.008,
+          "highpass": 800,
+          "lowpass": 8000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "bow_3.wav",
+      "label": "弓箭普攻",
+      "cue": "bow",
+      "seconds": 0.235,
+      "channels": 1,
+      "bytes": 20772,
+      "maxOfflinePeakReductionDB": 2.54,
+      "peakDBFS": -6.2,
+      "oversampledPeakDBFS": -5.87,
+      "activeRMSDBFS": -24.5,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "eec0b7d3ae13c91a225f970b29bbc51ad9c604f314ccddc6eb6c40d4f95061bd",
+      "layers": [
+        {
+          "source": "bow",
+          "sourceStart": 0.77,
+          "duration": 0.235,
+          "rate": 1,
+          "gain": 0.95,
+          "at": 0,
+          "highpass": 140,
+          "lowpass": 12500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swish",
+          "sourceStart": 0.154637,
+          "duration": 0.16,
+          "rate": 1.094,
+          "gain": 0.18,
+          "at": 0.008,
+          "highpass": 800,
+          "lowpass": 8000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "crossbow_1.wav",
+      "label": "重弩普攻",
+      "cue": "crossbow",
+      "seconds": 0.32,
+      "channels": 1,
+      "bytes": 28268,
+      "maxOfflinePeakReductionDB": 3.529,
+      "peakDBFS": -5.8,
+      "oversampledPeakDBFS": -5.8,
+      "activeRMSDBFS": -24.14,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "b7b0bb73ddb94099c920cae7f6d97c001160fbaa3ead6219eac2aa2cd3e1a3be",
+      "layers": [
+        {
+          "source": "crossbow",
+          "sourceStart": 0.32,
+          "duration": 0.32,
+          "rate": 0.98,
+          "gain": 1,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 11500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "wood",
+          "sourceStart": 0.0,
+          "duration": 0.16,
+          "rate": 1,
+          "gain": 0.19,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 3400,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swing",
+          "sourceStart": 0.169603,
+          "duration": 0.22,
+          "rate": 1,
+          "gain": 0.16,
+          "at": 0.009,
+          "highpass": 600,
+          "lowpass": 7500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "crossbow_2.wav",
+      "label": "重弩普攻",
+      "cue": "crossbow",
+      "seconds": 0.3135,
+      "channels": 1,
+      "bytes": 27698,
+      "maxOfflinePeakReductionDB": 1.413,
+      "peakDBFS": -5.8,
+      "oversampledPeakDBFS": -5.6,
+      "activeRMSDBFS": -22.25,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "9c5dd4ed50438da16b221f0c882435edab270e09357991ad9d5a59e3727e5c87",
+      "layers": [
+        {
+          "source": "crossbow",
+          "sourceStart": 0.834,
+          "duration": 0.32,
+          "rate": 0.98,
+          "gain": 1,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 11500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "wood",
+          "sourceStart": 0.03,
+          "duration": 0.16,
+          "rate": 1,
+          "gain": 0.19,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 3400,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swing",
+          "sourceStart": 0.169603,
+          "duration": 0.22,
+          "rate": 1,
+          "gain": 0.16,
+          "at": 0.009,
+          "highpass": 600,
+          "lowpass": 7500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "crossbow_3.wav",
+      "label": "重弩普攻",
+      "cue": "crossbow",
+      "seconds": 0.32,
+      "channels": 1,
+      "bytes": 28268,
+      "maxOfflinePeakReductionDB": 1.784,
+      "peakDBFS": -5.8,
+      "oversampledPeakDBFS": -5.71,
+      "activeRMSDBFS": -23.67,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "0bb5d0b3228c65c8c4fbd9392e15f4cc88f9f3af73f568a0843f7c326e991980",
+      "layers": [
+        {
+          "source": "crossbow",
+          "sourceStart": 1.41,
+          "duration": 0.32,
+          "rate": 0.98,
+          "gain": 1,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 11500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "wood",
+          "sourceStart": 0.06,
+          "duration": 0.16,
+          "rate": 1,
+          "gain": 0.19,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 3400,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swing",
+          "sourceStart": 0.169603,
+          "duration": 0.22,
+          "rate": 1,
+          "gain": 0.16,
+          "at": 0.009,
+          "highpass": 600,
+          "lowpass": 7500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "fire_1.wav",
+      "label": "火焰普攻",
+      "cue": "fire",
+      "seconds": 0.32,
+      "channels": 1,
+      "bytes": 28268,
+      "maxOfflinePeakReductionDB": 0,
+      "peakDBFS": -6.17,
+      "oversampledPeakDBFS": -6.14,
+      "activeRMSDBFS": -22.0,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "286bebd60cfdf06d5afeb8af53a3bb193c599de3571ceb3b688356e5f0130403",
+      "layers": [
+        {
+          "source": "flame1",
+          "sourceStart": 0.064841,
+          "duration": 0.32,
+          "rate": 1,
+          "gain": 0.85,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 8200,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "lighter",
+          "sourceStart": 1.087517,
+          "duration": 0.12,
+          "rate": 0.98,
+          "gain": 0.26,
+          "at": 0,
+          "highpass": 400,
+          "lowpass": 6500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "huff",
+          "sourceStart": 0.214501,
+          "duration": 0.22,
+          "rate": 1,
+          "gain": 0.16,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 1900,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "thunder_1.wav",
+      "label": "雷电普攻",
+      "cue": "thunder",
+      "seconds": 0.19,
+      "channels": 1,
+      "bytes": 16802,
+      "maxOfflinePeakReductionDB": 0.362,
+      "peakDBFS": -6.4,
+      "oversampledPeakDBFS": -5.92,
+      "activeRMSDBFS": -22.57,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "fd95b0e5053a6bac26532150363937f06a3263e259bcea058f6d03bb74bda052",
+      "layers": [
+        {
+          "source": "electric",
+          "sourceStart": 2.49,
+          "duration": 0.19,
+          "rate": 1,
+          "gain": 0.9,
+          "at": 0,
+          "highpass": 240,
+          "lowpass": 6600,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "hit1",
+          "sourceStart": 0.084796,
+          "duration": 0.16,
+          "rate": 1,
+          "gain": 0.18,
+          "at": 0,
+          "highpass": 170,
+          "lowpass": 2200,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "frost_1.wav",
+      "label": "冰霜普攻",
+      "cue": "frost",
+      "seconds": 0.3,
+      "channels": 1,
+      "bytes": 26504,
+      "maxOfflinePeakReductionDB": 3.375,
+      "peakDBFS": -6.4,
+      "oversampledPeakDBFS": -5.93,
+      "activeRMSDBFS": -25.04,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "17f66936fcf35cf1882e098a261547f132ad8ef4a1acc15d01e5cb48ac8c29ff",
+      "layers": [
+        {
+          "source": "ice",
+          "sourceStart": 0.019943,
+          "duration": 0.3,
+          "rate": 1.04,
+          "gain": 0.8,
+          "at": 0,
+          "highpass": 340,
+          "lowpass": 8500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swish",
+          "sourceStart": 0.149649,
+          "duration": 0.21,
+          "rate": 1,
+          "gain": 0.27,
+          "at": 0,
+          "highpass": 1200,
+          "lowpass": 6800,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "Percussion/Glock/glock_medium_G5.wav",
+          "sourceStart": 0,
+          "duration": 0.28,
+          "rate": 0.8908987181403393,
+          "gain": 0.045,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.084,
+          "pan": 0,
+          "instrument": "glock",
+          "midi": 89,
+          "root": 91
+        }
+      ]
+    },
+    {
+      "file": "fire_2.wav",
+      "label": "火焰普攻",
+      "cue": "fire",
+      "seconds": 0.32,
+      "channels": 1,
+      "bytes": 28268,
+      "maxOfflinePeakReductionDB": 0,
+      "peakDBFS": -7.92,
+      "oversampledPeakDBFS": -7.66,
+      "activeRMSDBFS": -22.0,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "d7074a1baa4533b3e62998c78906a4a5006ece0dd9b33a7b6ba3e2ecdef19314",
+      "layers": [
+        {
+          "source": "flame2",
+          "sourceStart": 0,
+          "duration": 0.32,
+          "rate": 1,
+          "gain": 0.85,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 8200,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "lighter",
+          "sourceStart": 1.087517,
+          "duration": 0.12,
+          "rate": 1.01,
+          "gain": 0.26,
+          "at": 0,
+          "highpass": 400,
+          "lowpass": 6500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "huff",
+          "sourceStart": 0.214501,
+          "duration": 0.22,
+          "rate": 1,
+          "gain": 0.16,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 1900,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "thunder_2.wav",
+      "label": "雷电普攻",
+      "cue": "thunder",
+      "seconds": 0.19,
+      "channels": 1,
+      "bytes": 16802,
+      "maxOfflinePeakReductionDB": 2.172,
+      "peakDBFS": -6.4,
+      "oversampledPeakDBFS": -6.24,
+      "activeRMSDBFS": -22.84,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "bec713742c6495b97e98d79401a21727a0215735ed354b0c03c434fe0533328e",
+      "layers": [
+        {
+          "source": "electric",
+          "sourceStart": 2.62,
+          "duration": 0.19,
+          "rate": 1,
+          "gain": 0.9,
+          "at": 0,
+          "highpass": 240,
+          "lowpass": 6600,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "hit2",
+          "sourceStart": 0.084796,
+          "duration": 0.16,
+          "rate": 1,
+          "gain": 0.18,
+          "at": 0,
+          "highpass": 170,
+          "lowpass": 2200,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "frost_2.wav",
+      "label": "冰霜普攻",
+      "cue": "frost",
+      "seconds": 0.3,
+      "channels": 1,
+      "bytes": 26504,
+      "maxOfflinePeakReductionDB": 4.0,
+      "peakDBFS": -6.4,
+      "oversampledPeakDBFS": -6.07,
+      "activeRMSDBFS": -25.77,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "175bc5cd7947e578a6c5ec36c123d4bce2f8e3d4ec15cb4591946481ce037d28",
+      "layers": [
+        {
+          "source": "icecrack",
+          "sourceStart": 1.48,
+          "duration": 0.3,
+          "rate": 1.04,
+          "gain": 0.8,
+          "at": 0,
+          "highpass": 340,
+          "lowpass": 8500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swish",
+          "sourceStart": 0.149649,
+          "duration": 0.21,
+          "rate": 1,
+          "gain": 0.27,
+          "at": 0,
+          "highpass": 1200,
+          "lowpass": 6800,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "Percussion/Glock/glock_medium_G5.wav",
+          "sourceStart": 0,
+          "duration": 0.28,
+          "rate": 0.9438743126816935,
+          "gain": 0.045,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.084,
+          "pan": 0,
+          "instrument": "glock",
+          "midi": 90,
+          "root": 91
+        }
+      ]
+    },
+    {
+      "file": "fire_3.wav",
+      "label": "火焰普攻",
+      "cue": "fire",
+      "seconds": 0.32,
+      "channels": 1,
+      "bytes": 28268,
+      "maxOfflinePeakReductionDB": 4.0,
+      "peakDBFS": -6.0,
+      "oversampledPeakDBFS": -5.55,
+      "activeRMSDBFS": -23.83,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "44af364e5a79bb7f363e2faf2b574121fadd162a4024963bcef527afa43c775f",
+      "layers": [
+        {
+          "source": "flame3",
+          "sourceStart": 0.084796,
+          "duration": 0.32,
+          "rate": 1,
+          "gain": 0.85,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 8200,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "lighter",
+          "sourceStart": 1.087517,
+          "duration": 0.12,
+          "rate": 1.04,
+          "gain": 0.26,
+          "at": 0,
+          "highpass": 400,
+          "lowpass": 6500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "huff",
+          "sourceStart": 0.214501,
+          "duration": 0.22,
+          "rate": 1,
+          "gain": 0.16,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 1900,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "thunder_3.wav",
+      "label": "雷电普攻",
+      "cue": "thunder",
+      "seconds": 0.19,
+      "channels": 1,
+      "bytes": 16802,
+      "maxOfflinePeakReductionDB": 0.111,
+      "peakDBFS": -6.4,
+      "oversampledPeakDBFS": -6.4,
+      "activeRMSDBFS": -22.52,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "efde310abfb7a4e3a7b885fcc96dc83cf0440ded85b102058895493a16f16d71",
+      "layers": [
+        {
+          "source": "electric",
+          "sourceStart": 2.83,
+          "duration": 0.19,
+          "rate": 1,
+          "gain": 0.9,
+          "at": 0,
+          "highpass": 240,
+          "lowpass": 6600,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "hit3",
+          "sourceStart": 0.119717,
+          "duration": 0.16,
+          "rate": 1,
+          "gain": 0.18,
+          "at": 0,
+          "highpass": 170,
+          "lowpass": 2200,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "frost_3.wav",
+      "label": "冰霜普攻",
+      "cue": "frost",
+      "seconds": 0.3,
+      "channels": 1,
+      "bytes": 26504,
+      "maxOfflinePeakReductionDB": 3.025,
+      "peakDBFS": -6.4,
+      "oversampledPeakDBFS": -6.39,
+      "activeRMSDBFS": -24.15,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "af946d90b01bd09e95de9108fd1cc9cf8f236c76539d026c9f843cce7a309540",
+      "layers": [
+        {
+          "source": "iceblock",
+          "sourceStart": 0.004977,
+          "duration": 0.3,
+          "rate": 1.04,
+          "gain": 0.8,
+          "at": 0,
+          "highpass": 340,
+          "lowpass": 8500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swish",
+          "sourceStart": 0.149649,
+          "duration": 0.21,
+          "rate": 1,
+          "gain": 0.27,
+          "at": 0,
+          "highpass": 1200,
+          "lowpass": 6800,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "Percussion/Glock/glock_medium_G5.wav",
+          "sourceStart": 0,
+          "duration": 0.28,
+          "rate": 1.0,
+          "gain": 0.045,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.084,
+          "pan": 0,
+          "instrument": "glock",
+          "midi": 91,
+          "root": 91
+        }
+      ]
+    },
+    {
+      "file": "pierce_heavy.wav",
+      "label": "贯穿重击",
+      "cue": "pierceHeavy",
+      "seconds": 0.258,
+      "channels": 1,
+      "bytes": 22804,
+      "maxOfflinePeakReductionDB": 0,
+      "peakDBFS": -5.54,
+      "oversampledPeakDBFS": -5.52,
+      "activeRMSDBFS": -21.0,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "4808a3dcc63df3791a1eeb92c7d36ecca1b2a8984fad1d0d53a49e8f28c6620a",
+      "layers": [
+        {
+          "source": "hit1",
+          "sourceStart": 0.084796,
+          "duration": 0.3,
+          "rate": 1,
+          "gain": 0.9,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "wood",
+          "sourceStart": 0.094773,
+          "duration": 0.23,
+          "rate": 1,
+          "gain": 0.28,
+          "at": 0.01,
+          "highpass": 80,
+          "lowpass": 5200,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "fire_heavy.wav",
+      "label": "火焰重击",
+      "cue": "fireHeavy",
+      "seconds": 0.52,
+      "channels": 1,
+      "bytes": 45908,
+      "maxOfflinePeakReductionDB": 4.0,
+      "peakDBFS": -5.5,
+      "oversampledPeakDBFS": -5.29,
+      "activeRMSDBFS": -23.04,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "e597636ee6a9d722cdee6761c32661f49c61c311dd415057bf890a7e95fbf0ee",
+      "layers": [
+        {
+          "source": "flame4",
+          "sourceStart": 0.119717,
+          "duration": 0.52,
+          "rate": 0.9,
+          "gain": 0.9,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 7000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "hit2",
+          "sourceStart": 0.084796,
+          "duration": 0.23,
+          "rate": 1,
+          "gain": 0.42,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 3800,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "thunder_heavy.wav",
+      "label": "雷电重击",
+      "cue": "thunderHeavy",
+      "seconds": 0.43,
+      "channels": 1,
+      "bytes": 37970,
+      "maxOfflinePeakReductionDB": 0,
+      "peakDBFS": -6.55,
+      "oversampledPeakDBFS": -6.41,
+      "activeRMSDBFS": -21.0,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "c1787f92d5b2d6407b472c60808c5b44795e9375a26c7b885dc08311ab160d4c",
+      "layers": [
+        {
+          "source": "electric",
+          "sourceStart": 0.089785,
+          "duration": 0.28,
+          "rate": 1,
+          "gain": 0.65,
+          "at": 0,
+          "highpass": 250,
+          "lowpass": 6300,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "thunder",
+          "sourceStart": 7.093866,
+          "duration": 0.43,
+          "rate": 1,
+          "gain": 0.6,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 4200,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "hit1",
+          "sourceStart": 0.084796,
+          "duration": 0.2,
+          "rate": 1,
+          "gain": 0.23,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 1900,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "frost_heavy.wav",
+      "label": "冰霜重击",
+      "cue": "frostHeavy",
+      "seconds": 0.49,
+      "channels": 1,
+      "bytes": 43262,
+      "maxOfflinePeakReductionDB": 3.01,
+      "peakDBFS": -5.5,
+      "oversampledPeakDBFS": -5.09,
+      "activeRMSDBFS": -23.65,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "0178d6fcfbd785080dfd5c797bd955aa7ed99556c35a226e33ffc76d9b5fee62",
+      "layers": [
+        {
+          "source": "iceblock",
+          "sourceStart": 0.004977,
+          "duration": 0.49,
+          "rate": 0.88,
+          "gain": 0.8,
+          "at": 0,
+          "highpass": 170,
+          "lowpass": 8200,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "icecrack",
+          "sourceStart": 0.493866,
+          "duration": 0.28,
+          "rate": 1,
+          "gain": 0.33,
+          "at": 0.04,
+          "highpass": 650,
+          "lowpass": 6900,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "crit.wav",
+      "label": "暴击",
+      "cue": "crit",
+      "seconds": 0.1955,
+      "channels": 1,
+      "bytes": 17284,
+      "maxOfflinePeakReductionDB": 0.329,
+      "peakDBFS": -5.5,
+      "oversampledPeakDBFS": -5.47,
+      "activeRMSDBFS": -20.96,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "9933123fb0f7330bc87ba281fb5a731e03a0543a827b7c06e707c1f7568ef3f0",
+      "layers": [
+        {
+          "source": "hit3",
+          "sourceStart": 0.119717,
+          "duration": 0.27,
+          "rate": 1.06,
+          "gain": 1,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swish",
+          "sourceStart": 0.154637,
+          "duration": 0.18,
+          "rate": 1,
+          "gain": 0.22,
+          "at": 0,
+          "highpass": 1100,
+          "lowpass": 8500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "heavy_1.wav",
+      "label": "精英与首领倒地",
+      "cue": "deathHeavy",
+      "seconds": 0.45,
+      "channels": 1,
+      "bytes": 39734,
+      "maxOfflinePeakReductionDB": 0,
+      "peakDBFS": -7.94,
+      "oversampledPeakDBFS": -7.93,
+      "activeRMSDBFS": -22.0,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "61f7dfcbced6030c43bd489cc1822411785a99431963da0655381fa18f56d626",
+      "layers": [
+        {
+          "source": "hit1",
+          "sourceStart": 0.084796,
+          "duration": 0.32,
+          "rate": 0.83,
+          "gain": 0.6,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 3000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "rockdrop",
+          "sourceStart": 0.44398,
+          "duration": 0.45,
+          "rate": 0.92,
+          "gain": 0.7,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 6500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "debris",
+          "sourceStart": 0.054864,
+          "duration": 0.24,
+          "rate": 1,
+          "gain": 0.22,
+          "at": 0.11,
+          "highpass": 450,
+          "lowpass": 5500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "heavy_2.wav",
+      "label": "精英与首领倒地",
+      "cue": "deathHeavy",
+      "seconds": 0.45,
+      "channels": 1,
+      "bytes": 39734,
+      "maxOfflinePeakReductionDB": 0,
+      "peakDBFS": -7.13,
+      "oversampledPeakDBFS": -7.11,
+      "activeRMSDBFS": -22.0,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "c64361e9765a7cb6da5ab5c5810fa8f2fbf3fce725077f7ec889899cfc00afa5",
+      "layers": [
+        {
+          "source": "hit2",
+          "sourceStart": 0.084796,
+          "duration": 0.32,
+          "rate": 0.83,
+          "gain": 0.6,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 3000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "rockdrop",
+          "sourceStart": 0.44398,
+          "duration": 0.45,
+          "rate": 0.9400000000000001,
+          "gain": 0.7,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 6500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "debris",
+          "sourceStart": 0.054864,
+          "duration": 0.24,
+          "rate": 1,
+          "gain": 0.22,
+          "at": 0.11,
+          "highpass": 450,
+          "lowpass": 5500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "heavy_3.wav",
+      "label": "精英与首领倒地",
+      "cue": "deathHeavy",
+      "seconds": 0.45,
+      "channels": 1,
+      "bytes": 39734,
+      "maxOfflinePeakReductionDB": 0,
+      "peakDBFS": -6.5,
+      "oversampledPeakDBFS": -6.49,
+      "activeRMSDBFS": -22.0,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "d328a10aee92de14e313ef3359c96861e2c74027f2f84c6c22bdd94ef88da76b",
+      "layers": [
+        {
+          "source": "hit3",
+          "sourceStart": 0.124705,
+          "duration": 0.32,
+          "rate": 0.83,
+          "gain": 0.6,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 3000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "rockdrop",
+          "sourceStart": 0.44398,
+          "duration": 0.45,
+          "rate": 0.96,
+          "gain": 0.7,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 6500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "debris",
+          "sourceStart": 0.054864,
+          "duration": 0.24,
+          "rate": 1,
+          "gain": 0.22,
+          "at": 0.11,
+          "highpass": 450,
+          "lowpass": 5500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "wall.wav",
+      "label": "防线受击",
+      "cue": "wall",
+      "seconds": 0.37,
+      "channels": 1,
+      "bytes": 32678,
+      "maxOfflinePeakReductionDB": 1.776,
+      "peakDBFS": -5.5,
+      "oversampledPeakDBFS": -5.33,
+      "activeRMSDBFS": -21.14,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "a3fddb2a2b94d7ca6c6cb0ae848da1fafd78b08ddb4f9267ab9f21b70d24a3fa",
+      "layers": [
+        {
+          "source": "rock",
+          "sourceStart": 0.119717,
+          "duration": 0.37,
+          "rate": 1,
+          "gain": 0.8,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 4800,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "wood",
+          "sourceStart": 0.044887,
+          "duration": 0.26,
+          "rate": 1,
+          "gain": 0.55,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 4200,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "snipe.wav",
+      "label": "重弩蓄力射击",
+      "cue": "snipe",
+      "seconds": 0.44,
+      "channels": 1,
+      "bytes": 38852,
+      "maxOfflinePeakReductionDB": 1.911,
+      "peakDBFS": -4.8,
+      "oversampledPeakDBFS": -4.57,
+      "activeRMSDBFS": -20.91,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "934a435295575c6719a65c2638c5d45dc8bd157bfb68c4e2400fd19fe0a953fe",
+      "layers": [
+        {
+          "source": "crossbow",
+          "sourceStart": 0.834,
+          "duration": 0.44,
+          "rate": 0.88,
+          "gain": 1,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swing",
+          "sourceStart": 0.169603,
+          "duration": 0.42,
+          "rate": 1,
+          "gain": 0.37,
+          "at": 0,
+          "highpass": 350,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "hit2",
+          "sourceStart": 0.084796,
+          "duration": 0.22,
+          "rate": 1,
+          "gain": 0.18,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 2100,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "skill.wav",
+      "label": "箭矢技能",
+      "cue": "skill",
+      "seconds": 0.379,
+      "channels": 1,
+      "bytes": 33468,
+      "maxOfflinePeakReductionDB": 2.25,
+      "peakDBFS": -5.3,
+      "oversampledPeakDBFS": -5.13,
+      "activeRMSDBFS": -22.08,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "7abd7246ac527f699a483b99ebc16885851657eb99fe9dd46c9344303705f9d7",
+      "layers": [
+        {
+          "source": "bow",
+          "sourceStart": 0.443,
+          "duration": 0.28,
+          "rate": 1,
+          "gain": 0.8,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swing",
+          "sourceStart": 0.169603,
+          "duration": 0.44,
+          "rate": 1.05,
+          "gain": 0.6,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swish",
+          "sourceStart": 0.154637,
+          "duration": 0.25,
+          "rate": 1,
+          "gain": 0.26,
+          "at": 0.065,
+          "highpass": 950,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "bow_ult.wav",
+      "label": "箭雨大招",
+      "cue": "bowUlt",
+      "seconds": 0.4756,
+      "channels": 1,
+      "bytes": 41992,
+      "maxOfflinePeakReductionDB": 3.647,
+      "peakDBFS": -4.8,
+      "oversampledPeakDBFS": -4.6,
+      "activeRMSDBFS": -21.61,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "a3beb6726ed0eef4eaa3893867bafe38b781ed1d37f466c56770076825ab7b42",
+      "layers": [
+        {
+          "source": "bow",
+          "sourceStart": 0.105,
+          "duration": 0.36,
+          "rate": 0.92,
+          "gain": 0.9,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swing",
+          "sourceStart": 0.169603,
+          "duration": 0.65,
+          "rate": 0.87,
+          "gain": 0.65,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swish",
+          "sourceStart": 0.154637,
+          "duration": 0.27,
+          "rate": 1,
+          "gain": 0.28,
+          "at": 0.08,
+          "highpass": 80,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swish",
+          "sourceStart": 0.154637,
+          "duration": 0.29,
+          "rate": 0.95,
+          "gain": 0.18,
+          "at": 0.17,
+          "highpass": 80,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "fire_skill.wav",
+      "label": "火焰技能",
+      "cue": "fireSkill",
+      "seconds": 0.705,
+      "channels": 1,
+      "bytes": 62226,
+      "maxOfflinePeakReductionDB": 4.0,
+      "peakDBFS": -5.0,
+      "oversampledPeakDBFS": -5.0,
+      "activeRMSDBFS": -21.87,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "73aceaed6340e152bcc60a17bd5ac24aee3760f84ece51ca26997d556052a324",
+      "layers": [
+        {
+          "source": "lighter",
+          "sourceStart": 1.087517,
+          "duration": 0.13,
+          "rate": 1,
+          "gain": 0.34,
+          "at": 0,
+          "highpass": 220,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "flame4",
+          "sourceStart": 0.119717,
+          "duration": 0.69,
+          "rate": 0.94,
+          "gain": 0.9,
+          "at": 0.015,
+          "highpass": 80,
+          "lowpass": 7400,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "huff",
+          "sourceStart": 0.214501,
+          "duration": 0.43,
+          "rate": 1,
+          "gain": 0.25,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 2500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "thunder_skill.wav",
+      "label": "连锁闪电",
+      "cue": "thunderSkill",
+      "seconds": 0.5,
+      "channels": 1,
+      "bytes": 44144,
+      "maxOfflinePeakReductionDB": 0,
+      "peakDBFS": -5.26,
+      "oversampledPeakDBFS": -5.2,
+      "activeRMSDBFS": -20.6,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "801221b23decd98f2d4412ff7b3639c95031d9ef40ff8667de795e8efdd8f54f",
+      "layers": [
+        {
+          "source": "electric",
+          "sourceStart": 0.089785,
+          "duration": 0.26,
+          "rate": 1,
+          "gain": 0.7,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 6300,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "current",
+          "sourceStart": 0.004977,
+          "duration": 0.47,
+          "rate": 1,
+          "gain": 0.4,
+          "at": 0.03,
+          "highpass": 220,
+          "lowpass": 4800,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "electric",
+          "sourceStart": 0.089785,
+          "duration": 0.16,
+          "rate": 1.1,
+          "gain": 0.3,
+          "at": 0.11,
+          "highpass": 80,
+          "lowpass": 6000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "thunder",
+          "sourceStart": 7.093866,
+          "duration": 0.42,
+          "rate": 1,
+          "gain": 0.32,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 3000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "frost_skill.wav",
+      "label": "冰霜领域",
+      "cue": "frostSkill",
+      "seconds": 0.68,
+      "channels": 1,
+      "bytes": 60020,
+      "maxOfflinePeakReductionDB": 2.94,
+      "peakDBFS": -5.0,
+      "oversampledPeakDBFS": -4.95,
+      "activeRMSDBFS": -23.12,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "9b364755fdcec09fef6b457bee0091ee641764b283e9b7beeb11c449e1929253",
+      "layers": [
+        {
+          "source": "swish",
+          "sourceStart": 0.154637,
+          "duration": 0.32,
+          "rate": 1,
+          "gain": 0.3,
+          "at": 0,
+          "highpass": 800,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "iceblock",
+          "sourceStart": 0.004977,
+          "duration": 0.61,
+          "rate": 0.88,
+          "gain": 0.8,
+          "at": 0.07,
+          "highpass": 80,
+          "lowpass": 8300,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "icecrack",
+          "sourceStart": 0.493866,
+          "duration": 0.38,
+          "rate": 1,
+          "gain": 0.25,
+          "at": 0.16,
+          "highpass": 600,
+          "lowpass": 7500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "Percussion/Glock/glock_medium_C5.wav",
+          "sourceStart": 0,
+          "duration": 0.52,
+          "rate": 1.0,
+          "gain": 0.07,
+          "at": 0.14,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0,
+          "instrument": "glock",
+          "midi": 84,
+          "root": 84
+        }
+      ]
+    },
+    {
+      "file": "fire_ult.wav",
+      "label": "流星火雨",
+      "cue": "fireUlt",
+      "seconds": 0.86,
+      "channels": 1,
+      "bytes": 75896,
+      "maxOfflinePeakReductionDB": 0.684,
+      "peakDBFS": -4.5,
+      "oversampledPeakDBFS": -4.5,
+      "activeRMSDBFS": -19.61,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "6360af573bc6523142be9e233f6ea1af91d680a4ce1c97ad66920363e057b934",
+      "layers": [
+        {
+          "source": "flame7",
+          "sourceStart": 0.114728,
+          "duration": 1.05,
+          "rate": 0.82,
+          "gain": 0.95,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 6700,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "huff",
+          "sourceStart": 0.214501,
+          "duration": 0.53,
+          "rate": 1,
+          "gain": 0.3,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 1800,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "rock",
+          "sourceStart": 0.124705,
+          "duration": 0.39,
+          "rate": 1,
+          "gain": 0.25,
+          "at": 0.12,
+          "highpass": 80,
+          "lowpass": 2500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "flame4",
+          "sourceStart": 0.119717,
+          "duration": 0.6,
+          "rate": 1.04,
+          "gain": 0.22,
+          "at": 0.26,
+          "highpass": 450,
+          "lowpass": 7000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "thunder_ult.wav",
+      "label": "雷暴大招",
+      "cue": "thunderUlt",
+      "seconds": 1.2,
+      "channels": 1,
+      "bytes": 105884,
+      "maxOfflinePeakReductionDB": 0,
+      "peakDBFS": -5.55,
+      "oversampledPeakDBFS": -5.48,
+      "activeRMSDBFS": -19.5,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "b88b090a2999a86fbf3e8cea5a1e232be5002c6a4b382fd0169778ea1f489138",
+      "layers": [
+        {
+          "source": "thunder",
+          "sourceStart": 7.093866,
+          "duration": 1.2,
+          "rate": 1,
+          "gain": 0.9,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 7000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "electric",
+          "sourceStart": 0.089785,
+          "duration": 0.36,
+          "rate": 1,
+          "gain": 0.4,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 6500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "current",
+          "sourceStart": 0.004977,
+          "duration": 0.62,
+          "rate": 0.9,
+          "gain": 0.3,
+          "at": 0.08,
+          "highpass": 80,
+          "lowpass": 5300,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "electric",
+          "sourceStart": 0.089785,
+          "duration": 0.18,
+          "rate": 1,
+          "gain": 0.18,
+          "at": 0.26,
+          "highpass": 80,
+          "lowpass": 6000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "frost_ult.wav",
+      "label": "暴风雪大招",
+      "cue": "frostUlt",
+      "seconds": 0.95,
+      "channels": 1,
+      "bytes": 83834,
+      "maxOfflinePeakReductionDB": 2.662,
+      "peakDBFS": -4.6,
+      "oversampledPeakDBFS": -4.6,
+      "activeRMSDBFS": -20.76,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "d51853d5ca7bec866179a15088f6d367c2d4b46753a7b0e9c7d6fcd412eea656",
+      "layers": [
+        {
+          "source": "iceblock",
+          "sourceStart": 0.004977,
+          "duration": 0.86,
+          "rate": 0.76,
+          "gain": 0.8,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 7500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "swing",
+          "sourceStart": 0.169603,
+          "duration": 0.83,
+          "rate": 0.86,
+          "gain": 0.38,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 5600,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "icecrack",
+          "sourceStart": 0.493866,
+          "duration": 0.44,
+          "rate": 1,
+          "gain": 0.3,
+          "at": 0.17,
+          "highpass": 450,
+          "lowpass": 7500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "ice",
+          "sourceStart": 0.019943,
+          "duration": 0.4,
+          "rate": 1,
+          "gain": 0.22,
+          "at": 0.37,
+          "highpass": 80,
+          "lowpass": 7000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "Percussion/Glock/glock_medium_C5.wav",
+          "sourceStart": 0,
+          "duration": 0.84,
+          "rate": 1.0,
+          "gain": 0.07,
+          "at": 0.11,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0,
+          "instrument": "glock",
+          "midi": 84,
+          "root": 84
+        },
+        {
+          "source": "Percussion/Glock/glock_medium_G5.wav",
+          "sourceStart": 0,
+          "duration": 0.72,
+          "rate": 1.0,
+          "gain": 0.035,
+          "at": 0.18,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0,
+          "instrument": "glock",
+          "midi": 91,
+          "root": 91
+        }
+      ]
+    },
+    {
+      "file": "pick_open.wav",
+      "label": "卡牌展开",
+      "cue": "pickOpen",
+      "seconds": 0.3,
+      "channels": 1,
+      "bytes": 26504,
+      "maxOfflinePeakReductionDB": 4.0,
+      "peakDBFS": -8.0,
+      "oversampledPeakDBFS": -7.81,
+      "activeRMSDBFS": -27.38,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "0ea11698ce161a6b754343ae2d2792ba5ab44474f78a26e3b931d9311c38ef80",
+      "layers": [
+        {
+          "source": "book",
+          "sourceStart": 0.009966,
+          "duration": 0.22,
+          "rate": 1,
+          "gain": 0.7,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "page",
+          "sourceStart": 0.029921,
+          "duration": 0.16,
+          "rate": 1,
+          "gain": 0.45,
+          "at": 0.06,
+          "highpass": 80,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "page2",
+          "sourceStart": 0.024932,
+          "duration": 0.18,
+          "rate": 1,
+          "gain": 0.35,
+          "at": 0.12,
+          "highpass": 80,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "pick_choose.wav",
+      "label": "卡牌选定",
+      "cue": "pickChoose",
+      "seconds": 0.515,
+      "channels": 2,
+      "bytes": 90892,
+      "maxOfflinePeakReductionDB": 1.457,
+      "peakDBFS": -6.5,
+      "oversampledPeakDBFS": -6.31,
+      "activeRMSDBFS": -22.34,
+      "clippedSamples": 0,
+      "firstSample": [
+        0,
+        0
+      ],
+      "lastSample": [
+        0,
+        0
+      ],
+      "sha256": "4d48637f4456cdc86a7c54da12fa6ad4a9e47f153f6206c5fa4ee102597b66e3",
+      "layers": [
+        {
+          "source": "page2",
+          "sourceStart": 0.024932,
+          "duration": 0.14,
+          "rate": 1,
+          "gain": 0.28,
+          "at": 0,
+          "highpass": 80,
+          "lowpass": 10000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "Percussion/Marimba/Marimba_hit_Outrigger_G4_loud_01.wav",
+          "sourceStart": 0,
+          "duration": 0.18,
+          "rate": 1.122462048309373,
+          "gain": 0.65,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.054,
+          "pan": 0,
+          "instrument": "marimba",
+          "midi": 81,
+          "root": 79
+        },
+        {
+          "source": "Percussion/Marimba/Marimba_hit_Outrigger_G4_loud_01.wav",
+          "sourceStart": 0,
+          "duration": 0.4,
+          "rate": 1.4983070768766815,
+          "gain": 0.8,
+          "at": 0.095,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.12,
+          "pan": 0,
+          "instrument": "marimba",
+          "midi": 86,
+          "root": 79
+        },
+        {
+          "source": "Strings/Harp/KSHarp_E5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 0.42,
+          "rate": 1.122462048309373,
+          "gain": 0.18,
+          "at": 0.095,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.126,
+          "pan": 0,
+          "instrument": "harp",
+          "midi": 78,
+          "root": 76
+        }
+      ]
+    },
+    {
+      "file": "growth.wav",
+      "label": "普通升级与主城成长",
+      "cue": "growth",
+      "seconds": 0.685,
+      "channels": 2,
+      "bytes": 120876,
+      "maxOfflinePeakReductionDB": 0.868,
+      "peakDBFS": -5.8,
+      "oversampledPeakDBFS": -5.8,
+      "activeRMSDBFS": -21.6,
+      "clippedSamples": 0,
+      "firstSample": [
+        0,
+        0
+      ],
+      "lastSample": [
+        0,
+        0
+      ],
+      "sha256": "988d7b416340b7f81b7a69a1815abdb20fa318e01bc4d729a5eb47a0d66819c1",
+      "layers": [
+        {
+          "source": "Percussion/Marimba/Marimba_hit_Outrigger_C4_loud_01.wav",
+          "sourceStart": 0,
+          "duration": 0.2,
+          "rate": 1.122462048309373,
+          "gain": 0.65,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.06,
+          "pan": 0,
+          "instrument": "marimba",
+          "midi": 74,
+          "root": 72
+        },
+        {
+          "source": "Percussion/Marimba/Marimba_hit_Outrigger_G4_loud_01.wav",
+          "sourceStart": 0,
+          "duration": 0.22,
+          "rate": 1.122462048309373,
+          "gain": 0.7,
+          "at": 0.085,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.066,
+          "pan": 0,
+          "instrument": "marimba",
+          "midi": 81,
+          "root": 79
+        },
+        {
+          "source": "Percussion/Marimba/Marimba_hit_Outrigger_G4_loud_01.wav",
+          "sourceStart": 0,
+          "duration": 0.45,
+          "rate": 1.4983070768766815,
+          "gain": 0.85,
+          "at": 0.185,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.135,
+          "pan": 0,
+          "instrument": "marimba",
+          "midi": 86,
+          "root": 79
+        },
+        {
+          "source": "Strings/Harp/KSHarp_E5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 0.5,
+          "rate": 1.122462048309373,
+          "gain": 0.26,
+          "at": 0.185,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0,
+          "instrument": "harp",
+          "midi": 78,
+          "root": 76
+        },
+        {
+          "source": "Brass/F Horn/sus/MOHorn_sus_C3_v2_1.wav",
+          "sourceStart": 0.059853,
+          "duration": 0.43,
+          "rate": 1.122462048309373,
+          "gain": 0.16,
+          "at": 0.185,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.129,
+          "pan": 0,
+          "instrument": "horn",
+          "midi": 62,
+          "root": 60
+        }
+      ]
+    },
+    {
+      "file": "reward.wav",
+      "label": "领奖、购买与招募",
+      "cue": "reward",
+      "seconds": 0.87,
+      "channels": 2,
+      "bytes": 153512,
+      "maxOfflinePeakReductionDB": 0.512,
+      "peakDBFS": -5.6,
+      "oversampledPeakDBFS": -5.59,
+      "activeRMSDBFS": -21.24,
+      "clippedSamples": 0,
+      "firstSample": [
+        0,
+        0
+      ],
+      "lastSample": [
+        0,
+        0
+      ],
+      "sha256": "3f597fed7e45b202d2fbadcd0306e46ad07e681ada79ce7f7fc8a85cd6f90fa9",
+      "layers": [
+        {
+          "source": "coins",
+          "sourceStart": 0.244433,
+          "duration": 0.27,
+          "rate": 1,
+          "gain": 0.25,
+          "at": 0,
+          "highpass": 450,
+          "lowpass": 9000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "Strings/Harp/KSHarp_C5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 0.4,
+          "rate": 1.122462048309373,
+          "gain": 0.55,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.12,
+          "pan": -0.08,
+          "instrument": "harp",
+          "midi": 74,
+          "root": 72
+        },
+        {
+          "source": "Strings/Harp/KSHarp_E5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 0.42,
+          "rate": 1.122462048309373,
+          "gain": 0.6,
+          "at": 0.065,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.126,
+          "pan": -0.08,
+          "instrument": "harp",
+          "midi": 78,
+          "root": 76
+        },
+        {
+          "source": "Strings/Harp/KSHarp_E5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 0.48,
+          "rate": 1.3348398541700344,
+          "gain": 0.7,
+          "at": 0.13,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": -0.08,
+          "instrument": "harp",
+          "midi": 81,
+          "root": 76
+        },
+        {
+          "source": "Strings/Harp/KSHarp_E5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 0.64,
+          "rate": 1.7817974362806785,
+          "gain": 0.72,
+          "at": 0.21,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": -0.08,
+          "instrument": "harp",
+          "midi": 86,
+          "root": 76
+        },
+        {
+          "source": "Percussion/Glock/glock_medium_C5.wav",
+          "sourceStart": 0,
+          "duration": 0.66,
+          "rate": 1.122462048309373,
+          "gain": 0.2,
+          "at": 0.21,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0.12,
+          "instrument": "glock",
+          "midi": 86,
+          "root": 84
+        },
+        {
+          "source": "Percussion/Marimba/Marimba_hit_Outrigger_C4_loud_01.wav",
+          "sourceStart": 0,
+          "duration": 0.4,
+          "rate": 1.122462048309373,
+          "gain": 0.28,
+          "at": 0.21,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.12,
+          "pan": 0,
+          "instrument": "marimba",
+          "midi": 74,
+          "root": 72
+        }
+      ]
+    },
+    {
+      "file": "breakthrough.wav",
+      "label": "阶段突破",
+      "cue": "breakthrough",
+      "seconds": 1.1,
+      "channels": 2,
+      "bytes": 194084,
+      "maxOfflinePeakReductionDB": 1.986,
+      "peakDBFS": -5.0,
+      "oversampledPeakDBFS": -4.72,
+      "activeRMSDBFS": -20.48,
+      "clippedSamples": 0,
+      "firstSample": [
+        0,
+        0
+      ],
+      "lastSample": [
+        0,
+        0
+      ],
+      "sha256": "1dd294f0b9f5de8093f9f4a0b733bea98b5bb307ca94802af519bb83eed07bdc",
+      "layers": [
+        {
+          "source": "Brass/Trumpet/stac/Sum_SHTrumpet_stac_G3_v3_rr1.wav",
+          "sourceStart": 0.004977,
+          "duration": 0.17,
+          "rate": 1.122462048309373,
+          "gain": 0.5,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.051000000000000004,
+          "pan": -0.07,
+          "instrument": "trumpet",
+          "midi": 69,
+          "root": 67
+        },
+        {
+          "source": "Brass/Trumpet/stac/Sum_SHTrumpet_stac_D4_v3_rr1.wav",
+          "sourceStart": 0.004977,
+          "duration": 0.19,
+          "rate": 1.0,
+          "gain": 0.6,
+          "at": 0.13,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.056999999999999995,
+          "pan": -0.07,
+          "instrument": "trumpet",
+          "midi": 74,
+          "root": 74
+        },
+        {
+          "source": "Brass/Trumpet/stac/Sum_SHTrumpet_stac_D4_v3_rr1.wav",
+          "sourceStart": 0.004977,
+          "duration": 0.2,
+          "rate": 1.2599210498948732,
+          "gain": 0.7,
+          "at": 0.29,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.06,
+          "pan": -0.07,
+          "instrument": "trumpet",
+          "midi": 78,
+          "root": 74
+        },
+        {
+          "source": "Brass/Trumpet/stac/Sum_SHTrumpet_stac_D4_v3_rr1.wav",
+          "sourceStart": 0.004977,
+          "duration": 0.52,
+          "rate": 1.4983070768766815,
+          "gain": 0.75,
+          "at": 0.47,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": -0.07,
+          "instrument": "trumpet",
+          "midi": 81,
+          "root": 74
+        },
+        {
+          "source": "Brass/F Horn/sus/MOHorn_sus_C3_v2_1.wav",
+          "sourceStart": 0.059853,
+          "duration": 0.58,
+          "rate": 1.122462048309373,
+          "gain": 0.36,
+          "at": 0.47,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0,
+          "instrument": "horn",
+          "midi": 62,
+          "root": 60
+        },
+        {
+          "source": "Strings/Harp/KSHarp_E5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 0.62,
+          "rate": 1.7817974362806785,
+          "gain": 0.34,
+          "at": 0.48,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0.1,
+          "instrument": "harp",
+          "midi": 86,
+          "root": 76
+        },
+        {
+          "source": "timpani",
+          "sourceStart": 0,
+          "duration": 0.55,
+          "rate": 1,
+          "gain": 0.19,
+          "at": 0.47,
+          "highpass": 80,
+          "lowpass": 3500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "loot_pickup.wav",
+      "label": "战利品拾取",
+      "cue": "lootPickup",
+      "seconds": 0.22,
+      "channels": 1,
+      "bytes": 19448,
+      "maxOfflinePeakReductionDB": 3.075,
+      "peakDBFS": -8.5,
+      "oversampledPeakDBFS": -8.36,
+      "activeRMSDBFS": -25.69,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "cf9dc8d349aef8b42f2b81292638402a28fa97f9c0a21955f5a612c094417233",
+      "layers": [
+        {
+          "source": "coins",
+          "sourceStart": 0.244433,
+          "duration": 0.2,
+          "rate": 1,
+          "gain": 0.6,
+          "at": 0,
+          "highpass": 650,
+          "lowpass": 7600,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "Percussion/Marimba/Marimba_hit_Outrigger_G4_loud_01.wav",
+          "sourceStart": 0,
+          "duration": 0.22,
+          "rate": 1.4983070768766815,
+          "gain": 0.34,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.066,
+          "pan": 0,
+          "instrument": "marimba",
+          "midi": 86,
+          "root": 79
+        }
+      ]
+    },
+    {
+      "file": "surge.wav",
+      "label": "精英与首领警报",
+      "cue": "surge",
+      "seconds": 0.71,
+      "channels": 2,
+      "bytes": 125288,
+      "maxOfflinePeakReductionDB": 0,
+      "peakDBFS": -10.66,
+      "oversampledPeakDBFS": -10.66,
+      "activeRMSDBFS": -21.4,
+      "clippedSamples": 0,
+      "firstSample": [
+        0,
+        0
+      ],
+      "lastSample": [
+        0,
+        0
+      ],
+      "sha256": "13738ccda3f86ebbc0aac6b9af754c5001cf1279bbce3cdecb662db41494b3fb",
+      "layers": [
+        {
+          "source": "Brass/F Horn/sus/MOHorn_sus_C3_v2_1.wav",
+          "sourceStart": 0.059853,
+          "duration": 0.29,
+          "rate": 0.7491535384383408,
+          "gain": 0.75,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.087,
+          "pan": 0,
+          "instrument": "horn",
+          "midi": 55,
+          "root": 60
+        },
+        {
+          "source": "Brass/F Horn/sus/MOHorn_sus_C3_v2_1.wav",
+          "sourceStart": 0.059853,
+          "duration": 0.52,
+          "rate": 1.122462048309373,
+          "gain": 0.82,
+          "at": 0.19,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0,
+          "instrument": "horn",
+          "midi": 62,
+          "root": 60
+        },
+        {
+          "source": "timpani",
+          "sourceStart": 0,
+          "duration": 0.43,
+          "rate": 1,
+          "gain": 0.32,
+          "at": 0.19,
+          "highpass": 80,
+          "lowpass": 3000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "victory.wav",
+      "label": "战斗胜利",
+      "cue": "victory",
+      "seconds": 1.98,
+      "channels": 2,
+      "bytes": 349316,
+      "maxOfflinePeakReductionDB": 0.225,
+      "peakDBFS": -4.8,
+      "oversampledPeakDBFS": -4.75,
+      "activeRMSDBFS": -20.0,
+      "clippedSamples": 0,
+      "firstSample": [
+        0,
+        0
+      ],
+      "lastSample": [
+        0,
+        0
+      ],
+      "sha256": "03ea4a2c150ddb92305319406f17bed69eef53850a883e5126b34a05813c9297",
+      "layers": [
+        {
+          "source": "Brass/Trumpet/stac/Sum_SHTrumpet_stac_G3_v3_rr1.wav",
+          "sourceStart": 0.004977,
+          "duration": 0.16,
+          "rate": 1.122462048309373,
+          "gain": 0.6,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.048,
+          "pan": -0.08,
+          "instrument": "trumpet",
+          "midi": 69,
+          "root": 67
+        },
+        {
+          "source": "Brass/Trumpet/stac/Sum_SHTrumpet_stac_G3_v3_rr1.wav",
+          "sourceStart": 0.004977,
+          "duration": 0.14,
+          "rate": 1.122462048309373,
+          "gain": 0.56,
+          "at": 0.15,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.042,
+          "pan": -0.08,
+          "instrument": "trumpet",
+          "midi": 69,
+          "root": 67
+        },
+        {
+          "source": "Brass/Trumpet/stac/Sum_SHTrumpet_stac_D4_v3_rr1.wav",
+          "sourceStart": 0.004977,
+          "duration": 0.2,
+          "rate": 1.0,
+          "gain": 0.72,
+          "at": 0.3,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.06,
+          "pan": -0.08,
+          "instrument": "trumpet",
+          "midi": 74,
+          "root": 74
+        },
+        {
+          "source": "Brass/Trumpet/stac/Sum_SHTrumpet_stac_D4_v3_rr1.wav",
+          "sourceStart": 0.004977,
+          "duration": 0.2,
+          "rate": 1.2599210498948732,
+          "gain": 0.77,
+          "at": 0.5,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.06,
+          "pan": -0.08,
+          "instrument": "trumpet",
+          "midi": 78,
+          "root": 74
+        },
+        {
+          "source": "Brass/Trumpet/stac/Sum_SHTrumpet_stac_D4_v3_rr1.wav",
+          "sourceStart": 0.004977,
+          "duration": 0.23,
+          "rate": 1.4983070768766815,
+          "gain": 0.8,
+          "at": 0.7,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.069,
+          "pan": -0.08,
+          "instrument": "trumpet",
+          "midi": 81,
+          "root": 74
+        },
+        {
+          "source": "Brass/Trumpet/sus/Sum_SHTrumpet_sus_G3_v3_rr1.wav",
+          "sourceStart": 0.004977,
+          "duration": 0.94,
+          "rate": 1.4983070768766815,
+          "gain": 0.62,
+          "at": 0.94,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": -0.08,
+          "instrument": "trumpet-long",
+          "midi": 74,
+          "root": 67
+        },
+        {
+          "source": "Brass/Trumpet/sus/Sum_SHTrumpet_sus_G3_v3_rr1.wav",
+          "sourceStart": 0.004977,
+          "duration": 0.88,
+          "rate": 1.8877486253633868,
+          "gain": 0.35,
+          "at": 0.94,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0.08,
+          "instrument": "trumpet-long",
+          "midi": 78,
+          "root": 67
+        },
+        {
+          "source": "Brass/F Horn/sus/MOHorn_sus_C3_v2_1.wav",
+          "sourceStart": 0.059853,
+          "duration": 1.02,
+          "rate": 1.122462048309373,
+          "gain": 0.36,
+          "at": 0.94,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0,
+          "instrument": "horn",
+          "midi": 62,
+          "root": 60
+        },
+        {
+          "source": "Brass/F Horn/sus/MOHorn_sus_C3_v2_1.wav",
+          "sourceStart": 0.059853,
+          "duration": 0.96,
+          "rate": 0.8408964152537145,
+          "gain": 0.24,
+          "at": 0.94,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0,
+          "instrument": "horn",
+          "midi": 57,
+          "root": 60
+        },
+        {
+          "source": "Strings/Harp/KSHarp_E5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 1.04,
+          "rate": 1.7817974362806785,
+          "gain": 0.24,
+          "at": 0.94,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0.16,
+          "instrument": "harp",
+          "midi": 86,
+          "root": 76
+        },
+        {
+          "source": "snare",
+          "sourceStart": 0,
+          "duration": 0.13,
+          "rate": 1,
+          "gain": 0.16,
+          "at": 0.27,
+          "highpass": 170,
+          "lowpass": 6800,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "timpani",
+          "sourceStart": 0,
+          "duration": 0.85,
+          "rate": 1,
+          "gain": 0.23,
+          "at": 0.94,
+          "highpass": 80,
+          "lowpass": 4000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "cymbal",
+          "sourceStart": 0,
+          "duration": 0.84,
+          "rate": 1,
+          "gain": 0.13,
+          "at": 0.94,
+          "highpass": 900,
+          "lowpass": 8200,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "defeat.wav",
+      "label": "战斗失败",
+      "cue": "defeat",
+      "seconds": 1.27,
+      "channels": 2,
+      "bytes": 224072,
+      "maxOfflinePeakReductionDB": 0,
+      "peakDBFS": -12.48,
+      "oversampledPeakDBFS": -12.48,
+      "activeRMSDBFS": -23.0,
+      "clippedSamples": 0,
+      "firstSample": [
+        0,
+        0
+      ],
+      "lastSample": [
+        0,
+        0
+      ],
+      "sha256": "2badc40ed1dbccd9ef3223ce59d77358c0df701678eaab8252ee8ccc81277e0b",
+      "layers": [
+        {
+          "source": "Woodwinds/Bassoon/stac/PSBassoon_C3_v1_rr1.wav",
+          "sourceStart": 0.054864,
+          "duration": 0.24,
+          "rate": 1.122462048309373,
+          "gain": 0.65,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.072,
+          "pan": -0.04,
+          "instrument": "bassoon",
+          "midi": 62,
+          "root": 60
+        },
+        {
+          "source": "Woodwinds/Bassoon/stac/PSBassoon_C3_v1_rr1.wav",
+          "sourceStart": 0.054864,
+          "duration": 0.22,
+          "rate": 1.0,
+          "gain": 0.62,
+          "at": 0.21,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.066,
+          "pan": -0.04,
+          "instrument": "bassoon",
+          "midi": 60,
+          "root": 60
+        },
+        {
+          "source": "Woodwinds/Bassoon/stac/PSBassoon_G2_v1_rr1.wav",
+          "sourceStart": 0.024932,
+          "duration": 0.25,
+          "rate": 1.122462048309373,
+          "gain": 0.62,
+          "at": 0.43,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.075,
+          "pan": -0.04,
+          "instrument": "bassoon",
+          "midi": 57,
+          "root": 55
+        },
+        {
+          "source": "Woodwinds/Bassoon/stac/PSBassoon_G2_v1_rr1.wav",
+          "sourceStart": 0.024932,
+          "duration": 0.52,
+          "rate": 0.7491535384383408,
+          "gain": 0.62,
+          "at": 0.69,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": -0.04,
+          "instrument": "bassoon",
+          "midi": 50,
+          "root": 55
+        },
+        {
+          "source": "Strings/Harp/KSHarp_A4_mf.wav",
+          "sourceStart": 0.014955,
+          "duration": 0.58,
+          "rate": 0.7937005259840998,
+          "gain": 0.18,
+          "at": 0.69,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0.1,
+          "instrument": "harp",
+          "midi": 65,
+          "root": 69
+        },
+        {
+          "source": "Brass/F Horn/sus/MOHorn_sus_C3_v2_1.wav",
+          "sourceStart": 0.059853,
+          "duration": 0.5,
+          "rate": 0.5612310241546865,
+          "gain": 0.14,
+          "at": 0.69,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0,
+          "instrument": "horn",
+          "midi": 50,
+          "root": 60
+        }
+      ]
+    },
+    {
+      "file": "ui_click_1.wav",
+      "label": "通用轻点击",
+      "cue": "ui",
+      "seconds": 0.085,
+      "channels": 1,
+      "bytes": 7542,
+      "maxOfflinePeakReductionDB": 1.93,
+      "peakDBFS": -9.0,
+      "oversampledPeakDBFS": -8.3,
+      "activeRMSDBFS": -27.58,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "036b942c538bb67b59d7faf6665997133032f0f7f695b7e6403e2e14bcccd467",
+      "layers": [
+        {
+          "source": "wood",
+          "sourceStart": 0.091,
+          "duration": 0.085,
+          "rate": 1.11,
+          "gain": 0.8,
+          "at": 0,
+          "highpass": 450,
+          "lowpass": 5000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "page",
+          "sourceStart": 0.029921,
+          "duration": 0.065,
+          "rate": 1,
+          "gain": 0.12,
+          "at": 0,
+          "highpass": 850,
+          "lowpass": 6500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    },
+    {
+      "file": "ui_click_2.wav",
+      "label": "通用轻点击",
+      "cue": "ui",
+      "seconds": 0.085,
+      "channels": 1,
+      "bytes": 7542,
+      "maxOfflinePeakReductionDB": 1.164,
+      "peakDBFS": -9.0,
+      "oversampledPeakDBFS": -9.0,
+      "activeRMSDBFS": -26.6,
+      "clippedSamples": 0,
+      "firstSample": [
+        0
+      ],
+      "lastSample": [
+        0
+      ],
+      "sha256": "f970496d18029ede6062df89bd704bc097b9d84140088fc9b19484de7d7ffea7",
+      "layers": [
+        {
+          "source": "wood",
+          "sourceStart": 0.355,
+          "duration": 0.085,
+          "rate": 1.1400000000000001,
+          "gain": 0.8,
+          "at": 0,
+          "highpass": 450,
+          "lowpass": 5000,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        },
+        {
+          "source": "page2",
+          "sourceStart": 0.024932,
+          "duration": 0.065,
+          "rate": 1,
+          "gain": 0.12,
+          "at": 0,
+          "highpass": 850,
+          "lowpass": 6500,
+          "attack": 0.001,
+          "release": 0.045,
+          "pan": 0
+        }
+      ]
+    }
+  ],
+  "sourceCount": 44,
+  "fileCount": 44,
+  "cueCount": 31,
+  "bytes": 2545772,
+  "auditioned": false,
+  "description": "Original arrangements with licensed recording layers; listening acceptance pending"
+}

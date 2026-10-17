@@ -1,0 +1,23 @@
+/** One semantic UI cue per action, even when that action opens/closes another surface. */
+import { Sfx } from '../core/Sfx';
+import { SfxName } from '../core/AudioCatalog';
+
+export type UISound = 'tap' | 'select' | 'open' | 'close' | 'toggle' | 'confirm' | 'success' | 'warning' | 'reward' | 'upgrade';
+const cues: Record<UISound, SfxName> = {
+  tap: 'ui', select: 'uiSelect', open: 'uiOpen', close: 'uiClose', toggle: 'uiToggle', confirm: 'uiConfirm',
+  success: 'uiConfirm', warning: 'uiClose', reward: 'reward', upgrade: 'levelup',
+};
+const rank: Record<UISound, number> = { tap: 0, select: 1, open: 2, close: 2, toggle: 3, confirm: 4, success: 4, warning: 4, reward: 5, upgrade: 5 };
+let pending: UISound | null = null;
+let scheduled = false;
+
+export function uiSound(kind: UISound): void {
+  if (!pending || rank[kind] >= rank[pending]) pending = kind;
+  if (scheduled) return;
+  scheduled = true;
+  void Promise.resolve().then(() => {
+    const cue = pending;
+    pending = null; scheduled = false;
+    if (cue) Sfx.play(cues[cue]);
+  });
+}

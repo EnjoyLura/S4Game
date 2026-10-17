@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-attribute-paper-v6-20261017-024717",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-price-buttons-v5-20261017-024106",
+  "entryVersion": "1792176402",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=shop-attribute-paper-v6-1792176402",
+  "scope": "restore one light paper backing per attribute group with unboxed rows; reserve 20 extra units below detail actions; retain original flat button and navigation selection styles",
+  "manualAcceptance": "pending user manual review"
+}

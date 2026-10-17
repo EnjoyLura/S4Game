@@ -1,0 +1,19 @@
+{
+  "revision": "cartoon-r1",
+  "purposes": 3,
+  "candidateClips": 6,
+  "oldClips": 3,
+  "repeatExamples": 3,
+  "sources": 2,
+  "cost": 0,
+  "channels": 2,
+  "maxMatchedRMSSpreadDB": 0.0,
+  "maxPeakDBFS": -3.529,
+  "clippedSamples": 0,
+  "sourceHashes": 15,
+  "audioBytes": 2187988,
+  "playedAudio": false,
+  "ranBrowser": false,
+  "gameReplaced": false,
+  "userAcceptance": "pending"
+}

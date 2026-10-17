@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-campaign-ui-polish-v2-20261017-002147",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-stage-loot-layout-v2-20261016-235755",
+  "entryVersion": "1792167614",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=campaign-ui-polish-v2-1792167614",
+  "scope": "chapter map top clearance and taller dock; native material polish; no-scroll preparation; closed drawer on battle return and tab changes; squad mobile Back",
+  "manualAcceptance": "pending user manual review"
+}

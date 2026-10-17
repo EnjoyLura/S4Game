@@ -1,0 +1,4 @@
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-mages-ui-v25/preview/media/pyro.mp4'
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-mages-ui-v25/preview/media/volt.mp4'
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-mages-ui-v25/preview/media/mora.mp4'
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-mages-ui-v25/preview/media/gate.mp4'

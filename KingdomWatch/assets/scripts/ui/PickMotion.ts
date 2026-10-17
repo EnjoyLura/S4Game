@@ -48,7 +48,7 @@ export class PickMotion extends Component {
     const title = this.chrome[0]; if (!title || this.titlePreviewed) return;
     this.titlePreviewed = true;
     title.node.active = true; title.node.setPosition(title.position); title.node.setScale(1, 1, 1);
-    uiSound('open');
+    uiSound('pickOpen');
   }
   /** New art is already ready. Refreshes exchange each column with its opaque predecessor. */
   reveal(previous: PickMotion | null, entered: () => void): void {
@@ -56,9 +56,9 @@ export class PickMotion extends Component {
     this.quiet = reducedMotion(); this.phase = 'enter'; this.age = 0; this.enabled = true;
     if (previous) {
       previous.chrome.forEach(c => { if (c.node.isValid) c.node.active = false; });
-      uiSound('open');
+      // The replacement cards own one paper shuffle at their first landing.
     }
-    else if (!this.titlePreviewed) uiSound('open');
+    else if (!this.titlePreviewed) uiSound('pickOpen');
     this.renderEntry();
   }
   choose(index: number, done: () => void): boolean {
@@ -82,14 +82,14 @@ export class PickMotion extends Component {
     if (this.phase === 'enter') {
       this.renderEntry();
       if (this.previous && !this.refreshCue && this.age >= (this.quiet ? .04 : .15)) {
-        this.refreshCue = true; uiSound('select');
+        this.refreshCue = true; uiSound('pickRefresh');
       }
       if (this.age >= (this.quiet ? .1 : this.previous ? .52 : .32)) {
         this.releasePrevious(); this.restore();
         const entered = this.entered; this.entered = null; entered?.();
       }
     } else if (this.phase === 'choose') {
-      if (!this.choiceCue && this.age >= (this.quiet ? 0 : .1)) { this.choiceCue = true; uiSound('confirm'); }
+      if (!this.choiceCue && this.age >= (this.quiet ? 0 : .1)) { this.choiceCue = true; uiSound('pickChoose'); }
       this.renderChoice();
       if (this.age >= (this.quiet ? .14 : .48)) {
         this.phase = 'held'; this.enabled = false;

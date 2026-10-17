@@ -1,0 +1,1105 @@
+{
+  "version": "v25",
+  "fileCount": 20,
+  "mageFiles": 18,
+  "gateFiles": 2,
+  "bytes": 616516,
+  "files": [
+    {
+      "file": "fire_1.wav",
+      "cue": "fire",
+      "label": "火焰普攻",
+      "seconds": 0.24,
+      "bytes": 21212,
+      "peakDBFS": -14.31,
+      "activeRMSDBFS": -27.0,
+      "clippedSamples": 0,
+      "sha256": "d9a2d32f86a8c75bd8fb449be978791a7223259b240dc53f49587e0769136b03",
+      "layers": [
+        {
+          "source": "huff",
+          "sourceStart": 0.214501,
+          "duration": 0.24,
+          "rate": 0.965,
+          "gain": 0.7,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 1800,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1800,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "flame1",
+          "sourceStart": 0.2,
+          "duration": 0.2,
+          "rate": 1,
+          "gain": 0.25,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 1900,
+          "attack": 0.012,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1900,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 0.0002577,
+        "spectralCentroidHz": 557.4
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.7033311,
+        "spectralCentroidHz": 4284.6
+      },
+      "previousActiveRMSDBFS": -22.0
+    },
+    {
+      "file": "thunder_1.wav",
+      "cue": "thunder",
+      "label": "雷电普攻",
+      "seconds": 0.2,
+      "bytes": 17684,
+      "peakDBFS": -14.24,
+      "activeRMSDBFS": -27.0,
+      "clippedSamples": 0,
+      "sha256": "150f89cf75428a9a91c92bcb7ced46cc81a27ce83cd2c41058d6a5c146a32dd3",
+      "layers": [
+        {
+          "source": "timpani",
+          "sourceStart": 0,
+          "duration": 0.2,
+          "rate": 1.135,
+          "gain": 0.75,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 2000,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 2000,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "current",
+          "sourceStart": 2.27,
+          "duration": 0.1,
+          "rate": 1,
+          "gain": 0.1,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 1700,
+          "attack": 0.008,
+          "release": 0.03,
+          "pan": 0,
+          "additionalLowpassHz": 1700,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 3.1e-06,
+        "spectralCentroidHz": 250.3
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.5084762,
+        "spectralCentroidHz": 3964.0
+      },
+      "previousActiveRMSDBFS": -22.57
+    },
+    {
+      "file": "frost_1.wav",
+      "cue": "frost",
+      "label": "冰霜普攻",
+      "seconds": 0.27,
+      "bytes": 23858,
+      "peakDBFS": -19.62,
+      "activeRMSDBFS": -28.0,
+      "clippedSamples": 0,
+      "sha256": "b5eec5e4a709294fcedeca336ee10810338746a018c8e197d5c125486f8ee4e9",
+      "layers": [
+        {
+          "source": "Strings/Harp/KSHarp_E5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 0.27,
+          "rate": 1.0,
+          "gain": 0.65,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.081,
+          "pan": 0,
+          "instrument": "harp",
+          "midi": 76,
+          "root": 76,
+          "additionalLowpassHz": 2600,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "swish",
+          "sourceStart": 0.149649,
+          "duration": 0.15,
+          "rate": 1,
+          "gain": 0.12,
+          "at": 0,
+          "highpass": 450,
+          "lowpass": 1800,
+          "attack": 0.02,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1800,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 2.06e-05,
+        "spectralCentroidHz": 688.9
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.4873052,
+        "spectralCentroidHz": 3908.8
+      },
+      "previousActiveRMSDBFS": -25.04
+    },
+    {
+      "file": "fire_2.wav",
+      "cue": "fire",
+      "label": "火焰普攻",
+      "seconds": 0.24,
+      "bytes": 21212,
+      "peakDBFS": -14.65,
+      "activeRMSDBFS": -27.0,
+      "clippedSamples": 0,
+      "sha256": "2d48e99155485ab8a17860addb8e4ed2f2e664d9d56b5ce01b1cce1d551ae097",
+      "layers": [
+        {
+          "source": "huff",
+          "sourceStart": 0.214501,
+          "duration": 0.24,
+          "rate": 0.99,
+          "gain": 0.7,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 1800,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1800,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "flame2",
+          "sourceStart": 0.2,
+          "duration": 0.2,
+          "rate": 1,
+          "gain": 0.25,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 1900,
+          "attack": 0.012,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1900,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 0.0001511,
+        "spectralCentroidHz": 545.9
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.6278637,
+        "spectralCentroidHz": 4133.5
+      },
+      "previousActiveRMSDBFS": -22.0
+    },
+    {
+      "file": "thunder_2.wav",
+      "cue": "thunder",
+      "label": "雷电普攻",
+      "seconds": 0.2,
+      "bytes": 17684,
+      "peakDBFS": -14.46,
+      "activeRMSDBFS": -27.0,
+      "clippedSamples": 0,
+      "sha256": "775ba44d29eda1956faa97bbb2de33c302bc8532fa01d723edcbdc476acee35e",
+      "layers": [
+        {
+          "source": "timpani",
+          "sourceStart": 0,
+          "duration": 0.2,
+          "rate": 1.1700000000000002,
+          "gain": 0.75,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 2000,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 2000,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "current",
+          "sourceStart": 2.39,
+          "duration": 0.1,
+          "rate": 1,
+          "gain": 0.1,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 1700,
+          "attack": 0.008,
+          "release": 0.03,
+          "pan": 0,
+          "additionalLowpassHz": 1700,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 4.7e-06,
+        "spectralCentroidHz": 257.5
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.5399847,
+        "spectralCentroidHz": 3755.0
+      },
+      "previousActiveRMSDBFS": -22.84
+    },
+    {
+      "file": "frost_2.wav",
+      "cue": "frost",
+      "label": "冰霜普攻",
+      "seconds": 0.27,
+      "bytes": 23858,
+      "peakDBFS": -19.57,
+      "activeRMSDBFS": -28.0,
+      "clippedSamples": 0,
+      "sha256": "5773b5095ae67c3c44b3a20f594ad7de6e67f66be24c1b7c8363df5a90a00359",
+      "layers": [
+        {
+          "source": "Strings/Harp/KSHarp_E5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 0.27,
+          "rate": 1.122462048309373,
+          "gain": 0.65,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.081,
+          "pan": 0,
+          "instrument": "harp",
+          "midi": 78,
+          "root": 76,
+          "additionalLowpassHz": 2600,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "swish",
+          "sourceStart": 0.149649,
+          "duration": 0.15,
+          "rate": 1,
+          "gain": 0.12,
+          "at": 0,
+          "highpass": 450,
+          "lowpass": 1800,
+          "attack": 0.02,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1800,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 8.61e-05,
+        "spectralCentroidHz": 762.1
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.5693195,
+        "spectralCentroidHz": 4597.7
+      },
+      "previousActiveRMSDBFS": -25.77
+    },
+    {
+      "file": "fire_3.wav",
+      "cue": "fire",
+      "label": "火焰普攻",
+      "seconds": 0.24,
+      "bytes": 21212,
+      "peakDBFS": -14.9,
+      "activeRMSDBFS": -27.0,
+      "clippedSamples": 0,
+      "sha256": "61fdff983b8750737e971c468619ad7da445ed1757c6f7ff138110c896a16337",
+      "layers": [
+        {
+          "source": "huff",
+          "sourceStart": 0.214501,
+          "duration": 0.24,
+          "rate": 1.015,
+          "gain": 0.7,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 1800,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1800,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "flame3",
+          "sourceStart": 0.2,
+          "duration": 0.2,
+          "rate": 1,
+          "gain": 0.25,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 1900,
+          "attack": 0.012,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1900,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 0.0002112,
+        "spectralCentroidHz": 562.2
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.6939228,
+        "spectralCentroidHz": 4658.3
+      },
+      "previousActiveRMSDBFS": -23.83
+    },
+    {
+      "file": "thunder_3.wav",
+      "cue": "thunder",
+      "label": "雷电普攻",
+      "seconds": 0.2,
+      "bytes": 17684,
+      "peakDBFS": -13.7,
+      "activeRMSDBFS": -27.0,
+      "clippedSamples": 0,
+      "sha256": "5c965ff6852c16ffaeaab66614458aa4f1f0a57b634c89afb4b2d92743d4826f",
+      "layers": [
+        {
+          "source": "timpani",
+          "sourceStart": 0,
+          "duration": 0.2,
+          "rate": 1.205,
+          "gain": 0.75,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 2000,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 2000,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "current",
+          "sourceStart": 2.51,
+          "duration": 0.1,
+          "rate": 1,
+          "gain": 0.1,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 1700,
+          "attack": 0.008,
+          "release": 0.03,
+          "pan": 0,
+          "additionalLowpassHz": 1700,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 5.3e-06,
+        "spectralCentroidHz": 264.4
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.2634436,
+        "spectralCentroidHz": 2882.3
+      },
+      "previousActiveRMSDBFS": -22.52
+    },
+    {
+      "file": "frost_3.wav",
+      "cue": "frost",
+      "label": "冰霜普攻",
+      "seconds": 0.27,
+      "bytes": 23858,
+      "peakDBFS": -19.38,
+      "activeRMSDBFS": -28.0,
+      "clippedSamples": 0,
+      "sha256": "cc86818961bd8037b1d41a121cfae189f62f0f089cf5af020cd934f2f1172668",
+      "layers": [
+        {
+          "source": "Strings/Harp/KSHarp_E5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 0.27,
+          "rate": 1.189207115002721,
+          "gain": 0.65,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.081,
+          "pan": 0,
+          "instrument": "harp",
+          "midi": 79,
+          "root": 76,
+          "additionalLowpassHz": 2600,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "swish",
+          "sourceStart": 0.149649,
+          "duration": 0.15,
+          "rate": 1,
+          "gain": 0.12,
+          "at": 0,
+          "highpass": 450,
+          "lowpass": 1800,
+          "attack": 0.02,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1800,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 7.11e-05,
+        "spectralCentroidHz": 803.7
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.5525677,
+        "spectralCentroidHz": 4201.6
+      },
+      "previousActiveRMSDBFS": -24.15
+    },
+    {
+      "file": "fire_heavy.wav",
+      "cue": "fireHeavy",
+      "label": "火焰重击",
+      "seconds": 0.32,
+      "bytes": 28268,
+      "peakDBFS": -10.52,
+      "activeRMSDBFS": -25.6,
+      "clippedSamples": 0,
+      "sha256": "2110434a538705f147a48463829562076ee73e03cfe15d839e8f93aeb580b3aa",
+      "layers": [
+        {
+          "source": "huff",
+          "sourceStart": 0.214501,
+          "duration": 0.32,
+          "rate": 0.9,
+          "gain": 0.65,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 1800,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1800,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "flame4",
+          "sourceStart": 0.25,
+          "duration": 0.25,
+          "rate": 1,
+          "gain": 0.3,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 2000,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 2000,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 0.000163,
+        "spectralCentroidHz": 489.4
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.5046235,
+        "spectralCentroidHz": 3325.0
+      },
+      "previousActiveRMSDBFS": -23.04
+    },
+    {
+      "file": "fire_skill.wav",
+      "cue": "fireSkill",
+      "label": "火焰技能",
+      "seconds": 0.42,
+      "bytes": 37088,
+      "peakDBFS": -11.73,
+      "activeRMSDBFS": -25.0,
+      "clippedSamples": 0,
+      "sha256": "5478d381d7e737cc01655a313b3d7749b3085b2169873669dbfbd0edc78025a5",
+      "layers": [
+        {
+          "source": "huff",
+          "sourceStart": 0.214501,
+          "duration": 0.42,
+          "rate": 0.92,
+          "gain": 0.65,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 1900,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1900,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "flame4",
+          "sourceStart": 0.24,
+          "duration": 0.34,
+          "rate": 1,
+          "gain": 0.32,
+          "at": 0.02,
+          "highpass": 100,
+          "lowpass": 2100,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 2100,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 0.0001784,
+        "spectralCentroidHz": 498.9
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.4224652,
+        "spectralCentroidHz": 2928.5
+      },
+      "previousActiveRMSDBFS": -21.87
+    },
+    {
+      "file": "fire_ult.wav",
+      "cue": "fireUlt",
+      "label": "流星火雨",
+      "seconds": 0.58,
+      "bytes": 51200,
+      "peakDBFS": -8.86,
+      "activeRMSDBFS": -23.5,
+      "clippedSamples": 0,
+      "sha256": "1d572fdd4f2a41eb3cd4a7fc7988a0007c3549e51d9f604a552c93a0e33ad97b",
+      "layers": [
+        {
+          "source": "huff",
+          "sourceStart": 0.214501,
+          "duration": 0.58,
+          "rate": 0.83,
+          "gain": 0.7,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 2000,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 2000,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "flame7",
+          "sourceStart": 0.114728,
+          "duration": 0.51,
+          "rate": 1,
+          "gain": 0.4,
+          "at": 0.045,
+          "highpass": 100,
+          "lowpass": 2100,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 2100,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 1.89e-05,
+        "spectralCentroidHz": 437.7
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.0868941,
+        "spectralCentroidHz": 1047.3
+      },
+      "previousActiveRMSDBFS": -19.61
+    },
+    {
+      "file": "thunder_heavy.wav",
+      "cue": "thunderHeavy",
+      "label": "雷电重击",
+      "seconds": 0.32,
+      "bytes": 28268,
+      "peakDBFS": -13.42,
+      "activeRMSDBFS": -25.6,
+      "clippedSamples": 0,
+      "sha256": "dd4590ad753bb4642bc84bc345832b4b2786b1d623c5d1ef982a68e47cec567e",
+      "layers": [
+        {
+          "source": "thunder",
+          "sourceStart": 7.093866,
+          "duration": 0.32,
+          "rate": 1,
+          "gain": 0.65,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 1900,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1900,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "timpani",
+          "sourceStart": 0,
+          "duration": 0.28,
+          "rate": 1,
+          "gain": 0.3,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 2000,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 2000,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 3e-07,
+        "spectralCentroidHz": 393.3
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.0933632,
+        "spectralCentroidHz": 1454.6
+      },
+      "previousActiveRMSDBFS": -21.0
+    },
+    {
+      "file": "thunder_skill.wav",
+      "cue": "thunderSkill",
+      "label": "连锁闪电",
+      "seconds": 0.42,
+      "bytes": 37088,
+      "peakDBFS": -12.91,
+      "activeRMSDBFS": -25.0,
+      "clippedSamples": 0,
+      "sha256": "bfbc3820578e947607b08ef01d548d26a076872b7699321f6a7c7da8d2cefa1b",
+      "layers": [
+        {
+          "source": "thunder",
+          "sourceStart": 7.093866,
+          "duration": 0.42,
+          "rate": 1,
+          "gain": 0.6,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 2100,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 2100,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "current",
+          "sourceStart": 2.5,
+          "duration": 0.19,
+          "rate": 1,
+          "gain": 0.12,
+          "at": 0.035,
+          "highpass": 100,
+          "lowpass": 1600,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1600,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 4.2e-06,
+        "spectralCentroidHz": 388.9
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.188066,
+        "spectralCentroidHz": 2295.3
+      },
+      "previousActiveRMSDBFS": -20.6
+    },
+    {
+      "file": "thunder_ult.wav",
+      "cue": "thunderUlt",
+      "label": "雷暴大招",
+      "seconds": 0.68,
+      "bytes": 60020,
+      "peakDBFS": -11.1,
+      "activeRMSDBFS": -23.5,
+      "clippedSamples": 0,
+      "sha256": "03c3daa29d331f603c0b6fd4d18b26c4d4521febe8fdee494c0a7108049bb1f3",
+      "layers": [
+        {
+          "source": "thunder",
+          "sourceStart": 7.093866,
+          "duration": 0.68,
+          "rate": 0.94,
+          "gain": 0.72,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 2100,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 2100,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "timpani",
+          "sourceStart": 0,
+          "duration": 0.43,
+          "rate": 0.86,
+          "gain": 0.22,
+          "at": 0.025,
+          "highpass": 100,
+          "lowpass": 1700,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1700,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 7e-07,
+        "spectralCentroidHz": 353.2
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.0130315,
+        "spectralCentroidHz": 656.8
+      },
+      "previousActiveRMSDBFS": -19.5
+    },
+    {
+      "file": "frost_heavy.wav",
+      "cue": "frostHeavy",
+      "label": "冰霜重击",
+      "seconds": 0.38,
+      "bytes": 33560,
+      "peakDBFS": -12.56,
+      "activeRMSDBFS": -26.0,
+      "clippedSamples": 0,
+      "sha256": "43bb20eb4d28cf4409a790db7413d6b4a6e3f90c123f77da71c005d61e878402",
+      "layers": [
+        {
+          "source": "Strings/Harp/KSHarp_C5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 0.38,
+          "rate": 1.0,
+          "gain": 0.7,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.11399999999999999,
+          "pan": 0,
+          "instrument": "harp",
+          "midi": 72,
+          "root": 72,
+          "additionalLowpassHz": 2600,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "wood",
+          "sourceStart": 0.355,
+          "duration": 0.17,
+          "rate": 0.84,
+          "gain": 0.12,
+          "at": 0,
+          "highpass": 100,
+          "lowpass": 1600,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1600,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 3.11e-05,
+        "spectralCentroidHz": 531.7
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.5010797,
+        "spectralCentroidHz": 4461.8
+      },
+      "previousActiveRMSDBFS": -23.65
+    },
+    {
+      "file": "frost_skill.wav",
+      "cue": "frostSkill",
+      "label": "冰霜领域",
+      "seconds": 0.48,
+      "bytes": 42380,
+      "peakDBFS": -11.54,
+      "activeRMSDBFS": -25.5,
+      "clippedSamples": 0,
+      "sha256": "da4927b6ea764899367812f73f7610def88c6c52740aacc5d9557a3be9146aa2",
+      "layers": [
+        {
+          "source": "Strings/Harp/KSHarp_C5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 0.48,
+          "rate": 1.122462048309373,
+          "gain": 0.65,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0,
+          "instrument": "harp",
+          "midi": 74,
+          "root": 72,
+          "additionalLowpassHz": 2600,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "Strings/Harp/KSHarp_E5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 0.36,
+          "rate": 1.3348398541700344,
+          "gain": 0.24,
+          "at": 0.055,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.108,
+          "pan": 0,
+          "instrument": "harp",
+          "midi": 81,
+          "root": 76,
+          "additionalLowpassHz": 2400,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 2.94e-05,
+        "spectralCentroidHz": 692.4
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.4696107,
+        "spectralCentroidHz": 4067.4
+      },
+      "previousActiveRMSDBFS": -23.12
+    },
+    {
+      "file": "frost_ult.wav",
+      "cue": "frostUlt",
+      "label": "暴风雪大招",
+      "seconds": 0.64,
+      "bytes": 56492,
+      "peakDBFS": -8.71,
+      "activeRMSDBFS": -24.0,
+      "clippedSamples": 0,
+      "sha256": "c99ccc21c18cafb0f93016fbed60752c2c96b03eaf0d3bf0d8e99904d4ba1a3a",
+      "layers": [
+        {
+          "source": "Strings/Harp/KSHarp_A4_mf.wav",
+          "sourceStart": 0.014955,
+          "duration": 0.64,
+          "rate": 1.0,
+          "gain": 0.6,
+          "at": 0,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0,
+          "instrument": "harp",
+          "midi": 69,
+          "root": 69,
+          "additionalLowpassHz": 2500,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "Strings/Harp/KSHarp_E5_mf.wav",
+          "sourceStart": 0.019943,
+          "duration": 0.56,
+          "rate": 1.0,
+          "gain": 0.36,
+          "at": 0.045,
+          "highpass": 65,
+          "lowpass": 14000,
+          "attack": 0.002,
+          "release": 0.14,
+          "pan": 0,
+          "instrument": "harp",
+          "midi": 76,
+          "root": 76,
+          "additionalLowpassHz": 2600,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "swing",
+          "sourceStart": 0.169603,
+          "duration": 0.48,
+          "rate": 0.9,
+          "gain": 0.14,
+          "at": 0.04,
+          "highpass": 400,
+          "lowpass": 1700,
+          "attack": 0.025,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 1700,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 1.3e-06,
+        "spectralCentroidHz": 593.1
+      },
+      "previousSpectrum": {
+        "above3500Fraction": 0.3614924,
+        "spectralCentroidHz": 3414.9
+      },
+      "previousActiveRMSDBFS": -20.76
+    },
+    {
+      "file": "gate_slide.wav",
+      "cue": "gateSlide",
+      "label": "木门滑合",
+      "seconds": 0.18,
+      "bytes": 15920,
+      "peakDBFS": -7.5,
+      "activeRMSDBFS": -26.55,
+      "clippedSamples": 0,
+      "sha256": "4ab3d6c54196d4cdd2015efc45bd20d25a906d141ecf15e83102baf541b166f8",
+      "layers": [
+        {
+          "source": "wood",
+          "sourceStart": 0.32,
+          "duration": 0.18,
+          "rate": 0.85,
+          "gain": 0.7,
+          "at": 0,
+          "highpass": 120,
+          "lowpass": 2700,
+          "attack": 0.008,
+          "release": 0.045,
+          "pan": 0,
+          "additionalLowpassHz": 2700,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        },
+        {
+          "source": "swing",
+          "sourceStart": 0.169603,
+          "duration": 0.18,
+          "rate": 1,
+          "gain": 0.25,
+          "at": 0,
+          "highpass": 300,
+          "lowpass": 2200,
+          "attack": 0.008,
+          "release": 0.025,
+          "pan": 0,
+          "additionalLowpassHz": 2200,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 0.0646184,
+        "spectralCentroidHz": 1975.2
+      }
+    },
+    {
+      "file": "gate_close.wav",
+      "cue": "gateClose",
+      "label": "木门合拢落点",
+      "seconds": 0.43,
+      "bytes": 37970,
+      "peakDBFS": -8.15,
+      "activeRMSDBFS": -23.0,
+      "clippedSamples": 0,
+      "sha256": "54255f23f2aa6eebb28c8d6643979b8ab9349be21fd1be75fbe57003ad2bf659",
+      "layers": [
+        {
+          "source": "gate",
+          "sourceStart": 2.165068,
+          "duration": 0.43,
+          "rate": 0.91,
+          "gain": 0.9,
+          "at": 0,
+          "highpass": 95,
+          "lowpass": 3400,
+          "attack": 0.002,
+          "release": 0.08,
+          "pan": 0,
+          "additionalLowpassHz": 3400,
+          "presenceDipHz": 2300,
+          "presenceDipDB": -4
+        }
+      ],
+      "spectrum": {
+        "above3500Fraction": 0.0110494,
+        "spectralCentroidHz": 407.2
+      }
+    }
+  ],
+  "auditioned": false,
+  "authoring": "Licensed original recordings re-edited; no oscillator or paid generation"
+}

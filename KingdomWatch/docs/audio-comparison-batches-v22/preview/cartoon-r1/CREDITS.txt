@@ -1,0 +1,36 @@
+王国守望 · 免费卡通风成长音效试听 · cartoon-r1
+Prepared 2026-10-17. No candidate is user-approved or integrated into the game.
+
+D01 A: Positive Holy1.wav
+D01 B: Positive Holy2.wav
+Casual SoundFX Pack by Tim Beek
+Audio by timbeek.com — https://timbeek.com/
+Source: https://timbeek.itch.io/casual-soundfx-pack
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+Original included license: licenses/Tim-Beek-CC-BY-4.0.pdf
+The free, attributed edition was downloaded; no paid no-attribution license used.
+
+D02 A: DM-CGS-21.wav
+D02 B: DM-CGS-32.wav
+D03 A: DM-CGS-07.wav
+D03 B: DM-CGS-41.wav
+Free Casual Game Sounds by Dustyroom
+Source: https://dustyroom.com/free-casual-game-sounds/
+Official non-Unity archive: https://dustyroom.com/casualgamesounds/DM-CGS.zip
+License: CC0 1.0 — https://creativecommons.org/publicdomain/zero/1.0/
+Original included license: licenses/Dustyroom-CC0.pdf
+
+Edits: source stereo preserved; converted to 44.1kHz 16-bit PCM WAV;
+near-silence removed with margins, DC offset removed and 2ms edge fades;
+scalar gain to common per-purpose active-RMS reference with >=3dB peak headroom.
+No pitch/time changes, layering, EQ, compression or new synthesis.
+D02 five-repeat examples use identical clips at 240ms spacing, no pitch changes.
+
+Old comparison files: current game assets/resources/audio/v21/growth.wav,
+growth_tick.wav and growth_land.wav. Stereo container/level reference only.
+Earlier baseline sources and credits:
+https://kingdom-watch.pages.dev/audio-credits.html
+
+Authors do not endorse this game or comparison. Offline signal inspection is
+not listening approval. Audio was not auditioned by the agent.

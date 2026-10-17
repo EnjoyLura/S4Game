@@ -1,0 +1,32 @@
+[
+  {
+    "chapter": "outpost",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-f7a4b0a2-de19-4253-99b3-3c44ac6719f9.png",
+    "path": "assets/resources/scenes/bg_campaign_outpost_v1.png",
+    "width": 887,
+    "height": 1774,
+    "bytes": 3383367,
+    "sha256": "ce7ef517d91076c2d5ccdec8dfdb7621ed92a9b624e36b44d193af1f6054feab",
+    "pixelEditing": false
+  },
+  {
+    "chapter": "forest",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-7537bdb4-e93d-468f-bbe4-454c701e92f8.png",
+    "path": "assets/resources/scenes/bg_campaign_forest_v1.png",
+    "width": 887,
+    "height": 1774,
+    "bytes": 3737807,
+    "sha256": "e64ffb7802ce39d72c75240b12ca673af24540281093011ccd8c44de975e7f94",
+    "pixelEditing": false
+  },
+  {
+    "chapter": "lair",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a12e7c-9e87-72e0-b3ff-bca4a58686b3\\exec-68f76fcb-d8d1-4f81-ab0f-4ddcc650ac66.png",
+    "path": "assets/resources/scenes/bg_campaign_lair_v1.png",
+    "width": 887,
+    "height": 1774,
+    "bytes": 3695386,
+    "sha256": "d12ca6f081bee95b8c90e3b5e835cbf38d2a7cc8bf32247936deb19f68459a85",
+    "pixelEditing": false
+  }
+]

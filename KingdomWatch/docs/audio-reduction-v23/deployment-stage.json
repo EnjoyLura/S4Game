@@ -1,0 +1,14 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-reduction-v23-20261017-174956",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-representatives-r1-20261017-171544",
+  "entryVersion": "1792230535",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=audio-reduction-v23-1792230535",
+  "scope": "Reduce redundant sound triggers and concurrency; reuse v21 samples; no candidate sound integration",
+  "priorPreviewFilesPreserved": 727,
+  "manualAcceptance": "pending user review; no game/browser/audio playback performed",
+  "deployment": "https://d78e3248.kingdom-watch.pages.dev",
+  "published": true,
+  "publicationNote": "Wrangler reported deployment complete; no browser/game/audio playback or online acceptance performed"
+}

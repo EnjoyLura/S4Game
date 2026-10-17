@@ -23,12 +23,8 @@ import { C, CA, dimLayer, gcircle, gpanel, label, N, setText, WY, WYB, WX } from
 import { battleArtIcon as artIcon, battleArtSprite as artSprite, battleStatBar as gbar } from './BattlePanelSkin';
 import { pauseButton, pauseFrame, pauseRow, pauseSwitch, pauseTabFace } from './PausePanelSkin';
 import { playSettlement, settlementButton, settlementFrame, settlementRewards } from './SettlementPanelSkin';
-
-/** 奖励行文字兜底 → A2 图标（有美术时整座替换，失败保持 emoji） */
-const REWARD_ICON: Record<string, string> = {
-  '🪙': 'ui_icon_coin', 'EXP': 'ui_icon_exp', '💎': 'ui_icon_diamond',
-  '🎁': 'ui_icon_chest', '🛡': 'ui_icon_equip',
-};
+import { battleRewardPanel } from './BattleRewardPanel';
+import { showCollectedLoot } from './LevelLootPreview';
 
 interface PickCallbacks {
   onPick: (card: CardDef) => void;
@@ -256,26 +252,12 @@ export class Panels {
     });
   }
 
-  /** Reward sockets and their amounts stay inside the same centered content area. */
-  private rewardIcons(parent: Node, y: number, items: [string, string, string][]): void {
-    const pitch = 160, s = 96;
-    items.forEach((it, i) => {
-      const x = (i - (items.length - 1) / 2) * pitch;
-      const c = gcircle(parent, x, y, 42, CA(it[0], 0.25));
-      artSprite(c, 0, 0, 84, 84, 'pause_comic_v1/reward_socket', { sliced: false, belowIdx: 0 });
-      const iconId = REWARD_ICON[it[1]];
-      if (iconId) artIcon(c, iconId, 60);
-      else label(c, 0, 0, it[1], { size: it[1] === 'EXP' ? 20 : 34, color: '#FFFFFF', bold: true });
-      label(parent, x, y - s / 2 - 22, it[2], { size: 20, color: '#FFFFFF', w: 140, h: 36, shrink: true });
-    });
-  }
-
   /* ---------- ④ 暂停（页签：奖励总览/伤害统计/设置，线稿④/④-1/④-2） ---------- */
   showPause(o: {
     onResume: () => void; onExit: () => void;
     music: boolean; sfx: boolean;
     onToggle: (k: 'music' | 'sfx', v: boolean) => void;
-    tab?: number; speed: number; speedUnlocked: boolean; xp: number;
+    tab?: number; speed: number; speedUnlocked: boolean; xp: number; loot?: StageLootSummary;
   }): void {
     const tab = o.tab ?? 0;
     const fresh = this.begin('pause');
@@ -285,11 +267,11 @@ export class Panels {
     label(root, 0, 298, '暂 停', { size: 46, color: '#FFFFFF', bold: true, w: 320, h: 62 });
     this.tabsBar(root, ['奖励总览', '伤害统计', '设置'], tab, t => this.showPause({ ...o, tab: t }));
     if (tab === 0) {
-      label(root, 0, 216, '— 已获得奖励 —', { size: 22, color: '#FFE08A', w: 560, h: 32 });
-      this.rewardIcons(root, 108, [
-        [PAL.gold, '🪙', String(Math.floor(this.dir.goldEarned))],
-        [PAL.green, 'EXP', String(o.xp)],
-      ]);
+      battleRewardPanel(root, {
+        top: 236, heading: '已获得奖励', gold: this.dir.goldEarned, xp: o.xp, loot: o.loot,
+        note: '金币与经验为本局累计',
+        onInspect: o.loot ? () => showCollectedLoot(this.modalRoot, o.loot!) : undefined,
+      });
     } else if (tab === 1) {
       label(root, 0, 216, '— 伤害统计（本局） —', { size: 22, color: '#FFE08A', w: 560, h: 32 });
       this.statsRows(root, this.dir.dmgSvc.rows());

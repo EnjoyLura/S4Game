@@ -1,0 +1,16 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-comparison-batches-v22-20261017-153334",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-overhaul-v21-20261017-150108",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=audio-overhaul-v21-1792220287",
+  "preview": "https://kingdom-watch.pages.dev/previews/audio-comparison-batches-v22/?v=batch-01-r1",
+  "growthPreview": "https://kingdom-watch.pages.dev/previews/audio-comparison-batches-v22/growth-r1/?v=growth-r1",
+  "cartoonPreview": "https://kingdom-watch.pages.dev/previews/audio-comparison-batches-v22/cartoon-r1/?v=cartoon-r1",
+  "scope": "Preview only: cartoon-r1 has 6 free casual/cartoon growth candidates and 3 repeat examples; earlier previews preserved",
+  "gameReplaced": false,
+  "manualAcceptance": "pending user listening and selection",
+  "deployment": "https://016e432b.kingdom-watch.pages.dev",
+  "deployedAt": "2026-10-17T16:27:40+08:00",
+  "cartoonDeployment": "https://016e432b.kingdom-watch.pages.dev/previews/audio-comparison-batches-v22/cartoon-r1/?v=cartoon-r1"
+}

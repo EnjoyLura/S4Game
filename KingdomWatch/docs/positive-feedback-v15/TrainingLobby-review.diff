@@ -1,0 +1,21 @@
+--- before/assets/scripts/ui/TrainingLobby.ts
++++ assets/scripts/ui/TrainingLobby.ts
+@@ -381,8 +381,8 @@
+           // Keep the same hit target and art alive throughout a continuous gesture.
+           const before = heroStats(hid).power, oldLevel = weapon ? h.weaponLv : h.lv;
+           const milestone = (oldLevel + 1) % 10 === 0;
+-          const result = milestone ? growthAction(target, action) : action();
+-          if (!result.ok) { if (!milestone) toast(result.msg, { kind: 'warning', title: '暂时无法提升' }); return false; }
++          const result = growthAction(target, action, repeating);
++          if (!result.ok) return false;
+           const level = weapon ? h.weaponLv : h.lv, capped = level >= (weapon ? MAX.weapon : MAX.hero);
+           const current = data.statsAt(hid, h.lv, h.weaponLv);
+           const nextStats = capped ? current : data.statsAt(hid, h.lv + (weapon ? 0 : 1), h.weaponLv + (weapon ? 1 : 0));
+@@ -391,7 +391,6 @@
+           const nextCost = weapon ? weaponUpCost(level) : { gold: heroUpCost(level), mat: 0 };
+           footerControl.refresh(nextCost, capped); ctx.refreshResources?.();
+           fx.pulse(before, heroStats(hid).power, milestone);
+-          if (!milestone) uiSound(repeating ? 'confirm' : 'upgrade');
+           if (milestone) refreshShelf();
+           if (capped) { if (!milestone) toast('已达到当前等级上限', { kind: 'success', title: '培养完成' }); return false; }
+           const missing = sv.gold < nextCost.gold ? '金币不足' : matCount('mat_stone') + matCount('mat_iron') < nextCost.mat ? '强化材料不足' : '';

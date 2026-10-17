@@ -1,0 +1,41 @@
+--- before/assets/scripts/core/GameAudio.ts
++++ assets/scripts/core/GameAudio.ts
+@@ -2,6 +2,11 @@
+ import { assetManager, AudioClip, resources } from 'cc';
+ import { loadSave } from './SaveData';
+ import { AUDIO_CUES, MUSIC_TRACKS, MusicScene, SfxName } from './AudioCatalog';
++
++// +3 dB for both buses; keep the existing mix balance and output limiter.
++const AUDIO_LEVEL_BOOST = Math.SQRT2;
++const SFX_BUS_GAIN = .85 * AUDIO_LEVEL_BOOST;
++const MUSIC_SCENE_GAIN = { camp: .52 * AUDIO_LEVEL_BOOST, battle: .42 * AUDIO_LEVEL_BOOST } as const;
+ 
+ interface PlaybackShape { preparing?: boolean; gain?: number; rate?: number; fadeIn?: number; duration?: number; lowpass?: number; }
+ interface Voice { source: AudioBufferSourceNode; gain: GainNode; priority: number; group: string; name: SfxName; started: number; }
+@@ -74,7 +79,7 @@
+     const save = loadSave();
+     this.musicEnabled = save.music !== false;
+     this.sfxEnabled = save.sfx !== false;
+-    if (this.sfxBus && this.ctx) this.ramp(this.sfxBus.gain, this.sfxEnabled ? .85 : 0, .03);
++    if (this.sfxBus && this.ctx) this.ramp(this.sfxBus.gain, this.sfxEnabled ? SFX_BUS_GAIN : 0, .03);
+     if (!this.sfxEnabled) this.stopVoices();
+     if (!this.musicEnabled) {
+       this.musicRevision++;
+@@ -182,7 +187,7 @@
+       limiter.threshold.value = -3; limiter.knee.value = 2; limiter.ratio.value = 12;
+       limiter.attack.value = .002; limiter.release.value = .09;
+       this.sfxBus = ctx.createGain(); this.musicBus = ctx.createGain();
+-      this.sfxBus.gain.value = this.sfxEnabled ? .85 : 0;
++      this.sfxBus.gain.value = this.sfxEnabled ? SFX_BUS_GAIN : 0;
+       this.musicBus.gain.value = 0;
+       this.combatBus = ctx.createGain();
+       const lowCut = ctx.createBiquadFilter(), presence = ctx.createBiquadFilter();
+@@ -297,7 +302,7 @@
+ 
+   private musicLevel(): void {
+     if (!this.ctx || !this.musicBus) return;
+-    const sceneGain = this.scene === 'camp' ? .52 : .42;
++    const sceneGain = MUSIC_SCENE_GAIN[this.scene];
+     const stateGain = this.state === 'win' || this.state === 'lose' ? .2 : this.state === 'paused' || this.state === 'pick' ? .42 : 1;
+     const duck = performance.now() < this.duckUntil ? this.duckGain : 1;
+     this.ramp(this.musicBus.gain, this.musicEnabled ? sceneGain * stateGain * duck : 0, .18);

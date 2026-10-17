@@ -1,0 +1,556 @@
+diff --git a/KingdomWatch/assets/scripts/battle/BattleDirector.ts b/KingdomWatch/assets/scripts/battle/BattleDirector.ts
+index 1edfc8a..f5a822c 100644
+--- a/KingdomWatch/assets/scripts/battle/BattleDirector.ts
++++ b/KingdomWatch/assets/scripts/battle/BattleDirector.ts
+@@ -140,7 +140,7 @@ export class BattleDirector extends Component {
+     this.float = new FloatText(textLayer);
+     this.pops = new ComicPop(textLayer);
+     this.mgr = new MonsterManager(mobLayer, hitCtx);
+-    this.mgr.statMul = DIFFICULTIES[this.levelDef.difficulty].statMul;
++    this.mgr.statMul = DIFFICULTIES[this.levelDef.difficulty].statMul * (this.levelDef.statMul || 1);
+     // 首次遭遇新怪种 → 解锁图鉴 + 横幅 + 新怪通知钮（介绍弹窗待玩家点击查看）
+     this.mgr.onFirstEncounter = def => {
+       if (unlockCodex(def.id)) {
+diff --git a/KingdomWatch/assets/scripts/config/LevelDifficulty.ts b/KingdomWatch/assets/scripts/config/LevelDifficulty.ts
+index 6d763cb..10242bc 100644
+--- a/KingdomWatch/assets/scripts/config/LevelDifficulty.ts
++++ b/KingdomWatch/assets/scripts/config/LevelDifficulty.ts
+@@ -1,5 +1,6 @@
+ /** A single source for battle formations, difficulty rewards and lobby previews. */
+ import { getLevelDef, LevelDef, LEVEL_IDS, MobDef, SpawnGroup, WaveDef } from './Mobs';
++import { campaignStage } from './Campaign';
+ 
+ export interface MaterialReward { id: string; n: number; }
+ export interface GearWeight { id: string; weight: number; }
+@@ -32,7 +33,9 @@ function reinforcement(groups: SpawnGroup[]): WaveDef { return { groups, surge:
+ export function getChallengeDef(id: string, value = 0): ChallengeDef {
+   const base = getLevelDef(id), d = difficultyIndex(value), key = base.id + ':' + d;
+   if (cache[key]) return cache[key];
+-  const s = Math.max(0, LEVEL_IDS.indexOf(base.id)), waves: WaveDef[] = [];
++  // Equipment pools and reinforcements follow chapter tiers, never the flat 0..29 stage index.
++  const stage = campaignStage(base.id), s = (stage?.chapter || 1) - 1;
++  const progress = Math.floor(((stage?.stage || 1) - 1) / 4), waves: WaveDef[] = [];
+   base.waves.forEach((wave, i) => {
+     const groups = wave.groups.map(g => ({ ...g,
+       count: d ? Math.ceil(g.count * (d === 1 ? 1.05 : 1.1)) : g.count,
+@@ -57,7 +60,7 @@ export function getChallengeDef(id: string, value = 0): ChallengeDef {
+       if (i === 8) waves.push(reinforcement([group('goblin_brute', 4 + s, 1.4), group('goblin_shaman', 4 + s, 1.8, 2), group('goblin_slinger', 14 + 4 * s, .75, 3)]));
+     }
+   });
+-  const materials: MaterialReward[] = [{ id: 'mat_stone', n: d === 0 ? 2 + s : d === 1 ? 4 + 2 * s : 6 + 3 * s }];
++  const materials: MaterialReward[] = [{ id: 'mat_stone', n: (d === 0 ? 2 + s : d === 1 ? 4 + 2 * s : 6 + 3 * s) + progress }];
+   if (d) materials.push({ id: 'mat_iron', n: d === 1 ? 1 + s : 2 + s });
+   if (d === 2) materials.push({ id: 'mat_dust', n: 1 + s });
+   // Split the old green-bow share across four weapon types; total equipment/weapon odds stay unchanged.
+diff --git a/KingdomWatch/assets/scripts/config/Mobs.ts b/KingdomWatch/assets/scripts/config/Mobs.ts
+index b30e530..7f97da1 100644
+--- a/KingdomWatch/assets/scripts/config/Mobs.ts
++++ b/KingdomWatch/assets/scripts/config/Mobs.ts
+@@ -2,6 +2,7 @@
+  * 怪物与关卡配置（§5 第 1 章 / §11.2 怪物基准，全配置化）
+  */
+ import { PAL } from './GameConfig';
++import { CAMPAIGN_CHAPTERS, CAMPAIGN_LEVEL_IDS, CAMPAIGN_STAGES } from './Campaign';
+ 
+ export interface MobDef {
+   id: string;
+@@ -76,10 +77,12 @@ export interface LevelDef {
+   /** 防线耐久（已含城墙加成前的关卡基础值；M0 直配） */
+   lineHp: number;
+   baseGold: number;
++  /** Chapter/stage growth, multiplied by the selected difficulty in BattleDirector. */
++  statMul?: number;
+   waves: WaveDef[];
+ }
+ 
+-export const LEVEL_1_1: LevelDef = {
++const OUTPOST_TEMPLATE: LevelDef = {
+   id: '1-1',
+   name: '腐朽森林·前哨',
+   lineHp: 1000,
+@@ -98,7 +101,7 @@ export const LEVEL_1_1: LevelDef = {
+   ],
+ };
+ 
+-export const LEVEL_1_2: LevelDef = {
++const FOREST_TEMPLATE: LevelDef = {
+   id: '1-2',
+   name: '腐朽森林·深林',
+   lineHp: 1000,
+@@ -117,7 +120,7 @@ export const LEVEL_1_2: LevelDef = {
+   ],
+ };
+ 
+-export const LEVEL_1_3: LevelDef = {
++const LAIR_TEMPLATE: LevelDef = {
+   id: '1-3',
+   name: '腐朽森林·兽穴',
+   lineHp: 1100,
+@@ -136,11 +139,40 @@ export const LEVEL_1_3: LevelDef = {
+   ],
+ };
+ 
+-/** 关卡注册表：新关卡在这里登记，主城关卡页与战斗启动共用 */
+-const LEVEL_TABLE: Record<string, LevelDef> = { '1-1': LEVEL_1_1, '1-2': LEVEL_1_2, '1-3': LEVEL_1_3 };
++/** Three chapter formations, with ten progressively stronger encounters in each chapter. */
++const TEMPLATES = [OUTPOST_TEMPLATE, FOREST_TEMPLATE, LAIR_TEMPLATE];
++const PATROLS = ['goblin_worker', 'goblin_slinger', 'wolf_rider', 'goblin_worker', 'goblin_shaman',
++  'goblin_slinger', 'wolf_rider', 'goblin_shaman', 'wolf_rider', 'goblin_brute'];
++const LEVEL_TABLE: Record<string, LevelDef> = {};
++for (const stage of CAMPAIGN_STAGES) {
++  const chapter = CAMPAIGN_CHAPTERS[stage.chapter - 1], base = TEMPLATES[stage.chapter - 1];
++  const step = stage.stage - 1;
++  const waves = base.waves.map((wave, index) => {
++    const groups = wave.groups.map(g => ({ ...g,
++      count: Math.ceil(g.count * (1 + step * .035)),
++      interval: Math.max(.35, g.interval * (1 - step * .012)),
++    }));
++    const add = (mob: string, count: number, interval: number, delay: number): void => {
++      const existing = groups.find(g => g.mob === mob);
++      if (existing) existing.count += count;
++      else groups.push({ mob, count, interval, delay });
++    };
++    // Change encounter composition as well as stats; chapter entry retains its baseline formation.
++    if (step > 0 && index === 5) {
++      const mob = PATROLS[step];
++      add(mob, mob === 'goblin_brute' ? 1 + stage.chapter : mob === 'goblin_shaman' ? 2 + stage.chapter : 4 + stage.chapter * 2, 1.3, 3);
++    }
++    if (stage.stage === 5 && index === 4) add('goblin_brute', stage.chapter, 1.8, 4);
++    if (stage.stage === 10 && index === 9) add('goblin_brute', stage.chapter + 1, 1.6, 4);
++    return { groups, surge: wave.surge || (stage.stage === 5 && index === 4) || (stage.stage === 10 && index === 9) };
++  });
++  LEVEL_TABLE[stage.id] = { id: stage.id, name: chapter.name + ' · ' + stage.name,
++    lineHp: base.lineHp, baseGold: 60 + (stage.chapter - 1) * 80 + step * 8,
++    statMul: Number((1 + (stage.chapter - 1) * .55 + step * .055).toFixed(3)), waves };
++}
+ 
+ /** 关卡推进顺序（登记顺序即推进顺序） */
+-export const LEVEL_IDS: string[] = Object.keys(LEVEL_TABLE);
++export const LEVEL_IDS: readonly string[] = CAMPAIGN_LEVEL_IDS;
+ 
+ /** 下一关 id；已是最后一关返回 null（胜利结算"下一关"直进用） */
+ export function nextLevelId(id: string): string | null {
+@@ -149,7 +181,7 @@ export function nextLevelId(id: string): string | null {
+ }
+ 
+ export function getLevelDef(id: string): LevelDef {
+-  return LEVEL_TABLE[id] || LEVEL_1_1;
++  return LEVEL_TABLE[id] || LEVEL_TABLE['1-1'];
+ }
+ 
+ /** 英雄站位（§3.1，用户确认）：防线横向对称分布，单人必须居中；3 人 ±210 */
+diff --git a/KingdomWatch/assets/scripts/core/Flow.ts b/KingdomWatch/assets/scripts/core/Flow.ts
+index 54e894e..2dccf41 100644
+--- a/KingdomWatch/assets/scripts/core/Flow.ts
++++ b/KingdomWatch/assets/scripts/core/Flow.ts
+@@ -6,7 +6,7 @@ export type FlowMode = 'main' | 'battle';
+ 
+ export const flow = {
+   mode: 'main' as FlowMode,
+-  /** 进入战斗的关卡 ID（当前仅 1-1；多关卡后由关卡页写入） */
++  /** 进入战斗的章节关卡 ID（1-1..3-10，由关卡页写入） */
+   levelId: '1-1',
+   /** 关卡难度：0 普通 / 1 精英 / 2 地狱（关卡页写入，战斗读取注入出怪倍率与星级后缀键） */
+   diff: 0,
+diff --git a/KingdomWatch/assets/scripts/core/GameData.ts b/KingdomWatch/assets/scripts/core/GameData.ts
+index 6d3fd4f..f9aaa55 100644
+--- a/KingdomWatch/assets/scripts/core/GameData.ts
++++ b/KingdomWatch/assets/scripts/core/GameData.ts
+@@ -5,6 +5,7 @@
+ import { loadSave, saveSave, EquipInst, HeroState } from './SaveData';
+ import { DIFFICULTIES, starChestRewards } from '../config/LevelDifficulty';
+ import { WEAPONS, weaponFits, weaponUsers } from '../config/Weapons';
++import { CAMPAIGN_LEVEL_IDS } from '../config/Campaign';
+ export { WEAPONS, weaponFits, weaponUsers } from '../config/Weapons';
+ 
+ /* ================= 物品定义 ================= */
+@@ -419,7 +420,7 @@ export const SHOP: ShopDef[] = [
+ ];
+ 
+ /** 关卡顺序表（解锁比较用） */
+-const LV_ORDER = ['1-1', '1-2', '1-3', '1-4', '1-5'];
++const LV_ORDER = CAMPAIGN_LEVEL_IDS;
+ export function lvReached(unlock: string): boolean {
+   if (!unlock) return true;
+   const sv = loadSave();
+diff --git a/KingdomWatch/assets/scripts/ui/BattleEntryWarmup.ts b/KingdomWatch/assets/scripts/ui/BattleEntryWarmup.ts
+index a1bf9b7..5397dae 100644
+--- a/KingdomWatch/assets/scripts/ui/BattleEntryWarmup.ts
++++ b/KingdomWatch/assets/scripts/ui/BattleEntryWarmup.ts
+@@ -1,5 +1,6 @@
+ /** Entry art first; only the selected battlefield and equipped heroes need a first-paint barrier. */
+ import { director } from 'cc';
++import { battleSceneKey } from '../config/Campaign';
+ import { preloadArcherClip } from '../battle/ArcherIdleAnimation';
+ import { preloadHeroClip } from '../battle/HeroSequenceAnimation';
+ import { uxFrame } from './Ux';
+@@ -37,7 +38,7 @@ export function warmBattlefield(levelId: string, heroIds: readonly string[]): Pr
+   const key = levelId + ':' + ids.join(',');
+   const hit = jobs.get(key); if (hit) return hit;
+   warmEntryArt(); void warmBattleScene();
+-  const firstPaint = [imageReady('scenes/scene_' + levelId.replace('-', '_')), imageReady('defense_wall')];
++  const firstPaint = [imageReady(battleSceneKey(levelId)), imageReady('defense_wall')];
+   for (const id of ids) {
+     if (id === 'archer') {
+       firstPaint.push(preloadArcherClip('idle'));
+diff --git a/KingdomWatch/assets/scripts/ui/HUD.ts b/KingdomWatch/assets/scripts/ui/HUD.ts
+index bc404b5..3a2a0c3 100644
+--- a/KingdomWatch/assets/scripts/ui/HUD.ts
++++ b/KingdomWatch/assets/scripts/ui/HUD.ts
+@@ -5,6 +5,7 @@
+  */
+ import { Graphics, Label, Layers, Node, Tween, tween, UIOpacity, UITransform, Vec3 } from 'cc';
+ import { expNeed, LO, PAL } from '../config/GameConfig';
++import { battleSceneKey } from '../config/Campaign';
+ import { dlgConfirm, dlgPanel, dlgTitle, gcircle, gpanel, label, noticeBtn, setText, WY, WYB, WX, Bar, CA, N } from './UIKit';
+ import { artSprite } from './Ux';
+ import { BattleDirector } from '../battle/BattleDirector';
+@@ -104,7 +105,7 @@ export class HUD {
+        否则异步加载完成后 clip 落在 Field 末尾，整张不透明场景图盖住全部战场实体 */
+     const bgFlat = gpanel(bgParent || top, 0, 0, 750, LO.half * 2 + 240, '#2E4034', undefined, 0, 0);
+     bgFlat.setSiblingIndex(0);
+-    const sceneId = 'scenes/scene_' + this.dir.levelDef.id.replace('-', '_');
++    const sceneId = battleSceneKey(this.dir.levelDef.id);
+     artSprite(bgParent || top, 0, 0, 750, LO.half * 2 + 240, sceneId,
+       { sliced: false, cover: true, belowIdx: 1, hideOnLoad: [bgFlat] });
+ 
+diff --git a/KingdomWatch/assets/scripts/ui/pages/LevelsPage.ts b/KingdomWatch/assets/scripts/ui/pages/LevelsPage.ts
+index 76d0e5f..b5b3282 100644
+--- a/KingdomWatch/assets/scripts/ui/pages/LevelsPage.ts
++++ b/KingdomWatch/assets/scripts/ui/pages/LevelsPage.ts
+@@ -1,10 +1,11 @@
+-/** Continuous outdoor scenery, a draggable route, and a reward dock that owns its space. */
+-import { Graphics, Mask, Node, ScrollView, Sprite, UIOpacity, UITransform, Vec2, director } from 'cc';
++/** Three chapter scenes, ten-stage routes and a persistent reward / battle dock. */
++import { Graphics, Node, ScrollView, Sprite, UIOpacity, Vec2, director } from 'cc';
+ import { LO } from '../../config/GameConfig';
+-import { C, N, WY } from '../UIKit';
++import { CAMPAIGN_CHAPTERS, CAMPAIGN_STAGES, campaignDifficultyOpen, campaignLevelOpen } from '../../config/Campaign';
++import { C, CA, N, WY } from '../UIKit';
+ import { artSprite } from '../Ux';
+ import { COMIC, comicArt, comicButton, comicButtonControl, comicMark, comicPlate } from '../ComicUI';
+-import { mainLabel, PageCtx, toast, mainLayout, MAIN_RESOURCE_H } from '../PageKit';
++import { mainLabel, PageCtx, toast, mainLayout, MAIN_RESOURCE_H, pageScroll } from '../PageKit';
+ import { CHEST_COND, claimChest, starKey, squadList } from '../../core/GameData';
+ import { DIFFICULTIES, getChallengeDef, starChestRewards } from '../../config/LevelDifficulty';
+ import { stageLootPreview } from '../LevelLootPreview';
+@@ -17,16 +18,12 @@ import { enterBattle, enteringBattle } from '../BattleEntry';
+ import { warmBattlefield } from '../BattleEntryWarmup';
+ import { deferUIWarmup } from '../IdleWarmup';
+ 
+-const LEVELS = [
+-  { id: '1-1', name: '1-1 前哨', short: '前哨', desc: '10 波 · 哥布林军团', art: 'outpost' },
+-  { id: '1-2', name: '1-2 深林', short: '深林', desc: '10 波 · 深林伏兵', art: 'forest' },
+-  { id: '1-3', name: '1-3 兽穴', short: '兽穴', desc: '10 波 · 蛮兵巢穴', art: 'lair' },
+-];
+-// Only the first three levels have battle definitions. Later stops cannot start fallback battles.
+-const ROUTE = [...LEVELS, { id: '1-4', short: '待开放' }, { id: '1-5', short: '待开放' }];
++const LEVELS = CAMPAIGN_STAGES;
+ const DIFFS = ['普通', '精英', '地狱'];
+ const DIFFICULTY_ART = ['comic_difficulty_shield_v1', 'comic_swords_v1', 'comic_difficulty_skull_v1'];
+-const st = { i: 0, d: 0, routeOffset: 0, rewardTab: 0 };
++const CHAPTER_NUMERALS = ['一', '二', '三'];
++const st = { i: 0, d: 0, rewardTab: 0, initialized: false,
++  selected: [0, 0, 0], upperOffset: [0, 0, 0] };
+ 
+ function levelArt(parent: Node, x: number, y: number, w: number, h: number, key: string): Node {
+   return comicArt(parent, x, y, w, h, 'levels_comic_v1/' + key);
+@@ -40,13 +37,24 @@ function star(parent: Node, x: number, y: number, size: number, earned: boolean)
+   });
+   if (!earned) art.addComponent(UIOpacity).opacity = 95;
+ }
+-/** Let ScrollView capture moves. Cancelled or dragged presses must never select a route stop. */
++/** Short screens scroll the whole chapter area; a drag must never select a stop. */
+ function routeTap(node: Node, cb: () => void): void {
+   bindButton(node, cb, { dragThreshold: 7 });
+ }
+ 
+ export function buildLevels(ctx: PageCtx): void {
+   st.rewardTab = 0; // Enter the level page on the left-hand star chest tab.
++  if (!st.initialized) {
++    st.initialized = true;
++    const stars = loadSave().stars;
++    CAMPAIGN_CHAPTERS.forEach((_, chapter) => {
++      const stages = LEVELS.slice(chapter * 10, chapter * 10 + 10);
++      const next = stages.find(stage => campaignLevelOpen(stage.id, stars) && !(stars[stage.id] > 0));
++      st.selected[chapter] = next ? next.stage - 1 : stages.some(stage => stars[stage.id] > 0) ? 9 : 0;
++    });
++    const next = LEVELS.find(stage => campaignLevelOpen(stage.id, stars) && !(stars[stage.id] > 0));
++    st.i = next ? next.order : LEVELS.length - 1;
++  }
+   // Consume only the battle-exit request; ordinary lobby switches keep their remembered selection.
+   const focus = flow.levelReturn;
+   if (focus) {
+@@ -56,107 +64,140 @@ export function buildLevels(ctx: PageCtx): void {
+       st.i = index;
+       st.d = Math.max(0, Math.min(DIFFS.length - 1, Math.floor(focus.diff)));
+       while (st.d > 0 && !diffUnlocked(st.i, st.d)) st.d--;
+-      // Keep the requested stop visible in the route instead of retaining a distant drag offset.
+-      st.routeOffset = Math.max(0, index * 180 - 180);
++      st.selected[Math.floor(index / 10)] = index % 10;
++      st.upperOffset[Math.floor(index / 10)] = 0;
+     }
+   }
+   const content = N('levelLobby', ctx.screens, 0, 0, 750, LO.half * 2);
+   function levelOpen(i: number): boolean {
+-    return i < LEVELS.length && (i === 0 || (loadSave().stars[starKey(LEVELS[i - 1].id, 0)] || 0) >= 1);
++    return !!LEVELS[i] && campaignLevelOpen(LEVELS[i].id, loadSave().stars);
+   }
+   function diffUnlocked(i: number, d: number): boolean {
+-    return d === 0 ? levelOpen(i) : (loadSave().stars[starKey(LEVELS[i].id, d - 1)] || 0) >= 1;
++    return !!LEVELS[i] && campaignDifficultyOpen(LEVELS[i].id, d, loadSave().stars);
+   }
+   function selectLevel(i: number): void {
+     st.i = i;
++    st.selected[Math.floor(i / 10)] = i % 10;
+     while (st.d > 0 && !diffUnlocked(st.i, st.d)) st.d--;
+     render();
+   }
+   function render(): void {
+     refreshUI(content, () => {
+       const sv = loadSave(), lv = LEVELS[st.i], open = levelOpen(st.i);
++      const chapterIndex = lv.chapter - 1, chapter = CAMPAIGN_CHAPTERS[chapterIndex];
+       const challenge = getChallengeDef(lv.id, st.d), chestRewards = starChestRewards(lv.id, st.d);
+       const key = starKey(lv.id, st.d), stars = sv.stars[key] || 0, claimed = sv.chestClaimed[key] || 0;
+       const { headerTop, bottom } = mainLayout(), height = LO.half * 2;
+       const titleTop = headerTop + MAIN_RESOURCE_H + 14;
+-      const tabsTop = titleTop + 78, tabH = 62, sceneTop = tabsTop + tabH + 12;
+       const actionH = 94, actionTop = bottom - actionH;
+       // The reward content owns real vertical space instead of being squeezed under an expanding diorama.
+       const rewardH = Math.min(460, Math.max(390, height * .30));
+-      const rewardTop = actionTop - rewardH - 14, selectorTop = rewardTop - 120;
+-      const sceneH = Math.max(1, selectorTop - 12 - sceneTop);
++      const rewardTop = actionTop - rewardH - 14;
+ 
+       const upper = N('levelUpperScene', content, 0, WY(0, rewardTop), 750, rewardTop);
+       const terrain = artSprite(upper, 0, 0, 750, rewardTop,
+-        'scenes/bg_levels_' + lv.art + '_comic_v2', { sliced: false, cover: true });
+-      terrain.name = 'levelTerrain:' + lv.id;
+-      mainLabel(content, 0, WY(titleTop, 26), '第1章 · 腐朽森林', {
+-        size: 23, color: '#F5DA9B', w: 460, h: 28, outline: COMIC.ink, outlineW: 2,
++        'scenes/bg_levels_' + chapter.art + '_comic_v2', { sliced: false, cover: true });
++      terrain.name = 'levelTerrain:chapter' + chapter.number;
++      // Keep the chapter route readable on short screens instead of shrinking touch targets.
++      const upperViewH = Math.max(1, rewardTop - 12 - titleTop), upperH = Math.max(500, upperViewH);
++      const body = pageScroll(content, 'chapterRoute', titleTop, rewardTop - 12, upperH, 718);
++      const scroll = body.parent!.getComponent(ScrollView)!;
++      scroll.inertia = true; scroll.brake = .65; scroll.cancelInnerEvents = true;
++      scroll.elastic = false;
++      const remember = (): void => {
++        st.upperOffset[chapterIndex] = Math.min(Math.max(0, upperH - upperViewH), Math.max(0, scroll.getScrollOffset().y));
++      };
++      body.parent!.on('scrolling', remember);
++      body.parent!.on('scroll-ended', remember);
++      scroll.scrollToOffset(new Vec2(0, Math.min(st.upperOffset[chapterIndex], upperH - upperViewH)), 0);
++      const by = (top: number, h = 0): number => -top - h / 2;
++      const chapterStages = LEVELS.slice(chapterIndex * 10, chapterIndex * 10 + 10);
++      const cleared = chapterStages.filter(stage => (sv.stars[stage.id] || 0) > 0).length;
++      mainLabel(body, -147, by(0, 40), '第' + CHAPTER_NUMERALS[chapterIndex] + '章 · ' + chapter.name, {
++        size: 32, color: COMIC.cream, bold: true, w: 388, h: 40, align: 'left', outline: COMIC.ink, outlineW: 3,
++      }).name = 'levelTitle';
++      mainLabel(body, 237, by(4, 32), '已通关 ' + cleared + '/10', {
++        size: 22, color: COMIC.cream, w: 208, h: 32, outline: COMIC.ink, outlineW: 2,
+       });
+-      const title = mainLabel(content, 0, WY(titleTop + 28, 44), lv.name, {
+-        size: 42, font: 'body', color: COMIC.cream, bold: true,
+-        w: 620, h: 44, outline: COMIC.ink, outlineW: 3,
++      CAMPAIGN_CHAPTERS.forEach((item, index) => {
++        const active = chapterIndex === index, unlocked = levelOpen(index * 10);
++        const tab = comicPlate(body, (index - 1) * 232, by(52, 54), 222, 54, active ? 'gold' : 'dark',
++          { name: 'chapterSelect:' + item.number });
++        mainLabel(tab, unlocked ? 0 : -10, 0, '第' + CHAPTER_NUMERALS[index] + '章  ' + item.name, {
++          size: 23, bold: true, color: active ? COMIC.text : unlocked ? COMIC.cream : COMIC.muted, w: 194, h: 36,
++        });
++        if (!unlocked) comicMark(tab, 91, 0, 'lock', 16, active ? COMIC.text : COMIC.muted);
++        routeTap(tab, () => { if (!active) selectLevel(index * 10 + st.selected[index]); });
+       });
+-      title.name = 'levelTitle';
+ 
+-      const difficultyBar = N('levelDifficultyBar', content, 0, WY(tabsTop, tabH), 686, tabH);
++      const tabH = 50;
++      const difficultyBar = N('levelDifficultyBar', body, 0, by(118, tabH), 686, tabH);
+       DIFFS.forEach((name, d) => {
+         const unlocked = diffUnlocked(st.i, d), active = st.d === d;
+         const slot = comicPlate(difficultyBar, (d - 1) * 232, 0, 222, tabH, active ? 'gold' : 'dark',
+           { name: 'levelDifficulty:' + d });
+-        levelArt(slot, -65, 0, 40, 40, DIFFICULTY_ART[d]);
++        levelArt(slot, -65, 0, 34, 34, DIFFICULTY_ART[d]);
+         mainLabel(slot, 7, 0, name, {
+-          size: 28, color: active ? COMIC.text : unlocked ? COMIC.cream : COMIC.muted,
++          size: 25, color: active ? COMIC.text : unlocked ? COMIC.cream : COMIC.muted,
+           bold: true, w: 94, h: 40,
+         });
+         if (!unlocked) comicMark(slot, 80, 0, 'lock', 20, COMIC.muted);
+-        tap(slot, () => {
++        routeTap(slot, () => {
+           if (!unlocked) { toast(d === 0 ? '通关上一关解锁' : '通关上一难度解锁'); return; }
+           if (st.d !== d) { st.d = d; render(); }
+         });
+       });
+ 
+-      const scene = N('terrainStage', content, 0, WY(sceneTop, sceneH), 750, sceneH);
+-      if (!open) {
+-        const locked = comicPlate(scene, 0, -sceneH / 2 + 30, 314, 48, 'dark', { name: 'levelLockedHint' });
+-        comicMark(locked, -123, 0, 'lock', 22);
+-        mainLabel(locked, 16, 0, '通关 ' + LEVELS[st.i - 1].id + ' 解锁', { size: 22, color: COMIC.cream, w: 258, h: 34 });
++      const routeH = upperH - 266;
++      const route = N('chapterStageRoute', body, 0, by(182, routeH), 704, routeH);
++      const rowGap = Math.min(210, routeH - 122), r = routeH > 280 ? 35 : 31;
++      const points = chapterStages.map((_, i) => ({ x: (i < 5 ? i - 2 : 7 - i) * 130,
++        y: (i < 5 ? .5 : -.5) * rowGap }));
++      const path = N('chapterRoutePath', route).addComponent(Graphics);
++      for (let i = 1; i < points.length; i++) {
++        const a = points[i - 1], b = points[i];
++        const segment = (): void => {
++          path.moveTo(a.x, a.y);
++          if (i === 5) path.bezierCurveTo(354, a.y, 354, b.y, b.x, b.y);
++          else path.lineTo(b.x, b.y);
++          path.stroke();
++        };
++        path.lineWidth = 11; path.strokeColor = CA(COMIC.darkShade, .8);
++        segment();
++        path.lineWidth = 5;
++        path.strokeColor = C((sv.stars[chapterStages[i - 1].id] || 0) > 0 ? COMIC.gold : COMIC.paperShade);
++        segment();
+       }
+-
+-      const viewW = 704, viewH = 80, pitch = 180, itemW = 164, pad = 8;
+-      const routeW = pad * 2 + (ROUTE.length - 1) * pitch + itemW;
+-      const maxOffset = routeW - viewW;
+-      const view = N('levelSelectors', content, 0, WY(selectorTop, viewH), viewW, viewH);
+-      view.addComponent(Mask);
+-      const scroll = view.addComponent(ScrollView);
+-      const route = N('levelRouteContent', view, -viewW / 2, 0, routeW, viewH);
+-      route.getComponent(UITransform)!.setAnchorPoint(0, .5);
+-      scroll.horizontal = true; scroll.vertical = false;
+-      scroll.inertia = true; scroll.brake = .65; scroll.elastic = false;
+-      scroll.cancelInnerEvents = true; scroll.content = route;
+-      const remember = (): void => { st.routeOffset = Math.min(maxOffset, Math.max(0, -scroll.getScrollOffset().x)); };
+-      view.on('scrolling', remember);
+-      view.on('scroll-ended', remember);
+-      ROUTE.forEach((level, i) => {
+-        const active = st.i === i, available = i < LEVELS.length, unlocked = available && levelOpen(i);
+-        const item = comicPlate(route, pad + itemW / 2 + i * pitch, 0, itemW, 74, active ? 'gold' : 'dark',
+-          { name: 'levelSelect:' + level.id });
+-        mainLabel(item, unlocked ? 0 : -10, 13, level.id, {
+-          size: 27, bold: true, color: active ? COMIC.text : available ? COMIC.cream : COMIC.muted, w: 100, h: 32,
+-        });
+-        mainLabel(item, 0, -20, level.short, { size: 18, color: active ? COMIC.text : '#C8CFD3', w: 144, h: 26 });
+-        if (!unlocked) comicMark(item, 53, 13, 'lock', 18, active ? COMIC.text : COMIC.muted);
+-        routeTap(item, () => {
+-          if (!available) { toast('后续关卡即将开放'); return; }
+-          if (!active) selectLevel(i);
++      chapterStages.forEach((level, i) => {
++        const active = lv.id === level.id, unlocked = diffUnlocked(level.order, st.d);
++        const earned = sv.stars[starKey(level.id, st.d)] || 0, p = points[i];
++        const item = N('levelSelect:' + level.id, route, p.x, p.y, 108, 112);
++        const g = item.addComponent(Graphics);
++        if (active) {
++          g.strokeColor = C(COMIC.goldLight); g.lineWidth = 3;
++          g.circle(0, 0, r + 6); g.stroke();
++        }
++        g.fillColor = C(active ? COMIC.gold : unlocked ? COMIC.dark : COMIC.mutedShade);
++        g.strokeColor = C(COMIC.ink); g.lineWidth = 3;
++        g.circle(0, 0, r); g.fill(); g.stroke();
++        g.strokeColor = C(active ? COMIC.goldLight : unlocked ? COMIC.darkLight : COMIC.muted);
++        g.lineWidth = 2; g.arc(0, 0, r - 4, .35, Math.PI - .35, false); g.stroke();
++        mainLabel(item, 0, 1, String(level.stage), {
++          size: 29, bold: true, color: active ? COMIC.text : COMIC.cream, w: 62, h: 40,
+         });
++        if (!unlocked) comicMark(item, r - 2, r - 2, 'lock', 17, COMIC.cream);
++        else if (earned > 0) comicMark(item, r - 2, r - 2, 'check', 18, COMIC.greenLight);
++        for (let s = 0; s < 3; s++) star(item, (s - 1) * 21, -r - 16, 19, s < earned);
++        if (level.stage === 10) comicMark(item, -r + 2, r - 2, 'upgrade', 18, COMIC.goldLight);
++        routeTap(item, () => { if (!active) selectLevel(level.order); });
+       });
+-      scroll.scrollToOffset(new Vec2(Math.min(maxOffset, st.routeOffset), 0), 0);
+-      mainLabel(content, -116, WY(selectorTop + 88, 24), challenge.waves.length + ' 波 · ' + DIFFICULTIES[st.d].formation, {
+-        size: 19, color: COMIC.cream, w: 450, h: 26, shrink: true, outline: COMIC.ink, outlineW: 2,
++      const summary = comicPlate(body, 0, by(upperH - 78, 74), 686, 74, 'dark', { name: 'selectedStage' });
++      mainLabel(summary, 0, 15, lv.id + '  ' + lv.name + (lv.stage === 10 ? ' · 章末' : ''), {
++        size: 25, bold: true, color: COMIC.cream, w: 652, h: 34,
+       });
+-      mainLabel(content, 239, WY(selectorTop + 88, 24), '左右滑动选关', {
+-        size: 18, color: COMIC.cream, w: 220, h: 26, outline: COMIC.ink, outlineW: 2,
++      mainLabel(summary, 0, -18, open ? challenge.waves.length + ' 波 · ' + DIFFICULTIES[st.d].formation
++        : '通关 ' + LEVELS[st.i - 1].id + ' 普通难度后解锁', {
++        size: 18, color: open ? COMIC.paperShade : COMIC.goldLight, w: 652, h: 28,
+       });
+ 
+       const rewards = comicPlate(content, 0, WY(rewardTop, rewardH), 718, rewardH, 'paper',
+@@ -228,9 +269,10 @@ export function buildLevels(ctx: PageCtx): void {
+       };
+       const battleControl = comicButtonControl(content, -91, WY(actionTop, actionH), 490, actionH, '', () => {
+         if (!open || enteringBattle()) return;
++        if (!campaignDifficultyOpen(lv.id, challenge.difficulty, loadSave().stars)) { toast('请先通关前置关卡或难度'); return; }
+         if (!squadList().length) { toast('请先上阵英雄'); return; }
+         enterBattle(done => {
+-          flow.mode = 'battle'; flow.levelId = lv.id; flow.diff = st.d;
++          flow.mode = 'battle'; flow.levelId = lv.id; flow.diff = challenge.difficulty;
+           return director.loadScene('Main', done);
+         }, restoreBattleEntry, warmBattlefield(lv.id, squadList()));
+       }, { tone: open ? 'gold' : 'muted', name: 'levelBattle', enabled: open });
+--- /dev/null
++++ KingdomWatch/assets/scripts/config/Campaign.ts
+@@ -0,0 +1,49 @@
++/** Chapter order, stage identity and battlefield art are shared by the lobby and battles. */
++export interface CampaignChapter {
++  number: number;
++  name: string;
++  art: string;
++  battlefield: string;
++  stages: readonly string[];
++}
++export interface CampaignStage {
++  id: string;
++  name: string;
++  chapter: number;
++  stage: number;
++  order: number;
++}
++
++export const CAMPAIGN_CHAPTERS: readonly CampaignChapter[] = [
++  { number: 1, name: '前哨', art: 'outpost', battlefield: 'scenes/scene_1_1',
++    stages: ['城外小径', '废弃岗亭', '林缘营地', '石桥隘口', '哨塔争夺', '补给小道', '旧墙防线', '烽火营地', '前哨围攻', '守望堡垒'] },
++  { number: 2, name: '深林', art: 'forest', battlefield: 'scenes/scene_1_2',
++    stages: ['林间入口', '迷雾小径', '古树廊道', '密林伏击', '狼影岔路', '苔石遗迹', '萨满祭地', '幽林深处', '荆棘围阵', '深林腹地'] },
++  { number: 3, name: '兽穴', art: 'lair', battlefield: 'scenes/scene_1_3',
++    stages: ['洞口险道', '碎骨坑道', '兽群营地', '獠牙石窟', '战鼓大厅', '地底暗河', '驯兽巢室', '蛮兵要塞', '兽穴围城', '巢穴核心'] },
++];
++export const CAMPAIGN_STAGES: readonly CampaignStage[] = CAMPAIGN_CHAPTERS.flatMap((chapter, c) =>
++  chapter.stages.map((name, i) => ({ id: chapter.number + '-' + (i + 1), name,
++    chapter: chapter.number, stage: i + 1, order: c * 10 + i })));
++export const CAMPAIGN_LEVEL_IDS: string[] = CAMPAIGN_STAGES.map(stage => stage.id);
++
++export function campaignStage(id: string): CampaignStage | undefined {
++  return CAMPAIGN_STAGES.find(stage => stage.id === id);
++}
++export function campaignChapter(id: string): CampaignChapter {
++  return CAMPAIGN_CHAPTERS[(campaignStage(id)?.chapter || 1) - 1];
++}
++export function battleSceneKey(id: string): string { return campaignChapter(id).battlefield; }
++
++/** Keep existing earned stages accessible without renaming stars or regranting claimed chests. */
++export function campaignLevelOpen(id: string, stars: Readonly<Record<string, number>>): boolean {
++  const stage = campaignStage(id);
++  if (!stage) return false;
++  if (stage.order === 0 || stars[id] > 0 || stars[id + 'e'] > 0 || stars[id + 'h'] > 0) return true;
++  return (stars[CAMPAIGN_LEVEL_IDS[stage.order - 1]] || 0) >= 1;
++}
++export function campaignDifficultyOpen(id: string, difficulty: number, stars: Readonly<Record<string, number>>): boolean {
++  if (!Number.isInteger(difficulty) || difficulty < 0 || difficulty > 2) return false;
++  if (!campaignLevelOpen(id, stars)) return false;
++  return difficulty === 0 || (stars[id + (difficulty === 1 ? '' : 'e')] || 0) >= 1;
++}
+--- /dev/null
++++ KingdomWatch/assets/scripts/config/Campaign.ts.meta
+@@ -0,0 +1,9 @@
++{
++  "ver": "4.0.24",
++  "importer": "typescript",
++  "imported": true,
++  "uuid": "b8cd560e-8c1d-4fd9-a8cf-b54d9186e3b1",
++  "files": [],
++  "subMetas": {},
++  "userData": {}
++}

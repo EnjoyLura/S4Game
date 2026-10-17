@@ -1,0 +1,30 @@
+{
+  "R01": {
+    "events": "Three bow releases at 0,1.02,2.04; material impact at +0.24s",
+    "design": "Sonniss Membrans cartoon arrow / NoizBoy whoosh and short impact"
+  },
+  "R02": {
+    "events": "Short pull then ice crystal impact at 0.24s",
+    "design": "Recorded glass/ice transient, harp pull, quiet glock tail"
+  },
+  "R03": {
+    "events": "Three cards reveal at 0,.085,.17s; choose at 1.04s",
+    "design": "Marimba and harp, dry card-sized whoosh"
+  },
+  "R04": {
+    "events": "Rise at 0,.11,.23s; new numeric value lands at .39s",
+    "design": "Original C major phrase: marimba, harp and soft horn foundation"
+  },
+  "R05": {
+    "events": "Reward reveal at 0; item and quantity land at .3s",
+    "design": "Original harp flourish, small glock chord and sparse bell tree"
+  },
+  "R06": {
+    "events": "Fanfare pickups 0,.19,.38,.63s; crown and chord at .91s",
+    "design": "Original trumpet fanfare, horn C major cadence, timpani and soft cymbal"
+  },
+  "R07": {
+    "events": "Falling bassoon phrase then quiet minor landing at .95s",
+    "design": "Original restrained minor woodwind cue; no comic fail horn"
+  }
+}

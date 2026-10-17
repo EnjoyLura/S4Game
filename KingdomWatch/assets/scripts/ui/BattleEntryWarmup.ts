@@ -1,5 +1,6 @@
 /** Entry art first; only the selected battlefield and equipped heroes need a first-paint barrier. */
 import { director } from 'cc';
+import { battleSceneKey } from '../config/Campaign';
 import { preloadArcherClip } from '../battle/ArcherIdleAnimation';
 import { preloadHeroClip } from '../battle/HeroSequenceAnimation';
 import { uxFrame } from './Ux';
@@ -37,7 +38,7 @@ export function warmBattlefield(levelId: string, heroIds: readonly string[]): Pr
   const key = levelId + ':' + ids.join(',');
   const hit = jobs.get(key); if (hit) return hit;
   warmEntryArt(); void warmBattleScene();
-  const firstPaint = [imageReady('scenes/scene_' + levelId.replace('-', '_')), imageReady('defense_wall')];
+  const firstPaint = [imageReady(battleSceneKey(levelId)), imageReady('defense_wall')];
   for (const id of ids) {
     if (id === 'archer') {
       firstPaint.push(preloadArcherClip('idle'));

@@ -1,0 +1,39 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-reward-chests-v1-20261016-211040",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-campaign-chapters-v1-20261016-210231",
+  "entryVersion": "1792156156",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=reward-chests-v1-1792156156",
+  "scope": "claim all currently earned chests for the selected level and difficulty; credited reward receipt popup with finite card, count and local sparkle animation",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://01d2c04c.kingdom-watch.pages.dev",
+  "date": "2026-10-16T21:11:29.818968+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-reward-chests-v1-20261016-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-reward-chests-v1-20261016-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 16653,
+  "mainBundleSha256": "96170260e480f70ba22a267e36ec15792eaadb91a8bd1bc189fdd1866fac2e16",
+  "validation": {
+    "sourceReview": true,
+    "localBundleInspection": true,
+    "cocosBuild": true,
+    "DPRPatch": true,
+    "testsRun": false,
+    "simulationRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "manualAcceptance": "pending user"
+  }
+}

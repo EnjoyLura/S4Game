@@ -1,0 +1,84 @@
+/** Shared smooth UI light. Four cached alpha textures, never overlapping translucent strips. */
+import { Node, Rect, Size, Sprite, SpriteFrame, Texture2D, UIOpacity, Vec2 } from 'cc';
+import { CA, N } from './UIKit';
+
+type Surface = 'feather' | 'growth' | 'band' | 'halo' | 'line';
+const frames = new Map<Surface, SpriteFrame>();
+const clamp = (v: number): number => Math.max(0, Math.min(1, v));
+const smooth = (v: number): number => { const p = clamp(v); return p * p * (3 - 2 * p); };
+
+function frame(kind: Surface): SpriteFrame {
+  const cached = frames.get(kind); if (cached) return cached;
+  const width = 512, height = kind === 'halo' ? 512 : kind === 'line' ? 8 : 64;
+  const pixels = new Uint8Array(width * height * 4);
+  for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+    const u = x / (width - 1) * 2 - 1, v = y / (height - 1) * 2 - 1;
+    const side = smooth((1 - Math.abs(u)) / .42);
+    let alpha: number;
+    if (kind === 'halo') {
+      const r = Math.sqrt(u * u + v * v);
+      // Zero at the boundary; the falloff and its slope remain continuous.
+      alpha = Math.exp(-5.5 * r * r) * (1 - smooth((r - .55) / .45));
+    } else if (kind === 'line') alpha = side * Math.exp(-5 * v * v);
+    else if (kind === 'growth') alpha = smooth((1 - Math.abs(u)) / .14) * smooth((1 - Math.abs(v)) / .045);
+    else if (kind === 'band') alpha = smooth((1 - Math.abs(v)) / .14);
+    else alpha = side * smooth((1 - Math.abs(v)) / .1);
+    const i = (y * width + x) * 4;
+    pixels[i] = pixels[i + 1] = pixels[i + 2] = 255;
+    pixels[i + 3] = Math.round(alpha * 255);
+  }
+  const texture = new Texture2D();
+  texture.reset({ width, height, format: Texture2D.PixelFormat.RGBA8888 });
+  texture.setFilters(Texture2D.Filter.LINEAR, Texture2D.Filter.LINEAR);
+  texture.uploadData(pixels);
+  const result = new SpriteFrame();
+  result.reset({ texture, rect: new Rect(0, 0, width, height), originalSize: new Size(width, height), offset: new Vec2() });
+  result.packable = false; frames.set(kind, result);
+  return result;
+}
+
+export function feedbackSurface(parent: Node, name: string, kind: Surface, x: number, y: number,
+  width: number, height: number, color: string, alpha = 1): Node {
+  const node = N(name, parent, x, y, width, height), sprite = node.addComponent(Sprite);
+  sprite.sizeMode = Sprite.SizeMode.CUSTOM; sprite.trim = false;
+  sprite.spriteFrame = frame(kind); sprite.color = CA(color, alpha);
+  return node;
+}
+
+/** Both parallel rules share the same feathered ends as their background. */
+export function noticeSurface(parent: Node, width: number, height: number): Node {
+  const node = N('featheredNoticeSurface', parent);
+  feedbackSurface(node, 'continuousAlpha', 'feather', 0, 0, width, height, '#12232F', .84);
+  for (const side of [-1, 1]) {
+    feedbackSurface(node, 'outerRule', 'line', 0, side * (height / 2 - 1), width, 2.2, '#E8C67D', .72);
+    feedbackSurface(node, 'innerRule', 'line', 0, side * (height / 2 - 5), width, 1.2, '#E8C67D', .34);
+  }
+  return node;
+}
+
+/** Dense center keeps numbers readable; only the empty ends feather into the scene. */
+export function growthSurface(parent: Node, width: number, height: number): Node {
+  const node = N('growthResultSurface', parent);
+  feedbackSurface(node, 'readableCenter', 'growth', 0, 0, width, height, '#101F2B', .985);
+  for (const side of [-1, 1]) {
+    feedbackSurface(node, 'outerRule', 'line', 0, side * (height / 2 - 1), width, 2.4, '#F1CE81', .9);
+    feedbackSurface(node, 'innerRule', 'line', 0, side * (height / 2 - 5), width, 1, '#F1CE81', .38);
+  }
+  return node;
+}
+
+/** A soft local glow behind the subject, with one finite rise and fall. */
+export function celebrationLight(parent: Node, name: string, x: number, y: number, width: number, height: number): Node {
+  const node = feedbackSurface(parent, name, 'halo', x, y, width, height, '#FFE2A0');
+  node.addComponent(UIOpacity).opacity = 0;
+  return node;
+}
+
+export function lightEnvelope(node: Node, age: number, duration: number, strength = .4): void {
+  const p = clamp(age / duration), visible = age > 0 && p < 1;
+  node.active = visible;
+  if (!visible) return;
+  node.getComponent(UIOpacity)!.opacity = Math.round(255 * strength * smooth(age / .14) * (1 - smooth((p - .24) / .76)));
+  const scale = .82 + .18 * (1 - (1 - p) ** 3);
+  node.setScale(scale, scale, 1);
+}

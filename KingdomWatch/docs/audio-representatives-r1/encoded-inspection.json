@@ -1,0 +1,114 @@
+[
+  {
+    "file": "all-new.mp4",
+    "audioSeconds": 29.28,
+    "peakDBFS": -2.984,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "all-old.mp4",
+    "audioSeconds": 34.273,
+    "peakDBFS": -4.116,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "R01-new.mp4",
+    "audioSeconds": 4.017,
+    "peakDBFS": -2.986,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "R01-old.mp4",
+    "audioSeconds": 4.017,
+    "peakDBFS": -7.728,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "R02-new.mp4",
+    "audioSeconds": 4.017,
+    "peakDBFS": -2.511,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "R02-old.mp4",
+    "audioSeconds": 4.017,
+    "peakDBFS": -7.193,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "R03-new.mp4",
+    "audioSeconds": 4.017,
+    "peakDBFS": -3.252,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "R03-old.mp4",
+    "audioSeconds": 4.017,
+    "peakDBFS": -4.116,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "R04-new.mp4",
+    "audioSeconds": 4.017,
+    "peakDBFS": -3.099,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "R04-old.mp4",
+    "audioSeconds": 4.017,
+    "peakDBFS": -6.806,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "R05-new.mp4",
+    "audioSeconds": 4.017,
+    "peakDBFS": -3.201,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "R05-old.mp4",
+    "audioSeconds": 4.017,
+    "peakDBFS": -7.7,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "R06-new.mp4",
+    "audioSeconds": 5.016,
+    "peakDBFS": -6.384,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "R06-old.mp4",
+    "audioSeconds": 8.011,
+    "peakDBFS": -6.286,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "R07-new.mp4",
+    "audioSeconds": 4.017,
+    "peakDBFS": -4.362,
+    "clippedSamples": 0,
+    "finite": true
+  },
+  {
+    "file": "R07-old.mp4",
+    "audioSeconds": 6.014,
+    "peakDBFS": -4.883,
+    "clippedSamples": 0,
+    "finite": true
+  }
+]

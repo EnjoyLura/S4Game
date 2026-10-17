@@ -1,0 +1,12 @@
+--- before/assets/scripts/battle/BattleDirector.ts
++++ assets/scripts/battle/BattleDirector.ts
+@@ -460,7 +460,8 @@
+         tab: 0,
+         speed: this.speed,
+         speedUnlocked: !!(sv.speedUnlocked || sv.debug),
+-        xp: Math.floor(this.xp),
++        xp: Math.floor(this.xpEarned),
++        loot: this.loot.summary(),
+       });
+     } else if (this.state === 'paused') {
+       this.panels.closeAll(true);

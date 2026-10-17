@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-price-buttons-v5-20261017-024106",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-shop-controls-quiet-v4-20261017-023641",
+  "entryVersion": "1792176036",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=shop-price-buttons-v5-1792176036",
+  "scope": "restore every shop card gold/diamond price button to original single-face ComicUI style and 192x48 dimensions; remove unused bevel painter; retain previous UI restoration and +1 dB audio",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://148ae5d6.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-shop-price-buttons-v5-20261017-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-shop-price-buttons-v5-20261017-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 17332,
+  "mainSha256": "fbb1b7b79c136e4ceb679c1e7b4d906157997970d6e8c475671e53d99ccab323",
+  "date": "2026-10-17T02:41:38.905093+08:00",
+  "testsRun": false,
+  "gameRun": false,
+  "simulationRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

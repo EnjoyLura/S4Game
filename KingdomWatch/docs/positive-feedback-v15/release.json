@@ -1,0 +1,33 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-positive-feedback-v15-20261017-131821",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-reward-banner-notice-v14-20261017-125852",
+  "entryVersion": "1792214288",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=positive-feedback-v15-1792214288",
+  "scope": "victory, reward, purchase, hero recruitment and growth celebration, eight original stingers, real deltas and non-blocking repeat feedback",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://565b3228.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-positive-feedback-v15-20261017-final-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-positive-feedback-v15-20261017-final-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 17848,
+  "mainSha256": "6b940c5ef7bab7c19e47fe18d49a4233a70c67a24eb9278ecb01f6e996f79554",
+  "date": "2026-10-17T13:18:56.125667+08:00",
+  "testsRun": false,
+  "simulationRun": false,
+  "gameRun": false,
+  "browserRun": false,
+  "audioAudition": false,
+  "onlineAcceptance": false
+}

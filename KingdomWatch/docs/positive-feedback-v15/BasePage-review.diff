@@ -1,0 +1,55 @@
+--- before/assets/scripts/ui/pages/BasePage.ts
++++ assets/scripts/ui/pages/BasePage.ts
+@@ -15,6 +15,8 @@
+ import { detailActionY, detailBody, detailFooter, detailHeight, detailOverview, detailRule, detailSection, detailSkin } from '../DetailDialog';
+ import { lobbyAttributeWell, shopDetailRule } from '../LobbyChrome';
+ import { BASE_INK, BASE_SUB, baseCodexCard, baseDiscoveryProgress, basePlaque, baseTextGroup } from '../BaseChrome';
++import { showRewardPopup } from '../RewardPopup';
++import { constructionPulse } from '../PositiveFeedback';
+ 
+ const HEART = 'base_comic_v1/comic_keep_heart_v1';
+ const SHIELD = 'levels_comic_v1/comic_difficulty_shield_v1';
+@@ -178,13 +180,15 @@
+   } else text(face, 206, 0, '已满级', { size: 23, color: COMIC.cream, w: 180, h: 38 });
+ }
+ 
+-function keepModal(ctx: PageCtx, session = new BaseModalSession(ctx)): void {
++function keepModal(ctx: PageCtx, session = new BaseModalSession(ctx), upgraded = false): void {
+   const sv = loadSave(), maxed = sv.keepLv >= MAX.keep, cost = keepUpCost(sv.keepLv);
+   const W = 660, footerH = 156, infoH = maxed ? 252 : 386;
+   const H = detailHeight(infoH, footerH, 730, W);
+   session.show(W, H, '主城建设', 'baseKeepDialog', p => {
+-    detailOverview(p, '主城', '守护王国防线', undefined, '', (node,x,y,side) =>
+-      comicArt(node,x,y,side,side+6,CASTLE));
++    detailOverview(p, '主城', '守护王国防线', undefined, '', (node,x,y,side) => {
++      const castle = comicArt(node,x,y,side,side+6,CASTLE);
++      if (upgraded) constructionPulse(castle,side*.72);
++    });
+     if (maxed) text(p,84,H/2-218,'Lv.'+sv.keepLv+' · 已满级',
+       {size:27,bold:true,w:336,h:38,align:'left',color:BASE_SUB});
+     else {
+@@ -229,7 +233,7 @@
+     comicButton(p,0,detailActionY(p),560,58,maxed?'建设已完成':'确认升级',() => {
+       if (maxed) return;
+       const r = growthAction({ kind: 'keep' }, () => upKeep());
+-      if (r.ok) { session.markDirty(); keepModal(ctx, session); }
++      if (r.ok) { session.markDirty(); keepModal(ctx, session, true); }
+     },{name:'baseKeepUpgrade',tone:maxed||sv.gold<cost?'muted':'green',size:27,enabled:!maxed});
+   });
+ }
+@@ -336,8 +340,13 @@
+     if (claimed) comicMark(p,250,-H/2+141,'check',28,COMIC.greenShade);
+     comicButton(p,0,detailActionY(p),560,58,claimed?'奖励已领取':'领取首览奖励',() => {
+       if (claimed) return;
+-      const r = claimCodexReward(id); toast(r.msg, { kind: r.ok ? 'reward' : 'warning', title: r.ok ? '首览奖励已领取' : '暂时无法领取', icon: r.ok ? 'shop_comic_v1/comic_diamond_v1' : undefined });
+-      if (r.ok) { session.markDirty(); codexModal(ctx, session, -1); }
++      const r = claimCodexReward(id);
++      if (r.ok) {
++        session.markDirty(); codexModal(ctx, session, -1); ctx.refreshResources?.();
++        showRewardPopup(ctx.screens.parent || ctx.screens, '怪物图鉴 · 首次发现', 0,
++          [{ name: '钻石', icon: 'comic_diamond_v1', amount: CODEX_REWARD }], undefined,
++          { subtitle: '首览奖励已到账' });
++      } else toast(r.msg, { kind: 'warning', title: '暂时无法领取' });
+     },{name:'baseCodexClaim',tone:claimed?'muted':'green',size:27,enabled:!claimed});
+   },() => codexModal(ctx,session,-1),1);
+ }

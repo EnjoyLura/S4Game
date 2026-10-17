@@ -1,0 +1,32 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-overlay-v4-20261016-231651",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-route-header-v3-20261016-230443",
+  "entryVersion": "1792163687",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=chapter-route-overlay-v4-1792163687",
+  "scope": "floating header over one terrain map; locked checkpoint style and disabled preparation; locked chapter map shade and condition",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://49c77622.kingdom-watch.pages.dev",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-chapter-route-overlay-v4-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-chapter-route-overlay-v4-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "mainSha256": "179f24112ee10d7824f4a8c6659d6c9cb4c77dd7e35e0d5d4a8b0265c02e8b0c",
+  "creatorBuildMilliseconds": 16702,
+  "date": "2026-10-16T23:17:45.100621+08:00",
+  "testsRun": false,
+  "simulationRun": false,
+  "gameRun": false,
+  "browserRun": false,
+  "onlineAcceptance": false
+}

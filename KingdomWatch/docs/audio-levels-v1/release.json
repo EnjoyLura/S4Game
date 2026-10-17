@@ -1,0 +1,39 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-levels-v1-20261016-215731",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-lobby-ui-quiet-v2-20261016-214310",
+  "entryVersion": "1792158868",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=audio-levels-v1-1792158868",
+  "scope": "BGM and SFX buses +3.01 dB; existing audio, attribution and mix dynamics retained",
+  "manualAcceptance": "pending user manual review",
+  "status": "published",
+  "deployment": "https://8ebae8c1.kingdom-watch.pages.dev",
+  "date": "2026-10-16T21:58:12.789546+08:00",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-audio-levels-v1-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-audio-levels-v1-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "creatorBuildMilliseconds": 17495,
+  "mainBundleSha256": "31cb1b50f9bb64edbac6a08af329aacb232e638c89e657c4a7c393734599e793",
+  "boostDB": 3.0102999566,
+  "validation": {
+    "sourceReview": true,
+    "localArtifactInspection": true,
+    "testsRun": false,
+    "simulationRun": false,
+    "gameRun": false,
+    "browserRun": false,
+    "onlineAcceptance": false,
+    "listeningPerformed": false,
+    "manualAcceptance": "pending user"
+  }
+}

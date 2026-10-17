@@ -1,0 +1,34 @@
+--- before/assets/scripts/ui/UINotice.ts
++++ assets/scripts/ui/UINotice.ts
+@@ -1,7 +1,8 @@
+ /** A non-blocking game notice: feathered sides, twin rules, slide up and fade upward. */
+-import { _decorator, Component, game, Game, Graphics, isValid, Node, UIOpacity } from 'cc';
++import { _decorator, Component, game, Game, isValid, Node, UIOpacity } from 'cc';
+ import { LO } from '../config/GameConfig';
+-import { CA, label, N } from './UIKit';
++import { label, N } from './UIKit';
++import { noticeSurface } from './FeedbackSurface';
+ import { whenUIArtReady } from './UIArtReady';
+ import { reducedMotion } from './UIMotion';
+ import { uiSound } from './UIAudio';
+@@ -52,18 +53,9 @@
+ }
+ const out = (t: number): number => 1 - Math.pow(1 - Math.min(1,Math.max(0,t)),3);
+ 
+-/** Static alpha bands feather both ends, including the two parallel rules at each edge. */
++/** One bilinearly filtered alpha surface, without overdraw seams between strips. */
+ function fadedNotice(parent: Node, width: number, height: number): void {
+-  const g=N('gameToastFadedBackground',parent,0,0,width,height).addComponent(Graphics), bands=80;
+-  for(let i=0;i<bands;i++) {
+-    const u=(i+.5)/bands, edge=Math.min(1,(1-Math.abs(u*2-1))/.38);
+-    const fade=edge*edge*(3-2*edge), x=-width/2+i*width/bands, strip=width/bands;
+-    g.fillColor=CA('#101B24',.76*fade);g.rect(x,-height/2,strip,height);g.fill();
+-    for(const side of [-1,1]) {
+-      g.fillColor=CA('#F2D692',.64*fade);g.rect(x,side*height/2-(side>0?1.5:0),strip,1.5);g.fill();
+-      g.fillColor=CA('#F2D692',.28*fade);g.rect(x,side*(height/2-5)-.5,strip,1);g.fill();
+-    }
+-  }
++  noticeSurface(parent, width, height);
+ }
+ 
+ @ccclass('UINotice')

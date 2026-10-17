@@ -465,7 +465,7 @@ export class Monster {
       killer: killerId, angle, heavy, force: Math.min(1.5, amount / this.maxHp),
       elite: !!this.def.elite, boss: this.isBoss, frozen: this.freezeT > 0,
     });
-    if (killerId !== 'gm') Sfx.death(killerId, this.freezeT > 0, heavy || !!this.def.elite || this.isBoss);
+    if (killerId !== 'gm') Sfx.death(killerId, this.freezeT > 0, !!this.def.elite || this.isBoss);
     this.flashT = this.lungeT = this.atkAnimT = 0;
     this.freezeT = this.thawT = this.slowT = this.stunT = this.burnT = this.shockT = 0;
     this.footLeftWeight = this.footRightWeight = 0;

@@ -1,0 +1,505 @@
+--- before/assets/scripts/ui/SquadChrome.ts
++++ assets/scripts/ui/SquadChrome.ts
+@@ -12,6 +12,15 @@
+   g.fillColor = C(fill); g.moveTo(points[0][0],points[0][1]);
+   points.slice(1).forEach(([x,y]) => g.lineTo(x,y)); g.close(); g.fill();
+   if (edge) { g.strokeColor = C(edge); g.lineWidth = width; g.stroke(); }
++}
++
++/** Small stepped shoulders carry the metal around each corner rather than a plain diagonal. */
++function cardRim(w: number, h: number, c: number): Point[] {
++  const l=-w/2, r=w/2, b=-h/2, t=h/2, step=2;
++  return [[l+c,b],[r-c,b],[r-c,b+step],[r-step,b+c],[r,b+c],
++    [r,t-c],[r-step,t-c],[r-c,t-step],[r-c,t],
++    [l+c,t],[l+c,t-step],[l+step,t-c],[l,t-c],
++    [l,b+c],[l+step,b+c],[l+c,b+step]];
+ }
+ 
+ export function paintSquadFrame(node: Node, w: number, h: number, roster = false): void {
+@@ -32,16 +41,32 @@
+   }
+ }
+ 
+-export function paintSquadCard(node: Node, w: number, h: number, selected: boolean, occupied = true): void {
++export function paintSquadCard(node: Node, w: number, h: number, selected: boolean, occupied = true,
++  kind: 'position' | 'hero' = 'hero'): void {
+   const g = node.getComponent(Graphics)!; g.clear();
+-  const edge = selected ? '#BF8D32' : '#7793A5';
+-  face(g,outline(w,h,10),occupied ? '#F3E7C9' : '#1C3545',occupied ? edge : '#5F7D8D',1.8);
+-  face(g,outline(w-5,h-5,8),occupied ? '#FFFBEF' : '#284656',occupied ? selected ? '#F4D48B' : '#D0D9D4' : '#738D9A',1.2);
+-  if (occupied) {
+-    face(g,[[-w/2+5,-h/2+11],[-w/2+11,-h/2+5],[w/2-11,-h/2+5],[w/2-5,-h/2+11],
+-      [w/2-5,-h/2+46],[-w/2+5,-h/2+46]],'#F8F0DB');
+-    g.strokeColor = C('#FFFFFF'); g.lineWidth = 1.6;
+-    g.moveTo(-w/2+12,h/2-5); g.lineTo(w/2-12,h/2-5); g.stroke();
++  if (!occupied) {
++    face(g,outline(w,h,10),'#1C3545','#5F7D8D',1.8);
++    face(g,outline(w-5,h-5,8),'#284656','#738D9A',1.2);
++    return;
++  }
++  const position = kind === 'position', gold = selected && !position;
++  const outer = position ? '#D5BC84' : gold ? '#96702F' : '#65869D';
++  const metal = position ? '#EFE0B6' : gold ? '#E5B34A' : '#ACC4D2';
++  const light = position ? '#FFF7DB' : gold ? '#FFE29A' : '#E5EEF0';
++  const inner = position ? '#DCC591' : gold ? '#B58734' : '#7899AC';
++  const inset = position ? 3.2 : gold ? 5.4 : 4;
++  face(g,cardRim(w,h,11),metal,outer,1.4);
++  face(g,cardRim(w-3,h-3,9.5),light,light,.9);
++  face(g,cardRim(w-inset*2,h-inset*2,7),'#FFFBEF',inner,1.1);
++  // The pale center stays continuous below the level and deployment text.
++  g.strokeColor = C(position ? '#FFFFFF' : gold ? '#FFF5C9' : '#F4FBFC'); g.lineWidth = 1.2;
++  g.moveTo(-w/2+13,h/2-2.5); g.lineTo(w/2-13,h/2-2.5); g.stroke();
++  for (const side of [-1,1]) {
++    g.strokeColor = C(side<0 ? light : outer); g.lineWidth = position ? 1 : 1.3;
++    g.moveTo(side*(w/2-2.5),side<0 ? h/2-15 : -h/2+15);
++    g.lineTo(side*(w/2-2.5),side<0 ? h/2-11 : -h/2+11);
++    g.lineTo(side*(w/2-11),side<0 ? h/2-2.5 : -h/2+2.5);
++    g.lineTo(side*(w/2-15),side<0 ? h/2-2.5 : -h/2+2.5); g.stroke();
+   }
+ }
+ 
+@@ -51,11 +76,16 @@
+   g.circle(0,0,radius); g.fill(); g.stroke();
+ }
+ 
+-export function squadDivider(parent: Node, x: number, y: number, width: number): void {
++export function squadDivider(parent: Node, x: number, y: number, width: number, gold = false): void {
+   const g = N('squadPaperDivider',parent,x,y).addComponent(Graphics);
+-  g.strokeColor = C('#C9AD77'); g.lineWidth = 1;
+-  g.moveTo(-width/2,0); g.lineTo(width/2,0); g.stroke();
+-  face(g,[[0,4],[4,0],[0,-4],[-4,0]],'#D7BB81');
++  const side=x<0 ? -1 : 1, radius=gold ? 5.2 : 4.6;
++  const center=-side*(width/2-radius-1), start=center+side*(radius+4), end=side*width/2;
++  const ink=gold ? '#B47F28' : '#B88E55';
++  // Line tapers outwards; the open diamond sits next to the text at the inner end.
++  face(g,[[start,-1],[end,0],[start,1]],ink);
++  g.strokeColor = C(ink); g.lineWidth = gold ? 1.8 : 1.6;
++  g.moveTo(center,radius); g.lineTo(center+radius,0); g.lineTo(center,-radius);
++  g.lineTo(center-radius,0); g.close(); g.stroke();
+ }
+ 
+ /** The lower hall is intentionally visible through the paper, strongest at the floor. */
+--- before/assets/scripts/ui/SquadPanel.ts
++++ assets/scripts/ui/SquadPanel.ts
+@@ -54,7 +54,7 @@
+     for (let i = 0; i < SQUAD_MAX; i++) {
+       const hid = sq[i], x = (i - 1.5) * 170;
+       const slot = comicPlate(formation, x, -21, 156, 192, hid ? 'card' : 'dark', { name: 'squadSlot:' + i });
+-      paintSquadCard(slot,156,192,!!hid,!!hid);
++      paintSquadCard(slot,156,192,!!hid,!!hid,'position');
+       mainLabel(slot, -58, 75, String(i + 1), { size: 18, color: hid ? COMIC.sub : COMIC.muted, w: 28, h: 25 });
+       if (hid) {
+         const def = HERO_DEFS[hid];
+@@ -71,8 +71,8 @@
+     }
+     mainLabel(body, 0, WY(formTop + 286, 32), '从左到右依次站位 · 点击已上阵英雄可下阵',
+       { size:20,color:COMIC.sub,w:566,h:32 });
+-    squadDivider(body,-310,WY(formTop+286,32),42);
+-    squadDivider(body,310,WY(formTop+286,32),42);
++    squadDivider(body,-279,WY(formTop+286,32),108);
++    squadDivider(body,279,WY(formTop+286,32),108);
+     const barTop = formTop + 332;
+     const bar = comicPlate(body, 0, WY(barTop, 290), 704, 290, 'paper', { name: 'squadHeroRoster' });
+     paintSquadFrame(bar,704,290,true);
+@@ -99,8 +99,8 @@
+     });
+     const noteTop = barTop + 320;
+     mainLabel(body, 0, WY(noteTop, 36), '最多上阵 4 位英雄', { size: 26, bold: true, color: COMIC.text, w: 600, h: 36 });
+-    squadDivider(body,-244,WY(noteTop,36),110);
+-    squadDivider(body,244,WY(noteTop,36),110);
++    squadDivider(body,-203,WY(noteTop,36),112);
++    squadDivider(body,203,WY(noteTop,36),112);
+     mainLabel(body, 0, WY(noteTop + 46, 32), '点击英雄加入编队，阵容自动保存', { size: 22, color: COMIC.sub, w: 650, h: 32 });
+     const availableH = LO.half*2-LO.safeTop-LO.safeBottom;
+     const markTop = noteTop+112+(availableH-126-noteTop-112)*.48;
+@@ -109,7 +109,7 @@
+     const doneFace = done.getChildByName('buttonFace')!;
+     paintCampaignMapAction(doneFace,390,88,'gold');
+     mainLabel(doneFace,0,0,'完成编队',{size:34,font:'body',bold:true,color:'#1C2D33',w:284,h:50});
+-    squadDivider(doneFace,-143,0,26); squadDivider(doneFace,143,0,26);
++    squadDivider(doneFace,-138,0,40,true); squadDivider(doneFace,138,0,40,true);
+   }
+ 
+   function confirmRemove(hid: string): void {
+--- before/assets/scripts/ui/CampaignCheckpointArt.ts
++++ assets/scripts/ui/CampaignCheckpointArt.ts
+@@ -52,28 +52,29 @@
+ function outpost(g: Graphics, active: boolean, open: boolean): void {
+   pedestal(g, active, open);
+   shape(g, [[-6,-24],[7,-24],[7,46],[-6,46]], '#48515A', '#24323B');
+-  const rim = active ? '#DDBF73' : open ? '#5D8BA6' : '#748892';
+-  const edge = active ? '#7C5521' : '#1C2A34';
++  const paint = active
++    ? { edge:'#69451E',outer:'#C99427',left:'#A66E1D',top:'#E9B93F',bottom:'#BF831F',cap:'#F0CB66',right:'#CE9A30',rim:'#E5BD59',catch:'#F8D989',rivet:'#E7C56E' }
++    : open
++      ? { edge:'#172B49',outer:'#194C92',left:'#102F61',top:'#2863AF',bottom:'#153B79',cap:'#4D7BAA',right:'#204E89',rim:'#6A8EB0',catch:'#9DB8CE',rivet:'#ADC0CE' }
++      : { edge:'#1D2933',outer:'#3F4C57',left:'#2C3943',top:'#576773',bottom:'#35434F',cap:'#6D7E89',right:'#495A66',rim:'#7C8D98',catch:'#AAB8BE',rivet:'#AFBCC3' };
+   const contour: Point[] = [[-32,55],[32,55],[32,0],[0,-24],[-32,0]];
+   shape(g, contour.map(([x,y]) => [x+1,y-3] as Point), '#26343F', '#17232B', 2);
+-  shape(g, contour, active ? '#E3AC32' : open ? '#256DA5' : '#4F606C', edge, 2.5);
+-  shape(g, [[-30,53],[-25,48],[-25,3],[0,-16],[0,-22],[-30,0]],
+-    active ? '#BD8325' : open ? '#14467D' : '#344650');
+-  shape(g, [[-25,48],[25,48],[25,3],[0,-16],[-25,3]], active ? '#EFB83B' : open ? '#1F70B4' : '#4C5D68');
+-  const light = C(active ? '#FFDD6B' : open ? '#369BDA' : '#71838C');
+-  const dark = C(active ? '#E6AB31' : open ? '#18548F' : '#43525E');
+-  for (let i = 0; i < 48; i++) {
+-    g.fillColor = Color.lerp(new Color(),light,dark,i/47);
+-    g.rect(-25,3+(47-i)*.9375,50,.95); g.fill();
++  shape(g, contour, paint.outer, paint.edge, 2);
++  shape(g, [[-30,53],[-25,48],[-25,3],[0,-16],[0,-22],[-30,0]],paint.left);
++  const light = C(paint.top), dark = C(paint.bottom), steps=64;
++  const halfWidth = (y: number): number => y<3 ? 25*(y+16)/19 : 25;
++  // The coat follows the pointed shield all the way down; no separate blue triangle or cyan strip.
++  for (let i = 0; i < steps; i++) {
++    const y1=48-i, y0=47-i;
++    g.fillColor = Color.lerp(new Color(),light,dark,i/(steps-1));
++    g.moveTo(-halfWidth(y0),y0); g.lineTo(halfWidth(y0),y0);
++    g.lineTo(halfWidth(y1),y1); g.lineTo(-halfWidth(y1),y1); g.close(); g.fill();
+   }
+-  shape(g, [[-30,53],[30,53],[24,47],[-24,47]], active ? '#EBC66E' : open ? '#5B99C0' : '#819198');
+-  shape(g, [[25,48],[31,54],[31,0],[0,-23],[0,-16],[25,3]],
+-    active ? '#DDB03D' : open ? '#2C6E9E' : '#5B6D78');
+-  stroke(g, [[-25,48],[25,48],[25,3],[0,-16],[-25,3],[-25,48]],rim,1);
+-  stroke(g, [[-27,51],[-11,51]],active ? '#F5DE9D' : '#A9BDC7',.8);
+-  rivet(g,-22,42,active ? '#FFE89B' : '#CEDCE2');
+-  rivet(g,22,42,active ? '#FFE89B' : '#CEDCE2');
+-  stroke(g, [[-23,12],[-21,16]], active ? '#FDE094' : open ? '#79AFD0' : '#839198',.8);
++  shape(g, [[-30,53],[30,53],[24,47],[-24,47]],paint.cap);
++  shape(g, [[25,48],[31,54],[31,0],[0,-23],[0,-16],[25,3]],paint.right);
++  stroke(g, [[-25,48],[25,48],[25,3],[0,-16],[-25,3],[-25,48]],paint.rim,1);
++  stroke(g, [[-27,51],[-11,51]],paint.catch,.8);
++  rivet(g,-22,42,paint.rivet); rivet(g,22,42,paint.rivet);
+ }
+ 
+ function forest(g: Graphics, active: boolean, open: boolean): void {
+@@ -137,13 +138,13 @@
+ export function campaignCheckpointStar(parent: Node, x: number, y: number, earned: boolean, index: number): void {
+   const g = N('checkpointStar:'+index,parent,x,y).addComponent(Graphics);
+   const points: Point[] = Array.from({length:10},(_,k) => {
+-    const a = Math.PI/2+k*Math.PI/5, r = k%2 ? 5.9 : 13.4;
++    const a = Math.PI/2+k*Math.PI/5, r = k%2 ? 6.4 : 14.5;
+     return [Math.cos(a)*r,Math.sin(a)*r] as Point;
+   });
+   shape(g,points.map(([px,py]) => [px,py-2] as Point),'#26323A','#17242B',1.5);
+-  shape(g,points,earned ? '#F9C641' : '#58656F','#25313A',1.7);
+-  shape(g,[[0,12],[-3,4],[-12,4],[-5,0],[0,2]],earned ? '#FFF0AD' : '#8B969C');
+-  shape(g,[[0,2],[7,-9],[5,-1],[12,4],[3,4]],earned ? '#D49420' : '#414E58');
++  shape(g,points,earned ? '#F9C641' : '#7F8C99','#17242B',2.1);
++  shape(g,[[0,13],[-3,4],[-13,4],[-5,0],[0,2]],earned ? '#FFF0AD' : '#B3BEC6');
++  shape(g,[[0,2],[8,-10],[5,-1],[13,4],[3,4]],earned ? '#D49420' : '#536371');
+ }
+ 
+ export function campaignCheckpointLock(parent: Node): void {
+--- before/assets/scripts/ui/CampaignRoute.ts
++++ assets/scripts/ui/CampaignRoute.ts
+@@ -79,8 +79,8 @@
+   if (highlighted) N('campaignSelectionGlow', item).addComponent(CampaignRouteMotion).glow();
+   paintCampaignCheckpoint(item, chapter, highlighted, open);
+   const goldShield = chapter === 0 && highlighted;
+-  mainLabel(item, 0, 23, String(stage), { size: 32, bold: true, font: 'number', color: goldShield ? '#3A2B17' : '#FFF7DF',
+-    w: 48, h: 40, outline: goldShield ? undefined : COMIC.darkShade, outlineW: 2 });
++  mainLabel(item, 0, 23, String(stage), { size: 32, bold: true, font: 'number', color: '#FFF7DF',
++    w: 48, h: 40, outline: goldShield ? '#79501D' : COMIC.darkShade, outlineW: 2 });
+   if (!open) campaignCheckpointLock(item);
+   if (stage === 10) {
+     comicSurface(item, 0, 65, 58, 22, highlighted ? 'gold' : 'dark', { radius: 11, name: 'chapterFinale' });
+@@ -89,17 +89,16 @@
+   // State always comes from actual normal-mode progress, including empty selected stars.
+   if (open) {
+     for (let s = 0; s < 3; s++) {
+-      campaignCheckpointStar(item,(s-1)*25,-38,s<earned,s);
++      campaignCheckpointStar(item,(s-1)*27,-40,s<earned,s);
+     }
+   }
+   if (claimable) {
+     campaignCheckpointReward(item,chapter===0 ? 31 : 44,50);
+   }
+   if (selected) {
+-    const side = p.x > 75 ? -1 : 1;
+-    const tag = campaignChapterPlate(item, side * (chapter === 0 ? 123 : 139), 3, 152, 40);
++    const tag = campaignChapterPlate(item, 0, -86, 152, 32);
+     tag.name = 'selectedCheckpointName';
+-    mainLabel(tag,0,0,name,{size:20,font:'body',bold:true,color:'#FFF6DC',w:126,h:30});
++    mainLabel(tag,0,0,name,{size:20,font:'body',bold:true,color:'#FFF6DC',w:126,h:26});
+   }
+   return item;
+ }
+--- before/assets/scripts/ui/HeroRosterRail.ts
++++ assets/scripts/ui/HeroRosterRail.ts
+@@ -6,10 +6,14 @@
+ export const ROSTER_CARD_W = 144;
+ const WIDTH = 686, HEIGHT = 122, STEP = 156, PAD = 8;
+ 
+-export function heroRosterRail(parent: Node, top: number, key: string, ids: string[], selected: string): {
+-  content: Node; x: (index: number) => number;
++export function heroRosterRail(parent: Node, top: number, key: string, ids: string[], selected: string,
++  opts: { cardWidth?: number; step?: number; center?: boolean } = {}): {
++  content: Node; cardWidth: number; x: (index: number) => number;
+ } {
+-  const width = Math.max(WIDTH, PAD * 2 + Math.max(0, ids.length - 1) * STEP + ROSTER_CARD_W);
++  const cardWidth=opts.cardWidth ?? ROSTER_CARD_W, step=opts.step ?? STEP;
++  const rowWidth=Math.max(0,ids.length-1)*step+cardWidth;
++  const pad=opts.center ? Math.max(PAD,(WIDTH-rowWidth)/2) : PAD;
++  const width = Math.max(WIDTH,pad*2+rowWidth);
+   const view = N(key + 'Rail', parent, 0, WY(top - 4, HEIGHT), WIDTH, HEIGHT);
+   view.addComponent(Mask);
+   const scroll = view.addComponent(ScrollView);
+@@ -21,9 +25,9 @@
+   const max = Math.max(0, width - WIDTH), prior = positions.get(key);
+   let offset = Math.max(0, Math.min(max, prior?.offset ?? 0));
+   if (!prior || prior.selected !== selected) {
+-    const index = Math.max(0, ids.indexOf(selected)), left = PAD + index * STEP, right = left + ROSTER_CARD_W;
+-    if (left < offset + PAD) offset = Math.max(0, left - PAD);
+-    if (right > offset + WIDTH - PAD) offset = Math.min(max, right - WIDTH + PAD);
++    const index = Math.max(0, ids.indexOf(selected)), left = pad + index * step, right = left + cardWidth;
++    if (left < offset + pad) offset = Math.max(0, left - pad);
++    if (right > offset + WIDTH - pad) offset = Math.min(max, right - WIDTH + pad);
+   }
+   const state = { offset, selected };
+   positions.set(key, state);
+@@ -33,5 +37,5 @@
+     state.offset = Math.max(0, Math.min(max, -scroll.getScrollOffset().x));
+   });
+   scroll.scrollToOffset(new Vec2(offset, 0), 0);
+-  return { content, x: index => PAD + ROSTER_CARD_W / 2 + index * STEP };
++  return { content, cardWidth, x: index => pad + cardWidth / 2 + index * step };
+ }
+--- before/assets/scripts/ui/pages/HeroPage.ts
++++ assets/scripts/ui/pages/HeroPage.ts
+@@ -15,7 +15,7 @@
+ import { dismissUI, motionIn, refreshUI } from '../UIMotion';
+ import { uiSound } from '../UIAudio';
+ import { growthAction } from '../GrowthFeedback';
+-import { heroRosterRail, ROSTER_CARD_W } from '../HeroRosterRail';
++import { heroRosterRail } from '../HeroRosterRail';
+ import { gearQuality } from '../GearQuality';
+ import { shopQualitySocket } from '../LobbyChrome';
+ import { HERO_INK, heroActionY, heroDialog, heroInventoryPaper, heroLobbyPortrait, heroModalSkin, heroPaper, heroWhiteWell } from '../HeroChrome';
+@@ -24,7 +24,6 @@
+ 
+ const SLOTS: EquipKind[] = ['helm', 'acc', 'glove', 'armor'];
+ const BAG_SIZE = 120, BAG_STEP = 130, BAG_COL_STEP = 138;
+-const HERO_DETAIL_H = 80;
+ const matOwned = (): number => matCount('mat_stone') + matCount('mat_iron');
+ const BAG_TABS = [['weapon', '武器', 'wpn_bow'], ['equip', '装备', 'armor_forest'], ['mat', '材料', 'mat_stone']] as const;
+ const bagSt: { tab: 'weapon' | 'equip' | 'mat'; offsets: Record<string, number> } = { tab: 'equip', offsets: {} };
+@@ -44,8 +43,8 @@
+       const rosterTop = mainResourceTop() + MAIN_RESOURCE_H + 20, stageTop = rosterTop + 126;
+       const bottom = LO.half * 2 - LO.safeTop - LO.safeBottom - MAIN_NAV_H;
+       const stageH = Math.min(610, Math.max(500, bottom - stageTop - 510));
+-      const bagTop = stageTop + stageH + HERO_DETAIL_H;
+-      heroEnvironment(body, bagTop, -154, 97 + HERO_DETAIL_H);
++      const bagTop = stageTop + stageH;
++      heroEnvironment(body, bagTop, -154, 97);
+       buildLobbyRoster(body, rosterTop, hid, select);
+       buildHeroStage(body, ctx, hid, stageTop, stageH, owned, select);
+       const cells: { uid: string; n: number }[] = [];
+@@ -119,10 +118,11 @@
+ 
+ function buildLobbyRoster(parent: Node, top: number, selected: string, select: (id: string) => void): void {
+   const sv = loadSave(), heroes = Object.values(HERO_DEFS);
+-  const rail = heroRosterRail(parent, top, 'heroLobbyRoster', heroes.map(def => def.id), selected);
++  const rail = heroRosterRail(parent, top, 'heroLobbyRoster', heroes.map(def => def.id), selected,
++    { cardWidth:120,step:134,center:true });
+   heroes.forEach((def, i) => {
+     const active = def.id === selected, owned = !!sv.heroes[def.id]?.owned;
+-    const slot = heroLobbyPortrait(rail.content, rail.x(i), def.id, active, owned, ROSTER_CARD_W);
++    const slot = heroLobbyPortrait(rail.content, rail.x(i), def.id, active, owned, rail.cardWidth);
+     slot.name = 'heroSelect:' + def.id;
+     pressAction(slot, () => {
+       if (!owned) { toast('前往商店解锁该英雄'); return; }
+@@ -134,9 +134,8 @@
+ function buildHeroStage(parent: Node, ctx: PageCtx, hid: string, top: number, height: number,
+   owned: string[], select: (id: string) => void): void {
+   const sv = loadSave(), def = HERO_DEFS[hid];
+-  // Reserve a separate footer so detail actions belong to the hero without moving or shrinking the figure.
+-  const layout = N('heroStage', parent, 0, WY(top, height + HERO_DETAIL_H), 750, height + HERO_DETAIL_H);
+-  const stage = N('heroShowcase', layout, 0, HERO_DETAIL_H / 2, 750, height);
++  const layout = N('heroStage', parent, 0, WY(top, height), 750, height);
++  const stage = N('heroShowcase', layout, 0, 0, 750, height);
+   const footY = -height / 2 + 97;
+   heroComicFigure(stage, hid, -154, footY, height - 185, 376);
+   mainLabel(stage, -162, height / 2 - 30, def.name, { size: 34, color: '#FFFDF2', outline: '#3D342A', outlineW: 2,
+@@ -162,8 +161,9 @@
+   mainLabel(power, 31, 0, '战力 ' + fmt(heroStats(hid).power), { size: 28, color: COMIC.cream,
+     font: 'number', bold: true, w: 208, h: 38 });
+   const sq = Math.min(124, Math.max(100, (height - 300) / 2));
+-  const equipmentH = 86 + sq * 3;
+-  const equipmentY = footY + (height - 185) / 2;
++  // Align the equipment panel to the stage top; its two actions share the panel's lower section.
++  const equipmentH = 86 + sq * 3 + 76;
++  const equipmentY = height / 2 - 12 - equipmentH / 2;
+   const equipment = N('heroEquipmentGroup', stage, 213, equipmentY, 284, equipmentH);
+   heroPaper(equipment,0,0,284,equipmentH,'heroEquipment');
+   mainLabel(equipment, -50, equipmentH / 2 - 22, '已穿戴', { size: 22, font: 'body', color: HERO_INK, bold: true, w: 132, h: 32 });
+@@ -172,13 +172,13 @@
+   drawSlot(ctx, equipment, hid, 'weapon', 0, equipmentH / 2 - 44 - sq / 2, 252, sq);
+   SLOTS.forEach((kind, i) => drawSlot(ctx, equipment, hid, kind, -67 + (i % 2) * 134,
+     equipmentH / 2 - (58 + sq * 1.5 + Math.floor(i / 2) * (sq + 14)), sq, sq));
+-  const details = N('heroDetails', layout, -154, -(height + HERO_DETAIL_H) / 2 + HERO_DETAIL_H / 2, 330, HERO_DETAIL_H);
+-  detailButton(details, -86, 0, '属性', 'attrs', () => attrsModal(ctx, hid));
+-  detailButton(details, 86, 0, '故事', 'book', () => storyModal(ctx, hid));
++  const details = N('heroDetails', equipment, 0, -equipmentH / 2 + 38, 260, 52);
++  detailButton(details, -68, 0, '属性', 'attrs', () => attrsModal(ctx, hid));
++  detailButton(details, 68, 0, '故事', 'book', () => storyModal(ctx, hid));
+ }
+ 
+ function detailButton(parent: Node, x: number, y: number, title: string, glyph: 'attrs' | 'book', onClick: () => void): void {
+-  const button = comicButton(parent, x, y, 150, 52, '', onClick, { tone: 'dark', name: 'heroDetail:' + title });
++  const button = comicButton(parent, x, y, 124, 52, '', onClick, { tone: 'dark', name: 'heroDetail:' + title });
+   const face = button.getChildByName('buttonFace')!;
+   heroGlyph(face, -27, 0, glyph, 30);
+   mainLabel(face, 20, 0, title, { size: 22, color: COMIC.cream, font: 'body', bold: true, w: 44, h: 30 });
+--- before/assets/scripts/ui/pages/LevelsPage.ts
++++ assets/scripts/ui/pages/LevelsPage.ts
+@@ -230,8 +230,12 @@
+   }
+   function renderSheet(): void {
+     if (!drawer) return;
+-    const panel = drawer;
+-    refreshUI(panel, () => {
++    const host = drawer;
++    refreshUI(host, () => {
++      // Retain an opaque paper together with its contents. Without this child surface,
++      // the incoming labels and sprites show through the outgoing transparent group.
++      const panel = campaignPreparationPanel(host,0,0,750,sheetH);
++      panel.name = 'campaignPreparationSurface';
+       const sv = loadSave(), lv = LEVELS[st.i], challenge = getChallengeDef(lv.id, st.d), open = difficultyOpen(st.i, st.d);
+       const key = starKey(lv.id, st.d), stars = sv.stars[key] || 0, claimed = sv.chestClaimed[key] || 0;
+       const y = (top: number): number => sheetH / 2 - top;
+@@ -261,7 +265,7 @@
+         bindButton(slot, () => {
+           if (!unlocked) { toast(d ? '通关上一难度解锁' : '通关前置关卡后解锁'); return; }
+           if (st.d !== d) { st.d = d; renderSheet(); }
+-        }, { sound: 'select', dragThreshold: 7 });
++        }, { sound: 'select', dragThreshold: 7, motion: false });
+       });
+ 
+       mainLabel(body, -194, by(layout.stars), '星级宝箱', { size: 27, font: 'body', bold: true, color: CAMPAIGN_TEXT.ink, w: 286, h: compact ? 32 : 38, align: 'left' });
+--- before/assets/scripts/ui/LevelLootPreview.ts
++++ assets/scripts/ui/LevelLootPreview.ts
+@@ -11,6 +11,9 @@
+ import { gearPlate, gearQuality, gearQualityHalo } from './GearQuality';
+ import { dismissUI } from './UIMotion';
+ import { CAMPAIGN_TEXT, paintCampaignRewardCard } from './CampaignChrome';
++import { shopQualitySocket } from './LobbyChrome';
++import { DETAIL_ACTION_FOOTER, DETAIL_WIDTH, DetailRow, detailActionY, detailBody, detailDialog, detailFooter,
++  detailGroup, detailGroupHeight, detailHeight, detailOverview, detailParagraph, detailSkin } from './DetailDialog';
+ 
+ const pct = (value: number): string => (value * 100).toFixed(2) + '%';
+ /** Keep expanded loot catalogs inside the existing dialog, including smaller viewports. */
+@@ -130,7 +133,36 @@
+ export function showDropItemDetails(parent: Node, level: ChallengeDef, id: string, back?: Node): void {
+   const d = EQUIPS[id], mat = MATS[id];
+   if (!d && !mat && id !== 'coin') return;
+-  const h = Math.min(d ? 748 : 490, LO.half * 2 - 90), top = h / 2;
++  const source = DIFFICULTIES[level.difficulty].name + ' · ' + level.id;
++  const groups: { title: string; rows: DetailRow[] }[] = [];
++  const amount = id === 'coin' ? level.baseGold : level.materials.find(row => row.id === id)?.n || 0;
++  let delivery: string;
++  if (d) {
++    const keys = (Object.keys(d.stats) as StatKey[]).filter(k => (d.stats[k] || 0) > 0);
++    const preview = { uid: 'drop-preview', defId: id, lv: 1 };
++    groups.push({ title: '初始属性', rows: keys.map(key => [STAT_NAME[key], '+' + statFmt(key, equipStat(preview, key))]) });
++    const total = level.gearPool.reduce((sum, row) => sum + row.weight, 0);
++    const weight = level.gearPool.find(row => row.id === id)?.weight || 0;
++    const share = total > 0 ? weight / total : 0;
++    const exactPct = (value: number): string => Number((value * 100).toFixed(4)) + '%';
++    groups.push({ title: '掉落概率', rows: [
++      ['每次击杀普通怪', exactPct(equipmentDropChance(level.difficulty) * share)],
++      ['每次击杀精英怪', exactPct(equipmentDropChance(level.difficulty, { elite: true }) * share)],
++      ['掉落后抽取占比', exactPct(share)],
++    ] });
++    delivery = (share ? '' : '当前关卡难度不掉落此装备。') + (WEAPONS[id]
++      ? weaponUsers(id) + '。装上后继承该英雄的武器培养等级。'
++      : '拾取后收入背包，可在英雄页穿戴和强化。');
++  } else {
++    groups.push({ title: '关卡奖励', rows: [
++      ['通关获得', id === 'coin' ? amount.toLocaleString() + '+' : '×' + amount.toLocaleString()],
++      ['奖励来源', source],
++    ] });
++    delivery = id === 'coin' ? '通关结算获得基础金币，战斗击杀收益另计。' : '通关结算后收入材料背包，可在英雄页查看与使用。';
++  }
++  const deliveryH = Math.max(50, Math.ceil(delivery.length / 28) * 25);
++  const contentH = groups.reduce((sum, group) => sum + detailGroupHeight(group.rows.length), 0) + 38 + deliveryH + 8;
++  const h = detailHeight(contentH), width = DETAIL_WIDTH;
+   let root: Node;
+   const close = (): void => {
+     if (!root?.isValid) return;
+@@ -140,57 +172,28 @@
+   };
+   // Catalog -> item -> catalog keeps the same dim layer and the original list/scroll position.
+   if (back?.isValid && back.parent) {
+-    root = comicDialogContent(back.parent, 650, h, '掉落物详情', close);
++    root = comicDialogContent(back.parent, width, h, '掉落物详情', close);
++    detailSkin(root, width, h, '掉落物详情');
+     back.active = false;
+-  } else root = comicDialog(parent, 650, h, '掉落物详情');
++  } else root = detailDialog(parent, width, h, '掉落物详情', 'dropItemDetails:' + id);
+   root.name = 'dropItemDetails:' + id;
+-  if (d) {
+-    stageDropIcon(root, -218, top - 146, 120, id);
+-    label(root, 64, top - 126, d.name, { size: 27, color: COMIC.text, bold: true, font: 'body',
+-      w: 350, h: 38, align: 'left', shrink: true });
+-    label(root, 64, top - 170, gearQuality(d.quality).name + ' · ' + KIND_NAME[d.kind] + ' · 初始 Lv.1',
+-      { size: 19, color: COMIC.sub, w: 350, h: 30, align: 'left', shrink: true });
+-    const keys = (Object.keys(d.stats) as StatKey[]).filter(k => (d.stats[k] || 0) > 0);
+-    const list = lootScroll(root, top - 228, -top + 91, 294 + keys.length * 44);
+-    label(list, 0, -15, '初始装备属性', { size: 21, color: COMIC.text, bold: true, w: 550, h: 30, align: 'left' });
+-    let cursor = 50;
+-    const preview = { uid: 'drop-preview', defId: id, lv: 1 };
+-    keys.forEach((key, i) => {
+-      const row = comicPlate(list, 0, -cursor, 554, 38, i % 2 ? 'paper' : 'card', { cut: 5, edge: false });
+-      label(row, -133, 0, STAT_NAME[key], { size: 20, color: COMIC.sub, w: 240, h: 30, align: 'left' });
+-      label(row, 133, 0, '+' + statFmt(key, equipStat(preview, key)), { size: 22, color: COMIC.text,
+-        bold: true, w: 240, h: 30, align: 'right' });
+-      cursor += 44;
++  detailOverview(root, d ? d.name : id === 'coin' ? '基础金币' : mat.name,
++    d ? gearQuality(d.quality).name + ' · ' + KIND_NAME[d.kind] + ' · 初始 Lv.1' : id === 'coin' ? '金币 · 通关结算' : '材料 · 通关结算',
++    d && WEAPONS[id] ? weaponUsers(id) : undefined,
++    d ? source + ' 掉落。装备成功掉落后，按装备池权重抽取。' : id === 'coin' ? '基础金币 ' + amount + '+' : mat.desc,
++    (panel, x, y, side) => {
++      if (id === 'coin') comicArt(panel, x, y, side - 20, side - 20, 'comic_coin_v1');
++      else {
++        shopQualitySocket(panel, x, y, side, d?.quality ?? 1);
++        gearArt(panel, x, y, side - 20, side - 20, id);
++      }
+     });
+-    const total = level.gearPool.reduce((sum, row) => sum + row.weight, 0);
+-    const weight = level.gearPool.find(row => row.id === id)?.weight || 0;
+-    const share = total > 0 ? weight / total : 0;
+-    const exactPct = (value: number): string => Number((value * 100).toFixed(4)) + '%';
+-    label(list, 0, -cursor - 9, DIFFICULTIES[level.difficulty].name + ' · ' + level.id + ' 掉落概率',
+-      { size: 21, color: COMIC.text, bold: true, w: 550, h: 30, align: 'left' });
+-    label(list, 0, -cursor - 72, share ? '每次击杀普通怪 ' + exactPct(equipmentDropChance(level.difficulty) * share)
+-      + '\n每次击杀精英怪 ' + exactPct(equipmentDropChance(level.difficulty, { elite: true }) * share) : '当前关卡难度不掉落此装备',
+-      { size: 20, color: COMIC.text, bold: true, w: 550, h: 66, lineHeight: 31, align: 'left', shrink: true });
+-    label(list, 0, -cursor - 131, '装备成功掉落后，此装备的抽取占比：' + exactPct(share),
+-      { size: 17, color: COMIC.sub, w: 550, h: 30, align: 'left', shrink: true });
+-    label(list, 0, -cursor - 190, WEAPONS[id] ? weaponUsers(id) + '\n装上后继承该英雄的武器培养等级'
+-      : '拾取后收入背包，可在英雄页穿戴和强化',
+-      { size: 19, color: COMIC.text, w: 550, h: 66, lineHeight: 29, align: 'left', shrink: true });
+-  } else {
+-    const amount = id === 'coin' ? level.baseGold : level.materials.find(row => row.id === id)?.n || 0;
+-    if (id === 'coin') comicArt(root, 0, top - 139, 94, 94, 'comic_coin_v1');
+-    else {
+-      gearQualityHalo(root, 0, top - 139, 108, 108, 1);
+-      gearArt(root, 0, top - 139, 94, 94, id);
+-    }
+-    label(root, 0, top - 218, id === 'coin' ? '基础金币 ' + amount + '+' : mat.name + ' ×' + amount,
+-      { size: 25, color: COMIC.text, bold: true, w: 550, h: 36 });
+-    label(root, 0, top - 284, id === 'coin' ? '通关结算获得基础金币，战斗击杀收益另计。' : mat.desc,
+-      { size: 21, color: COMIC.text, w: 550, h: 64, lineHeight: 30, shrink: true });
+-    label(root, 0, -top + 114, DIFFICULTIES[level.difficulty].name + ' · ' + level.id + ' 关卡奖励',
+-      { size: 19, color: COMIC.greenShade, w: 550, h: 30 });
+-  }
+-  comicButton(root, 0, -top + 43, 372, 56, back ? '返回掉落列表' : '关闭', close,
++  const content = detailBody(root, contentH, DETAIL_ACTION_FOOTER, 'dropItem');
++  let cursor = 0;
++  groups.forEach(group => { cursor = detailGroup(content, cursor, group.title, group.rows); });
++  detailParagraph(content, cursor, '获取说明', delivery, deliveryH);
++  detailFooter(root);
++  comicButton(root, 0, detailActionY(root), 372, 58, back ? '返回掉落列表' : '关闭', close,
+     { name: 'dropItemDetailsClose', tone: 'dark', size: 22, sound: 'close' });
+ }
+ 

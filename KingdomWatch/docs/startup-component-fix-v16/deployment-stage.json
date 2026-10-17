@@ -1,0 +1,10 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-startup-component-fix-v16-20261017-133109",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-positive-feedback-v15-20261017-131821",
+  "entryVersion": "1792215028",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "game": "https://kingdom-watch.pages.dev/?v=startup-component-fix-v16-1792215028",
+  "scope": "fix Cocos Error 3615 by splitting ConstructionPulse into a separate script and registration UUID",
+  "manualAcceptance": "pending user manual review"
+}

@@ -1,0 +1,77 @@
+--- before/assets/scripts/ui/pages/HeroPage.ts
++++ assets/scripts/ui/pages/HeroPage.ts
+@@ -17,10 +17,11 @@
+ import { growthAction } from '../GrowthFeedback';
+ import { heroRosterRail } from '../HeroRosterRail';
+ import { gearQuality } from '../GearQuality';
+-import { shopQualitySocket } from '../LobbyChrome';
++import { lobbyAttributeWell, shopQualitySocket } from '../LobbyChrome';
+ import { HERO_INK, heroActionY, heroDialog, heroInventoryPaper, heroLobbyPortrait, heroModalSkin, heroPaper, heroWhiteWell } from '../HeroChrome';
+ 
+-import { DETAIL_ACTION_FOOTER, detailBody, detailFooter, detailGroup, detailGroupHeight, detailHeight, detailOverview, detailParagraph } from '../DetailDialog';
++import { DETAIL_ACTION_FOOTER, detailBody, detailFooter, detailGroup, detailGroupHeight, detailHeight, detailOverview, detailParagraph, detailSection } from '../DetailDialog';
++import { TRAINING_INK, TRAINING_SUB, trainingComparison } from '../TrainingChrome';
+ 
+ const SLOTS: EquipKind[] = ['helm', 'acc', 'glove', 'armor'];
+ const BAG_SIZE = 120, BAG_STEP = 130, BAG_COL_STEP = 138;
+@@ -358,37 +359,45 @@
+   const d = EQUIPS[inst.defId], weapon = kind === 'weapon', lv = equipLevel(inst, hid), maxed = lv >= (weapon ? MAX.weapon : MAX.equip), cost = weapon ? weaponUpCost(lv) : equipUpCost(lv);
+   const basis = weapon ? heroStats(hid) : null, nextBasis = weapon ? heroStatsAt(hid, sv.heroes[hid].lv, maxed ? lv : lv + 1) : null;
+   const keys = weapon ? ['atk', 'skillDmg'] as StatKey[] : (Object.keys(d.stats) as StatKey[]).filter(k => (d.stats[k] || 0) > 0);
+-  const contentH = detailGroupHeight(keys.length), footerH = maxed?DETAIL_ACTION_FOOTER:218;
++  const attrH=38+keys.length*44+16+14, materialsH=maxed?0:38+128+14;
++  const contentH = attrH+materialsH, footerH = maxed?DETAIL_ACTION_FOOTER:166;
+   const height = detailHeight(contentH,footerH), bottom = -height/2;
+   const panel = heroDialog(ctx.screens,620,height,weapon?'武器培养':'装备强化','heroForgeDialog');
+-  detailOverview(panel,d.name,maxed?gearQuality(d.quality).name+' · 已满级':'Lv.'+lv+'  →  Lv.'+(lv+1),
++  detailOverview(panel,d.name,gearQuality(d.quality).name+' · '+KIND_NAME[d.kind]+' · '+(maxed?'已满级':'Lv.'+lv+' → Lv.'+(lv+1)),
+     weapon?weaponUsers(d.id):KIND_NAME[d.kind],
+     weapon?'与升级页共用培养等级 · 更换武器不掉级':'主属性 +4% / 级 · 材料需求每7级递增',
+     (root,x,y,side) => equipIcon(root,x,y,side,inst));
+   const content = detailBody(panel,contentH,footerH,'heroForge');
+-  detailGroup(content,0,'强化属性',keys.map(key => {
++  let cursor=detailSection(content,0,'强化属性');
++  cursor+=trainingComparison(content,-cursor,552,keys.map(key => {
+     const cur = weapon ? basis![key as 'atk' | 'skillDmg'] : equipStat(inst, key), next = weapon ? nextBasis![key as 'atk' | 'skillDmg'] : equipStat({ ...inst, lv: lv + 1 }, key);
+-    return [STAT_NAME[key],statFmt(key,cur)+'  →  '+(maxed?'MAX':statFmt(key,next))] as [string,string];
+-  }));
++    return {name:STAT_NAME[key],cur:statFmt(key,cur),next:maxed?'MAX':statFmt(key,next),gain:'+'+statFmt(key,next-cur)};
++  }),maxed)+14;
+   detailFooter(panel,footerH);
+   if (!maxed) {
+     const enoughGold = sv.gold >= cost.gold, enoughMat = matOwned() >= cost.mat;
+-    costEntry(panel, -210, bottom+168, 'gold', fmt(cost.gold) + ' / ' + fmt(sv.gold), enoughGold);
+-    costEntry(panel, -210, bottom+126, 'mat_stone', cost.mat + ' / ' + fmt(matOwned()), enoughMat);
++    cursor=detailSection(content,cursor,'消耗材料');
++    const materials=lobbyAttributeWell(content,0,-cursor-64,552,128,'heroForgeMaterialsWhite');
++    const entries=[{id:'gold',name:'金币',need:cost.gold,own:sv.gold,enough:enoughGold},
++      {id:'mat_stone',name:'强化材料',need:cost.mat,own:matOwned(),enough:enoughMat}];
++    entries.forEach((entry,i)=>{
++      const y=35-i*44;
++      if (entry.id==='gold') comicArt(materials,-232,y,34,34,'comic_coin_v1');
++      else gearArt(materials,-232,y,34,34,entry.id);
++      mainLabel(materials,-135,y,entry.name,{size:20,font:'body',color:TRAINING_SUB,align:'left',w:134,h:30});
++      mainLabel(materials,151,y,fmt(entry.need)+' / '+fmt(entry.own),
++        {size:23,font:'number',bold:true,color:entry.enough?TRAINING_INK:'#B34338',align:'right',w:204,h:32});
++    });
++    mainLabel(materials,165,-47,'需求 / 持有',{size:16,font:'body',color:TRAINING_SUB,align:'right',w:170,h:24});
++    mainLabel(panel,0,bottom+119,weapon?'与升级页共用培养等级':'材料需求每7级递增',
++      {size:18,font:'body',color:TRAINING_SUB,w:552,h:28});
+     comicButton(panel, 0, heroActionY(panel), 386, 60, '强化', () => {
+       const result = growthAction(weapon ? { kind: 'weapon', hid } : { kind: 'equip', hid, slot: kind }, () => weapon ? upWeapon(hid) : upWornEquip(hid, kind));
+       if (result.ok) dismissUI(panel.parent, ctx.refresh, false);
+-    }, { tone: enoughGold && enoughMat ? 'gold' : 'muted', name: 'heroForgeAction', sound: 'confirm' });
++    }, { tone: enoughGold && enoughMat ? 'green' : 'muted', name: 'heroForgeAction', sound: 'confirm' });
+   } else comicButton(panel,0,heroActionY(panel),248,58,'已达强化上限',() => dismissUI(panel.parent),
+     {tone:'dark',name:'heroForgeMaxClose',sound:'close'});
+ }
+-function costEntry(parent: Node, x: number, y: number, id: string, text: string, enough: boolean): void {
+-  if (id === 'gold') comicArt(parent, x, y, 32, 32, 'comic_coin_v1');
+-  else gearArt(parent, x, y, 32, 32, id);
+-  mainLabel(parent, x + 85, y, id === 'gold' ? '金币' : '材料', { size: 20, color: COMIC.sub, align: 'left', w: 92, h: 30 });
+-  mainLabel(parent, 110, y, text, { size: 22, color: enough ? COMIC.greenShade : '#B34338', font: 'number', align: 'right', w: 300, h: 32 });
+-}
+-
+ function drawBagCell(ctx: PageCtx, grid: Node, cell: { uid: string; n: number }, hid: string, x: number, y: number): void {
+   const isMat = cell.n > 0, inst = isMat ? null : loadSave().equips.find(e => e.uid === cell.uid);
+   const d = inst ? EQUIPS[inst.defId] : null;
