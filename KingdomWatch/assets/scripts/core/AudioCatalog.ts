@@ -1,26 +1,30 @@
-/** v24 material foley and acoustic motifs; the v23 reduced-event policy stays in place. */
+const generated = (...files: string[]): readonly string[] => files.map(file => 'v28/' + file);
+/** All mage casts share one recording; ultimate contacts use distinct physical materials. */
+const mage = (...files: string[]): readonly string[] => files.map(file => 'v27/' + file);
+const elemental = (...files: string[]): readonly string[] => files.map(file => 'v26/' + file);
 const gentle = (...files: string[]): readonly string[] => files.map(file => 'v25/' + file);
 const kingdom = (...files: string[]): readonly string[] => files.map(file => 'v24/' + file);
 const combat = (...files: string[]): readonly string[] => files.map(file => 'v21/' + file);
 const deaths = (kind: string): readonly string[] => [1, 2, 3].map(i => `v21/${kind}_${i}`);
 export const AUDIO_CUES = {
+  mageCast: { files: mage('mage_cast'), gain: .82, gap: .18, group: 'shot', priority: 1 },
   gateSlide: { files: gentle('gate_slide'), gain: .7, gap: .3, group: 'transition', priority: 3 },
   gateClose: { files: gentle('gate_close'), gain: .8, gap: .3, group: 'transition', priority: 3 },
   shoot: { files: combat('bow_1', 'bow_2', 'bow_3'), gain: .9, gap: .07, group: 'shot', priority: 1 },
   bow: { files: kingdom('bow_1', 'bow_2', 'bow_3'), gain: .9, gap: .07, group: 'shot', priority: 1 },
   crossbow: { files: kingdom('crossbow_1', 'crossbow_2', 'crossbow_3'), gain: .94, gap: .09, group: 'shot', priority: 1 },
-  fire: { files: gentle('fire_1', 'fire_2', 'fire_3'), gain: .88, gap: .09, group: 'shot', priority: 1 },
-  thunder: { files: gentle('thunder_1', 'thunder_2', 'thunder_3'), gain: .87, gap: .09, group: 'shot', priority: 1 },
-  frost: { files: gentle('frost_1', 'frost_2', 'frost_3'), gain: .88, gap: .09, group: 'shot', priority: 1 },
-  hit: { files: combat('hit_1', 'hit_2', 'hit_3'), gain: .68, gap: .08, group: 'impact', priority: 0 },
+  fire: { files: mage('mage_cast'), gain: .82, gap: .18, group: 'shot', priority: 1 },
+  thunder: { files: mage('mage_cast'), gain: .82, gap: .18, group: 'shot', priority: 1 },
+  frost: { files: mage('mage_cast'), gain: .82, gap: .18, group: 'shot', priority: 1 },
+  hit: { files: elemental('hit_common'), gain: .62, gap: .18, group: 'contact', priority: 0 },
   pierce: { files: combat('pierce_1', 'pierce_2', 'pierce_3'), gain: .74, gap: .09, group: 'impact', priority: 1 },
   crush: { files: combat('crush_1', 'crush_2', 'crush_3'), gain: .71, gap: .10, group: 'impact', priority: 1 },
   zapHit: { files: combat('zap_hit_1', 'zap_hit_2', 'zap_hit_3'), gain: .68, gap: .09, group: 'impact', priority: 0 },
   icebreak: { files: combat('icebreak_1', 'icebreak_2', 'icebreak_3'), gain: .7, gap: .09, group: 'impact', priority: 0 },
   pierceHeavy: { files: kingdom('pierce_heavy'), gain: .84, gap: .14, group: 'impact', priority: 2 },
-  fireHeavy: { files: gentle('fire_heavy'), gain: .82, gap: .14, group: 'impact', priority: 2 },
-  thunderHeavy: { files: gentle('thunder_heavy'), gain: .82, gap: .10, group: 'impact', priority: 2 },
-  frostHeavy: { files: gentle('frost_heavy'), gain: .82, gap: .16, group: 'impact', priority: 2 },
+  fireHeavy: { files: elemental('hit_common'), gain: .62, gap: .18, group: 'contact', priority: 0 },
+  thunderHeavy: { files: elemental('hit_common'), gain: .62, gap: .18, group: 'contact', priority: 0 },
+  frostHeavy: { files: elemental('hit_common'), gain: .62, gap: .18, group: 'contact', priority: 0 },
   crit: { files: kingdom('crit'), gain: .83, gap: .13, group: 'impact', priority: 2 },
   kill: { files: deaths('physical'), gain: .88, gap: .075, group: 'death', priority: 2 },
   deathFire: { files: deaths('fire_death'), gain: .86, gap: .075, group: 'death', priority: 2 },
@@ -32,12 +36,12 @@ export const AUDIO_CUES = {
   skill: { files: kingdom('skill'), gain: .9, gap: .18, group: 'cast', priority: 2 },
   ult: { files: combat('ult'), gain: 1, gap: .28, group: 'cast', priority: 3 },
   bowUlt: { files: kingdom('bow_ult'), gain: .96, gap: .28, group: 'cast', priority: 3 },
-  fireSkill: { files: gentle('fire_skill'), gain: .92, gap: .18, group: 'cast', priority: 2 },
-  thunderSkill: { files: gentle('thunder_skill'), gain: .92, gap: .18, group: 'cast', priority: 2 },
-  frostSkill: { files: gentle('frost_skill'), gain: .92, gap: .18, group: 'cast', priority: 2 },
-  fireUlt: { files: gentle('fire_ult'), gain: 1, gap: .28, group: 'cast', priority: 3 },
-  thunderUlt: { files: gentle('thunder_ult'), gain: .98, gap: .28, group: 'cast', priority: 3 },
-  frostUlt: { files: gentle('frost_ult'), gain: .98, gap: .28, group: 'cast', priority: 3 },
+  fireSkill: { files: mage('mage_cast'), gain: .82, gap: .18, group: 'shot', priority: 1 },
+  thunderSkill: { files: mage('mage_cast'), gain: .82, gap: .18, group: 'shot', priority: 1 },
+  frostSkill: { files: mage('mage_cast'), gain: .82, gap: .18, group: 'shot', priority: 1 },
+  fireUlt: { files: generated('meteor_ult'), gain: 0.126 * Math.pow(10, 3 / 20), gap: 2.35, group: 'cast', priority: 3 },
+  thunderUlt: { files: generated('thunder_ult'), gain: 0.135 * Math.pow(10, 3 / 20), gap: 2.05, group: 'cast', priority: 3 },
+  frostUlt: { files: generated('ice_ult'), gain: 0.485, gap: 1.75, group: 'cast', priority: 3 },
   charge: { files: combat('charge'), gain: .7, gap: .12, group: 'cast', priority: 2 },
   pickOpen: { files: kingdom('pick_open'), gain: .78, gap: .25, group: 'card', priority: 3 },
   pickRefresh: { files: combat('pick_refresh'), gain: .8, gap: .25, group: 'card', priority: 3 },
@@ -60,7 +64,7 @@ export const AUDIO_CUES = {
   surge: { files: kingdom('surge'), gain: .8, gap: 1.8, group: 'cue', priority: 4 },
   victory: { files: kingdom('victory'), gain: .9, gap: 2, group: 'cue', priority: 5 },
   defeat: { files: kingdom('defeat'), gain: .85, gap: 2, group: 'cue', priority: 5 },
-  ui: { files: kingdom('ui_click_1', 'ui_click_2'), gain: .65, gap: .07, group: 'ui', priority: 2 },
+  ui: { files: kingdom('ui_click_1'), gain: .65, gap: .07, group: 'ui', priority: 2 },
   uiSelect: { files: ['ui_click_2'], gain: .58, rate: 1.08, gap: .09, group: 'ui', priority: 2 },
   uiOpen: { files: ['ui_confirm'], gain: .38, rate: 1.08, gap: .14, group: 'ui', priority: 2 },
   uiClose: { files: ['ui_click_2'], gain: .45, rate: .86, gap: .12, group: 'ui', priority: 2 },
@@ -74,11 +78,14 @@ export type SfxName = keyof typeof AUDIO_CUES;
 /** Fewer independent messages: retain original sources so the policy is reversible. */
 const SILENT_CUES = new Set<SfxName>([
   'levelup', 'growthTick', 'growthLand', 'rewardLand', 'star', 'starFinish',
-  'hit', 'pierce', 'crush', 'zapHit', 'icebreak',
+  'pierce', 'crush', 'zapHit', 'icebreak',
   'kill', 'deathFire', 'deathVolt', 'deathFrost',
   'charge', 'ready', 'lootDrop',
 ]);
 const SHARED_CUES: Partial<Record<SfxName, SfxName>> = {
+  fire: 'mageCast', thunder: 'mageCast', frost: 'mageCast',
+  fireSkill: 'mageCast', thunderSkill: 'mageCast', frostSkill: 'mageCast',
+  fireHeavy: 'hit', thunderHeavy: 'hit', frostHeavy: 'hit',
   shoot: 'bow', ult: 'bowUlt',
   uiSelect: 'ui', uiOpen: 'ui', uiClose: 'ui',
   uiToggle: 'ui', uiConfirm: 'ui', confirm: 'ui', pickRefresh: 'ui',
@@ -91,3 +98,14 @@ export function resolveAudioCue(name: SfxName): SfxName | null {
 
 export type MusicScene = 'camp' | 'battle';
 export const MUSIC_TRACKS = { camp: 'bgm_camp', battle: 'bgm_battle' } as const;
+/** A chapter keeps its identity throughout the lobby and its own battles. */
+export const CHAPTER_MUSIC: Readonly<Record<number, Readonly<Record<MusicScene, string>>>> = {
+  1: MUSIC_TRACKS,
+  2: { camp: 'v29/bgm_forest', battle: 'v29/bgm_forest' },
+  3: { camp: 'v29/bgm_lair', battle: 'v29/bgm_lair' },
+};
+/** Per-track playback gain relative to v29, shared by lobby and battle. */
+export const MUSIC_TRACK_GAIN: Readonly<Record<string, number>> = {
+  'v29/bgm_forest': Math.pow(10, 3 / 20),
+  'v29/bgm_lair': Math.pow(10, 1.5 / 20),
+};

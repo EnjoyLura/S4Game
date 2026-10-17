@@ -1,0 +1,13 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-music-v29-20261017-230303",
+  "entryVersion": "1792249301",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-ai-ultimates-v28-20261017-224720",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=chapter-music-v29-1792249301",
+  "priorPreviewFilesPreserved": 793,
+  "manualAcceptance": "User manual; no game/browser/audio playback performed",
+  "deployment": "https://6eb6f615.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed"
+}

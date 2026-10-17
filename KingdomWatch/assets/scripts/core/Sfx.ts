@@ -6,7 +6,6 @@ export type { SfxName } from './AudioCatalog';
 const SHOTS: Record<string, SfxName> = { archer: 'bow', sniper: 'crossbow', pyro: 'fire', volt: 'thunder', mora: 'frost' };
 const ULTIMATES: Record<string, SfxName> = { archer: 'bowUlt', sniper: 'snipe', pyro: 'fireUlt', volt: 'thunderUlt', mora: 'frostUlt' };
 const SKILLS: Record<string, SfxName> = { archer: 'skill', sniper: 'snipe', pyro: 'fireSkill', volt: 'thunderSkill', mora: 'frostSkill' };
-const HITS: Record<string, SfxName> = { archer: 'hit', sniper: 'pierce', pyro: 'crush', volt: 'zapHit', mora: 'icebreak' };
 const HEAVY_HITS: Record<string, SfxName> = { archer: 'crit', sniper: 'pierceHeavy', pyro: 'fireHeavy', volt: 'thunderHeavy', mora: 'frostHeavy' };
 
 export const Sfx = {
@@ -21,7 +20,12 @@ export const Sfx = {
   cast(heroId: string, ultimate = false): void {
     GameAudio.play(ultimate ? ULTIMATES[heroId] || 'ult' : SKILLS[heroId] || 'skill');
   },
+  /** Called by the actual meteor, lightning or ice contact, never the wind-up. */
+  ultimateImpact(heroId: string): void {
+    if (heroId === 'pyro' || heroId === 'volt' || heroId === 'mora') GameAudio.play(ULTIMATES[heroId]);
+  },
   impact(heroId: string, heavy = false): void {
-    GameAudio.play(heavy ? HEAVY_HITS[heroId] || 'crit' : HITS[heroId] || 'hit');
+    // Ordinary contacts are emitted once by actual monster damage, including area/chain hits.
+    if (heavy) GameAudio.play(HEAVY_HITS[heroId] || 'crit');
   },
 };

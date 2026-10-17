@@ -1,0 +1,15 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-gains-v30-20261017-231309",
+  "entryVersion": "1792249966",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-chapter-music-v29-20261017-230303",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=audio-gains-v30-1792249966",
+  "priorPreviewFilesPreserved": 793,
+  "compiledMusicGainConfigurationPresent": true,
+  "builtMusicAndUltimateMediaUnchanged": true,
+  "manualAcceptance": "User manual; no game/browser/audio playback performed",
+  "deployment": "https://81e8323b.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed"
+}

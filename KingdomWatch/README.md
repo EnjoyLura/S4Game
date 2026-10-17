@@ -1,5 +1,15 @@
 # 王国守望 (Kingdom Watch)
 
+2026-10-17 [指定音量与进关音乐时机 v30 已发布](https://kingdom-watch.pages.dev/?v=audio-gains-v30-1792249966)。在v29基础上雷声、陨石和深林BGM各+3dB，兽穴BGM+1.5dB；进入关卡等完整门过场结束、战斗画面显露后再平滑切换战斗音乐。音频文件保持，仅调播放增益与切换时机；构建发布和静态资源核对完成，原10项类型诊断无新增，实际听感由用户试玩。详见[实现与发布记录](docs/audio-gains-v30/README.md)。
+
+2026-10-17 [章节音乐与平滑切换 v29 已发布](https://kingdom-watch.pages.dev/?v=chapter-music-v29-1792249301)。雷声和陨石大招约增加1.5dB；前哨沿用原音乐，深林增加幽静森林主题，兽穴增加紧张战斗主题。所有主页面跟随关卡页当前章节并记忆选择；同曲进入战斗继续播放，场景音量1秒渐变，需要换曲时1.6秒交叉淡入淡出。构建、静态资源与发布入口核对完成，原10项类型诊断无新增；未播放音频或运行游戏，实际体验由用户试玩。详见[实现与音乐来源](docs/chapter-music-v29/README.md)。
+
+2026-10-17 [用户 AI 视频大招试用 v28 已发布](https://kingdom-watch.pages.dev/?v=audio-ai-ultimates-v28-1792248418)。火法使用0–2.3秒、雷法2.3–4.3秒、冰法4.3–6秒三段用户最新确认音轨。逐字节保留原声，仅调整游戏播放音量和重复间隔，仍跟随实际大招接地/落雷。其他声音与玩法保持；构建发布及静态资源核对完成，实际听感由用户试玩。详见[接入记录](docs/audio-ai-ultimates-v28/README.md)。
+
+2026-10-17 [法师统一施法与大招落地 v27 已发布](https://kingdom-watch.pages.dev/?v=audio-mage-shared-v27-1792245362)，[四种声音试听](https://kingdom-watch.pages.dev/previews/audio-mage-shared-v27/)。三位法师的普攻和技能共用一条0.24秒气流录音、不随机变调；雷法大招1.15秒轻微自然雷鸣，火法0.64秒爆炸与碎石撞地，冰法0.60秒真实冰块撞地破碎。大招按实际接地/落雷触发，去掉旧出手声和元素重击；普通/重击共用既有受击。弓箭手、重弩手、固定第一条点击与通用受击保持。构建发布及静态检查完成，原10项类型诊断无新增；未运行游戏或播放音频，听感待用户人工确认。详见[制作与发布记录](docs/audio-mage-shared-v27/README.md)。
+
+2026-10-17 [法术与通用受击 v26 已发布](https://kingdom-watch.pages.dev/?v=audio-spells-v26-1792243638)，[分组试听](https://kingdom-watch.pages.dev/previews/audio-spells-v26/)。修改前版本已保存为 Git `9e6504fa`。针对三法师声音仍杂且奇怪的反馈，18 条全部换用 JC Sounds CC BY 4.0 专用法术素材，每条单一来源、原速，去掉乐器混搭；弓箭手与重弩手保持。点击固定原第一条样本，普通伤害在实际扣血时触发同一个短受击声，0.18 秒限频、最多一声部。生产构建与静态检查完成，未运行游戏、浏览器或音频播放，听感待用户确认。详见[制作与发布记录](docs/audio-spells-v26/README.md)。
+
 2026-10-17 [音效精简v23已发布](https://kingdom-watch.pages.dev/?v=audio-reduction-v23-1792230535)，部署 https://d78e3248.kingdom-watch.pages.dev。按用户先减少音效的要求，保留现有音源，61个定义收敛为31个可播放入口（21静音、9共用），削减界面装饰、数字落点和普通战斗的重复叠音，长按升级合并反馈；胜败/突破/大招/领奖保留重点。十份原脚本局部修改、音频和元数据散列保持，未接入尚未选定候选；类型诊断无新增，Cocos生产构建/MD5/DPR与Wrangler main发布完成，727个旧预览文件完整保留。未运行游戏、浏览器、试听或线上验收，实际听感待用户。详见[精简规则和逐项映射](docs/audio-reduction-v23/README.md)。
 
 2026-10-17 [免费卡通风成长音效试听 cartoon-r1](https://kingdom-watch.pages.dev/previews/audio-comparison-batches-v22/cartoon-r1/?v=cartoon-r1)已发布，部署 https://016e432b.kingdom-watch.pages.dev。针对用户否定的D01–D03，使用Tim Beek免费CC BY4.0与Dustyroom官网CC0两套成品，提供6候选/3旧v21/3五连升示例；免费、来源与随包许可完整保留。原生产2243文件散列不变，55预览文件/65引用有效、12音频零削波，JS语法通过；不运行游戏、浏览器或试听验收，听感待用户选择，正式游戏仍用v21。详见[试听与素材记录](docs/audio-comparison-batches-v22/README.md)。

@@ -161,7 +161,7 @@ export class FrostUltimateVFX {
     const top = LO.half - 150 - LO.notchTop, bottom = LINE_Y + 30;
     this.skyTop = top;
     this.targets = targets.filter(t => t.y >= bottom && t.y <= top).slice(0, MAX_MOBS);
-    this.hide(); this.age = 0; this.running = true; this.contactAt = -10; this.nextAudio = .8;
+    this.hide(); this.age = 0; this.running = true; this.contactAt = -10; this.nextAudio = 0;
     this.rainCount = RAIN_CAP;
     const low = bottom + 10, span = Math.max(1, top - 10 - low);
     // Random within broad depth bands, then shuffle the entire sequence.
@@ -212,7 +212,7 @@ export class FrostUltimateVFX {
     this.age += dt;
     for (const hit of this.hits) {
       if (hit.start > before && hit.start <= this.age && this.age >= this.nextAudio) {
-        Sfx.impact('mora', true); this.nextAudio = this.age + .45; break;
+        Sfx.ultimateImpact('mora'); this.nextAudio = this.age + .55; break;
       }
     }
     if (this.age >= DURATION) { this.running = false; this.hide(); return; }

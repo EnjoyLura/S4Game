@@ -1,0 +1,7 @@
+{
+  "gameStatus": 200,
+  "gameHasNewEntry": true,
+  "previewStatus": 200,
+  "previewContainsV26": true,
+  "method": "Static curl HTTP GET; no browser, game scripts or audio playback"
+}

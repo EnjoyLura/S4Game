@@ -1,0 +1,31 @@
+{
+  "changedRuntimeFiles": 3,
+  "priorAudioAndMetadataMatched": 589,
+  "battleMusicReleasedByActualTransitionFinish": true,
+  "v29MusicMediaUnchanged": true,
+  "newTypeDiagnostics": 0,
+  "existingTypeDiagnostics": 10,
+  "gains": {
+    "meteor": {
+      "before": 0.126,
+      "after": 0.17797973062246705,
+      "db": 3
+    },
+    "thunder": {
+      "before": 0.135,
+      "after": 0.19069256852407185,
+      "db": 3
+    },
+    "forest": {
+      "before": 1,
+      "after": 1.4125375446227544,
+      "db": 3
+    },
+    "lair": {
+      "before": 1,
+      "after": 1.1885022274370185,
+      "db": 1.5
+    }
+  },
+  "gameBrowserTestsAndAudioPlaybackPerformed": false
+}

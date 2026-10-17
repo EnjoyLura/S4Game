@@ -1,0 +1,55 @@
+{
+  "newAssets": [
+    {
+      "resource": "audio/v27/mage_cast",
+      "native": "assets/resources/native/f9/f93e7d59-4240-4a1f-9ea9-c5cca1d2ebfb.8a075.wav",
+      "sha256": "6a9157cee7b8ec23742484be2a40a11de714fab7932f2155a4660eb30673f7c3"
+    },
+    {
+      "resource": "audio/v27/thunder_soft",
+      "native": "assets/resources/native/10/10e7c639-86bb-420e-a2e6-22dee5666a37.fd16d.wav",
+      "sha256": "77c703847f2c17a24ec0ac4e8cdef8a7115286b35571efea9429fc7b487ffce2"
+    },
+    {
+      "resource": "audio/v27/meteor_land",
+      "native": "assets/resources/native/2c/2c56a2c7-cb33-4e32-87ff-16d31f0dadb5.9c3f1.wav",
+      "sha256": "278ae7eeef0bbf70902106e888be8af6b21f74a3f777498f0d1265bfa63a08cb"
+    },
+    {
+      "resource": "audio/v27/ice_shatter",
+      "native": "assets/resources/native/f0/f04ba793-1ed0-42ae-87c2-7cc0e6b0d178.f0820.wav",
+      "sha256": "2e205ba8a4ea6ee4a5fbd17ea05d132d6bba1df346ad3cfb7301736b3fefaf7f"
+    }
+  ],
+  "preservedWeaponFiles": 11,
+  "fixedClickAndCommonHitPreserved": true,
+  "nativePathUUIDAndHashMatch": true,
+  "encodedReels": [
+    {
+      "file": "all.mp4",
+      "sha256": "ca4982b2e82e3af1b81a5b8b1ec0aa2d2634152aac906c60a25e440ae5ac1e33",
+      "peakDBFS": -10.06
+    },
+    {
+      "file": "cast.mp4",
+      "sha256": "e07b09dcb7c00dfc30609d6694ad3e1a2080b4edb9e3ba548c6db0bd6ca49956",
+      "peakDBFS": -14.78
+    },
+    {
+      "file": "mora.mp4",
+      "sha256": "330d03a33c72d6cbda70a6d8ac412064183e0a3f538eaad9c8258a9e8c169fac",
+      "peakDBFS": -10.06
+    },
+    {
+      "file": "pyro.mp4",
+      "sha256": "8dfb18a548b13cc4f381b597a7d11ebe0b1c6de738df7a3b066272a46284addc",
+      "peakDBFS": -10.66
+    },
+    {
+      "file": "volt.mp4",
+      "sha256": "d9bdb25df3b42a1e06429aa9aa8d3362c9fcee4346e4ca6e4ea34c400d779f5c",
+      "peakDBFS": -17.12
+    }
+  ],
+  "noGameBrowserOrAudioPlaybackPerformed": true
+}

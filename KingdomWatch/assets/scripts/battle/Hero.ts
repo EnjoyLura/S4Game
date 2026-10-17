@@ -1103,7 +1103,6 @@ export class PyroHero extends HeroBase {
         if (q.fired) {
           q.fallElapsed = 0; q.fallSeconds = Math.max(.01, (top - q.y) / METEOR_SPEED);
           this.animateAttack(true, q.x - this.x, q.y - HERO_Y - 60);
-          if (q.first) Sfx.cast(this.id, true);
         }
       }
     }
@@ -1449,7 +1448,6 @@ export class VoltHero extends HeroBase {
           t = alive[(Math.random() * alive.length) | 0];
         }
         this.animateAttack(true, t.x - this.x, t.y - (HERO_Y + 60));
-        if (q.index === 0) Sfx.cast(this.id, true);
         this.thunderStrike(t, mgr, projs, q.index >= 10 ? 1.16 : 1);
         this.ultimateBeat(t.x, t.depthY, q.index === 14 ? 1 : q.index === 0 ? .85 : .3, true);
       }
@@ -1466,7 +1464,7 @@ export class VoltHero extends HeroBase {
     const uc = voltUltCfg(this.stats.ultLv);
     const dmgVal = this.abilityDamage(uc.boltMul, true);
     projs.voltThunder(t.x, t.y, SPAWN_Y + 140, t.depthY, 90 * uc.rMul, power);
-    Sfx.impact(this.id, true);
+    Sfx.ultimateImpact(this.id);
     bus.emit(EVT.HIT_STOP);
     for (const o of mgr.mobsInRadius(t.x, t.y, 90 * uc.rMul)) {   // 5级：落雷范围+20%
       if (o.dead) continue;
@@ -1645,7 +1643,6 @@ export class FrostHero extends HeroBase {
       this.lastDmg?.add(this.id, Math.min(d, hpBefore));
       if (!m.dead) m.applySlow(this.slowR(uc.slowMul), uc.slowDur + (this.stats.ultSlowDur || 0));
     }
-    Sfx.cast(this.id, true);
     this.ultimateBeat(this.x, HERO_Y + 60, .8);
     bus.emit(EVT.HIT_STOP);
   }

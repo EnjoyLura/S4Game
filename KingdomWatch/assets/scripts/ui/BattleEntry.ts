@@ -96,6 +96,7 @@ export class BattleEntry extends Component {
     failed: () => void, firstPaint: Promise<void>, destination: Destination): void {
     this.camera = camera; this.load = load; this.fail = failed;
     this.destination = destination;
+    if (destination === 'battle') GameAudio.holdMusicForTransition(true);
     this.lastFrameAt = performance.now();
     this.firstPaint = firstPaint; this.quiet = reducedMotion();
     const panel = (name: string): Graphics => {
@@ -226,11 +227,13 @@ export class BattleEntry extends Component {
   }
   private finish(): void {
     if (active === this) active = null;
+    if (this.destination === 'battle') GameAudio.holdMusicForTransition(false);
     director.removePersistRootNode(this.node); this.node.active = false; this.node.destroy();
   }
   private hide = (): void => { this.hidden = true; };
   private show = (): void => { this.lastFrameAt = performance.now(); this.hidden = false; };
   onDestroy(): void {
+    if (this.destination === 'battle') GameAudio.holdMusicForTransition(false);
     game.off(Game.EVENT_HIDE, this.hide, this); game.off(Game.EVENT_SHOW, this.show, this);
     if (this.drawReady) director.off(Director.EVENT_AFTER_DRAW, this.drawReady);
     if (active === this) active = null;

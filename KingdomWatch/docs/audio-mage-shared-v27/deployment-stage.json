@@ -1,0 +1,21 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-mage-shared-v27-20261017-215650",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-spells-v26-20261017-212836",
+  "entryVersion": "1792245362",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=audio-mage-shared-v27-1792245362",
+  "preview": "https://kingdom-watch.pages.dev/previews/audio-mage-shared-v27/",
+  "priorPreviewFilesPreserved": 780,
+  "manualAcceptance": "Pending user; no game/browser/audio playback performed",
+  "deployment": "https://5db6a12f.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHTTPVerification": {
+    "game": 200,
+    "preview": 200,
+    "entry": "index.30800.js?v=1792245362",
+    "previewMarker": "AUDIO V27",
+    "gameExecuted": false
+  }
+}

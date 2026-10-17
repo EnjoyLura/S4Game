@@ -16,7 +16,7 @@ import { COMIC, comicArt, comicButton, comicDialog, comicMark } from './ComicUI'
 import { ResourceBar, ResourceCurrency } from './ResourceBar';
 import { buildShop } from './pages/ShopPage';
 import { buildHeroes } from './pages/HeroPage';
-import { buildLevels, closeLevelPreparation } from './pages/LevelsPage';
+import { buildLevels, closeLevelPreparation, selectedCampaignChapter } from './pages/LevelsPage';
 import { buildUpgrade } from './pages/UpgradePage';
 import { buildBase } from './pages/BasePage';
 import { levelReturnReady } from './BattleEntry';
@@ -43,7 +43,7 @@ export class MainUI extends Component {
   private tab = flow.mainTab;
 
   start(): void {
-    GameAudio.enter('camp');
+    GameAudio.enter('camp', selectedCampaignChapter());
     // 视口变化（手机地址栏收起/展开、旋转等）：LO.half 只在启动时算过一次，画布被
     // Cocos 自动重适配后旧值全部失锚 → 重算 initLayout 并整屏重建，布局始终贴合当前可视区
     view.on('canvas-resize', this.queueRelayout, this);

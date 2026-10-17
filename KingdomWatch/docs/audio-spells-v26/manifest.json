@@ -1,0 +1,523 @@
+{
+  "version": "v26",
+  "files": [
+    {
+      "file": "fire_1.wav",
+      "cue": "fire",
+      "label": "火焰普攻",
+      "seconds": 0.28,
+      "bytes": 24740,
+      "sha256": "416b4f54c1d15cc5aaf01e2f6ac469e924605e6bba6f5f9eb822bfda9bc22dc9",
+      "peakDBFS": -12.8,
+      "activeRMSDBFS": -26.2,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Fireball Launch_01.wav",
+          "sha256": "45b973288d444310ad2bf77d4cca52a685360bbc7f610db6e84e8eb77518ba5a",
+          "author": "JC Sounds",
+          "start": 0.3,
+          "seconds": 0.28,
+          "filters": "highpass=f=65:p=2,highshelf=f=4200:g=-3,lowpass=f=8500:p=2",
+          "attack": 0.012,
+          "release": 0.055,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "fire_2.wav",
+      "cue": "fire",
+      "label": "火焰普攻",
+      "seconds": 0.28,
+      "bytes": 24740,
+      "sha256": "8d502186196b7642fae1daef1321afcd8a01f02190b410c60e37cd936e17ae34",
+      "peakDBFS": -12.36,
+      "activeRMSDBFS": -26.2,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Fireball Launch_02.wav",
+          "sha256": "d82cd24ae6d6bb39b2ac1fe5c1a33b3dec9794b1f740bc53a541ae39d336ce44",
+          "author": "JC Sounds",
+          "start": 0.3,
+          "seconds": 0.28,
+          "filters": "highpass=f=65:p=2,highshelf=f=4200:g=-3,lowpass=f=8500:p=2",
+          "attack": 0.012,
+          "release": 0.055,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "fire_3.wav",
+      "cue": "fire",
+      "label": "火焰普攻",
+      "seconds": 0.28,
+      "bytes": 24740,
+      "sha256": "054dc798452abb65204ae480f687c38cf816e1f31d0664a36391d3430e3d28ee",
+      "peakDBFS": -11.7,
+      "activeRMSDBFS": -26.2,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Fireball Launch_03.wav",
+          "sha256": "ea43403577ec255fd61524cac4bbac4d132e0e5a952d931a1e451cac89c822b2",
+          "author": "JC Sounds",
+          "start": 0.3,
+          "seconds": 0.28,
+          "filters": "highpass=f=65:p=2,highshelf=f=4200:g=-3,lowpass=f=8500:p=2",
+          "attack": 0.012,
+          "release": 0.055,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "fire_heavy.wav",
+      "cue": "fireHeavy",
+      "label": "火焰重击",
+      "seconds": 0.34,
+      "bytes": 30032,
+      "sha256": "d6fdd0effb3e9232cc8e32dd776cb53ce78799b2d261c1b690c090ea190a5cab",
+      "peakDBFS": -12.36,
+      "activeRMSDBFS": -25.4,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Fireball Impact_01.wav",
+          "sha256": "117df27398321a5454dc1f502a481db5efbf525cbf7a08c9632641ccbc9877c5",
+          "author": "JC Sounds",
+          "start": 0,
+          "seconds": 0.34,
+          "filters": "highpass=f=65:p=2,highshelf=f=4200:g=-3,lowpass=f=8500:p=2",
+          "attack": 0.005,
+          "release": 0.07,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "fire_skill.wav",
+      "cue": "fireSkill",
+      "label": "火焰技能",
+      "seconds": 0.48,
+      "bytes": 42380,
+      "sha256": "bdf9d3ac6b84164283308c24bf496b544d826fb2fdf17ebfc918338b266f96b2",
+      "peakDBFS": -10.34,
+      "activeRMSDBFS": -25.0,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Fireball Launch_02.wav",
+          "sha256": "d82cd24ae6d6bb39b2ac1fe5c1a33b3dec9794b1f740bc53a541ae39d336ce44",
+          "author": "JC Sounds",
+          "start": 0.19999999999999998,
+          "seconds": 0.48,
+          "filters": "highpass=f=65:p=2,highshelf=f=4200:g=-3,lowpass=f=8500:p=2",
+          "attack": 0.012,
+          "release": 0.08,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "fire_ult.wav",
+      "cue": "fireUlt",
+      "label": "火焰大招",
+      "seconds": 0.78,
+      "bytes": 68840,
+      "sha256": "22eb45457ada65ad6766b99dae45d54d8fc3d1ad3ae663316b899a7e0b712059",
+      "peakDBFS": -9.03,
+      "activeRMSDBFS": -23.8,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Fireball Launch_01.wav",
+          "sha256": "45b973288d444310ad2bf77d4cca52a685360bbc7f610db6e84e8eb77518ba5a",
+          "author": "JC Sounds",
+          "start": 0,
+          "seconds": 0.78,
+          "filters": "highpass=f=65:p=2,highshelf=f=4200:g=-3,lowpass=f=8500:p=2",
+          "attack": 0.015,
+          "release": 0.13,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "thunder_1.wav",
+      "cue": "thunder",
+      "label": "雷电普攻",
+      "seconds": 0.25,
+      "bytes": 22094,
+      "sha256": "628a4b14d3a244d577a2120d88c02e071caa1d2ab3542a19c070590033c67c68",
+      "peakDBFS": -15.2,
+      "activeRMSDBFS": -27.0,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Electric Spell_Launch_01.wav",
+          "sha256": "b6826f798eab14cc6c385f4f8310da770e945fde01aa5419c0a6ca44022836f7",
+          "author": "JC Sounds",
+          "start": 0.2,
+          "seconds": 0.25,
+          "filters": "highpass=f=65:p=2,highshelf=f=3000:g=-6,lowpass=f=6500:p=2",
+          "attack": 0.012,
+          "release": 0.055,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "thunder_2.wav",
+      "cue": "thunder",
+      "label": "雷电普攻",
+      "seconds": 0.25,
+      "bytes": 22094,
+      "sha256": "a6b80a40063da87ce7843b5aacfefcfcd353b0c328252e00232a2924d9b27fc3",
+      "peakDBFS": -14.17,
+      "activeRMSDBFS": -27.0,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Electric Spell_Launch_02.wav",
+          "sha256": "2d13b96766bb74a2022663e9333e0df07b2bdd680cec1cf61f9c29a89dcb3d35",
+          "author": "JC Sounds",
+          "start": 0.2,
+          "seconds": 0.25,
+          "filters": "highpass=f=65:p=2,highshelf=f=3000:g=-6,lowpass=f=6500:p=2",
+          "attack": 0.012,
+          "release": 0.055,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "thunder_3.wav",
+      "cue": "thunder",
+      "label": "雷电普攻",
+      "seconds": 0.25,
+      "bytes": 22094,
+      "sha256": "790f0292ca208ae5ddc3e4c65788657674919251648c94a8ba6f972ad903f294",
+      "peakDBFS": -14.63,
+      "activeRMSDBFS": -27.0,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Electric Spell_Launch_03.wav",
+          "sha256": "8e01d5b3fba4c9d53c99c957b1fc76e235f729f561cbebd4f4df3a1bead97c95",
+          "author": "JC Sounds",
+          "start": 0.2,
+          "seconds": 0.25,
+          "filters": "highpass=f=65:p=2,highshelf=f=3000:g=-6,lowpass=f=6500:p=2",
+          "attack": 0.012,
+          "release": 0.055,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "thunder_heavy.wav",
+      "cue": "thunderHeavy",
+      "label": "雷电重击",
+      "seconds": 0.34,
+      "bytes": 30032,
+      "sha256": "559dabf5f1aa3632459d5d8e0836ad9547f40f80252191356f1f78056034b479",
+      "peakDBFS": -11.03,
+      "activeRMSDBFS": -25.4,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Electric Spell_Hit_01.wav",
+          "sha256": "a17a9875ddbae68d5150f28b6a5bcf08f811883b27f5d80266acb262e307893e",
+          "author": "JC Sounds",
+          "start": 0,
+          "seconds": 0.34,
+          "filters": "highpass=f=65:p=2,highshelf=f=3000:g=-6,lowpass=f=6500:p=2",
+          "attack": 0.005,
+          "release": 0.07,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "thunder_skill.wav",
+      "cue": "thunderSkill",
+      "label": "雷电技能",
+      "seconds": 0.48,
+      "bytes": 42380,
+      "sha256": "f83bcebabb7bb9e9d116a4531162c9cf92ab9bff1a0c60b5eb9a1e980e63e4b8",
+      "peakDBFS": -11.9,
+      "activeRMSDBFS": -25.0,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Electric Spell_Launch_02.wav",
+          "sha256": "2d13b96766bb74a2022663e9333e0df07b2bdd680cec1cf61f9c29a89dcb3d35",
+          "author": "JC Sounds",
+          "start": 0.1,
+          "seconds": 0.48,
+          "filters": "highpass=f=65:p=2,highshelf=f=3000:g=-6,lowpass=f=6500:p=2",
+          "attack": 0.012,
+          "release": 0.08,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "thunder_ult.wav",
+      "cue": "thunderUlt",
+      "label": "雷电大招",
+      "seconds": 0.78,
+      "bytes": 68840,
+      "sha256": "15104b17d65a61a1845715ac15dcea48410e51bf45a51fbe3b1291f50025e3a4",
+      "peakDBFS": -9.81,
+      "activeRMSDBFS": -23.8,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Electric Spell_Launch_01.wav",
+          "sha256": "b6826f798eab14cc6c385f4f8310da770e945fde01aa5419c0a6ca44022836f7",
+          "author": "JC Sounds",
+          "start": 0,
+          "seconds": 0.78,
+          "filters": "highpass=f=65:p=2,highshelf=f=3000:g=-6,lowpass=f=6500:p=2",
+          "attack": 0.015,
+          "release": 0.13,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "frost_1.wav",
+      "cue": "frost",
+      "label": "冰霜普攻",
+      "seconds": 0.3,
+      "bytes": 26504,
+      "sha256": "46f613c3569b245ce020954b60d0b23f1659eacae02dfc042e7a4ef136284f53",
+      "peakDBFS": -11.84,
+      "activeRMSDBFS": -26.5,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Ice Shard Projectile_Launch_01.wav",
+          "sha256": "5efe35f56726ea7868674be9cb4eef5f95fe7533c037687d899421bbe5af58a2",
+          "author": "JC Sounds",
+          "start": 0.14,
+          "seconds": 0.3,
+          "filters": "highpass=f=65:p=2,highshelf=f=4000:g=-5,lowpass=f=8000:p=2",
+          "attack": 0.012,
+          "release": 0.055,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "frost_2.wav",
+      "cue": "frost",
+      "label": "冰霜普攻",
+      "seconds": 0.3,
+      "bytes": 26504,
+      "sha256": "1b27edca764fe8b9f79c568c287a16776010ed88d8a843d0ab8b586b38abd052",
+      "peakDBFS": -10.82,
+      "activeRMSDBFS": -26.5,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Ice Shard Projectile_Launch_02.wav",
+          "sha256": "087293b26ccd3ceb5308a8bba8a02c99921464955f89766183369d22362b46d5",
+          "author": "JC Sounds",
+          "start": 0.14,
+          "seconds": 0.3,
+          "filters": "highpass=f=65:p=2,highshelf=f=4000:g=-5,lowpass=f=8000:p=2",
+          "attack": 0.012,
+          "release": 0.055,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "frost_3.wav",
+      "cue": "frost",
+      "label": "冰霜普攻",
+      "seconds": 0.3,
+      "bytes": 26504,
+      "sha256": "bb4109ee20cdd44288a6ff9e6e29f42729e60ec0562adc0df7a19c3b46a8b69d",
+      "peakDBFS": -13.43,
+      "activeRMSDBFS": -26.5,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Ice Shard Projectile_Launch_03.wav",
+          "sha256": "763a6389c0c8b364e58cb3d46b3692a376da2b4ef7147aa3efafd9ccaa58a337",
+          "author": "JC Sounds",
+          "start": 0.14,
+          "seconds": 0.3,
+          "filters": "highpass=f=65:p=2,highshelf=f=4000:g=-5,lowpass=f=8000:p=2",
+          "attack": 0.012,
+          "release": 0.055,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "frost_heavy.wav",
+      "cue": "frostHeavy",
+      "label": "冰霜重击",
+      "seconds": 0.34,
+      "bytes": 30032,
+      "sha256": "c684db072ed6d1823bc21436232617a27eef973a6df1065ae07e785db5f06147",
+      "peakDBFS": -11.44,
+      "activeRMSDBFS": -25.4,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Ice Shard  Projectile_Impact_01.wav",
+          "sha256": "48a2496a206e2105cf9557994d1633dc35553a6f3f062988c03e561015ada148",
+          "author": "JC Sounds",
+          "start": 0,
+          "seconds": 0.34,
+          "filters": "highpass=f=65:p=2,highshelf=f=4000:g=-5,lowpass=f=8000:p=2",
+          "attack": 0.005,
+          "release": 0.07,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "frost_skill.wav",
+      "cue": "frostSkill",
+      "label": "冰霜技能",
+      "seconds": 0.48,
+      "bytes": 42380,
+      "sha256": "ed807d44ad7fb53b88c09bb24941e79c98d23df1c5fc2564f5bca48d02875e9f",
+      "peakDBFS": -8.27,
+      "activeRMSDBFS": -25.0,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Ice Shard Projectile_Launch_02.wav",
+          "sha256": "087293b26ccd3ceb5308a8bba8a02c99921464955f89766183369d22362b46d5",
+          "author": "JC Sounds",
+          "start": 0.04000000000000001,
+          "seconds": 0.48,
+          "filters": "highpass=f=65:p=2,highshelf=f=4000:g=-5,lowpass=f=8000:p=2",
+          "attack": 0.012,
+          "release": 0.08,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "frost_ult.wav",
+      "cue": "frostUlt",
+      "label": "冰霜大招",
+      "seconds": 0.78,
+      "bytes": 68840,
+      "sha256": "08c77a6bbbc04319de19fb1ab7e8e6d01d72ecbdb6329ebef9f42ed412b28532",
+      "peakDBFS": -8.0,
+      "activeRMSDBFS": -24.36,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-spells-v26/sources/JC Sounds/Fantasy SFX Pack Vol 1/Single_Fantasy SFX Pack Vol 1_Ice Shard Projectile_Launch_01.wav",
+          "sha256": "5efe35f56726ea7868674be9cb4eef5f95fe7533c037687d899421bbe5af58a2",
+          "author": "JC Sounds",
+          "start": 0,
+          "seconds": 0.78,
+          "filters": "highpass=f=65:p=2,highshelf=f=4000:g=-5,lowpass=f=8000:p=2",
+          "attack": 0.015,
+          "release": 0.13,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    },
+    {
+      "file": "hit_common.wav",
+      "cue": "hit",
+      "label": "普通伤害通用受击",
+      "seconds": 0.13,
+      "bytes": 11510,
+      "sha256": "ed93973bad2067c5f0b1c18f98d43caac254dfe47d56fc7f4d76a41f5b41b71b",
+      "peakDBFS": -15.51,
+      "activeRMSDBFS": -28.0,
+      "clippedSamples": 0,
+      "layers": [
+        {
+          "path": "docs/audio-kingdom-v24/sources/Sonniss2015/NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq1.15 Hit #3 96 HK1.wav",
+          "sha256": "4dbf0c4376cf7a07ad9991cba5032ade8dcb5fe1010557c20014355d2149e942",
+          "author": "NoizBoy",
+          "start": 0.08679591836734693,
+          "seconds": 0.13,
+          "filters": "highpass=f=65:p=2,highshelf=f=3500:g=-4,lowpass=f=6000:p=2",
+          "attack": 0.003,
+          "release": 0.045,
+          "rate": 1,
+          "layered": false
+        }
+      ],
+      "firstSample": 0,
+      "lastSample": 0
+    }
+  ],
+  "mageFiles": 18,
+  "commonHitFiles": 1,
+  "bytes": 655280,
+  "audioAuditioned": false,
+  "design": "One source per cue; original speed; no instruments, synthetic notes, extra layers or reverb"
+}

@@ -1,0 +1,16 @@
+{
+  "newMusic": [
+    {
+      "resource": "audio/v29/bgm_forest",
+      "native": "assets/resources/native/b3/b30e02b3-c7d8-4d0f-8af8-b1a8d0aadcb5.37656.mp3",
+      "sha256": "1e1ab08d88ae898773c5d9c79ef82694c1f3a0dd2a46dff7ba41140e16b0b9fd"
+    },
+    {
+      "resource": "audio/v29/bgm_lair",
+      "native": "assets/resources/native/94/94a5dabb-2b3d-4f56-bc06-e65122542f64.b1391.mp3",
+      "sha256": "e4ab82968cb406e0860889609d69f0c4ede179330d440fd4045c9aabb1c2b89a"
+    }
+  ],
+  "nativePathUUIDHashMatch": true,
+  "noGameOrAudioPlaybackPerformed": true
+}

@@ -1,0 +1,36 @@
+{
+  "changedOriginals": [
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/core/AudioCatalog.ts",
+    "assets/scripts/core/GameAudio.ts",
+    "assets/scripts/core/Sfx.ts",
+    "assets/resources/audio/README.txt",
+    "assets/resources/audio/v1/CREDITS.txt"
+  ],
+  "unchangedOriginals": 649,
+  "allPriorAudioAndMetadataUnchanged": true,
+  "preservedCueConfigurations": [
+    "bow",
+    "crossbow",
+    "snipe",
+    "skill",
+    "bowUlt",
+    "pierceHeavy",
+    "crit",
+    "gateSlide",
+    "gateClose"
+  ],
+  "oneFixedOriginalClick": true,
+  "commonDamageOnlyFromActualPositiveOrdinaryDamage": true,
+  "gameplayCodeOtherwiseUnchanged": true,
+  "newMageFiles": 18,
+  "newCommonHitFiles": 1,
+  "oneSourcePerNewFile": true,
+  "totalVoiceBudget": 8,
+  "commonContactGapSeconds": 0.18,
+  "commonContactVoiceLimit": 1,
+  "typeDiagnosticsBefore": 10,
+  "typeDiagnosticsAfter": 10,
+  "newTypeDiagnostics": 0,
+  "noTestsGameBrowserOrAudioPlaybackPerformed": true
+}

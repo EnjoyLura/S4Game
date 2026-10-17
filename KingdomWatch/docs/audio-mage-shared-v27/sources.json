@@ -1,0 +1,102 @@
+{
+  "swish": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Hits Whoosh/Fast Action Swish_HW 05.wav",
+    "original": "Mechanical Wave - Hits Whoosh/Fast Action Swish_HW 05.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 2770120616,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "2ef515c463c04c2d518afb74d44336f51ed0912c46c9e00431a3ed13f927f87d"
+  },
+  "swing": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Hits Whoosh/Action Swish_HW 02.wav",
+    "original": "Mechanical Wave - Hits Whoosh/Action Swish_HW 02.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 1203586015,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "1eb3e50adffabcc46ca3ed30f520eb19b234f9808acf4e760ec9ea8391e9b609"
+  },
+  "rock": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Rock Brick and Dirt/Hit Rock Debris_RBD 02.wav",
+    "original": "Mechanical Wave - Rock Brick and Dirt/Hit Rock Debris_RBD 02.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 675058260,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "b8fc22424f383573089facf17779315175b6b47c5d517be5865a183692aac5de"
+  },
+  "rockdrop": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Rock Brick and Dirt/Drop Rock On Rock Debris_RBD 03.wav",
+    "original": "Mechanical Wave - Rock Brick and Dirt/Drop Rock On Rock Debris_RBD 03.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 4200564539,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "d52813a926fb68e7dd9e6b5712c857c6369e2da079ea4b5f9ee49b7e2e282383"
+  },
+  "debris": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Mechanical Wave - Rock Brick and Dirt/Debris Brick_RBD 02.wav",
+    "original": "Mechanical Wave - Rock Brick and Dirt/Debris Brick_RBD 02.wav",
+    "author": "Mechanical Wave",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 2805017344,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "93c2e7a3b0993b859d50a7562e09d4fb4c90c448d0de78da324889b14684a7a1"
+  },
+  "iceblock": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/Eiravaein Works - Vaeyan I/IceBlocks,impact,cracked,tinypieces,scatter,slide,concrete,chunky,ambiance.M.wav",
+    "original": "Eiravaein Works - Vaeyan I/IceBlocks,impact,cracked,tinypieces,scatter,slide,concrete,chunky,ambiance.M.wav",
+    "author": "Eiravaein Works",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 308892689,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "afda7f4bfd44dac48b8f4cdbc39e4f6966700ef32502dfedf5ab88fccc073db4"
+  },
+  "hit2": {
+    "path": "docs/audio-kingdom-v24/sources/Sonniss2015/NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq1.15 Hit #3 96 HK1.wav",
+    "original": "NoizBoy - Hong Kong Action Kit - Hit Kit #1/Seq1.15 Hit #3 96 HK1.wav",
+    "author": "NoizBoy",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 3323540043,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "4dbf0c4376cf7a07ad9991cba5032ade8dcb5fe1010557c20014355d2149e942"
+  },
+  "rumble": {
+    "path": "docs/audio-mage-shared-v27/sources/Thunder_Rumble_Mid_Fienup_024.wav",
+    "original": "Soundopolis - Natures Fury_Thunder/Thunder_Rumble_Mid_Fienup_024.wav",
+    "author": "Soundopolis / David Fienup",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 3276678628,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "9b469fd74b5dd833df0d958082cd4e4276be98595687dd24ec1517f7b25c019f"
+  },
+  "deep": {
+    "path": "docs/audio-mage-shared-v27/sources/Thunder_Rumble_Deep_Fienup_003.wav",
+    "original": "Soundopolis - Natures Fury_Thunder/Thunder_Rumble_Deep_Fienup_003.wav",
+    "author": "Soundopolis / David Fienup",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 51116704,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "0ae104656721f9e15a7ba1a2230622c19ae81a8720e76bed44ffbd720d9836c6"
+  },
+  "boom": {
+    "path": "docs/audio-mage-shared-v27/sources/EFX EXT Mortar Explosion 08.wav",
+    "original": "Coll Anderson - Guns/EFX EXT Mortar Explosion 08.wav",
+    "author": "Coll Anderson",
+    "url": "https://ftpmirror.your.org/pub/misc/sonniss/sonniss.zip",
+    "archiveCRC32": 749971230,
+    "license": "Sonniss GameAudioGDC EULA v2.0",
+    "licenseURL": "https://sonniss.com/gdc-bundle-license/",
+    "sha256": "d70ac8cb469bdf23c2a25d2f22c06a5bf215e32f8bc52abc2f4881798def4294"
+  }
+}

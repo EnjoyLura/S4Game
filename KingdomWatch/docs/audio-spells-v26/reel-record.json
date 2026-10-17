@@ -1,0 +1,55 @@
+{
+  "scenes": [
+    {
+      "id": "pyro",
+      "title": "火法师",
+      "detail": "单一火球素材 · 短促喷焰",
+      "seconds": 6.7,
+      "video": "media/pyro.mp4",
+      "poster": "media/pyro.jpg",
+      "sha256": "669737c54a1a7ac7ce1945cf2a79531a3a7f5f510777f1f8fd6e6e217f8935fd"
+    },
+    {
+      "id": "volt",
+      "title": "雷法师",
+      "detail": "单一电击素材 · 短尾收束",
+      "seconds": 6.7,
+      "video": "media/volt.mp4",
+      "poster": "media/volt.jpg",
+      "sha256": "21668cc9ba322c690a0b4c2641ee58ab91eb4a873ad95010a07a334de28fbcfe"
+    },
+    {
+      "id": "mora",
+      "title": "冰法师",
+      "detail": "单一冰法术素材 · 结晶发射",
+      "seconds": 6.7,
+      "video": "media/mora.mp4",
+      "poster": "media/mora.jpg",
+      "sha256": "38adc2ee88c6d6a619108118058a342f7acd9a8f09c02824b19e75a57b8221e6"
+    },
+    {
+      "id": "click",
+      "title": "统一点击声",
+      "detail": "连续五次使用同一个第一条点击样本",
+      "seconds": 3.8,
+      "video": "media/click.mp4",
+      "poster": "media/click.jpg",
+      "sha256": "aa00cc46e2493711a0d744f3bfdc41c79501d48421aaaa9d44164551f7620343"
+    },
+    {
+      "id": "hit",
+      "title": "普通伤害 · 通用受击",
+      "detail": "五位英雄共用 · 无元素附加层",
+      "seconds": 3.2,
+      "video": "media/hit.mp4",
+      "poster": "media/hit.jpg",
+      "sha256": "1279a320943383cfb9c792614f9fe81714e42d6465e7b3e381bad895dffeb5c0"
+    }
+  ],
+  "totalSeconds": 27.1,
+  "mageFiles": 18,
+  "commonHitFiles": 1,
+  "clickFiles": 1,
+  "gameRecording": false,
+  "audioAuditioned": false
+}

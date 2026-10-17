@@ -429,6 +429,7 @@ export class Monster {
     const vulnerability = Math.max(this.vulnT > 0 ? this.vulnAmp : 0, this.hunterMarkT > 0 ? this.hunterMarkAmp : 0);
     if (vulnerability > 0) amount *= 1 + vulnerability;
     this.hp -= amount;
+    if (amount > 0 && !heavy && !crit && killerId !== 'burn' && killerId !== 'gm') Sfx.play('hit');
     this.ctx.dmgNumber(this.x, this.y + this.def.radius * 2.6,
       String(Math.round(amount)), crit ? '#FF3030' : '#FFFFFF', crit, { target: this, amount, periodic: killerId === 'burn' });
     this.ctx.impact?.(this.x, this.y + this.def.radius * 0.4, killerId, heavy || crit || this.hp <= 0 && !!this.def.elite, impactAngle);

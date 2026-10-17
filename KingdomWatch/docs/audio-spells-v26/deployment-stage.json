@@ -1,0 +1,24 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-spells-v26-20261017-212836",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-mages-ui-v25-20261017-183407",
+  "entryVersion": "1792243638",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=audio-spells-v26-1792243638",
+  "preview": "https://kingdom-watch.pages.dev/previews/audio-spells-v26/",
+  "priorPreviewFilesPreserved": 765,
+  "manualAcceptance": "Pending user; no game/browser/audio playback performed",
+  "deployment": "https://1f2e19ee.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "uploadedFiles": 54,
+  "alreadyUploadedFiles": 2490,
+  "totalObjects": 2544,
+  "staticHttpCheck": {
+    "gameStatus": 200,
+    "gameHasNewEntry": true,
+    "previewStatus": 200,
+    "previewContainsV26": true,
+    "method": "Static curl HTTP GET; no browser, game scripts or audio playback"
+  }
+}

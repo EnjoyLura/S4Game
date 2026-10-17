@@ -1,0 +1,23 @@
+{
+  "newAssets": [
+    {
+      "resource": "audio/v28/meteor_ult",
+      "native": "assets/resources/native/22/22a9801d-3051-46a4-a1a3-72e4b62f89cd.27cef.wav",
+      "sha256": "615917392a9b1962df03e69c1111c507548343e3a707688a19755b57707735b8"
+    },
+    {
+      "resource": "audio/v28/thunder_ult",
+      "native": "assets/resources/native/7d/7d3cec3c-ee52-427d-bce8-5cd4ce39257e.30ecd.wav",
+      "sha256": "94e462b73d73d2cb7029e491e71fed289f86d9f081f2d5e848664ced4a80adfb"
+    },
+    {
+      "resource": "audio/v28/ice_ult",
+      "native": "assets/resources/native/66/664b813f-09c0-4386-9cd9-a4b7ad2ca21c.e0640.wav",
+      "sha256": "4ecd6e46f48558fe6a819de990f9bc5db384c680d1068c56a3bb4886a760ff32"
+    }
+  ],
+  "sourceBytesPreserved": true,
+  "nativePathUUIDHashMatch": true,
+  "commonCastClickAndHitPreserved": true,
+  "noGameOrAudioPlaybackPerformed": true
+}

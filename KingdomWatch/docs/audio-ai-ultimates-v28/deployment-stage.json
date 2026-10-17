@@ -1,0 +1,18 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-ai-ultimates-v28-20261017-224720",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-mage-shared-v27-20261017-215650",
+  "entryVersion": "1792248418",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=audio-ai-ultimates-v28-1792248418",
+  "priorPreviewFilesPreserved": 793,
+  "manualAcceptance": "User manual audition; no game/browser/audio playback performed",
+  "deployment": "https://a675ddc9.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHTTPVerification": {
+    "game": 200,
+    "entry": "index.06305.js?v=1792248418",
+    "gameExecuted": false
+  }
+}

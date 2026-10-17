@@ -1,0 +1,5 @@
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-spells-v26/preview/media/pyro.mp4'
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-spells-v26/preview/media/volt.mp4'
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-spells-v26/preview/media/mora.mp4'
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-spells-v26/preview/media/click.mp4'
+file 'D:/AI/S4Game/KingdomWatch/docs/audio-spells-v26/preview/media/hit.mp4'

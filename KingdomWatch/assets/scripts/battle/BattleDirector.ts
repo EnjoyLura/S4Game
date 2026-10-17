@@ -10,6 +10,7 @@ import { expNeed, LO, PASSIVE_XP_INTERVAL, passiveXpGain, REVIVE_RATIO, starOf }
 import { bus, EVT, WaveThreat } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
 import { GameAudio } from '../core/GameAudio';
+import { campaignChapter } from '../config/Campaign';
 import { loadSave, saveSave } from '../core/SaveData';
 import { starKey, squadList, unlockCodex, advanceUnlock, equipAgg, heroState, heroStats, heroBtAgg, keepHp, keepShield } from '../core/GameData';
 import { grantStageMaterials } from '../core/StageLoot';
@@ -104,7 +105,7 @@ export class BattleDirector extends Component {
   private fpsN = 0;
 
   start(): void {
-    GameAudio.enter('battle');
+    GameAudio.enter('battle', campaignChapter(flow.levelId).number);
     const field = new Node('Field');
     field.setParent(this.node);
     this.field = field;

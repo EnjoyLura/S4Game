@@ -1,0 +1,10 @@
+
+
+Chapter music v29 — The Cynic Project / Alex Smith (cynicmusic)
+Dark Forest Theme — https://opengameart.org/node/80219
+Battle Theme B for RPG — https://opengameart.org/content/battle-theme-b-for-rpg
+CC0 1.0 — https://creativecommons.org/publicdomain/zero/1.0/
+Attribution: The Cynic Project / cynicmusic.com / pixelsphere.org
+Modifications: trim encoder/room silence, 0.7-second loop overlap, loudness normalization to -18 LUFS target, stereo MP3 encoding.
+Chapter 1 retains the existing Town Theme RPG and Battle Theme A recordings and credits.
+No author endorsement is implied. Sources, saved author/license pages and SHA256: docs/chapter-music-v29/.

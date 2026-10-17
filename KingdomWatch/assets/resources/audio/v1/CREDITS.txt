@@ -54,3 +54,47 @@ https://sonniss.com/gdc-bundle-license/
 Modifications: excerpt selection, filtering, pitch, fades, layering and scalar level matching.
 Recorded sources, exact recipes and hashes: docs/audio-mages-ui-v25/.
 No standalone sound-library redistribution. No author/reference-game endorsement.
+
+
+Elemental spell and common-contact audio v26 (2026-10-17)
+Fantasy SFX Pack Vol 1 — JC Sounds. CC BY 4.0 — Credit: JC Sounds.
+https://opengameart.org/content/jc-sounds-fantasy-sfx-pack-vol-1
+https://creativecommons.org/licenses/by/4.0/
+18 elemental spell edits: one original source per file, original playback speed,
+excerpt selection, mono conversion, gentle EQ, fades and level matching.
+The author has not endorsed this game or the modifications.
+Common normal-damage contact: NoizBoy / Hong Kong Action Kit, official Sonniss 2015 free bundle.
+https://sonniss.com/gameaudiogdc/ — GameAudioGDC EULA v2.0.
+Existing archer/crossbow samples are unchanged. UI uses only the first existing v24 click.
+Source archive, attribution snapshot, source/output hashes and exact recipes: docs/audio-spells-v26/.
+
+
+Mage audio v27 — shared casting and physical ultimate contacts
+Mechanical Wave — Fast Action Swish_HW 05, Hit Rock Debris_RBD 02
+Soundopolis / David Fienup — Thunder_Rumble_Mid_Fienup_024
+Coll Anderson — EFX EXT Mortar Explosion 08
+Eiravaein Works — IceBlocks impact cracked tiny pieces scatter slide concrete
+Source: Sonniss GameAudioGDC 2015, https://sonniss.com/gameaudiogdc/
+License: GameAudioGDC EULA v2.0, https://sonniss.com/gdc-bundle-license/
+Editing: excerpts, original playback speed, EQ, fades, mono conversion and levels; meteor combines explosion and rock recordings.
+Authors have not endorsed the game. Original files, SHA256, archive CRC and per-cue recipes: docs/audio-mage-shared-v27/.
+Standalone source redistribution is not permitted; public previews are synchronized audiovisual reels.
+
+
+Mage ultimate audio v28 — user-provided AI-generated video
+Source: user's generated-elements-8s.mp4, retained in docs/audio-ai-video-r1/source/.
+Exact user-selected excerpts: meteor 0–2.3s, thunder 2.3–4.3s, ice 4.3–6s.
+Production files preserve the selected WAV bytes; only game playback gains and repeat gaps are changed.
+Generation platform and model were not specified by the user. No third-party recording credit is asserted for these three new clips.
+Shared casting and all other retained recordings keep their existing credits above.
+Provenance, SHA256, cut boundaries and configuration: docs/audio-ai-ultimates-v28/.
+
+
+Chapter music v29 — The Cynic Project / Alex Smith (cynicmusic)
+Dark Forest Theme — https://opengameart.org/node/80219
+Battle Theme B for RPG — https://opengameart.org/content/battle-theme-b-for-rpg
+CC0 1.0 — https://creativecommons.org/publicdomain/zero/1.0/
+Attribution: The Cynic Project / cynicmusic.com / pixelsphere.org
+Modifications: trim encoder/room silence, 0.7-second loop overlap, loudness normalization to -18 LUFS target, stereo MP3 encoding.
+Chapter 1 retains the existing Town Theme RPG and Battle Theme A recordings and credits.
+No author endorsement is implied. Sources, saved author/license pages and SHA256: docs/chapter-music-v29/.

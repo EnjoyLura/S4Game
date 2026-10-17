@@ -1,0 +1,24 @@
+[
+  {
+    "key": "forest",
+    "name": "Dark Forest Theme",
+    "author": "The Cynic Project / Alex Smith (cynicmusic)",
+    "page": "https://opengameart.org/node/80219",
+    "url": "https://opengameart.org/sites/default/files/GameMusic_ForestTheme_24_0.mp3",
+    "path": "docs/chapter-music-v29/sources/forest.mp3",
+    "sha256": "c9e83d01741e97a462c44963aff81645a9c2aa3a7a33e5849114a1399d1b0914",
+    "license": "CC0-1.0",
+    "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/"
+  },
+  {
+    "key": "lair",
+    "name": "Battle Theme B for RPG",
+    "author": "The Cynic Project / Alex Smith (cynicmusic)",
+    "page": "https://opengameart.org/content/battle-theme-b-for-rpg",
+    "url": "https://opengameart.org/sites/default/files/battleThemeB.mp3",
+    "path": "docs/chapter-music-v29/sources/lair.mp3",
+    "sha256": "8476ce29692d8d317a7d79628af967448ec09d9f66efe692a597336c5cea2629",
+    "license": "CC0-1.0",
+    "licenseURL": "https://creativecommons.org/publicdomain/zero/1.0/"
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "changedOriginals": [
+    "assets/scripts/core/AudioCatalog.ts",
+    "assets/resources/audio/README.txt",
+    "assets/resources/audio/v1/CREDITS.txt"
+  ],
+  "unchangedOriginals": 700,
+  "allPriorAudioAndMetadataUnchanged": true,
+  "allOtherRuntimeScriptsUnchanged": true,
+  "onlyThreeUltimateCueConfigurationsChanged": true,
+  "exactUserClipsCopied": true,
+  "typeDiagnosticsBefore": 10,
+  "typeDiagnosticsAfter": 10,
+  "newTypeDiagnostics": 0,
+  "gameBrowserTestsAndAudioPlaybackPerformed": false
+}

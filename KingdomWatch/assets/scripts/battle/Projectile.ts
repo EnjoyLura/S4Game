@@ -648,7 +648,8 @@ export class ProjectileManager {
     if (this.impacts) this.impacts.blast(sp.x, sp.y, sp.heroId, radius);
     else this.boomFx(sp.x, sp.y, radius);
     this.parts?.burst(sp.x, sp.y, sp.color, 7, 230, Math.PI / 2);
-    Sfx.impact(sp.heroId, true);
+    if (sp.heroId === 'pyro' && sp.ult) Sfx.ultimateImpact(sp.heroId);
+    else Sfx.impact(sp.heroId, true);
     if (primary) bus.emit(EVT.HIT_STOP);
   }
 

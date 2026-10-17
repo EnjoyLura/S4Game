@@ -1,0 +1,33 @@
+{
+  "changedOriginals": [
+    "assets/scripts/battle/FrostUltimateVFX.ts",
+    "assets/scripts/battle/Hero.ts",
+    "assets/scripts/battle/Projectile.ts",
+    "assets/scripts/core/AudioCatalog.ts",
+    "assets/scripts/core/GameAudio.ts",
+    "assets/scripts/core/Sfx.ts",
+    "assets/resources/audio/README.txt",
+    "assets/resources/audio/v1/CREDITS.txt"
+  ],
+  "unchangedOriginals": 686,
+  "priorAudioAndMetadataUnchanged": 573,
+  "preservedCueConfigurations": [
+    "bow",
+    "crossbow",
+    "snipe",
+    "skill",
+    "bowUlt",
+    "pierceHeavy",
+    "crit",
+    "gateSlide",
+    "gateClose",
+    "ui",
+    "hit"
+  ],
+  "gameplayOtherwiseUnchanged": true,
+  "newFiles": 4,
+  "newTypeDiagnostics": 0,
+  "typeDiagnosticsBefore": 10,
+  "typeDiagnosticsAfter": 10,
+  "noTestsGameBrowserOrAudioPlaybackPerformed": true
+}

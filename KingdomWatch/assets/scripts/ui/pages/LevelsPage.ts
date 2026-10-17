@@ -9,7 +9,8 @@ import { mainLabel, PageCtx, toast, mainLayout, MAIN_RESOURCE_H, MAIN_NAV_H, pag
 import { CHEST_COND, claimAllChests, starKey, squadList } from '../../core/GameData';
 import { DIFFICULTIES, equipmentDropChance, getChallengeDef, starChestRewards } from '../../config/LevelDifficulty';
 import { showDropItemDetails, showStageLootDetails, stageDropIcon, stageGuaranteedRewards } from '../LevelLootPreview';
-import { loadSave } from '../../core/SaveData';
+import { loadSave, saveSave } from '../../core/SaveData';
+import { GameAudio } from '../../core/GameAudio';
 import { flow } from '../../core/Flow';
 import { openSquadPanel } from '../SquadPanel';
 import { bindButton } from '../ButtonFeedback';
@@ -43,7 +44,8 @@ function star(parent: Node, x: number, y: number, size: number, earned: boolean)
   if (!earned) art.addComponent(UIOpacity).opacity = 95;
 }
 
-export function buildLevels(ctx: PageCtx): void {
+/** Resolve the same selection before lobby music starts, including a returning battle's focus. */
+export function selectedCampaignChapter(): number {
   if (!st.initialized) {
     st.initialized = true;
     const stars = loadSave().stars;
@@ -54,6 +56,10 @@ export function buildLevels(ctx: PageCtx): void {
     });
     const next = LEVELS.find(stage => campaignLevelOpen(stage.id, stars) && !(stars[stage.id] > 0));
     st.i = next ? next.order : LEVELS.length - 1;
+    const remembered = Number(loadSave().viewedChapter);
+    if (Number.isInteger(remembered) && remembered >= 1 && remembered <= CAMPAIGN_CHAPTERS.length) {
+      st.i = (remembered - 1) * 10 + st.selected[remembered - 1];
+    }
   }
   const focus = flow.levelReturn;
   if (focus) {
@@ -66,7 +72,12 @@ export function buildLevels(ctx: PageCtx): void {
       st.drawer = false;
     }
   }
-  while (st.d > 0 && !difficultyOpen(st.i, st.d)) st.d--;
+  return Math.floor(st.i / 10) + 1;
+}
+
+export function buildLevels(ctx: PageCtx): void {
+  GameAudio.setChapter(selectedCampaignChapter());
+  while (st.d > 0 && !campaignDifficultyOpen(LEVELS[st.i].id, st.d, loadSave().stars)) st.d--;
   const content = N('campaignRouteLobby', ctx.screens, 0, 0, 750, LO.half * 2);
   let mapScroll: ScrollView | null = null;
   let pins: Node | null = null, dock: Node | null = null, drawer: Node | null = null, shade: Node | null = null;
@@ -363,6 +374,9 @@ export function buildLevels(ctx: PageCtx): void {
     });
   }
   function renderWorld(): void {
+    const chapterNumber = currentChapter() + 1, save = loadSave();
+    if (save.viewedChapter !== chapterNumber) { save.viewedChapter = chapterNumber; saveSave(); }
+    GameAudio.setChapter(chapterNumber);
     refreshUI(content, () => {
       mapScroll = null; drawer = null; shade = null; closing = false;
       const chapter = currentChapter();

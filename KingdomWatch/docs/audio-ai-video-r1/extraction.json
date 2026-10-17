@@ -1,0 +1,51 @@
+{
+  "sourceUserPath": "C:\\Users\\user\\Downloads\\AI视频提示词人物蹲起问题.mp4",
+  "sourceCopy": "source/generated-elements-8s.mp4",
+  "sourceSHA256": "dba246d05c1cb48e6e7ba52696b5846fcd590efb141f7d0b9a274ad6862258f2",
+  "sourceBytes": 1050614,
+  "userGeneratedSource": true,
+  "sourcePrompt": "一个纯黑的游戏音效视频，包含一颗火陨石砸落地面、一束雷电劈到地面、冰雨落到地面的音效。0-2s 是火陨石音效，2-4s 是雷音效，4-6 是冰雨冰晶落地的音效，8s",
+  "decodedAudioSeconds": 8.080544217687075,
+  "sampleRate": 44100,
+  "channels": 2,
+  "outputCodec": "pcm_s24le",
+  "processing": "Exact requested sample boundaries; original speed, original levels, original stereo; no EQ, fades, denoising, normalization or layering.",
+  "originalAACCopiedWithoutReencoding": true,
+  "files": [
+    {
+      "file": "01_meteor_0-2s.wav",
+      "label": "火陨石撞地",
+      "start": 0,
+      "end": 2,
+      "seconds": 2.0,
+      "sha256": "300596a015b963e55850c5afad31c6edda15038e12d7e1253fec9522fe1d12ba",
+      "peakDBFS": -1.734
+    },
+    {
+      "file": "02_thunder_2-4s.wav",
+      "label": "雷电落地",
+      "start": 2,
+      "end": 4,
+      "seconds": 2.0,
+      "sha256": "c82892877b95bb8c4fe108adf479602ffd59c8e2009e656b461b4b65c3d61111",
+      "peakDBFS": -2.195
+    },
+    {
+      "file": "03_ice_4-6s.wav",
+      "label": "冰雨冰晶落地",
+      "start": 4,
+      "end": 6,
+      "seconds": 2.0,
+      "sha256": "3b5a43fbe96f1c9f08ed7aaa7140afcb38b54c52df4d344ef858082b56fd6236",
+      "peakDBFS": -4.053
+    }
+  ],
+  "remainingTail": "6s to end retained in full track",
+  "gameChanged": false,
+  "audioPlayedOrAuditioned": false,
+  "staticIntegrity": {
+    "threeClipsExactlyTwoSeconds": true,
+    "stereo44100Preserved": true,
+    "decodedSampleDifferenceAtMost": 2.384185791015625e-07
+  }
+}

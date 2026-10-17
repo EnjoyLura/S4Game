@@ -1,7 +1,7 @@
 /** One persistent WebAudio mix for the web game; no scene-owned players or synthesized placeholders. */
 import { assetManager, AudioClip, resources } from 'cc';
 import { loadSave } from './SaveData';
-import { AUDIO_CUES, MUSIC_TRACKS, MusicScene, resolveAudioCue, SfxName } from './AudioCatalog';
+import { AUDIO_CUES, CHAPTER_MUSIC, MUSIC_TRACK_GAIN, MusicScene, resolveAudioCue, SfxName } from './AudioCatalog';
 
 // Keep the established master level. Impact comes from source transients and mix space.
 const AUDIO_LEVEL_BOOST = Math.SQRT2 * Math.pow(10, 1 / 20);
@@ -10,7 +10,7 @@ const MUSIC_SCENE_GAIN = { camp: .52 * AUDIO_LEVEL_BOOST, battle: .42 * AUDIO_LE
 
 interface PlaybackShape { preparing?: boolean; gain?: number; rate?: number; fadeIn?: number; duration?: number; lowpass?: number; }
 interface Voice { source: AudioBufferSourceNode; gain: GainNode; priority: number; group: string; name: SfxName; started: number; }
-interface MusicVoice { source: AudioBufferSourceNode; gain: GainNode; scene: MusicScene; }
+interface MusicVoice { source: AudioBufferSourceNode; gain: GainNode; track: string; }
 
 class GameAudioService {
   private ctx: AudioContext | null = null;
@@ -23,10 +23,13 @@ class GameAudioService {
   private failedAt = new Map<string, number>();
   private voices: Voice[] = [];
   private music: MusicVoice | null = null;
+  private musicTails = new Set<MusicVoice>();
   private scene: MusicScene = 'camp';
+  private chapter = 1;
   private state = 'running';
   private musicRevision = 0;
   private musicLoading = false;
+  private musicHeldForTransition = false;
   private musicRetry: ReturnType<typeof setTimeout> | null = null;
   private warming = false;
   private lastAt: Partial<Record<SfxName, number>> = {};
@@ -52,18 +55,56 @@ class GameAudioService {
     window.addEventListener('pageshow', () => this.visibilityChanged());
   }
 
-  enter(scene: MusicScene): void {
+  enter(scene: MusicScene, chapter = this.chapter): void {
     // Only the persistent gate's short collision tail crosses the covered scene swap.
     this.stopVoices(false, false, true);
-    if (this.scene !== scene) { this.scene = scene; this.musicRevision++; }
+    const selected = this.validChapter(chapter);
+    if (this.scene !== scene || this.chapter !== selected) {
+      this.scene = scene; this.chapter = selected; this.musicRevision++;
+    }
     this.state = 'running';
     this.ensureContext();
     this.settingsChanged();
     // Fetch/decode may run while the context is suspended. Playback still waits
     // for a real gesture, without making that gesture start every download.
-    if (this.musicEnabled) void this.buffer(MUSIC_TRACKS[scene]).then(() => this.startMusic());
+    if (this.musicEnabled) void this.buffer(this.musicTrack()).then(() => this.startMusic());
     this.startMusic();
+    // Crossing the gate also eases the lobby/battle mix level, even when the theme is shared.
+    this.musicLevel(1);
+    this.warmChapterMusic();
     this.warm();
+  }
+
+  /** Page selection is independent of the tab; only a chapter change requests new music. */
+  setChapter(chapter: number): void {
+    const selected = this.validChapter(chapter);
+    if (selected === this.chapter) return;
+    this.chapter = selected; this.musicRevision++;
+    this.startMusic(); this.warmChapterMusic();
+  }
+
+  /** Keep the current mix until the gate has fully revealed the battle. */
+  holdMusicForTransition(hold: boolean): void {
+    if (this.musicHeldForTransition === hold) return;
+    this.musicHeldForTransition = hold; this.musicRevision++;
+    if (!hold) { this.startMusic(); this.musicLevel(1); }
+  }
+
+  private validChapter(chapter: number): number {
+    return Math.max(1, Math.min(Object.keys(CHAPTER_MUSIC).length, Math.floor(Number(chapter) || 1)));
+  }
+
+  private musicTrack(): string {
+    return CHAPTER_MUSIC[this.chapter][this.scene];
+  }
+
+  private warmChapterMusic(): void {
+    if (!this.ctx || !this.musicEnabled) return;
+    // Adjacent themes are ready before a manual arrow click; the current track stays audible while loading.
+    for (const chapter of [this.chapter - 1, this.chapter + 1]) {
+      const tracks = CHAPTER_MUSIC[chapter];
+      if (tracks) void this.buffer(tracks[this.scene]);
+    }
   }
 
   /** Called before battle's paused/pick/settlement early returns. */
@@ -88,7 +129,7 @@ class GameAudioService {
       if (this.music) { this.retireMusic(this.music, .25); this.music = null; }
     }
     this.musicLevel();
-    if (this.musicEnabled) this.startMusic();
+    if (this.musicEnabled) { this.startMusic(); this.warmChapterMusic(); }
     else if (this.musicRetry !== null) { clearTimeout(this.musicRetry); this.musicRetry = null; }
     if (this.sfxEnabled) this.warm();
   }
@@ -109,12 +150,12 @@ class GameAudioService {
     name = resolved;
     if (!this.sfxEnabled || loadSave().sfx === false || typeof document === 'undefined' || document.hidden) return;
     const cue = AUDIO_CUES[name], now = performance.now() / 1000;
-    const combat = cue.group === 'shot' || cue.group === 'impact' || cue.group === 'cast' || cue.group === 'death';
+    const combat = cue.group === 'shot' || cue.group === 'impact' || cue.group === 'contact' || cue.group === 'cast' || cue.group === 'death';
     if (this.scene === 'battle' && combat && this.state !== 'running' && this.state !== 'prepare') return;
     if (now - (this.lastAt[name] ?? -100) < cue.gap) return;
     // Automatic volleys share space; they never queue up to play after the action.
     const groupGap = cue.group === 'shot' ? .12 : cue.group === 'impact' ? .2
-      : cue.group === 'death' ? .5 : cue.group === 'cast' && cue.priority < 3 ? .24
+      : cue.group === 'contact' ? .18 : cue.group === 'death' ? .5 : cue.group === 'cast' && cue.priority < 3 ? .24
       : cue.group === 'ui' ? .08 : 0;
     if (now - (this.lastGroup[cue.group] ?? -100) < groupGap) return;
     if (name === 'lootPickup' && now - (this.lastAt[name] ?? -100) < .6) return;
@@ -139,7 +180,7 @@ class GameAudioService {
     const family = this.voices.filter(v => v.name === name);
     if (combat && family.length >= 2) this.stopVoice(family[0]);
     const group = this.voices.filter(v => v.group === cue.group);
-    const groupLimit = cue.group === 'death' || cue.group === 'card' || cue.group === 'cue' || cue.group === 'impact' || cue.group === 'transition' ? 1 : 2;
+    const groupLimit = cue.group === 'death' || cue.group === 'card' || cue.group === 'cue' || cue.group === 'impact' || cue.group === 'contact' || cue.group === 'transition' ? 1 : 2;
     if (group.length >= groupLimit) {
       const victim = group.filter(v => v.priority <= cue.priority).sort((a, b) => a.priority - b.priority || a.started - b.started)[0];
       if (!victim) return;
@@ -157,14 +198,14 @@ class GameAudioService {
       this.duck(Math.min(combat ? .9 : 3.4, buffer.duration), combat ? .64 : .4);
       // Make room in already-playing ordinary contact tails as well as future hits.
       if (combat) for (const voice of this.voices) {
-        if ((voice.group === 'shot' || voice.group === 'impact') && voice.priority < 2 && now - voice.started > .035) {
+        if ((voice.group === 'shot' || voice.group === 'impact' || voice.group === 'contact') && voice.priority < 2 && now - voice.started > .035) {
           this.ramp(voice.gain.gain, voice.gain.gain.value * .55, .018);
         }
       }
     }
     const source = this.ctx.createBufferSource(), gain = this.ctx.createGain();
     source.buffer = buffer;
-    const vary = cue.group === 'shot' || cue.group === 'impact' || cue.group === 'death';
+    const vary = name !== 'mageCast' && (cue.group === 'shot' || cue.group === 'impact' || cue.group === 'death');
     const rate = 'rate' in cue ? cue.rate : 1;
     source.playbackRate.value = rate * (shape.rate ?? 1) * (vary ? .9875 + Math.random() * .025 : 1);
     const recent = combat ? this.voices.filter(v => v.group === cue.group && now - v.started < .12).length : 0;
@@ -253,7 +294,7 @@ class GameAudioService {
         await this.ready();
         const info = resources.getInfoWithPath('audio/' + (file.includes('/') ? file : 'v1/' + file), AudioClip);
         if (!info) throw new Error('Missing bundled audio: ' + file);
-        const url = assetManager.utils.getUrlWithUuid(info.uuid, { isNative: true, nativeExt: file.startsWith('bgm_') ? '.mp3' : '.wav' });
+        const url = assetManager.utils.getUrlWithUuid(info.uuid, { isNative: true, nativeExt: /(^|\/)bgm_/.test(file) ? '.mp3' : '.wav' });
         const response = await fetch(url);
         if (!response.ok) throw new Error('Audio HTTP ' + response.status);
         const decoded = await this.ctx!.decodeAudioData(await response.arrayBuffer());
@@ -274,7 +315,7 @@ class GameAudioService {
     this.warming = true;
     // Decode only retained/shared sources; muted recordings stay available on disk.
     const first: SfxName[] = ['ui', 'gateSlide', 'gateClose', 'pickOpen', 'pickChoose', 'growth', 'reward',
-      'victory', 'defeat', 'breakthrough', 'bow', 'crossbow', 'fire', 'thunder', 'frost'];
+      'victory', 'defeat', 'breakthrough', 'bow', 'crossbow', 'fire', 'thunder', 'frost', 'hit'];
     const files: string[] = [], unique = new Set<string>();
     for (const name of [...first, ...Object.keys(AUDIO_CUES) as SfxName[]]) {
       const resolved = resolveAudioCue(name);
@@ -289,23 +330,25 @@ class GameAudioService {
   }
 
   private startMusic(): void {
-    if (!this.ctx || this.ctx.state !== 'running' || document.hidden || !this.musicEnabled || this.music?.scene === this.scene || this.musicLoading) return;
+    const track = this.musicTrack();
+    if (!this.ctx || this.ctx.state !== 'running' || document.hidden || !this.musicEnabled || this.musicHeldForTransition || this.music?.track === track || this.musicLoading) return;
     if (this.musicRetry !== null) { clearTimeout(this.musicRetry); this.musicRetry = null; }
     this.musicLoading = true;
-    const scene = this.scene, revision = this.musicRevision;
-    void this.buffer(MUSIC_TRACKS[scene]).then(buffer => {
-      if (!buffer || !this.ctx || !this.musicEnabled || document.hidden || this.ctx.state !== 'running' || revision !== this.musicRevision) return;
+    const revision = this.musicRevision;
+    void this.buffer(track).then(buffer => {
+      if (!buffer || !this.ctx || !this.musicEnabled || this.musicHeldForTransition || document.hidden || this.ctx.state !== 'running' || revision !== this.musicRevision) return;
       const source = this.ctx.createBufferSource(), gain = this.ctx.createGain();
       source.buffer = buffer; source.loop = true;
       gain.gain.value = 0; source.connect(gain); gain.connect(this.musicBus!);
-      if (this.music) this.retireMusic(this.music, .65);
-      this.music = { source, gain, scene };
-      source.start(); this.ramp(gain.gain, 1, .65); this.musicLevel();
+      const previous = this.music;
+      if (previous) this.retireMusic(previous, 1.6);
+      this.music = { source, gain, track };
+      source.start(); this.ramp(gain.gain, MUSIC_TRACK_GAIN[track] ?? 1, previous ? 1.6 : .65); this.musicLevel(1);
     }).finally(() => {
       this.musicLoading = false;
       // A scene may have changed while the previous theme was being decoded.
       if (revision !== this.musicRevision) this.startMusic();
-      else if (this.music?.scene !== this.scene && this.musicEnabled && !document.hidden && this.ctx?.state === 'running') {
+      else if (this.music?.track !== this.musicTrack() && this.musicEnabled && !document.hidden && this.ctx?.state === 'running') {
         // A transient download failure must not leave BGM silent until another click.
         this.musicRetry = setTimeout(() => { this.musicRetry = null; this.startMusic(); }, 16000);
       }
@@ -313,8 +356,16 @@ class GameAudioService {
   }
 
   private retireMusic(voice: MusicVoice, seconds: number): void {
+    // Rapid chapter changes must not leave a stack of long, overlapping fades.
+    for (const tail of this.musicTails) {
+      this.ramp(tail.gain.gain, 0, .08);
+      try { tail.source.stop(this.ctx!.currentTime + .1); } catch { /* Already ended. */ }
+    }
+    this.musicTails.add(voice);
     this.ramp(voice.gain.gain, 0, seconds);
-    voice.source.onended = () => { voice.source.disconnect(); voice.gain.disconnect(); };
+    voice.source.onended = () => {
+      this.musicTails.delete(voice); voice.source.disconnect(); voice.gain.disconnect();
+    };
     try { voice.source.stop(this.ctx!.currentTime + seconds + .02); } catch { /* Already ended. */ }
   }
 
@@ -325,12 +376,13 @@ class GameAudioService {
     param.linearRampToValueAtTime(value, time + seconds);
   }
 
-  private musicLevel(): void {
+  private musicLevel(seconds = .18): void {
     if (!this.ctx || !this.musicBus) return;
+    if (this.musicHeldForTransition && this.musicEnabled) return;
     const sceneGain = MUSIC_SCENE_GAIN[this.scene];
     const stateGain = this.state === 'win' || this.state === 'lose' ? .2 : this.state === 'paused' || this.state === 'pick' ? .42 : 1;
     const duck = performance.now() < this.duckUntil ? this.duckGain : 1;
-    this.ramp(this.musicBus.gain, this.musicEnabled ? sceneGain * stateGain * duck : 0, .18);
+    this.ramp(this.musicBus.gain, this.musicEnabled ? sceneGain * stateGain * duck : 0, seconds);
   }
 
   private duck(seconds: number, gain = .43): void {
@@ -353,7 +405,7 @@ class GameAudioService {
       // Let the final kill's short material tail survive settlement, never navigation/pause.
       if (keepDeathTail && voice.group === 'death') continue;
       if (keepGateTail && voice.group === 'transition') continue;
-      if (!combatOnly || voice.group === 'shot' || voice.group === 'impact' || voice.group === 'cast' || voice.group === 'death') this.stopVoice(voice);
+      if (!combatOnly || voice.group === 'shot' || voice.group === 'impact' || voice.group === 'contact' || voice.group === 'cast' || voice.group === 'death') this.stopVoice(voice);
     }
   }
 

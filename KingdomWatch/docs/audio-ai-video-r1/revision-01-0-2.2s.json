@@ -1,0 +1,9 @@
+{
+  "source": "D:\\AI\\S4Game\\KingdomWatch\\docs\\audio-ai-video-r1\\audio\\00_full_original.wav",
+  "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\audio-ai-video-r1\\audio\\01_meteor_0-2.2s.wav",
+  "sourceStartSeconds": 0,
+  "sourceEndSeconds": 2.2,
+  "durationSeconds": 2.2,
+  "processing": "PCM sample cut only; original volume, speed and channels retained",
+  "audioPlayed": false
+}

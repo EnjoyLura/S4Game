@@ -1,0 +1,38 @@
+[
+  {
+    "id": "cast",
+    "title": "三法师 · 共用施法",
+    "detail": "普攻与技能使用完全相同的声音",
+    "seconds": 4.8,
+    "video": "media/cast.mp4",
+    "poster": "media/cast.jpg",
+    "sha256": "e07b09dcb7c00dfc30609d6694ad3e1a2080b4edb9e3ba548c6db0bd6ca49956"
+  },
+  {
+    "id": "pyro",
+    "title": "火法大招 · 陨石落地",
+    "detail": "撞击主体与碎石短尾",
+    "seconds": 4.3,
+    "video": "media/pyro.mp4",
+    "poster": "media/pyro.jpg",
+    "sha256": "8dfb18a548b13cc4f381b597a7d11ebe0b1c6de738df7a3b066272a46284addc"
+  },
+  {
+    "id": "volt",
+    "title": "雷法大招 · 轻微雷鸣",
+    "detail": "自然雷声 · 连续落雷限频",
+    "seconds": 5,
+    "video": "media/volt.mp4",
+    "poster": "media/volt.jpg",
+    "sha256": "d9bdb25df3b42a1e06429aa9aa8d3362c9fcee4346e4ca6e4ea34c400d779f5c"
+  },
+  {
+    "id": "mora",
+    "title": "冰法大招 · 冰晶破碎",
+    "detail": "真实冰块撞地与碎片散落",
+    "seconds": 3.7,
+    "video": "media/mora.mp4",
+    "poster": "media/mora.jpg",
+    "sha256": "330d03a33c72d6cbda70a6d8ac412064183e0a3f538eaad9c8258a9e8c169fac"
+  }
+]

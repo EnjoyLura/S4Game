@@ -36,6 +36,8 @@ export interface SaveData {
   /** 通关 1-2 解锁 2x 倍速（§3.0） */
   speedUnlocked: boolean;
   music: boolean;
+  /** Last chapter shown on the campaign page; also selects music throughout the lobby. */
+  viewedChapter?: number;
   sfx: boolean;
   debug: boolean;
   /** GM 开关：技能无冷却（调试用，旧档缺省视为关） */
