@@ -375,8 +375,9 @@ export class BattleDirector extends Component {
       // 无冷却并非零 CD：压到 1s 内置冷却，避免技能每帧连发（用户反馈）。
       if (this.gmNoSkillCd) for (const h of this.heroes) h.skillCd = Math.min(h.skillCd, 1);
       if (this.gmUltFull) for (const h of this.heroes) h.charge = h.ultUnlocked ? h.chargeGoal : 0;
-      this.projs.tick(sub, this.line);
-      this.parts.tick(sub);
+      const renderNow = i === steps - 1;
+      this.projs.tick(sub, this.line, renderNow);
+      this.parts.tick(sub, renderNow);
       this.impacts.syncBurns(this.mgr.list, sub);
       this.impacts.tick(sub);
       this.ultPresentation.tick(sub);

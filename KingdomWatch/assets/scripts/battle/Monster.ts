@@ -963,10 +963,12 @@ export class MonsterManager {
   tick(dt: number, line: { takeDamage: (d: number) => void }): void {
     if (this.disposed) return;
     let poisonDamage = 0;
+    let poisons = 0;
     for (const p of this.linePoisons) {
       poisonDamage += p.rate * Math.min(dt, p.remaining); p.remaining = Math.max(0, p.remaining - dt);
+      if (p.remaining > 0) this.linePoisons[poisons++] = p;
     }
-    this.linePoisons = this.linePoisons.filter(p => p.remaining > 0);
+    this.linePoisons.length = poisons;
     this.pendingPoisonDamage += poisonDamage;
     if (this.pendingPoisonDamage > 0) {
       this.poisonClock += dt;
@@ -1067,8 +1069,8 @@ export class MonsterManager {
     this.iceFeet.clear();
     for (const m of this.list) m.drawIceFeet(this.iceFeet);
     this.refreshHunterMarks();
-    this.deathAir.node.setSiblingIndex(this.field.children.length - 1);
     this.iceFeet.node.setSiblingIndex(this.field.children.length - 1);
+    this.deathAir.node.setSiblingIndex(this.field.children.length - 2);
   }
 
   /** Falling ice is ordered by its fixed ground footprint, not its airborne
@@ -1083,8 +1085,8 @@ export class MonsterManager {
     this.depthOrder.sort((a, b) => b.depthY - a.depthY);
     this.shadows.node.setSiblingIndex(0);
     this.depthOrder.forEach((item, i) => item.node.setSiblingIndex(i + 1));
-    this.deathAir.node.setSiblingIndex(this.field.children.length - 1);
     this.iceFeet.node.setSiblingIndex(this.field.children.length - 1);
+    this.deathAir.node.setSiblingIndex(this.field.children.length - 2);
   }
 
   private nudge(m: Monster, dx: number, dy: number): void {

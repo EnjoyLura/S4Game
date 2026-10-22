@@ -60,6 +60,10 @@ export class ImpactFX {
     this.volt.beginProjectileFrame();
     this.sniperUltimate.beginFrame();
   }
+  endProjectileFrame(): void {
+    this.fire.endProjectileFrame(); this.archer.endProjectileFrame(); this.frostProjectile.endProjectileFrame();
+    this.sniperUltimate.endFrame();
+  }
   iceProjectile(x: number, y: number, vx: number, vy: number, size: number, age: number): boolean {
     return this.frostProjectile.projectile(x, y, vx, vy, size, age);
   }

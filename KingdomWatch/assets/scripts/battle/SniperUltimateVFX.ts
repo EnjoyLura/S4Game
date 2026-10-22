@@ -124,8 +124,13 @@ export class SniperUltimateVFX {
   }
   beginFrame(): void {
     if (this.destroyed) return;
-    for (let i = 0; i < this.used; i++) this.flights[i].node.active = false;
+    this.previousUsed = this.used;
     this.used = 0; this.flightInk.clear();
+  }
+  private previousUsed = 0;
+  endFrame(): void {
+    if (this.destroyed) return;
+    for (let i = this.used; i < this.previousUsed; i++) this.flights[i].node.active = false;
   }
   release(x: number, y: number, dx: number, dy: number): void { this.accent(0, x, y, Math.atan2(dy, dx)); }
   hit(x: number, y: number, angle: number): void { this.accent(2, x, y, angle); }
@@ -149,7 +154,9 @@ export class SniperUltimateVFX {
     }
     const q = this.flights[this.used++], width = Math.max(100, length + 85);
     q.ui.setContentSize(width, 72); q.ui.setAnchorPoint(1 - 45 / width, .5);
-    q.node.setPosition(x, y, 0); q.node.angle = Math.atan2(vy, vx) * 180 / Math.PI;
+    q.node.setPosition(x, y, 0);
+    const angle = Math.atan2(vy, vx) * 180 / Math.PI;
+    if (q.node.angle !== angle) q.node.angle = angle;
     this.shade(q, age, 1, phase, length); return true;
   }
   tick(dt: number): void {

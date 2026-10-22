@@ -8,12 +8,17 @@ interface Flight { node: Node; sprite: Sprite; ui: UITransform; }
 const RESOURCE = 'fx/frost_ultimate_rain_v1';
 // Exactly the ultimate's single-point crop; the opposite bottom apex is excluded.
 const WIDTH = 65, HEIGHT = 156, AXIS_X = 46;
+const TAIL = Array.from({ length: 9 }, (_, k) => {
+  const t = k / 8;
+  return { t, width: Math.pow(1 - t, 1.25), alpha: Math.pow(1 - t, 1.8) };
+});
 
 export class FrostProjectileVFX {
   private root: Node;
   private trails: Graphics;
   private flights: Flight[] = [];
   private used = 0;
+  private previousUsed = 0;
   private source: SpriteFrame | null = null;
   private frame: SpriteFrame | null = null;
   private tint = new Color();
@@ -48,8 +53,12 @@ export class FrostProjectileVFX {
   }
 
   beginProjectileFrame(): void {
-    for (let i = 0; i < this.used; i++) this.flights[i].node.active = false;
+    this.previousUsed = this.used;
     this.used = 0; this.trails.clear();
+  }
+
+  endProjectileFrame(): void {
+    for (let i = this.used; i < this.previousUsed; i++) this.flights[i].node.active = false;
   }
 
   projectile(x: number, y: number, vx: number, vy: number, size: number, age: number): boolean {
@@ -61,7 +70,8 @@ export class FrostProjectileVFX {
     // Measure the crop, not SpriteFrame.width/height (whole texture in Creator).
     f.ui.setContentSize(height * WIDTH / HEIGHT, height);
     f.node.setPosition(x, y, 0);
-    f.node.angle = Math.atan2(vy, vx) * 180 / Math.PI - 90;
+    const angle = Math.atan2(vy, vx) * 180 / Math.PI - 90;
+    if (f.node.angle !== angle) f.node.angle = angle;
     f.node.active = true;
     // A short tapered wake begins at the crystal's tail, never at its nose.
     // Same age/velocity produces identical geometry during pause or speed-up.
@@ -77,12 +87,12 @@ export class FrostProjectileVFX {
       const width = (band === 0 ? 3.4 : band === 1 ? 1.5 : 0.4) * scale;
       const alpha = band === 0 ? 14 : band === 1 ? 38 : 100;
       for (let k = 0; k < 8; k++) {
-        const a = k / 8, b = (k + 1) / 8;
-        const wa = width * Math.pow(1 - a, 1.25), wb = width * Math.pow(1 - b, 1.25);
+        const a = TAIL[k].t, b = TAIL[k + 1].t;
+        const wa = width * TAIL[k].width, wb = width * TAIL[k + 1].width;
         const ax = x - dx * length * a, ay = y - dy * length * a;
         const bx = x - dx * length * b, by = y - dy * length * b;
         this.tint.set(band === 2 ? 208 : 107, band === 2 ? 248 : 211, 255,
-          Math.round(alpha * Math.pow(1 - a, 1.8)));
+          Math.round(alpha * TAIL[k].alpha));
         g.fillColor = this.tint;
         g.moveTo(ax + px * wa, ay + py * wa); g.lineTo(bx + px * wb, by + py * wb);
         g.lineTo(bx - px * wb, by - py * wb); g.lineTo(ax - px * wa, ay - py * wa);

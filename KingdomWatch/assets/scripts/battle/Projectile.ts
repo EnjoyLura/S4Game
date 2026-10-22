@@ -226,8 +226,9 @@ export class ProjectileManager {
     this.dmg.add(heroId, v);
   }
 
-  tick(dt: number, line: { takeDamage: (d: number) => void }): void {
-    this.dirty = true;
+  tick(dt: number, line: { takeDamage: (d: number) => void }, renderNow = true): void {
+    this.frame++; // Retain the original substep phase even when intermediate geometry is deferred.
+    if (this.active.length) this.dirty = true;
     for (let i = this.active.length - 1; i >= 0; i--) {
       const a = this.active[i];
       const sp = a.spec;
@@ -247,7 +248,9 @@ export class ProjectileManager {
           sp.x += a.vx * dt; sp.y += a.vy * dt;
           if (a.trailMax > 0) {
             a.trail.push(sp.x, sp.y);
-            while (a.trail.length > a.trailMax * 2) a.trail.splice(0, 2);
+            while (a.trail.length > a.trailMax * 2) {
+              a.trail.copyWithin(0, 2); a.trail.length -= 2;
+            }
           }
         }
         continue;
@@ -266,7 +269,9 @@ export class ProjectileManager {
         sp.y = startY + stepY;
         if (a.trailMax > 0) {
           a.trail.push(sp.x, sp.y);
-          while (a.trail.length > a.trailMax * 2) { a.trail.splice(0, 2); }
+          while (a.trail.length > a.trailMax * 2) {
+            a.trail.copyWithin(0, 2); a.trail.length -= 2;
+          }
         }
         if (sp.enemy && sp.y <= LINE_Y + 12) {
           line.takeDamage(sp.dmg);
@@ -278,7 +283,7 @@ export class ProjectileManager {
       }
       if (done) this.recycle(i, a);
     }
-    if (this.dirty) { this.render(); this.dirty = false; }
+    if (renderNow && this.dirty) { this.render(); this.dirty = false; }
   }
 
   private advanceReturning(a: Active, dt: number): boolean {
@@ -295,7 +300,9 @@ export class ProjectileManager {
       remaining = Math.max(0, remaining - travel / sp.speed);
       if (a.trailMax > 0) {
         a.trail.push(sp.x, sp.y);
-        while (a.trail.length > a.trailMax * 2) a.trail.splice(0, 2);
+        while (a.trail.length > a.trailMax * 2) {
+          a.trail.copyWithin(0, 2); a.trail.length -= 2;
+        }
       }
       if (a.legLeft > 1e-6) return false;
       if (a.returning) return true;
@@ -313,10 +320,18 @@ export class ProjectileManager {
   /** Exact segment/circle entries, in travel order. A piercing shot can hit several enemies in one step. */
   private hitSweep(a: Active, x: number, y: number, sx: number, sy: number): boolean {
     const sp = a.spec, length2 = sx * sx + sy * sy;
+    const minX = Math.min(x, x + sx), maxX = Math.max(x, x + sx);
+    const minY = Math.min(y, y + sy), maxY = Math.max(y, y + sy);
+    const padding = (sp.size || 7) * .5;
     let count = 0;
     for (const m of this.mgr.list) {
-      if (m.dead || a.hit.has(m.lifeId)) continue;
-      const dx = x - m.x, dy = y - m.y, radius = m.def.radius + (sp.size || 7) * .5;
+      if (m.dead) continue;
+      const mx = m.x, my = m.y, radius = m.def.radius + padding;
+      // Conservative broad phase only. Exact circle entry, ties and per-contact feedback stay below.
+      const bound = radius + 1e-6;
+      if (mx < minX - bound || mx > maxX + bound || my < minY - bound || my > maxY + bound) continue;
+      if (a.hit.has(m.lifeId)) continue;
+      const dx = x - mx, dy = y - my;
       const c = dx * dx + dy * dy - radius * radius;
       let t = 0;
       if (c > 0) {
@@ -350,13 +365,12 @@ export class ProjectileManager {
 
   /** 渲染帧计数（电球等动态弹体的伪随机相位种子） */
   private frame = 0;
-  /** 全部弹道一次重绘：单 Graphics 单 draw call（原每弹一 Node 一 Graphics） */
+  /** Draw once for the visible frame; simulation and every hit still advance per substep. */
   private render(): void {
     const g = this.g;
     g.clear();
     this.basicFlight.beginFrame();
     this.impacts?.beginProjectileFrame();
-    this.frame++;
     for (let i = 0; i < this.active.length; i++) {
       const a = this.active[i];
       const s = a.spec;
@@ -390,6 +404,7 @@ export class ProjectileManager {
         g.stroke();
       }
     }
+    this.impacts?.endProjectileFrame();
   }
 
   /** 锥形渐隐尾迹：越旧越窄越淡的软边条带（逐段四边形），叠一条更实的亮芯线；箭矢从箭尾接出避免盖住箭体 */

@@ -1,0 +1,381 @@
+diff --git a/KingdomWatch/assets/scripts/battle/ArcherVFX.ts b/KingdomWatch/assets/scripts/battle/ArcherVFX.ts
+index 03bc56f1..a27d4b9c 100644
+--- a/KingdomWatch/assets/scripts/battle/ArcherVFX.ts
++++ b/KingdomWatch/assets/scripts/battle/ArcherVFX.ts
+@@ -11,0 +12,13 @@ const clamp = (v: number): number => Math.max(0, Math.min(1, v));
++// Fixed samples retain every original segment and double precision; no per-arrow curve allocation.
++const LENS = Array.from({ length: 17 }, (_, k) => {
++  const angle = k * Math.PI / 8;
++  return { cos: Math.cos(angle), sin: Math.sin(angle) };
++});
++const WIND = Array.from({ length: 13 }, (_, k) => {
++  const t = k / 12;
++  return { t, sin: Math.sin(t * Math.PI), phase: t * Math.PI * 1.4 };
++});
++const TAIL = Array.from({ length: 9 }, (_, k) => {
++  const t = k / 8;
++  return { t, width: Math.pow(1 - t, 1.3), alpha: Math.pow(1 - t, 1.8), ray: Math.pow(1 - t, 1.6) };
++});
+@@ -21,0 +35 @@ export class ArcherVFX {
++  private previousFlightCount = 0;
+@@ -25,0 +40,4 @@ export class ArcherVFX {
++  private windX: number[] = new Array(13);
++  private windY: number[] = new Array(13);
++  private tailX: number[] = new Array(9);
++  private tailY: number[] = new Array(9);
+@@ -93 +110,0 @@ export class ArcherVFX {
+-    part.node.active = alpha > 0;
+@@ -100 +117,4 @@ export class ArcherVFX {
+-    part.node.setPosition(x, y, 0); part.node.angle = angle;
++    const position = part.node.position;
++    if (position.x !== x || position.y !== y) part.node.setPosition(x, y, 0);
++    if (part.node.angle !== angle) part.node.angle = angle;
++    part.node.active = alpha > 0;
+@@ -105 +125 @@ export class ArcherVFX {
+-    for (let i = 0; i < this.flightCount; i++) this.flights[i].root.active = false;
++    this.previousFlightCount = this.flightCount;
+@@ -108,0 +129,5 @@ export class ArcherVFX {
++  endProjectileFrame(): void {
++    // Keep reused slots enabled; only arrows absent from this frame leave the render pool.
++    for (let i = this.flightCount; i < this.previousFlightCount; i++) this.flights[i].root.active = false;
++  }
++
+@@ -114 +139,2 @@ export class ArcherVFX {
+-    f.root.active = true; f.root.setPosition(x, y, 0); f.root.angle = angle;
++    f.root.setPosition(x, y, 0);
++    if (f.root.angle !== angle) f.root.angle = angle;
+@@ -117,0 +144 @@ export class ArcherVFX {
++    f.root.active = true;
+@@ -136,3 +163,3 @@ export class ArcherVFX {
+-        const a = k * Math.PI / 8;
+-        const ax = cx + dx * Math.cos(a) * along + px * Math.sin(a) * across;
+-        const ay = cy + dy * Math.cos(a) * along + py * Math.sin(a) * across;
++        const sample = LENS[k];
++        const ax = cx + dx * sample.cos * along + px * sample.sin * across;
++        const ay = cy + dy * sample.cos * along + py * sample.sin * across;
+@@ -145 +172,9 @@ export class ArcherVFX {
+-    for (const side of [-1, 1]) {
++    for (let side = -1; side <= 1; side += 2) {
++      for (let k = 0; k <= 12; k++) {
++        const sample = WIND[k], t = sample.t;
++        const along = body * 0.38 - reach * t;
++        const offset = side * (1.2 + sample.sin * 4.2 + t * 0.8)
++          + Math.sin(sample.phase + age * 12) * 0.65 * sample.sin;
++        this.windX[k] = x + dx * along + px * offset;
++        this.windY[k] = y + dy * along + py * offset;
++      }
+@@ -150,5 +185 @@ export class ArcherVFX {
+-          const t = k / 12;
+-          const along = body * 0.38 - reach * t;
+-          const offset = side * (1.2 + Math.sin(t * Math.PI) * 4.2 + t * 0.8)
+-            + Math.sin(t * Math.PI * 1.4 + age * 12) * 0.65 * Math.sin(t * Math.PI);
+-          const ax = x + dx * along + px * offset, ay = y + dy * along + py * offset;
++          const ax = this.windX[k], ay = this.windY[k];
+@@ -165,0 +197,4 @@ export class ArcherVFX {
++    for (let k = 0; k <= 8; k++) {
++      this.tailX[k] = x - dx * length * TAIL[k].t;
++      this.tailY[k] = y - dy * length * TAIL[k].t;
++    }
+@@ -170,5 +205,3 @@ export class ArcherVFX {
+-        const near = k / 8, far = (k + 1) / 8;
+-        const wn = width * Math.pow(1 - near, 1.3), wf = width * Math.pow(1 - far, 1.3);
+-        const nx = x - dx * length * near, ny = y - dy * length * near;
+-        const fx = x - dx * length * far, fy = y - dy * length * far;
+-        this.tint.set(255, band === 2 ? 236 : 205, band === 2 ? 158 : 85, Math.round(alpha * Math.pow(1 - near, 1.8)));
++        const wn = width * TAIL[k].width, wf = width * TAIL[k + 1].width;
++        const nx = this.tailX[k], ny = this.tailY[k], fx = this.tailX[k + 1], fy = this.tailY[k + 1];
++        this.tint.set(255, band === 2 ? 236 : 205, band === 2 ? 158 : 85, Math.round(alpha * TAIL[k].alpha));
+@@ -182 +215 @@ export class ArcherVFX {
+-    for (const side of [-1, 1]) {
++    for (let side = -1; side <= 1; side += 2) {
+@@ -185 +218 @@ export class ArcherVFX {
+-        const near = k / 8, far = (k + 1) / 8;
++        const near = TAIL[k].t, far = TAIL[k + 1].t;
+@@ -187 +220 @@ export class ArcherVFX {
+-        this.tint.set(255, 224, 116, Math.round((heavy ? 155 : 105) * Math.pow(1 - near, 1.6)));
++        this.tint.set(255, 224, 116, Math.round((heavy ? 155 : 105) * TAIL[k].ray));
+@@ -189,2 +222,2 @@ export class ArcherVFX {
+-        g.moveTo(x - dx * length * near + px * offsetNear, y - dy * length * near + py * offsetNear);
+-        g.lineTo(x - dx * length * far + px * offsetFar, y - dy * length * far + py * offsetFar); g.stroke();
++        g.moveTo(this.tailX[k] + px * offsetNear, this.tailY[k] + py * offsetNear);
++        g.lineTo(this.tailX[k + 1] + px * offsetFar, this.tailY[k + 1] + py * offsetFar); g.stroke();
+diff --git a/KingdomWatch/assets/scripts/battle/BasicProjectileFlightVFX.ts b/KingdomWatch/assets/scripts/battle/BasicProjectileFlightVFX.ts
+index 4939b601..969881c5 100644
+--- a/KingdomWatch/assets/scripts/battle/BasicProjectileFlightVFX.ts
++++ b/KingdomWatch/assets/scripts/battle/BasicProjectileFlightVFX.ts
+@@ -13,0 +14,9 @@ const STYLES: Record<string, Style> = {
++const WAKE = Array.from({ length: 10 }, (_, k) => {
++  const t = k / 9;
++  return { t, width: Math.pow(1 - t, 1.35), alpha: Math.pow(1 - t, 1.65) };
++});
++const WIND = Array.from({ length: 8 }, (_, k) => {
++  const t = k / 7;
++  return { t, sin: Math.sin(t * Math.PI), alpha: Math.sin((t + .08) * Math.PI) };
++});
++
+@@ -18,0 +28,2 @@ export class BasicProjectileFlightVFX {
++  private wakeU: number[] = new Array(10);
++  private wakeV: number[] = new Array(10);
+@@ -63,0 +75,6 @@ export class BasicProjectileFlightVFX {
++    // All three color bands share the exact same centerline.
++    for (let k = 0; k <= 9; k++) {
++      const t = WAKE[k].t;
++      this.wakeU[k] = -tail - length * t;
++      this.wakeV[k] = Math.sin(t * 8 - age * 15 + phase) * t * (flame ? 2.7 : .65);
++    }
+@@ -67,4 +84,2 @@ export class BasicProjectileFlightVFX {
+-        const a = k / 9, b = (k + 1) / 9;
+-        const wa = width * Math.pow(1 - a, 1.35), wb = width * Math.pow(1 - b, 1.35);
+-        const va = Math.sin(a * 8 - age * 15 + phase) * a * (flame ? 2.7 : .65);
+-        const vb = Math.sin(b * 8 - age * 15 + phase) * b * (flame ? 2.7 : .65);
++        const wa = width * WAKE[k].width, wb = width * WAKE[k + 1].width;
++        const va = this.wakeV[k], vb = this.wakeV[k + 1];
+@@ -72,3 +87,3 @@ export class BasicProjectileFlightVFX {
+-          (band === 0 ? 38 : band === 1 ? 94 : 205) * Math.pow(1 - a, 1.65));
+-        this.move(-tail - length * a, va + wa); this.line(-tail - length * b, vb + wb);
+-        this.line(-tail - length * b, vb - wb); this.line(-tail - length * a, va - wa);
++          (band === 0 ? 38 : band === 1 ? 94 : 205) * WAKE[k].alpha);
++        this.move(this.wakeU[k], va + wa); this.line(this.wakeU[k + 1], vb + wb);
++        this.line(this.wakeU[k + 1], vb - wb); this.line(this.wakeU[k], va - wa);
+@@ -84 +99 @@ export class BasicProjectileFlightVFX {
+-        const a = k / 7, b = (k + 1) / 7;
++        const a = WIND[k].t, b = WIND[k + 1].t;
+@@ -86,3 +101,3 @@ export class BasicProjectileFlightVFX {
+-        const va = side * (3 + Math.sin(a * Math.PI) * (heavy ? 7 : 5) + a * 2);
+-        const vb = side * (3 + Math.sin(b * Math.PI) * (heavy ? 7 : 5) + b * 2);
+-        this.color(style.light, 165 * Math.sin((a + .08) * Math.PI) * reveal);
++        const va = side * (3 + WIND[k].sin * (heavy ? 7 : 5) + a * 2);
++        const vb = side * (3 + WIND[k + 1].sin * (heavy ? 7 : 5) + b * 2);
++        this.color(style.light, 165 * WIND[k].alpha * reveal);
+diff --git a/KingdomWatch/assets/scripts/battle/BattleDirector.ts b/KingdomWatch/assets/scripts/battle/BattleDirector.ts
+index e0c4d36d..c30ff95c 100644
+--- a/KingdomWatch/assets/scripts/battle/BattleDirector.ts
++++ b/KingdomWatch/assets/scripts/battle/BattleDirector.ts
+@@ -378,2 +378,3 @@ export class BattleDirector extends Component {
+-      this.projs.tick(sub, this.line);
+-      this.parts.tick(sub);
++      const renderNow = i === steps - 1;
++      this.projs.tick(sub, this.line, renderNow);
++      this.parts.tick(sub, renderNow);
+diff --git a/KingdomWatch/assets/scripts/battle/FireVFX.ts b/KingdomWatch/assets/scripts/battle/FireVFX.ts
+index 38eba0da..33cb4e6f 100644
+--- a/KingdomWatch/assets/scripts/battle/FireVFX.ts
++++ b/KingdomWatch/assets/scripts/battle/FireVFX.ts
+@@ -6 +6 @@ import { Color, EffectAsset, JsonAsset, Layers, Material, Node, Rect, resources,
+-interface Part { node: Node; sprite: Sprite; frame: string; }
++interface Part { node: Node; sprite: Sprite; ui: UITransform; frame: string; }
+@@ -148 +148 @@ export class FireVFX {
+-    for (let i = 0; i < this.flightCount; i++) this.flights[i].root.active = false;
++    this.previousFlightCount = this.flightCount;
+@@ -151,0 +152,5 @@ export class FireVFX {
++  private previousFlightCount = 0;
++  endProjectileFrame(): void {
++    for (let i = this.flightCount; i < this.previousFlightCount; i++) this.flights[i].root.active = false;
++  }
++
+@@ -156 +161 @@ export class FireVFX {
+-    f.root.active = true; f.root.setPosition(x, y, 0);
++    f.root.setPosition(x, y, 0);
+@@ -158,0 +164 @@ export class FireVFX {
++    f.root.active = true;
+@@ -202 +208 @@ export class FireVFX {
+-    node.addComponent(UITransform).setContentSize(1, 1);
++    const ui = node.addComponent(UITransform); ui.setContentSize(1, 1);
+@@ -205 +211 @@ export class FireVFX {
+-    return { node, sprite, frame: '' };
++    return { node, sprite, ui, frame: '' };
+@@ -223 +229,2 @@ export class FireVFX {
+-    if (this.active.filter(b => !b.blast).length >= CONTACT_CAP) return true;
++    let contacts = 0;
++    for (const b of this.active) if (!b.blast && ++contacts >= CONTACT_CAP) return true;
+@@ -240 +247 @@ export class FireVFX {
+-    clip.part.node.getComponent(UITransform)!.setContentSize(PYRO_CELL * scale, PYRO_CELL * scale);
++    clip.part.ui.setContentSize(PYRO_CELL * scale, PYRO_CELL * scale);
+@@ -289 +296 @@ export class FireVFX {
+-        clip.part.node.getComponent(UITransform)!.setContentSize(PYRO_CELL * clip.scale, PYRO_CELL * clip.scale);
++        clip.part.ui.setContentSize(PYRO_CELL * clip.scale, PYRO_CELL * clip.scale);
+@@ -307 +314,2 @@ export class FireVFX {
+-    if (this.active.filter(b => b.blast).length >= BLAST_CAP) return true;
++    let blasts = 0;
++    for (const b of this.active) if (b.blast && ++blasts >= BLAST_CAP) return true;
+@@ -354,2 +362,4 @@ export class FireVFX {
+-    part.node.getComponent(UITransform)!.setContentSize(width, width * ratio);
+-    part.node.setPosition(x, y, 0); part.node.angle = angle;
++    part.ui.setContentSize(width, width * ratio);
++    const position = part.node.position;
++    if (position.x !== x || position.y !== y) part.node.setPosition(x, y, 0);
++    if (part.node.angle !== angle) part.node.angle = angle;
+diff --git a/KingdomWatch/assets/scripts/battle/FloatText.ts b/KingdomWatch/assets/scripts/battle/FloatText.ts
+index fa2be035..0f403ed8 100644
+--- a/KingdomWatch/assets/scripts/battle/FloatText.ts
++++ b/KingdomWatch/assets/scripts/battle/FloatText.ts
+@@ -76 +76,4 @@ export class FloatText {
+-    if (kind === 'periodic' && this.live.filter(t => t.kind === 'periodic').length >= 6) return;
++    if (kind === 'periodic') {
++      let periodic = 0;
++      for (const t of this.live) if (t.kind === 'periodic' && ++periodic >= 6) return;
++    }
+diff --git a/KingdomWatch/assets/scripts/battle/FrostProjectileVFX.ts b/KingdomWatch/assets/scripts/battle/FrostProjectileVFX.ts
+index 7562f515..6acda46f 100644
+--- a/KingdomWatch/assets/scripts/battle/FrostProjectileVFX.ts
++++ b/KingdomWatch/assets/scripts/battle/FrostProjectileVFX.ts
+@@ -10,0 +11,4 @@ const WIDTH = 65, HEIGHT = 156, AXIS_X = 46;
++const TAIL = Array.from({ length: 9 }, (_, k) => {
++  const t = k / 8;
++  return { t, width: Math.pow(1 - t, 1.25), alpha: Math.pow(1 - t, 1.8) };
++});
+@@ -16,0 +21 @@ export class FrostProjectileVFX {
++  private previousUsed = 0;
+@@ -51 +56 @@ export class FrostProjectileVFX {
+-    for (let i = 0; i < this.used; i++) this.flights[i].node.active = false;
++    this.previousUsed = this.used;
+@@ -54,0 +60,4 @@ export class FrostProjectileVFX {
++  endProjectileFrame(): void {
++    for (let i = this.used; i < this.previousUsed; i++) this.flights[i].node.active = false;
++  }
++
+@@ -64 +73,2 @@ export class FrostProjectileVFX {
+-    f.node.angle = Math.atan2(vy, vx) * 180 / Math.PI - 90;
++    const angle = Math.atan2(vy, vx) * 180 / Math.PI - 90;
++    if (f.node.angle !== angle) f.node.angle = angle;
+@@ -80,2 +90,2 @@ export class FrostProjectileVFX {
+-        const a = k / 8, b = (k + 1) / 8;
+-        const wa = width * Math.pow(1 - a, 1.25), wb = width * Math.pow(1 - b, 1.25);
++        const a = TAIL[k].t, b = TAIL[k + 1].t;
++        const wa = width * TAIL[k].width, wb = width * TAIL[k + 1].width;
+@@ -85 +95 @@ export class FrostProjectileVFX {
+-          Math.round(alpha * Math.pow(1 - a, 1.8)));
++          Math.round(alpha * TAIL[k].alpha));
+diff --git a/KingdomWatch/assets/scripts/battle/Hero.ts b/KingdomWatch/assets/scripts/battle/Hero.ts
+index 0b64a250..24605cdf 100644
+--- a/KingdomWatch/assets/scripts/battle/Hero.ts
++++ b/KingdomWatch/assets/scripts/battle/Hero.ts
+@@ -339 +339,4 @@ export class ArcherHero extends HeroBase {
+-    return Math.min(Infinity, ...this.serialQueue.map(shot => shot.t), ...this.volleyQueue.map(row => row.t));
++    let delay = Infinity;
++    for (const shot of this.serialQueue) delay = Math.min(delay, shot.t);
++    for (const row of this.volleyQueue) delay = Math.min(delay, row.t);
++    return delay;
+diff --git a/KingdomWatch/assets/scripts/battle/ImpactFX.ts b/KingdomWatch/assets/scripts/battle/ImpactFX.ts
+index dbbe29d0..dd501770 100644
+--- a/KingdomWatch/assets/scripts/battle/ImpactFX.ts
++++ b/KingdomWatch/assets/scripts/battle/ImpactFX.ts
+@@ -62,0 +63,4 @@ export class ImpactFX {
++  endProjectileFrame(): void {
++    this.fire.endProjectileFrame(); this.archer.endProjectileFrame(); this.frostProjectile.endProjectileFrame();
++    this.sniperUltimate.endFrame();
++  }
+diff --git a/KingdomWatch/assets/scripts/battle/Monster.ts b/KingdomWatch/assets/scripts/battle/Monster.ts
+index 4d7a9b23..4e81eb36 100644
+--- a/KingdomWatch/assets/scripts/battle/Monster.ts
++++ b/KingdomWatch/assets/scripts/battle/Monster.ts
+@@ -965,0 +966 @@ export class MonsterManager {
++    let poisons = 0;
+@@ -967,0 +969 @@ export class MonsterManager {
++      if (p.remaining > 0) this.linePoisons[poisons++] = p;
+@@ -969 +971 @@ export class MonsterManager {
+-    this.linePoisons = this.linePoisons.filter(p => p.remaining > 0);
++    this.linePoisons.length = poisons;
+@@ -1070 +1071,0 @@ export class MonsterManager {
+-    this.deathAir.node.setSiblingIndex(this.field.children.length - 1);
+@@ -1071,0 +1073 @@ export class MonsterManager {
++    this.deathAir.node.setSiblingIndex(this.field.children.length - 2);
+@@ -1086 +1087,0 @@ export class MonsterManager {
+-    this.deathAir.node.setSiblingIndex(this.field.children.length - 1);
+@@ -1087,0 +1089 @@ export class MonsterManager {
++    this.deathAir.node.setSiblingIndex(this.field.children.length - 2);
+diff --git a/KingdomWatch/assets/scripts/battle/Particles.ts b/KingdomWatch/assets/scripts/battle/Particles.ts
+index 5cf36612..88dce945 100644
+--- a/KingdomWatch/assets/scripts/battle/Particles.ts
++++ b/KingdomWatch/assets/scripts/battle/Particles.ts
+@@ -7 +7 @@ import { Color, Graphics, Layers, Node } from 'cc';
+-interface P { x: number; y: number; vx: number; vy: number; life: number; max: number; size: number; hex: string; }
++interface P { x: number; y: number; vx: number; vy: number; life: number; max: number; size: number; color: Color; }
+@@ -22 +22 @@ export class Particles {
+-      this.free.push({ x: 0, y: 0, vx: 0, vy: 0, life: 0, max: 1, size: 3, hex: '#FFFFFF' });
++      this.free.push({ x: 0, y: 0, vx: 0, vy: 0, life: 0, max: 1, size: 3, color: new Color() });
+@@ -38 +38 @@ export class Particles {
+-      p.hex = hex;
++      Color.fromHEX(p.color, hex);
+@@ -43 +43 @@ export class Particles {
+-  tick(dt: number): void {
++  tick(dt: number, renderNow = true): void {
+@@ -45 +45 @@ export class Particles {
+-      if (this.dirty) { this.g.clear(); this.dirty = false; }
++      if (renderNow && this.dirty) { this.g.clear(); this.dirty = false; }
+@@ -47,0 +48 @@ export class Particles {
++    this.dirty = true;
+@@ -54,0 +56 @@ export class Particles {
++    if (!renderNow) return;
+@@ -59 +61 @@ export class Particles {
+-      Color.fromHEX(this.tmp, p.hex);
++      this.tmp.set(p.color);
+@@ -64,0 +67 @@ export class Particles {
++    this.dirty = false;
+diff --git a/KingdomWatch/assets/scripts/battle/Projectile.ts b/KingdomWatch/assets/scripts/battle/Projectile.ts
+index c674f350..d658e207 100644
+--- a/KingdomWatch/assets/scripts/battle/Projectile.ts
++++ b/KingdomWatch/assets/scripts/battle/Projectile.ts
+@@ -229,2 +229,3 @@ export class ProjectileManager {
+-  tick(dt: number, line: { takeDamage: (d: number) => void }): void {
+-    this.dirty = true;
++  tick(dt: number, line: { takeDamage: (d: number) => void }, renderNow = true): void {
++    this.frame++; // Retain the original substep phase even when intermediate geometry is deferred.
++    if (this.active.length) this.dirty = true;
+@@ -250 +251,3 @@ export class ProjectileManager {
+-            while (a.trail.length > a.trailMax * 2) a.trail.splice(0, 2);
++            while (a.trail.length > a.trailMax * 2) {
++              a.trail.copyWithin(0, 2); a.trail.length -= 2;
++            }
+@@ -269 +272,3 @@ export class ProjectileManager {
+-          while (a.trail.length > a.trailMax * 2) { a.trail.splice(0, 2); }
++          while (a.trail.length > a.trailMax * 2) {
++            a.trail.copyWithin(0, 2); a.trail.length -= 2;
++          }
+@@ -281 +286 @@ export class ProjectileManager {
+-    if (this.dirty) { this.render(); this.dirty = false; }
++    if (renderNow && this.dirty) { this.render(); this.dirty = false; }
+@@ -298 +303,3 @@ export class ProjectileManager {
+-        while (a.trail.length > a.trailMax * 2) a.trail.splice(0, 2);
++        while (a.trail.length > a.trailMax * 2) {
++          a.trail.copyWithin(0, 2); a.trail.length -= 2;
++        }
+@@ -315,0 +323,3 @@ export class ProjectileManager {
++    const minX = Math.min(x, x + sx), maxX = Math.max(x, x + sx);
++    const minY = Math.min(y, y + sy), maxY = Math.max(y, y + sy);
++    const padding = (sp.size || 7) * .5;
+@@ -318,2 +328,7 @@ export class ProjectileManager {
+-      if (m.dead || a.hit.has(m.lifeId)) continue;
+-      const dx = x - m.x, dy = y - m.y, radius = m.def.radius + (sp.size || 7) * .5;
++      if (m.dead) continue;
++      const mx = m.x, my = m.y, radius = m.def.radius + padding;
++      // Conservative broad phase only. Exact circle entry, ties and per-contact feedback stay below.
++      const bound = radius + 1e-6;
++      if (mx < minX - bound || mx > maxX + bound || my < minY - bound || my > maxY + bound) continue;
++      if (a.hit.has(m.lifeId)) continue;
++      const dx = x - mx, dy = y - my;
+@@ -353 +368 @@ export class ProjectileManager {
+-  /** 全部弹道一次重绘：单 Graphics 单 draw call（原每弹一 Node 一 Graphics） */
++  /** Draw once for the visible frame; simulation and every hit still advance per substep. */
+@@ -359 +373,0 @@ export class ProjectileManager {
+-    this.frame++;
+@@ -392,0 +407 @@ export class ProjectileManager {
++    this.impacts?.endProjectileFrame();
+diff --git a/KingdomWatch/assets/scripts/battle/SniperUltimateVFX.ts b/KingdomWatch/assets/scripts/battle/SniperUltimateVFX.ts
+index 8a5af0da..feccb0a5 100644
+--- a/KingdomWatch/assets/scripts/battle/SniperUltimateVFX.ts
++++ b/KingdomWatch/assets/scripts/battle/SniperUltimateVFX.ts
+@@ -127 +127 @@ export class SniperUltimateVFX {
+-    for (let i = 0; i < this.used; i++) this.flights[i].node.active = false;
++    this.previousUsed = this.used;
+@@ -129,0 +130,5 @@ export class SniperUltimateVFX {
++  private previousUsed = 0;
++  endFrame(): void {
++    if (this.destroyed) return;
++    for (let i = this.used; i < this.previousUsed; i++) this.flights[i].node.active = false;
++  }
+@@ -152 +157,3 @@ export class SniperUltimateVFX {
+-    q.node.setPosition(x, y, 0); q.node.angle = Math.atan2(vy, vx) * 180 / Math.PI;
++    q.node.setPosition(x, y, 0);
++    const angle = Math.atan2(vy, vx) * 180 / Math.PI;
++    if (q.node.angle !== angle) q.node.angle = angle;

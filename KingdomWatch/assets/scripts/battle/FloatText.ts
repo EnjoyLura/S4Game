@@ -73,7 +73,10 @@ export class FloatText {
       }
     }
     if (this.live.length >= MAX_ACTIVE || kind !== 'crit' && this.live.length >= MAX_ACTIVE - 6) return;
-    if (kind === 'periodic' && this.live.filter(t => t.kind === 'periodic').length >= 6) return;
+    if (kind === 'periodic') {
+      let periodic = 0;
+      for (const t of this.live) if (t.kind === 'periodic' && ++periodic >= 6) return;
+    }
     const ft = this.pool.get();
     ft.kind = kind; ft.target = event.target; ft.amount = amount; ft.hits = 1;
     const motion = MOTION[kind];

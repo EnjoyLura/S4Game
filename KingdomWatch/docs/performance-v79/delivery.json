@@ -1,0 +1,18 @@
+{
+  "phase": "source-backup-verified-runtime-published",
+  "backupCommit": "387ca439692543bf780c5004f1aa568f787ec5c1",
+  "runtimeCommit": "9e224dd0f794d385ee2dcf3cf5bd1e5bfebe4424",
+  "release": "50ca41f3c2fb7ab9",
+  "url": "https://enjoylura.github.io/kingdom-watch-play/?v=performance-v79",
+  "pagesStatus": "built",
+  "onlineChecksumSamples": 11,
+  "assetFiles": 2080,
+  "nativeFilesUnchanged": 756,
+  "gameplayOrBenchmarkRun": false,
+  "userVisualChoice": "Keep all visuals; manually playtest this build",
+  "pagesBuildStatus": "built",
+  "sourceBackupRemoteVerified": true,
+  "temporaryTransferRefsRemoved": true,
+  "temporaryTransferRefCount": 5,
+  "sourcePerformanceCommitMessage": "perf: optimize dense projectile volleys without reducing visuals"
+}

@@ -6,3 +6,7 @@ Tools/gpt-image-2-skill
 
 # Local audio scratch downloads and analysis exports
 /.tmp-kwsfx/
+
+# Python bytecode is a local cache, not a project source asset.
+__pycache__/
+*.pyc

@@ -9,6 +9,19 @@ interface Accent {
   x: number; y: number; age: number; life: number; angle: number; heavy: boolean; launch: boolean;
 }
 const clamp = (v: number): number => Math.max(0, Math.min(1, v));
+// Fixed samples retain every original segment and double precision; no per-arrow curve allocation.
+const LENS = Array.from({ length: 17 }, (_, k) => {
+  const angle = k * Math.PI / 8;
+  return { cos: Math.cos(angle), sin: Math.sin(angle) };
+});
+const WIND = Array.from({ length: 13 }, (_, k) => {
+  const t = k / 12;
+  return { t, sin: Math.sin(t * Math.PI), phase: t * Math.PI * 1.4 };
+});
+const TAIL = Array.from({ length: 9 }, (_, k) => {
+  const t = k / 8;
+  return { t, width: Math.pow(1 - t, 1.3), alpha: Math.pow(1 - t, 1.8), ray: Math.pow(1 - t, 1.6) };
+});
 
 export class ArcherVFX {
   private root: Node;
@@ -19,10 +32,15 @@ export class ArcherVFX {
   private loaded = false;
   private flights: Flight[] = [];
   private flightCount = 0;
+  private previousFlightCount = 0;
   private active: Accent[] = [];
   private launchFree: Accent[] = [];
   private hitFree: Accent[] = [];
   private tint = new Color();
+  private windX: number[] = new Array(13);
+  private windY: number[] = new Array(13);
+  private tailX: number[] = new Array(9);
+  private tailY: number[] = new Array(9);
 
   constructor(parent: Node, projectileParent: Node) {
     this.root = this.node('archerVfx', parent);
@@ -90,20 +108,27 @@ export class ArcherVFX {
   private paint(part: Part, id: string, height: number, alpha: number, x = 0, y = 0, angle = 0): void {
     const frame = this.frames.get(id);
     if (!frame) { part.node.active = false; return; }
-    part.node.active = alpha > 0;
     if (part.sprite.spriteFrame !== frame) part.sprite.spriteFrame = frame;
     // SpriteFrame.width/height are the WHOLE texture dimensions in Creator 3.8.
     // Cropped atlas cells must use rect dimensions or every sprite is stretched into a square.
     part.ui.setContentSize(height * frame.rect.width / frame.rect.height, height);
     this.tint.set(255, 255, 255, Math.round(Math.max(0, Math.min(255, alpha))));
     part.sprite.color = this.tint;
-    part.node.setPosition(x, y, 0); part.node.angle = angle;
+    const position = part.node.position;
+    if (position.x !== x || position.y !== y) part.node.setPosition(x, y, 0);
+    if (part.node.angle !== angle) part.node.angle = angle;
+    part.node.active = alpha > 0;
   }
 
   beginProjectileFrame(): void {
     this.trails.clear();
-    for (let i = 0; i < this.flightCount; i++) this.flights[i].root.active = false;
+    this.previousFlightCount = this.flightCount;
     this.flightCount = 0;
+  }
+
+  endProjectileFrame(): void {
+    // Keep reused slots enabled; only arrows absent from this frame leave the render pool.
+    for (let i = this.flightCount; i < this.previousFlightCount; i++) this.flights[i].root.active = false;
   }
 
   projectile(x: number, y: number, vx: number, vy: number, size: number, age: number, heavy: boolean): boolean {
@@ -111,10 +136,12 @@ export class ArcherVFX {
     const f = this.flights[this.flightCount++], speed = Math.hypot(vx, vy) || 1;
     const dx = vx / speed, dy = vy / speed, angle = Math.atan2(vy, vx) * 180 / Math.PI - 90;
     const length = 30 + size * 4.2;
-    f.root.active = true; f.root.setPosition(x, y, 0); f.root.angle = angle;
+    f.root.setPosition(x, y, 0);
+    if (f.root.angle !== angle) f.root.angle = angle;
     this.paint(f.body, 'arrow', length, 255);
     // The star sits on the leading bevel, leaving the emerald and feather silhouette readable.
     this.paint(f.tip, 'glint', heavy ? 17 : 9, heavy ? 175 + 25 * Math.sin(age * 15) : 85, 0, length * 0.43);
+    f.root.active = true;
     const tailX = x - dx * length * 0.44, tailY = y - dy * length * 0.44;
     const trailLength = Math.min(heavy ? 118 : 86, Math.max(0, speed * age - length * 0.44));
     this.greenWind(x, y, dx, dy, length, trailLength, age, heavy);
@@ -133,25 +160,29 @@ export class ArcherVFX {
       this.tint.set(159, 255, 170, Math.round((band === 0 ? 24 : band === 1 ? 12 : 5) * strength));
       g.fillColor = this.tint;
       for (let k = 0; k <= 16; k++) {
-        const a = k * Math.PI / 8;
-        const ax = cx + dx * Math.cos(a) * along + px * Math.sin(a) * across;
-        const ay = cy + dy * Math.cos(a) * along + py * Math.sin(a) * across;
+        const sample = LENS[k];
+        const ax = cx + dx * sample.cos * along + px * sample.sin * across;
+        const ay = cy + dy * sample.cos * along + py * sample.sin * across;
         if (k === 0) g.moveTo(ax, ay); else g.lineTo(ax, ay);
       }
       g.close(); g.fill();
     }
     // Short wind strokes flow along either side; phase depends on age, never random frame noise.
     const reach = body * 0.65 + Math.min(trail, 48);
-    for (const side of [-1, 1]) {
+    for (let side = -1; side <= 1; side += 2) {
+      for (let k = 0; k <= 12; k++) {
+        const sample = WIND[k], t = sample.t;
+        const along = body * 0.38 - reach * t;
+        const offset = side * (1.2 + sample.sin * 4.2 + t * 0.8)
+          + Math.sin(sample.phase + age * 12) * 0.65 * sample.sin;
+        this.windX[k] = x + dx * along + px * offset;
+        this.windY[k] = y + dy * along + py * offset;
+      }
       for (let band = 0; band < 2; band++) {
         this.tint.set(band ? 203 : 118, 255, band ? 210 : 143, Math.round((band ? 49 : 16) * strength));
         g.strokeColor = this.tint; g.lineWidth = band ? 0.8 : 2.5;
         for (let k = 0; k <= 12; k++) {
-          const t = k / 12;
-          const along = body * 0.38 - reach * t;
-          const offset = side * (1.2 + Math.sin(t * Math.PI) * 4.2 + t * 0.8)
-            + Math.sin(t * Math.PI * 1.4 + age * 12) * 0.65 * Math.sin(t * Math.PI);
-          const ax = x + dx * along + px * offset, ay = y + dy * along + py * offset;
+          const ax = this.windX[k], ay = this.windY[k];
           if (k === 0) g.moveTo(ax, ay); else g.lineTo(ax, ay);
         }
         g.stroke();
@@ -163,15 +194,17 @@ export class ArcherVFX {
   private ribbon(x: number, y: number, dx: number, dy: number, length: number, heavy: boolean): void {
     if (length < 2) return;
     const g = this.trails, px = -dy, py = dx;
+    for (let k = 0; k <= 8; k++) {
+      this.tailX[k] = x - dx * length * TAIL[k].t;
+      this.tailY[k] = y - dy * length * TAIL[k].t;
+    }
     for (let band = 0; band < 3; band++) {
       const width = (heavy ? 2.1 : 1.4) * (band === 0 ? 1.8 : band === 1 ? 0.85 : 0.22);
       const alpha = band === 0 ? 12 : band === 1 ? 32 : 110;
       for (let k = 0; k < 8; k++) {
-        const near = k / 8, far = (k + 1) / 8;
-        const wn = width * Math.pow(1 - near, 1.3), wf = width * Math.pow(1 - far, 1.3);
-        const nx = x - dx * length * near, ny = y - dy * length * near;
-        const fx = x - dx * length * far, fy = y - dy * length * far;
-        this.tint.set(255, band === 2 ? 236 : 205, band === 2 ? 158 : 85, Math.round(alpha * Math.pow(1 - near, 1.8)));
+        const wn = width * TAIL[k].width, wf = width * TAIL[k + 1].width;
+        const nx = this.tailX[k], ny = this.tailY[k], fx = this.tailX[k + 1], fy = this.tailY[k + 1];
+        this.tint.set(255, band === 2 ? 236 : 205, band === 2 ? 158 : 85, Math.round(alpha * TAIL[k].alpha));
         g.fillColor = this.tint;
         g.moveTo(nx + px * wn, ny + py * wn); g.lineTo(fx + px * wf, fy + py * wf);
         g.lineTo(fx - px * wf, fy - py * wf); g.lineTo(nx - px * wn, ny - py * wn);
@@ -179,15 +212,15 @@ export class ArcherVFX {
       }
     }
     // Two tapered side streaks open slightly behind the fletching, as fine rays rather than a fog wedge.
-    for (const side of [-1, 1]) {
+    for (let side = -1; side <= 1; side += 2) {
       const spread = heavy ? 5 : 3.5;
       for (let k = 0; k < 8; k++) {
-        const near = k / 8, far = (k + 1) / 8;
+        const near = TAIL[k].t, far = TAIL[k + 1].t;
         const offsetNear = side * (0.8 + spread * near), offsetFar = side * (0.8 + spread * far);
-        this.tint.set(255, 224, 116, Math.round((heavy ? 155 : 105) * Math.pow(1 - near, 1.6)));
+        this.tint.set(255, 224, 116, Math.round((heavy ? 155 : 105) * TAIL[k].ray));
         g.strokeColor = this.tint; g.lineWidth = (heavy ? 1.1 : 0.8) * (1 - near * 0.7);
-        g.moveTo(x - dx * length * near + px * offsetNear, y - dy * length * near + py * offsetNear);
-        g.lineTo(x - dx * length * far + px * offsetFar, y - dy * length * far + py * offsetFar); g.stroke();
+        g.moveTo(this.tailX[k] + px * offsetNear, this.tailY[k] + py * offsetNear);
+        g.lineTo(this.tailX[k + 1] + px * offsetFar, this.tailY[k + 1] + py * offsetFar); g.stroke();
       }
     }
   }

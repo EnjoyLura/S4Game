@@ -336,7 +336,10 @@ export class ArcherHero extends HeroBase {
   private volleyQueue: PendingVolley[] = [];
 
   protected queuedShotDelay(): number {
-    return Math.min(Infinity, ...this.serialQueue.map(shot => shot.t), ...this.volleyQueue.map(row => row.t));
+    let delay = Infinity;
+    for (const shot of this.serialQueue) delay = Math.min(delay, shot.t);
+    for (const row of this.volleyQueue) delay = Math.min(delay, row.t);
+    return delay;
   }
 
   protected buildVisual(parent: Node): void {

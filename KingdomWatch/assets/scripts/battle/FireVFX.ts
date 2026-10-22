@@ -3,7 +3,7 @@
  */
 import { Color, EffectAsset, JsonAsset, Layers, Material, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
 
-interface Part { node: Node; sprite: Sprite; frame: string; }
+interface Part { node: Node; sprite: Sprite; ui: UITransform; frame: string; }
 interface Fragment { part: Part; vx: number; vy: number; spin: number; }
 interface Flight { root: Node; body: Part; tail: Part; }
 interface Residue { mark: Part; glow: Part; }
@@ -145,17 +145,23 @@ export class FireVFX {
 
   /** Rendering slots only: projectile data, collision and velocity stay in ProjectileManager. */
   beginProjectileFrame(): void {
-    for (let i = 0; i < this.flightCount; i++) this.flights[i].root.active = false;
+    this.previousFlightCount = this.flightCount;
     this.flightCount = 0;
+  }
+
+  private previousFlightCount = 0;
+  endProjectileFrame(): void {
+    for (let i = this.flightCount; i < this.previousFlightCount; i++) this.flights[i].root.active = false;
   }
 
   projectile(x: number, y: number, vx: number, vy: number, size: number): boolean {
     if (!this.loaded || this.flightCount >= FLIGHT_CAP) return false;
     const f = this.flights[this.flightCount++], length = Math.hypot(vx, vy) || 1;
     const angle = Math.atan2(vy, vx) * 180 / Math.PI - 90;
-    f.root.active = true; f.root.setPosition(x, y, 0);
+    f.root.setPosition(x, y, 0);
     this.draw(f.tail, 'streak', size * 3.2, 180, -vx / length * size * 1.6, -vy / length * size * 1.6, angle + 180);
     this.draw(f.body, 'fireball', size * 2.65, 255, 0, 0, angle);
+    f.root.active = true;
     return true;
   }
 
@@ -199,10 +205,10 @@ export class FireVFX {
 
   private part(name: string, parent: Node): Part {
     const node = this.node(name, parent);
-    node.addComponent(UITransform).setContentSize(1, 1);
+    const ui = node.addComponent(UITransform); ui.setContentSize(1, 1);
     const sprite = node.addComponent(Sprite);
     sprite.sizeMode = Sprite.SizeMode.CUSTOM; sprite.trim = false;
-    return { node, sprite, frame: '' };
+    return { node, sprite, ui, frame: '' };
   }
 
   private create(): Burst {
@@ -220,7 +226,8 @@ export class FireVFX {
   /** Return true when handled, including intentional drops under the budget. */
   hit(x: number, y: number, heavy: boolean, angle = Math.PI / 2): boolean {
     if (!this.loaded) return false;
-    if (this.active.filter(b => !b.blast).length >= CONTACT_CAP) return true;
+    let contacts = 0;
+    for (const b of this.active) if (!b.blast && ++contacts >= CONTACT_CAP) return true;
     const burst = this.obtain(false);
     if (burst) this.start(burst, x, y, heavy ? 22 : 14, angle, false, heavy);
     return true;
@@ -237,7 +244,7 @@ export class FireVFX {
     clip.part.node.active = true;
     // 格内火焰质心在中心下方 (PYRO_ANCHOR_Y−CELL/2)px：把质心对到命中点，烟雾自然升到上方
     clip.part.node.setPosition(x, y + (PYRO_ANCHOR_Y - PYRO_CELL / 2) * scale, 0);
-    clip.part.node.getComponent(UITransform)!.setContentSize(PYRO_CELL * scale, PYRO_CELL * scale);
+    clip.part.ui.setContentSize(PYRO_CELL * scale, PYRO_CELL * scale);
     clip.part.sprite.customMaterial = this.material;
     clip.part.frame = '';
     this.clipsActive.push(clip);
@@ -286,7 +293,7 @@ export class FireVFX {
         // Local attachment inherits movement, depth sorting, and scene destruction.
         clip.part.node.setParent(target.node);
         clip.part.node.setPosition(0, target.def.radius * .4 + (PYRO_ANCHOR_Y - PYRO_CELL / 2) * clip.scale, 0);
-        clip.part.node.getComponent(UITransform)!.setContentSize(PYRO_CELL * clip.scale, PYRO_CELL * clip.scale);
+        clip.part.ui.setContentSize(PYRO_CELL * clip.scale, PYRO_CELL * clip.scale);
         clip.part.sprite.customMaterial = this.material;
         this.renderClip(clip);
         clip.part.node.active = true;
@@ -304,7 +311,8 @@ export class FireVFX {
 
   blast(x: number, y: number, radius: number): boolean {
     if (!this.loaded) return false;
-    if (this.active.filter(b => b.blast).length >= BLAST_CAP) return true;
+    let blasts = 0;
+    for (const b of this.active) if (b.blast && ++blasts >= BLAST_CAP) return true;
     // Damage contact is reported just before the AoE event. Upgrade that same
     // contact instead of drawing two opaque explosions at one collision.
     const contact = this.active.find(b => !b.blast && b.age < 0.035 && Math.hypot(b.x - x, b.y - y) < 20);
@@ -351,8 +359,10 @@ export class FireVFX {
     if (part.frame !== frame) { part.sprite.spriteFrame = sf; part.frame = frame; }
     part.node.active = visible;
     if (!visible) return;
-    part.node.getComponent(UITransform)!.setContentSize(width, width * ratio);
-    part.node.setPosition(x, y, 0); part.node.angle = angle;
+    part.ui.setContentSize(width, width * ratio);
+    const position = part.node.position;
+    if (position.x !== x || position.y !== y) part.node.setPosition(x, y, 0);
+    if (part.node.angle !== angle) part.node.angle = angle;
     this.tint.set(255, 255, 255, Math.round(Math.min(255, alpha))); part.sprite.color = this.tint;
   }
 

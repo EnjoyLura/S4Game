@@ -11,11 +11,22 @@ const STYLES: Record<string, Style> = {
   mora: { tail: 136, width: 6, color: [96, 209, 249], light: [225, 251, 255] },
 };
 
+const WAKE = Array.from({ length: 10 }, (_, k) => {
+  const t = k / 9;
+  return { t, width: Math.pow(1 - t, 1.35), alpha: Math.pow(1 - t, 1.65) };
+});
+const WIND = Array.from({ length: 8 }, (_, k) => {
+  const t = k / 7;
+  return { t, sin: Math.sin(t * Math.PI), alpha: Math.sin((t + .08) * Math.PI) };
+});
+
 export class BasicProjectileFlightVFX {
   private root: Node;
   private g: Graphics;
   private tint = new Color();
   private x = 0; private y = 0; private dx = 0; private dy = 1;
+  private wakeU: number[] = new Array(10);
+  private wakeV: number[] = new Array(10);
 
   constructor(parent: Node) {
     this.root = new Node('basicShotWakes');
@@ -61,17 +72,21 @@ export class BasicProjectileFlightVFX {
   }
 
   private wake(style: Style, tail: number, length: number, age: number, phase: number, flame: boolean): void {
+    // All three color bands share the exact same centerline.
+    for (let k = 0; k <= 9; k++) {
+      const t = WAKE[k].t;
+      this.wakeU[k] = -tail - length * t;
+      this.wakeV[k] = Math.sin(t * 8 - age * 15 + phase) * t * (flame ? 2.7 : .65);
+    }
     for (let band = 0; band < 3; band++) {
       const width = style.width * (band === 0 ? 1 : band === 1 ? .43 : .11);
       for (let k = 0; k < 9; k++) {
-        const a = k / 9, b = (k + 1) / 9;
-        const wa = width * Math.pow(1 - a, 1.35), wb = width * Math.pow(1 - b, 1.35);
-        const va = Math.sin(a * 8 - age * 15 + phase) * a * (flame ? 2.7 : .65);
-        const vb = Math.sin(b * 8 - age * 15 + phase) * b * (flame ? 2.7 : .65);
+        const wa = width * WAKE[k].width, wb = width * WAKE[k + 1].width;
+        const va = this.wakeV[k], vb = this.wakeV[k + 1];
         this.color(band === 2 ? style.light : style.color,
-          (band === 0 ? 38 : band === 1 ? 94 : 205) * Math.pow(1 - a, 1.65));
-        this.move(-tail - length * a, va + wa); this.line(-tail - length * b, vb + wb);
-        this.line(-tail - length * b, vb - wb); this.line(-tail - length * a, va - wa);
+          (band === 0 ? 38 : band === 1 ? 94 : 205) * WAKE[k].alpha);
+        this.move(this.wakeU[k], va + wa); this.line(this.wakeU[k + 1], vb + wb);
+        this.line(this.wakeU[k + 1], vb - wb); this.line(this.wakeU[k], va - wa);
         this.g.close(); this.g.fill();
       }
     }
@@ -81,11 +96,11 @@ export class BasicProjectileFlightVFX {
     const reveal = Math.min(1, age / .055);
     for (let side = -1; side <= 1; side += 2) {
       for (let k = 0; k < 7; k++) {
-        const a = k / 7, b = (k + 1) / 7;
+        const a = WIND[k].t, b = WIND[k + 1].t;
         const reach = body * .85 + length * .35;
-        const va = side * (3 + Math.sin(a * Math.PI) * (heavy ? 7 : 5) + a * 2);
-        const vb = side * (3 + Math.sin(b * Math.PI) * (heavy ? 7 : 5) + b * 2);
-        this.color(style.light, 165 * Math.sin((a + .08) * Math.PI) * reveal);
+        const va = side * (3 + WIND[k].sin * (heavy ? 7 : 5) + a * 2);
+        const vb = side * (3 + WIND[k + 1].sin * (heavy ? 7 : 5) + b * 2);
+        this.color(style.light, 165 * WIND[k].alpha * reveal);
         this.g.lineWidth = (heavy ? 1.45 : 1.15) * (1 - a * .65);
         this.move(body * .35 - a * reach, va); this.line(body * .35 - b * reach, vb); this.g.stroke();
       }

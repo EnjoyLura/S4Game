@@ -4,7 +4,7 @@
  */
 import { Color, Graphics, Layers, Node } from 'cc';
 
-interface P { x: number; y: number; vx: number; vy: number; life: number; max: number; size: number; hex: string; }
+interface P { x: number; y: number; vx: number; vy: number; life: number; max: number; size: number; color: Color; }
 
 export class Particles {
   private node = new Node('particles');
@@ -19,7 +19,7 @@ export class Particles {
     this.node.setParent(parent);
     this.g = this.node.addComponent(Graphics);
     for (let i = 0; i < this.cap; i++) {
-      this.free.push({ x: 0, y: 0, vx: 0, vy: 0, life: 0, max: 1, size: 3, hex: '#FFFFFF' });
+      this.free.push({ x: 0, y: 0, vx: 0, vy: 0, life: 0, max: 1, size: 3, color: new Color() });
     }
   }
 
@@ -35,16 +35,17 @@ export class Particles {
       p.vx = Math.cos(a) * s; p.vy = Math.sin(a) * s;
       p.max = p.life = angle === undefined ? 0.24 + Math.random() * 0.1 : 0.14 + Math.random() * 0.1;
       p.size = 1.8 + Math.random() * 1.6;
-      p.hex = hex;
+      Color.fromHEX(p.color, hex);
       this.act.push(p);
     }
   }
 
-  tick(dt: number): void {
+  tick(dt: number, renderNow = true): void {
     if (this.act.length === 0) {
-      if (this.dirty) { this.g.clear(); this.dirty = false; }
+      if (renderNow && this.dirty) { this.g.clear(); this.dirty = false; }
       return;
     }
+    this.dirty = true;
     for (let i = this.act.length - 1; i >= 0; i--) {
       const p = this.act[i];
       p.life -= dt;
@@ -52,15 +53,17 @@ export class Particles {
       p.vy -= 460 * dt;
       p.x += p.vx * dt; p.y += p.vy * dt;
     }
+    if (!renderNow) return;
     const g = this.g;
     g.clear();
     for (const p of this.act) {
       const k = p.life / p.max;
-      Color.fromHEX(this.tmp, p.hex);
+      this.tmp.set(p.color);
       this.tmp.a = Math.floor(230 * k);
       g.fillColor = this.tmp;
       g.circle(p.x, p.y, p.size * (0.5 + k * 0.5));
       g.fill();
     }
+    this.dirty = false;
   }
 }

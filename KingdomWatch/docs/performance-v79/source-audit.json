@@ -1,0 +1,95 @@
+{
+  "kind": "Static AST, source and file-hash inspection; no game execution",
+  "baselineCommit": "387ca439692543bf780c5004f1aa568f787ec5c1",
+  "assetsChecked": 2080,
+  "changedAssets": [
+    "scripts/battle/ArcherVFX.ts",
+    "scripts/battle/BasicProjectileFlightVFX.ts",
+    "scripts/battle/BattleDirector.ts",
+    "scripts/battle/FireVFX.ts",
+    "scripts/battle/FloatText.ts",
+    "scripts/battle/FrostProjectileVFX.ts",
+    "scripts/battle/Hero.ts",
+    "scripts/battle/ImpactFX.ts",
+    "scripts/battle/Monster.ts",
+    "scripts/battle/Particles.ts",
+    "scripts/battle/Projectile.ts",
+    "scripts/battle/SniperUltimateVFX.ts"
+  ],
+  "added": [],
+  "removed": [],
+  "unchangedNative": 756,
+  "changedMethods": {
+    "ArcherVFX": [
+      "ArcherVFX.paint",
+      "ArcherVFX.beginProjectileFrame",
+      "ArcherVFX.endProjectileFrame",
+      "ArcherVFX.projectile",
+      "ArcherVFX.greenWind",
+      "ArcherVFX.ribbon"
+    ],
+    "BasicProjectileFlightVFX": [
+      "BasicProjectileFlightVFX.wake",
+      "BasicProjectileFlightVFX.wind"
+    ],
+    "BattleDirector": [
+      "BattleDirector.update"
+    ],
+    "FireVFX": [
+      "FireVFX.beginProjectileFrame",
+      "FireVFX.endProjectileFrame",
+      "FireVFX.projectile",
+      "FireVFX.part",
+      "FireVFX.hit",
+      "FireVFX.hitClip",
+      "FireVFX.syncBurns",
+      "FireVFX.blast",
+      "FireVFX.drawFrame"
+    ],
+    "FloatText": [
+      "FloatText.spawn"
+    ],
+    "FrostProjectileVFX": [
+      "FrostProjectileVFX.beginProjectileFrame",
+      "FrostProjectileVFX.endProjectileFrame",
+      "FrostProjectileVFX.projectile",
+      "FrostProjectileVFX.ribbon"
+    ],
+    "Hero": [
+      "ArcherHero.queuedShotDelay"
+    ],
+    "ImpactFX": [
+      "ImpactFX.endProjectileFrame"
+    ],
+    "Monster": [
+      "MonsterManager.tick",
+      "MonsterManager.drawPresentation",
+      "MonsterManager.sortDepth"
+    ],
+    "Particles": [
+      "Particles.burst",
+      "Particles.tick"
+    ],
+    "Projectile": [
+      "ProjectileManager.tick",
+      "ProjectileManager.advanceReturning",
+      "ProjectileManager.hitSweep",
+      "ProjectileManager.render"
+    ],
+    "SniperUltimateVFX": [
+      "SniperUltimateVFX.beginFrame",
+      "SniperUltimateVFX.endFrame",
+      "SniperUltimateVFX.projectile"
+    ]
+  },
+  "unchangedMethodCount": 299,
+  "heroAttackAndCardMethodsUnchanged": true,
+  "hitDamageAndFeedbackUnchanged": true,
+  "burnSyncOnlyCachesUIComponent": true,
+  "exactCollisionAndOrderUnchanged": true,
+  "randomCallCountUnchanged": true,
+  "typeDiagnosticsUnchanged": true,
+  "typeDiagnostics": 10,
+  "runtimeBenchmarksRun": false,
+  "visualAcceptance": "User manual on phone"
+}
