@@ -8,6 +8,10 @@ import { COMIC, comicArt, comicButton, comicButtonControl, comicMark, comicPlate
 import { EMPTY_GEAR, gearArt, heroComicFigure, heroGlyph } from './HeroComic';
 import { mainLabel as pageLabel, PageCtx, mainLayout, mainResourceTop, MAIN_RESOURCE_H, pageScroll, fmt, toast } from './PageKit';
 import { loadSave, saveSave } from '../core/SaveData';
+import { finishUpgradeLesson, pendingUpgradeLesson } from '../core/SecondJourney';
+import { flow } from '../core/Flow';
+import { tutorialFocus } from './TutorialFocus';
+import { whenUIArtReady } from './UIArtReady';
 import { bindButton } from './ButtonFeedback';
 import { refreshUI } from './UIMotion';
 import { MilestoneSwipe } from './MilestoneSwipe';
@@ -99,7 +103,7 @@ function roster(parent: Node, top: number, hid: string, rebuild: () => void): vo
     const slot = heroLobbyPortrait(rail.content, rail.x(i), def.id, active, owned, rail.cardWidth);
     slot.name = 'trainingHero:' + def.id;
     tap(slot, () => {
-      if (!owned) { toast('前往商店解锁该英雄'); return; }
+      if (!owned) { toast(def.id === 'pyro' ? '通关普通1-2免费获得火法师' : '前往商店解锁该英雄'); return; }
       if (hid === def.id) return;
       sv.curHero = def.id; saveSave(); rebuild();
     });
@@ -324,6 +328,7 @@ function footer(parent: Node, ctx: PageCtx, top: number, text: string,
 }
 
 export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
+  if (pendingUpgradeLesson()) { loadSave().curHero = 'archer'; st.tab = 0; }
   const root = N('trainingLobby', ctx.screens, 0, 0, 750, LO.half * 2);
   function render(): void {
     refreshUI(root, () => {
@@ -415,6 +420,20 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
           return !missing;
         });
         fx.setHammer(footerControl.hammer);
+        if (!weapon && hid === 'archer' && pendingUpgradeLesson()) whenUIArtReady(root, () => {
+          if (!root.isValid || !root.activeInHierarchy || !pendingUpgradeLesson()) return;
+          const button = root.getChildByName('trainingUpgrade');
+          if (!button) return;
+          const back = (): void => {
+            flow.levelReturn = { id: '1-2', diff: 0 };
+            if (ctx.navigate) ctx.navigate(2); else ctx.refresh();
+          };
+          tutorialFocus(root, button, '绿弓已装备！再花100金币将弓箭手升到2级，随后前往第二关。也可以跳过。', () => {
+            const result = growthAction(target, action);
+            if (result.ok) { finishUpgradeLesson(); ctx.refreshResources?.(); back(); }
+            else { finishUpgradeLesson(true); back(); }
+          }, () => { finishUpgradeLesson(true); back(); });
+        });
       } else if (st.tab === 2) {
         const selected = selectedSkill, shelfH = 216;
         const shelf = N('trainingSkills', body, 0, -shelfH / 2, 702, shelfH);
@@ -433,8 +452,8 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
           const pct = (v: number): string => `${Math.round(v * 10000) / 100}%`;
           rows = [{ name: '技能伤害倍率', cur: pct(cur), next: pct(next), gain: `+${pct(next - cur)}` }];
         } else {
-          const pct = (l: number): number => (l - 1) * 8;
-          rows = [{ name: selected === 'atk' ? '普攻伤害加成' : '大招伤害加成', cur: `+${pct(lv)}%`, next: `+${pct(maxed ? lv : lv + 1)}%`, gain: maxed ? '+0%' : '+8%' }];
+          const pct = (l: number): number => 100 + (l - 1) * 8;
+          rows = [{ name: selected === 'atk' ? '普攻伤害倍率' : '大招伤害倍率', cur: `${pct(lv)}%`, next: `${pct(maxed ? lv : lv + 1)}%`, gain: maxed ? '+0%' : '+8%' }];
         }
         const paperH = height - shelfH - 280;
         preview(body, 0, -(shelfH + 12 + paperH / 2), 702, paperH, data.skillName(hid, selected), lv, maxed, rows, false,

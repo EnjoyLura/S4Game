@@ -1,0 +1,32 @@
+[
+  {
+    "mode": "手机模式",
+    "observedBrowserDpr": 4,
+    "observedBacking": [
+      1080,
+      2376
+    ],
+    "expectedDpr": 4,
+    "expectedBacking": [
+      1440,
+      3168
+    ],
+    "expectedNotchTop": 62.5,
+    "calculationOnly": true
+  },
+  {
+    "mode": "电脑模式",
+    "observedBrowserDpr": 4,
+    "observedBacking": [
+      3840,
+      8448
+    ],
+    "expectedDpr": 1.125,
+    "expectedBacking": [
+      1440,
+      3168
+    ],
+    "expectedNotchTop": 62.5,
+    "calculationOnly": true
+  }
+]

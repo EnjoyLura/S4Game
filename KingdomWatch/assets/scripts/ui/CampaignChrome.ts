@@ -36,9 +36,23 @@ function smoothCutFace(g: Graphics, w: number, h: number, corner: number, top: s
 export function campaignTerrainCrown(parent: Node, height: number, chapter: number): void {
   if (height <= 0) return;
   const g = N('campaignScrollingCanopy', parent).addComponent(Graphics);
-  const palettes = [['#638B55','#3E6944','#1C4A3D'], ['#456D50','#294E3D','#153E32'], ['#665F48','#454B3D','#293E34']];
+  const palettes = [['#638B55','#3E6944','#1C4A3D'], ['#456D50','#294E3D','#153E32'], ['#665F48','#454B3D','#293E34'],
+    ['#627A4D','#405D43','#294C3D'], ['#6DA3A5','#4D848E','#315C72'], ['#D8B174','#B98B53','#95673D'],
+    ['#BEA97A','#928363','#6D6B56'], ['#B77957','#945239','#683D30'], ['#74674F','#514A40','#393D39'],
+    ['#C5DCE1','#94B7CA','#5B7E9B'], ['#8898A0','#5C7381','#394E66'], ['#58456E','#3C3559','#252B45'],
+    ['#646C75','#404B59','#283747'], ['#747365','#505451','#333F43'], ['#7B4C35','#53362C','#352B2B'],
+    ['#6F6483','#49425F','#302E48']];
   const colors = palettes[chapter] || palettes[0];
   g.fillColor = C(colors[0]); g.rect(-375, -height - 16, 750, height + 16); g.fill();
+  if (chapter >= 3) {
+    // Later biomes use a quiet terrain ridge rather than a green forest canopy.
+    for (let layer = 0; layer < 2; layer++) {
+      g.fillColor = C(colors[layer + 1]); g.moveTo(-375,-height-16);
+      for (let i=0;i<=14;i++) g.lineTo(-390+i*58,-height*.28-((i*7+layer*3)%5)*height*.07-layer*height*.12);
+      g.lineTo(420,-height-16);g.close();g.fill();
+    }
+    return;
+  }
   for (let layer = 0; layer < 2; layer++) {
     for (let i = 0; i < 13; i++) {
       const x = -400 + i * 68 + layer * 29, base = -height - 20 + layer * 22;

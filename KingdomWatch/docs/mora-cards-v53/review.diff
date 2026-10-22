@@ -1,0 +1,400 @@
+--- before/assets/scripts/battle/Hero.ts
++++ after/assets/scripts/battle/Hero.ts
+@@ -11,6 +11,7 @@
+ import { HeroStats, abilityDamage, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+ import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDuration, pyroMeteorCount, pyroMeteorDamage } from '../config/Cards';
+ import { voltShockDuration, voltShockAmp, voltShockedMultiplier, voltStrikeCount, voltStrikeTime } from '../config/Cards';
++import { MORA_ULT_HITS, moraSlowRatio, moraSlowDuration, moraFreezeChance, moraNormalFreezeDuration, moraFieldRadius, moraFieldFreeze, moraColdMultiplier, moraUltimateHitDamage } from '../config/Cards';
+ import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, MORA_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL, LO, LINE_Y } from '../config/GameConfig';
+ import { Monster, MonsterManager } from './Monster';
+ import { ProjectileManager, ProjSpec } from './Projectile';
+@@ -25,7 +26,7 @@
+ import { PyroIdleAnimation } from './PyroIdleAnimation';
+ import { MoraIdleAnimation } from './MoraIdleAnimation';
+ import { drawSniperUltimateLock } from './SniperUltimateVFX';
+-import { ULT_TIMING, ARCHER_ULT_ROW_GAP, ARCHER_ULT_ROUND_GAP, METEOR_ULT_GAP } from './UltimateTiming';
++import { ULT_TIMING, ARCHER_ULT_ROW_GAP, ARCHER_ULT_ROUND_GAP, METEOR_ULT_GAP, FROST_ULT_HIT_GAP } from './UltimateTiming';
+ 
+ function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
+ 
+@@ -1497,6 +1498,7 @@
+   readonly chargeMax = MORA_CHARGE_MAX;
+   readonly skillMax = 10;
+   private ultimateBurstT = -1;
++  private ultimateHitsLeft = 0;
+ 
+   protected buildVisual(parent: Node): void {
+     const g = this.node.addComponent(Graphics);
+@@ -1549,11 +1551,6 @@
+     this.attachBattleArt('mora');
+   }
+ 
+-  /** 冰系减速幅度 = 基础比率 + 凛冬之息/绝对零度加成（结算上限 90%） */
+-  private slowR(base: number): number {
+-    return Math.min(0.9, base + (this.stats.slowAmpBonus || 0));
+-  }
+-
+   /** 冰棱弹种统一构造：冰蓝细弹 + 减速词条 */
+   private spec(base: {
+     x: number; y: number; dirX: number; dirY: number; dmg: number;
+@@ -1565,15 +1562,18 @@
+       speed: base.speed,
+       dmg: base.dmg * (this.stats.normalMul || 1) * (crit ? this.stats.critMul : 1), crit,
+       color: '#7FD8FF', heroId: this.id, size: base.size,
+-      slowRatio: this.slowR(this.stats.slowOnHit || 0),
+-      slowDur: this.stats.slowDur || 2,
++      slowRatio: moraSlowRatio(this.stats, this.stats.slowOnHit || 0),
++      slowDur: moraSlowDuration(this.stats, this.stats.slowDur || 2),
+       spark: true,
+       slowedBonus: this.stats.slowedBonus || undefined,
++      coldBonus: this.stats.moraColdBonus || undefined,
++      freezeChance: moraFreezeChance(this.stats),
++      freezeDuration: moraNormalFreezeDuration(this.stats),
+       ...this.targetBonuses(),
+     };
+   }
+ 
+-  /** 普攻·冰棱：快速单体 + 减速；70级突破：15% 概率冰冻 0.6s（不消耗） */
++  /** 普攻·冰棱：单体减速，速冻之心/70级突破在实际命中时判定0.6秒冰冻。 */
+   protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
+     void _mgr;
+     const bs = 850;
+@@ -1585,28 +1585,30 @@
+     }));
+     projs.normalRelease(this.id, this.x, HERO_Y + 60, lead.dirX, lead.dirY);
+     Sfx.shoot(this.id);
+-    // 70级突破冰冻：几率走 freezeChance（基础15%，速冻之心卡累加），时长走 freezeProc
+-    if (this.stats.freezeProc && Math.random() < (this.stats.freezeChance || 0.15)) target.applyFreeze(this.stats.freezeProc);
+-  }
+-
+-  /** 冰霜领域：按实际领域半径选择密集区，当场伤害、冰封；解冻后才启动 2s 减速。 */
++    // 冰冻统一由弹体实际命中时判定；速冻之心无需70级突破即可启用。
++  }
++
++  /** 冰霜领域：按实际半径选密集区；冰封延长只加冰封，寒冬延续只加解冻后减速。 */
+   private castFrostField(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
+     const mc = moraSkCfg(this.stats.skillLv);
+-    const NR = (this.stats.novaR || 150) * mc.rMul * (this.stats.skillRangeMul || 1);
++    const NR = moraFieldRadius(this.stats);
+     const center = mgr.densestArea(this.x, HERO_Y, this.stats.skillRange, NR);
+     if (!center) return;
+     this.animateAttack(true, center.x - this.x, center.y - (HERO_Y + 60));
+     const hitDmg = this.abilityDamage(mc.mul);
+-    const freeze = (this.stats.novaStun || 1.5) + mc.stunBonus;
++    const freeze = moraFieldFreeze(this.stats);
+     // Snapshot the cast position: killing the central target cannot move the remaining field.
+     projs.frostDomain(center.x, center.y, NR, freeze);
+     for (const m of mgr.mobsInRadius(center.x, center.y, NR)) {
+       if (m.dead) continue;
+       const hpBefore = m.hp;
+-      m.takeDamage(hitDmg, Math.random() < this.stats.critRate, this.id);
+-      dmg.add(this.id, Math.min(hitDmg, hpBefore));
++      const crit = Math.random() < this.stats.critRate;
++      const amount = hitDmg * (m.slowT > 0 || m.freezeT > 0 ? moraColdMultiplier(this.stats) : 1)
++        * (crit ? this.stats.critMul : 1);
++      m.takeDamage(amount, crit, this.id);
++      dmg.add(this.id, Math.max(0, hpBefore - Math.max(0, m.hp)));
+       // Boss still receives the existing area damage, but has no freeze or post-thaw status.
+-      m.applyFreeze(freeze, this.slowR(0.5), 2);
++      m.applyFreeze(freeze, moraSlowRatio(this.stats, .5), moraSlowDuration(this.stats, 2));
+     }
+     Sfx.cast(this.id);
+   }
+@@ -1617,24 +1619,33 @@
+     this.castFrostField(mgr, projs, dmg);
+   }
+ 
+-  /** Windup ends at the first rain contacts; one real field hit, unchanged multipliers/slow. */
++  /** Three real contacts during one continuous storm; no threefold art/audio restart. */
+   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
+     if (this.ultimateBurstT < 0) return;
+     this.ultimateBurstT -= dt;
+-    if (this.ultimateBurstT > 0) return;
+-    this.ultimateBurstT = -1;
+-    const alive = mgr.list.filter(m => !m.dead);
+-    projs.frostUltimateBurst(alive.map(m => ({ x: m.x, y: m.depthY, radius: m.def.radius })));
+-    if (alive[0]) this.animateAttack(true, alive[0].x - this.x, alive[0].y - HERO_Y - 60);
+-    const uc = moraUltCfg(this.stats.ultLv);
+-    for (const m of alive) {
+-      const hpBefore = m.hp, d = this.abilityDamage(uc.boltMul, true);
+-      m.takeDamage(d, false, this.id, false, 0, -Math.PI / 2, true);
+-      this.lastDmg?.add(this.id, Math.min(d, hpBefore));
+-      if (!m.dead) m.applySlow(this.slowR(uc.slowMul), uc.slowDur + (this.stats.ultSlowDur || 0));
+-    }
+-    this.ultimateBeat(this.x, HERO_Y + 60, .8);
+-    bus.emit(EVT.HIT_STOP);
++    while (this.ultimateBurstT <= 0 && this.ultimateHitsLeft > 0) {
++      // Resample living enemies at each contact, including those entering during the storm.
++      const alive = mgr.list.filter(m => !m.dead);
++      projs.frostUltimateBurst(alive.map(m => ({ x: m.x, y: m.depthY, radius: m.def.radius })));
++      if (alive[0]) this.animateAttack(true, alive[0].x - this.x, alive[0].y - HERO_Y - 60);
++      const uc = moraUltCfg(this.stats.ultLv), base = moraUltimateHitDamage(this.stats);
++      const slow = moraSlowRatio(this.stats, uc.slowMul);
++      const slowDuration = moraSlowDuration(this.stats, uc.slowDur + (this.stats.ultSlowDur || 0));
++      for (const m of alive) {
++        const hpBefore = m.hp;
++        const amount = base * (m.slowT > 0 || m.freezeT > 0 ? moraColdMultiplier(this.stats) : 1);
++        m.takeDamage(amount, false, this.id, false, 0, -Math.PI / 2, true);
++        this.lastDmg?.add(this.id, Math.max(0, hpBefore - Math.max(0, m.hp)));
++        if (m.dead) continue;
++        // Repeated freezes refresh instead of adding time. Bosses retain slow without freeze.
++        const frozen = this.stats.moraUltFreeze && m.applyFreeze(this.stats.moraUltFreeze, slow, slowDuration);
++        if (!frozen) m.applySlow(slow, slowDuration);
++      }
++      if (alive.length) { this.ultimateBeat(this.x, HERO_Y + 60, .8); bus.emit(EVT.HIT_STOP); }
++      this.ultimateHitsLeft--;
++      if (!this.ultimateHitsLeft) { this.ultimateBurstT = -1; break; }
++      this.ultimateBurstT += FROST_ULT_HIT_GAP;
++    }
+   }
+   protected queuedShotDelay(): number { return this.ultimateBurstT >= 0 ? this.ultimateBurstT : Infinity; }
+   castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean {
+@@ -1643,6 +1654,7 @@
+     if (!alive.length) return false;
+     this.charge = 0; this.lastDmg = dmg;
+     this.beginUltimate();
++    this.ultimateHitsLeft = MORA_ULT_HITS;
+     this.ultimateBurstT = ULT_TIMING.mora.windup;
+     bus.emit(EVT.CHARGE_CHANGED, 0, false);
+     projs.frostUltimate(alive.map(m => ({ x: m.x, y: m.depthY, radius: m.def.radius })));
+--- before/assets/scripts/battle/Projectile.ts
++++ after/assets/scripts/battle/Projectile.ts
+@@ -58,6 +58,9 @@
+   shockedBonus?: number;   // 对感电中目标伤害加成（雷普攻15级）
+   burnedBonus?: number;   // 对灼烧中目标伤害加成（火普攻15级）
+   slowedBonus?: number;   // 对减速中目标伤害加成（冰普攻15级）
++  coldBonus?: number;     // 碎冰卡：冰法自身对减速或冰封目标的独立增伤
++  freezeChance?: number; // 冰棱实际命中时判定，发射/落空不触发
++  freezeDuration?: number;
+   /** 猎杀标记（狙大招10级）：命中后目标受伤 +markAmp 持续 markDur s */
+   markAmp?: number;
+   markDur?: number;
+@@ -586,6 +589,7 @@
+     // Explosions still resolve when the directly struck enemy dies.
+     if (m.dead) return;
+     if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
++    if (sp.freezeChance && Math.random() < sp.freezeChance) m.applyFreeze(sp.freezeDuration || .6);
+     if (sp.burnDps) m.applyBurn(sp.burnDps, sp.burnDur ?? 3);
+     if (sp.stun) m.stunT = Math.max(m.stunT, sp.stun);
+     if (sp.shockAmp) m.applyShock(sp.shockAmp, sp.shockDur ?? 3);
+@@ -623,6 +627,7 @@
+     if (sp.shockedBonus && m.shockT > 0) amount *= 1 + sp.shockedBonus;
+     if (sp.burnedBonus && m.burnT > 0) amount *= 1 + sp.burnedBonus;
+     if (sp.slowedBonus && m.slowT > 0) amount *= 1 + sp.slowedBonus;
++    if (sp.coldBonus && (m.slowT > 0 || m.freezeT > 0)) amount *= 1 + sp.coldBonus;
+     return amount;
+   }
+ 
+--- before/assets/scripts/battle/UltimateTiming.ts
++++ after/assets/scripts/battle/UltimateTiming.ts
+@@ -8,5 +8,7 @@
+ };
+ export const ARCHER_ULT_ROW_GAP = .52, ARCHER_ULT_ROUND_GAP = 1.35;
+ export const METEOR_ULT_GAP = .48;
++/** Three field contacts fit inside the existing continuous frost rain (0.5 / 1.7 / 2.9s). */
++export const FROST_ULT_HIT_GAP = 1.2;
+ export interface UltimateCue { hero: string; x: number; y: number; windup: number; duration: number; }
+ export interface UltimateBeat { hero: string; x: number; y: number; energy: number; contact?: boolean; }
+--- before/assets/scripts/config/Cards.ts
++++ after/assets/scripts/config/Cards.ts
+@@ -73,9 +73,14 @@
+   novaStun: number;     // 技能·领域冻结时长 s（冰 1.5，突破80级 1.9）
+   freezeProc: number;   // 突破·普攻概率冰冻时长 s（冰70级 0.6，概率固定 15%）
+   slowedBonus: number;  // 技能升级·对减速目标伤害加成（冰普攻15级 0.25）
+-  slowAmpBonus: number; // 卡·凛冬之息/绝对零度：冰系减速幅度加成（普攻/领域/大招减速比率累加，结算上限 0.9）
+-  ultSlowDur: number;   // 卡·寒冬延续/绝对零度：大招减速持续 +s（累加）
+-  freezeChance: number; // 卡·速冻之心：普攻冰冻几率（冰基础 0.15，累加）
++  slowAmpBonus: number; // 凛冬之息：冰系减速比率累加，结算上限 0.9
++  ultSlowDur: number;   // 兼容既有大招减速额外时长；新寒冬延续走 moraSlowLinger
++  freezeChance: number; // 70级突破的普攻冰冻基础概率；无突破时不自动生效
++  moraFreezeChanceBonus?: number; // 速冻之心：每层命中冰冻概率+15%，可独立启用
++  moraColdBonus?: number; // 碎冰：冰法自身对减速/冰封目标伤害+30%/层
++  moraSlowLinger?: number; // 寒冬延续：所有冰法减速持续+s，不增加冰封时间
++  moraFreezeLinger?: number; // 冰封延长：仅冰霜领域冰封持续+s
++  moraUltFreeze?: number; // 绝对零度：大招命中冰封s，解冻后才开始减速
+   atkLv: number;        // 技能升级等级（战斗内读里程碑：普攻/技能/大招槽）
+   skillLv: number;
+   ultLv: number;
+@@ -189,6 +194,19 @@
+ export function moraUltCfg(u: number): { boltMul: number; slowMul: number; slowDur: number; chargeOn: boolean } {
+   return { boltMul: (1.8 + (u >= 20 ? 0.4 : 0)) * (1 + (u - 1) * 0.08), slowMul: u >= 5 ? 0.6 : 0.5, slowDur: u >= 10 ? 6 : 4, chargeOn: u >= 15 };
+ }
++
++/** 冰法战斗与属性提示共用；三段均分原大招总伤害，命中时再结算目标状态。 */
++export const MORA_ULT_HITS = 3;
++export function moraSlowRatio(s: HeroStats, base: number): number { return Math.min(.9, base + (s.slowAmpBonus || 0)); }
++export function moraSlowDuration(s: HeroStats, base: number): number { return base + (s.moraSlowLinger || 0); }
++export function moraFreezeChance(s: HeroStats): number {
++  return Math.min(1, (s.freezeProc > 0 ? s.freezeChance || .15 : 0) + (s.moraFreezeChanceBonus || 0));
++}
++export function moraNormalFreezeDuration(s: HeroStats): number { return Math.max(s.freezeProc || 0, s.moraFreezeChanceBonus ? .6 : 0); }
++export function moraFieldRadius(s: HeroStats): number { return (s.novaR || 150) * moraSkCfg(s.skillLv).rMul * (s.skillRangeMul || 1); }
++export function moraFieldFreeze(s: HeroStats): number { return (s.novaStun || 1.5) + moraSkCfg(s.skillLv).stunBonus + (s.moraFreezeLinger || 0); }
++export function moraColdMultiplier(s: HeroStats): number { return 1 + (s.moraColdBonus || 0); }
++export function moraUltimateHitDamage(s: HeroStats): number { return abilityDamage(s, moraUltCfg(s.ultLv).boltMul, true) / MORA_ULT_HITS; }
+ 
+ /** 技能伤害项每箭／每发／每跳的倍率，供技能培养预览共用。 */
+ export function skillBaseMultiplier(hid: string, level: number): number {
+@@ -334,7 +352,7 @@
+ function abilityCard(owner: string, unlocks: 'skill' | 'ult', abilityName: string): CardDef {
+   return c({
+     id: owner + '_unlock_' + unlocks, name: unlocks === 'skill' ? '解锁技能' : '解锁大招',
+-    owner, rarity: owner === 'archer' || owner === 'sniper' || owner === 'pyro' || owner === 'volt' ? 'gold' : 'white', maxStacks: 1, unlocks,
++    owner, rarity: 'gold', maxStacks: 1, unlocks,
+     desc: '本局学习「' + abilityName + '」' + (unlocks === 'skill' ? '\n冷却结束后自动释放' : '\n解锁后开始充能\n充满后点击释放'),
+     apply: x => { if (unlocks === 'skill') x.hero.skillUnlocked = true; else x.hero.ultUnlocked = true; },
+   });
+@@ -453,31 +471,31 @@
+     apply: x => { x.hero.ultStun += 1.5; } }),
+ ];
+ 
+-/* ---------- 冰霜法师 · 莫拉·寒霜强化卡：减速加深 → 冻结扩化 → 控制转伤害 ---------- */
++/* ---------- 冰霜法师：减速 / 冰封控场 / 碎冰增伤 ---------- */
+ export const MORA_CARDS: CardDef[] = [
+   ...commonHeroCards('mora'),
+-  c({ id: 'mora_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'mora', req: 'mora_unlock_skill', desc: '基础技能伤害 +40%\n技能、大招生效',
+-    apply: x => { x.hero.skillMul *= 1.4; } }),
+-  c({ id: 'mora_range', name: '极寒扩散', rarity: 'white', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', desc: '冰领域半径 +30%',
+-    apply: x => { x.hero.skillRangeMul *= 1.3; } }),
+-  c({ id: 'mora_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', desc: '技能冷却 -2 秒\n可叠加',
++  c({ id: 'mora_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'mora', reqAny: ['mora_unlock_skill', 'mora_unlock_ult'], art: 'ui_card_mora_spell_v2', desc: '技能伤害项 +30%\n技能、大招生效\n最多3层',
++    apply: x => { x.hero.skillMul *= 1.3; } }),
++  c({ id: 'mora_range', name: '极寒扩散', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', art: 'ui_card_mora_range_v2', desc: '冰霜领域半径 +20%\n不改变首次索敌范围\n最多3层',
++    apply: x => { x.hero.skillRangeMul *= 1.2; } }),
++  c({ id: 'mora_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', desc: '冰霜领域冷却 -2秒\n最多3层',
+     apply: x => { x.hero.skillCdFlat += 2; } }),
+-  c({ id: 'mora_chill', name: '凛冬之息', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '冰系减速幅度 +20%\n普攻、领域、大招\n全部生效',
+-    apply: x => { x.hero.slowAmpBonus += 0.2; } }),
+-  c({ id: 'mora_freeze', name: '速冻之心', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '普攻冰冻几率 +15%\n15%→30%→45%',
+-    apply: x => { x.hero.freezeChance += 0.15; } }),
+-  c({ id: 'mora_war', name: '战吼', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_ult', desc: '大招伤害 +50%',
+-    apply: x => { x.hero.ultDmgMul *= 1.5; } }),
+-  c({ id: 'mora_linger', name: '寒冬延续', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_ult', desc: '大招减速时间 +1 秒\n可叠加',
+-    apply: x => { x.hero.ultSlowDur += 1; } }),
+-  c({ id: 'mora_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '大招释放后\n攻速 +40%\n持续 5 秒',
+-    apply: x => { x.hero.ultHaste = 1; } }),
+-  c({ id: 'mora_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '大招充能需求 -25%\n可叠加',
++  c({ id: 'mora_chill', name: '凛冬之息', rarity: 'blue', maxStacks: 3, owner: 'mora', art: 'ui_card_mora_chill_v2', desc: '减速幅度 +10个百分点\n普攻、领域、大招生效\n最多3层，上限90%',
++    apply: x => { x.hero.slowAmpBonus += .1; } }),
++  c({ id: 'mora_freeze', name: '速冻之心', rarity: 'purple', maxStacks: 2, owner: 'mora', art: 'ui_card_mora_freeze_v2', desc: '普攻命中冰冻几率 +15%\n冰冻0.6秒，无需突破\n最多2层，可叠突破概率',
++    apply: x => { x.hero.moraFreezeChanceBonus = (x.hero.moraFreezeChanceBonus || 0) + .15; } }),
++  c({ id: 'mora_war', name: '冰川之力', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_ult', art: 'ui_card_mora_war_v2', desc: '大招三段伤害 +40%\n最多3层',
++    apply: x => { x.hero.ultDmgMul *= 1.4; } }),
++  c({ id: 'mora_linger', name: '寒冬延续', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '全部冰系减速持续 +1秒\n普攻、领域、大招生效\n最多2层，不延长冰封',
++    apply: x => { x.hero.moraSlowLinger = (x.hero.moraSlowLinger || 0) + 1; } }),
++  c({ id: 'mora_freeze_linger', name: '冰封延长', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_skill', art: 'ui_card_mora_freeze_linger_v1', desc: '冰霜领域冰封 +1秒\n基础1.5→2.5→3.5秒\n最多2层',
++    apply: x => { x.hero.moraFreezeLinger = (x.hero.moraFreezeLinger || 0) + 1; } }),
++  c({ id: 'mora_eager', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '大招充能需求 -25%\n最多2层',
+     apply: x => { x.hero.chargeMul *= 0.75; } }),
+-  c({ id: 'mora_brittle', name: '碎冰', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '对减速或冻结目标\n伤害 +30%\n最多 +60%',
+-    apply: x => { x.hero.slowedBonus += 0.3; } }),
+-  c({ id: 'mora_glacier', name: '绝对零度', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '冰系减速幅度 +20%\n大招减速时间 +2 秒\n可叠加',
+-    apply: x => { x.hero.slowAmpBonus += 0.2; x.hero.ultSlowDur += 2; } }),
++  c({ id: 'mora_brittle', name: '碎冰', rarity: 'purple', maxStacks: 2, owner: 'mora', art: 'ui_card_mora_brittle_v2', desc: '冰法对减速、冰封目标\n全部伤害 +30%\n最多2层，共+60%',
++    apply: x => { x.hero.moraColdBonus = (x.hero.moraColdBonus || 0) + .3; } }),
++  c({ id: 'mora_glacier', name: '绝对零度', rarity: 'gold', maxStacks: 1, owner: 'mora', req: 'mora_unlock_ult', art: 'ui_card_mora_glacier_v2', desc: '大招冰封1.5秒，命中刷新\n解冻后开始减速\nBoss免疫冰封',
++    apply: x => { x.hero.moraUltFreeze = 1.5; } }),
+ ];
+ 
+ /* ---------- 全局卡（§6.1） ---------- */
+--- before/assets/scripts/ui/BattleComicPanels.ts
++++ after/assets/scripts/ui/BattleComicPanels.ts
+@@ -165,7 +165,7 @@
+       text(header, 0, 0, card.name, { size: 25, bold: true, color: card.rarity === 'white' || card.rarity === 'gold' ? COMIC.text : COMIC.cream, w: 192, h: 42 });
+       const circle = N('pickIconSeat', frame, 0, 65).addComponent(Graphics); circle.fillColor = C('#E6DFCF'); circle.circle(0, 0, 60); circle.fill();
+       const key = card.art || (card.unlocks ? 'ui_icon_' + card.unlocks + '_' + card.owner : CARD_ART[card.id] || 'ui_card_' + card.id);
+-      if (card.owner === 'pyro' || card.owner === 'volt') pickCardIcon(frame, 0, 65, 118, card);
++      if (card.owner === 'pyro' || card.owner === 'volt' || card.owner === 'mora') pickCardIcon(frame, 0, 65, 118, card);
+       else artSprite(frame, 0, 65, 118, 118, key, { sliced: false });
+       if (card.owner !== 'global') {
+         heroPortrait(frame, -56, -23, 36, card.owner);
+--- before/assets/scripts/ui/Panels.ts
++++ after/assets/scripts/ui/Panels.ts
+@@ -6,9 +6,11 @@
+ import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+ import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDuration, pyroMeteorCount, pyroMeteorDamage } from '../config/Cards';
+ import { voltShockDuration, voltShockAmp, voltShockedMultiplier, voltStrikeCount } from '../config/Cards';
++import { MORA_ULT_HITS, moraSlowRatio, moraSlowDuration, moraFreezeChance, moraNormalFreezeDuration, moraFieldRadius, moraFieldFreeze, moraUltimateHitDamage } from '../config/Cards';
+ import { FROST_ULT_RAIN_COUNT, HERO_Y, LO, PAL } from '../config/GameConfig';
+ import { DamageRow, fmtWk } from '../battle/DamageService';
+ import { HeroBase } from '../battle/Hero';
++import { FROST_ULT_HIT_GAP } from '../battle/UltimateTiming';
+ import { BattleDirector } from '../battle/BattleDirector';
+ import { AdService } from '../platform/AdService';
+ import { loadSave, saveSave } from '../core/SaveData';
+@@ -482,17 +484,19 @@
+     let px: number, py: number, w = 300, hh = 272, title: string;
+     let rows: [string, string][];
+     if (kind === 'atk') {
+-      const atkTitle: Record<string, string> = { archer: '普攻 · 风刃射击', sniper: '普攻 · 重弩狙击', pyro: '普攻 · 烈焰火球', volt: '普攻 · 雷电球' };
++      const atkTitle: Record<string, string> = { archer: '普攻 · 风刃射击', sniper: '普攻 · 重弩狙击', pyro: '普攻 · 烈焰火球', volt: '普攻 · 雷电球', mora: '普攻 · 冰棱' };
+       title = atkTitle[hero.id] || '普攻';
+       rows = [
+         ['伤害', String(Math.round(hero.effAtk * (h.normalMul || 1)))],
+         ['攻速', h.aspd.toFixed(1) + ' 次/秒'],
+         ['索敌范围', String(Math.round(h.range))],
+         hero.id === 'pyro' ? ['爆炸半径', String(Math.round(pyroBlastRadius(h, Math.max(60, h.explodeR))))]
++          : hero.id === 'mora' ? ['减速', Math.round(moraSlowRatio(h, h.slowOnHit || 0) * 100) + '% · ' + moraSlowDuration(h, h.slowDur || 2) + 's']
+           : ['弹道', (h.fan + h.serial > 0 ? (1 + h.fan) + '×' + (1 + h.serial) + ' 弹幕' : '1 支')],
+         ['暴击', Math.round(h.critRate * 100) + '% / ' + Math.round(h.critMul * 100) + '%'],
+         hero.id === 'pyro' ? ['灼烧', h.burnOnHit ? `${Math.round(hero.effAtk * h.burnOnHit * pyroBurnMultiplier(h))}/秒 · ${pyroBurnDuration(h)}秒` : '未获得普攻灼烧']
+           : hero.id === 'volt' ? ['感电', (shockTxt || '未获得') + (voltShockedMultiplier(h, true) > 1 ? ' · 对感电伤害+' + Math.round((voltShockedMultiplier(h, true) - 1) * 100) + '%' : '')]
++          : hero.id === 'mora' ? ['命中特性', (moraFreezeChance(h) ? Math.round(moraFreezeChance(h) * 100) + '%冰冻' + moraNormalFreezeDuration(h) + 's' : '最靠下目标') + (h.moraColdBonus ? ' · 碎冰+' + Math.round(h.moraColdBonus * 100) + '%' : '')]
+           : ['目标', '最靠下'],
+       ];
+       px = hero.x - 27 + 23 + 16 + w / 2;
+@@ -535,12 +539,12 @@
+         title = '技能 · 冰霜领域';
+         const mc = moraSkCfg(h.skillLv || 1);
+         rows = [
+-          ['效果', '密集区冰封 ' + ((h.novaStun || 1.5) + mc.stunBonus).toFixed(1) + 's · Boss免疫'],
++          ['效果', '密集区冰封 ' + moraFieldFreeze(h).toFixed(1) + 's · Boss免疫'],
+           ['范围伤害', Math.round(hero.abilityDamage(mc.mul)) + '（技×' + mc.mul.toFixed(2) + '）'],
+-          ['特性', '解冻后减速 ' + Math.round(Math.min(0.9, 0.5 + (h.slowAmpBonus || 0)) * 100) + '% · 2s'],
++          ['特性', '解冻后减速 ' + Math.round(moraSlowRatio(h, .5) * 100) + '% · ' + moraSlowDuration(h, 2) + 's'],
+           ['冷却时间', cdTotal],
+-          ['领域半径', String(Math.round((h.novaR || 150) * mc.rMul * (h.skillRangeMul || 1)))],
+-          ['释放', '自动 · 小怪/精英可冰封'],
++          ['领域半径', String(Math.round(moraFieldRadius(h)))],
++          ['释放', '自动' + (h.moraColdBonus ? ' · 对减速/冰封+' + Math.round(h.moraColdBonus * 100) + '%' : ' · 小怪/精英可冰封')],
+         ];
+       } else {
+         title = '技能 · 连锁闪电';
+@@ -605,13 +609,13 @@
+       w = 280; hh = 272;
+       const mu = moraUltCfg(h.ultLv || 1);
+       rows = [
+-        ['伤害', Math.round(hero.abilityDamage(mu.boltMul, true)) + ' × 全场'],
+-        ['形态', FROST_ULT_RAIN_COUNT + '颗冰晶雨 · 全场'],
+-        ['特性', '深度减速 ' + Math.round(Math.min(0.9, mu.slowMul + (h.slowAmpBonus || 0)) * 100)
+-          + '% · ' + (mu.slowDur + (h.ultSlowDur || 0)) + 's'],
++        ['每段伤害', moraUltimateHitDamage(h).toFixed(1) + ' × ' + MORA_ULT_HITS + '段 · 全场'],
++        ['形态', FROST_ULT_RAIN_COUNT + '颗冰晶雨 · 间隔' + FROST_ULT_HIT_GAP + 's'],
++        ['特性', (h.moraUltFreeze ? '冰封' + h.moraUltFreeze + 's→' : '') + '减速 ' + Math.round(moraSlowRatio(h, mu.slowMul) * 100)
++          + '% · ' + moraSlowDuration(h, mu.slowDur + (h.ultSlowDur || 0)) + 's'],
+         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
+         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
+-        ['释放', '手动点击'],
++        ['释放', '手动点击' + (h.moraColdBonus ? ' · 碎冰+' + Math.round(h.moraColdBonus * 100) + '%' : '')],
+       ];
+       px = WX(636, 90) - 45 - 16 - w / 2;
+       py = WYB(240 + ultIdx * 110, 90);
+--- before/assets/scripts/ui/PickArt.ts
++++ after/assets/scripts/ui/PickArt.ts
+@@ -21,13 +21,13 @@
+     : CARD_ART[card.id] || 'ui_card_' + card.id);
+ }
+ 
+-/** Fire/lightning cards share a filled circular viewport. Clip only the icon subtree. */
++/** Mage cards share a filled circular viewport. Clip only the icon subtree. */
+ export function pickCardIcon(parent: Node, x: number, y: number, size: number, card: CardDef, hideOnLoad: Node[] = []): Node {
+-  if (card.owner !== 'pyro' && card.owner !== 'volt') return artSprite(parent, x, y, size, size, pickCardArt(card), { sliced: false, hideOnLoad });
++  if (card.owner !== 'pyro' && card.owner !== 'volt' && card.owner !== 'mora') return artSprite(parent, x, y, size, size, pickCardArt(card), { sliced: false, hideOnLoad });
+   const clip = N(card.owner + 'CardIcon', parent, x, y, size, size);
+   const mask = clip.addComponent(Mask); mask.type = Mask.Type.GRAPHICS_ELLIPSE; mask.segments = 96;
+   const backing = N('pyroIconBacking', clip).addComponent(Graphics);
+-  backing.fillColor = C(card.owner === 'pyro' ? '#652E1D' : '#2E1C52'); backing.circle(0, 0, size / 2); backing.fill();
++  backing.fillColor = C(card.owner === 'pyro' ? '#652E1D' : card.owner === 'mora' ? '#143B5C' : '#2E1C52'); backing.circle(0, 0, size / 2); backing.fill();
+   // Slightly cover the viewport so the painted circle reaches its boundary without transparent rim gaps.
+   artSprite(clip, 0, 0, size * 1.04, size * 1.04, pickCardArt(card), { sliced: false, fit: false, hideOnLoad });
+   return clip;

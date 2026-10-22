@@ -1,0 +1,16 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-meteor-impact-v31-20261018-154000",
+  "entryVersion": "1792309191",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-audio-gains-v30-20261017-231309",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=meteor-impact-v31-1792309191",
+  "priorPreviewFilesPreserved": 793,
+  "compiledImpactOffsetAndRestartPresent": true,
+  "originalMeteorResourcePathUUIDAndHashMatch": true,
+  "meteorNative": "assets/resources/native/22/22a9801d-3051-46a4-a1a3-72e4b62f89cd.27cef.wav",
+  "manualAcceptance": "User manual; no game/browser/audio playback performed",
+  "deployment": "https://4e83ac17.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed"
+}

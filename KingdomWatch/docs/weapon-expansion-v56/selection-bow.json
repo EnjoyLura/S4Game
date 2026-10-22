@@ -1,0 +1,42 @@
+[
+  {
+    "key": "blue_swift_bow",
+    "name": "疾羽短弓",
+    "type": "bow",
+    "quality": 2,
+    "art": "weapons_v1/blue_swift_bow_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_bow_v2.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 疾羽短弓 (blue rare): Compact ash-wood recurve bow, strongly swept short limbs, silver feather-shaped limb tips, sky-blue leather grip, tiny brass pins. Nimble lightweight silhouette. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-545ffaf3-fef9-4e89-aa4f-98d88e2b2dbd.png"
+  },
+  {
+    "key": "blue_briar_bow",
+    "name": "铁棘长弓",
+    "type": "bow",
+    "quality": 2,
+    "art": "weapons_v1/blue_briar_bow_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_bow_v2.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 铁棘长弓 (blue rare): Tall powerful dark oak longbow, angular long limbs reinforced with short blunt steel thorn plates, copper rivets, petrol-blue wrap. Restrained rugged silhouette, fully visible taut string. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-eff59ace-2877-492f-9fd4-7f2d211f9dc3.png"
+  },
+  {
+    "key": "purple_gale_bow",
+    "name": "逐风之弓",
+    "type": "bow",
+    "quality": 3,
+    "art": "weapons_v1/purple_gale_bow_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_bow_v2.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 逐风之弓 (purple epic): Elegant ivory and honey-gold recurve bow with broad swept feather-shaped limb plates, deep teal grip, small amber jewel at the riser. Airy long crescent silhouette, not a staff. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-97070ac3-578a-473d-ba66-217227730590.png"
+  },
+  {
+    "key": "purple_raven_bow",
+    "name": "鸦羽猎弓",
+    "type": "bow",
+    "quality": 3,
+    "art": "weapons_v1/purple_raven_bow_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_bow_v2.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 鸦羽猎弓 (purple epic): Black walnut hunting bow with layered dark plum raven-feather limb plates, silver beak-shaped ends, small amethyst jewel, brown leather grip. Strong broad asymmetrical silhouette, complete taut string. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-457e6dc8-9e8c-43a4-afd3-782e451e826c.png"
+  }
+]

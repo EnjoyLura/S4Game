@@ -5,7 +5,7 @@
 import { Color, EffectAsset, JsonAsset, Layers, Material, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2, Vec4 } from 'cc';
 import { uxFrame } from '../ui/Ux';
 
-type AtlasId = 'battle_mobs_v2' | 'battle_heroes_v2' | 'battle_mob_anim_v1' | 'lobby_heroes_v1';
+type AtlasId = string;
 interface FrameManifest { frames: Record<string, [number, number, number, number]>; }
 interface Atlas { frames: Map<string, SpriteFrame>; }
 const atlases = new Map<AtlasId, Atlas>();
@@ -79,6 +79,10 @@ function loadAtlas(id: AtlasId, cb: (atlas: Atlas | null) => void): void {
   });
 }
 
+export function warmBattleAtlas(id: string): Promise<void> {
+  return new Promise(resolve => loadAtlas(id, () => resolve()));
+}
+
 export class BattleSprite {
   readonly node = new Node('battleArt');
   readonly sprite: Sprite;
@@ -86,6 +90,8 @@ export class BattleSprite {
   private frame = '';
   private height = 100;
   private atlas: Atlas | null = null;
+  private atlasId = '';
+  private atlasRequest = 0;
   /** 序列帧模式（showSeq 写入；show() 清除回到静态帧） */
   private seqFrames: SpriteFrame[] | null = null;
   private seqIndex = -1;
@@ -109,15 +115,24 @@ export class BattleSprite {
     this.sprite.sizeMode = Sprite.SizeMode.CUSTOM;
     this.sprite.trim = false;
     this.node.active = false;
+    this.setAtlas(atlasId);
+  }
+
+  setAtlas(atlasId: string): void {
+    if (this.atlasId === atlasId) return;
+    this.atlasId = atlasId;
+    const request = ++this.atlasRequest;
+    this.atlas = null; this.loaded = false; this.seqFrames = null;
+    this.node.active = false;
     loadAtlas(atlasId, atlas => {
-      if (!this.node.isValid || !atlas) return;
+      if (!this.node.isValid || !atlas || request !== this.atlasRequest) return;
       this.atlas = atlas;
       this.apply();
     });
   }
 
   show(frame: string, height: number): void {
-    if (frame === this.frame && height === this.height && !this.seqFrames) return;
+    if (frame === this.frame && height === this.height && !this.seqFrames && this.loaded) return;
     this.seqFrames = null;
     this.seqFrac = 0;
     this.frame = frame;

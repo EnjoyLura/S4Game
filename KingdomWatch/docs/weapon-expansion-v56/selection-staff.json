@@ -1,0 +1,42 @@
+[
+  {
+    "key": "blue_frost_staff",
+    "name": "霜晶法杖",
+    "type": "staff",
+    "quality": 2,
+    "art": "weapons_v1/blue_frost_staff_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_staff.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 霜晶法杖 (blue rare): Slim straight brown wooden magic staff running diagonally, head of three restrained silver claws holding one large faceted pale-blue ice crystal, tan leather grip, small steel foot cap. No ice cloud or particles. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-a4fc10c1-0e3b-4265-ba8f-c32688e15b78.png"
+  },
+  {
+    "key": "blue_echo_staff",
+    "name": "回响法杖",
+    "type": "staff",
+    "quality": 2,
+    "art": "weapons_v1/blue_echo_staff_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_staff.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 回响法杖 (blue rare): Copper-brown gently twisted wooden staff, large open brass circular head with turquoise orb suspended visibly inside, secondary small crescent hoop, dark-blue wrapped grip, brass ferrule. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-c4b1475d-8a1a-434d-8e08-488f587287fd.png"
+  },
+  {
+    "key": "purple_sun_staff",
+    "name": "裂日法杖",
+    "type": "staff",
+    "quality": 3,
+    "art": "weapons_v1/purple_sun_staff_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_staff.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 裂日法杖 (purple epic): Powerful reddish-brown wooden magic staff, bold gold sun-fork crown holding a faceted white-gold amber gemstone, small blackened bronze collars, charcoal leather grip, gold foot cap. No fire or aura. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-b0c12ee3-7fe0-49b0-9aa9-c77b299d7b38.png"
+  },
+  {
+    "key": "purple_moon_staff",
+    "name": "月泉法杖",
+    "type": "staff",
+    "quality": 3,
+    "art": "weapons_v1/purple_moon_staff_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_staff.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 月泉法杖 (purple epic): Graceful ivory-wood magic staff, broad silver crescent head cradling a pale aqua pearl-like gemstone, deep teal wrapped grip and restrained gold collars, long flowing asymmetric silhouette. No mist or aura. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-2d3af6d0-d8f4-4711-9196-2e9b06f0d20f.png"
+  }
+]

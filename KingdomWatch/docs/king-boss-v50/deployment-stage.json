@@ -1,0 +1,97 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-king-boss-v50-20261019-001424",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "entryVersion": "1792340019",
+  "game": "https://kingdom-watch.pages.dev/?v=king-boss-v50-1792340019",
+  "originalFilesChecked": 1848,
+  "changedExistingFiles": [
+    "assets/scripts/battle/MobAnim.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/battle/WaveManager.ts",
+    "assets/scripts/config/FifthLevel.ts",
+    "assets/scripts/config/LevelDifficulty.ts",
+    "assets/scripts/config/Mobs.ts",
+    "assets/scripts/core/GameData.ts",
+    "assets/scripts/ui/BattleEntryWarmup.ts",
+    "assets/scripts/ui/HUD.ts",
+    "assets/scripts/ui/pages/BasePage.ts",
+    "assets/scripts/ui/pages/LevelsPage.ts"
+  ],
+  "addedFiles": [
+    "assets/resources/ux/goblin_king_walk_v1.frames.json",
+    "assets/resources/ux/goblin_king_walk_v1.frames.json.meta",
+    "assets/resources/ux/goblin_king_walk_v1.png",
+    "assets/resources/ux/goblin_king_walk_v1.png.meta"
+  ],
+  "priorPreviewFilesPreserved": 793,
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "allOriginalMediaUnchanged": true,
+  "kingFrames": 30,
+  "loopSeconds": 1.25,
+  "kingNativePath": "assets/resources/native/49/495bf00e-2192-4818-9f33-13d4d17afbbc.836fa.png",
+  "kingNativeSha256": "f3cf1756dfde0cb5d82822cb5a1ee0bb0394d7116c941cd686eb9b27786d762c",
+  "bossStats": [
+    {
+      "level": "1-5",
+      "difficulty": 0,
+      "wave": 8,
+      "count": 1,
+      "hp": 7000,
+      "lineDamage": 30
+    },
+    {
+      "level": "1-5",
+      "difficulty": 1,
+      "wave": 12,
+      "count": 1,
+      "hp": 49659,
+      "lineDamage": 98
+    },
+    {
+      "level": "1-5",
+      "difficulty": 2,
+      "wave": 15,
+      "count": 1,
+      "hp": 87137,
+      "lineDamage": 166
+    },
+    {
+      "level": "1-10",
+      "difficulty": 0,
+      "wave": 10,
+      "count": 1,
+      "hp": 33727,
+      "lineDamage": 69
+    },
+    {
+      "level": "1-10",
+      "difficulty": 1,
+      "wave": 12,
+      "count": 1,
+      "hp": 60852,
+      "lineDamage": 120
+    },
+    {
+      "level": "1-10",
+      "difficulty": 2,
+      "wave": 15,
+      "count": 1,
+      "hp": 106779,
+      "lineDamage": 203
+    }
+  ],
+  "scope": "King walk loop and boss role at chapter-one 1-5/1-10, all three difficulties; normal 1-5 replaces its final elite at unchanged 7000HP/30 damage; others add one final-wave king. Boss count is not multiplied. Warnings, boss-only HP bar, codex and discovery portrait synchronized. No summons/enrage added.",
+  "manualAcceptance": "Static source/assets/type/build/HTTP only. No tests, game, browser, combat simulation or audio playback; user performs acceptance.",
+  "deployment": "https://4298be00.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.db6bb.js?v=1792340019",
+    "finalUrl": "https://kingdom-watch.pages.dev/?v=king-boss-v50-1792340019",
+    "kingNativeStatus": 200,
+    "kingNativeSha256Matches": true
+  }
+}

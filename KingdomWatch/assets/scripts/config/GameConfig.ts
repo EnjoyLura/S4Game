@@ -24,12 +24,19 @@ export let HERO_Y = -545;
 export function initLayout(): void {
   const vis = view.getVisibleSize();
   LO.half = vis.height / 2;
+  LO.notchTop = 0;
   try {
     const safe = sys.getSafeAreaRect();
     if (safe && safe.width > 0 && safe.height > 0) {
       // getSafeAreaRect 与可视区同坐标系（原点左下）：顶内缩 = 可视高 − 安全区顶缘，全程设计单位
       // （旧版把 CSS px 与设计单位混算再乘 k，非 1:1 屏上恒得 0——刘海保护失效的根因）
-      const topIns = Math.max(0, vis.height - (safe.y + safe.height));
+      let topIns = Math.max(0, vis.height - (safe.y + safe.height));
+      if (typeof window !== 'undefined') {
+        // Via desktop mode keeps env(safe-area-inset-top)=30px while shrinking the
+        // 1280 CSS viewport to the 360 CSS screen. Keep that physical inset intact.
+        const pageScale = window.visualViewport?.scale || 1;
+        if (pageScale > 0 && pageScale < 1) topIns /= pageScale;
+      }
       LO.notchTop = Math.min(topIns, LO.half * 0.12);
     }
   } catch (e) { void e; }
@@ -58,10 +65,15 @@ export function starOf(ratio: number): 1 | 2 | 3 {
   return 1;
 }
 
-/** 经验需求（§11.3）：EXP(L→L+1) = 50 × 1.35^(L-1)，等级无上限 */
+/** Gentler run growth: the late part of an ordinary encounter still offers useful build choices. */
 export function expNeed(level: number): number {
-  return Math.floor(50 * Math.pow(1.35, level - 1));
+  return Math.floor(50 * Math.pow(1.28, level - 1));
 }
+
+/** Natural energy per battle second is fixed; distinct hero costs stay distinct. Kill awards are unchanged. */
+export const ULT_REGEN_PER_SECOND = .6;
+export const ULT_INITIAL_CHARGE = 0;
+export const SHARED_KILL_CHARGE = .55;
 
 /** 少量关卡时间经验：每2个战斗秒发放当前升级需求约1%，最低1点。 */
 export const PASSIVE_XP_INTERVAL = 2;
@@ -74,12 +86,12 @@ export const REVIVE_RATIO = 0.3;
 /** 复活后防线短暂无敌缓冲（待定项默认值，§3.9） */
 export const REVIVE_INVULN = 2;
 
-/** 大招充能上限（§3.7，逐英雄配置；弓箭手 60 / 狙击 55 / 火法 50） */
-export const ARCHER_CHARGE_MAX = 60;
+/** 大招基础能量需求：弓45 / 弩55 / 冰60 / 雷65 / 火70；充能卡与培养另乘需求倍率。 */
+export const ARCHER_CHARGE_MAX = 45;
 export const SNIPER_CHARGE_MAX = 55;
-export const PYRO_CHARGE_MAX = 50;
-export const VOLT_CHARGE_MAX = 50;
-export const MORA_CHARGE_MAX = 50;
+export const PYRO_CHARGE_MAX = 70;
+export const VOLT_CHARGE_MAX = 65;
+export const MORA_CHARGE_MAX = 60;
 
 /** 帧内上限（§12.4 性能预算；怪量 ×3 后同屏峰值上探，80 仍留裕量） */
 export const MAX_MOBS = 80;

@@ -1,0 +1,992 @@
+[
+  {
+    "id": "mobs-forest",
+    "file": "ux/mobs_forest_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "a64c68a0-e2e6-4d60-8f51-2538e3c9feac",
+    "sha256": "f510cad11344cc3012d8723c420e3482ee4296e4aa3984689fb13a9761fa1897",
+    "frames": {
+      "forest_spider": [
+        22,
+        78,
+        490,
+        422
+      ],
+      "forest_wasp": [
+        512,
+        49,
+        512,
+        463
+      ],
+      "forest_vine": [
+        1024,
+        38,
+        507,
+        466
+      ],
+      "forest_guard": [
+        14,
+        533,
+        487,
+        435
+      ],
+      "thorn_ancient": [
+        512,
+        512,
+        512,
+        474
+      ],
+      "thorn_ancient_phase": [
+        1024,
+        514,
+        500,
+        468
+      ]
+    }
+  },
+  {
+    "id": "mobs-lair",
+    "file": "ux/mobs_lair_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "c00c2789-9d58-4d68-81a9-789de98249ee",
+    "sha256": "d853704c771881349bc781f5d9d626041d13926550c8f41dbadf9297c20b68e5",
+    "frames": {
+      "lair_gnawer": [
+        30,
+        69,
+        482,
+        441
+      ],
+      "lair_hunter": [
+        512,
+        37,
+        494,
+        475
+      ],
+      "lair_tamer": [
+        1030,
+        42,
+        481,
+        470
+      ],
+      "lair_mauler": [
+        5,
+        533,
+        507,
+        450
+      ],
+      "fang_beast": [
+        512,
+        512,
+        501,
+        474
+      ],
+      "fang_beast_phase": [
+        1034,
+        523,
+        489,
+        463
+      ]
+    }
+  },
+  {
+    "id": "mobs-marsh",
+    "file": "ux/mobs_marsh_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "61374d48-7f7f-4f58-a12c-2e873456739d",
+    "sha256": "1a794ea99a9807012399a39eab62dd2922d0fe0d604d13a22b6b57a813db2329",
+    "frames": {
+      "marsh_frog": [
+        51,
+        32,
+        433,
+        480
+      ],
+      "venom_bug": [
+        538,
+        114,
+        460,
+        388
+      ],
+      "lizard_medic": [
+        1066,
+        8,
+        437,
+        503
+      ],
+      "marsh_guard": [
+        18,
+        545,
+        484,
+        437
+      ],
+      "marsh_toad": [
+        520,
+        529,
+        493,
+        451
+      ],
+      "marsh_toad_phase": [
+        1024,
+        523,
+        503,
+        465
+      ]
+    }
+  },
+  {
+    "id": "mobs-coast",
+    "file": "ux/mobs_coast_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "5436fbff-0193-4a7d-a194-d6536357f813",
+    "sha256": "e8263b63efab4fd9f29882039f5f4dfbcd11283f47c14f69df1da18cad1486ab",
+    "frames": {
+      "shell_crab": [
+        33,
+        9,
+        479,
+        503
+      ],
+      "reef_spearman": [
+        512,
+        45,
+        512,
+        467
+      ],
+      "tide_priest": [
+        1024,
+        53,
+        502,
+        459
+      ],
+      "anchor_crab": [
+        16,
+        512,
+        496,
+        466
+      ],
+      "claw_king": [
+        512,
+        512,
+        512,
+        465
+      ],
+      "claw_king_phase": [
+        1024,
+        512,
+        505,
+        465
+      ]
+    }
+  },
+  {
+    "id": "mobs-desert",
+    "file": "ux/mobs_desert_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "ea41db8c-dcc8-4846-9129-46f166665082",
+    "sha256": "ae360aa05747feeef54f5b9e9776c017ea1e6fa4bb92b95d8c38aba70945772d",
+    "frames": {
+      "dune_beetle": [
+        54,
+        154,
+        427,
+        336
+      ],
+      "sand_scorpion": [
+        523,
+        26,
+        491,
+        486
+      ],
+      "sand_lizard": [
+        1042,
+        75,
+        465,
+        437
+      ],
+      "dune_guard": [
+        16,
+        527,
+        496,
+        470
+      ],
+      "sand_worm": [
+        534,
+        512,
+        477,
+        486
+      ],
+      "sand_worm_phase": [
+        1036,
+        512,
+        485,
+        484
+      ]
+    }
+  },
+  {
+    "id": "mobs-ruins",
+    "file": "ux/mobs_ruins_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "cb23baca-88ac-48e9-83a1-ce254ec5eeee",
+    "sha256": "a1458f4ac44f39db3e32cad226c0fd134ada62af0941a12c71ad43bcc7e6a25d",
+    "frames": {
+      "clay_sentinel": [
+        10,
+        14,
+        502,
+        489
+      ],
+      "stone_archer": [
+        512,
+        11,
+        487,
+        501
+      ],
+      "tomb_spirit": [
+        1038,
+        22,
+        481,
+        484
+      ],
+      "royal_guard": [
+        11,
+        521,
+        496,
+        474
+      ],
+      "ancient_warden": [
+        513,
+        512,
+        503,
+        496
+      ],
+      "ancient_warden_phase": [
+        1028,
+        512,
+        505,
+        490
+      ]
+    }
+  },
+  {
+    "id": "mobs-canyon",
+    "file": "ux/mobs_canyon_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "266702da-cec0-42ab-9f5a-21de8f9b14ea",
+    "sha256": "0d255da56e65cc3bf7c51634eb11216d626dffe468f3c1029f77e8dd4a6aa206",
+    "frames": {
+      "canyon_ram": [
+        45,
+        34,
+        467,
+        459
+      ],
+      "cliff_eagle": [
+        512,
+        31,
+        512,
+        481
+      ],
+      "cliff_spear": [
+        1024,
+        14,
+        498,
+        498
+      ],
+      "cliff_bulwark": [
+        13,
+        526,
+        495,
+        436
+      ],
+      "split_horn": [
+        534,
+        512,
+        490,
+        451
+      ],
+      "split_horn_phase": [
+        1024,
+        512,
+        497,
+        455
+      ]
+    }
+  },
+  {
+    "id": "mobs-mine",
+    "file": "ux/mobs_mine_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "4143c990-9edb-4d80-b629-bd5006564aa2",
+    "sha256": "d16dd332f0f500a39b03edd86d2531f843e8cc6404c85a19f375ba139628ef39",
+    "frames": {
+      "mine_bat": [
+        26,
+        52,
+        486,
+        410
+      ],
+      "drill_beetle": [
+        512,
+        114,
+        509,
+        398
+      ],
+      "mining_drone": [
+        1047,
+        85,
+        458,
+        427
+      ],
+      "iron_loader": [
+        14,
+        526,
+        498,
+        424
+      ],
+      "mountain_drill": [
+        512,
+        512,
+        512,
+        454
+      ],
+      "mountain_drill_phase": [
+        1024,
+        512,
+        499,
+        456
+      ]
+    }
+  },
+  {
+    "id": "mobs-snow",
+    "file": "ux/mobs_snow_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "6dd8a8f1-415e-44e7-be64-506b00b3198b",
+    "sha256": "2bb8fb9bf40a0204213fd90e47094e2c30893169577d32f6eff9686c7466af0c",
+    "frames": {
+      "snow_wolf": [
+        22,
+        56,
+        475,
+        455
+      ],
+      "ice_shooter": [
+        548,
+        13,
+        440,
+        474
+      ],
+      "frost_giant": [
+        1031,
+        14,
+        495,
+        492
+      ],
+      "frost_guard": [
+        16,
+        539,
+        485,
+        464
+      ],
+      "frostback": [
+        520,
+        516,
+        493,
+        483
+      ],
+      "frostback_phase": [
+        1024,
+        515,
+        502,
+        494
+      ]
+    }
+  },
+  {
+    "id": "mobs-storm",
+    "file": "ux/mobs_storm_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "94cb1e24-fc32-4b6e-b41a-03ab7b59206d",
+    "sha256": "6154e7e8c829bacff9bb0718b939f86fd6ccb1593b83a3e6e94c08652c958e1e",
+    "frames": {
+      "thunder_eagle": [
+        11,
+        19,
+        496,
+        480
+      ],
+      "wind_spirit": [
+        528,
+        80,
+        482,
+        414
+      ],
+      "storm_stone": [
+        1027,
+        53,
+        497,
+        449
+      ],
+      "storm_guard": [
+        42,
+        566,
+        453,
+        413
+      ],
+      "storm_lord": [
+        516,
+        532,
+        505,
+        462
+      ],
+      "storm_lord_phase": [
+        1024,
+        524,
+        503,
+        478
+      ]
+    }
+  },
+  {
+    "id": "mobs-fungus",
+    "file": "ux/mobs_fungus_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "d2260f2d-9b7e-4df3-a2e5-8cb14e8bee7f",
+    "sha256": "1ddb335b9d4270c673dd5be9fd68f73bd029b8395fa55577800d7903eecc5e01",
+    "frames": {
+      "fungal_worm": [
+        101,
+        212,
+        334,
+        295
+      ],
+      "spore_spitter": [
+        560,
+        40,
+        449,
+        468
+      ],
+      "shield_mushroom": [
+        1048,
+        104,
+        450,
+        400
+      ],
+      "split_mushroom": [
+        29,
+        523,
+        483,
+        450
+      ],
+      "spore_mother": [
+        512,
+        556,
+        512,
+        424
+      ],
+      "spore_mother_phase": [
+        1024,
+        513,
+        503,
+        470
+      ]
+    }
+  },
+  {
+    "id": "mobs-grave",
+    "file": "ux/mobs_grave_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "72853a9b-8963-4da5-b612-42bcbb4105fd",
+    "sha256": "ee1e78f4cd4336729fc2834ca427dac262636b9ed21b277526472f9da81e3bd9",
+    "frames": {
+      "bone_soldier": [
+        43,
+        86,
+        465,
+        424
+      ],
+      "grave_wraith": [
+        576,
+        52,
+        403,
+        449
+      ],
+      "soul_binder": [
+        1076,
+        40,
+        446,
+        472
+      ],
+      "grave_guard": [
+        23,
+        548,
+        476,
+        435
+      ],
+      "tomb_colossus": [
+        512,
+        514,
+        499,
+        477
+      ],
+      "tomb_colossus_phase": [
+        1028,
+        515,
+        499,
+        475
+      ]
+    }
+  },
+  {
+    "id": "mobs-fortress",
+    "file": "ux/mobs_fortress_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "855d5e8f-99ca-41df-a24f-f2245b53130e",
+    "sha256": "584d254ba4679866f44c3a8e6ffaa3059a5a0ee58d80ec3c12b605bda642c8eb",
+    "frames": {
+      "living_armor": [
+        44,
+        107,
+        423,
+        401
+      ],
+      "siege_puppet": [
+        530,
+        63,
+        494,
+        437
+      ],
+      "banner_guard": [
+        1024,
+        12,
+        460,
+        490
+      ],
+      "iron_captain": [
+        35,
+        565,
+        477,
+        416
+      ],
+      "iron_commander": [
+        512,
+        519,
+        507,
+        477
+      ],
+      "iron_commander_phase": [
+        1045,
+        518,
+        467,
+        472
+      ]
+    }
+  },
+  {
+    "id": "mobs-volcano",
+    "file": "ux/mobs_volcano_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "0e630d9f-37cd-40ea-9de1-39a435f2f3ab",
+    "sha256": "68065b0db7ed209251286b7dce25f58ed43878dfa612fd73f11ca3f382be2ea7",
+    "frames": {
+      "lava_larva": [
+        17,
+        125,
+        495,
+        372
+      ],
+      "flame_spirit": [
+        541,
+        10,
+        460,
+        487
+      ],
+      "magma_shell": [
+        1034,
+        49,
+        486,
+        463
+      ],
+      "obsidian_guard": [
+        9,
+        530,
+        503,
+        440
+      ],
+      "molten_beast": [
+        512,
+        512,
+        512,
+        457
+      ],
+      "molten_beast_phase": [
+        1024,
+        512,
+        511,
+        462
+      ]
+    }
+  },
+  {
+    "id": "mobs-rift",
+    "file": "ux/mobs_rift_v66.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "uuid": "5948f432-f6b2-4300-adc8-ac8a2ae66ed8",
+    "sha256": "277f6be9c9c1b4be5792f59d53ff6ec5a17af0400fb7023ad26b756a2ba944e9",
+    "frames": {
+      "rift_hound": [
+        36,
+        105,
+        476,
+        398
+      ],
+      "mirror_fiend": [
+        512,
+        38,
+        478,
+        474
+      ],
+      "rift_priest": [
+        1051,
+        9,
+        451,
+        496
+      ],
+      "rift_guard": [
+        31,
+        520,
+        481,
+        484
+      ],
+      "rift_sovereign": [
+        512,
+        512,
+        512,
+        497
+      ],
+      "rift_sovereign_phase": [
+        1024,
+        512,
+        490,
+        495
+      ]
+    }
+  },
+  {
+    "id": "map-marsh",
+    "file": "scenes/bg_campaign_marsh_v66.png",
+    "size": [
+      887,
+      1774
+    ],
+    "uuid": "fddb5035-75da-4eff-bbad-da3d5866830f",
+    "sha256": "b36ba5b17f3256860b6bed469b149ae0e054c15219cab30a6ec5721d73dda1c4"
+  },
+  {
+    "id": "battle-marsh",
+    "file": "scenes/scene_marsh_v66.png",
+    "size": [
+      941,
+      1672
+    ],
+    "uuid": "c662b1d9-f467-43ac-b5f2-9fc7f3c0ab66",
+    "sha256": "b116374612c69b2683898a6d52aebcf7b8d2ab08ecd74035784c960e31489efe"
+  },
+  {
+    "id": "map-coast",
+    "file": "scenes/bg_campaign_coast_v66.png",
+    "size": [
+      887,
+      1774
+    ],
+    "uuid": "67f3769c-0f8f-4f0c-9039-60759728f0b8",
+    "sha256": "de693700d204a133a6ba8e5af70d556d63ed087a6cc91419f2d7091cdfaa3856"
+  },
+  {
+    "id": "battle-coast",
+    "file": "scenes/scene_coast_v66.png",
+    "size": [
+      941,
+      1672
+    ],
+    "uuid": "4958eb58-290b-46f3-9506-1fd997aa9023",
+    "sha256": "e80499aa3210d4ea687e385f9ba26719bcbf12d36a175a7d89dcb70c7622ffac"
+  },
+  {
+    "id": "map-desert",
+    "file": "scenes/bg_campaign_desert_v66.png",
+    "size": [
+      887,
+      1774
+    ],
+    "uuid": "3bf6e897-1845-4e26-a93a-fe770fb6d00c",
+    "sha256": "3b867125822fbf6ed93408d03084e84ad3aff2135bafc726ee297764f8e572e5"
+  },
+  {
+    "id": "battle-desert",
+    "file": "scenes/scene_desert_v66.png",
+    "size": [
+      941,
+      1672
+    ],
+    "uuid": "e91eae2c-2abd-492f-818b-96e1a9f1c1ab",
+    "sha256": "6e9764f301b0853cb780f1b70329f566210f367309c24942bd45cd08a047841d"
+  },
+  {
+    "id": "map-ruins",
+    "file": "scenes/bg_campaign_ruins_v66.png",
+    "size": [
+      887,
+      1774
+    ],
+    "uuid": "684b3388-547e-43fd-80d7-5a2298718c9c",
+    "sha256": "4c22ac4e620dff01379d1f5bee734b00d46672f6afd75bbfd889eb7f06435839"
+  },
+  {
+    "id": "battle-ruins",
+    "file": "scenes/scene_ruins_v66.png",
+    "size": [
+      941,
+      1672
+    ],
+    "uuid": "4df2d431-94ee-4423-ad17-7a917a28257d",
+    "sha256": "cdd06a968eb9e7d3d7765ae64c91fed6c1c5a2dc50d1f69c84ff3516801f261e"
+  },
+  {
+    "id": "map-canyon",
+    "file": "scenes/bg_campaign_canyon_v66.png",
+    "size": [
+      887,
+      1774
+    ],
+    "uuid": "8565264b-873b-48da-a467-375f300f8027",
+    "sha256": "cb193d21771453512673e12accc1a0c9a7760025dc7b5709f408fa1e369e5708"
+  },
+  {
+    "id": "battle-canyon",
+    "file": "scenes/scene_canyon_v66.png",
+    "size": [
+      941,
+      1672
+    ],
+    "uuid": "c74872e8-348d-476d-b3c9-f746e446ef21",
+    "sha256": "71e9073a2c1607d3a7d6b8e85eb8c4010eaeeec012f6ad360b71c89d2133ed6e"
+  },
+  {
+    "id": "map-mine",
+    "file": "scenes/bg_campaign_mine_v66.png",
+    "size": [
+      887,
+      1774
+    ],
+    "uuid": "d402e255-bb1c-48a0-b0c4-c08dc353a26a",
+    "sha256": "3aa1000ae242c13ff2aeb76f2e6b1e4766afa17bd2e8aa31b195b4a17504d63d"
+  },
+  {
+    "id": "battle-mine",
+    "file": "scenes/scene_mine_v66.png",
+    "size": [
+      941,
+      1672
+    ],
+    "uuid": "93a5365d-028c-44f5-8098-53bddfd9c963",
+    "sha256": "d75c546a09156a4f005529808ed80fa45809f2254c0efdc5395fba4921fb495e"
+  },
+  {
+    "id": "map-snow",
+    "file": "scenes/bg_campaign_snow_v66.png",
+    "size": [
+      887,
+      1774
+    ],
+    "uuid": "ddf24cc1-9b39-4963-9b0a-e04cbb21b1f1",
+    "sha256": "c5e1eabb72fa7f2cafd35970160224fee1c16c89dfbe1972942977123d0f9fce"
+  },
+  {
+    "id": "battle-snow",
+    "file": "scenes/scene_snow_v66.png",
+    "size": [
+      941,
+      1672
+    ],
+    "uuid": "57051156-2d4c-4e78-a557-33d3403d72fb",
+    "sha256": "de72bdf879dd102231f900da6d3a2121fa5565c3ffdb1018f0cadfe8fc47e076"
+  },
+  {
+    "id": "map-storm",
+    "file": "scenes/bg_campaign_storm_v66.png",
+    "size": [
+      887,
+      1774
+    ],
+    "uuid": "ded2d680-4fe9-4303-a129-14a14b3f5793",
+    "sha256": "cba44d866f4dcd42344a335e1586d69e8dd9c0a3e6b230b2b9fb08836140e3f8"
+  },
+  {
+    "id": "battle-storm",
+    "file": "scenes/scene_storm_v66.png",
+    "size": [
+      941,
+      1672
+    ],
+    "uuid": "66316adc-f006-47d0-9d20-32b8ab6e60fc",
+    "sha256": "a881e30f1758ca3ca7570a9759205e4accf62a78c4896418112ee42f19bb5e4e"
+  },
+  {
+    "id": "map-fungus",
+    "file": "scenes/bg_campaign_fungus_v66.png",
+    "size": [
+      887,
+      1774
+    ],
+    "uuid": "ff4e8a26-a00d-41f3-bc7d-f57f7cfce4a2",
+    "sha256": "46811072c57a86a3b23421b9b043d58e8f98f8d91972009dba0b87b2b0d45d81"
+  },
+  {
+    "id": "battle-fungus",
+    "file": "scenes/scene_fungus_v66.png",
+    "size": [
+      941,
+      1672
+    ],
+    "uuid": "a19613c4-e620-46dc-92b9-e1d37ac74f11",
+    "sha256": "0f56a9995b51fa832bacab58937e2ec82da618727f5055eeab77d0a842e49740"
+  },
+  {
+    "id": "map-grave",
+    "file": "scenes/bg_campaign_grave_v66.png",
+    "size": [
+      887,
+      1774
+    ],
+    "uuid": "a30cf878-e1f5-4d45-b313-d9a0b8d1a787",
+    "sha256": "d0297009e96e88c43608cca6c75a522ee36ad0aabbb05ff673a3e541f84262a5"
+  },
+  {
+    "id": "battle-grave",
+    "file": "scenes/scene_grave_v66.png",
+    "size": [
+      941,
+      1672
+    ],
+    "uuid": "6f4d9d39-7a86-4700-bdf2-7e7f58da3599",
+    "sha256": "ea343a41b57a2115722b6875fc68fccec8b7e63eef7387661bf2568a2f3ff2e5"
+  },
+  {
+    "id": "map-fortress",
+    "file": "scenes/bg_campaign_fortress_v66.png",
+    "size": [
+      887,
+      1774
+    ],
+    "uuid": "12061120-93fb-4217-ad92-7df47c1e643b",
+    "sha256": "a3084967b4c72ba1daac7a8ac2a3635726a95d8951d9a285e19fb286ba74706f"
+  },
+  {
+    "id": "battle-fortress",
+    "file": "scenes/scene_fortress_v66.png",
+    "size": [
+      941,
+      1672
+    ],
+    "uuid": "0310266a-8384-4786-902c-f96c822b585f",
+    "sha256": "acb3f5ce38ed3f464c3e7a82a60f70a7beed9e2d1a7279d937c1881021c1d4c7"
+  },
+  {
+    "id": "map-volcano",
+    "file": "scenes/bg_campaign_volcano_v66.png",
+    "size": [
+      887,
+      1774
+    ],
+    "uuid": "ce196245-0818-4f6e-81c4-cf323a22154e",
+    "sha256": "eb8daca2d7c39eba43afd9c98c58f6e2bdbe710dd642e806096bb6f80e147857"
+  },
+  {
+    "id": "battle-volcano",
+    "file": "scenes/scene_volcano_v66.png",
+    "size": [
+      941,
+      1672
+    ],
+    "uuid": "15ea606d-e60f-4e13-9f1b-2d80c1ab8517",
+    "sha256": "86c723c33598689f44bfe96a317b1a8568f94ed01fa7ce29887b73544febc73a"
+  },
+  {
+    "id": "map-rift",
+    "file": "scenes/bg_campaign_rift_v66.png",
+    "size": [
+      887,
+      1774
+    ],
+    "uuid": "2c6801bf-8594-475d-b648-65847d813cee",
+    "sha256": "53618b4294eda8df63934d98966e12391727ed4adc82cc82abdd07b25824ad21"
+  },
+  {
+    "id": "battle-rift",
+    "file": "scenes/scene_rift_v66.png",
+    "size": [
+      941,
+      1672
+    ],
+    "uuid": "97106c81-723d-4a09-8ef1-d37c9de7221c",
+    "sha256": "86372cc334cccce80cef38a33ebd6d4cf61621ec1545c625d4bfefe5ee4af379"
+  },
+  {
+    "id": "world",
+    "file": "scenes/bg_endless_world_v66.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "uuid": "98e575de-6dba-4386-9f1b-3afee257cdd6",
+    "sha256": "4f56f8e8a1868108181e254b1239ebf4f1ef5869dc91029f326a6c0f86f9f523"
+  }
+]

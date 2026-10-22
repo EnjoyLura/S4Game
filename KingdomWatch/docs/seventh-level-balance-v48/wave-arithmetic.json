@@ -1,0 +1,334 @@
+{
+  "waves": [
+    {
+      "wave": 1,
+      "groups": [
+        {
+          "kind": "workers",
+          "count": 30,
+          "hp": 420,
+          "damage": 10,
+          "interval": 1.05,
+          "delay": 0,
+          "lastSpawnSeconds": 30.45
+        }
+      ],
+      "lastSpawnSeconds": 30.45
+    },
+    {
+      "wave": 2,
+      "groups": [
+        {
+          "kind": "workers",
+          "count": 32,
+          "hp": 440,
+          "damage": 10,
+          "interval": 0.98,
+          "delay": 0,
+          "lastSpawnSeconds": 30.38
+        },
+        {
+          "kind": "slingers",
+          "count": 2,
+          "hp": 340,
+          "damage": 8,
+          "interval": 5,
+          "delay": 12.0,
+          "lastSpawnSeconds": 17.0
+        }
+      ],
+      "lastSpawnSeconds": 30.38
+    },
+    {
+      "wave": 3,
+      "groups": [
+        {
+          "kind": "workers",
+          "count": 34,
+          "hp": 460,
+          "damage": 10,
+          "interval": 0.9,
+          "delay": 0,
+          "lastSpawnSeconds": 29.7
+        },
+        {
+          "kind": "slingers",
+          "count": 2,
+          "hp": 340,
+          "damage": 8,
+          "interval": 5,
+          "delay": 12.0,
+          "lastSpawnSeconds": 17.0
+        },
+        {
+          "kind": "elite",
+          "count": 1,
+          "hp": 3400,
+          "damage": 24,
+          "interval": 1,
+          "delay": 8.0,
+          "lastSpawnSeconds": 8.0
+        }
+      ],
+      "lastSpawnSeconds": 29.7
+    },
+    {
+      "wave": 4,
+      "groups": [
+        {
+          "kind": "workers",
+          "count": 24,
+          "hp": 440,
+          "damage": 10,
+          "interval": 1.32,
+          "delay": 0,
+          "lastSpawnSeconds": 30.36
+        },
+        {
+          "kind": "slingers",
+          "count": 4,
+          "hp": 350,
+          "damage": 8,
+          "interval": 5,
+          "delay": 10.0,
+          "lastSpawnSeconds": 25.0
+        }
+      ],
+      "lastSpawnSeconds": 30.36
+    },
+    {
+      "wave": 5,
+      "groups": [
+        {
+          "kind": "workers",
+          "count": 36,
+          "hp": 480,
+          "damage": 10,
+          "interval": 0.86,
+          "delay": 0,
+          "lastSpawnSeconds": 30.1
+        },
+        {
+          "kind": "slingers",
+          "count": 4,
+          "hp": 360,
+          "damage": 8,
+          "interval": 5,
+          "delay": 8.0,
+          "lastSpawnSeconds": 23.0
+        },
+        {
+          "kind": "riders",
+          "count": 3,
+          "hp": 560,
+          "damage": 12,
+          "interval": 3,
+          "delay": 12.0,
+          "lastSpawnSeconds": 18.0
+        }
+      ],
+      "lastSpawnSeconds": 30.1
+    },
+    {
+      "wave": 6,
+      "groups": [
+        {
+          "kind": "workers",
+          "count": 22,
+          "hp": 460,
+          "damage": 10,
+          "interval": 1.45,
+          "delay": 0,
+          "lastSpawnSeconds": 30.45
+        },
+        {
+          "kind": "shaman",
+          "count": 1,
+          "hp": 400,
+          "damage": 0,
+          "interval": 1,
+          "delay": 16.0,
+          "lastSpawnSeconds": 16.0
+        }
+      ],
+      "lastSpawnSeconds": 30.45
+    },
+    {
+      "wave": 7,
+      "groups": [
+        {
+          "kind": "workers",
+          "count": 38,
+          "hp": 500,
+          "damage": 10,
+          "interval": 0.8,
+          "delay": 0,
+          "lastSpawnSeconds": 29.6
+        },
+        {
+          "kind": "slingers",
+          "count": 4,
+          "hp": 370,
+          "damage": 8,
+          "interval": 5,
+          "delay": 8.0,
+          "lastSpawnSeconds": 23.0
+        },
+        {
+          "kind": "elite",
+          "count": 1,
+          "hp": 3600,
+          "damage": 24,
+          "interval": 1,
+          "delay": 8.0,
+          "lastSpawnSeconds": 8.0
+        },
+        {
+          "kind": "shaman",
+          "count": 1,
+          "hp": 420,
+          "damage": 0,
+          "interval": 1,
+          "delay": 20.0,
+          "lastSpawnSeconds": 20.0
+        }
+      ],
+      "lastSpawnSeconds": 29.6
+    },
+    {
+      "wave": 8,
+      "groups": [
+        {
+          "kind": "workers",
+          "count": 30,
+          "hp": 500,
+          "damage": 10,
+          "interval": 1.02,
+          "delay": 0,
+          "lastSpawnSeconds": 29.58
+        },
+        {
+          "kind": "slingers",
+          "count": 2,
+          "hp": 380,
+          "damage": 8,
+          "interval": 5,
+          "delay": 12.0,
+          "lastSpawnSeconds": 17.0
+        },
+        {
+          "kind": "riders",
+          "count": 3,
+          "hp": 580,
+          "damage": 12,
+          "interval": 3,
+          "delay": 10.0,
+          "lastSpawnSeconds": 16.0
+        }
+      ],
+      "lastSpawnSeconds": 29.58
+    },
+    {
+      "wave": 9,
+      "groups": [
+        {
+          "kind": "workers",
+          "count": 36,
+          "hp": 520,
+          "damage": 10,
+          "interval": 0.84,
+          "delay": 0,
+          "lastSpawnSeconds": 29.4
+        },
+        {
+          "kind": "slingers",
+          "count": 4,
+          "hp": 380,
+          "damage": 8,
+          "interval": 5,
+          "delay": 8.0,
+          "lastSpawnSeconds": 23.0
+        },
+        {
+          "kind": "elite",
+          "count": 1,
+          "hp": 3800,
+          "damage": 24,
+          "interval": 1,
+          "delay": 8.0,
+          "lastSpawnSeconds": 8.0
+        },
+        {
+          "kind": "shaman",
+          "count": 1,
+          "hp": 420,
+          "damage": 0,
+          "interval": 1,
+          "delay": 20.0,
+          "lastSpawnSeconds": 20.0
+        }
+      ],
+      "lastSpawnSeconds": 29.4
+    },
+    {
+      "wave": 10,
+      "groups": [
+        {
+          "kind": "elite",
+          "count": 1,
+          "hp": 4400,
+          "damage": 24,
+          "interval": 1,
+          "delay": 0.0,
+          "lastSpawnSeconds": 0.0
+        },
+        {
+          "kind": "workers",
+          "count": 32,
+          "hp": 520,
+          "damage": 10,
+          "interval": 0.9,
+          "delay": 2.0,
+          "lastSpawnSeconds": 29.9
+        },
+        {
+          "kind": "slingers",
+          "count": 4,
+          "hp": 400,
+          "damage": 8,
+          "interval": 5,
+          "delay": 8.0,
+          "lastSpawnSeconds": 23.0
+        },
+        {
+          "kind": "shaman",
+          "count": 1,
+          "hp": 440,
+          "damage": 0,
+          "interval": 1,
+          "delay": 18.0,
+          "lastSpawnSeconds": 18.0
+        }
+      ],
+      "lastSpawnSeconds": 29.9
+    }
+  ],
+  "counts": {
+    "workers": 314,
+    "slingers": 26,
+    "riders": 6,
+    "elite": 4,
+    "shaman": 4
+  },
+  "totalEnemies": 354,
+  "staticQueueEndSeconds": 299.92,
+  "authoredKillGold": 840,
+  "oneStarGold": 1016,
+  "threeStarGold": 1048,
+  "averageQueueRate": 1.18031475060016,
+  "sixthLevelQueueRate": 1.1481171548117155,
+  "note": "Static authored queue arithmetic only; no gameplay, combat simulation, measured duration or acceptance.",
+  "totalAuthoredHp": 179500,
+  "sixthLevelAuthoredHp": 164440,
+  "hpChangePercent": 9.158355631233285
+}

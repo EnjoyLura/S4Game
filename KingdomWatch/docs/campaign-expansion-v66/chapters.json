@@ -1,0 +1,1185 @@
+{
+  "version": 66,
+  "status": "published-initial-balance",
+  "chapters": [
+    {
+      "number": 1,
+      "name": "前哨",
+      "art": "outpost",
+      "region": "王国边境",
+      "stages": [
+        "城外小径",
+        "废弃岗亭",
+        "林缘营地",
+        "石桥隘口",
+        "哨塔争夺",
+        "补给小道",
+        "旧墙防线",
+        "烽火营地",
+        "前哨围攻",
+        "守望堡垒"
+      ],
+      "landscape": "farms, pine woods, stone watchtowers and blue-roofed frontier castles",
+      "color": "#637B3B",
+      "mapPoint": [
+        0.2,
+        0.84
+      ],
+      "enemies": []
+    },
+    {
+      "number": 2,
+      "name": "深林",
+      "art": "forest",
+      "region": "王国边境",
+      "stages": [
+        "林间入口",
+        "迷雾小径",
+        "古树廊道",
+        "密林伏击",
+        "狼影岔路",
+        "苔石遗迹",
+        "萨满祭地",
+        "幽林深处",
+        "荆棘围阵",
+        "深林腹地"
+      ],
+      "landscape": "ancient broadleaf forest, webbed roots, overgrown standing stones, deep green and amber",
+      "color": "#3E7D4D",
+      "mapPoint": [
+        0.41,
+        0.78
+      ],
+      "enemies": [
+        {
+          "id": "forest_spider",
+          "name": "荆背林蛛",
+          "role": "swarm",
+          "design": "low broad four-pair-legged spider, thorny seed-shaped abdomen, two small amber eyes, no horror detail"
+        },
+        {
+          "id": "forest_wasp",
+          "name": "毒针蜂",
+          "role": "ranged",
+          "design": "long narrow ochre hornet, two readable broad leaflike wings, heavy downturned stinger, purposeful insect anatomy",
+          "airborne": true,
+          "venom": {
+            "duration": 3,
+            "portion": 0.25
+          }
+        },
+        {
+          "id": "forest_vine",
+          "name": "盘根藤怪",
+          "role": "tank",
+          "design": "upright twisted root creature with forked digging feet, closed seedpod head and one long hooked vine arm",
+          "regen": 0.012
+        },
+        {
+          "id": "forest_guard",
+          "name": "荆棘守卫",
+          "role": "elite",
+          "design": "stocky bramble creature, single forward thorn mantle protecting a dark seed face, woody forearms",
+          "guard": {
+            "period": 8,
+            "duration": 3,
+            "reduction": 0.35
+          }
+        },
+        {
+          "id": "thorn_ancient",
+          "name": "荆棘古树",
+          "role": "boss",
+          "design": "ancient hollow oak monster, naturally split trunk mouth, broad rooted feet, thorn crown attached to real branches, no skull mask or glowing chest",
+          "summon": {
+            "id": "forest_spider",
+            "count": 2,
+            "every": 14,
+            "limit": 6
+          },
+          "phase": {
+            "threshold": 0.45,
+            "attackMul": 1.25,
+            "speedMul": 1.1
+          }
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "name": "兽穴",
+      "art": "lair",
+      "region": "王国边境",
+      "stages": [
+        "洞口险道",
+        "碎骨坑道",
+        "兽群营地",
+        "獠牙石窟",
+        "战鼓大厅",
+        "地底暗河",
+        "驯兽巢室",
+        "蛮兵要塞",
+        "兽穴围城",
+        "巢穴核心"
+      ],
+      "landscape": "warm brown rocky beast dens, crude wooden pens, bone gates, underground stream, orange torchlight",
+      "color": "#927047",
+      "mapPoint": [
+        0.63,
+        0.88
+      ],
+      "enemies": [
+        {
+          "id": "lair_gnawer",
+          "name": "洞穴蛮兵",
+          "role": "runner",
+          "design": "low hunched grey-green cave beast with forward blunt snout, heavy jaw and a single short bone chopper",
+          "charge": {
+            "period": 7,
+            "duration": 1.1,
+            "multiplier": 1.6
+          }
+        },
+        {
+          "id": "lair_hunter",
+          "name": "獠牙投猎手",
+          "role": "ranged",
+          "design": "narrow long-armed cave creature, split batlike ears, one broad bone javelin and crude hide quiver"
+        },
+        {
+          "id": "lair_tamer",
+          "name": "兽穴驯兽师",
+          "role": "healer",
+          "design": "broad-nosed beast handler in a simple rough collar, antler whistle and low crooked cane, distinct squat pear-shaped torso"
+        },
+        {
+          "id": "lair_mauler",
+          "name": "战鼓蛮卫",
+          "role": "elite",
+          "design": "barrel-chested cave ogre with low flat head, one shoulder carries a small hide drum, thick stone-headed club",
+          "aura": {
+            "radius": 180,
+            "attackMul": 1.16
+          }
+        },
+        {
+          "id": "fang_beast",
+          "name": "巨牙兽王",
+          "role": "boss",
+          "design": "heavy quadrupedal cave boar-beast, shovel-shaped lower jaw, two uneven blunt tusks, high muscular shoulder ridge and small rear haunches",
+          "charge": {
+            "period": 9,
+            "duration": 1.4,
+            "multiplier": 1.7
+          },
+          "phase": {
+            "threshold": 0.45,
+            "attackMul": 1.25,
+            "speedMul": 1.12
+          }
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "name": "雾苇沼泽",
+      "art": "marsh",
+      "region": "王国边境",
+      "stages": [
+        "芦苇浅滩",
+        "腐木渡口",
+        "蛙鸣小径",
+        "沉屋泥潭",
+        "毒囊水洼",
+        "蜥族营地",
+        "枯根长堤",
+        "迷雾浮桥",
+        "深沼围攻",
+        "巨蛙沉潭"
+      ],
+      "landscape": "olive reed wetlands, shallow teal pools, tilted stilt huts, submerged roots and winding raised earth causeways",
+      "color": "#708956",
+      "mapPoint": [
+        0.82,
+        0.79
+      ],
+      "enemies": [
+        {
+          "id": "marsh_frog",
+          "name": "苇沼蛙兵",
+          "role": "runner",
+          "design": "lean frog raider, wide flat head with bulging side eyes, long planted feet, one snapped reed spear",
+          "charge": {
+            "period": 6,
+            "duration": 0.8,
+            "multiplier": 1.65
+          }
+        },
+        {
+          "id": "venom_bug",
+          "name": "毒囊虫",
+          "role": "ranged",
+          "design": "low six-legged marsh insect with one distended dull-yellow translucent poison sac and short forward spout",
+          "venom": {
+            "duration": 4,
+            "portion": 0.4
+          }
+        },
+        {
+          "id": "lizard_medic",
+          "name": "蜥蜴巫医",
+          "role": "healer",
+          "design": "long narrow lizard face, bent reed staff with hanging medicine gourd, simple woven reed shoulder cape"
+        },
+        {
+          "id": "marsh_guard",
+          "name": "泥甲蛙卫",
+          "role": "elite",
+          "design": "wide squat toad with heavy mud shell on upper back, short bone paddle as shield, slit pupils",
+          "regen": 0.015
+        },
+        {
+          "id": "marsh_toad",
+          "name": "沼潭巨蛙",
+          "role": "boss",
+          "design": "enormous low bullfrog with reed mats tangled on its broad back, huge throat pouch, small eyes above a wide grumpy mouth",
+          "venom": {
+            "duration": 5,
+            "portion": 0.35
+          },
+          "summon": {
+            "id": "marsh_frog",
+            "count": 2,
+            "every": 16,
+            "limit": 6
+          }
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "name": "碎帆海岸",
+      "art": "coast",
+      "region": "南方远征",
+      "stages": [
+        "潮痕沙滩",
+        "断桅湾口",
+        "礁石浅滩",
+        "漂木营地",
+        "沉船残骸",
+        "鱼人渔场",
+        "盐风栈桥",
+        "废港防线",
+        "潮汐围城",
+        "巨钳巢穴"
+      ],
+      "landscape": "turquoise tidal coast, weathered shipwrecks, broken docks, shell-lined beaches, sandstone and bleached timber",
+      "color": "#3B91A0",
+      "mapPoint": [
+        0.86,
+        0.62
+      ],
+      "enemies": [
+        {
+          "id": "shell_crab",
+          "name": "船壳蟹兵",
+          "role": "tank",
+          "design": "asymmetric hermit crab inhabiting a broken riveted ship's prow, one large claw and three visible legs per side",
+          "guard": {
+            "period": 9,
+            "duration": 3,
+            "reduction": 0.4
+          }
+        },
+        {
+          "id": "reef_spearman",
+          "name": "礁鳍掷叉手",
+          "role": "ranged",
+          "design": "lean angular fish raider, backward dorsal fin, broad-webbed feet, fork made from two fishbones on driftwood"
+        },
+        {
+          "id": "tide_priest",
+          "name": "潮汐祭司",
+          "role": "healer",
+          "design": "round-headed fish mystic, collar of interlocking oyster shells, curved coral staff holding one water bowl"
+        },
+        {
+          "id": "anchor_crab",
+          "name": "铁锚巨蟹",
+          "role": "elite",
+          "design": "heavy deep-blue crab carrying a small broken anchor in one enormous claw, barnacle-covered shield shell",
+          "physRes": 0.28
+        },
+        {
+          "id": "claw_king",
+          "name": "巨钳蟹王",
+          "role": "boss",
+          "design": "wide old rust-red crab, one disproportionately large blunt crushing claw, split ship-wheel embedded in shell, no humanoid torso",
+          "guard": {
+            "period": 9,
+            "duration": 3,
+            "reduction": 0.35
+          },
+          "phase": {
+            "threshold": 0.45,
+            "attackMul": 1.35,
+            "speedMul": 1.08
+          }
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "name": "赤金沙海",
+      "art": "desert",
+      "region": "南方远征",
+      "stages": [
+        "沙海边缘",
+        "商道残营",
+        "蝎尾沙丘",
+        "枯井绿洲",
+        "风蚀石阵",
+        "甲虫沙窝",
+        "流沙古道",
+        "断柱驿站",
+        "沙暴前线",
+        "巨虫沙穴"
+      ],
+      "landscape": "ochre sand dunes, tiny blue oasis, camel-free abandoned caravans, wind-eroded columns and angular sandstone",
+      "color": "#C19A45",
+      "mapPoint": [
+        0.55,
+        0.5
+      ],
+      "enemies": [
+        {
+          "id": "dune_beetle",
+          "name": "沙丘甲虫",
+          "role": "swarm",
+          "design": "small low sand-yellow scarab with a heavy oval shell and black spade-shaped front digging legs"
+        },
+        {
+          "id": "sand_scorpion",
+          "name": "赤尾沙蝎",
+          "role": "ranged",
+          "design": "flat sandstone scorpion, tail arched over back with one enlarged red-brown bulb and hooked stinger",
+          "venom": {
+            "duration": 3,
+            "portion": 0.3
+          }
+        },
+        {
+          "id": "sand_lizard",
+          "name": "沙蜥猎手",
+          "role": "runner",
+          "design": "lean bipedal desert lizard, blunt wedge snout, faded cloth neck wrap and short flint dagger",
+          "charge": {
+            "period": 6,
+            "duration": 1.2,
+            "multiplier": 1.7
+          }
+        },
+        {
+          "id": "dune_guard",
+          "name": "铲角甲卫",
+          "role": "elite",
+          "design": "broad heavily shelled scarab with one shovel horn and stepped overlapping shell plates, low beetle head",
+          "guard": {
+            "period": 8,
+            "duration": 2.8,
+            "reduction": 0.4
+          }
+        },
+        {
+          "id": "sand_worm",
+          "name": "沙潜巨虫",
+          "role": "boss",
+          "design": "thick upright segmented sandworm emerging on a coiled lower body, blunt circular four-part jaw, sandstone armored back, no gore",
+          "summon": {
+            "id": "dune_beetle",
+            "count": 3,
+            "every": 15,
+            "limit": 9
+          },
+          "phase": {
+            "threshold": 0.4,
+            "attackMul": 1.3,
+            "speedMul": 1.12
+          }
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "name": "失落王庭",
+      "art": "ruins",
+      "region": "南方远征",
+      "stages": [
+        "埋沙城门",
+        "残柱长街",
+        "陶俑庭院",
+        "石像廊桥",
+        "王陵前殿",
+        "沙漏祭室",
+        "断壁宫苑",
+        "守灵长阶",
+        "古王禁庭",
+        "王座封印"
+      ],
+      "landscape": "half-buried turquoise-and-gold ancient kingdom, broken geometric statues, ochre stone palace courts and old aqueducts",
+      "color": "#AA995F",
+      "mapPoint": [
+        0.4,
+        0.6
+      ],
+      "enemies": [
+        {
+          "id": "clay_sentinel",
+          "name": "陶俑卫士",
+          "role": "tank",
+          "design": "stout animated terracotta guardian, one shoulder broken, geometric mask with narrow eyes, broad rectangular stone shield",
+          "guard": {
+            "period": 8,
+            "duration": 3,
+            "reduction": 0.35
+          }
+        },
+        {
+          "id": "stone_archer",
+          "name": "石像射手",
+          "role": "ranged",
+          "design": "tall slender sandstone statue, hollow rectangular headpiece, long rigid bow integrated into left stone forearm"
+        },
+        {
+          "id": "tomb_spirit",
+          "name": "守墓灵",
+          "role": "healer",
+          "design": "floating folded-linen spirit, narrow carved ceramic face, lower body a single tapering cloth fold, turquoise sand vessel",
+          "airborne": true
+        },
+        {
+          "id": "royal_guard",
+          "name": "王庭重卫",
+          "role": "elite",
+          "design": "heavy terracotta guardian with wide trapezoid body, two-hand blunt stone glaive, broken turquoise enamel crest",
+          "guard": {
+            "period": 9,
+            "duration": 3.5,
+            "reduction": 0.4
+          }
+        },
+        {
+          "id": "ancient_warden",
+          "name": "古王守卫",
+          "role": "boss",
+          "design": "huge weathered palace automaton with squat lion-shaped mask, broad gold-rimmed sandstone shoulders, single long stone mace and missing crown point",
+          "guard": {
+            "period": 10,
+            "duration": 3,
+            "reduction": 0.4
+          },
+          "phase": {
+            "threshold": 0.45,
+            "attackMul": 1.25,
+            "speedMul": 1.08
+          }
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "name": "赤岩峡谷",
+      "art": "canyon",
+      "region": "南方远征",
+      "stages": [
+        "赤岩入口",
+        "鹰巢断崖",
+        "落石狭道",
+        "岩羊栈道",
+        "悬桥争夺",
+        "投矛岩台",
+        "碎谷隘口",
+        "裂角营地",
+        "峡谷重围",
+        "岩兽巢顶"
+      ],
+      "landscape": "terracotta red sandstone canyons, narrow rope bridges, eagle nests, stepped cliff dwellings and dry streambeds",
+      "color": "#AB6645",
+      "mapPoint": [
+        0.16,
+        0.47
+      ],
+      "enemies": [
+        {
+          "id": "canyon_ram",
+          "name": "岩羊撞兽",
+          "role": "runner",
+          "design": "stocky red-furred cliff ram with thick low curved horns protecting a wedge-shaped forehead and short hooves",
+          "charge": {
+            "period": 6,
+            "duration": 1.3,
+            "multiplier": 1.85
+          }
+        },
+        {
+          "id": "cliff_eagle",
+          "name": "峡谷猛禽",
+          "role": "runner",
+          "design": "rust-brown broad-winged predatory eagle, small sharply hooked head, thick gripping talons, wings safely contained",
+          "airborne": true,
+          "charge": {
+            "period": 7,
+            "duration": 1,
+            "multiplier": 1.65
+          }
+        },
+        {
+          "id": "cliff_spear",
+          "name": "崖居投矛手",
+          "role": "ranged",
+          "design": "rangy birdlike nonhuman cliff hunter, short hooked beak, long legs and a single feather-fletched stone spear"
+        },
+        {
+          "id": "cliff_bulwark",
+          "name": "赤岩厚甲兽",
+          "role": "elite",
+          "design": "low four-legged cliff beast with layered broad sandstone-like hide along its back and thick blunt forelimbs",
+          "physRes": 0.3
+        },
+        {
+          "id": "split_horn",
+          "name": "裂角岩兽",
+          "role": "boss",
+          "design": "massive red mountain ram-beast, uneven broken spiral horns, broad weathered forehead, heavy forequarters and short tail",
+          "charge": {
+            "period": 8,
+            "duration": 1.6,
+            "multiplier": 1.9
+          },
+          "phase": {
+            "threshold": 0.4,
+            "attackMul": 1.3,
+            "speedMul": 1.1
+          }
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "name": "锈铁矿区",
+      "art": "mine",
+      "region": "北境探险",
+      "stages": [
+        "旧矿入口",
+        "废轨岔路",
+        "蝠影坑道",
+        "矿车斜坡",
+        "钻甲工棚",
+        "升降井口",
+        "锈炉大厅",
+        "采矿深井",
+        "矿机暴走",
+        "掘山核心"
+      ],
+      "landscape": "slate-grey abandoned iron mines, copper rails, wooden pitheads, ochre ore carts, rust-red furnace fittings",
+      "color": "#756E60",
+      "mapPoint": [
+        0.23,
+        0.3
+      ],
+      "enemies": [
+        {
+          "id": "mine_bat",
+          "name": "矿穴蝠",
+          "role": "runner",
+          "design": "broad triangular bat with tiny angular head, tall ears and two translucent dull-copper wings, no jewelry",
+          "airborne": true
+        },
+        {
+          "id": "drill_beetle",
+          "name": "钻地甲虫",
+          "role": "tank",
+          "design": "low iron-grey insect with one broad corkscrew horn, flat ore-stained shell and heavy front digging legs",
+          "charge": {
+            "period": 8,
+            "duration": 1.2,
+            "multiplier": 1.6
+          }
+        },
+        {
+          "id": "mining_drone",
+          "name": "失控采矿机",
+          "role": "ranged",
+          "design": "small squat mechanical ore cart creature with two tread units, single forward bolt-launcher and one shutter-shaped eye",
+          "windup": 1.1
+        },
+        {
+          "id": "iron_loader",
+          "name": "重载矿机",
+          "role": "elite",
+          "design": "broad ore-loading automaton on two short treads, open bucket jaw, one enormous dull-iron shovel arm",
+          "physRes": 0.3
+        },
+        {
+          "id": "mountain_drill",
+          "name": "掘山钻机",
+          "role": "boss",
+          "design": "heavy mining engine monster on short tank treads, one huge conical drill as its face, exposed flywheel and chimney, intentional industrial silhouette",
+          "windup": 1.5,
+          "summon": {
+            "id": "mining_drone",
+            "count": 1,
+            "every": 16,
+            "limit": 4
+          }
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "name": "霜牙雪岭",
+      "art": "snow",
+      "region": "北境探险",
+      "stages": [
+        "雪松坡道",
+        "冻河浅滩",
+        "狼踪山口",
+        "冰晶洞口",
+        "霜甲营地",
+        "断冰石桥",
+        "雪岭堡垒",
+        "风雪长阶",
+        "巨兽冰原",
+        "霜背王巢"
+      ],
+      "landscape": "blue-white snowy peaks, dark fir forests, frozen rivers, ice-cut mountain passes, old snowbound stone fortresses",
+      "color": "#718EA4",
+      "mapPoint": [
+        0.49,
+        0.35
+      ],
+      "enemies": [
+        {
+          "id": "snow_wolf",
+          "name": "雪岭灰狼",
+          "role": "runner",
+          "design": "lean winter wolf with high shoulder fur and low ears, long narrow muzzle, planted paws and icy grey coat",
+          "charge": {
+            "period": 6,
+            "duration": 1.1,
+            "multiplier": 1.7
+          }
+        },
+        {
+          "id": "ice_shooter",
+          "name": "冰晶射手",
+          "role": "ranged",
+          "design": "angular ice spirit with a single broad crystal head, rigid shard forearm pointing downward, two short crystal feet"
+        },
+        {
+          "id": "frost_giant",
+          "name": "冻甲巨人",
+          "role": "tank",
+          "design": "hunched blue-grey giant with small face below a shelf brow, snow-packed layered ice on one shoulder, wide bare feet",
+          "guard": {
+            "period": 9,
+            "duration": 3,
+            "reduction": 0.35
+          }
+        },
+        {
+          "id": "frost_guard",
+          "name": "冰脊重卫",
+          "role": "elite",
+          "design": "broad pale-blue quadrupedal snow beast, short forward ice spines along its high back, heavy forepaws",
+          "regen": 0.012
+        },
+        {
+          "id": "frostback",
+          "name": "霜背巨兽",
+          "role": "boss",
+          "design": "huge squat snow beast, broad heavy downward muzzle, white fur mantle and one continuous curved ice ridge across its back, no copied yeti anatomy",
+          "phase": {
+            "threshold": 0.45,
+            "attackMul": 1.3,
+            "speedMul": 1.18
+          },
+          "summon": {
+            "id": "snow_wolf",
+            "count": 2,
+            "every": 17,
+            "limit": 6
+          }
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "name": "雷鸣高地",
+      "art": "storm",
+      "region": "北境探险",
+      "stages": [
+        "高地风口",
+        "雷羽巢台",
+        "风蚀石林",
+        "悬崖古道",
+        "蓄雷岩场",
+        "风灵长桥",
+        "雷痕祭坛",
+        "黑云山脊",
+        "雷翼围猎",
+        "风暴之巅"
+      ],
+      "landscape": "storm-blue windswept highlands, pale grass, standing stones with localized blue arcs, precipitous bridges and slate cliffs",
+      "color": "#6879A1",
+      "mapPoint": [
+        0.65,
+        0.28
+      ],
+      "enemies": [
+        {
+          "id": "thunder_eagle",
+          "name": "雷羽鹰",
+          "role": "runner",
+          "design": "slate-blue eagle with broad swept wings, pale zigzag feather tips and a sharply hooked small head",
+          "airborne": true,
+          "charge": {
+            "period": 6,
+            "duration": 1,
+            "multiplier": 1.8
+          }
+        },
+        {
+          "id": "wind_spirit",
+          "name": "回旋风灵",
+          "role": "ranged",
+          "design": "compact faceless wind creature, two long curved ribbon arms around a single dense spiral body, no cute facial eyes",
+          "airborne": true,
+          "windup": 1.2
+        },
+        {
+          "id": "storm_stone",
+          "name": "蓄雷石怪",
+          "role": "ranged",
+          "design": "three broad weathered standing-stone masses connected into a squat creature, two copper prongs on upper back, narrow amber eyes",
+          "windup": 1.8
+        },
+        {
+          "id": "storm_guard",
+          "name": "雷痕重卫",
+          "role": "elite",
+          "design": "stocky dark storm bird-beast with short folded wing shields and a heavy white brow crest",
+          "aura": {
+            "radius": 170,
+            "attackMul": 1.15
+          }
+        },
+        {
+          "id": "storm_lord",
+          "name": "雷翼领主",
+          "role": "boss",
+          "design": "heavy thunder raptor, wide cropped triangular wings, jagged pale crest, broad talons on a rocky perch integrated with its feet",
+          "airborne": true,
+          "windup": 2,
+          "phase": {
+            "threshold": 0.45,
+            "attackMul": 1.3,
+            "speedMul": 1.15
+          }
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "name": "菌光地窟",
+      "art": "fungus",
+      "region": "北境探险",
+      "stages": [
+        "荧光洞口",
+        "菌丝小径",
+        "伞盖林地",
+        "孢子水潭",
+        "盾菇营地",
+        "紫菌长桥",
+        "菌网腹地",
+        "母巢前厅",
+        "孢潮围阵",
+        "孢冠巢心"
+      ],
+      "landscape": "underground giant mushroom forest, muted violet caps, luminous teal pools, thick roots and dark plum stone",
+      "color": "#83688D",
+      "mapPoint": [
+        0.89,
+        0.32
+      ],
+      "enemies": [
+        {
+          "id": "fungal_worm",
+          "name": "菌丝虫",
+          "role": "swarm",
+          "design": "short blunt ivory grub with three thick body segments and a small mushroom saddle cap, tiny dark mouth"
+        },
+        {
+          "id": "spore_spitter",
+          "name": "喷孢怪",
+          "role": "ranged",
+          "design": "bent trumpet mushroom creature on two fibrous roots, one large forward-facing porous funnel head and small side eyes",
+          "summon": {
+            "id": "fungal_worm",
+            "count": 1,
+            "every": 16,
+            "limit": 2
+          }
+        },
+        {
+          "id": "shield_mushroom",
+          "name": "伞盖盾菇",
+          "role": "tank",
+          "design": "stocky living mushroom whose very broad downward-sloping purple cap covers narrow slit eyes, thick short stalk legs",
+          "guard": {
+            "period": 8,
+            "duration": 3,
+            "reduction": 0.35
+          }
+        },
+        {
+          "id": "split_mushroom",
+          "name": "裂孢重菇",
+          "role": "elite",
+          "design": "large asymmetric double-capped mushroom with pale cracked stem and three visible swollen spore sacs",
+          "split": {
+            "id": "fungal_worm",
+            "count": 3
+          }
+        },
+        {
+          "id": "spore_mother",
+          "name": "孢冠母体",
+          "role": "boss",
+          "design": "wide layered mushroom queen, three connected muted violet caps over a dense root body, low ivory face under main cap and strong root feet",
+          "summon": {
+            "id": "fungal_worm",
+            "count": 3,
+            "every": 13,
+            "limit": 12
+          },
+          "phase": {
+            "threshold": 0.45,
+            "attackMul": 1.2,
+            "speedMul": 1.1
+          }
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "name": "幽影墓园",
+      "art": "grave",
+      "region": "黑暗腹地",
+      "stages": [
+        "墓园铁门",
+        "枯树小径",
+        "残碑长街",
+        "骨犬荒岗",
+        "亡魂渡口",
+        "缚魂祭地",
+        "陵墓回廊",
+        "古墓深庭",
+        "百骨围城",
+        "守墓王陵"
+      ],
+      "landscape": "moonlit desaturated cemetery, crooked headstones, broken mausoleums, leafless trees, low blue lantern light",
+      "color": "#6B7D85",
+      "mapPoint": [
+        0.85,
+        0.14
+      ],
+      "enemies": [
+        {
+          "id": "bone_soldier",
+          "name": "残骨兵",
+          "role": "swarm",
+          "design": "short angular skeleton soldier with oversized battered helmet sliding over one eye and one broad broken sword, no gore",
+          "revive": 0.22
+        },
+        {
+          "id": "grave_wraith",
+          "name": "游荡亡魂",
+          "role": "ranged",
+          "design": "floating narrow cloth ghost with a cracked oval burial mask, long sleeves ending in two skeletal hands, tapering lower cloth body",
+          "airborne": true
+        },
+        {
+          "id": "soul_binder",
+          "name": "缚魂巫师",
+          "role": "healer",
+          "design": "thin stooped spirit in a folded mourning hood, face obscured by one long flat mask, a small iron soul lantern on crooked staff"
+        },
+        {
+          "id": "grave_guard",
+          "name": "墓门重卫",
+          "role": "elite",
+          "design": "thick animated stone coffin lid with squared head carved near the top, heavy chain arms and two short stone feet",
+          "physRes": 0.28,
+          "revive": 0.18
+        },
+        {
+          "id": "tomb_colossus",
+          "name": "守墓巨像",
+          "role": "boss",
+          "design": "massive old mausoleum guardian, one bell-shaped stone torso, carved sorrowful face, heavy iron gate shield and root-bound stone legs",
+          "summon": {
+            "id": "bone_soldier",
+            "count": 2,
+            "every": 16,
+            "limit": 8
+          },
+          "phase": {
+            "threshold": 0.4,
+            "attackMul": 1.25,
+            "speedMul": 1.1
+          }
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "name": "黑铁要塞",
+      "art": "fortress",
+      "region": "黑暗腹地",
+      "stages": [
+        "黑铁吊桥",
+        "外墙缺口",
+        "战旗营地",
+        "军械长街",
+        "铠卫庭院",
+        "傀儡工坊",
+        "重门甬道",
+        "内城防线",
+        "统帅亲卫",
+        "黑铁王座"
+      ],
+      "landscape": "black iron fortress courtyards, heavy riveted gates, muted red military banners, siege workshops and blue-grey masonry",
+      "color": "#686B79",
+      "mapPoint": [
+        0.49,
+        0.14
+      ],
+      "enemies": [
+        {
+          "id": "living_armor",
+          "name": "黑铁铠兵",
+          "role": "tank",
+          "design": "empty animated black iron armor, narrow glowing visor, short solid legs and a single broad chipped sword, no human skin",
+          "physRes": 0.25
+        },
+        {
+          "id": "siege_puppet",
+          "name": "攻城傀儡",
+          "role": "ranged",
+          "design": "squat iron-and-wood siege puppet on two block feet, one oversized crossbow built into its chest, no face except sight slit",
+          "windup": 1.4
+        },
+        {
+          "id": "banner_guard",
+          "name": "战旗卫士",
+          "role": "tank",
+          "design": "tall narrow empty armor with broad forked banner attached to its back, short spear and single red cloth waist strip",
+          "aura": {
+            "radius": 185,
+            "attackMul": 1.18
+          }
+        },
+        {
+          "id": "iron_captain",
+          "name": "黑铁亲卫",
+          "role": "elite",
+          "design": "broad empty plate armor with square sloping shoulders, short hornless helmet, thick rectangular tower shield",
+          "guard": {
+            "period": 8,
+            "duration": 3,
+            "reduction": 0.4
+          }
+        },
+        {
+          "id": "iron_commander",
+          "name": "黑铁统帅",
+          "role": "boss",
+          "design": "hulking animated dark iron commander armor, narrow low visor, high torn russet back banner, one broad siege hammer, no skull jewelry",
+          "aura": {
+            "radius": 210,
+            "attackMul": 1.2
+          },
+          "phase": {
+            "threshold": 0.45,
+            "attackMul": 1.3,
+            "speedMul": 1.1
+          }
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "name": "熔火裂谷",
+      "art": "volcano",
+      "region": "黑暗腹地",
+      "stages": [
+        "焦土边缘",
+        "焰灵岩道",
+        "熔壳滩地",
+        "黑曜石桥",
+        "岩浆虫穴",
+        "灰烬祭台",
+        "火山前庭",
+        "熔流隘口",
+        "巨兽苏醒",
+        "熔山深核"
+      ],
+      "landscape": "black volcanic basalt, narrow orange lava channels, ash dunes, obsidian bridges, broken forge arches and deep red glow",
+      "color": "#AE654A",
+      "mapPoint": [
+        0.64,
+        0.06
+      ],
+      "enemies": [
+        {
+          "id": "lava_larva",
+          "name": "岩浆虫",
+          "role": "swarm",
+          "design": "low squat red-black lava grub, three broad basalt segments, small orange mouth and tiny gripping legs"
+        },
+        {
+          "id": "flame_spirit",
+          "name": "灰烬焰灵",
+          "role": "ranged",
+          "design": "compact orange flame spirit with dark charcoal core, sharp tapered head and two long thin flame arms, no smiling mascot face",
+          "airborne": true
+        },
+        {
+          "id": "magma_shell",
+          "name": "熔壳兽",
+          "role": "tank",
+          "design": "heavy quadrupedal basalt-shelled beast with a low blunt head, three large shell plates and localized warm seams",
+          "split": {
+            "id": "lava_larva",
+            "count": 2
+          }
+        },
+        {
+          "id": "obsidian_guard",
+          "name": "黑曜重卫",
+          "role": "elite",
+          "design": "broad dark obsidian creature with two shieldlike forearms and small recessed glowing slit eyes, no random spikes",
+          "guard": {
+            "period": 8,
+            "duration": 2.8,
+            "reduction": 0.35
+          },
+          "split": {
+            "id": "lava_larva",
+            "count": 3
+          }
+        },
+        {
+          "id": "molten_beast",
+          "name": "熔山巨兽",
+          "role": "boss",
+          "design": "enormous low volcanic tortoise-beast with heavy forward jaw, a single smoldering crater in its broad back and thick elephantine legs",
+          "phase": {
+            "threshold": 0.45,
+            "attackMul": 1.35,
+            "speedMul": 1.08
+          },
+          "summon": {
+            "id": "lava_larva",
+            "count": 2,
+            "every": 15,
+            "limit": 8
+          }
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "name": "裂隙王座",
+      "art": "rift",
+      "region": "黑暗腹地",
+      "stages": [
+        "裂隙边境",
+        "浮岩断道",
+        "镜影庭院",
+        "虚空回廊",
+        "祭司高台",
+        "破碎城门",
+        "异界长桥",
+        "王座前庭",
+        "裂隙重围",
+        "终焉王座"
+      ],
+      "landscape": "fractured violet-grey castle continent, floating rocky fragments at edges, cracked causeways and restrained cyan-violet rifts",
+      "color": "#7D6A9C",
+      "mapPoint": [
+        0.18,
+        0.11
+      ],
+      "enemies": [
+        {
+          "id": "rift_hound",
+          "name": "虚空猎兽",
+          "role": "runner",
+          "design": "lean angular violet quadruped with a split wedge-shaped head, two flat cyan eye slits and long grounded foreclaws",
+          "charge": {
+            "period": 6,
+            "duration": 1.4,
+            "multiplier": 1.8
+          }
+        },
+        {
+          "id": "mirror_fiend",
+          "name": "镜影魔",
+          "role": "ranged",
+          "design": "thin asymmetric hovering creature, a broken silver oval mask split into two connected halves, dark ribbon body and blade-like forearms",
+          "airborne": true,
+          "revive": 0.2
+        },
+        {
+          "id": "rift_priest",
+          "name": "裂隙祭司",
+          "role": "healer",
+          "design": "tall angular robed nonhuman priest, elongated sealed facemask with vertical cyan slit, one staff shaped like a broken stone arch"
+        },
+        {
+          "id": "rift_guard",
+          "name": "裂隙重卫",
+          "role": "elite",
+          "design": "heavy violet-grey plate creature whose two broad shoulder slabs frame a tiny sealed mask, one solid crescent shield",
+          "guard": {
+            "period": 8,
+            "duration": 3,
+            "reduction": 0.4
+          }
+        },
+        {
+          "id": "rift_sovereign",
+          "name": "裂隙君主",
+          "role": "boss",
+          "design": "tall broad original alien sovereign, hollow broken-arch crown framing a narrow facemask, two large mantle planes and grounded stone claw feet, restrained cyan-violet light",
+          "summon": {
+            "id": "rift_hound",
+            "count": 2,
+            "every": 15,
+            "limit": 8
+          },
+          "phase": {
+            "threshold": 0.5,
+            "attackMul": 1.4,
+            "speedMul": 1.2
+          },
+          "windup": 1.5
+        }
+      ]
+    }
+  ],
+  "game": "https://kingdom-watch.pages.dev/?v=campaign-v66-1792425114",
+  "deployment": "https://cad2f705.kingdom-watch.pages.dev"
+}

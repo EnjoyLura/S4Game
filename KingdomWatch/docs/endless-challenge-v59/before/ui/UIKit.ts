@@ -1,0 +1,319 @@
+/**
+ * 程序化 UI 组件库（占位渲染：色块+描边+文字，视觉对齐 UX 线稿 token）
+ * 美术资源已接入：btn/gbar/gswitch 内部优先加载 assets/resources/ux 同名贴图，
+ * 加载失败保持程序绘制兜底 —— 见 UX/wireframe.html 资源清单与 ui/Ux.ts
+ */
+import { Color, Graphics, Label, Layers, Node, Sprite, UITransform, UIOpacity, tween, Vec3, BlockInputEvents } from 'cc';
+import { LO, PAL } from '../config/GameConfig';
+import { artSetFrame, artSprite, uxFrame } from './Ux';
+import { applyFont, FontRole, inferFont } from './Fonts';
+import { bindButton } from './ButtonFeedback';
+import { motionIn } from './UIMotion';
+
+export function C(hex: string): Color {
+  const c = new Color();
+  Color.fromHEX(c, hex);
+  return c;
+}
+
+/** 带透明度的颜色（hex + 0~1 alpha） */
+export function CA(hex: string, alpha: number): Color {
+  const c = C(hex);
+  c.a = Math.round(255 * Math.max(0, Math.min(1, alpha)));
+  return c;
+}
+
+type FillLike = string | Color;
+
+function toColor(v: FillLike): Color {
+  return typeof v === 'string' ? C(v) : v;
+}
+
+/** 线稿顶基坐标(设计px,左上) → 画布中心坐标；t 从可视区顶（刘海下）起算 */
+export function WX(l: number, w: number): number { return l + w / 2 - 375; }
+export function WY(t: number, h = 0): number { return (LO.half - LO.safeTop) - t - h / 2; }
+/** 底基坐标：b 从可视区底（手势条上）起算，用于贴底的耐久条/图标/大招列 */
+export function WYB(b: number, h = 0): number { return -(LO.half - LO.safeBottom) + b + h / 2; }
+
+export function N(name: string, parent: Node | null, x = 0, y = 0, w = 0, h = 0): Node {
+  const n = new Node(name);
+  n.layer = Layers.Enum.UI_2D; // 相机只渲染 UI_2D 层（§12.3），动态节点必须显式设层
+  if (parent) n.setParent(parent);
+  n.setPosition(x, y, 0);
+  if (w > 0 || h > 0) n.addComponent(UITransform).setContentSize(w, h);
+  return n;
+}
+
+export interface LabelOpts {
+  size?: number; color?: string; align?: 'left' | 'center' | 'right'; bold?: boolean;
+  w?: number; h?: number; lineHeight?: number;
+  /** SHRINK：文本在 w×h 框内自动缩字号换行，绝不超框（长描述/双列 Tips 用） */
+  shrink?: boolean;
+  /** 描边（亮底大图上的说明文字用，如关卡场景图内的波次信息） */
+  outline?: string; outlineW?: number;
+  font?: FontRole;
+}
+
+export function label(parent: Node, x: number, y: number, text: string, o: LabelOpts = {}): Node {
+  const n = N('lbl', parent, x, y, o.w || 0, o.h || 0);
+  const l = n.addComponent(Label);
+  l.string = text;
+  l.fontSize = o.size || 20;
+  l.lineHeight = o.lineHeight || (o.size || 20) * 1.25;
+  l.color = C(o.color || '#FFFFFF');
+  l.isBold = !!o.bold;
+  if (o.shrink && (o.w || 0) > 0 && (o.h || 0) > 0) {
+    l.overflow = Label.Overflow.SHRINK;
+    l.enableWrapText = true;
+    n.getComponent(UITransform)!.setContentSize(o.w!, o.h!);
+  }
+  if (o.outline) {
+    l.enableOutline = true;
+    l.outlineColor = C(o.outline);
+    l.outlineWidth = o.outlineW ?? 2;
+  }
+  if (o.align === 'left') l.horizontalAlign = Label.HorizontalAlign.LEFT;
+  else if (o.align === 'right') l.horizontalAlign = Label.HorizontalAlign.RIGHT;
+  else l.horizontalAlign = Label.HorizontalAlign.CENTER;
+  l.verticalAlign = Label.VerticalAlign.CENTER;
+  // Installing a cached font renders immediately. Apply it after overflow and
+  // fixed bounds, otherwise NONE overflow expands the intended text box.
+  const fontRole = o.font || inferFont(text, l.fontSize, l.isBold);
+  if (fontRole) applyFont(l, fontRole);
+  return n;
+}
+
+export function setText(n: Node, text: string): void {
+  const l = n.getComponent(Label);
+  if (l) l.string = text;
+}
+
+export function gpanel(parent: Node, x: number, y: number, w: number, h: number,
+  fill: FillLike, stroke?: FillLike, strokeW = 2, radius = 12): Node {
+  const n = N('panel', parent, x, y, w, h);
+  const g = n.addComponent(Graphics);
+  g.fillColor = toColor(fill);
+  if (stroke) { g.strokeColor = toColor(stroke); g.lineWidth = strokeW; }
+  g.roundRect(-w / 2, -h / 2, w, h, radius);
+  g.fill();
+  if (stroke) g.stroke();
+  return n;
+}
+
+export function gcircle(parent: Node, x: number, y: number, r: number, fill: FillLike, stroke?: FillLike, lw = 2): Node {
+  const n = N('circ', parent, x, y, r * 2, r * 2);
+  const g = n.addComponent(Graphics);
+  g.fillColor = toColor(fill);
+  if (stroke) { g.strokeColor = toColor(stroke); g.lineWidth = lw; }
+  g.circle(0, 0, r);
+  g.fill();
+  if (stroke) g.stroke();
+  return n;
+}
+
+/** 圆环进度（大招充能/技能CD），set(pct) 重绘 */
+export interface Ring { node: Node; set: (pct: number, color?: string) => void; }
+
+export function gring(parent: Node, x: number, y: number, r: number, track: FillLike): Ring {
+  const n = N('ring', parent, x, y, r * 2, r * 2);
+  const g = n.addComponent(Graphics);
+  const trackC = toColor(track);
+  const draw = (pct: number, color: FillLike) => {
+    g.clear();
+    g.lineWidth = 5;
+    g.strokeColor = trackC;
+    g.circle(0, 0, r);
+    g.stroke();
+    if (pct > 0.01) {
+      g.strokeColor = toColor(color);
+      g.arc(0, 0, r, Math.PI / 2, Math.PI / 2 - pct * Math.PI * 2, true);
+      g.stroke();
+    }
+  };
+  draw(0, track);
+  return { node: n, set: draw };
+}
+
+/** 进度条，set(pct) 重绘填充 */
+export interface Bar { node: Node; set: (pct: number, color?: string) => void; }
+
+export function gbar(parent: Node, x: number, y: number, w: number, h: number, fill: FillLike): Bar {
+  const bg = gpanel(parent, x, y, w, h, CA('#14181E', 0.85), CA('#FFFFFF', 0.33), 1.5, h / 2);
+  const fn = N('fill', bg, 0, 0, w, h);
+  const g = fn.addComponent(Graphics);
+  const base = toColor(fill);
+  /* 美术条：轨道垫底 + 白填充染色（金/绿/蓝/红全靠 tint）；加载失败保持程序绘制 */
+  let artFillSp: Sprite | null = null;
+  let artFillNode: Node | null = null;
+  let lastPct = 1;
+  let lastColor: Color = base;
+  const applyArt = (pct: number): void => {
+    if (!artFillNode || !artFillSp) return;
+    const fw = Math.max(0, Math.min(1, pct)) * (w - 4);
+    artFillNode.getComponent(UITransform)!.setContentSize(Math.max(fw, 0.01), h - 4);
+    artFillNode.active = fw > 0.5;
+  };
+  artSprite(bg, 0, 0, w, h, 'ui_bar_track', { belowIdx: 0, onLoaded: () => {
+    const bgG = bg.getComponent(Graphics);
+    if (bgG) bgG.enabled = false;
+  }});
+  artSprite(bg, 0, 0, w, h, 'ui_bar_fill_white', { fit: false, onLoaded: n => {
+    n.getComponent(UITransform)!.setAnchorPoint(0, 0.5);
+    n.setPosition(-w / 2 + 2, 0, 0);
+    artFillNode = n;
+    artFillSp = n.getComponent(Sprite);
+    g.enabled = false;
+    artFillSp.color = lastColor;   // 补染色：set 可能发生在美术加载完成前（伤害统计条只 set 一次→一直空白）
+    applyArt(lastPct);
+  }});
+  const draw = (pct: number, color?: FillLike) => {
+    // 比例/颜色先记账再绘制：美术异步加载完成时按最后一次 set 补应用
+    // （此前只在美术已加载时才记账，构建即 set 的统计条会被丢成初始满条——全满根因）
+    lastPct = Math.max(0, Math.min(1, pct));
+    lastColor = color ? toColor(color) : base;
+    g.clear();
+    const fw = lastPct * (w - 4);
+    if (fw > 0.5) {
+      g.fillColor = lastColor;
+      g.roundRect(-w / 2 + 2, -h / 2 + 2, fw, h - 4, (h - 4) / 2);
+      g.fill();
+    }
+    if (artFillSp) {
+      artFillSp.color = lastColor;
+      applyArt(lastPct);
+    }
+  };
+  draw(1);
+  return { node: bg, set: draw };
+}
+
+export function btn(parent: Node, x: number, y: number, w: number, h: number, text: string,
+  color: FillLike, cb: () => void, size = 22, flat = false, icon = '', art = ''): Node {
+  /* 无边框规范（用户确认：未特别强调不加边框资源）——程序层一律无描边 */
+  const n = gpanel(parent, x, y, w, h, color, undefined, 0, 14);
+  n.name = 'btn_' + text;
+  const lbl = label(n, icon ? w * 0.07 : 0, 0, text, { size, color: '#241C12', bold: true, w, h, font: size >= 26 && /[\u3400-\u9FFF]/.test(text) ? 'title' : undefined });
+  if (icon) artSprite(n, -w * 0.26, 0, size + 12, size + 12, icon, { sliced: false });
+  /* 美术按钮三态：金/绿（含按下/禁用帧）；#5A6472 视为禁用态用灰帧；失败保持程序绘制；
+   * flat=true 连框体美术也不用（纯色板，用户点名去边框的弹窗按钮用）；
+   * art 指定钮面美术 id（如商店购买钮 ui_btn_buy），字色保持调用方深字不换奶白 */
+  const isColor = (v: string) => typeof color === 'string' && color === v;
+  const style = art || (flat ? null : isColor(PAL.gold) ? 'ui_btn_primary' : isColor(PAL.green) ? 'ui_btn_green'
+    : isColor('#5A6472') ? 'ui_btn_primary_disabled' : null);
+  if (style) {
+    const isDisabled = style.endsWith('_disabled');
+    const normalId = style;
+    artSprite(n, 0, 0, w, h, normalId, { belowIdx: 0, onLoaded: () => {
+      const l = lbl.getComponent(Label);
+      if (l && !art) l.color = C(isDisabled ? '#AAB2BD' : '#FFF3D6');
+    }});
+  }
+  // Keep the original face and its colours; press feedback comes from physical motion.
+  bindButton(n, cb);
+  return n;
+}
+
+/* ---------- 通用弹窗三件套（用户参考样例：奶白圆角弹窗板 + 深红提示标题带 + 蓝色确认钮；扁平无边框） ---------- */
+
+/** 通用弹窗背板：奶白大圆角板，深色文字用 PAL.ink 系；生图羊皮板（ui_panel_dialog）加载后自动覆盖，缺图回退程序板 */
+export function dlgPanel(parent: Node, x: number, y: number, w: number, h: number): Node {
+  const n = gpanel(parent, x, y, w, h, CA('#E2DAC0', 1), undefined, 0, 24);
+  artSprite(n, 0, 0, w, h, 'ui_panel_dialog', { belowIdx: 0 });
+  return n;
+}
+
+/** 提示标题背板：深红圆角横带 + 白色粗体标题；生图折角缎带（ui_banner_notice）加载后自动覆盖，
+ *  叠在弹窗背板顶缘（横跨上沿）由调用方定位 */
+export function dlgTitle(parent: Node, x: number, y: number, w: number, text: string,
+  size = 26, color = '#853D39'): Node {
+  // 高度随宽度按缎带比例（源图 4:1）走，避免 9 宫上下边压扁卷折（用户反馈：标题背板显示不全）
+  const h = Math.max(64, Math.min(100, Math.round(w / 4)));
+  const n = gpanel(parent, x, y, w, h, CA(color, 1), undefined, 0, 14);
+  // 缎带主带中心略高于几何中心，文字随之微抬
+  label(n, 0, h * 0.07, text, { size, color: '#FFFFFF', bold: true, font: 'title', w: Math.max(w - 170, 120), h: h - 40, shrink: true });
+  artSprite(n, 0, 0, w, h, 'ui_banner_notice', { belowIdx: 0 });
+  return n;
+}
+
+/** 通用确认按钮：生图雕刻钮面（默认黄 ui_btn_confirm，加载后盖住程序面色，文字仍在其上），
+ *  缺图回退程序黄板；取消钮传 base/edge 绿系 + art='ui_btn_cancel' */
+export function dlgConfirm(parent: Node, x: number, y: number, w: number, h: number,
+  text: string, cb: () => void, size = 24, base = '#E8AE3A', edge = '#BC8320',
+  art = 'ui_btn_confirm'): Node {
+  const n = gpanel(parent, x, y, w, h, CA(edge, 1), undefined, 0, 14);
+  // 面与外框同尺寸（无阶梯）：美术钮裁边后盖满整钮，程序底板不再从底部露出（用户反馈）
+  const face = gpanel(n, 0, 0, w, h, CA(base, 1), undefined, 0, 14);
+  label(face, 0, 0, text, { size, color: '#3A2A10', bold: true, w: w - 16, h, shrink: true });
+  artSprite(face, 0, 0, w, h, art, { belowIdx: 0 });
+  bindButton(n, cb, { visual: face });
+  return n;
+}
+
+/** 新怪物通知钮：整体美术图标（哥布林脸+红!角标一体，生图 ui_btn_notice，用户调整：不做拼装）；
+ *  缺图回退程序橙圆 */
+export function noticeBtn(parent: Node, x: number, y: number, d: number, cb: () => void): Node {
+  const n = gcircle(parent, x, y, d / 2, CA('#D98A3E', 1));
+  artSprite(n, 0, 0, d + 4, d + 4, 'ui_btn_notice', { sliced: false, belowIdx: 0 });
+  bindButton(n, cb, { circle: true });
+  return n;
+}
+
+/** 左右旋钮开关（线稿④-2）：开=绿轨旋钮居右 / 关=灰轨旋钮居左；disabled 置灰不可点
+ *  美术开关 ui_switch_on/off/disabled 三帧切换，加载失败保持程序绘制 */
+export function gswitch(parent: Node, x: number, y: number, w: number, h: number, on: boolean,
+  onChange?: (v: boolean) => void, disabled = false): Node {
+  const n = N('switch', parent, x, y, w, h);
+  const g = n.addComponent(Graphics);
+  const draw = (v: boolean) => {
+    g.clear();
+    g.fillColor = disabled ? CA('#3A4250', 0.9) : v ? CA(PAL.green, 0.95) : CA('#5A6472', 0.9);
+    g.roundRect(-w / 2, -h / 2, w, h, h / 2);
+    g.fill();
+    const kx = v ? w / 2 - h / 2 : -w / 2 + h / 2;
+    g.fillColor = disabled ? C('#889099') : C('#FFFFFF');
+    g.circle(kx, 0, h / 2 - 3);
+    g.fill();
+  };
+  draw(on);
+  const artId = () => disabled ? 'ui_switch_disabled' : on ? 'ui_switch_on' : 'ui_switch_off';
+  let sp: Sprite | null = null;
+  let artOk = false;
+  artSprite(n, 0, 0, w, h, artId(), { onLoaded: node => {
+    sp = node.getComponent(Sprite);
+    artOk = true;
+    g.enabled = false;
+  }});
+  ['ui_switch_on', 'ui_switch_off'].forEach(id => uxFrame(id, () => {})); // 预热
+  if (!disabled && onChange) {
+    bindButton(n, () => {
+      on = !on;
+      if (artOk && sp) artSetFrame(sp, artId());
+      else draw(on);
+      onChange(on);
+    }, { radius: h / 2, sound: 'toggle', soundAfterAction: true });
+  }
+  return n;
+}
+
+/** 全屏遮罩（吞点击）：覆盖整个可视区（Fit-Width 高度动态），不能用 Widget 对 0 尺寸父级对齐 */
+export function dimLayer(parent: Node, alpha = 0.68, red = false, animated = true): Node {
+  const H = LO.half * 2 + 240;
+  const n = N('dim', parent, 0, 0, 750, H);
+  const g = n.addComponent(Graphics);
+  g.fillColor = red ? new Color(80, 10, 12, Math.round(255 * alpha)) : new Color(6, 8, 12, Math.round(255 * alpha));
+  g.roundRect(-375, -H / 2, 750, H, 0);
+  g.fill();
+  n.addComponent(BlockInputEvents);
+  if (animated) motionIn(n, 'fade');
+  return n;
+}
+
+export function fadeOut(node: Node, dur: number, done?: () => void): void {
+  const op = node.getComponent(UIOpacity) || node.addComponent(UIOpacity);
+  tween(op).to(dur, { opacity: 0 }).call(() => { if (done) done(); }).start();
+}
+
+export function setLayerDeep(node: Node, layer: number): void {
+  node.layer = layer;
+  node.children.forEach(ch => setLayerDeep(ch, layer));
+}

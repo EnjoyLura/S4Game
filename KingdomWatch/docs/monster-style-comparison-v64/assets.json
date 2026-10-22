@@ -1,0 +1,32 @@
+[
+  {
+    "option": "A",
+    "file": "style-a-cel.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-9bb975ea-f88b-433f-ad67-cbebea2d3fd9.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "ed9376ca88ad4009f04f822a05aa331ca14f8d0af10faf6faca4bf4f5840a690",
+    "tool": "built-in image_gen",
+    "status": "Concept only; awaiting user style choice"
+  },
+  {
+    "option": "B",
+    "file": "style-b-gouache.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-40336f3b-ea7d-4129-92c3-6bf1f9d71c30.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "0530f697f5a9468d9eb3e6f12052c2a9c5aef370c88e9536595ed9f30c37d01e",
+    "tool": "built-in image_gen",
+    "status": "Concept only; awaiting user style choice"
+  },
+  {
+    "option": "C",
+    "file": "style-c-comic.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-f21cde62-da07-481e-ac91-f10eb09b2aaf.png",
+    "width": 1254,
+    "height": 1254,
+    "sha256": "79ced5606457cc6409ee2b1f640088f90475772cbdd5f3bf2b27bb3952a66c56",
+    "tool": "built-in image_gen",
+    "status": "Concept only; awaiting user style choice"
+  }
+]

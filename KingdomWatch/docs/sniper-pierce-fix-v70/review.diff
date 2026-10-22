@@ -1,0 +1,279 @@
+--- before/assets/scripts/battle/BattleDirector.ts
++++ after/assets/scripts/battle/BattleDirector.ts
+@@ -99,7 +99,14 @@
+   private bossWarning!: BossWarning;
+   private loot!: BattleLoot;
+   private pendingWin = false;
++  private victoryDelayT = -1;
++  private pendingWinPanel: Parameters<Panels['showWin']>[0] | null = null;
+   private leaving = false;
++  /** Recheck at touch release: a modal may have opened after pointer-down. */
++  get canUseBattleHud(): boolean {
++    return this.state === 'running' && !this.pendingWin && !this.leaving
++      && !this.mobIntroOpen && !this.gm?.panelOpen && !enteringBattle();
++  }
+   private coachRoot!: Node;
+   private pickNumber = 0;
+   private killBeatAge = 0;
+@@ -207,7 +214,7 @@
+     this.heroes.forEach((h, i) => {
+       this.stacks[h.id + '_unlock_skill'] = 1;
+       this.stacks[h.id + '_unlock_ult'] = 1;
+-      h.charge = h.chargeGoal * Math.max(.1, ULT_INITIAL_CHARGE - i * .025);
++      h.charge = h.chargeGoal * ULT_INITIAL_CHARGE;
+       h.skillCd = i * .8;
+     });
+     this.parts = new Particles(fxLayer);
+@@ -257,6 +264,7 @@
+ 
+   onDestroy(): void {
+     this.leaving = true;
++    this.pendingWinPanel = null; this.victoryDelayT = -1;
+     bus.off(EVT.MOB_KILLED, this.onMobKilled, this);
+     bus.off(EVT.LINE_BROKEN, this.onLineBroken, this);
+     bus.off(EVT.ALL_WAVES_CLEARED, this.onAllCleared, this);
+@@ -300,6 +308,10 @@
+     if (this.leaving) return;
+     // Prepare countdown and combat begin only after the full-screen flags have cleared.
+     if (enteringBattle()) return;
++    // Real seconds, independent of speed and hit-stop; overlap the final ultimate's tail.
++    if (this.victoryDelayT > 0 && (this.state === 'running' || this.state === 'win') && !this.gm.panelOpen)
++      this.victoryDelayT = Math.max(0, this.victoryDelayT - rawDt);
++    this.showPendingWinPanel();
+     GameAudio.battleState(this.state);
+     this.fpsAcc += rawDt; this.fpsN++;
+     if (this.fpsAcc >= 0.5) {
+@@ -334,6 +346,10 @@
+       this.bossWarning.tick(0, false);
+       this.ultPresentation.suspend();
+       if (this.state === 'win' || this.state === 'lose') this.mgr.tickDeaths(dt);
++      if (this.state === 'win' && this.pendingWinPanel) {
++        this.parts.tick(dt); this.impacts.tick(dt);
++        this.float.tick(rawDt); this.pops.tick(rawDt);
++      }
+       return;
+     }
+ 
+@@ -491,7 +507,7 @@
+ 
+   /* ---------- 三选一（§3.8：全场冻结，连升排队；广告刷新×1+钻石刷新×1） ---------- */
+   private openPick(): void {
+-    if (this.state !== 'running' || this.pendingWin || this.ultShowT > 0) return;
++    if (this.state !== 'running' || this.pendingWin || this.ultShowT > 0 || this.ultimateActive) return;
+     if (!M0_POOL.some(c => (c.owner === 'global' || this.heroes.some(h => h.id === c.owner)) && canTakeCard(c, this.stacks))) {
+       this.pickQueue = 0; this.endlessCardsComplete = true;
+       this.panels.closeAll(true);
+@@ -586,8 +602,8 @@
+   }
+ 
+   /* ---------- 大招（手动，充能满可放；未满点图标→Tips） ---------- */
+-  tryCastUlt(idx = 0): 'ok' | 'charging' | 'locked' {
+-    if (this.state !== 'running' || this.pendingWin) return 'charging';
++  tryCastUlt(idx = 0): 'ok' | 'charging' | 'locked' | 'blocked' {
++    if (!this.canUseBattleHud) return 'blocked';
+     const h = this.heroes[idx];
+     if (!h?.ultUnlocked) return 'locked';
+     if (h && h.ultReady && h.castUlt(this.mgr, this.projs, this.dmgSvc)) {
+@@ -638,10 +654,12 @@
+   }
+ 
+   showStats(): void {
++    if (!this.canUseBattleHud) return;
+     this.panels.showStats(this.dmgSvc.rows());
+   }
+ 
+   showTips(kind: 'atk' | 'skill' | 'ult', idx = 0): void {
++    if (!this.canUseBattleHud) return;
+     const hero = this.heroes[idx] || this.heroes[0];
+     if (!hero || (kind === 'skill' && !hero.skillUnlocked) || (kind === 'ult' && !hero.ultUnlocked)) return;
+     this.panels.showTips(kind, hero, this.line, idx);
+@@ -652,6 +670,7 @@
+     if (this.state === 'win' || this.state === 'lose') return;
+     if (this.isEndless) { this.finishEndless(); return; }
+     this.state = 'lose'; this.pendingWin = false;
++    this.pendingWinPanel = null; this.victoryDelayT = -1;
+     this.bossWarning.clear();
+     this.ultPresentation.clear();
+     const goldFloor = Math.floor((this.levelDef.baseGold + this.goldEarned) * .3);
+@@ -677,7 +696,7 @@
+   /* ---------- 胜利结算（§3.9 星级 / §3.10 金币） ---------- */
+   /** 新怪通知钮点击：逐个弹出介绍弹窗，看完队列清空再收钮 */
+   showNewMobIntro(): void {
+-    if (this.mobIntroOpen) return;
++    if (!this.canUseBattleHud) return;
+     const id = this.newMobQueue[0];
+     if (!id) { this.hud.showNewMob(false); return; }
+     this.mobIntroOpen = true;
+@@ -695,6 +714,7 @@
+       if (this.endlessCleared < this.endlessFloor) this.pendingWin = true;
+       return;
+     }
++    if (this.victoryDelayT < 0) this.victoryDelayT = 1;
+     if (this.ultimateActive) { this.pendingWin = true; return; }
+     this.pendingWin = false; this.ultPresentation.clear();
+     this.state = 'win';
+@@ -721,7 +741,7 @@
+     saveSave();
+     advanceUnlock(this.levelDef.id);   // 通关推进主线解锁（商店英雄/装备的"通关 X 解锁"）
+ 
+-    this.panels.showWin({
++    this.pendingWinPanel = {
+       stars,
+       loot,
+       gold: reward,
+@@ -737,7 +757,15 @@
+         }, () => { if (!this.leaving && isValid(this, true)) done(false); });
+       },
+       onExit: () => this.exitBattle(),
+-    });
++    };
++    this.showPendingWinPanel();
++  }
++
++  private showPendingWinPanel(): void {
++    if (!this.pendingWinPanel || this.victoryDelayT > 0 || this.state !== 'win' || this.leaving) return;
++    const options = this.pendingWinPanel;
++    this.pendingWinPanel = null; this.victoryDelayT = -1;
++    this.panels.showWin(options);
+   }
+ 
+   private completeEndlessFloor(): void {
+--- before/assets/scripts/battle/Hero.ts
++++ after/assets/scripts/battle/Hero.ts
+@@ -12,7 +12,7 @@
+ import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDuration, pyroMeteorCount, pyroMeteorDamage } from '../config/Cards';
+ import { voltShockDuration, voltShockAmp, voltShockedMultiplier, voltStrikeCount, voltStrikeTime } from '../config/Cards';
+ import { MORA_ULT_HITS, moraSlowRatio, moraSlowDuration, moraFreezeChance, moraNormalFreezeDuration, moraFieldRadius, moraFieldFreeze, moraColdMultiplier, moraUltimateHitDamage } from '../config/Cards';
+-import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, MORA_CHARGE_MAX, ULT_REGEN_SECONDS, SPAWN_Y, HERO_Y, PAL, LO, LINE_Y } from '../config/GameConfig';
++import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, MORA_CHARGE_MAX, ULT_REGEN_PER_SECOND, SPAWN_Y, HERO_Y, PAL, LO, LINE_Y } from '../config/GameConfig';
+ import { Monster, MonsterManager } from './Monster';
+ import { ProjectileManager, ProjSpec } from './Projectile';
+ import { DamageService } from './DamageService';
+@@ -255,7 +255,7 @@
+       }
+     }
+     if (this.ultUnlocked && !this.ultReady)
+-      this.chargeKill(this.chargeMax * dt / (ULT_REGEN_SECONDS[this.id] || 90));
++      this.chargeKill(ULT_REGEN_PER_SECOND * dt);
+   }
+ 
+   /** 子类队列推进（连射/技能连狙等） */
+--- before/assets/scripts/config/Cards.ts
++++ after/assets/scripts/config/Cards.ts
+@@ -22,7 +22,7 @@
+   aspd: number;         // 攻速 次/s（累乘）
+   range: number;        // 普攻索敌范围
+   skillRange: number;   // 技能索敌范围
+-  skillPierce?: number; // 重弩手技能弩箭额外穿透数；不影响普攻和大招
++  skillPierce?: number; // 重弩手技能额外穿透数；贯颅弩矢另加普攻pierce，大招保持无限贯穿
+   ultMarkAmp?: number;  // 死亡准星：大招命中后受到伤害增幅，持续5秒
+   critRate: number;     // 暴击率
+   critMul: number;      // 暴击伤害倍率
+@@ -414,8 +414,8 @@
+     art: 'ui_card_sniper_range_v1', desc: '技能索敌范围 +30%',
+     apply: x => { x.hero.skillRange *= 1.3; } }),
+   c({ id: 'sniper_pierce', name: '贯颅弩矢', rarity: 'purple', maxStacks: 3, owner: 'sniper', req: 'sniper_unlock_skill',
+-    art: 'ui_card_sniper_pierce_v1', desc: '技能弩箭额外穿透\n1 个目标',
+-    apply: x => { x.hero.skillPierce = (x.hero.skillPierce || 0) + 1; } }),
++    art: 'ui_card_sniper_pierce_v1', desc: '普攻、技能弩箭\n额外穿透1个目标',
++    apply: x => { x.hero.pierce += 1; x.hero.skillPierce = (x.hero.skillPierce || 0) + 1; } }),
+   c({ id: 'extra_line', name: '额外枪线', rarity: 'gold', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招枪线 +1 条\n可叠加',
+     apply: x => { x.hero.ultBolts += 1; } }),
+   c({ id: 'fast_charge_s', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招充能需求 -20%\n可叠加',
+--- before/assets/scripts/config/GameConfig.ts
++++ after/assets/scripts/config/GameConfig.ts
+@@ -70,9 +70,9 @@
+   return Math.floor(50 * Math.pow(1.28, level - 1));
+ }
+ 
+-/** Natural full-charge seconds, before charge-reduction cards; kill energy is divided across the squad. */
+-export const ULT_REGEN_SECONDS: Record<string, number> = { archer: 80, sniper: 86, pyro: 94, volt: 88, mora: 100 };
+-export const ULT_INITIAL_CHARGE = .25;
++/** Natural energy per battle second is fixed; distinct hero costs stay distinct. Kill awards are unchanged. */
++export const ULT_REGEN_PER_SECOND = .6;
++export const ULT_INITIAL_CHARGE = 0;
+ export const SHARED_KILL_CHARGE = .55;
+ 
+ /** 少量关卡时间经验：每2个战斗秒发放当前升级需求约1%，最低1点。 */
+@@ -86,12 +86,12 @@
+ /** 复活后防线短暂无敌缓冲（待定项默认值，§3.9） */
+ export const REVIVE_INVULN = 2;
+ 
+-/** 大招充能上限（§3.7，逐英雄配置；弓箭手 60 / 狙击 55 / 火法 50） */
+-export const ARCHER_CHARGE_MAX = 60;
++/** 大招基础能量需求：弓45 / 弩55 / 冰60 / 雷65 / 火70；充能卡与培养另乘需求倍率。 */
++export const ARCHER_CHARGE_MAX = 45;
+ export const SNIPER_CHARGE_MAX = 55;
+-export const PYRO_CHARGE_MAX = 50;
+-export const VOLT_CHARGE_MAX = 50;
+-export const MORA_CHARGE_MAX = 50;
++export const PYRO_CHARGE_MAX = 70;
++export const VOLT_CHARGE_MAX = 65;
++export const MORA_CHARGE_MAX = 60;
+ 
+ /** 帧内上限（§12.4 性能预算；怪量 ×3 后同屏峰值上探，80 仍留裕量） */
+ export const MAX_MOBS = 80;
+--- before/assets/scripts/ui/HUD.ts
++++ after/assets/scripts/ui/HUD.ts
+@@ -73,7 +73,7 @@
+   ultimateTarget(index: number): Node | null { return this.ults[index]?.btn || null; }
+   activateUltimate(index: number): void {
+     const result = this.dir.tryCastUlt(index);
+-    if (result === 'locked') return;
++    if (result === 'locked' || result === 'blocked') return;
+     if (result === 'charging') this.dir.showTips('ult', index);
+     else this.ults[index]?.energy?.release();
+   }
+@@ -166,7 +166,7 @@
+     sg.roundRect(-3, -11, 6, 16, 1);
+     sg.roundRect(8, -11, 6, 22, 1);
+     sg.fill();
+-    bindButton(statsBtn, () => this.dir.showStats());
++    bindButton(statsBtn, () => this.dir.showStats(), { enabled: () => this.dir.canUseBattleHud });
+ 
+     /* 新怪通知钮（GM 钮下方，参考 KR）：首遇新怪种时亮出，点击弹怪物介绍弹窗（整体美术图标：生图 ui_btn_notice） */
+     this.newMobBtn = noticeBtn(top, WX(24, 60), WYN(480, 60), 64, () => this.dir.showNewMobIntro());
+@@ -253,7 +253,7 @@
+     bindButton(btn, () => {
+       this.activateUltimate(i);
+     }, { visual: pressPivot, scale: .94, shift: 1,
+-      enabled: () => hero.ultUnlocked });
++      enabled: () => hero.ultUnlocked && this.dir.canUseBattleHud });
+     const ui: UltUI = { root, baseY: uy, ux, uy, glow, btn, bright, gray, mask, color, fx, water, waterG, waterR: 46, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
+     // All heroes share the charge, completion, ready and release animation.
+     {
+@@ -280,7 +280,7 @@
+     const atkGlyph = label(atkIcon, 0, 0, '攻', { size: 18, color: PAL.gold, bold: true });
+     // 普攻/技能图标（58 > 底板圆 56：美术圆完全盖住底板，杜绝露出黄/蓝边——用户反馈）
+     artSprite(atkIcon, 0, 0, 58, 58, 'ui_icon_atk_' + hero.id, { sliced: false, hideOnLoad: [atkGlyph] });
+-    bindButton(atkIcon, () => this.dir.showTips('atk', i), { circle: true });
++    bindButton(atkIcon, () => this.dir.showTips('atk', i), { circle: true, enabled: () => this.dir.canUseBattleHud });
+     const root = new Node('heroSkill:' + hero.id);
+     root.setParent(top); root.active = hero.skillUnlocked;
+     top = root;
+@@ -289,7 +289,7 @@
+     const glyph = label(icon, 0, 0, '技', { size: 18, color: PAL.blue, bold: true });
+     // 技能图标（同上）
+     artSprite(icon, 0, 0, 58, 58, 'ui_icon_skill_' + hero.id, { sliced: false, hideOnLoad: [glyph] });
+-    bindButton(icon, () => this.dir.showTips('skill', i), { circle: true });
++    bindButton(icon, () => this.dir.showTips('skill', i), { circle: true, enabled: () => this.dir.canUseBattleHud });
+     const gray = gcircle(top, cx, cy, 28, CA('#3A4250', 0.55));   // 冷却遮罩（用户调整：半透明，隐约透出技能图标）
+     gray.active = false;
+     const pie = new Node('skillPie' + i);
+--- before/assets/scripts/ui/Panels.ts
++++ after/assets/scripts/ui/Panels.ts
+@@ -752,12 +752,12 @@
+     // Keep the existing six-row geometry while exposing the battle's new rules.
+     if (kind === 'atk') {
+       rows[0][0] = hero.id === 'archer' || hero.id === 'sniper' ? '物理伤害' : '法术伤害';
+-      if (hero.id === 'archer' && h.pierce) rows[5] = ['贯穿', '额外命中 ' + h.pierce + ' 个目标'];
++      if ((hero.id === 'archer' || hero.id === 'sniper') && h.pierce) rows[5] = ['贯穿', '额外命中 ' + h.pierce + ' 个目标'];
+       if (hero.id === 'pyro' && h.pyroBurnBurst) rows[5] = ['余烬爆破', '点燃后阵亡爆炸 · 半径100'];
+       if (hero.id === 'mora' && h.moraTeamVuln) rows[5] = ['冰裂印记', '全队易伤+15% · 3秒'];
+     } else if (kind === 'ult') {
+       const charge = rows.find(row => row[0] === '充能');
+-      if (charge) charge[1] = Math.floor(hero.charge / hero.chargeGoal * 100) + '% · 时间/全队击杀';
++      if (charge) charge[1] = Math.floor(hero.charge) + ' / ' + goalTxt + ' · ' + Math.floor(hero.charge / hero.chargeGoal * 100) + '%';
+     }
+     // 面板整体收敛进可视区
+     px = Math.max(-375 + w / 2 + 8, Math.min(375 - w / 2 - 8, px));

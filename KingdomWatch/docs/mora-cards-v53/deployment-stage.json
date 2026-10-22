@@ -1,0 +1,222 @@
+{
+  "originalFilesChecked": 1884,
+  "changedExistingFiles": [
+    "assets/scripts/battle/Hero.ts",
+    "assets/scripts/battle/Projectile.ts",
+    "assets/scripts/battle/UltimateTiming.ts",
+    "assets/scripts/config/Cards.ts",
+    "assets/scripts/ui/BattleComicPanels.ts",
+    "assets/scripts/ui/Panels.ts",
+    "assets/scripts/ui/PickArt.ts"
+  ],
+  "allOriginalMediaUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "otherHeroCombatAndCardEffectsUnchanged": true,
+  "cardCount": 17,
+  "rarityCounts": {
+    "white": 2,
+    "blue": 7,
+    "purple": 5,
+    "gold": 3
+  },
+  "cards": [
+    {
+      "id": "mora_attack",
+      "rarity": "white",
+      "maxStacks": 5
+    },
+    {
+      "id": "mora_aspd",
+      "rarity": "white",
+      "maxStacks": 4
+    },
+    {
+      "id": "mora_crit_rate",
+      "rarity": "blue",
+      "maxStacks": 4
+    },
+    {
+      "id": "mora_crit_dmg",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "mora_spell",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "mora_range",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "mora_cd",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "mora_chill",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "mora_freeze",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "mora_war",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "mora_linger",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "mora_freeze_linger",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "mora_eager",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "mora_brittle",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "mora_glacier",
+      "rarity": "gold",
+      "maxStacks": 1
+    },
+    {
+      "id": "mora_unlock_skill",
+      "rarity": "gold",
+      "maxStacks": 1
+    },
+    {
+      "id": "mora_unlock_ult",
+      "rarity": "gold",
+      "maxStacks": 1
+    }
+  ],
+  "generatedIcons": 8,
+  "redrawnIceIcons": 7,
+  "newIceIcons": 1,
+  "designValues": {
+    "ultimateHits": 3,
+    "ultimateContactSeconds": [
+      0.5,
+      1.7,
+      2.9
+    ],
+    "ultimateBaseTotalDamageUnchanged": true,
+    "fieldBaseFreezeSeconds": 1.5,
+    "freezeExtensionPerCard": 1,
+    "freezeExtensionMaxStacks": 2,
+    "fieldBaseMaxFreezeSeconds": 3.5,
+    "fieldFreezeWithLevel80AndSkill15": 4.2,
+    "allSlowExtensionMaxSeconds": 2,
+    "normalCardFreezeChanceWithoutBreakthrough": [
+      0,
+      0.15,
+      0.3
+    ],
+    "normalCardFreezeChanceWithBreakthrough": [
+      0.15,
+      0.3,
+      0.45
+    ],
+    "normalFreezeSeconds": 0.6,
+    "coldCardMaxBonus": 0.6,
+    "ultimateGoldFreezeSeconds": 1.5,
+    "ultimateRepeatedFreeze": "refresh max remaining, not additive",
+    "bossFreezeImmune": true,
+    "slowRatioCap": 0.9,
+    "chargeRequirementMultiplier": 0.5625
+  },
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-mora-cards-v53-20261019-014454",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "addedFiles": [
+    "assets/resources/ux/ui_card_mora_brittle_v2.png",
+    "assets/resources/ux/ui_card_mora_brittle_v2.png.meta",
+    "assets/resources/ux/ui_card_mora_chill_v2.png",
+    "assets/resources/ux/ui_card_mora_chill_v2.png.meta",
+    "assets/resources/ux/ui_card_mora_freeze_linger_v1.png",
+    "assets/resources/ux/ui_card_mora_freeze_linger_v1.png.meta",
+    "assets/resources/ux/ui_card_mora_freeze_v2.png",
+    "assets/resources/ux/ui_card_mora_freeze_v2.png.meta",
+    "assets/resources/ux/ui_card_mora_glacier_v2.png",
+    "assets/resources/ux/ui_card_mora_glacier_v2.png.meta",
+    "assets/resources/ux/ui_card_mora_range_v2.png",
+    "assets/resources/ux/ui_card_mora_range_v2.png.meta",
+    "assets/resources/ux/ui_card_mora_spell_v2.png",
+    "assets/resources/ux/ui_card_mora_spell_v2.png.meta",
+    "assets/resources/ux/ui_card_mora_war_v2.png",
+    "assets/resources/ux/ui_card_mora_war_v2.png.meta"
+  ],
+  "priorPreviewFilesPreserved": 793,
+  "entryVersion": "1792345430",
+  "game": "https://kingdom-watch.pages.dev/?v=mora-cards-v53-1792345430",
+  "nativeAssets": [
+    {
+      "id": "mora_spell",
+      "path": "assets/resources/native/8e/8e43fbe9-3fdd-46d7-bdc3-9989dec9d2e5.3a546.png",
+      "sha256": "f9dcc5049500b52e6eb54a3e760de38cea56d78ac628fed58ff0d09f94066e9c"
+    },
+    {
+      "id": "mora_range",
+      "path": "assets/resources/native/1c/1ccda0c8-420d-479a-b8c6-b0ba15802ccf.6da89.png",
+      "sha256": "90c0e2063e54458efd5a4592aaf9f099ab7cc3bac2b7822e99fcdd70c92fd6e3"
+    },
+    {
+      "id": "mora_chill",
+      "path": "assets/resources/native/c6/c6c97e3c-9dd5-4111-b3ab-ef5177e4c55c.4776f.png",
+      "sha256": "ec2b58e63bd78a8330538f4e342d08875e2cd4d31020871d1906ce3fa8371d0a"
+    },
+    {
+      "id": "mora_freeze",
+      "path": "assets/resources/native/52/52bb8a5a-e5c4-43a0-9a43-8b879e79f0c9.62978.png",
+      "sha256": "4d17393b46897d7343092bf964cb875b9ca43d773f66f5d0678810d71f981b7b"
+    },
+    {
+      "id": "mora_brittle",
+      "path": "assets/resources/native/d6/d621a2c3-4fc0-4b13-acc6-e876702dcec9.10f49.png",
+      "sha256": "a17d76e7d2bcf166c86c2006c384c536a95f8a567d8160cd8d9747a841a17363"
+    },
+    {
+      "id": "mora_war",
+      "path": "assets/resources/native/ae/aef79ccf-c946-4e20-b6b3-6af8d4a3731b.95a76.png",
+      "sha256": "a8376e7e1ecdc6c87e20b0e390f7e57a946b56f40be89c26038c811a99494895"
+    },
+    {
+      "id": "mora_glacier",
+      "path": "assets/resources/native/cc/ccfe1f5c-1fd1-44dd-8a20-1491b4f3ea1f.3d1a9.png",
+      "sha256": "b196e2c428b8e66b14a61a7c918f273ac6cc12be1ccb45e3dc12e2e9390e766b"
+    },
+    {
+      "id": "mora_freeze_linger",
+      "path": "assets/resources/native/0f/0fcee8ef-7638-4587-84ab-b37cd0dbe77c.35c74.png",
+      "sha256": "27a5dc1879e344d3b1cab660582480f1df712b14281ec7df0903f44abfd1fdde"
+    }
+  ],
+  "scope": "17 ice cards, +1s skill freeze extension, 3 real ultimate hits sharing old total damage; 7 icon redraws and 1 new full circular painting.",
+  "manualAcceptance": "Static source/assets/type/build/HTTP only. No tests, game, browser, combat simulation or audio; user performs acceptance.",
+  "deployment": "https://adc390a6.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.c8370.js?v=1792345430",
+    "nativeIconCount": 8,
+    "allIconHashesMatch": true
+  }
+}

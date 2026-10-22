@@ -1,0 +1,34 @@
+{
+  "production": true,
+  "md5Cache": true,
+  "engineRevision": "2cb74a1e8caa095a",
+  "entry": "index.cac7e.js?v=1792600505",
+  "immutableAssets": 2077,
+  "startupPreloads": [
+    [
+      "index.cac7e.js?v=1792600505",
+      "script"
+    ],
+    [
+      "application.6caa9.js",
+      "script"
+    ],
+    [
+      "src/settings.b72ca.json",
+      "fetch"
+    ],
+    [
+      "cocos-js/cc.03aac.js?kwengine=2cb74a1e8caa095a",
+      "script"
+    ],
+    [
+      "cocos-js/_virtual_cc-Bp5iGE8z.js?kwengine=2cb74a1e8caa095a",
+      "script"
+    ]
+  ],
+  "audioCredits": {
+    "path": "audio-credits.html",
+    "sha256": "6ab9a3c7a29f5cdbaca7cf5f8e45213f207edbd9b886b1ce9f77e3f9a8600ae2"
+  },
+  "validation": "offline preparation only; no game or browser executed"
+}

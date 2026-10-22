@@ -2,6 +2,7 @@
 import { assetManager, AudioClip, resources } from 'cc';
 import { loadSave } from './SaveData';
 import { AUDIO_CUES, CHAPTER_MUSIC, MUSIC_TRACK_GAIN, MusicScene, resolveAudioCue, SfxName } from './AudioCatalog';
+import { sfxMixGain } from './AudioMix';
 
 // Keep the established master level. Impact comes from source transients and mix space.
 const AUDIO_LEVEL_BOOST = Math.SQRT2 * Math.pow(10, 1 / 20);
@@ -135,6 +136,8 @@ class GameAudioService {
   }
 
   prepareUltimate(hero: string, seconds: number): void {
+    // Decode before the meteor falls, never wait for a download at contact.
+    if (hero === 'pyro' && this.ctx && this.sfxEnabled) for (const file of AUDIO_CUES.fireUlt.files) void this.buffer(file);
     if (this.ctx && this.scene === 'battle' && this.state === 'running') this.duck(seconds, .74);
     const rates: Record<string, number> = { archer: 1.08, sniper: .94, pyro: .9, volt: 1.12, mora: 1 };
     this.play('charge', { preparing: true, gain: .6, rate: rates[hero] || 1,
@@ -154,7 +157,9 @@ class GameAudioService {
     if (this.scene === 'battle' && combat && this.state !== 'running' && this.state !== 'prepare') return;
     if (now - (this.lastAt[name] ?? -100) < cue.gap) return;
     // Automatic volleys share space; they never queue up to play after the action.
-    const groupGap = cue.group === 'shot' ? .12 : cue.group === 'impact' ? .2
+    const damageHit = name === 'hit' || name === 'crit' || name === 'pierceHeavy';
+    // Merge contacts within one simulation instant, without the old 180/200ms attack-wide gaps.
+    const groupGap = damageHit ? .008 : cue.group === 'shot' ? .12 : cue.group === 'impact' ? .2
       : cue.group === 'contact' ? .18 : cue.group === 'death' ? .5 : cue.group === 'cast' && cue.priority < 3 ? .24
       : cue.group === 'ui' ? .08 : 0;
     if (now - (this.lastGroup[cue.group] ?? -100) < groupGap) return;
@@ -169,6 +174,9 @@ class GameAudioService {
     let index = Math.floor(Math.random() * available.length);
     if (available.length > 1 && index === this.lastVariant[name]) index = (index + 1) % available.length;
     const buffer = this.buffers.get(available[index])!;
+    if ('restart' in cue && cue.restart) {
+      for (const voice of [...this.voices]) if (voice.name === name) this.stopVoice(voice);
+    }
     // Full celebrations replace their predecessor instead of stacking long melodies.
     // Shared reward/growth phrases replace their predecessor rather than piling up.
     if (cue.group === 'cue' && cue.priority >= 4) {
@@ -180,7 +188,7 @@ class GameAudioService {
     const family = this.voices.filter(v => v.name === name);
     if (combat && family.length >= 2) this.stopVoice(family[0]);
     const group = this.voices.filter(v => v.group === cue.group);
-    const groupLimit = cue.group === 'death' || cue.group === 'card' || cue.group === 'cue' || cue.group === 'impact' || cue.group === 'contact' || cue.group === 'transition' ? 1 : 2;
+    const groupLimit = damageHit ? 2 : cue.group === 'death' || cue.group === 'card' || cue.group === 'cue' || cue.group === 'impact' || cue.group === 'contact' || cue.group === 'transition' ? 1 : 2;
     if (group.length >= groupLimit) {
       const victim = group.filter(v => v.priority <= cue.priority).sort((a, b) => a.priority - b.priority || a.started - b.started)[0];
       if (!victim) return;
@@ -211,8 +219,9 @@ class GameAudioService {
     const recent = combat ? this.voices.filter(v => v.group === cue.group && now - v.started < .12).length : 0;
     const density = 1 / Math.sqrt(1 + recent * .42);
     const underAccent = combat && cue.priority < 2 && now < this.accentUntil ? .62 : 1;
-    const level = cue.gain * density * underAccent * (shape.gain ?? 1) * (vary ? .96 + Math.random() * .04 : 1);
-    const playDuration = Math.min(buffer.duration / source.playbackRate.value, shape.duration ?? Infinity);
+    const level = sfxMixGain(name, available[index], cue.gain) * density * underAccent * (shape.gain ?? 1) * (vary ? .96 + Math.random() * .04 : 1);
+    const offset = 'offset' in cue ? Math.max(0, Math.min(cue.offset, buffer.duration)) : 0;
+    const playDuration = Math.min((buffer.duration - offset) / source.playbackRate.value, shape.duration ?? Infinity);
     if (shape.fadeIn) {
       const nowAudio = this.ctx.currentTime, attack = Math.min(shape.fadeIn, playDuration * .3);
       gain.gain.setValueAtTime(0, nowAudio);
@@ -230,7 +239,7 @@ class GameAudioService {
       this.voices = this.voices.filter(v => v !== voice);
       source.disconnect(); gain.disconnect(); filter?.disconnect();
     };
-    source.start();
+    source.start(0, offset);
     if (shape.duration) source.stop(this.ctx.currentTime + playDuration + .005);
   }
 
@@ -314,7 +323,7 @@ class GameAudioService {
     if (!this.ctx || this.warming || !this.sfxEnabled) return;
     this.warming = true;
     // Decode only retained/shared sources; muted recordings stay available on disk.
-    const first: SfxName[] = ['ui', 'gateSlide', 'gateClose', 'pickOpen', 'pickChoose', 'growth', 'reward',
+    const first: SfxName[] = ['ui', 'gateSlide', 'gateClose', 'fireUlt', 'pickOpen', 'pickChoose', 'growth', 'reward',
       'victory', 'defeat', 'breakthrough', 'bow', 'crossbow', 'fire', 'thunder', 'frost', 'hit'];
     const files: string[] = [], unique = new Set<string>();
     for (const name of [...first, ...Object.keys(AUDIO_CUES) as SfxName[]]) {

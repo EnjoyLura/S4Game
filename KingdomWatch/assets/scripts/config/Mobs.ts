@@ -3,8 +3,17 @@
  */
 import { PAL } from './GameConfig';
 import { CAMPAIGN_CHAPTERS, CAMPAIGN_LEVEL_IDS, CAMPAIGN_STAGES } from './Campaign';
+import { EnemyFeatures, EXPANSION_MOBS } from './ChapterContent';
+import { expandedLevel } from './ChapterWaves';
 
-export interface MobDef {
+export type DamageKind = 'physical' | 'magic' | 'true';
+export function damageKindFor(source: string): DamageKind {
+  if (source === 'gm') return 'true';
+  return source === 'pyro' || source === 'volt' || source === 'mora' || source === 'burn' || source === 'pyro_burst'
+    ? 'magic' : 'physical';
+}
+
+export interface MobDef extends EnemyFeatures {
   id: string;
   name: string;
   kind: 'melee' | 'ranged' | 'heal';
@@ -45,23 +54,42 @@ export const MOBS: Record<string, MobDef> = {
   },
   goblin_shaman: {
     id: 'goblin_shaman', name: '哥布林萨满', kind: 'heal',
-    hp: 240, dmg: 20, atkInterval: 6, speed: 25, radius: 24,
+    hp: 600, dmg: 20, atkInterval: 4, speed: 25, radius: 24,
     exp: 20, charge: 2, gold: 4, color: '#9B6BFF', healAmount: 40,
+    magicRes: .35, wardBreakRatio: .3,
+    description: '有35%法抗符盾；读条后治疗附近伤员，冰封或眩晕可打断施法。',
   },
   wolf_rider: {
     id: 'wolf_rider', name: '狼骑兵', kind: 'melee',
     hp: 220, dmg: 35, atkInterval: 3.2, speed: 47.5, radius: 24,
     exp: 12, charge: 1, gold: 3, color: '#8A8F98',
+    rush: { period: 6.5, windup: .55, duration: 2, multiplier: 1.8, impactMul: 1.5 },
+    description: '短暂蓄势后冲锋，冲锋撞线的首次攻击提高50%；冰封或眩晕可打断。',
   },
   goblin_brute: {
     id: 'goblin_brute', name: '大哥布林（精英）', kind: 'melee',
     hp: 2400, dmg: 80, atkInterval: 4, speed: 17.5, radius: 34,
     exp: 60, charge: 10, gold: 25, color: '#5E8F3C', elite: true,
+    physRes: .4, armorBreakRatio: .28,
+    description: '重甲减少40%物理伤害；累积物理命中破甲后失去物抗，并受到3秒易伤。法术可绕过物抗。',
+  },
+  goblin_king: {
+    id: 'goblin_king', name: '哥布林王', kind: 'melee',
+    hp: 4800, dmg: 80, atkInterval: 4, speed: 17.5, radius: 48,
+    exp: 120, charge: 20, gold: 50, color: '#6D963F', boss: true,
+    physRes: .3, armorBreakRatio: .28,
+    description: '铠甲减少30%物理伤害，集火可破甲；法术绕过物抗，首领仍免疫冰封。',
   },
 };
 
-export interface SpawnGroup { mob: string; count: number; interval: number; delay?: number; }
-export interface WaveDef { groups: SpawnGroup[]; surge?: boolean; }
+Object.assign(MOBS, EXPANSION_MOBS);
+
+export interface SpawnGroup { mob: string; count: number; interval: number; delay?: number; actual?: { hp: number; dmg: number }; }
+/** Spawn metadata only: all enemies retain straight movement and the shared living cap. */
+export interface EnemyFormation {
+  id?: string; role?: 'front' | 'support'; lane: number; gap?: number;
+}
+export interface WaveDef { groups: SpawnGroup[]; surge?: boolean; formation?: 'escort' | 'crossfire'; }
 
 /** 全怪血量倍率（用户调整：基础血量 ×2） */
 export const MOB_HP_MUL = 2;
@@ -79,6 +107,8 @@ export interface LevelDef {
   baseGold: number;
   /** Chapter/stage growth, multiplied by the selected difficulty in BattleDirector. */
   statMul?: number;
+  /** Authored counts/stats instead of the shared per-wave ramp. */
+  fixedWaves?: boolean;
   waves: WaveDef[];
 }
 
@@ -144,7 +174,7 @@ const TEMPLATES = [OUTPOST_TEMPLATE, FOREST_TEMPLATE, LAIR_TEMPLATE];
 const PATROLS = ['goblin_worker', 'goblin_slinger', 'wolf_rider', 'goblin_worker', 'goblin_shaman',
   'goblin_slinger', 'wolf_rider', 'goblin_shaman', 'wolf_rider', 'goblin_brute'];
 const LEVEL_TABLE: Record<string, LevelDef> = {};
-for (const stage of CAMPAIGN_STAGES) {
+for (const stage of CAMPAIGN_STAGES.filter(row => row.chapter === 1)) {
   const chapter = CAMPAIGN_CHAPTERS[stage.chapter - 1], base = TEMPLATES[stage.chapter - 1];
   const step = stage.stage - 1;
   const waves = base.waves.map((wave, index) => {
@@ -164,12 +194,18 @@ for (const stage of CAMPAIGN_STAGES) {
     }
     if (stage.stage === 5 && index === 4) add('goblin_brute', stage.chapter, 1.8, 4);
     if (stage.stage === 10 && index === 9) add('goblin_brute', stage.chapter + 1, 1.6, 4);
+    // Chapter-one milestones end with one king. Normal 1-5 uses its authored formation instead.
+    if (stage.chapter === 1 && (stage.stage === 5 || stage.stage === 10) && index === base.waves.length - 1) {
+      groups.unshift({ mob: 'goblin_king', count: 1, interval: 1, delay: 0 });
+    }
     return { groups, surge: wave.surge || (stage.stage === 5 && index === 4) || (stage.stage === 10 && index === 9) };
   });
   LEVEL_TABLE[stage.id] = { id: stage.id, name: chapter.name + ' · ' + stage.name,
     lineHp: base.lineHp, baseGold: 60 + (stage.chapter - 1) * 80 + step * 8,
     statMul: Number((1 + (stage.chapter - 1) * .55 + step * .055).toFixed(3)), waves };
 }
+
+for (const stage of CAMPAIGN_STAGES.filter(row => row.chapter >= 2)) LEVEL_TABLE[stage.id] = expandedLevel(stage);
 
 /** 关卡推进顺序（登记顺序即推进顺序） */
 export const LEVEL_IDS: readonly string[] = CAMPAIGN_LEVEL_IDS;
@@ -181,7 +217,9 @@ export function nextLevelId(id: string): string | null {
 }
 
 export function getLevelDef(id: string): LevelDef {
-  return LEVEL_TABLE[id] || LEVEL_TABLE['1-1'];
+  const level = LEVEL_TABLE[id];
+  if (!level) throw new Error('Unknown campaign stage: ' + id);
+  return level;
 }
 
 /** 英雄站位（§3.1，用户确认）：防线横向对称分布，单人必须居中；3 人 ±210 */

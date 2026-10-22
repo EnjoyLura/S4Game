@@ -2,6 +2,7 @@
 import { BlockInputEvents, Graphics, Label, Mask, Node, ScrollView, Sprite, UITransform, UIOpacity, Vec2, director } from 'cc';
 import { LO } from '../../config/GameConfig';
 import { CAMPAIGN_CHAPTERS, CAMPAIGN_STAGES, campaignDifficultyOpen, campaignLevelOpen } from '../../config/Campaign';
+import { chapterNumeral } from '../../config/ChapterContent';
 import { C, CA, N, WY } from '../UIKit';
 import { artSprite } from '../Ux';
 import { COMIC, comicArt, comicButton, comicButtonControl, comicMark, comicSurface } from '../ComicUI';
@@ -12,6 +13,12 @@ import { showDropItemDetails, showStageLootDetails, stageDropIcon, stageGuarante
 import { loadSave, saveSave } from '../../core/SaveData';
 import { GameAudio } from '../../core/GameAudio';
 import { flow } from '../../core/Flow';
+import { firstBowAvailable } from '../../core/FirstJourney';
+import { firstBookAvailable } from '../../core/ThirdJourney';
+import { fifthRewardsAvailable } from '../../core/FifthLevelRewards';
+import { finishSecondEntryLesson, pendingSecondEntryLesson, pendingUpgradeLesson, pyroRewardAvailable } from '../../core/SecondJourney';
+import { tutorialFocus } from '../TutorialFocus';
+import { whenUIArtReady } from '../UIArtReady';
 import { openSquadPanel } from '../SquadPanel';
 import { bindButton } from '../ButtonFeedback';
 import { refreshUI, reducedMotion } from '../UIMotion';
@@ -25,9 +32,8 @@ import { CAMPAIGN_TEXT, campaignChapterArrow, campaignChapterBanner, campaignChe
 
 const LEVELS = CAMPAIGN_STAGES;
 const DIFFS = ['普通', '精英', '地狱'];
-const CHAPTER_NUMERALS = ['一', '二', '三'];
 const st = { i: 0, d: 0, initialized: false, drawer: false,
-  selected: [0, 0, 0], offsets: [null, null, null] as (number | null)[] };
+  selected: CAMPAIGN_CHAPTERS.map(() => 0), offsets: CAMPAIGN_CHAPTERS.map(() => null) as (number | null)[] };
 let dismissPreparation: (() => void) | null = null;
 /** Tab navigation always returns to the plain chapter map, while local squad refresh keeps its parent. */
 export function closeLevelPreparation(): void { st.drawer = false; dismissPreparation?.(); }
@@ -76,7 +82,10 @@ export function selectedCampaignChapter(): number {
 }
 
 export function buildLevels(ctx: PageCtx): void {
+  const entryLesson = pendingSecondEntryLesson();
+  if (entryLesson) flow.levelReturn = { id: '1-2', diff: 0 };
   GameAudio.setChapter(selectedCampaignChapter());
+  if (entryLesson) st.drawer = true;
   while (st.d > 0 && !campaignDifficultyOpen(LEVELS[st.i].id, st.d, loadSave().stars)) st.d--;
   const content = N('campaignRouteLobby', ctx.screens, 0, 0, 750, LO.half * 2);
   let mapScroll: ScrollView | null = null;
@@ -144,7 +153,7 @@ export function buildLevels(ctx: PageCtx): void {
     const stars = stages.reduce((sum, stage) => sum + (sv.stars[stage.id] || 0), 0);
     const bar = campaignChapterBanner(header, 0, WY(chapterTop, 100), 694, 100);
     bar.addComponent(BlockInputEvents);
-    mainLabel(bar, 0, 14, '第' + CHAPTER_NUMERALS[currentChapter()] + '章 · ' + chapter.name,
+    mainLabel(bar, 0, 14, '第' + chapterNumeral(chapter.number) + '章 · ' + chapter.name,
       { size: 31, font: 'body', bold: true, color: '#FFF0C7', w: 470, h: 40, outline: '#10232F', outlineW: 1 });
     mainLabel(bar, -73, -22, '已通关 ' + cleared + '/10', { size: 19, bold: true, color: '#F6F2E2', w: 210, h: 28 });
     star(bar, 63, -21, 24, true);
@@ -259,7 +268,8 @@ export function buildLevels(ctx: PageCtx): void {
       const y = (top: number): number => sheetH / 2 - top;
       comicSurface(panel, 0, y(17), 56, 5, 'paper', { fill: '#A38C63', radius: 2 });
       mainLabel(panel, -29, y(53), lv.id + ' ' + lv.name, { size: 34, font: 'body', bold: true, color: CAMPAIGN_TEXT.ink, w: 612, h: 48, align: 'left' });
-      mainLabel(panel, -12, y(94), challenge.waves.length + ' 波 · ' + DIFFICULTIES[st.d].formation,
+      mainLabel(panel, -12, y(94), challenge.waves.length + ' 波 · '
+        + (challenge.id === '1-5' || challenge.id === '1-10' ? '哥布林王压阵' : DIFFICULTIES[st.d].formation),
         { size: 19, font: 'body', color: CAMPAIGN_TEXT.body, w: 644, h: 30, align: 'left' });
       const close = N('campaignDrawerClose', panel, 324, y(48), 58, 58);
       comicMark(close, 0, 0, 'close', 28, CAMPAIGN_TEXT.secondary); bindButton(close, closeDrawer, { sound: false });
@@ -315,8 +325,8 @@ export function buildLevels(ctx: PageCtx): void {
           if (result.ok === false) { claiming = false; toast(result.msg, { kind: 'warning' }); return; }
           ctx.refreshResources?.(); renderSheet(); renderPins();
           showRewardPopup(modalParent, lv.id + ' · ' + DIFFS[challenge.difficulty], result.chestCount, [
-            { name: '金币', icon: 'comic_coin_v1', amount: result.gold },
-            { name: '钻石', icon: 'comic_diamond_v1', amount: result.diamonds },
+            { id: 'coin', name: '金币', icon: 'comic_coin_v1', amount: result.gold },
+            { id: 'diamond', name: '钻石', icon: 'comic_diamond_v1', amount: result.diamonds },
           ], () => { claiming = false; });
         }, { dragThreshold: 7 });
       }
@@ -351,26 +361,49 @@ export function buildLevels(ctx: PageCtx): void {
         const pct = (n: number): string => (n * 100).toFixed(2) + '%';
         mainLabel(body, 0, by(layout.chance), '普通怪 ' + pct(equipmentDropChance(st.d)) + ' · 精英怪 ' + pct(equipmentDropChance(st.d, { elite: true })),
           { size: 17, font: 'body', color: CAMPAIGN_TEXT.body, w: 660, h: 28 });
-      } else mainLabel(equipment,0,-equipmentH/2,'普通难度不掉落装备\n挑战精英 / 地狱解锁装备掉落',
+        } else mainLabel(equipment,0,-equipmentH/2,challenge.id === '1-7' && challenge.difficulty === 0
+          ? '推荐英雄Lv.6、武器Lv.3\n投石手与萨满配合 · 金币与强化石' : challenge.id === '1-6' && challenge.difficulty === 0
+          ? '推荐英雄Lv.5、武器Lv.3\n狼骑分批突袭 · 金币与强化石' : challenge.id === '1-5' && challenge.difficulty === 0
+          ? '推荐英雄Lv.5、武器Lv.3\n' + (fifthRewardsAvailable(challenge.id, challenge.difficulty)
+            ? '首胜：巡林轻弩＋月纹坠饰' : '通关获得金币和强化石') : challenge.id === '1-4' && challenge.difficulty === 0
+          ? '推荐英雄Lv.3、武器Lv.2\n通关获得金币和强化石' : firstBowAvailable(challenge.id, challenge.difficulty)
+          ? '首次通关必得绿色猎风长弓\n回营后在英雄页穿戴' : pyroRewardAvailable(challenge.id, challenge.difficulty)
+          ? '首次通关免费获得火法师\n回营后手动加入第三个出战位置' : firstBookAvailable(challenge.id, challenge.difficulty)
+          ? '首次通关必得绿色翠纹秘典\n火法师适用，直接存入背包' : '普通难度不掉落装备\n挑战精英 / 地狱解锁装备掉落',
         { size: 19, font: 'body', color: CAMPAIGN_TEXT.secondary, w: 660, h: 68, lineHeight: 32 });
-      const battle = comicButtonControl(panel, 0, y(sheetH - 51), 664, 78, '', () => {
+      const startBattle = (): void => {
         if (!open || closing || enteringBattle()) return;
         if (!campaignDifficultyOpen(lv.id, challenge.difficulty, loadSave().stars)) { toast('请先通关前置关卡或难度'); return; }
+        if (lv.id === '1-2' && challenge.difficulty === 0 && pendingUpgradeLesson() && ctx.navigate) {
+          loadSave().curHero = 'archer'; saveSave();
+          flow.levelReturn = { id: '1-2', diff: 0 };
+          ctx.navigate(3); return;
+        }
         if (!squadList().length) { toast('请先上阵英雄'); return; }
         enterBattle(done => {
-          flow.mode = 'battle'; flow.levelId = lv.id; flow.diff = challenge.difficulty;
-          return director.loadScene('Main', done);
+          flow.mode = 'battle'; flow.levelId = lv.id; flow.diff = challenge.difficulty; flow.endlessChapter = 0;
+          return director.loadScene('Main', error => {
+            if (!error && lv.id === '1-2' && challenge.difficulty === 0) finishSecondEntryLesson();
+            done(error);
+          });
         }, () => {
           flow.mode = 'main';
           if (content.isValid) toast('进入战斗失败，请重试', { kind: 'warning', title: '进入战斗失败' });
         }, warmBattlefield(lv.id, squadList()));
-      }, { tone: open ? 'gold' : 'muted', name: 'campaignStartBattle', enabled: open });
+      };
+      const battle = comicButtonControl(panel, 0, y(sheetH - 51), 664, 78, '', startBattle,
+        { tone: open ? 'gold' : 'muted', name: 'campaignStartBattle', enabled: open });
       const battleFace = battle.node.getChildByName('buttonFace')!;
       paintCampaignMapAction(battleFace,664,78,'gold',open);
       if (open) levelArt(battleFace,-124,0,55,55,'comic_swords_v1');
       else comicMark(battleFace,-139,0,'lock',28,COMIC.sub);
       mainLabel(battleFace,30,0,open ? '开始战斗' : '通关前置关卡解锁',
         { size: open ? 36 : 26, font: 'body', bold: true, color: CAMPAIGN_TEXT.ink, w: 414, h: 50 });
+      if (lv.id === '1-2' && challenge.difficulty === 0 && open && pendingSecondEntryLesson()) whenUIArtReady(ctx.screens, () => {
+        if (!panel.isValid || !panel.activeInHierarchy || !battle.node.isValid || !pendingSecondEntryLesson()) return;
+        tutorialFocus(content, battle.node, '准备完成！这是第二关「废弃岗亭」，点击开始战斗。',
+          startBattle, () => finishSecondEntryLesson(true));
+      });
     });
   }
   function renderWorld(): void {

@@ -1,0 +1,42 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in reference generation",
+  "prompt": "prompt.txt",
+  "references": [
+    {
+      "path": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-dc8f2169-e6d8-4946-85e6-3dc91f2bc2d9.png",
+      "role": "Species and rendering reference only; original clothing rejected",
+      "sha256": "fe36bacc4405ab129708ef2c05b7700c8646ce5bb03eed2e9edcd0794e9d4271"
+    },
+    {
+      "path": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-11fd9a7b-2c98-4fa8-b252-d4a39ea054d5.png",
+      "role": "Species and rendering reference only; original clothing rejected",
+      "sha256": "0a2fee5f96ce6d01f23acd6b1a884a6fb5fb85a2cd70f4e68d13de9f1d5c1ca7"
+    }
+  ],
+  "output": {
+    "file": "four-enemies-differentiated.png",
+    "generated_source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-d356f4a9-adf8-4ade-bfff-d7b53a467827.png",
+    "sha256": "def7b21ac5a223b75b17ba5883d180d5bd4baeb313bfb48bf6c28f2f6eaacccc",
+    "original_bytes_preserved": true
+  },
+  "layout": "2x2, row-major",
+  "roster": [
+    "兽族散兵",
+    "兽族投手",
+    "兽人盾兵",
+    "骨杖巫医"
+  ],
+  "user_visual_approval": "rejected: user says visual result is still wrong and now prefers compact battlefield enemies with integrated body mass and very short limbs, as in their new gameplay-unit reference",
+  "game_integrated": false,
+  "visual_inspection": {
+    "entry_count": 4,
+    "frontal_faces_and_torsos": true,
+    "infantry": "Angular grinning face, spiky hair and iron brow band, open rust-red vest and dark shorts.",
+    "thrower": "Round face and belly, ochre head wrap, off-white one-shoulder tunic, stone at thigh; both hands low.",
+    "shieldbearer": "Heavy square face, salvaged iron helmet and chest plate, short oxblood kilt, shield and lowered blade.",
+    "healer": "Tapered aged face with chin hair, bone brow ornament, moss shoulder drape, sand cloth and herb staff.",
+    "shared_species": "Slate-blue skin, yellow eyes, lateral pointed ears and similar broad nonhuman noses retained.",
+    "limitations": "Infantry chest musculature is more explicit than the prompt preferred; minor bracer/wrap motifs remain. Sheet margins and label spacing are tight, background has faint variation; this is a concept comparison, not an animation master or transparent atlas."
+  }
+}

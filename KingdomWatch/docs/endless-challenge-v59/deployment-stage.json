@@ -1,0 +1,48 @@
+{
+  "originalFilesChecked": 1964,
+  "changedExistingFiles": [
+    "assets/scripts/Boot.ts",
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/core/EventBus.ts",
+    "assets/scripts/core/Flow.ts",
+    "assets/scripts/core/SaveData.ts",
+    "assets/scripts/ui/BattleEntryWarmup.ts",
+    "assets/scripts/ui/BossWarning.ts",
+    "assets/scripts/ui/HUD.ts",
+    "assets/scripts/ui/Panels.ts",
+    "assets/scripts/ui/pages/BasePage.ts",
+    "assets/scripts/ui/pages/LevelsPage.ts"
+  ],
+  "addedGameFiles": [
+    "assets/resources/scenes/bg_base_endless_v59.png",
+    "assets/resources/scenes/bg_base_endless_v59.png.meta",
+    "assets/scripts/config/Endless.ts",
+    "assets/scripts/config/Endless.ts.meta",
+    "assets/scripts/core/EndlessProgress.ts",
+    "assets/scripts/core/EndlessProgress.ts.meta"
+  ],
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "allOriginalNativeResourcesPreserved": 712,
+  "newNativeMedia": [
+    "assets/resources/native/1e/1e03f68e-3815-46e1-84aa-07cc631ea0b0.45eeb.png"
+  ],
+  "priorPreviewFilesPreserved": 793,
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-endless-challenge-v59-20261019-213047",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "entryVersion": "1792416624",
+  "game": "https://kingdom-watch.pages.dev/?v=endless-challenge-v59-1792416624",
+  "manualAcceptance": "Static source/types/media/compiled bundle/build/read-only HTTP only; no game/browser/tests/simulation/audio. User manual acceptance.",
+  "deployment": "https://7b800f71.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.62484.js?v=1792416624",
+    "mainBundleHashMatches": true,
+    "endlessMarkersPresent": true,
+    "newSceneHashMatches": true,
+    "prototypeGetterAbsent": true
+  }
+}

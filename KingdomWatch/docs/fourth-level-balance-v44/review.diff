@@ -1,0 +1,207 @@
+--- before/assets/scripts/config/LevelDifficulty.ts
++++ after/assets/scripts/config/LevelDifficulty.ts
+@@ -4,6 +4,7 @@
+ import { FIRST_LEVEL_WAVES } from './FirstLevel';
+ import { SECOND_LEVEL_WAVES } from './SecondLevel';
+ import { THIRD_LEVEL_WAVES } from './ThirdLevel';
++import { FOURTH_LEVEL_WAVES } from './FourthLevel';
+ 
+ export interface MaterialReward { id: string; n: number; }
+ export interface GearWeight { id: string; weight: number; }
+@@ -75,9 +76,12 @@
+   const first = base.id === '1-1' && d === 0;
+   const second = base.id === '1-2' && d === 0;
+   const third = base.id === '1-3' && d === 0;
+-  return cache[key] = { ...base, difficulty: d, baseGold: Math.round(base.baseGold * DIFFICULTIES[d].goldMul),
+-    waves: first ? FIRST_LEVEL_WAVES : second ? SECOND_LEVEL_WAVES : third ? THIRD_LEVEL_WAVES : waves,
+-    fixedWaves: first || second || third, materials, gearPool };
++  const fourth = base.id === '1-4' && d === 0;
++  // A repeatable cultivation reward; no new first-win item or tutorial receipt.
++  if (fourth) materials[0].n = 4;
++  return cache[key] = { ...base, difficulty: d, baseGold: fourth ? 100 : Math.round(base.baseGold * DIFFICULTIES[d].goldMul),
++    waves: first ? FIRST_LEVEL_WAVES : second ? SECOND_LEVEL_WAVES : third ? THIRD_LEVEL_WAVES : fourth ? FOURTH_LEVEL_WAVES : waves,
++    fixedWaves: first || second || third || fourth, materials, gearPool };
+ }
+ /** One equipment roll per real kill; elite bonus is explicit in the preview. */
+ export function equipmentDropChance(difficulty: number, mob?: Pick<MobDef, 'elite' | 'boss'>): number {
+--- before/assets/scripts/core/SaveData.ts
++++ after/assets/scripts/core/SaveData.ts
+@@ -166,6 +166,11 @@
+   if (!Array.isArray(sv.equips)) sv.equips = [];
+   const used = new Set<string>();
+   let changed = sv.weaponSystemVersion !== 1 || journeyMissing || secondMissing || thirdMissing;
++  // Replace only the recorded v43 first-win gift, keeping its UID, level and worn references.
++  // A missing/sold gift is not recreated; unrelated staffs remain untouched.
++  const thirdGift = sv.thirdJourney!.rewardClaimed && sv.thirdJourney!.rewardUid
++    ? sv.equips.find(e => e.uid === sv.thirdJourney!.rewardUid && e.defId === 'wpn_green_staff') : undefined;
++  if (thirdGift) { thirdGift.defId = 'wpn_green_book'; changed = true; }
+   // Backfill the free 1-2 reward on old cleared saves. Ownership only: never overwrite growth or auto-deploy.
+   if (sv.stars['1-2'] && !sv.secondJourney!.rewardClaimed) {
+     sv.heroes.pyro.owned = true;
+--- before/assets/scripts/core/ThirdJourney.ts
++++ after/assets/scripts/core/ThirdJourney.ts
+@@ -1,4 +1,4 @@
+-/** Independent 1-3 teaching and first-win staff receipt. No camp navigation or auto-equipping. */
++/** Independent 1-3 teaching and first-win book receipt. No camp navigation or auto-equipping. */
+ import { EquipInst, loadSave, saveSave } from './SaveData';
+ 
+ export function thirdTeachingBattle(id: string, difficulty: number): boolean {
+@@ -8,7 +8,7 @@
+ export function skipThirdBattleTeaching(): void {
+   loadSave().thirdJourney!.skipped = true; saveSave();
+ }
+-export function firstStaffAvailable(id: string, difficulty: number): boolean {
++export function firstBookAvailable(id: string, difficulty: number): boolean {
+   const sv = loadSave();
+   return id === '1-3' && difficulty === 0 && !sv.stars['1-3'] && !sv.thirdJourney!.rewardClaimed;
+ }
+@@ -18,9 +18,9 @@
+   const sv = loadSave(), j = sv.thirdJourney!;
+   j.battleDone = true;
+   if (previousStars || j.rewardClaimed) return null;
+-  let uid = 'third_journey_v1_staff', suffix = 0;
+-  while (sv.equips.some(e => e.uid === uid)) uid = 'third_journey_v1_staff_' + (++suffix);
+-  const gift = { uid, defId: 'wpn_green_staff', lv: 1 };
++  let uid = 'third_journey_v1_book', suffix = 0;
++  while (sv.equips.some(e => e.uid === uid)) uid = 'third_journey_v1_book_' + (++suffix);
++  const gift = { uid, defId: 'wpn_green_book', lv: 1 };
+   sv.equips.push(gift); j.rewardUid = uid; j.rewardClaimed = true;
+   return gift;
+ }
+--- before/assets/scripts/ui/HUD.ts
++++ after/assets/scripts/ui/HUD.ts
+@@ -6,9 +6,10 @@
+ import { Graphics, Label, Layers, Node, Tween, tween, UIOpacity, UITransform, Vec3 } from 'cc';
+ import { expNeed, LO, PAL } from '../config/GameConfig';
+ import { battleSceneKey } from '../config/Campaign';
+-import { dlgPanel, dlgTitle, gcircle, gpanel, label, noticeBtn, setText, WY, WYB, WX, Bar, CA, N } from './UIKit';
++import { gcircle, gpanel, label, noticeBtn, setText, WY, WYB, WX, Bar, CA, N } from './UIKit';
+ import { artAtlasSprite, artSprite } from './Ux';
+-import { comicButton } from './ComicUI';
++import { comicButton, comicPlate } from './ComicUI';
++import { detailSkin } from './DetailDialog';
+ import { BattleDirector } from '../battle/BattleDirector';
+ import { HeroBase } from '../battle/Hero';
+ import { CODEX } from '../core/GameData';
+@@ -330,7 +331,7 @@
+   /** 新怪通知钮显隐（有未查看的新怪种时亮出） */
+   showNewMob(v: boolean): void { this.newMobBtn.active = v; }
+ 
+-  /** 新怪物介绍弹窗（参考 KR「新敌人」：深红题签 + 羊皮纸卡：图标/名称/描述/红色特性条目 + 好的钮） */
++  /** Monster discovery uses the same modal paper and title as shop/hero details. */
+   showMobIntro(id: string, onOk: () => void): void {
+     const c = CODEX.find(x => x.id === id);
+     if (!c) { onOk(); return; }
+@@ -340,16 +341,18 @@
+       const ev = e as { propagationStopped?: boolean };
+       if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;  // 挡住战斗 UI 误触
+     });
+-    const card = dlgPanel(dim, 0, -40, 640, H);   // 生图羊皮弹窗背板（缺图回退程序奶白板）
+-    const title = dlgTitle(dim, 0, -40 + H / 2 - 10, 360, '新 敌 人', 30);   // 生图深红折角缎带（自带白字）
+-    const iconPlate = gpanel(card, -195, 40, 170, 170, '#E3EAD8', undefined, 0, 12);
++    const card = comicPlate(dim, 0, -40, 640, H, 'paper', { name: 'newEnemyCommonPanel' });
++    detailSkin(card, 640, H, '新敌人');
++    // The common title sits inside the paper; leave its lower edge clear.
++    const content = N('newEnemyContent', card, 0, -16);
++    const iconPlate = gpanel(content, -195, 40, 170, 170, '#E3EAD8', undefined, 0, 12);
+     // Same keyed monster artwork and proportional fit as the research codex.
+     const portrait = artAtlasSprite(iconPlate, 0, 0, 150, 150, 'battle_mobs_v2', c.id);
+     portrait.name = 'newEnemyPortrait:' + c.id;
+-    label(card, 50, 150, c.name, { size: 30, color: '#4A3214', bold: true, align: 'left', w: 300, h: 40 });
+-    label(card, 65, 92, c.desc, { size: 18, color: '#4A3214', w: 330, h: 64, shrink: true });
++    label(content, 50, 150, c.name, { size: 30, color: '#4A3214', bold: true, align: 'left', w: 300, h: 40 });
++    label(content, 65, 92, c.desc, { size: 18, color: '#4A3214', w: 330, h: 64, shrink: true });
+     c.traits.forEach((t, i) =>
+-      label(card, 65, 40 - i * 30, '- ' + t, { size: 18, color: '#B03A2E', bold: true, align: 'left', w: 330, h: 28 }));
++      label(content, 65, 40 - i * 30, '- ' + t, { size: 18, color: '#B03A2E', bold: true, align: 'left', w: 330, h: 28 }));
+     let closed = false;
+     comicButton(dim, 170, -40 - H / 2 + 64, 200, 64, '好的！', () => {
+       if (closed) return;
+--- before/assets/scripts/ui/LevelLootPreview.ts
++++ after/assets/scripts/ui/LevelLootPreview.ts
+@@ -6,7 +6,7 @@
+ import { pyroRewardAvailable } from '../core/SecondJourney';
+ import { StageLootSummary } from '../core/StageLoot';
+ import { firstBowAvailable } from '../core/FirstJourney';
+-import { firstStaffAvailable } from '../core/ThirdJourney';
++import { firstBookAvailable } from '../core/ThirdJourney';
+ import { C, label, N } from './UIKit';
+ import { COMIC, comicArt, comicButton, comicDialog, comicDialogContent, comicPlate, comicSurface } from './ComicUI';
+ import { gearArt, heroPortrait } from './HeroComic';
+@@ -37,7 +37,7 @@
+   onSelect: (id: string) => void, height = 76, campaign = false): void {
+   const entries = [{ id: 'coin', n: level.baseGold }, ...level.materials];
+   if (firstBowAvailable(level.id, level.difficulty)) entries.push({ id: 'wpn_bow', n: 1 });
+-  if (firstStaffAvailable(level.id, level.difficulty)) entries.push({ id: 'wpn_green_staff', n: 1 });
++  if (firstBookAvailable(level.id, level.difficulty)) entries.push({ id: 'wpn_green_book', n: 1 });
+   if (pyroRewardAvailable(level.id, level.difficulty)) entries.push({ id: 'hero_pyro', n: 1 });
+   const gap = 12, w = (width - gap * (entries.length - 1)) / entries.length;
+   entries.forEach((row, i) => {
+@@ -72,7 +72,7 @@
+ export function stageLootPreview(parent: Node, h: number, level: ChallengeDef, modalParent: Node): void {
+   const y = (top: number): number => h / 2 - top;
+   const entries = [{ id: 'coin', n: level.baseGold }, ...level.materials];
+-  if (firstStaffAvailable(level.id, level.difficulty)) entries.push({ id: 'wpn_green_staff', n: 1 });
++  if (firstBookAvailable(level.id, level.difficulty)) entries.push({ id: 'wpn_green_book', n: 1 });
+   if (pyroRewardAvailable(level.id, level.difficulty)) entries.push({ id: 'hero_pyro', n: 1 });
+   entries.forEach((row, i) => {
+     const x = (i - (entries.length - 1) / 2) * 150;
+@@ -102,8 +102,8 @@
+       { size: 15, color: COMIC.sub, w: 448, h: 24, shrink: true });
+   } else label(parent, -65, y(181), firstBowAvailable(level.id, level.difficulty)
+     ? '首次通关必得猎风长弓，回营后穿戴' : pyroRewardAvailable(level.id, level.difficulty)
+-    ? '首胜免费获得火法师，回营手动编队' : firstStaffAvailable(level.id, level.difficulty)
+-    ? '首次通关必得林语法杖，直接存入背包' : '普通难度不掉装备，挑战精英 / 地狱获取', { size: 19, color: COMIC.sub, w: 480, h: 38, shrink: true });
++    ? '首胜免费获得火法师，回营手动编队' : firstBookAvailable(level.id, level.difficulty)
++    ? '首次通关必得翠纹秘典，直接存入背包' : '普通难度不掉装备，挑战精英 / 地狱获取', { size: 19, color: COMIC.sub, w: 480, h: 38, shrink: true });
+   comicButton(parent, 241, y(h - 25), 138, 38, '掉落详情', () => showStageLootDetails(modalParent, level), { size: 18, tone: 'gold' });
+ }
+ 
+@@ -136,8 +136,8 @@
+     });
+   } else label(list, 0, -210, firstBowAvailable(level.id, level.difficulty)
+     ? '首次通关必得绿色猎风长弓\n奖励存入背包，回营后自行穿戴' : pyroRewardAvailable(level.id, level.difficulty)
+-    ? '首胜免费获得火法师\n回营后手动加入第三个出战位置' : firstStaffAvailable(level.id, level.difficulty)
+-    ? '首次通关必得绿色林语法杖\n火法师适用，奖励直接存入背包' : '普通难度不掉落装备\n挑战精英 / 地狱可获得概率装备',
++    ? '首胜免费获得火法师\n回营后手动加入第三个出战位置' : firstBookAvailable(level.id, level.difficulty)
++    ? '首次通关必得绿色翠纹秘典\n火法师适用，奖励直接存入背包' : '普通难度不掉落装备\n挑战精英 / 地狱可获得概率装备',
+     { size: 21, color: COMIC.sub, w: 570, h: 76, lineHeight: 32 });
+   label(root, 0, -top + 68, rows ? '点击落地装备拾取 · 30个战斗秒后自动拾取' : '点击金币或材料图标，查看奖励详情',
+     { size: 18, color: COMIC.text, w: 590, h: 28 });
+@@ -160,8 +160,8 @@
+   if (!d && !mat && id !== 'coin') return;
+   const source = DIFFICULTIES[level.difficulty].name + ' · ' + level.id;
+   const firstBow = id === 'wpn_bow' && firstBowAvailable(level.id, level.difficulty);
+-  const firstStaff = id === 'wpn_green_staff' && firstStaffAvailable(level.id, level.difficulty);
+-  const firstGift = firstBow || firstStaff;
++  const firstBook = id === 'wpn_green_book' && firstBookAvailable(level.id, level.difficulty);
++  const firstGift = firstBow || firstBook;
+   const groups: { title: string; rows: DetailRow[] }[] = [];
+   const amount = id === 'coin' ? level.baseGold : level.materials.find(row => row.id === id)?.n || 0;
+   let delivery: string;
+--- before/assets/scripts/ui/pages/LevelsPage.ts
++++ after/assets/scripts/ui/pages/LevelsPage.ts
+@@ -13,7 +13,7 @@
+ import { GameAudio } from '../../core/GameAudio';
+ import { flow } from '../../core/Flow';
+ import { firstBowAvailable } from '../../core/FirstJourney';
+-import { firstStaffAvailable } from '../../core/ThirdJourney';
++import { firstBookAvailable } from '../../core/ThirdJourney';
+ import { finishSecondEntryLesson, pendingSecondEntryLesson, pendingUpgradeLesson, pyroRewardAvailable } from '../../core/SecondJourney';
+ import { tutorialFocus } from '../TutorialFocus';
+ import { whenUIArtReady } from '../UIArtReady';
+@@ -359,10 +359,11 @@
+         const pct = (n: number): string => (n * 100).toFixed(2) + '%';
+         mainLabel(body, 0, by(layout.chance), '普通怪 ' + pct(equipmentDropChance(st.d)) + ' · 精英怪 ' + pct(equipmentDropChance(st.d, { elite: true })),
+           { size: 17, font: 'body', color: CAMPAIGN_TEXT.body, w: 660, h: 28 });
+-        } else mainLabel(equipment,0,-equipmentH/2,firstBowAvailable(challenge.id, challenge.difficulty)
++        } else mainLabel(equipment,0,-equipmentH/2,challenge.id === '1-4' && challenge.difficulty === 0
++          ? '推荐英雄Lv.3、武器Lv.2\n通关获得金币和强化石' : firstBowAvailable(challenge.id, challenge.difficulty)
+           ? '首次通关必得绿色猎风长弓\n回营后在英雄页穿戴' : pyroRewardAvailable(challenge.id, challenge.difficulty)
+-          ? '首次通关免费获得火法师\n回营后手动加入第三个出战位置' : firstStaffAvailable(challenge.id, challenge.difficulty)
+-          ? '首次通关必得绿色林语法杖\n火法师适用，直接存入背包' : '普通难度不掉落装备\n挑战精英 / 地狱解锁装备掉落',
++          ? '首次通关免费获得火法师\n回营后手动加入第三个出战位置' : firstBookAvailable(challenge.id, challenge.difficulty)
++          ? '首次通关必得绿色翠纹秘典\n火法师适用，直接存入背包' : '普通难度不掉落装备\n挑战精英 / 地狱解锁装备掉落',
+         { size: 19, font: 'body', color: CAMPAIGN_TEXT.secondary, w: 660, h: 68, lineHeight: 32 });
+       const startBattle = (): void => {
+         if (!open || closing || enteringBattle()) return;

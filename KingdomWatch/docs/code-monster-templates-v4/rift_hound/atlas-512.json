@@ -1,0 +1,216 @@
+{
+  "id": "rift_hound",
+  "animation": "walk",
+  "frame_count": 32,
+  "frame_ms": 40,
+  "cycle_ms": 1280,
+  "loop": true,
+  "duplicate_endpoint": false,
+  "frame_size": [
+    512,
+    512
+  ],
+  "atlas": "atlas-512.png",
+  "alpha_mode": "straight",
+  "pivot_top_left_normalized": [
+    0.5078829422579825,
+    0.8514434098966845
+  ],
+  "frames": {
+    "rift_hound_000": [
+      0,
+      0,
+      512,
+      512
+    ],
+    "rift_hound_001": [
+      512,
+      0,
+      512,
+      512
+    ],
+    "rift_hound_002": [
+      1024,
+      0,
+      512,
+      512
+    ],
+    "rift_hound_003": [
+      1536,
+      0,
+      512,
+      512
+    ],
+    "rift_hound_004": [
+      2048,
+      0,
+      512,
+      512
+    ],
+    "rift_hound_005": [
+      2560,
+      0,
+      512,
+      512
+    ],
+    "rift_hound_006": [
+      3072,
+      0,
+      512,
+      512
+    ],
+    "rift_hound_007": [
+      3584,
+      0,
+      512,
+      512
+    ],
+    "rift_hound_008": [
+      0,
+      512,
+      512,
+      512
+    ],
+    "rift_hound_009": [
+      512,
+      512,
+      512,
+      512
+    ],
+    "rift_hound_010": [
+      1024,
+      512,
+      512,
+      512
+    ],
+    "rift_hound_011": [
+      1536,
+      512,
+      512,
+      512
+    ],
+    "rift_hound_012": [
+      2048,
+      512,
+      512,
+      512
+    ],
+    "rift_hound_013": [
+      2560,
+      512,
+      512,
+      512
+    ],
+    "rift_hound_014": [
+      3072,
+      512,
+      512,
+      512
+    ],
+    "rift_hound_015": [
+      3584,
+      512,
+      512,
+      512
+    ],
+    "rift_hound_016": [
+      0,
+      1024,
+      512,
+      512
+    ],
+    "rift_hound_017": [
+      512,
+      1024,
+      512,
+      512
+    ],
+    "rift_hound_018": [
+      1024,
+      1024,
+      512,
+      512
+    ],
+    "rift_hound_019": [
+      1536,
+      1024,
+      512,
+      512
+    ],
+    "rift_hound_020": [
+      2048,
+      1024,
+      512,
+      512
+    ],
+    "rift_hound_021": [
+      2560,
+      1024,
+      512,
+      512
+    ],
+    "rift_hound_022": [
+      3072,
+      1024,
+      512,
+      512
+    ],
+    "rift_hound_023": [
+      3584,
+      1024,
+      512,
+      512
+    ],
+    "rift_hound_024": [
+      0,
+      1536,
+      512,
+      512
+    ],
+    "rift_hound_025": [
+      512,
+      1536,
+      512,
+      512
+    ],
+    "rift_hound_026": [
+      1024,
+      1536,
+      512,
+      512
+    ],
+    "rift_hound_027": [
+      1536,
+      1536,
+      512,
+      512
+    ],
+    "rift_hound_028": [
+      2048,
+      1536,
+      512,
+      512
+    ],
+    "rift_hound_029": [
+      2560,
+      1536,
+      512,
+      512
+    ],
+    "rift_hound_030": [
+      3072,
+      1536,
+      512,
+      512
+    ],
+    "rift_hound_031": [
+      3584,
+      1536,
+      512,
+      512
+    ]
+  },
+  "source_sha256": "d1ea57aa2f917bd6f7a07f0326152374fe6af9f83f1985d1e46f7d31c71b6881",
+  "technique": "pinned regions; angular rotation fields; fixed UV; premultiplied 2x bake",
+  "game_integrated": false
+}

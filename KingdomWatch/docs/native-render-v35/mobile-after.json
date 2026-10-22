@@ -1,0 +1,502 @@
+{
+  "report": "kw-render-diagnostics-v35",
+  "capturedAt": "2026-10-18T09:06:59.929Z",
+  "mode": "手机模式",
+  "path": "/",
+  "query": "?renderdiag=1&v=render-diagnostics-v33-1792312220",
+  "bootstrap": "static-html-before-engine",
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Linux; Android 15; V2408A Build/AP3A.240905.015.A2_V0101L11) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.8010.36 Mobile Safari/537.36",
+    "devicePixelRatio": 4,
+    "dprCap": 4,
+    "innerCss": [
+      360,
+      792
+    ],
+    "outerCss": [
+      360,
+      792
+    ],
+    "screenCss": [
+      360,
+      792
+    ],
+    "documentCss": [
+      360,
+      792
+    ],
+    "visualViewport": {
+      "width": 360,
+      "height": 792,
+      "scale": 1,
+      "offsetLeft": 0,
+      "offsetTop": 0
+    },
+    "viewportMeta": "width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1,minimal-ui=true,viewport-fit=cover",
+    "safeCss": [
+      "30px",
+      "0px",
+      "18px",
+      "0px"
+    ],
+    "fullscreenElement": null
+  },
+  "canvas": {
+    "backingPixels": [
+      1440,
+      3168
+    ],
+    "cssRect": [
+      0,
+      0,
+      360,
+      792
+    ],
+    "pixelRatio": [
+      4,
+      4
+    ],
+    "estimatedDisplayPixels": [
+      1440,
+      3168
+    ],
+    "estimatedBackingToDisplay": [
+      1,
+      1
+    ],
+    "transform": "none",
+    "ancestors": [
+      {
+        "id": "Cocos3dGameContainer",
+        "cssRect": [
+          0,
+          0,
+          360,
+          792
+        ],
+        "transform": "none",
+        "zoom": "1"
+      },
+      {
+        "id": "GameDiv",
+        "cssRect": [
+          0,
+          0,
+          360,
+          792
+        ],
+        "transform": "matrix(1, 0, 0, 1, 0, 0)",
+        "zoom": "1"
+      }
+    ]
+  },
+  "engineStatus": "已连接",
+  "recentErrors": [],
+  "engine": {
+    "version": "3.8.8",
+    "isMobile": true,
+    "os": "Android",
+    "browserType": "chrome",
+    "devicePixelRatio": 4,
+    "windowPixels": [
+      1440,
+      3168
+    ],
+    "resolutionPixels": [
+      1440,
+      3168
+    ],
+    "resolutionToWindow": [
+      1,
+      1
+    ],
+    "design": [
+      750,
+      1334
+    ],
+    "visible": [
+      750,
+      1650
+    ],
+    "scale": [
+      1.92,
+      1.92
+    ],
+    "safeRectSymmetric": [
+      0,
+      37.5,
+      750,
+      1550
+    ],
+    "safeRectRaw": [
+      0,
+      37.5,
+      750,
+      1550
+    ],
+    "appliedLayout": {
+      "half": 825,
+      "notchTop": 62.5,
+      "safeTop": 0,
+      "safeBottom": 0
+    }
+  },
+  "graphics": {
+    "drawingBufferPixels": [
+      1440,
+      3168
+    ],
+    "attributes": {
+      "alpha": false,
+      "antialias": true,
+      "depth": true,
+      "desynchronized": false,
+      "failIfMajorPerformanceCaveat": false,
+      "powerPreference": "default",
+      "premultipliedAlpha": false,
+      "preserveDrawingBuffer": false,
+      "stencil": true
+    },
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "renderer": "WebKit WebGL",
+    "maxTextureSize": 8192
+  },
+  "labels": [
+    {
+      "node": "lbl",
+      "text": "1",
+      "font": "UINumbers",
+      "systemFont": false,
+      "fontSize": 32,
+      "actualFontSize": 61,
+      "cacheMode": 0,
+      "bold": false,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        92,
+        76
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 61
+    },
+    {
+      "node": "lbl",
+      "text": "2",
+      "font": "UINumbers",
+      "systemFont": false,
+      "fontSize": 32,
+      "actualFontSize": 61,
+      "cacheMode": 0,
+      "bold": false,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        92,
+        76
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 61
+    },
+    {
+      "node": "lbl",
+      "text": "3",
+      "font": "UINumbers",
+      "systemFont": false,
+      "fontSize": 32,
+      "actualFontSize": 61,
+      "cacheMode": 0,
+      "bold": false,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        92,
+        76
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 61
+    },
+    {
+      "node": "lbl",
+      "text": "4",
+      "font": "UINumbers",
+      "systemFont": false,
+      "fontSize": 32,
+      "actualFontSize": 61,
+      "cacheMode": 0,
+      "bold": false,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        92,
+        76
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 61
+    },
+    {
+      "node": "lbl",
+      "text": "5",
+      "font": "UINumbers",
+      "systemFont": false,
+      "fontSize": 32,
+      "actualFontSize": 61,
+      "cacheMode": 0,
+      "bold": false,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        92,
+        76
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 61
+    },
+    {
+      "node": "lbl",
+      "text": "6",
+      "font": "UINumbers",
+      "systemFont": false,
+      "fontSize": 32,
+      "actualFontSize": 61,
+      "cacheMode": 0,
+      "bold": false,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        92,
+        76
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 61
+    },
+    {
+      "node": "lbl",
+      "text": "补给小道",
+      "font": "UIBody",
+      "systemFont": false,
+      "fontSize": 20,
+      "actualFontSize": 39,
+      "cacheMode": 0,
+      "bold": true,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        241,
+        49
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 39
+    },
+    {
+      "node": "lbl",
+      "text": "7",
+      "font": "UINumbers",
+      "systemFont": false,
+      "fontSize": 32,
+      "actualFontSize": 61,
+      "cacheMode": 0,
+      "bold": false,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        92,
+        76
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 61
+    },
+    {
+      "node": "lbl",
+      "text": "8",
+      "font": "UINumbers",
+      "systemFont": false,
+      "fontSize": 32,
+      "actualFontSize": 61,
+      "cacheMode": 0,
+      "bold": false,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        92,
+        76
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 61
+    },
+    {
+      "node": "lbl",
+      "text": "9",
+      "font": "UINumbers",
+      "systemFont": false,
+      "fontSize": 32,
+      "actualFontSize": 61,
+      "cacheMode": 0,
+      "bold": false,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        92,
+        76
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 61
+    },
+    {
+      "node": "lbl",
+      "text": "10",
+      "font": "UINumbers",
+      "systemFont": false,
+      "fontSize": 32,
+      "actualFontSize": 61,
+      "cacheMode": 0,
+      "bold": false,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        92,
+        76
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 61
+    },
+    {
+      "node": "lbl",
+      "text": "章末",
+      "font": "UIBody",
+      "systemFont": false,
+      "fontSize": 14,
+      "actualFontSize": 27,
+      "cacheMode": 0,
+      "bold": true,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        99,
+        38
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 27
+    },
+    {
+      "node": "lbl",
+      "text": "第一章 · 前哨",
+      "font": "UIBody",
+      "systemFont": false,
+      "fontSize": 31,
+      "actualFontSize": 60,
+      "cacheMode": 0,
+      "bold": true,
+      "outlineWidth": 1,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        902,
+        76
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 60
+    },
+    {
+      "node": "lbl",
+      "text": "已通关 5/10",
+      "font": "UIBody",
+      "systemFont": false,
+      "fontSize": 19,
+      "actualFontSize": 37,
+      "cacheMode": 0,
+      "bold": true,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        403,
+        53
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 37
+    },
+    {
+      "node": "lbl",
+      "text": "15/30",
+      "font": "UINumbers",
+      "systemFont": false,
+      "fontSize": 19,
+      "actualFontSize": 37,
+      "cacheMode": 0,
+      "bold": false,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        165,
+        53
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 37
+    },
+    {
+      "node": "lbl",
+      "text": "出战准备",
+      "font": "UIBody",
+      "systemFont": false,
+      "fontSize": 32,
+      "actualFontSize": 62,
+      "cacheMode": 0,
+      "bold": true,
+      "outlineWidth": 2,
+      "worldScale": [
+        1,
+        1
+      ],
+      "textCanvasPixels": [
+        422,
+        88
+      ],
+      "engineTextScale": 1.92,
+      "engineTextFontSize": 62
+    }
+  ]
+}

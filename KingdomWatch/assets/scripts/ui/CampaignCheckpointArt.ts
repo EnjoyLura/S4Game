@@ -128,7 +128,7 @@ function lair(g: Graphics, active: boolean, open: boolean): void {
 }
 
 export function paintCampaignCheckpoint(parent: Node, chapter: number, active: boolean, open: boolean): void {
-  const theme = Math.max(0,Math.min(2,Math.floor(chapter)));
+  const theme = chapter >= 3 ? 0 : Math.max(0,Math.min(2,Math.floor(chapter)));
   const names = ['campaignCheckpointOutpost','campaignCheckpointForest','campaignCheckpointLair'];
   const g = N(names[theme],parent).addComponent(Graphics);
   [outpost,forest,lair][theme](g,active,open);

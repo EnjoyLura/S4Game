@@ -1,0 +1,2050 @@
+[
+  {
+    "level": "1-1",
+    "waves": 6,
+    "beforeTotals": {
+      "count": 139,
+      "hp": 47680,
+      "spawnSeconds": 178.89
+    },
+    "afterTotals": {
+      "count": 145,
+      "hp": 54480,
+      "spawnSeconds": 178.59
+    },
+    "countPercent": 4.32,
+    "hpBudgetPercent": 14.26,
+    "workerHpPercentRange": [
+      6.67,
+      11.11
+    ],
+    "specialHpPercentRange": [
+      9.09,
+      9.09
+    ],
+    "damageDelaysSpecialCountsAndOrderUnchanged": true,
+    "surgesUnchanged": true,
+    "before": [
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 16.0,
+          "interval": 1.65,
+          "delay": 0.0,
+          "hp": 280.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 24.0,
+          "interval": 1.4,
+          "delay": 0.0,
+          "hp": 300.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 28.0,
+          "interval": 1.25,
+          "delay": 0.0,
+          "hp": 320.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 18.0,
+          "interval": 1.65,
+          "delay": 0.0,
+          "hp": 320.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 34.0,
+          "interval": 0.98,
+          "delay": 0.0,
+          "hp": 360.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 0,
+          "hp": 2200.0,
+          "dmg": 20.0
+        },
+        {
+          "mob": "goblin_worker",
+          "count": 18.0,
+          "interval": 1.4,
+          "delay": 4.0,
+          "hp": 380.0,
+          "dmg": 10.0
+        }
+      ]
+    ],
+    "after": [
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 16.0,
+          "interval": 1.65,
+          "delay": 0.0,
+          "hp": 300.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 24.0,
+          "interval": 1.4,
+          "delay": 0.0,
+          "hp": 320.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 30.0,
+          "interval": 1.16,
+          "delay": 0.0,
+          "hp": 350.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 18.0,
+          "interval": 1.65,
+          "delay": 0.0,
+          "hp": 350.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 36.0,
+          "interval": 0.92,
+          "delay": 0.0,
+          "hp": 400.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 0,
+          "hp": 2400.0,
+          "dmg": 20.0
+        },
+        {
+          "mob": "goblin_worker",
+          "count": 20.0,
+          "interval": 1.25,
+          "delay": 4.0,
+          "hp": 420.0,
+          "dmg": 10.0
+        }
+      ]
+    ]
+  },
+  {
+    "level": "1-2",
+    "waves": 7,
+    "beforeTotals": {
+      "count": 192,
+      "hp": 76480,
+      "spawnSeconds": 204.5
+    },
+    "afterTotals": {
+      "count": 200,
+      "hp": 88440,
+      "spawnSeconds": 204.33
+    },
+    "countPercent": 4.17,
+    "hpBudgetPercent": 15.64,
+    "workerHpPercentRange": [
+      8.33,
+      13.64
+    ],
+    "specialHpPercentRange": [
+      6.67,
+      9.62
+    ],
+    "damageDelaysSpecialCountsAndOrderUnchanged": true,
+    "surgesUnchanged": true,
+    "before": [
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 20.0,
+          "interval": 1.45,
+          "delay": 0.0,
+          "hp": 320.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 26.0,
+          "interval": 1.2,
+          "delay": 0.0,
+          "hp": 340.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 13.0,
+          "hp": 280.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 28.0,
+          "interval": 1.1,
+          "delay": 0.0,
+          "hp": 360.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 15.0,
+          "hp": 300.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 20.0,
+          "interval": 1.55,
+          "delay": 0.0,
+          "hp": 360.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 36.0,
+          "interval": 0.88,
+          "delay": 0.0,
+          "hp": 400.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 6.0,
+          "delay": 9.0,
+          "hp": 320.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 28.0,
+          "interval": 1.05,
+          "delay": 0.0,
+          "hp": 420.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 6.0,
+          "delay": 7.0,
+          "hp": 340.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 20.0,
+          "interval": 1.35,
+          "delay": 3.0,
+          "hp": 440.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 2.0,
+          "interval": 12.0,
+          "delay": 2.0,
+          "hp": 2600.0,
+          "dmg": 24.0
+        }
+      ]
+    ],
+    "after": [
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 20.0,
+          "interval": 1.45,
+          "delay": 0.0,
+          "hp": 350.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 26.0,
+          "interval": 1.2,
+          "delay": 0.0,
+          "hp": 370.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 13.0,
+          "hp": 300.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 30.0,
+          "interval": 1.02,
+          "delay": 0.0,
+          "hp": 400.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 15.0,
+          "hp": 320.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 20.0,
+          "interval": 1.55,
+          "delay": 0.0,
+          "hp": 390.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 38.0,
+          "interval": 0.83,
+          "delay": 0.0,
+          "hp": 450.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 6.0,
+          "delay": 9.0,
+          "hp": 350.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 30.0,
+          "interval": 0.98,
+          "delay": 0.0,
+          "hp": 470.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 6.0,
+          "delay": 7.0,
+          "hp": 370.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 22.0,
+          "interval": 1.22,
+          "delay": 3.0,
+          "hp": 500.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 2.0,
+          "interval": 12.0,
+          "delay": 2.0,
+          "hp": 2850.0,
+          "dmg": 24.0
+        }
+      ]
+    ]
+  },
+  {
+    "level": "1-3",
+    "waves": 8,
+    "beforeTotals": {
+      "count": 332,
+      "hp": 142640,
+      "spawnSeconds": 242.0
+    },
+    "afterTotals": {
+      "count": 344,
+      "hp": 166350,
+      "spawnSeconds": 242.12
+    },
+    "countPercent": 3.61,
+    "hpBudgetPercent": 16.62,
+    "workerHpPercentRange": [
+      11.11,
+      15.0
+    ],
+    "specialHpPercentRange": [
+      6.67,
+      11.11
+    ],
+    "damageDelaysSpecialCountsAndOrderUnchanged": true,
+    "surgesUnchanged": true,
+    "before": [
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 28.0,
+          "interval": 1.2,
+          "delay": 0.0,
+          "hp": 340.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 36.0,
+          "interval": 0.95,
+          "delay": 0.0,
+          "hp": 360.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 13.0,
+          "hp": 280.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 46.0,
+          "interval": 0.66,
+          "delay": 0.0,
+          "hp": 380.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 12.0,
+          "hp": 300.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 12.0,
+          "delay": 15.0,
+          "hp": 2800.0,
+          "dmg": 24.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 22.0,
+          "interval": 1.4,
+          "delay": 0.0,
+          "hp": 360.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 48.0,
+          "interval": 0.63,
+          "delay": 0.0,
+          "hp": 400.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 14.0,
+          "hp": 480.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 42.0,
+          "interval": 0.74,
+          "delay": 0.0,
+          "hp": 420.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 10.0,
+          "hp": 320.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 16.0,
+          "hp": 500.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 50.0,
+          "interval": 0.6,
+          "delay": 0.0,
+          "hp": 440.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 12.0,
+          "delay": 10.0,
+          "hp": 3000.0,
+          "dmg": 24.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 17.0,
+          "hp": 520.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 36.0,
+          "interval": 0.74,
+          "delay": 2.0,
+          "hp": 440.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 8.0,
+          "hp": 340.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 2.0,
+          "interval": 12.0,
+          "delay": 5.0,
+          "hp": 3200.0,
+          "dmg": 24.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 17.0,
+          "hp": 540.0,
+          "dmg": 12.0
+        }
+      ]
+    ],
+    "after": [
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 28.0,
+          "interval": 1.2,
+          "delay": 0.0,
+          "hp": 380.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 38.0,
+          "interval": 0.9,
+          "delay": 0.0,
+          "hp": 400.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 13.0,
+          "hp": 300.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 48.0,
+          "interval": 0.63,
+          "delay": 0.0,
+          "hp": 430.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 12.0,
+          "hp": 320.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 12.0,
+          "delay": 15.0,
+          "hp": 3050.0,
+          "dmg": 24.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 22.0,
+          "interval": 1.4,
+          "delay": 0.0,
+          "hp": 400.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 50.0,
+          "interval": 0.6,
+          "delay": 0.0,
+          "hp": 460.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 14.0,
+          "hp": 520.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 44.0,
+          "interval": 0.71,
+          "delay": 0.0,
+          "hp": 480.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 10.0,
+          "hp": 350.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 16.0,
+          "hp": 550.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 52.0,
+          "interval": 0.58,
+          "delay": 0.0,
+          "hp": 500.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 12.0,
+          "delay": 10.0,
+          "hp": 3300.0,
+          "dmg": 24.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 17.0,
+          "hp": 570.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 38.0,
+          "interval": 0.7,
+          "delay": 2.0,
+          "hp": 500.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 8.0,
+          "hp": 370.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 2.0,
+          "interval": 12.0,
+          "delay": 5.0,
+          "hp": 3500.0,
+          "dmg": 24.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 17.0,
+          "hp": 600.0,
+          "dmg": 12.0
+        }
+      ]
+    ]
+  },
+  {
+    "level": "1-4",
+    "waves": 8,
+    "beforeTotals": {
+      "count": 401,
+      "hp": 177800,
+      "spawnSeconds": 245.03
+    },
+    "afterTotals": {
+      "count": 413,
+      "hp": 210750,
+      "spawnSeconds": 244.46
+    },
+    "countPercent": 2.99,
+    "hpBudgetPercent": 18.53,
+    "workerHpPercentRange": [
+      13.16,
+      17.39
+    ],
+    "specialHpPercentRange": [
+      9.38,
+      11.76
+    ],
+    "damageDelaysSpecialCountsAndOrderUnchanged": true,
+    "surgesUnchanged": true,
+    "before": [
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 34.0,
+          "interval": 1.0,
+          "delay": 0.0,
+          "hp": 360.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 42.0,
+          "interval": 0.8,
+          "delay": 0.0,
+          "hp": 380.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 13.0,
+          "hp": 280.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 54.0,
+          "interval": 0.58,
+          "delay": 0.0,
+          "hp": 400.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 12.0,
+          "hp": 300.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 12.0,
+          "delay": 15.0,
+          "hp": 2800.0,
+          "dmg": 24.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 26.0,
+          "interval": 1.15,
+          "delay": 0.0,
+          "hp": 380.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 58.0,
+          "interval": 0.52,
+          "delay": 0.0,
+          "hp": 420.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 14.0,
+          "hp": 480.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 50.0,
+          "interval": 0.64,
+          "delay": 0.0,
+          "hp": 440.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 10.0,
+          "hp": 320.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 16.0,
+          "hp": 500.0,
+          "dmg": 12.0
+        },
+        {
+          "mob": "goblin_shaman",
+          "count": 1.0,
+          "interval": 10.0,
+          "delay": 18.0,
+          "hp": 360.0,
+          "dmg": 0.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 60.0,
+          "interval": 0.48,
+          "delay": 0.0,
+          "hp": 460.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 12.0,
+          "delay": 10.0,
+          "hp": 3000.0,
+          "dmg": 24.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 17.0,
+          "hp": 520.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 50.0,
+          "interval": 0.58,
+          "delay": 2.0,
+          "hp": 460.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 8.0,
+          "hp": 340.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 2.0,
+          "interval": 12.0,
+          "delay": 5.0,
+          "hp": 3200.0,
+          "dmg": 24.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 17.0,
+          "hp": 540.0,
+          "dmg": 12.0
+        },
+        {
+          "mob": "goblin_shaman",
+          "count": 2.0,
+          "interval": 10.0,
+          "delay": 12.0,
+          "hp": 360.0,
+          "dmg": 0.0
+        }
+      ]
+    ],
+    "after": [
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 34.0,
+          "interval": 1.0,
+          "delay": 0.0,
+          "hp": 410.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 44.0,
+          "interval": 0.76,
+          "delay": 0.0,
+          "hp": 430.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 13.0,
+          "hp": 310.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 56.0,
+          "interval": 0.56,
+          "delay": 0.0,
+          "hp": 460.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 12.0,
+          "hp": 330.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 12.0,
+          "delay": 15.0,
+          "hp": 3100.0,
+          "dmg": 24.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 26.0,
+          "interval": 1.15,
+          "delay": 0.0,
+          "hp": 430.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 60.0,
+          "interval": 0.5,
+          "delay": 0.0,
+          "hp": 490.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 14.0,
+          "hp": 530.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 52.0,
+          "interval": 0.61,
+          "delay": 0.0,
+          "hp": 510.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 10.0,
+          "hp": 350.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 16.0,
+          "hp": 550.0,
+          "dmg": 12.0
+        },
+        {
+          "mob": "goblin_shaman",
+          "count": 1.0,
+          "interval": 10.0,
+          "delay": 18.0,
+          "hp": 400.0,
+          "dmg": 0.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 62.0,
+          "interval": 0.46,
+          "delay": 0.0,
+          "hp": 540.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 12.0,
+          "delay": 10.0,
+          "hp": 3350.0,
+          "dmg": 24.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 17.0,
+          "hp": 580.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 52.0,
+          "interval": 0.56,
+          "delay": 2.0,
+          "hp": 540.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 8.0,
+          "hp": 380.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 2.0,
+          "interval": 12.0,
+          "delay": 5.0,
+          "hp": 3550.0,
+          "dmg": 24.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 17.0,
+          "hp": 600.0,
+          "dmg": 12.0
+        },
+        {
+          "mob": "goblin_shaman",
+          "count": 2.0,
+          "interval": 10.0,
+          "delay": 12.0,
+          "hp": 400.0,
+          "dmg": 0.0
+        }
+      ]
+    ]
+  },
+  {
+    "level": "1-5",
+    "waves": 8,
+    "beforeTotals": {
+      "count": 437,
+      "hp": 203200,
+      "spawnSeconds": 238.61
+    },
+    "afterTotals": {
+      "count": 449,
+      "hp": 243380,
+      "spawnSeconds": 238.86
+    },
+    "countPercent": 2.75,
+    "hpBudgetPercent": 19.77,
+    "workerHpPercentRange": [
+      15.0,
+      18.75
+    ],
+    "specialHpPercentRange": [
+      10.53,
+      13.33
+    ],
+    "damageDelaysSpecialCountsAndOrderUnchanged": true,
+    "surgesUnchanged": true,
+    "before": [
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 40.0,
+          "interval": 0.85,
+          "delay": 0.0,
+          "hp": 380.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 48.0,
+          "interval": 0.7,
+          "delay": 0.0,
+          "hp": 400.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 13.0,
+          "hp": 300.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 58.0,
+          "interval": 0.53,
+          "delay": 0.0,
+          "hp": 420.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 12.0,
+          "hp": 320.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 12.0,
+          "hp": 3200.0,
+          "dmg": 24.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 30.0,
+          "interval": 0.96,
+          "delay": 0.0,
+          "hp": 400.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 64.0,
+          "interval": 0.46,
+          "delay": 0.0,
+          "hp": 440.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 14.0,
+          "hp": 520.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 54.0,
+          "interval": 0.56,
+          "delay": 0.0,
+          "hp": 460.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 10.0,
+          "hp": 340.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 16.0,
+          "hp": 540.0,
+          "dmg": 12.0
+        },
+        {
+          "mob": "goblin_shaman",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 18.0,
+          "hp": 380.0,
+          "dmg": 0.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 64.0,
+          "interval": 0.45,
+          "delay": 0.0,
+          "hp": 480.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 8.0,
+          "hp": 3400.0,
+          "dmg": 24.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 17.0,
+          "hp": 560.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_king",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 0.0,
+          "hp": 7000.0,
+          "dmg": 30.0
+        },
+        {
+          "mob": "goblin_worker",
+          "count": 54.0,
+          "interval": 0.5,
+          "delay": 1.0,
+          "hp": 480.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 8.0,
+          "hp": 360.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 17.0,
+          "hp": 580.0,
+          "dmg": 12.0
+        },
+        {
+          "mob": "goblin_shaman",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 12.0,
+          "hp": 380.0,
+          "dmg": 0.0
+        }
+      ]
+    ],
+    "after": [
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 40.0,
+          "interval": 0.85,
+          "delay": 0.0,
+          "hp": 440.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 50.0,
+          "interval": 0.67,
+          "delay": 0.0,
+          "hp": 460.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 13.0,
+          "hp": 340.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 60.0,
+          "interval": 0.51,
+          "delay": 0.0,
+          "hp": 490.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 12.0,
+          "hp": 360.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 12.0,
+          "hp": 3600.0,
+          "dmg": 24.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 30.0,
+          "interval": 0.96,
+          "delay": 0.0,
+          "hp": 460.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 66.0,
+          "interval": 0.45,
+          "delay": 0.0,
+          "hp": 520.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 14.0,
+          "hp": 580.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 56.0,
+          "interval": 0.54,
+          "delay": 0.0,
+          "hp": 540.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 10.0,
+          "hp": 380.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 16.0,
+          "hp": 600.0,
+          "dmg": 12.0
+        },
+        {
+          "mob": "goblin_shaman",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 18.0,
+          "hp": 420.0,
+          "dmg": 0.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 66.0,
+          "interval": 0.44,
+          "delay": 0.0,
+          "hp": 570.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 8.0,
+          "hp": 3800.0,
+          "dmg": 24.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 17.0,
+          "hp": 630.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_king",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 0.0,
+          "hp": 7800.0,
+          "dmg": 30.0
+        },
+        {
+          "mob": "goblin_worker",
+          "count": 56.0,
+          "interval": 0.48,
+          "delay": 1.0,
+          "hp": 570.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 8.0,
+          "hp": 400.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 2.0,
+          "interval": 6.0,
+          "delay": 17.0,
+          "hp": 650.0,
+          "dmg": 12.0
+        },
+        {
+          "mob": "goblin_shaman",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 12.0,
+          "hp": 420.0,
+          "dmg": 0.0
+        }
+      ]
+    ]
+  },
+  {
+    "level": "1-6",
+    "waves": 10,
+    "beforeTotals": {
+      "count": 531,
+      "hp": 248960,
+      "spawnSeconds": 301.63
+    },
+    "afterTotals": {
+      "count": 545,
+      "hp": 297150,
+      "spawnSeconds": 301.3
+    },
+    "countPercent": 2.64,
+    "hpBudgetPercent": 19.36,
+    "workerHpPercentRange": [
+      15.0,
+      18.18
+    ],
+    "specialHpPercentRange": [
+      10.53,
+      12.5
+    ],
+    "damageDelaysSpecialCountsAndOrderUnchanged": true,
+    "surgesUnchanged": true,
+    "before": [
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 44.0,
+          "interval": 0.72,
+          "delay": 0.0,
+          "hp": 400.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 48.0,
+          "interval": 0.66,
+          "delay": 0.0,
+          "hp": 420.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 3.0,
+          "interval": 3.0,
+          "delay": 8.0,
+          "hp": 520.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 52.0,
+          "interval": 0.58,
+          "delay": 0.0,
+          "hp": 440.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 12.0,
+          "hp": 320.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 8.0,
+          "hp": 3200.0,
+          "dmg": 24.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 36.0,
+          "interval": 0.9,
+          "delay": 0.0,
+          "hp": 420.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 3.0,
+          "interval": 3.0,
+          "delay": 10.0,
+          "hp": 540.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 58.0,
+          "interval": 0.52,
+          "delay": 0.0,
+          "hp": 460.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 4.0,
+          "interval": 3.0,
+          "delay": 8.0,
+          "hp": 560.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 34.0,
+          "interval": 0.94,
+          "delay": 0.0,
+          "hp": 420.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 14.0,
+          "hp": 340.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 58.0,
+          "interval": 0.52,
+          "delay": 0.0,
+          "hp": 460.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 4.0,
+          "interval": 3.0,
+          "delay": 8.0,
+          "hp": 560.0,
+          "dmg": 12.0
+        },
+        {
+          "mob": "goblin_shaman",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 20.0,
+          "hp": 380.0,
+          "dmg": 0.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 52.0,
+          "interval": 0.58,
+          "delay": 0.0,
+          "hp": 480.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 8.0,
+          "hp": 340.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 8.0,
+          "hp": 3400.0,
+          "dmg": 24.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 58.0,
+          "interval": 0.52,
+          "delay": 0.0,
+          "hp": 480.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 4.0,
+          "interval": 3.0,
+          "delay": 8.0,
+          "hp": 580.0,
+          "dmg": 12.0
+        },
+        {
+          "mob": "goblin_shaman",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 18.0,
+          "hp": 400.0,
+          "dmg": 0.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 0.0,
+          "hp": 4000.0,
+          "dmg": 24.0
+        },
+        {
+          "mob": "goblin_worker",
+          "count": 52.0,
+          "interval": 0.55,
+          "delay": 1.0,
+          "hp": 480.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 4.0,
+          "interval": 3.0,
+          "delay": 6.0,
+          "hp": 580.0,
+          "dmg": 12.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 10.0,
+          "hp": 360.0,
+          "dmg": 8.0
+        }
+      ]
+    ],
+    "after": [
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 44.0,
+          "interval": 0.72,
+          "delay": 0.0,
+          "hp": 460.0,
+          "dmg": 10.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 50.0,
+          "interval": 0.63,
+          "delay": 0.0,
+          "hp": 490.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 3.0,
+          "interval": 3.0,
+          "delay": 8.0,
+          "hp": 580.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 54.0,
+          "interval": 0.56,
+          "delay": 0.0,
+          "hp": 520.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 12.0,
+          "hp": 360.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 8.0,
+          "hp": 3600.0,
+          "dmg": 24.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 36.0,
+          "interval": 0.9,
+          "delay": 0.0,
+          "hp": 490.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 3.0,
+          "interval": 3.0,
+          "delay": 10.0,
+          "hp": 600.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 60.0,
+          "interval": 0.5,
+          "delay": 0.0,
+          "hp": 540.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 4.0,
+          "interval": 3.0,
+          "delay": 8.0,
+          "hp": 630.0,
+          "dmg": 12.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 34.0,
+          "interval": 0.94,
+          "delay": 0.0,
+          "hp": 490.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 2.0,
+          "interval": 5.0,
+          "delay": 14.0,
+          "hp": 380.0,
+          "dmg": 8.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 60.0,
+          "interval": 0.5,
+          "delay": 0.0,
+          "hp": 540.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 4.0,
+          "interval": 3.0,
+          "delay": 8.0,
+          "hp": 630.0,
+          "dmg": 12.0
+        },
+        {
+          "mob": "goblin_shaman",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 20.0,
+          "hp": 420.0,
+          "dmg": 0.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 54.0,
+          "interval": 0.56,
+          "delay": 0.0,
+          "hp": 560.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 8.0,
+          "hp": 380.0,
+          "dmg": 8.0
+        },
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 8.0,
+          "hp": 3800.0,
+          "dmg": 24.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_worker",
+          "count": 60.0,
+          "interval": 0.5,
+          "delay": 0.0,
+          "hp": 560.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 4.0,
+          "interval": 3.0,
+          "delay": 8.0,
+          "hp": 650.0,
+          "dmg": 12.0
+        },
+        {
+          "mob": "goblin_shaman",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 18.0,
+          "hp": 450.0,
+          "dmg": 0.0
+        }
+      ],
+      [
+        {
+          "mob": "goblin_brute",
+          "count": 1.0,
+          "interval": 1.0,
+          "delay": 0.0,
+          "hp": 4500.0,
+          "dmg": 24.0
+        },
+        {
+          "mob": "goblin_worker",
+          "count": 54.0,
+          "interval": 0.53,
+          "delay": 1.0,
+          "hp": 560.0,
+          "dmg": 10.0
+        },
+        {
+          "mob": "wolf_rider",
+          "count": 4.0,
+          "interval": 3.0,
+          "delay": 6.0,
+          "hp": 650.0,
+          "dmg": 12.0
+        },
+        {
+          "mob": "goblin_slinger",
+          "count": 4.0,
+          "interval": 5.0,
+          "delay": 10.0,
+          "hp": 400.0,
+          "dmg": 8.0
+        }
+      ]
+    ]
+  }
+]

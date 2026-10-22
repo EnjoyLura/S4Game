@@ -1,0 +1,25 @@
+{
+  "source_assets": 2080,
+  "source_asset_hashes_match_review": true,
+  "native_files": 756,
+  "all_native_sha256_preserved": true,
+  "compiled_final_source_markers": {
+    "enemySidebar": true,
+    "closeEnemySidebar": true,
+    "releaseBurnClip": true
+  },
+  "main_bundle_files": [
+    "assets/main/index.231ef.js"
+  ],
+  "creator_duration_ms": 20711,
+  "source_head": "a02434d54d6077b9a86c3b667c94c21690d540b3",
+  "source_head_and_staged_contents_preserved": true,
+  "game_browser_tests_audio_simulation_or_wasm_started": false,
+  "publication_commit": "8edb1fccca94e6caba944e18bfa253bde104d179",
+  "release": "d087820ba2ae0d57",
+  "github_pages_status": "built",
+  "runtime_files": 2103,
+  "runtime_bytes": 677108910,
+  "online_hash_samples": 11,
+  "online_manifest_and_release_verified": true
+}

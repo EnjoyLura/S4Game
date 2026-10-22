@@ -1,0 +1,256 @@
+--- v68/assets/scripts/config/Cards.ts
++++ v69/assets/scripts/config/Cards.ts
+@@ -525,6 +525,64 @@
+ 
+ export interface CardStacks { [cardId: string]: number; }
+ 
++/** Read-only presentation helpers: never apply a card to preview it (some cards heal the wall). */
++export type BuildTeam = ReadonlyArray<{ id: string; stats: Readonly<HeroStats> }>;
++
++export function ownedBuildCards(owner: string, stacks: Readonly<CardStacks>): CardDef[] {
++  // Only acquired cards in the live pool count; the seeded legacy unlock IDs are not selections.
++  return M0_POOL.filter(card => card.owner === owner && (stacks[card.id] || 0) > 0)
++    .sort((a, b) => Number(isMechanicCard(b)) - Number(isMechanicCard(a)));
++}
++
++export function cardComboHint(card: CardDef, stacks: Readonly<CardStacks>, team: BuildTeam): string {
++  const has = (id: string): boolean => (stacks[id] || 0) > 0;
++  const owner = team.find(hero => hero.id === card.owner)?.stats;
++  switch (card.id) {
++    case 'serial': return has('fan') ? '联动：齐射同步多排' : '';
++    case 'fan': return has('serial') ? '联动：连射同步多列' : '';
++    case 'archer_pierce': return has('serial') || has('fan') ? '联动：弹幕逐箭贯穿' : '';
++    case 'explode_r': case 'explode_w': return has('explode') ? '联动：强化现有爆炸' : '';
++    case 'frost': return '减速压低冲锋移速';
++    case 'multi_lock': return has('sniper_pierce') ? '联动：每发连狙贯穿' : '';
++    case 'sniper_pierce': return has('multi_lock') ? '联动：多发贯穿清群' : '';
++    case 'sniper_mark': case 'mora_team':
++      return team.some(hero => hero.id !== card.owner &&
++        ((hero.stats.ultMarkAmp || 0) > 0 || (hero.stats.moraTeamVuln || 0) > 0))
++        ? '同类易伤取最高值'
++        : team.some(hero => hero.id === 'volt' && (hero.stats.shockOnHit > 0 || voltUltCfg(hero.stats.ultLv).shockOn))
++          ? '联动：易伤叠加感电' : '全队集火共享增伤';
++    case 'pyro_burst': return has('pyro_burn') ? '联动：普攻铺火爆破' : '技能点燃可接爆破';
++    case 'pyro_burn': return has('pyro_burst') ? '联动：普攻铺火爆破' : '';
++    case 'pyro_ember': case 'pyro_linger': return has('pyro_burn') ? '联动：强化普攻灼烧' : '技能、大招灼烧生效';
++    case 'pyro_range': return has('pyro_burn') ? '联动：扩大溅射铺火' : '';
++    case 'volt_shock':
++      return team.some(hero => hero.id !== card.owner &&
++        ((hero.stats.moraTeamVuln || 0) > 0 || (hero.stats.ultMarkAmp || 0) > 0))
++        ? '联动：感电叠加易伤' : '全队集火共享增伤';
++    case 'volt_pressure': return has('volt_shock') ? '联动：感电触发增伤' : '';
++    case 'volt_linger': return has('volt_shock') ? '联动：延长全队受益' : '';
++    case 'volt_range': return has('volt_shards') ? '联动：远跳覆盖多敌' : '';
++    case 'volt_shards': return has('volt_range') ? '联动：远跳覆盖多敌' : '';
++    case 'volt_stun': case 'mora_freeze': case 'mora_glacier': return '控制可打断狼骑冲锋';
++    case 'mora_brittle': return '联动：减速触发增伤';
++    case 'mora_chill': case 'mora_linger': return has('mora_brittle') ? '联动：维持碎冰增伤' : '';
++    case 'mora_freeze_linger': return owner && owner.skillUnlocked ? '联动：延长领域冰封' : '';
++    case 'wall': return has('repair') ? '联动：按新上限回血' : '';
++    case 'repair': return has('wall') ? '联动：城墙上限回血' : '';
++    default: return '';
++  }
++}
++
++/** Keep the existing description box and every condition/tradeoff; at most four semantic lines. */
++export function cardChoiceDescription(card: CardDef, stacks: Readonly<CardStacks>, team: BuildTeam): string {
++  const lines = card.desc.split('\n').filter(line => !/^最多\s*\d+\s*层$/.test(line) && line !== '可叠加');
++  const hint = cardComboHint(card, stacks, team);
++  if (hint && lines.length < 3) lines.push(hint);
++  const current = stacks[card.id] || 0;
++  lines.push('叠层 ' + current + '→' + Math.min(card.maxStacks, current + 1) + ' / ' + card.maxStacks);
++  return lines.join('\n');
++}
++
+ /** 抽卡、刷新与领取共用前置/上限检查，防止绕过解锁或重复学习。 */
+ export function canTakeCard(card: CardDef, stacks: CardStacks): boolean {
+   return (stacks[card.id] || 0) < card.maxStacks
+--- v68/assets/scripts/ui/Panels.ts
++++ v69/assets/scripts/ui/Panels.ts
+@@ -2,7 +2,7 @@
+  * 弹窗面板（UX 线稿 ②~⑤⑧）：三选一 / 暂停 / 胜利结算 / 失败结算(含广告复活) / 伤害统计 / 属性Tips
+  * 弹窗内容块均以屏幕垂直中心为重心；三选一期间全场冻结由 BattleDirector 状态控制
+  */
+-import { Graphics, Label, Node, Sprite, sys, tween, UIOpacity, Vec3 } from 'cc';
++import { Graphics, Label, Mask, Node, ScrollView, Sprite, sys, tween, UIOpacity, UITransform, Vec3 } from 'cc';
+ import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+ import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDuration, pyroMeteorCount, pyroMeteorDamage } from '../config/Cards';
+ import { voltShockDuration, voltShockAmp, voltShockedMultiplier, voltStrikeCount } from '../config/Cards';
+@@ -30,6 +30,9 @@
+ import { playSettlement, settlementButton, settlementFrame, settlementRewards } from './SettlementPanelSkin';
+ import { battleRewardPanel } from './BattleRewardPanel';
+ import { showCollectedLoot } from './LevelLootPreview';
++import { BuildTeam, cardChoiceDescription, cardComboHint, ownedBuildCards } from '../config/Cards';
++import { bindBrowserBack } from './BrowserBack';
++import { dismissUI } from './UIMotion';
+ 
+ interface PickCallbacks {
+   recommendedId?: string;
+@@ -62,6 +65,7 @@
+   private reviveHint = '';
+   private activeKind = '';
+   private pickMotion: PickMotion | null = null;
++  private buildOverlay: Node | null = null;
+ 
+   closeAll(animated = false): void {
+     const wasPick = this.activeKind === 'pick';
+@@ -71,6 +75,7 @@
+     this.pickPending = false;
+     this.panelVersion++;
+     this.pickMotion = null;
++    this.buildOverlay = null;
+     stopMotion(this.modalRoot);
+     if (animated && !wasPick) retireChildren(this.modalRoot);
+     else {
+@@ -94,7 +99,7 @@
+   }
+ 
+   /* ---------- ② 三选一 ---------- */
+-  showPick(cards: CardDef[], _stacks: CardStacks, cb: PickCallbacks): void {
++  showPick(cards: CardDef[], stacks: CardStacks, cb: PickCallbacks): void {
+     const previous = this.activeKind === 'pick' && this.pickMotion?.node.isValid ? this.pickMotion : null;
+     if (previous) ++this.panelVersion;
+     else { this.begin('pick'); dimLayer(this.modalRoot, .68, false, false); }
+@@ -108,7 +113,13 @@
+     artSprite(titleBg, 0, 0, 520, 88, 'pick_comic_v1/title_plate', { belowIdx: 0 });
+     label(titleBg, 0, 0, '选择强化', { size: 34, color: '#4A3214', bold: true });
+     const motion = pickRoot.addComponent(PickMotion);
+-    const canInteract = (): boolean => version === this.panelVersion && motion.ready && !this.picking && !this.pickPending;
++    const canInteract = (): boolean => version === this.panelVersion && motion.ready && !this.picking && !this.pickPending && !this.buildOverlay?.isValid;
++    // Child of the existing title chrome: follows its reveal/refresh/selection lifetime.
++    const buildLink = label(titleBg, 174, 66, '本局强化 ›', {
++      size: 18, color: '#FFE3A3', w: 172, h: 44,
++    });
++    buildLink.name = 'pickBuildOverview';
++    bindButton(buildLink, () => { if (canInteract()) this.showBuildOverview(); }, { enabled: canInteract });
+     const xs = [22, 264, 506];
+     const frames: Node[] = [];
+     cards.forEach((card, i) => {
+@@ -118,7 +129,7 @@
+       frame.name = 'pickCard:' + card.id;
+       frames.push(frame);
+       const face = gpanel(frame, 0, 0, 222, 360, '#F5E8CD', undefined, 0, 12);
+-      this.buildCard(face, card);
++      this.buildCard(face, card, stacks);
+       if (card.id === cb.recommendedId) {
+         const badge = gpanel(face, 0, 196, 200, 28, '#F6D57A', '#765927', 1, 8);
+         label(badge, 0, 0, '新手推荐 · 可自由选', { size: 16, color: '#49371D', bold: true, w: 190, h: 24 });
+@@ -153,7 +164,7 @@
+       AdService.showRewarded('pick_refresh', () => {
+         if (version === this.panelVersion) cb.onRefreshRequest();
+       }, () => {
+-        if (version === this.panelVersion) { this.pickAdLeft++; this.showPick(cards, _stacks, cb); }
++        if (version === this.panelVersion) { this.pickAdLeft++; this.showPick(cards, stacks, cb); }
+       });
+     };
+     const adRefresh = this.pickBtn(footer, WX(130, 300), WY(862, 76), 300, 76, '▶ 广告刷新', 24,
+@@ -197,7 +208,7 @@
+ 
+   /** 卡面布局（羊皮纸底；去「新」标与稀有度小字——用户要求：卡面只留 名称/图标/归属/描述）：
+    *  顶部稀有度通栏色带 → 圆形图标座 → 右上归属角标（避开色带与图标座）→ 下半区大号加粗描述（shrink 防超框） */
+-  private buildCard(frame: Node, card: CardDef): void {
++  private buildCard(frame: Node, card: CardDef, stacks: CardStacks): void {
+     const rarity = RARITY_COLOR[card.rarity];
+ 
+     // ⓪ 共用原创纸纹底板，细线与角饰留在边缘，中心供原图标和描述使用。
+@@ -228,11 +239,87 @@
+     }
+ 
+     // Explicit semantic lines preserve phrases, conditions and units; shrink only guards unusually long new copy.
+-    const description = label(frame, 0, -94, card.desc, {
++    const description = label(frame, 0, -94, cardChoiceDescription(card, stacks, this.dir.heroes), {
+       size: 18, color: '#4A3214', bold: true, font: 'body', w: 196, h: 112, shrink: true, lineHeight: 25,
+     });
+     description.name = 'pickDescription:' + card.id;
+     description.getComponent(Label)!.enableWrapText = false;
++  }
++
++  /** A read-only child overlay keeps the current draw, refresh allowance and battle pause intact. */
++  private showBuildOverview(): void {
++    if (this.buildOverlay?.isValid || (this.activeKind !== 'pick' && this.activeKind !== 'pause')) return;
++    const overlay = dimLayer(this.modalRoot, .66);
++    overlay.name = 'battleBuildOverview'; this.buildOverlay = overlay;
++    const close = (): void => {
++      releaseBack();
++      if (overlay.isValid) dismissUI(overlay);
++      if (this.buildOverlay === overlay) this.buildOverlay = null;
++    };
++    const releaseBack = bindBrowserBack(overlay, close);
++    overlay.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => {
++      if (e) e.propagationStopped = true;
++      close();
++    });
++    const W = 660, H = Math.min(900, LO.half * 2 - LO.notchTop * 2 - 48);
++    const root = comicDialogContent(overlay, W, H, '本局强化', close);
++    detailSkin(root, W, H, '本局强化');
++    const stacks = this.dir.stacks, team: BuildTeam = this.dir.heroes;
++    const groups = [...this.dir.heroes.map(hero => ({
++      owner: hero.id, name: hero.name, cards: ownedBuildCards(hero.id, stacks),
++    })), { owner: 'global', name: '全队与防线', cards: ownedBuildCards('global', stacks) }];
++    const total = groups.reduce((sum, group) => sum + group.cards.reduce((n, card) => n + stacks[card.id], 0), 0);
++    label(root, 0, H / 2 - 86, '已选择 ' + total + ' 次强化 · 按英雄查看', {
++      size: 19, color: COMIC.sub, w: 580, h: 30,
++    });
++    const rowHeight = (card: CardDef): number => 42 + card.desc.split('\n').length * 24
++      + (cardComboHint(card, stacks, team) ? 28 : 0);
++    const contentHeight = groups.reduce((sum, group) => sum + 72 + (group.cards.length
++      ? group.cards.reduce((height, card) => height + rowHeight(card), 0) : 40) + 18, 0);
++    const top = H / 2 - 112, bottom = -H / 2 + 66, height = top - bottom;
++    const view = N('buildListView', root, 0, (top + bottom) / 2, 596, height);
++    view.addComponent(Mask);
++    const scroll = view.addComponent(ScrollView);
++    const content = N('buildListContent', view, 0, height / 2, 596, Math.max(height, contentHeight));
++    content.getComponent(UITransform)!.setAnchorPoint(.5, 1);
++    scroll.content = content; scroll.horizontal = false; scroll.vertical = contentHeight > height;
++    scroll.inertia = true; scroll.elastic = false; scroll.brake = .7; scroll.cancelInnerEvents = true;
++    let cursor = 0;
++    groups.forEach(group => {
++      const selected = group.cards.reduce((sum, card) => sum + stacks[card.id], 0);
++      if (group.owner !== 'global')
++        artSprite(content, -268, -cursor - 30, 48, 48, 'ui_avatar_' + group.owner, { sliced: false });
++      label(content, group.owner === 'global' ? -12 : 16, -cursor - 30,
++        group.name + ' · ' + selected + '次', {
++          size: 22, color: COMIC.text, bold: true, align: 'left', w: group.owner === 'global' ? 556 : 500, h: 36,
++        });
++      cursor += 72;
++      if (!group.cards.length) {
++        label(content, 0, -cursor - 14, group.owner === 'global' ? '尚未选择全局强化' : '尚未选择专属强化 · 基础技能与大招可用', {
++          size: 18, color: COMIC.sub, align: 'left', w: 568, h: 28,
++        });
++        cursor += 40;
++      }
++      group.cards.forEach(card => {
++        pickCardIcon(content, -260, -cursor - 27, 48, card);
++        label(content, 28, -cursor - 14, card.name + ' · ' + stacks[card.id] + '/' + card.maxStacks + '层', {
++          size: 20, color: COMIC.text, bold: true, align: 'left', w: 480, h: 28,
++        });
++        const descHeight = card.desc.split('\n').length * 24;
++        label(content, 28, -cursor - 32 - descHeight / 2, card.desc, {
++          size: 18, color: COMIC.sub, align: 'left', w: 480, h: descHeight, lineHeight: 24,
++        });
++        const hint = cardComboHint(card, stacks, team);
++        if (hint) label(content, 28, -cursor - 46 - descHeight, hint, {
++          size: 18, color: COMIC.greenShade, align: 'left', w: 480, h: 28,
++        });
++        cursor += rowHeight(card);
++      });
++      cursor += 18;
++    });
++    label(root, 0, -H / 2 + 32, '同类易伤取最高；感电单独生效。', {
++      size: 18, color: COMIC.sub, w: 580, h: 30,
++    });
+   }
+ 
+   /** Pause tabs own a fixed footer band, separate from settings and the credits link. */
+@@ -280,6 +367,11 @@
+     const root = pauseFrame(this.modalRoot);
+     artSprite(root, 0, 298, 360, 68, 'pause_comic_v1/title_ribbon');
+     label(root, 0, 298, '暂 停', { size: 46, color: '#FFFFFF', bold: true, w: 320, h: 62 });
++    const buildLink = label(root, 250, 298, '本局强化 ›', {
++      size: 18, color: '#FFE3A3', w: 140, h: 44,
++    });
++    buildLink.name = 'pauseBuildOverview';
++    bindButton(buildLink, () => this.showBuildOverview());
+     this.tabsBar(root, ['奖励总览', '伤害统计', '设置'], tab, t => this.showPause({ ...o, tab: t }));
+     if (tab === 0) {
+       battleRewardPanel(root, {

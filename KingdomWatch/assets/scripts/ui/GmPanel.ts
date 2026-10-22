@@ -52,6 +52,7 @@ export class GmPanel {
     if (this.layer.children.length > 0) return;
     // 三选一/结算期间不开 GM（直接胜利等操作在这些状态下会被拒，避免误触无反馈）
     if (this.dir.state !== 'running' && this.dir.state !== 'prepare' && this.dir.state !== 'paused') return;
+    if (this.dir.state === 'running' && !this.dir.canUseBattleHud) return;
     // 不冻结战斗（用户要求：面板开着时游戏继续跑）；升级三选一在面板打开期间挂起，关闭时补弹
     this.btnNode.active = false; // 浮钮藏起，避免透过遮罩压在页签上
     this.rebuild();
@@ -72,7 +73,7 @@ export class GmPanel {
   /** 每帧同步浮钮可见性：面板开着 / 三选一 / 结算期间一律隐藏（BattleDirector.update 驱动） */
   syncVisibility(): void {
     const want = this.layer.children.length === 0 &&
-      (this.dir.state === 'running' || this.dir.state === 'prepare' || this.dir.state === 'paused') &&
+      ((this.dir.state === 'running' && this.dir.canUseBattleHud) || this.dir.state === 'prepare' || this.dir.state === 'paused') &&
       (loadSave().debug || this.forceShow);
     if (this.btnNode.active !== want) this.btnNode.active = want;
   }

@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-22",
+  "version": 70,
+  "feature": "combat-feedback-fix",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=combat-feedback-fix-v70-1792599730",
+  "entry": "index.e81b7.js?v=1792599730",
+  "main": "assets/main/index.c2cf8.js",
+  "hashes": {
+    "html": "65b02ce74e5f44393c8673af416b948035765bfffcb677a38e79a830226a4430",
+    "entry": "6ae8c9a8d7580a9af0a00ee86cb611cb02395a243e66b1ff529fde7434387b4b",
+    "main": "fb17978bcbda1d3834d6b6466186546586629d74ce954797ba8207661bbbc31c"
+  },
+  "engineRevision": "2cb74a1e8caa095a",
+  "production": true,
+  "creatorExitCode": 36,
+  "buildDurationMs": 21687,
+  "typeDiagnostics": {
+    "before": 10,
+    "after": 10,
+    "new": 0
+  },
+  "gameFilesChanged": 6,
+  "gameFilesAdded": 0,
+  "gameFilesRemoved": 0,
+  "preservedMedia": 756,
+  "preservedBuiltNative": 756,
+  "priorPreviewFiles": 793,
+  "baseUltimateCosts": {
+    "archer": 45,
+    "sniper": 55,
+    "mora": 60,
+    "volt": 65,
+    "pyro": 70
+  },
+  "killChargeUnchanged": true,
+  "validation": "Static source/type/build/hash/HTTP checks only. No game/browser/gameplay tests/simulation/audio run.",
+  "manualAcceptance": "pending user playtest",
+  "snapshot": "https://4b580815.kingdom-watch.pages.dev",
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-combat-feedback-fix-v70-20261022-002335",
+  "branch": "main",
+  "cloudflareObjects": 2895,
+  "uploadedFiles": 8,
+  "reusedFiles": 2887,
+  "preservedPreviewFiles": 793,
+  "httpChecks": [
+    {
+      "name": "html",
+      "url": "https://kingdom-watch.pages.dev/?v=combat-feedback-fix-v70-1792599730",
+      "status": 200,
+      "bytes": 15837,
+      "sha256": "65b02ce74e5f44393c8673af416b948035765bfffcb677a38e79a830226a4430",
+      "matchesLocal": true
+    },
+    {
+      "name": "entry",
+      "url": "https://kingdom-watch.pages.dev/index.e81b7.js?v=1792599730",
+      "status": 200,
+      "bytes": 824,
+      "sha256": "6ae8c9a8d7580a9af0a00ee86cb611cb02395a243e66b1ff529fde7434387b4b",
+      "matchesLocal": true
+    },
+    {
+      "name": "main",
+      "url": "https://kingdom-watch.pages.dev/assets/main/index.c2cf8.js",
+      "status": 200,
+      "bytes": 825130,
+      "sha256": "fb17978bcbda1d3834d6b6466186546586629d74ce954797ba8207661bbbc31c",
+      "matchesLocal": true
+    },
+    {
+      "name": "snapshotHtml",
+      "url": "https://4b580815.kingdom-watch.pages.dev/?v=combat-feedback-fix-v70-1792599730",
+      "status": 200,
+      "bytes": 15837,
+      "sha256": "65b02ce74e5f44393c8673af416b948035765bfffcb677a38e79a830226a4430",
+      "matchesLocal": true
+    }
+  ]
+}

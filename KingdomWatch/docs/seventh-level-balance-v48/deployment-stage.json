@@ -1,0 +1,395 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-seventh-level-balance-v48-20261018-221814",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "entryVersion": "1792333077",
+  "game": "https://kingdom-watch.pages.dev/?v=seventh-level-balance-v48-1792333077",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-sixth-level-balance-v47-20261018-215458",
+  "originalFilesChecked": 1846,
+  "changedExistingFiles": [
+    "assets/scripts/config/LevelDifficulty.ts",
+    "assets/scripts/ui/TrainingLobby.ts",
+    "assets/scripts/ui/pages/LevelsPage.ts"
+  ],
+  "addedFiles": [
+    "assets/scripts/config/SeventhLevel.ts",
+    "assets/scripts/config/SeventhLevel.ts.meta"
+  ],
+  "priorPreviewFilesPreserved": 793,
+  "typeDiagnosticsUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "allOriginalMediaUnchanged": true,
+  "monsterEntryUnchanged": true,
+  "cultivationCostsUnchanged": true,
+  "normalSeventhLevel": {
+    "waves": 10,
+    "workers": 314,
+    "slingers": 26,
+    "riders": 6,
+    "elites": 4,
+    "shamans": 4,
+    "total": 354,
+    "staticQueueEndSeconds": 299.92,
+    "combatTargetMinutes": [
+      5,
+      6
+    ],
+    "measured": false,
+    "baseline": "Archer/sniper/pyro Lv.6, weapons Lv.3; earned green bow/book/crossbow and moon accessory; soft recommendation without entry gate",
+    "design": "Slightly above sixth level; more ranged enemies and one healer per selected second-half wave; sparse sixth wave; 4400-HP final elite",
+    "baseGold": 160,
+    "materials": {
+      "mat_stone": 6
+    },
+    "freeHero": false,
+    "guaranteedEquipment": false,
+    "firstWinGold": false,
+    "teaching": false,
+    "freeCharge": false
+  },
+  "arithmetic": {
+    "waves": [
+      {
+        "wave": 1,
+        "groups": [
+          {
+            "kind": "workers",
+            "count": 30,
+            "hp": 420,
+            "damage": 10,
+            "interval": 1.05,
+            "delay": 0,
+            "lastSpawnSeconds": 30.45
+          }
+        ],
+        "lastSpawnSeconds": 30.45
+      },
+      {
+        "wave": 2,
+        "groups": [
+          {
+            "kind": "workers",
+            "count": 32,
+            "hp": 440,
+            "damage": 10,
+            "interval": 0.98,
+            "delay": 0,
+            "lastSpawnSeconds": 30.38
+          },
+          {
+            "kind": "slingers",
+            "count": 2,
+            "hp": 340,
+            "damage": 8,
+            "interval": 5,
+            "delay": 12.0,
+            "lastSpawnSeconds": 17.0
+          }
+        ],
+        "lastSpawnSeconds": 30.38
+      },
+      {
+        "wave": 3,
+        "groups": [
+          {
+            "kind": "workers",
+            "count": 34,
+            "hp": 460,
+            "damage": 10,
+            "interval": 0.9,
+            "delay": 0,
+            "lastSpawnSeconds": 29.7
+          },
+          {
+            "kind": "slingers",
+            "count": 2,
+            "hp": 340,
+            "damage": 8,
+            "interval": 5,
+            "delay": 12.0,
+            "lastSpawnSeconds": 17.0
+          },
+          {
+            "kind": "elite",
+            "count": 1,
+            "hp": 3400,
+            "damage": 24,
+            "interval": 1,
+            "delay": 8.0,
+            "lastSpawnSeconds": 8.0
+          }
+        ],
+        "lastSpawnSeconds": 29.7
+      },
+      {
+        "wave": 4,
+        "groups": [
+          {
+            "kind": "workers",
+            "count": 24,
+            "hp": 440,
+            "damage": 10,
+            "interval": 1.32,
+            "delay": 0,
+            "lastSpawnSeconds": 30.36
+          },
+          {
+            "kind": "slingers",
+            "count": 4,
+            "hp": 350,
+            "damage": 8,
+            "interval": 5,
+            "delay": 10.0,
+            "lastSpawnSeconds": 25.0
+          }
+        ],
+        "lastSpawnSeconds": 30.36
+      },
+      {
+        "wave": 5,
+        "groups": [
+          {
+            "kind": "workers",
+            "count": 36,
+            "hp": 480,
+            "damage": 10,
+            "interval": 0.86,
+            "delay": 0,
+            "lastSpawnSeconds": 30.1
+          },
+          {
+            "kind": "slingers",
+            "count": 4,
+            "hp": 360,
+            "damage": 8,
+            "interval": 5,
+            "delay": 8.0,
+            "lastSpawnSeconds": 23.0
+          },
+          {
+            "kind": "riders",
+            "count": 3,
+            "hp": 560,
+            "damage": 12,
+            "interval": 3,
+            "delay": 12.0,
+            "lastSpawnSeconds": 18.0
+          }
+        ],
+        "lastSpawnSeconds": 30.1
+      },
+      {
+        "wave": 6,
+        "groups": [
+          {
+            "kind": "workers",
+            "count": 22,
+            "hp": 460,
+            "damage": 10,
+            "interval": 1.45,
+            "delay": 0,
+            "lastSpawnSeconds": 30.45
+          },
+          {
+            "kind": "shaman",
+            "count": 1,
+            "hp": 400,
+            "damage": 0,
+            "interval": 1,
+            "delay": 16.0,
+            "lastSpawnSeconds": 16.0
+          }
+        ],
+        "lastSpawnSeconds": 30.45
+      },
+      {
+        "wave": 7,
+        "groups": [
+          {
+            "kind": "workers",
+            "count": 38,
+            "hp": 500,
+            "damage": 10,
+            "interval": 0.8,
+            "delay": 0,
+            "lastSpawnSeconds": 29.6
+          },
+          {
+            "kind": "slingers",
+            "count": 4,
+            "hp": 370,
+            "damage": 8,
+            "interval": 5,
+            "delay": 8.0,
+            "lastSpawnSeconds": 23.0
+          },
+          {
+            "kind": "elite",
+            "count": 1,
+            "hp": 3600,
+            "damage": 24,
+            "interval": 1,
+            "delay": 8.0,
+            "lastSpawnSeconds": 8.0
+          },
+          {
+            "kind": "shaman",
+            "count": 1,
+            "hp": 420,
+            "damage": 0,
+            "interval": 1,
+            "delay": 20.0,
+            "lastSpawnSeconds": 20.0
+          }
+        ],
+        "lastSpawnSeconds": 29.6
+      },
+      {
+        "wave": 8,
+        "groups": [
+          {
+            "kind": "workers",
+            "count": 30,
+            "hp": 500,
+            "damage": 10,
+            "interval": 1.02,
+            "delay": 0,
+            "lastSpawnSeconds": 29.58
+          },
+          {
+            "kind": "slingers",
+            "count": 2,
+            "hp": 380,
+            "damage": 8,
+            "interval": 5,
+            "delay": 12.0,
+            "lastSpawnSeconds": 17.0
+          },
+          {
+            "kind": "riders",
+            "count": 3,
+            "hp": 580,
+            "damage": 12,
+            "interval": 3,
+            "delay": 10.0,
+            "lastSpawnSeconds": 16.0
+          }
+        ],
+        "lastSpawnSeconds": 29.58
+      },
+      {
+        "wave": 9,
+        "groups": [
+          {
+            "kind": "workers",
+            "count": 36,
+            "hp": 520,
+            "damage": 10,
+            "interval": 0.84,
+            "delay": 0,
+            "lastSpawnSeconds": 29.4
+          },
+          {
+            "kind": "slingers",
+            "count": 4,
+            "hp": 380,
+            "damage": 8,
+            "interval": 5,
+            "delay": 8.0,
+            "lastSpawnSeconds": 23.0
+          },
+          {
+            "kind": "elite",
+            "count": 1,
+            "hp": 3800,
+            "damage": 24,
+            "interval": 1,
+            "delay": 8.0,
+            "lastSpawnSeconds": 8.0
+          },
+          {
+            "kind": "shaman",
+            "count": 1,
+            "hp": 420,
+            "damage": 0,
+            "interval": 1,
+            "delay": 20.0,
+            "lastSpawnSeconds": 20.0
+          }
+        ],
+        "lastSpawnSeconds": 29.4
+      },
+      {
+        "wave": 10,
+        "groups": [
+          {
+            "kind": "elite",
+            "count": 1,
+            "hp": 4400,
+            "damage": 24,
+            "interval": 1,
+            "delay": 0.0,
+            "lastSpawnSeconds": 0.0
+          },
+          {
+            "kind": "workers",
+            "count": 32,
+            "hp": 520,
+            "damage": 10,
+            "interval": 0.9,
+            "delay": 2.0,
+            "lastSpawnSeconds": 29.9
+          },
+          {
+            "kind": "slingers",
+            "count": 4,
+            "hp": 400,
+            "damage": 8,
+            "interval": 5,
+            "delay": 8.0,
+            "lastSpawnSeconds": 23.0
+          },
+          {
+            "kind": "shaman",
+            "count": 1,
+            "hp": 440,
+            "damage": 0,
+            "interval": 1,
+            "delay": 18.0,
+            "lastSpawnSeconds": 18.0
+          }
+        ],
+        "lastSpawnSeconds": 29.9
+      }
+    ],
+    "counts": {
+      "workers": 314,
+      "slingers": 26,
+      "riders": 6,
+      "elite": 4,
+      "shaman": 4
+    },
+    "totalEnemies": 354,
+    "staticQueueEndSeconds": 299.92,
+    "authoredKillGold": 840,
+    "oneStarGold": 1016,
+    "threeStarGold": 1048,
+    "averageQueueRate": 1.18031475060016,
+    "sixthLevelQueueRate": 1.1481171548117155,
+    "note": "Static authored queue arithmetic only; no gameplay, combat simulation, measured duration or acceptance.",
+    "totalAuthoredHp": 179500,
+    "sixthLevelAuthoredHp": 164440,
+    "hpChangePercent": 9.158355631233285
+  },
+  "upgradePreview": "Normal attack and ultimate cultivation multipliers display 100% to 108% instead of +0% to +8%; right-side increment retained; presentation only",
+  "scope": "Normal 1-7 wave/reward configuration, preparation text and training multiplier display. Earlier levels, other difficulties, economy, stars, saves, hero unlocks and tutorials retained.",
+  "manualAcceptance": "No tests/game/browser/simulation/audio playback. Queue arithmetic is not measured combat duration or difficulty acceptance.",
+  "deployment": "https://534983f9.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.3c137.js?v=1792333077",
+    "finalUrl": "https://kingdom-watch.pages.dev/?v=seventh-level-balance-v48-1792333077"
+  }
+}

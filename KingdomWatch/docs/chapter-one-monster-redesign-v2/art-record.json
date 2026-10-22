@@ -1,0 +1,42 @@
+{
+  "tool": "image_gen.imagegen",
+  "intent": "new non-goblin frontier roster concepts",
+  "user_direction": "First chapter does not have to use goblins; design freely.",
+  "game_integrated": false,
+  "user_visual_approval": "pending",
+  "references": [
+    {
+      "path": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\mobs_forest_v66.png",
+      "role": "style and design quality reference",
+      "sha256": "f510cad11344cc3012d8723c420e3482ee4296e4aa3984689fb13a9761fa1897"
+    },
+    {
+      "path": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\mobs_lair_v66.png",
+      "role": "style and design quality reference",
+      "sha256": "d853704c771881349bc781f5d9d626041d13926550c8f41dbadf9297c20b68e5"
+    },
+    {
+      "path": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\mobs_marsh_v66.png",
+      "role": "style and design quality reference",
+      "sha256": "1a794ea99a9807012399a39eab62dd2922d0fe0d604d13a22b6b57a813db2329"
+    }
+  ],
+  "prompt": "prompt.txt",
+  "output": {
+    "file": "frontier-wildlings-roster.png",
+    "generated_source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-55914fb4-54ff-4cf3-855b-0181022d0dee.png",
+    "sha256": "b0393ac159e1c5e73b470624bf416242e2caae30ca6a32c01f7a9736b1d8823c",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGB",
+    "original_bytes_preserved": true
+  },
+  "visual_inspection": {
+    "figures": 6,
+    "layout": "3x2",
+    "notes": "Distinct badger, cheek-pouch thrower, seedpod-backed healer, hyena, shielded boar and bear boss silhouettes, all complete. Healer and hyena are angled rather than perfectly frontal; cheek-pouch thrower is softer/cuter than other units. Outer margins remain tight in this concept sheet. These points require user direction and individual master-frame refinement if selected for animation.",
+    "approval": "pending"
+  }
+}

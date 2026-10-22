@@ -63,6 +63,10 @@ def main():
         for url, kind in preloads) + '\n  <!-- /KW startup preloads -->\n'
     html = html.replace('</head>', links + '</head>')
     html_path.write_text(html, encoding='utf-8', newline='')
+    # Same game, fixed diagnostic path: activation survives query-stripping mobile browsers.
+    if 'kwRenderPanel' not in html or 'static-html-before-engine' not in html:
+        raise RuntimeError('Missing pre-engine diagnostic panel in web template')
+    (WEB / 'diagnostics.html').write_text(html, encoding='utf-8', newline='')
     # The in-game credits entry is a stable URL. Cocos MD5-renames template HTML,
     # so also publish the original path with its complete attribution notice.
     credits_source = GAME / 'build-templates/web-mobile/audio-credits.html'
@@ -80,6 +84,8 @@ def main():
 /
   Cache-Control: no-cache
 /index.html
+  Cache-Control: no-cache
+/diagnostics.html
   Cache-Control: no-cache
 /audio-credits.html
   Cache-Control: no-cache

@@ -1,3 +1,4 @@
+import { enemyArtRef } from '../config/ChapterContent';
 /**
  * 战斗 HUD（UX 线稿 ①）：顶栏(暂停/关卡名/波次) + 经验条(无背板Lv居中) + 预警横幅
  * + 左列(倍速/统计/FPS) + 右侧大招纵列(每英雄一钮) + 防线耐久/蓝色外层护盾 + 头顶普攻技能图标(CD环)
@@ -6,8 +7,10 @@
 import { Graphics, Label, Layers, Node, Tween, tween, UIOpacity, UITransform, Vec3 } from 'cc';
 import { expNeed, LO, PAL } from '../config/GameConfig';
 import { battleSceneKey } from '../config/Campaign';
-import { dlgConfirm, dlgPanel, dlgTitle, gcircle, gpanel, label, noticeBtn, setText, WY, WYB, WX, Bar, CA, N } from './UIKit';
-import { artSprite } from './Ux';
+import { gcircle, gpanel, label, noticeBtn, setText, WY, WYB, WX, Bar, CA, N } from './UIKit';
+import { artAtlasSprite, artSprite } from './Ux';
+import { comicButton, comicPlate } from './ComicUI';
+import { detailSkin } from './DetailDialog';
 import { BattleDirector } from '../battle/BattleDirector';
 import { HeroBase } from '../battle/Hero';
 import { CODEX } from '../core/GameData';
@@ -67,6 +70,13 @@ export class HUD {
   private shieldBar!: Bar;
   private shieldVal!: Node;
   private ults: UltUI[] = [];
+  ultimateTarget(index: number): Node | null { return this.ults[index]?.btn || null; }
+  activateUltimate(index: number): void {
+    const result = this.dir.tryCastUlt(index);
+    if (result === 'locked' || result === 'blocked') return;
+    if (result === 'charging') this.dir.showTips('ult', index);
+    else this.ults[index]?.energy?.release();
+  }
   private skills: SkillUI[] = [];
   private hudNode!: Node;
   private banner!: Node;
@@ -105,7 +115,7 @@ export class HUD {
        否则异步加载完成后 clip 落在 Field 末尾，整张不透明场景图盖住全部战场实体 */
     const bgFlat = gpanel(bgParent || top, 0, 0, 750, LO.half * 2 + 240, '#2E4034', undefined, 0, 0);
     bgFlat.setSiblingIndex(0);
-    const sceneId = battleSceneKey(this.dir.levelDef.id);
+    const sceneId = battleSceneKey(this.dir.battleSceneId);
     artSprite(bgParent || top, 0, 0, 750, LO.half * 2 + 240, sceneId,
       { sliced: false, cover: true, belowIdx: 1, hideOnLoad: [bgFlat] });
 
@@ -124,9 +134,9 @@ export class HUD {
     gpanel(top, WX(106, 110), WYN(32, 44), 110, 44, CA('#151C19', 0.58), undefined, 0, 22);
     this.timeTxt = label(top, WX(106, 110), WYN(32, 44), '00:00', { size: 24, color: '#FFF6DC', font: 'number', align: 'center', w: 110, h: 44 });
     gpanel(top, WX(230, 290), WYN(31, 48), 290, 48, CA('#151C19', 0.5), undefined, 0, 24);
-    label(top, WX(230, 290), WYN(31, 48), this.dir.levelDef.id + ' ' + this.dir.levelDef.name, { size: 23, color: '#FFF3C7', font: 'title', w: 290, h: 48, shrink: true });
+    label(top, WX(230, 290), WYN(31, 48), this.dir.battleTitle, { size: 23, color: '#FFF3C7', font: 'title', w: 290, h: 48, shrink: true });
     gpanel(top, WX(560, 150), WYN(24, 60), 150, 60, CA('#151C19', 0.58), undefined, 0, 30);
-    this.waveTxt = label(top, WX(560, 150), WYN(24, 60), '波次 0/10', { size: 22, color: '#FFF3DC', bold: true, w: 140, h: 38, shrink: true });
+    this.waveTxt = label(top, WX(560, 150), WYN(24, 60), this.dir.isEndless ? '第1层' : '波次 0/10', { size: 22, color: '#FFF3DC', bold: true, w: 140, h: 38, shrink: true });
 
     /* 经验条 + 无背板的居中等级文字，细描边保证战场上可读。 */
     this.xpBar = battleProgressBar(top, WX(30, 690), WYN(100, 12), 690, 12, 'xp');
@@ -156,7 +166,7 @@ export class HUD {
     sg.roundRect(-3, -11, 6, 16, 1);
     sg.roundRect(8, -11, 6, 22, 1);
     sg.fill();
-    bindButton(statsBtn, () => this.dir.showStats());
+    bindButton(statsBtn, () => this.dir.showStats(), { enabled: () => this.dir.canUseBattleHud });
 
     /* 新怪通知钮（GM 钮下方，参考 KR）：首遇新怪种时亮出，点击弹怪物介绍弹窗（整体美术图标：生图 ui_btn_notice） */
     this.newMobBtn = noticeBtn(top, WX(24, 60), WYN(480, 60), 64, () => this.dir.showNewMobIntro());
@@ -241,12 +251,9 @@ export class HUD {
     // 充能百分比：单行居中（用户调整：去掉"大招"前缀与"就绪"文案，就绪时整行隐藏）
     const chargeTxt = label(top, ux, uy, '0%', { size: 27, color: '#FFF7E8', font: 'number', w: 90, h: 38, outline: '#1D2632', outlineW: 2.2 });
     bindButton(btn, () => {
-      const result = this.dir.tryCastUlt(i);
-      if (result === 'locked') return;
-      if (result === 'charging') this.dir.showTips('ult', i);
-      else ui.energy?.release();
+      this.activateUltimate(i);
     }, { visual: pressPivot, scale: .94, shift: 1,
-      enabled: () => hero.ultUnlocked });
+      enabled: () => hero.ultUnlocked && this.dir.canUseBattleHud });
     const ui: UltUI = { root, baseY: uy, ux, uy, glow, btn, bright, gray, mask, color, fx, water, waterG, waterR: 46, orbit, chargeTxt, ready: null, shown: 0, flash: 0, lastChargeKey: -1, lastTarget: -1 };
     // All heroes share the charge, completion, ready and release animation.
     {
@@ -273,7 +280,7 @@ export class HUD {
     const atkGlyph = label(atkIcon, 0, 0, '攻', { size: 18, color: PAL.gold, bold: true });
     // 普攻/技能图标（58 > 底板圆 56：美术圆完全盖住底板，杜绝露出黄/蓝边——用户反馈）
     artSprite(atkIcon, 0, 0, 58, 58, 'ui_icon_atk_' + hero.id, { sliced: false, hideOnLoad: [atkGlyph] });
-    bindButton(atkIcon, () => this.dir.showTips('atk', i), { circle: true });
+    bindButton(atkIcon, () => this.dir.showTips('atk', i), { circle: true, enabled: () => this.dir.canUseBattleHud });
     const root = new Node('heroSkill:' + hero.id);
     root.setParent(top); root.active = hero.skillUnlocked;
     top = root;
@@ -282,7 +289,7 @@ export class HUD {
     const glyph = label(icon, 0, 0, '技', { size: 18, color: PAL.blue, bold: true });
     // 技能图标（同上）
     artSprite(icon, 0, 0, 58, 58, 'ui_icon_skill_' + hero.id, { sliced: false, hideOnLoad: [glyph] });
-    bindButton(icon, () => this.dir.showTips('skill', i), { circle: true });
+    bindButton(icon, () => this.dir.showTips('skill', i), { circle: true, enabled: () => this.dir.canUseBattleHud });
     const gray = gcircle(top, cx, cy, 28, CA('#3A4250', 0.55));   // 冷却遮罩（用户调整：半透明，隐约透出技能图标）
     gray.active = false;
     const pie = new Node('skillPie' + i);
@@ -296,7 +303,7 @@ export class HUD {
   }
 
   setWave(cur: number, total: number): void {
-    const t = '波次 ' + cur + '/' + total;
+    const t = this.dir.isEndless ? '第' + this.dir.endlessFloor + '层' : '波次 ' + cur + '/' + total;
     if (t !== this.lastWave) { setText(this.waveTxt, t); this.lastWave = t; }
   }
 
@@ -325,7 +332,7 @@ export class HUD {
   /** 新怪通知钮显隐（有未查看的新怪种时亮出） */
   showNewMob(v: boolean): void { this.newMobBtn.active = v; }
 
-  /** 新怪物介绍弹窗（参考 KR「新敌人」：深红题签 + 羊皮纸卡：图标/名称/描述/红色特性条目 + 好的钮） */
+  /** Monster discovery uses the same modal paper and title as shop/hero details. */
   showMobIntro(id: string, onOk: () => void): void {
     const c = CODEX.find(x => x.id === id);
     if (!c) { onOk(); return; }
@@ -335,15 +342,25 @@ export class HUD {
       const ev = e as { propagationStopped?: boolean };
       if (ev && 'propagationStopped' in ev) ev.propagationStopped = true;  // 挡住战斗 UI 误触
     });
-    const card = dlgPanel(dim, 0, -40, 640, H);   // 生图羊皮弹窗背板（缺图回退程序奶白板）
-    const title = dlgTitle(dim, 0, -40 + H / 2 - 10, 360, '新 敌 人', 30);   // 生图深红折角缎带（自带白字）
-    const iconPlate = gpanel(card, -195, 40, 170, 170, CA('#2A3240', 1), undefined, 0, 12);
-    label(iconPlate, 0, 0, c.icon, { size: 84 });
-    label(card, 50, 150, c.name, { size: 30, color: '#4A3214', bold: true, align: 'left', w: 300, h: 40 });
-    label(card, 65, 92, c.desc, { size: 18, color: '#4A3214', w: 330, h: 64, shrink: true });
+    const card = comicPlate(dim, 0, -40, 640, H, 'paper', { name: 'newEnemyCommonPanel' });
+    detailSkin(card, 640, H, '新敌人');
+    // The common title sits inside the paper; leave its lower edge clear.
+    const content = N('newEnemyContent', card, 0, -16);
+    const iconPlate = gpanel(content, -195, 40, 170, 170, '#E3EAD8', undefined, 0, 12);
+    // Same keyed monster artwork and proportional fit as the research codex.
+    const image = enemyArtRef(c.id, true);
+    const portrait = artAtlasSprite(iconPlate, 0, 0, 150, 150,
+      image.atlas, image.frame);
+    portrait.name = 'newEnemyPortrait:' + c.id;
+    label(content, 50, 150, c.name, { size: 30, color: '#4A3214', bold: true, align: 'left', w: 300, h: 40 });
+    label(content, 65, 92, c.desc, { size: 18, color: '#4A3214', w: 330, h: 64, shrink: true });
     c.traits.forEach((t, i) =>
-      label(card, 65, 40 - i * 30, '- ' + t, { size: 18, color: '#B03A2E', bold: true, align: 'left', w: 330, h: 28 }));
-    dlgConfirm(dim, 170, -40 - H / 2 + 64, 200, 64, '好的！', () => { dim.destroy(); onOk(); }, 26);   // 卡内底缘上方（用户调整：原 +32 太靠下压边）
+      label(content, 65, 40 - i * 30, '- ' + t, { size: 18, color: '#B03A2E', bold: true, align: 'left', w: 330, h: 28 }));
+    let closed = false;
+    comicButton(dim, 170, -40 - H / 2 + 64, 200, 64, '好的！', () => {
+      if (closed) return;
+      closed = true; dim.active = false; dim.destroy(); onOk();
+    }, { tone: 'gold', size: 26, name: 'newEnemyConfirm', sound: 'confirm' });
   }
 
   /** 每帧轮询；dt 用于经验/充能的上涨动画（只在值变化或动画未收敛时重绘） */

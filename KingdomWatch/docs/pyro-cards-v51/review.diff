@@ -1,0 +1,425 @@
+--- before/assets/scripts/battle/Hero.ts
++++ after/assets/scripts/battle/Hero.ts
+@@ -9,6 +9,7 @@
+  */
+ import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
+ import { HeroStats, abilityDamage, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
++import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDuration, pyroMeteorCount, pyroMeteorDamage } from '../config/Cards';
+ import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, MORA_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL, LO, LINE_Y } from '../config/GameConfig';
+ import { Monster, MonsterManager } from './Monster';
+ import { ProjectileManager, ProjSpec } from './Projectile';
+@@ -889,7 +890,6 @@
+ const METEOR_BLAST_R = 140;
+ const METEOR_SPEED = 800;
+ const CRATER_R = 88 * 1.3 * 1.2;
+-const CRATER_LIFE = 4;
+ const CRATER_VULN = 0.25;
+ export class PyroHero extends HeroBase {
+   readonly id = 'pyro';
+@@ -904,12 +904,10 @@
+   private warnNode: Node | null = null;
+   private warnG: Graphics | null = null;
+   private warnTint = hexc('#201A17');
+-  /** 陨石坑：命中后的地面灼烧区（持续灼烧 + 易伤），寿命 CRATER_LIFE 秒 */
++  /** 陨石坑：命中后持续灼烧与易伤，基础4秒，余火绵延每层再延长1秒。 */
+   private craters: { x: number; y: number; t: number }[] = [];
+   private craterNode: Node | null = null;
+   private craterG: Graphics | null = null;
+-  /** 士气高涨：大招后攻速加成剩余时间 */
+-  private hasteT = 0;
+ 
+   protected buildVisual(parent: Node): void {
+     const g = this.node.addComponent(Graphics);
+@@ -962,11 +960,6 @@
+     this.attachBattleArt('pyro');
+   }
+ 
+-  /** 士气高涨窗口攻速 +40% */
+-  protected attackInterval(): number {
+-    return 1 / (this.stats.aspd * (this.hasteT > 0 ? 1.4 : 1));
+-  }
+-
+   /** 火球弹种统一构造：橙红大弹 + 溅射 + 灼烧（灼烧走余烬倍率） */
+   private spec(base: {
+     x: number; y: number; dirX: number; dirY: number; dmg: number;
+@@ -982,14 +975,16 @@
+       explodeR: base.explodeR, explodeMul: base.explodeMul ?? this.stats.explodeMul,
+       slowRatio: this.stats.slowOnHit || 0,
+       slowDur: this.stats.slowDur || 2,
+-      burnDps: base.burnDps * (this.stats.burnMul || 1),
++      burnDps: base.burnDps * pyroBurnMultiplier(this.stats),
++      burnDur: pyroBurnDuration(this.stats),
++      burnSplash: !!(base.ability || base.ult || this.stats.pyroSplashBurn),
+       spark: true, ability: base.ability, ult: base.ult, stun: base.stun,
+       burnedBonus: this.stats.burnedBonus || undefined,
+       ...this.targetBonuses(),
+     };
+   }
+ 
+-  /** 普攻·火球：小溅射（自带 60 半径 40% 溅射；法术范围卡不放大普攻溅射） */
++  /** 普攻火球：基础半径60、40%溅射；爆裂范围和烈焰附着同时覆盖溅射目标。 */
+   protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
+     void _mgr;
+     const bs = 700;
+@@ -997,7 +992,7 @@
+     this.animateAttack(false, lead.dirX, lead.dirY);
+     projs.fire(this.spec({
+       x: this.x, y: HERO_Y + 60, dirX: lead.dirX, dirY: lead.dirY,
+-      dmg: this.effAtk, explodeR: Math.max(60, this.stats.explodeR),
++      dmg: this.effAtk, explodeR: pyroBlastRadius(this.stats, Math.max(60, this.stats.explodeR)),
+       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
+       speed: bs, size: 9,
+     }));
+@@ -1022,7 +1017,7 @@
+     const pc = pyroSkCfg(this.stats.skillLv);
+     const shots = Math.max(1, Math.round(this.stats.skillShots || 3));
+     const dmg = this.abilityDamage(pc.mul);
+-    const boomR = 110 * (this.stats.skillRangeMul || 1);
++    const boomR = pyroBlastRadius(this.stats, 110 * (this.stats.skillRangeMul || 1));
+     this.animateAttack(true, best.x - this.x, best.y - (HERO_Y + 60));
+     for (let k = 0; k < shots; k++) {
+       const ox = best.x + (Math.random() * 2 - 1) * 70;
+@@ -1053,7 +1048,7 @@
+         if (!q.fired && q.t > .35) continue;
+         const approach = q.fired ? Math.min(1, (q.fallElapsed || 0) / Math.max(.01, q.fallSeconds || 1)) : 0;
+         const p = approach * approach * (3 - 2 * approach);
+-        const radius = METEOR_BLAST_R * (.35 + .43 * p);
++        const radius = pyroBlastRadius(this.stats, METEOR_BLAST_R) * (.35 + .43 * p);
+         // Concentric low-alpha ellipses form a soft, grounded shadow, not an outlined AOE indicator.
+         for (let band = 6; band >= 0; band--) {
+           const r = radius * (.49 + band * .085);
+@@ -1082,8 +1077,8 @@
+         const top = SPAWN_Y + 50;
+         const spec = this.spec({
+           x: q.x, y: top, dirX: 0, dirY: -1,
+-          dmg: this.abilityDamage(uc.boltMul, true),
+-          explodeR: METEOR_BLAST_R, burnDps: this.abilityDamage(0.3, true, 0.06),
++          dmg: pyroMeteorDamage(this.stats),
++          explodeR: pyroBlastRadius(this.stats, METEOR_BLAST_R), burnDps: this.abilityDamage(0.3, true, 0.06),
+           speed: METEOR_SPEED, size: 16, ability: true, ult: true,
+           stun: this.stats.ultStun || 0,
+         });
+@@ -1094,7 +1089,7 @@
+           if (index < 0) return;
+           this.meteorQueue.splice(index, 1);
+           this.ultimateBeat(q.x, q.y, q.last ? 1 : q.first ? .85 : .35, true);
+-          this.craters.push({ x: q.x, y: q.y, t: CRATER_LIFE });
++          this.craters.push({ x: q.x, y: q.y, t: pyroCraterDuration(this.stats) });
+           this.drawMeteorWarnings();
+           projs.fireCraters(this.craters, CRATER_R * pyroUltCfg(this.stats.ultLv).craterMul, this.warnT);
+         };
+@@ -1115,8 +1110,8 @@
+         if (c.t <= 0) { this.craters.splice(i, 1); continue; }
+         for (const m of mgr.list) {
+           if (m.dead || Math.hypot(m.x - c.x, m.y - c.y) > crR) continue;
+-          m.burnT = Math.max(m.burnT, 0.55);
+-          m.burnDps = Math.max(m.burnDps, this.abilityDamage(0.3, true, 0.06));
++          m.burnT = Math.max(m.burnT, pyroBurnDuration(this.stats, .55));
++          m.burnDps = Math.max(m.burnDps, this.abilityDamage(0.3, true, 0.06) * pyroBurnMultiplier(this.stats));
+           m.applyVuln(this.stats.pitVuln || CRATER_VULN, 0.6);
+         }
+       }
+@@ -1178,33 +1173,31 @@
+         this.craterNode = null; this.craterG = null;
+       }
+     }
+-    if (this.hasteT > 0) this.hasteT -= dt;
+   }
+ 
+   /** 大招演出时长：从施放到最后一颗陨石落地（排队间隔 + 弹道飞行）；三选一再等 2s 缓冲由导演统一加 */
+   get ultimateRemaining(): number { return Math.max(this.ultimateT, this.meteorQueue.length ? .01 : 0); }
+   get ultShowDuration(): number {
+-    const uc = pyroUltCfg(this.stats.ultLv);
++    const meteors = pyroMeteorCount(this.stats);
+     if (!this.meteorQueue.length) return Math.max(ULT_TIMING.pyro.duration,
+-      ULT_TIMING.pyro.windup + (uc.meteors - 1) * METEOR_ULT_GAP + (SPAWN_Y + 50 - LINE_Y) / METEOR_SPEED + .8);
++      ULT_TIMING.pyro.windup + (meteors - 1) * METEOR_ULT_GAP + (SPAWN_Y + 50 - LINE_Y) / METEOR_SPEED + .8);
+     return Math.max(ULT_TIMING.pyro.duration, this.meteorQueue.reduce((last, q) => Math.max(last,
+       (q.fired ? 0 : Math.max(0, q.t)) + (SPAWN_Y + 50 - q.y) / METEOR_SPEED), 0) + .8);
+   }
+ 
+   /** 大招·陨石天降：优先覆盖不同怪群，预告后固定落点，不在空中追踪或提前碰撞；
+-   *  每颗命中留燃烧陨石坑（持续灼烧 + 易伤 25%）；士气高涨卡给攻速爆发 */
++   *  每颗命中留燃烧陨石坑（持续灼烧 + 易伤25%），陨石增援增加真实落点与演出时长。 */
+   castUlt(mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): boolean {
+     if (!this.ultReady) return false;
+     const alive = mgr.list.filter(m => !m.dead);
+     if (!alive.length) return false;   // 全场无目标：不消耗充能
+     const uc = pyroUltCfg(this.stats.ultLv);
+-    const drops = this.planMeteorDrops(alive, uc.meteors, CRATER_R * uc.craterMul);
++    const drops = this.planMeteorDrops(alive, pyroMeteorCount(this.stats), CRATER_R * uc.craterMul);
+     this.charge = 0;
+     bus.emit(EVT.CHARGE_CHANGED, 0, false);
+     drops.forEach((q, i) => this.meteorQueue.push({ ...q, first: i === 0, last: i === drops.length - 1 }));
+     this.beginUltimate();
+     this.drawMeteorWarnings();
+-    if (this.stats.ultHaste) this.hasteT = 5;
+     void _projs; void _dmg;
+     return true;
+   }
+@@ -1221,8 +1214,9 @@
+   /** Greedy new coverage, then spacing; repeat a lone boss only when there is no new group to cover. */
+   private planMeteorDrops(alive: readonly Monster[], count: number, craterRadius: number): { t: number; x: number; y: number }[] {
+     const drops: { t: number; x: number; y: number }[] = [], covered = new Uint8Array(alive.length);
+-    const top = SPAWN_Y + 50, r2 = METEOR_BLAST_R ** 2;
+-    const spacing = Math.max(craterRadius * 1.6, METEOR_BLAST_R * 1.05);
++    const blastRadius = pyroBlastRadius(this.stats, METEOR_BLAST_R);
++    const top = SPAWN_Y + 50, r2 = blastRadius ** 2;
++    const spacing = Math.max(craterRadius * 1.6, blastRadius * 1.05);
+     type Choice = { x: number; y: number; score: number; fresh: number };
+     for (let k = 0; k < count; k++) {
+       const delay = ULT_TIMING.pyro.windup + k * METEOR_ULT_GAP;
+@@ -1263,7 +1257,7 @@
+       for (const point of predicted) {
+         consider(point.x, point.y);
+         for (let j = 0; j < 8; j++) {
+-          const angle = j * Math.PI / 4 + k * .31, offset = METEOR_BLAST_R * .65;
++          const angle = j * Math.PI / 4 + k * .31, offset = blastRadius * .65;
+           consider(point.x + Math.cos(angle) * offset, point.y + Math.sin(angle) * offset);
+         }
+       }
+--- before/assets/scripts/battle/Projectile.ts
++++ after/assets/scripts/battle/Projectile.ts
+@@ -39,6 +39,9 @@
+   slowRatio?: number;
+   slowDur?: number;
+   burnDps?: number;
++  burnDur?: number;
++  /** 火法灼烧覆盖爆炸内目标；其他英雄默认仍只处理直接命中。 */
++  burnSplash?: boolean;
+   /** 命中眩晕 s（震慑：陨石落点眩晕） */
+   stun?: number;
+   /** 雷系感电：命中后目标受伤 +shockAmp 持续 shockDur s */
+@@ -574,6 +577,7 @@
+         o.takeDamage(sp.dmg * (sp.explodeMul || 0.4), false, sp.heroId, false, 0,
+           Math.atan2(o.y - m.y, o.x - m.x));
+         this.dmg.add(sp.heroId, Math.min(sp.dmg * (sp.explodeMul || 0.4), ob));
++        if (!o.dead && sp.burnSplash && sp.burnDps) o.applyBurn(sp.burnDps, sp.burnDur ?? 3);
+         if (o.dead) this.killPop(sp, o.x, o.y + o.def.radius);
+       }
+       if (this.impacts) this.impacts.blast(m.x, m.y, sp.heroId, sp.explodeR);
+@@ -582,7 +586,7 @@
+     // Explosions still resolve when the directly struck enemy dies.
+     if (m.dead) return;
+     if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
+-    if (sp.burnDps) m.applyBurn(sp.burnDps, 3);
++    if (sp.burnDps) m.applyBurn(sp.burnDps, sp.burnDur ?? 3);
+     if (sp.stun) m.stunT = Math.max(m.stunT, sp.stun);
+     if (sp.shockAmp) m.applyShock(sp.shockAmp, sp.shockDur ?? 3);
+     // 分裂箭：与原弹同造型/同弹速/同词条（仅伤害减半、不再连锁分裂），
+@@ -638,8 +642,8 @@
+       const before = m.hp, angle = Math.atan2(m.y - sp.y, m.x - sp.x);
+       m.takeDamage(amount, direct && sp.crit, sp.heroId, direct && sp.ignoreRes === true, direct ? sp.resCut || 0 : 0, angle, direct);
+       this.dmg.add(sp.heroId, Math.min(amount, before));
++      if (!m.dead && sp.burnDps && (direct || sp.burnSplash)) m.applyBurn(sp.burnDps, sp.burnDur ?? 3);
+       if (direct && !m.dead) {
+-        if (sp.burnDps) m.applyBurn(sp.burnDps, 3);
+         if (sp.stun) m.stunT = Math.max(m.stunT, sp.stun);
+         if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
+       }
+--- before/assets/scripts/config/Cards.ts
++++ after/assets/scripts/config/Cards.ts
+@@ -47,7 +47,13 @@
+   ultDmgMul: number;    // 大招额外伤害加成（战吼，累乘）
+   ultStun: number;      // 大招命中眩晕 s（震慑，覆盖）
+   ultHaste: number;     // 大招后攻速加成标记（士气高涨，0/1）
+-  burnMul: number;      // 灼烧伤害倍率（余烬，累乘）
++  burnMul: number;      // 局外突破等灼烧伤害倍率；火法余烬卡另用pyroBurnBonus
++  pyroBurnBonus?: number; // 火法余烬卡：+50%/层，独立于局外灼烧倍率，最多+150%
++  pyroBlastMul?: number;  // 火法爆裂范围：只放大普攻/技能/陨石爆炸，不改索敌和陨石坑
++  pyroLinger?: number;    // 火法余火绵延：灼烧与陨石坑持续时间各+s
++  pyroMeteorBonus?: number; // 火法陨石增援：额外陨石数
++  pyroUltHitMul?: number; // 陨星威能：仅大招直接/溅射伤害，不放大灼烧
++  pyroSplashBurn?: boolean; // 烈焰附着：普攻溅射也附加灼烧
+   shockOnHit: number;   // 雷系命中感电：目标受伤 +25% 持续 3s（感电卡，0=无）
+   chargeEff: number;    // 装备充能效率词条：击杀充能 ×(1+eff)（累加）
+   pierceChance: number; // 英雄突破：普攻贯穿概率（0~1，累加）
+@@ -142,6 +148,16 @@
+   return { boltMul: (3.5 + (u >= 20 ? 0.4 : 0)) * (1 + (u - 1) * 0.08), meteors: 5 + (u >= 5 ? 2 : 0), craterMul: u >= 10 ? 1.25 : 1, chargeOn: u >= 15 };
+ }
+ 
++/** 火法强化卡的战斗侧与提示共用计算；局外培养倍率保留在独立乘区。 */
++export function pyroBlastRadius(s: HeroStats, base: number): number { return base * (s.pyroBlastMul || 1); }
++export function pyroBurnMultiplier(s: HeroStats): number { return (s.burnMul || 1) * (1 + (s.pyroBurnBonus || 0)); }
++export function pyroBurnDuration(s: HeroStats, base = 3): number { return base + (s.pyroLinger || 0); }
++export function pyroCraterDuration(s: HeroStats): number { return 4 + (s.pyroLinger || 0); }
++export function pyroMeteorCount(s: HeroStats): number { return pyroUltCfg(s.ultLv).meteors + (s.pyroMeteorBonus || 0); }
++export function pyroMeteorDamage(s: HeroStats): number {
++  return abilityDamage(s, pyroUltCfg(s.ultLv).boltMul, true) * (s.pyroUltHitMul || 1);
++}
++
+ /* ---------- 冰霜法师（莫拉·寒霜）技能升级效果（定稿；战斗侧与提示面板共用） ---------- */
+ /** 普攻槽：每级普攻伤害+8%，5级攻速+6%，10级暴击率+5%，15级对减速目标+25%，20级普攻伤害再+20% */
+ export function moraAtkCfg(a: number): { normalMul: number; aspdOn: boolean; critOn: boolean; slowedOn: boolean } {
+@@ -300,7 +316,7 @@
+ function abilityCard(owner: string, unlocks: 'skill' | 'ult', abilityName: string): CardDef {
+   return c({
+     id: owner + '_unlock_' + unlocks, name: unlocks === 'skill' ? '解锁技能' : '解锁大招',
+-    owner, rarity: owner === 'archer' || owner === 'sniper' ? 'gold' : 'white', maxStacks: 1, unlocks,
++    owner, rarity: owner === 'archer' || owner === 'sniper' || owner === 'pyro' ? 'gold' : 'white', maxStacks: 1, unlocks,
+     desc: '本局学习「' + abilityName + '」' + (unlocks === 'skill' ? '\n冷却结束后自动释放' : '\n解锁后开始充能\n充满后点击释放'),
+     apply: x => { if (unlocks === 'skill') x.hero.skillUnlocked = true; else x.hero.ultUnlocked = true; },
+   });
+@@ -367,27 +383,29 @@
+     apply: x => { x.hero.ultMarkAmp = .3; } }),
+ ];
+ 
+-/* ---------- 火焰法师 · 焰·辉（§6.3 技能流 + §6.4 余烬） ---------- */
++/* ---------- 火焰法师 · 范围爆炸与灼烧（白2/蓝6/紫5/黄3） ---------- */
+ export const PYRO_CARDS: CardDef[] = [
+   ...commonHeroCards('pyro'),
+-  c({ id: 'pyro_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'pyro', req: 'pyro_unlock_skill', desc: '基础技能伤害 +40%\n技能、大招生效',
+-    apply: x => { x.hero.skillMul *= 1.4; } }),
+-  c({ id: 'pyro_shards', name: '技能弹体', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '烈焰爆裂火球 +1 颗\n可叠加',
++  c({ id: 'pyro_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'pyro', reqAny: ['pyro_unlock_skill', 'pyro_unlock_ult'], desc: '基础技能伤害 +30%\n技能、大招生效\n最多3层',
++    apply: x => { x.hero.skillMul *= 1.3; } }),
++  c({ id: 'pyro_shards', name: '爆裂火球', rarity: 'purple', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '烈焰爆裂火球 +1颗\n最多3层',
+     apply: x => { x.hero.skillShots += 1; } }),
+   c({ id: 'pyro_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '技能冷却 -2 秒\n可叠加',
+     apply: x => { x.hero.skillCdFlat += 2; } }),
+-  c({ id: 'pyro_range', name: '法术范围', rarity: 'white', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '爆裂范围 +30%',
+-    apply: x => { x.hero.skillRangeMul *= 1.3; } }),
+-  c({ id: 'pyro_war', name: '战吼', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招伤害 +50%',
+-    apply: x => { x.hero.ultDmgMul *= 1.5; } }),
+-  c({ id: 'pyro_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招充能需求 -25%\n可叠加',
++  c({ id: 'pyro_range', name: '爆裂范围', rarity: 'blue', maxStacks: 3, owner: 'pyro', desc: '普攻、技能、陨石\n爆炸半径 +20%\n不扩大索敌或陨石坑',
++    apply: x => { x.hero.pyroBlastMul = (x.hero.pyroBlastMul || 1) * 1.2; } }),
++  c({ id: 'pyro_war', name: '陨星威能', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招直接伤害 +40%\n不提高灼烧伤害\n最多3层',
++    apply: x => { x.hero.pyroUltHitMul = (x.hero.pyroUltHitMul || 1) * 1.4; } }),
++  c({ id: 'pyro_eager', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招充能需求 -25%\n最多2层',
+     apply: x => { x.hero.chargeMul *= 0.75; } }),
+-  c({ id: 'pyro_stun', name: '震慑', rarity: 'purple', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '陨石命中眩晕 1 秒',
+-    apply: x => { x.hero.ultStun = 1; } }),
+-  c({ id: 'pyro_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招释放后\n攻速 +40%\n持续 5 秒',
+-    apply: x => { x.hero.ultHaste = 1; } }),
+-  c({ id: 'pyro_ember', name: '余烬', rarity: 'purple', maxStacks: 2, owner: 'pyro', reqAny: ['pyro_unlock_skill', 'pyro_unlock_ult'], desc: '灼烧伤害翻倍',
+-    apply: x => { x.hero.burnMul *= 2; } }),
++  c({ id: 'pyro_burn', name: '烈焰附着', rarity: 'purple', maxStacks: 1, owner: 'pyro', art: 'ui_card_pyro_burn_v1', desc: '普攻直击、溅射点燃\n每秒20%攻击力\n持续3秒',
++    apply: x => { x.hero.burnOnHit = Math.max(x.hero.burnOnHit, .2); x.hero.pyroSplashBurn = true; } }),
++  c({ id: 'pyro_ember', name: '余烬', rarity: 'purple', maxStacks: 3, owner: 'pyro', reqAny: ['pyro_burn', 'pyro_unlock_skill', 'pyro_unlock_ult'], desc: '全部灼烧伤害 +50%\n包含陨石坑\n最多3层，共+150%',
++    apply: x => { x.hero.pyroBurnBonus = (x.hero.pyroBurnBonus || 0) + .5; } }),
++  c({ id: 'pyro_linger', name: '余火绵延', rarity: 'purple', maxStacks: 2, owner: 'pyro', reqAny: ['pyro_burn', 'pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_linger_v1', desc: '灼烧持续时间 +1秒\n陨石坑持续时间 +1秒\n最多2层',
++    apply: x => { x.hero.pyroLinger = (x.hero.pyroLinger || 0) + 1; } }),
++  c({ id: 'pyro_meteors', name: '陨石增援', rarity: 'gold', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', art: 'ui_card_pyro_meteors_v1', desc: '大招额外落下2颗陨石\n最多2层，共+4颗',
++    apply: x => { x.hero.pyroMeteorBonus = (x.hero.pyroMeteorBonus || 0) + 2; } }),
+ ];
+ 
+ /* ---------- 雷电法师 · 沃尔·雷霆（§6.3 技能流 + §6.4 感电） ---------- */
+--- before/assets/scripts/ui/BattleComicPanels.ts
++++ after/assets/scripts/ui/BattleComicPanels.ts
+@@ -12,6 +12,7 @@
+ import { COMIC, comicArt, comicButton, comicPlate } from './ComicUI';
+ import { heroPortrait } from './HeroComic';
+ import { bindButton } from './ButtonFeedback';
++import { pickCardIcon } from './PickArt';
+ 
+ interface PickCallbacks { onPick: (card: CardDef) => void; onRefreshRequest: () => void; }
+ interface PauseOptions {
+@@ -164,7 +165,8 @@
+       text(header, 0, 0, card.name, { size: 25, bold: true, color: card.rarity === 'white' || card.rarity === 'gold' ? COMIC.text : COMIC.cream, w: 192, h: 42 });
+       const circle = N('pickIconSeat', frame, 0, 65).addComponent(Graphics); circle.fillColor = C('#E6DFCF'); circle.circle(0, 0, 60); circle.fill();
+       const key = card.art || (card.unlocks ? 'ui_icon_' + card.unlocks + '_' + card.owner : CARD_ART[card.id] || 'ui_card_' + card.id);
+-      artSprite(frame, 0, 65, 118, 118, key, { sliced: false });
++      if (card.owner === 'pyro') pickCardIcon(frame, 0, 65, 118, card);
++      else artSprite(frame, 0, 65, 118, 118, key, { sliced: false });
+       if (card.owner !== 'global') {
+         heroPortrait(frame, -56, -23, 36, card.owner);
+         text(frame, 27, -23, HERO_DEFS[card.owner]?.name.split('·')[0] || '', { size: 21, bold: true, w: 110, h: 32 });
+--- before/assets/scripts/ui/Panels.ts
++++ after/assets/scripts/ui/Panels.ts
+@@ -4,6 +4,7 @@
+  */
+ import { Graphics, Label, Node, Sprite, sys, tween, UIOpacity, Vec3 } from 'cc';
+ import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
++import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDuration, pyroMeteorCount, pyroMeteorDamage } from '../config/Cards';
+ import { FROST_ULT_RAIN_COUNT, HERO_Y, LO, PAL } from '../config/GameConfig';
+ import { DamageRow, fmtWk } from '../battle/DamageService';
+ import { HeroBase } from '../battle/Hero';
+@@ -18,7 +19,7 @@
+ import { whenUIArtReady } from './UIArtReady';
+ import { PickMotion } from './PickMotion';
+ import { uiSound } from './UIAudio';
+-import { pickCardArt } from './PickArt';
++import { pickCardIcon } from './PickArt';
+ import { C, CA, dimLayer, gcircle, gpanel, label, N, setText, WY, WYB, WX } from './UIKit';
+ import { battleArtIcon as artIcon, battleArtSprite as artSprite, battleStatBar as gbar } from './BattlePanelSkin';
+ import { pauseButton, pauseFrame, pauseRow, pauseSwitch, pauseTabFace } from './PausePanelSkin';
+@@ -214,7 +215,7 @@
+     const gear = gcircle(frame, 0, 50, 60, CA('#2A3240', 1));
+     const icon = gcircle(frame, 0, 50, 48, CA(rarity, 0.16));
+     const iconLbl = label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 26, color: card.rarity === 'white' ? '#E8E0C8' : rarity, bold: true });
+-    artSprite(frame, 0, 50, 124, 124, pickCardArt(card), { sliced: false, hideOnLoad: [iconLbl] });
++    pickCardIcon(frame, 0, 50, 124, card, [iconLbl]);
+ 
+     // ③ 右上归属角标：仅英雄专属卡贴头像（用户调整：通用卡不再显示"全"角标）
+     if (card.owner !== 'global') {
+@@ -486,9 +487,11 @@
+         ['伤害', String(Math.round(hero.effAtk * (h.normalMul || 1)))],
+         ['攻速', h.aspd.toFixed(1) + ' 次/秒'],
+         ['索敌范围', String(Math.round(h.range))],
+-        ['弹道', (h.fan + h.serial > 0 ? (1 + h.fan) + '×' + (1 + h.serial) + ' 弹幕' : '1 支')],
++        hero.id === 'pyro' ? ['爆炸半径', String(Math.round(pyroBlastRadius(h, Math.max(60, h.explodeR))))]
++          : ['弹道', (h.fan + h.serial > 0 ? (1 + h.fan) + '×' + (1 + h.serial) + ' 弹幕' : '1 支')],
+         ['暴击', Math.round(h.critRate * 100) + '% / ' + Math.round(h.critMul * 100) + '%'],
+-        ['目标', '最靠下'],
++        hero.id === 'pyro' ? ['灼烧', h.burnOnHit ? `${Math.round(hero.effAtk * h.burnOnHit * pyroBurnMultiplier(h))}/秒 · ${pyroBurnDuration(h)}秒` : '未获得普攻灼烧']
++          : ['目标', '最靠下'],
+       ];
+       px = hero.x - 27 + 23 + 16 + w / 2;
+       py = iconY + 23 + 16 + hh / 2;
+@@ -521,7 +524,7 @@
+         rows = [
+           ['效果', '锁定最密集敌群 · 齐射 ' + Math.round(h.skillShots || 3) + ' 颗爆裂火球'],
+           ['每发伤害', Math.round(hero.abilityDamage(pc.mul)) + '（技×' + pc.mul.toFixed(2) + '）'],
+-          ['特性', '大范围爆炸 + 灼烧' + (pc.boomMul > 0.4 ? ' · 溅射 +' + Math.round((pc.boomMul - 0.4) * 100) + '%' : '')],
++          ['特性', `爆炸半径 ${Math.round(pyroBlastRadius(h, 110 * (h.skillRangeMul || 1)))} · 灼烧${pyroBurnDuration(h)}秒`],
+           ['冷却时间', cdTotal],
+           ['索敌范围', String(Math.round(h.skillRange))],
+           ['释放', '自动'],
+@@ -586,10 +589,10 @@
+       w = 280; hh = 272;
+       const pu = pyroUltCfg(h.ultLv || 1);
+       rows = [
+-        ['伤害', Math.round(hero.abilityDamage(pu.boltMul, true)) + ' × 每颗'],
+-        ['索敌', '优先不同怪群 · 预警后固定落点'],
+-        ['形态', '分散轰炸 ' + pu.meteors + ' 颗陨石' + (h.ultHaste ? ' · 放后攻速提升 5 秒' : '')],
+-        ['陨石坑', '燃烧 4 秒：灼烧 + 易伤 ' + Math.round((h.pitVuln || 0.25) * 100) + '%' + (pu.craterMul > 1 ? ' · 坑范围+' + Math.round((pu.craterMul - 1) * 100) + '%' : '')],
++        ['伤害', Math.round(pyroMeteorDamage(h)) + ' × 每颗'],
++        ['索敌', '不同怪群 · 爆炸半径 ' + Math.round(pyroBlastRadius(h, 140))],
++        ['形态', '分散轰炸 ' + pyroMeteorCount(h) + ' 颗陨石'],
++        ['陨石坑', '燃烧 ' + pyroCraterDuration(h) + ' 秒：灼烧 + 易伤 ' + Math.round((h.pitVuln || 0.25) * 100) + '%' + (pu.craterMul > 1 ? ' · 坑范围+' + Math.round((pu.craterMul - 1) * 100) + '%' : '')],
+         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
+         ['释放', '手动点击'],
+       ];
+--- before/assets/scripts/ui/PickArt.ts
++++ after/assets/scripts/ui/PickArt.ts
+@@ -1,7 +1,9 @@
+ /** The picker preloads exactly the same art keys it renders, scoped to the equipped squad. */
+ import { CardDef, M0_POOL } from '../config/Cards';
++import { Graphics, Mask, Node } from 'cc';
+ import { heroPortraitKey } from './HeroComic';
+-import { uxFrame } from './Ux';
++import { artSprite, uxFrame } from './Ux';
++import { C, N } from './UIKit';
+ 
+ const SHARED = ['pick_comic_v1/title_plate', 'pick_comic_v1/card_base', 'pick_comic_v1/header_strip'];
+ const CARD_ART: Record<string, string> = {
+@@ -17,6 +19,18 @@
+ export function pickCardArt(card: CardDef): string {
+   return card.art || (card.unlocks ? 'ui_icon_' + card.unlocks + '_' + card.owner
+     : CARD_ART[card.id] || 'ui_card_' + card.id);
++}
++
++/** Fire cards have one filled circular viewport, including legacy/shared art. Clip only the icon subtree. */
++export function pickCardIcon(parent: Node, x: number, y: number, size: number, card: CardDef, hideOnLoad: Node[] = []): Node {
++  if (card.owner !== 'pyro') return artSprite(parent, x, y, size, size, pickCardArt(card), { sliced: false, hideOnLoad });
++  const clip = N('pyroCardIcon', parent, x, y, size, size);
++  const mask = clip.addComponent(Mask); mask.type = Mask.Type.GRAPHICS_ELLIPSE; mask.segments = 96;
++  const backing = N('pyroIconBacking', clip).addComponent(Graphics);
++  backing.fillColor = C('#652E1D'); backing.circle(0, 0, size / 2); backing.fill();
++  // Slightly cover the viewport so the painted circle reaches its boundary without transparent rim gaps.
++  artSprite(clip, 0, 0, size * 1.04, size * 1.04, pickCardArt(card), { sliced: false, fit: false, hideOnLoad });
++  return clip;
+ }
+ 
+ /** No nodes or hidden UI trees. Two low-priority requests at a time, shared by lobby / battle. */

@@ -1,0 +1,15 @@
+{
+  "maxCorrectionDB": 6,
+  "peakCeilingDBFS": -3,
+  "preserveCues": ["bow", "crossbow", "bowUlt", "snipe", "pierceHeavy", "fireUlt"],
+  "references": {
+    "attack": "bow",
+    "hit": "hit",
+    "heavy": "crit",
+    "ultimate": "fireUlt",
+    "ui": "ui",
+    "reward": "reward",
+    "result": "victory",
+    "world": "gateClose"
+  }
+}

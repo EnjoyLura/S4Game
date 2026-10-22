@@ -1,0 +1,30 @@
+{
+  "originalFilesChecked": 1964,
+  "changedExistingFiles": [
+    "assets/scripts/battle/Hero.ts"
+  ],
+  "addedGameFiles": [],
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "cause": "Cocos loose super accessor lowering emitted HeroBase.prototype.ultShowDuration, so base getter this.id became undefined and ULT_TIMING[undefined].duration threw before lightning queue creation, after charge reset.",
+  "fix": "Read ULT_TIMING.volt.duration directly; the extra-strike extension formula and all cast/queue/damage/charge/stun/audio logic remain byte-identical.",
+  "compiledPrototypeGetterAbsent": true,
+  "allOriginalNativeResourcesPreserved": 712,
+  "priorPreviewFilesPreserved": 793,
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-volt-ultimate-fix-v58-20261019-132746",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "entryVersion": "1792387641",
+  "game": "https://kingdom-watch.pages.dev/?v=volt-ultimate-fix-v58-1792387641",
+  "manualAcceptance": "Static source/types/compiled bundle/resources/build/read-only HTTP only; no game/browser/tests/simulation/audio. User manual acceptance.",
+  "deployment": "https://7e5d0526.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.f423b.js?v=1792387641",
+    "mainBundleHashMatches": true,
+    "compiledVoltGetterMatches": true,
+    "prototypeGetterAbsent": true
+  }
+}

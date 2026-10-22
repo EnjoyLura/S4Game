@@ -1,0 +1,69 @@
+{
+  "version": 68,
+  "feature": "combat-first",
+  "published": true,
+  "originalGameFiles": 2076,
+  "changedGameFiles": [
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/battle/Hero.ts",
+    "assets/scripts/battle/ImpactFX.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/battle/MonsterTraits.ts",
+    "assets/scripts/battle/Projectile.ts",
+    "assets/scripts/config/Cards.ts",
+    "assets/scripts/config/ChapterContent.ts",
+    "assets/scripts/config/GameConfig.ts",
+    "assets/scripts/config/Mobs.ts",
+    "assets/scripts/core/GameData.ts",
+    "assets/scripts/ui/Panels.ts"
+  ],
+  "addedGameFiles": [],
+  "removedGameFiles": [],
+  "mediaFilesPreserved": 756,
+  "originalMediaFiles": 756,
+  "diagnosticsBefore": 10,
+  "diagnosticsAfter": 10,
+  "newDiagnostics": [],
+  "validation": "Static source, type diagnostics, production build and resource identity only; no game/browser/test scripts/simulation/audio run.",
+  "typecheck": {
+    "newDiagnostics": 0,
+    "existingDiagnostics": 10
+  },
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-combat-first-v68-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-combat-first-v68-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "engineRevision": "2cb74a1e8caa095a",
+  "entry": "index.96a04.js?v=1792597084",
+  "mainBundle": "build/web-mobile/assets/main/index.94874.js",
+  "mainBundleSha256": "fa97b08eacdc4f0c4f48a858cf92112d2325aaaf1ff30b649fc5017dce147855",
+  "nativeFilesPreserved": 756,
+  "nativeDifferences": [],
+  "previewsPreserved": 793,
+  "game": "https://kingdom-watch.pages.dev/?v=combat-first-v68-1792597084",
+  "bundleFeatureStringsPresent": {
+    "穿林箭": true,
+    "余烬爆破": true,
+    "冰裂印记": true,
+    "armorBreak": true,
+    "pyro_burst": true
+  },
+  "publisher": "Installed Wrangler 4.143.0",
+  "httpIdentity": {
+    "htmlStatus": 200,
+    "entryReferenceMatches": true,
+    "entryStatus": 200,
+    "entrySha256Matches": true,
+    "mainStatus": 200,
+    "mainBundleSha256Matches": true
+  },
+  "deployment": "https://cb18a231.kingdom-watch.pages.dev"
+}

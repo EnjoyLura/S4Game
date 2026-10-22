@@ -1,0 +1,60 @@
+{
+  "originalGameFiles": 2076,
+  "changedGameFiles": [
+    "assets/scripts/config/Cards.ts",
+    "assets/scripts/ui/Panels.ts"
+  ],
+  "addedGameFiles": [],
+  "removedGameFiles": [],
+  "cardDefinitionsAndBattleLogicUnchanged": true,
+  "descriptionLiteralsReviewed": 63,
+  "maximumOriginalDescriptionLines": 3,
+  "maximumChoiceDescriptionLines": 4,
+  "diagnosticsBefore": 10,
+  "diagnosticsAfter": 10,
+  "newDiagnostics": [],
+  "mediaFilesPreserved": 756,
+  "validation": "Static source and compiler diagnostics only; no game/browser/gameplay tests/simulation/audio.",
+  "originalMediaFiles": 756,
+  "nativeFilesPreserved": 756,
+  "nativeDifferences": [],
+  "bundleFeatureStringsPresent": {
+    "本局强化": true,
+    "buildListContent": true,
+    "叠层 ": true,
+    "同类易伤取最高": true,
+    "battleBuildOverview": true
+  },
+  "version": 69,
+  "feature": "combat-build-guide",
+  "published": true,
+  "battleBalance": "v68 unchanged",
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-combat-build-guide-v69-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-combat-build-guide-v69-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "engineRevision": "2cb74a1e8caa095a",
+  "entry": "index.8a7c4.js?v=1792598159",
+  "mainBundle": "build/web-mobile/assets/main/index.db716.js",
+  "mainBundleSha256": "d2aee2cd5e0b39ac984476811588ad22880d75389a8c24544e6ad8281f8abea2",
+  "game": "https://kingdom-watch.pages.dev/?v=combat-build-guide-v69-1792598159",
+  "publisher": "Installed Wrangler 4.143.0",
+  "deployment": "https://823388c6.kingdom-watch.pages.dev",
+  "httpIdentity": {
+    "htmlStatus": 200,
+    "entryReferenceMatches": true,
+    "entryStatus": 200,
+    "entrySha256Matches": true,
+    "mainStatus": 200,
+    "mainBundleSha256Matches": true
+  },
+  "previewsPreserved": 793
+}

@@ -1,0 +1,17 @@
+{
+  "goblin_brute": {
+    "frames": 22,
+    "highestOpaqueFraction": 0.83125,
+    "lowestOpaqueFraction": 0.80625
+  },
+  "goblin_shaman": {
+    "frames": 24,
+    "highestOpaqueFraction": 0.90625,
+    "lowestOpaqueFraction": 0.89375
+  },
+  "wolf_rider": {
+    "frames": 25,
+    "highestOpaqueFraction": 0.90625,
+    "lowestOpaqueFraction": 0.8875
+  }
+}

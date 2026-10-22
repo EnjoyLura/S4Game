@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>Cocos Creator | kingdom-watch</title>
+
+  <!--http://www.html5rocks.com/en/mobile/mobifying/-->
+  <meta name="viewport"
+        content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1,minimal-ui=true,viewport-fit=cover"/>
+
+  <!-- 刘海/挖孔安全区：Cocos web 适配器 safeAreaEdge 从 documentElement 读这些 CSS 变量
+       （sys.getSafeAreaRect → initLayout 的 LO.notchTop）。viewport-fit=cover 已让页面铺到刘海下，
+       env() 在桌面端/无刘海设备求值为 0，无副作用 -->
+  <style>
+    :root {
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+    }
+  </style>
+
+  <!--https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- force webkit on 360 -->
+  <meta name="renderer" content="webkit"/>
+  <meta name="force-rendering" content="webkit"/>
+  <!-- force edge on IE -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <!-- force full screen on some browser -->
+  <meta name="full-screen" content="yes"/>
+  <meta name="x5-fullscreen" content="true"/>
+  <meta name="360-fullscreen" content="true"/>
+
+  <!--fix fireball/issues/3568 -->
+  <!--<meta name="browsermode" content="application">-->
+  <meta name="x5-page-mode" content="app">
+
+  <!--<link rel="apple-touch-icon" href=".png" />-->
+  <!--<link rel="apple-touch-icon-precomposed" href=".png" />-->
+
+  <link rel="stylesheet" type="text/css" href="style.f76d1.css"/>
+
+  <!-- 清晰度修复（须在引擎脚本之前执行）：
+       引擎 pal/screen-adapter 将 dpr 钳制为 min(dpr,2)，3x 屏 canvas 只有 2/3 物理像素再被 CSS 拉伸 → HUD 发糊。
+       这里把上限暴露为 window.__KW_DPR_CAP（默认 min(真实dpr,3)，即 3x 屏按原生 3x 渲染）；
+       引擎包内的钳制补丁由 tools/patch-web-dpr.py 应用。URL 加 ?dpr=2 可回退（低端机省电调试）。 -->
+  <script>
+    (function () {
+      try {
+        var real = window.devicePixelRatio || 1;
+        var q = parseFloat(new URLSearchParams(window.location.search).get('dpr'));
+        // 3x 屏按原生 3x 渲染修糊；URL ?dpr= 可强制（低端机省电调试）
+        window.__KW_DPR_CAP = q > 0 ? q : Math.min(real, 3);
+      } catch (e) { window.__KW_DPR_CAP = 2; }
+    })();
+  </script>
+
+  <!-- 运行时错误浮层：手机端脚本异常直接显示在画面顶部（否则用户只见空画面无从反馈）。
+       正常运行不出现任何内容；最多显示 3 条，每条截断 240 字符。 -->
+  <script>
+    (function () {
+      var seen = 0;
+      function show(msg) {
+        try {
+          if (seen >= 3) return;
+          var box = document.getElementById('kwErrBox');
+          if (!box) {
+            box = document.createElement('div');
+            box.id = 'kwErrBox';
+            box.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;pointer-events:none;'
+              + 'font:12px/1.4 monospace;color:#ff9a9a;background:rgba(0,0,0,.72);padding:4px 6px;'
+              + 'white-space:pre-wrap;word-break:break-all;max-height:40%;overflow:hidden;text-align:left;';
+            (document.body || document.documentElement).appendChild(box);
+          }
+          seen++;
+          box.textContent += (box.textContent ? '\n' : '') + '⚠ ' + String(msg).slice(0, 240);
+        } catch (e) { /* ignore */ }
+      }
+      window.addEventListener('error', function (e) {
+        show((e && (e.message || (e.error && e.error.message))) || 'unknown error');
+      });
+      window.addEventListener('unhandledrejection', function (e) { show('REJ: ' + (e && e.reason)); });
+      var ce = console.error;
+      console.error = function () {
+        try { show([].join.call(arguments, ' ')); } catch (x) { /* ignore */ }
+        ce.apply(console, arguments);
+      };
+    })();
+  </script>
+
+
+  <!-- KW startup preloads -->
+  <link rel="preload" as="script" href="index.e151f.js?v=1792309191" crossorigin="anonymous">
+  <link rel="preload" as="script" href="application.77b00.js" crossorigin="anonymous">
+  <link rel="preload" as="fetch" href="src/settings.1d9e3.json" crossorigin="anonymous">
+  <link rel="preload" as="script" href="cocos-js/cc.03aac.js?kwengine=8ada3fce8a0efe86" crossorigin="anonymous">
+  <link rel="preload" as="script" href="cocos-js/_virtual_cc-Bp5iGE8z.js?kwengine=8ada3fce8a0efe86" crossorigin="anonymous">
+  <!-- /KW startup preloads -->
+</head>
+<body>
+  <div id="GameDiv" cc_exact_fit_screen="true">
+      <div id="Cocos3dGameContainer">
+        <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="99"></canvas>
+      </div>
+    </div>
+  
+
+<!-- Polyfills bundle. -->
+
+<script src="src/polyfills.bundle.5adbf.js" charset="utf-8"> </script>
+
+
+<!-- SystemJS support. -->
+<script src="src/system.bundle.543e6.js" charset="utf-8"> </script>
+
+<!-- Import map -->
+<script src="src/import-map.4e643.json?kwengine=8ada3fce8a0efe86" type="systemjs-importmap" charset="utf-8"> </script>
+
+<script>
+    System.import('./index.e151f.js?v=1792309191').catch(function(err) { console.error(err); })
+</script>
+
+</body>
+</html>

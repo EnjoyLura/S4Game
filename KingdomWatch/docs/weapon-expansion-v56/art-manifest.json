@@ -1,0 +1,421 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "id": "wpn_blue_tide_book",
+      "name": "潮汐秘典",
+      "type": "book",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-d25fc791-f552-4281-b82e-6d269539bf94.png",
+      "path": "assets/resources/ux/weapons_v1/blue_tide_book_v56.png",
+      "uuid": "3f53aaf1-e2a9-4957-b9fc-8c28db6335ff",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "ca2085816324b3f54e1d3ccebcd42cc1e752973b1c3941b83333a18655b3f61b",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.045454545454545456,
+        0.03189792663476874,
+        0.045454545454545456,
+        0.03189792663476874
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 2082134
+    },
+    {
+      "id": "wpn_blue_ember_book",
+      "name": "烬纹魔典",
+      "type": "book",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-f331b643-d67e-404d-a034-981f07801276.png",
+      "path": "assets/resources/ux/weapons_v1/blue_ember_book_v56.png",
+      "uuid": "0db48227-07c7-4447-9506-09da2ae1f5a0",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "3073f00a5fe2ae338be519353b32380101e666aca60cef8a9f2262532afb50d6",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.046251993620414676,
+        0.025518341307814992,
+        0.04066985645933014,
+        0.01594896331738437
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 2218647
+    },
+    {
+      "id": "wpn_purple_star_book",
+      "name": "星潮法典",
+      "type": "book",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-064f8464-c085-4a4d-a5c5-822628081d69.png",
+      "path": "assets/resources/ux/weapons_v1/purple_star_book_v56.png",
+      "uuid": "c12af4cf-3f0f-4580-908e-068f8f534548",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "2f5525760bfce6ed9fde05bc5a16a73acf2882661625d35b944522587a2f637b",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.05422647527910686,
+        0.03110047846889952,
+        0.030303030303030304,
+        0.0215311004784689
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 2216960
+    },
+    {
+      "id": "wpn_purple_dusk_book",
+      "name": "暮鸦秘录",
+      "type": "book",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-d6010fb2-382b-4e71-8f20-d8248dbc10ef.png",
+      "path": "assets/resources/ux/weapons_v1/purple_dusk_book_v56.png",
+      "uuid": "6c6bc672-7e55-42cc-b4fb-17a303a47eb2",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "41ec1eafae7877f2a71a8d6b281a71e49fdf13849bab0d5221bd0252b4a1982c",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.044657097288676235,
+        0.024720893141945772,
+        0.023125996810207338,
+        0.015151515151515152
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 2292053
+    },
+    {
+      "id": "wpn_blue_swift_bow",
+      "name": "疾羽短弓",
+      "type": "bow",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-545ffaf3-fef9-4e89-aa4f-98d88e2b2dbd.png",
+      "path": "assets/resources/ux/weapons_v1/blue_swift_bow_v56.png",
+      "uuid": "8408fef8-f148-478b-818c-e333dfb1aa2c",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "cb68cf3231ccb3c91c5d3dc457546dbc4c5a984cc86a9dc6e963f46229170bf8",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.1371610845295056,
+        0.013556618819776715,
+        0.03110047846889952,
+        0.02711323763955343
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 528841
+    },
+    {
+      "id": "wpn_blue_briar_bow",
+      "name": "铁棘长弓",
+      "type": "bow",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-eff59ace-2877-492f-9fd4-7f2d211f9dc3.png",
+      "path": "assets/resources/ux/weapons_v1/blue_briar_bow_v56.png",
+      "uuid": "8eb3fa58-e7fd-4453-b886-23bc243d100c",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "53ed1c03b4c2ecb1c607eea712c56f8634f705d054d2d43534e22ffdd4ece568",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.15789473684210525,
+        0.007974481658692184,
+        0.03349282296650718,
+        0.01674641148325359
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 551266
+    },
+    {
+      "id": "wpn_purple_gale_bow",
+      "name": "逐风之弓",
+      "type": "bow",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-97070ac3-578a-473d-ba66-217227730590.png",
+      "path": "assets/resources/ux/weapons_v1/purple_gale_bow_v56.png",
+      "uuid": "95619104-5222-4d1a-b9fd-a306ea51bb6b",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "86ca98a44ee11c9b3b252b3d87b229fedab820a00ec6b92d3168dc2b13ef43b2",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.14752791068580542,
+        0.023125996810207338,
+        0.03269537480063796,
+        0.02711323763955343
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 586943
+    },
+    {
+      "id": "wpn_purple_raven_bow",
+      "name": "鸦羽猎弓",
+      "type": "bow",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-457e6dc8-9e8c-43a4-afd3-782e451e826c.png",
+      "path": "assets/resources/ux/weapons_v1/purple_raven_bow_v56.png",
+      "uuid": "ff92bcb9-4429-4d48-9819-f5dca6006c27",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "c817a3bb2c41c30287d09238accdf55636700e99eff93c143cd65be2154b138e",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.17384370015948963,
+        0.012759170653907496,
+        0.023923444976076555,
+        0.011961722488038277
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 614787
+    },
+    {
+      "id": "wpn_blue_hawk_crossbow",
+      "name": "隼翼轻弩",
+      "type": "crossbow",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-771fb9f6-7421-415e-a33e-6ae2fb97fe44.png",
+      "path": "assets/resources/ux/weapons_v1/blue_hawk_crossbow_v56.png",
+      "uuid": "07b3d5eb-5a4f-4b02-a0b8-5ee89a79ea81",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "822eb01fe4609b281ab53d16f5684f88eed8790fe187b8c898677fbdd6295925",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.0215311004784689,
+        0.07655502392344497,
+        0.013556618819776715,
+        0.11642743221690591
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1387197
+    },
+    {
+      "id": "wpn_blue_rock_crossbow",
+      "name": "碎岩重弩",
+      "type": "crossbow",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-d73210e6-699a-433a-ae72-c1a482c8b669.png",
+      "path": "assets/resources/ux/weapons_v1/blue_rock_crossbow_v56.png",
+      "uuid": "71defded-5ea3-408c-9322-ea2ea4a77085",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "2ff183e832d001372c95bd625dc7a37a8b2feea14bb653dee2f892bdc444dd54",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.015151515151515152,
+        0.07655502392344497,
+        0.007177033492822967,
+        0.12280701754385964
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1473651
+    },
+    {
+      "id": "wpn_purple_falcon_crossbow",
+      "name": "银隼战弩",
+      "type": "crossbow",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-767ae4c3-f123-4479-924e-c239bf7b158a.png",
+      "path": "assets/resources/ux/weapons_v1/purple_falcon_crossbow_v56.png",
+      "uuid": "0902476a-7222-4fe4-86ee-a48e3a687cf0",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "a7ac73fafa8e5e72212ecf25565caac02a806a81ecaf1f02fa3162d19b86f7a6",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.023923444976076555,
+        0.0773524720893142,
+        0.011961722488038277,
+        0.09968102073365231
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1420201
+    },
+    {
+      "id": "wpn_purple_siege_crossbow",
+      "name": "裂城重弩",
+      "type": "crossbow",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-66ebe411-7962-452b-bc3a-e28ae38622a4.png",
+      "path": "assets/resources/ux/weapons_v1/purple_siege_crossbow_v56.png",
+      "uuid": "7800b8ab-acca-4e3e-a014-3cedbeb99d4d",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "79d5a0329fc618334a9a653c15547f40885c83583babb8513b6dd4bfa3d719e7",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.019936204146730464,
+        0.10047846889952153,
+        0.015151515151515152,
+        0.08373205741626795
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1435538
+    },
+    {
+      "id": "wpn_blue_frost_staff",
+      "name": "霜晶法杖",
+      "type": "staff",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-a4fc10c1-0e3b-4265-ba8f-c32688e15b78.png",
+      "path": "assets/resources/ux/weapons_v1/blue_frost_staff_v56.png",
+      "uuid": "bd15140b-046b-4a52-a1b7-8fda267e7774",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "2ff52e29cf2c0198124264e4f5a7ea8d9871ddc4867b11b1b10f51a4e0986985",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.07256778309409888,
+        0.04066985645933014,
+        0.023125996810207338,
+        0.03269537480063796
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 615462
+    },
+    {
+      "id": "wpn_blue_echo_staff",
+      "name": "回响法杖",
+      "type": "staff",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-c4b1475d-8a1a-434d-8e08-488f587287fd.png",
+      "path": "assets/resources/ux/weapons_v1/blue_echo_staff_v56.png",
+      "uuid": "c8ee93d4-d833-405b-9a2a-2416039902dc",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "051cd0900eeb8936f38f9e4588e358e04248d0d5aa044fb17384c5062f119368",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.06220095693779904,
+        0.027910685805422646,
+        0.018341307814992026,
+        0.025518341307814992
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 763562
+    },
+    {
+      "id": "wpn_purple_sun_staff",
+      "name": "裂日法杖",
+      "type": "staff",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-b0c12ee3-7fe0-49b0-9aa9-c77b299d7b38.png",
+      "path": "assets/resources/ux/weapons_v1/purple_sun_staff_v56.png",
+      "uuid": "f9610939-35d9-487e-aaf2-23decc1fbf16",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "63def0f4e29dd5fa5fd5479eaaad044dc5bf32ce03fcd7ae45dc30412a3fc197",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.06060606060606061,
+        0.01674641148325359,
+        0.008771929824561403,
+        0.023923444976076555
+      ],
+      "cornerAlpha": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "bytes": 696132
+    },
+    {
+      "id": "wpn_purple_moon_staff",
+      "name": "月泉法杖",
+      "type": "staff",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-2d3af6d0-d8f4-4711-9196-2e9b06f0d20f.png",
+      "path": "assets/resources/ux/weapons_v1/purple_moon_staff_v56.png",
+      "uuid": "f51b26fd-a92a-4af6-a006-5cf74c51ee03",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "d1a5d071e295b389eefe880554f81f5e74205896d8996e2e30a920341a841294",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.07256778309409888,
+        0.029505582137161084,
+        0.01594896331738437,
+        0.0215311004784689
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 805407
+    }
+  ]
+}

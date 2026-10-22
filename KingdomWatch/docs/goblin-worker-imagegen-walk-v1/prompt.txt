@@ -1,0 +1,20 @@
+Use case: identity-preserve
+Asset type: production 2D game walk-cycle sprite sheet, exactly 8 sequential animation frames, 4 columns by 2 rows.
+Reference image 1 is the CURRENT IN-GAME goblin worker, the identity and drawing-style master. Preserve this exact goblin, do not redesign it: olive green skin, oversized pointed ears, sparse black mohawk, hooked long nose, small yellow angry eyes, two ivory lower tusks, large angular head, moderately muscular compact body, bare green chest, single brown leather belt with rectangular metal buckle, ragged brown loincloth, brown forearm wraps, brown wrapped boots. He carries the SAME rough chipped gray axe in his RIGHT hand (screen LEFT) throughout. His left hand is a closed fist (screen RIGHT). No skull helmet, no scarf, no vest, no new ornaments.
+
+Generate ONE wide sprite sheet with an exact invisible 4-column x 2-row grid. Preferred canvas 2048x1024, 8 equal 512x512 cells. EXACTLY ONE complete goblin in each cell. Reading order left-to-right on the first row, then left-to-right on the second row is a full continuous FORWARD WALKING LOOP. This is one character animated over time, not 8 character variants, not a turn-around sheet, not a pose collection. Every frame must face directly toward the camera, same near-frontal slightly elevated game camera as the reference. Never profile or turn sideways.
+
+Motion: an unmistakable grounded, weighty, slightly sneaky infantry WALK IN PLACE, not running, hopping or attacking. Keep the torso and head essentially frontal. Show TWO alternating steps per loop, each foot visibly lifting and passing the support foot, with subtle natural hip/shoulder counter-motion, small knee bends, and restrained opposite arm swing. Heavy axe follows the carrying hand smoothly as one rigid object; maintain correct fingers gripping the handle, do not change hands.
+Phase 1: character's RIGHT leg (screen left) reaches toward camera and plants, left leg trails.
+Phase 2: weight settles onto right leg, pelvis slightly lowers, left heel lifts.
+Phase 3: left knee bends and left boot lifts forward past the planted right leg.
+Phase 4: left leg extends forward to prepare contact, right leg moves back.
+Phase 5: LEFT leg (screen right) reaches toward camera and plants, right leg trails.
+Phase 6: weight settles onto left leg, pelvis slightly lowers, right heel lifts.
+Phase 7: right knee bends and right boot lifts forward past the planted left leg.
+Phase 8: right leg extends forward toward the next frame-1 contact, left leg moves back.
+Last frame must naturally lead into first frame; do NOT repeat frame 1 as frame 8. Frame 1/5 and frame 3/7 must show genuinely opposite foot phases; no duplicated poses.
+
+Lock skull/ears/nose/tusks/eye shape, body proportions, every clothing piece and axe shape across all cells. Use the reference's exact 2D fantasy painted cartoon rendering, dark contour lines, readable olive-green and brown blocks, modest shading, not photoreal, not pixel art, not 3D. Frame each goblin at identical scale (about 390px tall within a 512px cell), centered on x=256 of its cell, with the common ground plane near local y=450; preserve small natural walk bob, not exaggerated whole-body scaling. Entire ears, feet and axe blade must stay inside each cell with generous transparent separation. No limb cuts, neck gaps or separated armpits.
+
+Background MUST be actual alpha transparency. No checkerboard drawn into the image, no background color, no floor, no shadow, no scene, no labels, no text, no numbers, no grid lines, no UI, no glow, no motion blur, no dust. Only the 8 isolated complete goblin frames.

@@ -1,0 +1,295 @@
+[
+  {
+    "id": "mobs-forest",
+    "file": "ux/mobs_forest_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-66e023a5-04f1-4677-9a8f-439b72f91d55.png",
+    "kind": "mobs",
+    "chapter": 2
+  },
+  {
+    "id": "mobs-lair",
+    "file": "ux/mobs_lair_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-f56ecc74-ba32-42a2-b5ff-5cd59758f1ca.png",
+    "kind": "mobs",
+    "chapter": 3
+  },
+  {
+    "id": "mobs-marsh",
+    "file": "ux/mobs_marsh_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-b7007cc5-0078-41d6-96b0-6f94bbf13a19.png",
+    "kind": "mobs",
+    "chapter": 4
+  },
+  {
+    "id": "mobs-coast",
+    "file": "ux/mobs_coast_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-a9397754-729f-460b-9a55-815c444ddb9d.png",
+    "kind": "mobs",
+    "chapter": 5
+  },
+  {
+    "id": "mobs-desert",
+    "file": "ux/mobs_desert_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-2e481c76-3dce-461c-8782-0b38babd5785.png",
+    "kind": "mobs",
+    "chapter": 6
+  },
+  {
+    "id": "mobs-ruins",
+    "file": "ux/mobs_ruins_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-a92c947d-e35b-4c01-b0dd-3e02489d3784.png",
+    "kind": "mobs",
+    "chapter": 7
+  },
+  {
+    "id": "mobs-canyon",
+    "file": "ux/mobs_canyon_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-2545282c-2857-4652-a6c6-d94777fc4c63.png",
+    "kind": "mobs",
+    "chapter": 8
+  },
+  {
+    "id": "mobs-mine",
+    "file": "ux/mobs_mine_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-bebe5e1f-324b-4bda-a785-f84d423faed6.png",
+    "kind": "mobs",
+    "chapter": 9
+  },
+  {
+    "id": "mobs-snow",
+    "file": "ux/mobs_snow_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-84295f99-e51d-4f8e-a2f4-528a43a96171.png",
+    "kind": "mobs",
+    "chapter": 10
+  },
+  {
+    "id": "mobs-storm",
+    "file": "ux/mobs_storm_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-5aa6f233-4925-483b-aa10-03e672c04ab6.png",
+    "kind": "mobs",
+    "chapter": 11
+  },
+  {
+    "id": "mobs-fungus",
+    "file": "ux/mobs_fungus_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-1048a98d-8095-488f-acf2-e994299d53d1.png",
+    "kind": "mobs",
+    "chapter": 12
+  },
+  {
+    "id": "mobs-grave",
+    "file": "ux/mobs_grave_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-b2ca1d8a-088d-4366-9f8b-c9f2f0b1e82e.png",
+    "kind": "mobs",
+    "chapter": 13
+  },
+  {
+    "id": "mobs-fortress",
+    "file": "ux/mobs_fortress_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-634d5c4e-5a88-46f0-8f01-1fb483b0d2f8.png",
+    "kind": "mobs",
+    "chapter": 14
+  },
+  {
+    "id": "mobs-volcano",
+    "file": "ux/mobs_volcano_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-1e1efbb3-9f72-4b9a-a612-1e754086ffaa.png",
+    "kind": "mobs",
+    "chapter": 15
+  },
+  {
+    "id": "mobs-rift",
+    "file": "ux/mobs_rift_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-ce750e21-5592-470f-8ac6-5fa5c5b763e2.png",
+    "kind": "mobs",
+    "chapter": 16
+  },
+  {
+    "id": "map-marsh",
+    "file": "scenes/bg_campaign_marsh_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-35dee0ec-68c7-4113-be32-45e696be0081.png",
+    "kind": "map",
+    "chapter": 4
+  },
+  {
+    "id": "battle-marsh",
+    "file": "scenes/scene_marsh_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-56fee34a-680a-4a37-879d-d8fee1f0f7cb.png",
+    "kind": "battle",
+    "chapter": 4
+  },
+  {
+    "id": "map-coast",
+    "file": "scenes/bg_campaign_coast_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-86e7a5d2-1546-493c-8166-09f9e1284978.png",
+    "kind": "map",
+    "chapter": 5
+  },
+  {
+    "id": "battle-coast",
+    "file": "scenes/scene_coast_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-0794c8bb-ff9f-48b3-b4b9-cca2cd4bda41.png",
+    "kind": "battle",
+    "chapter": 5
+  },
+  {
+    "id": "map-desert",
+    "file": "scenes/bg_campaign_desert_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-d763f00e-6ca4-4e07-babe-ae6eedda6529.png",
+    "kind": "map",
+    "chapter": 6
+  },
+  {
+    "id": "battle-desert",
+    "file": "scenes/scene_desert_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-76aaeeb4-47e1-43d0-a122-ba73b042bd7e.png",
+    "kind": "battle",
+    "chapter": 6
+  },
+  {
+    "id": "map-ruins",
+    "file": "scenes/bg_campaign_ruins_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-e68521d2-e98e-491e-8eeb-6fe02b72c1bf.png",
+    "kind": "map",
+    "chapter": 7
+  },
+  {
+    "id": "battle-ruins",
+    "file": "scenes/scene_ruins_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-12904bbe-f277-4a80-9ce0-c4b236cc2d7b.png",
+    "kind": "battle",
+    "chapter": 7
+  },
+  {
+    "id": "map-canyon",
+    "file": "scenes/bg_campaign_canyon_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-bf15afea-3f00-4940-9ec5-3f12291a5372.png",
+    "kind": "map",
+    "chapter": 8
+  },
+  {
+    "id": "battle-canyon",
+    "file": "scenes/scene_canyon_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-9e6c0fb3-a209-4094-9e01-3befff5387b7.png",
+    "kind": "battle",
+    "chapter": 8
+  },
+  {
+    "id": "map-mine",
+    "file": "scenes/bg_campaign_mine_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-a49ba549-6271-4222-84b9-446de5425f28.png",
+    "kind": "map",
+    "chapter": 9
+  },
+  {
+    "id": "battle-mine",
+    "file": "scenes/scene_mine_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-62e68da5-b757-4e44-af57-57c9cc5c8ac9.png",
+    "kind": "battle",
+    "chapter": 9
+  },
+  {
+    "id": "map-snow",
+    "file": "scenes/bg_campaign_snow_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-8a7063fa-0bf4-4683-b2a6-177e5c73ed87.png",
+    "kind": "map",
+    "chapter": 10
+  },
+  {
+    "id": "battle-snow",
+    "file": "scenes/scene_snow_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-4ec7db5f-dc36-4d0f-8d10-1d4c04aaeb90.png",
+    "kind": "battle",
+    "chapter": 10
+  },
+  {
+    "id": "map-storm",
+    "file": "scenes/bg_campaign_storm_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-275f6ca7-5a86-4754-8482-dcb8f4edf627.png",
+    "kind": "map",
+    "chapter": 11
+  },
+  {
+    "id": "battle-storm",
+    "file": "scenes/scene_storm_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-e09a2ade-7311-4e0b-86a7-a434a2202b1e.png",
+    "kind": "battle",
+    "chapter": 11
+  },
+  {
+    "id": "map-fungus",
+    "file": "scenes/bg_campaign_fungus_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-053b6e6f-a539-44e2-9381-dbb5ad661b6d.png",
+    "kind": "map",
+    "chapter": 12
+  },
+  {
+    "id": "battle-fungus",
+    "file": "scenes/scene_fungus_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-a45699c4-f2f3-4f14-8198-032820e4a668.png",
+    "kind": "battle",
+    "chapter": 12
+  },
+  {
+    "id": "map-grave",
+    "file": "scenes/bg_campaign_grave_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-4399ee27-35f5-4336-a1d3-65037f0ccf9b.png",
+    "kind": "map",
+    "chapter": 13
+  },
+  {
+    "id": "battle-grave",
+    "file": "scenes/scene_grave_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-14989908-310d-4ead-a56f-8c425f7d51c4.png",
+    "kind": "battle",
+    "chapter": 13
+  },
+  {
+    "id": "map-fortress",
+    "file": "scenes/bg_campaign_fortress_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-a321eb2c-d469-4ce8-8ff9-4154bf74a72e.png",
+    "kind": "map",
+    "chapter": 14
+  },
+  {
+    "id": "battle-fortress",
+    "file": "scenes/scene_fortress_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-307fc509-c7a5-4eac-bcf8-65df6551e33f.png",
+    "kind": "battle",
+    "chapter": 14
+  },
+  {
+    "id": "map-volcano",
+    "file": "scenes/bg_campaign_volcano_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-e31db0c2-afae-4fae-b920-ce29c72e1fa0.png",
+    "kind": "map",
+    "chapter": 15
+  },
+  {
+    "id": "battle-volcano",
+    "file": "scenes/scene_volcano_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-c8ec424c-74d6-44c7-9126-991bc7b5e2eb.png",
+    "kind": "battle",
+    "chapter": 15
+  },
+  {
+    "id": "map-rift",
+    "file": "scenes/bg_campaign_rift_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-1e089a1e-616e-4bdc-b5ef-6b14ce8e52ca.png",
+    "kind": "map",
+    "chapter": 16
+  },
+  {
+    "id": "battle-rift",
+    "file": "scenes/scene_rift_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-d84236be-ff2f-44e8-a1fd-7e4b3aee5f5c.png",
+    "kind": "battle",
+    "chapter": 16
+  },
+  {
+    "id": "world",
+    "file": "scenes/bg_endless_world_v66.png",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-67e069d0-ea45-4522-a4a7-a10a4dee355e.png",
+    "kind": "world"
+  }
+]

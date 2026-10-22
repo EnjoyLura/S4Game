@@ -1,0 +1,127 @@
+{
+  "originalFilesChecked": 1858,
+  "changedExistingFiles": [
+    "assets/scripts/battle/Hero.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/config/Cards.ts",
+    "assets/scripts/ui/BattleComicPanels.ts",
+    "assets/scripts/ui/Panels.ts",
+    "assets/scripts/ui/PickArt.ts"
+  ],
+  "allOriginalMediaUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "nonLightningHeroCombatUnchanged": true,
+  "fireCardEffectsUnchanged": true,
+  "cardCount": 17,
+  "rarityCounts": {
+    "white": 2,
+    "blue": 6,
+    "purple": 5,
+    "gold": 4
+  },
+  "cards": [
+    {
+      "id": "volt_attack",
+      "rarity": "white",
+      "maxStacks": 5
+    },
+    {
+      "id": "volt_aspd",
+      "rarity": "white",
+      "maxStacks": 4
+    },
+    {
+      "id": "volt_crit_rate",
+      "rarity": "blue",
+      "maxStacks": 4
+    },
+    {
+      "id": "volt_crit_dmg",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "volt_spell",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "volt_shards",
+      "rarity": "purple",
+      "maxStacks": 3
+    },
+    {
+      "id": "volt_cd",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "volt_range",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "volt_war",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "volt_eager",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "volt_shock",
+      "rarity": "purple",
+      "maxStacks": 1
+    },
+    {
+      "id": "volt_pressure",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "volt_linger",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "volt_strikes",
+      "rarity": "gold",
+      "maxStacks": 2
+    },
+    {
+      "id": "volt_stun",
+      "rarity": "gold",
+      "maxStacks": 1
+    },
+    {
+      "id": "volt_unlock_skill",
+      "rarity": "gold",
+      "maxStacks": 1
+    },
+    {
+      "id": "volt_unlock_ult",
+      "rarity": "gold",
+      "maxStacks": 1
+    }
+  ],
+  "generatedIcons": 13,
+  "redrawnFireIcons": 5,
+  "redrawnLightningIcons": 4,
+  "newLightningIcons": 4,
+  "staticMaximums": {
+    "baseChainTargets": 11,
+    "chainHopDistance": 571.22,
+    "shockDuration": 5,
+    "shockBaseAmp": 0.25,
+    "shockAmpWithLevel30": 0.35,
+    "selfShockedCardBonus": 0.6,
+    "baseUltimateStrikes": 25,
+    "baseUltimateStun": 2.5,
+    "ultimateStunWithLevel80": 3,
+    "chargeRequirementMultiplier": 0.5625,
+    "ultimateDuration": 6.9
+  }
+}

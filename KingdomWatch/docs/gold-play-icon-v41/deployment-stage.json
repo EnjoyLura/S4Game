@@ -1,0 +1,26 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-gold-play-icon-v41-20261018-204240",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "entryVersion": "1792327352",
+  "game": "https://kingdom-watch.pages.dev/?v=gold-play-icon-v41-1792327352",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-second-level-balance-v40-20261018-203548",
+  "originalFilesChecked": 1830,
+  "changedExistingFiles": [
+    "assets/scripts/ui/Panels.ts"
+  ],
+  "priorPreviewFilesPreserved": 793,
+  "typeDiagnosticsUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "allOriginalMediaUnchanged": true,
+  "numericBalanceAndRewardTransactionsUnchanged": true,
+  "manualAcceptance": "No tests/game/browser/simulation/audio playback. User manual visual acceptance.",
+  "deployment": "https://6616756f.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.4512b.js?v=1792327352",
+    "finalUrl": "https://kingdom-watch.pages.dev/?v=gold-play-icon-v41-1792327352"
+  }
+}

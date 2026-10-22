@@ -1,0 +1,8 @@
+{
+  "tools/publish-github-pages.ps1": "2ef5ce8b7f8ca80b53c498979d26eade62c5fefcfa7c311bfba311632a0bee06",
+  "tools/github-pages/export.py": "c8822bdbdf5a232994959c6ace853cf270ab10f3e5292aab7a5af18b0a612f22",
+  "tools/github-pages/publish.py": "69b14260b59c5c13b1888ce9248c7ce930e600adc041835e93da99a60a33f4a3",
+  "docs/github-pages-publishing/README.md": "f99f0f75ff160b7cf2306cfaf4fdf9d9ab7515547eb21b18ad77e78eb22ff7be",
+  "AGENTS.md": "cda92471a2a379724f94ae8884f208961c76d1c44bc7a1e4a1772a01f233e930",
+  "README.md": "464bc98db328f47f2921a0aa7c41febe13384ddc4fac2bbf1572b72a2776c775"
+}

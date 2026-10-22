@@ -1,3 +1,4 @@
+import { EXPANSION_MOBS } from '../config/ChapterContent';
 /**
  * 五主界面数据层（§主界面需求清单）：物品/商店/英雄配置 + 经济公式 + 背包穿戴养成操作
  * 掉落与购买共用同一物品定义；数值默认值见 docs/主界面需求清单.md（实施时校准只动这张表）
@@ -43,6 +44,8 @@ export interface EquipDef {
   /** 词条表（lv1 基础值；阶级每+1 数值×1.8，百分比词条同乘） */
   stats: Partial<Record<StatKey, number>>;
   price: number; unlock: string; // 商店价/解锁关卡
+  /** 可选插画与搭配说明；非武器沿用各实例独立强化等级。 */
+  art?: string; focus?: string; description?: string;
 }
 export const EQUIPS: Record<string, EquipDef> = {
   ...Object.keys(WEAPONS).reduce((out, id) => { out[id] = { ...WEAPONS[id], kind: 'weapon' }; return out; }, {} as Record<string, EquipDef>),
@@ -50,6 +53,54 @@ export const EQUIPS: Record<string, EquipDef> = {
   acc_moon: { id: 'acc_moon', name: '月纹坠饰', kind: 'acc', quality: 1, tier: 1, stats: { critRate: 0.03, critDmg: 0.12 }, price: 300, unlock: '1-1' },
   glove_wind: { id: 'glove_wind', name: '疾风手套', kind: 'glove', quality: 0, tier: 3, stats: { atkSpd: 0.05, range: 30 }, price: 900, unlock: '1-2' },
   armor_forest: { id: 'armor_forest', name: '林语皮甲', kind: 'armor', quality: 3, tier: 1, stats: { skillDmg: 30, chargeEff: 0.10 }, price: 2400, unlock: '1-2' },
+  helm_ironridge: { id: 'helm_ironridge', name: '铁脊战盔', kind: 'helm', quality: 2, tier: 1,
+    stats: { atk: 18, atkPct: 0.04 }, price: 1800, unlock: '1-2',
+    art: 'shop_comic_v1/helm_ironridge_v57', focus: '基础攻击', description: '铁脊加固的前线战盔，偏重基础攻击，适合前期稳定输出。' },
+  helm_hawkguard: { id: 'helm_hawkguard', name: '鹰卫兜帽', kind: 'helm', quality: 2, tier: 1,
+    stats: { atk: 10, atkPct: 0.1 }, price: 1800, unlock: '1-2',
+    art: 'shop_comic_v1/helm_hawkguard_v57', focus: '攻击加成', description: '轻便的鹰卫兜帽，偏重攻击加成，适合已有攻击培养的英雄。' },
+  acc_sunfang: { id: 'acc_sunfang', name: '日牙护符', kind: 'acc', quality: 2, tier: 1,
+    stats: { critRate: 0.06, critDmg: 0.16 }, price: 1800, unlock: '1-2',
+    art: 'shop_comic_v1/acc_sunfang_v57', focus: '暴击率', description: '磨成日牙形的护符，偏重暴击率，让输出更稳定地触发暴击。' },
+  acc_crimson: { id: 'acc_crimson', name: '赤晶指环', kind: 'acc', quality: 2, tier: 1,
+    stats: { critRate: 0.03, critDmg: 0.3 }, price: 1800, unlock: '1-2',
+    art: 'shop_comic_v1/acc_crimson_v57', focus: '暴击伤害', description: '镶嵌赤晶的指环，偏重暴击伤害，适合已有暴击率的搭配。' },
+  glove_swift: { id: 'glove_swift', name: '游隼手套', kind: 'glove', quality: 2, tier: 1,
+    stats: { atkSpd: 0.12, range: 35 }, price: 1800, unlock: '1-2',
+    art: 'shop_comic_v1/glove_swift_v57', focus: '攻速', description: '贴合手指的游隼手套，偏重攻速，兼顾少量攻击范围。' },
+  glove_longwatch: { id: 'glove_longwatch', name: '远望护手', kind: 'glove', quality: 2, tier: 1,
+    stats: { atkSpd: 0.07, range: 70 }, price: 1800, unlock: '1-2',
+    art: 'shop_comic_v1/glove_longwatch_v57', focus: '攻击范围', description: '加长袖口的远望护手，偏重攻击范围，兼顾攻速。' },
+  armor_cinder: { id: 'armor_cinder', name: '余烬法衣', kind: 'armor', quality: 2, tier: 1,
+    stats: { skillDmg: 30, chargeEff: 0.05 }, price: 1800, unlock: '1-2',
+    art: 'shop_comic_v1/armor_cinder_v57', focus: '技能伤害', description: '绣有余烬纹的法衣，偏重技能伤害，兼顾少量充能效率。' },
+  armor_tide: { id: 'armor_tide', name: '潮纹外衣', kind: 'armor', quality: 2, tier: 1,
+    stats: { skillDmg: 18, chargeEff: 0.12 }, price: 1800, unlock: '1-2',
+    art: 'shop_comic_v1/armor_tide_v57', focus: '充能效率', description: '轻便的潮纹外衣，偏重充能效率，适合更频繁地释放大招。' },
+  helm_lioncrest: { id: 'helm_lioncrest', name: '狮脊重盔', kind: 'helm', quality: 3, tier: 1,
+    stats: { atk: 32, atkPct: 0.08 }, price: 6000, unlock: '1-4',
+    art: 'shop_comic_v1/helm_lioncrest_v57', focus: '基础攻击', description: '厚实的狮脊重盔，偏重基础攻击，并提供攻击加成。' },
+  helm_nightfeather: { id: 'helm_nightfeather', name: '夜羽兜帽', kind: 'helm', quality: 3, tier: 1,
+    stats: { atk: 18, atkPct: 0.18 }, price: 6000, unlock: '1-4',
+    art: 'shop_comic_v1/helm_nightfeather_v57', focus: '攻击加成', description: '夜羽织成的兜帽，偏重攻击加成，适合持续培养后的攻击流派。' },
+  acc_stareye: { id: 'acc_stareye', name: '星瞳吊坠', kind: 'acc', quality: 3, tier: 1,
+    stats: { critRate: 0.1, critDmg: 0.24 }, price: 6000, unlock: '1-4',
+    art: 'shop_comic_v1/acc_stareye_v57', focus: '暴击率', description: '星瞳宝石制成的吊坠，偏重暴击率，兼顾暴击伤害。' },
+  acc_dragonscale: { id: 'acc_dragonscale', name: '龙鳞指环', kind: 'acc', quality: 3, tier: 1,
+    stats: { critRate: 0.05, critDmg: 0.48 }, price: 6000, unlock: '1-4',
+    art: 'shop_comic_v1/acc_dragonscale_v57', focus: '暴击伤害', description: '龙鳞纹理的厚重指环，偏重暴击伤害，适合高暴击率搭配。' },
+  glove_storm: { id: 'glove_storm', name: '风暴护手', kind: 'glove', quality: 3, tier: 1,
+    stats: { atkSpd: 0.2, range: 50 }, price: 6000, unlock: '1-4',
+    art: 'shop_comic_v1/glove_storm_v57', focus: '攻速', description: '风暴纹护手偏重攻速，兼顾攻击范围，适合高频攻击。' },
+  glove_farstar: { id: 'glove_farstar', name: '远星护腕', kind: 'glove', quality: 3, tier: 1,
+    stats: { atkSpd: 0.12, range: 110 }, price: 6000, unlock: '1-4',
+    art: 'shop_comic_v1/glove_farstar_v57', focus: '攻击范围', description: '远星长护腕偏重攻击范围，兼顾攻速，帮助英雄更早接敌。' },
+  armor_flameseal: { id: 'armor_flameseal', name: '焰印长袍', kind: 'armor', quality: 3, tier: 1,
+    stats: { skillDmg: 54, chargeEff: 0.08 }, price: 6000, unlock: '1-4',
+    art: 'shop_comic_v1/armor_flameseal_v57', focus: '技能伤害', description: '刻有焰印的长袍，偏重技能伤害，兼顾充能效率；各职业均可穿戴。' },
+  armor_moonwell: { id: 'armor_moonwell', name: '月泉祭衣', kind: 'armor', quality: 3, tier: 1,
+    stats: { skillDmg: 32, chargeEff: 0.2 }, price: 6000, unlock: '1-4',
+    art: 'shop_comic_v1/armor_moonwell_v57', focus: '充能效率', description: '月泉祭衣偏重充能效率，兼顾技能伤害；各职业均可穿戴。' },
 };
 
 export function isEquip(id: string): boolean { return !!EQUIPS[id]; }
@@ -175,7 +226,7 @@ export const HERO_DEFS: Record<string, HeroDef> = {
     id: 'pyro', name: '焰·辉', job: '火焰 · AOE 爆发', avatar: 'ui_avatar_pyro',
     baseAtk: 60, baseSkillDmg: 90, growthType: 'ultimate', atkSpd: 1, weaponName: '辉焰法杖', skillName: '烈焰爆裂', ultName: '陨石天降',
     story: '自灰烬火山走出的流浪法师，掌心蕴火。怪群愈密，他的火焰便烧得愈旺。',
-    shopPrice: 2800,
+    shopPrice: 0,
   },
   volt: {
     id: 'volt', name: '沃尔·雷霆', job: '雷电 · 连锁控制', avatar: 'ui_avatar_volt',
@@ -201,9 +252,10 @@ export function squadList(): string[] {
 }
 export function inSquad(hid: string): boolean { return squadList().includes(hid); }
 
-/** 上阵：从左到右占第一个空位（满员/重复返回失败消息）；上阵即拥有（与商店/英雄/升级页同步） */
+/** 上阵：已拥有英雄从左到右占第一个空位。 */
 export function deployHero(hid: string): OpResult {
   if (!HERO_DEFS[hid]) return { ok: false, msg: '英雄不存在' };
+  if (!loadSave().heroes[hid]?.owned) return { ok: false, msg: hid === 'pyro' ? '通关普通1-2免费获得火法师' : '请先解锁该英雄' };
   const sq = squadList();
   if (sq.includes(hid)) return { ok: false, msg: '该英雄已上阵' };
   if (sq.length >= SQUAD_MAX) return { ok: false, msg: '编队已满，请先下阵英雄' };
@@ -404,8 +456,13 @@ export const SHOP: ShopDef[] = [
   ...['wpn_green_crossbow', 'wpn_green_book', 'wpn_green_staff'].map(id => ({ id: 's_' + id, tab: 'weapon' as ShopTab, name: WEAPONS[id].name,
     sub: '绿1阶 · ' + weaponUsers(id), price: WEAPONS[id].price, currency: 'diamond' as const, unlock: WEAPONS[id].unlock, give: { kind: 'equip' as const, id } })),
   { id: 's_wpn_crossbow', tab: 'weapon', name: '鹰眼重弩', sub: '紫2阶 · 重击弩', price: 1200, currency: 'diamond', unlock: '1-2', give: { kind: 'equip', id: 'wpn_crossbow' } },
+  ...Object.values(WEAPONS).filter(w => w.quality >= 2 && w.id !== 'wpn_crossbow').map(w => ({
+    id: 's_' + w.id, tab: 'weapon' as ShopTab, name: w.name,
+    sub: QNAME[w.quality] + w.tier + '阶 · ' + (w.focus || weaponUsers(w.id)),
+    price: w.price, currency: 'diamond' as const, unlock: w.unlock, give: { kind: 'equip' as const, id: w.id },
+  })),
   { id: 's_hero_sniper', tab: 'hero', name: '凯尔·鹰眼', sub: '狙击 · 重击输出', price: 6800, currency: 'diamond', unlock: '1-2', give: { kind: 'hero', id: 'sniper' } },
-  { id: 's_hero_pyro', tab: 'hero', name: '焰·辉', sub: '火焰 · AOE 爆发', price: 2800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'pyro' } },
+  { id: 's_hero_pyro', tab: 'hero', name: '焰·辉', sub: '通关普通1-2免费获得', price: 0, currency: 'diamond', unlock: '1-2', give: { kind: 'hero', id: 'pyro' } },
   { id: 's_hero_volt', tab: 'hero', name: '沃尔·雷霆', sub: '雷电 · 连锁控制', price: 4200, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'volt' } },
   { id: 's_hero_mora', tab: 'hero', name: '莫拉·寒霜', sub: '冰霜 · 减速控制', price: 4800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'mora' } },
   { id: 's_hero_more', tab: 'hero', name: '新英雄', sub: '敬请期待', price: 0, currency: 'diamond', unlock: '', give: { kind: 'hero', id: '' } },
@@ -413,6 +470,11 @@ export const SHOP: ShopDef[] = [
   { id: 's_acc_moon', tab: 'equip', name: '月纹坠饰', sub: '绿1阶 · 饰品', price: 300, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'acc_moon' } },
   { id: 's_glove_wind', tab: 'equip', name: '疾风手套', sub: '白3阶 · 手套', price: 900, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'glove_wind' } },
   { id: 's_armor_forest', tab: 'equip', name: '林语皮甲', sub: '紫1阶 · 衣服', price: 2400, currency: 'gold', unlock: '1-2', give: { kind: 'equip', id: 'armor_forest' } },
+  ...Object.values(EQUIPS).filter(d => d.kind !== 'weapon' && !!d.art).map(d => ({
+    id: 's_' + d.id, tab: 'equip' as ShopTab, name: d.name,
+    sub: QNAME[d.quality] + d.tier + '阶 · ' + KIND_NAME[d.kind] + ' · ' + d.focus,
+    price: d.price, currency: 'gold' as const, unlock: d.unlock, give: { kind: 'equip' as const, id: d.id },
+  })),
   { id: 's_mat_stone', tab: 'mat', name: '强化石', sub: '强化必需', price: 50, currency: 'gold', unlock: '1-1', give: { kind: 'mat', id: 'mat_stone', n: 1 } },
   { id: 's_mat_iron', tab: 'mat', name: '精铁锭', sub: '高阶强化', price: 80, currency: 'gold', unlock: '1-1', give: { kind: 'mat', id: 'mat_iron', n: 1 } },
   { id: 's_mat_dust', tab: 'mat', name: '魔法尘', sub: '附魔基底', price: 120, currency: 'gold', unlock: '1-2', give: { kind: 'mat', id: 'mat_dust', n: 1 } },
@@ -449,7 +511,10 @@ export function newEquipInst(defId: string): EquipInst {
 /** 商店购买（英雄=解锁；装备入仓库；材料入背包） */
 export function shopBuy(g: ShopDef): OpResult {
   const sv = loadSave();
+  // Includes stale callers carrying the former diamond price. The hero comes from victory only.
+  if (g.give.kind === 'hero' && g.give.id === 'pyro') return { ok: false, msg: sv.heroes.pyro.owned ? '已拥有该英雄' : '通关普通1-2免费获得火法师' };
   if (g.give.kind === 'hero' && g.give.id && sv.heroes[g.give.id]?.owned) return { ok: false, msg: '已拥有该英雄' };
+  if (!lvReached(g.unlock)) return { ok: false, msg: '通关 ' + g.unlock + ' 后解锁购买' };
   const wallet = g.currency === 'gold' ? sv.gold : sv.diamonds;
   if (wallet < g.price) return { ok: false, msg: g.currency === 'gold' ? '金币不足' : '钻石不足' };
   if (g.currency === 'gold') sv.gold -= g.price; else sv.diamonds -= g.price;
@@ -630,12 +695,17 @@ export interface CodexDef { id: string; name: string; icon: string; tags: [strin
 export const CODEX: CodexDef[] = [
   { id: 'goblin_worker', name: '哥布林苦工', icon: '👺', tags: ['小型', '近战'], desc: '成群结队冲向防线的近战单位，威胁在于数量。', traits: ['成群结队冲锋', '近战围攻防线', '单体威胁不高'], weak: '范围伤害（炮手/火法）' },
   { id: 'goblin_slinger', name: '哥布林投石手', icon: '🎯', tags: ['小型', '远程'], desc: '远程投掷石块，会躲在近战身后输出。', traits: ['远程投石攻击', '躲在近战身后', '血量偏低'], weak: '快速击杀（弓手/狙击）' },
-  { id: 'goblin_shaman', name: '哥布林萨满', icon: '🔮', tags: ['小型', '辅助'], desc: '治疗友军，优先击杀目标。', traits: ['持续治疗友军', '辅助型怪种', '务必优先击杀'], weak: '集火秒杀（狙击大招）' },
-  { id: 'wolf_rider', name: '狼骑兵', icon: '🐺', tags: ['中型', '骑兵'], desc: '高速冲锋，很快接近防线。', traits: ['移动速度极快', '迅速接近防线', '血量中等'], weak: '减速控制（冰法）' },
-  { id: 'goblin_brute', name: '大哥布林（精英）', icon: '👹', tags: ['大型', '精英'], desc: '血厚攻高的精英，击杀有装备掉落。', traits: ['血厚攻高', '精英级怪种', '击杀掉落装备'], weak: '持续输出 + 控场' },
-  { id: 'goblin_king', name: '哥布林王（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '第一章 BOSS，召唤苦工并狂暴冲锋。', traits: ['章节级 BOSS', '召唤苦工助战', '残血进入狂暴'], weak: '大招爆发窗口' },
+  { id: 'goblin_shaman', name: '哥布林萨满', icon: '🔮', tags: ['小型', '治疗'], desc: '生命较高的治疗法师，有35%法抗符盾，持续法术命中可破盾。', traits: ['每4秒治疗，施法准备1.2秒', '回复4%生命，最多治疗3名伤员', '冰封、眩晕可打断，治疗者不互疗'], weak: '物理或范围伤害覆盖后排，控制打断治疗' },
+  { id: 'wolf_rider', name: '狼骑兵', icon: '🐺', tags: ['中型', '冲锋'], desc: '蓄势0.55秒后冲锋2秒，冲锋撞线会强化第一次攻击。', traits: ['每6.5秒尝试冲锋，移速×1.8', '冲锋撞线首次攻击+50%', '冰封、眩晕可打断，减速可延缓'], weak: '留控制打断冲锋，提前减速' },
+  { id: 'goblin_brute', name: '大哥布林（精英）', icon: '👹', tags: ['大型', '重甲'], desc: '重甲减少40%物理伤害；法术绕过物抗，持续物理命中可破甲。', traits: ['累计原始物理伤害达最大生命28%时破甲', '破甲后物抗归零，受到伤害+15%持续3秒', '精英级怪种，击杀可掉落装备'], weak: '法术输出，或物理集火破甲后爆发' },
+  { id: 'goblin_king', name: '哥布林王（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '铠甲减少30%物理伤害；法术绕过物抗，物理集火可破甲。', traits: ['第五关与第十关首领', '破甲后物抗归零，易伤3秒', '免疫冰封'], weak: '法术输出，或破甲后大招爆发' },
 ];
 /** 图鉴首览奖励：每只怪物首次点开词条可领一次（钻石） */
+CODEX.push(...Object.values(EXPANSION_MOBS).map((d): CodexDef => ({
+  id: d.id, name: d.name, icon: '',
+  tags: [d.boss ? 'BOSS' : d.elite ? '精英' : d.airborne ? '飞行' : '普通', d.kind === 'heal' ? '辅助' : d.kind === 'ranged' ? '远程' : '近战'],
+  desc: d.description || d.name, traits: d.traits || [], weak: d.weak || '集中火力'
+})));
 export const CODEX_REWARD = 20;
 export function codexUnlocked(id: string): boolean { return loadSave().codex.includes(id); }
 export function codexClaimed(id: string): boolean { return loadSave().codexRewards.includes(id); }

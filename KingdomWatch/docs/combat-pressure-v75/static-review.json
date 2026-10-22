@@ -1,0 +1,21 @@
+{
+  "assetCount": 2078,
+  "changed": [
+    "scripts/config/FifthLevel.ts",
+    "scripts/config/FirstLevel.ts",
+    "scripts/config/FourthLevel.ts",
+    "scripts/config/SecondLevel.ts",
+    "scripts/config/SixthLevel.ts",
+    "scripts/config/ThirdLevel.ts"
+  ],
+  "added": [],
+  "removed": [],
+  "onlyNormalFirstSixWavesChanged": true,
+  "v74TwoSecondVictoryAllRuntimeCodePreserved": true,
+  "allOtherAssetsIdentical": true,
+  "native756UnchangedAfterV74Build": true,
+  "damageSpeedsSpecialCountsRewardRulesUnchanged": true,
+  "aliveCapStill60": true,
+  "reviewMethod": "static source and literal comparison only",
+  "gameBrowserTestsSimulationAudioStarted": false
+}

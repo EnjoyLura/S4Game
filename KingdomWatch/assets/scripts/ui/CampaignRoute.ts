@@ -6,8 +6,9 @@ import { mainLabel } from './PageKit';
 import { reducedMotion } from './UIMotion';
 import { campaignCheckpointLock, campaignCheckpointReward, campaignCheckpointStar, paintCampaignCheckpoint } from './CampaignCheckpointArt';
 import { campaignChapterPlate } from './CampaignChrome';
+import { CAMPAIGN_CHAPTERS } from '../config/Campaign';
 
-export const ROUTE_ART = ['outpost', 'forest', 'lair'].map(name => 'scenes/bg_campaign_' + name + '_v1');
+export const ROUTE_ART = CAMPAIGN_CHAPTERS.map(c => 'scenes/bg_campaign_' + c.art + (c.number <= 3 ? '_v1' : '_v66'));
 export const ROUTE_W = 750;
 export const ROUTE_H = 1500;
 /** Denser road clearings keep the finale below the floating header without a taller dock. */
@@ -78,7 +79,7 @@ export function routeStop(parent: Node, stage: number, selected: boolean, open: 
   shadow.fillColor = CA(COMIC.ink, .28); shadow.ellipse(1,-37,47,15); shadow.fill();
   if (highlighted) N('campaignSelectionGlow', item).addComponent(CampaignRouteMotion).glow();
   paintCampaignCheckpoint(item, chapter, highlighted, open);
-  const goldShield = chapter === 0 && highlighted;
+  const goldShield = (chapter === 0 || chapter >= 3) && highlighted;
   mainLabel(item, 0, 23, String(stage), { size: 32, bold: true, font: 'number', color: '#FFF7DF',
     w: 48, h: 40, outline: goldShield ? '#79501D' : COMIC.darkShade, outlineW: 2 });
   if (!open) campaignCheckpointLock(item);

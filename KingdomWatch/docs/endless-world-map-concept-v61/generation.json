@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-19",
+  "tool": "built-in image_gen",
+  "mode": "generate with reference images",
+  "purpose": "Temporary map art and portrait UX mockup for many future endless chapters",
+  "integratedIntoGame": false,
+  "published": false,
+  "userVisualApproval": "pending",
+  "temporaryGeographyAndRecords": true,
+  "liveVersionUnchanged": "endless-challenge-v59",
+  "assets": [
+    {
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-5bbe11ce-717e-4ab4-a51e-df11fbe57246.png",
+      "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\endless-world-map-concept-v61\\world-map-placeholder-v61.png",
+      "width": 1024,
+      "height": 1536,
+      "sha256": "d742bc1a96b704e3439b43b70811125c11af1405358d9a20d2ac7527dd9126d9",
+      "copiedOriginalBytes": true,
+      "prompt": "map-prompt.txt",
+      "references": [
+        "C:/Users/user/AppData/Local/Temp/codex-clipboard-8c029105-0ca8-486d-8f0e-264c99062b05.png",
+        "docs/endless-page-concept-v60/endless-page-concept-v60.png"
+      ]
+    },
+    {
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-578ed705-3bc3-423b-b1dc-6640ab86eff9.png",
+      "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\endless-world-map-concept-v61\\endless-world-map-ux-v61.png",
+      "width": 887,
+      "height": 1774,
+      "sha256": "569b19b42a9a5b82f45635b48046ec4ae234cc26a5c4c980f98a0ef7f9c13149",
+      "copiedOriginalBytes": true,
+      "prompt": "ux-prompt.txt",
+      "references": [
+        "docs/endless-world-map-concept-v61/world-map-placeholder-v61.png",
+        "docs/endless-page-concept-v60/endless-page-concept-v60.png"
+      ]
+    }
+  ]
+}

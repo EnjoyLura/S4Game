@@ -1,0 +1,13 @@
+--- before/Cards.ts
++++ after/Cards.ts
+@@ -9,8 +9,8 @@
+ // Relative weights; adding gold keeps existing rarity/type weights intact.
+ const RARITY_WEIGHT: Record<Rarity, number> = { white: 0.6, blue: 0.3, purple: 0.1, gold: 0.05 };
+ type OfferGroup = 'stats' | 'combat' | 'support';
+-/** Multiplies rarity weight, not an absolute offer probability. */
+-const OFFER_GROUP_WEIGHT: Record<OfferGroup, number> = { stats: 0.3, combat: 2, support: 1 };
++/** 普攻机制/技能/大招卡优先；同品质单卡权重是通用数值卡的30倍，并非固定出现概率。 */
++const OFFER_GROUP_WEIGHT: Record<OfferGroup, number> = { stats: 0.1, combat: 3, support: 1 };
+ 
+ /** 英雄战斗属性（卡牌改写目标；M0 弓箭手） */
+ export interface HeroStats {

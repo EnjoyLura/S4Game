@@ -1,0 +1,40 @@
+{
+  "version": 67,
+  "feature": "chapter-clear-focus",
+  "published": true,
+  "changedGameFiles": [
+    "assets/scripts/battle/BattleDirector.ts"
+  ],
+  "originalGameFiles": 2076,
+  "addedGameFiles": 0,
+  "nativeFilesPreserved": 756,
+  "typecheck": {
+    "newDiagnostics": 0,
+    "existingDiagnostics": 10
+  },
+  "build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-chapter-clear-focus-v67-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-chapter-clear-focus-v67-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "engineRevision": "2cb74a1e8caa095a",
+  "entry": "index.d12a8.js?v=1792589972",
+  "mainBundle": "build/web-mobile/assets/main/index.2cd56.js",
+  "mainBundleSha256": "0C1E00A459BA3A71E88BCFC9087E27C39B6B14BE791186FA05FBCAC6FA9D567D",
+  "validation": "Static source, type diagnostics, production build and resource identity only; no game/browser/test scripts/simulation/audio run.",
+  "deployment": "https://69df8aa0.kingdom-watch.pages.dev",
+  "game": "https://kingdom-watch.pages.dev/?v=chapter-clear-focus-v67-1792589972",
+  "httpIdentity": {
+    "mainBundleSha256Matches": true,
+    "entryStatus": 200,
+    "entryMatches": true
+  },
+  "publisher": "Installed Wrangler 4.143.0; initial unpinned npx cache resolution failed before deployment."
+}

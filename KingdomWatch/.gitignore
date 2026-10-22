@@ -25,3 +25,6 @@ node_modules/
 #//////////////////////////
 .idea/
 .wrangler/
+
+# Redundant frame export: unpacked sources remain versioned; archive kept locally.
+/docs/code-monster-templates-v4/five-monsters-pinned-mesh-v4.zip

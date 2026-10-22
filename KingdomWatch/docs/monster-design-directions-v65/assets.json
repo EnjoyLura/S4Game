@@ -1,0 +1,33 @@
+{
+  "tool": "image_gen.imagegen",
+  "status": "concepts-awaiting-user-feedback",
+  "assets": [
+    {
+      "id": "A",
+      "file": "a-jaw-grunt.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-2b458207-539b-467c-9aa6-523b31fe8c63.png",
+      "width": 1086,
+      "height": 1448,
+      "bytes": 1344445,
+      "sha256": "f9aa929b248ab92f1e768d3bbb4ab230c13c8536fd50e9c2460f554259d3afa2"
+    },
+    {
+      "id": "B",
+      "file": "b-stump-slinger.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-d5c75559-1734-40f2-9150-a4f3963342dd.png",
+      "width": 1086,
+      "height": 1448,
+      "bytes": 1348950,
+      "sha256": "805a19481622352663adb0c56674134a7d6231191f5363d83dafbd298032dac4"
+    },
+    {
+      "id": "C",
+      "file": "c-heavy-arm-brute.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-7c1ee6a2-e4c1-4fd0-aa7a-81c1b249d6ca.png",
+      "width": 1145,
+      "height": 1374,
+      "bytes": 1301382,
+      "sha256": "46b8553d5b86b3fc745a891c44d3e39d9d2ecd650b621c4a3b496ded684ba0dd"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-settlement-actions-v39-20261018-201903",
+  "entryVersion": "1792325928",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-new-enemy-art-v38-20261018-201314",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=settlement-actions-v39-1792325928",
+  "priorPreviewFilesPreserved": 793,
+  "originalFilesChecked": 1826,
+  "changedExistingFiles": [
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/config/FirstLevel.ts",
+    "assets/scripts/ui/Panels.ts"
+  ],
+  "typeDiagnosticsUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "allOriginalMediaUnchanged": true,
+  "audioAndRenderingUnchanged": true,
+  "heroWeaponCardDamageFormulasUnchanged": true,
+  "firstLevelWorkerCount": 100,
+  "previousWorkerCount": 69,
+  "eliteCount": 1,
+  "staticSpawnEndSum": 186.8,
+  "scope": "Victory settlement: left double-gold/right return only. Normal 1-1: 100 workers plus one elite, denser spawns over a similar schedule.",
+  "manualAcceptance": "User manual; no tests/game/browser/simulation/audio playback performed",
+  "deployment": "https://f2525640.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.d4fc6.js?v=1792325928",
+    "finalUrl": "https://kingdom-watch.pages.dev/?v=settlement-actions-v39-1792325928"
+  }
+}

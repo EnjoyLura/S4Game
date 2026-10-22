@@ -1,0 +1,29 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-burn-status-v36-20261018-171438",
+  "entryVersion": "1792314860",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-native-render-v35-20261018-165705",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=burn-status-v36-1792314860",
+  "priorPreviewFilesPreserved": 793,
+  "originalFilesChecked": 1820,
+  "changedExistingFiles": [
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/battle/FireVFX.ts",
+    "assets/scripts/battle/ImpactFX.ts"
+  ],
+  "typeDiagnosticsUnchanged": true,
+  "previousFireAnimationsUnchanged": true,
+  "audioGameplayAndRenderingUnchanged": true,
+  "allOriginalMediaUnchanged": true,
+  "statusVisual": "One pooled existing pyro_hit flame attached per living enemy with burnT > 0",
+  "manualAcceptance": "User manual; no tests/game/browser/simulation/audio playback performed",
+  "deployment": "https://a2b960eb.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.7127c.js?v=1792314860",
+    "finalUrl": "https://kingdom-watch.pages.dev/?v=burn-status-v36-1792314860"
+  }
+}

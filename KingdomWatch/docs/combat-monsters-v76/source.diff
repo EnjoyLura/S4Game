@@ -1,0 +1,1988 @@
+--- before/battle/BattleDirector.ts
++++ assets/scripts/battle/BattleDirector.ts
+@@ -44,6 +44,7 @@
+ import { battleEntryReady, enteringBattle, leaveBattle } from '../ui/BattleEntry';
+ import { warmPickArt } from '../ui/PickArt';
+ import { BossWarning } from '../ui/BossWarning';
++import { EnemyTooltip } from '../ui/EnemyTooltip';
+ 
+ const { ccclass } = _decorator;
+ 
+@@ -98,6 +99,7 @@
+   private ultPresentation!: UltimatePresentation;
+   private bossWarning!: BossWarning;
+   private loot!: BattleLoot;
++  private enemyTooltip!: EnemyTooltip;
+   private pendingWin = false;
+   private victoryDelayT = -1;
+   private pendingWinPanel: Parameters<Panels['showWin']>[0] | null = null;
+@@ -223,6 +225,7 @@
+     for (const h of this.heroes) this.dmgSvc.register(h.id, h.name);
+ 
+     this.hud = new HUD(uiRoot, this, field);
++    this.enemyTooltip = new EnemyTooltip(field, uiRoot, this.mgr, () => this.canUseBattleHud && !this.ultimateActive);
+     const lootLayer = new Node('EquipmentDrops');
+     lootLayer.setParent(field);
+     lootLayer.setSiblingIndex(textLayer.getSiblingIndex());
+@@ -410,6 +413,8 @@
+     this.offerUltimateLesson();
+   }
+ 
++  lateUpdate(dt: number): void { this.enemyTooltip?.tick(dt); }
++
+   /** Event/state driven: never pause inside damage, picking, loading or an ultimate presentation. */
+   private offerUltimateLesson(): void {
+     const second = this.secondTeaching, third = this.thirdTeaching;
+@@ -464,7 +469,8 @@
+     const hints: [string, boolean, string][] = [
+       ['armor', enemies.some(d => !!d.physRes), '重甲来袭：法术绕过物抗，物理集火可破甲'],
+       ['rush', enemies.some(d => !!d.rush), '冲锋来袭：冰封、眩晕可打断，减速可延缓'],
+-      ['heal', enemies.some(d => d.kind === 'heal'), '治疗单位来袭：用大招覆盖后排，阻断续航'],
++      ['ward', enemies.some(d => !!d.magicRes), '符盾抵抗法术：物理伤害绕过，法术集火可破盾'],
++      ['heal', enemies.some(d => d.kind === 'heal'), '治疗读条时可用冰封、眩晕打断，优先覆盖后排'],
+     ];
+     const hint = hints.find(([id, present]) => present && !this.roleHints.has(id));
+     if (hint) {
+--- before/battle/FireVFX.ts
++++ assets/scripts/battle/FireVFX.ts
+@@ -7,9 +7,9 @@
+ interface Fragment { part: Part; vx: number; vy: number; spin: number; }
+ interface Flight { root: Node; body: Part; tail: Part; }
+ interface Residue { mark: Part; glow: Part; }
+-interface Clip { part: Part; age: number; scale: number; }
++interface Clip { part: Part; age: number; scale: number; targetLifeId?: number; }
+ /** Read-only status view: every burn source already maintains these fields. */
+-export interface BurningTarget { node: Node; dead: boolean; burnT: number; def: { radius: number }; }
++export interface BurningTarget { node: Node; lifeId: number; dead: boolean; burnT: number; burnTick: number; burnPulse: number; def: { radius: number }; }
+ interface Burst {
+   root: Node; ground: Node; core: Part; flames: Part[]; smoke: Part[]; dust: Part; scorch: Part;
+   fragments: Fragment[]; age: number; life: number; radius: number; angle: number; blast: boolean; heavy: boolean;
+@@ -260,8 +260,9 @@
+   /** One existing small flame per living burned enemy, independent of attacker.
+    * Called after damage/status updates, using only the battle simulation clock. */
+   syncBurns(targets: readonly BurningTarget[], dt: number): void {
++    void dt;
+     for (const [target, clip] of this.burning) {
+-      if (target.dead || target.burnT <= 0 || !target.node.isValid || !target.node.parent) {
++      if (target.dead || target.burnT <= 0 || clip.targetLifeId !== target.lifeId || !target.node.isValid || !target.node.parent) {
+         clip.part.node.active = false;
+         clip.part.node.setParent(this.root);
+         this.burning.delete(target); this.burnFree.push(clip);
+@@ -273,7 +274,7 @@
+       let clip = this.burning.get(target);
+       if (!clip) {
+         clip = this.burnFree.pop() || { part: this.part('burnStatusFlame', this.root), age: 0, scale: 1 };
+-        clip.age = 0; clip.scale = 21 / PYRO_FLAME_W;
++        clip.age = 0; clip.scale = 21 / PYRO_FLAME_W; clip.targetLifeId = target.lifeId;
+         clip.part.frame = '';
+         // Local attachment inherits movement, depth sorting, and scene destruction.
+         clip.part.node.setParent(target.node);
+@@ -282,11 +283,14 @@
+         clip.part.sprite.customMaterial = this.material;
+         clip.part.node.active = true;
+         this.burning.set(target, clip);
+-      } else {
+-        clip.age = (clip.age + dt) % PYRO_CLIP_LIFE;
+-      }
+-      // Repeat the original forward ignition/decay cels while burnT remains active.
++      }
++      // One forward cycle per real 0.5s damage tick; refreshing burn never restarts its phase.
++      clip.age = target.burnPulse > 0 ? Math.min(.9999, target.burnTick / .5) * PYRO_CLIP_LIFE : PYRO_CLIP_LIFE * .75;
+       this.renderClip(clip);
++      // Before the first damage tick the status is a quiet ember, rather than a full damage burst.
++      if (target.burnPulse === 0) {
++        this.tint.set(255, 255, 255, 100); clip.part.sprite.color = this.tint;
++      }
+     }
+   }
+ 
+--- before/battle/Hero.ts
++++ assets/scripts/battle/Hero.ts
+@@ -891,6 +891,8 @@
+   readonly name = '焰·辉';
+   readonly chargeMax = PYRO_CHARGE_MAX;
+   readonly skillMax = 10;
++  /** One entry per promised skill fireball. Full projectile capacity defers a shot instead of dropping it. */
++  private skillVolley: { t: number; spec: ProjSpec; first: boolean }[] = [];
+   /** Fixed ground points; the projectile's actual arrival removes the warning and creates the crater. */
+   private meteorQueue: { t: number; x: number; y: number; fired?: boolean; first?: boolean; last?: boolean;
+     fallElapsed?: number; fallSeconds?: number }[] = [];
+@@ -996,9 +998,11 @@
+     Sfx.shoot(this.id);
+   }
+ 
+-  /** 技能·烈焰爆裂（自动，10s CD）：锁定技能范围内最密集簇，齐射 3 颗爆裂火球（1.6×攻击、大爆炸 + 灼烧 3s） */
++  /** 技能·烈焰爆裂：完整读取培养/强化后的数量，错开0.12秒发射，使额外火球可辨认。 */
+   protected castSkill(mgr: MonsterManager, projs: ProjectileManager, _dmg: DamageService): void {
+     void _dmg;
++    void projs;
++    if (this.skillVolley.length) { this.skillCd = .15; return; }
+     this.skillCd = this.skillCdTotal;   // 冷却缩减卡
+     const R = this.stats.skillRange;
+     const cands = mgr.list.filter(m => !m.dead && Math.hypot(m.x - this.x, m.y - HERO_Y) <= R);
+@@ -1016,18 +1020,19 @@
+     const boomR = pyroBlastRadius(this.stats, 110 * (this.stats.skillRangeMul || 1));
+     this.animateAttack(true, best.x - this.x, best.y - (HERO_Y + 60));
+     for (let k = 0; k < shots; k++) {
+-      const ox = best.x + (Math.random() * 2 - 1) * 70;
+-      const oy = best.y + (Math.random() * 2 - 1) * 70;
++      const ox = best.x + (k - (shots - 1) / 2) * Math.min(28, 100 / Math.max(1, shots - 1));
++      const oy = best.y;
+       const dx = ox - this.x, dy = oy - (HERO_Y + 60);
+       const l = Math.hypot(dx, dy) || 1;
+-      projs.fire(this.spec({
++      this.skillVolley.push({ t: k * .12, first: k === 0, spec: this.spec({
+         x: this.x, y: HERO_Y + 60, dirX: dx / l, dirY: dy / l,
+         dmg, explodeR: boomR, explodeMul: pc.boomMul, burnDps: this.abilityDamage(0.2, false, 0.04),
+         speed: 820, size: 11, ability: true,
+-      }));
+-    }
+-    Sfx.cast(this.id);
+-  }
++      }) });
++    }
++  }
++
++  protected queuedShotDelay(): number { return this.skillVolley[0]?.t ?? Infinity; }
+ 
+   private drawMeteorWarnings(): void {
+     if (this.meteorQueue.length) {
+@@ -1061,6 +1066,17 @@
+   }
+ 
+   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
++    for (const q of this.skillVolley) q.t -= dt;
++    if (this.skillVolley.length && this.skillVolley[0].t <= 0) {
++      const q = this.skillVolley[0];
++      if (projs.fire(q.spec)) {
++        this.skillVolley.shift();
++        if (q.first) Sfx.cast(this.id);
++        // Capacity recovery cannot collapse the remaining volley back into one overlapping burst.
++        const delay = this.skillVolley.length ? Math.max(0, .12 - this.skillVolley[0].t) : 0;
++        if (delay > 0) for (const next of this.skillVolley) next.t += delay;
++      }
++    }
+     this.warnT += dt;
+     const uc = pyroUltCfg(this.stats.ultLv);
+     const crR = CRATER_R * uc.craterMul;
+--- before/battle/ImpactFX.ts
++++ assets/scripts/battle/ImpactFX.ts
+@@ -144,11 +144,11 @@
+   /** Shared code-only role feedback. Low-priority cues never evict a break/heal already playing. */
+   combatFeedback(kind: string, x: number, y: number, radius: number, tx = x, ty = y): void {
+     if (kind === 'burnBurst') { this.blast(x, y, 'pyro', radius); return; }
+-    if ((kind === 'rush' || kind === 'armorHit') && this.cueFree.length <= 8) return;
++    if ((kind === 'rush' || kind === 'armorHit' || kind === 'wardHit' || kind === 'burnTick') && this.cueFree.length <= 8) return;
+     const p = this.cueFree.pop();
+     if (!p) return;
+     p.kind = kind; p.x = x; p.y = y; p.tx = tx; p.ty = ty; p.radius = radius;
+-    p.max = p.life = kind === 'armorHit' ? .16 : kind === 'rush' ? .24 : kind === 'heal' ? .55 : .4;
++    p.max = p.life = kind === 'armorHit' || kind === 'wardHit' ? .16 : kind === 'rush' ? .24 : kind === 'heal' ? .55 : .4;
+     this.cues.push(p); this.dirty = true;
+   }
+ 
+@@ -175,8 +175,12 @@
+           g.moveTo(x, y); g.lineTo(x + (k - 1) * 4, y + 18 + 12 * fade); g.stroke();
+         }
+       } else {
+-        const breaking = p.kind === 'armorBreak', group = p.kind === 'groupKill';
+-        this.tint.set(group ? 250 : 202, group ? 211 : 225, group ? 132 : 235, Math.round(235 * fade));
++        const magic = p.kind === 'wardBreak' || p.kind === 'wardHit';
++        const breaking = p.kind === 'armorBreak' || p.kind === 'wardBreak', group = p.kind === 'groupKill';
++        const interrupt = p.kind === 'interrupt', burn = p.kind === 'burnTick';
++        this.tint.set(group || interrupt || burn ? 250 : magic ? 206 : 202,
++          group ? 211 : interrupt ? 225 : burn ? 151 : magic ? 167 : 225,
++          group ? 132 : interrupt ? 154 : burn ? 62 : magic ? 255 : 235, Math.round(235 * fade));
+         g.fillColor = this.tint; g.strokeColor = this.tint; g.lineWidth = 1.8;
+         const count = breaking ? 6 : group ? 7 : 3;
+         const spread = (breaking ? p.radius * 1.5 : group ? 52 : 14) * (t + .2);
+--- before/battle/Monster.ts
++++ assets/scripts/battle/Monster.ts
+@@ -3,8 +3,8 @@
+  * 受击只闪红不掉速（用户确认：控制效果只属于特定 buff）；仅 BOSS 显示血条（M0 1-1 无 BOSS，钩子保留）
+  */
+ import { Color, Graphics, isValid, Label, Layers, Node, Tween, UIOpacity } from 'cc';
+-import { damageKindFor, MOBS, MOB_DMG_MUL, MOB_HP_MUL, MobDef } from '../config/Mobs';
+-import { enemyArtRef } from '../config/ChapterContent';
++import { damageKindFor, EnemyFormation, MOBS, MOB_DMG_MUL, MOB_HP_MUL, MobDef } from '../config/Mobs';
++import { enemyArtRef, EnemyHealing } from '../config/ChapterContent';
+ import { MonsterTraits } from './MonsterTraits';
+ import { LINE_Y, LO, PAL } from '../config/GameConfig';
+ import { bus, EVT } from '../core/EventBus';
+@@ -37,6 +37,9 @@
+ };
+ 
+ export class Monster {
++  private static nextLifeId = 0;
++  /** Stable for one spawn, so projectile deduplication/inspection survives node pooling. */
++  lifeId = 0;
+   private traits = new MonsterTraits(this);
+   node = new Node('mob');
+   def!: MobDef;
+@@ -46,6 +49,9 @@
+   state: 'move' | 'hold' | 'attack' = 'move';
+   dead = false;
+   baseX = 0;
++  formation: EnemyFormation | null = null;
++  /** Shared support lock: several healers cannot stack a heal on the same target. */
++  supportHealT = 0;
+   life = 0;
+   /** 地面基线固定；脚印只随步态改变位置与重量，不带动角色上下移动。 */
+   groundOffset = 3 / 160;
+@@ -61,6 +67,7 @@
+   burnT = 0;
+   burnTick = 0;
+   burnDps = 0;
++  burnPulse = 0;
+   private burnBurst = 0;
+   /** 眩晕硬直（预留：真正的眩晕类 buff 才会写入；受击不再写） */
+   stunT = 0;
+@@ -71,6 +78,7 @@
+   private freezeSlowDur = 0;
+   private thawT = 0;
+   private walkClock = 0;
++  private walking = true;
+   /** 感电（沃尔·雷霆）：受雷系命中后受伤放大，持续 shockT 秒 */
+   shockT = 0;
+   shockAmp = 0;
+@@ -107,14 +115,18 @@
+   init(def: MobDef, parent: Node, x: number, ctx: MonsterHitCtx, mgr?: MonsterManager): void {
+     this.deathMotion?.reset();
+     this.def = def;
++    this.lifeId = ++Monster.nextLifeId;
+     this.traits.reset();
+     this.ctx = ctx;
+     this.mgrRef = mgr || null;
+     this.maxHp = def.hp;
+     this.hp = def.hp;
+-    this.lastDamageTaken = this.burnBurst = 0;
++    this.lastDamageTaken = this.burnBurst = this.burnPulse = 0;
+     this.state = 'move';
+     this.dead = false;
++    this.formation = null;
++    this.supportHealT = 0;
++    this.walking = true;
+     this.life = Math.random() * 10;
+     this.walkClock = this.life;
+     this.groundOffset = 3 / 160;
+@@ -186,7 +198,7 @@
+         const t = Math.min(clip.attack.length - 1, p * clip.attack.length);
+         const i = Math.floor(t);
+         this.art.showSeq(clip.attack, i, i >= clip.attack.length - 1 ? 0 : t - i, h);
+-      } else if (this.state === 'move') {
++      } else if (this.state === 'move' && this.walking) {
+         // 步态节奏：以源视频步态环真实时长为基准实时播放（相位连贯不踉跄），按移速微调档位，减速同步变慢
+         const tempo = Math.min(1.25, Math.max(0.75, this.def.speed / clip.referenceSpeed));
+         const cps = (1 / clip.loopDur) * tempo;
+@@ -204,7 +216,7 @@
+       return;
+     }
+     // 程序化步态兜底（序列帧缺失时保留旧行为）
+-    const moving = this.state === 'move';
++    const moving = this.state === 'move' && this.walking;
+     const gait = moving ? Math.sin(this.walkClock * (this.def.id === 'wolf_rider' ? 12 : 8)) : 0;
+     this.art.node.angle = gait * 2.2;
+     this.art.node.setScale(1 + gait * 0.012, 1 + Math.abs(gait) * 0.017, 1);
+@@ -311,6 +323,19 @@
+   }
+   get isBoss(): boolean { return !!this.def.boss || this.def.id === 'goblin_king'; }
+   get immobilized(): boolean { return this.freezeT > 0 || this.stunT > 0; }
++  /** Read-only view of this living instance, rather than its original codex stats. */
++  inspect(): { physical: number; magic: number; armorBroken: boolean; wardBroken: boolean; states: string[] } {
++    const states = this.traits.activeStates;
++    if (this.freezeT > 0) states.push('冰封');
++    if (this.stunT > 0) states.push('眩晕');
++    if (this.burnT > 0) states.push('灼烧');
++    if (this.slowT > 0) states.push('减速' + Math.round(this.slowAmp * 100) + '%');
++    if (this.shockT > 0) states.push('感电');
++    if (this.vulnT > 0) states.push('易伤' + Math.round(this.vulnAmp * 100) + '%');
++    if (this.hunterMarkT > 0) states.push('猎杀标记');
++    if (!states.length) states.push(this.state === 'move' ? '行进中' : this.def.kind === 'melee' ? '攻击防线' : this.def.kind === 'heal' ? '治疗待命' : '远程攻击');
++    return { ...this.traits.defenseInfo, states };
++  }
+ 
+   drawIceFeet(g: Graphics): void {
+     if (this.freezeT <= 0 && this.thawT <= 0) return;
+@@ -324,6 +349,7 @@
+     if (this.dead) return;
+     this.deathMotion?.prepare();
+     this.life += dt;
++    this.supportHealT = Math.max(0, this.supportHealT - dt);
+     const frozenLeft = this.freezeT;
+     const motionDt = Math.max(0, dt - Math.max(this.freezeT, this.stunT));
+     this.thawT = Math.max(0, this.thawT - dt);
+@@ -355,15 +381,21 @@
+       this.flashOp.opacity = Math.max(0, Math.floor(255 * this.flashT / 0.12));
+       if (this.flashT <= 0 && this.flashNode) this.flashNode.active = false;
+     }
+-    if (this.state === 'move') this.walkClock += motionDt * (this.slowT > 0 ? 1 - this.slowAmp : 1);
+     this.traits.tick(dt, motionDt, line, mgr);
++    const slow = this.slowT > 0 ? 1 - this.slowAmp : 1;
++    const travel = this.state === 'move'
++      ? mgr.escortTravel(this, this.def.speed * slow * this.traits.speedMultiplier() * motionDt) : 0;
++    this.walking = travel > 0;
++    this.walkClock += travel / Math.max(1, this.def.speed);
+     this.tickArt(motionDt);
+     // 点燃 DoT：每 0.5s 聚合一条（§3.11）
+     if (this.burnT > 0) {
+       this.burnTick += Math.min(dt, this.burnT);
+-      if (this.burnTick >= 0.5) {
+-        this.burnTick -= 0.5;
++      if (this.burnTick + 1e-8 >= 0.5) {
++        this.burnTick = Math.max(0, this.burnTick - 0.5);
++        this.burnPulse++;
+         this.takeDamage(this.burnDps * 0.5, false, 'burn');
++        if (!this.dead) this.feedback('burnTick');
+       }
+       if (this.dead) return;
+       this.burnT = Math.max(0, this.burnT - dt);
+@@ -373,10 +405,9 @@
+     // Control stops movement and attacks, while burn damage and other status timers continue.
+     if (motionDt <= 0) return;
+ 
+-    const mul = this.slowT > 0 ? (1 - this.slowAmp) : 1;
+     if (this.state === 'move') {
+       // 直线行进（用户确认：不蛇形）；横向松散由出生 x 与分离逻辑保证
+-      this.node.setPosition(this.baseX, this.node.position.y - this.def.speed * mul * this.traits.speedMultiplier() * motionDt, 0);
++      this.node.setPosition(this.baseX, this.node.position.y - travel, 0);
+       const reach = this.def.kind === 'ranged' ? (this.def.atkRange || 0) : this.def.radius * 0.5;
+       if (this.node.position.y - LINE_Y <= reach) {
+         this.holdY = this.node.position.y;
+@@ -417,6 +448,8 @@
+   feedback(kind: string): void {
+     this.ctx.combatFeedback?.(kind, this.x, this.y + (kind === 'rush' ? 0 : this.def.radius * 1.2), this.def.radius);
+     if (kind === 'armorBreak') this.ctx.dmgNumber(this.x, this.y + this.def.radius * 3, '破甲', '#D4ECF4', true);
++    else if (kind === 'wardBreak') this.ctx.dmgNumber(this.x, this.y + this.def.radius * 3, '破盾', '#D5B5FF', true);
++    else if (kind === 'interrupt') this.ctx.dmgNumber(this.x, this.y + this.def.radius * 3, '打断', '#FFE29A');
+   }
+ 
+   private lunge(): void {
+@@ -424,7 +457,7 @@
+     this.atkAnimT = ATK_ANIM;
+   }
+ 
+-  /** 受击；crit 用于飘字样式；ignoreRes=无视物抗（狙击大招等）；返回是否击杀
++  /** 受击；crit 用于飘字样式；ignoreRes=无视物抗/法抗（狙击大招等）；返回是否击杀
+    *  受击只掉血+闪红，不硬直/减速/击退——控制只来自特定 buff（applySlow 等后续技能效果） */
+   /** 感电：同类状态取高并刷新；过期强度不能被后续较弱的感电继承。 */
+   applyShock(amp: number, dur: number): void {
+@@ -491,7 +524,7 @@
+     if (this.dead || !Number.isFinite(amount) || amount <= 0) return false;
+     const raw = amount, kind = damageKindFor(killerId);
+     if (!ignoreRes && kind !== 'true') {
+-      const resistance = kind === 'physical' ? this.traits.physicalResistance : this.def.magicRes || 0;
++      const resistance = kind === 'physical' ? this.traits.physicalResistance : this.traits.magicResistance;
+       amount *= 1 - Math.max(0, Math.min(.95, resistance)) * (1 - Math.max(0, Math.min(1, resCut)));
+     }
+     if (this.shockT > 0) amount *= 1 + this.shockAmp;
+@@ -505,7 +538,7 @@
+     this.ctx.dmgNumber(this.x, this.y + this.def.radius * 2.6,
+       String(Math.round(amount)), crit ? '#FF3030' : '#FFFFFF', crit, { target: this, amount, periodic: killerId === 'burn' });
+     this.ctx.impact?.(this.x, this.y + this.def.radius * 0.4, visualSource, heavy || crit || this.hp <= 0 && !!this.def.elite, impactAngle);
+-    if (kind === 'physical' && this.hp > 0) this.traits.recordPhysicalHit(raw);
++    if (this.hp > 0) this.traits.recordHit(raw, kind);
+     this.flash();
+     if (this.hp <= 0) {
+       if (this.traits.onLethal(killerId)) return false;
+@@ -577,6 +610,7 @@
+   }
+   applyBurn(dps: number, dur: number, burst = 0): void {
+     if (this.dead || dps <= 0 || dur <= 0) return;
++    if (this.burnT <= 0) this.burnTick = this.burnPulse = 0;
+     this.burnDps = this.burnT > 0 ? Math.max(this.burnDps, dps) : dps;
+     this.burnBurst = this.burnT > 0 ? Math.max(this.burnBurst, burst) : burst;
+     this.burnT = Math.max(this.burnT, dur);
+@@ -688,7 +722,7 @@
+   onFirstEncounter: ((def: MobDef) => void) | null = null;
+   private seen = new Set<string>();
+ 
+-  spawn(def: MobDef, actual?: { hp: number; dmg: number }): boolean {
++  spawn(def: MobDef, actual?: { hp: number; dmg: number }, formation?: EnemyFormation): boolean {
+     if (this.disposed) return false;
+     if (this.aliveCount >= 60) return false; // Corpses do not consume living-enemy capacity.
+     def = {
+@@ -698,7 +732,13 @@
+       healAmount: def.homeChapter && def.healAmount ? Math.round(def.healAmount * (actual ? actual.hp / def.hp : MOB_HP_MUL * this.statMul * this.rampHp)) : def.healAmount,
+     };
+     const m = this.pool.pop() || new Monster();
+-    m.init(def, this.field, def.boss ? 0 : Math.random() * 660 - 330, this.ctx, this);
++    const x = def.boss ? 0 : formation ? Math.max(-330, Math.min(330, formation.lane + Math.random() * 36 - 18)) : Math.random() * 660 - 330;
++    m.init(def, this.field, x, this.ctx, this);
++    if (formation?.id) {
++      const groups = new Set(this.list.filter(o => !o.dead && o.formation?.id).map(o => o.formation!.id));
++      const front = this.list.find(o => !o.dead && o.formation?.id === formation.id && o.formation.role === 'front');
++      if ((formation.role !== 'support' || front) && (groups.has(formation.id) || groups.size < 2)) m.formation = { ...formation };
++    }
+     this.list.push(m);
+     if (!this.seen.has(def.id)) { this.seen.add(def.id); this.onFirstEncounter?.(def); }
+     return true;
+@@ -851,12 +891,28 @@
+     return best;
+   }
+ 
+-  healAround(src: Monster, r: number, amt: number): number {
+-    const wounded = this.mobsInRadius(src.x, src.y, r).filter(m => m !== src && m.hp < m.maxHp);
+-    wounded.sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp);
++  /** A rear unit waits for its own living front; it never teleports or walks backwards. */
++  escortTravel(src: Monster, travel: number): number {
++    if (src.formation?.role !== 'support') return travel;
++    const front = this.list.find(m => !m.dead && m.formation?.id === src.formation!.id && m.formation.role === 'front');
++    if (!front) { src.formation = null; return travel; }
++    return Math.max(0, Math.min(travel, src.y - front.y - (src.formation.gap ?? 140)));
++  }
++
++  hasHealingTarget(src: Monster, radius: number): boolean {
++    return this.list.some(m => !m.dead && m !== src && m.def.kind !== 'heal' && m.hp < m.maxHp &&
++      m.supportHealT <= 0 && (m.x - src.x) ** 2 + (m.y - src.y) ** 2 <= radius * radius);
++  }
++
++  healAround(src: Monster, spec: Readonly<EnemyHealing>): number {
++    const wounded = this.mobsInRadius(src.x, src.y, spec.radius)
++      .filter(m => m !== src && m.def.kind !== 'heal' && m.hp < m.maxHp && m.supportHealT <= 0);
++    const front = src.formation?.id ? this.list.find(m => !m.dead && m.formation?.id === src.formation!.id && m.formation.role === 'front') : undefined;
++    wounded.sort((a, b) => a === front ? -1 : b === front ? 1 : a.hp / a.maxHp - b.hp / b.maxHp);
+     let count = 0;
+-    for (const m of wounded.slice(0, 3)) {
+-      if (m.heal(amt) <= 0) continue;
++    for (const m of wounded.slice(0, Math.min(3, Math.max(1, spec.targets)))) {
++      if (m.heal(Math.min(m.maxHp * spec.fraction, src.maxHp * spec.capRatio)) <= 0) continue;
++      m.supportHealT = 4;
+       count++;
+       this.ctx.combatFeedback?.('heal', src.x, src.y + src.def.radius, m.def.radius, m.x, m.y + m.def.radius);
+     }
+@@ -996,6 +1052,13 @@
+     const edge = m.isBoss ? 375 - m.def.radius * MOB_ART_HEIGHT / 2 - 12 : 355;
+     let nx = Math.max(-edge, Math.min(edge, p.x + dx));
+     let ny = Math.min(mobEntryY(m.def.radius) + 12, p.y + dy);
++    if (m.formation?.id) {
++      nx = Math.max(-edge, Math.min(edge, Math.max(m.formation.lane - 32, Math.min(m.formation.lane + 32, nx))));
++      if (m.formation.role === 'support') {
++        const front = this.list.find(o => !o.dead && o.formation?.id === m.formation!.id && o.formation.role === 'front');
++        if (front) ny = Math.max(ny, Math.min(p.y, front.y + (m.formation.gap ?? 140)));
++      }
++    }
+     if (m.state === 'hold') ny = p.y; // 停位怪不上下挤
+     m.node.setPosition(nx, ny, 0);
+     if (m.state === 'move') m.baseX = nx;
+--- before/battle/MonsterTraits.ts
++++ assets/scripts/battle/MonsterTraits.ts
+@@ -1,6 +1,8 @@
+ /** Shared, bounded enemy roles; all clocks follow battle simulation time. */
+ import { Color, Graphics, Node } from 'cc';
+ import { LO } from '../config/GameConfig';
++import { ENEMY_HEALING } from '../config/ChapterContent';
++import { damageKindFor, DamageKind } from '../config/Mobs';
+ import type { Monster, MonsterManager } from './Monster';
+ 
+ type DefenseLine = { takeDamage: (damage: number) => void };
+@@ -16,6 +18,10 @@
+   private armorDamage = 0;
+   private armorBroken = false;
+   private armorCueT = 0;
++  private wardDamage = 0;
++  private wardBroken = false;
++  private wardCueT = 0;
++  private pendingHeal = 0;
+   private cancelledRush = -1;
+   private chargeArmed = false;
+   private rushCueT = 0;
+@@ -26,23 +32,47 @@
+   reset(): void {
+     this.age = this.summonClock = this.summoned = this.regenClock = this.pendingStrike = 0;
+     this.revived = this.phase = false;
+-    this.armorDamage = this.armorCueT = this.rushCueT = 0;
+-    this.armorBroken = this.chargeArmed = false;
++    this.armorDamage = this.armorCueT = this.wardDamage = this.wardCueT = this.pendingHeal = this.rushCueT = 0;
++    this.armorBroken = this.wardBroken = this.chargeArmed = false;
+     this.cancelledRush = -1;
+     this.hide();
+   }
+   get enraged(): boolean { return this.phase; }
+   get physicalResistance(): number { return this.armorBroken ? 0 : this.owner.def.physRes || 0; }
+-  recordPhysicalHit(raw: number): void {
+-    if (this.physicalResistance <= 0 || raw <= 0) return;
+-    this.armorDamage += raw;
+-    if (this.armorDamage >= this.owner.maxHp * (this.owner.def.armorBreakRatio || .3)) {
+-      this.armorBroken = true;
++  get magicResistance(): number { return this.wardBroken ? 0 : this.owner.def.magicRes || 0; }
++  get defenseInfo(): { physical: number; magic: number; armorBroken: boolean; wardBroken: boolean } {
++    return {
++      physical: 1 - this.incomingDamage(1 - this.physicalResistance, 'archer'),
++      magic: 1 - this.incomingDamage(1 - this.magicResistance, 'pyro'),
++      armorBroken: this.armorBroken, wardBroken: this.wardBroken,
++    };
++  }
++  get activeStates(): string[] {
++    const states: string[] = [];
++    if (this.pendingHeal > 0) states.push('治疗读条 ' + this.pendingHeal.toFixed(1) + '秒');
++    if (this.pendingStrike > 0) states.push('攻击蓄力 ' + this.pendingStrike.toFixed(1) + '秒');
++    if (this.preparingRush) states.push('冲锋蓄势');
++    else if (this.charging) states.push('冲锋中');
++    if (this.guarding) states.push('防御姿态');
++    if (this.phase) states.push('狂暴');
++    return states;
++  }
++  recordHit(raw: number, kind: DamageKind): void {
++    const magic = kind === 'magic';
++    if (kind === 'true' || raw <= 0 || (magic ? this.magicResistance : this.physicalResistance) <= 0) return;
++    if (magic) this.wardDamage += raw;
++    else this.armorDamage += raw;
++    const damage = magic ? this.wardDamage : this.armorDamage;
++    const threshold = magic ? this.owner.def.wardBreakRatio ?? .3 : this.owner.def.armorBreakRatio ?? .3;
++    if (damage >= this.owner.maxHp * threshold) {
++      if (magic) this.wardBroken = true;
++      else this.armorBroken = true;
+       this.owner.applyVuln(.15, 3);
+-      this.owner.feedback('armorBreak');
+-    } else if (this.armorCueT <= 0) {
+-      this.armorCueT = .16;
+-      this.owner.feedback('armorHit');
++      this.owner.feedback(magic ? 'wardBreak' : 'armorBreak');
++    } else if ((magic ? this.wardCueT : this.armorCueT) <= 0) {
++      if (magic) this.wardCueT = .16;
++      else this.armorCueT = .16;
++      this.owner.feedback(magic ? 'wardHit' : 'armorHit');
+     }
+   }
+   private get rushPhase(): number {
+@@ -62,9 +92,11 @@
+   onReachLine(): void { this.chargeArmed = this.charging; }
+   private get guarding(): boolean {
+     const g = this.owner.def.guard;
++    if (this.armorBroken && this.owner.def.physRes || this.wardBroken && this.owner.def.magicRes) return false;
+     return !!g && this.age >= g.period && this.age % g.period < g.duration;
+   }
+   speedMultiplier(): number {
++    if (this.pendingHeal > 0) return 0;
+     const speed = this.preparingRush ? .4 : this.charging ? this.owner.def.rush!.multiplier : 1;
+     return speed * (this.phase ? this.owner.def.phase?.speedMul || 1 : 1);
+   }
+@@ -74,22 +106,53 @@
+     return charge * (this.phase ? this.owner.def.phase?.attackMul || 1 : 1);
+   }
+   incomingDamage(amount: number, killer: string): number {
+-    return killer !== 'gm' && this.guarding ? amount * (1 - this.owner.def.guard!.reduction) : amount;
++    if (killer === 'gm' || !this.guarding) return amount;
++    const kind = damageKindFor(killer), d = this.owner.def;
++    // An armored guard defends against physical damage; a ward guards against magic.
++    // Breaking that defense also removes its periodic guard until this enemy dies.
++    if (d.physRes && (kind !== 'physical' || this.armorBroken)) return amount;
++    if (d.magicRes && (kind !== 'magic' || this.wardBroken)) return amount;
++    return amount * (1 - d.guard!.reduction);
++  }
++  private interruptControl(): void {
++    let interrupted = this.pendingHeal > 0 || this.pendingStrike > 0;
++    if (this.pendingHeal > 0) {
++      this.pendingHeal = 0;
++      this.owner.healT = this.owner.def.atkInterval;
++    }
++    if (this.preparingRush || this.charging) {
++      this.cancelledRush = Math.floor(this.age / this.owner.def.rush!.period);
++      interrupted = true;
++    }
++    this.pendingStrike = 0;
++    this.chargeArmed = false;
++    if (interrupted) this.owner.feedback('interrupt');
++  }
++  private tickHealing(dt: number, manager: MonsterManager): void {
++    const o = this.owner, spec = o.def.healing || ENEMY_HEALING;
++    o.healT = Math.max(0, o.healT - dt);
++    if (this.pendingHeal > 0) {
++      this.pendingHeal = Math.max(0, this.pendingHeal - dt);
++      if (this.pendingHeal === 0 && manager.healAround(o, spec)) o.animateHeal();
++    } else if (o.healT <= 0) {
++      if (manager.hasHealingTarget(o, spec.radius)) {
++        this.pendingHeal = Math.max(.2, spec.windup);
++        o.healT = o.def.atkInterval;
++        o.animateHeal();
++      } else o.healT = .5; // A healthy group is checked twice a second, never every frame.
++    }
+   }
+ 
+   tick(dt: number, motionDt: number, line: DefenseLine, manager: MonsterManager): void {
+     const o = this.owner, d = o.def;
+     if (o.dead) return;
+     this.armorCueT = Math.max(0, this.armorCueT - dt);
+-    if (motionDt < dt) {
+-      if (this.preparingRush || this.charging) this.cancelledRush = Math.floor(this.age / d.rush!.period);
+-      this.chargeArmed = false;
+-    }
++    this.wardCueT = Math.max(0, this.wardCueT - dt);
++    if (motionDt < dt) this.interruptControl();
+     this.age += motionDt;
+     if (d.phase && o.hp <= o.maxHp * d.phase.threshold) this.phase = true;
+     // A control effect cancels the telegraph; it cannot land a queued hit after interruption.
+-    if (motionDt < dt) this.pendingStrike = 0;
+-    else if (this.pendingStrike > 0) {
++    if (motionDt === dt && this.pendingStrike > 0) {
+       this.pendingStrike = Math.max(0, this.pendingStrike - motionDt);
+       if (this.pendingStrike === 0) o.strike(line, manager);
+     }
+@@ -105,13 +168,7 @@
+           if (o.hp < o.maxHp) o.heal(Math.min(o.maxHp - o.hp, o.maxHp * d.regen * seconds));
+         }
+       }
+-      if (d.kind === 'heal') {
+-        o.healT -= motionDt;
+-        if (o.healT <= 0) {
+-          o.healT += d.atkInterval;
+-          if (manager.healAround(o, 180, d.healAmount || 40)) o.animateHeal();
+-        }
+-      }
++      if (d.kind === 'heal' && motionDt === dt) this.tickHealing(motionDt, manager);
+       if (d.summon && this.summoned < d.summon.limit) {
+         this.summonClock += motionDt;
+         if (this.summonClock >= d.summon.every) {
+@@ -134,7 +191,7 @@
+     if (killer === 'gm' || !fraction || this.revived) return false;
+     this.revived = true;
+     this.owner.hp = Math.max(1, Math.round(this.owner.maxHp * fraction));
+-    this.pendingStrike = 0;
++    this.pendingStrike = this.pendingHeal = 0;
+     return true;
+   }
+   onDie(killer: string, manager: MonsterManager | null): void {
+@@ -145,23 +202,41 @@
+   private hide(): void { if (this.cue) this.cue.node.active = false; }
+   private drawCue(): void {
+     const o = this.owner;
+-    const armor = this.physicalResistance > 0, healer = o.def.kind === 'heal';
++    const armor = this.physicalResistance > 0, ward = this.magicResistance > 0, healer = o.def.kind === 'heal';
+     const preparing = this.preparingRush, charging = this.charging;
+-    if (!armor && !healer && !preparing && !charging && !this.guarding && this.pendingStrike <= 0) { this.hide(); return; }
++    if (!armor && !ward && !this.armorBroken && !this.wardBroken && !healer && !preparing && !charging && !this.guarding && this.pendingStrike <= 0) { this.hide(); return; }
+     if (!this.cue) {
+       const n = new Node('enemyTelegraph'); n.layer = o.node.layer; n.setParent(o.node);
+       this.cue = n.addComponent(Graphics);
+     }
+     const g = this.cue; g.node.active = true; g.clear();
+-    const top = o.headTop + 6;
+-    if (armor) {
++    const top = o.headTop + 6, dx = o.isBoss ? -o.def.radius * 1.4 - 13 : healer ? -11 : 0;
++    if (this.armorBroken) {
++      // Two separated shield halves and a jagged crack remain visible until death.
++      this.tint.set(239, 198, 135, 255); g.strokeColor = this.tint; g.lineWidth = 2.3;
++      g.moveTo(dx - 2, top + 15); g.lineTo(dx - 9, top + 15); g.lineTo(dx - 8, top + 6);
++      g.lineTo(dx - 3, top + 1); g.lineTo(dx - 5, top + 7); g.lineTo(dx - 1, top + 10); g.stroke();
++      g.moveTo(dx + 3, top + 13); g.lineTo(dx + 10, top + 13); g.lineTo(dx + 9, top + 4);
++      g.lineTo(dx + 4, top - 1); g.lineTo(dx + 2, top + 5); g.lineTo(dx + 6, top + 8); g.stroke();
++    } else if (armor) {
+       this.tint.set(186, 210, 224, 255); g.strokeColor = this.tint; g.lineWidth = 2;
+-      g.moveTo(-7, top + 14); g.lineTo(7, top + 14); g.lineTo(6, top + 4);
+-      g.lineTo(0, top); g.lineTo(-6, top + 4); g.close(); g.stroke();
+-      g.moveTo(0, top + 12); g.lineTo(0, top + 4); g.stroke();
+-    } else if (healer) {
++      g.moveTo(dx - 7, top + 14); g.lineTo(dx + 7, top + 14); g.lineTo(dx + 6, top + 4);
++      g.lineTo(dx, top); g.lineTo(dx - 6, top + 4); g.close(); g.stroke();
++      g.moveTo(dx, top + 12); g.lineTo(dx, top + 4); g.stroke();
++    } else if (this.wardBroken) {
++      this.tint.set(185, 153, 214, 255); g.strokeColor = this.tint; g.lineWidth = 2.3;
++      g.moveTo(dx - 2, top + 16); g.lineTo(dx - 9, top + 8); g.lineTo(dx - 3, top + 1); g.stroke();
++      g.moveTo(dx + 4, top + 14); g.lineTo(dx + 10, top + 7); g.lineTo(dx + 4, top - 1); g.stroke();
++    } else if (ward) {
++      this.tint.set(202, 159, 255, 255); g.strokeColor = this.tint; g.lineWidth = 2.4;
++      g.moveTo(dx, top + 16); g.lineTo(dx + 7, top + 8); g.lineTo(dx, top);
++      g.lineTo(dx - 7, top + 8); g.close(); g.stroke();
++      g.moveTo(dx - 3, top + 8); g.lineTo(dx + 3, top + 8); g.stroke();
++    }
++    if (healer) {
++      const x = armor || ward || this.armorBroken || this.wardBroken ? 11 : 0;
+       this.tint.set(136, 230, 127, 255); g.strokeColor = this.tint; g.lineWidth = 3;
+-      g.moveTo(-7, top + 8); g.lineTo(7, top + 8); g.moveTo(0, top + 1); g.lineTo(0, top + 15); g.stroke();
++      g.moveTo(x - 6, top + 8); g.lineTo(x + 6, top + 8); g.moveTo(x, top + 2); g.lineTo(x, top + 14); g.stroke();
+     } else if (preparing || charging) {
+       this.tint.set(255, 177, 70, 255); g.strokeColor = this.tint; g.lineWidth = 3;
+       for (let i = 0; i < 2; i++) {
+@@ -172,6 +247,17 @@
+         g.lineWidth = 2; g.moveTo(-o.def.radius, -3); g.lineTo(0, -18); g.lineTo(o.def.radius, -3); g.stroke();
+       }
+     }
++    if (this.pendingHeal > 0) {
++      const spec = o.def.healing || ENEMY_HEALING;
++      const progress = 1 - this.pendingHeal / Math.max(.2, spec.windup);
++      this.tint.set(136, 230, 127, 230); g.strokeColor = this.tint; g.lineWidth = 3;
++      for (let i = 0; i <= Math.ceil(progress * 24); i++) {
++        const a = -Math.PI / 2 + Math.min(progress, i / 24) * Math.PI * 2;
++        const x = Math.cos(a) * o.def.radius * 1.2, y = -o.def.radius * .65 + Math.sin(a) * o.def.radius * .4;
++        if (i === 0) g.moveTo(x, y); else g.lineTo(x, y);
++      }
++      g.stroke();
++    }
+     if (this.guarding) {
+       this.tint.set(112, 209, 238, 220); g.strokeColor = this.tint; g.lineWidth = 3;
+       g.ellipse(0, -o.def.radius * .65, o.def.radius * 1.15, o.def.radius * .4); g.stroke();
+--- before/battle/Projectile.ts
++++ assets/scripts/battle/Projectile.ts
+@@ -85,7 +85,7 @@
+   spec: ProjSpec;
+   vx: number; vy: number;
+   pierceLeft: number;
+-  hit: Set<Monster>;
++  hit: Set<number>;
+   ttl: number;
+   age: number;
+   trail: number[];
+@@ -111,6 +111,8 @@
+ }
+ 
+ export class ProjectileManager {
++  /** Reused sweep records, bounded by the 60 living-enemy limit. */
++  private contacts = Array.from({ length: 60 }, () => ({ mob: null as Monster | null, t: 0 }));
+   private active: Active[] = [];
+   private free: Active[] = [];
+   private g!: Graphics;
+@@ -133,7 +135,7 @@
+     const a = this.free.pop() || this.makeActive();
+     a.spec = spec;
+     a.hit.clear();
+-    if (spec.exclude) a.hit.add(spec.exclude);
++    if (spec.exclude) a.hit.add(spec.exclude.lifeId);
+     a.pierceLeft = spec.pierce || 0;
+     a.ttl = spec.ttl ?? 3.2;
+     a.age = 0; a.ultContact = false;
+@@ -153,7 +155,7 @@
+   }
+ 
+   private makeActive(): Active {
+-    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<Monster>(), ttl: 0, age: 0, trail: [], trailMax: 0, fxSeed: 0, ultContact: false };
++    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<number>(), ttl: 0, age: 0, trail: [], trailMax: 0, fxSeed: 0, ultContact: false };
+   }
+ 
+   /** 敌方远程石块：直线落向防线，触线即结算 */
+@@ -227,26 +229,12 @@
+         continue;
+       }
+ 
+-      // 直线弹：扫掠补偿按本帧位移的一半扩大判定半径，防高速弹穿过薄目标
++      const startX = sp.x, startY = sp.y, stepX = a.vx * dt, stepY = a.vy * dt;
++      if (!sp.enemy) done = this.hitSweep(a, startX, startY, stepX, stepY);
++
+       if (!done) {
+-        const sweep = (Math.abs(a.vx) + Math.abs(a.vy)) * dt * 0.5;
+-        for (const m of this.mgr.list) {
+-          if (m.dead || a.hit.has(m)) continue;
+-          const dx = m.x - sp.x, dy = m.y - sp.y;
+-          const rr = m.def.radius + (sp.size || 7) * 0.5 + sweep;
+-          if (dx * dx + dy * dy <= rr * rr) {
+-            a.hit.add(m);
+-            this.hitMob(a, m);
+-            if (a.pierceLeft > 0) a.pierceLeft--;
+-            else { done = true; }
+-            break;
+-          }
+-        }
+-      }
+-
+-      if (!done) {
+-        sp.x += a.vx * dt;
+-        sp.y += a.vy * dt;
++        sp.x = startX + stepX;
++        sp.y = startY + stepY;
+         if (a.trailMax > 0) {
+           a.trail.push(sp.x, sp.y);
+           while (a.trail.length > a.trailMax * 2) { a.trail.splice(0, 2); }
+@@ -262,6 +250,43 @@
+       if (done) this.recycle(i, a);
+     }
+     if (this.dirty) { this.render(); this.dirty = false; }
++  }
++
++  /** Exact segment/circle entries, in travel order. A piercing shot can hit several enemies in one step. */
++  private hitSweep(a: Active, x: number, y: number, sx: number, sy: number): boolean {
++    const sp = a.spec, length2 = sx * sx + sy * sy;
++    let count = 0;
++    for (const m of this.mgr.list) {
++      if (m.dead || a.hit.has(m.lifeId)) continue;
++      const dx = x - m.x, dy = y - m.y, radius = m.def.radius + (sp.size || 7) * .5;
++      const c = dx * dx + dy * dy - radius * radius;
++      let t = 0;
++      if (c > 0) {
++        if (length2 <= 1e-8) continue;
++        const b = dx * sx + dy * sy, discriminant = b * b - length2 * c;
++        if (b >= 0 || discriminant < 0) continue;
++        t = (-b - Math.sqrt(discriminant)) / length2;
++        if (t < 0 || t > 1) continue;
++      }
++      if (count >= this.contacts.length) break;
++      let index = count++;
++      while (index > 0 && this.contacts[index - 1].t > t) {
++        this.contacts[index].mob = this.contacts[index - 1].mob;
++        this.contacts[index].t = this.contacts[index - 1].t;
++        index--;
++      }
++      this.contacts[index].mob = m; this.contacts[index].t = t;
++    }
++    for (let i = 0; i < count; i++) {
++      const contact = this.contacts[i], m = contact.mob!;
++      if (m.dead || a.hit.has(m.lifeId)) continue;
++      sp.x = x + sx * contact.t; sp.y = y + sy * contact.t;
++      a.hit.add(m.lifeId);
++      this.hitMob(a, m); // Every contact retains the ordinary damage, sound, flash and on-hit path.
++      if (a.pierceLeft <= 0) return true;
++      a.pierceLeft--;
++    }
++    return false;
+   }
+ 
+   /** 渲染帧计数（电球等动态弹体的伪随机相位种子） */
+--- before/battle/WaveManager.ts
++++ assets/scripts/battle/WaveManager.ts
+@@ -2,11 +2,11 @@
+  * 波次管理（用户调整·向僵尸开炮式持续刷怪）：本波出怪队列放完即开下一波（不等击杀）；
+  * 末波出怪完毕且全场清空才算通关。数量/血量/伤害逐波阶梯增长（WAVE_RAMP）。
+  */
+-import { LevelDef, MOBS, MobDef, WAVE_RAMP } from '../config/Mobs';
++import { EnemyFormation, LevelDef, MOBS, MobDef, WAVE_RAMP } from '../config/Mobs';
+ import { MonsterManager } from './Monster';
+ import { bus, EVT, WaveThreat } from '../core/EventBus';
+ 
+-interface DueSpawn { mob: string; t: number; actual?: { hp: number; dmg: number }; }
++interface DueSpawn { mob: string; t: number; actual?: { hp: number; dmg: number }; formation?: EnemyFormation; }
+ 
+ export class WaveManager {
+   private idx = 0;
+@@ -53,6 +53,38 @@
+       }
+     }
+     this.queue.sort((a, b) => a.t - b.t);
++    if (wave.formation === 'escort') this.buildEscorts();
++    else if (wave.formation === 'crossfire') this.buildCrossfire();
++  }
++
++  private buildEscorts(): void {
++    const used = new Set<DueSpawn>();
++    let pair = 0;
++    for (const support of this.queue.filter(s => MOBS[s.mob]?.kind === 'heal')) {
++      if (pair >= 2) break;
++      const front = this.queue.filter(s => !used.has(s) && MOBS[s.mob]?.kind === 'melee' &&
++        (MOBS[s.mob].elite || MOBS[s.mob].boss) && s.t <= support.t - 5 && s.t >= support.t - 16)
++        .sort((a, b) => Math.abs(support.t - a.t - 8) - Math.abs(support.t - b.t - 8))[0];
++      if (!front) continue;
++      const lane = MOBS[front.mob].boss ? 0 : (pair % 2 ? 165 : -165) * (this.idx % 2 ? 1 : -1);
++      const id = this.level.id + ':' + this.idx + ':' + pair;
++      front.formation = { id, lane, role: 'front' };
++      support.formation = { id, lane, role: 'support', gap: 140 };
++      used.add(front); pair++;
++    }
++  }
++
++  private buildCrossfire(): void {
++    const ranged = this.queue.filter(s => MOBS[s.mob]?.kind === 'ranged');
++    if (!ranged.length) return;
++    const side = this.idx % 2 ? 1 : -1, first = ranged[0].t;
++    for (const s of ranged) s.formation = { lane: -side * 165 };
++    let rider = 0;
++    for (const s of this.queue) if (MOBS[s.mob]?.rush) {
++      s.t = Math.max(s.t, first + 6 + rider++ * 3);
++      s.formation = { lane: side * 165 };
++    }
++    this.queue.sort((a, b) => a.t - b.t);
+   }
+ 
+   tick(dt: number): void {
+@@ -66,7 +98,7 @@
+       const s = this.queue[0];
+       const def = MOBS[s.mob];
+       // A full living-enemy pool defers this entry; never consume a failed spawn.
+-      if (def && !this.mgr.spawn(def as MobDef, s.actual)) break;
++      if (def && !this.mgr.spawn(def as MobDef, s.actual, s.formation)) break;
+       this.queue.shift();
+     }
+     if (this.queue.length > 0) return;
+--- before/config/Cards.ts
++++ assets/scripts/config/Cards.ts
+@@ -22,7 +22,7 @@
+   aspd: number;         // 攻速 次/s（累乘）
+   range: number;        // 普攻索敌范围
+   skillRange: number;   // 技能索敌范围
+-  skillPierce?: number; // 重弩手技能额外穿透数；贯颅弩矢另加普攻pierce，大招保持无限贯穿
++  skillPierce?: number; // 重弩手技能额外穿透数；贯颅弩矢只强化技能，大招保持无限贯穿
+   ultMarkAmp?: number;  // 死亡准星：大招命中后受到伤害增幅，持续5秒
+   critRate: number;     // 暴击率
+   critMul: number;      // 暴击伤害倍率
+@@ -414,8 +414,8 @@
+     art: 'ui_card_sniper_range_v1', desc: '技能索敌范围 +30%',
+     apply: x => { x.hero.skillRange *= 1.3; } }),
+   c({ id: 'sniper_pierce', name: '贯颅弩矢', rarity: 'purple', maxStacks: 3, owner: 'sniper', req: 'sniper_unlock_skill',
+-    art: 'ui_card_sniper_pierce_v1', desc: '普攻和技能弩箭\n额外穿透1个目标',
+-    apply: x => { x.hero.pierce += 1; x.hero.skillPierce = (x.hero.skillPierce || 0) + 1; } }),
++    art: 'ui_card_sniper_pierce_v1', desc: '技能额外穿透1个目标',
++    apply: x => { x.hero.skillPierce = (x.hero.skillPierce || 0) + 1; } }),
+   c({ id: 'extra_line', name: '额外弩矢', rarity: 'gold', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招弩箭数量 +1',
+     apply: x => { x.hero.ultBolts += 1; } }),
+   c({ id: 'fast_charge_s', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招充能需求 -20%',
+--- before/config/ChapterContent.ts
++++ assets/scripts/config/ChapterContent.ts
+@@ -1,4 +1,9 @@
+ /** Authored sixteen-region content. No engine imports or save mutations. */
++export interface EnemyHealing {
++  windup: number; fraction: number; capRatio: number; radius: number; targets: number;
++}
++/** A cast heals 4% of target HP, capped at 20% of the caster's HP per target. */
++export const ENEMY_HEALING: Readonly<EnemyHealing> = { windup: 1.2, fraction: .04, capRatio: .2, radius: 200, targets: 3 };
+ export interface EnemyFeatures {
+   homeChapter?: number;
+   artAtlas?: string;
+@@ -9,6 +14,9 @@
+   magicRes?: number;
+   /** Raw physical damage required to break armor, as a fraction of maximum HP. */
+   armorBreakRatio?: number;
++  /** Raw magic damage required to break a one-use ward, as a fraction of maximum HP. */
++  wardBreakRatio?: number;
++  healing?: EnemyHealing;
+   guard?: { period: number; duration: number; reduction: number };
+   rush?: { period: number; duration: number; multiplier: number; windup?: number; impactMul?: number };
+   venom?: { duration: number; portion: number };
+@@ -553,11 +561,14 @@
+     "exp": 65,
+     "charge": 8,
+     "gold": 27,
+-    "description": "深林的精英单位。每8秒防御3秒，减伤35%。",
+-    "traits": [
+-      "每8秒防御3秒，减伤35%"
+-    ],
+-    "weak": "利用防御间隙集中爆发"
++    "description": "深林的精英单位。每8秒防御3秒，减伤35%。 铠甲减少30%物理伤害，法术不受影响。",
++    "traits": [
++      "每8秒防御3秒，物理减伤35%",
++      "物抗30%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发",
++    "physRes": 0.3,
++    "armorBreakRatio": 0.3
+   },
+   "thorn_ancient": {
+     "id": "thorn_ancient",
+@@ -595,7 +606,11 @@
+   },
+   "lair_gnawer": {
+     "id": "lair_gnawer",
+-    "rush": {"period":7,"duration":1.1,"multiplier":1.6},
++    "rush": {
++      "period": 7,
++      "duration": 1.1,
++      "multiplier": 1.6
++    },
+     "name": "洞穴蛮兵",
+     "kind": "melee",
+     "hp": 240,
+@@ -641,9 +656,9 @@
+     "id": "lair_tamer",
+     "name": "兽穴驯兽师",
+     "kind": "heal",
+-    "hp": 320,
++    "hp": 640,
+     "dmg": 0,
+-    "atkInterval": 5.5,
++    "atkInterval": 4,
+     "speed": 24,
+     "radius": 23,
+     "healAmount": 48,
+@@ -653,11 +668,13 @@
+     "exp": 15,
+     "charge": 2,
+     "gold": 3,
+-    "description": "兽穴的治疗支援单位。行进时也会周期治疗附近友军。",
+-    "traits": [
+-      "行进时也会周期治疗附近友军"
+-    ],
+-    "weak": "优先集火支援者，避免敌群积累"
++    "description": "生命较高的支援单位，读条后治疗附近伤员；冰封、眩晕可打断。",
++    "traits": [
++      "每4秒治疗，施法准备1.2秒",
++      "回复4%生命，最多治疗3名伤员",
++      "冰封、眩晕可打断，治疗者不互疗"
++    ],
++    "weak": "范围伤害覆盖后排，或用冰封、眩晕打断治疗"
+   },
+   "lair_mauler": {
+     "id": "lair_mauler",
+@@ -687,7 +704,11 @@
+   },
+   "fang_beast": {
+     "id": "fang_beast",
+-    "rush": {"period":9,"duration":1.4,"multiplier":1.7},
++    "rush": {
++      "period": 9,
++      "duration": 1.4,
++      "multiplier": 1.7
++    },
+     "name": "巨牙兽王",
+     "kind": "melee",
+     "hp": 9000,
+@@ -716,7 +737,11 @@
+   },
+   "marsh_frog": {
+     "id": "marsh_frog",
+-    "rush": {"period":6,"duration":0.8,"multiplier":1.65},
++    "rush": {
++      "period": 6,
++      "duration": 0.8,
++      "multiplier": 1.65
++    },
+     "name": "苇沼蛙兵",
+     "kind": "melee",
+     "hp": 240,
+@@ -766,9 +791,9 @@
+     "id": "lizard_medic",
+     "name": "蜥蜴巫医",
+     "kind": "heal",
+-    "hp": 320,
++    "hp": 640,
+     "dmg": 0,
+-    "atkInterval": 5.5,
++    "atkInterval": 4,
+     "speed": 24,
+     "radius": 23,
+     "healAmount": 48,
+@@ -778,11 +803,16 @@
+     "exp": 16,
+     "charge": 2,
+     "gold": 3,
+-    "description": "雾苇沼泽的治疗支援单位。行进时也会周期治疗附近友军。",
+-    "traits": [
+-      "行进时也会周期治疗附近友军"
+-    ],
+-    "weak": "优先集火支援者，避免敌群积累"
++    "description": "有35%法抗符盾。生命较高的支援单位，读条后治疗附近伤员；冰封、眩晕可打断。",
++    "traits": [
++      "每4秒治疗，施法准备1.2秒",
++      "回复4%生命，最多治疗3名伤员",
++      "冰封、眩晕可打断，治疗者不互疗",
++      "法抗35%，持续法术命中可破盾"
++    ],
++    "weak": "物理输出，或法术集火破盾；冰封、眩晕仍有效",
++    "magicRes": 0.35,
++    "wardBreakRatio": 0.3
+   },
+   "marsh_guard": {
+     "id": "marsh_guard",
+@@ -801,11 +831,14 @@
+     "exp": 65,
+     "charge": 8,
+     "gold": 29,
+-    "description": "雾苇沼泽的精英单位。每秒回复1.5%最大生命。",
+-    "traits": [
+-      "每秒回复1.5%最大生命"
+-    ],
+-    "weak": "持续输出与控制，保留大招应对高压波次"
++    "description": "雾苇沼泽的精英单位。每秒回复1.5%最大生命。 铠甲减少25%物理伤害，法术不受影响。",
++    "traits": [
++      "每秒回复1.5%最大生命",
++      "物抗25%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发",
++    "physRes": 0.25,
++    "armorBreakRatio": 0.3
+   },
+   "marsh_toad": {
+     "id": "marsh_toad",
+@@ -866,11 +899,14 @@
+     "exp": 17,
+     "charge": 2,
+     "gold": 3,
+-    "description": "碎帆海岸的重型前排单位。每9秒防御3秒，减伤40%。",
+-    "traits": [
+-      "每9秒防御3秒，减伤40%"
+-    ],
+-    "weak": "利用防御间隙集中爆发"
++    "description": "碎帆海岸的重型前排单位。每9秒防御3秒，减伤40%。 铠甲减少25%物理伤害，法术不受影响。",
++    "traits": [
++      "每9秒防御3秒，物理减伤40%",
++      "物抗25%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发",
++    "physRes": 0.25,
++    "armorBreakRatio": 0.3
+   },
+   "reef_spearman": {
+     "id": "reef_spearman",
+@@ -898,9 +934,9 @@
+     "id": "tide_priest",
+     "name": "潮汐祭司",
+     "kind": "heal",
+-    "hp": 320,
++    "hp": 640,
+     "dmg": 0,
+-    "atkInterval": 5.5,
++    "atkInterval": 4,
+     "speed": 24,
+     "radius": 23,
+     "healAmount": 48,
+@@ -910,11 +946,16 @@
+     "exp": 17,
+     "charge": 2,
+     "gold": 3,
+-    "description": "碎帆海岸的治疗支援单位。行进时也会周期治疗附近友军。",
+-    "traits": [
+-      "行进时也会周期治疗附近友军"
+-    ],
+-    "weak": "优先集火支援者，避免敌群积累"
++    "description": "有35%法抗符盾。生命较高的支援单位，读条后治疗附近伤员；冰封、眩晕可打断。",
++    "traits": [
++      "每4秒治疗，施法准备1.2秒",
++      "回复4%生命，最多治疗3名伤员",
++      "冰封、眩晕可打断，治疗者不互疗",
++      "法抗35%，持续法术命中可破盾"
++    ],
++    "weak": "物理输出，或法术集火破盾；冰封、眩晕仍有效",
++    "magicRes": 0.35,
++    "wardBreakRatio": 0.3
+   },
+   "anchor_crab": {
+     "id": "anchor_crab",
+@@ -933,11 +974,11 @@
+     "exp": 65,
+     "charge": 8,
+     "gold": 30,
+-    "description": "碎帆海岸的精英单位。常驻减伤28%。",
+-    "traits": [
+-      "常驻减伤28%"
+-    ],
+-    "weak": "持续输出与控制，保留大招应对高压波次"
++    "description": "碎帆海岸的精英单位。常驻减伤28%。 铠甲减少28%物理伤害，法术不受影响。",
++    "traits": [
++      "物抗28%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发"
+   },
+   "claw_king": {
+     "id": "claw_king",
+@@ -1021,7 +1062,11 @@
+   },
+   "sand_lizard": {
+     "id": "sand_lizard",
+-    "rush": {"period":6,"duration":1.2,"multiplier":1.7},
++    "rush": {
++      "period": 6,
++      "duration": 1.2,
++      "multiplier": 1.7
++    },
+     "name": "沙蜥猎手",
+     "kind": "melee",
+     "hp": 240,
+@@ -1062,11 +1107,14 @@
+     "exp": 65,
+     "charge": 8,
+     "gold": 31,
+-    "description": "赤金沙海的精英单位。每8秒防御2.8秒，减伤40%。",
+-    "traits": [
+-      "每8秒防御2.8秒，减伤40%"
+-    ],
+-    "weak": "利用防御间隙集中爆发"
++    "description": "赤金沙海的精英单位。每8秒防御2.8秒，减伤40%。 铠甲减少30%物理伤害，法术不受影响。",
++    "traits": [
++      "每8秒防御2.8秒，物理减伤40%",
++      "物抗30%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发",
++    "physRes": 0.3,
++    "armorBreakRatio": 0.3
+   },
+   "sand_worm": {
+     "id": "sand_worm",
+@@ -1122,11 +1170,14 @@
+     "exp": 19,
+     "charge": 2,
+     "gold": 4,
+-    "description": "失落王庭的重型前排单位。每8秒防御3秒，减伤35%。",
+-    "traits": [
+-      "每8秒防御3秒，减伤35%"
+-    ],
+-    "weak": "利用防御间隙集中爆发"
++    "description": "失落王庭的重型前排单位。每8秒防御3秒，减伤35%。 铠甲减少25%物理伤害，法术不受影响。",
++    "traits": [
++      "每8秒防御3秒，物理减伤35%",
++      "物抗25%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发",
++    "physRes": 0.25,
++    "armorBreakRatio": 0.3
+   },
+   "stone_archer": {
+     "id": "stone_archer",
+@@ -1154,9 +1205,9 @@
+     "id": "tomb_spirit",
+     "name": "守墓灵",
+     "kind": "heal",
+-    "hp": 320,
++    "hp": 640,
+     "dmg": 0,
+-    "atkInterval": 5.5,
++    "atkInterval": 4,
+     "speed": 24,
+     "radius": 23,
+     "healAmount": 48,
+@@ -1167,12 +1218,17 @@
+     "exp": 19,
+     "charge": 2,
+     "gold": 4,
+-    "description": "失落王庭的治疗支援单位。飞行单位，可被全部英雄攻击。",
++    "description": "有35%法抗符盾。生命较高的支援单位，读条后治疗附近伤员；冰封、眩晕可打断。",
+     "traits": [
+       "飞行单位，可被全部英雄攻击",
+-      "行进时也会周期治疗附近友军"
+-    ],
+-    "weak": "优先集火支援者，避免敌群积累"
++      "每4秒治疗，施法准备1.2秒",
++      "回复4%生命，最多治疗3名伤员",
++      "冰封、眩晕可打断，治疗者不互疗",
++      "法抗35%，持续法术命中可破盾"
++    ],
++    "weak": "物理输出，或法术集火破盾；冰封、眩晕仍有效",
++    "magicRes": 0.35,
++    "wardBreakRatio": 0.3
+   },
+   "royal_guard": {
+     "id": "royal_guard",
+@@ -1195,11 +1251,14 @@
+     "exp": 65,
+     "charge": 8,
+     "gold": 32,
+-    "description": "失落王庭的精英单位。每9秒防御3.5秒，减伤40%。",
+-    "traits": [
+-      "每9秒防御3.5秒，减伤40%"
+-    ],
+-    "weak": "利用防御间隙集中爆发"
++    "description": "失落王庭的精英单位。每9秒防御3.5秒，减伤40%。 铠甲减少35%物理伤害，法术不受影响。",
++    "traits": [
++      "每9秒防御3.5秒，物理减伤40%",
++      "物抗35%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发",
++    "physRes": 0.35,
++    "armorBreakRatio": 0.3
+   },
+   "ancient_warden": {
+     "id": "ancient_warden",
+@@ -1227,16 +1286,23 @@
+     "exp": 140,
+     "charge": 20,
+     "gold": 88,
+-    "description": "失落王庭的首领单位。每10秒防御3秒，减伤40%。",
+-    "traits": [
+-      "每10秒防御3秒，减伤40%",
+-      "生命低于45%进入强化阶段"
+-    ],
+-    "weak": "利用防御间隙集中爆发"
++    "description": "失落王庭的首领单位。每10秒防御3秒，减伤40%。 铠甲减少30%物理伤害，法术不受影响。",
++    "traits": [
++      "每10秒防御3秒，物理减伤40%",
++      "生命低于45%进入强化阶段",
++      "物抗30%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发",
++    "physRes": 0.3,
++    "armorBreakRatio": 0.3
+   },
+   "canyon_ram": {
+     "id": "canyon_ram",
+-    "rush": {"period":6,"duration":1.3,"multiplier":1.85},
++    "rush": {
++      "period": 6,
++      "duration": 1.3,
++      "multiplier": 1.85
++    },
+     "name": "岩羊撞兽",
+     "kind": "melee",
+     "hp": 240,
+@@ -1258,7 +1324,11 @@
+   },
+   "cliff_eagle": {
+     "id": "cliff_eagle",
+-    "rush": {"period":7,"duration":1,"multiplier":1.65},
++    "rush": {
++      "period": 7,
++      "duration": 1,
++      "multiplier": 1.65
++    },
+     "name": "峡谷猛禽",
+     "kind": "melee",
+     "hp": 240,
+@@ -1319,15 +1389,19 @@
+     "exp": 65,
+     "charge": 8,
+     "gold": 33,
+-    "description": "赤岩峡谷的精英单位。常驻减伤30%。",
+-    "traits": [
+-      "常驻减伤30%"
+-    ],
+-    "weak": "持续输出与控制，保留大招应对高压波次"
++    "description": "赤岩峡谷的精英单位。常驻减伤30%。 铠甲减少30%物理伤害，法术不受影响。",
++    "traits": [
++      "物抗30%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发"
+   },
+   "split_horn": {
+     "id": "split_horn",
+-    "rush": {"period":8,"duration":1.6,"multiplier":1.9},
++    "rush": {
++      "period": 8,
++      "duration": 1.6,
++      "multiplier": 1.9
++    },
+     "name": "裂角岩兽",
+     "kind": "melee",
+     "hp": 9000,
+@@ -1378,7 +1452,11 @@
+   },
+   "drill_beetle": {
+     "id": "drill_beetle",
+-    "rush": {"period":8,"duration":1.2,"multiplier":1.6},
++    "rush": {
++      "period": 8,
++      "duration": 1.2,
++      "multiplier": 1.6
++    },
+     "name": "钻地甲虫",
+     "kind": "melee",
+     "hp": 580,
+@@ -1438,11 +1516,11 @@
+     "exp": 65,
+     "charge": 8,
+     "gold": 34,
+-    "description": "锈铁矿区的精英单位。常驻减伤30%。",
+-    "traits": [
+-      "常驻减伤30%"
+-    ],
+-    "weak": "持续输出与控制，保留大招应对高压波次"
++    "description": "锈铁矿区的精英单位。常驻减伤30%。 铠甲减少30%物理伤害，法术不受影响。",
++    "traits": [
++      "物抗30%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发"
+   },
+   "mountain_drill": {
+     "id": "mountain_drill",
+@@ -1482,7 +1560,11 @@
+   },
+   "snow_wolf": {
+     "id": "snow_wolf",
+-    "rush": {"period":6,"duration":1.1,"multiplier":1.7},
++    "rush": {
++      "period": 6,
++      "duration": 1.1,
++      "multiplier": 1.7
++    },
+     "name": "雪岭灰狼",
+     "kind": "melee",
+     "hp": 240,
+@@ -1544,11 +1626,14 @@
+     "exp": 22,
+     "charge": 2,
+     "gold": 5,
+-    "description": "霜牙雪岭的重型前排单位。每9秒防御3秒，减伤35%。",
+-    "traits": [
+-      "每9秒防御3秒，减伤35%"
+-    ],
+-    "weak": "利用防御间隙集中爆发"
++    "description": "霜牙雪岭的重型前排单位。每9秒防御3秒，减伤35%。 铠甲减少25%物理伤害，法术不受影响。",
++    "traits": [
++      "每9秒防御3秒，物理减伤35%",
++      "物抗25%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发",
++    "physRes": 0.25,
++    "armorBreakRatio": 0.3
+   },
+   "frost_guard": {
+     "id": "frost_guard",
+@@ -1567,11 +1652,14 @@
+     "exp": 65,
+     "charge": 8,
+     "gold": 35,
+-    "description": "霜牙雪岭的精英单位。每秒回复1.2%最大生命。",
+-    "traits": [
+-      "每秒回复1.2%最大生命"
+-    ],
+-    "weak": "持续输出与控制，保留大招应对高压波次"
++    "description": "霜牙雪岭的精英单位。每秒回复1.2%最大生命。 铠甲减少30%物理伤害，法术不受影响。",
++    "traits": [
++      "每秒回复1.2%最大生命",
++      "物抗30%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发",
++    "physRes": 0.3,
++    "armorBreakRatio": 0.3
+   },
+   "frostback": {
+     "id": "frostback",
+@@ -1609,7 +1697,11 @@
+   },
+   "thunder_eagle": {
+     "id": "thunder_eagle",
+-    "rush": {"period":6,"duration":1,"multiplier":1.8},
++    "rush": {
++      "period": 6,
++      "duration": 1,
++      "multiplier": 1.8
++    },
+     "name": "雷羽鹰",
+     "kind": "melee",
+     "hp": 240,
+@@ -1649,12 +1741,15 @@
+     "exp": 23,
+     "charge": 2,
+     "gold": 5,
+-    "description": "雷鸣高地的远程攻击单位。飞行单位，可被全部英雄攻击。",
++    "description": "有35%法抗符盾。雷鸣高地的远程攻击单位。飞行单位，可被全部英雄攻击。",
+     "traits": [
+       "飞行单位，可被全部英雄攻击",
+-      "攻击前蓄力1.2秒，可用眩晕或冰封打断"
+-    ],
+-    "weak": "减速与眩晕，及时清理快攻单位"
++      "攻击前蓄力1.2秒，可用眩晕或冰封打断",
++      "法抗35%，持续法术命中可破盾"
++    ],
++    "weak": "物理输出，或法术集火破盾；冰封、眩晕仍有效",
++    "magicRes": 0.35,
++    "wardBreakRatio": 0.3
+   },
+   "storm_stone": {
+     "id": "storm_stone",
+@@ -1673,11 +1768,14 @@
+     "exp": 23,
+     "charge": 2,
+     "gold": 5,
+-    "description": "雷鸣高地的远程攻击单位。攻击前蓄力1.8秒，可用眩晕或冰封打断。",
+-    "traits": [
+-      "攻击前蓄力1.8秒，可用眩晕或冰封打断"
+-    ],
+-    "weak": "持续输出与控制，保留大招应对高压波次"
++    "description": "有35%法抗符盾。雷鸣高地的远程攻击单位。攻击前蓄力1.8秒，可用眩晕或冰封打断。",
++    "traits": [
++      "攻击前蓄力1.8秒，可用眩晕或冰封打断",
++      "法抗35%，持续法术命中可破盾"
++    ],
++    "weak": "物理输出，或法术集火破盾；冰封、眩晕仍有效",
++    "magicRes": 0.35,
++    "wardBreakRatio": 0.3
+   },
+   "storm_guard": {
+     "id": "storm_guard",
+@@ -1699,11 +1797,14 @@
+     "exp": 65,
+     "charge": 8,
+     "gold": 36,
+-    "description": "雷鸣高地的精英单位。提高附近友军15%攻线伤害。",
+-    "traits": [
+-      "提高附近友军15%攻线伤害"
+-    ],
+-    "weak": "优先集火支援者，避免敌群积累"
++    "description": "雷鸣高地的精英单位。提高附近友军15%攻线伤害。 铠甲减少30%物理伤害，法术不受影响。",
++    "traits": [
++      "提高附近友军15%攻线伤害",
++      "物抗30%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发",
++    "physRes": 0.3,
++    "armorBreakRatio": 0.3
+   },
+   "storm_lord": {
+     "id": "storm_lord",
+@@ -1910,19 +2011,22 @@
+     "exp": 24,
+     "charge": 2,
+     "gold": 6,
+-    "description": "幽影墓园的远程攻击单位。飞行单位，可被全部英雄攻击。",
+-    "traits": [
+-      "飞行单位，可被全部英雄攻击"
+-    ],
+-    "weak": "减速与眩晕，及时清理快攻单位"
++    "description": "有35%法抗符盾。幽影墓园的远程攻击单位。飞行单位，可被全部英雄攻击。",
++    "traits": [
++      "飞行单位，可被全部英雄攻击",
++      "法抗35%，持续法术命中可破盾"
++    ],
++    "weak": "物理输出，或法术集火破盾；冰封、眩晕仍有效",
++    "magicRes": 0.35,
++    "wardBreakRatio": 0.3
+   },
+   "soul_binder": {
+     "id": "soul_binder",
+     "name": "缚魂巫师",
+     "kind": "heal",
+-    "hp": 320,
++    "hp": 640,
+     "dmg": 0,
+-    "atkInterval": 5.5,
++    "atkInterval": 4,
+     "speed": 24,
+     "radius": 23,
+     "healAmount": 48,
+@@ -1932,11 +2036,16 @@
+     "exp": 24,
+     "charge": 2,
+     "gold": 6,
+-    "description": "幽影墓园的治疗支援单位。行进时也会周期治疗附近友军。",
+-    "traits": [
+-      "行进时也会周期治疗附近友军"
+-    ],
+-    "weak": "优先集火支援者，避免敌群积累"
++    "description": "有35%法抗符盾。生命较高的支援单位，读条后治疗附近伤员；冰封、眩晕可打断。",
++    "traits": [
++      "每4秒治疗，施法准备1.2秒",
++      "回复4%生命，最多治疗3名伤员",
++      "冰封、眩晕可打断，治疗者不互疗",
++      "法抗35%，持续法术命中可破盾"
++    ],
++    "weak": "物理输出，或法术集火破盾；冰封、眩晕仍有效",
++    "magicRes": 0.35,
++    "wardBreakRatio": 0.3
+   },
+   "grave_guard": {
+     "id": "grave_guard",
+@@ -1956,12 +2065,12 @@
+     "exp": 65,
+     "charge": 8,
+     "gold": 38,
+-    "description": "幽影墓园的精英单位。第一次倒下后恢复部分生命，仅复生一次。",
++    "description": "幽影墓园的精英单位。第一次倒下后恢复部分生命，仅复生一次。 铠甲减少28%物理伤害，法术不受影响。",
+     "traits": [
+       "第一次倒下后恢复部分生命，仅复生一次",
+-      "常驻减伤28%"
+-    ],
+-    "weak": "持续输出与控制，保留大招应对高压波次"
++      "物抗28%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发"
+   },
+   "tomb_colossus": {
+     "id": "tomb_colossus",
+@@ -2013,11 +2122,11 @@
+     "exp": 24,
+     "charge": 2,
+     "gold": 6,
+-    "description": "黑铁要塞的重型前排单位。常驻减伤25%。",
+-    "traits": [
+-      "常驻减伤25%"
+-    ],
+-    "weak": "持续输出与控制，保留大招应对高压波次"
++    "description": "黑铁要塞的重型前排单位。常驻减伤25%。 铠甲减少25%物理伤害，法术不受影响。",
++    "traits": [
++      "物抗25%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发"
+   },
+   "siege_puppet": {
+     "id": "siege_puppet",
+@@ -2088,11 +2197,14 @@
+     "exp": 65,
+     "charge": 8,
+     "gold": 39,
+-    "description": "黑铁要塞的精英单位。每8秒防御3秒，减伤40%。",
+-    "traits": [
+-      "每8秒防御3秒，减伤40%"
+-    ],
+-    "weak": "利用防御间隙集中爆发"
++    "description": "黑铁要塞的精英单位。每8秒防御3秒，减伤40%。 铠甲减少35%物理伤害，法术不受影响。",
++    "traits": [
++      "每8秒防御3秒，物理减伤40%",
++      "物抗35%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发",
++    "physRes": 0.35,
++    "armorBreakRatio": 0.3
+   },
+   "iron_commander": {
+     "id": "iron_commander",
+@@ -2119,12 +2231,15 @@
+     "exp": 140,
+     "charge": 20,
+     "gold": 116,
+-    "description": "黑铁要塞的首领单位。提高附近友军20%攻线伤害。",
++    "description": "黑铁要塞的首领单位。提高附近友军20%攻线伤害。 铠甲减少30%物理伤害，法术不受影响。",
+     "traits": [
+       "提高附近友军20%攻线伤害",
+-      "生命低于45%进入强化阶段"
+-    ],
+-    "weak": "优先集火支援者，避免敌群积累"
++      "生命低于45%进入强化阶段",
++      "物抗30%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发",
++    "physRes": 0.3,
++    "armorBreakRatio": 0.3
+   },
+   "lava_larva": {
+     "id": "lava_larva",
+@@ -2164,11 +2279,14 @@
+     "exp": 24,
+     "charge": 2,
+     "gold": 7,
+-    "description": "熔火裂谷的远程攻击单位。飞行单位，可被全部英雄攻击。",
+-    "traits": [
+-      "飞行单位，可被全部英雄攻击"
+-    ],
+-    "weak": "减速与眩晕，及时清理快攻单位"
++    "description": "有35%法抗符盾。熔火裂谷的远程攻击单位。飞行单位，可被全部英雄攻击。",
++    "traits": [
++      "飞行单位，可被全部英雄攻击",
++      "法抗35%，持续法术命中可破盾"
++    ],
++    "weak": "物理输出，或法术集火破盾；冰封、眩晕仍有效",
++    "magicRes": 0.35,
++    "wardBreakRatio": 0.3
+   },
+   "magma_shell": {
+     "id": "magma_shell",
+@@ -2220,12 +2338,15 @@
+     "exp": 65,
+     "charge": 8,
+     "gold": 40,
+-    "description": "熔火裂谷的精英单位。每8秒防御2.8秒，减伤35%。",
+-    "traits": [
+-      "每8秒防御2.8秒，减伤35%",
+-      "被击败后分裂出3只小怪"
+-    ],
+-    "weak": "利用防御间隙集中爆发"
++    "description": "熔火裂谷的精英单位。每8秒防御2.8秒，减伤35%。 铠甲减少30%物理伤害，法术不受影响。",
++    "traits": [
++      "每8秒防御2.8秒，物理减伤35%",
++      "被击败后分裂出3只小怪",
++      "物抗30%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发",
++    "physRes": 0.3,
++    "armorBreakRatio": 0.3
+   },
+   "molten_beast": {
+     "id": "molten_beast",
+@@ -2263,7 +2384,11 @@
+   },
+   "rift_hound": {
+     "id": "rift_hound",
+-    "rush": {"period":6,"duration":1.4,"multiplier":1.8},
++    "rush": {
++      "period": 6,
++      "duration": 1.4,
++      "multiplier": 1.8
++    },
+     "name": "虚空猎兽",
+     "kind": "melee",
+     "hp": 240,
+@@ -2301,20 +2426,23 @@
+     "exp": 24,
+     "charge": 2,
+     "gold": 7,
+-    "description": "裂隙王座的远程攻击单位。飞行单位，可被全部英雄攻击。",
++    "description": "有35%法抗符盾。裂隙王座的远程攻击单位。飞行单位，可被全部英雄攻击。",
+     "traits": [
+       "飞行单位，可被全部英雄攻击",
+-      "第一次倒下后恢复部分生命，仅复生一次"
+-    ],
+-    "weak": "减速与眩晕，及时清理快攻单位"
++      "第一次倒下后恢复部分生命，仅复生一次",
++      "法抗35%，持续法术命中可破盾"
++    ],
++    "weak": "物理输出，或法术集火破盾；冰封、眩晕仍有效",
++    "magicRes": 0.35,
++    "wardBreakRatio": 0.3
+   },
+   "rift_priest": {
+     "id": "rift_priest",
+     "name": "裂隙祭司",
+     "kind": "heal",
+-    "hp": 320,
++    "hp": 640,
+     "dmg": 0,
+-    "atkInterval": 5.5,
++    "atkInterval": 4,
+     "speed": 24,
+     "radius": 23,
+     "healAmount": 48,
+@@ -2324,11 +2452,16 @@
+     "exp": 24,
+     "charge": 2,
+     "gold": 7,
+-    "description": "裂隙王座的治疗支援单位。行进时也会周期治疗附近友军。",
+-    "traits": [
+-      "行进时也会周期治疗附近友军"
+-    ],
+-    "weak": "优先集火支援者，避免敌群积累"
++    "description": "有35%法抗符盾。生命较高的支援单位，读条后治疗附近伤员；冰封、眩晕可打断。",
++    "traits": [
++      "每4秒治疗，施法准备1.2秒",
++      "回复4%生命，最多治疗3名伤员",
++      "冰封、眩晕可打断，治疗者不互疗",
++      "法抗35%，持续法术命中可破盾"
++    ],
++    "weak": "物理输出，或法术集火破盾；冰封、眩晕仍有效",
++    "magicRes": 0.35,
++    "wardBreakRatio": 0.3
+   },
+   "rift_guard": {
+     "id": "rift_guard",
+@@ -2351,11 +2484,14 @@
+     "exp": 65,
+     "charge": 8,
+     "gold": 41,
+-    "description": "裂隙王座的精英单位。每8秒防御3秒，减伤40%。",
+-    "traits": [
+-      "每8秒防御3秒，减伤40%"
+-    ],
+-    "weak": "利用防御间隙集中爆发"
++    "description": "裂隙王座的精英单位。每8秒防御3秒，减伤40%。 铠甲减少30%物理伤害，法术不受影响。",
++    "traits": [
++      "每8秒防御3秒，物理减伤40%",
++      "物抗30%，持续物理命中可破甲"
++    ],
++    "weak": "法术输出，或物理集火破甲后爆发",
++    "physRes": 0.3,
++    "armorBreakRatio": 0.3
+   },
+   "rift_sovereign": {
+     "id": "rift_sovereign",
+--- before/config/FifthLevel.ts
++++ assets/scripts/config/FifthLevel.ts
+@@ -10,7 +10,7 @@
+ const elite = (hp: number, delay: number, dmg = 24) =>
+   ({ mob: 'goblin_brute', count: 1, interval: 1, delay, actual: { hp, dmg } });
+ const shaman = (delay: number) =>
+-  ({ mob: 'goblin_shaman', count: 1, interval: 1, delay, actual: { hp: 800, dmg: 0 } });
++  ({ mob: 'goblin_shaman', count: 1, interval: 1, delay, actual: { hp: 2200, dmg: 0 } });
+ const king = () =>
+   ({ mob: 'goblin_king', count: 1, interval: 1, delay: 0, actual: { hp: 12000, dmg: 30 } });
+ 
+@@ -20,9 +20,9 @@
+   { groups: [workers(94, 860, 0.32), slingers(2, 600, 12), elite(5800, 12)], surge: true },
+   { groups: [workers(40, 760, 0.71)] },
+   { groups: [workers(110, 1000, 0.27), riders(1000, 14)], surge: true },
+-  { groups: [workers(96, 1140, 0.31), slingers(4, 760, 10), riders(1180, 16), shaman(18)] },
++  { groups: [workers(95, 1140, 0.31), slingers(4, 760, 10), elite(6400, 11), riders(1180, 16), shaman(18)], formation: 'escort' },
+   { groups: [workers(114, 1280, 0.25), elite(7200, 8), riders(1360, 17)], surge: true },
+   // One king anchors the final wave; retain its authored identity and line damage.
+   { groups: [king(), workers(100, 1360, 0.27, 1), slingers(4, 860, 8),
+-    riders(1500, 17), shaman(12)], surge: true },
++    riders(1500, 17), shaman(12)], surge: true, formation: 'escort' },
+ ];
+--- before/config/FourthLevel.ts
++++ assets/scripts/config/FourthLevel.ts
+@@ -10,7 +10,7 @@
+ const elite = (count: number, hp: number, delay: number) =>
+   ({ mob: 'goblin_brute', count, interval: 12, delay, actual: { hp, dmg: 24 } });
+ const shaman = (count: number, delay: number) =>
+-  ({ mob: 'goblin_shaman', count, interval: 10, delay, actual: { hp: 700, dmg: 0 } });
++  ({ mob: 'goblin_shaman', count, interval: 10, delay, actual: { hp: 1800, dmg: 0 } });
+ 
+ export const FOURTH_LEVEL_WAVES: WaveDef[] = [
+   { groups: [workers(44, 560, 0.77)] },
+@@ -18,8 +18,8 @@
+   { groups: [workers(86, 800, 0.36), slingers(2, 540, 5, 12), elite(1, 5000, 15)], surge: true },
+   { groups: [workers(36, 700, 0.82)] },
+   { groups: [workers(98, 940, 0.3), riders(900, 14)], surge: true },
+-  { groups: [workers(88, 1060, 0.36), slingers(4, 700, 5, 10), riders(1050, 16), shaman(1, 18)] },
++  { groups: [workers(87, 1060, 0.36), slingers(4, 700, 5, 10), elite(1, 5600, 11), riders(1050, 16), shaman(1, 18)], formation: 'escort' },
+   { groups: [workers(104, 1180, 0.27), elite(1, 6200, 10), riders(1200, 17)], surge: true },
+   { groups: [workers(88, 1260, 0.33, 2), slingers(4, 800, 5, 8),
+-    elite(2, 7000, 5), riders(1360, 17), shaman(2, 12)], surge: true },
++    elite(2, 7000, 5), riders(1360, 17), shaman(2, 12)], surge: true, formation: 'escort' },
+ ];
+--- before/config/Mobs.ts
++++ assets/scripts/config/Mobs.ts
+@@ -54,9 +54,10 @@
+   },
+   goblin_shaman: {
+     id: 'goblin_shaman', name: '哥布林萨满', kind: 'heal',
+-    hp: 240, dmg: 20, atkInterval: 6, speed: 25, radius: 24,
++    hp: 600, dmg: 20, atkInterval: 4, speed: 25, radius: 24,
+     exp: 20, charge: 2, gold: 4, color: '#9B6BFF', healAmount: 40,
+-    description: '行进中也会治疗周围最多3名受伤友军；优先处理，阻断续航。',
++    magicRes: .35, wardBreakRatio: .3,
++    description: '有35%法抗符盾；读条后治疗附近伤员，冰封或眩晕可打断施法。',
+   },
+   wolf_rider: {
+     id: 'wolf_rider', name: '狼骑兵', kind: 'melee',
+@@ -76,13 +77,19 @@
+     id: 'goblin_king', name: '哥布林王', kind: 'melee',
+     hp: 4800, dmg: 80, atkInterval: 4, speed: 17.5, radius: 48,
+     exp: 120, charge: 20, gold: 50, color: '#6D963F', boss: true,
++    physRes: .3, armorBreakRatio: .28,
++    description: '铠甲减少30%物理伤害，集火可破甲；法术绕过物抗，首领仍免疫冰封。',
+   },
+ };
+ 
+ Object.assign(MOBS, EXPANSION_MOBS);
+ 
+ export interface SpawnGroup { mob: string; count: number; interval: number; delay?: number; actual?: { hp: number; dmg: number }; }
+-export interface WaveDef { groups: SpawnGroup[]; surge?: boolean; }
++/** Spawn metadata only: all enemies retain straight movement and the shared living cap. */
++export interface EnemyFormation {
++  id?: string; role?: 'front' | 'support'; lane: number; gap?: number;
++}
++export interface WaveDef { groups: SpawnGroup[]; surge?: boolean; formation?: 'escort' | 'crossfire'; }
+ 
+ /** 全怪血量倍率（用户调整：基础血量 ×2） */
+ export const MOB_HP_MUL = 2;
+--- before/config/SixthLevel.ts
++++ assets/scripts/config/SixthLevel.ts
+@@ -20,10 +20,10 @@
+   { groups: [workers(100, 1040, 0.3), riders(4, 1180, 8)], surge: true },
+   // A shorter middle wave separates the raids; it still carries more pressure than the old version.
+   { groups: [workers(46, 840, 0.69), slingers(2, 620, 14)] },
+-  { groups: [workers(104, 1120, 0.29), riders(4, 1280, 8), shaman(760, 20)], surge: true },
++  { groups: [workers(103, 1120, 0.29), elite(6400, 13), riders(4, 1280, 8), shaman(2400, 20)], surge: true, formation: 'escort' },
+   { groups: [workers(96, 1240, 0.31), slingers(4, 820, 8), elite(7000, 8)] },
+-  { groups: [workers(108, 1340, 0.28), riders(4, 1450, 8), shaman(900, 18)], surge: true },
++  { groups: [workers(107, 1340, 0.28), elite(7800, 11), riders(4, 1450, 8), shaman(2800, 18)], surge: true, formation: 'escort' },
+   // An ordinary elite arrives early in the final wave; no second boss climax after 1-5.
+   { groups: [elite(8600, 0), workers(102, 1440, 0.28, 1), riders(4, 1600, 6),
+-    slingers(4, 940, 10)], surge: true },
++    slingers(4, 940, 10)], surge: true, formation: 'crossfire' },
+ ];
+--- before/core/GameData.ts
++++ assets/scripts/core/GameData.ts
+@@ -695,10 +695,10 @@
+ export const CODEX: CodexDef[] = [
+   { id: 'goblin_worker', name: '哥布林苦工', icon: '👺', tags: ['小型', '近战'], desc: '成群结队冲向防线的近战单位，威胁在于数量。', traits: ['成群结队冲锋', '近战围攻防线', '单体威胁不高'], weak: '范围伤害（炮手/火法）' },
+   { id: 'goblin_slinger', name: '哥布林投石手', icon: '🎯', tags: ['小型', '远程'], desc: '远程投掷石块，会躲在近战身后输出。', traits: ['远程投石攻击', '躲在近战身后', '血量偏低'], weak: '快速击杀（弓手/狙击）' },
+-  { id: 'goblin_shaman', name: '哥布林萨满', icon: '🔮', tags: ['小型', '治疗'], desc: '行进中也会施法，为周围受伤友军恢复生命。', traits: ['每6秒治疗周围最多3名伤员', '优先治疗生命比例最低的友军', '不治疗自己，控制可延后施法'], weak: '范围大招覆盖后排，优先切断治疗' },
++  { id: 'goblin_shaman', name: '哥布林萨满', icon: '🔮', tags: ['小型', '治疗'], desc: '生命较高的治疗法师，有35%法抗符盾，持续法术命中可破盾。', traits: ['每4秒治疗，施法准备1.2秒', '回复4%生命，最多治疗3名伤员', '冰封、眩晕可打断，治疗者不互疗'], weak: '物理或范围伤害覆盖后排，控制打断治疗' },
+   { id: 'wolf_rider', name: '狼骑兵', icon: '🐺', tags: ['中型', '冲锋'], desc: '蓄势0.55秒后冲锋2秒，冲锋撞线会强化第一次攻击。', traits: ['每6.5秒尝试冲锋，移速×1.8', '冲锋撞线首次攻击+50%', '冰封、眩晕可打断，减速可延缓'], weak: '留控制打断冲锋，提前减速' },
+   { id: 'goblin_brute', name: '大哥布林（精英）', icon: '👹', tags: ['大型', '重甲'], desc: '重甲减少40%物理伤害；法术绕过物抗，持续物理命中可破甲。', traits: ['累计原始物理伤害达最大生命28%时破甲', '破甲后物抗归零，受到伤害+15%持续3秒', '精英级怪种，击杀可掉落装备'], weak: '法术输出，或物理集火破甲后爆发' },
+-  { id: 'goblin_king', name: '哥布林王（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '第一章第五关与第十关的首领，率领部队缓慢推进并近战攻击防线。', traits: ['第五关与第十关首领', '大型近战，血量厚重', '免疫冰封'], weak: '持续集火与大招爆发' },
++  { id: 'goblin_king', name: '哥布林王（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '铠甲减少30%物理伤害；法术绕过物抗，物理集火可破甲。', traits: ['第五关与第十关首领', '破甲后物抗归零，易伤3秒', '免疫冰封'], weak: '法术输出，或破甲后大招爆发' },
+ ];
+ /** 图鉴首览奖励：每只怪物首次点开词条可领一次（钻石） */
+ CODEX.push(...Object.values(EXPANSION_MOBS).map((d): CodexDef => ({
+--- before/ui/Panels.ts
++++ assets/scripts/ui/Panels.ts
+@@ -647,7 +647,7 @@
+         title = '技能 · 烈焰爆裂';
+         const pc = pyroSkCfg(h.skillLv || 1);
+         rows = [
+-          ['效果', '锁定最密集敌群 · 齐射 ' + Math.round(h.skillShots || 3) + ' 颗爆裂火球'],
++          ['效果', '锁定最密集敌群 · 连续发射 ' + Math.round(h.skillShots || 3) + ' 颗爆裂火球'],
+           ['每发伤害', Math.round(hero.abilityDamage(pc.mul)) + '（技×' + pc.mul.toFixed(2) + '）'],
+           ['特性', `爆炸半径 ${Math.round(pyroBlastRadius(h, 110 * (h.skillRangeMul || 1)))} · 灼烧${pyroBurnDuration(h)}秒`],
+           ['冷却时间', cdTotal],
+--- /dev/null
++++ assets/scripts/ui/EnemyTooltip.ts
+@@ -0,0 +1,126 @@
++/** One live, non-modal enemy readout; field taps stay behind HUD, loot and modal controls. */
++import { BlockInputEvents, EventTouch, Graphics, Node, UITransform, Vec3 } from 'cc';
++import type { Monster, MonsterManager } from '../battle/Monster';
++import { LO } from '../config/GameConfig';
++import { CODEX } from '../core/GameData';
++import { comicButton, comicMark, comicPlate, COMIC } from './ComicUI';
++import { Bar, C, gbar, gpanel, label, N, setText } from './UIKit';
++
++const WIDTH = 380, HEIGHT = 300;
++
++export class EnemyTooltip {
++  private root: Node;
++  private ring: Graphics;
++  private selected: Monster | null = null;
++  private lifeId = 0;
++  private refreshT = 0;
++  private pressed = -1;
++  private startX = 0;
++  private startY = 0;
++  private point = new Vec3();
++  private local = new Vec3();
++  private name: Node;
++  private tags: Node;
++  private health: Node;
++  private healthBar: Bar;
++  private physical: Node;
++  private magic: Node;
++  private states: Node;
++  private counter: Node;
++
++  constructor(field: Node, ui: Node, private manager: MonsterManager, private canInspect: () => boolean) {
++    const tap = N('enemyInspectFieldTap', field, 0, 0, 750, LO.half * 2);
++    tap.setSiblingIndex(0);
++    const transform = tap.getComponent(UITransform)!;
++    tap.on(Node.EventType.TOUCH_START, (e: EventTouch) => {
++      this.pressed = this.canInspect() ? e.getID() : -1;
++      const p = e.getUILocation(); this.startX = p.x; this.startY = p.y;
++    });
++    tap.on(Node.EventType.TOUCH_CANCEL, () => { this.pressed = -1; });
++    tap.on(Node.EventType.TOUCH_END, (e: EventTouch) => {
++      const valid = this.pressed === e.getID(); this.pressed = -1;
++      const p = e.getUILocation();
++      if (!valid || !this.canInspect() || Math.hypot(p.x - this.startX, p.y - this.startY) > 14) return;
++      this.point.set(p.x, p.y, 0); transform.convertToNodeSpaceAR(this.point, this.local);
++      const target = this.pick(this.local.x, this.local.y);
++      if (!target || target === this.selected && target.lifeId === this.lifeId) this.hide();
++      else this.show(target);
++    });
++
++    this.ring = N('inspectedEnemyRing', field).addComponent(Graphics);
++    this.ring.node.active = false;
++    this.root = comicPlate(ui, 0, 0, WIDTH, HEIGHT, 'paper', { name: 'enemyLiveTooltip', cut: 10 });
++    this.root.addComponent(BlockInputEvents);
++    this.name = label(this.root, -10, 118, '', { size: 24, bold: true, color: COMIC.text, align: 'left', w: 292, h: 32, shrink: true });
++    this.tags = label(this.root, 0, 87, '', { size: 16, color: COMIC.sub, align: 'left', w: 344, h: 22, shrink: true });
++    this.health = label(this.root, 0, 59, '', { size: 18, bold: true, color: COMIC.text, align: 'left', w: 344, h: 25 });
++    this.healthBar = gbar(this.root, 0, 37, 344, 10, '#65B441');
++    this.physical = label(this.root, -86, 8, '', { size: 18, bold: true, color: '#546A76', align: 'left', w: 172, h: 26, shrink: true });
++    this.magic = label(this.root, 86, 8, '', { size: 18, bold: true, color: '#7754A1', align: 'left', w: 172, h: 26, shrink: true });
++    this.states = label(this.root, 0, -44, '', { size: 18, color: COMIC.text, align: 'left', w: 344, h: 68, lineHeight: 23, shrink: true });
++    gpanel(this.root, 0, -91, 344, 1, '#D4BD96');
++    this.counter = label(this.root, 0, -117, '', { size: 16, color: COMIC.sub, align: 'left', w: 344, h: 42, lineHeight: 21, shrink: true });
++    const close = comicButton(this.root, 158, 119, 40, 40, '', () => this.hide(), { tone: 'dark', sound: 'close', name: 'closeEnemyTooltip' });
++    comicMark(close.getChildByName('buttonFace')!, 0, 0, 'close', 18);
++    this.root.active = false;
++  }
++
++  private pick(x: number, y: number): Monster | null {
++    let result: Monster | null = null, best = Infinity;
++    for (const m of this.manager.list) {
++      if (m.dead || !m.node.activeInHierarchy) continue;
++      const halfWidth = Math.max(25, m.def.radius * 1.3);
++      const bottom = m.y - m.def.radius * .82 - 5, top = m.y + m.headTop + 23;
++      if (Math.abs(x - m.x) > halfWidth || y < bottom || y > top) continue;
++      const score = ((x - m.x) / halfWidth) ** 2 + ((y - (bottom + top) / 2) / ((top - bottom) / 2)) ** 2;
++      if (score < best || score === best && m.depthY < (result?.depthY ?? Infinity)) { result = m; best = score; }
++    }
++    return result;
++  }
++
++  private show(m: Monster): void {
++    this.selected = m; this.lifeId = m.lifeId; this.refreshT = 0;
++    setText(this.name, m.def.name);
++    const tags = [m.isBoss ? '首领' : m.def.elite ? '精英' : '普通',
++      m.def.kind === 'heal' ? '治疗' : m.def.kind === 'ranged' ? '远程' : '近战'];
++    if (m.def.physRes) tags.push('重甲');
++    if (m.def.magicRes) tags.push('符盾');
++    if (m.def.airborne) tags.push('飞行');
++    if (m.def.rush) tags.push('冲锋');
++    if (m.def.regen) tags.push('再生');
++    if (m.def.summon) tags.push('召唤');
++    if (m.def.aura) tags.push('光环');
++    if (m.def.revive) tags.push('复生');
++    if (m.def.split) tags.push('分裂');
++    setText(this.tags, tags.join(' · '));
++    setText(this.counter, '应对：' + (CODEX.find(d => d.id === m.def.id)?.weak || '集中火力，注意施法与冲锋时机'));
++    this.root.active = true; this.ring.node.active = true;
++    this.tick(0);
++  }
++
++  hide(): void {
++    this.selected = null; this.root.active = false; this.ring.node.active = false;
++  }
++
++  tick(dt: number): void {
++    const m = this.selected;
++    if (!m) return;
++    if (!this.canInspect() || m.dead || m.lifeId !== this.lifeId || !m.node.isValid || !m.node.activeInHierarchy) { this.hide(); return; }
++    const maxY = LO.half - LO.notchTop - 130 - HEIGHT / 2;
++    const minY = Math.min(maxY, -LO.half + 300 + HEIGHT / 2);
++    let y = m.y + m.headTop + HEIGHT / 2 + 26;
++    if (y > maxY) y = m.y - m.def.radius - HEIGHT / 2 - 18;
++    this.root.setPosition(Math.max(-165, Math.min(70, m.x + (m.x > 0 ? -90 : 90))), Math.max(minY, Math.min(maxY, y)), 0);
++    this.ring.clear(); this.ring.strokeColor = C('#FFDA7A'); this.ring.lineWidth = 2.5;
++    this.ring.ellipse(m.x, m.depthY, m.def.radius * 1.28, m.def.radius * .44); this.ring.stroke();
++    this.refreshT -= dt;
++    if (this.refreshT > 0) return;
++    this.refreshT = .1;
++    const info = m.inspect();
++    setText(this.health, '生命 ' + Math.max(0, Math.ceil(m.hp)) + ' / ' + Math.round(m.maxHp));
++    this.healthBar.set(m.hp / Math.max(1, m.maxHp));
++    setText(this.physical, '物抗 ' + Math.round(info.physical * 100) + '%' + (info.armorBroken ? ' · 已破甲' : ''));
++    setText(this.magic, '法抗 ' + Math.round(info.magic * 100) + '%' + (info.wardBroken ? ' · 已破盾' : ''));
++    setText(this.states, '状态：' + info.states.join(' · '));
++  }
++}

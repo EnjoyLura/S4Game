@@ -1,0 +1,62 @@
+{
+  "sourceSHA256": "76faa6e3eafe0e53c985273b8f367fa72461add20a403a67bee96f1d1f223e5b",
+  "reports": [
+    {
+      "mode": "手机模式",
+      "version": "kw-render-diagnostics-v35",
+      "canvasBefore": [
+        1080,
+        2376
+      ],
+      "canvasAfter": [
+        1440,
+        3168
+      ],
+      "glBefore": [
+        1080,
+        2376
+      ],
+      "glAfter": [
+        1440,
+        3168
+      ],
+      "backingToDisplay": [
+        1,
+        1
+      ],
+      "notchBefore": 62.5,
+      "notchAfter": 62.5,
+      "reportedErrors": []
+    },
+    {
+      "mode": "电脑模式",
+      "version": "kw-render-diagnostics-v35",
+      "canvasBefore": [
+        3840,
+        8448
+      ],
+      "canvasAfter": [
+        1440,
+        3168
+      ],
+      "glBefore": [
+        3840,
+        8192
+      ],
+      "glAfter": [
+        1440,
+        3168
+      ],
+      "backingToDisplay": [
+        1,
+        1
+      ],
+      "notchBefore": 17.578125,
+      "notchAfter": 62.5,
+      "reportedErrors": []
+    }
+  ],
+  "sampledLabelCount": 16,
+  "sampledLabelRenderingMatchesBetweenModes": true,
+  "acceptance": "User-supplied runtime report confirms resolution and layout parameters; visual quality and performance not yet confirmed by user"
+}

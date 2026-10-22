@@ -23,9 +23,11 @@ export const Sfx = {
   /** Called by the actual meteor, lightning or ice contact, never the wind-up. */
   ultimateImpact(heroId: string): void {
     if (heroId === 'pyro' || heroId === 'volt' || heroId === 'mora') GameAudio.play(ULTIMATES[heroId]);
+    // Also cover an empty-ground meteor; the damage path coalesces the same instant's heavy hit.
+    if (heroId === 'pyro') GameAudio.play('fireHeavy');
   },
   impact(heroId: string, heavy = false): void {
-    // Ordinary contacts are emitted once by actual monster damage, including area/chain hits.
-    if (heavy) GameAudio.play(HEAVY_HITS[heroId] || 'crit');
+    // All positive attack damage calls here once, including area, chain, crit and heavy hits.
+    GameAudio.play(heavy ? HEAVY_HITS[heroId] || 'crit' : 'hit');
   },
 };

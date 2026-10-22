@@ -1,0 +1,286 @@
+{
+  "frames": {
+    "goblin_worker_w000": [
+      0,
+      0,
+      512,
+      576
+    ],
+    "goblin_worker_w001": [
+      512,
+      0,
+      512,
+      576
+    ],
+    "goblin_worker_w002": [
+      1024,
+      0,
+      512,
+      576
+    ],
+    "goblin_worker_w003": [
+      1536,
+      0,
+      512,
+      576
+    ],
+    "goblin_worker_w004": [
+      2048,
+      0,
+      512,
+      576
+    ],
+    "goblin_worker_w005": [
+      2560,
+      0,
+      512,
+      576
+    ],
+    "goblin_worker_w006": [
+      0,
+      576,
+      512,
+      576
+    ],
+    "goblin_worker_w007": [
+      512,
+      576,
+      512,
+      576
+    ],
+    "goblin_worker_w008": [
+      1024,
+      576,
+      512,
+      576
+    ],
+    "goblin_worker_w009": [
+      1536,
+      576,
+      512,
+      576
+    ],
+    "goblin_worker_w010": [
+      2048,
+      576,
+      512,
+      576
+    ],
+    "goblin_worker_w011": [
+      2560,
+      576,
+      512,
+      576
+    ],
+    "goblin_worker_w012": [
+      0,
+      1152,
+      512,
+      576
+    ],
+    "goblin_worker_w013": [
+      512,
+      1152,
+      512,
+      576
+    ],
+    "goblin_worker_w014": [
+      1024,
+      1152,
+      512,
+      576
+    ],
+    "goblin_worker_w015": [
+      1536,
+      1152,
+      512,
+      576
+    ],
+    "goblin_worker_w016": [
+      2048,
+      1152,
+      512,
+      576
+    ],
+    "goblin_worker_w017": [
+      2560,
+      1152,
+      512,
+      576
+    ],
+    "goblin_worker_w018": [
+      0,
+      1728,
+      512,
+      576
+    ],
+    "goblin_worker_w019": [
+      512,
+      1728,
+      512,
+      576
+    ],
+    "goblin_worker_w020": [
+      1024,
+      1728,
+      512,
+      576
+    ],
+    "goblin_worker_w021": [
+      1536,
+      1728,
+      512,
+      576
+    ],
+    "goblin_worker_w022": [
+      2048,
+      1728,
+      512,
+      576
+    ],
+    "goblin_worker_w023": [
+      2560,
+      1728,
+      512,
+      576
+    ]
+  },
+  "animation": {
+    "name": "goblin_worker_walk",
+    "loop": true,
+    "fps": 24.0,
+    "seconds": 1.0,
+    "frameOrder": [
+      "goblin_worker_w000",
+      "goblin_worker_w001",
+      "goblin_worker_w002",
+      "goblin_worker_w003",
+      "goblin_worker_w004",
+      "goblin_worker_w005",
+      "goblin_worker_w006",
+      "goblin_worker_w007",
+      "goblin_worker_w008",
+      "goblin_worker_w009",
+      "goblin_worker_w010",
+      "goblin_worker_w011",
+      "goblin_worker_w012",
+      "goblin_worker_w013",
+      "goblin_worker_w014",
+      "goblin_worker_w015",
+      "goblin_worker_w016",
+      "goblin_worker_w017",
+      "goblin_worker_w018",
+      "goblin_worker_w019",
+      "goblin_worker_w020",
+      "goblin_worker_w021",
+      "goblin_worker_w022",
+      "goblin_worker_w023"
+    ],
+    "frameDurations": [
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664
+    ]
+  },
+  "cycle": {
+    "seconds": 1.0,
+    "cells": 24
+  },
+  "source": {
+    "name": "生成4秒行走视频.mp4",
+    "sha256": "8ce2ed554fd2dab5b8bb3e3647fe8d1c11ed538d29d4f671ac4fac4f0d566225",
+    "size": [
+      720,
+      720
+    ],
+    "fps": 24.0,
+    "frameCount": 97,
+    "selectedFramesZeroBased": [
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50
+    ],
+    "startSeconds": 1.125,
+    "endSecondsExclusive": 2.125,
+    "matchingPhaseReference": 51
+  },
+  "layout": {
+    "cellSize": [
+      512,
+      576
+    ],
+    "columns": 6,
+    "rows": 4,
+    "sourceUnionBounds": [
+      64,
+      58,
+      602,
+      662
+    ],
+    "scale": 0.8921933085501859,
+    "imageOffset": [
+      16,
+      21
+    ],
+    "pivotNormalized": [
+      0.5,
+      0.9722222222222222
+    ]
+  },
+  "processing": {
+    "key": "blue excess B-max(R,G), soft transition 15..85",
+    "blueDespillMaxExcess": 10,
+    "sourceRoi": [
+      25,
+      35,
+      640,
+      665
+    ],
+    "fixedCropAndScale": true,
+    "reverse": false,
+    "crossfade": false,
+    "generatedFrames": false
+  }
+}

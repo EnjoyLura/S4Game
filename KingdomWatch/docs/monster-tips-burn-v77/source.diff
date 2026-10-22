@@ -1,0 +1,387 @@
+--- before/battle/FireVFX.ts
++++ assets/scripts/battle/FireVFX.ts
+@@ -7,7 +7,8 @@
+ interface Fragment { part: Part; vx: number; vy: number; spin: number; }
+ interface Flight { root: Node; body: Part; tail: Part; }
+ interface Residue { mark: Part; glow: Part; }
+-interface Clip { part: Part; age: number; scale: number; targetLifeId?: number; }
++interface Clip { part: Part; age: number; scale: number; }
++interface BurnState { lifeId: number; pulse: number; clips: Clip[]; }
+ /** Read-only status view: every burn source already maintains these fields. */
+ export interface BurningTarget { node: Node; lifeId: number; dead: boolean; burnT: number; burnTick: number; burnPulse: number; def: { radius: number }; }
+ interface Burst {
+@@ -44,7 +45,7 @@
+   private craterFrames = new Map<string, SpriteFrame>();
+   private clipFree: Clip[] = [];
+   private clipsActive: Clip[] = [];
+-  private burning = new Map<BurningTarget, Clip>();
++  private burning = new Map<BurningTarget, BurnState>();
+   private burnFree: Clip[] = [];
+   private clipLoaded = false;
+   private craterLoaded = false;
+@@ -257,41 +258,47 @@
+     clip.part.sprite.color = this.tint;
+   }
+ 
+-  /** One existing small flame per living burned enemy, independent of attacker.
+-   * Called after damage/status updates, using only the battle simulation clock. */
++  /** Each actual burn tick starts the original, unscaled forward clip.
++   * Its last 0.12s can finish beneath the next tick; never speed up or restart a playing clip. */
+   syncBurns(targets: readonly BurningTarget[], dt: number): void {
+-    void dt;
+-    for (const [target, clip] of this.burning) {
+-      if (target.dead || target.burnT <= 0 || clip.targetLifeId !== target.lifeId || !target.node.isValid || !target.node.parent) {
+-        clip.part.node.active = false;
+-        clip.part.node.setParent(this.root);
+-        this.burning.delete(target); this.burnFree.push(clip);
+-      }
+-    }
+-    if (!this.clipLoaded || !this.material) return;
++    for (const [target, state] of this.burning) {
++      if (target.dead || state.lifeId !== target.lifeId || !target.node.isValid || !target.node.parent) {
++        for (const clip of state.clips) this.releaseBurnClip(clip);
++        this.burning.delete(target);
++      }
++    }
+     for (const target of targets) {
+       if (target.dead || target.burnT <= 0 || !target.node.isValid || !target.node.parent) continue;
+-      let clip = this.burning.get(target);
+-      if (!clip) {
+-        clip = this.burnFree.pop() || { part: this.part('burnStatusFlame', this.root), age: 0, scale: 1 };
+-        clip.age = 0; clip.scale = 21 / PYRO_FLAME_W; clip.targetLifeId = target.lifeId;
++      if (!this.burning.has(target)) this.burning.set(target, { lifeId: target.lifeId, pulse: target.burnPulse, clips: [] });
++    }
++    for (const [target, state] of this.burning) {
++      for (let i = state.clips.length - 1; i >= 0; i--) {
++        const clip = state.clips[i]; clip.age += dt;
++        if (clip.age >= PYRO_CLIP_LIFE) { state.clips.splice(i, 1); this.releaseBurnClip(clip); }
++      }
++      const ticked = target.burnPulse > state.pulse;
++      state.pulse = target.burnPulse;
++      if (ticked && this.clipLoaded && this.material && state.clips.length < 2) {
++        const clip = this.burnFree.pop() || { part: this.part('burnStatusFlame', this.root), age: 0, scale: 1 };
++        clip.age = target.burnTick; clip.scale = 21 / PYRO_FLAME_W;
+         clip.part.frame = '';
+         // Local attachment inherits movement, depth sorting, and scene destruction.
+         clip.part.node.setParent(target.node);
+         clip.part.node.setPosition(0, target.def.radius * .4 + (PYRO_ANCHOR_Y - PYRO_CELL / 2) * clip.scale, 0);
+         clip.part.node.getComponent(UITransform)!.setContentSize(PYRO_CELL * clip.scale, PYRO_CELL * clip.scale);
+         clip.part.sprite.customMaterial = this.material;
++        this.renderClip(clip);
+         clip.part.node.active = true;
+-        this.burning.set(target, clip);
+-      }
+-      // One forward cycle per real 0.5s damage tick; refreshing burn never restarts its phase.
+-      clip.age = target.burnPulse > 0 ? Math.min(.9999, target.burnTick / .5) * PYRO_CLIP_LIFE : PYRO_CLIP_LIFE * .75;
+-      this.renderClip(clip);
+-      // Before the first damage tick the status is a quiet ember, rather than a full damage burst.
+-      if (target.burnPulse === 0) {
+-        this.tint.set(255, 255, 255, 100); clip.part.sprite.color = this.tint;
+-      }
+-    }
++        state.clips.push(clip);
++      }
++      for (const clip of state.clips) this.renderClip(clip);
++      // The final damage tick keeps its natural tail even after the gameplay status expires.
++      if (target.burnT <= 0 && !state.clips.length) this.burning.delete(target);
++    }
++  }
++
++  private releaseBurnClip(clip: Clip): void {
++    clip.part.node.active = false; clip.part.node.setParent(this.root); this.burnFree.push(clip);
+   }
+ 
+   blast(x: number, y: number, radius: number): boolean {
+--- before/battle/ImpactFX.ts
++++ assets/scripts/battle/ImpactFX.ts
+@@ -144,7 +144,7 @@
+   /** Shared code-only role feedback. Low-priority cues never evict a break/heal already playing. */
+   combatFeedback(kind: string, x: number, y: number, radius: number, tx = x, ty = y): void {
+     if (kind === 'burnBurst') { this.blast(x, y, 'pyro', radius); return; }
+-    if ((kind === 'rush' || kind === 'armorHit' || kind === 'wardHit' || kind === 'burnTick') && this.cueFree.length <= 8) return;
++    if ((kind === 'rush' || kind === 'armorHit' || kind === 'wardHit') && this.cueFree.length <= 8) return;
+     const p = this.cueFree.pop();
+     if (!p) return;
+     p.kind = kind; p.x = x; p.y = y; p.tx = tx; p.ty = ty; p.radius = radius;
+@@ -177,10 +177,10 @@
+       } else {
+         const magic = p.kind === 'wardBreak' || p.kind === 'wardHit';
+         const breaking = p.kind === 'armorBreak' || p.kind === 'wardBreak', group = p.kind === 'groupKill';
+-        const interrupt = p.kind === 'interrupt', burn = p.kind === 'burnTick';
+-        this.tint.set(group || interrupt || burn ? 250 : magic ? 206 : 202,
+-          group ? 211 : interrupt ? 225 : burn ? 151 : magic ? 167 : 225,
+-          group ? 132 : interrupt ? 154 : burn ? 62 : magic ? 255 : 235, Math.round(235 * fade));
++        const interrupt = p.kind === 'interrupt';
++        this.tint.set(group || interrupt ? 250 : magic ? 206 : 202,
++          group ? 211 : interrupt ? 225 : magic ? 167 : 225,
++          group ? 132 : interrupt ? 154 : magic ? 255 : 235, Math.round(235 * fade));
+         g.fillColor = this.tint; g.strokeColor = this.tint; g.lineWidth = 1.8;
+         const count = breaking ? 6 : group ? 7 : 3;
+         const spread = (breaking ? p.radius * 1.5 : group ? 52 : 14) * (t + .2);
+--- before/battle/Monster.ts
++++ assets/scripts/battle/Monster.ts
+@@ -67,6 +67,7 @@
+   burnT = 0;
+   burnTick = 0;
+   burnDps = 0;
++  /** Monotonic damage-event counter for this pooled life; reapplying burn must not replay an old event. */
+   burnPulse = 0;
+   private burnBurst = 0;
+   /** 眩晕硬直（预留：真正的眩晕类 buff 才会写入；受击不再写） */
+@@ -395,7 +396,6 @@
+         this.burnTick = Math.max(0, this.burnTick - 0.5);
+         this.burnPulse++;
+         this.takeDamage(this.burnDps * 0.5, false, 'burn');
+-        if (!this.dead) this.feedback('burnTick');
+       }
+       if (this.dead) return;
+       this.burnT = Math.max(0, this.burnT - dt);
+@@ -610,7 +610,7 @@
+   }
+   applyBurn(dps: number, dur: number, burst = 0): void {
+     if (this.dead || dps <= 0 || dur <= 0) return;
+-    if (this.burnT <= 0) this.burnTick = this.burnPulse = 0;
++    if (this.burnT <= 0) this.burnTick = 0;
+     this.burnDps = this.burnT > 0 ? Math.max(this.burnDps, dps) : dps;
+     this.burnBurst = this.burnT > 0 ? Math.max(this.burnBurst, burst) : burst;
+     this.burnT = Math.max(this.burnT, dur);
+--- before/ui/EnemyTooltip.ts
++++ assets/scripts/ui/EnemyTooltip.ts
+@@ -1,126 +1,169 @@
+-/** One live, non-modal enemy readout; field taps stay behind HUD, loot and modal controls. */
++/** Compact enemy sidebar. Field taps stay below loot and HUD controls. */
+ import { BlockInputEvents, EventTouch, Graphics, Node, UITransform, Vec3 } from 'cc';
+ import type { Monster, MonsterManager } from '../battle/Monster';
+ import { LO } from '../config/GameConfig';
+-import { CODEX } from '../core/GameData';
+-import { comicButton, comicMark, comicPlate, COMIC } from './ComicUI';
+-import { Bar, C, gbar, gpanel, label, N, setText } from './UIKit';
++import type { MobDef } from '../config/Mobs';
++import { comicButton } from './ComicUI';
++import { Bar, C, CA, gbar, gpanel, label, N, setText } from './UIKit';
+ 
+-const WIDTH = 380, HEIGHT = 300;
++const WIDTH = 148, HEIGHT = 334, CONTENT = WIDTH - 24;
++const TAP_PADDING = 26, DRAG_SLOP = 34;
++interface Selection {
++  mob: Monster; lifeId: number; def: MobDef;
++  hp: number; maxHp: number; info: ReturnType<Monster['inspect']>;
++}
+ 
+ export class EnemyTooltip {
+   private root: Node;
+   private ring: Graphics;
+-  private selected: Monster | null = null;
+-  private lifeId = 0;
++  private selected: Selection | null = null;
++  private pending: Selection | null = null;
+   private refreshT = 0;
+   private pressed = -1;
+   private startX = 0;
+   private startY = 0;
+   private point = new Vec3();
+   private local = new Vec3();
++  private ringColor = C('#FFDA7A');
+   private name: Node;
+-  private tags: Node;
++  private kind: Node;
+   private health: Node;
+   private healthBar: Bar;
+   private physical: Node;
+   private magic: Node;
++  private introduction: Node;
+   private states: Node;
+-  private counter: Node;
+ 
+   constructor(field: Node, ui: Node, private manager: MonsterManager, private canInspect: () => boolean) {
+     const tap = N('enemyInspectFieldTap', field, 0, 0, 750, LO.half * 2);
+-    tap.setSiblingIndex(0);
++    // Above scenery, actors and effects; the director inserts clickable loot just above this.
++    const textLayer = field.getChildByName('TextLayer');
++    if (textLayer) tap.setSiblingIndex(textLayer.getSiblingIndex());
+     const transform = tap.getComponent(UITransform)!;
++    const pickAt = (x: number, y: number): Selection | null => {
++      this.point.set(x, y, 0); transform.convertToNodeSpaceAR(this.point, this.local);
++      const m = this.pick(this.local.x, this.local.y);
++      return m ? { mob: m, lifeId: m.lifeId, def: m.def, hp: m.hp, maxHp: m.maxHp, info: m.inspect() } : null;
++    };
+     tap.on(Node.EventType.TOUCH_START, (e: EventTouch) => {
+-      this.pressed = this.canInspect() ? e.getID() : -1;
++      if (this.pressed !== -1 || !this.canInspect()) return;
++      this.pressed = e.getID();
+       const p = e.getUILocation(); this.startX = p.x; this.startY = p.y;
++      this.pending = pickAt(p.x, p.y); // Lock the touched instance before it can move or die.
+     });
+-    tap.on(Node.EventType.TOUCH_CANCEL, () => { this.pressed = -1; });
++    tap.on(Node.EventType.TOUCH_CANCEL, (e: EventTouch) => {
++      if (this.pressed === e.getID()) { this.pressed = -1; this.pending = null; }
++    });
+     tap.on(Node.EventType.TOUCH_END, (e: EventTouch) => {
+-      const valid = this.pressed === e.getID(); this.pressed = -1;
++      if (this.pressed !== e.getID()) return;
++      const captured = this.pending; this.pressed = -1; this.pending = null;
+       const p = e.getUILocation();
+-      if (!valid || !this.canInspect() || Math.hypot(p.x - this.startX, p.y - this.startY) > 14) return;
+-      this.point.set(p.x, p.y, 0); transform.convertToNodeSpaceAR(this.point, this.local);
+-      const target = this.pick(this.local.x, this.local.y);
+-      if (!target || target === this.selected && target.lifeId === this.lifeId) this.hide();
++      if (!this.canInspect() || Math.hypot(p.x - this.startX, p.y - this.startY) > DRAG_SLOP) return;
++      const target = captured || pickAt(p.x, p.y);
++      if (!target || target.lifeId === this.selected?.lifeId) this.hide();
+       else this.show(target);
+     });
+ 
+     this.ring = N('inspectedEnemyRing', field).addComponent(Graphics);
+     this.ring.node.active = false;
+-    this.root = comicPlate(ui, 0, 0, WIDTH, HEIGHT, 'paper', { name: 'enemyLiveTooltip', cut: 10 });
++    this.root = gpanel(ui, 0, 0, WIDTH, HEIGHT, CA('#151C19', .9), CA('#D1BC83', .8), 1.5, 10);
++    this.root.name = 'enemySidebar';
+     this.root.addComponent(BlockInputEvents);
+-    this.name = label(this.root, -10, 118, '', { size: 24, bold: true, color: COMIC.text, align: 'left', w: 292, h: 32, shrink: true });
+-    this.tags = label(this.root, 0, 87, '', { size: 16, color: COMIC.sub, align: 'left', w: 344, h: 22, shrink: true });
+-    this.health = label(this.root, 0, 59, '', { size: 18, bold: true, color: COMIC.text, align: 'left', w: 344, h: 25 });
+-    this.healthBar = gbar(this.root, 0, 37, 344, 10, '#65B441');
+-    this.physical = label(this.root, -86, 8, '', { size: 18, bold: true, color: '#546A76', align: 'left', w: 172, h: 26, shrink: true });
+-    this.magic = label(this.root, 86, 8, '', { size: 18, bold: true, color: '#7754A1', align: 'left', w: 172, h: 26, shrink: true });
+-    this.states = label(this.root, 0, -44, '', { size: 18, color: COMIC.text, align: 'left', w: 344, h: 68, lineHeight: 23, shrink: true });
+-    gpanel(this.root, 0, -91, 344, 1, '#D4BD96');
+-    this.counter = label(this.root, 0, -117, '', { size: 16, color: COMIC.sub, align: 'left', w: 344, h: 42, lineHeight: 21, shrink: true });
+-    const close = comicButton(this.root, 158, 119, 40, 40, '', () => this.hide(), { tone: 'dark', sound: 'close', name: 'closeEnemyTooltip' });
+-    comicMark(close.getChildByName('buttonFace')!, 0, 0, 'close', 18);
++    const text = '#FFF3D6', muted = '#D1C8AF';
++    this.name = label(this.root, 0, 133, '', { size: 19, bold: true, color: text, w: CONTENT, h: 48, lineHeight: 23, shrink: true });
++    this.kind = label(this.root, 0, 98, '', { size: 15, color: muted, w: CONTENT, h: 22, shrink: true });
++    gpanel(this.root, 0, 80, CONTENT, 1, CA('#D1BC83', .4));
++    this.health = label(this.root, 0, 60, '', { size: 16, color: text, w: CONTENT, h: 27, shrink: true });
++    this.healthBar = gbar(this.root, 0, 41, CONTENT - 4, 8, '#65B441');
++    this.physical = label(this.root, 0, 17, '', { size: 16, color: '#C9E0E9', w: CONTENT, h: 25, shrink: true });
++    this.magic = label(this.root, 0, -8, '', { size: 16, color: '#DABAF7', w: CONTENT, h: 25, shrink: true });
++    gpanel(this.root, 0, -29, CONTENT, 1, CA('#D1BC83', .4));
++    this.introduction = label(this.root, 0, -57, '', { size: 16, color: text, w: CONTENT, h: 46, lineHeight: 22, shrink: true });
++    this.states = label(this.root, 0, -101, '', { size: 15, color: muted, w: CONTENT, h: 36, lineHeight: 19, shrink: true });
++    const close = comicButton(this.root, 0, -140, CONTENT - 8, 36, '关闭', () => this.hide(),
++      { tone: 'dark', size: 16, sound: 'close', name: 'closeEnemySidebar' });
++    close.getComponent(UITransform)!.setContentSize(CONTENT, 48);
+     this.root.active = false;
+   }
+ 
+   private pick(x: number, y: number): Monster | null {
+     let result: Monster | null = null, best = Infinity;
+     for (const m of this.manager.list) {
+-      if (m.dead || !m.node.activeInHierarchy) continue;
+-      const halfWidth = Math.max(25, m.def.radius * 1.3);
+-      const bottom = m.y - m.def.radius * .82 - 5, top = m.y + m.headTop + 23;
+-      if (Math.abs(x - m.x) > halfWidth || y < bottom || y > top) continue;
+-      const score = ((x - m.x) / halfWidth) ** 2 + ((y - (bottom + top) / 2) / ((top - bottom) / 2)) ** 2;
++      if (m.dead || !m.node.isValid || !m.node.activeInHierarchy) continue;
++      const halfWidth = Math.max(34, m.def.radius * 1.5);
++      const bottom = m.y - m.def.radius * .82 - 8, top = m.y + m.headTop + 12;
++      const dx = Math.max(0, Math.abs(x - m.x) - halfWidth);
++      const dy = Math.max(0, bottom - y, y - top);
++      const edgeDistance = Math.hypot(dx, dy);
++      if (edgeDistance > TAP_PADDING) continue;
++      // Prefer a directly touched body; near its edge choose the closest visible body.
++      const center = Math.hypot(x - m.x, y - (bottom + top) / 2);
++      const score = (edgeDistance > 0 ? 1000 + edgeDistance : 0) + center * .01;
+       if (score < best || score === best && m.depthY < (result?.depthY ?? Infinity)) { result = m; best = score; }
+     }
+     return result;
+   }
+ 
+-  private show(m: Monster): void {
+-    this.selected = m; this.lifeId = m.lifeId; this.refreshT = 0;
+-    setText(this.name, m.def.name);
+-    const tags = [m.isBoss ? '首领' : m.def.elite ? '精英' : '普通',
+-      m.def.kind === 'heal' ? '治疗' : m.def.kind === 'ranged' ? '远程' : '近战'];
+-    if (m.def.physRes) tags.push('重甲');
+-    if (m.def.magicRes) tags.push('符盾');
+-    if (m.def.airborne) tags.push('飞行');
+-    if (m.def.rush) tags.push('冲锋');
+-    if (m.def.regen) tags.push('再生');
+-    if (m.def.summon) tags.push('召唤');
+-    if (m.def.aura) tags.push('光环');
+-    if (m.def.revive) tags.push('复生');
+-    if (m.def.split) tags.push('分裂');
+-    setText(this.tags, tags.join(' · '));
+-    setText(this.counter, '应对：' + (CODEX.find(d => d.id === m.def.id)?.weak || '集中火力，注意施法与冲锋时机'));
+-    this.root.active = true; this.ring.node.active = true;
++  private describe(d: MobDef): string {
++    if (d.kind === 'heal') return '治疗周围友军\n控制可打断';
++    if (d.rush) return '蓄势后快速冲锋\n控制可打断';
++    if (d.summon) return '召唤额外怪物\n优先集中击败';
++    if (d.split) return '倒下后分裂\n留意新生怪物';
++    if (d.revive) return '倒下后可复生\n需要再次击败';
++    if (d.regen) return '受伤后持续再生\n集中火力击败';
++    if (d.aura) return '为附近友军增益\n优先集中击败';
++    if (d.venom) return '攻击附带毒伤\n及时清理前排';
++    if (d.physRes) return '重甲抵挡物理\n法术伤害有效';
++    if (d.magicRes) return '符盾抵挡法术\n物理伤害有效';
++    if (d.kind === 'ranged') return '远程攻击防线\n留意后排威胁';
++    if (d.id === 'goblin_worker') return '成群围攻防线\n范围伤害有效';
++    return '近战逼近防线\n及时清理前排';
++  }
++
++  private show(s: Selection): void {
++    this.selected = s; this.refreshT = 0;
++    setText(this.name, s.def.name.replace(/[（(](精英|BOSS|首领)[）)]/gi, ''));
++    setText(this.kind, [s.def.boss ? '首领' : s.def.elite ? '精英' : '普通',
++      s.def.kind === 'heal' ? '治疗' : s.def.kind === 'ranged' ? '远程' : '近战'].join(' · '));
++    setText(this.introduction, this.describe(s.def));
++    this.root.active = true;
+     this.tick(0);
+   }
+ 
+   hide(): void {
+-    this.selected = null; this.root.active = false; this.ring.node.active = false;
++    this.selected = this.pending = null; this.pressed = -1;
++    this.root.active = false; this.ring.node.active = false;
+   }
+ 
+   tick(dt: number): void {
+-    const m = this.selected;
+-    if (!m) return;
+-    if (!this.canInspect() || m.dead || m.lifeId !== this.lifeId || !m.node.isValid || !m.node.activeInHierarchy) { this.hide(); return; }
+-    const maxY = LO.half - LO.notchTop - 130 - HEIGHT / 2;
+-    const minY = Math.min(maxY, -LO.half + 300 + HEIGHT / 2);
+-    let y = m.y + m.headTop + HEIGHT / 2 + 26;
+-    if (y > maxY) y = m.y - m.def.radius - HEIGHT / 2 - 18;
+-    this.root.setPosition(Math.max(-165, Math.min(70, m.x + (m.x > 0 ? -90 : 90))), Math.max(minY, Math.min(maxY, y)), 0);
+-    this.ring.clear(); this.ring.strokeColor = C('#FFDA7A'); this.ring.lineWidth = 2.5;
+-    this.ring.ellipse(m.x, m.depthY, m.def.radius * 1.28, m.def.radius * .44); this.ring.stroke();
++    if (!this.canInspect()) { this.hide(); return; }
++    const s = this.selected;
++    if (!s) return;
++    // Fixed left column below speed/stats/GM/notice controls, above the keep HUD.
++    const top = LO.half - Math.max(552, LO.notchTop + 316);
++    const bottom = -LO.half + 280;
++    const scale = Math.max(.5, Math.min(1, (top - bottom) / HEIGHT));
++    this.root.setScale(scale, scale, 1);
++    this.root.setPosition(-375 + 12 + WIDTH * scale / 2, Math.max(bottom + HEIGHT * scale / 2, top - HEIGHT * scale / 2), 0);
++    const m = s.mob;
++    const live = m.lifeId === s.lifeId && !m.dead && m.node.isValid && m.node.activeInHierarchy;
++    this.ring.node.active = live;
++    if (live) {
++      this.ring.clear(); this.ring.strokeColor = this.ringColor; this.ring.lineWidth = 2.5;
++      this.ring.ellipse(m.x, m.depthY, m.def.radius * 1.28, m.def.radius * .44); this.ring.stroke();
++    }
+     this.refreshT -= dt;
+     if (this.refreshT > 0) return;
+     this.refreshT = .1;
+-    const info = m.inspect();
+-    setText(this.health, '生命 ' + Math.max(0, Math.ceil(m.hp)) + ' / ' + Math.round(m.maxHp));
+-    this.healthBar.set(m.hp / Math.max(1, m.maxHp));
+-    setText(this.physical, '物抗 ' + Math.round(info.physical * 100) + '%' + (info.armorBroken ? ' · 已破甲' : ''));
+-    setText(this.magic, '法抗 ' + Math.round(info.magic * 100) + '%' + (info.wardBroken ? ' · 已破盾' : ''));
+-    setText(this.states, '状态：' + info.states.join(' · '));
++    if (live) { s.hp = m.hp; s.info = m.inspect(); }
++    else s.hp = 0; // Retain the brief introduction after death so a quick kill remains readable.
++    const info = s.info;
++    setText(this.health, '生命 ' + Math.max(0, Math.ceil(s.hp)) + '/' + Math.round(s.maxHp));
++    this.healthBar.set(s.hp / Math.max(1, s.maxHp));
++    setText(this.physical, '物抗 ' + Math.round(info.physical * 100) + '%' + (info.armorBroken ? '（破甲）' : ''));
++    setText(this.magic, '法抗 ' + Math.round(info.magic * 100) + '%' + (info.wardBroken ? '（破盾）' : ''));
++    const priority = ['冰封', '眩晕', '治疗读条', '冲锋蓄势', '冲锋中', '攻击蓄力', '灼烧', '感电', '减速', '易伤', '猎杀标记', '防御姿态', '狂暴'];
++    const active = priority.filter(key => info.states.some(state => state.startsWith(key))).slice(0, 2);
++    setText(this.states, live ? active.join(' · ') || info.states[0] : '已击败');
+   }
+ }

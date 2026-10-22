@@ -1,0 +1,17 @@
+{
+  "revision": "single-page-archive-trash-v2",
+  "htmlIds": 67,
+  "literalElementReferences": 66,
+  "missingReferences": 0,
+  "javascriptSyntax": "node --check passed",
+  "all627AssetPathsPresent": true,
+  "allFilteredCardsRenderedWithoutPagination": true,
+  "storageKeyPreserved": true,
+  "backupVersionsSupported": [
+    1,
+    2
+  ],
+  "browserRuntimeChecked": false,
+  "artworkChanges": false,
+  "review": "Static code and references only; no browser or gameplay run"
+}

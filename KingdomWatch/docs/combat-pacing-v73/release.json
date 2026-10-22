@@ -1,0 +1,149 @@
+{
+  "date": "2026-10-22",
+  "version": 73,
+  "feature": "combat-pacing",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=combat-pacing-v73-1792603091",
+  "entry": "index.6e649.js?v=1792603091",
+  "main": "assets/main/index.1ca20.js",
+  "hashes": {
+    "html": "555c0eacde00014057dbc373de2f62b45bd4c7b732b7f5bc8169042d31ba31db",
+    "entry": "e02a834aa4bc0272d71c5d980f7340493a716373e8d68dc7bea7cacd3071c672",
+    "main": "d16653c8d68a09e95493b6dea3145a15f548016746a1d5e08f247a3930e1e9a5"
+  },
+  "engineRevision": "2cb74a1e8caa095a",
+  "creatorExitCode": 36,
+  "buildDurationMs": 20019,
+  "production": true,
+  "changedGameFiles": 8,
+  "addedGameFiles": 0,
+  "removedGameFiles": 0,
+  "preservedMedia": 756,
+  "preservedNative": 756,
+  "previewCount": 793,
+  "typeDiagnostics": {
+    "before": 10,
+    "after": 10,
+    "new": 0,
+    "lineNormalizedEqual": true
+  },
+  "levels": [
+    {
+      "level": "1-1",
+      "waves": 6,
+      "monstersBefore": 101,
+      "monstersAfter": 139,
+      "countIncreasePercent": 37.6,
+      "nominalSpawnSecondsBefore": 186.8,
+      "nominalSpawnSecondsAfter": 178.89,
+      "spawnScheduleChangePercent": -4.2,
+      "individualHpAndLineDamageUnchanged": true,
+      "specialEnemyGroupsUnchanged": true
+    },
+    {
+      "level": "1-2",
+      "waves": 7,
+      "monstersBefore": 136,
+      "monstersAfter": 192,
+      "countIncreasePercent": 41.2,
+      "nominalSpawnSecondsBefore": 202.05,
+      "nominalSpawnSecondsAfter": 204.5,
+      "spawnScheduleChangePercent": 1.2,
+      "individualHpAndLineDamageUnchanged": true,
+      "specialEnemyGroupsUnchanged": true
+    },
+    {
+      "level": "1-3",
+      "waves": 8,
+      "monstersBefore": 228,
+      "monstersAfter": 332,
+      "countIncreasePercent": 45.6,
+      "nominalSpawnSecondsBefore": 239.35,
+      "nominalSpawnSecondsAfter": 242.0,
+      "spawnScheduleChangePercent": 1.1,
+      "individualHpAndLineDamageUnchanged": true,
+      "specialEnemyGroupsUnchanged": true
+    },
+    {
+      "level": "1-4",
+      "waves": 8,
+      "monstersBefore": 269,
+      "monstersAfter": 401,
+      "countIncreasePercent": 49.1,
+      "nominalSpawnSecondsBefore": 244.35,
+      "nominalSpawnSecondsAfter": 245.03,
+      "spawnScheduleChangePercent": 0.3,
+      "individualHpAndLineDamageUnchanged": true,
+      "specialEnemyGroupsUnchanged": true
+    },
+    {
+      "level": "1-5",
+      "waves": 8,
+      "monstersBefore": 283,
+      "monstersAfter": 437,
+      "countIncreasePercent": 54.4,
+      "nominalSpawnSecondsBefore": 238.03,
+      "nominalSpawnSecondsAfter": 238.61,
+      "spawnScheduleChangePercent": 0.2,
+      "individualHpAndLineDamageUnchanged": true,
+      "specialEnemyGroupsUnchanged": true
+    },
+    {
+      "level": "1-6",
+      "waves": 10,
+      "monstersBefore": 343,
+      "monstersAfter": 531,
+      "countIncreasePercent": 54.8,
+      "nominalSpawnSecondsBefore": 298.75,
+      "nominalSpawnSecondsAfter": 301.63,
+      "spawnScheduleChangePercent": 1.0,
+      "individualHpAndLineDamageUnchanged": true,
+      "specialEnemyGroupsUnchanged": true
+    }
+  ],
+  "maxCardDescriptionLines": 3,
+  "cardGameplayUnchanged": true,
+  "manualAcceptance": "pending user mobile balance, visual and performance review",
+  "validation": "Static source/type/build/hash/HTTP only. No game/browser/test/simulation/audio run.",
+  "snapshot": "https://70b6a7bc.kingdom-watch.pages.dev",
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-combat-pacing-v73-20261022-011858",
+  "branch": "main",
+  "objects": 2895,
+  "uploaded": 8,
+  "reused": 2887,
+  "httpChecks": [
+    {
+      "name": "html",
+      "url": "https://kingdom-watch.pages.dev/?v=combat-pacing-v73-1792603091",
+      "status": 200,
+      "bytes": 15837,
+      "sha256": "555c0eacde00014057dbc373de2f62b45bd4c7b732b7f5bc8169042d31ba31db",
+      "matchesLocal": true
+    },
+    {
+      "name": "entry",
+      "url": "https://kingdom-watch.pages.dev/index.6e649.js?v=1792603091",
+      "status": 200,
+      "bytes": 824,
+      "sha256": "e02a834aa4bc0272d71c5d980f7340493a716373e8d68dc7bea7cacd3071c672",
+      "matchesLocal": true
+    },
+    {
+      "name": "main",
+      "url": "https://kingdom-watch.pages.dev/assets/main/index.1ca20.js",
+      "status": 200,
+      "bytes": 830631,
+      "sha256": "d16653c8d68a09e95493b6dea3145a15f548016746a1d5e08f247a3930e1e9a5",
+      "matchesLocal": true
+    },
+    {
+      "name": "snapshotHtml",
+      "url": "https://70b6a7bc.kingdom-watch.pages.dev/?v=combat-pacing-v73-1792603091",
+      "status": 200,
+      "bytes": 15837,
+      "sha256": "555c0eacde00014057dbc373de2f62b45bd4c7b732b7f5bc8169042d31ba31db",
+      "matchesLocal": true
+    }
+  ],
+  "publicationNetwork": "Existing local proxy for this process only; no system proxy change or new login."
+}

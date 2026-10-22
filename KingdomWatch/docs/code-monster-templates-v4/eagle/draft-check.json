@@ -1,0 +1,60 @@
+{
+  "phases": 129,
+  "minimum_signed_cross_product": 253.80848724158608,
+  "periodic_position_max_error": 2.2737367544323206e-13,
+  "periodic_velocity_max_error": 1.1368683772161603e-08,
+  "low": [
+    229.9536788220425,
+    52.23067272500565
+  ],
+  "high": [
+    1305.598280701755,
+    877.4565054129317
+  ],
+  "camera": {
+    "scale": 0.42393184440579174,
+    "offset": [
+      -69.48468719092557,
+      58.93799992578417
+    ],
+    "common_with_legacy": true
+  },
+  "same_source_image": true,
+  "game_started": false,
+  "root_collar_relative_motion_max": 0.0,
+  "wing_body_connected_frames": [
+    true,
+    true,
+    true,
+    true
+  ],
+  "visible_bounds": [
+    [
+      88,
+      95,
+      423,
+      375
+    ],
+    [
+      41,
+      184,
+      471,
+      376
+    ],
+    [
+      63,
+      179,
+      449,
+      384
+    ],
+    [
+      37,
+      180,
+      475,
+      370
+    ]
+  ],
+  "seconds": 1.5,
+  "mesh_vertices": 1388,
+  "mesh_triangles": 1746
+}

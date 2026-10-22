@@ -1,0 +1,19 @@
+Use case: precise-object-edit.
+Asset type: second state of a portrait endless-challenge game screen, with campaign-style deployment preparation sheet open.
+Edit target image 1: the new endless world-map page. Preserve its top header/back/title/chapter directory, shared resource bar, visible map geography and bottom five-item navigation, with BASE selected.
+Reference image 2: actual campaign preparation sheet from the same game. Use its EXACT visual language: clean full-width cream bottom sheet, restrained rounded upper corners, small drag handle, dark navy text, close X, pale item-card backgrounds, and wide gold chamfered crossed-swords "开始战斗" button at the bottom above the shared navigation. Ignore Windows/browser/development capture widgets.
+References 3, 4 and 5: existing game item illustrations (green bow, green spellbook, metal helmet). Reuse their visual identities for a compact sample equipment row; these illustrate layout, not guaranteed rewards.
+Primary change: show the selected endless chapter's preparation sheet sliding up OVER the lower part of the map, exactly the same workflow as the campaign screenshot but without any difficulty choices or star chest system. The underlying endless map remains a full secondary page. Do not turn the full mode into a centered modal.
+Sheet height roughly 52–58% of full image, with its bottom edge just above the existing bottom navigation. Upper map and top resource/header remain visible. Hide the underlying deployment and team buttons while the sheet covers that area. Keep the sheet compact, no giant blank gap where removed campaign chests used to be.
+Sheet content in reading order:
+- centered subtle small drag handle at top;
+- left aligned title "第2章 · 深林挑战", close X on the right;
+- compact two-value row "最高已通 15层" and "从第1层开始";
+- next line "怪物范围：第1～2章";
+- section heading "挑战掉落";
+- two equal pale cards side by side: first a large coin icon, title "金币", subtitle "击败怪物获得"; second an equipment/helmet icon, title "装备", subtitle "概率掉落". No counts, no percentages, no guaranteed amount.
+- heading "可掉落装备" with small "详情 ›" at right;
+- one compact horizontal row of three item preview tiles using the bow, spellbook and helmet reference illustrations, large enough to recognize, no names, no invented stats, no quantity counters;
+- at bottom a wide gold chamfered action button, crossed-swords icon and accurate Chinese "开始战斗", same proportion and style as real campaign page.
+Very important: no ordinary/elite/hell tabs, no difficulty selector or difficulty flags; no treasure chests, no three-star awards, no star counters, no one-click claim buttons. The ONLY endless reward categories shown are gold and equipment. The top account diamond BALANCE remains unchanged, but no diamonds, experience, upgrade stones or materials appear in the sheet rewards.
+Respect the existing map and blue/cream/gold game UI, simple clean readable Chinese type. Single full screen portrait image with actual bottom navigation visible, no device framing, no callout annotations, no watermark.

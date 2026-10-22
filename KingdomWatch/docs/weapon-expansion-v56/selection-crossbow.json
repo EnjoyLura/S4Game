@@ -1,0 +1,42 @@
+[
+  {
+    "key": "blue_hawk_crossbow",
+    "name": "隼翼轻弩",
+    "type": "crossbow",
+    "quality": 2,
+    "art": "weapons_v1/blue_hawk_crossbow_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_crossbow.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 隼翼轻弩 (blue rare): Compact pale-oak crossbow in three-quarter view, short sweeping silver steel limbs like hawk wings, sky-blue leather wrap and small brass hawk crest, one wooden bolt seated on the rail. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-771fb9f6-7421-415e-a33e-6ae2fb97fe44.png"
+  },
+  {
+    "key": "blue_rock_crossbow",
+    "name": "碎岩重弩",
+    "type": "crossbow",
+    "quality": 2,
+    "art": "weapons_v1/blue_rock_crossbow_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_crossbow.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 碎岩重弩 (blue rare): Chunky siege-style crossbow, heavy dark iron angular bow limbs, blocky honey-oak stock, ochre leather wraps, large steel bolts and copper rivets. One broad-tipped wooden bolt seated on the rail. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-d73210e6-699a-433a-ae72-c1a482c8b669.png"
+  },
+  {
+    "key": "purple_falcon_crossbow",
+    "name": "银隼战弩",
+    "type": "crossbow",
+    "quality": 3,
+    "art": "weapons_v1/purple_falcon_crossbow_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_crossbow.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 银隼战弩 (purple epic): Refined silver-steel crossbow with sweeping falcon-wing limbs, navy lacquered wooden stock, pale gold fittings and small aquamarine jewel, long rail and one wooden bolt. Clearly mechanical medieval crossbow. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-767ae4c3-f123-4479-924e-c239bf7b158a.png"
+  },
+  {
+    "key": "purple_siege_crossbow",
+    "name": "裂城重弩",
+    "type": "crossbow",
+    "quality": 3,
+    "art": "weapons_v1/purple_siege_crossbow_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_crossbow.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 裂城重弩 (purple epic): Massive dark iron arbalest crossbow, wide layered angular limbs, reddish walnut stock, bronze mechanical brackets and crimson leather bindings. One thick armor-piercing bolt seated on the rail. No firearm barrel. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-66ebe411-7962-452b-bc3a-e28ae38622a4.png"
+  }
+]

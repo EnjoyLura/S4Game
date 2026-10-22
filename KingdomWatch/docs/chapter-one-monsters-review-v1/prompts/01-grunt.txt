@@ -1,0 +1,8 @@
+Use case: precise-object-edit.
+Edit this EXACT blue raider image. Change ONLY the condition of the brown tunic and dark-red scarf: the user wants the clothing noticeably more ragged.
+
+Brown tunic: make the shoulder flap partly ripped away with an uneven open seam; add one medium irregular worn-through hole near the side ribs showing blue skin and a smaller stretched tear near the lower waist. Tear two larger unequal chunks out of the lower hem so it hangs unevenly, with frayed raw edges, a few short loose threads and one broad loose flap. Keep the tunic readable as a single old garment. Scuffs and ground-in dirt should be broad and irregular.
+
+Red scarf: preserve the off-center knot and one-sided long tail. Add two uneven worn-through holes in the long hanging tail, a missing corner, split ends and a few loose threads. Break the neat edge across the shoulder with irregular larger bites and abrasion. Keep several broad cloth shapes, no many thin ribbons or elaborate patchwork. It should look repeatedly used and torn, with natural unequal damage rather than a repeated zigzag decorative border.
+
+Strict preservation: keep the SAME creature face and expression, eyes, skull helmet and broken horn, body size and small muscular definition, blue skin, weapon, hands, feet, pose, camera angle, framing, palette and drawing style. Do not change head orientation or stance. Do not add new armor, jewelry, props, characters or background details. Keep the original full-body composition and pale ivory background.

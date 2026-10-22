@@ -1,0 +1,53 @@
+--- before/assets/scripts/config/LevelDifficulty.ts
++++ after/assets/scripts/config/LevelDifficulty.ts
+@@ -7,6 +7,7 @@
+ import { FOURTH_LEVEL_WAVES } from './FourthLevel';
+ import { FIFTH_LEVEL_WAVES } from './FifthLevel';
+ import { SIXTH_LEVEL_WAVES } from './SixthLevel';
++import { SEVENTH_LEVEL_WAVES } from './SeventhLevel';
+ 
+ export interface MaterialReward { id: string; n: number; }
+ export interface GearWeight { id: string; weight: number; }
+@@ -81,12 +82,14 @@
+   const fourth = base.id === '1-4' && d === 0;
+   const fifth = base.id === '1-5' && d === 0;
+   const sixth = base.id === '1-6' && d === 0;
++  const seventh = base.id === '1-7' && d === 0;
+   // Repeatable cultivation materials are separate from first-win equipment receipts.
+   if (fourth || fifth) materials[0].n = 4;
+   if (sixth) materials[0].n = 5;
+-  return cache[key] = { ...base, difficulty: d, baseGold: sixth ? 140 : fifth ? 120 : fourth ? 100 : Math.round(base.baseGold * DIFFICULTIES[d].goldMul),
+-    waves: first ? FIRST_LEVEL_WAVES : second ? SECOND_LEVEL_WAVES : third ? THIRD_LEVEL_WAVES : fourth ? FOURTH_LEVEL_WAVES : fifth ? FIFTH_LEVEL_WAVES : sixth ? SIXTH_LEVEL_WAVES : waves,
+-    fixedWaves: first || second || third || fourth || fifth || sixth, materials, gearPool };
++  if (seventh) materials[0].n = 6;
++  return cache[key] = { ...base, difficulty: d, baseGold: seventh ? 160 : sixth ? 140 : fifth ? 120 : fourth ? 100 : Math.round(base.baseGold * DIFFICULTIES[d].goldMul),
++    waves: first ? FIRST_LEVEL_WAVES : second ? SECOND_LEVEL_WAVES : third ? THIRD_LEVEL_WAVES : fourth ? FOURTH_LEVEL_WAVES : fifth ? FIFTH_LEVEL_WAVES : sixth ? SIXTH_LEVEL_WAVES : seventh ? SEVENTH_LEVEL_WAVES : waves,
++    fixedWaves: first || second || third || fourth || fifth || sixth || seventh, materials, gearPool };
+ }
+ /** One equipment roll per real kill; elite bonus is explicit in the preview. */
+ export function equipmentDropChance(difficulty: number, mob?: Pick<MobDef, 'elite' | 'boss'>): number {
+--- before/assets/scripts/ui/TrainingLobby.ts
++++ after/assets/scripts/ui/TrainingLobby.ts
+@@ -452,8 +452,8 @@
+           const pct = (v: number): string => `${Math.round(v * 10000) / 100}%`;
+           rows = [{ name: '技能伤害倍率', cur: pct(cur), next: pct(next), gain: `+${pct(next - cur)}` }];
+         } else {
+-          const pct = (l: number): number => (l - 1) * 8;
+-          rows = [{ name: selected === 'atk' ? '普攻伤害加成' : '大招伤害加成', cur: `+${pct(lv)}%`, next: `+${pct(maxed ? lv : lv + 1)}%`, gain: maxed ? '+0%' : '+8%' }];
++          const pct = (l: number): number => 100 + (l - 1) * 8;
++          rows = [{ name: selected === 'atk' ? '普攻伤害倍率' : '大招伤害倍率', cur: `${pct(lv)}%`, next: `${pct(maxed ? lv : lv + 1)}%`, gain: maxed ? '+0%' : '+8%' }];
+         }
+         const paperH = height - shelfH - 280;
+         preview(body, 0, -(shelfH + 12 + paperH / 2), 702, paperH, data.skillName(hid, selected), lv, maxed, rows, false,
+--- before/assets/scripts/ui/pages/LevelsPage.ts
++++ after/assets/scripts/ui/pages/LevelsPage.ts
+@@ -360,7 +360,8 @@
+         const pct = (n: number): string => (n * 100).toFixed(2) + '%';
+         mainLabel(body, 0, by(layout.chance), '普通怪 ' + pct(equipmentDropChance(st.d)) + ' · 精英怪 ' + pct(equipmentDropChance(st.d, { elite: true })),
+           { size: 17, font: 'body', color: CAMPAIGN_TEXT.body, w: 660, h: 28 });
+-        } else mainLabel(equipment,0,-equipmentH/2,challenge.id === '1-6' && challenge.difficulty === 0
++        } else mainLabel(equipment,0,-equipmentH/2,challenge.id === '1-7' && challenge.difficulty === 0
++          ? '推荐英雄Lv.6、武器Lv.3\n投石手与萨满配合 · 金币与强化石' : challenge.id === '1-6' && challenge.difficulty === 0
+           ? '推荐英雄Lv.5、武器Lv.3\n狼骑分批突袭 · 金币与强化石' : challenge.id === '1-5' && challenge.difficulty === 0
+           ? '推荐英雄Lv.5、武器Lv.3\n' + (fifthRewardsAvailable(challenge.id, challenge.difficulty)
+             ? '首胜：巡林轻弩＋月纹坠饰' : '通关获得金币和强化石') : challenge.id === '1-4' && challenge.difficulty === 0

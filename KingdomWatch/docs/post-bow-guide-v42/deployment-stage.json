@@ -1,0 +1,34 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-post-bow-guide-v42-20261018-204814",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "entryVersion": "1792327683",
+  "game": "https://kingdom-watch.pages.dev/?v=post-bow-guide-v42-1792327683",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-gold-play-icon-v41-20261018-204240",
+  "originalFilesChecked": 1830,
+  "changedExistingFiles": [
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/core/SaveData.ts",
+    "assets/scripts/core/SecondJourney.ts",
+    "assets/scripts/ui/MainUI.ts",
+    "assets/scripts/ui/TrainingLobby.ts",
+    "assets/scripts/ui/pages/HeroPage.ts",
+    "assets/scripts/ui/pages/LevelsPage.ts"
+  ],
+  "priorPreviewFilesPreserved": 793,
+  "typeDiagnosticsUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "allOriginalMediaUnchanged": true,
+  "waveCountsAndCombatStatsUnchanged": true,
+  "ultimateLaunchHeightsUnchanged": true,
+  "scope": "Earned bow -> archer upgrade -> normal 1-2 start spotlight; visible monster entry below top HUD.",
+  "manualAcceptance": "No tests/game/browser/simulation/audio playback. User manual interaction/visual/balance acceptance.",
+  "deployment": "https://c3d4cb98.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.441fc.js?v=1792327683",
+    "finalUrl": "https://kingdom-watch.pages.dev/?v=post-bow-guide-v42-1792327683"
+  }
+}

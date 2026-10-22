@@ -2,31 +2,42 @@
  * 弹窗面板（UX 线稿 ②~⑤⑧）：三选一 / 暂停 / 胜利结算 / 失败结算(含广告复活) / 伤害统计 / 属性Tips
  * 弹窗内容块均以屏幕垂直中心为重心；三选一期间全场冻结由 BattleDirector 状态控制
  */
-import { Graphics, Label, Node, Sprite, sys, tween, UIOpacity, Vec3 } from 'cc';
+import { Graphics, Label, Mask, Node, ScrollView, Sprite, sys, tween, UIOpacity, UITransform, Vec3 } from 'cc';
 import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDuration, pyroMeteorCount, pyroMeteorDamage } from '../config/Cards';
+import { voltShockDuration, voltShockAmp, voltShockedMultiplier, voltStrikeCount } from '../config/Cards';
+import { MORA_ULT_HITS, moraSlowRatio, moraSlowDuration, moraFreezeChance, moraNormalFreezeDuration, moraFieldRadius, moraFieldFreeze, moraUltimateHitDamage } from '../config/Cards';
 import { FROST_ULT_RAIN_COUNT, HERO_Y, LO, PAL } from '../config/GameConfig';
 import { DamageRow, fmtWk } from '../battle/DamageService';
 import { HeroBase } from '../battle/Hero';
+import { FROST_ULT_HIT_GAP } from '../battle/UltimateTiming';
 import { BattleDirector } from '../battle/BattleDirector';
 import { AdService } from '../platform/AdService';
 import { loadSave, saveSave } from '../core/SaveData';
 import { StageLootSummary } from '../core/StageLoot';
 import { DIFFICULTIES } from '../config/LevelDifficulty';
-import { COMIC, comicButtonControl, ComicButtonControl } from './ComicUI';
+import { COMIC, comicArt, comicButton, comicButtonControl, comicDialogContent, ComicButtonControl } from './ComicUI';
+import { detailSkin } from './DetailDialog';
 import { bindButton, ButtonFeedback } from './ButtonFeedback';
 import { motionIn, retireChildren, stopMotion } from './UIMotion';
 import { whenUIArtReady } from './UIArtReady';
 import { PickMotion } from './PickMotion';
 import { uiSound } from './UIAudio';
-import { pickCardArt } from './PickArt';
+import { pickCardIcon } from './PickArt';
 import { C, CA, dimLayer, gcircle, gpanel, label, N, setText, WY, WYB, WX } from './UIKit';
 import { battleArtIcon as artIcon, battleArtSprite as artSprite, battleStatBar as gbar } from './BattlePanelSkin';
 import { pauseButton, pauseFrame, pauseRow, pauseSwitch, pauseTabFace } from './PausePanelSkin';
 import { playSettlement, settlementButton, settlementFrame, settlementRewards } from './SettlementPanelSkin';
 import { battleRewardPanel } from './BattleRewardPanel';
 import { showCollectedLoot } from './LevelLootPreview';
+import { showItemDetails } from './ItemDetails';
+import { BuildTeam, cardComboHint, ownedBuildCards } from '../config/Cards';
+import { bindBrowserBack } from './BrowserBack';
+import { dismissUI } from './UIMotion';
 
 interface PickCallbacks {
+  recommendedId?: string;
+  onSkipTeaching?: () => void;
   onPick: (card: CardDef) => void;
   onRefreshRequest: () => void;
 }
@@ -55,6 +66,7 @@ export class Panels {
   private reviveHint = '';
   private activeKind = '';
   private pickMotion: PickMotion | null = null;
+  private buildOverlay: Node | null = null;
 
   closeAll(animated = false): void {
     const wasPick = this.activeKind === 'pick';
@@ -64,6 +76,7 @@ export class Panels {
     this.pickPending = false;
     this.panelVersion++;
     this.pickMotion = null;
+    this.buildOverlay = null;
     stopMotion(this.modalRoot);
     if (animated && !wasPick) retireChildren(this.modalRoot);
     else {
@@ -87,7 +100,7 @@ export class Panels {
   }
 
   /* ---------- ② 三选一 ---------- */
-  showPick(cards: CardDef[], _stacks: CardStacks, cb: PickCallbacks): void {
+  showPick(cards: CardDef[], stacks: CardStacks, cb: PickCallbacks): void {
     const previous = this.activeKind === 'pick' && this.pickMotion?.node.isValid ? this.pickMotion : null;
     if (previous) ++this.panelVersion;
     else { this.begin('pick'); dimLayer(this.modalRoot, .68, false, false); }
@@ -101,7 +114,13 @@ export class Panels {
     artSprite(titleBg, 0, 0, 520, 88, 'pick_comic_v1/title_plate', { belowIdx: 0 });
     label(titleBg, 0, 0, '选择强化', { size: 34, color: '#4A3214', bold: true });
     const motion = pickRoot.addComponent(PickMotion);
-    const canInteract = (): boolean => version === this.panelVersion && motion.ready && !this.picking && !this.pickPending;
+    const canInteract = (): boolean => version === this.panelVersion && motion.ready && !this.picking && !this.pickPending && !this.buildOverlay?.isValid;
+    // Child of the existing title chrome: follows its reveal/refresh/selection lifetime.
+    const buildLink = label(titleBg, 174, 66, '本局强化 ›', {
+      size: 18, color: '#FFE3A3', w: 172, h: 44,
+    });
+    buildLink.name = 'pickBuildOverview';
+    bindButton(buildLink, () => { if (canInteract()) this.showBuildOverview(); }, { enabled: canInteract });
     const xs = [22, 264, 506];
     const frames: Node[] = [];
     cards.forEach((card, i) => {
@@ -111,7 +130,11 @@ export class Panels {
       frame.name = 'pickCard:' + card.id;
       frames.push(frame);
       const face = gpanel(frame, 0, 0, 222, 360, '#F5E8CD', undefined, 0, 12);
-      this.buildCard(face, card);
+      this.buildCard(face, card, stacks);
+      if (card.id === cb.recommendedId) {
+        const badge = gpanel(face, 0, 196, 200, 28, '#F6D57A', '#765927', 1, 8);
+        label(badge, 0, 0, '新手推荐 · 可自由选', { size: 16, color: '#49371D', bold: true, w: 190, h: 24 });
+      }
       bindButton(frame, () => {
         if (!canInteract()) return;
         this.picking = true;
@@ -125,6 +148,10 @@ export class Panels {
     });
 
     const footer = N('pickRefreshFooter', pickRoot);
+    if (cb.onSkipTeaching) {
+      const skip = label(footer, 0, WY(778, 36), '跳过新手引导', { size: 18, color: '#FFE3A3', w: 280, h: 36 });
+      bindButton(skip, () => { if (canInteract()) cb.onSkipTeaching?.(); }, { sound: 'select' });
+    }
     const refreshNote = label(footer, 0, WY(818, 40),
       '当局剩余刷新：广告 ' + this.pickAdLeft + ' 次 · 钻石 ' + this.pickDiaLeft + ' 次',
       { size: 18, color: '#CFE3FF' });
@@ -138,7 +165,7 @@ export class Panels {
       AdService.showRewarded('pick_refresh', () => {
         if (version === this.panelVersion) cb.onRefreshRequest();
       }, () => {
-        if (version === this.panelVersion) { this.pickAdLeft++; this.showPick(cards, _stacks, cb); }
+        if (version === this.panelVersion) { this.pickAdLeft++; this.showPick(cards, stacks, cb); }
       });
     };
     const adRefresh = this.pickBtn(footer, WX(130, 300), WY(862, 76), 300, 76, '▶ 广告刷新', 24,
@@ -182,7 +209,7 @@ export class Panels {
 
   /** 卡面布局（羊皮纸底；去「新」标与稀有度小字——用户要求：卡面只留 名称/图标/归属/描述）：
    *  顶部稀有度通栏色带 → 圆形图标座 → 右上归属角标（避开色带与图标座）→ 下半区大号加粗描述（shrink 防超框） */
-  private buildCard(frame: Node, card: CardDef): void {
+  private buildCard(frame: Node, card: CardDef, _stacks: CardStacks): void {
     const rarity = RARITY_COLOR[card.rarity];
 
     // ⓪ 共用原创纸纹底板，细线与角饰留在边缘，中心供原图标和描述使用。
@@ -204,7 +231,7 @@ export class Panels {
     const gear = gcircle(frame, 0, 50, 60, CA('#2A3240', 1));
     const icon = gcircle(frame, 0, 50, 48, CA(rarity, 0.16));
     const iconLbl = label(icon, 0, 0, card.id.slice(0, 2).toUpperCase(), { size: 26, color: card.rarity === 'white' ? '#E8E0C8' : rarity, bold: true });
-    artSprite(frame, 0, 50, 124, 124, pickCardArt(card), { sliced: false, hideOnLoad: [iconLbl] });
+    pickCardIcon(frame, 0, 50, 124, card, [iconLbl]);
 
     // ③ 右上归属角标：仅英雄专属卡贴头像（用户调整：通用卡不再显示"全"角标）
     if (card.owner !== 'global') {
@@ -212,12 +239,88 @@ export class Panels {
       artSprite(ava, 0, 0, 48, 48, 'ui_avatar_' + card.owner, { sliced: false });
     }
 
-    // Explicit semantic lines preserve phrases, conditions and units; shrink only guards unusually long new copy.
+    // Shared concise copy: no stack counters or automatic combo hints on the choice card.
     const description = label(frame, 0, -94, card.desc, {
       size: 18, color: '#4A3214', bold: true, font: 'body', w: 196, h: 112, shrink: true, lineHeight: 25,
     });
     description.name = 'pickDescription:' + card.id;
     description.getComponent(Label)!.enableWrapText = false;
+  }
+
+  /** A read-only child overlay keeps the current draw, refresh allowance and battle pause intact. */
+  private showBuildOverview(): void {
+    if (this.buildOverlay?.isValid || (this.activeKind !== 'pick' && this.activeKind !== 'pause')) return;
+    const overlay = dimLayer(this.modalRoot, .66);
+    overlay.name = 'battleBuildOverview'; this.buildOverlay = overlay;
+    const close = (): void => {
+      releaseBack();
+      if (overlay.isValid) dismissUI(overlay);
+      if (this.buildOverlay === overlay) this.buildOverlay = null;
+    };
+    const releaseBack = bindBrowserBack(overlay, close);
+    overlay.on(Node.EventType.TOUCH_END, (e: { propagationStopped?: boolean }) => {
+      if (e) e.propagationStopped = true;
+      close();
+    });
+    const W = 660, H = Math.min(900, LO.half * 2 - LO.notchTop * 2 - 48);
+    const root = comicDialogContent(overlay, W, H, '本局强化', close);
+    detailSkin(root, W, H, '本局强化');
+    const stacks = this.dir.stacks, team: BuildTeam = this.dir.heroes;
+    const groups = [...this.dir.heroes.map(hero => ({
+      owner: hero.id, name: hero.name, cards: ownedBuildCards(hero.id, stacks),
+    })), { owner: 'global', name: '全队与防线', cards: ownedBuildCards('global', stacks) }];
+    const total = groups.reduce((sum, group) => sum + group.cards.reduce((n, card) => n + stacks[card.id], 0), 0);
+    label(root, 0, H / 2 - 86, '已选择 ' + total + ' 次强化 · 按英雄查看', {
+      size: 19, color: COMIC.sub, w: 580, h: 30,
+    });
+    const rowHeight = (card: CardDef): number => 42 + card.desc.split('\n').length * 24
+      + (cardComboHint(card, stacks, team) ? 28 : 0);
+    const contentHeight = groups.reduce((sum, group) => sum + 72 + (group.cards.length
+      ? group.cards.reduce((height, card) => height + rowHeight(card), 0) : 40) + 18, 0);
+    const top = H / 2 - 112, bottom = -H / 2 + 66, height = top - bottom;
+    const view = N('buildListView', root, 0, (top + bottom) / 2, 596, height);
+    view.addComponent(Mask);
+    const scroll = view.addComponent(ScrollView);
+    const content = N('buildListContent', view, 0, height / 2, 596, Math.max(height, contentHeight));
+    content.getComponent(UITransform)!.setAnchorPoint(.5, 1);
+    scroll.content = content; scroll.horizontal = false; scroll.vertical = contentHeight > height;
+    scroll.inertia = true; scroll.elastic = false; scroll.brake = .7; scroll.cancelInnerEvents = true;
+    let cursor = 0;
+    groups.forEach(group => {
+      const selected = group.cards.reduce((sum, card) => sum + stacks[card.id], 0);
+      if (group.owner !== 'global')
+        artSprite(content, -268, -cursor - 30, 48, 48, 'ui_avatar_' + group.owner, { sliced: false });
+      label(content, group.owner === 'global' ? -12 : 16, -cursor - 30,
+        group.name + ' · ' + selected + '次', {
+          size: 22, color: COMIC.text, bold: true, align: 'left', w: group.owner === 'global' ? 556 : 500, h: 36,
+        });
+      cursor += 72;
+      if (!group.cards.length) {
+        label(content, 0, -cursor - 14, group.owner === 'global' ? '尚未选择全局强化' : '尚未选择专属强化 · 基础技能与大招可用', {
+          size: 18, color: COMIC.sub, align: 'left', w: 568, h: 28,
+        });
+        cursor += 40;
+      }
+      group.cards.forEach(card => {
+        pickCardIcon(content, -260, -cursor - 27, 48, card);
+        label(content, 28, -cursor - 14, card.name + ' · ' + stacks[card.id] + '/' + card.maxStacks + '层', {
+          size: 20, color: COMIC.text, bold: true, align: 'left', w: 480, h: 28,
+        });
+        const descHeight = card.desc.split('\n').length * 24;
+        label(content, 28, -cursor - 32 - descHeight / 2, card.desc, {
+          size: 18, color: COMIC.sub, align: 'left', w: 480, h: descHeight, lineHeight: 24,
+        });
+        const hint = cardComboHint(card, stacks, team);
+        if (hint) label(content, 28, -cursor - 46 - descHeight, hint, {
+          size: 18, color: COMIC.greenShade, align: 'left', w: 480, h: 28,
+        });
+        cursor += rowHeight(card);
+      });
+      cursor += 18;
+    });
+    label(root, 0, -H / 2 + 32, '同类易伤取最高；感电单独生效。', {
+      size: 18, color: COMIC.sub, w: 580, h: 30,
+    });
   }
 
   /** Pause tabs own a fixed footer band, separate from settings and the credits link. */
@@ -265,12 +368,17 @@ export class Panels {
     const root = pauseFrame(this.modalRoot);
     artSprite(root, 0, 298, 360, 68, 'pause_comic_v1/title_ribbon');
     label(root, 0, 298, '暂 停', { size: 46, color: '#FFFFFF', bold: true, w: 320, h: 62 });
+    const buildLink = label(root, 250, 298, '本局强化 ›', {
+      size: 18, color: '#FFE3A3', w: 140, h: 44,
+    });
+    buildLink.name = 'pauseBuildOverview';
+    bindButton(buildLink, () => this.showBuildOverview());
     this.tabsBar(root, ['奖励总览', '伤害统计', '设置'], tab, t => this.showPause({ ...o, tab: t }));
     if (tab === 0) {
       battleRewardPanel(root, {
         top: 236, heading: '已获得奖励', gold: this.dir.goldEarned, xp: o.xp, loot: o.loot,
-        note: '金币与经验为本局累计',
-        onInspect: o.loot ? () => showCollectedLoot(this.modalRoot, o.loot!) : undefined,
+        note: this.dir.isEndless ? '已通过' + this.dir.endlessCleared + '层 · 通层金币即时保存' : '金币为本局累计 · 经验仅用于本局升级选卡',
+        detailParent: this.modalRoot, source: '本局奖励总览',
       });
     } else if (tab === 1) {
       label(root, 0, 216, '— 伤害统计（本局） —', { size: 22, color: '#FFE08A', w: 560, h: 32 });
@@ -306,33 +414,62 @@ export class Panels {
         sys.openURL(new URL('audio-credits.html', window.location.href).href);
       });
     }
-    pauseButton(root, -175, -270, 300, 86, '⏻ 退出', o.onExit, 22, 'gold');
+    pauseButton(root, -175, -270, 300, 86, this.dir.isEndless ? '结束挑战' : '⏻ 退出', o.onExit, 22, 'gold');
     pauseButton(root, 175, -270, 300, 86, '▶ 继续战斗', o.onResume, 22, 'green');
+  }
+
+  showEndless(o: { cleared: number; floor: number; best: number; newBest: boolean; gold: number; loot: StageLootSummary; onExit: () => void }): void {
+    this.begin('endless');
+    dimLayer(this.modalRoot, .68, false, true);
+    const W = 660, H = Math.min(740, LO.half * 2 - LO.notchTop * 2 - 48);
+    const root = comicDialogContent(this.modalRoot, W, H, '无尽挑战结算', o.onExit);
+    detailSkin(root, W, H, '无尽挑战结算');
+    label(root, 0, H / 2 - 116, this.dir.levelDef.name, { size: 27, bold: true, color: COMIC.text, w: 560, h: 40 });
+    label(root, 0, H / 2 - 202, '通过 ' + o.cleared + ' 层', { size: 49, bold: true, color: COMIC.text, w: 560, h: 72 });
+    label(root, 0, H / 2 - 270, (o.newBest ? '新纪录！' : '历史最高') + ' 第' + o.best + '层',
+      { size: 25, bold: true, color: COMIC.greenShade, w: 560, h: 40 });
+    label(root, 0, H / 2 - 324, '本次抵达第' + o.floor + '层 · 仅完成的层数计入纪录',
+      { size: 19, color: COMIC.sub, w: 580, h: 38 });
+    const goldReward = N('endlessGoldReceipt', root, 0, -H / 2 + 247, 360, 60);
+    comicArt(goldReward, -120, 0, 58, 58, 'comic_coin_v1');
+    label(goldReward, 45, 0, '金币 +' + o.gold, { size: 31, bold: true, color: COMIC.text, w: 260, h: 52 });
+    bindButton(goldReward, () => showItemDetails(this.modalRoot, 'coin', { amount: o.gold, source: '无尽挑战结算' }),
+      { dragThreshold: 7, sound: false });
+    const gearCount = o.loot.equipment.length;
+    if (gearCount) comicButton(root, 0, -H / 2 + 180, 410, 48, '已获装备 ×' + gearCount + ' · 查看',
+      () => showCollectedLoot(this.modalRoot, o.loot), { tone: 'dark', size: 21 });
+    label(root, 0, -H / 2 + 134, '收益已到账 · 下次从第1层重新挑战', { size: 18, color: COMIC.sub, w: 580, h: 30 });
+    comicButton(root, 0, -H / 2 + 68, 548, 66, '返回地图', o.onExit,
+      { name: 'endlessReturn', tone: 'gold', size: 29 });
   }
 
   /* ---------- ⑥ 胜利结算：评级、奖励与固定操作区 ---------- */
   showWin(o: {
-    stars: 1 | 2 | 3; gold: number; ratio: number; xp: number; loot?: StageLootSummary;
+    stars: 1 | 2 | 3; gold: number; diamonds: number; ratio: number; loot?: StageLootSummary;
+    firstWinGold?: number;
     onDouble: (done: (ok: boolean) => void) => void;
-    onNext: () => void; onExit: () => void;
+    onExit: () => void;
   }): void {
     if (this.doubleKey !== o.onDouble) { this.doubleKey = o.onDouble; this.doubleBusy = false; this.doubleClaimed = false; this.winGoldShown = o.gold; }
     const fresh = this.begin('win');
     this.settlementKind = 'win';
     dimLayer(this.modalRoot, .68, false, fresh);
     const root = settlementFrame(this.modalRoot, 'win', this.dir.levelDef.id + '  ' + this.dir.levelDef.name + ' · ' + DIFFICULTIES[this.dir.levelDef.difficulty].name, o.stars, o.ratio, fresh);
-    settlementRewards(root, 'win', o.gold * (this.doubleClaimed ? 2 : 1), o.xp,
-      this.doubleClaimed ? '双倍金币已领取 · 战利品保持原数量' : '本局累计金币已到账 · 广告仅加倍金币', o.loot,
+    settlementRewards(root, 'win', o.gold * (this.doubleClaimed ? 2 : 1), o.diamonds,
+      o.firstWinGold ? '含首胜加奖 ' + o.firstWinGold * (this.doubleClaimed ? 2 : 1) + ' · '
+        + (this.doubleClaimed ? '金币已加倍' : '广告可加倍金币')
+        : this.doubleClaimed ? '双倍金币已领取 · 钻石保持原数量' : '金币和钻石已到账 · 广告仅加倍金币', o.loot,
       { intro: fresh, goldFrom: fresh ? 0 : this.winGoldShown });
     this.winGoldShown = o.gold * (this.doubleClaimed ? 2 : 1);
-    const back = settlementButton(root, -153, -353, 286, 78, '返回', 'gold', o.onExit, !this.doubleBusy);
-    const next = settlementButton(root, 153, -353, 286, 78, '下一关 ▶', 'green', o.onNext, !this.doubleBusy);
-    const dbl = settlementButton(root, 0, -261, 610, 74,
-      this.doubleClaimed ? '双倍金币已领取' : this.doubleBusy ? '领取中…' : '▶ 看广告 · 双倍金币',
+    const back = settlementButton(root, 153, -353, 286, 78, '返回', 'gold', o.onExit, !this.doubleBusy, 'battleReturn');
+    const dbl = settlementButton(root, -153, -353, 286, 78,
+      this.doubleClaimed ? '已领取' : this.doubleBusy ? '领取中…' : '金币x2',
       this.doubleClaimed ? 'muted' : 'teal', () => {
       if (this.doubleBusy || this.doubleClaimed) return;
       this.doubleBusy = true;
-      dbl.setBusy(true, '领取中…'); back.setEnabled(false); next.setEnabled(false);
+      const playIcon = dbl.node.getChildByName('buttonFace')?.getChildByName('doubleGoldPlayIcon');
+      if (playIcon) playIcon.active = false;
+      dbl.setBusy(true, '领取中…'); back.setEnabled(false);
       o.onDouble(ok => {
         if (this.doubleKey !== o.onDouble) return;
         this.doubleBusy = false;
@@ -340,13 +477,22 @@ export class Panels {
         if (this.settlementKind === 'win') this.showWin(o);
       });
     }, !this.doubleBusy && !this.doubleClaimed, 'battleDouble');
+    if (!this.doubleBusy && !this.doubleClaimed) {
+      const face = dbl.node.getChildByName('buttonFace')!;
+      const caption = face.children.find(child => !!child.getComponent(Label));
+      if (caption) caption.setPosition(15, 1, 0);
+      // Draw the play symbol independently of font glyph coverage.
+      const play = N('doubleGoldPlayIcon', face, -59, 1, 22, 26).addComponent(Graphics);
+      play.fillColor = C('#FFF3D5');
+      play.moveTo(-9, -12); play.lineTo(11, 0); play.lineTo(-9, 12); play.close(); play.fill();
+    }
     if (this.doubleBusy) dbl.setBusy(true);
     playSettlement(root);
   }
 
   /* ---------- ⑤ 失败结算：蓝灰破损皇冠与复活操作 ---------- */
   showLose(o: {
-    goldFloor: number; reviveRatio: number; xp: number; loot?: StageLootSummary;
+    goldFloor: number; reviveRatio: number; loot?: StageLootSummary;
     onRevive: (done: (ok: boolean) => void) => void;
     onRetry: () => void;
   }): void {
@@ -355,7 +501,7 @@ export class Panels {
     this.settlementKind = 'lose';
     dimLayer(this.modalRoot, .72, false, fresh);
     const root = settlementFrame(this.modalRoot, 'lose', this.dir.levelDef.id + '  ' + this.dir.levelDef.name + ' · ' + DIFFICULTIES[this.dir.levelDef.difficulty].name, 0, 0, fresh);
-    settlementRewards(root, 'lose', o.goldFloor, o.xp,
+    settlementRewards(root, 'lose', o.goldFloor, 0,
       o.loot?.equipment.length ? '金币和装备已保存 · 复活继续本局 / 重试返回关卡页'
         : '金币已到账 · 复活恢复 ' + Math.round(o.reviveRatio * 100) + '% 耐久 · 重试返回当前关卡', o.loot, { intro: fresh });
     const retry = settlementButton(root, 153, -353, 286, 78, '↻ 再来一次', 'gold', o.onRetry, !this.reviveBusy, 'battleRetry');
@@ -452,20 +598,25 @@ export class Panels {
     const isArcher = hero.id === 'archer';
     const cdTotal = hero.skillCdTotal + ' 秒';
     const goalTxt = String(Math.round(hero.chargeGoal * 10) / 10);
-    const shockTxt = (h.shockOnHit || 0) > 0 ? '感电：受伤 +' + Math.round(h.shockOnHit * (h.shockAmpMul || 1) * 100) + '%' : '';
+    const shockTxt = voltShockAmp(h) > 0 ? '感电+' + Math.round(voltShockAmp(h) * 100) + '% · ' + voltShockDuration(h) + 's' : '';
     const iconY = WYB(126, 46);
     let px: number, py: number, w = 300, hh = 272, title: string;
     let rows: [string, string][];
     if (kind === 'atk') {
-      const atkTitle: Record<string, string> = { archer: '普攻 · 风刃射击', sniper: '普攻 · 重弩狙击', pyro: '普攻 · 烈焰火球', volt: '普攻 · 雷电球' };
+      const atkTitle: Record<string, string> = { archer: '普攻 · 风刃射击', sniper: '普攻 · 重弩狙击', pyro: '普攻 · 烈焰火球', volt: '普攻 · 雷电球', mora: '普攻 · 冰棱' };
       title = atkTitle[hero.id] || '普攻';
       rows = [
         ['伤害', String(Math.round(hero.effAtk * (h.normalMul || 1)))],
         ['攻速', h.aspd.toFixed(1) + ' 次/秒'],
         ['索敌范围', String(Math.round(h.range))],
-        ['弹道', (h.fan + h.serial > 0 ? (1 + h.fan) + '×' + (1 + h.serial) + ' 弹幕' : '1 支')],
+        hero.id === 'pyro' ? ['爆炸半径', String(Math.round(pyroBlastRadius(h, Math.max(60, h.explodeR))))]
+          : hero.id === 'mora' ? ['减速', Math.round(moraSlowRatio(h, h.slowOnHit || 0) * 100) + '% · ' + moraSlowDuration(h, h.slowDur || 2) + 's']
+          : ['弹道', (h.fan + h.serial > 0 ? (1 + h.fan) + '×' + (1 + h.serial) + ' 弹幕' : '1 支')],
         ['暴击', Math.round(h.critRate * 100) + '% / ' + Math.round(h.critMul * 100) + '%'],
-        ['目标', '最靠下'],
+        hero.id === 'pyro' ? ['灼烧', h.burnOnHit ? `${Math.round(hero.effAtk * h.burnOnHit * pyroBurnMultiplier(h))}/秒 · ${pyroBurnDuration(h)}秒` : '未获得普攻灼烧']
+          : hero.id === 'volt' ? ['感电', (shockTxt || '未获得') + (voltShockedMultiplier(h, true) > 1 ? ' · 对感电伤害+' + Math.round((voltShockedMultiplier(h, true) - 1) * 100) + '%' : '')]
+          : hero.id === 'mora' ? ['命中特性', (moraFreezeChance(h) ? Math.round(moraFreezeChance(h) * 100) + '%冰冻' + moraNormalFreezeDuration(h) + 's' : '最靠下目标') + (h.moraColdBonus ? ' · 碎冰+' + Math.round(h.moraColdBonus * 100) + '%' : '')]
+          : ['目标', '最靠下'],
       ];
       px = hero.x - 27 + 23 + 16 + w / 2;
       py = iconY + 23 + 16 + hh / 2;
@@ -496,9 +647,9 @@ export class Panels {
         title = '技能 · 烈焰爆裂';
         const pc = pyroSkCfg(h.skillLv || 1);
         rows = [
-          ['效果', '锁定最密集敌群 · 齐射 ' + Math.round(h.skillShots || 3) + ' 颗爆裂火球'],
+          ['效果', '锁定最密集敌群 · 连续发射 ' + Math.round(h.skillShots || 3) + ' 颗爆裂火球'],
           ['每发伤害', Math.round(hero.abilityDamage(pc.mul)) + '（技×' + pc.mul.toFixed(2) + '）'],
-          ['特性', '大范围爆炸 + 灼烧' + (pc.boomMul > 0.4 ? ' · 溅射 +' + Math.round((pc.boomMul - 0.4) * 100) + '%' : '')],
+          ['特性', `爆炸半径 ${Math.round(pyroBlastRadius(h, 110 * (h.skillRangeMul || 1)))} · 灼烧${pyroBurnDuration(h)}秒`],
           ['冷却时间', cdTotal],
           ['索敌范围', String(Math.round(h.skillRange))],
           ['释放', '自动'],
@@ -507,20 +658,20 @@ export class Panels {
         title = '技能 · 冰霜领域';
         const mc = moraSkCfg(h.skillLv || 1);
         rows = [
-          ['效果', '密集区冰封 ' + ((h.novaStun || 1.5) + mc.stunBonus).toFixed(1) + 's · Boss免疫'],
+          ['效果', '密集区冰封 ' + moraFieldFreeze(h).toFixed(1) + 's · Boss免疫'],
           ['范围伤害', Math.round(hero.abilityDamage(mc.mul)) + '（技×' + mc.mul.toFixed(2) + '）'],
-          ['特性', '解冻后减速 ' + Math.round(Math.min(0.9, 0.5 + (h.slowAmpBonus || 0)) * 100) + '% · 2s'],
+          ['特性', '解冻后减速 ' + Math.round(moraSlowRatio(h, .5) * 100) + '% · ' + moraSlowDuration(h, 2) + 's'],
           ['冷却时间', cdTotal],
-          ['领域半径', String(Math.round((h.novaR || 150) * mc.rMul * (h.skillRangeMul || 1)))],
-          ['释放', '自动 · 小怪/精英可冰封'],
+          ['领域半径', String(Math.round(moraFieldRadius(h)))],
+          ['释放', '自动' + (h.moraColdBonus ? ' · 对减速/冰封+' + Math.round(h.moraColdBonus * 100) + '%' : ' · 小怪/精英可冰封')],
         ];
       } else {
         title = '技能 · 连锁闪电';
         const vc = voltSkCfg(h.skillLv || 1);
         rows = [
-          ['效果', '最多连锁 ' + Math.round(h.skillShots || 5) + ' 个目标'],
+          ['效果', '连锁 ' + Math.round(h.skillShots || 5) + ' 目标 · 跳距 ' + Math.round(260 * (h.skillRangeMul || 1))],
           ['每跳伤害', Math.round(hero.abilityDamage(vc.mul)) + '（技×' + vc.mul.toFixed(2) + '）'],
-          ['特性', (vc.chainInc ? '每跳递增 +' + Math.round(vc.chainInc * 100) + '% · ' : '') + (shockTxt || '跳距 ' + Math.round(260 * (h.skillRangeMul || 1)))],
+          ['特性', (shockTxt || '同次不重复命中') + (h.voltShockBonus ? ' · 对感电+' + Math.round(h.voltShockBonus * 100) + '%' : '') + (vc.chainInc ? ' · 每跳+' + Math.round(vc.chainInc * 100) + '%' : '')],
           ['冷却时间', cdTotal],
           ['索敌范围', String(Math.round(h.skillRange))],
           ['释放', '自动'],
@@ -563,10 +714,10 @@ export class Panels {
       w = 280; hh = 272;
       const pu = pyroUltCfg(h.ultLv || 1);
       rows = [
-        ['伤害', Math.round(hero.abilityDamage(pu.boltMul, true)) + ' × 每颗'],
-        ['索敌', '优先不同怪群 · 预警后固定落点'],
-        ['形态', '分散轰炸 ' + pu.meteors + ' 颗陨石' + (h.ultHaste ? ' · 放后攻速提升 5 秒' : '')],
-        ['陨石坑', '燃烧 4 秒：灼烧 + 易伤 ' + Math.round((h.pitVuln || 0.25) * 100) + '%' + (pu.craterMul > 1 ? ' · 坑范围+' + Math.round((pu.craterMul - 1) * 100) + '%' : '')],
+        ['伤害', Math.round(pyroMeteorDamage(h)) + ' × 每颗'],
+        ['索敌', '不同怪群 · 爆炸半径 ' + Math.round(pyroBlastRadius(h, 140))],
+        ['形态', '分散轰炸 ' + pyroMeteorCount(h) + ' 颗陨石'],
+        ['陨石坑', '燃烧 ' + pyroCraterDuration(h) + ' 秒：灼烧 + 易伤 ' + Math.round((h.pitVuln || 0.25) * 100) + '%' + (pu.craterMul > 1 ? ' · 坑范围+' + Math.round((pu.craterMul - 1) * 100) + '%' : '')],
         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
         ['释放', '手动点击'],
       ];
@@ -577,13 +728,13 @@ export class Panels {
       w = 280; hh = 272;
       const mu = moraUltCfg(h.ultLv || 1);
       rows = [
-        ['伤害', Math.round(hero.abilityDamage(mu.boltMul, true)) + ' × 全场'],
-        ['形态', FROST_ULT_RAIN_COUNT + '颗冰晶雨 · 全场'],
-        ['特性', '深度减速 ' + Math.round(Math.min(0.9, mu.slowMul + (h.slowAmpBonus || 0)) * 100)
-          + '% · ' + (mu.slowDur + (h.ultSlowDur || 0)) + 's'],
+        ['每段伤害', moraUltimateHitDamage(h).toFixed(1) + ' × ' + MORA_ULT_HITS + '段 · 全场'],
+        ['形态', FROST_ULT_RAIN_COUNT + '颗冰晶雨 · 间隔' + FROST_ULT_HIT_GAP + 's'],
+        ['特性', (h.moraUltFreeze ? '冰封' + h.moraUltFreeze + 's→' : '') + '减速 ' + Math.round(moraSlowRatio(h, mu.slowMul) * 100)
+          + '% · ' + moraSlowDuration(h, mu.slowDur + (h.ultSlowDur || 0)) + 's'],
         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
-        ['释放', '手动点击'],
+        ['释放', '手动点击' + (h.moraColdBonus ? ' · 碎冰+' + Math.round(h.moraColdBonus * 100) + '%' : '')],
       ];
       px = WX(636, 90) - 45 - 16 - w / 2;
       py = WYB(240 + ultIdx * 110, 90);
@@ -593,14 +744,24 @@ export class Panels {
       const vu = voltUltCfg(h.ultLv || 1);
       rows = [
         ['伤害', Math.round(hero.abilityDamage(vu.boltMul, true)) + ' × 每道'],
-        ['形态', '15 道天雷轰炸全场' + (vu.rMul > 1 ? ' · 爆炸范围+' + Math.round((vu.rMul - 1) * 100) + '%' : '')],
-        ['特性', '范围爆炸 · 眩晕 ' + (h.ultStun || 1).toFixed(1) + 's' + (vu.shockOn ? ' · 落雷感电' : shockTxt ? ' · ' + shockTxt : '')],
+        ['形态', voltStrikeCount(h) + ' 道天雷 · 半径 ' + Math.round(90 * vu.rMul)],
+        ['特性', '眩晕 ' + (h.ultStun || 1).toFixed(1) + 's' + (voltShockAmp(h, true) ? ' · 感电+' + Math.round(voltShockAmp(h, true) * 100) + '% ' + voltShockDuration(h) + 's' : '') + (h.voltShockBonus ? ' · 对感电+' + Math.round(h.voltShockBonus * 100) + '%' : '')],
         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
         ['释放', '手动点击'],
       ];
       px = WX(636, 90) - 45 - 16 - w / 2;
       py = WYB(240 + ultIdx * 110, 90);
+    }
+    // Keep the existing six-row geometry while exposing the battle's new rules.
+    if (kind === 'atk') {
+      rows[0][0] = hero.id === 'archer' || hero.id === 'sniper' ? '物理伤害' : '法术伤害';
+      if ((hero.id === 'archer' || hero.id === 'sniper') && h.pierce) rows[5] = ['贯穿', '额外命中 ' + h.pierce + ' 个目标'];
+      if (hero.id === 'pyro' && h.pyroBurnBurst) rows[5] = ['余烬爆破', '点燃后阵亡爆炸 · 半径100'];
+      if (hero.id === 'mora' && h.moraTeamVuln) rows[5] = ['冰裂印记', '全队易伤+15% · 3秒'];
+    } else if (kind === 'ult') {
+      const charge = rows.find(row => row[0] === '充能');
+      if (charge) charge[1] = Math.floor(hero.charge) + ' / ' + goalTxt + ' · ' + Math.floor(hero.charge / hero.chargeGoal * 100) + '%';
     }
     // 面板整体收敛进可视区
     px = Math.max(-375 + w / 2 + 8, Math.min(375 - w / 2 - 8, px));

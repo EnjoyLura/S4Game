@@ -1,0 +1,82 @@
+[
+  {
+    "key": "glove_swift",
+    "id": "glove_swift",
+    "name": "游隼手套",
+    "kind": "glove",
+    "quality": 2,
+    "tier": 1,
+    "stats": {
+      "atkSpd": 0.12,
+      "range": 35
+    },
+    "focus": "攻速",
+    "description": "贴合手指的游隼手套，偏重攻速，兼顾少量攻击范围。",
+    "art": "shop_comic_v1/glove_swift_v57",
+    "price": 1800,
+    "unlock": "1-2",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_glove_wind_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 游隼手套. Subject: A pair of slim hunter leather gloves, tan-brown leather, dark teal cuffs, narrow brass wrist buckles, flexible segmented fingers, small feather-shaped embossed cuff patches. No hands or arms inside. Rarity: blue rare, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-5a5669d1-44f2-441e-87b8-e139000f94b8.png"
+  },
+  {
+    "key": "glove_longwatch",
+    "id": "glove_longwatch",
+    "name": "远望护手",
+    "kind": "glove",
+    "quality": 2,
+    "tier": 1,
+    "stats": {
+      "atkSpd": 0.07,
+      "range": 70
+    },
+    "focus": "攻击范围",
+    "description": "加长袖口的远望护手，偏重攻击范围，兼顾攻速。",
+    "art": "shop_comic_v1/glove_longwatch_v57",
+    "price": 1800,
+    "unlock": "1-2",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_glove_wind_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 远望护手. Subject: A pair of long-cuffed leather archery bracers with attached fingerless gloves, dark brown leather, slate blue cloth cuffs, silver strips and a small simple carved sight motif. Long silhouette, visibly distinct from short gloves. No body parts. Rarity: blue rare, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-a8245d96-b02e-473e-afa9-95c2f267bcc4.png"
+  },
+  {
+    "key": "armor_cinder",
+    "id": "armor_cinder",
+    "name": "余烬法衣",
+    "kind": "armor",
+    "quality": 2,
+    "tier": 1,
+    "stats": {
+      "skillDmg": 30,
+      "chargeEff": 0.05
+    },
+    "focus": "技能伤害",
+    "description": "绣有余烬纹的法衣，偏重技能伤害，兼顾少量充能效率。",
+    "art": "shop_comic_v1/armor_cinder_v57",
+    "price": 1800,
+    "unlock": "1-2",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_armor_forest_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 余烬法衣. Subject: An empty sleeveless short mage robe torso, brick red cloth, charcoal shoulder collar, warm brass edging and broad simple ember-shaped stitched chest motif, leather belt. No human wearer, no arms, no legs. Rarity: blue rare, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-5efdb406-3a67-4e0c-9654-9e4cd4d26bd6.png"
+  },
+  {
+    "key": "armor_tide",
+    "id": "armor_tide",
+    "name": "潮纹外衣",
+    "kind": "armor",
+    "quality": 2,
+    "tier": 1,
+    "stats": {
+      "skillDmg": 18,
+      "chargeEff": 0.12
+    },
+    "focus": "充能效率",
+    "description": "轻便的潮纹外衣，偏重充能效率，适合更频繁地释放大招。",
+    "art": "shop_comic_v1/armor_tide_v57",
+    "price": 1800,
+    "unlock": "1-2",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_armor_forest_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 潮纹外衣. Subject: An empty sleeveless caster tunic torso, deep teal-blue cloth, cream lapels, a few broad curved wave embroidery shapes, silver clasp, brown waist belt, clear open neck hole. No wearer or mannequin. Rarity: blue rare, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-a600aeb3-7183-4839-b739-20634b07e274.png"
+  }
+]

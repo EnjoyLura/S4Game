@@ -1,0 +1,14 @@
+构建参数 mainBundleCompressionType (merge_dep) 校验失败,  compression type(undefined) is invalid for this platform!, 将会使用默认值 "merge_dep"
+Warn: [Assets] [buildScriptCommand][[Build.Script.Rollup]] Circular dependency: file:///D:/AI/S4Game/KingdomWatch/assets/scripts/ui/Ux.ts -> file:///D:/AI/S4Game/KingdomWatch/assets/scripts/ui/UIKit.ts -> file:///D:/AI/S4Game/KingdomWatch/assets/scripts/ui/Ux.ts
+
+    at console.warn (C:\ProgramData\cocos\editors\Creator\3.8.8\resources\app.asar\node_modules\@sentry\core\src\utils-hoist\instrument\console.ts:40:14)
+    at NewConsole.warn (C:\ProgramData\cocos\editors\Creator\3.8.8\resources\app.asar\builtin\asset-db\dist\worker\console.ccc:1:1637)
+    at NewConsole.warn (C:\ProgramData\cocos\editors\Creator\3.8.8\resources\app.asar\builtin\builder\dist\worker\console.ccc:1:2358)
+    at Socket.<anonymous> (C:\ProgramData\cocos\editors\Creator\3.8.8\resources\app.asar\builtin\builder\dist\worker\worker-pools\sub-process-manager.ccc:1:2763)
+    at Socket.emit (node:events:519:28)
+    at addChunk (node:internal/streams/readable:559:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
+    at Socket.Readable.push (node:internal/streams/readable:390:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:191:23)
+2026-10-22 16:14:03 - warn: [buildScriptCommand][[Build.Script.Rollup]] Circular dependency: file:///D:/AI/S4Game/KingdomWatch/assets/scripts/ui/Ux.ts -> file:///D:/AI/S4Game/KingdomWatch/assets/scripts/ui/UIKit.ts -> file:///D:/AI/S4Game/KingdomWatch/assets/scripts/ui/Ux.ts
+

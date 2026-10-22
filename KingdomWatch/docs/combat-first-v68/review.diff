@@ -1,0 +1,1167 @@
+--- before/assets/scripts/battle/BattleDirector.ts
++++ after/assets/scripts/battle/BattleDirector.ts
+@@ -6,7 +6,7 @@
+ import { MobDef, MOBS, heroSlots } from '../config/Mobs';
+ import { ChallengeDef, DIFFICULTIES, getChallengeDef } from '../config/LevelDifficulty';
+ import { CardCtx, CardDef, CardStacks, canTakeCard, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, baseMoraStats, HeroStats, archerAtkCfg, sniperAtkCfg, sniperSkCfg, voltAtkCfg, voltSkCfg, voltUltCfg, pyroAtkCfg, pyroSkCfg, pyroUltCfg, moraAtkCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+-import { expNeed, LO, PASSIVE_XP_INTERVAL, passiveXpGain, REVIVE_RATIO, starOf } from '../config/GameConfig';
++import { expNeed, LO, PASSIVE_XP_INTERVAL, passiveXpGain, REVIVE_RATIO, starOf, ULT_INITIAL_CHARGE, SHARED_KILL_CHARGE } from '../config/GameConfig';
+ import { bus, EVT, WaveThreat } from '../core/EventBus';
+ import { Sfx } from '../core/Sfx';
+ import { GameAudio } from '../core/GameAudio';
+@@ -102,6 +102,12 @@
+   private leaving = false;
+   private coachRoot!: Node;
+   private pickNumber = 0;
++  private killBeatAge = 0;
++  private killBeatCount = 0;
++  private killBeatX = 0;
++  private killBeatY = 0;
++  private killBeatCooldown = 0;
++  private roleHints = new Set<string>();
+   private ultFocusShown = false;
+   private get teaching(): boolean { return teachingBattle(this.levelDef.id, this.levelDef.difficulty); }
+   private get secondTeaching(): boolean { return secondTeachingBattle(this.levelDef.id, this.levelDef.difficulty); }
+@@ -164,6 +170,9 @@
+       dmgNumber: (x: number, y: number, text: string, color: string, big?: boolean, event?: FloatEvent) =>
+         this.float.spawn(x, y, text, color, big, event),
+       impact: (x: number, y: number, hero: string, heavy: boolean, angle?: number) => this.impacts.hit(x, y, hero, heavy, angle),
++      combatFeedback: (kind: string, x: number, y: number, radius: number, tx?: number, ty?: number) =>
++        this.impacts.combatFeedback(kind, x, y, radius, tx, ty),
++      damage: (hero: string, amount: number) => this.dmgSvc.add(hero, amount),
+     };
+     this.float = new FloatText(textLayer);
+     this.pops = new ComicPop(textLayer);
+@@ -194,6 +203,13 @@
+             : hid === 'mora' ? new FrostHero(heroLayer, slots[i], st)
+               : new ArcherHero(heroLayer, slots[i], st);
+     });
++    // Abilities are part of the hero. Seed legacy prerequisites locally; never write them to the save.
++    this.heroes.forEach((h, i) => {
++      this.stacks[h.id + '_unlock_skill'] = 1;
++      this.stacks[h.id + '_unlock_ult'] = 1;
++      h.charge = h.chargeGoal * Math.max(.1, ULT_INITIAL_CHARGE - i * .025);
++      h.skillCd = i * .8;
++    });
+     this.parts = new Particles(fxLayer);
+     this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts, this.impacts);
+     this.waves = new WaveManager(this.levelDef, this.mgr);
+@@ -326,6 +342,9 @@
+     const sdt = dt * readableSpeed * (hitStopActive ? 0.12 : 1);
+     this.ambience.tick(sdt);
+     this.elapsed += sdt;
++    this.killBeatAge += sdt;
++    this.killBeatCooldown = Math.max(0, this.killBeatCooldown - sdt);
++    if (this.killBeatAge > .35) this.killBeatCount = this.killBeatX = this.killBeatY = 0;
+     if (!this.pendingWin && (!this.isEndless || this.endlessRest < 0)) this.passiveXpElapsed += sdt;
+     const steps = sdt > 1 / 30 ? 2 : 1;
+     const sub = sdt / steps;
+@@ -401,14 +420,37 @@
+     if (d.offspring) return;
+     this.goldEarned += d.gold * this.global.goldMul * DIFFICULTIES[this.levelDef.difficulty].goldMul;
+     if (killerId !== 'gm' && position && this.state === 'running') this.loot.onKill(d, position as DeathPosition);
+-    const killer = this.heroes.find(h => h.id === killerId);
+-    if (killer) killer.chargeKill(d.charge * (1 + (killer.stats.chargeEff || 0)));   // 充能效率：击杀充能加成（呼吸回能不受加成）
++    if (killerId !== 'gm') {
++      const share = d.charge * SHARED_KILL_CHARGE / Math.max(1, this.heroes.length);
++      for (const hero of this.heroes) hero.chargeKill(share * (1 + (hero.stats.chargeEff || 0)));
++      if (position && this.state === 'running' && this.killBeatCooldown <= 0) {
++        const p = position as DeathPosition;
++        if (!this.killBeatCount) this.killBeatAge = 0;
++        this.killBeatCount++; this.killBeatX += p.x; this.killBeatY += p.y;
++        if (this.killBeatCount >= 5) {
++          this.impacts.combatFeedback('groupKill', this.killBeatX / this.killBeatCount, this.killBeatY / this.killBeatCount, 52);
++          bus.emit(EVT.HIT_STOP);
++          this.killBeatCount = this.killBeatX = this.killBeatY = 0;
++          this.killBeatCooldown = .9;
++        }
++      }
++    }
+     this.gainXp(d.exp * this.global.xpMul);
+   }
+ 
+   private onWaveChanged(cur: unknown, total: unknown, surge: unknown): void {
+     this.hud.setWave(cur as number, total as number);
+-    if (surge && !this.waves.hasThreat) {
++    const wave = this.levelDef.waves[(cur as number) - 1];
++    const enemies = (wave?.groups || []).map(g => MOBS[g.mob]).filter(Boolean);
++    const hints: [string, boolean, string][] = [
++      ['armor', enemies.some(d => !!d.physRes), '重甲来袭：法术绕过物抗，物理集火可破甲'],
++      ['rush', enemies.some(d => !!d.rush), '冲锋来袭：冰封、眩晕可打断，减速可延缓'],
++      ['heal', enemies.some(d => d.kind === 'heal'), '治疗单位来袭：用大招覆盖后排，阻断续航'],
++    ];
++    const hint = hints.find(([id, present]) => present && !this.roleHints.has(id));
++    if (hint) {
++      this.roleHints.add(hint[0]); this.hud.showBanner(hint[2], 3);
++    } else if (surge && !this.waves.hasThreat) {
+       this.hud.showBanner('敌军大部队来袭！', 2);
+     }
+   }
+@@ -425,6 +467,7 @@
+     while (this.xp >= need) {
+       this.xp -= need;
+       this.heroLevel++;
++      for (const hero of this.heroes) { hero.stats.atkMul *= 1.025; hero.stats.skillMul *= 1.025; }
+       if (!this.endlessCardsComplete) this.pickQueue++;
+       Sfx.play('levelup');
+       need = this.expNeed(this.heroLevel);
+@@ -449,7 +492,7 @@
+   /* ---------- 三选一（§3.8：全场冻结，连升排队；广告刷新×1+钻石刷新×1） ---------- */
+   private openPick(): void {
+     if (this.state !== 'running' || this.pendingWin || this.ultShowT > 0) return;
+-    if (this.isEndless && !M0_POOL.some(c => (c.owner === 'global' || this.heroes.some(h => h.id === c.owner)) && canTakeCard(c, this.stacks))) {
++    if (!M0_POOL.some(c => (c.owner === 'global' || this.heroes.some(h => h.id === c.owner)) && canTakeCard(c, this.stacks))) {
+       this.pickQueue = 0; this.endlessCardsComplete = true;
+       this.panels.closeAll(true);
+       this.hud.showBanner('本局可选强化已全部学满，继续挑战！', 3);
+@@ -464,39 +507,39 @@
+         if (this.state !== 'pick' || !this.applyCard(card)) return;
+         // PickMotion owns the single confirmation at the selected card's landing.
+         this.stacks[card.id] = (this.stacks[card.id] || 0) + 1;
+-        if (this.teaching && card.id === 'archer_unlock_ult' && !loadSave().firstJourney!.freeChargeUsed) {
++        if (this.teaching && !loadSave().firstJourney!.freeChargeUsed) {
+           const archer = this.heroes.find(h => h.id === 'archer');
+           if (archer) {
+             archer.charge = archer.chargeGoal;
+             loadSave().firstJourney!.freeChargeUsed = true;
+           }
+         }
+-        if (this.secondTeaching && card.id === 'sniper_unlock_ult' && !loadSave().secondJourney!.freeChargeUsed) {
++        if (this.secondTeaching && !loadSave().secondJourney!.freeChargeUsed) {
+           const sniper = this.heroes.find(h => h.id === 'sniper');
+           if (sniper) { sniper.charge = sniper.chargeGoal; loadSave().secondJourney!.freeChargeUsed = true; }
+         }
+-        if (this.thirdTeaching && card.id === 'pyro_unlock_ult' && !loadSave().thirdJourney!.freeChargeUsed) {
++        if (this.thirdTeaching && !loadSave().thirdJourney!.freeChargeUsed) {
+           const pyro = this.heroes.find(h => h.id === 'pyro');
+           if (pyro) { pyro.charge = pyro.chargeGoal; loadSave().thirdJourney!.freeChargeUsed = true; }
+         }
+         this.pickQueue--;
+         saveSave();
+-        this.hud.sync(); // 选择解锁卡后立即刷新图标，即使后面还有排队三选一。
++        this.hud.sync(); // 强化后立即刷新状态，即使后面还有排队三选一。
+         this.state = 'running';
+         if (this.pickQueue > 0) this.openPick();
+         else { this.panels.closeAll(true); this.state = 'running'; }
+-        if (this.teaching && card.id === 'archer_unlock_skill')
+-          this.hud.showBanner('强化箭矢已学会，冷却结束后会自动释放。', 5);
+-        if (this.thirdTeaching && card.id === 'pyro_unlock_skill')
+-          this.hud.showBanner('烈焰爆裂已学会，会自动轰击敌群。', 5);
++        if (this.teaching && card.id === 'serial')
++          this.hud.showBanner('连射已强化！技能自动释放，大招充满后点击使用。', 5);
++        if (this.thirdTeaching && card.id === 'pyro_shards')
++          this.hud.showBanner('爆裂火球增加！基础技能开场即可使用。', 5);
+       },
+       onRefreshRequest: () => {
+         showOffer();
+       },
+     };
+     const showOffer = (): void => {
+-      const lessons = this.thirdTeaching ? ['pyro_unlock_skill', 'pyro_unlock_ult']
+-        : this.secondTeaching ? ['sniper_unlock_skill', 'sniper_unlock_ult'] : ['serial', 'archer_unlock_skill', 'archer_unlock_ult'];
++      const lessons = this.thirdTeaching ? ['pyro_shards', 'pyro_burn']
++        : this.secondTeaching ? ['sniper_pierce', 'multi_lock'] : ['serial', 'fan'];
+       const desired = lessons[Math.min(this.pickNumber - 1, lessons.length - 1)];
+       const missing = lessons.filter(id => !(this.stacks[id] > 0));
+       const lessonId = missing.includes(desired) ? desired : missing[0];
+@@ -533,6 +576,10 @@
+       },
+     };
+     card.apply(ctx);
++    if (owner) {
++      owner.charge = Math.min(owner.charge, owner.chargeGoal);
++      owner.skillCd = Math.min(owner.skillCd, owner.skillCdTotal);
++    }
+     if (owner && card.unlocks === 'skill') owner.skillCd = 0;
+     if (owner && card.unlocks === 'ult') owner.charge = 0;
+     return true;
+--- before/assets/scripts/battle/Hero.ts
++++ after/assets/scripts/battle/Hero.ts
+@@ -12,7 +12,7 @@
+ import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDuration, pyroMeteorCount, pyroMeteorDamage } from '../config/Cards';
+ import { voltShockDuration, voltShockAmp, voltShockedMultiplier, voltStrikeCount, voltStrikeTime } from '../config/Cards';
+ import { MORA_ULT_HITS, moraSlowRatio, moraSlowDuration, moraFreezeChance, moraNormalFreezeDuration, moraFieldRadius, moraFieldFreeze, moraColdMultiplier, moraUltimateHitDamage } from '../config/Cards';
+-import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, MORA_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL, LO, LINE_Y } from '../config/GameConfig';
++import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, MORA_CHARGE_MAX, ULT_REGEN_SECONDS, SPAWN_Y, HERO_Y, PAL, LO, LINE_Y } from '../config/GameConfig';
+ import { Monster, MonsterManager } from './Monster';
+ import { ProjectileManager, ProjSpec } from './Projectile';
+ import { DamageService } from './DamageService';
+@@ -42,8 +42,7 @@
+   abstract readonly chargeMax: number;
+   skillCd = 0;
+   abstract readonly skillMax: number;
+-  /** 大招呼吸回能计时（每 3s +1，用户确认的少量自然回能） */
+-  private regenT = 3;
++  /** Simulation-clock regeneration is independent of which hero lands the final blow. */
+   private atkT = 0;
+   private hx: number;
+   private art: BattleSprite | null = null;
+@@ -255,14 +254,8 @@
+         this.castSkill(mgr, projs, dmg);
+       }
+     }
+-    // 大招呼吸回能：每 3 秒少量充能（不与击杀充能冲突；满后停止）
+-    if (this.ultUnlocked) {
+-      this.regenT -= dt;
+-      if (this.regenT <= 0) {
+-        this.regenT += 3;
+-        if (!this.ultReady) this.chargeKill(1);
+-      }
+-    }
++    if (this.ultUnlocked && !this.ultReady)
++      this.chargeKill(this.chargeMax * dt / (ULT_REGEN_SECONDS[this.id] || 90));
+   }
+ 
+   /** 子类队列推进（连射/技能连狙等） */
+@@ -277,7 +270,7 @@
+   /** 大招（手动，充能满可放；全场无目标时不消耗充能） */
+   abstract castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean;
+ 
+-  /** 击杀充能（§3.7：击杀者获得怪物配置充能值） */
++  /** Accept natural or shared kill energy, including the ready transition notification. */
+   chargeKill(v: number): void {
+     if (!this.ultUnlocked || this.charge >= this.chargeGoal) return;
+     const was = this.ultReady;
+@@ -979,6 +972,7 @@
+       slowDur: this.stats.slowDur || 2,
+       burnDps: base.burnDps * pyroBurnMultiplier(this.stats),
+       burnDur: pyroBurnDuration(this.stats),
++      burnBurst: this.effAtk * (this.stats.pyroBurnBurst || 0),
+       burnSplash: !!(base.ability || base.ult || this.stats.pyroSplashBurn),
+       spark: true, ability: base.ability, ult: base.ult, stun: base.stun,
+       burnedBonus: this.stats.burnedBonus || undefined,
+@@ -1112,8 +1106,8 @@
+         if (c.t <= 0) { this.craters.splice(i, 1); continue; }
+         for (const m of mgr.list) {
+           if (m.dead || Math.hypot(m.x - c.x, m.y - c.y) > crR) continue;
+-          m.burnT = Math.max(m.burnT, pyroBurnDuration(this.stats, .55));
+-          m.burnDps = Math.max(m.burnDps, this.abilityDamage(0.3, true, 0.06) * pyroBurnMultiplier(this.stats));
++          m.applyBurn(this.abilityDamage(0.3, true, 0.06) * pyroBurnMultiplier(this.stats),
++            pyroBurnDuration(this.stats, .55), this.effAtk * (this.stats.pyroBurnBurst || 0));
+           m.applyVuln(this.stats.pitVuln || CRATER_VULN, 0.6);
+         }
+       }
+@@ -1403,12 +1397,11 @@
+     for (let k = 0; k < jumps && cur; k++) {
+       struck.add(cur);
+       // 直接结算伤害（连锁无弹道，即时跳）
+-      const hpBefore = cur.hp;
+       const crit = Math.random() < this.stats.critRate;
+       const dmgK = hitDmg * (1 + sc.chainInc * k) * (crit ? this.stats.critMul : 1)
+         * (cur.shockT > 0 ? voltShockedMultiplier(this.stats) : 1);
+       cur.takeDamage(dmgK, crit, this.id);
+-      if (dmg) dmg.add(this.id, Math.min(hpBefore, Math.max(0, hpBefore - cur.hp)));
++      if (dmg) dmg.add(this.id, cur.lastDamageTaken);
+       const sa = voltShockAmp(this.stats);
+       if (sa && !cur.dead) cur.applyShock(sa, voltShockDuration(this.stats));
+       projs.voltChain(fromX, fromY, cur.x, cur.y, k);
+@@ -1458,10 +1451,9 @@
+     bus.emit(EVT.HIT_STOP);
+     for (const o of mgr.mobsInRadius(t.x, t.y, 90 * uc.rMul)) {   // 5级：落雷范围+20%
+       if (o.dead) continue;
+-      const hpBefore = o.hp;
+       const amount = dmgVal * (o.shockT > 0 ? voltShockedMultiplier(this.stats) : 1);
+       o.takeDamage(amount, false, this.id, false, 0, -Math.PI / 2, true);
+-      if (this.lastDmg) this.lastDmg.add(this.id, Math.min(hpBefore, Math.max(0, hpBefore - o.hp)));
++      if (this.lastDmg) this.lastDmg.add(this.id, o.lastDamageTaken);
+       if (!o.dead) {
+         if (this.stats.ultStun) o.stunT = Math.max(o.stunT, this.stats.ultStun);
+         const sa2 = voltShockAmp(this.stats, true); // 大招10级与卡牌感电取高
+@@ -1570,6 +1562,7 @@
+       coldBonus: this.stats.moraColdBonus || undefined,
+       freezeChance: moraFreezeChance(this.stats),
+       freezeDuration: moraNormalFreezeDuration(this.stats),
++      teamVuln: this.stats.moraTeamVuln || 0,
+       ...this.targetBonuses(),
+     };
+   }
+@@ -1602,14 +1595,14 @@
+     projs.frostDomain(center.x, center.y, NR, freeze);
+     for (const m of mgr.mobsInRadius(center.x, center.y, NR)) {
+       if (m.dead) continue;
+-      const hpBefore = m.hp;
+       const crit = Math.random() < this.stats.critRate;
+       const amount = hitDmg * (m.slowT > 0 || m.freezeT > 0 ? moraColdMultiplier(this.stats) : 1)
+         * (crit ? this.stats.critMul : 1);
+       m.takeDamage(amount, crit, this.id);
+-      dmg.add(this.id, Math.max(0, hpBefore - Math.max(0, m.hp)));
++      dmg.add(this.id, m.lastDamageTaken);
+       // Boss still receives the existing area damage, but has no freeze or post-thaw status.
+       m.applyFreeze(freeze, moraSlowRatio(this.stats, .5), moraSlowDuration(this.stats, 2));
++      if (this.stats.moraTeamVuln) m.applyVuln(this.stats.moraTeamVuln, 3);
+     }
+     Sfx.cast(this.id);
+   }
+@@ -1633,12 +1626,12 @@
+       const slow = moraSlowRatio(this.stats, uc.slowMul);
+       const slowDuration = moraSlowDuration(this.stats, uc.slowDur + (this.stats.ultSlowDur || 0));
+       for (const m of alive) {
+-        const hpBefore = m.hp;
+         const amount = base * (m.slowT > 0 || m.freezeT > 0 ? moraColdMultiplier(this.stats) : 1);
+         m.takeDamage(amount, false, this.id, false, 0, -Math.PI / 2, true);
+-        this.lastDmg?.add(this.id, Math.max(0, hpBefore - Math.max(0, m.hp)));
++        this.lastDmg?.add(this.id, m.lastDamageTaken);
+         if (m.dead) continue;
+         // Repeated freezes refresh instead of adding time. Bosses retain slow without freeze.
++        if (this.stats.moraTeamVuln) m.applyVuln(this.stats.moraTeamVuln, 3);
+         const frozen = this.stats.moraUltFreeze && m.applyFreeze(this.stats.moraUltFreeze, slow, slowDuration);
+         if (!frozen) m.applySlow(slow, slowDuration);
+       }
+--- before/assets/scripts/battle/ImpactFX.ts
++++ after/assets/scripts/battle/ImpactFX.ts
+@@ -13,6 +13,7 @@
+ import { SniperUltimateVFX } from './SniperUltimateVFX';
+ 
+ interface Impact { x: number; y: number; life: number; max: number; radius: number; color: string; angle: number; heavy: boolean; hero: string; kind: 'contact' | 'cast' | 'blast'; }
++interface CombatCue { kind: string; x: number; y: number; tx: number; ty: number; radius: number; life: number; max: number; }
+ 
+ export const HERO_FX: Record<string, string> = {
+   archer: '#F8D886', sniper: '#ABD9F4', pyro: '#FFAD54', volt: '#D2A4FF', mora: '#A6E9F6',
+@@ -22,6 +23,8 @@
+   private g: Graphics;
+   private active: Impact[] = [];
+   private free: Impact[] = [];
++  private cues: CombatCue[] = [];
++  private cueFree: CombatCue[] = [];
+   private tint = new Color();
+   private dirty = false;
+   private fire: FireVFX;
+@@ -49,6 +52,7 @@
+     node.setParent(parent);
+     this.g = node.addComponent(Graphics);
+     for (let i = 0; i < 32; i++) this.free.push({ x: 0, y: 0, life: 0, max: 1, radius: 1, color: '', angle: 0, heavy: false, hero: '', kind: 'contact' });
++    for (let i = 0; i < 40; i++) this.cueFree.push({ kind: '', x: 0, y: 0, tx: 0, ty: 0, radius: 1, life: 0, max: 1 });
+   }
+ 
+   beginProjectileFrame(): void {
+@@ -137,6 +141,59 @@
+     if (p) { p.kind = 'blast'; p.radius = Math.min(60, radius * 0.45); p.max = p.life = 0.28; }
+   }
+ 
++  /** Shared code-only role feedback. Low-priority cues never evict a break/heal already playing. */
++  combatFeedback(kind: string, x: number, y: number, radius: number, tx = x, ty = y): void {
++    if (kind === 'burnBurst') { this.blast(x, y, 'pyro', radius); return; }
++    if ((kind === 'rush' || kind === 'armorHit') && this.cueFree.length <= 8) return;
++    const p = this.cueFree.pop();
++    if (!p) return;
++    p.kind = kind; p.x = x; p.y = y; p.tx = tx; p.ty = ty; p.radius = radius;
++    p.max = p.life = kind === 'armorHit' ? .16 : kind === 'rush' ? .24 : kind === 'heal' ? .55 : .4;
++    this.cues.push(p); this.dirty = true;
++  }
++
++  private drawCombatCues(dt: number): void {
++    const g = this.g;
++    for (let i = this.cues.length - 1; i >= 0; i--) {
++      const p = this.cues[i]; p.life -= dt;
++      if (p.life <= 0) { this.cues.splice(i, 1); this.cueFree.push(p); continue; }
++      const t = 1 - p.life / p.max, fade = 1 - t;
++      if (p.kind === 'heal') {
++        this.tint.set(117, 229, 124, Math.round(170 * fade)); g.strokeColor = this.tint; g.lineWidth = 2;
++        const travel = Math.min(1, t * 2.8), tail = Math.max(0, travel - .35);
++        g.moveTo(p.x + (p.tx - p.x) * tail, p.y + (p.ty - p.y) * tail);
++        g.lineTo(p.x + (p.tx - p.x) * travel, p.y + (p.ty - p.y) * travel); g.stroke();
++        if (t > .25) {
++          const y = p.ty + t * 24, size = 5 + 2 * fade;
++          g.lineWidth = 3; g.moveTo(p.tx - size, y); g.lineTo(p.tx + size, y);
++          g.moveTo(p.tx, y - size); g.lineTo(p.tx, y + size); g.stroke();
++        }
++      } else if (p.kind === 'rush') {
++        this.tint.set(231, 196, 139, Math.round(150 * fade)); g.strokeColor = this.tint; g.lineWidth = 2 * fade + .5;
++        for (let k = 0; k < 3; k++) {
++          const x = p.x + (k - 1) * p.radius * .65, y = p.y + t * 28 + k * 4;
++          g.moveTo(x, y); g.lineTo(x + (k - 1) * 4, y + 18 + 12 * fade); g.stroke();
++        }
++      } else {
++        const breaking = p.kind === 'armorBreak', group = p.kind === 'groupKill';
++        this.tint.set(group ? 250 : 202, group ? 211 : 225, group ? 132 : 235, Math.round(235 * fade));
++        g.fillColor = this.tint; g.strokeColor = this.tint; g.lineWidth = 1.8;
++        const count = breaking ? 6 : group ? 7 : 3;
++        const spread = (breaking ? p.radius * 1.5 : group ? 52 : 14) * (t + .2);
++        for (let k = 0; k < count; k++) {
++          const a = k * Math.PI * 2 / count + .25, dx = Math.cos(a), dy = Math.sin(a);
++          const x = p.x + dx * spread, y = p.y + dy * spread - (breaking ? 36 * t * t : 0);
++          if (breaking) {
++            const s = 3 + 3 * fade;
++            g.moveTo(x + s, y); g.lineTo(x, y + s * .6); g.lineTo(x - s, y - s); g.close(); g.fill();
++          } else {
++            g.moveTo(x, y); g.lineTo(x + dx * (5 + fade * 10), y + dy * (5 + fade * 10)); g.stroke();
++          }
++        }
++      }
++    }
++  }
++
+   tick(dt: number): void {
+     this.fire.tick(dt);
+     this.archer.tick(dt);
+@@ -146,7 +203,7 @@
+     this.volt.tick(dt);
+     this.voltUltimate.tick(dt);
+     this.sniperUltimate.tick(dt);
+-    if (!this.dirty && this.active.length === 0) return;
++    if (!this.dirty && this.active.length === 0 && this.cues.length === 0) return;
+     this.g.clear(); this.dirty = false;
+     for (let i = this.active.length - 1; i >= 0; i--) {
+       const p = this.active[i]; p.life -= dt;
+@@ -193,5 +250,6 @@
+       }
+       if (p.hero !== 'mora') this.g.stroke();
+     }
++    this.drawCombatCues(dt);
+   }
+ }
+--- before/assets/scripts/battle/Monster.ts
++++ after/assets/scripts/battle/Monster.ts
+@@ -3,7 +3,7 @@
+  * 受击只闪红不掉速（用户确认：控制效果只属于特定 buff）；仅 BOSS 显示血条（M0 1-1 无 BOSS，钩子保留）
+  */
+ import { Color, Graphics, isValid, Label, Layers, Node, Tween, UIOpacity } from 'cc';
+-import { MOBS, MOB_DMG_MUL, MOB_HP_MUL, MobDef } from '../config/Mobs';
++import { damageKindFor, MOBS, MOB_DMG_MUL, MOB_HP_MUL, MobDef } from '../config/Mobs';
+ import { enemyArtRef } from '../config/ChapterContent';
+ import { MonsterTraits } from './MonsterTraits';
+ import { LINE_Y, LO, PAL } from '../config/GameConfig';
+@@ -30,6 +30,8 @@
+   floatParent: Node;
+   dmgNumber: (x: number, y: number, text: string, color: string, big?: boolean, event?: FloatEvent) => void;
+   impact?: (x: number, y: number, hero: string, heavy: boolean, angle?: number) => void;
++  combatFeedback?: (kind: string, x: number, y: number, radius: number, tx?: number, ty?: number) => void;
++  damage?: (hero: string, amount: number) => void;
+ };
+ 
+ export class Monster {
+@@ -38,6 +40,7 @@
+   def!: MobDef;
+   hp = 0;
+   maxHp = 0;
++  lastDamageTaken = 0;
+   state: 'move' | 'hold' | 'attack' = 'move';
+   dead = false;
+   baseX = 0;
+@@ -56,6 +59,7 @@
+   burnT = 0;
+   burnTick = 0;
+   burnDps = 0;
++  private burnBurst = 0;
+   /** 眩晕硬直（预留：真正的眩晕类 buff 才会写入；受击不再写） */
+   stunT = 0;
+   /** 冰封与雷系眩晕独立；解冻时才启动后续减速。 */
+@@ -106,6 +110,7 @@
+     this.mgrRef = mgr || null;
+     this.maxHp = def.hp;
+     this.hp = def.hp;
++    this.lastDamageTaken = this.burnBurst = 0;
+     this.state = 'move';
+     this.dead = false;
+     this.life = Math.random() * 10;
+@@ -347,13 +352,14 @@
+     this.tickArt(motionDt);
+     // 点燃 DoT：每 0.5s 聚合一条（§3.11）
+     if (this.burnT > 0) {
+-      this.burnT -= dt;
+-      this.burnTick += dt;
++      this.burnTick += Math.min(dt, this.burnT);
+       if (this.burnTick >= 0.5) {
+         this.burnTick -= 0.5;
+         this.takeDamage(this.burnDps * 0.5, false, 'burn');
+       }
+       if (this.dead) return;
++      this.burnT = Math.max(0, this.burnT - dt);
++      if (this.burnT <= 0) this.burnDps = this.burnBurst = this.burnTick = 0;
+     }
+ 
+     // Control stops movement and attacks, while burn damage and other status timers continue.
+@@ -366,6 +372,7 @@
+       const reach = this.def.kind === 'ranged' ? (this.def.atkRange || 0) : this.def.radius * 0.5;
+       if (this.node.position.y - LINE_Y <= reach) {
+         this.holdY = this.node.position.y;
++        this.traits.onReachLine();
+         this.state = this.def.kind === 'melee' ? 'attack' : 'hold';
+         this.atkT = Math.min(this.atkT, 0.4);
+       }
+@@ -374,10 +381,7 @@
+       this.atkT -= motionDt;
+       if (this.atkT <= 0) {
+         this.atkT = this.def.atkInterval;
+-        if (this.def.kind === 'heal' && !this.def.homeChapter) {
+-          this.atkAnimT = ATK_ANIM;   // 萨满施法也走攻击一次性帧（缺 attack 段则自动退化为待机帧）
+-          mgr.healAround(this, 160, this.def.healAmount || 40);
+-        } else if (this.def.kind !== 'heal') {
++        if (this.def.kind !== 'heal') {
+           this.traits.attack(line, mgr);
+         }
+       }
+@@ -400,6 +404,13 @@
+     bus.emit(EVT.COMIC_POP, this.x, this.y + this.def.radius, this.def.kind === 'ranged' ? 'stoneHit' : 'meleeHit');
+   }
+ 
++  animateHeal(): void { this.atkAnimT = ATK_ANIM; }
++
++  feedback(kind: string): void {
++    this.ctx.combatFeedback?.(kind, this.x, this.y + (kind === 'rush' ? 0 : this.def.radius * 1.2), this.def.radius);
++    if (kind === 'armorBreak') this.ctx.dmgNumber(this.x, this.y + this.def.radius * 3, '破甲', '#D4ECF4', true);
++  }
++
+   private lunge(): void {
+     this.lungeT = 0.2;
+     this.atkAnimT = ATK_ANIM;
+@@ -416,7 +427,8 @@
+ 
+   /** 易伤：坑内每帧刷新，出坑残留 dur */
+   applyVuln(amp: number, dur: number): void {
+-    this.vulnAmp = Math.max(this.vulnAmp, amp);
++    if (this.dead || amp <= 0 || dur <= 0) return;
++    this.vulnAmp = this.vulnT > 0 ? Math.max(this.vulnAmp, amp) : amp;
+     this.vulnT = Math.max(this.vulnT, dur);
+   }
+ 
+@@ -467,17 +479,25 @@
+   }
+ 
+   takeDamage(amount: number, crit: boolean, killerId: string, ignoreRes = false, resCut = 0, impactAngle?: number, heavy = false): boolean {
+-    if (this.dead) return false;
+-    if (this.def.physRes && !ignoreRes) amount *= 1 - this.def.physRes * (1 - resCut);   // resCut=无视防御比例（英雄突破）
++    this.lastDamageTaken = 0;
++    if (this.dead || !Number.isFinite(amount) || amount <= 0) return false;
++    const raw = amount, kind = damageKindFor(killerId);
++    if (!ignoreRes && kind !== 'true') {
++      const resistance = kind === 'physical' ? this.traits.physicalResistance : this.def.magicRes || 0;
++      amount *= 1 - Math.max(0, Math.min(.95, resistance)) * (1 - Math.max(0, Math.min(1, resCut)));
++    }
+     if (this.shockT > 0) amount *= 1 + this.shockAmp;
+     const vulnerability = Math.max(this.vulnT > 0 ? this.vulnAmp : 0, this.hunterMarkT > 0 ? this.hunterMarkAmp : 0);
+     if (vulnerability > 0) amount *= 1 + vulnerability;
+     amount = this.traits.incomingDamage(amount, killerId);
++    this.lastDamageTaken = Math.min(this.hp, amount);
+     this.hp -= amount;
+-    if (amount > 0 && killerId !== 'burn' && killerId !== 'gm') Sfx.impact(killerId, heavy || crit);
++    const visualSource = killerId === 'pyro_burst' ? 'pyro' : killerId;
++    if (amount > 0 && killerId !== 'burn' && killerId !== 'gm') Sfx.impact(visualSource, heavy || crit);
+     this.ctx.dmgNumber(this.x, this.y + this.def.radius * 2.6,
+       String(Math.round(amount)), crit ? '#FF3030' : '#FFFFFF', crit, { target: this, amount, periodic: killerId === 'burn' });
+-    this.ctx.impact?.(this.x, this.y + this.def.radius * 0.4, killerId, heavy || crit || this.hp <= 0 && !!this.def.elite, impactAngle);
++    this.ctx.impact?.(this.x, this.y + this.def.radius * 0.4, visualSource, heavy || crit || this.hp <= 0 && !!this.def.elite, impactAngle);
++    if (kind === 'physical' && this.hp > 0) this.traits.recordPhysicalHit(raw);
+     this.flash();
+     if (this.hp <= 0) {
+       if (this.traits.onLethal(killerId)) return false;
+@@ -504,6 +524,9 @@
+ 
+   private die(killerId: string, angle: number | undefined, heavy: boolean, amount: number): void {
+     this.dead = true;
++    if (this.burnT > 0 && this.burnBurst > 0 && killerId !== 'pyro_burst' && killerId !== 'gm') {
++      this.mgrRef?.queueBurnBurst(this.x, this.y + this.def.radius * .4, this.burnBurst);
++    }
+     this.traits.onDie(killerId, this.mgrRef);
+     if (this.bossHp) this.bossHp.node.active = false;
+     const marked = this.hunterMarkVisual;
+@@ -511,10 +534,10 @@
+     this.hunterMarkVisual = false;
+     if (marked) this.mgrRef?.refreshHunterMarks();
+     this.deathMotion?.begin(this.def.radius, this.groundOffset, {
+-      killer: killerId, angle, heavy, force: Math.min(1.5, amount / this.maxHp),
++      killer: killerId === 'pyro_burst' ? 'pyro' : killerId, angle, heavy, force: Math.min(1.5, amount / this.maxHp),
+       elite: !!this.def.elite, boss: this.isBoss, frozen: this.freezeT > 0,
+     });
+-    if (killerId !== 'gm') Sfx.death(killerId, this.freezeT > 0, !!this.def.elite || this.isBoss);
++    if (killerId !== 'gm') Sfx.death(killerId === 'pyro_burst' ? 'pyro' : killerId, this.freezeT > 0, !!this.def.elite || this.isBoss);
+     this.flashT = this.lungeT = this.atkAnimT = 0;
+     this.freezeT = this.thawT = this.slowT = this.stunT = this.burnT = this.shockT = 0;
+     this.footLeftWeight = this.footRightWeight = 0;
+@@ -544,18 +567,38 @@
+     this.freezeSlowDur = Math.max(this.freezeSlowDur, postSlowDuration);
+     return true;
+   }
+-  applyBurn(dps: number, dur: number): void {
+-    this.burnDps = dps;
++  applyBurn(dps: number, dur: number, burst = 0): void {
++    if (this.dead || dps <= 0 || dur <= 0) return;
++    this.burnDps = this.burnT > 0 ? Math.max(this.burnDps, dps) : dps;
++    this.burnBurst = this.burnT > 0 ? Math.max(this.burnBurst, burst) : burst;
+     this.burnT = Math.max(this.burnT, dur);
+   }
+-  heal(v: number): void {
+-    if (this.dead) return;
+-    this.hp = Math.min(this.maxHp, this.hp + v);
+-    this.ctx.dmgNumber(this.x, this.y + this.def.radius, '+' + Math.round(v), '#7FB841');
++  heal(v: number): number {
++    if (this.dead) return 0;
++    const healed = Math.max(0, Math.min(v, this.maxHp - this.hp));
++    if (healed <= 0) return 0;
++    this.hp += healed;
++    this.ctx.dmgNumber(this.x, this.y + this.def.radius, '+' + Math.round(healed), '#7FB841');
++    return healed;
+   }
+ }
+ 
+ export class MonsterManager {
++  private burnBursts: { x: number; y: number; damage: number }[] = [];
++  queueBurnBurst(x: number, y: number, damage: number): void {
++    if (!this.disposed && this.burnBursts.length < 32) this.burnBursts.push({ x, y, damage });
++  }
++  private drainBurnBursts(): void {
++    // No recursive death explosions; separate deaths from area damage with a bounded queue.
++    for (let i = 0; i < 8 && this.burnBursts.length; i++) {
++      const burst = this.burnBursts.shift()!;
++      this.ctx.combatFeedback?.('burnBurst', burst.x, burst.y, 100);
++      for (const m of this.mobsInRadius(burst.x, burst.y, 100)) {
++        m.takeDamage(burst.damage, false, 'pyro_burst', false, 0, Math.atan2(m.y - burst.y, m.x - burst.x));
++        this.ctx.damage?.('pyro', m.lastDamageTaken);
++      }
++    }
++  }
+   private linePoisons: { remaining: number; rate: number }[] = [];
+   private poisonClock = 0;
+   private pendingPoisonDamage = 0;
+@@ -668,6 +711,7 @@
+     if (this.disposed) return;
+     this.disposed = true;
+     this.linePoisons.length = 0;
++    this.burnBursts.length = 0;
+     this.poisonClock = this.pendingPoisonDamage = 0;
+     clearDepthSorter(this.field);
+     // Cocos destroys child nodes before BattleDirector.onDestroy. Only detached
+@@ -799,8 +843,16 @@
+     return best;
+   }
+ 
+-  healAround(src: Monster, r: number, amt: number): void {
+-    for (const m of this.mobsInRadius(src.x, src.y, r)) m.heal(amt);
++  healAround(src: Monster, r: number, amt: number): number {
++    const wounded = this.mobsInRadius(src.x, src.y, r).filter(m => m !== src && m.hp < m.maxHp);
++    wounded.sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp);
++    let count = 0;
++    for (const m of wounded.slice(0, 3)) {
++      if (m.heal(amt) <= 0) continue;
++      count++;
++      this.ctx.combatFeedback?.('heal', src.x, src.y + src.def.radius, m.def.radius, m.x, m.y + m.def.radius);
++    }
++    return count;
+   }
+ 
+   tick(dt: number, line: { takeDamage: (d: number) => void }): void {
+@@ -819,6 +871,7 @@
+     }
+     this.advanceDeaths(dt);
+     for (const m of this.list) m.tick(dt, line, this);
++    this.drainBurnBursts();
+     // 自动分离（简单排斥半径，§3.1）：隔帧执行减半开销，视觉无感
+     if ((this.sepN++ & 1) === 0) {
+       for (let i = 0; i < this.list.length; i++) {
+--- before/assets/scripts/battle/MonsterTraits.ts
++++ after/assets/scripts/battle/MonsterTraits.ts
+@@ -1,4 +1,4 @@
+-/** Chapter enemies share bounded, simulation-time mechanics. Original goblins stay unchanged. */
++/** Shared, bounded enemy roles; all clocks follow battle simulation time. */
+ import { Color, Graphics, Node } from 'cc';
+ import { LO } from '../config/GameConfig';
+ import type { Monster, MonsterManager } from './Monster';
+@@ -13,32 +13,78 @@
+   private pendingStrike = 0;
+   private revived = false;
+   private phase = false;
++  private armorDamage = 0;
++  private armorBroken = false;
++  private armorCueT = 0;
++  private cancelledRush = -1;
++  private chargeArmed = false;
++  private rushCueT = 0;
+   private cue: Graphics | null = null;
++  private tint = new Color();
+   constructor(private owner: Monster) {}
+ 
+   reset(): void {
+     this.age = this.summonClock = this.summoned = this.regenClock = this.pendingStrike = 0;
+     this.revived = this.phase = false;
++    this.armorDamage = this.armorCueT = this.rushCueT = 0;
++    this.armorBroken = this.chargeArmed = false;
++    this.cancelledRush = -1;
+     this.hide();
+   }
+   get enraged(): boolean { return this.phase; }
++  get physicalResistance(): number { return this.armorBroken ? 0 : this.owner.def.physRes || 0; }
++  recordPhysicalHit(raw: number): void {
++    if (this.physicalResistance <= 0 || raw <= 0) return;
++    this.armorDamage += raw;
++    if (this.armorDamage >= this.owner.maxHp * (this.owner.def.armorBreakRatio || .3)) {
++      this.armorBroken = true;
++      this.owner.applyVuln(.15, 3);
++      this.owner.feedback('armorBreak');
++    } else if (this.armorCueT <= 0) {
++      this.armorCueT = .16;
++      this.owner.feedback('armorHit');
++    }
++  }
++  private get rushPhase(): number {
++    const rush = this.owner.def.rush;
++    if (!rush || this.owner.state !== 'move' || this.age < rush.period ||
++      Math.floor(this.age / rush.period) === this.cancelledRush) return -1;
++    return this.age % rush.period;
++  }
++  private get preparingRush(): boolean {
++    return this.rushPhase >= 0 && this.rushPhase < (this.owner.def.rush?.windup ?? .55);
++  }
++  private get charging(): boolean {
++    const rush = this.owner.def.rush, phase = this.rushPhase;
++    const windup = rush?.windup ?? .55;
++    return !!rush && phase >= windup && phase < windup + rush.duration;
++  }
++  onReachLine(): void { this.chargeArmed = this.charging; }
+   private get guarding(): boolean {
+     const g = this.owner.def.guard;
+     return !!g && this.age >= g.period && this.age % g.period < g.duration;
+   }
+   speedMultiplier(): number {
+-    const rush = this.owner.def.rush;
+-    const charging = rush && this.age >= rush.period && this.age % rush.period < rush.duration;
+-    return (charging ? rush!.multiplier : 1) * (this.phase ? this.owner.def.phase?.speedMul || 1 : 1);
++    const speed = this.preparingRush ? .4 : this.charging ? this.owner.def.rush!.multiplier : 1;
++    return speed * (this.phase ? this.owner.def.phase?.speedMul || 1 : 1);
+   }
+-  damageMultiplier(): number { return this.phase ? this.owner.def.phase?.attackMul || 1 : 1; }
++  damageMultiplier(): number {
++    const charge = this.chargeArmed ? this.owner.def.rush?.impactMul || 1 : 1;
++    this.chargeArmed = false;
++    return charge * (this.phase ? this.owner.def.phase?.attackMul || 1 : 1);
++  }
+   incomingDamage(amount: number, killer: string): number {
+     return killer !== 'gm' && this.guarding ? amount * (1 - this.owner.def.guard!.reduction) : amount;
+   }
+ 
+   tick(dt: number, motionDt: number, line: DefenseLine, manager: MonsterManager): void {
+     const o = this.owner, d = o.def;
+-    if (!d.homeChapter || o.dead) return;
++    if (o.dead) return;
++    this.armorCueT = Math.max(0, this.armorCueT - dt);
++    if (motionDt < dt) {
++      if (this.preparingRush || this.charging) this.cancelledRush = Math.floor(this.age / d.rush!.period);
++      this.chargeArmed = false;
++    }
+     this.age += motionDt;
+     if (d.phase && o.hp <= o.maxHp * d.phase.threshold) this.phase = true;
+     // A control effect cancels the telegraph; it cannot land a queued hit after interruption.
+@@ -46,6 +92,10 @@
+     else if (this.pendingStrike > 0) {
+       this.pendingStrike = Math.max(0, this.pendingStrike - motionDt);
+       if (this.pendingStrike === 0) o.strike(line, manager);
++    }
++    this.rushCueT = Math.max(0, this.rushCueT - dt);
++    if (this.charging && motionDt > 0 && this.rushCueT <= 0) {
++      this.rushCueT = .2; o.feedback('rush');
+     }
+     if (motionDt > 0 && o.y < LO.half - d.radius) {
+       if (d.regen) {
+@@ -57,7 +107,10 @@
+       }
+       if (d.kind === 'heal') {
+         o.healT -= motionDt;
+-        if (o.healT <= 0) { o.healT += d.atkInterval; manager.healAround(o, 180, d.healAmount || 40); }
++        if (o.healT <= 0) {
++          o.healT += d.atkInterval;
++          if (manager.healAround(o, 180, d.healAmount || 40)) o.animateHeal();
++        }
+       }
+       if (d.summon && this.summoned < d.summon.limit) {
+         this.summonClock += motionDt;
+@@ -92,21 +145,44 @@
+   private hide(): void { if (this.cue) this.cue.node.active = false; }
+   private drawCue(): void {
+     const o = this.owner;
+-    if (!this.guarding && this.pendingStrike <= 0) { this.hide(); return; }
++    const armor = this.physicalResistance > 0, healer = o.def.kind === 'heal';
++    const preparing = this.preparingRush, charging = this.charging;
++    if (!armor && !healer && !preparing && !charging && !this.guarding && this.pendingStrike <= 0) { this.hide(); return; }
+     if (!this.cue) {
+       const n = new Node('enemyTelegraph'); n.layer = o.node.layer; n.setParent(o.node);
+       this.cue = n.addComponent(Graphics);
+     }
+     const g = this.cue; g.node.active = true; g.clear();
++    const top = o.def.radius * 3.2 + 12;
++    this.tint.set(24, 31, 39, 220); g.fillColor = this.tint;
++    if (armor || healer || preparing || charging) { g.roundRect(-14, top - 4, 28, 25, 5); g.fill(); }
++    if (armor) {
++      this.tint.set(186, 210, 224, 255); g.strokeColor = this.tint; g.lineWidth = 2;
++      g.moveTo(-7, top + 14); g.lineTo(7, top + 14); g.lineTo(6, top + 4);
++      g.lineTo(0, top); g.lineTo(-6, top + 4); g.close(); g.stroke();
++      g.moveTo(0, top + 12); g.lineTo(0, top + 4); g.stroke();
++    } else if (healer) {
++      this.tint.set(136, 230, 127, 255); g.strokeColor = this.tint; g.lineWidth = 3;
++      g.moveTo(-7, top + 8); g.lineTo(7, top + 8); g.moveTo(0, top + 1); g.lineTo(0, top + 15); g.stroke();
++    } else if (preparing || charging) {
++      this.tint.set(255, 177, 70, 255); g.strokeColor = this.tint; g.lineWidth = 3;
++      for (let i = 0; i < 2; i++) {
++        const y = top + 15 - i * 8;
++        g.moveTo(-6, y); g.lineTo(0, y - 5); g.lineTo(6, y); g.stroke();
++      }
++      if (preparing) {
++        g.lineWidth = 2; g.moveTo(-o.def.radius, -3); g.lineTo(0, -18); g.lineTo(o.def.radius, -3); g.stroke();
++      }
++    }
+     if (this.guarding) {
+-      g.strokeColor = new Color(112, 209, 238, 220); g.lineWidth = 3;
++      this.tint.set(112, 209, 238, 220); g.strokeColor = this.tint; g.lineWidth = 3;
+       g.ellipse(0, -o.def.radius * .65, o.def.radius * 1.15, o.def.radius * .4); g.stroke();
+     }
+     if (this.pendingStrike > 0) {
+       const width = o.isBoss ? 84 : 52, y = o.def.radius * 3.2 + (o.isBoss ? 24 : 6);
+       const progress = 1 - this.pendingStrike / Math.max(.01, o.def.windup || 1);
+-      g.fillColor = new Color(48, 31, 24, 230); g.rect(-width / 2, y, width, 7); g.fill();
+-      g.fillColor = new Color(255, 158, 53, 255); g.rect(-width / 2, y, width * progress, 7); g.fill();
++      this.tint.set(48, 31, 24, 230); g.fillColor = this.tint; g.rect(-width / 2, y, width, 7); g.fill();
++      this.tint.set(255, 158, 53, 255); g.fillColor = this.tint; g.rect(-width / 2, y, width * progress, 7); g.fill();
+     }
+   }
+ }
+--- before/assets/scripts/battle/Projectile.ts
++++ after/assets/scripts/battle/Projectile.ts
+@@ -40,6 +40,8 @@
+   slowDur?: number;
+   burnDps?: number;
+   burnDur?: number;
++  burnBurst?: number;
++  teamVuln?: number;
+   /** 火法灼烧覆盖爆炸内目标；其他英雄默认仍只处理直接命中。 */
+   burnSplash?: boolean;
+   /** 命中眩晕 s（震慑：陨石落点眩晕） */
+@@ -550,7 +552,6 @@
+   private hitMob(a: Active, m: Monster): void {
+     const sp = a.spec;
+     if (sp.enemy) return;
+-    const hpBefore = m.hp;
+     // 目标词条在命中时结算：处决标记（精英/BOSS）+ 猎手本能（残血<30%）
+     const final = this.damageFor(sp, m);
+     const angle = Math.atan2(a.vy, a.vx);
+@@ -564,7 +565,7 @@
+         bus.emit(EVT.ULTIMATE_BEAT, { hero: sp.heroId, x: sp.x, y: sp.y, energy: 1, contact: true });
+       }
+     }
+-    this.dmg.add(sp.heroId, Math.min(final, hpBefore));
++    this.dmg.add(sp.heroId, m.lastDamageTaken);
+     if (this.parts) {
+       this.parts.burst(m.x, m.y, sp.color, heavy ? 5 : sp.spark ? 3 : 2, heavy ? 230 : 160, angle);
+     }
+@@ -576,11 +577,10 @@
+     if (sp.explodeR && sp.explodeR > 0) {
+       for (const o of this.mgr.mobsInRadius(m.x, m.y, sp.explodeR)) {
+         if (o === m || o.dead) continue;
+-        const ob = o.hp;
+         o.takeDamage(sp.dmg * (sp.explodeMul || 0.4), false, sp.heroId, false, 0,
+           Math.atan2(o.y - m.y, o.x - m.x));
+-        this.dmg.add(sp.heroId, Math.min(sp.dmg * (sp.explodeMul || 0.4), ob));
+-        if (!o.dead && sp.burnSplash && sp.burnDps) o.applyBurn(sp.burnDps, sp.burnDur ?? 3);
++        this.dmg.add(sp.heroId, o.lastDamageTaken);
++        if (!o.dead && sp.burnSplash && sp.burnDps) o.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0);
+         if (o.dead) this.killPop(sp, o.x, o.y + o.def.radius);
+       }
+       if (this.impacts) this.impacts.blast(m.x, m.y, sp.heroId, sp.explodeR);
+@@ -590,7 +590,8 @@
+     if (m.dead) return;
+     if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
+     if (sp.freezeChance && Math.random() < sp.freezeChance) m.applyFreeze(sp.freezeDuration || .6);
+-    if (sp.burnDps) m.applyBurn(sp.burnDps, sp.burnDur ?? 3);
++    if (sp.burnDps) m.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0);
++    if (sp.teamVuln) m.applyVuln(sp.teamVuln, 3);
+     if (sp.stun) m.stunT = Math.max(m.stunT, sp.stun);
+     if (sp.shockAmp) m.applyShock(sp.shockAmp, sp.shockDur ?? 3);
+     // 分裂箭：与原弹同造型/同弹速/同词条（仅伤害减半、不再连锁分裂），
+@@ -644,10 +645,10 @@
+       if (m.dead || (m.x - sp.x) ** 2 + (m.y - sp.y) ** 2 > r2) continue;
+       // Preserve one full-strength central hit and the existing splash multiplier for neighbours.
+       const direct = m === primary, amount = direct ? this.damageFor(sp, m) : sp.dmg * (sp.explodeMul || .4);
+-      const before = m.hp, angle = Math.atan2(m.y - sp.y, m.x - sp.x);
++      const angle = Math.atan2(m.y - sp.y, m.x - sp.x);
+       m.takeDamage(amount, direct && sp.crit, sp.heroId, direct && sp.ignoreRes === true, direct ? sp.resCut || 0 : 0, angle, direct);
+-      this.dmg.add(sp.heroId, Math.min(amount, before));
+-      if (!m.dead && sp.burnDps && (direct || sp.burnSplash)) m.applyBurn(sp.burnDps, sp.burnDur ?? 3);
++      this.dmg.add(sp.heroId, m.lastDamageTaken);
++      if (!m.dead && sp.burnDps && (direct || sp.burnSplash)) m.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0);
+       if (direct && !m.dead) {
+         if (sp.stun) m.stunT = Math.max(m.stunT, sp.stun);
+         if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
+--- before/assets/scripts/config/Cards.ts
++++ after/assets/scripts/config/Cards.ts
+@@ -14,7 +14,7 @@
+ 
+ /** 英雄战斗属性（卡牌改写目标；M0 弓箭手） */
+ export interface HeroStats {
+-  skillUnlocked: boolean; // 当局通过解锁卡学习；局外等级/突破不自动开启
++  skillUnlocked: boolean; // 基础技能随上阵可用，局内卡改变构筑
+   ultUnlocked: boolean;
+   atk: number;          // 独立基础攻击力（含局外成长及装备）
+   skillDmg: number;     // 独立基础技能伤害（含局外成长及装备；不是百分比）
+@@ -54,6 +54,8 @@
+   pyroMeteorBonus?: number; // 火法陨石增援：额外陨石数
+   pyroUltHitMul?: number; // 陨星威能：仅大招直接/溅射伤害，不放大灼烧
+   pyroSplashBurn?: boolean; // 烈焰附着：普攻溅射也附加灼烧
++  pyroBurnBurst?: number; // 余烬爆破：燃烧敌人死亡爆炸，爆炸本身不递归引爆
++  moraTeamVuln?: number; // 冰裂印记：冰系命中给全队提供短暂易伤
+   shockOnHit: number;   // 雷系命中感电：目标受伤 +25% 持续 3s（感电卡，0=无）
+   voltShockBonus?: number; // 高压电流：仅雷法自身对感电目标伤害+30%/层
+   voltShockLinger?: number; // 余电不散：所有雷法来源感电持续+s
+@@ -222,7 +224,7 @@
+ export function baseArcherStats(): HeroStats {
+   return {
+     // 射程 900 / 技能 800（用户调整；文档 §3.1 的 520/416 作废）
+-    skillUnlocked: false, ultUnlocked: false, atk: 45, skillDmg: 100, atkMul: 1, aspd: 1.2, range: 900, skillRange: 800,
++    skillUnlocked: true, ultUnlocked: true, atk: 45, skillDmg: 100, atkMul: 1, aspd: 1.2, range: 900, skillRange: 800,
+     critRate: 0.05, critMul: 1.5,
+     serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
+     pierce: 0, slowOnHit: 0, burnOnHit: 0,
+@@ -236,7 +238,7 @@
+ /** 重弩手凯尔·鹰眼：基础攻速 0.5 次/秒；普攻 1200（几乎覆盖全场）、技能索敌 900 */
+ export function baseSniperStats(): HeroStats {
+   return {
+-    skillUnlocked: false, ultUnlocked: false, atk: 140, skillDmg: 140, atkMul: 1, aspd: 0.5, range: 1200, skillRange: 900,
++    skillUnlocked: true, ultUnlocked: true, atk: 140, skillDmg: 140, atkMul: 1, aspd: 0.5, range: 1200, skillRange: 900,
+     critRate: 0.05, critMul: 1.5,
+     serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
+     pierce: 0, slowOnHit: 0, burnOnHit: 0,
+@@ -250,7 +252,7 @@
+ /** 火焰法师 · 焰·辉（§4 #2：技能流·AOE/橙红）：普攻火球小溅射；普攻 520 / 技能索敌 460 */
+ export function basePyroStats(): HeroStats {
+   return {
+-    skillUnlocked: false, ultUnlocked: false, atk: 60, skillDmg: 90, atkMul: 1, aspd: 1, range: 950, skillRange: 850,   // 基础普攻 1 次/秒；索敌范围 950 / 技能 850
++    skillUnlocked: true, ultUnlocked: true, atk: 60, skillDmg: 90, atkMul: 1, aspd: 1, range: 950, skillRange: 850,   // 基础普攻 1 次/秒；索敌范围 950 / 技能 850
+     critRate: 0.05, critMul: 1.5,
+     serial: 0, fan: 0, split: 0, explodeR: 60, explodeMul: 0.4,   // 火球自带小溅射
+     pierce: 0, slowOnHit: 0, burnOnHit: 0,
+@@ -264,7 +266,7 @@
+ /** 雷电法师 · 沃尔·雷霆（§4 #3：技能流·连锁/紫）：闪电弹单体；普攻 900 / 技能索敌 800（用户调整）；天雷自带 1s 眩晕 */
+ export function baseVoltStats(): HeroStats {
+   return {
+-    skillUnlocked: false, ultUnlocked: false, atk: 55, skillDmg: 85, atkMul: 1, aspd: 1, range: 900, skillRange: 800,
++    skillUnlocked: true, ultUnlocked: true, atk: 55, skillDmg: 85, atkMul: 1, aspd: 1, range: 900, skillRange: 800,
+     critRate: 0.05, critMul: 1.5,
+     serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
+     pierce: 0, slowOnHit: 0, burnOnHit: 0,
+@@ -278,7 +280,7 @@
+ /** 冰霜法师 · 莫拉·寒霜（控制流·冰霜）：冰棱减速；普攻 900 / 技能索敌 800；自带减速 25%·2s */
+ export function baseMoraStats(): HeroStats {
+   return {
+-    skillUnlocked: false, ultUnlocked: false, atk: 58, skillDmg: 80, atkMul: 1, aspd: 0.75, range: 900, skillRange: 800,
++    skillUnlocked: true, ultUnlocked: true, atk: 58, skillDmg: 80, atkMul: 1, aspd: 0.75, range: 900, skillRange: 800,
+     critRate: 0.05, critMul: 1.5,
+     serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
+     pierce: 0, slowOnHit: 0.25, burnOnHit: 0,
+@@ -306,7 +308,7 @@
+   id: string;
+   name: string;
+   rarity: Rarity;
+-  /** Mark generic numeric cards explicitly; other hero cards default to combat, global cards to support. */
++  /** Explicit overrides; otherwise classify mechanic cards, numeric cards and global support. */
+   offerGroup?: OfferGroup;
+   maxStacks: number;
+   /** 归属：'global' 或英雄 id（'archer' | 'sniper'），决定改写谁的属性 */
+@@ -358,6 +360,7 @@
+   });
+ }
+ 
++/** Legacy definitions only; battle entry grants these prerequisites, so they are not in M0_POOL. */
+ export const ABILITY_CARDS: CardDef[] = [
+   abilityCard('archer', 'skill', '强化箭矢'), abilityCard('archer', 'ult', '扇形箭雨'),
+   abilityCard('sniper', 'skill', '穿颅射击'), abilityCard('sniper', 'ult', '猎杀时刻'),
+@@ -369,6 +372,9 @@
+ /* ---------- 弓箭手 · 普攻强化卡（§6.2 子集） ---------- */
+ export const ARCHER_CARDS: CardDef[] = [
+   ...commonHeroCards('archer'),
++  c({ id: 'archer_pierce', name: '穿林箭', rarity: 'blue', maxStacks: 2, owner: 'archer',
++    art: 'ui_card_sniper_pierce_v1', desc: '普攻额外穿透1个目标\n可配合连射、齐射\n最多2层',
++    apply: x => { x.hero.pierce += 1; } }),
+   c({ id: 'serial', name: '连射', rarity: 'blue', maxStacks: 5, owner: 'archer', desc: '普攻追加1排连射\n攻击力 -10%\n最多5层',
+     apply: archerAttackTradeoff(x => { x.hero.serial += 1; }) }),
+   c({ id: 'fan', name: '齐射', rarity: 'blue', maxStacks: 5, owner: 'archer', desc: '普攻额外发射1支箭\n攻击力 -10%\n最多5层',
+@@ -422,6 +428,9 @@
+ /* ---------- 火焰法师 · 范围爆炸与灼烧（白2/蓝6/紫5/黄3） ---------- */
+ export const PYRO_CARDS: CardDef[] = [
+   ...commonHeroCards('pyro'),
++  c({ id: 'pyro_burst', name: '余烬爆破', rarity: 'purple', maxStacks: 1, owner: 'pyro',
++    art: 'ui_card_pyro_burn_v1', desc: '火法点燃的敌人死亡爆炸\n半径100，伤害为60%攻击力\n爆炸不触发二次引爆',
++    apply: x => { x.hero.pyroBurnBurst = .6; } }),
+   c({ id: 'pyro_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'pyro', reqAny: ['pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_spell_v2', desc: '基础技能伤害 +30%\n技能、大招生效\n最多3层',
+     apply: x => { x.hero.skillMul *= 1.3; } }),
+   c({ id: 'pyro_shards', name: '爆裂火球', rarity: 'purple', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', art: 'ui_card_pyro_shards_v2', desc: '烈焰爆裂火球 +1颗\n最多3层',
+@@ -474,6 +483,9 @@
+ /* ---------- 冰霜法师：减速 / 冰封控场 / 碎冰增伤 ---------- */
+ export const MORA_CARDS: CardDef[] = [
+   ...commonHeroCards('mora'),
++  c({ id: 'mora_team', name: '冰裂印记', rarity: 'purple', maxStacks: 1, owner: 'mora',
++    art: 'ui_card_mora_brittle_v2', desc: '冰系命中施加冰裂印记\n目标受到全队伤害 +15%\n持续3秒，可刷新',
++    apply: x => { x.hero.moraTeamVuln = .15; } }),
+   c({ id: 'mora_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'mora', reqAny: ['mora_unlock_skill', 'mora_unlock_ult'], art: 'ui_card_mora_spell_v2', desc: '技能伤害项 +30%\n技能、大招生效\n最多3层',
+     apply: x => { x.hero.skillMul *= 1.3; } }),
+   c({ id: 'mora_range', name: '极寒扩散', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', art: 'ui_card_mora_range_v2', desc: '冰霜领域半径 +20%\n不改变首次索敌范围\n最多3层',
+@@ -509,7 +521,7 @@
+ ];
+ 
+ /** 当前卡池 = 弓箭手 + 狙击 + 火法 + 雷法 + 冰法 + 全局（卡按 owner 归属英雄生效） */
+-export const M0_POOL: CardDef[] = [...ABILITY_CARDS, ...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...VOLT_CARDS, ...MORA_CARDS, ...GLOBAL_CARDS];
++export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...VOLT_CARDS, ...MORA_CARDS, ...GLOBAL_CARDS];
+ 
+ export interface CardStacks { [cardId: string]: number; }
+ 
+@@ -520,27 +532,49 @@
+     && (!card.reqAny || card.reqAny.some(id => (stacks[id] || 0) > 0));
+ }
+ 
++/** These cards change projectiles, statuses, contacts or cooperation, rather than only numbers. */
++const MECHANIC_IDS = new Set(['archer_pierce', 'serial', 'fan', 'split', 'explode', 'frost', 'burn', 'rain_rounds',
++  'multi_lock', 'sniper_pierce', 'extra_line', 'sniper_mark', 'pyro_shards', 'pyro_burn', 'pyro_burst', 'pyro_meteors',
++  'volt_shards', 'volt_shock', 'volt_strikes', 'volt_stun', 'mora_freeze', 'mora_glacier', 'mora_team']);
++export function isMechanicCard(card: CardDef): boolean { return MECHANIC_IDS.has(card.id); }
++function offerGroup(card: CardDef): OfferGroup {
++  return card.offerGroup ?? (card.owner === 'global' ? 'support' : isMechanicCard(card) ? 'combat' : 'stats');
++}
+ function offerWeight(card: CardDef): number {
+-  const group = card.offerGroup ?? (card.owner === 'global' ? 'support' : 'combat');
++  const group = offerGroup(card);
+   return RARITY_WEIGHT[card.rarity] * OFFER_GROUP_WEIGHT[group];
+ }
+ 
+-/** 三张不重复：稀有度×卡类型权重；仍遵循上阵归属、前置解锁和叠层上限。 */
++/** Two mechanic opportunities when available, one following an invested hero and one opening another path.
++ * Refreshes share these guarantees. Numeric-only leftovers may return fewer than three legal choices. */
+ export function draw3(pool: CardDef[], stacks: CardStacks): CardDef[] {
+-  const avail = pool.filter(k => canTakeCard(k, stacks));
+   const picked: CardDef[] = [];
+-  const rest = avail.slice();
+-  while (picked.length < 3 && rest.length > 0) {
+-    const weights = rest.map(offerWeight);
++  const rest = pool.filter(k => canTakeCard(k, stacks));
++  const progress: Record<string, number> = {};
++  for (const card of pool) if (card.owner !== 'global')
++    progress[card.owner] = (progress[card.owner] || 0) + (stacks[card.id] || 0);
++  const take = (candidates: CardDef[], follow = false): void => {
++    if (!candidates.length) return;
++    const weights = candidates.map(c => offerWeight(c) * (follow ? 1 + Math.min(4, progress[c.owner] || 0) * .25 : 1));
+     const total = weights.reduce((sum, weight) => sum + weight, 0);
+     let r = Math.random() * total;
+     let idx = 0;
+-    for (let i = 0; i < rest.length; i++) {
++    for (let i = 0; i < candidates.length; i++) {
+       r -= weights[i];
+       if (r <= 0) { idx = i; break; }
+     }
+-    picked.push(rest[idx]);
+-    rest.splice(idx, 1);
++    const card = candidates[idx];
++    picked.push(card); rest.splice(rest.indexOf(card), 1);
++  };
++  const mechanics = rest.filter(isMechanicCard);
++  const continuing = mechanics.filter(c => progress[c.owner] > 0);
++  take(continuing.length ? continuing : mechanics, true);
++  const alternative = rest.filter(c => isMechanicCard(c) && c.owner !== picked[0]?.owner);
++  take(alternative.length ? alternative : rest.filter(isMechanicCard));
++  while (picked.length < 3) {
++    const candidates = rest.filter(c => offerGroup(c) !== 'stats' || !picked.some(p => offerGroup(p) === 'stats'));
++    if (!candidates.length) break;
++    take(candidates);
+   }
+   return picked;
+ }
+--- before/assets/scripts/config/ChapterContent.ts
++++ after/assets/scripts/config/ChapterContent.ts
+@@ -6,8 +6,11 @@
+   traits?: string[];
+   weak?: string;
+   airborne?: boolean;
++  magicRes?: number;
++  /** Raw physical damage required to break armor, as a fraction of maximum HP. */
++  armorBreakRatio?: number;
+   guard?: { period: number; duration: number; reduction: number };
+-  rush?: { period: number; duration: number; multiplier: number };
++  rush?: { period: number; duration: number; multiplier: number; windup?: number; impactMul?: number };
+   venom?: { duration: number; portion: number };
+   regen?: number;
+   aura?: { radius: number; attackMul: number };
+--- before/assets/scripts/config/GameConfig.ts
++++ after/assets/scripts/config/GameConfig.ts
+@@ -65,10 +65,15 @@
+   return 1;
+ }
+ 
+-/** 经验需求（§11.3）：EXP(L→L+1) = 50 × 1.35^(L-1)，等级无上限 */
++/** Gentler run growth: the late part of an ordinary encounter still offers useful build choices. */
+ export function expNeed(level: number): number {
+-  return Math.floor(50 * Math.pow(1.35, level - 1));
++  return Math.floor(50 * Math.pow(1.28, level - 1));
+ }
++
++/** Natural full-charge seconds, before charge-reduction cards; kill energy is divided across the squad. */
++export const ULT_REGEN_SECONDS: Record<string, number> = { archer: 80, sniper: 86, pyro: 94, volt: 88, mora: 100 };
++export const ULT_INITIAL_CHARGE = .25;
++export const SHARED_KILL_CHARGE = .55;
+ 
+ /** 少量关卡时间经验：每2个战斗秒发放当前升级需求约1%，最低1点。 */
+ export const PASSIVE_XP_INTERVAL = 2;
+--- before/assets/scripts/config/Mobs.ts
++++ after/assets/scripts/config/Mobs.ts
+@@ -5,6 +5,13 @@
+ import { CAMPAIGN_CHAPTERS, CAMPAIGN_LEVEL_IDS, CAMPAIGN_STAGES } from './Campaign';
+ import { EnemyFeatures, EXPANSION_MOBS } from './ChapterContent';
+ import { expandedLevel } from './ChapterWaves';
++
++export type DamageKind = 'physical' | 'magic' | 'true';
++export function damageKindFor(source: string): DamageKind {
++  if (source === 'gm') return 'true';
++  return source === 'pyro' || source === 'volt' || source === 'mora' || source === 'burn' || source === 'pyro_burst'
++    ? 'magic' : 'physical';
++}
+ 
+ export interface MobDef extends EnemyFeatures {
+   id: string;
+@@ -49,16 +56,21 @@
+     id: 'goblin_shaman', name: '哥布林萨满', kind: 'heal',
+     hp: 240, dmg: 20, atkInterval: 6, speed: 25, radius: 24,
+     exp: 20, charge: 2, gold: 4, color: '#9B6BFF', healAmount: 40,
++    description: '行进中也会治疗周围最多3名受伤友军；优先处理，阻断续航。',
+   },
+   wolf_rider: {
+     id: 'wolf_rider', name: '狼骑兵', kind: 'melee',
+     hp: 220, dmg: 35, atkInterval: 3.2, speed: 47.5, radius: 24,
+     exp: 12, charge: 1, gold: 3, color: '#8A8F98',
++    rush: { period: 6.5, windup: .55, duration: 2, multiplier: 1.8, impactMul: 1.5 },
++    description: '短暂蓄势后冲锋，冲锋撞线的首次攻击提高50%；冰封或眩晕可打断。',
+   },
+   goblin_brute: {
+     id: 'goblin_brute', name: '大哥布林（精英）', kind: 'melee',
+     hp: 2400, dmg: 80, atkInterval: 4, speed: 17.5, radius: 34,
+     exp: 60, charge: 10, gold: 25, color: '#5E8F3C', elite: true,
++    physRes: .4, armorBreakRatio: .28,
++    description: '重甲减少40%物理伤害；累积物理命中破甲后失去物抗，并受到3秒易伤。法术可绕过物抗。',
+   },
+   goblin_king: {
+     id: 'goblin_king', name: '哥布林王', kind: 'melee',
+--- before/assets/scripts/core/GameData.ts
++++ after/assets/scripts/core/GameData.ts
+@@ -695,9 +695,9 @@
+ export const CODEX: CodexDef[] = [
+   { id: 'goblin_worker', name: '哥布林苦工', icon: '👺', tags: ['小型', '近战'], desc: '成群结队冲向防线的近战单位，威胁在于数量。', traits: ['成群结队冲锋', '近战围攻防线', '单体威胁不高'], weak: '范围伤害（炮手/火法）' },
+   { id: 'goblin_slinger', name: '哥布林投石手', icon: '🎯', tags: ['小型', '远程'], desc: '远程投掷石块，会躲在近战身后输出。', traits: ['远程投石攻击', '躲在近战身后', '血量偏低'], weak: '快速击杀（弓手/狙击）' },
+-  { id: 'goblin_shaman', name: '哥布林萨满', icon: '🔮', tags: ['小型', '辅助'], desc: '治疗友军，优先击杀目标。', traits: ['持续治疗友军', '辅助型怪种', '务必优先击杀'], weak: '集火秒杀（狙击大招）' },
+-  { id: 'wolf_rider', name: '狼骑兵', icon: '🐺', tags: ['中型', '骑兵'], desc: '高速冲锋，很快接近防线。', traits: ['移动速度极快', '迅速接近防线', '血量中等'], weak: '减速控制（冰法）' },
+-  { id: 'goblin_brute', name: '大哥布林（精英）', icon: '👹', tags: ['大型', '精英'], desc: '血厚攻高的精英，击杀有装备掉落。', traits: ['血厚攻高', '精英级怪种', '击杀掉落装备'], weak: '持续输出 + 控场' },
++  { id: 'goblin_shaman', name: '哥布林萨满', icon: '🔮', tags: ['小型', '治疗'], desc: '行进中也会施法，为周围受伤友军恢复生命。', traits: ['每6秒治疗周围最多3名伤员', '优先治疗生命比例最低的友军', '不治疗自己，控制可延后施法'], weak: '范围大招覆盖后排，优先切断治疗' },
++  { id: 'wolf_rider', name: '狼骑兵', icon: '🐺', tags: ['中型', '冲锋'], desc: '蓄势0.55秒后冲锋2秒，冲锋撞线会强化第一次攻击。', traits: ['每6.5秒尝试冲锋，移速×1.8', '冲锋撞线首次攻击+50%', '冰封、眩晕可打断，减速可延缓'], weak: '留控制打断冲锋，提前减速' },
++  { id: 'goblin_brute', name: '大哥布林（精英）', icon: '👹', tags: ['大型', '重甲'], desc: '重甲减少40%物理伤害；法术绕过物抗，持续物理命中可破甲。', traits: ['累计原始物理伤害达最大生命28%时破甲', '破甲后物抗归零，受到伤害+15%持续3秒', '精英级怪种，击杀可掉落装备'], weak: '法术输出，或物理集火破甲后爆发' },
+   { id: 'goblin_king', name: '哥布林王（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '第一章第五关与第十关的首领，率领部队缓慢推进并近战攻击防线。', traits: ['第五关与第十关首领', '大型近战，血量厚重', '免疫冰封'], weak: '持续集火与大招爆发' },
+ ];
+ /** 图鉴首览奖励：每只怪物首次点开词条可领一次（钻石） */
+--- before/assets/scripts/ui/Panels.ts
++++ after/assets/scripts/ui/Panels.ts
+@@ -657,6 +657,16 @@
+       px = WX(636, 90) - 45 - 16 - w / 2;
+       py = WYB(240 + ultIdx * 110, 90);
+     }
++    // Keep the existing six-row geometry while exposing the battle's new rules.
++    if (kind === 'atk') {
++      rows[0][0] = hero.id === 'archer' || hero.id === 'sniper' ? '物理伤害' : '法术伤害';
++      if (hero.id === 'archer' && h.pierce) rows[5] = ['贯穿', '额外命中 ' + h.pierce + ' 个目标'];
++      if (hero.id === 'pyro' && h.pyroBurnBurst) rows[5] = ['余烬爆破', '点燃后阵亡爆炸 · 半径100'];
++      if (hero.id === 'mora' && h.moraTeamVuln) rows[5] = ['冰裂印记', '全队易伤+15% · 3秒'];
++    } else if (kind === 'ult') {
++      const charge = rows.find(row => row[0] === '充能');
++      if (charge) charge[1] = Math.floor(hero.charge / hero.chargeGoal * 100) + '% · 时间/全队击杀';
++    }
+     // 面板整体收敛进可视区
+     px = Math.max(-375 + w / 2 + 8, Math.min(375 - w / 2 - 8, px));
+     py = Math.max(-LO.half + hh / 2 + 8, Math.min(LO.half - hh / 2 - 8, py));

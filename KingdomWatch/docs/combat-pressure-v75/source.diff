@@ -1,0 +1,197 @@
+--- v74/assets/scripts/config/FifthLevel.ts
++++ v75/assets/scripts/config/FifthLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-5: modest HP pressure and fodder density; preserve wave arc, special counts and line damage. */
++/** Normal 1-5: pressure from the opening, with denser and tougher middle/final waves. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -10,19 +10,19 @@
+ const elite = (hp: number, delay: number, dmg = 24) =>
+   ({ mob: 'goblin_brute', count: 1, interval: 1, delay, actual: { hp, dmg } });
+ const shaman = (delay: number) =>
+-  ({ mob: 'goblin_shaman', count: 1, interval: 1, delay, actual: { hp: 420, dmg: 0 } });
++  ({ mob: 'goblin_shaman', count: 1, interval: 1, delay, actual: { hp: 800, dmg: 0 } });
+ const king = () =>
+-  ({ mob: 'goblin_king', count: 1, interval: 1, delay: 0, actual: { hp: 7800, dmg: 30 } });
++  ({ mob: 'goblin_king', count: 1, interval: 1, delay: 0, actual: { hp: 12000, dmg: 30 } });
+ 
+ export const FIFTH_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(40, 440, 0.85)] },
+-  { groups: [workers(50, 460, 0.67), slingers(2, 340, 13)] },
+-  { groups: [workers(60, 490, 0.51), slingers(2, 360, 12), elite(3600, 12)], surge: true },
+-  { groups: [workers(30, 460, 0.96)] },
+-  { groups: [workers(66, 520, 0.45), riders(580, 14)], surge: true },
+-  { groups: [workers(56, 540, 0.54), slingers(4, 380, 10), riders(600, 16), shaman(18)] },
+-  { groups: [workers(66, 570, 0.44), elite(3800, 8), riders(630, 17)], surge: true },
++  { groups: [workers(52, 600, 0.65)] },
++  { groups: [workers(74, 720, 0.45), slingers(2, 480, 13)] },
++  { groups: [workers(94, 860, 0.32), slingers(2, 600, 12), elite(5800, 12)], surge: true },
++  { groups: [workers(40, 760, 0.71)] },
++  { groups: [workers(110, 1000, 0.27), riders(1000, 14)], surge: true },
++  { groups: [workers(96, 1140, 0.31), slingers(4, 760, 10), riders(1180, 16), shaman(18)] },
++  { groups: [workers(114, 1280, 0.25), elite(7200, 8), riders(1360, 17)], surge: true },
+   // One king anchors the final wave; retain its authored identity and line damage.
+-  { groups: [king(), workers(56, 570, 0.48, 1), slingers(4, 400, 8),
+-    riders(650, 17), shaman(12)], surge: true },
++  { groups: [king(), workers(100, 1360, 0.27, 1), slingers(4, 860, 8),
++    riders(1500, 17), shaman(12)], surge: true },
+ ];
+--- v74/assets/scripts/config/FirstLevel.ts
++++ v75/assets/scripts/config/FirstLevel.ts
+@@ -1,14 +1,14 @@
+-/** Normal 1-1: modest HP pressure and fodder density; preserve wave arc, special counts and line damage. */
++/** Normal 1-1: pressure from the opening, with denser and tougher middle/final waves. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+   ({ mob: 'goblin_worker', count, interval, delay, actual: { hp, dmg: 10 } });
+ export const FIRST_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(16, 300, 1.65)] },
+-  { groups: [workers(24, 320, 1.4)] },
+-  { groups: [workers(30, 350, 1.16)] },
+-  { groups: [workers(18, 350, 1.65)] },
+-  { groups: [workers(36, 400, 0.92)], surge: true },
+-  { groups: [{ mob: 'goblin_brute', count: 1, interval: 1, actual: { hp: 2400, dmg: 20 } },
+-    workers(20, 420, 1.25, 4)] },
++  { groups: [workers(20, 400, 1.3)] },
++  { groups: [workers(32, 480, 1.04)] },
++  { groups: [workers(44, 600, 0.78)] },
++  { groups: [workers(24, 520, 1.22)] },
++  { groups: [workers(58, 800, 0.56)], surge: true },
++  { groups: [{ mob: 'goblin_brute', count: 1, interval: 1, actual: { hp: 4000, dmg: 20 } },
++    workers(32, 900, 0.77, 4)] },
+ ];
+--- v74/assets/scripts/config/FourthLevel.ts
++++ v75/assets/scripts/config/FourthLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-4: modest HP pressure and fodder density; preserve wave arc, special counts and line damage. */
++/** Normal 1-4: pressure from the opening, with denser and tougher middle/final waves. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -10,16 +10,16 @@
+ const elite = (count: number, hp: number, delay: number) =>
+   ({ mob: 'goblin_brute', count, interval: 12, delay, actual: { hp, dmg: 24 } });
+ const shaman = (count: number, delay: number) =>
+-  ({ mob: 'goblin_shaman', count, interval: 10, delay, actual: { hp: 400, dmg: 0 } });
++  ({ mob: 'goblin_shaman', count, interval: 10, delay, actual: { hp: 700, dmg: 0 } });
+ 
+ export const FOURTH_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(34, 410, 1)] },
+-  { groups: [workers(44, 430, 0.76), slingers(2, 310, 5, 13)] },
+-  { groups: [workers(56, 460, 0.56), slingers(2, 330, 5, 12), elite(1, 3100, 15)], surge: true },
+-  { groups: [workers(26, 430, 1.15)] },
+-  { groups: [workers(60, 490, 0.5), riders(530, 14)], surge: true },
+-  { groups: [workers(52, 510, 0.61), slingers(4, 350, 5, 10), riders(550, 16), shaman(1, 18)] },
+-  { groups: [workers(62, 540, 0.46), elite(1, 3350, 10), riders(580, 17)], surge: true },
+-  { groups: [workers(52, 540, 0.56, 2), slingers(4, 380, 5, 8),
+-    elite(2, 3550, 5), riders(600, 17), shaman(2, 12)], surge: true },
++  { groups: [workers(44, 560, 0.77)] },
++  { groups: [workers(64, 680, 0.52), slingers(2, 430, 5, 13)] },
++  { groups: [workers(86, 800, 0.36), slingers(2, 540, 5, 12), elite(1, 5000, 15)], surge: true },
++  { groups: [workers(36, 700, 0.82)] },
++  { groups: [workers(98, 940, 0.3), riders(900, 14)], surge: true },
++  { groups: [workers(88, 1060, 0.36), slingers(4, 700, 5, 10), riders(1050, 16), shaman(1, 18)] },
++  { groups: [workers(104, 1180, 0.27), elite(1, 6200, 10), riders(1200, 17)], surge: true },
++  { groups: [workers(88, 1260, 0.33, 2), slingers(4, 800, 5, 8),
++    elite(2, 7000, 5), riders(1360, 17), shaman(2, 12)], surge: true },
+ ];
+--- v74/assets/scripts/config/SecondLevel.ts
++++ v75/assets/scripts/config/SecondLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-2: modest HP pressure and fodder density; preserve wave arc, special counts and line damage. */
++/** Normal 1-2: pressure from the opening, with denser and tougher middle/final waves. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -6,12 +6,12 @@
+ const slingers = (count: number, hp: number, interval: number, delay = 0) =>
+   ({ mob: 'goblin_slinger', count, interval, delay, actual: { hp, dmg: 8 } });
+ export const SECOND_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(20, 350, 1.45)] },
+-  { groups: [workers(26, 370, 1.2), slingers(2, 300, 5, 13)] },
+-  { groups: [workers(30, 400, 1.02), slingers(2, 320, 5, 15)] },
+-  { groups: [workers(20, 390, 1.55)] },
+-  { groups: [workers(38, 450, 0.83), slingers(4, 350, 6, 9)], surge: true },
+-  { groups: [workers(30, 470, 0.98), slingers(4, 370, 6, 7)], surge: true },
+-  { groups: [workers(22, 500, 1.22, 3),
+-    { mob: 'goblin_brute', count: 2, interval: 12, delay: 2, actual: { hp: 2850, dmg: 24 } }] },
++  { groups: [workers(26, 470, 1.1)] },
++  { groups: [workers(36, 540, 0.86), slingers(2, 400, 5, 13)] },
++  { groups: [workers(46, 660, 0.66), slingers(2, 500, 5, 15)] },
++  { groups: [workers(26, 570, 1.18)] },
++  { groups: [workers(62, 800, 0.5), slingers(4, 650, 6, 9)], surge: true },
++  { groups: [workers(50, 900, 0.58), slingers(4, 750, 6, 7)], surge: true },
++  { groups: [workers(36, 1000, 0.73, 3),
++    { mob: 'goblin_brute', count: 2, interval: 12, delay: 2, actual: { hp: 4800, dmg: 24 } }] },
+ ];
+--- v74/assets/scripts/config/SixthLevel.ts
++++ v75/assets/scripts/config/SixthLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-6: modest HP pressure and fodder density; preserve wave arc, special counts and line damage. */
++/** Normal 1-6: pressure from the opening, with denser and tougher middle/final waves. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -13,17 +13,17 @@
+   ({ mob: 'goblin_shaman', count: 1, interval: 1, delay, actual: { hp, dmg: 0 } });
+ 
+ export const SIXTH_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(44, 460, 0.72)] },
+-  { groups: [workers(50, 490, 0.63), riders(3, 580, 8)] },
+-  { groups: [workers(54, 520, 0.56), slingers(2, 360, 12), elite(3600, 8)] },
+-  { groups: [workers(36, 490, 0.9), riders(3, 600, 10)] },
+-  { groups: [workers(60, 540, 0.5), riders(4, 630, 8)], surge: true },
+-  // Lighter middle wave separates the raids while maintaining a steady stream of targets.
+-  { groups: [workers(34, 490, 0.94), slingers(2, 380, 14)] },
+-  { groups: [workers(60, 540, 0.5), riders(4, 630, 8), shaman(420, 20)], surge: true },
+-  { groups: [workers(54, 560, 0.56), slingers(4, 380, 8), elite(3800, 8)] },
+-  { groups: [workers(60, 560, 0.5), riders(4, 650, 8), shaman(450, 18)], surge: true },
++  { groups: [workers(58, 650, 0.54)] },
++  { groups: [workers(72, 760, 0.43), riders(3, 850, 8)] },
++  { groups: [workers(84, 880, 0.36), slingers(2, 520, 12), elite(5600, 8)] },
++  { groups: [workers(48, 780, 0.67), riders(3, 1000, 10)] },
++  { groups: [workers(100, 1040, 0.3), riders(4, 1180, 8)], surge: true },
++  // A shorter middle wave separates the raids; it still carries more pressure than the old version.
++  { groups: [workers(46, 840, 0.69), slingers(2, 620, 14)] },
++  { groups: [workers(104, 1120, 0.29), riders(4, 1280, 8), shaman(760, 20)], surge: true },
++  { groups: [workers(96, 1240, 0.31), slingers(4, 820, 8), elite(7000, 8)] },
++  { groups: [workers(108, 1340, 0.28), riders(4, 1450, 8), shaman(900, 18)], surge: true },
+   // An ordinary elite arrives early in the final wave; no second boss climax after 1-5.
+-  { groups: [elite(4500, 0), workers(54, 560, 0.53, 1), riders(4, 650, 6),
+-    slingers(4, 400, 10)], surge: true },
++  { groups: [elite(8600, 0), workers(102, 1440, 0.28, 1), riders(4, 1600, 6),
++    slingers(4, 940, 10)], surge: true },
+ ];
+--- v74/assets/scripts/config/ThirdLevel.ts
++++ v75/assets/scripts/config/ThirdLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-3: modest HP pressure and fodder density; preserve wave arc, special counts and line damage. */
++/** Normal 1-3: pressure from the opening, with denser and tougher middle/final waves. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -11,13 +11,13 @@
+   ({ mob: 'goblin_brute', count, interval: 12, delay, actual: { hp, dmg: 24 } });
+ 
+ export const THIRD_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(28, 380, 1.2)] },
+-  { groups: [workers(38, 400, 0.9), slingers(2, 300, 5, 13)] },
+-  { groups: [workers(48, 430, 0.63), slingers(2, 320, 5, 12), elite(1, 3050, 15)], surge: true },
+-  { groups: [workers(22, 400, 1.4)] },
+-  { groups: [workers(50, 460, 0.6), riders(520, 14)], surge: true },
+-  { groups: [workers(44, 480, 0.71), slingers(4, 350, 5, 10), riders(550, 16)] },
+-  { groups: [workers(52, 500, 0.58), elite(1, 3300, 10), riders(570, 17)], surge: true },
+-  { groups: [workers(38, 500, 0.7, 2), slingers(4, 370, 5, 8),
+-    elite(2, 3500, 5), riders(600, 17)], surge: true },
++  { groups: [workers(36, 520, 0.93)] },
++  { groups: [workers(52, 620, 0.65), slingers(2, 400, 5, 13)] },
++  { groups: [workers(72, 740, 0.42), slingers(2, 500, 5, 12), elite(1, 4600, 15)], surge: true },
++  { groups: [workers(30, 640, 1.01)] },
++  { groups: [workers(80, 860, 0.37), riders(800, 14)], surge: true },
++  { groups: [workers(72, 980, 0.43), slingers(4, 650, 5, 10), riders(950, 16)] },
++  { groups: [workers(86, 1100, 0.35), elite(1, 5600, 10), riders(1100, 17)], surge: true },
++  { groups: [workers(64, 1180, 0.41, 2), slingers(4, 750, 5, 8),
++    elite(2, 6400, 5), riders(1250, 17)], surge: true },
+ ];

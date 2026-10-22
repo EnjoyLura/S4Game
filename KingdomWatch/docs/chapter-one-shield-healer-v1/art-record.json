@@ -1,0 +1,29 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in reference generation",
+  "prompt": "prompt.txt",
+  "reference": {
+    "path": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-beastfolk-base-v5/beastfolk-front-armored.png",
+    "role": "Shared blue beastfolk base, clothing and drawing style",
+    "sha256": "fe36bacc4405ab129708ef2c05b7700c8646ce5bb03eed2e9edcd0794e9d4271"
+  },
+  "output": {
+    "file": "shieldbearer-bone-healer.png",
+    "generated_source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-11fd9a7b-2c98-4fa8-b252-d4a39ea054d5.png",
+    "sha256": "0a2fee5f96ce6d01f23acd6b1a884a6fb5fb85a2cd70f4e68d13de9f1d5c1ca7",
+    "original_bytes_preserved": true
+  },
+  "characters": [
+    "兽人盾兵",
+    "骨杖巫医"
+  ],
+  "user_visual_approval": "rejected: user finds clothing too enclosing and recurring skull headgear, red scarves and layered leather too uniform; requests moderate differences in face, physique and costume design",
+  "game_integrated": false,
+  "visual_inspection": {
+    "shared_species": "Blue skin, yellow eyes, pointed ears, broad nose, red cloth, brown leather and bone headgear shared with prior infantry/thrower.",
+    "shieldbearer": "Wide squat body, reinforced wooden shield, lowered cleaver, closed leather armor and trousers.",
+    "healer": "Narrower face with pointed chin, hooded robe, bone-topped staff and herb pouches.",
+    "orientation": "Both faces and torsos frontal, full body visible.",
+    "limitations": "Concept sheet with labels and off-white background, not a transparent animation master. Outer shield and staff-top margins are tighter than requested; no clipping visible. User has not approved this art or the earlier comparison."
+  }
+}

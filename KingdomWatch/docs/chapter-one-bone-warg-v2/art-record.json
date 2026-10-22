@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-21",
+  "tool": "image_gen",
+  "mode": "built-in precise-object-edit",
+  "request": "狼要看到一点背，四足的要用微微俯视角",
+  "source": {
+    "path": "D:\\AI\\S4Game\\KingdomWatch\\docs\\chapter-one-bone-warg-v1\\bone-warg-front.png",
+    "sha256": "F7CB488BDCECD325B0E265E75E82D1C4CF2AD377770FDE8F76B41854C5501C39"
+  },
+  "prompts": [
+    "prompt.txt",
+    "gentler-camera-prompt.txt"
+  ],
+  "intermediate": {
+    "path": "D:\\AI\\S4Game\\KingdomWatch\\docs\\chapter-one-bone-warg-v2\\bone-warg-steep-draft.png",
+    "generated_source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-ed0f932f-f3d7-45ad-8ee2-fd90b776e919.png",
+    "sha256": "46F481E18EAA231293A56C0415BFD21491E3CDB89CBA2279D8A841139898973A",
+    "status": "Agent judged camera too steep and refined it; not user rejected"
+  },
+  "final": {
+    "path": "D:\\AI\\S4Game\\KingdomWatch\\docs\\chapter-one-bone-warg-v2\\bone-warg-slight-top-front.png",
+    "generated_source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-64d11b2e-aa44-4c82-ae01-bd1176e0a898.png",
+    "sha256": "994E7BC84D4113DD2F236264B935335FD975DBFEC5FCFE84B78AC4212E2680EC"
+  },
+  "inspection": [
+    "Face and longitudinal torso direction remain frontal; both eyes and ears visible",
+    "Head/shoulders show top surfaces, with a short section of receding back behind head",
+    "Final camera is gentler than intermediate; angles in prompts are guidance, not measured 3D camera values",
+    "Four paws, ears and tail within frame; same dark fur, fangs, leather and bone gear",
+    "Images inspected inline; original PNG bytes preserved and copy hashes checked"
+  ],
+  "user_visual_approval": "pending",
+  "game_integrated": false
+}

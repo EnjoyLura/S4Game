@@ -1,0 +1,43 @@
+{
+  "mode": "built-in image_gen",
+  "styleReference": "assets/resources/ux/ui_icon_skill_archer.png",
+  "assets": [
+    {
+      "id": "pyro_burn",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-78e60dfe-b7f2-4e34-baf6-2f6b6f159015.png",
+      "path": "assets/resources/ux/ui_card_pyro_burn_v1.png",
+      "uuid": "df8c25c6-e877-4e7f-95bf-bc250949cc27",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "c4aaa5c1f1b0db4501037003dd04bf1e43e5a87ba9dfed45ae6cb29b94fe40be",
+      "sourceBytesPreserved": true,
+      "opaqueInteriorFraction": 0.99998686325082,
+      "bytes": 2224258
+    },
+    {
+      "id": "pyro_linger",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-a92968aa-7424-4197-b457-dc29d7f747a4.png",
+      "path": "assets/resources/ux/ui_card_pyro_linger_v1.png",
+      "uuid": "53c52cd1-38ce-43ae-838c-2bebac03069d",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "33abb96ae31629ff8b70a6fea49f2fe81344027ae8e05a01eb59902ecde6036e",
+      "sourceBytesPreserved": true,
+      "opaqueInteriorFraction": 1.0,
+      "bytes": 2070919
+    },
+    {
+      "id": "pyro_meteors",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-2e02a48b-f2f5-4e71-b91b-9865339ec5d8.png",
+      "path": "assets/resources/ux/ui_card_pyro_meteors_v1.png",
+      "uuid": "57ac4129-0ad5-4f4a-ac6f-92988538e51b",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "9da0d15fdc8bd3d8a37ab3e5e027f54f35bc1c0f70b9602d2f5db1c97279dd29",
+      "sourceBytesPreserved": true,
+      "opaqueInteriorFraction": 1.0,
+      "bytes": 2207643
+    }
+  ],
+  "draftNote": "Earlier irregular transparent-cutout drafts not integrated; user asked for full circular paintings."
+}

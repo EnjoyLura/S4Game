@@ -1,0 +1,170 @@
+[
+  {
+    "id": "map-marsh",
+    "kind": "map",
+    "chapter": 4,
+    "file": "scenes/bg_campaign_marsh_v66.png",
+    "refs": [
+      "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_campaign_outpost_v1.png"
+    ],
+    "transparent": false,
+    "prompt": "Use case: stylized-concept. Asset: full-bleed tall portrait chapter campaign map background for a 2D fantasy mobile game, approximately 1:2 aspect ratio. Match the reference's readable illustrated map scale, confident dark outlines, chunky natural forms, painterly two-step shadows, rich restrained colors and elevated view. New original region: olive reed wetlands, shallow teal pools, tilted stilt huts, submerged roots and winding raised earth causeways. The whole image is a coherent traversable landscape, from a small entrance landmark near bottom to a large chapter-finale landmark in upper quarter. A broad continuous winding causeway/road connects TEN empty clearings; NO flags or numbers drawn into the art. Keep the same broad road progression as the reference. Approximate centers normalized from top-left: (.28,.88),(.61,.805),(.79,.72),(.50,.59),(.46,.50),(.26,.465),(.42,.385),(.61,.355),(.81,.315),(.56,.25). Road center should pass through these points with room for runtime checkpoint shields. Region-specific buildings, foliage, rocks, water or ruins frame the road, without obscuring the clearings. Tall phone composition fills edge-to-edge, continuous ground, no horizon or sky. Visually readable positive terrain, not overwhelming tiny details. No monsters, heroes, text, UI, icons, resource bars, border, fog overlay, miniature interface or watermark. Not a recolor of the reference: design this region's own landmarks and geology.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-35dee0ec-68c7-4113-be32-45e696be0081.png"
+  },
+  {
+    "id": "battle-marsh",
+    "kind": "battle",
+    "chapter": 4,
+    "file": "scenes/scene_marsh_v66.png",
+    "refs": [
+      "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/scene_1_1.png"
+    ],
+    "transparent": false,
+    "prompt": "Use case: stylized-concept. Asset: tall portrait seamless-feeling static BATTLEFIELD BACKGROUND for a 2D fantasy mobile defense game, approximately 9:16 aspect ratio. The reference is for elevated camera, scale of ground details, ink and painterly game rendering, and a broad unobstructed straight approach down the middle. New region: olive reed wetlands, shallow teal pools, tilted stilt huts, submerged roots and winding raised earth causeways. Make a wide clear central ground corridor covering the middle 70 percent of the image width, fully walkable and visually calm from the top edge to the bottom edge. Region-specific terrain details and landmarks concentrated along outer 15 percent margins; no barrier, bridge railing, cliffs or large props across the center. Top and bottom both continue beyond frame. View down at the ground from an elevated frontal game camera; absolutely no sky, horizon, perspective vanishing point, isometric diamond or scenic postcard view. Center ground uses a moderate-value color contrasting with creatures, readable small stones and faint wear, no heavy decorative pattern. All lava/water/chasms remain strictly at side edges; the center is a safe continuous solid surface. No castle wall across bottom because the game overlays its own wall. No heroes, creatures, text, interface, symbols, grid, border, particles, magical circle, bright central light or watermark. Full-bleed original landscape adapted to actual enemy movement, not a mere palette swap.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-56fee34a-680a-4a37-879d-d8fee1f0f7cb.png"
+  },
+  {
+    "id": "map-coast",
+    "kind": "map",
+    "chapter": 5,
+    "file": "scenes/bg_campaign_coast_v66.png",
+    "refs": [
+      "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_campaign_outpost_v1.png"
+    ],
+    "transparent": false,
+    "prompt": "Use case: stylized-concept. Asset: full-bleed tall portrait chapter campaign map background for a 2D fantasy mobile game, approximately 1:2 aspect ratio. Match the reference's readable illustrated map scale, confident dark outlines, chunky natural forms, painterly two-step shadows, rich restrained colors and elevated view. New original region: turquoise tidal coast, weathered shipwrecks, broken docks, shell-lined beaches, sandstone and bleached timber. The whole image is a coherent traversable landscape, from a small entrance landmark near bottom to a large chapter-finale landmark in upper quarter. A broad continuous winding causeway/road connects TEN empty clearings; NO flags or numbers drawn into the art. Keep the same broad road progression as the reference. Approximate centers normalized from top-left: (.28,.88),(.61,.805),(.79,.72),(.50,.59),(.46,.50),(.26,.465),(.42,.385),(.61,.355),(.81,.315),(.56,.25). Road center should pass through these points with room for runtime checkpoint shields. Region-specific buildings, foliage, rocks, water or ruins frame the road, without obscuring the clearings. Tall phone composition fills edge-to-edge, continuous ground, no horizon or sky. Visually readable positive terrain, not overwhelming tiny details. No monsters, heroes, text, UI, icons, resource bars, border, fog overlay, miniature interface or watermark. Not a recolor of the reference: design this region's own landmarks and geology.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-86e7a5d2-1546-493c-8166-09f9e1284978.png"
+  },
+  {
+    "id": "battle-coast",
+    "kind": "battle",
+    "chapter": 5,
+    "file": "scenes/scene_coast_v66.png",
+    "refs": [
+      "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/scene_1_1.png"
+    ],
+    "transparent": false,
+    "prompt": "Use case: stylized-concept. Asset: tall portrait seamless-feeling static BATTLEFIELD BACKGROUND for a 2D fantasy mobile defense game, approximately 9:16 aspect ratio. The reference is for elevated camera, scale of ground details, ink and painterly game rendering, and a broad unobstructed straight approach down the middle. New region: turquoise tidal coast, weathered shipwrecks, broken docks, shell-lined beaches, sandstone and bleached timber. Make a wide clear central ground corridor covering the middle 70 percent of the image width, fully walkable and visually calm from the top edge to the bottom edge. Region-specific terrain details and landmarks concentrated along outer 15 percent margins; no barrier, bridge railing, cliffs or large props across the center. Top and bottom both continue beyond frame. View down at the ground from an elevated frontal game camera; absolutely no sky, horizon, perspective vanishing point, isometric diamond or scenic postcard view. Center ground uses a moderate-value color contrasting with creatures, readable small stones and faint wear, no heavy decorative pattern. All lava/water/chasms remain strictly at side edges; the center is a safe continuous solid surface. No castle wall across bottom because the game overlays its own wall. No heroes, creatures, text, interface, symbols, grid, border, particles, magical circle, bright central light or watermark. Full-bleed original landscape adapted to actual enemy movement, not a mere palette swap.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-0794c8bb-ff9f-48b3-b4b9-cca2cd4bda41.png"
+  },
+  {
+    "id": "map-desert",
+    "kind": "map",
+    "chapter": 6,
+    "file": "scenes/bg_campaign_desert_v66.png",
+    "refs": [
+      "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_campaign_outpost_v1.png"
+    ],
+    "transparent": false,
+    "prompt": "Use case: stylized-concept. Asset: full-bleed tall portrait chapter campaign map background for a 2D fantasy mobile game, approximately 1:2 aspect ratio. Match the reference's readable illustrated map scale, confident dark outlines, chunky natural forms, painterly two-step shadows, rich restrained colors and elevated view. New original region: ochre sand dunes, tiny blue oasis, camel-free abandoned caravans, wind-eroded columns and angular sandstone. The whole image is a coherent traversable landscape, from a small entrance landmark near bottom to a large chapter-finale landmark in upper quarter. A broad continuous winding causeway/road connects TEN empty clearings; NO flags or numbers drawn into the art. Keep the same broad road progression as the reference. Approximate centers normalized from top-left: (.28,.88),(.61,.805),(.79,.72),(.50,.59),(.46,.50),(.26,.465),(.42,.385),(.61,.355),(.81,.315),(.56,.25). Road center should pass through these points with room for runtime checkpoint shields. Region-specific buildings, foliage, rocks, water or ruins frame the road, without obscuring the clearings. Tall phone composition fills edge-to-edge, continuous ground, no horizon or sky. Visually readable positive terrain, not overwhelming tiny details. No monsters, heroes, text, UI, icons, resource bars, border, fog overlay, miniature interface or watermark. Not a recolor of the reference: design this region's own landmarks and geology.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-d763f00e-6ca4-4e07-babe-ae6eedda6529.png"
+  },
+  {
+    "id": "battle-desert",
+    "kind": "battle",
+    "chapter": 6,
+    "file": "scenes/scene_desert_v66.png",
+    "refs": [
+      "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/scene_1_1.png"
+    ],
+    "transparent": false,
+    "prompt": "Use case: stylized-concept. Asset: tall portrait seamless-feeling static BATTLEFIELD BACKGROUND for a 2D fantasy mobile defense game, approximately 9:16 aspect ratio. The reference is for elevated camera, scale of ground details, ink and painterly game rendering, and a broad unobstructed straight approach down the middle. New region: ochre sand dunes, tiny blue oasis, camel-free abandoned caravans, wind-eroded columns and angular sandstone. Make a wide clear central ground corridor covering the middle 70 percent of the image width, fully walkable and visually calm from the top edge to the bottom edge. Region-specific terrain details and landmarks concentrated along outer 15 percent margins; no barrier, bridge railing, cliffs or large props across the center. Top and bottom both continue beyond frame. View down at the ground from an elevated frontal game camera; absolutely no sky, horizon, perspective vanishing point, isometric diamond or scenic postcard view. Center ground uses a moderate-value color contrasting with creatures, readable small stones and faint wear, no heavy decorative pattern. All lava/water/chasms remain strictly at side edges; the center is a safe continuous solid surface. No castle wall across bottom because the game overlays its own wall. No heroes, creatures, text, interface, symbols, grid, border, particles, magical circle, bright central light or watermark. Full-bleed original landscape adapted to actual enemy movement, not a mere palette swap.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-76aaeeb4-47e1-43d0-a122-ba73b042bd7e.png"
+  },
+  {
+    "id": "map-ruins",
+    "kind": "map",
+    "chapter": 7,
+    "file": "scenes/bg_campaign_ruins_v66.png",
+    "refs": [
+      "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_campaign_outpost_v1.png"
+    ],
+    "transparent": false,
+    "prompt": "Use case: stylized-concept. Asset: full-bleed tall portrait chapter campaign map background for a 2D fantasy mobile game, approximately 1:2 aspect ratio. Match the reference's readable illustrated map scale, confident dark outlines, chunky natural forms, painterly two-step shadows, rich restrained colors and elevated view. New original region: half-buried turquoise-and-gold ancient kingdom, broken geometric statues, ochre stone palace courts and old aqueducts. The whole image is a coherent traversable landscape, from a small entrance landmark near bottom to a large chapter-finale landmark in upper quarter. A broad continuous winding causeway/road connects TEN empty clearings; NO flags or numbers drawn into the art. Keep the same broad road progression as the reference. Approximate centers normalized from top-left: (.28,.88),(.61,.805),(.79,.72),(.50,.59),(.46,.50),(.26,.465),(.42,.385),(.61,.355),(.81,.315),(.56,.25). Road center should pass through these points with room for runtime checkpoint shields. Region-specific buildings, foliage, rocks, water or ruins frame the road, without obscuring the clearings. Tall phone composition fills edge-to-edge, continuous ground, no horizon or sky. Visually readable positive terrain, not overwhelming tiny details. No monsters, heroes, text, UI, icons, resource bars, border, fog overlay, miniature interface or watermark. Not a recolor of the reference: design this region's own landmarks and geology.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-e68521d2-e98e-491e-8eeb-6fe02b72c1bf.png"
+  },
+  {
+    "id": "battle-ruins",
+    "kind": "battle",
+    "chapter": 7,
+    "file": "scenes/scene_ruins_v66.png",
+    "refs": [
+      "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/scene_1_1.png"
+    ],
+    "transparent": false,
+    "prompt": "Use case: stylized-concept. Asset: tall portrait seamless-feeling static BATTLEFIELD BACKGROUND for a 2D fantasy mobile defense game, approximately 9:16 aspect ratio. The reference is for elevated camera, scale of ground details, ink and painterly game rendering, and a broad unobstructed straight approach down the middle. New region: half-buried turquoise-and-gold ancient kingdom, broken geometric statues, ochre stone palace courts and old aqueducts. Make a wide clear central ground corridor covering the middle 70 percent of the image width, fully walkable and visually calm from the top edge to the bottom edge. Region-specific terrain details and landmarks concentrated along outer 15 percent margins; no barrier, bridge railing, cliffs or large props across the center. Top and bottom both continue beyond frame. View down at the ground from an elevated frontal game camera; absolutely no sky, horizon, perspective vanishing point, isometric diamond or scenic postcard view. Center ground uses a moderate-value color contrasting with creatures, readable small stones and faint wear, no heavy decorative pattern. All lava/water/chasms remain strictly at side edges; the center is a safe continuous solid surface. No castle wall across bottom because the game overlays its own wall. No heroes, creatures, text, interface, symbols, grid, border, particles, magical circle, bright central light or watermark. Full-bleed original landscape adapted to actual enemy movement, not a mere palette swap.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-12904bbe-f277-4a80-9ce0-c4b236cc2d7b.png"
+  },
+  {
+    "id": "map-canyon",
+    "kind": "map",
+    "chapter": 8,
+    "file": "scenes/bg_campaign_canyon_v66.png",
+    "refs": [
+      "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_campaign_outpost_v1.png"
+    ],
+    "transparent": false,
+    "prompt": "Use case: stylized-concept. Asset: full-bleed tall portrait chapter campaign map background for a 2D fantasy mobile game, approximately 1:2 aspect ratio. Match the reference's readable illustrated map scale, confident dark outlines, chunky natural forms, painterly two-step shadows, rich restrained colors and elevated view. New original region: terracotta red sandstone canyons, narrow rope bridges, eagle nests, stepped cliff dwellings and dry streambeds. The whole image is a coherent traversable landscape, from a small entrance landmark near bottom to a large chapter-finale landmark in upper quarter. A broad continuous winding causeway/road connects TEN empty clearings; NO flags or numbers drawn into the art. Keep the same broad road progression as the reference. Approximate centers normalized from top-left: (.28,.88),(.61,.805),(.79,.72),(.50,.59),(.46,.50),(.26,.465),(.42,.385),(.61,.355),(.81,.315),(.56,.25). Road center should pass through these points with room for runtime checkpoint shields. Region-specific buildings, foliage, rocks, water or ruins frame the road, without obscuring the clearings. Tall phone composition fills edge-to-edge, continuous ground, no horizon or sky. Visually readable positive terrain, not overwhelming tiny details. No monsters, heroes, text, UI, icons, resource bars, border, fog overlay, miniature interface or watermark. Not a recolor of the reference: design this region's own landmarks and geology.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-bf15afea-3f00-4940-9ec5-3f12291a5372.png"
+  },
+  {
+    "id": "battle-canyon",
+    "kind": "battle",
+    "chapter": 8,
+    "file": "scenes/scene_canyon_v66.png",
+    "refs": [
+      "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/scene_1_1.png"
+    ],
+    "transparent": false,
+    "prompt": "Use case: stylized-concept. Asset: tall portrait seamless-feeling static BATTLEFIELD BACKGROUND for a 2D fantasy mobile defense game, approximately 9:16 aspect ratio. The reference is for elevated camera, scale of ground details, ink and painterly game rendering, and a broad unobstructed straight approach down the middle. New region: terracotta red sandstone canyons, narrow rope bridges, eagle nests, stepped cliff dwellings and dry streambeds. Make a wide clear central ground corridor covering the middle 70 percent of the image width, fully walkable and visually calm from the top edge to the bottom edge. Region-specific terrain details and landmarks concentrated along outer 15 percent margins; no barrier, bridge railing, cliffs or large props across the center. Top and bottom both continue beyond frame. View down at the ground from an elevated frontal game camera; absolutely no sky, horizon, perspective vanishing point, isometric diamond or scenic postcard view. Center ground uses a moderate-value color contrasting with creatures, readable small stones and faint wear, no heavy decorative pattern. All lava/water/chasms remain strictly at side edges; the center is a safe continuous solid surface. No castle wall across bottom because the game overlays its own wall. No heroes, creatures, text, interface, symbols, grid, border, particles, magical circle, bright central light or watermark. Full-bleed original landscape adapted to actual enemy movement, not a mere palette swap.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-9e6c0fb3-a209-4094-9e01-3befff5387b7.png"
+  },
+  {
+    "id": "map-mine",
+    "kind": "map",
+    "chapter": 9,
+    "file": "scenes/bg_campaign_mine_v66.png",
+    "refs": [
+      "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_campaign_outpost_v1.png"
+    ],
+    "transparent": false,
+    "prompt": "Use case: stylized-concept. Asset: full-bleed tall portrait chapter campaign map background for a 2D fantasy mobile game, approximately 1:2 aspect ratio. Match the reference's readable illustrated map scale, confident dark outlines, chunky natural forms, painterly two-step shadows, rich restrained colors and elevated view. New original region: slate-grey abandoned iron mines, copper rails, wooden pitheads, ochre ore carts, rust-red furnace fittings. The whole image is a coherent traversable landscape, from a small entrance landmark near bottom to a large chapter-finale landmark in upper quarter. A broad continuous winding causeway/road connects TEN empty clearings; NO flags or numbers drawn into the art. Keep the same broad road progression as the reference. Approximate centers normalized from top-left: (.28,.88),(.61,.805),(.79,.72),(.50,.59),(.46,.50),(.26,.465),(.42,.385),(.61,.355),(.81,.315),(.56,.25). Road center should pass through these points with room for runtime checkpoint shields. Region-specific buildings, foliage, rocks, water or ruins frame the road, without obscuring the clearings. Tall phone composition fills edge-to-edge, continuous ground, no horizon or sky. Visually readable positive terrain, not overwhelming tiny details. No monsters, heroes, text, UI, icons, resource bars, border, fog overlay, miniature interface or watermark. Not a recolor of the reference: design this region's own landmarks and geology.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-a49ba549-6271-4222-84b9-446de5425f28.png"
+  },
+  {
+    "id": "battle-mine",
+    "kind": "battle",
+    "chapter": 9,
+    "file": "scenes/scene_mine_v66.png",
+    "refs": [
+      "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/scene_1_1.png"
+    ],
+    "transparent": false,
+    "prompt": "Use case: stylized-concept. Asset: tall portrait seamless-feeling static BATTLEFIELD BACKGROUND for a 2D fantasy mobile defense game, approximately 9:16 aspect ratio. The reference is for elevated camera, scale of ground details, ink and painterly game rendering, and a broad unobstructed straight approach down the middle. New region: slate-grey abandoned iron mines, copper rails, wooden pitheads, ochre ore carts, rust-red furnace fittings. Make a wide clear central ground corridor covering the middle 70 percent of the image width, fully walkable and visually calm from the top edge to the bottom edge. Region-specific terrain details and landmarks concentrated along outer 15 percent margins; no barrier, bridge railing, cliffs or large props across the center. Top and bottom both continue beyond frame. View down at the ground from an elevated frontal game camera; absolutely no sky, horizon, perspective vanishing point, isometric diamond or scenic postcard view. Center ground uses a moderate-value color contrasting with creatures, readable small stones and faint wear, no heavy decorative pattern. All lava/water/chasms remain strictly at side edges; the center is a safe continuous solid surface. No castle wall across bottom because the game overlays its own wall. No heroes, creatures, text, interface, symbols, grid, border, particles, magical circle, bright central light or watermark. Full-bleed original landscape adapted to actual enemy movement, not a mere palette swap.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-62e68da5-b757-4e44-af57-57c9cc5c8ac9.png"
+  },
+  {
+    "id": "map-snow",
+    "kind": "map",
+    "chapter": 10,
+    "file": "scenes/bg_campaign_snow_v66.png",
+    "refs": [
+      "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/bg_campaign_outpost_v1.png"
+    ],
+    "transparent": false,
+    "prompt": "Use case: stylized-concept. Asset: full-bleed tall portrait chapter campaign map background for a 2D fantasy mobile game, approximately 1:2 aspect ratio. Match the reference's readable illustrated map scale, confident dark outlines, chunky natural forms, painterly two-step shadows, rich restrained colors and elevated view. New original region: blue-white snowy peaks, dark fir forests, frozen rivers, ice-cut mountain passes, old snowbound stone fortresses. The whole image is a coherent traversable landscape, from a small entrance landmark near bottom to a large chapter-finale landmark in upper quarter. A broad continuous winding causeway/road connects TEN empty clearings; NO flags or numbers drawn into the art. Keep the same broad road progression as the reference. Approximate centers normalized from top-left: (.28,.88),(.61,.805),(.79,.72),(.50,.59),(.46,.50),(.26,.465),(.42,.385),(.61,.355),(.81,.315),(.56,.25). Road center should pass through these points with room for runtime checkpoint shields. Region-specific buildings, foliage, rocks, water or ruins frame the road, without obscuring the clearings. Tall phone composition fills edge-to-edge, continuous ground, no horizon or sky. Visually readable positive terrain, not overwhelming tiny details. No monsters, heroes, text, UI, icons, resource bars, border, fog overlay, miniature interface or watermark. Not a recolor of the reference: design this region's own landmarks and geology.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-8a7063fa-0bf4-4683-b2a6-177e5c73ed87.png"
+  },
+  {
+    "id": "battle-snow",
+    "kind": "battle",
+    "chapter": 10,
+    "file": "scenes/scene_snow_v66.png",
+    "refs": [
+      "D:/AI/S4Game/KingdomWatch/assets/resources/scenes/scene_1_1.png"
+    ],
+    "transparent": false,
+    "prompt": "Use case: stylized-concept. Asset: tall portrait seamless-feeling static BATTLEFIELD BACKGROUND for a 2D fantasy mobile defense game, approximately 9:16 aspect ratio. The reference is for elevated camera, scale of ground details, ink and painterly game rendering, and a broad unobstructed straight approach down the middle. New region: blue-white snowy peaks, dark fir forests, frozen rivers, ice-cut mountain passes, old snowbound stone fortresses. Make a wide clear central ground corridor covering the middle 70 percent of the image width, fully walkable and visually calm from the top edge to the bottom edge. Region-specific terrain details and landmarks concentrated along outer 15 percent margins; no barrier, bridge railing, cliffs or large props across the center. Top and bottom both continue beyond frame. View down at the ground from an elevated frontal game camera; absolutely no sky, horizon, perspective vanishing point, isometric diamond or scenic postcard view. Center ground uses a moderate-value color contrasting with creatures, readable small stones and faint wear, no heavy decorative pattern. All lava/water/chasms remain strictly at side edges; the center is a safe continuous solid surface. No castle wall across bottom because the game overlays its own wall. No heroes, creatures, text, interface, symbols, grid, border, particles, magical circle, bright central light or watermark. Full-bleed original landscape adapted to actual enemy movement, not a mere palette swap.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-4ec7db5f-dc36-4d0f-8d10-1d4c04aaeb90.png"
+  }
+]

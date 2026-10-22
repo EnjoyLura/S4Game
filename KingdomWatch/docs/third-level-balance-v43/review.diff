@@ -1,0 +1,314 @@
+--- before/assets\scripts\battle\BattleDirector.ts
++++ after/assets\scripts\battle\BattleDirector.ts
+@@ -14,6 +14,7 @@
+ import { loadSave, saveSave } from '../core/SaveData';
+ import { firstLevelVictory, pendingBowLesson, skipBattleTeaching, teachingBattle } from '../core/FirstJourney';
+ import { pendingPyroSquadLesson, secondLevelVictory, secondTeachingBattle, skipSecondBattleTeaching } from '../core/SecondJourney';
++import { thirdLevelVictory, thirdTeachingBattle, skipThirdBattleTeaching } from '../core/ThirdJourney';
+ import { tutorialFocus } from '../ui/TutorialFocus';
+ import { starKey, squadList, unlockCodex, advanceUnlock, equipAgg, heroState, heroStats, heroBtAgg, keepHp, keepShield } from '../core/GameData';
+ import { grantStageMaterials } from '../core/StageLoot';
+@@ -92,6 +93,9 @@
+   private ultFocusShown = false;
+   private get teaching(): boolean { return teachingBattle(this.levelDef.id, this.levelDef.difficulty); }
+   private get secondTeaching(): boolean { return secondTeachingBattle(this.levelDef.id, this.levelDef.difficulty); }
++  private get thirdTeaching(): boolean {
++    return thirdTeachingBattle(this.levelDef.id, this.levelDef.difficulty) && this.heroes.some(h => h.id === 'pyro');
++  }
+ 
+   global: GlobalStats = { xpMul: 1, goldMul: 1, lineRegenPct: 0 };
+   stacks: CardStacks = {};
+@@ -345,18 +349,23 @@
+ 
+   /** Event/state driven: never pause inside damage, picking, loading or an ultimate presentation. */
+   private offerUltimateLesson(): void {
+-    const second = this.secondTeaching;
+-    if ((!this.teaching && !second) || this.ultFocusShown || (second ? loadSave().secondJourney!.ultCast : loadSave().firstJourney!.ultCast)
++    const second = this.secondTeaching, third = this.thirdTeaching;
++    const journey = third ? loadSave().thirdJourney! : second ? loadSave().secondJourney! : loadSave().firstJourney!;
++    if ((!this.teaching && !second && !third) || this.ultFocusShown || journey.ultCast
+       || this.state !== 'running' || this.pickQueue > 0 || this.pendingWin || this.ultShowT > 0
+       || this.ultimateActive || this.gm.panelOpen || this.mobIntroOpen || this.mgr.aliveCount < 1) return;
+-    const index = this.heroes.findIndex(h => h.id === (second ? 'sniper' : 'archer'));
++    const index = this.heroes.findIndex(h => h.id === (third ? 'pyro' : second ? 'sniper' : 'archer'));
+     if (index < 0 || !this.heroes[index].ultReady) return;
+     const target = this.hud.ultimateTarget(index);
+     if (!target) return;
+     const focus = tutorialFocus(this.coachRoot, target,
+-      second ? '猎杀时刻已就绪！点击重弩手大招，穿透前方敌群。' : '箭雨已就绪！点击发光的大招按钮，清扫敌群。',
++      third ? '陨石天降已就绪！点击火法师大招，轰击敌群并留下灼烧区域。'
++        : second ? '猎杀时刻已就绪！点击重弩手大招，穿透前方敌群。' : '箭雨已就绪！点击发光的大招按钮，清扫敌群。',
+       () => { this.state = 'running'; this.hud.activateUltimate(index); },
+-      () => { if (second) skipSecondBattleTeaching(); else skipBattleTeaching(); this.state = 'running'; });
++      () => {
++        if (third) skipThirdBattleTeaching(); else if (second) skipSecondBattleTeaching(); else skipBattleTeaching();
++        this.state = 'running';
++      });
+     if (focus) { this.panels.closeAll(); this.ultFocusShown = true; this.state = 'tutorial'; }
+   }
+ 
+@@ -430,6 +439,10 @@
+           const sniper = this.heroes.find(h => h.id === 'sniper');
+           if (sniper) { sniper.charge = sniper.chargeGoal; loadSave().secondJourney!.freeChargeUsed = true; }
+         }
++        if (this.thirdTeaching && card.id === 'pyro_unlock_ult' && !loadSave().thirdJourney!.freeChargeUsed) {
++          const pyro = this.heroes.find(h => h.id === 'pyro');
++          if (pyro) { pyro.charge = pyro.chargeGoal; loadSave().thirdJourney!.freeChargeUsed = true; }
++        }
+         this.pickQueue--;
+         saveSave();
+         this.hud.sync(); // 选择解锁卡后立即刷新图标，即使后面还有排队三选一。
+@@ -438,21 +451,25 @@
+         else { this.panels.closeAll(true); this.state = 'running'; }
+         if (this.teaching && card.id === 'archer_unlock_skill')
+           this.hud.showBanner('强化箭矢已学会，冷却结束后会自动释放。', 5);
++        if (this.thirdTeaching && card.id === 'pyro_unlock_skill')
++          this.hud.showBanner('烈焰爆裂已学会，会自动轰击敌群。', 5);
+       },
+       onRefreshRequest: () => {
+         showOffer();
+       },
+     };
+     const showOffer = (): void => {
+-      const lessons = this.secondTeaching ? ['sniper_unlock_skill', 'sniper_unlock_ult'] : ['serial', 'archer_unlock_skill', 'archer_unlock_ult'];
++      const lessons = this.thirdTeaching ? ['pyro_unlock_skill', 'pyro_unlock_ult']
++        : this.secondTeaching ? ['sniper_unlock_skill', 'sniper_unlock_ult'] : ['serial', 'archer_unlock_skill', 'archer_unlock_ult'];
+       const desired = lessons[Math.min(this.pickNumber - 1, lessons.length - 1)];
+       const missing = lessons.filter(id => !(this.stacks[id] > 0));
+       const lessonId = missing.includes(desired) ? desired : missing[0];
+-      const lesson = (this.teaching || this.secondTeaching) && pool.find(c => c.id === lessonId && canTakeCard(c, this.stacks));
++      const lesson = (this.teaching || this.secondTeaching || this.thirdTeaching) && pool.find(c => c.id === lessonId && canTakeCard(c, this.stacks));
+       const cards = draw3(pool, this.stacks);
+       opts.recommendedId = lesson ? lesson.id : undefined;
+-      opts.onSkipTeaching = (this.teaching || this.secondTeaching) ? () => {
+-        if (this.secondTeaching) skipSecondBattleTeaching(); else skipBattleTeaching(); showOffer();
++      opts.onSkipTeaching = (this.teaching || this.secondTeaching || this.thirdTeaching) ? () => {
++        if (this.thirdTeaching) skipThirdBattleTeaching(); else if (this.secondTeaching) skipSecondBattleTeaching(); else skipBattleTeaching();
++        showOffer();
+       } : undefined;
+       this.panels.showPick(lesson ? [lesson, ...cards.filter(c => c.id !== lesson.id)].slice(0, 3) : cards, this.stacks, opts);
+     };
+@@ -499,6 +516,9 @@
+       }
+       if (this.secondTeaching && h.id === 'sniper') {
+         loadSave().secondJourney!.ultCast = true; saveSave();
++      }
++      if (this.thirdTeaching && h.id === 'pyro') {
++        loadSave().thirdJourney!.ultCast = true; saveSave();
+       }
+       return 'ok';
+     }
+@@ -601,6 +621,8 @@
+     const firstGift = firstLevelVictory(this.levelDef.id, this.levelDef.difficulty, sv.stars[sk] || 0);
+     if (firstGift) loot.equipment.push(firstGift);
+     if (secondLevelVictory(this.levelDef.id, this.levelDef.difficulty)) loot.heroes = ['pyro'];
++    const thirdGift = thirdLevelVictory(this.levelDef.id, this.levelDef.difficulty, sv.stars[sk] || 0);
++    if (thirdGift) loot.equipment.push(thirdGift);
+     sv.stars[sk] = Math.max(sv.stars[sk] || 0, stars);
+     if (this.levelDef.id === '1-2') sv.speedUnlocked = true;
+     saveSave();
+--- before/assets\scripts\battle\Monster.ts
++++ after/assets\scripts\battle\Monster.ts
+@@ -18,10 +18,10 @@
+ const ATK_ANIM = 0.34;
+ /** 统一静态/序列帧显示高度，保持脚底锚点与碰撞半径不变。 */
+ const MOB_ART_HEIGHT = 3.85;
+-/** Put the entire silhouette just below the top HUD, including the art's foot offset.
+- * Keep the shared offscreen SPAWN_Y unchanged: ultimates use it as their launch height. */
++/** Start the art's feet just beyond the physical top edge, then walk into view.
++ * Do not use the HUD inset or shared SPAWN_Y (also used by ultimate presentations). */
+ function mobEntryY(radius: number): number {
+-  return LO.half - LO.notchTop - 124 - radius * (MOB_ART_HEIGHT - .82);
++  return LO.half + radius * .82 + 10;
+ }
+ 
+ export type MonsterHitCtx = {
+@@ -118,7 +118,7 @@
+     this.hunterMarkVisual = false;
+     this.baseX = x;
+     this.node.removeFromParent();
+-    this.node.setPosition(x, mobEntryY(def.radius) - Math.random() * 24, 0);
++    this.node.setPosition(x, mobEntryY(def.radius) + Math.random() * 12, 0);
+     this.node.setScale(1, 1, 1);
+     this.node.angle = 0;
+     this.lastTint = '';
+@@ -837,7 +837,7 @@
+     if (m.immobilized) return;
+     const p = m.node.position;
+     let nx = Math.max(-355, Math.min(355, p.x + dx));
+-    let ny = Math.min(mobEntryY(m.def.radius), p.y + dy);
++    let ny = Math.min(mobEntryY(m.def.radius) + 12, p.y + dy);
+     if (m.state === 'hold') ny = p.y; // 停位怪不上下挤
+     m.node.setPosition(nx, ny, 0);
+     if (m.state === 'move') m.baseX = nx;
+--- before/assets\scripts\config\LevelDifficulty.ts
++++ after/assets\scripts\config\LevelDifficulty.ts
+@@ -3,6 +3,7 @@
+ import { campaignStage } from './Campaign';
+ import { FIRST_LEVEL_WAVES } from './FirstLevel';
+ import { SECOND_LEVEL_WAVES } from './SecondLevel';
++import { THIRD_LEVEL_WAVES } from './ThirdLevel';
+ 
+ export interface MaterialReward { id: string; n: number; }
+ export interface GearWeight { id: string; weight: number; }
+@@ -73,8 +74,10 @@
+   }, [] as GearWeight[]).filter(g => g.weight > 0) : [];
+   const first = base.id === '1-1' && d === 0;
+   const second = base.id === '1-2' && d === 0;
++  const third = base.id === '1-3' && d === 0;
+   return cache[key] = { ...base, difficulty: d, baseGold: Math.round(base.baseGold * DIFFICULTIES[d].goldMul),
+-    waves: first ? FIRST_LEVEL_WAVES : second ? SECOND_LEVEL_WAVES : waves, fixedWaves: first || second, materials, gearPool };
++    waves: first ? FIRST_LEVEL_WAVES : second ? SECOND_LEVEL_WAVES : third ? THIRD_LEVEL_WAVES : waves,
++    fixedWaves: first || second || third, materials, gearPool };
+ }
+ /** One equipment roll per real kill; elite bonus is explicit in the preview. */
+ export function equipmentDropChance(difficulty: number, mob?: Pick<MobDef, 'elite' | 'boss'>): number {
+--- before/assets\scripts\core\SaveData.ts
++++ after/assets\scripts\core\SaveData.ts
+@@ -30,6 +30,7 @@
+   /** Versioned first-session teaching; missing on an old save never opts it in. */
+   firstJourney?: FirstJourney;
+   secondJourney?: SecondJourney;
++  thirdJourney?: ThirdJourney;
+   gold: number;
+   diamonds: number;
+   /** 星数表：'1-1' -> 1~3 */
+@@ -69,6 +70,17 @@
+   weaponSystemVersion?: number;
+ }
+ 
++export interface ThirdJourney {
++  version: 1;
++  enabled: boolean;
++  skipped: boolean;
++  battleDone: boolean;
++  freeChargeUsed: boolean;
++  ultCast: boolean;
++  rewardClaimed: boolean;
++  rewardUid?: string;
++}
++
+ export interface SecondJourney {
+   version: 1;
+   enabled: boolean;
+@@ -131,6 +143,12 @@
+     skipped: false, upgradeDone: false, upgradeSkipped: false, battleDone: !!sv.stars['1-2'],
+     freeChargeUsed: false, ultCast: false, rewardClaimed: false, squadDone: false, squadSkipped: false,
+   };
++  const thirdMissing = !sv.thirdJourney;
++  if (thirdMissing) sv.thirdJourney = {
++    version: 1, enabled: sv.firstJourney!.enabled && !sv.firstJourney!.skipped && !sv.stars['1-3'],
++    skipped: false, battleDone: !!sv.stars['1-3'], freeChargeUsed: false, ultCast: false,
++    rewardClaimed: !!sv.stars['1-3'],
++  };
+   // 老档/缺英雄补默认（未拥有的英雄 hero 状态也建好，商店解锁只翻 owned）
+   if (!sv.heroes) sv.heroes = {};
+   for (const hid of ['archer', 'sniper', 'pyro', 'volt', 'mora']) {
+@@ -147,7 +165,7 @@
+   // One owned instance per slot; never replace a valid, compatible existing weapon.
+   if (!Array.isArray(sv.equips)) sv.equips = [];
+   const used = new Set<string>();
+-  let changed = sv.weaponSystemVersion !== 1 || journeyMissing || secondMissing;
++  let changed = sv.weaponSystemVersion !== 1 || journeyMissing || secondMissing || thirdMissing;
+   // Backfill the free 1-2 reward on old cleared saves. Ownership only: never overwrite growth or auto-deploy.
+   if (sv.stars['1-2'] && !sv.secondJourney!.rewardClaimed) {
+     sv.heroes.pyro.owned = true;
+--- before/assets\scripts\ui\LevelLootPreview.ts
++++ after/assets\scripts\ui\LevelLootPreview.ts
+@@ -6,6 +6,7 @@
+ import { pyroRewardAvailable } from '../core/SecondJourney';
+ import { StageLootSummary } from '../core/StageLoot';
+ import { firstBowAvailable } from '../core/FirstJourney';
++import { firstStaffAvailable } from '../core/ThirdJourney';
+ import { C, label, N } from './UIKit';
+ import { COMIC, comicArt, comicButton, comicDialog, comicDialogContent, comicPlate, comicSurface } from './ComicUI';
+ import { gearArt, heroPortrait } from './HeroComic';
+@@ -36,6 +37,7 @@
+   onSelect: (id: string) => void, height = 76, campaign = false): void {
+   const entries = [{ id: 'coin', n: level.baseGold }, ...level.materials];
+   if (firstBowAvailable(level.id, level.difficulty)) entries.push({ id: 'wpn_bow', n: 1 });
++  if (firstStaffAvailable(level.id, level.difficulty)) entries.push({ id: 'wpn_green_staff', n: 1 });
+   if (pyroRewardAvailable(level.id, level.difficulty)) entries.push({ id: 'hero_pyro', n: 1 });
+   const gap = 12, w = (width - gap * (entries.length - 1)) / entries.length;
+   entries.forEach((row, i) => {
+@@ -70,6 +72,7 @@
+ export function stageLootPreview(parent: Node, h: number, level: ChallengeDef, modalParent: Node): void {
+   const y = (top: number): number => h / 2 - top;
+   const entries = [{ id: 'coin', n: level.baseGold }, ...level.materials];
++  if (firstStaffAvailable(level.id, level.difficulty)) entries.push({ id: 'wpn_green_staff', n: 1 });
+   if (pyroRewardAvailable(level.id, level.difficulty)) entries.push({ id: 'hero_pyro', n: 1 });
+   entries.forEach((row, i) => {
+     const x = (i - (entries.length - 1) / 2) * 150;
+@@ -99,7 +102,8 @@
+       { size: 15, color: COMIC.sub, w: 448, h: 24, shrink: true });
+   } else label(parent, -65, y(181), firstBowAvailable(level.id, level.difficulty)
+     ? '首次通关必得猎风长弓，回营后穿戴' : pyroRewardAvailable(level.id, level.difficulty)
+-    ? '首胜免费获得火法师，回营手动编队' : '普通难度不掉装备，挑战精英 / 地狱获取', { size: 19, color: COMIC.sub, w: 480, h: 38, shrink: true });
++    ? '首胜免费获得火法师，回营手动编队' : firstStaffAvailable(level.id, level.difficulty)
++    ? '首次通关必得林语法杖，直接存入背包' : '普通难度不掉装备，挑战精英 / 地狱获取', { size: 19, color: COMIC.sub, w: 480, h: 38, shrink: true });
+   comicButton(parent, 241, y(h - 25), 138, 38, '掉落详情', () => showStageLootDetails(modalParent, level), { size: 18, tone: 'gold' });
+ }
+ 
+@@ -132,7 +136,8 @@
+     });
+   } else label(list, 0, -210, firstBowAvailable(level.id, level.difficulty)
+     ? '首次通关必得绿色猎风长弓\n奖励存入背包，回营后自行穿戴' : pyroRewardAvailable(level.id, level.difficulty)
+-    ? '首胜免费获得火法师\n回营后手动加入第三个出战位置' : '普通难度不掉落装备\n挑战精英 / 地狱可获得概率装备',
++    ? '首胜免费获得火法师\n回营后手动加入第三个出战位置' : firstStaffAvailable(level.id, level.difficulty)
++    ? '首次通关必得绿色林语法杖\n火法师适用，奖励直接存入背包' : '普通难度不掉落装备\n挑战精英 / 地狱可获得概率装备',
+     { size: 21, color: COMIC.sub, w: 570, h: 76, lineHeight: 32 });
+   label(root, 0, -top + 68, rows ? '点击落地装备拾取 · 30个战斗秒后自动拾取' : '点击金币或材料图标，查看奖励详情',
+     { size: 18, color: COMIC.text, w: 590, h: 28 });
+@@ -155,6 +160,8 @@
+   if (!d && !mat && id !== 'coin') return;
+   const source = DIFFICULTIES[level.difficulty].name + ' · ' + level.id;
+   const firstBow = id === 'wpn_bow' && firstBowAvailable(level.id, level.difficulty);
++  const firstStaff = id === 'wpn_green_staff' && firstStaffAvailable(level.id, level.difficulty);
++  const firstGift = firstBow || firstStaff;
+   const groups: { title: string; rows: DetailRow[] }[] = [];
+   const amount = id === 'coin' ? level.baseGold : level.materials.find(row => row.id === id)?.n || 0;
+   let delivery: string;
+@@ -166,12 +173,12 @@
+     const weight = level.gearPool.find(row => row.id === id)?.weight || 0;
+     const share = total > 0 ? weight / total : 0;
+     const exactPct = (value: number): string => Number((value * 100).toFixed(4)) + '%';
+-    groups.push(firstBow ? { title: '首胜奖励', rows: [['获得条件', '首次通关普通1-1'], ['获得数量', '必得1件 · 仅一次']] } : { title: '掉落概率', rows: [
++    groups.push(firstGift ? { title: '首胜奖励', rows: [['获得条件', '首次通关普通' + level.id], ['获得数量', '必得1件 · 仅一次']] } : { title: '掉落概率', rows: [
+       ['每次击杀普通怪', exactPct(equipmentDropChance(level.difficulty) * share)],
+       ['每次击杀精英怪', exactPct(equipmentDropChance(level.difficulty, { elite: true }) * share)],
+       ['掉落后抽取占比', exactPct(share)],
+     ] });
+-    delivery = (firstBow ? '首次通关后直接存入背包。' : share ? '' : '当前关卡难度不掉落此装备。') + (WEAPONS[id]
++    delivery = (firstGift ? '首次通关后直接存入背包。' : share ? '' : '当前关卡难度不掉落此装备。') + (WEAPONS[id]
+       ? weaponUsers(id) + '。装上后继承该英雄的武器培养等级。'
+       : '拾取后收入背包，可在英雄页穿戴和强化。');
+   } else {
+@@ -201,7 +208,7 @@
+   detailOverview(root, d ? d.name : id === 'coin' ? '基础金币' : mat.name,
+     d ? gearQuality(d.quality).name + ' · ' + KIND_NAME[d.kind] + ' · 初始 Lv.1' : id === 'coin' ? '金币 · 通关结算' : '材料 · 通关结算',
+     d && WEAPONS[id] ? weaponUsers(id) : undefined,
+-    d ? firstBow ? '普通1-1首胜奖励，必得一件，仅领取一次。' : source + ' 掉落。装备成功掉落后，按装备池权重抽取。' : id === 'coin' ? '基础金币 ' + amount + '+' : mat.desc,
++    d ? firstGift ? '普通' + level.id + '首胜奖励，必得一件，仅领取一次。' : source + ' 掉落。装备成功掉落后，按装备池权重抽取。' : id === 'coin' ? '基础金币 ' + amount + '+' : mat.desc,
+     (panel, x, y, side) => {
+       if (id === 'coin') comicArt(panel, x, y, side - 20, side - 20, 'comic_coin_v1');
+       else {
+--- before/assets\scripts\ui\pages\LevelsPage.ts
++++ after/assets\scripts\ui\pages\LevelsPage.ts
+@@ -13,6 +13,7 @@
+ import { GameAudio } from '../../core/GameAudio';
+ import { flow } from '../../core/Flow';
+ import { firstBowAvailable } from '../../core/FirstJourney';
++import { firstStaffAvailable } from '../../core/ThirdJourney';
+ import { finishSecondEntryLesson, pendingSecondEntryLesson, pendingUpgradeLesson, pyroRewardAvailable } from '../../core/SecondJourney';
+ import { tutorialFocus } from '../TutorialFocus';
+ import { whenUIArtReady } from '../UIArtReady';
+@@ -360,7 +361,8 @@
+           { size: 17, font: 'body', color: CAMPAIGN_TEXT.body, w: 660, h: 28 });
+         } else mainLabel(equipment,0,-equipmentH/2,firstBowAvailable(challenge.id, challenge.difficulty)
+           ? '首次通关必得绿色猎风长弓\n回营后在英雄页穿戴' : pyroRewardAvailable(challenge.id, challenge.difficulty)
+-          ? '首次通关免费获得火法师\n回营后手动加入第三个出战位置' : '普通难度不掉落装备\n挑战精英 / 地狱解锁装备掉落',
++          ? '首次通关免费获得火法师\n回营后手动加入第三个出战位置' : firstStaffAvailable(challenge.id, challenge.difficulty)
++          ? '首次通关必得绿色林语法杖\n火法师适用，直接存入背包' : '普通难度不掉落装备\n挑战精英 / 地狱解锁装备掉落',
+         { size: 19, font: 'body', color: CAMPAIGN_TEXT.secondary, w: 660, h: 68, lineHeight: 32 });
+       const startBattle = (): void => {
+         if (!open || closing || enteringBattle()) return;

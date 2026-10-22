@@ -1,0 +1,44 @@
+{
+  "originalFilesChecked": 1900,
+  "changedExistingFiles": [
+    "assets/scripts/config/Cards.ts"
+  ],
+  "addedFiles": [],
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "allCardDefinitionsAndEffectsUnchanged": true,
+  "allOriginalMediaUnchanged": true,
+  "productionResourceFilesUnchanged": 1826,
+  "previousGroupWeights": {
+    "stats": 0.3,
+    "combat": 2,
+    "support": 1
+  },
+  "groupWeights": {
+    "stats": 0.1,
+    "combat": 3,
+    "support": 1
+  },
+  "sameRarityCombatToStatsRatio": 30,
+  "rarityWeights": {
+    "white": 0.6,
+    "blue": 0.3,
+    "purple": 0.1,
+    "gold": 0.05
+  },
+  "sourceReview": "Only OFFER_GROUP_WEIGHT and its comment changed; pool, ownership, unlocks, caps, lessons, effects and weighted unique sampling remain identical.",
+  "experienceAnswer": "Settlement XP is an earned-in-battle summary used for run-level card picks, not persistent currency. Hero upgrades consume gold. No XP changes made.",
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-card-offer-weights-v54-20261019-015658",
+  "published": false,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "priorPreviewFilesPreserved": 793,
+  "entryVersion": "1792346060",
+  "game": "https://kingdom-watch.pages.dev/?v=card-offer-weights-v54-1792346060",
+  "manualAcceptance": "Static source/assets/type/build/HTTP only; no tests, game, browser, combat simulation or audio. User manual acceptance.",
+  "includedInPublishedRelease": {
+    "release": "v55",
+    "game": "https://kingdom-watch.pages.dev/?v=clear-currencies-v55-1792346363",
+    "deployment": "https://577b41e3.kingdom-watch.pages.dev"
+  }
+}

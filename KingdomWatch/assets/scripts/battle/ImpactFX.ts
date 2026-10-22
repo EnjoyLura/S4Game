@@ -2,7 +2,7 @@
  * Ordinary hits have no expanding halo. One bounded pool and one Graphics node.
  */
 import { Color, Graphics, Layers, Node } from 'cc';
-import { FireVFX } from './FireVFX';
+import { BurningTarget, FireVFX } from './FireVFX';
 import { ArcherVFX } from './ArcherVFX';
 import { FrostVFX } from './FrostVFX';
 import { FrostProjectileVFX } from './FrostProjectileVFX';
@@ -13,6 +13,7 @@ import { VoltUltimateVFX } from './VoltUltimateVFX';
 import { SniperUltimateVFX } from './SniperUltimateVFX';
 
 interface Impact { x: number; y: number; life: number; max: number; radius: number; color: string; angle: number; heavy: boolean; hero: string; kind: 'contact' | 'cast' | 'blast'; }
+interface CombatCue { kind: string; x: number; y: number; tx: number; ty: number; radius: number; life: number; max: number; }
 
 export const HERO_FX: Record<string, string> = {
   archer: '#F8D886', sniper: '#ABD9F4', pyro: '#FFAD54', volt: '#D2A4FF', mora: '#A6E9F6',
@@ -22,6 +23,8 @@ export class ImpactFX {
   private g: Graphics;
   private active: Impact[] = [];
   private free: Impact[] = [];
+  private cues: CombatCue[] = [];
+  private cueFree: CombatCue[] = [];
   private tint = new Color();
   private dirty = false;
   private fire: FireVFX;
@@ -49,6 +52,7 @@ export class ImpactFX {
     node.setParent(parent);
     this.g = node.addComponent(Graphics);
     for (let i = 0; i < 32; i++) this.free.push({ x: 0, y: 0, life: 0, max: 1, radius: 1, color: '', angle: 0, heavy: false, hero: '', kind: 'contact' });
+    for (let i = 0; i < 40; i++) this.cueFree.push({ kind: '', x: 0, y: 0, tx: 0, ty: 0, radius: 1, life: 0, max: 1 });
   }
 
   beginProjectileFrame(): void {
@@ -87,12 +91,18 @@ export class ImpactFX {
   fireProjectile(x: number, y: number, vx: number, vy: number, size: number): boolean {
     return this.fire.projectile(x, y, vx, vy, size);
   }
-  fireCraters(areas: readonly { x: number; y: number; t: number }[], radius: number, clock: number): boolean {
+  fireCraters(areas: readonly { x: number; y: number; t: number; life?: number; radius?: number }[], radius: number, clock: number): boolean {
     return this.fire.craters(areas, radius, clock);
   }
 
+  syncBurns(targets: readonly BurningTarget[], dt: number): void { this.fire.syncBurns(targets, dt); }
+
   frostDomain(x: number, y: number, radius: number, duration: number): void {
     this.frost.domain(x, y, radius, duration);
+  }
+
+  frostGround(areas: readonly { x: number; y: number; radius: number; t: number; life: number }[]): void {
+    this.frost.groundAreas(areas);
   }
 
   frostUlt(targets: readonly FrostUltTarget[]): void { this.frostUltimate.cast(targets); }
@@ -135,6 +145,63 @@ export class ImpactFX {
     if (p) { p.kind = 'blast'; p.radius = Math.min(60, radius * 0.45); p.max = p.life = 0.28; }
   }
 
+  /** Shared code-only role feedback. Low-priority cues never evict a break/heal already playing. */
+  combatFeedback(kind: string, x: number, y: number, radius: number, tx = x, ty = y): void {
+    if (kind === 'burnBurst') { this.blast(x, y, 'pyro', radius); return; }
+    if ((kind === 'rush' || kind === 'armorHit' || kind === 'wardHit') && this.cueFree.length <= 8) return;
+    const p = this.cueFree.pop();
+    if (!p) return;
+    p.kind = kind; p.x = x; p.y = y; p.tx = tx; p.ty = ty; p.radius = radius;
+    p.max = p.life = kind === 'armorHit' || kind === 'wardHit' ? .16 : kind === 'rush' ? .24 : kind === 'heal' ? .55 : .4;
+    this.cues.push(p); this.dirty = true;
+  }
+
+  private drawCombatCues(dt: number): void {
+    const g = this.g;
+    for (let i = this.cues.length - 1; i >= 0; i--) {
+      const p = this.cues[i]; p.life -= dt;
+      if (p.life <= 0) { this.cues.splice(i, 1); this.cueFree.push(p); continue; }
+      const t = 1 - p.life / p.max, fade = 1 - t;
+      if (p.kind === 'heal') {
+        this.tint.set(117, 229, 124, Math.round(170 * fade)); g.strokeColor = this.tint; g.lineWidth = 2;
+        const travel = Math.min(1, t * 2.8), tail = Math.max(0, travel - .35);
+        g.moveTo(p.x + (p.tx - p.x) * tail, p.y + (p.ty - p.y) * tail);
+        g.lineTo(p.x + (p.tx - p.x) * travel, p.y + (p.ty - p.y) * travel); g.stroke();
+        if (t > .25) {
+          const y = p.ty + t * 24, size = 5 + 2 * fade;
+          g.lineWidth = 3; g.moveTo(p.tx - size, y); g.lineTo(p.tx + size, y);
+          g.moveTo(p.tx, y - size); g.lineTo(p.tx, y + size); g.stroke();
+        }
+      } else if (p.kind === 'rush') {
+        this.tint.set(231, 196, 139, Math.round(150 * fade)); g.strokeColor = this.tint; g.lineWidth = 2 * fade + .5;
+        for (let k = 0; k < 3; k++) {
+          const x = p.x + (k - 1) * p.radius * .65, y = p.y + t * 28 + k * 4;
+          g.moveTo(x, y); g.lineTo(x + (k - 1) * 4, y + 18 + 12 * fade); g.stroke();
+        }
+      } else {
+        const magic = p.kind === 'wardBreak' || p.kind === 'wardHit';
+        const breaking = p.kind === 'armorBreak' || p.kind === 'wardBreak', group = p.kind === 'groupKill';
+        const interrupt = p.kind === 'interrupt';
+        this.tint.set(group || interrupt ? 250 : magic ? 206 : 202,
+          group ? 211 : interrupt ? 225 : magic ? 167 : 225,
+          group ? 132 : interrupt ? 154 : magic ? 255 : 235, Math.round(235 * fade));
+        g.fillColor = this.tint; g.strokeColor = this.tint; g.lineWidth = 1.8;
+        const count = breaking ? 6 : group ? 7 : 3;
+        const spread = (breaking ? p.radius * 1.5 : group ? 52 : 14) * (t + .2);
+        for (let k = 0; k < count; k++) {
+          const a = k * Math.PI * 2 / count + .25, dx = Math.cos(a), dy = Math.sin(a);
+          const x = p.x + dx * spread, y = p.y + dy * spread - (breaking ? 36 * t * t : 0);
+          if (breaking) {
+            const s = 3 + 3 * fade;
+            g.moveTo(x + s, y); g.lineTo(x, y + s * .6); g.lineTo(x - s, y - s); g.close(); g.fill();
+          } else {
+            g.moveTo(x, y); g.lineTo(x + dx * (5 + fade * 10), y + dy * (5 + fade * 10)); g.stroke();
+          }
+        }
+      }
+    }
+  }
+
   tick(dt: number): void {
     this.fire.tick(dt);
     this.archer.tick(dt);
@@ -144,7 +211,7 @@ export class ImpactFX {
     this.volt.tick(dt);
     this.voltUltimate.tick(dt);
     this.sniperUltimate.tick(dt);
-    if (!this.dirty && this.active.length === 0) return;
+    if (!this.dirty && this.active.length === 0 && this.cues.length === 0) return;
     this.g.clear(); this.dirty = false;
     for (let i = this.active.length - 1; i >= 0; i--) {
       const p = this.active[i]; p.life -= dt;
@@ -191,5 +258,6 @@ export class ImpactFX {
       }
       if (p.hero !== 'mora') this.g.stroke();
     }
+    this.drawCombatCues(dt);
   }
 }

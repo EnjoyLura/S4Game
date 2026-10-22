@@ -1,0 +1,75 @@
+{
+  "inputs": [
+    {
+      "id": "worker",
+      "canonical_input": "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-walk-v2\\source-cutout.png",
+      "sha256": "4f26e4ab16233614070ef75f84eaff677af918609041bdebbbdda5adad3b82bf",
+      "copied_sha256": "4f26e4ab16233614070ef75f84eaff677af918609041bdebbbdda5adad3b82bf",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "legacy_atlas": "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-walk-v2\\goblin-code-walk-atlas.png"
+    },
+    {
+      "id": "snow_wolf",
+      "canonical_input": "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\sources\\snow_wolf.png",
+      "sha256": "231f6e11a593d07eba24eb549e14338185a88b2a76dbd49cfc8da9e608324f13",
+      "copied_sha256": "231f6e11a593d07eba24eb549e14338185a88b2a76dbd49cfc8da9e608324f13",
+      "source_size": [
+        1024,
+        1024
+      ],
+      "legacy_atlas": "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\snow_wolf\\atlas.png"
+    },
+    {
+      "id": "rift_hound",
+      "canonical_input": "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\sources\\rift_hound.png",
+      "sha256": "d1ea57aa2f917bd6f7a07f0326152374fe6af9f83f1985d1e46f7d31c71b6881",
+      "copied_sha256": "d1ea57aa2f917bd6f7a07f0326152374fe6af9f83f1985d1e46f7d31c71b6881",
+      "source_size": [
+        1024,
+        1024
+      ],
+      "legacy_atlas": "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\rift_hound\\atlas.png"
+    },
+    {
+      "id": "eagle",
+      "canonical_input": "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\sources\\eagle-cutout.png",
+      "sha256": "ff85009a227ea3d64cec3cdb5c2224e606d406bb0fcbeb80fb79bfb4d126e67d",
+      "copied_sha256": "ff85009a227ea3d64cec3cdb5c2224e606d406bb0fcbeb80fb79bfb4d126e67d",
+      "source_size": [
+        1536,
+        1024
+      ],
+      "legacy_atlas": "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\eagle\\atlas.png"
+    },
+    {
+      "id": "bat",
+      "canonical_input": "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\sources\\bat.png",
+      "sha256": "e9935a4349fc47bf952642ff5bae20bc2b978b5138b2901e208e2a4ee6723e85",
+      "copied_sha256": "e9935a4349fc47bf952642ff5bae20bc2b978b5138b2901e208e2a4ee6723e85",
+      "source_size": [
+        1024,
+        1024
+      ],
+      "legacy_atlas": "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\bat\\atlas.png"
+    }
+  ],
+  "protected_legacy_files": {
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-walk-v2\\source-cutout.png": "4f26e4ab16233614070ef75f84eaff677af918609041bdebbbdda5adad3b82bf",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-walk-v2\\goblin-code-walk-atlas.png": "10aa3b13d72e5c074f250ef85fb8ac393ac9eb4813647ad339cc9197e4583075",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-walk-v2\\animate.py": "0fd75ff59cb5f7227a8b54e0a471ebfaf8a03e61f2a03feba3eaac7b471ebafc",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\sources\\snow_wolf.png": "231f6e11a593d07eba24eb549e14338185a88b2a76dbd49cfc8da9e608324f13",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\snow_wolf\\atlas.png": "47d2385ffed2223d9a2611c5ab173f5b59def09a90fd99fc1691ad9229c0f9cc",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\animate.py": "6539fb6e7d1d2984cbf11c4e1de0f6ed2689ecf47f255ade4345f4e6d8a7e9a3",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\sources\\rift_hound.png": "d1ea57aa2f917bd6f7a07f0326152374fe6af9f83f1985d1e46f7d31c71b6881",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\rift_hound\\atlas.png": "33981bef3d07b1b144b36ff7def43c470a01c22178ff6c70bcf465f7ac55a5d1",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\sources\\eagle-cutout.png": "ff85009a227ea3d64cec3cdb5c2224e606d406bb0fcbeb80fb79bfb4d126e67d",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\eagle\\atlas.png": "66c3d303d78eaad4cdb9edffdd4733c15842b47f2fd16429b81d6ed6a02a43a9",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\sources\\bat.png": "e9935a4349fc47bf952642ff5bae20bc2b978b5138b2901e208e2a4ee6723e85",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\bat\\atlas.png": "412ba623fc97ab10edc5300700150b099824c84e17487b9d282124e08ac4a1ad"
+  },
+  "method_reference": "D:/AI/S5Game/docs/artifacts/eagle-flight-v1/bake_eagle_flight.py",
+  "method_reference_sha256": "348e62a951b7ee1a93c1f7f34422d522931badd132176f366c8e5f12e4963b27"
+}

@@ -6,7 +6,6 @@ import { artSprite } from './Ux';
 import { battleArtSprite } from './BattlePanelSkin';
 import { COMIC, comicButtonControl } from './ComicUI';
 import { StageLootSummary } from '../core/StageLoot';
-import { showCollectedLoot } from './LevelLootPreview';
 import { SettlementMotion } from './SettlementMotion';
 import { battleRewardPanel } from './BattleRewardPanel';
 
@@ -52,11 +51,11 @@ export function settlementFrame(parent: Node, outcome: Outcome, level: string, s
 
 export function playSettlement(root: Node): void { root.getComponent(SettlementMotion)?.play(); }
 
-export function settlementRewards(parent: Node, outcome: Outcome, gold: number, xp: number, note: string, loot?: StageLootSummary,
+export function settlementRewards(parent: Node, outcome: Outcome, gold: number, diamonds: number, note: string, loot?: StageLootSummary,
   animation: { intro?: boolean; goldFrom?: number } = {}): void {
   battleRewardPanel(parent, {
-    top: 122, heading: outcome === 'win' ? '通关奖励' : '已获得奖励', gold, xp, loot, note,
-    onInspect: loot ? () => showCollectedLoot(parent.parent || parent, loot) : undefined,
+    top: 122, heading: outcome === 'win' ? '通关奖励' : '已获得奖励', gold, diamonds, loot, note,
+    detailParent: parent.parent || parent, source: outcome === 'win' ? '通关奖励' : '已获得奖励',
     onCounter: (kind, number, target) => parent.getComponent(SettlementMotion)?.addReward(number, target,
       !!animation.intro || (kind === 'gold' && animation.goldFrom !== undefined && animation.goldFrom !== gold),
       kind === 'gold' ? animation.goldFrom || 0 : 0),

@@ -1,0 +1,23 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-render-diagnostics-v33-20261018-163025",
+  "entryVersion": "1792312220",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-hit-mix-v32-20261018-155650",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=render-diagnostics-v33-1792312220",
+  "diagnostic": "https://kingdom-watch.pages.dev/?renderdiag=1&v=render-diagnostics-v33-1792312220",
+  "priorPreviewFilesPreserved": 793,
+  "originalFilesChecked": 851,
+  "changedExistingFiles": [
+    "assets/scripts/Boot.ts"
+  ],
+  "typeDiagnosticsUnchanged": true,
+  "compiledDiagnosticFieldsPresent": true,
+  "noDprViewportFontSafetyOrAudioOverrides": true,
+  "manualAcceptance": "User manual; no game/browser/audio playback performed",
+  "deployment": "https://6f406c98.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "htmlStatus": 200,
+  "publishedEntry": "index.02ba5.js?v=1792312220"
+}

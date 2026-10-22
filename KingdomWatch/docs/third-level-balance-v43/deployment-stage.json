@@ -1,0 +1,59 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-third-level-balance-v43-20261018-210255",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "entryVersion": "1792328523",
+  "game": "https://kingdom-watch.pages.dev/?v=third-level-balance-v43-1792328523",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-post-bow-guide-v42-20261018-204814",
+  "originalFilesChecked": 1830,
+  "changedExistingFiles": [
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/config/LevelDifficulty.ts",
+    "assets/scripts/core/SaveData.ts",
+    "assets/scripts/ui/LevelLootPreview.ts",
+    "assets/scripts/ui/pages/LevelsPage.ts"
+  ],
+  "addedFiles": [
+    "assets/scripts/config/ThirdLevel.ts",
+    "assets/scripts/config/ThirdLevel.ts.meta",
+    "assets/scripts/core/ThirdJourney.ts",
+    "assets/scripts/core/ThirdJourney.ts.meta"
+  ],
+  "priorPreviewFilesPreserved": 793,
+  "typeDiagnosticsUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "allOriginalMediaUnchanged": true,
+  "ultimateLaunchHeightsUnchanged": true,
+  "normalThirdLevel": {
+    "waves": 8,
+    "workers": 204,
+    "slingers": 12,
+    "riders": 8,
+    "elites": 4,
+    "staticQueueEndSeconds": 239.35,
+    "combatTargetMinutes": [
+      4,
+      5
+    ],
+    "baseline": "Natural archer/sniper/pyro roster and earned green bow; no required extra cultivation",
+    "measured": false,
+    "firstWinWeapon": "wpn_green_staff",
+    "campEquipTutorial": false
+  },
+  "monsterEntry": {
+    "allStages": true,
+    "artFootAbovePhysicalTopMin": 10,
+    "artFootAbovePhysicalTopMax": 22
+  },
+  "scope": "Normal 1-3 waves, skippable pyro teaching, one-time charge, first-win staff; short offscreen entry for all monsters.",
+  "manualAcceptance": "No tests/game/browser/simulation/audio playback. User manual interaction/visual/balance acceptance.",
+  "deployment": "https://1c08274b.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.235e3.js?v=1792328523",
+    "finalUrl": "https://kingdom-watch.pages.dev/?v=third-level-balance-v43-1792328523"
+  }
+}

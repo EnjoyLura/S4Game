@@ -1,0 +1,19 @@
+{
+  "python_syntax": "passed",
+  "powershell_syntax": "passed",
+  "production_build": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-github-pages-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-github-pages-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "whole_command_skip_build": "passed",
+  "unchanged_release_republish": "same commit 220ff1fa4dcea1d7aa33523b029dd0bab24a8e83, previous files retained",
+  "browser_or_game_started": false
+}

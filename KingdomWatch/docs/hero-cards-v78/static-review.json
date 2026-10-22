@@ -1,0 +1,25 @@
+{
+  "scope": "Static source, AST, type diagnostic comparison and SHA-256 only",
+  "original_assets": 2080,
+  "changed_files": [
+    "assets/scripts/battle/FireVFX.ts",
+    "assets/scripts/battle/FrostVFX.ts",
+    "assets/scripts/battle/Hero.ts",
+    "assets/scripts/battle/ImpactFX.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/battle/Projectile.ts",
+    "assets/scripts/config/Cards.ts"
+  ],
+  "added_assets": [],
+  "removed_assets": [],
+  "all_other_asset_bytes_unchanged": true,
+  "typescript_existing_diagnostics": 10,
+  "typescript_new_diagnostics": 0,
+  "source_repository_unchanged": {
+    "head": "a02434d54d6077b9a86c3b667c94c21690d540b3",
+    "stage_entries_sha256": "60432a810983c486a0e02239482c10220586b6fce2f4e802fb94def3411a7a71",
+    "staged_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "game_browser_tests_simulation_audio_or_wasm_started": false,
+  "manual_phone_gameplay_pending": true
+}

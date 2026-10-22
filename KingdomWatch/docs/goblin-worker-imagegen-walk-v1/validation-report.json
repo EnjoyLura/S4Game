@@ -1,0 +1,17 @@
+{
+  "frameCount": 8,
+  "uniquePixelHashes": 8,
+  "sourceAlphaZeroFraction": 0.5231402101506287,
+  "sourceBoundsSafeAtAlpha64": true,
+  "gif": {
+    "frameCount": 8,
+    "durationMs": 800
+  },
+  "medianOriginalHeight": 426.0,
+  "browserOrGameStarted": false,
+  "visualAnimationApproval": "pending_user_review",
+  "missingLocalReferences": [],
+  "originalRuntimeFilesUnchanged": true,
+  "zipIntegrityError": null,
+  "zipFileCount": 23
+}

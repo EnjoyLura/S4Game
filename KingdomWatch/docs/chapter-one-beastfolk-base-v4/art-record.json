@@ -1,0 +1,31 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in",
+  "asset": "Shared blue beastfolk base: infantry and stone thrower comparison",
+  "prompt": "prompt.txt",
+  "references": [
+    {
+      "path": "C:/Users/user/AppData/Local/Temp/codex-clipboard-a4d0c27f-f5d6-4d6d-846c-c582994868c4.png",
+      "role": "Creature mother design and drawing style: blue wolf rider",
+      "sha256": "e5a56b43ded8c22261f6db25f64a6c6533f0d6b78395d783fe747c41313e9c8f"
+    }
+  ],
+  "output": {
+    "file": "beastfolk-infantry-thrower.png",
+    "generated_source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-bc89d5f9-5868-4a79-8668-821d762ce714.png",
+    "sha256": "30698ebc32cdfc6747002d82ee6befce9bb03796212175b4aa5149ae89a375fd",
+    "original_bytes_preserved": true
+  },
+  "game_integrated": false,
+  "user_visual_approval": "pending",
+  "visual_inspection": {
+    "characters": 2,
+    "names": [
+      "兽族散兵",
+      "兽族投手"
+    ],
+    "shared_identity": "Shared blue skin, yellow eyes, pointed ears, short broad muzzle, red scarf and brown leather equipment.",
+    "role_readability": "Left has a short curved blade; right holds a stone and carries a stone bag, without a sling.",
+    "limitations": "Concept comparison, not an animation master. Faces and bodies are slightly turned, background has faint variation and the blade has a tight left margin. Toe count is not exactly the requested three; anatomical details and animation-safe framing need a separate master after design approval."
+  }
+}

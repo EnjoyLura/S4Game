@@ -1,0 +1,82 @@
+[
+  {
+    "key": "glove_storm",
+    "id": "glove_storm",
+    "name": "风暴护手",
+    "kind": "glove",
+    "quality": 3,
+    "tier": 1,
+    "stats": {
+      "atkSpd": 0.2,
+      "range": 50
+    },
+    "focus": "攻速",
+    "description": "风暴纹护手偏重攻速，兼顾攻击范围，适合高频攻击。",
+    "art": "shop_comic_v1/glove_storm_v57",
+    "price": 6000,
+    "unlock": "1-4",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_glove_wind_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 风暴护手. Subject: A pair of compact dark navy leather gauntlet gloves with layered silver finger plates, angular gold lightning-shaped wrist guards and a small blue gem on each cuff. No sparks, no magic particles, no body inside. Rarity: purple epic, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-d295897e-fa95-4a70-a334-7bd3657ae369.png"
+  },
+  {
+    "key": "glove_farstar",
+    "id": "glove_farstar",
+    "name": "远星护腕",
+    "kind": "glove",
+    "quality": 3,
+    "tier": 1,
+    "stats": {
+      "atkSpd": 0.12,
+      "range": 110
+    },
+    "focus": "攻击范围",
+    "description": "远星长护腕偏重攻击范围，兼顾攻速，帮助英雄更早接敌。",
+    "art": "shop_comic_v1/glove_farstar_v57",
+    "price": 6000,
+    "unlock": "1-4",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_glove_wind_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 远星护腕. Subject: A pair of long ranger bracers with attached half-finger gloves, midnight green leather, overlapping polished bronze forearm plates, a small turquoise four-point star gem at each cuff, visibly elongated silhouette. No hands or arms inside. Rarity: purple epic, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-9b5fc9ef-a61b-46ee-9be2-55d2f1d28379.png"
+  },
+  {
+    "key": "armor_flameseal",
+    "id": "armor_flameseal",
+    "name": "焰印长袍",
+    "kind": "armor",
+    "quality": 3,
+    "tier": 1,
+    "stats": {
+      "skillDmg": 54,
+      "chargeEff": 0.08
+    },
+    "focus": "技能伤害",
+    "description": "刻有焰印的长袍，偏重技能伤害，兼顾充能效率；各职业均可穿戴。",
+    "art": "shop_comic_v1/armor_flameseal_v57",
+    "price": 6000,
+    "unlock": "1-4",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_armor_forest_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 焰印长袍. Subject: An empty sleeveless fantasy robe torso with short split skirt, deep crimson red and charcoal cloth, broad ornate antique gold edging, stylized large flame sigil embroidered on chest, small warm orange gem clasp. No wearer or mannequin, no ground. Rarity: purple epic, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-0054168d-abd9-4279-89ef-ab8f72ec581d.png"
+  },
+  {
+    "key": "armor_moonwell",
+    "id": "armor_moonwell",
+    "name": "月泉祭衣",
+    "kind": "armor",
+    "quality": 3,
+    "tier": 1,
+    "stats": {
+      "skillDmg": 32,
+      "chargeEff": 0.2
+    },
+    "focus": "充能效率",
+    "description": "月泉祭衣偏重充能效率，兼顾技能伤害；各职业均可穿戴。",
+    "art": "shop_comic_v1/armor_moonwell_v57",
+    "price": 6000,
+    "unlock": "1-4",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_armor_forest_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 月泉祭衣. Subject: An empty sleeveless fantasy caster vestment torso with short split skirt, deep indigo and muted ivory cloth, pale gold crescent collar and flowing broad cyan wave embroidery, turquoise teardrop gem clasp. No wearer or mannequin, no ground. Rarity: purple epic, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-34891a0c-7e15-40ef-b21d-8588fe833576.png"
+  }
+]

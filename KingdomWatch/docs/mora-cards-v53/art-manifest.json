@@ -1,0 +1,110 @@
+{
+  "mode": "built-in image_gen",
+  "styleReference": "assets/resources/ux/ui_icon_skill_archer.png",
+  "assets": [
+    {
+      "id": "mora_spell",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-5dade824-55c1-443c-aa3e-417bb56751e7.png",
+      "path": "assets/resources/ux/ui_card_mora_spell_v2.png",
+      "uuid": "8e43fbe9-3fdd-46d7-bdc3-9989dec9d2e5",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "f9dcc5049500b52e6eb54a3e760de38cea56d78ac628fed58ff0d09f94066e9c",
+      "sourceBytesPreserved": true,
+      "opaqueInteriorFraction": 1.0,
+      "opaqueBeyondCircleFraction": 0.0,
+      "bytes": 2034703
+    },
+    {
+      "id": "mora_range",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-6bb58ee7-0b06-40f7-b970-0766dcd9f766.png",
+      "path": "assets/resources/ux/ui_card_mora_range_v2.png",
+      "uuid": "1ccda0c8-420d-479a-b8c6-b0ba15802ccf",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "90c0e2063e54458efd5a4592aaf9f099ab7cc3bac2b7822e99fcdd70c92fd6e3",
+      "sourceBytesPreserved": true,
+      "opaqueInteriorFraction": 0.9995993291500085,
+      "opaqueBeyondCircleFraction": 0.0,
+      "bytes": 2439859
+    },
+    {
+      "id": "mora_chill",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-97218045-1de4-4aca-86d8-c525de7c2bab.png",
+      "path": "assets/resources/ux/ui_card_mora_chill_v2.png",
+      "uuid": "c6c97e3c-9dd5-4111-b3ab-ef5177e4c55c",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "ec2b58e63bd78a8330538f4e342d08875e2cd4d31020871d1906ce3fa8371d0a",
+      "sourceBytesPreserved": true,
+      "opaqueInteriorFraction": 0.9999978105418034,
+      "opaqueBeyondCircleFraction": 0.0,
+      "bytes": 2215905
+    },
+    {
+      "id": "mora_freeze",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-f4b0a181-59b1-4526-b87f-ce76a7e605d1.png",
+      "path": "assets/resources/ux/ui_card_mora_freeze_v2.png",
+      "uuid": "52bb8a5a-e5c4-43a0-9a43-8b879e79f0c9",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "4d17393b46897d7343092bf964cb875b9ca43d773f66f5d0678810d71f981b7b",
+      "sourceBytesPreserved": true,
+      "opaqueInteriorFraction": 0.9996639181668104,
+      "opaqueBeyondCircleFraction": 0.0,
+      "bytes": 2184191
+    },
+    {
+      "id": "mora_brittle",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-73ce30a9-56e3-4e95-ade7-041de97c6afc.png",
+      "path": "assets/resources/ux/ui_card_mora_brittle_v2.png",
+      "uuid": "d621a2c3-4fc0-4b13-acc6-e876702dcec9",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "a17d76e7d2bcf166c86c2006c384c536a95f8a567d8160cd8d9747a841a17363",
+      "sourceBytesPreserved": true,
+      "opaqueInteriorFraction": 0.9990902801192817,
+      "opaqueBeyondCircleFraction": 0.0,
+      "bytes": 2404468
+    },
+    {
+      "id": "mora_war",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-0f7c00d9-90a0-4293-a753-0f9e218cc90b.png",
+      "path": "assets/resources/ux/ui_card_mora_war_v2.png",
+      "uuid": "aef79ccf-c946-4e20-b6b3-6af8d4a3731b",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "a8376e7e1ecdc6c87e20b0e390f7e57a946b56f40be89c26038c811a99494895",
+      "sourceBytesPreserved": true,
+      "opaqueInteriorFraction": 1.0,
+      "opaqueBeyondCircleFraction": 0.0,
+      "bytes": 2253897
+    },
+    {
+      "id": "mora_glacier",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-86a9336d-b21c-4ffd-8cb9-8c84d6b7e616.png",
+      "path": "assets/resources/ux/ui_card_mora_glacier_v2.png",
+      "uuid": "ccfe1f5c-1fd1-44dd-8a20-1491b4f3ea1f",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "b196e2c428b8e66b14a61a7c918f273ac6cc12be1ccb45e3dc12e2e9390e766b",
+      "sourceBytesPreserved": true,
+      "opaqueInteriorFraction": 0.9999989052709016,
+      "opaqueBeyondCircleFraction": 0.0,
+      "bytes": 2401034
+    },
+    {
+      "id": "mora_freeze_linger",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-b7d7640a-5b3c-47b3-9ddd-28d291f9141d.png",
+      "path": "assets/resources/ux/ui_card_mora_freeze_linger_v1.png",
+      "uuid": "0fcee8ef-7638-4587-84ab-b37cd0dbe77c",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "27a5dc1879e344d3b1cab660582480f1df712b14281ec7df0903f44abfd1fdde",
+      "sourceBytesPreserved": true,
+      "opaqueInteriorFraction": 1.0,
+      "opaqueBeyondCircleFraction": 0.0,
+      "bytes": 2330806
+    }
+  ]
+}

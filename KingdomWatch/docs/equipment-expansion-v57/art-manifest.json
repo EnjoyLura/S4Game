@@ -1,0 +1,421 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "id": "helm_ironridge",
+      "name": "铁脊战盔",
+      "kind": "helm",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-0c6ac076-4184-4944-b991-b3045726061f.png",
+      "path": "assets/resources/ux/shop_comic_v1/helm_ironridge_v57.png",
+      "uuid": "cc58de3b-3c07-418c-8c6d-ec00c7ee91bd",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "0d0db9ce8e080826d581d08baa091ee16c68e3632c006bf50fd62d56dcb98570",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.13237639553429026,
+        0.046251993620414676,
+        0.08931419457735247,
+        0.03907496012759171
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1285095
+    },
+    {
+      "id": "helm_hawkguard",
+      "name": "鹰卫兜帽",
+      "kind": "helm",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-e1984a54-e93f-4d72-a77c-bb39de47c8c8.png",
+      "path": "assets/resources/ux/shop_comic_v1/helm_hawkguard_v57.png",
+      "uuid": "190ef127-ea62-4e46-8755-055c4f1c7018",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "e4f62a86d172785ff10b593c0531e03197fe315a93ebd71e0c25734cdf6c0b7b",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.08692185007974482,
+        0.046251993620414676,
+        0.08373205741626795,
+        0.0430622009569378
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1192780
+    },
+    {
+      "id": "acc_sunfang",
+      "name": "日牙护符",
+      "kind": "acc",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-b2f2eebc-8aa3-40a1-a792-840953c54bd5.png",
+      "path": "assets/resources/ux/shop_comic_v1/acc_sunfang_v57.png",
+      "uuid": "f00c36b2-ca6c-4ec1-8941-b43e756aebc5",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "8ef26d9c7ef0f8fd77d2de579ee37196f90c3cf22ebede4b9da6ae355f9ac998",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.2535885167464115,
+        0.023125996810207338,
+        0.17942583732057416,
+        0.07974481658692185
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 672231
+    },
+    {
+      "id": "acc_crimson",
+      "name": "赤晶指环",
+      "kind": "acc",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-f1fcaafa-ad25-4961-9f2a-e0c4e93e8cf0.png",
+      "path": "assets/resources/ux/shop_comic_v1/acc_crimson_v57.png",
+      "uuid": "a10e1ab6-8d03-4e2a-9d81-af2c6707910a",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "d088d113df43281cb19b86a255391ec237492b360410880ddcc41b30fbbdce7e",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.16188197767145135,
+        0.05901116427432217,
+        0.1594896331738437,
+        0.07017543859649122
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1103997
+    },
+    {
+      "id": "glove_swift",
+      "name": "游隼手套",
+      "kind": "glove",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-5a5669d1-44f2-441e-87b8-e139000f94b8.png",
+      "path": "assets/resources/ux/shop_comic_v1/glove_swift_v57.png",
+      "uuid": "84f06434-68f7-42d5-9033-5759e5191202",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "311550dd5a56462a9a38aaa631f816f6fe36d0e3a18ecaa9392b6b3cfc5fd444",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.04704944178628389,
+        0.10845295055821372,
+        0.03508771929824561,
+        0.09409888357256778
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1243368
+    },
+    {
+      "id": "glove_longwatch",
+      "name": "远望护手",
+      "kind": "glove",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-a8245d96-b02e-473e-afa9-95c2f267bcc4.png",
+      "path": "assets/resources/ux/shop_comic_v1/glove_longwatch_v57.png",
+      "uuid": "7462053d-f38a-479f-a061-4705b6e89e0d",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "5aae4f218df2eee7f268dc99d258460db29f9e81b231cb278184dadefc005c3e",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.09728867623604466,
+        0.10845295055821372,
+        0.05263157894736842,
+        0.09011164274322168
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1155961
+    },
+    {
+      "id": "armor_cinder",
+      "name": "余烬法衣",
+      "kind": "armor",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-5efdb406-3a67-4e0c-9654-9e4cd4d26bd6.png",
+      "path": "assets/resources/ux/shop_comic_v1/armor_cinder_v57.png",
+      "uuid": "dee514b5-6e2c-4c91-b477-25a4f7f3ca53",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "a83f724d163cdf8e20bc05433ec99b23adff4e1ddfab1696d5369cd3ad336a85",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.12121212121212122,
+        0.046251993620414676,
+        0.06618819776714513,
+        0.04066985645933014
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1282959
+    },
+    {
+      "id": "armor_tide",
+      "name": "潮纹外衣",
+      "kind": "armor",
+      "quality": 2,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-a600aeb3-7183-4839-b739-20634b07e274.png",
+      "path": "assets/resources/ux/shop_comic_v1/armor_tide_v57.png",
+      "uuid": "cd2bfada-4805-4b58-84b7-ad9dc8a3afd6",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "797105da128a58b59febfa04e9b6413cc298004f53ee1a01dbb490282c199e7e",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.15869218500797447,
+        0.04066985645933014,
+        0.10606060606060606,
+        0.03508771929824561
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1374391
+    },
+    {
+      "id": "helm_lioncrest",
+      "name": "狮脊重盔",
+      "kind": "helm",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-07676713-0c95-4c59-a7a9-e1e1977281e1.png",
+      "path": "assets/resources/ux/shop_comic_v1/helm_lioncrest_v57.png",
+      "uuid": "bcfd2b86-663a-4c73-9c53-dbd3a3703460",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "e5d80d4a888bbf9ef7f87de725c7126c0cfcbb006ec84eaccf8695cf980d6f7c",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.1331738437001595,
+        0.046251993620414676,
+        0.049441786283891544,
+        0.03827751196172249
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1236966
+    },
+    {
+      "id": "helm_nightfeather",
+      "name": "夜羽兜帽",
+      "kind": "helm",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-7e87d58d-d631-4316-80a3-1926d34db54a.png",
+      "path": "assets/resources/ux/shop_comic_v1/helm_nightfeather_v57.png",
+      "uuid": "7dfcff6d-852b-417c-923f-bd56b694b415",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "f05533709eead258176c2a79df6c2cb7ab3ced9f4e397a8ec034f04a8be3dab7",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.06778309409888357,
+        0.05661881977671451,
+        0.06778309409888357,
+        0.07974481658692185
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1225777
+    },
+    {
+      "id": "acc_stareye",
+      "name": "星瞳吊坠",
+      "kind": "acc",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-89cfea26-8ecb-4b1a-bd09-994ef3b6c78b.png",
+      "path": "assets/resources/ux/shop_comic_v1/acc_stareye_v57.png",
+      "uuid": "7d82524d-b3df-4091-b7d9-05d1b3d95c02",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "1d970ac3f39951375585087b841f5d560be1d34d2cdc1d0f6b6b0318fb823e35",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.19298245614035087,
+        0.05263157894736842,
+        0.16985645933014354,
+        0.06618819776714513
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 778847
+    },
+    {
+      "id": "acc_dragonscale",
+      "name": "龙鳞指环",
+      "kind": "acc",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-0ebff776-77cc-4d4a-b360-a0ff8890c593.png",
+      "path": "assets/resources/ux/shop_comic_v1/acc_dragonscale_v57.png",
+      "uuid": "fad31408-8805-4721-b5d1-36dd5c9bfced",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "95c4815eaaf632ef7599a2b2e7b11ea62b8cf83fefd7d1f5c284bd8874770dc6",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.1547049441786284,
+        0.06618819776714513,
+        0.14832535885167464,
+        0.07974481658692185
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1103803
+    },
+    {
+      "id": "glove_storm",
+      "name": "风暴护手",
+      "kind": "glove",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-d295897e-fa95-4a70-a334-7bd3657ae369.png",
+      "path": "assets/resources/ux/shop_comic_v1/glove_storm_v57.png",
+      "uuid": "0757a34d-a4b8-4b54-ac4e-ce3221367fdc",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "2275da6496d41477f97f9c0dcd7a256d2a3707a5e7628f4df152a37d892cee81",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.04066985645933014,
+        0.11562998405103668,
+        0.0215311004784689,
+        0.06220095693779904
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1421813
+    },
+    {
+      "id": "glove_farstar",
+      "name": "远星护腕",
+      "kind": "glove",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-9b5fc9ef-a61b-46ee-9be2-55d2f1d28379.png",
+      "path": "assets/resources/ux/shop_comic_v1/glove_farstar_v57.png",
+      "uuid": "a9c1dd41-c03c-4288-b70d-7d2c0fb19152",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "5a2f601c639b0ce028e4d610b7bd4dea9636fc0b51488482b5020dd778966b26",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.06060606060606061,
+        0.05661881977671451,
+        0.04864433811802233,
+        0.06937799043062201
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1142022
+    },
+    {
+      "id": "armor_flameseal",
+      "name": "焰印长袍",
+      "kind": "armor",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-0054168d-abd9-4279-89ef-ab8f72ec581d.png",
+      "path": "assets/resources/ux/shop_comic_v1/armor_flameseal_v57.png",
+      "uuid": "406c6ede-e69b-43aa-a21c-64249bf03448",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "2b3d7fa6a838c82a506ae830abc73c24543bc6211e0f5a83014d220b61468e7e",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.15789473684210525,
+        0.02711323763955343,
+        0.10207336523125997,
+        0.027910685805422646
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1406138
+    },
+    {
+      "id": "armor_moonwell",
+      "name": "月泉祭衣",
+      "kind": "armor",
+      "quality": 3,
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-34891a0c-7e15-40ef-b21d-8588fe833576.png",
+      "path": "assets/resources/ux/shop_comic_v1/armor_moonwell_v57.png",
+      "uuid": "f8249c13-05df-4634-94ee-3a257a018790",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "7b2d320393692236a315858c0c63117f3ced7a9a31da36b1c1667f3d64edefc7",
+      "sourceBytesPreserved": true,
+      "normalizedMargins": [
+        0.11244019138755981,
+        0.04704944178628389,
+        0.10845295055821372,
+        0.03987240829346093
+      ],
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "bytes": 1449523
+    }
+  ]
+}

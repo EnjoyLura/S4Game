@@ -1,0 +1,37 @@
+--- before/assets/scripts/battle/Monster.ts
++++ after/assets/scripts/battle/Monster.ts
+@@ -20,6 +20,8 @@
+ const ATK_ANIM = 0.34;
+ /** 统一静态/序列帧显示高度，保持脚底锚点与碰撞半径不变。 */
+ const MOB_ART_HEIGHT = 3.85;
++/** Stable opaque top of existing walk clips; ignore their transparent headroom. */
++const MOB_ANIM_TOP: Record<string, number> = { goblin_brute: .84, goblin_shaman: .92, wolf_rider: .92 };
+ /** Start the art's feet just beyond the physical top edge, then walk into view.
+  * Do not use the HUD inset or shared SPAWN_Y (also used by ultimate presentations). */
+ function mobEntryY(radius: number): number {
+@@ -301,6 +303,12 @@
+   get x(): number { return this.node.position.x; }
+   get y(): number { return this.node.position.y; }
+   get depthY(): number { return this.y - this.def.radius * 0.82; }
++  /** Local top for role icons, using the same foot offset and height as the art. */
++  get headTop(): number {
++    const r = this.def.radius;
++    const ratio = this.anims?.get(this.def.id)?.walk.length ? MOB_ANIM_TOP[this.def.id] || 1 : 1;
++    return -r * .82 + r * MOB_ART_HEIGHT * ratio;
++  }
+   get isBoss(): boolean { return !!this.def.boss || this.def.id === 'goblin_king'; }
+   get immobilized(): boolean { return this.freezeT > 0 || this.stunT > 0; }
+ 
+--- before/assets/scripts/battle/MonsterTraits.ts
++++ after/assets/scripts/battle/MonsterTraits.ts
+@@ -153,9 +153,7 @@
+       this.cue = n.addComponent(Graphics);
+     }
+     const g = this.cue; g.node.active = true; g.clear();
+-    const top = o.def.radius * 3.2 + 12;
+-    this.tint.set(24, 31, 39, 220); g.fillColor = this.tint;
+-    if (armor || healer || preparing || charging) { g.roundRect(-14, top - 4, 28, 25, 5); g.fill(); }
++    const top = o.headTop + 6;
+     if (armor) {
+       this.tint.set(186, 210, 224, 255); g.strokeColor = this.tint; g.lineWidth = 2;
+       g.moveTo(-7, top + 14); g.lineTo(7, top + 14); g.lineTo(6, top + 4);

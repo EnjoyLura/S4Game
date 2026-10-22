@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex"><title>王国守望</title>
+<style>html,body{margin:0;height:100%;background:#14222c;color:#fff5d8;font:17px system-ui,sans-serif}main{max-width:34em;margin:auto;padding:18vh 24px 30px}h1{font-size:26px}p{line-height:1.7;overflow-wrap:anywhere}a{color:#ffcf65}button{padding:12px 22px;font-size:17px;background:#ffd05c;color:#20333f;border:0;border-radius:8px}</style>
+</head><body><main><h1>王国守望</h1><p id="kwLoad">正在读取最新版本…</p><button id="kwRetry" hidden>重试</button><p><a href="__BASE_PATH__hosting-diagnostics.html">托管诊断（不启动游戏）</a></p></main>
+<script>
+(function(){
+  'use strict';
+  var base = new URL('__BASE_PATH__',location.origin);
+  var status = document.getElementById('kwLoad'), retry = document.getElementById('kwRetry');
+  function scoped(path){
+    var u=new URL(path,base);
+    if(u.origin!==base.origin || !u.pathname.startsWith(base.pathname) || /[?#]/.test(path)) throw new Error('发布路径不合法');
+    return u;
+  }
+  async function network(url){
+    var ctl=new AbortController(), timer=setTimeout(function(){ctl.abort();},20000);
+    try {var r=await fetch(url,{cache:'no-store',signal:ctl.signal,credentials:'same-origin'});if(!r.ok)throw new Error('HTTP '+r.status);return await r.arrayBuffer();}
+    finally{clearTimeout(timer);}
+  }
+  async function hash(bytes){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(function(x){return x.toString(16).padStart(2,'0');}).join('');}
+  async function start(){
+    retry.hidden=true;status.textContent='正在读取最新版本…';
+    try {
+      if(!window.isSecureContext || !crypto.subtle)throw new Error('请使用 HTTPS 和支持安全校验的现代浏览器');
+      var manifestUrl=scoped('hosting-release.json');manifestUrl.searchParams.set('check',Date.now());
+      var m=JSON.parse(new TextDecoder().decode(await network(manifestUrl)));
+      if(m.schema!==1 || m.base_path!==base.pathname || !/^[a-f0-9]{64}$/.test(m.entry_sha256) || !/^game\.[a-f0-9]{16}\.html$/.test(m.entry))throw new Error('版本清单不完整');
+      if(m.requires_cross_origin_isolation && !crossOriginIsolated)throw new Error('此版本需要跨源隔离，当前托管环境尚未满足');
+      status.textContent='正在校验运行入口…';
+      var bytes=await network(scoped(m.entry));
+      if(await hash(bytes)!==m.entry_sha256)throw new Error('入口校验失败，请稍后重试');
+      // The address remains the fixed project URL. The verified original Cocos
+      // document supplies its explicit project base before any engine script.
+      document.open();document.write(new TextDecoder().decode(bytes));document.close();
+    } catch(e){status.textContent='游戏尚未加载：'+(e.name==='AbortError'?'连接超时':e.message);retry.hidden=false;}
+  }
+  retry.onclick=start;start();
+})();
+</script></body></html>

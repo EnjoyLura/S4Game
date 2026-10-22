@@ -1,0 +1,5 @@
+{
+  "bundle": "assets/main/index.cc9a2.js",
+  "getter": "key:\"ultShowDuration\",get:function(){return dt.volt.duration+1.2*Math.max(0,Math.ceil((D(this.stats)-15)/5))}}",
+  "prototypeGetterAbsent": true
+}

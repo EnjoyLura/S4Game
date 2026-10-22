@@ -1,0 +1,342 @@
+--- before/assets/scripts/battle/MobAnim.ts
++++ after/assets/scripts/battle/MobAnim.ts
+@@ -1,4 +1,4 @@
+-/** MobAnim —— 怪物动作序列帧注册表（battle_mob_anim_v1 图集）。
++/** MobAnim —— 怪物动作序列帧注册表（普通怪与哥布林王分开按需加载）。
+  * 帧名约定 <mobId>_w<i>（walk 循环）/ <mobId>_a<i>（attack 一次性，可缺省）。
+  * 加载失败返回 null → Monster 走程序化步态兜底，调用方零分支。
+  */
+@@ -10,6 +10,8 @@
+   attack: SpriteFrame[];
+   /** 步态环真实时长（s）：源视频一个完整周期；运行时按实时速率播放避免慢动作/快进的踉跄感 */
+   loopDur: number;
++  /** 源步态对应的移速；现有普通怪保持原45，新王按17.5播放原速。 */
++  referenceSpeed: number;
+   /** 固定地面基线和逐帧左右鞋底点，均为相对于显示高度的比例。 */
+   groundOffset: number;
+   feet: [number, number, number, number][];
+@@ -18,33 +20,35 @@
+ interface FrameManifest {
+   frames: Record<string, [number, number, number, number]>;
+   cycles?: Record<string, number>;
++  walkSpeeds?: Record<string, number>;
+   ground?: Record<string, { offset: number; feet: [number, number, number, number][] }>;
+ }
+ 
+-let defs: Map<string, MobClip> | null = null;
+-let loading = false;
+-const waiters: ((d: Map<string, MobClip> | null) => void)[] = [];
++type AtlasId = 'battle_mob_anim_v1' | 'goblin_king_walk_v1';
++type Loaded = Map<string, MobClip> | null;
++const defs = new Map<AtlasId, Map<string, MobClip>>();
++const pending = new Map<AtlasId, ((d: Loaded) => void)[]>();
+ 
+-export function getMobAnims(cb: (d: Map<string, MobClip> | null) => void): void {
+-  if (defs) { cb(defs); return; }
+-  waiters.push(cb);
+-  if (loading) return;
+-  loading = true;
+-  resources.load('ux/battle_mob_anim_v1.frames', JsonAsset, (err, asset) => {
++export function getMobAnims(cb: (d: Loaded) => void, mobId = ''): void {
++  const id: AtlasId = mobId === 'goblin_king' ? 'goblin_king_walk_v1' : 'battle_mob_anim_v1';
++  const cached = defs.get(id);
++  if (cached) { cb(cached); return; }
++  const waiters = pending.get(id);
++  if (waiters) { waiters.push(cb); return; }
++  pending.set(id, [cb]);
++  const finish = (d: Loaded): void => {
++    if (d) defs.set(id, d);
++    const callbacks = pending.get(id) || [];
++    pending.delete(id);
++    callbacks.forEach(f => f(d));
++  };
++  resources.load('ux/' + id + '.frames', JsonAsset, (err, asset) => {
+     if (err || !asset) { finish(null); return; }
+-    uxFrame('battle_mob_anim_v1', source => {
++    uxFrame(id, source => {
+       if (!source) { finish(null); return; }
+       finish(parse(asset.json as FrameManifest, source.texture));
+     });
+   });
+-}
+-
+-function finish(d: Map<string, MobClip> | null): void {
+-  defs = d;
+-  loading = false;
+-  const q = waiters.slice();
+-  waiters.length = 0;
+-  q.forEach(f => f(d));
+ }
+ 
+ function parse(manifest: FrameManifest, tex: SpriteFrame['texture']): Map<string, MobClip> {
+@@ -65,11 +69,13 @@
+         const [x, y, w, h] = manifest.frames[name];
+         const sf = new SpriteFrame();
+         sf.reset({ texture: tex, rect: new Rect(x, y, w, h), originalSize: new Size(w, h), offset: new Vec2() });
++        if (mob === 'goblin_king') sf.packable = false;
+         return sf;
+       });
+     };
+     const contact = manifest.ground?.[mob];
+     out.set(mob, { walk: mk(s.w), attack: mk(s.a), loopDur: manifest.cycles?.[mob] || 1,
++      referenceSpeed: manifest.walkSpeeds?.[mob] || 45,
+       groundOffset: contact?.offset ?? 3 / 160, feet: contact?.feet || [] });
+   }
+   return out;
+--- before/assets/scripts/battle/Monster.ts
++++ after/assets/scripts/battle/Monster.ts
+@@ -92,6 +92,8 @@
+   private deathMotion: MonsterDeath | null = null;
+   private tint = new Color();
+   private lastTint = '';
++  private bossHp: Graphics | null = null;
++  private bossHpValue = -1;
+ 
+   init(def: MobDef, parent: Node, x: number, ctx: MonsterHitCtx, mgr?: MonsterManager): void {
+     this.deathMotion?.reset();
+@@ -129,6 +131,8 @@
+     this.node.setParent(parent);
+     this.draw();
+     this.buildArt();
++    this.bossHpValue = -1;
++    this.updateBossHp();
+   }
+ 
+   private buildArt(): void {
+@@ -139,7 +143,9 @@
+     }
+     this.art.node.setPosition(0, -r * 0.82, 0);
+     this.art.show(this.def.id, r * MOB_ART_HEIGHT);
+-    getMobAnims(a => { this.anims = a; });
++    this.anims = null;
++    const id = this.def.id;
++    getMobAnims(a => { if (this.node.isValid && this.def.id === id && !this.dead) this.anims = a; }, id);
+     Tween.stopAllByTarget(this.art.node);
+     this.art.node.setScale(1, 1, 1); this.art.node.angle = 0;
+     this.art.cold(null);
+@@ -148,6 +154,7 @@
+   }
+ 
+   private tickArt(dt: number): void {
++    this.updateBossHp();
+     if (!this.art?.loaded) return;
+     if (this.immobilized) {
+       // Hold the current walk/attack cel instead of snapping to idle or continuing a frozen attack.
+@@ -168,7 +175,7 @@
+         this.art.showSeq(clip.attack, i, i >= clip.attack.length - 1 ? 0 : t - i, h);
+       } else if (this.state === 'move') {
+         // 步态节奏：以源视频步态环真实时长为基准实时播放（相位连贯不踉跄），按移速微调档位，减速同步变慢
+-        const tempo = Math.min(1.25, Math.max(0.75, this.def.speed / 45));
++        const tempo = Math.min(1.25, Math.max(0.75, this.def.speed / clip.referenceSpeed));
+         const cps = (1 / clip.loopDur) * tempo;
+         const t = this.walkClock * cps * clip.walk.length;
+         const index = Math.floor(t) % clip.walk.length;
+@@ -397,6 +404,22 @@
+     this.vulnT = Math.max(this.vulnT, dur);
+   }
+ 
++  private updateBossHp(): void {
++    if (!this.isBoss || this.dead) {
++      if (this.bossHp) this.bossHp.node.active = false;
++      return;
++    }
++    if (!this.bossHp) {
++      const n = new Node('bossHp'); n.layer = Layers.Enum.UI_2D; n.setParent(this.node);
++      this.bossHp = n.addComponent(Graphics);
++    }
++    this.bossHp.node.active = true;
++    if (this.bossHpValue !== this.hp) {
++      this.bossHpValue = this.hp;
++      drawMobHpBar(this, this.bossHp);
++    }
++  }
++
+   applyHunterMark(amp: number, dur: number, visual: boolean): void {
+     if (this.dead || amp <= 0 || dur <= 0) return;
+     if (this.hunterMarkT <= 0) {
+@@ -463,6 +486,7 @@
+ 
+   private die(killerId: string, angle: number | undefined, heavy: boolean, amount: number): void {
+     this.dead = true;
++    if (this.bossHp) this.bossHp.node.active = false;
+     const marked = this.hunterMarkVisual;
+     this.hunterMarkT = this.hunterMarkAmp = this.hunterMarkAge = 0;
+     this.hunterMarkVisual = false;
+@@ -565,7 +589,7 @@
+       dmg: actual ? actual.dmg : Math.round(def.dmg * MOB_DMG_MUL * this.statMul * this.rampDmg),
+     };
+     const m = this.pool.pop() || new Monster();
+-    m.init(def, this.field, Math.random() * 660 - 330, this.ctx, this);
++    m.init(def, this.field, def.boss ? 0 : Math.random() * 660 - 330, this.ctx, this);
+     this.list.push(m);
+     if (!this.seen.has(def.id)) { this.seen.add(def.id); this.onFirstEncounter?.(def); }
+     return true;
+@@ -836,7 +860,8 @@
+   private nudge(m: Monster, dx: number, dy: number): void {
+     if (m.immobilized) return;
+     const p = m.node.position;
+-    let nx = Math.max(-355, Math.min(355, p.x + dx));
++    const edge = m.isBoss ? 375 - m.def.radius * MOB_ART_HEIGHT / 2 - 12 : 355;
++    let nx = Math.max(-edge, Math.min(edge, p.x + dx));
+     let ny = Math.min(mobEntryY(m.def.radius) + 12, p.y + dy);
+     if (m.state === 'hold') ny = p.y; // 停位怪不上下挤
+     m.node.setPosition(nx, ny, 0);
+@@ -844,14 +869,15 @@
+   }
+ }
+ 
+-/** 占位：血条仅 BOSS 显示（M0 预留钩子） */
++/** Boss-only health bar above the full character art, including a pooled king. */
+ export function drawMobHpBar(m: Monster, g: Graphics): void {
+-  const w = m.def.radius * 2;
++  const w = m.def.radius * 2.8;
++  const y = -m.def.radius * .82 + m.def.radius * MOB_ART_HEIGHT + 8;
+   g.clear();
+   g.fillColor = new Color(0, 0, 0, 140);
+-  g.roundRect(-w / 2, m.def.radius + 6, w, 6, 3);
++  g.roundRect(-w / 2, y, w, 8, 4);
+   g.fill();
+   g.fillColor = new Color(229, 72, 77, 255);
+-  g.roundRect(-w / 2, m.def.radius + 6, w * Math.max(0, m.hp / m.maxHp), 6, 3);
+-  g.fill();
++  const hpWidth = w * Math.max(0, Math.min(1, m.hp / m.maxHp));
++  if (hpWidth > 0) { g.roundRect(-w / 2, y, hpWidth, 8, Math.min(4, hpWidth / 2)); g.fill(); }
+ }
+--- before/assets/scripts/battle/WaveManager.ts
++++ after/assets/scripts/battle/WaveManager.ts
+@@ -46,7 +46,8 @@
+     this.mgr.rampDmg = this.level.fixedWaves ? 1 : 1 + WAVE_RAMP.dmg * this.idx;
+     const cntMul = this.level.fixedWaves ? 1 : 1 + WAVE_RAMP.cnt * this.idx;
+     for (const g of wave.groups) {
+-      const n = Math.max(1, Math.round(g.count * cntMul));
++      // Bosses are authored individuals, never multiplied into a crowd by the wave ramp.
++      const n = Math.max(1, MOBS[g.mob]?.boss ? g.count : Math.round(g.count * cntMul));
+       for (let i = 0; i < n; i++) {
+         this.queue.push({ mob: g.mob, t: (g.delay || 0) + i * g.interval, actual: g.actual });
+       }
+--- before/assets/scripts/config/FifthLevel.ts
++++ after/assets/scripts/config/FifthLevel.ts
+@@ -11,6 +11,8 @@
+   ({ mob: 'goblin_brute', count: 1, interval: 1, delay, actual: { hp, dmg } });
+ const shaman = (delay: number) =>
+   ({ mob: 'goblin_shaman', count: 1, interval: 1, delay, actual: { hp: 380, dmg: 0 } });
++const king = () =>
++  ({ mob: 'goblin_king', count: 1, interval: 1, delay: 0, actual: { hp: 7000, dmg: 30 } });
+ 
+ export const FIFTH_LEVEL_WAVES: WaveDef[] = [
+   { groups: [workers(26, 380, 1.35)] },
+@@ -20,7 +22,7 @@
+   { groups: [workers(40, 440, .75), riders(520, 14)], surge: true },
+   { groups: [workers(34, 460, .9), slingers(4, 340, 10), riders(540, 16), shaman(18)] },
+   { groups: [workers(40, 480, .72), elite(3400, 8), riders(560, 17)], surge: true },
+-  // The stronger elite starts with the final wave so it can walk into range before the queue ends.
+-  { groups: [elite(7000, 0, 30), workers(34, 480, .8, 2), slingers(4, 360, 8),
++  // Replace the final elite with the king, preserving this encounter's authored HP and line damage.
++  { groups: [king(), workers(34, 480, .8, 2), slingers(4, 360, 8),
+     riders(580, 17), shaman(12)], surge: true },
+ ];
+--- before/assets/scripts/config/LevelDifficulty.ts
++++ after/assets/scripts/config/LevelDifficulty.ts
+@@ -45,7 +45,7 @@
+   const progress = Math.floor(((stage?.stage || 1) - 1) / 4), waves: WaveDef[] = [];
+   base.waves.forEach((wave, i) => {
+     const groups = wave.groups.map(g => ({ ...g,
+-      count: d ? Math.ceil(g.count * (d === 1 ? 1.05 : 1.1)) : g.count,
++      count: g.mob === 'goblin_king' ? g.count : d ? Math.ceil(g.count * (d === 1 ? 1.05 : 1.1)) : g.count,
+       interval: g.interval * (d === 1 ? .95 : d === 2 ? .88 : 1),
+     }));
+     const add = (g: SpawnGroup): void => { if (!groups.some(row => row.mob === g.mob)) groups.push(g); };
+--- before/assets/scripts/config/Mobs.ts
++++ after/assets/scripts/config/Mobs.ts
+@@ -58,6 +58,11 @@
+     hp: 2400, dmg: 80, atkInterval: 4, speed: 17.5, radius: 34,
+     exp: 60, charge: 10, gold: 25, color: '#5E8F3C', elite: true,
+   },
++  goblin_king: {
++    id: 'goblin_king', name: '哥布林王', kind: 'melee',
++    hp: 4800, dmg: 80, atkInterval: 4, speed: 17.5, radius: 48,
++    exp: 120, charge: 20, gold: 50, color: '#6D963F', boss: true,
++  },
+ };
+ 
+ export interface SpawnGroup { mob: string; count: number; interval: number; delay?: number; actual?: { hp: number; dmg: number }; }
+@@ -166,6 +171,10 @@
+     }
+     if (stage.stage === 5 && index === 4) add('goblin_brute', stage.chapter, 1.8, 4);
+     if (stage.stage === 10 && index === 9) add('goblin_brute', stage.chapter + 1, 1.6, 4);
++    // Chapter-one milestones end with one king. Normal 1-5 uses its authored formation instead.
++    if (stage.chapter === 1 && (stage.stage === 5 || stage.stage === 10) && index === base.waves.length - 1) {
++      groups.unshift({ mob: 'goblin_king', count: 1, interval: 1, delay: 0 });
++    }
+     return { groups, surge: wave.surge || (stage.stage === 5 && index === 4) || (stage.stage === 10 && index === 9) };
+   });
+   LEVEL_TABLE[stage.id] = { id: stage.id, name: chapter.name + ' · ' + stage.name,
+--- before/assets/scripts/core/GameData.ts
++++ after/assets/scripts/core/GameData.ts
+@@ -636,7 +636,7 @@
+   { id: 'goblin_shaman', name: '哥布林萨满', icon: '🔮', tags: ['小型', '辅助'], desc: '治疗友军，优先击杀目标。', traits: ['持续治疗友军', '辅助型怪种', '务必优先击杀'], weak: '集火秒杀（狙击大招）' },
+   { id: 'wolf_rider', name: '狼骑兵', icon: '🐺', tags: ['中型', '骑兵'], desc: '高速冲锋，很快接近防线。', traits: ['移动速度极快', '迅速接近防线', '血量中等'], weak: '减速控制（冰法）' },
+   { id: 'goblin_brute', name: '大哥布林（精英）', icon: '👹', tags: ['大型', '精英'], desc: '血厚攻高的精英，击杀有装备掉落。', traits: ['血厚攻高', '精英级怪种', '击杀掉落装备'], weak: '持续输出 + 控场' },
+-  { id: 'goblin_king', name: '哥布林王（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '第一章 BOSS，召唤苦工并狂暴冲锋。', traits: ['章节级 BOSS', '召唤苦工助战', '残血进入狂暴'], weak: '大招爆发窗口' },
++  { id: 'goblin_king', name: '哥布林王（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '第一章第五关与第十关的首领，率领部队缓慢推进并近战攻击防线。', traits: ['第五关与第十关首领', '大型近战，血量厚重', '免疫冰封'], weak: '持续集火与大招爆发' },
+ ];
+ /** 图鉴首览奖励：每只怪物首次点开词条可领一次（钻石） */
+ export const CODEX_REWARD = 20;
+--- before/assets/scripts/ui/BattleEntryWarmup.ts
++++ after/assets/scripts/ui/BattleEntryWarmup.ts
+@@ -3,6 +3,7 @@
+ import { battleSceneKey } from '../config/Campaign';
+ import { preloadArcherClip } from '../battle/ArcherIdleAnimation';
+ import { preloadHeroClip } from '../battle/HeroSequenceAnimation';
++import { getMobAnims } from '../battle/MobAnim';
+ import { uxFrame } from './Ux';
+ import { warmPickArt } from './PickArt';
+ 
+@@ -38,6 +39,7 @@
+   const key = levelId + ':' + ids.join(',');
+   const hit = jobs.get(key); if (hit) return hit;
+   warmEntryArt(); void warmBattleScene();
++  if (levelId === '1-5' || levelId === '1-10') getMobAnims(() => {}, 'goblin_king');
+   const firstPaint = [imageReady(battleSceneKey(levelId)), imageReady('defense_wall')];
+   for (const id of ids) {
+     if (id === 'archer') {
+--- before/assets/scripts/ui/HUD.ts
++++ after/assets/scripts/ui/HUD.ts
+@@ -347,7 +347,9 @@
+     const content = N('newEnemyContent', card, 0, -16);
+     const iconPlate = gpanel(content, -195, 40, 170, 170, '#E3EAD8', undefined, 0, 12);
+     // Same keyed monster artwork and proportional fit as the research codex.
+-    const portrait = artAtlasSprite(iconPlate, 0, 0, 150, 150, 'battle_mobs_v2', c.id);
++    const king = c.id === 'goblin_king';
++    const portrait = artAtlasSprite(iconPlate, 0, 0, 150, 150,
++      king ? 'goblin_king_walk_v1' : 'battle_mobs_v2', king ? 'goblin_king_w0' : c.id);
+     portrait.name = 'newEnemyPortrait:' + c.id;
+     label(content, 50, 150, c.name, { size: 30, color: '#4A3214', bold: true, align: 'left', w: 300, h: 40 });
+     label(content, 65, 92, c.desc, { size: 18, color: '#4A3214', w: 330, h: 64, shrink: true });
+--- before/assets/scripts/ui/pages/BasePage.ts
++++ after/assets/scripts/ui/pages/BasePage.ts
+@@ -240,10 +240,10 @@
+ 
+ function monsterArt(parent: Node, id: string, x: number, y: number, w: number, h: number, hidden = false): void {
+   // Match the active battle appearances, not the superseded static portraits.
+-  // The king has no walk clip and still uses the battle's static fallback.
+   const battlePose = ['goblin_worker', 'goblin_slinger', 'goblin_shaman', 'wolf_rider', 'goblin_brute'].includes(id);
++  const king = id === 'goblin_king';
+   const art = artAtlasSprite(parent, x, y, w, h,
+-    battlePose ? 'battle_mob_anim_v1' : 'battle_mobs_v2', battlePose ? id + '_w0' : id);
++    king ? 'goblin_king_walk_v1' : battlePose ? 'battle_mob_anim_v1' : 'battle_mobs_v2', king || battlePose ? id + '_w0' : id);
+   if (hidden) {
+     art.name = 'codexSilhouette:' + id;
+     // Zero RGB removes every painted detail; alpha alone preserves the exact monster outline.
+--- before/assets/scripts/ui/pages/LevelsPage.ts
++++ after/assets/scripts/ui/pages/LevelsPage.ts
+@@ -268,7 +268,8 @@
+       const y = (top: number): number => sheetH / 2 - top;
+       comicSurface(panel, 0, y(17), 56, 5, 'paper', { fill: '#A38C63', radius: 2 });
+       mainLabel(panel, -29, y(53), lv.id + ' ' + lv.name, { size: 34, font: 'body', bold: true, color: CAMPAIGN_TEXT.ink, w: 612, h: 48, align: 'left' });
+-      mainLabel(panel, -12, y(94), challenge.waves.length + ' 波 · ' + DIFFICULTIES[st.d].formation,
++      mainLabel(panel, -12, y(94), challenge.waves.length + ' 波 · '
++        + (challenge.id === '1-5' || challenge.id === '1-10' ? '哥布林王压阵' : DIFFICULTIES[st.d].formation),
+         { size: 19, font: 'body', color: CAMPAIGN_TEXT.body, w: 644, h: 30, align: 'left' });
+       const close = N('campaignDrawerClose', panel, 324, y(48), 58, 58);
+       comicMark(close, 0, 0, 'close', 28, CAMPAIGN_TEXT.secondary); bindButton(close, closeDrawer, { sound: false });

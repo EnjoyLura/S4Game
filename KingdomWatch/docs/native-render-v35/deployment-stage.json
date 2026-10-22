@@ -1,0 +1,40 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-native-render-v35-20261018-165705",
+  "entryVersion": "1792313812",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-render-diagnostics-v34-20261018-163839",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=native-render-v35-1792313812",
+  "diagnostic": "https://kingdom-watch.pages.dev/diagnostics.html?v=native-render-v35-1792313812",
+  "priorPreviewFilesPreserved": 793,
+  "originalFilesChecked": 876,
+  "changedExistingFiles": [
+    "assets/scripts/config/GameConfig.ts",
+    "assets/scripts/core/RenderDiagnostics.ts",
+    "build-templates/web-mobile/index.html",
+    "tools/patch-web-dpr.py"
+  ],
+  "typeDiagnosticsUnchanged": true,
+  "compiledDiagnosticFieldsPresent": true,
+  "native4xAndDesktopScaleCompensation": true,
+  "audioAndGameplayUnchanged": true,
+  "manualAcceptance": "User manual; no game/browser/audio playback performed",
+  "deployment": "https://8461ea74.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpChecks": [
+    {
+      "page": "game",
+      "status": 200,
+      "entry": "index.59059.js?v=1792313812",
+      "finalUrl": "https://kingdom-watch.pages.dev/?v=native-render-v35-1792313812"
+    },
+    {
+      "page": "diagnostic",
+      "status": 200,
+      "entry": "index.59059.js?v=1792313812",
+      "finalUrl": "https://kingdom-watch.pages.dev/diagnostics?v=native-render-v35-1792313812"
+    }
+  ],
+  "userReportSHA256": "9f4ce726390b8449b045a6800db8d6bb42426f9a8096b96e114392249e64abe7"
+}

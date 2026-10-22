@@ -15,9 +15,11 @@ import { celebrationConfetti } from './CelebrationInk';
 import { celebrationLight, feedbackSurface, lightEnvelope } from './FeedbackSurface';
 import { collectRewardFx } from './RewardCollectFx';
 import { bindBrowserBack } from './BrowserBack';
+import { bindButton } from './ButtonFeedback';
+import { showItemDetails } from './ItemDetails';
 
 const { ccclass } = _decorator;
-export interface RewardPopupItem { name: string; icon: string; amount: number; quality?: Quality; }
+export interface RewardPopupItem { id: string; name: string; icon: string; amount: number; quality?: Quality; }
 export interface RewardPresentation { title?: string; subtitle?: string; heroId?: string; sound?: UISound; }
 interface RewardRow { node: Node; text: Label; fade: UIOpacity; amount: number; at: Vec3; delay: number; revealOnly?: boolean; }
 const clamp = (value: number): number => Math.max(0, Math.min(1, value));
@@ -160,8 +162,9 @@ export function showRewardPopup(parent: Node, source: string, chestCount: number
   const dim = dimLayer(parent, .72, false, false);
   dim.name = 'rewardPopup';
   let closing = false, acknowledged = false, motion: RewardPopupMotion | null = null;
+  let detail: Node | null = null;
   const close = (): void => {
-    if (closing) return;
+    if (closing || (detail && isValid(detail, true))) return;
     closing = true; motion?.stop();
     dismissUI(dim, () => {
       if (acknowledged) return;
@@ -188,12 +191,19 @@ export function showRewardPopup(parent: Node, source: string, chestCount: number
     size: 18, color: '#C4C9C9', w: 620, h: 26,
   });
   const rows: { node: Node; text: Node; amount: number; revealOnly?: boolean }[] = [];
+  const inspect = (id: string, amount: number): void => {
+    if (closing || (detail && isValid(detail, true))) return;
+    motion?.stop(); // Finish the reveal before covering it; no acknowledgement or wallet flight.
+    detail = showItemDetails(dim, id, { amount, source });
+  };
+  const canInspect = (): boolean => !closing && !(detail && isValid(detail, true));
   if (hero) {
     const reveal = N('recruitedHero:' + hero,panel,0,-16,350,410);
     heroComicFigure(reveal,hero,0,-158,350,276);
     mainLabel(reveal,0,-188,HERO_DEFS[hero].name,{size:32,bold:true,color:'#FFE7A2',w:560,h:44});
     const text = mainLabel(reveal,0,-227,'已解锁 · 可加入出战编队',{size:21,color:'#C9EAA7',w:560,h:32});
     rows.push({node:reveal,text,amount:1,revealOnly:true});
+    bindButton(reveal, () => inspect('hero_' + hero, 1), { enabled: canInspect, scale: .99, sound: false });
   } else rewards.forEach((reward, index) => {
     const row=Math.floor(index/columns),count=Math.min(columns,rewards.length-row*columns);
     const card=N('rewardPopupItem:'+index,panel,((index%columns)-(count-1)/2)*166,
@@ -206,8 +216,9 @@ export function showRewardPopup(parent: Node, source: string, chestCount: number
       outline:'#142431',outlineW:2,
     });
     rows.push({ node: card, text, amount: reward.amount });
+    bindButton(card, () => inspect(reward.id, reward.amount), { enabled: canInspect, scale: .97, dragThreshold: 7, sound: false });
   });
-  const hint = mainLabel(panel, 0, -height/2+30, '点击任意位置收下', { size: 19, color: '#C4C9C9', w: 620, h: 28 });
+  const hint = mainLabel(panel, 0, -height/2+30, '点击物品查看详情 · 点击空白处收下', { size: 19, color: '#C4C9C9', w: 620, h: 28 });
   motion = panel.addComponent(RewardPopupMotion);
   motion.configure(rows,title,hint,presentation.sound || 'reward'); motionIn(panel, 'modal'); motion.play();
   return dim;

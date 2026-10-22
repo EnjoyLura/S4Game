@@ -1,0 +1,434 @@
+--- before/tools/publish-github-pages.ps1
++++ after/tools/publish-github-pages.ps1
+@@ -1,21 +1,68 @@
++<#
++.SYNOPSIS
++Build, validate and publish Kingdom Watch to its independent GitHub Pages repository.
++.EXAMPLE
++./tools/publish-github-pages.ps1
++.EXAMPLE
++./tools/publish-github-pages.ps1 -ValidateOnly
++.EXAMPLE
++./tools/publish-github-pages.ps1 -StatusOnly -ProxyUrl http://127.0.0.1:7897
++.NOTES
++Exit 0: verified. Exit 2: uploaded, Pages pending; use -StatusOnly later.
++Only the runtime repository receives Git commits. CF is not deployed.
++#>
++[CmdletBinding(DefaultParameterSetName = 'Publish')]
+ param(
+-    [switch]$SkipBuild,
+-    [switch]$StatusOnly,
+-    [int]$WaitSeconds = 240
++    [Parameter(ParameterSetName = 'Publish')][switch]$SkipBuild,
++    [Parameter(Mandatory, ParameterSetName = 'Validate')][switch]$ValidateOnly,
++    [Parameter(Mandatory, ParameterSetName = 'Status')][switch]$StatusOnly,
++    [Parameter(ParameterSetName = 'Publish')][string]$PreparedPackage = '',
++    [ValidateRange(0, 3600)][int]$WaitSeconds = 240,
++    [string]$ProxyUrl = '',
++    [string]$ConfigPath = ''
+ )
+ $ErrorActionPreference = 'Stop'
+ $kwPagesProject = Split-Path -Parent $PSScriptRoot
+ $kwPagesPython = 'C:/Users/user/AppData/Local/Python/pythoncore-3.14-64/python.exe'
++$kwPagesOldProxy = @{ HTTP_PROXY = $env:HTTP_PROXY; HTTPS_PROXY = $env:HTTPS_PROXY }
++$kwPagesExit = 1
++if (-not (Test-Path -LiteralPath $kwPagesPython -PathType Leaf)) { throw 'Python runtime not found.' }
++if ($ProxyUrl) {
++    $kwPagesProxyUri = $null
++    if (-not [Uri]::TryCreate($ProxyUrl, [UriKind]::Absolute, [ref]$kwPagesProxyUri) -or
++        $kwPagesProxyUri.Scheme -notin @('http', 'https') -or $kwPagesProxyUri.UserInfo) {
++        throw 'ProxyUrl must be an HTTP(S) address without embedded credentials.'
++    }
++}
++if ($ConfigPath) { $ConfigPath = (Resolve-Path -LiteralPath $ConfigPath).Path }
++if ($PreparedPackage) { $PreparedPackage = (Resolve-Path -LiteralPath $PreparedPackage).Path }
+ Push-Location -LiteralPath $kwPagesProject
+ try {
+-    if (-not $SkipBuild -and -not $StatusOnly) {
++    if ($ProxyUrl) { $env:HTTP_PROXY = $ProxyUrl; $env:HTTPS_PROXY = $ProxyUrl }
++    if (-not $SkipBuild -and -not $StatusOnly -and -not $ValidateOnly -and -not $PreparedPackage) {
+         & (Join-Path $PSScriptRoot 'build-web.ps1') -LogName 'kw-github-pages'
+         if ($LASTEXITCODE -ne 0) { throw 'Original web build failed' }
+     }
+-    $kwPagesArgs = @((Join-Path $PSScriptRoot 'github-pages/publish.py'), '--wait-seconds', $WaitSeconds)
++    $kwPagesArgs = @('-X', 'utf8', (Join-Path $PSScriptRoot 'github-pages/publish.py'), '--wait-seconds', $WaitSeconds)
+     if ($StatusOnly) { $kwPagesArgs += '--status-only' }
++    if ($ValidateOnly) { $kwPagesArgs += '--validate-only' }
++    if ($PreparedPackage) { $kwPagesArgs += @('--prepared', $PreparedPackage) }
++    if ($ConfigPath) { $kwPagesArgs += @('--config', $ConfigPath) }
+     & $kwPagesPython @kwPagesArgs
+-    if ($LASTEXITCODE -ne 0) { throw 'GitHub Pages publishing did not complete; see the saved deployment report.' }
++    $kwPagesExit = $LASTEXITCODE
++    if ($kwPagesExit -eq 2) {
++        Write-Warning 'Uploaded successfully; Pages is still pending. Run this script with -StatusOnly to check again.'
++    } elseif ($kwPagesExit -ne 0) {
++        throw 'GitHub Pages publishing failed; see docs/github-pages-publishing/deployment.json.'
++    }
+ } finally {
++    foreach ($kwPagesProxyName in $kwPagesOldProxy.Keys) {
++        if ($null -eq $kwPagesOldProxy[$kwPagesProxyName]) {
++            Remove-Item -LiteralPath ('Env:' + $kwPagesProxyName) -ErrorAction SilentlyContinue
++        } else {
++            [Environment]::SetEnvironmentVariable($kwPagesProxyName, $kwPagesOldProxy[$kwPagesProxyName], 'Process')
++        }
++    }
+     Pop-Location
+ }
++exit $kwPagesExit
+--- before/tools/github-pages/export.py
++++ after/tools/github-pages/export.py
+@@ -184,6 +184,66 @@
+     return {'release':pointer,'file_count':len(files)+2,'runtime_bytes':total,'validation':links,'all_exported_hashes_verified':True,'source_web_files_modified':False}
+ 
+ 
++def validate_package(folder,config):
++    """Inspect an exported package without executing JS, WASM or a test harness."""
++    folder=Path(folder).resolve()
++    def safe_file(name):
++        if not isinstance(name,str) or not name or any(c in name for c in ('\\',':','?','#')) or any(p in ('','.','..') for p in name.split('/')):
++            raise RuntimeError('Unsafe runtime package path')
++        path=folder/name
++        if not path.resolve().is_relative_to(folder) or path.is_symlink() or not path.is_file():
++            raise RuntimeError('Missing or unsafe runtime package file: '+name)
++        return path
++    release=json.loads(safe_file('hosting-release.json').read_text('utf-8'))
++    base='/'+config['repository']+'/'
++    if release.get('schema')!=1 or release.get('base_path')!=base:
++        raise RuntimeError('Runtime package does not match the configured project path')
++    if not re.fullmatch(r'hosting-files\.[a-f0-9]{16}\.json',release.get('inventory','')):
++        raise RuntimeError('Invalid runtime inventory name')
++    inventory_path=safe_file(release['inventory']);digest=sha(inventory_path)
++    if digest!=release.get('inventory_sha256') or release.get('id')!=digest[:16] or inventory_path.name!='hosting-files.'+digest[:16]+'.json':
++        raise RuntimeError('Runtime inventory checksum mismatch')
++    inventory=json.loads(inventory_path.read_text('utf-8'));files=inventory['files']
++    actual=set()
++    for path in folder.rglob('*'):
++        if path.is_symlink():raise RuntimeError('Symlink in runtime package')
++        if path.is_file():actual.add(path.relative_to(folder).as_posix())
++    if actual!=set(files)|{'hosting-release.json',release['inventory']}:
++        raise RuntimeError('Runtime package contains missing or unlisted files')
++    for name,meta in files.items():
++        path=safe_file(name)
++        if name!='.nojekyll' and path.suffix.lower() not in EXTENSIONS:
++            raise RuntimeError('Non-runtime file in package: '+name)
++        if any(p in ('.git','.github','node_modules','logs','cache') for p in path.relative_to(folder).parts):
++            raise RuntimeError('Development directory in runtime package')
++        if path.stat().st_size!=meta['bytes'] or sha(path)!=meta['sha256']:
++            raise RuntimeError('Runtime package checksum mismatch: '+name)
++    total=sum(meta['bytes'] for meta in files.values())
++    if total!=inventory['total_bytes'] or total>950*1048576 or any(meta['bytes']>=100*1048576 for meta in files.values()):
++        raise RuntimeError('Runtime package size or file budget is invalid')
++    if safe_file('.nojekyll').stat().st_size!=0:raise RuntimeError('Expected empty .nojekyll')
++    entry=safe_file(release['entry'])
++    if not re.fullmatch(r'game\.[a-f0-9]{16}\.html',entry.name) or sha(entry)!=release['entry_sha256'] or entry.stat().st_size!=release['entry_bytes']:
++        raise RuntimeError('Runtime entry checksum mismatch')
++    if '<base href="'+base+'">' not in entry.read_text('utf-8'):
++        raise RuntimeError('Missing project-path base in game entry')
++    wasm=sorted(name for name in files if name.endswith('.wasm'))
++    memories={name:wasm_memories(safe_file(name).read_bytes()) for name in wasm}
++    if wasm!=release['wasm'] or release.get('requires_cross_origin_isolation') is not False or any(m['shared'] for ms in memories.values() for m in ms):
++        raise RuntimeError('WASM requirements need a separate isolation adaptation')
++    if memories!=inventory['runtime']['wasm_memories']:raise RuntimeError('WASM memory inventory mismatch')
++    for name in files:
++        if Path(name).suffix in {'.js','.json','.html','.txt'}:
++            value=safe_file(name).read_text('utf-8')
++            if re.search(r'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|github_pat_[A-Za-z0-9_]{20,}|gh[pousr]_[A-Za-z0-9]{30,}',value):
++                raise RuntimeError('Credential-like value in runtime package')
++            if name.endswith('.js') and any(v in value for v in ('SharedArrayBuffer','PThread','pthread_create')):
++                raise RuntimeError('Shared-memory JS requires a separate isolation adaptation')
++    return {'release':release,'file_count':len(actual),'runtime_bytes':total,'all_exported_hashes_verified':True,
++            'links':verify_links(folder),'wasm_memories':memories,'validation':'static files and WASM headers only',
++            'javascript_executed':False,'wasm_compiled_or_instantiated':False,'game_browser_or_tests_started':False}
++
++
+ if __name__=='__main__':
+     import argparse
+     parser=argparse.ArgumentParser();parser.add_argument('destination');args=parser.parse_args()
+--- before/tools/github-pages/publish.py
++++ after/tools/github-pages/publish.py
+@@ -12,6 +12,7 @@
+ import json
+ import os
+ from pathlib import Path
++import re
+ import shutil
+ import subprocess
+ import sys
+@@ -19,25 +20,17 @@
+ import urllib.error
+ import urllib.request
+ 
+-from export import HERE,PROJECT,export,sha,write_json
++from export import HERE,PROJECT,export,sha,write_json,validate_package
+ 
+ REPORT=PROJECT/'docs/github-pages-publishing/deployment.json'
+ 
+ 
+ def log(value):print(value,flush=True)
+-
+-
+-def check_bootstrap(stage):
+-    node=shutil.which('node')
+-    if not node:raise RuntimeError('Node.js is required for offline hosting and WASM validation')
+-    result=subprocess.run([node,str(HERE/'check-launcher.cjs'),str(stage.resolve())],capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=45)
+-    if result.returncode:raise RuntimeError('Hosting bootstrap validation failed: '+result.stderr[-1800:])
+-    return json.loads(result.stdout)
+ 
+ 
+ def git(folder,*args,check=True,echo=False):
+     env=os.environ.copy();env.update(GIT_TERMINAL_PROMPT='0',GCM_INTERACTIVE='never')
+-    result=subprocess.run(['git','-C',str(folder),*args],capture_output=True,text=True,encoding='utf-8',errors='replace',env=env)
++    result=subprocess.run(['git','-C',str(folder),*args],capture_output=True,text=True,encoding='utf-8',errors='replace',env=env,timeout=300)
+     if echo and result.stdout.strip():log(result.stdout.strip())
+     if result.returncode and check:
+         raise RuntimeError('Git command failed: '+args[0]+'; '+result.stderr[-1400:])
+@@ -46,7 +39,7 @@
+ 
+ class GitHub:
+     def __init__(self):
+-        result=subprocess.run(['git','credential','fill'],input='protocol=https\nhost=github.com\n\n',capture_output=True,text=True,env={**os.environ,'GIT_TERMINAL_PROMPT':'0','GCM_INTERACTIVE':'never'})
++        result=subprocess.run(['git','credential','fill'],input='protocol=https\nhost=github.com\n\n',capture_output=True,text=True,env={**os.environ,'GIT_TERMINAL_PROMPT':'0','GCM_INTERACTIVE':'never'},timeout=35)
+         values=dict(line.split('=',1) for line in result.stdout.splitlines() if '=' in line)
+         self._token=values.get('password')
+         if result.returncode or not self._token:raise RuntimeError('GitHub login is unavailable in Git Credential Manager')
+@@ -96,6 +89,12 @@
+             if not value:raise RuntimeError('Git identity is not configured')
+             git(dest,'config',name,value)
+     git(dest,'config','core.autocrlf','false')
++    remote=git(dest,'ls-remote','--exit-code','--heads','origin',cfg['branch'],check=False)
++    if remote.returncode==0:
++        git(dest,'fetch','--quiet','origin',cfg['branch'])
++        git(dest,'merge','--ff-only','origin/'+cfg['branch'])
++    elif remote.returncode!=2:
++        raise RuntimeError('Cannot inspect publication branch; checkout preserved')
+     return dest
+ 
+ 
+@@ -201,60 +200,99 @@
+         pages=api.call('/repos/'+full+'/pages');build=api.call('/repos/'+full+'/pages/builds/latest',missing=True)
+         current={'pages_status':pages.get('status'),'build_status':build.get('status') if build else None,'build_commit':build.get('commit') if build else None,'build_error':build.get('error') if build else None}
+         if current!=last:log(json.dumps(current,ensure_ascii=False));last=current
+-        record['deployment_status']=current;record['url']=base
++        record['deployment_status']=current;record['url']=base;record['phase']='verifying';write_json(REPORT,record)
+         try:
+             pointer,_=http_bytes(base+'hosting-release.json?check='+str(time.time_ns()))
+             if json.loads(pointer).get('id')==release['id']:
+-                record['online_verification']=online_verification(base,stage,release);record['complete']=True;return True
+-        except (urllib.error.URLError,json.JSONDecodeError,TimeoutError):pass
+-        if build and build.get('status')=='errored':raise RuntimeError('GitHub Pages build failed: '+str(build.get('error')))
++                record['online_verification']=online_verification(base,stage,release);record['complete']=True;record['phase']='complete'
++                record.pop('pending_reason',None);record.pop('last_probe_error',None);return True
++        except (urllib.error.URLError,json.JSONDecodeError,TimeoutError,RuntimeError) as exc:
++            record['last_probe_error']=str(exc)
++        if build and build.get('status')=='errored' and build.get('commit')==record['publication_commit']:
++            raise RuntimeError('GitHub Pages build failed: '+str(build.get('error')))
+         if time.monotonic()>=deadline:
+-            record['complete']=False;record['pending_reason']='GitHub Pages has not served the expected release yet';return False
++            record['complete']=False;record['phase']='pending';record['pending_reason']='GitHub Pages has not served the expected release yet';return False
+         time.sleep(min(12,max(0,deadline-time.monotonic())))
+ 
+ 
+ def main():
+-    parser=argparse.ArgumentParser();parser.add_argument('--wait-seconds',type=int,default=240);parser.add_argument('--status-only',action='store_true');parser.add_argument('--prepared',type=Path);args=parser.parse_args()
+-    cfg=json.loads((HERE/'config.json').read_text('utf-8'));api=GitHub();REPORT.parent.mkdir(parents=True,exist_ok=True)
++    parser=argparse.ArgumentParser(description='Publish the production runtime to an independent GitHub Pages repository.')
++    parser.add_argument('--wait-seconds',type=int,default=240)
++    mode=parser.add_mutually_exclusive_group()
++    mode.add_argument('--status-only',action='store_true')
++    mode.add_argument('--validate-only',action='store_true')
++    parser.add_argument('--prepared',type=Path)
++    parser.add_argument('--config',type=Path,default=HERE/'config.json')
++    args=parser.parse_args()
++    if not 0<=args.wait_seconds<=3600:parser.error('--wait-seconds must be between 0 and 3600')
++    if args.prepared and args.status_only:parser.error('--prepared cannot be combined with --status-only')
++    cfg=json.loads(args.config.read_text('utf-8-sig'))
++    if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9-]{0,38}',cfg['owner']) or not re.fullmatch(r'[A-Za-z0-9_][A-Za-z0-9_.-]{0,99}',cfg['repository']):
++        raise RuntimeError('Invalid GitHub owner or repository name')
++    if cfg['branch']!='main' or cfg['source_path']!='/' or cfg['visibility']!='public':
++        raise RuntimeError('Expected dedicated public runtime repository, main branch, root directory')
++    REPORT.parent.mkdir(parents=True,exist_ok=True)
+     source_head=git(PROJECT,'rev-parse','HEAD').stdout.strip();source_index=hashlib.sha256(git(PROJECT,'ls-files','--stage').stdout.encode()).hexdigest()
+-    if args.status_only:
+-        record=json.loads(REPORT.read_text('utf-8'));stage=Path(record['stage']);release=json.loads((stage/'hosting-release.json').read_text('utf-8'))
+-    else:
+-        record={'time':datetime.now(timezone.utc).isoformat(),'repository':'https://github.com/'+cfg['owner']+'/'+cfg['repository'],'source_head_before':source_head,'complete':False}
+-        stage=args.prepared or PROJECT/'build'/('github-pages-'+datetime.now().strftime('%Y%m%d-%H%M%S'))
+-        if args.prepared:
+-            release=json.loads((stage/'hosting-release.json').read_text('utf-8'));inv=json.loads((stage/release['inventory']).read_text('utf-8'))
+-            if sha(stage/release['inventory'])!=release['inventory_sha256']:raise RuntimeError('Prepared inventory checksum mismatch')
+-            for name,meta in inv['files'].items():
+-                if sha(stage/name)!=meta['sha256']:raise RuntimeError('Prepared runtime file changed: '+name)
+-            record['export']={'release':release,'file_count':len(inv['files'])+2,'runtime_bytes':inv['total_bytes'],'all_exported_hashes_verified':True}
+-        else:record['export']=export(stage,cfg);release=record['export']['release']
+-        record['stage']=str(stage.resolve());record['hosting_bootstrap_checks']=check_bootstrap(stage);write_json(REPORT,record)
+-        log('Validated runtime package: '+str(record['export']['file_count'])+' files, '+str(round(record['export']['runtime_bytes']/1048576,1))+' MiB')
+-        ensure_repository(api,cfg);dest=local_checkout(cfg);record['publication_checkout']=str(dest)
+-        record['copied_and_rehashed_files']=synchronize(stage,dest);git(dest,'add','--all')
+-        changed=git(dest,'diff','--cached','--quiet',check=False).returncode
+-        if changed==1:
+-            git(dest,'commit','--quiet','-m','Publish Kingdom Watch runtime '+release['id'])
+-            log('Committed runtime release '+release['id'])
+-        elif changed!=0:raise RuntimeError('Cannot inspect staged runtime changes')
+-        record['publication_commit']=git(dest,'rev-parse','HEAD').stdout.strip();write_json(REPORT,record)
+-        log('Pushing runtime repository (no source repository commits)...')
+-        git(dest,'-c','http.lowSpeedLimit=1024','-c','http.lowSpeedTime=90','push','--set-upstream','origin','main',echo=True)
++    repository='https://github.com/'+cfg['owner']+'/'+cfg['repository']
++    report_path=REPORT.parent/'validation.json' if args.validate_only else REPORT
++    record={'time':datetime.now(timezone.utc).isoformat(),'repository':repository,'source_head_before':source_head,'complete':False,'phase':'preparing'}
++    code=1
++    try:
++        if args.status_only:
++            previous=json.loads(REPORT.read_text('utf-8'))
++            if previous.get('repository')!=repository:raise RuntimeError('Last deployment belongs to a different repository')
++            record=previous
++            record['complete']=False;record.pop('error',None)
++            stage=Path(record['stage'])
++            record['hosting_package_checks']=validate_package(stage,cfg)
++            release=record['hosting_package_checks']['release']
++        else:
++            stage=args.prepared or PROJECT/'build'/('github-pages-'+datetime.now().strftime('%Y%m%d-%H%M%S-%f'))
++            record['stage']=str(stage.resolve())
++            if not args.prepared:
++                log('Exporting the prepared production build...')
++                record['export']=export(stage,cfg)
++            record['hosting_package_checks']=validate_package(stage,cfg)
++            checked=record['hosting_package_checks'];release=checked['release']
++            if args.prepared:record['export']={key:checked[key] for key in ('release','file_count','runtime_bytes','all_exported_hashes_verified')}
++            record['phase']='validated';write_json(report_path,record)
++            log('Validated runtime package: '+str(checked['file_count'])+' files, '+str(round(checked['runtime_bytes']/1048576,1))+' MiB')
++            if args.validate_only:
++                record['complete']=True;record['phase']='validated-only';record['uploaded']=False;code=0
++                log('Local package verified. No credentials read, repository changes or upload.')
++                return code
++        api=GitHub()
++        if not args.status_only:
++            ensure_repository(api,cfg);dest=local_checkout(cfg);record['publication_checkout']=str(dest)
++            record['copied_and_rehashed_files']=synchronize(stage,dest);git(dest,'add','--all')
++            changed=git(dest,'diff','--cached','--quiet',check=False).returncode
++            if changed==1:
++                git(dest,'commit','--quiet','-m','Publish Kingdom Watch runtime '+release['id'])
++                log('Committed runtime release '+release['id'])
++            elif changed!=0:raise RuntimeError('Cannot inspect staged runtime changes')
++            record['publication_commit']=git(dest,'rev-parse','HEAD').stdout.strip();record['phase']='committed';write_json(REPORT,record)
++            log('Pushing runtime repository (no source repository commits)...')
++            git(dest,'-c','http.lowSpeedLimit=1024','-c','http.lowSpeedTime=90','push','--set-upstream','origin','main',echo=True)
+         remote=api.call('/repos/'+cfg['owner']+'/'+cfg['repository']+'/git/ref/heads/main')
+-        if remote['object']['sha']!=record['publication_commit']:raise RuntimeError('Remote main does not match the runtime commit')
+-        record['remote_commit_verified']=True;record['pages_settings']=enable_pages(api,cfg);write_json(REPORT,record)
+-    try:
++        if remote['object']['sha']!=record.get('publication_commit'):
++            raise RuntimeError('Remote main does not match this release; rerun publication before checking status')
++        record['remote_commit_verified']=True
++        if not args.status_only:record['pages_settings']=enable_pages(api,cfg)
++        record['phase']='uploaded';write_json(REPORT,record)
+         complete=check_status(api,cfg,stage,release,args.wait_seconds,record)
++        log(('Published and HTTP-verified: ' if complete else 'Uploaded; Pages is still pending: ')+record['url'])
++        code=0 if complete else 2
++        return code
++    except Exception as exc:
++        record['complete']=False;record['phase']='failed';record['error']=str(exc);raise
++    finally:
+         record['source_head_unchanged']=git(PROJECT,'rev-parse','HEAD').stdout.strip()==source_head
+         record['source_index_unchanged']=hashlib.sha256(git(PROJECT,'ls-files','--stage').stdout.encode()).hexdigest()==source_index
+-        if not record['source_head_unchanged'] or not record['source_index_unchanged']:raise RuntimeError('Source repository state changed during publication')
+-        write_json(REPORT,record)
+-        log(('Published and HTTP-verified: ' if complete else 'Uploaded; Pages is still pending: ')+record['url'])
+-        log('Report: '+str(REPORT))
+-        return 0 if complete else 2
+-    except Exception as exc:
+-        record['complete']=False;record['error']=str(exc);write_json(REPORT,record);raise
++        if not record['source_head_unchanged'] or not record['source_index_unchanged']:
++            record['complete']=False;record['phase']='failed';record['error']='Source repository state changed during publication'
++            write_json(report_path,record);raise RuntimeError(record['error'])
++        write_json(report_path,record)
++        log('Report: '+str(report_path))
+ 
+ 
+ if __name__=='__main__':
+--- before/docs/github-pages-publishing/README.md
++++ after/docs/github-pages-publishing/README.md
+@@ -13,11 +13,35 @@
+ ./tools/publish-github-pages.ps1
+ ```
+ 
+-依次沿用原 `build-web.ps1` 正式导出、DPR 补丁和版本准备，然后生成子路径运行包、检查所有文件散列及资源引用、离线验证入口和 WASM、提交并推送独立仓库，最后等待 Pages 并做 HTTP 校验。第一次已创建仓库并启用 `main` 分支根目录发布，包内包含 `.nojekyll`。
++依次沿用原 `build-web.ps1` 正式导出、DPR 补丁和版本准备，再生成子路径运行包、静态核对全部文件散列和资源引用、检查 WASM 头与内存要求，提交推送独立仓库，最后等待 Pages 并做 HTTP 校验。默认不执行游戏、浏览器、JS/WASM 或旧入口测试脚本。已配置 `main` 分支根目录发布，包内包含 `.nojekyll`。
+ 
+-已有最新正式构建时可用 `-SkipBuild`；只检查上一次上传和部署、不构建或推送时用 `-StatusOnly`。默认等候 240 秒，可用 `-WaitSeconds 600` 延长。GitHub 排队超过时间会明确报告未完成，稍后运行 `-StatusOnly`，不要把上传成功当成上线成功。
++2026-10-22 已补齐只校验模式、可配置文件、预制包复用、进程代理恢复和分阶段报告。参数如下：
+ 
+-配置在 `tools/github-pages/config.json`，本机独立发布 checkout 为 `D:/AI/kingdom-watch-pages`。凭据由 Git Credential Manager 在进程内读取，不写入文件、URL 或运行包。需要当前 GitHub 账号拥有该仓库权限；本机使用既有 Python、Node 和 Cocos Creator 3.8.8。
++| 参数 | 行为 |
++| --- | --- |
++| 无参数 | 正式构建 → 导出 → 静态校验 → 提交推送独立仓库 → 等待 Pages → HTTP 核对 |
++| `-ValidateOnly` | 只导出、校验现有生产构建；不读 GitHub 凭据，不构建、提交或上传 |
++| `-SkipBuild` | 复用已准备的生产构建，继续导出和发布 |
++| `-StatusOnly` | 只校验上次运行包并查询部署、核对线上文件；不构建、提交或推送 |
++| `-PreparedPackage <目录>` | 校验并发布指定的已导出包，跳过构建与再次导出 |
++| `-ProxyUrl http://127.0.0.1:7897` | 仅本次进程使用指定代理，结束后恢复环境变量；不改系统代理 |
++| `-ConfigPath <文件>` | 使用指定的发布配置；默认 `tools/github-pages/config.json` |
++| `-WaitSeconds 600` | 最长等候秒数，默认240，可设0～3600；0为查询一轮 |
++
++```powershell
++# 本地导出和检查
++./tools/publish-github-pages.ps1 -ValidateOnly
++
++# 网络需要当前本地代理时
++./tools/publish-github-pages.ps1 -ProxyUrl http://127.0.0.1:7897
++
++# 上传后仍在排队，稍后仅检查部署
++./tools/publish-github-pages.ps1 -StatusOnly -ProxyUrl http://127.0.0.1:7897
++```
++
++退出码0表示本次操作校验完成，2表示已上传但 Pages 尚未上线，1表示失败。等待超时保留包与部署记录，稍后运行 `-StatusOnly`；不会把上传成功当成上线成功。只校验报告独立写入 `validation.json`，不会覆盖最后一次部署记录。发布前仅在独立仓库快进同步远端，遇到未提交修改或分叉则停止，不强制推送或重置。
++
++配置在 `tools/github-pages/config.json`，本机独立发布 checkout 为 `D:/AI/kingdom-watch-pages`。凭据由 Git Credential Manager 在进程内读取，不写入文件、URL 或运行包。需要当前 GitHub 账号拥有该仓库权限；本机使用既有 Python 和 Cocos Creator 3.8.8 构建工具；静态校验不依赖 Node 运行入口代码。
+ 
+ 只在独立仓库执行 add / commit / push。原项目的提交、暂存区和 CF 发布脚本不变；该命令不会同步发布 CF。
+ 
+@@ -39,6 +63,10 @@
+ 
+ 诊断页只读取环境、版本和资源，不加载 Cocos、不实例化 WASM、不启动战斗。自动核对清单、入口及 WASM 的散列，并只编译 WASM。可手动启动全资源下载校验，流量约 646 MiB。
+ 
++## 当前脚本验证
++
++2026-10-22 记录见 [发布命令核对](../github-pages-command-20261022/README.md)。`-ValidateOnly` 已核对2103文件约645.7MiB；完整构建发布与 `-StatusOnly` 结果以本目录 `deployment.json` 为准。当前默认校验仅分析文件与WASM头，不编译或实例化WASM，不执行入口测试；下方2026-10-20离线情景检查只保留为历史记录。首次进入、再次进入及更新后的手机游戏表现仍待人工确认。
++
+ ## 验证记录
+ 
+ 首次发布记录：`first-deployment.json`。最新发布记录：`deployment.json`。部署完成才会写入 `complete: true`。
+@@ -50,3 +78,5 @@
+ 本轮没有打开游戏或浏览器、没有执行战斗和音频验收。手机上首次进入、再次进入、更新后的实际游戏表现由用户体验。两种托管域名的浏览器存档相互独立，本轮没有做存档迁移。
+ 
+ 可用 `python tools/github-pages/audit-live.py` 重跑全量线上文件散列检查，包含当前与上一版保留的旧路径，报告为 `full-cdn-audit.json`。这是只读下载，不启动游戏；本轮流量约 650 MiB。
++
++配置与状态接口参照 [GitHub发布来源说明](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) 和 [GitHub Pages REST API](https://docs.github.com/en/rest/pages/pages)。
+--- before/AGENTS.md
++++ after/AGENTS.md
+@@ -1,5 +1,7 @@
+ # 交付要求
+ 
++
++2026-10-22 用户要求新项目默认GitHub Pages并把发布做成脚本。长期偏好已写C:/Users/user/.codex/AGENTS.md；当前复用原独立仓库与tools/publish-github-pages.ps1，详见[发布命令核对](docs/github-pages-command-20261022/README.md)。补齐-ValidateOnly/-PreparedPackage/-ConfigPath/-ProxyUrl、代理精确恢复、分阶段报告及-StatusOnly；等待上传与上线分别记录，旧失败构建仅在commit匹配时阻断。默认只静态检查文件/散列/资源引用/WASM头，不再自动运行check-launcher.cjs或编译WASM。完整命令已构建并发布当前v73玩法至https://enjoylura.github.io/kingdom-watch-play/ ，commit 8f85546 /版本9e7cd310850b8080；2103文件645.7MiB，Creator19134ms退出36，Pages built且远端commit/固定入口/清单/11份资源含WASM与gzip SHA通过。只校验与单独状态查询均通过，2078游戏assets与原项目HEAD/暂存区保持。CF v73站点及脚本保留，HTML200且散列不变，本命令不发布CF；没有新原项目提交。未启动游戏/浏览器/测试/模拟/音频/WASM，手机实机体验仍待用户确认；两域名本地存档独立。
+ 
+ 2026-10-22 用户手机试玩认可新版战斗，并授权精简强化文案、重调普通1-1～1-6密度，已发布[文案与出怪节奏v73](docs/combat-pacing-v73/README.md)：https://kingdom-watch.pages.dev/?v=combat-pacing-v73-1792603091 ，部署 https://70b6a7bc.kingdom-watch.pages.dev 。58处卡文案精简为最多三行，选卡移除叠层变化及自动搭配提示，真实层数/组合仍可在本局强化主动查看；余烬爆破改为自身点燃目标死亡爆炸、60%攻击力范围伤害、不连锁，不再显示半径100；额外枪线更名额外弩矢。卡效果/前置/上限/权重保持，原18px与196×112文字框/25行距及布局保持。本轮仅普通前六关workers数量/间隔/末波延迟重调，总怪101→139、136→192、228→332、269→401、283→437、343→531（+37.6%～54.8%）；原单怪血量攻击、波数/缓急、全部特殊怪组合及数值保持，静态总出怪时间跨度接近，未实测时长。此授权取代此前前六关数量/间隔保持要求，仅限上述密度；其他难度/后续关/无尽保持。击杀回能与奖励单价、大招需求/0起始、选卡时序/胜利延迟、精英图标和物品详情保持。2078原assets仅8TS变化，无新增删除，756媒体/native及793历史预览散列保持；原10类型诊断无新增，Creator20019ms退出36，生产/DPR/缓存完成，引擎2cb74a1e8caa095a保持。Wrangler main上传8复用2887，正式HTML/入口/主包及快照均200且SHA一致；复用当前本地代理仅发布进程设置，无系统代理改动。未运行游戏/浏览器/测试/模拟/音频，手机视觉、平衡、时长与性能待用户人工试玩；无Git提交，保留原工作。
+ 
+--- before/README.md
++++ after/README.md
+@@ -1,5 +1,7 @@
+ # 王国守望 (Kingdom Watch)
+ 
++
++2026-10-22 [GitHub Pages发布脚本已完善](docs/github-pages-command-20261022/README.md)：`./tools/publish-github-pages.ps1` 一条命令完成正式构建、运行包导出、静态校验、独立仓库推送和上线核对。支持只校验、单独查状态及进程代理。当前v73已发布至[固定GitHub试玩地址](https://enjoylura.github.io/kingdom-watch-play/)并通过HTTP文件散列核对；原CF站点保留，游戏源码和开发仓库提交保持。新项目默认GitHub Pages；实际手机体验由用户确认。
+ 
+ 2026-10-22 [强化卡文案与第一章出怪节奏 v73 已发布](https://kingdom-watch.pages.dev/?v=combat-pacing-v73-1792603091)。选卡去掉叠层行和自动搭配提示，58处效果说明缩短至最多三行；余烬爆破保留死亡触发、60%攻击力范围伤害和不连锁限制。普通1-1～1-6通过普通怪增量与更紧凑的间隔增加目标密度（总怪量约+38%～55%），沿用原单怪属性、特殊怪组合与波次。构建、类型和线上文件散列核对完成，手感、难度与流畅度待手机人工试玩；未运行游戏或浏览器。详见[本轮改动与发布记录](docs/combat-pacing-v73/README.md)。
+ 
+@@ -396,7 +398,7 @@
+ 
+ 线上地址：<https://kingdom-watch.pages.dev/>。正式构建使用 `tools/web-release-build.json`：关闭debug、开启MD5 Cache。不要再沿用旧交付脚本的 `debug=true` 构建命令。
+ 
+-独立 GitHub Pages 发布：运行 `./tools/publish-github-pages.ps1`，自动沿用正式构建、导出子路径运行包并校验，只提交推送独立运行包仓库。固定入口 <https://enjoylura.github.io/kingdom-watch-play/>，不启动游戏的[托管诊断页](https://enjoylura.github.io/kingdom-watch-play/hosting-diagnostics.html)。CF 保留，原项目提交与部署流程不变，两个域名的本地存档独立。详见 [GitHub Pages 发布说明](docs/github-pages-publishing/README.md)。
++GitHub Pages 一条命令：运行 `./tools/publish-github-pages.ps1`，自动正式构建、导出子路径运行包、静态校验、提交推送独立仓库并核对上线。`-ValidateOnly` 只导出检查，`-StatusOnly` 只查上次部署，`-SkipBuild` 复用生产构建；网络需要代理时加 `-ProxyUrl http://127.0.0.1:7897`。固定入口 <https://enjoylura.github.io/kingdom-watch-play/>，不启动游戏的[托管诊断页](https://enjoylura.github.io/kingdom-watch-play/hosting-diagnostics.html)。本命令不发布CF，原CF入口与原项目提交流程保留，两个域名的本地存档独立；新项目默认GitHub Pages。详见 [GitHub Pages 发布说明](docs/github-pages-publishing/README.md)。
+ 
+ Windows 上建议用 `Start-Process -WindowStyle Hidden` 启动 Creator，并重定向输出到 temp 日志以避免管道 EPIPE。若已启用系统代理，发布时给当前 Wrangler 进程设置 `HTTPS_PROXY` 为实际代理地址；Node 不会自动沿用 Windows 系统代理。
+ 

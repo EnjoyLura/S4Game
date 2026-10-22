@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-21",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in edit",
+  "prompt": "prompt.txt",
+  "reference": {
+    "path": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-skull-grunt-v10/wall-view-ragged-grunt.png",
+    "role": "Pose correction target, preserve clothes and identity",
+    "sha256": "00bb76f2163f0687874733814f5ee183ee5a9d7b22ea9a5d6177a5fbc17cf0e7"
+  },
+  "output": {
+    "file": "wall-view-front-neutral-grunt.png",
+    "generated_source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-87943c85-8fc5-4110-98ed-d1805559bdef.png",
+    "sha256": "d41b4bfd852448128f79cbd6a694e019e632a5ca70248411f4815c055fb16ebc",
+    "original_bytes_preserved": true
+  },
+  "requested_changes": [
+    "no upward-looking creature",
+    "feet side by side, not staggered",
+    "no sideways body turn",
+    "retain elevated camera and ragged asymmetrical outfit"
+  ],
+  "visual_inspection": {
+    "feet": "Both feet planted next to each other at matching apparent depth and baseline; no stepping pose.",
+    "orientation": "Face, torso and hips frontally aligned; no strong diagonal body turn.",
+    "head": "Head sits tucked below helmet, no visible backward chin lift; eyes under lowered brows.",
+    "camera": "Upper surfaces of cap, shoulders and feet visible, elevated frontal view retained.",
+    "limitations": "Gaze and camera geometry assessed visually, not measured in 3D. Aesthetic approval and suitability as an animation source remain pending."
+  },
+  "user_visual_approval": "pending",
+  "game_integrated": false
+}

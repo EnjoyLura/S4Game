@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>Cocos Creator | kingdom-watch</title>
+
+  <!--http://www.html5rocks.com/en/mobile/mobifying/-->
+  <meta name="viewport"
+        content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1,minimal-ui=true,viewport-fit=cover"/>
+
+  <!-- 刘海/挖孔安全区：Cocos web 适配器 safeAreaEdge 从 documentElement 读这些 CSS 变量
+       （sys.getSafeAreaRect → initLayout 的 LO.notchTop）。viewport-fit=cover 已让页面铺到刘海下，
+       env() 在桌面端/无刘海设备求值为 0，无副作用 -->
+  <style>
+    :root {
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+    }
+  </style>
+
+  <!--https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- force webkit on 360 -->
+  <meta name="renderer" content="webkit"/>
+  <meta name="force-rendering" content="webkit"/>
+  <!-- force edge on IE -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <!-- force full screen on some browser -->
+  <meta name="full-screen" content="yes"/>
+  <meta name="x5-fullscreen" content="true"/>
+  <meta name="360-fullscreen" content="true"/>
+
+  <!--fix fireball/issues/3568 -->
+  <!--<meta name="browsermode" content="application">-->
+  <meta name="x5-page-mode" content="app">
+
+  <!--<link rel="apple-touch-icon" href=".png" />-->
+  <!--<link rel="apple-touch-icon-precomposed" href=".png" />-->
+
+  <link rel="stylesheet" type="text/css" href="style.f76d1.css"/>
+
+  <!-- 原生像素匹配：4x 手机不再按 3x 降采样；电脑模式按页面缩小比例计算有效 DPR，
+       避免 1280 CSS 宽的手机网页生成 3840×8448 缓冲并触及 GPU 高度上限。
+       引擎 getter 每次读取当前视口；?dpr=2 保留手动省电选项。 -->
+  <script>
+    (function () {
+      try {
+        var q = parseFloat(new URLSearchParams(window.location.search).get('dpr'));
+        window.__KW_GET_DPR_CAP = function () {
+          var real = window.devicePixelRatio || 1;
+          var scale = window.visualViewport && window.visualViewport.scale || 1;
+          // Pinch enlargement does not allocate larger buffers; desktop page reduction does.
+          var cap = q > 0 ? Math.min(real, q) : Math.min(real, 4) * Math.min(1, scale);
+          window.__KW_DPR_CAP = Math.max(.25, cap);
+          return window.__KW_DPR_CAP;
+        };
+        window.__KW_GET_DPR_CAP();
+      } catch (e) { window.__KW_DPR_CAP = 2; }
+    })();
+  </script>
+
+  <!-- 运行时错误浮层：手机端脚本异常直接显示在画面顶部（否则用户只见空画面无从反馈）。
+       正常运行不出现任何内容；最多显示 3 条，每条截断 240 字符。 -->
+  <script>
+    (function () {
+      var seen = 0;
+      function show(msg) {
+        try {
+          if (seen >= 3) return;
+          var box = document.getElementById('kwErrBox');
+          if (!box) {
+            box = document.createElement('div');
+            box.id = 'kwErrBox';
+            box.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;pointer-events:none;'
+              + 'font:12px/1.4 monospace;color:#ff9a9a;background:rgba(0,0,0,.72);padding:4px 6px;'
+              + 'white-space:pre-wrap;word-break:break-all;max-height:40%;overflow:hidden;text-align:left;';
+            (document.body || document.documentElement).appendChild(box);
+          }
+          seen++;
+          box.textContent += (box.textContent ? '\n' : '') + '⚠ ' + String(msg).slice(0, 240);
+        } catch (e) { /* ignore */ }
+      }
+      window.addEventListener('error', function (e) {
+        show((e && (e.message || (e.error && e.error.message))) || 'unknown error');
+      });
+      window.addEventListener('unhandledrejection', function (e) { show('REJ: ' + (e && e.reason)); });
+      var ce = console.error;
+      console.error = function () {
+        try { show([].join.call(arguments, ' ')); } catch (x) { /* ignore */ }
+        ce.apply(console, arguments);
+      };
+    })();
+  </script>
+
+
+  <!-- KW startup preloads -->
+  <link rel="preload" as="script" href="index.777d2.js?v=1792387418" crossorigin="anonymous">
+  <link rel="preload" as="script" href="application.471ed.js" crossorigin="anonymous">
+  <link rel="preload" as="fetch" href="src/settings.ccb59.json" crossorigin="anonymous">
+  <link rel="preload" as="script" href="cocos-js/cc.03aac.js?kwengine=2cb74a1e8caa095a" crossorigin="anonymous">
+  <link rel="preload" as="script" href="cocos-js/_virtual_cc-Bp5iGE8z.js?kwengine=2cb74a1e8caa095a" crossorigin="anonymous">
+  <!-- /KW startup preloads -->
+</head>
+<body>
+  <div id="GameDiv" cc_exact_fit_screen="true">
+      <div id="Cocos3dGameContainer">
+        <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="99"></canvas>
+      </div>
+    </div>
+  
+
+<!-- KW diagnostics: static HTML, available before any engine code. -->
+<section id="kwRenderPanel" style="display:none" aria-label="清晰度诊断">
+  <header><strong>清晰度诊断 v35</strong><button id="kwDiagToggle" type="button">收起</button></header>
+  <div id="kwDiagBody">
+    <p id="kwDiagSummary">HTML 诊断入口已加载，等待读取数据…</p>
+    <div class="kwDiagRow"><button id="kwDiagMobile" type="button">复制手机模式数据</button><button id="kwDiagDesktop" type="button">复制电脑模式数据</button></div>
+    <div class="kwDiagRow"><button id="kwDiagRefresh" type="button">刷新数据</button><button id="kwDiagDetails" type="button">展开原始数据</button></div>
+    <textarea id="kwDiagData" readonly aria-label="诊断原始数据" style="display:none"></textarea>
+    <p id="kwDiagStatus">无需进入战斗。复制后粘贴到聊天中。</p>
+  </div>
+</section>
+<style>
+  #kwRenderPanel { all:initial;display:none;position:fixed;z-index:2147483647;left:10px;top:18%;width:340px;max-height:70vh;overflow:auto;box-sizing:border-box;padding:10px;background:#101923;color:#eef5ff;border:2px solid #93b9d8;border-radius:10px;font:13px/1.4 system-ui,sans-serif;text-align:left;transform-origin:top left;pointer-events:auto;isolation:isolate;touch-action:pan-y; }
+  #kwRenderPanel * { box-sizing:border-box; }
+  #kwRenderPanel header { display:flex;align-items:center;gap:8px; }
+  #kwRenderPanel strong { flex:1; }
+  #kwRenderPanel p { display:block;margin:8px 0;white-space:pre-wrap; }
+  #kwRenderPanel button { display:block;position:static;font:inherit;color:#fff;background:#28445e;border:1px solid #6489aa;border-radius:6px;padding:8px;min-height:38px;cursor:pointer;touch-action:manipulation; }
+  #kwRenderPanel .kwDiagRow { display:flex;gap:6px;margin:6px 0; }
+  #kwRenderPanel .kwDiagRow button { flex:1; }
+  #kwRenderPanel textarea { display:block;width:100%;height:120px;padding:6px;font:11px/1.3 monospace;color:#eef5ff;background:#081019;border:1px solid #6489aa;user-select:text!important;-webkit-user-select:text!important;touch-action:auto; }
+  #kwDiagStatus { font-size:12px;color:#c7daed; }
+</style>
+<script>
+(function () {
+  // A fixed path also activates the report if a browser drops the query string.
+  if (!/(?:[?&])renderdiag=1(?:&|$)/.test(location.search)
+      && !/\/diagnostics(?:\.html)?\/?$/.test(location.pathname)) return;
+  var panel = document.getElementById('kwRenderPanel');
+  var data = document.getElementById('kwDiagData');
+  var summary = document.getElementById('kwDiagSummary');
+  var status = document.getElementById('kwDiagStatus');
+  var body = document.getElementById('kwDiagBody');
+  var mode = '未标记';
+  var recentErrors = [];
+  function number(n) { return Math.round(n * 1000) / 1000; }
+  function rect(r) { return [number(r.x), number(r.y), number(r.width), number(r.height)]; }
+  function readBrowser() {
+    var canvas = document.getElementById('GameCanvas');
+    var bounds = canvas && canvas.getBoundingClientRect();
+    var vv = window.visualViewport;
+    var css = getComputedStyle(document.documentElement);
+    var dpr = window.devicePixelRatio || 1;
+    var scale = vv && vv.scale || 1;
+    var fs = document.fullscreenElement || document.webkitFullscreenElement;
+    var result = {
+      report: 'kw-render-diagnostics-v35', capturedAt: new Date().toISOString(), mode: mode,
+      path: location.pathname, query: location.search, bootstrap: 'static-html-before-engine',
+      browser: {
+        userAgent: navigator.userAgent, devicePixelRatio: dpr, dprCap: window.__KW_DPR_CAP,
+        innerCss: [innerWidth, innerHeight], outerCss: [outerWidth, outerHeight],
+        screenCss: [window.screen.width, window.screen.height],
+        documentCss: [document.documentElement.clientWidth, document.documentElement.clientHeight],
+        visualViewport: vv ? { width: number(vv.width), height: number(vv.height), scale: number(vv.scale), offsetLeft: number(vv.offsetLeft), offsetTop: number(vv.offsetTop) } : null,
+        viewportMeta: document.querySelector('meta[name="viewport"]').getAttribute('content'),
+        safeCss: ['top', 'right', 'bottom', 'left'].map(function (e) { return css.getPropertyValue('--safe-' + e).trim(); }),
+        fullscreenElement: fs ? fs.tagName + '#' + fs.id : null
+      },
+      canvas: canvas && bounds ? {
+        backingPixels: [canvas.width, canvas.height], cssRect: rect(bounds),
+        pixelRatio: [number(canvas.width / bounds.width), number(canvas.height / bounds.height)],
+        estimatedDisplayPixels: [number(bounds.width * dpr * scale), number(bounds.height * dpr * scale)],
+        estimatedBackingToDisplay: [number(canvas.width / (bounds.width * dpr * scale)), number(canvas.height / (bounds.height * dpr * scale))],
+        transform: getComputedStyle(canvas).transform,
+        ancestors: [canvas.parentElement, canvas.parentElement && canvas.parentElement.parentElement].filter(Boolean).map(function (el) {
+          var style = getComputedStyle(el);
+          return { id: el.id, cssRect: rect(el.getBoundingClientRect()), transform: style.transform, zoom: style.getPropertyValue('zoom') };
+        })
+      } : null,
+      engineStatus: '未收到引擎数据，基础数据仍可复制', recentErrors: recentErrors.slice()
+    };
+    if (typeof window.__kwCollectRenderDiagnostics === 'function') {
+      try {
+        var engine = window.__kwCollectRenderDiagnostics(mode);
+        result.engine = engine.engine; result.graphics = engine.graphics; result.labels = engine.labels;
+        result.engineStatus = '已连接';
+      } catch (error) { result.engineStatus = '读取失败：' + String(error); }
+    }
+    return result;
+  }
+  function fit() {
+    var vv = window.visualViewport;
+    var scale = vv && vv.scale || 1;
+    var width = (vv ? vv.width : innerWidth) * scale;
+    var height = (vv ? vv.height : innerHeight) * scale;
+    // Only the diagnostic panel counteracts page zoom; no game dimensions change.
+    panel.style.setProperty('display', 'block', 'important');
+    panel.style.width = Math.max(180, Math.min(420, width - 20)) + 'px';
+    panel.style.maxHeight = height * .72 + 'px';
+    panel.style.left = ((vv ? vv.offsetLeft : 0) + 10 / scale) + 'px';
+    panel.style.top = ((vv ? vv.offsetTop : 0) + Math.min(110, height * .18) / scale) + 'px';
+    panel.style.transform = 'scale(' + 1 / scale + ')';
+  }
+  function refresh() {
+    try {
+      fit();
+      var r = readBrowser();
+      summary.textContent = 'HTML 面板 v35 已启动 / 引擎：' + r.engineStatus
+        + '\n浏览器 DPR ' + r.browser.devicePixelRatio + ' / 引擎 DPR ' + (r.engine ? r.engine.devicePixelRatio : '待连接')
+        + '\n画布 ' + (r.canvas ? r.canvas.backingPixels.join(' × ') : '未就绪') + ' px'
+        + '\n显示 ' + (r.canvas ? r.canvas.cssRect.slice(2).join(' × ') : '未就绪') + ' CSS px'
+        + '\n页面缩放 ' + (r.browser.visualViewport ? r.browser.visualViewport.scale : 1)
+        + ' / 顶部安全区 ' + (r.browser.safeCss[0] || '未报告');
+      data.value = JSON.stringify(r, null, 2);
+      return true;
+    } catch (error) { status.textContent = '诊断读取失败：' + String(error); return false; }
+  }
+  function fallbackCopy() {
+    data.style.display = 'block';
+    data.focus(); data.select(); data.setSelectionRange(0, data.value.length);
+    var copied = false;
+    try { copied = document.execCommand('copy'); } catch (ignored) {}
+    status.textContent = copied ? '已复制' + mode + '数据，请粘贴到聊天。' : '请长按下方文本框，全选并复制；也可直接截取面板。';
+  }
+  function copy(nextMode) {
+    mode = nextMode;
+    if (!refresh()) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        navigator.clipboard.writeText(data.value).then(function () {
+          status.textContent = '已复制' + mode + '数据，请粘贴到聊天。';
+        }, fallbackCopy);
+      } catch (error) { fallbackCopy(); }
+    } else { fallbackCopy(); }
+  }
+  document.getElementById('kwDiagMobile').onclick = function () { copy('手机模式'); };
+  document.getElementById('kwDiagDesktop').onclick = function () { copy('电脑模式'); };
+  document.getElementById('kwDiagRefresh').onclick = refresh;
+  document.getElementById('kwDiagDetails').onclick = function () { refresh(); data.style.display = data.style.display === 'none' ? 'block' : 'none'; };
+  document.getElementById('kwDiagToggle').onclick = function () {
+    body.style.display = body.style.display === 'none' ? 'block' : 'none';
+    this.textContent = body.style.display === 'none' ? '展开诊断' : '收起';
+    if (body.style.display !== 'none') refresh();
+  };
+  // Keep panel gestures out of the underlying game's input handlers.
+  ['pointerdown', 'pointerup', 'touchstart', 'touchend', 'click'].forEach(function (name) {
+    panel.addEventListener(name, function (e) { e.stopPropagation(); });
+  });
+  function moveIntoFullscreen() {
+    var fs = document.fullscreenElement || document.webkitFullscreenElement;
+    if (fs && fs.tagName !== 'CANVAS' && !fs.contains(panel)) fs.appendChild(panel);
+    if (!fs && panel.parentElement !== document.body) document.body.appendChild(panel);
+    refresh();
+  }
+  document.addEventListener('fullscreenchange', moveIntoFullscreen);
+  document.addEventListener('webkitfullscreenchange', moveIntoFullscreen);
+  window.addEventListener('resize', refresh);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', refresh);
+  window.addEventListener('kw-render-diagnostics-ready', refresh);
+  window.addEventListener('error', function (e) { if (recentErrors.length < 5) recentErrors.push(String(e.message || 'script error').slice(0, 240)); });
+  window.addEventListener('unhandledrejection', function (e) { if (recentErrors.length < 5) recentErrors.push(String(e.reason).slice(0, 240)); });
+  refresh();
+  setTimeout(refresh, 1500);
+  setTimeout(refresh, 5000);
+})();
+</script>
+<!-- /KW diagnostics -->
+
+<!-- Polyfills bundle. -->
+
+<script src="src/polyfills.bundle.5adbf.js" charset="utf-8"> </script>
+
+
+<!-- SystemJS support. -->
+<script src="src/system.bundle.543e6.js" charset="utf-8"> </script>
+
+<!-- Import map -->
+<script src="src/import-map.4e643.json?kwengine=2cb74a1e8caa095a" type="systemjs-importmap" charset="utf-8"> </script>
+
+<script>
+    System.import('./index.777d2.js?v=1792387418').catch(function(err) { console.error(err); })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-first-level-balance-v37-20261018-200242",
+  "entryVersion": "1792324910",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-burn-status-v36-20261018-171438",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=first-level-balance-v37-1792324910",
+  "priorPreviewFilesPreserved": 793,
+  "originalFilesChecked": 1820,
+  "changedExistingFiles": [
+    "assets/scripts/Boot.ts",
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/battle/WaveManager.ts",
+    "assets/scripts/config/LevelDifficulty.ts",
+    "assets/scripts/config/Mobs.ts",
+    "assets/scripts/core/SaveData.ts",
+    "assets/scripts/ui/BattleRewardPanel.ts",
+    "assets/scripts/ui/HUD.ts",
+    "assets/scripts/ui/LevelLootPreview.ts",
+    "assets/scripts/ui/Panels.ts",
+    "assets/scripts/ui/pages/HeroPage.ts",
+    "assets/scripts/ui/pages/LevelsPage.ts"
+  ],
+  "typeDiagnosticsUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "allOriginalMediaUnchanged": true,
+  "audioAndRenderingUnchanged": true,
+  "heroWeaponCardDamageFormulasUnchanged": true,
+  "scope": "Normal 1-1 six waves, new-profile teaching, one-time first-victory bow, retry spawns at capacity",
+  "manualAcceptance": "User manual; no tests/game/browser/simulation/audio playback performed",
+  "deployment": "https://e4af7e0f.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.c7f21.js?v=1792324910",
+    "finalUrl": "https://kingdom-watch.pages.dev/?v=first-level-balance-v37-1792324910"
+  }
+}

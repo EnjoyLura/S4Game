@@ -82,7 +82,7 @@ export function heroRoster(parent: Node, top: number, selected: string, onSelect
     mainLabel(slot, 0, -32, def.name.split('·')[0], { size: 18, color: active ? '#FFE1A0' : owned ? '#D9DFD4' : '#8D9A91', bold: active, w: 112, h: 24 });
     if (active) gpanel(slot, 0, -49, 28, 3, '#E8BA60', undefined, 0, 1);
     bindButton(slot, () => {
-      if (!owned) { toast('前往商店解锁该英雄'); return; }
+      if (!owned) { toast(def.id === 'pyro' ? '通关普通1-2免费获得火法师' : '前往商店解锁该英雄'); return; }
       onSelect(def.id);
     }, { sound: 'select' });
   });
@@ -108,6 +108,9 @@ export function heroFigure(parent: Node, id: string, x: number, footY: number, h
 
 export interface PageCtx {
   screens: Node;
+  openEndless?: () => void;
+  /** Navigate through MainUI so overlays and persistent navigation update together. */
+  navigate?: (tab: number) => void;
   /** 全屏刷新（页签内容整屏重建 + 顶栏货币刷新） */
   refresh: () => void;
   /** Update shared currencies without replacing the page or its open dialog. */

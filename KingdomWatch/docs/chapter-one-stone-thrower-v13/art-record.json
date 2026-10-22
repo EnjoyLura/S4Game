@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-21",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in reference generation",
+  "design_standard": "../monster-design-prompt-standard-v1/master-prompt-zh.txt",
+  "prompt": "prompt.txt",
+  "reference": {
+    "path": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-skull-grunt-v12/grunt-more-ragged.png",
+    "role": "Current blue species and rendering direction; not an outfit to duplicate or a user-approved final master",
+    "sha256": "8758008ade0a58dfe4d34394fffd5ec8102b92afa704ddd1ea9fab4e5c1e2b25"
+  },
+  "output": {
+    "file": "beastfolk-stone-thrower.png",
+    "generated_source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-c6c2ed2b-f62d-46bb-bce2-ad173fb73532.png",
+    "sha256": "9faffd1b75af2868bd21a7b539e876abea3d2f47f97d23cac680b6a994338beb",
+    "original_bytes_preserved": true
+  },
+  "visual_inspection": {
+    "species": "Blue skin, yellow eyes, broad short muzzle, lateral pointed ears and broad clawed feet.",
+    "differentiation": "Rounder scowling face, heavier lower lip and short tusks, compact fuller trunk, ochre tied headcloth and pale worn tunic; no large bone helmet or red cape.",
+    "equipment": "Open hide bag contains grey stones; one rounded stone held low by thigh, other arm relaxed low; no sling.",
+    "clothing": "Missing shoulder edge, worn holes and unequal hem with a few threads; pale coarse cloth and dark short trousers.",
+    "composition": "One frontal full-body figure, both feet at similar depth, no text/scenery, ivory background and clear margins.",
+    "limitations": "Painted muscle and texture detail remains relatively pronounced. Concept art pending user judgement; not a transparent animation master."
+  },
+  "user_visual_approval": "rejected: user states clothing and face are too human and unsuitable",
+  "game_integrated": false
+}

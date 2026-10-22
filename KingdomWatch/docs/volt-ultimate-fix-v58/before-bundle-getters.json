@@ -1,0 +1,9 @@
+{
+  "bundle": "D:\\AI\\S4Game\\KingdomWatch\\build\\web-mobile\\assets\\main\\index.9ab63.js",
+  "getters": [
+    "rn this.ultUnlocked&&this.charge>=this.chargeGoal&&this.ultimateRemaining<=0}},{key:\"ultShowDuration\",get:function(){return dt[this.id].duration}},{key:\"ultimateRemaining\",get:function(){return this.ultimateT}},{key:\"skillPct\",get:function(){return this.skillUnlocked?1-this.skillCd/this.skillCdTotal:0}},{key:\"skillCdTotal\",get:function(){return Math.max(2,this.skillMax-(this.stats.skillCd",
+    "get:function(){return Math.max(this.ultimateT,this.volleyQueue.length?.01:0)}},{key:\"ultShowDuration\",get:function(){return dt.archer.duration+(Math.max(1,this.stats.ultRounds||1)-1)*ct+(p(this.stats.ultLv).rows-2)*ft}}]),r}(vt)),t(\"SniperHero\",function(t){function a(){for(var i,e=arguments.length,s=new Array(e),r=0;r<e;r++)s[r]=arguments[r];return(i=t.call.apply(t,[this].concat(s))||this",
+    "get:function(){return Math.max(this.ultimateT,this.meteorQueue.length?.01:0)}},{key:\"ultShowDuration\",get:function(){var t=T(this.stats);return this.meteorQueue.length?Math.max(dt.pyro.duration,this.meteorQueue.reduce((function(t,i){return Math.max(t,(i.fired?0:Math.max(0,i.t))+(V+50-i.y)/yt)}),0)+.8):Math.max(dt.pyro.duration,dt.pyro.windup+(t-1)*pt+(V+50-O)/yt+.8)}}]),a}(vt)),t(\"VoltHer",
+    "get:function(){return Math.max(this.ultimateT,this.strikeQueue.length?.01:0)}},{key:\"ultShowDuration\",get:function(){return t.prototype.ultShowDuration+1.2*Math.max(0,Math.ceil((D(this.stats)-15)/5))}}]),a}(vt)),t(\"FrostHero\",function(t){function i(){for(var i,e=arguments.length,s=new Array(e),r=0;r<e;r++)s[r]=arguments[r];return(i=t.call.apply(t,[this].concat(s))||this).id=\"mora\",i.name="
+  ]
+}

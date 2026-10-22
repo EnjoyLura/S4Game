@@ -1,0 +1,20 @@
+{
+  "changed": [
+    "assets/scripts/ui/BattleRewardPanel.ts",
+    "assets/scripts/ui/EndlessLootPreview.ts",
+    "assets/scripts/ui/LevelLootPreview.ts",
+    "assets/scripts/ui/Panels.ts",
+    "assets/scripts/ui/RewardPopup.ts",
+    "assets/scripts/ui/SettlementPanelSkin.ts",
+    "assets/scripts/ui/pages/BasePage.ts",
+    "assets/scripts/ui/pages/EndlessPage.ts",
+    "assets/scripts/ui/pages/LevelsPage.ts",
+    "assets/scripts/ui/pages/ShopPage.ts"
+  ],
+  "added": [
+    "assets/scripts/ui/ItemDetails.ts",
+    "assets/scripts/ui/ItemDetails.ts.meta"
+  ],
+  "removed": [],
+  "originalFiles": 2076
+}

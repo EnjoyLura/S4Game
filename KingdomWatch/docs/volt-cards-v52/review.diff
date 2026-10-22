@@ -1,0 +1,361 @@
+--- before/assets/scripts/battle/Hero.ts
++++ after/assets/scripts/battle/Hero.ts
+@@ -10,6 +10,7 @@
+ import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
+ import { HeroStats, abilityDamage, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+ import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDuration, pyroMeteorCount, pyroMeteorDamage } from '../config/Cards';
++import { voltShockDuration, voltShockAmp, voltShockedMultiplier, voltStrikeCount, voltStrikeTime } from '../config/Cards';
+ import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, MORA_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL, LO, LINE_Y } from '../config/GameConfig';
+ import { Monster, MonsterManager } from './Monster';
+ import { ProjectileManager, ProjSpec } from './Projectile';
+@@ -1284,8 +1285,9 @@
+   /** 大招·天雷灭世：排队落下的雷击（目标引用，落雷时已亡则转随机存活目标） */
+   private strikeQueue: { t: number; target: Monster | null; index: number }[] = [];
+   get ultimateRemaining(): number { return Math.max(this.ultimateT, this.strikeQueue.length ? .01 : 0); }
+-  /** 士气高涨：大招后攻速加成剩余时间 */
+-  private hasteT = 0;
++  get ultShowDuration(): number {
++    return super.ultShowDuration + Math.max(0, Math.ceil((voltStrikeCount(this.stats) - 15) / 5)) * 1.2;
++  }
+ 
+   protected buildVisual(parent: Node): void {
+     const g = this.node.addComponent(Graphics);
+@@ -1338,11 +1340,6 @@
+     this.attachBattleArt('volt');
+   }
+ 
+-  /** 士气高涨窗口攻速 +40% */
+-  protected attackInterval(): number {
+-    return 1 / (this.stats.aspd * (this.hasteT > 0 ? 1.4 : 1));
+-  }
+-
+   /** 闪电弹种统一构造：紫色细弹 + 感电词条 */
+   private spec(base: {
+     x: number; y: number; dirX: number; dirY: number; dmg: number;
+@@ -1358,8 +1355,8 @@
+       slowDur: this.stats.slowDur || 2,
+       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
+       spark: true, ability: base.ability, ult: base.ult, stun: base.stun,
+-      shockAmp: this.shockAmp(), shockDur: 3,
+-      shockedBonus: this.stats.shockedBonus || undefined,
++      shockAmp: voltShockAmp(this.stats), shockDur: voltShockDuration(this.stats),
++      shockedBonus: voltShockedMultiplier(this.stats, true) - 1 || undefined,
+       ...this.targetBonuses(),
+     };
+   }
+@@ -1384,9 +1381,6 @@
+     this.skillCd = this.skillCdTotal;   // 冷却缩减卡
+     this.castChain(mgr, projs, dmg);
+   }
+-
+-  /** 感电增伤值 = 感电来源（感电卡/雷霆之躯）× 30级加深倍率 */
+-  private shockAmp(): number { return (this.stats.shockOnHit || 0) * (this.stats.shockAmpMul || 1); }
+ 
+   /** 连锁闪电本体（普攻概率施法复用）：从技能范围最近目标起跳，最多 skillShots 目标间跳跃 */
+   private castChain(mgr: MonsterManager, projs: ProjectileManager, dmg?: DamageService): void {
+@@ -1408,11 +1402,13 @@
+       struck.add(cur);
+       // 直接结算伤害（连锁无弹道，即时跳）
+       const hpBefore = cur.hp;
+-      const dmgK = sc.chainInc ? hitDmg * (1 + sc.chainInc * k) : hitDmg;   // 15级：越跳越痛
+-      const done = cur.takeDamage(dmgK, Math.random() < this.stats.critRate, this.id);
+-      if (dmg) dmg.add(this.id, Math.min(dmgK, hpBefore));
+-      const sa = this.shockAmp();
+-      if (sa) cur.applyShock(sa, 3);
++      const crit = Math.random() < this.stats.critRate;
++      const dmgK = hitDmg * (1 + sc.chainInc * k) * (crit ? this.stats.critMul : 1)
++        * (cur.shockT > 0 ? voltShockedMultiplier(this.stats) : 1);
++      cur.takeDamage(dmgK, crit, this.id);
++      if (dmg) dmg.add(this.id, Math.min(hpBefore, Math.max(0, hpBefore - cur.hp)));
++      const sa = voltShockAmp(this.stats);
++      if (sa && !cur.dead) cur.applyShock(sa, voltShockDuration(this.stats));
+       projs.voltChain(fromX, fromY, cur.x, cur.y, k);
+       fromX = cur.x; fromY = cur.y;
+       // 下一跳：距当前最近且未被打过的（无则终止）
+@@ -1423,7 +1419,6 @@
+         if (d < nd && d <= hop) { nd = d; next = o; }
+       }
+       cur = next;
+-      void done;
+     }
+   }
+ 
+@@ -1441,11 +1436,11 @@
+           t = alive[(Math.random() * alive.length) | 0];
+         }
+         this.animateAttack(true, t.x - this.x, t.y - (HERO_Y + 60));
+-        this.thunderStrike(t, mgr, projs, q.index >= 10 ? 1.16 : 1);
+-        this.ultimateBeat(t.x, t.depthY, q.index === 14 ? 1 : q.index === 0 ? .85 : .3, true);
+-      }
+-    }
+-    if (this.hasteT > 0) this.hasteT -= dt;
++        const count = voltStrikeCount(this.stats);
++        this.thunderStrike(t, mgr, projs, q.index >= count - 5 ? 1.16 : 1);
++        this.ultimateBeat(t.x, t.depthY, q.index === count - 1 ? 1 : q.index === 0 ? .85 : .3, true);
++      }
++    }
+   }
+ 
+   protected queuedShotDelay(): number {
+@@ -1462,16 +1457,19 @@
+     for (const o of mgr.mobsInRadius(t.x, t.y, 90 * uc.rMul)) {   // 5级：落雷范围+20%
+       if (o.dead) continue;
+       const hpBefore = o.hp;
+-      o.takeDamage(dmgVal, false, this.id, false, 0, -Math.PI / 2, true);
+-      if (this.lastDmg) this.lastDmg.add(this.id, Math.min(dmgVal, hpBefore));
+-      if (this.stats.ultStun) o.stunT = Math.max(o.stunT, this.stats.ultStun);
+-      const sa2 = Math.max(this.shockAmp(), uc.shockOn ? 0.25 * (this.stats.shockAmpMul || 1) : 0);   // 10级：落雷自带感电（取更优）
+-      if (sa2) o.applyShock(sa2, 3);
++      const amount = dmgVal * (o.shockT > 0 ? voltShockedMultiplier(this.stats) : 1);
++      o.takeDamage(amount, false, this.id, false, 0, -Math.PI / 2, true);
++      if (this.lastDmg) this.lastDmg.add(this.id, Math.min(hpBefore, Math.max(0, hpBefore - o.hp)));
++      if (!o.dead) {
++        if (this.stats.ultStun) o.stunT = Math.max(o.stunT, this.stats.ultStun);
++        const sa2 = voltShockAmp(this.stats, true); // 大招10级与卡牌感电取高
++        if (sa2) o.applyShock(sa2, voltShockDuration(this.stats));
++      }
+     }
+     void t;
+   }
+ 
+-  /** 大招·天雷灭世（手动，击杀充能）：全屏 15 道落雷（在场目标轮转，目标不足时随机补位），每道 AOE + 眩晕 1s */
++  /** 大招·天雷灭世：基础15道，雷暴增援最多25道；每道真实范围伤害+当前眩晕时长。 */
+   castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean {
+     if (!this.ultReady) return false;
+     const alive = mgr.list.filter(m => !m.dead);
+@@ -1480,12 +1478,11 @@
+     this.beginUltimate();
+     bus.emit(EVT.CHARGE_CHANGED, 0, false);
+     this.lastDmg = dmg;   // 天雷直伤计入伤害统计（施放时刷新引用）
+-    for (let k = 0; k < 15; k++) {
++    const count = voltStrikeCount(this.stats);
++    for (let k = 0; k < count; k++) {
+       const t = alive[k % alive.length];
+-      const group = Math.floor(k / 5), within = k % 5;
+-      this.strikeQueue.push({ t: [.65, 1.95, 3.15][group] + within * [.2, .17, .16][group], target: t, index: k });
+-    }
+-    if (this.stats.ultHaste) this.hasteT = 5;
++      this.strikeQueue.push({ t: voltStrikeTime(k), target: t, index: k });
++    }
+     void projs;
+     return true;
+   }
+--- before/assets/scripts/battle/Monster.ts
++++ after/assets/scripts/battle/Monster.ts
+@@ -311,6 +311,7 @@
+     if (this.slowT > 0) this.slowT = Math.max(0, this.slowT - dt);
+     if (this.slowT <= 0) this.slowAmp = 0.2;
+     if (this.shockT > 0) this.shockT = Math.max(0, this.shockT - dt);
++    if (this.shockT <= 0) this.shockAmp = 0;
+     if (this.vulnT > 0) this.vulnT = Math.max(0, this.vulnT - dt);
+     if (this.hunterMarkT > 0) {
+       this.hunterMarkAge += dt;
+@@ -392,9 +393,10 @@
+ 
+   /** 受击；crit 用于飘字样式；ignoreRes=无视物抗（狙击大招等）；返回是否击杀
+    *  受击只掉血+闪红，不硬直/减速/击退——控制只来自特定 buff（applySlow 等后续技能效果） */
+-  /** 感电：雷系命中后受伤放大 3s（重复命中刷新时长，取更高倍率） */
++  /** 感电：同类状态取高并刷新；过期强度不能被后续较弱的感电继承。 */
+   applyShock(amp: number, dur: number): void {
+-    this.shockAmp = Math.max(this.shockAmp, amp);
++    if (this.dead || amp <= 0 || dur <= 0) return;
++    this.shockAmp = this.shockT > 0 ? Math.max(this.shockAmp, amp) : amp;
+     this.shockT = Math.max(this.shockT, dur);
+   }
+ 
+--- before/assets/scripts/config/Cards.ts
++++ after/assets/scripts/config/Cards.ts
+@@ -55,6 +55,9 @@
+   pyroUltHitMul?: number; // 陨星威能：仅大招直接/溅射伤害，不放大灼烧
+   pyroSplashBurn?: boolean; // 烈焰附着：普攻溅射也附加灼烧
+   shockOnHit: number;   // 雷系命中感电：目标受伤 +25% 持续 3s（感电卡，0=无）
++  voltShockBonus?: number; // 高压电流：仅雷法自身对感电目标伤害+30%/层
++  voltShockLinger?: number; // 余电不散：所有雷法来源感电持续+s
++  voltStrikeBonus?: number; // 雷暴增援：额外真实落雷数
+   chargeEff: number;    // 装备充能效率词条：击杀充能 ×(1+eff)（累加）
+   pierceChance: number; // 英雄突破：普攻贯穿概率（0~1，累加）
+   defIgnore: number;    // 英雄突破：无视防御比例（0~1，累加）
+@@ -134,6 +137,21 @@
+   return { boltMul: (2.2 + (u >= 20 ? 0.4 : 0)) * (1 + (u - 1) * 0.08), rMul: u >= 5 ? 1.2 : 1, shockOn: u >= 10, chargeOn: u >= 15 };
+ }
+ 
++/** 雷法强化的战斗/提示共用配置；额外落雷延续原五道一组的节奏。 */
++export function voltShockDuration(s: HeroStats): number { return 3 + (s.voltShockLinger || 0); }
++export function voltShockedMultiplier(s: HeroStats, normal = false): number {
++  return (1 + (s.voltShockBonus || 0)) * (1 + (normal ? s.shockedBonus || 0 : 0));
++}
++export function voltShockAmp(s: HeroStats, ultimate = false): number {
++  return Math.max(s.shockOnHit || 0, ultimate && voltUltCfg(s.ultLv).shockOn ? .25 : 0) * (s.shockAmpMul || 1);
++}
++export function voltStrikeCount(s: HeroStats): number { return 15 + (s.voltStrikeBonus || 0); }
++export function voltStrikeTime(index: number): number {
++  const group = Math.floor(index / 5), within = index % 5;
++  return (group < 3 ? [.65, 1.95, 3.15][group] : 3.15 + (group - 2) * 1.2)
++    + within * (group < 3 ? [.2, .17, .16][group] : .16);
++}
++
+ /* ---------- 火法师（焰·辉）技能升级效果（用户定稿；战斗侧与提示面板共用） ---------- */
+ /** 普攻槽：每级普攻伤害+8%，5级攻速+6%，10级暴击率+5%，15级对灼烧目标+25%，20级普攻伤害再+20% */
+ export function pyroAtkCfg(a: number): { normalMul: number; aspdOn: boolean; critOn: boolean; burnedOn: boolean } {
+@@ -316,7 +334,7 @@
+ function abilityCard(owner: string, unlocks: 'skill' | 'ult', abilityName: string): CardDef {
+   return c({
+     id: owner + '_unlock_' + unlocks, name: unlocks === 'skill' ? '解锁技能' : '解锁大招',
+-    owner, rarity: owner === 'archer' || owner === 'sniper' || owner === 'pyro' ? 'gold' : 'white', maxStacks: 1, unlocks,
++    owner, rarity: owner === 'archer' || owner === 'sniper' || owner === 'pyro' || owner === 'volt' ? 'gold' : 'white', maxStacks: 1, unlocks,
+     desc: '本局学习「' + abilityName + '」' + (unlocks === 'skill' ? '\n冷却结束后自动释放' : '\n解锁后开始充能\n充满后点击释放'),
+     apply: x => { if (unlocks === 'skill') x.hero.skillUnlocked = true; else x.hero.ultUnlocked = true; },
+   });
+@@ -386,21 +404,21 @@
+ /* ---------- 火焰法师 · 范围爆炸与灼烧（白2/蓝6/紫5/黄3） ---------- */
+ export const PYRO_CARDS: CardDef[] = [
+   ...commonHeroCards('pyro'),
+-  c({ id: 'pyro_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'pyro', reqAny: ['pyro_unlock_skill', 'pyro_unlock_ult'], desc: '基础技能伤害 +30%\n技能、大招生效\n最多3层',
++  c({ id: 'pyro_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'pyro', reqAny: ['pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_spell_v2', desc: '基础技能伤害 +30%\n技能、大招生效\n最多3层',
+     apply: x => { x.hero.skillMul *= 1.3; } }),
+-  c({ id: 'pyro_shards', name: '爆裂火球', rarity: 'purple', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '烈焰爆裂火球 +1颗\n最多3层',
++  c({ id: 'pyro_shards', name: '爆裂火球', rarity: 'purple', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', art: 'ui_card_pyro_shards_v2', desc: '烈焰爆裂火球 +1颗\n最多3层',
+     apply: x => { x.hero.skillShots += 1; } }),
+   c({ id: 'pyro_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '技能冷却 -2 秒\n可叠加',
+     apply: x => { x.hero.skillCdFlat += 2; } }),
+-  c({ id: 'pyro_range', name: '爆裂范围', rarity: 'blue', maxStacks: 3, owner: 'pyro', desc: '普攻、技能、陨石\n爆炸半径 +20%\n不扩大索敌或陨石坑',
++  c({ id: 'pyro_range', name: '爆裂范围', rarity: 'blue', maxStacks: 3, owner: 'pyro', art: 'ui_card_pyro_range_v2', desc: '普攻、技能、陨石\n爆炸半径 +20%\n不扩大索敌或陨石坑',
+     apply: x => { x.hero.pyroBlastMul = (x.hero.pyroBlastMul || 1) * 1.2; } }),
+-  c({ id: 'pyro_war', name: '陨星威能', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招直接伤害 +40%\n不提高灼烧伤害\n最多3层',
++  c({ id: 'pyro_war', name: '陨星威能', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_ult', art: 'ui_card_pyro_war_v2', desc: '大招直接伤害 +40%\n不提高灼烧伤害\n最多3层',
+     apply: x => { x.hero.pyroUltHitMul = (x.hero.pyroUltHitMul || 1) * 1.4; } }),
+   c({ id: 'pyro_eager', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招充能需求 -25%\n最多2层',
+     apply: x => { x.hero.chargeMul *= 0.75; } }),
+   c({ id: 'pyro_burn', name: '烈焰附着', rarity: 'purple', maxStacks: 1, owner: 'pyro', art: 'ui_card_pyro_burn_v1', desc: '普攻直击、溅射点燃\n每秒20%攻击力\n持续3秒',
+     apply: x => { x.hero.burnOnHit = Math.max(x.hero.burnOnHit, .2); x.hero.pyroSplashBurn = true; } }),
+-  c({ id: 'pyro_ember', name: '余烬', rarity: 'purple', maxStacks: 3, owner: 'pyro', reqAny: ['pyro_burn', 'pyro_unlock_skill', 'pyro_unlock_ult'], desc: '全部灼烧伤害 +50%\n包含陨石坑\n最多3层，共+150%',
++  c({ id: 'pyro_ember', name: '余烬', rarity: 'purple', maxStacks: 3, owner: 'pyro', reqAny: ['pyro_burn', 'pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_ember_v2', desc: '全部灼烧伤害 +50%\n包含陨石坑\n最多3层，共+150%',
+     apply: x => { x.hero.pyroBurnBonus = (x.hero.pyroBurnBonus || 0) + .5; } }),
+   c({ id: 'pyro_linger', name: '余火绵延', rarity: 'purple', maxStacks: 2, owner: 'pyro', reqAny: ['pyro_burn', 'pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_linger_v1', desc: '灼烧持续时间 +1秒\n陨石坑持续时间 +1秒\n最多2层',
+     apply: x => { x.hero.pyroLinger = (x.hero.pyroLinger || 0) + 1; } }),
+@@ -408,25 +426,31 @@
+     apply: x => { x.hero.pyroMeteorBonus = (x.hero.pyroMeteorBonus || 0) + 2; } }),
+ ];
+ 
+-/* ---------- 雷电法师 · 沃尔·雷霆（§6.3 技能流 + §6.4 感电） ---------- */
++/* ---------- 雷电法师：连锁清群 / 感电协作 / 连续落雷 ---------- */
+ export const VOLT_CARDS: CardDef[] = [
+   ...commonHeroCards('volt'),
+-  c({ id: 'volt_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'volt', req: 'volt_unlock_skill', desc: '基础技能伤害 +40%\n技能、大招生效',
+-    apply: x => { x.hero.skillMul *= 1.4; } }),
+-  c({ id: 'volt_shards', name: '技能弹体', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '连锁闪电\n弹跳目标 +2\n可叠加',
++  c({ id: 'volt_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'volt', reqAny: ['volt_unlock_skill', 'volt_unlock_ult'], art: 'ui_card_volt_spell_v2', desc: '技能伤害项 +30%\n技能、大招生效\n最多3层',
++    apply: x => { x.hero.skillMul *= 1.3; } }),
++  c({ id: 'volt_shards', name: '连锁增幅', rarity: 'purple', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', art: 'ui_card_volt_shards_v2', desc: '连锁闪电目标 +2\n基础5→7→9→11个\n同次不重复命中',
+     apply: x => { x.hero.skillShots += 2; } }),
+-  c({ id: 'volt_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '技能冷却 -2 秒\n可叠加',
++  c({ id: 'volt_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '连锁闪电冷却 -2秒\n最多3层',
+     apply: x => { x.hero.skillCdFlat += 2; } }),
+-  c({ id: 'volt_range', name: '法术范围', rarity: 'white', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '连锁跳跃距离 +30%',
++  c({ id: 'volt_range', name: '电弧延伸', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '连锁跳跃距离 +30%\n不改变首次索敌范围\n最多3层',
+     apply: x => { x.hero.skillRangeMul *= 1.3; } }),
+-  c({ id: 'volt_war', name: '战吼', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_ult', desc: '大招伤害 +50%',
+-    apply: x => { x.hero.ultDmgMul *= 1.5; } }),
+-  c({ id: 'volt_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', desc: '大招充能需求 -25%\n可叠加',
++  c({ id: 'volt_war', name: '雷霆威能', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_ult', art: 'ui_card_volt_war_v2', desc: '大招落雷伤害 +40%\n最多3层',
++    apply: x => { x.hero.ultDmgMul *= 1.4; } }),
++  c({ id: 'volt_eager', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', desc: '大招充能需求 -25%\n最多2层',
+     apply: x => { x.hero.chargeMul *= 0.75; } }),
+-  c({ id: 'volt_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', desc: '大招释放后\n攻速 +40%\n持续 5 秒',
+-    apply: x => { x.hero.ultHaste = 1; } }),
+-  c({ id: 'volt_shock', name: '感电', rarity: 'purple', maxStacks: 2, owner: 'volt', desc: '雷系命中附加感电\n目标受到伤害 +25%\n持续 3 秒\n最多 +50%',
+-    apply: x => { x.hero.shockOnHit = Math.min(0.5, x.hero.shockOnHit + 0.25); } }),
++  c({ id: 'volt_shock', name: '感电', rarity: 'purple', maxStacks: 1, owner: 'volt', art: 'ui_card_volt_shock_v2', desc: '普攻、技能、大招附加感电\n目标受到所有伤害 +25%\n持续3秒，重复命中刷新',
++    apply: x => { x.hero.shockOnHit = Math.max(x.hero.shockOnHit, .25); } }),
++  c({ id: 'volt_pressure', name: '高压电流', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_shock', art: 'ui_card_volt_pressure_v1', desc: '雷法自身对感电目标\n伤害 +30%\n最多2层，共+60%',
++    apply: x => { x.hero.voltShockBonus = (x.hero.voltShockBonus || 0) + .3; } }),
++  c({ id: 'volt_linger', name: '余电不散', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_shock', art: 'ui_card_volt_linger_v1', desc: '感电持续时间 +1秒\n3→4→5秒\n最多2层',
++    apply: x => { x.hero.voltShockLinger = (x.hero.voltShockLinger || 0) + 1; } }),
++  c({ id: 'volt_strikes', name: '雷暴增援', rarity: 'gold', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', art: 'ui_card_volt_strikes_v1', desc: '大招额外落雷5次\n15→20→25道\n最多2层',
++    apply: x => { x.hero.voltStrikeBonus = (x.hero.voltStrikeBonus || 0) + 5; } }),
++  c({ id: 'volt_stun', name: '雷霆震慑', rarity: 'gold', maxStacks: 1, owner: 'volt', req: 'volt_unlock_ult', art: 'ui_card_volt_stun_v1', desc: '大招落雷眩晕 +1.5秒\n基础1→2.5秒\n最多1层',
++    apply: x => { x.hero.ultStun += 1.5; } }),
+ ];
+ 
+ /* ---------- 冰霜法师 · 莫拉·寒霜强化卡：减速加深 → 冻结扩化 → 控制转伤害 ---------- */
+--- before/assets/scripts/ui/BattleComicPanels.ts
++++ after/assets/scripts/ui/BattleComicPanels.ts
+@@ -165,7 +165,7 @@
+       text(header, 0, 0, card.name, { size: 25, bold: true, color: card.rarity === 'white' || card.rarity === 'gold' ? COMIC.text : COMIC.cream, w: 192, h: 42 });
+       const circle = N('pickIconSeat', frame, 0, 65).addComponent(Graphics); circle.fillColor = C('#E6DFCF'); circle.circle(0, 0, 60); circle.fill();
+       const key = card.art || (card.unlocks ? 'ui_icon_' + card.unlocks + '_' + card.owner : CARD_ART[card.id] || 'ui_card_' + card.id);
+-      if (card.owner === 'pyro') pickCardIcon(frame, 0, 65, 118, card);
++      if (card.owner === 'pyro' || card.owner === 'volt') pickCardIcon(frame, 0, 65, 118, card);
+       else artSprite(frame, 0, 65, 118, 118, key, { sliced: false });
+       if (card.owner !== 'global') {
+         heroPortrait(frame, -56, -23, 36, card.owner);
+--- before/assets/scripts/ui/Panels.ts
++++ after/assets/scripts/ui/Panels.ts
+@@ -5,6 +5,7 @@
+ import { Graphics, Label, Node, Sprite, sys, tween, UIOpacity, Vec3 } from 'cc';
+ import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+ import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDuration, pyroMeteorCount, pyroMeteorDamage } from '../config/Cards';
++import { voltShockDuration, voltShockAmp, voltShockedMultiplier, voltStrikeCount } from '../config/Cards';
+ import { FROST_ULT_RAIN_COUNT, HERO_Y, LO, PAL } from '../config/GameConfig';
+ import { DamageRow, fmtWk } from '../battle/DamageService';
+ import { HeroBase } from '../battle/Hero';
+@@ -476,7 +477,7 @@
+     const isArcher = hero.id === 'archer';
+     const cdTotal = hero.skillCdTotal + ' 秒';
+     const goalTxt = String(Math.round(hero.chargeGoal * 10) / 10);
+-    const shockTxt = (h.shockOnHit || 0) > 0 ? '感电：受伤 +' + Math.round(h.shockOnHit * (h.shockAmpMul || 1) * 100) + '%' : '';
++    const shockTxt = voltShockAmp(h) > 0 ? '感电+' + Math.round(voltShockAmp(h) * 100) + '% · ' + voltShockDuration(h) + 's' : '';
+     const iconY = WYB(126, 46);
+     let px: number, py: number, w = 300, hh = 272, title: string;
+     let rows: [string, string][];
+@@ -491,6 +492,7 @@
+           : ['弹道', (h.fan + h.serial > 0 ? (1 + h.fan) + '×' + (1 + h.serial) + ' 弹幕' : '1 支')],
+         ['暴击', Math.round(h.critRate * 100) + '% / ' + Math.round(h.critMul * 100) + '%'],
+         hero.id === 'pyro' ? ['灼烧', h.burnOnHit ? `${Math.round(hero.effAtk * h.burnOnHit * pyroBurnMultiplier(h))}/秒 · ${pyroBurnDuration(h)}秒` : '未获得普攻灼烧']
++          : hero.id === 'volt' ? ['感电', (shockTxt || '未获得') + (voltShockedMultiplier(h, true) > 1 ? ' · 对感电伤害+' + Math.round((voltShockedMultiplier(h, true) - 1) * 100) + '%' : '')]
+           : ['目标', '最靠下'],
+       ];
+       px = hero.x - 27 + 23 + 16 + w / 2;
+@@ -544,9 +546,9 @@
+         title = '技能 · 连锁闪电';
+         const vc = voltSkCfg(h.skillLv || 1);
+         rows = [
+-          ['效果', '最多连锁 ' + Math.round(h.skillShots || 5) + ' 个目标'],
++          ['效果', '连锁 ' + Math.round(h.skillShots || 5) + ' 目标 · 跳距 ' + Math.round(260 * (h.skillRangeMul || 1))],
+           ['每跳伤害', Math.round(hero.abilityDamage(vc.mul)) + '（技×' + vc.mul.toFixed(2) + '）'],
+-          ['特性', (vc.chainInc ? '每跳递增 +' + Math.round(vc.chainInc * 100) + '% · ' : '') + (shockTxt || '跳距 ' + Math.round(260 * (h.skillRangeMul || 1)))],
++          ['特性', (shockTxt || '同次不重复命中') + (h.voltShockBonus ? ' · 对感电+' + Math.round(h.voltShockBonus * 100) + '%' : '') + (vc.chainInc ? ' · 每跳+' + Math.round(vc.chainInc * 100) + '%' : '')],
+           ['冷却时间', cdTotal],
+           ['索敌范围', String(Math.round(h.skillRange))],
+           ['释放', '自动'],
+@@ -619,8 +621,8 @@
+       const vu = voltUltCfg(h.ultLv || 1);
+       rows = [
+         ['伤害', Math.round(hero.abilityDamage(vu.boltMul, true)) + ' × 每道'],
+-        ['形态', '15 道天雷轰炸全场' + (vu.rMul > 1 ? ' · 爆炸范围+' + Math.round((vu.rMul - 1) * 100) + '%' : '')],
+-        ['特性', '范围爆炸 · 眩晕 ' + (h.ultStun || 1).toFixed(1) + 's' + (vu.shockOn ? ' · 落雷感电' : shockTxt ? ' · ' + shockTxt : '')],
++        ['形态', voltStrikeCount(h) + ' 道天雷 · 半径 ' + Math.round(90 * vu.rMul)],
++        ['特性', '眩晕 ' + (h.ultStun || 1).toFixed(1) + 's' + (voltShockAmp(h, true) ? ' · 感电+' + Math.round(voltShockAmp(h, true) * 100) + '% ' + voltShockDuration(h) + 's' : '') + (h.voltShockBonus ? ' · 对感电+' + Math.round(h.voltShockBonus * 100) + '%' : '')],
+         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
+         ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'],
+         ['释放', '手动点击'],
+--- before/assets/scripts/ui/PickArt.ts
++++ after/assets/scripts/ui/PickArt.ts
+@@ -21,13 +21,13 @@
+     : CARD_ART[card.id] || 'ui_card_' + card.id);
+ }
+ 
+-/** Fire cards have one filled circular viewport, including legacy/shared art. Clip only the icon subtree. */
++/** Fire/lightning cards share a filled circular viewport. Clip only the icon subtree. */
+ export function pickCardIcon(parent: Node, x: number, y: number, size: number, card: CardDef, hideOnLoad: Node[] = []): Node {
+-  if (card.owner !== 'pyro') return artSprite(parent, x, y, size, size, pickCardArt(card), { sliced: false, hideOnLoad });
+-  const clip = N('pyroCardIcon', parent, x, y, size, size);
++  if (card.owner !== 'pyro' && card.owner !== 'volt') return artSprite(parent, x, y, size, size, pickCardArt(card), { sliced: false, hideOnLoad });
++  const clip = N(card.owner + 'CardIcon', parent, x, y, size, size);
+   const mask = clip.addComponent(Mask); mask.type = Mask.Type.GRAPHICS_ELLIPSE; mask.segments = 96;
+   const backing = N('pyroIconBacking', clip).addComponent(Graphics);
+-  backing.fillColor = C('#652E1D'); backing.circle(0, 0, size / 2); backing.fill();
++  backing.fillColor = C(card.owner === 'pyro' ? '#652E1D' : '#2E1C52'); backing.circle(0, 0, size / 2); backing.fill();
+   // Slightly cover the viewport so the painted circle reaches its boundary without transparent rim gaps.
+   artSprite(clip, 0, 0, size * 1.04, size * 1.04, pickCardArt(card), { sliced: false, fit: false, hideOnLoad });
+   return clip;

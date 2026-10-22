@@ -1,0 +1,443 @@
+--- before/assets/scripts/config/Cards.ts
++++ after/assets/scripts/config/Cards.ts
+@@ -1,6 +1,6 @@
+ /**
+  * 强化卡（§6 卡池，按英雄单独强化 + 全局卡；M0 弓箭手子集）
+- * 卡效果直接改写 HeroStats / 全局 Stats；desc 支持显示当前叠层
++ * 卡效果直接改写 HeroStats / 全局 Stats；desc 只说明本次效果、触发条件与代价
+  */
+ import { PAL } from './GameConfig';
+ 
+@@ -373,55 +373,55 @@
+ export const ARCHER_CARDS: CardDef[] = [
+   ...commonHeroCards('archer'),
+   c({ id: 'archer_pierce', name: '穿林箭', rarity: 'blue', maxStacks: 2, owner: 'archer',
+-    art: 'ui_card_sniper_pierce_v1', desc: '普攻额外穿透1个目标\n可配合连射、齐射\n最多2层',
++    art: 'ui_card_sniper_pierce_v1', desc: '普攻额外穿透1个目标',
+     apply: x => { x.hero.pierce += 1; } }),
+-  c({ id: 'serial', name: '连射', rarity: 'blue', maxStacks: 5, owner: 'archer', desc: '普攻追加1排连射\n攻击力 -10%\n最多5层',
++  c({ id: 'serial', name: '连射', rarity: 'blue', maxStacks: 5, owner: 'archer', desc: '普攻额外连射1次\n攻击力 -10%',
+     apply: archerAttackTradeoff(x => { x.hero.serial += 1; }) }),
+-  c({ id: 'fan', name: '齐射', rarity: 'blue', maxStacks: 5, owner: 'archer', desc: '普攻额外发射1支箭\n攻击力 -10%\n最多5层',
++  c({ id: 'fan', name: '齐射', rarity: 'blue', maxStacks: 5, owner: 'archer', desc: '普攻箭矢数量 +1\n攻击力 -10%',
+     apply: archerAttackTradeoff(x => { x.hero.fan += 1; }) }),
+-  c({ id: 'split', name: '分裂', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '命中分裂 2 支箭\n分裂箭伤害 50%\n攻击力 -10%',
++  c({ id: 'split', name: '分裂', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '命中后分裂2支箭\n分裂箭伤害50%\n攻击力 -10%',
+     apply: archerAttackTradeoff(x => { x.hero.split += 2; }) }),
+-  c({ id: 'explode', name: '小范围爆炸', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中触发爆炸\n溅射伤害 40%\n攻击力 -10%',
++  c({ id: 'explode', name: '小范围爆炸', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中触发范围爆炸\n溅射伤害40%\n攻击力 -10%',
+     apply: archerAttackTradeoff(x => { x.hero.explodeR = Math.max(x.hero.explodeR, 70); }) }),
+-  c({ id: 'explode_r', name: '爆炸范围', rarity: 'purple', maxStacks: 3, owner: 'archer', req: 'explode', desc: '爆炸半径 +40%\n需已学习爆炸',
++  c({ id: 'explode_r', name: '爆炸范围', rarity: 'purple', maxStacks: 3, owner: 'archer', req: 'explode', desc: '爆炸半径 +40%',
+     apply: x => { if (x.hero.explodeR > 0) x.hero.explodeR *= 1.4; } }),
+-  c({ id: 'explode_w', name: '爆炸威力', rarity: 'purple', maxStacks: 3, owner: 'archer', req: 'explode', desc: '爆炸伤害 +50%\n需已学习爆炸',
++  c({ id: 'explode_w', name: '爆炸威力', rarity: 'purple', maxStacks: 3, owner: 'archer', req: 'explode', desc: '爆炸伤害 +50%',
+     apply: x => { if (x.hero.explodeR > 0) x.hero.explodeMul *= 1.5; } }),
+-  c({ id: 'frost', name: '寒霜附魔', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中减速 20%\n持续 1 秒\n攻击力 -10%',
++  c({ id: 'frost', name: '寒霜附魔', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中减速20%\n持续1秒\n攻击力 -10%',
+     apply: archerAttackTradeoff(x => { x.hero.slowOnHit = 0.2; x.hero.slowDur = 1; }) }),
+-  c({ id: 'burn', name: '烈焰附魔', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中点燃 3 秒\n共60%攻击力伤害\n攻击力 -10%',
++  c({ id: 'burn', name: '烈焰附魔', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中点燃3秒\n累计60%攻击力伤害\n攻击力 -10%',
+     apply: archerAttackTradeoff(x => { x.hero.burnOnHit = 0.2; }) }),
+-  c({ id: 'instinct_a', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'archer', desc: '目标血量低于30%时\n伤害 +100%',
++  c({ id: 'instinct_a', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'archer', desc: '对生命低于30%的目标\n伤害 +100%',
+     apply: x => { x.hero.lowHpBonus += 1; } }),
+-  c({ id: 'rain_rounds', name: '多轮箭雨', rarity: 'gold', maxStacks: 2, owner: 'archer', req: 'archer_unlock_ult', desc: '大招箭雨 +1 轮\n最多 3 轮',
++  c({ id: 'rain_rounds', name: '多轮箭雨', rarity: 'gold', maxStacks: 2, owner: 'archer', req: 'archer_unlock_ult', desc: '大招箭雨轮数 +1',
+     apply: x => { x.hero.ultRounds += 1; } }),
+-  c({ id: 'fast_charge_a', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'archer', req: 'archer_unlock_ult', desc: '大招充能需求 -20%\n可叠加',
++  c({ id: 'fast_charge_a', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'archer', req: 'archer_unlock_ult', desc: '大招充能需求 -20%',
+     apply: x => { x.hero.chargeMul *= 0.8; } }),
+ ];
+ 
+ /* ---------- 狙击游侠 · 凯尔·鹰眼（§6.2/§6.4 普攻流·极限单体） ---------- */
+ export const SNIPER_CARDS: CardDef[] = [
+   ...commonHeroCards('sniper'),
+-  c({ id: 'execute', name: '处决标记', rarity: 'blue', maxStacks: 3, owner: 'sniper', desc: '对精英和BOSS\n伤害 +35%',
++  c({ id: 'execute', name: '处决标记', rarity: 'blue', maxStacks: 3, owner: 'sniper', desc: '对精英、首领\n伤害 +35%',
+     apply: x => { x.hero.executeBonus += 0.35; } }),
+-  c({ id: 'instinct_s', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'sniper', desc: '目标血量低于30%时\n伤害 +100%',
++  c({ id: 'instinct_s', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'sniper', desc: '对生命低于30%的目标\n伤害 +100%',
+     apply: x => { x.hero.lowHpBonus += 1; } }),
+-  c({ id: 'multi_lock', name: '多目标锁定', rarity: 'purple', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_skill', desc: '穿颅射击连狙 +2 发\n可叠加',
++  c({ id: 'multi_lock', name: '多目标锁定', rarity: 'purple', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_skill', desc: '穿颅射击额外连射2发',
+     apply: x => { x.hero.skillShots += 2; } }),
+-  c({ id: 'cd_cut', name: '冷却缩减', rarity: 'blue', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_skill', desc: '技能冷却 -2 秒\n可叠加',
++  c({ id: 'cd_cut', name: '冷却缩减', rarity: 'blue', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_skill', desc: '穿颅射击冷却 -2秒',
+     apply: x => { x.hero.skillCdFlat += 2; } }),
+   c({ id: 'sniper_range', name: '远距校准', rarity: 'blue', maxStacks: 3, owner: 'sniper', req: 'sniper_unlock_skill',
+     art: 'ui_card_sniper_range_v1', desc: '技能索敌范围 +30%',
+     apply: x => { x.hero.skillRange *= 1.3; } }),
+   c({ id: 'sniper_pierce', name: '贯颅弩矢', rarity: 'purple', maxStacks: 3, owner: 'sniper', req: 'sniper_unlock_skill',
+-    art: 'ui_card_sniper_pierce_v1', desc: '普攻、技能弩箭\n额外穿透1个目标',
++    art: 'ui_card_sniper_pierce_v1', desc: '普攻和技能弩箭\n额外穿透1个目标',
+     apply: x => { x.hero.pierce += 1; x.hero.skillPierce = (x.hero.skillPierce || 0) + 1; } }),
+-  c({ id: 'extra_line', name: '额外枪线', rarity: 'gold', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招枪线 +1 条\n可叠加',
++  c({ id: 'extra_line', name: '额外弩矢', rarity: 'gold', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招弩箭数量 +1',
+     apply: x => { x.hero.ultBolts += 1; } }),
+-  c({ id: 'fast_charge_s', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招充能需求 -20%\n可叠加',
++  c({ id: 'fast_charge_s', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招充能需求 -20%',
+     apply: x => { x.hero.chargeMul *= 0.8; } }),
+   c({ id: 'sniper_mark', name: '死亡准星', rarity: 'gold', maxStacks: 1, owner: 'sniper', req: 'sniper_unlock_ult',
+-    art: 'ui_card_sniper_mark_v1', desc: '大招命中挂上蓝色准星\n目标受到伤害 +30%\n持续 5 秒',
++    art: 'ui_card_sniper_mark_v1', desc: '大招命中施加易伤\n目标受到伤害 +30%\n持续5秒',
+     apply: x => { x.hero.ultMarkAmp = .3; } }),
+ ];
+ 
+@@ -429,54 +429,54 @@
+ export const PYRO_CARDS: CardDef[] = [
+   ...commonHeroCards('pyro'),
+   c({ id: 'pyro_burst', name: '余烬爆破', rarity: 'purple', maxStacks: 1, owner: 'pyro',
+-    art: 'ui_card_pyro_burn_v1', desc: '火法点燃的敌人死亡爆炸\n半径100，伤害为60%攻击力\n爆炸不触发二次引爆',
++    art: 'ui_card_pyro_burn_v1', desc: '自身点燃目标死亡时爆炸\n造成60%攻击力范围伤害\n爆炸不触发连锁',
+     apply: x => { x.hero.pyroBurnBurst = .6; } }),
+-  c({ id: 'pyro_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'pyro', reqAny: ['pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_spell_v2', desc: '基础技能伤害 +30%\n技能、大招生效\n最多3层',
++  c({ id: 'pyro_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'pyro', reqAny: ['pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_spell_v2', desc: '技能伤害属性 +30%\n影响技能与大招',
+     apply: x => { x.hero.skillMul *= 1.3; } }),
+-  c({ id: 'pyro_shards', name: '爆裂火球', rarity: 'purple', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', art: 'ui_card_pyro_shards_v2', desc: '烈焰爆裂火球 +1颗\n最多3层',
++  c({ id: 'pyro_shards', name: '爆裂火球', rarity: 'purple', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', art: 'ui_card_pyro_shards_v2', desc: '烈焰爆裂多发1颗火球',
+     apply: x => { x.hero.skillShots += 1; } }),
+-  c({ id: 'pyro_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '技能冷却 -2 秒\n可叠加',
++  c({ id: 'pyro_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '烈焰爆裂冷却 -2秒',
+     apply: x => { x.hero.skillCdFlat += 2; } }),
+-  c({ id: 'pyro_range', name: '爆裂范围', rarity: 'blue', maxStacks: 3, owner: 'pyro', art: 'ui_card_pyro_range_v2', desc: '普攻、技能、陨石\n爆炸半径 +20%\n不扩大索敌或陨石坑',
++  c({ id: 'pyro_range', name: '爆裂范围', rarity: 'blue', maxStacks: 3, owner: 'pyro', art: 'ui_card_pyro_range_v2', desc: '普攻、技能与陨石\n爆炸半径 +20%',
+     apply: x => { x.hero.pyroBlastMul = (x.hero.pyroBlastMul || 1) * 1.2; } }),
+-  c({ id: 'pyro_war', name: '陨星威能', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_ult', art: 'ui_card_pyro_war_v2', desc: '大招直接伤害 +40%\n不提高灼烧伤害\n最多3层',
++  c({ id: 'pyro_war', name: '陨星威能', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_ult', art: 'ui_card_pyro_war_v2', desc: '大招直接伤害 +40%',
+     apply: x => { x.hero.pyroUltHitMul = (x.hero.pyroUltHitMul || 1) * 1.4; } }),
+-  c({ id: 'pyro_eager', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招充能需求 -25%\n最多2层',
++  c({ id: 'pyro_eager', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招充能需求 -25%',
+     apply: x => { x.hero.chargeMul *= 0.75; } }),
+-  c({ id: 'pyro_burn', name: '烈焰附着', rarity: 'purple', maxStacks: 1, owner: 'pyro', art: 'ui_card_pyro_burn_v1', desc: '普攻直击、溅射点燃\n每秒20%攻击力\n持续3秒',
++  c({ id: 'pyro_burn', name: '烈焰附着', rarity: 'purple', maxStacks: 1, owner: 'pyro', art: 'ui_card_pyro_burn_v1', desc: '普攻和溅射点燃3秒\n每秒20%攻击力伤害',
+     apply: x => { x.hero.burnOnHit = Math.max(x.hero.burnOnHit, .2); x.hero.pyroSplashBurn = true; } }),
+-  c({ id: 'pyro_ember', name: '余烬', rarity: 'purple', maxStacks: 3, owner: 'pyro', reqAny: ['pyro_burn', 'pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_ember_v2', desc: '全部灼烧伤害 +50%\n包含陨石坑\n最多3层，共+150%',
++  c({ id: 'pyro_ember', name: '余烬', rarity: 'purple', maxStacks: 3, owner: 'pyro', reqAny: ['pyro_burn', 'pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_ember_v2', desc: '灼烧伤害 +50%\n包含陨石坑灼烧',
+     apply: x => { x.hero.pyroBurnBonus = (x.hero.pyroBurnBonus || 0) + .5; } }),
+-  c({ id: 'pyro_linger', name: '余火绵延', rarity: 'purple', maxStacks: 2, owner: 'pyro', reqAny: ['pyro_burn', 'pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_linger_v1', desc: '灼烧持续时间 +1秒\n陨石坑持续时间 +1秒\n最多2层',
++  c({ id: 'pyro_linger', name: '余火绵延', rarity: 'purple', maxStacks: 2, owner: 'pyro', reqAny: ['pyro_burn', 'pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_linger_v1', desc: '灼烧、陨石坑\n持续时间 +1秒',
+     apply: x => { x.hero.pyroLinger = (x.hero.pyroLinger || 0) + 1; } }),
+-  c({ id: 'pyro_meteors', name: '陨石增援', rarity: 'gold', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', art: 'ui_card_pyro_meteors_v1', desc: '大招额外落下2颗陨石\n最多2层，共+4颗',
++  c({ id: 'pyro_meteors', name: '陨石增援', rarity: 'gold', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', art: 'ui_card_pyro_meteors_v1', desc: '大招陨石数量 +2',
+     apply: x => { x.hero.pyroMeteorBonus = (x.hero.pyroMeteorBonus || 0) + 2; } }),
+ ];
+ 
+ /* ---------- 雷电法师：连锁清群 / 感电协作 / 连续落雷 ---------- */
+ export const VOLT_CARDS: CardDef[] = [
+   ...commonHeroCards('volt'),
+-  c({ id: 'volt_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'volt', reqAny: ['volt_unlock_skill', 'volt_unlock_ult'], art: 'ui_card_volt_spell_v2', desc: '技能伤害项 +30%\n技能、大招生效\n最多3层',
++  c({ id: 'volt_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'volt', reqAny: ['volt_unlock_skill', 'volt_unlock_ult'], art: 'ui_card_volt_spell_v2', desc: '技能伤害属性 +30%\n影响技能与大招',
+     apply: x => { x.hero.skillMul *= 1.3; } }),
+-  c({ id: 'volt_shards', name: '连锁增幅', rarity: 'purple', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', art: 'ui_card_volt_shards_v2', desc: '连锁闪电目标 +2\n基础5→7→9→11个\n同次不重复命中',
++  c({ id: 'volt_shards', name: '连锁增幅', rarity: 'purple', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', art: 'ui_card_volt_shards_v2', desc: '连锁闪电目标 +2',
+     apply: x => { x.hero.skillShots += 2; } }),
+-  c({ id: 'volt_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '连锁闪电冷却 -2秒\n最多3层',
++  c({ id: 'volt_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '连锁闪电冷却 -2秒',
+     apply: x => { x.hero.skillCdFlat += 2; } }),
+-  c({ id: 'volt_range', name: '电弧延伸', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '连锁跳跃距离 +30%\n不改变首次索敌范围\n最多3层',
++  c({ id: 'volt_range', name: '电弧延伸', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '闪电跳跃距离 +30%',
+     apply: x => { x.hero.skillRangeMul *= 1.3; } }),
+-  c({ id: 'volt_war', name: '雷霆威能', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_ult', art: 'ui_card_volt_war_v2', desc: '大招落雷伤害 +40%\n最多3层',
++  c({ id: 'volt_war', name: '雷霆威能', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_ult', art: 'ui_card_volt_war_v2', desc: '大招落雷伤害 +40%',
+     apply: x => { x.hero.ultDmgMul *= 1.4; } }),
+-  c({ id: 'volt_eager', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', desc: '大招充能需求 -25%\n最多2层',
++  c({ id: 'volt_eager', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', desc: '大招充能需求 -25%',
+     apply: x => { x.hero.chargeMul *= 0.75; } }),
+-  c({ id: 'volt_shock', name: '感电', rarity: 'purple', maxStacks: 1, owner: 'volt', art: 'ui_card_volt_shock_v2', desc: '普攻、技能、大招附加感电\n目标受到所有伤害 +25%\n持续3秒，重复命中刷新',
++  c({ id: 'volt_shock', name: '感电', rarity: 'purple', maxStacks: 1, owner: 'volt', art: 'ui_card_volt_shock_v2', desc: '命中附加3秒感电\n目标受到伤害 +25%',
+     apply: x => { x.hero.shockOnHit = Math.max(x.hero.shockOnHit, .25); } }),
+-  c({ id: 'volt_pressure', name: '高压电流', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_shock', art: 'ui_card_volt_pressure_v1', desc: '雷法自身对感电目标\n伤害 +30%\n最多2层，共+60%',
++  c({ id: 'volt_pressure', name: '高压电流', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_shock', art: 'ui_card_volt_pressure_v1', desc: '对感电目标\n自身伤害 +30%',
+     apply: x => { x.hero.voltShockBonus = (x.hero.voltShockBonus || 0) + .3; } }),
+-  c({ id: 'volt_linger', name: '余电不散', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_shock', art: 'ui_card_volt_linger_v1', desc: '感电持续时间 +1秒\n3→4→5秒\n最多2层',
++  c({ id: 'volt_linger', name: '余电不散', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_shock', art: 'ui_card_volt_linger_v1', desc: '感电持续时间 +1秒',
+     apply: x => { x.hero.voltShockLinger = (x.hero.voltShockLinger || 0) + 1; } }),
+-  c({ id: 'volt_strikes', name: '雷暴增援', rarity: 'gold', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', art: 'ui_card_volt_strikes_v1', desc: '大招额外落雷5次\n15→20→25道\n最多2层',
++  c({ id: 'volt_strikes', name: '雷暴增援', rarity: 'gold', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', art: 'ui_card_volt_strikes_v1', desc: '大招落雷次数 +5',
+     apply: x => { x.hero.voltStrikeBonus = (x.hero.voltStrikeBonus || 0) + 5; } }),
+-  c({ id: 'volt_stun', name: '雷霆震慑', rarity: 'gold', maxStacks: 1, owner: 'volt', req: 'volt_unlock_ult', art: 'ui_card_volt_stun_v1', desc: '大招落雷眩晕 +1.5秒\n基础1→2.5秒\n最多1层',
++  c({ id: 'volt_stun', name: '雷霆震慑', rarity: 'gold', maxStacks: 1, owner: 'volt', req: 'volt_unlock_ult', art: 'ui_card_volt_stun_v1', desc: '大招眩晕时间 +1.5秒',
+     apply: x => { x.hero.ultStun += 1.5; } }),
+ ];
+ 
+@@ -484,37 +484,37 @@
+ export const MORA_CARDS: CardDef[] = [
+   ...commonHeroCards('mora'),
+   c({ id: 'mora_team', name: '冰裂印记', rarity: 'purple', maxStacks: 1, owner: 'mora',
+-    art: 'ui_card_mora_brittle_v2', desc: '冰系命中施加冰裂印记\n目标受到全队伤害 +15%\n持续3秒，可刷新',
++    art: 'ui_card_mora_brittle_v2', desc: '命中附加3秒易伤\n目标受到伤害 +15%',
+     apply: x => { x.hero.moraTeamVuln = .15; } }),
+-  c({ id: 'mora_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'mora', reqAny: ['mora_unlock_skill', 'mora_unlock_ult'], art: 'ui_card_mora_spell_v2', desc: '技能伤害项 +30%\n技能、大招生效\n最多3层',
++  c({ id: 'mora_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'mora', reqAny: ['mora_unlock_skill', 'mora_unlock_ult'], art: 'ui_card_mora_spell_v2', desc: '技能伤害属性 +30%\n影响技能与大招',
+     apply: x => { x.hero.skillMul *= 1.3; } }),
+-  c({ id: 'mora_range', name: '极寒扩散', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', art: 'ui_card_mora_range_v2', desc: '冰霜领域半径 +20%\n不改变首次索敌范围\n最多3层',
++  c({ id: 'mora_range', name: '极寒扩散', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', art: 'ui_card_mora_range_v2', desc: '冰霜领域半径 +20%',
+     apply: x => { x.hero.skillRangeMul *= 1.2; } }),
+-  c({ id: 'mora_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', desc: '冰霜领域冷却 -2秒\n最多3层',
++  c({ id: 'mora_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', desc: '冰霜领域冷却 -2秒',
+     apply: x => { x.hero.skillCdFlat += 2; } }),
+-  c({ id: 'mora_chill', name: '凛冬之息', rarity: 'blue', maxStacks: 3, owner: 'mora', art: 'ui_card_mora_chill_v2', desc: '减速幅度 +10个百分点\n普攻、领域、大招生效\n最多3层，上限90%',
++  c({ id: 'mora_chill', name: '凛冬之息', rarity: 'blue', maxStacks: 3, owner: 'mora', art: 'ui_card_mora_chill_v2', desc: '减速幅度 +10个百分点\n最高减速90%',
+     apply: x => { x.hero.slowAmpBonus += .1; } }),
+-  c({ id: 'mora_freeze', name: '速冻之心', rarity: 'purple', maxStacks: 2, owner: 'mora', art: 'ui_card_mora_freeze_v2', desc: '普攻命中冰冻几率 +15%\n冰冻0.6秒，无需突破\n最多2层，可叠突破概率',
++  c({ id: 'mora_freeze', name: '速冻之心', rarity: 'purple', maxStacks: 2, owner: 'mora', art: 'ui_card_mora_freeze_v2', desc: '普攻冰冻几率 +15%\n冰冻持续0.6秒',
+     apply: x => { x.hero.moraFreezeChanceBonus = (x.hero.moraFreezeChanceBonus || 0) + .15; } }),
+-  c({ id: 'mora_war', name: '冰川之力', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_ult', art: 'ui_card_mora_war_v2', desc: '大招三段伤害 +40%\n最多3层',
++  c({ id: 'mora_war', name: '冰川之力', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_ult', art: 'ui_card_mora_war_v2', desc: '大招伤害 +40%',
+     apply: x => { x.hero.ultDmgMul *= 1.4; } }),
+-  c({ id: 'mora_linger', name: '寒冬延续', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '全部冰系减速持续 +1秒\n普攻、领域、大招生效\n最多2层，不延长冰封',
++  c({ id: 'mora_linger', name: '寒冬延续', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '减速持续时间 +1秒',
+     apply: x => { x.hero.moraSlowLinger = (x.hero.moraSlowLinger || 0) + 1; } }),
+-  c({ id: 'mora_freeze_linger', name: '冰封延长', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_skill', art: 'ui_card_mora_freeze_linger_v1', desc: '冰霜领域冰封 +1秒\n基础1.5→2.5→3.5秒\n最多2层',
++  c({ id: 'mora_freeze_linger', name: '冰封延长', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_skill', art: 'ui_card_mora_freeze_linger_v1', desc: '技能冰封时间 +1秒',
+     apply: x => { x.hero.moraFreezeLinger = (x.hero.moraFreezeLinger || 0) + 1; } }),
+-  c({ id: 'mora_eager', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '大招充能需求 -25%\n最多2层',
++  c({ id: 'mora_eager', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '大招充能需求 -25%',
+     apply: x => { x.hero.chargeMul *= 0.75; } }),
+-  c({ id: 'mora_brittle', name: '碎冰', rarity: 'purple', maxStacks: 2, owner: 'mora', art: 'ui_card_mora_brittle_v2', desc: '冰法对减速、冰封目标\n全部伤害 +30%\n最多2层，共+60%',
++  c({ id: 'mora_brittle', name: '碎冰', rarity: 'purple', maxStacks: 2, owner: 'mora', art: 'ui_card_mora_brittle_v2', desc: '对减速、冰封目标\n自身伤害 +30%',
+     apply: x => { x.hero.moraColdBonus = (x.hero.moraColdBonus || 0) + .3; } }),
+-  c({ id: 'mora_glacier', name: '绝对零度', rarity: 'gold', maxStacks: 1, owner: 'mora', req: 'mora_unlock_ult', art: 'ui_card_mora_glacier_v2', desc: '大招冰封1.5秒，命中刷新\n解冻后开始减速\nBoss免疫冰封',
++  c({ id: 'mora_glacier', name: '绝对零度', rarity: 'gold', maxStacks: 1, owner: 'mora', req: 'mora_unlock_ult', art: 'ui_card_mora_glacier_v2', desc: '大招命中冰封1.5秒\n首领免疫冰封',
+     apply: x => { x.hero.moraUltFreeze = 1.5; } }),
+ ];
+ 
+ /* ---------- 全局卡（§6.1） ---------- */
+ export const GLOBAL_CARDS: CardDef[] = [
+-  c({ id: 'wall', name: '城墙加固', rarity: 'white', maxStacks: 4, owner: 'global', desc: '防线耐久上限 +25%\n并回复 25% 耐久',
++  c({ id: 'wall', name: '城墙加固', rarity: 'white', maxStacks: 4, owner: 'global', desc: '防线耐久上限 +25%\n回复25%最大耐久',
+     apply: x => { x.line.addMaxMul(1.25); x.line.healPct(0.25); } }),
+-  c({ id: 'repair', name: '工事修理', rarity: 'blue', maxStacks: 3, owner: 'global', desc: '防线每秒回复\n0.5% 最大耐久',
++  c({ id: 'repair', name: '工事修理', rarity: 'blue', maxStacks: 3, owner: 'global', desc: '每秒回复0.5%最大耐久',
+     apply: x => { x.global.lineRegenPct += 0.005; } }),
+   c({ id: 'xp_badge', name: '经验勋章', rarity: 'white', offerGroup: 'stats', maxStacks: 3, owner: 'global', desc: '经验获取 +10%',
+     apply: x => { x.global.xpMul *= 1.1; } }),
+@@ -573,16 +573,6 @@
+   }
+ }
+ 
+-/** Keep the existing description box and every condition/tradeoff; at most four semantic lines. */
+-export function cardChoiceDescription(card: CardDef, stacks: Readonly<CardStacks>, team: BuildTeam): string {
+-  const lines = card.desc.split('\n').filter(line => !/^最多\s*\d+\s*层$/.test(line) && line !== '可叠加');
+-  const hint = cardComboHint(card, stacks, team);
+-  if (hint && lines.length < 3) lines.push(hint);
+-  const current = stacks[card.id] || 0;
+-  lines.push('叠层 ' + current + '→' + Math.min(card.maxStacks, current + 1) + ' / ' + card.maxStacks);
+-  return lines.join('\n');
+-}
+-
+ /** 抽卡、刷新与领取共用前置/上限检查，防止绕过解锁或重复学习。 */
+ export function canTakeCard(card: CardDef, stacks: CardStacks): boolean {
+   return (stacks[card.id] || 0) < card.maxStacks
+--- before/assets/scripts/config/FifthLevel.ts
++++ after/assets/scripts/config/FifthLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-5: the first five-stage climax; three Lv.5 heroes / Lv.3 weapons, 4–5 minutes at 1x. */
++/** Normal 1-5: denser fodder for open abilities; preserve authored stats, encounter order and duration. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -15,14 +15,14 @@
+   ({ mob: 'goblin_king', count: 1, interval: 1, delay: 0, actual: { hp: 7000, dmg: 30 } });
+ 
+ export const FIFTH_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(26, 380, 1.35)] },
+-  { groups: [workers(30, 400, 1.1), slingers(2, 300, 13)] },
+-  { groups: [workers(36, 420, .85), slingers(2, 320, 12), elite(3200, 12)], surge: true },
+-  { groups: [workers(18, 400, 1.6)] },
+-  { groups: [workers(40, 440, .75), riders(520, 14)], surge: true },
+-  { groups: [workers(34, 460, .9), slingers(4, 340, 10), riders(540, 16), shaman(18)] },
+-  { groups: [workers(40, 480, .72), elite(3400, 8), riders(560, 17)], surge: true },
++  { groups: [workers(40, 380, 0.85)] },
++  { groups: [workers(48, 400, 0.7), slingers(2, 300, 13)] },
++  { groups: [workers(58, 420, 0.53), slingers(2, 320, 12), elite(3200, 12)], surge: true },
++  { groups: [workers(30, 400, 0.96)] },
++  { groups: [workers(64, 440, 0.46), riders(520, 14)], surge: true },
++  { groups: [workers(54, 460, 0.56), slingers(4, 340, 10), riders(540, 16), shaman(18)] },
++  { groups: [workers(64, 480, 0.45), elite(3400, 8), riders(560, 17)], surge: true },
+   // Replace the final elite with the king, preserving this encounter's authored HP and line damage.
+-  { groups: [king(), workers(34, 480, .8, 2), slingers(4, 360, 8),
++  { groups: [king(), workers(54, 480, 0.5, 1), slingers(4, 360, 8),
+     riders(580, 17), shaman(12)], surge: true },
+ ];
+--- before/assets/scripts/config/FirstLevel.ts
++++ after/assets/scripts/config/FirstLevel.ts
+@@ -1,14 +1,14 @@
+-/** Normal 1-1 only. Absolute arrival stats; no chapter or per-wave multiplication. */
++/** Normal 1-1: denser fodder for open abilities; preserve authored HP, damage and six-wave arc. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+   ({ mob: 'goblin_worker', count, interval, delay, actual: { hp, dmg: 10 } });
+ export const FIRST_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(12, 280, 2.4)] },
+-  { groups: [workers(18, 300, 1.95)] },
+-  { groups: [workers(20, 320, 1.8)] },
+-  { groups: [workers(12, 320, 2.9)] },
+-  { groups: [workers(26, 360, 1.3)], surge: true },
++  { groups: [workers(16, 280, 1.65)] },
++  { groups: [workers(24, 300, 1.4)] },
++  { groups: [workers(28, 320, 1.25)] },
++  { groups: [workers(18, 320, 1.65)] },
++  { groups: [workers(34, 360, 0.98)], surge: true },
+   { groups: [{ mob: 'goblin_brute', count: 1, interval: 1, actual: { hp: 2200, dmg: 20 } },
+-    workers(12, 380, 2.15, 5)] },
++    workers(18, 380, 1.4, 4)] },
+ ];
+--- before/assets/scripts/config/FourthLevel.ts
++++ after/assets/scripts/config/FourthLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-4: a small step above 1-3, tuned around three Lv.3 heroes / Lv.2 weapons. */
++/** Normal 1-4: denser fodder for open abilities; preserve authored stats, encounter order and duration. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -13,13 +13,13 @@
+   ({ mob: 'goblin_shaman', count, interval: 10, delay, actual: { hp: 360, dmg: 0 } });
+ 
+ export const FOURTH_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(24, 360, 1.5)] },
+-  { groups: [workers(28, 380, 1.2), slingers(2, 280, 5, 13)] },
+-  { groups: [workers(34, 400, .9), slingers(2, 300, 5, 12), elite(1, 2800, 15)], surge: true },
+-  { groups: [workers(16, 380, 1.9)] },
+-  { groups: [workers(38, 420, .8), riders(480, 14)], surge: true },
+-  { groups: [workers(32, 440, 1), slingers(4, 320, 5, 10), riders(500, 16), shaman(1, 18)] },
+-  { groups: [workers(38, 460, .75), elite(1, 3000, 10), riders(520, 17)], surge: true },
+-  { groups: [workers(32, 460, .9, 3), slingers(4, 340, 5, 8),
++  { groups: [workers(34, 360, 1)] },
++  { groups: [workers(42, 380, 0.8), slingers(2, 280, 5, 13)] },
++  { groups: [workers(54, 400, 0.58), slingers(2, 300, 5, 12), elite(1, 2800, 15)], surge: true },
++  { groups: [workers(26, 380, 1.15)] },
++  { groups: [workers(58, 420, 0.52), riders(480, 14)], surge: true },
++  { groups: [workers(50, 440, 0.64), slingers(4, 320, 5, 10), riders(500, 16), shaman(1, 18)] },
++  { groups: [workers(60, 460, 0.48), elite(1, 3000, 10), riders(520, 17)], surge: true },
++  { groups: [workers(50, 460, 0.58, 2), slingers(4, 340, 5, 8),
+     elite(2, 3200, 5), riders(540, 17), shaman(2, 12)], surge: true },
+ ];
+--- before/assets/scripts/config/SecondLevel.ts
++++ after/assets/scripts/config/SecondLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-2: authored arrival stats, 1x combat target 3–4 minutes. */
++/** Normal 1-2: denser fodder for open abilities; preserve authored stats, encounter order and duration. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -6,12 +6,12 @@
+ const slingers = (count: number, hp: number, interval: number, delay = 0) =>
+   ({ mob: 'goblin_slinger', count, interval, delay, actual: { hp, dmg: 8 } });
+ export const SECOND_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(14, 320, 2.1)] },
+-  { groups: [workers(18, 340, 1.7), slingers(2, 280, 5, 13)] },
+-  { groups: [workers(20, 360, 1.6), slingers(2, 300, 5, 15)] },
+-  { groups: [workers(12, 360, 2.7)] },
+-  { groups: [workers(26, 400, 1.25), slingers(4, 320, 6, 9)], surge: true },
+-  { groups: [workers(20, 420, 1.5), slingers(4, 340, 6, 7)], surge: true },
+-  { groups: [workers(12, 440, 2, 4),
++  { groups: [workers(20, 320, 1.45)] },
++  { groups: [workers(26, 340, 1.2), slingers(2, 280, 5, 13)] },
++  { groups: [workers(28, 360, 1.1), slingers(2, 300, 5, 15)] },
++  { groups: [workers(20, 360, 1.55)] },
++  { groups: [workers(36, 400, 0.88), slingers(4, 320, 6, 9)], surge: true },
++  { groups: [workers(28, 420, 1.05), slingers(4, 340, 6, 7)], surge: true },
++  { groups: [workers(20, 440, 1.35, 3),
+     { mob: 'goblin_brute', count: 2, interval: 12, delay: 2, actual: { hp: 2600, dmg: 24 } }] },
+ ];
+--- before/assets/scripts/config/SixthLevel.ts
++++ after/assets/scripts/config/SixthLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-6: similar pressure to 1-5, longer 5–6 minute target, with short wolf-rider raids. */
++/** Normal 1-6: denser fodder for open abilities; preserve authored stats, encounter order and duration. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -13,17 +13,17 @@
+   ({ mob: 'goblin_shaman', count: 1, interval: 1, delay, actual: { hp, dmg: 0 } });
+ 
+ export const SIXTH_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(28, 400, 1.15)] },
+-  { groups: [workers(30, 420, 1.05), riders(3, 520, 8)] },
+-  { groups: [workers(32, 440, .95), slingers(2, 320, 12), elite(3200, 8)] },
+-  { groups: [workers(22, 420, 1.45), riders(3, 540, 10)] },
+-  { groups: [workers(36, 460, .85), riders(4, 560, 8)], surge: true },
+-  // A sparse middle wave separates the raids; the next wave still starts without waiting for a clear.
+-  { groups: [workers(20, 420, 1.55), slingers(2, 340, 14)] },
+-  { groups: [workers(36, 460, .84), riders(4, 560, 8), shaman(380, 20)], surge: true },
+-  { groups: [workers(32, 480, .95), slingers(4, 340, 8), elite(3400, 8)] },
+-  { groups: [workers(36, 480, .84), riders(4, 580, 8), shaman(400, 18)], surge: true },
++  { groups: [workers(44, 400, 0.72)] },
++  { groups: [workers(48, 420, 0.66), riders(3, 520, 8)] },
++  { groups: [workers(52, 440, 0.58), slingers(2, 320, 12), elite(3200, 8)] },
++  { groups: [workers(36, 420, 0.9), riders(3, 540, 10)] },
++  { groups: [workers(58, 460, 0.52), riders(4, 560, 8)], surge: true },
++  // Lighter middle wave separates the raids while maintaining a steady stream of targets.
++  { groups: [workers(34, 420, 0.94), slingers(2, 340, 14)] },
++  { groups: [workers(58, 460, 0.52), riders(4, 560, 8), shaman(380, 20)], surge: true },
++  { groups: [workers(52, 480, 0.58), slingers(4, 340, 8), elite(3400, 8)] },
++  { groups: [workers(58, 480, 0.52), riders(4, 580, 8), shaman(400, 18)], surge: true },
+   // An ordinary elite arrives early in the final wave; no repeat of the 7000-HP climax from 1-5.
+-  { groups: [elite(4000, 0), workers(32, 480, .9, 2), riders(4, 580, 6),
++  { groups: [elite(4000, 0), workers(52, 480, 0.55, 1), riders(4, 580, 6),
+     slingers(4, 360, 10)], surge: true },
+ ];
+--- before/assets/scripts/config/ThirdLevel.ts
++++ after/assets/scripts/config/ThirdLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-3: crowd clearing with the newly earned pyro; 1x combat target 4–5 minutes. */
++/** Normal 1-3: denser fodder for open abilities; preserve authored stats, encounter order and duration. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -11,13 +11,13 @@
+   ({ mob: 'goblin_brute', count, interval: 12, delay, actual: { hp, dmg: 24 } });
+ 
+ export const THIRD_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(20, 340, 1.8)] },
+-  { groups: [workers(24, 360, 1.4), slingers(2, 280, 5, 13)] },
+-  { groups: [workers(30, 380, 1), slingers(2, 300, 5, 12), elite(1, 2800, 15)], surge: true },
+-  { groups: [workers(14, 360, 2.2)] },
+-  { groups: [workers(32, 400, .95), riders(480, 14)], surge: true },
+-  { groups: [workers(28, 420, 1.1), slingers(4, 320, 5, 10), riders(500, 16)] },
+-  { groups: [workers(32, 440, .9), elite(1, 3000, 10), riders(520, 17)], surge: true },
+-  { groups: [workers(24, 440, 1.1, 3), slingers(4, 340, 5, 8),
++  { groups: [workers(28, 340, 1.2)] },
++  { groups: [workers(36, 360, 0.95), slingers(2, 280, 5, 13)] },
++  { groups: [workers(46, 380, 0.66), slingers(2, 300, 5, 12), elite(1, 2800, 15)], surge: true },
++  { groups: [workers(22, 360, 1.4)] },
++  { groups: [workers(48, 400, 0.63), riders(480, 14)], surge: true },
++  { groups: [workers(42, 420, 0.74), slingers(4, 320, 5, 10), riders(500, 16)] },
++  { groups: [workers(50, 440, 0.6), elite(1, 3000, 10), riders(520, 17)], surge: true },
++  { groups: [workers(36, 440, 0.74, 2), slingers(4, 340, 5, 8),
+     elite(2, 3200, 5), riders(540, 17)], surge: true },
+ ];
+--- before/assets/scripts/ui/Panels.ts
++++ after/assets/scripts/ui/Panels.ts
+@@ -31,7 +31,7 @@
+ import { battleRewardPanel } from './BattleRewardPanel';
+ import { showCollectedLoot } from './LevelLootPreview';
+ import { showItemDetails } from './ItemDetails';
+-import { BuildTeam, cardChoiceDescription, cardComboHint, ownedBuildCards } from '../config/Cards';
++import { BuildTeam, cardComboHint, ownedBuildCards } from '../config/Cards';
+ import { bindBrowserBack } from './BrowserBack';
+ import { dismissUI } from './UIMotion';
+ 
+@@ -209,7 +209,7 @@
+ 
+   /** 卡面布局（羊皮纸底；去「新」标与稀有度小字——用户要求：卡面只留 名称/图标/归属/描述）：
+    *  顶部稀有度通栏色带 → 圆形图标座 → 右上归属角标（避开色带与图标座）→ 下半区大号加粗描述（shrink 防超框） */
+-  private buildCard(frame: Node, card: CardDef, stacks: CardStacks): void {
++  private buildCard(frame: Node, card: CardDef, _stacks: CardStacks): void {
+     const rarity = RARITY_COLOR[card.rarity];
+ 
+     // ⓪ 共用原创纸纹底板，细线与角饰留在边缘，中心供原图标和描述使用。
+@@ -239,8 +239,8 @@
+       artSprite(ava, 0, 0, 48, 48, 'ui_avatar_' + card.owner, { sliced: false });
+     }
+ 
+-    // Explicit semantic lines preserve phrases, conditions and units; shrink only guards unusually long new copy.
+-    const description = label(frame, 0, -94, cardChoiceDescription(card, stacks, this.dir.heroes), {
++    // Shared concise copy: no stack counters or automatic combo hints on the choice card.
++    const description = label(frame, 0, -94, card.desc, {
+       size: 18, color: '#4A3214', bold: true, font: 'body', w: 196, h: 112, shrink: true, lineHeight: 25,
+     });
+     description.name = 'pickDescription:' + card.id;

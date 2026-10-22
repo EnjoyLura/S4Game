@@ -1,0 +1,28 @@
+diff --git a/docs/chapter-clear-focus-v67/BattleDirector.before.ts.txt b/assets/scripts/battle/BattleDirector.ts
+index eb8a349..8b727a6 100644
+--- a/docs/chapter-clear-focus-v67/BattleDirector.before.ts.txt
++++ b/assets/scripts/battle/BattleDirector.ts
+@@ -10,7 +10,7 @@ import { expNeed, LO, PASSIVE_XP_INTERVAL, passiveXpGain, REVIVE_RATIO, starOf }
+ import { bus, EVT, WaveThreat } from '../core/EventBus';
+ import { Sfx } from '../core/Sfx';
+ import { GameAudio } from '../core/GameAudio';
+-import { campaignChapter } from '../config/Campaign';
++import { CAMPAIGN_STAGES, campaignChapter, campaignLevelOpen, campaignStage } from '../config/Campaign';
+ import { endlessWave } from '../config/Endless';
+ import { endlessBest, recordEndlessFloor } from '../core/EndlessProgress';
+ import { loadSave, saveSave } from '../core/SaveData';
+@@ -800,6 +800,14 @@ export class BattleDirector extends Component {
+ 
+   private exitBattle(): void {
+     if (this.isEndless && this.state !== 'lose' && this.state !== 'win') { this.finishEndless(); return; }
++    // After a chapter-ending victory, focus the newly available chapter without starting battle.
++    const completed = campaignStage(this.levelDef.id);
++    const next = completed && CAMPAIGN_STAGES[completed.order + 1];
++    if (!this.isEndless && this.state === 'win' && completed && next && next.chapter !== completed.chapter
++      && campaignLevelOpen(next.id, loadSave().stars)) {
++      this.changeScene('main', next.id, 0);
++      return;
++    }
+     this.changeScene('main', this.levelDef.id, flow.diff);
+   }
+ 

@@ -1,0 +1,54 @@
+{
+  "atlas": "goblin_king_walk_v1",
+  "size": [
+    1536,
+    1440
+  ],
+  "frameCount": 30,
+  "cellSize": [
+    256,
+    288
+  ],
+  "loopSeconds": 1.25,
+  "sourceFrameSize": [
+    512,
+    576
+  ],
+  "sourceHashes": {
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w000.png": "ecfd54f7e247729ffcc0a18e2f3ce384993ed56820d9e5389c322afb30bb412d",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w001.png": "aa2154f08a8f21ff48836f1d82de1d8decdc2db7e14ea59ebb3818eb911173a0",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w002.png": "e480225440100a5d5279d2480898cf68e2ce20a807ddf140415c82898d1651c4",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w003.png": "090b921df480cd31acad20ee30aa55a46bc0ef53ecf6e20caca71811c0c288c9",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w004.png": "d0fc0687f365d36b6a0954acff5b9d2bc716205dda48a5792ef07ecff1b95fbc",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w005.png": "a25767e6d4d7f84fe5b7f6ec16977b2d95d4267258a4851d826e63e5514c9b80",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w006.png": "570a827cd2128af0069375300206ccece3b484e5a00ff0e32c05e0f19df678c6",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w007.png": "a7fa44c809b1cd92c86f65c3aa5badaa0d6b74d8cd8644f6503d947230ad3eeb",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w008.png": "43a81bc6afbfa0511a086e5136cc29c3a93a91e0cd5081c15b879e1522a58d04",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w009.png": "f08c1adfbb20f36ab4aa51d5708c204237804e6f25a9e15293721fcfe7a946fd",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w010.png": "3cd1fb2b93a0d667a9050ad5f931245facb97af5926c3882a84d978a394ac2cc",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w011.png": "fa4170cbb32b60584a1340ad303ac3652abf21ffa563bc33a2d3995ccafc1faf",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w012.png": "398e62f2994a63ccf2d64b18fd9e49ef07ce4abf0f0d215adc0da6d040814fa8",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w013.png": "67addd7e2ee266ef5541004aa621bccda1d598ef534e487cc0ab9f65637712d9",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w014.png": "77a6aa8778dce7f3b428569426805687260d6019bae8c626ccaabc48f8b40731",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w015.png": "265873a04eca883d08b23d9963d135026ec3363689fc9c9cc72fcea458be3048",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w016.png": "71468c27a7f8c0cb74b8634dcb9cc0575cc87a0b28b864f65034b597ed6f26dd",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w017.png": "1756edc490e986bb8fe3b71420a6ad1e8218458d8fb2f8aef05248e203c9440e",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w018.png": "b39e9309665ed59b6774d681c24d47a6b37873ccbd1487074247de42e24abc05",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w019.png": "6c1b1586420f1b73ee6230b609047475ca74ea898389204131a5d00cac012d42",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w020.png": "9dc628d2f3037f1fc7cf3710c08cc37edd64663ba1efaeb2e92776d2dd754ba6",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w021.png": "5ec95d04b1d1b856b6ac876c30378a8f1a67bff2f9666c01335d741f47c9e04f",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w022.png": "4ee93dddb46127e5b3aaff58aafc249537437404159ae00b16708d7e057f8a66",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w023.png": "03a16339bab47854c129212d76c367a8d92734a0c98533bb0eb8c8d636e88b3d",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w024.png": "2aa12f180b75762871b22b9e3b906f4557af44c15aea2ce74919bcb819968e4b",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w025.png": "67ca21a49c82e98eea44fe59934758e73d59091b847bbc11a0f7d1a2bc08362c",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w026.png": "f264382bc559fc2ec436f07fc30bafc8d04c421079c336ec0026662bedea4664",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w027.png": "d0259b7ee1edf36666de2149468f1c150bd1647bc1648abf3783c3d91df4f8c5",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w028.png": "b13185830740fb8ce6950055dc18056fa9a67506479a7608ecbe35e09a018ffb",
+    "docs/video-sequence-20261018/loop-30-frames/goblin_king_w029.png": "b536450fc86d23bac06026c81a45464d62e4a95d057ec5457e6f49d46c71dc50"
+  },
+  "resourcePaths": [
+    "assets\\resources\\ux\\goblin_king_walk_v1.png",
+    "assets\\resources\\ux\\goblin_king_walk_v1.frames.json"
+  ],
+  "pngSha256": "f3cf1756dfde0cb5d82822cb5a1ee0bb0394d7116c941cd686eb9b27786d762c"
+}

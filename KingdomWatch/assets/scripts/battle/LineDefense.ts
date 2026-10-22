@@ -21,6 +21,7 @@ export class LineDefense {
   private flashT = 0;
   private shakeT = 0;
   private basePos: Vec3 = new Vec3();
+  private battleFinished = false;
 
   constructor(parent: Node, hp: number, shield = 0) {
     this.maxHp = hp;
@@ -61,7 +62,7 @@ export class LineDefense {
 
   /** 怪物/石块攻线伤害入口 */
   takeDamage(d: number): void {
-    if (this.invulnT > 0 || d <= 0) return;
+    if (this.battleFinished || this.invulnT > 0 || d <= 0) return;
     if (this.shield > 0) {
       const s = Math.min(this.shield, d);
       this.shield -= s;
@@ -101,9 +102,12 @@ export class LineDefense {
   get ratio(): number { return this.maxHp > 0 ? this.hp / this.maxHp : 0; }
   get lowRatio(): boolean { return this.ratio < 0.3; }
 
+  /** Freeze the cleared result while the battlefield finishes its presentation. */
+  finishBattle(): void { this.battleFinished = true; }
+
   tick(dt: number): void {
     if (this.invulnT > 0) this.invulnT -= dt;
-    if (this.regenPct > 0 && this.hp < this.maxHp) {
+    if (!this.battleFinished && this.regenPct > 0 && this.hp < this.maxHp) {
       this.hp = Math.min(this.maxHp, this.hp + this.maxHp * this.regenPct * dt);
     }
     if (this.flashT > 0) this.flashT -= dt;

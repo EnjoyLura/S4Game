@@ -1,0 +1,22 @@
+{
+  "changedRuntimeFiles": [
+    "KingdomWatch/assets/scripts/core/AudioCatalog.ts",
+    "KingdomWatch/assets/scripts/core/GameAudio.ts"
+  ],
+  "typeDiagnostics": 10,
+  "newTypeDiagnostics": 0,
+  "otherAudioCuesUnchanged": true,
+  "mediaFilesUnchanged": true,
+  "meteorGainBefore": 0.17797973062246705,
+  "meteorGainAfter": 0.3164976903702071,
+  "gainIncreaseDB": 5,
+  "sourceSeconds": 2.3,
+  "playbackStartFrame": 70101,
+  "sourceSampleRate": 44100,
+  "playbackOffsetSeconds": 1.589591836734694,
+  "playbackRemainingSeconds": 0.7104081632653059,
+  "sourceSha256": "615917392a9b1962df03e69c1111c507548343e3a707688a19755b57707735b8",
+  "gapSeconds": 0.18,
+  "replaceSameCueTail": true,
+  "noTestsGameBrowserOrAudioPlaybackPerformed": true
+}

@@ -1,3 +1,4 @@
+import { CHAPTER_CONTENT, EXPANSION_MOBS, enemyArtRef, chapterNumeral } from '../../config/ChapterContent';
 /** A single painted settlement, shared comic controls and save-backed construction / codex. */
 import { Graphics, isValid, Mask, Node, ScrollView, Sprite, UITransform, Vec2 } from 'cc';
 import { C, CA, dimLayer, LabelOpts, N, WY } from '../UIKit';
@@ -17,6 +18,8 @@ import { lobbyAttributeWell, shopDetailRule } from '../LobbyChrome';
 import { BASE_INK, BASE_SUB, baseCodexCard, baseDiscoveryProgress, basePlaque, baseTextGroup } from '../BaseChrome';
 import { showRewardPopup } from '../RewardPopup';
 import { constructionPulse } from '../ConstructionPulse';
+import { CAMPAIGN_CHAPTERS } from '../../config/Campaign';
+import { endlessOpen } from '../../config/Endless';
 
 const HEART = 'base_comic_v1/comic_keep_heart_v1';
 const SHIELD = 'levels_comic_v1/comic_difficulty_shield_v1';
@@ -24,6 +27,7 @@ const HAMMER = 'upgrade_comic_v1/comic_training_hammer_v1';
 const BOOK = 'hero_comic_v2/comic_story_v2';
 const CASTLE = 'comic_nav_castle_v1';
 let settlementOffset = 0, codexOffset = 0;
+let codexChapter = 1;
 
 function text(parent: Node, x: number, y: number, value: string, opts: LabelOpts = {}): Node {
   return pageLabel(parent, x, y, value, { font: 'body', color: BASE_INK, ...opts });
@@ -122,12 +126,17 @@ export function buildBase(ctx: PageCtx): void {
   const academy = building('academy', .27, .715, 326, 252, '研究院',
     rewards ? `图鉴 ${discovered}/${CODEX.length} · ${rewards}份奖励可领` : `怪物图鉴 ${discovered}/${CODEX.length}`, () => codexModal(ctx));
   if (rewards) dot(academy, 121, -252 / 2 + 33, rewards, 'baseCodexBadge');
-  building('workshop', .73, .747, 326, 252, '工坊', '尚未开放', () => toast('工坊尚未开放'), true);
+  const endlessCount = CAMPAIGN_CHAPTERS.filter(c => endlessOpen(c.number, sv.stars)).length;
+  building('endless', .73, .747, 326, 252, '无尽挑战',
+    endlessCount ? `已开放 ${endlessCount} 个挑战 · 点击攀层` : '通关1-10解锁', () => {
+      if (!endlessCount) { toast('通关1-10后解锁无尽挑战'); return; }
+      ctx.openEndless?.();
+    }, !endlessCount);
   let artY = 0, mapWidth = 750, mapHeight = totalH;
   const updateAnchors = (): void => {
     anchors.forEach(a => a.node.setPosition(mapWidth * (a.u - .5), sceneTop - mapHeight * a.v + a.height / 2 - 42, 0));
   };
-  const artwork = artSprite(upper, 0, (boardTop - totalH) / 2, 750, totalH, 'scenes/bg_base_comic_v1', {
+  const artwork = artSprite(upper, 0, (boardTop - totalH) / 2, 750, totalH, 'scenes/bg_base_endless_v59', {
     sliced: false, onLoaded: art => {
       const r = art.getComponent(Sprite)!.spriteFrame!.rect, k = Math.max(750 / r.width, totalH / r.height);
       mapWidth = r.width * k; mapHeight = r.height * k;
@@ -155,7 +164,7 @@ export function buildBase(ctx: PageCtx): void {
   basePlaque(root, 0, WY(titleTop, 46), 354, 46, 'baseCampTitlePlate');
   const title = text(root, 0, WY(titleTop, 46), '远征营地', { size: 34, bold: true, color: COMIC.cream, w: 312, h: 42 });
   title.name = 'baseTitle';
-  text(root, 0, WY(titleTop + 46, 28), '建设主城 · 记录远征发现', { size: 20, color: COMIC.dark, w: 470, h: 28, outline: COMIC.card, outlineW: 1.5 });
+  text(root, 0, WY(titleTop + 46, 28), '建设主城 · 无尽挑战 · 记录发现', { size: 20, color: COMIC.dark, w: 530, h: 28, outline: COMIC.card, outlineW: 1.5 });
   const board = comicPlate(root, 0, WY(boardTop, boardH), 750, boardH, 'paper', {
     name: 'baseConstruction', cut: 0, edge: false, highlight: false, fill: '#FFF7E7',
   });
@@ -239,7 +248,10 @@ function keepModal(ctx: PageCtx, session = new BaseModalSession(ctx), upgraded =
 }
 
 function monsterArt(parent: Node, id: string, x: number, y: number, w: number, h: number, hidden = false): void {
-  const art = artAtlasSprite(parent, x, y, w, h, 'battle_mobs_v2', id);
+  // Match the active battle appearances, not the superseded static portraits.
+  const image = enemyArtRef(id, true);
+  const art = artAtlasSprite(parent, x, y, w, h,
+    image.atlas, image.frame);
   if (hidden) {
     art.name = 'codexSilhouette:' + id;
     // Zero RGB removes every painted detail; alpha alone preserves the exact monster outline.
@@ -262,14 +274,23 @@ function codexModal(ctx: PageCtx, session = new BaseModalSession(ctx), direction
     text(p,0,H/2-163,'战斗中遇见怪物后解锁 · 首览奖励每种仅领一次',
       {size:17,color:BASE_SUB,w:592,h:28});
     detailRule(p,H/2-190,W);
-    const viewTop=H/2-204, viewBottom=-H/2+30, viewH=viewTop-viewBottom, viewY=(viewTop+viewBottom)/2;
-    const cardH=226,gap=14,pad=6,rows=Math.ceil(CODEX.length/2);
+    const entries = CODEX.filter(c => (EXPANSION_MOBS[c.id]?.homeChapter || 1) === codexChapter);
+    const current = CHAPTER_CONTENT[codexChapter - 1];
+    text(p,0,H/2-222,'第'+chapterNumeral(codexChapter)+'章 · '+current.name,{size:23,bold:true,w:420,h:36});
+    const switchChapter = (step: number): void => {
+      codexChapter = Math.max(1,Math.min(CHAPTER_CONTENT.length,codexChapter+step));
+      codexOffset = 0; codexModal(ctx,session,step);
+    };
+    comicButton(p,-260,H/2-222,52,42,'‹',()=>switchChapter(-1),{tone:'dark',size:30,enabled:codexChapter>1});
+    comicButton(p,260,H/2-222,52,42,'›',()=>switchChapter(1),{tone:'dark',size:30,enabled:codexChapter<CHAPTER_CONTENT.length});
+    const viewTop=H/2-258, viewBottom=-H/2+30, viewH=viewTop-viewBottom, viewY=(viewTop+viewBottom)/2;
+    const cardH=226,gap=14,pad=6,rows=Math.ceil(entries.length/2);
     const contentH=Math.max(viewH,rows*(cardH+gap)-gap+pad*2);
     const view=N('baseCodexView',p,0,viewY,592,viewH);view.addComponent(Mask);
     const scroll=view.addComponent(ScrollView);scroll.horizontal=false;scroll.vertical=contentH>viewH;scroll.elastic=false;
     const content=N('baseCodexContent',view,0,viewH/2,592,contentH);
     content.getComponent(UITransform)!.setAnchorPoint(.5,1);scroll.content=content;
-    CODEX.forEach((c,i) => {
+    entries.forEach((c,i) => {
       const got=codexUnlocked(c.id),claimed=codexClaimed(c.id);
       const card=baseCodexCard(content,i%2===0?-148:148,
         -(pad+Math.floor(i/2)*(cardH+gap)+cardH/2),280,cardH,'baseCodexCard:'+c.id,got);
@@ -344,7 +365,7 @@ function codexDetail(ctx: PageCtx, id: string, session: BaseModalSession): void 
       if (r.ok) {
         session.markDirty(); codexModal(ctx, session, -1); ctx.refreshResources?.();
         showRewardPopup(ctx.screens.parent || ctx.screens, '怪物图鉴 · 首次发现', 0,
-          [{ name: '钻石', icon: 'comic_diamond_v1', amount: CODEX_REWARD }], undefined,
+          [{ id: 'diamond', name: '钻石', icon: 'comic_diamond_v1', amount: CODEX_REWARD }], undefined,
           { subtitle: '首览奖励已到账' });
       } else toast(r.msg, { kind: 'warning', title: '暂时无法领取' });
     },{name:'baseCodexClaim',tone:claimed?'muted':'green',size:27,enabled:!claimed});

@@ -1,0 +1,34 @@
+[
+  {
+    "name": "html",
+    "url": "https://kingdom-watch.pages.dev/?v=combat-pacing-v73-1792603091",
+    "status": 200,
+    "bytes": 15837,
+    "sha256": "555c0eacde00014057dbc373de2f62b45bd4c7b732b7f5bc8169042d31ba31db",
+    "matchesLocal": true
+  },
+  {
+    "name": "entry",
+    "url": "https://kingdom-watch.pages.dev/index.6e649.js?v=1792603091",
+    "status": 200,
+    "bytes": 824,
+    "sha256": "e02a834aa4bc0272d71c5d980f7340493a716373e8d68dc7bea7cacd3071c672",
+    "matchesLocal": true
+  },
+  {
+    "name": "main",
+    "url": "https://kingdom-watch.pages.dev/assets/main/index.1ca20.js",
+    "status": 200,
+    "bytes": 830631,
+    "sha256": "d16653c8d68a09e95493b6dea3145a15f548016746a1d5e08f247a3930e1e9a5",
+    "matchesLocal": true
+  },
+  {
+    "name": "snapshotHtml",
+    "url": "https://70b6a7bc.kingdom-watch.pages.dev/?v=combat-pacing-v73-1792603091",
+    "status": 200,
+    "bytes": 15837,
+    "sha256": "555c0eacde00014057dbc373de2f62b45bd4c7b732b7f5bc8169042d31ba31db",
+    "matchesLocal": true
+  }
+]

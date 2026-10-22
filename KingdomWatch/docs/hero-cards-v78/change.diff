@@ -1,0 +1,914 @@
+--- before/assets/scripts/battle/FireVFX.ts
++++ assets/scripts/battle/FireVFX.ts
+@@ -20,7 +20,7 @@
+ const CONTACT_CAP = 10;
+ const BLAST_CAP = 8;
+ const FLIGHT_CAP = 32;
+-const RESIDUE_CAP = 8;
++const RESIDUE_CAP = 16;
+ const FLAME_IDS = ['flame_0', 'flame_1', 'flame_2', 'flame_3', 'flame_4', 'flame_5', 'flame_6', 'flame_7'];
+ // Short ignition, solid peak, then outgoing wisps. Blend only at cel boundaries.
+ const FLAME_TIME = [0, 0.018, 0.045, 0.10, 0.155, 0.210, 0.270, 0.320, 0.360];
+@@ -159,8 +159,8 @@
+     return true;
+   }
+ 
+-  /** Read-only view of the hero's existing four-second burn areas. */
+-  craters(areas: readonly { x: number; y: number; t: number }[], radius: number, clock: number): boolean {
++  /** Read-only view of the hero's skill firefields and ultimate craters. */
++  craters(areas: readonly { x: number; y: number; t: number; life?: number; radius?: number }[], radius: number, clock: number): boolean {
+     if (!this.loaded) return false;
+     const slots = this.residues;
+     const n = Math.min(slots.length, areas.length);
+@@ -168,23 +168,24 @@
+     // 所有坑共用 mark 层与 glow 层：先铺全部焦痕、再叠全部余烬，跨坑不再互相盖。
+     for (let i = 0; i < n; i++) {
+       const c = areas[areas.length - 1 - i];
++      const areaRadius = c.radius ?? radius;
+       const seed = Math.sin(c.x * 0.017 + c.y * 0.013);
+-      const fade = Math.min(1, c.t / 0.8, clamp((4 - c.t) / 0.08));
++      const fade = Math.min(1, c.t / 0.8, clamp(((c.life ?? 4) - c.t) / 0.08));
+       let k = 0;
+       for (let j = 0; j < areas.length; j++) {
+-        if (Math.hypot(areas[j].x - c.x, areas[j].y - c.y) < radius) k++;
++        if (Math.hypot(areas[j].x - c.x, areas[j].y - c.y) < Math.max(areaRadius, areas[j].radius ?? radius)) k++;
+       }
+       const atten = 1 / Math.sqrt(Math.max(1, k));   // 近邻越多越衰减，叠点不烧成实心红饼
+       if (this.craterLoaded) {
+         // 沙环已从贴片抠除：叠加只会炭压炭加深，不会出现盖沙拼布。
+-        this.drawFrame(slots[i].mark, 'mark', radius * 2.45, 255 * fade, c.x, c.y - 6, seed * 7, 1, this.craterFrames);
++        this.drawFrame(slots[i].mark, 'mark', areaRadius * 2.45, 255 * fade, c.x, c.y - 6, seed * 7, 1, this.craterFrames);
+       } else {
+-        this.draw(slots[i].mark, 'scorch', radius * 2.55, 118 * fade * atten, c.x, c.y - 6, seed * 7, 1.5);
++        this.draw(slots[i].mark, 'scorch', areaRadius * 2.55, 118 * fade * atten, c.x, c.y - 6, seed * 7, 1.5);
+       }
+       if (this.craterLoaded) {
+         const pulse = 0.5 + 0.5 * Math.sin(clock * Math.PI * 1.05 + seed * 2.1);
+         // 灰晕已从焦痕贴图抠除，炭体收紧后余烬斑同步收窄（2.3→1.7），避免亮斑飘在裸沙上
+-        this.drawFrame(slots[i].glow, 'embers', radius * 1.7, (110 + 145 * pulse) * fade * atten, c.x, c.y - 6, seed * 7, 1, this.craterFrames);
++        this.drawFrame(slots[i].glow, 'embers', areaRadius * 1.7, (110 + 145 * pulse) * fade * atten, c.x, c.y - 6, seed * 7, 1, this.craterFrames);
+       } else {
+         slots[i].glow.node.active = false;
+       }
+
+--- before/assets/scripts/battle/FrostVFX.ts
++++ assets/scripts/battle/FrostVFX.ts
+@@ -81,8 +81,13 @@
+   private atlas: FrostAtlas | null = null;
+   private source: SpriteFrame | null = null;
+   private life = CLIP_DURATION;
++  private ground: Graphics;
++  private groundVisible = false;
+ 
+   constructor(groundParent: Node) {
++    const ground = new Node('frostGround');
++    ground.layer = Layers.Enum.UI_2D; ground.setParent(groundParent);
++    this.ground = ground.addComponent(Graphics);
+     this.root = new Node('frostDomainVideo');
+     this.root.layer = Layers.Enum.UI_2D; this.root.setParent(groundParent);
+     this.fallback = this.root.addComponent(Graphics);
+@@ -132,6 +137,30 @@
+     this.active.push(d); this.render();
+   }
+ 
++  /** Low ground frost persists independently of the complete, unchanged v10 casting clip. */
++  groundAreas(areas: readonly { x: number; y: number; radius: number; t: number; life: number }[]): void {
++    if (!areas.length && !this.groundVisible) return;
++    this.groundVisible = areas.length > 0;
++    const g = this.ground; g.clear();
++    for (const area of areas) {
++      const fade = Math.min(1, area.t / .45, (area.life - area.t) / .15);
++      const r = area.radius;
++      g.fillColor = color(98, 185, 218, 26 * fade);
++      g.circle(area.x, area.y, r); g.fill();
++      g.fillColor = color(176, 231, 244, 22 * fade);
++      g.circle(area.x, area.y, r * .72); g.fill();
++      // Broken crystalline edges keep the battlefield legible without a heavy status ring.
++      for (let k = 0; k < 9; k++) {
++        const angle = k * Math.PI * 2 / 9 + area.x * .013;
++        const x = area.x + Math.cos(angle) * r * .82;
++        const y = area.y + Math.sin(angle) * r * .82;
++        drawIceCrystal(g, x, y, 5, 9, 95 * fade, Math.cos(angle) * 2);
++        g.strokeColor = color(212, 247, 252, 70 * fade); g.lineWidth = 1;
++        g.moveTo(x - 8, y - 1); g.lineTo(x, y + 2); g.lineTo(x + 7, y); g.stroke();
++      }
++    }
++  }
++
+   tick(dt: number): void {
+     if (!this.active.length) return;
+     for (let i = this.active.length - 1; i >= 0; i--) {
+
+--- before/assets/scripts/battle/Hero.ts
++++ assets/scripts/battle/Hero.ts
+@@ -331,6 +331,7 @@
+   /** 强化窗口剩余秒数（技能15级里程碑 +2s；到时未射完的强化次数作废） */
+   empowerT = 0;
+   private lastEmp = false;
++  private knockbackCycle = 0;
+   private serialQueue: PendingShot[] = [];
+   private volleyQueue: PendingVolley[] = [];
+ 
+@@ -403,7 +404,7 @@
+   }
+ 
+   private spec(base: {
+-    x: number; y: number; dirX?: number; dirY?: number; small?: boolean; dmgMul?: number; emp?: boolean;
++    x: number; y: number; dirX?: number; dirY?: number; small?: boolean; dmgMul?: number; emp?: boolean; knockback?: number;
+   }): ProjSpec {
+     const emp = base.emp === true;
+     const crit = Math.random() < this.stats.critRate;
+@@ -419,6 +420,7 @@
+       size: base.small ? 5 : emp ? 10 : 7,
+       small: base.small,
+       pierce: emp ? 999 : this.stats.pierce,
++      knockback: base.knockback,
+       resCut: this.stats.defIgnore || 0,   // 英雄突破：无视防御比例（全部箭矢）
+       spark: emp,
+       explodeR: this.stats.explodeR > 0 && !base.small ? this.stats.explodeR : 0,
+@@ -433,8 +435,8 @@
+   }
+ 
+   /** 出弓瞬间按拦截预判锁定方向，之后直线飞行（用户确认：不追踪不拐弯）；emp=金色强化贯穿箭 */
+-  private fireDir(projs: ProjectileManager, dirX: number, dirY: number, emp = false): void {
+-    projs.fire(this.spec({ x: this.x, y: HERO_Y + 60, dirX, dirY, emp }));
++  private fireDir(projs: ProjectileManager, dirX: number, dirY: number, emp = false, knockback = 0): boolean {
++    return projs.fire(this.spec({ x: this.x, y: HERO_Y + 60, dirX, dirY, emp, knockback }));
+   }
+ 
+   protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
+@@ -448,7 +450,9 @@
+     const bs = 960;   // 与 spec 弹速一致（强化箭同普攻弹速，用户调整）
+     // 首排弹幕：预判拦截点直线射出（列 = 1+齐射层）
+     const lead = this.lead(target, bs);
+-    this.fireRow(projs, lead.dirX, lead.dirY, emp);
++    const knockback = this.stats.archerKnockback && this.knockbackCycle === 3 ? this.stats.archerKnockback : 0;
++    if (this.fireRow(projs, lead.dirX, lead.dirY, emp, knockback) && this.stats.archerKnockback)
++      this.knockbackCycle = (this.knockbackCycle + 1) % 4;
+     // 连射：后续排延迟成排再射；每排出弓瞬间若目标存活则按当时状态重新预判（出弓后仍直线），目标已亡则沿锁定方向
+     for (let i = 1; i <= this.stats.serial; i++) {
+       this.serialQueue.push({ t: i * 0.12, target, dirX: lead.dirX, dirY: lead.dirY, emp });
+@@ -459,18 +463,21 @@
+    *  附加列在主箭两侧交替展开（+7°,-7°,+14°…直线随缘）（齐射×连射 = 列×排网格）。
+    *  旧版整组以瞄准线为中心对称摊开——偶数列（1/3 层）时没有任何箭在瞄准线上，5° 偏移在
+    *  400~900px 交战距离即脱靶 35~79px（怪碰撞半径仅 22~34px），齐射后反而一直打不中主目标 */
+-  private fireRow(projs: ProjectileManager, dirX: number, dirY: number, emp: boolean): void {
++  private fireRow(projs: ProjectileManager, dirX: number, dirY: number, emp: boolean, knockback = 0): boolean {
+     this.animateAttack(emp, dirX, dirY);
+     Sfx.shoot(this.id);
+     const cols = 1 + this.stats.fan;
+     const baseAng = Math.atan2(dirY, dirX);
+     // One air-pressure release per row, rather than stacking an effect for every fan arrow.
+     projs.normalRelease(this.id, this.x, HERO_Y + 60, dirX, dirY, emp);
++    let primaryFired = false;
+     for (let c = 0; c < cols; c++) {
+       const side = c === 0 ? 0 : Math.ceil(c / 2) * (c % 2 === 1 ? 1 : -1);   // c=0 主箭 0°；其余 +7/-7/+14/-14/+21…
+       const ang = baseAng + side * 7 * Math.PI / 180;
+-      this.fireDir(projs, Math.cos(ang), Math.sin(ang), emp);
+-    }
++      const fired = this.fireDir(projs, Math.cos(ang), Math.sin(ang), emp, c === 0 ? knockback : 0);
++      if (c === 0) primaryFired = fired;
++    }
++    return primaryFired;
+   }
+ 
+   /** 出手弓弦闪光：箭矢出弓点的一瞬星芒（约 90ms，主芒顺瞄准方向 + 侧芒 + 亮芯），金箭配金光 */
+@@ -800,6 +807,7 @@
+         dmg: this.abilityDamage(uc.boltMul, true), crit: true,
+         color: '#509DFF', heroId: this.id, size: 12 * uc.rMul,
+         ttl: 4, pierce: 999, spark: true,
++        returnDamage: this.stats.sniperReturn || 0,
+         ignoreRes: true,
+         ult: true, ability: true,   // 大招弹：击杀弹 KAPOW!（60%）
+         markAmp: Math.max(uc.markAmp, this.stats.ultMarkAmp || 0) || undefined, markDur: uc.markDur,
+@@ -902,9 +910,10 @@
+   private warnG: Graphics | null = null;
+   private warnTint = hexc('#201A17');
+   /** 陨石坑：命中后持续灼烧与易伤，基础4秒，余火绵延每层再延长1秒。 */
+-  private craters: { x: number; y: number; t: number }[] = [];
++  private craters: { x: number; y: number; t: number; life: number; radius?: number; skill?: boolean }[] = [];
+   private craterNode: Node | null = null;
+   private craterG: Graphics | null = null;
++  private giantCycle = 0;
+ 
+   protected buildVisual(parent: Node): void {
+     const g = this.node.addComponent(Graphics);
+@@ -975,6 +984,7 @@
+       burnDps: base.burnDps * pyroBurnMultiplier(this.stats),
+       burnDur: pyroBurnDuration(this.stats),
+       burnBurst: this.effAtk * (this.stats.pyroBurnBurst || 0),
++      burnHealCut: this.stats.pyroHealCut || 0,
+       burnSplash: !!(base.ability || base.ult || this.stats.pyroSplashBurn),
+       spark: true, ability: base.ability, ult: base.ult, stun: base.stun,
+       burnedBonus: this.stats.burnedBonus || undefined,
+@@ -987,14 +997,17 @@
+     void _mgr;
+     const bs = 700;
+     const lead = this.lead(target, bs);
+-    this.animateAttack(false, lead.dirX, lead.dirY);
+-    projs.fire(this.spec({
++    const every = this.stats.pyroGiantEvery || 0;
++    const giant = every > 0 && this.giantCycle + 1 >= every;
++    this.animateAttack(giant, lead.dirX, lead.dirY);
++    const fired = projs.fire(this.spec({
+       x: this.x, y: HERO_Y + 60, dirX: lead.dirX, dirY: lead.dirY,
+-      dmg: this.effAtk, explodeR: pyroBlastRadius(this.stats, Math.max(60, this.stats.explodeR)),
++      dmg: this.effAtk, explodeR: pyroBlastRadius(this.stats, Math.max(60, this.stats.explodeR)) * (giant ? 2 : 1),
+       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
+-      speed: bs, size: 9,
++      speed: bs, size: giant ? 15 : 9,
+     }));
+-    projs.normalRelease(this.id, this.x, HERO_Y + 60, lead.dirX, lead.dirY);
++    if (fired && every > 0) this.giantCycle = giant ? 0 : this.giantCycle + 1;
++    projs.normalRelease(this.id, this.x, HERO_Y + 60, lead.dirX, lead.dirY, giant);
+     Sfx.shoot(this.id);
+   }
+ 
+@@ -1024,11 +1037,24 @@
+       const oy = best.y;
+       const dx = ox - this.x, dy = oy - (HERO_Y + 60);
+       const l = Math.hypot(dx, dy) || 1;
+-      this.skillVolley.push({ t: k * .12, first: k === 0, spec: this.spec({
++      const spec = this.spec({
+         x: this.x, y: HERO_Y + 60, dirX: dx / l, dirY: dy / l,
+         dmg, explodeR: boomR, explodeMul: pc.boomMul, burnDps: this.abilityDamage(0.2, false, 0.04),
+         speed: 820, size: 11, ability: true,
+-      }) });
++      });
++      if (k === shots - 1 && this.stats.pyroFirefield) {
++        spec.groundTarget = { x: ox, y: oy };
++        spec.onGroundImpact = () => {
++          if (!this.node.isValid) return;
++          const life = (this.stats.pyroFirefield || 3) + (this.stats.pyroLinger || 0);
++          // Bound persistent skill patches without evicting an ultimate crater.
++          const fields = this.craters.filter(c => c.skill);
++          if (fields.length >= 4) this.craters.splice(this.craters.indexOf(fields[0]), 1);
++          this.craters.push({ x: ox, y: oy, t: life, life, radius: boomR, skill: true });
++          projs.fireCraters(this.craters, CRATER_R * pyroUltCfg(this.stats.ultLv).craterMul, this.warnT);
++        };
++      }
++      this.skillVolley.push({ t: k * .12, first: k === 0, spec });
+     }
+   }
+ 
+@@ -1101,7 +1127,8 @@
+           if (index < 0) return;
+           this.meteorQueue.splice(index, 1);
+           this.ultimateBeat(q.x, q.y, q.last ? 1 : q.first ? .85 : .35, true);
+-          this.craters.push({ x: q.x, y: q.y, t: pyroCraterDuration(this.stats) });
++          const life = pyroCraterDuration(this.stats);
++          this.craters.push({ x: q.x, y: q.y, t: life, life });
+           this.drawMeteorWarnings();
+           projs.fireCraters(this.craters, CRATER_R * pyroUltCfg(this.stats.ultLv).craterMul, this.warnT);
+         };
+@@ -1114,17 +1141,17 @@
+       }
+     }
+     this.drawMeteorWarnings();
+-    // 陨石坑：坑内怪持续挂灼烧 + 易伤（出坑残留 0.6s），寿命尽即熄灭
++    // 技能火区只灼烧；陨石坑另有原本的易伤。出区灼烧短暂残留，区域到期熄灭。
+     if (this.craters.length) {
+       for (let i = this.craters.length - 1; i >= 0; i--) {
+         const c = this.craters[i];
+         c.t -= dt;
+         if (c.t <= 0) { this.craters.splice(i, 1); continue; }
+         for (const m of mgr.list) {
+-          if (m.dead || Math.hypot(m.x - c.x, m.y - c.y) > crR) continue;
+-          m.applyBurn(this.abilityDamage(0.3, true, 0.06) * pyroBurnMultiplier(this.stats),
+-            pyroBurnDuration(this.stats, .55), this.effAtk * (this.stats.pyroBurnBurst || 0));
+-          m.applyVuln(this.stats.pitVuln || CRATER_VULN, 0.6);
++          if (m.dead || Math.hypot(m.x - c.x, m.y - c.y) > (c.radius ?? crR)) continue;
++          m.applyBurn(this.abilityDamage(c.skill ? .2 : .3, !c.skill, c.skill ? .04 : .06) * pyroBurnMultiplier(this.stats),
++            pyroBurnDuration(this.stats, .55), this.effAtk * (this.stats.pyroBurnBurst || 0), this.stats.pyroHealCut || 0);
++          if (!c.skill) m.applyVuln(this.stats.pitVuln || CRATER_VULN, 0.6);
+         }
+       }
+       if (!projs.fireCraters(this.craters, crR, this.warnT)) {
+@@ -1144,30 +1171,31 @@
+       g.clear();
+       for (let i = 0; i < this.craters.length; i++) {
+         const c = this.craters[i];
++        const radius = c.radius ?? crR;
+         const fade = Math.min(1, c.t / 0.8);   // 末 0.8s 渐灭
+         const glow = 0.55 + Math.sin(this.warnT * 5 + i * 2.1) * 0.2;
+         // 焦黑坑底（两层）
+         g.fillColor = oc('#1C120C', 150 * fade);
+-        g.circle(c.x, c.y, crR); g.fill();
++        g.circle(c.x, c.y, radius); g.fill();
+         g.fillColor = oc('#33200F', 110 * fade);
+-        g.circle(c.x, c.y, crR * 0.8); g.fill();
++        g.circle(c.x, c.y, radius * 0.8); g.fill();
+         // 熔岩池 + 白热岩芯（呼吸脉动）
+         const pulse = 1 + Math.sin(this.warnT * 6 + i) * 0.06;
+         g.fillColor = oc('#C2401F', (150 + 40 * glow) * fade);
+-        g.circle(c.x, c.y, crR * 0.42 * pulse); g.fill();
++        g.circle(c.x, c.y, radius * 0.42 * pulse); g.fill();
+         g.fillColor = oc('#FF7A2E', (170 + 50 * glow) * fade);
+-        g.circle(c.x, c.y, crR * 0.22 * pulse); g.fill();
++        g.circle(c.x, c.y, radius * 0.22 * pulse); g.fill();
+         g.fillColor = oc('#FFD24A', (120 + 70 * glow) * fade);
+-        g.circle(c.x, c.y, crR * 0.1 * pulse); g.fill();
++        g.circle(c.x, c.y, radius * 0.1 * pulse); g.fill();
+         // 熔岩缘（外圈粗 + 内圈亮）
+         g.strokeColor = oc('#E86A28', 215 * fade); g.lineWidth = 4.5;
+-        g.circle(c.x, c.y, crR * pulse); g.stroke();
++        g.circle(c.x, c.y, radius * pulse); g.stroke();
+         g.strokeColor = oc('#FFC24A', 160 * fade); g.lineWidth = 2;
+-        g.circle(c.x, c.y, crR * 0.86 * pulse); g.stroke();
++        g.circle(c.x, c.y, radius * 0.86 * pulse); g.stroke();
+         // 坑内岩浆斑 + 余烬闪点
+         for (let k = 0; k < 3; k++) {
+           const ang = i * 2.4 + k * 2.1;
+-          const rr = crR * 0.5;
++          const rr = radius * 0.5;
+           g.fillColor = oc('#D9481F', (200 * glow + 40) * fade);
+           g.circle(c.x + Math.cos(ang) * rr, c.y + Math.sin(ang) * rr * 0.7, 12 + (k % 2) * 5);
+           g.fill();
+@@ -1363,6 +1391,7 @@
+       speed: base.speed,
+       dmg: base.dmg * (this.stats.normalMul || 1) * (crit ? this.stats.critMul : 1), crit,
+       color: '#B96BFF', heroId: this.id, size: base.size,
++      arcDamage: this.stats.voltArc || 0,
+       slowRatio: this.stats.slowOnHit || 0,
+       slowDur: this.stats.slowDur || 2,
+       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
+@@ -1418,6 +1447,7 @@
+         * (cur.shockT > 0 ? voltShockedMultiplier(this.stats) : 1);
+       cur.takeDamage(dmgK, crit, this.id);
+       if (dmg) dmg.add(this.id, cur.lastDamageTaken);
++      if (this.stats.voltOverload) cur.tryOverload(this.stats.voltOverload);
+       const sa = voltShockAmp(this.stats);
+       if (sa && !cur.dead) cur.applyShock(sa, voltShockDuration(this.stats));
+       projs.voltChain(fromX, fromY, cur.x, cur.y, k);
+@@ -1508,6 +1538,8 @@
+   readonly skillMax = 10;
+   private ultimateBurstT = -1;
+   private ultimateHitsLeft = 0;
++  private frostAreas: { x: number; y: number; radius: number; t: number; life: number; slow: number }[] = [];
++  private frostGroundVisible = false;
+ 
+   protected buildVisual(parent: Node): void {
+     const g = this.node.addComponent(Graphics);
+@@ -1571,6 +1603,7 @@
+       speed: base.speed,
+       dmg: base.dmg * (this.stats.normalMul || 1) * (crit ? this.stats.critMul : 1), crit,
+       color: '#7FD8FF', heroId: this.id, size: base.size,
++      pierce: this.stats.moraPierce || 0, pierceDamage: .7,
+       slowRatio: moraSlowRatio(this.stats, this.stats.slowOnHit || 0),
+       slowDur: moraSlowDuration(this.stats, this.stats.slowDur || 2),
+       spark: true,
+@@ -1609,6 +1642,11 @@
+     const freeze = moraFieldFreeze(this.stats);
+     // Snapshot the cast position: killing the central target cannot move the remaining field.
+     projs.frostDomain(center.x, center.y, NR, freeze);
++    if (this.stats.moraGround) {
++      const life = this.stats.moraGround + (this.stats.moraSlowLinger || 0);
++      if (this.frostAreas.length >= 4) this.frostAreas.shift();
++      this.frostAreas.push({ x: center.x, y: center.y, radius: NR, t: life, life, slow: moraSlowRatio(this.stats, .5) });
++    }
+     for (const m of mgr.mobsInRadius(center.x, center.y, NR)) {
+       if (m.dead) continue;
+       const crit = Math.random() < this.stats.critRate;
+@@ -1631,6 +1669,17 @@
+ 
+   /** Three real contacts during one continuous storm; no threefold art/audio restart. */
+   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
++    if (this.frostAreas.length || this.frostGroundVisible) {
++      for (let i = this.frostAreas.length - 1; i >= 0; i--) {
++        const area = this.frostAreas[i];
++        area.t -= dt;
++        if (area.t <= 0) { this.frostAreas.splice(i, 1); continue; }
++        for (const m of mgr.list)
++          if (!m.dead && (m.x - area.x) ** 2 + (m.y - area.y) ** 2 <= area.radius ** 2) m.applySlow(area.slow, .25);
++      }
++      projs.frostGround(this.frostAreas);
++      this.frostGroundVisible = this.frostAreas.length > 0;
++    }
+     if (this.ultimateBurstT < 0) return;
+     this.ultimateBurstT -= dt;
+     while (this.ultimateBurstT <= 0 && this.ultimateHitsLeft > 0) {
+
+--- before/assets/scripts/battle/ImpactFX.ts
++++ assets/scripts/battle/ImpactFX.ts
+@@ -91,7 +91,7 @@
+   fireProjectile(x: number, y: number, vx: number, vy: number, size: number): boolean {
+     return this.fire.projectile(x, y, vx, vy, size);
+   }
+-  fireCraters(areas: readonly { x: number; y: number; t: number }[], radius: number, clock: number): boolean {
++  fireCraters(areas: readonly { x: number; y: number; t: number; life?: number; radius?: number }[], radius: number, clock: number): boolean {
+     return this.fire.craters(areas, radius, clock);
+   }
+ 
+@@ -99,6 +99,10 @@
+ 
+   frostDomain(x: number, y: number, radius: number, duration: number): void {
+     this.frost.domain(x, y, radius, duration);
++  }
++
++  frostGround(areas: readonly { x: number; y: number; radius: number; t: number; life: number }[]): void {
++    this.frost.groundAreas(areas);
+   }
+ 
+   frostUlt(targets: readonly FrostUltTarget[]): void { this.frostUltimate.cast(targets); }
+
+--- before/assets/scripts/battle/Monster.ts
++++ assets/scripts/battle/Monster.ts
+@@ -70,6 +70,11 @@
+   /** Monotonic damage-event counter for this pooled life; reapplying burn must not replay an old event. */
+   burnPulse = 0;
+   private burnBurst = 0;
++  private burnHealCutT = 0;
++  private burnHealCut = 0;
++  private overloadCd = 0;
++  private knockbackT = 0;
++  private knockbackLeft = 0;
+   /** 眩晕硬直（预留：真正的眩晕类 buff 才会写入；受击不再写） */
+   stunT = 0;
+   /** 冰封与雷系眩晕独立；解冻时才启动后续减速。 */
+@@ -123,6 +128,7 @@
+     this.maxHp = def.hp;
+     this.hp = def.hp;
+     this.lastDamageTaken = this.burnBurst = this.burnPulse = 0;
++    this.burnHealCutT = this.burnHealCut = this.overloadCd = this.knockbackT = this.knockbackLeft = 0;
+     this.state = 'move';
+     this.dead = false;
+     this.formation = null;
+@@ -323,13 +329,13 @@
+     return -r * .82 + r * MOB_ART_HEIGHT * ratio;
+   }
+   get isBoss(): boolean { return !!this.def.boss || this.def.id === 'goblin_king'; }
+-  get immobilized(): boolean { return this.freezeT > 0 || this.stunT > 0; }
++  get immobilized(): boolean { return this.freezeT > 0 || this.stunT > 0 || this.knockbackT > 0; }
+   /** Read-only view of this living instance, rather than its original codex stats. */
+   inspect(): { physical: number; magic: number; armorBroken: boolean; wardBroken: boolean; states: string[] } {
+     const states = this.traits.activeStates;
+     if (this.freezeT > 0) states.push('冰封');
+     if (this.stunT > 0) states.push('眩晕');
+-    if (this.burnT > 0) states.push('灼烧');
++    if (this.burnT > 0) states.push(this.burnHealCutT > 0 ? '灼烧·治疗降低50%' : '灼烧');
+     if (this.slowT > 0) states.push('减速' + Math.round(this.slowAmp * 100) + '%');
+     if (this.shockT > 0) states.push('感电');
+     if (this.vulnT > 0) states.push('易伤' + Math.round(this.vulnAmp * 100) + '%');
+@@ -351,8 +357,17 @@
+     this.deathMotion?.prepare();
+     this.life += dt;
+     this.supportHealT = Math.max(0, this.supportHealT - dt);
++    this.overloadCd = Math.max(0, this.overloadCd - dt);
++    this.burnHealCutT = Math.max(0, this.burnHealCutT - dt);
++    if (this.burnHealCutT <= 0) this.burnHealCut = 0;
+     const frozenLeft = this.freezeT;
+-    const motionDt = Math.max(0, dt - Math.max(this.freezeT, this.stunT));
++    const motionDt = Math.max(0, dt - Math.max(this.freezeT, this.stunT, this.knockbackT));
++    if (this.knockbackT > 0) {
++      const step = this.knockbackLeft * Math.min(1, dt / this.knockbackT);
++      this.node.setPosition(this.baseX, Math.min(mobEntryY(this.def.radius) + 12, this.y + step), 0);
++      this.knockbackLeft = Math.max(0, this.knockbackLeft - step);
++      this.knockbackT = Math.max(0, this.knockbackT - dt);
++    }
+     this.thawT = Math.max(0, this.thawT - dt);
+     if (this.slowT > 0) this.slowT = Math.max(0, this.slowT - dt);
+     if (this.slowT <= 0) this.slowAmp = 0.2;
+@@ -464,6 +479,26 @@
+     if (this.dead || amp <= 0 || dur <= 0) return;
+     this.shockAmp = this.shockT > 0 ? Math.max(this.shockAmp, amp) : amp;
+     this.shockT = Math.max(this.shockT, dur);
++  }
++
++  /** Only chain lightning can request this roll, before applying its new shock. */
++  tryOverload(chance: number): boolean {
++    if (this.dead || this.isBoss || this.shockT <= 0 || this.overloadCd > 0 || Math.random() >= chance) return false;
++    this.stunT = Math.max(this.stunT, .4);
++    this.overloadCd = 3;
++    return true;
++  }
++
++  /** A card-owned displacement; ordinary hits still cause no movement or control. */
++  applyKnockback(distance: number): boolean {
++    if (this.dead || this.isBoss || distance <= 0) return false;
++    const travel = Math.min(distance * (this.def.elite ? .4 : 1), mobEntryY(this.def.radius) + 12 - this.y);
++    if (travel <= 0) return false;
++    this.knockbackLeft = Math.max(this.knockbackLeft, travel);
++    this.knockbackT = .18;
++    this.lungeT = this.atkAnimT = 0;
++    this.state = 'move';
++    return true;
+   }
+ 
+   /** 易伤：坑内每帧刷新，出坑残留 dur */
+@@ -581,6 +616,7 @@
+     if (killerId !== 'gm') Sfx.death(killerId === 'pyro_burst' ? 'pyro' : killerId, this.freezeT > 0, !!this.def.elite || this.isBoss);
+     this.flashT = this.lungeT = this.atkAnimT = 0;
+     this.freezeT = this.thawT = this.slowT = this.stunT = this.burnT = this.shockT = 0;
++    this.burnHealCutT = this.burnHealCut = this.overloadCd = this.knockbackT = this.knockbackLeft = 0;
+     this.footLeftWeight = this.footRightWeight = 0;
+     if (this.flashNode) this.flashNode.active = false;
+     // Gameplay death and rewards are immediate. The remaining body is cosmetic only.
+@@ -608,16 +644,21 @@
+     this.freezeSlowDur = Math.max(this.freezeSlowDur, postSlowDuration);
+     return true;
+   }
+-  applyBurn(dps: number, dur: number, burst = 0): void {
++  applyBurn(dps: number, dur: number, burst = 0, healCut = 0): void {
+     if (this.dead || dps <= 0 || dur <= 0) return;
+     if (this.burnT <= 0) this.burnTick = 0;
+     this.burnDps = this.burnT > 0 ? Math.max(this.burnDps, dps) : dps;
+     this.burnBurst = this.burnT > 0 ? Math.max(this.burnBurst, burst) : burst;
+     this.burnT = Math.max(this.burnT, dur);
++    // An unrelated source extending burn must not extend the pyro-owned healing penalty.
++    if (healCut > 0) {
++      this.burnHealCut = this.burnHealCutT > 0 ? Math.max(this.burnHealCut, healCut) : healCut;
++      this.burnHealCutT = Math.max(this.burnHealCutT, dur);
++    }
+   }
+   heal(v: number): number {
+     if (this.dead) return 0;
+-    const healed = Math.max(0, Math.min(v, this.maxHp - this.hp));
++    const healed = Math.max(0, Math.min(v * (1 - Math.min(1, this.burnHealCutT > 0 ? this.burnHealCut : 0)), this.maxHp - this.hp));
+     if (healed <= 0) return 0;
+     this.hp += healed;
+     this.ctx.dmgNumber(this.x, this.y + this.def.radius, '+' + Math.round(healed), '#7FB841');
+
+--- before/assets/scripts/battle/Projectile.ts
++++ assets/scripts/battle/Projectile.ts
+@@ -27,6 +27,13 @@
+   ttl?: number;
+   /** 命中后穿透余量（转直线继续飞） */
+   pierce?: number;
++  /** Damage retained after each pierced target; omitted on ordinary piercing shots. */
++  pierceDamage?: number;
++  /** One straight return to the launch point, with one contact per target on each leg. */
++  returnDamage?: number;
++  knockback?: number;
++  /** One nearby secondary hit; it never launches another arc or a skill. */
++  arcDamage?: number;
+   explodeR?: number;
+   explodeMul?: number;
+   /** 最终命中时分裂出 n 支小弹 */
+@@ -41,6 +48,7 @@
+   burnDps?: number;
+   burnDur?: number;
+   burnBurst?: number;
++  burnHealCut?: number;
+   teamVuln?: number;
+   /** 火法灼烧覆盖爆炸内目标；其他英雄默认仍只处理直接命中。 */
+   burnSplash?: boolean;
+@@ -92,6 +100,10 @@
+   trailMax: number;
+   fxSeed: number;
+   ultContact: boolean;
++  damageScale: number;
++  returning: boolean;
++  legLeft: number;
++  returnDistance: number;
+ }
+ 
+ const colorCache = new Map<string, Color>();
+@@ -139,6 +151,7 @@
+     a.pierceLeft = spec.pierce || 0;
+     a.ttl = spec.ttl ?? 3.2;
+     a.age = 0; a.ultContact = false;
++    a.damageScale = 1; a.returning = false; a.legLeft = a.returnDistance = 0;
+     a.fxSeed = (++this.flightSerial * .61803398875) % 1;
+     a.trail.length = 0;
+     a.trailMax = spec.enemy ? 0 : spec.spark ? 9
+@@ -148,6 +161,12 @@
+     const len = Math.sqrt(dx * dx + dy * dy) || 1;
+     a.vx = dx / len * spec.speed;
+     a.vy = dy / len * spec.speed;
++    if (spec.returnDamage && !spec.enemy) {
++      const ux = a.vx / spec.speed, uy = a.vy / spec.speed;
++      const exitX = ux > 0 ? (430 - spec.x) / ux : ux < 0 ? (-430 - spec.x) / ux : Infinity;
++      const exitY = uy > 0 ? (LO.half + 120 - spec.y) / uy : uy < 0 ? (-720 - spec.y) / uy : Infinity;
++      a.legLeft = a.returnDistance = Math.max(.01, Math.min(exitX, exitY, spec.speed * a.ttl));
++    }
+     this.active.push(a);
+     this.dirty = true;
+     if (spec.heroId === 'sniper' && spec.ult) this.impacts?.sniperUltimateRelease(spec.x, spec.y, a.vx, a.vy);
+@@ -155,7 +174,8 @@
+   }
+ 
+   private makeActive(): Active {
+-    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<number>(), ttl: 0, age: 0, trail: [], trailMax: 0, fxSeed: 0, ultContact: false };
++    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<number>(), ttl: 0, age: 0, trail: [], trailMax: 0, fxSeed: 0, ultContact: false,
++      damageScale: 1, returning: false, legLeft: 0, returnDistance: 0 };
+   }
+ 
+   /** 敌方远程石块：直线落向防线，触线即结算 */
+@@ -178,12 +198,16 @@
+     this.impacts?.normalRelease(hero, x, y, dx, dy, empowered);
+   }
+ 
+-  fireCraters(areas: readonly { x: number; y: number; t: number }[], radius: number, clock: number): boolean {
++  fireCraters(areas: readonly { x: number; y: number; t: number; life?: number; radius?: number }[], radius: number, clock: number): boolean {
+     return this.impacts?.fireCraters(areas, radius, clock) || false;
+   }
+ 
+   frostDomain(x: number, y: number, radius: number, duration: number): void {
+     this.impacts?.frostDomain(x, y, radius, duration);
++  }
++
++  frostGround(areas: readonly { x: number; y: number; radius: number; t: number; life: number }[]): void {
++    this.impacts?.frostGround(areas);
+   }
+ 
+   frostUltimate(targets: readonly FrostUltTarget[]): void { this.impacts?.frostUlt(targets); }
+@@ -229,6 +253,11 @@
+         continue;
+       }
+ 
++      if (sp.returnDamage && !sp.enemy) {
++        if (this.advanceReturning(a, dt)) this.recycle(i, a);
++        continue;
++      }
++
+       const startX = sp.x, startY = sp.y, stepX = a.vx * dt, stepY = a.vy * dt;
+       if (!sp.enemy) done = this.hitSweep(a, startX, startY, stepX, stepY);
+ 
+@@ -250,6 +279,35 @@
+       if (done) this.recycle(i, a);
+     }
+     if (this.dirty) { this.render(); this.dirty = false; }
++  }
++
++  private advanceReturning(a: Active, dt: number): boolean {
++    const sp = a.spec;
++    let remaining = dt;
++    // At most one turn. Clip both segments so neither fast frames nor the map edge lose contacts.
++    for (let leg = 0; leg < 2; leg++) {
++      const travel = Math.min(a.legLeft, sp.speed * remaining);
++      const sx = a.vx / sp.speed * travel, sy = a.vy / sp.speed * travel;
++      const x = sp.x, y = sp.y;
++      if (this.hitSweep(a, x, y, sx, sy)) return true;
++      sp.x = x + sx; sp.y = y + sy;
++      a.legLeft = Math.max(0, a.legLeft - travel);
++      remaining = Math.max(0, remaining - travel / sp.speed);
++      if (a.trailMax > 0) {
++        a.trail.push(sp.x, sp.y);
++        while (a.trail.length > a.trailMax * 2) a.trail.splice(0, 2);
++      }
++      if (a.legLeft > 1e-6) return false;
++      if (a.returning) return true;
++      a.returning = true;
++      a.vx = -a.vx; a.vy = -a.vy;
++      a.legLeft = a.returnDistance;
++      a.damageScale *= sp.returnDamage!;
++      a.pierceLeft = sp.pierce || 0;
++      a.hit.clear();
++      if (remaining <= 0) return false;
++    }
++    return false;
+   }
+ 
+   /** Exact segment/circle entries, in travel order. A piercing shot can hit several enemies in one step. */
+@@ -285,6 +343,7 @@
+       this.hitMob(a, m); // Every contact retains the ordinary damage, sound, flash and on-hit path.
+       if (a.pierceLeft <= 0) return true;
+       a.pierceLeft--;
++      if (sp.pierceDamage !== undefined) a.damageScale *= sp.pierceDamage;
+     }
+     return false;
+   }
+@@ -578,7 +637,7 @@
+     const sp = a.spec;
+     if (sp.enemy) return;
+     // 目标词条在命中时结算：处决标记（精英/BOSS）+ 猎手本能（残血<30%）
+-    const final = this.damageFor(sp, m);
++    const final = this.damageFor(sp, m, a.damageScale);
+     const angle = Math.atan2(a.vy, a.vx);
+     const heavy = !!sp.ult || sp.heroId === 'sniper' && !!sp.ability || sp.heroId === 'pyro' && !!sp.explodeR;
+     m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true, sp.resCut || 0, angle, heavy);
+@@ -602,20 +661,22 @@
+     if (sp.explodeR && sp.explodeR > 0) {
+       for (const o of this.mgr.mobsInRadius(m.x, m.y, sp.explodeR)) {
+         if (o === m || o.dead) continue;
+-        o.takeDamage(sp.dmg * (sp.explodeMul || 0.4), false, sp.heroId, false, 0,
++        o.takeDamage(sp.dmg * a.damageScale * (sp.explodeMul || 0.4), false, sp.heroId, false, 0,
+           Math.atan2(o.y - m.y, o.x - m.x));
+         this.dmg.add(sp.heroId, o.lastDamageTaken);
+-        if (!o.dead && sp.burnSplash && sp.burnDps) o.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0);
++        if (!o.dead && sp.burnSplash && sp.burnDps) o.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0);
+         if (o.dead) this.killPop(sp, o.x, o.y + o.def.radius);
+       }
+       if (this.impacts) this.impacts.blast(m.x, m.y, sp.heroId, sp.explodeR);
+       else this.boomFx(m.x, m.y, sp.explodeR);
+     }
++    if (sp.arcDamage) this.hitArc(a, m);
+     // Explosions still resolve when the directly struck enemy dies.
+     if (m.dead) return;
++    if (sp.knockback) m.applyKnockback(sp.knockback);
+     if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
+     if (sp.freezeChance && Math.random() < sp.freezeChance) m.applyFreeze(sp.freezeDuration || .6);
+-    if (sp.burnDps) m.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0);
++    if (sp.burnDps) m.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0);
+     if (sp.teamVuln) m.applyVuln(sp.teamVuln, 3);
+     if (sp.stun) m.stunT = Math.max(m.stunT, sp.stun);
+     if (sp.shockAmp) m.applyShock(sp.shockAmp, sp.shockDur ?? 3);
+@@ -638,11 +699,27 @@
+           x: m.x, y: m.y,
+           dirX: dx / l, dirY: dy / l,
+           dmg: sp.dmg * 0.5, crit: false,
+-          split: 0, small: true, exclude: m,   // 不再连锁分裂；不打目标本体
++          split: 0, small: true, exclude: m, knockback: 0, arcDamage: 0, returnDamage: 0,
+           ttl: Math.min(sp.ttl ?? 3.2, 0.8),   // 射空时在近处消散，不无限前飞
+         });
+       }
+     }
++  }
++
++  private hitArc(a: Active, primary: Monster): void {
++    const sp = a.spec;
++    let target: Monster | null = null, nearest = 220 * 220;
++    for (const m of this.mgr.list) {
++      if (m.dead || m === primary) continue;
++      const d2 = (m.x - primary.x) ** 2 + (m.y - primary.y) ** 2;
++      if (d2 <= nearest) { target = m; nearest = d2; }
++    }
++    if (!target) return;
++    this.impacts?.voltChain(primary.x, primary.y, target.x, target.y, 0);
++    target.takeDamage(this.damageFor(sp, target, a.damageScale * sp.arcDamage!), sp.crit, sp.heroId,
++      sp.ignoreRes === true, sp.resCut || 0, Math.atan2(target.y - primary.y, target.x - primary.x));
++    this.dmg.add(sp.heroId, target.lastDamageTaken);
++    if (!target.dead && sp.shockAmp) target.applyShock(sp.shockAmp, sp.shockDur ?? 3);
+   }
+ 
+   private damageFor(sp: ProjSpec, m: Monster, scale = 1): number {
+@@ -673,7 +750,7 @@
+       const angle = Math.atan2(m.y - sp.y, m.x - sp.x);
+       m.takeDamage(amount, direct && sp.crit, sp.heroId, direct && sp.ignoreRes === true, direct ? sp.resCut || 0 : 0, angle, direct);
+       this.dmg.add(sp.heroId, m.lastDamageTaken);
+-      if (!m.dead && sp.burnDps && (direct || sp.burnSplash)) m.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0);
++      if (!m.dead && sp.burnDps && (direct || sp.burnSplash)) m.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0);
+       if (direct && !m.dead) {
+         if (sp.stun) m.stunT = Math.max(m.stunT, sp.stun);
+         if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
+
+--- before/assets/scripts/config/Cards.ts
++++ assets/scripts/config/Cards.ts
+@@ -24,6 +24,8 @@
+   skillRange: number;   // 技能索敌范围
+   skillPierce?: number; // 重弩手技能额外穿透数；贯颅弩矢只强化技能，大招保持无限贯穿
+   ultMarkAmp?: number;  // 死亡准星：大招命中后受到伤害增幅，持续5秒
++  archerKnockback?: number; // 震退箭：每四轮首支主箭的击退距离
++  sniperReturn?: number; // 回旋弩矢：大招返程伤害倍率
+   critRate: number;     // 暴击率
+   critMul: number;      // 暴击伤害倍率
+   serial: number;       // 连射：追加的弹幕排数（每排与首排同列数，列×排网格）
+@@ -49,17 +51,22 @@
+   ultHaste: number;     // 大招后攻速加成标记（士气高涨，0/1）
+   burnMul: number;      // 局外突破等灼烧伤害倍率；火法余烬卡另用pyroBurnBonus
+   pyroBurnBonus?: number; // 火法余烬卡：+50%/层，独立于局外灼烧倍率，最多+150%
+-  pyroBlastMul?: number;  // 火法爆裂范围：只放大普攻/技能/陨石爆炸，不改索敌和陨石坑
+-  pyroLinger?: number;    // 火法余火绵延：灼烧与陨石坑持续时间各+s
++  pyroBlastMul?: number;  // 火法爆裂范围：放大普攻/技能/陨石爆炸与技能火区，不改索敌和陨石坑
++  pyroLinger?: number;    // 火法余火绵延：灼烧、火区与陨石坑持续时间各+s
+   pyroMeteorBonus?: number; // 火法陨石增援：额外陨石数
+   pyroUltHitMul?: number; // 陨星威能：仅大招直接/溅射伤害，不放大灼烧
+   pyroSplashBurn?: boolean; // 烈焰附着：普攻溅射也附加灼烧
+   pyroBurnBurst?: number; // 余烬爆破：燃烧敌人死亡爆炸，爆炸本身不递归引爆
++  pyroFirefield?: number; // 灼热火区：技能末颗火球落点留下火区的基础秒数
++  pyroHealCut?: number; // 焦灼禁疗：自身灼烧附带的治疗削减比例
++  pyroGiantEvery?: number; // 熔火巨弹：每多少次普攻发射巨型火球
+   moraTeamVuln?: number; // 冰裂印记：冰系命中给全队提供短暂易伤
+   shockOnHit: number;   // 雷系命中感电：目标受伤 +25% 持续 3s（感电卡，0=无）
+   voltShockBonus?: number; // 高压电流：仅雷法自身对感电目标伤害+30%/层
+   voltShockLinger?: number; // 余电不散：所有雷法来源感电持续+s
+   voltStrikeBonus?: number; // 雷暴增援：额外真实落雷数
++  voltOverload?: number; // 过载麻痹：连锁命中已有感电目标的眩晕概率
++  voltArc?: number; // 电弧普攻：一次额外跳跃的伤害倍率
+   chargeEff: number;    // 装备充能效率词条：击杀充能 ×(1+eff)（累加）
+   pierceChance: number; // 英雄突破：普攻贯穿概率（0~1，累加）
+   defIgnore: number;    // 英雄突破：无视防御比例（0~1，累加）
+@@ -80,9 +87,11 @@
+   freezeChance: number; // 70级突破的普攻冰冻基础概率；无突破时不自动生效
+   moraFreezeChanceBonus?: number; // 速冻之心：每层命中冰冻概率+15%，可独立启用
+   moraColdBonus?: number; // 碎冰：冰法自身对减速/冰封目标伤害+30%/层
+-  moraSlowLinger?: number; // 寒冬延续：所有冰法减速持续+s，不增加冰封时间
++  moraSlowLinger?: number; // 寒冬延续：所有冰法减速与霜地持续+s，不增加冰封时间
+   moraFreezeLinger?: number; // 冰封延长：仅冰霜领域冰封持续+s
+   moraUltFreeze?: number; // 绝对零度：大招命中冰封s，解冻后才开始减速
++  moraPierce?: number; // 穿霜冰锥：普攻额外穿透数，后续目标伤害70%
++  moraGround?: number; // 凝霜地带：技能留下减速地带的基础秒数
+   atkLv: number;        // 技能升级等级（战斗内读里程碑：普攻/技能/大招槽）
+   skillLv: number;
+   ultLv: number;
+@@ -372,6 +381,9 @@
+ /* ---------- 弓箭手 · 普攻强化卡（§6.2 子集） ---------- */
+ export const ARCHER_CARDS: CardDef[] = [
+   ...commonHeroCards('archer'),
++  c({ id: 'archer_knockback', name: '震退箭', rarity: 'blue', maxStacks: 1, owner: 'archer',
++    art: 'ui_card_sniper_pierce_v1', desc: '每4轮普攻\n首支主箭击退敌人\n首领免疫',
++    apply: x => { x.hero.archerKnockback = 56; } }),
+   c({ id: 'archer_pierce', name: '穿林箭', rarity: 'blue', maxStacks: 2, owner: 'archer',
+     art: 'ui_card_sniper_pierce_v1', desc: '普攻额外穿透1个目标',
+     apply: x => { x.hero.pierce += 1; } }),
+@@ -402,6 +414,9 @@
+ /* ---------- 狙击游侠 · 凯尔·鹰眼（§6.2/§6.4 普攻流·极限单体） ---------- */
+ export const SNIPER_CARDS: CardDef[] = [
+   ...commonHeroCards('sniper'),
++  c({ id: 'sniper_return', name: '回旋弩矢', rarity: 'purple', maxStacks: 1, owner: 'sniper', req: 'sniper_unlock_ult',
++    art: 'ui_icon_ult_sniper', desc: '大招弩箭折返\n返程造成40%伤害',
++    apply: x => { x.hero.sniperReturn = .4; } }),
+   c({ id: 'execute', name: '处决标记', rarity: 'blue', maxStacks: 3, owner: 'sniper', desc: '对精英、首领\n伤害 +35%',
+     apply: x => { x.hero.executeBonus += 0.35; } }),
+   c({ id: 'instinct_s', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'sniper', desc: '对生命低于30%的目标\n伤害 +100%',
+@@ -428,6 +443,15 @@
+ /* ---------- 火焰法师 · 范围爆炸与灼烧（白2/蓝6/紫5/黄3） ---------- */
+ export const PYRO_CARDS: CardDef[] = [
+   ...commonHeroCards('pyro'),
++  c({ id: 'pyro_firefield', name: '灼热火区', rarity: 'purple', maxStacks: 1, owner: 'pyro', req: 'pyro_unlock_skill',
++    art: 'ui_card_pyro_linger_v1', desc: '技能最后一颗火球\n落点留下3秒火区',
++    apply: x => { x.hero.pyroFirefield = 3; } }),
++  c({ id: 'pyro_antiheal', name: '焦灼禁疗', rarity: 'blue', maxStacks: 1, owner: 'pyro',
++    art: 'ui_card_pyro_burn_v1', desc: '自身灼烧的敌人\n受到治疗量 -50%',
++    apply: x => { x.hero.pyroHealCut = .5; } }),
++  c({ id: 'pyro_giant', name: '熔火巨弹', rarity: 'purple', maxStacks: 1, owner: 'pyro',
++    art: 'ui_card_pyro_shards_v2', desc: '每4次普攻发射巨弹\n爆炸半径翻倍',
++    apply: x => { x.hero.pyroGiantEvery = 4; } }),
+   c({ id: 'pyro_burst', name: '余烬爆破', rarity: 'purple', maxStacks: 1, owner: 'pyro',
+     art: 'ui_card_pyro_burn_v1', desc: '自身点燃目标死亡时爆炸\n造成60%攻击力范围伤害\n爆炸不触发连锁',
+     apply: x => { x.hero.pyroBurnBurst = .6; } }),
+@@ -437,7 +461,7 @@
+     apply: x => { x.hero.skillShots += 1; } }),
+   c({ id: 'pyro_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '烈焰爆裂冷却 -2秒',
+     apply: x => { x.hero.skillCdFlat += 2; } }),
+-  c({ id: 'pyro_range', name: '爆裂范围', rarity: 'blue', maxStacks: 3, owner: 'pyro', art: 'ui_card_pyro_range_v2', desc: '普攻、技能与陨石\n爆炸半径 +20%',
++  c({ id: 'pyro_range', name: '爆裂范围', rarity: 'blue', maxStacks: 3, owner: 'pyro', art: 'ui_card_pyro_range_v2', desc: '普攻、技能与陨石\n爆炸半径 +20%\n技能火区半径 +20%',
+     apply: x => { x.hero.pyroBlastMul = (x.hero.pyroBlastMul || 1) * 1.2; } }),
+   c({ id: 'pyro_war', name: '陨星威能', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_ult', art: 'ui_card_pyro_war_v2', desc: '大招直接伤害 +40%',
+     apply: x => { x.hero.pyroUltHitMul = (x.hero.pyroUltHitMul || 1) * 1.4; } }),
+@@ -447,7 +471,7 @@
+     apply: x => { x.hero.burnOnHit = Math.max(x.hero.burnOnHit, .2); x.hero.pyroSplashBurn = true; } }),
+   c({ id: 'pyro_ember', name: '余烬', rarity: 'purple', maxStacks: 3, owner: 'pyro', reqAny: ['pyro_burn', 'pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_ember_v2', desc: '灼烧伤害 +50%\n包含陨石坑灼烧',
+     apply: x => { x.hero.pyroBurnBonus = (x.hero.pyroBurnBonus || 0) + .5; } }),
+-  c({ id: 'pyro_linger', name: '余火绵延', rarity: 'purple', maxStacks: 2, owner: 'pyro', reqAny: ['pyro_burn', 'pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_linger_v1', desc: '灼烧、陨石坑\n持续时间 +1秒',
++  c({ id: 'pyro_linger', name: '余火绵延', rarity: 'purple', maxStacks: 2, owner: 'pyro', reqAny: ['pyro_burn', 'pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_linger_v1', desc: '灼烧、火区与陨石坑\n持续时间 +1秒',
+     apply: x => { x.hero.pyroLinger = (x.hero.pyroLinger || 0) + 1; } }),
+   c({ id: 'pyro_meteors', name: '陨石增援', rarity: 'gold', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', art: 'ui_card_pyro_meteors_v1', desc: '大招陨石数量 +2',
+     apply: x => { x.hero.pyroMeteorBonus = (x.hero.pyroMeteorBonus || 0) + 2; } }),
+@@ -456,6 +480,12 @@
+ /* ---------- 雷电法师：连锁清群 / 感电协作 / 连续落雷 ---------- */
+ export const VOLT_CARDS: CardDef[] = [
+   ...commonHeroCards('volt'),
++  c({ id: 'volt_arc', name: '电弧普攻', rarity: 'blue', maxStacks: 1, owner: 'volt',
++    art: 'ui_card_volt_shards_v2', desc: '普攻额外跳跃1次\n跳跃伤害50%',
++    apply: x => { x.hero.voltArc = .5; } }),
++  c({ id: 'volt_overload', name: '过载麻痹', rarity: 'purple', maxStacks: 1, owner: 'volt', req: 'volt_shock',
++    art: 'ui_card_volt_stun_v1', desc: '连锁命中感电敌人\n50%几率眩晕0.4秒\n同一目标间隔3秒',
++    apply: x => { x.hero.voltOverload = .5; } }),
+   c({ id: 'volt_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'volt', reqAny: ['volt_unlock_skill', 'volt_unlock_ult'], art: 'ui_card_volt_spell_v2', desc: '技能伤害属性 +30%\n影响技能与大招',
+     apply: x => { x.hero.skillMul *= 1.3; } }),
+   c({ id: 'volt_shards', name: '连锁增幅', rarity: 'purple', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', art: 'ui_card_volt_shards_v2', desc: '连锁闪电目标 +2',
+@@ -483,6 +513,12 @@
+ /* ---------- 冰霜法师：减速 / 冰封控场 / 碎冰增伤 ---------- */
+ export const MORA_CARDS: CardDef[] = [
+   ...commonHeroCards('mora'),
++  c({ id: 'mora_pierce', name: '穿霜冰锥', rarity: 'blue', maxStacks: 1, owner: 'mora',
++    art: 'ui_card_mora_spell_v2', desc: '普攻额外穿透1个目标\n穿透后造成70%伤害',
++    apply: x => { x.hero.moraPierce = 1; } }),
++  c({ id: 'mora_ground', name: '凝霜地带', rarity: 'purple', maxStacks: 1, owner: 'mora', req: 'mora_unlock_skill',
++    art: 'ui_card_mora_range_v2', desc: '技能留下3秒寒霜地带\n进入的敌人受到减速',
++    apply: x => { x.hero.moraGround = 3; } }),
+   c({ id: 'mora_team', name: '冰裂印记', rarity: 'purple', maxStacks: 1, owner: 'mora',
+     art: 'ui_card_mora_brittle_v2', desc: '命中附加3秒易伤\n目标受到伤害 +15%',
+     apply: x => { x.hero.moraTeamVuln = .15; } }),
+@@ -498,7 +534,7 @@
+     apply: x => { x.hero.moraFreezeChanceBonus = (x.hero.moraFreezeChanceBonus || 0) + .15; } }),
+   c({ id: 'mora_war', name: '冰川之力', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_ult', art: 'ui_card_mora_war_v2', desc: '大招伤害 +40%',
+     apply: x => { x.hero.ultDmgMul *= 1.4; } }),
+-  c({ id: 'mora_linger', name: '寒冬延续', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '减速持续时间 +1秒',
++  c({ id: 'mora_linger', name: '寒冬延续', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '减速、霜地\n持续时间 +1秒',
+     apply: x => { x.hero.moraSlowLinger = (x.hero.moraSlowLinger || 0) + 1; } }),
+   c({ id: 'mora_freeze_linger', name: '冰封延长', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_skill', art: 'ui_card_mora_freeze_linger_v1', desc: '技能冰封时间 +1秒',
+     apply: x => { x.hero.moraFreezeLinger = (x.hero.moraFreezeLinger || 0) + 1; } }),
+@@ -583,7 +619,9 @@
+ /** These cards change projectiles, statuses, contacts or cooperation, rather than only numbers. */
+ const MECHANIC_IDS = new Set(['archer_pierce', 'serial', 'fan', 'split', 'explode', 'frost', 'burn', 'rain_rounds',
+   'multi_lock', 'sniper_pierce', 'extra_line', 'sniper_mark', 'pyro_shards', 'pyro_burn', 'pyro_burst', 'pyro_meteors',
+-  'volt_shards', 'volt_shock', 'volt_strikes', 'volt_stun', 'mora_freeze', 'mora_glacier', 'mora_team']);
++  'volt_shards', 'volt_shock', 'volt_strikes', 'volt_stun', 'mora_freeze', 'mora_glacier', 'mora_team',
++  'archer_knockback', 'sniper_return', 'pyro_firefield', 'pyro_antiheal', 'pyro_giant',
++  'volt_arc', 'volt_overload', 'mora_pierce', 'mora_ground']);
+ export function isMechanicCard(card: CardDef): boolean { return MECHANIC_IDS.has(card.id); }
+ function offerGroup(card: CardDef): OfferGroup {
+   return card.offerGroup ?? (card.owner === 'global' ? 'support' : isMechanicCard(card) ? 'combat' : 'stats');
+@@ -594,7 +632,7 @@
+ }
+ 
+ /** Two mechanic opportunities when available, one following an invested hero and one opening another path.
+- * Refreshes share these guarantees. Numeric-only leftovers may return fewer than three legal choices. */
++ * Refreshes share these guarantees. Exhausted mechanic pools fall back to remaining legal cards. */
+ export function draw3(pool: CardDef[], stacks: CardStacks): CardDef[] {
+   const picked: CardDef[] = [];
+   const rest = pool.filter(k => canTakeCard(k, stacks));
+@@ -621,8 +659,8 @@
+   take(alternative.length ? alternative : rest.filter(isMechanicCard));
+   while (picked.length < 3) {
+     const candidates = rest.filter(c => offerGroup(c) !== 'stats' || !picked.some(p => offerGroup(p) === 'stats'));
+-    if (!candidates.length) break;
+-    take(candidates);
++    if (!rest.length) break;
++    take(candidates.length ? candidates : rest);
+   }
+   return picked;
+ }
+

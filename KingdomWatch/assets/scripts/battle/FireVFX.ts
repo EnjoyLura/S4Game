@@ -8,6 +8,9 @@ interface Fragment { part: Part; vx: number; vy: number; spin: number; }
 interface Flight { root: Node; body: Part; tail: Part; }
 interface Residue { mark: Part; glow: Part; }
 interface Clip { part: Part; age: number; scale: number; }
+interface BurnState { lifeId: number; pulse: number; clips: Clip[]; }
+/** Read-only status view: every burn source already maintains these fields. */
+export interface BurningTarget { node: Node; lifeId: number; dead: boolean; burnT: number; burnTick: number; burnPulse: number; def: { radius: number }; }
 interface Burst {
   root: Node; ground: Node; core: Part; flames: Part[]; smoke: Part[]; dust: Part; scorch: Part;
   fragments: Fragment[]; age: number; life: number; radius: number; angle: number; blast: boolean; heavy: boolean;
@@ -17,7 +20,7 @@ const CAP = 16;
 const CONTACT_CAP = 10;
 const BLAST_CAP = 8;
 const FLIGHT_CAP = 32;
-const RESIDUE_CAP = 8;
+const RESIDUE_CAP = 16;
 const FLAME_IDS = ['flame_0', 'flame_1', 'flame_2', 'flame_3', 'flame_4', 'flame_5', 'flame_6', 'flame_7'];
 // Short ignition, solid peak, then outgoing wisps. Blend only at cel boundaries.
 const FLAME_TIME = [0, 0.018, 0.045, 0.10, 0.155, 0.210, 0.270, 0.320, 0.360];
@@ -27,6 +30,7 @@ const PYRO_CELL = 256;
 // 每格时长：快攻绽放 → 慢衰消散；总和必须 < 普攻间隔，否则怪死了火还在原地烧
 const PYRO_CEL_DUR = [0.04, 0.04, 0.04, 0.04, 0.05, 0.05, 0.05, 0.05, 0.065, 0.065, 0.065, 0.065];
 const PYRO_CELS = PYRO_CEL_DUR.length;
+const PYRO_CLIP_LIFE = PYRO_CEL_DUR.reduce((sum, seconds) => sum + seconds, 0);
 const PYRO_ANCHOR_Y = 172;  // 首格火焰亮度质心（格内坐标，自顶向下）
 const PYRO_FLAME_W = 88;    // 首格火焰宽度（决定格缩放 → 屏上火焰尺寸）
 const clamp = (v: number): number => Math.max(0, Math.min(1, v));
@@ -41,6 +45,8 @@ export class FireVFX {
   private craterFrames = new Map<string, SpriteFrame>();
   private clipFree: Clip[] = [];
   private clipsActive: Clip[] = [];
+  private burning = new Map<BurningTarget, BurnState>();
+  private burnFree: Clip[] = [];
   private clipLoaded = false;
   private craterLoaded = false;
   private material: Material | null = null;
@@ -130,6 +136,7 @@ export class FireVFX {
       });
     });
     this.root.once(Node.EventType.NODE_DESTROYED, () => {
+      this.burning.clear(); this.burnFree.length = 0;
       this.material?.destroy(); this.frames.forEach(frame => frame.destroy());
       this.clipFrames.forEach(frame => frame.destroy());
       this.craterFrames.forEach(frame => frame.destroy());
@@ -152,8 +159,8 @@ export class FireVFX {
     return true;
   }
 
-  /** Read-only view of the hero's existing four-second burn areas. */
-  craters(areas: readonly { x: number; y: number; t: number }[], radius: number, clock: number): boolean {
+  /** Read-only view of the hero's skill firefields and ultimate craters. */
+  craters(areas: readonly { x: number; y: number; t: number; life?: number; radius?: number }[], radius: number, clock: number): boolean {
     if (!this.loaded) return false;
     const slots = this.residues;
     const n = Math.min(slots.length, areas.length);
@@ -161,23 +168,24 @@ export class FireVFX {
     // 所有坑共用 mark 层与 glow 层：先铺全部焦痕、再叠全部余烬，跨坑不再互相盖。
     for (let i = 0; i < n; i++) {
       const c = areas[areas.length - 1 - i];
+      const areaRadius = c.radius ?? radius;
       const seed = Math.sin(c.x * 0.017 + c.y * 0.013);
-      const fade = Math.min(1, c.t / 0.8, clamp((4 - c.t) / 0.08));
+      const fade = Math.min(1, c.t / 0.8, clamp(((c.life ?? 4) - c.t) / 0.08));
       let k = 0;
       for (let j = 0; j < areas.length; j++) {
-        if (Math.hypot(areas[j].x - c.x, areas[j].y - c.y) < radius) k++;
+        if (Math.hypot(areas[j].x - c.x, areas[j].y - c.y) < Math.max(areaRadius, areas[j].radius ?? radius)) k++;
       }
       const atten = 1 / Math.sqrt(Math.max(1, k));   // 近邻越多越衰减，叠点不烧成实心红饼
       if (this.craterLoaded) {
         // 沙环已从贴片抠除：叠加只会炭压炭加深，不会出现盖沙拼布。
-        this.drawFrame(slots[i].mark, 'mark', radius * 2.45, 255 * fade, c.x, c.y - 6, seed * 7, 1, this.craterFrames);
+        this.drawFrame(slots[i].mark, 'mark', areaRadius * 2.45, 255 * fade, c.x, c.y - 6, seed * 7, 1, this.craterFrames);
       } else {
-        this.draw(slots[i].mark, 'scorch', radius * 2.55, 118 * fade * atten, c.x, c.y - 6, seed * 7, 1.5);
+        this.draw(slots[i].mark, 'scorch', areaRadius * 2.55, 118 * fade * atten, c.x, c.y - 6, seed * 7, 1.5);
       }
       if (this.craterLoaded) {
         const pulse = 0.5 + 0.5 * Math.sin(clock * Math.PI * 1.05 + seed * 2.1);
         // 灰晕已从焦痕贴图抠除，炭体收紧后余烬斑同步收窄（2.3→1.7），避免亮斑飘在裸沙上
-        this.drawFrame(slots[i].glow, 'embers', radius * 1.7, (110 + 145 * pulse) * fade * atten, c.x, c.y - 6, seed * 7, 1, this.craterFrames);
+        this.drawFrame(slots[i].glow, 'embers', areaRadius * 1.7, (110 + 145 * pulse) * fade * atten, c.x, c.y - 6, seed * 7, 1, this.craterFrames);
       } else {
         slots[i].glow.node.active = false;
       }
@@ -249,6 +257,49 @@ export class FireVFX {
     }
     this.tint.set(255, 255, 255, 255);
     clip.part.sprite.color = this.tint;
+  }
+
+  /** Each actual burn tick starts the original, unscaled forward clip.
+   * Its last 0.12s can finish beneath the next tick; never speed up or restart a playing clip. */
+  syncBurns(targets: readonly BurningTarget[], dt: number): void {
+    for (const [target, state] of this.burning) {
+      if (target.dead || state.lifeId !== target.lifeId || !target.node.isValid || !target.node.parent) {
+        for (const clip of state.clips) this.releaseBurnClip(clip);
+        this.burning.delete(target);
+      }
+    }
+    for (const target of targets) {
+      if (target.dead || target.burnT <= 0 || !target.node.isValid || !target.node.parent) continue;
+      if (!this.burning.has(target)) this.burning.set(target, { lifeId: target.lifeId, pulse: target.burnPulse, clips: [] });
+    }
+    for (const [target, state] of this.burning) {
+      for (let i = state.clips.length - 1; i >= 0; i--) {
+        const clip = state.clips[i]; clip.age += dt;
+        if (clip.age >= PYRO_CLIP_LIFE) { state.clips.splice(i, 1); this.releaseBurnClip(clip); }
+      }
+      const ticked = target.burnPulse > state.pulse;
+      state.pulse = target.burnPulse;
+      if (ticked && this.clipLoaded && this.material && state.clips.length < 2) {
+        const clip = this.burnFree.pop() || { part: this.part('burnStatusFlame', this.root), age: 0, scale: 1 };
+        clip.age = target.burnTick; clip.scale = 21 / PYRO_FLAME_W;
+        clip.part.frame = '';
+        // Local attachment inherits movement, depth sorting, and scene destruction.
+        clip.part.node.setParent(target.node);
+        clip.part.node.setPosition(0, target.def.radius * .4 + (PYRO_ANCHOR_Y - PYRO_CELL / 2) * clip.scale, 0);
+        clip.part.node.getComponent(UITransform)!.setContentSize(PYRO_CELL * clip.scale, PYRO_CELL * clip.scale);
+        clip.part.sprite.customMaterial = this.material;
+        this.renderClip(clip);
+        clip.part.node.active = true;
+        state.clips.push(clip);
+      }
+      for (const clip of state.clips) this.renderClip(clip);
+      // The final damage tick keeps its natural tail even after the gameplay status expires.
+      if (target.burnT <= 0 && !state.clips.length) this.burning.delete(target);
+    }
+  }
+
+  private releaseBurnClip(clip: Clip): void {
+    clip.part.node.active = false; clip.part.node.setParent(this.root); this.burnFree.push(clip);
   }
 
   blast(x: number, y: number, radius: number): boolean {

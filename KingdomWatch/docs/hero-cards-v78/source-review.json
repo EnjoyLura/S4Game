@@ -1,0 +1,124 @@
+{
+  "scope": "static syntax and AST only",
+  "game_code_executed": false,
+  "files_parsed": 7,
+  "direct_card_count": 67,
+  "new_mechanic_cards": [
+    {
+      "id": "archer_knockback",
+      "name": "震退箭",
+      "owner": "archer",
+      "rarity": "blue",
+      "maxStacks": 1,
+      "art": "ui_card_sniper_pierce_v1",
+      "desc": "每4轮普攻\n首支主箭击退敌人\n首领免疫",
+      "apply": "x => { x.hero.archerKnockback = 56; }"
+    },
+    {
+      "id": "sniper_return",
+      "name": "回旋弩矢",
+      "owner": "sniper",
+      "rarity": "purple",
+      "maxStacks": 1,
+      "art": "ui_icon_ult_sniper",
+      "req": "sniper_unlock_ult",
+      "desc": "大招弩箭折返\n返程造成40%伤害",
+      "apply": "x => { x.hero.sniperReturn = .4; }"
+    },
+    {
+      "id": "pyro_firefield",
+      "name": "灼热火区",
+      "owner": "pyro",
+      "rarity": "purple",
+      "maxStacks": 1,
+      "art": "ui_card_pyro_linger_v1",
+      "req": "pyro_unlock_skill",
+      "desc": "技能最后一颗火球\n落点留下3秒火区",
+      "apply": "x => { x.hero.pyroFirefield = 3; }"
+    },
+    {
+      "id": "pyro_antiheal",
+      "name": "焦灼禁疗",
+      "owner": "pyro",
+      "rarity": "blue",
+      "maxStacks": 1,
+      "art": "ui_card_pyro_burn_v1",
+      "desc": "自身灼烧的敌人\n受到治疗量 -50%",
+      "apply": "x => { x.hero.pyroHealCut = .5; }"
+    },
+    {
+      "id": "pyro_giant",
+      "name": "熔火巨弹",
+      "owner": "pyro",
+      "rarity": "purple",
+      "maxStacks": 1,
+      "art": "ui_card_pyro_shards_v2",
+      "desc": "每4次普攻发射巨弹\n爆炸半径翻倍",
+      "apply": "x => { x.hero.pyroGiantEvery = 4; }"
+    },
+    {
+      "id": "volt_arc",
+      "name": "电弧普攻",
+      "owner": "volt",
+      "rarity": "blue",
+      "maxStacks": 1,
+      "art": "ui_card_volt_shards_v2",
+      "desc": "普攻额外跳跃1次\n跳跃伤害50%",
+      "apply": "x => { x.hero.voltArc = .5; }"
+    },
+    {
+      "id": "volt_overload",
+      "name": "过载麻痹",
+      "owner": "volt",
+      "rarity": "purple",
+      "maxStacks": 1,
+      "art": "ui_card_volt_stun_v1",
+      "req": "volt_shock",
+      "desc": "连锁命中感电敌人\n50%几率眩晕0.4秒\n同一目标间隔3秒",
+      "apply": "x => { x.hero.voltOverload = .5; }"
+    },
+    {
+      "id": "mora_pierce",
+      "name": "穿霜冰锥",
+      "owner": "mora",
+      "rarity": "blue",
+      "maxStacks": 1,
+      "art": "ui_card_mora_spell_v2",
+      "desc": "普攻额外穿透1个目标\n穿透后造成70%伤害",
+      "apply": "x => { x.hero.moraPierce = 1; }"
+    },
+    {
+      "id": "mora_ground",
+      "name": "凝霜地带",
+      "owner": "mora",
+      "rarity": "purple",
+      "maxStacks": 1,
+      "art": "ui_card_mora_range_v2",
+      "req": "mora_unlock_skill",
+      "desc": "技能留下3秒寒霜地带\n进入的敌人受到减速",
+      "apply": "x => { x.hero.moraGround = 3; }"
+    }
+  ],
+  "preserved_methods": {
+    "FireVFX.syncBurns": "identical",
+    "FireVFX.renderClip": "identical",
+    "FireVFX.tick": "identical",
+    "FrostVFX.domain": "identical",
+    "FrostVFX.tick": "identical",
+    "FrostVFX.render": "identical",
+    "HeroBase.tick": "identical",
+    "HeroBase.chargeKill": "identical"
+  },
+  "documented_review": [
+    "Normal finite segment collision remains shared by outbound, return and frost piercing contacts.",
+    "Return clips the map edge and launch point, uses distinct per-leg life IDs, never creates another return.",
+    "Only the first primary arrow of every fourth base cycle owns knockback; split and serial arrows do not copy it.",
+    "Basic arc is bounded to one nearest secondary target and cannot call itself or cast a skill.",
+    "Overload checks existing shock, 50% roll, boss exclusion and a per-target three-second cooldown.",
+    "Burn healing reduction owns its own expiry; other sources extending burn cannot extend that expiry.",
+    "Firefield callback runs on the actual last skill projectile landing, including empty ground.",
+    "Skill firefields never apply meteor vulnerability; both field types use each area radius and lifetime.",
+    "Frost ground updates before the ultimate queue early return, refreshes slow on new arrivals and clears on expiry.",
+    "Picker falls back to remaining legal cards only after the usual numeric cap would leave empty slots."
+  ]
+}

@@ -19,7 +19,12 @@ import { buildHeroes } from './pages/HeroPage';
 import { buildLevels, closeLevelPreparation, selectedCampaignChapter } from './pages/LevelsPage';
 import { buildUpgrade } from './pages/UpgradePage';
 import { buildBase } from './pages/BasePage';
+import { buildEndless } from './pages/EndlessPage';
 import { levelReturnReady } from './BattleEntry';
+import { pendingPyroSquadLesson, postBowCampTab } from '../core/SecondJourney';
+import { loadSave, saveSave } from '../core/SaveData';
+import { openSquadPanel } from './SquadPanel';
+import { whenUIArtReady } from './UIArtReady';
 import { paintLobbyStrip } from './LobbyChrome';
 
 const { ccclass } = _decorator;
@@ -43,6 +48,13 @@ export class MainUI extends Component {
   private tab = flow.mainTab;
 
   start(): void {
+    // Resume the post-bow chain after a refresh without repeating a paid upgrade.
+    const campTab = postBowCampTab();
+    if (campTab !== null) {
+      flow.mainTab = campTab;
+      if (campTab === 3) { loadSave().curHero = 'archer'; saveSave(); }
+      else flow.levelReturn = { id: '1-2', diff: 0 };
+    }
     GameAudio.enter('camp', selectedCampaignChapter());
     // 视口变化（手机地址栏收起/展开、旋转等）：LO.half 只在启动时算过一次，画布被
     // Cocos 自动重适配后旧值全部失锚 → 重算 initLayout 并整屏重建，布局始终贴合当前可视区
@@ -84,7 +96,7 @@ export class MainUI extends Component {
     this.screens.setSiblingIndex(0);
     setGlobalRoot(root);
     this.tab = flow.mainTab;
-    this.switchTab(this.tab);
+    this.switchTab(this.tab, true);
     // 资源栏恒在页面内容上层。
     ['resBar'].forEach(nm => { const n = root.getChildByName(nm); if (n) n.setSiblingIndex(root.children.length - 1); });
   }
@@ -164,11 +176,15 @@ export class MainUI extends Component {
   }
 
   /* ---------- 页签切换：内容整屏重建 ---------- */
-  switchTab(i: number): void {
+  switchTab(i: number, keepSecondary = false): void {
     const previous = this.tab;
+    if (!keepSecondary) flow.endlessPage = false;
     if (i !== 2) closeLevelPreparation();
     this.tab = i;
     flow.mainTab = i;
+    const showNav = !flow.endlessPage;
+    if (this.navBar) this.navBar.active = showNav;
+    this.navItems.forEach(it => it.slot.active = showNav);
     this.highlightTabs();
     this.rebuildScreen(i === previous ? 0 : i > previous ? 1 : -1);
   }
@@ -196,9 +212,12 @@ export class MainUI extends Component {
   /** 页面刷新入口（购买/升级/穿戴后）：整屏重建 + 货币同步 */
   private rebuildScreen(direction = 0): void {
     refreshUI(this.screens, () => {
-      this.applyPageBg(this.tab);
-      const ctx: PageCtx = { screens: this.screens, refresh: () => this.switchTab(this.tab), refreshResources: () => this.updateWallet() };
-      switch (this.tab) {
+      if (!flow.endlessPage) this.applyPageBg(this.tab);
+      const ctx: PageCtx = { screens: this.screens, refresh: () => this.switchTab(this.tab, true),
+        refreshResources: () => this.updateWallet(), navigate: tab => this.switchTab(tab),
+        openEndless: () => { flow.endlessPage = true; this.switchTab(4, true); } };
+      if (flow.endlessPage) buildEndless(ctx);
+      else switch (this.tab) {
         case 0: buildShop(ctx); break;
         case 1: buildHeroes(ctx); break;
         case 2: buildLevels(ctx); break;
@@ -206,6 +225,9 @@ export class MainUI extends Component {
         case 4: buildBase(ctx); break;
       }
       this.updateWallet();
+      if (this.tab === 2 && pendingPyroSquadLesson()) whenUIArtReady(this.screens, () => {
+        if (this.tab === 2 && this.screens.isValid && pendingPyroSquadLesson()) openSquadPanel(ctx);
+      });
     }, direction);
   }
 }

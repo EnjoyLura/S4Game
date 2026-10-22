@@ -1,0 +1,51 @@
+{
+  "source_assets_before": 2078,
+  "source_assets_after": 2080,
+  "changed_source_ts": [
+    "scripts/battle/BattleDirector.ts",
+    "scripts/battle/FireVFX.ts",
+    "scripts/battle/Hero.ts",
+    "scripts/battle/ImpactFX.ts",
+    "scripts/battle/Monster.ts",
+    "scripts/battle/MonsterTraits.ts",
+    "scripts/battle/Projectile.ts",
+    "scripts/battle/WaveManager.ts",
+    "scripts/config/Cards.ts",
+    "scripts/config/ChapterContent.ts",
+    "scripts/config/FifthLevel.ts",
+    "scripts/config/FourthLevel.ts",
+    "scripts/config/Mobs.ts",
+    "scripts/config/SixthLevel.ts",
+    "scripts/core/GameData.ts",
+    "scripts/ui/Panels.ts"
+  ],
+  "new_source_files": [
+    "scripts/ui/EnemyTooltip.ts",
+    "scripts/ui/EnemyTooltip.ts.meta"
+  ],
+  "deleted_source_files": [],
+  "all_other_original_assets_unchanged": true,
+  "native_before": 756,
+  "native_after": 756,
+  "all_native_sha256_preserved": true,
+  "source_head": "a02434d54d6077b9a86c3b667c94c21690d540b3",
+  "source_head_and_staged_content_preserved": true,
+  "main_bundle_files": [
+    "assets/main/index.a9bb5.js"
+  ],
+  "compiled_source_markers": {
+    "burnPulse": true,
+    "skillVolley": true,
+    "enemyLiveTooltip": true,
+    "物理伤害绕过，法术集火可破盾": true
+  },
+  "creator_duration_ms": 19990,
+  "game_browser_tests_audio_or_wasm_executed": false,
+  "publication_commit": "10b8bc490718cafc1bf752186ad46d2b25ee1367",
+  "release": "eb35586cbc10a811",
+  "github_pages_status": "built",
+  "runtime_files": 2103,
+  "runtime_bytes": 677107730,
+  "online_hash_samples": 11,
+  "online_manifest_and_release_verified": true
+}

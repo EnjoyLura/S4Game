@@ -1,0 +1,652 @@
+--- assets/scripts/battle/BattleDirector.ts.before
++++ assets/scripts/battle/BattleDirector.ts
+@@ -13,6 +13,7 @@
+ import { campaignChapter } from '../config/Campaign';
+ import { loadSave, saveSave } from '../core/SaveData';
+ import { firstLevelVictory, pendingBowLesson, skipBattleTeaching, teachingBattle } from '../core/FirstJourney';
++import { pendingPyroSquadLesson, secondLevelVictory, secondTeachingBattle, skipSecondBattleTeaching } from '../core/SecondJourney';
+ import { tutorialFocus } from '../ui/TutorialFocus';
+ import { starKey, squadList, unlockCodex, advanceUnlock, equipAgg, heroState, heroStats, heroBtAgg, keepHp, keepShield } from '../core/GameData';
+ import { grantStageMaterials } from '../core/StageLoot';
+@@ -90,6 +91,7 @@
+   private pickNumber = 0;
+   private ultFocusShown = false;
+   private get teaching(): boolean { return teachingBattle(this.levelDef.id, this.levelDef.difficulty); }
++  private get secondTeaching(): boolean { return secondTeachingBattle(this.levelDef.id, this.levelDef.difficulty); }
+ 
+   global: GlobalStats = { xpMul: 1, goldMul: 1, lineRegenPct: 0 };
+   stacks: CardStacks = {};
+@@ -343,17 +345,18 @@
+ 
+   /** Event/state driven: never pause inside damage, picking, loading or an ultimate presentation. */
+   private offerUltimateLesson(): void {
+-    if (!this.teaching || this.ultFocusShown || loadSave().firstJourney!.ultCast
++    const second = this.secondTeaching;
++    if ((!this.teaching && !second) || this.ultFocusShown || (second ? loadSave().secondJourney!.ultCast : loadSave().firstJourney!.ultCast)
+       || this.state !== 'running' || this.pickQueue > 0 || this.pendingWin || this.ultShowT > 0
+       || this.ultimateActive || this.gm.panelOpen || this.mobIntroOpen || this.mgr.aliveCount < 1) return;
+-    const index = this.heroes.findIndex(h => h.id === 'archer');
++    const index = this.heroes.findIndex(h => h.id === (second ? 'sniper' : 'archer'));
+     if (index < 0 || !this.heroes[index].ultReady) return;
+     const target = this.hud.ultimateTarget(index);
+     if (!target) return;
+     const focus = tutorialFocus(this.coachRoot, target,
+-      '箭雨已就绪！点击发光的大招按钮，清扫敌群。',
++      second ? '猎杀时刻已就绪！点击重弩手大招，穿透前方敌群。' : '箭雨已就绪！点击发光的大招按钮，清扫敌群。',
+       () => { this.state = 'running'; this.hud.activateUltimate(index); },
+-      () => { skipBattleTeaching(); this.state = 'running'; });
++      () => { if (second) skipSecondBattleTeaching(); else skipBattleTeaching(); this.state = 'running'; });
+     if (focus) { this.panels.closeAll(); this.ultFocusShown = true; this.state = 'tutorial'; }
+   }
+ 
+@@ -423,6 +426,10 @@
+             loadSave().firstJourney!.freeChargeUsed = true;
+           }
+         }
++        if (this.secondTeaching && card.id === 'sniper_unlock_ult' && !loadSave().secondJourney!.freeChargeUsed) {
++          const sniper = this.heroes.find(h => h.id === 'sniper');
++          if (sniper) { sniper.charge = sniper.chargeGoal; loadSave().secondJourney!.freeChargeUsed = true; }
++        }
+         this.pickQueue--;
+         saveSave();
+         this.hud.sync(); // 选择解锁卡后立即刷新图标，即使后面还有排队三选一。
+@@ -437,14 +444,16 @@
+       },
+     };
+     const showOffer = (): void => {
+-      const lessons = ['serial', 'archer_unlock_skill', 'archer_unlock_ult'];
++      const lessons = this.secondTeaching ? ['sniper_unlock_skill', 'sniper_unlock_ult'] : ['serial', 'archer_unlock_skill', 'archer_unlock_ult'];
+       const desired = lessons[Math.min(this.pickNumber - 1, lessons.length - 1)];
+       const missing = lessons.filter(id => !(this.stacks[id] > 0));
+       const lessonId = missing.includes(desired) ? desired : missing[0];
+-      const lesson = this.teaching && pool.find(c => c.id === lessonId && canTakeCard(c, this.stacks));
++      const lesson = (this.teaching || this.secondTeaching) && pool.find(c => c.id === lessonId && canTakeCard(c, this.stacks));
+       const cards = draw3(pool, this.stacks);
+       opts.recommendedId = lesson ? lesson.id : undefined;
+-      opts.onSkipTeaching = this.teaching ? () => { skipBattleTeaching(); showOffer(); } : undefined;
++      opts.onSkipTeaching = (this.teaching || this.secondTeaching) ? () => {
++        if (this.secondTeaching) skipSecondBattleTeaching(); else skipBattleTeaching(); showOffer();
++      } : undefined;
+       this.panels.showPick(lesson ? [lesson, ...cards.filter(c => c.id !== lesson.id)].slice(0, 3) : cards, this.stacks, opts);
+     };
+     this.pickOpts = opts;
+@@ -487,6 +496,9 @@
+       this.ultShowT = Math.max(this.ultShowT, h.ultShowDuration + 2);
+       if (this.teaching && h.id === 'archer') {
+         loadSave().firstJourney!.ultCast = true; saveSave();
++      }
++      if (this.secondTeaching && h.id === 'sniper') {
++        loadSave().secondJourney!.ultCast = true; saveSave();
+       }
+       return 'ok';
+     }
+@@ -588,6 +600,7 @@
+     const sk = starKey(this.levelDef.id, this.levelDef.difficulty);
+     const firstGift = firstLevelVictory(this.levelDef.id, this.levelDef.difficulty, sv.stars[sk] || 0);
+     if (firstGift) loot.equipment.push(firstGift);
++    if (secondLevelVictory(this.levelDef.id, this.levelDef.difficulty)) loot.heroes = ['pyro'];
+     sv.stars[sk] = Math.max(sv.stars[sk] || 0, stars);
+     if (this.levelDef.id === '1-2') sv.speedUnlocked = true;
+     saveSave();
+@@ -719,6 +732,7 @@
+       const bowLesson = pendingBowLesson();
+       flow.mainTab = bowLesson ? 1 : 2;
+       flow.levelReturn = bowLesson ? null : { id: levelId, diff };
++      if (!bowLesson && pendingPyroSquadLesson()) flow.levelReturn = { id: '1-3', diff: 0 };
+       if (bowLesson) { loadSave().curHero = 'archer'; saveSave(); }
+     }
+     const failed = (error?: Error | null): void => {
+--- assets/scripts/config/LevelDifficulty.ts.before
++++ assets/scripts/config/LevelDifficulty.ts
+@@ -2,6 +2,7 @@
+ import { getLevelDef, LevelDef, LEVEL_IDS, MobDef, SpawnGroup, WaveDef } from './Mobs';
+ import { campaignStage } from './Campaign';
+ import { FIRST_LEVEL_WAVES } from './FirstLevel';
++import { SECOND_LEVEL_WAVES } from './SecondLevel';
+ 
+ export interface MaterialReward { id: string; n: number; }
+ export interface GearWeight { id: string; weight: number; }
+@@ -71,8 +72,9 @@
+     return rows;
+   }, [] as GearWeight[]).filter(g => g.weight > 0) : [];
+   const first = base.id === '1-1' && d === 0;
++  const second = base.id === '1-2' && d === 0;
+   return cache[key] = { ...base, difficulty: d, baseGold: Math.round(base.baseGold * DIFFICULTIES[d].goldMul),
+-    waves: first ? FIRST_LEVEL_WAVES : waves, fixedWaves: first, materials, gearPool };
++    waves: first ? FIRST_LEVEL_WAVES : second ? SECOND_LEVEL_WAVES : waves, fixedWaves: first || second, materials, gearPool };
+ }
+ /** One equipment roll per real kill; elite bonus is explicit in the preview. */
+ export function equipmentDropChance(difficulty: number, mob?: Pick<MobDef, 'elite' | 'boss'>): number {
+--- assets/scripts/core/GameData.ts.before
++++ assets/scripts/core/GameData.ts
+@@ -175,7 +175,7 @@
+     id: 'pyro', name: '焰·辉', job: '火焰 · AOE 爆发', avatar: 'ui_avatar_pyro',
+     baseAtk: 60, baseSkillDmg: 90, growthType: 'ultimate', atkSpd: 1, weaponName: '辉焰法杖', skillName: '烈焰爆裂', ultName: '陨石天降',
+     story: '自灰烬火山走出的流浪法师，掌心蕴火。怪群愈密，他的火焰便烧得愈旺。',
+-    shopPrice: 2800,
++    shopPrice: 0,
+   },
+   volt: {
+     id: 'volt', name: '沃尔·雷霆', job: '雷电 · 连锁控制', avatar: 'ui_avatar_volt',
+@@ -201,9 +201,10 @@
+ }
+ export function inSquad(hid: string): boolean { return squadList().includes(hid); }
+ 
+-/** 上阵：从左到右占第一个空位（满员/重复返回失败消息）；上阵即拥有（与商店/英雄/升级页同步） */
++/** 上阵：已拥有英雄从左到右占第一个空位。 */
+ export function deployHero(hid: string): OpResult {
+   if (!HERO_DEFS[hid]) return { ok: false, msg: '英雄不存在' };
++  if (!loadSave().heroes[hid]?.owned) return { ok: false, msg: hid === 'pyro' ? '通关普通1-2免费获得火法师' : '请先解锁该英雄' };
+   const sq = squadList();
+   if (sq.includes(hid)) return { ok: false, msg: '该英雄已上阵' };
+   if (sq.length >= SQUAD_MAX) return { ok: false, msg: '编队已满，请先下阵英雄' };
+@@ -405,7 +406,7 @@
+     sub: '绿1阶 · ' + weaponUsers(id), price: WEAPONS[id].price, currency: 'diamond' as const, unlock: WEAPONS[id].unlock, give: { kind: 'equip' as const, id } })),
+   { id: 's_wpn_crossbow', tab: 'weapon', name: '鹰眼重弩', sub: '紫2阶 · 重击弩', price: 1200, currency: 'diamond', unlock: '1-2', give: { kind: 'equip', id: 'wpn_crossbow' } },
+   { id: 's_hero_sniper', tab: 'hero', name: '凯尔·鹰眼', sub: '狙击 · 重击输出', price: 6800, currency: 'diamond', unlock: '1-2', give: { kind: 'hero', id: 'sniper' } },
+-  { id: 's_hero_pyro', tab: 'hero', name: '焰·辉', sub: '火焰 · AOE 爆发', price: 2800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'pyro' } },
++  { id: 's_hero_pyro', tab: 'hero', name: '焰·辉', sub: '通关普通1-2免费获得', price: 0, currency: 'diamond', unlock: '1-2', give: { kind: 'hero', id: 'pyro' } },
+   { id: 's_hero_volt', tab: 'hero', name: '沃尔·雷霆', sub: '雷电 · 连锁控制', price: 4200, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'volt' } },
+   { id: 's_hero_mora', tab: 'hero', name: '莫拉·寒霜', sub: '冰霜 · 减速控制', price: 4800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'mora' } },
+   { id: 's_hero_more', tab: 'hero', name: '新英雄', sub: '敬请期待', price: 0, currency: 'diamond', unlock: '', give: { kind: 'hero', id: '' } },
+@@ -449,6 +450,8 @@
+ /** 商店购买（英雄=解锁；装备入仓库；材料入背包） */
+ export function shopBuy(g: ShopDef): OpResult {
+   const sv = loadSave();
++  // Includes stale callers carrying the former diamond price. The hero comes from victory only.
++  if (g.give.kind === 'hero' && g.give.id === 'pyro') return { ok: false, msg: sv.heroes.pyro.owned ? '已拥有该英雄' : '通关普通1-2免费获得火法师' };
+   if (g.give.kind === 'hero' && g.give.id && sv.heroes[g.give.id]?.owned) return { ok: false, msg: '已拥有该英雄' };
+   const wallet = g.currency === 'gold' ? sv.gold : sv.diamonds;
+   if (wallet < g.price) return { ok: false, msg: g.currency === 'gold' ? '金币不足' : '钻石不足' };
+--- assets/scripts/core/SaveData.ts.before
++++ assets/scripts/core/SaveData.ts
+@@ -29,6 +29,7 @@
+ export interface SaveData {
+   /** Versioned first-session teaching; missing on an old save never opts it in. */
+   firstJourney?: FirstJourney;
++  secondJourney?: SecondJourney;
+   gold: number;
+   diamonds: number;
+   /** 星数表：'1-1' -> 1~3 */
+@@ -66,6 +67,20 @@
+   /** 已领取首览奖励的图鉴 id（每只怪物一次性） */
+   codexRewards: string[];
+   weaponSystemVersion?: number;
++}
++
++export interface SecondJourney {
++  version: 1;
++  enabled: boolean;
++  skipped: boolean;
++  upgradeDone: boolean;
++  upgradeSkipped: boolean;
++  battleDone: boolean;
++  freeChargeUsed: boolean;
++  ultCast: boolean;
++  rewardClaimed: boolean;
++  squadDone: boolean;
++  squadSkipped: boolean;
+ }
+ 
+ export interface FirstJourney {
+@@ -107,6 +122,12 @@
+     version: 1, enabled: fresh, entryStarted: false, skipped: false, battleDone: false,
+     freeChargeUsed: false, ultCast: false, rewardClaimed: false, equipDone: false, equipSkipped: false,
+   };
++  const secondMissing = !sv.secondJourney;
++  if (secondMissing) sv.secondJourney = {
++    version: 1, enabled: sv.firstJourney!.enabled && !sv.firstJourney!.skipped && !sv.stars['1-2'],
++    skipped: false, upgradeDone: false, upgradeSkipped: false, battleDone: !!sv.stars['1-2'],
++    freeChargeUsed: false, ultCast: false, rewardClaimed: false, squadDone: false, squadSkipped: false,
++  };
+   // 老档/缺英雄补默认（未拥有的英雄 hero 状态也建好，商店解锁只翻 owned）
+   if (!sv.heroes) sv.heroes = {};
+   for (const hid of ['archer', 'sniper', 'pyro', 'volt', 'mora']) {
+@@ -123,7 +144,12 @@
+   // One owned instance per slot; never replace a valid, compatible existing weapon.
+   if (!Array.isArray(sv.equips)) sv.equips = [];
+   const used = new Set<string>();
+-  let changed = sv.weaponSystemVersion !== 1 || journeyMissing;
++  let changed = sv.weaponSystemVersion !== 1 || journeyMissing || secondMissing;
++  // Backfill the free 1-2 reward on old cleared saves. Ownership only: never overwrite growth or auto-deploy.
++  if (sv.stars['1-2'] && !sv.secondJourney!.rewardClaimed) {
++    sv.heroes.pyro.owned = true;
++    sv.secondJourney!.rewardClaimed = true; changed = true;
++  }
+   for (const hid of Object.keys(STARTER_WEAPON)) {
+     const h = sv.heroes[hid];
+     h.worn = h.worn || {};
+--- assets/scripts/core/StageLoot.ts.before
++++ assets/scripts/core/StageLoot.ts
+@@ -4,7 +4,7 @@
+ import { newEquipInst } from './GameData';
+ import { EquipInst, loadSave, saveSave } from './SaveData';
+ 
+-export interface StageLootSummary { equipment: EquipInst[]; materials: MaterialReward[]; }
++export interface StageLootSummary { equipment: EquipInst[]; materials: MaterialReward[]; heroes?: string[]; }
+ export function rollEquipment(level: ChallengeDef, mob: MobDef): EquipInst | null {
+   if (!level.gearPool.length || Math.random() >= equipmentDropChance(level.difficulty, mob)) return null;
+   const total = level.gearPool.reduce((sum, row) => sum + row.weight, 0);
+--- assets/scripts/ui/BattleRewardPanel.ts.before
++++ assets/scripts/ui/BattleRewardPanel.ts
+@@ -1,6 +1,7 @@
+ /** Actual battle receipts: feathered double rules, earned rewards, then collected equipment. */
+ import { Mask, Node, ScrollView, UITransform } from 'cc';
+-import { EQUIPS, itemName } from '../core/GameData';
++import { EQUIPS, HERO_DEFS, itemName } from '../core/GameData';
++import { heroPortrait } from './HeroComic';
+ import { StageLootSummary } from '../core/StageLoot';
+ import { battleArtIcon } from './BattlePanelSkin';
+ import { bindButton } from './ButtonFeedback';
+@@ -11,7 +12,7 @@
+ 
+ type Counter = 'gold' | 'xp';
+ interface RewardItem {
+-  id: string; name: string; amount: number; quality: number; counter?: Counter;
++  id: string; name: string; amount: number; quality: number; counter?: Counter; hero?: boolean;
+ }
+ interface BattleRewardOptions {
+   top: number; heading: string; gold: number; xp: number; note: string;
+@@ -41,7 +42,8 @@
+     if (item.counter) {
+       const art = N('battleRewardIcon:' + item.id, card);
+       battleArtIcon(art, item.counter === 'gold' ? 'ui_icon_coin' : 'ui_icon_exp', side - 16);
+-    } else gearArt(card, 0, 3, side - 16, side - 16, item.id);
++    } else if (item.hero) heroPortrait(card, 0, 3, side - 16, item.id);
++    else gearArt(card, 0, 3, side - 16, side - 16, item.id);
+     const amount = label(card, 0, -side / 2 + 14, (item.counter ? '' : '×') + item.amount, {
+       size: 24, font: 'number', color: '#FFFFFF', bold: true, align: 'right',
+       w: side - 10, h: 30, shrink: true, outline: '#142431', outlineW: 2,
+@@ -61,9 +63,12 @@
+ export function battleRewardPanel(parent: Node, options: BattleRewardOptions): Node {
+   const counts: Record<string, number> = {};
+   for (const item of options.loot?.equipment || []) counts[item.defId] = (counts[item.defId] || 0) + 1;
+-  const equipment = Object.keys(counts).map(id => ({
++  const equipment: RewardItem[] = Object.keys(counts).map(id => ({
+     id, name: itemName(id), amount: counts[id], quality: EQUIPS[id]?.quality ?? 0,
+   }));
++  for (const id of options.loot?.heroes || []) if (HERO_DEFS[id]) equipment.push({
++    id, name: '火法师 · 免费', amount: 1, quality: 3, hero: true,
++  });
+   const hasEquipment = equipment.length > 0;
+   const height = hasEquipment ? 326 : 204;
+   const panel = N('battleRewardPanel', parent, 0, options.top - height / 2, 750, height);
+@@ -85,7 +90,7 @@
+   if (hasEquipment) {
+     for (const side of [-1, 1]) feedbackSurface(panel, 'equipmentSectionRule', 'line', side * 238, y(170), 124, 1, '#A8B4B9', .32);
+     // The section is created only for equipment actually collected in this battle.
+-    label(panel, 0, y(170), equipment.length > 5 ? '已获得装备 · 左右滑动' : '已获得装备', {
++    label(panel, 0, y(170), options.loot?.heroes?.length ? '首胜英雄 · 回营手动编队' : equipment.length > 5 ? '已获得装备 · 左右滑动' : '已获得装备', {
+       size: 18, color: '#E4D2A9', w: 344, h: 26,
+     });
+     rewardRow(panel, 'collectedBattleEquipment', y(225), equipment, 72, undefined, options.onInspect);
+--- assets/scripts/ui/LevelLootPreview.ts.before
++++ assets/scripts/ui/LevelLootPreview.ts
+@@ -3,11 +3,12 @@
+ import { LO } from '../config/GameConfig';
+ import { ChallengeDef, DIFFICULTIES, equipmentDropChance } from '../config/LevelDifficulty';
+ import { EQUIPS, equipStat, itemName, KIND_NAME, MATS, StatKey, STAT_NAME, statFmt, WEAPONS, weaponUsers } from '../core/GameData';
++import { pyroRewardAvailable } from '../core/SecondJourney';
+ import { StageLootSummary } from '../core/StageLoot';
+ import { firstBowAvailable } from '../core/FirstJourney';
+ import { C, label, N } from './UIKit';
+ import { COMIC, comicArt, comicButton, comicDialog, comicDialogContent, comicPlate, comicSurface } from './ComicUI';
+-import { gearArt } from './HeroComic';
++import { gearArt, heroPortrait } from './HeroComic';
+ import { bindButton } from './ButtonFeedback';
+ import { gearPlate, gearQuality, gearQualityHalo } from './GearQuality';
+ import { dismissUI } from './UIMotion';
+@@ -35,6 +36,7 @@
+   onSelect: (id: string) => void, height = 76, campaign = false): void {
+   const entries = [{ id: 'coin', n: level.baseGold }, ...level.materials];
+   if (firstBowAvailable(level.id, level.difficulty)) entries.push({ id: 'wpn_bow', n: 1 });
++  if (pyroRewardAvailable(level.id, level.difficulty)) entries.push({ id: 'hero_pyro', n: 1 });
+   const gap = 12, w = (width - gap * (entries.length - 1)) / entries.length;
+   entries.forEach((row, i) => {
+     const card = comicSurface(parent, x + (i - (entries.length - 1) / 2) * (w + gap), y, w, height, 'card',
+@@ -45,13 +47,14 @@
+     const textX = campaign ? (iconSize+14)/2 : 26;
+     const textW = campaign ? w-iconSize-36 : w-60;
+     if (row.id === 'coin') comicArt(card,iconX,0,campaign ? iconSize : 44,campaign ? iconSize : 44,'comic_coin_v1');
++    else if (row.id === 'hero_pyro') heroPortrait(card, iconX, 0, iconSize, 'pyro');
+     else {
+       gearQualityHalo(card,iconX,0,iconSize,iconSize,1);
+       gearArt(card,iconX,0,campaign ? iconSize*.85 : 39,campaign ? iconSize*.85 : 39,row.id);
+     }
+-    label(card,textX,15,row.id === 'coin' ? '基础金币' : itemName(row.id),
++    label(card,textX,15,row.id === 'coin' ? '基础金币' : row.id === 'hero_pyro' ? '火法师' : itemName(row.id),
+       {size:campaign ? 18 : 16,color:campaign ? CAMPAIGN_TEXT.body : COMIC.sub,w:textW,h:campaign ? 25 : 23,shrink:true});
+-    label(card,textX,-14,row.id === 'coin' ? row.n.toLocaleString()+'+' : '×'+row.n.toLocaleString(),
++    label(card,textX,-14,row.id === 'coin' ? row.n.toLocaleString()+'+' : row.id === 'hero_pyro' ? '首胜免费' : '×'+row.n.toLocaleString(),
+       {size:campaign ? 24 : 22,color:campaign ? CAMPAIGN_TEXT.ink : COMIC.text,bold:true,w:textW,h:30,shrink:true});
+     bindButton(card, () => onSelect(row.id), { dragThreshold: 7, sound: false });
+   });
+@@ -67,16 +70,18 @@
+ export function stageLootPreview(parent: Node, h: number, level: ChallengeDef, modalParent: Node): void {
+   const y = (top: number): number => h / 2 - top;
+   const entries = [{ id: 'coin', n: level.baseGold }, ...level.materials];
++  if (pyroRewardAvailable(level.id, level.difficulty)) entries.push({ id: 'hero_pyro', n: 1 });
+   entries.forEach((row, i) => {
+     const x = (i - (entries.length - 1) / 2) * 150;
+     const icon = N('guaranteedLoot:' + row.id, parent, x, y(56), 76, 68);
+     if (row.id === 'coin') comicArt(icon, 0, 0, 43, 43, 'comic_coin_v1');
++    else if (row.id === 'hero_pyro') heroPortrait(icon, 0, 0, 43, 'pyro');
+     else {
+       gearQualityHalo(icon, 0, 0, 48, 48, 1);
+       gearArt(icon, 0, 0, 40, 40, row.id);
+     }
+     bindButton(icon, () => showDropItemDetails(modalParent, level, row.id), { sound: false });
+-    label(parent, x, y(92), row.id === 'coin' ? '基础金币 ' + row.n + '+' : itemName(row.id) + ' ×' + row.n,
++    label(parent, x, y(92), row.id === 'coin' ? '基础金币 ' + row.n + '+' : row.id === 'hero_pyro' ? '火法师 · 首胜免费' : itemName(row.id) + ' ×' + row.n,
+       { size: 17, color: COMIC.text, bold: true, w: 148, h: 24, shrink: true });
+   });
+   const line = N('lootPreviewDivider', parent).addComponent(Graphics);
+@@ -93,7 +98,8 @@
+     label(parent, -75, y(h - 23), '每怪 ' + pct(equipmentDropChance(level.difficulty)) + ' · 精英怪 ' + pct(equipmentDropChance(level.difficulty, { elite: true })),
+       { size: 15, color: COMIC.sub, w: 448, h: 24, shrink: true });
+   } else label(parent, -65, y(181), firstBowAvailable(level.id, level.difficulty)
+-    ? '首次通关必得猎风长弓，回营后穿戴' : '普通难度不掉装备，挑战精英 / 地狱获取', { size: 19, color: COMIC.sub, w: 480, h: 38, shrink: true });
++    ? '首次通关必得猎风长弓，回营后穿戴' : pyroRewardAvailable(level.id, level.difficulty)
++    ? '首胜免费获得火法师，回营手动编队' : '普通难度不掉装备，挑战精英 / 地狱获取', { size: 19, color: COMIC.sub, w: 480, h: 38, shrink: true });
+   comicButton(parent, 241, y(h - 25), 138, 38, '掉落详情', () => showStageLootDetails(modalParent, level), { size: 18, tone: 'gold' });
+ }
+ 
+@@ -125,7 +131,8 @@
+       bindButton(card, () => showDropItemDetails(parent, level, row.id, root), { dragThreshold: 7, sound: false });
+     });
+   } else label(list, 0, -210, firstBowAvailable(level.id, level.difficulty)
+-    ? '首次通关必得绿色猎风长弓\n奖励存入背包，回营后自行穿戴' : '普通难度不掉落装备\n挑战精英 / 地狱可获得概率装备',
++    ? '首次通关必得绿色猎风长弓\n奖励存入背包，回营后自行穿戴' : pyroRewardAvailable(level.id, level.difficulty)
++    ? '首胜免费获得火法师\n回营后手动加入第三个出战位置' : '普通难度不掉落装备\n挑战精英 / 地狱可获得概率装备',
+     { size: 21, color: COMIC.sub, w: 570, h: 76, lineHeight: 32 });
+   label(root, 0, -top + 68, rows ? '点击落地装备拾取 · 30个战斗秒后自动拾取' : '点击金币或材料图标，查看奖励详情',
+     { size: 18, color: COMIC.text, w: 590, h: 28 });
+@@ -135,6 +142,15 @@
+ 
+ /** Item previews read level-one definitions, never inventory mutation or a purchase action. */
+ export function showDropItemDetails(parent: Node, level: ChallengeDef, id: string, back?: Node): void {
++  if (id === 'hero_pyro') {
++    const panel = detailDialog(parent, 620, 420, '首胜英雄 · 火法师', 'pyroFirstVictoryDetails');
++    heroPortrait(panel, 0, 55, 108, 'pyro');
++    label(panel, 0, -47, '首次通关普通1-2免费获得，仅一次。\n无需钻石，回营后自行加入出战编队。\n已拥有英雄保留全部培养，不重复发放。',
++      { size: 22, color: COMIC.text, w: 540, h: 108, lineHeight: 32 });
++    detailFooter(panel);
++    comicButton(panel, 0, detailActionY(panel), 372, 58, '关闭', () => dismissUI(panel.parent), { tone: 'dark', sound: 'close' });
++    return;
++  }
+   const d = EQUIPS[id], mat = MATS[id];
+   if (!d && !mat && id !== 'coin') return;
+   const source = DIFFICULTIES[level.difficulty].name + ' · ' + level.id;
+@@ -206,16 +222,18 @@
+ export function showCollectedLoot(parent: Node, loot: StageLootSummary): void {
+   const counts: Record<string, number> = {};
+   for (const e of loot.equipment) counts[e.defId] = (counts[e.defId] || 0) + 1;
+-  const entries = [...loot.materials, ...Object.keys(counts).map(id => ({ id, n: counts[id] }))];
++  const entries = [...loot.materials, ...Object.keys(counts).map(id => ({ id, n: counts[id] })),
++    ...(loot.heroes || []).filter(id => id === 'pyro').map(() => ({ id: 'hero_pyro', n: 1 }))];
+   const h = Math.min(740, LO.half * 2 - 90, 180 + Math.ceil(entries.length / 2) * 100);
+-  const root = comicDialog(parent, 640, h, '本局战利品 · 已收入背包');
++  const root = comicDialog(parent, 640, h, loot.heroes?.length ? '本局战利品 · 英雄已解锁' : '本局战利品 · 已收入背包');
+   const list = lootScroll(root, h / 2 - 86, -h / 2 + 26, Math.ceil(entries.length / 2) * 100);
+   entries.forEach((row, i) => {
+     const d = EQUIPS[row.id], x = (i % 2 - .5) * 286, y = -46 - Math.floor(i / 2) * 100;
+     const card = d ? gearPlate(list, x, y, 274, 88, d.quality) : comicPlate(list, x, y, 274, 88, 'card');
+     gearQualityHalo(card, -88, 0, 60, 60, d ? d.quality : 1);
+-    gearArt(card, -88, 0, 53, 53, row.id);
+-    label(card, 34, 13, itemName(row.id), { size: 19, color: COMIC.text, w: 162, h: 28, shrink: true });
++    if (row.id === 'hero_pyro') heroPortrait(card, -88, 0, 53, 'pyro');
++    else gearArt(card, -88, 0, 53, 53, row.id);
++    label(card, 34, 13, row.id === 'hero_pyro' ? '火法师 · 首胜免费' : itemName(row.id), { size: 19, color: COMIC.text, w: 162, h: 28, shrink: true });
+     label(card, 34, -19, '×' + row.n, { size: 20, color: COMIC.greenShade, bold: true, w: 162, h: 28 });
+   });
+ }
+--- assets/scripts/ui/MainUI.ts.before
++++ assets/scripts/ui/MainUI.ts
+@@ -20,6 +20,9 @@
+ import { buildUpgrade } from './pages/UpgradePage';
+ import { buildBase } from './pages/BasePage';
+ import { levelReturnReady } from './BattleEntry';
++import { pendingPyroSquadLesson } from '../core/SecondJourney';
++import { openSquadPanel } from './SquadPanel';
++import { whenUIArtReady } from './UIArtReady';
+ import { paintLobbyStrip } from './LobbyChrome';
+ 
+ const { ccclass } = _decorator;
+@@ -197,7 +200,8 @@
+   private rebuildScreen(direction = 0): void {
+     refreshUI(this.screens, () => {
+       this.applyPageBg(this.tab);
+-      const ctx: PageCtx = { screens: this.screens, refresh: () => this.switchTab(this.tab), refreshResources: () => this.updateWallet() };
++      const ctx: PageCtx = { screens: this.screens, refresh: () => this.switchTab(this.tab),
++        refreshResources: () => this.updateWallet(), navigate: tab => this.switchTab(tab) };
+       switch (this.tab) {
+         case 0: buildShop(ctx); break;
+         case 1: buildHeroes(ctx); break;
+@@ -206,6 +210,9 @@
+         case 4: buildBase(ctx); break;
+       }
+       this.updateWallet();
++      if (this.tab === 2 && pendingPyroSquadLesson()) whenUIArtReady(this.screens, () => {
++        if (this.tab === 2 && this.screens.isValid && pendingPyroSquadLesson()) openSquadPanel(ctx);
++      });
+     }, direction);
+   }
+ }
+--- assets/scripts/ui/PageKit.ts.before
++++ assets/scripts/ui/PageKit.ts
+@@ -82,7 +82,7 @@
+     mainLabel(slot, 0, -32, def.name.split('·')[0], { size: 18, color: active ? '#FFE1A0' : owned ? '#D9DFD4' : '#8D9A91', bold: active, w: 112, h: 24 });
+     if (active) gpanel(slot, 0, -49, 28, 3, '#E8BA60', undefined, 0, 1);
+     bindButton(slot, () => {
+-      if (!owned) { toast('前往商店解锁该英雄'); return; }
++      if (!owned) { toast(def.id === 'pyro' ? '通关普通1-2免费获得火法师' : '前往商店解锁该英雄'); return; }
+       onSelect(def.id);
+     }, { sound: 'select' });
+   });
+@@ -108,6 +108,8 @@
+ 
+ export interface PageCtx {
+   screens: Node;
++  /** Navigate through MainUI so overlays and persistent navigation update together. */
++  navigate?: (tab: number) => void;
+   /** 全屏刷新（页签内容整屏重建 + 顶栏货币刷新） */
+   refresh: () => void;
+   /** Update shared currencies without replacing the page or its open dialog. */
+--- assets/scripts/ui/SquadPanel.ts.before
++++ assets/scripts/ui/SquadPanel.ts
+@@ -7,6 +7,9 @@
+ import { mainLabel, PageCtx, toast } from './PageKit';
+ import { HERO_DEFS, SQUAD_MAX, deployHero, inSquad, squadList, undeployHero } from '../core/GameData';
+ import { loadSave } from '../core/SaveData';
++import { finishPyroSquadLesson, pendingPyroSquadLesson } from '../core/SecondJourney';
++import { tutorialFocus } from './TutorialFocus';
++import { whenUIArtReady } from './UIArtReady';
+ import { bindButton } from './ButtonFeedback';
+ import { dismissUI, dismissUIAfterRefresh, motionIn } from './UIMotion';
+ import { uiSound } from './UIAudio';
+@@ -24,9 +27,11 @@
+   squadHallBackground(dim,LO.half*2,WY(0,440),WY(420,Math.max(1,LO.half*2-420)));
+   const top = Math.max(48, LO.notchTop + 20);
+   let closing = false;
++  let taughtPyro = false;
+   let releaseBack = (): void => {};
+   const close = (): void => {
+     if (closing || !dim.isValid) return;
++    if (pendingPyroSquadLesson()) finishPyroSquadLesson(true);
+     closing = true; releaseBack();
+     dismissUIAfterRefresh(dim, ctx.screens, ctx.refresh);
+   };
+@@ -91,11 +96,21 @@
+       mainLabel(card, 0, -59, 'Lv.' + (sv.heroes[def.id]?.lv || 1), { size: 18, color: COMIC.sub, w: 108, h: 26 });
+       mainLabel(card,0,-85,dep ? '已上阵' : owned ? '点击上阵' : '尚未解锁',{size:17,color:dep ? COMIC.greenShade : COMIC.sub,w:116,h:26});
+       if (dep) comicMark(card, 46, 78, 'check', 19, COMIC.greenShade);
+-      bindButton(card, () => {
++      const select = (): void => {
+         if (dep) { confirmRemove(def.id); return; }
++        const teaching = def.id === 'pyro' && pendingPyroSquadLesson();
+         const result = deployHero(def.id);
+         toast(result.msg, { kind: result.ok ? 'success' : 'warning', title: result.ok ? '编队已更新' : '暂时无法上阵' });
++        if (result.ok && teaching) {
++          finishPyroSquadLesson(); taughtPyro = true;
++        }
+         if (result.ok) rebuild();
++      };
++      bindButton(card, select);
++      if (def.id === 'pyro' && owned && !dep && pendingPyroSquadLesson()) whenUIArtReady(body, () => {
++        if (!card.isValid || !card.activeInHierarchy || !pendingPyroSquadLesson()) return;
++        tutorialFocus(dim, card, '火法师已免费加入！点击将他放入空余出战位置，准备挑战1-3。', select,
++          () => finishPyroSquadLesson(true));
+       });
+     });
+     const noteTop = barTop + 320;
+@@ -111,6 +126,11 @@
+     paintCampaignMapAction(doneFace,390,88,'gold');
+     mainLabel(doneFace,0,0,'完成编队',{size:34,font:'body',bold:true,color:'#1C2D33',w:284,h:50});
+     squadDivider(doneFace,-138,0,40,true); squadDivider(doneFace,138,0,40,true);
++    if (taughtPyro) whenUIArtReady(body, () => {
++      if (!done.isValid || !done.activeInHierarchy) return;
++      taughtPyro = false;
++      tutorialFocus(dim, done, '火法师已上阵，点击完成编队，前往1-3。', close, close);
++    });
+   }
+ 
+   function confirmRemove(hid: string): void {
+--- assets/scripts/ui/TrainingLobby.ts.before
++++ assets/scripts/ui/TrainingLobby.ts
+@@ -8,6 +8,9 @@
+ import { EMPTY_GEAR, gearArt, heroComicFigure, heroGlyph } from './HeroComic';
+ import { mainLabel as pageLabel, PageCtx, mainLayout, mainResourceTop, MAIN_RESOURCE_H, pageScroll, fmt, toast } from './PageKit';
+ import { loadSave, saveSave } from '../core/SaveData';
++import { finishUpgradeLesson, pendingUpgradeLesson } from '../core/SecondJourney';
++import { tutorialFocus } from './TutorialFocus';
++import { whenUIArtReady } from './UIArtReady';
+ import { bindButton } from './ButtonFeedback';
+ import { refreshUI } from './UIMotion';
+ import { MilestoneSwipe } from './MilestoneSwipe';
+@@ -99,7 +102,7 @@
+     const slot = heroLobbyPortrait(rail.content, rail.x(i), def.id, active, owned, rail.cardWidth);
+     slot.name = 'trainingHero:' + def.id;
+     tap(slot, () => {
+-      if (!owned) { toast('前往商店解锁该英雄'); return; }
++      if (!owned) { toast(def.id === 'pyro' ? '通关普通1-2免费获得火法师' : '前往商店解锁该英雄'); return; }
+       if (hid === def.id) return;
+       sv.curHero = def.id; saveSave(); rebuild();
+     });
+@@ -324,6 +327,7 @@
+ }
+ 
+ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
++  if (pendingUpgradeLesson()) { loadSave().curHero = 'archer'; st.tab = 0; }
+   const root = N('trainingLobby', ctx.screens, 0, 0, 750, LO.half * 2);
+   function render(): void {
+     refreshUI(root, () => {
+@@ -415,6 +419,17 @@
+           return !missing;
+         });
+         fx.setHammer(footerControl.hammer);
++        if (!weapon && hid === 'archer' && pendingUpgradeLesson()) whenUIArtReady(root, () => {
++          if (!root.isValid || !root.activeInHierarchy || !pendingUpgradeLesson()) return;
++          const button = root.getChildByName('trainingUpgrade');
++          if (!button) return;
++          const back = (): void => { if (ctx.navigate) ctx.navigate(2); else ctx.refresh(); };
++          tutorialFocus(root, button, '进入1-2前试着升级弓箭手：消耗100金币，升到2级。也可以跳过直接挑战。', () => {
++            const result = growthAction(target, action);
++            if (result.ok) { finishUpgradeLesson(); ctx.refreshResources?.(); back(); }
++            else { finishUpgradeLesson(true); back(); }
++          }, () => { finishUpgradeLesson(true); back(); });
++        });
+       } else if (st.tab === 2) {
+         const selected = selectedSkill, shelfH = 216;
+         const shelf = N('trainingSkills', body, 0, -shelfH / 2, 702, shelfH);
+--- assets/scripts/ui/pages/HeroPage.ts.before
++++ assets/scripts/ui/pages/HeroPage.ts
+@@ -136,7 +136,7 @@
+     const slot = heroLobbyPortrait(rail.content, rail.x(i), def.id, active, owned, rail.cardWidth);
+     slot.name = 'heroSelect:' + def.id;
+     pressAction(slot, () => {
+-      if (!owned) { toast('前往商店解锁该英雄'); return; }
++      if (!owned) { toast(def.id === 'pyro' ? '通关普通1-2免费获得火法师' : '前往商店解锁该英雄'); return; }
+       select(def.id);
+     });
+   });
+@@ -470,7 +470,7 @@
+   const content = detailBody(panel,contentH,footerH,'heroStory');
+   detailParagraph(content,0,'背景故事',def.story,textH,620,true);
+   detailFooter(panel,footerH);
+-  mainLabel(panel,0,heroActionY(panel)+66,owned?'已解锁':'商店解锁',
++  mainLabel(panel,0,heroActionY(panel)+66,owned?'已解锁':hid==='pyro'?'通关普通1-2免费获得':'商店解锁',
+     {size:20,color:owned?COMIC.greenShade:COMIC.sub,bold:true,w:500,h:28});
+   comicButton(panel,0,heroActionY(panel),248,58,'关闭',() => dismissUI(panel.parent),
+     {tone:'dark',name:'heroStoryClose',sound:'close'});
+--- assets/scripts/ui/pages/LevelsPage.ts.before
++++ assets/scripts/ui/pages/LevelsPage.ts
+@@ -13,6 +13,7 @@
+ import { GameAudio } from '../../core/GameAudio';
+ import { flow } from '../../core/Flow';
+ import { firstBowAvailable } from '../../core/FirstJourney';
++import { pendingUpgradeLesson, pyroRewardAvailable } from '../../core/SecondJourney';
+ import { openSquadPanel } from '../SquadPanel';
+ import { bindButton } from '../ButtonFeedback';
+ import { refreshUI, reducedMotion } from '../UIMotion';
+@@ -353,11 +354,17 @@
+         mainLabel(body, 0, by(layout.chance), '普通怪 ' + pct(equipmentDropChance(st.d)) + ' · 精英怪 ' + pct(equipmentDropChance(st.d, { elite: true })),
+           { size: 17, font: 'body', color: CAMPAIGN_TEXT.body, w: 660, h: 28 });
+         } else mainLabel(equipment,0,-equipmentH/2,firstBowAvailable(challenge.id, challenge.difficulty)
+-          ? '首次通关必得绿色猎风长弓\n回营后在英雄页穿戴' : '普通难度不掉落装备\n挑战精英 / 地狱解锁装备掉落',
++          ? '首次通关必得绿色猎风长弓\n回营后在英雄页穿戴' : pyroRewardAvailable(challenge.id, challenge.difficulty)
++          ? '首次通关免费获得火法师\n回营后手动加入第三个出战位置' : '普通难度不掉落装备\n挑战精英 / 地狱解锁装备掉落',
+         { size: 19, font: 'body', color: CAMPAIGN_TEXT.secondary, w: 660, h: 68, lineHeight: 32 });
+       const battle = comicButtonControl(panel, 0, y(sheetH - 51), 664, 78, '', () => {
+         if (!open || closing || enteringBattle()) return;
+         if (!campaignDifficultyOpen(lv.id, challenge.difficulty, loadSave().stars)) { toast('请先通关前置关卡或难度'); return; }
++        if (lv.id === '1-2' && challenge.difficulty === 0 && pendingUpgradeLesson() && ctx.navigate) {
++          loadSave().curHero = 'archer'; saveSave();
++          flow.levelReturn = { id: '1-2', diff: 0 };
++          ctx.navigate(3); return;
++        }
+         if (!squadList().length) { toast('请先上阵英雄'); return; }
+         enterBattle(done => {
+           flow.mode = 'battle'; flow.levelId = lv.id; flow.diff = challenge.difficulty;
+--- assets/scripts/ui/pages/ShopPage.ts.before
++++ assets/scripts/ui/pages/ShopPage.ts
+@@ -124,10 +124,10 @@
+   mainLabel(card, 0, -80, equipment ? g.sub.replace(/^[白绿蓝紫]\d+阶\s*·\s*/, '') : g.sub,
+     { size: 16, color: COMIC.sub, font: 'body', w: 194, h: 28 });
+   const available = !!g.price && unlocked && !owned;
+-  const text = available ? '' : owned ? '已拥有' : !g.price ? '敬请期待' : '通关 ' + g.unlock + ' 解锁';
++  const text = available ? '' : owned ? '已拥有' : g.give.id === 'pyro' ? '通关普通1-2免费获得' : !g.price ? '敬请期待' : '通关 ' + g.unlock + ' 解锁';
+   if (!available) {
+     const status = N('shopBuy:' + g.id, card, 0, -130, 192, 48);
+-    mainLabel(status, 0, 0, text, { size: owned || !g.price ? 21 : 16, color: owned ? COMIC.greenShade : COMIC.sub,
++    mainLabel(status, 0, 0, text, { size: g.give.id === 'pyro' && !owned ? 16 : owned || !g.price ? 21 : 16, color: owned ? COMIC.greenShade : COMIC.sub,
+       bold: owned, font: 'body', w: 184, h: 38 });
+     if (!owned && g.price) bindButton(status, () => toast('通关 ' + g.unlock + ' 后解锁'), { sound: false });
+     return;
+@@ -172,7 +172,8 @@
+     const hero = HERO_DEFS[g.give.id];
+     return { meta: hero.job, description: hero.story,
+       rows: [['初始攻击', String(hero.baseAtk)], ['初始技能伤害', String(hero.baseSkillDmg)], ['初始攻速', hero.atkSpd + ' 次/秒'], ['技能', hero.skillName], ['大招', hero.ultName]],
+-      delivery: '购买后解锁英雄，可在英雄页培养与编队。技能和大招需在每局三选一中学习。' };
++      delivery: g.give.id === 'pyro' ? '首次通关普通1-2免费获得，无需钻石。回营后手动加入编队；技能和大招仍需每局选卡学习。'
++        : '购买后解锁英雄，可在英雄页培养与编队。技能和大招需在每局三选一中学习。' };
+   }
+   if (g.give.kind === 'mat') {
+     return { meta: '材料 · 每次获得 ×' + amount, description: MATS[g.give.id]?.desc || g.sub,
+@@ -212,7 +213,7 @@
+   groups.forEach(group => { cursor = detailGroup(content,cursor,group.title,group.rows); });
+   detailParagraph(content,cursor,'获取说明',info.delivery,deliveryH);
+   detailFooter(panel,footerH);
+-  const status = owned ? '已拥有该英雄' : !g.price ? '敬请期待' : !unlocked ? '通关 ' + g.unlock + ' 解锁购买'
++  const status = owned ? '已拥有该英雄' : g.give.id === 'pyro' ? '通关普通1-2免费获得 · 无需钻石' : !g.price ? '敬请期待' : !unlocked ? '通关 ' + g.unlock + ' 解锁购买'
+     : '每次购买获得 ' + (g.give.n || 1) + (g.give.kind === 'hero' ? ' 名英雄' : g.give.kind === 'equip' ? ' 件装备' : ' 个材料');
+   const feedback = N('shopPurchaseFeedback', panel);
+   const statusLabel = mainLabel(feedback, 0, bottom + 87 + footerInset, status, { size: 17, font:'body', color: available ? COMIC.greenShade : COMIC.sub, w: 552, h: 24 });
+@@ -262,7 +263,7 @@
+         sound: g.give.kind === 'hero' ? 'recruit' : 'purchase' });
+     }, false);
+   };
+-  const purchase = comicButton(panel, 139, bottom + 39 + footerInset, 248, 58, available ? '购买' : owned ? '已拥有' : !g.price ? '敬请期待' : '尚未解锁',
++  const purchase = comicButton(panel, 139, bottom + 39 + footerInset, 248, 58, available ? '购买' : owned ? '已拥有' : g.give.id === 'pyro' ? '关卡免费获得' : !g.price ? '敬请期待' : '尚未解锁',
+     attemptPurchase, { tone: 'green', name: 'shopPurchaseConfirm', enabled: available });
+   // The semantic result owns its sound, including a failed purchase; no success click first.
+   bindButton(purchase, attemptPurchase, { sound: false });

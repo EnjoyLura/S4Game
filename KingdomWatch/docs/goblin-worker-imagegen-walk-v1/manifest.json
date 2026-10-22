@@ -1,0 +1,367 @@
+{
+  "name": "goblin_worker_imagegen_walk_v1",
+  "status": "experimental_preview_not_integrated",
+  "method": "builtin_imagegen_reference_to_8_frame_sprite_sheet",
+  "reference": {
+    "atlas": "assets/resources/ux/battle_mobs_v2.png",
+    "frame": "goblin_worker",
+    "rect": [
+      59,
+      24,
+      393,
+      464
+    ]
+  },
+  "currentRuntime": {
+    "script": "assets/scripts/battle/MobAnim.ts",
+    "atlas": "battle_mob_anim_v1",
+    "frame": "goblin_worker_w0"
+  },
+  "generatedOriginal": {
+    "file": "generated-sheet-original.png",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "9be4a4805096b91da622704a94181b74bb9293fe12c0227d437e7244b34cfbc2"
+  },
+  "generationCorrection": {
+    "file": "generated-sheet-correction.png",
+    "sha256": "424ef1ee4ac921b92c05337bd1f3eb0a8c6897dae783ad3e70bdba5cb6d78c3c",
+    "selectedFrameIndices": [
+      5,
+      6
+    ],
+    "purpose": "opposite leading foot in frames 6 and 7"
+  },
+  "grid": {
+    "columns": 4,
+    "rows": 2,
+    "readOrder": "row-major"
+  },
+  "animation": {
+    "frameCount": 8,
+    "fps": 10,
+    "frameDurationMs": 100,
+    "durationMs": 800,
+    "loop": true,
+    "order": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "playback": "forward-only; no ping-pong; no repeated endpoint"
+  },
+  "processing": {
+    "sharedScale": 0.974477958236659,
+    "canvas": [
+      512,
+      512
+    ],
+    "baseline": 470,
+    "horizontalAnchor": "upper green head centroid",
+    "alpha": "original generated alpha preserved",
+    "poseDeformation": false,
+    "interpolation": false
+  },
+  "atlas": {
+    "file": "goblin-worker-walk-8f.png",
+    "size": [
+      2048,
+      1024
+    ],
+    "frames": {
+      "goblin_worker_w0": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "goblin_worker_w1": [
+        512,
+        0,
+        512,
+        512
+      ],
+      "goblin_worker_w2": [
+        1024,
+        0,
+        512,
+        512
+      ],
+      "goblin_worker_w3": [
+        1536,
+        0,
+        512,
+        512
+      ],
+      "goblin_worker_w4": [
+        0,
+        512,
+        512,
+        512
+      ],
+      "goblin_worker_w5": [
+        512,
+        512,
+        512,
+        512
+      ],
+      "goblin_worker_w6": [
+        1024,
+        512,
+        512,
+        512
+      ],
+      "goblin_worker_w7": [
+        1536,
+        512,
+        512,
+        512
+      ]
+    }
+  },
+  "frames": [
+    {
+      "index": 0,
+      "sourceImage": "generated-sheet-original.png",
+      "sourceRect": [
+        0,
+        0,
+        444,
+        444
+      ],
+      "visibleBounds": [
+        33,
+        12,
+        417,
+        439
+      ],
+      "headAxis": 257.0403724394786,
+      "file": "frames/goblin_worker_walk_00.png",
+      "translation": [
+        6,
+        42
+      ],
+      "outputBounds": [
+        38,
+        54,
+        413,
+        470
+      ]
+    },
+    {
+      "index": 1,
+      "sourceImage": "generated-sheet-original.png",
+      "sourceRect": [
+        444,
+        0,
+        887,
+        444
+      ],
+      "visibleBounds": [
+        38,
+        14,
+        414,
+        440
+      ],
+      "headAxis": 252.2891174077088,
+      "file": "frames/goblin_worker_walk_01.png",
+      "translation": [
+        10,
+        41
+      ],
+      "outputBounds": [
+        47,
+        55,
+        414,
+        471
+      ]
+    },
+    {
+      "index": 2,
+      "sourceImage": "generated-sheet-original.png",
+      "sourceRect": [
+        887,
+        0,
+        1330,
+        444
+      ],
+      "visibleBounds": [
+        36,
+        12,
+        405,
+        438
+      ],
+      "headAxis": 243.6661772263417,
+      "file": "frames/goblin_worker_walk_02.png",
+      "translation": [
+        19,
+        43
+      ],
+      "outputBounds": [
+        54,
+        55,
+        414,
+        470
+      ]
+    },
+    {
+      "index": 3,
+      "sourceImage": "generated-sheet-original.png",
+      "sourceRect": [
+        1330,
+        0,
+        1774,
+        444
+      ],
+      "visibleBounds": [
+        29,
+        7,
+        411,
+        438
+      ],
+      "headAxis": 243.19302909466845,
+      "file": "frames/goblin_worker_walk_03.png",
+      "translation": [
+        19,
+        43
+      ],
+      "outputBounds": [
+        47,
+        49,
+        420,
+        470
+      ]
+    },
+    {
+      "index": 4,
+      "sourceImage": "generated-sheet-original.png",
+      "sourceRect": [
+        0,
+        444,
+        444,
+        887
+      ],
+      "visibleBounds": [
+        39,
+        9,
+        417,
+        432
+      ],
+      "headAxis": 247.91953498974243,
+      "file": "frames/goblin_worker_walk_04.png",
+      "translation": [
+        14,
+        49
+      ],
+      "outputBounds": [
+        52,
+        58,
+        420,
+        470
+      ]
+    },
+    {
+      "index": 5,
+      "sourceImage": "generated-sheet-correction.png",
+      "sourceRect": [
+        444,
+        444,
+        887,
+        887
+      ],
+      "visibleBounds": [
+        37,
+        5,
+        416,
+        428
+      ],
+      "headAxis": 252.92983181692858,
+      "file": "frames/goblin_worker_walk_05.png",
+      "translation": [
+        10,
+        53
+      ],
+      "outputBounds": [
+        46,
+        58,
+        415,
+        470
+      ]
+    },
+    {
+      "index": 6,
+      "sourceImage": "generated-sheet-correction.png",
+      "sourceRect": [
+        887,
+        444,
+        1330,
+        887
+      ],
+      "visibleBounds": [
+        30,
+        6,
+        403,
+        409
+      ],
+      "headAxis": 244.81960728916513,
+      "file": "frames/goblin_worker_walk_06.png",
+      "translation": [
+        17,
+        71
+      ],
+      "outputBounds": [
+        47,
+        77,
+        410,
+        470
+      ]
+    },
+    {
+      "index": 7,
+      "sourceImage": "generated-sheet-original.png",
+      "sourceRect": [
+        1330,
+        444,
+        1774,
+        887
+      ],
+      "visibleBounds": [
+        25,
+        3,
+        406,
+        431
+      ],
+      "headAxis": 239.86829879802374,
+      "file": "frames/goblin_worker_walk_07.png",
+      "translation": [
+        22,
+        50
+      ],
+      "outputBounds": [
+        46,
+        53,
+        418,
+        470
+      ]
+    }
+  ],
+  "notes": [
+    "Generated poses are experimental and need user review.",
+    "A sprite sheet may retain frame-to-frame drawing or timing differences.",
+    "Only grid extraction, common resizing, whole-frame alignment and encoding were applied."
+  ],
+  "originalGameHashes": {
+    "assets/resources/ux/battle_mobs_v2.png": "9aa6119be6f117318b1600fad31b57a819d18ab3d3204bc61cb872a34db2881a",
+    "assets/resources/ux/battle_mobs_v2.frames.json": "1f8a1d5fbbac019f8d4e89df5b20cbb10764ceb61cc8d35245c86e84cfee8bc5",
+    "assets/resources/ux/battle_mob_anim_v1.png": "7a8cde839bc565aee978c21739eafdaffcc5a014b1f89f48bef7cf9d1c088732",
+    "assets/resources/ux/battle_mob_anim_v1.frames.json": "993698bc48e4a2b1a9888f3e067284fa08fd5393555de82462052f40ba259d2a",
+    "assets/scripts/battle/MobAnim.ts": "cddd7a22421c32ccd96b4dc2c362a9621311f5ae17bc86d290014e3b1834b2d0"
+  }
+}

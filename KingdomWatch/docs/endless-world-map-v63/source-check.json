@@ -1,0 +1,28 @@
+{
+  "originalFiles": 1970,
+  "changed": [
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/config/Endless.ts",
+    "assets/scripts/config/LevelDifficulty.ts",
+    "assets/scripts/core/Flow.ts",
+    "assets/scripts/core/StageLoot.ts",
+    "assets/scripts/ui/LevelLootPreview.ts",
+    "assets/scripts/ui/MainUI.ts",
+    "assets/scripts/ui/PageKit.ts",
+    "assets/scripts/ui/Panels.ts",
+    "assets/scripts/ui/pages/BasePage.ts"
+  ],
+  "added": [
+    "assets/resources/scenes/bg_endless_world_v63.png",
+    "assets/resources/scenes/bg_endless_world_v63.png.meta",
+    "assets/scripts/ui/EndlessLootPreview.ts",
+    "assets/scripts/ui/EndlessLootPreview.ts.meta",
+    "assets/scripts/ui/EndlessMapController.ts",
+    "assets/scripts/ui/EndlessMapController.ts.meta",
+    "assets/scripts/ui/pages/EndlessPage.ts",
+    "assets/scripts/ui/pages/EndlessPage.ts.meta"
+  ],
+  "unchanged": 1960,
+  "heroUnchanged": true,
+  "mapOriginalBytes": true
+}

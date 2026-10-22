@@ -1,0 +1,585 @@
+{
+  "method": "50ms active-segment RMS, -70dBFS absolute / -24dB relative gate; not integrated LUFS",
+  "policy": {
+    "maxCorrectionDB": 6,
+    "peakCeilingDBFS": -3,
+    "preserveCues": [
+      "bow",
+      "crossbow",
+      "bowUlt",
+      "snipe",
+      "pierceHeavy",
+      "fireUlt"
+    ],
+    "references": {
+      "attack": "bow",
+      "hit": "hit",
+      "heavy": "crit",
+      "ultimate": "fireUlt",
+      "ui": "ui",
+      "reward": "reward",
+      "result": "victory",
+      "world": "gateClose"
+    }
+  },
+  "categoryTargetsDBFS": {
+    "attack": -30.75342420871089,
+    "hit": -36.65889112618021,
+    "heavy": -25.588649999251192,
+    "ultimate": -17.182531942106948,
+    "ui": -35.27992332489082,
+    "reward": -24.168877000884574,
+    "result": -21.335323066051124,
+    "world": -29.4313285301384
+  },
+  "cues": 26,
+  "files": 32,
+  "audioFilesModified": false,
+  "audioPlaybackPerformed": false,
+  "rows": [
+    {
+      "cue": "mageCast",
+      "file": "v27/mage_cast",
+      "category": "attack",
+      "baseGain": 0.82,
+      "measurement": {
+        "activeRmsDBFS": -32.323627832749004,
+        "peakDBFS": -16.711374924801767,
+        "sha256": "6a9157cee7b8ec23742484be2a40a11de714fab7932f2155a4660eb30673f7c3",
+        "offsetSeconds": 0,
+        "seconds": 0.24
+      },
+      "targetDBFS": -30.75342420871089,
+      "trimDB": 3.2939,
+      "calibratedActiveDBFS": -30.75345078507467,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "gateSlide",
+      "file": "v25/gate_slide",
+      "category": "world",
+      "baseGain": 0.7,
+      "measurement": {
+        "activeRmsDBFS": -30.46548813967252,
+        "peakDBFS": -10.51039466185594,
+        "sha256": "4ab3d6c54196d4cdd2015efc45bd20d25a906d141ecf15e83102baf541b166f8",
+        "offsetSeconds": 0,
+        "seconds": 0.18
+      },
+      "targetDBFS": -29.4313285301384,
+      "trimDB": 4.1322,
+      "calibratedActiveDBFS": -29.431327339387384,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "gateClose",
+      "file": "v25/gate_close",
+      "category": "world",
+      "baseGain": 0.8,
+      "measurement": {
+        "activeRmsDBFS": -27.493128269977273,
+        "peakDBFS": -11.165604342461632,
+        "sha256": "54255f23f2aa6eebb28c8d6643979b8ab9349be21fd1be75fbe57003ad2bf659",
+        "offsetSeconds": 0,
+        "seconds": 0.43
+      },
+      "targetDBFS": -29.4313285301384,
+      "trimDB": 0.0,
+      "calibratedActiveDBFS": -29.4313285301384,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "bow",
+      "file": "v24/bow_1",
+      "category": "attack",
+      "baseGain": 0.9,
+      "measurement": {
+        "activeRmsDBFS": -29.521267718472473,
+        "peakDBFS": -9.210339333663484,
+        "sha256": "be87d54fc961ac6dc5e72beb8f4d6e94907985c820e55bc34a451c86fb4a1daa",
+        "offsetSeconds": 0,
+        "seconds": 0.23501133786848072
+      },
+      "targetDBFS": -30.75342420871089,
+      "trimDB": 0,
+      "calibratedActiveDBFS": -30.436417529685976,
+      "preservedUserApprovedLevel": true
+    },
+    {
+      "cue": "bow",
+      "file": "v24/bow_2",
+      "category": "attack",
+      "baseGain": 0.9,
+      "measurement": {
+        "activeRmsDBFS": -30.28708167188646,
+        "peakDBFS": -9.210339333663484,
+        "sha256": "831bd5ffea3833ecb453add52e42b21e90d86cd40b621b72c24be0ceb745f384",
+        "offsetSeconds": 0,
+        "seconds": 0.23501133786848072
+      },
+      "targetDBFS": -30.75342420871089,
+      "trimDB": 0,
+      "calibratedActiveDBFS": -31.202231483099965,
+      "preservedUserApprovedLevel": true
+    },
+    {
+      "cue": "bow",
+      "file": "v24/bow_3",
+      "category": "attack",
+      "baseGain": 0.9,
+      "measurement": {
+        "activeRmsDBFS": -29.706473802133225,
+        "peakDBFS": -9.210339333663484,
+        "sha256": "eec0b7d3ae13c91a225f970b29bbc51ad9c604f314ccddc6eb6c40d4f95061bd",
+        "offsetSeconds": 0,
+        "seconds": 0.23501133786848072
+      },
+      "targetDBFS": -30.75342420871089,
+      "trimDB": 0,
+      "calibratedActiveDBFS": -30.621623613346728,
+      "preservedUserApprovedLevel": true
+    },
+    {
+      "cue": "crossbow",
+      "file": "v24/crossbow_1",
+      "category": "attack",
+      "baseGain": 0.94,
+      "measurement": {
+        "activeRmsDBFS": -30.363649583962292,
+        "peakDBFS": -8.810528151853015,
+        "sha256": "b7b0bb73ddb94099c920cae7f6d97c001160fbaa3ead6219eac2aa2cd3e1a3be",
+        "offsetSeconds": 0,
+        "seconds": 0.32
+      },
+      "targetDBFS": -30.75342420871089,
+      "trimDB": 0,
+      "calibratedActiveDBFS": -30.90109251196832,
+      "preservedUserApprovedLevel": true
+    },
+    {
+      "cue": "crossbow",
+      "file": "v24/crossbow_2",
+      "category": "attack",
+      "baseGain": 0.94,
+      "measurement": {
+        "activeRmsDBFS": -27.426864595535392,
+        "peakDBFS": -8.810528151853015,
+        "sha256": "9c5dd4ed50438da16b221f0c882435edab270e09357991ad9d5a59e3727e5c87",
+        "offsetSeconds": 0,
+        "seconds": 0.3135374149659864
+      },
+      "targetDBFS": -30.75342420871089,
+      "trimDB": 0,
+      "calibratedActiveDBFS": -27.964307523541418,
+      "preservedUserApprovedLevel": true
+    },
+    {
+      "cue": "crossbow",
+      "file": "v24/crossbow_3",
+      "category": "attack",
+      "baseGain": 0.94,
+      "measurement": {
+        "activeRmsDBFS": -28.871056120779134,
+        "peakDBFS": -8.810528151853015,
+        "sha256": "0bb5d0b3228c65c8c4fbd9392e15f4cc88f9f3af73f568a0843f7c326e991980",
+        "offsetSeconds": 0,
+        "seconds": 0.32
+      },
+      "targetDBFS": -30.75342420871089,
+      "trimDB": 0,
+      "calibratedActiveDBFS": -29.40849904878516,
+      "preservedUserApprovedLevel": true
+    },
+    {
+      "cue": "hit",
+      "file": "v26/hit_common",
+      "category": "hit",
+      "baseGain": 0.62,
+      "measurement": {
+        "activeRmsDBFS": -32.50672491614529,
+        "peakDBFS": -18.51836435436352,
+        "sha256": "ed93973bad2067c5f0b1c18f98d43caac254dfe47d56fc7f4d76a41f5b41b71b",
+        "offsetSeconds": 0,
+        "seconds": 0.13
+      },
+      "targetDBFS": -36.65889112618021,
+      "trimDB": 0.0,
+      "calibratedActiveDBFS": -36.65889112618021,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "pierceHeavy",
+      "file": "v24/pierce_heavy",
+      "category": "heavy",
+      "baseGain": 0.84,
+      "measurement": {
+        "activeRmsDBFS": -27.869361905733946,
+        "peakDBFS": -8.549845769655782,
+        "sha256": "4808a3dcc63df3791a1eeb92c7d36ecca1b2a8984fad1d0d53a49e8f28c6620a",
+        "offsetSeconds": 0,
+        "seconds": 0.25804988662131517
+      },
+      "targetDBFS": -25.588649999251192,
+      "trimDB": 0,
+      "calibratedActiveDBFS": -29.383776184496313,
+      "preservedUserApprovedLevel": true
+    },
+    {
+      "cue": "crit",
+      "file": "v24/crit",
+      "category": "heavy",
+      "baseGain": 0.83,
+      "measurement": {
+        "activeRmsDBFS": -23.97021184677267,
+        "peakDBFS": -8.510810268455089,
+        "sha256": "9933123fb0f7330bc87ba281fb5a731e03a0543a827b7c06e707c1f7568ef3f0",
+        "offsetSeconds": 0,
+        "seconds": 0.19546485260770974
+      },
+      "targetDBFS": -25.588649999251192,
+      "trimDB": 0.0,
+      "calibratedActiveDBFS": -25.588649999251192,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "deathHeavy",
+      "file": "v24/heavy_1",
+      "category": "world",
+      "baseGain": 0.92,
+      "measurement": {
+        "activeRmsDBFS": -27.947350611571828,
+        "peakDBFS": -10.94871363724485,
+        "sha256": "61f7dfcbced6030c43bd489cc1822411785a99431963da0655381fa18f56d626",
+        "offsetSeconds": 0,
+        "seconds": 0.45
+      },
+      "targetDBFS": -29.4313285301384,
+      "trimDB": -0.7597,
+      "calibratedActiveDBFS": -29.431294064660722,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "deathHeavy",
+      "file": "v24/heavy_2",
+      "category": "world",
+      "baseGain": 0.92,
+      "measurement": {
+        "activeRmsDBFS": -27.915447738762623,
+        "peakDBFS": -10.14300564880343,
+        "sha256": "c64361e9765a7cb6da5ab5c5810fa8f2fbf3fce725077f7ec889899cfc00afa5",
+        "offsetSeconds": 0,
+        "seconds": 0.45
+      },
+      "targetDBFS": -29.4313285301384,
+      "trimDB": -0.7916,
+      "calibratedActiveDBFS": -29.431291191851518,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "deathHeavy",
+      "file": "v24/heavy_3",
+      "category": "world",
+      "baseGain": 0.92,
+      "measurement": {
+        "activeRmsDBFS": -27.94379928520342,
+        "peakDBFS": -9.505382679541377,
+        "sha256": "d328a10aee92de14e313ef3359c96861e2c74027f2f84c6c22bdd94ef88da76b",
+        "offsetSeconds": 0,
+        "seconds": 0.45
+      },
+      "targetDBFS": -29.4313285301384,
+      "trimDB": -0.7633,
+      "calibratedActiveDBFS": -29.431342738292315,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "wall",
+      "file": "v24/wall",
+      "category": "world",
+      "baseGain": 0.9,
+      "measurement": {
+        "activeRmsDBFS": -25.91540147019215,
+        "peakDBFS": -8.510810268455089,
+        "sha256": "a3fddb2a2b94d7ca6c6cb0ae848da1fafd78b08ddb4f9267ab9f21b70d24a3fa",
+        "offsetSeconds": 0,
+        "seconds": 0.37
+      },
+      "targetDBFS": -29.4313285301384,
+      "trimDB": -2.6008,
+      "calibratedActiveDBFS": -29.431351281405654,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "snipe",
+      "file": "v24/snipe",
+      "category": "ultimate",
+      "baseGain": 0.96,
+      "measurement": {
+        "activeRmsDBFS": -26.06267363003202,
+        "peakDBFS": -7.810768124522809,
+        "sha256": "934a435295575c6719a65c2638c5d45dc8bd157bfb68c4e2400fd19fe0a953fe",
+        "offsetSeconds": 0,
+        "seconds": 0.44
+      },
+      "targetDBFS": -17.182531942106948,
+      "trimDB": 0,
+      "calibratedActiveDBFS": -26.417248969240653,
+      "preservedUserApprovedLevel": true
+    },
+    {
+      "cue": "skill",
+      "file": "v24/skill",
+      "category": "attack",
+      "baseGain": 0.9,
+      "measurement": {
+        "activeRmsDBFS": -25.7838735347512,
+        "peakDBFS": -8.31041051684528,
+        "sha256": "7abd7246ac527f699a483b99ebc16885851657eb99fe9dd46c9344303705f9d7",
+        "offsetSeconds": 0,
+        "seconds": 0.3789569160997732
+      },
+      "targetDBFS": -30.75342420871089,
+      "trimDB": -4.0544,
+      "calibratedActiveDBFS": -30.753423345964706,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "bowUlt",
+      "file": "v24/bow_ult",
+      "category": "ultimate",
+      "baseGain": 0.96,
+      "measurement": {
+        "activeRmsDBFS": -25.212018199729812,
+        "peakDBFS": -7.810768124522809,
+        "sha256": "a3beb6726ed0eef4eaa3893867bafe38b781ed1d37f466c56770076825ab7b42",
+        "offsetSeconds": 0,
+        "seconds": 0.47560090702947844
+      },
+      "targetDBFS": -17.182531942106948,
+      "trimDB": 0,
+      "calibratedActiveDBFS": -25.566593538938445,
+      "preservedUserApprovedLevel": true
+    },
+    {
+      "cue": "fireUlt",
+      "file": "v28/meteor_ult",
+      "category": "ultimate",
+      "baseGain": 0.3164976903702071,
+      "measurement": {
+        "activeRmsDBFS": -7.189942844458207,
+        "peakDBFS": -1.790780270111589,
+        "sha256": "615917392a9b1962df03e69c1111c507548343e3a707688a19755b57707735b8",
+        "offsetSeconds": 1.589591836734694,
+        "seconds": 0.7104081632653061
+      },
+      "targetDBFS": -17.182531942106948,
+      "trimDB": 0,
+      "calibratedActiveDBFS": -17.182531942106948,
+      "preservedUserApprovedLevel": true
+    },
+    {
+      "cue": "thunderUlt",
+      "file": "v28/thunder_ult",
+      "category": "ultimate",
+      "baseGain": 0.19069256852407185,
+      "measurement": {
+        "activeRmsDBFS": -14.535200122227279,
+        "peakDBFS": -2.194673719461993,
+        "sha256": "94e462b73d73d2cb7029e491e71fed289f86d9f081f2d5e848664ced4a80adfb",
+        "offsetSeconds": 0,
+        "seconds": 2.0
+      },
+      "targetDBFS": -17.182531942106948,
+      "trimDB": 6,
+      "calibratedActiveDBFS": -22.928524752327156,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "frostUlt",
+      "file": "v28/ice_ult",
+      "category": "ultimate",
+      "baseGain": 0.485,
+      "measurement": {
+        "activeRmsDBFS": -25.001365850262694,
+        "peakDBFS": -7.274265825358396,
+        "sha256": "4ecd6e46f48558fe6a819de990f9bc5db384c680d1068c56a3bb4886a760ff32",
+        "offsetSeconds": 0,
+        "seconds": 1.7
+      },
+      "targetDBFS": -17.182531942106948,
+      "trimDB": 6,
+      "calibratedActiveDBFS": -25.286531078217422,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "pickOpen",
+      "file": "v24/pick_open",
+      "category": "ui",
+      "baseGain": 0.78,
+      "measurement": {
+        "activeRmsDBFS": -31.855456755481306,
+        "peakDBFS": -11.010416942631933,
+        "sha256": "0ea11698ce161a6b754343ae2d2792ba5ab44474f78a26e3b931d9311c38ef80",
+        "offsetSeconds": 0,
+        "seconds": 0.3
+      },
+      "targetDBFS": -35.27992332489082,
+      "trimDB": -1.2664,
+      "calibratedActiveDBFS": -35.279964701671695,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "pickChoose",
+      "file": "v24/pick_choose",
+      "category": "ui",
+      "baseGain": 0.86,
+      "measurement": {
+        "activeRmsDBFS": -22.837688231673404,
+        "peakDBFS": -6.500123505060556,
+        "sha256": "4d48637f4456cdc86a7c54da12fa6ad4a9e47f153f6206c5fa4ee102597b66e3",
+        "offsetSeconds": 0,
+        "seconds": 0.5150113378684807
+      },
+      "targetDBFS": -35.27992332489082,
+      "trimDB": -6,
+      "calibratedActiveDBFS": -30.14771920680205,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "reward",
+      "file": "v24/reward",
+      "category": "reward",
+      "baseGain": 0.85,
+      "measurement": {
+        "activeRmsDBFS": -22.757255515170428,
+        "peakDBFS": -5.600449970294973,
+        "sha256": "3f597fed7e45b202d2fbadcd0306e46ad07e681ada79ce7f7fc8a85cd6f90fa9",
+        "offsetSeconds": 0,
+        "seconds": 0.87
+      },
+      "targetDBFS": -24.168877000884574,
+      "trimDB": 0.0,
+      "calibratedActiveDBFS": -24.168877000884574,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "growth",
+      "file": "v24/growth",
+      "category": "reward",
+      "baseGain": 0.85,
+      "measurement": {
+        "activeRmsDBFS": -22.117882248265666,
+        "peakDBFS": -5.800228363084433,
+        "sha256": "988d7b416340b7f81b7a69a1815abdb20fa318e01bc4d729a5eb47a0d66819c1",
+        "offsetSeconds": 0,
+        "seconds": 0.6849886621315193
+      },
+      "targetDBFS": -24.168877000884574,
+      "trimDB": -0.6394,
+      "calibratedActiveDBFS": -24.16890373397981,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "breakthrough",
+      "file": "v24/breakthrough",
+      "category": "reward",
+      "baseGain": 0.86,
+      "measurement": {
+        "activeRmsDBFS": -20.521598020467316,
+        "peakDBFS": -5.000377362660108,
+        "sha256": "1dd294f0b9f5de8093f9f4a0b733bea98b5bb307ca94802af519bb83eed07bdc",
+        "offsetSeconds": 0,
+        "seconds": 1.1
+      },
+      "targetDBFS": -24.168877000884574,
+      "trimDB": -2.3372,
+      "calibratedActiveDBFS": -24.168828995595963,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "lootPickup",
+      "file": "v24/loot_pickup",
+      "category": "ui",
+      "baseGain": 0.7,
+      "measurement": {
+        "activeRmsDBFS": -28.922402724619772,
+        "peakDBFS": -11.510610810176598,
+        "sha256": "cf9dc8d349aef8b42f2b81292638402a28fa97f9c0a21955f5a612c094417233",
+        "offsetSeconds": 0,
+        "seconds": 0.22
+      },
+      "targetDBFS": -35.27992332489082,
+      "trimDB": -3.2595,
+      "calibratedActiveDBFS": -35.279941924334636,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "surge",
+      "file": "v24/surge",
+      "category": "world",
+      "baseGain": 0.8,
+      "measurement": {
+        "activeRmsDBFS": -21.58872682353174,
+        "peakDBFS": -10.664478865700861,
+        "sha256": "13738ccda3f86ebbc0aac6b9af754c5001cf1279bbce3cdecb662db41494b3fb",
+        "offsetSeconds": 0,
+        "seconds": 0.71
+      },
+      "targetDBFS": -29.4313285301384,
+      "trimDB": -5.9044,
+      "calibratedActiveDBFS": -29.431327083692867,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "victory",
+      "file": "v24/victory",
+      "category": "result",
+      "baseGain": 0.9,
+      "measurement": {
+        "activeRmsDBFS": -20.42017325483762,
+        "peakDBFS": -4.800467964361578,
+        "sha256": "03ea4a2c150ddb92305319406f17bed69eef53850a883e5126b34a05813c9297",
+        "offsetSeconds": 0,
+        "seconds": 1.98
+      },
+      "targetDBFS": -21.335323066051124,
+      "trimDB": 0.0,
+      "calibratedActiveDBFS": -21.335323066051124,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "defeat",
+      "file": "v24/defeat",
+      "category": "result",
+      "baseGain": 0.85,
+      "measurement": {
+        "activeRmsDBFS": -23.49317568449782,
+        "peakDBFS": -12.480479842234477,
+        "sha256": "2badc40ed1dbccd9ef3223ce59d77358c0df701678eaab8252ee8ccc81277e0b",
+        "offsetSeconds": 0,
+        "seconds": 1.27
+      },
+      "targetDBFS": -21.335323066051124,
+      "trimDB": 3.5695,
+      "calibratedActiveDBFS": -21.335297170211966,
+      "preservedUserApprovedLevel": false
+    },
+    {
+      "cue": "ui",
+      "file": "v24/ui_click_1",
+      "category": "ui",
+      "baseGain": 0.65,
+      "measurement": {
+        "activeRmsDBFS": -31.53819045774793,
+        "peakDBFS": -12.01069249039577,
+        "sha256": "036b942c538bb67b59d7faf6665997133032f0f7f695b7e6403e2e14bcccd467",
+        "offsetSeconds": 0,
+        "seconds": 0.08501133786848072
+      },
+      "targetDBFS": -35.27992332489082,
+      "trimDB": 0.0,
+      "calibratedActiveDBFS": -35.27992332489082,
+      "preservedUserApprovedLevel": false
+    }
+  ]
+}

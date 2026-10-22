@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-21",
+  "tool": "image_gen",
+  "mode": "built-in generation with image references",
+  "subject": "噬骨座狼",
+  "prompt": "prompt.txt",
+  "references": [
+    {
+      "path": "C:\\Users\\user\\AppData\\Local\\Temp\\codex-clipboard-a4d0c27f-f5d6-4d6d-846c-c582994868c4.png",
+      "sha256": "E5A56B43DED8C22261F6DB25F64A6C6533F0D6B78395D783FE747C41313E9C8F"
+    },
+    {
+      "path": "D:\\AI\\S4Game\\KingdomWatch\\docs\\chapter-one-stone-thrower-v14\\stone-thrower-front.png",
+      "sha256": "955DE41F969F88E0BCD189945F763BC0C4E72AA7E812C9E0349F30C7299DF5E8"
+    }
+  ],
+  "output": {
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-37ccc0fe-93ba-4dc4-bebe-12b9401ff6bd.png",
+    "saved": "D:\\AI\\S4Game\\KingdomWatch\\docs\\chapter-one-bone-warg-v1\\bone-warg-front.png",
+    "sha256": "F7CB488BDCECD325B0E265E75E82D1C4CF2AD377770FDE8F76B41854C5501C39"
+  },
+  "inspection": [
+    "Frontal face and chest; four paws and tail visible; ears and paws not cropped",
+    "Dark fur, grey cheek ruff, broad jaws and upper fangs; worn leather and two bone toggles",
+    "Fur is denser and figure fills more of canvas than prompt target; no animation production claim",
+    "Original output inspected inline; workspace copy hash verified"
+  ],
+  "user_visual_approval": "pending",
+  "game_integrated": false
+}

@@ -1,0 +1,44 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex"><title>王国守望 · 托管诊断</title>
+<style>body{max-width:920px;margin:20px auto;padding:0 16px;background:#14222c;color:#fff5d8;font:16px/1.6 system-ui,sans-serif}h1{font-size:25px}button,a{font-size:16px;color:#182d39;background:#ffd05c;border:0;border-radius:6px;padding:10px 14px;margin:4px 8px 8px 0;display:inline-block;text-decoration:none}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#223744;padding:16px;border-radius:8px}.hint{color:#c1cbd0}</style>
+</head><body><h1>王国守望 · 托管诊断</h1>
+<p>本页只校验静态文件和 WASM 模块，不加载 Cocos 引擎、不启动游戏。</p>
+<button id="quick">重新检查</button><button id="all">完整资源校验</button><button id="copy">复制报告</button><a href="__BASE_PATH__">进入游戏</a>
+<p id="progress" class="hint">正在检查…</p><pre id="out"></pre>
+<script>
+(function(){
+ 'use strict';var base=new URL('__BASE_PATH__',location.origin),report={},release,inventory;
+ var out=document.getElementById('out'),progress=document.getElementById('progress');
+ function show(){out.textContent=JSON.stringify(report,null,2);}
+ function url(path){var u=new URL(path,base);if(u.origin!==base.origin||!u.pathname.startsWith(base.pathname))throw new Error('资源越出项目路径：'+path);return u;}
+ async function get(path){var u=url(path);u.searchParams.set('diag',Date.now());var c=new AbortController(),timer=setTimeout(function(){c.abort();},30000);try{var r=await fetch(u,{cache:'no-store',signal:c.signal});if(!r.ok)throw new Error(path+' HTTP '+r.status);return{bytes:await r.arrayBuffer(),type:r.headers.get('content-type'),encoding:r.headers.get('content-encoding'),cache:r.headers.get('cache-control')};}finally{clearTimeout(timer);}}
+ async function sha(b){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',b))).map(function(x){return x.toString(16).padStart(2,'0');}).join('');}
+ async function checked(path,expected){var r=await get(path);if(await sha(r.bytes)!==expected.sha256||r.bytes.byteLength!==expected.bytes)throw new Error(path+' 文件校验失败');return r;}
+ async function quick(){
+  document.getElementById('all').disabled=true;progress.textContent='正在检查入口、资源清单、WASM 与浏览器环境…';
+  report={time:new Date().toISOString(),page:location.href,secureContext:isSecureContext,crossOriginIsolated:crossOriginIsolated,sharedArrayBufferAvailable:typeof SharedArrayBuffer!=='undefined',devicePixelRatio:devicePixelRatio,userAgent:navigator.userAgent,gameStarted:false,checks:[],errors:[]};show();
+  try{
+   var first=await get('hosting-release.json');release=JSON.parse(new TextDecoder().decode(first.bytes));
+   if(release.schema!==1||release.base_path!==base.pathname)throw new Error('项目路径/清单版本不匹配');
+   report.release=release.id;report.requiresCrossOriginIsolation=release.requires_cross_origin_isolation;report.isolationStatus=release.requires_cross_origin_isolation?(crossOriginIsolated?'满足':'不满足'):'当前单线程运行包不需要';
+   if(release.requires_cross_origin_isolation&&!crossOriginIsolated)throw new Error('缺少跨源隔离');
+   var list=await get(release.inventory);if(await sha(list.bytes)!==release.inventory_sha256)throw new Error('完整清单散列不匹配');inventory=JSON.parse(new TextDecoder().decode(list.bytes));report.totalFiles=Object.keys(inventory.files).length;report.totalMiB=Math.round(inventory.total_bytes/1048576*10)/10;
+   await checked(release.entry,{sha256:release.entry_sha256,bytes:release.entry_bytes});report.checks.push('入口 HTML 的 SHA-256 与项目 base 路径清单匹配');
+   for(var path of Object.keys(inventory.files))url(path);report.checks.push('全部清单地址位于当前项目子路径');
+   report.wasm=[];
+   for(var path of release.wasm){var w=await checked(path,inventory.files[path]);var valid=WebAssembly.validate(w.bytes);if(!valid)throw new Error('WASM 验证失败：'+path);await WebAssembly.compile(w.bytes);report.wasm.push({path:path,sha256:'匹配',moduleCompiled:true,contentType:w.type,contentEncoding:w.encoding});}
+   var second=JSON.parse(new TextDecoder().decode((await get('hosting-release.json')).bytes));if(second.id!==release.id)throw new Error('检查期间刚发生发布，请重新检查');report.checks.push('再次读取版本一致');
+   if('serviceWorker' in navigator){report.serviceWorkers=(await navigator.serviceWorker.getRegistrations()).map(function(r){return{scope:r.scope,controller:navigator.serviceWorker.controller&&navigator.serviceWorker.controller.scriptURL};});}
+   report.cachePolicy='入口先联网获取版本清单；代码和媒体使用构建版本文件名；HTTP 缓存时长由 GitHub Pages 控制';
+   progress.textContent='基础检查通过。完整资源校验将下载约 '+report.totalMiB+' MiB，不会启动游戏。';document.getElementById('all').disabled=false;
+  }catch(e){report.errors.push(e.message);progress.textContent='检查未通过，报告中保留具体原因。';}show();
+ }
+ async function all(){
+  if(!inventory)return;document.getElementById('all').disabled=true;var paths=Object.keys(inventory.files),next=0,done=0,failures=[];report.fullCheck={checked:0,total:paths.length,failures:failures};
+  async function worker(){while(next<paths.length){var path=paths[next++];try{await checked(path,inventory.files[path]);}catch(e){failures.push({path:path,error:e.message});}done++;report.fullCheck.checked=done;progress.textContent='完整资源校验 '+done+'/'+paths.length+'，失败 '+failures.length;show();}}
+  await Promise.all([worker(),worker(),worker(),worker()]);report.fullCheck.complete=true;progress.textContent=failures.length?'校验结束，存在失败项。':'全部资源 SHA-256 和字节数匹配。';show();document.getElementById('all').disabled=false;
+ }
+ document.getElementById('quick').onclick=quick;document.getElementById('all').onclick=all;document.getElementById('copy').onclick=async function(){try{await navigator.clipboard.writeText(JSON.stringify(report,null,2));progress.textContent='报告已复制';}catch(e){progress.textContent='请长按报告全选复制';}};quick();
+})();
+</script></body></html>

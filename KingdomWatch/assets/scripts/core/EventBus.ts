@@ -23,7 +23,7 @@ export class EventBus {
 export const bus = new EventBus();
 
 /** One warning per special wave, with independent elite/Boss semantics. */
-export interface WaveThreat { wave: number; boss: boolean; names: string[]; }
+export interface WaveThreat { wave: number; boss: boolean; names: string[]; floor?: number; }
 
 /** 战斗事件名 */
 export const EVT = {

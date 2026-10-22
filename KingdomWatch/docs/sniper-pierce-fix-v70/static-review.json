@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-22",
+  "originalGameFiles": 2076,
+  "changedGameFiles": [
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/battle/Hero.ts",
+    "assets/scripts/config/Cards.ts",
+    "assets/scripts/config/GameConfig.ts",
+    "assets/scripts/ui/HUD.ts",
+    "assets/scripts/ui/Panels.ts"
+  ],
+  "addedGameFiles": [],
+  "removedGameFiles": [],
+  "originalMediaFiles": 756,
+  "mediaFilesPreserved": 756,
+  "diagnosticsBefore": 10,
+  "diagnosticsAfter": 10,
+  "newDiagnostics": [],
+  "baseUltimateCosts": {
+    "archer": 45,
+    "sniper": 55,
+    "mora": 60,
+    "volt": 65,
+    "pyro": 70
+  },
+  "sourceReview": {
+    "cardIncrementsBasicAndSkillPierce": true,
+    "cardOriginalCapOwnerRequirement": true,
+    "basicAndSkillBoltsKeepSeparateFields": true,
+    "initialChargeZero": true,
+    "noSlotOffsetOrHiddenMinimum": true,
+    "fixedActualEnergyRegen": true,
+    "killAwardMethodUnchanged": true,
+    "killChargeClampUnchanged": true,
+    "sharedKillCoefficientUnchanged": true,
+    "chargeGoalAndReadinessUnchanged": true,
+    "blockedDistinctFromCharging": true,
+    "blockedHudReturnsWithoutTipsOrRelease": true,
+    "ultimateTouchReleaseRechecksState": true,
+    "statsAndTipsRejectModalState": true,
+    "allFourHudActionsGuarded": true,
+    "pickWaitsForLiveUltimate": true,
+    "oneRealSecondVictoryDelay": true,
+    "victoryAwardsUnchanged": true,
+    "pendingPanelClearedBeforeShow": true,
+    "endlessFloorFlowUnchanged": true,
+    "noNewArtAudioFonts": true
+  },
+  "validation": "Static source/file review and type diagnostics only; no game, browser, gameplay test, simulation or audio executed."
+}

@@ -3,17 +3,24 @@
  * dt×倍速步进；暂停/三选一期间全场冻结（§3.2）
  */
 import { _decorator, Canvas, Component, director, isValid, Layers, Node } from 'cc';
-import { MobDef, MOBS, heroSlots, nextLevelId } from '../config/Mobs';
+import { MobDef, MOBS, heroSlots } from '../config/Mobs';
 import { ChallengeDef, DIFFICULTIES, getChallengeDef } from '../config/LevelDifficulty';
 import { CardCtx, CardDef, CardStacks, canTakeCard, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, baseMoraStats, HeroStats, archerAtkCfg, sniperAtkCfg, sniperSkCfg, voltAtkCfg, voltSkCfg, voltUltCfg, pyroAtkCfg, pyroSkCfg, pyroUltCfg, moraAtkCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
-import { expNeed, LO, PASSIVE_XP_INTERVAL, passiveXpGain, REVIVE_RATIO, starOf } from '../config/GameConfig';
+import { expNeed, LO, PASSIVE_XP_INTERVAL, passiveXpGain, REVIVE_RATIO, starOf, ULT_INITIAL_CHARGE, SHARED_KILL_CHARGE } from '../config/GameConfig';
 import { bus, EVT, WaveThreat } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
 import { GameAudio } from '../core/GameAudio';
-import { campaignChapter } from '../config/Campaign';
+import { CAMPAIGN_STAGES, campaignChapter, campaignLevelOpen, campaignStage } from '../config/Campaign';
+import { endlessWave } from '../config/Endless';
+import { endlessBest, recordEndlessFloor } from '../core/EndlessProgress';
 import { loadSave, saveSave } from '../core/SaveData';
+import { firstLevelVictory, pendingBowLesson, skipBattleTeaching, teachingBattle } from '../core/FirstJourney';
+import { pendingPyroSquadLesson, secondLevelVictory, secondTeachingBattle, skipSecondBattleTeaching } from '../core/SecondJourney';
+import { thirdLevelVictory, thirdTeachingBattle, skipThirdBattleTeaching } from '../core/ThirdJourney';
+import { fifthLevelVictory } from '../core/FifthLevelRewards';
+import { claimEarlyFirstWinGold } from '../core/EarlyEconomy';
+import { tutorialFocus } from '../ui/TutorialFocus';
 import { starKey, squadList, unlockCodex, advanceUnlock, equipAgg, heroState, heroStats, heroBtAgg, keepHp, keepShield } from '../core/GameData';
-import { grantStageMaterials } from '../core/StageLoot';
 import { BattleLoot, DeathPosition } from './BattleLoot';
 import { flow } from '../core/Flow';
 import { MonsterManager } from './Monster';
@@ -37,12 +44,15 @@ import { setLayerDeep } from '../ui/UIKit';
 import { battleEntryReady, enteringBattle, leaveBattle } from '../ui/BattleEntry';
 import { warmPickArt } from '../ui/PickArt';
 import { BossWarning } from '../ui/BossWarning';
+import { EnemyTooltip } from '../ui/EnemyTooltip';
 
 const { ccclass } = _decorator;
 
-export type BattleState = 'prepare' | 'running' | 'pick' | 'paused' | 'win' | 'lose';
+export type BattleState = 'prepare' | 'running' | 'pick' | 'paused' | 'tutorial' | 'win' | 'lose';
 
 export interface PickOpts {
+  recommendedId?: string;
+  onSkipTeaching?: () => void;
   onPick: (card: CardDef) => void;
   onRefreshRequest: () => void;
 }
@@ -50,6 +60,15 @@ export interface PickOpts {
 @ccclass('BattleDirector')
 export class BattleDirector extends Component {
   levelDef: ChallengeDef = getChallengeDef('1-1', 0);
+  endlessChapter = 0;
+  endlessFloor = 1;
+  endlessCleared = 0;
+  private endlessRest = -1;
+  private endlessStartingBest = 0;
+  private endlessCardsComplete = false;
+  get isEndless(): boolean { return this.endlessChapter > 0; }
+  get battleSceneId(): string { return this.isEndless ? this.endlessChapter + '-10' : this.levelDef.id; }
+  get battleTitle(): string { return this.isEndless ? this.levelDef.name : this.levelDef.id + ' ' + this.levelDef.name; }
   state: BattleState = 'prepare';
   /** 未查看的新怪种队列（新怪通知钮 → 介绍弹窗逐个消费） */
   private newMobQueue: string[] = [];
@@ -80,8 +99,30 @@ export class BattleDirector extends Component {
   private ultPresentation!: UltimatePresentation;
   private bossWarning!: BossWarning;
   private loot!: BattleLoot;
+  private enemyTooltip!: EnemyTooltip;
   private pendingWin = false;
+  private victoryDelayT = -1;
+  private pendingWinPanel: Parameters<Panels['showWin']>[0] | null = null;
   private leaving = false;
+  /** Recheck at touch release: a modal may have opened after pointer-down. */
+  get canUseBattleHud(): boolean {
+    return this.state === 'running' && !this.pendingWin && !this.leaving
+      && !this.mobIntroOpen && !this.gm?.panelOpen && !enteringBattle();
+  }
+  private coachRoot!: Node;
+  private pickNumber = 0;
+  private killBeatAge = 0;
+  private killBeatCount = 0;
+  private killBeatX = 0;
+  private killBeatY = 0;
+  private killBeatCooldown = 0;
+  private roleHints = new Set<string>();
+  private ultFocusShown = false;
+  private get teaching(): boolean { return teachingBattle(this.levelDef.id, this.levelDef.difficulty); }
+  private get secondTeaching(): boolean { return secondTeachingBattle(this.levelDef.id, this.levelDef.difficulty); }
+  private get thirdTeaching(): boolean {
+    return thirdTeachingBattle(this.levelDef.id, this.levelDef.difficulty) && this.heroes.some(h => h.id === 'pyro');
+  }
 
   global: GlobalStats = { xpMul: 1, goldMul: 1, lineRegenPct: 0 };
   stacks: CardStacks = {};
@@ -105,6 +146,7 @@ export class BattleDirector extends Component {
   private fpsN = 0;
 
   start(): void {
+    if (this.isEndless) this.endlessStartingBest = endlessBest(this.endlessChapter);
     GameAudio.enter('battle', campaignChapter(flow.levelId).number);
     const field = new Node('Field');
     field.setParent(this.node);
@@ -137,6 +179,9 @@ export class BattleDirector extends Component {
       dmgNumber: (x: number, y: number, text: string, color: string, big?: boolean, event?: FloatEvent) =>
         this.float.spawn(x, y, text, color, big, event),
       impact: (x: number, y: number, hero: string, heavy: boolean, angle?: number) => this.impacts.hit(x, y, hero, heavy, angle),
+      combatFeedback: (kind: string, x: number, y: number, radius: number, tx?: number, ty?: number) =>
+        this.impacts.combatFeedback(kind, x, y, radius, tx, ty),
+      damage: (hero: string, amount: number) => this.dmgSvc.add(hero, amount),
     };
     this.float = new FloatText(textLayer);
     this.pops = new ComicPop(textLayer);
@@ -167,12 +212,20 @@ export class BattleDirector extends Component {
             : hid === 'mora' ? new FrostHero(heroLayer, slots[i], st)
               : new ArcherHero(heroLayer, slots[i], st);
     });
+    // Abilities are part of the hero. Seed legacy prerequisites locally; never write them to the save.
+    this.heroes.forEach((h, i) => {
+      this.stacks[h.id + '_unlock_skill'] = 1;
+      this.stacks[h.id + '_unlock_ult'] = 1;
+      h.charge = h.chargeGoal * ULT_INITIAL_CHARGE;
+      h.skillCd = i * .8;
+    });
     this.parts = new Particles(fxLayer);
     this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts, this.impacts);
     this.waves = new WaveManager(this.levelDef, this.mgr);
     for (const h of this.heroes) this.dmgSvc.register(h.id, h.name);
 
     this.hud = new HUD(uiRoot, this, field);
+    this.enemyTooltip = new EnemyTooltip(field, uiRoot, this.mgr, () => this.canUseBattleHud && !this.ultimateActive);
     const lootLayer = new Node('EquipmentDrops');
     lootLayer.setParent(field);
     lootLayer.setSiblingIndex(textLayer.getSiblingIndex());
@@ -182,6 +235,8 @@ export class BattleDirector extends Component {
     this.bossWarning = new BossWarning(uiRoot);
     this.panels = new Panels(uiRoot, this);
     this.gm = new GmPanel(uiRoot, this);
+    this.coachRoot = new Node('FirstBattleCoach');
+    this.coachRoot.setParent(uiRoot);
 
     // 兜底：初始构建树（Field/UIRoot/HUD/Panels）全部置于 UI_2D 层，相机才会渲染
     setLayerDeep(this.node, Layers.Enum.UI_2D);
@@ -212,6 +267,7 @@ export class BattleDirector extends Component {
 
   onDestroy(): void {
     this.leaving = true;
+    this.pendingWinPanel = null; this.victoryDelayT = -1;
     bus.off(EVT.MOB_KILLED, this.onMobKilled, this);
     bus.off(EVT.LINE_BROKEN, this.onLineBroken, this);
     bus.off(EVT.ALL_WAVES_CLEARED, this.onAllCleared, this);
@@ -255,6 +311,10 @@ export class BattleDirector extends Component {
     if (this.leaving) return;
     // Prepare countdown and combat begin only after the full-screen flags have cleared.
     if (enteringBattle()) return;
+    // Real seconds, independent of speed and hit-stop; overlap the final ultimate's tail.
+    if (this.victoryDelayT > 0 && this.state === 'running' && !this.gm.panelOpen)
+      this.victoryDelayT = Math.max(0, this.victoryDelayT - rawDt);
+    this.showPendingWinPanel();
     GameAudio.battleState(this.state);
     this.fpsAcc += rawDt; this.fpsN++;
     if (this.fpsAcc >= 0.5) {
@@ -279,6 +339,7 @@ export class BattleDirector extends Component {
       if (this.prepareT <= 0) {
         this.state = 'running';
         this.waves.start();
+        if (this.teaching) this.hud.showBanner('英雄会自动攻击，守住底部防线！', 5);
         if (this.pickQueue > 0) this.openPick(); // GM 期间升级的排队三选一
       }
       return;
@@ -288,6 +349,10 @@ export class BattleDirector extends Component {
       this.bossWarning.tick(0, false);
       this.ultPresentation.suspend();
       if (this.state === 'win' || this.state === 'lose') this.mgr.tickDeaths(dt);
+      if (this.state === 'win' && this.pendingWinPanel) {
+        this.parts.tick(dt); this.impacts.tick(dt);
+        this.float.tick(rawDt); this.pops.tick(rawDt);
+      }
       return;
     }
 
@@ -296,7 +361,10 @@ export class BattleDirector extends Component {
     const sdt = dt * readableSpeed * (hitStopActive ? 0.12 : 1);
     this.ambience.tick(sdt);
     this.elapsed += sdt;
-    if (!this.pendingWin) this.passiveXpElapsed += sdt;
+    this.killBeatAge += sdt;
+    this.killBeatCooldown = Math.max(0, this.killBeatCooldown - sdt);
+    if (this.killBeatAge > .35) this.killBeatCount = this.killBeatX = this.killBeatY = 0;
+    if (!this.pendingWin && (!this.isEndless || this.endlessRest < 0)) this.passiveXpElapsed += sdt;
     const steps = sdt > 1 / 30 ? 2 : 1;
     const sub = sdt / steps;
     for (let i = 0; i < steps; i++) {
@@ -309,43 +377,113 @@ export class BattleDirector extends Component {
       if (this.gmUltFull) for (const h of this.heroes) h.charge = h.ultUnlocked ? h.chargeGoal : 0;
       this.projs.tick(sub, this.line);
       this.parts.tick(sub);
+      this.impacts.syncBurns(this.mgr.list, sub);
       this.impacts.tick(sub);
       this.ultPresentation.tick(sub);
       this.line.regenPct = this.global.lineRegenPct;
       this.line.tick(sub);
     }
-    if (this.state === 'running') this.loot.tick(sdt);
+    if (this.state === 'running') {
+      this.waves.checkCleared();
+      this.loot.tick(sdt);
+    }
     // 大招演出锁倒计时；期间排队的升级三选一挂起，锁走完自动补弹
     if (this.ultShowT > 0) this.ultShowT = Math.max(0, this.ultShowT - sdt);
     if (this.ultimateActive) this.ultShowT = Math.max(this.ultShowT, 2);
-    if (this.pendingWin && !this.ultimateActive && this.state === 'running') this.onAllCleared();
+    if (this.pendingWin && !this.ultimateActive && this.state === 'running') {
+      if (this.isEndless) this.completeEndlessFloor(); else this.completeVictory();
+    }
     // Grant after combat steps: a timed level-up must not interrupt a simulation substep.
     this.grantTimeXp();
     if (this.pickQueue > 0 && !this.pendingWin && this.ultShowT <= 0 && !this.gm.panelOpen && this.state === 'running') this.openPick();
+    if (this.isEndless && this.endlessRest >= 0 && this.state === 'running') {
+      this.endlessRest = Math.max(0, this.endlessRest - sdt);
+      if (this.endlessRest === 0 && !this.pickQueue && this.ultShowT <= 0 && !this.gm.panelOpen) {
+        this.endlessFloor++; this.endlessRest = -1;
+        this.levelDef.waves = [endlessWave(this.endlessChapter, this.endlessFloor)];
+        this.waves = new WaveManager(this.levelDef, this.mgr);
+        this.waves.start();
+        this.hud.showBanner('第' + this.endlessFloor + '层' + (this.endlessFloor % 5 === 0 ? ' · 首领层' : ' · 敌军来袭'), 2);
+      }
+    }
     this.float.tick(rawDt);
     this.pops.tick(rawDt);
     this.hud.sync(rawDt);
     this.bossWarning.tick(rawDt, this.state === 'running' && !this.gm.panelOpen);
+    this.offerUltimateLesson();
+  }
+
+  lateUpdate(dt: number): void { this.enemyTooltip?.tick(dt); }
+
+  /** Event/state driven: never pause inside damage, picking, loading or an ultimate presentation. */
+  private offerUltimateLesson(): void {
+    const second = this.secondTeaching, third = this.thirdTeaching;
+    const journey = third ? loadSave().thirdJourney! : second ? loadSave().secondJourney! : loadSave().firstJourney!;
+    if ((!this.teaching && !second && !third) || this.ultFocusShown || journey.ultCast
+      || this.state !== 'running' || this.pickQueue > 0 || this.pendingWin || this.ultShowT > 0
+      || this.ultimateActive || this.gm.panelOpen || this.mobIntroOpen || this.mgr.aliveCount < 1) return;
+    const index = this.heroes.findIndex(h => h.id === (third ? 'pyro' : second ? 'sniper' : 'archer'));
+    if (index < 0 || !this.heroes[index].ultReady) return;
+    const target = this.hud.ultimateTarget(index);
+    if (!target) return;
+    const focus = tutorialFocus(this.coachRoot, target,
+      third ? '陨石天降已就绪！点击火法师大招，轰击敌群并留下灼烧区域。'
+        : second ? '猎杀时刻已就绪！点击重弩手大招，穿透前方敌群。' : '箭雨已就绪！点击发光的大招按钮，清扫敌群。',
+      () => { this.state = 'running'; this.hud.activateUltimate(index); },
+      () => {
+        if (third) skipThirdBattleTeaching(); else if (second) skipSecondBattleTeaching(); else skipBattleTeaching();
+        this.state = 'running';
+      });
+    if (focus) { this.panels.closeAll(); this.ultFocusShown = true; this.state = 'tutorial'; }
   }
 
   /* ---------- 击杀 → 金币/经验/充能（§3.7/§3.8/§3.10） ---------- */
   private onMobKilled(def: unknown, killerId: unknown, position: unknown): void {
+    if (this.isEndless && (this.state === 'win' || this.state === 'lose')) return;
     const d = def as MobDef;
+    if (d.offspring) return;
     this.goldEarned += d.gold * this.global.goldMul * DIFFICULTIES[this.levelDef.difficulty].goldMul;
     if (killerId !== 'gm' && position && this.state === 'running') this.loot.onKill(d, position as DeathPosition);
-    const killer = this.heroes.find(h => h.id === killerId);
-    if (killer) killer.chargeKill(d.charge * (1 + (killer.stats.chargeEff || 0)));   // 充能效率：击杀充能加成（呼吸回能不受加成）
+    if (killerId !== 'gm') {
+      const share = d.charge * SHARED_KILL_CHARGE / Math.max(1, this.heroes.length);
+      for (const hero of this.heroes) hero.chargeKill(share * (1 + (hero.stats.chargeEff || 0)));
+      if (position && this.state === 'running' && this.killBeatCooldown <= 0) {
+        const p = position as DeathPosition;
+        if (!this.killBeatCount) this.killBeatAge = 0;
+        this.killBeatCount++; this.killBeatX += p.x; this.killBeatY += p.y;
+        if (this.killBeatCount >= 5) {
+          this.impacts.combatFeedback('groupKill', this.killBeatX / this.killBeatCount, this.killBeatY / this.killBeatCount, 52);
+          bus.emit(EVT.HIT_STOP);
+          this.killBeatCount = this.killBeatX = this.killBeatY = 0;
+          this.killBeatCooldown = .9;
+        }
+      }
+    }
     this.gainXp(d.exp * this.global.xpMul);
   }
 
   private onWaveChanged(cur: unknown, total: unknown, surge: unknown): void {
     this.hud.setWave(cur as number, total as number);
-    if (surge && !this.waves.hasThreat) {
+    const wave = this.levelDef.waves[(cur as number) - 1];
+    const enemies = (wave?.groups || []).map(g => MOBS[g.mob]).filter(Boolean);
+    const hints: [string, boolean, string][] = [
+      ['armor', enemies.some(d => !!d.physRes), '重甲来袭：法术绕过物抗，物理集火可破甲'],
+      ['rush', enemies.some(d => !!d.rush), '冲锋来袭：冰封、眩晕可打断，减速可延缓'],
+      ['ward', enemies.some(d => !!d.magicRes), '符盾抵抗法术：物理伤害绕过，法术集火可破盾'],
+      ['heal', enemies.some(d => d.kind === 'heal'), '治疗读条时可用冰封、眩晕打断，优先覆盖后排'],
+    ];
+    const hint = hints.find(([id, present]) => present && !this.roleHints.has(id));
+    if (hint) {
+      this.roleHints.add(hint[0]); this.hud.showBanner(hint[2], 3);
+    } else if (surge && !this.waves.hasThreat) {
       this.hud.showBanner('敌军大部队来袭！', 2);
     }
   }
 
-  private onWaveThreat(threat: unknown): void { this.bossWarning.show(threat as WaveThreat); }
+  private onWaveThreat(threat: unknown): void {
+    const value = threat as WaveThreat;
+    this.bossWarning.show(this.isEndless ? { ...value, floor: this.endlessFloor } : value);
+  }
 
   private gainXp(v: number): void {
     this.xpEarned += v;
@@ -354,7 +492,8 @@ export class BattleDirector extends Component {
     while (this.xp >= need) {
       this.xp -= need;
       this.heroLevel++;
-      this.pickQueue++;
+      for (const hero of this.heroes) { hero.stats.atkMul *= 1.025; hero.stats.skillMul *= 1.025; }
+      if (!this.endlessCardsComplete) this.pickQueue++;
       Sfx.play('levelup');
       need = this.expNeed(this.heroLevel);
       bus.emit(EVT.LEVEL_UP, this.heroLevel);
@@ -377,30 +516,71 @@ export class BattleDirector extends Component {
 
   /* ---------- 三选一（§3.8：全场冻结，连升排队；广告刷新×1+钻石刷新×1） ---------- */
   private openPick(): void {
-    if (this.state !== 'running' || this.pendingWin || this.ultShowT > 0) return;
+    if (this.state !== 'running' || this.pendingWin || this.ultShowT > 0 || this.ultimateActive) return;
+    if (!M0_POOL.some(c => (c.owner === 'global' || this.heroes.some(h => h.id === c.owner)) && canTakeCard(c, this.stacks))) {
+      this.pickQueue = 0; this.endlessCardsComplete = true;
+      this.panels.closeAll(true);
+      this.hud.showBanner('本局可选强化已全部学满，继续挑战！', 3);
+      return;
+    }
     this.state = 'pick';
     // §3.8：三选一 = 上阵英雄卡池混合 + 全局卡（未上阵英雄的卡不出现；首抽与刷新共用同一过滤池）
     const pool = M0_POOL.filter(c => c.owner === 'global' || this.heroes.some(h => h.id === c.owner));
+    this.pickNumber++;
     const opts: PickOpts = {
       onPick: (card: CardDef) => {
         if (this.state !== 'pick' || !this.applyCard(card)) return;
         // PickMotion owns the single confirmation at the selected card's landing.
         this.stacks[card.id] = (this.stacks[card.id] || 0) + 1;
+        if (this.teaching && !loadSave().firstJourney!.freeChargeUsed) {
+          const archer = this.heroes.find(h => h.id === 'archer');
+          if (archer) {
+            archer.charge = archer.chargeGoal;
+            loadSave().firstJourney!.freeChargeUsed = true;
+          }
+        }
+        if (this.secondTeaching && !loadSave().secondJourney!.freeChargeUsed) {
+          const sniper = this.heroes.find(h => h.id === 'sniper');
+          if (sniper) { sniper.charge = sniper.chargeGoal; loadSave().secondJourney!.freeChargeUsed = true; }
+        }
+        if (this.thirdTeaching && !loadSave().thirdJourney!.freeChargeUsed) {
+          const pyro = this.heroes.find(h => h.id === 'pyro');
+          if (pyro) { pyro.charge = pyro.chargeGoal; loadSave().thirdJourney!.freeChargeUsed = true; }
+        }
         this.pickQueue--;
         saveSave();
-        this.hud.sync(); // 选择解锁卡后立即刷新图标，即使后面还有排队三选一。
+        this.hud.sync(); // 强化后立即刷新状态，即使后面还有排队三选一。
         this.state = 'running';
         if (this.pickQueue > 0) this.openPick();
         else { this.panels.closeAll(true); this.state = 'running'; }
+        if (this.teaching && card.id === 'serial')
+          this.hud.showBanner('连射已强化！技能自动释放，大招充满后点击使用。', 5);
+        if (this.thirdTeaching && card.id === 'pyro_shards')
+          this.hud.showBanner('爆裂火球增加！基础技能开场即可使用。', 5);
       },
       onRefreshRequest: () => {
-        this.panels.showPick(draw3(pool, this.stacks), this.stacks, opts);
+        showOffer();
       },
+    };
+    const showOffer = (): void => {
+      const lessons = this.thirdTeaching ? ['pyro_shards', 'pyro_burn']
+        : this.secondTeaching ? ['sniper_pierce', 'multi_lock'] : ['serial', 'fan'];
+      const desired = lessons[Math.min(this.pickNumber - 1, lessons.length - 1)];
+      const missing = lessons.filter(id => !(this.stacks[id] > 0));
+      const lessonId = missing.includes(desired) ? desired : missing[0];
+      const lesson = (this.teaching || this.secondTeaching || this.thirdTeaching) && pool.find(c => c.id === lessonId && canTakeCard(c, this.stacks));
+      const cards = draw3(pool, this.stacks);
+      opts.recommendedId = lesson ? lesson.id : undefined;
+      opts.onSkipTeaching = (this.teaching || this.secondTeaching || this.thirdTeaching) ? () => {
+        if (this.thirdTeaching) skipThirdBattleTeaching(); else if (this.secondTeaching) skipSecondBattleTeaching(); else skipBattleTeaching();
+        showOffer();
+      } : undefined;
+      this.panels.showPick(lesson ? [lesson, ...cards.filter(c => c.id !== lesson.id)].slice(0, 3) : cards, this.stacks, opts);
     };
     this.pickOpts = opts;
     this.hud.sync(); // 冻结期间 HUD 不轮询，升级瞬间把经验条/等级刷到位
     this.panels.resetPickRefresh();
-    this.panels.showPick(draw3(pool, this.stacks), this.stacks, opts);
+    showOffer();
   }
 
   /** Panels 回调入口：广告/钻石刷新（次数限制在 Panels 内部控制） */
@@ -421,20 +601,33 @@ export class BattleDirector extends Component {
       },
     };
     card.apply(ctx);
+    if (owner) {
+      owner.charge = Math.min(owner.charge, owner.chargeGoal);
+      owner.skillCd = Math.min(owner.skillCd, owner.skillCdTotal);
+    }
     if (owner && card.unlocks === 'skill') owner.skillCd = 0;
     if (owner && card.unlocks === 'ult') owner.charge = 0;
     return true;
   }
 
   /* ---------- 大招（手动，充能满可放；未满点图标→Tips） ---------- */
-  tryCastUlt(idx = 0): 'ok' | 'charging' | 'locked' {
-    if (this.state !== 'running' || this.pendingWin) return 'charging';
+  tryCastUlt(idx = 0): 'ok' | 'charging' | 'locked' | 'blocked' {
+    if (!this.canUseBattleHud) return 'blocked';
     const h = this.heroes[idx];
     if (!h?.ultUnlocked) return 'locked';
     if (h && h.ultReady && h.castUlt(this.mgr, this.projs, this.dmgSvc)) {
       // Each hero owns its actual release cue; tapping starts only its windup.
       // 演出锁：大招期间三选一挂起（时长由各英雄自报），结束后再等 2s 缓冲补弹（用户要求：一结束就弹太突兀）
       this.ultShowT = Math.max(this.ultShowT, h.ultShowDuration + 2);
+      if (this.teaching && h.id === 'archer') {
+        loadSave().firstJourney!.ultCast = true; saveSave();
+      }
+      if (this.secondTeaching && h.id === 'sniper') {
+        loadSave().secondJourney!.ultCast = true; saveSave();
+      }
+      if (this.thirdTeaching && h.id === 'pyro') {
+        loadSave().thirdJourney!.ultCast = true; saveSave();
+      }
       return 'ok';
     }
     return 'charging';
@@ -448,6 +641,7 @@ export class BattleDirector extends Component {
   }
 
   togglePause(): void {
+    if (this.pendingWin || this.leaving) return;
     if (this.state === 'running') {
       this.state = 'paused';
       const sv = loadSave();
@@ -470,10 +664,12 @@ export class BattleDirector extends Component {
   }
 
   showStats(): void {
+    if (!this.canUseBattleHud) return;
     this.panels.showStats(this.dmgSvc.rows());
   }
 
   showTips(kind: 'atk' | 'skill' | 'ult', idx = 0): void {
+    if (!this.canUseBattleHud) return;
     const hero = this.heroes[idx] || this.heroes[0];
     if (!hero || (kind === 'skill' && !hero.skillUnlocked) || (kind === 'ult' && !hero.ultUnlocked)) return;
     this.panels.showTips(kind, hero, this.line, idx);
@@ -482,7 +678,9 @@ export class BattleDirector extends Component {
   /* ---------- 失败 → 复活留在本局，重试先回当前关卡页 ---------- */
   private onLineBroken(): void {
     if (this.state === 'win' || this.state === 'lose') return;
+    if (this.isEndless) { this.finishEndless(); return; }
     this.state = 'lose'; this.pendingWin = false;
+    this.pendingWinPanel = null; this.victoryDelayT = -1;
     this.bossWarning.clear();
     this.ultPresentation.clear();
     const goldFloor = Math.floor((this.levelDef.baseGold + this.goldEarned) * .3);
@@ -492,7 +690,6 @@ export class BattleDirector extends Component {
       goldFloor,
       loot,
       reviveRatio: REVIVE_RATIO,
-      xp: Math.floor(this.xpEarned),
       onRevive: (done: (ok: boolean) => void) => {
         AdService.showRewarded('revive', () => {
           if (this.leaving || !isValid(this, true)) return;
@@ -509,7 +706,7 @@ export class BattleDirector extends Component {
   /* ---------- 胜利结算（§3.9 星级 / §3.10 金币） ---------- */
   /** 新怪通知钮点击：逐个弹出介绍弹窗，看完队列清空再收钮 */
   showNewMobIntro(): void {
-    if (this.mobIntroOpen) return;
+    if (!this.canUseBattleHud) return;
     const id = this.newMobQueue[0];
     if (!id) { this.hud.showNewMob(false); return; }
     this.mobIntroOpen = true;
@@ -522,28 +719,54 @@ export class BattleDirector extends Component {
 
   private onAllCleared(): void {
     if (this.state !== 'running') return;
-    if (this.ultimateActive) { this.pendingWin = true; return; }
+    // Drain after the combat substeps and the final ultimate have finished.
+    if (this.isEndless) {
+      if (this.endlessCleared < this.endlessFloor) this.pendingWin = true;
+      return;
+    }
+    if (this.pendingWin) return;
+    this.pendingWin = true;
+    this.victoryDelayT = 2;
+    // Keep the running update for poses, projectiles, drops and the final ultimate.
+    // The cleared outcome is fixed: late enemy shots and regeneration cannot change its stars.
+    this.line.finishBattle();
+    this.bossWarning.clear();
+  }
+
+  private completeVictory(): void {
+    if (this.state !== 'running' || !this.pendingWin || this.victoryDelayT > 0 || this.ultimateActive) return;
     this.pendingWin = false; this.ultPresentation.clear();
     this.state = 'win';
     this.bossWarning.clear();
     const stars = starOf(this.line.ratio);
-    const reward = Math.floor(this.goldEarned + this.levelDef.baseGold * (1 + stars * 0.1));
+    const battleGold = Math.floor(this.goldEarned + this.levelDef.baseGold * (1 + stars * 0.1));
     const sv = loadSave();
-    this.creditBattleGold(reward);
     const loot = this.loot.collectAll();
-    loot.materials = grantStageMaterials(this.levelDef);
     const sk = starKey(this.levelDef.id, this.levelDef.difficulty);
+    const firstWinGold = claimEarlyFirstWinGold(this.levelDef.id, this.levelDef.difficulty, sv.stars[sk] || 0);
+    const reward = battleGold + firstWinGold;
+    const firstGift = firstLevelVictory(this.levelDef.id, this.levelDef.difficulty, sv.stars[sk] || 0);
+    if (firstGift) loot.equipment.push(firstGift);
+    if (secondLevelVictory(this.levelDef.id, this.levelDef.difficulty)) loot.heroes = ['pyro'];
+    const thirdGift = thirdLevelVictory(this.levelDef.id, this.levelDef.difficulty, sv.stars[sk] || 0);
+    if (thirdGift) loot.equipment.push(thirdGift);
+    loot.equipment.push(...fifthLevelVictory(this.levelDef.id, this.levelDef.difficulty, sv.stars[sk] || 0));
     sv.stars[sk] = Math.max(sv.stars[sk] || 0, stars);
     if (this.levelDef.id === '1-2') sv.speedUnlocked = true;
+    // Only this guarded win transition grants diamonds; panel redraws and ads never grant them again.
+    sv.diamonds += this.levelDef.baseDiamonds;
+    // Diamonds/first-win receipts/stars/equipment share this write; gold keeps its existing delta guard.
+    this.creditBattleGold(reward);
     saveSave();
     advanceUnlock(this.levelDef.id);   // 通关推进主线解锁（商店英雄/装备的"通关 X 解锁"）
 
-    this.panels.showWin({
+    this.pendingWinPanel = {
       stars,
       loot,
       gold: reward,
+      diamonds: this.levelDef.baseDiamonds,
+      firstWinGold,
       ratio: this.line.ratio,
-      xp: Math.floor(this.xpEarned),
       onDouble: (done: (ok: boolean) => void) => {
         AdService.showRewarded('double', () => {
           if (this.leaving || !isValid(this, true) || this.doubleRewarded) return;
@@ -552,15 +775,38 @@ export class BattleDirector extends Component {
           done(true);
         }, () => { if (!this.leaving && isValid(this, true)) done(false); });
       },
-      onNext: () => {
-        // 直进下一关（用户调整：不回主城）；无下一关回关卡页，同难度未解锁降回普通
-        const nid = nextLevelId(this.levelDef.id);
-        if (!nid) { this.exitBattle(); return; }
-        const d = flow.diff > 0 && (loadSave().stars[starKey(nid, flow.diff - 1)] || 0) < 1 ? 0 : flow.diff;
-        this.changeScene('battle', nid, d);
-      },
       onExit: () => this.exitBattle(),
-    });
+    };
+    this.showPendingWinPanel();
+  }
+
+  private showPendingWinPanel(): void {
+    if (!this.pendingWinPanel || this.victoryDelayT > 0 || this.state !== 'win' || this.leaving) return;
+    const options = this.pendingWinPanel;
+    this.pendingWinPanel = null; this.victoryDelayT = -1;
+    this.panels.showWin(options);
+  }
+
+  private completeEndlessFloor(): void {
+    if (!this.isEndless || this.endlessCleared >= this.endlessFloor) return;
+    this.pendingWin = false; this.endlessCleared = this.endlessFloor; this.endlessRest = 3;
+    this.bossWarning.clear();
+    // Delta payment and a per-chapter best survive leaving or refreshing between floors.
+    this.creditBattleGold(this.goldEarned);
+    recordEndlessFloor(this.endlessChapter, this.endlessCleared);
+    this.loot.collectAll();
+    this.hud.showBanner('第' + this.endlessCleared + '层通过 · 3秒后继续', 2.8);
+  }
+
+  private finishEndless(): void {
+    if (!this.isEndless || this.state === 'lose' || this.state === 'win' || this.leaving) return;
+    this.state = 'lose'; this.pendingWin = false; this.endlessRest = -1;
+    this.bossWarning.clear(); this.ultPresentation.clear();
+    this.creditBattleGold(this.goldEarned);
+    const loot = this.loot.collectAll();
+    this.panels.showEndless({ cleared: this.endlessCleared, floor: this.endlessFloor,
+      best: endlessBest(this.endlessChapter), newBest: this.endlessCleared > this.endlessStartingBest,
+      gold: Math.floor(this.goldEarned), loot, onExit: () => this.changeScene('main', this.battleSceneId, 0) });
   }
 
   /* ---------- GM 后台（GmPanel 专用入口） ---------- */
@@ -647,6 +893,15 @@ export class BattleDirector extends Component {
   }
 
   private exitBattle(): void {
+    if (this.isEndless && this.state !== 'lose' && this.state !== 'win') { this.finishEndless(); return; }
+    // After a chapter-ending victory, focus the newly available chapter without starting battle.
+    const completed = campaignStage(this.levelDef.id);
+    const next = completed && CAMPAIGN_STAGES[completed.order + 1];
+    if (!this.isEndless && this.state === 'win' && completed && next && next.chapter !== completed.chapter
+      && campaignLevelOpen(next.id, loadSave().stars)) {
+      this.changeScene('main', next.id, 0);
+      return;
+    }
     this.changeScene('main', this.levelDef.id, flow.diff);
   }
 
@@ -668,8 +923,14 @@ export class BattleDirector extends Component {
     GameAudio.battleState('leaving');
     flow.mode = mode; flow.levelId = levelId; flow.diff = diff;
     if (mode === 'main') {
-      flow.mainTab = 2;
-      flow.levelReturn = { id: levelId, diff };
+      const bowLesson = !this.isEndless && pendingBowLesson();
+      flow.mainTab = bowLesson ? 1 : 2;
+      flow.levelReturn = bowLesson ? null : { id: levelId, diff };
+      if (!this.isEndless && !bowLesson && pendingPyroSquadLesson()) flow.levelReturn = { id: '1-3', diff: 0 };
+      if (bowLesson) { loadSave().curHero = 'archer'; saveSave(); }
+      flow.endlessPage = this.isEndless;
+      if (this.isEndless) { flow.mainTab = 4; flow.levelReturn = null; }
+      flow.endlessChapter = 0;
     }
     const failed = (error?: Error | null): void => {
       if (!error || !isValid(this, true)) return;

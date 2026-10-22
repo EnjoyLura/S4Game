@@ -1,0 +1,42 @@
+{
+  "samples": [
+    {
+      "id": "snow_wolf",
+      "frames": 32,
+      "cycle_ms": 1280,
+      "endpoint_matrix_error": 1.3877787807814457e-17,
+      "folds": 0,
+      "minimum_work_canvas_margin": 104,
+      "atlas_matches_frames": true
+    },
+    {
+      "id": "rift_hound",
+      "frames": 32,
+      "cycle_ms": 1280,
+      "endpoint_matrix_error": 5.684341886080802e-14,
+      "folds": 0,
+      "minimum_work_canvas_margin": 103,
+      "atlas_matches_frames": true
+    },
+    {
+      "id": "eagle",
+      "frames": 32,
+      "cycle_ms": 960,
+      "endpoint_matrix_error": 1.92367069372179e-18,
+      "folds": 0,
+      "minimum_work_canvas_margin": 91,
+      "atlas_matches_frames": true
+    },
+    {
+      "id": "bat",
+      "frames": 32,
+      "cycle_ms": 640,
+      "endpoint_matrix_error": 7.105427357601002e-14,
+      "folds": 0,
+      "minimum_work_canvas_margin": 102,
+      "atlas_matches_frames": true
+    }
+  ],
+  "archive_megabytes": 62.49,
+  "check_scope": "offline image assets only; game/browser not run"
+}

@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-21",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in reference generation followed by one targeted edit",
+  "user_feedback": [
+    "likes the actual wolf rider face and animal-skull helmet",
+    "generated faces too human",
+    "bodies too muscular",
+    "clothing too fragmented"
+  ],
+  "reference": {
+    "path": "C:/Users/user/AppData/Local/Temp/codex-clipboard-a4d0c27f-f5d6-4d6d-846c-c582994868c4.png",
+    "role": "Actual rider face and substantial bone helmet design reference",
+    "sha256": "e5a56b43ded8c22261f6db25f64a6c6533f0d6b78395d783fe747c41313e9c8f"
+  },
+  "prompts": [
+    "prompt.txt",
+    "refinement-prompt.txt"
+  ],
+  "outputs": [
+    {
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-747a2585-f049-4ff4-8fb1-9227ace90be7.png",
+      "file": "skull-grunt-initial.png",
+      "sha256": "69ccbf3bc0451a6cbf281e64e755d6346224c668789ac0769368e4caee4243b2"
+    },
+    {
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-3001326e-7020-46e8-bd1c-b30b63272194.png",
+      "file": "skull-grunt-front.png",
+      "sha256": "4333af0791a370b220a16ab98ba0be0043e20e09e1f660e4cb15e72b4dfb1117"
+    }
+  ],
+  "selected_output": "skull-grunt-front.png",
+  "original_bytes_preserved": true,
+  "visual_inspection": {
+    "initial": "Large recognizable skull helmet and animal muzzle; figure remained angled and limbs showed athletic definition, so edited again.",
+    "refined": "Face and torso front, thin arms and legs, narrow body, no bare chest or abdominal definition. Tunic simplified to one broad mass; blade down, no extra props.",
+    "limitations": "Some painted limb anatomy and surface variation remain. Frontal skull reinterpretation and facial proportions are still pending user judgement. Concept on opaque ivory background, not a transparent animation master."
+  },
+  "user_visual_approval": "pending",
+  "game_integrated": false
+}

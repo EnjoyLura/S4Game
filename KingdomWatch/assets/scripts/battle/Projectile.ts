@@ -27,6 +27,13 @@ export interface ProjSpec {
   ttl?: number;
   /** 命中后穿透余量（转直线继续飞） */
   pierce?: number;
+  /** Damage retained after each pierced target; omitted on ordinary piercing shots. */
+  pierceDamage?: number;
+  /** One straight return to the launch point, with one contact per target on each leg. */
+  returnDamage?: number;
+  knockback?: number;
+  /** One nearby secondary hit; it never launches another arc or a skill. */
+  arcDamage?: number;
   explodeR?: number;
   explodeMul?: number;
   /** 最终命中时分裂出 n 支小弹 */
@@ -39,6 +46,12 @@ export interface ProjSpec {
   slowRatio?: number;
   slowDur?: number;
   burnDps?: number;
+  burnDur?: number;
+  burnBurst?: number;
+  burnHealCut?: number;
+  teamVuln?: number;
+  /** 火法灼烧覆盖爆炸内目标；其他英雄默认仍只处理直接命中。 */
+  burnSplash?: boolean;
   /** 命中眩晕 s（震慑：陨石落点眩晕） */
   stun?: number;
   /** 雷系感电：命中后目标受伤 +shockAmp 持续 shockDur s */
@@ -55,6 +68,9 @@ export interface ProjSpec {
   shockedBonus?: number;   // 对感电中目标伤害加成（雷普攻15级）
   burnedBonus?: number;   // 对灼烧中目标伤害加成（火普攻15级）
   slowedBonus?: number;   // 对减速中目标伤害加成（冰普攻15级）
+  coldBonus?: number;     // 碎冰卡：冰法自身对减速或冰封目标的独立增伤
+  freezeChance?: number; // 冰棱实际命中时判定，发射/落空不触发
+  freezeDuration?: number;
   /** 猎杀标记（狙大招10级）：命中后目标受伤 +markAmp 持续 markDur s */
   markAmp?: number;
   markDur?: number;
@@ -77,13 +93,17 @@ interface Active {
   spec: ProjSpec;
   vx: number; vy: number;
   pierceLeft: number;
-  hit: Set<Monster>;
+  hit: Set<number>;
   ttl: number;
   age: number;
   trail: number[];
   trailMax: number;
   fxSeed: number;
   ultContact: boolean;
+  damageScale: number;
+  returning: boolean;
+  legLeft: number;
+  returnDistance: number;
 }
 
 const colorCache = new Map<string, Color>();
@@ -103,6 +123,8 @@ function cola(h: string, mul: number): Color {
 }
 
 export class ProjectileManager {
+  /** Reused sweep records, bounded by the 60 living-enemy limit. */
+  private contacts = Array.from({ length: 60 }, () => ({ mob: null as Monster | null, t: 0 }));
   private active: Active[] = [];
   private free: Active[] = [];
   private g!: Graphics;
@@ -125,10 +147,11 @@ export class ProjectileManager {
     const a = this.free.pop() || this.makeActive();
     a.spec = spec;
     a.hit.clear();
-    if (spec.exclude) a.hit.add(spec.exclude);
+    if (spec.exclude) a.hit.add(spec.exclude.lifeId);
     a.pierceLeft = spec.pierce || 0;
     a.ttl = spec.ttl ?? 3.2;
     a.age = 0; a.ultContact = false;
+    a.damageScale = 1; a.returning = false; a.legLeft = a.returnDistance = 0;
     a.fxSeed = (++this.flightSerial * .61803398875) % 1;
     a.trail.length = 0;
     a.trailMax = spec.enemy ? 0 : spec.spark ? 9
@@ -138,6 +161,12 @@ export class ProjectileManager {
     const len = Math.sqrt(dx * dx + dy * dy) || 1;
     a.vx = dx / len * spec.speed;
     a.vy = dy / len * spec.speed;
+    if (spec.returnDamage && !spec.enemy) {
+      const ux = a.vx / spec.speed, uy = a.vy / spec.speed;
+      const exitX = ux > 0 ? (430 - spec.x) / ux : ux < 0 ? (-430 - spec.x) / ux : Infinity;
+      const exitY = uy > 0 ? (LO.half + 120 - spec.y) / uy : uy < 0 ? (-720 - spec.y) / uy : Infinity;
+      a.legLeft = a.returnDistance = Math.max(.01, Math.min(exitX, exitY, spec.speed * a.ttl));
+    }
     this.active.push(a);
     this.dirty = true;
     if (spec.heroId === 'sniper' && spec.ult) this.impacts?.sniperUltimateRelease(spec.x, spec.y, a.vx, a.vy);
@@ -145,7 +174,8 @@ export class ProjectileManager {
   }
 
   private makeActive(): Active {
-    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<Monster>(), ttl: 0, age: 0, trail: [], trailMax: 0, fxSeed: 0, ultContact: false };
+    return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<number>(), ttl: 0, age: 0, trail: [], trailMax: 0, fxSeed: 0, ultContact: false,
+      damageScale: 1, returning: false, legLeft: 0, returnDistance: 0 };
   }
 
   /** 敌方远程石块：直线落向防线，触线即结算 */
@@ -168,12 +198,16 @@ export class ProjectileManager {
     this.impacts?.normalRelease(hero, x, y, dx, dy, empowered);
   }
 
-  fireCraters(areas: readonly { x: number; y: number; t: number }[], radius: number, clock: number): boolean {
+  fireCraters(areas: readonly { x: number; y: number; t: number; life?: number; radius?: number }[], radius: number, clock: number): boolean {
     return this.impacts?.fireCraters(areas, radius, clock) || false;
   }
 
   frostDomain(x: number, y: number, radius: number, duration: number): void {
     this.impacts?.frostDomain(x, y, radius, duration);
+  }
+
+  frostGround(areas: readonly { x: number; y: number; radius: number; t: number; life: number }[]): void {
+    this.impacts?.frostGround(areas);
   }
 
   frostUltimate(targets: readonly FrostUltTarget[]): void { this.impacts?.frostUlt(targets); }
@@ -219,26 +253,17 @@ export class ProjectileManager {
         continue;
       }
 
-      // 直线弹：扫掠补偿按本帧位移的一半扩大判定半径，防高速弹穿过薄目标
-      if (!done) {
-        const sweep = (Math.abs(a.vx) + Math.abs(a.vy)) * dt * 0.5;
-        for (const m of this.mgr.list) {
-          if (m.dead || a.hit.has(m)) continue;
-          const dx = m.x - sp.x, dy = m.y - sp.y;
-          const rr = m.def.radius + (sp.size || 7) * 0.5 + sweep;
-          if (dx * dx + dy * dy <= rr * rr) {
-            a.hit.add(m);
-            this.hitMob(a, m);
-            if (a.pierceLeft > 0) a.pierceLeft--;
-            else { done = true; }
-            break;
-          }
-        }
+      if (sp.returnDamage && !sp.enemy) {
+        if (this.advanceReturning(a, dt)) this.recycle(i, a);
+        continue;
       }
 
+      const startX = sp.x, startY = sp.y, stepX = a.vx * dt, stepY = a.vy * dt;
+      if (!sp.enemy) done = this.hitSweep(a, startX, startY, stepX, stepY);
+
       if (!done) {
-        sp.x += a.vx * dt;
-        sp.y += a.vy * dt;
+        sp.x = startX + stepX;
+        sp.y = startY + stepY;
         if (a.trailMax > 0) {
           a.trail.push(sp.x, sp.y);
           while (a.trail.length > a.trailMax * 2) { a.trail.splice(0, 2); }
@@ -254,6 +279,73 @@ export class ProjectileManager {
       if (done) this.recycle(i, a);
     }
     if (this.dirty) { this.render(); this.dirty = false; }
+  }
+
+  private advanceReturning(a: Active, dt: number): boolean {
+    const sp = a.spec;
+    let remaining = dt;
+    // At most one turn. Clip both segments so neither fast frames nor the map edge lose contacts.
+    for (let leg = 0; leg < 2; leg++) {
+      const travel = Math.min(a.legLeft, sp.speed * remaining);
+      const sx = a.vx / sp.speed * travel, sy = a.vy / sp.speed * travel;
+      const x = sp.x, y = sp.y;
+      if (this.hitSweep(a, x, y, sx, sy)) return true;
+      sp.x = x + sx; sp.y = y + sy;
+      a.legLeft = Math.max(0, a.legLeft - travel);
+      remaining = Math.max(0, remaining - travel / sp.speed);
+      if (a.trailMax > 0) {
+        a.trail.push(sp.x, sp.y);
+        while (a.trail.length > a.trailMax * 2) a.trail.splice(0, 2);
+      }
+      if (a.legLeft > 1e-6) return false;
+      if (a.returning) return true;
+      a.returning = true;
+      a.vx = -a.vx; a.vy = -a.vy;
+      a.legLeft = a.returnDistance;
+      a.damageScale *= sp.returnDamage!;
+      a.pierceLeft = sp.pierce || 0;
+      a.hit.clear();
+      if (remaining <= 0) return false;
+    }
+    return false;
+  }
+
+  /** Exact segment/circle entries, in travel order. A piercing shot can hit several enemies in one step. */
+  private hitSweep(a: Active, x: number, y: number, sx: number, sy: number): boolean {
+    const sp = a.spec, length2 = sx * sx + sy * sy;
+    let count = 0;
+    for (const m of this.mgr.list) {
+      if (m.dead || a.hit.has(m.lifeId)) continue;
+      const dx = x - m.x, dy = y - m.y, radius = m.def.radius + (sp.size || 7) * .5;
+      const c = dx * dx + dy * dy - radius * radius;
+      let t = 0;
+      if (c > 0) {
+        if (length2 <= 1e-8) continue;
+        const b = dx * sx + dy * sy, discriminant = b * b - length2 * c;
+        if (b >= 0 || discriminant < 0) continue;
+        t = (-b - Math.sqrt(discriminant)) / length2;
+        if (t < 0 || t > 1) continue;
+      }
+      if (count >= this.contacts.length) break;
+      let index = count++;
+      while (index > 0 && this.contacts[index - 1].t > t) {
+        this.contacts[index].mob = this.contacts[index - 1].mob;
+        this.contacts[index].t = this.contacts[index - 1].t;
+        index--;
+      }
+      this.contacts[index].mob = m; this.contacts[index].t = t;
+    }
+    for (let i = 0; i < count; i++) {
+      const contact = this.contacts[i], m = contact.mob!;
+      if (m.dead || a.hit.has(m.lifeId)) continue;
+      sp.x = x + sx * contact.t; sp.y = y + sy * contact.t;
+      a.hit.add(m.lifeId);
+      this.hitMob(a, m); // Every contact retains the ordinary damage, sound, flash and on-hit path.
+      if (a.pierceLeft <= 0) return true;
+      a.pierceLeft--;
+      if (sp.pierceDamage !== undefined) a.damageScale *= sp.pierceDamage;
+    }
+    return false;
   }
 
   /** 渲染帧计数（电球等动态弹体的伪随机相位种子） */
@@ -544,9 +636,8 @@ export class ProjectileManager {
   private hitMob(a: Active, m: Monster): void {
     const sp = a.spec;
     if (sp.enemy) return;
-    const hpBefore = m.hp;
     // 目标词条在命中时结算：处决标记（精英/BOSS）+ 猎手本能（残血<30%）
-    const final = this.damageFor(sp, m);
+    const final = this.damageFor(sp, m, a.damageScale);
     const angle = Math.atan2(a.vy, a.vx);
     const heavy = !!sp.ult || sp.heroId === 'sniper' && !!sp.ability || sp.heroId === 'pyro' && !!sp.explodeR;
     m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true, sp.resCut || 0, angle, heavy);
@@ -558,8 +649,7 @@ export class ProjectileManager {
         bus.emit(EVT.ULTIMATE_BEAT, { hero: sp.heroId, x: sp.x, y: sp.y, energy: 1, contact: true });
       }
     }
-    this.dmg.add(sp.heroId, Math.min(final, hpBefore));
-    Sfx.impact(sp.heroId, heavy || sp.crit);
+    this.dmg.add(sp.heroId, m.lastDamageTaken);
     if (this.parts) {
       this.parts.burst(m.x, m.y, sp.color, heavy ? 5 : sp.spark ? 3 : 2, heavy ? 230 : 160, angle);
     }
@@ -571,19 +661,23 @@ export class ProjectileManager {
     if (sp.explodeR && sp.explodeR > 0) {
       for (const o of this.mgr.mobsInRadius(m.x, m.y, sp.explodeR)) {
         if (o === m || o.dead) continue;
-        const ob = o.hp;
-        o.takeDamage(sp.dmg * (sp.explodeMul || 0.4), false, sp.heroId, false, 0,
+        o.takeDamage(sp.dmg * a.damageScale * (sp.explodeMul || 0.4), false, sp.heroId, false, 0,
           Math.atan2(o.y - m.y, o.x - m.x));
-        this.dmg.add(sp.heroId, Math.min(sp.dmg * (sp.explodeMul || 0.4), ob));
+        this.dmg.add(sp.heroId, o.lastDamageTaken);
+        if (!o.dead && sp.burnSplash && sp.burnDps) o.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0);
         if (o.dead) this.killPop(sp, o.x, o.y + o.def.radius);
       }
       if (this.impacts) this.impacts.blast(m.x, m.y, sp.heroId, sp.explodeR);
       else this.boomFx(m.x, m.y, sp.explodeR);
     }
+    if (sp.arcDamage) this.hitArc(a, m);
     // Explosions still resolve when the directly struck enemy dies.
     if (m.dead) return;
+    if (sp.knockback) m.applyKnockback(sp.knockback);
     if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
-    if (sp.burnDps) m.applyBurn(sp.burnDps, 3);
+    if (sp.freezeChance && Math.random() < sp.freezeChance) m.applyFreeze(sp.freezeDuration || .6);
+    if (sp.burnDps) m.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0);
+    if (sp.teamVuln) m.applyVuln(sp.teamVuln, 3);
     if (sp.stun) m.stunT = Math.max(m.stunT, sp.stun);
     if (sp.shockAmp) m.applyShock(sp.shockAmp, sp.shockDur ?? 3);
     // 分裂箭：与原弹同造型/同弹速/同词条（仅伤害减半、不再连锁分裂），
@@ -605,11 +699,27 @@ export class ProjectileManager {
           x: m.x, y: m.y,
           dirX: dx / l, dirY: dy / l,
           dmg: sp.dmg * 0.5, crit: false,
-          split: 0, small: true, exclude: m,   // 不再连锁分裂；不打目标本体
+          split: 0, small: true, exclude: m, knockback: 0, arcDamage: 0, returnDamage: 0,
           ttl: Math.min(sp.ttl ?? 3.2, 0.8),   // 射空时在近处消散，不无限前飞
         });
       }
     }
+  }
+
+  private hitArc(a: Active, primary: Monster): void {
+    const sp = a.spec;
+    let target: Monster | null = null, nearest = 220 * 220;
+    for (const m of this.mgr.list) {
+      if (m.dead || m === primary) continue;
+      const d2 = (m.x - primary.x) ** 2 + (m.y - primary.y) ** 2;
+      if (d2 <= nearest) { target = m; nearest = d2; }
+    }
+    if (!target) return;
+    this.impacts?.voltChain(primary.x, primary.y, target.x, target.y, 0);
+    target.takeDamage(this.damageFor(sp, target, a.damageScale * sp.arcDamage!), sp.crit, sp.heroId,
+      sp.ignoreRes === true, sp.resCut || 0, Math.atan2(target.y - primary.y, target.x - primary.x));
+    this.dmg.add(sp.heroId, target.lastDamageTaken);
+    if (!target.dead && sp.shockAmp) target.applyShock(sp.shockAmp, sp.shockDur ?? 3);
   }
 
   private damageFor(sp: ProjSpec, m: Monster, scale = 1): number {
@@ -620,6 +730,7 @@ export class ProjectileManager {
     if (sp.shockedBonus && m.shockT > 0) amount *= 1 + sp.shockedBonus;
     if (sp.burnedBonus && m.burnT > 0) amount *= 1 + sp.burnedBonus;
     if (sp.slowedBonus && m.slowT > 0) amount *= 1 + sp.slowedBonus;
+    if (sp.coldBonus && (m.slowT > 0 || m.freezeT > 0)) amount *= 1 + sp.coldBonus;
     return amount;
   }
 
@@ -636,11 +747,11 @@ export class ProjectileManager {
       if (m.dead || (m.x - sp.x) ** 2 + (m.y - sp.y) ** 2 > r2) continue;
       // Preserve one full-strength central hit and the existing splash multiplier for neighbours.
       const direct = m === primary, amount = direct ? this.damageFor(sp, m) : sp.dmg * (sp.explodeMul || .4);
-      const before = m.hp, angle = Math.atan2(m.y - sp.y, m.x - sp.x);
+      const angle = Math.atan2(m.y - sp.y, m.x - sp.x);
       m.takeDamage(amount, direct && sp.crit, sp.heroId, direct && sp.ignoreRes === true, direct ? sp.resCut || 0 : 0, angle, direct);
-      this.dmg.add(sp.heroId, Math.min(amount, before));
+      this.dmg.add(sp.heroId, m.lastDamageTaken);
+      if (!m.dead && sp.burnDps && (direct || sp.burnSplash)) m.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0);
       if (direct && !m.dead) {
-        if (sp.burnDps) m.applyBurn(sp.burnDps, 3);
         if (sp.stun) m.stunT = Math.max(m.stunT, sp.stun);
         if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
       }
@@ -649,7 +760,6 @@ export class ProjectileManager {
     else this.boomFx(sp.x, sp.y, radius);
     this.parts?.burst(sp.x, sp.y, sp.color, 7, 230, Math.PI / 2);
     if (sp.heroId === 'pyro' && sp.ult) Sfx.ultimateImpact(sp.heroId);
-    else Sfx.impact(sp.heroId, true);
     if (primary) bus.emit(EVT.HIT_STOP);
   }
 

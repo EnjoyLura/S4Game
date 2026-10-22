@@ -1,0 +1,88 @@
+from pathlib import Path
+import json,re
+HERE=Path(__file__).resolve().parent
+ROOT=HERE.parents[1]
+read=lambda p:p.read_text(encoding='utf-8-sig')
+r=json.loads(read(HERE/'deployment-stage.json'));w=json.loads(read(HERE/'web-release.json'))
+assert r['published'] and r['staticHttpCheck']['newSceneHashMatches']
+build=json.loads(read(HERE/'build-record.json'))
+duration=re.search(r'build-project-total \((\d+)ms\)',read(Path(build['log']))).group(1)
+upload=re.search(r'Uploaded (\d+) files \((\d+) already uploaded\)',read(HERE/'publish.log'))
+assert upload
+text=f'''# 基地无尽挑战 v59
+
+[正式游戏]({r['game']}) · [本次部署]({r['deployment']})
+
+用户要求：把工坊替换为无尽模式入口，通关每章第10关解锁对应挑战；怪物种类包含该章及之前章节。
+
+## 入口与解锁
+
+基地右侧工坊已改为挑战之门，名牌「无尽挑战」。未解锁也可查看挑战列表与解锁条件，不能进入战斗。老存档按已有通关星数立即开放，无需重打。
+
+| 挑战 | 解锁条件 | 怪物来源 | 场景 |
+| --- | --- | --- | --- |
+| 前哨挑战 | 普通1-10至少1星 | 第1章 | 前哨战场 |
+| 深林挑战 | 普通2-10至少1星 | 第1、2章 | 深林战场 |
+| 兽穴挑战 | 普通3-10至少1星 | 第1、2、3章 | 兽穴战场 |
+
+入口点击与Boot场景启动均检查真实通关记录；主线入口明确清空无尽标记。空编队拦截、转场互斥、失败恢复原流程标记、关门音效及战斗音乐时序沿用现有实现。
+
+**当前三个章节的正式出怪配置复用了同一批6种怪物**：哥布林苦工、投石手、萨满、狼骑兵、大哥布林精英、哥布林王。本轮没有新增章节独有怪物；新模式从各章普通关卡真实配置取并集，之后新增章节专属怪物会自动进入对应及后续挑战，不会提前进入较早挑战。
+
+## 攀层与战斗
+
+- 每次新挑战从第1层开始，没有预设最后一层；只生成当前层队列，清场后生成下一层。
+- 全部怪物消灭且本轮大招完成后计为通层，休整3个游戏秒再前进；暂停、选卡、GM面板期间不推进休整，选卡和大招缓冲处理完才进入下一层。
+- 每层普通兵种分批入场；第3层及其倍数、首领层加入精英；每5层加入1只首领。多个Boss物种按首领层轮换，不把Boss数量乘成怪群。
+- 数量逐层增长并设队列上限，生命/攻线伤害继续增长。现有同屏怪物池满时延迟出怪，不丢怪。
+- 英雄、装备、培养来自当前出战编队。技能/大招仍需每局选卡学习，已有卡池与权重保持。
+- 本局强化、伤害统计、技能冷却、充能、耐久、护盾跨层保留，不重建英雄或防线；已有回血/冷却在休整时自然推进。
+- 可选强化全部学满后继续战斗，不弹空的三选一。
+- HUD显示「第N层」，首领/精英横幅也显示层数；背景和BGM跟随挑战章节。
+
+初始数值在 `assets/scripts/config/Endless.ts`。令n=层数−1，章节倍率=1.7^(章号−1)：
+
+- 生命倍率：章节倍率 × (1 + 0.12n + 0.004n²)。
+- 伤害倍率：章节倍率 × (1 + 0.06n + 0.0015n²)。
+- 单个主要普通兵种16起、最高48只；其余普通兵种6起、最高24只，各章起始量略增；精英每种最多4只；首领每5层1只。
+- 实际数值包含既有全怪生命×2、伤害÷3；使用actual数值和fixedWaves，不再叠普通关卡逐波倍率。
+
+这些是本轮初始值，尚未进行实战数值验收。
+
+## 纪录与奖励
+
+每个挑战分别保存最高**已通过**层数，存档可选字段 `endless: {{version:1,best:{{"1":N,"2":N,"3":N}}}}`。旧存档不重置。
+
+奖励先使用已有击杀金币，不另设钻石、层数底薪、装备掉落、广告加倍或广告复活。每层通过时按本局金币累计目标支付未发差额；失败或暂停页「结束挑战」时结清当前层已击杀金币，专用结算显示本次通层、抵达层、历史最高和本局金币，然后返回基地。已付金币不重复发放。刷新仅保留已存的通层纪录和金币；不会续接中断的战局，下次仍从第1层开始。
+
+无尽清场在普通胜利事务之前分支，不写主线星级、解锁关卡或领取首通奖励，不发普通通关钻石。各章纪录相互独立。
+
+## 美术
+
+使用内置 **image_gen** 编辑完整基地场景。替换右侧工坊为蓝金旗帜、交叉双剑标志、石阶和青色门洞的挑战之门，保留庭院布局、主城、研究院和统一透视风格；没有叠放独立建筑。生成式编辑可能对周围笔触有细小变化，不声称逐像素相同。
+
+- [接入的新场景PNG](../../assets/resources/scenes/bg_base_endless_v59.png)：1086×1448，生成文件原字节复制，无裁切、重采样或后期图像编辑。
+- [完整生图提示词](art-prompt.txt)。
+- [来源、UUID和SHA256](art.json)。
+- 原 `bg_base_comic_v1.jpg` 与meta保留；新图和两份新增TS具有独立UUID。既有建筑锚点和滚动同步方式沿用。
+
+## 静态检查、构建与发布
+
+- 对照改动前1964份脚本/资源/模板/工具：11份原脚本变化，1953份原文件保持；新增2份TS、1张PNG及各自meta共6份文件。完整差异见 [review.diff](review.diff)。
+- TypeScript检查保留原10条诊断，规范化行列后与此前相同，没有新增诊断；不是无错误类型检查。见 [types-after.log](types-after.log)。
+- Hero.ts、Cards.ts、Mobs.ts、LevelDifficulty.ts、Campaign.ts、武器/装备/商店/图鉴及所有原媒体保持；雷法v58修复仍在，产物中没有父类prototype大招getter访问。
+- Creator3.8.8 web-mobile production/MD5构建退出{build['exitCode']}，耗时{duration}ms；执行DPR补丁与缓存准备，引擎修订仍为{w['engineRevision']}。
+- 保留712份原生资源及793份历史预览的内容和路径，唯一新增原生媒体是基地PNG，与生成源SHA256一致。
+- Wrangler main上传{upload.group(1)}份、复用{upload.group(2)}份；部署返回成功。
+- 只读HTTP核对正式网址200、入口 `{w['entry']}`、主包及新图SHA256与发布目录一致。
+- **未执行游戏、浏览器、测试、战斗模拟、音频试听或交互验收；实际效果由用户人工验收。** 无Git提交，已有工作与.tmp-kwsfx保留。
+
+交付记录：[deployment-stage.json](deployment-stage.json)、[build-record.json](build-record.json)、[web-release.json](web-release.json)。
+'''
+(HERE/'README.md').write_text(text,encoding='utf-8')
+ledger=f'2026-10-19 用户要求工坊改无尽入口、每章通关10关解锁累计怪池；已发布[基地无尽挑战v59](docs/endless-challenge-v59/README.md)，游戏 {r["game"]} ，部署 {r["deployment"]} 。基地右侧完整场景image_gen编辑为挑战之门，原字节1086×1448PNG版本化接入，原场景保留；建筑锚点与滚动同步保持，无独立建筑叠图。1-10/2-10/3-10真实普通星数分别开放前哨/深林/兽穴，点击及Boot双重守卫；怪池从截至对应章的普通关卡配置取并集。目前三章实际复用6怪，没有新增章节独有物种。每局1层起，无预设末层，单层队列清场并等待大招结束后记通层，休整3游戏秒、选卡/大招缓冲处理完再前进；每3层/首领层精英、每5层1Boss，数量有界、血伤增长，保留本局强化/能量/冷却/防线/统计，学满卡不弹空选项。逐挑战最高已通层可选字段endless.best即时保存；金币沿已有击杀值，通层差额入账，失败/主动结束结清当前击杀并专用结算回基地，不续接中断战局、不发钻石/装备/广告复活。普通主线奖励/星数/首通不串账。1964原文件仅11脚本改动、1953保持，新增2TS/PNG及meta共6；原712媒体和793预览SHA保持，原10类型诊断无新增，雷法v58修复保持。Creator{duration}ms退出36，DPR/缓存/引擎{w["engineRevision"]}保持。Wrangler main上传{upload.group(1)}复用{upload.group(2)}，入口200、主包与新图SHA一致。未运行游戏/浏览器/测试/模拟/音频，实际视觉交互与初始平衡用户人工验收。无Git提交，原工作及.tmp-kwsfx保持。'
+for name in ['README.md','AGENTS.md']:
+    p=ROOT/name;old=read(p)
+    first,rest=old.split('\n',1)
+    p.write_text(first+'\n\n'+ledger+'\n'+rest,encoding='utf-8')
+print('Delivery docs and README/AGENTS ledger updated. No game code changed after publication.')

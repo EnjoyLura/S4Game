@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-19",
+  "tool": "built-in image_gen",
+  "mode": "edit with local target and reference images",
+  "purpose": "Endless map deployment buttons and campaign-style preparation sheet",
+  "confirmedUserRequirements": [
+    "Reuse campaign preparation and team layout",
+    "Endless farms gold and equipment",
+    "No star chests or difficulty selection"
+  ],
+  "integratedIntoGame": false,
+  "published": false,
+  "userVisualApproval": "pending",
+  "liveVersionUnchanged": "endless-challenge-v59",
+  "equipmentDropStatus": "Current live endless gearPool empty; feature requires implementation",
+  "assets": [
+    {
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-a973ba6a-0e96-44dc-bafb-0060e410571a.png",
+      "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\endless-deployment-layout-v62\\endless-map-deployment-v62.png",
+      "width": 887,
+      "height": 1774,
+      "sha256": "aed39d3202df344733cd976491384386ee745e05a3844a5129a22ec4b6afa7fa",
+      "copiedOriginalBytes": true,
+      "prompt": "map-prompt.txt",
+      "references": [
+        "docs/endless-world-map-concept-v61/endless-world-map-ux-v61.png",
+        "C:/Users/user/AppData/Local/Temp/codex-clipboard-4c8ea9a9-d3c8-4e47-80d1-e07a86dca64d.png"
+      ]
+    },
+    {
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-94208c20-2d16-4b19-b2e0-bd6d4a1dc56a.png",
+      "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\endless-deployment-layout-v62\\endless-preparation-v62.png",
+      "width": 887,
+      "height": 1774,
+      "sha256": "906d0dce504d7ea7e6a967a6fc30d28b6b5b8f525bd995d810b8719a32260094",
+      "copiedOriginalBytes": true,
+      "prompt": "preparation-prompt.txt",
+      "references": [
+        "docs/endless-deployment-layout-v62/endless-map-deployment-v62.png",
+        "C:/Users/user/AppData/Local/Temp/codex-clipboard-36d9b488-5a8b-485d-8594-631ab426be35.png",
+        "assets/resources/ux/weapons_v1/green_bow_v2.png",
+        "assets/resources/ux/weapons_v1/green_book.png",
+        "assets/resources/ux/shop_comic_v1/comic_helm_falcon_v1.png"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+[
+  {
+    "id": "snow_wolf",
+    "path": "assets\\resources\\ux\\mobs_snow_v66.png",
+    "atlas_rect": [
+      22,
+      56,
+      475,
+      455
+    ],
+    "source_crop": [
+      3,
+      2,
+      473,
+      452
+    ],
+    "scale": 1.6595744680851063,
+    "work_position": [
+      122,
+      158
+    ],
+    "work_size": [
+      1024,
+      1024
+    ],
+    "original_sha256": "2bb8fb9bf40a0204213fd90e47094e2c30893169577d32f6eff9686c7466af0c",
+    "cutout_sha256": "9167f09bfe289b3772c26ac7a7227325a127830077079f316aab7dd082399aab",
+    "normalized_sha256": "231f6e11a593d07eba24eb549e14338185a88b2a76dbd49cfc8da9e608324f13",
+    "preprocessing": "existing atlas alpha"
+  },
+  {
+    "id": "rift_hound",
+    "path": "assets\\resources\\ux\\mobs_rift_v66.png",
+    "atlas_rect": [
+      36,
+      105,
+      476,
+      398
+    ],
+    "source_crop": [
+      3,
+      2,
+      476,
+      396
+    ],
+    "scale": 1.6490486257928119,
+    "work_position": [
+      122,
+      255
+    ],
+    "work_size": [
+      1024,
+      1024
+    ],
+    "original_sha256": "277f6be9c9c1b4be5792f59d53ff6ec5a17af0400fb7023ad26b756a2ba944e9",
+    "cutout_sha256": "4ac17a99c0da8069fd9f483b0f12fc304faa97df837139b23264fa2c157b515a",
+    "normalized_sha256": "d1ea57aa2f917bd6f7a07f0326152374fe6af9f83f1985d1e46f7d31c71b6881",
+    "preprocessing": "existing atlas alpha"
+  },
+  {
+    "id": "eagle",
+    "path": "docs\\frontier-new-enemies-v1\\sources\\eagle-front-green-v2-safe-margin.png",
+    "atlas_rect": null,
+    "source_crop": [
+      284,
+      251,
+      1251,
+      735
+    ],
+    "scale": 0.827300930713547,
+    "work_position": [
+      112,
+      312
+    ],
+    "work_size": [
+      1024,
+      1024
+    ],
+    "original_sha256": "6eaf59a8b58069db2a7adbc449bc8545ad10775b8c2953f8e00119c9d986fae1",
+    "cutout_sha256": "ff85009a227ea3d64cec3cdb5c2224e606d406bb0fcbeb80fb79bfb4d126e67d",
+    "normalized_sha256": "57310dfdca74baeeca836cf6f6e648331b490f6299f141c4b93d1962eed1e8ea",
+    "preprocessing": "green chroma key; archived RGBA cutout"
+  },
+  {
+    "id": "bat",
+    "path": "docs\\frontier-new-enemies-v1\\sources\\bat-front-green-v2-safe-margin.png",
+    "atlas_rect": null,
+    "source_crop": [
+      252,
+      282,
+      1284,
+      750
+    ],
+    "scale": 0.7751937984496124,
+    "work_position": [
+      112,
+      330
+    ],
+    "work_size": [
+      1024,
+      1024
+    ],
+    "original_sha256": "0628387e987897d815032c441be34156723d35466980bd452c6b10f248a0126a",
+    "cutout_sha256": "c08bd0528c0ef8c10746307213a1d5247fccbc446c3007440b3e57f626e125d4",
+    "normalized_sha256": "e9935a4349fc47bf952642ff5bae20bc2b978b5138b2901e208e2a4ee6723e85",
+    "preprocessing": "green chroma key; archived RGBA cutout"
+  }
+]

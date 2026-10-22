@@ -1,6 +1,6 @@
 /**
  * 强化卡（§6 卡池，按英雄单独强化 + 全局卡；M0 弓箭手子集）
- * 卡效果直接改写 HeroStats / 全局 Stats；desc 支持显示当前叠层
+ * 卡效果直接改写 HeroStats / 全局 Stats；desc 只说明本次效果、触发条件与代价
  */
 import { PAL } from './GameConfig';
 
@@ -9,12 +9,12 @@ export const RARITY_COLOR: Record<Rarity, string> = { white: PAL.white, blue: PA
 // Relative weights; adding gold keeps existing rarity/type weights intact.
 const RARITY_WEIGHT: Record<Rarity, number> = { white: 0.6, blue: 0.3, purple: 0.1, gold: 0.05 };
 type OfferGroup = 'stats' | 'combat' | 'support';
-/** Multiplies rarity weight, not an absolute offer probability. */
-const OFFER_GROUP_WEIGHT: Record<OfferGroup, number> = { stats: 0.3, combat: 2, support: 1 };
+/** 普攻机制/技能/大招卡优先；同品质单卡权重是通用数值卡的30倍，并非固定出现概率。 */
+const OFFER_GROUP_WEIGHT: Record<OfferGroup, number> = { stats: 0.1, combat: 3, support: 1 };
 
 /** 英雄战斗属性（卡牌改写目标；M0 弓箭手） */
 export interface HeroStats {
-  skillUnlocked: boolean; // 当局通过解锁卡学习；局外等级/突破不自动开启
+  skillUnlocked: boolean; // 基础技能随上阵可用，局内卡改变构筑
   ultUnlocked: boolean;
   atk: number;          // 独立基础攻击力（含局外成长及装备）
   skillDmg: number;     // 独立基础技能伤害（含局外成长及装备；不是百分比）
@@ -22,8 +22,10 @@ export interface HeroStats {
   aspd: number;         // 攻速 次/s（累乘）
   range: number;        // 普攻索敌范围
   skillRange: number;   // 技能索敌范围
-  skillPierce?: number; // 重弩手技能弩箭额外穿透数；不影响普攻和大招
+  skillPierce?: number; // 重弩手技能额外穿透数；贯颅弩矢只强化技能，大招保持无限贯穿
   ultMarkAmp?: number;  // 死亡准星：大招命中后受到伤害增幅，持续5秒
+  archerKnockback?: number; // 震退箭：每四轮首支主箭的击退距离
+  sniperReturn?: number; // 回旋弩矢：大招返程伤害倍率
   critRate: number;     // 暴击率
   critMul: number;      // 暴击伤害倍率
   serial: number;       // 连射：追加的弹幕排数（每排与首排同列数，列×排网格）
@@ -47,8 +49,24 @@ export interface HeroStats {
   ultDmgMul: number;    // 大招额外伤害加成（战吼，累乘）
   ultStun: number;      // 大招命中眩晕 s（震慑，覆盖）
   ultHaste: number;     // 大招后攻速加成标记（士气高涨，0/1）
-  burnMul: number;      // 灼烧伤害倍率（余烬，累乘）
+  burnMul: number;      // 局外突破等灼烧伤害倍率；火法余烬卡另用pyroBurnBonus
+  pyroBurnBonus?: number; // 火法余烬卡：+50%/层，独立于局外灼烧倍率，最多+150%
+  pyroBlastMul?: number;  // 火法爆裂范围：放大普攻/技能/陨石爆炸与技能火区，不改索敌和陨石坑
+  pyroLinger?: number;    // 火法余火绵延：灼烧、火区与陨石坑持续时间各+s
+  pyroMeteorBonus?: number; // 火法陨石增援：额外陨石数
+  pyroUltHitMul?: number; // 陨星威能：仅大招直接/溅射伤害，不放大灼烧
+  pyroSplashBurn?: boolean; // 烈焰附着：普攻溅射也附加灼烧
+  pyroBurnBurst?: number; // 余烬爆破：燃烧敌人死亡爆炸，爆炸本身不递归引爆
+  pyroFirefield?: number; // 灼热火区：技能末颗火球落点留下火区的基础秒数
+  pyroHealCut?: number; // 焦灼禁疗：自身灼烧附带的治疗削减比例
+  pyroGiantEvery?: number; // 熔火巨弹：每多少次普攻发射巨型火球
+  moraTeamVuln?: number; // 冰裂印记：冰系命中给全队提供短暂易伤
   shockOnHit: number;   // 雷系命中感电：目标受伤 +25% 持续 3s（感电卡，0=无）
+  voltShockBonus?: number; // 高压电流：仅雷法自身对感电目标伤害+30%/层
+  voltShockLinger?: number; // 余电不散：所有雷法来源感电持续+s
+  voltStrikeBonus?: number; // 雷暴增援：额外真实落雷数
+  voltOverload?: number; // 过载麻痹：连锁命中已有感电目标的眩晕概率
+  voltArc?: number; // 电弧普攻：一次额外跳跃的伤害倍率
   chargeEff: number;    // 装备充能效率词条：击杀充能 ×(1+eff)（累加）
   pierceChance: number; // 英雄突破：普攻贯穿概率（0~1，累加）
   defIgnore: number;    // 英雄突破：无视防御比例（0~1，累加）
@@ -64,9 +82,16 @@ export interface HeroStats {
   novaStun: number;     // 技能·领域冻结时长 s（冰 1.5，突破80级 1.9）
   freezeProc: number;   // 突破·普攻概率冰冻时长 s（冰70级 0.6，概率固定 15%）
   slowedBonus: number;  // 技能升级·对减速目标伤害加成（冰普攻15级 0.25）
-  slowAmpBonus: number; // 卡·凛冬之息/绝对零度：冰系减速幅度加成（普攻/领域/大招减速比率累加，结算上限 0.9）
-  ultSlowDur: number;   // 卡·寒冬延续/绝对零度：大招减速持续 +s（累加）
-  freezeChance: number; // 卡·速冻之心：普攻冰冻几率（冰基础 0.15，累加）
+  slowAmpBonus: number; // 凛冬之息：冰系减速比率累加，结算上限 0.9
+  ultSlowDur: number;   // 兼容既有大招减速额外时长；新寒冬延续走 moraSlowLinger
+  freezeChance: number; // 70级突破的普攻冰冻基础概率；无突破时不自动生效
+  moraFreezeChanceBonus?: number; // 速冻之心：每层命中冰冻概率+15%，可独立启用
+  moraColdBonus?: number; // 碎冰：冰法自身对减速/冰封目标伤害+30%/层
+  moraSlowLinger?: number; // 寒冬延续：所有冰法减速与霜地持续+s，不增加冰封时间
+  moraFreezeLinger?: number; // 冰封延长：仅冰霜领域冰封持续+s
+  moraUltFreeze?: number; // 绝对零度：大招命中冰封s，解冻后才开始减速
+  moraPierce?: number; // 穿霜冰锥：普攻额外穿透数，后续目标伤害70%
+  moraGround?: number; // 凝霜地带：技能留下减速地带的基础秒数
   atkLv: number;        // 技能升级等级（战斗内读里程碑：普攻/技能/大招槽）
   skillLv: number;
   ultLv: number;
@@ -128,6 +153,21 @@ export function voltUltCfg(u: number): { boltMul: number; rMul: number; shockOn:
   return { boltMul: (2.2 + (u >= 20 ? 0.4 : 0)) * (1 + (u - 1) * 0.08), rMul: u >= 5 ? 1.2 : 1, shockOn: u >= 10, chargeOn: u >= 15 };
 }
 
+/** 雷法强化的战斗/提示共用配置；额外落雷延续原五道一组的节奏。 */
+export function voltShockDuration(s: HeroStats): number { return 3 + (s.voltShockLinger || 0); }
+export function voltShockedMultiplier(s: HeroStats, normal = false): number {
+  return (1 + (s.voltShockBonus || 0)) * (1 + (normal ? s.shockedBonus || 0 : 0));
+}
+export function voltShockAmp(s: HeroStats, ultimate = false): number {
+  return Math.max(s.shockOnHit || 0, ultimate && voltUltCfg(s.ultLv).shockOn ? .25 : 0) * (s.shockAmpMul || 1);
+}
+export function voltStrikeCount(s: HeroStats): number { return 15 + (s.voltStrikeBonus || 0); }
+export function voltStrikeTime(index: number): number {
+  const group = Math.floor(index / 5), within = index % 5;
+  return (group < 3 ? [.65, 1.95, 3.15][group] : 3.15 + (group - 2) * 1.2)
+    + within * (group < 3 ? [.2, .17, .16][group] : .16);
+}
+
 /* ---------- 火法师（焰·辉）技能升级效果（用户定稿；战斗侧与提示面板共用） ---------- */
 /** 普攻槽：每级普攻伤害+8%，5级攻速+6%，10级暴击率+5%，15级对灼烧目标+25%，20级普攻伤害再+20% */
 export function pyroAtkCfg(a: number): { normalMul: number; aspdOn: boolean; critOn: boolean; burnedOn: boolean } {
@@ -140,6 +180,16 @@ export function pyroSkCfg(k: number): { mul: number; cdOn: boolean; shotsOn: boo
 /** 大招槽（陨石天降）：每级+8%，5级陨石+2颗，10级陨石坑范围+25%，15级充能-10%，20级每颗倍率+0.4 */
 export function pyroUltCfg(u: number): { boltMul: number; meteors: number; craterMul: number; chargeOn: boolean } {
   return { boltMul: (3.5 + (u >= 20 ? 0.4 : 0)) * (1 + (u - 1) * 0.08), meteors: 5 + (u >= 5 ? 2 : 0), craterMul: u >= 10 ? 1.25 : 1, chargeOn: u >= 15 };
+}
+
+/** 火法强化卡的战斗侧与提示共用计算；局外培养倍率保留在独立乘区。 */
+export function pyroBlastRadius(s: HeroStats, base: number): number { return base * (s.pyroBlastMul || 1); }
+export function pyroBurnMultiplier(s: HeroStats): number { return (s.burnMul || 1) * (1 + (s.pyroBurnBonus || 0)); }
+export function pyroBurnDuration(s: HeroStats, base = 3): number { return base + (s.pyroLinger || 0); }
+export function pyroCraterDuration(s: HeroStats): number { return 4 + (s.pyroLinger || 0); }
+export function pyroMeteorCount(s: HeroStats): number { return pyroUltCfg(s.ultLv).meteors + (s.pyroMeteorBonus || 0); }
+export function pyroMeteorDamage(s: HeroStats): number {
+  return abilityDamage(s, pyroUltCfg(s.ultLv).boltMul, true) * (s.pyroUltHitMul || 1);
 }
 
 /* ---------- 冰霜法师（莫拉·寒霜）技能升级效果（定稿；战斗侧与提示面板共用） ---------- */
@@ -156,6 +206,19 @@ export function moraUltCfg(u: number): { boltMul: number; slowMul: number; slowD
   return { boltMul: (1.8 + (u >= 20 ? 0.4 : 0)) * (1 + (u - 1) * 0.08), slowMul: u >= 5 ? 0.6 : 0.5, slowDur: u >= 10 ? 6 : 4, chargeOn: u >= 15 };
 }
 
+/** 冰法战斗与属性提示共用；三段均分原大招总伤害，命中时再结算目标状态。 */
+export const MORA_ULT_HITS = 3;
+export function moraSlowRatio(s: HeroStats, base: number): number { return Math.min(.9, base + (s.slowAmpBonus || 0)); }
+export function moraSlowDuration(s: HeroStats, base: number): number { return base + (s.moraSlowLinger || 0); }
+export function moraFreezeChance(s: HeroStats): number {
+  return Math.min(1, (s.freezeProc > 0 ? s.freezeChance || .15 : 0) + (s.moraFreezeChanceBonus || 0));
+}
+export function moraNormalFreezeDuration(s: HeroStats): number { return Math.max(s.freezeProc || 0, s.moraFreezeChanceBonus ? .6 : 0); }
+export function moraFieldRadius(s: HeroStats): number { return (s.novaR || 150) * moraSkCfg(s.skillLv).rMul * (s.skillRangeMul || 1); }
+export function moraFieldFreeze(s: HeroStats): number { return (s.novaStun || 1.5) + moraSkCfg(s.skillLv).stunBonus + (s.moraFreezeLinger || 0); }
+export function moraColdMultiplier(s: HeroStats): number { return 1 + (s.moraColdBonus || 0); }
+export function moraUltimateHitDamage(s: HeroStats): number { return abilityDamage(s, moraUltCfg(s.ultLv).boltMul, true) / MORA_ULT_HITS; }
+
 /** 技能伤害项每箭／每发／每跳的倍率，供技能培养预览共用。 */
 export function skillBaseMultiplier(hid: string, level: number): number {
   switch (hid) {
@@ -170,7 +233,7 @@ export function skillBaseMultiplier(hid: string, level: number): number {
 export function baseArcherStats(): HeroStats {
   return {
     // 射程 900 / 技能 800（用户调整；文档 §3.1 的 520/416 作废）
-    skillUnlocked: false, ultUnlocked: false, atk: 45, skillDmg: 100, atkMul: 1, aspd: 1.2, range: 900, skillRange: 800,
+    skillUnlocked: true, ultUnlocked: true, atk: 45, skillDmg: 100, atkMul: 1, aspd: 1.2, range: 900, skillRange: 800,
     critRate: 0.05, critMul: 1.5,
     serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
@@ -184,7 +247,7 @@ export function baseArcherStats(): HeroStats {
 /** 重弩手凯尔·鹰眼：基础攻速 0.5 次/秒；普攻 1200（几乎覆盖全场）、技能索敌 900 */
 export function baseSniperStats(): HeroStats {
   return {
-    skillUnlocked: false, ultUnlocked: false, atk: 140, skillDmg: 140, atkMul: 1, aspd: 0.5, range: 1200, skillRange: 900,
+    skillUnlocked: true, ultUnlocked: true, atk: 140, skillDmg: 140, atkMul: 1, aspd: 0.5, range: 1200, skillRange: 900,
     critRate: 0.05, critMul: 1.5,
     serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
@@ -198,7 +261,7 @@ export function baseSniperStats(): HeroStats {
 /** 火焰法师 · 焰·辉（§4 #2：技能流·AOE/橙红）：普攻火球小溅射；普攻 520 / 技能索敌 460 */
 export function basePyroStats(): HeroStats {
   return {
-    skillUnlocked: false, ultUnlocked: false, atk: 60, skillDmg: 90, atkMul: 1, aspd: 1, range: 950, skillRange: 850,   // 基础普攻 1 次/秒；索敌范围 950 / 技能 850
+    skillUnlocked: true, ultUnlocked: true, atk: 60, skillDmg: 90, atkMul: 1, aspd: 1, range: 950, skillRange: 850,   // 基础普攻 1 次/秒；索敌范围 950 / 技能 850
     critRate: 0.05, critMul: 1.5,
     serial: 0, fan: 0, split: 0, explodeR: 60, explodeMul: 0.4,   // 火球自带小溅射
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
@@ -212,7 +275,7 @@ export function basePyroStats(): HeroStats {
 /** 雷电法师 · 沃尔·雷霆（§4 #3：技能流·连锁/紫）：闪电弹单体；普攻 900 / 技能索敌 800（用户调整）；天雷自带 1s 眩晕 */
 export function baseVoltStats(): HeroStats {
   return {
-    skillUnlocked: false, ultUnlocked: false, atk: 55, skillDmg: 85, atkMul: 1, aspd: 1, range: 900, skillRange: 800,
+    skillUnlocked: true, ultUnlocked: true, atk: 55, skillDmg: 85, atkMul: 1, aspd: 1, range: 900, skillRange: 800,
     critRate: 0.05, critMul: 1.5,
     serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
     pierce: 0, slowOnHit: 0, burnOnHit: 0,
@@ -226,7 +289,7 @@ export function baseVoltStats(): HeroStats {
 /** 冰霜法师 · 莫拉·寒霜（控制流·冰霜）：冰棱减速；普攻 900 / 技能索敌 800；自带减速 25%·2s */
 export function baseMoraStats(): HeroStats {
   return {
-    skillUnlocked: false, ultUnlocked: false, atk: 58, skillDmg: 80, atkMul: 1, aspd: 0.75, range: 900, skillRange: 800,
+    skillUnlocked: true, ultUnlocked: true, atk: 58, skillDmg: 80, atkMul: 1, aspd: 0.75, range: 900, skillRange: 800,
     critRate: 0.05, critMul: 1.5,
     serial: 0, fan: 0, split: 0, explodeR: 0, explodeMul: 0.4,
     pierce: 0, slowOnHit: 0.25, burnOnHit: 0,
@@ -254,7 +317,7 @@ export interface CardDef {
   id: string;
   name: string;
   rarity: Rarity;
-  /** Mark generic numeric cards explicitly; other hero cards default to combat, global cards to support. */
+  /** Explicit overrides; otherwise classify mechanic cards, numeric cards and global support. */
   offerGroup?: OfferGroup;
   maxStacks: number;
   /** 归属：'global' 或英雄 id（'archer' | 'sniper'），决定改写谁的属性 */
@@ -300,12 +363,13 @@ function archerAttackTradeoff(effect: CardDef['apply']): CardDef['apply'] {
 function abilityCard(owner: string, unlocks: 'skill' | 'ult', abilityName: string): CardDef {
   return c({
     id: owner + '_unlock_' + unlocks, name: unlocks === 'skill' ? '解锁技能' : '解锁大招',
-    owner, rarity: owner === 'archer' || owner === 'sniper' ? 'gold' : 'white', maxStacks: 1, unlocks,
+    owner, rarity: 'gold', maxStacks: 1, unlocks,
     desc: '本局学习「' + abilityName + '」' + (unlocks === 'skill' ? '\n冷却结束后自动释放' : '\n解锁后开始充能\n充满后点击释放'),
     apply: x => { if (unlocks === 'skill') x.hero.skillUnlocked = true; else x.hero.ultUnlocked = true; },
   });
 }
 
+/** Legacy definitions only; battle entry grants these prerequisites, so they are not in M0_POOL. */
 export const ABILITY_CARDS: CardDef[] = [
   abilityCard('archer', 'skill', '强化箭矢'), abilityCard('archer', 'ult', '扇形箭雨'),
   abilityCard('sniper', 'skill', '穿颅射击'), abilityCard('sniper', 'ult', '猎杀时刻'),
@@ -317,141 +381,233 @@ export const ABILITY_CARDS: CardDef[] = [
 /* ---------- 弓箭手 · 普攻强化卡（§6.2 子集） ---------- */
 export const ARCHER_CARDS: CardDef[] = [
   ...commonHeroCards('archer'),
-  c({ id: 'serial', name: '连射', rarity: 'blue', maxStacks: 5, owner: 'archer', desc: '普攻追加1排连射\n攻击力 -10%\n最多5层',
+  c({ id: 'archer_knockback', name: '震退箭', rarity: 'blue', maxStacks: 1, owner: 'archer',
+    art: 'ui_card_sniper_pierce_v1', desc: '每4轮普攻\n首支主箭击退敌人\n首领免疫',
+    apply: x => { x.hero.archerKnockback = 56; } }),
+  c({ id: 'archer_pierce', name: '穿林箭', rarity: 'blue', maxStacks: 2, owner: 'archer',
+    art: 'ui_card_sniper_pierce_v1', desc: '普攻额外穿透1个目标',
+    apply: x => { x.hero.pierce += 1; } }),
+  c({ id: 'serial', name: '连射', rarity: 'blue', maxStacks: 5, owner: 'archer', desc: '普攻额外连射1次\n攻击力 -10%',
     apply: archerAttackTradeoff(x => { x.hero.serial += 1; }) }),
-  c({ id: 'fan', name: '齐射', rarity: 'blue', maxStacks: 5, owner: 'archer', desc: '普攻额外发射1支箭\n攻击力 -10%\n最多5层',
+  c({ id: 'fan', name: '齐射', rarity: 'blue', maxStacks: 5, owner: 'archer', desc: '普攻箭矢数量 +1\n攻击力 -10%',
     apply: archerAttackTradeoff(x => { x.hero.fan += 1; }) }),
-  c({ id: 'split', name: '分裂', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '命中分裂 2 支箭\n分裂箭伤害 50%\n攻击力 -10%',
+  c({ id: 'split', name: '分裂', rarity: 'purple', maxStacks: 2, owner: 'archer', desc: '命中后分裂2支箭\n分裂箭伤害50%\n攻击力 -10%',
     apply: archerAttackTradeoff(x => { x.hero.split += 2; }) }),
-  c({ id: 'explode', name: '小范围爆炸', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中触发爆炸\n溅射伤害 40%\n攻击力 -10%',
+  c({ id: 'explode', name: '小范围爆炸', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中触发范围爆炸\n溅射伤害40%\n攻击力 -10%',
     apply: archerAttackTradeoff(x => { x.hero.explodeR = Math.max(x.hero.explodeR, 70); }) }),
-  c({ id: 'explode_r', name: '爆炸范围', rarity: 'purple', maxStacks: 3, owner: 'archer', req: 'explode', desc: '爆炸半径 +40%\n需已学习爆炸',
+  c({ id: 'explode_r', name: '爆炸范围', rarity: 'purple', maxStacks: 3, owner: 'archer', req: 'explode', desc: '爆炸半径 +40%',
     apply: x => { if (x.hero.explodeR > 0) x.hero.explodeR *= 1.4; } }),
-  c({ id: 'explode_w', name: '爆炸威力', rarity: 'purple', maxStacks: 3, owner: 'archer', req: 'explode', desc: '爆炸伤害 +50%\n需已学习爆炸',
+  c({ id: 'explode_w', name: '爆炸威力', rarity: 'purple', maxStacks: 3, owner: 'archer', req: 'explode', desc: '爆炸伤害 +50%',
     apply: x => { if (x.hero.explodeR > 0) x.hero.explodeMul *= 1.5; } }),
-  c({ id: 'frost', name: '寒霜附魔', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中减速 20%\n持续 1 秒\n攻击力 -10%',
+  c({ id: 'frost', name: '寒霜附魔', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中减速20%\n持续1秒\n攻击力 -10%',
     apply: archerAttackTradeoff(x => { x.hero.slowOnHit = 0.2; x.hero.slowDur = 1; }) }),
-  c({ id: 'burn', name: '烈焰附魔', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中点燃 3 秒\n共60%攻击力伤害\n攻击力 -10%',
+  c({ id: 'burn', name: '烈焰附魔', rarity: 'purple', maxStacks: 1, owner: 'archer', desc: '命中点燃3秒\n累计60%攻击力伤害\n攻击力 -10%',
     apply: archerAttackTradeoff(x => { x.hero.burnOnHit = 0.2; }) }),
-  c({ id: 'instinct_a', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'archer', desc: '目标血量低于30%时\n伤害 +100%',
+  c({ id: 'instinct_a', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'archer', desc: '对生命低于30%的目标\n伤害 +100%',
     apply: x => { x.hero.lowHpBonus += 1; } }),
-  c({ id: 'rain_rounds', name: '多轮箭雨', rarity: 'gold', maxStacks: 2, owner: 'archer', req: 'archer_unlock_ult', desc: '大招箭雨 +1 轮\n最多 3 轮',
+  c({ id: 'rain_rounds', name: '多轮箭雨', rarity: 'gold', maxStacks: 2, owner: 'archer', req: 'archer_unlock_ult', desc: '大招箭雨轮数 +1',
     apply: x => { x.hero.ultRounds += 1; } }),
-  c({ id: 'fast_charge_a', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'archer', req: 'archer_unlock_ult', desc: '大招充能需求 -20%\n可叠加',
+  c({ id: 'fast_charge_a', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'archer', req: 'archer_unlock_ult', desc: '大招充能需求 -20%',
     apply: x => { x.hero.chargeMul *= 0.8; } }),
 ];
 
 /* ---------- 狙击游侠 · 凯尔·鹰眼（§6.2/§6.4 普攻流·极限单体） ---------- */
 export const SNIPER_CARDS: CardDef[] = [
   ...commonHeroCards('sniper'),
-  c({ id: 'execute', name: '处决标记', rarity: 'blue', maxStacks: 3, owner: 'sniper', desc: '对精英和BOSS\n伤害 +35%',
+  c({ id: 'sniper_return', name: '回旋弩矢', rarity: 'purple', maxStacks: 1, owner: 'sniper', req: 'sniper_unlock_ult',
+    art: 'ui_icon_ult_sniper', desc: '大招弩箭折返\n返程造成40%伤害',
+    apply: x => { x.hero.sniperReturn = .4; } }),
+  c({ id: 'execute', name: '处决标记', rarity: 'blue', maxStacks: 3, owner: 'sniper', desc: '对精英、首领\n伤害 +35%',
     apply: x => { x.hero.executeBonus += 0.35; } }),
-  c({ id: 'instinct_s', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'sniper', desc: '目标血量低于30%时\n伤害 +100%',
+  c({ id: 'instinct_s', name: '猎手本能', rarity: 'blue', maxStacks: 2, owner: 'sniper', desc: '对生命低于30%的目标\n伤害 +100%',
     apply: x => { x.hero.lowHpBonus += 1; } }),
-  c({ id: 'multi_lock', name: '多目标锁定', rarity: 'purple', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_skill', desc: '穿颅射击连狙 +2 发\n可叠加',
+  c({ id: 'multi_lock', name: '多目标锁定', rarity: 'purple', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_skill', desc: '穿颅射击额外连射2发',
     apply: x => { x.hero.skillShots += 2; } }),
-  c({ id: 'cd_cut', name: '冷却缩减', rarity: 'blue', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_skill', desc: '技能冷却 -2 秒\n可叠加',
+  c({ id: 'cd_cut', name: '冷却缩减', rarity: 'blue', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_skill', desc: '穿颅射击冷却 -2秒',
     apply: x => { x.hero.skillCdFlat += 2; } }),
   c({ id: 'sniper_range', name: '远距校准', rarity: 'blue', maxStacks: 3, owner: 'sniper', req: 'sniper_unlock_skill',
     art: 'ui_card_sniper_range_v1', desc: '技能索敌范围 +30%',
     apply: x => { x.hero.skillRange *= 1.3; } }),
   c({ id: 'sniper_pierce', name: '贯颅弩矢', rarity: 'purple', maxStacks: 3, owner: 'sniper', req: 'sniper_unlock_skill',
-    art: 'ui_card_sniper_pierce_v1', desc: '技能弩箭额外穿透\n1 个目标',
+    art: 'ui_card_sniper_pierce_v1', desc: '技能额外穿透1个目标',
     apply: x => { x.hero.skillPierce = (x.hero.skillPierce || 0) + 1; } }),
-  c({ id: 'extra_line', name: '额外枪线', rarity: 'gold', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招枪线 +1 条\n可叠加',
+  c({ id: 'extra_line', name: '额外弩矢', rarity: 'gold', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招弩箭数量 +1',
     apply: x => { x.hero.ultBolts += 1; } }),
-  c({ id: 'fast_charge_s', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招充能需求 -20%\n可叠加',
+  c({ id: 'fast_charge_s', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'sniper', req: 'sniper_unlock_ult', desc: '大招充能需求 -20%',
     apply: x => { x.hero.chargeMul *= 0.8; } }),
   c({ id: 'sniper_mark', name: '死亡准星', rarity: 'gold', maxStacks: 1, owner: 'sniper', req: 'sniper_unlock_ult',
-    art: 'ui_card_sniper_mark_v1', desc: '大招命中挂上蓝色准星\n目标受到伤害 +30%\n持续 5 秒',
+    art: 'ui_card_sniper_mark_v1', desc: '大招命中施加易伤\n目标受到伤害 +30%\n持续5秒',
     apply: x => { x.hero.ultMarkAmp = .3; } }),
 ];
 
-/* ---------- 火焰法师 · 焰·辉（§6.3 技能流 + §6.4 余烬） ---------- */
+/* ---------- 火焰法师 · 范围爆炸与灼烧（白2/蓝6/紫5/黄3） ---------- */
 export const PYRO_CARDS: CardDef[] = [
   ...commonHeroCards('pyro'),
-  c({ id: 'pyro_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'pyro', req: 'pyro_unlock_skill', desc: '基础技能伤害 +40%\n技能、大招生效',
-    apply: x => { x.hero.skillMul *= 1.4; } }),
-  c({ id: 'pyro_shards', name: '技能弹体', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '烈焰爆裂火球 +1 颗\n可叠加',
+  c({ id: 'pyro_firefield', name: '灼热火区', rarity: 'purple', maxStacks: 1, owner: 'pyro', req: 'pyro_unlock_skill',
+    art: 'ui_card_pyro_linger_v1', desc: '技能最后一颗火球\n落点留下3秒火区',
+    apply: x => { x.hero.pyroFirefield = 3; } }),
+  c({ id: 'pyro_antiheal', name: '焦灼禁疗', rarity: 'blue', maxStacks: 1, owner: 'pyro',
+    art: 'ui_card_pyro_burn_v1', desc: '自身灼烧的敌人\n受到治疗量 -50%',
+    apply: x => { x.hero.pyroHealCut = .5; } }),
+  c({ id: 'pyro_giant', name: '熔火巨弹', rarity: 'purple', maxStacks: 1, owner: 'pyro',
+    art: 'ui_card_pyro_shards_v2', desc: '每4次普攻发射巨弹\n爆炸半径翻倍',
+    apply: x => { x.hero.pyroGiantEvery = 4; } }),
+  c({ id: 'pyro_burst', name: '余烬爆破', rarity: 'purple', maxStacks: 1, owner: 'pyro',
+    art: 'ui_card_pyro_burn_v1', desc: '自身点燃目标死亡时爆炸\n造成60%攻击力范围伤害\n爆炸不触发连锁',
+    apply: x => { x.hero.pyroBurnBurst = .6; } }),
+  c({ id: 'pyro_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'pyro', reqAny: ['pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_spell_v2', desc: '技能伤害属性 +30%\n影响技能与大招',
+    apply: x => { x.hero.skillMul *= 1.3; } }),
+  c({ id: 'pyro_shards', name: '爆裂火球', rarity: 'purple', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', art: 'ui_card_pyro_shards_v2', desc: '烈焰爆裂多发1颗火球',
     apply: x => { x.hero.skillShots += 1; } }),
-  c({ id: 'pyro_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '技能冷却 -2 秒\n可叠加',
+  c({ id: 'pyro_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '烈焰爆裂冷却 -2秒',
     apply: x => { x.hero.skillCdFlat += 2; } }),
-  c({ id: 'pyro_range', name: '法术范围', rarity: 'white', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_skill', desc: '爆裂范围 +30%',
-    apply: x => { x.hero.skillRangeMul *= 1.3; } }),
-  c({ id: 'pyro_war', name: '战吼', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招伤害 +50%',
-    apply: x => { x.hero.ultDmgMul *= 1.5; } }),
-  c({ id: 'pyro_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招充能需求 -25%\n可叠加',
+  c({ id: 'pyro_range', name: '爆裂范围', rarity: 'blue', maxStacks: 3, owner: 'pyro', art: 'ui_card_pyro_range_v2', desc: '普攻、技能与陨石\n爆炸半径 +20%\n技能火区半径 +20%',
+    apply: x => { x.hero.pyroBlastMul = (x.hero.pyroBlastMul || 1) * 1.2; } }),
+  c({ id: 'pyro_war', name: '陨星威能', rarity: 'blue', maxStacks: 3, owner: 'pyro', req: 'pyro_unlock_ult', art: 'ui_card_pyro_war_v2', desc: '大招直接伤害 +40%',
+    apply: x => { x.hero.pyroUltHitMul = (x.hero.pyroUltHitMul || 1) * 1.4; } }),
+  c({ id: 'pyro_eager', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招充能需求 -25%',
     apply: x => { x.hero.chargeMul *= 0.75; } }),
-  c({ id: 'pyro_stun', name: '震慑', rarity: 'purple', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '陨石命中眩晕 1 秒',
-    apply: x => { x.hero.ultStun = 1; } }),
-  c({ id: 'pyro_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', desc: '大招释放后\n攻速 +40%\n持续 5 秒',
-    apply: x => { x.hero.ultHaste = 1; } }),
-  c({ id: 'pyro_ember', name: '余烬', rarity: 'purple', maxStacks: 2, owner: 'pyro', reqAny: ['pyro_unlock_skill', 'pyro_unlock_ult'], desc: '灼烧伤害翻倍',
-    apply: x => { x.hero.burnMul *= 2; } }),
+  c({ id: 'pyro_burn', name: '烈焰附着', rarity: 'purple', maxStacks: 1, owner: 'pyro', art: 'ui_card_pyro_burn_v1', desc: '普攻和溅射点燃3秒\n每秒20%攻击力伤害',
+    apply: x => { x.hero.burnOnHit = Math.max(x.hero.burnOnHit, .2); x.hero.pyroSplashBurn = true; } }),
+  c({ id: 'pyro_ember', name: '余烬', rarity: 'purple', maxStacks: 3, owner: 'pyro', reqAny: ['pyro_burn', 'pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_ember_v2', desc: '灼烧伤害 +50%\n包含陨石坑灼烧',
+    apply: x => { x.hero.pyroBurnBonus = (x.hero.pyroBurnBonus || 0) + .5; } }),
+  c({ id: 'pyro_linger', name: '余火绵延', rarity: 'purple', maxStacks: 2, owner: 'pyro', reqAny: ['pyro_burn', 'pyro_unlock_skill', 'pyro_unlock_ult'], art: 'ui_card_pyro_linger_v1', desc: '灼烧、火区与陨石坑\n持续时间 +1秒',
+    apply: x => { x.hero.pyroLinger = (x.hero.pyroLinger || 0) + 1; } }),
+  c({ id: 'pyro_meteors', name: '陨石增援', rarity: 'gold', maxStacks: 2, owner: 'pyro', req: 'pyro_unlock_ult', art: 'ui_card_pyro_meteors_v1', desc: '大招陨石数量 +2',
+    apply: x => { x.hero.pyroMeteorBonus = (x.hero.pyroMeteorBonus || 0) + 2; } }),
 ];
 
-/* ---------- 雷电法师 · 沃尔·雷霆（§6.3 技能流 + §6.4 感电） ---------- */
+/* ---------- 雷电法师：连锁清群 / 感电协作 / 连续落雷 ---------- */
 export const VOLT_CARDS: CardDef[] = [
   ...commonHeroCards('volt'),
-  c({ id: 'volt_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'volt', req: 'volt_unlock_skill', desc: '基础技能伤害 +40%\n技能、大招生效',
-    apply: x => { x.hero.skillMul *= 1.4; } }),
-  c({ id: 'volt_shards', name: '技能弹体', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '连锁闪电\n弹跳目标 +2\n可叠加',
+  c({ id: 'volt_arc', name: '电弧普攻', rarity: 'blue', maxStacks: 1, owner: 'volt',
+    art: 'ui_card_volt_shards_v2', desc: '普攻额外跳跃1次\n跳跃伤害50%',
+    apply: x => { x.hero.voltArc = .5; } }),
+  c({ id: 'volt_overload', name: '过载麻痹', rarity: 'purple', maxStacks: 1, owner: 'volt', req: 'volt_shock',
+    art: 'ui_card_volt_stun_v1', desc: '连锁命中感电敌人\n50%几率眩晕0.4秒\n同一目标间隔3秒',
+    apply: x => { x.hero.voltOverload = .5; } }),
+  c({ id: 'volt_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'volt', reqAny: ['volt_unlock_skill', 'volt_unlock_ult'], art: 'ui_card_volt_spell_v2', desc: '技能伤害属性 +30%\n影响技能与大招',
+    apply: x => { x.hero.skillMul *= 1.3; } }),
+  c({ id: 'volt_shards', name: '连锁增幅', rarity: 'purple', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', art: 'ui_card_volt_shards_v2', desc: '连锁闪电目标 +2',
     apply: x => { x.hero.skillShots += 2; } }),
-  c({ id: 'volt_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '技能冷却 -2 秒\n可叠加',
+  c({ id: 'volt_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '连锁闪电冷却 -2秒',
     apply: x => { x.hero.skillCdFlat += 2; } }),
-  c({ id: 'volt_range', name: '法术范围', rarity: 'white', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '连锁跳跃距离 +30%',
+  c({ id: 'volt_range', name: '电弧延伸', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_skill', desc: '闪电跳跃距离 +30%',
     apply: x => { x.hero.skillRangeMul *= 1.3; } }),
-  c({ id: 'volt_war', name: '战吼', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_ult', desc: '大招伤害 +50%',
-    apply: x => { x.hero.ultDmgMul *= 1.5; } }),
-  c({ id: 'volt_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', desc: '大招充能需求 -25%\n可叠加',
+  c({ id: 'volt_war', name: '雷霆威能', rarity: 'blue', maxStacks: 3, owner: 'volt', req: 'volt_unlock_ult', art: 'ui_card_volt_war_v2', desc: '大招落雷伤害 +40%',
+    apply: x => { x.hero.ultDmgMul *= 1.4; } }),
+  c({ id: 'volt_eager', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', desc: '大招充能需求 -25%',
     apply: x => { x.hero.chargeMul *= 0.75; } }),
-  c({ id: 'volt_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', desc: '大招释放后\n攻速 +40%\n持续 5 秒',
-    apply: x => { x.hero.ultHaste = 1; } }),
-  c({ id: 'volt_shock', name: '感电', rarity: 'purple', maxStacks: 2, owner: 'volt', desc: '雷系命中附加感电\n目标受到伤害 +25%\n持续 3 秒\n最多 +50%',
-    apply: x => { x.hero.shockOnHit = Math.min(0.5, x.hero.shockOnHit + 0.25); } }),
+  c({ id: 'volt_shock', name: '感电', rarity: 'purple', maxStacks: 1, owner: 'volt', art: 'ui_card_volt_shock_v2', desc: '命中附加3秒感电\n目标受到伤害 +25%',
+    apply: x => { x.hero.shockOnHit = Math.max(x.hero.shockOnHit, .25); } }),
+  c({ id: 'volt_pressure', name: '高压电流', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_shock', art: 'ui_card_volt_pressure_v1', desc: '对感电目标\n自身伤害 +30%',
+    apply: x => { x.hero.voltShockBonus = (x.hero.voltShockBonus || 0) + .3; } }),
+  c({ id: 'volt_linger', name: '余电不散', rarity: 'purple', maxStacks: 2, owner: 'volt', req: 'volt_shock', art: 'ui_card_volt_linger_v1', desc: '感电持续时间 +1秒',
+    apply: x => { x.hero.voltShockLinger = (x.hero.voltShockLinger || 0) + 1; } }),
+  c({ id: 'volt_strikes', name: '雷暴增援', rarity: 'gold', maxStacks: 2, owner: 'volt', req: 'volt_unlock_ult', art: 'ui_card_volt_strikes_v1', desc: '大招落雷次数 +5',
+    apply: x => { x.hero.voltStrikeBonus = (x.hero.voltStrikeBonus || 0) + 5; } }),
+  c({ id: 'volt_stun', name: '雷霆震慑', rarity: 'gold', maxStacks: 1, owner: 'volt', req: 'volt_unlock_ult', art: 'ui_card_volt_stun_v1', desc: '大招眩晕时间 +1.5秒',
+    apply: x => { x.hero.ultStun += 1.5; } }),
 ];
 
-/* ---------- 冰霜法师 · 莫拉·寒霜强化卡：减速加深 → 冻结扩化 → 控制转伤害 ---------- */
+/* ---------- 冰霜法师：减速 / 冰封控场 / 碎冰增伤 ---------- */
 export const MORA_CARDS: CardDef[] = [
   ...commonHeroCards('mora'),
-  c({ id: 'mora_spell', name: '法术精研', rarity: 'white', maxStacks: 4, owner: 'mora', req: 'mora_unlock_skill', desc: '基础技能伤害 +40%\n技能、大招生效',
-    apply: x => { x.hero.skillMul *= 1.4; } }),
-  c({ id: 'mora_range', name: '极寒扩散', rarity: 'white', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', desc: '冰领域半径 +30%',
-    apply: x => { x.hero.skillRangeMul *= 1.3; } }),
-  c({ id: 'mora_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', desc: '技能冷却 -2 秒\n可叠加',
+  c({ id: 'mora_pierce', name: '穿霜冰锥', rarity: 'blue', maxStacks: 1, owner: 'mora',
+    art: 'ui_card_mora_spell_v2', desc: '普攻额外穿透1个目标\n穿透后造成70%伤害',
+    apply: x => { x.hero.moraPierce = 1; } }),
+  c({ id: 'mora_ground', name: '凝霜地带', rarity: 'purple', maxStacks: 1, owner: 'mora', req: 'mora_unlock_skill',
+    art: 'ui_card_mora_range_v2', desc: '技能留下3秒寒霜地带\n进入的敌人受到减速',
+    apply: x => { x.hero.moraGround = 3; } }),
+  c({ id: 'mora_team', name: '冰裂印记', rarity: 'purple', maxStacks: 1, owner: 'mora',
+    art: 'ui_card_mora_brittle_v2', desc: '命中附加3秒易伤\n目标受到伤害 +15%',
+    apply: x => { x.hero.moraTeamVuln = .15; } }),
+  c({ id: 'mora_spell', name: '法术精研', rarity: 'blue', maxStacks: 3, owner: 'mora', reqAny: ['mora_unlock_skill', 'mora_unlock_ult'], art: 'ui_card_mora_spell_v2', desc: '技能伤害属性 +30%\n影响技能与大招',
+    apply: x => { x.hero.skillMul *= 1.3; } }),
+  c({ id: 'mora_range', name: '极寒扩散', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', art: 'ui_card_mora_range_v2', desc: '冰霜领域半径 +20%',
+    apply: x => { x.hero.skillRangeMul *= 1.2; } }),
+  c({ id: 'mora_cd', name: '冷却缩减', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_skill', desc: '冰霜领域冷却 -2秒',
     apply: x => { x.hero.skillCdFlat += 2; } }),
-  c({ id: 'mora_chill', name: '凛冬之息', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '冰系减速幅度 +20%\n普攻、领域、大招\n全部生效',
-    apply: x => { x.hero.slowAmpBonus += 0.2; } }),
-  c({ id: 'mora_freeze', name: '速冻之心', rarity: 'blue', maxStacks: 2, owner: 'mora', desc: '普攻冰冻几率 +15%\n15%→30%→45%',
-    apply: x => { x.hero.freezeChance += 0.15; } }),
-  c({ id: 'mora_war', name: '战吼', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_ult', desc: '大招伤害 +50%',
-    apply: x => { x.hero.ultDmgMul *= 1.5; } }),
-  c({ id: 'mora_linger', name: '寒冬延续', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_ult', desc: '大招减速时间 +1 秒\n可叠加',
-    apply: x => { x.hero.ultSlowDur += 1; } }),
-  c({ id: 'mora_morale', name: '士气高涨', rarity: 'blue', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '大招释放后\n攻速 +40%\n持续 5 秒',
-    apply: x => { x.hero.ultHaste = 1; } }),
-  c({ id: 'mora_eager', name: '激昂', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '大招充能需求 -25%\n可叠加',
+  c({ id: 'mora_chill', name: '凛冬之息', rarity: 'blue', maxStacks: 3, owner: 'mora', art: 'ui_card_mora_chill_v2', desc: '减速幅度 +10个百分点\n最高减速90%',
+    apply: x => { x.hero.slowAmpBonus += .1; } }),
+  c({ id: 'mora_freeze', name: '速冻之心', rarity: 'purple', maxStacks: 2, owner: 'mora', art: 'ui_card_mora_freeze_v2', desc: '普攻冰冻几率 +15%\n冰冻持续0.6秒',
+    apply: x => { x.hero.moraFreezeChanceBonus = (x.hero.moraFreezeChanceBonus || 0) + .15; } }),
+  c({ id: 'mora_war', name: '冰川之力', rarity: 'blue', maxStacks: 3, owner: 'mora', req: 'mora_unlock_ult', art: 'ui_card_mora_war_v2', desc: '大招伤害 +40%',
+    apply: x => { x.hero.ultDmgMul *= 1.4; } }),
+  c({ id: 'mora_linger', name: '寒冬延续', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '减速、霜地\n持续时间 +1秒',
+    apply: x => { x.hero.moraSlowLinger = (x.hero.moraSlowLinger || 0) + 1; } }),
+  c({ id: 'mora_freeze_linger', name: '冰封延长', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_skill', art: 'ui_card_mora_freeze_linger_v1', desc: '技能冰封时间 +1秒',
+    apply: x => { x.hero.moraFreezeLinger = (x.hero.moraFreezeLinger || 0) + 1; } }),
+  c({ id: 'mora_eager', name: '快速充能', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '大招充能需求 -25%',
     apply: x => { x.hero.chargeMul *= 0.75; } }),
-  c({ id: 'mora_brittle', name: '碎冰', rarity: 'purple', maxStacks: 2, owner: 'mora', desc: '对减速或冻结目标\n伤害 +30%\n最多 +60%',
-    apply: x => { x.hero.slowedBonus += 0.3; } }),
-  c({ id: 'mora_glacier', name: '绝对零度', rarity: 'purple', maxStacks: 2, owner: 'mora', req: 'mora_unlock_ult', desc: '冰系减速幅度 +20%\n大招减速时间 +2 秒\n可叠加',
-    apply: x => { x.hero.slowAmpBonus += 0.2; x.hero.ultSlowDur += 2; } }),
+  c({ id: 'mora_brittle', name: '碎冰', rarity: 'purple', maxStacks: 2, owner: 'mora', art: 'ui_card_mora_brittle_v2', desc: '对减速、冰封目标\n自身伤害 +30%',
+    apply: x => { x.hero.moraColdBonus = (x.hero.moraColdBonus || 0) + .3; } }),
+  c({ id: 'mora_glacier', name: '绝对零度', rarity: 'gold', maxStacks: 1, owner: 'mora', req: 'mora_unlock_ult', art: 'ui_card_mora_glacier_v2', desc: '大招命中冰封1.5秒\n首领免疫冰封',
+    apply: x => { x.hero.moraUltFreeze = 1.5; } }),
 ];
 
 /* ---------- 全局卡（§6.1） ---------- */
 export const GLOBAL_CARDS: CardDef[] = [
-  c({ id: 'wall', name: '城墙加固', rarity: 'white', maxStacks: 4, owner: 'global', desc: '防线耐久上限 +25%\n并回复 25% 耐久',
+  c({ id: 'wall', name: '城墙加固', rarity: 'white', maxStacks: 4, owner: 'global', desc: '防线耐久上限 +25%\n回复25%最大耐久',
     apply: x => { x.line.addMaxMul(1.25); x.line.healPct(0.25); } }),
-  c({ id: 'repair', name: '工事修理', rarity: 'blue', maxStacks: 3, owner: 'global', desc: '防线每秒回复\n0.5% 最大耐久',
+  c({ id: 'repair', name: '工事修理', rarity: 'blue', maxStacks: 3, owner: 'global', desc: '每秒回复0.5%最大耐久',
     apply: x => { x.global.lineRegenPct += 0.005; } }),
   c({ id: 'xp_badge', name: '经验勋章', rarity: 'white', offerGroup: 'stats', maxStacks: 3, owner: 'global', desc: '经验获取 +10%',
     apply: x => { x.global.xpMul *= 1.1; } }),
 ];
 
 /** 当前卡池 = 弓箭手 + 狙击 + 火法 + 雷法 + 冰法 + 全局（卡按 owner 归属英雄生效） */
-export const M0_POOL: CardDef[] = [...ABILITY_CARDS, ...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...VOLT_CARDS, ...MORA_CARDS, ...GLOBAL_CARDS];
+export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...VOLT_CARDS, ...MORA_CARDS, ...GLOBAL_CARDS];
 
 export interface CardStacks { [cardId: string]: number; }
+
+/** Read-only presentation helpers: never apply a card to preview it (some cards heal the wall). */
+export type BuildTeam = ReadonlyArray<{ id: string; stats: Readonly<HeroStats> }>;
+
+export function ownedBuildCards(owner: string, stacks: Readonly<CardStacks>): CardDef[] {
+  // Only acquired cards in the live pool count; the seeded legacy unlock IDs are not selections.
+  return M0_POOL.filter(card => card.owner === owner && (stacks[card.id] || 0) > 0)
+    .sort((a, b) => Number(isMechanicCard(b)) - Number(isMechanicCard(a)));
+}
+
+export function cardComboHint(card: CardDef, stacks: Readonly<CardStacks>, team: BuildTeam): string {
+  const has = (id: string): boolean => (stacks[id] || 0) > 0;
+  const owner = team.find(hero => hero.id === card.owner)?.stats;
+  switch (card.id) {
+    case 'serial': return has('fan') ? '联动：齐射同步多排' : '';
+    case 'fan': return has('serial') ? '联动：连射同步多列' : '';
+    case 'archer_pierce': return has('serial') || has('fan') ? '联动：弹幕逐箭贯穿' : '';
+    case 'explode_r': case 'explode_w': return has('explode') ? '联动：强化现有爆炸' : '';
+    case 'frost': return '减速压低冲锋移速';
+    case 'multi_lock': return has('sniper_pierce') ? '联动：每发连狙贯穿' : '';
+    case 'sniper_pierce': return has('multi_lock') ? '联动：多发贯穿清群' : '';
+    case 'sniper_mark': case 'mora_team':
+      return team.some(hero => hero.id !== card.owner &&
+        ((hero.stats.ultMarkAmp || 0) > 0 || (hero.stats.moraTeamVuln || 0) > 0))
+        ? '同类易伤取最高值'
+        : team.some(hero => hero.id === 'volt' && (hero.stats.shockOnHit > 0 || voltUltCfg(hero.stats.ultLv).shockOn))
+          ? '联动：易伤叠加感电' : '全队集火共享增伤';
+    case 'pyro_burst': return has('pyro_burn') ? '联动：普攻铺火爆破' : '技能点燃可接爆破';
+    case 'pyro_burn': return has('pyro_burst') ? '联动：普攻铺火爆破' : '';
+    case 'pyro_ember': case 'pyro_linger': return has('pyro_burn') ? '联动：强化普攻灼烧' : '技能、大招灼烧生效';
+    case 'pyro_range': return has('pyro_burn') ? '联动：扩大溅射铺火' : '';
+    case 'volt_shock':
+      return team.some(hero => hero.id !== card.owner &&
+        ((hero.stats.moraTeamVuln || 0) > 0 || (hero.stats.ultMarkAmp || 0) > 0))
+        ? '联动：感电叠加易伤' : '全队集火共享增伤';
+    case 'volt_pressure': return has('volt_shock') ? '联动：感电触发增伤' : '';
+    case 'volt_linger': return has('volt_shock') ? '联动：延长全队受益' : '';
+    case 'volt_range': return has('volt_shards') ? '联动：远跳覆盖多敌' : '';
+    case 'volt_shards': return has('volt_range') ? '联动：远跳覆盖多敌' : '';
+    case 'volt_stun': case 'mora_freeze': case 'mora_glacier': return '控制可打断狼骑冲锋';
+    case 'mora_brittle': return '联动：减速触发增伤';
+    case 'mora_chill': case 'mora_linger': return has('mora_brittle') ? '联动：维持碎冰增伤' : '';
+    case 'mora_freeze_linger': return owner && owner.skillUnlocked ? '联动：延长领域冰封' : '';
+    case 'wall': return has('repair') ? '联动：按新上限回血' : '';
+    case 'repair': return has('wall') ? '联动：城墙上限回血' : '';
+    default: return '';
+  }
+}
 
 /** 抽卡、刷新与领取共用前置/上限检查，防止绕过解锁或重复学习。 */
 export function canTakeCard(card: CardDef, stacks: CardStacks): boolean {
@@ -460,27 +616,51 @@ export function canTakeCard(card: CardDef, stacks: CardStacks): boolean {
     && (!card.reqAny || card.reqAny.some(id => (stacks[id] || 0) > 0));
 }
 
+/** These cards change projectiles, statuses, contacts or cooperation, rather than only numbers. */
+const MECHANIC_IDS = new Set(['archer_pierce', 'serial', 'fan', 'split', 'explode', 'frost', 'burn', 'rain_rounds',
+  'multi_lock', 'sniper_pierce', 'extra_line', 'sniper_mark', 'pyro_shards', 'pyro_burn', 'pyro_burst', 'pyro_meteors',
+  'volt_shards', 'volt_shock', 'volt_strikes', 'volt_stun', 'mora_freeze', 'mora_glacier', 'mora_team',
+  'archer_knockback', 'sniper_return', 'pyro_firefield', 'pyro_antiheal', 'pyro_giant',
+  'volt_arc', 'volt_overload', 'mora_pierce', 'mora_ground']);
+export function isMechanicCard(card: CardDef): boolean { return MECHANIC_IDS.has(card.id); }
+function offerGroup(card: CardDef): OfferGroup {
+  return card.offerGroup ?? (card.owner === 'global' ? 'support' : isMechanicCard(card) ? 'combat' : 'stats');
+}
 function offerWeight(card: CardDef): number {
-  const group = card.offerGroup ?? (card.owner === 'global' ? 'support' : 'combat');
+  const group = offerGroup(card);
   return RARITY_WEIGHT[card.rarity] * OFFER_GROUP_WEIGHT[group];
 }
 
-/** 三张不重复：稀有度×卡类型权重；仍遵循上阵归属、前置解锁和叠层上限。 */
+/** Two mechanic opportunities when available, one following an invested hero and one opening another path.
+ * Refreshes share these guarantees. Exhausted mechanic pools fall back to remaining legal cards. */
 export function draw3(pool: CardDef[], stacks: CardStacks): CardDef[] {
-  const avail = pool.filter(k => canTakeCard(k, stacks));
   const picked: CardDef[] = [];
-  const rest = avail.slice();
-  while (picked.length < 3 && rest.length > 0) {
-    const weights = rest.map(offerWeight);
+  const rest = pool.filter(k => canTakeCard(k, stacks));
+  const progress: Record<string, number> = {};
+  for (const card of pool) if (card.owner !== 'global')
+    progress[card.owner] = (progress[card.owner] || 0) + (stacks[card.id] || 0);
+  const take = (candidates: CardDef[], follow = false): void => {
+    if (!candidates.length) return;
+    const weights = candidates.map(c => offerWeight(c) * (follow ? 1 + Math.min(4, progress[c.owner] || 0) * .25 : 1));
     const total = weights.reduce((sum, weight) => sum + weight, 0);
     let r = Math.random() * total;
     let idx = 0;
-    for (let i = 0; i < rest.length; i++) {
+    for (let i = 0; i < candidates.length; i++) {
       r -= weights[i];
       if (r <= 0) { idx = i; break; }
     }
-    picked.push(rest[idx]);
-    rest.splice(idx, 1);
+    const card = candidates[idx];
+    picked.push(card); rest.splice(rest.indexOf(card), 1);
+  };
+  const mechanics = rest.filter(isMechanicCard);
+  const continuing = mechanics.filter(c => progress[c.owner] > 0);
+  take(continuing.length ? continuing : mechanics, true);
+  const alternative = rest.filter(c => isMechanicCard(c) && c.owner !== picked[0]?.owner);
+  take(alternative.length ? alternative : rest.filter(isMechanicCard));
+  while (picked.length < 3) {
+    const candidates = rest.filter(c => offerGroup(c) !== 'stats' || !picked.some(p => offerGroup(p) === 'stats'));
+    if (!rest.length) break;
+    take(candidates.length ? candidates : rest);
   }
   return picked;
 }

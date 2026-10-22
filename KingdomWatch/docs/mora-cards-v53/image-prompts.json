@@ -1,0 +1,54 @@
+{
+  "mode": "built-in image_gen",
+  "styleReference": "assets/resources/ux/ui_icon_skill_archer.png",
+  "assets": [
+    {
+      "id": "mora_spell",
+      "filename": "ui_card_mora_spell_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: one finished 2D fantasy tower-defense upgrade icon. Use the reference archer icon ONLY as a style reference for hand-painted bold forms, crisp dark contours, readable chunky shapes and a COMPLETE circular painted scene. Square canvas. One geometrically PERFECT circle almost inscribed in the square, entirely OPAQUE inside from center right to edge. Transparent pixels ONLY OUTSIDE the circle. No hollow gaps, no cutout motif alone, no square backing, no border/frame, no text, numbers or watermark. Nothing, including shards, may protrude outside the circle. Rich deep navy/teal blue painted background, azure ice and white highlights, restrained highlights so shapes stay readable at 100px. Avoid photorealism or 3D gloss. Primary request: A large open frost spellbook across the lower half, a bold luminous snowflake sigil rising from its pages in the upper half. Illustrated dark-blue icy mage study fills every gap inside the circle. Strong simple book and frost shapes.",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-5dade824-55c1-443c-aa3e-417bb56751e7.png"
+    },
+    {
+      "id": "mora_range",
+      "filename": "ui_card_mora_range_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: one finished 2D fantasy tower-defense upgrade icon. Use the reference archer icon ONLY as a style reference for hand-painted bold forms, crisp dark contours, readable chunky shapes and a COMPLETE circular painted scene. Square canvas. One geometrically PERFECT circle almost inscribed in the square, entirely OPAQUE inside from center right to edge. Transparent pixels ONLY OUTSIDE the circle. No hollow gaps, no cutout motif alone, no square backing, no border/frame, no text, numbers or watermark. Nothing, including shards, may protrude outside the circle. Rich deep navy/teal blue painted background, azure ice and white highlights, restrained highlights so shapes stay readable at 100px. Avoid photorealism or 3D gloss. Primary request: Oblique overhead view of a large frost-field bursting outward across blue frozen stone. A broad bright expanding icy ring and chunky crystals radiating across the ground. The center is painted frosted ground, NOT an empty transparent hole. Frozen terrain fills the circle right to its boundary.",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-6bb58ee7-0b06-40f7-b970-0766dcd9f766.png"
+    },
+    {
+      "id": "mora_chill",
+      "filename": "ui_card_mora_chill_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: one finished 2D fantasy tower-defense upgrade icon. Use the reference archer icon ONLY as a style reference for hand-painted bold forms, crisp dark contours, readable chunky shapes and a COMPLETE circular painted scene. Square canvas. One geometrically PERFECT circle almost inscribed in the square, entirely OPAQUE inside from center right to edge. Transparent pixels ONLY OUTSIDE the circle. No hollow gaps, no cutout motif alone, no square backing, no border/frame, no text, numbers or watermark. Nothing, including shards, may protrude outside the circle. Rich deep navy/teal blue painted background, azure ice and white highlights, restrained highlights so shapes stay readable at 100px. Avoid photorealism or 3D gloss. Primary request: A powerful curling gust of blue-white freezing breath sweeps across a dark snowy forest. One large snowflake embedded in the gust is the clear focus. Fully painted storm scene fills the perfect circle; no isolated wisps or gaps.",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-97218045-1de4-4aca-86d8-c525de7c2bab.png"
+    },
+    {
+      "id": "mora_freeze",
+      "filename": "ui_card_mora_freeze_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: one finished 2D fantasy tower-defense upgrade icon. Use the reference archer icon ONLY as a style reference for hand-painted bold forms, crisp dark contours, readable chunky shapes and a COMPLETE circular painted scene. Square canvas. One geometrically PERFECT circle almost inscribed in the square, entirely OPAQUE inside from center right to edge. Transparent pixels ONLY OUTSIDE the circle. No hollow gaps, no cutout motif alone, no square backing, no border/frame, no text, numbers or watermark. Nothing, including shards, may protrude outside the circle. Rich deep navy/teal blue painted background, azure ice and white highlights, restrained highlights so shapes stay readable at 100px. Avoid photorealism or 3D gloss. Primary request: A large crimson heart encased in thick faceted pale-blue ice, a readable symbol for freezing on hit. Heart and enclosing ice dominate the middle. Dark-blue frozen cavern painted all around to complete the entire circular silhouette. No square slab backing and no shards outside circle.",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-f4b0a181-59b1-4526-b87f-ce76a7e605d1.png"
+    },
+    {
+      "id": "mora_brittle",
+      "filename": "ui_card_mora_brittle_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: one finished 2D fantasy tower-defense upgrade icon. Use the reference archer icon ONLY as a style reference for hand-painted bold forms, crisp dark contours, readable chunky shapes and a COMPLETE circular painted scene. Square canvas. One geometrically PERFECT circle almost inscribed in the square, entirely OPAQUE inside from center right to edge. Transparent pixels ONLY OUTSIDE the circle. No hollow gaps, no cutout motif alone, no square backing, no border/frame, no text, numbers or watermark. Nothing, including shards, may protrude outside the circle. Rich deep navy/teal blue painted background, azure ice and white highlights, restrained highlights so shapes stay readable at 100px. Avoid photorealism or 3D gloss. Primary request: A massive blue ice crystal splitting with a forceful diagonal impact into several chunky shards. Bright crack across the middle. Painted frozen battlefield and short ice dust streaks fill all space inside the circle. Every shard stays inside.",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-73ce30a9-56e3-4e95-ade7-041de97c6afc.png"
+    },
+    {
+      "id": "mora_war",
+      "filename": "ui_card_mora_war_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: one finished 2D fantasy tower-defense upgrade icon. Use the reference archer icon ONLY as a style reference for hand-painted bold forms, crisp dark contours, readable chunky shapes and a COMPLETE circular painted scene. Square canvas. One geometrically PERFECT circle almost inscribed in the square, entirely OPAQUE inside from center right to edge. Transparent pixels ONLY OUTSIDE the circle. No hollow gaps, no cutout motif alone, no square backing, no border/frame, no text, numbers or watermark. Nothing, including shards, may protrude outside the circle. Rich deep navy/teal blue painted background, azure ice and white highlights, restrained highlights so shapes stay readable at 100px. Avoid photorealism or 3D gloss. Primary request: Several powerful sharp ice spears descend diagonally from a storm cloud and strike frozen stone in a dense ice-shatter impact. Clear bold ice-rain power motif for an ultimate damage upgrade. Deep blue storm and ground completely fill the circular scene. No horn, banner or text.",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-0f7c00d9-90a0-4293-a753-0f9e218cc90b.png"
+    },
+    {
+      "id": "mora_glacier",
+      "filename": "ui_card_mora_glacier_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: one finished 2D fantasy tower-defense upgrade icon. Use the reference archer icon ONLY as a style reference for hand-painted bold forms, crisp dark contours, readable chunky shapes and a COMPLETE circular painted scene. Square canvas. One geometrically PERFECT circle almost inscribed in the square, entirely OPAQUE inside from center right to edge. Transparent pixels ONLY OUTSIDE the circle. No hollow gaps, no cutout motif alone, no square backing, no border/frame, no text, numbers or watermark. Nothing, including shards, may protrude outside the circle. Rich deep navy/teal blue painted background, azure ice and white highlights, restrained highlights so shapes stay readable at 100px. Avoid photorealism or 3D gloss. Primary request: A hulking armored fantasy monster silhouette immobilized inside a massive jagged blue ice prison, frost spreading over shoulders and feet. Dramatic ice peaks and deep navy blizzard fill the whole circular scene. Clear freezing ultimate motif; silhouette readable, not photorealistic, not gore.",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-86a9336d-b21c-4ffd-8cb9-8c84d6b7e616.png"
+    },
+    {
+      "id": "mora_freeze_linger",
+      "filename": "ui_card_mora_freeze_linger_v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: one finished 2D fantasy tower-defense upgrade icon. Use the reference archer icon ONLY as a style reference for hand-painted bold forms, crisp dark contours, readable chunky shapes and a COMPLETE circular painted scene. Square canvas. One geometrically PERFECT circle almost inscribed in the square, entirely OPAQUE inside from center right to edge. Transparent pixels ONLY OUTSIDE the circle. No hollow gaps, no cutout motif alone, no square backing, no border/frame, no text, numbers or watermark. Nothing, including shards, may protrude outside the circle. Rich deep navy/teal blue painted background, azure ice and white highlights, restrained highlights so shapes stay readable at 100px. Avoid photorealism or 3D gloss. Primary request: A large squat hourglass encased in faceted icy crystal, frozen grains suspended halfway, with a bold snowflake above its center. Deep navy frosted cavern fills every gap right to perfect circular edge. Clear time-extension freezing motif; hourglass dominates frame, no numbers or text.",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-b7d7640a-5b3c-47b3-9ddd-28d291f9141d.png"
+    }
+  ]
+}

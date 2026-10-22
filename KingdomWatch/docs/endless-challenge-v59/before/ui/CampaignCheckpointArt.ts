@@ -1,0 +1,169 @@
+/** Painted checkpoint materials and state ornaments, independent of route coordinates. */
+import { Color, Graphics, Node } from 'cc';
+import { C, CA, N } from './UIKit';
+
+type Point = readonly [number, number];
+function shape(g: Graphics, points: readonly Point[], fill: string, edge?: string, width = 2): void {
+  g.fillColor = C(fill); g.moveTo(points[0][0], points[0][1]);
+  for (let i = 1; i < points.length; i++) g.lineTo(points[i][0], points[i][1]);
+  g.close(); g.fill();
+  if (edge) { g.strokeColor = C(edge); g.lineWidth = width; g.stroke(); }
+}
+function stroke(g: Graphics, points: readonly Point[], color: string, width = 2): void {
+  g.strokeColor = C(color); g.lineWidth = width; g.moveTo(points[0][0], points[0][1]);
+  for (let i = 1; i < points.length; i++) g.lineTo(points[i][0], points[i][1]);
+  g.stroke();
+}
+function rivet(g: Graphics, x: number, y: number, color: string): void {
+  g.fillColor = C('#17232B'); g.circle(x+.4, y-.7, 3.4); g.fill();
+  g.fillColor = C(color); g.circle(x, y, 2.3); g.fill();
+  g.fillColor = CA('#FFFFFF', .65); g.circle(x-.7, y+.8, .9); g.fill();
+}
+
+/** Two stone courses, a chamfered top and radial joints give every theme a real footing. */
+function pedestal(g: Graphics, active: boolean, open: boolean): void {
+  const ink = '#28343D';
+  g.lineWidth = 1.8; g.strokeColor = C(ink);
+  g.fillColor = C('#3E4850'); g.ellipse(0,-35,43,14); g.fill(); g.stroke();
+  g.fillColor = C(open ? '#727F86' : '#626E75');
+  g.moveTo(-43,-23); g.lineTo(-43,-34);
+  g.bezierCurveTo(-43,-51,43,-51,43,-34); g.lineTo(43,-23); g.close(); g.fill(); g.stroke();
+  g.fillColor = C('#4B5963');
+  g.moveTo(1,-37); g.lineTo(1,-47); g.bezierCurveTo(27,-47,43,-42,43,-34);
+  g.lineTo(43,-23); g.close(); g.fill();
+  for (const x of [-29,-12,14,32]) {
+    const y = -34-Math.sqrt(1-x*x/(43*43))*12;
+    stroke(g, [[x,y+10],[x,y]], '#35434C', 1.4);
+    stroke(g, [[x+1.5,y+9],[x+1.5,y+2]], '#879298', .8);
+  }
+  g.fillColor = C(open ? '#A5AFB0' : '#8B979B');
+  g.strokeColor = C(ink); g.lineWidth = 1.8; g.ellipse(0,-23,43,15); g.fill(); g.stroke();
+  g.fillColor = C(open ? '#CCD0C6' : '#B1B9B4'); g.ellipse(-1,-21,37,11); g.fill();
+  g.strokeColor = C(open ? '#F0E9D3' : '#CCD0C6'); g.lineWidth = 1.3;
+  g.moveTo(-35,-18); g.bezierCurveTo(-22,-8,21,-8,35,-18); g.stroke();
+  stroke(g, [[-31,-20],[-23,-23],[-26,-28]], '#7B898D', 1);
+  stroke(g, [[28,-18],[22,-21],[28,-25]], '#7B898D', 1);
+  if (active) {
+    g.strokeColor = C('#FFE8A0'); g.lineWidth = 2.2; g.ellipse(0,-23,42,14); g.stroke();
+    g.strokeColor = C('#DCA333'); g.lineWidth = 1.4; g.ellipse(0,-24,45,16); g.stroke();
+  }
+}
+
+function outpost(g: Graphics, active: boolean, open: boolean): void {
+  pedestal(g, active, open);
+  shape(g, [[-6,-24],[7,-24],[7,46],[-6,46]], '#48515A', '#24323B');
+  const paint = active
+    ? { edge:'#69451E',outer:'#C99427',left:'#A66E1D',top:'#E9B93F',bottom:'#BF831F',cap:'#F0CB66',right:'#CE9A30',rim:'#E5BD59',catch:'#F8D989',rivet:'#E7C56E' }
+    : open
+      ? { edge:'#172B49',outer:'#194C92',left:'#102F61',top:'#2863AF',bottom:'#153B79',cap:'#4D7BAA',right:'#204E89',rim:'#6A8EB0',catch:'#9DB8CE',rivet:'#ADC0CE' }
+      : { edge:'#1D2933',outer:'#3F4C57',left:'#2C3943',top:'#576773',bottom:'#35434F',cap:'#6D7E89',right:'#495A66',rim:'#7C8D98',catch:'#AAB8BE',rivet:'#AFBCC3' };
+  const contour: Point[] = [[-32,55],[32,55],[32,0],[0,-24],[-32,0]];
+  shape(g, contour.map(([x,y]) => [x+1,y-3] as Point), '#26343F', '#17232B', 2);
+  shape(g, contour, paint.outer, paint.edge, 2);
+  shape(g, [[-30,53],[-25,48],[-25,3],[0,-16],[0,-22],[-30,0]],paint.left);
+  const light = C(paint.top), dark = C(paint.bottom), steps=64;
+  const halfWidth = (y: number): number => y<3 ? 25*(y+16)/19 : 25;
+  // The coat follows the pointed shield all the way down; no separate blue triangle or cyan strip.
+  for (let i = 0; i < steps; i++) {
+    const y1=48-i, y0=47-i;
+    g.fillColor = Color.lerp(new Color(),light,dark,i/(steps-1));
+    g.moveTo(-halfWidth(y0),y0); g.lineTo(halfWidth(y0),y0);
+    g.lineTo(halfWidth(y1),y1); g.lineTo(-halfWidth(y1),y1); g.close(); g.fill();
+  }
+  shape(g, [[-30,53],[30,53],[24,47],[-24,47]],paint.cap);
+  shape(g, [[25,48],[31,54],[31,0],[0,-23],[0,-16],[25,3]],paint.right);
+  stroke(g, [[-25,48],[25,48],[25,3],[0,-16],[-25,3],[-25,48]],paint.rim,1);
+  stroke(g, [[-27,51],[-11,51]],paint.catch,.8);
+  rivet(g,-22,42,paint.rivet); rivet(g,22,42,paint.rivet);
+}
+
+function forest(g: Graphics, active: boolean, open: boolean): void {
+  const ink = '#3C3027', wood = open ? '#B27B40' : '#777360';
+  const light = open ? '#E3B879' : '#A7A38A', shade = open ? '#79502F' : '#585E51';
+  pedestal(g, active, open);
+  shape(g, [[-7,-31],[7,-28],[10,46],[-5,57],[-10,48]], open ? '#795335' : '#5E6353', ink, 2.2);
+  stroke(g,[[-3,-20],[-1,2]],open ? '#B18A50' : '#879075',1.3);
+  const board: Point[] = [[-42,49],[29,52],[47,36],[40,25],[47,9],[31,-3],[-42,-1],[-37,23]];
+  shape(g,board.map(([x,y]) => [x+1,y-4] as Point),shade,ink,2.3);
+  shape(g,board,wood,active ? '#D6B86C' : ink,active ? 2 : 2.3);
+  shape(g,[[-39,27],[39,29],[44,36],[28,48],[-39,45]],open ? '#BE8A50' : '#84816B');
+  shape(g,[[-39,14],[38,16],[44,9],[30,1],[-39,2]],shade);
+  stroke(g,[[-37,45],[26,48],[39,37]],light,1.3);
+  stroke(g,[[-37,23],[-20,22],[14,25],[40,25]],ink,1.7);
+  stroke(g,[[-36,20],[-16,19],[18,22]],light,1);
+  for (const points of [ [[-32,35],[-25,34],[-18,36]], [[21,10],[29,12],[36,11]],
+    [[-29,6],[-19,7]], [[-32,30],[-25,30]], [[19,42],[25,41]] ] as Point[][]) {
+    stroke(g,points,light,1.1);
+  }
+  shape(g,[[-40,44],[-34,43],[-34,29],[-39,29]],'#62685C',ink,1);
+  shape(g,[[31,40],[36,36],[34,28],[29,29]],'#62685C',ink,1);
+  rivet(g,-36,38,open ? '#DDD2A8' : '#B3B8A3');
+  rivet(g,32,34,open ? '#DDD2A8' : '#B3B8A3');
+  rivet(g,-29,8,open ? '#DDD2A8' : '#B3B8A3');
+  const moss = open ? '#5A7C38' : '#65725A';
+  shape(g,[[-44,45],[-46,54],[-35,52],[-29,43],[-37,45],[-38,36]],moss,ink,1.2);
+  stroke(g,[[-42,49],[-38,49],[-34,44]],open ? '#9CAE52' : '#8B9874',1.2);
+  shape(g,[[30,-2],[39,4],[41,-3],[35,-9],[29,-7]],moss,ink,1.1);
+}
+
+function lair(g: Graphics, active: boolean, open: boolean): void {
+  const rim = active ? '#D5BB75' : open ? '#9D8564' : '#809088';
+  const bone = open ? '#E7D9B9' : '#B0B5A4', dark = '#242D2D';
+  pedestal(g, active, open);
+  shape(g,[[-8,-28],[8,-28],[7,47],[0,60],[-7,47]],'#4C5046',dark,2);
+  const plate: Point[] = [[-30,49],[-8,55],[0,49],[8,55],[30,49],[37,32],[30,-4],[0,-18],[-30,-4],[-37,32]];
+  shape(g,plate.map(([x,y]) => [x,y-3] as Point),'#1C2426',dark,2.5);
+  shape(g,plate,open ? '#3D4442' : '#52605A',rim,active ? 2 : 1.6);
+  shape(g,[[-24,43],[-9,48],[0,43],[9,48],[24,43],[29,30],[23,0],[0,-11],[-23,0],[-29,30]],
+    open ? '#252F31' : '#404E4B','#747D6A',1.2);
+  shape(g,[[-24,43],[-9,48],[0,43],[9,48],[24,43],[20,37],[-20,37]],open ? '#61685A' : '#79877A');
+  shape(g,[[-36,49],[-46,56],[-45,32],[-41,12],[-29,-7],[-34,17],[-31,33]],bone,dark,2.2);
+  shape(g,[[36,49],[46,56],[45,32],[41,12],[29,-7],[34,17],[31,33]],bone,dark,2.2);
+  stroke(g,[[-42,47],[-41,29],[-36,15]],open ? '#D2C5A8' : '#B5BDAA',1);
+  stroke(g,[[41,45],[40,29],[36,15]],open ? '#AB9673' : '#7D8C7B',1.6);
+  stroke(g,[[-22,43],[-9,47]],rim,1.4); stroke(g,[[22,43],[9,47]],rim,1.4);
+  rivet(g,-22,35,rim); rivet(g,22,35,rim);
+  shape(g,[[-7,1],[0,7],[7,1],[0,-7]],open ? active ? '#FFD163' : '#B9623E' : '#839181',dark,1.5);
+  shape(g,[[-4,1],[0,4],[3,1],[0,0]],open ? '#F3BC74' : '#BBC3A5');
+}
+
+export function paintCampaignCheckpoint(parent: Node, chapter: number, active: boolean, open: boolean): void {
+  const theme = Math.max(0,Math.min(2,Math.floor(chapter)));
+  const names = ['campaignCheckpointOutpost','campaignCheckpointForest','campaignCheckpointLair'];
+  const g = N(names[theme],parent).addComponent(Graphics);
+  [outpost,forest,lair][theme](g,active,open);
+}
+
+/** The empty-star face deliberately stays gray even on a selected gold checkpoint. */
+export function campaignCheckpointStar(parent: Node, x: number, y: number, earned: boolean, index: number): void {
+  const g = N('checkpointStar:'+index,parent,x,y).addComponent(Graphics);
+  const points: Point[] = Array.from({length:10},(_,k) => {
+    const a = Math.PI/2+k*Math.PI/5, r = k%2 ? 6.4 : 14.5;
+    return [Math.cos(a)*r,Math.sin(a)*r] as Point;
+  });
+  shape(g,points.map(([px,py]) => [px,py-2] as Point),'#26323A','#17242B',1.5);
+  shape(g,points,earned ? '#F9C641' : '#7F8C99','#17242B',2.1);
+  shape(g,[[0,13],[-3,4],[-13,4],[-5,0],[0,2]],earned ? '#FFF0AD' : '#B3BEC6');
+  shape(g,[[0,2],[8,-10],[5,-1],[13,4],[3,4]],earned ? '#D49420' : '#536371');
+}
+
+export function campaignCheckpointLock(parent: Node): void {
+  const g = N('campaignLockSeal',parent,0,-18,30,34).addComponent(Graphics);
+  g.fillColor = C('#26343E'); g.strokeColor = C('#172630'); g.lineWidth = 1.2;
+  g.roundRect(-14,-14,28,32,7); g.fill(); g.stroke();
+  g.strokeColor = C('#A5B4BA'); g.lineWidth = 4;
+  g.moveTo(-6,1); g.lineTo(-6,8); g.bezierCurveTo(-6,16,6,16,6,8); g.lineTo(6,1); g.stroke();
+  g.strokeColor = C('#F2F3E9'); g.lineWidth = 2;
+  g.moveTo(-6,2); g.lineTo(-6,8); g.bezierCurveTo(-6,15,6,15,6,8); g.stroke();
+  g.fillColor = C('#D8DFDD'); g.roundRect(-9,-10,18,17,3); g.fill();
+  g.fillColor = C('#F9F8E9'); g.roundRect(-8,0,16,6,2); g.fill();
+  g.fillColor = C('#6A7D85'); g.circle(0,-2,1.8); g.fill(); g.rect(-.9,-6,1.8,4); g.fill();
+}
+
+export function campaignCheckpointReward(parent: Node, x: number, y: number): void {
+  const g = N('campaignChestReady',parent,x,y).addComponent(Graphics);
+  g.fillColor = CA('#1F2B34',.35); g.circle(1,-1,8); g.fill();
+  g.fillColor = C('#D9533C'); g.strokeColor = C('#FFF3D4'); g.lineWidth = 1.6;
+  g.circle(0,0,7); g.fill(); g.stroke();
+  g.fillColor = CA('#FFD5A3',.8); g.circle(-2,2,1.7); g.fill();
+}

@@ -1,0 +1,15 @@
+Use case: precise-object-edit.
+Correct ONLY the stance, head direction and gaze of this exact raider. Preserve the same blue creature face and body, bone cap with one broken horn, modest muscles, very ragged asymmetrical brown tunic, loose dirty dark-red side-knotted scarf, low curved blade, color palette and drawing style.
+
+CAMERA stays elevated as a defender on a wall looking gently DOWN at the enemy, around 25–30 degrees, centered directly IN FRONT of it. Do NOT return to an eye-level camera. Helmet top, shoulder tops and foot tops remain visible.
+
+THE CREATURE MUST NOT LOOK UP:
+Its head stays in a natural forward orientation, chin LEVEL or slightly tucked, not tilted back. The eyes look ahead horizontally toward the BASE of the wall, below the elevated camera's eye line. No upward-rolled pupils, no lifting the chin to meet the viewer, no eye contact with the high camera. From the elevated camera we see the top of its head and a little less of the lower face. Keep its beast face readable but do not compensate for the elevated view by making it look upward.
+
+STRICTLY FRONTAL BODY, NO SIDE TURN:
+Head, skull centerline, nose, chest and pelvis all point straight ahead on the same vertical axis. No sideways twist, no three-quarter body, no diagonal lean, no tilted head. The two shoulders and two hip joints are at matching depths and heights. Keep the clothing asymmetrical; do NOT twist the anatomy to create that asymmetry.
+
+FEET SIDE BY SIDE, NOT A WALKING POSE:
+Replace the staggered legs with a quiet planted stance. Both feet stand at the SAME DISTANCE from the camera, on the SAME transverse ground line, side by side with a natural hip-width gap. Both toe tips appear at the SAME IMAGE HEIGHT; feet have equal apparent size and matching foreshortening. Both feet point forward in the same direction. Both knees relaxed evenly. No foot forward, no foot behind, no stepping, running, lunging, contrapposto or weight shift. This is a stationary neutral source pose for animation. Camera foreshortening affects both legs equally.
+
+Arms low and relaxed; keep the blade low outside one thigh and the other hand down. Full body, feet, scarf tail, helmet and blade inside generous margins. Plain flat light-ivory background, no wall illustration, no text, no scenery, no grid or ground props. Make the above-camera view unmistakable while the monster itself looks straight ahead, stands frontally, and plants both feet in one row.

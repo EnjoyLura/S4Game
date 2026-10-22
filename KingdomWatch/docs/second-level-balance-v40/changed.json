@@ -1,0 +1,16 @@
+[
+  "assets/scripts/battle/BattleDirector.ts",
+  "assets/scripts/config/LevelDifficulty.ts",
+  "assets/scripts/core/GameData.ts",
+  "assets/scripts/core/SaveData.ts",
+  "assets/scripts/core/StageLoot.ts",
+  "assets/scripts/ui/BattleRewardPanel.ts",
+  "assets/scripts/ui/LevelLootPreview.ts",
+  "assets/scripts/ui/MainUI.ts",
+  "assets/scripts/ui/PageKit.ts",
+  "assets/scripts/ui/SquadPanel.ts",
+  "assets/scripts/ui/TrainingLobby.ts",
+  "assets/scripts/ui/pages/HeroPage.ts",
+  "assets/scripts/ui/pages/LevelsPage.ts",
+  "assets/scripts/ui/pages/ShopPage.ts"
+]

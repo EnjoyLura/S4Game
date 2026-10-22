@@ -1,0 +1,68 @@
+{
+  "tool": "built-in image_gen",
+  "status": "Concept first-frame images; not integrated; not user-approved",
+  "assets": [
+    {
+      "file": "burrow-beast-melee-front-green-v2.png",
+      "mode": "RGB",
+      "size": [
+        1254,
+        1254
+      ],
+      "cornerColors": [
+        [
+          22,
+          240,
+          25
+        ],
+        [
+          14,
+          238,
+          15
+        ],
+        [
+          19,
+          240,
+          22
+        ],
+        [
+          17,
+          243,
+          20
+        ]
+      ],
+      "sha256": "d323fc1893a3dce6836a63f68abf4b9f1186b6074e0594fcef5908128251146d"
+    },
+    {
+      "file": "burrow-beast-ranged-front-green-v2.png",
+      "mode": "RGB",
+      "size": [
+        1254,
+        1254
+      ],
+      "cornerColors": [
+        [
+          18,
+          240,
+          27
+        ],
+        [
+          19,
+          241,
+          25
+        ],
+        [
+          17,
+          241,
+          25
+        ],
+        [
+          15,
+          243,
+          23
+        ]
+      ],
+      "sha256": "4471396adf4a4515911e2c6158f4d5fdfb964d00c1b83522c7a4156c64709b69"
+    }
+  ]
+}

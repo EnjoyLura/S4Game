@@ -7,6 +7,9 @@ import { heroPortrait } from './HeroComic';
 import { mainLabel, PageCtx, toast } from './PageKit';
 import { HERO_DEFS, SQUAD_MAX, deployHero, inSquad, squadList, undeployHero } from '../core/GameData';
 import { loadSave } from '../core/SaveData';
+import { finishPyroSquadLesson, pendingPyroSquadLesson } from '../core/SecondJourney';
+import { tutorialFocus } from './TutorialFocus';
+import { whenUIArtReady } from './UIArtReady';
 import { bindButton } from './ButtonFeedback';
 import { dismissUI, dismissUIAfterRefresh, motionIn } from './UIMotion';
 import { uiSound } from './UIAudio';
@@ -24,9 +27,11 @@ export function openSquadPanel(ctx: PageCtx): void {
   squadHallBackground(dim,LO.half*2,WY(0,440),WY(420,Math.max(1,LO.half*2-420)));
   const top = Math.max(48, LO.notchTop + 20);
   let closing = false;
+  let taughtPyro = false;
   let releaseBack = (): void => {};
   const close = (): void => {
     if (closing || !dim.isValid) return;
+    if (pendingPyroSquadLesson()) finishPyroSquadLesson(true);
     closing = true; releaseBack();
     dismissUIAfterRefresh(dim, ctx.screens, ctx.refresh);
   };
@@ -91,11 +96,21 @@ export function openSquadPanel(ctx: PageCtx): void {
       mainLabel(card, 0, -59, 'Lv.' + (sv.heroes[def.id]?.lv || 1), { size: 18, color: COMIC.sub, w: 108, h: 26 });
       mainLabel(card,0,-85,dep ? '已上阵' : owned ? '点击上阵' : '尚未解锁',{size:17,color:dep ? COMIC.greenShade : COMIC.sub,w:116,h:26});
       if (dep) comicMark(card, 46, 78, 'check', 19, COMIC.greenShade);
-      bindButton(card, () => {
+      const select = (): void => {
         if (dep) { confirmRemove(def.id); return; }
+        const teaching = def.id === 'pyro' && pendingPyroSquadLesson();
         const result = deployHero(def.id);
         toast(result.msg, { kind: result.ok ? 'success' : 'warning', title: result.ok ? '编队已更新' : '暂时无法上阵' });
+        if (result.ok && teaching) {
+          finishPyroSquadLesson(); taughtPyro = true;
+        }
         if (result.ok) rebuild();
+      };
+      bindButton(card, select);
+      if (def.id === 'pyro' && owned && !dep && pendingPyroSquadLesson()) whenUIArtReady(body, () => {
+        if (!card.isValid || !card.activeInHierarchy || !pendingPyroSquadLesson()) return;
+        tutorialFocus(dim, card, '火法师已免费加入！点击将他放入空余出战位置，准备挑战1-3。', select,
+          () => finishPyroSquadLesson(true));
       });
     });
     const noteTop = barTop + 320;
@@ -111,6 +126,11 @@ export function openSquadPanel(ctx: PageCtx): void {
     paintCampaignMapAction(doneFace,390,88,'gold');
     mainLabel(doneFace,0,0,'完成编队',{size:34,font:'body',bold:true,color:'#1C2D33',w:284,h:50});
     squadDivider(doneFace,-138,0,40,true); squadDivider(doneFace,138,0,40,true);
+    if (taughtPyro) whenUIArtReady(body, () => {
+      if (!done.isValid || !done.activeInHierarchy) return;
+      taughtPyro = false;
+      tutorialFocus(dim, done, '火法师已上阵，点击完成编队，前往1-3。', close, close);
+    });
   }
 
   function confirmRemove(hid: string): void {

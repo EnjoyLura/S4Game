@@ -1,0 +1,377 @@
+{
+  "originalWeaponCount": 9,
+  "originalWeaponsUnchanged": true,
+  "totalWeapons": 25,
+  "shopWeaponCount": 21,
+  "added": [
+    {
+      "id": "wpn_blue_swift_bow",
+      "name": "疾羽短弓",
+      "type": "bow",
+      "quality": 2,
+      "tier": 1,
+      "focus": "攻速弓",
+      "description": "轻盈的羽翼形短弓，提供攻击、技能伤害和攻速，适合持续普攻。",
+      "stats": {
+        "atk": 36,
+        "skillDmg": 20,
+        "atkSpd": 0.1
+      },
+      "price": 1000,
+      "unlock": "1-2",
+      "art": "weapons_v1/blue_swift_bow_v56",
+      "breakthrough": {
+        "atk": 0.11,
+        "skill": 0.08,
+        "secondary": "atkSpd",
+        "bonus": 0.03
+      }
+    },
+    {
+      "id": "wpn_blue_briar_bow",
+      "name": "铁棘长弓",
+      "type": "bow",
+      "quality": 2,
+      "tier": 1,
+      "focus": "暴击弓",
+      "description": "铁棘加固的长弓，攻击较高，兼顾技能伤害与暴击率，适合暴击普攻。",
+      "stats": {
+        "atk": 40,
+        "skillDmg": 16,
+        "critRate": 0.045
+      },
+      "price": 1000,
+      "unlock": "1-2",
+      "art": "weapons_v1/blue_briar_bow_v56",
+      "breakthrough": {
+        "atk": 0.12,
+        "skill": 0.07,
+        "secondary": "critRate",
+        "bonus": 0.015
+      }
+    },
+    {
+      "id": "wpn_purple_gale_bow",
+      "name": "逐风之弓",
+      "type": "bow",
+      "quality": 3,
+      "tier": 2,
+      "focus": "攻速弓",
+      "description": "象牙色羽翼弓臂搭配金属护片，提供攻击、技能伤害和攻速，延续快速射击路线。",
+      "stats": {
+        "atk": 40,
+        "skillDmg": 22,
+        "atkSpd": 0.1
+      },
+      "price": 1600,
+      "unlock": "1-4",
+      "art": "weapons_v1/purple_gale_bow_v56",
+      "breakthrough": {
+        "atk": 0.12,
+        "skill": 0.09,
+        "secondary": "atkSpd",
+        "bonus": 0.035
+      }
+    },
+    {
+      "id": "wpn_purple_raven_bow",
+      "name": "鸦羽猎弓",
+      "type": "bow",
+      "quality": 3,
+      "tier": 2,
+      "focus": "暴击弓",
+      "description": "乌木与鸦羽形护片打造的猎弓，偏重攻击和暴击率，同时保留技能伤害。",
+      "stats": {
+        "atk": 44,
+        "skillDmg": 18,
+        "critRate": 0.045
+      },
+      "price": 1600,
+      "unlock": "1-4",
+      "art": "weapons_v1/purple_raven_bow_v56",
+      "breakthrough": {
+        "atk": 0.13,
+        "skill": 0.08,
+        "secondary": "critRate",
+        "bonus": 0.02
+      }
+    },
+    {
+      "id": "wpn_blue_hawk_crossbow",
+      "name": "隼翼轻弩",
+      "type": "crossbow",
+      "quality": 2,
+      "tier": 1,
+      "focus": "暴击弩",
+      "description": "轻巧的隼翼弩臂便于稳定瞄准，提供攻击、技能伤害与暴击率。",
+      "stats": {
+        "atk": 46,
+        "skillDmg": 14,
+        "critRate": 0.05
+      },
+      "price": 1000,
+      "unlock": "1-2",
+      "art": "weapons_v1/blue_hawk_crossbow_v56",
+      "breakthrough": {
+        "atk": 0.12,
+        "skill": 0.07,
+        "secondary": "critRate",
+        "bonus": 0.02
+      }
+    },
+    {
+      "id": "wpn_blue_rock_crossbow",
+      "name": "碎岩重弩",
+      "type": "crossbow",
+      "quality": 2,
+      "tier": 1,
+      "focus": "暴伤弩",
+      "description": "厚重的铁臂与坚固弩床，兼顾攻击、技能伤害和暴击伤害，适合已有暴击率的搭配。",
+      "stats": {
+        "atk": 42,
+        "skillDmg": 18,
+        "critDmg": 0.2
+      },
+      "price": 1000,
+      "unlock": "1-2",
+      "art": "weapons_v1/blue_rock_crossbow_v56",
+      "breakthrough": {
+        "atk": 0.11,
+        "skill": 0.08,
+        "secondary": "critDmg",
+        "bonus": 0.08
+      }
+    },
+    {
+      "id": "wpn_purple_falcon_crossbow",
+      "name": "银隼战弩",
+      "type": "crossbow",
+      "quality": 3,
+      "tier": 2,
+      "focus": "暴击弩",
+      "description": "银钢隼翼与长弩轨强调精准重击，偏重攻击和暴击率，兼顾技能伤害。",
+      "stats": {
+        "atk": 52,
+        "skillDmg": 20,
+        "critRate": 0.055
+      },
+      "price": 1600,
+      "unlock": "1-4",
+      "art": "weapons_v1/purple_falcon_crossbow_v56",
+      "breakthrough": {
+        "atk": 0.13,
+        "skill": 0.08,
+        "secondary": "critRate",
+        "bonus": 0.025
+      }
+    },
+    {
+      "id": "wpn_purple_siege_crossbow",
+      "name": "裂城重弩",
+      "type": "crossbow",
+      "quality": 3,
+      "tier": 2,
+      "focus": "暴伤弩",
+      "description": "重型铁臂和青铜机括构成的攻城弩，兼顾攻击、技能伤害与暴击伤害。",
+      "stats": {
+        "atk": 48,
+        "skillDmg": 24,
+        "critDmg": 0.24
+      },
+      "price": 1600,
+      "unlock": "1-4",
+      "art": "weapons_v1/purple_siege_crossbow_v56",
+      "breakthrough": {
+        "atk": 0.12,
+        "skill": 0.09,
+        "secondary": "critDmg",
+        "bonus": 0.1
+      }
+    },
+    {
+      "id": "wpn_blue_tide_book",
+      "name": "潮汐秘典",
+      "type": "book",
+      "quality": 2,
+      "tier": 1,
+      "focus": "充能魔法书",
+      "description": "银色潮纹封面的秘典，偏重技能伤害与充能效率，并提供少量攻击。三系法师通用。",
+      "stats": {
+        "atk": 18,
+        "skillDmg": 44,
+        "chargeEff": 0.09
+      },
+      "price": 1000,
+      "unlock": "1-2",
+      "art": "weapons_v1/blue_tide_book_v56",
+      "breakthrough": {
+        "atk": 0.07,
+        "skill": 0.12,
+        "secondary": "chargeEff",
+        "bonus": 0.04
+      }
+    },
+    {
+      "id": "wpn_blue_ember_book",
+      "name": "烬纹魔典",
+      "type": "book",
+      "quality": 2,
+      "tier": 1,
+      "focus": "暴击魔法书",
+      "description": "烬色皮革与琥珀纹章的魔典，提供攻击、技能伤害和暴击率，适合兼顾法术输出与暴击的搭配。三系法师通用。",
+      "stats": {
+        "atk": 22,
+        "skillDmg": 40,
+        "critRate": 0.04
+      },
+      "price": 1000,
+      "unlock": "1-2",
+      "art": "weapons_v1/blue_ember_book_v56",
+      "breakthrough": {
+        "atk": 0.08,
+        "skill": 0.11,
+        "secondary": "critRate",
+        "bonus": 0.015
+      }
+    },
+    {
+      "id": "wpn_purple_star_book",
+      "name": "星潮法典",
+      "type": "book",
+      "quality": 3,
+      "tier": 2,
+      "focus": "充能魔法书",
+      "description": "星盘纹章与银白护角装订的法典，偏重技能伤害与充能效率，适合频繁准备大招。三系法师通用。",
+      "stats": {
+        "atk": 22,
+        "skillDmg": 46,
+        "chargeEff": 0.1
+      },
+      "price": 1600,
+      "unlock": "1-4",
+      "art": "weapons_v1/purple_star_book_v56",
+      "breakthrough": {
+        "atk": 0.08,
+        "skill": 0.13,
+        "secondary": "chargeEff",
+        "bonus": 0.05
+      }
+    },
+    {
+      "id": "wpn_purple_dusk_book",
+      "name": "暮鸦秘录",
+      "type": "book",
+      "quality": 3,
+      "tier": 2,
+      "focus": "暴击魔法书",
+      "description": "暮色皮革封面镶嵌鸦翼纹章，提供攻击、技能伤害和暴击率。三系法师通用。",
+      "stats": {
+        "atk": 26,
+        "skillDmg": 42,
+        "critRate": 0.045
+      },
+      "price": 1600,
+      "unlock": "1-4",
+      "art": "weapons_v1/purple_dusk_book_v56",
+      "breakthrough": {
+        "atk": 0.09,
+        "skill": 0.12,
+        "secondary": "critRate",
+        "bonus": 0.02
+      }
+    },
+    {
+      "id": "wpn_blue_frost_staff",
+      "name": "霜晶法杖",
+      "type": "staff",
+      "quality": 2,
+      "tier": 1,
+      "focus": "暴伤法杖",
+      "description": "银爪托起淡蓝霜晶的法杖，提供攻击、技能伤害和暴击伤害，适合提高暴击命中的伤害。三系法师通用。",
+      "stats": {
+        "atk": 24,
+        "skillDmg": 38,
+        "critDmg": 0.18
+      },
+      "price": 1000,
+      "unlock": "1-2",
+      "art": "weapons_v1/blue_frost_staff_v56",
+      "breakthrough": {
+        "atk": 0.09,
+        "skill": 0.1,
+        "secondary": "critDmg",
+        "bonus": 0.08
+      }
+    },
+    {
+      "id": "wpn_blue_echo_staff",
+      "name": "回响法杖",
+      "type": "staff",
+      "quality": 2,
+      "tier": 1,
+      "focus": "充能法杖",
+      "description": "黄铜环首包围青色宝珠，偏重技能伤害和充能效率，兼顾攻击。三系法师通用。",
+      "stats": {
+        "atk": 20,
+        "skillDmg": 42,
+        "chargeEff": 0.09
+      },
+      "price": 1000,
+      "unlock": "1-2",
+      "art": "weapons_v1/blue_echo_staff_v56",
+      "breakthrough": {
+        "atk": 0.08,
+        "skill": 0.11,
+        "secondary": "chargeEff",
+        "bonus": 0.04
+      }
+    },
+    {
+      "id": "wpn_purple_sun_staff",
+      "name": "裂日法杖",
+      "type": "staff",
+      "quality": 3,
+      "tier": 2,
+      "focus": "暴伤法杖",
+      "description": "金色日轮杖首与琥珀晶石，提供攻击、技能伤害和暴击伤害，适合暴击搭配。三系法师通用。",
+      "stats": {
+        "atk": 28,
+        "skillDmg": 42,
+        "critDmg": 0.2
+      },
+      "price": 1600,
+      "unlock": "1-4",
+      "art": "weapons_v1/purple_sun_staff_v56",
+      "breakthrough": {
+        "atk": 0.1,
+        "skill": 0.11,
+        "secondary": "critDmg",
+        "bonus": 0.1
+      }
+    },
+    {
+      "id": "wpn_purple_moon_staff",
+      "name": "月泉法杖",
+      "type": "staff",
+      "quality": 3,
+      "tier": 2,
+      "focus": "充能法杖",
+      "description": "象牙色杖身与银月托珠，偏重技能伤害和充能效率，并提供攻击。三系法师通用。",
+      "stats": {
+        "atk": 24,
+        "skillDmg": 46,
+        "chargeEff": 0.1
+      },
+      "price": 1600,
+      "unlock": "1-4",
+      "art": "weapons_v1/purple_moon_staff_v56",
+      "breakthrough": {
+        "atk": 0.09,
+        "skill": 0.12,
+        "secondary": "chargeEff",
+        "bonus": 0.05
+      }
+    }
+  ],
+  "inspection": "Static AST extraction only; no project code executed"
+}

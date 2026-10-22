@@ -1,0 +1,202 @@
+{
+  "scope": "Offline image, atlas, geometry and source-preservation checks; no game/browser/audio execution.",
+  "visual_approval": "Pending user review; geometric continuity does not prove natural motion.",
+  "monsters": {
+    "worker": {
+      "frames": 32,
+      "dimensions": [
+        512,
+        512
+      ],
+      "minimum_transparent_margin_px": 28,
+      "animations": {
+        "preview.gif": {
+          "frames": 32,
+          "cycle_ms": 1280
+        },
+        "preview.apng": {
+          "frames": 32,
+          "cycle_ms": 1280.0
+        },
+        "old-new.gif": {
+          "frames": 32,
+          "cycle_ms": 1280
+        }
+      },
+      "atlases_match_every_frame": true,
+      "dense_geometry_phases": 129,
+      "minimum_signed_cross_product": 34.290376637571114,
+      "periodic_position_max_error": 4.547473508864641e-13,
+      "periodic_velocity_max_error": 2.2737367544323206e-08,
+      "root_collar_relative_motion_max": null,
+      "wing_connected_all_32_frames": null,
+      "mean_adjacent_pixel_difference": 4.070940554141998,
+      "wrap_pixel_difference": 4.3081207275390625,
+      "game_integrated": false
+    },
+    "snow_wolf": {
+      "frames": 32,
+      "dimensions": [
+        512,
+        512
+      ],
+      "minimum_transparent_margin_px": 28,
+      "animations": {
+        "preview.gif": {
+          "frames": 32,
+          "cycle_ms": 1280
+        },
+        "preview.apng": {
+          "frames": 32,
+          "cycle_ms": 1280.0
+        },
+        "old-new.gif": {
+          "frames": 32,
+          "cycle_ms": 1280
+        }
+      },
+      "atlases_match_every_frame": true,
+      "dense_geometry_phases": 129,
+      "minimum_signed_cross_product": 105.26572440419163,
+      "periodic_position_max_error": 2.2737367544323206e-13,
+      "periodic_velocity_max_error": 1.1368683772161603e-08,
+      "root_collar_relative_motion_max": null,
+      "wing_connected_all_32_frames": null,
+      "mean_adjacent_pixel_difference": 5.160551846027374,
+      "wrap_pixel_difference": 4.755751609802246,
+      "game_integrated": false
+    },
+    "rift_hound": {
+      "frames": 32,
+      "dimensions": [
+        512,
+        512
+      ],
+      "minimum_transparent_margin_px": 28,
+      "animations": {
+        "preview.gif": {
+          "frames": 32,
+          "cycle_ms": 1280
+        },
+        "preview.apng": {
+          "frames": 32,
+          "cycle_ms": 1280.0
+        },
+        "old-new.gif": {
+          "frames": 32,
+          "cycle_ms": 1280
+        }
+      },
+      "atlases_match_every_frame": true,
+      "dense_geometry_phases": 129,
+      "minimum_signed_cross_product": 61.361815070328106,
+      "periodic_position_max_error": 2.2737367544323206e-13,
+      "periodic_velocity_max_error": 2.2737367544323206e-08,
+      "root_collar_relative_motion_max": null,
+      "wing_connected_all_32_frames": null,
+      "mean_adjacent_pixel_difference": 4.995853304862976,
+      "wrap_pixel_difference": 4.923266410827637,
+      "game_integrated": false
+    },
+    "eagle": {
+      "frames": 32,
+      "dimensions": [
+        512,
+        512
+      ],
+      "minimum_transparent_margin_px": 34,
+      "animations": {
+        "preview.gif": {
+          "frames": 32,
+          "cycle_ms": 960
+        },
+        "preview.apng": {
+          "frames": 32,
+          "cycle_ms": 960.0
+        },
+        "old-new.gif": {
+          "frames": 32,
+          "cycle_ms": 960
+        }
+      },
+      "atlases_match_every_frame": true,
+      "dense_geometry_phases": 129,
+      "minimum_signed_cross_product": 253.80848724158608,
+      "periodic_position_max_error": 2.2737367544323206e-13,
+      "periodic_velocity_max_error": 1.1368683772161603e-08,
+      "root_collar_relative_motion_max": 0.0,
+      "wing_connected_all_32_frames": true,
+      "mean_adjacent_pixel_difference": 4.633919715881348,
+      "wrap_pixel_difference": 2.3385448455810547,
+      "game_integrated": false
+    },
+    "bat": {
+      "frames": 32,
+      "dimensions": [
+        512,
+        512
+      ],
+      "minimum_transparent_margin_px": 45,
+      "animations": {
+        "preview.gif": {
+          "frames": 32,
+          "cycle_ms": 640
+        },
+        "preview.apng": {
+          "frames": 32,
+          "cycle_ms": 640.0
+        },
+        "old-new.gif": {
+          "frames": 32,
+          "cycle_ms": 640
+        }
+      },
+      "atlases_match_every_frame": true,
+      "dense_geometry_phases": 129,
+      "minimum_signed_cross_product": 28.253412590426816,
+      "periodic_position_max_error": 0.0,
+      "periodic_velocity_max_error": 5.6843418860808015e-09,
+      "root_collar_relative_motion_max": 0.0,
+      "wing_connected_all_32_frames": true,
+      "mean_adjacent_pixel_difference": 3.971881628036499,
+      "wrap_pixel_difference": 1.76171875,
+      "game_integrated": false
+    }
+  },
+  "preserved_original_files": {
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-walk-v2\\source-cutout.png": "4f26e4ab16233614070ef75f84eaff677af918609041bdebbbdda5adad3b82bf",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-walk-v2\\goblin-code-walk-atlas.png": "10aa3b13d72e5c074f250ef85fb8ac393ac9eb4813647ad339cc9197e4583075",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-walk-v2\\animate.py": "0fd75ff59cb5f7227a8b54e0a471ebfaf8a03e61f2a03feba3eaac7b471ebafc",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\sources\\snow_wolf.png": "231f6e11a593d07eba24eb549e14338185a88b2a76dbd49cfc8da9e608324f13",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\snow_wolf\\atlas.png": "47d2385ffed2223d9a2611c5ab173f5b59def09a90fd99fc1691ad9229c0f9cc",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\animate.py": "6539fb6e7d1d2984cbf11c4e1de0f6ed2689ecf47f255ade4345f4e6d8a7e9a3",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\sources\\rift_hound.png": "d1ea57aa2f917bd6f7a07f0326152374fe6af9f83f1985d1e46f7d31c71b6881",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\rift_hound\\atlas.png": "33981bef3d07b1b144b36ff7def43c470a01c22178ff6c70bcf465f7ac55a5d1",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\sources\\eagle-cutout.png": "ff85009a227ea3d64cec3cdb5c2224e606d406bb0fcbeb80fb79bfb4d126e67d",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\eagle\\atlas.png": "66c3d303d78eaad4cdb9edffdd4733c15842b47f2fd16429b81d6ed6a02a43a9",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\sources\\bat.png": "e9935a4349fc47bf952642ff5bae20bc2b978b5138b2901e208e2a4ee6723e85",
+    "D:\\AI\\S4Game\\KingdomWatch\\docs\\code-monster-templates-v3\\bat\\atlas.png": "412ba623fc97ab10edc5300700150b099824c84e17487b9d282124e08ac4a1ad"
+  },
+  "input_copies": {
+    "worker": "4f26e4ab16233614070ef75f84eaff677af918609041bdebbbdda5adad3b82bf",
+    "snow_wolf": "231f6e11a593d07eba24eb549e14338185a88b2a76dbd49cfc8da9e608324f13",
+    "rift_hound": "d1ea57aa2f917bd6f7a07f0326152374fe6af9f83f1985d1e46f7d31c71b6881",
+    "eagle": "ff85009a227ea3d64cec3cdb5c2224e606d406bb0fcbeb80fb79bfb4d126e67d",
+    "bat": "e9935a4349fc47bf952642ff5bae20bc2b978b5138b2901e208e2a4ee6723e85"
+  },
+  "galleries": {
+    "quadruped-new.gif": {
+      "frames": 32,
+      "cycle_ms": 1280
+    },
+    "flight-new.gif": {
+      "frames": 48,
+      "cycle_ms": 1920
+    },
+    "biped-new.gif": {
+      "frames": 32,
+      "cycle_ms": 1280
+    }
+  },
+  "passed": true
+}

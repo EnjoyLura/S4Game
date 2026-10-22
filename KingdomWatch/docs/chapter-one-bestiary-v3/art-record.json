@@ -1,0 +1,50 @@
+{
+  "tool": "image_gen.imagegen",
+  "asset": "one Chinese chapter-one bestiary poster",
+  "roster": [
+    "兽族散兵",
+    "兽族投手",
+    "噬骨座狼",
+    "赤翼秃鹫",
+    "兽人盾兵",
+    "骨杖巫医",
+    "赤旗狼骑",
+    "碎木巨魔",
+    "双头食人魔「断门者」"
+  ],
+  "layout": "3 columns x 3 rows; row-major roster order",
+  "references": [
+    {
+      "path": "C:\\Users\\user\\AppData\\Local\\Temp\\codex-clipboard-f0d98594-d8c5-4503-9526-47cf3f7a4238.png",
+      "role": "visual style/design reference, not edit target",
+      "sha256": "df6c0a403b86ecc43a57e10876dd8f4d05a3cc3fcc3f8eada1037446037dcaeb"
+    },
+    {
+      "path": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\ux\\mobs_lair_v66.png",
+      "role": "visual style/design reference, not edit target",
+      "sha256": "d853704c771881349bc781f5d9d626041d13926550c8f41dbadf9297c20b68e5"
+    }
+  ],
+  "prompt": "prompt.txt",
+  "game_integrated": false,
+  "user_visual_approval": "rejected: user requested shared species bases using the blue wolf rider reference",
+  "output": {
+    "file": "chapter-one-bestiary.png",
+    "generated_source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-800f2c4a-3fe7-42b6-8d75-868af11d2365.png",
+    "sha256": "4c34e3329ddad03239e56006d9993c0ec1b19eaf05161757f0a1e895fbd95683",
+    "size": [
+      1086,
+      1448
+    ],
+    "mode": "RGB",
+    "original_bytes_preserved": true
+  },
+  "visual_inspection": {
+    "entry_count": 9,
+    "roster_order_matches": true,
+    "title_and_nameplates": "All nine names and two-headed boss alias are visible and read correctly in the generated sheet.",
+    "boss_head_count": 2,
+    "notes": "Full-body parchment collection with distinct silhouettes. Several poses are angled rather than strictly frontal; vulture wing and boss beam have tight side margins. Treat as a collection concept, not an animation master or transparent atlas.",
+    "user_approval": "rejected"
+  }
+}

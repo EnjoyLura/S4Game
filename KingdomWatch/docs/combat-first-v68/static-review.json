@@ -1,0 +1,25 @@
+{
+  "originalGameFiles": 2076,
+  "changedGameFiles": [
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/battle/Hero.ts",
+    "assets/scripts/battle/ImpactFX.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/battle/MonsterTraits.ts",
+    "assets/scripts/battle/Projectile.ts",
+    "assets/scripts/config/Cards.ts",
+    "assets/scripts/config/ChapterContent.ts",
+    "assets/scripts/config/GameConfig.ts",
+    "assets/scripts/config/Mobs.ts",
+    "assets/scripts/core/GameData.ts",
+    "assets/scripts/ui/Panels.ts"
+  ],
+  "addedGameFiles": [],
+  "removedGameFiles": [],
+  "mediaFilesPreserved": 756,
+  "originalMediaFiles": 756,
+  "diagnosticsBefore": 10,
+  "diagnosticsAfter": 10,
+  "newDiagnostics": [],
+  "validation": "File contents and compiler diagnostics only; no gameplay, browser, tests, simulation or audio."
+}

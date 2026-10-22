@@ -1,4 +1,5 @@
 /** Chapter order, stage identity and battlefield art are shared by the lobby and battles. */
+import { CHAPTER_CONTENT } from './ChapterContent';
 export interface CampaignChapter {
   number: number;
   name: string;
@@ -14,14 +15,10 @@ export interface CampaignStage {
   order: number;
 }
 
-export const CAMPAIGN_CHAPTERS: readonly CampaignChapter[] = [
-  { number: 1, name: '前哨', art: 'outpost', battlefield: 'scenes/scene_1_1',
-    stages: ['城外小径', '废弃岗亭', '林缘营地', '石桥隘口', '哨塔争夺', '补给小道', '旧墙防线', '烽火营地', '前哨围攻', '守望堡垒'] },
-  { number: 2, name: '深林', art: 'forest', battlefield: 'scenes/scene_1_2',
-    stages: ['林间入口', '迷雾小径', '古树廊道', '密林伏击', '狼影岔路', '苔石遗迹', '萨满祭地', '幽林深处', '荆棘围阵', '深林腹地'] },
-  { number: 3, name: '兽穴', art: 'lair', battlefield: 'scenes/scene_1_3',
-    stages: ['洞口险道', '碎骨坑道', '兽群营地', '獠牙石窟', '战鼓大厅', '地底暗河', '驯兽巢室', '蛮兵要塞', '兽穴围城', '巢穴核心'] },
-];
+export const CAMPAIGN_CHAPTERS: readonly CampaignChapter[] = CHAPTER_CONTENT.map(c => ({
+  number: c.number, name: c.name, art: c.art, stages: c.stages,
+  battlefield: c.number <= 3 ? 'scenes/scene_1_' + c.number : 'scenes/scene_' + c.art + '_v66',
+}));
 export const CAMPAIGN_STAGES: readonly CampaignStage[] = CAMPAIGN_CHAPTERS.flatMap((chapter, c) =>
   chapter.stages.map((name, i) => ({ id: chapter.number + '-' + (i + 1), name,
     chapter: chapter.number, stage: i + 1, order: c * 10 + i })));

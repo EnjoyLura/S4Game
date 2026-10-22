@@ -1,0 +1,1083 @@
+[
+  {
+    "level": "1-1",
+    "wave": 1,
+    "early": true,
+    "countPercent": 25.0,
+    "hpPercent": 33.33,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 16.0,
+      "interval": 1.65,
+      "delay": 0.0,
+      "hp": 300.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 20.0,
+      "interval": 1.3,
+      "delay": 0.0,
+      "hp": 400.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-1",
+    "wave": 2,
+    "early": true,
+    "countPercent": 33.33,
+    "hpPercent": 50.0,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 24.0,
+      "interval": 1.4,
+      "delay": 0.0,
+      "hp": 320.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 32.0,
+      "interval": 1.04,
+      "delay": 0.0,
+      "hp": 480.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-1",
+    "wave": 3,
+    "early": false,
+    "countPercent": 46.67,
+    "hpPercent": 71.43,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 30.0,
+      "interval": 1.16,
+      "delay": 0.0,
+      "hp": 350.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 44.0,
+      "interval": 0.78,
+      "delay": 0.0,
+      "hp": 600.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-1",
+    "wave": 4,
+    "early": false,
+    "countPercent": 33.33,
+    "hpPercent": 48.57,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 18.0,
+      "interval": 1.65,
+      "delay": 0.0,
+      "hp": 350.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 24.0,
+      "interval": 1.22,
+      "delay": 0.0,
+      "hp": 520.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-1",
+    "wave": 5,
+    "early": false,
+    "countPercent": 61.11,
+    "hpPercent": 100.0,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 36.0,
+      "interval": 0.92,
+      "delay": 0.0,
+      "hp": 400.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 58.0,
+      "interval": 0.56,
+      "delay": 0.0,
+      "hp": 800.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-1",
+    "wave": 6,
+    "early": false,
+    "countPercent": 60.0,
+    "hpPercent": 114.29,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 20.0,
+      "interval": 1.25,
+      "delay": 4.0,
+      "hp": 420.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 32.0,
+      "interval": 0.77,
+      "delay": 4.0,
+      "hp": 900.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-2",
+    "wave": 1,
+    "early": true,
+    "countPercent": 30.0,
+    "hpPercent": 34.29,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 20.0,
+      "interval": 1.45,
+      "delay": 0.0,
+      "hp": 350.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 26.0,
+      "interval": 1.1,
+      "delay": 0.0,
+      "hp": 470.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-2",
+    "wave": 2,
+    "early": true,
+    "countPercent": 38.46,
+    "hpPercent": 45.95,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 26.0,
+      "interval": 1.2,
+      "delay": 0.0,
+      "hp": 370.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 36.0,
+      "interval": 0.86,
+      "delay": 0.0,
+      "hp": 540.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-2",
+    "wave": 3,
+    "early": false,
+    "countPercent": 53.33,
+    "hpPercent": 65.0,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 30.0,
+      "interval": 1.02,
+      "delay": 0.0,
+      "hp": 400.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 46.0,
+      "interval": 0.66,
+      "delay": 0.0,
+      "hp": 660.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-2",
+    "wave": 4,
+    "early": false,
+    "countPercent": 30.0,
+    "hpPercent": 46.15,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 20.0,
+      "interval": 1.55,
+      "delay": 0.0,
+      "hp": 390.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 26.0,
+      "interval": 1.18,
+      "delay": 0.0,
+      "hp": 570.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-2",
+    "wave": 5,
+    "early": false,
+    "countPercent": 63.16,
+    "hpPercent": 77.78,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 38.0,
+      "interval": 0.83,
+      "delay": 0.0,
+      "hp": 450.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 62.0,
+      "interval": 0.5,
+      "delay": 0.0,
+      "hp": 800.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-2",
+    "wave": 6,
+    "early": false,
+    "countPercent": 66.67,
+    "hpPercent": 91.49,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 30.0,
+      "interval": 0.98,
+      "delay": 0.0,
+      "hp": 470.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 50.0,
+      "interval": 0.58,
+      "delay": 0.0,
+      "hp": 900.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-2",
+    "wave": 7,
+    "early": false,
+    "countPercent": 63.64,
+    "hpPercent": 100.0,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 22.0,
+      "interval": 1.22,
+      "delay": 3.0,
+      "hp": 500.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 36.0,
+      "interval": 0.73,
+      "delay": 3.0,
+      "hp": 1000.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-3",
+    "wave": 1,
+    "early": true,
+    "countPercent": 28.57,
+    "hpPercent": 36.84,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 28.0,
+      "interval": 1.2,
+      "delay": 0.0,
+      "hp": 380.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 36.0,
+      "interval": 0.93,
+      "delay": 0.0,
+      "hp": 520.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-3",
+    "wave": 2,
+    "early": true,
+    "countPercent": 36.84,
+    "hpPercent": 55.0,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 38.0,
+      "interval": 0.9,
+      "delay": 0.0,
+      "hp": 400.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 52.0,
+      "interval": 0.65,
+      "delay": 0.0,
+      "hp": 620.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-3",
+    "wave": 3,
+    "early": false,
+    "countPercent": 50.0,
+    "hpPercent": 72.09,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 48.0,
+      "interval": 0.63,
+      "delay": 0.0,
+      "hp": 430.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 72.0,
+      "interval": 0.42,
+      "delay": 0.0,
+      "hp": 740.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-3",
+    "wave": 4,
+    "early": false,
+    "countPercent": 36.36,
+    "hpPercent": 60.0,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 22.0,
+      "interval": 1.4,
+      "delay": 0.0,
+      "hp": 400.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 30.0,
+      "interval": 1.01,
+      "delay": 0.0,
+      "hp": 640.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-3",
+    "wave": 5,
+    "early": false,
+    "countPercent": 60.0,
+    "hpPercent": 86.96,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 50.0,
+      "interval": 0.6,
+      "delay": 0.0,
+      "hp": 460.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 80.0,
+      "interval": 0.37,
+      "delay": 0.0,
+      "hp": 860.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-3",
+    "wave": 6,
+    "early": false,
+    "countPercent": 63.64,
+    "hpPercent": 104.17,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 44.0,
+      "interval": 0.71,
+      "delay": 0.0,
+      "hp": 480.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 72.0,
+      "interval": 0.43,
+      "delay": 0.0,
+      "hp": 980.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-3",
+    "wave": 7,
+    "early": false,
+    "countPercent": 65.38,
+    "hpPercent": 120.0,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 52.0,
+      "interval": 0.58,
+      "delay": 0.0,
+      "hp": 500.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 86.0,
+      "interval": 0.35,
+      "delay": 0.0,
+      "hp": 1100.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-3",
+    "wave": 8,
+    "early": false,
+    "countPercent": 68.42,
+    "hpPercent": 136.0,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 38.0,
+      "interval": 0.7,
+      "delay": 2.0,
+      "hp": 500.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 64.0,
+      "interval": 0.41,
+      "delay": 2.0,
+      "hp": 1180.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-4",
+    "wave": 1,
+    "early": true,
+    "countPercent": 29.41,
+    "hpPercent": 36.59,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 34.0,
+      "interval": 1.0,
+      "delay": 0.0,
+      "hp": 410.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 44.0,
+      "interval": 0.77,
+      "delay": 0.0,
+      "hp": 560.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-4",
+    "wave": 2,
+    "early": true,
+    "countPercent": 45.45,
+    "hpPercent": 58.14,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 44.0,
+      "interval": 0.76,
+      "delay": 0.0,
+      "hp": 430.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 64.0,
+      "interval": 0.52,
+      "delay": 0.0,
+      "hp": 680.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-4",
+    "wave": 3,
+    "early": false,
+    "countPercent": 53.57,
+    "hpPercent": 73.91,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 56.0,
+      "interval": 0.56,
+      "delay": 0.0,
+      "hp": 460.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 86.0,
+      "interval": 0.36,
+      "delay": 0.0,
+      "hp": 800.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-4",
+    "wave": 4,
+    "early": false,
+    "countPercent": 38.46,
+    "hpPercent": 62.79,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 26.0,
+      "interval": 1.15,
+      "delay": 0.0,
+      "hp": 430.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 36.0,
+      "interval": 0.82,
+      "delay": 0.0,
+      "hp": 700.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-4",
+    "wave": 5,
+    "early": false,
+    "countPercent": 63.33,
+    "hpPercent": 91.84,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 60.0,
+      "interval": 0.5,
+      "delay": 0.0,
+      "hp": 490.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 98.0,
+      "interval": 0.3,
+      "delay": 0.0,
+      "hp": 940.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-4",
+    "wave": 6,
+    "early": false,
+    "countPercent": 69.23,
+    "hpPercent": 107.84,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 52.0,
+      "interval": 0.61,
+      "delay": 0.0,
+      "hp": 510.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 88.0,
+      "interval": 0.36,
+      "delay": 0.0,
+      "hp": 1060.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-4",
+    "wave": 7,
+    "early": false,
+    "countPercent": 67.74,
+    "hpPercent": 118.52,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 62.0,
+      "interval": 0.46,
+      "delay": 0.0,
+      "hp": 540.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 104.0,
+      "interval": 0.27,
+      "delay": 0.0,
+      "hp": 1180.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-4",
+    "wave": 8,
+    "early": false,
+    "countPercent": 69.23,
+    "hpPercent": 133.33,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 52.0,
+      "interval": 0.56,
+      "delay": 2.0,
+      "hp": 540.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 88.0,
+      "interval": 0.33,
+      "delay": 2.0,
+      "hp": 1260.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-5",
+    "wave": 1,
+    "early": true,
+    "countPercent": 30.0,
+    "hpPercent": 36.36,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 40.0,
+      "interval": 0.85,
+      "delay": 0.0,
+      "hp": 440.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 52.0,
+      "interval": 0.65,
+      "delay": 0.0,
+      "hp": 600.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-5",
+    "wave": 2,
+    "early": true,
+    "countPercent": 48.0,
+    "hpPercent": 56.52,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 50.0,
+      "interval": 0.67,
+      "delay": 0.0,
+      "hp": 460.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 74.0,
+      "interval": 0.45,
+      "delay": 0.0,
+      "hp": 720.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-5",
+    "wave": 3,
+    "early": false,
+    "countPercent": 56.67,
+    "hpPercent": 75.51,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 60.0,
+      "interval": 0.51,
+      "delay": 0.0,
+      "hp": 490.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 94.0,
+      "interval": 0.32,
+      "delay": 0.0,
+      "hp": 860.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-5",
+    "wave": 4,
+    "early": false,
+    "countPercent": 33.33,
+    "hpPercent": 65.22,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 30.0,
+      "interval": 0.96,
+      "delay": 0.0,
+      "hp": 460.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 40.0,
+      "interval": 0.71,
+      "delay": 0.0,
+      "hp": 760.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-5",
+    "wave": 5,
+    "early": false,
+    "countPercent": 66.67,
+    "hpPercent": 92.31,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 66.0,
+      "interval": 0.45,
+      "delay": 0.0,
+      "hp": 520.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 110.0,
+      "interval": 0.27,
+      "delay": 0.0,
+      "hp": 1000.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-5",
+    "wave": 6,
+    "early": false,
+    "countPercent": 71.43,
+    "hpPercent": 111.11,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 56.0,
+      "interval": 0.54,
+      "delay": 0.0,
+      "hp": 540.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 96.0,
+      "interval": 0.31,
+      "delay": 0.0,
+      "hp": 1140.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-5",
+    "wave": 7,
+    "early": false,
+    "countPercent": 72.73,
+    "hpPercent": 124.56,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 66.0,
+      "interval": 0.44,
+      "delay": 0.0,
+      "hp": 570.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 114.0,
+      "interval": 0.25,
+      "delay": 0.0,
+      "hp": 1280.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-5",
+    "wave": 8,
+    "early": false,
+    "countPercent": 78.57,
+    "hpPercent": 138.6,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 56.0,
+      "interval": 0.48,
+      "delay": 1.0,
+      "hp": 570.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 100.0,
+      "interval": 0.27,
+      "delay": 1.0,
+      "hp": 1360.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-6",
+    "wave": 1,
+    "early": true,
+    "countPercent": 31.82,
+    "hpPercent": 41.3,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 44.0,
+      "interval": 0.72,
+      "delay": 0.0,
+      "hp": 460.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 58.0,
+      "interval": 0.54,
+      "delay": 0.0,
+      "hp": 650.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-6",
+    "wave": 2,
+    "early": true,
+    "countPercent": 44.0,
+    "hpPercent": 55.1,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 50.0,
+      "interval": 0.63,
+      "delay": 0.0,
+      "hp": 490.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 72.0,
+      "interval": 0.43,
+      "delay": 0.0,
+      "hp": 760.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-6",
+    "wave": 3,
+    "early": false,
+    "countPercent": 55.56,
+    "hpPercent": 69.23,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 54.0,
+      "interval": 0.56,
+      "delay": 0.0,
+      "hp": 520.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 84.0,
+      "interval": 0.36,
+      "delay": 0.0,
+      "hp": 880.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-6",
+    "wave": 4,
+    "early": false,
+    "countPercent": 33.33,
+    "hpPercent": 59.18,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 36.0,
+      "interval": 0.9,
+      "delay": 0.0,
+      "hp": 490.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 48.0,
+      "interval": 0.67,
+      "delay": 0.0,
+      "hp": 780.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-6",
+    "wave": 5,
+    "early": false,
+    "countPercent": 66.67,
+    "hpPercent": 92.59,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 60.0,
+      "interval": 0.5,
+      "delay": 0.0,
+      "hp": 540.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 100.0,
+      "interval": 0.3,
+      "delay": 0.0,
+      "hp": 1040.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-6",
+    "wave": 6,
+    "early": false,
+    "countPercent": 35.29,
+    "hpPercent": 71.43,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 34.0,
+      "interval": 0.94,
+      "delay": 0.0,
+      "hp": 490.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 46.0,
+      "interval": 0.69,
+      "delay": 0.0,
+      "hp": 840.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-6",
+    "wave": 7,
+    "early": false,
+    "countPercent": 73.33,
+    "hpPercent": 107.41,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 60.0,
+      "interval": 0.5,
+      "delay": 0.0,
+      "hp": 540.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 104.0,
+      "interval": 0.29,
+      "delay": 0.0,
+      "hp": 1120.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-6",
+    "wave": 8,
+    "early": false,
+    "countPercent": 77.78,
+    "hpPercent": 121.43,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 54.0,
+      "interval": 0.56,
+      "delay": 0.0,
+      "hp": 560.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 96.0,
+      "interval": 0.31,
+      "delay": 0.0,
+      "hp": 1240.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-6",
+    "wave": 9,
+    "early": false,
+    "countPercent": 80.0,
+    "hpPercent": 139.29,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 60.0,
+      "interval": 0.5,
+      "delay": 0.0,
+      "hp": 560.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 108.0,
+      "interval": 0.28,
+      "delay": 0.0,
+      "hp": 1340.0,
+      "dmg": 10.0
+    }
+  },
+  {
+    "level": "1-6",
+    "wave": 10,
+    "early": false,
+    "countPercent": 88.89,
+    "hpPercent": 157.14,
+    "before": {
+      "mob": "goblin_worker",
+      "count": 54.0,
+      "interval": 0.53,
+      "delay": 1.0,
+      "hp": 560.0,
+      "dmg": 10.0
+    },
+    "after": {
+      "mob": "goblin_worker",
+      "count": 102.0,
+      "interval": 0.28,
+      "delay": 1.0,
+      "hp": 1440.0,
+      "dmg": 10.0
+    }
+  }
+]

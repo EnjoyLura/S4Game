@@ -1,0 +1,104 @@
+/** Terrain pixels and live checkpoint state are deliberately independent. */
+import { _decorator, Component, game, Game, Graphics, Node, Tween, tween, Vec3 } from 'cc';
+import { C, CA, N } from './UIKit';
+import { COMIC, comicSurface } from './ComicUI';
+import { mainLabel } from './PageKit';
+import { reducedMotion } from './UIMotion';
+import { campaignCheckpointLock, campaignCheckpointReward, campaignCheckpointStar, paintCampaignCheckpoint } from './CampaignCheckpointArt';
+import { campaignChapterPlate } from './CampaignChrome';
+
+export const ROUTE_ART = ['outpost', 'forest', 'lair'].map(name => 'scenes/bg_campaign_' + name + '_v1');
+export const ROUTE_W = 750;
+export const ROUTE_H = 1500;
+/** Denser road clearings keep the finale below the floating header without a taller dock. */
+const ROAD_POINTS = [
+  [.28, .88], [.61, .805], [.79, .72], [.50, .59], [.46, .50],
+  [.26, .465], [.42, .385], [.61, .355], [.81, .315], [.56, .25],
+] as const;
+export function routePoint(stage: number, mapHeight = ROUTE_H): { x: number; top: number } {
+  const point = ROAD_POINTS[Math.max(0, Math.min(9, stage - 1))];
+  return { x: (point[0] - .5) * ROUTE_W * mapHeight / ROUTE_H, top: point[1] * mapHeight };
+}
+
+const { ccclass } = _decorator;
+
+/** One small local breathing accent, paused in the background and cleaned with the page. */
+@ccclass('CampaignRouteMotion')
+export class CampaignRouteMotion extends Component {
+  private age = 0;
+  private ink: Graphics | null = null;
+  private hidden = false;
+  private movement: Tween<Node> | null = null;
+  onLoad(): void {
+    game.on(Game.EVENT_HIDE, this.hide, this); game.on(Game.EVENT_SHOW, this.show, this);
+  }
+  glow(): void {
+    this.ink = this.node.addComponent(Graphics);
+    this.paint(0); this.enabled = !reducedMotion();
+  }
+  update(dt: number): void {
+    if (this.hidden || !this.ink) return;
+    this.age += Math.min(.06, dt);
+    this.paint((Math.sin(this.age * 2.4) + 1) / 2);
+  }
+  private paint(p: number): void {
+    const g = this.ink!; g.clear();
+    g.fillColor = CA('#FFD569', .06 + p * .05); g.ellipse(0,-24,58+p*2,27); g.fill();
+    g.fillColor = CA('#FFCE43', .10 + p * .08); g.ellipse(0,-24,52+p*2,22); g.fill();
+    g.lineWidth = 2.4; g.strokeColor = CA('#FFF1AF', .65 + p * .25);
+    g.ellipse(0,-24,48+p*2,19+p); g.stroke();
+    g.lineWidth = 1.5; g.strokeColor = C('#E1AD35'); g.ellipse(0,-24,50,21); g.stroke();
+  }
+  private hide = (): void => { this.hidden = true; };
+  private show = (): void => { this.hidden = false; };
+  /** Short drawer motion is owned here and cancelled when its page is destroyed. */
+  enter(): void {
+    if (reducedMotion()) return;
+    const target = this.node.position.clone();
+    this.node.setPosition(target.x, target.y - 56, target.z);
+    this.movement = tween(this.node).to(.25, { position: target }, { easing: 'cubicOut' }).start();
+  }
+  leave(done: () => void): void {
+    this.movement?.stop();
+    if (reducedMotion()) { done(); return; }
+    const at = this.node.position;
+    this.movement = tween(this.node).to(.16, { position: new Vec3(at.x, at.y - 74, at.z) }, { easing: 'quadIn' }).call(done).start();
+  }
+  onDestroy(): void {
+    this.movement?.stop(); this.movement = null;
+    game.off(Game.EVENT_HIDE, this.hide, this); game.off(Game.EVENT_SHOW, this.show, this);
+  }
+}
+
+export function routeStop(parent: Node, stage: number, selected: boolean, open: boolean, earned: number,
+  name: string, claimable: boolean, mapHeight = ROUTE_H, chapter = 0): Node {
+  const p = routePoint(stage, mapHeight), item = N('campaignStop:' + stage, parent, p.x, -p.top, 112, 128);
+  const highlighted = selected && open;
+  const shadow = N('checkpointShadow', item).addComponent(Graphics);
+  shadow.fillColor = CA(COMIC.ink, .28); shadow.ellipse(1,-37,47,15); shadow.fill();
+  if (highlighted) N('campaignSelectionGlow', item).addComponent(CampaignRouteMotion).glow();
+  paintCampaignCheckpoint(item, chapter, highlighted, open);
+  const goldShield = chapter === 0 && highlighted;
+  mainLabel(item, 0, 23, String(stage), { size: 32, bold: true, font: 'number', color: '#FFF7DF',
+    w: 48, h: 40, outline: goldShield ? '#79501D' : COMIC.darkShade, outlineW: 2 });
+  if (!open) campaignCheckpointLock(item);
+  if (stage === 10) {
+    comicSurface(item, 0, 65, 58, 22, highlighted ? 'gold' : 'dark', { radius: 11, name: 'chapterFinale' });
+    mainLabel(item, 0, 65, '章末', { size: 14, bold: true, color: highlighted ? COMIC.text : COMIC.cream, w: 52, h: 20 });
+  }
+  // State always comes from actual normal-mode progress, including empty selected stars.
+  if (open) {
+    for (let s = 0; s < 3; s++) {
+      campaignCheckpointStar(item,(s-1)*27,-40,s<earned,s);
+    }
+  }
+  if (claimable) {
+    campaignCheckpointReward(item,chapter===0 ? 31 : 44,50);
+  }
+  if (selected) {
+    const tag = campaignChapterPlate(item, 0, -76, 152, 32);
+    tag.name = 'selectedCheckpointName';
+    mainLabel(tag,0,0,name,{size:20,font:'body',bold:true,color:'#FFF6DC',w:126,h:26});
+  }
+  return item;
+}

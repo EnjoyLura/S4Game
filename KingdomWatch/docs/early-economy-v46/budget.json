@@ -1,0 +1,57 @@
+{
+  "assumptions": "Initial 500 gold; all authored enemies killed; no gold cards, repeats, purchases or ads; star chests excluded unless specified; budget arithmetic only, not gameplay verification",
+  "heroPerStep": [
+    100,
+    250,
+    440,
+    650
+  ],
+  "weaponPerStep": [
+    150,
+    400
+  ],
+  "threeHeroCost": 4320,
+  "threeWeaponCost": 1650,
+  "totalCost": 5970,
+  "stages": [
+    {
+      "stage": "1-1",
+      "baseGold": 60,
+      "authoredKillGold": 225,
+      "firstWinBonus": 200,
+      "oneStarGold": 491,
+      "threeStarGold": 503
+    },
+    {
+      "stage": "1-2",
+      "baseGold": 68,
+      "authoredKillGold": 330,
+      "firstWinBonus": 400,
+      "oneStarGold": 804,
+      "threeStarGold": 818
+    },
+    {
+      "stage": "1-3",
+      "baseGold": 76,
+      "authoredKillGold": 568,
+      "firstWinBonus": 800,
+      "oneStarGold": 1451,
+      "threeStarGold": 1466
+    },
+    {
+      "stage": "1-4",
+      "baseGold": 100,
+      "authoredKillGold": 656,
+      "firstWinBonus": 2000,
+      "oneStarGold": 2766,
+      "threeStarGold": 2786
+    }
+  ],
+  "oneStarTotal": 6012,
+  "threeStarTotal": 6073,
+  "optionalFirstStarChestGold": 1400,
+  "weaponStoneNeeded": 6,
+  "firstFourStoneRewards": 10,
+  "oneStarRemainder": 42,
+  "threeStarRemainder": 103
+}

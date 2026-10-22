@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-21",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in edit",
+  "prompt": "prompt.txt",
+  "reference": {
+    "path": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-skull-grunt-v8/skull-grunt-front.png",
+    "role": "edit target; preserve face, species and frontal stance",
+    "sha256": "4333af0791a370b220a16ab98ba0be0043e20e09e1f660e4cb15e72b4dfb1117"
+  },
+  "output": {
+    "file": "skull-grunt-asymmetric.png",
+    "generated_source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-1096ba3c-53e8-456d-83c7-4c508549a774.png",
+    "sha256": "f1c1eb34e8ba274c07d9fa125f50608fea06dc55343791291b0b00512df0e148",
+    "original_bytes_preserved": true
+  },
+  "user_feedback": [
+    "a little muscle is better",
+    "clothes too symmetrical",
+    "bone helmet too dominant",
+    "red neck cloth too symmetrical, neat and clean"
+  ],
+  "visual_inspection": {
+    "anatomy": "Modest increase in arm and calf definition, narrow creature torso retained.",
+    "helmet": "Smaller skull cap, shorter horns with one broken; face more exposed.",
+    "outfit": "One shoulder sleeve versus exposed upper arm, diagonal belt and unequal hem.",
+    "scarf": "Side knot, diagonal folds and one long worn cloth tail on the opposite side; visible broad stains.",
+    "orientation": "Face and torso frontal, low relaxed hands, whole weapon visible.",
+    "limitations": "Painted surface variation and some anatomical shading remain. Exact desired dirt, helmet prominence and proportions require user judgement. Opaque concept background, not a transparent animation master."
+  },
+  "user_visual_approval": "pending",
+  "game_integrated": false
+}

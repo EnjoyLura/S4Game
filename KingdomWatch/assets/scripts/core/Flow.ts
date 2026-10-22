@@ -10,6 +10,10 @@ export const flow = {
   levelId: '1-1',
   /** 关卡难度：0 普通 / 1 精英 / 2 地狱（关卡页写入，战斗读取注入出怪倍率与星级后缀键） */
   diff: 0,
+  /** 0 = campaign; otherwise the unlocked chapter's cumulative endless challenge. */
+  endlessChapter: 0,
+  /** Dedicated secondary world map, retained on return from an endless attempt. */
+  endlessPage: false,
   /** 主城最后停留的底部页签（0商店 1英雄 2关卡 3升级 4基地） */
   mainTab: 2,
   /** One-shot focus when leaving a battle: restore this level/difficulty without starting it. */

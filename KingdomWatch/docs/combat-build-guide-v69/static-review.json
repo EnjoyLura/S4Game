@@ -1,0 +1,28 @@
+{
+  "originalGameFiles": 2076,
+  "changedGameFiles": [
+    "assets/scripts/config/Cards.ts",
+    "assets/scripts/ui/Panels.ts"
+  ],
+  "addedGameFiles": [],
+  "removedGameFiles": [],
+  "cardDefinitionsAndBattleLogicUnchanged": true,
+  "descriptionLiteralsReviewed": 63,
+  "maximumOriginalDescriptionLines": 3,
+  "maximumChoiceDescriptionLines": 4,
+  "diagnosticsBefore": 10,
+  "diagnosticsAfter": 10,
+  "newDiagnostics": [],
+  "mediaFilesPreserved": 756,
+  "validation": "Static source and compiler diagnostics only; no game/browser/gameplay tests/simulation/audio.",
+  "originalMediaFiles": 756,
+  "nativeFilesPreserved": 756,
+  "nativeDifferences": [],
+  "bundleFeatureStringsPresent": {
+    "本局强化": true,
+    "buildListContent": true,
+    "叠层 ": true,
+    "同类易伤取最高": true,
+    "battleBuildOverview": true
+  }
+}

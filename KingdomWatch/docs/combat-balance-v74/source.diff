@@ -1,0 +1,328 @@
+--- before/assets/scripts/battle/BattleDirector.ts
++++ assets/scripts/battle/BattleDirector.ts
+@@ -309,7 +309,7 @@
+     // Prepare countdown and combat begin only after the full-screen flags have cleared.
+     if (enteringBattle()) return;
+     // Real seconds, independent of speed and hit-stop; overlap the final ultimate's tail.
+-    if (this.victoryDelayT > 0 && (this.state === 'running' || this.state === 'win') && !this.gm.panelOpen)
++    if (this.victoryDelayT > 0 && this.state === 'running' && !this.gm.panelOpen)
+       this.victoryDelayT = Math.max(0, this.victoryDelayT - rawDt);
+     this.showPendingWinPanel();
+     GameAudio.battleState(this.state);
+@@ -380,12 +380,15 @@
+       this.line.regenPct = this.global.lineRegenPct;
+       this.line.tick(sub);
+     }
+-    if (this.state === 'running') this.loot.tick(sdt);
++    if (this.state === 'running') {
++      this.waves.checkCleared();
++      this.loot.tick(sdt);
++    }
+     // 大招演出锁倒计时；期间排队的升级三选一挂起，锁走完自动补弹
+     if (this.ultShowT > 0) this.ultShowT = Math.max(0, this.ultShowT - sdt);
+     if (this.ultimateActive) this.ultShowT = Math.max(this.ultShowT, 2);
+     if (this.pendingWin && !this.ultimateActive && this.state === 'running') {
+-      if (this.isEndless) this.completeEndlessFloor(); else this.onAllCleared();
++      if (this.isEndless) this.completeEndlessFloor(); else this.completeVictory();
+     }
+     // Grant after combat steps: a timed level-up must not interrupt a simulation substep.
+     this.grantTimeXp();
+@@ -632,6 +635,7 @@
+   }
+ 
+   togglePause(): void {
++    if (this.pendingWin || this.leaving) return;
+     if (this.state === 'running') {
+       this.state = 'paused';
+       const sv = loadSave();
+@@ -714,8 +718,17 @@
+       if (this.endlessCleared < this.endlessFloor) this.pendingWin = true;
+       return;
+     }
+-    if (this.victoryDelayT < 0) this.victoryDelayT = 1;
+-    if (this.ultimateActive) { this.pendingWin = true; return; }
++    if (this.pendingWin) return;
++    this.pendingWin = true;
++    this.victoryDelayT = 2;
++    // Keep the running update for poses, projectiles, drops and the final ultimate.
++    // The cleared outcome is fixed: late enemy shots and regeneration cannot change its stars.
++    this.line.finishBattle();
++    this.bossWarning.clear();
++  }
++
++  private completeVictory(): void {
++    if (this.state !== 'running' || !this.pendingWin || this.victoryDelayT > 0 || this.ultimateActive) return;
+     this.pendingWin = false; this.ultPresentation.clear();
+     this.state = 'win';
+     this.bossWarning.clear();
+--- before/assets/scripts/battle/LineDefense.ts
++++ assets/scripts/battle/LineDefense.ts
+@@ -21,6 +21,7 @@
+   private flashT = 0;
+   private shakeT = 0;
+   private basePos: Vec3 = new Vec3();
++  private battleFinished = false;
+ 
+   constructor(parent: Node, hp: number, shield = 0) {
+     this.maxHp = hp;
+@@ -61,7 +62,7 @@
+ 
+   /** 怪物/石块攻线伤害入口 */
+   takeDamage(d: number): void {
+-    if (this.invulnT > 0 || d <= 0) return;
++    if (this.battleFinished || this.invulnT > 0 || d <= 0) return;
+     if (this.shield > 0) {
+       const s = Math.min(this.shield, d);
+       this.shield -= s;
+@@ -101,9 +102,12 @@
+   get ratio(): number { return this.maxHp > 0 ? this.hp / this.maxHp : 0; }
+   get lowRatio(): boolean { return this.ratio < 0.3; }
+ 
++  /** Freeze the cleared result while the battlefield finishes its presentation. */
++  finishBattle(): void { this.battleFinished = true; }
++
+   tick(dt: number): void {
+     if (this.invulnT > 0) this.invulnT -= dt;
+-    if (this.regenPct > 0 && this.hp < this.maxHp) {
++    if (!this.battleFinished && this.regenPct > 0 && this.hp < this.maxHp) {
+       this.hp = Math.min(this.maxHp, this.hp + this.maxHp * this.regenPct * dt);
+     }
+     if (this.flashT > 0) this.flashT -= dt;
+--- before/assets/scripts/battle/WaveManager.ts
++++ assets/scripts/battle/WaveManager.ts
+@@ -75,10 +75,14 @@
+       this.idx++;
+       this.buildQueue();
+       bus.emit(EVT.WAVE_CHANGED, this.waveNum, this.total, this.currentSurge);
+-    } else if (this.mgr.aliveCount === 0) {
+-      this.finished = true;
+-      bus.emit(EVT.ALL_WAVES_CLEARED);
+-    }
++    } else this.checkCleared();
++  }
++
++  /** Also check after damage steps so the final kill cannot open a queued upgrade first. */
++  checkCleared(): void {
++    if (this.finished || this.queue.length > 0 || this.idx < this.total - 1 || this.mgr.aliveCount > 0) return;
++    this.finished = true;
++    bus.emit(EVT.ALL_WAVES_CLEARED);
+   }
+ 
+   /** GM：跳过本波（清空生成队列并全杀场上怪；非末波下帧进下一波，末波直接结算） */
+--- before/assets/scripts/config/FifthLevel.ts
++++ assets/scripts/config/FifthLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-5: denser fodder for open abilities; preserve authored stats, encounter order and duration. */
++/** Normal 1-5: modest HP pressure and fodder density; preserve wave arc, special counts and line damage. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -10,19 +10,19 @@
+ const elite = (hp: number, delay: number, dmg = 24) =>
+   ({ mob: 'goblin_brute', count: 1, interval: 1, delay, actual: { hp, dmg } });
+ const shaman = (delay: number) =>
+-  ({ mob: 'goblin_shaman', count: 1, interval: 1, delay, actual: { hp: 380, dmg: 0 } });
++  ({ mob: 'goblin_shaman', count: 1, interval: 1, delay, actual: { hp: 420, dmg: 0 } });
+ const king = () =>
+-  ({ mob: 'goblin_king', count: 1, interval: 1, delay: 0, actual: { hp: 7000, dmg: 30 } });
++  ({ mob: 'goblin_king', count: 1, interval: 1, delay: 0, actual: { hp: 7800, dmg: 30 } });
+ 
+ export const FIFTH_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(40, 380, 0.85)] },
+-  { groups: [workers(48, 400, 0.7), slingers(2, 300, 13)] },
+-  { groups: [workers(58, 420, 0.53), slingers(2, 320, 12), elite(3200, 12)], surge: true },
+-  { groups: [workers(30, 400, 0.96)] },
+-  { groups: [workers(64, 440, 0.46), riders(520, 14)], surge: true },
+-  { groups: [workers(54, 460, 0.56), slingers(4, 340, 10), riders(540, 16), shaman(18)] },
+-  { groups: [workers(64, 480, 0.45), elite(3400, 8), riders(560, 17)], surge: true },
+-  // Replace the final elite with the king, preserving this encounter's authored HP and line damage.
+-  { groups: [king(), workers(54, 480, 0.5, 1), slingers(4, 360, 8),
+-    riders(580, 17), shaman(12)], surge: true },
++  { groups: [workers(40, 440, 0.85)] },
++  { groups: [workers(50, 460, 0.67), slingers(2, 340, 13)] },
++  { groups: [workers(60, 490, 0.51), slingers(2, 360, 12), elite(3600, 12)], surge: true },
++  { groups: [workers(30, 460, 0.96)] },
++  { groups: [workers(66, 520, 0.45), riders(580, 14)], surge: true },
++  { groups: [workers(56, 540, 0.54), slingers(4, 380, 10), riders(600, 16), shaman(18)] },
++  { groups: [workers(66, 570, 0.44), elite(3800, 8), riders(630, 17)], surge: true },
++  // One king anchors the final wave; retain its authored identity and line damage.
++  { groups: [king(), workers(56, 570, 0.48, 1), slingers(4, 400, 8),
++    riders(650, 17), shaman(12)], surge: true },
+ ];
+--- before/assets/scripts/config/FirstLevel.ts
++++ assets/scripts/config/FirstLevel.ts
+@@ -1,14 +1,14 @@
+-/** Normal 1-1: denser fodder for open abilities; preserve authored HP, damage and six-wave arc. */
++/** Normal 1-1: modest HP pressure and fodder density; preserve wave arc, special counts and line damage. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+   ({ mob: 'goblin_worker', count, interval, delay, actual: { hp, dmg: 10 } });
+ export const FIRST_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(16, 280, 1.65)] },
+-  { groups: [workers(24, 300, 1.4)] },
+-  { groups: [workers(28, 320, 1.25)] },
+-  { groups: [workers(18, 320, 1.65)] },
+-  { groups: [workers(34, 360, 0.98)], surge: true },
+-  { groups: [{ mob: 'goblin_brute', count: 1, interval: 1, actual: { hp: 2200, dmg: 20 } },
+-    workers(18, 380, 1.4, 4)] },
++  { groups: [workers(16, 300, 1.65)] },
++  { groups: [workers(24, 320, 1.4)] },
++  { groups: [workers(30, 350, 1.16)] },
++  { groups: [workers(18, 350, 1.65)] },
++  { groups: [workers(36, 400, 0.92)], surge: true },
++  { groups: [{ mob: 'goblin_brute', count: 1, interval: 1, actual: { hp: 2400, dmg: 20 } },
++    workers(20, 420, 1.25, 4)] },
+ ];
+--- before/assets/scripts/config/FourthLevel.ts
++++ assets/scripts/config/FourthLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-4: denser fodder for open abilities; preserve authored stats, encounter order and duration. */
++/** Normal 1-4: modest HP pressure and fodder density; preserve wave arc, special counts and line damage. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -10,16 +10,16 @@
+ const elite = (count: number, hp: number, delay: number) =>
+   ({ mob: 'goblin_brute', count, interval: 12, delay, actual: { hp, dmg: 24 } });
+ const shaman = (count: number, delay: number) =>
+-  ({ mob: 'goblin_shaman', count, interval: 10, delay, actual: { hp: 360, dmg: 0 } });
++  ({ mob: 'goblin_shaman', count, interval: 10, delay, actual: { hp: 400, dmg: 0 } });
+ 
+ export const FOURTH_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(34, 360, 1)] },
+-  { groups: [workers(42, 380, 0.8), slingers(2, 280, 5, 13)] },
+-  { groups: [workers(54, 400, 0.58), slingers(2, 300, 5, 12), elite(1, 2800, 15)], surge: true },
+-  { groups: [workers(26, 380, 1.15)] },
+-  { groups: [workers(58, 420, 0.52), riders(480, 14)], surge: true },
+-  { groups: [workers(50, 440, 0.64), slingers(4, 320, 5, 10), riders(500, 16), shaman(1, 18)] },
+-  { groups: [workers(60, 460, 0.48), elite(1, 3000, 10), riders(520, 17)], surge: true },
+-  { groups: [workers(50, 460, 0.58, 2), slingers(4, 340, 5, 8),
+-    elite(2, 3200, 5), riders(540, 17), shaman(2, 12)], surge: true },
++  { groups: [workers(34, 410, 1)] },
++  { groups: [workers(44, 430, 0.76), slingers(2, 310, 5, 13)] },
++  { groups: [workers(56, 460, 0.56), slingers(2, 330, 5, 12), elite(1, 3100, 15)], surge: true },
++  { groups: [workers(26, 430, 1.15)] },
++  { groups: [workers(60, 490, 0.5), riders(530, 14)], surge: true },
++  { groups: [workers(52, 510, 0.61), slingers(4, 350, 5, 10), riders(550, 16), shaman(1, 18)] },
++  { groups: [workers(62, 540, 0.46), elite(1, 3350, 10), riders(580, 17)], surge: true },
++  { groups: [workers(52, 540, 0.56, 2), slingers(4, 380, 5, 8),
++    elite(2, 3550, 5), riders(600, 17), shaman(2, 12)], surge: true },
+ ];
+--- before/assets/scripts/config/SecondLevel.ts
++++ assets/scripts/config/SecondLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-2: denser fodder for open abilities; preserve authored stats, encounter order and duration. */
++/** Normal 1-2: modest HP pressure and fodder density; preserve wave arc, special counts and line damage. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -6,12 +6,12 @@
+ const slingers = (count: number, hp: number, interval: number, delay = 0) =>
+   ({ mob: 'goblin_slinger', count, interval, delay, actual: { hp, dmg: 8 } });
+ export const SECOND_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(20, 320, 1.45)] },
+-  { groups: [workers(26, 340, 1.2), slingers(2, 280, 5, 13)] },
+-  { groups: [workers(28, 360, 1.1), slingers(2, 300, 5, 15)] },
+-  { groups: [workers(20, 360, 1.55)] },
+-  { groups: [workers(36, 400, 0.88), slingers(4, 320, 6, 9)], surge: true },
+-  { groups: [workers(28, 420, 1.05), slingers(4, 340, 6, 7)], surge: true },
+-  { groups: [workers(20, 440, 1.35, 3),
+-    { mob: 'goblin_brute', count: 2, interval: 12, delay: 2, actual: { hp: 2600, dmg: 24 } }] },
++  { groups: [workers(20, 350, 1.45)] },
++  { groups: [workers(26, 370, 1.2), slingers(2, 300, 5, 13)] },
++  { groups: [workers(30, 400, 1.02), slingers(2, 320, 5, 15)] },
++  { groups: [workers(20, 390, 1.55)] },
++  { groups: [workers(38, 450, 0.83), slingers(4, 350, 6, 9)], surge: true },
++  { groups: [workers(30, 470, 0.98), slingers(4, 370, 6, 7)], surge: true },
++  { groups: [workers(22, 500, 1.22, 3),
++    { mob: 'goblin_brute', count: 2, interval: 12, delay: 2, actual: { hp: 2850, dmg: 24 } }] },
+ ];
+--- before/assets/scripts/config/SixthLevel.ts
++++ assets/scripts/config/SixthLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-6: denser fodder for open abilities; preserve authored stats, encounter order and duration. */
++/** Normal 1-6: modest HP pressure and fodder density; preserve wave arc, special counts and line damage. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -13,17 +13,17 @@
+   ({ mob: 'goblin_shaman', count: 1, interval: 1, delay, actual: { hp, dmg: 0 } });
+ 
+ export const SIXTH_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(44, 400, 0.72)] },
+-  { groups: [workers(48, 420, 0.66), riders(3, 520, 8)] },
+-  { groups: [workers(52, 440, 0.58), slingers(2, 320, 12), elite(3200, 8)] },
+-  { groups: [workers(36, 420, 0.9), riders(3, 540, 10)] },
+-  { groups: [workers(58, 460, 0.52), riders(4, 560, 8)], surge: true },
++  { groups: [workers(44, 460, 0.72)] },
++  { groups: [workers(50, 490, 0.63), riders(3, 580, 8)] },
++  { groups: [workers(54, 520, 0.56), slingers(2, 360, 12), elite(3600, 8)] },
++  { groups: [workers(36, 490, 0.9), riders(3, 600, 10)] },
++  { groups: [workers(60, 540, 0.5), riders(4, 630, 8)], surge: true },
+   // Lighter middle wave separates the raids while maintaining a steady stream of targets.
+-  { groups: [workers(34, 420, 0.94), slingers(2, 340, 14)] },
+-  { groups: [workers(58, 460, 0.52), riders(4, 560, 8), shaman(380, 20)], surge: true },
+-  { groups: [workers(52, 480, 0.58), slingers(4, 340, 8), elite(3400, 8)] },
+-  { groups: [workers(58, 480, 0.52), riders(4, 580, 8), shaman(400, 18)], surge: true },
+-  // An ordinary elite arrives early in the final wave; no repeat of the 7000-HP climax from 1-5.
+-  { groups: [elite(4000, 0), workers(52, 480, 0.55, 1), riders(4, 580, 6),
+-    slingers(4, 360, 10)], surge: true },
++  { groups: [workers(34, 490, 0.94), slingers(2, 380, 14)] },
++  { groups: [workers(60, 540, 0.5), riders(4, 630, 8), shaman(420, 20)], surge: true },
++  { groups: [workers(54, 560, 0.56), slingers(4, 380, 8), elite(3800, 8)] },
++  { groups: [workers(60, 560, 0.5), riders(4, 650, 8), shaman(450, 18)], surge: true },
++  // An ordinary elite arrives early in the final wave; no second boss climax after 1-5.
++  { groups: [elite(4500, 0), workers(54, 560, 0.53, 1), riders(4, 650, 6),
++    slingers(4, 400, 10)], surge: true },
+ ];
+--- before/assets/scripts/config/ThirdLevel.ts
++++ assets/scripts/config/ThirdLevel.ts
+@@ -1,4 +1,4 @@
+-/** Normal 1-3: denser fodder for open abilities; preserve authored stats, encounter order and duration. */
++/** Normal 1-3: modest HP pressure and fodder density; preserve wave arc, special counts and line damage. */
+ import { WaveDef } from './Mobs';
+ 
+ const workers = (count: number, hp: number, interval: number, delay = 0) =>
+@@ -11,13 +11,13 @@
+   ({ mob: 'goblin_brute', count, interval: 12, delay, actual: { hp, dmg: 24 } });
+ 
+ export const THIRD_LEVEL_WAVES: WaveDef[] = [
+-  { groups: [workers(28, 340, 1.2)] },
+-  { groups: [workers(36, 360, 0.95), slingers(2, 280, 5, 13)] },
+-  { groups: [workers(46, 380, 0.66), slingers(2, 300, 5, 12), elite(1, 2800, 15)], surge: true },
+-  { groups: [workers(22, 360, 1.4)] },
+-  { groups: [workers(48, 400, 0.63), riders(480, 14)], surge: true },
+-  { groups: [workers(42, 420, 0.74), slingers(4, 320, 5, 10), riders(500, 16)] },
+-  { groups: [workers(50, 440, 0.6), elite(1, 3000, 10), riders(520, 17)], surge: true },
+-  { groups: [workers(36, 440, 0.74, 2), slingers(4, 340, 5, 8),
+-    elite(2, 3200, 5), riders(540, 17)], surge: true },
++  { groups: [workers(28, 380, 1.2)] },
++  { groups: [workers(38, 400, 0.9), slingers(2, 300, 5, 13)] },
++  { groups: [workers(48, 430, 0.63), slingers(2, 320, 5, 12), elite(1, 3050, 15)], surge: true },
++  { groups: [workers(22, 400, 1.4)] },
++  { groups: [workers(50, 460, 0.6), riders(520, 14)], surge: true },
++  { groups: [workers(44, 480, 0.71), slingers(4, 350, 5, 10), riders(550, 16)] },
++  { groups: [workers(52, 500, 0.58), elite(1, 3300, 10), riders(570, 17)], surge: true },
++  { groups: [workers(38, 500, 0.7, 2), slingers(4, 370, 5, 8),
++    elite(2, 3500, 5), riders(600, 17)], surge: true },
+ ];
+--- before/assets/scripts/ui/GmPanel.ts
++++ assets/scripts/ui/GmPanel.ts
+@@ -52,6 +52,7 @@
+     if (this.layer.children.length > 0) return;
+     // 三选一/结算期间不开 GM（直接胜利等操作在这些状态下会被拒，避免误触无反馈）
+     if (this.dir.state !== 'running' && this.dir.state !== 'prepare' && this.dir.state !== 'paused') return;
++    if (this.dir.state === 'running' && !this.dir.canUseBattleHud) return;
+     // 不冻结战斗（用户要求：面板开着时游戏继续跑）；升级三选一在面板打开期间挂起，关闭时补弹
+     this.btnNode.active = false; // 浮钮藏起，避免透过遮罩压在页签上
+     this.rebuild();
+@@ -72,7 +73,7 @@
+   /** 每帧同步浮钮可见性：面板开着 / 三选一 / 结算期间一律隐藏（BattleDirector.update 驱动） */
+   syncVisibility(): void {
+     const want = this.layer.children.length === 0 &&
+-      (this.dir.state === 'running' || this.dir.state === 'prepare' || this.dir.state === 'paused') &&
++      ((this.dir.state === 'running' && this.dir.canUseBattleHud) || this.dir.state === 'prepare' || this.dir.state === 'paused') &&
+       (loadSave().debug || this.forceShow);
+     if (this.btnNode.active !== want) this.btnNode.active = want;
+   }

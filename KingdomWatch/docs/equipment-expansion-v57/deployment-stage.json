@@ -1,0 +1,167 @@
+{
+  "originalFilesChecked": 1932,
+  "changedExistingFiles": [
+    "assets/scripts/core/GameData.ts",
+    "assets/scripts/ui/HeroComic.ts",
+    "assets/scripts/ui/pages/ShopPage.ts"
+  ],
+  "addedFiles": [
+    "assets/resources/ux/shop_comic_v1/acc_crimson_v57.png",
+    "assets/resources/ux/shop_comic_v1/acc_crimson_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/acc_dragonscale_v57.png",
+    "assets/resources/ux/shop_comic_v1/acc_dragonscale_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/acc_stareye_v57.png",
+    "assets/resources/ux/shop_comic_v1/acc_stareye_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/acc_sunfang_v57.png",
+    "assets/resources/ux/shop_comic_v1/acc_sunfang_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/armor_cinder_v57.png",
+    "assets/resources/ux/shop_comic_v1/armor_cinder_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/armor_flameseal_v57.png",
+    "assets/resources/ux/shop_comic_v1/armor_flameseal_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/armor_moonwell_v57.png",
+    "assets/resources/ux/shop_comic_v1/armor_moonwell_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/armor_tide_v57.png",
+    "assets/resources/ux/shop_comic_v1/armor_tide_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/glove_farstar_v57.png",
+    "assets/resources/ux/shop_comic_v1/glove_farstar_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/glove_longwatch_v57.png",
+    "assets/resources/ux/shop_comic_v1/glove_longwatch_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/glove_storm_v57.png",
+    "assets/resources/ux/shop_comic_v1/glove_storm_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/glove_swift_v57.png",
+    "assets/resources/ux/shop_comic_v1/glove_swift_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/helm_hawkguard_v57.png",
+    "assets/resources/ux/shop_comic_v1/helm_hawkguard_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/helm_ironridge_v57.png",
+    "assets/resources/ux/shop_comic_v1/helm_ironridge_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/helm_lioncrest_v57.png",
+    "assets/resources/ux/shop_comic_v1/helm_lioncrest_v57.png.meta",
+    "assets/resources/ux/shop_comic_v1/helm_nightfeather_v57.png",
+    "assets/resources/ux/shop_comic_v1/helm_nightfeather_v57.png.meta"
+  ],
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "originalNonWeaponEquipmentUnchanged": 4,
+  "newEquipment": 16,
+  "totalNonWeaponEquipment": 20,
+  "totalIncludingWeapons": 45,
+  "shopEquipment": 20,
+  "blueNewEquipment": 8,
+  "purpleNewEquipment": 8,
+  "blue": {
+    "price": 1800,
+    "currency": "gold",
+    "unlock": "1-2",
+    "tier": 1
+  },
+  "purple": {
+    "price": 6000,
+    "currency": "gold",
+    "unlock": "1-4",
+    "tier": 1
+  },
+  "existingWhiteAndGreenUnchanged": true,
+  "weaponsV56Unchanged": true,
+  "allOriginalMediaUnchanged": true,
+  "originalNativeFilesPreserved": 696,
+  "priorPreviewFilesPreserved": 793,
+  "nativeAssets": [
+    {
+      "id": "helm_ironridge",
+      "path": "assets/resources/native/cc/cc58de3b-3c07-418c-8c6d-ec00c7ee91bd.69014.png",
+      "sha256": "0d0db9ce8e080826d581d08baa091ee16c68e3632c006bf50fd62d56dcb98570"
+    },
+    {
+      "id": "helm_hawkguard",
+      "path": "assets/resources/native/19/190ef127-ea62-4e46-8755-055c4f1c7018.43dcb.png",
+      "sha256": "e4f62a86d172785ff10b593c0531e03197fe315a93ebd71e0c25734cdf6c0b7b"
+    },
+    {
+      "id": "acc_sunfang",
+      "path": "assets/resources/native/f0/f00c36b2-ca6c-4ec1-8941-b43e756aebc5.c35dc.png",
+      "sha256": "8ef26d9c7ef0f8fd77d2de579ee37196f90c3cf22ebede4b9da6ae355f9ac998"
+    },
+    {
+      "id": "acc_crimson",
+      "path": "assets/resources/native/a1/a10e1ab6-8d03-4e2a-9d81-af2c6707910a.86892.png",
+      "sha256": "d088d113df43281cb19b86a255391ec237492b360410880ddcc41b30fbbdce7e"
+    },
+    {
+      "id": "glove_swift",
+      "path": "assets/resources/native/84/84f06434-68f7-42d5-9033-5759e5191202.a38df.png",
+      "sha256": "311550dd5a56462a9a38aaa631f816f6fe36d0e3a18ecaa9392b6b3cfc5fd444"
+    },
+    {
+      "id": "glove_longwatch",
+      "path": "assets/resources/native/74/7462053d-f38a-479f-a061-4705b6e89e0d.630ff.png",
+      "sha256": "5aae4f218df2eee7f268dc99d258460db29f9e81b231cb278184dadefc005c3e"
+    },
+    {
+      "id": "armor_cinder",
+      "path": "assets/resources/native/de/dee514b5-6e2c-4c91-b477-25a4f7f3ca53.b7f7e.png",
+      "sha256": "a83f724d163cdf8e20bc05433ec99b23adff4e1ddfab1696d5369cd3ad336a85"
+    },
+    {
+      "id": "armor_tide",
+      "path": "assets/resources/native/cd/cd2bfada-4805-4b58-84b7-ad9dc8a3afd6.e8f9d.png",
+      "sha256": "797105da128a58b59febfa04e9b6413cc298004f53ee1a01dbb490282c199e7e"
+    },
+    {
+      "id": "helm_lioncrest",
+      "path": "assets/resources/native/bc/bcfd2b86-663a-4c73-9c53-dbd3a3703460.b11f2.png",
+      "sha256": "e5d80d4a888bbf9ef7f87de725c7126c0cfcbb006ec84eaccf8695cf980d6f7c"
+    },
+    {
+      "id": "helm_nightfeather",
+      "path": "assets/resources/native/7d/7dfcff6d-852b-417c-923f-bd56b694b415.79cbb.png",
+      "sha256": "f05533709eead258176c2a79df6c2cb7ab3ced9f4e397a8ec034f04a8be3dab7"
+    },
+    {
+      "id": "acc_stareye",
+      "path": "assets/resources/native/7d/7d82524d-b3df-4091-b7d9-05d1b3d95c02.55760.png",
+      "sha256": "1d970ac3f39951375585087b841f5d560be1d34d2cdc1d0f6b6b0318fb823e35"
+    },
+    {
+      "id": "acc_dragonscale",
+      "path": "assets/resources/native/fa/fad31408-8805-4721-b5d1-36dd5c9bfced.2074a.png",
+      "sha256": "95c4815eaaf632ef7599a2b2e7b11ea62b8cf83fefd7d1f5c284bd8874770dc6"
+    },
+    {
+      "id": "glove_storm",
+      "path": "assets/resources/native/07/0757a34d-a4b8-4b54-ac4e-ce3221367fdc.9f308.png",
+      "sha256": "2275da6496d41477f97f9c0dcd7a256d2a3707a5e7628f4df152a37d892cee81"
+    },
+    {
+      "id": "glove_farstar",
+      "path": "assets/resources/native/a9/a9c1dd41-c03c-4288-b70d-7d2c0fb19152.848a5.png",
+      "sha256": "5a2f601c639b0ce028e4d610b7bd4dea9636fc0b51488482b5020dd778966b26"
+    },
+    {
+      "id": "armor_flameseal",
+      "path": "assets/resources/native/40/406c6ede-e69b-43aa-a21c-64249bf03448.87662.png",
+      "sha256": "2b3d7fa6a838c82a506ae830abc73c24543bc6211e0f5a83014d220b61468e7e"
+    },
+    {
+      "id": "armor_moonwell",
+      "path": "assets/resources/native/f8/f8249c13-05df-4634-94ee-3a257a018790.2ebc1.png",
+      "sha256": "7b2d320393692236a315858c0c63117f3ced7a9a31da36b1c1667f3d64edefc7"
+    }
+  ],
+  "sourceNotes": "Only GameData equipment definitions/shop catalog, HeroComic shared art map, ShopPage slot filter/details changed. No combat/drop/save/cultivation/economy formula changes.",
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-equipment-expansion-v57-20261019-132356",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "entryVersion": "1792387418",
+  "game": "https://kingdom-watch.pages.dev/?v=equipment-expansion-v57-1792387418",
+  "manualAcceptance": "Static source/AST/media/types/build/HTTP only; no tests, game, browser, combat simulation or audio. User manual acceptance.",
+  "deployment": "https://2912b99e.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.777d2.js?v=1792387418",
+    "mainBundleHashMatches": true,
+    "nativeIllustrations": 16,
+    "allImageHashesMatch": true
+  }
+}

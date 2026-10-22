@@ -1,0 +1,420 @@
+{
+  "date": "2026-10-21",
+  "timezone": "Asia/Shanghai",
+  "tool": "image_gen",
+  "mode": "built-in",
+  "scope": {
+    "existing_candidates": 4,
+    "new_concepts": 5,
+    "total": 9,
+    "game_integrated": false,
+    "animation_created": false,
+    "user_visual_approval": "rejected"
+  },
+  "notes": [
+    "2026-10-21: User explicitly rejected all preceding concepts. Preserved only as historical records. Do not reuse as approved art or positive design references.",
+    "All generated artworks inspected inline. Existing four are carried forward candidates, not user-approved masters.",
+    "New shieldbearer; healer head made frontal; rider framing expanded; troll head and costume differentiated; boss framing expanded.",
+    "Viewpoint/margin figures in prompts are targets, not precise measured camera values. No future animation range validation.",
+    "Overview is HTML referencing the untouched PNG copies; no new generated contact sheet. No game/browser/test/build/deployment run."
+  ],
+  "references": {
+    "beastfolk": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-stone-thrower-v14/stone-thrower-front.png",
+    "warg": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-bone-warg-v2/bone-warg-slight-top-front.png",
+    "original_rider": "C:/Users/user/AppData/Local/Temp/codex-clipboard-a4d0c27f-f5d6-4d6d-846c-c582994868c4.png"
+  },
+  "units": [
+    {
+      "id": "01-grunt",
+      "name": "兽族散兵",
+      "role": "基础近战",
+      "group": "earlier",
+      "note": "骨盔、破损红布、低位短刃",
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-skull-grunt-v12/grunt-more-ragged.png",
+      "image": "assets/01-grunt.png",
+      "user_visual_approval": "rejected",
+      "prompts": [
+        "01-grunt.txt"
+      ],
+      "path": "assets/01-grunt.png",
+      "sha256": "8758008ADE0A58DFE4D34394FFFD5EC8102B92AFA704DDD1EA9FAB4E5C1E2B25",
+      "bytes": 1808970,
+      "png": {
+        "width": 1199,
+        "height": 1312
+      }
+    },
+    {
+      "id": "02-stone-thrower",
+      "name": "兽族投手",
+      "role": "远程投石",
+      "group": "earlier",
+      "note": "短兽吻、紧凑体态、腿侧握石",
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-stone-thrower-v14/stone-thrower-front.png",
+      "image": "assets/02-stone-thrower.png",
+      "user_visual_approval": "rejected",
+      "prompts": [
+        "02-stone-thrower-design.txt",
+        "02-stone-thrower-front-fix.txt"
+      ],
+      "path": "assets/02-stone-thrower.png",
+      "sha256": "955DE41F969F88E0BCD189945F763BC0C4E72AA7E812C9E0349F30C7299DF5E8",
+      "bytes": 1819636,
+      "png": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "id": "03-bone-warg",
+      "name": "噬骨座狼",
+      "role": "快速近战",
+      "group": "earlier",
+      "note": "正面微俯视、露出一点背部",
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-bone-warg-v2/bone-warg-slight-top-front.png",
+      "image": "assets/03-bone-warg.png",
+      "user_visual_approval": "rejected",
+      "prompts": [
+        "03-bone-warg-camera.txt",
+        "03-bone-warg-gentler-camera.txt"
+      ],
+      "path": "assets/03-bone-warg.png",
+      "sha256": "994E7BC84D4113DD2F236264B935335FD975DBFEC5FCFE84B78AC4212E2680EC",
+      "bytes": 1635901,
+      "png": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "id": "04-redwing-vulture",
+      "name": "赤翼秃鹫",
+      "role": "飞行",
+      "group": "earlier",
+      "note": "秃头钩喙、赤翼、完整展翼留白",
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-redwing-vulture-v1/redwing-vulture-front-padded.png",
+      "image": "assets/04-redwing-vulture.png",
+      "user_visual_approval": "rejected",
+      "prompts": [
+        "04-vulture-design.txt",
+        "04-vulture-padding.txt"
+      ],
+      "path": "assets/04-redwing-vulture.png",
+      "sha256": "6C33BC66B4C16641050353FFE8F949A3D4ECC01F1A6ECBE3E153BF2A352096E9",
+      "bytes": 1518199,
+      "png": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "id": "05-shieldbearer",
+      "name": "兽人盾兵",
+      "role": "防御",
+      "group": "new",
+      "note": "矮宽体型、拼木盾、锈铁小盔",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-793cca8c-83a3-4f39-87ad-b575adb5df3b.png",
+      "image": "assets/05-shieldbearer.png",
+      "user_visual_approval": "rejected",
+      "prompts": [
+        "05-shieldbearer.txt"
+      ],
+      "path": "assets/05-shieldbearer.png",
+      "sha256": "31337D85B7E049756080F02BD5D5079DD5B224A381AFF7342DAAE3F232E492B1",
+      "bytes": 1839541,
+      "png": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "id": "06-bone-healer",
+      "name": "骨杖巫医",
+      "role": "治疗支援",
+      "group": "new",
+      "note": "瘦长体态、偏肩旧披料、骨杖药囊",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-fac0f663-a041-4df3-9c2f-0c122b40718e.png",
+      "image": "assets/06-bone-healer.png",
+      "user_visual_approval": "rejected",
+      "prompts": [
+        "06-bone-healer.txt",
+        "06-bone-healer-front-fix.txt"
+      ],
+      "path": "assets/06-bone-healer.png",
+      "sha256": "85B8F090983F55894EED6D0734E64FC50F11943AED4A65B0C648183DDFCF0BD0",
+      "bytes": 1911135,
+      "png": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "id": "07-red-banner-wolfrider",
+      "name": "赤旗狼骑",
+      "role": "骑乘冲锋",
+      "group": "new",
+      "note": "小骑手与座狼、侧后破旗、微俯视",
+      "image": "assets/07-red-banner-wolfrider.png",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-2e2eb8e2-d88f-40b9-a69f-9193283c8906.png",
+      "user_visual_approval": "rejected",
+      "prompts": [
+        "07-red-banner-wolfrider.txt",
+        "07-red-banner-wolfrider-padding.txt"
+      ],
+      "path": "assets/07-red-banner-wolfrider.png",
+      "sha256": "2DE97CBD5F45BD4D857420C250560C405E0ACA9D710F81AE6B3200AF8F28A794",
+      "bytes": 1760318,
+      "png": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "id": "08-splinterwood-troll",
+      "name": "碎木巨魔",
+      "role": "重型精英",
+      "group": "new",
+      "note": "长臂短腿、苔灰绿皮、断木桩",
+      "image": "assets/08-splinterwood-troll.png",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-4ed8bef6-d673-428e-a8e7-90f7f1fd85b9.png",
+      "user_visual_approval": "rejected",
+      "prompts": [
+        "08-splinterwood-troll.txt",
+        "08-splinterwood-troll-species-fix.txt"
+      ],
+      "path": "assets/08-splinterwood-troll.png",
+      "sha256": "FD76221D4CAD2D1D897A04724D6AB36C55C6F8344DDE05E7F21A1880EB155736",
+      "bytes": 2020843,
+      "png": {
+        "width": 1254,
+        "height": 1254
+      }
+    },
+    {
+      "id": "09-gatebreaker-boss",
+      "name": "双头食人魔「断门者」",
+      "role": "关底 Boss",
+      "group": "new",
+      "note": "两颗不同头型、厚重体态、破门梁",
+      "image": "assets/09-gatebreaker-boss.png",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-aa9e2f07-4df1-4dcb-ba3a-d9f3daa93177.png",
+      "user_visual_approval": "rejected",
+      "prompts": [
+        "09-gatebreaker-boss.txt",
+        "09-gatebreaker-boss-padding.txt"
+      ],
+      "path": "assets/09-gatebreaker-boss.png",
+      "sha256": "FDBEFD711CFCDA568391CAC50B354EEE9EDBCE39DC8FDE87AC31795F7574A71A",
+      "bytes": 1709279,
+      "png": {
+        "width": 1254,
+        "height": 1254
+      }
+    }
+  ],
+  "drafts": [
+    {
+      "id": "06-bone-healer",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-4e876869-ae90-405b-b1ad-e658bde60b0a.png",
+      "path": "drafts/06-bone-healer-initial.png",
+      "status": "Assistant revised this draft; not user rejected",
+      "sha256": "5333C0142A5D28260FF97C8753BE95FD2A9E963557C23343C0CF7AF5E3208D1E",
+      "bytes": 1718770
+    },
+    {
+      "id": "07-red-banner-wolfrider",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-5fd67665-2ac1-43cf-ad3b-9c4ec7c77ab8.png",
+      "path": "drafts/07-red-banner-wolfrider-initial.png",
+      "status": "Assistant revised this draft; not user rejected",
+      "sha256": "BB9F9E532ABD390248FEB45DAC8A4F35F28D74EDD0192309C07460C4A5A97939",
+      "bytes": 2037338
+    },
+    {
+      "id": "08-splinterwood-troll",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-29079e26-b232-4a6e-ac91-86103f431740.png",
+      "path": "drafts/08-splinterwood-troll-initial.png",
+      "status": "Assistant revised this draft; not user rejected",
+      "sha256": "606F135A2BFE33579971C68CAF323B88E409813512E92D29670323E726766EBB",
+      "bytes": 2000316
+    },
+    {
+      "id": "09-gatebreaker-boss",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-4369960f-e590-4030-8b03-3bb56db7c3e4.png",
+      "path": "drafts/09-gatebreaker-boss-initial.png",
+      "status": "Assistant revised this draft; not user rejected",
+      "sha256": "8E8267B41490DBA4B28D46E94506DC730945684AB7951CB3D7235EA6C39B3681",
+      "bytes": 2186151
+    }
+  ],
+  "prior_prompt_copies": [
+    {
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-skull-grunt-v12/prompt.txt",
+      "path": "prompts/01-grunt.txt",
+      "sha256": "A67D5FE4FA1247785CA65BD15E2F07DFF972C6BD3F7551342B1673572BBAC566",
+      "bytes": 1521
+    },
+    {
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-stone-thrower-v14/prompt.txt",
+      "path": "prompts/02-stone-thrower-design.txt",
+      "sha256": "BD1152D098E3CFD150B454D142A4B0744E78E50BD7F66BCC348FED9B8FAF7B31",
+      "bytes": 3624
+    },
+    {
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-stone-thrower-v14/front-correction-prompt.txt",
+      "path": "prompts/02-stone-thrower-front-fix.txt",
+      "sha256": "BB54B1D6AA0AC2EAF4E800F5BEDB53CC5B042F7685080A69F5B2FEC247B5DB23",
+      "bytes": 1825
+    },
+    {
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-bone-warg-v2/prompt.txt",
+      "path": "prompts/03-bone-warg-camera.txt",
+      "sha256": "3535CC89DC766056F90C2D9696D65D8B7D8413A9F3BFA1C522D5C812FD5B5915",
+      "bytes": 2132
+    },
+    {
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-bone-warg-v2/gentler-camera-prompt.txt",
+      "path": "prompts/03-bone-warg-gentler-camera.txt",
+      "sha256": "99A8F356F11B1F0BD9AB25811284D486238D40F05044B6458F73B0FF744636F9",
+      "bytes": 1434
+    },
+    {
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-redwing-vulture-v1/prompt.txt",
+      "path": "prompts/04-vulture-design.txt",
+      "sha256": "0653EBE4F3A46A32CDC784EB5C2104544FAFE1EE54CECF479BF02D3EFC7AEF5E",
+      "bytes": 3399
+    },
+    {
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-redwing-vulture-v1/padding-prompt.txt",
+      "path": "prompts/04-vulture-padding.txt",
+      "sha256": "1523645F6ECF3C1DD057C887C2F695E5396EB6275F8E2E733611D465A602412E",
+      "bytes": 1344
+    }
+  ],
+  "source_record_copies": [
+    {
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-skull-grunt-v12/art-record.json",
+      "path": "source-records/01-grunt.json",
+      "sha256": "2831FA6817BF88787EDB9B0A8A7F09236D8A7ADD95A02E326ED04768D64B3C01",
+      "bytes": 1268
+    },
+    {
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-stone-thrower-v14/art-record.json",
+      "path": "source-records/02-stone-thrower.json",
+      "sha256": "F766ACFAE60132DCDCD6F1CD85AC8CC7F983A8D589F6DC0AF39574AF2A25C82F",
+      "bytes": 1849
+    },
+    {
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-bone-warg-v2/art-record.json",
+      "path": "source-records/03-bone-warg.json",
+      "sha256": "EE61AD0C05C2D595FC488F9CCE4AA7E11466A0C187629FB5176CD8623F883C1F",
+      "bytes": 1822
+    },
+    {
+      "source": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-redwing-vulture-v1/art-record.json",
+      "path": "source-records/04-redwing-vulture.json",
+      "sha256": "8875EC28473A99449F0C03FC8C3E0717BA5BAC2E10D6CB3B88758340AA72A433",
+      "bytes": 2176
+    }
+  ],
+  "prompt_files": [
+    {
+      "path": "prompts/01-grunt.txt",
+      "sha256": "A67D5FE4FA1247785CA65BD15E2F07DFF972C6BD3F7551342B1673572BBAC566",
+      "bytes": 1521
+    },
+    {
+      "path": "prompts/02-stone-thrower-design.txt",
+      "sha256": "BD1152D098E3CFD150B454D142A4B0744E78E50BD7F66BCC348FED9B8FAF7B31",
+      "bytes": 3624
+    },
+    {
+      "path": "prompts/02-stone-thrower-front-fix.txt",
+      "sha256": "BB54B1D6AA0AC2EAF4E800F5BEDB53CC5B042F7685080A69F5B2FEC247B5DB23",
+      "bytes": 1825
+    },
+    {
+      "path": "prompts/03-bone-warg-camera.txt",
+      "sha256": "3535CC89DC766056F90C2D9696D65D8B7D8413A9F3BFA1C522D5C812FD5B5915",
+      "bytes": 2132
+    },
+    {
+      "path": "prompts/03-bone-warg-gentler-camera.txt",
+      "sha256": "99A8F356F11B1F0BD9AB25811284D486238D40F05044B6458F73B0FF744636F9",
+      "bytes": 1434
+    },
+    {
+      "path": "prompts/04-vulture-design.txt",
+      "sha256": "0653EBE4F3A46A32CDC784EB5C2104544FAFE1EE54CECF479BF02D3EFC7AEF5E",
+      "bytes": 3399
+    },
+    {
+      "path": "prompts/04-vulture-padding.txt",
+      "sha256": "1523645F6ECF3C1DD057C887C2F695E5396EB6275F8E2E733611D465A602412E",
+      "bytes": 1344
+    },
+    {
+      "path": "prompts/05-shieldbearer.txt",
+      "sha256": "3C5F277BA8D6C678F5587EED091905E176DB8ED95943D72D3AFBE24629C741E9",
+      "bytes": 3219
+    },
+    {
+      "path": "prompts/06-bone-healer-front-fix.txt",
+      "sha256": "4D93C2F36A7AE59B74706DDD2236575816FE81347F8F93EB92B7C9809D45BBEA",
+      "bytes": 898
+    },
+    {
+      "path": "prompts/06-bone-healer.txt",
+      "sha256": "BC901874D2D0938B0BA087D16029FE3C0F53DFAF6E910EA1D15A2B901931C63F",
+      "bytes": 3372
+    },
+    {
+      "path": "prompts/07-red-banner-wolfrider-padding.txt",
+      "sha256": "FE8ED1EA9D73FF53724FF7768362BB582427ED1B82D813DB95A6D254F9600B88",
+      "bytes": 1072
+    },
+    {
+      "path": "prompts/07-red-banner-wolfrider.txt",
+      "sha256": "61C7A6D98D18C110A7DEBC9A11CE335EA5083D21529F85486B50BAB366D99E4E",
+      "bytes": 3248
+    },
+    {
+      "path": "prompts/08-splinterwood-troll-species-fix.txt",
+      "sha256": "E2420F0EF4489B58046E158D8D62C041A118ACC62CBC301130FAC31710774DDA",
+      "bytes": 2231
+    },
+    {
+      "path": "prompts/08-splinterwood-troll.txt",
+      "sha256": "2B8673DE8264E234D0577D73355A10F6CB37F70609A08E8B2C7EDDEBBB2C63EB",
+      "bytes": 3210
+    },
+    {
+      "path": "prompts/09-gatebreaker-boss-padding.txt",
+      "sha256": "05E06FED26219ECE72D65CB3F405E434A48572D8B4C7911C1A249C4CD2477E0E",
+      "bytes": 1060
+    },
+    {
+      "path": "prompts/09-gatebreaker-boss.txt",
+      "sha256": "61BD1461AF4D5436C4A1A19EE45EF0995E776B1A664681C91BFD5F949F3E45BE",
+      "bytes": 3410
+    }
+  ],
+  "reference_sha256": {
+    "beastfolk": "955DE41F969F88E0BCD189945F763BC0C4E72AA7E812C9E0349F30C7299DF5E8",
+    "warg": "994E7BC84D4113DD2F236264B935335FD975DBFEC5FCFE84B78AC4212E2680EC",
+    "original_rider": "E5A56B43DED8C22261F6DB25F64A6C6533F0D6B78395D783FE747C41313E9C8F"
+  },
+  "static_file_checks": "Nine PNG signatures/dimensions, source-copy SHA256 equality, sixteen prompts and referenced files checked; no browser/game/test run.",
+  "review_files": [
+    {
+      "path": "index.html",
+      "sha256": "37877597CBB4D938AC4F716CC0E5CA96F972DE1718969F4DB01BD512B52AAF39",
+      "bytes": 11290
+    },
+    {
+      "path": "README.md",
+      "sha256": "AAAB21E96A3ED35933DA86E0D62B4A671762137E6CF16746847C6BC5F69C5074",
+      "bytes": 6528
+    }
+  ],
+  "gallery_reference_check": "Static inline dataset and current-prompt links match existing files and manifest; no browser execution."
+}

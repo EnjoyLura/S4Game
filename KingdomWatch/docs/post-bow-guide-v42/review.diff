@@ -1,0 +1,220 @@
+--- assets/scripts/battle/Monster.ts.before
++++ assets/scripts/battle/Monster.ts
+@@ -4,7 +4,7 @@
+  */
+ import { Color, Graphics, isValid, Label, Layers, Node, Tween, UIOpacity } from 'cc';
+ import { MOB_DMG_MUL, MOB_HP_MUL, MobDef } from '../config/Mobs';
+-import { LINE_Y, PAL, SPAWN_Y } from '../config/GameConfig';
++import { LINE_Y, LO, PAL } from '../config/GameConfig';
+ import { bus, EVT } from '../core/EventBus';
+ import { Sfx } from '../core/Sfx';
+ import { BattleSprite } from './BattleSprite';
+@@ -18,6 +18,11 @@
+ const ATK_ANIM = 0.34;
+ /** 统一静态/序列帧显示高度，保持脚底锚点与碰撞半径不变。 */
+ const MOB_ART_HEIGHT = 3.85;
++/** Put the entire silhouette just below the top HUD, including the art's foot offset.
++ * Keep the shared offscreen SPAWN_Y unchanged: ultimates use it as their launch height. */
++function mobEntryY(radius: number): number {
++  return LO.half - LO.notchTop - 124 - radius * (MOB_ART_HEIGHT - .82);
++}
+ 
+ export type MonsterHitCtx = {
+   floatParent: Node;
+@@ -113,7 +118,7 @@
+     this.hunterMarkVisual = false;
+     this.baseX = x;
+     this.node.removeFromParent();
+-    this.node.setPosition(x, SPAWN_Y + 40 + Math.random() * 60, 0);
++    this.node.setPosition(x, mobEntryY(def.radius) - Math.random() * 24, 0);
+     this.node.setScale(1, 1, 1);
+     this.node.angle = 0;
+     this.lastTint = '';
+@@ -832,7 +837,7 @@
+     if (m.immobilized) return;
+     const p = m.node.position;
+     let nx = Math.max(-355, Math.min(355, p.x + dx));
+-    let ny = Math.min(SPAWN_Y, p.y + dy);
++    let ny = Math.min(mobEntryY(m.def.radius), p.y + dy);
+     if (m.state === 'hold') ny = p.y; // 停位怪不上下挤
+     m.node.setPosition(nx, ny, 0);
+     if (m.state === 'move') m.baseX = nx;
+--- assets/scripts/core/SaveData.ts.before
++++ assets/scripts/core/SaveData.ts
+@@ -75,6 +75,9 @@
+   skipped: boolean;
+   upgradeDone: boolean;
+   upgradeSkipped: boolean;
++  /** Optional for v40 saves: complete only after entering normal 1-2 successfully. */
++  entryDone?: boolean;
++  entrySkipped?: boolean;
+   battleDone: boolean;
+   freeChargeUsed: boolean;
+   ultCast: boolean;
+--- assets/scripts/core/SecondJourney.ts.before
++++ assets/scripts/core/SecondJourney.ts
+@@ -17,6 +17,23 @@
+   const sv = loadSave(), j = sv.secondJourney!;
+   if (skipped) j.upgradeSkipped = true;
+   else if (sv.heroes.archer.lv > 1) j.upgradeDone = true;
++  saveSave();
++}
++/** Follow the earned bow, not any unrelated equipment transaction. Old non-teaching saves stay out. */
++export function postBowCampTab(): 2 | 3 | null {
++  const sv = loadSave(), first = sv.firstJourney!, j = sv.secondJourney!;
++  const bow = sv.equips.find(e => e.uid === first.rewardUid && e.defId === 'wpn_bow');
++  if (!first.enabled || first.skipped || first.equipSkipped || !j.enabled || j.skipped
++    || !sv.stars['1-1'] || sv.stars['1-2'] || j.entryDone || j.entrySkipped
++    || !bow || sv.heroes.archer.worn.weapon !== bow.uid) return null;
++  if (pendingUpgradeLesson()) return 3;
++  return j.upgradeDone || j.upgradeSkipped ? 2 : null;
++}
++export function pendingSecondEntryLesson(): boolean { return postBowCampTab() === 2; }
++export function finishSecondEntryLesson(skipped = false): void {
++  const j = loadSave().secondJourney!;
++  if (skipped) j.entrySkipped = true;
++  else j.entryDone = true;
+   saveSave();
+ }
+ export function pyroRewardAvailable(id: string, difficulty: number): boolean {
+--- assets/scripts/ui/MainUI.ts.before
++++ assets/scripts/ui/MainUI.ts
+@@ -20,7 +20,8 @@
+ import { buildUpgrade } from './pages/UpgradePage';
+ import { buildBase } from './pages/BasePage';
+ import { levelReturnReady } from './BattleEntry';
+-import { pendingPyroSquadLesson } from '../core/SecondJourney';
++import { pendingPyroSquadLesson, postBowCampTab } from '../core/SecondJourney';
++import { loadSave, saveSave } from '../core/SaveData';
+ import { openSquadPanel } from './SquadPanel';
+ import { whenUIArtReady } from './UIArtReady';
+ import { paintLobbyStrip } from './LobbyChrome';
+@@ -46,6 +47,13 @@
+   private tab = flow.mainTab;
+ 
+   start(): void {
++    // Resume the post-bow chain after a refresh without repeating a paid upgrade.
++    const campTab = postBowCampTab();
++    if (campTab !== null) {
++      flow.mainTab = campTab;
++      if (campTab === 3) { loadSave().curHero = 'archer'; saveSave(); }
++      else flow.levelReturn = { id: '1-2', diff: 0 };
++    }
+     GameAudio.enter('camp', selectedCampaignChapter());
+     // 视口变化（手机地址栏收起/展开、旋转等）：LO.half 只在启动时算过一次，画布被
+     // Cocos 自动重适配后旧值全部失锚 → 重算 initLayout 并整屏重建，布局始终贴合当前可视区
+--- assets/scripts/ui/TrainingLobby.ts.before
++++ assets/scripts/ui/TrainingLobby.ts
+@@ -9,6 +9,7 @@
+ import { mainLabel as pageLabel, PageCtx, mainLayout, mainResourceTop, MAIN_RESOURCE_H, pageScroll, fmt, toast } from './PageKit';
+ import { loadSave, saveSave } from '../core/SaveData';
+ import { finishUpgradeLesson, pendingUpgradeLesson } from '../core/SecondJourney';
++import { flow } from '../core/Flow';
+ import { tutorialFocus } from './TutorialFocus';
+ import { whenUIArtReady } from './UIArtReady';
+ import { bindButton } from './ButtonFeedback';
+@@ -423,8 +424,11 @@
+           if (!root.isValid || !root.activeInHierarchy || !pendingUpgradeLesson()) return;
+           const button = root.getChildByName('trainingUpgrade');
+           if (!button) return;
+-          const back = (): void => { if (ctx.navigate) ctx.navigate(2); else ctx.refresh(); };
+-          tutorialFocus(root, button, '进入1-2前试着升级弓箭手：消耗100金币，升到2级。也可以跳过直接挑战。', () => {
++          const back = (): void => {
++            flow.levelReturn = { id: '1-2', diff: 0 };
++            if (ctx.navigate) ctx.navigate(2); else ctx.refresh();
++          };
++          tutorialFocus(root, button, '绿弓已装备！再花100金币将弓箭手升到2级，随后前往第二关。也可以跳过。', () => {
+             const result = growthAction(target, action);
+             if (result.ok) { finishUpgradeLesson(); ctx.refreshResources?.(); back(); }
+             else { finishUpgradeLesson(true); back(); }
+--- assets/scripts/ui/pages/HeroPage.ts.before
++++ assets/scripts/ui/pages/HeroPage.ts
+@@ -23,6 +23,8 @@
+ import { DETAIL_ACTION_FOOTER, detailBody, detailFooter, detailGroup, detailGroupHeight, detailHeight, detailOverview, detailParagraph, detailSection } from '../DetailDialog';
+ import { TRAINING_INK, TRAINING_SUB, trainingComparison } from '../TrainingChrome';
+ import { finishBowLesson, pendingBowLesson, skipBowLesson } from '../../core/FirstJourney';
++import { postBowCampTab } from '../../core/SecondJourney';
++import { flow } from '../../core/Flow';
+ import { tutorialFocus } from '../TutorialFocus';
+ import { whenUIArtReady } from '../UIArtReady';
+ 
+@@ -311,7 +313,14 @@
+   const result = wearEquip(hid, EQUIPS[inst.defId].kind, inst.uid);
+   if (result.ok) finishBowLesson(inst.uid, hid);
+   toast(result.msg, { kind: result.ok ? 'success' : 'warning', title: result.ok ? '装备替换成功' : '无法穿戴' });
+-  if (result.ok) dismissUI(dim, ctx.refresh, false);
++  if (result.ok) dismissUI(dim, () => {
++    const tab = hid === 'archer' && inst.uid === loadSave().firstJourney!.rewardUid ? postBowCampTab() : null;
++    if (tab !== null && ctx.navigate) {
++      loadSave().curHero = 'archer'; saveSave();
++      flow.levelReturn = { id: '1-2', diff: 0 };
++      ctx.navigate(tab);
++    } else ctx.refresh();
++  }, false);
+ }
+ function unequipFromDialog(ctx: PageCtx, hid: string, kind: EquipKind, inst: EquipInst, dim: Node): void {
+   if (wornInst(hid, kind)?.uid !== inst.uid) {
+--- assets/scripts/ui/pages/LevelsPage.ts.before
++++ assets/scripts/ui/pages/LevelsPage.ts
+@@ -13,7 +13,9 @@
+ import { GameAudio } from '../../core/GameAudio';
+ import { flow } from '../../core/Flow';
+ import { firstBowAvailable } from '../../core/FirstJourney';
+-import { pendingUpgradeLesson, pyroRewardAvailable } from '../../core/SecondJourney';
++import { finishSecondEntryLesson, pendingSecondEntryLesson, pendingUpgradeLesson, pyroRewardAvailable } from '../../core/SecondJourney';
++import { tutorialFocus } from '../TutorialFocus';
++import { whenUIArtReady } from '../UIArtReady';
+ import { openSquadPanel } from '../SquadPanel';
+ import { bindButton } from '../ButtonFeedback';
+ import { refreshUI, reducedMotion } from '../UIMotion';
+@@ -78,7 +80,10 @@
+ }
+ 
+ export function buildLevels(ctx: PageCtx): void {
++  const entryLesson = pendingSecondEntryLesson();
++  if (entryLesson) flow.levelReturn = { id: '1-2', diff: 0 };
+   GameAudio.setChapter(selectedCampaignChapter());
++  if (entryLesson) st.drawer = true;
+   while (st.d > 0 && !campaignDifficultyOpen(LEVELS[st.i].id, st.d, loadSave().stars)) st.d--;
+   const content = N('campaignRouteLobby', ctx.screens, 0, 0, 750, LO.half * 2);
+   let mapScroll: ScrollView | null = null;
+@@ -357,7 +362,7 @@
+           ? '首次通关必得绿色猎风长弓\n回营后在英雄页穿戴' : pyroRewardAvailable(challenge.id, challenge.difficulty)
+           ? '首次通关免费获得火法师\n回营后手动加入第三个出战位置' : '普通难度不掉落装备\n挑战精英 / 地狱解锁装备掉落',
+         { size: 19, font: 'body', color: CAMPAIGN_TEXT.secondary, w: 660, h: 68, lineHeight: 32 });
+-      const battle = comicButtonControl(panel, 0, y(sheetH - 51), 664, 78, '', () => {
++      const startBattle = (): void => {
+         if (!open || closing || enteringBattle()) return;
+         if (!campaignDifficultyOpen(lv.id, challenge.difficulty, loadSave().stars)) { toast('请先通关前置关卡或难度'); return; }
+         if (lv.id === '1-2' && challenge.difficulty === 0 && pendingUpgradeLesson() && ctx.navigate) {
+@@ -368,18 +373,28 @@
+         if (!squadList().length) { toast('请先上阵英雄'); return; }
+         enterBattle(done => {
+           flow.mode = 'battle'; flow.levelId = lv.id; flow.diff = challenge.difficulty;
+-          return director.loadScene('Main', done);
++          return director.loadScene('Main', error => {
++            if (!error && lv.id === '1-2' && challenge.difficulty === 0) finishSecondEntryLesson();
++            done(error);
++          });
+         }, () => {
+           flow.mode = 'main';
+           if (content.isValid) toast('进入战斗失败，请重试', { kind: 'warning', title: '进入战斗失败' });
+         }, warmBattlefield(lv.id, squadList()));
+-      }, { tone: open ? 'gold' : 'muted', name: 'campaignStartBattle', enabled: open });
++      };
++      const battle = comicButtonControl(panel, 0, y(sheetH - 51), 664, 78, '', startBattle,
++        { tone: open ? 'gold' : 'muted', name: 'campaignStartBattle', enabled: open });
+       const battleFace = battle.node.getChildByName('buttonFace')!;
+       paintCampaignMapAction(battleFace,664,78,'gold',open);
+       if (open) levelArt(battleFace,-124,0,55,55,'comic_swords_v1');
+       else comicMark(battleFace,-139,0,'lock',28,COMIC.sub);
+       mainLabel(battleFace,30,0,open ? '开始战斗' : '通关前置关卡解锁',
+         { size: open ? 36 : 26, font: 'body', bold: true, color: CAMPAIGN_TEXT.ink, w: 414, h: 50 });
++      if (lv.id === '1-2' && challenge.difficulty === 0 && open && pendingSecondEntryLesson()) whenUIArtReady(ctx.screens, () => {
++        if (!panel.isValid || !panel.activeInHierarchy || !battle.node.isValid || !pendingSecondEntryLesson()) return;
++        tutorialFocus(content, battle.node, '准备完成！这是第二关「废弃岗亭」，点击开始战斗。',
++          startBattle, () => finishSecondEntryLesson(true));
++      });
+     });
+   }
+   function renderWorld(): void {

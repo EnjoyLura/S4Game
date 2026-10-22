@@ -1,0 +1,223 @@
+[
+  {
+    "key": "ui_card_sharp",
+    "size": [
+      416,
+      416
+    ],
+    "alphaBounds": [
+      3,
+      3,
+      414,
+      414
+    ]
+  },
+  {
+    "key": "ui_card_swift",
+    "size": [
+      416,
+      416
+    ],
+    "alphaBounds": [
+      3,
+      3,
+      414,
+      414
+    ]
+  },
+  {
+    "key": "ui_card_crit_rate",
+    "size": [
+      416,
+      416
+    ],
+    "alphaBounds": [
+      3,
+      3,
+      414,
+      414
+    ]
+  },
+  {
+    "key": "ui_card_crit_dmg",
+    "size": [
+      416,
+      416
+    ],
+    "alphaBounds": [
+      3,
+      3,
+      414,
+      414
+    ]
+  },
+  {
+    "key": "ui_card_cd_cut",
+    "size": [
+      408,
+      408
+    ],
+    "alphaBounds": [
+      3,
+      3,
+      406,
+      406
+    ]
+  },
+  {
+    "key": "ui_card_fast_charge_a",
+    "size": [
+      416,
+      416
+    ],
+    "alphaBounds": [
+      3,
+      3,
+      414,
+      414
+    ]
+  },
+  {
+    "key": "ui_icon_skill_archer",
+    "size": [
+      472,
+      472
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      472,
+      472
+    ]
+  },
+  {
+    "key": "ui_icon_skill_mora",
+    "size": [
+      248,
+      248
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      248,
+      248
+    ]
+  },
+  {
+    "key": "ui_icon_ult_mora",
+    "size": [
+      254,
+      254
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      254,
+      254
+    ]
+  },
+  {
+    "key": "ui_card_mora_brittle",
+    "size": [
+      244,
+      245
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      244,
+      245
+    ]
+  },
+  {
+    "key": "ui_card_mora_chill",
+    "size": [
+      246,
+      241
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      246,
+      241
+    ]
+  },
+  {
+    "key": "ui_card_mora_freeze",
+    "size": [
+      239,
+      244
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      239,
+      244
+    ]
+  },
+  {
+    "key": "ui_card_mora_glacier",
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      256,
+      256
+    ]
+  },
+  {
+    "key": "ui_card_mora_morale",
+    "size": [
+      221,
+      249
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      221,
+      249
+    ]
+  },
+  {
+    "key": "ui_card_mora_range",
+    "size": [
+      256,
+      234
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      256,
+      234
+    ]
+  },
+  {
+    "key": "ui_card_mora_spell",
+    "size": [
+      250,
+      248
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      250,
+      248
+    ]
+  },
+  {
+    "key": "ui_card_mora_war",
+    "size": [
+      254,
+      248
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      254,
+      248
+    ]
+  }
+]

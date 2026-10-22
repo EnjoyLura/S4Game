@@ -1,0 +1,187 @@
+/** Opt-in, read-only rendering report for a user's own phone. No rendering overrides. */
+import { director, Label, screen, sys, view } from 'cc';
+import { LO } from '../config/GameConfig';
+
+let installed = false;
+
+function rounded(n: number): number { return Math.round(n * 1000) / 1000; }
+function size(v: { width: number; height: number }): number[] {
+  return [rounded(v.width), rounded(v.height)];
+}
+function rect(v: { x: number; y: number; width: number; height: number }): number[] {
+  return [rounded(v.x), rounded(v.y), rounded(v.width), rounded(v.height)];
+}
+
+function collect(mode: string): any {
+  const canvas = document.getElementById('GameCanvas') as HTMLCanvasElement | null;
+  const bounds = canvas?.getBoundingClientRect();
+  const vv = window.visualViewport;
+  const css = getComputedStyle(document.documentElement);
+  const dpr = window.devicePixelRatio || 1;
+  const pageScale = vv?.scale || 1;
+  // The page-scale-aware ratio is an estimate, not a physical-panel measurement.
+  const targetW = bounds ? bounds.width * dpr * pageScale : 0;
+  const targetH = bounds ? bounds.height * dpr * pageScale : 0;
+  const gl = (director.root?.device as unknown as { gl?: WebGLRenderingContext })?.gl;
+  const engineSafe = sys.getSafeAreaRect();
+  const rawSafe = sys.getSafeAreaRect(false);
+  const labels = (director.getScene()?.getComponentsInChildren(Label) || [])
+    .filter(l => l.enabledInHierarchy && l.node.activeInHierarchy && l.string.trim())
+    .slice(0, 16).map(l => {
+      // Read-only engine internals are optional; unavailable fields stay null.
+      const probe = l as unknown as {
+        assemblerData?: { canvas?: HTMLCanvasElement };
+        textStyle?: { fontScale?: number; actualFontSize?: number };
+      };
+      const textCanvas = probe.assemblerData?.canvas;
+      const ws = l.node.worldScale;
+      return {
+        node: l.node.name, text: l.string.slice(0, 48), font: l.font?.name || l.fontFamily,
+        systemFont: l.useSystemFont, fontSize: l.fontSize, actualFontSize: l.actualFontSize,
+        cacheMode: l.cacheMode, bold: l.isBold, outlineWidth: l.outlineWidth,
+        worldScale: [rounded(ws.x), rounded(ws.y)],
+        textCanvasPixels: textCanvas ? [textCanvas.width, textCanvas.height] : null,
+        engineTextScale: probe.textStyle?.fontScale ?? null,
+        engineTextFontSize: probe.textStyle?.actualFontSize ?? null,
+      };
+    });
+  return {
+    report: 'kw-render-diagnostics-v33', capturedAt: new Date().toISOString(), mode,
+    page: location.origin + location.pathname, query: location.search,
+    browser: {
+      userAgent: navigator.userAgent, devicePixelRatio: dpr,
+      dprCap: (window as unknown as { __KW_DPR_CAP?: number }).__KW_DPR_CAP ?? null,
+      innerCss: [innerWidth, innerHeight], outerCss: [outerWidth, outerHeight],
+      screenCss: [window.screen.width, window.screen.height],
+      availableScreenCss: [window.screen.availWidth, window.screen.availHeight],
+      documentCss: [document.documentElement.clientWidth, document.documentElement.clientHeight],
+      visualViewport: vv ? {
+        width: rounded(vv.width), height: rounded(vv.height), scale: rounded(vv.scale),
+        offsetLeft: rounded(vv.offsetLeft), offsetTop: rounded(vv.offsetTop),
+      } : null,
+      viewportMeta: document.querySelector('meta[name="viewport"]')?.getAttribute('content'),
+      safeCss: ['top', 'right', 'bottom', 'left'].map(edge => css.getPropertyValue('--safe-' + edge).trim()),
+    },
+    canvas: canvas && bounds ? {
+      backingPixels: [canvas.width, canvas.height], cssRect: rect(bounds),
+      pixelRatio: [rounded(canvas.width / bounds.width), rounded(canvas.height / bounds.height)],
+      estimatedDisplayPixels: [rounded(targetW), rounded(targetH)],
+      estimatedBackingToDisplay: [rounded(canvas.width / targetW), rounded(canvas.height / targetH)],
+      transform: getComputedStyle(canvas).transform,
+      ancestors: [canvas.parentElement, canvas.parentElement?.parentElement].filter(Boolean).map(el => {
+        const s = getComputedStyle(el!);
+        return { id: el!.id, cssRect: rect(el!.getBoundingClientRect()), transform: s.transform, zoom: s.getPropertyValue('zoom') };
+      }),
+    } : null,
+    engine: {
+      version: '3.8.8', isMobile: sys.isMobile, os: sys.os, browserType: sys.browserType,
+      devicePixelRatio: screen.devicePixelRatio,
+      windowPixels: size(screen.windowSize), resolutionPixels: size(screen.resolution),
+      resolutionToWindow: [rounded(screen.resolution.width / screen.windowSize.width), rounded(screen.resolution.height / screen.windowSize.height)],
+      design: size(view.getDesignResolutionSize()), visible: size(view.getVisibleSize()),
+      scale: [rounded(view.getScaleX()), rounded(view.getScaleY())],
+      safeRectSymmetric: rect(engineSafe), safeRectRaw: rect(rawSafe),
+      appliedLayout: { half: LO.half, notchTop: LO.notchTop, safeTop: LO.safeTop, safeBottom: LO.safeBottom },
+    },
+    graphics: gl ? {
+      drawingBufferPixels: [gl.drawingBufferWidth, gl.drawingBufferHeight],
+      attributes: gl.getContextAttributes(), version: gl.getParameter(gl.VERSION),
+      renderer: gl.getParameter(gl.RENDERER), maxTextureSize: gl.getParameter(gl.MAX_TEXTURE_SIZE),
+    } : null,
+    labels,
+  };
+}
+
+export function installRenderDiagnostics(): void {
+  if (installed || typeof window === 'undefined' || typeof document === 'undefined') return;
+  if (new URLSearchParams(location.search).get('renderdiag') !== '1') return;
+  installed = true;
+  try { mount(); } catch (e) { console.warn('Render diagnostics unavailable', e); }
+}
+
+function mount(): void {
+  const host = document.createElement('div');
+  host.id = 'kwRenderDiagnostics';
+  host.style.cssText = 'position:fixed;z-index:2147483646;left:8px;bottom:8px;transform-origin:bottom left;pointer-events:auto;text-align:left;';
+  const root = host.attachShadow({ mode: 'open' });
+  root.innerHTML = `<style>
+    :host { color-scheme:dark; }
+    * { box-sizing:border-box; }
+    section { background:#101923f5;color:#eef5ff;border:1px solid #7891a8;border-radius:10px;padding:10px;font:13px/1.45 system-ui,sans-serif;box-shadow:0 3px 16px #0008; }
+    header { display:flex;align-items:center;gap:8px; }
+    strong { flex:1; }
+    p { margin:7px 0;white-space:pre-wrap; }
+    button { font:inherit;color:#fff;background:#28445e;border:1px solid #6489aa;border-radius:6px;padding:8px;min-height:36px;cursor:pointer; }
+    .row { display:flex;gap:6px;margin-top:6px; }
+    .row button { flex:1; }
+    textarea { display:block;width:100%;height:100px;margin-top:8px;font:11px/1.3 monospace;user-select:text;-webkit-user-select:text;color:#e9f2ff;background:#081019;border:1px solid #6489aa; }
+    small { display:block;color:#b9cada;margin-top:5px; }
+    [hidden] { display:none!important; }
+  </style><section>
+    <header><strong>清晰度诊断 v33</strong><button id="toggle" type="button">收起</button></header>
+    <div id="body"><p id="summary">正在读取…</p>
+      <div class="row"><button id="mobile" type="button">复制手机模式数据</button><button id="desktop" type="button">复制电脑模式数据</button></div>
+      <div class="row"><button id="refresh" type="button">刷新数据</button><button id="details" type="button">展开原始数据</button></div>
+      <textarea id="data" aria-label="诊断数据，可长按全选复制" readonly hidden></textarea>
+      <small id="status">切换浏览器模式后，点对应按钮，再把数据粘贴给我。</small>
+    </div></section>`;
+  document.body.appendChild(host);
+  const find = <T extends HTMLElement>(id: string): T => root.getElementById(id) as T;
+  const summary = find<HTMLParagraphElement>('summary');
+  const data = find<HTMLTextAreaElement>('data');
+  const status = find<HTMLElement>('status');
+  const body = find<HTMLDivElement>('body');
+  let mode = '未标记';
+  function fit(): void {
+    const vv = window.visualViewport;
+    const pageScale = vv?.scale || 1;
+    // Counteract desktop-mode page shrinking on this panel only, never on the game.
+    host.style.transform = 'scale(' + 1 / pageScale + ')';
+    host.style.width = Math.max(180, Math.min(420, (vv?.width || innerWidth) * pageScale - 16)) + 'px';
+    host.style.left = 8 / pageScale + 'px';
+    host.style.bottom = 8 / pageScale + 'px';
+  }
+  function refresh(): void {
+    try {
+      fit();
+      const r = collect(mode);
+      const c = r.canvas;
+      summary.textContent = '浏览器 DPR ' + r.browser.devicePixelRatio + ' / 引擎 DPR ' + r.engine.devicePixelRatio
+        + '\n画布 ' + (c ? c.backingPixels.join(' × ') : '未就绪') + ' px'
+        + '\n显示 ' + (c ? c.cssRect.slice(2).join(' × ') : '未就绪') + ' CSS px / 页面缩放 ' + (r.browser.visualViewport?.scale ?? 1)
+        + '\n顶部安全区 ' + (r.browser.safeCss[0] || '未报告') + ' / 游戏避让 ' + rounded(r.engine.appliedLayout.notchTop);
+      data.value = JSON.stringify(r, null, 2);
+    } catch (e) {
+      status.textContent = '读取未完成，可稍后点刷新：' + String(e);
+    }
+  }
+  async function copy(nextMode: string): Promise<void> {
+    mode = nextMode;
+    refresh();
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('clipboard unavailable');
+      await navigator.clipboard.writeText(data.value);
+      status.textContent = '已复制' + mode + '数据，请粘贴到聊天中。';
+    } catch (e) {
+      data.hidden = false;
+      data.focus(); data.select(); data.setSelectionRange(0, data.value.length);
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (ignored) { void ignored; }
+      status.textContent = copied ? '已复制' + mode + '数据，请粘贴到聊天中。' : '请长按下方文本框，全选并复制。';
+    }
+  }
+  find<HTMLButtonElement>('mobile').onclick = () => { void copy('手机模式'); };
+  find<HTMLButtonElement>('desktop').onclick = () => { void copy('电脑模式'); };
+  find<HTMLButtonElement>('refresh').onclick = refresh;
+  find<HTMLButtonElement>('details').onclick = () => { data.hidden = !data.hidden; refresh(); };
+  find<HTMLButtonElement>('toggle').onclick = () => {
+    body.hidden = !body.hidden;
+    find<HTMLButtonElement>('toggle').textContent = body.hidden ? '展开' : '收起';
+    if (!body.hidden) refresh();
+  };
+  // Read-only snapshots on explicit actions/viewport changes, no frame loop or uploads.
+  window.addEventListener('resize', refresh, { passive: true });
+  window.visualViewport?.addEventListener('resize', refresh, { passive: true });
+  refresh();
+  window.setTimeout(refresh, 1500);
+}

@@ -1,0 +1,49 @@
+{
+  "originalFilesChecked": 1970,
+  "changedExistingFiles": [
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/config/Endless.ts",
+    "assets/scripts/config/LevelDifficulty.ts",
+    "assets/scripts/core/Flow.ts",
+    "assets/scripts/core/StageLoot.ts",
+    "assets/scripts/ui/LevelLootPreview.ts",
+    "assets/scripts/ui/MainUI.ts",
+    "assets/scripts/ui/PageKit.ts",
+    "assets/scripts/ui/Panels.ts",
+    "assets/scripts/ui/pages/BasePage.ts"
+  ],
+  "addedGameFiles": [
+    "assets/resources/scenes/bg_endless_world_v63.png",
+    "assets/resources/scenes/bg_endless_world_v63.png.meta",
+    "assets/scripts/ui/EndlessLootPreview.ts",
+    "assets/scripts/ui/EndlessLootPreview.ts.meta",
+    "assets/scripts/ui/EndlessMapController.ts",
+    "assets/scripts/ui/EndlessMapController.ts.meta",
+    "assets/scripts/ui/pages/EndlessPage.ts",
+    "assets/scripts/ui/pages/EndlessPage.ts.meta"
+  ],
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "allOriginalNativeResourcesPreserved": 713,
+  "newNativeMedia": [
+    "assets/resources/native/dd/dd6aff62-a305-4750-8cfb-8db3aad0d7fd.a9dd3.png"
+  ],
+  "priorPreviewFilesPreserved": 793,
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-endless-world-map-v63-20261019-223933",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "entryVersion": "1792420719",
+  "game": "https://kingdom-watch.pages.dev/?v=endless-world-map-v63-1792420719",
+  "manualAcceptance": "Static source/types/media/compiled bundle/build/read-only HTTP only. No game/browser/tests/simulation/audio executed. User manual acceptance.",
+  "deployment": "https://e45fbfaa.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.39868.js?v=1792420719",
+    "mainBundleHashMatches": true,
+    "worldMapMarkersPresent": true,
+    "newSceneHashMatches": true,
+    "prototypeGetterAbsent": true
+  }
+}

@@ -1,12 +1,12 @@
 /** Durable pickup and settlement accounting. Visual callbacks never roll or grant twice. */
-import { ChallengeDef, equipmentDropChance, MaterialReward } from '../config/LevelDifficulty';
+import { ChallengeDef, challengeEquipmentDropChance, MaterialReward } from '../config/LevelDifficulty';
 import { MobDef } from '../config/Mobs';
 import { newEquipInst } from './GameData';
 import { EquipInst, loadSave, saveSave } from './SaveData';
 
-export interface StageLootSummary { equipment: EquipInst[]; materials: MaterialReward[]; }
+export interface StageLootSummary { equipment: EquipInst[]; materials: MaterialReward[]; heroes?: string[]; }
 export function rollEquipment(level: ChallengeDef, mob: MobDef): EquipInst | null {
-  if (!level.gearPool.length || Math.random() >= equipmentDropChance(level.difficulty, mob)) return null;
+  if (!level.gearPool.length || Math.random() >= challengeEquipmentDropChance(level, mob)) return null;
   const total = level.gearPool.reduce((sum, row) => sum + row.weight, 0);
   let roll = Math.random() * total;
   for (const row of level.gearPool) {

@@ -1,0 +1,35 @@
+{
+  "original_native_files": 756,
+  "native_hashes_identical": true,
+  "asset_count": 2080,
+  "asset_changes_match_static_review": true,
+  "build_record": {
+    "exitCode": 36,
+    "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-github-pages-out.log",
+    "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-github-pages-err.log",
+    "creator": "3.8.8",
+    "platform": "web-mobile",
+    "debug": false,
+    "md5Cache": true,
+    "dprPatch": "completed",
+    "preparation": "tools/prepare-web-release.py",
+    "gameplayValidation": "user manual"
+  },
+  "compiled_main_bundle": {
+    "file": "build/web-mobile/assets/main/index.6e83a.js",
+    "sha256": "a32e083acb1463db6d71718e9094a2792ea00f4d834b2815da87ad92cc3c8a88",
+    "bytes": 859009,
+    "approved_card_ids_present": [
+      "archer_knockback",
+      "sniper_return",
+      "pyro_firefield",
+      "pyro_antiheal",
+      "pyro_giant",
+      "volt_arc",
+      "volt_overload",
+      "mora_pierce",
+      "mora_ground"
+    ]
+  },
+  "javascript_or_wasm_executed": false
+}

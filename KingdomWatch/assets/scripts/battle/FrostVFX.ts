@@ -81,8 +81,13 @@ export class FrostVFX {
   private atlas: FrostAtlas | null = null;
   private source: SpriteFrame | null = null;
   private life = CLIP_DURATION;
+  private ground: Graphics;
+  private groundVisible = false;
 
   constructor(groundParent: Node) {
+    const ground = new Node('frostGround');
+    ground.layer = Layers.Enum.UI_2D; ground.setParent(groundParent);
+    this.ground = ground.addComponent(Graphics);
     this.root = new Node('frostDomainVideo');
     this.root.layer = Layers.Enum.UI_2D; this.root.setParent(groundParent);
     this.fallback = this.root.addComponent(Graphics);
@@ -130,6 +135,30 @@ export class FrostVFX {
     if (!d) return;
     Object.assign(d, { x, y, radius, age: 0, frameIndex: -1 });
     this.active.push(d); this.render();
+  }
+
+  /** Low ground frost persists independently of the complete, unchanged v10 casting clip. */
+  groundAreas(areas: readonly { x: number; y: number; radius: number; t: number; life: number }[]): void {
+    if (!areas.length && !this.groundVisible) return;
+    this.groundVisible = areas.length > 0;
+    const g = this.ground; g.clear();
+    for (const area of areas) {
+      const fade = Math.min(1, area.t / .45, (area.life - area.t) / .15);
+      const r = area.radius;
+      g.fillColor = color(98, 185, 218, 26 * fade);
+      g.circle(area.x, area.y, r); g.fill();
+      g.fillColor = color(176, 231, 244, 22 * fade);
+      g.circle(area.x, area.y, r * .72); g.fill();
+      // Broken crystalline edges keep the battlefield legible without a heavy status ring.
+      for (let k = 0; k < 9; k++) {
+        const angle = k * Math.PI * 2 / 9 + area.x * .013;
+        const x = area.x + Math.cos(angle) * r * .82;
+        const y = area.y + Math.sin(angle) * r * .82;
+        drawIceCrystal(g, x, y, 5, 9, 95 * fade, Math.cos(angle) * 2);
+        g.strokeColor = color(212, 247, 252, 70 * fade); g.lineWidth = 1;
+        g.moveTo(x - 8, y - 1); g.lineTo(x, y + 2); g.lineTo(x + 7, y); g.stroke();
+      }
+    }
   }
 
   tick(dt: number): void {

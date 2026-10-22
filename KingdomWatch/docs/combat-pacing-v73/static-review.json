@@ -1,0 +1,98 @@
+{
+  "changedGameFiles": [
+    "assets/scripts/config/Cards.ts",
+    "assets/scripts/config/FifthLevel.ts",
+    "assets/scripts/config/FirstLevel.ts",
+    "assets/scripts/config/FourthLevel.ts",
+    "assets/scripts/config/SecondLevel.ts",
+    "assets/scripts/config/SixthLevel.ts",
+    "assets/scripts/config/ThirdLevel.ts",
+    "assets/scripts/ui/Panels.ts"
+  ],
+  "addedGameFiles": [],
+  "originalGameFiles": 2078,
+  "cardGameplayUnchanged": true,
+  "maxCardDescriptionLines": 3,
+  "unchangedCardBox": {
+    "font": 18,
+    "width": 196,
+    "height": 112,
+    "lineHeight": 25
+  },
+  "wideCopyForReview": [],
+  "levels": [
+    {
+      "level": "1-1",
+      "waves": 6,
+      "monstersBefore": 101,
+      "monstersAfter": 139,
+      "countIncreasePercent": 37.6,
+      "nominalSpawnSecondsBefore": 186.8,
+      "nominalSpawnSecondsAfter": 178.89,
+      "spawnScheduleChangePercent": -4.2,
+      "individualHpAndLineDamageUnchanged": true,
+      "specialEnemyGroupsUnchanged": true
+    },
+    {
+      "level": "1-2",
+      "waves": 7,
+      "monstersBefore": 136,
+      "monstersAfter": 192,
+      "countIncreasePercent": 41.2,
+      "nominalSpawnSecondsBefore": 202.05,
+      "nominalSpawnSecondsAfter": 204.5,
+      "spawnScheduleChangePercent": 1.2,
+      "individualHpAndLineDamageUnchanged": true,
+      "specialEnemyGroupsUnchanged": true
+    },
+    {
+      "level": "1-3",
+      "waves": 8,
+      "monstersBefore": 228,
+      "monstersAfter": 332,
+      "countIncreasePercent": 45.6,
+      "nominalSpawnSecondsBefore": 239.35,
+      "nominalSpawnSecondsAfter": 242.0,
+      "spawnScheduleChangePercent": 1.1,
+      "individualHpAndLineDamageUnchanged": true,
+      "specialEnemyGroupsUnchanged": true
+    },
+    {
+      "level": "1-4",
+      "waves": 8,
+      "monstersBefore": 269,
+      "monstersAfter": 401,
+      "countIncreasePercent": 49.1,
+      "nominalSpawnSecondsBefore": 244.35,
+      "nominalSpawnSecondsAfter": 245.03,
+      "spawnScheduleChangePercent": 0.3,
+      "individualHpAndLineDamageUnchanged": true,
+      "specialEnemyGroupsUnchanged": true
+    },
+    {
+      "level": "1-5",
+      "waves": 8,
+      "monstersBefore": 283,
+      "monstersAfter": 437,
+      "countIncreasePercent": 54.4,
+      "nominalSpawnSecondsBefore": 238.03,
+      "nominalSpawnSecondsAfter": 238.61,
+      "spawnScheduleChangePercent": 0.2,
+      "individualHpAndLineDamageUnchanged": true,
+      "specialEnemyGroupsUnchanged": true
+    },
+    {
+      "level": "1-6",
+      "waves": 10,
+      "monstersBefore": 343,
+      "monstersAfter": 531,
+      "countIncreasePercent": 54.8,
+      "nominalSpawnSecondsBefore": 298.75,
+      "nominalSpawnSecondsAfter": 301.63,
+      "spawnScheduleChangePercent": 1.0,
+      "individualHpAndLineDamageUnchanged": true,
+      "specialEnemyGroupsUnchanged": true
+    }
+  ],
+  "validation": "Static literal inspection and arithmetic only. No game, battle simulation, test script, browser or audio execution."
+}

@@ -1,0 +1,15 @@
+--- before/BasePage.ts
++++ after/BasePage.ts
+@@ -239,7 +239,11 @@
+ }
+ 
+ function monsterArt(parent: Node, id: string, x: number, y: number, w: number, h: number, hidden = false): void {
+-  const art = artAtlasSprite(parent, x, y, w, h, 'battle_mobs_v2', id);
++  // Match the active battle appearances, not the superseded static portraits.
++  // The king has no walk clip and still uses the battle's static fallback.
++  const battlePose = ['goblin_worker', 'goblin_slinger', 'goblin_shaman', 'wolf_rider', 'goblin_brute'].includes(id);
++  const art = artAtlasSprite(parent, x, y, w, h,
++    battlePose ? 'battle_mob_anim_v1' : 'battle_mobs_v2', battlePose ? id + '_w0' : id);
+   if (hidden) {
+     art.name = 'codexSilhouette:' + id;
+     // Zero RGB removes every painted detail; alpha alone preserves the exact monster outline.

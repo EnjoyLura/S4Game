@@ -1,0 +1,17 @@
+{
+  "status": "Superseded by user requirement for full circular illustrations; never integrated",
+  "prompts": [
+    {
+      "key": "pyro_burn",
+      "prompt": "Use case: stylized-concept. NEW mobile fantasy tower-defense upgrade-card icon for a fire mage's basic-attack ignition perk. The attached images are STYLE REFERENCES ONLY, never edit or copy their layout: chunky hand painted orange fire, deep brown-black outlines, faceted dark ember material, bright yellow hot cores. Create ONE coherent standalone illustration: one small blazing fireball streaking diagonally into two battered dark leather armor plates, with distinct little flames clinging to both impact plates, illustrating lingering ignition spreading through splash. No characters, no corpse, no gore. Strong simple silhouette readable at 100px, clean bold hand-ink contours, limited cel-shaded warm orange/yellow palette and dark red accents, finished game art. Square 1024 canvas, centered composition with 8 percent safe margins. Fully transparent background, preserve transparency between separated flames. No circle or badge backing, no frame, no interface, no letters, no words, no numbers, no watermark. Do not include the reference heart or reference triple fireballs."
+    },
+    {
+      "key": "pyro_linger",
+      "prompt": "Use case: stylized-concept. NEW mobile fantasy tower-defense upgrade-card icon for a fire mage's longer burning and longer-lived fire craters. Attached images are STYLE REFERENCES ONLY: bold dark outlines, faceted charcoal rocks, orange/yellow flames, hand painted fantasy comic game finish. Create ONE single standalone emblem: a low shallow ring of dark cracked volcanic stones holding bright orange embers and three long, curling, steady tongues of fire; two glowing ember trails curve upward and around the flames suggesting sustained duration, without a clock face or symbols. Fire itself is main subject. Rich warm orange, yellow core and dark reddish-brown stones, limited cel shadows, crisp readable at 100px. Square 1024 canvas, centered full silhouette with 8 percent safe margins. Fully transparent background and empty corners, no circle backing, no frame, no text, no numbers, no watermark. Do not reproduce the heart or triple fireball arrangement."
+    },
+    {
+      "key": "pyro_meteors",
+      "prompt": "Use case: stylized-concept. NEW mobile fantasy tower-defense upgrade-card icon for a fire mage's additional falling meteors. Attached images are STYLE REFERENCES ONLY: bold dark outlines, chunky cracked magma-rock material, glowing yellow fissures, orange flame, hand painted fantasy comic finish. One centered standalone illustration showing FIVE compact volcanic METEORS with clearly different scale, falling together diagonally from upper right to lower left with tapered orange/yellow flame trails behind them. Two medium rocks flank a larger leading rock, two smaller rocks behind; distinct readable rocks, strong grouped silhouette and energetic downward direction. No ground, no landscape, no sky disk, no heart shape, no loose unrelated objects. Dark rock facets and bright warm fire, restrained cel shadows, crisp readable at 100px. Square 1024 canvas with 8 percent safe margins. Fully transparent background with empty corners, no circular badge or frame, no letters, words, numbers or watermark."
+    }
+  ]
+}

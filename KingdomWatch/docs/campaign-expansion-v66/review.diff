@@ -1,0 +1,716 @@
+--- assets/scripts/battle/BattleDirector.ts (before)
++++ assets/scripts/battle/BattleDirector.ts
+@@ -398,6 +398,7 @@
+   private onMobKilled(def: unknown, killerId: unknown, position: unknown): void {
+     if (this.isEndless && (this.state === 'win' || this.state === 'lose')) return;
+     const d = def as MobDef;
++    if (d.offspring) return;
+     this.goldEarned += d.gold * this.global.goldMul * DIFFICULTIES[this.levelDef.difficulty].goldMul;
+     if (killerId !== 'gm' && position && this.state === 'running') this.loot.onKill(d, position as DeathPosition);
+     const killer = this.heroes.find(h => h.id === killerId);
+--- assets/scripts/battle/BattleSprite.ts (before)
++++ assets/scripts/battle/BattleSprite.ts
+@@ -5,7 +5,7 @@
+ import { Color, EffectAsset, JsonAsset, Layers, Material, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2, Vec4 } from 'cc';
+ import { uxFrame } from '../ui/Ux';
+ 
+-type AtlasId = 'battle_mobs_v2' | 'battle_heroes_v2' | 'battle_mob_anim_v1' | 'lobby_heroes_v1';
++type AtlasId = string;
+ interface FrameManifest { frames: Record<string, [number, number, number, number]>; }
+ interface Atlas { frames: Map<string, SpriteFrame>; }
+ const atlases = new Map<AtlasId, Atlas>();
+@@ -79,6 +79,10 @@
+   });
+ }
+ 
++export function warmBattleAtlas(id: string): Promise<void> {
++  return new Promise(resolve => loadAtlas(id, () => resolve()));
++}
++
+ export class BattleSprite {
+   readonly node = new Node('battleArt');
+   readonly sprite: Sprite;
+@@ -86,6 +90,8 @@
+   private frame = '';
+   private height = 100;
+   private atlas: Atlas | null = null;
++  private atlasId = '';
++  private atlasRequest = 0;
+   /** 序列帧模式（showSeq 写入；show() 清除回到静态帧） */
+   private seqFrames: SpriteFrame[] | null = null;
+   private seqIndex = -1;
+@@ -109,15 +115,24 @@
+     this.sprite.sizeMode = Sprite.SizeMode.CUSTOM;
+     this.sprite.trim = false;
+     this.node.active = false;
++    this.setAtlas(atlasId);
++  }
++
++  setAtlas(atlasId: string): void {
++    if (this.atlasId === atlasId) return;
++    this.atlasId = atlasId;
++    const request = ++this.atlasRequest;
++    this.atlas = null; this.loaded = false; this.seqFrames = null;
++    this.node.active = false;
+     loadAtlas(atlasId, atlas => {
+-      if (!this.node.isValid || !atlas) return;
++      if (!this.node.isValid || !atlas || request !== this.atlasRequest) return;
+       this.atlas = atlas;
+       this.apply();
+     });
+   }
+ 
+   show(frame: string, height: number): void {
+-    if (frame === this.frame && height === this.height && !this.seqFrames) return;
++    if (frame === this.frame && height === this.height && !this.seqFrames && this.loaded) return;
+     this.seqFrames = null;
+     this.seqFrac = 0;
+     this.frame = frame;
+--- assets/scripts/battle/Monster.ts (before)
++++ assets/scripts/battle/Monster.ts
+@@ -3,7 +3,9 @@
+  * 受击只闪红不掉速（用户确认：控制效果只属于特定 buff）；仅 BOSS 显示血条（M0 1-1 无 BOSS，钩子保留）
+  */
+ import { Color, Graphics, isValid, Label, Layers, Node, Tween, UIOpacity } from 'cc';
+-import { MOB_DMG_MUL, MOB_HP_MUL, MobDef } from '../config/Mobs';
++import { MOBS, MOB_DMG_MUL, MOB_HP_MUL, MobDef } from '../config/Mobs';
++import { enemyArtRef } from '../config/ChapterContent';
++import { MonsterTraits } from './MonsterTraits';
+ import { LINE_Y, LO, PAL } from '../config/GameConfig';
+ import { bus, EVT } from '../core/EventBus';
+ import { Sfx } from '../core/Sfx';
+@@ -31,6 +33,7 @@
+ };
+ 
+ export class Monster {
++  private traits = new MonsterTraits(this);
+   node = new Node('mob');
+   def!: MobDef;
+   hp = 0;
+@@ -98,6 +101,7 @@
+   init(def: MobDef, parent: Node, x: number, ctx: MonsterHitCtx, mgr?: MonsterManager): void {
+     this.deathMotion?.reset();
+     this.def = def;
++    this.traits.reset();
+     this.ctx = ctx;
+     this.mgrRef = mgr || null;
+     this.maxHp = def.hp;
+@@ -138,14 +142,15 @@
+   private buildArt(): void {
+     const r = this.def.radius;
+     if (!this.art) {
+-      this.art = new BattleSprite(this.node, 'battle_mobs_v2', () => { this.g.enabled = false; });
++      this.art = new BattleSprite(this.node, enemyArtRef(this.def.id).atlas, () => { this.g.enabled = false; });
+       this.deathMotion = new MonsterDeath(this.node, this.art);
+     }
+     this.art.node.setPosition(0, -r * 0.82, 0);
++    this.art.setAtlas(enemyArtRef(this.def.id).atlas);
+     this.art.show(this.def.id, r * MOB_ART_HEIGHT);
+     this.anims = null;
+     const id = this.def.id;
+-    getMobAnims(a => { if (this.node.isValid && this.def.id === id && !this.dead) this.anims = a; }, id);
++    if (!this.def.homeChapter) getMobAnims(a => { if (this.node.isValid && this.def.id === id && !this.dead) this.anims = a; }, id);
+     Tween.stopAllByTarget(this.art.node);
+     this.art.node.setScale(1, 1, 1); this.art.node.angle = 0;
+     this.art.cold(null);
+@@ -156,6 +161,7 @@
+   private tickArt(dt: number): void {
+     this.updateBossHp();
+     if (!this.art?.loaded) return;
++    if (this.def.homeChapter) this.art.show(this.def.id + (this.traits.enraged && this.def.boss ? '_phase' : ''), this.def.radius * MOB_ART_HEIGHT);
+     if (this.immobilized) {
+       // Hold the current walk/attack cel instead of snapping to idle or continuing a frozen attack.
+       this.syncArtTint();
+@@ -337,6 +343,7 @@
+       if (this.flashT <= 0 && this.flashNode) this.flashNode.active = false;
+     }
+     if (this.state === 'move') this.walkClock += motionDt * (this.slowT > 0 ? 1 - this.slowAmp : 1);
++    this.traits.tick(dt, motionDt, line, mgr);
+     this.tickArt(motionDt);
+     // 点燃 DoT：每 0.5s 聚合一条（§3.11）
+     if (this.burnT > 0) {
+@@ -355,7 +362,7 @@
+     const mul = this.slowT > 0 ? (1 - this.slowAmp) : 1;
+     if (this.state === 'move') {
+       // 直线行进（用户确认：不蛇形）；横向松散由出生 x 与分离逻辑保证
+-      this.node.setPosition(this.baseX, this.node.position.y - this.def.speed * mul * motionDt, 0);
++      this.node.setPosition(this.baseX, this.node.position.y - this.def.speed * mul * this.traits.speedMultiplier() * motionDt, 0);
+       const reach = this.def.kind === 'ranged' ? (this.def.atkRange || 0) : this.def.radius * 0.5;
+       if (this.node.position.y - LINE_Y <= reach) {
+         this.holdY = this.node.position.y;
+@@ -367,14 +374,11 @@
+       this.atkT -= motionDt;
+       if (this.atkT <= 0) {
+         this.atkT = this.def.atkInterval;
+-        if (this.def.kind === 'heal') {
++        if (this.def.kind === 'heal' && !this.def.homeChapter) {
+           this.atkAnimT = ATK_ANIM;   // 萨满施法也走攻击一次性帧（缺 attack 段则自动退化为待机帧）
+           mgr.healAround(this, 160, this.def.healAmount || 40);
+-        } else {
+-          line.takeDamage(this.def.dmg);
+-          this.lunge();
+-          // 近战/石弹命中防线的概率词条（POW!/SOK!/咚!，30% 概率，ComicPop 内掷骰）
+-          bus.emit(EVT.COMIC_POP, this.x, this.y + this.def.radius, this.def.kind === 'ranged' ? 'stoneHit' : 'meleeHit');
++        } else if (this.def.kind !== 'heal') {
++          this.traits.attack(line, mgr);
+         }
+       }
+       // 冲撞/投掷前摇（手动正弦脉冲，代替逐次 tween）
+@@ -384,6 +388,16 @@
+         this.node.setPosition(this.node.position.x, this.holdY - Math.sin(pr * Math.PI) * 10, 0);
+       }
+     }
++  }
++
++  strike(line: { takeDamage: (d: number) => void }, mgr: MonsterManager): void {
++    if (this.dead || this.immobilized) return;
++    const damage = this.def.dmg * this.traits.damageMultiplier() * mgr.attackMultiplier(this);
++    const poison = this.def.venom;
++    line.takeDamage(damage * (poison ? 1 - poison.portion : 1));
++    if (poison) mgr.addLinePoison(damage * poison.portion, poison.duration);
++    this.lunge();
++    bus.emit(EVT.COMIC_POP, this.x, this.y + this.def.radius, this.def.kind === 'ranged' ? 'stoneHit' : 'meleeHit');
+   }
+ 
+   private lunge(): void {
+@@ -458,6 +472,7 @@
+     if (this.shockT > 0) amount *= 1 + this.shockAmp;
+     const vulnerability = Math.max(this.vulnT > 0 ? this.vulnAmp : 0, this.hunterMarkT > 0 ? this.hunterMarkAmp : 0);
+     if (vulnerability > 0) amount *= 1 + vulnerability;
++    amount = this.traits.incomingDamage(amount, killerId);
+     this.hp -= amount;
+     if (amount > 0 && killerId !== 'burn' && killerId !== 'gm') Sfx.impact(killerId, heavy || crit);
+     this.ctx.dmgNumber(this.x, this.y + this.def.radius * 2.6,
+@@ -465,6 +480,7 @@
+     this.ctx.impact?.(this.x, this.y + this.def.radius * 0.4, killerId, heavy || crit || this.hp <= 0 && !!this.def.elite, impactAngle);
+     this.flash();
+     if (this.hp <= 0) {
++      if (this.traits.onLethal(killerId)) return false;
+       this.die(killerId, impactAngle, heavy || crit, amount);
+       return true;
+     }
+@@ -488,6 +504,7 @@
+ 
+   private die(killerId: string, angle: number | undefined, heavy: boolean, amount: number): void {
+     this.dead = true;
++    this.traits.onDie(killerId, this.mgrRef);
+     if (this.bossHp) this.bossHp.node.active = false;
+     const marked = this.hunterMarkVisual;
+     this.hunterMarkT = this.hunterMarkAmp = this.hunterMarkAge = 0;
+@@ -539,6 +556,44 @@
+ }
+ 
+ export class MonsterManager {
++  private linePoisons: { remaining: number; rate: number }[] = [];
++  private poisonClock = 0;
++  private pendingPoisonDamage = 0;
++
++  addLinePoison(total: number, duration: number): void {
++    if (total <= 0 || duration <= 0) return;
++    if (this.linePoisons.length < 24) this.linePoisons.push({ remaining: duration, rate: total / duration });
++    else {
++      const p = this.linePoisons[0], remainingTotal = p.rate * p.remaining + total;
++      p.remaining = Math.max(p.remaining, duration); p.rate = remainingTotal / p.remaining;
++    }
++  }
++
++  attackMultiplier(source: Monster): number {
++    let multiplier = 1;
++    for (const ally of this.list) {
++      const aura = ally.def.aura;
++      if (!ally.dead && aura && Math.hypot(ally.x - source.x, ally.y - source.y) <= aura.radius) multiplier = Math.max(multiplier, aura.attackMul);
++    }
++    return multiplier;
++  }
++
++  spawnOffspring(source: Monster, id: string, count: number): number {
++    const base = MOBS[id], parentBase = MOBS[source.def.id];
++    if (!base || !parentBase || this.disposed) return 0;
++    let made = 0;
++    for (let i = 0; i < Math.min(4, count); i++) {
++      const child: MobDef = { ...base, offspring: true, exp: 0, gold: 0, charge: 0,
++        summon: undefined, split: undefined, revive: undefined };
++      if (!this.spawn(child, { hp: Math.max(1, Math.round(base.hp * source.maxHp / parentBase.hp)),
++        dmg: Math.round(base.dmg * (parentBase.dmg > 0 ? source.def.dmg / parentBase.dmg : source.maxHp / parentBase.hp * MOB_DMG_MUL / MOB_HP_MUL)) })) break;
++      const mob = this.list[this.list.length - 1];
++      mob.baseX = Math.max(-330, Math.min(330, source.x + (i % 2 ? 1 : -1) * (24 + 14 * i)));
++      mob.node.setPosition(mob.baseX, Math.max(LINE_Y + base.radius + 24, source.y + (i % 2) * 18), 0);
++      made++;
++    }
++    return made;
++  }
+   list: Monster[] = [];
+   /** 击杀统计（金币累计在 director） */
+   killGold = 0;
+@@ -589,6 +644,7 @@
+       ...def,
+       hp: actual ? actual.hp : Math.round(def.hp * MOB_HP_MUL * this.statMul * this.rampHp),
+       dmg: actual ? actual.dmg : Math.round(def.dmg * MOB_DMG_MUL * this.statMul * this.rampDmg),
++      healAmount: def.homeChapter && def.healAmount ? Math.round(def.healAmount * (actual ? actual.hp / def.hp : MOB_HP_MUL * this.statMul * this.rampHp)) : def.healAmount,
+     };
+     const m = this.pool.pop() || new Monster();
+     m.init(def, this.field, def.boss ? 0 : Math.random() * 660 - 330, this.ctx, this);
+@@ -611,6 +667,8 @@
+   destroy(): void {
+     if (this.disposed) return;
+     this.disposed = true;
++    this.linePoisons.length = 0;
++    this.poisonClock = this.pendingPoisonDamage = 0;
+     clearDepthSorter(this.field);
+     // Cocos destroys child nodes before BattleDirector.onDestroy. Only detached
+     // pool entries belong to this cleanup; the scene owns actors and Graphics.
+@@ -747,16 +805,28 @@
+ 
+   tick(dt: number, line: { takeDamage: (d: number) => void }): void {
+     if (this.disposed) return;
++    let poisonDamage = 0;
++    for (const p of this.linePoisons) {
++      poisonDamage += p.rate * Math.min(dt, p.remaining); p.remaining = Math.max(0, p.remaining - dt);
++    }
++    this.linePoisons = this.linePoisons.filter(p => p.remaining > 0);
++    this.pendingPoisonDamage += poisonDamage;
++    if (this.pendingPoisonDamage > 0) {
++      this.poisonClock += dt;
++      if (this.poisonClock >= .5 || !this.linePoisons.length) {
++        line.takeDamage(this.pendingPoisonDamage); this.pendingPoisonDamage = this.poisonClock = 0;
++      }
++    }
+     this.advanceDeaths(dt);
+     for (const m of this.list) m.tick(dt, line, this);
+     // 自动分离（简单排斥半径，§3.1）：隔帧执行减半开销，视觉无感
+     if ((this.sepN++ & 1) === 0) {
+       for (let i = 0; i < this.list.length; i++) {
+         const a = this.list[i];
+-        if (a.dead || a.state === 'attack') continue;
++        if (a.dead || a.state === 'attack' || a.def.airborne) continue;
+         for (let j = i + 1; j < this.list.length; j++) {
+           const b = this.list[j];
+-          if (b.dead || b.state === 'attack') continue;
++          if (b.dead || b.state === 'attack' || b.def.airborne) continue;
+           const dx = b.x - a.x, dy = b.y - a.y;
+           const min = a.def.radius + b.def.radius;
+           const d2 = dx * dx + dy * dy;
+--- assets/scripts/config/Campaign.ts (before)
++++ assets/scripts/config/Campaign.ts
+@@ -1,4 +1,5 @@
+ /** Chapter order, stage identity and battlefield art are shared by the lobby and battles. */
++import { CHAPTER_CONTENT } from './ChapterContent';
+ export interface CampaignChapter {
+   number: number;
+   name: string;
+@@ -14,14 +15,10 @@
+   order: number;
+ }
+ 
+-export const CAMPAIGN_CHAPTERS: readonly CampaignChapter[] = [
+-  { number: 1, name: '前哨', art: 'outpost', battlefield: 'scenes/scene_1_1',
+-    stages: ['城外小径', '废弃岗亭', '林缘营地', '石桥隘口', '哨塔争夺', '补给小道', '旧墙防线', '烽火营地', '前哨围攻', '守望堡垒'] },
+-  { number: 2, name: '深林', art: 'forest', battlefield: 'scenes/scene_1_2',
+-    stages: ['林间入口', '迷雾小径', '古树廊道', '密林伏击', '狼影岔路', '苔石遗迹', '萨满祭地', '幽林深处', '荆棘围阵', '深林腹地'] },
+-  { number: 3, name: '兽穴', art: 'lair', battlefield: 'scenes/scene_1_3',
+-    stages: ['洞口险道', '碎骨坑道', '兽群营地', '獠牙石窟', '战鼓大厅', '地底暗河', '驯兽巢室', '蛮兵要塞', '兽穴围城', '巢穴核心'] },
+-];
++export const CAMPAIGN_CHAPTERS: readonly CampaignChapter[] = CHAPTER_CONTENT.map(c => ({
++  number: c.number, name: c.name, art: c.art, stages: c.stages,
++  battlefield: c.number <= 3 ? 'scenes/scene_1_' + c.number : 'scenes/scene_' + c.art + '_v66',
++}));
+ export const CAMPAIGN_STAGES: readonly CampaignStage[] = CAMPAIGN_CHAPTERS.flatMap((chapter, c) =>
+   chapter.stages.map((name, i) => ({ id: chapter.number + '-' + (i + 1), name,
+     chapter: chapter.number, stage: i + 1, order: c * 10 + i })));
+--- assets/scripts/config/Endless.ts (before)
++++ assets/scripts/config/Endless.ts
+@@ -33,7 +33,7 @@
+ /** Only one bounded spawn queue exists at a time; there is no authored last floor. */
+ export function endlessWave(chapter: number, floor: number): WaveDef {
+   const pool = endlessMobPool(chapter), n = Math.max(0, floor - 1);
+-  const chapterMul = Math.pow(1.7, chapter - 1);
++  const chapterMul = chapter <= 3 ? Math.pow(1.7, chapter - 1) : 2.89 + (chapter - 3) * .7;
+   const hpMul = chapterMul * (1 + .12 * n + .004 * n * n);
+   const dmgMul = chapterMul * (1 + .06 * n + .0015 * n * n);
+   const groups: SpawnGroup[] = [];
+@@ -45,11 +45,24 @@
+     } });
+   };
+   const ordinary = pool.filter(id => !MOBS[id].elite && !MOBS[id].boss);
+-  ordinary.forEach((id, i) => add(id,
+-    Math.min(i === 0 ? 48 : 24, (i === 0 ? 16 : 6) + Math.floor(n * .8) + (chapter - 1) * 2),
+-    i * 2.4, Math.max(.32, .9 - n * .015)));
++  const attackers = ordinary.filter(id => MOBS[id].kind !== 'heal');
++  const latest = attackers.filter(id => (MOBS[id].homeChapter || 1) === chapter);
++  const chosen: string[] = [];
++  if (latest.length) chosen.push(latest[n % latest.length]);
++  const kinds = Math.min(4, 2 + Math.floor(n / 8));
++  for (let i = 0; i < attackers.length && chosen.length < kinds; i++) {
++    const id = attackers[(n * 3 + i) % attackers.length];
++    if (!chosen.includes(id)) chosen.push(id);
++  }
++  const total = Math.min(56, 28 + Math.floor(n * 1.1) + Math.min(8, chapter));
++  chosen.forEach((id, i) => add(id, Math.floor(total / chosen.length) + (i < total % chosen.length ? 1 : 0),
++    i * 2.4, Math.max(.4, 1.05 - n * .012)));
++  const support = ordinary.filter(id => MOBS[id].kind === 'heal');
++  if (floor >= 3 && support.length) add(support[n % support.length], floor >= 12 ? 2 : 1, 7, 4);
+   const elites = pool.filter(id => MOBS[id].elite && !MOBS[id].boss);
+-  if (floor % 3 === 0 || floor % 5 === 0) elites.forEach(id => add(id, Math.min(4, 1 + Math.floor(floor / 12)), 8, 2));
++  if ((floor % 3 === 0 || floor % 5 === 0) && elites.length) {
++    add(elites[n % elites.length], floor >= 18 ? 2 : 1, 8, 3);
++  }
+   const bosses = pool.filter(id => MOBS[id].boss);
+   if (floor % 5 === 0 && bosses.length) add(bosses[(Math.floor(floor / 5) - 1) % bosses.length], 1, 12, 1);
+   return { groups, surge: floor % 5 === 0 };
+--- assets/scripts/config/LevelDifficulty.ts (before)
++++ assets/scripts/config/LevelDifficulty.ts
+@@ -1,6 +1,7 @@
+ /** A single source for battle formations, difficulty rewards and lobby previews. */
+ import { getLevelDef, LevelDef, LEVEL_IDS, MobDef, SpawnGroup, WaveDef } from './Mobs';
+ import { campaignStage } from './Campaign';
++import { expandedStageWaves } from './ChapterWaves';
+ import { FIRST_LEVEL_WAVES } from './FirstLevel';
+ import { SECOND_LEVEL_WAVES } from './SecondLevel';
+ import { THIRD_LEVEL_WAVES } from './ThirdLevel';
+@@ -45,6 +46,17 @@
+   if (cache[key]) return cache[key];
+   // Equipment pools and reinforcements follow chapter tiers, never the flat 0..29 stage index.
+   const stage = campaignStage(base.id), s = (stage?.chapter || 1) - 1;
++  if (stage && stage.chapter >= 2) {
++    const weights = POOLS[Math.min(s, POOLS.length - 1)];
++    const gearPool: GearWeight[] = d ? weights[d - 1].reduce((rows, weight, i) => {
++      if (i === 0) for (const id of ['wpn_bow','wpn_green_crossbow','wpn_green_book','wpn_green_staff']) rows.push({ id, weight: weight / 4 });
++      else rows.push({ id: GEAR_IDS[i], weight });
++      return rows;
++    }, [] as GearWeight[]).filter(g => g.weight > 0) : [];
++    return cache[key] = { ...base, difficulty: d, baseGold: Math.round(base.baseGold * DIFFICULTIES[d].goldMul),
++      baseDiamonds: DIFFICULTIES[d].diamonds, materials: [], gearPool, fixedWaves: true,
++      waves: expandedStageWaves(stage.chapter, stage.stage, d) };
++  }
+   const waves: WaveDef[] = [];
+   base.waves.forEach((wave, i) => {
+     const groups = wave.groups.map(g => ({ ...g,
+@@ -73,7 +85,7 @@
+   // 通关常规奖励改为金币和钻石；材料背包及其他材料来源保留。
+   const materials: MaterialReward[] = [];
+   // Split the old green-bow share across four weapon types; total equipment/weapon odds stay unchanged.
+-  const gearPool = d ? POOLS[s][d - 1].reduce((rows, weight, i) => {
++  const gearPool = d ? POOLS[Math.min(s, POOLS.length - 1)][d - 1].reduce((rows, weight, i) => {
+     if (i === 0) for (const id of ['wpn_bow', 'wpn_green_crossbow', 'wpn_green_book', 'wpn_green_staff']) rows.push({ id, weight: weight / 4 });
+     else rows.push({ id: GEAR_IDS[i], weight });
+     return rows;
+@@ -100,8 +112,11 @@
+     : Math.min(1, Math.max(0, level.equipmentChance) * (mob?.boss ? 20 : mob?.elite ? 8 : 1));
+ }
+ export function starChestRewards(id: string, difficulty: number): ChestReward[] {
+-  const s = Math.max(0, LEVEL_IDS.indexOf(id)), d = difficultyIndex(difficulty);
+-  return d === 0 ? [{ gold: 200 + 100 * s }, { diamonds: 60 + 10 * s }, { diamonds: 150 + 25 * s }]
++  const stage = campaignStage(id);
++  const s = stage && stage.chapter >= 4 ? 29 + (stage.chapter - 3) * 2 + (stage.stage - 1) * .2
++    : Math.max(0, LEVEL_IDS.indexOf(id)), d = difficultyIndex(difficulty);
++  const rewards = d === 0 ? [{ gold: 200 + 100 * s }, { diamonds: 60 + 10 * s }, { diamonds: 150 + 25 * s }]
+     : d === 1 ? [{ gold: 350 + 150 * s }, { diamonds: 90 + 15 * s }, { diamonds: 220 + 40 * s }]
+       : [{ gold: 600 + 200 * s }, { diamonds: 120 + 20 * s }, { diamonds: 300 + 50 * s }];
++  return rewards.map(r => r.gold === undefined ? { diamonds: Math.round(r.diamonds!) } : { gold: Math.round(r.gold) });
+ }
+--- assets/scripts/config/Mobs.ts (before)
++++ assets/scripts/config/Mobs.ts
+@@ -3,8 +3,10 @@
+  */
+ import { PAL } from './GameConfig';
+ import { CAMPAIGN_CHAPTERS, CAMPAIGN_LEVEL_IDS, CAMPAIGN_STAGES } from './Campaign';
+-
+-export interface MobDef {
++import { EnemyFeatures, EXPANSION_MOBS } from './ChapterContent';
++import { expandedLevel } from './ChapterWaves';
++
++export interface MobDef extends EnemyFeatures {
+   id: string;
+   name: string;
+   kind: 'melee' | 'ranged' | 'heal';
+@@ -65,6 +67,8 @@
+   },
+ };
+ 
++Object.assign(MOBS, EXPANSION_MOBS);
++
+ export interface SpawnGroup { mob: string; count: number; interval: number; delay?: number; actual?: { hp: number; dmg: number }; }
+ export interface WaveDef { groups: SpawnGroup[]; surge?: boolean; }
+ 
+@@ -151,7 +155,7 @@
+ const PATROLS = ['goblin_worker', 'goblin_slinger', 'wolf_rider', 'goblin_worker', 'goblin_shaman',
+   'goblin_slinger', 'wolf_rider', 'goblin_shaman', 'wolf_rider', 'goblin_brute'];
+ const LEVEL_TABLE: Record<string, LevelDef> = {};
+-for (const stage of CAMPAIGN_STAGES) {
++for (const stage of CAMPAIGN_STAGES.filter(row => row.chapter === 1)) {
+   const chapter = CAMPAIGN_CHAPTERS[stage.chapter - 1], base = TEMPLATES[stage.chapter - 1];
+   const step = stage.stage - 1;
+   const waves = base.waves.map((wave, index) => {
+@@ -182,6 +186,8 @@
+     statMul: Number((1 + (stage.chapter - 1) * .55 + step * .055).toFixed(3)), waves };
+ }
+ 
++for (const stage of CAMPAIGN_STAGES.filter(row => row.chapter >= 2)) LEVEL_TABLE[stage.id] = expandedLevel(stage);
++
+ /** 关卡推进顺序（登记顺序即推进顺序） */
+ export const LEVEL_IDS: readonly string[] = CAMPAIGN_LEVEL_IDS;
+ 
+@@ -192,7 +198,9 @@
+ }
+ 
+ export function getLevelDef(id: string): LevelDef {
+-  return LEVEL_TABLE[id] || LEVEL_TABLE['1-1'];
++  const level = LEVEL_TABLE[id];
++  if (!level) throw new Error('Unknown campaign stage: ' + id);
++  return level;
+ }
+ 
+ /** 英雄站位（§3.1，用户确认）：防线横向对称分布，单人必须居中；3 人 ±210 */
+--- assets/scripts/core/AudioCatalog.ts (before)
++++ assets/scripts/core/AudioCatalog.ts
+@@ -104,6 +104,20 @@
+   1: MUSIC_TRACKS,
+   2: { camp: 'v29/bgm_forest', battle: 'v29/bgm_forest' },
+   3: { camp: 'v29/bgm_lair', battle: 'v29/bgm_lair' },
++  // Initial expansion reuses the existing licensed tracks by biome; no new compositions yet.
++  4: { camp: 'v29/bgm_forest', battle: 'v29/bgm_forest' },
++  5: MUSIC_TRACKS,
++  6: { camp: 'v29/bgm_lair', battle: 'v29/bgm_lair' },
++  7: MUSIC_TRACKS,
++  8: { camp: 'v29/bgm_lair', battle: 'v29/bgm_lair' },
++  9: { camp: 'v29/bgm_lair', battle: 'v29/bgm_lair' },
++  10: { camp: 'v29/bgm_forest', battle: 'v29/bgm_forest' },
++  11: MUSIC_TRACKS,
++  12: { camp: 'v29/bgm_forest', battle: 'v29/bgm_forest' },
++  13: { camp: 'v29/bgm_lair', battle: 'v29/bgm_lair' },
++  14: MUSIC_TRACKS,
++  15: { camp: 'v29/bgm_lair', battle: 'v29/bgm_lair' },
++  16: { camp: 'v29/bgm_lair', battle: 'v29/bgm_lair' },
+ };
+ /** Per-track playback gain relative to v29, shared by lobby and battle. */
+ export const MUSIC_TRACK_GAIN: Readonly<Record<string, number>> = {
+--- assets/scripts/core/GameData.ts (before)
++++ assets/scripts/core/GameData.ts
+@@ -1,3 +1,4 @@
++import { EXPANSION_MOBS } from '../config/ChapterContent';
+ /**
+  * 五主界面数据层（§主界面需求清单）：物品/商店/英雄配置 + 经济公式 + 背包穿戴养成操作
+  * 掉落与购买共用同一物品定义；数值默认值见 docs/主界面需求清单.md（实施时校准只动这张表）
+@@ -700,6 +701,11 @@
+   { id: 'goblin_king', name: '哥布林王（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '第一章第五关与第十关的首领，率领部队缓慢推进并近战攻击防线。', traits: ['第五关与第十关首领', '大型近战，血量厚重', '免疫冰封'], weak: '持续集火与大招爆发' },
+ ];
+ /** 图鉴首览奖励：每只怪物首次点开词条可领一次（钻石） */
++CODEX.push(...Object.values(EXPANSION_MOBS).map((d): CodexDef => ({
++  id: d.id, name: d.name, icon: '',
++  tags: [d.boss ? 'BOSS' : d.elite ? '精英' : d.airborne ? '飞行' : '普通', d.kind === 'heal' ? '辅助' : d.kind === 'ranged' ? '远程' : '近战'],
++  desc: d.description || d.name, traits: d.traits || [], weak: d.weak || '集中火力'
++})));
+ export const CODEX_REWARD = 20;
+ export function codexUnlocked(id: string): boolean { return loadSave().codex.includes(id); }
+ export function codexClaimed(id: string): boolean { return loadSave().codexRewards.includes(id); }
+--- assets/scripts/ui/BattleEntryWarmup.ts (before)
++++ assets/scripts/ui/BattleEntryWarmup.ts
+@@ -1,6 +1,9 @@
+ /** Entry art first; only the selected battlefield and equipped heroes need a first-paint barrier. */
+ import { director } from 'cc';
+ import { battleSceneKey } from '../config/Campaign';
++import { getChallengeDef } from '../config/LevelDifficulty';
++import { enemyArtRef } from '../config/ChapterContent';
++import { warmBattleAtlas } from '../battle/BattleSprite';
+ import { preloadArcherClip } from '../battle/ArcherIdleAnimation';
+ import { preloadHeroClip } from '../battle/HeroSequenceAnimation';
+ import { getMobAnims } from '../battle/MobAnim';
+@@ -41,6 +44,9 @@
+   warmEntryArt(); void warmBattleScene();
+   if (levelId === '1-5' || levelId === '1-10' || mobIds.includes('goblin_king')) getMobAnims(() => {}, 'goblin_king');
+   const firstPaint = [imageReady(battleSceneKey(levelId)), imageReady('defense_wall')];
++  const enemies: string[] = [...mobIds];
++  if (!enemies.length) for (const wave of getChallengeDef(levelId, 0).waves) for (const group of wave.groups) enemies.push(group.mob);
++  for (const atlas of new Set(enemies.map(id => enemyArtRef(id).atlas))) firstPaint.push(warmBattleAtlas(atlas));
+   for (const id of ids) {
+     if (id === 'archer') {
+       firstPaint.push(preloadArcherClip('idle'));
+--- assets/scripts/ui/CampaignCheckpointArt.ts (before)
++++ assets/scripts/ui/CampaignCheckpointArt.ts
+@@ -128,7 +128,7 @@
+ }
+ 
+ export function paintCampaignCheckpoint(parent: Node, chapter: number, active: boolean, open: boolean): void {
+-  const theme = Math.max(0,Math.min(2,Math.floor(chapter)));
++  const theme = chapter >= 3 ? 0 : Math.max(0,Math.min(2,Math.floor(chapter)));
+   const names = ['campaignCheckpointOutpost','campaignCheckpointForest','campaignCheckpointLair'];
+   const g = N(names[theme],parent).addComponent(Graphics);
+   [outpost,forest,lair][theme](g,active,open);
+--- assets/scripts/ui/CampaignChrome.ts (before)
++++ assets/scripts/ui/CampaignChrome.ts
+@@ -36,9 +36,23 @@
+ export function campaignTerrainCrown(parent: Node, height: number, chapter: number): void {
+   if (height <= 0) return;
+   const g = N('campaignScrollingCanopy', parent).addComponent(Graphics);
+-  const palettes = [['#638B55','#3E6944','#1C4A3D'], ['#456D50','#294E3D','#153E32'], ['#665F48','#454B3D','#293E34']];
++  const palettes = [['#638B55','#3E6944','#1C4A3D'], ['#456D50','#294E3D','#153E32'], ['#665F48','#454B3D','#293E34'],
++    ['#627A4D','#405D43','#294C3D'], ['#6DA3A5','#4D848E','#315C72'], ['#D8B174','#B98B53','#95673D'],
++    ['#BEA97A','#928363','#6D6B56'], ['#B77957','#945239','#683D30'], ['#74674F','#514A40','#393D39'],
++    ['#C5DCE1','#94B7CA','#5B7E9B'], ['#8898A0','#5C7381','#394E66'], ['#58456E','#3C3559','#252B45'],
++    ['#646C75','#404B59','#283747'], ['#747365','#505451','#333F43'], ['#7B4C35','#53362C','#352B2B'],
++    ['#6F6483','#49425F','#302E48']];
+   const colors = palettes[chapter] || palettes[0];
+   g.fillColor = C(colors[0]); g.rect(-375, -height - 16, 750, height + 16); g.fill();
++  if (chapter >= 3) {
++    // Later biomes use a quiet terrain ridge rather than a green forest canopy.
++    for (let layer = 0; layer < 2; layer++) {
++      g.fillColor = C(colors[layer + 1]); g.moveTo(-375,-height-16);
++      for (let i=0;i<=14;i++) g.lineTo(-390+i*58,-height*.28-((i*7+layer*3)%5)*height*.07-layer*height*.12);
++      g.lineTo(420,-height-16);g.close();g.fill();
++    }
++    return;
++  }
+   for (let layer = 0; layer < 2; layer++) {
+     for (let i = 0; i < 13; i++) {
+       const x = -400 + i * 68 + layer * 29, base = -height - 20 + layer * 22;
+--- assets/scripts/ui/CampaignRoute.ts (before)
++++ assets/scripts/ui/CampaignRoute.ts
+@@ -6,8 +6,9 @@
+ import { reducedMotion } from './UIMotion';
+ import { campaignCheckpointLock, campaignCheckpointReward, campaignCheckpointStar, paintCampaignCheckpoint } from './CampaignCheckpointArt';
+ import { campaignChapterPlate } from './CampaignChrome';
++import { CAMPAIGN_CHAPTERS } from '../config/Campaign';
+ 
+-export const ROUTE_ART = ['outpost', 'forest', 'lair'].map(name => 'scenes/bg_campaign_' + name + '_v1');
++export const ROUTE_ART = CAMPAIGN_CHAPTERS.map(c => 'scenes/bg_campaign_' + c.art + (c.number <= 3 ? '_v1' : '_v66'));
+ export const ROUTE_W = 750;
+ export const ROUTE_H = 1500;
+ /** Denser road clearings keep the finale below the floating header without a taller dock. */
+@@ -78,7 +79,7 @@
+   shadow.fillColor = CA(COMIC.ink, .28); shadow.ellipse(1,-37,47,15); shadow.fill();
+   if (highlighted) N('campaignSelectionGlow', item).addComponent(CampaignRouteMotion).glow();
+   paintCampaignCheckpoint(item, chapter, highlighted, open);
+-  const goldShield = chapter === 0 && highlighted;
++  const goldShield = (chapter === 0 || chapter >= 3) && highlighted;
+   mainLabel(item, 0, 23, String(stage), { size: 32, bold: true, font: 'number', color: '#FFF7DF',
+     w: 48, h: 40, outline: goldShield ? '#79501D' : COMIC.darkShade, outlineW: 2 });
+   if (!open) campaignCheckpointLock(item);
+--- assets/scripts/ui/HUD.ts (before)
++++ assets/scripts/ui/HUD.ts
+@@ -1,3 +1,4 @@
++import { enemyArtRef } from '../config/ChapterContent';
+ /**
+  * 战斗 HUD（UX 线稿 ①）：顶栏(暂停/关卡名/波次) + 经验条(无背板Lv居中) + 预警横幅
+  * + 左列(倍速/统计/FPS) + 右侧大招纵列(每英雄一钮) + 防线耐久/蓝色外层护盾 + 头顶普攻技能图标(CD环)
+@@ -347,9 +348,9 @@
+     const content = N('newEnemyContent', card, 0, -16);
+     const iconPlate = gpanel(content, -195, 40, 170, 170, '#E3EAD8', undefined, 0, 12);
+     // Same keyed monster artwork and proportional fit as the research codex.
+-    const king = c.id === 'goblin_king';
++    const image = enemyArtRef(c.id, true);
+     const portrait = artAtlasSprite(iconPlate, 0, 0, 150, 150,
+-      king ? 'goblin_king_walk_v1' : 'battle_mobs_v2', king ? 'goblin_king_w0' : c.id);
++      image.atlas, image.frame);
+     portrait.name = 'newEnemyPortrait:' + c.id;
+     label(content, 50, 150, c.name, { size: 30, color: '#4A3214', bold: true, align: 'left', w: 300, h: 40 });
+     label(content, 65, 92, c.desc, { size: 18, color: '#4A3214', w: 330, h: 64, shrink: true });
+--- assets/scripts/ui/pages/BasePage.ts (before)
++++ assets/scripts/ui/pages/BasePage.ts
+@@ -1,3 +1,4 @@
++import { CHAPTER_CONTENT, EXPANSION_MOBS, enemyArtRef, chapterNumeral } from '../../config/ChapterContent';
+ /** A single painted settlement, shared comic controls and save-backed construction / codex. */
+ import { Graphics, isValid, Mask, Node, ScrollView, Sprite, UITransform, Vec2 } from 'cc';
+ import { C, CA, dimLayer, LabelOpts, N, WY } from '../UIKit';
+@@ -26,6 +27,7 @@
+ const BOOK = 'hero_comic_v2/comic_story_v2';
+ const CASTLE = 'comic_nav_castle_v1';
+ let settlementOffset = 0, codexOffset = 0;
++let codexChapter = 1;
+ 
+ function text(parent: Node, x: number, y: number, value: string, opts: LabelOpts = {}): Node {
+   return pageLabel(parent, x, y, value, { font: 'body', color: BASE_INK, ...opts });
+@@ -247,10 +249,9 @@
+ 
+ function monsterArt(parent: Node, id: string, x: number, y: number, w: number, h: number, hidden = false): void {
+   // Match the active battle appearances, not the superseded static portraits.
+-  const battlePose = ['goblin_worker', 'goblin_slinger', 'goblin_shaman', 'wolf_rider', 'goblin_brute'].includes(id);
+-  const king = id === 'goblin_king';
++  const image = enemyArtRef(id, true);
+   const art = artAtlasSprite(parent, x, y, w, h,
+-    king ? 'goblin_king_walk_v1' : battlePose ? 'battle_mob_anim_v1' : 'battle_mobs_v2', king || battlePose ? id + '_w0' : id);
++    image.atlas, image.frame);
+   if (hidden) {
+     art.name = 'codexSilhouette:' + id;
+     // Zero RGB removes every painted detail; alpha alone preserves the exact monster outline.
+@@ -273,14 +274,23 @@
+     text(p,0,H/2-163,'战斗中遇见怪物后解锁 · 首览奖励每种仅领一次',
+       {size:17,color:BASE_SUB,w:592,h:28});
+     detailRule(p,H/2-190,W);
+-    const viewTop=H/2-204, viewBottom=-H/2+30, viewH=viewTop-viewBottom, viewY=(viewTop+viewBottom)/2;
+-    const cardH=226,gap=14,pad=6,rows=Math.ceil(CODEX.length/2);
++    const entries = CODEX.filter(c => (EXPANSION_MOBS[c.id]?.homeChapter || 1) === codexChapter);
++    const current = CHAPTER_CONTENT[codexChapter - 1];
++    text(p,0,H/2-222,'第'+chapterNumeral(codexChapter)+'章 · '+current.name,{size:23,bold:true,w:420,h:36});
++    const switchChapter = (step: number): void => {
++      codexChapter = Math.max(1,Math.min(CHAPTER_CONTENT.length,codexChapter+step));
++      codexOffset = 0; codexModal(ctx,session,step);
++    };
++    comicButton(p,-260,H/2-222,52,42,'‹',()=>switchChapter(-1),{tone:'dark',size:30,enabled:codexChapter>1});
++    comicButton(p,260,H/2-222,52,42,'›',()=>switchChapter(1),{tone:'dark',size:30,enabled:codexChapter<CHAPTER_CONTENT.length});
++    const viewTop=H/2-258, viewBottom=-H/2+30, viewH=viewTop-viewBottom, viewY=(viewTop+viewBottom)/2;
++    const cardH=226,gap=14,pad=6,rows=Math.ceil(entries.length/2);
+     const contentH=Math.max(viewH,rows*(cardH+gap)-gap+pad*2);
+     const view=N('baseCodexView',p,0,viewY,592,viewH);view.addComponent(Mask);
+     const scroll=view.addComponent(ScrollView);scroll.horizontal=false;scroll.vertical=contentH>viewH;scroll.elastic=false;
+     const content=N('baseCodexContent',view,0,viewH/2,592,contentH);
+     content.getComponent(UITransform)!.setAnchorPoint(.5,1);scroll.content=content;
+-    CODEX.forEach((c,i) => {
++    entries.forEach((c,i) => {
+       const got=codexUnlocked(c.id),claimed=codexClaimed(c.id);
+       const card=baseCodexCard(content,i%2===0?-148:148,
+         -(pad+Math.floor(i/2)*(cardH+gap)+cardH/2),280,cardH,'baseCodexCard:'+c.id,got);
+--- assets/scripts/ui/pages/EndlessPage.ts (before)
++++ assets/scripts/ui/pages/EndlessPage.ts
+@@ -1,3 +1,4 @@
++import { CHAPTER_CONTENT } from '../../config/ChapterContent';
+ /** A dedicated secondary world map. Terrain is replaceable; chapter progress and loot are live UI. */
+ import { BlockInputEvents, director, Graphics, Mask, Node, ScrollView, UITransform } from 'cc';
+ import { LO } from '../../config/GameConfig';
+@@ -26,7 +27,7 @@
+ 
+ const state = { chapter: 1, initialized: false, camera: { u: .46, v: .68, zoom: 1.12 } as EndlessCamera };
+ // Temporary geography is deliberately independent of the campaign chapter count.
+-const REGIONS = [[.34,.765], [.43,.582], [.64,.462], [.18,.325], [.72,.25], [.36,.215], [.72,.10], [.19,.095]];
++const REGIONS = CHAPTER_CONTENT.map(c => c.mapPoint);
+ function region(index: number): { u: number; v: number } {
+   const p = REGIONS[index] || [.2 + index % 4 * .2, .15 + Math.floor(index / 4) % 4 * .16];
+   return { u: p[0], v: p[1] };
+@@ -48,7 +49,7 @@
+   const map = N('endlessMapViewport', root, 0, WY(0, height), 750, height);
+   map.addComponent(Mask);
+   const world = N('endlessWorldTerrain', map, 0, 0, ENDLESS_MAP_W, ENDLESS_MAP_H);
+-  artSprite(world, 0, 0, ENDLESS_MAP_W, ENDLESS_MAP_H, 'scenes/bg_endless_world_v63', { sliced: false, fit: false });
++  artSprite(world, 0, 0, ENDLESS_MAP_W, ENDLESS_MAP_H, 'scenes/bg_endless_world_v66', { sliced: false, fit: false });
+   const pins = N('endlessChapterPins', world);
+   const camera = map.addComponent(EndlessMapController);
+   const header = N('endlessFloatingChapter', root);
+--- assets/scripts/ui/pages/LevelsPage.ts (before)
++++ assets/scripts/ui/pages/LevelsPage.ts
+@@ -2,6 +2,7 @@
+ import { BlockInputEvents, Graphics, Label, Mask, Node, ScrollView, Sprite, UITransform, UIOpacity, Vec2, director } from 'cc';
+ import { LO } from '../../config/GameConfig';
+ import { CAMPAIGN_CHAPTERS, CAMPAIGN_STAGES, campaignDifficultyOpen, campaignLevelOpen } from '../../config/Campaign';
++import { chapterNumeral } from '../../config/ChapterContent';
+ import { C, CA, N, WY } from '../UIKit';
+ import { artSprite } from '../Ux';
+ import { COMIC, comicArt, comicButton, comicButtonControl, comicMark, comicSurface } from '../ComicUI';
+@@ -31,9 +32,8 @@
+ 
+ const LEVELS = CAMPAIGN_STAGES;
+ const DIFFS = ['普通', '精英', '地狱'];
+-const CHAPTER_NUMERALS = ['一', '二', '三'];
+ const st = { i: 0, d: 0, initialized: false, drawer: false,
+-  selected: [0, 0, 0], offsets: [null, null, null] as (number | null)[] };
++  selected: CAMPAIGN_CHAPTERS.map(() => 0), offsets: CAMPAIGN_CHAPTERS.map(() => null) as (number | null)[] };
+ let dismissPreparation: (() => void) | null = null;
+ /** Tab navigation always returns to the plain chapter map, while local squad refresh keeps its parent. */
+ export function closeLevelPreparation(): void { st.drawer = false; dismissPreparation?.(); }
+@@ -153,7 +153,7 @@
+     const stars = stages.reduce((sum, stage) => sum + (sv.stars[stage.id] || 0), 0);
+     const bar = campaignChapterBanner(header, 0, WY(chapterTop, 100), 694, 100);
+     bar.addComponent(BlockInputEvents);
+-    mainLabel(bar, 0, 14, '第' + CHAPTER_NUMERALS[currentChapter()] + '章 · ' + chapter.name,
++    mainLabel(bar, 0, 14, '第' + chapterNumeral(chapter.number) + '章 · ' + chapter.name,
+       { size: 31, font: 'body', bold: true, color: '#FFF0C7', w: 470, h: 40, outline: '#10232F', outlineW: 1 });
+     mainLabel(bar, -73, -22, '已通关 ' + cleared + '/10', { size: 19, bold: true, color: '#F6F2E2', w: 210, h: 28 });
+     star(bar, 63, -21, 24, true);

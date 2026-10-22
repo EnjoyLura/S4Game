@@ -3,8 +3,10 @@
  * 受击只闪红不掉速（用户确认：控制效果只属于特定 buff）；仅 BOSS 显示血条（M0 1-1 无 BOSS，钩子保留）
  */
 import { Color, Graphics, isValid, Label, Layers, Node, Tween, UIOpacity } from 'cc';
-import { MOB_DMG_MUL, MOB_HP_MUL, MobDef } from '../config/Mobs';
-import { LINE_Y, PAL, SPAWN_Y } from '../config/GameConfig';
+import { damageKindFor, EnemyFormation, MOBS, MOB_DMG_MUL, MOB_HP_MUL, MobDef } from '../config/Mobs';
+import { enemyArtRef, EnemyHealing } from '../config/ChapterContent';
+import { MonsterTraits } from './MonsterTraits';
+import { LINE_Y, LO, PAL } from '../config/GameConfig';
 import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
 import { BattleSprite } from './BattleSprite';
@@ -18,21 +20,38 @@ import { MonsterDeath, warmMonsterDeath } from './MonsterDeath';
 const ATK_ANIM = 0.34;
 /** 统一静态/序列帧显示高度，保持脚底锚点与碰撞半径不变。 */
 const MOB_ART_HEIGHT = 3.85;
+/** Stable opaque top of existing walk clips; ignore their transparent headroom. */
+const MOB_ANIM_TOP: Record<string, number> = { goblin_brute: .84, goblin_shaman: .92, wolf_rider: .92 };
+/** Start the art's feet just beyond the physical top edge, then walk into view.
+ * Do not use the HUD inset or shared SPAWN_Y (also used by ultimate presentations). */
+function mobEntryY(radius: number): number {
+  return LO.half + radius * .82 + 10;
+}
 
 export type MonsterHitCtx = {
   floatParent: Node;
   dmgNumber: (x: number, y: number, text: string, color: string, big?: boolean, event?: FloatEvent) => void;
   impact?: (x: number, y: number, hero: string, heavy: boolean, angle?: number) => void;
+  combatFeedback?: (kind: string, x: number, y: number, radius: number, tx?: number, ty?: number) => void;
+  damage?: (hero: string, amount: number) => void;
 };
 
 export class Monster {
+  private static nextLifeId = 0;
+  /** Stable for one spawn, so projectile deduplication/inspection survives node pooling. */
+  lifeId = 0;
+  private traits = new MonsterTraits(this);
   node = new Node('mob');
   def!: MobDef;
   hp = 0;
   maxHp = 0;
+  lastDamageTaken = 0;
   state: 'move' | 'hold' | 'attack' = 'move';
   dead = false;
   baseX = 0;
+  formation: EnemyFormation | null = null;
+  /** Shared support lock: several healers cannot stack a heal on the same target. */
+  supportHealT = 0;
   life = 0;
   /** 地面基线固定；脚印只随步态改变位置与重量，不带动角色上下移动。 */
   groundOffset = 3 / 160;
@@ -48,6 +67,14 @@ export class Monster {
   burnT = 0;
   burnTick = 0;
   burnDps = 0;
+  /** Monotonic damage-event counter for this pooled life; reapplying burn must not replay an old event. */
+  burnPulse = 0;
+  private burnBurst = 0;
+  private burnHealCutT = 0;
+  private burnHealCut = 0;
+  private overloadCd = 0;
+  private knockbackT = 0;
+  private knockbackLeft = 0;
   /** 眩晕硬直（预留：真正的眩晕类 buff 才会写入；受击不再写） */
   stunT = 0;
   /** 冰封与雷系眩晕独立；解冻时才启动后续减速。 */
@@ -57,6 +84,7 @@ export class Monster {
   private freezeSlowDur = 0;
   private thawT = 0;
   private walkClock = 0;
+  private walking = true;
   /** 感电（沃尔·雷霆）：受雷系命中后受伤放大，持续 shockT 秒 */
   shockT = 0;
   shockAmp = 0;
@@ -87,16 +115,25 @@ export class Monster {
   private deathMotion: MonsterDeath | null = null;
   private tint = new Color();
   private lastTint = '';
+  private bossHp: Graphics | null = null;
+  private bossHpValue = -1;
 
   init(def: MobDef, parent: Node, x: number, ctx: MonsterHitCtx, mgr?: MonsterManager): void {
     this.deathMotion?.reset();
     this.def = def;
+    this.lifeId = ++Monster.nextLifeId;
+    this.traits.reset();
     this.ctx = ctx;
     this.mgrRef = mgr || null;
     this.maxHp = def.hp;
     this.hp = def.hp;
+    this.lastDamageTaken = this.burnBurst = this.burnPulse = 0;
+    this.burnHealCutT = this.burnHealCut = this.overloadCd = this.knockbackT = this.knockbackLeft = 0;
     this.state = 'move';
     this.dead = false;
+    this.formation = null;
+    this.supportHealT = 0;
+    this.walking = true;
     this.life = Math.random() * 10;
     this.walkClock = this.life;
     this.groundOffset = 3 / 160;
@@ -113,7 +150,7 @@ export class Monster {
     this.hunterMarkVisual = false;
     this.baseX = x;
     this.node.removeFromParent();
-    this.node.setPosition(x, SPAWN_Y + 40 + Math.random() * 60, 0);
+    this.node.setPosition(x, mobEntryY(def.radius) + Math.random() * 12, 0);
     this.node.setScale(1, 1, 1);
     this.node.angle = 0;
     this.lastTint = '';
@@ -124,17 +161,22 @@ export class Monster {
     this.node.setParent(parent);
     this.draw();
     this.buildArt();
+    this.bossHpValue = -1;
+    this.updateBossHp();
   }
 
   private buildArt(): void {
     const r = this.def.radius;
     if (!this.art) {
-      this.art = new BattleSprite(this.node, 'battle_mobs_v2', () => { this.g.enabled = false; });
+      this.art = new BattleSprite(this.node, enemyArtRef(this.def.id).atlas, () => { this.g.enabled = false; });
       this.deathMotion = new MonsterDeath(this.node, this.art);
     }
     this.art.node.setPosition(0, -r * 0.82, 0);
+    this.art.setAtlas(enemyArtRef(this.def.id).atlas);
     this.art.show(this.def.id, r * MOB_ART_HEIGHT);
-    getMobAnims(a => { this.anims = a; });
+    this.anims = null;
+    const id = this.def.id;
+    if (!this.def.homeChapter) getMobAnims(a => { if (this.node.isValid && this.def.id === id && !this.dead) this.anims = a; }, id);
     Tween.stopAllByTarget(this.art.node);
     this.art.node.setScale(1, 1, 1); this.art.node.angle = 0;
     this.art.cold(null);
@@ -143,7 +185,9 @@ export class Monster {
   }
 
   private tickArt(dt: number): void {
+    this.updateBossHp();
     if (!this.art?.loaded) return;
+    if (this.def.homeChapter) this.art.show(this.def.id + (this.traits.enraged && this.def.boss ? '_phase' : ''), this.def.radius * MOB_ART_HEIGHT);
     if (this.immobilized) {
       // Hold the current walk/attack cel instead of snapping to idle or continuing a frozen attack.
       this.syncArtTint();
@@ -161,9 +205,9 @@ export class Monster {
         const t = Math.min(clip.attack.length - 1, p * clip.attack.length);
         const i = Math.floor(t);
         this.art.showSeq(clip.attack, i, i >= clip.attack.length - 1 ? 0 : t - i, h);
-      } else if (this.state === 'move') {
+      } else if (this.state === 'move' && this.walking) {
         // 步态节奏：以源视频步态环真实时长为基准实时播放（相位连贯不踉跄），按移速微调档位，减速同步变慢
-        const tempo = Math.min(1.25, Math.max(0.75, this.def.speed / 45));
+        const tempo = Math.min(1.25, Math.max(0.75, this.def.speed / clip.referenceSpeed));
         const cps = (1 / clip.loopDur) * tempo;
         const t = this.walkClock * cps * clip.walk.length;
         const index = Math.floor(t) % clip.walk.length;
@@ -179,7 +223,7 @@ export class Monster {
       return;
     }
     // 程序化步态兜底（序列帧缺失时保留旧行为）
-    const moving = this.state === 'move';
+    const moving = this.state === 'move' && this.walking;
     const gait = moving ? Math.sin(this.walkClock * (this.def.id === 'wolf_rider' ? 12 : 8)) : 0;
     this.art.node.angle = gait * 2.2;
     this.art.node.setScale(1 + gait * 0.012, 1 + Math.abs(gait) * 0.017, 1);
@@ -278,8 +322,27 @@ export class Monster {
   get x(): number { return this.node.position.x; }
   get y(): number { return this.node.position.y; }
   get depthY(): number { return this.y - this.def.radius * 0.82; }
+  /** Local top for role icons, using the same foot offset and height as the art. */
+  get headTop(): number {
+    const r = this.def.radius;
+    const ratio = this.anims?.get(this.def.id)?.walk.length ? MOB_ANIM_TOP[this.def.id] || 1 : 1;
+    return -r * .82 + r * MOB_ART_HEIGHT * ratio;
+  }
   get isBoss(): boolean { return !!this.def.boss || this.def.id === 'goblin_king'; }
-  get immobilized(): boolean { return this.freezeT > 0 || this.stunT > 0; }
+  get immobilized(): boolean { return this.freezeT > 0 || this.stunT > 0 || this.knockbackT > 0; }
+  /** Read-only view of this living instance, rather than its original codex stats. */
+  inspect(): { physical: number; magic: number; armorBroken: boolean; wardBroken: boolean; states: string[] } {
+    const states = this.traits.activeStates;
+    if (this.freezeT > 0) states.push('冰封');
+    if (this.stunT > 0) states.push('眩晕');
+    if (this.burnT > 0) states.push(this.burnHealCutT > 0 ? '灼烧·治疗降低50%' : '灼烧');
+    if (this.slowT > 0) states.push('减速' + Math.round(this.slowAmp * 100) + '%');
+    if (this.shockT > 0) states.push('感电');
+    if (this.vulnT > 0) states.push('易伤' + Math.round(this.vulnAmp * 100) + '%');
+    if (this.hunterMarkT > 0) states.push('猎杀标记');
+    if (!states.length) states.push(this.state === 'move' ? '行进中' : this.def.kind === 'melee' ? '攻击防线' : this.def.kind === 'heal' ? '治疗待命' : '远程攻击');
+    return { ...this.traits.defenseInfo, states };
+  }
 
   drawIceFeet(g: Graphics): void {
     if (this.freezeT <= 0 && this.thawT <= 0) return;
@@ -293,12 +356,23 @@ export class Monster {
     if (this.dead) return;
     this.deathMotion?.prepare();
     this.life += dt;
+    this.supportHealT = Math.max(0, this.supportHealT - dt);
+    this.overloadCd = Math.max(0, this.overloadCd - dt);
+    this.burnHealCutT = Math.max(0, this.burnHealCutT - dt);
+    if (this.burnHealCutT <= 0) this.burnHealCut = 0;
     const frozenLeft = this.freezeT;
-    const motionDt = Math.max(0, dt - Math.max(this.freezeT, this.stunT));
+    const motionDt = Math.max(0, dt - Math.max(this.freezeT, this.stunT, this.knockbackT));
+    if (this.knockbackT > 0) {
+      const step = this.knockbackLeft * Math.min(1, dt / this.knockbackT);
+      this.node.setPosition(this.baseX, Math.min(mobEntryY(this.def.radius) + 12, this.y + step), 0);
+      this.knockbackLeft = Math.max(0, this.knockbackLeft - step);
+      this.knockbackT = Math.max(0, this.knockbackT - dt);
+    }
     this.thawT = Math.max(0, this.thawT - dt);
     if (this.slowT > 0) this.slowT = Math.max(0, this.slowT - dt);
     if (this.slowT <= 0) this.slowAmp = 0.2;
     if (this.shockT > 0) this.shockT = Math.max(0, this.shockT - dt);
+    if (this.shockT <= 0) this.shockAmp = 0;
     if (this.vulnT > 0) this.vulnT = Math.max(0, this.vulnT - dt);
     if (this.hunterMarkT > 0) {
       this.hunterMarkAge += dt;
@@ -323,29 +397,36 @@ export class Monster {
       this.flashOp.opacity = Math.max(0, Math.floor(255 * this.flashT / 0.12));
       if (this.flashT <= 0 && this.flashNode) this.flashNode.active = false;
     }
-    if (this.state === 'move') this.walkClock += motionDt * (this.slowT > 0 ? 1 - this.slowAmp : 1);
+    this.traits.tick(dt, motionDt, line, mgr);
+    const slow = this.slowT > 0 ? 1 - this.slowAmp : 1;
+    const travel = this.state === 'move'
+      ? mgr.escortTravel(this, this.def.speed * slow * this.traits.speedMultiplier() * motionDt) : 0;
+    this.walking = travel > 0;
+    this.walkClock += travel / Math.max(1, this.def.speed);
     this.tickArt(motionDt);
     // 点燃 DoT：每 0.5s 聚合一条（§3.11）
     if (this.burnT > 0) {
-      this.burnT -= dt;
-      this.burnTick += dt;
-      if (this.burnTick >= 0.5) {
-        this.burnTick -= 0.5;
+      this.burnTick += Math.min(dt, this.burnT);
+      if (this.burnTick + 1e-8 >= 0.5) {
+        this.burnTick = Math.max(0, this.burnTick - 0.5);
+        this.burnPulse++;
         this.takeDamage(this.burnDps * 0.5, false, 'burn');
       }
       if (this.dead) return;
+      this.burnT = Math.max(0, this.burnT - dt);
+      if (this.burnT <= 0) this.burnDps = this.burnBurst = this.burnTick = 0;
     }
 
     // Control stops movement and attacks, while burn damage and other status timers continue.
     if (motionDt <= 0) return;
 
-    const mul = this.slowT > 0 ? (1 - this.slowAmp) : 1;
     if (this.state === 'move') {
       // 直线行进（用户确认：不蛇形）；横向松散由出生 x 与分离逻辑保证
-      this.node.setPosition(this.baseX, this.node.position.y - this.def.speed * mul * motionDt, 0);
+      this.node.setPosition(this.baseX, this.node.position.y - travel, 0);
       const reach = this.def.kind === 'ranged' ? (this.def.atkRange || 0) : this.def.radius * 0.5;
       if (this.node.position.y - LINE_Y <= reach) {
         this.holdY = this.node.position.y;
+        this.traits.onReachLine();
         this.state = this.def.kind === 'melee' ? 'attack' : 'hold';
         this.atkT = Math.min(this.atkT, 0.4);
       }
@@ -354,14 +435,8 @@ export class Monster {
       this.atkT -= motionDt;
       if (this.atkT <= 0) {
         this.atkT = this.def.atkInterval;
-        if (this.def.kind === 'heal') {
-          this.atkAnimT = ATK_ANIM;   // 萨满施法也走攻击一次性帧（缺 attack 段则自动退化为待机帧）
-          mgr.healAround(this, 160, this.def.healAmount || 40);
-        } else {
-          line.takeDamage(this.def.dmg);
-          this.lunge();
-          // 近战/石弹命中防线的概率词条（POW!/SOK!/咚!，30% 概率，ComicPop 内掷骰）
-          bus.emit(EVT.COMIC_POP, this.x, this.y + this.def.radius, this.def.kind === 'ranged' ? 'stoneHit' : 'meleeHit');
+        if (this.def.kind !== 'heal') {
+          this.traits.attack(line, mgr);
         }
       }
       // 冲撞/投掷前摇（手动正弦脉冲，代替逐次 tween）
@@ -373,23 +448,80 @@ export class Monster {
     }
   }
 
+  strike(line: { takeDamage: (d: number) => void }, mgr: MonsterManager): void {
+    if (this.dead || this.immobilized) return;
+    const damage = this.def.dmg * this.traits.damageMultiplier() * mgr.attackMultiplier(this);
+    const poison = this.def.venom;
+    line.takeDamage(damage * (poison ? 1 - poison.portion : 1));
+    if (poison) mgr.addLinePoison(damage * poison.portion, poison.duration);
+    this.lunge();
+    bus.emit(EVT.COMIC_POP, this.x, this.y + this.def.radius, this.def.kind === 'ranged' ? 'stoneHit' : 'meleeHit');
+  }
+
+  animateHeal(): void { this.atkAnimT = ATK_ANIM; }
+
+  feedback(kind: string): void {
+    this.ctx.combatFeedback?.(kind, this.x, this.y + (kind === 'rush' ? 0 : this.def.radius * 1.2), this.def.radius);
+    if (kind === 'armorBreak') this.ctx.dmgNumber(this.x, this.y + this.def.radius * 3, '破甲', '#D4ECF4', true);
+    else if (kind === 'wardBreak') this.ctx.dmgNumber(this.x, this.y + this.def.radius * 3, '破盾', '#D5B5FF', true);
+    else if (kind === 'interrupt') this.ctx.dmgNumber(this.x, this.y + this.def.radius * 3, '打断', '#FFE29A');
+  }
+
   private lunge(): void {
     this.lungeT = 0.2;
     this.atkAnimT = ATK_ANIM;
   }
 
-  /** 受击；crit 用于飘字样式；ignoreRes=无视物抗（狙击大招等）；返回是否击杀
+  /** 受击；crit 用于飘字样式；ignoreRes=无视物抗/法抗（狙击大招等）；返回是否击杀
    *  受击只掉血+闪红，不硬直/减速/击退——控制只来自特定 buff（applySlow 等后续技能效果） */
-  /** 感电：雷系命中后受伤放大 3s（重复命中刷新时长，取更高倍率） */
+  /** 感电：同类状态取高并刷新；过期强度不能被后续较弱的感电继承。 */
   applyShock(amp: number, dur: number): void {
-    this.shockAmp = Math.max(this.shockAmp, amp);
+    if (this.dead || amp <= 0 || dur <= 0) return;
+    this.shockAmp = this.shockT > 0 ? Math.max(this.shockAmp, amp) : amp;
     this.shockT = Math.max(this.shockT, dur);
+  }
+
+  /** Only chain lightning can request this roll, before applying its new shock. */
+  tryOverload(chance: number): boolean {
+    if (this.dead || this.isBoss || this.shockT <= 0 || this.overloadCd > 0 || Math.random() >= chance) return false;
+    this.stunT = Math.max(this.stunT, .4);
+    this.overloadCd = 3;
+    return true;
+  }
+
+  /** A card-owned displacement; ordinary hits still cause no movement or control. */
+  applyKnockback(distance: number): boolean {
+    if (this.dead || this.isBoss || distance <= 0) return false;
+    const travel = Math.min(distance * (this.def.elite ? .4 : 1), mobEntryY(this.def.radius) + 12 - this.y);
+    if (travel <= 0) return false;
+    this.knockbackLeft = Math.max(this.knockbackLeft, travel);
+    this.knockbackT = .18;
+    this.lungeT = this.atkAnimT = 0;
+    this.state = 'move';
+    return true;
   }
 
   /** 易伤：坑内每帧刷新，出坑残留 dur */
   applyVuln(amp: number, dur: number): void {
-    this.vulnAmp = Math.max(this.vulnAmp, amp);
+    if (this.dead || amp <= 0 || dur <= 0) return;
+    this.vulnAmp = this.vulnT > 0 ? Math.max(this.vulnAmp, amp) : amp;
     this.vulnT = Math.max(this.vulnT, dur);
+  }
+
+  private updateBossHp(): void {
+    if (!this.isBoss || this.dead) {
+      if (this.bossHp) this.bossHp.node.active = false;
+      return;
+    }
+    if (!this.bossHp) {
+      const n = new Node('bossHp'); n.layer = Layers.Enum.UI_2D; n.setParent(this.node);
+      this.bossHp = n.addComponent(Graphics);
+    }
+    this.bossHp.node.active = true;
+    if (this.bossHpValue !== this.hp) {
+      this.bossHpValue = this.hp;
+      drawMobHpBar(this, this.bossHp);
+    }
   }
 
   applyHunterMark(amp: number, dur: number, visual: boolean): void {
@@ -423,18 +555,28 @@ export class Monster {
   }
 
   takeDamage(amount: number, crit: boolean, killerId: string, ignoreRes = false, resCut = 0, impactAngle?: number, heavy = false): boolean {
-    if (this.dead) return false;
-    if (this.def.physRes && !ignoreRes) amount *= 1 - this.def.physRes * (1 - resCut);   // resCut=无视防御比例（英雄突破）
+    this.lastDamageTaken = 0;
+    if (this.dead || !Number.isFinite(amount) || amount <= 0) return false;
+    const raw = amount, kind = damageKindFor(killerId);
+    if (!ignoreRes && kind !== 'true') {
+      const resistance = kind === 'physical' ? this.traits.physicalResistance : this.traits.magicResistance;
+      amount *= 1 - Math.max(0, Math.min(.95, resistance)) * (1 - Math.max(0, Math.min(1, resCut)));
+    }
     if (this.shockT > 0) amount *= 1 + this.shockAmp;
     const vulnerability = Math.max(this.vulnT > 0 ? this.vulnAmp : 0, this.hunterMarkT > 0 ? this.hunterMarkAmp : 0);
     if (vulnerability > 0) amount *= 1 + vulnerability;
+    amount = this.traits.incomingDamage(amount, killerId);
+    this.lastDamageTaken = Math.min(this.hp, amount);
     this.hp -= amount;
-    if (amount > 0 && !heavy && !crit && killerId !== 'burn' && killerId !== 'gm') Sfx.play('hit');
+    const visualSource = killerId === 'pyro_burst' ? 'pyro' : killerId;
+    if (amount > 0 && killerId !== 'burn' && killerId !== 'gm') Sfx.impact(visualSource, heavy || crit);
     this.ctx.dmgNumber(this.x, this.y + this.def.radius * 2.6,
       String(Math.round(amount)), crit ? '#FF3030' : '#FFFFFF', crit, { target: this, amount, periodic: killerId === 'burn' });
-    this.ctx.impact?.(this.x, this.y + this.def.radius * 0.4, killerId, heavy || crit || this.hp <= 0 && !!this.def.elite, impactAngle);
+    this.ctx.impact?.(this.x, this.y + this.def.radius * 0.4, visualSource, heavy || crit || this.hp <= 0 && !!this.def.elite, impactAngle);
+    if (this.hp > 0) this.traits.recordHit(raw, kind);
     this.flash();
     if (this.hp <= 0) {
+      if (this.traits.onLethal(killerId)) return false;
       this.die(killerId, impactAngle, heavy || crit, amount);
       return true;
     }
@@ -458,17 +600,23 @@ export class Monster {
 
   private die(killerId: string, angle: number | undefined, heavy: boolean, amount: number): void {
     this.dead = true;
+    if (this.burnT > 0 && this.burnBurst > 0 && killerId !== 'pyro_burst' && killerId !== 'gm') {
+      this.mgrRef?.queueBurnBurst(this.x, this.y + this.def.radius * .4, this.burnBurst);
+    }
+    this.traits.onDie(killerId, this.mgrRef);
+    if (this.bossHp) this.bossHp.node.active = false;
     const marked = this.hunterMarkVisual;
     this.hunterMarkT = this.hunterMarkAmp = this.hunterMarkAge = 0;
     this.hunterMarkVisual = false;
     if (marked) this.mgrRef?.refreshHunterMarks();
     this.deathMotion?.begin(this.def.radius, this.groundOffset, {
-      killer: killerId, angle, heavy, force: Math.min(1.5, amount / this.maxHp),
+      killer: killerId === 'pyro_burst' ? 'pyro' : killerId, angle, heavy, force: Math.min(1.5, amount / this.maxHp),
       elite: !!this.def.elite, boss: this.isBoss, frozen: this.freezeT > 0,
     });
-    if (killerId !== 'gm') Sfx.death(killerId, this.freezeT > 0, !!this.def.elite || this.isBoss);
+    if (killerId !== 'gm') Sfx.death(killerId === 'pyro_burst' ? 'pyro' : killerId, this.freezeT > 0, !!this.def.elite || this.isBoss);
     this.flashT = this.lungeT = this.atkAnimT = 0;
     this.freezeT = this.thawT = this.slowT = this.stunT = this.burnT = this.shockT = 0;
+    this.burnHealCutT = this.burnHealCut = this.overloadCd = this.knockbackT = this.knockbackLeft = 0;
     this.footLeftWeight = this.footRightWeight = 0;
     if (this.flashNode) this.flashNode.active = false;
     // Gameplay death and rewards are immediate. The remaining body is cosmetic only.
@@ -496,18 +644,82 @@ export class Monster {
     this.freezeSlowDur = Math.max(this.freezeSlowDur, postSlowDuration);
     return true;
   }
-  applyBurn(dps: number, dur: number): void {
-    this.burnDps = dps;
+  applyBurn(dps: number, dur: number, burst = 0, healCut = 0): void {
+    if (this.dead || dps <= 0 || dur <= 0) return;
+    if (this.burnT <= 0) this.burnTick = 0;
+    this.burnDps = this.burnT > 0 ? Math.max(this.burnDps, dps) : dps;
+    this.burnBurst = this.burnT > 0 ? Math.max(this.burnBurst, burst) : burst;
     this.burnT = Math.max(this.burnT, dur);
+    // An unrelated source extending burn must not extend the pyro-owned healing penalty.
+    if (healCut > 0) {
+      this.burnHealCut = this.burnHealCutT > 0 ? Math.max(this.burnHealCut, healCut) : healCut;
+      this.burnHealCutT = Math.max(this.burnHealCutT, dur);
+    }
   }
-  heal(v: number): void {
-    if (this.dead) return;
-    this.hp = Math.min(this.maxHp, this.hp + v);
-    this.ctx.dmgNumber(this.x, this.y + this.def.radius, '+' + Math.round(v), '#7FB841');
+  heal(v: number): number {
+    if (this.dead) return 0;
+    const healed = Math.max(0, Math.min(v * (1 - Math.min(1, this.burnHealCutT > 0 ? this.burnHealCut : 0)), this.maxHp - this.hp));
+    if (healed <= 0) return 0;
+    this.hp += healed;
+    this.ctx.dmgNumber(this.x, this.y + this.def.radius, '+' + Math.round(healed), '#7FB841');
+    return healed;
   }
 }
 
 export class MonsterManager {
+  private burnBursts: { x: number; y: number; damage: number }[] = [];
+  queueBurnBurst(x: number, y: number, damage: number): void {
+    if (!this.disposed && this.burnBursts.length < 32) this.burnBursts.push({ x, y, damage });
+  }
+  private drainBurnBursts(): void {
+    // No recursive death explosions; separate deaths from area damage with a bounded queue.
+    for (let i = 0; i < 8 && this.burnBursts.length; i++) {
+      const burst = this.burnBursts.shift()!;
+      this.ctx.combatFeedback?.('burnBurst', burst.x, burst.y, 100);
+      for (const m of this.mobsInRadius(burst.x, burst.y, 100)) {
+        m.takeDamage(burst.damage, false, 'pyro_burst', false, 0, Math.atan2(m.y - burst.y, m.x - burst.x));
+        this.ctx.damage?.('pyro', m.lastDamageTaken);
+      }
+    }
+  }
+  private linePoisons: { remaining: number; rate: number }[] = [];
+  private poisonClock = 0;
+  private pendingPoisonDamage = 0;
+
+  addLinePoison(total: number, duration: number): void {
+    if (total <= 0 || duration <= 0) return;
+    if (this.linePoisons.length < 24) this.linePoisons.push({ remaining: duration, rate: total / duration });
+    else {
+      const p = this.linePoisons[0], remainingTotal = p.rate * p.remaining + total;
+      p.remaining = Math.max(p.remaining, duration); p.rate = remainingTotal / p.remaining;
+    }
+  }
+
+  attackMultiplier(source: Monster): number {
+    let multiplier = 1;
+    for (const ally of this.list) {
+      const aura = ally.def.aura;
+      if (!ally.dead && aura && Math.hypot(ally.x - source.x, ally.y - source.y) <= aura.radius) multiplier = Math.max(multiplier, aura.attackMul);
+    }
+    return multiplier;
+  }
+
+  spawnOffspring(source: Monster, id: string, count: number): number {
+    const base = MOBS[id], parentBase = MOBS[source.def.id];
+    if (!base || !parentBase || this.disposed) return 0;
+    let made = 0;
+    for (let i = 0; i < Math.min(4, count); i++) {
+      const child: MobDef = { ...base, offspring: true, exp: 0, gold: 0, charge: 0,
+        summon: undefined, split: undefined, revive: undefined };
+      if (!this.spawn(child, { hp: Math.max(1, Math.round(base.hp * source.maxHp / parentBase.hp)),
+        dmg: Math.round(base.dmg * (parentBase.dmg > 0 ? source.def.dmg / parentBase.dmg : source.maxHp / parentBase.hp * MOB_DMG_MUL / MOB_HP_MUL)) })) break;
+      const mob = this.list[this.list.length - 1];
+      mob.baseX = Math.max(-330, Math.min(330, source.x + (i % 2 ? 1 : -1) * (24 + 14 * i)));
+      mob.node.setPosition(mob.baseX, Math.max(LINE_Y + base.radius + 24, source.y + (i % 2) * 18), 0);
+      made++;
+    }
+    return made;
+  }
   list: Monster[] = [];
   /** 击杀统计（金币累计在 director） */
   killGold = 0;
@@ -551,16 +763,23 @@ export class MonsterManager {
   onFirstEncounter: ((def: MobDef) => void) | null = null;
   private seen = new Set<string>();
 
-  spawn(def: MobDef): boolean {
+  spawn(def: MobDef, actual?: { hp: number; dmg: number }, formation?: EnemyFormation): boolean {
     if (this.disposed) return false;
     if (this.aliveCount >= 60) return false; // Corpses do not consume living-enemy capacity.
     def = {
       ...def,
-      hp: Math.round(def.hp * MOB_HP_MUL * this.statMul * this.rampHp),
-      dmg: Math.round(def.dmg * MOB_DMG_MUL * this.statMul * this.rampDmg),
+      hp: actual ? actual.hp : Math.round(def.hp * MOB_HP_MUL * this.statMul * this.rampHp),
+      dmg: actual ? actual.dmg : Math.round(def.dmg * MOB_DMG_MUL * this.statMul * this.rampDmg),
+      healAmount: def.homeChapter && def.healAmount ? Math.round(def.healAmount * (actual ? actual.hp / def.hp : MOB_HP_MUL * this.statMul * this.rampHp)) : def.healAmount,
     };
     const m = this.pool.pop() || new Monster();
-    m.init(def, this.field, Math.random() * 660 - 330, this.ctx, this);
+    const x = def.boss ? 0 : formation ? Math.max(-330, Math.min(330, formation.lane + Math.random() * 36 - 18)) : Math.random() * 660 - 330;
+    m.init(def, this.field, x, this.ctx, this);
+    if (formation?.id) {
+      const groups = new Set(this.list.filter(o => !o.dead && o.formation?.id).map(o => o.formation!.id));
+      const front = this.list.find(o => !o.dead && o.formation?.id === formation.id && o.formation.role === 'front');
+      if ((formation.role !== 'support' || front) && (groups.has(formation.id) || groups.size < 2)) m.formation = { ...formation };
+    }
     this.list.push(m);
     if (!this.seen.has(def.id)) { this.seen.add(def.id); this.onFirstEncounter?.(def); }
     return true;
@@ -580,6 +799,9 @@ export class MonsterManager {
   destroy(): void {
     if (this.disposed) return;
     this.disposed = true;
+    this.linePoisons.length = 0;
+    this.burnBursts.length = 0;
+    this.poisonClock = this.pendingPoisonDamage = 0;
     clearDepthSorter(this.field);
     // Cocos destroys child nodes before BattleDirector.onDestroy. Only detached
     // pool entries belong to this cleanup; the scene owns actors and Graphics.
@@ -710,22 +932,59 @@ export class MonsterManager {
     return best;
   }
 
-  healAround(src: Monster, r: number, amt: number): void {
-    for (const m of this.mobsInRadius(src.x, src.y, r)) m.heal(amt);
+  /** A rear unit waits for its own living front; it never teleports or walks backwards. */
+  escortTravel(src: Monster, travel: number): number {
+    if (src.formation?.role !== 'support') return travel;
+    const front = this.list.find(m => !m.dead && m.formation?.id === src.formation!.id && m.formation.role === 'front');
+    if (!front) { src.formation = null; return travel; }
+    return Math.max(0, Math.min(travel, src.y - front.y - (src.formation.gap ?? 140)));
+  }
+
+  hasHealingTarget(src: Monster, radius: number): boolean {
+    return this.list.some(m => !m.dead && m !== src && m.def.kind !== 'heal' && m.hp < m.maxHp &&
+      m.supportHealT <= 0 && (m.x - src.x) ** 2 + (m.y - src.y) ** 2 <= radius * radius);
+  }
+
+  healAround(src: Monster, spec: Readonly<EnemyHealing>): number {
+    const wounded = this.mobsInRadius(src.x, src.y, spec.radius)
+      .filter(m => m !== src && m.def.kind !== 'heal' && m.hp < m.maxHp && m.supportHealT <= 0);
+    const front = src.formation?.id ? this.list.find(m => !m.dead && m.formation?.id === src.formation!.id && m.formation.role === 'front') : undefined;
+    wounded.sort((a, b) => a === front ? -1 : b === front ? 1 : a.hp / a.maxHp - b.hp / b.maxHp);
+    let count = 0;
+    for (const m of wounded.slice(0, Math.min(3, Math.max(1, spec.targets)))) {
+      if (m.heal(Math.min(m.maxHp * spec.fraction, src.maxHp * spec.capRatio)) <= 0) continue;
+      m.supportHealT = 4;
+      count++;
+      this.ctx.combatFeedback?.('heal', src.x, src.y + src.def.radius, m.def.radius, m.x, m.y + m.def.radius);
+    }
+    return count;
   }
 
   tick(dt: number, line: { takeDamage: (d: number) => void }): void {
     if (this.disposed) return;
+    let poisonDamage = 0;
+    for (const p of this.linePoisons) {
+      poisonDamage += p.rate * Math.min(dt, p.remaining); p.remaining = Math.max(0, p.remaining - dt);
+    }
+    this.linePoisons = this.linePoisons.filter(p => p.remaining > 0);
+    this.pendingPoisonDamage += poisonDamage;
+    if (this.pendingPoisonDamage > 0) {
+      this.poisonClock += dt;
+      if (this.poisonClock >= .5 || !this.linePoisons.length) {
+        line.takeDamage(this.pendingPoisonDamage); this.pendingPoisonDamage = this.poisonClock = 0;
+      }
+    }
     this.advanceDeaths(dt);
     for (const m of this.list) m.tick(dt, line, this);
+    this.drainBurnBursts();
     // 自动分离（简单排斥半径，§3.1）：隔帧执行减半开销，视觉无感
     if ((this.sepN++ & 1) === 0) {
       for (let i = 0; i < this.list.length; i++) {
         const a = this.list[i];
-        if (a.dead || a.state === 'attack') continue;
+        if (a.dead || a.state === 'attack' || a.def.airborne) continue;
         for (let j = i + 1; j < this.list.length; j++) {
           const b = this.list[j];
-          if (b.dead || b.state === 'attack') continue;
+          if (b.dead || b.state === 'attack' || b.def.airborne) continue;
           const dx = b.x - a.x, dy = b.y - a.y;
           const min = a.def.radius + b.def.radius;
           const d2 = dx * dx + dy * dy;
@@ -831,22 +1090,31 @@ export class MonsterManager {
   private nudge(m: Monster, dx: number, dy: number): void {
     if (m.immobilized) return;
     const p = m.node.position;
-    let nx = Math.max(-355, Math.min(355, p.x + dx));
-    let ny = Math.min(SPAWN_Y, p.y + dy);
+    const edge = m.isBoss ? 375 - m.def.radius * MOB_ART_HEIGHT / 2 - 12 : 355;
+    let nx = Math.max(-edge, Math.min(edge, p.x + dx));
+    let ny = Math.min(mobEntryY(m.def.radius) + 12, p.y + dy);
+    if (m.formation?.id) {
+      nx = Math.max(-edge, Math.min(edge, Math.max(m.formation.lane - 32, Math.min(m.formation.lane + 32, nx))));
+      if (m.formation.role === 'support') {
+        const front = this.list.find(o => !o.dead && o.formation?.id === m.formation!.id && o.formation.role === 'front');
+        if (front) ny = Math.max(ny, Math.min(p.y, front.y + (m.formation.gap ?? 140)));
+      }
+    }
     if (m.state === 'hold') ny = p.y; // 停位怪不上下挤
     m.node.setPosition(nx, ny, 0);
     if (m.state === 'move') m.baseX = nx;
   }
 }
 
-/** 占位：血条仅 BOSS 显示（M0 预留钩子） */
+/** Boss-only health bar above the full character art, including a pooled king. */
 export function drawMobHpBar(m: Monster, g: Graphics): void {
-  const w = m.def.radius * 2;
+  const w = m.def.radius * 2.8;
+  const y = -m.def.radius * .82 + m.def.radius * MOB_ART_HEIGHT + 8;
   g.clear();
   g.fillColor = new Color(0, 0, 0, 140);
-  g.roundRect(-w / 2, m.def.radius + 6, w, 6, 3);
+  g.roundRect(-w / 2, y, w, 8, 4);
   g.fill();
   g.fillColor = new Color(229, 72, 77, 255);
-  g.roundRect(-w / 2, m.def.radius + 6, w * Math.max(0, m.hp / m.maxHp), 6, 3);
-  g.fill();
+  const hpWidth = w * Math.max(0, Math.min(1, m.hp / m.maxHp));
+  if (hpWidth > 0) { g.roundRect(-w / 2, y, hpWidth, 8, Math.min(4, hpWidth / 2)); g.fill(); }
 }

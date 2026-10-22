@@ -1,0 +1,26 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in reference generation",
+  "prompt": "prompt.txt",
+  "reference": {
+    "source": "C:/Users/user/AppData/Local/Temp/codex-clipboard-5625792d-7790-4636-b044-2f7024e82108.png",
+    "archived_file": "user-proportion-reference.png",
+    "sha256": "1025a5553b7c794f0a8bb8a4fac02c72a353adb113ee1ab1c236d466bc7d231c",
+    "role": "User-provided gameplay unit proportions and simplification reference; not a game asset to copy or integrate"
+  },
+  "output": {
+    "file": "compact-grunt-proportions.png",
+    "generated_source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-341b6e44-fcb3-4e75-9e88-17cdd72141f0.png",
+    "sha256": "5030c66ebd7888f743e6f90e9e368143d5738de154027aa3c05c606eff0823d4",
+    "original_bytes_preserved": true
+  },
+  "user_visual_approval": "pending",
+  "game_integrated": false,
+  "visual_inspection": {
+    "character_count": 1,
+    "silhouette": "One squat helmet-face-poncho mass; no visible neck, long arms or articulated legs. Stubby hands and feet.",
+    "costume": "Dented bowl cap, brown short poncho, small ochre cloth corner and lowered short cleaver.",
+    "orientation": "Frontal with face, both hands and feet visible.",
+    "limitations": "Proportion concept only. Heavy outlines and broad painted patches remain for user review; actual 50-70px gameplay readability and animation are not tested. Not a transparent sprite atlas."
+  }
+}

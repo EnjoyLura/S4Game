@@ -1,0 +1,239 @@
+{
+  "originalFilesChecked": 1858,
+  "changedExistingFiles": [
+    "assets/scripts/battle/Hero.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/config/Cards.ts",
+    "assets/scripts/ui/BattleComicPanels.ts",
+    "assets/scripts/ui/Panels.ts",
+    "assets/scripts/ui/PickArt.ts"
+  ],
+  "allOriginalMediaUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "nonLightningHeroCombatUnchanged": true,
+  "fireCardEffectsUnchanged": true,
+  "cardCount": 17,
+  "rarityCounts": {
+    "white": 2,
+    "blue": 6,
+    "purple": 5,
+    "gold": 4
+  },
+  "cards": [
+    {
+      "id": "volt_attack",
+      "rarity": "white",
+      "maxStacks": 5
+    },
+    {
+      "id": "volt_aspd",
+      "rarity": "white",
+      "maxStacks": 4
+    },
+    {
+      "id": "volt_crit_rate",
+      "rarity": "blue",
+      "maxStacks": 4
+    },
+    {
+      "id": "volt_crit_dmg",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "volt_spell",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "volt_shards",
+      "rarity": "purple",
+      "maxStacks": 3
+    },
+    {
+      "id": "volt_cd",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "volt_range",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "volt_war",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "volt_eager",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "volt_shock",
+      "rarity": "purple",
+      "maxStacks": 1
+    },
+    {
+      "id": "volt_pressure",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "volt_linger",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "volt_strikes",
+      "rarity": "gold",
+      "maxStacks": 2
+    },
+    {
+      "id": "volt_stun",
+      "rarity": "gold",
+      "maxStacks": 1
+    },
+    {
+      "id": "volt_unlock_skill",
+      "rarity": "gold",
+      "maxStacks": 1
+    },
+    {
+      "id": "volt_unlock_ult",
+      "rarity": "gold",
+      "maxStacks": 1
+    }
+  ],
+  "generatedIcons": 13,
+  "redrawnFireIcons": 5,
+  "redrawnLightningIcons": 4,
+  "newLightningIcons": 4,
+  "staticMaximums": {
+    "baseChainTargets": 11,
+    "chainHopDistance": 571.22,
+    "shockDuration": 5,
+    "shockBaseAmp": 0.25,
+    "shockAmpWithLevel30": 0.35,
+    "selfShockedCardBonus": 0.6,
+    "baseUltimateStrikes": 25,
+    "baseUltimateStun": 2.5,
+    "ultimateStunWithLevel80": 3,
+    "chargeRequirementMultiplier": 0.5625,
+    "ultimateDuration": 6.9
+  },
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-volt-cards-v52-20261019-011248",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "addedFiles": [
+    "assets/resources/ux/ui_card_pyro_ember_v2.png",
+    "assets/resources/ux/ui_card_pyro_ember_v2.png.meta",
+    "assets/resources/ux/ui_card_pyro_range_v2.png",
+    "assets/resources/ux/ui_card_pyro_range_v2.png.meta",
+    "assets/resources/ux/ui_card_pyro_shards_v2.png",
+    "assets/resources/ux/ui_card_pyro_shards_v2.png.meta",
+    "assets/resources/ux/ui_card_pyro_spell_v2.png",
+    "assets/resources/ux/ui_card_pyro_spell_v2.png.meta",
+    "assets/resources/ux/ui_card_pyro_war_v2.png",
+    "assets/resources/ux/ui_card_pyro_war_v2.png.meta",
+    "assets/resources/ux/ui_card_volt_linger_v1.png",
+    "assets/resources/ux/ui_card_volt_linger_v1.png.meta",
+    "assets/resources/ux/ui_card_volt_pressure_v1.png",
+    "assets/resources/ux/ui_card_volt_pressure_v1.png.meta",
+    "assets/resources/ux/ui_card_volt_shards_v2.png",
+    "assets/resources/ux/ui_card_volt_shards_v2.png.meta",
+    "assets/resources/ux/ui_card_volt_shock_v2.png",
+    "assets/resources/ux/ui_card_volt_shock_v2.png.meta",
+    "assets/resources/ux/ui_card_volt_spell_v2.png",
+    "assets/resources/ux/ui_card_volt_spell_v2.png.meta",
+    "assets/resources/ux/ui_card_volt_strikes_v1.png",
+    "assets/resources/ux/ui_card_volt_strikes_v1.png.meta",
+    "assets/resources/ux/ui_card_volt_stun_v1.png",
+    "assets/resources/ux/ui_card_volt_stun_v1.png.meta",
+    "assets/resources/ux/ui_card_volt_war_v2.png",
+    "assets/resources/ux/ui_card_volt_war_v2.png.meta"
+  ],
+  "priorPreviewFilesPreserved": 793,
+  "entryVersion": "1792343521",
+  "game": "https://kingdom-watch.pages.dev/?v=volt-cards-v52-1792343521",
+  "nativeAssets": [
+    {
+      "id": "pyro_spell",
+      "path": "assets/resources/native/ed/ed9ba40e-6154-4672-a29b-e6cf3f4c32d0.38218.png",
+      "sha256": "10ee7010c9e9b56625cd7f597bc9660ab35496addc5f67baa5bf375c6682d1ac"
+    },
+    {
+      "id": "pyro_shards",
+      "path": "assets/resources/native/f2/f2868c86-6cf7-4397-bede-bf3ddb971525.d00aa.png",
+      "sha256": "d5619c27daec606476384a059a649fe14ea9d589af5f39d7b91e1f06c5fc77f2"
+    },
+    {
+      "id": "pyro_range",
+      "path": "assets/resources/native/d6/d674781e-0c6c-470c-8f0b-01dce7dfeb25.4b375.png",
+      "sha256": "e2d8dcdac3c8c224600f89bf2388f56fdce834ca6b6aaff37939f1943e67e7c3"
+    },
+    {
+      "id": "pyro_war",
+      "path": "assets/resources/native/11/119f29c8-2f9d-4e37-9235-24bbe181e9a1.74de3.png",
+      "sha256": "8a264674b26839431a8e1fb4c2c1227b83f890018c4cec48edb12a44eb8dc04c"
+    },
+    {
+      "id": "pyro_ember",
+      "path": "assets/resources/native/0b/0ba1265d-6035-4311-91cd-bbecc9e9ac81.9d4ea.png",
+      "sha256": "35ee53d16f4a294185752c41b7e6fc6e67110e3017ceb825d21e4e1e010f9dd1"
+    },
+    {
+      "id": "volt_spell",
+      "path": "assets/resources/native/92/9276cce5-5a07-4e85-b3ed-ecca42259818.09abc.png",
+      "sha256": "140bc2a961f111116eb550dcf5a24d610376e40db59e19b9a9e6418937e6bbf4"
+    },
+    {
+      "id": "volt_shards",
+      "path": "assets/resources/native/fc/fc6f078f-e52f-4206-960b-14c37a4d7b1e.72cbd.png",
+      "sha256": "841852115f51dc1361fc38c3cdc099001655cda7ac942a5d5e6630e3dc4abe72"
+    },
+    {
+      "id": "volt_war",
+      "path": "assets/resources/native/b8/b8365d92-7f76-43d1-b02a-c71d4fb45ee0.323b7.png",
+      "sha256": "a72dbf6b7cfccdd323dcf3c1086b16ea4bb687054c81895568af893ea1bd87f6"
+    },
+    {
+      "id": "volt_shock",
+      "path": "assets/resources/native/d6/d6adae74-de28-4d0d-ae8b-c7fcd807947c.0c21f.png",
+      "sha256": "6209401517cfe3185550682a541b3285255c7bb2cafcd6df75d32b8afa1afffa"
+    },
+    {
+      "id": "volt_pressure",
+      "path": "assets/resources/native/65/658c5a41-a1d3-45ef-920e-b4a204c29b7e.eeac4.png",
+      "sha256": "a1e174b5a1c4973084774732bea792bb51af1fcced2f71ddd760528e9317ce5e"
+    },
+    {
+      "id": "volt_linger",
+      "path": "assets/resources/native/a3/a312633d-498a-44a9-bf78-af109b4634f4.ecf2a.png",
+      "sha256": "1533d6078bfe2aa409d8a5f23000c730825c570b0453b764a00607a8c433ab64"
+    },
+    {
+      "id": "volt_strikes",
+      "path": "assets/resources/native/56/566a9bfd-d08c-4ee0-98b2-1c02c1ff7498.84165.png",
+      "sha256": "e1edbb305558d97566263626ee02ff63f8a691c102255acceb803be34b2cee32"
+    },
+    {
+      "id": "volt_stun",
+      "path": "assets/resources/native/b5/b58347c4-54b9-4968-aa8d-a992ea6d2d73.6fa00.png",
+      "sha256": "45c110e6d7fd2bebff835a949edc7f40b53eb5c3895da83beda1f6a7506611fd"
+    }
+  ],
+  "scope": "17 lightning cards including +1.5s stun gold; 5 fire and 4 lightning icon redraws plus 4 new full circular paintings.",
+  "manualAcceptance": "Static source/assets/type/build/HTTP only. No tests, game, browser, combat simulation or audio; user performs acceptance.",
+  "deployment": "https://834e89ca.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.000b2.js?v=1792343521",
+    "nativeIconCount": 13,
+    "allIconHashesMatch": true
+  }
+}

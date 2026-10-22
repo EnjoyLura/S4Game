@@ -1,0 +1,30 @@
+Cocos exit code: 36
+2026-10-22 01:33:42 - debug: // ---- build task adsense-h5g-plugin：onAfterBuild ----
+
+2026-10-22 01:33:42 - debug: adsense-h5g-plugin:(onAfterBuild) in 0 ms ✓, progress: 60%
+
+2026-10-22 01:33:42 - log: Asset DB is resume!
+
+2026-10-22 01:33:42 - debug: builder:build-project-total (19134ms)
+
+2026-10-22 01:33:42 - debug: build task(web-mobile) in 19134!
+
+2026-10-22 01:33:42 - debug: [Build Memory track]: builder:build-project-total start:326.05MB, end 246.06MB, increase: -81916.57KB
+
+2026-10-22 01:33:42 - debug: ================================ build Task (web-mobile) Finished in (19 s)ms ================================
+
+patch-web-dpr: patched build/web-mobile/cocos-js\_virtual_cc-Bp5iGE8z.js
+patch-web-dpr: clamp pattern not found in build/web-mobile/cocos-js\cc.03aac.js - skipped
+patch-web-dpr: done, 1 file(s) patched
+patch-web-dpr: entry cache-bust v=1792604023
+patch-web-dpr: index.html bootstrap OK
+{"production": true, "md5Cache": true, "engineRevision": "2cb74a1e8caa095a", "entry": "index.6e649.js?v=1792604023", "immutableAssets": 2077, "startupPreloads": [["index.6e649.js?v=1792604023", "script"], ["application.9c53d.js", "script"], ["src/settings.2b6c7.json", "fetch"], ["cocos-js/cc.03aac.js?kwengine=2cb74a1e8caa095a", "script"], ["cocos-js/_virtual_cc-Bp5iGE8z.js?kwengine=2cb74a1e8caa095a", "script"]], "audioCredits": {"path": "audio-credits.html", "sha256": "6ab9a3c7a29f5cdbaca7cf5f8e45213f207edbd9b886b1ce9f77e3f9a8600ae2"}, "validation": "offline preparation only; no game or browser executed"}
+Exporting the prepared production build...
+Validated runtime package: 2103 files, 645.7 MiB
+Committed runtime release 9e7cd310850b8080
+Pushing runtime repository (no source repository commits)...
+branch 'main' set up to track 'origin/main'.
+{"pages_status": "building", "build_status": "building", "build_commit": "8f85546a3f45ffad00bbf28fdc8ff65d9e95faef", "build_error": {"message": null}}
+{"pages_status": "built", "build_status": "built", "build_commit": "8f85546a3f45ffad00bbf28fdc8ff65d9e95faef", "build_error": {"message": null}}
+Published and HTTP-verified: https://enjoylura.github.io/kingdom-watch-play/
+Report: D:\AI\S4Game\KingdomWatch\docs\github-pages-publishing\deployment.json

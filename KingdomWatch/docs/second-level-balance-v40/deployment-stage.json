@@ -1,0 +1,59 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-second-level-balance-v40-20261018-203548",
+  "entryVersion": "1792326929",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-settlement-actions-v39-20261018-201903",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=second-level-balance-v40-1792326929",
+  "originalFilesChecked": 1826,
+  "changedExistingFiles": [
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/config/LevelDifficulty.ts",
+    "assets/scripts/core/GameData.ts",
+    "assets/scripts/core/SaveData.ts",
+    "assets/scripts/core/StageLoot.ts",
+    "assets/scripts/ui/BattleRewardPanel.ts",
+    "assets/scripts/ui/LevelLootPreview.ts",
+    "assets/scripts/ui/MainUI.ts",
+    "assets/scripts/ui/PageKit.ts",
+    "assets/scripts/ui/SquadPanel.ts",
+    "assets/scripts/ui/TrainingLobby.ts",
+    "assets/scripts/ui/pages/HeroPage.ts",
+    "assets/scripts/ui/pages/LevelsPage.ts",
+    "assets/scripts/ui/pages/ShopPage.ts"
+  ],
+  "addedRuntimeFiles": [
+    "assets/scripts/config/SecondLevel.ts",
+    "assets/scripts/config/SecondLevel.ts.meta",
+    "assets/scripts/core/SecondJourney.ts",
+    "assets/scripts/core/SecondJourney.ts.meta"
+  ],
+  "priorPreviewFilesPreserved": 793,
+  "typeDiagnosticsUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "allOriginalMediaUnchanged": true,
+  "firstLevelAndOtherDifficultyFormationsUnchanged": true,
+  "heroDamageAndGrowthFormulasUnchanged": true,
+  "normalSecondLevel": {
+    "workers": 122,
+    "slingers": 12,
+    "elites": 2,
+    "waves": 7,
+    "staticSpawnEndSum": 202.05,
+    "targetCombatSeconds": [
+      180,
+      240
+    ],
+    "measuredCombatSeconds": null
+  },
+  "choices": "A,A,A,A,A,A: 3-4min; archer/sniper+green bow viable without upgrades; workers/slingers/two elites; sniper ultimate; optional archer level-up; free pyro/manual deployment",
+  "manualAcceptance": "User manual. No tests, game, browser, simulations or audio playback performed.",
+  "deployment": "https://ae3a2c16.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.5b213.js?v=1792326929",
+    "finalUrl": "https://kingdom-watch.pages.dev/?v=second-level-balance-v40-1792326929"
+  }
+}

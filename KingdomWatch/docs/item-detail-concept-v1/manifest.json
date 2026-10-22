@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-22",
+  "tool": "built-in image_gen",
+  "mode": "new concept from references",
+  "source": "C:\\Users\\user\\.codex\\generated_images\\01a15ef7-7947-7cb0-82f2-df6682c99f16\\exec-b83af234-5075-4c91-9c22-1880dcdcffb2.png",
+  "image": "D:\\AI\\S4Game\\KingdomWatch\\docs\\item-detail-concept-v1\\item-detail-gold-concept.png",
+  "size": [
+    1086,
+    1448
+  ],
+  "sha256": "6e5c2c765ba7130b1cf937e9ee4e70632f96d91cf374c145e1279c266b3d5a1c",
+  "references": [
+    "C:/Users/user/AppData/Local/Temp/codex-clipboard-42a4d83f-7587-450d-ab2c-dd930b913391.png",
+    "C:/Users/user/AppData/Local/Temp/codex-clipboard-c8300410-62fb-4fc8-8b5e-3c2ce7cba5f0.png",
+    "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_coin_v1.png"
+  ],
+  "prompt": "prompt.txt",
+  "status": "art preview only; pending user review; not connected to game",
+  "countAndSourceAction": "Sample count and navigation are mockup examples, not implemented behavior."
+}

@@ -1,0 +1,131 @@
+{
+  "originalFilesChecked": 1852,
+  "changedExistingFiles": [
+    "assets/scripts/battle/Hero.ts",
+    "assets/scripts/battle/Projectile.ts",
+    "assets/scripts/config/Cards.ts",
+    "assets/scripts/ui/BattleComicPanels.ts",
+    "assets/scripts/ui/Panels.ts",
+    "assets/scripts/ui/PickArt.ts"
+  ],
+  "allOriginalMediaUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "otherHeroCardsAndCombatUnchanged": true,
+  "cardCount": 16,
+  "rarityCounts": {
+    "white": 2,
+    "blue": 6,
+    "purple": 5,
+    "gold": 3
+  },
+  "cards": [
+    {
+      "id": "pyro_attack",
+      "name": "攻击强化",
+      "rarity": "white",
+      "maxStacks": 5
+    },
+    {
+      "id": "pyro_aspd",
+      "name": "攻速强化",
+      "rarity": "white",
+      "maxStacks": 4
+    },
+    {
+      "id": "pyro_crit_rate",
+      "name": "暴击强化",
+      "rarity": "blue",
+      "maxStacks": 4
+    },
+    {
+      "id": "pyro_crit_dmg",
+      "name": "爆伤强化",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "pyro_spell",
+      "name": "法术精研",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "pyro_shards",
+      "name": "爆裂火球",
+      "rarity": "purple",
+      "maxStacks": 3
+    },
+    {
+      "id": "pyro_cd",
+      "name": "冷却缩减",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "pyro_range",
+      "name": "爆裂范围",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "pyro_war",
+      "name": "陨星威能",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "pyro_eager",
+      "name": "快速充能",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "pyro_burn",
+      "name": "烈焰附着",
+      "rarity": "purple",
+      "maxStacks": 1
+    },
+    {
+      "id": "pyro_ember",
+      "name": "余烬",
+      "rarity": "purple",
+      "maxStacks": 3
+    },
+    {
+      "id": "pyro_linger",
+      "name": "余火绵延",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "pyro_meteors",
+      "name": "陨石增援",
+      "rarity": "gold",
+      "maxStacks": 2
+    },
+    {
+      "id": "pyro_unlock_skill",
+      "name": "解锁技能",
+      "rarity": "gold",
+      "maxStacks": 1
+    },
+    {
+      "id": "pyro_unlock_ult",
+      "name": "解锁大招",
+      "rarity": "gold",
+      "maxStacks": 1
+    }
+  ],
+  "staticMaximums": {
+    "burnCardMultiplier": 2.5,
+    "normalBlastRadius": 103.68,
+    "skillBlastRadius": 190.08,
+    "meteorBlastRadius": 241.92,
+    "baseLevelMeteors": 9,
+    "ultimateLevel5Meteors": 11,
+    "burnDuration": 5,
+    "craterDuration": 6,
+    "chargeRequirementMultiplier": 0.5625
+  }
+}

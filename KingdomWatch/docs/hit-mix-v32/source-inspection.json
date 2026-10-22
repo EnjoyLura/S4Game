@@ -1,0 +1,22 @@
+{
+  "changedOriginalScripts": [
+    "assets/scripts/battle/Hero.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/battle/Projectile.ts",
+    "assets/scripts/core/AudioCatalog.ts",
+    "assets/scripts/core/GameAudio.ts",
+    "assets/scripts/core/Sfx.ts"
+  ],
+  "newRuntimeModules": [
+    "AudioMix.ts",
+    "AudioMixCalibration.ts"
+  ],
+  "allExistingMediaAndMetadataUnchanged": true,
+  "damageAndProjectileRulesUnchanged": true,
+  "typeDiagnostics": 10,
+  "newTypeDiagnostics": 0,
+  "cuesCalibrated": 26,
+  "cueFilePairsCalibrated": 32,
+  "approvedBowCrossbowAndMeteorGainsPreserved": true,
+  "noTestsGameBrowserOrAudioPlaybackPerformed": true
+}

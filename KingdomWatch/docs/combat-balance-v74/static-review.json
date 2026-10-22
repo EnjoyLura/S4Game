@@ -1,0 +1,28 @@
+{
+  "assetCount": 2078,
+  "added": [],
+  "removed": [],
+  "changed": [
+    "scripts/battle/BattleDirector.ts",
+    "scripts/battle/LineDefense.ts",
+    "scripts/battle/WaveManager.ts",
+    "scripts/config/FifthLevel.ts",
+    "scripts/config/FirstLevel.ts",
+    "scripts/config/FourthLevel.ts",
+    "scripts/config/SecondLevel.ts",
+    "scripts/config/SixthLevel.ts",
+    "scripts/config/ThirdLevel.ts",
+    "scripts/ui/GmPanel.ts"
+  ],
+  "allOtherAssetsIdentical": true,
+  "originalRewardBlockAndSingleGrantGuardsIdentical": true,
+  "endlessSettlementAndOtherLaterMethodsIdentical": true,
+  "victoryWaitRealSeconds": 2,
+  "runningStatePreservedDuringWait": true,
+  "clearCheckedAfterDamageBeforeUpgrade": true,
+  "alreadyClearedFlagGuardsRepeatedEvent": true,
+  "lineDamageAndRegenLockedDuringTail": true,
+  "pendingWinBlocksHudPauseUpgradeAndGmEntry": true,
+  "reviewMethod": "static source and literal comparison only",
+  "gameBrowserTestsSimulationAudioStarted": false
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "key": "helm_lioncrest",
+    "id": "helm_lioncrest",
+    "name": "狮脊重盔",
+    "kind": "helm",
+    "quality": 3,
+    "tier": 1,
+    "stats": {
+      "atk": 32,
+      "atkPct": 0.08
+    },
+    "focus": "基础攻击",
+    "description": "厚实的狮脊重盔，偏重基础攻击，并提供攻击加成。",
+    "art": "shop_comic_v1/helm_lioncrest_v57",
+    "price": 6000,
+    "unlock": "1-4",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_helm_falcon_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 狮脊重盔. Subject: A heavy reinforced closed knight helmet, dark gunmetal with angular gold lion-brow faceguard, broad side cheek plates and short red horsehair ridge, battle-worn cartoon metal, no detached ornaments. Rarity: purple epic, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-07676713-0c95-4c59-a7a9-e1e1977281e1.png"
+  },
+  {
+    "key": "helm_nightfeather",
+    "id": "helm_nightfeather",
+    "name": "夜羽兜帽",
+    "kind": "helm",
+    "quality": 3,
+    "tier": 1,
+    "stats": {
+      "atk": 18,
+      "atkPct": 0.18
+    },
+    "focus": "攻击加成",
+    "description": "夜羽织成的兜帽，偏重攻击加成，适合持续培养后的攻击流派。",
+    "art": "shop_comic_v1/helm_nightfeather_v57",
+    "price": 6000,
+    "unlock": "1-4",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_helm_falcon_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 夜羽兜帽. Subject: An empty deep midnight violet scout hood with layered black feather-like leather shoulder collar, pale gold crescent clasp, silver stitched folded brim, sharp elegant angular outline. Empty black cloth interior, absolutely no face. Rarity: purple epic, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-7e87d58d-d631-4316-80a3-1926d34db54a.png"
+  },
+  {
+    "key": "acc_stareye",
+    "id": "acc_stareye",
+    "name": "星瞳吊坠",
+    "kind": "acc",
+    "quality": 3,
+    "tier": 1,
+    "stats": {
+      "critRate": 0.1,
+      "critDmg": 0.24
+    },
+    "focus": "暴击率",
+    "description": "星瞳宝石制成的吊坠，偏重暴击率，兼顾暴击伤害。",
+    "art": "shop_comic_v1/acc_stareye_v57",
+    "price": 6000,
+    "unlock": "1-4",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_acc_moon_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 星瞳吊坠. Subject: One necklace pendant, a vivid turquoise faceted oval gemstone nested in an angular gold eight-point star frame, thick short dark leather necklace loop with gold end caps. Compact, clear readable central gemstone. Rarity: purple epic, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-89cfea26-8ecb-4b1a-bd09-994ef3b6c78b.png"
+  },
+  {
+    "key": "acc_dragonscale",
+    "id": "acc_dragonscale",
+    "name": "龙鳞指环",
+    "kind": "acc",
+    "quality": 3,
+    "tier": 1,
+    "stats": {
+      "critRate": 0.05,
+      "critDmg": 0.48
+    },
+    "focus": "暴击伤害",
+    "description": "龙鳞纹理的厚重指环，偏重暴击伤害，适合高暴击率搭配。",
+    "art": "shop_comic_v1/acc_dragonscale_v57",
+    "price": 6000,
+    "unlock": "1-4",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_acc_moon_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 龙鳞指环. Subject: One thick bronze-gold ring shaped from overlapping dark bronze dragon scales, one large burnt-orange angular gemstone, sturdy claw-like prongs, tilted three-quarter view, clearly visible hollow ring opening. Rarity: purple epic, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-0ebff776-77cc-4d4a-b360-a0ff8890c593.png"
+  }
+]

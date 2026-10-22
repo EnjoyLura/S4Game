@@ -1,0 +1,77 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-fifth-level-balance-v45-20261018-213321",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "entryVersion": "1792330240",
+  "game": "https://kingdom-watch.pages.dev/?v=fifth-level-balance-v45-1792330240",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-fourth-level-balance-v44-20261018-211926",
+  "originalFilesChecked": 1836,
+  "changedExistingFiles": [
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/config/LevelDifficulty.ts",
+    "assets/scripts/core/SaveData.ts",
+    "assets/scripts/ui/LevelLootPreview.ts",
+    "assets/scripts/ui/pages/LevelsPage.ts"
+  ],
+  "addedFiles": [
+    "assets/scripts/config/FifthLevel.ts",
+    "assets/scripts/config/FifthLevel.ts.meta",
+    "assets/scripts/core/FifthLevelRewards.ts",
+    "assets/scripts/core/FifthLevelRewards.ts.meta"
+  ],
+  "priorPreviewFilesPreserved": 793,
+  "typeDiagnosticsUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "allOriginalMediaUnchanged": true,
+  "monsterEntryUnchanged": true,
+  "normalFifthLevel": {
+    "waves": 8,
+    "workers": 258,
+    "slingers": 12,
+    "riders": 8,
+    "elites": 3,
+    "shamans": 2,
+    "total": 283,
+    "finalElite": {
+      "hp": 7000,
+      "damage": 30
+    },
+    "staticQueueEndSeconds": 238.03,
+    "combatTargetMinutes": [
+      4,
+      5
+    ],
+    "measured": false,
+    "baseline": "Archer/sniper/pyro Lv.5, weapons Lv.3; soft recommendation without entry gate or auto-upgrade",
+    "baseGold": 120,
+    "materials": {
+      "mat_stone": 4
+    },
+    "teaching": false,
+    "freeCharge": false
+  },
+  "firstWin": {
+    "equipment": [
+      "wpn_green_crossbow",
+      "acc_moon"
+    ],
+    "countEach": 1,
+    "instanceLevel": 1,
+    "duplicateProtection": "Receipt and both inventory instances saved with victory stars",
+    "oldClearedAccounts": "No retroactive gifts",
+    "autoEquip": false,
+    "campEquipTutorial": false,
+    "freeHero": false
+  },
+  "economyFollowUp": "Lv.5 heroes / Lv.3 weapons cost more than first four base clear rewards; no hard gate or silent compensation.",
+  "scope": "Normal 1-5 waves, soft recommendation, repeatable materials/gold and first-win equipment bundle only.",
+  "manualAcceptance": "No tests/game/browser/simulation/audio playback. Actual balance and duration require user play.",
+  "deployment": "https://bcbf18b6.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.c7f18.js?v=1792330240",
+    "finalUrl": "https://kingdom-watch.pages.dev/?v=fifth-level-balance-v45-1792330240"
+  }
+}

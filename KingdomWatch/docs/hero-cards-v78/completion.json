@@ -1,0 +1,15 @@
+{
+  "complete": true,
+  "url": "https://enjoylura.github.io/kingdom-watch-play/?v=hero-cards-v78",
+  "runtime_commit": "70d90871b6a6fbd70d0167198a7a577bf846fae5",
+  "release": "03ba03f07d2760f0",
+  "pages_status": "built",
+  "http_checksum_samples": 11,
+  "source_state_unchanged": {
+    "head": "a02434d54d6077b9a86c3b667c94c21690d540b3",
+    "stage_entries_sha256": "60432a810983c486a0e02239482c10220586b6fce2f4e802fb94def3411a7a71",
+    "staged_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "runtime_checkout_clean": true,
+  "game_or_browser_started": false
+}

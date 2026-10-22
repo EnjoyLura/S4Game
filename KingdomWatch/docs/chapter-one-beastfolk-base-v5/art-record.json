@@ -1,0 +1,38 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in edit",
+  "prompt": "prompt.txt",
+  "references": [
+    {
+      "path": "D:/AI/S4Game/KingdomWatch/docs/chapter-one-beastfolk-base-v4/beastfolk-infantry-thrower.png",
+      "role": "edit target, shared creature identity and style",
+      "sha256": "30698ebc32cdfc6747002d82ee6befce9bb03796212175b4aa5149ae89a375fd"
+    },
+    {
+      "path": "C:/Users/user/AppData/Local/Temp/codex-clipboard-a4d0c27f-f5d6-4d6d-846c-c582994868c4.png",
+      "role": "bone headwear and practical tribal clothing reference",
+      "sha256": "e5a56b43ded8c22261f6db25f64a6c6533f0d6b78395d783fe747c41313e9c8f"
+    }
+  ],
+  "output": {
+    "file": "beastfolk-front-armored.png",
+    "generated_source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-dc8f2169-e6d8-4946-85e6-3dc91f2bc2d9.png",
+    "sha256": "fe36bacc4405ab129708ef2c05b7700c8646ce5bb03eed2e9edcd0794e9d4271",
+    "original_bytes_preserved": true
+  },
+  "user_requested_changes": [
+    "bone or tribal head decoration",
+    "more clothing and body equipment",
+    "both arms of thrower lowered",
+    "both characters face camera frontally"
+  ],
+  "visual_inspection": {
+    "frontal_faces_and_torsos": true,
+    "headgear": "Infantry has a small horned skull cap; thrower has a leather cap with bone forehead plate and tooth ornaments.",
+    "clothing": "Chest, abdomen, thighs and shins covered by leather jerkin, trousers, hip panels and wraps; blue faces, hands, upper-arm areas and toes visible.",
+    "thrower": "Both hands below waist; one holds a stone beside the thigh, the other hangs beside stone bag.",
+    "limitations": "Concept sheet only. Blade still has a tight left margin; off-white background has faint variation. Not a transparent atlas or final animation master."
+  },
+  "game_integrated": false,
+  "user_visual_approval": "rejected: user finds clothing too enclosing and recurring skull headgear, red scarves and layered leather too uniform; requests moderate differences in face, physique and costume design"
+}

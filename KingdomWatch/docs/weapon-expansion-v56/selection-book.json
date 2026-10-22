@@ -1,0 +1,42 @@
+[
+  {
+    "key": "blue_tide_book",
+    "name": "潮汐秘典",
+    "type": "book",
+    "quality": 2,
+    "art": "weapons_v1/blue_tide_book_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_book.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 潮汐秘典 (blue rare): Thick closed teal-blue leather spellbook in three-quarter view, rounded brass corner guards, silver curling-wave cover emblem with turquoise gem, ivory paper page block and brown buckled strap. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-d25fc791-f552-4281-b82e-6d269539bf94.png"
+  },
+  {
+    "key": "blue_ember_book",
+    "name": "烬纹魔典",
+    "type": "book",
+    "quality": 2,
+    "art": "weapons_v1/blue_ember_book_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_book.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 烬纹魔典 (blue rare): Thick closed brick-red leather grimoire, angular iron corner guards, bronze geometric ember-flame cover medallion with amber gem, dark strap and pale uneven paper block. No real fire. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-f331b643-d67e-404d-a034-981f07801276.png"
+  },
+  {
+    "key": "purple_star_book",
+    "name": "星潮法典",
+    "type": "book",
+    "quality": 3,
+    "art": "weapons_v1/purple_star_book_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_book.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 星潮法典 (purple epic): Grand closed midnight-blue cloth-bound spell tome, ornate ivory-silver angular corner guards, bold star-and-compass cover medallion with white opal, violet binding bands, thick parchment page block. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-064f8464-c085-4a4d-a5c5-822628081d69.png"
+  },
+  {
+    "key": "purple_dusk_book",
+    "name": "暮鸦秘录",
+    "type": "book",
+    "quality": 3,
+    "art": "weapons_v1/purple_dusk_book_v56",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/weapons_v1/green_book.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory weapon illustration for the existing Kingdom Watch mobile fantasy game. Input image is ONLY a style and scale reference, not an object to copy. Create ONE original distinct weapon. Match the reference's hand-painted 2D fantasy cartoon item art: confident dark contour, chunky readable shapes, warm material colors, simplified faceted highlights, subtle brush texture, moderately worn crafted edges. Render at square 1:1 composition, complete object centered, about 80-85% of frame, generous 8% safe margin on ALL sides. True transparent background and transparent holes between parts; no floor, no shadow, no backdrop, no UI frame, no rarity square, no text, no letters, no labels, no watermark, no hands or people, no duplicated weapon, no other props. No neon aura, smoke, sparkles, photorealism, 3D render, or excessive tiny filigree. Ensure silhouette is readable as a 160px game icon. Design 暮鸦秘录 (purple epic): Closed plum-black leather magic tome, dark iron corners with aged silver edges, striking folded raven-wing cover emblem, round amber eye-stone, deep burgundy clasp and thick pale pages. The colors of the item itself should be distinctive and natural; rarity is displayed by the game socket, not a background.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-d6010fb2-382b-4e71-8f20-d8248dbc10ef.png"
+  }
+]

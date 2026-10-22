@@ -1,0 +1,173 @@
+{
+  "originalFilesChecked": 1852,
+  "changedExistingFiles": [
+    "assets/scripts/battle/Hero.ts",
+    "assets/scripts/battle/Projectile.ts",
+    "assets/scripts/config/Cards.ts",
+    "assets/scripts/ui/BattleComicPanels.ts",
+    "assets/scripts/ui/Panels.ts",
+    "assets/scripts/ui/PickArt.ts"
+  ],
+  "allOriginalMediaUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "otherHeroCardsAndCombatUnchanged": true,
+  "cardCount": 16,
+  "rarityCounts": {
+    "white": 2,
+    "blue": 6,
+    "purple": 5,
+    "gold": 3
+  },
+  "cards": [
+    {
+      "id": "pyro_attack",
+      "name": "攻击强化",
+      "rarity": "white",
+      "maxStacks": 5
+    },
+    {
+      "id": "pyro_aspd",
+      "name": "攻速强化",
+      "rarity": "white",
+      "maxStacks": 4
+    },
+    {
+      "id": "pyro_crit_rate",
+      "name": "暴击强化",
+      "rarity": "blue",
+      "maxStacks": 4
+    },
+    {
+      "id": "pyro_crit_dmg",
+      "name": "爆伤强化",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "pyro_spell",
+      "name": "法术精研",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "pyro_shards",
+      "name": "爆裂火球",
+      "rarity": "purple",
+      "maxStacks": 3
+    },
+    {
+      "id": "pyro_cd",
+      "name": "冷却缩减",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "pyro_range",
+      "name": "爆裂范围",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "pyro_war",
+      "name": "陨星威能",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "pyro_eager",
+      "name": "快速充能",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "pyro_burn",
+      "name": "烈焰附着",
+      "rarity": "purple",
+      "maxStacks": 1
+    },
+    {
+      "id": "pyro_ember",
+      "name": "余烬",
+      "rarity": "purple",
+      "maxStacks": 3
+    },
+    {
+      "id": "pyro_linger",
+      "name": "余火绵延",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "pyro_meteors",
+      "name": "陨石增援",
+      "rarity": "gold",
+      "maxStacks": 2
+    },
+    {
+      "id": "pyro_unlock_skill",
+      "name": "解锁技能",
+      "rarity": "gold",
+      "maxStacks": 1
+    },
+    {
+      "id": "pyro_unlock_ult",
+      "name": "解锁大招",
+      "rarity": "gold",
+      "maxStacks": 1
+    }
+  ],
+  "staticMaximums": {
+    "burnCardMultiplier": 2.5,
+    "normalBlastRadius": 103.68,
+    "skillBlastRadius": 190.08,
+    "meteorBlastRadius": 241.92,
+    "baseLevelMeteors": 9,
+    "ultimateLevel5Meteors": 11,
+    "burnDuration": 5,
+    "craterDuration": 6,
+    "chargeRequirementMultiplier": 0.5625
+  },
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-pyro-cards-v51-20261019-003500",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "addedFiles": [
+    "assets/resources/ux/ui_card_pyro_burn_v1.png",
+    "assets/resources/ux/ui_card_pyro_burn_v1.png.meta",
+    "assets/resources/ux/ui_card_pyro_linger_v1.png",
+    "assets/resources/ux/ui_card_pyro_linger_v1.png.meta",
+    "assets/resources/ux/ui_card_pyro_meteors_v1.png",
+    "assets/resources/ux/ui_card_pyro_meteors_v1.png.meta"
+  ],
+  "priorPreviewFilesPreserved": 793,
+  "entryVersion": "1792341274",
+  "game": "https://kingdom-watch.pages.dev/?v=pyro-cards-v51-1792341274",
+  "nativeAssets": [
+    {
+      "id": "pyro_burn",
+      "path": "assets/resources/native/df/df8c25c6-e877-4e7f-95bf-bc250949cc27.a8118.png",
+      "sha256": "c4aaa5c1f1b0db4501037003dd04bf1e43e5a87ba9dfed45ae6cb29b94fe40be"
+    },
+    {
+      "id": "pyro_linger",
+      "path": "assets/resources/native/53/53c52cd1-38ce-43ae-838c-2bebac03069d.d0572.png",
+      "sha256": "33abb96ae31629ff8b70a6fea49f2fe81344027ae8e05a01eb59902ecde6036e"
+    },
+    {
+      "id": "pyro_meteors",
+      "path": "assets/resources/native/57/57ac4129-0ad5-4f4a-ac6f-92988538e51b.22505.png",
+      "sha256": "9da0d15fdc8bd3d8a37ab3e5e027f54f35bc1c0f70b9602d2f5db1c97279dd29"
+    }
+  ],
+  "scope": "16 fire mage cards: area explosions and burning, without death explosions; circular filled icons in both card pickers.",
+  "manualAcceptance": "Static source/assets/type/build/HTTP only. No tests, game, browser, combat simulation or audio playback; user performs acceptance.",
+  "deployment": "https://bafc4d16.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.6389e.js?v=1792341274",
+    "nativeIconCount": 3,
+    "allIconHashesMatch": true
+  }
+}

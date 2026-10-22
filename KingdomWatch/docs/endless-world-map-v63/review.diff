@@ -1,0 +1,343 @@
+--- before/assets/scripts/battle/BattleDirector.ts
++++ after/assets/scripts/battle/BattleDirector.ts
+@@ -699,6 +699,7 @@
+     // Delta payment and a per-chapter best survive leaving or refreshing between floors.
+     this.creditBattleGold(this.goldEarned);
+     recordEndlessFloor(this.endlessChapter, this.endlessCleared);
++    this.loot.collectAll();
+     this.hud.showBanner('第' + this.endlessCleared + '层通过 · 3秒后继续', 2.8);
+   }
+ 
+@@ -707,10 +708,10 @@
+     this.state = 'lose'; this.pendingWin = false; this.endlessRest = -1;
+     this.bossWarning.clear(); this.ultPresentation.clear();
+     this.creditBattleGold(this.goldEarned);
+-    this.loot.collectAll();
++    const loot = this.loot.collectAll();
+     this.panels.showEndless({ cleared: this.endlessCleared, floor: this.endlessFloor,
+       best: endlessBest(this.endlessChapter), newBest: this.endlessCleared > this.endlessStartingBest,
+-      gold: Math.floor(this.goldEarned), onExit: () => this.changeScene('main', this.battleSceneId, 0) });
++      gold: Math.floor(this.goldEarned), loot, onExit: () => this.changeScene('main', this.battleSceneId, 0) });
+   }
+ 
+   /* ---------- GM 后台（GmPanel 专用入口） ---------- */
+@@ -824,6 +825,7 @@
+       flow.levelReturn = bowLesson ? null : { id: levelId, diff };
+       if (!this.isEndless && !bowLesson && pendingPyroSquadLesson()) flow.levelReturn = { id: '1-3', diff: 0 };
+       if (bowLesson) { loadSave().curHero = 'archer'; saveSave(); }
++      flow.endlessPage = this.isEndless;
+       if (this.isEndless) { flow.mainTab = 4; flow.levelReturn = null; }
+       flow.endlessChapter = 0;
+     }
+--- before/assets/scripts/config/Endless.ts
++++ after/assets/scripts/config/Endless.ts
+@@ -2,6 +2,16 @@
+ import { CAMPAIGN_CHAPTERS } from './Campaign';
+ import { ChallengeDef, getChallengeDef } from './LevelDifficulty';
+ import { MOBS, MOB_DMG_MUL, MOB_HP_MUL, SpawnGroup, WaveDef } from './Mobs';
++import { EQUIPS } from '../core/GameData';
++
++/** Conditional rarity shares after an equipment drop; templates of one quality share its weight. */
++const ENDLESS_QUALITY_WEIGHTS = [[0,70,27,3], [0,55,38,7], [0,45,43,12]];
++export function endlessGearPool(chapter: number): ChallengeDef['gearPool'] {
++  const shares = ENDLESS_QUALITY_WEIGHTS[Math.min(2, Math.max(0, chapter - 1))];
++  const items = Object.values(EQUIPS).filter(d => shares[d.quality] > 0 && Number(d.unlock.split('-')[0]) <= chapter);
++  const counts = shares.map((_, q) => items.filter(d => d.quality === q).length);
++  return items.sort((a,b) => a.quality - b.quality).map(d => ({ id: d.id, weight: shares[d.quality] / counts[d.quality] }));
++}
+ 
+ export function endlessOpen(chapter: number, stars: Record<string, number>): boolean {
+   return CAMPAIGN_CHAPTERS.some(c => c.number === chapter) && (stars[chapter + '-10'] || 0) >= 1;
+@@ -48,6 +58,6 @@
+ export function endlessChallenge(chapter: number): ChallengeDef {
+   const c = CAMPAIGN_CHAPTERS.find(row => row.number === chapter)!;
+   return { id: 'endless-' + chapter, name: c.name + ' · 无尽挑战', difficulty: 0,
+-    lineHp: 0, baseGold: 0, baseDiamonds: 0, materials: [], gearPool: [],
++    lineHp: 0, baseGold: 0, baseDiamonds: 0, materials: [], gearPool: endlessGearPool(chapter), equipmentChance: .005,
+     fixedWaves: true, waves: [endlessWave(chapter, 1)] };
+ }
+--- before/assets/scripts/config/LevelDifficulty.ts
++++ after/assets/scripts/config/LevelDifficulty.ts
+@@ -25,6 +25,8 @@
+   baseDiamonds: number;
+   materials: MaterialReward[];
+   gearPool: GearWeight[];
++  /** An independent mode may override the ordinary per-kill chance. */
++  equipmentChance?: number;
+ }
+ const POOLS: number[][][] = [
+   [[45, 40, 15, 0, 0, 0], [25, 25, 45, 0, 5, 0]],
+@@ -92,6 +94,11 @@
+ export function equipmentDropChance(difficulty: number, mob?: Pick<MobDef, 'elite' | 'boss'>): number {
+   return Math.min(1, DIFFICULTIES[difficultyIndex(difficulty)].gearChance * (mob?.boss ? 20 : mob?.elite ? 8 : 1));
+ }
++/** Shared by actual rolls and item previews; campaign probabilities retain their existing values. */
++export function challengeEquipmentDropChance(level: ChallengeDef, mob?: Pick<MobDef, 'elite' | 'boss'>): number {
++  return level.equipmentChance === undefined ? equipmentDropChance(level.difficulty, mob)
++    : Math.min(1, Math.max(0, level.equipmentChance) * (mob?.boss ? 20 : mob?.elite ? 8 : 1));
++}
+ export function starChestRewards(id: string, difficulty: number): ChestReward[] {
+   const s = Math.max(0, LEVEL_IDS.indexOf(id)), d = difficultyIndex(difficulty);
+   return d === 0 ? [{ gold: 200 + 100 * s }, { diamonds: 60 + 10 * s }, { diamonds: 150 + 25 * s }]
+--- before/assets/scripts/core/Flow.ts
++++ after/assets/scripts/core/Flow.ts
+@@ -12,6 +12,8 @@
+   diff: 0,
+   /** 0 = campaign; otherwise the unlocked chapter's cumulative endless challenge. */
+   endlessChapter: 0,
++  /** Dedicated secondary world map, retained on return from an endless attempt. */
++  endlessPage: false,
+   /** 主城最后停留的底部页签（0商店 1英雄 2关卡 3升级 4基地） */
+   mainTab: 2,
+   /** One-shot focus when leaving a battle: restore this level/difficulty without starting it. */
+--- before/assets/scripts/core/StageLoot.ts
++++ after/assets/scripts/core/StageLoot.ts
+@@ -1,12 +1,12 @@
+ /** Durable pickup and settlement accounting. Visual callbacks never roll or grant twice. */
+-import { ChallengeDef, equipmentDropChance, MaterialReward } from '../config/LevelDifficulty';
++import { ChallengeDef, challengeEquipmentDropChance, MaterialReward } from '../config/LevelDifficulty';
+ import { MobDef } from '../config/Mobs';
+ import { newEquipInst } from './GameData';
+ import { EquipInst, loadSave, saveSave } from './SaveData';
+ 
+ export interface StageLootSummary { equipment: EquipInst[]; materials: MaterialReward[]; heroes?: string[]; }
+ export function rollEquipment(level: ChallengeDef, mob: MobDef): EquipInst | null {
+-  if (!level.gearPool.length || Math.random() >= equipmentDropChance(level.difficulty, mob)) return null;
++  if (!level.gearPool.length || Math.random() >= challengeEquipmentDropChance(level, mob)) return null;
+   const total = level.gearPool.reduce((sum, row) => sum + row.weight, 0);
+   let roll = Math.random() * total;
+   for (const row of level.gearPool) {
+--- before/assets/scripts/ui/LevelLootPreview.ts
++++ after/assets/scripts/ui/LevelLootPreview.ts
+@@ -1,7 +1,7 @@
+ /** Existing inventory illustrations and paper panels, backed by the actual drop configuration. */
+ import { Graphics, Mask, Node, ScrollView, UITransform } from 'cc';
+ import { LO } from '../config/GameConfig';
+-import { ChallengeDef, DIFFICULTIES, equipmentDropChance } from '../config/LevelDifficulty';
++import { ChallengeDef, DIFFICULTIES, challengeEquipmentDropChance } from '../config/LevelDifficulty';
+ import { EQUIPS, equipStat, itemName, KIND_NAME, MATS, StatKey, STAT_NAME, statFmt, WEAPONS, weaponUsers } from '../core/GameData';
+ import { pyroRewardAvailable } from '../core/SecondJourney';
+ import { StageLootSummary } from '../core/StageLoot';
+@@ -15,6 +15,7 @@
+ import { bindButton } from './ButtonFeedback';
+ import { gearPlate, gearQuality, gearQualityHalo } from './GearQuality';
+ import { dismissUI } from './UIMotion';
++import { bindBrowserBack } from './BrowserBack';
+ import { CAMPAIGN_TEXT, paintCampaignRewardCard } from './CampaignChrome';
+ import { shopQualitySocket } from './LobbyChrome';
+ import { DETAIL_ACTION_FOOTER, DETAIL_WIDTH, DetailRow, detailActionY, detailBody, detailDialog, detailFooter,
+@@ -106,7 +107,7 @@
+       const tile = stageDropIcon(parent, x, y(185), 64, row.id);
+       bindButton(tile, () => showDropItemDetails(modalParent, level, row.id), { dragThreshold: 7, sound: false });
+     });
+-    label(parent, -75, y(h - 23), '每怪 ' + pct(equipmentDropChance(level.difficulty)) + ' · 精英怪 ' + pct(equipmentDropChance(level.difficulty, { elite: true })),
++    label(parent, -75, y(h - 23), '每怪 ' + pct(challengeEquipmentDropChance(level)) + ' · 精英怪 ' + pct(challengeEquipmentDropChance(level, { elite: true })),
+       { size: 15, color: COMIC.sub, w: 448, h: 24, shrink: true });
+   } else label(parent, -65, y(181), firstBowAvailable(level.id, level.difficulty)
+     ? '首次通关必得猎风长弓，回营后穿戴' : pyroRewardAvailable(level.id, level.difficulty)
+@@ -129,7 +130,7 @@
+     { size: 16, color: COMIC.sub, w: 584, h: 26, shrink: true });
+   if (level.gearPool.length) {
+     label(list, 0, -149, '概率掉落装备', { size: 21, color: COMIC.text, bold: true, w: 584, h: 30 });
+-    label(list, 0, -185, '普通怪 ' + pct(equipmentDropChance(level.difficulty)) + ' / 精英怪 ' + pct(equipmentDropChance(level.difficulty, { elite: true })),
++    label(list, 0, -185, '普通怪 ' + pct(challengeEquipmentDropChance(level)) + ' / 精英怪 ' + pct(challengeEquipmentDropChance(level, { elite: true })),
+       { size: 20, color: COMIC.greenShade, bold: true, w: 584, h: 30 });
+     label(list, 0, -217, '下方百分比为装备掉落后，各件装备的抽取占比',
+       { size: 16, color: COMIC.sub, w: 584, h: 26, shrink: true });
+@@ -169,7 +170,7 @@
+   }
+   const d = EQUIPS[id], mat = MATS[id];
+   if (!d && !mat && id !== 'coin' && id !== 'diamond') return;
+-  const source = DIFFICULTIES[level.difficulty].name + ' · ' + level.id;
++  const source = level.id.startsWith('endless-') ? level.name : DIFFICULTIES[level.difficulty].name + ' · ' + level.id;
+   const firstBow = id === 'wpn_bow' && firstBowAvailable(level.id, level.difficulty);
+   const firstBook = id === 'wpn_green_book' && firstBookAvailable(level.id, level.difficulty);
+   const fifthGift = level.id === '1-5' && level.difficulty === 0 && FIFTH_LEVEL_GIFTS.includes(id);
+@@ -187,8 +188,9 @@
+     const share = total > 0 ? weight / total : 0;
+     const exactPct = (value: number): string => Number((value * 100).toFixed(4)) + '%';
+     groups.push(firstGift ? { title: '首胜奖励', rows: [['获得条件', '首次通关普通' + level.id], ['获得数量', '必得1件 · 仅一次']] } : { title: '掉落概率', rows: [
+-      ['每次击杀普通怪', exactPct(equipmentDropChance(level.difficulty) * share)],
+-      ['每次击杀精英怪', exactPct(equipmentDropChance(level.difficulty, { elite: true }) * share)],
++      ['每次击杀普通怪', exactPct(challengeEquipmentDropChance(level) * share)],
++      ['每次击杀精英怪', exactPct(challengeEquipmentDropChance(level, { elite: true }) * share)],
++      ...(level.id.startsWith('endless-') ? [['每次击杀首领', exactPct(challengeEquipmentDropChance(level, { boss: true }) * share)]] as DetailRow[] : []),
+       ['掉落后抽取占比', exactPct(share)],
+     ] });
+     delivery = (firstGift ? '首次通关后直接存入背包。' : share ? '' : '当前关卡难度不掉落此装备。') + (WEAPONS[id]
+@@ -223,6 +225,7 @@
+     back.active = false;
+   } else root = detailDialog(parent, width, h, '掉落物详情', 'dropItemDetails:' + id);
+   root.name = 'dropItemDetails:' + id;
++  if (level.id.startsWith('endless-')) bindBrowserBack(root, close);
+   detailOverview(root, d ? d.name : id === 'coin' ? firstWinGold ? '基础＋首胜金币' : '基础金币' : id === 'diamond' ? '钻石' : mat.name,
+     d ? gearQuality(d.quality).name + ' · ' + KIND_NAME[d.kind] + ' · 初始 Lv.1' : id === 'coin' ? '金币 · 通关结算' : id === 'diamond' ? '钻石 · 通关结算' : '材料 · 通关结算',
+     d && WEAPONS[id] ? weaponUsers(id) : undefined,
+--- before/assets/scripts/ui/MainUI.ts
++++ after/assets/scripts/ui/MainUI.ts
+@@ -19,6 +19,7 @@
+ import { buildLevels, closeLevelPreparation, selectedCampaignChapter } from './pages/LevelsPage';
+ import { buildUpgrade } from './pages/UpgradePage';
+ import { buildBase } from './pages/BasePage';
++import { buildEndless } from './pages/EndlessPage';
+ import { levelReturnReady } from './BattleEntry';
+ import { pendingPyroSquadLesson, postBowCampTab } from '../core/SecondJourney';
+ import { loadSave, saveSave } from '../core/SaveData';
+@@ -95,7 +96,7 @@
+     this.screens.setSiblingIndex(0);
+     setGlobalRoot(root);
+     this.tab = flow.mainTab;
+-    this.switchTab(this.tab);
++    this.switchTab(this.tab, true);
+     // 资源栏恒在页面内容上层。
+     ['resBar'].forEach(nm => { const n = root.getChildByName(nm); if (n) n.setSiblingIndex(root.children.length - 1); });
+   }
+@@ -175,11 +176,15 @@
+   }
+ 
+   /* ---------- 页签切换：内容整屏重建 ---------- */
+-  switchTab(i: number): void {
++  switchTab(i: number, keepSecondary = false): void {
+     const previous = this.tab;
++    if (!keepSecondary) flow.endlessPage = false;
+     if (i !== 2) closeLevelPreparation();
+     this.tab = i;
+     flow.mainTab = i;
++    const showNav = !flow.endlessPage;
++    if (this.navBar) this.navBar.active = showNav;
++    this.navItems.forEach(it => it.slot.active = showNav);
+     this.highlightTabs();
+     this.rebuildScreen(i === previous ? 0 : i > previous ? 1 : -1);
+   }
+@@ -207,10 +212,12 @@
+   /** 页面刷新入口（购买/升级/穿戴后）：整屏重建 + 货币同步 */
+   private rebuildScreen(direction = 0): void {
+     refreshUI(this.screens, () => {
+-      this.applyPageBg(this.tab);
+-      const ctx: PageCtx = { screens: this.screens, refresh: () => this.switchTab(this.tab),
+-        refreshResources: () => this.updateWallet(), navigate: tab => this.switchTab(tab) };
+-      switch (this.tab) {
++      if (!flow.endlessPage) this.applyPageBg(this.tab);
++      const ctx: PageCtx = { screens: this.screens, refresh: () => this.switchTab(this.tab, true),
++        refreshResources: () => this.updateWallet(), navigate: tab => this.switchTab(tab),
++        openEndless: () => { flow.endlessPage = true; this.switchTab(4, true); } };
++      if (flow.endlessPage) buildEndless(ctx);
++      else switch (this.tab) {
+         case 0: buildShop(ctx); break;
+         case 1: buildHeroes(ctx); break;
+         case 2: buildLevels(ctx); break;
+--- before/assets/scripts/ui/PageKit.ts
++++ after/assets/scripts/ui/PageKit.ts
+@@ -108,6 +108,7 @@
+ 
+ export interface PageCtx {
+   screens: Node;
++  openEndless?: () => void;
+   /** Navigate through MainUI so overlays and persistent navigation update together. */
+   navigate?: (tab: number) => void;
+   /** 全屏刷新（页签内容整屏重建 + 顶栏货币刷新） */
+--- before/assets/scripts/ui/Panels.ts
++++ after/assets/scripts/ui/Panels.ts
+@@ -325,7 +325,7 @@
+     pauseButton(root, 175, -270, 300, 86, '▶ 继续战斗', o.onResume, 22, 'green');
+   }
+ 
+-  showEndless(o: { cleared: number; floor: number; best: number; newBest: boolean; gold: number; onExit: () => void }): void {
++  showEndless(o: { cleared: number; floor: number; best: number; newBest: boolean; gold: number; loot: StageLootSummary; onExit: () => void }): void {
+     this.begin('endless');
+     dimLayer(this.modalRoot, .68, false, true);
+     const W = 660, H = Math.min(740, LO.half * 2 - LO.notchTop * 2 - 48);
+@@ -339,8 +339,11 @@
+       { size: 19, color: COMIC.sub, w: 580, h: 38 });
+     comicArt(root, -120, -H / 2 + 247, 58, 58, 'comic_coin_v1');
+     label(root, 45, -H / 2 + 247, '金币 +' + o.gold, { size: 31, bold: true, color: COMIC.text, w: 260, h: 52 });
+-    label(root, 0, -H / 2 + 180, '金币已到账 · 下次从第1层重新挑战', { size: 20, color: COMIC.sub, w: 580, h: 34 });
+-    comicButton(root, 0, -H / 2 + 80, 548, 72, '返回基地', o.onExit,
++    const gearCount = o.loot.equipment.length;
++    if (gearCount) comicButton(root, 0, -H / 2 + 180, 410, 48, '已获装备 ×' + gearCount + ' · 查看',
++      () => showCollectedLoot(this.modalRoot, o.loot), { tone: 'dark', size: 21 });
++    label(root, 0, -H / 2 + 134, '收益已到账 · 下次从第1层重新挑战', { size: 18, color: COMIC.sub, w: 580, h: 30 });
++    comicButton(root, 0, -H / 2 + 68, 548, 66, '返回地图', o.onExit,
+       { name: 'endlessReturn', tone: 'gold', size: 29 });
+   }
+ 
+--- before/assets/scripts/ui/pages/BasePage.ts
++++ after/assets/scripts/ui/pages/BasePage.ts
+@@ -1,5 +1,5 @@
+ /** A single painted settlement, shared comic controls and save-backed construction / codex. */
+-import { director, Graphics, isValid, Mask, Node, ScrollView, Sprite, UITransform, Vec2 } from 'cc';
++import { Graphics, isValid, Mask, Node, ScrollView, Sprite, UITransform, Vec2 } from 'cc';
+ import { C, CA, dimLayer, LabelOpts, N, WY } from '../UIKit';
+ import { artAtlasSprite, artSprite } from '../Ux';
+ import { COMIC, comicArt, comicButton, comicDialogContent, comicMark, comicPlate, comicSurface } from '../ComicUI';
+@@ -18,13 +18,7 @@
+ import { showRewardPopup } from '../RewardPopup';
+ import { constructionPulse } from '../ConstructionPulse';
+ import { CAMPAIGN_CHAPTERS } from '../../config/Campaign';
+-import { endlessMobPool, endlessOpen } from '../../config/Endless';
+-import { MOBS } from '../../config/Mobs';
+-import { endlessBest } from '../../core/EndlessProgress';
+-import { squadList } from '../../core/GameData';
+-import { flow } from '../../core/Flow';
+-import { enterBattle, enteringBattle } from '../BattleEntry';
+-import { warmBattlefield } from '../BattleEntryWarmup';
++import { endlessOpen } from '../../config/Endless';
+ 
+ const HEART = 'base_comic_v1/comic_keep_heart_v1';
+ const SHIELD = 'levels_comic_v1/comic_difficulty_shield_v1';
+@@ -132,7 +126,10 @@
+   if (rewards) dot(academy, 121, -252 / 2 + 33, rewards, 'baseCodexBadge');
+   const endlessCount = CAMPAIGN_CHAPTERS.filter(c => endlessOpen(c.number, sv.stars)).length;
+   building('endless', .73, .747, 326, 252, '无尽挑战',
+-    endlessCount ? `已开放 ${endlessCount} 个挑战 · 点击攀层` : '通关1-10解锁', () => endlessModal(ctx), !endlessCount);
++    endlessCount ? `已开放 ${endlessCount} 个挑战 · 点击攀层` : '通关1-10解锁', () => {
++      if (!endlessCount) { toast('通关1-10后解锁无尽挑战'); return; }
++      ctx.openEndless?.();
++    }, !endlessCount);
+   let artY = 0, mapWidth = 750, mapHeight = totalH;
+   const updateAnchors = (): void => {
+     anchors.forEach(a => a.node.setPosition(mapWidth * (a.u - .5), sceneTop - mapHeight * a.v + a.height / 2 - 42, 0));
+@@ -188,43 +185,6 @@
+     comicArt(face, 117, 0, 34, 34, 'comic_coin_v1');
+     text(face, 221, 0, fmt(cost), { size: 26, bold: true, color: COMIC.cream, w: 158, h: 40 });
+   } else text(face, 206, 0, '已满级', { size: 23, color: COMIC.cream, w: 180, h: 38 });
+-}
+-
+-function endlessModal(ctx: PageCtx): void {
+-  const session = new BaseModalSession(ctx), W = 660, footerH = 92;
+-  const infoH = CAMPAIGN_CHAPTERS.length * 252 + 10, H = detailHeight(infoH, footerH, 820, W);
+-  session.show(W, H, '无尽挑战', 'baseEndlessDialog', p => {
+-    detailOverview(p, '无尽攀层', '每次挑战从第1层开始', undefined,
+-      '清空本层后继续攀升，每5层首领压阵。强化、能量和防线状态延续。',
+-      (parent, x, y, side) => comicArt(parent, x, y, side, side, 'levels_comic_v1/comic_swords_v1'));
+-    const body = detailBody(p, infoH, footerH, 'baseEndless');
+-    CAMPAIGN_CHAPTERS.forEach((chapter, i) => {
+-      const open = endlessOpen(chapter.number, loadSave().stars), best = endlessBest(chapter.number);
+-      const pool = endlessMobPool(chapter.number);
+-      const card = comicPlate(body, 0, -i * 252 - 120, W - 74, 236, 'card', { name: 'endlessChapter:' + chapter.number });
+-      text(card, -142, 84, chapter.name + '挑战', { size: 29, bold: true, w: 248, h: 40, align: 'left' });
+-      text(card, 150, 84, best ? '最高第' + best + '层' : '尚无通层记录',
+-        { size: 20, w: 230, h: 32, align: 'right', color: BASE_SUB });
+-      text(card, 0, 43, (open ? '已解锁' : '通关' + chapter.number + '-10解锁') + ' · 第1至' + chapter.number + '章怪物池',
+-        { size: 19, w: 540, h: 32, color: open ? COMIC.greenShade : BASE_SUB });
+-      text(card, 0, -6, pool.map(id => MOBS[id].name).join(' · '),
+-        { size: 17, w: 532, h: 66, lineHeight: 24, color: BASE_SUB });
+-      comicButton(card, 0, -78, 526, 56, open ? '开始挑战' : '未解锁', () => {
+-        if (enteringBattle()) return;
+-        if (!endlessOpen(chapter.number, loadSave().stars)) { toast('请先通关' + chapter.number + '-10'); return; }
+-        const squad = squadList();
+-        if (!squad.length) { toast('请先在英雄页设置出战编队'); return; }
+-        const previous = { ...flow }, levelId = chapter.number + '-10';
+-        enterBattle(done => {
+-          flow.mode = 'battle'; flow.levelId = levelId; flow.diff = 0; flow.endlessChapter = chapter.number;
+-          return director.loadScene('Main', done);
+-        }, () => { Object.assign(flow, previous); toast('进入挑战失败，请重试'); }, warmBattlefield(levelId, squad, pool));
+-      }, { name: 'endlessEnter:' + chapter.number, tone: open ? 'green' : 'muted', enabled: open, size: 25 });
+-    });
+-    detailFooter(p, footerH);
+-    text(p, 0, -H / 2 + 45, '通层纪录与金币即时保存 · 退出后重新从第1层挑战',
+-      { size: 18, color: BASE_SUB, w: 588, h: 52, lineHeight: 25 });
+-  });
+ }
+ 
+ function keepModal(ctx: PageCtx, session = new BaseModalSession(ctx), upgraded = false): void {

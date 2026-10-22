@@ -1,0 +1,47 @@
+{
+  "method": "Static source, types, file inventory and hashes; no game, browser or simulation executed",
+  "asset_files_before": 2080,
+  "asset_files_after": 2080,
+  "changed_existing_assets": [
+    "scripts/battle/FireVFX.ts",
+    "scripts/battle/ImpactFX.ts",
+    "scripts/battle/Monster.ts",
+    "scripts/ui/EnemyTooltip.ts"
+  ],
+  "added": [],
+  "deleted": [],
+  "all_original_media_and_other_source_assets_preserved": true,
+  "existing_type_diagnostics": 10,
+  "new_type_diagnostics": 0,
+  "monster_gameplay_equivalent_except_visual_counter": true,
+  "burn_damage_interval": 0.5,
+  "burn_damage_multiplier": 0.5,
+  "original_frame_durations_seconds": [
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.05,
+    0.05,
+    0.05,
+    0.05,
+    0.065,
+    0.065,
+    0.065,
+    0.065
+  ],
+  "original_animation_duration_seconds": 0.62,
+  "animation_rate_adjustment": false,
+  "max_attached_burn_clips_per_target": 2,
+  "click_selection": "Touch-down snapshot retained through movement and death; release activates after 34-unit drag tolerance",
+  "body_edge_padding_design_units": 26,
+  "fixed_sidebar_design_size": [
+    148,
+    334
+  ],
+  "sidebar_left_inset": 12,
+  "brief_intro_lines": 2,
+  "max_active_state_labels": 2,
+  "field_input_order": "above actors/effects, below loot/text and HUD",
+  "source_head_and_staged_contents_preserved": true
+}

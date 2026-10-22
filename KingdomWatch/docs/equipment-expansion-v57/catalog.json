@@ -1,0 +1,269 @@
+{
+  "originalNonWeaponEquipment": 4,
+  "originalNonWeaponEquipmentUnchanged": true,
+  "newEquipment": 16,
+  "totalNonWeaponEquipment": 20,
+  "totalIncludingWeapons": 45,
+  "shopEquipmentCount": 20,
+  "qualitySlotPairs": 8,
+  "newLevelOneBuySellArbitrage": false,
+  "added": [
+    {
+      "id": "helm_ironridge",
+      "name": "铁脊战盔",
+      "kind": "helm",
+      "quality": 2,
+      "tier": 1,
+      "stats": {
+        "atk": 18,
+        "atkPct": 0.04
+      },
+      "price": 1800,
+      "unlock": "1-2",
+      "art": "shop_comic_v1/helm_ironridge_v57",
+      "focus": "基础攻击",
+      "description": "铁脊加固的前线战盔，偏重基础攻击，适合前期稳定输出。"
+    },
+    {
+      "id": "helm_hawkguard",
+      "name": "鹰卫兜帽",
+      "kind": "helm",
+      "quality": 2,
+      "tier": 1,
+      "stats": {
+        "atk": 10,
+        "atkPct": 0.1
+      },
+      "price": 1800,
+      "unlock": "1-2",
+      "art": "shop_comic_v1/helm_hawkguard_v57",
+      "focus": "攻击加成",
+      "description": "轻便的鹰卫兜帽，偏重攻击加成，适合已有攻击培养的英雄。"
+    },
+    {
+      "id": "acc_sunfang",
+      "name": "日牙护符",
+      "kind": "acc",
+      "quality": 2,
+      "tier": 1,
+      "stats": {
+        "critRate": 0.06,
+        "critDmg": 0.16
+      },
+      "price": 1800,
+      "unlock": "1-2",
+      "art": "shop_comic_v1/acc_sunfang_v57",
+      "focus": "暴击率",
+      "description": "磨成日牙形的护符，偏重暴击率，让输出更稳定地触发暴击。"
+    },
+    {
+      "id": "acc_crimson",
+      "name": "赤晶指环",
+      "kind": "acc",
+      "quality": 2,
+      "tier": 1,
+      "stats": {
+        "critRate": 0.03,
+        "critDmg": 0.3
+      },
+      "price": 1800,
+      "unlock": "1-2",
+      "art": "shop_comic_v1/acc_crimson_v57",
+      "focus": "暴击伤害",
+      "description": "镶嵌赤晶的指环，偏重暴击伤害，适合已有暴击率的搭配。"
+    },
+    {
+      "id": "glove_swift",
+      "name": "游隼手套",
+      "kind": "glove",
+      "quality": 2,
+      "tier": 1,
+      "stats": {
+        "atkSpd": 0.12,
+        "range": 35
+      },
+      "price": 1800,
+      "unlock": "1-2",
+      "art": "shop_comic_v1/glove_swift_v57",
+      "focus": "攻速",
+      "description": "贴合手指的游隼手套，偏重攻速，兼顾少量攻击范围。"
+    },
+    {
+      "id": "glove_longwatch",
+      "name": "远望护手",
+      "kind": "glove",
+      "quality": 2,
+      "tier": 1,
+      "stats": {
+        "atkSpd": 0.07,
+        "range": 70
+      },
+      "price": 1800,
+      "unlock": "1-2",
+      "art": "shop_comic_v1/glove_longwatch_v57",
+      "focus": "攻击范围",
+      "description": "加长袖口的远望护手，偏重攻击范围，兼顾攻速。"
+    },
+    {
+      "id": "armor_cinder",
+      "name": "余烬法衣",
+      "kind": "armor",
+      "quality": 2,
+      "tier": 1,
+      "stats": {
+        "skillDmg": 30,
+        "chargeEff": 0.05
+      },
+      "price": 1800,
+      "unlock": "1-2",
+      "art": "shop_comic_v1/armor_cinder_v57",
+      "focus": "技能伤害",
+      "description": "绣有余烬纹的法衣，偏重技能伤害，兼顾少量充能效率。"
+    },
+    {
+      "id": "armor_tide",
+      "name": "潮纹外衣",
+      "kind": "armor",
+      "quality": 2,
+      "tier": 1,
+      "stats": {
+        "skillDmg": 18,
+        "chargeEff": 0.12
+      },
+      "price": 1800,
+      "unlock": "1-2",
+      "art": "shop_comic_v1/armor_tide_v57",
+      "focus": "充能效率",
+      "description": "轻便的潮纹外衣，偏重充能效率，适合更频繁地释放大招。"
+    },
+    {
+      "id": "helm_lioncrest",
+      "name": "狮脊重盔",
+      "kind": "helm",
+      "quality": 3,
+      "tier": 1,
+      "stats": {
+        "atk": 32,
+        "atkPct": 0.08
+      },
+      "price": 6000,
+      "unlock": "1-4",
+      "art": "shop_comic_v1/helm_lioncrest_v57",
+      "focus": "基础攻击",
+      "description": "厚实的狮脊重盔，偏重基础攻击，并提供攻击加成。"
+    },
+    {
+      "id": "helm_nightfeather",
+      "name": "夜羽兜帽",
+      "kind": "helm",
+      "quality": 3,
+      "tier": 1,
+      "stats": {
+        "atk": 18,
+        "atkPct": 0.18
+      },
+      "price": 6000,
+      "unlock": "1-4",
+      "art": "shop_comic_v1/helm_nightfeather_v57",
+      "focus": "攻击加成",
+      "description": "夜羽织成的兜帽，偏重攻击加成，适合持续培养后的攻击流派。"
+    },
+    {
+      "id": "acc_stareye",
+      "name": "星瞳吊坠",
+      "kind": "acc",
+      "quality": 3,
+      "tier": 1,
+      "stats": {
+        "critRate": 0.1,
+        "critDmg": 0.24
+      },
+      "price": 6000,
+      "unlock": "1-4",
+      "art": "shop_comic_v1/acc_stareye_v57",
+      "focus": "暴击率",
+      "description": "星瞳宝石制成的吊坠，偏重暴击率，兼顾暴击伤害。"
+    },
+    {
+      "id": "acc_dragonscale",
+      "name": "龙鳞指环",
+      "kind": "acc",
+      "quality": 3,
+      "tier": 1,
+      "stats": {
+        "critRate": 0.05,
+        "critDmg": 0.48
+      },
+      "price": 6000,
+      "unlock": "1-4",
+      "art": "shop_comic_v1/acc_dragonscale_v57",
+      "focus": "暴击伤害",
+      "description": "龙鳞纹理的厚重指环，偏重暴击伤害，适合高暴击率搭配。"
+    },
+    {
+      "id": "glove_storm",
+      "name": "风暴护手",
+      "kind": "glove",
+      "quality": 3,
+      "tier": 1,
+      "stats": {
+        "atkSpd": 0.2,
+        "range": 50
+      },
+      "price": 6000,
+      "unlock": "1-4",
+      "art": "shop_comic_v1/glove_storm_v57",
+      "focus": "攻速",
+      "description": "风暴纹护手偏重攻速，兼顾攻击范围，适合高频攻击。"
+    },
+    {
+      "id": "glove_farstar",
+      "name": "远星护腕",
+      "kind": "glove",
+      "quality": 3,
+      "tier": 1,
+      "stats": {
+        "atkSpd": 0.12,
+        "range": 110
+      },
+      "price": 6000,
+      "unlock": "1-4",
+      "art": "shop_comic_v1/glove_farstar_v57",
+      "focus": "攻击范围",
+      "description": "远星长护腕偏重攻击范围，兼顾攻速，帮助英雄更早接敌。"
+    },
+    {
+      "id": "armor_flameseal",
+      "name": "焰印长袍",
+      "kind": "armor",
+      "quality": 3,
+      "tier": 1,
+      "stats": {
+        "skillDmg": 54,
+        "chargeEff": 0.08
+      },
+      "price": 6000,
+      "unlock": "1-4",
+      "art": "shop_comic_v1/armor_flameseal_v57",
+      "focus": "技能伤害",
+      "description": "刻有焰印的长袍，偏重技能伤害，兼顾充能效率；各职业均可穿戴。"
+    },
+    {
+      "id": "armor_moonwell",
+      "name": "月泉祭衣",
+      "kind": "armor",
+      "quality": 3,
+      "tier": 1,
+      "stats": {
+        "skillDmg": 32,
+        "chargeEff": 0.2
+      },
+      "price": 6000,
+      "unlock": "1-4",
+      "art": "shop_comic_v1/armor_moonwell_v57",
+      "focus": "充能效率",
+      "description": "月泉祭衣偏重充能效率，兼顾技能伤害；各职业均可穿戴。"
+    }
+  ],
+  "inspection": "Static source AST only; game code not executed"
+}

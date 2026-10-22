@@ -8,6 +8,7 @@ import {
 } from 'cc';
 import { DESIGN_H, DESIGN_W, initLayout } from './config/GameConfig';
 import { getChallengeDef } from './config/LevelDifficulty';
+import { endlessChallenge, endlessOpen } from './config/Endless';
 import { flow } from './core/Flow';
 import { setLayerDeep } from './ui/UIKit';
 import { uxPreloadIdle } from './ui/Ux';
@@ -15,9 +16,11 @@ import { MainUI } from './ui/MainUI';
 import { BattleDirector } from './battle/BattleDirector';
 import { TouchFeedback } from './ui/TouchFeedback';
 import { motionIn } from './ui/UIMotion';
-import { enteringBattle } from './ui/BattleEntry';
-import { warmEntryArt } from './ui/BattleEntryWarmup';
+import { enterBattle, enteringBattle } from './ui/BattleEntry';
+import { warmBattlefield, warmEntryArt } from './ui/BattleEntryWarmup';
+import { loadSave, saveSave } from './core/SaveData';
 import { deferUIWarmup } from './ui/IdleWarmup';
+import { installRenderDiagnostics } from './core/RenderDiagnostics';
 
 function hexc(hex: string): Color {
   const c = new Color();
@@ -77,10 +80,25 @@ function onSceneLaunched(): void {
   root.parent = canvasNode;
 
   // 双模式：主城 MainUI（底部导航五主界面）/ 战斗 BattleDirector；经 flow 标记 + loadScene 重建切换
+  if (flow.mode === 'battle' && flow.endlessChapter && !endlessOpen(flow.endlessChapter, loadSave().stars)) {
+    flow.mode = 'main'; flow.endlessChapter = 0; flow.mainTab = 4; flow.levelReturn = null;
+  }
   if (flow.mode === 'battle') {
     const bd = root.addComponent(BattleDirector);
-    bd.levelDef = getChallengeDef(flow.levelId, flow.diff);
+    bd.endlessChapter = flow.endlessChapter;
+    bd.levelDef = flow.endlessChapter ? endlessChallenge(flow.endlessChapter) : getChallengeDef(flow.levelId, flow.diff);
     (globalThis as unknown as { __kw?: BattleDirector }).__kw = bd; // 调试句柄：浏览器实测弹窗用
+  } else if (loadSave().firstJourney?.enabled && !loadSave().firstJourney!.entryStarted) {
+    // Fresh profiles use the normal gate, scene load, art warmup and music hold.
+    enterBattle(done => {
+      flow.mode = 'battle'; flow.levelId = '1-1'; flow.diff = 0; flow.endlessChapter = 0;
+      loadSave().firstJourney!.entryStarted = true; saveSave();
+      return director.loadScene('Main', done);
+    }, () => {
+      flow.mode = 'main';
+      loadSave().firstJourney!.entryStarted = false; saveSave();
+      if (root.isValid) root.addComponent(MainUI);
+    }, warmBattlefield('1-1', ['archer', 'sniper']));
   } else {
     root.addComponent(MainUI);
     deferUIWarmup(root, () => { warmEntryArt(); uxPreloadIdle(8000); });
@@ -91,6 +109,8 @@ function onSceneLaunched(): void {
   touchLayer.parent = canvasNode;
   touchLayer.addComponent(UITransform).setContentSize(vis.width, vis.height);
   touchLayer.addComponent(TouchFeedback);
+
+  installRenderDiagnostics();
 
   // Page artwork loads first. Only a small current-art set warms later, one image at a time.
 }

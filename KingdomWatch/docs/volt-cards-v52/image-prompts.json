@@ -1,0 +1,97 @@
+{
+  "mode": "built-in image_gen",
+  "styleReference": "assets/resources/ux/ui_icon_skill_archer.png",
+  "assets": [
+    {
+      "id": "pyro_spell",
+      "old": "ui_card_pyro_spell",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-7f65889c-f944-4216-ac55-02084bf2f595.png",
+      "filename": "ui_card_pyro_spell_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: a single finished 2D fantasy tower-defense skill upgrade icon. Square canvas, one perfect circular painted vignette filling the canvas, with a completely opaque richly illustrated interior ALL THE WAY to the circular boundary. Transparent pixels ONLY outside that perfect circle. No transparent holes, no hollow center, no square backing, no frame, no letters, no numbers, no watermark. NOTHING protrudes outside the circle. Keep all subject details and sparks inside the circular silhouette. Strong hand-painted stylized forms, bold dark contours and readable chunky shapes. Match the reference archer skill's complete circular scene, scale of shapes, shading and finish; use orange/yellow flames and red-brown backgrounds appropriate for the existing fire mage, not the archer's green palette.\nPrimary request: Redesign the existing open flaming spellbook icon as a FULLY PAINTED circular scene. Large open worn spellbook in lower center, bold living flame rising from its pages; the rest of the circle is a warm red-orange mage study lit by embers, without empty gaps. Keep recognizable book/flame concept."
+    },
+    {
+      "id": "pyro_shards",
+      "old": "ui_card_pyro_shards",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-610fbacc-f9eb-4e44-b77f-3c051fbb8d42.png",
+      "filename": "ui_card_pyro_shards_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: a single finished 2D fantasy tower-defense skill upgrade icon. Square canvas, one perfect circular painted vignette filling the canvas, with a completely opaque richly illustrated interior ALL THE WAY to the circular boundary. Transparent pixels ONLY outside that perfect circle. No transparent holes, no hollow center, no square backing, no frame, no letters, no numbers, no watermark. NOTHING protrudes outside the circle. Keep all subject details and sparks inside the circular silhouette. Strong hand-painted stylized forms, bold dark contours and readable chunky shapes. Match the reference archer skill's complete circular scene, scale of shapes, shading and finish; use orange/yellow flames and red-brown backgrounds appropriate for the existing fire mage, not the archer's green palette.\nPrimary request: Redesign the existing three fireballs icon as a FULLY PAINTED circular scene. Three large molten explosive fireballs flying diagonally through a fiery red-orange battlefield sky, dynamic trails contained within circle. The three separate fireballs are the clear focus; dense painted background fills all gaps."
+    },
+    {
+      "id": "pyro_range",
+      "old": "ui_card_pyro_range",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-67260e1a-b1de-42f5-b535-8b185606ec09.png",
+      "filename": "ui_card_pyro_range_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: a single finished 2D fantasy tower-defense skill upgrade icon. Square canvas, one perfect circular painted vignette filling the canvas, with a completely opaque richly illustrated interior ALL THE WAY to the circular boundary. Transparent pixels ONLY outside that perfect circle. No transparent holes, no hollow center, no square backing, no frame, no letters, no numbers, no watermark. NOTHING protrudes outside the circle. Keep all subject details and sparks inside the circular silhouette. Strong hand-painted stylized forms, bold dark contours and readable chunky shapes. Match the reference archer skill's complete circular scene, scale of shapes, shading and finish; use orange/yellow flames and red-brown backgrounds appropriate for the existing fire mage, not the archer's green palette.\nPrimary request: Redesign existing widening fire explosion icon as a FULLY PAINTED circular scene. A powerful ground-impact explosion viewed from above obliquely, bright shock ring expanding across cracked scorched ground, big bold concentric fiery wave. Solid painted scorched terrain visible right to circle boundary; no cutout shards protruding."
+    },
+    {
+      "id": "pyro_war",
+      "old": "ui_card_pyro_war",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-4955b572-292d-4c78-a897-dacb4cba3e18.png",
+      "filename": "ui_card_pyro_war_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: a single finished 2D fantasy tower-defense skill upgrade icon. Square canvas, one perfect circular painted vignette filling the canvas, with a completely opaque richly illustrated interior ALL THE WAY to the circular boundary. Transparent pixels ONLY outside that perfect circle. No transparent holes, no hollow center, no square backing, no frame, no letters, no numbers, no watermark. NOTHING protrudes outside the circle. Keep all subject details and sparks inside the circular silhouette. Strong hand-painted stylized forms, bold dark contours and readable chunky shapes. Match the reference archer skill's complete circular scene, scale of shapes, shading and finish; use orange/yellow flames and red-brown backgrounds appropriate for the existing fire mage, not the archer's green palette.\nPrimary request: Redesign existing flaming warhorn icon as a FULLY PAINTED circular scene for meteor damage upgrade. A large gold warhorn with a powerful orange fire blast at its bell, backed by a densely painted red firestorm. Horn, ribbon and flames must be contained in circle; do not leave negative transparent gaps."
+    },
+    {
+      "id": "pyro_ember",
+      "old": "ui_card_pyro_ember",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-2223021f-af37-4b21-8fdf-76595db374cb.png",
+      "filename": "ui_card_pyro_ember_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: a single finished 2D fantasy tower-defense skill upgrade icon. Square canvas, one perfect circular painted vignette filling the canvas, with a completely opaque richly illustrated interior ALL THE WAY to the circular boundary. Transparent pixels ONLY outside that perfect circle. No transparent holes, no hollow center, no square backing, no frame, no letters, no numbers, no watermark. NOTHING protrudes outside the circle. Keep all subject details and sparks inside the circular silhouette. Strong hand-painted stylized forms, bold dark contours and readable chunky shapes. Match the reference archer skill's complete circular scene, scale of shapes, shading and finish; use orange/yellow flames and red-brown backgrounds appropriate for the existing fire mage, not the archer's green palette.\nPrimary request: Redesign existing glowing molten ember heart icon as a FULLY PAINTED circular scene. A large cracked black-red ember core shaped like a rugged heart in intense orange flames, background densely filled with glowing coals and dark-red smoke, no empty holes; keep strong high-contrast readable central core."
+    },
+    {
+      "id": "volt_spell",
+      "old": "ui_card_volt_spell",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-2ab3c729-804a-4ba9-94e0-68c027d70d3d.png",
+      "filename": "ui_card_volt_spell_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: single finished 2D fantasy tower-defense lightning-mage skill upgrade icon. Square canvas. ONE geometrically perfect circular painted vignette, fully filling the square's width/height, with opaque, richly illustrated interior up to its circular edge. Transparent pixels ONLY outside circle. NO hollow/transparent interior, NO square backing, NO elements or sparks outside circle, NO frame/text/numbers/watermark. Match archer reference's big readable shapes, hand-painted stylized game shading, dark bold contours and fully illustrated scene. Lightning mage palette: violet/plum/indigo storm backgrounds, brilliant purple-white lightning, touches of old gold. Solid painted environments fill the gaps; avoid empty plain holes.\nPrimary request: Rebuild existing lightning spellbook icon. Large open purple and old-silver arcane tome, bright zigzag lightning pouring upward from its pages. Dense painted stormy library / thundercloud scene behind book; keep book and all lightning completely inside circular silhouette."
+    },
+    {
+      "id": "volt_shards",
+      "old": "ui_card_volt_shards",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-c305a85d-cc5b-4f09-8d55-d725ed9264d5.png",
+      "filename": "ui_card_volt_shards_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: single finished 2D fantasy tower-defense lightning-mage skill upgrade icon. Square canvas. ONE geometrically perfect circular painted vignette, fully filling the square's width/height, with opaque, richly illustrated interior up to its circular edge. Transparent pixels ONLY outside circle. NO hollow/transparent interior, NO square backing, NO elements or sparks outside circle, NO frame/text/numbers/watermark. Match archer reference's big readable shapes, hand-painted stylized game shading, dark bold contours and fully illustrated scene. Lightning mage palette: violet/plum/indigo storm backgrounds, brilliant purple-white lightning, touches of old gold. Solid painted environments fill the gaps; avoid empty plain holes.\nPrimary request: Rebuild existing square three-orb chain-lightning icon into a perfect full painted circle. Three large separate stone-armored enemy silhouettes arranged diagonally, connected by one brilliant purple-white zigzag lightning chain. Lightning clearly hops from target to target, violet storm landscape fills entire circle. Do not use a square or ragged boundary."
+    },
+    {
+      "id": "volt_war",
+      "old": "ui_card_volt_war",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-25ae66ca-c1e2-4e23-bdd7-29aadff85e62.png",
+      "filename": "ui_card_volt_war_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: single finished 2D fantasy tower-defense lightning-mage skill upgrade icon. Square canvas. ONE geometrically perfect circular painted vignette, fully filling the square's width/height, with opaque, richly illustrated interior up to its circular edge. Transparent pixels ONLY outside circle. NO hollow/transparent interior, NO square backing, NO elements or sparks outside circle, NO frame/text/numbers/watermark. Match archer reference's big readable shapes, hand-painted stylized game shading, dark bold contours and fully illustrated scene. Lightning mage palette: violet/plum/indigo storm backgrounds, brilliant purple-white lightning, touches of old gold. Solid painted environments fill the gaps; avoid empty plain holes.\nPrimary request: Rebuild existing purple warhorn icon into perfect full painted circle. A large gold warhorn wrapped in purple cloth blasts intense purple-white lightning; storm-cloud battlefield background fills circle, all horn details and electric rays contained inside boundary."
+    },
+    {
+      "id": "volt_shock",
+      "old": "ui_card_volt_shock",
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-e73f1179-f711-4e87-aea4-9ad979e96a6f.png",
+      "filename": "ui_card_volt_shock_v2.png",
+      "prompt": "Use case: stylized-concept. Asset type: single finished 2D fantasy tower-defense lightning-mage skill upgrade icon. Square canvas. ONE geometrically perfect circular painted vignette, fully filling the square's width/height, with opaque, richly illustrated interior up to its circular edge. Transparent pixels ONLY outside circle. NO hollow/transparent interior, NO square backing, NO elements or sparks outside circle, NO frame/text/numbers/watermark. Match archer reference's big readable shapes, hand-painted stylized game shading, dark bold contours and fully illustrated scene. Lightning mage palette: violet/plum/indigo storm backgrounds, brilliant purple-white lightning, touches of old gold. Solid painted environments fill the gaps; avoid empty plain holes.\nPrimary request: Rebuild existing cutout electrified orb icon into a fully painted circle. One large rough dark-armored fantasy enemy torso enveloped by clinging crackling violet electricity and a luminous orbit, readable status-effect symbol; dark violet rocky battlefield and storms fill all gaps behind it. No scattered cutout pieces beyond circle."
+    },
+    {
+      "id": "volt_pressure",
+      "old": null,
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-009eaac7-88c5-4681-a052-afe38c2cfae7.png",
+      "filename": "ui_card_volt_pressure_v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: single finished 2D fantasy tower-defense lightning-mage skill upgrade icon. Square canvas. ONE geometrically perfect circular painted vignette, fully filling the square's width/height, with opaque, richly illustrated interior up to its circular edge. Transparent pixels ONLY outside circle. NO hollow/transparent interior, NO square backing, NO elements or sparks outside circle, NO frame/text/numbers/watermark. Match archer reference's big readable shapes, hand-painted stylized game shading, dark bold contours and fully illustrated scene. Lightning mage palette: violet/plum/indigo storm backgrounds, brilliant purple-white lightning, touches of old gold. Solid painted environments fill the gaps; avoid empty plain holes.\nPrimary request: High-voltage damage upgrade: a thick concentrated purple-white lightning bolt striking an already electrified armored stone target, two bright crossing electric arcs focus on its glowing chest. Intense concentrated impact, close-up, readable central target. Painted deep-purple storm battlefield fills the circular picture; no gore."
+    },
+    {
+      "id": "volt_linger",
+      "old": null,
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-61e8e171-c9cc-49fc-aa16-baf1daa8a210.png",
+      "filename": "ui_card_volt_linger_v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: single finished 2D fantasy tower-defense lightning-mage skill upgrade icon. Square canvas. ONE geometrically perfect circular painted vignette, fully filling the square's width/height, with opaque, richly illustrated interior up to its circular edge. Transparent pixels ONLY outside circle. NO hollow/transparent interior, NO square backing, NO elements or sparks outside circle, NO frame/text/numbers/watermark. Match archer reference's big readable shapes, hand-painted stylized game shading, dark bold contours and fully illustrated scene. Lightning mage palette: violet/plum/indigo storm backgrounds, brilliant purple-white lightning, touches of old gold. Solid painted environments fill the gaps; avoid empty plain holes.\nPrimary request: Lingering electricity upgrade: a single broad armored stone enemy target remains wrapped by two strongly glowing purple lightning loops; residual electric sparks cling around its chest and feet, a small arcane hourglass beside the target signals longer duration. Full painted indigo storm ruins behind; distinctive big readable target and looping residual electricity, no empty holes."
+    },
+    {
+      "id": "volt_strikes",
+      "old": null,
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-cc656cba-38c1-4ae8-bd5e-00f26d324eec.png",
+      "filename": "ui_card_volt_strikes_v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: single finished 2D fantasy tower-defense lightning-mage skill upgrade icon. Square canvas. ONE geometrically perfect circular painted vignette, fully filling the square's width/height, with opaque, richly illustrated interior up to its circular edge. Transparent pixels ONLY outside circle. NO hollow/transparent interior, NO square backing, NO elements or sparks outside circle, NO frame/text/numbers/watermark. Match archer reference's big readable shapes, hand-painted stylized game shading, dark bold contours and fully illustrated scene. Lightning mage palette: violet/plum/indigo storm backgrounds, brilliant purple-white lightning, touches of old gold. Solid painted environments fill the gaps; avoid empty plain holes.\nPrimary request: More thunderstrikes ultimate upgrade: a broad violet thunderstorm viewed across a battlefield, FIVE separate thick bright purple-white lightning pillars strike five ground points successively, showering golden-purple sparks. Fill circular composition with towering dark purple thunderclouds above and electric-lit rocky ground below. Big clear countable lightning pillars; no thin noisy filaments."
+    },
+    {
+      "id": "volt_stun",
+      "old": null,
+      "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-c0fcb401-7c64-455b-9b69-093bc4063da3.png",
+      "filename": "ui_card_volt_stun_v1.png",
+      "prompt": "Use case: stylized-concept. Asset type: single finished 2D fantasy tower-defense lightning-mage skill upgrade icon. Square canvas. ONE geometrically perfect circular painted vignette, fully filling the square's width/height, with opaque, richly illustrated interior up to its circular edge. Transparent pixels ONLY outside circle. NO hollow/transparent interior, NO square backing, NO elements or sparks outside circle, NO frame/text/numbers/watermark. Match archer reference's big readable shapes, hand-painted stylized game shading, dark bold contours and fully illustrated scene. Lightning mage palette: violet/plum/indigo storm backgrounds, brilliant purple-white lightning, touches of old gold. Solid painted environments fill the gaps; avoid empty plain holes.\nPrimary request: Thunder stun ultimate upgrade: a thick purple-white lightning bolt crashes onto the helmet of one large armored stone enemy target, target staggered with three big golden stars orbiting its helmet. Strong readable bolt, stars and staggered target, violet storm battlefield fully painted inside circle. No blood, no words, no graphic arrows."
+    }
+  ]
+}

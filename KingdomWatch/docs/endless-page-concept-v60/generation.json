@@ -1,0 +1,15 @@
+{
+  "tool": "built-in image_gen",
+  "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-2ab67f4d-5f38-485a-be93-d0672feb169e.png",
+  "output": "D:\\AI\\S4Game\\KingdomWatch\\docs\\endless-page-concept-v60\\endless-page-concept-v60.png",
+  "width": 887,
+  "height": 1774,
+  "sha256": "e27582b51a33a8a30eb9abb4f4f9fd1d3b56a2b1792dc9f8d7656732ab348034",
+  "copiedOriginalBytes": true,
+  "purpose": "secondary-page art mockup; not integrated into live game",
+  "prompt": "prompt.txt",
+  "references": [
+    "docs/lobby-ui-quiet-v1/approved-direction.png",
+    "assets/resources/scenes/bg_base_endless_v59.png"
+  ]
+}

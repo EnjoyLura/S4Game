@@ -1,0 +1,145 @@
+{
+  "originalFilesChecked": 1884,
+  "changedExistingFiles": [
+    "assets/scripts/battle/Hero.ts",
+    "assets/scripts/battle/Projectile.ts",
+    "assets/scripts/battle/UltimateTiming.ts",
+    "assets/scripts/config/Cards.ts",
+    "assets/scripts/ui/BattleComicPanels.ts",
+    "assets/scripts/ui/Panels.ts",
+    "assets/scripts/ui/PickArt.ts"
+  ],
+  "allOriginalMediaUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "otherHeroCombatAndCardEffectsUnchanged": true,
+  "cardCount": 17,
+  "rarityCounts": {
+    "white": 2,
+    "blue": 7,
+    "purple": 5,
+    "gold": 3
+  },
+  "cards": [
+    {
+      "id": "mora_attack",
+      "rarity": "white",
+      "maxStacks": 5
+    },
+    {
+      "id": "mora_aspd",
+      "rarity": "white",
+      "maxStacks": 4
+    },
+    {
+      "id": "mora_crit_rate",
+      "rarity": "blue",
+      "maxStacks": 4
+    },
+    {
+      "id": "mora_crit_dmg",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "mora_spell",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "mora_range",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "mora_cd",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "mora_chill",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "mora_freeze",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "mora_war",
+      "rarity": "blue",
+      "maxStacks": 3
+    },
+    {
+      "id": "mora_linger",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "mora_freeze_linger",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "mora_eager",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "mora_brittle",
+      "rarity": "purple",
+      "maxStacks": 2
+    },
+    {
+      "id": "mora_glacier",
+      "rarity": "gold",
+      "maxStacks": 1
+    },
+    {
+      "id": "mora_unlock_skill",
+      "rarity": "gold",
+      "maxStacks": 1
+    },
+    {
+      "id": "mora_unlock_ult",
+      "rarity": "gold",
+      "maxStacks": 1
+    }
+  ],
+  "generatedIcons": 8,
+  "redrawnIceIcons": 7,
+  "newIceIcons": 1,
+  "designValues": {
+    "ultimateHits": 3,
+    "ultimateContactSeconds": [
+      0.5,
+      1.7,
+      2.9
+    ],
+    "ultimateBaseTotalDamageUnchanged": true,
+    "fieldBaseFreezeSeconds": 1.5,
+    "freezeExtensionPerCard": 1,
+    "freezeExtensionMaxStacks": 2,
+    "fieldBaseMaxFreezeSeconds": 3.5,
+    "fieldFreezeWithLevel80AndSkill15": 4.2,
+    "allSlowExtensionMaxSeconds": 2,
+    "normalCardFreezeChanceWithoutBreakthrough": [
+      0,
+      0.15,
+      0.3
+    ],
+    "normalCardFreezeChanceWithBreakthrough": [
+      0.15,
+      0.3,
+      0.45
+    ],
+    "normalFreezeSeconds": 0.6,
+    "coldCardMaxBonus": 0.6,
+    "ultimateGoldFreezeSeconds": 1.5,
+    "ultimateRepeatedFreeze": "refresh max remaining, not additive",
+    "bossFreezeImmune": true,
+    "slowRatioCap": 0.9,
+    "chargeRequirementMultiplier": 0.5625
+  }
+}

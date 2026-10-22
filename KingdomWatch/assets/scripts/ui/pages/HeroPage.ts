@@ -22,6 +22,11 @@ import { HERO_INK, heroActionY, heroDialog, heroInventoryPaper, heroLobbyPortrai
 
 import { DETAIL_ACTION_FOOTER, detailBody, detailFooter, detailGroup, detailGroupHeight, detailHeight, detailOverview, detailParagraph, detailSection } from '../DetailDialog';
 import { TRAINING_INK, TRAINING_SUB, trainingComparison } from '../TrainingChrome';
+import { finishBowLesson, pendingBowLesson, skipBowLesson } from '../../core/FirstJourney';
+import { postBowCampTab } from '../../core/SecondJourney';
+import { flow } from '../../core/Flow';
+import { tutorialFocus } from '../TutorialFocus';
+import { whenUIArtReady } from '../UIArtReady';
 
 const SLOTS: EquipKind[] = ['helm', 'acc', 'glove', 'armor'];
 const BAG_SIZE = 120, BAG_STEP = 130, BAG_COL_STEP = 138;
@@ -31,11 +36,18 @@ const bagSt: { tab: 'weapon' | 'equip' | 'mat'; offsets: Record<string, number> 
 
 export function buildHeroes(ctx: PageCtx): void {
   const root = ctx.screens, sv = loadSave();
+  const lessonBow = pendingBowLesson();
+  if (lessonBow) { sv.curHero = 'archer'; bagSt.tab = 'weapon'; bagSt.offsets['archer:weapon'] = 0; }
   const owned = Object.keys(HERO_DEFS).filter(id => sv.heroes[id]?.owned);
   if (!owned.includes(sv.curHero)) sv.curHero = owned[0] || 'archer';
   const content = N('heroContent', root);
   const body = N('heroBody', content);
   render();
+  if (lessonBow) whenUIArtReady(ctx.screens, () => {
+    if (!content.isValid || !content.activeInHierarchy || !pendingBowLesson()) return;
+    // Show the normal item detail and its real wear transaction; never auto-equip.
+    warehouseEquipModal(ctx, 'archer', lessonBow, true);
+  });
 
   function render(): void {
     refreshUI(body, () => {
@@ -126,7 +138,7 @@ function buildLobbyRoster(parent: Node, top: number, selected: string, select: (
     const slot = heroLobbyPortrait(rail.content, rail.x(i), def.id, active, owned, rail.cardWidth);
     slot.name = 'heroSelect:' + def.id;
     pressAction(slot, () => {
-      if (!owned) { toast('前往商店解锁该英雄'); return; }
+      if (!owned) { toast(def.id === 'pyro' ? '通关普通1-2免费获得火法师' : '前往商店解锁该英雄'); return; }
       select(def.id);
     });
   });
@@ -299,8 +311,16 @@ function openWeaponBag(ctx: PageCtx, hid: string, dim: Node): void {
 }
 function replaceEquip(ctx: PageCtx, hid: string, inst: EquipInst, dim: Node): void {
   const result = wearEquip(hid, EQUIPS[inst.defId].kind, inst.uid);
+  if (result.ok) finishBowLesson(inst.uid, hid);
   toast(result.msg, { kind: result.ok ? 'success' : 'warning', title: result.ok ? '装备替换成功' : '无法穿戴' });
-  if (result.ok) dismissUI(dim, ctx.refresh, false);
+  if (result.ok) dismissUI(dim, () => {
+    const tab = hid === 'archer' && inst.uid === loadSave().firstJourney!.rewardUid ? postBowCampTab() : null;
+    if (tab !== null && ctx.navigate) {
+      loadSave().curHero = 'archer'; saveSave();
+      flow.levelReturn = { id: '1-2', diff: 0 };
+      ctx.navigate(tab);
+    } else ctx.refresh();
+  }, false);
 }
 function unequipFromDialog(ctx: PageCtx, hid: string, kind: EquipKind, inst: EquipInst, dim: Node): void {
   if (wornInst(hid, kind)?.uid !== inst.uid) {
@@ -315,13 +335,19 @@ function unequipFromDialog(ctx: PageCtx, hid: string, kind: EquipKind, inst: Equ
   toast(EQUIPS[inst.defId].name + '已放回背包', { kind: 'success', title: '装备已卸下' });
   dismissUI(dim, ctx.refresh, false);
 }
-function warehouseEquipModal(ctx: PageCtx, hid: string, inst: EquipInst): void {
+function warehouseEquipModal(ctx: PageCtx, hid: string, inst: EquipInst, teaching = false): void {
   const d = EQUIPS[inst.defId], dim = equipmentDim(ctx, 'heroWarehouseDialog');
   const panel = equipDetailPanel(dim, 0, 0, inst, false, true, hid), weapon = d.kind === 'weapon', by = heroActionY(panel);
   const starter = !!WEAPONS[d.id]?.starter, fits = !weapon || weaponFits(hid, d.id);
   mainLabel(panel, 0, by + 66, starter ? '初始武器 · 永久保留' : '出售价 ' + fmt(sellPrice(inst)) + ' 金币', { size: 20, color: COMIC.sub, w: 500, h: 30 });
   comicButton(panel, -139, by, 248, 58, starter ? '初始武器' : '出售', () => confirmDismantle(ctx, inst, '出售'), { tone: 'dark', enabled: !starter, name: 'heroSellOpen' });
-  comicButton(panel, 139, by, 248, 58, fits ? '穿戴' : '职业不符', () => replaceEquip(ctx, hid, inst, dim), { name: 'heroWear', enabled: fits, tone: fits ? 'green' : 'muted', sound: 'confirm' });
+  const wear = comicButton(panel, 139, by, 248, 58, fits ? '穿戴' : '职业不符', () => replaceEquip(ctx, hid, inst, dim), { name: 'heroWear', enabled: fits, tone: fits ? 'green' : 'muted', sound: 'confirm' });
+  if (teaching) whenUIArtReady(dim, () => {
+    if (!dim.isValid || !pendingBowLesson()) return;
+    tutorialFocus(dim, wear, '首胜获得猎风长弓！点击穿戴，为弓箭手提升战力。',
+      () => replaceEquip(ctx, hid, inst, dim),
+      () => { skipBowLesson(); dismissUI(dim); });
+  });
 }
 function confirmDismantle(ctx: PageCtx, inst: EquipInst, action: '出售' | '分解'): void {
   const d = EQUIPS[inst.defId], contentH = detailGroupHeight(1)+38+50+8;
@@ -453,7 +479,7 @@ export function storyModal(ctx: PageCtx, hid: string): void {
   const content = detailBody(panel,contentH,footerH,'heroStory');
   detailParagraph(content,0,'背景故事',def.story,textH,620,true);
   detailFooter(panel,footerH);
-  mainLabel(panel,0,heroActionY(panel)+66,owned?'已解锁':'商店解锁',
+  mainLabel(panel,0,heroActionY(panel)+66,owned?'已解锁':hid==='pyro'?'通关普通1-2免费获得':'商店解锁',
     {size:20,color:owned?COMIC.greenShade:COMIC.sub,bold:true,w:500,h:28});
   comicButton(panel,0,heroActionY(panel),248,58,'关闭',() => dismissUI(panel.parent),
     {tone:'dark',name:'heroStoryClose',sound:'close'});

@@ -1,0 +1,88 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-codex-battle-art-v49-20261018-230756",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "entryVersion": "1792336024",
+  "game": "https://kingdom-watch.pages.dev/?v=codex-battle-art-v49-1792336024",
+  "originalFilesChecked": 1848,
+  "changedExistingFiles": [
+    "assets/scripts/ui/pages/BasePage.ts"
+  ],
+  "addedFiles": [],
+  "priorPreviewFilesPreserved": 793,
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "artMapping": {
+    "goblin_worker": {
+      "atlas": "battle_mob_anim_v1",
+      "frame": "goblin_worker_w0",
+      "rect": [
+        0,
+        0,
+        160,
+        160
+      ]
+    },
+    "goblin_slinger": {
+      "atlas": "battle_mob_anim_v1",
+      "frame": "goblin_slinger_w0",
+      "rect": [
+        1120,
+        160,
+        160,
+        160
+      ]
+    },
+    "goblin_shaman": {
+      "atlas": "battle_mob_anim_v1",
+      "frame": "goblin_shaman_w0",
+      "rect": [
+        160,
+        480,
+        160,
+        160
+      ]
+    },
+    "wolf_rider": {
+      "atlas": "battle_mob_anim_v1",
+      "frame": "wolf_rider_w0",
+      "rect": [
+        160,
+        800,
+        160,
+        160
+      ]
+    },
+    "goblin_brute": {
+      "atlas": "battle_mob_anim_v1",
+      "frame": "goblin_brute_w0",
+      "rect": [
+        320,
+        1120,
+        160,
+        160
+      ]
+    },
+    "goblin_king": {
+      "atlas": "battle_mobs_v2",
+      "frame": "goblin_king",
+      "rect": [
+        1053,
+        536,
+        454,
+        464
+      ]
+    }
+  },
+  "allOriginalMediaUnchanged": true,
+  "scope": "Codex list/detail/locked silhouettes use the five active battle walk-0 frames; king retains static fallback. No battle art or gameplay changes; rejected replacement concepts not integrated.",
+  "manualAcceptance": "No tests, game, browser, combat simulation or audio playback. User performs visual acceptance.",
+  "deployment": "https://2336be20.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.6a02d.js?v=1792336024",
+    "finalUrl": "https://kingdom-watch.pages.dev/?v=codex-battle-art-v49-1792336024"
+  }
+}

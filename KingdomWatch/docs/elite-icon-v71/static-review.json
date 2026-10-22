@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-22",
+  "originalGameFiles": 2076,
+  "changedGameFiles": [
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/battle/MonsterTraits.ts"
+  ],
+  "addedGameFiles": [],
+  "removedGameFiles": [],
+  "mediaFilesPreserved": 756,
+  "typeDiagnostics": {
+    "before": 10,
+    "after": 10,
+    "new": 0
+  },
+  "sourceReview": {
+    "traitsOnlyChangesIconAnchorAndRemovesBacking": true,
+    "monsterOnlyAddsReadonlyHeadGeometry": true,
+    "iconShapesAndColorsPreserved": true,
+    "fallbackUsesFullSpriteHeight": true,
+    "clipBoundsStableAcrossFrames": true,
+    "combatRulesUntouched": true
+  },
+  "illustrativeBruteOffsets": {
+    "radius": 34,
+    "oldIconBottom": 120.80000000000001,
+    "newWalkIconBottom": 88.07600000000001,
+    "newStaticIconBottom": 109.02000000000001
+  },
+  "validation": "Source and file inspection, type diagnostics, production build and HTTP file checks only; no game/browser/test/simulation/audio executed."
+}

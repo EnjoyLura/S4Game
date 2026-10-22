@@ -1,0 +1,334 @@
+{
+  "frames": {
+    "goblin_king_w000": [
+      0,
+      0,
+      512,
+      576
+    ],
+    "goblin_king_w001": [
+      512,
+      0,
+      512,
+      576
+    ],
+    "goblin_king_w002": [
+      1024,
+      0,
+      512,
+      576
+    ],
+    "goblin_king_w003": [
+      1536,
+      0,
+      512,
+      576
+    ],
+    "goblin_king_w004": [
+      2048,
+      0,
+      512,
+      576
+    ],
+    "goblin_king_w005": [
+      2560,
+      0,
+      512,
+      576
+    ],
+    "goblin_king_w006": [
+      0,
+      576,
+      512,
+      576
+    ],
+    "goblin_king_w007": [
+      512,
+      576,
+      512,
+      576
+    ],
+    "goblin_king_w008": [
+      1024,
+      576,
+      512,
+      576
+    ],
+    "goblin_king_w009": [
+      1536,
+      576,
+      512,
+      576
+    ],
+    "goblin_king_w010": [
+      2048,
+      576,
+      512,
+      576
+    ],
+    "goblin_king_w011": [
+      2560,
+      576,
+      512,
+      576
+    ],
+    "goblin_king_w012": [
+      0,
+      1152,
+      512,
+      576
+    ],
+    "goblin_king_w013": [
+      512,
+      1152,
+      512,
+      576
+    ],
+    "goblin_king_w014": [
+      1024,
+      1152,
+      512,
+      576
+    ],
+    "goblin_king_w015": [
+      1536,
+      1152,
+      512,
+      576
+    ],
+    "goblin_king_w016": [
+      2048,
+      1152,
+      512,
+      576
+    ],
+    "goblin_king_w017": [
+      2560,
+      1152,
+      512,
+      576
+    ],
+    "goblin_king_w018": [
+      0,
+      1728,
+      512,
+      576
+    ],
+    "goblin_king_w019": [
+      512,
+      1728,
+      512,
+      576
+    ],
+    "goblin_king_w020": [
+      1024,
+      1728,
+      512,
+      576
+    ],
+    "goblin_king_w021": [
+      1536,
+      1728,
+      512,
+      576
+    ],
+    "goblin_king_w022": [
+      2048,
+      1728,
+      512,
+      576
+    ],
+    "goblin_king_w023": [
+      2560,
+      1728,
+      512,
+      576
+    ],
+    "goblin_king_w024": [
+      0,
+      2304,
+      512,
+      576
+    ],
+    "goblin_king_w025": [
+      512,
+      2304,
+      512,
+      576
+    ],
+    "goblin_king_w026": [
+      1024,
+      2304,
+      512,
+      576
+    ],
+    "goblin_king_w027": [
+      1536,
+      2304,
+      512,
+      576
+    ],
+    "goblin_king_w028": [
+      2048,
+      2304,
+      512,
+      576
+    ],
+    "goblin_king_w029": [
+      2560,
+      2304,
+      512,
+      576
+    ]
+  },
+  "animation": {
+    "name": "goblin_king_walk",
+    "loop": true,
+    "fps": 24,
+    "seconds": 1.25,
+    "frameOrder": [
+      "goblin_king_w000",
+      "goblin_king_w001",
+      "goblin_king_w002",
+      "goblin_king_w003",
+      "goblin_king_w004",
+      "goblin_king_w005",
+      "goblin_king_w006",
+      "goblin_king_w007",
+      "goblin_king_w008",
+      "goblin_king_w009",
+      "goblin_king_w010",
+      "goblin_king_w011",
+      "goblin_king_w012",
+      "goblin_king_w013",
+      "goblin_king_w014",
+      "goblin_king_w015",
+      "goblin_king_w016",
+      "goblin_king_w017",
+      "goblin_king_w018",
+      "goblin_king_w019",
+      "goblin_king_w020",
+      "goblin_king_w021",
+      "goblin_king_w022",
+      "goblin_king_w023",
+      "goblin_king_w024",
+      "goblin_king_w025",
+      "goblin_king_w026",
+      "goblin_king_w027",
+      "goblin_king_w028",
+      "goblin_king_w029"
+    ],
+    "frameDurations": [
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664,
+      0.041666666666666664
+    ]
+  },
+  "cycle": {
+    "seconds": 1.25,
+    "cells": 30
+  },
+  "source": {
+    "name": "lens-api-task_n2IefTfJ6jnffKf4AJJr3xDlznfuBVD0.mp4",
+    "sha256": "03fc71c9c2386795dafbe9cdbc281ebbf93773bfc10da42f0b02a6ab37221ec8",
+    "size": [
+      1344,
+      768
+    ],
+    "fps": 24,
+    "frameCount": 56,
+    "selectedFramesZeroBased": [
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52
+    ],
+    "excludedMatchingPhase": 53
+  },
+  "layout": {
+    "cellSize": [
+      512,
+      576
+    ],
+    "columns": 6,
+    "rows": 5,
+    "sourceUnionBounds": [
+      305,
+      35,
+      1041,
+      768
+    ],
+    "scale": 0.6521739130434783,
+    "imageOffset": [
+      16,
+      82
+    ],
+    "pivotNormalized": [
+      0.5,
+      0.9722222222222222
+    ]
+  },
+  "processing": {
+    "key": "edge-connected black <=12 RGB max",
+    "matteClosingFilterPx": 7,
+    "matteEdgeExpansionPx": 1,
+    "matteFeatherSourcePx": 0.4,
+    "fixedCropAndScale": true,
+    "reverse": false,
+    "interpolation": false,
+    "crossfade": false
+  }
+}

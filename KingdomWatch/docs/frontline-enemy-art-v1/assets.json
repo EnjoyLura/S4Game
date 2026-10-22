@@ -1,0 +1,36 @@
+{
+  "method": "built-in image_gen, genuine transparent output",
+  "status": "Concept art only; not user-approved and not integrated; no animation or gameplay changes",
+  "assets": [
+    {
+      "path": "D:\\AI\\S4Game\\KingdomWatch\\docs\\frontline-enemy-art-v1\\sources\\frontline-raider-melee-v1.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "transparentPixels": 1034355,
+      "opaquePixels": 1995,
+      "sha256": "5c6ef5300d698452c35dbffc57e2b73828a534094a602e50e9070392f1851f8f"
+    },
+    {
+      "path": "D:\\AI\\S4Game\\KingdomWatch\\docs\\frontline-enemy-art-v1\\sources\\frontline-raider-ranged-v1.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "transparentPixels": 1142758,
+      "opaquePixels": 2408,
+      "sha256": "ee8064f1e5225bc24731c55966e87a4576cd5a844991a37e8ffaa14dd4744436"
+    }
+  ]
+}

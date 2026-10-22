@@ -12,6 +12,7 @@ import { artSprite } from './Ux';
 import { COMIC, comicArt, comicButton, comicPlate } from './ComicUI';
 import { heroPortrait } from './HeroComic';
 import { bindButton } from './ButtonFeedback';
+import { pickCardIcon } from './PickArt';
 
 interface PickCallbacks { onPick: (card: CardDef) => void; onRefreshRequest: () => void; }
 interface PauseOptions {
@@ -164,7 +165,8 @@ export class BattleComicPanels {
       text(header, 0, 0, card.name, { size: 25, bold: true, color: card.rarity === 'white' || card.rarity === 'gold' ? COMIC.text : COMIC.cream, w: 192, h: 42 });
       const circle = N('pickIconSeat', frame, 0, 65).addComponent(Graphics); circle.fillColor = C('#E6DFCF'); circle.circle(0, 0, 60); circle.fill();
       const key = card.art || (card.unlocks ? 'ui_icon_' + card.unlocks + '_' + card.owner : CARD_ART[card.id] || 'ui_card_' + card.id);
-      artSprite(frame, 0, 65, 118, 118, key, { sliced: false });
+      if (card.owner === 'pyro' || card.owner === 'volt' || card.owner === 'mora') pickCardIcon(frame, 0, 65, 118, card);
+      else artSprite(frame, 0, 65, 118, 118, key, { sliced: false });
       if (card.owner !== 'global') {
         heroPortrait(frame, -56, -23, 36, card.owner);
         text(frame, 27, -23, HERO_DEFS[card.owner]?.name.split('·')[0] || '', { size: 21, bold: true, w: 110, h: 32 });

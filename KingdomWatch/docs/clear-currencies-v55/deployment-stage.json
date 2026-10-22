@@ -1,0 +1,51 @@
+{
+  "originalFilesChecked": 1900,
+  "changedExistingFiles": [
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/config/LevelDifficulty.ts",
+    "assets/scripts/ui/BattleRewardPanel.ts",
+    "assets/scripts/ui/LevelLootPreview.ts",
+    "assets/scripts/ui/Panels.ts",
+    "assets/scripts/ui/SettlementPanelSkin.ts"
+  ],
+  "addedFiles": [],
+  "includedPriorChange": "Card offer weights v54: stats .1 / combat 3 / support 1; no separate v54 deployment.",
+  "totalChangedScriptsSinceV53": 7,
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "allOriginalMediaUnchanged": true,
+  "productionResourceFilesUnchanged": 1826,
+  "rewardRules": {
+    "gold": "Original kill/star/first-win formula and ad doubling unchanged",
+    "diamondsByDifficulty": [
+      10,
+      15,
+      20
+    ],
+    "repeatClearGrantsDiamonds": true,
+    "failureGrantsDiamonds": false,
+    "exitGrantsDiamonds": false,
+    "adDoublesDiamonds": false,
+    "clearMaterialsRemoved": true,
+    "runExperienceUnchanged": true,
+    "firstWinEquipmentAndHeroesUnchanged": true,
+    "starChestsUnchanged": true,
+    "oldInventoryUnchanged": true
+  },
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-clear-currencies-v55-20261019-020014",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "priorPreviewFilesPreserved": 793,
+  "entryVersion": "1792346363",
+  "game": "https://kingdom-watch.pages.dev/?v=clear-currencies-v55-1792346363",
+  "manualAcceptance": "Static source/assets/type/build/HTTP only; no tests, game, browser, combat simulation or audio. User manual acceptance.",
+  "deployment": "https://577b41e3.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.8137c.js?v=1792346363",
+    "mainBundle": "assets/main/index.65be8.js",
+    "mainBundleHashMatches": true
+  }
+}

@@ -1,0 +1,336 @@
+--- before/assets/scripts/battle/BattleDirector.ts
++++ after/assets/scripts/battle/BattleDirector.ts
+@@ -19,7 +19,6 @@
+ import { claimEarlyFirstWinGold } from '../core/EarlyEconomy';
+ import { tutorialFocus } from '../ui/TutorialFocus';
+ import { starKey, squadList, unlockCodex, advanceUnlock, equipAgg, heroState, heroStats, heroBtAgg, keepHp, keepShield } from '../core/GameData';
+-import { grantStageMaterials } from '../core/StageLoot';
+ import { BattleLoot, DeathPosition } from './BattleLoot';
+ import { flow } from '../core/Flow';
+ import { MonsterManager } from './Monster';
+@@ -579,7 +578,6 @@
+       goldFloor,
+       loot,
+       reviveRatio: REVIVE_RATIO,
+-      xp: Math.floor(this.xpEarned),
+       onRevive: (done: (ok: boolean) => void) => {
+         AdService.showRewarded('revive', () => {
+           if (this.leaving || !isValid(this, true)) return;
+@@ -617,7 +615,6 @@
+     const battleGold = Math.floor(this.goldEarned + this.levelDef.baseGold * (1 + stars * 0.1));
+     const sv = loadSave();
+     const loot = this.loot.collectAll();
+-    loot.materials = grantStageMaterials(this.levelDef);
+     const sk = starKey(this.levelDef.id, this.levelDef.difficulty);
+     const firstWinGold = claimEarlyFirstWinGold(this.levelDef.id, this.levelDef.difficulty, sv.stars[sk] || 0);
+     const reward = battleGold + firstWinGold;
+@@ -629,7 +626,9 @@
+     loot.equipment.push(...fifthLevelVictory(this.levelDef.id, this.levelDef.difficulty, sv.stars[sk] || 0));
+     sv.stars[sk] = Math.max(sv.stars[sk] || 0, stars);
+     if (this.levelDef.id === '1-2') sv.speedUnlocked = true;
+-    // First-win gold/receipt/stars/equipment share this write; ordinary and ad credits keep their existing delta guard.
++    // Only this guarded win transition grants diamonds; panel redraws and ads never grant them again.
++    sv.diamonds += this.levelDef.baseDiamonds;
++    // Diamonds/first-win receipts/stars/equipment share this write; gold keeps its existing delta guard.
+     this.creditBattleGold(reward);
+     saveSave();
+     advanceUnlock(this.levelDef.id);   // 通关推进主线解锁（商店英雄/装备的"通关 X 解锁"）
+@@ -638,9 +637,9 @@
+       stars,
+       loot,
+       gold: reward,
++      diamonds: this.levelDef.baseDiamonds,
+       firstWinGold,
+       ratio: this.line.ratio,
+-      xp: Math.floor(this.xpEarned),
+       onDouble: (done: (ok: boolean) => void) => {
+         AdService.showRewarded('double', () => {
+           if (this.leaving || !isValid(this, true) || this.doubleRewarded) return;
+--- before/assets/scripts/config/LevelDifficulty.ts
++++ after/assets/scripts/config/LevelDifficulty.ts
+@@ -13,15 +13,16 @@
+ export interface GearWeight { id: string; weight: number; }
+ export interface ChestReward { gold?: number; diamonds?: number; }
+ export const DIFFICULTIES = [
+-  { name: '普通', waves: 10, statMul: 1, goldMul: 1, gearChance: 0, formation: '步兵推进 · 逐步增援' },
+-  { name: '精英', waves: 12, statMul: 1.6, goldMul: 1.5, gearChance: .001, formation: '骑兵夹击 · 精英压阵' },
+-  { name: '地狱', waves: 15, statMul: 2.4, goldMul: 2.2, gearChance: .0018, formation: '萨满支援 · 多轮精英军团' },
++  { name: '普通', waves: 10, statMul: 1, goldMul: 1, diamonds: 10, gearChance: 0, formation: '步兵推进 · 逐步增援' },
++  { name: '精英', waves: 12, statMul: 1.6, goldMul: 1.5, diamonds: 15, gearChance: .001, formation: '骑兵夹击 · 精英压阵' },
++  { name: '地狱', waves: 15, statMul: 2.4, goldMul: 2.2, diamonds: 20, gearChance: .0018, formation: '萨满支援 · 多轮精英军团' },
+ ];
+ export function difficultyIndex(value: number): number {
+   return Number.isFinite(value) ? Math.max(0, Math.min(2, Math.floor(value))) : 0;
+ }
+ export interface ChallengeDef extends LevelDef {
+   difficulty: number;
++  baseDiamonds: number;
+   materials: MaterialReward[];
+   gearPool: GearWeight[];
+ }
+@@ -42,7 +43,7 @@
+   if (cache[key]) return cache[key];
+   // Equipment pools and reinforcements follow chapter tiers, never the flat 0..29 stage index.
+   const stage = campaignStage(base.id), s = (stage?.chapter || 1) - 1;
+-  const progress = Math.floor(((stage?.stage || 1) - 1) / 4), waves: WaveDef[] = [];
++  const waves: WaveDef[] = [];
+   base.waves.forEach((wave, i) => {
+     const groups = wave.groups.map(g => ({ ...g,
+       count: g.mob === 'goblin_king' ? g.count : d ? Math.ceil(g.count * (d === 1 ? 1.05 : 1.1)) : g.count,
+@@ -67,9 +68,8 @@
+       if (i === 8) waves.push(reinforcement([group('goblin_brute', 4 + s, 1.4), group('goblin_shaman', 4 + s, 1.8, 2), group('goblin_slinger', 14 + 4 * s, .75, 3)]));
+     }
+   });
+-  const materials: MaterialReward[] = [{ id: 'mat_stone', n: (d === 0 ? 2 + s : d === 1 ? 4 + 2 * s : 6 + 3 * s) + progress }];
+-  if (d) materials.push({ id: 'mat_iron', n: d === 1 ? 1 + s : 2 + s });
+-  if (d === 2) materials.push({ id: 'mat_dust', n: 1 + s });
++  // 通关常规奖励改为金币和钻石；材料背包及其他材料来源保留。
++  const materials: MaterialReward[] = [];
+   // Split the old green-bow share across four weapon types; total equipment/weapon odds stay unchanged.
+   const gearPool = d ? POOLS[s][d - 1].reduce((rows, weight, i) => {
+     if (i === 0) for (const id of ['wpn_bow', 'wpn_green_crossbow', 'wpn_green_book', 'wpn_green_staff']) rows.push({ id, weight: weight / 4 });
+@@ -83,11 +83,8 @@
+   const fifth = base.id === '1-5' && d === 0;
+   const sixth = base.id === '1-6' && d === 0;
+   const seventh = base.id === '1-7' && d === 0;
+-  // Repeatable cultivation materials are separate from first-win equipment receipts.
+-  if (fourth || fifth) materials[0].n = 4;
+-  if (sixth) materials[0].n = 5;
+-  if (seventh) materials[0].n = 6;
+   return cache[key] = { ...base, difficulty: d, baseGold: seventh ? 160 : sixth ? 140 : fifth ? 120 : fourth ? 100 : Math.round(base.baseGold * DIFFICULTIES[d].goldMul),
++    baseDiamonds: DIFFICULTIES[d].diamonds,
+     waves: first ? FIRST_LEVEL_WAVES : second ? SECOND_LEVEL_WAVES : third ? THIRD_LEVEL_WAVES : fourth ? FOURTH_LEVEL_WAVES : fifth ? FIFTH_LEVEL_WAVES : sixth ? SIXTH_LEVEL_WAVES : seventh ? SEVENTH_LEVEL_WAVES : waves,
+     fixedWaves: first || second || third || fourth || fifth || sixth || seventh, materials, gearPool };
+ }
+--- before/assets/scripts/ui/BattleRewardPanel.ts
++++ after/assets/scripts/ui/BattleRewardPanel.ts
+@@ -10,12 +10,12 @@
+ import { shopQualitySocket } from './LobbyChrome';
+ import { label, N } from './UIKit';
+ 
+-type Counter = 'gold' | 'xp';
++type Counter = 'gold' | 'diamonds' | 'xp';
+ interface RewardItem {
+   id: string; name: string; amount: number; quality: number; counter?: Counter; hero?: boolean;
+ }
+ interface BattleRewardOptions {
+-  top: number; heading: string; gold: number; xp: number; note: string;
++  top: number; heading: string; gold: number; diamonds?: number; xp?: number; note: string;
+   loot?: StageLootSummary;
+   onInspect?: () => void;
+   onCounter?: (kind: Counter, node: Node, target: number) => void;
+@@ -41,7 +41,7 @@
+     shopQualitySocket(card, 0, 0, side, item.quality);
+     if (item.counter) {
+       const art = N('battleRewardIcon:' + item.id, card);
+-      battleArtIcon(art, item.counter === 'gold' ? 'ui_icon_coin' : 'ui_icon_exp', side - 16);
++      battleArtIcon(art, item.counter === 'gold' ? 'ui_icon_coin' : item.counter === 'diamonds' ? 'ui_icon_diamond' : 'ui_icon_exp', side - 16);
+     } else if (item.hero) heroPortrait(card, 0, 3, side - 16, item.id);
+     else gearArt(card, 0, 3, side - 16, side - 16, item.id);
+     const amount = label(card, 0, -side / 2 + 14, (item.counter ? '' : '×') + item.amount, {
+@@ -49,7 +49,7 @@
+       w: side - 10, h: 30, shrink: true, outline: '#142431', outlineW: 2,
+     });
+     if (item.counter) {
+-      amount.name = item.counter === 'gold' ? 'settlementGoldNumber' : 'settlementXpNumber';
++      amount.name = item.counter === 'gold' ? 'settlementGoldNumber' : item.counter === 'diamonds' ? 'settlementDiamondNumber' : 'settlementXpNumber';
+       onCounter?.(item.counter, amount, item.amount);
+     }
+     label(card, 0, -side / 2 - 15, item.name, {
+@@ -81,11 +81,17 @@
+   label(panel, 0, y(24), options.heading, { size: 25, color: '#FFE3A2', bold: true, w: 580, h: 34 });
+   const earned: RewardItem[] = [
+     { id: 'gold', name: '金币', amount: Math.max(0, Math.floor(options.gold)), quality: 2, counter: 'gold' },
+-    { id: 'xp', name: '本局经验', amount: Math.max(0, Math.floor(options.xp)), quality: 2, counter: 'xp' },
+     ...(options.loot?.materials || []).filter(item => item.n > 0).map(item => ({
+       id: item.id, name: itemName(item.id), amount: item.n, quality: 1,
+     })),
+   ];
++  if ((options.diamonds || 0) > 0) earned.splice(1, 0, {
++    id: 'diamonds', name: '钻石', amount: Math.floor(options.diamonds!), quality: 2, counter: 'diamonds',
++  });
++  // XP is a run statistic, shown in pause only when explicitly requested, never a clear reward.
++  if (options.xp !== undefined) earned.splice(1, 0, {
++    id: 'xp', name: '本局经验', amount: Math.max(0, Math.floor(options.xp)), quality: 2, counter: 'xp',
++  });
+   rewardRow(panel, 'earnedBattleRewards', y(87), earned, 76, options.onCounter);
+   if (hasEquipment) {
+     for (const side of [-1, 1]) feedbackSurface(panel, 'equipmentSectionRule', 'line', side * 238, y(170), 124, 1, '#A8B4B9', .32);
+--- before/assets/scripts/ui/LevelLootPreview.ts
++++ after/assets/scripts/ui/LevelLootPreview.ts
+@@ -38,7 +38,7 @@
+ export function stageGuaranteedRewards(parent: Node, x: number, y: number, width: number, level: ChallengeDef,
+   onSelect: (id: string) => void, height = 76, campaign = false): void {
+   const firstWinGold = earlyFirstWinGold(level.id, level.difficulty);
+-  const entries = [{ id: 'coin', n: level.baseGold + firstWinGold }, ...level.materials];
++  const entries = [{ id: 'coin', n: level.baseGold + firstWinGold }, { id: 'diamond', n: level.baseDiamonds }, ...level.materials];
+   if (firstBowAvailable(level.id, level.difficulty)) entries.push({ id: 'wpn_bow', n: 1 });
+   if (firstBookAvailable(level.id, level.difficulty)) entries.push({ id: 'wpn_green_book', n: 1 });
+   if (fifthRewardsAvailable(level.id, level.difficulty)) entries.push(...FIFTH_LEVEL_GIFTS.map(id => ({ id, n: 1 })));
+@@ -53,12 +53,13 @@
+     const textX = campaign ? (iconSize+14)/2 : 26;
+     const textW = campaign ? w-iconSize-36 : w-60;
+     if (row.id === 'coin') comicArt(card,iconX,0,campaign ? iconSize : 44,campaign ? iconSize : 44,'comic_coin_v1');
++    else if (row.id === 'diamond') comicArt(card,iconX,0,iconSize,iconSize,'comic_diamond_v1');
+     else if (row.id === 'hero_pyro') heroPortrait(card, iconX, 0, iconSize, 'pyro');
+     else {
+       gearQualityHalo(card,iconX,0,iconSize,iconSize,1);
+       gearArt(card,iconX,0,campaign ? iconSize*.85 : 39,campaign ? iconSize*.85 : 39,row.id);
+     }
+-    label(card,textX,15,row.id === 'coin' ? firstWinGold ? '基础＋首胜' : '基础金币' : row.id === 'hero_pyro' ? '火法师' : itemName(row.id),
++    label(card,textX,15,row.id === 'coin' ? firstWinGold ? '基础＋首胜' : '基础金币' : row.id === 'diamond' ? '钻石' : row.id === 'hero_pyro' ? '火法师' : itemName(row.id),
+       {size:campaign ? 18 : 16,color:campaign ? CAMPAIGN_TEXT.body : COMIC.sub,w:textW,h:campaign ? 25 : 23,shrink:true});
+     label(card,textX,-14,row.id === 'coin' ? row.n.toLocaleString()+'+' : row.id === 'hero_pyro' ? '首胜免费' : '×'+row.n.toLocaleString(),
+       {size:campaign ? 24 : 22,color:campaign ? CAMPAIGN_TEXT.ink : COMIC.text,bold:true,w:textW,h:30,shrink:true});
+@@ -76,7 +77,7 @@
+ export function stageLootPreview(parent: Node, h: number, level: ChallengeDef, modalParent: Node): void {
+   const y = (top: number): number => h / 2 - top;
+   const firstWinGold = earlyFirstWinGold(level.id, level.difficulty);
+-  const entries = [{ id: 'coin', n: level.baseGold + firstWinGold }, ...level.materials];
++  const entries = [{ id: 'coin', n: level.baseGold + firstWinGold }, { id: 'diamond', n: level.baseDiamonds }, ...level.materials];
+   if (firstBookAvailable(level.id, level.difficulty)) entries.push({ id: 'wpn_green_book', n: 1 });
+   if (fifthRewardsAvailable(level.id, level.difficulty)) entries.push(...FIFTH_LEVEL_GIFTS.map(id => ({ id, n: 1 })));
+   if (pyroRewardAvailable(level.id, level.difficulty)) entries.push({ id: 'hero_pyro', n: 1 });
+@@ -84,13 +85,14 @@
+     const x = (i - (entries.length - 1) / 2) * 150;
+     const icon = N('guaranteedLoot:' + row.id, parent, x, y(56), 76, 68);
+     if (row.id === 'coin') comicArt(icon, 0, 0, 43, 43, 'comic_coin_v1');
++    else if (row.id === 'diamond') comicArt(icon, 0, 0, 43, 43, 'comic_diamond_v1');
+     else if (row.id === 'hero_pyro') heroPortrait(icon, 0, 0, 43, 'pyro');
+     else {
+       gearQualityHalo(icon, 0, 0, 48, 48, 1);
+       gearArt(icon, 0, 0, 40, 40, row.id);
+     }
+     bindButton(icon, () => showDropItemDetails(modalParent, level, row.id), { sound: false });
+-    label(parent, x, y(92), row.id === 'coin' ? (firstWinGold ? '基础＋首胜 ' : '基础金币 ') + row.n + '+' : row.id === 'hero_pyro' ? '火法师 · 首胜免费' : itemName(row.id) + ' ×' + row.n,
++    label(parent, x, y(92), row.id === 'coin' ? (firstWinGold ? '基础＋首胜 ' : '基础金币 ') + row.n + '+' : row.id === 'diamond' ? '钻石 ×' + row.n : row.id === 'hero_pyro' ? '火法师 · 首胜免费' : itemName(row.id) + ' ×' + row.n,
+       { size: 17, color: COMIC.text, bold: true, w: 148, h: 24, shrink: true });
+   });
+   const line = N('lootPreviewDivider', parent).addComponent(Graphics);
+@@ -123,7 +125,7 @@
+   const list = lootScroll(root, top - 116, -top + 100, rows ? 260 + rows * 116 : 258);
+   stageGuaranteedRewards(list, 0, -48, 584, level, id => showDropItemDetails(parent, level, id, root));
+   label(list, 0, -107, earlyFirstWinGold(level.id, level.difficulty)
+-    ? '金币含一次性首胜加奖，击杀与星级加成另计' : '金币另有战斗击杀收益，材料随通关结算发放',
++    ? '金币含首胜加奖，击杀与星级加成另计 · 钻石通关到账' : '金币另有击杀收益 · 钻石每次通关结算到账',
+     { size: 16, color: COMIC.sub, w: 584, h: 26, shrink: true });
+   if (level.gearPool.length) {
+     label(list, 0, -149, '概率掉落装备', { size: 21, color: COMIC.text, bold: true, w: 584, h: 30 });
+@@ -148,7 +150,7 @@
+     ? '首次通关必得绿色翠纹秘典\n火法师适用，奖励直接存入背包' : fifthRewardsAvailable(level.id, level.difficulty)
+     ? '首胜必得巡林轻弩＋月纹坠饰\n各一件，直接存入背包，仅领取一次' : '普通难度不掉落装备\n挑战精英 / 地狱可获得概率装备',
+     { size: 21, color: COMIC.sub, w: 570, h: 76, lineHeight: 32 });
+-  label(root, 0, -top + 68, rows ? '点击落地装备拾取 · 30个战斗秒后自动拾取' : '点击金币或材料图标，查看奖励详情',
++  label(root, 0, -top + 68, rows ? '点击落地装备拾取 · 30个战斗秒后自动拾取' : '点击金币或钻石图标，查看奖励详情',
+     { size: 18, color: COMIC.text, w: 590, h: 28 });
+   label(root, 0, -top + 36, rows ? '暂停 / 选卡冻结计时 · 结算 / 离场收回剩余装备' : '通关收益随难度变化 · 星级宝箱单独领取',
+     { size: 16, color: COMIC.sub, w: 590, h: 26 });
+@@ -166,7 +168,7 @@
+     return;
+   }
+   const d = EQUIPS[id], mat = MATS[id];
+-  if (!d && !mat && id !== 'coin') return;
++  if (!d && !mat && id !== 'coin' && id !== 'diamond') return;
+   const source = DIFFICULTIES[level.difficulty].name + ' · ' + level.id;
+   const firstBow = id === 'wpn_bow' && firstBowAvailable(level.id, level.difficulty);
+   const firstBook = id === 'wpn_green_book' && firstBookAvailable(level.id, level.difficulty);
+@@ -174,7 +176,7 @@
+   const firstGift = firstBow || firstBook || fifthGift;
+   const groups: { title: string; rows: DetailRow[] }[] = [];
+   const firstWinGold = id === 'coin' ? earlyFirstWinGold(level.id, level.difficulty) : 0;
+-  const amount = id === 'coin' ? level.baseGold + firstWinGold : level.materials.find(row => row.id === id)?.n || 0;
++  const amount = id === 'coin' ? level.baseGold + firstWinGold : id === 'diamond' ? level.baseDiamonds : level.materials.find(row => row.id === id)?.n || 0;
+   let delivery: string;
+   if (d) {
+     const keys = (Object.keys(d.stats) as StatKey[]).filter(k => (d.stats[k] || 0) > 0);
+@@ -201,6 +203,7 @@
+     groups.push({ title: '关卡奖励', rows: rewardRows });
+     delivery = id === 'coin' ? '通关结算获得基础金币、星级加成和击杀金币。'
+       + (firstWinGold ? '首胜另加' + firstWinGold + '金币，仅一次；广告可加倍本局金币，重玩不再发首胜加奖。' : '')
++      : id === 'diamond' ? '每次成功通关后直接存入钻石余额，重玩通关也可获得。广告仅加倍金币，不增加钻石；失败或中途退出不发放通关钻石。'
+       : '通关结算后收入材料背包，可在英雄页查看与使用。';
+   }
+   const deliveryH = Math.max(50, Math.ceil(delivery.length / 28) * 25);
+@@ -220,12 +223,13 @@
+     back.active = false;
+   } else root = detailDialog(parent, width, h, '掉落物详情', 'dropItemDetails:' + id);
+   root.name = 'dropItemDetails:' + id;
+-  detailOverview(root, d ? d.name : id === 'coin' ? firstWinGold ? '基础＋首胜金币' : '基础金币' : mat.name,
+-    d ? gearQuality(d.quality).name + ' · ' + KIND_NAME[d.kind] + ' · 初始 Lv.1' : id === 'coin' ? '金币 · 通关结算' : '材料 · 通关结算',
++  detailOverview(root, d ? d.name : id === 'coin' ? firstWinGold ? '基础＋首胜金币' : '基础金币' : id === 'diamond' ? '钻石' : mat.name,
++    d ? gearQuality(d.quality).name + ' · ' + KIND_NAME[d.kind] + ' · 初始 Lv.1' : id === 'coin' ? '金币 · 通关结算' : id === 'diamond' ? '钻石 · 通关结算' : '材料 · 通关结算',
+     d && WEAPONS[id] ? weaponUsers(id) : undefined,
+-    d ? firstGift ? '普通' + level.id + '首胜奖励，必得一件，仅领取一次。' : source + ' 掉落。装备成功掉落后，按装备池权重抽取。' : id === 'coin' ? (firstWinGold ? '基础＋首胜 ' : '基础金币 ') + amount + '+' : mat.desc,
++    d ? firstGift ? '普通' + level.id + '首胜奖励，必得一件，仅领取一次。' : source + ' 掉落。装备成功掉落后，按装备池权重抽取。' : id === 'coin' ? (firstWinGold ? '基础＋首胜 ' : '基础金币 ') + amount + '+' : id === 'diamond' ? '每次通关获得 ' + amount + ' 钻石' : mat.desc,
+     (panel, x, y, side) => {
+       if (id === 'coin') comicArt(panel, x, y, side - 20, side - 20, 'comic_coin_v1');
++      else if (id === 'diamond') comicArt(panel, x, y, side - 20, side - 20, 'comic_diamond_v1');
+       else {
+         shopQualitySocket(panel, x, y, side, d?.quality ?? 1);
+         gearArt(panel, x, y, side - 20, side - 20, id);
+--- before/assets/scripts/ui/Panels.ts
++++ after/assets/scripts/ui/Panels.ts
+@@ -283,7 +283,7 @@
+     if (tab === 0) {
+       battleRewardPanel(root, {
+         top: 236, heading: '已获得奖励', gold: this.dir.goldEarned, xp: o.xp, loot: o.loot,
+-        note: '金币与经验为本局累计',
++        note: '金币为本局累计 · 经验仅用于本局升级选卡',
+         onInspect: o.loot ? () => showCollectedLoot(this.modalRoot, o.loot!) : undefined,
+       });
+     } else if (tab === 1) {
+@@ -326,7 +326,7 @@
+ 
+   /* ---------- ⑥ 胜利结算：评级、奖励与固定操作区 ---------- */
+   showWin(o: {
+-    stars: 1 | 2 | 3; gold: number; ratio: number; xp: number; loot?: StageLootSummary;
++    stars: 1 | 2 | 3; gold: number; diamonds: number; ratio: number; loot?: StageLootSummary;
+     firstWinGold?: number;
+     onDouble: (done: (ok: boolean) => void) => void;
+     onExit: () => void;
+@@ -336,10 +336,10 @@
+     this.settlementKind = 'win';
+     dimLayer(this.modalRoot, .68, false, fresh);
+     const root = settlementFrame(this.modalRoot, 'win', this.dir.levelDef.id + '  ' + this.dir.levelDef.name + ' · ' + DIFFICULTIES[this.dir.levelDef.difficulty].name, o.stars, o.ratio, fresh);
+-    settlementRewards(root, 'win', o.gold * (this.doubleClaimed ? 2 : 1), o.xp,
++    settlementRewards(root, 'win', o.gold * (this.doubleClaimed ? 2 : 1), o.diamonds,
+       o.firstWinGold ? '含首胜加奖 ' + o.firstWinGold * (this.doubleClaimed ? 2 : 1) + ' · '
+         + (this.doubleClaimed ? '金币已加倍' : '广告可加倍金币')
+-        : this.doubleClaimed ? '双倍金币已领取 · 战利品保持原数量' : '本局累计金币已到账 · 广告仅加倍金币', o.loot,
++        : this.doubleClaimed ? '双倍金币已领取 · 钻石保持原数量' : '金币和钻石已到账 · 广告仅加倍金币', o.loot,
+       { intro: fresh, goldFrom: fresh ? 0 : this.winGoldShown });
+     this.winGoldShown = o.gold * (this.doubleClaimed ? 2 : 1);
+     const back = settlementButton(root, 153, -353, 286, 78, '返回', 'gold', o.onExit, !this.doubleBusy, 'battleReturn');
+@@ -373,7 +373,7 @@
+ 
+   /* ---------- ⑤ 失败结算：蓝灰破损皇冠与复活操作 ---------- */
+   showLose(o: {
+-    goldFloor: number; reviveRatio: number; xp: number; loot?: StageLootSummary;
++    goldFloor: number; reviveRatio: number; loot?: StageLootSummary;
+     onRevive: (done: (ok: boolean) => void) => void;
+     onRetry: () => void;
+   }): void {
+@@ -382,7 +382,7 @@
+     this.settlementKind = 'lose';
+     dimLayer(this.modalRoot, .72, false, fresh);
+     const root = settlementFrame(this.modalRoot, 'lose', this.dir.levelDef.id + '  ' + this.dir.levelDef.name + ' · ' + DIFFICULTIES[this.dir.levelDef.difficulty].name, 0, 0, fresh);
+-    settlementRewards(root, 'lose', o.goldFloor, o.xp,
++    settlementRewards(root, 'lose', o.goldFloor, 0,
+       o.loot?.equipment.length ? '金币和装备已保存 · 复活继续本局 / 重试返回关卡页'
+         : '金币已到账 · 复活恢复 ' + Math.round(o.reviveRatio * 100) + '% 耐久 · 重试返回当前关卡', o.loot, { intro: fresh });
+     const retry = settlementButton(root, 153, -353, 286, 78, '↻ 再来一次', 'gold', o.onRetry, !this.reviveBusy, 'battleRetry');
+--- before/assets/scripts/ui/SettlementPanelSkin.ts
++++ after/assets/scripts/ui/SettlementPanelSkin.ts
+@@ -52,10 +52,10 @@
+ 
+ export function playSettlement(root: Node): void { root.getComponent(SettlementMotion)?.play(); }
+ 
+-export function settlementRewards(parent: Node, outcome: Outcome, gold: number, xp: number, note: string, loot?: StageLootSummary,
++export function settlementRewards(parent: Node, outcome: Outcome, gold: number, diamonds: number, note: string, loot?: StageLootSummary,
+   animation: { intro?: boolean; goldFrom?: number } = {}): void {
+   battleRewardPanel(parent, {
+-    top: 122, heading: outcome === 'win' ? '通关奖励' : '已获得奖励', gold, xp, loot, note,
++    top: 122, heading: outcome === 'win' ? '通关奖励' : '已获得奖励', gold, diamonds, loot, note,
+     onInspect: loot ? () => showCollectedLoot(parent.parent || parent, loot) : undefined,
+     onCounter: (kind, number, target) => parent.getComponent(SettlementMotion)?.addReward(number, target,
+       !!animation.intro || (kind === 'gold' && animation.goldFrom !== undefined && animation.goldFrom !== gold),

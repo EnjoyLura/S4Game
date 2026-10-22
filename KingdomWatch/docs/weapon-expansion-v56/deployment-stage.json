@@ -1,0 +1,163 @@
+{
+  "originalFilesChecked": 1900,
+  "changedExistingFiles": [
+    "assets/scripts/config/Weapons.ts",
+    "assets/scripts/core/GameData.ts",
+    "assets/scripts/ui/pages/ShopPage.ts"
+  ],
+  "addedFiles": [
+    "assets/resources/ux/weapons_v1/blue_briar_bow_v56.png",
+    "assets/resources/ux/weapons_v1/blue_briar_bow_v56.png.meta",
+    "assets/resources/ux/weapons_v1/blue_echo_staff_v56.png",
+    "assets/resources/ux/weapons_v1/blue_echo_staff_v56.png.meta",
+    "assets/resources/ux/weapons_v1/blue_ember_book_v56.png",
+    "assets/resources/ux/weapons_v1/blue_ember_book_v56.png.meta",
+    "assets/resources/ux/weapons_v1/blue_frost_staff_v56.png",
+    "assets/resources/ux/weapons_v1/blue_frost_staff_v56.png.meta",
+    "assets/resources/ux/weapons_v1/blue_hawk_crossbow_v56.png",
+    "assets/resources/ux/weapons_v1/blue_hawk_crossbow_v56.png.meta",
+    "assets/resources/ux/weapons_v1/blue_rock_crossbow_v56.png",
+    "assets/resources/ux/weapons_v1/blue_rock_crossbow_v56.png.meta",
+    "assets/resources/ux/weapons_v1/blue_swift_bow_v56.png",
+    "assets/resources/ux/weapons_v1/blue_swift_bow_v56.png.meta",
+    "assets/resources/ux/weapons_v1/blue_tide_book_v56.png",
+    "assets/resources/ux/weapons_v1/blue_tide_book_v56.png.meta",
+    "assets/resources/ux/weapons_v1/purple_dusk_book_v56.png",
+    "assets/resources/ux/weapons_v1/purple_dusk_book_v56.png.meta",
+    "assets/resources/ux/weapons_v1/purple_falcon_crossbow_v56.png",
+    "assets/resources/ux/weapons_v1/purple_falcon_crossbow_v56.png.meta",
+    "assets/resources/ux/weapons_v1/purple_gale_bow_v56.png",
+    "assets/resources/ux/weapons_v1/purple_gale_bow_v56.png.meta",
+    "assets/resources/ux/weapons_v1/purple_moon_staff_v56.png",
+    "assets/resources/ux/weapons_v1/purple_moon_staff_v56.png.meta",
+    "assets/resources/ux/weapons_v1/purple_raven_bow_v56.png",
+    "assets/resources/ux/weapons_v1/purple_raven_bow_v56.png.meta",
+    "assets/resources/ux/weapons_v1/purple_siege_crossbow_v56.png",
+    "assets/resources/ux/weapons_v1/purple_siege_crossbow_v56.png.meta",
+    "assets/resources/ux/weapons_v1/purple_star_book_v56.png",
+    "assets/resources/ux/weapons_v1/purple_star_book_v56.png.meta",
+    "assets/resources/ux/weapons_v1/purple_sun_staff_v56.png",
+    "assets/resources/ux/weapons_v1/purple_sun_staff_v56.png.meta"
+  ],
+  "preExistingTypeErrors": 10,
+  "typeDiagnosticsUnchanged": true,
+  "originalWeaponsUnchanged": 9,
+  "newWeapons": 16,
+  "totalWeapons": 25,
+  "shopWeapons": 21,
+  "blueNewWeapons": 8,
+  "purpleNewWeapons": 8,
+  "blue": {
+    "price": 1000,
+    "unlock": "1-2",
+    "tier": 1
+  },
+  "purple": {
+    "price": 1600,
+    "unlock": "1-4",
+    "tier": 2
+  },
+  "existingWhiteAndGreenUnchanged": true,
+  "allOriginalMediaUnchanged": true,
+  "originalNativeFilesPreserved": 680,
+  "priorPreviewFilesPreserved": 793,
+  "nativeAssets": [
+    {
+      "id": "wpn_blue_tide_book",
+      "path": "assets/resources/native/3f/3f53aaf1-e2a9-4957-b9fc-8c28db6335ff.4e006.png",
+      "sha256": "ca2085816324b3f54e1d3ccebcd42cc1e752973b1c3941b83333a18655b3f61b"
+    },
+    {
+      "id": "wpn_blue_ember_book",
+      "path": "assets/resources/native/0d/0db48227-07c7-4447-9506-09da2ae1f5a0.593eb.png",
+      "sha256": "3073f00a5fe2ae338be519353b32380101e666aca60cef8a9f2262532afb50d6"
+    },
+    {
+      "id": "wpn_purple_star_book",
+      "path": "assets/resources/native/c1/c12af4cf-3f0f-4580-908e-068f8f534548.4d898.png",
+      "sha256": "2f5525760bfce6ed9fde05bc5a16a73acf2882661625d35b944522587a2f637b"
+    },
+    {
+      "id": "wpn_purple_dusk_book",
+      "path": "assets/resources/native/6c/6c6bc672-7e55-42cc-b4fb-17a303a47eb2.ba9f2.png",
+      "sha256": "41ec1eafae7877f2a71a8d6b281a71e49fdf13849bab0d5221bd0252b4a1982c"
+    },
+    {
+      "id": "wpn_blue_swift_bow",
+      "path": "assets/resources/native/84/8408fef8-f148-478b-818c-e333dfb1aa2c.e64e5.png",
+      "sha256": "cb68cf3231ccb3c91c5d3dc457546dbc4c5a984cc86a9dc6e963f46229170bf8"
+    },
+    {
+      "id": "wpn_blue_briar_bow",
+      "path": "assets/resources/native/8e/8eb3fa58-e7fd-4453-b886-23bc243d100c.25f0b.png",
+      "sha256": "53ed1c03b4c2ecb1c607eea712c56f8634f705d054d2d43534e22ffdd4ece568"
+    },
+    {
+      "id": "wpn_purple_gale_bow",
+      "path": "assets/resources/native/95/95619104-5222-4d1a-b9fd-a306ea51bb6b.29210.png",
+      "sha256": "86ca98a44ee11c9b3b252b3d87b229fedab820a00ec6b92d3168dc2b13ef43b2"
+    },
+    {
+      "id": "wpn_purple_raven_bow",
+      "path": "assets/resources/native/ff/ff92bcb9-4429-4d48-9819-f5dca6006c27.14bd6.png",
+      "sha256": "c817a3bb2c41c30287d09238accdf55636700e99eff93c143cd65be2154b138e"
+    },
+    {
+      "id": "wpn_blue_hawk_crossbow",
+      "path": "assets/resources/native/07/07b3d5eb-5a4f-4b02-a0b8-5ee89a79ea81.1416f.png",
+      "sha256": "822eb01fe4609b281ab53d16f5684f88eed8790fe187b8c898677fbdd6295925"
+    },
+    {
+      "id": "wpn_blue_rock_crossbow",
+      "path": "assets/resources/native/71/71defded-5ea3-408c-9322-ea2ea4a77085.8e381.png",
+      "sha256": "2ff183e832d001372c95bd625dc7a37a8b2feea14bb653dee2f892bdc444dd54"
+    },
+    {
+      "id": "wpn_purple_falcon_crossbow",
+      "path": "assets/resources/native/09/0902476a-7222-4fe4-86ee-a48e3a687cf0.1f5a0.png",
+      "sha256": "a7ac73fafa8e5e72212ecf25565caac02a806a81ecaf1f02fa3162d19b86f7a6"
+    },
+    {
+      "id": "wpn_purple_siege_crossbow",
+      "path": "assets/resources/native/78/7800b8ab-acca-4e3e-a014-3cedbeb99d4d.59081.png",
+      "sha256": "79d5a0329fc618334a9a653c15547f40885c83583babb8513b6dd4bfa3d719e7"
+    },
+    {
+      "id": "wpn_blue_frost_staff",
+      "path": "assets/resources/native/bd/bd15140b-046b-4a52-a1b7-8fda267e7774.5dbc9.png",
+      "sha256": "2ff52e29cf2c0198124264e4f5a7ea8d9871ddc4867b11b1b10f51a4e0986985"
+    },
+    {
+      "id": "wpn_blue_echo_staff",
+      "path": "assets/resources/native/c8/c8ee93d4-d833-405b-9a2a-2416039902dc.f8ff6.png",
+      "sha256": "051cd0900eeb8936f38f9e4588e358e04248d0d5aa044fb17384c5062f119368"
+    },
+    {
+      "id": "wpn_purple_sun_staff",
+      "path": "assets/resources/native/f9/f9610939-35d9-487e-aaf2-23decc1fbf16.60146.png",
+      "sha256": "63def0f4e29dd5fa5fd5479eaaad044dc5bf32ce03fcd7ae45dc30412a3fc197"
+    },
+    {
+      "id": "wpn_purple_moon_staff",
+      "path": "assets/resources/native/f5/f51b26fd-a92a-4af6-a006-5cf74c51ee03.7eb06.png",
+      "sha256": "d1a5d071e295b389eefe880554f81f5e74205896d8996e2e30a920341a841294"
+    }
+  ],
+  "sourceNotes": "Only Weapons, GameData shop catalog/unlock guard, ShopPage filter/details changed. No combat, drops, levels, hero growth, save schema, currencies, card weights, old assets or audio changes.",
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-weapon-expansion-v56-20261019-131155",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "entryVersion": "1792386660",
+  "game": "https://kingdom-watch.pages.dev/?v=weapon-expansion-v56-1792386660",
+  "manualAcceptance": "Static source/AST/media/types/build/HTTP only; no tests, game, browser, combat simulation or audio. User manual acceptance.",
+  "deployment": "https://948fce77.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.b8251.js?v=1792386660",
+    "mainBundleHashMatches": true,
+    "nativeIllustrations": 16,
+    "allImageHashesMatch": true
+  }
+}

@@ -1,8 +1,12 @@
 /** Entry art first; only the selected battlefield and equipped heroes need a first-paint barrier. */
 import { director } from 'cc';
 import { battleSceneKey } from '../config/Campaign';
+import { getChallengeDef } from '../config/LevelDifficulty';
+import { enemyArtRef } from '../config/ChapterContent';
+import { warmBattleAtlas } from '../battle/BattleSprite';
 import { preloadArcherClip } from '../battle/ArcherIdleAnimation';
 import { preloadHeroClip } from '../battle/HeroSequenceAnimation';
+import { getMobAnims } from '../battle/MobAnim';
 import { uxFrame } from './Ux';
 import { warmPickArt } from './PickArt';
 
@@ -33,12 +37,16 @@ export function warmBattleScene(): Promise<boolean> {
 }
 
 /** Failures settle to the existing fallback. Pending work is shared; failed assets may retry later. */
-export function warmBattlefield(levelId: string, heroIds: readonly string[]): Promise<void> {
+export function warmBattlefield(levelId: string, heroIds: readonly string[], mobIds: readonly string[] = []): Promise<void> {
   const ids = heroIds.length ? [...heroIds] : ['archer', 'sniper'];
-  const key = levelId + ':' + ids.join(',');
+  const key = levelId + ':' + ids.join(',') + ':' + mobIds.join(',');
   const hit = jobs.get(key); if (hit) return hit;
   warmEntryArt(); void warmBattleScene();
+  if (levelId === '1-5' || levelId === '1-10' || mobIds.includes('goblin_king')) getMobAnims(() => {}, 'goblin_king');
   const firstPaint = [imageReady(battleSceneKey(levelId)), imageReady('defense_wall')];
+  const enemies: string[] = [...mobIds];
+  if (!enemies.length) for (const wave of getChallengeDef(levelId, 0).waves) for (const group of wave.groups) enemies.push(group.mob);
+  for (const atlas of new Set(enemies.map(id => enemyArtRef(id).atlas))) firstPaint.push(warmBattleAtlas(atlas));
   for (const id of ids) {
     if (id === 'archer') {
       firstPaint.push(preloadArcherClip('idle'));

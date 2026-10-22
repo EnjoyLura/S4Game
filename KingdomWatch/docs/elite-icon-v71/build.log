@@ -1,0 +1,21 @@
+Cocos exit code: 36
+2026-10-22 00:35:04 - debug: // ---- build task adsense-h5g-plugin：onAfterBuild ---- (2ms)
+
+2026-10-22 00:35:04 - debug: adsense-h5g-plugin:(onAfterBuild) in 2 ms ✓, progress: 60%
+
+2026-10-22 00:35:04 - log: Asset DB is resume!
+
+2026-10-22 00:35:04 - debug: builder:build-project-total (21443ms)
+
+2026-10-22 00:35:04 - debug: build task(web-mobile) in 21443!
+
+2026-10-22 00:35:04 - debug: [Build Memory track]: builder:build-project-total start:226.11MB, end 245.91MB, increase: 19.80MB
+
+2026-10-22 00:35:04 - debug: ================================ build Task (web-mobile) Finished in (21 s)ms ================================
+
+patch-web-dpr: patched build/web-mobile/cocos-js\_virtual_cc-Bp5iGE8z.js
+patch-web-dpr: clamp pattern not found in build/web-mobile/cocos-js\cc.03aac.js - skipped
+patch-web-dpr: done, 1 file(s) patched
+patch-web-dpr: entry cache-bust v=1792600505
+patch-web-dpr: index.html bootstrap OK
+{"production": true, "md5Cache": true, "engineRevision": "2cb74a1e8caa095a", "entry": "index.cac7e.js?v=1792600505", "immutableAssets": 2077, "startupPreloads": [["index.cac7e.js?v=1792600505", "script"], ["application.6caa9.js", "script"], ["src/settings.b72ca.json", "fetch"], ["cocos-js/cc.03aac.js?kwengine=2cb74a1e8caa095a", "script"], ["cocos-js/_virtual_cc-Bp5iGE8z.js?kwengine=2cb74a1e8caa095a", "script"]], "audioCredits": {"path": "audio-credits.html", "sha256": "6ab9a3c7a29f5cdbaca7cf5f8e45213f207edbd9b886b1ce9f77e3f9a8600ae2"}, "validation": "offline preparation only; no game or browser executed"}

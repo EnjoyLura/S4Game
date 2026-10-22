@@ -91,7 +91,7 @@ export class BossWarning {
       const threat = this.pending; this.pending = null;
       this.age = 0; this.playing = true; this.quiet = reducedMotion();
       this.title.string = threat.boss ? '首领来袭' : '精英来袭';
-      this.subtitle.string = `第 ${threat.wave} 波 · ${threat.names.join('、')}`;
+      this.subtitle.string = (threat.floor ? `第 ${threat.floor} 层` : `第 ${threat.wave} 波`) + ' · ' + threat.names.join('、');
       // Commit complete art only at the start, never pop it into a warning already on screen.
       this.fit(this.bannerArt, this.frames[0], 720, 240, this.bannerFallback);
       this.fit(this.crestArt, this.frames[1], 184, 184, this.crestFallback);

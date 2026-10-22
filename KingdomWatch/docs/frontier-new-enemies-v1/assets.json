@@ -1,0 +1,63 @@
+{
+  "tool": "built-in image_gen",
+  "status": "Concept/AI-video first frames only; no game integration",
+  "assets": [
+    {
+      "file": "bat-front-green-v1.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "sha256": "02767dcf137bbbf6ff6b3055a9e7945cf5bd2376b1039339acff130b8ace64ec"
+    },
+    {
+      "file": "eagle-front-green-v1.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "sha256": "fc7820b87bfc0a65582c1c111c7ed04a31d895f98b8d45ff168309e079c32e3f"
+    },
+    {
+      "file": "eagle-front-green-v2-safe-margin.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "sha256": "6eaf59a8b58069db2a7adbc449bc8545ad10775b8c2953f8e00119c9d986fae1",
+      "approxSubjectBounds": [
+        283,
+        251,
+        1251,
+        736
+      ],
+      "approxMarginsPercent": {
+        "left": 18.4,
+        "right": 18.6,
+        "top": 24.5,
+        "bottom": 28.1
+      }
+    },
+    {
+      "file": "goblin-bandit-front-blue-v1.png",
+      "size": [
+        1312,
+        1199
+      ],
+      "mode": "RGB",
+      "sha256": "9a4a714b356c7262b5480d899cefd6f86d8807001865d264fb166face53ddb54"
+    },
+    {
+      "file": "bat-front-green-v2-safe-margin.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "sha256": "0628387e987897d815032c441be34156723d35466980bd452c6b10f248a0126a"
+    }
+  ]
+}

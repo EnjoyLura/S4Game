@@ -9,7 +9,10 @@
  */
 import { Color, Graphics, Layers, Node, UIOpacity, tween, Vec3 } from 'cc';
 import { HeroStats, abilityDamage, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
-import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, MORA_CHARGE_MAX, SPAWN_Y, HERO_Y, PAL, LO, LINE_Y } from '../config/GameConfig';
+import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDuration, pyroMeteorCount, pyroMeteorDamage } from '../config/Cards';
+import { voltShockDuration, voltShockAmp, voltShockedMultiplier, voltStrikeCount, voltStrikeTime } from '../config/Cards';
+import { MORA_ULT_HITS, moraSlowRatio, moraSlowDuration, moraFreezeChance, moraNormalFreezeDuration, moraFieldRadius, moraFieldFreeze, moraColdMultiplier, moraUltimateHitDamage } from '../config/Cards';
+import { ARCHER_CHARGE_MAX, SNIPER_CHARGE_MAX, PYRO_CHARGE_MAX, VOLT_CHARGE_MAX, MORA_CHARGE_MAX, ULT_REGEN_PER_SECOND, SPAWN_Y, HERO_Y, PAL, LO, LINE_Y } from '../config/GameConfig';
 import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
@@ -23,7 +26,7 @@ import { VoltIdleAnimation } from './VoltIdleAnimation';
 import { PyroIdleAnimation } from './PyroIdleAnimation';
 import { MoraIdleAnimation } from './MoraIdleAnimation';
 import { drawSniperUltimateLock } from './SniperUltimateVFX';
-import { ULT_TIMING, ARCHER_ULT_ROW_GAP, ARCHER_ULT_ROUND_GAP, METEOR_ULT_GAP } from './UltimateTiming';
+import { ULT_TIMING, ARCHER_ULT_ROW_GAP, ARCHER_ULT_ROUND_GAP, METEOR_ULT_GAP, FROST_ULT_HIT_GAP } from './UltimateTiming';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
@@ -39,8 +42,7 @@ export abstract class HeroBase {
   abstract readonly chargeMax: number;
   skillCd = 0;
   abstract readonly skillMax: number;
-  /** 大招呼吸回能计时（每 3s +1，用户确认的少量自然回能） */
-  private regenT = 3;
+  /** Simulation-clock regeneration is independent of which hero lands the final blow. */
   private atkT = 0;
   private hx: number;
   private art: BattleSprite | null = null;
@@ -252,14 +254,8 @@ export abstract class HeroBase {
         this.castSkill(mgr, projs, dmg);
       }
     }
-    // 大招呼吸回能：每 3 秒少量充能（不与击杀充能冲突；满后停止）
-    if (this.ultUnlocked) {
-      this.regenT -= dt;
-      if (this.regenT <= 0) {
-        this.regenT += 3;
-        if (!this.ultReady) this.chargeKill(1);
-      }
-    }
+    if (this.ultUnlocked && !this.ultReady)
+      this.chargeKill(ULT_REGEN_PER_SECOND * dt);
   }
 
   /** 子类队列推进（连射/技能连狙等） */
@@ -274,7 +270,7 @@ export abstract class HeroBase {
   /** 大招（手动，充能满可放；全场无目标时不消耗充能） */
   abstract castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean;
 
-  /** 击杀充能（§3.7：击杀者获得怪物配置充能值） */
+  /** Accept natural or shared kill energy, including the ready transition notification. */
   chargeKill(v: number): void {
     if (!this.ultUnlocked || this.charge >= this.chargeGoal) return;
     const was = this.ultReady;
@@ -335,6 +331,7 @@ export class ArcherHero extends HeroBase {
   /** 强化窗口剩余秒数（技能15级里程碑 +2s；到时未射完的强化次数作废） */
   empowerT = 0;
   private lastEmp = false;
+  private knockbackCycle = 0;
   private serialQueue: PendingShot[] = [];
   private volleyQueue: PendingVolley[] = [];
 
@@ -407,7 +404,7 @@ export class ArcherHero extends HeroBase {
   }
 
   private spec(base: {
-    x: number; y: number; dirX?: number; dirY?: number; small?: boolean; dmgMul?: number; emp?: boolean;
+    x: number; y: number; dirX?: number; dirY?: number; small?: boolean; dmgMul?: number; emp?: boolean; knockback?: number;
   }): ProjSpec {
     const emp = base.emp === true;
     const crit = Math.random() < this.stats.critRate;
@@ -423,6 +420,7 @@ export class ArcherHero extends HeroBase {
       size: base.small ? 5 : emp ? 10 : 7,
       small: base.small,
       pierce: emp ? 999 : this.stats.pierce,
+      knockback: base.knockback,
       resCut: this.stats.defIgnore || 0,   // 英雄突破：无视防御比例（全部箭矢）
       spark: emp,
       explodeR: this.stats.explodeR > 0 && !base.small ? this.stats.explodeR : 0,
@@ -437,8 +435,8 @@ export class ArcherHero extends HeroBase {
   }
 
   /** 出弓瞬间按拦截预判锁定方向，之后直线飞行（用户确认：不追踪不拐弯）；emp=金色强化贯穿箭 */
-  private fireDir(projs: ProjectileManager, dirX: number, dirY: number, emp = false): void {
-    projs.fire(this.spec({ x: this.x, y: HERO_Y + 60, dirX, dirY, emp }));
+  private fireDir(projs: ProjectileManager, dirX: number, dirY: number, emp = false, knockback = 0): boolean {
+    return projs.fire(this.spec({ x: this.x, y: HERO_Y + 60, dirX, dirY, emp, knockback }));
   }
 
   protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
@@ -452,7 +450,9 @@ export class ArcherHero extends HeroBase {
     const bs = 960;   // 与 spec 弹速一致（强化箭同普攻弹速，用户调整）
     // 首排弹幕：预判拦截点直线射出（列 = 1+齐射层）
     const lead = this.lead(target, bs);
-    this.fireRow(projs, lead.dirX, lead.dirY, emp);
+    const knockback = this.stats.archerKnockback && this.knockbackCycle === 3 ? this.stats.archerKnockback : 0;
+    if (this.fireRow(projs, lead.dirX, lead.dirY, emp, knockback) && this.stats.archerKnockback)
+      this.knockbackCycle = (this.knockbackCycle + 1) % 4;
     // 连射：后续排延迟成排再射；每排出弓瞬间若目标存活则按当时状态重新预判（出弓后仍直线），目标已亡则沿锁定方向
     for (let i = 1; i <= this.stats.serial; i++) {
       this.serialQueue.push({ t: i * 0.12, target, dirX: lead.dirX, dirY: lead.dirY, emp });
@@ -463,18 +463,21 @@ export class ArcherHero extends HeroBase {
    *  附加列在主箭两侧交替展开（+7°,-7°,+14°…直线随缘）（齐射×连射 = 列×排网格）。
    *  旧版整组以瞄准线为中心对称摊开——偶数列（1/3 层）时没有任何箭在瞄准线上，5° 偏移在
    *  400~900px 交战距离即脱靶 35~79px（怪碰撞半径仅 22~34px），齐射后反而一直打不中主目标 */
-  private fireRow(projs: ProjectileManager, dirX: number, dirY: number, emp: boolean): void {
+  private fireRow(projs: ProjectileManager, dirX: number, dirY: number, emp: boolean, knockback = 0): boolean {
     this.animateAttack(emp, dirX, dirY);
     Sfx.shoot(this.id);
     const cols = 1 + this.stats.fan;
     const baseAng = Math.atan2(dirY, dirX);
     // One air-pressure release per row, rather than stacking an effect for every fan arrow.
     projs.normalRelease(this.id, this.x, HERO_Y + 60, dirX, dirY, emp);
+    let primaryFired = false;
     for (let c = 0; c < cols; c++) {
       const side = c === 0 ? 0 : Math.ceil(c / 2) * (c % 2 === 1 ? 1 : -1);   // c=0 主箭 0°；其余 +7/-7/+14/-14/+21…
       const ang = baseAng + side * 7 * Math.PI / 180;
-      this.fireDir(projs, Math.cos(ang), Math.sin(ang), emp);
+      const fired = this.fireDir(projs, Math.cos(ang), Math.sin(ang), emp, c === 0 ? knockback : 0);
+      if (c === 0) primaryFired = fired;
     }
+    return primaryFired;
   }
 
   /** 出手弓弦闪光：箭矢出弓点的一瞬星芒（约 90ms，主芒顺瞄准方向 + 侧芒 + 亮芯），金箭配金光 */
@@ -804,6 +807,7 @@ export class SniperHero extends HeroBase {
         dmg: this.abilityDamage(uc.boltMul, true), crit: true,
         color: '#509DFF', heroId: this.id, size: 12 * uc.rMul,
         ttl: 4, pierce: 999, spark: true,
+        returnDamage: this.stats.sniperReturn || 0,
         ignoreRes: true,
         ult: true, ability: true,   // 大招弹：击杀弹 KAPOW!（60%）
         markAmp: Math.max(uc.markAmp, this.stats.ultMarkAmp || 0) || undefined, markDur: uc.markDur,
@@ -889,13 +893,14 @@ export class SniperHero extends HeroBase {
 const METEOR_BLAST_R = 140;
 const METEOR_SPEED = 800;
 const CRATER_R = 88 * 1.3 * 1.2;
-const CRATER_LIFE = 4;
 const CRATER_VULN = 0.25;
 export class PyroHero extends HeroBase {
   readonly id = 'pyro';
   readonly name = '焰·辉';
   readonly chargeMax = PYRO_CHARGE_MAX;
   readonly skillMax = 10;
+  /** One entry per promised skill fireball. Full projectile capacity defers a shot instead of dropping it. */
+  private skillVolley: { t: number; spec: ProjSpec; first: boolean }[] = [];
   /** Fixed ground points; the projectile's actual arrival removes the warning and creates the crater. */
   private meteorQueue: { t: number; x: number; y: number; fired?: boolean; first?: boolean; last?: boolean;
     fallElapsed?: number; fallSeconds?: number }[] = [];
@@ -904,12 +909,11 @@ export class PyroHero extends HeroBase {
   private warnNode: Node | null = null;
   private warnG: Graphics | null = null;
   private warnTint = hexc('#201A17');
-  /** 陨石坑：命中后的地面灼烧区（持续灼烧 + 易伤），寿命 CRATER_LIFE 秒 */
-  private craters: { x: number; y: number; t: number }[] = [];
+  /** 陨石坑：命中后持续灼烧与易伤，基础4秒，余火绵延每层再延长1秒。 */
+  private craters: { x: number; y: number; t: number; life: number; radius?: number; skill?: boolean }[] = [];
   private craterNode: Node | null = null;
   private craterG: Graphics | null = null;
-  /** 士气高涨：大招后攻速加成剩余时间 */
-  private hasteT = 0;
+  private giantCycle = 0;
 
   protected buildVisual(parent: Node): void {
     const g = this.node.addComponent(Graphics);
@@ -962,11 +966,6 @@ export class PyroHero extends HeroBase {
     this.attachBattleArt('pyro');
   }
 
-  /** 士气高涨窗口攻速 +40% */
-  protected attackInterval(): number {
-    return 1 / (this.stats.aspd * (this.hasteT > 0 ? 1.4 : 1));
-  }
-
   /** 火球弹种统一构造：橙红大弹 + 溅射 + 灼烧（灼烧走余烬倍率） */
   private spec(base: {
     x: number; y: number; dirX: number; dirY: number; dmg: number;
@@ -982,32 +981,41 @@ export class PyroHero extends HeroBase {
       explodeR: base.explodeR, explodeMul: base.explodeMul ?? this.stats.explodeMul,
       slowRatio: this.stats.slowOnHit || 0,
       slowDur: this.stats.slowDur || 2,
-      burnDps: base.burnDps * (this.stats.burnMul || 1),
+      burnDps: base.burnDps * pyroBurnMultiplier(this.stats),
+      burnDur: pyroBurnDuration(this.stats),
+      burnBurst: this.effAtk * (this.stats.pyroBurnBurst || 0),
+      burnHealCut: this.stats.pyroHealCut || 0,
+      burnSplash: !!(base.ability || base.ult || this.stats.pyroSplashBurn),
       spark: true, ability: base.ability, ult: base.ult, stun: base.stun,
       burnedBonus: this.stats.burnedBonus || undefined,
       ...this.targetBonuses(),
     };
   }
 
-  /** 普攻·火球：小溅射（自带 60 半径 40% 溅射；法术范围卡不放大普攻溅射） */
+  /** 普攻火球：基础半径60、40%溅射；爆裂范围和烈焰附着同时覆盖溅射目标。 */
   protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
     void _mgr;
     const bs = 700;
     const lead = this.lead(target, bs);
-    this.animateAttack(false, lead.dirX, lead.dirY);
-    projs.fire(this.spec({
+    const every = this.stats.pyroGiantEvery || 0;
+    const giant = every > 0 && this.giantCycle + 1 >= every;
+    this.animateAttack(giant, lead.dirX, lead.dirY);
+    const fired = projs.fire(this.spec({
       x: this.x, y: HERO_Y + 60, dirX: lead.dirX, dirY: lead.dirY,
-      dmg: this.effAtk, explodeR: Math.max(60, this.stats.explodeR),
+      dmg: this.effAtk, explodeR: pyroBlastRadius(this.stats, Math.max(60, this.stats.explodeR)) * (giant ? 2 : 1),
       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
-      speed: bs, size: 9,
+      speed: bs, size: giant ? 15 : 9,
     }));
-    projs.normalRelease(this.id, this.x, HERO_Y + 60, lead.dirX, lead.dirY);
+    if (fired && every > 0) this.giantCycle = giant ? 0 : this.giantCycle + 1;
+    projs.normalRelease(this.id, this.x, HERO_Y + 60, lead.dirX, lead.dirY, giant);
     Sfx.shoot(this.id);
   }
 
-  /** 技能·烈焰爆裂（自动，10s CD）：锁定技能范围内最密集簇，齐射 3 颗爆裂火球（1.6×攻击、大爆炸 + 灼烧 3s） */
+  /** 技能·烈焰爆裂：完整读取培养/强化后的数量，错开0.12秒发射，使额外火球可辨认。 */
   protected castSkill(mgr: MonsterManager, projs: ProjectileManager, _dmg: DamageService): void {
     void _dmg;
+    void projs;
+    if (this.skillVolley.length) { this.skillCd = .15; return; }
     this.skillCd = this.skillCdTotal;   // 冷却缩减卡
     const R = this.stats.skillRange;
     const cands = mgr.list.filter(m => !m.dead && Math.hypot(m.x - this.x, m.y - HERO_Y) <= R);
@@ -1022,21 +1030,35 @@ export class PyroHero extends HeroBase {
     const pc = pyroSkCfg(this.stats.skillLv);
     const shots = Math.max(1, Math.round(this.stats.skillShots || 3));
     const dmg = this.abilityDamage(pc.mul);
-    const boomR = 110 * (this.stats.skillRangeMul || 1);
+    const boomR = pyroBlastRadius(this.stats, 110 * (this.stats.skillRangeMul || 1));
     this.animateAttack(true, best.x - this.x, best.y - (HERO_Y + 60));
     for (let k = 0; k < shots; k++) {
-      const ox = best.x + (Math.random() * 2 - 1) * 70;
-      const oy = best.y + (Math.random() * 2 - 1) * 70;
+      const ox = best.x + (k - (shots - 1) / 2) * Math.min(28, 100 / Math.max(1, shots - 1));
+      const oy = best.y;
       const dx = ox - this.x, dy = oy - (HERO_Y + 60);
       const l = Math.hypot(dx, dy) || 1;
-      projs.fire(this.spec({
+      const spec = this.spec({
         x: this.x, y: HERO_Y + 60, dirX: dx / l, dirY: dy / l,
         dmg, explodeR: boomR, explodeMul: pc.boomMul, burnDps: this.abilityDamage(0.2, false, 0.04),
         speed: 820, size: 11, ability: true,
-      }));
+      });
+      if (k === shots - 1 && this.stats.pyroFirefield) {
+        spec.groundTarget = { x: ox, y: oy };
+        spec.onGroundImpact = () => {
+          if (!this.node.isValid) return;
+          const life = (this.stats.pyroFirefield || 3) + (this.stats.pyroLinger || 0);
+          // Bound persistent skill patches without evicting an ultimate crater.
+          const fields = this.craters.filter(c => c.skill);
+          if (fields.length >= 4) this.craters.splice(this.craters.indexOf(fields[0]), 1);
+          this.craters.push({ x: ox, y: oy, t: life, life, radius: boomR, skill: true });
+          projs.fireCraters(this.craters, CRATER_R * pyroUltCfg(this.stats.ultLv).craterMul, this.warnT);
+        };
+      }
+      this.skillVolley.push({ t: k * .12, first: k === 0, spec });
     }
-    Sfx.cast(this.id);
   }
+
+  protected queuedShotDelay(): number { return this.skillVolley[0]?.t ?? Infinity; }
 
   private drawMeteorWarnings(): void {
     if (this.meteorQueue.length) {
@@ -1053,7 +1075,7 @@ export class PyroHero extends HeroBase {
         if (!q.fired && q.t > .35) continue;
         const approach = q.fired ? Math.min(1, (q.fallElapsed || 0) / Math.max(.01, q.fallSeconds || 1)) : 0;
         const p = approach * approach * (3 - 2 * approach);
-        const radius = METEOR_BLAST_R * (.35 + .43 * p);
+        const radius = pyroBlastRadius(this.stats, METEOR_BLAST_R) * (.35 + .43 * p);
         // Concentric low-alpha ellipses form a soft, grounded shadow, not an outlined AOE indicator.
         for (let band = 6; band >= 0; band--) {
           const r = radius * (.49 + band * .085);
@@ -1070,6 +1092,17 @@ export class PyroHero extends HeroBase {
   }
 
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
+    for (const q of this.skillVolley) q.t -= dt;
+    if (this.skillVolley.length && this.skillVolley[0].t <= 0) {
+      const q = this.skillVolley[0];
+      if (projs.fire(q.spec)) {
+        this.skillVolley.shift();
+        if (q.first) Sfx.cast(this.id);
+        // Capacity recovery cannot collapse the remaining volley back into one overlapping burst.
+        const delay = this.skillVolley.length ? Math.max(0, .12 - this.skillVolley[0].t) : 0;
+        if (delay > 0) for (const next of this.skillVolley) next.t += delay;
+      }
+    }
     this.warnT += dt;
     const uc = pyroUltCfg(this.stats.ultLv);
     const crR = CRATER_R * uc.craterMul;
@@ -1082,8 +1115,8 @@ export class PyroHero extends HeroBase {
         const top = SPAWN_Y + 50;
         const spec = this.spec({
           x: q.x, y: top, dirX: 0, dirY: -1,
-          dmg: this.abilityDamage(uc.boltMul, true),
-          explodeR: METEOR_BLAST_R, burnDps: this.abilityDamage(0.3, true, 0.06),
+          dmg: pyroMeteorDamage(this.stats),
+          explodeR: pyroBlastRadius(this.stats, METEOR_BLAST_R), burnDps: this.abilityDamage(0.3, true, 0.06),
           speed: METEOR_SPEED, size: 16, ability: true, ult: true,
           stun: this.stats.ultStun || 0,
         });
@@ -1094,7 +1127,8 @@ export class PyroHero extends HeroBase {
           if (index < 0) return;
           this.meteorQueue.splice(index, 1);
           this.ultimateBeat(q.x, q.y, q.last ? 1 : q.first ? .85 : .35, true);
-          this.craters.push({ x: q.x, y: q.y, t: CRATER_LIFE });
+          const life = pyroCraterDuration(this.stats);
+          this.craters.push({ x: q.x, y: q.y, t: life, life });
           this.drawMeteorWarnings();
           projs.fireCraters(this.craters, CRATER_R * pyroUltCfg(this.stats.ultLv).craterMul, this.warnT);
         };
@@ -1107,17 +1141,17 @@ export class PyroHero extends HeroBase {
       }
     }
     this.drawMeteorWarnings();
-    // 陨石坑：坑内怪持续挂灼烧 + 易伤（出坑残留 0.6s），寿命尽即熄灭
+    // 技能火区只灼烧；陨石坑另有原本的易伤。出区灼烧短暂残留，区域到期熄灭。
     if (this.craters.length) {
       for (let i = this.craters.length - 1; i >= 0; i--) {
         const c = this.craters[i];
         c.t -= dt;
         if (c.t <= 0) { this.craters.splice(i, 1); continue; }
         for (const m of mgr.list) {
-          if (m.dead || Math.hypot(m.x - c.x, m.y - c.y) > crR) continue;
-          m.burnT = Math.max(m.burnT, 0.55);
-          m.burnDps = Math.max(m.burnDps, this.abilityDamage(0.3, true, 0.06));
-          m.applyVuln(this.stats.pitVuln || CRATER_VULN, 0.6);
+          if (m.dead || Math.hypot(m.x - c.x, m.y - c.y) > (c.radius ?? crR)) continue;
+          m.applyBurn(this.abilityDamage(c.skill ? .2 : .3, !c.skill, c.skill ? .04 : .06) * pyroBurnMultiplier(this.stats),
+            pyroBurnDuration(this.stats, .55), this.effAtk * (this.stats.pyroBurnBurst || 0), this.stats.pyroHealCut || 0);
+          if (!c.skill) m.applyVuln(this.stats.pitVuln || CRATER_VULN, 0.6);
         }
       }
       if (!projs.fireCraters(this.craters, crR, this.warnT)) {
@@ -1137,30 +1171,31 @@ export class PyroHero extends HeroBase {
       g.clear();
       for (let i = 0; i < this.craters.length; i++) {
         const c = this.craters[i];
+        const radius = c.radius ?? crR;
         const fade = Math.min(1, c.t / 0.8);   // 末 0.8s 渐灭
         const glow = 0.55 + Math.sin(this.warnT * 5 + i * 2.1) * 0.2;
         // 焦黑坑底（两层）
         g.fillColor = oc('#1C120C', 150 * fade);
-        g.circle(c.x, c.y, crR); g.fill();
+        g.circle(c.x, c.y, radius); g.fill();
         g.fillColor = oc('#33200F', 110 * fade);
-        g.circle(c.x, c.y, crR * 0.8); g.fill();
+        g.circle(c.x, c.y, radius * 0.8); g.fill();
         // 熔岩池 + 白热岩芯（呼吸脉动）
         const pulse = 1 + Math.sin(this.warnT * 6 + i) * 0.06;
         g.fillColor = oc('#C2401F', (150 + 40 * glow) * fade);
-        g.circle(c.x, c.y, crR * 0.42 * pulse); g.fill();
+        g.circle(c.x, c.y, radius * 0.42 * pulse); g.fill();
         g.fillColor = oc('#FF7A2E', (170 + 50 * glow) * fade);
-        g.circle(c.x, c.y, crR * 0.22 * pulse); g.fill();
+        g.circle(c.x, c.y, radius * 0.22 * pulse); g.fill();
         g.fillColor = oc('#FFD24A', (120 + 70 * glow) * fade);
-        g.circle(c.x, c.y, crR * 0.1 * pulse); g.fill();
+        g.circle(c.x, c.y, radius * 0.1 * pulse); g.fill();
         // 熔岩缘（外圈粗 + 内圈亮）
         g.strokeColor = oc('#E86A28', 215 * fade); g.lineWidth = 4.5;
-        g.circle(c.x, c.y, crR * pulse); g.stroke();
+        g.circle(c.x, c.y, radius * pulse); g.stroke();
         g.strokeColor = oc('#FFC24A', 160 * fade); g.lineWidth = 2;
-        g.circle(c.x, c.y, crR * 0.86 * pulse); g.stroke();
+        g.circle(c.x, c.y, radius * 0.86 * pulse); g.stroke();
         // 坑内岩浆斑 + 余烬闪点
         for (let k = 0; k < 3; k++) {
           const ang = i * 2.4 + k * 2.1;
-          const rr = crR * 0.5;
+          const rr = radius * 0.5;
           g.fillColor = oc('#D9481F', (200 * glow + 40) * fade);
           g.circle(c.x + Math.cos(ang) * rr, c.y + Math.sin(ang) * rr * 0.7, 12 + (k % 2) * 5);
           g.fill();
@@ -1178,33 +1213,31 @@ export class PyroHero extends HeroBase {
         this.craterNode = null; this.craterG = null;
       }
     }
-    if (this.hasteT > 0) this.hasteT -= dt;
   }
 
   /** 大招演出时长：从施放到最后一颗陨石落地（排队间隔 + 弹道飞行）；三选一再等 2s 缓冲由导演统一加 */
   get ultimateRemaining(): number { return Math.max(this.ultimateT, this.meteorQueue.length ? .01 : 0); }
   get ultShowDuration(): number {
-    const uc = pyroUltCfg(this.stats.ultLv);
+    const meteors = pyroMeteorCount(this.stats);
     if (!this.meteorQueue.length) return Math.max(ULT_TIMING.pyro.duration,
-      ULT_TIMING.pyro.windup + (uc.meteors - 1) * METEOR_ULT_GAP + (SPAWN_Y + 50 - LINE_Y) / METEOR_SPEED + .8);
+      ULT_TIMING.pyro.windup + (meteors - 1) * METEOR_ULT_GAP + (SPAWN_Y + 50 - LINE_Y) / METEOR_SPEED + .8);
     return Math.max(ULT_TIMING.pyro.duration, this.meteorQueue.reduce((last, q) => Math.max(last,
       (q.fired ? 0 : Math.max(0, q.t)) + (SPAWN_Y + 50 - q.y) / METEOR_SPEED), 0) + .8);
   }
 
   /** 大招·陨石天降：优先覆盖不同怪群，预告后固定落点，不在空中追踪或提前碰撞；
-   *  每颗命中留燃烧陨石坑（持续灼烧 + 易伤 25%）；士气高涨卡给攻速爆发 */
+   *  每颗命中留燃烧陨石坑（持续灼烧 + 易伤25%），陨石增援增加真实落点与演出时长。 */
   castUlt(mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): boolean {
     if (!this.ultReady) return false;
     const alive = mgr.list.filter(m => !m.dead);
     if (!alive.length) return false;   // 全场无目标：不消耗充能
     const uc = pyroUltCfg(this.stats.ultLv);
-    const drops = this.planMeteorDrops(alive, uc.meteors, CRATER_R * uc.craterMul);
+    const drops = this.planMeteorDrops(alive, pyroMeteorCount(this.stats), CRATER_R * uc.craterMul);
     this.charge = 0;
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
     drops.forEach((q, i) => this.meteorQueue.push({ ...q, first: i === 0, last: i === drops.length - 1 }));
     this.beginUltimate();
     this.drawMeteorWarnings();
-    if (this.stats.ultHaste) this.hasteT = 5;
     void _projs; void _dmg;
     return true;
   }
@@ -1221,8 +1254,9 @@ export class PyroHero extends HeroBase {
   /** Greedy new coverage, then spacing; repeat a lone boss only when there is no new group to cover. */
   private planMeteorDrops(alive: readonly Monster[], count: number, craterRadius: number): { t: number; x: number; y: number }[] {
     const drops: { t: number; x: number; y: number }[] = [], covered = new Uint8Array(alive.length);
-    const top = SPAWN_Y + 50, r2 = METEOR_BLAST_R ** 2;
-    const spacing = Math.max(craterRadius * 1.6, METEOR_BLAST_R * 1.05);
+    const blastRadius = pyroBlastRadius(this.stats, METEOR_BLAST_R);
+    const top = SPAWN_Y + 50, r2 = blastRadius ** 2;
+    const spacing = Math.max(craterRadius * 1.6, blastRadius * 1.05);
     type Choice = { x: number; y: number; score: number; fresh: number };
     for (let k = 0; k < count; k++) {
       const delay = ULT_TIMING.pyro.windup + k * METEOR_ULT_GAP;
@@ -1263,7 +1297,7 @@ export class PyroHero extends HeroBase {
       for (const point of predicted) {
         consider(point.x, point.y);
         for (let j = 0; j < 8; j++) {
-          const angle = j * Math.PI / 4 + k * .31, offset = METEOR_BLAST_R * .65;
+          const angle = j * Math.PI / 4 + k * .31, offset = blastRadius * .65;
           consider(point.x + Math.cos(angle) * offset, point.y + Math.sin(angle) * offset);
         }
       }
@@ -1290,8 +1324,10 @@ export class VoltHero extends HeroBase {
   /** 大招·天雷灭世：排队落下的雷击（目标引用，落雷时已亡则转随机存活目标） */
   private strikeQueue: { t: number; target: Monster | null; index: number }[] = [];
   get ultimateRemaining(): number { return Math.max(this.ultimateT, this.strikeQueue.length ? .01 : 0); }
-  /** 士气高涨：大招后攻速加成剩余时间 */
-  private hasteT = 0;
+  get ultShowDuration(): number {
+    // Cocos loose super-getter lowering reads HeroBase.prototype, losing the instance id.
+    return ULT_TIMING.volt.duration + Math.max(0, Math.ceil((voltStrikeCount(this.stats) - 15) / 5)) * 1.2;
+  }
 
   protected buildVisual(parent: Node): void {
     const g = this.node.addComponent(Graphics);
@@ -1344,11 +1380,6 @@ export class VoltHero extends HeroBase {
     this.attachBattleArt('volt');
   }
 
-  /** 士气高涨窗口攻速 +40% */
-  protected attackInterval(): number {
-    return 1 / (this.stats.aspd * (this.hasteT > 0 ? 1.4 : 1));
-  }
-
   /** 闪电弹种统一构造：紫色细弹 + 感电词条 */
   private spec(base: {
     x: number; y: number; dirX: number; dirY: number; dmg: number;
@@ -1360,12 +1391,13 @@ export class VoltHero extends HeroBase {
       speed: base.speed,
       dmg: base.dmg * (this.stats.normalMul || 1) * (crit ? this.stats.critMul : 1), crit,
       color: '#B96BFF', heroId: this.id, size: base.size,
+      arcDamage: this.stats.voltArc || 0,
       slowRatio: this.stats.slowOnHit || 0,
       slowDur: this.stats.slowDur || 2,
       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit : 0,
       spark: true, ability: base.ability, ult: base.ult, stun: base.stun,
-      shockAmp: this.shockAmp(), shockDur: 3,
-      shockedBonus: this.stats.shockedBonus || undefined,
+      shockAmp: voltShockAmp(this.stats), shockDur: voltShockDuration(this.stats),
+      shockedBonus: voltShockedMultiplier(this.stats, true) - 1 || undefined,
       ...this.targetBonuses(),
     };
   }
@@ -1391,9 +1423,6 @@ export class VoltHero extends HeroBase {
     this.castChain(mgr, projs, dmg);
   }
 
-  /** 感电增伤值 = 感电来源（感电卡/雷霆之躯）× 30级加深倍率 */
-  private shockAmp(): number { return (this.stats.shockOnHit || 0) * (this.stats.shockAmpMul || 1); }
-
   /** 连锁闪电本体（普攻概率施法复用）：从技能范围最近目标起跳，最多 skillShots 目标间跳跃 */
   private castChain(mgr: MonsterManager, projs: ProjectileManager, dmg?: DamageService): void {
     const R = this.stats.skillRange;
@@ -1413,14 +1442,15 @@ export class VoltHero extends HeroBase {
     for (let k = 0; k < jumps && cur; k++) {
       struck.add(cur);
       // 直接结算伤害（连锁无弹道，即时跳）
-      const hpBefore = cur.hp;
-      const dmgK = sc.chainInc ? hitDmg * (1 + sc.chainInc * k) : hitDmg;   // 15级：越跳越痛
-      const done = cur.takeDamage(dmgK, Math.random() < this.stats.critRate, this.id);
-      if (dmg) dmg.add(this.id, Math.min(dmgK, hpBefore));
-      const sa = this.shockAmp();
-      if (sa) cur.applyShock(sa, 3);
+      const crit = Math.random() < this.stats.critRate;
+      const dmgK = hitDmg * (1 + sc.chainInc * k) * (crit ? this.stats.critMul : 1)
+        * (cur.shockT > 0 ? voltShockedMultiplier(this.stats) : 1);
+      cur.takeDamage(dmgK, crit, this.id);
+      if (dmg) dmg.add(this.id, cur.lastDamageTaken);
+      if (this.stats.voltOverload) cur.tryOverload(this.stats.voltOverload);
+      const sa = voltShockAmp(this.stats);
+      if (sa && !cur.dead) cur.applyShock(sa, voltShockDuration(this.stats));
       projs.voltChain(fromX, fromY, cur.x, cur.y, k);
-      Sfx.impact(this.id, false);
       fromX = cur.x; fromY = cur.y;
       // 下一跳：距当前最近且未被打过的（无则终止）
       let next: Monster | null = null, nd = Infinity;
@@ -1430,7 +1460,6 @@ export class VoltHero extends HeroBase {
         if (d < nd && d <= hop) { nd = d; next = o; }
       }
       cur = next;
-      void done;
     }
   }
 
@@ -1448,11 +1477,11 @@ export class VoltHero extends HeroBase {
           t = alive[(Math.random() * alive.length) | 0];
         }
         this.animateAttack(true, t.x - this.x, t.y - (HERO_Y + 60));
-        this.thunderStrike(t, mgr, projs, q.index >= 10 ? 1.16 : 1);
-        this.ultimateBeat(t.x, t.depthY, q.index === 14 ? 1 : q.index === 0 ? .85 : .3, true);
+        const count = voltStrikeCount(this.stats);
+        this.thunderStrike(t, mgr, projs, q.index >= count - 5 ? 1.16 : 1);
+        this.ultimateBeat(t.x, t.depthY, q.index === count - 1 ? 1 : q.index === 0 ? .85 : .3, true);
       }
     }
-    if (this.hasteT > 0) this.hasteT -= dt;
   }
 
   protected queuedShotDelay(): number {
@@ -1468,17 +1497,19 @@ export class VoltHero extends HeroBase {
     bus.emit(EVT.HIT_STOP);
     for (const o of mgr.mobsInRadius(t.x, t.y, 90 * uc.rMul)) {   // 5级：落雷范围+20%
       if (o.dead) continue;
-      const hpBefore = o.hp;
-      o.takeDamage(dmgVal, false, this.id, false, 0, -Math.PI / 2, true);
-      if (this.lastDmg) this.lastDmg.add(this.id, Math.min(dmgVal, hpBefore));
-      if (this.stats.ultStun) o.stunT = Math.max(o.stunT, this.stats.ultStun);
-      const sa2 = Math.max(this.shockAmp(), uc.shockOn ? 0.25 * (this.stats.shockAmpMul || 1) : 0);   // 10级：落雷自带感电（取更优）
-      if (sa2) o.applyShock(sa2, 3);
+      const amount = dmgVal * (o.shockT > 0 ? voltShockedMultiplier(this.stats) : 1);
+      o.takeDamage(amount, false, this.id, false, 0, -Math.PI / 2, true);
+      if (this.lastDmg) this.lastDmg.add(this.id, o.lastDamageTaken);
+      if (!o.dead) {
+        if (this.stats.ultStun) o.stunT = Math.max(o.stunT, this.stats.ultStun);
+        const sa2 = voltShockAmp(this.stats, true); // 大招10级与卡牌感电取高
+        if (sa2) o.applyShock(sa2, voltShockDuration(this.stats));
+      }
     }
     void t;
   }
 
-  /** 大招·天雷灭世（手动，击杀充能）：全屏 15 道落雷（在场目标轮转，目标不足时随机补位），每道 AOE + 眩晕 1s */
+  /** 大招·天雷灭世：基础15道，雷暴增援最多25道；每道真实范围伤害+当前眩晕时长。 */
   castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean {
     if (!this.ultReady) return false;
     const alive = mgr.list.filter(m => !m.dead);
@@ -1487,12 +1518,11 @@ export class VoltHero extends HeroBase {
     this.beginUltimate();
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
     this.lastDmg = dmg;   // 天雷直伤计入伤害统计（施放时刷新引用）
-    for (let k = 0; k < 15; k++) {
+    const count = voltStrikeCount(this.stats);
+    for (let k = 0; k < count; k++) {
       const t = alive[k % alive.length];
-      const group = Math.floor(k / 5), within = k % 5;
-      this.strikeQueue.push({ t: [.65, 1.95, 3.15][group] + within * [.2, .17, .16][group], target: t, index: k });
+      this.strikeQueue.push({ t: voltStrikeTime(k), target: t, index: k });
     }
-    if (this.stats.ultHaste) this.hasteT = 5;
     void projs;
     return true;
   }
@@ -1507,6 +1537,9 @@ export class FrostHero extends HeroBase {
   readonly chargeMax = MORA_CHARGE_MAX;
   readonly skillMax = 10;
   private ultimateBurstT = -1;
+  private ultimateHitsLeft = 0;
+  private frostAreas: { x: number; y: number; radius: number; t: number; life: number; slow: number }[] = [];
+  private frostGroundVisible = false;
 
   protected buildVisual(parent: Node): void {
     const g = this.node.addComponent(Graphics);
@@ -1559,11 +1592,6 @@ export class FrostHero extends HeroBase {
     this.attachBattleArt('mora');
   }
 
-  /** 冰系减速幅度 = 基础比率 + 凛冬之息/绝对零度加成（结算上限 90%） */
-  private slowR(base: number): number {
-    return Math.min(0.9, base + (this.stats.slowAmpBonus || 0));
-  }
-
   /** 冰棱弹种统一构造：冰蓝细弹 + 减速词条 */
   private spec(base: {
     x: number; y: number; dirX: number; dirY: number; dmg: number;
@@ -1575,15 +1603,20 @@ export class FrostHero extends HeroBase {
       speed: base.speed,
       dmg: base.dmg * (this.stats.normalMul || 1) * (crit ? this.stats.critMul : 1), crit,
       color: '#7FD8FF', heroId: this.id, size: base.size,
-      slowRatio: this.slowR(this.stats.slowOnHit || 0),
-      slowDur: this.stats.slowDur || 2,
+      pierce: this.stats.moraPierce || 0, pierceDamage: .7,
+      slowRatio: moraSlowRatio(this.stats, this.stats.slowOnHit || 0),
+      slowDur: moraSlowDuration(this.stats, this.stats.slowDur || 2),
       spark: true,
       slowedBonus: this.stats.slowedBonus || undefined,
+      coldBonus: this.stats.moraColdBonus || undefined,
+      freezeChance: moraFreezeChance(this.stats),
+      freezeDuration: moraNormalFreezeDuration(this.stats),
+      teamVuln: this.stats.moraTeamVuln || 0,
       ...this.targetBonuses(),
     };
   }
 
-  /** 普攻·冰棱：快速单体 + 减速；70级突破：15% 概率冰冻 0.6s（不消耗） */
+  /** 普攻·冰棱：单体减速，速冻之心/70级突破在实际命中时判定0.6秒冰冻。 */
   protected shoot(target: Monster, _mgr: MonsterManager, projs: ProjectileManager): void {
     void _mgr;
     const bs = 850;
@@ -1595,28 +1628,35 @@ export class FrostHero extends HeroBase {
     }));
     projs.normalRelease(this.id, this.x, HERO_Y + 60, lead.dirX, lead.dirY);
     Sfx.shoot(this.id);
-    // 70级突破冰冻：几率走 freezeChance（基础15%，速冻之心卡累加），时长走 freezeProc
-    if (this.stats.freezeProc && Math.random() < (this.stats.freezeChance || 0.15)) target.applyFreeze(this.stats.freezeProc);
+    // 冰冻统一由弹体实际命中时判定；速冻之心无需70级突破即可启用。
   }
 
-  /** 冰霜领域：按实际领域半径选择密集区，当场伤害、冰封；解冻后才启动 2s 减速。 */
+  /** 冰霜领域：按实际半径选密集区；冰封延长只加冰封，寒冬延续只加解冻后减速。 */
   private castFrostField(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
     const mc = moraSkCfg(this.stats.skillLv);
-    const NR = (this.stats.novaR || 150) * mc.rMul * (this.stats.skillRangeMul || 1);
+    const NR = moraFieldRadius(this.stats);
     const center = mgr.densestArea(this.x, HERO_Y, this.stats.skillRange, NR);
     if (!center) return;
     this.animateAttack(true, center.x - this.x, center.y - (HERO_Y + 60));
     const hitDmg = this.abilityDamage(mc.mul);
-    const freeze = (this.stats.novaStun || 1.5) + mc.stunBonus;
+    const freeze = moraFieldFreeze(this.stats);
     // Snapshot the cast position: killing the central target cannot move the remaining field.
     projs.frostDomain(center.x, center.y, NR, freeze);
+    if (this.stats.moraGround) {
+      const life = this.stats.moraGround + (this.stats.moraSlowLinger || 0);
+      if (this.frostAreas.length >= 4) this.frostAreas.shift();
+      this.frostAreas.push({ x: center.x, y: center.y, radius: NR, t: life, life, slow: moraSlowRatio(this.stats, .5) });
+    }
     for (const m of mgr.mobsInRadius(center.x, center.y, NR)) {
       if (m.dead) continue;
-      const hpBefore = m.hp;
-      m.takeDamage(hitDmg, Math.random() < this.stats.critRate, this.id);
-      dmg.add(this.id, Math.min(hitDmg, hpBefore));
+      const crit = Math.random() < this.stats.critRate;
+      const amount = hitDmg * (m.slowT > 0 || m.freezeT > 0 ? moraColdMultiplier(this.stats) : 1)
+        * (crit ? this.stats.critMul : 1);
+      m.takeDamage(amount, crit, this.id);
+      dmg.add(this.id, m.lastDamageTaken);
       // Boss still receives the existing area damage, but has no freeze or post-thaw status.
-      m.applyFreeze(freeze, this.slowR(0.5), 2);
+      m.applyFreeze(freeze, moraSlowRatio(this.stats, .5), moraSlowDuration(this.stats, 2));
+      if (this.stats.moraTeamVuln) m.applyVuln(this.stats.moraTeamVuln, 3);
     }
     Sfx.cast(this.id);
   }
@@ -1627,24 +1667,44 @@ export class FrostHero extends HeroBase {
     this.castFrostField(mgr, projs, dmg);
   }
 
-  /** Windup ends at the first rain contacts; one real field hit, unchanged multipliers/slow. */
+  /** Three real contacts during one continuous storm; no threefold art/audio restart. */
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
+    if (this.frostAreas.length || this.frostGroundVisible) {
+      for (let i = this.frostAreas.length - 1; i >= 0; i--) {
+        const area = this.frostAreas[i];
+        area.t -= dt;
+        if (area.t <= 0) { this.frostAreas.splice(i, 1); continue; }
+        for (const m of mgr.list)
+          if (!m.dead && (m.x - area.x) ** 2 + (m.y - area.y) ** 2 <= area.radius ** 2) m.applySlow(area.slow, .25);
+      }
+      projs.frostGround(this.frostAreas);
+      this.frostGroundVisible = this.frostAreas.length > 0;
+    }
     if (this.ultimateBurstT < 0) return;
     this.ultimateBurstT -= dt;
-    if (this.ultimateBurstT > 0) return;
-    this.ultimateBurstT = -1;
-    const alive = mgr.list.filter(m => !m.dead);
-    projs.frostUltimateBurst(alive.map(m => ({ x: m.x, y: m.depthY, radius: m.def.radius })));
-    if (alive[0]) this.animateAttack(true, alive[0].x - this.x, alive[0].y - HERO_Y - 60);
-    const uc = moraUltCfg(this.stats.ultLv);
-    for (const m of alive) {
-      const hpBefore = m.hp, d = this.abilityDamage(uc.boltMul, true);
-      m.takeDamage(d, false, this.id, false, 0, -Math.PI / 2, true);
-      this.lastDmg?.add(this.id, Math.min(d, hpBefore));
-      if (!m.dead) m.applySlow(this.slowR(uc.slowMul), uc.slowDur + (this.stats.ultSlowDur || 0));
+    while (this.ultimateBurstT <= 0 && this.ultimateHitsLeft > 0) {
+      // Resample living enemies at each contact, including those entering during the storm.
+      const alive = mgr.list.filter(m => !m.dead);
+      projs.frostUltimateBurst(alive.map(m => ({ x: m.x, y: m.depthY, radius: m.def.radius })));
+      if (alive[0]) this.animateAttack(true, alive[0].x - this.x, alive[0].y - HERO_Y - 60);
+      const uc = moraUltCfg(this.stats.ultLv), base = moraUltimateHitDamage(this.stats);
+      const slow = moraSlowRatio(this.stats, uc.slowMul);
+      const slowDuration = moraSlowDuration(this.stats, uc.slowDur + (this.stats.ultSlowDur || 0));
+      for (const m of alive) {
+        const amount = base * (m.slowT > 0 || m.freezeT > 0 ? moraColdMultiplier(this.stats) : 1);
+        m.takeDamage(amount, false, this.id, false, 0, -Math.PI / 2, true);
+        this.lastDmg?.add(this.id, m.lastDamageTaken);
+        if (m.dead) continue;
+        // Repeated freezes refresh instead of adding time. Bosses retain slow without freeze.
+        if (this.stats.moraTeamVuln) m.applyVuln(this.stats.moraTeamVuln, 3);
+        const frozen = this.stats.moraUltFreeze && m.applyFreeze(this.stats.moraUltFreeze, slow, slowDuration);
+        if (!frozen) m.applySlow(slow, slowDuration);
+      }
+      if (alive.length) { this.ultimateBeat(this.x, HERO_Y + 60, .8); bus.emit(EVT.HIT_STOP); }
+      this.ultimateHitsLeft--;
+      if (!this.ultimateHitsLeft) { this.ultimateBurstT = -1; break; }
+      this.ultimateBurstT += FROST_ULT_HIT_GAP;
     }
-    this.ultimateBeat(this.x, HERO_Y + 60, .8);
-    bus.emit(EVT.HIT_STOP);
   }
   protected queuedShotDelay(): number { return this.ultimateBurstT >= 0 ? this.ultimateBurstT : Infinity; }
   castUlt(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): boolean {
@@ -1653,6 +1713,7 @@ export class FrostHero extends HeroBase {
     if (!alive.length) return false;
     this.charge = 0; this.lastDmg = dmg;
     this.beginUltimate();
+    this.ultimateHitsLeft = MORA_ULT_HITS;
     this.ultimateBurstT = ULT_TIMING.mora.windup;
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
     projs.frostUltimate(alive.map(m => ({ x: m.x, y: m.depthY, radius: m.def.radius })));

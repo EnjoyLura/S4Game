@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-21",
+  "tool": "image_gen",
+  "mode": "built-in generation with references, then precise-object-edit for framing",
+  "subject": "赤翼秃鹫",
+  "references": [
+    {
+      "path": "D:\\AI\\S4Game\\KingdomWatch\\docs\\chapter-one-bone-warg-v2\\bone-warg-slight-top-front.png",
+      "sha256": "994E7BC84D4113DD2F236264B935335FD975DBFEC5FCFE84B78AC4212E2680EC",
+      "role": "Outline, paint and material language only; not bird anatomy"
+    },
+    {
+      "path": "C:\\Users\\user\\AppData\\Local\\Temp\\codex-clipboard-a4d0c27f-f5d6-4d6d-846c-c582994868c4.png",
+      "sha256": "E5A56B43DED8C22261F6DB25F64A6C6533F0D6B78395D783FE747C41313E9C8F",
+      "role": "Outline, paint and material language only; not bird anatomy"
+    }
+  ],
+  "prompts": [
+    "prompt.txt",
+    "padding-prompt.txt"
+  ],
+  "initial": {
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-dcdd5ee2-42cd-4e84-94ee-0da6c1fb4e4f.png",
+    "path": "D:\\AI\\S4Game\\KingdomWatch\\docs\\chapter-one-redwing-vulture-v1\\redwing-vulture-initial.png",
+    "sha256": "58EBF5BC6AED7CD2FF3D644D111149A9E30E2ACA88698A27C6B12B4C85B64951",
+    "status": "Wing tips close to border; agent expanded framing"
+  },
+  "final": {
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-96a838de-bc35-4266-bdea-43bf793fc5d7.png",
+    "path": "D:\\AI\\S4Game\\KingdomWatch\\docs\\chapter-one-redwing-vulture-v1\\redwing-vulture-front-padded.png",
+    "sha256": "6C33BC66B4C16641050353FFE8F949A3D4ECC01F1A6ECBE3E153BF2A352096E9"
+  },
+  "inspection": [
+    "Frontal head and body; bald folded neck, hooked beak, dark brick-red wings, ivory ruff and grey talons visible",
+    "Wings, feet and tail complete; final has substantially more blank margin around wing tips",
+    "Exact margin percentages in prompt are targets, not guaranteed measurements; animation range not validated",
+    "Native generated images inspected; PNG original byte copies verified by SHA256"
+  ],
+  "user_visual_approval": "pending",
+  "game_integrated": false,
+  "animation_created": false
+}

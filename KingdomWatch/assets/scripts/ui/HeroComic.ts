@@ -3,15 +3,14 @@ import { Graphics, Node, Sprite, UIOpacity, UITransform } from 'cc';
 import { C, CA, label, N, WY } from './UIKit';
 import { artSprite } from './Ux';
 import { COMIC, comicArt, comicMark, comicPortrait, comicSurface } from './ComicUI';
-import { EquipKind, HERO_DEFS } from '../core/GameData';
-import { WEAPONS } from '../config/Weapons';
+import { EQUIPS, EquipKind, HERO_DEFS } from '../core/GameData';
 
 export const HERO_PASTEL: Record<string, string> = {
   archer: '#DDEBD0', sniper: '#DBE7F2', pyro: '#F4DDC5', volt: '#E7DEF0', mora: '#D9EDF0',
 };
 export const GEAR_PASTEL = ['#E8E5DC', '#DDEBD0', '#DCE8F1', '#E7DEF0'];
 export const GEAR_ART: Record<string, string> = {
-  ...Object.keys(WEAPONS).reduce((out, id) => { out[id] = WEAPONS[id].art; return out; }, {} as Record<string, string>),
+  ...Object.values(EQUIPS).reduce((out, item) => { if (item.art) out[item.id] = item.art; return out; }, {} as Record<string, string>),
   helm_falcon: 'comic_helm_falcon_v1', acc_moon: 'comic_acc_moon_v1',
   glove_wind: 'comic_glove_wind_v1', armor_forest: 'comic_armor_forest_v1',
   mat_stone: 'comic_mat_stone_v1', mat_iron: 'comic_mat_iron_v1',

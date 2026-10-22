@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>哥布林苦工 · 生图行走实验</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,"Microsoft YaHei",sans-serif;background:#171d23;color:#e8e0cd}*{box-sizing:border-box}body{max-width:1150px;margin:auto;padding:26px 20px 60px}h1{font-size:26px;margin:0 0 10px}p{color:#b9c2c6;line-height:1.7}a{color:#f3c762}header{margin-bottom:20px}.toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:14px;background:#25313b;border-radius:12px;position:sticky;top:8px;z-index:1}button,select{font:inherit;border:1px solid #60707a;border-radius:7px;background:#31424e;color:#fff;padding:8px 12px;cursor:pointer}label{display:flex;align-items:center;gap:8px}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:20px 0}.card{background:#25313b;border:1px solid #41505a;border-radius:14px;overflow:hidden}.card h2{font-size:17px;padding:0 16px}.stage{background:#e8e0cd;aspect-ratio:1;position:relative}.stage img,.stage canvas{width:100%;height:100%;object-fit:contain;display:block}.dark .stage{background:#26333e}.check .stage{background:repeating-conic-gradient(#ddd6c4 0 25%,#eee7d7 0 50%) 50%/24px 24px}.hint{padding:0 16px;color:#b9c2c6;font-size:13px}.frames{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.frames a{display:block;background:#e8e0cd;border-radius:9px;position:relative}.frames img{display:block;width:100%}.frames span{position:absolute;top:7px;left:9px;color:#25313b;font-weight:700}details{margin:24px 0}details img{max-width:100%;margin-top:14px}.error{color:#ffae96}@media(max-width:650px){body{padding:18px 12px}.comparison{gap:9px}.card h2{font-size:14px;padding:0 9px}.hint{padding:0 9px}.frames{grid-template-columns:repeat(2,1fr)}}
+</style>
+<header><h1>哥布林苦工 · 生图行走实验</h1><p>以当前游戏绿皮持斧苦工为参考，由生图生成8个姿势。4列×2行，顺序循环；这里只做切帧、统一缩放与整体对齐，未使用骨骼变形或程序补帧。试验素材尚未接入游戏。</p></header>
+<div class="toolbar"><button id="play">暂停</button><button id="previous">上一帧</button><button id="next">下一帧</button><label>速度 <input id="fps" type="range" min="4" max="16" value="10"><output id="rate">10 FPS</output></label><label>背景 <select id="background"><option value="light">浅色</option><option value="dark">深色</option><option value="check">棋盘</option></select></label><strong id="position">第1 / 8帧</strong></div>
+<div class="comparison"><section class="card"><h2>当前游戏原图</h2><div class="stage"><canvas id="original" width="512" height="512"></canvas></div><p class="hint">当前正式素材中的哥布林苦工，原图保留。</p></section><section class="card"><h2>生图生成 · 正面行走</h2><div class="stage"><canvas id="animation" width="512" height="512"></canvas></div><p class="hint">先看脚步、脸与斧头的连续性，再判断是否值得继续。</p></section></div>
+<p><a href="walk-preview.gif">单只动图</a> · <a href="source-and-walk.gif">原图与动作对照</a> · <a href="goblin-worker-walk-8f.png">透明精灵表</a> · <a href="goblin-worker-walk-8f.zip">下载PNG帧与图集</a> · <a href="prompt.txt">完整提示词</a></p>
+<h2>逐帧查看</h2><div class="frames" id="frames"></div>
+<details><summary>生图原始精灵表（未对齐）</summary><a href="generated-sheet-original.png"><img src="generated-sheet-original.png" alt="原始8帧透明精灵表"></a></details>
+<details><summary>第6、7帧左右脚相位修正版</summary><p>第二轮定向生图；最终只采用本图第6、7格，其他六格保留首轮。</p><a href="generated-sheet-correction.png"><img src="generated-sheet-correction.png" alt="第6、7帧相位修正原图"></a></details>
+<p id="status">正在读取本地图片…</p>
+<script>
+const $=id=>document.getElementById(id);let images=[],index=0,playing=true,last=0,elapsed=0;const ctx=$('animation').getContext('2d');
+function image(src){return new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=()=>reject(new Error(src));i.src=src})}
+function draw(){if(!images.length)return;ctx.clearRect(0,0,512,512);ctx.drawImage(images[index],0,0);$('position').textContent=`第${index+1} / 8帧`}
+function setPlaying(value){playing=value;$('play').textContent=value?'暂停':'播放';elapsed=0}
+$('play').onclick=()=>setPlaying(!playing);$('previous').onclick=()=>{setPlaying(false);index=(index+7)%8;draw()};$('next').onclick=()=>{setPlaying(false);index=(index+1)%8;draw()};$('fps').oninput=()=>{$('rate').textContent=$('fps').value+' FPS';elapsed=0};$('background').onchange=()=>{document.body.className=$('background').value};
+function loop(t){const dt=last?Math.min(t-last,200):0;last=t;if(playing&&images.length){elapsed+=dt;const interval=1000/Number($('fps').value);if(elapsed>=interval){const steps=Math.floor(elapsed/interval);index=(index+steps)%8;elapsed-=steps*interval;draw()}}requestAnimationFrame(loop)}
+Promise.all(Array.from({length:8},(_,i)=>image(`frames/goblin_worker_walk_${String(i).padStart(2,'0')}.png`))).then(result=>{images=result;draw();$('status').textContent='图片已加载。最终自然度由你检查；没有运行游戏或浏览器交互验收。';requestAnimationFrame(loop)}).catch(e=>{$('status').className='error';$('status').textContent='图片读取失败：'+e.message});
+image('current-game-portrait.png').then(im=>{const c=$('original').getContext('2d');const scale=420/im.height;c.drawImage(im,256-235*scale,470-im.height*scale,im.width*scale,im.height*scale)}).catch(()=>{});
+for(let i=0;i<8;i++){const a=document.createElement('a');a.href=`frames/goblin_worker_walk_${String(i).padStart(2,'0')}.png`;a.innerHTML=`<span>${String(i+1).padStart(2,'0')}</span><img alt="行走第${i+1}帧" src="${a.getAttribute('href')}">`;$('frames').append(a)}
+</script>
+</html>

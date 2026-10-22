@@ -1,0 +1,82 @@
+[
+  {
+    "key": "helm_ironridge",
+    "id": "helm_ironridge",
+    "name": "铁脊战盔",
+    "kind": "helm",
+    "quality": 2,
+    "tier": 1,
+    "stats": {
+      "atk": 18,
+      "atkPct": 0.04
+    },
+    "focus": "基础攻击",
+    "description": "铁脊加固的前线战盔，偏重基础攻击，适合前期稳定输出。",
+    "art": "shop_comic_v1/helm_ironridge_v57",
+    "price": 1800,
+    "unlock": "1-2",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_helm_falcon_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 铁脊战盔. Subject: A compact rugged iron closed war helmet, broad flat brow, short ridged reinforcing crest, riveted cheek plates, rust-red leather lining, steel grey and warm brass accents. No feathers. Rarity: blue rare, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-0c6ac076-4184-4944-b991-b3045726061f.png"
+  },
+  {
+    "key": "helm_hawkguard",
+    "id": "helm_hawkguard",
+    "name": "鹰卫兜帽",
+    "kind": "helm",
+    "quality": 2,
+    "tier": 1,
+    "stats": {
+      "atk": 10,
+      "atkPct": 0.1
+    },
+    "focus": "攻击加成",
+    "description": "轻便的鹰卫兜帽，偏重攻击加成，适合已有攻击培养的英雄。",
+    "art": "shop_comic_v1/helm_hawkguard_v57",
+    "price": 1800,
+    "unlock": "1-2",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_helm_falcon_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 鹰卫兜帽. Subject: A hunter scout hood made from dark forest teal cloth, pointed folded crown, short brown leather shoulder cowl, tiny silver hawk clasp at the throat and reinforced eyebrow leather. Clearly a wearable empty hood, not a face or head. Rarity: blue rare, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-e1984a54-e93f-4d72-a77c-bb39de47c8c8.png"
+  },
+  {
+    "key": "acc_sunfang",
+    "id": "acc_sunfang",
+    "name": "日牙护符",
+    "kind": "acc",
+    "quality": 2,
+    "tier": 1,
+    "stats": {
+      "critRate": 0.06,
+      "critDmg": 0.16
+    },
+    "focus": "暴击率",
+    "description": "磨成日牙形的护符，偏重暴击率，让输出更稳定地触发暴击。",
+    "art": "shop_comic_v1/acc_sunfang_v57",
+    "price": 1800,
+    "unlock": "1-2",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_acc_moon_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 日牙护符. Subject: One necklace pendant: a curved ivory fang held in a rough bronze sun-shaped clasp, a small amber-orange inset stone, short visible brown cord loop. Robust angular fantasy craftsmanship. Rarity: blue rare, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-b2f2eebc-8aa3-40a1-a792-840953c54bd5.png"
+  },
+  {
+    "key": "acc_crimson",
+    "id": "acc_crimson",
+    "name": "赤晶指环",
+    "kind": "acc",
+    "quality": 2,
+    "tier": 1,
+    "stats": {
+      "critRate": 0.03,
+      "critDmg": 0.3
+    },
+    "focus": "暴击伤害",
+    "description": "镶嵌赤晶的指环，偏重暴击伤害，适合已有暴击率的搭配。",
+    "art": "shop_comic_v1/acc_crimson_v57",
+    "price": 1800,
+    "unlock": "1-2",
+    "reference": "D:/AI/S4Game/KingdomWatch/assets/resources/ux/shop_comic_v1/comic_acc_moon_v1.png",
+    "prompt": "Use case: stylized-concept. Asset type: one transparent inventory equipment illustration for a 2D fantasy tower-defense game. Reference image role: match only its bold hand-painted cartoon item art, thick dark brown contour, simplified chunky planes, warm highlights, readable 3-tone shading and slightly worn surfaces; do not duplicate its design. Create a NEW item called 赤晶指环. Subject: One chunky iron ring with a large angular dark red crystal in a simple brass four-prong mount, thick silver-steel band, tilted three-quarter view with visible ring opening. Rarity: blue rare, communicated through richer construction, without any rarity frame. Composition: centered isolated full item (gloves/bracers form one compact paired item), square canvas, three-quarter view, maximal readable size while retaining at least 8 percent clear margin on ALL four sides, whole contour entirely inside canvas. True transparent background, crisp opaque item interiors, no scene, no card, no circular badge, no ground shadow, no text, no letters, no logo, no watermark. Match the reference's simple confident inked comic brush style; no photorealism, no 3D render, no excessive tiny ornament or excessive shine.",
+    "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-f1fcaafa-ad25-4961-9f2a-e0c4e93e8cf0.png"
+  }
+]

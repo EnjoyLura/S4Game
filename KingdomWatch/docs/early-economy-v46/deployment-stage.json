@@ -1,0 +1,103 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-early-economy-v46-20261018-214523",
+  "published": true,
+  "project": "kingdom-watch",
+  "branch": "main",
+  "entryVersion": "1792331065",
+  "game": "https://kingdom-watch.pages.dev/?v=early-economy-v46-1792331065",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-fifth-level-balance-v45-20261018-213321",
+  "originalFilesChecked": 1840,
+  "changedExistingFiles": [
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/core/SaveData.ts",
+    "assets/scripts/ui/LevelLootPreview.ts",
+    "assets/scripts/ui/Panels.ts"
+  ],
+  "addedFiles": [
+    "assets/scripts/config/EarlyEconomy.ts",
+    "assets/scripts/config/EarlyEconomy.ts.meta",
+    "assets/scripts/core/EarlyEconomy.ts",
+    "assets/scripts/core/EarlyEconomy.ts.meta"
+  ],
+  "priorPreviewFilesPreserved": 793,
+  "typeDiagnosticsUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "allOriginalMediaUnchanged": true,
+  "allMonsterWavesUnchanged": true,
+  "cultivationCostsUnchanged": true,
+  "firstWinGold": {
+    "1-1": 200,
+    "1-2": 400,
+    "1-3": 800,
+    "1-4": 2000
+  },
+  "budget": {
+    "assumptions": "Initial 500 gold; all authored enemies killed; no gold cards, repeats, purchases or ads; star chests excluded unless specified; budget arithmetic only, not gameplay verification",
+    "heroPerStep": [
+      100,
+      250,
+      440,
+      650
+    ],
+    "weaponPerStep": [
+      150,
+      400
+    ],
+    "threeHeroCost": 4320,
+    "threeWeaponCost": 1650,
+    "totalCost": 5970,
+    "stages": [
+      {
+        "stage": "1-1",
+        "baseGold": 60,
+        "authoredKillGold": 225,
+        "firstWinBonus": 200,
+        "oneStarGold": 491,
+        "threeStarGold": 503
+      },
+      {
+        "stage": "1-2",
+        "baseGold": 68,
+        "authoredKillGold": 330,
+        "firstWinBonus": 400,
+        "oneStarGold": 804,
+        "threeStarGold": 818
+      },
+      {
+        "stage": "1-3",
+        "baseGold": 76,
+        "authoredKillGold": 568,
+        "firstWinBonus": 800,
+        "oneStarGold": 1451,
+        "threeStarGold": 1466
+      },
+      {
+        "stage": "1-4",
+        "baseGold": 100,
+        "authoredKillGold": 656,
+        "firstWinBonus": 2000,
+        "oneStarGold": 2766,
+        "threeStarGold": 2786
+      }
+    ],
+    "oneStarTotal": 6012,
+    "threeStarTotal": 6073,
+    "optionalFirstStarChestGold": 1400,
+    "weaponStoneNeeded": 6,
+    "firstFourStoneRewards": 10,
+    "oneStarRemainder": 42,
+    "threeStarRemainder": 103
+  },
+  "advertising": "Existing full victory gold x2, including gold actually granted as the first-win bonus in that battle; optional acceleration for discretionary cultivation.",
+  "receipts": "First-win receipt, credited gold, stars and gifts committed together. No new claim button; duplicate wins excluded.",
+  "oldSaves": "Previously cleared stages ineligible, no retroactive money; uncleared stages remain eligible; existing inventory/growth retained.",
+  "scope": "Normal 1-1 through 1-4 one-time gold bonus, previews, settlement note and receipt migration only. Repeat rewards, costs, waves, first-win gear/heroes and ad semantics retained.",
+  "manualAcceptance": "No tests/game/browser/simulation/audio playback. Static budget arithmetic is not gameplay acceptance.",
+  "deployment": "https://a42c00e8.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.e4f19.js?v=1792331065",
+    "finalUrl": "https://kingdom-watch.pages.dev/?v=early-economy-v46-1792331065"
+  }
+}

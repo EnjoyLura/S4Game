@@ -1,0 +1,350 @@
+[
+  {
+    "id": "archer_pierce",
+    "before": "普攻额外穿透1个目标\n可配合连射、齐射\n最多2层",
+    "after": "普攻额外穿透1个目标",
+    "lines": 1
+  },
+  {
+    "id": "serial",
+    "before": "普攻追加1排连射\n攻击力 -10%\n最多5层",
+    "after": "普攻额外连射1次\n攻击力 -10%",
+    "lines": 2
+  },
+  {
+    "id": "fan",
+    "before": "普攻额外发射1支箭\n攻击力 -10%\n最多5层",
+    "after": "普攻箭矢数量 +1\n攻击力 -10%",
+    "lines": 2
+  },
+  {
+    "id": "split",
+    "before": "命中分裂 2 支箭\n分裂箭伤害 50%\n攻击力 -10%",
+    "after": "命中后分裂2支箭\n分裂箭伤害50%\n攻击力 -10%",
+    "lines": 3
+  },
+  {
+    "id": "explode",
+    "before": "命中触发爆炸\n溅射伤害 40%\n攻击力 -10%",
+    "after": "命中触发范围爆炸\n溅射伤害40%\n攻击力 -10%",
+    "lines": 3
+  },
+  {
+    "id": "explode_r",
+    "before": "爆炸半径 +40%\n需已学习爆炸",
+    "after": "爆炸半径 +40%",
+    "lines": 1
+  },
+  {
+    "id": "explode_w",
+    "before": "爆炸伤害 +50%\n需已学习爆炸",
+    "after": "爆炸伤害 +50%",
+    "lines": 1
+  },
+  {
+    "id": "frost",
+    "before": "命中减速 20%\n持续 1 秒\n攻击力 -10%",
+    "after": "命中减速20%\n持续1秒\n攻击力 -10%",
+    "lines": 3
+  },
+  {
+    "id": "burn",
+    "before": "命中点燃 3 秒\n共60%攻击力伤害\n攻击力 -10%",
+    "after": "命中点燃3秒\n累计60%攻击力伤害\n攻击力 -10%",
+    "lines": 3
+  },
+  {
+    "id": "instinct_a",
+    "before": "目标血量低于30%时\n伤害 +100%",
+    "after": "对生命低于30%的目标\n伤害 +100%",
+    "lines": 2
+  },
+  {
+    "id": "rain_rounds",
+    "before": "大招箭雨 +1 轮\n最多 3 轮",
+    "after": "大招箭雨轮数 +1",
+    "lines": 1
+  },
+  {
+    "id": "fast_charge_a",
+    "before": "大招充能需求 -20%\n可叠加",
+    "after": "大招充能需求 -20%",
+    "lines": 1
+  },
+  {
+    "id": "execute",
+    "before": "对精英和BOSS\n伤害 +35%",
+    "after": "对精英、首领\n伤害 +35%",
+    "lines": 2
+  },
+  {
+    "id": "instinct_s",
+    "before": "目标血量低于30%时\n伤害 +100%",
+    "after": "对生命低于30%的目标\n伤害 +100%",
+    "lines": 2
+  },
+  {
+    "id": "multi_lock",
+    "before": "穿颅射击连狙 +2 发\n可叠加",
+    "after": "穿颅射击额外连射2发",
+    "lines": 1
+  },
+  {
+    "id": "cd_cut",
+    "before": "技能冷却 -2 秒\n可叠加",
+    "after": "穿颅射击冷却 -2秒",
+    "lines": 1
+  },
+  {
+    "id": "sniper_range",
+    "before": "技能索敌范围 +30%",
+    "after": "技能索敌范围 +30%",
+    "lines": 1
+  },
+  {
+    "id": "sniper_pierce",
+    "before": "普攻、技能弩箭\n额外穿透1个目标",
+    "after": "普攻和技能弩箭\n额外穿透1个目标",
+    "lines": 2
+  },
+  {
+    "id": "extra_line",
+    "before": "大招枪线 +1 条\n可叠加",
+    "after": "大招弩箭数量 +1",
+    "lines": 1
+  },
+  {
+    "id": "fast_charge_s",
+    "before": "大招充能需求 -20%\n可叠加",
+    "after": "大招充能需求 -20%",
+    "lines": 1
+  },
+  {
+    "id": "sniper_mark",
+    "before": "大招命中挂上蓝色准星\n目标受到伤害 +30%\n持续 5 秒",
+    "after": "大招命中施加易伤\n目标受到伤害 +30%\n持续5秒",
+    "lines": 3
+  },
+  {
+    "id": "pyro_burst",
+    "before": "火法点燃的敌人死亡爆炸\n半径100，伤害为60%攻击力\n爆炸不触发二次引爆",
+    "after": "自身点燃目标死亡时爆炸\n造成60%攻击力范围伤害\n爆炸不触发连锁",
+    "lines": 3
+  },
+  {
+    "id": "pyro_spell",
+    "before": "基础技能伤害 +30%\n技能、大招生效\n最多3层",
+    "after": "技能伤害属性 +30%\n影响技能与大招",
+    "lines": 2
+  },
+  {
+    "id": "pyro_shards",
+    "before": "烈焰爆裂火球 +1颗\n最多3层",
+    "after": "烈焰爆裂多发1颗火球",
+    "lines": 1
+  },
+  {
+    "id": "pyro_cd",
+    "before": "技能冷却 -2 秒\n可叠加",
+    "after": "烈焰爆裂冷却 -2秒",
+    "lines": 1
+  },
+  {
+    "id": "pyro_range",
+    "before": "普攻、技能、陨石\n爆炸半径 +20%\n不扩大索敌或陨石坑",
+    "after": "普攻、技能与陨石\n爆炸半径 +20%",
+    "lines": 2
+  },
+  {
+    "id": "pyro_war",
+    "before": "大招直接伤害 +40%\n不提高灼烧伤害\n最多3层",
+    "after": "大招直接伤害 +40%",
+    "lines": 1
+  },
+  {
+    "id": "pyro_eager",
+    "before": "大招充能需求 -25%\n最多2层",
+    "after": "大招充能需求 -25%",
+    "lines": 1
+  },
+  {
+    "id": "pyro_burn",
+    "before": "普攻直击、溅射点燃\n每秒20%攻击力\n持续3秒",
+    "after": "普攻和溅射点燃3秒\n每秒20%攻击力伤害",
+    "lines": 2
+  },
+  {
+    "id": "pyro_ember",
+    "before": "全部灼烧伤害 +50%\n包含陨石坑\n最多3层，共+150%",
+    "after": "灼烧伤害 +50%\n包含陨石坑灼烧",
+    "lines": 2
+  },
+  {
+    "id": "pyro_linger",
+    "before": "灼烧持续时间 +1秒\n陨石坑持续时间 +1秒\n最多2层",
+    "after": "灼烧、陨石坑\n持续时间 +1秒",
+    "lines": 2
+  },
+  {
+    "id": "pyro_meteors",
+    "before": "大招额外落下2颗陨石\n最多2层，共+4颗",
+    "after": "大招陨石数量 +2",
+    "lines": 1
+  },
+  {
+    "id": "volt_spell",
+    "before": "技能伤害项 +30%\n技能、大招生效\n最多3层",
+    "after": "技能伤害属性 +30%\n影响技能与大招",
+    "lines": 2
+  },
+  {
+    "id": "volt_shards",
+    "before": "连锁闪电目标 +2\n基础5→7→9→11个\n同次不重复命中",
+    "after": "连锁闪电目标 +2",
+    "lines": 1
+  },
+  {
+    "id": "volt_cd",
+    "before": "连锁闪电冷却 -2秒\n最多3层",
+    "after": "连锁闪电冷却 -2秒",
+    "lines": 1
+  },
+  {
+    "id": "volt_range",
+    "before": "连锁跳跃距离 +30%\n不改变首次索敌范围\n最多3层",
+    "after": "闪电跳跃距离 +30%",
+    "lines": 1
+  },
+  {
+    "id": "volt_war",
+    "before": "大招落雷伤害 +40%\n最多3层",
+    "after": "大招落雷伤害 +40%",
+    "lines": 1
+  },
+  {
+    "id": "volt_eager",
+    "before": "大招充能需求 -25%\n最多2层",
+    "after": "大招充能需求 -25%",
+    "lines": 1
+  },
+  {
+    "id": "volt_shock",
+    "before": "普攻、技能、大招附加感电\n目标受到所有伤害 +25%\n持续3秒，重复命中刷新",
+    "after": "命中附加3秒感电\n目标受到伤害 +25%",
+    "lines": 2
+  },
+  {
+    "id": "volt_pressure",
+    "before": "雷法自身对感电目标\n伤害 +30%\n最多2层，共+60%",
+    "after": "对感电目标\n自身伤害 +30%",
+    "lines": 2
+  },
+  {
+    "id": "volt_linger",
+    "before": "感电持续时间 +1秒\n3→4→5秒\n最多2层",
+    "after": "感电持续时间 +1秒",
+    "lines": 1
+  },
+  {
+    "id": "volt_strikes",
+    "before": "大招额外落雷5次\n15→20→25道\n最多2层",
+    "after": "大招落雷次数 +5",
+    "lines": 1
+  },
+  {
+    "id": "volt_stun",
+    "before": "大招落雷眩晕 +1.5秒\n基础1→2.5秒\n最多1层",
+    "after": "大招眩晕时间 +1.5秒",
+    "lines": 1
+  },
+  {
+    "id": "mora_team",
+    "before": "冰系命中施加冰裂印记\n目标受到全队伤害 +15%\n持续3秒，可刷新",
+    "after": "命中附加3秒易伤\n目标受到伤害 +15%",
+    "lines": 2
+  },
+  {
+    "id": "mora_spell",
+    "before": "技能伤害项 +30%\n技能、大招生效\n最多3层",
+    "after": "技能伤害属性 +30%\n影响技能与大招",
+    "lines": 2
+  },
+  {
+    "id": "mora_range",
+    "before": "冰霜领域半径 +20%\n不改变首次索敌范围\n最多3层",
+    "after": "冰霜领域半径 +20%",
+    "lines": 1
+  },
+  {
+    "id": "mora_cd",
+    "before": "冰霜领域冷却 -2秒\n最多3层",
+    "after": "冰霜领域冷却 -2秒",
+    "lines": 1
+  },
+  {
+    "id": "mora_chill",
+    "before": "减速幅度 +10个百分点\n普攻、领域、大招生效\n最多3层，上限90%",
+    "after": "减速幅度 +10个百分点\n最高减速90%",
+    "lines": 2
+  },
+  {
+    "id": "mora_freeze",
+    "before": "普攻命中冰冻几率 +15%\n冰冻0.6秒，无需突破\n最多2层，可叠突破概率",
+    "after": "普攻冰冻几率 +15%\n冰冻持续0.6秒",
+    "lines": 2
+  },
+  {
+    "id": "mora_war",
+    "before": "大招三段伤害 +40%\n最多3层",
+    "after": "大招伤害 +40%",
+    "lines": 1
+  },
+  {
+    "id": "mora_linger",
+    "before": "全部冰系减速持续 +1秒\n普攻、领域、大招生效\n最多2层，不延长冰封",
+    "after": "减速持续时间 +1秒",
+    "lines": 1
+  },
+  {
+    "id": "mora_freeze_linger",
+    "before": "冰霜领域冰封 +1秒\n基础1.5→2.5→3.5秒\n最多2层",
+    "after": "技能冰封时间 +1秒",
+    "lines": 1
+  },
+  {
+    "id": "mora_eager",
+    "before": "大招充能需求 -25%\n最多2层",
+    "after": "大招充能需求 -25%",
+    "lines": 1
+  },
+  {
+    "id": "mora_brittle",
+    "before": "冰法对减速、冰封目标\n全部伤害 +30%\n最多2层，共+60%",
+    "after": "对减速、冰封目标\n自身伤害 +30%",
+    "lines": 2
+  },
+  {
+    "id": "mora_glacier",
+    "before": "大招冰封1.5秒，命中刷新\n解冻后开始减速\nBoss免疫冰封",
+    "after": "大招命中冰封1.5秒\n首领免疫冰封",
+    "lines": 2
+  },
+  {
+    "id": "wall",
+    "before": "防线耐久上限 +25%\n并回复 25% 耐久",
+    "after": "防线耐久上限 +25%\n回复25%最大耐久",
+    "lines": 2
+  },
+  {
+    "id": "repair",
+    "before": "防线每秒回复\n0.5% 最大耐久",
+    "after": "每秒回复0.5%最大耐久",
+    "lines": 1
+  },
+  {
+    "id": "xp_badge",
+    "before": "经验获取 +10%",
+    "after": "经验获取 +10%",
+    "lines": 1
+  }
+]

@@ -1,0 +1,28 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-new-enemy-art-v38-20261018-201314",
+  "entryVersion": "1792325569",
+  "priorPublishedStage": "D:\\AI\\S4Game\\KingdomWatch\\build\\publish-first-level-balance-v37-20261018-200242",
+  "project": "kingdom-watch",
+  "branch": "main",
+  "published": true,
+  "game": "https://kingdom-watch.pages.dev/?v=new-enemy-art-v38-1792325569",
+  "priorPreviewFilesPreserved": 793,
+  "originalFilesChecked": 1826,
+  "changedExistingFiles": [
+    "assets/scripts/ui/HUD.ts"
+  ],
+  "typeDiagnosticsUnchanged": true,
+  "preExistingTypeErrors": 10,
+  "allOriginalMediaUnchanged": true,
+  "audioAndRenderingUnchanged": true,
+  "heroWeaponCardDamageFormulasUnchanged": true,
+  "scope": "New-enemy popup uses codex monster atlas frames and the shared comic confirmation button",
+  "manualAcceptance": "User manual; no tests/game/browser/simulation/audio playback performed",
+  "deployment": "https://208a9ace.kingdom-watch.pages.dev",
+  "publicationNote": "Wrangler reported Deployment complete; no game/browser/audio playback performed",
+  "staticHttpCheck": {
+    "status": 200,
+    "entry": "index.b4996.js?v=1792325569",
+    "finalUrl": "https://kingdom-watch.pages.dev/?v=new-enemy-art-v38-1792325569"
+  }
+}

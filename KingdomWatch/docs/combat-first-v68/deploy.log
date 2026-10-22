@@ -1,0 +1,14 @@
+
+ ⛅️ wrangler 4.143.0
+────────────────────
+✨ Compiled Worker successfully
+Uploading... (2887/2895)
+Uploading... (2890/2895)
+Uploading... (2893/2895)
+Uploading... (2895/2895)
+✨ Success! Uploaded 8 files (2887 already uploaded) (2.67 sec)
+
+✨ Uploading _headers
+✨ Uploading Functions bundle
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://cb18a231.kingdom-watch.pages.dev

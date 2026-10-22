@@ -3,3 +3,6 @@
 Tools/gpt-image-2-skill
 
 .wrangler/
+
+# Local audio scratch downloads and analysis exports
+/.tmp-kwsfx/

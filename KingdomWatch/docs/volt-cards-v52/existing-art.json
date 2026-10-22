@@ -1,0 +1,353 @@
+[
+  {
+    "key": "ui_card_sharp",
+    "size": [
+      416,
+      416
+    ],
+    "alphaBounds": [
+      3,
+      3,
+      414,
+      414
+    ]
+  },
+  {
+    "key": "ui_card_swift",
+    "size": [
+      416,
+      416
+    ],
+    "alphaBounds": [
+      3,
+      3,
+      414,
+      414
+    ]
+  },
+  {
+    "key": "ui_card_crit_rate",
+    "size": [
+      416,
+      416
+    ],
+    "alphaBounds": [
+      3,
+      3,
+      414,
+      414
+    ]
+  },
+  {
+    "key": "ui_card_crit_dmg",
+    "size": [
+      416,
+      416
+    ],
+    "alphaBounds": [
+      3,
+      3,
+      414,
+      414
+    ]
+  },
+  {
+    "key": "ui_card_cd_cut",
+    "size": [
+      408,
+      408
+    ],
+    "alphaBounds": [
+      3,
+      3,
+      406,
+      406
+    ]
+  },
+  {
+    "key": "ui_card_fast_charge_a",
+    "size": [
+      416,
+      416
+    ],
+    "alphaBounds": [
+      3,
+      3,
+      414,
+      414
+    ]
+  },
+  {
+    "key": "ui_icon_skill_archer",
+    "size": [
+      472,
+      472
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      472,
+      472
+    ]
+  },
+  {
+    "key": "ui_icon_skill_pyro",
+    "size": [
+      190,
+      192
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      190,
+      192
+    ]
+  },
+  {
+    "key": "ui_icon_ult_pyro",
+    "size": [
+      189,
+      192
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      189,
+      192
+    ]
+  },
+  {
+    "key": "ui_card_pyro_burn_v1",
+    "size": [
+      1254,
+      1254
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      1254,
+      1254
+    ]
+  },
+  {
+    "key": "ui_card_pyro_ember",
+    "size": [
+      256,
+      249
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      256,
+      249
+    ]
+  },
+  {
+    "key": "ui_card_pyro_linger_v1",
+    "size": [
+      1254,
+      1254
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      1243,
+      1224
+    ]
+  },
+  {
+    "key": "ui_card_pyro_meteors_v1",
+    "size": [
+      1254,
+      1254
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      1254,
+      1254
+    ]
+  },
+  {
+    "key": "ui_card_pyro_morale",
+    "size": [
+      249,
+      256
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      249,
+      256
+    ]
+  },
+  {
+    "key": "ui_card_pyro_range",
+    "size": [
+      256,
+      251
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      256,
+      251
+    ]
+  },
+  {
+    "key": "ui_card_pyro_shards",
+    "size": [
+      256,
+      243
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      256,
+      243
+    ]
+  },
+  {
+    "key": "ui_card_pyro_spell",
+    "size": [
+      256,
+      254
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      256,
+      254
+    ]
+  },
+  {
+    "key": "ui_card_pyro_stun",
+    "size": [
+      253,
+      256
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      253,
+      256
+    ]
+  },
+  {
+    "key": "ui_card_pyro_war",
+    "size": [
+      256,
+      255
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      256,
+      255
+    ]
+  },
+  {
+    "key": "ui_icon_skill_volt",
+    "size": [
+      189,
+      192
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      189,
+      192
+    ]
+  },
+  {
+    "key": "ui_icon_ult_volt",
+    "size": [
+      191,
+      192
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      191,
+      192
+    ]
+  },
+  {
+    "key": "ui_card_volt_morale",
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      22,
+      6,
+      237,
+      240
+    ]
+  },
+  {
+    "key": "ui_card_volt_range",
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      19,
+      13,
+      240,
+      239
+    ]
+  },
+  {
+    "key": "ui_card_volt_shards",
+    "size": [
+      256,
+      251
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      256,
+      251
+    ]
+  },
+  {
+    "key": "ui_card_volt_shock",
+    "size": [
+      255,
+      256
+    ],
+    "alphaBounds": [
+      0,
+      0,
+      255,
+      256
+    ]
+  },
+  {
+    "key": "ui_card_volt_spell",
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      22,
+      3,
+      246,
+      241
+    ]
+  },
+  {
+    "key": "ui_card_volt_war",
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      25,
+      18,
+      240,
+      236
+    ]
+  }
+]

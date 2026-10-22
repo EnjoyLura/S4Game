@@ -1,7 +1,9 @@
 /** The picker preloads exactly the same art keys it renders, scoped to the equipped squad. */
 import { CardDef, M0_POOL } from '../config/Cards';
+import { Graphics, Mask, Node } from 'cc';
 import { heroPortraitKey } from './HeroComic';
-import { uxFrame } from './Ux';
+import { artSprite, uxFrame } from './Ux';
+import { C, N } from './UIKit';
 
 const SHARED = ['pick_comic_v1/title_plate', 'pick_comic_v1/card_base', 'pick_comic_v1/header_strip'];
 const CARD_ART: Record<string, string> = {
@@ -17,6 +19,18 @@ const jobs = new Map<string, Promise<void>>();
 export function pickCardArt(card: CardDef): string {
   return card.art || (card.unlocks ? 'ui_icon_' + card.unlocks + '_' + card.owner
     : CARD_ART[card.id] || 'ui_card_' + card.id);
+}
+
+/** Mage cards share a filled circular viewport. Clip only the icon subtree. */
+export function pickCardIcon(parent: Node, x: number, y: number, size: number, card: CardDef, hideOnLoad: Node[] = []): Node {
+  if (card.owner !== 'pyro' && card.owner !== 'volt' && card.owner !== 'mora') return artSprite(parent, x, y, size, size, pickCardArt(card), { sliced: false, hideOnLoad });
+  const clip = N(card.owner + 'CardIcon', parent, x, y, size, size);
+  const mask = clip.addComponent(Mask); mask.type = Mask.Type.GRAPHICS_ELLIPSE; mask.segments = 96;
+  const backing = N('pyroIconBacking', clip).addComponent(Graphics);
+  backing.fillColor = C(card.owner === 'pyro' ? '#652E1D' : card.owner === 'mora' ? '#143B5C' : '#2E1C52'); backing.circle(0, 0, size / 2); backing.fill();
+  // Slightly cover the viewport so the painted circle reaches its boundary without transparent rim gaps.
+  artSprite(clip, 0, 0, size * 1.04, size * 1.04, pickCardArt(card), { sliced: false, fit: false, hideOnLoad });
+  return clip;
 }
 
 /** No nodes or hidden UI trees. Two low-priority requests at a time, shared by lobby / battle. */

@@ -2,11 +2,11 @@
  * 波次管理（用户调整·向僵尸开炮式持续刷怪）：本波出怪队列放完即开下一波（不等击杀）；
  * 末波出怪完毕且全场清空才算通关。数量/血量/伤害逐波阶梯增长（WAVE_RAMP）。
  */
-import { LevelDef, MOBS, MobDef, WAVE_RAMP } from '../config/Mobs';
+import { EnemyFormation, LevelDef, MOBS, MobDef, WAVE_RAMP } from '../config/Mobs';
 import { MonsterManager } from './Monster';
 import { bus, EVT, WaveThreat } from '../core/EventBus';
 
-interface DueSpawn { mob: string; t: number; }
+interface DueSpawn { mob: string; t: number; actual?: { hp: number; dmg: number }; formation?: EnemyFormation; }
 
 export class WaveManager {
   private idx = 0;
@@ -42,14 +42,47 @@ export class WaveManager {
       names: Array.from(new Set(featured.map(g => MOBS[g.mob].name))) } : null;
     this.threatAt = featured.length ? Math.max(0, Math.min(...featured.map(g => g.delay || 0)) - .8) : 0;
     this.announced = false;
-    this.mgr.rampHp = 1 + WAVE_RAMP.hp * this.idx;
-    this.mgr.rampDmg = 1 + WAVE_RAMP.dmg * this.idx;
-    const cntMul = 1 + WAVE_RAMP.cnt * this.idx;
+    this.mgr.rampHp = this.level.fixedWaves ? 1 : 1 + WAVE_RAMP.hp * this.idx;
+    this.mgr.rampDmg = this.level.fixedWaves ? 1 : 1 + WAVE_RAMP.dmg * this.idx;
+    const cntMul = this.level.fixedWaves ? 1 : 1 + WAVE_RAMP.cnt * this.idx;
     for (const g of wave.groups) {
-      const n = Math.max(1, Math.round(g.count * cntMul));
+      // Bosses are authored individuals, never multiplied into a crowd by the wave ramp.
+      const n = Math.max(1, MOBS[g.mob]?.boss ? g.count : Math.round(g.count * cntMul));
       for (let i = 0; i < n; i++) {
-        this.queue.push({ mob: g.mob, t: (g.delay || 0) + i * g.interval });
+        this.queue.push({ mob: g.mob, t: (g.delay || 0) + i * g.interval, actual: g.actual });
       }
+    }
+    this.queue.sort((a, b) => a.t - b.t);
+    if (wave.formation === 'escort') this.buildEscorts();
+    else if (wave.formation === 'crossfire') this.buildCrossfire();
+  }
+
+  private buildEscorts(): void {
+    const used = new Set<DueSpawn>();
+    let pair = 0;
+    for (const support of this.queue.filter(s => MOBS[s.mob]?.kind === 'heal')) {
+      if (pair >= 2) break;
+      const front = this.queue.filter(s => !used.has(s) && MOBS[s.mob]?.kind === 'melee' &&
+        (MOBS[s.mob].elite || MOBS[s.mob].boss) && s.t <= support.t - 5 && s.t >= support.t - 16)
+        .sort((a, b) => Math.abs(support.t - a.t - 8) - Math.abs(support.t - b.t - 8))[0];
+      if (!front) continue;
+      const lane = MOBS[front.mob].boss ? 0 : (pair % 2 ? 165 : -165) * (this.idx % 2 ? 1 : -1);
+      const id = this.level.id + ':' + this.idx + ':' + pair;
+      front.formation = { id, lane, role: 'front' };
+      support.formation = { id, lane, role: 'support', gap: 140 };
+      used.add(front); pair++;
+    }
+  }
+
+  private buildCrossfire(): void {
+    const ranged = this.queue.filter(s => MOBS[s.mob]?.kind === 'ranged');
+    if (!ranged.length) return;
+    const side = this.idx % 2 ? 1 : -1, first = ranged[0].t;
+    for (const s of ranged) s.formation = { lane: -side * 165 };
+    let rider = 0;
+    for (const s of this.queue) if (MOBS[s.mob]?.rush) {
+      s.t = Math.max(s.t, first + 6 + rider++ * 3);
+      s.formation = { lane: side * 165 };
     }
     this.queue.sort((a, b) => a.t - b.t);
   }
@@ -62,9 +95,11 @@ export class WaveManager {
       bus.emit(EVT.WAVE_THREAT, this.threat);
     }
     while (this.queue.length > 0 && this.queue[0].t <= this.elapsed) {
-      const s = this.queue.shift() as DueSpawn;
+      const s = this.queue[0];
       const def = MOBS[s.mob];
-      if (def) this.mgr.spawn(def as MobDef);
+      // A full living-enemy pool defers this entry; never consume a failed spawn.
+      if (def && !this.mgr.spawn(def as MobDef, s.actual, s.formation)) break;
+      this.queue.shift();
     }
     if (this.queue.length > 0) return;
     // 出怪队列已空：非末波立即开下一波（不等击杀）；末波等全场清空再结算
@@ -72,10 +107,14 @@ export class WaveManager {
       this.idx++;
       this.buildQueue();
       bus.emit(EVT.WAVE_CHANGED, this.waveNum, this.total, this.currentSurge);
-    } else if (this.mgr.aliveCount === 0) {
-      this.finished = true;
-      bus.emit(EVT.ALL_WAVES_CLEARED);
-    }
+    } else this.checkCleared();
+  }
+
+  /** Also check after damage steps so the final kill cannot open a queued upgrade first. */
+  checkCleared(): void {
+    if (this.finished || this.queue.length > 0 || this.idx < this.total - 1 || this.mgr.aliveCount > 0) return;
+    this.finished = true;
+    bus.emit(EVT.ALL_WAVES_CLEARED);
   }
 
   /** GM：跳过本波（清空生成队列并全杀场上怪；非末波下帧进下一波，末波直接结算） */

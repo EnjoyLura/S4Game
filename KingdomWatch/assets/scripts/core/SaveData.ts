@@ -4,6 +4,7 @@
  * 五主界面扩展：背包/装备实例/英雄养成/主城等级/星箱领取/图鉴（老档缺键走 DEFAULTS 迁移）
  */
 import { STARTER_WEAPON, weaponFits } from '../config/Weapons';
+import { EARLY_FIRST_WIN_GOLD } from '../config/EarlyEconomy';
 const KEY = 'kw_save_v1';
 
 /** 装备/武器实例（掉落与商店共用物品表定义，实例持有强化等级） */
@@ -27,6 +28,14 @@ export interface HeroState {
 }
 
 export interface SaveData {
+  /** Independent highest cleared floor for each chapter's endless challenge. */
+  endless?: { version: 1; best: Record<string, number> };
+  /** Versioned first-session teaching; missing on an old save never opts it in. */
+  firstJourney?: FirstJourney;
+  secondJourney?: SecondJourney;
+  thirdJourney?: ThirdJourney;
+  fifthRewards?: { version: 1; claimed: boolean; uids?: string[] };
+  earlyGold?: { version: 1; claimed: Record<string, boolean> };
   gold: number;
   diamonds: number;
   /** 星数表：'1-1' -> 1~3 */
@@ -66,6 +75,48 @@ export interface SaveData {
   weaponSystemVersion?: number;
 }
 
+export interface ThirdJourney {
+  version: 1;
+  enabled: boolean;
+  skipped: boolean;
+  battleDone: boolean;
+  freeChargeUsed: boolean;
+  ultCast: boolean;
+  rewardClaimed: boolean;
+  rewardUid?: string;
+}
+
+export interface SecondJourney {
+  version: 1;
+  enabled: boolean;
+  skipped: boolean;
+  upgradeDone: boolean;
+  upgradeSkipped: boolean;
+  /** Optional for v40 saves: complete only after entering normal 1-2 successfully. */
+  entryDone?: boolean;
+  entrySkipped?: boolean;
+  battleDone: boolean;
+  freeChargeUsed: boolean;
+  ultCast: boolean;
+  rewardClaimed: boolean;
+  squadDone: boolean;
+  squadSkipped: boolean;
+}
+
+export interface FirstJourney {
+  version: 1;
+  enabled: boolean;
+  entryStarted: boolean;
+  skipped: boolean;
+  battleDone: boolean;
+  freeChargeUsed: boolean;
+  ultCast: boolean;
+  rewardClaimed: boolean;
+  rewardUid?: string;
+  equipDone: boolean;
+  equipSkipped: boolean;
+}
+
 const DEFAULTS: SaveData = {
   gold: 500, diamonds: 20, stars: {}, unlocked: '1-1',
   speedUnlocked: false, music: true, sfx: true, debug: true,
@@ -77,13 +128,40 @@ let cache: SaveData | null = null;
 
 export function loadSave(): SaveData {
   if (cache) return cache;
+  let fresh = false;
   try {
     const raw = localStorage.getItem(KEY);
+    fresh = raw === null;
     cache = raw ? { ...DEFAULTS, ...JSON.parse(raw) } : { ...DEFAULTS };
   } catch {
     cache = { ...DEFAULTS };
   }
   const sv = cache;
+  const journeyMissing = !sv.firstJourney;
+  if (journeyMissing) sv.firstJourney = {
+    version: 1, enabled: fresh, entryStarted: false, skipped: false, battleDone: false,
+    freeChargeUsed: false, ultCast: false, rewardClaimed: false, equipDone: false, equipSkipped: false,
+  };
+  const secondMissing = !sv.secondJourney;
+  if (secondMissing) sv.secondJourney = {
+    version: 1, enabled: sv.firstJourney!.enabled && !sv.firstJourney!.skipped && !sv.stars['1-2'],
+    skipped: false, upgradeDone: false, upgradeSkipped: false, battleDone: !!sv.stars['1-2'],
+    freeChargeUsed: false, ultCast: false, rewardClaimed: false, squadDone: false, squadSkipped: false,
+  };
+  const thirdMissing = !sv.thirdJourney;
+  if (thirdMissing) sv.thirdJourney = {
+    version: 1, enabled: sv.firstJourney!.enabled && !sv.firstJourney!.skipped && !sv.stars['1-3'],
+    skipped: false, battleDone: !!sv.stars['1-3'], freeChargeUsed: false, ultCast: false,
+    rewardClaimed: !!sv.stars['1-3'],
+  };
+  const fifthMissing = !sv.fifthRewards;
+  if (fifthMissing) sv.fifthRewards = { version: 1, claimed: !!sv.stars['1-5'] };
+  const earlyGoldMissing = !sv.earlyGold;
+  if (earlyGoldMissing) {
+    sv.earlyGold = { version: 1, claimed: {} };
+    // Old cleared stages are ineligible: no retroactive money or reset of existing cultivation.
+    for (const id of Object.keys(EARLY_FIRST_WIN_GOLD)) if (sv.stars[id]) sv.earlyGold.claimed[id] = true;
+  }
   // 老档/缺英雄补默认（未拥有的英雄 hero 状态也建好，商店解锁只翻 owned）
   if (!sv.heroes) sv.heroes = {};
   for (const hid of ['archer', 'sniper', 'pyro', 'volt', 'mora']) {
@@ -100,7 +178,17 @@ export function loadSave(): SaveData {
   // One owned instance per slot; never replace a valid, compatible existing weapon.
   if (!Array.isArray(sv.equips)) sv.equips = [];
   const used = new Set<string>();
-  let changed = sv.weaponSystemVersion !== 1;
+  let changed = sv.weaponSystemVersion !== 1 || journeyMissing || secondMissing || thirdMissing || fifthMissing || earlyGoldMissing;
+  // Replace only the recorded v43 first-win gift, keeping its UID, level and worn references.
+  // A missing/sold gift is not recreated; unrelated staffs remain untouched.
+  const thirdGift = sv.thirdJourney!.rewardClaimed && sv.thirdJourney!.rewardUid
+    ? sv.equips.find(e => e.uid === sv.thirdJourney!.rewardUid && e.defId === 'wpn_green_staff') : undefined;
+  if (thirdGift) { thirdGift.defId = 'wpn_green_book'; changed = true; }
+  // Backfill the free 1-2 reward on old cleared saves. Ownership only: never overwrite growth or auto-deploy.
+  if (sv.stars['1-2'] && !sv.secondJourney!.rewardClaimed) {
+    sv.heroes.pyro.owned = true;
+    sv.secondJourney!.rewardClaimed = true; changed = true;
+  }
   for (const hid of Object.keys(STARTER_WEAPON)) {
     const h = sv.heroes[hid];
     h.worn = h.worn || {};
