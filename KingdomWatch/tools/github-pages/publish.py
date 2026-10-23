@@ -98,7 +98,7 @@ def local_checkout(cfg):
     return dest
 
 
-def synchronize(stage,dest):
+def synchronize(stage,dest,prune_previous_release=False):
     new={p.relative_to(stage).as_posix() for p in stage.rglob('*') if p.is_file()}
     old=set(git(dest,'ls-files').stdout.splitlines())
     retained=set()
@@ -111,12 +111,13 @@ def synchronize(stage,dest):
         for name,meta in records.items():
             path=dest/name
             if not path.resolve().is_relative_to(dest) or not path.is_file() or sha(path)!=meta['sha256']:raise RuntimeError('Previous runtime file is not intact: '+name)
-            if name not in new:retained.add(name)
+            if name not in new:
+                if not prune_previous_release:retained.add(name)
             elif sha(stage/name)!=meta['sha256'] and name not in {'index.html','hosting-diagnostics.html','audio-credits.html'}:
                 raise RuntimeError('Unversioned runtime collision between releases: '+name)
-        retained.add(previous['inventory'])
+        if not prune_previous_release:retained.add(previous['inventory'])
         upcoming=json.loads((stage/'hosting-release.json').read_text('utf-8'))
-        if previous==upcoming:
+        if previous==upcoming and not prune_previous_release:
             # Retrying an unchanged export must not count as a new release or
             # prune the preceding release that a real update retained.
             retained.update(old-new)
@@ -222,10 +223,14 @@ def main():
     mode.add_argument('--status-only',action='store_true')
     mode.add_argument('--validate-only',action='store_true')
     parser.add_argument('--prepared',type=Path)
+    parser.add_argument('--prune-previous-release',action='store_true',
+                        help='After validating the new package, remove previous-only tracked runtime files; keep Git history')
     parser.add_argument('--config',type=Path,default=HERE/'config.json')
     args=parser.parse_args()
     if not 0<=args.wait_seconds<=3600:parser.error('--wait-seconds must be between 0 and 3600')
     if args.prepared and args.status_only:parser.error('--prepared cannot be combined with --status-only')
+    if args.prune_previous_release and (args.status_only or args.validate_only):
+        parser.error('--prune-previous-release is only available during publication')
     cfg=json.loads(args.config.read_text('utf-8-sig'))
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9-]{0,38}',cfg['owner']) or not re.fullmatch(r'[A-Za-z0-9_][A-Za-z0-9_.-]{0,99}',cfg['repository']):
         raise RuntimeError('Invalid GitHub owner or repository name')
@@ -264,7 +269,8 @@ def main():
         api=GitHub()
         if not args.status_only:
             ensure_repository(api,cfg);dest=local_checkout(cfg);record['publication_checkout']=str(dest)
-            record['copied_and_rehashed_files']=synchronize(stage,dest);git(dest,'add','--all')
+            record['pruned_previous_release']=args.prune_previous_release
+            record['copied_and_rehashed_files']=synchronize(stage,dest,args.prune_previous_release);git(dest,'add','--all')
             changed=git(dest,'diff','--cached','--quiet',check=False).returncode
             if changed==1:
                 git(dest,'commit','--quiet','-m','Publish Kingdom Watch runtime '+release['id'])

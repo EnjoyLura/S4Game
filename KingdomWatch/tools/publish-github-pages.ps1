@@ -14,6 +14,7 @@ Only the runtime repository receives Git commits. CF is not deployed.
 [CmdletBinding(DefaultParameterSetName = 'Publish')]
 param(
     [Parameter(ParameterSetName = 'Publish')][switch]$SkipBuild,
+    [Parameter(ParameterSetName = 'Publish')][switch]$PrunePreviousRelease,
     [Parameter(Mandatory, ParameterSetName = 'Validate')][switch]$ValidateOnly,
     [Parameter(Mandatory, ParameterSetName = 'Status')][switch]$StatusOnly,
     [Parameter(ParameterSetName = 'Publish')][string]$PreparedPackage = '',
@@ -47,6 +48,7 @@ try {
     if ($StatusOnly) { $kwPagesArgs += '--status-only' }
     if ($ValidateOnly) { $kwPagesArgs += '--validate-only' }
     if ($PreparedPackage) { $kwPagesArgs += @('--prepared', $PreparedPackage) }
+    if ($PrunePreviousRelease) { $kwPagesArgs += '--prune-previous-release' }
     if ($ConfigPath) { $kwPagesArgs += @('--config', $ConfigPath) }
     & $kwPagesPython @kwPagesArgs
     $kwPagesExit = $LASTEXITCODE

@@ -1,0 +1,17 @@
+{
+  "scope": "Temporary local packaging directories only; no game/browser/network/auth",
+  "checks": [
+    {
+      "prunePreviousRelease": false,
+      "previousOnlyFilesHandled": true,
+      "activeBytesKept": true,
+      "untrackedFileKept": true
+    },
+    {
+      "prunePreviousRelease": true,
+      "previousOnlyFilesHandled": true,
+      "activeBytesKept": true,
+      "untrackedFileKept": true
+    }
+  ]
+}

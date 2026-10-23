@@ -1,0 +1,13 @@
+{
+  "nativeFilesBefore": 756,
+  "nativeFilesAfter": 700,
+  "removedNativeFiles": 56,
+  "removedNativeBytes": 228296382,
+  "allRemainingNativeBytesUnchanged": true,
+  "changedNative": [],
+  "addedNative": [],
+  "removedNativeWithoutRetirementRecord": [],
+  "mainBundleBytesUnchanged": true,
+  "mainBundle": "index.04eb0.js",
+  "mainBundleBytes": 861162
+}

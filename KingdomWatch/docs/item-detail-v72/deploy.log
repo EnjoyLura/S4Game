@@ -1,8 +1,0 @@
-
- ⛅️ wrangler 4.143.0 (update available 4.151.3)
-───────────────────────────────────────────────
-
-X [ERROR] In a non-interactive environment, it's necessary to set a CLOUDFLARE_API_TOKEN environment variable for wrangler to work. Please go to https://developers.cloudflare.com/fundamentals/api/get-started/create-token/ for instructions on how to create an api token, and assign its value to CLOUDFLARE_API_TOKEN.
-
-
-🪵  Logs were written to "C:\Users\user\AppData\Roaming\xdg.config\.wrangler\logs\wrangler-2026-10-21_16-50-58_109.log"

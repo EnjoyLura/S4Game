@@ -1,0 +1,23 @@
+{
+  "stagedChangeCounts": {
+    "M": 7,
+    "D": 10469,
+    "A": 19
+  },
+  "onlyAuditedPathsStaged": true,
+  "projectTreeSnapshotBytes": 502129596,
+  "projectTreeSnapshotFiles": 6546,
+  "snapshotBeforeFinalDeliveryNote": true,
+  "projectGroups": {
+    ".gitignore": 1518,
+    ".zcodeignore": 672,
+    "AI_SETUP_GUIDE.md": 2655,
+    "KingdomWatch": 501659624,
+    "UX": 104056,
+    "tsconfig.check.json": 492,
+    "策划": 40262,
+    "美术": 320317
+  },
+  "runtimeAssetChanges": "Only explicitly archived resource deletions; retained files unchanged",
+  "gitHistoryRewritten": false
+}

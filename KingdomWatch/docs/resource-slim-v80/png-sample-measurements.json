@@ -1,0 +1,168 @@
+{
+  "scope": "Seven representative current PNG files, not a complete release estimate",
+  "pillowVersion": "12.3.0",
+  "webpVersion": "1.6.0",
+  "localCandidates": "D:\\AI\\S4Game\\.local-art-archive\\png-compression-lab-v80",
+  "productionAssetsChanged": false,
+  "gameOrBrowserStarted": false,
+  "totals": {
+    "pngBytes": 33459321,
+    "lossless": {
+      "bytes": 26845920,
+      "savingPercent": 19.8
+    },
+    "quality90": {
+      "bytes": 8090026,
+      "savingPercent": 75.8
+    }
+  },
+  "samples": [
+    {
+      "source": "assets/resources/ux/volt_attack_user_v2/attack.png",
+      "pngBytes": 10319450,
+      "width": 4096,
+      "height": 3584,
+      "rgbaTextureBytes": 58720256,
+      "lossless": {
+        "bytes": 8697846,
+        "encodeSeconds": 4.6,
+        "rgbaPixelsIdentical": true,
+        "alphaIdentical": true,
+        "savingPercent": 15.7
+      },
+      "quality90": {
+        "bytes": 2825678,
+        "encodeSeconds": 2.39,
+        "rgbaPixelsIdentical": false,
+        "alphaIdentical": true,
+        "savingPercent": 72.6
+      }
+    },
+    {
+      "source": "assets/resources/ux/sniper_attack_clean_v1/attack.png",
+      "pngBytes": 8064459,
+      "width": 4096,
+      "height": 3584,
+      "rgbaTextureBytes": 58720256,
+      "lossless": {
+        "bytes": 6686688,
+        "encodeSeconds": 3.96,
+        "rgbaPixelsIdentical": true,
+        "alphaIdentical": true,
+        "savingPercent": 17.1
+      },
+      "quality90": {
+        "bytes": 2072666,
+        "encodeSeconds": 2.06,
+        "rgbaPixelsIdentical": false,
+        "alphaIdentical": true,
+        "savingPercent": 74.3
+      }
+    },
+    {
+      "source": "assets/resources/fx/frost_domain_video_v10.png",
+      "pngBytes": 4396916,
+      "width": 3072,
+      "height": 2304,
+      "rgbaTextureBytes": 28311552,
+      "lossless": {
+        "bytes": 3367952,
+        "encodeSeconds": 2.61,
+        "rgbaPixelsIdentical": true,
+        "alphaIdentical": true,
+        "savingPercent": 23.4
+      },
+      "quality90": {
+        "bytes": 1640942,
+        "encodeSeconds": 1.96,
+        "rgbaPixelsIdentical": false,
+        "alphaIdentical": true,
+        "savingPercent": 62.7
+      }
+    },
+    {
+      "source": "assets/resources/ux/ui_card_pyro_shards_v2.png",
+      "pngBytes": 1992721,
+      "width": 1254,
+      "height": 1254,
+      "rgbaTextureBytes": 6290064,
+      "lossless": {
+        "bytes": 1544960,
+        "encodeSeconds": 1.85,
+        "rgbaPixelsIdentical": true,
+        "alphaIdentical": true,
+        "savingPercent": 22.5
+      },
+      "quality90": {
+        "bytes": 333586,
+        "encodeSeconds": 0.51,
+        "rgbaPixelsIdentical": false,
+        "alphaIdentical": true,
+        "savingPercent": 83.3
+      }
+    },
+    {
+      "source": "assets/resources/scenes/scene_1_1.png",
+      "pngBytes": 3667045,
+      "width": 1152,
+      "height": 2048,
+      "rgbaTextureBytes": 9437184,
+      "lossless": {
+        "bytes": 2629858,
+        "encodeSeconds": 2.12,
+        "rgbaPixelsIdentical": true,
+        "alphaIdentical": true,
+        "savingPercent": 28.3
+      },
+      "quality90": {
+        "bytes": 484860,
+        "encodeSeconds": 0.4,
+        "rgbaPixelsIdentical": false,
+        "alphaIdentical": true,
+        "savingPercent": 86.8
+      }
+    },
+    {
+      "source": "assets/resources/scenes/bg_campaign_outpost_v1.png",
+      "pngBytes": 3383367,
+      "width": 887,
+      "height": 1774,
+      "rgbaTextureBytes": 6294152,
+      "lossless": {
+        "bytes": 2739656,
+        "encodeSeconds": 1.23,
+        "rgbaPixelsIdentical": true,
+        "alphaIdentical": true,
+        "savingPercent": 19.0
+      },
+      "quality90": {
+        "bytes": 646724,
+        "encodeSeconds": 0.33,
+        "rgbaPixelsIdentical": false,
+        "alphaIdentical": true,
+        "savingPercent": 80.9
+      }
+    },
+    {
+      "source": "assets/resources/ux/pick_comic_v1/card_base.png",
+      "pngBytes": 1635363,
+      "width": 883,
+      "height": 1477,
+      "rgbaTextureBytes": 5216764,
+      "lossless": {
+        "bytes": 1178960,
+        "encodeSeconds": 1.17,
+        "rgbaPixelsIdentical": true,
+        "alphaIdentical": true,
+        "savingPercent": 27.9
+      },
+      "quality90": {
+        "bytes": 85570,
+        "encodeSeconds": 0.28,
+        "rgbaPixelsIdentical": false,
+        "alphaIdentical": true,
+        "savingPercent": 94.8
+      }
+    }
+  ]
+}

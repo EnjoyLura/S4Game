@@ -1,0 +1,1387 @@
+{
+  "schema": 1,
+  "archive": "D:\\AI\\S4Game\\.local-art-archive\\resources-v80",
+  "resourcesRoot": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources",
+  "assetFileCount": 2080,
+  "retiredFileCount": 224,
+  "retiredSourceBytes": 228985496,
+  "referenceAudit": {
+    "textFilesChecked": 1149,
+    "retiredUUIDsChecked": 240,
+    "externalReferences": [],
+    "authoringOnlyCalibrationNotes": [
+      {
+        "file": "assets/resources/ux/sniper_attack_clean_v1/attack.frames.json",
+        "idleReference": "ux/sniper_idle_natural_v2/idle.frames"
+      },
+      {
+        "file": "assets/resources/ux/sniper_idle_natural_v2/idle.frames.json",
+        "idleReference": "ux/sniper_idle_natural_v1/idle.frames"
+      },
+      {
+        "file": "assets/resources/ux/volt_attack_user_v2/attack.frames.json",
+        "idleReference": "ux/volt_idle_natural_v1/idle.frames"
+      },
+      {
+        "file": "assets/resources/ux/volt_idle_natural_v1/idle.frames.json",
+        "idleReference": "ux/volt_idle_flow_v1/idle.frames"
+      }
+    ],
+    "broadOrExternalResourceLoaders": false,
+    "manualDynamicReview": [
+      "Hero clip selectors + entry warmup",
+      "Archer idle/attack template IDs retained",
+      "All 16 campaign map/battlefield paths retained",
+      "All chapter monster atlases and weapon keys retained",
+      "HUD/card dynamic ui_* keys retained",
+      "Fallback media with source references retained",
+      "Frame manifest texture pages and active FX loaders retained"
+    ]
+  },
+  "files": [
+    {
+      "asset": "resources/fx/archer_arrow_v2.png",
+      "bytes": 156521,
+      "sha256": "0528a2ed3e91c1a2f0a822844c6fbe943b89a519a99fc1755b1478d91731cd65",
+      "reason": "ArcherVFX uses fx/archer_v1."
+    },
+    {
+      "asset": "resources/fx/archer_arrow_v2.png.meta",
+      "bytes": 2961,
+      "sha256": "8ebbfcd45a679738a4d1f1bfd92e0cf5706330488a789fd3614df939afdffd96",
+      "reason": "ArcherVFX uses fx/archer_v1."
+    },
+    {
+      "asset": "resources/fx/basic_launch_v2_fire.png",
+      "bytes": 678338,
+      "sha256": "91a61358697cf9f5e9d57443336e1fe82db3482176022d698c2bd2787114870c",
+      "reason": "BasicAttackLaunchVFX uses the texture-free basic-launch-procedural shader."
+    },
+    {
+      "asset": "resources/fx/basic_launch_v2_fire.png.meta",
+      "bytes": 3013,
+      "sha256": "a5d8fad687b75bb4a2515c6e4b9139d0c37631e79f3842e1b76ffe8167d044c3",
+      "reason": "BasicAttackLaunchVFX uses the texture-free basic-launch-procedural shader."
+    },
+    {
+      "asset": "resources/fx/basic_launch_v2_frost.png",
+      "bytes": 1063812,
+      "sha256": "4dcf28a1c566d63b454152e81caa3f56ebed699329c34d463d4ade24c8c9e63a",
+      "reason": "BasicAttackLaunchVFX uses the texture-free basic-launch-procedural shader."
+    },
+    {
+      "asset": "resources/fx/basic_launch_v2_frost.png.meta",
+      "bytes": 3015,
+      "sha256": "99f0b9b40e084dcf188a508effe48d55cc38ed8eea0d2c1b7671f16acc1b6a2c",
+      "reason": "BasicAttackLaunchVFX uses the texture-free basic-launch-procedural shader."
+    },
+    {
+      "asset": "resources/fx/basic_launch_v2_volt.png",
+      "bytes": 932442,
+      "sha256": "96d905e8af48dd56f471eb4fb1b2828574e7cc361d97816111199673b95eae49",
+      "reason": "BasicAttackLaunchVFX uses the texture-free basic-launch-procedural shader."
+    },
+    {
+      "asset": "resources/fx/basic_launch_v2_volt.png.meta",
+      "bytes": 3013,
+      "sha256": "6b4b70b8988a08fdb6f748a03d43f4e5156107fe84b7a5883b6e0cf7d35e5643",
+      "reason": "BasicAttackLaunchVFX uses the texture-free basic-launch-procedural shader."
+    },
+    {
+      "asset": "resources/fx/basic_launch_v2_wind.png",
+      "bytes": 967332,
+      "sha256": "b98583a11d24447f2dc8d57b8ab376f8c6f14eb09fa8fae2aef21f4d9d6a5b0d",
+      "reason": "BasicAttackLaunchVFX uses the texture-free basic-launch-procedural shader."
+    },
+    {
+      "asset": "resources/fx/basic_launch_v2_wind.png.meta",
+      "bytes": 3013,
+      "sha256": "aef62a1f711593de496d7fb6aecf5f9539694fc455476ad8a3998ecf495e81ea",
+      "reason": "BasicAttackLaunchVFX uses the texture-free basic-launch-procedural shader."
+    },
+    {
+      "asset": "resources/fx/fire-soft.effect",
+      "bytes": 1727,
+      "sha256": "1f7cb465c7e61b9a3647c51e541aa65d2891d705db20a6fe54dc9249b2069073",
+      "reason": "FireVFX uses fire-paint-v2; old shader has no caller."
+    },
+    {
+      "asset": "resources/fx/fire-soft.effect.meta",
+      "bytes": 181,
+      "sha256": "b2156648a0b49a6336ad70dccec1544dd2676d2d18f52c6263e2123f256844dd",
+      "reason": "FireVFX uses fire-paint-v2; old shader has no caller."
+    },
+    {
+      "asset": "resources/fx/fire_v1.frames.json",
+      "bytes": 1181,
+      "sha256": "7987e04f954abcea502d4a02efc000bbf0158c2da8fc4ece98bf6bf67b558a34",
+      "reason": "FireVFX uses fire_v2 and pyro_hit."
+    },
+    {
+      "asset": "resources/fx/fire_v1.frames.json.meta",
+      "bytes": 179,
+      "sha256": "b6d940d4a37a4c0031a6940fb66e56c73c43832692a3f6704b7de7b5f89a438e",
+      "reason": "FireVFX uses fire_v2 and pyro_hit."
+    },
+    {
+      "asset": "resources/fx/fire_v1.png",
+      "bytes": 485309,
+      "sha256": "2164a9a00a3a395f83346c9941abb898f98ad4ab0bebb5dd1adc2e6455debcef",
+      "reason": "FireVFX uses fire_v2 and pyro_hit."
+    },
+    {
+      "asset": "resources/fx/fire_v1.png.meta",
+      "bytes": 2920,
+      "sha256": "981eaedd3641d94fd53388cca895f6efdb3759aa6f7518e19f688a62300a6d54",
+      "reason": "FireVFX uses fire_v2 and pyro_hit."
+    },
+    {
+      "asset": "resources/fx/frost-domain-v3.effect",
+      "bytes": 3599,
+      "sha256": "65d3fbe78ec5bc673a3cd2cf9ff4e4af0b05cd0de1c142915d96d9586a9ceb30",
+      "reason": "FrostVFX uses the approved v10 clip and existing foot-ice Graphics."
+    },
+    {
+      "asset": "resources/fx/frost-domain-v3.effect.meta",
+      "bytes": 181,
+      "sha256": "fcba509c175f6f7109377090b9270d858ca60e56a98416b6f60dddf26936fe30",
+      "reason": "FrostVFX uses the approved v10 clip and existing foot-ice Graphics."
+    },
+    {
+      "asset": "resources/fx/frost-ice-v4.effect",
+      "bytes": 2224,
+      "sha256": "15274bc8496c7a7773713a15bb305263126440d9cb5e473ff27574f5389c361b",
+      "reason": "Frost projectile and ultimate use current painted sprite assets."
+    },
+    {
+      "asset": "resources/fx/frost-ice-v4.effect.meta",
+      "bytes": 181,
+      "sha256": "38b2851c2d1babedd0225ebf8ee1b6c257e9943cb98e3ee7ab4f763e8b61ff75",
+      "reason": "Frost projectile and ultimate use current painted sprite assets."
+    },
+    {
+      "asset": "resources/fx/frost_domain_v2.png",
+      "bytes": 888288,
+      "sha256": "4ad50732f30f6014e1a8e7214a3134cb99710330754f7ef44ffab44d96b60563",
+      "reason": "FrostVFX uses frost_domain_video_v10."
+    },
+    {
+      "asset": "resources/fx/frost_domain_v2.png.meta",
+      "bytes": 2973,
+      "sha256": "e5543e7081df93305b881d51e208729b4b6f78a7c67afb1243a74ce0e499017e",
+      "reason": "FrostVFX uses frost_domain_video_v10."
+    },
+    {
+      "asset": "resources/fx/frost_domain_video_v11.frames.json",
+      "bytes": 5998,
+      "sha256": "4550c0f59eaab8681e8a185c90d23a8fc5b3b333aab9cb26a5123e13d5d07c0e",
+      "reason": "Rejected experiment; FrostVFX retains the approved complete v10."
+    },
+    {
+      "asset": "resources/fx/frost_domain_video_v11.frames.json.meta",
+      "bytes": 188,
+      "sha256": "30cd86b958237c9cb67c4c1a48f57666fe633c13754bd817bb884057b5464c34",
+      "reason": "Rejected experiment; FrostVFX retains the approved complete v10."
+    },
+    {
+      "asset": "resources/fx/frost_domain_video_v11.png",
+      "bytes": 3578057,
+      "sha256": "0b0fe4b67d9216240dce9b90c1e29ba4a17fa3e083e5935554d0195b18968cf8",
+      "reason": "Rejected experiment; FrostVFX retains the approved complete v10."
+    },
+    {
+      "asset": "resources/fx/frost_domain_video_v11.png.meta",
+      "bytes": 3005,
+      "sha256": "0e93942eb0196fa0bc43c3da0f96b2077fec5997cf7c16fc5caffd21d5d1b824",
+      "reason": "Rejected experiment; FrostVFX retains the approved complete v10."
+    },
+    {
+      "asset": "resources/fx/frost_ice_v4.frames.json",
+      "bytes": 1256,
+      "sha256": "63914ad9a5c81b970381f97ddbb7ae4fc439b5de2c8087a91d77d29249ec49dd",
+      "reason": "Frost projectile and ultimate use frost_ultimate_rain_v1 and frost_ultimate_impact_v1."
+    },
+    {
+      "asset": "resources/fx/frost_ice_v4.frames.json.meta",
+      "bytes": 179,
+      "sha256": "2102024f9022ae032c282fdc391f10a62da16f96648c3523637c8a954f33ce75",
+      "reason": "Frost projectile and ultimate use frost_ultimate_rain_v1 and frost_ultimate_impact_v1."
+    },
+    {
+      "asset": "resources/fx/frost_ice_v4.png",
+      "bytes": 508896,
+      "sha256": "db0658d07cd1caad88866660850733f58f6e959bd4de2b2a2c0c3d6f09b85aa6",
+      "reason": "Frost projectile and ultimate use frost_ultimate_rain_v1 and frost_ultimate_impact_v1."
+    },
+    {
+      "asset": "resources/fx/frost_ice_v4.png.meta",
+      "bytes": 2916,
+      "sha256": "4a294c171a1508f5f35b868c039447c8084ef9dad74b3b35b7d25d731bab1027",
+      "reason": "Frost projectile and ultimate use frost_ultimate_rain_v1 and frost_ultimate_impact_v1."
+    },
+    {
+      "asset": "resources/fx/frost_mist_v3.png",
+      "bytes": 94534,
+      "sha256": "e65602e01f4dbfb3afa65312f81e89333f5665ec1aff80a74bb8a33174072412",
+      "reason": "Superseded frost experiment; no active loader or asset dependency."
+    },
+    {
+      "asset": "resources/fx/frost_mist_v3.png.meta",
+      "bytes": 2835,
+      "sha256": "9916c280feb474eac794189385dc2e9f0d456f3341ff18c14ed0e913ea237a27",
+      "reason": "Superseded frost experiment; no active loader or asset dependency."
+    },
+    {
+      "asset": "resources/scenes/bg_base_comic_v1.jpg",
+      "bytes": 579696,
+      "sha256": "85353d78f4673033e3b4e07d9cac6a239002f19e5e0d8db928a059d9ec34308b",
+      "reason": "BasePage uses bg_base_endless_v59; legacy fallback bg_base_lobby_v1 retained."
+    },
+    {
+      "asset": "resources/scenes/bg_base_comic_v1.jpg.meta",
+      "bytes": 3007,
+      "sha256": "b09932db2187cf6ff07fa390e83848388f7151c1665db1183047774021f62322",
+      "reason": "BasePage uses bg_base_endless_v59; legacy fallback bg_base_lobby_v1 retained."
+    },
+    {
+      "asset": "resources/scenes/bg_endless_world_v63.png",
+      "bytes": 3771975,
+      "sha256": "d742bc1a96b704e3439b43b70811125c11af1405358d9a20d2ac7527dd9126d9",
+      "reason": "EndlessPage uses bg_endless_world_v66."
+    },
+    {
+      "asset": "resources/scenes/bg_endless_world_v63.png.meta",
+      "bytes": 2992,
+      "sha256": "6aead61c985cafa698b7489cf92cd9ae674ee8031877add5e63cf10028621667",
+      "reason": "EndlessPage uses bg_endless_world_v66."
+    },
+    {
+      "asset": "resources/scenes/bg_heroes_comic_v2.jpg",
+      "bytes": 231905,
+      "sha256": "66b41804855b0cdcd6d94132820e7a2d1b3f91a6bddc98b8bf0df38d7f52ca4c",
+      "reason": "HeroComic uses v3; SquadChrome still needs v1, which is retained."
+    },
+    {
+      "asset": "resources/scenes/bg_heroes_comic_v2.jpg.meta",
+      "bytes": 3011,
+      "sha256": "390c610aa59649832825c0a773fa33d37ed86a45695cbceef5e063eac2cad2d8",
+      "reason": "HeroComic uses v3; SquadChrome still needs v1, which is retained."
+    },
+    {
+      "asset": "resources/scenes/bg_levels_forest_comic_v2.jpg",
+      "bytes": 551701,
+      "sha256": "4a6e2024a8fb96f22a7025a55647c9b91f8ed7a2cc6ffbc6ac8e5365abc3d185",
+      "reason": "CampaignRoute uses bg_campaign_forest_v1."
+    },
+    {
+      "asset": "resources/scenes/bg_levels_forest_comic_v2.jpg.meta",
+      "bytes": 3025,
+      "sha256": "df06f8f8fbff49d8b47104b951e33b78e2197175a5657307aa601263e376949e",
+      "reason": "CampaignRoute uses bg_campaign_forest_v1."
+    },
+    {
+      "asset": "resources/scenes/bg_levels_lair_comic_v2.jpg",
+      "bytes": 496095,
+      "sha256": "9eaf4e02e252905d7088b5ff165692e33252295e4d4020fa9f1e7f89e84e0b05",
+      "reason": "CampaignRoute uses bg_campaign_lair_v1."
+    },
+    {
+      "asset": "resources/scenes/bg_levels_lair_comic_v2.jpg.meta",
+      "bytes": 3021,
+      "sha256": "c3f0ff5c39199bfc6edd5ea4b02bad1d332d3cb73fbe1c4aa06150a95f94cfaa",
+      "reason": "CampaignRoute uses bg_campaign_lair_v1."
+    },
+    {
+      "asset": "resources/scenes/bg_levels_outpost_comic_v2.jpg",
+      "bytes": 512590,
+      "sha256": "8061ada4c0b343625e3e1462de32cc278450c84549fac7e7052aa30a3637e3a1",
+      "reason": "CampaignRoute uses bg_campaign_outpost_v1."
+    },
+    {
+      "asset": "resources/scenes/bg_levels_outpost_comic_v2.jpg.meta",
+      "bytes": 3027,
+      "sha256": "8a633dfcf3918cab3bfca9fa62ebfc0ec962763d7a653053758b2ceaac5dde74",
+      "reason": "CampaignRoute uses bg_campaign_outpost_v1."
+    },
+    {
+      "asset": "resources/ux/archer_combat_rebuild_v1/archer-ready-up-left-v2.png",
+      "bytes": 1706435,
+      "sha256": "bcf8d9de5f042a7716a82e9def0c03d471743937597f12a98c6fbd1ab1e0b58a",
+      "reason": "Abandoned combat-pose reference; ArcherIdleAnimation uses archer_idle_v1 and archer_attack_v1."
+    },
+    {
+      "asset": "resources/ux/archer_combat_rebuild_v1/archer-ready-up-left-v2.png.meta",
+      "bytes": 2955,
+      "sha256": "c3f9f493fe2f2b0c6f44064108a7c48f7f743bd3d1731325cc0fe896d516bc02",
+      "reason": "Abandoned combat-pose reference; ArcherIdleAnimation uses archer_idle_v1 and archer_attack_v1."
+    },
+    {
+      "asset": "resources/ux/archer_combat_rebuild_v1/archer-ready-up-left-v3.png",
+      "bytes": 1687346,
+      "sha256": "0ae21d872f80aa1a3ffbf4a613adfef883d4beec52ebb56b5005060f100f91b2",
+      "reason": "Abandoned combat-pose reference; ArcherIdleAnimation uses archer_idle_v1 and archer_attack_v1."
+    },
+    {
+      "asset": "resources/ux/archer_combat_rebuild_v1/archer-ready-up-left-v3.png.meta",
+      "bytes": 2932,
+      "sha256": "06f93474dbaff2df0943badc819f105a7b03c8ecd8d99ed6a01adf7ce5d2c44d",
+      "reason": "Abandoned combat-pose reference; ArcherIdleAnimation uses archer_idle_v1 and archer_attack_v1."
+    },
+    {
+      "asset": "resources/ux/archer_combat_rebuild_v1/archer-ready-up-left.png",
+      "bytes": 1702105,
+      "sha256": "687bb84d634e4ca4175156519023d889200d083504a09fe7d21d42c061d30dec",
+      "reason": "Abandoned combat-pose reference; ArcherIdleAnimation uses archer_idle_v1 and archer_attack_v1."
+    },
+    {
+      "asset": "resources/ux/archer_combat_rebuild_v1/archer-ready-up-left.png.meta",
+      "bytes": 2951,
+      "sha256": "f262534033ff8abb3adea2fd1196e2bf75558025940d117587d8119fc52cdbf1",
+      "reason": "Abandoned combat-pose reference; ArcherIdleAnimation uses archer_idle_v1 and archer_attack_v1."
+    },
+    {
+      "asset": "resources/ux/archer_combat_rebuild_v1.meta",
+      "bytes": 176,
+      "sha256": "0bfd43b0eec546be273b4b0bb22925ca63027ab645c0bec73c481d20dc3294fc",
+      "reason": "Abandoned combat-pose reference; ArcherIdleAnimation uses archer_idle_v1 and archer_attack_v1."
+    },
+    {
+      "asset": "resources/ux/battle_entry_v2/royal_gate.png",
+      "bytes": 2144486,
+      "sha256": "b34e667b6c059d7dfdb6e5f079f759191d4c19398d470c0359c4baf2c6a37ab2",
+      "reason": "BattleEntry and warmup use battle_entry_v3/outpost_gate."
+    },
+    {
+      "asset": "resources/ux/battle_entry_v2/royal_gate.png.meta",
+      "bytes": 2996,
+      "sha256": "2f44804020646ec05392d29841404ac3d351524ff4099bbe4a6769fc1c879ba7",
+      "reason": "BattleEntry and warmup use battle_entry_v3/outpost_gate."
+    },
+    {
+      "asset": "resources/ux/battle_entry_v2.meta",
+      "bytes": 176,
+      "sha256": "b0fbaf8e8757d10750c2f4bf2d3d253b6a66f959e09502c7e9db6f9d1ce971d9",
+      "reason": "BattleEntry and warmup use battle_entry_v3/outpost_gate."
+    },
+    {
+      "asset": "resources/ux/lobby_base_buildings_v1.frames.json",
+      "bytes": 240,
+      "sha256": "bec3f462e25c76f9ffde6ae4516bbcb9369432c99bf8f25e3093f9206285e082",
+      "reason": "Replaced by continuous base/endless artwork."
+    },
+    {
+      "asset": "resources/ux/lobby_base_buildings_v1.frames.json.meta",
+      "bytes": 179,
+      "sha256": "1584282abb06d36348ea941e1261d7137277bd184695b4217b85c25b7fd43fca",
+      "reason": "Replaced by continuous base/endless artwork."
+    },
+    {
+      "asset": "resources/ux/lobby_base_buildings_v1.png",
+      "bytes": 1421675,
+      "sha256": "51ad55d0325ce970543e8548819e386f4e40c602758cea57f5de3b71cb4f74cf",
+      "reason": "Replaced by continuous base/endless artwork."
+    },
+    {
+      "asset": "resources/ux/lobby_base_buildings_v1.png.meta",
+      "bytes": 2975,
+      "sha256": "1cd03fb5d19600d32cee458eb2a63ff1eaae3549542a86063a65ce346e5eec0e",
+      "reason": "Replaced by continuous base/endless artwork."
+    },
+    {
+      "asset": "resources/ux/lobby_levels_v1.frames.json",
+      "bytes": 263,
+      "sha256": "272a74192dba0057e8fadaee00c437cc1cde71500e911e72bb392627a82c2aaa",
+      "reason": "Replaced by CampaignRoute, CampaignChrome and current chapter art."
+    },
+    {
+      "asset": "resources/ux/lobby_levels_v1.frames.json.meta",
+      "bytes": 179,
+      "sha256": "130be82d5139c90c504abbd76f454e68d370a689274ccd4126064d74f28a62fe",
+      "reason": "Replaced by CampaignRoute, CampaignChrome and current chapter art."
+    },
+    {
+      "asset": "resources/ux/lobby_levels_v1.png",
+      "bytes": 1857792,
+      "sha256": "58b93b4f132b84bde1f2ec5f8e470e375f7a4e1d80cd9f020f72cc413e223927",
+      "reason": "Replaced by CampaignRoute, CampaignChrome and current chapter art."
+    },
+    {
+      "asset": "resources/ux/lobby_levels_v1.png.meta",
+      "bytes": 2970,
+      "sha256": "f7ee57c7d6a4c64487d6928d48875927f4c736d08ff8d686932e80990f247f17",
+      "reason": "Replaced by CampaignRoute, CampaignChrome and current chapter art."
+    },
+    {
+      "asset": "resources/ux/lobby_rewards_v1.frames.json",
+      "bytes": 346,
+      "sha256": "17e0a5ac8ee4f99b71505f2791dbe7cb774bdf73593076b46bb7ff3d2297cc35",
+      "reason": "Replaced by shared ComicUI item and reward components."
+    },
+    {
+      "asset": "resources/ux/lobby_rewards_v1.frames.json.meta",
+      "bytes": 179,
+      "sha256": "3262c2c70f2f986fef363c312d1c091631dfeda851f7a1dfb847ba1842593c61",
+      "reason": "Replaced by shared ComicUI item and reward components."
+    },
+    {
+      "asset": "resources/ux/lobby_rewards_v1.png",
+      "bytes": 2243460,
+      "sha256": "f6e5ecafb63f5b18df28fabf555c5a6f6aee8072c327f93b33086b7aaf666cf2",
+      "reason": "Replaced by shared ComicUI item and reward components."
+    },
+    {
+      "asset": "resources/ux/lobby_rewards_v1.png.meta",
+      "bytes": 2941,
+      "sha256": "c289903957982e1f2d1fae1d7719e0ae5741cec6f97155f9cdd9e5e8464a2aeb",
+      "reason": "Replaced by shared ComicUI item and reward components."
+    },
+    {
+      "asset": "resources/ux/lobby_training_v1.frames.json",
+      "bytes": 325,
+      "sha256": "51d10d8da56bbe10c6f2614611d1a25bad495bb0e1c6966767c0b48cd2d31a2a",
+      "reason": "Replaced by TrainingLobby and upgrade_comic_v1."
+    },
+    {
+      "asset": "resources/ux/lobby_training_v1.frames.json.meta",
+      "bytes": 179,
+      "sha256": "9ed2097b0971e404bf24bfce1e138832113355e0edcc4809c9b64d87186be798",
+      "reason": "Replaced by TrainingLobby and upgrade_comic_v1."
+    },
+    {
+      "asset": "resources/ux/lobby_training_v1.png",
+      "bytes": 700485,
+      "sha256": "c6bcc97aea42244287323a83925db647ededd9a99e5db7583f2bb07dae41dd27",
+      "reason": "Replaced by TrainingLobby and upgrade_comic_v1."
+    },
+    {
+      "asset": "resources/ux/lobby_training_v1.png.meta",
+      "bytes": 3024,
+      "sha256": "d0a4277153fc95fca59fee61791e98d222008535f53c392a1eec6a06fd991f42",
+      "reason": "Replaced by TrainingLobby and upgrade_comic_v1."
+    },
+    {
+      "asset": "resources/ux/lobby_weapons_v1.frames.json",
+      "bytes": 375,
+      "sha256": "4f328bfa30bff44e014692eeaab61be351fe4f70fa5a2d8db8988a434984d4d7",
+      "reason": "Replaced by weapons_v1 and shop_comic_v1 equipment art."
+    },
+    {
+      "asset": "resources/ux/lobby_weapons_v1.frames.json.meta",
+      "bytes": 179,
+      "sha256": "9c5e8d713ead25d87d334f43ee4eb055d139fae9c31650692dfe7d80c411b3a1",
+      "reason": "Replaced by weapons_v1 and shop_comic_v1 equipment art."
+    },
+    {
+      "asset": "resources/ux/lobby_weapons_v1.png",
+      "bytes": 924579,
+      "sha256": "5331617f3cf83d925fb9521cd6032e371f3e14c7600200b8a765e3cdf0584020",
+      "reason": "Replaced by weapons_v1 and shop_comic_v1 equipment art."
+    },
+    {
+      "asset": "resources/ux/lobby_weapons_v1.png.meta",
+      "bytes": 3024,
+      "sha256": "c67f96b95ea592139190284a177c2cdbd81411996c1c846e698d47d1dc81cc5e",
+      "reason": "Replaced by weapons_v1 and shop_comic_v1 equipment art."
+    },
+    {
+      "asset": "resources/ux/pyro_attack_user_v1/attack.frames.json",
+      "bytes": 30593,
+      "sha256": "6d314f1ea6a73257e3925cdf8087704faaf7455fff920991bbc0e489071b3ac7",
+      "reason": "PyroIdleAnimation and warmup use pyro_attack_user_v2."
+    },
+    {
+      "asset": "resources/ux/pyro_attack_user_v1/attack.frames.json.meta",
+      "bytes": 188,
+      "sha256": "c218555a948019a90a6b8e515c98f6126077630629f965d4cef40c2d16dec9eb",
+      "reason": "PyroIdleAnimation and warmup use pyro_attack_user_v2."
+    },
+    {
+      "asset": "resources/ux/pyro_attack_user_v1/attack.png",
+      "bytes": 8844100,
+      "sha256": "061c31b879daef019ba9ae3f65113b996532b87ed76f4f724208d359766f4675",
+      "reason": "PyroIdleAnimation and warmup use pyro_attack_user_v2."
+    },
+    {
+      "asset": "resources/ux/pyro_attack_user_v1/attack.png.meta",
+      "bytes": 2963,
+      "sha256": "e9655ed6199157da4928fd9170796ccdaed81db9808480d3da25f06f0f0de36f",
+      "reason": "PyroIdleAnimation and warmup use pyro_attack_user_v2."
+    },
+    {
+      "asset": "resources/ux/pyro_attack_user_v1.meta",
+      "bytes": 176,
+      "sha256": "e6c60a6d2fab233c6b6e219ba7078ae19d9dda11c8fac43bde14f769b3376249",
+      "reason": "PyroIdleAnimation and warmup use pyro_attack_user_v2."
+    },
+    {
+      "asset": "resources/ux/pyro_idle_user_v1/idle.frames.json",
+      "bytes": 30069,
+      "sha256": "2cd28a7f93bda5d1bb824cb77e8dac928ba5c06a93ea1672e93c64fb5e95d663",
+      "reason": "PyroIdleAnimation and warmup use pyro_idle_loop_v2."
+    },
+    {
+      "asset": "resources/ux/pyro_idle_user_v1/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "4dcb57c6b2fb710110f6926d0ed8481109c005fa6e517307adf5624f9649cb6a",
+      "reason": "PyroIdleAnimation and warmup use pyro_idle_loop_v2."
+    },
+    {
+      "asset": "resources/ux/pyro_idle_user_v1/idle.png",
+      "bytes": 9298427,
+      "sha256": "b6292dee631455b8ef654793bb9623b6b8885dc37a005b72294c5646cdb28341",
+      "reason": "PyroIdleAnimation and warmup use pyro_idle_loop_v2."
+    },
+    {
+      "asset": "resources/ux/pyro_idle_user_v1/idle.png.meta",
+      "bytes": 2981,
+      "sha256": "3b0d06f218c1d5fb950889711f910489f1efc685befd5ca994814f4713dd1a96",
+      "reason": "PyroIdleAnimation and warmup use pyro_idle_loop_v2."
+    },
+    {
+      "asset": "resources/ux/pyro_idle_user_v1.meta",
+      "bytes": 176,
+      "sha256": "86c781915ed82d01336691da0cb860be9c96a1a7ed2f64b278369c37c1f7c475",
+      "reason": "PyroIdleAnimation and warmup use pyro_idle_loop_v2."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_forward_v3/attack.frames.json",
+      "bytes": 10408,
+      "sha256": "088f4b7789d21702ce5d5417382650e4f91abdbab6368f443e0bb821295b0c8a",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_forward_v3/attack.frames.json.meta",
+      "bytes": 188,
+      "sha256": "725736735a9a2423cd87019cfcfd54c2a77c38b24fde7a59a5c753724ef5cc74",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_forward_v3/attack.png",
+      "bytes": 6760784,
+      "sha256": "52ae15e2a5bec76ff1a130f770113c0401bb3aba03a0753ab54e123e903e1c0d",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_forward_v3/attack.png.meta",
+      "bytes": 2997,
+      "sha256": "dc42ed0c08cdcf011f23778f1a043623e47c26051dc2e417aaff7099a19bfb5c",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_forward_v3.meta",
+      "bytes": 176,
+      "sha256": "4170da2cb04fd73f753d36259eff316a5aeb262fb11971e6d0bc1a64dc036caf",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_forward_v4/attack.frames.json",
+      "bytes": 10897,
+      "sha256": "438d3c71cbe44d467b212bcc5fcddaddc109b791334f7768954f59b5a4b024a0",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_forward_v4/attack.frames.json.meta",
+      "bytes": 188,
+      "sha256": "d594ecad64c5cc457a63c73843e6e2522f7d978168c278c2c3f52f4e2a346361",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_forward_v4/attack.png",
+      "bytes": 6360582,
+      "sha256": "2c643ab9a108393e86eee3ee7b66a7c96dddcb70f58ec78fcec3d28555202a4b",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_forward_v4/attack.png.meta",
+      "bytes": 2987,
+      "sha256": "eac157307494e66c4b2e27d537626305932e69e1ab5c5a9dd9765b519e74ee47",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_forward_v4.meta",
+      "bytes": 176,
+      "sha256": "50e0616946d3416fddf3fc541093cad60ab789f8ff504307d83d558ad76b31d3",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_natural_v1/attack-1.png",
+      "bytes": 4303903,
+      "sha256": "7d79c67f25d5f3fa3f7f065e2c0d26b8503b6cd7290092cfa02aeba6ed18d20b",
+      "reason": "SniperIdleAnimation and warmup use sniper_attack_clean_v1."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_natural_v1/attack-1.png.meta",
+      "bytes": 2991,
+      "sha256": "d0696ee938368ecb74a79a06e54f78c6f6ba0addd9931a98638ed0953111d540",
+      "reason": "SniperIdleAnimation and warmup use sniper_attack_clean_v1."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_natural_v1/attack.frames.json",
+      "bytes": 58877,
+      "sha256": "fd3fb19cd088bb9eaa74a1d0dcb90d7a2f0da8e4c68a0a2731adcfdbe0454e98",
+      "reason": "SniperIdleAnimation and warmup use sniper_attack_clean_v1."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_natural_v1/attack.frames.json.meta",
+      "bytes": 188,
+      "sha256": "c70bd62cf9ef86e4d815d5c934bfe3bf7f08bc57ac4623f089dbdc5d673917bb",
+      "reason": "SniperIdleAnimation and warmup use sniper_attack_clean_v1."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_natural_v1/attack.png",
+      "bytes": 8849198,
+      "sha256": "31245221452c0c2bee5285f7d69bca761e0a5aef7c79349ae148a934f245e8cb",
+      "reason": "SniperIdleAnimation and warmup use sniper_attack_clean_v1."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_natural_v1/attack.png.meta",
+      "bytes": 2951,
+      "sha256": "6343543ef2a0922282577745b81ab1e6e338e3c8d9e8a1dc3aff5129a423cf1d",
+      "reason": "SniperIdleAnimation and warmup use sniper_attack_clean_v1."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_natural_v1.meta",
+      "bytes": 176,
+      "sha256": "f7efa7f4c13f083f3d035b533ee2a7f2daf960e78d22dab5ffb517907312332e",
+      "reason": "SniperIdleAnimation and warmup use sniper_attack_clean_v1."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_v1/attack.frames.json",
+      "bytes": 8527,
+      "sha256": "a2e58ccdbbd10111341b1ccf55dd431e0e692202347944c93df603f7151153bc",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_v1/attack.frames.json.meta",
+      "bytes": 188,
+      "sha256": "2f5e0729fd777c454433664e7695d9f986de29667924426e196f6802a6952bd2",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_v1/attack.png",
+      "bytes": 7195840,
+      "sha256": "df22e538a3ddac3ee1f3029ffe01942b94ecc42126e0cff3b80c1cf55160071f",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_v1/attack.png.meta",
+      "bytes": 3007,
+      "sha256": "4c00b1bafbcea1b967a89714a5ba013023704ed01b5a99097f15814301004fac",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_attack_v1.meta",
+      "bytes": 176,
+      "sha256": "2c3ee1ac68ddeb7df67a72a897caadf722192432c0ff6a5db78f195f332036e9",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_combat_rebuild_v1/sniper-ready.png",
+      "bytes": 1524255,
+      "sha256": "0b02f262248584a827347f31cafba2a27f6b466022bd8e113ea8c4ab7c89c7e0",
+      "reason": "Superseded static sniper combat reference."
+    },
+    {
+      "asset": "resources/ux/sniper_combat_rebuild_v1/sniper-ready.png.meta",
+      "bytes": 2986,
+      "sha256": "d691571cbac989ef349daef5d440b272ca7a57681172fa4d21504a35690520a3",
+      "reason": "Superseded static sniper combat reference."
+    },
+    {
+      "asset": "resources/ux/sniper_combat_rebuild_v1.meta",
+      "bytes": 169,
+      "sha256": "9041ca7c41830965882f8fe6f795d805b073d70bb4ee1f6bb156a2981b2d9e83",
+      "reason": "Superseded static sniper combat reference."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_cape_safe_v3/idle.frames.json",
+      "bytes": 15905,
+      "sha256": "ddb2f66cf272bfba579c77f62663dac67e5a204852428973d57f43b2806798f5",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_cape_safe_v3/idle.frames.json.meta",
+      "bytes": 190,
+      "sha256": "2bdedf2dde90f864a5777b9cf1f542d1a91421556f8f7c251f4d7f4d5ecfe722",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_cape_safe_v3/idle.png",
+      "bytes": 3414279,
+      "sha256": "b4b0ef4881579705457f27c69a2bb981bb45ec6afb6f05c88e9223932073546c",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_cape_safe_v3/idle.png.meta",
+      "bytes": 2965,
+      "sha256": "169cfe8898c4d98e745a87d39591bc4df1c7a6397c21233d3d2564e847c2656c",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_cape_safe_v3.meta",
+      "bytes": 178,
+      "sha256": "d0e20e267b8848c61f97f99893663ee4d2ab08702d31bcb54177c60b6e4075f5",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_flow_v1/idle.frames.json",
+      "bytes": 34903,
+      "sha256": "7da2833dc6624d4f0a351dcc29d954c2f6e46f6f6e7ee54188b18e698a9ce9d1",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_flow_v1/idle.frames.json.meta",
+      "bytes": 190,
+      "sha256": "67bd026dce38137e35e147277f892a6e9cb28aa56d297d67abbccf335f60fc2f",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_flow_v1/idle.png",
+      "bytes": 8274447,
+      "sha256": "a41ebdb7b12840bf6fdc0df3b3e2d5926e93b7f04d565f0c49ba46c5bb4a545b",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_flow_v1/idle.png.meta",
+      "bytes": 2945,
+      "sha256": "c0d387531589017f2cabe6b79347ac9e1b6c6cdc033e5270c7d398f3e35300b0",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_flow_v1.meta",
+      "bytes": 178,
+      "sha256": "b4fe875ab6b17304e36d94fea2d7472ec1009c23e8c910504b3dca0d26de1d04",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_forward_v1/idle.frames.json",
+      "bytes": 15379,
+      "sha256": "8a36cdde2047543dee1e9e1e5221688a81053aa4ee3d943f5ab72e3b74a6ee7d",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_forward_v1/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "c1da9f3e1fb1796fdabe1b77054540d861bd98ec8f94745bc3589f89fa3f13dd",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_forward_v1/idle.png",
+      "bytes": 7104979,
+      "sha256": "6fe22313f375f16a8e833eb477d979b8f1221af7f4236c382ddd203963eba86b",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_forward_v1/idle.png.meta",
+      "bytes": 2976,
+      "sha256": "a9281d0d1f53af084b5e43a18efce5dee1d9847f9a0a7d9cc83a73489595484c",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_forward_v1.meta",
+      "bytes": 176,
+      "sha256": "b3b94b6bf85d8ee4a0343192f88d3cf72930618054b52b0a388d28ff1470f00c",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_forward_v2/idle.frames.json",
+      "bytes": 15385,
+      "sha256": "4290a52b6d8cd4145cdec687f34d86bba68a7408fd2cf4bd6ec6355effbe89eb",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_forward_v2/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "d32d1f43807606287d41c960523cabef7cc9e5ab8562e74ba04ce88fb336acca",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_forward_v2/idle.png",
+      "bytes": 7575764,
+      "sha256": "500426279e9cab65a1413a87b6c3d86bec0096f00fa08d9e2dd95fc5d478404b",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_forward_v2/idle.png.meta",
+      "bytes": 2943,
+      "sha256": "988a0e8fce02a9a0d6ff8c068912457fba4e4ac658f63284d4f11d74192b04a4",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_forward_v2.meta",
+      "bytes": 176,
+      "sha256": "c4a73d94e085f253893676495461293efad84fae9d2a6760524e216b106c36ea",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_full_v6/idle.frames.json",
+      "bytes": 33623,
+      "sha256": "cbbd7ca9dd7dcddba07b8eb105763d5417600fad136dc92213e3a8fcac0ce806",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_full_v6/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "fabc6435e2bcecdd43ddb74b59b977f7544c9292d16a4a3ac836b34a8bdeb1e6",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_full_v6/idle.png",
+      "bytes": 8274447,
+      "sha256": "a41ebdb7b12840bf6fdc0df3b3e2d5926e93b7f04d565f0c49ba46c5bb4a545b",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_full_v6/idle.png.meta",
+      "bytes": 2945,
+      "sha256": "f461de01366e6ee103e2551e266ebb1fa9b9ee97edfb7ffee51563df9f833be2",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_full_v6.meta",
+      "bytes": 176,
+      "sha256": "4d76646eb6bd507aae41da65cbfc97708697e3d13ca80bf2ff80b60c7638ae54",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_level_v1/idle.frames.json",
+      "bytes": 15381,
+      "sha256": "b42a8ba892c21f6243aedd463b5fbd973330fff34c7e44afeeee6b5c6d1f94a9",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_level_v1/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "59c2c8b6062b33ea3ba876927e6d5b4e97a41d189191fd8505e6d65167b95cb5",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_level_v1/idle.png",
+      "bytes": 8760505,
+      "sha256": "3b60c2bdbf5e1476ae8060228e186b15d523dff63fd0342fd4f272e8dc40641d",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_level_v1/idle.png.meta",
+      "bytes": 2960,
+      "sha256": "d443068da41f81adad0a8c61d21c2796981403dbd072ead4713c3dd83d4afbd1",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_level_v1.meta",
+      "bytes": 176,
+      "sha256": "d1136464883d31a3786a6c84651e1bc09f3312ba4c98f4e498e434f48f172205",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_lively_loop_v2/idle.frames.json",
+      "bytes": 15443,
+      "sha256": "b680236bec06f632eceaac11d44e48b5d73312d28b615c32c5da43ff85735c50",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_lively_loop_v2/idle.frames.json.meta",
+      "bytes": 190,
+      "sha256": "915c8ec6ce0a773f657d694f522a70affaf8fafbec75bf20f0265b62d92b67db",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_lively_loop_v2/idle.png",
+      "bytes": 7674676,
+      "sha256": "91310c0757a81c2fce57965fed5957cb68aac91dcc7e4b400124d75b3b68ff4a",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_lively_loop_v2/idle.png.meta",
+      "bytes": 2951,
+      "sha256": "ae2e3aec3009e532f67a880c403c8188baec63a44b27784171f0d40c1a00efc6",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_lively_loop_v2.meta",
+      "bytes": 178,
+      "sha256": "d680ef408c146ed81321037558605c5e2fda1cc5dee1abd7d5d71a6b915287db",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_lively_v1/idle.frames.json",
+      "bytes": 12009,
+      "sha256": "941cc94a429b6e2114c38b150978bf7d57c754204200099dfe7baea13e055e25",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_lively_v1/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "5e9815691fc9712ec530f1978a1599dbeebf6b79caaf20ab70a8f9a21a5cdd4a",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_lively_v1/idle.png",
+      "bytes": 7674676,
+      "sha256": "91310c0757a81c2fce57965fed5957cb68aac91dcc7e4b400124d75b3b68ff4a",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_lively_v1/idle.png.meta",
+      "bytes": 2951,
+      "sha256": "70bf60e5d8c5976dd8fc38d8e1ccb1c9cd2cc8ff20f6d9ae894d8b3544957143",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_lively_v1.meta",
+      "bytes": 176,
+      "sha256": "a13031daa9e3e11437dab05bb3202f35b8661a4a6ffe9f2eaca6b8cac9052eb8",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_natural_v1/idle.frames.json",
+      "bytes": 30905,
+      "sha256": "f83ba7b61c257df86152a19a3b51153869b7fa744ff54bc23f5324e16434a020",
+      "reason": "SniperIdleAnimation and warmup use sniper_idle_natural_v2."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_natural_v1/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "5dec18e2878ca8745800fbaf991cf453f786e38ac539059f42ea17fd22641be1",
+      "reason": "SniperIdleAnimation and warmup use sniper_idle_natural_v2."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_natural_v1/idle.png",
+      "bytes": 8823967,
+      "sha256": "8048e1313cc274ba4224fc1ff176158a38b8de2a8804b21a0baa4bf653cd0c7f",
+      "reason": "SniperIdleAnimation and warmup use sniper_idle_natural_v2."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_natural_v1/idle.png.meta",
+      "bytes": 2961,
+      "sha256": "a8d374462df4e7ae380ace2426bd47c5c17a8eb8093de4c8996d06fb7eb9bf3a",
+      "reason": "SniperIdleAnimation and warmup use sniper_idle_natural_v2."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_natural_v1.meta",
+      "bytes": 176,
+      "sha256": "ef071f296b5d9c52bc38c5d9b7aaac2a5c16b188996bb9907a3ab46e451088ff",
+      "reason": "SniperIdleAnimation and warmup use sniper_idle_natural_v2."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v1/idle.frames.json",
+      "bytes": 3717,
+      "sha256": "62f22f9d7c10d2f4f55068d1e430e533b983443d7360b52e6616f916319954ca",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v1/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "aad472968e93be655d5835182a5bf3f182a8aa933fb819e5196063c4785b6443",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v1/idle.png",
+      "bytes": 1452248,
+      "sha256": "723926902a26b04cae3ea1c5a918de4c4e5eecf06cfb12cac3a87395693ab3a2",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v1/idle.png.meta",
+      "bytes": 2949,
+      "sha256": "adc2c6a30b0f296b545bd02a7ed30522f8ef56b54ae073606b257fa2b8b419b0",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v1.meta",
+      "bytes": 176,
+      "sha256": "221750038616d631055ff1a1e1db802da1976437a81682c6b3dc91a636021986",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v2/idle.frames.json",
+      "bytes": 5752,
+      "sha256": "0d1cba1508b9c43a262bf33c85265e1f96f695200e11da5469d40fd858f4ec17",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v2/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "11d39a5a3b8e11e3ca37561e5f6c9a25d84e8985624a67c1237004284aad13cb",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v2/idle.png",
+      "bytes": 3028435,
+      "sha256": "c871468fa0e0d80a372ab71ec8daea6b9e6ef318c8bc1a3d3def9b3665266fda",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v2/idle.png.meta",
+      "bytes": 2933,
+      "sha256": "07d14c19e1f4858982ce1d6d51bbaa6a5b006828ce96f314b8f55c931c252ec9",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v2.meta",
+      "bytes": 176,
+      "sha256": "cdf40ea96763e0bd0ce20841c6f3816b762340fb345bab2b7d0c4fab254b66ca",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v3/idle.frames.json",
+      "bytes": 5551,
+      "sha256": "f3a369bea82f27d67c248424ac150aa78766af94d2526bea1c7be808e1901b3a",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v3/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "2cfecb23fc6a6952dd6f0def3f20c2d62e3e908a56c6acb146a99e16db5d8689",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v3/idle.png",
+      "bytes": 1149643,
+      "sha256": "0ee8f960523d9e664ad88e6ac4f8d42ee6a7cea7d06242f614e9d40ef34e46eb",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v3/idle.png.meta",
+      "bytes": 2938,
+      "sha256": "a7a27ab27b470c72cac00b98ee55662137a34f14ee713cf4f3f69054f35f3d70",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v3.meta",
+      "bytes": 176,
+      "sha256": "e9486aced8c31594ae1c3972f124fbbe78ad07eed80abb8254185c2e39355bac",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v4/idle.frames.json",
+      "bytes": 11292,
+      "sha256": "075f3e63b63c53980b107c13a17544b1bfafc213b5807e8431b3fcb0f02b77ab",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v4/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "ceb9860e3b5c68be0c221e831ca794e018304ac6f4bf2299e57e80a5b04ca86c",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v4/idle.png",
+      "bytes": 8449382,
+      "sha256": "8c4511cd358ffd8feb8b12e25f6a3a430b73c58da536004f3fd47e1c36e5ed20",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v4/idle.png.meta",
+      "bytes": 2991,
+      "sha256": "100122ebb6532da0b13ea46922e03859f9ec0e75787528b88c222f10e50ed1fc",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_rebuild_v4.meta",
+      "bytes": 176,
+      "sha256": "2ff5c53154ed214b2cc9dc8636a3c38de286036c6644e9322e8b90e2227056f6",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_subtle_v2/idle.frames.json",
+      "bytes": 3812,
+      "sha256": "4e4349ae6d72e474e7dd9726bcc704bd4c5fb3c8e9edc221048d9bcb725cec9d",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_subtle_v2/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "7026e1bf82ce6347b18a947d7c37d94c9c5a6c0d6262b0bca93acd7df567e7eb",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_subtle_v2/idle.png",
+      "bytes": 1276064,
+      "sha256": "660855fa24ed8b80f58c6ade62600c37c08317d35716f8481aef4608b3e155cd",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_subtle_v2/idle.png.meta",
+      "bytes": 2930,
+      "sha256": "57dd666ee0e62e666eaeefbde8ed33eb2bf278f995ceadeef85ac49641a53b0d",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_idle_subtle_v2.meta",
+      "bytes": 176,
+      "sha256": "0aee29a7d8fc0a81802bddb4a0d72fa45919bea360446f32a2fe226f0b58a292",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_stance_attack_v1/attack.frames.json",
+      "bytes": 4236,
+      "sha256": "fc420c593dec5af1e8eb8200c65db876c97a4162d1a48a79389a28b4619ef34d",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_stance_attack_v1/attack.frames.json.meta",
+      "bytes": 188,
+      "sha256": "014ada2fcb673680d1713b8fac654a84bfeaca18cdf00817d3b46a5d4318f017",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_stance_attack_v1/attack.png",
+      "bytes": 1277913,
+      "sha256": "81dc59b5023268938591e91f6ee3bb4f361fdeae08420f2a0b2036a91c03ff33",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_stance_attack_v1/attack.png.meta",
+      "bytes": 2946,
+      "sha256": "82b2cfc459c7d99c76272e922e7f24a6ff791c0342322e0869cfc8bbed512dfa",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_stance_attack_v1.meta",
+      "bytes": 176,
+      "sha256": "223cc3d8a02e6708f26c4f7079d1ee09cb624274388bef1bed010740ec55119d",
+      "reason": "Superseded sniper attack experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_stance_idle_v3/idle.frames.json",
+      "bytes": 15480,
+      "sha256": "5484f6b7cc13487bc79fde775107775a1862c0686ff572760377e167a4290960",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_stance_idle_v3/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "09f1d122c21bc2c2d2f01f7a794c224e4f327631852612715a8c875550375a71",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_stance_idle_v3/idle.png",
+      "bytes": 8545747,
+      "sha256": "39840d4da25076fb8a25aadfa0503cf5601ae623f3fc0c42ba3bd5402cca93cb",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_stance_idle_v3/idle.png.meta",
+      "bytes": 2951,
+      "sha256": "057a4863ee96152a7520c55faeae09dfe3ce648e4dbce240333ab56f6ce50829",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/sniper_stance_idle_v3.meta",
+      "bytes": 176,
+      "sha256": "b727e42de8cdb8a38ff4ecd82260eff51a6114f1b186d4773d3d0a9b67b1d248",
+      "reason": "Superseded sniper idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_attack_natural_v1/attack.frames.json",
+      "bytes": 30378,
+      "sha256": "99c42bbc941d05844dab75e04b046b61e5c0f58ef40ffb5df0f068e567be72c7",
+      "reason": "VoltIdleAnimation and warmup use volt_attack_user_v2."
+    },
+    {
+      "asset": "resources/ux/volt_attack_natural_v1/attack.frames.json.meta",
+      "bytes": 188,
+      "sha256": "ec2eaa09de0622676bc377b270d13d960644c4ede7a5ff840a8d581cf5815b87",
+      "reason": "VoltIdleAnimation and warmup use volt_attack_user_v2."
+    },
+    {
+      "asset": "resources/ux/volt_attack_natural_v1/attack.png",
+      "bytes": 10116936,
+      "sha256": "610c184cca74af3cbdb0fe170e9f98734cabd21742d00b2ff71ff541f5711163",
+      "reason": "VoltIdleAnimation and warmup use volt_attack_user_v2."
+    },
+    {
+      "asset": "resources/ux/volt_attack_natural_v1/attack.png.meta",
+      "bytes": 2985,
+      "sha256": "f34a7a1f695baa5ef5320121f1c3d1b47466b1633e6b7f9212fffb32d0edde2b",
+      "reason": "VoltIdleAnimation and warmup use volt_attack_user_v2."
+    },
+    {
+      "asset": "resources/ux/volt_attack_natural_v1.meta",
+      "bytes": 176,
+      "sha256": "2a76cb616e9b924a657f1466f220ea27c29a3d27c0ce81a5ac4f8468d4dcc2b7",
+      "reason": "VoltIdleAnimation and warmup use volt_attack_user_v2."
+    },
+    {
+      "asset": "resources/ux/volt_idle_flow_v1/idle.frames.json",
+      "bytes": 14862,
+      "sha256": "3088cee8a4299901b92b79aabd4f3f2c54c38b4385fbae4914b38384d3bfd9c2",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_flow_v1/idle.frames.json.meta",
+      "bytes": 190,
+      "sha256": "dfc61707001d2222ebbc38e0b6772cd2d8e1b240e739b17adf2d029bd5f9cf76",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_flow_v1/idle.png",
+      "bytes": 7285589,
+      "sha256": "1461b75b3138469563ec615d02351b33d520d1e6ae65b14f14ebe48c390895dc",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_flow_v1/idle.png.meta",
+      "bytes": 2983,
+      "sha256": "614c770553922b5f91f5882201c147d72f4aa69444257bf42c65e8548bbb6564",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_flow_v1.meta",
+      "bytes": 178,
+      "sha256": "a48c8c7dae3a3c244be047eb03fdf0285ac996baf04d0f2c41a1f0af01633b95",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_lively_loop_v2/idle.frames.json",
+      "bytes": 13656,
+      "sha256": "3f0c925348178e2ea37eceace762a9deeed2df9259e532a8001211b9ca9d77f4",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_lively_loop_v2/idle.frames.json.meta",
+      "bytes": 190,
+      "sha256": "815e590ce80a1a70d0a0e6337de47015c1690b5312037781d30641aa8cfc6179",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_lively_loop_v2/idle.png",
+      "bytes": 7285589,
+      "sha256": "1461b75b3138469563ec615d02351b33d520d1e6ae65b14f14ebe48c390895dc",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_lively_loop_v2/idle.png.meta",
+      "bytes": 2983,
+      "sha256": "f255d8e210390feb11c32d3dc6d1595c63e33246f521f77543a097aa0861ccd9",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_lively_loop_v2.meta",
+      "bytes": 178,
+      "sha256": "7b70e618ecfae62ee7879e374f0075f5086e69496c4606727b3ea3743c874569",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_lively_v1/idle.frames.json",
+      "bytes": 10550,
+      "sha256": "9adad0cc5730816ff753024c7677ccdbe53219de8c79e118a4a63b615fa08033",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_lively_v1/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "4e72f3bd4459e3fbe17cb7d322b9de82520a5444c089c36a04c266affd3a926b",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_lively_v1/idle.png",
+      "bytes": 7285589,
+      "sha256": "1461b75b3138469563ec615d02351b33d520d1e6ae65b14f14ebe48c390895dc",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_lively_v1/idle.png.meta",
+      "bytes": 2983,
+      "sha256": "34b89b6b105219b9e1decf4bc61917c3f991e42188f71cfdf4e499e4210428f4",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_lively_v1.meta",
+      "bytes": 176,
+      "sha256": "fb7872ba47e038c0c440b3530c324448361980423fbe111ef9e050df54098c8b",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_subtle_v2/idle.frames.json",
+      "bytes": 3575,
+      "sha256": "23b9ed505240fb0be63077e4311ceccce5bad1856ba3b094c0a7ae42bb400291",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_subtle_v2/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "31ac37c6ea527242df4582dd715d9d84242fa6e5c98925b09fbaae062b697dc2",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_subtle_v2/idle.png",
+      "bytes": 1369796,
+      "sha256": "7287eb9b44b11a4ac50cb2d320f4ad8ac78d22f0b87beaca6c0c50aab7607542",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_subtle_v2/idle.png.meta",
+      "bytes": 2923,
+      "sha256": "05ca891aec7802b4e99207ee09cdd73a887442be79dafad891ac1a7ec1bfa399",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_subtle_v2.meta",
+      "bytes": 176,
+      "sha256": "40fa9c3e186e933404aaa8adab24b263bd6f1ee9ac2749c28cd51cbf7c426a17",
+      "reason": "Superseded volt idle experiment."
+    },
+    {
+      "asset": "resources/ux/volt_idle_v1/idle.frames.json",
+      "bytes": 15474,
+      "sha256": "4a4089800e3c7e849ecb7899a6b356ac48066f647404c06ddcc04797d16b0809",
+      "reason": "Superseded by volt_idle_natural_v1."
+    },
+    {
+      "asset": "resources/ux/volt_idle_v1/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "afb3569e7851d31230ff8fbc78470b49f383fabb01dfeb72fec62a244be53682",
+      "reason": "Superseded by volt_idle_natural_v1."
+    },
+    {
+      "asset": "resources/ux/volt_idle_v1/idle.png",
+      "bytes": 9453380,
+      "sha256": "e4678cfbffb588fb4b7470bb06d2d9e759acbf96dc8fe62b6c9760b2988ea95c",
+      "reason": "Superseded by volt_idle_natural_v1."
+    },
+    {
+      "asset": "resources/ux/volt_idle_v1/idle.png.meta",
+      "bytes": 2963,
+      "sha256": "1c5642ab3719dca322acb6278d860e7fdea9052e311a08f3ba7f87a6b09780e5",
+      "reason": "Superseded by volt_idle_natural_v1."
+    },
+    {
+      "asset": "resources/ux/volt_idle_v1.meta",
+      "bytes": 176,
+      "sha256": "a0a6eb5547b731126a62e92e8f0073316e8d8898efa57bd0c2aaf7c2326a4b37",
+      "reason": "Superseded by volt_idle_natural_v1."
+    },
+    {
+      "asset": "resources/ux/volt_stance_idle_v2/idle.frames.json",
+      "bytes": 15478,
+      "sha256": "5e096d2748ec9c1626d477de8bf6f99ae33bb6bea88eb9cbefc7b51bc402d0cb",
+      "reason": "VoltIdleAnimation and warmup use volt_idle_natural_v1."
+    },
+    {
+      "asset": "resources/ux/volt_stance_idle_v2/idle.frames.json.meta",
+      "bytes": 188,
+      "sha256": "54ec95336931ada02eeea9b11abdb2d255c51a712da5ddf1c8e5e93aa98a0604",
+      "reason": "VoltIdleAnimation and warmup use volt_idle_natural_v1."
+    },
+    {
+      "asset": "resources/ux/volt_stance_idle_v2/idle.png",
+      "bytes": 9719388,
+      "sha256": "a47c0af7eeb70982fc054e9319acf4da859423c268a5a7d61efa60a31e850ad2",
+      "reason": "VoltIdleAnimation and warmup use volt_idle_natural_v1."
+    },
+    {
+      "asset": "resources/ux/volt_stance_idle_v2/idle.png.meta",
+      "bytes": 2949,
+      "sha256": "38688a4f6d3b434f94e0fad3dd473320c4f8391dafb121fd941008ac572432e6",
+      "reason": "VoltIdleAnimation and warmup use volt_idle_natural_v1."
+    },
+    {
+      "asset": "resources/ux/volt_stance_idle_v2.meta",
+      "bytes": 176,
+      "sha256": "5121b07c3868978cc063a52e4a89d3043811652577057e95bed1d3181f277520",
+      "reason": "VoltIdleAnimation and warmup use volt_idle_natural_v1."
+    }
+  ]
+}
