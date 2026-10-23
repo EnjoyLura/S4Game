@@ -10,12 +10,12 @@
 在 `D:/AI/S4Game/KingdomWatch` 执行：
 
 ```powershell
-./tools/publish-github-pages.ps1
+./tools/publish-github-pages.ps1 -PrunePreviousRelease
 ```
 
 依次沿用原 `build-web.ps1` 正式导出、DPR 补丁和版本准备，再生成子路径运行包、静态核对全部文件散列和资源引用、检查 WASM 头与内存要求，提交推送独立仓库，最后等待 Pages 并做 HTTP 校验。默认不执行游戏、浏览器、JS/WASM 或旧入口测试脚本。已配置 `main` 分支根目录发布，包内包含 `.nojekyll`。
 
-2026-10-23 已接入[自动美术资源管线v82](../art-resource-pipeline-v82/README.md)：构建生成尺寸/留白审计，独立GitHub导出默认选用逐RGBA像素一致且体积更小的无损WebP，源PNG和正常Cocos导出保持。入口有无损WebP解码能力探测，图片及索引使用新内容版本，发布前核对真实原生地址、像素和完整文件散列。编码缓存与有损候选只在本地。
+2026-10-24 已接入[200MB混合编码v88](../art-mixed-v88/README.md)：默认 `mixed-webp-q95`，保护界面、九宫格、小图、头像和原特效，大幅插画及动画图集采用Q95 RGB编码，仅更小时使用；尺寸、透明度、ICC和动画清单保持。源PNG和正常Cocos导出保留，完整运行包（含版本指针和清单）超过200,000,000字节时中止。缓存只在本地；可显式重新导出无损或PNG回退版本，两种回退保留500MB预算。首次切换或保留旧版使站点超过200MB时，须加 `-PrunePreviousRelease` 仅保留当前运行包；独立仓库的Git历史仍保留。前版[无损管线v82](../art-resource-pipeline-v82/README.md)是实现基础，其“默认无损/500MB”已由本条替代。
 
 2026-10-22 已补齐只校验模式、可配置文件、预制包复用、进程代理恢复和分阶段报告。参数如下：
 
@@ -27,7 +27,8 @@
 | `-PrunePreviousRelease` | 本次发布只保留新运行包，清掉上一版独有的已跟踪运行文件；保留未跟踪文件与 Git 历史。默认不启用，仅发布模式可用 |
 | `-StatusOnly` | 只校验上次运行包并查询部署、核对线上文件；不构建、提交或推送 |
 | `-PreparedPackage <目录>` | 校验并发布指定的已导出包，跳过构建与再次导出 |
-| `-TextureMode lossless-webp` | 新导出使用无损WebP（默认）；逐像素验证，仅采用更小结果 |
+| `-TextureMode mixed-webp-q95` | 默认混合编码；保护UI等无损，适合的大图Q95，完整包上限200MB |
+| `-TextureMode lossless-webp` | 显式无损WebP回退；逐像素验证，仅采用更小结果，上限500MB |
 | `-TextureMode original-png` | 新导出保留原PNG，用于兼容回退；不与PreparedPackage/StatusOnly组合 |
 | `-ProxyUrl http://127.0.0.1:7897` | 仅本次进程使用指定代理，结束后恢复环境变量；不改系统代理 |
 | `-ConfigPath <文件>` | 使用指定的发布配置；默认 `tools/github-pages/config.json` |
@@ -60,7 +61,7 @@
 
 GitHub Pages 的 HTTP 缓存由平台控制，实测 `max-age=600`；本方案不能通过 CF `_headers` 设置一年缓存。入口与清单明确联网，资源使用稳定版本路径。未添加 Service Worker，不抢占同一 GitHub 域名下其他项目。
 
-当前单文件、图片尺寸、当前包以及当前加上一版的总量均在发布前检查。v82完整运行资源351.46MB（335.18MiB）；后续资源增加超出预算会中止并说明，不会静默漏传。
+单文件、图片尺寸、完整当前包以及保留上一版后的站点总量均在发布前检查。混合模式200MB预算包含版本指针和清单；超过预算时停止发布，不自动降低画质或删除原稿。
 
 ## WASM 与诊断
 

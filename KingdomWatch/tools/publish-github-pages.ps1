@@ -18,7 +18,7 @@ param(
     [Parameter(Mandatory, ParameterSetName = 'Validate')][switch]$ValidateOnly,
     [Parameter(Mandatory, ParameterSetName = 'Status')][switch]$StatusOnly,
     [Parameter(ParameterSetName = 'Publish')][string]$PreparedPackage = '',
-    [Parameter(ParameterSetName = 'Publish')][ValidateSet('lossless-webp','original-png')][string]$TextureMode = '',
+    [Parameter(ParameterSetName = 'Publish')][ValidateSet('mixed-webp-q95','lossless-webp','original-png')][string]$TextureMode = '',
     [ValidateRange(0, 3600)][int]$WaitSeconds = 240,
     [string]$ProxyUrl = '',
     [string]$ConfigPath = ''

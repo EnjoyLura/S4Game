@@ -1,0 +1,78 @@
+{
+  "package": {
+    "release": {
+      "base_path": "/kingdom-watch-play/",
+      "entry": "game.bbe84a590d7bc72d.html",
+      "entry_bytes": 22425,
+      "entry_sha256": "bbe84a590d7bc72d3b5284f2b074fd4116220d0718ab4c602bbaec14d25489dc",
+      "id": "12ec0530039779bc",
+      "inventory": "hosting-files.12ec0530039779bc.json",
+      "inventory_sha256": "12ec0530039779bc1030f9399a01483cc474072a0cab52e592be82674f671743",
+      "requires_cross_origin_isolation": false,
+      "requires_webp": true,
+      "schema": 1,
+      "texture_mode": "mixed-webp-q95",
+      "wasm": [
+        "cocos-js/assets/spine-CC34fKUR.wasm"
+      ]
+    },
+    "file_count": 1912,
+    "runtime_bytes": 177621753,
+    "full_package_bytes": 177952789,
+    "budget_bytes": 200000000,
+    "all_exported_hashes_verified": true,
+    "links": {
+      "explicit_file_references_checked": 438,
+      "embedded_provenance_strings_not_fetches": [],
+      "virtual_system_modules": 153,
+      "remote_url_literals": [
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/bangers/Bangers-Regular.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-Bold.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-ExtraBoldItalic.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+      ],
+      "bundle_versions": {
+        "internal": "9e58a",
+        "main": "c47c2",
+        "resources": "eb8d75799745e69f"
+      }
+    },
+    "wasm_memories": {
+      "cocos-js/assets/spine-CC34fKUR.wasm": [
+        {
+          "shared": false,
+          "memory64": false,
+          "minimum_pages": 512
+        }
+      ]
+    },
+    "art_resources": {
+      "nativeImagesResolved": 409,
+      "webpImagesRGBAAndHashesVerified": 396,
+      "losslessImagesSourceRGBAIdentical": 237,
+      "q95ImagesDimensionsAlphaAndOutputVerified": 159,
+      "gameEngineExecuted": false
+    },
+    "validation": "static files, image pixels and WASM headers only",
+    "javascript_executed": false,
+    "wasm_compiled_or_instantiated": false,
+    "game_browser_or_tests_started": false
+  },
+  "sourceFilesUnchanged": 1874,
+  "mainGameJavaScriptMatchesV87": true,
+  "baselineFullPackageBytes": 373735451,
+  "fullPackageBytes": 177952789,
+  "bytesSaved": 195782662,
+  "reductionPercent": 52.39,
+  "headroomTo200MB": 22047211,
+  "q95Images": 159,
+  "losslessWebpImages": 237,
+  "originalTinyPngs": 1,
+  "unchangedNativePathsAndBytes": 545,
+  "nativePathsReplacedOnlyByQ95": 159,
+  "dimensionsAlphaICCAndAnimationMetadataPreserved": true,
+  "javascriptUnchangedByArtStep": true,
+  "gameBrowserTestsOrWasmStarted": false,
+  "visualQualityRequiresUserReview": true
+}

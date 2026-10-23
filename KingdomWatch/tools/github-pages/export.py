@@ -15,7 +15,7 @@ from urllib.parse import unquote, urlsplit
 HERE=Path(__file__).resolve().parent
 PROJECT=HERE.parents[1]
 sys.path.insert(0, str(HERE.parent))
-from art_resources import image_records, optimize_export, validate_art, POLICY
+from art_resources import image_records, optimize_export, validate_art, POLICY, MODES, runtime_budget
 WEB=PROJECT/'build/web-mobile'
 EXTENSIONS={'.html','.css','.js','.json','.wasm','.bin','.png','.jpg','.jpeg','.webp','.gif','.mp3','.wav','.ogg','.m4a','.ttf','.otf','.woff','.woff2','.txt'}
 
@@ -85,6 +85,16 @@ def verify_links(folder):
     for f in folder.rglob('*'):
         if not f.is_file() or f.suffix not in {'.html','.js','.json','.css'}:continue
         if f.name.startswith('hosting-') or f.name=='index.html':continue
+        if re.fullmatch(r'art-resources\.[a-f0-9]{16}\.json',f.name):
+            # Source-master paths are provenance, never download URLs. Validate
+            # only the real runtime native paths here; validate_art checks pixels
+            # and Cocos import/config versions separately.
+            for item in json.loads(f.read_text('utf-8'))['images']:
+                path=folder/item['native']
+                if not path.resolve().is_relative_to(folder.resolve()) or not path.is_file():
+                    missing.append(f.name+': '+item['native'])
+                else:checked+=1
+            continue
         text=f.read_text('utf-8')
         for match in candidates.finditer(text):
             raw=match[1];url=urlsplit(raw)
@@ -199,7 +209,7 @@ def export(destination,config,texture_mode=None):
     links=verify_links(destination)
     files={p.relative_to(destination).as_posix():{'sha256':sha(p),'bytes':p.stat().st_size} for p in sorted(destination.rglob('*')) if p.is_file()}
     total=sum(v['bytes'] for v in files.values())
-    if total>POLICY['limits']['runtimeBytes']:raise RuntimeError('Export exceeds the configured art runtime budget')
+    if total>runtime_budget(art['mode']):raise RuntimeError('Export exceeds the configured art runtime budget')
     if total>950*1024**2:raise RuntimeError('Export approaches the GitHub Pages 1 GiB site limit')
     if any(v['bytes']>=100*1024**2 for v in files.values()):raise RuntimeError('A runtime file reaches the GitHub 100 MiB file limit')
     inventory={'schema':1,'files':files,'total_bytes':total,'runtime':{'cocos':'3.8.8','engine_revision':production['engineRevision'],'shared_wasm_memory':shared,'wasm_memories':memories,'remote_bundles':False,'art_resources':art}}
@@ -207,10 +217,13 @@ def export(destination,config,texture_mode=None):
     inv_sha=hashlib.sha256(raw).hexdigest();inv_name='hosting-files.'+inv_sha[:16]+'.json';(destination/inv_name).write_bytes(raw)
     pointer={'schema':1,'id':inv_sha[:16],'base_path':base,'entry':entry,'entry_sha256':entry_sha,'entry_bytes':len(entry_bytes),'inventory':inv_name,'inventory_sha256':inv_sha,'requires_cross_origin_isolation':False,'wasm':sorted(memories),'requires_webp':art['requiresWebP'],'texture_mode':art['mode']}
     write_json(destination/'hosting-release.json',pointer)
+    full_total=total+len(raw)+(destination/'hosting-release.json').stat().st_size
+    if full_total>runtime_budget(art['mode']):
+        raise RuntimeError('Complete runtime package including inventories exceeds its byte budget')
     # Independently reread every exported file after writing the inventories.
     for name,record in files.items():
         if sha(destination/name)!=record['sha256']:raise RuntimeError('Export checksum changed: '+name)
-    return {'release':pointer,'file_count':len(files)+2,'runtime_bytes':total,'validation':links,'art_resources':art,'all_exported_hashes_verified':True,'source_web_files_modified':False}
+    return {'release':pointer,'file_count':len(files)+2,'runtime_bytes':total,'full_package_bytes':full_total,'budget_bytes':runtime_budget(art['mode']),'validation':links,'art_resources':art,'all_exported_hashes_verified':True,'source_web_files_modified':False}
 
 
 def validate_package(folder,config):
@@ -270,6 +283,12 @@ def validate_package(folder,config):
         if release.get('requires_webp')!=bool(art_manifest['images']) or release.get('texture_mode')!=art_manifest['mode']:
             raise RuntimeError('Texture compatibility requirements do not match the image package')
         art_checks=validate_art(folder,art_manifest)
+        if art['mode']!=art_manifest['mode']:
+            raise RuntimeError('Art mode differs between inventory and manifest')
+    full_total=total+inventory_path.stat().st_size+safe_file('hosting-release.json').stat().st_size
+    budget=runtime_budget(release.get('texture_mode','original-png'))
+    if full_total>budget:
+        raise RuntimeError('Complete runtime package including inventories exceeds its byte budget')
     for name in files:
         if Path(name).suffix in {'.js','.json','.html','.txt'}:
             value=safe_file(name).read_text('utf-8')
@@ -277,12 +296,12 @@ def validate_package(folder,config):
                 raise RuntimeError('Credential-like value in runtime package')
             if name.endswith('.js') and any(v in value for v in ('SharedArrayBuffer','PThread','pthread_create')):
                 raise RuntimeError('Shared-memory JS requires a separate isolation adaptation')
-    return {'release':release,'file_count':len(actual),'runtime_bytes':total,'all_exported_hashes_verified':True,
+    return {'release':release,'file_count':len(actual),'runtime_bytes':total,'full_package_bytes':full_total,'budget_bytes':budget,'all_exported_hashes_verified':True,
             'links':verify_links(folder),'wasm_memories':memories,'art_resources':art_checks,'validation':'static files, image pixels and WASM headers only',
             'javascript_executed':False,'wasm_compiled_or_instantiated':False,'game_browser_or_tests_started':False}
 
 
 if __name__=='__main__':
     import argparse
-    parser=argparse.ArgumentParser();parser.add_argument('destination');parser.add_argument('--texture-mode',choices=('lossless-webp','original-png'));args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('destination');parser.add_argument('--texture-mode',choices=MODES);args=parser.parse_args()
     print(json.dumps(export(args.destination,json.loads((HERE/'config.json').read_text('utf-8')),args.texture_mode),ensure_ascii=False,indent=2))

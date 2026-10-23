@@ -1,4 +1,4 @@
-"""Offline art export, exact pixel verification and source-size audit; no engine execution.
+"""Offline art export, encoding verification and source-size audit; no engine execution.
 
 The Cocos 3.8.8 image serializer uses fmt 0=PNG, 1=JPG, 4=WebP. Transform only
 its recognized standalone ImageAsset records, and version the entire dependency
@@ -12,13 +12,59 @@ import base64
 import copy
 import hashlib
 import json
+import re
+import uuid as uuidlib
 from pathlib import Path
 from PIL import Image, features
 
 PROJECT = Path(__file__).resolve().parents[1]
 POLICY = json.loads((Path(__file__).with_name('art-resource-policy.json')).read_text('utf-8'))
 CACHE = PROJECT / 'build/art-resource-cache'
-MODES = ('lossless-webp', 'original-png')
+MODES = ('mixed-webp-q95', 'lossless-webp', 'original-png')
+
+
+def runtime_budget(mode):
+    if mode not in MODES:
+        raise ValueError('Unknown texture mode: ' + str(mode))
+    return POLICY['runtimeBudgets'][mode]
+
+
+def source_profiles():
+    """Unknown/unmapped art is lossless; never infer UI roles from build UUID names."""
+    sources = {}
+    for path in (PROJECT / 'assets/resources').rglob('*.png'):
+        meta = path.with_suffix('.png.meta')
+        if not meta.is_file():
+            continue
+        uuid = json.loads(meta.read_text('utf-8'))['uuid']
+        if uuid in sources:
+            raise RuntimeError('Duplicate source image UUID: ' + uuid)
+        sources[uuid] = path.relative_to(PROJECT).as_posix()
+    slices = set(re.findall(r"^\s*'([^']+)': \{ canon", (PROJECT / 'assets/scripts/ui/Ux.ts').read_text('utf-8'), re.M))
+    if not slices:
+        raise RuntimeError('Cannot resolve nine-slice UI protection rules')
+    return sources, slices
+
+
+def quality_profile(record, sources, slices):
+    source = sources.get(record['uuid'], '')
+    policy = POLICY['mixedWebp']
+    reasons = []
+    if not source or not any(source.startswith(root) for root in policy['eligibleRoots']):
+        reasons.append('Unknown or non-eligible source role')
+    if any(fragment in source for fragment in policy['protectedPathFragments']):
+        reasons.append('Comic UI/equipment art')
+    if any(source.startswith(root) for root in policy['protectedRoots']):
+        reasons.append('VFX art')
+    key = source.removeprefix('assets/resources/ux/').removesuffix('.png')
+    if key in slices:
+        reasons.append('Nine-slice UI')
+    if re.match(policy['protectedNamePattern'], Path(source).stem):
+        reasons.append('UI chrome/portrait/icon')
+    with Image.open(record['native']) as image:
+        if max(image.size) <= policy['protectedMaximumSide']:
+            reasons.append('Small image')
+    return {'source': source, 'losslessReasons': reasons, 'allowLossy': not reasons}
 
 
 def sha(path):
@@ -88,7 +134,7 @@ def image_records(folder):
     return records
 
 
-def encode_one(path):
+def encode_one(path, allow_lossy=False):
     digest = sha(path)
     with Image.open(path) as original:
         if getattr(original, 'n_frames', 1) != 1 or original.mode not in ('RGBA', 'RGB', 'P', 'L', 'LA'):
@@ -99,24 +145,38 @@ def encode_one(path):
         pixels = original.convert('RGBA')
         profile = original.info.get('icc_profile', b'')
     rgba = hashlib.sha256(pixels.tobytes()).hexdigest()
+    alpha = hashlib.sha256(pixels.getchannel('A').tobytes()).hexdigest()
     encoder = 'pillow-' + Image.__version__ + '-webp-' + str(features.version('webp'))
-    key = hashlib.sha256((digest + encoder + json.dumps(POLICY['webp'], sort_keys=True)).encode()).hexdigest()
-    cached = CACHE / (key + '.webp')
     CACHE.mkdir(parents=True, exist_ok=True)
-    reused = cached.is_file()
-    if not reused:
-        temporary = cached.with_suffix('.part')
-        pixels.save(temporary, 'WEBP', icc_profile=profile, **POLICY['webp'])
-        temporary.replace(cached)
-    with Image.open(cached) as decoded:
-        if decoded.size != pixels.size or hashlib.sha256(decoded.convert('RGBA').tobytes()).hexdigest() != rgba:
-            raise RuntimeError('Lossless RGBA verification failed: ' + str(path))
-        if decoded.info.get('icc_profile', b'') != profile:
-            raise RuntimeError('ICC profile verification failed: ' + str(path))
-    return {'sourceSha256': digest, 'sourceBytes': path.stat().st_size, 'webpBytes': cached.stat().st_size,
-            'width': pixels.width, 'height': pixels.height, 'rgbaSha256': rgba,
-            'webpSha256': sha(cached), 'candidate': cached, 'rgbaIdentical': True,
-            'iccIdentical': True, 'cacheReused': reused}
+    def candidate(parameters, encoding):
+        key = hashlib.sha256((digest + encoder + json.dumps(parameters, sort_keys=True)).encode()).hexdigest()
+        cached = CACHE / (key + '.webp')
+        reused = cached.is_file()
+        if not reused:
+            temporary = cached.with_suffix('.' + uuidlib.uuid4().hex + '.part')
+            pixels.save(temporary, 'WEBP', icc_profile=profile, **parameters)
+            temporary.replace(cached)
+        with Image.open(cached) as decoded:
+            output = decoded.convert('RGBA')
+            output_rgba = hashlib.sha256(output.tobytes()).hexdigest()
+            if decoded.size != pixels.size or hashlib.sha256(output.getchannel('A').tobytes()).hexdigest() != alpha:
+                raise RuntimeError('Image dimensions/alpha verification failed: ' + str(path))
+            if parameters['lossless'] and output_rgba != rgba:
+                raise RuntimeError('Lossless RGBA verification failed: ' + str(path))
+            if decoded.info.get('icc_profile', b'') != profile:
+                raise RuntimeError('ICC profile verification failed: ' + str(path))
+        return {'candidate': cached, 'encoding': encoding, 'encodingParameters': parameters,
+                'rgbaSha256': output_rgba, 'rgbaIdentical': output_rgba == rgba,
+                'webpSha256': sha(cached), 'webpBytes': cached.stat().st_size, 'cacheReused': reused}
+    selected = candidate(POLICY['webp'], 'lossless-webp')
+    if allow_lossy:
+        lossy = candidate(POLICY['mixedWebp']['encoding'], 'webp-q95')
+        if selected['webpBytes'] - lossy['webpBytes'] >= POLICY['minimumSavingBytes']:
+            selected = lossy
+    return {'sourceSha256': digest, 'sourceBytes': path.stat().st_size,
+            'width': pixels.width, 'height': pixels.height, 'sourceRgbaSha256': rgba,
+            'alphaSha256': alpha, 'iccSha256': hashlib.sha256(profile).hexdigest(),
+            'alphaIdentical': True, 'iccIdentical': True, **selected}
 
 
 def validate_art(folder, manifest):
@@ -134,6 +194,16 @@ def validate_art(folder, manifest):
                 raise RuntimeError('Image dimensions changed')
             if hashlib.sha256(decoded.convert('RGBA').tobytes()).hexdigest() != item['rgbaSha256']:
                 raise RuntimeError('Exported RGBA bytes changed')
+            if manifest.get('schema', 1) >= 2:
+                if hashlib.sha256(decoded.convert('RGBA').getchannel('A').tobytes()).hexdigest() != item['alphaSha256']:
+                    raise RuntimeError('Exported source alpha changed')
+                if hashlib.sha256(decoded.info.get('icc_profile', b'')).hexdigest() != item['iccSha256']:
+                    raise RuntimeError('Exported ICC changed')
+                if item['encoding'] == 'lossless-webp':
+                    if item['rgbaSha256'] != item['sourceRgbaSha256']:
+                        raise RuntimeError('Lossless source RGBA changed')
+                elif item['encoding'] != 'webp-q95' or item['losslessReasons']:
+                    raise RuntimeError('Invalid lossy encoding or protected art was changed')
     settings_path, = (folder / 'src').glob('settings.*.json')
     versions = json.loads(settings_path.read_text('utf-8'))['assets']['bundleVers']
     for name, version in manifest['bundleVersions'].items():
@@ -141,10 +211,13 @@ def validate_art(folder, manifest):
         if versions[name] != version or sha(path)[:16] != version:
             raise RuntimeError('Image bundle config content version is inconsistent')
     return {'nativeImagesResolved': len(records), 'webpImagesRGBAAndHashesVerified': len(manifest['images']),
+            'losslessImagesSourceRGBAIdentical': sum(i.get('encoding', 'lossless-webp') == 'lossless-webp' for i in manifest['images']),
+            'q95ImagesDimensionsAlphaAndOutputVerified': sum(i.get('encoding') == 'webp-q95' for i in manifest['images']),
             'gameEngineExecuted': False}
 
 
-def optimize_export(folder, mode='lossless-webp'):
+def optimize_export(folder, mode=None):
+    mode = mode or POLICY['defaultMode']
     folder = Path(folder).resolve()
     if mode not in MODES:
         raise ValueError('Unknown texture mode')
@@ -162,23 +235,26 @@ def optimize_export(folder, mode='lossless-webp'):
         with Image.open(record['native']) as image:
             if max(image.size) > POLICY['limits']['textureSide']:
                 raise RuntimeError('Texture exceeds the configured maximum side: ' + str(record['native']))
+    sources, slices = source_profiles()
+    profiles = {r['uuid']: quality_profile(r, sources, slices) for r in pngs}
     results = {}
-    if mode == 'lossless-webp':
+    if mode != 'original-png':
         # Identical images share one encoding task. Cache reads still decode and verify pixels.
-        unique = {sha(r['native']): r['native'] for r in pngs}
+        unique = {(sha(r['native']), mode == 'mixed-webp-q95' and profiles[r['uuid']]['allowLossy']): r['native'] for r in pngs}
         with ThreadPoolExecutor(max_workers=POLICY['workers']) as pool:
-            jobs = {pool.submit(encode_one, path): digest for digest, path in unique.items()}
+            jobs = {pool.submit(encode_one, path, key[1]): key for key, path in unique.items()}
             for i, job in enumerate(as_completed(jobs), 1):
                 results[jobs[job]] = job.result()
                 if i == 1 or i % 25 == 0 or i == len(jobs):
-                    print('Lossless art encoding: ' + str(i) + '/' + str(len(jobs)), flush=True)
+                    print('Art encoding (' + mode + '): ' + str(i) + '/' + str(len(jobs)), flush=True)
     changed = {}
-    manifest = {'schema': 1, 'mode': mode, 'images': [], 'bundleVersions': {},
+    manifest = {'schema': 2, 'mode': mode, 'images': [], 'bundleVersions': {},
                 'pngImagesExamined': len(pngs), 'pngKept': [], 'sourceMastersModified': False,
                 'pillow': Image.__version__, 'libwebp': features.version('webp')}
     for record in pngs:
         path = record['native']
-        result = results.get(sha(path), {})
+        profile = profiles[record['uuid']]
+        result = results.get((sha(path), mode == 'mixed-webp-q95' and profile['allowLossy']), {})
         if not result or result.get('keepReason') or result['sourceBytes'] - result['webpBytes'] < POLICY['minimumSavingBytes']:
             manifest['pngKept'].append({'uuid': record['uuid'], 'reason': result.get('keepReason', 'Original PNG is smaller or original-png mode')})
             continue
@@ -205,7 +281,8 @@ def optimize_export(folder, mode='lossless-webp'):
             'sha256': result['webpSha256'], 'originalPngSha256': result['sourceSha256'],
             'originalBytes': result['sourceBytes'], 'bytes': result['webpBytes'],
             'width': result['width'], 'height': result['height'], 'rgbaSha256': result['rgbaSha256'],
-            'importVersion': import_version})
+            'importVersion': import_version, 'source': profile['source'], 'losslessReasons': profile['losslessReasons'],
+            **{key: result[key] for key in ('encoding', 'encodingParameters', 'sourceRgbaSha256', 'alphaSha256', 'iccSha256', 'rgbaIdentical', 'alphaIdentical', 'iccIdentical')}})
     settings_path, = (folder / 'src').glob('settings.*.json')
     settings = json.loads(settings_path.read_text('utf-8'))
     for old_path, config in changed.items():
@@ -233,7 +310,7 @@ def optimize_export(folder, mode='lossless-webp'):
     filename = 'art-resources.' + hashlib.sha256(raw).hexdigest()[:16] + '.json'
     (folder / filename).write_bytes(raw)
     total = sum(p.stat().st_size for p in folder.rglob('*') if p.is_file())
-    if total > POLICY['limits']['runtimeBytes']:
+    if total > runtime_budget(mode):
         raise RuntimeError('Runtime export exceeds the art resource byte budget')
     return {'mode': mode, 'manifest': filename, 'requiresWebP': bool(manifest['images']),
             'imagesConverted': len(manifest['images']), 'pngImagesKept': len(manifest['pngKept']),

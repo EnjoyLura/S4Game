@@ -21,6 +21,7 @@ import urllib.error
 import urllib.request
 
 from export import HERE,PROJECT,export,sha,write_json,validate_package
+from art_resources import MODES, runtime_budget
 
 REPORT=PROJECT/'docs/github-pages-publishing/deployment.json'
 
@@ -127,6 +128,9 @@ def synchronize(stage,dest,prune_previous_release=False):
         if not path.resolve().is_relative_to(dest) or path.is_symlink():raise RuntimeError('Unsafe retained publication path')
     combined=sum(p.stat().st_size for p in stage.rglob('*') if p.is_file())+sum((dest/n).stat().st_size for n in retained)
     if combined>950*1048576:raise RuntimeError('Current plus previous runtime exceeds the safe Pages size budget')
+    release=json.loads((stage/'hosting-release.json').read_text('utf-8'))
+    if release.get('texture_mode')=='mixed-webp-q95' and combined>runtime_budget('mixed-webp-q95'):
+        raise RuntimeError('Current plus retained runtime exceeds 200MB; use -PrunePreviousRelease to publish only the current package')
     # Delete only previously tracked generated files, after verifying the exact
     # resolved target remains inside this independent checkout. Never recurse.
     for name in sorted(old-new-retained):
@@ -169,6 +173,14 @@ def online_verification(base,stage,release):
     if hashlib.sha256(payload).hexdigest()!=release['inventory_sha256']:raise RuntimeError('Live inventory checksum mismatch')
     inventory=json.loads(payload);files=inventory['files']
     names=['index.html','hosting-diagnostics.html',release['entry'],*release['wasm']]
+    art=inventory['runtime'].get('art_resources')
+    if art:
+        names.append(art['manifest'])
+        images=json.loads((stage/art['manifest']).read_text('utf-8'))['images']
+        for encoding in ('lossless-webp','webp-q95'):
+            candidates=[item['native'] for item in images if item.get('encoding','lossless-webp')==encoding]
+            if candidates:
+                names.extend([min(candidates,key=lambda n:files[n]['bytes']),max(candidates,key=lambda n:files[n]['bytes'])])
     for prefix,suffix in [('src/','.json'),('assets/main/','.js'),('cocos-js/cc.','.js'),('cocos-js/_virtual_cc-','.js'),('assets/resources/native/','.png'),('assets/resources/native/','.webp'),('assets/resources/native/','.ttf'),('assets/resources/native/','.mp3')]:
         candidates=[n for n in files if n.startswith(prefix) and n.endswith(suffix)]
         if candidates:names.append(min(candidates,key=lambda n:files[n]['bytes']))
@@ -176,6 +188,8 @@ def online_verification(base,stage,release):
     def check(name):
         data,h=http_bytes(base+name+'?check='+stamp)
         if hashlib.sha256(data).hexdigest()!=files[name]['sha256'] or len(data)!=files[name]['bytes']:raise RuntimeError('Live checksum mismatch: '+name)
+        if name.endswith('.webp') and h.get('content-type','').split(';')[0].strip().lower()!='image/webp':
+            raise RuntimeError('Incorrect WebP response Content-Type: '+name)
         return {'path':name,'bytes':len(data),'sha256':'matches','content_type':h.get('content-type'),'content_encoding':h.get('content-encoding'),'cache_control':h.get('cache-control')}
     with ThreadPoolExecutor(max_workers=4) as pool:checks=list(pool.map(check,sorted(set(names))))
     second,_=http_bytes(base+'hosting-release.json?check='+str(time.time_ns()))
@@ -224,7 +238,7 @@ def main():
     mode.add_argument('--status-only',action='store_true')
     mode.add_argument('--validate-only',action='store_true')
     parser.add_argument('--prepared',type=Path)
-    parser.add_argument('--texture-mode',choices=('lossless-webp','original-png'))
+    parser.add_argument('--texture-mode',choices=MODES)
     parser.add_argument('--prune-previous-release',action='store_true',
                         help='After validating the new package, remove previous-only tracked runtime files; keep Git history')
     parser.add_argument('--config',type=Path,default=HERE/'config.json')
@@ -262,9 +276,9 @@ def main():
                 record['export']=export(stage,cfg,args.texture_mode)
             record['hosting_package_checks']=validate_package(stage,cfg)
             checked=record['hosting_package_checks'];release=checked['release']
-            if args.prepared:record['export']={key:checked[key] for key in ('release','file_count','runtime_bytes','all_exported_hashes_verified')}
+            if args.prepared:record['export']={key:checked[key] for key in ('release','file_count','runtime_bytes','full_package_bytes','budget_bytes','all_exported_hashes_verified')}
             record['phase']='validated';write_json(report_path,record)
-            log('Validated runtime package: '+str(checked['file_count'])+' files, '+str(round(checked['runtime_bytes']/1048576,1))+' MiB')
+            log('Validated runtime package including inventories: '+str(checked['file_count'])+' files, '+str(round(checked['full_package_bytes']/1048576,1))+' MiB')
             if args.validate_only:
                 record['complete']=True;record['phase']='validated-only';record['uploaded']=False;code=0
                 log('Local package verified. No credentials read, repository changes or upload.')

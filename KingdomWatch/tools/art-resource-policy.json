@@ -1,10 +1,19 @@
 {
   "schema": 1,
-  "defaultMode": "lossless-webp",
+  "defaultMode": "mixed-webp-q95",
   "workers": 2,
   "minimumSavingBytes": 256,
   "webp": {"lossless": true, "quality": 100, "method": 4, "exact": true},
-  "limits": {"runtimeBytes": 500000000, "imageFileBytes": 67108864, "textureSide": 8192},
+  "mixedWebp": {
+    "encoding": {"lossless": false, "quality": 95, "alpha_quality": 100, "method": 4, "exact": true},
+    "eligibleRoots": ["assets/resources/scenes/", "assets/resources/ux/"],
+    "protectedPathFragments": ["comic"],
+    "protectedRoots": ["assets/resources/fx/"],
+    "protectedNamePattern": "^(ui_panel|ui_button|ui_currency|ui_icon|icon_|glyph_|btn_|hero_)",
+    "protectedMaximumSide": 512
+  },
+  "runtimeBudgets": {"mixed-webp-q95": 200000000, "lossless-webp": 500000000, "original-png": 500000000},
+  "limits": {"imageFileBytes": 67108864, "textureSide": 8192},
   "warnings": {"textureRGBABytes": 33554432, "largeSquareIconSide": 1024},
-  "notes": "Original PNG masters stay unchanged. Modern lossless-WebP browsers use one representation per image. OriginalPNG export remains available; unsupported browsers receive a pre-engine message. No lossy encoding, resizing or animation trimming in production."
+  "notes": "Original PNG masters stay unchanged. Mixed mode protects UI/comic art, nine-slice panels, portraits, VFX, small and unknown images; eligible large art uses Q95 RGB only when smaller than lossless. Dimensions, alpha, ICC and animation metadata stay unchanged. The 200MB mixed-mode limit includes inventories and the release pointer. Explicit lossless-WebP and original-PNG rollback exports retain their 500MB budget."
 }
