@@ -8,6 +8,13 @@ const LIMIT = 256 * 1024 * 1024;
 const catalogs = new Map(), pending = new Map();
 let statePromise, queue = Promise.resolve(), usedBytes = 0, storedFiles = 0;
 let measured = false, storageCooldown = 0;
+const observedSince = new Date().toISOString(), observations = new Map();
+const totals = {cacheHits: 0, cacheHitBytes: 0, cacheMisses: 0, httpFetches: 0, verifiedFetchBytes: 0, untrackedFetches: 0, integrityRetries: 0};
+function observe(clientId, name, amount = 1) {
+  if (!observations.has(clientId)) observations.set(clientId, Object.fromEntries(Object.keys(totals).map(function(key) { return [key, 0]; })));
+  observations.get(clientId)[name] += amount;
+  totals[name] += amount;
+}
 
 function address(path) { return new URL('hosting-cache/' + path, BASE).href; }
 // Preserve the original URL as well as bytes: cached CSS/module responses may
@@ -89,6 +96,7 @@ async function maintain(value) {
   const pages = await self.clients.matchAll({type: 'window', includeUncontrolled: true});
   const live = new Set(pages.filter(function(client) { return client.url.startsWith(BASE.href); }).map(function(client) { return client.id; }));
   for (const id of Object.keys(value.clients)) if (!live.has(id)) delete value.clients[id];
+  for (const id of observations.keys()) if (!live.has(id)) observations.delete(id);
   const keep = new Set(value.catalogs.slice(0, 2).map(function(item) { return item.id; }));
   Object.values(value.clients).forEach(function(id) { keep.add(id); });
   const allowed = new Map(), retained = [];
@@ -143,12 +151,15 @@ async function store(record, path, response) {
     } catch (_) { storageCooldown = Date.now() + 60000; }
   });
 }
-async function download(request, record, path) {
+async function download(request, record, path, clientId) {
   for (let attempt = 0; attempt < 2; attempt++) {
+    observe(clientId, 'httpFetches');
+    if (attempt) observe(clientId, 'integrityRetries');
     const response = await fetch(attempt ? new Request(request, {cache: 'reload'}) : request);
     if (response.status !== 200 || response.type !== 'basic' || response.headers.has('Content-Range')) return {response: response};
     const bytes = await response.clone().arrayBuffer();
     if (bytes.byteLength === record.bytes && await sha(bytes) === record.sha256) {
+      observe(clientId, 'verifiedFetchBytes', bytes.byteLength);
       return {response: response, write: store(record, path, response.clone()).catch(function() {})};
     }
   }
@@ -163,17 +174,24 @@ async function resource(event, path) {
     }
     return null;
   })(), 500);
-  if (!record) return {response: await fetch(event.request)};
+  if (!record) {
+    observe(event.clientId, 'untrackedFetches'); observe(event.clientId, 'httpFetches');
+    return {response: await fetch(event.request)};
+  }
   const key = contentKey(record, path);
   const cached = await optional((async function() {
     const cache = await caches.open(CONTENT);
     return await cache.match(key, {ignoreVary: true});
   })(), 250);
-  if (cached) return {response: cached};
+  if (cached) {
+    observe(event.clientId, 'cacheHits'); observe(event.clientId, 'cacheHitBytes', record.bytes);
+    return {response: cached};
+  }
+  observe(event.clientId, 'cacheMisses');
   // Reuse unchanged paths/bytes between releases; changed bytes get a distinct
   // key, including when two open tabs use different versions of a fixed path.
   if (!pending.has(key)) {
-    pending.set(key, download(event.request, record, path).finally(function() { pending.delete(key); }));
+    pending.set(key, download(event.request, record, path, event.clientId).finally(function() { pending.delete(key); }));
   }
   const result = await pending.get(key);
   return {response: result.response.clone(), write: result.write};
@@ -192,7 +210,11 @@ self.addEventListener('message', function(event) {
       const value = await state();
       if (!measured) await maintain(value);
       port.postMessage({protocol: 1, scope: BASE.href, cachedFiles: storedFiles, cachedBytes: usedBytes,
-        limitBytes: LIMIT, releases: value.catalogs.map(function(item) { return item.id; }), precache: false});
+        limitBytes: LIMIT, releases: value.catalogs.map(function(item) { return item.id; }), precache: false,
+        observations: {since: observedSince, lifetime: '当前Worker本次运行；浏览器休眠或重启后计数从零开始',
+          totals: totals, clients: Array.from(observations).map(function(item) {
+            return {client: item[0], release: value.clients[item[0]] || null, counts: item[1]};
+          })}});
     }).catch(function() { port.postMessage({enabled: false, reason: 'storage-unavailable'}); }));
   }
 });

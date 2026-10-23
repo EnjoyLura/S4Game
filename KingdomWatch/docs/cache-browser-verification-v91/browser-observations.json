@@ -1,0 +1,307 @@
+{
+  "schema": 1,
+  "initial": {
+    "time": "2026-10-23T17:21:15.709Z",
+    "page": "https://enjoylura.github.io/kingdom-watch-play/hosting-diagnostics.html",
+    "secureContext": true,
+    "crossOriginIsolated": false,
+    "sharedArrayBufferAvailable": false,
+    "devicePixelRatio": 1.75,
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "gameStarted": false,
+    "checks": [
+      "入口 HTML 的 SHA-256 与项目 base 路径清单匹配",
+      "全部清单地址位于当前项目子路径",
+      "再次读取版本一致"
+    ],
+    "errors": [],
+    "release": "f26aacc9f6682c92",
+    "requiresCrossOriginIsolation": false,
+    "isolationStatus": "当前单线程运行包不需要",
+    "losslessWebPSupported": true,
+    "requiresWebP": true,
+    "totalFiles": 1491,
+    "totalMiB": 160,
+    "wasm": [
+      {
+        "path": "cocos-js/assets/spine-CC34fKUR.wasm",
+        "sha256": "匹配",
+        "moduleCompiled": true,
+        "contentType": "application/wasm",
+        "contentEncoding": "gzip"
+      }
+    ],
+    "browserCache": {
+      "available": true,
+      "mode": "按需缓存，不预下载整包",
+      "originUsageBytes": 160712158,
+      "originQuotaBytes": 10898130398,
+      "originPersisted": false,
+      "registered": true,
+      "worker": "https://enjoylura.github.io/kingdom-watch-play/hosting-cache-sw.js",
+      "runtime": {
+        "protocol": 1,
+        "scope": "https://enjoylura.github.io/kingdom-watch-play/",
+        "cachedFiles": 235,
+        "cachedBytes": 27209459,
+        "limitBytes": 268435456,
+        "releases": [
+          "f26aacc9f6682c92"
+        ],
+        "precache": false
+      }
+    },
+    "cachePolicy": "版本清单每次优先联网；已校验入口和清单缓存；运行资源首次使用时下载并按SHA缓存，更新复用相同内容；不预下载整包。诊断请求绕过资源缓存，检查真实托管文件。"
+  },
+  "upgrade": {
+    "time": "2026-10-23T17:26:28.249Z",
+    "page": "https://enjoylura.github.io/kingdom-watch-play/hosting-diagnostics.html?v=cache-proof-v91",
+    "secureContext": true,
+    "crossOriginIsolated": false,
+    "sharedArrayBufferAvailable": false,
+    "devicePixelRatio": 1.75,
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "gameStarted": false,
+    "checks": [
+      "入口 HTML 的 SHA-256 与项目 base 路径清单匹配",
+      "全部清单地址位于当前项目子路径",
+      "再次读取版本一致"
+    ],
+    "errors": [],
+    "release": "3fd186b7aee76e4e",
+    "requiresCrossOriginIsolation": false,
+    "isolationStatus": "当前单线程运行包不需要",
+    "losslessWebPSupported": true,
+    "requiresWebP": true,
+    "totalFiles": 1491,
+    "totalMiB": 160,
+    "wasm": [
+      {
+        "path": "cocos-js/assets/spine-CC34fKUR.wasm",
+        "sha256": "匹配",
+        "moduleCompiled": true,
+        "contentType": "application/wasm",
+        "contentEncoding": "gzip"
+      }
+    ],
+    "browserCache": {
+      "available": true,
+      "mode": "按需缓存，不预下载整包",
+      "originUsageBytes": 190958370,
+      "originQuotaBytes": 10928376610,
+      "originPersisted": false,
+      "registered": true,
+      "worker": "https://enjoylura.github.io/kingdom-watch-play/hosting-cache-sw.js",
+      "runtime": {
+        "protocol": 1,
+        "scope": "https://enjoylura.github.io/kingdom-watch-play/",
+        "cachedFiles": 426,
+        "cachedBytes": 56549152,
+        "limitBytes": 268435456,
+        "releases": [
+          "3fd186b7aee76e4e",
+          "f26aacc9f6682c92"
+        ],
+        "precache": false,
+        "observations": {
+          "since": "2026-10-23T17:26:30.060Z",
+          "lifetime": "当前Worker本次运行；浏览器休眠或重启后计数从零开始",
+          "totals": {
+            "cacheHits": 406,
+            "cacheHitBytes": 52477132,
+            "cacheMisses": 0,
+            "httpFetches": 0,
+            "verifiedFetchBytes": 0,
+            "untrackedFetches": 0,
+            "integrityRetries": 0
+          },
+          "clients": [
+            {
+              "client": "54a8b961-465c-441d-bc4a-c26f7fa7c08c",
+              "release": "3fd186b7aee76e4e",
+              "counts": {
+                "cacheHits": 406,
+                "cacheHitBytes": 52477132,
+                "cacheMisses": 0,
+                "httpFetches": 0,
+                "verifiedFetchBytes": 0,
+                "untrackedFetches": 0,
+                "integrityRetries": 0
+              }
+            }
+          ]
+        }
+      }
+    },
+    "cachePolicy": "版本清单每次优先联网；已校验入口和清单缓存；运行资源首次使用时下载并按SHA缓存，更新复用相同内容；不预下载整包。诊断请求绕过资源缓存，检查真实托管文件。",
+    "cacheObservedAt": "2026-10-23T17:26:38.995Z"
+  },
+  "reload": {
+    "time": "2026-10-23T17:26:28.249Z",
+    "page": "https://enjoylura.github.io/kingdom-watch-play/hosting-diagnostics.html?v=cache-proof-v91",
+    "secureContext": true,
+    "crossOriginIsolated": false,
+    "sharedArrayBufferAvailable": false,
+    "devicePixelRatio": 1.75,
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "gameStarted": false,
+    "checks": [
+      "入口 HTML 的 SHA-256 与项目 base 路径清单匹配",
+      "全部清单地址位于当前项目子路径",
+      "再次读取版本一致"
+    ],
+    "errors": [],
+    "release": "3fd186b7aee76e4e",
+    "requiresCrossOriginIsolation": false,
+    "isolationStatus": "当前单线程运行包不需要",
+    "losslessWebPSupported": true,
+    "requiresWebP": true,
+    "totalFiles": 1491,
+    "totalMiB": 160,
+    "wasm": [
+      {
+        "path": "cocos-js/assets/spine-CC34fKUR.wasm",
+        "sha256": "匹配",
+        "moduleCompiled": true,
+        "contentType": "application/wasm",
+        "contentEncoding": "gzip"
+      }
+    ],
+    "browserCache": {
+      "available": true,
+      "mode": "按需缓存，不预下载整包",
+      "originUsageBytes": 190958370,
+      "originQuotaBytes": 10928376610,
+      "originPersisted": false,
+      "registered": true,
+      "worker": "https://enjoylura.github.io/kingdom-watch-play/hosting-cache-sw.js",
+      "runtime": {
+        "protocol": 1,
+        "scope": "https://enjoylura.github.io/kingdom-watch-play/",
+        "cachedFiles": 426,
+        "cachedBytes": 56549152,
+        "limitBytes": 268435456,
+        "releases": [
+          "3fd186b7aee76e4e",
+          "f26aacc9f6682c92"
+        ],
+        "precache": false,
+        "observations": {
+          "since": "2026-10-23T17:28:10.515Z",
+          "lifetime": "当前Worker本次运行；浏览器休眠或重启后计数从零开始",
+          "totals": {
+            "cacheHits": 311,
+            "cacheHitBytes": 14939522,
+            "cacheMisses": 0,
+            "httpFetches": 0,
+            "verifiedFetchBytes": 0,
+            "untrackedFetches": 0,
+            "integrityRetries": 0
+          },
+          "clients": [
+            {
+              "client": "642af40b-834f-4d7e-a92a-79fd19a5fbd7",
+              "release": "3fd186b7aee76e4e",
+              "counts": {
+                "cacheHits": 311,
+                "cacheHitBytes": 14939522,
+                "cacheMisses": 0,
+                "httpFetches": 0,
+                "verifiedFetchBytes": 0,
+                "untrackedFetches": 0,
+                "integrityRetries": 0
+              }
+            }
+          ]
+        }
+      }
+    },
+    "cachePolicy": "版本清单每次优先联网；已校验入口和清单缓存；运行资源首次使用时下载并按SHA缓存，更新复用相同内容；不预下载整包。诊断请求绕过资源缓存，检查真实托管文件。",
+    "cacheObservedAt": "2026-10-23T17:28:49.788Z"
+  },
+  "reopen": {
+    "time": "2026-10-23T17:26:28.249Z",
+    "page": "https://enjoylura.github.io/kingdom-watch-play/hosting-diagnostics.html?v=cache-proof-v91",
+    "secureContext": true,
+    "crossOriginIsolated": false,
+    "sharedArrayBufferAvailable": false,
+    "devicePixelRatio": 1.75,
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "gameStarted": false,
+    "checks": [
+      "入口 HTML 的 SHA-256 与项目 base 路径清单匹配",
+      "全部清单地址位于当前项目子路径",
+      "再次读取版本一致"
+    ],
+    "errors": [],
+    "release": "3fd186b7aee76e4e",
+    "requiresCrossOriginIsolation": false,
+    "isolationStatus": "当前单线程运行包不需要",
+    "losslessWebPSupported": true,
+    "requiresWebP": true,
+    "totalFiles": 1491,
+    "totalMiB": 160,
+    "wasm": [
+      {
+        "path": "cocos-js/assets/spine-CC34fKUR.wasm",
+        "sha256": "匹配",
+        "moduleCompiled": true,
+        "contentType": "application/wasm",
+        "contentEncoding": "gzip"
+      }
+    ],
+    "browserCache": {
+      "available": true,
+      "mode": "按需缓存，不预下载整包",
+      "originUsageBytes": 190958370,
+      "originQuotaBytes": 10928376610,
+      "originPersisted": false,
+      "registered": true,
+      "worker": "https://enjoylura.github.io/kingdom-watch-play/hosting-cache-sw.js",
+      "runtime": {
+        "protocol": 1,
+        "scope": "https://enjoylura.github.io/kingdom-watch-play/",
+        "cachedFiles": 426,
+        "cachedBytes": 56549152,
+        "limitBytes": 268435456,
+        "releases": [
+          "3fd186b7aee76e4e",
+          "f26aacc9f6682c92"
+        ],
+        "precache": false,
+        "observations": {
+          "since": "2026-10-23T17:28:10.515Z",
+          "lifetime": "当前Worker本次运行；浏览器休眠或重启后计数从零开始",
+          "totals": {
+            "cacheHits": 742,
+            "cacheHitBytes": 74024812,
+            "cacheMisses": 0,
+            "httpFetches": 0,
+            "verifiedFetchBytes": 0,
+            "untrackedFetches": 0,
+            "integrityRetries": 0
+          },
+          "clients": [
+            {
+              "client": "122f73f3-ac67-4adb-ab5d-1a7dae8ac8e9",
+              "release": "3fd186b7aee76e4e",
+              "counts": {
+                "cacheHits": 431,
+                "cacheHitBytes": 59085290,
+                "cacheMisses": 0,
+                "httpFetches": 0,
+                "verifiedFetchBytes": 0,
+                "untrackedFetches": 0,
+                "integrityRetries": 0
+              }
+            }
+          ]
+        }
+      }
+    },
+    "cachePolicy": "版本清单每次优先联网；已校验入口和清单缓存；运行资源首次使用时下载并按SHA缓存，更新复用相同内容；不预下载整包。诊断请求绕过资源缓存，检查真实托管文件。",
+    "cacheObservedAt": "2026-10-23T17:29:08.769Z"
+  },
+  "reloadGameLogs": [],
+  "reopenGameLogs": []
+}

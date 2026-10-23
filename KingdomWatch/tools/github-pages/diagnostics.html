@@ -4,7 +4,8 @@
 <style>body{max-width:920px;margin:20px auto;padding:0 16px;background:#14222c;color:#fff5d8;font:16px/1.6 system-ui,sans-serif}h1{font-size:25px}button,a{font-size:16px;color:#182d39;background:#ffd05c;border:0;border-radius:6px;padding:10px 14px;margin:4px 8px 8px 0;display:inline-block;text-decoration:none}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#223744;padding:16px;border-radius:8px}.hint{color:#c1cbd0}</style>
 </head><body><h1>王国守望 · 托管诊断</h1>
 <p>本页只校验静态文件和 WASM 模块，不加载 Cocos 引擎、不启动游戏。</p>
-<button id="quick">重新检查</button><button id="all">完整资源校验</button><button id="copy">复制报告</button><a href="__BASE_PATH__">进入游戏</a>
+<button id="quick">重新检查</button><button id="cache">刷新缓存统计</button><button id="all">完整资源校验</button><button id="copy">复制报告</button><a href="__BASE_PATH__">进入游戏</a>
+<p id="cacheSummary" class="hint"></p>
 <p id="progress" class="hint">正在检查…</p><pre id="out"></pre>
 <script>
 (function(){
@@ -30,6 +31,18 @@
   result.runtime=await new Promise(function(resolve){var channel=new MessageChannel(),timer=setTimeout(function(){channel.port1.close();resolve({status:'暂未响应'});},2000);channel.port1.onmessage=function(e){clearTimeout(timer);channel.port1.close();resolve(e.data);};own.active.postMessage({type:'KW_CACHE_STATUS',protocol:1},[channel.port2]);});
   return result;
  }
+ function describeCache(result){
+  var runtime=result&&result.runtime,summary=document.getElementById('cacheSummary');
+  if(!runtime||typeof runtime.cachedFiles!=='number'){summary.textContent='项目缓存尚未就绪，请先打开一次游戏。';return;}
+  var text='已缓存 '+runtime.cachedFiles+' 个文件，'+(runtime.cachedBytes/1000000).toFixed(2)+' MB。';
+  var observations=runtime.observations;
+  if(observations){var counts=observations.totals;text+='本次Worker运行：本地命中 '+counts.cacheHits+' 次（'+(counts.cacheHitBytes/1000000).toFixed(2)+' MB），HTTP取文件 '+counts.httpFetches+' 次，未匹配清单 '+counts.untrackedFetches+' 次。计数起点 '+observations.since+'；Worker休眠后重计。';}
+  summary.textContent=text;
+ }
+ async function refreshCache(){
+  try{report.browserCache=await cacheStatus();report.cacheObservedAt=new Date().toISOString();describeCache(report.browserCache);show();}
+  catch(e){document.getElementById('cacheSummary').textContent='缓存统计暂不可用：'+e.message;}
+ }
  async function quick(){
   document.getElementById('all').disabled=true;progress.textContent='正在检查入口、资源清单、WASM 与浏览器环境…';
   report={time:new Date().toISOString(),page:location.href,secureContext:isSecureContext,crossOriginIsolated:crossOriginIsolated,sharedArrayBufferAvailable:typeof SharedArrayBuffer!=='undefined',devicePixelRatio:devicePixelRatio,userAgent:navigator.userAgent,gameStarted:false,checks:[],errors:[]};show();
@@ -46,7 +59,7 @@
    report.wasm=[];
    for(var path of release.wasm){var w=await checked(path,inventory.files[path]);var valid=WebAssembly.validate(w.bytes);if(!valid)throw new Error('WASM 验证失败：'+path);await WebAssembly.compile(w.bytes);report.wasm.push({path:path,sha256:'匹配',moduleCompiled:true,contentType:w.type,contentEncoding:w.encoding});}
    var second=JSON.parse(new TextDecoder().decode((await get('hosting-release.json')).bytes));if(second.id!==release.id)throw new Error('检查期间刚发生发布，请重新检查');report.checks.push('再次读取版本一致');
-   try{report.browserCache=await cacheStatus();}catch(e){report.browserCache={status:'浏览器未提供存储状态',reason:e.message};}
+   try{report.browserCache=await cacheStatus();describeCache(report.browserCache);}catch(e){report.browserCache={status:'浏览器未提供存储状态',reason:e.message};}
    report.cachePolicy='版本清单每次优先联网；已校验入口和清单缓存；运行资源首次使用时下载并按SHA缓存，更新复用相同内容；不预下载整包。诊断请求绕过资源缓存，检查真实托管文件。';
    progress.textContent='基础检查通过。完整资源校验将下载约 '+report.totalMiB+' MiB，不会启动游戏。';document.getElementById('all').disabled=false;
   }catch(e){report.errors.push(e.message);progress.textContent='检查未通过，报告中保留具体原因。';}show();
@@ -56,6 +69,6 @@
   async function worker(){while(next<paths.length){var path=paths[next++];try{await checked(path,inventory.files[path]);}catch(e){failures.push({path:path,error:e.message});}done++;report.fullCheck.checked=done;progress.textContent='完整资源校验 '+done+'/'+paths.length+'，失败 '+failures.length;show();}}
   await Promise.all([worker(),worker(),worker(),worker()]);report.fullCheck.complete=true;progress.textContent=failures.length?'校验结束，存在失败项。':'全部资源 SHA-256 和字节数匹配。';show();document.getElementById('all').disabled=false;
  }
- document.getElementById('quick').onclick=quick;document.getElementById('all').onclick=all;document.getElementById('copy').onclick=async function(){try{await navigator.clipboard.writeText(JSON.stringify(report,null,2));progress.textContent='报告已复制';}catch(e){progress.textContent='请长按报告全选复制';}};quick();
+ document.getElementById('quick').onclick=quick;document.getElementById('cache').onclick=refreshCache;document.getElementById('all').onclick=all;document.getElementById('copy').onclick=async function(){try{await navigator.clipboard.writeText(JSON.stringify(report,null,2));progress.textContent='报告已复制';}catch(e){progress.textContent='请长按报告全选复制';}};quick();
 })();
 </script></body></html>
