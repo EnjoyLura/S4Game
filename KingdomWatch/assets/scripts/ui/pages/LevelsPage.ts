@@ -25,6 +25,8 @@ import { refreshUI, reducedMotion } from '../UIMotion';
 import { enterBattle, enteringBattle } from '../BattleEntry';
 import { warmBattlefield } from '../BattleEntryWarmup';
 import { deferUIWarmup } from '../IdleWarmup';
+import { warmCampaignPreparation } from '../LobbyArtWarmup';
+import { warmPickArt } from '../PickArt';
 import { showRewardPopup } from '../RewardPopup';
 import { CampaignRouteMotion, ROUTE_ART, ROUTE_H, ROUTE_W, routePoint, routeStop } from '../CampaignRoute';
 import { CAMPAIGN_TEXT, campaignChapterArrow, campaignChapterBanner, campaignChestBackdrop, campaignDifficultyFace, campaignEquipmentHeading,
@@ -140,8 +142,16 @@ export function buildLevels(ctx: PageCtx): void {
   }
   function warmSelected(): void {
     if (levelOpen(st.i)) {
-      const levelId = LEVELS[st.i].id, heroes = squadList();
-      deferUIWarmup(content, () => { void warmBattlefield(levelId, heroes); });
+      const levelId = LEVELS[st.i].id, difficulty = st.d, heroes = squadList();
+      // The drawer is the next interaction. Large battle sheets must follow its art and cards.
+      // Queue the small next action now. The shared scheduler still serves visible art first.
+      void warmCampaignPreparation(levelId, difficulty).then(() => {
+        if (!content.isValid || LEVELS[st.i].id !== levelId) return;
+        return warmPickArt(heroes).then(() => {
+          if (!content.isValid || LEVELS[st.i].id !== levelId) return;
+          deferUIWarmup(content, () => { void warmBattlefield(levelId, heroes, [], 'idle'); }, 200);
+        });
+      });
     }
   }
   function renderHeader(): void {
@@ -220,6 +230,7 @@ export function buildLevels(ctx: PageCtx): void {
     mainLabel(squadFace,19,-20,squadList().length+'/4',{size:17,color:'#C6D9DE',w:76,h:24});
   }
   function openDrawer(animate = true): void {
+    void warmCampaignPreparation(LEVELS[st.i].id, st.d, 'visible');
     const existed = !!drawer;
     // Freeze the exact terrain offset before covering it; opening the paper never recenters a checkpoint.
     mapScroll?.stopAutoScroll();
@@ -292,7 +303,7 @@ export function buildLevels(ctx: PageCtx): void {
           color: active ? CAMPAIGN_TEXT.ink : CAMPAIGN_TEXT.secondary, w: 140, h: 38 });
         bindButton(slot, () => {
           if (!unlocked) { toast(d ? '通关上一难度解锁' : '通关前置关卡后解锁'); return; }
-          if (st.d !== d) { st.d = d; renderSheet(); }
+          if (st.d !== d) { st.d = d; void warmCampaignPreparation(LEVELS[st.i].id, d, 'visible'); renderSheet(); }
         }, { sound: 'select', dragThreshold: 7, motion: false });
       });
 

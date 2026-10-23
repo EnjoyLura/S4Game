@@ -1,6 +1,6 @@
 /** Complete idle/attack video frames, sharing a fixed foot pivot and painted scale. */
 import { JsonAsset, Layers, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
-import { uxFrame } from '../ui/Ux';
+import { ArtPriority, higherArtPriority, promoteUXArt, uxFrame } from '../ui/Ux';
 
 type ClipId = 'idle' | 'attack';
 interface IdleManifest {
@@ -13,10 +13,13 @@ interface IdleManifest {
 interface IdleClip { manifest: IdleManifest; frames: SpriteFrame[]; }
 const clips = new Map<ClipId, IdleClip>();
 const pending = new Map<ClipId, ((value: IdleClip | null) => void)[]>();
+const priorities = new Map<ClipId, ArtPriority>();
 
-function loadClip(id: ClipId, callback: (value: IdleClip | null) => void): void {
+function loadClip(id: ClipId, callback: (value: IdleClip | null) => void, priority: ArtPriority = 'visible'): void {
   const cached = clips.get(id);
   if (cached) { Promise.resolve().then(() => callback(cached)); return; }
+  priorities.set(id, higherArtPriority(priorities.get(id) || priority, priority));
+  promoteUXArt(`archer_${id}_v1/${id}`, priority);
   const queue = pending.get(id);
   if (queue) { queue.push(callback); return; }
   pending.set(id, [callback]);
@@ -24,6 +27,7 @@ function loadClip(id: ClipId, callback: (value: IdleClip | null) => void): void 
     if (result) clips.set(id, result);
     const callbacks = pending.get(id) || [];
     pending.delete(id);
+    priorities.delete(id);
     callbacks.forEach(cb => cb(result));
   };
   resources.load(`ux/archer_${id}_v1/${id}.frames`, JsonAsset, (error, asset) => {
@@ -43,13 +47,13 @@ function loadClip(id: ClipId, callback: (value: IdleClip | null) => void): void 
       source.texture.addRef();
       asset.addRef();
       finish({ manifest, frames: manifest.animation.frames.map(name => map.get(name)!) });
-    });
+    }, priorities.get(id) || priority);
   });
 }
 
 /** Prepare the same shared clip cache from the lobby, without constructing a character. */
-export function preloadArcherClip(id: ClipId): Promise<void> {
-  return new Promise(resolve => loadClip(id, () => resolve()));
+export function preloadArcherClip(id: ClipId, priority: ArtPriority = 'visible'): Promise<void> {
+  return new Promise(resolve => loadClip(id, () => resolve(), priority));
 }
 
 export class ArcherIdleAnimation {

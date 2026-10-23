@@ -1,0 +1,21 @@
+{
+  "originalAssetCount": 1856,
+  "currentAssetCount": 1860,
+  "changed": [
+    "assets/scripts/battle/MobAnim.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/config/ChapterContent.ts",
+    "assets/scripts/ui/BattleEntryWarmup.ts"
+  ],
+  "added": [
+    "assets/resources/ux/chapter1_mob_walk_v81.frames.json",
+    "assets/resources/ux/chapter1_mob_walk_v81.frames.json.meta",
+    "assets/resources/ux/chapter1_mob_walk_v81.png",
+    "assets/resources/ux/chapter1_mob_walk_v81.png.meta"
+  ],
+  "removed": [],
+  "atlasCellsMatch": true,
+  "frameCount": 82,
+  "minimumTransparentMargin": 12,
+  "noGameOrBrowserStarted": true
+}

@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "tool": "built-in imagegen",
+  "editTarget": "C:/Users/user/.codex/generated_images/01a168ed-30bd-77b0-be5b-c302e0e07d1b/exec-67c5d346-cbea-4dce-920e-0057bd4acf06.png",
+  "generatedSource": "C:\\Users\\user\\.codex\\generated_images\\01a168ed-30bd-77b0-be5b-c302e0e07d1b\\exec-94893433-e14d-4cf3-93ee-f24ce4582086.png",
+  "file": "four-monsters-video-source-v2.png",
+  "size": [
+    1254,
+    1254
+  ],
+  "bytes": 1612221,
+  "sha256": "51de17b59ed0d4fc4d379606b5ec0c56c86116c6412784b49d449ec9d7860a86",
+  "order": [
+    "black_eagle",
+    "purple_bat",
+    "bee",
+    "red_crystal_spider_mother"
+  ],
+  "change": "Smaller centered characters with wider outer and central motion margins",
+  "editPrompt": "layout-edit-prompt-v2.txt",
+  "videoPrompt": "video-prompt-v2.txt",
+  "videoGenerated": false,
+  "gameChanged": false
+}

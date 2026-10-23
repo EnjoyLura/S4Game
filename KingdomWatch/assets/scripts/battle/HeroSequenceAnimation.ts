@@ -1,6 +1,6 @@
 /** Full-character preparation, release and forward recovery with an unchanged foot pivot. */
 import { JsonAsset, Layers, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
-import { uxFrame } from '../ui/Ux';
+import { ArtPriority, higherArtPriority, promoteUXArt, uxFrame } from '../ui/Ux';
 
 type ClipId = 'idle' | 'attack';
 interface Manifest {
@@ -16,11 +16,15 @@ interface Manifest {
 interface Clip { manifest: Manifest; frames: SpriteFrame[]; frameEnds: number[] }
 const clips = new Map<string, Clip>();
 const pending = new Map<string, ((clip: Clip | null) => void)[]>();
+const priorities = new Map<string, ArtPriority>();
+const pages = new Map<string, string[]>();
 
-function loadClip(directory: string, id: ClipId, callback: (clip: Clip | null) => void): void {
+function loadClip(directory: string, id: ClipId, callback: (clip: Clip | null) => void, priority: ArtPriority = 'visible'): void {
   const key = `${directory}/${id}`;
   const cached = clips.get(key);
   if (cached) { Promise.resolve().then(() => callback(cached)); return; }
+  priorities.set(key, higherArtPriority(priorities.get(key) || priority, priority));
+  pages.get(key)?.forEach(page => promoteUXArt(page, priority));
   const waiting = pending.get(key);
   if (waiting) { waiting.push(callback); return; }
   pending.set(key, [callback]);
@@ -28,12 +32,14 @@ function loadClip(directory: string, id: ClipId, callback: (clip: Clip | null) =
     if (clip) clips.set(key, clip);
     const callbacks = pending.get(key) || [];
     pending.delete(key);
+    priorities.delete(key); pages.delete(key);
     callbacks.forEach(cb => cb(clip));
   };
   resources.load(`ux/${directory}/${id}.frames`, JsonAsset, (error, asset) => {
     if (error || !asset) { finish(null); return; }
     const manifest = asset.json as Manifest;
     const textures = manifest.textures ?? [`${id}.png`];
+    pages.set(key, textures.map(file => `${directory}/${file.replace(/\.png$/, '')}`));
     const sources: SpriteFrame[] = new Array(textures.length);
     let remaining = textures.length, failed = false;
     textures.forEach((file, page) => uxFrame(`${directory}/${file.replace(/\.png$/, '')}`, source => {
@@ -58,13 +64,13 @@ function loadClip(directory: string, id: ClipId, callback: (clip: Clip | null) =
       sources.forEach(texture => texture.texture.addRef());
       asset.addRef();
       finish({ manifest, frames, frameEnds });
-    }));
+    }, priorities.get(key) || priority));
   });
 }
 
 /** Reuse the player's real clip loader while the level lobby is visible. */
-export function preloadHeroClip(directory: string, id: ClipId): Promise<void> {
-  return new Promise(resolve => loadClip(directory, id, () => resolve()));
+export function preloadHeroClip(directory: string, id: ClipId, priority: ArtPriority = 'visible'): Promise<void> {
+  return new Promise(resolve => loadClip(directory, id, () => resolve(), priority));
 }
 
 function frameAt(clip: Clip, time: number): number {

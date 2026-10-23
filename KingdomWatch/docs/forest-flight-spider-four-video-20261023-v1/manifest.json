@@ -1,0 +1,35 @@
+{
+  "tool": "built-in imagegen",
+  "generatedSource": "C:\\Users\\user\\.codex\\generated_images\\01a168ed-30bd-77b0-be5b-c302e0e07d1b\\exec-67c5d346-cbea-4dce-920e-0057bd4acf06.png",
+  "size": [
+    1254,
+    1254
+  ],
+  "bytes": 1939734,
+  "sha256": "440f6a3f402d6a0ec0a835f9b766555ef9a3510d23f79af15f093496472f6afc",
+  "order": [
+    "eagle_sheet_row1_col1",
+    "flying_sheet_row1_col1_bat",
+    "flying_sheet_row1_col2_bee",
+    "spider_mother_sheet_row1_col1"
+  ],
+  "references": [
+    {
+      "source": "C:\\Users\\user\\AppData\\Local\\Temp\\codex-clipboard-a56e9eee-2d84-4a03-9982-445ba0758530.png",
+      "file": "eagle-sheet.png",
+      "sha256": "d69bb90149bbc32736e6d26fa5653a844030d8a8e1a5eb5290bc4dea725ae845"
+    },
+    {
+      "source": "C:\\Users\\user\\AppData\\Local\\Temp\\codex-clipboard-e3088c30-f002-4ad5-9a87-6ab7dccce079.png",
+      "file": "flying-monsters-sheet.png",
+      "sha256": "848e786f3eb6908137ca400f91fa0351ae95a36ee61daf4ab9bd935b72d00fd4"
+    },
+    {
+      "source": "C:\\Users\\user\\AppData\\Local\\Temp\\codex-clipboard-8f665c4c-5b6e-49bb-bddd-e792ece5a22c.png",
+      "file": "spider-mother-sheet.png",
+      "sha256": "00d70b74521b3f4a12d188fd2e0de8cf6f626668b5f071dfd6e14c68f186885c"
+    }
+  ],
+  "videoGenerated": false,
+  "gameChanged": false
+}

@@ -1,0 +1,39 @@
+{
+  "tool": "built-in imagegen",
+  "generatedSource": "C:/Users/user/.codex/generated_images/01a168ed-30bd-77b0-be5b-c302e0e07d1b/exec-040e0aac-8ac3-417b-815b-53d0a1629e18.png",
+  "size": [
+    1254,
+    1254
+  ],
+  "sha256": "82c9ed6c9a9dd3f9b31fbca5792d3e8fbcfbc4d66e2eb0d8fc2a7a89811e8e59",
+  "order": [
+    "gray_wolf_S22-06",
+    "woodland_boar_S30-03",
+    "spider_sheet_row1_col3",
+    "treant_sheet_row1_col3"
+  ],
+  "references": [
+    {
+      "file": "gray-wolf-S22-06.png",
+      "sha256": "6ac4bb1f77853c803d5503f4154140d893d295ddca9ae67d33a8418bcdce4eea"
+    },
+    {
+      "file": "spider-sheet.png",
+      "sha256": "9bc34b921939b7a0d31b6225fb3e11337df692d36dfea2d7223d113609cd7a05"
+    },
+    {
+      "file": "treant-sheet.png",
+      "sha256": "c8c6bdd2463bdf62bb5d17d31fd323b1a48a9646a9f3781aa74dc653611b5e06"
+    },
+    {
+      "file": "user-shortlist.png",
+      "sha256": "5c75a8335b02018b0fee44b4cdf225452f930bd6be6b12f1e34bd3e3abc111d1"
+    },
+    {
+      "file": "woodland-boar-S30-03.png",
+      "sha256": "b955cfaf679bc8ce04e212771ff7bf53f6d3fe618ce019f7801a516263a6a173"
+    }
+  ],
+  "videoGenerated": false,
+  "gameChanged": false
+}

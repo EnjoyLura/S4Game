@@ -823,5 +823,44 @@
     "mode": "RGBA",
     "count": 9,
     "theme": "飞行与漂浮"
+  },
+  {
+    "id": "S64",
+    "filename": "selected-four-monsters-standing.png",
+    "original": "D:\\AI\\S4Game\\KingdomWatch\\docs\\chapter1-selected-four-standing-20261023-v1\\selected-four-monsters-standing.png",
+    "aliases": [],
+    "path": "sources/S64.png",
+    "sha256": "1902756fbc87b3b279d557254b97d488de4b15c4bde4e36b9ab1bc63b03f4869",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGB",
+    "count": 4,
+    "theme": "第一章选定形象"
+  },
+  {
+    "id": "S65",
+    "filename": "codex-clipboard-56851b87-f132-4e3d-9de3-22764616eeb4.png",
+    "original": "C:\\Users\\user\\AppData\\Local\\Temp\\codex-clipboard-56851b87-f132-4e3d-9de3-22764616eeb4.png",
+    "aliases": [],
+    "path": "sources/S65.png",
+    "sha256": "4f422714279fdefc6b09781b344f76b5744e537dfd1468a67f9e22696db4c99e",
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "count": 1,
+    "theme": "第一章选定形象"
+  },
+  {
+    "id": "S66",
+    "filename": "codex-clipboard-d54389b1-9d59-40be-8e8c-6c100e73f9b3.png",
+    "original": "C:\\Users\\user\\AppData\\Local\\Temp\\codex-clipboard-d54389b1-9d59-40be-8e8c-6c100e73f9b3.png",
+    "aliases": [],
+    "path": "sources/S66.png",
+    "sha256": "dd4c5703e0beb3862bb9a6b55063aff900b5a0ef853e419e1e8305a3597b4524",
+    "width": 1024,
+    "height": 1024,
+    "mode": "RGBA",
+    "count": 1,
+    "theme": "第一章选定形象"
   }
 ]

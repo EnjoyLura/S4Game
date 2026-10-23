@@ -1,0 +1,14 @@
+Use case: compositing.
+Edit target: the supplied four-monster square image. This is ONLY a layout and scale correction for an AI-video starting image. Preserve the exact four existing creature illustrations and their poses, anatomy, outlines, colors and proportions. Reposition and uniformly scale each intact creature as if moving and resizing four cutouts.
+
+CRITICAL CHANGE: All four creatures are currently much too big, with wing tips and spider legs nearly touching the canvas edges and their neighbors. Reduce EACH individual creature to approximately 62-65% of its current linear size, without changing the square canvas size. The final creatures must look noticeably SMALLER and be surrounded by ABUNDANT EMPTY BACKGROUND.
+
+Maintain a 2 by 2 arrangement with invisible equal square quadrants. Center the complete silhouette of each creature at these normalized canvas coordinates:
+- black eagle at (25%,25%), top left;
+- purple bat at (75%,25%), top right;
+- yellow-black bee at (25%,75%), bottom left;
+- red crystal spider mother at (75%,75%), bottom right.
+Every complete silhouette INCLUDING all wing tips, antennae, toes, crystals and spider legs should occupy NO MORE THAN 62-65% of the width AND NO MORE THAN 62-65% of the height of its quadrant; preserve each creature's original aspect ratio, so some will be shorter than this. This leaves about 18-19% of EACH CELL empty around each character. On the whole image there should be roughly 9% empty outer side margins and 17-19% wide clear empty bands between adjacent character silhouettes. The eagle's very left and right feather tips must be well clear of the outer edge and the center seam; similarly for the bat, bee and spider. Center each silhouette within its own quadrant rather than bunching the bodies towards the middle. Plenty of headroom and floor space for flapping and crawling.
+
+Keep the exact current frontal camera and unchanged static poses: spread eagle wings, spread bat wings, four spread pale bee wings, frontal slightly elevated spider mother. Keep the current exact character designs: charcoal eagle golden beak and claws; purple horned bat magenta membranes; fierce yellow-black wasp with red eyes; navy-purple spider mother with red crystal abdomen and bladed red legs.
+Background must be ONE uniform flat light warm beige (#EEE8D8) covering the entire image, including the newly emptied areas. No texture, gradient, scenery, ground, cast shadows, lettering, borders, frames, grid lines, labels or visible panel dividers. No particles or extra effects. Exactly four creatures. Absolutely do not enlarge the monsters to fill the available space. This image is deliberately roomy so their appendages can move safely in a video. Output the finished square image only.

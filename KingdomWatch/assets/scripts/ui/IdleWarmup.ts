@@ -8,7 +8,7 @@ const versions = new WeakMap<Node, number>();
 export function deferUIWarmup(owner: Node, work: () => void, delayMs = 1200): void {
   const version = (versions.get(owner) || 0) + 1;
   versions.set(owner, version);
-  const current = (): boolean => isValid(owner, true) && versions.get(owner) === version;
+  const current = (): boolean => isValid(owner, true) && owner.activeInHierarchy && versions.get(owner) === version;
   const run = (): void => {
     if (!current()) return;
     if (typeof document !== 'undefined' && document.hidden) { setTimeout(run, 1000); return; }
@@ -21,6 +21,6 @@ export function deferUIWarmup(owner: Node, work: () => void, delayMs = 1200): vo
   };
   setTimeout(() => {
     if (!current()) return;
-    whenUIArtReady(owner, () => { if (current()) setTimeout(run, 350); }, owner);
+    whenUIArtReady(owner, () => { if (current()) setTimeout(run, 40); }, owner);
   }, delayMs);
 }

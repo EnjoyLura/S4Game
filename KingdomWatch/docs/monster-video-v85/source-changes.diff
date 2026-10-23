@@ -1,0 +1,141 @@
+--- before/assets/scripts/battle/MobAnim.ts
++++ after/assets/scripts/battle/MobAnim.ts
+@@ -27,16 +27,22 @@
+   topRatios?: Record<string, number>;
+ }
+ 
+-type AtlasId = 'battle_mob_anim_v1' | 'chapter1_mob_walk_v81' | 'chapter1_mob_walk_v84';
++type AtlasId = 'battle_mob_anim_v1' | 'chapter1_mob_walk_v81' | 'chapter1_mob_walk_v84' | 'forest_mob_walk_v85';
+ const videoWalkMobs = new Set(['goblin_worker', 'goblin_shaman', 'goblin_brute', 'wolf_rider']);
+ const nextVideoWalkMobs = new Set(['orc_axeman', 'orc_siege_cart', 'goblin_slinger', 'goblin_king']);
++const forestVideoWalkMobs = new Set(['forest_wolf', 'forest_spider', 'forest_vine']);
++/** Expansion monsters with video clips follow the same walk/freeze/ground path as chapter one. */
++export function usesVideoWalkAnimation(id: string): boolean {
++  return forestVideoWalkMobs.has(id) || nextVideoWalkMobs.has(id) || videoWalkMobs.has(id);
++}
+ type Loaded = Map<string, MobClip> | null;
+ const defs = new Map<AtlasId, Map<string, MobClip>>();
+ const pending = new Map<AtlasId, ((d: Loaded) => void)[]>();
+ const priorities = new Map<AtlasId, ArtPriority>();
+ 
+ export function getMobAnims(cb: (d: Loaded) => void, mobId = '', priority: ArtPriority = 'visible'): void {
+-  const id: AtlasId = nextVideoWalkMobs.has(mobId) ? 'chapter1_mob_walk_v84'
++  const id: AtlasId = forestVideoWalkMobs.has(mobId) ? 'forest_mob_walk_v85'
++    : nextVideoWalkMobs.has(mobId) ? 'chapter1_mob_walk_v84'
+     : videoWalkMobs.has(mobId) ? 'chapter1_mob_walk_v81' : 'battle_mob_anim_v1';
+   const cached = defs.get(id);
+   if (cached) { cb(cached); return; }
+@@ -79,7 +85,7 @@
+         const [x, y, w, h] = manifest.frames[name];
+         const sf = new SpriteFrame();
+         sf.reset({ texture: tex, rect: new Rect(x, y, w, h), originalSize: new Size(w, h), offset: new Vec2() });
+-        if (nextVideoWalkMobs.has(mob) || videoWalkMobs.has(mob)) sf.packable = false;
++        if (usesVideoWalkAnimation(mob)) sf.packable = false;
+         return sf;
+       });
+     };
+--- before/assets/scripts/battle/Monster.ts
++++ after/assets/scripts/battle/Monster.ts
+@@ -11,7 +11,7 @@
+ import { Sfx } from '../core/Sfx';
+ import { BattleSprite } from './BattleSprite';
+ import { FloatEvent } from './FloatText';
+-import { getMobAnims, MobClip } from './MobAnim';
++import { getMobAnims, MobClip, usesVideoWalkAnimation } from './MobAnim';
+ import { drawFootIce } from './FrostVFX';
+ import { clearDepthSorter, DepthSprite, depthSprites, setDepthSorter } from './BattleDepth';
+ import { MonsterDeath, warmMonsterDeath } from './MonsterDeath';
+@@ -176,7 +176,7 @@
+     this.art.show(this.def.id, r * MOB_ART_HEIGHT);
+     this.anims = null;
+     const id = this.def.id;
+-    if (!this.def.homeChapter) getMobAnims(a => { if (this.node.isValid && this.def.id === id && !this.dead) this.anims = a; }, id);
++    if (!this.def.homeChapter || usesVideoWalkAnimation(id)) getMobAnims(a => { if (this.node.isValid && this.def.id === id && !this.dead) this.anims = a; }, id);
+     Tween.stopAllByTarget(this.art.node);
+     this.art.node.setScale(1, 1, 1); this.art.node.angle = 0;
+     this.art.cold(null);
+@@ -187,7 +187,7 @@
+   private tickArt(dt: number): void {
+     this.updateBossHp();
+     if (!this.art?.loaded) return;
+-    if (this.def.homeChapter) this.art.show(this.def.id + (this.traits.enraged && this.def.boss ? '_phase' : ''), this.def.radius * MOB_ART_HEIGHT);
++    if (this.def.homeChapter && !usesVideoWalkAnimation(this.def.id)) this.art.show(this.def.id + (this.traits.enraged && this.def.boss ? '_phase' : ''), this.def.radius * MOB_ART_HEIGHT);
+     if (this.immobilized) {
+       // Hold the current walk/attack cel instead of snapping to idle or continuing a frozen attack.
+       this.syncArtTint();
+--- before/assets/scripts/config/ChapterContent.ts
++++ after/assets/scripts/config/ChapterContent.ts
+@@ -469,9 +469,9 @@
+   }
+ ];
+ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
+-  "forest_spider": {
+-    "id": "forest_spider",
+-    "name": "荆背林蛛",
++  "forest_wolf": {
++    "id": "forest_wolf",
++    "name": "灰鬃狼怪",
+     "kind": "melee",
+     "hp": 180,
+     "dmg": 27,
+@@ -480,7 +480,26 @@
+     "radius": 18,
+     "color": "#3E7D4D",
+     "homeChapter": 2,
+-    "artAtlas": "mobs_forest_v66",
++    "artAtlas": "forest_mob_walk_v85",
++    "exp": 14,
++    "charge": 1,
++    "gold": 2,
++    "description": "深林的双足近战单位。双爪逼近防线，成群出现时需要及时清理。",
++    "traits": ["双足行走，近战围攻防线", "成群出现，单体生命较低"],
++    "weak": "范围攻击覆盖前排"
++  },
++  "forest_spider": {
++    "id": "forest_spider",
++    "name": "荆背林蛛",
++    "kind": "melee",
++    "hp": 180,
++    "dmg": 27,
++    "atkInterval": 3.8,
++    "speed": 36,
++    "radius": 18,
++    "color": "#3E7D4D",
++    "homeChapter": 2,
++    "artAtlas": "forest_mob_walk_v85",
+     "exp": 14,
+     "charge": 1,
+     "gold": 2,
+@@ -529,7 +548,7 @@
+     "radius": 27,
+     "color": "#3E7D4D",
+     "homeChapter": 2,
+-    "artAtlas": "mobs_forest_v66",
++    "artAtlas": "forest_mob_walk_v85",
+     "regen": 0.012,
+     "exp": 14,
+     "charge": 2,
+--- before/assets/scripts/config/ChapterWaves.ts
++++ after/assets/scripts/config/ChapterWaves.ts
+@@ -13,7 +13,9 @@
+   for (let i = 0; i < length; i++) {
+     const rest = i === 3 || i === 6 && i < length - 1;
+     const count = rest ? 10 + difficulty * 2 : 15 + Math.floor(stage * .7) + Math.min(7, i) + difficulty * 2;
+-    const groups: SpawnGroup[] = [{ mob: front, count, interval: rest ? 2.1 : Math.max(.72, 1.16 - stage * .022 - i * .012) }];
++    // Forest wolves occupy existing front-line slots; wave counts, cadence and stats stay the same.
++    const frontId = chapter === 2 && i % 4 === 2 ? 'forest_wolf' : front;
++    const groups: SpawnGroup[] = [{ mob: frontId, count, interval: rest ? 2.1 : Math.max(.72, 1.16 - stage * .022 - i * .012) }];
+     if (i >= 1) groups.push({ mob: ranged, count: rest ? 3 : 4 + Math.floor(i * .55) + difficulty,
+       interval: rest ? 2.6 : 1.7, delay: 4 });
+     if (i >= 2 && (!rest || i === 6)) groups.push({ mob: support,
+--- before/assets/scripts/ui/BattleEntryWarmup.ts
++++ after/assets/scripts/ui/BattleEntryWarmup.ts
+@@ -47,7 +47,7 @@
+   const enemies: string[] = [...mobIds];
+   if (!enemies.length) for (const wave of getChallengeDef(levelId, 0).waves) for (const group of wave.groups) enemies.push(group.mob);
+   for (const atlas of new Set(enemies.map(id => enemyArtRef(id).atlas))) firstPaint.push(warmBattleAtlas(atlas, priority));
+-  for (const atlas of ['chapter1_mob_walk_v81', 'chapter1_mob_walk_v84']) {
++  for (const atlas of ['chapter1_mob_walk_v81', 'chapter1_mob_walk_v84', 'forest_mob_walk_v85']) {
+     const videoWalk = enemies.find(id => enemyArtRef(id).atlas === atlas);
+     if (videoWalk) firstPaint.push(new Promise<void>(resolve => getMobAnims(() => resolve(), videoWalk, priority)));
+   }

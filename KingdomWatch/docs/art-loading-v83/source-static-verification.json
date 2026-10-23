@@ -1,0 +1,40 @@
+{
+  "beforeFiles": 1860,
+  "afterFiles": 1862,
+  "changed": [
+    "assets/scripts/battle/ArcherIdleAnimation.ts",
+    "assets/scripts/battle/BattleSprite.ts",
+    "assets/scripts/battle/HeroSequenceAnimation.ts",
+    "assets/scripts/battle/MobAnim.ts",
+    "assets/scripts/Boot.ts",
+    "assets/scripts/ui/BattleEntryWarmup.ts",
+    "assets/scripts/ui/IdleWarmup.ts",
+    "assets/scripts/ui/LevelLootPreview.ts",
+    "assets/scripts/ui/MainUI.ts",
+    "assets/scripts/ui/pages/LevelsPage.ts",
+    "assets/scripts/ui/Panels.ts",
+    "assets/scripts/ui/PickArt.ts",
+    "assets/scripts/ui/UIArtReady.ts",
+    "assets/scripts/ui/Ux.ts"
+  ],
+  "added": [
+    "assets/scripts/ui/LobbyArtWarmup.ts",
+    "assets/scripts/ui/LobbyArtWarmup.ts.meta"
+  ],
+  "removed": [],
+  "allOriginalMediaAndFrameManifestsUnchanged": true,
+  "originalMediaAndFrameManifestsChecked": 739,
+  "animationPlayerClassBodiesUnchanged": {
+    "battle/ArcherIdleAnimation.ts": true,
+    "battle/HeroSequenceAnimation.ts": true,
+    "battle/BattleSprite.ts": true
+  },
+  "explicitPreloadAssetKeysChecked": 11,
+  "missingExplicitPreloadKeys": [],
+  "typecheck": {
+    "beforeDiagnostics": 10,
+    "afterDiagnostics": 10,
+    "normalizedDiagnosticsUnchanged": true
+  },
+  "gameBrowserWasmAudioOrGameplayTestsStarted": false
+}

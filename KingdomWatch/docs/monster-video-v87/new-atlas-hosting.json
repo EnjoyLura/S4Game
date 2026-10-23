@@ -1,0 +1,17 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\github-pages-20261023-235400-621194",
+  "atlas": [
+    {
+      "path": "assets/resources/native/b8/b81b5008-72ae-433a-9144-ff2cf017986d.d03c10b9696fe652.webp",
+      "bytes": 4691078,
+      "sha256": "d03c10b9696fe652d64d19580046947123f60dc85037f5405e5711ee8e56dce1",
+      "contentType": "image/webp",
+      "status": 200,
+      "verified": true
+    }
+  ],
+  "previousNativeFiles": 703,
+  "changedPreviousNativeFiles": [],
+  "gameOrBrowserStarted": false,
+  "wasmExecuted": false
+}

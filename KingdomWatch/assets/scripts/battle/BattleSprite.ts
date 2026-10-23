@@ -3,13 +3,14 @@
  * Missing assets retain the existing Graphics fallback.
  */
 import { Color, EffectAsset, JsonAsset, Layers, Material, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2, Vec4 } from 'cc';
-import { uxFrame } from '../ui/Ux';
+import { ArtPriority, higherArtPriority, promoteUXArt, uxFrame } from '../ui/Ux';
 
 type AtlasId = string;
 interface FrameManifest { frames: Record<string, [number, number, number, number]>; }
 interface Atlas { frames: Map<string, SpriteFrame>; }
 const atlases = new Map<AtlasId, Atlas>();
 const pending = new Map<AtlasId, ((atlas: Atlas | null) => void)[]>();
+const priorities = new Map<AtlasId, ArtPriority>();
 
 type ColdMode = 'frozen' | 'slow' | null;
 let coldMaterials: { frozen: Material; slow: Material } | null = null;
@@ -40,9 +41,11 @@ function loadColdMaterials(cb: () => void): void {
   });
 }
 
-function loadAtlas(id: AtlasId, cb: (atlas: Atlas | null) => void): void {
+function loadAtlas(id: AtlasId, cb: (atlas: Atlas | null) => void, priority: ArtPriority = 'visible'): void {
   const cached = atlases.get(id);
   if (cached) { cb(cached); return; }
+  priorities.set(id, higherArtPriority(priorities.get(id) || priority, priority));
+  promoteUXArt(id, priority);
   const queue = pending.get(id);
   if (queue) { queue.push(cb); return; }
   pending.set(id, [cb]);
@@ -50,6 +53,7 @@ function loadAtlas(id: AtlasId, cb: (atlas: Atlas | null) => void): void {
     if (atlas) atlases.set(id, atlas);
     const callbacks = pending.get(id) || [];
     pending.delete(id);
+    priorities.delete(id);
     callbacks.forEach(f => f(atlas));
   };
   resources.load('ux/' + id + '.frames', JsonAsset, (err, asset) => {
@@ -75,12 +79,12 @@ function loadAtlas(id: AtlasId, cb: (atlas: Atlas | null) => void): void {
         }
       }
       finish({ frames });
-    });
+    }, priorities.get(id) || priority);
   });
 }
 
-export function warmBattleAtlas(id: string): Promise<void> {
-  return new Promise(resolve => loadAtlas(id, () => resolve()));
+export function warmBattleAtlas(id: string, priority: ArtPriority = 'visible'): Promise<void> {
+  return new Promise(resolve => loadAtlas(id, () => resolve(), priority));
 }
 
 export class BattleSprite {

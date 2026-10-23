@@ -48,7 +48,7 @@ export const MOBS: Record<string, MobDef> = {
     exp: 8, charge: 1, gold: 2, color: '#7FB841',
   },
   goblin_slinger: {
-    id: 'goblin_slinger', name: '哥布林投石手', kind: 'ranged',
+    id: 'goblin_slinger', name: '兽族投石兵', kind: 'ranged',
     hp: 120, dmg: 20, atkInterval: 5, speed: 22.5, radius: 20,
     exp: 10, charge: 1, gold: 3, color: '#B2C24B', atkRange: 300,
   },
@@ -74,13 +74,19 @@ export const MOBS: Record<string, MobDef> = {
     description: '重甲减少40%物理伤害；累积物理命中破甲后失去物抗，并受到3秒易伤。法术可绕过物抗。',
   },
   goblin_king: {
-    id: 'goblin_king', name: '哥布林王', kind: 'melee',
+    id: 'goblin_king', name: '兽族将军', kind: 'melee',
     hp: 4800, dmg: 80, atkInterval: 4, speed: 17.5, radius: 48,
     exp: 120, charge: 20, gold: 50, color: '#6D963F', boss: true,
     physRes: .3, armorBreakRatio: .28,
     description: '铠甲减少30%物理伤害，集火可破甲；法术绕过物抗，首领仍免疫冰封。',
   },
 };
+
+// New video appearances reuse existing combat templates; no extra stats, rewards or attack mechanics.
+MOBS.orc_axeman = { ...MOBS.goblin_worker, id: 'orc_axeman', name: '兽族斧兵',
+  description: '持斧逼近防线的近战单位，成群出现时用范围伤害清理。' };
+MOBS.orc_siege_cart = { ...MOBS.goblin_brute, id: 'orc_siege_cart', name: '兽族攻城车',
+  description: '重甲攻城车缓慢逼近防线；物抗40%，可持续物理集火破甲，或用法术绕过物抗。' };
 
 Object.assign(MOBS, EXPANSION_MOBS);
 

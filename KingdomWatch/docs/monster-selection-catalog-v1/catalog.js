@@ -10,10 +10,13 @@
   const byId = new Map(data.monsters.map(m => [m.id, m]));
   const sourceById = new Map(data.sources.map(s => [s.id, s]));
   const chapterById = new Map(data.chapters.map(c => [String(c.number), c.name]));
+  const reviewSets = (data.reviewSets || []).filter(set => set && Array.isArray(set.ids));
+  const reviewSetById = new Map(reviewSets.map(set => [set.id, set]));
+  const appliedReviewSets = new Set();
   const roles = new Set(['', '普通怪', '精英怪', '关底 Boss']);
   const statuses = new Map([['active','候选区'],['archived','已归档'],['deleted','回收站']]);
   let choices = Object.create(null);
-  let filters = { search: '', source: '', theme: '', selected: false, status: 'active' };
+  let filters = { search: '', source: '', theme: '', selected: false, status: 'active', reviewSet: '' };
   let filtered = [];
   let managing = false;
   const checked = new Set();
@@ -62,7 +65,7 @@
     if ($('toast').parentNode !== parent) parent.appendChild($('toast'));
   }
   function persist() {
-    try { localStorage.setItem(KEY, JSON.stringify({version: 2, choices, filters})); }
+    try { localStorage.setItem(KEY, JSON.stringify({version: 2, choices, filters, appliedReviewSets: [...appliedReviewSets]})); }
     catch (_) {
       if (!saveNoticeShown) { saveNoticeShown = true; toast('当前浏览器无法自动保存，请用「导出整理备份」保留记录。'); }
     }
@@ -71,15 +74,30 @@
     const restored = JSON.parse(localStorage.getItem(KEY) || 'null');
     if (restored) {
       choices = normalizeChoices(restored.choices);
+      for (const id of Array.isArray(restored.appliedReviewSets) ? restored.appliedReviewSets : []) {
+        if (reviewSetById.has(id)) appliedReviewSets.add(id);
+      }
       if (restored.filters) {
         filters.search = String(restored.filters.search || '').slice(0, 200);
         filters.source = sourceById.has(restored.filters.source) ? restored.filters.source : '';
         filters.theme = data.sources.some(s => s.theme === restored.filters.theme) ? restored.filters.theme : '';
         filters.selected = restored.filters.selected === true;
         filters.status = statuses.has(restored.filters.status) ? restored.filters.status : 'active';
+        filters.reviewSet = reviewSetById.has(restored.filters.reviewSet) ? restored.filters.reviewSet : '';
       }
     }
   } catch (_) { /* A corrupt or inaccessible storage entry never prevents opening the catalogue. */ }
+  // Import each explicit chat selection once; later deselection/archival stays under user control.
+  for (const set of reviewSets) {
+    if (appliedReviewSets.has(set.id)) continue;
+    for (const id of set.ids) {
+      if (!byId.has(id)) continue;
+      const previous = choiceFor(id);
+      choices[id] = {...previous, selected: true, status: 'active', trashFrom: 'active', chapter: previous.chapter || (chapterById.has(set.chapter) ? set.chapter : '')};
+    }
+    appliedReviewSets.add(set.id);
+    filters = {search:'', source:'', theme:'', selected:false, status:'active', reviewSet:set.id};
+  }
   function chapterOptions() {
     return '<option value="">暂不分配章节</option>' + data.chapters.map(c => `<option value="${c.number}">第${c.number}章 · ${esc(c.name)}</option>`).join('');
   }
@@ -92,6 +110,12 @@
   $('sourceFilter').value = filters.source;
   $('onlySelected').checked = filters.selected;
   const themes = [...new Set(data.sources.map(s => s.theme))];
+  function renderReviewSets() {
+    $('reviewSets').hidden = !reviewSets.length;
+    $('reviewSets').innerHTML = [{id:'',label:'全部形象'}, ...reviewSets].map(set =>
+      `<button class="theme-pill${filters.reviewSet === set.id ? ' active' : ''}" data-review-set="${esc(set.id)}" aria-pressed="${filters.reviewSet === set.id}">${esc(set.label)}</button>`
+    ).join('');
+  }
   function renderStatuses() {
     $('statusTabs').innerHTML = [...statuses].map(([value,label]) => {
       const count = data.monsters.filter(m => choiceFor(m.id).status === value).length;
@@ -108,7 +132,10 @@
   }
   function applyFilter() {
     const terms = filters.search.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const reviewSet = reviewSetById.get(filters.reviewSet);
+    const reviewIds = reviewSet ? new Set(reviewSet.ids) : null;
     filtered = data.monsters.filter(m => {
+      if (reviewIds && !reviewIds.has(m.id)) return false;
       if (choiceFor(m.id).status !== filters.status) return false;
       if (filters.source && m.source !== filters.source) return false;
       if (filters.theme && m.theme !== filters.theme) return false;
@@ -118,6 +145,10 @@
       const haystack = [m.id,m.name,m.theme,source.filename,...source.aliases,pick.note,pick.role,pick.chapter ? chapterName(pick.chapter) : ''].join(' ').toLowerCase();
       return terms.every(term => haystack.includes(term));
     });
+    if (reviewSet) {
+      const order = new Map(reviewSet.ids.map((id,index) => [id,index]));
+      filtered.sort((a,b) => order.get(a.id) - order.get(b.id));
+    }
     const visibleIds = new Set(filtered.map(m => m.id));
     for (const id of checked) if (!visibleIds.has(id)) checked.delete(id);
   }
@@ -152,7 +183,7 @@
     $('resultsCount').textContent = `共 ${filtered.length} 个形象 · 一页显示`;
     $('emptyTitle').textContent = filters.status === 'active' ? '没有符合条件的候选' : filters.status === 'archived' ? '这里暂时没有归档形象' : '回收站里没有符合条件的形象';
     $('emptyHint').textContent = '可以清除当前筛选，或切换候选区、已归档、回收站。';
-    renderStatuses(); renderThemes(); renderManagement();
+    renderStatuses(); renderThemes(); renderReviewSets(); renderManagement();
   }
   function renderSelection() {
     const items = selectedItems();
@@ -313,6 +344,13 @@
       } catch (_) { /* Manual selection remains available. */ }
     }
   }
+  $('reviewSets').addEventListener('click', event => {
+    const button = event.target.closest('[data-review-set]');
+    if (!button || (button.dataset.reviewSet && !reviewSetById.has(button.dataset.reviewSet))) return;
+    filters = {search:'',source:'',theme:'',selected:false,status:'active',reviewSet:button.dataset.reviewSet};
+    $('search').value=''; $('sourceFilter').value=''; $('onlySelected').checked=false;
+    checked.clear(); renderGrid(); persist();
+  });
   $('themes').addEventListener('click', event => {
     const button = event.target.closest('[data-theme]'); if (!button) return;
     filters.theme = button.dataset.theme; renderGrid(); persist();
@@ -327,7 +365,7 @@
   $('sourceFilter').addEventListener('change', () => { filters.source=$('sourceFilter').value; renderGrid(); persist(); });
   $('onlySelected').addEventListener('change', () => { filters.selected=$('onlySelected').checked; renderGrid(); persist(); });
   $('resetFilters').onclick = () => {
-    filters={search:'',source:'',theme:'',selected:false,status:filters.status};
+    filters={search:'',source:'',theme:'',selected:false,status:filters.status,reviewSet:''};
     $('search').value=''; $('sourceFilter').value=''; $('onlySelected').checked=false;
     renderGrid(); persist();
   };
@@ -422,7 +460,7 @@
     }
   };
   $('exportBackup').onclick=()=>{
-    const backup={kind:'kingdomwatch-monster-selection',version:2,exportedAt:new Date().toISOString(),choices,
+    const backup={kind:'kingdomwatch-monster-selection',version:2,exportedAt:new Date().toISOString(),choices,appliedReviewSets:[...appliedReviewSets],
       selections:selectedItems().map(m=>({...m,...choiceFor(m.id),originalSource:sourceById.get(m.source).original}))};
     download(JSON.stringify(backup,null,2),`怪物整理备份-${dateStamp()}.json`,'application/json;charset=utf-8');
     toast('整理备份已导出，包含选择、章节、备注、归档和回收站记录。');
@@ -440,5 +478,5 @@
     } catch(error) {toast('导入失败：'+error.message);}
     finally {$('importFile').value='';}
   };
-  renderGrid(); renderSelection();
+  renderGrid(); renderSelection(); persist();
 })();

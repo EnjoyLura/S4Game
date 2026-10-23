@@ -1,0 +1,42 @@
+{
+  "originalAssets": 1866,
+  "currentAssets": 1870,
+  "changed": [
+    "assets/scripts/battle/MobAnim.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/config/ChapterContent.ts",
+    "assets/scripts/config/ChapterWaves.ts",
+    "assets/scripts/ui/BattleEntryWarmup.ts",
+    "assets/scripts/ui/Ux.ts"
+  ],
+  "added": [
+    "assets/resources/ux/forest_mob_walk_v85.frames.json",
+    "assets/resources/ux/forest_mob_walk_v85.frames.json.meta",
+    "assets/resources/ux/forest_mob_walk_v85.png",
+    "assets/resources/ux/forest_mob_walk_v85.png.meta"
+  ],
+  "removed": [],
+  "concurrentChangesPreserved": {
+    "assets/scripts/ui/Ux.ts": {
+      "sha256": "e6c66354ddfc26aa10efde091a6ced87a32398af0abeb7d0f1fc9806d1184dde",
+      "reason": "Concurrent art-load-fix-v85 work, preserved without editing; outside this monster change",
+      "snapshot": "docs\\monster-video-v85\\concurrent\\assets\\scripts\\ui\\Ux.ts"
+    }
+  },
+  "originalMediaUnchanged": true,
+  "typeDiagnostics": "identical baseline 10",
+  "atlasSha256": "40c73d0ee855fa08007a90216a4cee8e5f8b83d7ee825de60c53348a0590e658",
+  "frames": 89,
+  "minimumTransparentMargin": {
+    "forest_wolf": 12,
+    "forest_spider": 12,
+    "forest_vine": 12
+  },
+  "sourceSha256": "e65cce0529cae1c99d734ed7a8b92f2f91f32d00b338f668db107424e20fd6dd",
+  "oldMobNumericalDefinitionsUnchanged": true,
+  "newWolfStatsMatchOldSpider": true,
+  "waveCountsAndCadenceUnchanged": true,
+  "forestBoarExcluded": true,
+  "gameOrBrowserStarted": false,
+  "wasmExecuted": false
+}

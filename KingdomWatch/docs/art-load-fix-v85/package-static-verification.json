@@ -1,0 +1,58 @@
+{
+  "release": {
+    "base_path": "/kingdom-watch-play/",
+    "entry": "game.614a5a08ffe35b4b.html",
+    "entry_bytes": 22425,
+    "entry_sha256": "614a5a08ffe35b4b116f0dc447d76a278787c8f4c127025546e050fd6e3bd00c",
+    "id": "39918951dd0bb750",
+    "inventory": "hosting-files.39918951dd0bb750.json",
+    "inventory_sha256": "39918951dd0bb7509429991559369f417e4eeb541d151896f494888423a1aa21",
+    "requires_cross_origin_isolation": false,
+    "requires_webp": true,
+    "schema": 1,
+    "texture_mode": "lossless-webp",
+    "wasm": [
+      "cocos-js/assets/spine-CC34fKUR.wasm"
+    ]
+  },
+  "ownSourceChanged": [
+    "assets/scripts/ui/Ux.ts"
+  ],
+  "concurrentForestChangesPreserved": [
+    "assets/scripts/battle/MobAnim.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/config/ChapterContent.ts",
+    "assets/scripts/config/ChapterWaves.ts",
+    "assets/scripts/ui/BattleEntryWarmup.ts"
+  ],
+  "changedFromInitialBaseline": [
+    "assets/scripts/battle/MobAnim.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/config/ChapterContent.ts",
+    "assets/scripts/config/ChapterWaves.ts",
+    "assets/scripts/ui/BattleEntryWarmup.ts",
+    "assets/scripts/ui/Ux.ts"
+  ],
+  "addedConcurrentAssets": [
+    "assets/resources/ux/forest_mob_walk_v85.frames.json",
+    "assets/resources/ux/forest_mob_walk_v85.frames.json.meta",
+    "assets/resources/ux/forest_mob_walk_v85.png",
+    "assets/resources/ux/forest_mob_walk_v85.png.meta"
+  ],
+  "removed": [],
+  "allOriginalMediaAndFrameManifestsUnchanged": true,
+  "previousNativeFilesByteIdentical": 702,
+  "newForestNativePreserved": true,
+  "sourceHeadAndIndexUnchanged": true,
+  "scriptsSyntaxChecked": [
+    "game.614a5a08ffe35b4b.html:0",
+    "game.614a5a08ffe35b4b.html:1",
+    "game.614a5a08ffe35b4b.html:2",
+    "game.614a5a08ffe35b4b.html:3",
+    "game.614a5a08ffe35b4b.html:7",
+    "index.html:0",
+    "assets/main/index.96d3d.js"
+  ],
+  "nativeContentChecksAreAgainstCurrentReleaseInventory": true,
+  "gameBrowserAudioWasmOrGameplayTestsStarted": false
+}

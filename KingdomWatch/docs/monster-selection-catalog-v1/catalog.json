@@ -1,7 +1,7 @@
 {
   "version": 1,
   "title": "怪物形象候选图鉴",
-  "sourceFiles": 66,
+  "sourceFiles": 69,
   "sources": [
     {
       "id": "S01",
@@ -827,6 +827,45 @@
       "mode": "RGBA",
       "count": 9,
       "theme": "飞行与漂浮"
+    },
+    {
+      "id": "S64",
+      "filename": "selected-four-monsters-standing.png",
+      "original": "D:\\AI\\S4Game\\KingdomWatch\\docs\\chapter1-selected-four-standing-20261023-v1\\selected-four-monsters-standing.png",
+      "aliases": [],
+      "path": "sources/S64.png",
+      "sha256": "1902756fbc87b3b279d557254b97d488de4b15c4bde4e36b9ab1bc63b03f4869",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "count": 4,
+      "theme": "第一章选定形象"
+    },
+    {
+      "id": "S65",
+      "filename": "codex-clipboard-56851b87-f132-4e3d-9de3-22764616eeb4.png",
+      "original": "C:\\Users\\user\\AppData\\Local\\Temp\\codex-clipboard-56851b87-f132-4e3d-9de3-22764616eeb4.png",
+      "aliases": [],
+      "path": "sources/S65.png",
+      "sha256": "4f422714279fdefc6b09781b344f76b5744e537dfd1468a67f9e22696db4c99e",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "count": 1,
+      "theme": "第一章选定形象"
+    },
+    {
+      "id": "S66",
+      "filename": "codex-clipboard-d54389b1-9d59-40be-8e8c-6c100e73f9b3.png",
+      "original": "C:\\Users\\user\\AppData\\Local\\Temp\\codex-clipboard-d54389b1-9d59-40be-8e8c-6c100e73f9b3.png",
+      "aliases": [],
+      "path": "sources/S66.png",
+      "sha256": "dd4c5703e0beb3862bb9a6b55063aff900b5a0ef853e419e1e8305a3597b4524",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "count": 1,
+      "theme": "第一章选定形象"
     }
   ],
   "monsters": [
@@ -13369,6 +13408,126 @@
       ],
       "sha256": "9f4e213dea789d1c827e4f75d3fd9a5d7f89df0dbb8d2a5eaf00beb3f46a3818",
       "pixelSha256": "5fdb2f864242530dd5c48c58b0d430349be8e6476f4a1960a3165bc503b7e20f"
+    },
+    {
+      "id": "S64-01",
+      "name": "普通哥布林",
+      "source": "S64",
+      "row": 1,
+      "column": 1,
+      "theme": "第一章选定形象",
+      "image": "monsters/S64-01.png",
+      "thumb": "thumbs/S64-01.webp",
+      "width": 675,
+      "height": 545,
+      "box": [
+        0,
+        0,
+        675,
+        545
+      ],
+      "sha256": "893a5950a9cecf854afbde42e67d5b9ffa5cbef5ccf90de8a65eaf61da17e65f",
+      "pixelSha256": "51a533c780d78d2cb665f1dedb4eeb15244bc0f5cce4afbe36df248d8920d2d6"
+    },
+    {
+      "id": "S64-02",
+      "name": "兽族萨满",
+      "source": "S64",
+      "row": 1,
+      "column": 2,
+      "theme": "第一章选定形象",
+      "image": "monsters/S64-02.png",
+      "thumb": "thumbs/S64-02.webp",
+      "width": 579,
+      "height": 545,
+      "box": [
+        675,
+        0,
+        1254,
+        545
+      ],
+      "sha256": "4b978480ccef0dbdf384e69f259eba68122a840d34f22bad036d7ae87bdf15f3",
+      "pixelSha256": "626792dc291e526cf825070d7cef9acd1a1df756b142c2e60d65c3133967b047"
+    },
+    {
+      "id": "S64-03",
+      "name": "兽族盾兵",
+      "source": "S64",
+      "row": 2,
+      "column": 1,
+      "theme": "第一章选定形象",
+      "image": "monsters/S64-03.png",
+      "thumb": "thumbs/S64-03.webp",
+      "width": 675,
+      "height": 709,
+      "box": [
+        0,
+        545,
+        675,
+        1254
+      ],
+      "sha256": "4a8e86ffa88eea7dd6f2cbe04cdf96f45cc7a281fefa655e500c6fe1b2bfb01d",
+      "pixelSha256": "0d1c98992e448b1303a8ce46cd060ff1070c00ba5936e4568ceaae8d34588c54"
+    },
+    {
+      "id": "S64-04",
+      "name": "兽族狼骑兵",
+      "source": "S64",
+      "row": 2,
+      "column": 2,
+      "theme": "第一章选定形象",
+      "image": "monsters/S64-04.png",
+      "thumb": "thumbs/S64-04.webp",
+      "width": 579,
+      "height": 709,
+      "box": [
+        675,
+        545,
+        1254,
+        1254
+      ],
+      "sha256": "59f2ffd5083987b51ed2c78a9657f12a18f2372f3483ed19c371accbd5d2ed62",
+      "pixelSha256": "323bd98ca97d2ccddd8714d2204955df45860a16b750b68c31a35840ba1e3b34"
+    },
+    {
+      "id": "S65-04",
+      "name": "兽族攻城车",
+      "source": "S65",
+      "row": 2,
+      "column": 1,
+      "theme": "第一章选定形象",
+      "image": "monsters/S65-04.png",
+      "thumb": "thumbs/S65-04.webp",
+      "width": 341,
+      "height": 342,
+      "box": [
+        0,
+        341,
+        341,
+        683
+      ],
+      "sha256": "3bc4df5a43c6dab5bdef99d5cdce1d951704e766d4f0ebc05787023d3c95707b",
+      "pixelSha256": "4aca3e6ab12e6967ca2cff2cfddb77a233e4cad9de62000f7e7386aadeaf4556"
+    },
+    {
+      "id": "S66-01",
+      "name": "兽族投石手",
+      "source": "S66",
+      "row": 1,
+      "column": 1,
+      "theme": "第一章选定形象",
+      "image": "monsters/S66-01.png",
+      "thumb": "thumbs/S66-01.webp",
+      "width": 341,
+      "height": 341,
+      "box": [
+        0,
+        0,
+        341,
+        341
+      ],
+      "sha256": "026d31f0b8a8e38ff3bbbc53f2727edb6b1537bc95ddc289340e332fd67ab027",
+      "pixelSha256": "aa7d0d307d20467cf0e26c4156a2f6c54a9e66605363f27dd48a8db659808938"
     }
   ],
   "chapters": [
@@ -13435,6 +13594,23 @@
     {
       "number": 16,
       "name": "裂隙王座"
+    }
+  ],
+  "reviewSets": [
+    {
+      "id": "chapter1-picked-20261023-v1",
+      "label": "本次选定 7 只",
+      "chapter": "1",
+      "ids": [
+        "S64-01",
+        "S64-02",
+        "S64-03",
+        "S64-04",
+        "S65-04",
+        "S66-01",
+        "S22-01"
+      ],
+      "description": "包含站姿修订后的四只怪物、攻城车第4个、投石手第1个及S22-01斧兵。"
     }
   ]
 }

@@ -85,12 +85,12 @@ export class MonsterDeath {
     if (this.art.node.isValid) this.art.node.active = this.art.loaded;
     this.opacity.opacity = 255;
   }
-  begin(radius: number, groundOffset: number, hit: FatalHit): void {
+  begin(radius: number, groundOffset: number, hit: FatalHit, height = radius * 3.85): void {
     this.active = true; this.bound = false; this.burst.node.active = false; this.age = 0;
     this.seed = (++serial * 0.61803398875) % 1 * 97;
-    this.radius = radius; this.height = radius * 3.85;
+    this.radius = height / 3.85; this.height = height;
     this.footX = this.root.position.x;
-    this.footY = this.root.position.y - radius * 0.82 + this.height * groundOffset;
+    this.footY = this.root.position.y + this.art.node.position.y + this.height * groundOffset;
     this.bodyX = this.footX; this.bodyY = this.footY + this.height * 0.36;
     this.heavy = hit.heavy || hit.elite || hit.boss;
     this.element = hit.killer === 'pyro' || hit.killer === 'burn' ? 'fire'

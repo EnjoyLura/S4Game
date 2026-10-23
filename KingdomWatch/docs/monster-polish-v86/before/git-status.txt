@@ -1,0 +1,62 @@
+ M AGENTS.md
+ M assets/scripts/Boot.ts
+ M assets/scripts/battle/ArcherIdleAnimation.ts
+ M assets/scripts/battle/BattleDirector.ts
+ M assets/scripts/battle/BattleSprite.ts
+ M assets/scripts/battle/HeroSequenceAnimation.ts
+ M assets/scripts/battle/MobAnim.ts
+ M assets/scripts/battle/Monster.ts
+ M assets/scripts/battle/MonsterDeath.ts
+ M assets/scripts/config/ChapterContent.ts
+ M assets/scripts/config/ChapterWaves.ts
+ M assets/scripts/config/LevelDifficulty.ts
+ M assets/scripts/config/Mobs.ts
+ M assets/scripts/core/GameData.ts
+ M assets/scripts/ui/BattleEntryWarmup.ts
+ M assets/scripts/ui/IdleWarmup.ts
+ M assets/scripts/ui/LevelLootPreview.ts
+ M assets/scripts/ui/MainUI.ts
+ M assets/scripts/ui/Panels.ts
+ M assets/scripts/ui/PickArt.ts
+ M assets/scripts/ui/UIArtReady.ts
+ M assets/scripts/ui/Ux.ts
+ M assets/scripts/ui/pages/LevelsPage.ts
+ M build-templates/web-mobile/index.html
+ M docs/github-pages-publishing/deployment.json
+ M docs/monster-selection-catalog-v1/catalog-data.js
+ M docs/monster-selection-catalog-v1/catalog.js
+ M docs/monster-selection-catalog-v1/catalog.json
+ M docs/monster-selection-catalog-v1/index.html
+ M docs/monster-selection-catalog-v1/sources.json
+ M tools/github-pages/check-launcher.cjs
+ M tools/github-pages/export.py
+ M tools/github-pages/launcher.html
+?? assets/resources/ux/chapter1_mob_walk_v81.frames.json
+?? assets/resources/ux/chapter1_mob_walk_v81.frames.json.meta
+?? assets/resources/ux/chapter1_mob_walk_v81.png
+?? assets/resources/ux/chapter1_mob_walk_v81.png.meta
+?? assets/resources/ux/chapter1_mob_walk_v84.frames.json
+?? assets/resources/ux/chapter1_mob_walk_v84.frames.json.meta
+?? assets/resources/ux/chapter1_mob_walk_v84.png
+?? assets/resources/ux/chapter1_mob_walk_v84.png.meta
+?? assets/resources/ux/forest_mob_walk_v85.frames.json
+?? assets/resources/ux/forest_mob_walk_v85.frames.json.meta
+?? assets/resources/ux/forest_mob_walk_v85.png
+?? assets/resources/ux/forest_mob_walk_v85.png.meta
+?? assets/scripts/ui/LobbyArtWarmup.ts
+?? assets/scripts/ui/LobbyArtWarmup.ts.meta
+?? docs/art-load-fix-v85/
+?? docs/art-loading-v83/
+?? docs/chapter1-monster-grid-three-20261023-v1/
+?? docs/chapter1-next-four-video-20261023-v1/
+?? docs/chapter1-selected-four-clean-front-20261023-v1/
+?? docs/chapter1-selected-four-standing-20261023-v1/
+?? docs/chapter1-selected-monsters-20261023-v1/
+?? docs/chapter1-warlord-boar-20261023-v1/
+?? docs/forest-flight-spider-four-video-20261023-v1/
+?? docs/forest-selected-four-video-20261023-v1/
+?? docs/monster-polish-v86/
+?? docs/monster-video-v81/
+?? docs/monster-video-v84/
+?? docs/monster-video-v85/
+?? tools/github-pages/startup-art.js

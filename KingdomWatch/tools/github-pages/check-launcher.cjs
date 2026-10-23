@@ -17,7 +17,7 @@ async function scenario(version, invalid = false) {
   const body = Buffer.from('<html><head><base href="/kingdom-watch-play/"></head><body>' + version + '</body></html>');
   const sha = crypto.createHash('sha256').update(body).digest('hex');
   const manifest = { schema: 1, id: version, base_path: '/kingdom-watch-play/', entry: 'game.' + sha.slice(0, 16) + '.html', entry_sha256: invalid ? '0'.repeat(64) : sha, requires_cross_origin_isolation: false };
-  const requests = [], nodes = { kwLoad: {}, kwRetry: {} }; let written, opens = 0, closes = 0;
+  const requests = [], nodes = { kwLoad: {}, kwRetry: {}, kwProblem: { hidden: true } }; let written, opens = 0, closes = 0;
   const ctx = vm.createContext({ URL, TextDecoder, AbortController, Uint8Array, Date, setTimeout, clearTimeout,
     crypto: crypto.webcrypto, location: { origin: 'https://enjoylura.github.io' },
     window: { isSecureContext: true }, crossOriginIsolated: false,

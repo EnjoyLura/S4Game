@@ -15,7 +15,7 @@ from urllib.parse import unquote, urlsplit
 HERE=Path(__file__).resolve().parent
 PROJECT=HERE.parents[1]
 sys.path.insert(0, str(HERE.parent))
-from art_resources import optimize_export, validate_art, POLICY
+from art_resources import image_records, optimize_export, validate_art, POLICY
 WEB=PROJECT/'build/web-mobile'
 EXTENSIONS={'.html','.css','.js','.json','.wasm','.bin','.png','.jpg','.jpeg','.webp','.gif','.mp3','.wav','.ogg','.m4a','.ttf','.otf','.woff','.woff2','.txt'}
 
@@ -143,6 +143,27 @@ def address_runtime_code(folder,html,engine_revision):
     return html
 
 
+def startup_art_script(folder):
+    """Resolve three first-paint hints to the final native URLs; no runtime guessing."""
+    by_uuid={record['uuid']: record['native'].relative_to(folder).as_posix() for record in image_records(folder)}
+    def native(key):
+        source=PROJECT/'assets/resources'/(key if key.startswith('scenes/') else 'ux/'+key)
+        meta=json.loads(source.with_suffix('.png.meta').read_text('utf-8'))
+        url=by_uuid[meta['uuid']]
+        if not (folder/url).is_file():raise RuntimeError('Missing startup image: '+key)
+        return url
+    content=(PROJECT/'assets/scripts/config/ChapterContent.ts').read_text('utf-8')
+    array=re.search(r'export const CHAPTER_CONTENT:[^=]+?=\s*',content)
+    if not array:raise RuntimeError('Missing authored chapter list')
+    chapters,_=json.JSONDecoder().raw_decode(content[array.end():])
+    data={'chapters':{str(c['number']):native('scenes/bg_campaign_'+c['art']+('_v1' if c['number']<=3 else '_v66')) for c in chapters},
+          'firstBattle':native('scenes/scene_1_1'),
+          'common':[native('shop_comic_v1/comic_coin_v1'),native('shop_comic_v1/comic_diamond_v1')]}
+    script=(HERE/'startup-art.js').read_text('utf-8')
+    if script.count('/*__STARTUP_ART_DATA__*/')!=1:raise RuntimeError('Missing startup image profile placeholder')
+    return '<script>\n'+script.replace('/*__STARTUP_ART_DATA__*/',json.dumps(data,separators=(',',':')))+'\n</script>'
+
+
 def export(destination,config,texture_mode=None):
     if not re.fullmatch(r'[A-Za-z0-9_.-]+',config['repository']):raise RuntimeError('Invalid repository name')
     destination=Path(destination).resolve()
@@ -157,7 +178,7 @@ def export(destination,config,texture_mode=None):
     art=optimize_export(destination,texture_mode or POLICY['defaultMode'])
     original_html=address_runtime_code(destination,(WEB/'index.html').read_text('utf-8'),production['engineRevision'])
     if '<base ' in original_html:raise RuntimeError('Unexpected existing document base')
-    game_html=original_html.replace('<head>','<head>\n<base href="'+base+'">',1)
+    game_html=original_html.replace('<head>','<head>\n<base href="'+base+'">\n'+startup_art_script(destination),1)
     entry_bytes=game_html.encode('utf-8');entry_sha=hashlib.sha256(entry_bytes).hexdigest();entry='game.'+entry_sha[:16]+'.html'
     (destination/entry).write_bytes(entry_bytes)
     support=(HERE/'webp-support.js').read_text('utf-8')

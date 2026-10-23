@@ -1,0 +1,524 @@
+{
+  "source": {
+    "path": "C:\\Users\\user\\Downloads\\lens-api-task_Jfdoq4hkkNxlF0AxZHmBuhQQzn6TltAm.mp4",
+    "frames": 56,
+    "fps": 24.0,
+    "size": [
+      1344,
+      768
+    ],
+    "bytes": 3284703,
+    "sha256": "e65cce0529cae1c99d734ed7a8b92f2f91f32d00b338f668db107424e20fd6dd"
+  },
+  "fps": 24,
+  "canvas": [
+    320,
+    320
+  ],
+  "atlas": [
+    3240,
+    2916
+  ],
+  "loops": {
+    "forest_wolf": {
+      "label": "灰鬃狼怪",
+      "sourceFrames": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42
+      ],
+      "seconds": 1.3333333333333333,
+      "referenceNextFrame": 43,
+      "metrics": {
+        "start": 11,
+        "end": 43,
+        "length": 32,
+        "seconds": 1.3333333333333333,
+        "pose": 0.014372382313013077,
+        "context": 0.014673227444291115,
+        "velocity": 0.01655418612062931,
+        "seam": 0.02527661807835102,
+        "seamVsMedian": 0.7008237943394855,
+        "clippedFrames": 0,
+        "score": 0.032732638716697696
+      },
+      "fixedSourceUnion": [
+        22,
+        26,
+        462,
+        423
+      ],
+      "fixedTargetSize": [
+        296,
+        267
+      ],
+      "fixedOffset": [
+        12,
+        41,
+        308,
+        308
+      ],
+      "feetBaseline": 0.039602,
+      "topRatio": 0.871875
+    },
+    "forest_spider": {
+      "label": "荆背林蛛",
+      "sourceFrames": [
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48
+      ],
+      "seconds": 1.0416666666666667,
+      "referenceNextFrame": 49,
+      "metrics": {
+        "start": 24,
+        "end": 49,
+        "length": 25,
+        "seconds": 1.0416666666666667,
+        "pose": 0.04885141924023628,
+        "context": 0.05035034939646721,
+        "velocity": 0.023180503398180008,
+        "seam": 0.05179310962557793,
+        "seamVsMedian": 2.4132989575836854,
+        "clippedFrames": 0,
+        "score": 0.12873547077178957
+      },
+      "fixedSourceUnion": [
+        17,
+        57,
+        468,
+        372
+      ],
+      "fixedTargetSize": [
+        296,
+        207
+      ],
+      "fixedOffset": [
+        12,
+        101,
+        308,
+        308
+      ],
+      "feetBaseline": 0.039554,
+      "topRatio": 0.682321
+    },
+    "forest_vine": {
+      "label": "盘根藤怪",
+      "sourceFrames": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "seconds": 1.3333333333333333,
+      "referenceNextFrame": 37,
+      "metrics": {
+        "start": 5,
+        "end": 37,
+        "length": 32,
+        "seconds": 1.3333333333333333,
+        "pose": 0.014731669798493385,
+        "context": 0.017848296090960503,
+        "velocity": 0.021096380427479744,
+        "seam": 0.05277657136321068,
+        "seamVsMedian": 1.2180708398437214,
+        "clippedFrames": 0,
+        "score": 0.04689743183553219
+      },
+      "fixedSourceUnion": [
+        38,
+        14,
+        466,
+        387
+      ],
+      "fixedTargetSize": [
+        296,
+        258
+      ],
+      "fixedOffset": [
+        12,
+        50,
+        308,
+        308
+      ],
+      "feetBaseline": 0.039662,
+      "topRatio": 0.841588
+    }
+  },
+  "method": "forward consecutive source frames, fixed union crop; source-clipped wolf fur tip restored from source frame 8 outside original top edge only; no temporal blending, reversal or interpolated frames",
+  "wolfTipRestoration": {
+    "referenceSourceFrame": 8,
+    "paddingTop": 32,
+    "method": "same-video fur tip, tracked head anchors, fill outside source top edge only",
+    "frames": [
+      {
+        "frame": 0,
+        "sourceTopClipped": true,
+        "restoredPixels": 26
+      },
+      {
+        "frame": 1,
+        "sourceTopClipped": true,
+        "restoredPixels": 24
+      },
+      {
+        "frame": 2,
+        "sourceTopClipped": true,
+        "restoredPixels": 18
+      },
+      {
+        "frame": 3,
+        "sourceTopClipped": true,
+        "restoredPixels": 12
+      },
+      {
+        "frame": 4,
+        "sourceTopClipped": true,
+        "restoredPixels": 6
+      },
+      {
+        "frame": 5,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 6,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 7,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 8,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 9,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 10,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 11,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 12,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 13,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 14,
+        "sourceTopClipped": true,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 15,
+        "sourceTopClipped": true,
+        "restoredPixels": 12
+      },
+      {
+        "frame": 16,
+        "sourceTopClipped": true,
+        "restoredPixels": 21
+      },
+      {
+        "frame": 17,
+        "sourceTopClipped": true,
+        "restoredPixels": 26
+      },
+      {
+        "frame": 18,
+        "sourceTopClipped": true,
+        "restoredPixels": 26
+      },
+      {
+        "frame": 19,
+        "sourceTopClipped": true,
+        "restoredPixels": 15
+      },
+      {
+        "frame": 20,
+        "sourceTopClipped": true,
+        "restoredPixels": 6
+      },
+      {
+        "frame": 21,
+        "sourceTopClipped": true,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 22,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 23,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 24,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 25,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 26,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 27,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 28,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 29,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 30,
+        "sourceTopClipped": true,
+        "restoredPixels": 9
+      },
+      {
+        "frame": 31,
+        "sourceTopClipped": true,
+        "restoredPixels": 22
+      },
+      {
+        "frame": 32,
+        "sourceTopClipped": true,
+        "restoredPixels": 31
+      },
+      {
+        "frame": 33,
+        "sourceTopClipped": true,
+        "restoredPixels": 32
+      },
+      {
+        "frame": 34,
+        "sourceTopClipped": true,
+        "restoredPixels": 28
+      },
+      {
+        "frame": 35,
+        "sourceTopClipped": true,
+        "restoredPixels": 22
+      },
+      {
+        "frame": 36,
+        "sourceTopClipped": true,
+        "restoredPixels": 8
+      },
+      {
+        "frame": 37,
+        "sourceTopClipped": true,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 38,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 39,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 40,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 41,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 42,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 43,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 44,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 45,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 46,
+        "sourceTopClipped": true,
+        "restoredPixels": 1
+      },
+      {
+        "frame": 47,
+        "sourceTopClipped": true,
+        "restoredPixels": 12
+      },
+      {
+        "frame": 48,
+        "sourceTopClipped": true,
+        "restoredPixels": 26
+      },
+      {
+        "frame": 49,
+        "sourceTopClipped": true,
+        "restoredPixels": 27
+      },
+      {
+        "frame": 50,
+        "sourceTopClipped": true,
+        "restoredPixels": 28
+      },
+      {
+        "frame": 51,
+        "sourceTopClipped": true,
+        "restoredPixels": 22
+      },
+      {
+        "frame": 52,
+        "sourceTopClipped": true,
+        "restoredPixels": 12
+      },
+      {
+        "frame": 53,
+        "sourceTopClipped": true,
+        "restoredPixels": 8
+      },
+      {
+        "frame": 54,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      },
+      {
+        "frame": 55,
+        "sourceTopClipped": false,
+        "restoredPixels": 0
+      }
+    ]
+  },
+  "excludedSourceQuadrant": "upper-right forest boar; waiting for running video",
+  "atlasSha256": "40c73d0ee855fa08007a90216a4cee8e5f8b83d7ee825de60c53348a0590e658",
+  "frameCount": 89,
+  "runtimeAssets": [
+    "assets/resources/ux/forest_mob_walk_v85.frames.json",
+    "assets/resources/ux/forest_mob_walk_v85.frames.json.meta",
+    "assets/resources/ux/forest_mob_walk_v85.png",
+    "assets/resources/ux/forest_mob_walk_v85.png.meta"
+  ]
+}

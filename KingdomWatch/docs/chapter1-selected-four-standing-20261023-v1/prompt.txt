@@ -1,0 +1,10 @@
+Use case: precise-object-edit / identity-preserve.
+Edit the supplied 2x2 four-monster sheet, changing ONLY these two details:
+
+1) TOP RIGHT SHAMAN: change his crouching, wide-legged stance into a relaxed upright standing pose. Straighten the torso and hips, visibly straighten and extend both legs, and place his feet naturally below his hips, about shoulder width apart, with knees almost straight. His weight should read as standing still, not squatting or lunging. Keep him short and nonhuman, with exactly the same face/skull mask, horns, fur, ragged clothing, bone ornaments, colors, staff and hand design. Keep the staff held upright with its base resting beside his foot and preserve the free hand gesture. Show enough lower leg below the ragged hem to make the standing pose clear. Do not simply scale the whole shaman taller.
+
+2) TOP LEFT ORDINARY GOBLIN: make the entire head assembly (head, ears and helmet together) just a little smaller, about 92% of its current dimensions, retaining the exact facial character and expression, and attaching naturally to the original neck/body. Bring both feet a little closer to his centerline, reducing the overall stance width about 10–12%, and adjust the lower legs naturally. Feet should still be separated in a comfortable standing pose, not touching. Keep the original body, outfit, small sword and round shield, colors, body height and compact silhouette. This is a subtle proportion adjustment.
+
+Keep BOTTOM LEFT SHIELD SOLDIER and BOTTOM RIGHT WOLF RIDER unchanged.
+Preserve the four quadrants, original pale solid beige background, same art style, crisp dark outlines, painted shading, margins and full-body framing. All characters, including rider and wolf, must continue looking straight at the viewer with frontal faces and torsos.
+No new effects, glow, fire, smoke, particles, scenery, text, borders or accessories. Do not redesign any character.

@@ -13,7 +13,9 @@ export function expandedStageWaves(chapter: number, stage: number, difficulty = 
   for (let i = 0; i < length; i++) {
     const rest = i === 3 || i === 6 && i < length - 1;
     const count = rest ? 10 + difficulty * 2 : 15 + Math.floor(stage * .7) + Math.min(7, i) + difficulty * 2;
-    const groups: SpawnGroup[] = [{ mob: front, count, interval: rest ? 2.1 : Math.max(.72, 1.16 - stage * .022 - i * .012) }];
+    // Forest variants share existing front-line slots; counts and cadence stay the same.
+    const frontId = chapter === 2 ? [front, 'forest_eagle', 'forest_wolf', 'forest_bat'][i % 4] : front;
+    const groups: SpawnGroup[] = [{ mob: frontId, count, interval: rest ? 2.1 : Math.max(.72, 1.16 - stage * .022 - i * .012) }];
     if (i >= 1) groups.push({ mob: ranged, count: rest ? 3 : 4 + Math.floor(i * .55) + difficulty,
       interval: rest ? 2.6 : 1.7, delay: 4 });
     if (i >= 2 && (!rest || i === 6)) groups.push({ mob: support,

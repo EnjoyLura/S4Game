@@ -1,0 +1,24 @@
+{
+  "existingMonstersPreserved": 627,
+  "addedMonsters": 6,
+  "totalMonsters": 633,
+  "totalSources": 66,
+  "losslessNewCropsVerified": 6,
+  "newSourceCopiesVerified": 3,
+  "selectedIds": [
+    "S64-01",
+    "S64-02",
+    "S64-03",
+    "S64-04",
+    "S65-04",
+    "S66-01",
+    "S22-01"
+  ],
+  "allImagePathsExist": true,
+  "gameFilesChanged": 0,
+  "browserOpened": false,
+  "gameStarted": false,
+  "jsSyntaxChecksPassed": true,
+  "staticDomReferencesVerified": 67,
+  "missingDomIds": []
+}

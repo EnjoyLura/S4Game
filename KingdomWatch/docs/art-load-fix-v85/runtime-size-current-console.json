@@ -1,0 +1,93 @@
+{
+  "release": {
+    "base_path": "/kingdom-watch-play/",
+    "entry": "game.614a5a08ffe35b4b.html",
+    "entry_bytes": 22425,
+    "entry_sha256": "614a5a08ffe35b4b116f0dc447d76a278787c8f4c127025546e050fd6e3bd00c",
+    "id": "39918951dd0bb750",
+    "inventory": "hosting-files.39918951dd0bb750.json",
+    "inventory_sha256": "39918951dd0bb7509429991559369f417e4eeb541d151896f494888423a1aa21",
+    "requires_cross_origin_isolation": false,
+    "requires_webp": true,
+    "schema": 1,
+    "texture_mode": "lossless-webp",
+    "wasm": [
+      "cocos-js/assets/spine-CC34fKUR.wasm"
+    ]
+  },
+  "runtimeBytes": 368641423,
+  "actualFilesIncludingManifestsBytes": 368971776,
+  "byExtension": {
+    ".webp": {
+      "bytes": 335059254,
+      "count": 395
+    },
+    ".wav": {
+      "bytes": 13831190,
+      "count": 286
+    },
+    ".mp3": {
+      "bytes": 8383596,
+      "count": 4
+    },
+    ".jpg": {
+      "bytes": 4883791,
+      "count": 12
+    },
+    ".js": {
+      "bytes": 3874283,
+      "count": 14
+    },
+    ".json": {
+      "bytes": 1197459,
+      "count": 1178
+    },
+    ".ttf": {
+      "bytes": 1111708,
+      "count": 5
+    },
+    ".wasm": {
+      "bytes": 205175,
+      "count": 1
+    },
+    ".html": {
+      "bytes": 49745,
+      "count": 5
+    },
+    ".bin": {
+      "bytes": 25799,
+      "count": 2
+    },
+    ".txt": {
+      "bytes": 18062,
+      "count": 1
+    },
+    ".css": {
+      "bytes": 1283,
+      "count": 1
+    },
+    ".png": {
+      "bytes": 78,
+      "count": 1
+    },
+    "(none)": {
+      "bytes": 0,
+      "count": 1
+    }
+  },
+  "imageGroups": {
+    "frame-atlases": {
+      "bytes": 134612136,
+      "count": 39
+    },
+    "other-images": {
+      "bytes": 117438814,
+      "count": 324
+    },
+    "scene-backgrounds": {
+      "bytes": 87892173,
+      "count": 45
+    }
+  },
+  "gameBrowserOrWasmStarted": false
+}

@@ -1,0 +1,15 @@
+{
+  "headUnchanged": true,
+  "headSha256": "8b69d6343418ed70ba34b71c89b6c3f6f8643a26a283c099c4c3317c0ae97f4f",
+  "indexUnchanged": true,
+  "indexSha256": "23a96542621080f3e55f9bee54c82d66119a99735efe97563c4c5984fe5d1bcb",
+  "finalPublicationCommit": "40bb74b6759c860e31f4896407695a9275f9264f",
+  "releaseId": "2f47dd6d51e20fda",
+  "published": true,
+  "previousNativeFilesUnchanged": 703,
+  "httpSamples": 13,
+  "extraAtlasHttpCheck": true,
+  "gameOrBrowserStarted": false,
+  "wasmExecuted": false,
+  "agentsOriginalTailPreserved": true
+}

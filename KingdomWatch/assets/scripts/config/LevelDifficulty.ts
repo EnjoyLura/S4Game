@@ -41,6 +41,16 @@ function group(mob: string, count: number, interval = .85, delay = 0): SpawnGrou
 }
 function reinforcement(groups: SpawnGroup[]): WaveDef { return { groups, surge: true }; }
 
+/** Swap appearances in existing spawn slots, preserving every count, interval, delay and authored stat. */
+function chapterOneVideoWaves(waves: WaveDef[], stage: number): WaveDef[] {
+  if (stage < 4) return waves;
+  return waves.map((wave, i) => ({ ...wave, groups: wave.groups.map(g => {
+    if (g.mob === 'goblin_worker' && i % 4 === 2) return { ...g, mob: 'orc_axeman' };
+    if (stage >= 7 && g.mob === 'goblin_brute' && i % 3 === 2) return { ...g, mob: 'orc_siege_cart' };
+    return g;
+  }) }));
+}
+
 export function getChallengeDef(id: string, value = 0): ChallengeDef {
   const base = getLevelDef(id), d = difficultyIndex(value), key = base.id + ':' + d;
   if (cache[key]) return cache[key];
@@ -99,7 +109,7 @@ export function getChallengeDef(id: string, value = 0): ChallengeDef {
   const seventh = base.id === '1-7' && d === 0;
   return cache[key] = { ...base, difficulty: d, baseGold: seventh ? 160 : sixth ? 140 : fifth ? 120 : fourth ? 100 : Math.round(base.baseGold * DIFFICULTIES[d].goldMul),
     baseDiamonds: DIFFICULTIES[d].diamonds,
-    waves: first ? FIRST_LEVEL_WAVES : second ? SECOND_LEVEL_WAVES : third ? THIRD_LEVEL_WAVES : fourth ? FOURTH_LEVEL_WAVES : fifth ? FIFTH_LEVEL_WAVES : sixth ? SIXTH_LEVEL_WAVES : seventh ? SEVENTH_LEVEL_WAVES : waves,
+    waves: chapterOneVideoWaves(first ? FIRST_LEVEL_WAVES : second ? SECOND_LEVEL_WAVES : third ? THIRD_LEVEL_WAVES : fourth ? FOURTH_LEVEL_WAVES : fifth ? FIFTH_LEVEL_WAVES : sixth ? SIXTH_LEVEL_WAVES : seventh ? SEVENTH_LEVEL_WAVES : waves, stage?.stage || 1),
     fixedWaves: first || second || third || fourth || fifth || sixth || seventh, materials, gearPool };
 }
 /** One equipment roll per real kill; elite bonus is explicit in the preview. */

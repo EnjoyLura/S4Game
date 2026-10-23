@@ -1,0 +1,33 @@
+{
+  "originalAssets": 1870,
+  "currentAssets": 1874,
+  "changed": [
+    "assets/scripts/battle/MobAnim.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/config/ChapterContent.ts",
+    "assets/scripts/config/ChapterWaves.ts",
+    "assets/scripts/ui/BattleEntryWarmup.ts"
+  ],
+  "added": [
+    "assets/resources/ux/forest_mob_walk_v87.frames.json",
+    "assets/resources/ux/forest_mob_walk_v87.frames.json.meta",
+    "assets/resources/ux/forest_mob_walk_v87.png",
+    "assets/resources/ux/forest_mob_walk_v87.png.meta"
+  ],
+  "removed": [],
+  "originalMediaAndFirstChapterAdjustmentsUnchanged": true,
+  "typeDiagnostics": "identical baseline 10",
+  "atlasSha256": "24f59c021db768e3d13b9ed225e708aa626c0231bd53ef437691fe67d348555a",
+  "frames": 85,
+  "minimumTransparentMargin": {
+    "forest_eagle": 12,
+    "forest_bat": 12,
+    "forest_wasp": 12,
+    "thorn_ancient": 12
+  },
+  "oldMobNumericalDefinitionsUnchanged": true,
+  "newFlyerStatsMatchOldSpider": true,
+  "waveCountsAndCadenceUnchanged": true,
+  "gameOrBrowserStarted": false,
+  "wasmExecuted": false
+}

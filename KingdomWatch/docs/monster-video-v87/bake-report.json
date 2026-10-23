@@ -1,0 +1,3401 @@
+{
+  "source": {
+    "path": "C:\\Users\\user\\Downloads\\lens-api-task_S2F1payDFIr6mT5MbFUoMSBSvLVeriMs.mp4",
+    "frames": 56,
+    "fps": 24.0,
+    "size": [
+      1344,
+      768
+    ],
+    "bytes": 2907920,
+    "sha256": "ba02aab70163f1077345a68401144070b14532e6467b0751d2ac3f2574c4a25e"
+  },
+  "fps": 24,
+  "canvas": [
+    320,
+    320
+  ],
+  "atlas": [
+    3240,
+    2916
+  ],
+  "loops": {
+    "forest_eagle": {
+      "label": "黑羽猛禽",
+      "sourceFrames": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "seconds": 0.6666666666666666,
+      "referenceNextFrame": 33,
+      "metrics": {
+        "start": 17,
+        "end": 33,
+        "length": 16,
+        "seconds": 0.6666666666666666,
+        "pose": 0.00806689728051424,
+        "context": 0.007806696929037571,
+        "velocity": 0.015061740763485432,
+        "seam": 0.028395961970090866,
+        "seamVsMedian": 0.4601190716566201,
+        "clippedFrames": 0,
+        "score": 0.02033695112913847
+      },
+      "fixedSourceUnion": [
+        38,
+        61,
+        705,
+        439
+      ],
+      "fixedTargetSize": [
+        296,
+        168
+      ],
+      "fixedOffset": [
+        12,
+        140
+      ],
+      "feetBaseline": 0.05,
+      "topRatio": 0.411111,
+      "airborne": true
+    },
+    "forest_bat": {
+      "label": "赤翼魔蝠",
+      "sourceFrames": [
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "seconds": 0.7916666666666666,
+      "referenceNextFrame": 33,
+      "metrics": {
+        "start": 14,
+        "end": 33,
+        "length": 19,
+        "seconds": 0.7916666666666666,
+        "pose": 0.006239153910428286,
+        "context": 0.006661044433712959,
+        "velocity": 0.010139945894479752,
+        "seam": 0.024555040523409843,
+        "seamVsMedian": 0.7549933187987904,
+        "clippedFrames": 0,
+        "score": 0.015623967815190556
+      },
+      "fixedSourceUnion": [
+        10,
+        72,
+        769,
+        504
+      ],
+      "fixedTargetSize": [
+        296,
+        168
+      ],
+      "fixedOffset": [
+        12,
+        140
+      ],
+      "feetBaseline": 0.039931,
+      "topRatio": 0.504167,
+      "airborne": true
+    },
+    "forest_wasp": {
+      "label": "毒针蜂",
+      "sourceFrames": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38
+      ],
+      "seconds": 0.6666666666666666,
+      "referenceNextFrame": 39,
+      "metrics": {
+        "start": 23,
+        "end": 39,
+        "length": 16,
+        "seconds": 0.6666666666666666,
+        "pose": 0.022864172235131264,
+        "context": 0.02469385229051113,
+        "velocity": 0.030996214598417282,
+        "seam": 0.03809482604265213,
+        "seamVsMedian": 0.5273561433471916,
+        "clippedFrames": 0,
+        "score": 0.05501773990690709
+      },
+      "fixedSourceUnion": [
+        33,
+        9,
+        483,
+        373
+      ],
+      "fixedTargetSize": [
+        296,
+        239
+      ],
+      "fixedOffset": [
+        12,
+        69
+      ],
+      "feetBaseline": 0.039552,
+      "topRatio": 0.663316,
+      "airborne": true
+    },
+    "thorn_ancient": {
+      "label": "赤甲蛛王",
+      "sourceFrames": [
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46
+      ],
+      "seconds": 1.4166666666666667,
+      "referenceNextFrame": 47,
+      "metrics": {
+        "start": 13,
+        "end": 47,
+        "length": 34,
+        "seconds": 1.4166666666666667,
+        "pose": 0.046434592455625534,
+        "context": 0.045681096613407135,
+        "velocity": 0.0220496729016304,
+        "seam": 0.044319041073322296,
+        "seamVsMedian": 2.262945219817202,
+        "clippedFrames": 0,
+        "score": 0.11653370745480061
+      },
+      "fixedSourceUnion": [
+        21,
+        17,
+        489,
+        368
+      ],
+      "fixedTargetSize": [
+        296,
+        222
+      ],
+      "fixedOffset": [
+        12,
+        86
+      ],
+      "feetBaseline": 0.039476,
+      "topRatio": 0.729274,
+      "airborne": false
+    }
+  },
+  "method": "continuous forward source frames, fixed union crop; spider slow zoom correction, same-video wing caps outside source image only; no blending, reversal or time interpolation",
+  "spiderCorrection": {
+    "method": "KLT central carapace/face anchors + RANSAC similarity; remove linear scale and translation trends only",
+    "firstToLastZoom": 1.0907820118990887,
+    "reference": [
+      0.9984798280593982,
+      269.98169617846776,
+      146.93202211112265
+    ],
+    "samples": [
+      {
+        "frame": 0,
+        "anchors": 160,
+        "scale": 1.0,
+        "center": [
+          270.0,
+          150.0
+        ],
+        "correctionScale": 1.0,
+        "residualScale": 1.0,
+        "trendCenter": [
+          269.98169617846776,
+          146.93202211112265
+        ]
+      },
+      {
+        "frame": 1,
+        "anchors": 159,
+        "scale": 1.0003204024862546,
+        "center": [
+          269.9192290671948,
+          150.04229149519443
+        ],
+        "correctionScale": 0.9983521378970536,
+        "residualScale": 0.9986720124041935,
+        "trendCenter": [
+          269.99584725351247,
+          147.12481260920822
+        ]
+      },
+      {
+        "frame": 2,
+        "anchors": 159,
+        "scale": 1.0027905218480773,
+        "center": [
+          269.948510107801,
+          149.5197389954138
+        ],
+        "correctionScale": 0.9967096977584782,
+        "residualScale": 0.9994910379462637,
+        "trendCenter": [
+          270.0099983285571,
+          147.3176031072938
+        ]
+      },
+      {
+        "frame": 3,
+        "anchors": 159,
+        "scale": 1.0043213621115354,
+        "center": [
+          269.9433795628285,
+          148.7810713120207
+        ],
+        "correctionScale": 0.9950726528683734,
+        "residualScale": 0.9993727221287039,
+        "trendCenter": [
+          270.0241494036018,
+          147.5103936053794
+        ]
+      },
+      {
+        "frame": 4,
+        "anchors": 159,
+        "scale": 1.00654332329737,
+        "center": [
+          269.9596875152547,
+          147.7484461930554
+        ],
+        "correctionScale": 0.9934409766860686,
+        "residualScale": 0.9999413821733805,
+        "trendCenter": [
+          270.03830047864653,
+          147.70318410346496
+        ]
+      },
+      {
+        "frame": 5,
+        "anchors": 159,
+        "scale": 1.0087920863000726,
+        "center": [
+          270.0237789174908,
+          146.72481307028616
+        ],
+        "correctionScale": 0.9918146428446892,
+        "residualScale": 1.0005347627782555,
+        "trendCenter": [
+          270.05245155369124,
+          147.89597460155053
+        ]
+      },
+      {
+        "frame": 6,
+        "anchors": 159,
+        "scale": 1.010969351214897,
+        "center": [
+          270.078313762619,
+          145.61326067642867
+        ],
+        "correctionScale": 0.990193625149737,
+        "residualScale": 1.0010554067947564,
+        "trendCenter": [
+          270.0666026287359,
+          148.0887650996361
+        ]
+      },
+      {
+        "frame": 7,
+        "anchors": 158,
+        "scale": 1.0120341035604108,
+        "center": [
+          270.07349179264884,
+          145.2156180364277
+        ],
+        "correctionScale": 0.9885778975776817,
+        "residualScale": 1.0004745463746647,
+        "trendCenter": [
+          270.0807537037806,
+          148.28155559772168
+        ]
+      },
+      {
+        "frame": 8,
+        "anchors": 159,
+        "scale": 1.0132487413326672,
+        "center": [
+          270.0714080067802,
+          145.0463695000407
+        ],
+        "correctionScale": 0.9869674342745706,
+        "residualScale": 1.0000435105150405,
+        "trendCenter": [
+          270.0949047788253,
+          148.47434609580728
+        ]
+      },
+      {
+        "frame": 9,
+        "anchors": 158,
+        "scale": 1.0141347716534739,
+        "center": [
+          270.0317409712242,
+          145.4187934341915
+        ],
+        "correctionScale": 0.9853622095546488,
+        "residualScale": 0.9992900793826662,
+        "trendCenter": [
+          270.10905585387,
+          148.66713659389285
+        ]
+      },
+      {
+        "frame": 10,
+        "anchors": 158,
+        "scale": 1.0153154888486786,
+        "center": [
+          270.07677302476066,
+          146.2792840159266
+        ],
+        "correctionScale": 0.9837621978989928,
+        "residualScale": 0.9988289968706664,
+        "trendCenter": [
+          270.12320692891467,
+          148.85992709197842
+        ]
+      },
+      {
+        "frame": 11,
+        "anchors": 152,
+        "scale": 1.0162622199294846,
+        "center": [
+          270.0878498118422,
+          147.31604818370366
+        ],
+        "correctionScale": 0.9821673739541593,
+        "residualScale": 0.9981395957969662,
+        "trendCenter": [
+          270.1373580039594,
+          149.052717590064
+        ]
+      },
+      {
+        "frame": 12,
+        "anchors": 145,
+        "scale": 1.0172212206979228,
+        "center": [
+          270.09013184945485,
+          149.42876135939903
+        ],
+        "correctionScale": 0.980577712530846,
+        "residualScale": 0.997464457729804,
+        "trendCenter": [
+          270.1515090790041,
+          149.24550808814956
+        ]
+      },
+      {
+        "frame": 13,
+        "anchors": 141,
+        "scale": 1.0187266852889298,
+        "center": [
+          270.14917060866935,
+          150.97322242843214
+        ],
+        "correctionScale": 0.978993188602564,
+        "residualScale": 0.9973264859455302,
+        "trendCenter": [
+          270.1656601540488,
+          149.43829858623516
+        ]
+      },
+      {
+        "frame": 14,
+        "anchors": 140,
+        "scale": 1.0213860914818436,
+        "center": [
+          270.21532787497136,
+          153.01889061177508
+        ],
+        "correctionScale": 0.9774137773043265,
+        "residualScale": 0.9983168377613711,
+        "trendCenter": [
+          270.17981122909345,
+          149.63108908432073
+        ]
+      },
+      {
+        "frame": 15,
+        "anchors": 139,
+        "scale": 1.023008242703477,
+        "center": [
+          270.25471609788553,
+          153.9574887927431
+        ],
+        "correctionScale": 0.9758394539313466,
+        "residualScale": 0.9982918049270275,
+        "trendCenter": [
+          270.19396230413815,
+          149.8238795824063
+        ]
+      },
+      {
+        "frame": 16,
+        "anchors": 137,
+        "scale": 1.0237588675323819,
+        "center": [
+          270.22424503730895,
+          154.81176297536376
+        ],
+        "correctionScale": 0.9742701939377499,
+        "residualScale": 0.9974177504162649,
+        "trendCenter": [
+          270.20811337918286,
+          150.01667008049188
+        ]
+      },
+      {
+        "frame": 17,
+        "anchors": 133,
+        "scale": 1.0254608346766354,
+        "center": [
+          270.2528432358416,
+          154.66271856067627
+        ],
+        "correctionScale": 0.972705972935299,
+        "residualScale": 0.9974718789011804,
+        "trendCenter": [
+          270.22226445422757,
+          150.20946057857745
+        ]
+      },
+      {
+        "frame": 18,
+        "anchors": 132,
+        "scale": 1.028280788142536,
+        "center": [
+          270.271513327086,
+          153.8818129368394
+        ],
+        "correctionScale": 0.9711467666921288,
+        "residualScale": 0.9986115626562577,
+        "trendCenter": [
+          270.2364155292722,
+          150.40225107666305
+        ]
+      },
+      {
+        "frame": 19,
+        "anchors": 131,
+        "scale": 1.0291652381785559,
+        "center": [
+          270.2343240284814,
+          152.62160210005862
+        ],
+        "correctionScale": 0.969592551131497,
+        "residualScale": 0.9978709488214008,
+        "trendCenter": [
+          270.25056660431693,
+          150.59504157474862
+        ]
+      },
+      {
+        "frame": 20,
+        "anchors": 131,
+        "scale": 1.0307194274598583,
+        "center": [
+          270.18501439293755,
+          151.00486148363572
+        ],
+        "correctionScale": 0.9680433023305439,
+        "residualScale": 0.9977810383344887,
+        "trendCenter": [
+          270.26471767936164,
+          150.7878320728342
+        ]
+      },
+      {
+        "frame": 21,
+        "anchors": 131,
+        "scale": 1.0315607672534286,
+        "center": [
+          270.1749650681498,
+          149.92729276467782
+        ],
+        "correctionScale": 0.9664989965190642,
+        "residualScale": 0.9970024463988747,
+        "trendCenter": [
+          270.27886875440635,
+          150.98062257091976
+        ]
+      },
+      {
+        "frame": 22,
+        "anchors": 131,
+        "scale": 1.0326510503281578,
+        "center": [
+          270.24072161577277,
+          148.3647050898607
+        ],
+        "correctionScale": 0.9649596100782929,
+        "residualScale": 0.9964665548715989,
+        "trendCenter": [
+          270.293019829451,
+          151.17341306900533
+        ]
+      },
+      {
+        "frame": 23,
+        "anchors": 134,
+        "scale": 1.0338905801348044,
+        "center": [
+          270.2373933082886,
+          147.38009479198925
+        ],
+        "correctionScale": 0.9634251195397004,
+        "residualScale": 0.9960761557573442,
+        "trendCenter": [
+          270.3071709044957,
+          151.36620356709093
+        ]
+      },
+      {
+        "frame": 24,
+        "anchors": 137,
+        "scale": 1.0351096263411705,
+        "center": [
+          270.2428857730415,
+          146.8310331368554
+        ],
+        "correctionScale": 0.9618955015837992,
+        "residualScale": 0.9956672932236592,
+        "trendCenter": [
+          270.3213219795404,
+          151.5589940651765
+        ]
+      },
+      {
+        "frame": 25,
+        "anchors": 137,
+        "scale": 1.0364119492078485,
+        "center": [
+          270.26607539683243,
+          146.7623846432188
+        ],
+        "correctionScale": 0.960370733038964,
+        "residualScale": 0.995339703391083,
+        "trendCenter": [
+          270.33547305458507,
+          151.75178456326208
+        ]
+      },
+      {
+        "frame": 26,
+        "anchors": 137,
+        "scale": 1.0391415420783043,
+        "center": [
+          270.2921543812351,
+          147.7152648285233
+        ],
+        "correctionScale": 0.9588507908802602,
+        "residualScale": 0.9963816894583152,
+        "trendCenter": [
+          270.3496241296298,
+          151.94457506134765
+        ]
+      },
+      {
+        "frame": 27,
+        "anchors": 136,
+        "scale": 1.0416650120985902,
+        "center": [
+          270.3406959966816,
+          148.99660423309416
+        ],
+        "correctionScale": 0.9573356522282859,
+        "residualScale": 0.9972230537607891,
+        "trendCenter": [
+          270.3637752046745,
+          152.13736555943325
+        ]
+      },
+      {
+        "frame": 28,
+        "anchors": 133,
+        "scale": 1.0440538320139376,
+        "center": [
+          270.38006155491314,
+          150.96072767850671
+        ],
+        "correctionScale": 0.9558252943480243,
+        "residualScale": 0.9979330612999047,
+        "trendCenter": [
+          270.3779262797192,
+          152.33015605751882
+        ]
+      },
+      {
+        "frame": 29,
+        "anchors": 133,
+        "scale": 1.044658936010635,
+        "center": [
+          270.44888759358975,
+          152.72331350335668
+        ],
+        "correctionScale": 0.9543196946477048,
+        "residualScale": 0.9969385968246655,
+        "trendCenter": [
+          270.39207735476384,
+          152.5229465556044
+        ]
+      },
+      {
+        "frame": 30,
+        "anchors": 126,
+        "scale": 1.0462498528469464,
+        "center": [
+          270.41020060205295,
+          154.86242329141567
+        ],
+        "correctionScale": 0.952818830677678,
+        "residualScale": 0.9968865613863203,
+        "trendCenter": [
+          270.40622842980855,
+          152.71573705368996
+        ]
+      },
+      {
+        "frame": 31,
+        "anchors": 126,
+        "scale": 1.0485234442238012,
+        "center": [
+          270.47622893703226,
+          156.27298167001197
+        ],
+        "correctionScale": 0.9513226801293,
+        "residualScale": 0.9974841331373911,
+        "trendCenter": [
+          270.42037950485326,
+          152.90852755177553
+        ]
+      },
+      {
+        "frame": 32,
+        "anchors": 126,
+        "scale": 1.0512980214836154,
+        "center": [
+          270.57571037023956,
+          157.3832862530738
+        ],
+        "correctionScale": 0.9498312208338257,
+        "residualScale": 0.9985556832059679,
+        "trendCenter": [
+          270.43453057989797,
+          153.10131804986113
+        ]
+      },
+      {
+        "frame": 33,
+        "anchors": 126,
+        "scale": 1.0520632189621517,
+        "center": [
+          270.58987683758534,
+          157.6118575451755
+        ],
+        "correctionScale": 0.948344430761315,
+        "residualScale": 0.9977182945115786,
+        "trendCenter": [
+          270.4486816549426,
+          153.2941085479467
+        ]
+      },
+      {
+        "frame": 34,
+        "anchors": 123,
+        "scale": 1.055371280176398,
+        "center": [
+          270.7085712066609,
+          156.85686256109048
+        ],
+        "correctionScale": 0.9468622880195487,
+        "residualScale": 0.9992912650579443,
+        "trendCenter": [
+          270.4628327299873,
+          153.48689904603228
+        ]
+      },
+      {
+        "frame": 35,
+        "anchors": 124,
+        "scale": 1.0565607668504156,
+        "center": [
+          270.7447561845665,
+          155.8017472570975
+        ],
+        "correctionScale": 0.9453847708529519,
+        "residualScale": 0.9988564584610993,
+        "trendCenter": [
+          270.47698380503203,
+          153.67968954411785
+        ]
+      },
+      {
+        "frame": 36,
+        "anchors": 124,
+        "scale": 1.058381244224761,
+        "center": [
+          270.7484553399603,
+          153.94917405209523
+        ],
+        "correctionScale": 0.9439118576415316,
+        "residualScale": 0.9990186063291498,
+        "trendCenter": [
+          270.49113488007674,
+          153.87248004220342
+        ]
+      },
+      {
+        "frame": 37,
+        "anchors": 127,
+        "scale": 1.0603360985151318,
+        "center": [
+          270.73863830654307,
+          152.67370518802488
+        ],
+        "correctionScale": 0.9424435268998214,
+        "residualScale": 0.9993068923837972,
+        "trendCenter": [
+          270.5052859551214,
+          154.06527054028902
+        ]
+      },
+      {
+        "frame": 38,
+        "anchors": 126,
+        "scale": 1.0616560072774428,
+        "center": [
+          270.7101151654219,
+          151.28012169550368
+        ],
+        "correctionScale": 0.9409797572758359,
+        "residualScale": 0.9989968120383612,
+        "trendCenter": [
+          270.5194370301661,
+          154.2580610383746
+        ]
+      },
+      {
+        "frame": 39,
+        "anchors": 127,
+        "scale": 1.06270060439523,
+        "center": [
+          270.6634683604972,
+          150.60927524972064
+        ],
+        "correctionScale": 0.9395205275500377,
+        "residualScale": 0.9984290324691505,
+        "trendCenter": [
+          270.5335881052108,
+          154.45085153646016
+        ]
+      },
+      {
+        "frame": 40,
+        "anchors": 126,
+        "scale": 1.065489525406225,
+        "center": [
+          270.7073813701621,
+          150.00338935618186
+        ],
+        "correctionScale": 0.9380658166343097,
+        "residualScale": 0.9994993017654935,
+        "trendCenter": [
+          270.5477391802555,
+          154.64364203454573
+        ]
+      },
+      {
+        "frame": 41,
+        "anchors": 125,
+        "scale": 1.0665967687546059,
+        "center": [
+          270.70502196997177,
+          150.02314707659977
+        ],
+        "correctionScale": 0.9366156035709413,
+        "residualScale": 0.9989911763339109,
+        "trendCenter": [
+          270.56189025530017,
+          154.8364325326313
+        ]
+      },
+      {
+        "frame": 42,
+        "anchors": 123,
+        "scale": 1.068308593661995,
+        "center": [
+          270.6587028939214,
+          150.5063099311856
+        ],
+        "correctionScale": 0.9351698675316211,
+        "residualScale": 0.9990500060177803,
+        "trendCenter": [
+          270.5760413303449,
+          155.0292230307169
+        ]
+      },
+      {
+        "frame": 43,
+        "anchors": 123,
+        "scale": 1.0694276366651227,
+        "center": [
+          270.60070606043575,
+          151.47876414260344
+        ],
+        "correctionScale": 0.9337285878164389,
+        "residualScale": 0.9985551569551967,
+        "trendCenter": [
+          270.5901924053896,
+          155.22201352880248
+        ]
+      },
+      {
+        "frame": 44,
+        "anchors": 123,
+        "scale": 1.0722530894844902,
+        "center": [
+          270.6173482309727,
+          153.30263323904347
+        ],
+        "correctionScale": 0.9322917438528991,
+        "residualScale": 0.999652702647154,
+        "trendCenter": [
+          270.6043434804343,
+          155.41480402688805
+        ]
+      },
+      {
+        "frame": 45,
+        "anchors": 124,
+        "scale": 1.074495475556573,
+        "center": [
+          270.6366851957691,
+          154.90344063396606
+        ],
+        "correctionScale": 0.9308593151949417,
+        "residualScale": 1.0002041225566547,
+        "trendCenter": [
+          270.61849455547895,
+          155.60759452497362
+        ]
+      },
+      {
+        "frame": 46,
+        "anchors": 122,
+        "scale": 1.076054978719554,
+        "center": [
+          270.6420602503984,
+          157.48589473263786
+        ],
+        "correctionScale": 0.9294312815219712,
+        "residualScale": 1.0001191578594124,
+        "trendCenter": [
+          270.63264563052365,
+          155.8003850230592
+        ]
+      },
+      {
+        "frame": 47,
+        "anchors": 123,
+        "scale": 1.077217350584738,
+        "center": [
+          270.6457029025564,
+          158.88065082305621
+        ],
+        "correctionScale": 0.9280076226378972,
+        "residualScale": 0.9996659125804369,
+        "trendCenter": [
+          270.64679670556836,
+          155.9931755211448
+        ]
+      },
+      {
+        "frame": 48,
+        "anchors": 123,
+        "scale": 1.0778791847585543,
+        "center": [
+          270.62550935971575,
+          160.43857465333252
+        ],
+        "correctionScale": 0.926588318470182,
+        "residualScale": 0.9987502613194394,
+        "trendCenter": [
+          270.660947780613,
+          156.18596601923036
+        ]
+      },
+      {
+        "frame": 49,
+        "anchors": 121,
+        "scale": 1.0788514951198758,
+        "center": [
+          270.6882351140674,
+          161.0657917679917
+        ],
+        "correctionScale": 0.925173349068896,
+        "residualScale": 0.9981246508880413,
+        "trendCenter": [
+          270.6750988556577,
+          156.37875651731594
+        ]
+      },
+      {
+        "frame": 50,
+        "anchors": 121,
+        "scale": 1.0801843712783794,
+        "center": [
+          270.6848501890459,
+          160.97881883486446
+        ],
+        "correctionScale": 0.9237626946057851,
+        "residualScale": 0.9978340254831716,
+        "trendCenter": [
+          270.68924993070243,
+          156.5715470154015
+        ]
+      },
+      {
+        "frame": 51,
+        "anchors": 117,
+        "scale": 1.0821423659885208,
+        "center": [
+          270.6925534574011,
+          160.2984388102358
+        ],
+        "correctionScale": 0.9223563353733422,
+        "residualScale": 0.99812086704541,
+        "trendCenter": [
+          270.70340100574714,
+          156.76433751348708
+        ]
+      },
+      {
+        "frame": 52,
+        "anchors": 113,
+        "scale": 1.0854278339913632,
+        "center": [
+          270.56554950005034,
+          158.7708856340323
+        ],
+        "correctionScale": 0.920954251783891,
+        "residualScale": 0.9996293787189254,
+        "trendCenter": [
+          270.7175520807918,
+          156.95712801157268
+        ]
+      },
+      {
+        "frame": 53,
+        "anchors": 113,
+        "scale": 1.0867448024553297,
+        "center": [
+          270.52390630427493,
+          157.50411667177616
+        ],
+        "correctionScale": 0.9195564243686766,
+        "residualScale": 0.9993231647470667,
+        "trendCenter": [
+          270.7317031558365,
+          157.14991850965825
+        ]
+      },
+      {
+        "frame": 54,
+        "anchors": 110,
+        "scale": 1.0875330273041806,
+        "center": [
+          270.3827855363081,
+          155.68972870472217
+        ],
+        "correctionScale": 0.9181628337769632,
+        "residualScale": 0.9985324061756459,
+        "trendCenter": [
+          270.7458542308812,
+          157.34270900774382
+        ]
+      },
+      {
+        "frame": 55,
+        "anchors": 103,
+        "scale": 1.08955248212184,
+        "center": [
+          270.3093322358305,
+          154.73030866752407
+        ],
+        "correctionScale": 0.9167734607751422,
+        "residualScale": 0.9988727997309856,
+        "trendCenter": [
+          270.7600053059259,
+          157.5354995058294
+        ]
+      }
+    ]
+  },
+  "wingRestoration": {
+    "forest_eagle": {
+      "method": "same-video same-wing tip pixels; boundary profile registration; only outside original source rectangle",
+      "paddingTop": 80,
+      "paddingRight": 0,
+      "frames": [
+        {
+          "frame": 0,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 22.19886047960855,
+              "referenceCutRow": 23,
+              "scale": [
+                0.7962962962962963,
+                1.15
+              ],
+              "restoredPixels": 434,
+              "transform": [
+                [
+                  0.7962962962962963,
+                  0.0,
+                  45.425925925925924
+                ],
+                [
+                  0.0,
+                  1.15,
+                  53.55
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 25.379722630477858,
+              "referenceCutRow": 16,
+              "scale": [
+                1.0,
+                1.15
+              ],
+              "restoredPixels": 474,
+              "transform": [
+                [
+                  1.0,
+                  0.0,
+                  -8.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  61.6
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 1,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 24.250562149406022,
+              "referenceCutRow": 23,
+              "scale": [
+                0.7407407407407407,
+                1.15
+              ],
+              "restoredPixels": 401,
+              "transform": [
+                [
+                  0.7407407407407407,
+                  0.0,
+                  49.814814814814824
+                ],
+                [
+                  0.0,
+                  1.15,
+                  53.55
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 25.06903984915708,
+              "referenceCutRow": 16,
+              "scale": [
+                0.9777777777777777,
+                1.15
+              ],
+              "restoredPixels": 465,
+              "transform": [
+                [
+                  0.9777777777777777,
+                  0.0,
+                  14.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  61.6
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 2,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 29,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 35.34925558857298,
+              "referenceCutRow": 72,
+              "scale": [
+                0.65625,
+                1.15
+              ],
+              "restoredPixels": 118,
+              "transform": [
+                [
+                  0.65625,
+                  0.0,
+                  -19.0625
+                ],
+                [
+                  0.0,
+                  1.15,
+                  -2.799999999999997
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 13,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 39.30987646869993,
+              "referenceCutRow": 80,
+              "scale": [
+                0.65625,
+                1.15
+              ],
+              "restoredPixels": 193,
+              "transform": [
+                [
+                  0.65625,
+                  0.0,
+                  273.59375
+                ],
+                [
+                  0.0,
+                  1.15,
+                  -12.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 3,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 20,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 6.186677037406169,
+              "referenceCutRow": 53,
+              "scale": [
+                0.9,
+                1.15
+              ],
+              "restoredPixels": 43,
+              "transform": [
+                [
+                  0.9,
+                  0.0,
+                  47.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  19.050000000000004
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 4,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 10.405315345381622,
+              "referenceCutRow": 51,
+              "scale": [
+                0.6666666666666666,
+                1.0
+              ],
+              "restoredPixels": 30,
+              "transform": [
+                [
+                  0.6666666666666666,
+                  0.0,
+                  183.66666666666669
+                ],
+                [
+                  0.0,
+                  1.0,
+                  29.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 4,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 5,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 6,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 7,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 8,
+          "sourceTopClipped": false,
+          "sourceRightClipped": true,
+          "wings": []
+        },
+        {
+          "frame": 9,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 10,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 11,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 12,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 13,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 14,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 15,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 16,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 23.561157485620903,
+              "referenceCutRow": 24,
+              "scale": [
+                0.7857142857142857,
+                1.15
+              ],
+              "restoredPixels": 473,
+              "transform": [
+                [
+                  0.7857142857142857,
+                  0.0,
+                  53.21428571428572
+                ],
+                [
+                  0.0,
+                  1.15,
+                  52.400000000000006
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 23.404041003466215,
+              "referenceCutRow": 16,
+              "scale": [
+                1.0222222222222221,
+                1.15
+              ],
+              "restoredPixels": 485,
+              "transform": [
+                [
+                  1.0222222222222221,
+                  0.0,
+                  -25.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  61.6
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 17,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 22.675021606803483,
+              "referenceCutRow": 23,
+              "scale": [
+                0.7407407407407407,
+                1.15
+              ],
+              "restoredPixels": 401,
+              "transform": [
+                [
+                  0.7407407407407407,
+                  0.0,
+                  48.814814814814824
+                ],
+                [
+                  0.0,
+                  1.15,
+                  53.55
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 24.363018322044066,
+              "referenceCutRow": 16,
+              "scale": [
+                0.9555555555555556,
+                1.15
+              ],
+              "restoredPixels": 456,
+              "transform": [
+                [
+                  0.9555555555555556,
+                  0.0,
+                  22.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  61.6
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 18,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 29,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 34.109449436627415,
+              "referenceCutRow": 73,
+              "scale": [
+                0.6567164179104478,
+                1.15
+              ],
+              "restoredPixels": 166,
+              "transform": [
+                [
+                  0.6567164179104478,
+                  0.0,
+                  -18.850746268656707
+                ],
+                [
+                  0.0,
+                  1.15,
+                  -3.9499999999999886
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 35.694208319218056,
+              "referenceCutRow": 16,
+              "scale": [
+                0.8444444444444444,
+                1.15
+              ],
+              "restoredPixels": 401,
+              "transform": [
+                [
+                  0.8444444444444444,
+                  0.0,
+                  129.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  61.6
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 19,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 20,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 7.123446582508476,
+              "referenceCutRow": 56,
+              "scale": [
+                0.9230769230769231,
+                1.15
+              ],
+              "restoredPixels": 76,
+              "transform": [
+                [
+                  0.9230769230769231,
+                  0.0,
+                  45.076923076923066
+                ],
+                [
+                  0.0,
+                  1.15,
+                  15.600000000000009
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 52,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 10.348564708123726,
+              "referenceCutRow": 55,
+              "scale": [
+                0.75,
+                1.15
+              ],
+              "restoredPixels": 6,
+              "transform": [
+                [
+                  0.75,
+                  0.0,
+                  128.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  16.750000000000007
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 20,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 21,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 22,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 23,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 24,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 25,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 26,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 27,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 28,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 29,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 30,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 31,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 32,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 24.30656845690347,
+              "referenceCutRow": 23,
+              "scale": [
+                0.7962962962962963,
+                1.15
+              ],
+              "restoredPixels": 434,
+              "transform": [
+                [
+                  0.7962962962962963,
+                  0.0,
+                  49.425925925925924
+                ],
+                [
+                  0.0,
+                  1.15,
+                  53.55
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 18.059442070836766,
+              "referenceCutRow": 16,
+              "scale": [
+                0.9777777777777777,
+                1.15
+              ],
+              "restoredPixels": 465,
+              "transform": [
+                [
+                  0.9777777777777777,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  61.6
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 33,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 24.049836035559835,
+              "referenceCutRow": 23,
+              "scale": [
+                0.7777777777777778,
+                1.15
+              ],
+              "restoredPixels": 423,
+              "transform": [
+                [
+                  0.7777777777777778,
+                  0.0,
+                  38.55555555555554
+                ],
+                [
+                  0.0,
+                  1.15,
+                  53.55
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 24.21681293927465,
+              "referenceCutRow": 16,
+              "scale": [
+                0.9333333333333333,
+                1.15
+              ],
+              "restoredPixels": 445,
+              "transform": [
+                [
+                  0.9333333333333333,
+                  0.0,
+                  39.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  61.6
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 34,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 37.734471524769674,
+              "referenceCutRow": 23,
+              "scale": [
+                0.7592592592592593,
+                1.15
+              ],
+              "restoredPixels": 413,
+              "transform": [
+                [
+                  0.7592592592592593,
+                  0.0,
+                  -5.3148148148148096
+                ],
+                [
+                  0.0,
+                  1.15,
+                  53.55
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 13,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 37.14138697726016,
+              "referenceCutRow": 80,
+              "scale": [
+                0.65625,
+                1.0
+              ],
+              "restoredPixels": 170,
+              "transform": [
+                [
+                  0.65625,
+                  0.0,
+                  275.59375
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 35,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 20,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 10.061162030197094,
+              "referenceCutRow": 53,
+              "scale": [
+                1.0,
+                1.15
+              ],
+              "restoredPixels": 49,
+              "transform": [
+                [
+                  1.0,
+                  0.0,
+                  38.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  19.050000000000004
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 4,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 9.13222497775216,
+              "referenceCutRow": 50,
+              "scale": [
+                0.9090909090909091,
+                1.15
+              ],
+              "restoredPixels": 35,
+              "transform": [
+                [
+                  0.9090909090909091,
+                  0.0,
+                  24.454545454545496
+                ],
+                [
+                  0.0,
+                  1.15,
+                  22.500000000000007
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 36,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 37,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 38,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 39,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 40,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 41,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 42,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 43,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 44,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 45,
+          "sourceTopClipped": false,
+          "sourceRightClipped": true,
+          "wings": []
+        },
+        {
+          "frame": 46,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 47,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 30.29885807277212,
+              "referenceCutRow": 12,
+              "scale": [
+                0.7391304347826086,
+                1.0
+              ],
+              "restoredPixels": 25,
+              "transform": [
+                [
+                  0.7391304347826086,
+                  0.0,
+                  52.521739130434796
+                ],
+                [
+                  0.0,
+                  1.0,
+                  68.0
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 14,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 23.456182515121412,
+              "referenceCutRow": 43,
+              "scale": [
+                1.0,
+                1.15
+              ],
+              "restoredPixels": 3,
+              "transform": [
+                [
+                  1.0,
+                  0.0,
+                  44.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  30.550000000000004
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 48,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 24.981296114997928,
+              "referenceCutRow": 23,
+              "scale": [
+                0.8148148148148148,
+                1.15
+              ],
+              "restoredPixels": 444,
+              "transform": [
+                [
+                  0.8148148148148148,
+                  0.0,
+                  47.296296296296305
+                ],
+                [
+                  0.0,
+                  1.15,
+                  53.55
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 24.654600497425005,
+              "referenceCutRow": 16,
+              "scale": [
+                1.0444444444444445,
+                1.15
+              ],
+              "restoredPixels": 489,
+              "transform": [
+                [
+                  1.0444444444444445,
+                  0.0,
+                  -37.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  61.6
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 49,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 23.9702083716935,
+              "referenceCutRow": 23,
+              "scale": [
+                0.7592592592592593,
+                1.15
+              ],
+              "restoredPixels": 413,
+              "transform": [
+                [
+                  0.7592592592592593,
+                  0.0,
+                  41.68518518518519
+                ],
+                [
+                  0.0,
+                  1.15,
+                  53.55
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 31,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 21.92903980695043,
+              "referenceCutRow": 16,
+              "scale": [
+                0.9333333333333333,
+                1.15
+              ],
+              "restoredPixels": 445,
+              "transform": [
+                [
+                  0.9333333333333333,
+                  0.0,
+                  40.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  61.6
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 50,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 29,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 35.89594696377404,
+              "referenceCutRow": 72,
+              "scale": [
+                0.671875,
+                1.15
+              ],
+              "restoredPixels": 119,
+              "transform": [
+                [
+                  0.671875,
+                  0.0,
+                  -29.46875
+                ],
+                [
+                  0.0,
+                  1.15,
+                  -2.799999999999997
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 13,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 37.958687809031964,
+              "referenceCutRow": 80,
+              "scale": [
+                0.65625,
+                1.15
+              ],
+              "restoredPixels": 193,
+              "transform": [
+                [
+                  0.65625,
+                  0.0,
+                  277.59375
+                ],
+                [
+                  0.0,
+                  1.15,
+                  -12.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 51,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 4,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 11.660959120581804,
+              "referenceCutRow": 47,
+              "scale": [
+                0.7777777777777778,
+                1.15
+              ],
+              "restoredPixels": 28,
+              "transform": [
+                [
+                  0.7777777777777778,
+                  0.0,
+                  54.22222222222222
+                ],
+                [
+                  0.0,
+                  1.15,
+                  25.950000000000003
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 52,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 10.657663905511422,
+              "referenceCutRow": 55,
+              "scale": [
+                0.75,
+                1.15
+              ],
+              "restoredPixels": 6,
+              "transform": [
+                [
+                  0.75,
+                  0.0,
+                  130.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  16.750000000000007
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 52,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 53,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 54,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 55,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        }
+      ]
+    },
+    "forest_bat": {
+      "method": "same-video same-wing tip pixels; boundary profile registration; only outside original source rectangle",
+      "paddingTop": 80,
+      "paddingRight": 80,
+      "frames": [
+        {
+          "frame": 0,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 1,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 2,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 1,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 23.355331856281275,
+              "referenceCutRow": 11,
+              "scale": [
+                0.6911764705882353,
+                1.15
+              ],
+              "restoredPixels": 137,
+              "transform": [
+                [
+                  0.6911764705882353,
+                  0.0,
+                  59.38235294117648
+                ],
+                [
+                  0.0,
+                  1.15,
+                  67.35
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 1,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 42.63883955096377,
+              "referenceCutRow": 15,
+              "scale": [
+                0.7236842105263158,
+                0.85
+              ],
+              "restoredPixels": 83,
+              "transform": [
+                [
+                  0.7236842105263158,
+                  0.0,
+                  163.6973684210526
+                ],
+                [
+                  0.0,
+                  0.85,
+                  67.25
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 3,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 1,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 58.82914685049437,
+              "referenceCutRow": 9,
+              "scale": [
+                0.8292682926829268,
+                0.85
+              ],
+              "restoredPixels": 43,
+              "transform": [
+                [
+                  0.8292682926829268,
+                  0.0,
+                  19.951219512195124
+                ],
+                [
+                  0.0,
+                  0.85,
+                  72.35
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 39,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 54.8888597755847,
+              "referenceCutRow": 13,
+              "scale": [
+                0.65625,
+                1.15
+              ],
+              "restoredPixels": 59,
+              "transform": [
+                [
+                  0.65625,
+                  0.0,
+                  205.5
+                ],
+                [
+                  0.0,
+                  1.15,
+                  65.05
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 4,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 37,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 83.20639425581578,
+              "referenceCutRow": 45,
+              "scale": [
+                0.8333333333333334,
+                1.15
+              ],
+              "restoredPixels": 5,
+              "transform": [
+                [
+                  0.8333333333333334,
+                  0.0,
+                  -126.5
+                ],
+                [
+                  0.0,
+                  1.15,
+                  28.250000000000007
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 37,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 79.12814332859963,
+              "referenceCutRow": 42,
+              "scale": [
+                0.7586206896551724,
+                1.15
+              ],
+              "restoredPixels": 20,
+              "transform": [
+                [
+                  0.7586206896551724,
+                  0.0,
+                  287.65517241379314
+                ],
+                [
+                  0.0,
+                  1.15,
+                  31.700000000000003
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 5,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 44,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 12.823967796001428,
+              "referenceCutRow": 66,
+              "scale": [
+                0.7272727272727273,
+                1.15
+              ],
+              "restoredPixels": 41,
+              "transform": [
+                [
+                  0.7272727272727273,
+                  0.0,
+                  49.27272727272727
+                ],
+                [
+                  0.0,
+                  1.15,
+                  4.1000000000000085
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 44,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 16.33982197349784,
+              "referenceCutRow": 72,
+              "scale": [
+                0.6842105263157895,
+                1.15
+              ],
+              "restoredPixels": 191,
+              "transform": [
+                [
+                  0.6842105263157895,
+                  0.0,
+                  190.9473684210526
+                ],
+                [
+                  0.0,
+                  1.15,
+                  -2.799999999999997
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 6,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 7,
+          "sourceTopClipped": false,
+          "sourceRightClipped": true,
+          "wings": [
+            {
+              "wing": 1,
+              "edge": "right",
+              "referenceFrame": 25,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 7.817164898549162,
+              "referenceCutRow": 19,
+              "scale": [
+                0.8125,
+                1.15
+              ],
+              "restoredPixels": 111,
+              "transform": [
+                [
+                  0.8125,
+                  0.0,
+                  74.5
+                ],
+                [
+                  0.0,
+                  1.15,
+                  58.150000000000006
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 8,
+          "sourceTopClipped": false,
+          "sourceRightClipped": true,
+          "wings": [
+            {
+              "wing": 1,
+              "edge": "right",
+              "referenceFrame": 9,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 20.63532732064708,
+              "referenceCutRow": 55,
+              "scale": [
+                0.6666666666666666,
+                1.15
+              ],
+              "restoredPixels": 115,
+              "transform": [
+                [
+                  0.6666666666666666,
+                  0.0,
+                  31.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  16.750000000000007
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 9,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 10,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 11,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 12,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 13,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 14,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 15,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 16,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 17,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 18,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 19,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 20,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 1,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 22.115150829810265,
+              "referenceCutRow": 12,
+              "scale": [
+                0.7123287671232876,
+                1.0
+              ],
+              "restoredPixels": 168,
+              "transform": [
+                [
+                  0.7123287671232876,
+                  0.0,
+                  30.54794520547945
+                ],
+                [
+                  0.0,
+                  1.0,
+                  68.0
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 1,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 29.30495686167083,
+              "referenceCutRow": 19,
+              "scale": [
+                0.6509433962264151,
+                0.85
+              ],
+              "restoredPixels": 272,
+              "transform": [
+                [
+                  0.6509433962264151,
+                  0.0,
+                  231.3490566037736
+                ],
+                [
+                  0.0,
+                  0.85,
+                  63.85
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 21,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 1,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 16.35161201299964,
+              "referenceCutRow": 14,
+              "scale": [
+                0.6707317073170732,
+                1.0
+              ],
+              "restoredPixels": 260,
+              "transform": [
+                [
+                  0.6707317073170732,
+                  0.0,
+                  57.121951219512184
+                ],
+                [
+                  0.0,
+                  1.0,
+                  66.0
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 1,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 31.106224666229632,
+              "referenceCutRow": 16,
+              "scale": [
+                0.6551724137931034,
+                1.0
+              ],
+              "restoredPixels": 145,
+              "transform": [
+                [
+                  0.6551724137931034,
+                  0.0,
+                  195.58620689655174
+                ],
+                [
+                  0.0,
+                  1.0,
+                  64.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 22,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 1,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 50.33318394781342,
+              "referenceCutRow": 9,
+              "scale": [
+                0.7317073170731707,
+                0.85
+              ],
+              "restoredPixels": 38,
+              "transform": [
+                [
+                  0.7317073170731707,
+                  0.0,
+                  22.78048780487805
+                ],
+                [
+                  0.0,
+                  0.85,
+                  72.35
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 39,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 55.24610032472987,
+              "referenceCutRow": 12,
+              "scale": [
+                0.6981132075471698,
+                1.15
+              ],
+              "restoredPixels": 18,
+              "transform": [
+                [
+                  0.6981132075471698,
+                  0.0,
+                  191.16981132075472
+                ],
+                [
+                  0.0,
+                  1.15,
+                  66.2
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 23,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 1,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 81.34009833752107,
+              "referenceCutRow": 7,
+              "scale": [
+                0.8,
+                1.15
+              ],
+              "restoredPixels": 7,
+              "transform": [
+                [
+                  0.8,
+                  0.0,
+                  -22.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  71.95
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 37,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 85.90186683676261,
+              "referenceCutRow": 42,
+              "scale": [
+                0.6896551724137931,
+                1.15
+              ],
+              "restoredPixels": 18,
+              "transform": [
+                [
+                  0.6896551724137931,
+                  0.0,
+                  320.41379310344826
+                ],
+                [
+                  0.0,
+                  1.15,
+                  31.700000000000003
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 24,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 1,
+              "referenceFrame": 25,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 7.598954634060378,
+              "referenceCutRow": 50,
+              "scale": [
+                0.8,
+                1.15
+              ],
+              "restoredPixels": 4,
+              "transform": [
+                [
+                  0.8,
+                  0.0,
+                  108.79999999999995
+                ],
+                [
+                  0.0,
+                  1.15,
+                  22.500000000000007
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 25,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 26,
+          "sourceTopClipped": false,
+          "sourceRightClipped": true,
+          "wings": [
+            {
+              "wing": 1,
+              "edge": "right",
+              "referenceFrame": 25,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 11.641445839214686,
+              "referenceCutRow": 19,
+              "scale": [
+                0.6875,
+                1.15
+              ],
+              "restoredPixels": 95,
+              "transform": [
+                [
+                  0.6875,
+                  0.0,
+                  116.5
+                ],
+                [
+                  0.0,
+                  1.15,
+                  58.150000000000006
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 27,
+          "sourceTopClipped": false,
+          "sourceRightClipped": true,
+          "wings": [
+            {
+              "wing": 1,
+              "edge": "right",
+              "referenceFrame": 9,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 19.372542362761337,
+              "referenceCutRow": 55,
+              "scale": [
+                0.6666666666666666,
+                1.15
+              ],
+              "restoredPixels": 115,
+              "transform": [
+                [
+                  0.6666666666666666,
+                  0.0,
+                  30.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  16.750000000000007
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 28,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 29,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 30,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 31,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 32,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 33,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 34,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 35,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 36,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 37,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 38,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 39,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 40,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 1,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 20.7043994856589,
+              "referenceCutRow": 13,
+              "scale": [
+                0.6623376623376623,
+                1.15
+              ],
+              "restoredPixels": 249,
+              "transform": [
+                [
+                  0.6623376623376623,
+                  0.0,
+                  61.246753246753244
+                ],
+                [
+                  0.0,
+                  1.15,
+                  65.05
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 1,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 39.60451897937296,
+              "referenceCutRow": 16,
+              "scale": [
+                0.7011494252873564,
+                0.85
+              ],
+              "restoredPixels": 122,
+              "transform": [
+                [
+                  0.7011494252873564,
+                  0.0,
+                  170.57471264367814
+                ],
+                [
+                  0.0,
+                  0.85,
+                  66.4
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 41,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 36,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 56.3659601026295,
+              "referenceCutRow": 64,
+              "scale": [
+                0.6666666666666666,
+                1.15
+              ],
+              "restoredPixels": 447,
+              "transform": [
+                [
+                  0.6666666666666666,
+                  0.0,
+                  -14.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  6.400000000000006
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 1,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 50.49384548860736,
+              "referenceCutRow": 14,
+              "scale": [
+                0.676923076923077,
+                0.85
+              ],
+              "restoredPixels": 55,
+              "transform": [
+                [
+                  0.676923076923077,
+                  0.0,
+                  196.98461538461538
+                ],
+                [
+                  0.0,
+                  0.85,
+                  68.1
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 42,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 37,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 82.5629681568471,
+              "referenceCutRow": 45,
+              "scale": [
+                1.0,
+                0.85
+              ],
+              "restoredPixels": 6,
+              "transform": [
+                [
+                  1.0,
+                  0.0,
+                  -176.0
+                ],
+                [
+                  0.0,
+                  0.85,
+                  41.75
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 37,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 77.59297071910979,
+              "referenceCutRow": 42,
+              "scale": [
+                0.7931034482758621,
+                1.15
+              ],
+              "restoredPixels": 21,
+              "transform": [
+                [
+                  0.7931034482758621,
+                  0.0,
+                  272.2758620689655
+                ],
+                [
+                  0.0,
+                  1.15,
+                  31.700000000000003
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 43,
+          "sourceTopClipped": true,
+          "sourceRightClipped": false,
+          "wings": [
+            {
+              "wing": 0,
+              "referenceFrame": 44,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 12.534873688030604,
+              "referenceCutRow": 74,
+              "scale": [
+                0.6875,
+                1.15
+              ],
+              "restoredPixels": 123,
+              "transform": [
+                [
+                  0.6875,
+                  0.0,
+                  41.75
+                ],
+                [
+                  0.0,
+                  1.15,
+                  -5.099999999999994
+                ]
+              ]
+            },
+            {
+              "wing": 1,
+              "referenceFrame": 44,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 15.956275921416118,
+              "referenceCutRow": 74,
+              "scale": [
+                0.6666666666666666,
+                1.15
+              ],
+              "restoredPixels": 216,
+              "transform": [
+                [
+                  0.6666666666666666,
+                  0.0,
+                  204.33333333333337
+                ],
+                [
+                  0.0,
+                  1.15,
+                  -5.099999999999994
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 44,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 45,
+          "sourceTopClipped": false,
+          "sourceRightClipped": true,
+          "wings": [
+            {
+              "wing": 1,
+              "edge": "right",
+              "referenceFrame": 25,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 8.878225749586944,
+              "referenceCutRow": 21,
+              "scale": [
+                0.6666666666666666,
+                1.0
+              ],
+              "restoredPixels": 99,
+              "transform": [
+                [
+                  0.6666666666666666,
+                  0.0,
+                  83.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  59.0
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 46,
+          "sourceTopClipped": false,
+          "sourceRightClipped": true,
+          "wings": [
+            {
+              "wing": 1,
+              "edge": "right",
+              "referenceFrame": 47,
+              "method": "same-wing boundary profile registration",
+              "boundaryFitError": 14.0623016172169,
+              "referenceCutRow": 62,
+              "scale": [
+                0.6666666666666666,
+                1.15
+              ],
+              "restoredPixels": 185,
+              "transform": [
+                [
+                  0.6666666666666666,
+                  0.0,
+                  34.0
+                ],
+                [
+                  0.0,
+                  1.15,
+                  8.700000000000003
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "frame": 47,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 48,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 49,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 50,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 51,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 52,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 53,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 54,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        },
+        {
+          "frame": 55,
+          "sourceTopClipped": false,
+          "sourceRightClipped": false,
+          "wings": []
+        }
+      ]
+    }
+  },
+  "atlasSha256": "24f59c021db768e3d13b9ed225e708aa626c0231bd53ef437691fe67d348555a",
+  "frameCount": 85
+}

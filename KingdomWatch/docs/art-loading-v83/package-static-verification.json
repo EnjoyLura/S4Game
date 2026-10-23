@@ -1,0 +1,16 @@
+{
+  "release": "649b834cf121038a",
+  "previousRelease": "35e98ba11f9cd12d",
+  "runtimeBytes": 351468282,
+  "previousRuntimeBytes": 351459226,
+  "fileCount": 1898,
+  "nativeFilesByteIdentical": 701,
+  "nativePathsAndHashesUnchanged": true,
+  "startupScreenHiddenExceptFailures": true,
+  "diagnosticsStandalone": true,
+  "inlineAndMainScriptsSyntaxChecked": 8,
+  "startupHintsForOneChapterOrTutorialPlusTwoWalletIcons": true,
+  "javascriptExecuted": false,
+  "wasmCompiledOrInstantiated": false,
+  "gameBrowserAudioOrGameplayTestsStarted": false
+}

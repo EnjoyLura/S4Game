@@ -1,0 +1,49 @@
+{
+  "originalAssets": 1870,
+  "currentAssets": 1870,
+  "changed": [
+    "assets/resources/ux/chapter1_mob_walk_v81.png",
+    "assets/resources/ux/chapter1_mob_walk_v84.png",
+    "assets/scripts/battle/BattleDirector.ts",
+    "assets/scripts/battle/MobAnim.ts",
+    "assets/scripts/battle/Monster.ts",
+    "assets/scripts/battle/MonsterDeath.ts"
+  ],
+  "added": [],
+  "removed": [],
+  "atlases": {
+    "v81": {
+      "sha256": "4b6c5238e668e62ca571b566e6bd957193a71cf76ae8c1ad091a7900da01261e",
+      "changedPixels": 293446,
+      "untargetedFramesExactlyUnchanged": true,
+      "frameManifestUnchanged": true
+    },
+    "v84": {
+      "sha256": "f85c2fdf712f57f7189a1ad0e16883edb47764065c4c611d1713a59a7377dce8",
+      "changedPixels": 127919,
+      "untargetedFramesExactlyUnchanged": true,
+      "frameManifestUnchanged": true
+    }
+  },
+  "cosmeticGeometry": {
+    "orc_axeman": {
+      "displayScale": 1.6,
+      "fixedGroundPlane": true
+    },
+    "wolf_rider": {
+      "displayScale": 1.2,
+      "fixedGroundPlane": true
+    },
+    "goblin_slinger": {
+      "displayScale": 1.3,
+      "fixedGroundPlane": true
+    }
+  },
+  "axeVisibleHeightRelativeToShield": 1.0591065836278768,
+  "allCombatAndChapterDefinitionsUnchanged": true,
+  "allFrameCountsAndSourceCyclesUnchanged": true,
+  "walkPlayback": "chapter-one eight IDs: 0.5; forest and other clips: 1",
+  "typeDiagnostics": "same 10 as baseline",
+  "gameOrBrowserStarted": false,
+  "wasmExecuted": false
+}

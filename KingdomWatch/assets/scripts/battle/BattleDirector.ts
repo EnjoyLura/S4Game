@@ -895,12 +895,12 @@ export class BattleDirector extends Component {
 
   private exitBattle(): void {
     if (this.isEndless && this.state !== 'lose' && this.state !== 'win') { this.finishEndless(); return; }
-    // After a chapter-ending victory, focus the newly available chapter without starting battle.
+    // Every campaign victory focuses the following stage without starting it.
     const completed = campaignStage(this.levelDef.id);
     const next = completed && CAMPAIGN_STAGES[completed.order + 1];
-    if (!this.isEndless && this.state === 'win' && completed && next && next.chapter !== completed.chapter
+    if (!this.isEndless && this.state === 'win' && completed && next
       && campaignLevelOpen(next.id, loadSave().stars)) {
-      this.changeScene('main', next.id, 0);
+      this.changeScene('main', next.id, next.chapter === completed.chapter ? flow.diff : 0);
       return;
     }
     this.changeScene('main', this.levelDef.id, flow.diff);
@@ -926,7 +926,7 @@ export class BattleDirector extends Component {
     if (mode === 'main') {
       const bowLesson = !this.isEndless && pendingBowLesson();
       flow.mainTab = bowLesson ? 1 : 2;
-      flow.levelReturn = bowLesson ? null : { id: levelId, diff };
+      flow.levelReturn = { id: levelId, diff };
       if (!this.isEndless && !bowLesson && pendingPyroSquadLesson()) flow.levelReturn = { id: '1-3', diff: 0 };
       if (bowLesson) { loadSave().curHero = 'archer'; saveSave(); }
       flow.endlessPage = this.isEndless;

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>第一章四怪 · 视频序列帧 v84</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#ece5d6;color:#273c35;font:16px/1.6 system-ui,sans-serif}main{max-width:1080px;margin:auto;padding:28px}h1{font-size:28px;margin:0 0 6px}p{margin:4px 0 22px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}figure{margin:0;padding:16px;background:#faf6ec;border-radius:16px}figure img{display:block;max-width:100%;width:320px;margin:auto}figcaption{display:flex;justify-content:space-between;gap:12px}small{color:#617267}.wide{margin:24px 0}video{display:block;width:100%;max-width:512px;margin:16px auto;border-radius:12px}.compare img{width:800px}a{color:inherit} @media(max-width:560px){main{padding:16px}.grid{gap:10px}figure{padding:10px}figcaption{display:block}small{display:block}}
+</style>
+<main><h1>第一章四怪 · 行走序列帧</h1>
+<p>各自使用连续正向帧循环，保持24fps原速；将军坐骑步行。</p>
+<div class="grid">
+<figure><figcaption><b>兽族斧兵</b><small>23帧 · 0.958秒</small></figcaption><img src="orc_axeman.gif" alt="斧兵行走"></figure>
+<figure><figcaption><b>兽族攻城车</b><small>30帧 · 1.25秒</small></figcaption><img src="orc_siege_cart.gif" alt="攻城车推进"></figure>
+<figure><figcaption><b>兽族投石兵</b><small>23帧 · 0.958秒</small></figcaption><img src="goblin_slinger.gif" alt="投石兵行走"></figure>
+<figure><figcaption><b>兽族将军</b><small>23帧 · 0.958秒</small></figcaption><img src="goblin_king.gif" alt="将军骑战猪步行"></figure>
+</div>
+<figure class="wide compare"><figcaption><b>攻城车尺寸校正对照</b><small>左：原片　右：校正后</small></figcaption><img src="cart-before-after.gif" alt="原片全程的尺寸校正对照"><p>车架追踪测得原片约放大12.2%。校正缓慢缩放和位移，保留滚动、颠簸和原片的轻微造型变化；这里展示完整源片，重播处不是选定的游戏循环。</p></figure>
+<figure class="wide"><figcaption><b>四怪同步预览</b><small>全部周期完整重复 · 28.75秒</small></figcaption><video src="four-monsters-preview.mp4" controls muted loop playsinline poster="four-monsters-preview.png"></video></figure>
+<p><a href="loop-seams.jpg">查看末两帧 → 首两帧 → 源片下一帧对照</a>　·　<a href="https://enjoylura.github.io/kingdom-watch-play/?v=monster-video-v84">打开游戏</a></p>
+</main></html>

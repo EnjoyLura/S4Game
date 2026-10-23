@@ -101,7 +101,7 @@ function onSceneLaunched(): void {
     }, warmBattlefield('1-1', ['archer', 'sniper']));
   } else {
     root.addComponent(MainUI);
-    deferUIWarmup(root, () => { warmEntryArt(); uxPreloadIdle(8000); });
+    deferUIWarmup(root, () => { warmEntryArt('idle'); uxPreloadIdle(1500); }, 200);
   }
   if (!enteringBattle()) motionIn(root, 'fade');
   const touchLayer = new Node('TouchFeedbackLayer');

@@ -1,0 +1,41 @@
+{
+  "chapters": 16,
+  "monsters": 86,
+  "animated": 15,
+  "verifiedImages": 100,
+  "sourcePixelIdentity": true,
+  "chapterCounts": [
+    8,
+    8,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "htmlUniqueIds": 106,
+  "domReferences": 103,
+  "localScriptAndStyleFiles": 6,
+  "dataMatchesJSON": true,
+  "gameInputsMatchSnapshot": true,
+  "candidateEntries": 633,
+  "candidateStorageKeyPreserved": true,
+  "browserRun": false,
+  "gameRun": false,
+  "javaScriptSyntaxChecked": [
+    "catalog.js",
+    "catalog-data.js",
+    "live-catalog.js",
+    "live-catalog-data.js"
+  ],
+  "trackedWhitespaceCheck": true
+}

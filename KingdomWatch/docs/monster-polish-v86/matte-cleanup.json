@@ -1,0 +1,1397 @@
+{
+  "goblin_worker": {
+    "atlas": "assets\\resources\\ux\\chapter1_mob_walk_v81.png",
+    "frames": [
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1255,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1255,
+        "sourceFrame": 29,
+        "frameIndex": 0
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1211,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1211,
+        "sourceFrame": 30,
+        "frameIndex": 1
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1190,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1190,
+        "sourceFrame": 31,
+        "frameIndex": 2
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1200,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1200,
+        "sourceFrame": 32,
+        "frameIndex": 3
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1204,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1204,
+        "sourceFrame": 33,
+        "frameIndex": 4
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1223,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1223,
+        "sourceFrame": 34,
+        "frameIndex": 5
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1225,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1225,
+        "sourceFrame": 35,
+        "frameIndex": 6
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1229,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1229,
+        "sourceFrame": 36,
+        "frameIndex": 7
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1241,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1241,
+        "sourceFrame": 37,
+        "frameIndex": 8
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              118,
+              183,
+              10,
+              14
+            ],
+            "area": 83
+          },
+          {
+            "bbox": [
+              148,
+              205,
+              4,
+              7
+            ],
+            "area": 19
+          }
+        ],
+        "alphaPixelsChanged": 1335,
+        "enclosedPixelsRemoved": 118,
+        "outerFringePixelsRemoved": 1217,
+        "sourceFrame": 38,
+        "frameIndex": 9
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              111,
+              182,
+              3,
+              5
+            ],
+            "area": 9
+          },
+          {
+            "bbox": [
+              119,
+              184,
+              9,
+              12
+            ],
+            "area": 73
+          },
+          {
+            "bbox": [
+              148,
+              205,
+              4,
+              7
+            ],
+            "area": 20
+          },
+          {
+            "bbox": [
+              142,
+              247,
+              2,
+              4
+            ],
+            "area": 8
+          }
+        ],
+        "alphaPixelsChanged": 1349,
+        "enclosedPixelsRemoved": 150,
+        "outerFringePixelsRemoved": 1213,
+        "sourceFrame": 39,
+        "frameIndex": 10
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              125,
+              185,
+              5,
+              7
+            ],
+            "area": 21
+          },
+          {
+            "bbox": [
+              151,
+              205,
+              3,
+              6
+            ],
+            "area": 14
+          },
+          {
+            "bbox": [
+              141,
+              219,
+              11,
+              29
+            ],
+            "area": 108
+          }
+        ],
+        "alphaPixelsChanged": 1346,
+        "enclosedPixelsRemoved": 190,
+        "outerFringePixelsRemoved": 1156,
+        "sourceFrame": 40,
+        "frameIndex": 11
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              152,
+              206,
+              3,
+              6
+            ],
+            "area": 12
+          },
+          {
+            "bbox": [
+              142,
+              220,
+              10,
+              27
+            ],
+            "area": 89
+          }
+        ],
+        "alphaPixelsChanged": 1271,
+        "enclosedPixelsRemoved": 133,
+        "outerFringePixelsRemoved": 1138,
+        "sourceFrame": 41,
+        "frameIndex": 12
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              154,
+              209,
+              3,
+              6
+            ],
+            "area": 15
+          },
+          {
+            "bbox": [
+              144,
+              223,
+              10,
+              26
+            ],
+            "area": 72
+          }
+        ],
+        "alphaPixelsChanged": 1218,
+        "enclosedPixelsRemoved": 110,
+        "outerFringePixelsRemoved": 1108,
+        "sourceFrame": 42,
+        "frameIndex": 13
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              155,
+              211,
+              3,
+              6
+            ],
+            "area": 14
+          },
+          {
+            "bbox": [
+              143,
+              223,
+              12,
+              26
+            ],
+            "area": 83
+          }
+        ],
+        "alphaPixelsChanged": 1208,
+        "enclosedPixelsRemoved": 124,
+        "outerFringePixelsRemoved": 1084,
+        "sourceFrame": 43,
+        "frameIndex": 14
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              155,
+              211,
+              3,
+              6
+            ],
+            "area": 14
+          },
+          {
+            "bbox": [
+              143,
+              223,
+              12,
+              26
+            ],
+            "area": 86
+          }
+        ],
+        "alphaPixelsChanged": 1216,
+        "enclosedPixelsRemoved": 118,
+        "outerFringePixelsRemoved": 1098,
+        "sourceFrame": 44,
+        "frameIndex": 15
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              128,
+              188,
+              7,
+              12
+            ],
+            "area": 55
+          },
+          {
+            "bbox": [
+              141,
+              212,
+              19,
+              39
+            ],
+            "area": 188
+          }
+        ],
+        "alphaPixelsChanged": 1339,
+        "enclosedPixelsRemoved": 276,
+        "outerFringePixelsRemoved": 1063,
+        "sourceFrame": 45,
+        "frameIndex": 16
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              139,
+              211,
+              22,
+              45
+            ],
+            "area": 235
+          }
+        ],
+        "alphaPixelsChanged": 1394,
+        "enclosedPixelsRemoved": 279,
+        "outerFringePixelsRemoved": 1115,
+        "sourceFrame": 46,
+        "frameIndex": 17
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              139,
+              206,
+              22,
+              49
+            ],
+            "area": 318
+          }
+        ],
+        "alphaPixelsChanged": 1448,
+        "enclosedPixelsRemoved": 355,
+        "outerFringePixelsRemoved": 1093,
+        "sourceFrame": 47,
+        "frameIndex": 18
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              137,
+              204,
+              24,
+              50
+            ],
+            "area": 361
+          }
+        ],
+        "alphaPixelsChanged": 1507,
+        "enclosedPixelsRemoved": 403,
+        "outerFringePixelsRemoved": 1104,
+        "sourceFrame": 48,
+        "frameIndex": 19
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              137,
+              203,
+              24,
+              52
+            ],
+            "area": 394
+          }
+        ],
+        "alphaPixelsChanged": 1550,
+        "enclosedPixelsRemoved": 435,
+        "outerFringePixelsRemoved": 1119,
+        "sourceFrame": 49,
+        "frameIndex": 20
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1302,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1302,
+        "sourceFrame": 50,
+        "frameIndex": 21
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1284,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1284,
+        "sourceFrame": 51,
+        "frameIndex": 22
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1262,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1262,
+        "sourceFrame": 52,
+        "frameIndex": 23
+      }
+    ],
+    "fixedTransformUnchanged": true,
+    "sourcePixelsRepainted": false
+  },
+  "goblin_shaman": {
+    "atlas": "assets\\resources\\ux\\chapter1_mob_walk_v81.png",
+    "frames": [
+      {
+        "holes": [
+          {
+            "bbox": [
+              105,
+              132,
+              19,
+              39
+            ],
+            "area": 420
+          },
+          {
+            "bbox": [
+              113,
+              222,
+              18,
+              44
+            ],
+            "area": 368
+          },
+          {
+            "bbox": [
+              119,
+              275,
+              12,
+              30
+            ],
+            "area": 184
+          }
+        ],
+        "alphaPixelsChanged": 2954,
+        "enclosedPixelsRemoved": 1057,
+        "outerFringePixelsRemoved": 1897,
+        "sourceFrame": 5,
+        "frameIndex": 0
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              108,
+              134,
+              18,
+              38
+            ],
+            "area": 407
+          },
+          {
+            "bbox": [
+              114,
+              224,
+              19,
+              46
+            ],
+            "area": 403
+          },
+          {
+            "bbox": [
+              118,
+              277,
+              13,
+              29
+            ],
+            "area": 189
+          }
+        ],
+        "alphaPixelsChanged": 2953,
+        "enclosedPixelsRemoved": 1087,
+        "outerFringePixelsRemoved": 1866,
+        "sourceFrame": 6,
+        "frameIndex": 1
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              109,
+              135,
+              18,
+              38
+            ],
+            "area": 414
+          },
+          {
+            "bbox": [
+              114,
+              224,
+              19,
+              46
+            ],
+            "area": 427
+          }
+        ],
+        "alphaPixelsChanged": 2830,
+        "enclosedPixelsRemoved": 906,
+        "outerFringePixelsRemoved": 1924,
+        "sourceFrame": 7,
+        "frameIndex": 2
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              110,
+              134,
+              18,
+              39
+            ],
+            "area": 423
+          },
+          {
+            "bbox": [
+              113,
+              223,
+              21,
+              49
+            ],
+            "area": 484
+          }
+        ],
+        "alphaPixelsChanged": 2935,
+        "enclosedPixelsRemoved": 959,
+        "outerFringePixelsRemoved": 1976,
+        "sourceFrame": 8,
+        "frameIndex": 3
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              110,
+              129,
+              20,
+              41
+            ],
+            "area": 475
+          }
+        ],
+        "alphaPixelsChanged": 2586,
+        "enclosedPixelsRemoved": 510,
+        "outerFringePixelsRemoved": 2076,
+        "sourceFrame": 9,
+        "frameIndex": 4
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 2161,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 2161,
+        "sourceFrame": 10,
+        "frameIndex": 5
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 2080,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 2080,
+        "sourceFrame": 11,
+        "frameIndex": 6
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 2063,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 2063,
+        "sourceFrame": 12,
+        "frameIndex": 7
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1960,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1960,
+        "sourceFrame": 13,
+        "frameIndex": 8
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1902,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1902,
+        "sourceFrame": 14,
+        "frameIndex": 9
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1892,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1892,
+        "sourceFrame": 15,
+        "frameIndex": 10
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1854,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1854,
+        "sourceFrame": 16,
+        "frameIndex": 11
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              99,
+              211,
+              34,
+              97
+            ],
+            "area": 1978
+          }
+        ],
+        "alphaPixelsChanged": 3647,
+        "enclosedPixelsRemoved": 2057,
+        "outerFringePixelsRemoved": 1590,
+        "sourceFrame": 17,
+        "frameIndex": 12
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              97,
+              219,
+              33,
+              98
+            ],
+            "area": 1928
+          }
+        ],
+        "alphaPixelsChanged": 3536,
+        "enclosedPixelsRemoved": 1992,
+        "outerFringePixelsRemoved": 1544,
+        "sourceFrame": 18,
+        "frameIndex": 13
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              97,
+              221,
+              32,
+              98
+            ],
+            "area": 1762
+          }
+        ],
+        "alphaPixelsChanged": 3377,
+        "enclosedPixelsRemoved": 1837,
+        "outerFringePixelsRemoved": 1540,
+        "sourceFrame": 19,
+        "frameIndex": 14
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              97,
+              221,
+              32,
+              99
+            ],
+            "area": 1716
+          }
+        ],
+        "alphaPixelsChanged": 3353,
+        "enclosedPixelsRemoved": 1780,
+        "outerFringePixelsRemoved": 1573,
+        "sourceFrame": 20,
+        "frameIndex": 15
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              98,
+              221,
+              31,
+              97
+            ],
+            "area": 1487
+          }
+        ],
+        "alphaPixelsChanged": 3078,
+        "enclosedPixelsRemoved": 1554,
+        "outerFringePixelsRemoved": 1524,
+        "sourceFrame": 21,
+        "frameIndex": 16
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              100,
+              220,
+              30,
+              96
+            ],
+            "area": 1316
+          }
+        ],
+        "alphaPixelsChanged": 3265,
+        "enclosedPixelsRemoved": 1399,
+        "outerFringePixelsRemoved": 1866,
+        "sourceFrame": 22,
+        "frameIndex": 17
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              104,
+              216,
+              28,
+              96
+            ],
+            "area": 1052
+          }
+        ],
+        "alphaPixelsChanged": 3090,
+        "enclosedPixelsRemoved": 1118,
+        "outerFringePixelsRemoved": 1972,
+        "sourceFrame": 23,
+        "frameIndex": 18
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              106,
+              215,
+              26,
+              96
+            ],
+            "area": 923
+          }
+        ],
+        "alphaPixelsChanged": 2976,
+        "enclosedPixelsRemoved": 989,
+        "outerFringePixelsRemoved": 1987,
+        "sourceFrame": 24,
+        "frameIndex": 19
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              106,
+              215,
+              26,
+              95
+            ],
+            "area": 885
+          }
+        ],
+        "alphaPixelsChanged": 2978,
+        "enclosedPixelsRemoved": 961,
+        "outerFringePixelsRemoved": 2017,
+        "sourceFrame": 25,
+        "frameIndex": 20
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              111,
+              218,
+              20,
+              47
+            ],
+            "area": 397
+          },
+          {
+            "bbox": [
+              120,
+              272,
+              12,
+              34
+            ],
+            "area": 196
+          }
+        ],
+        "alphaPixelsChanged": 2667,
+        "enclosedPixelsRemoved": 649,
+        "outerFringePixelsRemoved": 2018,
+        "sourceFrame": 26,
+        "frameIndex": 21
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              112,
+              218,
+              19,
+              47
+            ],
+            "area": 385
+          },
+          {
+            "bbox": [
+              120,
+              271,
+              12,
+              35
+            ],
+            "area": 198
+          }
+        ],
+        "alphaPixelsChanged": 2637,
+        "enclosedPixelsRemoved": 638,
+        "outerFringePixelsRemoved": 1999,
+        "sourceFrame": 27,
+        "frameIndex": 22
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              104,
+              129,
+              19,
+              41
+            ],
+            "area": 427
+          },
+          {
+            "bbox": [
+              113,
+              221,
+              19,
+              44
+            ],
+            "area": 358
+          },
+          {
+            "bbox": [
+              121,
+              280,
+              10,
+              25
+            ],
+            "area": 170
+          }
+        ],
+        "alphaPixelsChanged": 2972,
+        "enclosedPixelsRemoved": 1035,
+        "outerFringePixelsRemoved": 1937,
+        "sourceFrame": 28,
+        "frameIndex": 23
+      }
+    ],
+    "fixedTransformUnchanged": true,
+    "sourcePixelsRepainted": false
+  },
+  "orc_axeman": {
+    "atlas": "assets\\resources\\ux\\chapter1_mob_walk_v84.png",
+    "frames": [
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1798,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1798,
+        "sourceFrame": 21,
+        "frameIndex": 0
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              308,
+              196,
+              31,
+              70
+            ],
+            "area": 1154
+          }
+        ],
+        "alphaPixelsChanged": 2875,
+        "enclosedPixelsRemoved": 1215,
+        "outerFringePixelsRemoved": 1660,
+        "sourceFrame": 22,
+        "frameIndex": 1
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              308,
+              194,
+              28,
+              63
+            ],
+            "area": 997
+          }
+        ],
+        "alphaPixelsChanged": 2704,
+        "enclosedPixelsRemoved": 1041,
+        "outerFringePixelsRemoved": 1663,
+        "sourceFrame": 23,
+        "frameIndex": 2
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              308,
+              193,
+              27,
+              55
+            ],
+            "area": 810
+          }
+        ],
+        "alphaPixelsChanged": 2543,
+        "enclosedPixelsRemoved": 859,
+        "outerFringePixelsRemoved": 1684,
+        "sourceFrame": 24,
+        "frameIndex": 3
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              308,
+              191,
+              25,
+              44
+            ],
+            "area": 644
+          }
+        ],
+        "alphaPixelsChanged": 2369,
+        "enclosedPixelsRemoved": 680,
+        "outerFringePixelsRemoved": 1689,
+        "sourceFrame": 25,
+        "frameIndex": 4
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              307,
+              190,
+              23,
+              36
+            ],
+            "area": 468
+          }
+        ],
+        "alphaPixelsChanged": 2198,
+        "enclosedPixelsRemoved": 499,
+        "outerFringePixelsRemoved": 1699,
+        "sourceFrame": 26,
+        "frameIndex": 5
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              156,
+              182,
+              44,
+              113
+            ],
+            "area": 2000
+          },
+          {
+            "bbox": [
+              306,
+              190,
+              21,
+              30
+            ],
+            "area": 327
+          }
+        ],
+        "alphaPixelsChanged": 3908,
+        "enclosedPixelsRemoved": 2455,
+        "outerFringePixelsRemoved": 1455,
+        "sourceFrame": 27,
+        "frameIndex": 6
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              156,
+              185,
+              42,
+              110
+            ],
+            "area": 2027
+          },
+          {
+            "bbox": [
+              305,
+              190,
+              18,
+              25
+            ],
+            "area": 227
+          }
+        ],
+        "alphaPixelsChanged": 3772,
+        "enclosedPixelsRemoved": 2355,
+        "outerFringePixelsRemoved": 1417,
+        "sourceFrame": 28,
+        "frameIndex": 7
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              156,
+              188,
+              41,
+              112
+            ],
+            "area": 2003
+          },
+          {
+            "bbox": [
+              304,
+              192,
+              16,
+              20
+            ],
+            "area": 147
+          }
+        ],
+        "alphaPixelsChanged": 3666,
+        "enclosedPixelsRemoved": 2258,
+        "outerFringePixelsRemoved": 1408,
+        "sourceFrame": 29,
+        "frameIndex": 8
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              157,
+              192,
+              39,
+              110
+            ],
+            "area": 1897
+          },
+          {
+            "bbox": [
+              302,
+              194,
+              16,
+              19
+            ],
+            "area": 121
+          }
+        ],
+        "alphaPixelsChanged": 3526,
+        "enclosedPixelsRemoved": 2123,
+        "outerFringePixelsRemoved": 1403,
+        "sourceFrame": 30,
+        "frameIndex": 9
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              301,
+              195,
+              15,
+              20
+            ],
+            "area": 130
+          },
+          {
+            "bbox": [
+              158,
+              196,
+              36,
+              108
+            ],
+            "area": 1737
+          }
+        ],
+        "alphaPixelsChanged": 3350,
+        "enclosedPixelsRemoved": 1979,
+        "outerFringePixelsRemoved": 1371,
+        "sourceFrame": 31,
+        "frameIndex": 10
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              300,
+              194,
+              16,
+              23
+            ],
+            "area": 176
+          },
+          {
+            "bbox": [
+              159,
+              198,
+              34,
+              106
+            ],
+            "area": 1593
+          }
+        ],
+        "alphaPixelsChanged": 3238,
+        "enclosedPixelsRemoved": 1867,
+        "outerFringePixelsRemoved": 1371,
+        "sourceFrame": 32,
+        "frameIndex": 11
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              299,
+              192,
+              18,
+              29
+            ],
+            "area": 252
+          },
+          {
+            "bbox": [
+              160,
+              198,
+              32,
+              103
+            ],
+            "area": 1427
+          }
+        ],
+        "alphaPixelsChanged": 3159,
+        "enclosedPixelsRemoved": 1775,
+        "outerFringePixelsRemoved": 1384,
+        "sourceFrame": 33,
+        "frameIndex": 12
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              298,
+              189,
+              21,
+              38
+            ],
+            "area": 419
+          },
+          {
+            "bbox": [
+              162,
+              195,
+              30,
+              104
+            ],
+            "area": 1313
+          }
+        ],
+        "alphaPixelsChanged": 3200,
+        "enclosedPixelsRemoved": 1819,
+        "outerFringePixelsRemoved": 1381,
+        "sourceFrame": 34,
+        "frameIndex": 13
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              298,
+              185,
+              24,
+              43
+            ],
+            "area": 583
+          },
+          {
+            "bbox": [
+              163,
+              192,
+              28,
+              104
+            ],
+            "area": 1180
+          }
+        ],
+        "alphaPixelsChanged": 3245,
+        "enclosedPixelsRemoved": 1867,
+        "outerFringePixelsRemoved": 1378,
+        "sourceFrame": 35,
+        "frameIndex": 14
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              298,
+              183,
+              27,
+              46
+            ],
+            "area": 739
+          },
+          {
+            "bbox": [
+              165,
+              190,
+              26,
+              104
+            ],
+            "area": 1097
+          }
+        ],
+        "alphaPixelsChanged": 3333,
+        "enclosedPixelsRemoved": 1943,
+        "outerFringePixelsRemoved": 1390,
+        "sourceFrame": 36,
+        "frameIndex": 15
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              298,
+              181,
+              31,
+              59
+            ],
+            "area": 958
+          },
+          {
+            "bbox": [
+              166,
+              188,
+              25,
+              104
+            ],
+            "area": 1017
+          }
+        ],
+        "alphaPixelsChanged": 3494,
+        "enclosedPixelsRemoved": 2082,
+        "outerFringePixelsRemoved": 1412,
+        "sourceFrame": 37,
+        "frameIndex": 16
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              299,
+              182,
+              34,
+              64
+            ],
+            "area": 1159
+          },
+          {
+            "bbox": [
+              167,
+              186,
+              25,
+              86
+            ],
+            "area": 882
+          },
+          {
+            "bbox": [
+              174,
+              273,
+              10,
+              19
+            ],
+            "area": 86
+          }
+        ],
+        "alphaPixelsChanged": 3677,
+        "enclosedPixelsRemoved": 2257,
+        "outerFringePixelsRemoved": 1420,
+        "sourceFrame": 38,
+        "frameIndex": 17
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              168,
+              185,
+              25,
+              108
+            ],
+            "area": 936
+          }
+        ],
+        "alphaPixelsChanged": 2579,
+        "enclosedPixelsRemoved": 1017,
+        "outerFringePixelsRemoved": 1562,
+        "sourceFrame": 39,
+        "frameIndex": 18
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              168,
+              186,
+              26,
+              109
+            ],
+            "area": 956
+          }
+        ],
+        "alphaPixelsChanged": 2603,
+        "enclosedPixelsRemoved": 1033,
+        "outerFringePixelsRemoved": 1570,
+        "sourceFrame": 40,
+        "frameIndex": 19
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              167,
+              188,
+              28,
+              135
+            ],
+            "area": 1104
+          }
+        ],
+        "alphaPixelsChanged": 2726,
+        "enclosedPixelsRemoved": 1186,
+        "outerFringePixelsRemoved": 1542,
+        "sourceFrame": 41,
+        "frameIndex": 20
+      },
+      {
+        "holes": [
+          {
+            "bbox": [
+              166,
+              189,
+              31,
+              131
+            ],
+            "area": 1236
+          }
+        ],
+        "alphaPixelsChanged": 2836,
+        "enclosedPixelsRemoved": 1314,
+        "outerFringePixelsRemoved": 1524,
+        "sourceFrame": 42,
+        "frameIndex": 21
+      },
+      {
+        "holes": [],
+        "alphaPixelsChanged": 1804,
+        "enclosedPixelsRemoved": 0,
+        "outerFringePixelsRemoved": 1804,
+        "sourceFrame": 43,
+        "frameIndex": 22
+      }
+    ],
+    "fixedTransformUnchanged": true,
+    "sourcePixelsRepainted": false
+  }
+}

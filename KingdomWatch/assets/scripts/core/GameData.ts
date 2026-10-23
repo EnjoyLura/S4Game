@@ -694,11 +694,13 @@ export function claimChest(levelId: string, stars: number, tier: number): ChestC
 export interface CodexDef { id: string; name: string; icon: string; tags: [string, string]; desc: string; traits: string[]; weak: string; }
 export const CODEX: CodexDef[] = [
   { id: 'goblin_worker', name: '哥布林苦工', icon: '👺', tags: ['小型', '近战'], desc: '成群结队冲向防线的近战单位，威胁在于数量。', traits: ['成群结队冲锋', '近战围攻防线', '单体威胁不高'], weak: '范围伤害（炮手/火法）' },
-  { id: 'goblin_slinger', name: '哥布林投石手', icon: '🎯', tags: ['小型', '远程'], desc: '远程投掷石块，会躲在近战身后输出。', traits: ['远程投石攻击', '躲在近战身后', '血量偏低'], weak: '快速击杀（弓手/狙击）' },
+  { id: 'goblin_slinger', name: '兽族投石兵', icon: '🎯', tags: ['小型', '远程'], desc: '远程投掷石块，会躲在近战身后输出。', traits: ['远程投石攻击', '躲在近战身后', '血量偏低'], weak: '快速击杀（弓手/狙击）' },
   { id: 'goblin_shaman', name: '哥布林萨满', icon: '🔮', tags: ['小型', '治疗'], desc: '生命较高的治疗法师，有35%法抗符盾，持续法术命中可破盾。', traits: ['每4秒治疗，施法准备1.2秒', '回复4%生命，最多治疗3名伤员', '冰封、眩晕可打断，治疗者不互疗'], weak: '物理或范围伤害覆盖后排，控制打断治疗' },
   { id: 'wolf_rider', name: '狼骑兵', icon: '🐺', tags: ['中型', '冲锋'], desc: '蓄势0.55秒后冲锋2秒，冲锋撞线会强化第一次攻击。', traits: ['每6.5秒尝试冲锋，移速×1.8', '冲锋撞线首次攻击+50%', '冰封、眩晕可打断，减速可延缓'], weak: '留控制打断冲锋，提前减速' },
   { id: 'goblin_brute', name: '大哥布林（精英）', icon: '👹', tags: ['大型', '重甲'], desc: '重甲减少40%物理伤害；法术绕过物抗，持续物理命中可破甲。', traits: ['累计原始物理伤害达最大生命28%时破甲', '破甲后物抗归零，受到伤害+15%持续3秒', '精英级怪种，击杀可掉落装备'], weak: '法术输出，或物理集火破甲后爆发' },
-  { id: 'goblin_king', name: '哥布林王（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '铠甲减少30%物理伤害；法术绕过物抗，物理集火可破甲。', traits: ['第五关与第十关首领', '破甲后物抗归零，易伤3秒', '免疫冰封'], weak: '法术输出，或破甲后大招爆发' },
+  { id: 'goblin_king', name: '兽族将军（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '骑战猪步行逼近防线，铠甲减少30%物理伤害；法术绕过物抗，物理集火可破甲。', traits: ['第五关与第十关首领', '破甲后物抗归零，易伤3秒', '免疫冰封'], weak: '法术输出，或破甲后大招爆发' },
+  { id: 'orc_axeman', name: '兽族斧兵', icon: '🪓', tags: ['普通', '近战'], desc: '持斧逼近防线，从第一章第四关开始随步兵出现。', traits: ['挥斧近战攻击', '成群出现', '集结后威胁防线'], weak: '范围伤害覆盖前排' },
+  { id: 'orc_siege_cart', name: '兽族攻城车', icon: '🛞', tags: ['精英', '重甲'], desc: '从第一章第七关开始出现，缓慢推进的重甲攻城单位。', traits: ['减少40%物理伤害', '持续物理集火可破甲', '击杀可掉落装备'], weak: '法术输出，或破甲后集中爆发' },
 ];
 /** 图鉴首览奖励：每只怪物首次点开词条可领一次（钻石） */
 CODEX.push(...Object.values(EXPANSION_MOBS).map((d): CodexDef => ({

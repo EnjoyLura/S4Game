@@ -11,7 +11,7 @@ import { bus, EVT } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
 import { BattleSprite } from './BattleSprite';
 import { FloatEvent } from './FloatText';
-import { getMobAnims, MobClip } from './MobAnim';
+import { getMobAnims, MobClip, usesVideoWalkAnimation } from './MobAnim';
 import { drawFootIce } from './FrostVFX';
 import { clearDepthSorter, DepthSprite, depthSprites, setDepthSorter } from './BattleDepth';
 import { MonsterDeath, warmMonsterDeath } from './MonsterDeath';
@@ -20,6 +20,8 @@ import { MonsterDeath, warmMonsterDeath } from './MonsterDeath';
 const ATK_ANIM = 0.34;
 /** 统一静态/序列帧显示高度，保持脚底锚点与碰撞半径不变。 */
 const MOB_ART_HEIGHT = 3.85;
+/** Cosmetic size only; combat radii, speed, HP and damage retain their original values. */
+const MOB_ART_SCALE: Readonly<Record<string, number>> = { orc_axeman: 1.6, wolf_rider: 1.2, goblin_slinger: 1.3 };
 /** Stable opaque top of existing walk clips; ignore their transparent headroom. */
 const MOB_ANIM_TOP: Record<string, number> = { goblin_brute: .84, goblin_shaman: .92, wolf_rider: .92 };
 /** Start the art's feet just beyond the physical top edge, then walk into view.
@@ -166,17 +168,16 @@ export class Monster {
   }
 
   private buildArt(): void {
-    const r = this.def.radius;
     if (!this.art) {
       this.art = new BattleSprite(this.node, enemyArtRef(this.def.id).atlas, () => { this.g.enabled = false; });
       this.deathMotion = new MonsterDeath(this.node, this.art);
     }
-    this.art.node.setPosition(0, -r * 0.82, 0);
+    this.art.node.setPosition(0, this.artBaseY, 0);
     this.art.setAtlas(enemyArtRef(this.def.id).atlas);
-    this.art.show(this.def.id, r * MOB_ART_HEIGHT);
+    this.art.show(this.def.id, this.artHeight);
     this.anims = null;
     const id = this.def.id;
-    if (!this.def.homeChapter) getMobAnims(a => { if (this.node.isValid && this.def.id === id && !this.dead) this.anims = a; }, id);
+    if (!this.def.homeChapter || usesVideoWalkAnimation(id)) getMobAnims(a => { if (this.node.isValid && this.def.id === id && !this.dead) this.anims = a; }, id);
     Tween.stopAllByTarget(this.art.node);
     this.art.node.setScale(1, 1, 1); this.art.node.angle = 0;
     this.art.cold(null);
@@ -187,7 +188,7 @@ export class Monster {
   private tickArt(dt: number): void {
     this.updateBossHp();
     if (!this.art?.loaded) return;
-    if (this.def.homeChapter) this.art.show(this.def.id + (this.traits.enraged && this.def.boss ? '_phase' : ''), this.def.radius * MOB_ART_HEIGHT);
+    if (this.def.homeChapter && !usesVideoWalkAnimation(this.def.id)) this.art.show(this.def.id + (this.traits.enraged && this.def.boss ? '_phase' : ''), this.artHeight);
     if (this.immobilized) {
       // Hold the current walk/attack cel instead of snapping to idle or continuing a frozen attack.
       this.syncArtTint();
@@ -197,7 +198,7 @@ export class Monster {
     const clip = this.anims?.get(this.def.id);
     if (clip && clip.walk.length) {
       // 序列帧模式：攻击一次性 > 步态循环（速度映射播放速率，减速同步变慢）> 待机第 0 帧
-      const h = this.def.radius * MOB_ART_HEIGHT;
+      const h = this.artHeight;
       if (this.atkAnimT > 0 && clip.attack.length) {
         this.footLeftWeight = this.footRightWeight = 0;
         this.atkAnimT = Math.max(0, this.atkAnimT - dt);
@@ -205,10 +206,10 @@ export class Monster {
         const t = Math.min(clip.attack.length - 1, p * clip.attack.length);
         const i = Math.floor(t);
         this.art.showSeq(clip.attack, i, i >= clip.attack.length - 1 ? 0 : t - i, h);
-      } else if (this.state === 'move' && this.walking) {
+      } else if (this.def.airborne || this.state === 'move' && this.walking) {
         // 步态节奏：以源视频步态环真实时长为基准实时播放（相位连贯不踉跄），按移速微调档位，减速同步变慢
         const tempo = Math.min(1.25, Math.max(0.75, this.def.speed / clip.referenceSpeed));
-        const cps = (1 / clip.loopDur) * tempo;
+        const cps = (clip.playbackRate / clip.loopDur) * tempo;
         const t = this.walkClock * cps * clip.walk.length;
         const index = Math.floor(t) % clip.walk.length;
         // 原视频已经提供完整步态：避免两帧鞋底叠加形成半透明滑动残影。
@@ -245,6 +246,8 @@ export class Monster {
 
   private syncGroundContact(clip: MobClip, index: number, frac: number): void {
     this.groundOffset = clip.groundOffset;
+    const y = this.artBaseY;
+    if (this.art && this.art.node.position.y !== y) this.art.node.setPosition(0, y, 0);
     const a = clip.feet[index];
     const b = clip.feet[(index + 1) % clip.feet.length];
     if (!a || !b) { this.footLeftWeight = this.footRightWeight = 0; return; }
@@ -321,12 +324,17 @@ export class Monster {
 
   get x(): number { return this.node.position.x; }
   get y(): number { return this.node.position.y; }
+  get artScale(): number { return MOB_ART_SCALE[this.def.id] || 1; }
+  get artHeight(): number { return this.def.radius * MOB_ART_HEIGHT * this.artScale; }
+  /** Enlarge around the fixed ground plane, so feet never jump upward with the canvas. */
+  get artBaseY(): number { return -this.def.radius * .82 - (this.artHeight - this.def.radius * MOB_ART_HEIGHT) * this.groundOffset; }
+  get groundY(): number { return this.y - this.def.radius * .82 + this.def.radius * MOB_ART_HEIGHT * this.groundOffset; }
   get depthY(): number { return this.y - this.def.radius * 0.82; }
   /** Local top for role icons, using the same foot offset and height as the art. */
   get headTop(): number {
-    const r = this.def.radius;
-    const ratio = this.anims?.get(this.def.id)?.walk.length ? MOB_ANIM_TOP[this.def.id] || 1 : 1;
-    return -r * .82 + r * MOB_ART_HEIGHT * ratio;
+    const clip = this.anims?.get(this.def.id);
+    const ratio = clip?.walk.length ? clip.topRatio ?? (MOB_ANIM_TOP[this.def.id] || 1) : 1;
+    return this.artBaseY + this.artHeight * ratio;
   }
   get isBoss(): boolean { return !!this.def.boss || this.def.id === 'goblin_king'; }
   get immobilized(): boolean { return this.freezeT > 0 || this.stunT > 0 || this.knockbackT > 0; }
@@ -347,8 +355,7 @@ export class Monster {
   drawIceFeet(g: Graphics): void {
     if (this.freezeT <= 0 && this.thawT <= 0) return;
     const r = this.def.radius;
-    const footY = this.y - r * 0.82 + r * MOB_ART_HEIGHT * this.groundOffset;
-    drawFootIce(g, this.x, footY, r, this.freezeAge, this.freezeT, this.thawT);
+    drawFootIce(g, this.x, this.groundY, r * this.artScale, this.freezeAge, this.freezeT, this.thawT);
   }
 
   /** 单帧推进；返回是否死亡（死亡由 manager 清理） */
@@ -402,7 +409,9 @@ export class Monster {
     const travel = this.state === 'move'
       ? mgr.escortTravel(this, this.def.speed * slow * this.traits.speedMultiplier() * motionDt) : 0;
     this.walking = travel > 0;
-    this.walkClock += travel / Math.max(1, this.def.speed);
+    // Hovering video creatures keep beating their wings while attacking; control still stops motionDt.
+    this.walkClock += this.def.airborne && usesVideoWalkAnimation(this.def.id)
+      ? slow * motionDt : travel / Math.max(1, this.def.speed);
     this.tickArt(motionDt);
     // 点燃 DoT：每 0.5s 聚合一条（§3.11）
     if (this.burnT > 0) {
@@ -538,7 +547,7 @@ export class Monster {
   /** One shared Graphics layer draws marks above the complete current monster frame. */
   drawHunterMark(g: Graphics): void {
     if (this.dead || this.hunterMarkT <= 0 || !this.hunterMarkVisual) return;
-    const x = this.x, y = this.y + this.def.radius * (MOB_ART_HEIGHT - .82) + 19;
+    const x = this.x, y = this.y + this.artBaseY + this.artHeight + 19;
     const r = 11 + 4 * Math.exp(-this.hunterMarkAge * 18);
     const alpha = Math.round(255 * Math.min(1, this.hunterMarkT / .2));
     for (let band = 0; band < 2; band++) {
@@ -612,7 +621,7 @@ export class Monster {
     this.deathMotion?.begin(this.def.radius, this.groundOffset, {
       killer: killerId === 'pyro_burst' ? 'pyro' : killerId, angle, heavy, force: Math.min(1.5, amount / this.maxHp),
       elite: !!this.def.elite, boss: this.isBoss, frozen: this.freezeT > 0,
-    });
+    }, this.artHeight);
     if (killerId !== 'gm') Sfx.death(killerId === 'pyro_burst' ? 'pyro' : killerId, this.freezeT > 0, !!this.def.elite || this.isBoss);
     this.flashT = this.lungeT = this.atkAnimT = 0;
     this.freezeT = this.thawT = this.slowT = this.stunT = this.burnT = this.shockT = 0;
@@ -1038,13 +1047,12 @@ export class MonsterManager {
     this.shadows.fillColor = this.groundShadowColor;
     for (const m of this.list) {
       const r = m.def.radius;
-      const footY = m.y - r * 0.82 + r * MOB_ART_HEIGHT * m.groundOffset;
-      this.shadows.ellipse(m.x, footY, r * 1.02, r * 0.20);
+      this.shadows.ellipse(m.x, m.groundY, r * m.artScale * 1.02, r * m.artScale * 0.20);
     }
     if (this.list.length) this.shadows.fill();
     for (const m of this.list) {
-      const r = m.def.radius, h = r * MOB_ART_HEIGHT;
-      const footY = m.y - r * 0.82 + h * m.groundOffset;
+      const r = m.def.radius * m.artScale, h = m.artHeight;
+      const footY = m.groundY;
       if (m.footLeftWeight > 0.02) {
         this.footShadowColor.a = Math.round(100 * m.footLeftWeight);
         this.shadows.fillColor = this.footShadowColor;
@@ -1111,7 +1119,7 @@ export class MonsterManager {
 /** Boss-only health bar above the full character art, including a pooled king. */
 export function drawMobHpBar(m: Monster, g: Graphics): void {
   const w = m.def.radius * 2.8;
-  const y = -m.def.radius * .82 + m.def.radius * MOB_ART_HEIGHT + 8;
+  const y = m.artBaseY + m.artHeight + 8;
   g.clear();
   g.fillColor = new Color(0, 0, 0, 140);
   g.roundRect(-w / 2, y, w, 8, 4);

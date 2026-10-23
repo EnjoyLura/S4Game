@@ -1,0 +1,13 @@
+diff --git a/KingdomWatch/assets/scripts/ui/BattleEntryWarmup.ts b/KingdomWatch/assets/scripts/ui/BattleEntryWarmup.ts
+index 528657d7..25047ecf 100644
+--- a/KingdomWatch/assets/scripts/ui/BattleEntryWarmup.ts
++++ b/KingdomWatch/assets/scripts/ui/BattleEntryWarmup.ts
+@@ -47,6 +47,8 @@ export function warmBattlefield(levelId: string, heroIds: readonly string[], mob
+   const enemies: string[] = [...mobIds];
+   if (!enemies.length) for (const wave of getChallengeDef(levelId, 0).waves) for (const group of wave.groups) enemies.push(group.mob);
+   for (const atlas of new Set(enemies.map(id => enemyArtRef(id).atlas))) firstPaint.push(warmBattleAtlas(atlas));
++  const videoWalk = enemies.find(id => enemyArtRef(id).atlas === 'chapter1_mob_walk_v81');
++  if (videoWalk) firstPaint.push(new Promise<void>(resolve => getMobAnims(() => resolve(), videoWalk)));
+   for (const id of ids) {
+     if (id === 'archer') {
+       firstPaint.push(preloadArcherClip('idle'));

@@ -1,0 +1,42 @@
+.catalog-views{max-width:2200px;margin:0 auto 22px;padding:0 36px;display:flex;gap:8px;border-bottom:1px solid var(--line)}
+.catalog-views>button{background:transparent;border:0;border-bottom:3px solid transparent;color:var(--muted);padding:12px 17px;font-size:15px;font-weight:650;margin-bottom:-1px;display:flex;align-items:center;gap:9px}
+.catalog-views>button[aria-selected=true]{color:var(--green);border-bottom-color:var(--green)}
+.catalog-views>button>span{font-size:11px;font-weight:500;padding:2px 8px;border-radius:15px;background:#e8ede3;color:var(--green)}
+.live-panel{max-width:2200px;margin:auto;padding:0 36px 40px}
+.live-filter-panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;margin-bottom:30px}
+.live-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:20px}
+.live-heading h2{font-size:24px;margin:3px 0 5px}.live-heading .muted{font-size:12px}
+.live-chapters{display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid #eeeee4;padding-top:17px;margin-bottom:18px}
+.live-chapter-tab{display:flex;gap:9px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:7px;background:#f8f8ef;padding:8px 11px;color:var(--ink);font-size:12px;min-height:42px}
+.live-chapter-tab[aria-pressed=true]{background:var(--green);border-color:var(--green);color:#fff}
+.live-chapter-tab>span{font-size:10px;border-radius:12px;background:#21322e0c;padding:1px 6px}
+.live-chapter-tab[aria-pressed=true]>span{background:#ffffff22}
+.live-search-row{display:flex;align-items:center;gap:18px}.live-search-row .search-field{max-width:700px}
+.live-results{font-size:12px;color:var(--muted);margin-top:14px}
+.live-chapter-section{margin-bottom:35px;scroll-margin-top:20px}
+.live-section-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:15px;padding:0 1px}
+.live-section-heading>div{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}.live-section-heading h3{font-size:22px;font-weight:650}
+.live-section-heading .muted{font-size:12px}.live-section-heading>.button{flex-shrink:0}
+.live-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
+.live-card .monster-art{background:#eae8dd;aspect-ratio:1}
+.live-card .monster-art img{padding:12px;object-fit:contain}
+.live-card .card-info h3{font-size:16px}.live-game-id{display:block;font:11px/1.5 Consolas,monospace;color:var(--muted);overflow-wrap:anywhere;margin:4px 0 9px}
+.live-in-use{position:absolute;top:10px;left:10px;border-radius:5px;background:var(--green);color:#fff;padding:3px 7px;font-size:10px}
+.live-badges{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:9px 0}
+.live-badge{display:inline-block;font-size:11px;padding:3px 7px;border:1px solid #d9dfd2;border-radius:5px;color:var(--green);background:#f0f3e9}
+.live-badge.boss{background:#f7e7de;border-color:#e2bdab;color:#8d4228}.live-badge.elite{background:#f7eed7;border-color:#e4d2a5;color:#80602b}
+.live-badge.animated{background:#e8eef4;border-color:#cedae4;color:#3a5b7a}
+.live-card-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}
+.live-card-bottom .muted{font-size:11px}.live-card .pick-button{flex-shrink:0;min-height:30px}
+.live-detail-chapter{font-size:13px;color:var(--green);margin:8px 0 18px}
+.live-description{font-size:14px;line-height:1.8;margin:20px 0 12px}
+.live-traits{margin:12px 0 24px;padding-left:19px;font-size:13px;line-height:1.9;color:#56665a}
+.live-detail-art{background:#eae8dd}.live-art-variants{display:flex;justify-content:center;gap:8px;margin-top:12px}
+.live-art-variants button[aria-pressed=true]{background:var(--green);color:#fff;border-color:var(--green)}
+.live-copy-panel{padding:20px;background:var(--card);border:1px solid var(--line);border-radius:10px;margin:20px 0}
+.live-copy-heading{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:10px}
+.live-copy-panel textarea{width:100%;display:block;margin:12px 0;font-size:12px}
+@media(min-width:1800px){.live-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(max-width:1250px){.catalog-views{padding:0 24px}.live-panel{padding:0 24px 35px}.live-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:920px){.live-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.live-chapter-tab{padding:7px 9px}}
+@media(max-width:620px){.catalog-views{padding:0 12px;margin-bottom:16px;gap:3px}.catalog-views>button{font-size:13px;padding:12px 10px;gap:7px}.live-panel{padding:0 12px 25px}.live-filter-panel{padding:14px;margin-bottom:24px}.live-heading{display:block;margin-bottom:15px}.live-heading h2{font-size:21px}.live-heading>.button{margin-top:13px;font-size:11px}.live-chapters{gap:6px;padding-top:13px}.live-chapter-tab{font-size:11px;padding:6px 8px;gap:6px}.live-search-row{gap:10px;align-items:stretch;flex-direction:column}.live-search-row>.text-button{align-self:flex-start}.live-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.live-section-heading{align-items:flex-start;gap:10px}.live-section-heading h3{font-size:18px}.live-section-heading>div{gap:4px;flex-direction:column}.live-section-heading .muted{font-size:10px}.live-section-heading>.button{font-size:10px;padding:7px}.live-card .card-info h3{font-size:13px}.live-card .card-info{padding:10px}.live-game-id{font-size:10px}.live-badge{font-size:10px;padding:2px 5px}.live-card-bottom .muted{font-size:10px}.live-card .monster-art img{padding:8px}.live-card .pick-button{font-size:10px;padding:3px 7px}.live-in-use{font-size:9px;top:7px;left:7px}.live-detail-dialog .detail-art>img{height:340px;max-height:45vh}.live-description{font-size:13px}.live-copy-panel{padding:14px}}

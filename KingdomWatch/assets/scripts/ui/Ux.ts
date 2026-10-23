@@ -3,9 +3,9 @@
  * 约定：assets/resources/ux/<id>.png 与 assets/resources/scenes/<id>.png；
  * 加载失败一律回退程序绘制（调用方先画程序版，美术加载成功后覆盖/隐藏）。
  */
-import { Graphics, JsonAsset, Mask, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
+import { Graphics, isValid, JsonAsset, Mask, Node, Rect, resources, ScrollView, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
 import { N } from './UIKit';
-import { trackUIArt } from './UIArtReady';
+import { trackUIArt, uiArtInView } from './UIArtReady';
 
 /** id → 资源路径：'scenes/x' 原样，其余视为 ux/ 下的清单 ID */
 function resPath(id: string): string {
@@ -13,10 +13,104 @@ function resPath(id: string): string {
 }
 
 const cache = new Map<string, SpriteFrame>();
-const pending = new Map<string, ((sf: SpriteFrame | null) => void)[]>();
+export type ArtPriority = 'visible' | 'next' | 'idle';
+const rank: Record<ArtPriority, number> = { visible: 0, next: 1, idle: 2 };
+export function higherArtPriority(a: ArtPriority, b: ArtPriority): ArtPriority { return rank[a] < rank[b] ? a : b; }
+interface ArtRequest {
+  id: string; priority: ArtPriority; callbacks: ((sf: SpriteFrame | null) => void)[];
+  started: boolean; retries: number; retryTimer?: ReturnType<typeof setTimeout>;
+}
+const pending = new Map<string, ArtRequest>();
+const active = new Set<ArtRequest>();
+let pumpQueued = false;
+let offlineTimer: ReturnType<typeof setTimeout> | undefined;
+type ArtNetworkHost = { __KW_NETWORK_FAILURE?: (error: unknown) => boolean; __KW_NETWORK_RECOVERED?: () => void };
+
+function offline(): boolean { return typeof navigator !== 'undefined' && navigator.onLine === false; }
+function finishArt(request: ArtRequest, frame: SpriteFrame | null): void {
+  if (pending.get(request.id) !== request) return;
+  if (request.retryTimer !== undefined) clearTimeout(request.retryTimer);
+  active.delete(request); pending.delete(request.id);
+  if (frame) cache.set(request.id, frame);
+  // Each consumer settles independently, including ones whose page has closed.
+  request.callbacks.forEach(callback => { void Promise.resolve().then(() => callback(frame)); });
+  if (frame && request.retries && !Array.from(pending.values()).some(item => item.retries)) {
+    (globalThis as ArtNetworkHost).__KW_NETWORK_RECOVERED?.();
+  }
+}
+
+function downloadFailure(error: Error): boolean {
+  // Cocos' image/download errors only. Missing asset IDs and programming errors
+  // must keep their normal error path instead of being treated as a lost network.
+  return /download failed:|load image \(|(?:Error\s*#?\s*4930\b)|failed to fetch|networkerror|load failed/i.test(String(error));
+}
+
+/** Four image loads at most. Predictions use two slots; optional large atlases use only one. */
+function queuePump(): void {
+  if (pumpQueued) return;
+  pumpQueued = true;
+  Promise.resolve().then(() => {
+    pumpQueued = false;
+    if (offline()) {
+      // Preserve queued consumers through a short disconnection, but keep a
+      // permanent outage from retaining closed pages and their listeners forever.
+      if (offlineTimer === undefined) offlineTimer = setTimeout(() => {
+        offlineTimer = undefined;
+        if (offline()) pending.forEach(request => { if (!active.has(request)) finishArt(request, null); });
+      }, 30000);
+      return;
+    }
+    while (active.size < 4) {
+      let next: ArtRequest | undefined;
+      pending.forEach(request => {
+        if (!request.started && (!next || rank[request.priority] < rank[next.priority])) next = request;
+      });
+      if (!next) return;
+      if (next.priority !== 'visible') {
+        if (typeof document !== 'undefined' && document.hidden) return;
+        const running = Array.from(active), foreground = running.filter(request => request.priority === 'visible').length;
+        if (next.priority === 'idle' ? active.size >= 1
+          : running.length - foreground >= (foreground ? 1 : 2)) return;
+      }
+      const request = next; request.started = true; active.add(request);
+      resources.load(resPath(request.id), SpriteFrame, (error, frame) => {
+        active.delete(request);
+        if (error && downloadFailure(error) && request.retries < 2) {
+          (globalThis as ArtNetworkHost).__KW_NETWORK_FAILURE?.(error);
+          request.retries++;
+          request.retryTimer = setTimeout(() => {
+            request.retryTimer = undefined; request.started = false; queuePump();
+          }, 1000 * request.retries);
+        } else finishArt(request, !error && frame ? frame : null);
+        queuePump();
+      });
+    }
+  });
+}
+if (typeof document !== 'undefined') document.addEventListener('visibilitychange', queuePump);
+if (typeof window !== 'undefined') window.addEventListener('online', () => {
+  if (offlineTimer !== undefined) { clearTimeout(offlineTimer); offlineTimer = undefined; }
+  pending.forEach(request => {
+    if (request.retryTimer !== undefined) {
+      clearTimeout(request.retryTimer); request.retryTimer = undefined; request.started = false;
+    }
+  });
+  queuePump();
+});
+
+/** Promote a queued prediction when it becomes visible; never issue a duplicate download. */
+export function promoteUXArt(id: string, priority: ArtPriority = 'visible'): void {
+  const request = pending.get(id);
+  if (request && rank[priority] < rank[request.priority]) { request.priority = priority; queuePump(); }
+}
+
+export function warmUXArt(ids: readonly string[], priority: ArtPriority = 'next'): Promise<void> {
+  return Promise.all(Array.from(new Set(ids)).filter(Boolean).map(id =>
+    new Promise<void>(resolve => uxFrame(id, () => resolve(), priority)))).then(() => {});
+}
 
 /** 异步取 SpriteFrame（带缓存与去重）；失败回调 null，调用方保持程序绘制 */
-export function uxFrame(id: string, cb: (sf: SpriteFrame | null) => void): void {
+export function uxFrame(id: string, cb: (sf: SpriteFrame | null) => void, priority: ArtPriority = 'visible'): void {
   const hit = cache.get(id);
   if (hit) {
     // 缓存命中也走微任务：同步回调会在 artSprite 返回前触发，回调里引用
@@ -25,15 +119,32 @@ export function uxFrame(id: string, cb: (sf: SpriteFrame | null) => void): void 
     return;
   }
   const q = pending.get(id);
-  if (q) { q.push(cb); return; }
-  pending.set(id, [cb]);
-  resources.load(resPath(id), SpriteFrame, (err, sf) => {
-    const cbs = pending.get(id) || [];
-    pending.delete(id);
-    if (err || !sf) { cbs.forEach(f => f(null)); return; }
-    cache.set(id, sf);
-    cbs.forEach(f => f(sf));
-  });
+  if (q) { q.callbacks.push(cb); promoteUXArt(id, priority); return; }
+  pending.set(id, { id, priority, callbacks: [cb], started: false, retries: 0 });
+  queuePump();
+}
+
+/** Masked scroll content can warm in the background without delaying page handoff. */
+function watchArtVisibility(node: Node, id: string): () => void {
+  const scrolls: Node[] = [];
+  for (let parent = node.parent; parent; parent = parent.parent) if (parent.getComponent(ScrollView)) scrolls.push(parent);
+  let watching = true;
+  const promote = (): void => { if (watching && isValid(node, true) && uiArtInView(node, 160)) promoteUXArt(id); };
+  const cleanup = (destroyed = false): void => {
+    // Destruction and a late image callback can both arrive. Cocos clears a
+    // destroyed node's event processor, so never detach from it a second time.
+    if (!watching) return;
+    watching = false;
+    scrolls.forEach(scroll => { if (isValid(scroll, true)) scroll.off('scrolling', promote); });
+    scrolls.length = 0;
+    if (!destroyed && isValid(node, true)) node.off(Node.EventType.NODE_DESTROYED, onDestroyed);
+  };
+  const onDestroyed = (): void => cleanup(true);
+  scrolls.forEach(scroll => scroll.on('scrolling', promote));
+  node.once(Node.EventType.NODE_DESTROYED, onDestroyed);
+  // The page restores its remembered scroll position after constructing its children.
+  Promise.resolve().then(promote);
+  return () => cleanup();
 }
 
 /**
@@ -160,9 +271,10 @@ export function artSprite(parent: Node, x: number, y: number, w: number, h: numb
   sp.sizeMode = Sprite.SizeMode.CUSTOM;
   sp.trim = false;
   const artReady = trackUIArt(n);
+  const unwatch = watchArtVisibility(n, id);
   uxFrame(id, sf => {
     try {
-      if (!sf || !n.isValid) return;
+      if (!sf || !isValid(n, true)) return;
       sp.spriteFrame = sf;
       if (SLICE9[id]) {
         const c = SLICE9[id];
@@ -190,15 +302,15 @@ export function artSprite(parent: Node, x: number, y: number, w: number, h: numb
       }
       (o.hideOnLoad || []).forEach(v => { if (v.isValid) v.active = false; });
       if (o.onLoaded) o.onLoaded(n);
-    } finally { artReady(); }
-  });
+    } finally { unwatch(); artReady(); }
+  }, uiArtInView(n, 160) ? 'visible' : 'idle');
   return n;
 }
 
 /** 给已有 Sprite 换帧（按钮态/开关态）；失败不动；九宫格 ID 换态帧同步落 insets */
 export function artSetFrame(sp: Sprite, id: string): void {
   uxFrame(id, sf => {
-    if (!sf || !sp.isValid) return;
+    if (!sf || !isValid(sp, true)) return;
     sp.spriteFrame = sf;
     if (SLICE9[id]) applySlice9(id, sf);
   });
@@ -258,7 +370,7 @@ export function artAtlasSprite(parent: Node, x: number, y: number, w: number, h:
   lobbyAtlas(id, atlas => {
     try {
       const frame = atlas?.get(key);
-      if (!frame || !node.isValid) return;
+      if (!frame || !isValid(node, true)) return;
       sprite.spriteFrame = frame;
       if (opts.sliceBorder) {
         const border = Math.min(0.45, Math.max(0.01, opts.sliceBorder));
@@ -308,7 +420,7 @@ export function uxPreloadIdle(delayMs = 0): void {
     if ((typeof document !== 'undefined' && document.hidden) || pending.size) {
       setTimeout(step, 250); return;
     }
-    uxFrame(UX_PRELOAD_IDS[i++], () => { setTimeout(step, 150); });
+    uxFrame(UX_PRELOAD_IDS[i++], () => { setTimeout(step, 150); }, 'idle');
   };
   if (delayMs > 0) setTimeout(step, delayMs);
   else step();

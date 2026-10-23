@@ -194,7 +194,7 @@ export class Panels {
       if (version !== this.panelVersion || !pickRoot.isValid) return;
       this.pickMotion = motion;
       motion.reveal(previous, () => { if (version === this.panelVersion) this.pickPending = false; });
-    });
+    }, undefined, 250);
   }
 
   /** Lobby buttons in the existing refresh geometry; availability checks stay in the callbacks. */

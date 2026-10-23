@@ -1,0 +1,137 @@
+--- before/assets/scripts/battle/MobAnim.ts
++++ assets/scripts/battle/MobAnim.ts
+@@ -27,15 +27,16 @@
+   topRatios?: Record<string, number>;
+ }
+ 
+-type AtlasId = 'battle_mob_anim_v1' | 'goblin_king_walk_v1' | 'chapter1_mob_walk_v81';
++type AtlasId = 'battle_mob_anim_v1' | 'chapter1_mob_walk_v81' | 'chapter1_mob_walk_v84';
+ const videoWalkMobs = new Set(['goblin_worker', 'goblin_shaman', 'goblin_brute', 'wolf_rider']);
++const nextVideoWalkMobs = new Set(['orc_axeman', 'orc_siege_cart', 'goblin_slinger', 'goblin_king']);
+ type Loaded = Map<string, MobClip> | null;
+ const defs = new Map<AtlasId, Map<string, MobClip>>();
+ const pending = new Map<AtlasId, ((d: Loaded) => void)[]>();
+ const priorities = new Map<AtlasId, ArtPriority>();
+ 
+ export function getMobAnims(cb: (d: Loaded) => void, mobId = '', priority: ArtPriority = 'visible'): void {
+-  const id: AtlasId = mobId === 'goblin_king' ? 'goblin_king_walk_v1'
++  const id: AtlasId = nextVideoWalkMobs.has(mobId) ? 'chapter1_mob_walk_v84'
+     : videoWalkMobs.has(mobId) ? 'chapter1_mob_walk_v81' : 'battle_mob_anim_v1';
+   const cached = defs.get(id);
+   if (cached) { cb(cached); return; }
+@@ -78,7 +79,7 @@
+         const [x, y, w, h] = manifest.frames[name];
+         const sf = new SpriteFrame();
+         sf.reset({ texture: tex, rect: new Rect(x, y, w, h), originalSize: new Size(w, h), offset: new Vec2() });
+-        if (mob === 'goblin_king' || videoWalkMobs.has(mob)) sf.packable = false;
++        if (nextVideoWalkMobs.has(mob) || videoWalkMobs.has(mob)) sf.packable = false;
+         return sf;
+       });
+     };
+--- before/assets/scripts/config/ChapterContent.ts
++++ assets/scripts/config/ChapterContent.ts
+@@ -2540,9 +2540,10 @@
+ export function enemyArtRef(id: string, portrait = false): { atlas: string; frame: string } {
+   const mob = EXPANSION_MOBS[id];
+   if (mob) return { atlas: mob.artAtlas!, frame: id };
++  if (['orc_axeman','orc_siege_cart','goblin_slinger','goblin_king'].includes(id))
++    return { atlas: 'chapter1_mob_walk_v84', frame: portrait ? id + '_w0' : id };
+   if (['goblin_worker','goblin_shaman','goblin_brute','wolf_rider'].includes(id))
+     return { atlas: 'chapter1_mob_walk_v81', frame: portrait ? id + '_w0' : id };
+-  if (portrait && id === 'goblin_king') return { atlas: 'goblin_king_walk_v1', frame: 'goblin_king_w0' };
+   if (portrait && ['goblin_worker','goblin_slinger','goblin_shaman','wolf_rider','goblin_brute'].includes(id))
+     return { atlas: 'battle_mob_anim_v1', frame: id + '_w0' };
+   return { atlas: 'battle_mobs_v2', frame: id };
+--- before/assets/scripts/config/LevelDifficulty.ts
++++ assets/scripts/config/LevelDifficulty.ts
+@@ -40,6 +40,16 @@
+   return { mob, count, interval, delay };
+ }
+ function reinforcement(groups: SpawnGroup[]): WaveDef { return { groups, surge: true }; }
++
++/** Swap appearances in existing spawn slots, preserving every count, interval, delay and authored stat. */
++function chapterOneVideoWaves(waves: WaveDef[], stage: number): WaveDef[] {
++  if (stage < 4) return waves;
++  return waves.map((wave, i) => ({ ...wave, groups: wave.groups.map(g => {
++    if (g.mob === 'goblin_worker' && i % 4 === 2) return { ...g, mob: 'orc_axeman' };
++    if (stage >= 7 && g.mob === 'goblin_brute' && i % 3 === 2) return { ...g, mob: 'orc_siege_cart' };
++    return g;
++  }) }));
++}
+ 
+ export function getChallengeDef(id: string, value = 0): ChallengeDef {
+   const base = getLevelDef(id), d = difficultyIndex(value), key = base.id + ':' + d;
+@@ -99,7 +109,7 @@
+   const seventh = base.id === '1-7' && d === 0;
+   return cache[key] = { ...base, difficulty: d, baseGold: seventh ? 160 : sixth ? 140 : fifth ? 120 : fourth ? 100 : Math.round(base.baseGold * DIFFICULTIES[d].goldMul),
+     baseDiamonds: DIFFICULTIES[d].diamonds,
+-    waves: first ? FIRST_LEVEL_WAVES : second ? SECOND_LEVEL_WAVES : third ? THIRD_LEVEL_WAVES : fourth ? FOURTH_LEVEL_WAVES : fifth ? FIFTH_LEVEL_WAVES : sixth ? SIXTH_LEVEL_WAVES : seventh ? SEVENTH_LEVEL_WAVES : waves,
++    waves: chapterOneVideoWaves(first ? FIRST_LEVEL_WAVES : second ? SECOND_LEVEL_WAVES : third ? THIRD_LEVEL_WAVES : fourth ? FOURTH_LEVEL_WAVES : fifth ? FIFTH_LEVEL_WAVES : sixth ? SIXTH_LEVEL_WAVES : seventh ? SEVENTH_LEVEL_WAVES : waves, stage?.stage || 1),
+     fixedWaves: first || second || third || fourth || fifth || sixth || seventh, materials, gearPool };
+ }
+ /** One equipment roll per real kill; elite bonus is explicit in the preview. */
+--- before/assets/scripts/config/Mobs.ts
++++ assets/scripts/config/Mobs.ts
+@@ -48,7 +48,7 @@
+     exp: 8, charge: 1, gold: 2, color: '#7FB841',
+   },
+   goblin_slinger: {
+-    id: 'goblin_slinger', name: '哥布林投石手', kind: 'ranged',
++    id: 'goblin_slinger', name: '兽族投石兵', kind: 'ranged',
+     hp: 120, dmg: 20, atkInterval: 5, speed: 22.5, radius: 20,
+     exp: 10, charge: 1, gold: 3, color: '#B2C24B', atkRange: 300,
+   },
+@@ -74,13 +74,19 @@
+     description: '重甲减少40%物理伤害；累积物理命中破甲后失去物抗，并受到3秒易伤。法术可绕过物抗。',
+   },
+   goblin_king: {
+-    id: 'goblin_king', name: '哥布林王', kind: 'melee',
++    id: 'goblin_king', name: '兽族将军', kind: 'melee',
+     hp: 4800, dmg: 80, atkInterval: 4, speed: 17.5, radius: 48,
+     exp: 120, charge: 20, gold: 50, color: '#6D963F', boss: true,
+     physRes: .3, armorBreakRatio: .28,
+     description: '铠甲减少30%物理伤害，集火可破甲；法术绕过物抗，首领仍免疫冰封。',
+   },
+ };
++
++// New video appearances reuse existing combat templates; no extra stats, rewards or attack mechanics.
++MOBS.orc_axeman = { ...MOBS.goblin_worker, id: 'orc_axeman', name: '兽族斧兵',
++  description: '持斧逼近防线的近战单位，成群出现时用范围伤害清理。' };
++MOBS.orc_siege_cart = { ...MOBS.goblin_brute, id: 'orc_siege_cart', name: '兽族攻城车',
++  description: '重甲攻城车缓慢逼近防线；物抗40%，可持续物理集火破甲，或用法术绕过物抗。' };
+ 
+ Object.assign(MOBS, EXPANSION_MOBS);
+ 
+--- before/assets/scripts/core/GameData.ts
++++ assets/scripts/core/GameData.ts
+@@ -694,11 +694,13 @@
+ export interface CodexDef { id: string; name: string; icon: string; tags: [string, string]; desc: string; traits: string[]; weak: string; }
+ export const CODEX: CodexDef[] = [
+   { id: 'goblin_worker', name: '哥布林苦工', icon: '👺', tags: ['小型', '近战'], desc: '成群结队冲向防线的近战单位，威胁在于数量。', traits: ['成群结队冲锋', '近战围攻防线', '单体威胁不高'], weak: '范围伤害（炮手/火法）' },
+-  { id: 'goblin_slinger', name: '哥布林投石手', icon: '🎯', tags: ['小型', '远程'], desc: '远程投掷石块，会躲在近战身后输出。', traits: ['远程投石攻击', '躲在近战身后', '血量偏低'], weak: '快速击杀（弓手/狙击）' },
++  { id: 'goblin_slinger', name: '兽族投石兵', icon: '🎯', tags: ['小型', '远程'], desc: '远程投掷石块，会躲在近战身后输出。', traits: ['远程投石攻击', '躲在近战身后', '血量偏低'], weak: '快速击杀（弓手/狙击）' },
+   { id: 'goblin_shaman', name: '哥布林萨满', icon: '🔮', tags: ['小型', '治疗'], desc: '生命较高的治疗法师，有35%法抗符盾，持续法术命中可破盾。', traits: ['每4秒治疗，施法准备1.2秒', '回复4%生命，最多治疗3名伤员', '冰封、眩晕可打断，治疗者不互疗'], weak: '物理或范围伤害覆盖后排，控制打断治疗' },
+   { id: 'wolf_rider', name: '狼骑兵', icon: '🐺', tags: ['中型', '冲锋'], desc: '蓄势0.55秒后冲锋2秒，冲锋撞线会强化第一次攻击。', traits: ['每6.5秒尝试冲锋，移速×1.8', '冲锋撞线首次攻击+50%', '冰封、眩晕可打断，减速可延缓'], weak: '留控制打断冲锋，提前减速' },
+   { id: 'goblin_brute', name: '大哥布林（精英）', icon: '👹', tags: ['大型', '重甲'], desc: '重甲减少40%物理伤害；法术绕过物抗，持续物理命中可破甲。', traits: ['累计原始物理伤害达最大生命28%时破甲', '破甲后物抗归零，受到伤害+15%持续3秒', '精英级怪种，击杀可掉落装备'], weak: '法术输出，或物理集火破甲后爆发' },
+-  { id: 'goblin_king', name: '哥布林王（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '铠甲减少30%物理伤害；法术绕过物抗，物理集火可破甲。', traits: ['第五关与第十关首领', '破甲后物抗归零，易伤3秒', '免疫冰封'], weak: '法术输出，或破甲后大招爆发' },
++  { id: 'goblin_king', name: '兽族将军（BOSS）', icon: '👑', tags: ['大型', 'BOSS'], desc: '骑战猪步行逼近防线，铠甲减少30%物理伤害；法术绕过物抗，物理集火可破甲。', traits: ['第五关与第十关首领', '破甲后物抗归零，易伤3秒', '免疫冰封'], weak: '法术输出，或破甲后大招爆发' },
++  { id: 'orc_axeman', name: '兽族斧兵', icon: '🪓', tags: ['普通', '近战'], desc: '持斧逼近防线，从第一章第四关开始随步兵出现。', traits: ['挥斧近战攻击', '成群出现', '集结后威胁防线'], weak: '范围伤害覆盖前排' },
++  { id: 'orc_siege_cart', name: '兽族攻城车', icon: '🛞', tags: ['精英', '重甲'], desc: '从第一章第七关开始出现，缓慢推进的重甲攻城单位。', traits: ['减少40%物理伤害', '持续物理集火可破甲', '击杀可掉落装备'], weak: '法术输出，或破甲后集中爆发' },
+ ];
+ /** 图鉴首览奖励：每只怪物首次点开词条可领一次（钻石） */
+ CODEX.push(...Object.values(EXPANSION_MOBS).map((d): CodexDef => ({
+--- before/assets/scripts/ui/BattleEntryWarmup.ts
++++ assets/scripts/ui/BattleEntryWarmup.ts
+@@ -47,8 +47,10 @@
+   const enemies: string[] = [...mobIds];
+   if (!enemies.length) for (const wave of getChallengeDef(levelId, 0).waves) for (const group of wave.groups) enemies.push(group.mob);
+   for (const atlas of new Set(enemies.map(id => enemyArtRef(id).atlas))) firstPaint.push(warmBattleAtlas(atlas, priority));
+-  const videoWalk = enemies.find(id => enemyArtRef(id).atlas === 'chapter1_mob_walk_v81');
+-  if (videoWalk) firstPaint.push(new Promise<void>(resolve => getMobAnims(() => resolve(), videoWalk, priority)));
++  for (const atlas of ['chapter1_mob_walk_v81', 'chapter1_mob_walk_v84']) {
++    const videoWalk = enemies.find(id => enemyArtRef(id).atlas === atlas);
++    if (videoWalk) firstPaint.push(new Promise<void>(resolve => getMobAnims(() => resolve(), videoWalk, priority)));
++  }
+   for (const id of ids) {
+     if (id === 'archer') {
+       firstPaint.push(preloadArcherClip('idle', priority));

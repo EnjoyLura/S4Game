@@ -1,0 +1,265 @@
+{
+  "source": {
+    "frames": 56,
+    "fps": 24.0,
+    "size": [
+      1344,
+      768
+    ],
+    "sha256": "fe6cb1875b5a0f7c35d114f2499989d288eabdf95564418b1ac79e6e3c104cec"
+  },
+  "fps": 24,
+  "canvas": [
+    320,
+    320
+  ],
+  "atlas": [
+    3240,
+    2916
+  ],
+  "loops": {
+    "goblin_worker": {
+      "label": "哥布林苦工",
+      "sourceFrames": [
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ],
+      "seconds": 1.0,
+      "referenceNextFrame": 53,
+      "metrics": {
+        "start": 29,
+        "end": 53,
+        "length": 24,
+        "seconds": 1.0,
+        "pose": 0.01227505598217249,
+        "context": 0.013445000164210796,
+        "velocity": 0.01765739545226097,
+        "seam": 0.023076694458723068,
+        "seamVsMedian": 0.7443272202469018,
+        "clippedFrames": 0,
+        "score": 0.03009401429444552
+      },
+      "fixedSourceUnion": [
+        58,
+        61,
+        329,
+        322
+      ],
+      "fixedTargetSize": [
+        296,
+        285
+      ],
+      "fixedOffset": [
+        12,
+        23,
+        308,
+        308
+      ],
+      "feetBaseline": 0.040912,
+      "topRatio": 0.924713
+    },
+    "goblin_shaman": {
+      "label": "兽族萨满",
+      "sourceFrames": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "seconds": 1.0,
+      "referenceNextFrame": 29,
+      "metrics": {
+        "start": 5,
+        "end": 29,
+        "length": 24,
+        "seconds": 1.0,
+        "pose": 0.018005667254328728,
+        "context": 0.02637309767305851,
+        "velocity": 0.04178469255566597,
+        "seam": 0.03476976230740547,
+        "seamVsMedian": 0.8667351070251196,
+        "clippedFrames": 0,
+        "score": 0.055818022415041926
+      },
+      "fixedSourceUnion": [
+        13,
+        12,
+        311,
+        339
+      ],
+      "fixedTargetSize": [
+        270,
+        296
+      ],
+      "fixedOffset": [
+        25,
+        12,
+        295,
+        308
+      ],
+      "feetBaseline": 0.043157,
+      "topRatio": 0.948356
+    },
+    "goblin_brute": {
+      "label": "兽族盾兵（重甲精英）",
+      "sourceFrames": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "seconds": 0.9166666666666666,
+      "referenceNextFrame": 48,
+      "metrics": {
+        "start": 26,
+        "end": 48,
+        "length": 22,
+        "seconds": 0.9166666666666666,
+        "pose": 0.01466867420822382,
+        "context": 0.029356881976127625,
+        "velocity": 0.015368754975497723,
+        "seam": 0.04749452695250511,
+        "seamVsMedian": 0.940732560714375,
+        "clippedFrames": 0,
+        "score": 0.04430168177932501
+      },
+      "fixedSourceUnion": [
+        10,
+        16,
+        397,
+        354
+      ],
+      "fixedTargetSize": [
+        296,
+        259
+      ],
+      "fixedOffset": [
+        12,
+        49,
+        308,
+        308
+      ],
+      "feetBaseline": 0.039895,
+      "topRatio": 0.84448
+    },
+    "wolf_rider": {
+      "label": "狼骑兵",
+      "sourceFrames": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "seconds": 0.5,
+      "referenceNextFrame": 29,
+      "metrics": {
+        "start": 17,
+        "end": 29,
+        "length": 12,
+        "seconds": 0.5,
+        "pose": 0.010408809408545494,
+        "context": 0.013093757443130016,
+        "velocity": 0.02095085009932518,
+        "seam": 0.01314220018684864,
+        "seamVsMedian": 0.2939146204139061,
+        "clippedFrames": 0,
+        "score": 0.02926415540277958
+      },
+      "fixedSourceUnion": [
+        34,
+        22,
+        277,
+        454
+      ],
+      "fixedTargetSize": [
+        166,
+        296
+      ],
+      "fixedOffset": [
+        77,
+        12,
+        243,
+        308
+      ],
+      "feetBaseline": 0.039641,
+      "topRatio": 0.898264
+    }
+  },
+  "method": "forward consecutive video frames; shared fixed crop/scale; no blending or reversal",
+  "atlasSha256": "485b042f8c1cf586f017dfe531a8686a302a1155111d0e565012aa372b28807a",
+  "frameCount": 82,
+  "runtimeAssets": [
+    "assets/resources/ux/chapter1_mob_walk_v81.frames.json",
+    "assets/resources/ux/chapter1_mob_walk_v81.frames.json.meta",
+    "assets/resources/ux/chapter1_mob_walk_v81.png",
+    "assets/resources/ux/chapter1_mob_walk_v81.png.meta"
+  ]
+}

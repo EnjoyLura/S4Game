@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>怪物形象图鉴 · 挑选与章节编排</title>
+  <link rel="stylesheet" href="catalog.css">
+  <script src="catalog-data.js" defer></script>
+  <script src="catalog.js" defer></script>
+</head>
+<body id="catalogTop">
+  <header class="masthead">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">✦</span><div><div class="eyebrow">KINGDOM WATCH / ART SELECTION</div><h1>怪物形象图鉴</h1></div></div>
+    <div class="top-meta"><span id="sourceCount">正在整理图集</span><span class="dot"></span><span id="monsterCount"></span></div>
+  </header>
+  <div class="intro"><div><h2>挑选你想放进游戏的怪物。</h2><p>全部形象在一页连续浏览。暂时不看的归档，不合格的删除；已归档和回收站都能恢复。</p></div><div class="backup-actions"><button class="button quiet" id="importBackup">导入整理备份</button><button class="button quiet" id="exportBackup">导出整理备份</button><input type="file" accept="application/json,.json" id="importFile" hidden></div></div>
+  <main class="workspace">
+    <section class="browse" aria-label="怪物候选">
+      <div class="filter-panel">
+        <div class="status-tabs" id="statusTabs" role="group" aria-label="候选归档与回收站"></div>
+        <div class="search-row"><label class="search-field"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜索外观、编号，如「狼」「巫师」「S24-06」" aria-label="搜索怪物"></label><select id="sourceFilter" aria-label="按原图集筛选"><option value="">全部图集</option></select></div>
+        <div class="theme-row" id="themes" aria-label="主题筛选"></div>
+        <div class="results-bar"><span id="resultsCount" aria-live="polite"></span><label class="selected-filter"><input type="checkbox" id="onlySelected">只看已选</label><button id="manageToggle" class="text-button" aria-pressed="false">批量整理</button></div>
+      </div>
+      <div class="manage-bar" id="manageBar" hidden><div class="manage-summary"><strong id="manageCount">已勾选 0 个</strong><span>整理勾选独立于右侧选用清单</span></div><div class="manage-actions"><button id="checkFiltered" class="button small">勾选筛选结果</button><button id="uncheckAll" class="button small">取消勾选</button><button id="archiveChecked" class="button small">归档</button><button id="restoreChecked" class="button small">恢复</button><button id="deleteChecked" class="button small danger">删除</button><button id="finishManage" class="text-button">完成整理</button></div></div>
+      <div id="grid" class="grid"></div>
+      <div id="empty" class="empty" hidden><div class="empty-mark">◇</div><h3 id="emptyTitle">没有符合条件的怪物</h3><p id="emptyHint">换个关键词，或清除筛选后继续查看。</p><button class="button" id="resetFilters">清除筛选</button></div>
+    </section>
+    <aside class="selection-panel" aria-label="我的选择">
+      <div class="selection-heading"><div><span class="eyebrow">YOUR SHORTLIST</span><h2>我的选择 <span id="selectionCount">0</span></h2></div><button id="clearSelection" class="text-button">清空</button></div>
+      <div class="bulk-row"><select id="bulkChapter" aria-label="批量分配章节"></select><button id="applyChapter" class="button small">分配所选</button></div>
+      <div id="selectedList" class="selected-list"></div>
+      <div id="selectionEmpty" class="selection-empty"><span>✧</span><p>喜欢哪只，就选哪只。</p><small>固定编号会始终对应同一个原画。</small></div>
+      <div class="selection-actions"><button id="copySelection" class="button primary">复制所选清单 <span aria-hidden="true">↗</span></button><button id="downloadText" class="text-button">保存清单为 TXT</button><p>章节与备注会一起复制。选择、归档和回收站记录自动保存在本机，也可导出整理备份。</p></div>
+    </aside>
+  </main>
+  <footer>所有条目均来自你提供的原图集。外观名称用于检索，正式名称与兵种由你决定。</footer>
+  <dialog id="detailDialog" class="detail-dialog">
+    <div class="dialog-top"><span id="detailIndex"></span><button class="icon-button" id="closeDetail" aria-label="关闭详情">×</button></div>
+    <div class="detail-body"><div class="detail-art"><img id="detailImage" alt=""><div class="art-links"><button id="viewSource" class="text-button">查看原图集</button><a id="openCrop" target="_blank" rel="noopener">打开独立 PNG ↗</a></div></div><div class="detail-info"><div class="eyebrow" id="detailTheme"></div><h2 id="detailName"></h2><code id="detailId"></code><p id="detailOrigin" class="muted"></p><label class="field-label">安排到章节<select id="detailChapter"></select></label><label class="field-label">兵种定位<select id="detailRole"><option value="">暂未确定</option><option>普通怪</option><option>精英怪</option><option>关底 Boss</option></select></label><label class="field-label">我的备注<textarea id="detailNote" rows="4" placeholder="写下你希望保留或调整的地方"></textarea></label><button id="detailSelect" class="button primary"></button></div></div>
+    <div class="detail-management"><p id="detailStatus" role="status"></p><div><button id="detailArchive" class="button small">归档</button><button id="detailRestore" class="button small">恢复</button><button id="detailDelete" class="button small danger">删除</button></div></div>
+    <div class="dialog-bottom"><button class="button quiet" id="prevDetail">← 上一只</button><span>填写章节或备注会自动选用 · ← → 切换 · Esc 关闭</span><button class="button quiet" id="nextDetail">下一只 →</button></div>
+  </dialog>
+  <dialog id="sourceDialog" class="source-dialog"><div class="dialog-top"><div><strong id="sourceTitle"></strong><p id="sourceFilename" class="muted"></p></div><button class="icon-button" id="closeSource" aria-label="关闭原图集">×</button></div><div class="source-frame"><img id="sourceImage" alt="原始图集"><div id="cropHighlight" aria-hidden="true"></div></div><p class="source-caption">金色框标出当前怪物在原图中的位置。</p></dialog>
+  <dialog id="copyDialog" class="copy-dialog"><div class="dialog-top"><strong>所选怪物清单</strong><button class="icon-button" id="closeCopy" aria-label="关闭复制窗口">×</button></div><p id="copyHint">清单已生成，可以直接选中文字复制。</p><textarea id="copyText" readonly rows="15" aria-label="所选清单文本"></textarea><div class="copy-actions"><button class="button primary" id="retryCopy">复制文字</button><button class="button quiet" id="saveCopyText">保存 TXT</button></div></dialog>
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+  <a class="back-to-top" href="#catalogTop" aria-label="返回顶部筛选和归档入口">↑ 顶部</a>
+  <noscript><p>请在支持 JavaScript 的浏览器中打开本地图鉴，才能勾选与复制。</p></noscript>
+</body>
+</html>

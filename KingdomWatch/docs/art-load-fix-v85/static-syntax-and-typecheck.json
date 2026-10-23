@@ -1,0 +1,33 @@
+{
+  "beforeDiagnostics": 10,
+  "afterDiagnostics": 10,
+  "normalizedDiagnosticsUnchanged": true,
+  "scripts": [
+    {
+      "source": "build-templates/web-mobile/index.html",
+      "script": 0,
+      "syntaxOnly": true
+    },
+    {
+      "source": "build-templates/web-mobile/index.html",
+      "script": 1,
+      "syntaxOnly": true
+    },
+    {
+      "source": "build-templates/web-mobile/index.html",
+      "script": 2,
+      "syntaxOnly": true
+    },
+    {
+      "source": "build-templates/web-mobile/index.html",
+      "script": 6,
+      "syntaxOnly": true
+    },
+    {
+      "source": "tools/github-pages/launcher.html",
+      "script": 0,
+      "syntaxOnly": true
+    }
+  ],
+  "gameBrowserWasmOrGameplayTestsStarted": false
+}

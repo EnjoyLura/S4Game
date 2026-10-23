@@ -1,0 +1,20 @@
+{
+  "mode": "built-in imagegen",
+  "source": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-64365840-4b58-48f2-9ae2-1e53b4d4a4f5.png",
+  "references": [
+    "C:/Users/user/AppData/Local/Temp/codex-clipboard-ccf7d7a7-e137-4ad0-91ee-6f1c3477aaec.png",
+    "C:/Users/user/AppData/Local/Temp/codex-clipboard-fa01ccef-f129-4d38-b588-fda182a7007f.png",
+    "C:/Users/user/AppData/Local/Temp/codex-clipboard-799ace4b-ff6e-4673-bd29-54c662c21d95.png",
+    "C:/Users/user/AppData/Local/Temp/codex-clipboard-28739ea8-b4c1-4aa6-847e-417b1f13a27a.png"
+  ],
+  "selection": [
+    2,
+    1,
+    1,
+    1
+  ],
+  "output": "selected-four-monsters.png",
+  "sha256": "9F3B52F98192FDF2CB7181C8ADA3E1C98672A0CF897FDC902959D73D539AAB50",
+  "prompt": "Use case: compositing / identity-preserve.\nEdit the four attached reference sheets into ONE clean square 2 × 2 character sheet, using exactly the selected four monsters below. Number each reference's nine characters left-to-right, top-to-bottom. Preserve each selected character's existing face, silhouette, proportions, costume, weapons, colors and illustrated rendering; this is a faithful extraction/composite and effects-cleanup task, not a redesign.\n\nTOP LEFT: reference image 1, character #2 (top middle): the small olive-green orc foot soldier with brown pointed spiked helmet, brown leather outfit, short jagged iron sword and small round wooden shield with metal central boss.\nTOP RIGHT: reference image 2, character #1 (top left): the small dark-furred orc shaman wearing the elongated ivory animal-skull mask with curled horns, holding a wooden skull-topped staff and wearing ragged russet-brown clothing, bone ornaments and small hanging feathers. Remove ALL green magic flames, glowing wisps and spell effects around the staff and free hand. Keep the solid skull, horns, fingers, ornaments, feathers and wooden staff intact.\nBOTTOM LEFT: reference image 3, character #1 (top left): the stocky olive-green orc shield soldier wearing a pointed iron helmet, brown fur shoulder collar and leather armor, holding a broad short sword and a large round wooden shield with riveted iron rim.\nBOTTOM RIGHT: reference image 4, character #1 (top left): the olive-green orc wolf rider with a small pointed horned metal helmet, brown fur/leather clothes, spear with a small red cloth tie, riding the charcoal-gray wolf. Keep rider and entire mount together. The wolf looks straight at the camera with its ears, muzzle, body and four legs visible as in the reference.\n\nCamera: ALL FOUR look directly forward at the viewer; face and torso oriented straight toward the camera, with a frontal orthographic game-character presentation. In the mounted character, both rider and wolf face forward. Do not turn faces sideways.\nBackdrop: ONE uniform flat pale warm gray-beige color (#EEE9DB), identical across the entire image, including each quadrant. No landscape, buildings, sky, props, ground texture, parchment texture, gradients or vignettes. No drawn panels, borders, captions, names, numbers or watermark. Arrange the four characters in evenly spaced invisible square quadrants, each isolated and centered, with generous clear padding all around. Full bodies and entire equipment must fit with nothing cropped or crossing into another quadrant. Keep their relative game proportions; do not enlarge heads or make any of them more cute or more realistic.\nEffects cleanup: remove all fire, smoke, glow halos, particles, trails, magic auras, colored emission and floating spell elements. Eyes can retain their natural yellow/green color as flat painted eyes with no emitted glow. Preserve physical decorations and red cloth; those are not effects.\nKeep the crisp dark hand-drawn outlines and simple painted shading of the supplied references, faithful to the selected four characters.",
+  "needsUserReview": true
+}

@@ -1,0 +1,26 @@
+{
+  "stage": "D:\\AI\\S4Game\\KingdomWatch\\build\\github-pages-20261023-230331-939158",
+  "atlases": [
+    {
+      "path": "assets/resources/native/74/74e7dcf7-91ca-4824-ba75-4f12d2db3514.39462b33e4d10a3c.webp",
+      "bytes": 6432406,
+      "sha256": "39462b33e4d10a3c76447f3ffb8720df3f32e6f4d2e597eb2c4a5b3191ca9722",
+      "contentType": "image/webp",
+      "status": 200,
+      "verified": true
+    },
+    {
+      "path": "assets/resources/native/c5/c5081278-7508-4169-89f2-c059cd683204.5fb7b164dd3a8fc3.webp",
+      "bytes": 9958602,
+      "sha256": "5fb7b164dd3a8fc308c467f0af31c4c87995b3bafb16f82280d13e13f3ddc0c2",
+      "contentType": "image/webp",
+      "status": 200,
+      "verified": true
+    }
+  ],
+  "previousNativeFiles": 703,
+  "untargetedNativeFilesExactlyUnchanged": 701,
+  "unexpectedChanges": [],
+  "gameOrBrowserStarted": false,
+  "wasmExecuted": false
+}

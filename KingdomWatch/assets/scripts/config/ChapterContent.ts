@@ -469,6 +469,65 @@ export const CHAPTER_CONTENT: readonly ChapterContent[] = [
   }
 ];
 export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
+  "forest_eagle": {
+    "id": "forest_eagle",
+    "name": "黑羽猛禽",
+    "kind": "melee",
+    "hp": 180,
+    "dmg": 27,
+    "atkInterval": 3.8,
+    "speed": 36,
+    "radius": 18,
+    "color": "#3E7D4D",
+    "homeChapter": 2,
+    "artAtlas": "forest_mob_walk_v87",
+    "airborne": true,
+    "exp": 14,
+    "charge": 1,
+    "gold": 2,
+    "description": "深林的飞行近战单位。振翅逼近防线，可被全部英雄攻击。",
+    "traits": ["飞行单位，可被全部英雄攻击", "成群出现，单体生命较低"],
+    "weak": "范围攻击覆盖敌群"
+  },
+  "forest_bat": {
+    "id": "forest_bat",
+    "name": "赤翼魔蝠",
+    "kind": "melee",
+    "hp": 180,
+    "dmg": 27,
+    "atkInterval": 3.8,
+    "speed": 36,
+    "radius": 18,
+    "color": "#3E7D4D",
+    "homeChapter": 2,
+    "artAtlas": "forest_mob_walk_v87",
+    "airborne": true,
+    "exp": 14,
+    "charge": 1,
+    "gold": 2,
+    "description": "深林的飞行近战单位。拍翼成群靠近防线，可被全部英雄攻击。",
+    "traits": ["飞行单位，可被全部英雄攻击", "成群出现，单体生命较低"],
+    "weak": "范围攻击覆盖敌群"
+  },
+  "forest_wolf": {
+    "id": "forest_wolf",
+    "name": "灰鬃狼怪",
+    "kind": "melee",
+    "hp": 180,
+    "dmg": 27,
+    "atkInterval": 3.8,
+    "speed": 36,
+    "radius": 18,
+    "color": "#3E7D4D",
+    "homeChapter": 2,
+    "artAtlas": "forest_mob_walk_v85",
+    "exp": 14,
+    "charge": 1,
+    "gold": 2,
+    "description": "深林的双足近战单位。双爪逼近防线，成群出现时需要及时清理。",
+    "traits": ["双足行走，近战围攻防线", "成群出现，单体生命较低"],
+    "weak": "范围攻击覆盖前排"
+  },
   "forest_spider": {
     "id": "forest_spider",
     "name": "荆背林蛛",
@@ -480,7 +539,7 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "radius": 18,
     "color": "#3E7D4D",
     "homeChapter": 2,
-    "artAtlas": "mobs_forest_v66",
+    "artAtlas": "forest_mob_walk_v85",
     "exp": 14,
     "charge": 1,
     "gold": 2,
@@ -502,7 +561,7 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "atkRange": 285,
     "color": "#3E7D4D",
     "homeChapter": 2,
-    "artAtlas": "mobs_forest_v66",
+    "artAtlas": "forest_mob_walk_v87",
     "airborne": true,
     "venom": {
       "duration": 3,
@@ -529,7 +588,7 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "radius": 27,
     "color": "#3E7D4D",
     "homeChapter": 2,
-    "artAtlas": "mobs_forest_v66",
+    "artAtlas": "forest_mob_walk_v85",
     "regen": 0.012,
     "exp": 14,
     "charge": 2,
@@ -572,7 +631,7 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
   },
   "thorn_ancient": {
     "id": "thorn_ancient",
-    "name": "荆棘古树",
+    "name": "赤甲蛛王",
     "kind": "melee",
     "hp": 9000,
     "dmg": 132,
@@ -581,7 +640,7 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "radius": 47,
     "color": "#3E7D4D",
     "homeChapter": 2,
-    "artAtlas": "mobs_forest_v66",
+    "artAtlas": "forest_mob_walk_v87",
     "summon": {
       "id": "forest_spider",
       "count": 2,
@@ -2540,7 +2599,10 @@ export function chapterNumeral(chapter: number): string {
 export function enemyArtRef(id: string, portrait = false): { atlas: string; frame: string } {
   const mob = EXPANSION_MOBS[id];
   if (mob) return { atlas: mob.artAtlas!, frame: id };
-  if (portrait && id === 'goblin_king') return { atlas: 'goblin_king_walk_v1', frame: 'goblin_king_w0' };
+  if (['orc_axeman','orc_siege_cart','goblin_slinger','goblin_king'].includes(id))
+    return { atlas: 'chapter1_mob_walk_v84', frame: portrait ? id + '_w0' : id };
+  if (['goblin_worker','goblin_shaman','goblin_brute','wolf_rider'].includes(id))
+    return { atlas: 'chapter1_mob_walk_v81', frame: portrait ? id + '_w0' : id };
   if (portrait && ['goblin_worker','goblin_slinger','goblin_shaman','wolf_rider','goblin_brute'].includes(id))
     return { atlas: 'battle_mob_anim_v1', frame: id + '_w0' };
   return { atlas: 'battle_mobs_v2', frame: id };

@@ -26,6 +26,8 @@ import { loadSave, saveSave } from '../core/SaveData';
 import { openSquadPanel } from './SquadPanel';
 import { whenUIArtReady } from './UIArtReady';
 import { paintLobbyStrip } from './LobbyChrome';
+import { warmLobbyNavigation } from './LobbyArtWarmup';
+import { deferUIWarmup } from './IdleWarmup';
 
 const { ccclass } = _decorator;
 
@@ -228,6 +230,10 @@ export class MainUI extends Component {
       if (this.tab === 2 && pendingPyroSquadLesson()) whenUIArtReady(this.screens, () => {
         if (this.tab === 2 && this.screens.isValid && pendingPyroSquadLesson()) openSquadPanel(ctx);
       });
+      const tab = this.tab, chapter = selectedCampaignChapter();
+      deferUIWarmup(this.screens, () => {
+        if (this.tab === tab && !flow.endlessPage) warmLobbyNavigation(tab, chapter);
+      }, 160);
     }, direction);
   }
 }

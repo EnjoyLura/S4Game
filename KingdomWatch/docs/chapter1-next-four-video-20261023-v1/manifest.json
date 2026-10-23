@@ -1,0 +1,17 @@
+{
+  "tool": "built-in imagegen",
+  "size": [
+    1254,
+    1254
+  ],
+  "sha256": "8a8f8309e158ab5e3f896388515e1006b37c30ed6d96bb9a655f3f3b3243701f",
+  "originalGeneratedImage": "C:/Users/user/.codex/generated_images/01a1494f-e0d3-7423-88a3-3e1079c0ca5f/exec-1e807c57-2a93-4bea-99b5-92242334ab73.png",
+  "order": [
+    "axe_infantry",
+    "siege_cart",
+    "stone_thrower",
+    "warlord_on_boar"
+  ],
+  "videoGenerated": false,
+  "gameChanged": false
+}

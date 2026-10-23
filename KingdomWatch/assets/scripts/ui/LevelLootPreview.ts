@@ -34,15 +34,22 @@ function lootScroll(parent: Node, top: number, bottom: number, contentHeight: nu
   return content;
 }
 
-/** Guaranteed clear rewards remain visible at every difficulty, separate from the equipment roll. */
-export function stageGuaranteedRewards(parent: Node, x: number, y: number, width: number, level: ChallengeDef,
-  onSelect: (id: string) => void, height = 76, campaign = false): void {
+/** Shared by rendering and prediction, including the actual first-clear reward conditions. */
+export function stageGuaranteedEntries(level: ChallengeDef): { id: string; n: number }[] {
   const firstWinGold = earlyFirstWinGold(level.id, level.difficulty);
   const entries = [{ id: 'coin', n: level.baseGold + firstWinGold }, { id: 'diamond', n: level.baseDiamonds }, ...level.materials];
   if (firstBowAvailable(level.id, level.difficulty)) entries.push({ id: 'wpn_bow', n: 1 });
   if (firstBookAvailable(level.id, level.difficulty)) entries.push({ id: 'wpn_green_book', n: 1 });
   if (fifthRewardsAvailable(level.id, level.difficulty)) entries.push(...FIFTH_LEVEL_GIFTS.map(id => ({ id, n: 1 })));
   if (pyroRewardAvailable(level.id, level.difficulty)) entries.push({ id: 'hero_pyro', n: 1 });
+  return entries;
+}
+
+/** Guaranteed clear rewards remain visible at every difficulty, separate from the equipment roll. */
+export function stageGuaranteedRewards(parent: Node, x: number, y: number, width: number, level: ChallengeDef,
+  onSelect: (id: string) => void, height = 76, campaign = false): void {
+  const firstWinGold = earlyFirstWinGold(level.id, level.difficulty);
+  const entries = stageGuaranteedEntries(level);
   const gap = 12, w = (width - gap * (entries.length - 1)) / entries.length;
   entries.forEach((row, i) => {
     const card = comicSurface(parent, x + (i - (entries.length - 1) / 2) * (w + gap), y, w, height, 'card',

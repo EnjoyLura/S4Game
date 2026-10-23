@@ -1,0 +1,37 @@
+{
+  "originalAssets": 1862,
+  "currentAssets": 1866,
+  "changed": [
+    "assets/scripts/battle/MobAnim.ts",
+    "assets/scripts/config/ChapterContent.ts",
+    "assets/scripts/config/LevelDifficulty.ts",
+    "assets/scripts/config/Mobs.ts",
+    "assets/scripts/core/GameData.ts",
+    "assets/scripts/ui/BattleEntryWarmup.ts"
+  ],
+  "added": [
+    "assets/resources/ux/chapter1_mob_walk_v84.frames.json",
+    "assets/resources/ux/chapter1_mob_walk_v84.frames.json.meta",
+    "assets/resources/ux/chapter1_mob_walk_v84.png",
+    "assets/resources/ux/chapter1_mob_walk_v84.png.meta"
+  ],
+  "removed": [],
+  "originalMediaUnchanged": true,
+  "typeDiagnostics": "identical baseline 10",
+  "atlasSha256": "d97b47278de0d06252f272ebcfd1b7f7bd9b1066554a86810343bfbb3330d8f6",
+  "frames": 99,
+  "minimumTransparentMargin": {
+    "orc_axeman": 12,
+    "orc_siege_cart": 12,
+    "goblin_slinger": 12,
+    "goblin_king": 12
+  },
+  "sourceSha256": "4f59139fc55dcb73b910893b5fa6bd7593e5de92b96f30c071c10c9bc1f174b1",
+  "cartSourceZoom": 1.122430550279414,
+  "cartCorrectedChassisScaleRange": [
+    0.9986802237500851,
+    1.0024339351632963
+  ],
+  "gameOrBrowserStarted": false,
+  "wasmExecuted": false
+}

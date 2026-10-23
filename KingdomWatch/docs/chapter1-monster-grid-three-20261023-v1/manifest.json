@@ -1,0 +1,37 @@
+{
+  "generator": "built-in imagegen",
+  "prompt": "模仿《王国保卫战》，兽族散兵、兽族祭司、兽族盾兵、兽族狼骑兵、大刀将军、兽族投石手、热气球投弹手、军旗指挥官、兽族巫师，新怪物合集，九宫格，全部怪物正面镜头。",
+  "needsUserReview": true,
+  "images": [
+    {
+      "number": 1,
+      "file": "chapter1-monsters-01.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-eddf67db-05d5-4f2d-97c2-1f53c95e2246.png",
+      "sha256": "c33fcec1bff2abe98f7346c7ac5077308a71e13ca905e9c1cabfb40dd4ea3282",
+      "dimensions": [
+        1254,
+        1254
+      ]
+    },
+    {
+      "number": 2,
+      "file": "chapter1-monsters-02.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-bf913563-822d-40fc-b097-546d1b40e503.png",
+      "sha256": "4462481616e8f50e219263b50018dfa0419eb1937cf34821a836cfd8b2028074",
+      "dimensions": [
+        1254,
+        1254
+      ]
+    },
+    {
+      "number": 3,
+      "file": "chapter1-monsters-03.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a1494f-e0d3-7423-88a3-3e1079c0ca5f\\exec-61fe4780-5f7b-4c2c-9725-6e4fd188d3b8.png",
+      "sha256": "c160b45bf2dfb8e4a0cc620275207f5489d8975a093e4e2f184478ea2b6894bd",
+      "dimensions": [
+        1254,
+        1254
+      ]
+    }
+  ]
+}

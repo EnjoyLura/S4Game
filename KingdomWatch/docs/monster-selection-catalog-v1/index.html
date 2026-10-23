@@ -6,18 +6,27 @@
   <meta name="color-scheme" content="light">
   <title>怪物形象图鉴 · 挑选与章节编排</title>
   <link rel="stylesheet" href="catalog.css">
+  <link rel="stylesheet" href="live-catalog.css">
   <script src="catalog-data.js" defer></script>
+  <script src="live-catalog-data.js" defer></script>
   <script src="catalog.js" defer></script>
+  <script src="live-catalog.js" defer></script>
 </head>
 <body id="catalogTop">
   <header class="masthead">
     <div class="brand"><span class="brand-mark" aria-hidden="true">✦</span><div><div class="eyebrow">KINGDOM WATCH / ART SELECTION</div><h1>怪物形象图鉴</h1></div></div>
     <div class="top-meta"><span id="sourceCount">正在整理图集</span><span class="dot"></span><span id="monsterCount"></span></div>
   </header>
-  <div class="intro"><div><h2>挑选你想放进游戏的怪物。</h2><p>全部形象在一页连续浏览。暂时不看的归档，不合格的删除；已归档和回收站都能恢复。</p></div><div class="backup-actions"><button class="button quiet" id="importBackup">导入整理备份</button><button class="button quiet" id="exportBackup">导出整理备份</button><input type="file" accept="application/json,.json" id="importFile" hidden></div></div>
-  <main class="workspace">
+  <div class="intro"><div><h2 id="introTitle">查看游戏各章正在使用的怪物。</h2><p id="introDescription">按章节查看现用形象，也可以切到候选图鉴继续挑选。</p></div><div class="backup-actions" id="candidateBackupActions" hidden><button class="button quiet" id="importBackup">导入整理备份</button><button class="button quiet" id="exportBackup">导出整理备份</button><input type="file" accept="application/json,.json" id="importFile" hidden></div></div>
+  <nav class="catalog-views" id="catalogViews" role="tablist" aria-label="查看候选形象或游戏实际使用">
+    <button id="liveTab" role="tab" aria-selected="true" aria-controls="livePanel" data-catalog-view="live">游戏实际使用 <span id="liveTabCount"></span></button>
+    <button id="candidateTab" role="tab" aria-selected="false" aria-controls="candidatePanel" data-catalog-view="candidate" tabindex="-1">候选图鉴 <span id="candidateTabCount"></span></button>
+  </nav>
+  <main>
+  <section id="candidatePanel" class="workspace" role="tabpanel" aria-labelledby="candidateTab" hidden>
     <section class="browse" aria-label="怪物候选">
       <div class="filter-panel">
+        <div class="theme-row" id="reviewSets" role="group" aria-label="已选参考合集" style="margin-top:0;margin-bottom:15px"></div>
         <div class="status-tabs" id="statusTabs" role="group" aria-label="候选归档与回收站"></div>
         <div class="search-row"><label class="search-field"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜索外观、编号，如「狼」「巫师」「S24-06」" aria-label="搜索怪物"></label><select id="sourceFilter" aria-label="按原图集筛选"><option value="">全部图集</option></select></div>
         <div class="theme-row" id="themes" aria-label="主题筛选"></div>
@@ -34,8 +43,25 @@
       <div id="selectionEmpty" class="selection-empty"><span>✧</span><p>喜欢哪只，就选哪只。</p><small>固定编号会始终对应同一个原画。</small></div>
       <div class="selection-actions"><button id="copySelection" class="button primary">复制所选清单 <span aria-hidden="true">↗</span></button><button id="downloadText" class="text-button">保存清单为 TXT</button><p>章节与备注会一起复制。选择、归档和回收站记录自动保存在本机，也可导出整理备份。</p></div>
     </aside>
+  </section>
+  <section id="livePanel" class="live-panel" role="tabpanel" aria-labelledby="liveTab">
+    <div class="live-filter-panel">
+      <div class="live-heading"><div><span class="eyebrow">IN GAME / BY CHAPTER</span><h2>各章实际使用</h2><p id="liveSummary" class="muted">正在读取现用怪物清单…</p></div><button id="copyLiveRoster" class="button quiet">复制当前怪物清单</button></div>
+      <div id="liveChapters" class="live-chapters" role="group" aria-label="按实际使用章节筛选"></div>
+      <div class="live-search-row"><label class="search-field"><span aria-hidden="true">⌕</span><input id="liveSearch" type="search" placeholder="搜索现用怪物、兵种或游戏编号" aria-label="搜索游戏实际使用的怪物"></label><button id="resetLiveFilters" class="text-button">查看全部章节</button></div>
+      <p class="live-results" id="liveResults" aria-live="polite"></p>
+    </div>
+    <div id="liveSections"></div>
+    <div id="liveEmpty" class="empty" hidden><div class="empty-mark">◇</div><h3>没有符合条件的现用怪物</h3><p>试试其他关键词，或点击「查看全部章节」。</p></div>
+    <div id="liveCopyPanel" class="live-copy-panel" hidden><div class="live-copy-heading"><strong>当前实际使用清单</strong><button id="closeLiveCopy" class="text-button">收起</button></div><p id="liveCopyHint" class="muted"></p><textarea id="liveCopyText" readonly rows="10" aria-label="游戏实际使用怪物清单"></textarea><button id="saveLiveRoster" class="button small">保存清单为 TXT</button></div>
+  </section>
   </main>
-  <footer>所有条目均来自你提供的原图集。外观名称用于检索，正式名称与兵种由你决定。</footer>
+  <footer>实际使用区依据当前游戏章节配置与素材整理；候选区保留你提供的原图集与选用记录。</footer>
+  <dialog id="liveDetailDialog" class="detail-dialog live-detail-dialog">
+    <div class="dialog-top"><span id="liveDetailIndex"></span><button class="icon-button" id="closeLiveDetail" aria-label="关闭现用怪物详情">×</button></div>
+    <div class="detail-body"><div class="detail-art live-detail-art"><img id="liveDetailImage" alt=""><div id="liveArtVariants" class="live-art-variants" role="group" aria-label="怪物形态"></div><div class="art-links"><a id="openLiveCrop" target="_blank" rel="noopener">打开独立 PNG ↗</a></div></div><div class="detail-info"><div class="eyebrow">CURRENT GAME MONSTER</div><h2 id="liveDetailName"></h2><code id="liveDetailId"></code><p id="liveDetailChapter" class="live-detail-chapter"></p><div id="liveDetailBadges" class="live-badges"></div><p id="liveDetailDescription" class="live-description"></p><ul id="liveDetailTraits" class="live-traits"></ul><p id="liveDetailAnimation" class="muted"></p></div></div>
+    <div class="dialog-bottom"><button id="prevLiveDetail" class="button quiet">← 上一只</button><span>游戏实际使用形象 · ← → 切换 · Esc 关闭</span><button id="nextLiveDetail" class="button quiet">下一只 →</button></div>
+  </dialog>
   <dialog id="detailDialog" class="detail-dialog">
     <div class="dialog-top"><span id="detailIndex"></span><button class="icon-button" id="closeDetail" aria-label="关闭详情">×</button></div>
     <div class="detail-body"><div class="detail-art"><img id="detailImage" alt=""><div class="art-links"><button id="viewSource" class="text-button">查看原图集</button><a id="openCrop" target="_blank" rel="noopener">打开独立 PNG ↗</a></div></div><div class="detail-info"><div class="eyebrow" id="detailTheme"></div><h2 id="detailName"></h2><code id="detailId"></code><p id="detailOrigin" class="muted"></p><label class="field-label">安排到章节<select id="detailChapter"></select></label><label class="field-label">兵种定位<select id="detailRole"><option value="">暂未确定</option><option>普通怪</option><option>精英怪</option><option>关底 Boss</option></select></label><label class="field-label">我的备注<textarea id="detailNote" rows="4" placeholder="写下你希望保留或调整的地方"></textarea></label><button id="detailSelect" class="button primary"></button></div></div>
