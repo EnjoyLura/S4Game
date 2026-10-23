@@ -8,6 +8,7 @@
 (function(){
   'use strict';
   /*__WEBP_SUPPORT__*/
+  /*__RUNTIME_CACHE_CLIENT__*/
   var base = new URL('__BASE_PATH__',location.origin);
   var status = document.getElementById('kwLoad'), retry = document.getElementById('kwRetry'), problem = document.getElementById('kwProblem');
   var starting=false, canResume=false;
@@ -35,6 +36,7 @@
     }
   }
   async function hash(bytes){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(function(x){return x.toString(16).padStart(2,'0');}).join('');}
+  var runtimeCache=createRuntimeCache(base,network,hash);
   async function start(){
     if(starting)return;
     starting=true;canResume=false;
@@ -43,11 +45,14 @@
       if(!window.isSecureContext || !crypto.subtle)throw new Error('请使用 HTTPS 和支持安全校验的现代浏览器');
       var manifestUrl=scoped('hosting-release.json');manifestUrl.searchParams.set('check',Date.now());
       var m=JSON.parse(new TextDecoder().decode(await network(manifestUrl)));
-      if(m.schema!==1 || m.base_path!==base.pathname || !/^[a-f0-9]{64}$/.test(m.entry_sha256) || !/^game\.[a-f0-9]{16}\.html$/.test(m.entry))throw new Error('版本清单不完整');
+      if(m.schema!==1 || m.base_path!==base.pathname || !/^[a-f0-9]{64}$/.test(m.entry_sha256) || !/^game\.[a-f0-9]{16}\.html$/.test(m.entry) ||
+         !/^[a-f0-9]{64}$/.test(m.inventory_sha256) || m.id!==m.inventory_sha256.slice(0,16) || m.inventory!=='hosting-files.'+m.id+'.json' ||
+         !Number.isSafeInteger(m.entry_bytes) || m.entry_bytes<=0 || !Number.isSafeInteger(m.inventory_bytes) || m.inventory_bytes<=0 || m.inventory_bytes>2*1024*1024)throw new Error('版本清单不完整');
       if(m.requires_cross_origin_isolation && !crossOriginIsolated)throw new Error('此版本需要跨源隔离，当前托管环境尚未满足');
       if(m.requires_webp && !await supportsLosslessWebP())throw new Error('当前浏览器不支持无损 WebP 图片，请升级浏览器或在系统浏览器打开');
-      var bytes=await network(scoped(m.entry));
-      if(await hash(bytes)!==m.entry_sha256)throw new Error('入口校验失败，请稍后重试');
+      var cacheReady=runtimeCache.connect(m);
+      var bytes=await runtimeCache.checked(m.entry,{sha256:m.entry_sha256,bytes:m.entry_bytes});
+      window.__KWRuntimeCache=await cacheReady;
       // The address remains the fixed project URL. The verified original Cocos
       // document supplies its explicit project base before any engine script.
       window.removeEventListener('online',resumeStart);

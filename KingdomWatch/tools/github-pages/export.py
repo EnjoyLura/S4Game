@@ -195,7 +195,11 @@ def export(destination,config,texture_mode=None):
     for name,template in [('index.html','launcher.html'),('hosting-diagnostics.html','diagnostics.html')]:
         source=(HERE/template).read_text('utf-8')
         if source.count('/*__WEBP_SUPPORT__*/')!=1:raise RuntimeError('Missing texture capability preflight')
+        if template=='launcher.html':
+            if source.count('/*__RUNTIME_CACHE_CLIENT__*/')!=1:raise RuntimeError('Missing runtime cache bootstrap')
+            source=source.replace('/*__RUNTIME_CACHE_CLIENT__*/',(HERE/'runtime-cache-client.js').read_text('utf-8'))
         (destination/name).write_text(source.replace('__BASE_PATH__',base).replace('/*__WEBP_SUPPORT__*/',support),encoding='utf-8')
+    (destination/'hosting-cache-sw.js').write_text((HERE/'runtime-cache-sw.js').read_text('utf-8').replace('__BASE_PATH__',base),encoding='utf-8')
     (destination/'.nojekyll').write_bytes(b'')
     memories={p.relative_to(destination).as_posix():wasm_memories(p.read_bytes()) for p in destination.rglob('*.wasm')}
     shared=any(m['shared'] for ms in memories.values() for m in ms)
@@ -215,7 +219,7 @@ def export(destination,config,texture_mode=None):
     inventory={'schema':1,'files':files,'total_bytes':total,'runtime':{'cocos':'3.8.8','engine_revision':production['engineRevision'],'shared_wasm_memory':shared,'wasm_memories':memories,'remote_bundles':False,'art_resources':art}}
     raw=(json.dumps(inventory,ensure_ascii=False,sort_keys=True,separators=(',',':'))+'\n').encode('utf-8')
     inv_sha=hashlib.sha256(raw).hexdigest();inv_name='hosting-files.'+inv_sha[:16]+'.json';(destination/inv_name).write_bytes(raw)
-    pointer={'schema':1,'id':inv_sha[:16],'base_path':base,'entry':entry,'entry_sha256':entry_sha,'entry_bytes':len(entry_bytes),'inventory':inv_name,'inventory_sha256':inv_sha,'requires_cross_origin_isolation':False,'wasm':sorted(memories),'requires_webp':art['requiresWebP'],'texture_mode':art['mode']}
+    pointer={'schema':1,'id':inv_sha[:16],'base_path':base,'entry':entry,'entry_sha256':entry_sha,'entry_bytes':len(entry_bytes),'inventory':inv_name,'inventory_sha256':inv_sha,'inventory_bytes':len(raw),'runtime_cache':{'protocol':1,'worker':'hosting-cache-sw.js','scope':base,'on_demand':True,'max_bytes':256*1024**2},'requires_cross_origin_isolation':False,'wasm':sorted(memories),'requires_webp':art['requiresWebP'],'texture_mode':art['mode']}
     write_json(destination/'hosting-release.json',pointer)
     full_total=total+len(raw)+(destination/'hosting-release.json').stat().st_size
     if full_total>runtime_budget(art['mode']):
@@ -246,6 +250,14 @@ def validate_package(folder,config):
     if digest!=release.get('inventory_sha256') or release.get('id')!=digest[:16] or inventory_path.name!='hosting-files.'+digest[:16]+'.json':
         raise RuntimeError('Runtime inventory checksum mismatch')
     inventory=json.loads(inventory_path.read_text('utf-8'));files=inventory['files']
+    cache_policy=release.get('runtime_cache')
+    if cache_policy:
+        if cache_policy!={'protocol':1,'worker':'hosting-cache-sw.js','scope':base,'on_demand':True,'max_bytes':256*1024**2} or release.get('inventory_bytes')!=inventory_path.stat().st_size:
+            raise RuntimeError('Runtime cache policy or inventory byte count mismatch')
+        if safe_file('hosting-cache-sw.js').read_text('utf-8')!=(HERE/'runtime-cache-sw.js').read_text('utf-8').replace('__BASE_PATH__',base):
+            raise RuntimeError('Project-scoped cache worker differs from its template')
+        if '/*__RUNTIME_CACHE_CLIENT__*/' in safe_file('index.html').read_text('utf-8') or '__BASE_PATH__' in safe_file('hosting-cache-sw.js').read_text('utf-8'):
+            raise RuntimeError('Unresolved runtime cache bootstrap placeholder')
     actual=set()
     for path in folder.rglob('*'):
         if path.is_symlink():raise RuntimeError('Symlink in runtime package')
@@ -297,7 +309,7 @@ def validate_package(folder,config):
             if name.endswith('.js') and any(v in value for v in ('SharedArrayBuffer','PThread','pthread_create')):
                 raise RuntimeError('Shared-memory JS requires a separate isolation adaptation')
     return {'release':release,'file_count':len(actual),'runtime_bytes':total,'full_package_bytes':full_total,'budget_bytes':budget,'all_exported_hashes_verified':True,
-            'links':verify_links(folder),'wasm_memories':memories,'art_resources':art_checks,'validation':'static files, image pixels and WASM headers only',
+            'links':verify_links(folder),'wasm_memories':memories,'art_resources':art_checks,'runtime_cache':cache_policy,'validation':'static files, image pixels and WASM headers only',
             'javascript_executed':False,'wasm_compiled_or_instantiated':False,'game_browser_or_tests_started':False}
 
 

@@ -1,0 +1,115 @@
+{
+  "checks": {
+    "release": {
+      "base_path": "/kingdom-watch-play/",
+      "entry": "game.8e951479f4b98167.html",
+      "entry_bytes": 22425,
+      "entry_sha256": "8e951479f4b9816710d0c356d90d2a71e27bbf3a3745dff782692d7ecc8c0a21",
+      "id": "f26aacc9f6682c92",
+      "inventory": "hosting-files.f26aacc9f6682c92.json",
+      "inventory_bytes": 260312,
+      "inventory_sha256": "f26aacc9f6682c9212db2ad235fce7caa4ad0f16d86ce12d4d164818c597041e",
+      "requires_cross_origin_isolation": false,
+      "requires_webp": true,
+      "runtime_cache": {
+        "max_bytes": 268435456,
+        "on_demand": true,
+        "protocol": 1,
+        "scope": "/kingdom-watch-play/",
+        "worker": "hosting-cache-sw.js"
+      },
+      "schema": 1,
+      "texture_mode": "mixed-webp-q95",
+      "wasm": [
+        "cocos-js/assets/spine-CC34fKUR.wasm"
+      ]
+    },
+    "file_count": 1493,
+    "runtime_bytes": 167767282,
+    "full_package_bytes": 168028239,
+    "budget_bytes": 200000000,
+    "all_exported_hashes_verified": true,
+    "links": {
+      "explicit_file_references_checked": 438,
+      "embedded_provenance_strings_not_fetches": [],
+      "virtual_system_modules": 153,
+      "remote_url_literals": [
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/bangers/Bangers-Regular.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-Bold.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-ExtraBoldItalic.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+      ],
+      "bundle_versions": {
+        "internal": "9e58a",
+        "main": "c47c2",
+        "resources": "b0299901cc71836f"
+      }
+    },
+    "wasm_memories": {
+      "cocos-js/assets/spine-CC34fKUR.wasm": [
+        {
+          "shared": false,
+          "memory64": false,
+          "minimum_pages": 512
+        }
+      ]
+    },
+    "art_resources": {
+      "nativeImagesResolved": 409,
+      "webpImagesRGBAAndHashesVerified": 396,
+      "losslessImagesSourceRGBAIdentical": 237,
+      "q95ImagesDimensionsAlphaAndOutputVerified": 159,
+      "gameEngineExecuted": false
+    },
+    "runtime_cache": {
+      "max_bytes": 268435456,
+      "on_demand": true,
+      "protocol": 1,
+      "scope": "/kingdom-watch-play/",
+      "worker": "hosting-cache-sw.js"
+    },
+    "validation": "static files, image pixels and WASM headers only",
+    "javascript_executed": false,
+    "wasm_compiled_or_instantiated": false,
+    "game_browser_or_tests_started": false
+  },
+  "sourceAssetsUnchanged": 1454,
+  "unchangedRuntimeFiles": 1487,
+  "runtimeFilesChangedOrAdded": [
+    "game.6dba31df6f83cd3d.html",
+    "game.8e951479f4b98167.html",
+    "hosting-cache-sw.js",
+    "hosting-diagnostics.html",
+    "index.html"
+  ],
+  "baselineBytes": 168009942,
+  "fullPackageBytes": 168028239,
+  "addedPackageBytes": 18297,
+  "entryUnchangedExceptOriginalBuildTimestamp": true,
+  "mainGameCodeUnchanged": true,
+  "syntaxOnlyFiles": [
+    "D:\\AI\\S4Game\\KingdomWatch\\build\\github-pages-browser-cache-v90\\hosting-cache-sw.js",
+    "D:\\AI\\S4Game\\KingdomWatch\\tools\\github-pages\\runtime-cache-client.js",
+    "D:\\AI\\S4Game\\KingdomWatch\\build\\browser-cache-v90-syntax\\index-html-0.js",
+    "D:\\AI\\S4Game\\KingdomWatch\\build\\browser-cache-v90-syntax\\hosting-diagnostics-html-0.js"
+  ],
+  "sourceReviewGuardsPresent": [
+    "request.mode === 'navigate'",
+    "request.cache === 'no-store'",
+    "request.headers.has('Range')",
+    "url.searchParams.has('diag')",
+    "url.searchParams.has('check')",
+    "url.origin !== BASE.origin",
+    "value.clients[event.clientId]",
+    "await sha(bytes) === record.sha256",
+    "usedBytes + record.bytes > LIMIT"
+  ],
+  "automaticWholePackagePrecache": false,
+  "gameBrowserWorkerTestsAudioOrWasmExecuted": false,
+  "manualChecksRemaining": [
+    "Phone first visit, close/reopen and cached resource reuse",
+    "Update with an old tab still open",
+    "Storage disabled/full and uncached offline resource recovery"
+  ]
+}

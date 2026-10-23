@@ -19,6 +19,8 @@
 
 2026-10-24 [其他资源v89](../resource-other-v89/README.md)将210份非声明旧音效移到本地可恢复归档，完整64类音效声明和4首音乐的80文件保留原字节；构建前新增静态音频目录检查。受保护图片加入method4/6无损择小，196图再省1.20MB，全部图片解码像素与v88相同；完整包168.01MB，200MB限制与发布命令保持。
 
+2026-10-24 [浏览器按需缓存v90](../browser-cache-v90/README.md)添加只限本项目scope的缓存Worker，资源首次使用时下载/验证并保存，更新复用未变内容，不预下载整包。入口/版本指针保持联网，散列入口/清单也可复用，缓存不可用时自动走HTTP。完整包168.03MB，画面和音频原字节保持。此Worker用于普通资源缓存，当前单线程WASM仍不需要跨源隔离。
+
 2026-10-22 已补齐只校验模式、可配置文件、预制包复用、进程代理恢复和分阶段报告。参数如下：
 
 | 参数 | 行为 |
@@ -57,11 +59,11 @@
 
 仅复制浏览器所需的 `assets/`、`src/`、`cocos-js/` 以及入口、样式和许可说明。排除开发配置、源码目录、日志、缓存、Source Map、CF `_headers` 和函数。公开仓库中的运行资源公开，但不包含原项目开发仓库。CF `functions/report.js` 不会迁入静态托管。
 
-固定 `index.html` 通过 `cache: no-store` 和查询参数读取小型 `hosting-release.json`，再联网读取、验证 SHA-256 后加载对应的 `game.<散列>.html`。引导失败显示错误和重试按钮，不自动刷新。HTML 的 `<base>`、启动设置、import map、引擎脚本、effect 二进制和原资源均适配 `/kingdom-watch-play/`。
+固定 `index.html` 通过 `cache: no-store` 和查询参数读取小型 `hosting-release.json`，散列命名的入口和完整清单可复用本地已校验缓存，大小/SHA匹配后才加载对应的 `game.<散列>.html`。引导失败显示错误和重试按钮，不自动刷新。HTML 的 `<base>`、启动设置、import map、引擎脚本、effect 二进制和原资源均适配 `/kingdom-watch-play/`。
 
 游戏资源沿用 Cocos UUID/版本路径。v82变换后的图片native、import和bundle配置使用实际内容SHA版本，并同步settings；UUID与运行加载ID保持。构建后修改的引擎额外使用 engine revision 路径，启动依赖与 effect 使用实际内容散列路径。更新默认保留上一版需要的文件，防止仍开着的上一版页面立即丢失资源；再上一个版本不长期保留。若未版本化的运行文件内容发生冲突则拒绝发布；显式PrunePreviousRelease只保留本次运行包。
 
-GitHub Pages 的 HTTP 缓存由平台控制，实测 `max-age=600`；本方案不能通过 CF `_headers` 设置一年缓存。入口与清单明确联网，资源使用稳定版本路径。未添加 Service Worker，不抢占同一 GitHub 域名下其他项目。
+GitHub Pages 的 HTTP 缓存由平台控制，实测 `max-age=600`；不能通过 CF `_headers` 设置一年缓存。v90在其上添加CacheStorage：当前页面按已校验文件清单访问资源，资源SHA与原路径作为键，缓存命中不再为该资源联网；首次缺失才下载并验证缓存。仅256MiB资源体预算，保留最近两版与活跃页面所需数据，过期无引用条目清理，存储失败走HTTP。导航/版本指针、诊断、Range、no-store与跨域请求绕过资源缓存。scope严格为 `/kingdom-watch-play/`，不会控制同域其他项目。清缓存/浏览器回收/无痕结束可能需重下，不承诺完整离线启动。
 
 单文件、图片尺寸、完整当前包以及保留上一版后的站点总量均在发布前检查。混合模式200MB预算包含版本指针和清单；超过预算时停止发布，不自动降低画质或删除原稿。
 

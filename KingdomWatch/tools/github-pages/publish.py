@@ -114,7 +114,7 @@ def synchronize(stage,dest,prune_previous_release=False):
             if not path.resolve().is_relative_to(dest) or not path.is_file() or sha(path)!=meta['sha256']:raise RuntimeError('Previous runtime file is not intact: '+name)
             if name not in new:
                 if not prune_previous_release:retained.add(name)
-            elif sha(stage/name)!=meta['sha256'] and name not in {'index.html','hosting-diagnostics.html','audio-credits.html'}:
+            elif sha(stage/name)!=meta['sha256'] and name not in {'index.html','hosting-diagnostics.html','audio-credits.html','hosting-cache-sw.js'}:
                 raise RuntimeError('Unversioned runtime collision between releases: '+name)
         if not prune_previous_release:retained.add(previous['inventory'])
         upcoming=json.loads((stage/'hosting-release.json').read_text('utf-8'))
@@ -173,6 +173,7 @@ def online_verification(base,stage,release):
     if hashlib.sha256(payload).hexdigest()!=release['inventory_sha256']:raise RuntimeError('Live inventory checksum mismatch')
     inventory=json.loads(payload);files=inventory['files']
     names=['index.html','hosting-diagnostics.html',release['entry'],*release['wasm']]
+    if release.get('runtime_cache'):names.append(release['runtime_cache']['worker'])
     art=inventory['runtime'].get('art_resources')
     if art:
         names.append(art['manifest'])
@@ -190,6 +191,8 @@ def online_verification(base,stage,release):
         if hashlib.sha256(data).hexdigest()!=files[name]['sha256'] or len(data)!=files[name]['bytes']:raise RuntimeError('Live checksum mismatch: '+name)
         if name.endswith('.webp') and h.get('content-type','').split(';')[0].strip().lower()!='image/webp':
             raise RuntimeError('Incorrect WebP response Content-Type: '+name)
+        if name==release.get('runtime_cache',{}).get('worker') and h.get('content-type','').split(';')[0].strip().lower() not in {'text/javascript','application/javascript'}:
+            raise RuntimeError('Cache worker is not served as JavaScript')
         return {'path':name,'bytes':len(data),'sha256':'matches','content_type':h.get('content-type'),'content_encoding':h.get('content-encoding'),'cache_control':h.get('cache-control')}
     with ThreadPoolExecutor(max_workers=4) as pool:checks=list(pool.map(check,sorted(set(names))))
     second,_=http_bytes(base+'hosting-release.json?check='+str(time.time_ns()))

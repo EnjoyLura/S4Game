@@ -16,6 +16,20 @@
  async function get(path){var u=url(path);u.searchParams.set('diag',Date.now());var c=new AbortController(),timer=setTimeout(function(){c.abort();},30000);try{var r=await fetch(u,{cache:'no-store',signal:c.signal});if(!r.ok)throw new Error(path+' HTTP '+r.status);return{bytes:await r.arrayBuffer(),type:r.headers.get('content-type'),encoding:r.headers.get('content-encoding'),cache:r.headers.get('cache-control')};}finally{clearTimeout(timer);}}
  async function sha(b){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',b))).map(function(x){return x.toString(16).padStart(2,'0');}).join('');}
  async function checked(path,expected){var r=await get(path);if(await sha(r.bytes)!==expected.sha256||r.bytes.byteLength!==expected.bytes)throw new Error(path+' 文件校验失败');return r;}
+ async function cacheStatus(){
+  var result={available:'serviceWorker' in navigator&&'caches' in window,mode:'按需缓存，不预下载整包'};
+  if(navigator.storage&&navigator.storage.estimate){var size=await navigator.storage.estimate();result.originUsageBytes=size.usage;result.originQuotaBytes=size.quota;}
+  if(navigator.storage&&navigator.storage.persisted)result.originPersisted=await navigator.storage.persisted();
+  if(!result.available)return result;
+  var registrations=await navigator.serviceWorker.getRegistrations();
+  var own=registrations.find(function(r){return r.scope===base.href;});
+  result.registered=!!own;
+  if(!own||!own.active)return result;
+  result.worker=own.active.scriptURL;
+  if(result.worker!==new URL('hosting-cache-sw.js',base).href)return result;
+  result.runtime=await new Promise(function(resolve){var channel=new MessageChannel(),timer=setTimeout(function(){channel.port1.close();resolve({status:'暂未响应'});},2000);channel.port1.onmessage=function(e){clearTimeout(timer);channel.port1.close();resolve(e.data);};own.active.postMessage({type:'KW_CACHE_STATUS',protocol:1},[channel.port2]);});
+  return result;
+ }
  async function quick(){
   document.getElementById('all').disabled=true;progress.textContent='正在检查入口、资源清单、WASM 与浏览器环境…';
   report={time:new Date().toISOString(),page:location.href,secureContext:isSecureContext,crossOriginIsolated:crossOriginIsolated,sharedArrayBufferAvailable:typeof SharedArrayBuffer!=='undefined',devicePixelRatio:devicePixelRatio,userAgent:navigator.userAgent,gameStarted:false,checks:[],errors:[]};show();
@@ -32,8 +46,8 @@
    report.wasm=[];
    for(var path of release.wasm){var w=await checked(path,inventory.files[path]);var valid=WebAssembly.validate(w.bytes);if(!valid)throw new Error('WASM 验证失败：'+path);await WebAssembly.compile(w.bytes);report.wasm.push({path:path,sha256:'匹配',moduleCompiled:true,contentType:w.type,contentEncoding:w.encoding});}
    var second=JSON.parse(new TextDecoder().decode((await get('hosting-release.json')).bytes));if(second.id!==release.id)throw new Error('检查期间刚发生发布，请重新检查');report.checks.push('再次读取版本一致');
-   if('serviceWorker' in navigator){report.serviceWorkers=(await navigator.serviceWorker.getRegistrations()).map(function(r){return{scope:r.scope,controller:navigator.serviceWorker.controller&&navigator.serviceWorker.controller.scriptURL};});}
-   report.cachePolicy='入口先联网获取版本清单；代码和媒体使用构建版本文件名；HTTP 缓存时长由 GitHub Pages 控制';
+   try{report.browserCache=await cacheStatus();}catch(e){report.browserCache={status:'浏览器未提供存储状态',reason:e.message};}
+   report.cachePolicy='版本清单每次优先联网；已校验入口和清单缓存；运行资源首次使用时下载并按SHA缓存，更新复用相同内容；不预下载整包。诊断请求绕过资源缓存，检查真实托管文件。';
    progress.textContent='基础检查通过。完整资源校验将下载约 '+report.totalMiB+' MiB，不会启动游戏。';document.getElementById('all').disabled=false;
   }catch(e){report.errors.push(e.message);progress.textContent='检查未通过，报告中保留具体原因。';}show();
  }
