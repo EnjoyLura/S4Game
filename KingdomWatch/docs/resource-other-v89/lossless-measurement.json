@@ -1,0 +1,1905 @@
+{
+  "baselineRelease": "12ec0530039779bc",
+  "imageCount": 237,
+  "imagesSmaller": 196,
+  "bytesSaved": 1195182,
+  "allPixelsIdentical": true,
+  "images": [
+    {
+      "uuid": "000789f3-54c4-4c77-88c6-2e9910d9e71e",
+      "source": "assets/resources/ux/ui_video_badge.png",
+      "beforeBytes": 67208,
+      "candidateBytes": 66752,
+      "selectedBytes": 66752,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "006b6b52-2bf0-466d-bd2c-d0601ac6c41c",
+      "source": "assets/resources/ux/settlement_comic_v1/panel_lose.png",
+      "beforeBytes": 109126,
+      "candidateBytes": 106626,
+      "selectedBytes": 106626,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "008bc53d-dd22-41bf-a87d-5db19fb5741b",
+      "source": "assets/resources/ux/ui_card_pyro_morale.png",
+      "beforeBytes": 70052,
+      "candidateBytes": 69206,
+      "selectedBytes": 69206,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "02b16a72-25a3-4b17-a597-342c457a2c34",
+      "source": "assets/resources/ux/ui_icon_atk_sniper.png",
+      "beforeBytes": 182878,
+      "candidateBytes": 171658,
+      "selectedBytes": 171658,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "02cf2ca3-2925-4dd3-ba3e-b541dda78fd6",
+      "source": "assets/resources/ux/shop_comic_v1/comic_glove_wind_v1.png",
+      "beforeBytes": 45306,
+      "candidateBytes": 44276,
+      "selectedBytes": 44276,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "0422dbf4-2634-4a51-8608-13a12303d92c",
+      "source": "assets/resources/ux/pause_comic_v1/tab_gold.png",
+      "beforeBytes": 88908,
+      "candidateBytes": 88908,
+      "selectedBytes": 88908,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "05cc3090-3ff6-4e5b-843d-a9c6e89e297e",
+      "source": "assets/resources/ux/ui_card_serial.png",
+      "beforeBytes": 164368,
+      "candidateBytes": 156856,
+      "selectedBytes": 156856,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "0757a34d-a4b8-4b54-ac4e-ce3221367fdc",
+      "source": "assets/resources/ux/shop_comic_v1/glove_storm_v57.png",
+      "beforeBytes": 951906,
+      "candidateBytes": 907198,
+      "selectedBytes": 907198,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "079e88e8-1c6e-4cb0-909b-fe03762a5e5f",
+      "source": "assets/resources/ux/settlement_comic_v1/badge_win.png",
+      "beforeBytes": 272314,
+      "candidateBytes": 267166,
+      "selectedBytes": 267166,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "085112e8-0cbb-4ed0-847c-6ad998aa457e",
+      "source": "assets/resources/ux/pause_comic_v1/switch_on.png",
+      "beforeBytes": 40304,
+      "candidateBytes": 39210,
+      "selectedBytes": 39210,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "0870731e-8150-41a4-819f-c422ff659f6c",
+      "source": "assets/resources/ux/hero_comic_v1/comic_figure_pyro_v1.png",
+      "beforeBytes": 293662,
+      "candidateBytes": 282486,
+      "selectedBytes": 282486,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "0898322d-3835-44f5-b73b-684e083a46e8",
+      "source": "assets/resources/ux/battle_skin_v2/tab_m.png",
+      "beforeBytes": 44,
+      "candidateBytes": 38,
+      "selectedBytes": 44,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "0b3c1ec0-fc04-4b4e-8ef2-96fa5c1eb50e",
+      "source": "assets/resources/ux/ui_card_mora_war.png",
+      "beforeBytes": 94862,
+      "candidateBytes": 93238,
+      "selectedBytes": 93238,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "0b5be3f9-913b-4e18-977d-2942764463aa",
+      "source": "assets/resources/ux/ui_star_gray.png",
+      "beforeBytes": 54130,
+      "candidateBytes": 53550,
+      "selectedBytes": 53550,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "0bbe952f-9e51-4d09-a660-9072118f8130",
+      "source": "assets/resources/ux/ui_nav_shop.png",
+      "beforeBytes": 34808,
+      "candidateBytes": 34372,
+      "selectedBytes": 34372,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "0cce6029-d676-49b2-95e4-6da782da7131",
+      "source": "assets/resources/ux/ui_card_fast_charge_a.png",
+      "beforeBytes": 155836,
+      "candidateBytes": 149046,
+      "selectedBytes": 149046,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "0d844e72-ceed-4694-baf9-d4462b11b285",
+      "source": "assets/resources/ux/ui_item_mat_rune.png",
+      "beforeBytes": 189954,
+      "candidateBytes": 184002,
+      "selectedBytes": 184002,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "0e39aa31-38d4-4054-af7b-6ad52473e6cb",
+      "source": "assets/resources/ux/pause_comic_v1/switch_disabled.png",
+      "beforeBytes": 35038,
+      "candidateBytes": 34712,
+      "selectedBytes": 34712,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "0ea34f6f-1c9c-4fb9-a7a3-034b54467ceb",
+      "source": "assets/resources/ux/ui_item_mat_dust.png",
+      "beforeBytes": 183734,
+      "candidateBytes": 177290,
+      "selectedBytes": 177290,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "0efe1f1f-a949-4997-bbc1-c2106faf412b",
+      "source": "assets/resources/ux/icon_alert.png",
+      "beforeBytes": 30720,
+      "candidateBytes": 29616,
+      "selectedBytes": 29616,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "0fe9422a-65db-4c75-b877-e7ba1566c851",
+      "source": "assets/resources/ux/ui_card_volt_shock.png",
+      "beforeBytes": 92586,
+      "candidateBytes": 90570,
+      "selectedBytes": 90570,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "14cf5e98-7d35-4f97-9626-46b81ce70080",
+      "source": "assets/resources/ux/ui_star.png",
+      "beforeBytes": 68634,
+      "candidateBytes": 67920,
+      "selectedBytes": 67920,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "190ef127-ea62-4e46-8755-055c4f1c7018",
+      "source": "assets/resources/ux/shop_comic_v1/helm_hawkguard_v57.png",
+      "beforeBytes": 750540,
+      "candidateBytes": 718080,
+      "selectedBytes": 718080,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "193059ea-9661-4ad3-af29-b61f0a8700ea",
+      "source": "assets/resources/ux/ui_card_multi_lock.png",
+      "beforeBytes": 167910,
+      "candidateBytes": 157532,
+      "selectedBytes": 157532,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "1a0190e4-9d4f-4f80-a58a-2dbcd337344f",
+      "source": "assets/resources/ux/ui_icon_exp.png",
+      "beforeBytes": 39336,
+      "candidateBytes": 38730,
+      "selectedBytes": 38730,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "1a0e1bc6-7574-4ae4-ab22-08c0761e5398",
+      "source": "assets/resources/ux/ui_icon_stats.png",
+      "beforeBytes": 29574,
+      "candidateBytes": 28528,
+      "selectedBytes": 28528,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "1ccfae17-f1c6-4b01-b279-2fb2724c9a6a",
+      "source": "assets/resources/ux/ui_icon_heart.png",
+      "beforeBytes": 28538,
+      "candidateBytes": 28336,
+      "selectedBytes": 28538,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "1ff994d4-dd97-4e97-8d05-67647c9692a2",
+      "source": "assets/resources/ux/shop_comic_v1/comic_mat_iron_v1.png",
+      "beforeBytes": 34778,
+      "candidateBytes": 34638,
+      "selectedBytes": 34778,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "2105fb12-f360-49a1-a6de-2b36e59ff199",
+      "source": "assets/resources/ux/pause_comic_v1/button_gold.png",
+      "beforeBytes": 72344,
+      "candidateBytes": 72344,
+      "selectedBytes": 72344,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "212f530b-f0b8-4441-bceb-1f0bab119551",
+      "source": "assets/resources/ux/ui_card_header_blue.png",
+      "beforeBytes": 48918,
+      "candidateBytes": 48774,
+      "selectedBytes": 48918,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "2200e16d-6427-43fe-81ad-a776ed2da121",
+      "source": "assets/resources/ux/battle_skin_v2/button_muted.png",
+      "beforeBytes": 1154,
+      "candidateBytes": 1154,
+      "selectedBytes": 1154,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "22a1d1e0-db99-401a-b4e8-23fc2bb118bf",
+      "source": "assets/resources/ux/ui_card_pyro_ember.png",
+      "beforeBytes": 77080,
+      "candidateBytes": 75892,
+      "selectedBytes": 75892,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "22d5a589-3361-4fbe-b257-81f66c215a6f",
+      "source": "assets/resources/ux/hero_comic_v1/comic_figure_sniper_v1.png",
+      "beforeBytes": 269384,
+      "candidateBytes": 260020,
+      "selectedBytes": 260020,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "234eaa82-b4cb-4d35-9a10-80b11d1b1ef8",
+      "source": "assets/resources/ux/settlement_comic_v1/badge_lose.png",
+      "beforeBytes": 178434,
+      "candidateBytes": 175296,
+      "selectedBytes": 175296,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "256ed004-bc58-4af8-a516-d3492eccffbd",
+      "source": "assets/resources/ux/ui_card_split.png",
+      "beforeBytes": 160610,
+      "candidateBytes": 153522,
+      "selectedBytes": 153522,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "2823f7bc-402c-46e2-a318-4284a86bd7bf",
+      "source": "assets/resources/ux/ui_panel_dialog.png",
+      "beforeBytes": 418276,
+      "candidateBytes": 416578,
+      "selectedBytes": 416578,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "28d10029-0bc2-4f49-9f51-cb4c9ce6a015",
+      "source": "assets/resources/ux/ui_card_execute.png",
+      "beforeBytes": 162444,
+      "candidateBytes": 153702,
+      "selectedBytes": 153702,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "2996d22c-a972-4cfc-bcb2-9537567bb6f9",
+      "source": "assets/resources/ux/shop_comic_v1/comic_helm_falcon_v1.png",
+      "beforeBytes": 44124,
+      "candidateBytes": 43174,
+      "selectedBytes": 43174,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "29eca40d-b627-4781-932e-c14b3b0bc272",
+      "source": "assets/resources/ux/pause_comic_v1/button_green.png",
+      "beforeBytes": 71738,
+      "candidateBytes": 71626,
+      "selectedBytes": 71738,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "2a5377a8-efd5-40a7-a466-1594df6f924c",
+      "source": "assets/resources/fx/archer_v1.png",
+      "beforeBytes": 612968,
+      "candidateBytes": 606904,
+      "selectedBytes": 606904,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "2c1d0ca6-e4b6-4efa-b80b-0bc218dc6800",
+      "source": "assets/resources/ux/ui_card_frame_purple.png",
+      "beforeBytes": 193256,
+      "candidateBytes": 192332,
+      "selectedBytes": 192332,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "2d09fa20-6df0-4ebf-a913-6cbfcf8aa680",
+      "source": "assets/resources/ux/ui_icon_skill_volt.png",
+      "beforeBytes": 55572,
+      "candidateBytes": 54096,
+      "selectedBytes": 54096,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "2ec58d2d-181d-44c1-96a8-dd5af70bcaba",
+      "source": "assets/resources/ux/shop_comic_v1/comic_mat_rune_v1.png",
+      "beforeBytes": 45378,
+      "candidateBytes": 44886,
+      "selectedBytes": 44886,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "2f8c3c62-5b36-497f-9504-87637131579f",
+      "source": "assets/resources/ux/ui_card_explode.png",
+      "beforeBytes": 173772,
+      "candidateBytes": 161992,
+      "selectedBytes": 161992,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "30189d50-3714-440f-a66b-f85cf074cea6",
+      "source": "assets/resources/ux/upgrade_comic_v1/comic_staff_mora_v1.png",
+      "beforeBytes": 76010,
+      "candidateBytes": 72604,
+      "selectedBytes": 72604,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "308b38ab-6b2f-4d2e-96d5-48dbf62a4b26",
+      "source": "assets/resources/ux/ui_card_mora_range.png",
+      "beforeBytes": 83496,
+      "candidateBytes": 82002,
+      "selectedBytes": 82002,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "311c6759-47c6-4e25-a11b-bb02bec86c0f",
+      "source": "assets/resources/ux/ui_panel_dark_white.png",
+      "beforeBytes": 64870,
+      "candidateBytes": 63916,
+      "selectedBytes": 63916,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "31aae5c1-b0d5-4dfd-891d-b929783c58f9",
+      "source": "assets/resources/ux/hero_comic_v3/comic_cycle_button_v3.png",
+      "beforeBytes": 49676,
+      "candidateBytes": 48588,
+      "selectedBytes": 48588,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "336749c7-e8cc-4249-aaa3-f3caf4ccd2e5",
+      "source": "assets/resources/ux/base_comic_v1/comic_keep_heart_v1.png",
+      "beforeBytes": 32418,
+      "candidateBytes": 32328,
+      "selectedBytes": 32418,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "33cb15ed-62e1-4d4f-abe0-0e574e3bc69f",
+      "source": "assets/resources/ux/battle_comic_v1/comic_victory_v1.png",
+      "beforeBytes": 56400,
+      "candidateBytes": 54250,
+      "selectedBytes": 54250,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "343b9d0e-fd85-4aa3-9df5-50e255271e19",
+      "source": "assets/resources/ux/ui_icon_pause.png",
+      "beforeBytes": 27830,
+      "candidateBytes": 26954,
+      "selectedBytes": 26954,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "34532008-e85f-4127-8eae-fe05a5fe9b2a",
+      "source": "assets/resources/ux/ui_icon_refresh_diamond.png",
+      "beforeBytes": 42662,
+      "candidateBytes": 41210,
+      "selectedBytes": 41210,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "3468821a-6309-4587-824b-cdfe103b8eea",
+      "source": "assets/resources/ux/ui_circ_btn_green.png",
+      "beforeBytes": 73114,
+      "candidateBytes": 72260,
+      "selectedBytes": 72260,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "34f7e4e7-80db-4f04-8ef3-371b2a871e37",
+      "source": "assets/resources/ux/ui_nav_base.png",
+      "beforeBytes": 31696,
+      "candidateBytes": 31024,
+      "selectedBytes": 31024,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "35bdd906-6125-4df4-ac4e-f36d5210d654",
+      "source": "assets/resources/ux/hero_comic_v1/comic_figure_archer_v2.png",
+      "beforeBytes": 913796,
+      "candidateBytes": 876122,
+      "selectedBytes": 876122,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "3650a533-3a5f-45fc-bdbb-c4f5f29f967e",
+      "source": "assets/resources/ux/ui_card_mora_spell.png",
+      "beforeBytes": 95630,
+      "candidateBytes": 93342,
+      "selectedBytes": 93342,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "37e1ede5-c87b-43df-b53b-e26aea9ca80a",
+      "source": "assets/resources/ux/upgrade_comic_v1/comic_training_hammer_v1.png",
+      "beforeBytes": 44976,
+      "candidateBytes": 44094,
+      "selectedBytes": 44094,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "38f539a7-439c-47fe-a6aa-0a26dc230546",
+      "source": "assets/resources/ux/ui_wave_pill.png",
+      "beforeBytes": 33840,
+      "candidateBytes": 33824,
+      "selectedBytes": 33840,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "39521acb-26b2-43a4-aa72-4adfdd4e1fdb",
+      "source": "assets/resources/ux/ui_icon_skill_mora.png",
+      "beforeBytes": 85198,
+      "candidateBytes": 84094,
+      "selectedBytes": 84094,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "39bd0f7c-d172-457a-8c19-c255cd674613",
+      "source": "assets/resources/ux/ui_icon_skill_archer.png",
+      "beforeBytes": 233834,
+      "candidateBytes": 220350,
+      "selectedBytes": 220350,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "3b430ab2-88df-49b9-b5a9-38ece622e9c4",
+      "source": "assets/resources/ux/battle_skin_v2/banner_fail.png",
+      "beforeBytes": 1188,
+      "candidateBytes": 1188,
+      "selectedBytes": 1188,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "3e9ac617-0e41-4f1b-9f39-c0884c1d97df",
+      "source": "assets/resources/ux/hero_comic_v1/comic_figure_mora_v1.png",
+      "beforeBytes": 300658,
+      "candidateBytes": 291728,
+      "selectedBytes": 291728,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "3f86c912-4ab6-408f-b009-132d9d1f02de",
+      "source": "assets/resources/ux/ui_card_frame_white.png",
+      "beforeBytes": 195908,
+      "candidateBytes": 194780,
+      "selectedBytes": 194780,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "406c6ede-e69b-43aa-a21c-64249bf03448",
+      "source": "assets/resources/ux/shop_comic_v1/armor_flameseal_v57.png",
+      "beforeBytes": 965772,
+      "candidateBytes": 924064,
+      "selectedBytes": 924064,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "4116a03e-b857-435c-acf0-e29b0d34abd5",
+      "source": "assets/resources/ux/ui_panel_shop.png",
+      "beforeBytes": 2461722,
+      "candidateBytes": 2483294,
+      "selectedBytes": 2461722,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "417bca46-df6e-4f10-8578-51af4ca6d7a4",
+      "source": "assets/resources/ux/ui_card_cd_cut.png",
+      "beforeBytes": 186742,
+      "candidateBytes": 174440,
+      "selectedBytes": 174440,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "41e605b6-b34f-427f-8eed-0414a327fea9",
+      "source": "assets/resources/ux/ui_nav_heroes.png",
+      "beforeBytes": 28378,
+      "candidateBytes": 28212,
+      "selectedBytes": 28378,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "427a3433-22e7-4e08-a043-8b5f3bf64a00",
+      "source": "assets/resources/ux/ui_item_helm_falcon.png",
+      "beforeBytes": 41588,
+      "candidateBytes": 40428,
+      "selectedBytes": 40428,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "42f17c11-edc5-411a-a593-3eded7bb729e",
+      "source": "assets/resources/ux/ui_item_armor_forest.png",
+      "beforeBytes": 43766,
+      "candidateBytes": 42670,
+      "selectedBytes": 42670,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "43f63f29-69f2-4c87-9e84-30819cac23e9",
+      "source": "assets/resources/ux/ui_card_mora_morale.png",
+      "beforeBytes": 72250,
+      "candidateBytes": 70550,
+      "selectedBytes": 70550,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "440afb0c-55fa-46fb-8c82-ae2711751e2e",
+      "source": "assets/resources/ux/ui_icon_skill_pyro.png",
+      "beforeBytes": 50224,
+      "candidateBytes": 48980,
+      "selectedBytes": 48980,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "4748b8e3-2e73-4a12-b004-1f1a3c32a9dd",
+      "source": "assets/resources/ux/battle_skin_v2/tab_l.png",
+      "beforeBytes": 294,
+      "candidateBytes": 294,
+      "selectedBytes": 294,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "4cd045e0-2447-41b1-8cef-b48aa04f8b31",
+      "source": "assets/resources/ux/ui_avatar_volt.png",
+      "beforeBytes": 91844,
+      "candidateBytes": 89536,
+      "selectedBytes": 89536,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "4d445d7e-b5be-469b-b10f-82898798fb8d",
+      "source": "assets/resources/ux/ui_seat_q3.png",
+      "beforeBytes": 44002,
+      "candidateBytes": 44002,
+      "selectedBytes": 44002,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "4d51d4df-d090-480f-a0f0-b5d48bd343fa",
+      "source": "assets/resources/ux/ui_card_rain_rounds.png",
+      "beforeBytes": 162562,
+      "candidateBytes": 155010,
+      "selectedBytes": 155010,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "4f97355c-1eab-45e6-858d-a4f32cc9cd50",
+      "source": "assets/resources/ux/ui_circ_icon_blue_active.png",
+      "beforeBytes": 123500,
+      "candidateBytes": 119890,
+      "selectedBytes": 119890,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "50361ef5-4dea-4f5a-9c5c-f6a716368c3d",
+      "source": "assets/resources/fx/frost_domain_video_v10.png",
+      "beforeBytes": 3367952,
+      "candidateBytes": 3371672,
+      "selectedBytes": 3367952,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "516fde54-680d-4011-ae70-50543eed8031",
+      "source": "assets/resources/ux/ui_card_frame_blue.png",
+      "beforeBytes": 194100,
+      "candidateBytes": 193252,
+      "selectedBytes": 193252,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "51af3679-6760-45c5-9caf-9bb95230bd3a",
+      "source": "assets/resources/ux/shop_comic_v1/comic_wpn_crossbow_v1.png",
+      "beforeBytes": 42176,
+      "candidateBytes": 41458,
+      "selectedBytes": 41458,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "52a30213-566b-408f-b276-3c45df60e195",
+      "source": "assets/resources/ux/ui_item_wpn_bow.png",
+      "beforeBytes": 34018,
+      "candidateBytes": 33644,
+      "selectedBytes": 33644,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "52a43b0a-ee2a-4f19-913c-b05bffe27e7b",
+      "source": "assets/resources/ux/ui_seat_q2.png",
+      "beforeBytes": 43406,
+      "candidateBytes": 43406,
+      "selectedBytes": 43406,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "52c42fb1-5aa2-48b5-9d39-3600dd1d1d7e",
+      "source": "assets/resources/ux/hero_comic_v2/comic_bag_v2.png",
+      "beforeBytes": 57678,
+      "candidateBytes": 56530,
+      "selectedBytes": 56530,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "53d36051-51bd-478d-90c8-7e4b4e5ca9e7",
+      "source": "assets/resources/ux/ui_seat_q0.png",
+      "beforeBytes": 48204,
+      "candidateBytes": 46526,
+      "selectedBytes": 46526,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "542e47d1-1504-4b2f-93de-928476df6a63",
+      "source": "assets/resources/fx/fire_v2.png",
+      "beforeBytes": 296600,
+      "candidateBytes": 281854,
+      "selectedBytes": 281854,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "5836f308-0aa1-4fa3-a66c-bcf76e8c6cd4",
+      "source": "assets/resources/fx/crater_mark.png",
+      "beforeBytes": 137214,
+      "candidateBytes": 136076,
+      "selectedBytes": 136076,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "5981b5f3-fc09-40b0-9f32-4cea5f359d5a",
+      "source": "assets/resources/ux/ui_item_acc_moon.png",
+      "beforeBytes": 29392,
+      "candidateBytes": 29058,
+      "selectedBytes": 29058,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "5a337cc8-8169-4621-b897-325bfbd7bd05",
+      "source": "assets/resources/ux/hero_comic_v1/comic_hero_archer_v1.png",
+      "beforeBytes": 119926,
+      "candidateBytes": 116848,
+      "selectedBytes": 116848,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "5a4191f3-41e5-41a3-9fea-aa01db8ef148",
+      "source": "assets/resources/ux/ui_item_glove_wind.png",
+      "beforeBytes": 32034,
+      "candidateBytes": 31562,
+      "selectedBytes": 31562,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "5a68394e-c7e2-4fc8-8e5b-93ae49d6c2ed",
+      "source": "assets/resources/ux/ui_icon_atk_archer.png",
+      "beforeBytes": 216340,
+      "candidateBytes": 201472,
+      "selectedBytes": 201472,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "5a697038-38a3-4c7d-9be1-13e1d9103ebf",
+      "source": "assets/resources/ux/ui_icon_chest.png",
+      "beforeBytes": 36708,
+      "candidateBytes": 36090,
+      "selectedBytes": 36090,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "5b3fc306-315b-4120-a25d-395cc850dfc7",
+      "source": "assets/resources/ux/ui_nav_upgrade.png",
+      "beforeBytes": 33978,
+      "candidateBytes": 32892,
+      "selectedBytes": 32892,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "5b41f8f1-01ac-4d4e-9d17-d8f8de495d5e",
+      "source": "assets/resources/ux/battle_skin_v2/bar_track.png",
+      "beforeBytes": 530,
+      "candidateBytes": 530,
+      "selectedBytes": 530,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "5b75090d-1cbd-40ae-a7a5-5b8d4201daf8",
+      "source": "assets/resources/ux/upgrade_comic_v1/comic_staff_volt_v1.png",
+      "beforeBytes": 86376,
+      "candidateBytes": 83042,
+      "selectedBytes": 83042,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "5e47f828-ca8d-4ce0-be76-3ba960cd0176",
+      "source": "assets/resources/ux/ui_card_volt_spell.png",
+      "beforeBytes": 68128,
+      "candidateBytes": 66782,
+      "selectedBytes": 66782,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "604375e0-ee6e-42da-a5e7-0b8e4c314a3d",
+      "source": "assets/resources/ux/hero_comic_v1/comic_figure_volt_v1.png",
+      "beforeBytes": 344796,
+      "candidateBytes": 333968,
+      "selectedBytes": 333968,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "62bf0aa7-a65e-4c9c-bd34-1930af2b3f85",
+      "source": "assets/resources/ux/ui_card_sharp.png",
+      "beforeBytes": 168390,
+      "candidateBytes": 158728,
+      "selectedBytes": 158728,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "6620e3bd-ce8b-4935-9b7e-54a8a43318bf",
+      "source": "assets/resources/ux/levels_comic_v1/comic_swords_v1.png",
+      "beforeBytes": 51606,
+      "candidateBytes": 50414,
+      "selectedBytes": 50414,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "693ed11b-12bb-4887-b783-945f8230fc9c",
+      "source": "assets/resources/ux/shop_comic_v1/comic_nav_map_v1.png",
+      "beforeBytes": 43354,
+      "candidateBytes": 42656,
+      "selectedBytes": 42656,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "6a596eaa-c60d-4d91-8d53-a14e231fe455",
+      "source": "assets/resources/ux/settlement_comic_v1/button_teal.png",
+      "beforeBytes": 52834,
+      "candidateBytes": 50820,
+      "selectedBytes": 50820,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "6b17269d-41fb-4abe-b617-e4ba06ffb2ff",
+      "source": "assets/resources/ux/pause_comic_v1/title_ribbon.png",
+      "beforeBytes": 118250,
+      "candidateBytes": 118242,
+      "selectedBytes": 118250,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "6c5abf0d-a478-4eb4-9ff5-c0e5b2e599fb",
+      "source": "assets/resources/ux/ui_item_wpn_crossbow.png",
+      "beforeBytes": 51064,
+      "candidateBytes": 50350,
+      "selectedBytes": 50350,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "6e09c713-0171-4d7b-87ab-5bd7aff5c54c",
+      "source": "assets/resources/ux/ui_card_volt_war.png",
+      "beforeBytes": 57114,
+      "candidateBytes": 55890,
+      "selectedBytes": 55890,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "7179b300-d0e5-4d76-842b-8f8373e293ce",
+      "source": "assets/resources/ux/ui_card_explode_r.png",
+      "beforeBytes": 164466,
+      "candidateBytes": 156424,
+      "selectedBytes": 156424,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "737be726-64c9-4f95-a90c-f4d0a263b03a",
+      "source": "assets/resources/ux/ui_icon_ult_mora.png",
+      "beforeBytes": 88626,
+      "candidateBytes": 88322,
+      "selectedBytes": 88322,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "7462053d-f38a-479f-a061-4705b6e89e0d",
+      "source": "assets/resources/ux/shop_comic_v1/glove_longwatch_v57.png",
+      "beforeBytes": 756230,
+      "candidateBytes": 723268,
+      "selectedBytes": 723268,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "7608c483-ef0c-4d00-ab98-44cc3da24fb3",
+      "source": "assets/resources/ux/ui_icon_atk_pyro.png",
+      "beforeBytes": 40516,
+      "candidateBytes": 39730,
+      "selectedBytes": 39730,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "767a65be-71f8-4ee6-a731-a891a9d781ae",
+      "source": "assets/resources/ux/hero_comic_v2/comic_story_v2.png",
+      "beforeBytes": 42340,
+      "candidateBytes": 41822,
+      "selectedBytes": 41822,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "77df17b6-5632-4663-836b-241049beabf0",
+      "source": "assets/resources/ux/battle_comic_v1/comic_defeat_v1.png",
+      "beforeBytes": 47964,
+      "candidateBytes": 47056,
+      "selectedBytes": 47056,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "79642122-825b-42d9-a790-6b58245cbb4d",
+      "source": "assets/resources/ux/ui_avatar_pyro.png",
+      "beforeBytes": 83290,
+      "candidateBytes": 82122,
+      "selectedBytes": 82122,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "7974fe9b-767b-4f84-b130-9f4bcd4acfad",
+      "source": "assets/resources/ux/ui_icon_skull.png",
+      "beforeBytes": 36514,
+      "candidateBytes": 35402,
+      "selectedBytes": 35402,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "79bcee8d-8f71-4028-a462-73c77b3926a5",
+      "source": "assets/resources/ux/battle_skin_v2/tab_r.png",
+      "beforeBytes": 300,
+      "candidateBytes": 300,
+      "selectedBytes": 300,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "79ef67bd-b8b1-4788-b959-e50a0d4c3609",
+      "source": "assets/resources/ux/pause_comic_v1/tab_neutral.png",
+      "beforeBytes": 96032,
+      "candidateBytes": 94364,
+      "selectedBytes": 94364,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "7af2d1c2-65ef-401c-a47d-f3c3d1d52aa3",
+      "source": "assets/resources/ux/settlement_comic_v1/card_lose.png",
+      "beforeBytes": 50194,
+      "candidateBytes": 49356,
+      "selectedBytes": 49356,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "7b6d17d6-1661-4d74-8248-f90701e4b457",
+      "source": "assets/resources/ux/ui_card_header_white.png",
+      "beforeBytes": 47552,
+      "candidateBytes": 47092,
+      "selectedBytes": 47092,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "7c08c719-097c-402d-b6c6-991639de179c",
+      "source": "assets/resources/ux/pause_comic_v1/settings_row.png",
+      "beforeBytes": 96038,
+      "candidateBytes": 94936,
+      "selectedBytes": 94936,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "7c942567-751e-4d84-ae87-99a6238f98a6",
+      "source": "assets/resources/ux/ui_card_pyro_stun.png",
+      "beforeBytes": 86256,
+      "candidateBytes": 85046,
+      "selectedBytes": 85046,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "7d82524d-b3df-4091-b7d9-05d1b3d95c02",
+      "source": "assets/resources/ux/shop_comic_v1/acc_stareye_v57.png",
+      "beforeBytes": 548132,
+      "candidateBytes": 524948,
+      "selectedBytes": 524948,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "7dfcff6d-852b-417c-923f-bd56b694b415",
+      "source": "assets/resources/ux/shop_comic_v1/helm_nightfeather_v57.png",
+      "beforeBytes": 779678,
+      "candidateBytes": 759188,
+      "selectedBytes": 759188,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "7e86341d-6566-46c1-8568-0eadbc2e2ed1",
+      "source": "assets/resources/ux/levels_comic_v1/comic_star_v1.png",
+      "beforeBytes": 34684,
+      "candidateBytes": 34310,
+      "selectedBytes": 34310,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "7f98eab3-edc2-4749-8520-e71d88755dcb",
+      "source": "assets/resources/ux/ui_icon_ult_sniper.png",
+      "beforeBytes": 198350,
+      "candidateBytes": 187720,
+      "selectedBytes": 187720,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "7faf0482-7d4b-4e59-a16c-a540d39678a5",
+      "source": "assets/resources/ux/upgrade_comic_v1/comic_staff_pyro_v1.png",
+      "beforeBytes": 72490,
+      "candidateBytes": 69198,
+      "selectedBytes": 69198,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "814e0018-e07c-4773-8892-8c732a26d334",
+      "source": "assets/resources/ux/ui_icon_ult_pyro.png",
+      "beforeBytes": 53438,
+      "candidateBytes": 53270,
+      "selectedBytes": 53438,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "8284b05d-3bf6-49a8-bb53-2922da0eacec",
+      "source": "assets/resources/ux/ui_card_volt_morale.png",
+      "beforeBytes": 48744,
+      "candidateBytes": 47638,
+      "selectedBytes": 47638,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "84618ad9-f04c-4070-8592-37724ba81dbf",
+      "source": "assets/resources/ux/ui_btn_buy.png",
+      "beforeBytes": 37140,
+      "candidateBytes": 37140,
+      "selectedBytes": 37140,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "84e9c067-6eed-4e1d-95da-bec7db0b5688",
+      "source": "assets/resources/ux/pick_comic_v1/card_base.png",
+      "beforeBytes": 1178960,
+      "candidateBytes": 1188376,
+      "selectedBytes": 1178960,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "84f06434-68f7-42d5-9033-5759e5191202",
+      "source": "assets/resources/ux/shop_comic_v1/glove_swift_v57.png",
+      "beforeBytes": 837964,
+      "candidateBytes": 802768,
+      "selectedBytes": 802768,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "8da8e9d9-089e-4d9b-9071-1488fe2c8c24",
+      "source": "assets/resources/ux/ui_circ_icon_gray.png",
+      "beforeBytes": 116652,
+      "candidateBytes": 111678,
+      "selectedBytes": 111678,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "8de8521b-6d70-4ff8-9114-3e7d277276b9",
+      "source": "assets/resources/ux/ui_avatar_archer.png",
+      "beforeBytes": 209420,
+      "candidateBytes": 195236,
+      "selectedBytes": 195236,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "8f5ee1e2-44e1-48a1-b13f-a7f111300707",
+      "source": "assets/resources/ux/ui_card_xp_badge.png",
+      "beforeBytes": 192888,
+      "candidateBytes": 180658,
+      "selectedBytes": 180658,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "8f9de682-12bb-45e6-a65f-4ebe05a73df0",
+      "source": "assets/resources/ux/levels_comic_v1/comic_difficulty_shield_v1.png",
+      "beforeBytes": 46570,
+      "candidateBytes": 46006,
+      "selectedBytes": 46006,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "9133df24-ef54-4ca3-825a-f72bfeba6975",
+      "source": "assets/resources/ux/shop_comic_v1/comic_coin_v1.png",
+      "beforeBytes": 56576,
+      "candidateBytes": 55734,
+      "selectedBytes": 55734,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "91f88333-611c-40cb-ad9d-fb42d764acaa",
+      "source": "assets/resources/fx/pyro_hit.png",
+      "beforeBytes": 132206,
+      "candidateBytes": 127860,
+      "selectedBytes": 127860,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "92c9d2b6-594d-40d5-88e8-450828a3dd11",
+      "source": "assets/resources/ux/ui_card_mora_chill.png",
+      "beforeBytes": 85452,
+      "candidateBytes": 84344,
+      "selectedBytes": 84344,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "934f537f-cf5c-4c6b-b4da-7cfd1277cc76",
+      "source": "assets/resources/ux/pause_comic_v1/switch_off.png",
+      "beforeBytes": 37224,
+      "candidateBytes": 36988,
+      "selectedBytes": 37224,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "936c5e85-91fc-4c8d-9e6f-f3aa3836b925",
+      "source": "assets/resources/ux/ui_card_extra_line.png",
+      "beforeBytes": 133206,
+      "candidateBytes": 129318,
+      "selectedBytes": 129318,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "9663529a-b248-4202-80a1-fabbd6c0bfeb",
+      "source": "assets/resources/ux/battle_skin_v2/button_green.png",
+      "beforeBytes": 1134,
+      "candidateBytes": 1134,
+      "selectedBytes": 1134,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "979d7a6c-67ef-4053-9328-74734401e0f4",
+      "source": "assets/resources/ux/ui_card_mora_glacier.png",
+      "beforeBytes": 90772,
+      "candidateBytes": 89376,
+      "selectedBytes": 89376,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "98a0d80d-cacc-4475-b9f1-7f37d680cc36",
+      "source": "assets/resources/ux/pause_comic_v1/button_muted.png",
+      "beforeBytes": 34940,
+      "candidateBytes": 34434,
+      "selectedBytes": 34434,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "9bf218fb-b4cc-4c47-afa6-55c8635d9822",
+      "source": "assets/resources/ux/battle_skin_v2/banner_title.png",
+      "beforeBytes": 1202,
+      "candidateBytes": 1202,
+      "selectedBytes": 1202,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "9ce4b3bf-4fc4-4ce9-a982-dfb083aef9cd",
+      "source": "assets/resources/ux/ui_icon_atk_volt.png",
+      "beforeBytes": 50096,
+      "candidateBytes": 49060,
+      "selectedBytes": 49060,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "9f44531a-a24d-4470-a11a-8183ba00a6ab",
+      "source": "assets/resources/ux/battle_skin_v2/button_gold.png",
+      "beforeBytes": 1158,
+      "candidateBytes": 1158,
+      "selectedBytes": 1158,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a10e1ab6-8d03-4e2a-9d81-af2c6707910a",
+      "source": "assets/resources/ux/shop_comic_v1/acc_crimson_v57.png",
+      "beforeBytes": 741418,
+      "candidateBytes": 709874,
+      "selectedBytes": 709874,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a12179af-b5b0-4285-889b-a4cc9c95d813",
+      "source": "assets/resources/ux/ui_card_crit_rate.png",
+      "beforeBytes": 160088,
+      "candidateBytes": 155354,
+      "selectedBytes": 155354,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a1956b71-b190-4f51-8142-790475054af3",
+      "source": "assets/resources/ux/pick_comic_v1/header_strip.png",
+      "beforeBytes": 636176,
+      "candidateBytes": 616332,
+      "selectedBytes": 616332,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a2037507-bbc4-45f7-8294-625b0210d4d7",
+      "source": "assets/resources/ux/ui_card_explode_w.png",
+      "beforeBytes": 168884,
+      "candidateBytes": 158734,
+      "selectedBytes": 158734,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a2229768-aad4-48e1-8648-e6b604aae0a6",
+      "source": "assets/resources/ux/battle_skin_v2/switch_on.png",
+      "beforeBytes": 2756,
+      "candidateBytes": 2724,
+      "selectedBytes": 2756,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a2434f41-438b-422e-9dad-89f06d903a0d",
+      "source": "assets/resources/ux/battle_skin_v2/bar_fill.png",
+      "beforeBytes": 248,
+      "candidateBytes": 248,
+      "selectedBytes": 248,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a2bc5b45-3574-4057-8260-af3ef9540714",
+      "source": "assets/resources/ux/ui_circ_icon_gray_active.png",
+      "beforeBytes": 116746,
+      "candidateBytes": 111892,
+      "selectedBytes": 111892,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a2d0d2a9-f151-4aaa-9335-2e2c82e17751",
+      "source": "assets/resources/ux/ui_card_volt_range.png",
+      "beforeBytes": 70170,
+      "candidateBytes": 68388,
+      "selectedBytes": 68388,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a3c54d54-3691-4aa4-9a18-9567042393f3",
+      "source": "assets/resources/ux/hero_comic_v2/comic_attributes_v2.png",
+      "beforeBytes": 45236,
+      "candidateBytes": 44092,
+      "selectedBytes": 44092,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a3d25181-dfb6-4dbc-86b1-8959af1d0c84",
+      "source": "assets/resources/ux/ui_switch_disabled.png",
+      "beforeBytes": 45838,
+      "candidateBytes": 45210,
+      "selectedBytes": 45210,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a4172b00-8314-47e0-9ef8-f734a3af70f3",
+      "source": "assets/resources/ux/shop_comic_v1/comic_hero_sniper_v1.png",
+      "beforeBytes": 110516,
+      "candidateBytes": 107364,
+      "selectedBytes": 107364,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a4ce34c9-b3df-44ad-ba49-7deb7be1e83b",
+      "source": "assets/resources/ux/hero_comic_v2/comic_forge_v2.png",
+      "beforeBytes": 35948,
+      "candidateBytes": 35322,
+      "selectedBytes": 35322,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a4ce7732-d70a-47e9-8c68-d1c3a8fa666f",
+      "source": "assets/resources/ux/shop_comic_v1/comic_diamond_v1.png",
+      "beforeBytes": 34514,
+      "candidateBytes": 34320,
+      "selectedBytes": 34514,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a63ac3de-5338-4ae2-a9ba-6b39d8cc87bd",
+      "source": "assets/resources/ux/levels_comic_v1/comic_terrain_forest_v1.png",
+      "beforeBytes": 478760,
+      "candidateBytes": 462040,
+      "selectedBytes": 462040,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a654ad2e-b240-4513-81ef-c3cdd63134bb",
+      "source": "assets/resources/ux/battle_skin_v2/switch_disabled.png",
+      "beforeBytes": 2522,
+      "candidateBytes": 2530,
+      "selectedBytes": 2522,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a826c9d9-b7ff-42b1-8fcf-9e991350b361",
+      "source": "assets/resources/ux/levels_comic_v1/comic_terrain_outpost_v1.png",
+      "beforeBytes": 517938,
+      "candidateBytes": 504730,
+      "selectedBytes": 504730,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a85eeb0b-ee1f-46e6-a071-3b92d94148d4",
+      "source": "assets/resources/ux/ui_item_mat_stone.png",
+      "beforeBytes": 26928,
+      "candidateBytes": 26964,
+      "selectedBytes": 26928,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "a9c1dd41-c03c-4288-b70d-7d2c0fb19152",
+      "source": "assets/resources/ux/shop_comic_v1/glove_farstar_v57.png",
+      "beforeBytes": 765520,
+      "candidateBytes": 728448,
+      "selectedBytes": 728448,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "abd82860-801c-44d1-9e29-b93f3ad897c7",
+      "source": "assets/resources/ux/ui_icon_coin.png",
+      "beforeBytes": 30542,
+      "candidateBytes": 29842,
+      "selectedBytes": 29842,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "abff6c4d-3d8b-45f4-ad69-4e13c62f1889",
+      "source": "assets/resources/ux/shop_comic_v1/comic_hero_mora_v1.png",
+      "beforeBytes": 127200,
+      "candidateBytes": 124190,
+      "selectedBytes": 124190,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "ad54c7b0-e04a-4465-a49e-66536336170b",
+      "source": "assets/resources/ux/pick_comic_v1/title_plate.png",
+      "beforeBytes": 567474,
+      "candidateBytes": 566332,
+      "selectedBytes": 566332,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "adad480f-88c6-4443-bbbf-175c2b44a23e",
+      "source": "assets/resources/ux/levels_comic_v1/comic_chest_closed_v1.png",
+      "beforeBytes": 56596,
+      "candidateBytes": 55256,
+      "selectedBytes": 55256,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "ae0e95aa-57d6-4dc8-b480-48be97e5270c",
+      "source": "assets/resources/ux/levels_comic_v1/comic_chest_open_v1.png",
+      "beforeBytes": 68958,
+      "candidateBytes": 67060,
+      "selectedBytes": 67060,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "b08050ed-dd08-4531-a29a-eb18a9654386",
+      "source": "assets/resources/ux/pause_comic_v1/reward_socket.png",
+      "beforeBytes": 46240,
+      "candidateBytes": 44624,
+      "selectedBytes": 44624,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "b1127b77-8cec-426f-ae96-71062431f80e",
+      "source": "assets/resources/ux/ui_item_mat_iron.png",
+      "beforeBytes": 23524,
+      "candidateBytes": 22980,
+      "selectedBytes": 22980,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "b1f3739f-b3c6-441a-a2fd-a3a283ed569a",
+      "source": "assets/resources/ux/shop_comic_v1/comic_mat_dust_v1.png",
+      "beforeBytes": 51194,
+      "candidateBytes": 50412,
+      "selectedBytes": 50412,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "b2e88b47-c596-43bb-9c04-50e425f6ba18",
+      "source": "assets/resources/ux/ui_badge_new.png",
+      "beforeBytes": 92490,
+      "candidateBytes": 91488,
+      "selectedBytes": 91488,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "b4cf04e8-602c-4fa4-8b07-27f22f9db07a",
+      "source": "assets/resources/ux/ui_icon_speed.png",
+      "beforeBytes": 29458,
+      "candidateBytes": 28318,
+      "selectedBytes": 28318,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "b60283e9-b9c6-4fa4-8c47-e6a21590b226",
+      "source": "assets/resources/ux/ui_avatar_mora.png",
+      "beforeBytes": 91584,
+      "candidateBytes": 89778,
+      "selectedBytes": 89778,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "b746fc79-bdad-42a6-84a7-558590be6ec6",
+      "source": "assets/resources/ux/ui_nav_levels.png",
+      "beforeBytes": 33070,
+      "candidateBytes": 32472,
+      "selectedBytes": 32472,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "b7ac8338-6151-4108-b3c6-ba0d3e134c31",
+      "source": "assets/resources/ux/ui_circ_icon_gold.png",
+      "beforeBytes": 119790,
+      "candidateBytes": 119538,
+      "selectedBytes": 119790,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "b8154fa0-1dfc-4ac4-9ae2-d28af21697d5",
+      "source": "assets/resources/ux/hero_comic_v3/comic_power_plate_v3.png",
+      "beforeBytes": 64698,
+      "candidateBytes": 64074,
+      "selectedBytes": 64074,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "bb2375c0-df63-4825-a3ae-9ab5ea0ec520",
+      "source": "assets/resources/ux/settlement_comic_v1/card_win.png",
+      "beforeBytes": 50790,
+      "candidateBytes": 49604,
+      "selectedBytes": 49604,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "bcbd4645-a308-4a5e-b642-6104db23d383",
+      "source": "assets/resources/ux/ui_icon_refresh_ad.png",
+      "beforeBytes": 27386,
+      "candidateBytes": 26508,
+      "selectedBytes": 26508,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "bcfd2b86-663a-4c73-9c53-dbd3a3703460",
+      "source": "assets/resources/ux/shop_comic_v1/helm_lioncrest_v57.png",
+      "beforeBytes": 830788,
+      "candidateBytes": 804264,
+      "selectedBytes": 804264,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "bdf34b81-7221-45c2-81ea-51dc6a608f60",
+      "source": "assets/resources/ux/ui_avatar_sniper.png",
+      "beforeBytes": 204286,
+      "candidateBytes": 189500,
+      "selectedBytes": 189500,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "be038358-8e71-479c-94ae-99250cd029da",
+      "source": "assets/resources/ux/ui_icon_ult_archer.png",
+      "beforeBytes": 260266,
+      "candidateBytes": 242740,
+      "selectedBytes": 242740,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "bf587cf3-2fc1-4f20-a32a-bff801dbcf15",
+      "source": "assets/resources/ux/shop_comic_v1/comic_hero_pyro_v1.png",
+      "beforeBytes": 119682,
+      "candidateBytes": 115708,
+      "selectedBytes": 115708,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "bfff3ab0-69e7-42d4-9480-af1547542edd",
+      "source": "assets/resources/ux/levels_comic_v1/comic_difficulty_skull_v1.png",
+      "beforeBytes": 45544,
+      "candidateBytes": 44528,
+      "selectedBytes": 44528,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "c32582ac-5b08-407e-ac83-888dcbb9b7ef",
+      "source": "assets/resources/ux/ui_circ_icon_blue.png",
+      "beforeBytes": 122362,
+      "candidateBytes": 118372,
+      "selectedBytes": 118372,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "c4686b26-2efc-4630-a8a0-0f9a5b15a86e",
+      "source": "assets/resources/ux/ui_card_instinct_a.png",
+      "beforeBytes": 157840,
+      "candidateBytes": 148786,
+      "selectedBytes": 148786,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "c69efab8-6b16-42f6-bcbc-3ee92089bae5",
+      "source": "assets/resources/ux/hero_comic_v2/comic_power_banner_v2.png",
+      "beforeBytes": 80764,
+      "candidateBytes": 80646,
+      "selectedBytes": 80764,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "c74798b9-af3f-4db9-a782-212d905aea38",
+      "source": "assets/resources/ux/ui_card_fan.png",
+      "beforeBytes": 159354,
+      "candidateBytes": 153326,
+      "selectedBytes": 153326,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "c87c8647-c4ad-43a4-9e38-386acc3e7364",
+      "source": "assets/resources/ux/ui_circ_icon_gold_active.png",
+      "beforeBytes": 121372,
+      "candidateBytes": 121198,
+      "selectedBytes": 121372,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "c95063fb-5cb4-4d9d-93ab-41bdd45a38fc",
+      "source": "assets/resources/fx/frost_ultimate_impact_v1.png",
+      "beforeBytes": 1489300,
+      "candidateBytes": 1479442,
+      "selectedBytes": 1479442,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "c9f5c56b-3f1d-417c-ab4b-c194a74d613b",
+      "source": "assets/resources/ux/ui_gear_ring.png",
+      "beforeBytes": 93558,
+      "candidateBytes": 92566,
+      "selectedBytes": 92566,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "ca9e658d-ff59-449a-bc11-f7b490ad7370",
+      "source": "assets/resources/ux/shop_comic_v1/comic_nav_castle_v1.png",
+      "beforeBytes": 58604,
+      "candidateBytes": 57888,
+      "selectedBytes": 57888,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "cb1d9f30-c37c-40c3-9482-5cae224ab69c",
+      "source": "assets/resources/ux/ui_card_mora_freeze.png",
+      "beforeBytes": 96564,
+      "candidateBytes": 94826,
+      "selectedBytes": 94826,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "cb35d9a0-8122-414a-97b1-62be93f8a421",
+      "source": "assets/resources/ux/shop_comic_v1/comic_mat_stone_v1.png",
+      "beforeBytes": 42818,
+      "candidateBytes": 42494,
+      "selectedBytes": 42494,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "cbc7f045-a917-40fa-9273-93d29ed7e9a6",
+      "source": "assets/resources/ux/ui_switch_on.png",
+      "beforeBytes": 53114,
+      "candidateBytes": 52442,
+      "selectedBytes": 52442,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "cc58de3b-3c07-418c-8c6d-ec00c7ee91bd",
+      "source": "assets/resources/ux/shop_comic_v1/helm_ironridge_v57.png",
+      "beforeBytes": 854854,
+      "candidateBytes": 828940,
+      "selectedBytes": 828940,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "cd2bfada-4805-4b58-84b7-ad9dc8a3afd6",
+      "source": "assets/resources/ux/shop_comic_v1/armor_tide_v57.png",
+      "beforeBytes": 895910,
+      "candidateBytes": 864076,
+      "selectedBytes": 864076,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "cdb776e0-847c-4a98-a491-f5835902148f",
+      "source": "assets/resources/ux/ui_card_burn.png",
+      "beforeBytes": 148652,
+      "candidateBytes": 143294,
+      "selectedBytes": 143294,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "ceca9262-7d63-4782-acf9-3d2d8ddf0896",
+      "source": "assets/resources/ux/ui_card_volt_shards.png",
+      "beforeBytes": 91098,
+      "candidateBytes": 88758,
+      "selectedBytes": 88758,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "d053671c-c42a-48cb-865a-bc436290d937",
+      "source": "assets/resources/ux/ui_switch_off.png",
+      "beforeBytes": 50920,
+      "candidateBytes": 50470,
+      "selectedBytes": 50470,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "d09a1599-f28b-461c-a513-f458ac72482d",
+      "source": "assets/resources/ux/ui_card_crit_dmg.png",
+      "beforeBytes": 165070,
+      "candidateBytes": 157332,
+      "selectedBytes": 157332,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "d0a83eaf-3046-46c3-bcbe-eb5333d547d4",
+      "source": "assets/resources/fx/frost_ultimate_rain_v1.png",
+      "beforeBytes": 16388,
+      "candidateBytes": 16228,
+      "selectedBytes": 16388,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "d20d5923-bd70-419b-9d12-8f85c82faac3",
+      "source": "assets/resources/ux/ui_icon_lock.png",
+      "beforeBytes": 15116,
+      "candidateBytes": 14746,
+      "selectedBytes": 14746,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "d2c436e0-a6c4-4e2d-b180-257f1c43d033",
+      "source": "assets/resources/ux/ui_card_pyro_shards.png",
+      "beforeBytes": 75750,
+      "candidateBytes": 74568,
+      "selectedBytes": 74568,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "d5144da3-22e5-4391-92f4-89a5c9fc89a5",
+      "source": "assets/resources/ux/shop_comic_v1/comic_wpn_bow_v1.png",
+      "beforeBytes": 34280,
+      "candidateBytes": 33260,
+      "selectedBytes": 33260,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "d84d0566-28ad-450a-8e06-c7ca02bd4c48",
+      "source": "assets/resources/ux/ui_card_pyro_war.png",
+      "beforeBytes": 85382,
+      "candidateBytes": 84020,
+      "selectedBytes": 84020,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "da51f2a1-aaf5-409f-a1a2-7105cde0439f",
+      "source": "assets/resources/ux/ui_card_pyro_spell.png",
+      "beforeBytes": 68732,
+      "candidateBytes": 67610,
+      "selectedBytes": 67610,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "dad63b1b-d529-4808-a8a9-032e5c6bf0e7",
+      "source": "assets/resources/ux/ui_card_wall.png",
+      "beforeBytes": 183028,
+      "candidateBytes": 170844,
+      "selectedBytes": 170844,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "db265a4e-06f9-4e78-8f85-1e6a86d84f2c",
+      "source": "assets/resources/ux/hero_comic_v2/comic_cycle_arrow_v2.png",
+      "beforeBytes": 26906,
+      "candidateBytes": 26468,
+      "selectedBytes": 26468,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "dcab8bca-8989-47a9-be19-21f68d304cbc",
+      "source": "assets/resources/ux/ui_icon_skill_sniper.png",
+      "beforeBytes": 209574,
+      "candidateBytes": 194872,
+      "selectedBytes": 194872,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "dde5b26e-c48f-4b88-9449-ffefb35bb8a6",
+      "source": "assets/resources/fx/crater_embers.png",
+      "beforeBytes": 32486,
+      "candidateBytes": 32486,
+      "selectedBytes": 32486,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "ddf5bd04-ace8-4be2-afc2-aca096038b36",
+      "source": "assets/resources/ux/ui_card_repair.png",
+      "beforeBytes": 180090,
+      "candidateBytes": 169802,
+      "selectedBytes": 169802,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "dee514b5-6e2c-4c91-b477-25a4f7f3ca53",
+      "source": "assets/resources/ux/shop_comic_v1/armor_cinder_v57.png",
+      "beforeBytes": 846816,
+      "candidateBytes": 814322,
+      "selectedBytes": 814322,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "deec534b-21d6-4881-b342-b9aea4563ec2",
+      "source": "assets/resources/ux/ui_seat_q1.png",
+      "beforeBytes": 41904,
+      "candidateBytes": 41904,
+      "selectedBytes": 41904,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "e23e4480-528c-4e2f-a0da-eb2acee86f3d",
+      "source": "assets/resources/ux/battle_skin_v2/switch_off.png",
+      "beforeBytes": 2576,
+      "candidateBytes": 2518,
+      "selectedBytes": 2576,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "e303326c-3def-4c4d-88ee-e981624d188c",
+      "source": "assets/resources/ux/ui_icon_diamond.png",
+      "beforeBytes": 24540,
+      "candidateBytes": 23486,
+      "selectedBytes": 23486,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "e31c9a2c-eeac-4b10-b93b-7cadbf2ed6b3",
+      "source": "assets/resources/ux/ui_card_swift.png",
+      "beforeBytes": 169974,
+      "candidateBytes": 161154,
+      "selectedBytes": 161154,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "e35538c7-7bc4-4b9c-ae3b-f78b388f565a",
+      "source": "assets/resources/ux/shop_comic_v1/comic_acc_moon_v1.png",
+      "beforeBytes": 32536,
+      "candidateBytes": 31944,
+      "selectedBytes": 31944,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "e735abe2-640e-467c-8ff0-eb6f813d1dc8",
+      "source": "assets/resources/ux/levels_comic_v1/comic_terrain_lair_v1.png",
+      "beforeBytes": 409804,
+      "candidateBytes": 396144,
+      "selectedBytes": 396144,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "e76aca24-e83a-4f1f-b0cd-852ffc62b76c",
+      "source": "assets/resources/ux/hero_comic_v1/comic_figure_archer_v1.png",
+      "beforeBytes": 261816,
+      "candidateBytes": 252472,
+      "selectedBytes": 252472,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "e8e574df-ad9e-4911-a5dc-7924c0fd3829",
+      "source": "assets/resources/ux/shop_comic_v1/comic_armor_forest_v1.png",
+      "beforeBytes": 53718,
+      "candidateBytes": 52584,
+      "selectedBytes": 52584,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "e974315b-026c-438f-b02a-91b14cb58b51",
+      "source": "assets/resources/ux/ui_lv_badge.png",
+      "beforeBytes": 63764,
+      "candidateBytes": 62946,
+      "selectedBytes": 62946,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "eb4bc0e1-ab96-4fa8-b1fc-59bd138486d9",
+      "source": "assets/resources/ux/settlement_comic_v1/panel_win.png",
+      "beforeBytes": 109104,
+      "candidateBytes": 107126,
+      "selectedBytes": 107126,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "efddce5b-b1b7-4c43-9c41-897f5410b35d",
+      "source": "assets/resources/ux/ui_icon_eye.png",
+      "beforeBytes": 36260,
+      "candidateBytes": 35650,
+      "selectedBytes": 35650,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "f00c36b2-ca6c-4ec1-8941-b43e756aebc5",
+      "source": "assets/resources/ux/shop_comic_v1/acc_sunfang_v57.png",
+      "beforeBytes": 455068,
+      "candidateBytes": 439870,
+      "selectedBytes": 439870,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "f00daa28-970d-4377-aed7-1993b397dd77",
+      "source": "assets/resources/ux/ui_card_header_purple.png",
+      "beforeBytes": 47002,
+      "candidateBytes": 47000,
+      "selectedBytes": 47002,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "f030c883-c8d3-4d67-9ca8-0cc081815947",
+      "source": "assets/resources/ux/battle_skin_v2/card_base.png",
+      "beforeBytes": 1148,
+      "candidateBytes": 1142,
+      "selectedBytes": 1148,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "f176a675-2677-4611-98b3-9f29fada7076",
+      "source": "assets/resources/ux/ui_card_frost.png",
+      "beforeBytes": 161944,
+      "candidateBytes": 153356,
+      "selectedBytes": 153356,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "f20a82a0-9108-4b37-874b-0dd14511f042",
+      "source": "assets/resources/ux/ui_icon_ult_volt.png",
+      "beforeBytes": 58006,
+      "candidateBytes": 56602,
+      "selectedBytes": 56602,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "f339f6a0-11d5-4fd1-ac41-4130370346bc",
+      "source": "assets/resources/ux/ui_btn_notice.png",
+      "beforeBytes": 215598,
+      "candidateBytes": 207972,
+      "selectedBytes": 207972,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "f493102c-65f6-422f-ba35-c975efad4d4a",
+      "source": "assets/resources/ux/ui_icon_atk_mora.png",
+      "beforeBytes": 74046,
+      "candidateBytes": 73064,
+      "selectedBytes": 73064,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "f5223b5c-6b1e-4162-9811-bd454067ab87",
+      "source": "assets/resources/ux/ui_panel_dark_gold.png",
+      "beforeBytes": 65928,
+      "candidateBytes": 65140,
+      "selectedBytes": 65140,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "f6b0a363-074e-48ac-80d7-99c345a3efa3",
+      "source": "assets/resources/ux/shop_comic_v1/comic_nav_shop_v1.png",
+      "beforeBytes": 50112,
+      "candidateBytes": 49644,
+      "selectedBytes": 49644,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "f6bf0d86-f7d6-48b3-ba79-450f5c109919",
+      "source": "assets/resources/ux/settlement_comic_v1/button_muted.png",
+      "beforeBytes": 50980,
+      "candidateBytes": 50248,
+      "selectedBytes": 50248,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "f8249c13-05df-4634-94ee-3a257a018790",
+      "source": "assets/resources/ux/shop_comic_v1/armor_moonwell_v57.png",
+      "beforeBytes": 986122,
+      "candidateBytes": 939708,
+      "selectedBytes": 939708,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "f9cc6c15-9260-4dd8-a688-95acbc8ca856",
+      "source": "assets/resources/ux/ui_icon_equip.png",
+      "beforeBytes": 35628,
+      "candidateBytes": 34862,
+      "selectedBytes": 34862,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "fad31408-8805-4721-b5d1-36dd5c9bfced",
+      "source": "assets/resources/ux/shop_comic_v1/acc_dragonscale_v57.png",
+      "beforeBytes": 778330,
+      "candidateBytes": 745858,
+      "selectedBytes": 745858,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "fadc03b2-17e4-4dcf-a428-576ef2a930f5",
+      "source": "assets/resources/ux/ui_card_mora_brittle.png",
+      "beforeBytes": 84510,
+      "candidateBytes": 83006,
+      "selectedBytes": 83006,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "faebe69a-95f6-4305-a2c5-589d856b356f",
+      "source": "assets/resources/ux/ui_icon_chat.png",
+      "beforeBytes": 30576,
+      "candidateBytes": 29682,
+      "selectedBytes": 29682,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "fb668788-2d10-410a-b08d-64c4ca3a04ed",
+      "source": "assets/resources/ux/shop_comic_v1/comic_hero_volt_v1.png",
+      "beforeBytes": 125260,
+      "candidateBytes": 119976,
+      "selectedBytes": 119976,
+      "rgbaIdentical": true
+    },
+    {
+      "uuid": "fd08c636-7526-4211-b52e-c438ba40187e",
+      "source": "assets/resources/ux/ui_card_pyro_range.png",
+      "beforeBytes": 104040,
+      "candidateBytes": 102434,
+      "selectedBytes": 102434,
+      "rgbaIdentical": true
+    }
+  ]
+}

@@ -169,6 +169,13 @@ def encode_one(path, allow_lossy=False):
                 'rgbaSha256': output_rgba, 'rgbaIdentical': output_rgba == rgba,
                 'webpSha256': sha(cached), 'webpBytes': cached.stat().st_size, 'cacheReused': reused}
     selected = candidate(POLICY['webp'], 'lossless-webp')
+    if not allow_lossy:
+        for method in POLICY.get('losslessSearchMethods', [POLICY['webp']['method']]):
+            if method == POLICY['webp']['method']:
+                continue
+            alternative = candidate({**POLICY['webp'], 'method': method}, 'lossless-webp')
+            if selected['webpBytes'] - alternative['webpBytes'] >= POLICY['minimumSavingBytes']:
+                selected = alternative
     if allow_lossy:
         lossy = candidate(POLICY['mixedWebp']['encoding'], 'webp-q95')
         if selected['webpBytes'] - lossy['webpBytes'] >= POLICY['minimumSavingBytes']:

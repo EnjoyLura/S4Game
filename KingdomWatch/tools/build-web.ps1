@@ -2,6 +2,9 @@ param([string]$LogName = 'kw-web-release')
 $ErrorActionPreference = 'Stop'
 $kwWebRoot = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $kwWebRoot
+$kwWebNode = 'C:/Program Files/nodejs/node.exe'
+& $kwWebNode tools/audit-audio-catalog.cjs
+if ($LASTEXITCODE -ne 0) { throw 'Declared audio resource audit failed' }
 $kwWebOut = Join-Path $env:TEMP ($LogName + '-out.log')
 $kwWebErr = Join-Path $env:TEMP ($LogName + '-err.log')
 $kwWebConfig = Join-Path $PSScriptRoot 'web-release-build.json'

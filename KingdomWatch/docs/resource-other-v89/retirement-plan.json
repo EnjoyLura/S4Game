@@ -1,0 +1,2537 @@
+{
+  "schema": 1,
+  "archive": "D:\\AI\\S4Game\\.local-art-archive\\audio-v89",
+  "resourcesRoot": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources",
+  "catalogSha256": "e05561c221458a92d5419da6e504c1a507ac63d38bd21767bcb14eff348a964a",
+  "allDeclaredCuesRetained": true,
+  "declaredAudioFilesRetained": 80,
+  "audioFilesBefore": 290,
+  "retiredAudioFiles": 210,
+  "retiredFilesIncludingMeta": 420,
+  "retiredSourceBytes": 8682856,
+  "serializedAudioReferencesRetained": [],
+  "textFilesChecked": 47,
+  "files": [
+    {
+      "asset": "resources/audio/death-v3/fire_1.wav",
+      "bytes": 22116,
+      "sha256": "6b1e0ab7756f186dd6b9a9705956a8f01de1167a0f66d888e6d2b4a4d8dfd99c",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/fire_1.wav.meta",
+      "bytes": 234,
+      "sha256": "39fd2ce9e37ac5e4be8ffe18a4c862550e51a252d1cf7254e51d5ce8680a9e26",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/fire_2.wav",
+      "bytes": 22800,
+      "sha256": "fcdcf59f688e3d14ccf1f1420a7f9d17605f9ae82a006cee54b2149150f11056",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/fire_2.wav.meta",
+      "bytes": 234,
+      "sha256": "c6db3e9772213ba93623f4f2723893ee44fef6b8c8cb701f40f3aa7164aca3dc",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/fire_3.wav",
+      "bytes": 22800,
+      "sha256": "6189d58ab3bfa9a2f3e39d10a0a092d0fdd8a3e35fa683b8cfe268ee84b0c51f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/fire_3.wav.meta",
+      "bytes": 234,
+      "sha256": "463ce08cbfcd5a34f1077e291c8d9c48ae730bdf44c3edb2b11de9d44fb04b9b",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/frost_1.wav",
+      "bytes": 18986,
+      "sha256": "edd256646f6cb7002af084aac1dcc96a59e23d1686c467d0e8cb5e7efd6e0eb9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/frost_1.wav.meta",
+      "bytes": 234,
+      "sha256": "6e39fea99791394e65b3a90abceefada6533bc12f2bb997a2956677ebabc7e71",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/frost_2.wav",
+      "bytes": 19000,
+      "sha256": "5e0ee5cc8d0a7cf0413bb08bbf4d59efbc57402db98a7f9f96471d7e804f2c44",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/frost_2.wav.meta",
+      "bytes": 234,
+      "sha256": "7f3b7f9b84f93135dfe8282898057a0a5d3f483b1d9bd01bf0191047ad407d2e",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/frost_3.wav",
+      "bytes": 19002,
+      "sha256": "fa694dc12e8a5f7281f88bc87d0a0e962ad88a6862bb535022fbb38497e021f3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/frost_3.wav.meta",
+      "bytes": 234,
+      "sha256": "9c8bd8d015ce783b3573143b5fcbb645127c1535f21c0525d6eb2df77023f8b5",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/heavy_1.wav",
+      "bytes": 17356,
+      "sha256": "f0415f8e9a2166af8577aa38154e0ce052bd27390c06927f0de34f3e91afec52",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/heavy_1.wav.meta",
+      "bytes": 234,
+      "sha256": "f30411c2d6e27bd4bb439197b828ce290c57500687f0c376296d7bd921370ea4",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/heavy_2.wav",
+      "bytes": 17356,
+      "sha256": "4fc7c5f667d5741d6faa1a1d3c2e5f586dd9e6e5ec9821d89dfc57cbc740cc3a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/heavy_2.wav.meta",
+      "bytes": 234,
+      "sha256": "d64e8078b5f4d1576cafad1642f46cca119c4a52245d299dda948ef37466ae30",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/heavy_3.wav",
+      "bytes": 17356,
+      "sha256": "6a0afd277e6eb1608566bb2e942f75e4ccda8f307b9312d0ea4f08e593558a84",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/heavy_3.wav.meta",
+      "bytes": 234,
+      "sha256": "e6f9fe9e6e80b9019dc582fb75eaac4d7d4f32f6549f3dae6d1afc2324c08f9d",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/physical_1.wav",
+      "bytes": 14408,
+      "sha256": "6277947b9071309a8fe386501742fadd20b35a452dfe067d40d7355a6812e35e",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/physical_1.wav.meta",
+      "bytes": 234,
+      "sha256": "d9870ed601eecefe0829253e556ab81e62543bba8f84fded1ed089fa8d219ae1",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/physical_2.wav",
+      "bytes": 14290,
+      "sha256": "29173801d0970dbf02e8a1a792b6db3dc34a3155a828863f2b1579b9dc31312d",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/physical_2.wav.meta",
+      "bytes": 234,
+      "sha256": "2c50d744bdbadaa275c5010b3c795314c5d62ad6f5f6aab1efaae03396f05be9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/physical_3.wav",
+      "bytes": 13016,
+      "sha256": "8962bb26bd537fb7c74dcd408c312d7c6cd31102d52b29fcd84b2acdde9e24c5",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/physical_3.wav.meta",
+      "bytes": 234,
+      "sha256": "ce29844493310f39fb4f23e95d9439f08474872e56906110535f92dd800bf921",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/volt_1.wav",
+      "bytes": 14408,
+      "sha256": "d92d31f10b4a5134a6aecc597b37b2bcb2c57b0d830261cf6c420e7dd847f7f5",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/volt_1.wav.meta",
+      "bytes": 234,
+      "sha256": "a6e65c2e16ad8aa8b7d681778274148e16b0bfc8878b91431c1d20d44e98a618",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/volt_2.wav",
+      "bytes": 14290,
+      "sha256": "e49493251c19b4d679b14cca013d46e01c0ea22d2ee2dbee066953c3acfafa54",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/volt_2.wav.meta",
+      "bytes": 234,
+      "sha256": "8acb35b6dbbee120e90152fdeb1976e803e82c09627dea23c9961e3ea734ab6d",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/volt_3.wav",
+      "bytes": 13016,
+      "sha256": "7fa3a5acc9f45dee051077ea871f986610832b217baa1debf8428b0e5d1c8714",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/death-v3/volt_3.wav.meta",
+      "bytes": 234,
+      "sha256": "6591a5bd8b308645700a9b58c48dcbe9c82d685b6abd15efc4c8644d1b12456a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/breakthrough.wav",
+      "bytes": 63404,
+      "sha256": "d7258dbb44446914dbdf84c06ff0f59d9cbe1deb2d7f63ac4eec1d9e954d9bc3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/breakthrough.wav.meta",
+      "bytes": 234,
+      "sha256": "af10626f801ba7b72bc6534943d3c81b43cc17a790e0f8290db6aa4f371a1c30",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/construction.wav",
+      "bytes": 68204,
+      "sha256": "d0489268e36442fe1631f40f5b80724fd10c40d2302b42d86bfd9b4fe96edfaf",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/construction.wav.meta",
+      "bytes": 234,
+      "sha256": "8cd4324cf929fd521ee82e8583e3ece95d68c514530f4efccb731f65c18998f4",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/growth.wav",
+      "bytes": 29804,
+      "sha256": "89fd6ca11a937e61d0ba3ec44a7d6f663b89a76f58284260052dcd709bee5fec",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/growth.wav.meta",
+      "bytes": 234,
+      "sha256": "f59e5ab94bdb1b3ac007909f5ce2d305037eba9156363a30470f05de7f8d33a5",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/purchase.wav",
+      "bytes": 36524,
+      "sha256": "858ec88d0fa3c42f89e339e7fdfb11f2746d44f0c3df77b01cb5877235171643",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/purchase.wav.meta",
+      "bytes": 234,
+      "sha256": "1d4735157c08d16ddb63aca65932c2b74d01f8b6ac3fb87c528609981449cf62",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/recruit.wav",
+      "bytes": 79724,
+      "sha256": "1dd6f0026c8304f16466183d129da7706548e0d5b74021f31250705365f69e20",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/recruit.wav.meta",
+      "bytes": 234,
+      "sha256": "e44b6f214c3b1e4a6a7156ef6e3af3f6b1539c4d10c63386a79413e265dc4e35",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/reward.wav",
+      "bytes": 53804,
+      "sha256": "9e5ce7d80287629c4ff879fce803bce9ea4957462b4c06bb1696218346436dc3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/reward.wav.meta",
+      "bytes": 234,
+      "sha256": "d13ad40a3bcef59eb5406c113ba5610f66e6de288b5e700c392888c181a70df9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/star.wav",
+      "bytes": 13004,
+      "sha256": "0d2c030131150388676628d367e0cfb120999a10e05bf852382f28ea91447d62",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/star.wav.meta",
+      "bytes": 234,
+      "sha256": "2022d58599e4c31c93a4262abd64e99af9aa872bd04ccdaf144167d8679d5531",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/tick.wav",
+      "bytes": 9164,
+      "sha256": "7f77209013d3cc2a692d16f1adf4a9c547b0fac6f285cd4c77cdfa1e61cfabf3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/feedback-v15/tick.wav.meta",
+      "bytes": 234,
+      "sha256": "910b189a020ada27893c45d7e91f9c75e4e5968fbe4b90cce5c745203d65e844",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/bow_1.wav",
+      "bytes": 21212,
+      "sha256": "36029f137f110cc817eed7bb82c81cff0ea6e4aa5fb563d860e9aef58376d93a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/bow_1.wav.meta",
+      "bytes": 222,
+      "sha256": "1f5989c4daf54a5e16a777d92cdf47278f9e10f1f883310a9464d6a018fc1948",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/bow_2.wav",
+      "bytes": 21212,
+      "sha256": "024ec07096db36c59f4883a482904b89d9e92d4362bfeb11ffffde43c946f74e",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/bow_2.wav.meta",
+      "bytes": 222,
+      "sha256": "248ccf915c6cad79a1426771749a2921a0328e4d641a82d9952c33a61dcf9d4a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/bow_3.wav",
+      "bytes": 21212,
+      "sha256": "7566da38ef496786769d3c8d7c60e0571c4a50b97a2f16ee5aa6ba4127f47add",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/bow_3.wav.meta",
+      "bytes": 222,
+      "sha256": "bd64e7dcc3ba320f7293d504d36c932ba64e690d7a878317810d169a15f03c1f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/bow_ult.wav",
+      "bytes": 39734,
+      "sha256": "66ba24ca109fb7dd4bb1e70bbfceccfb50a9839f33edb3dd280ca4249e8cb611",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/bow_ult.wav.meta",
+      "bytes": 222,
+      "sha256": "3b3ecab145063d1f755e330d2e6dfaf16db502b7c98b16c51592de5dbbe469be",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/crit.wav",
+      "bytes": 21212,
+      "sha256": "f955ddfa292410512520f95199e4db1203eed3277d2d99b4617f7e57caed93b9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/crit.wav.meta",
+      "bytes": 222,
+      "sha256": "2c61c957c2591191824caa1fe0fdb042c8714d6682966841994fcac37bc08f55",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/crossbow_1.wav",
+      "bytes": 24740,
+      "sha256": "fdadeed2b13d0e041ae59773bab9d7ff67b54c5f8575b7fa53945d01b5933354",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/crossbow_1.wav.meta",
+      "bytes": 222,
+      "sha256": "62af947b97f66cd5733f52540bd69ed64357d8d4e51cafc4e52ca82177760195",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/crossbow_2.wav",
+      "bytes": 24740,
+      "sha256": "add80c51438e9ea98aec01cce154559d030417634b6bf5cbb656068feeb6bd33",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/crossbow_2.wav.meta",
+      "bytes": 222,
+      "sha256": "c3f54fb7dbddb16860e3ca0f4f85941cd6bd776ebe090b1a6dce5e96206c2886",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/crossbow_3.wav",
+      "bytes": 24740,
+      "sha256": "4658fe809a202a4ec3621a165d1b0573e3a8ddc7c2c70dcbbd5e80d2148e5b2b",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/crossbow_3.wav.meta",
+      "bytes": 222,
+      "sha256": "bcab92df7a726034a0b35ea4a4dad52cdea8d64a61c9a69b0b4505f562cac841",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/crush_1.wav",
+      "bytes": 22976,
+      "sha256": "0cef7d0ea578cbb396b4889a4ecac9cf6524142755b277db5d28f70c3d6e002d",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/crush_1.wav.meta",
+      "bytes": 222,
+      "sha256": "758199aba1532847a0a1d7dae32b207878ef06ffb2c87d0fa96c1157ad94e966",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/crush_2.wav",
+      "bytes": 22976,
+      "sha256": "87106551f3f962d79bcb458086b4fbb38081c341e725e01cccdfb2f4d83cf5ed",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/crush_2.wav.meta",
+      "bytes": 222,
+      "sha256": "e6418b3573828dd030baefa4d48334aa3221c2567d052529371a7b857d228b57",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/defeat.wav",
+      "bytes": 74848,
+      "sha256": "39540b84a4598018ee9645f4b850c45debc54141dcfdb97cf0daa9082cddc3d5",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/defeat.wav.meta",
+      "bytes": 222,
+      "sha256": "5c4d575153d92cca79355914c823b75aab3bc96c5c49c4240eac59a50a2cb06b",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/fire_1.wav",
+      "bytes": 40554,
+      "sha256": "70a38b867d3564ffe15ee5e41f69a08306c1e181c3a28037364304c9d5cef3f7",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/fire_1.wav.meta",
+      "bytes": 222,
+      "sha256": "943e22ae74c2a4c3204dfac6c1258e25cbacf02cc4b3ceda5f4093f9cbb88f3a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/fire_2.wav",
+      "bytes": 40432,
+      "sha256": "46213f1cd96a5123d5a3ccb15a2f5aeff84e57c00b561f8db8f200b0e65285bc",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/fire_2.wav.meta",
+      "bytes": 222,
+      "sha256": "2a6afd18c83b4aa26ce4fd2bd4cfd876f3cf56906cde8d0666228cc0a369055b",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/fire_3.wav",
+      "bytes": 40190,
+      "sha256": "c27844befaaf42fc50afd2d48aab7fee3969b48a5a28bdc62e61d259b49ebd60",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/fire_3.wav.meta",
+      "bytes": 222,
+      "sha256": "c39af75867f1d6f81d2297e4d1f8396c83636d5f59b3df543604160dc13bb132",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/fire_skill.wav",
+      "bytes": 62666,
+      "sha256": "8015855f86c9140153f406318d89670c67b1af00e8cb21d3fc537f6571a13438",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/fire_skill.wav.meta",
+      "bytes": 222,
+      "sha256": "4e37b37d78145ec8bfcec52e1cc4ff7e701fc8baf5257f584c05c9868a563ce5",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/fire_ult.wav",
+      "bytes": 80306,
+      "sha256": "fd8bd0addab05ebd5dbf618132f24a404bb377d823433a2d844ccbf2af6ad374",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/fire_ult.wav.meta",
+      "bytes": 222,
+      "sha256": "0bc72b9e2233aa2533936efe01b067f8612db6734f8966bc20c599a2f28a7340",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/frost_1.wav",
+      "bytes": 39734,
+      "sha256": "0a7dcdaff4937ca7fe1fd67585504372675a96910a7e3ff52dc9de353a3b28b0",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/frost_1.wav.meta",
+      "bytes": 222,
+      "sha256": "5da0712f6f4ce075abb331c288029f6a10f808c39896f857dc8e8f9b21b0a22e",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/frost_2.wav",
+      "bytes": 39734,
+      "sha256": "d416de2609a18e955ff4136410fe86a89ad3791906d32837d190cada545ad262",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/frost_2.wav.meta",
+      "bytes": 222,
+      "sha256": "dfa70ddad051354b38c207bdba0e4f11f7c0ccebca901d2027e5c5c24bf3c0eb",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/frost_skill.wav",
+      "bytes": 58256,
+      "sha256": "6d914edcb0d0806b54873585e9ea956c202e263649a3d9040dfdcfac6eb17637",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/frost_skill.wav.meta",
+      "bytes": 222,
+      "sha256": "0a6ee5807006bb7eb3fada8ef1c261e8421cf4a4358010877913d4ae79e04194",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/frost_ult.wav",
+      "bytes": 71486,
+      "sha256": "70764aff2acd5095c7aecd2889112ba75d2e96ca14771a1b7f7a9cb1b8d1d461",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/frost_ult.wav.meta",
+      "bytes": 222,
+      "sha256": "3bcdf8c7d612f563ae1983dcd3f18562eb3ebe15750f90822d66e33c6e06d9e9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/hit_1.wav",
+      "bytes": 15920,
+      "sha256": "5b72dd087ccd6f00da1f634c6a53c4049eeb71f4be8e28beb39cace6d581cdab",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/hit_1.wav.meta",
+      "bytes": 222,
+      "sha256": "542abe90cb1d3698a1f85ad49a1b795413ace6247fec3f54c5bd520f1a8ca7df",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/hit_2.wav",
+      "bytes": 15920,
+      "sha256": "08af07605a3bd461b37bfd48171ebadcf389aaf3a40be44b7c5d7149682f21e6",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/hit_2.wav.meta",
+      "bytes": 222,
+      "sha256": "9324e8c8d7f1637a4317073ba5ebad4aae0157fea4f96841cac5678c34b706dc",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/icebreak_1.wav",
+      "bytes": 22094,
+      "sha256": "93963e6bf977efb8ff31baa782d8fcdc06ffebb5a5c67909e99ac3bdd5def8e5",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/icebreak_1.wav.meta",
+      "bytes": 222,
+      "sha256": "1364d1a210e4f2064e387df7ebd85a1d45b62a55504d100f67fb783c4b0ffa4a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/icebreak_2.wav",
+      "bytes": 22094,
+      "sha256": "5805cc0c669a0ceae84bf78dc02b4217f0901f25865cdb03e8ba82869b0b2058",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/icebreak_2.wav.meta",
+      "bytes": 222,
+      "sha256": "63b5aa2b4d9e02c830c11287d058be9e5fb2b57079c0169260217f0e0496ec21",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/kill.wav",
+      "bytes": 24740,
+      "sha256": "41e4b0d4d748ac76a93275908b6cd6249957c658b760dfbfa642726197fd51a5",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/kill.wav.meta",
+      "bytes": 222,
+      "sha256": "f4b01488897bc9090569340abc6a351e426638318b06499cd2b20494fba05de3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/levelup.wav",
+      "bytes": 88452,
+      "sha256": "0d532f7d88ab937336df5a5696e00cee60c34b74eda1238c2a656d36acf7bf45",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/levelup.wav.meta",
+      "bytes": 222,
+      "sha256": "1eeca425e0ce1ce65c5941c718eb95813f647894b7497b62f873469c7724cb2b",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/pierce.wav",
+      "bytes": 19448,
+      "sha256": "a6206941411946a0f6f0bb11150ae316bf4c63d7b78e43591f09c111a2092860",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/pierce.wav.meta",
+      "bytes": 222,
+      "sha256": "47147e21b78d9c0f32ae4445befb36dc594578957537f5bc109aeb3cc7e98c23",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/ready.wav",
+      "bytes": 57286,
+      "sha256": "b0335e3760392d20785edf50b42dd2f719e278879d80c8b3988129cbd9a3e1f3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/ready.wav.meta",
+      "bytes": 222,
+      "sha256": "a2e4f43db1553c1c892aecc6f6fd5f631267004473cc816bdba9090b1666cbbf",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/skill.wav",
+      "bytes": 52082,
+      "sha256": "e87347718168236c7be8a48c7da575169a6da77c528686bca483ae5fd7b2e92a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/skill.wav.meta",
+      "bytes": 222,
+      "sha256": "2cddc9f182f2b40ecea2ca9b92d925d503d83fbd540bcace909fb63f779d7bcf",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/snipe.wav",
+      "bytes": 37970,
+      "sha256": "b1dc2d808a0faa291a631d90c942c1cd3d8658ffb5f96eb8c87bec881a2e087a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/snipe.wav.meta",
+      "bytes": 222,
+      "sha256": "a4af12e7e366c32039562f4fc1c8954185054478c0b3611bbd6fc921777858f1",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/surge.wav",
+      "bytes": 91774,
+      "sha256": "7ae86abc54bb8a6bbde33e31534aec34b0e734fd8c564baa4cbe5a740f679358",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/surge.wav.meta",
+      "bytes": 222,
+      "sha256": "f1c70bb28bac3cd9d7f5644113088af7cc5d24f23bb6d3207450b3bfe37c4ca1",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/thunder_1.wav",
+      "bytes": 33560,
+      "sha256": "de753b5c6b7648c6ab1c2720cd575123178782dcd8da4a505e6dd03b2b55bc57",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/thunder_1.wav.meta",
+      "bytes": 222,
+      "sha256": "f700debfd2ce36cf9ec39032c7fa7a258b9721069cba694e4bb2fb47982227cc",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/thunder_2.wav",
+      "bytes": 33560,
+      "sha256": "d8c5bf816a65cb336646eafbba94e2d50eec13b12c2a398c41058925d0c18026",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/thunder_2.wav.meta",
+      "bytes": 222,
+      "sha256": "52014a094df3e188306d080f02cfb478b093b6243c6c0d1783fb8b9e3f4c8bc9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/thunder_ult.wav",
+      "bytes": 62666,
+      "sha256": "82cb93ae018e8479a4e59071ed737ba52874456c19e5b8ed1623a50f0fc17f5c",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/thunder_ult.wav.meta",
+      "bytes": 222,
+      "sha256": "f1cd7a62e96df10ecc474abab463480b8f0043778b35fd3054f629a1f0f3a208",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/ult.wav",
+      "bytes": 67076,
+      "sha256": "68f128d63fb79507ead0a01cb4285def0e7e8757142257e040ee8fe07fad1cf9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/ult.wav.meta",
+      "bytes": 222,
+      "sha256": "c8d9f6bc0b513933ab3ea4ea4e4067d0548a27d591bc93903b9cb16abce875ab",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/victory.wav",
+      "bytes": 43630,
+      "sha256": "cfb4e5ae4e2588ae2f653061e36c5bd0fabfe6fe703b322b60953c0fb873ea00",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/victory.wav.meta",
+      "bytes": 222,
+      "sha256": "4011a55a9c9ecfe34db20bbcd78015c960b15be602e057aecd85a69e05ad0ca3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/wall.wav",
+      "bytes": 30914,
+      "sha256": "22d9b107de54c30b7ee7df80e855f21060f342122c83e14b1a57af8af853de79",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/wall.wav.meta",
+      "bytes": 222,
+      "sha256": "f3907300481f7d33761e095846371ab2617414b099105da16831a353880d9981",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/zap_hit_1.wav",
+      "bytes": 14156,
+      "sha256": "1b9353dfa8b01e421bc359eb71f2ff22fec97b7822c8fc946a48b3e18ba93d33",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/zap_hit_1.wav.meta",
+      "bytes": 222,
+      "sha256": "617ed62c4b5c094e84d3b67edd25af59f2f23f4374d9f4c32274c8a103a09930",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/zap_hit_2.wav",
+      "bytes": 14156,
+      "sha256": "d22eafc9c0e4dc640f74f17b35452d00ee0f64d58567696e46a8ec2a1252025f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v1/zap_hit_2.wav.meta",
+      "bytes": 222,
+      "sha256": "4169b350359da44c951271694d615dd3226764c07017bdd6bbfe1c850772cdf1",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/bow_1.wav",
+      "bytes": 16802,
+      "sha256": "f76323f4b8cdc3079628d06942ab1a714b3e8a4913fd35d0980df1e04cbbe008",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/bow_1.wav.meta",
+      "bytes": 234,
+      "sha256": "a631e447befa3f72494f264fd7eb55e827a8160f292895ffa871528b726e2492",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/bow_2.wav",
+      "bytes": 16802,
+      "sha256": "9f4081c47f6d2e533e1960ea0a7064e4f87a4e899fff8a17ba0076cd14394e51",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/bow_2.wav.meta",
+      "bytes": 234,
+      "sha256": "91beec9bdf962994d9b4a08c34678daf7f0e7fabfdb53b9d7523790c7af1938e",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/bow_3.wav",
+      "bytes": 16802,
+      "sha256": "6fa6a45f8c298d612236133e0ea8a7637dc3701189f28145bebac3a9510b6b40",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/bow_3.wav.meta",
+      "bytes": 234,
+      "sha256": "40a337348591e6317f78a5571b772720a9a8fb57d73e829013d7bfd6a2937491",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/bow_ult.wav",
+      "bytes": 35324,
+      "sha256": "70cbd2bec7c8c16fcae64b93e78d1a9c5679680bae8db0b3322f4a6dda3dc2c4",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/bow_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "cf102e7dcccaa14ea612df8cf1b97433d5f61a33586ac325565538e5938bfa04",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/crit.wav",
+      "bytes": 17666,
+      "sha256": "8624c2de6020f937bea596738c1eb440ee9c7251e47821de0dd846313f0196a4",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/crit.wav.meta",
+      "bytes": 234,
+      "sha256": "cdf4822842b8a95a522422081ee9ae5af17c1ac9faa48d79d8eb66c56ca661e7",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/crossbow_1.wav",
+      "bytes": 19096,
+      "sha256": "e65b8dc3a721e384bbdfab5ea7ed84bf2bbc3432a59aa7c1436b15a85a455fed",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/crossbow_1.wav.meta",
+      "bytes": 234,
+      "sha256": "2e8aa3388cbf6a742928093675bd97c3c6fef95119fd70776ee8bb11b89de4ee",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/crossbow_2.wav",
+      "bytes": 19096,
+      "sha256": "9db00255d09af54a43b147ce689d36e88cf7be9f509029d6afc1f357a8893719",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/crossbow_2.wav.meta",
+      "bytes": 234,
+      "sha256": "cac7fd049d2e3fa58586f9b3d6c52d2ace626dbac8e230ddbad150a5ac0b431f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/crossbow_3.wav",
+      "bytes": 19096,
+      "sha256": "888d7663115ec165c19757cca6c57221c31b21fba1a4af7b7f3d5c91e7458724",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/crossbow_3.wav.meta",
+      "bytes": 234,
+      "sha256": "afee0a33062b5c77d7d5d133c827c537b7ed95ebf95121762ed6cd3e568107e9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/crush_1.wav",
+      "bytes": 16626,
+      "sha256": "7a0ca145f6f954af6168d3c546eaac3e7326a0265fc23e68a6b2efe999462899",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/crush_1.wav.meta",
+      "bytes": 234,
+      "sha256": "db23be8671061ebda82bc5de03e6c508b7acf2def3f97712b26bb600ce4be3d5",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/crush_2.wav",
+      "bytes": 16626,
+      "sha256": "9da07490d0f06e132234fbca1456dbeade918af0494a8c03b27ea0eb59f793fb",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/crush_2.wav.meta",
+      "bytes": 234,
+      "sha256": "a5c07aca8ad62aa8fb40537612cca0863683f8ccfb8ea08a09b1c2dc28f49352",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/crush_3.wav",
+      "bytes": 16842,
+      "sha256": "4775148acdf4de827eeefcc68738f749de0c78813fdbbfb65ca696f540b00ec1",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/crush_3.wav.meta",
+      "bytes": 234,
+      "sha256": "0ec1b7362736674c8fda38059c788ef092c094e35eb917513c2f53349bcecf88",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/fire_1.wav",
+      "bytes": 22094,
+      "sha256": "11a5e9be3695868c7489ec9a1e10cd1aafb2905b8c08ac10dab1b427bcffd2dc",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/fire_1.wav.meta",
+      "bytes": 234,
+      "sha256": "d97377136b42d650227aed32127e68404e8d71f4ca0dc561ea7ad2f0d6cd7095",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/fire_2.wav",
+      "bytes": 21696,
+      "sha256": "8aa1d99c00379a2ed6306acd96a4b406414f5513e0cafd9b1005d689c28b8c50",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/fire_2.wav.meta",
+      "bytes": 234,
+      "sha256": "d64e6ab89ed52c52cd7e7ca033dae8393a4514a76ba04c4a398dcbee4d0045e9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/fire_3.wav",
+      "bytes": 22266,
+      "sha256": "648ff40b74dacd87e7892b68d9c8f4ce2a02e1c58f160cabc9205ea87baa72fb",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/fire_3.wav.meta",
+      "bytes": 234,
+      "sha256": "f365601c2ef869c06b82c96e85cc5803fb3ca1665733171af8dd2786e78968e3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/fire_heavy.wav",
+      "bytes": 38852,
+      "sha256": "6e220d65c29cca879001b496cf45b5185c317ac003e5f998eca476491828b184",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/fire_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "1acaed123079fdde99330abafe82ac65e75a09007aabd0ea4fde9641a0f39c2c",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/fire_skill.wav",
+      "bytes": 37970,
+      "sha256": "f16c39e089a0fcb8c000835f0a82982ec7fc34588dd93fd0bda9f931687c3c5f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/fire_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "aee7ef02f557fbb332718c3d13d3331198c8ee1892aaa109478b6e42c01ef31f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/fire_ult.wav",
+      "bytes": 47672,
+      "sha256": "600f89ad18c36ae81995a7065ab32c0f2cdbc49952338f1aef4c6eee1400e302",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/fire_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "c7f8223fd61140da198668ca3002d5f5c58422b6253eaf204a79990672a5c31e",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/frost_1.wav",
+      "bytes": 19448,
+      "sha256": "7e627b815da0b648392ec6a0bd4a636d81bae23145ea14cb5310426785ac279a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/frost_1.wav.meta",
+      "bytes": 234,
+      "sha256": "0cad9bcca7d53990942d42ace99218303b90f1b9994d6cb9d71b187067488bd4",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/frost_2.wav",
+      "bytes": 19448,
+      "sha256": "174a2404a2e9e3d83ae463e3be72c745f4bfa97f70ff8f52adf6231a17492ae2",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/frost_2.wav.meta",
+      "bytes": 234,
+      "sha256": "23df178361086f30212e6aaa091ef75c9b3751930698c303621312c54ff76788",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/frost_3.wav",
+      "bytes": 19448,
+      "sha256": "e9a4676e9fe5f7dd4435f7e9066d5e0faa3663e15db1e2c286ea9bb2932c6acc",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/frost_3.wav.meta",
+      "bytes": 234,
+      "sha256": "1dee9f84bd7283d9c9c083c334fcb0adcced1a0798e8372786a6289fdd1971f9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/frost_heavy.wav",
+      "bytes": 28784,
+      "sha256": "02b0a217735937aefd188a0461267d2051d2b98e536dde4f7992acf14e9f3e35",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/frost_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "09c032078ae9afc03d01c9f464d9b9734c67c757c84d7c049de1a1ab27625f0e",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/frost_skill.wav",
+      "bytes": 36206,
+      "sha256": "3f386882e830bf580964831ba02344e287a55bea19f2b4f28c009fc7e79dd6e6",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/frost_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "afca27d5351f3f195a799ec88a4860affcfcdc14bd7f554e4a4fe9de9f699d57",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/frost_ult.wav",
+      "bytes": 50318,
+      "sha256": "39bc3cce338efa44ddb974784bcf4af8799f7bc9575ece6218cd236cdfcaf496",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/frost_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "558230a4c8c034bfb97a10929888aa779eb637846cd1bdc1e37a14f107635651",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/hit_1.wav",
+      "bytes": 12630,
+      "sha256": "c7b1d3bd087a8dd4e7205a64f40f399902ad43ef8e62558f1ff2de102b4d6899",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/hit_1.wav.meta",
+      "bytes": 234,
+      "sha256": "93c967cd477dd6c9877d948b800016309fb29ecded0f167f87b6c3581b6022cf",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/hit_2.wav",
+      "bytes": 12458,
+      "sha256": "ec98593cb78d2672c78e5aef5492fc4e79f07b6533da0eccbbaeb3c5ac25b46c",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/hit_2.wav.meta",
+      "bytes": 234,
+      "sha256": "9dd405ecd773ba39e6a14f97bcdcdb4ee6e29853bc9e8c91a09788fab849050c",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/hit_3.wav",
+      "bytes": 12204,
+      "sha256": "21f4826f3b9483e8b34c36cc5629f9949b0571ae7804fe4f3e188690a14ca954",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/hit_3.wav.meta",
+      "bytes": 234,
+      "sha256": "c37f5df8d836d7fc632e7d5ad43c1770d747d32b320037fa0cf9d8373df4202b",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/icebreak_1.wav",
+      "bytes": 12984,
+      "sha256": "8965a1364911a24c10e290d68848f63a88d5827f69d658a48e62dc1f86359e73",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/icebreak_1.wav.meta",
+      "bytes": 234,
+      "sha256": "9369f6b547fd728e20ac2cfa7a03fd5b3537eeeb764502d288633debf1871702",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/icebreak_2.wav",
+      "bytes": 12984,
+      "sha256": "ccd3c950a760d808eabc2a25974f6db8553d5e1bd0958ad34ece47adab4869c2",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/icebreak_2.wav.meta",
+      "bytes": 234,
+      "sha256": "b0c4aa3608405d034890c99c80dbe63392b353a7d27e8460770e1ccdb34d00eb",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/icebreak_3.wav",
+      "bytes": 12984,
+      "sha256": "b12326ed2651de2195617fac8ef48341c3d5010f88e6c2f714f232f67c23aa23",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/icebreak_3.wav.meta",
+      "bytes": 234,
+      "sha256": "8d9990df140c2dfd517943731ab6f1169ea48bdaa837c4359fe09b667373f2da",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/kill.wav",
+      "bytes": 12144,
+      "sha256": "82c505d5ac1a290b7b4a005630c2adae7febe8125b3f2b8321f490efbd19870b",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/kill.wav.meta",
+      "bytes": 234,
+      "sha256": "7a17a0bb9d8bf354511377bef717e8bb2f1b7005b3f0c5d3a0a979eee4b6d1a0",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/pierce_1.wav",
+      "bytes": 11956,
+      "sha256": "12fda1ce033d1fa1b5c929106d9391a9227b6ecf46e2d15970009d97610b5b43",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/pierce_1.wav.meta",
+      "bytes": 234,
+      "sha256": "c9db0c165831d86a4b6b43f7bc7d557b2af61c6d534015c594fcda2d03eb1a4f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/pierce_2.wav",
+      "bytes": 12360,
+      "sha256": "a46457344dc04092ef48924b966eabc577a96e650c91004d8ddeb384a34d8d68",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/pierce_2.wav.meta",
+      "bytes": 234,
+      "sha256": "46beaaee78a39cf6f3da5c43b3955089bdee126ff6752e648565fefa2b3e7ade",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/pierce_3.wav",
+      "bytes": 12622,
+      "sha256": "9e39f420c9dce5208c4a86af8c09e2fd4008e2a7011fdcacd1d04d1f8cde8034",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/pierce_3.wav.meta",
+      "bytes": 234,
+      "sha256": "930659cd1fe9c8838e7f2323ca237342e0703def23db65ca4dfd59ab183d03c0",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/pierce_heavy.wav",
+      "bytes": 19150,
+      "sha256": "a4b771051fa6ae6ddf388b07385f6d92529e65a3f1b8251a39a8ff383d626bb3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/pierce_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "125e3dddddef31a0c297ff3153303687b2e841b0e6827e9cbfc5314a59b760a4",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/ready.wav",
+      "bytes": 23858,
+      "sha256": "f83f42eef316662e2d57bd79de1950349fc27486f8f89f77abdcb8ec082d9768",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/ready.wav.meta",
+      "bytes": 234,
+      "sha256": "3c681a671f76e82f6ae0b3c286bc1d3201d02ddd5744fda3e7b0322b5d50da13",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/skill.wav",
+      "bytes": 33560,
+      "sha256": "23953df77505ff7618f6ecc8574e4698e968b5d3764cd36894b20cd9df6b6661",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/skill.wav.meta",
+      "bytes": 234,
+      "sha256": "479c8e64f7f17fac6041783b1d59bd564920aad0726fe8037ffad3b7c9cdfb31",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/snipe.wav",
+      "bytes": 30914,
+      "sha256": "c1afcbea2c2355aa9a8a516e884ea52a9f3a1fa9f18eb48f92b6d8e998125f36",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/snipe.wav.meta",
+      "bytes": 234,
+      "sha256": "ad9cd3df5a81c48b4f60b633f8ce0c770f87286c2b368c4d84b3a1d36662544c",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/thunder_1.wav",
+      "bytes": 12392,
+      "sha256": "af55f0bbe96543e3de0202e09eddb188b3cede2d786328f735ac5778d36c2c55",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/thunder_1.wav.meta",
+      "bytes": 234,
+      "sha256": "214278c8cd90261680eafb0acb8a59057fefe3da592e06d2b4ed2611ee97a6fe",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/thunder_2.wav",
+      "bytes": 12392,
+      "sha256": "34ce0f4547930ee872c4f926c68f56968264be4312bd46481d0755419f04f677",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/thunder_2.wav.meta",
+      "bytes": 234,
+      "sha256": "d3be2997e7d7b3851ccb975330f6e80a33d694445a8d3d01d7e98ce6571d1daa",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/thunder_3.wav",
+      "bytes": 12392,
+      "sha256": "1fb33d3a225f17fe52036550e23b47cf588be80b935dde47db679e61ae9b8540",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/thunder_3.wav.meta",
+      "bytes": 234,
+      "sha256": "1564da7eaa197c0194f759a0f68fd22fd89265c0653a80684b90ea10d97ff05b",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/thunder_heavy.wav",
+      "bytes": 24740,
+      "sha256": "832f57c9e1767b6c574dee6c53c05af80182c7e3efeb0a1f9826858df4522700",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/thunder_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "93249358f9b14605228fffc8032842ad61e4162eb0d0c803a55ec207ecfd3df9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/thunder_skill.wav",
+      "bytes": 30032,
+      "sha256": "ee74c1d4c63b22632e151a58af47ed5ea33852d666b791a1993f8ad08cf66fac",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/thunder_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "56e6bce72dfede491836555bcc7a8c44eec0d51dd7c2d11dd7636e0a698c90ae",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/thunder_ult.wav",
+      "bytes": 48554,
+      "sha256": "8850d7079e1410eabfd166e630337b7a4a056b8bb12c65eceba967d9cba74ba2",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/thunder_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "346ff800db96179e4d4381e14b790e9853c68e00e7795a956016a9f3743e29a5",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/ult.wav",
+      "bytes": 45908,
+      "sha256": "28c985c9d74228854509df24fc9758c0dd603cf9b22a37324e76872410a6551b",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/ult.wav.meta",
+      "bytes": 234,
+      "sha256": "4f161ce1d45bf9b3458ba26f6c936edf371290f83ed35d02f8e242fab73a3aa6",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/wall.wav",
+      "bytes": 22088,
+      "sha256": "2f50ae56d68f63d8e9a4faf207c7f025d91c9b10dde02533ce87bcbf79ca9f07",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/wall.wav.meta",
+      "bytes": 234,
+      "sha256": "fa78e5409ae4f9dbe12fd160c720f2f2f6b63c72fadd8318131df3188a8700f6",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/zap_hit_1.wav",
+      "bytes": 8920,
+      "sha256": "e23eaa60185115ba1999cde09c152042dee14bd7643f33ea9068cb7aa3625a88",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/zap_hit_1.wav.meta",
+      "bytes": 234,
+      "sha256": "b2d891fb24220801099d005ac6d7cecbe59c322530d66dc8c66eb8221023f7fc",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/zap_hit_2.wav",
+      "bytes": 8730,
+      "sha256": "964b27d8dd92a1214c0bd7aa8e3ac2f31f2305fdf8613970fad5167b5713f8e6",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/zap_hit_2.wav.meta",
+      "bytes": 234,
+      "sha256": "875de9ccce74487d9995a8a960af5531eee6a2675abee61005abcc644b015981",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/zap_hit_3.wav",
+      "bytes": 8448,
+      "sha256": "1d09a4331c8905873d9d76e5a1a07692f9f9a6f802698c1050f96e39b4c0f989",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v2/zap_hit_3.wav.meta",
+      "bytes": 234,
+      "sha256": "14c764a3cb429a38b03546b6be3942061404f4b37479c25422800369559aa86e",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/bow_ult.wav",
+      "bytes": 69722,
+      "sha256": "748d93fbaf5125bd9b8d31868630aedb4f89768a6b6acb1e9d477d3c31876cf7",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/bow_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "1dd8f286fa9b7b451acb90dfe385f43cf83f5660f5eaa4596bf15d2749c0766f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/breakthrough.wav",
+      "bytes": 235308,
+      "sha256": "a0e26fb62377fe9828c7d627e150003bc9856f1fe3f6b3b4a1f38b759b6dcaa9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/breakthrough.wav.meta",
+      "bytes": 234,
+      "sha256": "6a59f0f4ad6480280e0d3596efd9f4938d1876ce62263e8e301949bb62eb77b7",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/crit.wav",
+      "bytes": 26504,
+      "sha256": "9fdaa461ea58aa7cf5dba6d72ba5fe4efb9c10b0727e2483b46597655216517c",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/crit.wav.meta",
+      "bytes": 234,
+      "sha256": "d6a4e85f94e4aa3bc6e462ccefc37f8f483dd687e30032c2653eedac277af9b4",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/crossbow_1.wav",
+      "bytes": 27298,
+      "sha256": "1795f89d784f71ec31fbf2fce894a822583792fbf49848e960f846ad06dff47e",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/crossbow_1.wav.meta",
+      "bytes": 234,
+      "sha256": "b2a6266a00f035d5e68da773927fc594b9abf4570a8ceca915c49728a5805e30",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/crossbow_2.wav",
+      "bytes": 27298,
+      "sha256": "420bf2a93bd99eaeb798bfde0cc7e21054599c459d496ec966008058bd579483",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/crossbow_2.wav.meta",
+      "bytes": 234,
+      "sha256": "137d45f37acc29e7ea6dffadbc3f916d5c9a3d837d8ad962427cbe8c25b2a411",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/crossbow_3.wav",
+      "bytes": 27298,
+      "sha256": "1d8c8dc4105a6469bc9ac8409099aa13c3cdf65d150740ffc2f3c75c2ea5232f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/crossbow_3.wav.meta",
+      "bytes": 234,
+      "sha256": "0317fed0db31bd4ec30817c62a244b1fed3bebe7baae0e4d944f3e109c44a726",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/defeat.wav",
+      "bytes": 425404,
+      "sha256": "b5e376d49808034a2a3b4ec1036fc96a8e762b49d390fd74f854d9933afb2e1b",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/defeat.wav.meta",
+      "bytes": 234,
+      "sha256": "29481fd38777eda2ab59e3a4d0144b7d4e42db5ebaeb8c02202a9fc0c873c2ec",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/fire_1.wav",
+      "bytes": 30032,
+      "sha256": "8bbbef3d33106cf2cef8e3dfc44c80d2fd4211f1a640fd008db2e942442aeec5",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/fire_1.wav.meta",
+      "bytes": 234,
+      "sha256": "5f48ad3d178d5f24c794b8f05511932c7ba09767604475f83fc9814ca75deef8",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/fire_2.wav",
+      "bytes": 30032,
+      "sha256": "d71a2e6cb113601e8470e21832db3ae458fb96b74dc52e63c0f40b7ed7d37691",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/fire_2.wav.meta",
+      "bytes": 234,
+      "sha256": "984a97ec4640dcd802feacc33dd5d4fc6a39e55b707c190395c0afcba7e1fa03",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/fire_3.wav",
+      "bytes": 30032,
+      "sha256": "d8e1e1f24e11939e7d9c631f1a079a9f17e6cab9a4d278b012ef44d730b50cfc",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/fire_3.wav.meta",
+      "bytes": 234,
+      "sha256": "7f24759f27ea348499382fbf70f7efa6dc087d580197a9da0f06758e7af1248a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/fire_heavy.wav",
+      "bytes": 57374,
+      "sha256": "0aa03246ffdbcfd67fa2f68798e470cf3d95f6b813103679af8f32ba2e38c953",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/fire_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "06ccfaf1eed779a50b7ce1553bf0c38b553e2941cde584969f8860dfea71a12a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/fire_skill.wav",
+      "bytes": 74132,
+      "sha256": "efd9f33b07ac87d09c90f4898cfdacc697c4787a59b7d3e10f63a1229092518e",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/fire_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "485dd2a8b712842540af54022ddc54ed762228ddd14d5c920f6944b8b28499ca",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/fire_ult.wav",
+      "bytes": 78542,
+      "sha256": "847b1b4e245179ceae73f751dda6f161dd548d185deec56704def4674f9994d7",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/fire_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "b4f046503a1066bcf8beb15628dcad94856d07be8b868687fd21ff1c8f83cb38",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/frost_1.wav",
+      "bytes": 27386,
+      "sha256": "533c7618a1bd0c44d0fffe027dfb441d09e07670e0dcc6399700a00bf6cdd58a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/frost_1.wav.meta",
+      "bytes": 234,
+      "sha256": "c3dd0c85ca6929dd7df50b16360f60431e3ed27af58c7bf683e01591bc0119b6",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/frost_2.wav",
+      "bytes": 27386,
+      "sha256": "4713f9b1c0994df5dee7959ab2b0a5e469174ab525d0d3f9731da1133b1bcc8c",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/frost_2.wav.meta",
+      "bytes": 234,
+      "sha256": "175e1fcbaa34635fefbe27fdce86d6cfa8051e39011c6ee9b56cfdb6456f3ef0",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/frost_3.wav",
+      "bytes": 27386,
+      "sha256": "9a98e8931c8079b67f3ede7129a3efb258ed851f27e2e3f235e5f1e75d99f0c4",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/frost_3.wav.meta",
+      "bytes": 234,
+      "sha256": "131aff0de1e16326a3159d9cbf4af2d675a7a83f9db328c23464819b3f68a1b6",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/frost_heavy.wav",
+      "bytes": 35324,
+      "sha256": "182ebe6b2d97d416abe9a338bd95339e74594c38fd03fb9855d69efc5c3192a0",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/frost_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "b51c67e3cbdb1a2f3e02605aa983a415ec3f45a73308298b30342d469eda3460",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/frost_skill.wav",
+      "bytes": 67076,
+      "sha256": "c2c3423b7271e198cc44228838e37754dc744ad8813b18bc1f6808a571c64f8d",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/frost_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "ee0f3dc713f1ad2424715baf4d37534d7f8a568bcc331cb875f38946bb12d390",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/frost_ult.wav",
+      "bytes": 89126,
+      "sha256": "c1da583642312dc6a40bc44ec5052d5cbe4b44d36c9374805ef8aa9f71ff63c0",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/frost_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "0e6ad7406a3a6e9bcf76a22252a124d2e60117ab38732eae59c86c4111f43f66",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/growth.wav",
+      "bytes": 90008,
+      "sha256": "32a20946e6bf35346467114ac035c46775d98d666a70b5e7f5b15e23c3ee5010",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/growth.wav.meta",
+      "bytes": 234,
+      "sha256": "7bebd37f8bbe639c93c8e88193476178eb9bef3ed33f0a3a5ebe17de8b876135",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/heavy_1.wav",
+      "bytes": 30914,
+      "sha256": "5b53cf997b35e280e315f815986fb5716afafec85aefbb01a7bdbf24d540a2f7",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/heavy_1.wav.meta",
+      "bytes": 234,
+      "sha256": "1578a0039f26b5722186d9fea011b511c70fbdf3341c5d61d2618a4af731b5ef",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/heavy_2.wav",
+      "bytes": 30914,
+      "sha256": "a7758a1d8e93c4e98b3f5b9266464520cc114942a784babf2067f750357b57dd",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/heavy_2.wav.meta",
+      "bytes": 234,
+      "sha256": "653c6330c70b6d5a3bc5e9e1d03664e109f7d6f2ee6d2bb8be59b58c6f37ff7d",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/heavy_3.wav",
+      "bytes": 30914,
+      "sha256": "71dec466b73a186ad7756c7c2d00efa9543d15fa4a61300c83eee2d9f5de97bd",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/heavy_3.wav.meta",
+      "bytes": 234,
+      "sha256": "1623f01712b9802b5d366b4c2fc81b63e23c8278537cf84de192ddd863f162ef",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/hit_1.wav",
+      "bytes": 18566,
+      "sha256": "9f81593fbfafa4e3a6b01d62bbd66771dfe26ebd33be00b66358734984102ab1",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/hit_1.wav.meta",
+      "bytes": 234,
+      "sha256": "96a3ecbdff4ffecbec8437a7a8d2c6633d3b840e2edc4c197878b9d05c6098c8",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/hit_2.wav",
+      "bytes": 18566,
+      "sha256": "c38ff877d37b3220e99e72f8549bfe8b295fb11ab500d8f45e9957c17b2ca041",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/hit_2.wav.meta",
+      "bytes": 234,
+      "sha256": "70a9d986e4001472c7dd5c50143755afa67ac24e18724dc049119ad7a474c4fa",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/hit_3.wav",
+      "bytes": 18566,
+      "sha256": "47508c12375eb15f0844de15902497f227a90733676b30ef7a27944f41fba390",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/hit_3.wav.meta",
+      "bytes": 234,
+      "sha256": "3846ea7ab1094e325de4c3534eeb9e614a5bfbdf75ee3bfbeff585606c84c7df",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/loot_pickup.wav",
+      "bytes": 29894,
+      "sha256": "7be3539534346776b1c41279abdfbac31cfbadfae4a6ce41e0550fcebf26ae46",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/loot_pickup.wav.meta",
+      "bytes": 234,
+      "sha256": "e628c97bc2e824f9a505daf81b5aae915d53197b65e79684800ead867a57120e",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/pick_choose.wav",
+      "bytes": 63498,
+      "sha256": "75f39ed4ba7515230022ddf695748eb87de12511dfd473927b258916bc7c2155",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/pick_choose.wav.meta",
+      "bytes": 234,
+      "sha256": "a2bdce04452cd36a260b11073493271f0aa75050f17bfb347ff1d45f0c7537c6",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/pick_open.wav",
+      "bytes": 78100,
+      "sha256": "df5493976c4faf926caa026c1a3a2cd8c88b82945d9fca37129429a82fabf251",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/pick_open.wav.meta",
+      "bytes": 234,
+      "sha256": "340e11e855790ce2226757b19958de0007dd852925e659e22370c8bed6229ff9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/pierce_heavy.wav",
+      "bytes": 30914,
+      "sha256": "fb7a1f3850297559126d2f38b9ccaeaabd2909e8ba1aeafe630801511b52053a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/pierce_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "5ef3a76623401885632e4fd9a2380b434ff189ff9497d0437695118794bd62df",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/reward.wav",
+      "bytes": 267538,
+      "sha256": "682e7f96938161e2341092ce1f9faae629241080133022a826abd3431ddc02c5",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/reward.wav.meta",
+      "bytes": 234,
+      "sha256": "897c579cc683ec6fd042145362eeb56ad481bf53402ab4cda38cea0fcd285dc3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/skill.wav",
+      "bytes": 75014,
+      "sha256": "79cd182b9ee7de22c8955af6c8960c3e7506f34860c08d641dc897994f17373c",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/skill.wav.meta",
+      "bytes": 234,
+      "sha256": "3cc5b5cf92f2e81d62f08a5482ffad1de72e8c184f7ab3685075af50ee0c8bf1",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/snipe.wav",
+      "bytes": 53846,
+      "sha256": "1e19be89dc0691ccfb317cebec5d3dcbc07003af3f9262c265edbab572a702e7",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/snipe.wav.meta",
+      "bytes": 234,
+      "sha256": "8d1819271c5fa7bbe46956aae5337d7377c3a59b4da3cd89bdf7caad05065b96",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/surge.wav",
+      "bytes": 68840,
+      "sha256": "dd0ffe7c06feac51eceef2803b47e861650585c46293ab14445cb88e5f31a170",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/surge.wav.meta",
+      "bytes": 234,
+      "sha256": "7b193d55b49410e3164f90d015e03eff0581f8834d958093f3c9eb4edd7b759b",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/thunder_1.wav",
+      "bytes": 17684,
+      "sha256": "5eb63e0e007ed9238b76286e9e82b96233e3a1e6849615f404ae0539202cd6cd",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/thunder_1.wav.meta",
+      "bytes": 234,
+      "sha256": "c7586ee6d1608e74a06e45e40430221e5c204bbcdf988fc25e37ee223ca77d85",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/thunder_2.wav",
+      "bytes": 17684,
+      "sha256": "516c7fc630f29a530ef4fc2c34c795d9beedb4d18769179ca37a8460657bad9d",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/thunder_2.wav.meta",
+      "bytes": 234,
+      "sha256": "dff5ae95443a355ff0b08ca26e232e8664dcf01a7f326c2a54d82af61de6db8d",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/thunder_3.wav",
+      "bytes": 17684,
+      "sha256": "fb247ceac889aeb4c5bd103fa923286fa02634ab823612a28e7620b5b2049202",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/thunder_3.wav.meta",
+      "bytes": 234,
+      "sha256": "ec5b84cb216af2d2bdfc6651e8cfb4b4b31b6280699e7b6f30bcc4c0efdf9fd8",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/thunder_heavy.wav",
+      "bytes": 30032,
+      "sha256": "a47ba0c1f19fe66bb208cdafe94113874d9d4121c70e4bcec7d102f790cd470d",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/thunder_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "23e10e847cba61731f6e32b694f7c93c0319356e04b962aab766932165184f44",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/thunder_skill.wav",
+      "bytes": 65702,
+      "sha256": "0f01a7ce395bf42811c9e3ded7c6f34434c0fdb8368a0f12dee70a55fce41451",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/thunder_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "83fcf1e64a1bc85401c06b9c811e8b28e9534b4fef171c21f9b39a712a99a394",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/thunder_ult.wav",
+      "bytes": 97904,
+      "sha256": "d2c7e6319b26e7084db7b7643e8789c6db301322cb9b5e26ce713e93e2102cfd",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/thunder_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "092f6a85983b3980acc27734a2e206bf9556eeb5313736bd1ce537aa5596a84b",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/victory.wav",
+      "bytes": 638010,
+      "sha256": "d827407928899772a81a0953c9b4c3d5d39215896d88a48f0a7c5d865244dc00",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/victory.wav.meta",
+      "bytes": 234,
+      "sha256": "2cc875a302b05b6ce8070dfb3786c052e9a426c2041d46e040283989427718e1",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/wall.wav",
+      "bytes": 35324,
+      "sha256": "0c668553db4366a47844fa50a10e8ffa04034e5c336ba2fc5c246af0acbeabf1",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v21/wall.wav.meta",
+      "bytes": 234,
+      "sha256": "e0c63cf47a7e9f901e5157e9e1d0783b0161d7b0959e4284a75ff1aa75497f0f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/fire_1.wav",
+      "bytes": 28268,
+      "sha256": "286bebd60cfdf06d5afeb8af53a3bb193c599de3571ceb3b688356e5f0130403",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/fire_1.wav.meta",
+      "bytes": 234,
+      "sha256": "b9c40936d426702a5bb9205b0b4f63db5d0be2e0fa51d25b8b34ba937eadb1e7",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/fire_2.wav",
+      "bytes": 28268,
+      "sha256": "d7074a1baa4533b3e62998c78906a4a5006ece0dd9b33a7b6ba3e2ecdef19314",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/fire_2.wav.meta",
+      "bytes": 234,
+      "sha256": "f288230651831e2f8d250ccb62140f3e312875025d789ffccedcb8ebadffe2f3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/fire_3.wav",
+      "bytes": 28268,
+      "sha256": "44af364e5a79bb7f363e2faf2b574121fadd162a4024963bcef527afa43c775f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/fire_3.wav.meta",
+      "bytes": 234,
+      "sha256": "f78affb4b1776948991899b18b9ce572af531eaa978789ae9618932e54f53776",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/fire_heavy.wav",
+      "bytes": 45908,
+      "sha256": "e597636ee6a9d722cdee6761c32661f49c61c311dd415057bf890a7e95fbf0ee",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/fire_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "a8a2aa8b57fda44b821556b2543d41af9a9ecacf33fa79f292f19353f5a7c353",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/fire_skill.wav",
+      "bytes": 62226,
+      "sha256": "73aceaed6340e152bcc60a17bd5ac24aee3760f84ece51ca26997d556052a324",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/fire_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "f23d792be5f2d7b7428889a5c9d3cc7b024ed47e6e0e75bed37638e55d2f0163",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/fire_ult.wav",
+      "bytes": 75896,
+      "sha256": "6360af573bc6523142be9e233f6ea1af91d680a4ce1c97ad66920363e057b934",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/fire_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "ace6b406e6000119f70c688cb5f6d73a4acfaee63fb6b099480946e04078381d",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/frost_1.wav",
+      "bytes": 26504,
+      "sha256": "17f66936fcf35cf1882e098a261547f132ad8ef4a1acc15d01e5cb48ac8c29ff",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/frost_1.wav.meta",
+      "bytes": 234,
+      "sha256": "d46132901d89c1b6c5cb1a8d8f7d94fe485a382868c6d552966927c46bdb54cd",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/frost_2.wav",
+      "bytes": 26504,
+      "sha256": "175bc5cd7947e578a6c5ec36c123d4bce2f8e3d4ec15cb4591946481ce037d28",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/frost_2.wav.meta",
+      "bytes": 234,
+      "sha256": "0d2b1738bd32b5175604eba7c6859ba85fea9a90f943effa84a0331c09d504fc",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/frost_3.wav",
+      "bytes": 26504,
+      "sha256": "af946d90b01bd09e95de9108fd1cc9cf8f236c76539d026c9f843cce7a309540",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/frost_3.wav.meta",
+      "bytes": 234,
+      "sha256": "f9765390e4b70245b4dfb6f1996843fcdb88596d3de3caaa004967158b083486",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/frost_heavy.wav",
+      "bytes": 43262,
+      "sha256": "0178d6fcfbd785080dfd5c797bd955aa7ed99556c35a226e33ffc76d9b5fee62",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/frost_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "3d5744e9fd0a32855f6e272c2ad0f2a99648a3f619ae5a81af1a963ff45e28e9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/frost_skill.wav",
+      "bytes": 60020,
+      "sha256": "9b364755fdcec09fef6b457bee0091ee641764b283e9b7beeb11c449e1929253",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/frost_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "139bc7ad38f577e23cb4cf4c5827e8bfe96fa5fb9aeb88a77f6b7da8e7d907c3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/frost_ult.wav",
+      "bytes": 83834,
+      "sha256": "d51853d5ca7bec866179a15088f6d367c2d4b46753a7b0e9c7d6fcd412eea656",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/frost_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "d24c8d9dd36d3e23447e7b852e269feca1bb47ed193eb682adfbaaad262e83f7",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/thunder_1.wav",
+      "bytes": 16802,
+      "sha256": "fd95b0e5053a6bac26532150363937f06a3263e259bcea058f6d03bb74bda052",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/thunder_1.wav.meta",
+      "bytes": 234,
+      "sha256": "bb741d7ce44349271d6bbb8735d7bfe6f33bb8d60c7b8987a10457b2d4fba2eb",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/thunder_2.wav",
+      "bytes": 16802,
+      "sha256": "bec713742c6495b97e98d79401a21727a0215735ed354b0c03c434fe0533328e",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/thunder_2.wav.meta",
+      "bytes": 234,
+      "sha256": "2e4999c0f3107dd3fa0f975d13c510fb7c1991def591e524a5122ea5c49d1bac",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/thunder_3.wav",
+      "bytes": 16802,
+      "sha256": "efde310abfb7a4e3a7b885fcc96dc83cf0440ded85b102058895493a16f16d71",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/thunder_3.wav.meta",
+      "bytes": 234,
+      "sha256": "ae4d62e36a068e7290cc7127c07ca9387ed799ab4ee0ac8a5b7a33cfcf08560a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/thunder_heavy.wav",
+      "bytes": 37970,
+      "sha256": "c1787f92d5b2d6407b472c60808c5b44795e9375a26c7b885dc08311ab160d4c",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/thunder_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "cd8d9676f9061768e49301b2b81a494b84e05226a01a351032ac9d1939621582",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/thunder_skill.wav",
+      "bytes": 44144,
+      "sha256": "801221b23decd98f2d4412ff7b3639c95031d9ef40ff8667de795e8efdd8f54f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/thunder_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "f68f72057ed9eaa904f3deaadbc8b28735dcfb90b099b7ef6fa2143e163df398",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/thunder_ult.wav",
+      "bytes": 105884,
+      "sha256": "b88b090a2999a86fbf3e8cea5a1e232be5002c6a4b382fd0169778ea1f489138",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/thunder_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "82df9722e214ff38940aa6337e8edf7748556269de66b984336f263a79ebeeef",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/ui_click_2.wav",
+      "bytes": 7542,
+      "sha256": "f970496d18029ede6062df89bd704bc097b9d84140088fc9b19484de7d7ffea7",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v24/ui_click_2.wav.meta",
+      "bytes": 234,
+      "sha256": "ae72cb745af7d4224d52038142481aea38ce38f5c02b5ddcd58885a34d36f803",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/fire_1.wav",
+      "bytes": 21212,
+      "sha256": "d9a2d32f86a8c75bd8fb449be978791a7223259b240dc53f49587e0769136b03",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/fire_1.wav.meta",
+      "bytes": 234,
+      "sha256": "ffa83c89f9d4e434477a3ee8d055958e009f37f77128b1b322beffcf9ade0b43",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/fire_2.wav",
+      "bytes": 21212,
+      "sha256": "2d48e99155485ab8a17860addb8e4ed2f2e664d9d56b5ce01b1cce1d551ae097",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/fire_2.wav.meta",
+      "bytes": 234,
+      "sha256": "77e3cb5349bbbf550ef40bb64d70d8ce7d9847f742f06d51e8679f56b7a141f7",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/fire_3.wav",
+      "bytes": 21212,
+      "sha256": "61fdff983b8750737e971c468619ad7da445ed1757c6f7ff138110c896a16337",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/fire_3.wav.meta",
+      "bytes": 234,
+      "sha256": "6c39f9065a90e6780024ba4161de2c6a63658b85562247586aed3a4d7afa30ac",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/fire_heavy.wav",
+      "bytes": 28268,
+      "sha256": "2110434a538705f147a48463829562076ee73e03cfe15d839e8f93aeb580b3aa",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/fire_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "7b5c7ec2bf53b15725012cb8b61dbfa4d985daf4d36cd51212a56d31448fa5e3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/fire_skill.wav",
+      "bytes": 37088,
+      "sha256": "5478d381d7e737cc01655a313b3d7749b3085b2169873669dbfbd0edc78025a5",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/fire_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "b8d3126261c24002c995ec200068bb3ce51e2e56e9eca1724f7d69cb88209121",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/fire_ult.wav",
+      "bytes": 51200,
+      "sha256": "1d572fdd4f2a41eb3cd4a7fc7988a0007c3549e51d9f604a552c93a0e33ad97b",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/fire_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "be2aa3c9e00e1178b3be554402c37b27c770e4b71cf85282ace0313457cfcf08",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/frost_1.wav",
+      "bytes": 23858,
+      "sha256": "b5eec5e4a709294fcedeca336ee10810338746a018c8e197d5c125486f8ee4e9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/frost_1.wav.meta",
+      "bytes": 234,
+      "sha256": "bae19933ef046859152076a8845b2c73b3700b76f3d0de32cc5c4629e95052d4",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/frost_2.wav",
+      "bytes": 23858,
+      "sha256": "5773b5095ae67c3c44b3a20f594ad7de6e67f66be24c1b7c8363df5a90a00359",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/frost_2.wav.meta",
+      "bytes": 234,
+      "sha256": "65499e0118bf391eff564efc34fef99bc5b221ad56e631d6625d8be8b9edb9c6",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/frost_3.wav",
+      "bytes": 23858,
+      "sha256": "cc86818961bd8037b1d41a121cfae189f62f0f089cf5af020cd934f2f1172668",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/frost_3.wav.meta",
+      "bytes": 234,
+      "sha256": "3579d5054a8e4a352bdfbeb7e77db67f84f736b9053d7dc01ee451855b6a2a7c",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/frost_heavy.wav",
+      "bytes": 33560,
+      "sha256": "43bb20eb4d28cf4409a790db7413d6b4a6e3f90c123f77da71c005d61e878402",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/frost_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "aee5fa3d2f96dc0ca38a30dda72b80b878fd042f0c6db4a067224ecc6c5a3e0f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/frost_skill.wav",
+      "bytes": 42380,
+      "sha256": "da4927b6ea764899367812f73f7610def88c6c52740aacc5d9557a3be9146aa2",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/frost_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "46035930f641b3f8fe0d932f61b9b77b1a64271ac18911bbcfb71f15324847bb",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/frost_ult.wav",
+      "bytes": 56492,
+      "sha256": "c99ccc21c18cafb0f93016fbed60752c2c96b03eaf0d3bf0d8e99904d4ba1a3a",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/frost_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "5667e574e35501c27dbf6417b327b0847b7bb2890f8db8e5d504d1d5a5427f85",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/thunder_1.wav",
+      "bytes": 17684,
+      "sha256": "150f89cf75428a9a91c92bcb7ced46cc81a27ce83cd2c41058d6a5c146a32dd3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/thunder_1.wav.meta",
+      "bytes": 234,
+      "sha256": "67e17bb862ed283f5ddafa33e2783b4020a422625fd0e1ee69f48ed2ba8366ac",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/thunder_2.wav",
+      "bytes": 17684,
+      "sha256": "775ba44d29eda1956faa97bbb2de33c302bc8532fa01d723edcbdc476acee35e",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/thunder_2.wav.meta",
+      "bytes": 234,
+      "sha256": "97c37d0a83a17db81f69747c87bbfee9ffeba79a4f9102f4e6b857ac59e0cff6",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/thunder_3.wav",
+      "bytes": 17684,
+      "sha256": "5c965ff6852c16ffaeaab66614458aa4f1f0a57b634c89afb4b2d92743d4826f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/thunder_3.wav.meta",
+      "bytes": 234,
+      "sha256": "7217eb188440ef0e47665de4aaf0fe7e5efd89cc5a6caf3c91f94baacfe456f6",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/thunder_heavy.wav",
+      "bytes": 28268,
+      "sha256": "dd4590ad753bb4642bc84bc345832b4b2786b1d623c5d1ef982a68e47cec567e",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/thunder_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "fb2be29d94909f473c4daf2beb11d4245ccfbb2a49977c8111504eda8889b6bb",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/thunder_skill.wav",
+      "bytes": 37088,
+      "sha256": "bfbc3820578e947607b08ef01d548d26a076872b7699321f6a7c7da8d2cefa1b",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/thunder_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "b8c0168df9148eb24eb58e8683ff4f5bf743ac72b2f6389210fb64e97239e9e7",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/thunder_ult.wav",
+      "bytes": 60020,
+      "sha256": "03c3daa29d331f603c0b6fd4d18b26c4d4521febe8fdee494c0a7108049bb1f3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v25/thunder_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "20359b9c7f9ae83715bf174095206b9dd2280cdb3e76d193d3ee49e500bd5445",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/fire_1.wav",
+      "bytes": 24740,
+      "sha256": "416b4f54c1d15cc5aaf01e2f6ac469e924605e6bba6f5f9eb822bfda9bc22dc9",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/fire_1.wav.meta",
+      "bytes": 234,
+      "sha256": "3738333d3a4fe2700e3297402c4e48007e023747cdba4255d5a8fa98e09c0ae4",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/fire_2.wav",
+      "bytes": 24740,
+      "sha256": "8d502186196b7642fae1daef1321afcd8a01f02190b410c60e37cd936e17ae34",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/fire_2.wav.meta",
+      "bytes": 234,
+      "sha256": "fa91549d10b6ce93de2388af20373945c225fdd98f608c65e11dd56d319ca680",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/fire_3.wav",
+      "bytes": 24740,
+      "sha256": "054dc798452abb65204ae480f687c38cf816e1f31d0664a36391d3430e3d28ee",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/fire_3.wav.meta",
+      "bytes": 234,
+      "sha256": "9fa71b3c6ef6b37a2e8f4dbba025baebd7ac26dc8fa38c87c15b2cfbc3d5b168",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/fire_heavy.wav",
+      "bytes": 30032,
+      "sha256": "d6fdd0effb3e9232cc8e32dd776cb53ce78799b2d261c1b690c090ea190a5cab",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/fire_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "cd70a524453afa6bc9d4558fcc7823cc1c547097d02b3ea1d6393de065907371",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/fire_skill.wav",
+      "bytes": 42380,
+      "sha256": "bdf9d3ac6b84164283308c24bf496b544d826fb2fdf17ebfc918338b266f96b2",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/fire_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "1e095865030e7f057e2f580b5a411c2ca44121a2ede23021459c25e160dab827",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/fire_ult.wav",
+      "bytes": 68840,
+      "sha256": "22eb45457ada65ad6766b99dae45d54d8fc3d1ad3ae663316b899a7e0b712059",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/fire_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "924d6ff0f8d3618c2315cec5ffd02c8edf0859052c0b2b957661901fc5370ccd",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/frost_1.wav",
+      "bytes": 26504,
+      "sha256": "46f613c3569b245ce020954b60d0b23f1659eacae02dfc042e7a4ef136284f53",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/frost_1.wav.meta",
+      "bytes": 234,
+      "sha256": "3a055f0a75d99a47f15f6dde16d1e54fd5abe2a471ca4e4610c4f4b9e123ee61",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/frost_2.wav",
+      "bytes": 26504,
+      "sha256": "1b27edca764fe8b9f79c568c287a16776010ed88d8a843d0ab8b586b38abd052",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/frost_2.wav.meta",
+      "bytes": 234,
+      "sha256": "1fe66a673a5fb859bee12364dd6da96b6a1e94afdee3f8147cdc8781048c314d",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/frost_3.wav",
+      "bytes": 26504,
+      "sha256": "bb4109ee20cdd44288a6ff9e6e29f42729e60ec0562adc0df7a19c3b46a8b69d",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/frost_3.wav.meta",
+      "bytes": 234,
+      "sha256": "aaf3fbf2434ca9ea231b5e2fd3ca8ec52c7182e878193ad175436b968a6c952d",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/frost_heavy.wav",
+      "bytes": 30032,
+      "sha256": "c684db072ed6d1823bc21436232617a27eef973a6df1065ae07e785db5f06147",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/frost_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "cfb7e172fa6aac2b87334b16c843393836630bd837949960f5aee3327e7c51da",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/frost_skill.wav",
+      "bytes": 42380,
+      "sha256": "ed807d44ad7fb53b88c09bb24941e79c98d23df1c5fc2564f5bca48d02875e9f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/frost_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "a922f2ce9ad51b356851d2154b8c9e035fb76d6951619aa203addcd447cbb3bb",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/frost_ult.wav",
+      "bytes": 68840,
+      "sha256": "08c77a6bbbc04319de19fb1ab7e8e6d01d72ecbdb6329ebef9f42ed412b28532",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/frost_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "ac2ff63b70f80afe0d4a1ea91a11eddb334b9a1387967568ad0a55303afb6581",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/thunder_1.wav",
+      "bytes": 22094,
+      "sha256": "628a4b14d3a244d577a2120d88c02e071caa1d2ab3542a19c070590033c67c68",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/thunder_1.wav.meta",
+      "bytes": 234,
+      "sha256": "b13c53729610cb5bd6695a67af78f3c382f56650c3979d6ca789b4fffbfded41",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/thunder_2.wav",
+      "bytes": 22094,
+      "sha256": "a6b80a40063da87ce7843b5aacfefcfcd353b0c328252e00232a2924d9b27fc3",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/thunder_2.wav.meta",
+      "bytes": 234,
+      "sha256": "d0567c0ebcd23f8396f5a4f798880d57034662bb635f51e8d802ad093353cf56",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/thunder_3.wav",
+      "bytes": 22094,
+      "sha256": "790f0292ca208ae5ddc3e4c65788657674919251648c94a8ba6f972ad903f294",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/thunder_3.wav.meta",
+      "bytes": 234,
+      "sha256": "27c861d87c10244d825f2ec8ceef792a9c6ef9eb7891592dce011f895762cdaa",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/thunder_heavy.wav",
+      "bytes": 30032,
+      "sha256": "559dabf5f1aa3632459d5d8e0836ad9547f40f80252191356f1f78056034b479",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/thunder_heavy.wav.meta",
+      "bytes": 234,
+      "sha256": "b9462909be15bcc4cf4645a70a8a061414e6fe841355746f6364ef9895629dce",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/thunder_skill.wav",
+      "bytes": 42380,
+      "sha256": "f83bcebabb7bb9e9d116a4531162c9cf92ab9bff1a0c60b5eb9a1e980e63e4b8",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/thunder_skill.wav.meta",
+      "bytes": 234,
+      "sha256": "bf79037f7d1041a0726dd817a373051ebdd4458f44b55a85ae6bb153b41e4529",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/thunder_ult.wav",
+      "bytes": 68840,
+      "sha256": "15104b17d65a61a1845715ac15dcea48410e51bf45a51fbe3b1291f50025e3a4",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v26/thunder_ult.wav.meta",
+      "bytes": 234,
+      "sha256": "62c3b826c5b6bf0edad536e4afbb70fb3d8ac2d245f3f8a6c890b5c7626cc26f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v27/ice_shatter.wav",
+      "bytes": 52964,
+      "sha256": "2e205ba8a4ea6ee4a5fbd17ea05d132d6bba1df346ad3cfb7301736b3fefaf7f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v27/ice_shatter.wav.meta",
+      "bytes": 234,
+      "sha256": "cd5eb3a921a2e73508c999bede8bfb58422b1130eb04be6d20e64a8cdd35cc88",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v27/meteor_land.wav",
+      "bytes": 56492,
+      "sha256": "278ae7eeef0bbf70902106e888be8af6b21f74a3f777498f0d1265bfa63a08cb",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v27/meteor_land.wav.meta",
+      "bytes": 234,
+      "sha256": "7be4264610ad51ff76bff26da32eb4be5152f4388357219bf5eee488c0b16d4f",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v27/thunder_soft.wav",
+      "bytes": 101474,
+      "sha256": "77c703847f2c17a24ec0ac4e8cdef8a7115286b35571efea9429fc7b487ffce2",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    },
+    {
+      "asset": "resources/audio/v27/thunder_soft.wav.meta",
+      "bytes": 234,
+      "sha256": "01248fa93c25de3b812246bdcf6e16090965adf9fdca716f682ed9713253e4ea",
+      "reason": "Absent from all declared cues/music and serialized audio UUID references"
+    }
+  ],
+  "gameOrAudioStarted": false
+}

@@ -4,6 +4,7 @@
   "workers": 2,
   "minimumSavingBytes": 256,
   "webp": {"lossless": true, "quality": 100, "method": 4, "exact": true},
+  "losslessSearchMethods": [4, 6],
   "mixedWebp": {
     "encoding": {"lossless": false, "quality": 95, "alpha_quality": 100, "method": 4, "exact": true},
     "eligibleRoots": ["assets/resources/scenes/", "assets/resources/ux/"],

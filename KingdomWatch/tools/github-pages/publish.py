@@ -181,10 +181,10 @@ def online_verification(base,stage,release):
             candidates=[item['native'] for item in images if item.get('encoding','lossless-webp')==encoding]
             if candidates:
                 names.extend([min(candidates,key=lambda n:files[n]['bytes']),max(candidates,key=lambda n:files[n]['bytes'])])
-    for prefix,suffix in [('src/','.json'),('assets/main/','.js'),('cocos-js/cc.','.js'),('cocos-js/_virtual_cc-','.js'),('assets/resources/native/','.png'),('assets/resources/native/','.webp'),('assets/resources/native/','.ttf'),('assets/resources/native/','.mp3')]:
+    for prefix,suffix in [('src/','.json'),('assets/main/','.js'),('cocos-js/cc.','.js'),('cocos-js/_virtual_cc-','.js'),('assets/resources/native/','.png'),('assets/resources/native/','.webp'),('assets/resources/native/','.ttf'),('assets/resources/native/','.mp3'),('assets/resources/native/','.wav')]:
         candidates=[n for n in files if n.startswith(prefix) and n.endswith(suffix)]
         if candidates:names.append(min(candidates,key=lambda n:files[n]['bytes']))
-        if suffix=='.webp' and candidates:names.append(max(candidates,key=lambda n:files[n]['bytes']))
+        if suffix in ('.webp','.wav') and candidates:names.append(max(candidates,key=lambda n:files[n]['bytes']))
     def check(name):
         data,h=http_bytes(base+name+'?check='+stamp)
         if hashlib.sha256(data).hexdigest()!=files[name]['sha256'] or len(data)!=files[name]['bytes']:raise RuntimeError('Live checksum mismatch: '+name)

@@ -1,0 +1,313 @@
+{
+  "schema": 1,
+  "catalogSha256": "e05561c221458a92d5419da6e504c1a507ac63d38bd21767bcb14eff348a964a",
+  "allDeclaredCuesRetainedIncludingMutedAndShared": true,
+  "cues": {
+    "mageCast": [
+      "audio/v27/mage_cast"
+    ],
+    "gateSlide": [
+      "audio/v25/gate_slide"
+    ],
+    "gateClose": [
+      "audio/v25/gate_close"
+    ],
+    "shoot": [
+      "audio/v21/bow_1",
+      "audio/v21/bow_2",
+      "audio/v21/bow_3"
+    ],
+    "bow": [
+      "audio/v24/bow_1",
+      "audio/v24/bow_2",
+      "audio/v24/bow_3"
+    ],
+    "crossbow": [
+      "audio/v24/crossbow_1",
+      "audio/v24/crossbow_2",
+      "audio/v24/crossbow_3"
+    ],
+    "fire": [
+      "audio/v27/mage_cast"
+    ],
+    "thunder": [
+      "audio/v27/mage_cast"
+    ],
+    "frost": [
+      "audio/v27/mage_cast"
+    ],
+    "hit": [
+      "audio/v26/hit_common"
+    ],
+    "pierce": [
+      "audio/v21/pierce_1",
+      "audio/v21/pierce_2",
+      "audio/v21/pierce_3"
+    ],
+    "crush": [
+      "audio/v21/crush_1",
+      "audio/v21/crush_2",
+      "audio/v21/crush_3"
+    ],
+    "zapHit": [
+      "audio/v21/zap_hit_1",
+      "audio/v21/zap_hit_2",
+      "audio/v21/zap_hit_3"
+    ],
+    "icebreak": [
+      "audio/v21/icebreak_1",
+      "audio/v21/icebreak_2",
+      "audio/v21/icebreak_3"
+    ],
+    "pierceHeavy": [
+      "audio/v24/pierce_heavy"
+    ],
+    "fireHeavy": [
+      "audio/v24/crit"
+    ],
+    "thunderHeavy": [
+      "audio/v24/crit"
+    ],
+    "frostHeavy": [
+      "audio/v24/crit"
+    ],
+    "crit": [
+      "audio/v24/crit"
+    ],
+    "kill": [
+      "audio/v21/physical_1",
+      "audio/v21/physical_2",
+      "audio/v21/physical_3"
+    ],
+    "deathFire": [
+      "audio/v21/fire_death_1",
+      "audio/v21/fire_death_2",
+      "audio/v21/fire_death_3"
+    ],
+    "deathVolt": [
+      "audio/v21/volt_death_1",
+      "audio/v21/volt_death_2",
+      "audio/v21/volt_death_3"
+    ],
+    "deathFrost": [
+      "audio/v21/frost_death_1",
+      "audio/v21/frost_death_2",
+      "audio/v21/frost_death_3"
+    ],
+    "deathHeavy": [
+      "audio/v24/heavy_1",
+      "audio/v24/heavy_2",
+      "audio/v24/heavy_3"
+    ],
+    "wall": [
+      "audio/v24/wall"
+    ],
+    "snipe": [
+      "audio/v24/snipe"
+    ],
+    "skill": [
+      "audio/v24/skill"
+    ],
+    "ult": [
+      "audio/v21/ult"
+    ],
+    "bowUlt": [
+      "audio/v24/bow_ult"
+    ],
+    "fireSkill": [
+      "audio/v27/mage_cast"
+    ],
+    "thunderSkill": [
+      "audio/v27/mage_cast"
+    ],
+    "frostSkill": [
+      "audio/v27/mage_cast"
+    ],
+    "fireUlt": [
+      "audio/v28/meteor_ult"
+    ],
+    "thunderUlt": [
+      "audio/v28/thunder_ult"
+    ],
+    "frostUlt": [
+      "audio/v28/ice_ult"
+    ],
+    "charge": [
+      "audio/v21/charge"
+    ],
+    "pickOpen": [
+      "audio/v24/pick_open"
+    ],
+    "pickRefresh": [
+      "audio/v21/pick_refresh"
+    ],
+    "pickChoose": [
+      "audio/v24/pick_choose"
+    ],
+    "levelup": [
+      "audio/v21/levelup"
+    ],
+    "reward": [
+      "audio/v24/reward"
+    ],
+    "rewardLand": [
+      "audio/v21/reward_land"
+    ],
+    "growth": [
+      "audio/v24/growth"
+    ],
+    "growthTick": [
+      "audio/v21/growth_tick"
+    ],
+    "growthLand": [
+      "audio/v21/growth_land"
+    ],
+    "breakthrough": [
+      "audio/v24/breakthrough"
+    ],
+    "purchase": [
+      "audio/v21/purchase"
+    ],
+    "recruit": [
+      "audio/v21/recruit"
+    ],
+    "construction": [
+      "audio/v21/construction"
+    ],
+    "star": [
+      "audio/v21/star"
+    ],
+    "starFinish": [
+      "audio/v21/star_finish"
+    ],
+    "lootDrop": [
+      "audio/v21/loot_drop"
+    ],
+    "lootPickup": [
+      "audio/v24/loot_pickup"
+    ],
+    "ready": [
+      "audio/v21/ready"
+    ],
+    "surge": [
+      "audio/v24/surge"
+    ],
+    "victory": [
+      "audio/v24/victory"
+    ],
+    "defeat": [
+      "audio/v24/defeat"
+    ],
+    "ui": [
+      "audio/v24/ui_click_1"
+    ],
+    "uiSelect": [
+      "audio/v1/ui_click_2"
+    ],
+    "uiOpen": [
+      "audio/v1/ui_confirm"
+    ],
+    "uiClose": [
+      "audio/v1/ui_click_2"
+    ],
+    "uiToggle": [
+      "audio/v1/ui_click_1"
+    ],
+    "uiConfirm": [
+      "audio/v1/ui_confirm"
+    ],
+    "confirm": [
+      "audio/v1/ui_confirm"
+    ]
+  },
+  "music": [
+    "audio/v1/bgm_battle",
+    "audio/v1/bgm_camp",
+    "audio/v29/bgm_forest",
+    "audio/v29/bgm_lair"
+  ],
+  "retainedAudioPaths": [
+    "audio/v1/bgm_battle",
+    "audio/v1/bgm_camp",
+    "audio/v1/ui_click_1",
+    "audio/v1/ui_click_2",
+    "audio/v1/ui_confirm",
+    "audio/v21/bow_1",
+    "audio/v21/bow_2",
+    "audio/v21/bow_3",
+    "audio/v21/charge",
+    "audio/v21/construction",
+    "audio/v21/crush_1",
+    "audio/v21/crush_2",
+    "audio/v21/crush_3",
+    "audio/v21/fire_death_1",
+    "audio/v21/fire_death_2",
+    "audio/v21/fire_death_3",
+    "audio/v21/frost_death_1",
+    "audio/v21/frost_death_2",
+    "audio/v21/frost_death_3",
+    "audio/v21/growth_land",
+    "audio/v21/growth_tick",
+    "audio/v21/icebreak_1",
+    "audio/v21/icebreak_2",
+    "audio/v21/icebreak_3",
+    "audio/v21/levelup",
+    "audio/v21/loot_drop",
+    "audio/v21/physical_1",
+    "audio/v21/physical_2",
+    "audio/v21/physical_3",
+    "audio/v21/pick_refresh",
+    "audio/v21/pierce_1",
+    "audio/v21/pierce_2",
+    "audio/v21/pierce_3",
+    "audio/v21/purchase",
+    "audio/v21/ready",
+    "audio/v21/recruit",
+    "audio/v21/reward_land",
+    "audio/v21/star",
+    "audio/v21/star_finish",
+    "audio/v21/ult",
+    "audio/v21/volt_death_1",
+    "audio/v21/volt_death_2",
+    "audio/v21/volt_death_3",
+    "audio/v21/zap_hit_1",
+    "audio/v21/zap_hit_2",
+    "audio/v21/zap_hit_3",
+    "audio/v24/bow_1",
+    "audio/v24/bow_2",
+    "audio/v24/bow_3",
+    "audio/v24/bow_ult",
+    "audio/v24/breakthrough",
+    "audio/v24/crit",
+    "audio/v24/crossbow_1",
+    "audio/v24/crossbow_2",
+    "audio/v24/crossbow_3",
+    "audio/v24/defeat",
+    "audio/v24/growth",
+    "audio/v24/heavy_1",
+    "audio/v24/heavy_2",
+    "audio/v24/heavy_3",
+    "audio/v24/loot_pickup",
+    "audio/v24/pick_choose",
+    "audio/v24/pick_open",
+    "audio/v24/pierce_heavy",
+    "audio/v24/reward",
+    "audio/v24/skill",
+    "audio/v24/snipe",
+    "audio/v24/surge",
+    "audio/v24/ui_click_1",
+    "audio/v24/victory",
+    "audio/v24/wall",
+    "audio/v25/gate_close",
+    "audio/v25/gate_slide",
+    "audio/v26/hit_common",
+    "audio/v27/mage_cast",
+    "audio/v28/ice_ult",
+    "audio/v28/meteor_ult",
+    "audio/v28/thunder_ult",
+    "audio/v29/bgm_forest",
+    "audio/v29/bgm_lair"
+  ],
+  "additionalReferences": [],
+  "gameOrAudioCodeExecuted": false
+}

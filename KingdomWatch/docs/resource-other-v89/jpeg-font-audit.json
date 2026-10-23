@@ -1,0 +1,114 @@
+{
+  "jpegImages": [
+    {
+      "source": "assets/resources/scenes/bg_base.jpg",
+      "bytes": 513850,
+      "losslessWebpBytes": 2466884,
+      "keepOriginal": true,
+      "rgbaIdentical": true
+    },
+    {
+      "source": "assets/resources/scenes/bg_heroes.jpg",
+      "bytes": 365348,
+      "losslessWebpBytes": 1866778,
+      "keepOriginal": true,
+      "rgbaIdentical": true
+    },
+    {
+      "source": "assets/resources/scenes/bg_heroes_comic_v1.jpg",
+      "bytes": 313088,
+      "losslessWebpBytes": 988530,
+      "keepOriginal": true,
+      "rgbaIdentical": true
+    },
+    {
+      "source": "assets/resources/scenes/bg_heroes_comic_v3.jpg",
+      "bytes": 379562,
+      "losslessWebpBytes": 1348004,
+      "keepOriginal": true,
+      "rgbaIdentical": true
+    },
+    {
+      "source": "assets/resources/scenes/bg_level.jpg",
+      "bytes": 530190,
+      "losslessWebpBytes": 2547160,
+      "keepOriginal": true,
+      "rgbaIdentical": true
+    },
+    {
+      "source": "assets/resources/scenes/bg_levels_comic_v1.jpg",
+      "bytes": 325245,
+      "losslessWebpBytes": 1146018,
+      "keepOriginal": true,
+      "rgbaIdentical": true
+    },
+    {
+      "source": "assets/resources/scenes/bg_shop.jpg",
+      "bytes": 426003,
+      "losslessWebpBytes": 2120960,
+      "keepOriginal": true,
+      "rgbaIdentical": true
+    },
+    {
+      "source": "assets/resources/scenes/bg_shop_comic_v1.jpg",
+      "bytes": 361384,
+      "losslessWebpBytes": 1266088,
+      "keepOriginal": true,
+      "rgbaIdentical": true
+    },
+    {
+      "source": "assets/resources/scenes/bg_upgrade.jpg",
+      "bytes": 396833,
+      "losslessWebpBytes": 1997632,
+      "keepOriginal": true,
+      "rgbaIdentical": true
+    },
+    {
+      "source": "assets/resources/scenes/bg_upgrade_comic_v1.jpg",
+      "bytes": 352080,
+      "losslessWebpBytes": 1225184,
+      "keepOriginal": true,
+      "rgbaIdentical": true
+    },
+    {
+      "source": "assets/resources/scenes/scene_1_2.jpg",
+      "bytes": 430953,
+      "losslessWebpBytes": 2236312,
+      "keepOriginal": true,
+      "rgbaIdentical": true
+    },
+    {
+      "source": "assets/resources/scenes/scene_1_3.jpg",
+      "bytes": 489255,
+      "losslessWebpBytes": 2403672,
+      "keepOriginal": true,
+      "rgbaIdentical": true
+    }
+  ],
+  "jpegBytes": 4883791,
+  "losslessJpegSavingCandidateBytes": 0,
+  "fonts": [
+    {
+      "path": "assets/resources/fonts/CombatDigits.ttf",
+      "bytes": 44076
+    },
+    {
+      "path": "assets/resources/fonts/ComicLettering.ttf",
+      "bytes": 33684
+    },
+    {
+      "path": "assets/resources/fonts/UIBody.ttf",
+      "bytes": 420248
+    },
+    {
+      "path": "assets/resources/fonts/UIHeading.ttf",
+      "bytes": 571180
+    },
+    {
+      "path": "assets/resources/fonts/UINumbers.ttf",
+      "bytes": 42520
+    }
+  ],
+  "fontBytes": 1111708,
+  "fontGlyphsAndLicensesUnchanged": true
+}
