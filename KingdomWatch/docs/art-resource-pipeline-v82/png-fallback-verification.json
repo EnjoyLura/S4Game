@@ -1,0 +1,57 @@
+{
+  "release": {
+    "base_path": "/kingdom-watch-play/",
+    "entry": "game.af4c64e2d75c32df.html",
+    "entry_bytes": 15961,
+    "entry_sha256": "af4c64e2d75c32df40100643af3a4e9af1c64e91e43b31fa8321847e4164d2f4",
+    "id": "3b5131b990561eca",
+    "inventory": "hosting-files.3b5131b990561eca.json",
+    "inventory_sha256": "3b5131b990561ecaca19cbc76cc4ab7cda4231dd824a4352e14ab3278209cf7a",
+    "requires_cross_origin_isolation": false,
+    "requires_webp": false,
+    "schema": 1,
+    "texture_mode": "original-png",
+    "wasm": [
+      "cocos-js/assets/spine-CC34fKUR.wasm"
+    ]
+  },
+  "file_count": 1900,
+  "runtime_bytes": 457828487,
+  "all_exported_hashes_verified": true,
+  "links": {
+    "explicit_file_references_checked": 23,
+    "embedded_provenance_strings_not_fetches": [],
+    "virtual_system_modules": 152,
+    "remote_url_literals": [
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/bangers/Bangers-Regular.ttf",
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-Bold.ttf",
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-ExtraBoldItalic.ttf",
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+    ],
+    "bundle_versions": {
+      "internal": "9e58a",
+      "main": "4658a",
+      "resources": "6be8c"
+    }
+  },
+  "wasm_memories": {
+    "cocos-js/assets/spine-CC34fKUR.wasm": [
+      {
+        "shared": false,
+        "memory64": false,
+        "minimum_pages": 512
+      }
+    ]
+  },
+  "art_resources": {
+    "nativeImagesResolved": 406,
+    "webpImagesRGBAAndHashesVerified": 0,
+    "gameEngineExecuted": false
+  },
+  "validation": "static files, image pixels and WASM headers only",
+  "javascript_executed": false,
+  "wasm_compiled_or_instantiated": false,
+  "game_browser_or_tests_started": false,
+  "originalPNGFilesByteIdentical": 394
+}

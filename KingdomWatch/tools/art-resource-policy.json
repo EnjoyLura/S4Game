@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "defaultMode": "lossless-webp",
+  "workers": 2,
+  "minimumSavingBytes": 256,
+  "webp": {"lossless": true, "quality": 100, "method": 4, "exact": true},
+  "limits": {"runtimeBytes": 500000000, "imageFileBytes": 67108864, "textureSide": 8192},
+  "warnings": {"textureRGBABytes": 33554432, "largeSquareIconSide": 1024},
+  "notes": "Original PNG masters stay unchanged. Modern lossless-WebP browsers use one representation per image. OriginalPNG export remains available; unsupported browsers receive a pre-engine message. No lossy encoding, resizing or animation trimming in production."
+}

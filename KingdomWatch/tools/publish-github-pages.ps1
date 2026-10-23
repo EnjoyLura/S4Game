@@ -18,6 +18,7 @@ param(
     [Parameter(Mandatory, ParameterSetName = 'Validate')][switch]$ValidateOnly,
     [Parameter(Mandatory, ParameterSetName = 'Status')][switch]$StatusOnly,
     [Parameter(ParameterSetName = 'Publish')][string]$PreparedPackage = '',
+    [Parameter(ParameterSetName = 'Publish')][ValidateSet('lossless-webp','original-png')][string]$TextureMode = '',
     [ValidateRange(0, 3600)][int]$WaitSeconds = 240,
     [string]$ProxyUrl = '',
     [string]$ConfigPath = ''
@@ -37,6 +38,7 @@ if ($ProxyUrl) {
 }
 if ($ConfigPath) { $ConfigPath = (Resolve-Path -LiteralPath $ConfigPath).Path }
 if ($PreparedPackage) { $PreparedPackage = (Resolve-Path -LiteralPath $PreparedPackage).Path }
+if ($PreparedPackage -and $TextureMode) { throw 'PreparedPackage retains its existing texture mode.' }
 Push-Location -LiteralPath $kwPagesProject
 try {
     if ($ProxyUrl) { $env:HTTP_PROXY = $ProxyUrl; $env:HTTPS_PROXY = $ProxyUrl }
@@ -48,6 +50,7 @@ try {
     if ($StatusOnly) { $kwPagesArgs += '--status-only' }
     if ($ValidateOnly) { $kwPagesArgs += '--validate-only' }
     if ($PreparedPackage) { $kwPagesArgs += @('--prepared', $PreparedPackage) }
+    if ($TextureMode) { $kwPagesArgs += @('--texture-mode', $TextureMode) }
     if ($PrunePreviousRelease) { $kwPagesArgs += '--prune-previous-release' }
     if ($ConfigPath) { $kwPagesArgs += @('--config', $ConfigPath) }
     & $kwPagesPython @kwPagesArgs

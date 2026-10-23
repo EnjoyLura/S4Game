@@ -18,7 +18,9 @@ if ($kwWebCode -ne 0 -and $kwWebCode -ne 36) {
 $kwWebPython = 'C:/Users/user/AppData/Local/Python/pythoncore-3.14-64/python.exe'
 & $kwWebPython tools/patch-web-dpr.py
 if ($LASTEXITCODE -ne 0) { throw 'DPR patch failed' }
+& $kwWebPython -X utf8 tools/art_resources.py audit --output build/art-source-audit.json
+if ($LASTEXITCODE -ne 0) { throw 'Art resource audit failed' }
 & $kwWebPython tools/prepare-web-release.py
 if ($LASTEXITCODE -ne 0) { throw 'Production cache preparation failed' }
-$kwWebRecord = [ordered]@{ exitCode = $kwWebCode; log = $kwWebOut; stderr = $kwWebErr; creator = '3.8.8'; platform = 'web-mobile'; debug = $false; md5Cache = $true; dprPatch = 'completed'; preparation = 'tools/prepare-web-release.py'; gameplayValidation = 'user manual' }
+$kwWebRecord = [ordered]@{ exitCode = $kwWebCode; log = $kwWebOut; stderr = $kwWebErr; creator = '3.8.8'; platform = 'web-mobile'; debug = $false; md5Cache = $true; dprPatch = 'completed'; artAudit = 'build/art-source-audit.json'; preparation = 'tools/prepare-web-release.py'; gameplayValidation = 'user manual' }
 $kwWebRecord | ConvertTo-Json | Set-Content -LiteralPath 'build/web-mobile/build-record.json' -Encoding utf8

@@ -9,6 +9,7 @@
 <script>
 (function(){
  'use strict';var base=new URL('__BASE_PATH__',location.origin),report={},release,inventory;
+ /*__WEBP_SUPPORT__*/
  var out=document.getElementById('out'),progress=document.getElementById('progress');
  function show(){out.textContent=JSON.stringify(report,null,2);}
  function url(path){var u=new URL(path,base);if(u.origin!==base.origin||!u.pathname.startsWith(base.pathname))throw new Error('资源越出项目路径：'+path);return u;}
@@ -22,6 +23,8 @@
    var first=await get('hosting-release.json');release=JSON.parse(new TextDecoder().decode(first.bytes));
    if(release.schema!==1||release.base_path!==base.pathname)throw new Error('项目路径/清单版本不匹配');
    report.release=release.id;report.requiresCrossOriginIsolation=release.requires_cross_origin_isolation;report.isolationStatus=release.requires_cross_origin_isolation?(crossOriginIsolated?'满足':'不满足'):'当前单线程运行包不需要';
+   report.losslessWebPSupported=await supportsLosslessWebP();report.requiresWebP=!!release.requires_webp;
+   if(release.requires_webp&&!report.losslessWebPSupported)throw new Error('当前浏览器不支持本版本使用的无损 WebP 图片');
    if(release.requires_cross_origin_isolation&&!crossOriginIsolated)throw new Error('缺少跨源隔离');
    var list=await get(release.inventory);if(await sha(list.bytes)!==release.inventory_sha256)throw new Error('完整清单散列不匹配');inventory=JSON.parse(new TextDecoder().decode(list.bytes));report.totalFiles=Object.keys(inventory.files).length;report.totalMiB=Math.round(inventory.total_bytes/1048576*10)/10;
    await checked(release.entry,{sha256:release.entry_sha256,bytes:release.entry_bytes});report.checks.push('入口 HTML 的 SHA-256 与项目 base 路径清单匹配');

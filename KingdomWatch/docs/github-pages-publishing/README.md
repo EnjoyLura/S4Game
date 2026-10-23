@@ -15,6 +15,8 @@
 
 依次沿用原 `build-web.ps1` 正式导出、DPR 补丁和版本准备，再生成子路径运行包、静态核对全部文件散列和资源引用、检查 WASM 头与内存要求，提交推送独立仓库，最后等待 Pages 并做 HTTP 校验。默认不执行游戏、浏览器、JS/WASM 或旧入口测试脚本。已配置 `main` 分支根目录发布，包内包含 `.nojekyll`。
 
+2026-10-23 已接入[自动美术资源管线v82](../art-resource-pipeline-v82/README.md)：构建生成尺寸/留白审计，独立GitHub导出默认选用逐RGBA像素一致且体积更小的无损WebP，源PNG和正常Cocos导出保持。入口有无损WebP解码能力探测，图片及索引使用新内容版本，发布前核对真实原生地址、像素和完整文件散列。编码缓存与有损候选只在本地。
+
 2026-10-22 已补齐只校验模式、可配置文件、预制包复用、进程代理恢复和分阶段报告。参数如下：
 
 | 参数 | 行为 |
@@ -25,6 +27,8 @@
 | `-PrunePreviousRelease` | 本次发布只保留新运行包，清掉上一版独有的已跟踪运行文件；保留未跟踪文件与 Git 历史。默认不启用，仅发布模式可用 |
 | `-StatusOnly` | 只校验上次运行包并查询部署、核对线上文件；不构建、提交或推送 |
 | `-PreparedPackage <目录>` | 校验并发布指定的已导出包，跳过构建与再次导出 |
+| `-TextureMode lossless-webp` | 新导出使用无损WebP（默认）；逐像素验证，仅采用更小结果 |
+| `-TextureMode original-png` | 新导出保留原PNG，用于兼容回退；不与PreparedPackage/StatusOnly组合 |
 | `-ProxyUrl http://127.0.0.1:7897` | 仅本次进程使用指定代理，结束后恢复环境变量；不改系统代理 |
 | `-ConfigPath <文件>` | 使用指定的发布配置；默认 `tools/github-pages/config.json` |
 | `-WaitSeconds 600` | 最长等候秒数，默认240，可设0～3600；0为查询一轮 |
@@ -52,17 +56,17 @@
 
 固定 `index.html` 通过 `cache: no-store` 和查询参数读取小型 `hosting-release.json`，再联网读取、验证 SHA-256 后加载对应的 `game.<散列>.html`。引导失败显示错误和重试按钮，不自动刷新。HTML 的 `<base>`、启动设置、import map、引擎脚本、effect 二进制和原资源均适配 `/kingdom-watch-play/`。
 
-游戏资源沿用 Cocos MD5 路径。构建后修改的引擎额外使用 engine revision 路径，启动依赖与 effect 使用实际内容散列路径。更新同时保留上一版需要的文件，防止仍开着的上一版页面立即丢失资源；再上一个版本不长期保留。若未版本化的运行文件内容发生冲突则拒绝发布。
+游戏资源沿用 Cocos UUID/版本路径。v82变换后的图片native、import和bundle配置使用实际内容SHA版本，并同步settings；UUID与运行加载ID保持。构建后修改的引擎额外使用 engine revision 路径，启动依赖与 effect 使用实际内容散列路径。更新默认保留上一版需要的文件，防止仍开着的上一版页面立即丢失资源；再上一个版本不长期保留。若未版本化的运行文件内容发生冲突则拒绝发布；显式PrunePreviousRelease只保留本次运行包。
 
 GitHub Pages 的 HTTP 缓存由平台控制，实测 `max-age=600`；本方案不能通过 CF `_headers` 设置一年缓存。入口与清单明确联网，资源使用稳定版本路径。未添加 Service Worker，不抢占同一 GitHub 域名下其他项目。
 
-当前单文件和当前加上一版的总量均在发布前检查。运行包约 646 MiB；后续资源增加超出预算会中止并说明，不会静默漏传。
+当前单文件、图片尺寸、当前包以及当前加上一版的总量均在发布前检查。v82完整运行资源351.46MB（335.18MiB）；后续资源增加超出预算会中止并说明，不会静默漏传。
 
 ## WASM 与诊断
 
 本轮 Cocos 导出只有一个 Spine WASM，内存未共享，无 pthread / SharedArrayBuffer 依赖，因此不需要 COOP/COEP 或隔离 Service Worker。诊断页显示 `crossOriginIsolated: false` 在当前包是正常状态。以后检测到共享内存会中止发布，必须先适配并验证隔离。
 
-诊断页只读取环境、版本和资源，不加载 Cocos、不实例化 WASM、不启动战斗。自动核对清单、入口及 WASM 的散列，并只编译 WASM。可手动启动全资源下载校验，流量约 646 MiB。
+诊断页只读取环境、版本和资源，不加载 Cocos、不实例化 WASM、不启动战斗。显示无损WebP解码能力，自动核对清单、入口及 WASM 的散列，并只编译 WASM。可手动启动全资源下载校验，v82流量约335MiB。
 
 ## 当前脚本验证
 

@@ -7,6 +7,7 @@
 <script>
 (function(){
   'use strict';
+  /*__WEBP_SUPPORT__*/
   var base = new URL('__BASE_PATH__',location.origin);
   var status = document.getElementById('kwLoad'), retry = document.getElementById('kwRetry');
   function scoped(path){
@@ -28,6 +29,7 @@
       var m=JSON.parse(new TextDecoder().decode(await network(manifestUrl)));
       if(m.schema!==1 || m.base_path!==base.pathname || !/^[a-f0-9]{64}$/.test(m.entry_sha256) || !/^game\.[a-f0-9]{16}\.html$/.test(m.entry))throw new Error('版本清单不完整');
       if(m.requires_cross_origin_isolation && !crossOriginIsolated)throw new Error('此版本需要跨源隔离，当前托管环境尚未满足');
+      if(m.requires_webp && !await supportsLosslessWebP())throw new Error('当前浏览器不支持无损 WebP 图片，请升级浏览器或在系统浏览器打开');
       status.textContent='正在校验运行入口…';
       var bytes=await network(scoped(m.entry));
       if(await hash(bytes)!==m.entry_sha256)throw new Error('入口校验失败，请稍后重试');

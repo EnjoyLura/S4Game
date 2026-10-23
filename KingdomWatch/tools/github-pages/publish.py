@@ -169,9 +169,10 @@ def online_verification(base,stage,release):
     if hashlib.sha256(payload).hexdigest()!=release['inventory_sha256']:raise RuntimeError('Live inventory checksum mismatch')
     inventory=json.loads(payload);files=inventory['files']
     names=['index.html','hosting-diagnostics.html',release['entry'],*release['wasm']]
-    for prefix,suffix in [('src/','.json'),('assets/main/','.js'),('cocos-js/cc.','.js'),('cocos-js/_virtual_cc-','.js'),('assets/resources/native/','.png'),('assets/resources/native/','.ttf'),('assets/resources/native/','.mp3')]:
+    for prefix,suffix in [('src/','.json'),('assets/main/','.js'),('cocos-js/cc.','.js'),('cocos-js/_virtual_cc-','.js'),('assets/resources/native/','.png'),('assets/resources/native/','.webp'),('assets/resources/native/','.ttf'),('assets/resources/native/','.mp3')]:
         candidates=[n for n in files if n.startswith(prefix) and n.endswith(suffix)]
         if candidates:names.append(min(candidates,key=lambda n:files[n]['bytes']))
+        if suffix=='.webp' and candidates:names.append(max(candidates,key=lambda n:files[n]['bytes']))
     def check(name):
         data,h=http_bytes(base+name+'?check='+stamp)
         if hashlib.sha256(data).hexdigest()!=files[name]['sha256'] or len(data)!=files[name]['bytes']:raise RuntimeError('Live checksum mismatch: '+name)
@@ -223,12 +224,14 @@ def main():
     mode.add_argument('--status-only',action='store_true')
     mode.add_argument('--validate-only',action='store_true')
     parser.add_argument('--prepared',type=Path)
+    parser.add_argument('--texture-mode',choices=('lossless-webp','original-png'))
     parser.add_argument('--prune-previous-release',action='store_true',
                         help='After validating the new package, remove previous-only tracked runtime files; keep Git history')
     parser.add_argument('--config',type=Path,default=HERE/'config.json')
     args=parser.parse_args()
     if not 0<=args.wait_seconds<=3600:parser.error('--wait-seconds must be between 0 and 3600')
     if args.prepared and args.status_only:parser.error('--prepared cannot be combined with --status-only')
+    if args.texture_mode and (args.prepared or args.status_only):parser.error('--texture-mode is for a new export; prepared/status packages retain their recorded mode')
     if args.prune_previous_release and (args.status_only or args.validate_only):
         parser.error('--prune-previous-release is only available during publication')
     cfg=json.loads(args.config.read_text('utf-8-sig'))
@@ -256,7 +259,7 @@ def main():
             record['stage']=str(stage.resolve())
             if not args.prepared:
                 log('Exporting the prepared production build...')
-                record['export']=export(stage,cfg)
+                record['export']=export(stage,cfg,args.texture_mode)
             record['hosting_package_checks']=validate_package(stage,cfg)
             checked=record['hosting_package_checks'];release=checked['release']
             if args.prepared:record['export']={key:checked[key] for key in ('release','file_count','runtime_bytes','all_exported_hashes_verified')}

@@ -8,11 +8,14 @@ import json
 import re
 import shutil
 import struct
+import sys
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 HERE=Path(__file__).resolve().parent
 PROJECT=HERE.parents[1]
+sys.path.insert(0, str(HERE.parent))
+from art_resources import optimize_export, validate_art, POLICY
 WEB=PROJECT/'build/web-mobile'
 EXTENSIONS={'.html','.css','.js','.json','.wasm','.bin','.png','.jpg','.jpeg','.webp','.gif','.mp3','.wav','.ogg','.m4a','.ttf','.otf','.woff','.woff2','.txt'}
 
@@ -140,7 +143,7 @@ def address_runtime_code(folder,html,engine_revision):
     return html
 
 
-def export(destination,config):
+def export(destination,config,texture_mode=None):
     if not re.fullmatch(r'[A-Za-z0-9_.-]+',config['repository']):raise RuntimeError('Invalid repository name')
     destination=Path(destination).resolve()
     if destination.exists() and any(destination.iterdir()):raise RuntimeError('Export destination must be empty')
@@ -151,13 +154,17 @@ def export(destination,config):
     for source in runtime_files():
         relative=source.relative_to(WEB);target=destination/relative
         target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source,target)
+    art=optimize_export(destination,texture_mode or POLICY['defaultMode'])
     original_html=address_runtime_code(destination,(WEB/'index.html').read_text('utf-8'),production['engineRevision'])
     if '<base ' in original_html:raise RuntimeError('Unexpected existing document base')
     game_html=original_html.replace('<head>','<head>\n<base href="'+base+'">',1)
     entry_bytes=game_html.encode('utf-8');entry_sha=hashlib.sha256(entry_bytes).hexdigest();entry='game.'+entry_sha[:16]+'.html'
     (destination/entry).write_bytes(entry_bytes)
-    (destination/'index.html').write_text((HERE/'launcher.html').read_text('utf-8').replace('__BASE_PATH__',base),encoding='utf-8')
-    (destination/'hosting-diagnostics.html').write_text((HERE/'diagnostics.html').read_text('utf-8').replace('__BASE_PATH__',base),encoding='utf-8')
+    support=(HERE/'webp-support.js').read_text('utf-8')
+    for name,template in [('index.html','launcher.html'),('hosting-diagnostics.html','diagnostics.html')]:
+        source=(HERE/template).read_text('utf-8')
+        if source.count('/*__WEBP_SUPPORT__*/')!=1:raise RuntimeError('Missing texture capability preflight')
+        (destination/name).write_text(source.replace('__BASE_PATH__',base).replace('/*__WEBP_SUPPORT__*/',support),encoding='utf-8')
     (destination/'.nojekyll').write_bytes(b'')
     memories={p.relative_to(destination).as_posix():wasm_memories(p.read_bytes()) for p in destination.rglob('*.wasm')}
     shared=any(m['shared'] for ms in memories.values() for m in ms)
@@ -171,17 +178,18 @@ def export(destination,config):
     links=verify_links(destination)
     files={p.relative_to(destination).as_posix():{'sha256':sha(p),'bytes':p.stat().st_size} for p in sorted(destination.rglob('*')) if p.is_file()}
     total=sum(v['bytes'] for v in files.values())
+    if total>POLICY['limits']['runtimeBytes']:raise RuntimeError('Export exceeds the configured art runtime budget')
     if total>950*1024**2:raise RuntimeError('Export approaches the GitHub Pages 1 GiB site limit')
     if any(v['bytes']>=100*1024**2 for v in files.values()):raise RuntimeError('A runtime file reaches the GitHub 100 MiB file limit')
-    inventory={'schema':1,'files':files,'total_bytes':total,'runtime':{'cocos':'3.8.8','engine_revision':production['engineRevision'],'shared_wasm_memory':shared,'wasm_memories':memories,'remote_bundles':False}}
+    inventory={'schema':1,'files':files,'total_bytes':total,'runtime':{'cocos':'3.8.8','engine_revision':production['engineRevision'],'shared_wasm_memory':shared,'wasm_memories':memories,'remote_bundles':False,'art_resources':art}}
     raw=(json.dumps(inventory,ensure_ascii=False,sort_keys=True,separators=(',',':'))+'\n').encode('utf-8')
     inv_sha=hashlib.sha256(raw).hexdigest();inv_name='hosting-files.'+inv_sha[:16]+'.json';(destination/inv_name).write_bytes(raw)
-    pointer={'schema':1,'id':inv_sha[:16],'base_path':base,'entry':entry,'entry_sha256':entry_sha,'entry_bytes':len(entry_bytes),'inventory':inv_name,'inventory_sha256':inv_sha,'requires_cross_origin_isolation':False,'wasm':sorted(memories)}
+    pointer={'schema':1,'id':inv_sha[:16],'base_path':base,'entry':entry,'entry_sha256':entry_sha,'entry_bytes':len(entry_bytes),'inventory':inv_name,'inventory_sha256':inv_sha,'requires_cross_origin_isolation':False,'wasm':sorted(memories),'requires_webp':art['requiresWebP'],'texture_mode':art['mode']}
     write_json(destination/'hosting-release.json',pointer)
     # Independently reread every exported file after writing the inventories.
     for name,record in files.items():
         if sha(destination/name)!=record['sha256']:raise RuntimeError('Export checksum changed: '+name)
-    return {'release':pointer,'file_count':len(files)+2,'runtime_bytes':total,'validation':links,'all_exported_hashes_verified':True,'source_web_files_modified':False}
+    return {'release':pointer,'file_count':len(files)+2,'runtime_bytes':total,'validation':links,'art_resources':art,'all_exported_hashes_verified':True,'source_web_files_modified':False}
 
 
 def validate_package(folder,config):
@@ -232,6 +240,15 @@ def validate_package(folder,config):
     if wasm!=release['wasm'] or release.get('requires_cross_origin_isolation') is not False or any(m['shared'] for ms in memories.values() for m in ms):
         raise RuntimeError('WASM requirements need a separate isolation adaptation')
     if memories!=inventory['runtime']['wasm_memories']:raise RuntimeError('WASM memory inventory mismatch')
+    art=inventory['runtime'].get('art_resources')
+    art_checks=None
+    if art:
+        manifest=safe_file(art['manifest'])
+        if manifest.name!='art-resources.'+sha(manifest)[:16]+'.json':raise RuntimeError('Art manifest content version mismatch')
+        art_manifest=json.loads(manifest.read_text('utf-8'))
+        if release.get('requires_webp')!=bool(art_manifest['images']) or release.get('texture_mode')!=art_manifest['mode']:
+            raise RuntimeError('Texture compatibility requirements do not match the image package')
+        art_checks=validate_art(folder,art_manifest)
     for name in files:
         if Path(name).suffix in {'.js','.json','.html','.txt'}:
             value=safe_file(name).read_text('utf-8')
@@ -240,11 +257,11 @@ def validate_package(folder,config):
             if name.endswith('.js') and any(v in value for v in ('SharedArrayBuffer','PThread','pthread_create')):
                 raise RuntimeError('Shared-memory JS requires a separate isolation adaptation')
     return {'release':release,'file_count':len(actual),'runtime_bytes':total,'all_exported_hashes_verified':True,
-            'links':verify_links(folder),'wasm_memories':memories,'validation':'static files and WASM headers only',
+            'links':verify_links(folder),'wasm_memories':memories,'art_resources':art_checks,'validation':'static files, image pixels and WASM headers only',
             'javascript_executed':False,'wasm_compiled_or_instantiated':False,'game_browser_or_tests_started':False}
 
 
 if __name__=='__main__':
     import argparse
-    parser=argparse.ArgumentParser();parser.add_argument('destination');args=parser.parse_args()
-    print(json.dumps(export(args.destination,json.loads((HERE/'config.json').read_text('utf-8'))),ensure_ascii=False,indent=2))
+    parser=argparse.ArgumentParser();parser.add_argument('destination');parser.add_argument('--texture-mode',choices=('lossless-webp','original-png'));args=parser.parse_args()
+    print(json.dumps(export(args.destination,json.loads((HERE/'config.json').read_text('utf-8')),args.texture_mode),ensure_ascii=False,indent=2))

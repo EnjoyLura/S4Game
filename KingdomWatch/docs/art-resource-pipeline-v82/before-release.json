@@ -1,0 +1,14 @@
+{
+  "base_path": "/kingdom-watch-play/",
+  "entry": "game.bbabf91b6761ad8c.html",
+  "entry_bytes": 15961,
+  "entry_sha256": "bbabf91b6761ad8cbc44172487efd434f96b46f2adae7f7c117f651c2cf0b848",
+  "id": "c9165776302aea5c",
+  "inventory": "hosting-files.c9165776302aea5c.json",
+  "inventory_sha256": "c9165776302aea5c8618eea5d8fe2aeac4e2b0692c21264a0db280ad8bc4a059",
+  "requires_cross_origin_isolation": false,
+  "schema": 1,
+  "wasm": [
+    "cocos-js/assets/spine-CC34fKUR.wasm"
+  ]
+}

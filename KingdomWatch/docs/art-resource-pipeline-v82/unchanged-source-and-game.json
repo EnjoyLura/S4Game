@@ -1,0 +1,12 @@
+{
+  "sourceFilesVerified": 1860,
+  "sourceAssetChanges": 0,
+  "gameMainJSFilesByteIdentical": [
+    "assets/main/index.4658a.js"
+  ],
+  "otherNativeFilesByteIdentical": 307,
+  "runtimeBytesBefore": 457785194,
+  "runtimeBytesAfter": 351459226,
+  "savedBytes": 106325968,
+  "validation": "Static file/pixel/hash inspection only; game/browser/WASM/audio not executed"
+}

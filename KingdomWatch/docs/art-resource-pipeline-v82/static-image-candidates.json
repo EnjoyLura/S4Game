@@ -1,0 +1,54 @@
+{
+  "localPreview": "D:\\AI\\S4Game\\.local-art-archive\\art-resource-v82-comparisons\\index.html",
+  "samples": [
+    {
+      "title": "第一章战场",
+      "source": "assets/resources/scenes/scene_1_1.png",
+      "sourceSha256": "cfbc3f0dd31532f8f48e3060122855184aac72a1505d1a11c5eded7a698e7e50",
+      "width": 1152,
+      "height": 2048,
+      "sourceBytes": 3667045,
+      "quality90Bytes": 484860,
+      "savingPercent": 86.8,
+      "alphaIdentical": true,
+      "productionReplacement": false
+    },
+    {
+      "title": "前哨地图",
+      "source": "assets/resources/scenes/bg_campaign_outpost_v1.png",
+      "sourceSha256": "ce7ef517d91076c2d5ccdec8dfdb7621ed92a9b624e36b44d193af1f6054feab",
+      "width": 887,
+      "height": 1774,
+      "sourceBytes": 3383367,
+      "quality90Bytes": 646724,
+      "savingPercent": 80.9,
+      "alphaIdentical": true,
+      "productionReplacement": false
+    },
+    {
+      "title": "火法强化卡图",
+      "source": "assets/resources/ux/ui_card_pyro_shards_v2.png",
+      "sourceSha256": "d5619c27daec606476384a059a649fe14ea9d589af5f39d7b91e1f06c5fc77f2",
+      "width": 1254,
+      "height": 1254,
+      "sourceBytes": 1992721,
+      "quality90Bytes": 333586,
+      "savingPercent": 83.3,
+      "alphaIdentical": true,
+      "productionReplacement": false
+    },
+    {
+      "title": "强化卡底板",
+      "source": "assets/resources/ux/pick_comic_v1/card_base.png",
+      "sourceSha256": "2107c7129510ab6070a312ba3b06485fed481ef5012fc86b17e2659a30ef5ced",
+      "width": 883,
+      "height": 1477,
+      "sourceBytes": 1635363,
+      "quality90Bytes": 85570,
+      "savingPercent": 94.8,
+      "alphaIdentical": true,
+      "productionReplacement": false
+    }
+  ],
+  "gameBrowserOrEngineStarted": false
+}
