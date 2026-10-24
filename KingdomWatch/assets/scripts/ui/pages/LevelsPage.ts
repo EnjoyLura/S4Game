@@ -143,6 +143,13 @@ export function buildLevels(ctx: PageCtx): void {
   function warmSelected(): void {
     if (levelOpen(st.i)) {
       const levelId = LEVELS[st.i].id, difficulty = st.d, heroes = squadList();
+      // Difficulty switches and neighbouring unlocked checkpoints are predictable
+      // before the drawer opens; their real loot icons share the normal cache.
+      for (const index of [st.i - 1, st.i, st.i + 1]) {
+        if (!LEVELS[index] || !levelOpen(index)) continue;
+        for (let d = 0; d < 3; d++) if (difficultyOpen(index, d) && (index !== st.i || d !== difficulty))
+          void warmCampaignPreparation(LEVELS[index].id, d, 'idle');
+      }
       // The drawer is the next interaction. Large battle sheets must follow its art and cards.
       // Queue the small next action now. The shared scheduler still serves visible art first.
       void warmCampaignPreparation(levelId, difficulty).then(() => {

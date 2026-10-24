@@ -4,7 +4,7 @@ import { C, CA, label, N, WY } from './UIKit';
 import { artSprite } from './Ux';
 import { COMIC, comicArt, comicMark, comicPortrait, comicSurface } from './ComicUI';
 import { EQUIPS, EquipKind, HERO_DEFS } from '../core/GameData';
-import { HeroLobbyIdle } from './HeroLobbyIdle';
+import { HeroLobbyIdle, supportsHeroLobbyIdle } from './HeroLobbyIdle';
 
 export const HERO_PASTEL: Record<string, string> = {
   cannon: '#F0DFB4', siphon: '#EFD3DF',
@@ -59,19 +59,24 @@ export function gearArt(parent: Node, x: number, y: number, w: number, h: number
   return comicArt(parent, x, y, w, h, GEAR_ART[id]);
 }
 /** Keep the complete illustration and align its authored transparent foot margin. */
+export function heroFigureKey(id: string): string {
+  return 'hero_comic_v1/comic_figure_' + id + (id === 'archer' ? '_v2' : '_v1');
+}
 export function heroComicFigure(parent: Node, id: string, x: number, footY: number, height: number, maxWidth: number, animated = false): Node {
   const figure = N('heroFigure:' + id, parent, x, footY);
   const ground = N('heroGround', figure).addComponent(Graphics);
   ground.fillColor = CA(COMIC.ink, .24); ground.ellipse(0, -2, Math.min(72, height * .17), 8); ground.fill();
-  const key = 'hero_comic_v1/comic_figure_' + id + (id === 'archer' ? '_v2' : '_v1');
+  const key = heroFigureKey(id);
   const footMargin = id === 'cannon' ? 81 / 1536 : id === 'siphon' ? 30 / 1536 : id === 'archer' ? 14 / 1546 : 16 / 768;
-  const still = artSprite(figure, 0, height / 2, maxWidth, height, key, {
+  const still = N('heroStillFallback', figure);
+  const loadStill = (): void => { artSprite(still, 0, height / 2, maxWidth, height, key, {
     sliced: false, onLoaded: art => {
       const h = art.getComponent(UITransform)!.height;
       art.setPosition(0, h / 2 - h * footMargin, 0);
     },
-  });
-  if (animated) figure.addComponent(HeroLobbyIdle).configure(id, still, height, maxWidth);
+  }); };
+  if (animated && supportsHeroLobbyIdle(id)) figure.addComponent(HeroLobbyIdle).configure(id, still, height, maxWidth, loadStill);
+  else loadStill();
   return figure;
 }
 /** Illustrated action icons share the same reference as the shop objects. */

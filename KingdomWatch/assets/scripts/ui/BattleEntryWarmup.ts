@@ -1,5 +1,5 @@
 /** Entry art first; only the selected battlefield and equipped heroes need a first-paint barrier. */
-import { director } from 'cc';
+import { director, EffectAsset, JsonAsset, resources } from 'cc';
 import { battleSceneKey } from '../config/Campaign';
 import { getChallengeDef } from '../config/LevelDifficulty';
 import { enemyArtRef } from '../config/ChapterContent';
@@ -9,6 +9,7 @@ import { preloadHeroClip } from '../battle/HeroSequenceAnimation';
 import { getMobAnims } from '../battle/MobAnim';
 import { ArtPriority, uxFrame, warmUXArt } from './Ux';
 import { warmPickArt } from './PickArt';
+import { warmGameFonts } from './Fonts';
 
 export const ENTRY_GATE_ART = 'battle_entry_v3/outpost_gate';
 export const THREAT_ART = ['boss_warning_v1/banner', 'boss_warning_v1/crest'] as const;
@@ -19,6 +20,37 @@ const HERO_CLIPS: Record<string, [string, string]> = {
   mora: ['mora_idle_user_v1', 'mora_attack_user_v1'],
 };
 let sceneJob: Promise<boolean> | null = null;
+export const BATTLE_COMMON_ART = ['pause_comic_v1/title_ribbon',
+  'settlement_comic_v1/badge_win', 'settlement_comic_v1/badge_lose', 'levels_comic_v1/comic_star_v1',
+  'shop_comic_v1/comic_coin_v1', 'shop_comic_v1/comic_diamond_v1', 'hero_comic_v2/comic_attributes_v2',
+  'pick_comic_v1/title_plate', 'hero_comic_v2/comic_story_v2', 'ult_energy_quad', ...THREAT_ART] as const;
+const FX_IMAGES: Record<string, string[]> = {
+  archer: ['fx/archer_v1'],
+  pyro: ['fx/pyro_hit', 'fx/fire_v2', 'fx/crater_mark', 'fx/crater_embers'],
+  mora: ['fx/frost_domain_video_v10', 'fx/frost_ultimate_impact_v1', 'fx/frost_ultimate_rain_v1'],
+};
+const FX_MANIFESTS = new Set(['fx/archer_v1', 'fx/pyro_hit', 'fx/fire_v2', 'fx/frost_domain_video_v10', 'fx/frost_ultimate_impact_v1']);
+const FX_EFFECTS: Record<string, string[]> = {
+  pyro: ['fx/fire-paint-v2'], volt: ['fx/volt-ultimate-procedural'], sniper: ['fx/sniper-ultimate-procedural'],
+};
+const fxRequests = new Map<string, Promise<void>>();
+function warmFxResource(path: string, effect: boolean): Promise<void> {
+  const hit = fxRequests.get(path); if (hit) return hit;
+  const job = new Promise<void>(resolve => {
+    const finish = (error: Error | null): void => { if (error) fxRequests.delete(path); resolve(); };
+    if (effect) resources.load(path, EffectAsset, finish); else resources.load(path, JsonAsset, finish);
+  });
+  fxRequests.set(path, job); return job;
+}
+function warmBattleEffects(heroIds: readonly string[], priority: ArtPriority): Promise<void> {
+  const images = Array.from(new Set(heroIds.flatMap(id => FX_IMAGES[id] || [])));
+  const jobs = [warmUXArt(images, priority)];
+  for (const path of images) if (FX_MANIFESTS.has(path)) jobs.push(warmFxResource(path + '.frames', false));
+  const effects = ['fx/basic-launch-procedural', 'fx/mob-cold', 'fx/mob-death', 'fx/ult-energy',
+    ...heroIds.flatMap(id => FX_EFFECTS[id] || [])];
+  jobs.push(...effects.map(path => warmFxResource(path, true)));
+  return Promise.all(jobs).then(() => {});
+}
 
 function imageReady(id: string, priority: ArtPriority): Promise<void> {
   return warmUXArt([id], priority);
@@ -39,13 +71,14 @@ export function warmBattleScene(): Promise<boolean> {
 export function warmBattlefield(levelId: string, heroIds: readonly string[], mobIds: readonly string[] = [],
   priority: ArtPriority = 'visible'): Promise<void> {
   const ids = heroIds.length ? [...heroIds] : ['archer', 'sniper'];
+  warmGameFonts();
   warmEntryArt(priority); void warmBattleScene();
   // Small reused HUD art starts before entry; neither image blocks the battlefield reveal.
   void warmUXArt(['hero_comic_v2/comic_story_v2', 'pick_comic_v1/title_plate'], priority === 'visible' ? 'next' : priority);
   // Start card predictions now, rather than after every multi-megabyte character sheet.
-  void warmPickArt(ids);
   if (levelId === '1-5' || levelId === '1-10' || mobIds.includes('goblin_king')) getMobAnims(() => {}, 'goblin_king', priority);
   const firstPaint = [imageReady(battleSceneKey(levelId), priority), imageReady('defense_wall', priority)];
+  firstPaint.push(warmPickArt(ids, priority), warmUXArt(BATTLE_COMMON_ART, priority), warmBattleEffects(ids, priority));
   const enemies: string[] = [...mobIds];
   if (!enemies.length) for (const wave of getChallengeDef(levelId, 0).waves) for (const group of wave.groups) enemies.push(group.mob);
   for (const atlas of new Set(enemies.map(id => enemyArtRef(id).atlas))) firstPaint.push(warmBattleAtlas(atlas, priority));
@@ -58,17 +91,15 @@ export function warmBattlefield(levelId: string, heroIds: readonly string[], mob
     if (id === 'archer') {
       firstPaint.push(preloadArcherClip('idle', priority));
       // Attack sheets follow idle sheets, so a large combat atlas cannot delay the first hero pose.
-      void preloadArcherClip('idle', priority).then(() => preloadArcherClip('attack', 'idle'));
+      firstPaint.push(preloadArcherClip('attack', priority));
     } else if (HERO_CLIPS[id]) {
       const [idle, attack] = HERO_CLIPS[id];
       firstPaint.push(preloadHeroClip(idle, 'idle', priority));
-      void preloadHeroClip(idle, 'idle', priority).then(() => preloadHeroClip(attack, 'attack', 'idle'));
+      firstPaint.push(preloadHeroClip(attack, 'attack', priority));
     }
     // HUD decorations are warm, but never hold an opaque screen hostage.
-    for (const part of ['avatar', 'icon_atk', 'icon_skill', 'icon_ult']) {
-      uxFrame('ui_' + part + '_' + id, () => {}, priority === 'visible' ? 'next' : priority);
-    }
+    firstPaint.push(warmUXArt(['icon_atk', 'icon_skill', 'icon_ult'].map(part => 'ui_' + part + '_' + id), priority));
   }
   // The actual resource caches deduplicate requests, and a click can promote an idle prediction.
-  return Promise.all(firstPaint).then(() => { void warmUXArt(THREAT_ART, 'idle'); });
+  return Promise.all(firstPaint).then(() => {});
 }

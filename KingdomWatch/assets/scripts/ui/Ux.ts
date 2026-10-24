@@ -10,7 +10,7 @@ import { NEW_HERO_FRAMES } from './NewHeroArt';
 
 /** id → 资源路径：'scenes/x' 原样，其余视为 ux/ 下的清单 ID */
 function resPath(id: string): string {
-  return (id.startsWith('scenes/') ? id : 'ux/' + id) + '/spriteFrame';
+  return (id.startsWith('scenes/') || id.startsWith('fx/') ? id : 'ux/' + id) + '/spriteFrame';
 }
 
 const cache = new Map<string, SpriteFrame>();
@@ -110,6 +110,36 @@ export function promoteUXArt(id: string, priority: ArtPriority = 'visible'): voi
 export function warmUXArt(ids: readonly string[], priority: ArtPriority = 'next'): Promise<void> {
   return Promise.all(Array.from(new Set(ids)).filter(Boolean).map(id =>
     new Promise<void>(resolve => uxFrame(id, () => resolve(), priority)))).then(() => {});
+}
+
+/** Distant large art downloads without creating Texture2D/GPU resources. */
+const prefetched = new Set<string>();
+const prefetching = new Map<string, (() => void)[]>();
+let prefetchActive = false, prefetchTimer: ReturnType<typeof setTimeout> | undefined;
+function pumpPrefetch(): void {
+  if (prefetchActive || prefetchTimer !== undefined || !prefetching.size) return;
+  if (offline() || (typeof document !== 'undefined' && document.hidden) || active.size || pending.size) {
+    prefetchTimer = setTimeout(() => { prefetchTimer = undefined; pumpPrefetch(); }, 250); return;
+  }
+  const id = prefetching.keys().next().value as string;
+  prefetchActive = true;
+  const complete = (error: Error | null): void => {
+    if (!error) prefetched.add(id);
+    const callbacks = prefetching.get(id) || []; prefetching.delete(id);
+    prefetchActive = false; callbacks.forEach(done => done()); pumpPrefetch();
+  };
+  if (id.endsWith('.frames')) resources.preload(id.startsWith('fx/') ? id : 'ux/' + id, JsonAsset, complete);
+  else resources.preload(resPath(id), SpriteFrame, complete);
+}
+export function prefetchUXArt(ids: readonly string[]): Promise<void> {
+  return Promise.all(Array.from(new Set(ids.filter(Boolean).map(id => NEW_HERO_FRAMES[id]?.source || id))).map(id => {
+    if (prefetched.has(id) || cache.has(id)) return Promise.resolve();
+    return new Promise<void>(resolve => {
+      const prior = prefetching.get(id);
+      if (prior) prior.push(resolve); else prefetching.set(id, [resolve]);
+      pumpPrefetch();
+    });
+  })).then(() => {});
 }
 
 /** 异步取 SpriteFrame（带缓存与去重）；失败回调 null，调用方保持程序绘制 */
@@ -271,6 +301,7 @@ export interface ArtOpts {
   hideOnLoad?: Node[];
   /** 加载成功回调（例：切换水位半径） */
   onLoaded?: (n: Node) => void;
+  onFailed?: () => void;
 }
 
 /** 创建美术 Sprite 节点：立即可用（加载完成前透明），失败则保持透明、由程序绘制兜底 */
@@ -293,7 +324,8 @@ export function artSprite(parent: Node, x: number, y: number, w: number, h: numb
   const unwatch = watchArtVisibility(n, id);
   uxFrame(id, sf => {
     try {
-      if (!sf || !isValid(n, true)) return;
+      if (!isValid(n, true)) return;
+      if (!sf) { o.onFailed?.(); return; }
       sp.spriteFrame = sf;
       if (SLICE9[id]) {
         const c = SLICE9[id];

@@ -12,7 +12,7 @@ const LAYER = 1 << 19;
 const CLOSE_SECONDS = .24;
 const OPEN_SECONDS = .32;
 const CLOSED_HOLD_SECONDS = 1.5;
-const ART_WAIT_LIMIT = .9;
+const ART_WAIT_LIMIT = 6;
 type Destination = 'battle' | 'main';
 type SceneLoader = (done: (error?: Error | null) => void) => boolean;
 let active: BattleEntry | null = null;
@@ -149,7 +149,7 @@ export class BattleEntry extends Component {
     if (destination === 'main') {
       whenUIArtReady(root, () => this.queueFirstDraw());
     } else {
-      // Decorative HUD images load independently. Only the background, wall and actual idle clips matter here.
+      // The real entry plan includes attack clips, selected effects, cards and HUD faces.
       void this.firstPaint.then(() => this.queueFirstDraw());
     }
   }
@@ -171,7 +171,7 @@ export class BattleEntry extends Component {
     this.age += this.phase === 'holding' ? elapsed : delta;
     if (this.builtRoot && !this.ready) {
       this.builtAge += elapsed;
-      // A stalled network must not add the former eight-second closed-door wait.
+      // A bounded cold/offline fallback remains; warm entries reveal as soon as their assets draw.
       if (this.destination === 'battle' && this.builtAge >= ART_WAIT_LIMIT) this.queueFirstDraw();
     }
     if (this.phase === 'closing') {

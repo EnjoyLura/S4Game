@@ -28,6 +28,7 @@ import { whenUIArtReady } from './UIArtReady';
 import { paintLobbyStrip } from './LobbyChrome';
 import { warmLobbyNavigation } from './LobbyArtWarmup';
 import { deferUIWarmup } from './IdleWarmup';
+import { warmGameFonts } from './Fonts';
 
 const { ccclass } = _decorator;
 
@@ -50,6 +51,7 @@ export class MainUI extends Component {
   private tab = flow.mainTab;
 
   start(): void {
+    warmGameFonts();
     // Resume the post-bow chain after a refresh without repeating a paid upgrade.
     const campTab = postBowCampTab();
     if (campTab !== null) {

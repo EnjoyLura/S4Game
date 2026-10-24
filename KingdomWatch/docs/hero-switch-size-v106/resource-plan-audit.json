@@ -1,0 +1,93 @@
+{
+  "declaredWarmupFilesResolved": {
+    "upgrade_comic_v1/comic_training_hammer_v1": "assets/resources/ux/upgrade_comic_v1/comic_training_hammer_v1.png",
+    "levels_comic_v1/comic_star_v1": "assets/resources/ux/levels_comic_v1/comic_star_v1.png",
+    "levels_comic_v1/comic_swords_v1": "assets/resources/ux/levels_comic_v1/comic_swords_v1.png",
+    "hero_comic_v2/comic_bag_v2": "assets/resources/ux/hero_comic_v2/comic_bag_v2.png",
+    "hero_comic_v2/comic_attributes_v2": "assets/resources/ux/hero_comic_v2/comic_attributes_v2.png",
+    "hero_comic_v2/comic_story_v2": "assets/resources/ux/hero_comic_v2/comic_story_v2.png",
+    "hero_comic_v2/comic_forge_v2": "assets/resources/ux/hero_comic_v2/comic_forge_v2.png",
+    "hero_comic_v3/comic_cycle_button_v3": "assets/resources/ux/hero_comic_v3/comic_cycle_button_v3.png",
+    "hero_comic_v3/comic_power_plate_v3": "assets/resources/ux/hero_comic_v3/comic_power_plate_v3.png",
+    "scenes/bg_base_endless_v59": "assets/resources/scenes/bg_base_endless_v59.png",
+    "scenes/bg_shop_comic_v1": "assets/resources/scenes/bg_shop_comic_v1.jpg",
+    "scenes/bg_upgrade_comic_v1": "assets/resources/scenes/bg_upgrade_comic_v1.jpg",
+    "scenes/bg_heroes_comic_v3": "assets/resources/scenes/bg_heroes_comic_v3.jpg",
+    "base_comic_v1/comic_keep_heart_v1": "assets/resources/ux/base_comic_v1/comic_keep_heart_v1.png",
+    "levels_comic_v1/comic_difficulty_shield_v1": "assets/resources/ux/levels_comic_v1/comic_difficulty_shield_v1.png",
+    "scenes/bg_endless_world_v66": "assets/resources/scenes/bg_endless_world_v66.png",
+    "battle_entry_v3/outpost_gate": "assets/resources/ux/battle_entry_v3/outpost_gate.png",
+    "boss_warning_v1/banner": "assets/resources/ux/boss_warning_v1/banner.png",
+    "boss_warning_v1/crest": "assets/resources/ux/boss_warning_v1/crest.png",
+    "pause_comic_v1/title_ribbon": "assets/resources/ux/pause_comic_v1/title_ribbon.png",
+    "settlement_comic_v1/badge_win": "assets/resources/ux/settlement_comic_v1/badge_win.png",
+    "settlement_comic_v1/badge_lose": "assets/resources/ux/settlement_comic_v1/badge_lose.png",
+    "shop_comic_v1/comic_coin_v1": "assets/resources/ux/shop_comic_v1/comic_coin_v1.png",
+    "shop_comic_v1/comic_diamond_v1": "assets/resources/ux/shop_comic_v1/comic_diamond_v1.png",
+    "pick_comic_v1/title_plate": "assets/resources/ux/pick_comic_v1/title_plate.png",
+    "fx/archer_v1": "assets/resources/fx/archer_v1.png",
+    "fx/pyro_hit": "assets/resources/fx/pyro_hit.png",
+    "fx/fire_v2": "assets/resources/fx/fire_v2.png",
+    "fx/crater_mark": "assets/resources/fx/crater_mark.png",
+    "fx/crater_embers": "assets/resources/fx/crater_embers.png",
+    "fx/frost_domain_video_v10": "assets/resources/fx/frost_domain_video_v10.png",
+    "fx/frost_ultimate_impact_v1": "assets/resources/fx/frost_ultimate_impact_v1.png",
+    "fx/frost_ultimate_rain_v1": "assets/resources/fx/frost_ultimate_rain_v1.png",
+    "fx/fire-paint-v2": "assets/resources/fx/fire-paint-v2.effect",
+    "fx/volt-ultimate-procedural": "assets/resources/fx/volt-ultimate-procedural.effect",
+    "fx/sniper-ultimate-procedural": "assets/resources/fx/sniper-ultimate-procedural.effect",
+    "fx/basic-launch-procedural": "assets/resources/fx/basic-launch-procedural.effect",
+    "fx/mob-cold": "assets/resources/fx/mob-cold.effect",
+    "fx/mob-death": "assets/resources/fx/mob-death.effect",
+    "fx/ult-energy": "assets/resources/fx/ult-energy.effect",
+    "preparation_art_v2/difficulty_normal_v2": "assets/resources/ux/preparation_art_v2/difficulty_normal_v2.png",
+    "preparation_art_v2/difficulty_elite_v2": "assets/resources/ux/preparation_art_v2/difficulty_elite_v2.png",
+    "preparation_art_v2/difficulty_hell_v2": "assets/resources/ux/preparation_art_v2/difficulty_hell_v2.png",
+    "preparation_art_v2/chest_bronze_v2": "assets/resources/ux/preparation_art_v2/chest_bronze_v2.png",
+    "preparation_art_v2/chest_sapphire_v2": "assets/resources/ux/preparation_art_v2/chest_sapphire_v2.png",
+    "preparation_art_v2/chest_crimson_v2": "assets/resources/ux/preparation_art_v2/chest_crimson_v2.png",
+    "preparation_art_v2/claim_button_v2": "assets/resources/ux/preparation_art_v2/claim_button_v2.png",
+    "shop_comic_v1/comic_nav_shop_v1": "assets/resources/ux/shop_comic_v1/comic_nav_shop_v1.png",
+    "shop_comic_v1/comic_helm_falcon_v1": "assets/resources/ux/shop_comic_v1/comic_helm_falcon_v1.png",
+    "shop_comic_v1/comic_nav_map_v1": "assets/resources/ux/shop_comic_v1/comic_nav_map_v1.png",
+    "shop_comic_v1/comic_nav_castle_v1": "assets/resources/ux/shop_comic_v1/comic_nav_castle_v1.png"
+  },
+  "heroShowcases": [
+    {
+      "hero": "archer",
+      "actual": "hero_lobby_idle_v103/archer",
+      "frames": 52,
+      "fallbackPNGBytesNoLongerRequestedOnSuccess": 1336231
+    },
+    {
+      "hero": "pyro",
+      "actual": "hero_lobby_idle_v99/pyro",
+      "frames": 48,
+      "fallbackPNGBytesNoLongerRequestedOnSuccess": 385783
+    },
+    {
+      "hero": "mora",
+      "actual": "hero_lobby_idle_v102/mora",
+      "frames": 52,
+      "fallbackPNGBytesNoLongerRequestedOnSuccess": 425143
+    },
+    {
+      "hero": "sniper",
+      "actual": "hero_lobby_idle_v100/sniper",
+      "frames": 56,
+      "fallbackPNGBytesNoLongerRequestedOnSuccess": 384155
+    },
+    {
+      "hero": "volt",
+      "actual": "hero_lobby_idle_v100/volt",
+      "frames": 42,
+      "fallbackPNGBytesNoLongerRequestedOnSuccess": 461059
+    }
+  ],
+  "coldFallbackRetained": true,
+  "imagesOrAnimationPixelsModified": false,
+  "prefetchAPI": "Cocos resources.preload: download only, no asset parsing",
+  "unrelatedHeroEffectsNotConstructed": true,
+  "ordinaryUltFaceDoesNotFetchCoveredPortrait": true,
+  "gameBrowserOrWasmExecuted": false
+}

@@ -28,26 +28,31 @@ export class ImpactFX {
   private cueFree: CombatCue[] = [];
   private tint = new Color();
   private dirty = false;
-  private fire: FireVFX;
-  private archer: ArcherVFX;
-  private frost: FrostVFX;
-  private frostProjectile: FrostProjectileVFX;
-  private frostUltimate: FrostUltimateVFX;
+  private fire?: FireVFX;
+  private archer?: ArcherVFX;
+  private frost?: FrostVFX;
+  private frostProjectile?: FrostProjectileVFX;
+  private frostUltimate?: FrostUltimateVFX;
   private basicLaunch: BasicAttackLaunchVFX;
-  private volt: VoltVFX;
-  private voltUltimate: VoltUltimateVFX;
-  private sniperUltimate: SniperUltimateVFX;
+  private volt?: VoltVFX;
+  private voltUltimate?: VoltUltimateVFX;
+  private sniperUltimate?: SniperUltimateVFX;
 
-  constructor(parent: Node, groundParent: Node = parent, projectileParent: Node = parent, depthParent?: Node) {
-    this.fire = new FireVFX(parent, groundParent, projectileParent);
-    this.archer = new ArcherVFX(parent, projectileParent);
-    this.frost = new FrostVFX(groundParent);
-    this.frostProjectile = new FrostProjectileVFX(projectileParent);
-    this.frostUltimate = new FrostUltimateVFX(groundParent, parent, depthParent);
+  constructor(parent: Node, groundParent: Node = parent, projectileParent: Node = parent, depthParent?: Node,
+    heroIds: readonly string[] = ['archer', 'sniper', 'pyro', 'volt', 'mora']) {
+    if (heroIds.includes('pyro')) this.fire = new FireVFX(parent, groundParent, projectileParent);
+    if (heroIds.includes('archer')) this.archer = new ArcherVFX(parent, projectileParent);
+    if (heroIds.includes('mora')) {
+      this.frost = new FrostVFX(groundParent);
+      this.frostProjectile = new FrostProjectileVFX(projectileParent);
+      this.frostUltimate = new FrostUltimateVFX(groundParent, parent, depthParent);
+    }
     this.basicLaunch = new BasicAttackLaunchVFX(parent);
-    this.volt = new VoltVFX(parent, projectileParent);
-    this.voltUltimate = new VoltUltimateVFX(parent, groundParent);
-    this.sniperUltimate = new SniperUltimateVFX(parent, projectileParent);
+    if (heroIds.includes('volt')) {
+      this.volt = new VoltVFX(parent, projectileParent);
+      this.voltUltimate = new VoltUltimateVFX(parent, groundParent);
+    }
+    if (heroIds.includes('sniper')) this.sniperUltimate = new SniperUltimateVFX(parent, projectileParent);
     const node = new Node('impactEnvelopes');
     node.layer = Layers.Enum.UI_2D;
     node.setParent(parent);
@@ -57,69 +62,69 @@ export class ImpactFX {
   }
 
   beginProjectileFrame(): void {
-    this.fire.beginProjectileFrame(); this.archer.beginProjectileFrame(); this.frostProjectile.beginProjectileFrame();
-    this.volt.beginProjectileFrame();
-    this.sniperUltimate.beginFrame();
+    this.fire?.beginProjectileFrame(); this.archer?.beginProjectileFrame(); this.frostProjectile?.beginProjectileFrame();
+    this.volt?.beginProjectileFrame();
+    this.sniperUltimate?.beginFrame();
   }
   endProjectileFrame(): void {
-    this.fire.endProjectileFrame(); this.archer.endProjectileFrame(); this.frostProjectile.endProjectileFrame();
-    this.sniperUltimate.endFrame();
+    this.fire?.endProjectileFrame(); this.archer?.endProjectileFrame(); this.frostProjectile?.endProjectileFrame();
+    this.sniperUltimate?.endFrame();
   }
   iceProjectile(x: number, y: number, vx: number, vy: number, size: number, age: number): boolean {
-    return this.frostProjectile.projectile(x, y, vx, vy, size, age);
+    return this.frostProjectile?.projectile(x, y, vx, vy, size, age) ?? false;
   }
   arrowProjectile(x: number, y: number, vx: number, vy: number, size: number, age: number, heavy: boolean): boolean {
-    return this.archer.projectile(x, y, vx, vy, size, age, heavy);
+    return this.archer?.projectile(x, y, vx, vy, size, age, heavy) ?? false;
   }
   arrowRelease(x: number, y: number, dx: number, dy: number, heavy: boolean): boolean {
-    return this.archer.release(x, y, dx, dy, heavy);
+    return this.archer?.release(x, y, dx, dy, heavy) ?? false;
   }
   normalRelease(hero: string, x: number, y: number, dx: number, dy: number, empowered = false): void {
-    if (hero === 'volt') { this.volt.release(x, y, dx, dy); return; }
+    if (hero === 'volt') { this.volt?.release(x, y, dx, dy); return; }
     this.basicLaunch.release(hero, x, y, dx, dy, empowered);
   }
   voltProjectile(x: number, y: number, vx: number, vy: number, size: number, age: number, seed: number): boolean {
-    return this.volt.projectile(x, y, vx, vy, size, age, seed);
+    return this.volt?.projectile(x, y, vx, vy, size, age, seed) ?? false;
   }
   voltChain(x: number, y: number, x1: number, y1: number, jump: number): void {
-    this.volt.chain(x, y, x1, y1, jump);
+    this.volt?.chain(x, y, x1, y1, jump);
   }
   voltThunder(x: number, y: number, top: number, footY: number, radius: number, power = 1): void {
-    this.voltUltimate.strike(x, y, top, footY, radius, power);
+    this.voltUltimate?.strike(x, y, top, footY, radius, power);
   }
-  voltCast(x: number, y: number): void { this.volt.cast(x, y); }
-  sniperUltimateRelease(x: number, y: number, dx: number, dy: number): void { this.sniperUltimate.release(x, y, dx, dy); }
-  sniperUltimateHit(x: number, y: number, angle: number): void { this.sniperUltimate.hit(x, y, angle); }
+  voltCast(x: number, y: number): void { this.volt?.cast(x, y); }
+  sniperUltimateRelease(x: number, y: number, dx: number, dy: number): void { this.sniperUltimate?.release(x, y, dx, dy); }
+  sniperUltimateHit(x: number, y: number, angle: number): void { this.sniperUltimate?.hit(x, y, angle); }
   sniperUltimateProjectile(x: number, y: number, vx: number, vy: number, age: number, phase: number): boolean {
-    return this.sniperUltimate.projectile(x, y, vx, vy, age, phase);
+    return this.sniperUltimate?.projectile(x, y, vx, vy, age, phase) ?? false;
   }
   fireProjectile(x: number, y: number, vx: number, vy: number, size: number): boolean {
-    return this.fire.projectile(x, y, vx, vy, size);
+    return this.fire?.projectile(x, y, vx, vy, size) ?? false;
   }
   fireCraters(areas: readonly { x: number; y: number; t: number; life?: number; radius?: number }[], radius: number, clock: number): boolean {
-    return this.fire.craters(areas, radius, clock);
+    return this.fire?.craters(areas, radius, clock) ?? false;
   }
 
-  syncBurns(targets: readonly BurningTarget[], dt: number): void { this.fire.syncBurns(targets, dt); }
+  syncBurns(targets: readonly BurningTarget[], dt: number): void { this.fire?.syncBurns(targets, dt); }
 
   frostDomain(x: number, y: number, radius: number, duration: number): void {
-    this.frost.domain(x, y, radius, duration);
+    this.frost?.domain(x, y, radius, duration);
   }
 
   frostGround(areas: readonly { x: number; y: number; radius: number; t: number; life: number }[]): void {
-    this.frost.groundAreas(areas);
+    this.frost?.groundAreas(areas);
   }
 
-  frostUlt(targets: readonly FrostUltTarget[]): void { this.frostUltimate.cast(targets); }
-  frostUltBurst(targets: readonly FrostUltTarget[]): void { this.frostUltimate.burst(targets); }
+  frostUlt(targets: readonly FrostUltTarget[]): void { this.frostUltimate?.cast(targets); }
+  frostUltBurst(targets: readonly FrostUltTarget[]): void { this.frostUltimate?.burst(targets); }
 
   hit(x: number, y: number, hero: string, heavy: boolean, angle?: number): void {
-    if (hero === 'volt') { this.volt.hit(x, y, heavy); return; }
-    if (hero === 'archer' && this.archer.hit(x, y, heavy, angle)) return;
+    if (hero === 'volt') { this.volt?.hit(x, y, heavy); return; }
+    if (hero === 'archer' && this.archer?.hit(x, y, heavy, angle)) return;
     if (hero === 'pyro') {
       // 首选图生视频灼烧序列；未就绪退回引擎火团，再退回矢量描边。
-      if (this.fire.hitClip(x, y, heavy)) return;
-      if (this.fire.hit(x, y, heavy, angle)) return;
+      if (this.fire?.hitClip(x, y, heavy)) return;
+      if (this.fire?.hit(x, y, heavy, angle)) return;
     }
     this.contact(x, y, hero, heavy, angle);
   }
@@ -136,7 +141,7 @@ export class ImpactFX {
 
   cast(x: number, y: number, hero: string): void {
     // Generic hero cast anchor is +24; the lightning release anchor is +60.
-    if (hero === 'volt') { this.volt.cast(x, y + 36, true); return; }
+    if (hero === 'volt') { this.volt?.cast(x, y + 36, true); return; }
     this.contact(x, y, hero, false);
     const p = this.active[this.active.length - 1];
     if (p) { p.kind = 'cast'; p.radius = 19; p.max = p.life = 0.16; }
@@ -144,7 +149,7 @@ export class ImpactFX {
 
   /** A local hot core and ground dust, sized below the gameplay warning circle. */
   blast(x: number, y: number, hero: string, radius: number): void {
-    if (hero === 'pyro' && this.fire.blast(x, y, radius)) return;
+    if (hero === 'pyro' && this.fire?.blast(x, y, radius)) return;
     this.contact(x, y, hero, true, Math.PI / 2);
     const p = this.active[this.active.length - 1];
     if (p) { p.kind = 'blast'; p.radius = Math.min(60, radius * 0.45); p.max = p.life = 0.28; }
@@ -208,14 +213,14 @@ export class ImpactFX {
   }
 
   tick(dt: number): void {
-    this.fire.tick(dt);
-    this.archer.tick(dt);
-    this.frost.tick(dt);
-    this.frostUltimate.tick(dt);
+    this.fire?.tick(dt);
+    this.archer?.tick(dt);
+    this.frost?.tick(dt);
+    this.frostUltimate?.tick(dt);
     this.basicLaunch.tick(dt);
-    this.volt.tick(dt);
-    this.voltUltimate.tick(dt);
-    this.sniperUltimate.tick(dt);
+    this.volt?.tick(dt);
+    this.voltUltimate?.tick(dt);
+    this.sniperUltimate?.tick(dt);
     if (!this.dirty && this.active.length === 0 && this.cues.length === 0) return;
     this.g.clear(); this.dirty = false;
     for (let i = this.active.length - 1; i >= 0; i--) {

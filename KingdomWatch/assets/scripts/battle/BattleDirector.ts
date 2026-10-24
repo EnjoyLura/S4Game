@@ -173,7 +173,8 @@ export class BattleDirector extends Component {
     fxLayer.setParent(field);
     const textLayer = new Node('TextLayer');
     textLayer.setParent(field);
-    this.impacts = new ImpactFX(fxLayer, groundFxLayer, projLayer, mobLayer);
+    const squad = squadList(), ids = squad.length ? squad : ['archer', 'sniper'];
+    this.impacts = new ImpactFX(fxLayer, groundFxLayer, projLayer, mobLayer, ids);
     this.ultPresentation = new UltimatePresentation(field, fxLayer, groundFxLayer);
 
     const hitCtx = {
@@ -198,8 +199,6 @@ export class BattleDirector extends Component {
       }
     };
     // 编队上阵（§编队）：按存档上阵顺序从左到右站位（2 人 = ±160 与旧版一致）；空编队兜底双英雄
-    const squad = squadList();
-    const ids = squad.length ? squad : ['archer', 'sniper'];
     const slots = heroSlots(ids.length);
     this.heroes = ids.map((hid, i) => {
       const st = hid === 'cannon' ? baseCannonStats() : hid === 'siphon' ? baseSiphonStats() : hid === 'sniper' ? baseSniperStats()

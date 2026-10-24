@@ -229,10 +229,14 @@ export class HUD {
     bright.active = false;
     const gray = gcircle(top, ux, uy, 45, CA('#3A4250', 0.9));
     gray.active = false;   // 用户调整：图标占满钮面后不再整体置灰，灰罩只走未充能扇形
-    // 英雄头像+大招图标：垫在进度灰罩/百分比之下（92 > 钮圆 90：占满整个圆）
-    artSprite(top, ux, uy, 92, 92, 'ui_avatar_' + hero.id, { sliced: false });
-    // 大招图标（美术到位后盖过头像作钮面；缺失保持头像兜底）
-    artSprite(top, ux, uy, 92, 92, 'ui_icon_ult_' + hero.id, { sliced: false });
+    // Fetch the actual face once; a portrait is needed only when that resource fails.
+    const face = artSprite(top, ux, uy, 92, 92, 'ui_icon_ult_' + hero.id, { sliced: false,
+      onFailed: () => {
+        if (!top.isValid || !face.isValid) return;
+        const fallback = artSprite(top, ux, uy, 92, 92, 'ui_avatar_' + hero.id, { sliced: false });
+        fallback.setSiblingIndex(face.getSiblingIndex());
+      },
+    });
     // 旧整圆置灰罩已弃用（被未充能扇形替代），保留节点占位不再激活
     const mask = gcircle(top, ux, uy, 46, CA('#3A4250', 0.7));
     mask.active = false;

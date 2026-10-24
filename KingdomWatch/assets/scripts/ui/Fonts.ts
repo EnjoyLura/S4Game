@@ -25,12 +25,23 @@ export function applyFont(label: Label, role: FontRole): void {
   const queue = waiting.get(role);
   if (queue) { if (!queue.includes(label)) queue.push(label); return; }
   waiting.set(role, [label]);
+  requestFont(role);
+}
+
+function requestFont(role: FontRole): void {
   resources.load('fonts/' + FILES[role], Font, (err, asset) => {
     const labels = waiting.get(role) || [];
     waiting.delete(role);
     if (err || !asset) return;
     loaded.set(role, asset);
     labels.forEach(l => install(l, asset, role));
+  });
+}
+
+export function warmGameFonts(): void {
+  (Object.keys(FILES) as FontRole[]).forEach(role => {
+    if (loaded.has(role) || waiting.has(role)) return;
+    waiting.set(role, []); requestFont(role);
   });
 }
 
