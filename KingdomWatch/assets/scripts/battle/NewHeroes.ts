@@ -9,8 +9,9 @@ import { HeroStats } from '../config/Cards';
 import { CANNON, SIPHON, cannonSkillCfg, cannonUltCfg, siphonSkillCfg, siphonUltCfg } from '../config/NewHeroConfig';
 import { HERO_Y, LINE_Y, LO } from '../config/GameConfig';
 import { artSprite } from '../ui/Ux';
-import { C, CA, N } from '../ui/UIKit';
+import { CA, N } from '../ui/UIKit';
 import { Sfx } from '../core/Sfx';
+import { CannonBlastVFX, SiphonBeamVFX } from './NewHeroVFX';
 
 function visual(parent: Node, node: Node, x: number, hero: string): Node {
   node.layer = parent.layer; node.setParent(parent); node.setPosition(x, HERO_Y, 0);
@@ -40,15 +41,14 @@ function cluster(mgr: MonsterManager, x: number, range: number, radius: number):
 interface Shell {
   delay: number; x: number; y: number; damage: number; radius: number;
   skill: boolean; ult: boolean; echo: boolean; extra: boolean; detonate?: boolean;
+  launchX?: number;
 }
-interface Blast { x: number; y: number; radius: number; age: number; }
 
 export class CannonHero extends HeroBase {
   readonly id = 'cannon'; readonly name = '布洛克·铜铸';
   readonly chargeMax = CANNON.energy; readonly skillMax = CANNON.cooldown;
   private shells: Shell[] = [];
-  private blasts: Blast[] = [];
-  private blastInk: Graphics | null = null;
+  private blastFX: CannonBlastVFX | null = null;
   private loadingCycle = 0;
   private flyingUlt = 0;
 
@@ -87,18 +87,21 @@ export class CannonHero extends HeroBase {
     }
     for (let i = 0; i < count; i++) this.shells.push({ delay: .6 + i * .26,
       ...point(targets[i % targets.length], .8 + i * .26), damage: this.abilityDamage(cfg.mul, true),
-      radius: cfg.radius * this.stats.skillRangeMul, skill: false, ult: true, echo: false, extra: true });
+      radius: cfg.radius * this.stats.skillRangeMul, skill: false, ult: true, echo: false, extra: true,
+      launchX: Math.max(-350, Math.min(350, targets[i % targets.length].x + (i % 2 ? 120 : -120))) });
     Sfx.cast(this.id, true);
     return true;
   }
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
+    this.blastFX?.tick(dt);
     for (let i = this.shells.length - 1; i >= 0; i--) {
       const shot = this.shells[i]; shot.delay -= dt;
       if (shot.delay > 0) continue;
       if (shot.detonate) { this.detonate(shot, mgr); this.shells.splice(i, 1); continue; }
       if (!projs.hasCapacity) continue;
-      const sx = shot.ult ? shot.x : this.x, sy = shot.ult ? LO.half + 40 : HERO_Y + 60;
+      const sx = shot.ult ? shot.launchX ?? shot.x : this.x, sy = shot.ult ? LO.half + 40 : HERO_Y + 60;
       const dx = shot.x - sx, dy = shot.y - sy, len = Math.hypot(dx, dy) || 1;
+      let landing = 0;
       const critical = Math.random() < this.stats.critRate;
       const spec: ProjSpec = { x: sx, y: sy, dirX: dx / len, dirY: dy / len, speed: shot.ult ? 1350 : 760,
         dmg: shot.damage * (critical ? this.stats.critMul : 1), crit: critical, color: '#D5A641', heroId: this.id,
@@ -106,9 +109,9 @@ export class CannonHero extends HeroBase {
         ability: shot.skill, ult: shot.ult, groundTarget: { x: shot.x, y: shot.y }, resCut: this.stats.defIgnore,
         onGroundImpact: () => {
           if (!this.node.isValid) return;
+          if (landing) this.blastFX?.landed(landing);
           if (shot.ult) { this.flyingUlt = Math.max(0, this.flyingUlt - 1); this.ultimateBeat(shot.x, shot.y, .7, true); }
-          this.blasts.push({ x: shot.x, y: shot.y, radius: shot.radius, age: 0 });
-          if (this.blasts.length > 16) this.blasts.shift();
+          this.blast(shot, shot.ult ? 'ult' : shot.skill ? 'skill' : 'normal');
           if (shot.skill) for (const m of mgr.list) {
             if (m.dead || (m.x - shot.x) ** 2 + (m.y - shot.y) ** 2 > shot.radius ** 2) continue;
             m.applyResistanceShred('physical', CANNON.shred, cannonSkillCfg(this.stats.skillLv).shredSeconds);
@@ -120,7 +123,7 @@ export class CannonHero extends HeroBase {
           Sfx.impact(this.id, true);
         } };
       if (!projs.fire(spec)) continue;
-      if (shot.ult) this.flyingUlt++;
+      if (shot.ult) { this.flyingUlt++; landing = this.effects().target(shot.x, shot.y, len / spec.speed); }
       else {
         this.animateAttack(shot.skill, dx, dy);
         if (!shot.extra) Sfx.cast(this.id);
@@ -131,7 +134,6 @@ export class CannonHero extends HeroBase {
         this.shells.push({ ...shot, damage: shot.damage * .6, delay: .18, extra: true });
       }
     }
-    this.drawBlasts(dt);
   }
   private detonate(shot: Shell, mgr: MonsterManager): void {
     for (const m of mgr.list) {
@@ -139,27 +141,14 @@ export class CannonHero extends HeroBase {
       m.takeDamage(shot.damage, false, this.id, false, this.stats.defIgnore);
       this.lastDmg?.add(this.id, m.lastDamageTaken);
     }
-    this.blasts.push({ x: shot.x, y: shot.y, radius: shot.radius * .85, age: 0 });
-    if (this.blasts.length > 16) this.blasts.shift();
+    this.blast(shot, 'echo');
     Sfx.impact(this.id, true);
   }
-  private drawBlasts(dt: number): void {
-    if (!this.blasts.length && !this.blastInk) return;
-    if (!this.blastInk) this.blastInk = N('cannonShockwaves', this.node.parent!.parent!.getChildByName('FxLayer')!).addComponent(Graphics);
-    const g = this.blastInk; g.clear();
-    for (let i = this.blasts.length - 1; i >= 0; i--) {
-      const b = this.blasts[i]; b.age += dt;
-      if (b.age >= .36) { this.blasts.splice(i, 1); continue; }
-      const p = b.age / .36;
-      g.strokeColor = CA('#E9B84F', (1 - p) * .8); g.lineWidth = 5 * (1 - p) + 1;
-      g.ellipse(b.x, b.y, b.radius * (.35 + .65 * p), b.radius * (.22 + .4 * p)); g.stroke();
-      g.fillColor = CA('#FFE1A0', (1 - p) * .6);
-      for (let k = 0; k < 7; k++) {
-        const angle = k * Math.PI * 2 / 7, radius = b.radius * p;
-        g.circle(b.x + Math.cos(angle) * radius, b.y + Math.sin(angle) * radius * .65, 3 * (1 - p) + 1); g.fill();
-      }
-    }
+  private blast(shot: Shell, kind: 'normal' | 'skill' | 'ult' | 'echo'): void {
+    this.effects().burst(shot.x, shot.y, shot.radius, kind);
   }
+  private effects(): CannonBlastVFX { return this.blastFX ||= new CannonBlastVFX(this.node.parent!.parent!); }
+  renderEffects(): void { this.blastFX?.render(); }
 }
 
 interface Beam { mob: Monster; life: number; kind: 'twin' | 'skill' | 'ult'; }
@@ -174,8 +163,7 @@ export class SiphonHero extends HeroBase {
   private harvestSeconds = 0;
   private harvestDelay = 0;
   private beams: Beam[] = [];
-  private beamInk: Graphics | null = null;
-  private clock = 0;
+  private beamFX: SiphonBeamVFX | null = null;
   constructor(parent: Node, x: number, stats: HeroStats, private line: LineDefense) { super(parent, x, stats); }
 
   protected buildVisual(parent: Node): void { this.staticArt = visual(parent, this.node, this.x, 'siphon'); }
@@ -204,6 +192,7 @@ export class SiphonHero extends HeroBase {
       m.takeDamage(amount * (critical ? this.stats.critMul : 1), critical, this.id, false, this.stats.defIgnore);
       const dealt = m.lastDamageTaken;
       service.add(this.id, dealt);
+      if (dealt > 0) this.beamFX?.hit(m.x, m.y + m.def.radius * .45, m.lifeId, harvesting);
       return dealt;
     };
     let actual = take(target, base * (1 + this.ramp) * (harvesting ? siphonUltCfg(this.stats.ultLv).primaryMul : 1));
@@ -216,7 +205,8 @@ export class SiphonHero extends HeroBase {
     }
     const fraction = harvesting ? SIPHON.ultimateHealFraction : SIPHON.healFraction;
     const cap = harvesting ? SIPHON.ultimateHealCapPerSecond : SIPHON.healCapPerSecond;
-    this.line.healAmount(Math.min(actual * fraction, this.line.maxHp * cap * SIPHON.tick));
+    const healed = this.line.healAmount(Math.min(actual * fraction, this.line.maxHp * cap * SIPHON.tick));
+    if (healed > 0) this.beamFX?.healed();
     this.animateAttack(false, target.x - this.x, target.y - HERO_Y - 60);
   }
   protected castSkill(mgr: MonsterManager): void {
@@ -236,8 +226,9 @@ export class SiphonHero extends HeroBase {
     return true;
   }
   protected updateQueues(dt: number, mgr: MonsterManager): void {
-    this.clock += dt;
     const primary = this.selectNormalTarget(mgr);
+    if (primary && !this.beamFX) this.beamFX = new SiphonBeamVFX(this.node.parent!.parent!);
+    this.beamFX?.tick(dt);
     this.skillSeconds = Math.max(0, this.skillSeconds - dt);
     const delay = this.harvestDelay;
     this.harvestDelay = Math.max(0, delay - dt);
@@ -272,36 +263,21 @@ export class SiphonHero extends HeroBase {
       }
     }
     this.beams = next;
-    this.drawBeams(primary);
   }
-  private drawBeams(primary: Monster | null): void {
-    if (!this.beamInk) this.beamInk = N('lifeSiphonBeams', this.node.parent!.parent!.getChildByName('FxLayer')!).addComponent(Graphics);
-    const g = this.beamInk; g.clear();
-    if (!primary || primary.dead) return;
-    const draw = (m: Monster, strength: number): void => {
-      if (m.dead) return;
-      const sx = this.x, sy = HERO_Y + 66, tx = m.x, ty = m.y + m.def.radius * .45;
-      for (let layer = 0; layer < 3; layer++) {
-        g.strokeColor = CA(layer === 2 ? '#FFD4E7' : '#E65C96', layer === 0 ? .13 : layer === 1 ? .7 : .9);
-        g.lineWidth = (layer === 0 ? 10 : layer === 1 ? 4 : 1.2) * strength;
-        g.moveTo(sx, sy);
-        for (let i = 1; i <= 16; i++) {
-          const t = i / 16, wave = Math.sin(t * 15 - this.clock * 6) * Math.sin(t * Math.PI) * 4;
-          g.lineTo(sx + (tx - sx) * t + wave, sy + (ty - sy) * t);
-        }
-        g.stroke();
-      }
-      // Moving motes travel from victim to caster to communicate life being reclaimed.
-      g.fillColor = C('#FFC2DC');
-      for (let i = 0; i < 3; i++) {
-        const t = 1 - (this.clock * .8 + i / 3) % 1;
-        g.circle(sx + (tx - sx) * t, sy + (ty - sy) * t, 2 * strength); g.fill();
-      }
-    };
-    draw(primary, 1 + this.ramp * .4);
+  renderEffects(): void {
+    const fx = this.beamFX;
+    if (!fx) return;
+    // Crystal center in the 120x180 sprite, mirrored with the complete character artwork.
+    fx.begin(this.x - 32.5 * (this.staticArt?.scale.x ?? 1), HERO_Y + 70.4,
+      this.harvestSeconds > 0 && this.harvestDelay <= 0);
+    const primary = this.primary;
+    if (!primary || primary.dead || primary.lifeId !== this.primaryLife) { fx.end(); return; }
+    fx.beam(primary.x, primary.y + primary.def.radius * .45, 1 + this.ramp * .4, .6);
     const drawn = new Set<Monster>([primary]);
     for (const b of this.beams) if (b.mob.lifeId === b.life && !drawn.has(b.mob)) {
-      draw(b.mob, b.kind === 'ult' ? .85 : .65); drawn.add(b.mob);
+      if (!b.mob.dead) fx.beam(b.mob.x, b.mob.y + b.mob.def.radius * .45, b.kind === 'ult' ? .85 : .65, b.life % 17);
+      drawn.add(b.mob);
     }
+    fx.end();
   }
 }

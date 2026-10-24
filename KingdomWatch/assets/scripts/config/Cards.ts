@@ -586,7 +586,7 @@ export const CANNON_CARDS: CardDef[] = [
   c({ id: 'cannon_knockback', owner: 'cannon', name: '震荡冲击', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
     art: 'ui_card_cannon_knockback', desc: '技能爆炸击退敌人\n首领免疫击退', apply: x => { x.hero.cannonKnockback = 56; } }),
   c({ id: 'cannon_barrage', owner: 'cannon', name: '饱和轰炸', rarity: 'gold', maxStacks: 2, offerGroup: 'combat',
-    art: 'ui_card_cannon_barrage', desc: '大招轰炸炮弹 +2', apply: x => { x.hero.cannonUltShots = (x.hero.cannonUltShots || 0) + 2; } }),
+    art: 'ui_card_cannon_barrage', desc: '大招轰炸导弹 +2', apply: x => { x.hero.cannonUltShots = (x.hero.cannonUltShots || 0) + 2; } }),
 ];
 export const SIPHON_CARDS: CardDef[] = [
   ...commonHeroCards('siphon'),

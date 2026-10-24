@@ -642,10 +642,10 @@ export class Panels {
         py = iconY + 23 + 16 + hh / 2;
       } else {
         const cu = cannonUltCfg(h.ultLv), vu = siphonUltCfg(h.ultLv);
-        title = cannon ? '大招 · 集束轰炸' : '大招 · 生命收割';
+        title = cannon ? '大招 · 导弹轰炸' : '大招 · 生命收割';
         rows = cannon ? [
           ['每弹中心伤害', String(Math.round(hero.abilityDamage(cu.mul, true)))],
-          ['轰炸炮弹', (cu.shots + (h.cannonUltShots || 0)) + ' 发 · 错峰落下'],
+          ['轰炸导弹', (cu.shots + (h.cannonUltShots || 0)) + ' 发 · 错峰落下'],
           ['爆炸范围', '半径' + Math.round(cu.radius * h.skillRangeMul)],
           ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
           ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'], ['释放', '手动点击'],

@@ -13,6 +13,7 @@ import { bus, EVT } from '../core/EventBus';
 import { LINE_Y, LO, PAL, MAX_PROJS } from '../config/GameConfig';
 import { FrostUltTarget } from './FrostUltimateVFX';
 import { BasicProjectileFlightVFX } from './BasicProjectileFlightVFX';
+import { drawCannonMissile } from './NewHeroVFX';
 
 export interface ProjSpec {
   x: number; y: number;
@@ -154,7 +155,7 @@ export class ProjectileManager {
     a.damageScale = 1; a.returning = false; a.legLeft = a.returnDistance = 0;
     a.fxSeed = (++this.flightSerial * .61803398875) % 1;
     a.trail.length = 0;
-    a.trailMax = spec.enemy ? 0 : spec.spark ? 9
+    a.trailMax = spec.enemy ? 0 : spec.spark || spec.heroId === 'cannon' && spec.ult ? 9
       : spec.heroId === 'archer' ? 7
       : spec.heroId === 'sniper' && !spec.small ? 6 : 3;
     const dx = spec.dirX ?? 0, dy = spec.dirY ?? -1;
@@ -380,6 +381,10 @@ export class ProjectileManager {
       const orb = s.heroId === 'volt' && !s.small && !s.enemy;
       const fire = s.heroId === 'pyro' && !s.enemy;
       const shard = s.heroId === 'mora' && !s.small && !s.enemy;
+      if (s.heroId === 'cannon' && s.ult && !s.enemy) {
+        drawCannonMissile(g, s.x, s.y, a.vx, a.vy, size, a.age, a.fxSeed, a.trail);
+        continue;
+      }
       if (orb && this.impacts?.voltProjectile(s.x, s.y, a.vx, a.vy, size, a.age, a.fxSeed)) continue;
       const basic = !s.enemy && !s.ult && !s.small
         && (!s.ability || (s.heroId === 'archer' && !!s.spark));
@@ -777,9 +782,12 @@ export class ProjectileManager {
         if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
       }
     }
-    if (this.impacts) this.impacts.blast(sp.x, sp.y, sp.heroId, radius);
-    else this.boomFx(sp.x, sp.y, radius);
-    this.parts?.burst(sp.x, sp.y, sp.color, 7, 230, Math.PI / 2);
+    // Cannon's landing callback owns its layered explosion. Keep normal damage/hit-stop above/below.
+    if (sp.heroId !== 'cannon' || !sp.onGroundImpact) {
+      if (this.impacts) this.impacts.blast(sp.x, sp.y, sp.heroId, radius);
+      else this.boomFx(sp.x, sp.y, radius);
+      this.parts?.burst(sp.x, sp.y, sp.color, 7, 230, Math.PI / 2);
+    }
     if (sp.heroId === 'pyro' && sp.ult) Sfx.ultimateImpact(sp.heroId);
     if (primary) bus.emit(EVT.HIT_STOP);
   }

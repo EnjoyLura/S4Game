@@ -390,6 +390,7 @@ export class BattleDirector extends Component {
       this.line.regenPct = this.global.lineRegenPct;
       this.line.tick(sub);
     }
+    for (const h of this.heroes) h.renderEffects();
     if (this.state === 'running') {
       this.waves.checkCleared();
       this.loot.tick(sdt);

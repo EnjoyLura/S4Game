@@ -243,7 +243,7 @@ export const HERO_DEFS: Record<string, HeroDef> = {
   cannon: {
     id: 'cannon', name: '布洛克·铜铸', job: '重炮 · 物理爆破', avatar: 'ui_avatar_cannon',
     baseAtk: 150, baseSkillDmg: 150, growthType: 'hybrid', atkSpd: .45,
-    weaponName: '铜铸重炮', skillName: '破城重炮', ultName: '集束轰炸', shopPrice: 5200,
+    weaponName: '铜铸重炮', skillName: '破城重炮', ultName: '导弹轰炸', shopPrice: 5200,
     story: '来自铜炉堡的矮人工程师。他把城门工坊里的重炮扛上防线，用精准的爆破为同伴撕开重甲。',
   },
   siphon: {

@@ -264,6 +264,8 @@ export abstract class HeroBase {
 
   /** 子类队列推进（连射/技能连狙等） */
   protected updateQueues(_dt: number, _mgr: MonsterManager, _projs: ProjectileManager): void { void _dt; void _mgr; void _projs; }
+  /** Optional procedural geometry: rebuild once after the final simulation step and projectile hits. */
+  renderEffects(): void {}
   protected queuedShotDelay(): number { return Infinity; }
 
   /** 本次普攻后的攻击间隔（弓箭手强化窗口攻速 +30% 时覆写） */
