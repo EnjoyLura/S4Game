@@ -1,15 +1,15 @@
 /** Comic formation overlay; squad order and the existing deploy/remove rules stay in GameData. */
-import { Mask, Node, ScrollView, UIOpacity, UITransform, Vec2 } from 'cc';
+import { director, Director, isValid, Node, ScrollView, UIOpacity, Vec2 } from 'cc';
 import { LO } from '../config/GameConfig';
 import { dimLayer, N, WY } from './UIKit';
 import { COMIC, comicArt, comicButton, comicMark, comicPlate } from './ComicUI';
 import { heroPortrait } from './HeroComic';
-import { mainLabel, PageCtx, toast } from './PageKit';
+import { mainLabel, pageScroll, PageCtx, toast } from './PageKit';
 import { HERO_DEFS, SQUAD_MAX, deployHero, inSquad, squadList, undeployHero } from '../core/GameData';
 import { loadSave } from '../core/SaveData';
 import { finishPyroSquadLesson, pendingPyroSquadLesson } from '../core/SecondJourney';
 import { tutorialFocus } from './TutorialFocus';
-import { whenUIArtReady } from './UIArtReady';
+import { trackUISurface, whenUIArtReady } from './UIArtReady';
 import { bindButton } from './ButtonFeedback';
 import { dismissUI, dismissUIAfterRefresh, motionIn } from './UIMotion';
 import { uiSound } from './UIAudio';
@@ -28,7 +28,7 @@ export function openSquadPanel(ctx: PageCtx): void {
   const top = Math.max(48, LO.notchTop + 20);
   let closing = false;
   let taughtPyro = false;
-  let rosterOffset = 0;
+  let bodyOffset = 0;
   let releaseBack = (): void => {};
   const close = (): void => {
     if (closing || !dim.isValid) return;
@@ -45,15 +45,40 @@ export function openSquadPanel(ctx: PageCtx): void {
   paintCampaignMapAction(backFace,70,58,'navy');
   campaignChapterArrow(backFace,-1,true);
   const body = N('squadBody', dim);
+  const actions = N('squadActions', dim);
   let removeModal: Node | null = null;
   rebuild();
   motionIn(body, 'page'); uiSound('open');
 
   function rebuild(): void {
     body.destroyAllChildren();
+    actions.destroyAllChildren();
     const sq = squadList(), sv = loadSave();
     const formTop = top + 108;
-    const formation = comicPlate(body, 0, WY(formTop, 260), 704, 260, 'dark', { name: 'squadFormation' });
+    const defs = Object.values(HERO_DEFS), columns = Math.min(5, Math.max(1, defs.length));
+    const rows = Math.max(1, Math.ceil(defs.length / columns)), cardW = 126, cardH = 206, rowStep = 218;
+    const barTop = formTop + 332, rosterH = 66 + rows * cardH + (rows - 1) * 12 + 18;
+    const noteTop = barTop + rosterH + 30;
+    const availableH = LO.half * 2 - LO.safeTop - LO.safeBottom, doneTop = availableH - 126;
+    const bodyTop = top + 96, bodyBottom = doneTop - 18;
+    const contentH = noteTop + 88 - bodyTop, viewH = Math.max(1, bodyBottom - bodyTop);
+    const content = pageScroll(body, 'squadBody', bodyTop, bodyBottom, contentH, 750);
+    const scroll = content.parent!.getComponent(ScrollView)!;
+    scroll.elastic = false; scroll.cancelInnerEvents = true;
+    const maxOffset = Math.max(0, contentH - viewH);
+    const offset = Math.min(bodyOffset, maxOffset), positionReady = trackUISurface(scroll.node);
+    let positioned = false;
+    const restore = (): void => {
+      if (isValid(scroll, true)) { scroll.scrollToOffset(new Vec2(0, offset), 0); bodyOffset = offset; positioned = true; }
+      positionReady();
+    };
+    director.once(Director.EVENT_BEFORE_DRAW, restore);
+    scroll.node.once(Node.EventType.NODE_DESTROYED, () => { director.off(Director.EVENT_BEFORE_DRAW, restore); positionReady(); });
+    scroll.node.on(ScrollView.EventType.SCROLLING, () => {
+      if (positioned) bodyOffset = Math.max(0, Math.min(maxOffset, scroll.getScrollOffset().y));
+    });
+    const by = (at: number, height = 0): number => -(at - bodyTop) - height / 2;
+    const formation = comicPlate(content, 0, by(formTop, 260), 704, 260, 'dark', { name: 'squadFormation' });
     paintSquadFrame(formation,704,260);
     comicArt(formation, -303, 98, 34, 34, 'comic_helm_falcon_v1');
     mainLabel(formation, -158, 97, '战斗站位', { size: 26, bold: true, color: COMIC.cream, w: 228, h: 38, align: 'left' });
@@ -76,30 +101,20 @@ export function openSquadPanel(ctx: PageCtx): void {
         mainLabel(slot, 0, -56, '待上阵', { size: 22, color: '#ADB7BE', w: 134, h: 32 });
       }
     }
-    mainLabel(body, 0, WY(formTop + 286, 32), '从左到右依次站位 · 点击已上阵英雄可下阵',
+    mainLabel(content, 0, by(formTop + 286, 32), '从左到右依次站位 · 点击已上阵英雄可下阵',
       { size:20,color:COMIC.sub,w:566,h:32 });
-    squadDivider(body,-279,WY(formTop+286,32),108);
-    squadDivider(body,279,WY(formTop+286,32),108);
-    const barTop = formTop + 332;
-    const bar = comicPlate(body, 0, WY(barTop, 290), 704, 290, 'paper', { name: 'squadHeroRoster' });
-    paintSquadFrame(bar,704,290,true);
-    comicArt(bar, -301, 113, 34, 34, 'comic_helm_falcon_v1');
-    mainLabel(bar,-134,112,'选择出战英雄',{size:27,font:'body',bold:true,color:'#FFF4DA',w:276,h:38,align:'left'});
-    const defs = Object.values(HERO_DEFS), viewW = 680, step = 134;
-    const roster = N('squadRosterView', bar, 0, -24, viewW, 218);
-    roster.addComponent(Mask);
-    const scroll = roster.addComponent(ScrollView);
-    const contentW = Math.max(viewW, defs.length * step + 8);
-    const content = N('squadRosterCards', roster, -viewW / 2, 0, contentW, 218);
-    content.getComponent(UITransform)!.setAnchorPoint(0, .5);
-    scroll.content = content; scroll.horizontal = contentW > viewW; scroll.vertical = false;
-    scroll.elastic = false; scroll.cancelInnerEvents = true;
-    scroll.scrollToOffset(new Vec2(Math.min(rosterOffset, contentW - viewW), 0), 0);
-    roster.on(ScrollView.EventType.SCROLLING, () => { rosterOffset = Math.max(0, -scroll.getScrollOffset().x); });
-    mainLabel(bar, 241, 112, '左右滑动', { size: 18, color: COMIC.cream, w: 132, h: 28 });
-    Object.values(HERO_DEFS).forEach((def, i, defs) => {
+    squadDivider(content,-279,by(formTop+286,32),108);
+    squadDivider(content,279,by(formTop+286,32),108);
+    const bar = comicPlate(content, 0, by(barTop, rosterH), 704, rosterH, 'paper', { name: 'squadHeroRoster' });
+    paintSquadFrame(bar,704,rosterH,true);
+    const headerY = rosterH / 2 - 33;
+    comicArt(bar, -301, headerY + 1, 34, 34, 'comic_helm_falcon_v1');
+    mainLabel(bar,-134,headerY,'选择出战英雄',{size:27,font:'body',bold:true,color:'#FFF4DA',w:276,h:38,align:'left'});
+    defs.forEach((def, i) => {
       const dep = inSquad(def.id), owned = !!sv.heroes[def.id]?.owned;
-      const card = comicPlate(content, 8 + 63 + i * step, 0, 126, 206,
+      const x = (i % columns - (columns - 1) / 2) * 134;
+      const y = rosterH / 2 - 66 - cardH / 2 - Math.floor(i / columns) * rowStep;
+      const card = comicPlate(bar, x, y, cardW, cardH,
         dep ? 'gold' : 'card', { name: 'squadHero:' + def.id });
       paintSquadCard(card,126,206,dep);
       squadPortraitRim(card,37,49,dep);
@@ -126,15 +141,13 @@ export function openSquadPanel(ctx: PageCtx): void {
           () => finishPyroSquadLesson(true));
       });
     });
-    const noteTop = barTop + 320;
-    mainLabel(body, 0, WY(noteTop, 36), '最多上阵 4 位英雄', { size: 26, bold: true, color: COMIC.text, w: 600, h: 36 });
-    squadDivider(body,-203,WY(noteTop,36),112);
-    squadDivider(body,203,WY(noteTop,36),112);
-    mainLabel(body, 0, WY(noteTop + 46, 32), '点击英雄加入编队，阵容自动保存', { size: 22, color: COMIC.sub, w: 650, h: 32 });
-    const availableH = LO.half*2-LO.safeTop-LO.safeBottom;
+    mainLabel(content, 0, by(noteTop, 36), '最多上阵 4 位英雄', { size: 26, bold: true, color: COMIC.text, w: 600, h: 36 });
+    squadDivider(content,-203,by(noteTop,36),112);
+    squadDivider(content,203,by(noteTop,36),112);
+    mainLabel(content, 0, by(noteTop + 46, 32), '点击英雄加入编队，阵容自动保存', { size: 22, color: COMIC.sub, w: 650, h: 32 });
     const markTop = noteTop+112+(availableH-126-noteTop-112)*.48;
-    if (markTop>noteTop+150) squadWatermark(body,WY(markTop));
-    const done = comicButton(body,0,WY(availableH-126,88),390,88,'',close,{tone:'gold',name:'squadDone'});
+    if (contentH <= viewH && markTop>noteTop+150) squadWatermark(content,by(markTop));
+    const done = comicButton(actions,0,WY(doneTop,88),390,88,'',close,{tone:'gold',name:'squadDone'});
     const doneFace = done.getChildByName('buttonFace')!;
     paintCampaignMapAction(doneFace,390,88,'gold');
     mainLabel(doneFace,0,0,'完成编队',{size:34,font:'body',bold:true,color:'#1C2D33',w:284,h:50});
