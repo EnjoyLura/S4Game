@@ -52,7 +52,6 @@ export type BattleState = 'prepare' | 'running' | 'pick' | 'paused' | 'tutorial'
 
 export interface PickOpts {
   recommendedId?: string;
-  onSkipTeaching?: () => void;
   onPick: (card: CardDef) => void;
   onRefreshRequest: () => void;
 }
@@ -213,11 +212,12 @@ export class BattleDirector extends Component {
               : new ArcherHero(heroLayer, slots[i], st);
     });
     // Abilities are part of the hero. Seed legacy prerequisites locally; never write them to the save.
-    this.heroes.forEach((h, i) => {
+    this.heroes.forEach(h => {
       this.stacks[h.id + '_unlock_skill'] = 1;
       this.stacks[h.id + '_unlock_ult'] = 1;
       h.charge = h.chargeGoal * ULT_INITIAL_CHARGE;
-      h.skillCd = i * .8;
+      // A new battle starts ready; only an actual skill cast starts its cooldown.
+      h.skillCd = 0;
     });
     this.parts = new Particles(fxLayer);
     this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts, this.impacts);
@@ -333,6 +333,8 @@ export class BattleDirector extends Component {
     this.gm.syncVisibility(); // 所有状态下都要同步 GM 浮钮（三选一/结算期间隐藏）
 
     if (this.state === 'prepare') {
+      // Async HUD effects may finish during the countdown; sync without advancing energy or combat.
+      this.hud.sync(0);
       this.ambience.tick(dt);
       for (const h of this.heroes) h.tickIdle(dt);
       this.prepareT -= dt;
@@ -572,10 +574,6 @@ export class BattleDirector extends Component {
       const lesson = (this.teaching || this.secondTeaching || this.thirdTeaching) && pool.find(c => c.id === lessonId && canTakeCard(c, this.stacks));
       const cards = draw3(pool, this.stacks);
       opts.recommendedId = lesson ? lesson.id : undefined;
-      opts.onSkipTeaching = (this.teaching || this.secondTeaching || this.thirdTeaching) ? () => {
-        if (this.thirdTeaching) skipThirdBattleTeaching(); else if (this.secondTeaching) skipSecondBattleTeaching(); else skipBattleTeaching();
-        showOffer();
-      } : undefined;
       this.panels.showPick(lesson ? [lesson, ...cards.filter(c => c.id !== lesson.id)].slice(0, 3) : cards, this.stacks, opts);
     };
     this.pickOpts = opts;
@@ -700,7 +698,7 @@ export class BattleDirector extends Component {
           done(true);
         }, () => { if (!this.leaving && isValid(this, true)) done(false); });
       },
-      onRetry: () => this.exitBattle(),
+      onReturn: () => this.exitBattle(),
     });
   }
 

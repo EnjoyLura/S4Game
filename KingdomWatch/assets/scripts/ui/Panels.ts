@@ -26,6 +26,7 @@ import { uiSound } from './UIAudio';
 import { pickCardIcon } from './PickArt';
 import { C, CA, dimLayer, gcircle, gpanel, label, N, setText, WY, WYB, WX } from './UIKit';
 import { battleArtIcon as artIcon, battleArtSprite as artSprite, battleStatBar as gbar } from './BattlePanelSkin';
+import { damageStatColors } from './BattleProgressBar';
 import { pauseButton, pauseFrame, pauseRow, pauseSwitch, pauseTabFace } from './PausePanelSkin';
 import { playSettlement, settlementButton, settlementFrame, settlementRewards } from './SettlementPanelSkin';
 import { battleRewardPanel } from './BattleRewardPanel';
@@ -37,7 +38,6 @@ import { dismissUI } from './UIMotion';
 
 interface PickCallbacks {
   recommendedId?: string;
-  onSkipTeaching?: () => void;
   onPick: (card: CardDef) => void;
   onRefreshRequest: () => void;
 }
@@ -148,10 +148,6 @@ export class Panels {
     });
 
     const footer = N('pickRefreshFooter', pickRoot);
-    if (cb.onSkipTeaching) {
-      const skip = label(footer, 0, WY(778, 36), '跳过新手引导', { size: 18, color: '#FFE3A3', w: 280, h: 36 });
-      bindButton(skip, () => { if (canInteract()) cb.onSkipTeaching?.(); }, { sound: 'select' });
-    }
     const refreshNote = label(footer, 0, WY(818, 40),
       '当局剩余刷新：广告 ' + this.pickAdLeft + ' 次 · 钻石 ' + this.pickDiaLeft + ' 次',
       { size: 18, color: '#CFE3FF' });
@@ -340,6 +336,7 @@ export class Panels {
     const shown = rows.slice(0, 4);
     const leader = Math.max(1, ...rows.map(r => r.val));
     shown.forEach((r, i) => {
+      const colors = damageStatColors(r.id);
       const host = N('pauseDamageRow:' + r.id, parent, 0, 158 - i * 66);
       const av = gcircle(host, -282, 0, 26, CA('#2A3240', 1));
       const avLbl = label(av, 0, 0, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
@@ -347,10 +344,10 @@ export class Panels {
         artSprite(av, 0, 0, 44, 44, 'ui_avatar_' + r.id, { sliced: false, hideOnLoad: [avLbl] });
       label(host, -93, 9, r.name, { size: 18, color: '#FFFFFF', align: 'left', w: 296, h: 26, shrink: true });
       label(host, 250, 9, fmtWk(r.val),
-        { size: 20, color: '#FFE27A', font: 'number', align: 'right', w: 130, h: 24, shrink: true });
+        { size: 20, color: colors.value, font: 'number', align: 'right', w: 130, h: 24, shrink: true });
       label(host, 250, -10, (r.pct * 100).toFixed(2) + '%',
         { size: 11, color: '#BAC5CD', font: 'number', align: 'right', w: 130, h: 12 });
-      const bar = gbar(host, 36, -24, 558, 8, '#F0793D');
+      const bar = gbar(host, 36, -24, 558, 8, colors.bar);
       bar.set(r.val > 0 ? r.val / leader : 0);
     });
   }
@@ -494,7 +491,7 @@ export class Panels {
   showLose(o: {
     goldFloor: number; reviveRatio: number; loot?: StageLootSummary;
     onRevive: (done: (ok: boolean) => void) => void;
-    onRetry: () => void;
+    onReturn: () => void;
   }): void {
     if (this.reviveKey !== o.onRevive) { this.reviveKey = o.onRevive; this.reviveBusy = false; this.reviveHint = ''; }
     const fresh = this.begin('lose');
@@ -502,15 +499,15 @@ export class Panels {
     dimLayer(this.modalRoot, .72, false, fresh);
     const root = settlementFrame(this.modalRoot, 'lose', this.dir.levelDef.id + '  ' + this.dir.levelDef.name + ' · ' + DIFFICULTIES[this.dir.levelDef.difficulty].name, 0, 0, fresh);
     settlementRewards(root, 'lose', o.goldFloor, 0,
-      o.loot?.equipment.length ? '金币和装备已保存 · 复活继续本局 / 重试返回关卡页'
-        : '金币已到账 · 复活恢复 ' + Math.round(o.reviveRatio * 100) + '% 耐久 · 重试返回当前关卡', o.loot, { intro: fresh });
-    const retry = settlementButton(root, 153, -353, 286, 78, '↻ 再来一次', 'gold', o.onRetry, !this.reviveBusy, 'battleRetry');
+      o.loot?.equipment.length ? '金币和装备已保存 · 复活继续本局 / 返回关卡页'
+        : '金币已到账 · 复活恢复 ' + Math.round(o.reviveRatio * 100) + '% 耐久 · 返回关卡页', o.loot, { intro: fresh });
+    const returnBtn = settlementButton(root, 153, -353, 286, 78, '返回', 'gold', o.onReturn, !this.reviveBusy, 'battleReturn');
     const rv = settlementButton(root, -153, -353, 286, 78,
       this.reviveBusy ? '复活中…' : this.reviveHint || '▶ 看广告复活', 'teal', () => {
       if (this.reviveBusy) return;
       this.reviveBusy = true;
       this.reviveHint = '';
-      rv.setBusy(true, '复活中…'); retry.setEnabled(false);
+      rv.setBusy(true, '复活中…'); returnBtn.setEnabled(false);
       o.onRevive(ok => {
         if (this.reviveKey !== o.onRevive) return;
         this.reviveBusy = false;
@@ -545,6 +542,7 @@ export class Panels {
     // 保留原面板与头像；数值移到条外，并给末行与关闭提示留出间距。
     const leader = Math.max(1, ...rows.map(r => r.val));
     rows.slice(0, 4).forEach((r, i) => {
+      const colors = damageStatColors(r.id);
       const cyAv = py + hh / 2 - 109 - i * 96;
       const cyTx = py + hh / 2 - 98 - i * 96;
       const cxAv = px - w / 2 + 51;
@@ -556,11 +554,11 @@ export class Panels {
       label(this.modalRoot, px - w / 2 + 180, cyTx, r.name,
         { size: 18, color: '#FFFFFF', align: 'left', w: 126, h: 30, shrink: true });
       label(this.modalRoot, px + w / 2 - 66, cyTx + 2, fmtWk(r.val),
-        { size: 20, color: '#FFE27A', font: 'number', align: 'right', w: 100, h: 26, shrink: true });
+        { size: 20, color: colors.value, font: 'number', align: 'right', w: 100, h: 26, shrink: true });
       label(this.modalRoot, px + w / 2 - 66, cyTx - 17, (r.pct * 100).toFixed(2) + '%',
         { size: 11, color: '#BAC5CD', font: 'number', align: 'right', w: 100, h: 14 });
       const barX = px - w / 2 + 229.5, barY = py + hh / 2 - 135 - i * 96;
-      const bar = gbar(this.modalRoot, barX, barY, 225, 10, '#F0793D');
+      const bar = gbar(this.modalRoot, barX, barY, 225, 10, colors.bar);
       bar.set(r.val > 0 ? r.val / leader : 0);
     });
     label(this.modalRoot, px, py - hh / 2 + 28, '点击空白处关闭', { size: 12, color: '#888888' });

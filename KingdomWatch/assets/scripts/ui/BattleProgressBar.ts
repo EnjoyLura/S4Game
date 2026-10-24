@@ -7,6 +7,19 @@ const COLORS: Record<MeterKind, string> = {
   health: '#2ACB1D', shield: '#4CC7F5', damage: '#F0793D', xp: '#6CBCC6',
 };
 
+/** Stable hero hues across both damage reports; brighter values stay legible on dark panels. */
+const DAMAGE_COLORS: Record<string, { bar: string; value: string }> = {
+  archer: { bar: '#67C878', value: '#ACEBB5' },
+  sniper: { bar: '#64B8F1', value: '#AFE0FF' },
+  pyro: { bar: '#F39A62', value: '#FFD0AA' },
+  volt: { bar: '#B48CF0', value: '#DEC8FF' },
+  mora: { bar: '#72D5DE', value: '#B5F0F4' },
+};
+const DAMAGE_NEUTRAL = { bar: '#98AFC4', value: '#DAE6F0' };
+export function damageStatColors(heroId: string): { bar: string; value: string } {
+  return DAMAGE_COLORS[heroId] || DAMAGE_NEUTRAL;
+}
+
 export function battleProgressBar(parent: Node, x: number, y: number, w: number, h: number,
   kind: MeterKind, initial?: string | Color): Bar {
   const node = N('battleMeter:' + kind, parent, x, y, w, h);

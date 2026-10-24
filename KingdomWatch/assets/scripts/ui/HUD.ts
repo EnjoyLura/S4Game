@@ -471,7 +471,7 @@ export class HUD {
   }
 
   /** 水杯充能（用户反馈：保留水位上涨效果，只去掉白色液面分割线）
-   *  液面以上未充能区灰白罩置灰；液面以下已充能区英雄主色能量水、隐约透出干净图标（无遮罩） */
+   *  异步特效未就绪时也沿用深色充能罩，避免入场先出现旧版灰白遮罩。 */
   private redrawUltWater(u: UltUI, pct: number): void {
     const g = u.waterG;
     g.clear();
@@ -483,7 +483,7 @@ export class HUD {
       return;
     }
     if (pct <= 0.004) {
-      g.fillColor = CA('#C6CBD3', 0.62);   // 用户调整：未充能遮罩更灰白
+      g.fillColor = CA('#102235', 0.7 - pct * 0.32);
       g.circle(0, 0, R);
       g.fill();
       return;
@@ -491,8 +491,8 @@ export class HUD {
     const yc = -R + 2 * R * pct;
     const a = Math.asin(Math.max(-1, Math.min(1, yc / R)));
     const steps = 28;
-    // 液面以上：灰白罩（弦 + 上弧采样；用户调整：更灰白）
-    g.fillColor = CA('#C6CBD3', 0.62);
+    // Match the loaded energy effect's dimming while its material is still loading.
+    g.fillColor = CA('#102235', 0.7 - pct * 0.32);
     g.moveTo(R * Math.cos(a), yc);
     g.lineTo(-R * Math.cos(a), yc);
     for (let i = 0; i <= steps; i++) {
