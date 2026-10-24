@@ -15,3 +15,13 @@ package-validation.json记录完整1555个文件逐SHA、图片解码/透明度�
 ## 发布与Git
 
 仅推送EnjoyLura/kingdom-watch-play的运行包main；源码在D:/AI/S4Game本地提交，不推送其origin。当前CF站点保持。使用已校验预制运行包和既有-PrunePreviousRelease规则，仅保留本次部署资源以满足200MB预算，独立仓库Git历史保留可回退。上线状态与HTTP文件校验以deployment.json和online-assets.json为准，实际手机游戏体验待用户检查。
+
+## 完成记录
+
+- 固定入口：https://enjoylura.github.io/kingdom-watch-play/?v=hero-idle-v104 。
+- 运行版本5904aec85115709b，独立运行包提交1c68f1eebaa957d5f41e4d113866a9e1761eb6ed，Pages built。
+- 完整1555文件192351981字节（192.35MB），比首次超预算包少29054442字节，没有降低原编码质量或删除源原稿。
+- 19个标准HTTP文件样本、20个正式英雄资源文件HTTP/SHA/MIME校验通过，含5位全部新图集、图片导入与帧清单，固定入口/版本指针/清单一致；不是全量CDN重复下载或游戏运行测试。
+- 1534个源码assets和正常Cocos构建逐SHA保持，正式资源路径仅包含5套当前使用的大厅动作。
+- 源码与当前制作记录已本地提交02e2f8ff；本次发布记录另做本地提交。没有源码推送或CF部署。
+- 发布前发现21:05遗留的空index.lock，确认现存Git进程均非本库索引写入后，保留为.git/index.lock.stale-20261024-2333，再正常提交；未重置索引或改写已有提交。
