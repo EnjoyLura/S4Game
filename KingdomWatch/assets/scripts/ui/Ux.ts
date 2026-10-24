@@ -6,6 +6,7 @@
 import { Graphics, isValid, JsonAsset, Mask, Node, Rect, resources, ScrollView, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
 import { N } from './UIKit';
 import { trackUIArt, uiArtInView } from './UIArtReady';
+import { NEW_HERO_FRAMES } from './NewHeroArt';
 
 /** id → 资源路径：'scenes/x' 原样，其余视为 ux/ 下的清单 ID */
 function resPath(id: string): string {
@@ -100,6 +101,8 @@ if (typeof window !== 'undefined') window.addEventListener('online', () => {
 
 /** Promote a queued prediction when it becomes visible; never issue a duplicate download. */
 export function promoteUXArt(id: string, priority: ArtPriority = 'visible'): void {
+  const alias = NEW_HERO_FRAMES[id];
+  if (alias) { promoteUXArt(alias.source, priority); return; }
   const request = pending.get(id);
   if (request && rank[priority] < rank[request.priority]) { request.priority = priority; queuePump(); }
 }
@@ -111,6 +114,22 @@ export function warmUXArt(ids: readonly string[], priority: ArtPriority = 'next'
 
 /** 异步取 SpriteFrame（带缓存与去重）；失败回调 null，调用方保持程序绘制 */
 export function uxFrame(id: string, cb: (sf: SpriteFrame | null) => void, priority: ArtPriority = 'visible'): void {
+  const alias = NEW_HERO_FRAMES[id];
+  if (alias && !cache.has(id)) {
+    uxFrame(alias.source, source => {
+      if (!source) { cb(null); return; }
+      const hit = cache.get(id);
+      if (hit) { cb(hit); return; }
+      source.packable = false;
+      const [x, y, w, h] = alias.rect;
+      if (x + w > source.rect.width || y + h > source.rect.height) { cb(null); return; }
+      const frame = new SpriteFrame();
+      frame.reset({ texture: source.texture, rect: new Rect(source.rect.x + x, source.rect.y + y, w, h),
+        originalSize: new Size(w, h), offset: new Vec2() });
+      frame.packable = false; cache.set(id, frame); cb(frame);
+    }, priority);
+    return;
+  }
   const hit = cache.get(id);
   if (hit) {
     // 缓存命中也走微任务：同步回调会在 artSprite 返回前触发，回调里引用

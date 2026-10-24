@@ -3,6 +3,7 @@
  * 卡效果直接改写 HeroStats / 全局 Stats；desc 只说明本次效果、触发条件与代价
  */
 import { PAL } from './GameConfig';
+import { CANNON, SIPHON, cannonSkillCfg, siphonSkillCfg } from './NewHeroConfig';
 
 export type Rarity = 'white' | 'blue' | 'purple' | 'gold';
 export const RARITY_COLOR: Record<Rarity, string> = { white: PAL.white, blue: PAL.blue, purple: PAL.purple, gold: PAL.gold };
@@ -14,6 +15,14 @@ const OFFER_GROUP_WEIGHT: Record<OfferGroup, number> = { stats: 0.1, combat: 3, 
 
 /** 英雄战斗属性（卡牌改写目标；M0 弓箭手） */
 export interface HeroStats {
+  cannonEcho?: number;
+  cannonLoader?: boolean;
+  cannonKnockback?: number;
+  cannonUltShots?: number;
+  siphonTwin?: number;
+  siphonInheritance?: number;
+  siphonShred?: number;
+  siphonBranches?: number;
   skillUnlocked: boolean; // 基础技能随上阵可用，局内卡改变构筑
   ultUnlocked: boolean;
   atk: number;          // 独立基础攻击力（含局外成长及装备）
@@ -222,6 +231,8 @@ export function moraUltimateHitDamage(s: HeroStats): number { return abilityDama
 /** 技能伤害项每箭／每发／每跳的倍率，供技能培养预览共用。 */
 export function skillBaseMultiplier(hid: string, level: number): number {
   switch (hid) {
+    case 'cannon': return cannonSkillCfg(level).mul;
+    case 'siphon': return siphonSkillCfg(level).mul;
     case 'sniper': return sniperSkCfg(level).mul;
     case 'pyro': return pyroSkCfg(level).mul;
     case 'volt': return voltSkCfg(level).mul;
@@ -301,6 +312,15 @@ export function baseMoraStats(): HeroStats {
 }
 
 /** 全局属性（经验/金币/防线） */
+export function baseCannonStats(): HeroStats {
+  return { ...baseArcherStats(), atk: CANNON.attack, skillDmg: CANNON.skill, aspd: CANNON.aspd,
+    range: CANNON.range, skillRange: CANNON.skillRange, skillShots: 1, explodeR: CANNON.blast };
+}
+export function baseSiphonStats(): HeroStats {
+  return { ...baseArcherStats(), atk: SIPHON.attack, skillDmg: SIPHON.skill, aspd: SIPHON.aspd,
+    range: SIPHON.range, skillRange: SIPHON.skillRange, skillShots: 2 };
+}
+
 export interface GlobalStats {
   xpMul: number;
   goldMul: number;
@@ -557,7 +577,30 @@ export const GLOBAL_CARDS: CardDef[] = [
 ];
 
 /** 当前卡池 = 弓箭手 + 狙击 + 火法 + 雷法 + 冰法 + 全局（卡按 owner 归属英雄生效） */
-export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...VOLT_CARDS, ...MORA_CARDS, ...GLOBAL_CARDS];
+export const CANNON_CARDS: CardDef[] = [
+  ...commonHeroCards('cannon'),
+  c({ id: 'cannon_echo', owner: 'cannon', name: '二段爆破', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_cannon_echo', desc: '普攻爆炸后再次爆破\n二次伤害40%', apply: x => { x.hero.cannonEcho = .4; } }),
+  c({ id: 'cannon_loader', owner: 'cannon', name: '爆破装填', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_cannon_loader', desc: '每4轮普攻追加1发炮弹\n追加炮弹伤害60%', apply: x => { x.hero.cannonLoader = true; } }),
+  c({ id: 'cannon_knockback', owner: 'cannon', name: '震荡冲击', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_cannon_knockback', desc: '技能爆炸击退敌人\n首领免疫击退', apply: x => { x.hero.cannonKnockback = 56; } }),
+  c({ id: 'cannon_barrage', owner: 'cannon', name: '饱和轰炸', rarity: 'gold', maxStacks: 2, offerGroup: 'combat',
+    art: 'ui_card_cannon_barrage', desc: '大招轰炸炮弹 +2', apply: x => { x.hero.cannonUltShots = (x.hero.cannonUltShots || 0) + 2; } }),
+];
+export const SIPHON_CARDS: CardDef[] = [
+  ...commonHeroCards('siphon'),
+  c({ id: 'siphon_twin', owner: 'siphon', name: '双重虹吸', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_siphon_twin', desc: '普攻增加1条副光束\n副光束伤害50%', apply: x => { x.hero.siphonTwin = .5; } }),
+  c({ id: 'siphon_inherit', owner: 'siphon', name: '余能继承', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_siphon_inherit', desc: '换目标时保留\n50%虹吸增伤', apply: x => { x.hero.siphonInheritance = .5; } }),
+  c({ id: 'siphon_shred', owner: 'siphon', name: '深度汲取', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_siphon_shred', desc: '持续锁定目标3秒后\n目标法抗降低15个百分点', apply: x => { x.hero.siphonShred = .15; } }),
+  c({ id: 'siphon_extend', owner: 'siphon', name: '灵魂延展', rarity: 'gold', maxStacks: 2, offerGroup: 'combat',
+    art: 'ui_card_siphon_extend', desc: '技能、大招\n各多连接1个目标', apply: x => { x.hero.siphonBranches = (x.hero.siphonBranches || 0) + 1; } }),
+];
+export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...VOLT_CARDS, ...MORA_CARDS,
+  ...CANNON_CARDS, ...SIPHON_CARDS, ...GLOBAL_CARDS];
 
 export interface CardStacks { [cardId: string]: number; }
 
@@ -621,7 +664,9 @@ const MECHANIC_IDS = new Set(['archer_pierce', 'serial', 'fan', 'split', 'explod
   'multi_lock', 'sniper_pierce', 'extra_line', 'sniper_mark', 'pyro_shards', 'pyro_burn', 'pyro_burst', 'pyro_meteors',
   'volt_shards', 'volt_shock', 'volt_strikes', 'volt_stun', 'mora_freeze', 'mora_glacier', 'mora_team',
   'archer_knockback', 'sniper_return', 'pyro_firefield', 'pyro_antiheal', 'pyro_giant',
-  'volt_arc', 'volt_overload', 'mora_pierce', 'mora_ground']);
+  'volt_arc', 'volt_overload', 'mora_pierce', 'mora_ground',
+  'cannon_echo', 'cannon_loader', 'cannon_knockback', 'cannon_barrage',
+  'siphon_twin', 'siphon_inherit', 'siphon_shred', 'siphon_extend']);
 export function isMechanicCard(card: CardDef): boolean { return MECHANIC_IDS.has(card.id); }
 function offerGroup(card: CardDef): OfferGroup {
   return card.offerGroup ?? (card.owner === 'global' ? 'support' : isMechanicCard(card) ? 'combat' : 'stats');

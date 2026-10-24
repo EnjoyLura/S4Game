@@ -29,7 +29,7 @@ interface LoseOptions {
   onRevive: (done: (ok: boolean) => void) => void; onRetry: () => void; onExit: () => void; tab?: number;
 }
 
-const HERO_COLOR: Record<string, string> = { archer: '#68AA43', sniper: '#4594BD', pyro: '#D96A42', volt: '#8A68B9', mora: '#48ACBC' };
+const HERO_COLOR: Record<string, string> = { cannon: '#D5A641', siphon: '#DF7B9F', archer: '#68AA43', sniper: '#4594BD', pyro: '#D96A42', volt: '#8A68B9', mora: '#48ACBC' };
 const CARD_ART: Record<string, string> = {
   heavy_head: 'ui_card_sharp', fast_load: 'ui_card_swift', steady_rest: 'ui_card_crit_rate', lethal_aim: 'ui_card_crit_dmg',
   instinct_s: 'ui_card_instinct_a', fast_charge_s: 'ui_card_fast_charge_a',

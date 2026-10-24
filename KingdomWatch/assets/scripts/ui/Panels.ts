@@ -6,6 +6,7 @@ import { Graphics, Label, Mask, Node, ScrollView, Sprite, sys, tween, UIOpacity,
 import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
 import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDuration, pyroMeteorCount, pyroMeteorDamage } from '../config/Cards';
 import { voltShockDuration, voltShockAmp, voltShockedMultiplier, voltStrikeCount } from '../config/Cards';
+import { CANNON, cannonSkillCfg, cannonUltCfg, siphonSkillCfg, siphonUltCfg } from '../config/NewHeroConfig';
 import { MORA_ULT_HITS, moraSlowRatio, moraSlowDuration, moraFreezeChance, moraNormalFreezeDuration, moraFieldRadius, moraFieldFreeze, moraUltimateHitDamage } from '../config/Cards';
 import { FROST_ULT_RAIN_COUNT, HERO_Y, LO, PAL } from '../config/GameConfig';
 import { DamageRow, fmtWk } from '../battle/DamageService';
@@ -339,7 +340,7 @@ export class Panels {
       const host = N('pauseDamageRow:' + r.id, parent, 0, 158 - i * 66);
       const av = gcircle(host, -282, 0, 26, CA('#2A3240', 1));
       const avLbl = label(av, 0, 0, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
-      if (r.id === 'archer' || r.id === 'sniper' || r.id === 'pyro' || r.id === 'volt' || r.id === 'mora')
+      if (['archer', 'sniper', 'pyro', 'volt', 'mora', 'cannon', 'siphon'].includes(r.id))
         artSprite(av, 0, 0, 44, 44, 'ui_avatar_' + r.id, { sliced: false, hideOnLoad: [avLbl] });
       label(host, -93, 9, r.name, { size: 18, color: '#FFFFFF', align: 'left', w: 296, h: 26, shrink: true });
       label(host, 250, 9, fmtWk(r.val),
@@ -548,7 +549,7 @@ export class Panels {
       gcircle(this.modalRoot, cxAv, cyAv, 35, CA('#2A3240', 1));
       const avLbl = label(this.modalRoot, cxAv, cyAv, r.name.slice(0, 1), { size: 26, color: PAL.gold, bold: true });
       // 74 > 70 座圆：头像盖满整个圆去黑环（用户反馈）
-      if (r.id === 'archer' || r.id === 'sniper' || r.id === 'pyro' || r.id === 'volt' || r.id === 'mora')
+      if (['archer', 'sniper', 'pyro', 'volt', 'mora', 'cannon', 'siphon'].includes(r.id))
         artSprite(this.modalRoot, cxAv, cyAv, 74, 74, 'ui_avatar_' + r.id, { sliced: false, hideOnLoad: [avLbl] });
       label(this.modalRoot, px - w / 2 + 180, cyTx, r.name,
         { size: 18, color: '#FFFFFF', align: 'left', w: 126, h: 30, shrink: true });
@@ -599,7 +600,66 @@ export class Panels {
     const iconY = WYB(126, 46);
     let px: number, py: number, w = 300, hh = 272, title: string;
     let rows: [string, string][];
-    if (kind === 'atk') {
+    if (hero.id === 'cannon' || hero.id === 'siphon') {
+      const cannon = hero.id === 'cannon';
+      w = 320;
+      if (kind === 'atk') {
+        title = cannon ? '普攻 · 爆裂炮弹' : '普攻 · 生命虹吸';
+        rows = cannon ? [
+          ['伤害', Math.round(hero.effAtk * h.normalMul) + ' · 中心全额'],
+          ['攻速', h.aspd.toFixed(2) + ' 次/秒'],
+          ['爆破', '半径90 · 周围伤害70%'],
+          ['追加爆破', h.cannonEcho ? '延迟0.35秒 · 伤害40%' : '未获得'],
+          ['追加装填', h.cannonLoader ? '每4轮追加1发 · 伤害60%' : '未获得'],
+          ['索敌范围', String(Math.round(h.range))],
+        ] : [
+          ['伤害/秒', String(Math.round(hero.effAtk * h.aspd * h.normalMul))],
+          ['结算', '每0.25秒 · 持续追踪至阵亡'],
+          ['虹吸增伤', '每秒+10% · 最高+50%'],
+          ['防线恢复', '实际伤害8% · 每秒上限0.4%耐久'],
+          ['副光束', h.siphonTwin ? '另连1敌 · 50%普攻伤害' : '未获得'],
+          ['法抗削弱', h.siphonShred ? '锁定3秒后降低15个百分点' : '未获得'],
+        ];
+        px = hero.x - 27 + 23 + 16 + w / 2;
+        py = iconY + 23 + 16 + hh / 2;
+      } else if (kind === 'skill') {
+        const cs = cannonSkillCfg(h.skillLv), vs = siphonSkillCfg(h.skillLv);
+        title = cannon ? '技能 · 破城重炮' : '技能 · 灵魂分流';
+        rows = cannon ? [
+          ['中心伤害', String(Math.round(hero.abilityDamage(cs.mul)))],
+          ['爆炸范围', '半径' + Math.round(CANNON.skillBlast * cs.radiusMul * h.skillRangeMul)],
+          ['破甲', '物抗降低15个百分点 · ' + cs.shredSeconds + '秒'],
+          ['震荡冲击', h.cannonKnockback ? '击退敌人 · 首领免疫' : '未获得'],
+          ['冷却', cdTotal], ['释放', '自动锁定怪群'],
+        ] : [
+          ['每束伤害/秒', String(Math.round(hero.abilityDamage(vs.mul)))],
+          ['分流目标', '+' + (vs.branches + (h.siphonBranches || 0)) + ' 个敌人'],
+          ['持续时间', vs.duration + ' 秒'],
+          ['目标', '主目标附近 · 分流独立锁定'],
+          ['冷却', cdTotal], ['释放', '自动'],
+        ];
+        px = hero.x + 27 + 23 + 16 + w / 2;
+        py = iconY + 23 + 16 + hh / 2;
+      } else {
+        const cu = cannonUltCfg(h.ultLv), vu = siphonUltCfg(h.ultLv);
+        title = cannon ? '大招 · 集束轰炸' : '大招 · 生命收割';
+        rows = cannon ? [
+          ['每弹中心伤害', String(Math.round(hero.abilityDamage(cu.mul, true)))],
+          ['轰炸炮弹', (cu.shots + (h.cannonUltShots || 0)) + ' 发 · 错峰落下'],
+          ['爆炸范围', '半径' + Math.round(cu.radius * h.skillRangeMul)],
+          ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
+          ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'], ['释放', '手动点击'],
+        ] : [
+          ['每束伤害/秒', String(Math.round(hero.abilityDamage(vu.mul, true)))],
+          ['目标', '+' + (vu.branches + (h.siphonBranches || 0)) + ' 敌 · 主束伤害×1.6'],
+          ['持续时间', vu.duration + ' 秒'],
+          ['防线恢复', '实际伤害12% · 每秒上限0.8%耐久'],
+          ['充能', Math.floor(hero.charge) + ' / ' + goalTxt], ['释放', '手动点击'],
+        ];
+        px = WX(636, 90) - 45 - 16 - w / 2;
+        py = WYB(240 + ultIdx * 110, 90);
+      }
+    } else if (kind === 'atk') {
       const atkTitle: Record<string, string> = { archer: '普攻 · 风刃射击', sniper: '普攻 · 重弩狙击', pyro: '普攻 · 烈焰火球', volt: '普攻 · 雷电球', mora: '普攻 · 冰棱' };
       title = atkTitle[hero.id] || '普攻';
       rows = [
@@ -752,7 +812,7 @@ export class Panels {
     }
     // Keep the existing six-row geometry while exposing the battle's new rules.
     if (kind === 'atk') {
-      rows[0][0] = hero.id === 'archer' || hero.id === 'sniper' ? '物理伤害' : '法术伤害';
+      if (hero.id !== 'siphon') rows[0][0] = ['archer', 'sniper', 'cannon'].includes(hero.id) ? '物理伤害' : '法术伤害';
       if ((hero.id === 'archer' || hero.id === 'sniper') && h.pierce) rows[5] = ['贯穿', '额外命中 ' + h.pierce + ' 个目标'];
       if (hero.id === 'pyro' && h.pyroBurnBurst) rows[5] = ['余烬爆破', '点燃后阵亡爆炸 · 半径100'];
       if (hero.id === 'mora' && h.moraTeamVuln) rows[5] = ['冰裂印记', '全队易伤+15% · 3秒'];

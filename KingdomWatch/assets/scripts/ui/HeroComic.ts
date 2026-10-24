@@ -7,6 +7,7 @@ import { EQUIPS, EquipKind, HERO_DEFS } from '../core/GameData';
 import { HeroLobbyIdle } from './HeroLobbyIdle';
 
 export const HERO_PASTEL: Record<string, string> = {
+  cannon: '#F0DFB4', siphon: '#EFD3DF',
   archer: '#DDEBD0', sniper: '#DBE7F2', pyro: '#F4DDC5', volt: '#E7DEF0', mora: '#D9EDF0',
 };
 export const GEAR_PASTEL = ['#E8E5DC', '#DDEBD0', '#DCE8F1', '#E7DEF0'];
@@ -26,6 +27,7 @@ export const EMPTY_GEAR: Record<EquipKind, string> = {
 };
 /** Shared with picker prewarming, including the shop prefix applied by comicArt. */
 export function heroPortraitKey(id: string): string {
+  if (id === 'cannon' || id === 'siphon') return 'new_heroes_v105/avatar_' + id;
   return id === 'archer' ? 'hero_comic_v1/comic_hero_archer_v1' : 'shop_comic_v1/comic_hero_' + id + '_v1';
 }
 export function heroPortrait(parent: Node, x: number, y: number, size: number, id: string): Node {
@@ -62,7 +64,7 @@ export function heroComicFigure(parent: Node, id: string, x: number, footY: numb
   const ground = N('heroGround', figure).addComponent(Graphics);
   ground.fillColor = CA(COMIC.ink, .24); ground.ellipse(0, -2, Math.min(72, height * .17), 8); ground.fill();
   const key = 'hero_comic_v1/comic_figure_' + id + (id === 'archer' ? '_v2' : '_v1');
-  const footMargin = id === 'archer' ? 14 / 1546 : 16 / 768;
+  const footMargin = id === 'cannon' ? 81 / 1536 : id === 'siphon' ? 30 / 1536 : id === 'archer' ? 14 / 1546 : 16 / 768;
   const still = artSprite(figure, 0, height / 2, maxWidth, height, key, {
     sliced: false, onLoaded: art => {
       const h = art.getComponent(UITransform)!.height;

@@ -7,7 +7,7 @@ import { artSprite } from '../Ux';
 import { COMIC, comicArt, comicButton, comicMark, comicPlate, comicPortrait, comicSurface } from '../ComicUI';
 import { mainLabel, PageCtx, fmt, toast, MAIN_NAV_H, MAIN_RESOURCE_H, mainResourceTop, pageScroll } from '../PageKit';
 import { EQUIPS, EquipKind, HERO_DEFS, KIND_NAME, MATS, SHOP, SHOP_TABS, ShopDef, ShopTab, STAT_NAME, StatKey, equipStat, lvReached, shopBuy, statFmt, WEAPONS, weaponUsers } from '../../core/GameData';
-import { GEAR_ART } from '../HeroComic';
+import { GEAR_ART, heroPortraitKey } from '../HeroComic';
 import { loadSave } from '../../core/SaveData';
 import { dismissUI, reducedMotion, refreshUI } from '../UIMotion';
 import { bindButton } from '../ButtonFeedback';
@@ -29,7 +29,7 @@ const EQUIP_INTRO: Record<string, string> = {
   armor_forest: '林间守卫使用的护甲，提升技能伤害与充能效率。',
 };
 const itemArt = (g: ShopDef): string => g.give.kind === 'hero'
-  ? g.give.id ? 'comic_hero_' + g.give.id + '_v1' : '' : GEAR_ART[g.give.id] || '';
+  ? g.give.id ? heroPortraitKey(g.give.id) : '' : GEAR_ART[g.give.id] || '';
 type WeaponFilter = 'all' | WeaponType;
 const WEAPON_FILTERS: { key: WeaponFilter; name: string }[] = [
   { key: 'all', name: '全部' }, { key: 'bow', name: '弓' }, { key: 'crossbow', name: '弩' },
@@ -200,8 +200,8 @@ function productInfo(g: ShopDef): ProductInfo {
     const hero = HERO_DEFS[g.give.id];
     return { meta: hero.job, description: hero.story,
       rows: [['初始攻击', String(hero.baseAtk)], ['初始技能伤害', String(hero.baseSkillDmg)], ['初始攻速', hero.atkSpd + ' 次/秒'], ['技能', hero.skillName], ['大招', hero.ultName]],
-      delivery: g.give.id === 'pyro' ? '首次通关普通1-2免费获得，无需钻石。回营后手动加入编队；技能和大招仍需每局选卡学习。'
-        : '购买后解锁英雄，可在英雄页培养与编队。技能和大招需在每局三选一中学习。' };
+      delivery: g.give.id === 'pyro' ? '首次通关普通1-2免费获得，无需钻石。回营后手动加入编队；技能和大招随上阵可用。'
+        : '购买后解锁英雄，可在英雄页培养与编队。技能和大招随上阵可用，局内强化卡改变技能效果。' };
   }
   if (g.give.kind === 'mat') {
     return { meta: '材料 · 每次获得 ×' + amount, description: MATS[g.give.id]?.desc || g.sub,

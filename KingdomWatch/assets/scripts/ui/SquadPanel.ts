@@ -1,5 +1,5 @@
 /** Comic formation overlay; squad order and the existing deploy/remove rules stay in GameData. */
-import { Node, UIOpacity } from 'cc';
+import { Mask, Node, ScrollView, UIOpacity, UITransform, Vec2 } from 'cc';
 import { LO } from '../config/GameConfig';
 import { dimLayer, N, WY } from './UIKit';
 import { COMIC, comicArt, comicButton, comicMark, comicPlate } from './ComicUI';
@@ -28,6 +28,7 @@ export function openSquadPanel(ctx: PageCtx): void {
   const top = Math.max(48, LO.notchTop + 20);
   let closing = false;
   let taughtPyro = false;
+  let rosterOffset = 0;
   let releaseBack = (): void => {};
   const close = (): void => {
     if (closing || !dim.isValid) return;
@@ -84,9 +85,21 @@ export function openSquadPanel(ctx: PageCtx): void {
     paintSquadFrame(bar,704,290,true);
     comicArt(bar, -301, 113, 34, 34, 'comic_helm_falcon_v1');
     mainLabel(bar,-134,112,'选择出战英雄',{size:27,font:'body',bold:true,color:'#FFF4DA',w:276,h:38,align:'left'});
+    const defs = Object.values(HERO_DEFS), viewW = 680, step = 134;
+    const roster = N('squadRosterView', bar, 0, -24, viewW, 218);
+    roster.addComponent(Mask);
+    const scroll = roster.addComponent(ScrollView);
+    const contentW = Math.max(viewW, defs.length * step + 8);
+    const content = N('squadRosterCards', roster, -viewW / 2, 0, contentW, 218);
+    content.getComponent(UITransform)!.setAnchorPoint(0, .5);
+    scroll.content = content; scroll.horizontal = contentW > viewW; scroll.vertical = false;
+    scroll.elastic = false; scroll.cancelInnerEvents = true;
+    scroll.scrollToOffset(new Vec2(Math.min(rosterOffset, contentW - viewW), 0), 0);
+    roster.on(ScrollView.EventType.SCROLLING, () => { rosterOffset = Math.max(0, -scroll.getScrollOffset().x); });
+    mainLabel(bar, 241, 112, '左右滑动', { size: 18, color: COMIC.cream, w: 132, h: 28 });
     Object.values(HERO_DEFS).forEach((def, i, defs) => {
       const dep = inSquad(def.id), owned = !!sv.heroes[def.id]?.owned;
-      const card = comicPlate(bar, (i - (defs.length - 1) / 2) * 134, -24, 126, 206,
+      const card = comicPlate(content, 8 + 63 + i * step, 0, 126, 206,
         dep ? 'gold' : 'card', { name: 'squadHero:' + def.id });
       paintSquadCard(card,126,206,dep);
       squadPortraitRim(card,37,49,dep);

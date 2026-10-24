@@ -2,6 +2,7 @@
 import { Graphics, Label, Mask, Node, ScrollView, Sprite, UITransform, UIOpacity, Vec2 } from 'cc';
 import { LO } from '../config/GameConfig';
 import { skillBaseMultiplier } from '../config/Cards';
+import { newHeroNormalCfg, cannonUltCfg, siphonUltCfg } from '../config/NewHeroConfig';
 import { C, CA, LabelOpts, N, setText, WY } from './UIKit';
 import { artSprite } from './Ux';
 import { COMIC, comicArt, comicButton, comicButtonControl, comicMark, comicPlate, comicSurface } from './ComicUI';
@@ -451,13 +452,20 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
           const cur = skillBaseMultiplier(hid, lv), next = skillBaseMultiplier(hid, maxed ? lv : lv + 1);
           const pct = (v: number): string => `${Math.round(v * 10000) / 100}%`;
           rows = [{ name: '技能伤害倍率', cur: pct(cur), next: pct(next), gain: `+${pct(next - cur)}` }];
+        } else if (hid === 'cannon' || hid === 'siphon') {
+          const value = (level: number): number => selected === 'atk' ? newHeroNormalCfg(level).normalMul
+            : hid === 'cannon' ? cannonUltCfg(level).mul : siphonUltCfg(level).mul;
+          const cur = value(lv), next = value(maxed ? lv : lv + 1);
+          const pct = (v: number): string => `${Math.round(v * 10000) / 100}%`;
+          rows = [{ name: selected === 'atk' ? '普攻伤害倍率' : hid === 'siphon' ? '每束每秒技能倍率' : '每弹中心技能倍率',
+            cur: pct(cur), next: pct(next), gain: `+${pct(next - cur)}` }];
         } else {
           const pct = (l: number): number => 100 + (l - 1) * 8;
           rows = [{ name: selected === 'atk' ? '普攻伤害倍率' : '大招伤害倍率', cur: `${pct(lv)}%`, next: `${pct(maxed ? lv : lv + 1)}%`, gain: maxed ? '+0%' : '+8%' }];
         }
         const paperH = height - shelfH - 280;
         preview(body, 0, -(shelfH + 12 + paperH / 2), 702, paperH, data.skillName(hid, selected), lv, maxed, rows, false,
-          selected === 'atk' ? '每5级获得阶段突破' : '局内仍需三选一解锁；每5级获得阶段突破');
+          selected === 'atk' ? '每5级获得阶段突破' : '上阵即可使用；每5级获得阶段突破');
         milestoneShelf(body, ctx, -(height - 122), '技能突破', data.skillMilestones(hid, selected), lv, hid + ':skill:' + selected, data.skillIconId(hid, selected), render, true,data.skillName(hid,selected));
         footer(root, ctx, footerTop, '升级' + (selected === 'atk' ? '普攻' : selected === 'skill' ? '技能' : '大招'), skillUpCost(lv), maxed, () => upSkill(hid, selected), { kind: selected, hid });
       } else {

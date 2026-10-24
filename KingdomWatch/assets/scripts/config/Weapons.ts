@@ -1,6 +1,6 @@
 /** Pure weapon catalog: also safe to read while migrating the save (no GameData dependency). */
-export type WeaponType = 'bow' | 'crossbow' | 'book' | 'staff';
-export const WEAPON_TYPE_NAME: Record<WeaponType, string> = { bow: '弓', crossbow: '弩', book: '魔法书', staff: '法杖' };
+export type WeaponType = 'bow' | 'crossbow' | 'book' | 'staff' | 'cannon';
+export const WEAPON_TYPE_NAME: Record<WeaponType, string> = { bow: '弓', crossbow: '弩', book: '魔法书', staff: '法杖', cannon: '重炮' };
 export interface WeaponSpec {
   id: string; name: string; type: WeaponType; quality: 0 | 1 | 2 | 3; tier: number;
   focus?: string; description?: string;
@@ -11,6 +11,9 @@ export interface WeaponSpec {
 }
 const art = (name: string): string => 'weapons_v1/' + name;
 export const WEAPONS: Record<string, WeaponSpec> = {
+  wpn_starter_cannon: { id: 'wpn_starter_cannon', name: '铜铸重炮', type: 'cannon', quality: 0, tier: 1,
+    stats: { atk: 14, skillDmg: 6 }, price: 0, unlock: '', art: 'ui_icon_atk_cannon', starter: true,
+    breakthrough: { atk: .1, skill: .08, secondary: 'critRate', bonus: .015 } },
   wpn_starter_bow: { id: 'wpn_starter_bow', name: '狩猎木弓', type: 'bow', quality: 0, tier: 1, stats: { atk: 8, skillDmg: 4 }, price: 0, unlock: '', art: art('starter_bow_v2'), starter: true, breakthrough: { atk: .09, skill: .07, secondary: 'atkSpd', bonus: .02 } },
   wpn_starter_crossbow: { id: 'wpn_starter_crossbow', name: '制式轻弩', type: 'crossbow', quality: 0, tier: 1, stats: { atk: 14, skillDmg: 4 }, price: 0, unlock: '', art: art('starter_crossbow'), starter: true, breakthrough: { atk: .10, skill: .06, secondary: 'critRate', bonus: .01 } },
   wpn_starter_book: { id: 'wpn_starter_book', name: '学徒魔法书', type: 'book', quality: 0, tier: 1, stats: { atk: 4, skillDmg: 12 }, price: 0, unlock: '', art: art('starter_book'), starter: true, breakthrough: { atk: .06, skill: .10, secondary: 'chargeEff', bonus: .02 } },
@@ -40,14 +43,15 @@ export const WEAPONS: Record<string, WeaponSpec> = {
   wpn_purple_moon_staff: { id: 'wpn_purple_moon_staff', name: '月泉法杖', type: 'staff', quality: 3, tier: 2, focus: '充能法杖', description: '象牙色杖身与银月托珠，偏重技能伤害和充能效率，并提供攻击。三系法师通用。', stats: { atk: 24, skillDmg: 46, chargeEff: .10 }, price: 1600, unlock: '1-4', art: art('purple_moon_staff_v56'), breakthrough: { atk: .09, skill: .12, secondary: 'chargeEff', bonus: .05 } },
 };
 export const STARTER_WEAPON: Record<string, string> = {
+  cannon: 'wpn_starter_cannon', siphon: 'wpn_starter_staff',
   archer: 'wpn_starter_bow', sniper: 'wpn_starter_crossbow', pyro: 'wpn_starter_book', volt: 'wpn_starter_staff', mora: 'wpn_starter_staff',
 };
 export function weaponFits(hid: string, id: string): boolean {
   const type = WEAPONS[id]?.type;
-  return hid === 'archer' ? type === 'bow' : hid === 'sniper' ? type === 'crossbow'
-    : ['pyro', 'volt', 'mora'].includes(hid) && (type === 'book' || type === 'staff');
+  return hid === 'cannon' ? type === 'cannon' : hid === 'archer' ? type === 'bow' : hid === 'sniper' ? type === 'crossbow'
+    : ['pyro', 'volt', 'mora', 'siphon'].includes(hid) && (type === 'book' || type === 'staff');
 }
 export function weaponUsers(id: string): string {
   const type = WEAPONS[id]?.type;
-  return type === 'bow' ? '弓手专用' : type === 'crossbow' ? '重弩手专用' : '火 / 雷 / 冰法师通用';
+  return type === 'cannon' ? '重炮工程师专用' : type === 'bow' ? '弓手专用' : type === 'crossbow' ? '重弩手专用' : '火 / 雷 / 冰 / 生命法师通用';
 }

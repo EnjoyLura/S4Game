@@ -2,6 +2,7 @@
 import { EQUIPS, EquipKind, HERO_DEFS, OpResult, PCT_STATS, STAT_NAME, StatKey, equipStat, heroBtList, heroStats, keepHp, keepShield, wornInst, equippedWeapon, weaponBtList } from '../core/GameData';
 import { loadSave } from '../core/SaveData';
 import { archerAtkCfg, archerUltCfg, moraAtkCfg, moraUltCfg, pyroAtkCfg, pyroUltCfg, sniperAtkCfg, sniperUltCfg, voltAtkCfg, voltUltCfg, skillBaseMultiplier } from '../config/Cards';
+import { newHeroNormalCfg, cannonUltCfg, siphonUltCfg } from '../config/NewHeroConfig';
 import { gearArtKey } from './HeroComic';
 import { GLOBAL_ROOT, toast } from './PageKit';
 import { NoticeNumberFormat, NoticeStat } from './UINotice';
@@ -14,9 +15,11 @@ interface GrowthState {
   stats: { name: string; value: number; format?: NoticeNumberFormat }[]; milestone?: string;
 }
 const NORMAL_CFG: Record<string, (lv: number) => { normalMul: number }> = {
+  cannon: newHeroNormalCfg, siphon: newHeroNormalCfg,
   archer: archerAtkCfg, sniper: sniperAtkCfg, volt: voltAtkCfg, pyro: pyroAtkCfg, mora: moraAtkCfg,
 };
 const ULT_DAMAGE: Record<string, (lv: number) => number> = {
+  cannon: lv => cannonUltCfg(lv).mul, siphon: lv => siphonUltCfg(lv).mul,
   archer: lv => archerUltCfg(lv).coeff, sniper: lv => sniperUltCfg(lv).boltMul,
   volt: lv => voltUltCfg(lv).boltMul, pyro: lv => pyroUltCfg(lv).boltMul, mora: lv => moraUltCfg(lv).boltMul,
 };

@@ -1,3 +1,4 @@
+import { newHeroMilestones } from '../../config/NewHeroConfig';
 /**
  * ④ 升级：四页共用铁匠铺培养界面；保留英雄/基地调用的装备强化弹窗。
  */
@@ -135,7 +136,8 @@ const SKILL_GENERIC: Record<'atk' | 'skill' | 'ult', string> = {
   ult: '大招伤害 +15%',
 };
 const skillMilestones = (hid: string, slot: 'atk' | 'skill' | 'ult'): { lv: number; txt: string }[] =>
-  hid === 'archer' ? SKILL_MS_ARCHER[slot]
+  hid === 'cannon' || hid === 'siphon' ? newHeroMilestones(hid, slot)
+    : hid === 'archer' ? SKILL_MS_ARCHER[slot]
     : hid === 'sniper' ? SKILL_MS_SNIPER[slot]
       : hid === 'volt' ? SKILL_MS_VOLT[slot]
         : hid === 'pyro' ? SKILL_MS_PYRO[slot]

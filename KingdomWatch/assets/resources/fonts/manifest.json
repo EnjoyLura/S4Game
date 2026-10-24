@@ -1,30 +1,30 @@
 {
   "revision": "7085eb89a950e85db5b166b7a58d414544b4140c",
-  "glyphsRequested": 1356,
+  "glyphsRequested": 1578,
   "fonts": [
     {
       "file": "UIBody.ttf",
       "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
       "sourceSha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
-      "sha256": "9bdefcb7745b6618a8928243bb1d00d63bbfde5cac79a9361092439b34e0c479",
-      "bytes": 420248,
-      "glyphs": 1347,
+      "sha256": "addb671c57ffa596cde60755c8b33b4b4a82192f703632071f66b36267da91cf",
+      "bytes": 490808,
+      "glyphs": 1572,
       "weight": 500
     },
     {
       "file": "UIHeading.ttf",
       "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf",
       "sourceSha256": "050080d9255a86808f2945bffac582b31ef32bc36411ce29563b4961670c66f9",
-      "sha256": "759d511a520f18bd4ee2fcce8026ce4c2708c9fc2d739b0e87d3995379b233a4",
-      "bytes": 571180,
-      "glyphs": 1347,
+      "sha256": "e1551bc2fd2ac2958f21a1985438c8f1abf2ee905979d4021d7cfe564ec889f4",
+      "bytes": 669116,
+      "glyphs": 1572,
       "weight": 750
     },
     {
       "file": "UINumbers.ttf",
       "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-Bold.ttf",
       "sourceSha256": "e476562ec9c1e16cf16475895b511f08c804f438cc9a9f80a44ea50a0eeb5b65",
-      "sha256": "4b392c133dffa4e43da56a46d0fe7128712199e87b35da2ce07068528cc4c047",
+      "sha256": "16b69d81f41674c4bf6e154ef08287b100a037ce0a008f0e030f3e265f30b65f",
       "bytes": 42520,
       "glyphs": 100,
       "weight": null
@@ -33,7 +33,7 @@
       "file": "CombatDigits.ttf",
       "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-ExtraBoldItalic.ttf",
       "sourceSha256": "331783dae9ec0c398f4d32c9fd5a56d4c602caa0c1628c2b9cbfe93f48eb68c9",
-      "sha256": "ebe509d9fbb30a1855ec43e96c3023d20b8eebc13ed64941692820af03615d3c",
+      "sha256": "6fdd8a515b000f84903b39d28aa936e451c1a42e5881bb9bc9a981d5e8cda6ec",
       "bytes": 44076,
       "glyphs": 100,
       "weight": null
@@ -42,7 +42,7 @@
       "file": "ComicLettering.ttf",
       "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/bangers/Bangers-Regular.ttf",
       "sourceSha256": "4160a7311de9342674cce9160cde9fcbb30f48190397d86ff1b70b455af65824",
-      "sha256": "b7218d295edb22047725874fb291493e806c874d0c2584fd20dc97551ecce3e0",
+      "sha256": "8c1666c4cc2796dd095ebbb232f5b7ebc7250ca5df0e5325c72875dee72b14c1",
       "bytes": 33684,
       "glyphs": 99,
       "weight": null

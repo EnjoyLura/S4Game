@@ -46,6 +46,7 @@ export abstract class HeroBase {
   private atkT = 0;
   private hx: number;
   private art: BattleSprite | null = null;
+  protected staticArt: Node | null = null;
   private motion: HeroBattleMotion | null = null;
   private idleArcher: ArcherIdleAnimation | null = null;
   private idleSniper: SniperIdleAnimation | null = null;
@@ -154,11 +155,11 @@ export abstract class HeroBase {
   }
 
   /** Mirror the art about its foot pivot; UI, shadow and simulation origins stay fixed. */
-  private faceAttack(dx: number, dy: number): void {
+  protected faceAttack(dx: number, dy: number): void {
     if (!Number.isFinite(dx) || !Number.isFinite(dy)) return;
     const length = Math.hypot(dx, dy);
     if (!length || Math.abs(dx / length) < .06) return;
-    const art = this.idleArcher?.node || this.idleSniper?.node || this.idleVolt?.node || this.idlePyro?.node || this.idleMora?.node || this.art?.node;
+    const art = this.staticArt || this.idleArcher?.node || this.idleSniper?.node || this.idleVolt?.node || this.idlePyro?.node || this.idleMora?.node || this.art?.node;
     // Complete video characters face left by default; remaining sprites face right.
     const rightScale = this.idleArcher || this.idleSniper || this.idleVolt || this.idlePyro || this.idleMora ? -1 : 1;
     art?.setScale(dx > 0 ? rightScale : -rightScale, 1, 1);
@@ -169,7 +170,7 @@ export abstract class HeroBase {
 
   private tickPose(dt: number, mgr?: MonsterManager): void {
     this.attackPoseT = Math.max(0, this.attackPoseT - dt);
-    if (mgr) this.poseTarget = mgr.pickTarget(this.x, HERO_Y, this.stats.range);
+    if (mgr) this.poseTarget = this.selectNormalTarget(mgr);
     if (this.poseTarget?.dead) this.poseTarget = null;
     const target = this.poseTarget;
     const hasTargetInRange = !!target;
@@ -193,6 +194,9 @@ export abstract class HeroBase {
   }
 
   get x(): number { return this.hx; }
+  protected selectNormalTarget(mgr: MonsterManager): Monster | null {
+    return mgr.pickTarget(this.x, HERO_Y, this.stats.range);
+  }
   get effAtk(): number { return this.stats.atk * this.stats.atkMul; }
   /** 两项独立基础值：攻击力 × 小额系数 + 技能伤害 × 当前技能倍率。 */
   abilityDamage(skillMultiplier: number, ultimate = false, attackMultiplier?: number): number {
@@ -236,7 +240,7 @@ export abstract class HeroBase {
     // 普攻
     this.atkT -= dt;
     if (this.atkT <= 0 && this.ultimateWindupT <= 0) {
-      const t = mgr.pickTarget(this.x, HERO_Y, this.stats.range);
+      const t = this.selectNormalTarget(mgr);
       if (t) {
         this.poseTarget = t;
         this.animateAttack();

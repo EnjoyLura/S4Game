@@ -391,6 +391,12 @@ export class ProjectileManager {
       // 尾迹先画（垫在弹体之下）：锥形渐隐条带 + 亮芯
       if (!decorated && !ultimateWake && a.trailMax > 0) this.drawTrail(g, s, a, size, arrow);
       if (arrow) this.drawArrow(g, s, a, size);
+      else if (s.heroId === 'cannon' && !s.enemy) {
+        // Brass casing and a bright rim read as a heavy shell, using the shared batch.
+        g.fillColor = hexc('#3E4650'); g.strokeColor = hexc('#F5CE75'); g.lineWidth = 2.4;
+        g.circle(s.x, s.y, size); g.fill(); g.stroke();
+        g.fillColor = hexc('#D5A641'); g.circle(s.x - size * .25, s.y + size * .25, size * .48); g.fill();
+      }
       else if (bolt) this.drawBolt(g, s, a, size);
       else if (orb) this.drawOrb(g, s, size, i);
       else if (fire) this.drawFireball(g, s, a, size, i);

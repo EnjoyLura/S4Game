@@ -69,6 +69,10 @@ export class Monster {
   burnT = 0;
   burnTick = 0;
   burnDps = 0;
+  physicalShred = 0;
+  magicShred = 0;
+  private physicalShredT = 0;
+  private magicShredT = 0;
   private burnOwner = 'pyro';
   /** Monotonic damage-event counter for this pooled life; reapplying burn must not replay an old event. */
   burnPulse = 0;
@@ -145,6 +149,7 @@ export class Monster {
     this.healT = def.atkInterval;
     this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = this.lungeT = this.flashT = 0;
     this.burnOwner = 'pyro';
+    this.physicalShred = this.magicShred = this.physicalShredT = this.magicShredT = 0;
     this.atkAnimT = 0;
     this.freezeT = this.freezeAge = this.freezeSlowAmp = this.freezeSlowDur = this.thawT = 0;
     this.slowAmp = 0.2;
@@ -343,6 +348,8 @@ export class Monster {
   /** Read-only view of this living instance, rather than its original codex stats. */
   inspect(): { physical: number; magic: number; armorBroken: boolean; wardBroken: boolean; states: string[] } {
     const states = this.traits.activeStates;
+    if (this.physicalShredT > 0) states.push('破甲' + Math.round(this.physicalShred * 100) + '%');
+    if (this.magicShredT > 0) states.push('法抗削弱' + Math.round(this.magicShred * 100) + '%');
     if (this.freezeT > 0) states.push('冰封');
     if (this.stunT > 0) states.push('眩晕');
     if (this.burnT > 0) states.push(this.burnHealCutT > 0 ? '灼烧·治疗降低50%' : '灼烧');
@@ -363,6 +370,10 @@ export class Monster {
   /** 单帧推进；返回是否死亡（死亡由 manager 清理） */
   tick(dt: number, line: { takeDamage: (d: number) => void }, mgr: MonsterManager): void {
     if (this.dead) return;
+    this.physicalShredT = Math.max(0, this.physicalShredT - dt);
+    this.magicShredT = Math.max(0, this.magicShredT - dt);
+    if (!this.physicalShredT) this.physicalShred = 0;
+    if (!this.magicShredT) this.magicShred = 0;
     this.deathMotion?.prepare();
     this.life += dt;
     this.supportHealT = Math.max(0, this.supportHealT - dt);
@@ -669,6 +680,16 @@ export class Monster {
     if (healCut > 0) {
       this.burnHealCut = this.burnHealCutT > 0 ? Math.max(this.burnHealCut, healCut) : healCut;
       this.burnHealCutT = Math.max(this.burnHealCutT, dur);
+    }
+  }
+  applyResistanceShred(kind: 'physical' | 'magic', amount: number, seconds: number): void {
+    if (this.dead || !Number.isFinite(amount + seconds) || amount <= 0 || seconds <= 0) return;
+    if (kind === 'physical') {
+      this.physicalShred = Math.max(this.physicalShred, Math.min(.95, amount));
+      this.physicalShredT = Math.max(this.physicalShredT, seconds);
+    } else {
+      this.magicShred = Math.max(this.magicShred, Math.min(.95, amount));
+      this.magicShredT = Math.max(this.magicShredT, seconds);
     }
   }
   heal(v: number): number {

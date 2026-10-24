@@ -6,6 +6,9 @@ import { _decorator, Canvas, Component, director, isValid, Layers, Node } from '
 import { MobDef, MOBS, heroSlots } from '../config/Mobs';
 import { ChallengeDef, DIFFICULTIES, getChallengeDef } from '../config/LevelDifficulty';
 import { CardCtx, CardDef, CardStacks, canTakeCard, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, baseMoraStats, HeroStats, archerAtkCfg, sniperAtkCfg, sniperSkCfg, voltAtkCfg, voltSkCfg, voltUltCfg, pyroAtkCfg, pyroSkCfg, pyroUltCfg, moraAtkCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
+import { baseCannonStats, baseSiphonStats } from '../config/Cards';
+import { newHeroNormalCfg } from '../config/NewHeroConfig';
+import { CannonHero, SiphonHero } from './NewHeroes';
 import { expNeed, LO, PASSIVE_XP_INTERVAL, passiveXpGain, REVIVE_RATIO, starOf, ULT_INITIAL_CHARGE, SHARED_KILL_CHARGE } from '../config/GameConfig';
 import { bus, EVT, WaveThreat } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
@@ -199,13 +202,15 @@ export class BattleDirector extends Component {
     const ids = squad.length ? squad : ['archer', 'sniper'];
     const slots = heroSlots(ids.length);
     this.heroes = ids.map((hid, i) => {
-      const st = hid === 'sniper' ? baseSniperStats()
+      const st = hid === 'cannon' ? baseCannonStats() : hid === 'siphon' ? baseSiphonStats() : hid === 'sniper' ? baseSniperStats()
         : hid === 'pyro' ? basePyroStats()
           : hid === 'volt' ? baseVoltStats()
             : hid === 'mora' ? baseMoraStats() : baseArcherStats();
       applyHeroGrowth(st, hid);     // 英雄等级成长+阶段性突破上场（每级成长按存档等级）
       applyEquipAffixes(st, hid);   // 穿戴词条上场即生效（用户确认的词条体系）
-      return hid === 'sniper' ? new SniperHero(heroLayer, slots[i], st)
+      return hid === 'cannon' ? new CannonHero(heroLayer, slots[i], st)
+        : hid === 'siphon' ? new SiphonHero(heroLayer, slots[i], st, this.line)
+        : hid === 'sniper' ? new SniperHero(heroLayer, slots[i], st)
         : hid === 'pyro' ? new PyroHero(heroLayer, slots[i], st)
           : hid === 'volt' ? new VoltHero(heroLayer, slots[i], st)
             : hid === 'mora' ? new FrostHero(heroLayer, slots[i], st)
@@ -972,7 +977,13 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
   s.ultBolts += bt.ultBolts;
   s.ultAutoCd = bt.ultAutoCd;
   s.atkLv = hs.atkLv; s.skillLv = hs.skillLv; s.ultLv = hs.ultLv;   // 技能升级里程碑（弓箭手类内读取）
-  if (hid === 'archer') {
+  if (hid === 'cannon' || hid === 'siphon') {
+    s.normalMul = newHeroNormalCfg(hs.atkLv).normalMul;
+    if (hs.atkLv >= 10) s.critRate = Math.min(1, s.critRate + .05);
+    if (hs.atkLv >= 15) s.range = Math.round(s.range * 1.08);
+    if (hs.skillLv >= 5) s.skillCdFlat += 1;
+    if (hs.ultLv >= 15) s.chargeMul *= .9;
+  } else if (hid === 'archer') {
     const ac = archerAtkCfg(hs.atkLv);
     s.normalMul = ac.normalMul;                       // 普攻伤害：每级+8%、20级再+20%（技能/大招不吃）
     if (ac.critOn) s.critRate = Math.min(1, s.critRate + 0.05);   // 10级 暴击率+5%

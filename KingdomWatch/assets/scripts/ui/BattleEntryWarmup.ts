@@ -54,6 +54,7 @@ export function warmBattlefield(levelId: string, heroIds: readonly string[], mob
     if (videoWalk) firstPaint.push(new Promise<void>(resolve => getMobAnims(() => resolve(), videoWalk, priority)));
   }
   for (const id of ids) {
+    if (id === 'cannon' || id === 'siphon') firstPaint.push(imageReady('new_heroes_v105/' + id + '_battle', priority));
     if (id === 'archer') {
       firstPaint.push(preloadArcherClip('idle', priority));
       // Attack sheets follow idle sheets, so a large combat atlas cannot delay the first hero pose.

@@ -240,6 +240,18 @@ export const HERO_DEFS: Record<string, HeroDef> = {
     story: '北境冰原走出的年轻冰霜法师，能把空气里的水汽凝成利刃。她走过的地方，敌人都慢了下来。',
     shopPrice: 4800,
   },
+  cannon: {
+    id: 'cannon', name: '布洛克·铜铸', job: '重炮 · 物理爆破', avatar: 'ui_avatar_cannon',
+    baseAtk: 150, baseSkillDmg: 150, growthType: 'hybrid', atkSpd: .45,
+    weaponName: '铜铸重炮', skillName: '破城重炮', ultName: '集束轰炸', shopPrice: 5200,
+    story: '来自铜炉堡的矮人工程师。他把城门工坊里的重炮扛上防线，用精准的爆破为同伴撕开重甲。',
+  },
+  siphon: {
+    id: 'siphon', name: '薇拉·绯契', job: '虹吸 · 持续续航', avatar: 'ui_avatar_siphon',
+    baseAtk: 64, baseSkillDmg: 95, growthType: 'normal', atkSpd: 1,
+    weaponName: '绯契法杖', skillName: '灵魂分流', ultName: '生命收割', shopPrice: 5600,
+    story: '以绯晶维系生命契约的流浪术士。她锁住敌人的生命，将汲取的余能送回防线；连接越久，契约越强。',
+  },
 };
 
 /* ================= 编队（二级编队界面：4 上阵位；战斗按上阵顺序从左到右站位） ================= */
@@ -465,6 +477,8 @@ export const SHOP: ShopDef[] = [
   { id: 's_hero_pyro', tab: 'hero', name: '焰·辉', sub: '通关普通1-2免费获得', price: 0, currency: 'diamond', unlock: '1-2', give: { kind: 'hero', id: 'pyro' } },
   { id: 's_hero_volt', tab: 'hero', name: '沃尔·雷霆', sub: '雷电 · 连锁控制', price: 4200, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'volt' } },
   { id: 's_hero_mora', tab: 'hero', name: '莫拉·寒霜', sub: '冰霜 · 减速控制', price: 4800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'mora' } },
+  { id: 's_hero_cannon', tab: 'hero', name: '布洛克·铜铸', sub: '重炮 · 物理爆破', price: 5200, currency: 'diamond', unlock: '1-4', give: { kind: 'hero', id: 'cannon' } },
+  { id: 's_hero_siphon', tab: 'hero', name: '薇拉·绯契', sub: '虹吸 · 持续续航', price: 5600, currency: 'diamond', unlock: '1-4', give: { kind: 'hero', id: 'siphon' } },
   { id: 's_hero_more', tab: 'hero', name: '新英雄', sub: '敬请期待', price: 0, currency: 'diamond', unlock: '', give: { kind: 'hero', id: '' } },
   { id: 's_helm_falcon', tab: 'equip', name: '猎鹰头盔', sub: '蓝1阶 · 头盔', price: 600, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'helm_falcon' } },
   { id: 's_acc_moon', tab: 'equip', name: '月纹坠饰', sub: '绿1阶 · 饰品', price: 300, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'acc_moon' } },

@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "status": "local-first-playable-awaiting-user-gameplay-review",
+  "heroes": [
+    {
+      "id": "cannon",
+      "name": "布洛克·铜铸",
+      "battleSource": "C:/Users/user/.codex/generated_images/01a15ef7-7947-7cb0-82f2-df6682c99f16/exec-6988ce27-65ba-4593-9ed7-1b7090ef4c26.png"
+    },
+    {
+      "id": "siphon",
+      "name": "薇拉·绯契",
+      "battleSource": "C:/Users/user/.codex/generated_images/01a15ef7-7947-7cb0-82f2-df6682c99f16/exec-6d61f709-67d8-4ec7-b7a4-df4e9197ca3b.png"
+    }
+  ],
+  "referenceRecord": "../../../美术/英雄设计/新英雄立绘-v1/design-record.json",
+  "generationTool": "built-in image_gen",
+  "prompts": [
+    {
+      "key": "cannon",
+      "file": "D:/AI/S4Game/美术/英雄设计/新英雄立绘-v1/brock-copperforge-v1.png",
+      "prompt": "Create ONE rear three-quarter battle-standing sprite for this exact dwarf cannon engineer, using the supplied lobby portrait as character identity and style reference. Full entire body and full cannon, front of body turned AWAY from viewer facing towards the upper-right enemy battlefield, camera viewing his back at a slight elevated angle. Keep the reddish braided beard only visible at side, brass goggles, gold plated broad shoulders, mustard coat, charcoal apron, stocky dwarf proportions, leather belt and armored boots, and the SAME large dark-iron cannon with brass rings. Both feet planted, offset stance, hands holding cannon ready aimed up-right, entire weapon in frame. Clear hand-drawn dark outlines, crisp angular cel shading and bold readable costume shapes exactly like reference. Genuine transparent alpha background with NO floor, gradient, glow, cast shadow, frame, text, effects or particles. No animation, no alternate views, one complete character only. Leave a generous 8 percent empty margin on ALL four sides; head, cape, feet, barrel and muzzle must not touch edges. Portrait 2:3 canvas."
+    },
+    {
+      "key": "siphon",
+      "file": "D:/AI/S4Game/美术/英雄设计/新英雄立绘-v1/veyra-crimsonpact-v1.png",
+      "prompt": "Create ONE rear three-quarter battle-standing sprite for this exact adult female life-siphon mage, using the supplied lobby portrait as identity and style reference. Full body and complete staff. She faces AWAY towards the upper-right enemy battlefield with camera slightly elevated behind her. Keep same long dark plum hair and silver temple lock, wine-burgundy high-collared robe and short structured mantle, ivory edges, dark indigo fitted trousers and dark boots, silver trims and rose gemstones. SAME tall dark-silver crescent staff holding red-pink pointed life crystal, held steadily in one hand alongside her; other hand raised slightly forward to channel, no beam in image. Pose balanced, offset feet, both soles visible, robe comfortably contained. Hand-drawn fantasy comic, clear dark outlines, large angular cel-shaded planes matching reference. True transparent background, NO floor, glow cloud, gradients, cast shadow, text, labels, frame, particles or scenery. No animation, no sheet, no extra view or character. Leave generous 8 percent empty transparent margin all around including staff tip and every boot. Portrait 2:3."
+    }
+  ],
+  "pixelEditingPerformed": false,
+  "newAnimationSequencesProduced": false,
+  "skillAndCardIcons": "virtual crops of the lobby illustrations; provisional shared art",
+  "selectedCards": {
+    "cannon": [
+      "P1 cannon_echo",
+      "P3 cannon_loader",
+      "P5 cannon_knockback",
+      "P6 cannon_barrage"
+    ],
+    "siphon": [
+      "V1 siphon_twin",
+      "V2 siphon_inherit",
+      "V3 siphon_shred",
+      "V6 siphon_extend"
+    ]
+  },
+  "userSelection": "按你的建议",
+  "gameplayRun": false,
+  "sourcePush": false,
+  "deployment": false
+}

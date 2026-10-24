@@ -1,0 +1,92 @@
+{
+  "images": [
+    {
+      "file": "assets/resources/ux/new_heroes_v105/cannon_battle.png",
+      "bytes": 1915428,
+      "sha256": "afab1ea98570c0a5b2c02ae43dafa07c3301751b04b0d5a87f599446f5b734f9",
+      "size": [
+        1024,
+        1536
+      ],
+      "alphaBounds": [
+        67,
+        133,
+        999,
+        1520
+      ],
+      "alphaExtrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "assets/resources/ux/new_heroes_v105/cannon_lobby.png",
+      "bytes": 2031889,
+      "sha256": "faa36b647542d8ba82b68e352e5c32b9592424635cf99b2ec08d127ddac10498",
+      "size": [
+        1024,
+        1536
+      ],
+      "alphaBounds": [
+        25,
+        65,
+        1009,
+        1528
+      ],
+      "alphaExtrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "assets/resources/ux/new_heroes_v105/siphon_battle.png",
+      "bytes": 1984605,
+      "sha256": "da2f0d73397a8c4dd1a433df37def55f608d8c32e0e5631380f67df6d2b1ae70",
+      "size": [
+        1024,
+        1536
+      ],
+      "alphaBounds": [
+        44,
+        52,
+        992,
+        1520
+      ],
+      "alphaExtrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "file": "assets/resources/ux/new_heroes_v105/siphon_lobby.png",
+      "bytes": 2173181,
+      "sha256": "c15c146871fba45185fb3022f7f8ff288b3157690af060efc9f238a39a87aed8",
+      "size": [
+        1024,
+        1536
+      ],
+      "alphaBounds": [
+        0,
+        12,
+        1004,
+        1536
+      ],
+      "alphaExtrema": [
+        0,
+        254
+      ]
+    }
+  ],
+  "imagePixelsModified": false,
+  "fullSourceRectForVirtualFrames": true,
+  "fonts": [
+    {
+      "name": "UIBody",
+      "missingHan": ""
+    },
+    {
+      "name": "UIHeading",
+      "missingHan": ""
+    }
+  ]
+}

@@ -9,6 +9,7 @@ interface Cast extends UltimateCue { age: number; }
 interface Beat extends UltimateBeat { age: number; sx: number; sy: number; }
 const TAU = Math.PI * 2;
 const PALETTE: Record<string, readonly number[]> = {
+  cannon: [235, 189, 80], siphon: [240, 108, 155],
   archer: [189, 230, 117], sniper: [72, 170, 255], pyro: [255, 154, 55],
   volt: [191, 121, 255], mora: [147, 224, 246],
 };

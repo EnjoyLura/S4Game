@@ -1,5 +1,7 @@
 /** One battle-clock contract for cast queues, presentation and panel protection. */
 export const ULT_TIMING: Record<string, { windup: number; duration: number }> = {
+  cannon: { windup: .6, duration: 4.5 },
+  siphon: { windup: .6, duration: 5.6 },
   archer: { windup: .55, duration: 3.4 },
   sniper: { windup: 1.1, duration: 3 },
   pyro: { windup: .7, duration: 5 },

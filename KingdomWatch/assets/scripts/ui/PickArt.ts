@@ -22,11 +22,11 @@ export function pickCardArt(card: CardDef): string {
 
 /** Mage cards share a filled circular viewport. Clip only the icon subtree. */
 export function pickCardIcon(parent: Node, x: number, y: number, size: number, card: CardDef, hideOnLoad: Node[] = []): Node {
-  if (card.owner !== 'pyro' && card.owner !== 'volt' && card.owner !== 'mora') return artSprite(parent, x, y, size, size, pickCardArt(card), { sliced: false, hideOnLoad });
+  if (!['pyro', 'volt', 'mora', 'cannon', 'siphon'].includes(card.owner)) return artSprite(parent, x, y, size, size, pickCardArt(card), { sliced: false, hideOnLoad });
   const clip = N(card.owner + 'CardIcon', parent, x, y, size, size);
   const mask = clip.addComponent(Mask); mask.type = Mask.Type.GRAPHICS_ELLIPSE; mask.segments = 96;
   const backing = N('pyroIconBacking', clip).addComponent(Graphics);
-  backing.fillColor = C(card.owner === 'pyro' ? '#652E1D' : card.owner === 'mora' ? '#143B5C' : '#2E1C52'); backing.circle(0, 0, size / 2); backing.fill();
+  backing.fillColor = C(card.owner === 'cannon' ? '#4A3825' : card.owner === 'siphon' ? '#4B213C' : card.owner === 'pyro' ? '#652E1D' : card.owner === 'mora' ? '#143B5C' : '#2E1C52'); backing.circle(0, 0, size / 2); backing.fill();
   // Slightly cover the viewport so the painted circle reaches its boundary without transparent rim gaps.
   artSprite(clip, 0, 0, size * 1.04, size * 1.04, pickCardArt(card), { sliced: false, fit: false, hideOnLoad });
   return clip;
