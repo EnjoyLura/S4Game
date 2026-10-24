@@ -1,0 +1,99 @@
+{
+  "schema": 1,
+  "date": "2026-10-24",
+  "status": "concepts-awaiting-user-review",
+  "tool": "built-in image_gen",
+  "runtimeIntegration": false,
+  "deployment": false,
+  "sourcePush": false,
+  "styleReferences": [
+    "KingdomWatch/assets/resources/ux/hero_comic_v1/comic_figure_sniper_v1.png",
+    "KingdomWatch/assets/resources/ux/hero_comic_v1/comic_figure_mora_v1.png"
+  ],
+  "heroes": [
+    {
+      "id": "cannon_engineer_concept",
+      "name": "布洛克·铜铸",
+      "englishName": "Brock Copperforge",
+      "role": "重炮工程师",
+      "epithet": "破城重炮",
+      "design": "成年男性矮人工匠，敦实体型，护目镜、铜金护甲与枪铁重炮；英雄页完整正面三分之四立绘。",
+      "palette": {
+        "primary": "#D5A641",
+        "secondary": "#3E4650"
+      },
+      "file": "brock-copperforge-v1.png",
+      "generationSource": "C:/Users/user/.codex/generated_images/01a15ef7-7947-7cb0-82f2-df6682c99f16/exec-66508a28-8bdc-42eb-97d0-22d6b4cccb02.png",
+      "initialGenerationSource": "C:/Users/user/.codex/generated_images/01a15ef7-7947-7cb0-82f2-df6682c99f16/exec-0e0d93e3-0f5b-4333-8c87-9f040b933a62.png",
+      "prompt": "Use case: stylized-concept. Asset type: full-body lobby hero illustration for the existing Chinese mobile fantasy tower-defense game 王国守望. The supplied images are STYLE REFERENCES ONLY (existing sniper and ice mage), not characters to edit. Match their hand-drawn clean fantasy-comic style: strong crisp dark brown/black contours, clear angular cel-shaded planes, controlled painted highlights, saturated but coherent colors, appealing expressive face, readable at small mobile UI scale. A single complete character, head to both boot soles, front three-quarter view, stable standing pose with a natural weight shift. Portrait canvas with generous transparent padding all around, every weapon and cape edge fully inside frame. True transparent background. No landscape, ground, platform, panel, text, labels, numbers, watermark, extra character, photorealism, 3D render, blurry painterly haze, or baked combat particles. All hands and grips anatomically clear. This is new hero concept art, not an icon, combat-back sprite, or character sheet. Character: 布洛克·铜铸 / Brock Copperforge, male adult dwarf heavy cannon engineer, a reliable veteran artisan with a stocky broad-shouldered silhouette, about 4.5 head body proportions; thick short reddish-brown beard, warm determined eyes, brass-rimmed work goggles pushed onto forehead, short swept-back dark auburn hair, confident slight grin. Main costume color brass gold #D5A641, supporting gunmetal gray #3E4650 and dark brown leather. Large clean brass chest/shoulder armor over a mustard work coat and charcoal protective apron, rolled sturdy sleeves, dark trousers and heavy riveted boots, one tidy utility belt. His iconic weapon is a very large portable short-barreled fantasy siege cannon with a wide dark muzzle, layered angular brass reinforcing bands and dark iron barrel, dwarven artisan engineering rather than modern sci-fi; held firmly diagonally across his torso, one hand around the rear wooden grip and the other visibly supporting the barrel underside, muzzle angled modestly upward and away from his face. Small shoulder harness supports its weight. Cannon is the central readable prop and stays entirely in frame. Only restrained silver edge highlights and brass facets; no active muzzle flash, fire, smoke, cogwheel clutter, floating tools, ammunition explosion or mechanical legs. Character should feel weighty, capable, heroic and distinct from the slim blue sniper reference.",
+      "framingRevisionPrompt": "Use case: precise-object-edit. Edit target: the supplied newly generated heavy cannon engineer portrait. Correct framing ONLY. Preserve this exact dwarf engineer's identity, face, beard, goggles, costume, armor, colors, hand grips and the cannon design, as well as its crisp outlined cel-shaded fantasy-comic rendering. The cannon muzzle is currently too close to/cut by the right canvas boundary: zoom out the COMPLETE character and cannon together by about 15 percent and centre the complete silhouette inside a portrait 2:3 canvas, leaving at least 7 percent genuinely transparent clear margin on the left AND right and 5 percent above head and below both boots. Fully reconstruct only the tiny cropped outer edge of the right muzzle if needed to make a complete rounded metal rim. Do not change the pose, redesign body or gun, add props, change proportions, add shadows, backdrop, particles, text or logos. Remove the soft background atmosphere/glow, keep only the whole character as an alpha cutout with transparent empty background. Full body, all gear and both soles visible and no part touches a canvas edge.",
+      "revisionNote": "初稿炮口触及右缘；内置image_gen定向调整构图留白。生成编辑会重绘，不声称与初稿逐像素相同。",
+      "fileValidation": {
+        "file": "brock-copperforge-v1.png",
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "bytes": 2031889,
+        "sha256": "faa36b647542d8ba82b68e352e5c32b9592424635cf99b2ec08d127ddac10498",
+        "alphaExtrema": [
+          0,
+          254
+        ],
+        "bodyBoundsAlphaOver200": [
+          53,
+          108,
+          1006,
+          1457
+        ],
+        "copiedByteIdentical": true,
+        "pixelEditingPerformed": false
+      }
+    },
+    {
+      "id": "life_siphon_mage_concept",
+      "name": "薇拉·绯契",
+      "englishName": "Veyra Crimsonpact",
+      "role": "生命汲取魔法师",
+      "epithet": "绯色契约",
+      "design": "成年女性法师，修长轮廓，酒红长袍、深靛内搭、银白额发和玫红晶核法杖；伸手维持虹吸的施法姿态。",
+      "palette": {
+        "primary": "#963657",
+        "secondary": "#29243C",
+        "energy": "#F06C9B"
+      },
+      "file": "veyra-crimsonpact-v1.png",
+      "generationSource": "C:/Users/user/.codex/generated_images/01a15ef7-7947-7cb0-82f2-df6682c99f16/exec-5ae3e5e2-2e71-4b6a-a82f-f44208ff44c1.png",
+      "prompt": "Use case: stylized-concept. Asset type: full-body lobby hero illustration for the existing Chinese mobile fantasy tower-defense game 王国守望. The supplied images are STYLE REFERENCES ONLY (existing sniper and ice mage), not characters to edit. Match their hand-drawn clean fantasy-comic style: strong crisp dark brown/black contours, clear angular cel-shaded planes, controlled painted highlights, saturated but coherent colors, appealing expressive face, readable at small mobile UI scale. A single complete character, head to both boot soles, front three-quarter view, stable standing pose with a natural weight shift. Portrait canvas with generous transparent padding all around, every weapon and cape edge fully inside frame. True transparent background. No landscape, ground, platform, panel, text, labels, numbers, watermark, extra character, photorealism, 3D render, blurry painterly haze, or baked combat particles. All hands and grips anatomically clear. This is new hero concept art, not an icon, combat-back sprite, or character sheet. Character: 薇拉·绯契 / Veyra Crimsonpact, adult human female life-siphon magician, poised, composed, morally ambiguous yet heroic. Slender elegant silhouette, around 6 head proportions, clearly adult proportions; pale warm skin, focused rose-colored eyes, long dark-plum hair with a silver temple lock, small antique silver circlet inset with a rose garnet. Main costume wine red #963657, supporting deep indigo-black #29243C; restrained rose-magenta #F06C9B gemstone details, warm ivory lining and small muted-silver trims. A practical high-collared burgundy robe with structured shoulders, asymmetric short shoulder mantle and flowing divided long skirt over fitted dark trousers, fully clothed, hands exposed and both refined dark boots visible. No oversized witch hat or hood, no bat wings, skulls, fangs or horror blood. One hand naturally grips a tall dark-silver siphon staff planted lightly alongside the body, its top a distinctive open crescent/curved branching reliquary surrounding one polished rose-red life crystal like a suspended seed, with clear silhouette and subdued gemstone luminosity only. The other hand is extended slightly toward the viewer in a controlled channeling gesture with relaxed articulate fingers; no rendered beam, target, orb cloud or spell swirl. Give the robe broad readable burgundy planes with just a few long ivory/silver seam motifs suggesting flowing life energy, not tiny filigree everywhere. A calm commanding gaze, not flirtatious; visually distinct from the blue hooded ice mage reference.",
+      "fileValidation": {
+        "file": "veyra-crimsonpact-v1.png",
+        "size": [
+          1024,
+          1536
+        ],
+        "mode": "RGBA",
+        "bytes": 2173181,
+        "sha256": "c15c146871fba45185fb3022f7f8ff288b3157690af060efc9f238a39a87aed8",
+        "alphaExtrema": [
+          0,
+          254
+        ],
+        "bodyBoundsAlphaOver200": [
+          53,
+          15,
+          999,
+          1519
+        ],
+        "copiedByteIdentical": true,
+        "pixelEditingPerformed": false
+      }
+    }
+  ],
+  "notes": [
+    "两张独立PNG设计稿，保留生成原字节；不是已接入的正式运行资源。",
+    "名字、造型、姿态为本次拟定，尚未获用户视觉认可。",
+    "未生成视频/待机/攻击帧或技能图标。",
+    "原PNG复制至工作区，依既有美术媒体忽略规则仅保留本地；制作记录做本地Git提交，未推送。"
+  ]
+}
