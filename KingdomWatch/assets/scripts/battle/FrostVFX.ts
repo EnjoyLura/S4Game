@@ -63,11 +63,13 @@ interface FrostAtlas {
   frameDurations: number[];
   groundAnchor: [number, number];
   groundRadius: number;
+  tailDuration?: number;
 }
 interface Domain {
-  x: number; y: number; radius: number; age: number; frameIndex: number;
+  x: number; y: number; radius: number; age: number; frameIndex: number; duration: number;
   sprite: Sprite; ui: UITransform;
 }
+interface GroundArea { x: number; y: number; radius: number; t: number; life: number; }
 const FROST_RESOURCE = 'fx/frost_domain_video_v10';
 const CLIP_DURATION = 1.5;
 
@@ -81,13 +83,8 @@ export class FrostVFX {
   private atlas: FrostAtlas | null = null;
   private source: SpriteFrame | null = null;
   private life = CLIP_DURATION;
-  private ground: Graphics;
-  private groundVisible = false;
 
   constructor(groundParent: Node) {
-    const ground = new Node('frostGround');
-    ground.layer = Layers.Enum.UI_2D; ground.setParent(groundParent);
-    this.ground = ground.addComponent(Graphics);
     this.root = new Node('frostDomainVideo');
     this.root.layer = Layers.Enum.UI_2D; this.root.setParent(groundParent);
     this.fallback = this.root.addComponent(Graphics);
@@ -98,7 +95,7 @@ export class FrostVFX {
       sprite.sizeMode = Sprite.SizeMode.CUSTOM; sprite.trim = false;
       // The atlas is straight RGBA: use the Sprite's standard alpha blend, never ADD.
       node.active = false;
-      this.free.push({ x: 0, y: 0, radius: 0, age: 0, frameIndex: -1, sprite, ui });
+      this.free.push({ x: 0, y: 0, radius: 0, age: 0, frameIndex: -1, duration: CLIP_DURATION, sprite, ui });
     }
     resources.load(FROST_RESOURCE + '.frames', JsonAsset, (err, data) => {
       if (err || !data || !this.root.isValid) return;
@@ -133,31 +130,23 @@ export class FrostVFX {
   domain(x: number, y: number, radius: number, _freezeDuration: number): void {
     const d = this.free.pop() || this.active.shift();
     if (!d) return;
-    Object.assign(d, { x, y, radius, age: 0, frameIndex: -1 });
+    Object.assign(d, { x, y, radius, age: 0, frameIndex: -1, duration: this.life });
     this.active.push(d); this.render();
   }
 
-  /** Low ground frost persists independently of the complete, unchanged v10 casting clip. */
-  groundAreas(areas: readonly { x: number; y: number; radius: number; t: number; life: number }[]): void {
-    if (!areas.length && !this.groundVisible) return;
-    this.groundVisible = areas.length > 0;
-    const g = this.ground; g.clear();
+  /** Extend the same cast at the mature cel, then continue its original forward dissolve. */
+  groundAreas(areas: readonly GroundArea[]): void {
     for (const area of areas) {
-      const fade = Math.min(1, area.t / .45, (area.life - area.t) / .15);
-      const r = area.radius;
-      g.fillColor = color(98, 185, 218, 26 * fade);
-      g.circle(area.x, area.y, r); g.fill();
-      g.fillColor = color(176, 231, 244, 22 * fade);
-      g.circle(area.x, area.y, r * .72); g.fill();
-      // Broken crystalline edges keep the battlefield legible without a heavy status ring.
-      for (let k = 0; k < 9; k++) {
-        const angle = k * Math.PI * 2 / 9 + area.x * .013;
-        const x = area.x + Math.cos(angle) * r * .82;
-        const y = area.y + Math.sin(angle) * r * .82;
-        drawIceCrystal(g, x, y, 5, 9, 95 * fade, Math.cos(angle) * 2);
-        g.strokeColor = color(212, 247, 252, 70 * fade); g.lineWidth = 1;
-        g.moveTo(x - 8, y - 1); g.lineTo(x, y + 2); g.lineTo(x + 7, y); g.stroke();
+      // Repeated casts can share a location. Match by age too, so an older patch cannot extend a new cast.
+      let closest: Domain | null = null, ageError = .15;
+      for (const d of this.active) {
+        const error = Math.abs(d.age - (area.life - area.t));
+        if (Math.abs(d.x - area.x) < .1 && Math.abs(d.y - area.y) < .1
+          && Math.abs(d.radius - area.radius) < .1 && error < ageError) { closest = d; ageError = error; }
       }
+      // The card adds a full three-second pause BEFORE the original shatter tail resumes.
+      // Its slowdown clock remains gameplay-owned; extending this visual never adds status time.
+      if (closest) closest.duration = this.life + area.life;
     }
   }
 
@@ -165,7 +154,7 @@ export class FrostVFX {
     if (!this.active.length) return;
     for (let i = this.active.length - 1; i >= 0; i--) {
       const d = this.active[i]; d.age += dt;
-      if (d.age >= this.life) {
+      if (d.age >= d.duration) {
         d.sprite.node.active = false; this.active.splice(i, 1); this.free.push(d);
       }
     }
@@ -176,19 +165,25 @@ export class FrostVFX {
     this.fallback.clear();
     for (const d of this.active) {
       if (this.atlas) {
+        const tail = this.atlas.tailDuration ?? .68;
+        const holdAt = Math.max(0, this.life - tail);
+        const extra = Math.max(0, d.duration - this.life);
+        // Hold the LAST mature frame, never reappear as an earlier full ice sheet over the dissolve.
+        const clipAge = d.age < holdAt ? d.age : d.age < holdAt + extra
+          ? Math.max(0, holdAt - .000001) : d.age - extra;
         let index = Math.max(0, d.frameIndex);
         // Variable cel timing also handles skipped frames at low FPS and battle speed-up.
-        while (index < this.frames.length - 1 && d.age >= this.frameEnds[index]) index++;
+        while (index < this.frames.length - 1 && clipAge >= this.frameEnds[index]) index++;
         if (index !== d.frameIndex) {
           d.sprite.spriteFrame = this.frames[index]; d.frameIndex = index;
         }
         const scale = d.radius / this.atlas.groundRadius;
         d.ui.setContentSize(this.atlas.cellSize[0] * scale, this.atlas.cellSize[1] * scale);
         d.sprite.node.setPosition(d.x, d.y, 0);
-        d.sprite.node.active = d.age < this.life;
+        d.sprite.node.active = d.age < d.duration;
       } else {
         // Only while downloading: a light, brief frost front; never draw the obsolete ice sheet.
-        const open = clamp(d.age / 0.4), fade = clamp((this.life - d.age) / 0.68);
+        const open = clamp(d.age / 0.4), fade = clamp((d.duration - d.age) / 0.68);
         this.fallback.strokeColor = color(152, 226, 249, 35 * Math.sin(open * Math.PI) * fade);
         this.fallback.lineWidth = 4;
         this.fallback.circle(d.x, d.y, Math.max(1, d.radius * open)); this.fallback.stroke();

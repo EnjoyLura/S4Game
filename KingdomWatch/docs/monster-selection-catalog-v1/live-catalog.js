@@ -3,6 +3,8 @@
   const $ = id => document.getElementById(id);
   const candidates = window.MONSTER_CATALOG;
   const data = window.LIVE_MONSTER_CATALOG;
+  const quadSheets = window.QUAD_MONSTER_CATALOG?.sheets || [];
+  const views = ['live','candidate','quad'];
   const KEY = 'kingdomwatch.monster-art-selection.v1.live-view';
   const esc = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   const state = {view:'live', chapter:'', search:''};
@@ -14,10 +16,12 @@
   let detailIds = [];
   let activeId = '';
   let activePhase = false;
+  let livePlayer = null;
+  let autoplayNext = false;
 
   try {
     const restored = JSON.parse(localStorage.getItem(KEY) || 'null');
-    if (restored?.view === 'candidate') state.view = 'candidate';
+    if (views.includes(restored?.view)) state.view = restored.view;
     if (chapterById.has(String(restored?.chapter))) state.chapter = String(restored.chapter);
   } catch (_) { /* Browsing remains available without local storage. */ }
 
@@ -30,22 +34,25 @@
     return chapter ? `第${number}章 · ${chapter.name}` : `第${number}章`;
   }
   function setView(view) {
-    state.view = view === 'candidate' ? 'candidate' : 'live';
+    state.view = views.includes(view) ? view : 'live';
     const live = state.view === 'live';
-    $('candidatePanel').hidden = live;
+    const quad = state.view === 'quad';
+    $('candidatePanel').hidden = state.view !== 'candidate';
     $('livePanel').hidden = !live;
-    $('candidateBackupActions').hidden = live;
+    $('quadPanel').hidden = !quad;
+    $('candidateBackupActions').hidden = state.view !== 'candidate';
     for (const button of $('catalogViews').querySelectorAll('[data-catalog-view]')) {
       const selected = button.dataset.catalogView === state.view;
       button.setAttribute('aria-selected', String(selected));
       button.tabIndex = selected ? 0 : -1;
     }
-    $('introTitle').textContent = live ? '查看游戏各章正在使用的怪物。' : '挑选你想放进游戏的怪物。';
+    $('introTitle').textContent = quad ? '之前的四宫格，都放在这里。' : live ? '查看游戏各章正在使用的怪物。' : '挑选你想放进游戏的怪物。';
     $('introDescription').textContent = live
       ? '按章节查看现用形象，点击查看大图、兵种定位与章节归属。'
+      : quad ? '按章节浏览组合，查看各格怪物、放大和下载原图。'
       : '全部形象在一页连续浏览。暂时不看的归档，不合格的删除；已归档和回收站都能恢复。';
-    $('sourceCount').textContent = live ? `${chapters.length} 个实际使用章节` : `${candidates?.sources?.length || 0} 张独立图集`;
-    $('monsterCount').textContent = live ? `${byId.size} 种现用怪物` : `${candidates?.monsters?.length || 0} 个候选形象`;
+    $('sourceCount').textContent = quad ? `${quadSheets.length} 张四宫格` : live ? `${chapters.length} 个实际使用章节` : `${candidates?.sources?.length || 0} 张独立图集`;
+    $('monsterCount').textContent = quad ? `${new Set(quadSheets.map(sheet => sheet.chapter)).size} 个章节的组合` : live ? `${byId.size} 种现用怪物` : `${candidates?.monsters?.length || 0} 个候选形象`;
     persistView();
   }
   function badges(m) {
@@ -69,7 +76,7 @@
   function cardHtml(m) {
     return `<article class="monster-card live-card" data-live-id="${esc(m.id)}">
       <button class="monster-art" data-live-view="${esc(m.id)}" aria-label="查看现用怪物 ${esc(m.name)}"><img src="${esc(m.image)}" alt="${esc(m.name)}" loading="lazy" decoding="async"><span class="live-in-use">游戏实际使用</span></button>
-      <div class="card-info"><h3>${esc(m.name)}</h3><code class="live-game-id">${esc(m.id)}</code><div class="live-badges">${badges(m)}</div><div class="live-card-bottom"><span class="muted">${m.animation ? '当前行走形象' : '当前立绘'}${m.phase ? ' · 含强化形态' : ''}</span><button class="pick-button" data-live-view="${esc(m.id)}">查看大图</button></div></div>
+      <div class="card-info"><h3>${esc(m.name)}</h3><code class="live-game-id">${esc(m.id)}</code><div class="live-badges">${badges(m)}</div><div class="live-card-bottom"><span class="muted">${m.animation ? '已接入行走动作' : '当前立绘'}${m.phase ? ' · 含强化形态' : ''}</span><button class="pick-button" data-live-view="${esc(m.id)}"${window.MonsterFramePlayer.hasClip(m.id) ? ' data-live-play="true"' : ''}>${window.MonsterFramePlayer.hasClip(m.id) ? '播放动作' : '查看大图'}</button></div></div>
     </article>`;
   }
   function render() {
@@ -94,8 +101,14 @@
     if (![...document.querySelectorAll('dialog')].some(dialog => dialog.open)) document.body.classList.remove('modal-open');
   }
   function paintArt() {
+    livePlayer?.destroy(); livePlayer = null;
     const m = byId.get(activeId);
     const art = activePhase && m.phase ? m.phase : m;
+    const animated = !activePhase && window.MonsterFramePlayer.hasClip(m.id);
+    $('liveDetailImage').hidden = animated;
+    $('liveFramePlayer').hidden = !animated;
+    if (animated) livePlayer = window.MonsterFramePlayer.mount($('liveFramePlayer'), [{id:m.id,name:m.name}], {autoplay:autoplayNext});
+    autoplayNext = false;
     $('liveDetailImage').src = art.image;
     $('liveDetailImage').alt = `${m.name}${activePhase ? ' · 强化形态' : ''}`;
     $('openLiveCrop').href = art.image;
@@ -117,15 +130,16 @@
     $('liveDetailTraits').innerHTML = m.traits.map(text => `<li>${esc(text)}</li>`).join('');
     $('liveDetailTraits').hidden = !m.traits.length;
     $('liveDetailAnimation').textContent = m.animation
-      ? `已使用 ${m.animation.frames} 帧行走序列，当前展示该序列的首帧。`
+      ? `已接入 ${m.animation.frames} 帧行走序列，可播放、暂停、慢放和逐帧检查。`
       : '当前展示游戏使用的立绘。';
     $('prevLiveDetail').disabled = index <= 0;
     $('nextLiveDetail').disabled = index >= detailIds.length - 1;
     paintArt();
   }
-  function showDetail(id) {
+  function showDetail(id, autoplay = false) {
     if (!byId.has(id)) return;
     activeId = id;
+    autoplayNext = autoplay;
     detailIds = [...new Set(visibleGroups.flatMap(group => group.monsters.map(m => m.id)))];
     if (!detailIds.includes(id)) detailIds = [...byId.keys()];
     paintDetail();
@@ -174,9 +188,11 @@
   $('catalogViews').addEventListener('keydown', event => {
     if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
     event.preventDefault();
-    const view = event.key === 'Home' ? 'live' : event.key === 'End' ? 'candidate' : state.view === 'live' ? 'candidate' : 'live';
+    const index = views.indexOf(state.view);
+    const view = event.key === 'Home' ? views[0] : event.key === 'End' ? views[views.length - 1]
+      : views[(index + (event.key === 'ArrowRight' ? 1 : -1) + views.length) % views.length];
     setView(view);
-    $(view === 'live' ? 'liveTab' : 'candidateTab').focus();
+    $(`${view}Tab`).focus();
   });
   $('liveChapters').addEventListener('click', event => {
     const button = event.target.closest('[data-live-chapter]');
@@ -195,7 +211,7 @@
   };
   $('liveSections').addEventListener('click', event => {
     const view = event.target.closest('[data-live-view]');
-    if (view) { showDetail(view.dataset.liveView); return; }
+    if (view) { showDetail(view.dataset.liveView, view.dataset.livePlay === 'true'); return; }
     const copy = event.target.closest('[data-copy-live-chapter]');
     if (copy) copyRoster(copy.dataset.copyLiveChapter);
   });
@@ -215,7 +231,10 @@
     const button = event.target.closest('[data-live-phase]');
     if (button) { activePhase = button.dataset.livePhase === 'phase'; paintArt(); }
   });
-  $('liveDetailDialog').addEventListener('close', closeModalBody);
+  $('liveDetailDialog').addEventListener('close', () => {
+    livePlayer?.destroy(); livePlayer = null;
+    closeModalBody();
+  });
   $('liveDetailDialog').addEventListener('click', event => {
     if (event.target !== $('liveDetailDialog')) return;
     const rect = event.target.getBoundingClientRect();
@@ -228,6 +247,7 @@
   });
   $('candidateTabCount').textContent = candidates?.monsters?.length || 0;
   $('liveTabCount').textContent = byId.size;
+  $('quadTabCount').textContent = quadSheets.length;
   if (!data || !Array.isArray(data.monsters) || !Array.isArray(data.chapters)) {
     $('liveSummary').textContent = '现用怪物数据未加载，请保持 HTML 与旁边的文件一起打开。';
     $('copyLiveRoster').disabled = true;

@@ -10,7 +10,7 @@ export interface MobClip {
   attack: SpriteFrame[];
   /** 步态环真实时长（s）：源视频一个完整周期；运行时按实时速率播放避免慢动作/快进的踉跄感 */
   loopDur: number;
-  /** Chapter-one gait preview adjustment; independent of travel speed and attack cadence. */
+  /** Clip playback multiplier; independent of travel speed and attack cadence. */
   playbackRate: number;
   /** 源步态对应的移速；现有普通怪保持原45，新王按17.5播放原速。 */
   referenceSpeed: number;
@@ -29,9 +29,11 @@ interface FrameManifest {
   topRatios?: Record<string, number>;
 }
 
-type AtlasId = 'battle_mob_anim_v1' | 'chapter1_mob_walk_v81' | 'chapter1_mob_walk_v84' | 'forest_mob_walk_v85' | 'forest_mob_walk_v87';
+type AtlasId = 'battle_mob_anim_v1' | 'chapter1_mob_walk_v81' | 'chapter1_mob_walk_v84' | 'chapter1_mob_walk_v94' | 'chapter1_mob_walk_v95' | 'chapter1_cart_walk_v95' | 'forest_mob_walk_v85' | 'forest_mob_walk_v87';
 const videoWalkMobs = new Set(['goblin_worker', 'goblin_shaman', 'goblin_brute', 'wolf_rider']);
+const seedanceVideoWalkMobs = new Set(['goblin_worker', 'goblin_shaman', 'goblin_brute']);
 const nextVideoWalkMobs = new Set(['orc_axeman', 'orc_siege_cart', 'goblin_slinger', 'goblin_king']);
+const seedanceNextVideoWalkMobs = new Set(['orc_axeman', 'goblin_slinger', 'goblin_king']);
 const forestVideoWalkMobs = new Set(['forest_wolf', 'forest_spider', 'forest_vine']);
 const forestFlightAndBossMobs = new Set(['forest_eagle', 'forest_bat', 'forest_wasp', 'thorn_ancient']);
 /** Expansion monsters with video clips follow the same walk/freeze/ground path as chapter one. */
@@ -46,7 +48,10 @@ const priorities = new Map<AtlasId, ArtPriority>();
 export function getMobAnims(cb: (d: Loaded) => void, mobId = '', priority: ArtPriority = 'visible'): void {
   const id: AtlasId = forestFlightAndBossMobs.has(mobId) ? 'forest_mob_walk_v87'
     : forestVideoWalkMobs.has(mobId) ? 'forest_mob_walk_v85'
+    : mobId === 'orc_siege_cart' ? 'chapter1_cart_walk_v95'
+    : seedanceNextVideoWalkMobs.has(mobId) ? 'chapter1_mob_walk_v95'
     : nextVideoWalkMobs.has(mobId) ? 'chapter1_mob_walk_v84'
+    : seedanceVideoWalkMobs.has(mobId) ? 'chapter1_mob_walk_v94'
     : videoWalkMobs.has(mobId) ? 'chapter1_mob_walk_v81' : 'battle_mob_anim_v1';
   const cached = defs.get(id);
   if (cached) { cb(cached); return; }
@@ -95,7 +100,7 @@ function parse(manifest: FrameManifest, tex: SpriteFrame['texture']): Map<string
     };
     const contact = manifest.ground?.[mob];
     out.set(mob, { walk: mk(s.w), attack: mk(s.a), loopDur: manifest.cycles?.[mob] || 1,
-      playbackRate: videoWalkMobs.has(mob) || nextVideoWalkMobs.has(mob) ? 0.5 : 1,
+      playbackRate: 1,
       referenceSpeed: manifest.walkSpeeds?.[mob] || 45,
       groundOffset: contact?.offset ?? 3 / 160, feet: contact?.feet || [],
       topRatio: manifest.topRatios?.[mob] });

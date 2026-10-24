@@ -1,0 +1,50 @@
+{
+  "archer": {
+    "file": "C:\\Users\\user\\Documents\\Qoder\\2026-10-24\\50d365fa\\vibe_videos\\elf-archer-idle_1792850829.mp4",
+    "sha256": "ab7868d09e01be1c51f2788e25be166340079b74c86a0217deb5ae0a6c0fb20b",
+    "bytes": 5992511,
+    "fps": 30.0,
+    "frames": 60,
+    "size": [
+      1174,
+      1762
+    ],
+    "duration": 2.02
+  },
+  "volt": {
+    "file": "C:\\Users\\user\\Documents\\Qoder\\2026-10-24\\ed0ebfd9\\vibe_videos\\wizard_idle_1080p_2s_1792850959.mp4",
+    "sha256": "d69799f489e981e591c00a069943f93e6e4b76c708a3988f2e5da84af19f8fef",
+    "bytes": 6400068,
+    "fps": 30.0,
+    "frames": 60,
+    "size": [
+      1174,
+      1762
+    ],
+    "duration": 2.02
+  },
+  "mora": {
+    "file": "C:\\Users\\user\\Documents\\Qoder\\2026-10-24\\8b019690\\vibe_videos\\ice_mage_idle_1080p_2s_1792850895.mp4",
+    "sha256": "d530db03d7af5c7d11f2d56238b4077467f6577330587698e291df0704801e32",
+    "bytes": 6298148,
+    "fps": 30.0,
+    "frames": 60,
+    "size": [
+      1174,
+      1762
+    ],
+    "duration": 2.02
+  },
+  "sniper": {
+    "file": "C:\\Users\\user\\Documents\\Qoder\\2026-10-24\\fd96a17e\\vibe_videos\\hooded_arbalist_idle_safe_1080p_2s_1792851224.mp4",
+    "sha256": "c778a6c3c91c34e14d373f1cd2d85b9e5b6eea5e5bae27d934db6f800b480f52",
+    "bytes": 5597805,
+    "fps": 30.0,
+    "frames": 60,
+    "size": [
+      1080,
+      1920
+    ],
+    "duration": 2.02
+  }
+}

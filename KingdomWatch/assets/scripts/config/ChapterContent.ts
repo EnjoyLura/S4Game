@@ -2599,9 +2599,13 @@ export function chapterNumeral(chapter: number): string {
 export function enemyArtRef(id: string, portrait = false): { atlas: string; frame: string } {
   const mob = EXPANSION_MOBS[id];
   if (mob) return { atlas: mob.artAtlas!, frame: id };
-  if (['orc_axeman','orc_siege_cart','goblin_slinger','goblin_king'].includes(id))
-    return { atlas: 'chapter1_mob_walk_v84', frame: portrait ? id + '_w0' : id };
-  if (['goblin_worker','goblin_shaman','goblin_brute','wolf_rider'].includes(id))
+  if (['orc_axeman','goblin_slinger','goblin_king'].includes(id))
+    return { atlas: 'chapter1_mob_walk_v95', frame: portrait ? id + '_w0' : id };
+  if (['orc_siege_cart'].includes(id))
+    return { atlas: 'chapter1_cart_walk_v95', frame: portrait ? id + '_w0' : id };
+  if (['goblin_worker','goblin_shaman','goblin_brute'].includes(id))
+    return { atlas: 'chapter1_mob_walk_v94', frame: portrait ? id + '_w0' : id };
+  if (['wolf_rider'].includes(id))
     return { atlas: 'chapter1_mob_walk_v81', frame: portrait ? id + '_w0' : id };
   if (portrait && ['goblin_worker','goblin_slinger','goblin_shaman','wolf_rider','goblin_brute'].includes(id))
     return { atlas: 'battle_mob_anim_v1', frame: id + '_w0' };

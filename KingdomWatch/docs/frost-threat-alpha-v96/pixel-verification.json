@@ -1,0 +1,100 @@
+{
+  "underarmRepairs": [
+    {
+      "atlas": "chapter1_mob_walk_v94",
+      "frames": 28,
+      "alphaChanged": 5600,
+      "rgbIdentical": true,
+      "outsideRequestedRegionsAnd2pxFeatherRGBAIdentical": true,
+      "sha256": "628b94cdb4746d73cf804d7fde077cc77722fd32f9d81987c38cc7373ebaa484"
+    },
+    {
+      "atlas": "chapter1_mob_walk_v81",
+      "frames": 12,
+      "alphaChanged": 2643,
+      "rgbIdentical": true,
+      "outsideRequestedRegionsAnd2pxFeatherRGBAIdentical": true,
+      "sha256": "c7b7b5af930ccd2e110cd1df70755253be59a27bb6dc6ace8d7806aa13b4e481"
+    },
+    {
+      "atlas": "chapter1_mob_walk_v95",
+      "frames": 49,
+      "alphaChanged": 42820,
+      "rgbIdentical": true,
+      "outsideRequestedRegionsAnd2pxFeatherRGBAIdentical": true,
+      "sha256": "d99c7d27edd7192d8366b2aa0c35875b4614d4a1f346ae93f6a172a5a9fd20a6"
+    }
+  ],
+  "heroes": {
+    "archer": {
+      "frames": 49,
+      "seconds": 4.041666666666666,
+      "sourceSHA256": "6eac01833500c649c7637d2470def511ce06418e7397488d76131ae4b9da05b1",
+      "atlasSHA256": "fb070700ad4b883069005b16e65c6729ee238603f2d75a13df6662c1ecf14ee9",
+      "canvas": [
+        352,
+        576
+      ],
+      "atlas": [
+        3168,
+        3456
+      ],
+      "everyAtlasCelMatchesPNG": true,
+      "sourceDirectionAndTimingPreserved": true,
+      "fixedCropAndScale": true
+    },
+    "pyro": {
+      "frames": 49,
+      "seconds": 4.041666666666666,
+      "sourceSHA256": "6329ef74ba9cb247069df60858642489553369658a7f688043b22aec68dbb363",
+      "atlasSHA256": "217c6c02ad41f593c27b0e49d1766eadd09ac91dde2aea2f005e02675dc3377d",
+      "canvas": [
+        352,
+        576
+      ],
+      "atlas": [
+        3168,
+        3456
+      ],
+      "everyAtlasCelMatchesPNG": true,
+      "sourceDirectionAndTimingPreserved": true,
+      "fixedCropAndScale": true
+    },
+    "sniper": {
+      "frames": 49,
+      "seconds": 4.041666666666666,
+      "sourceSHA256": "9e802946797a885ee50db5334fd2a06057d59ca7a50352b03a1a590580a1d2a8",
+      "atlasSHA256": "20f812a92819f5dcc64b8bad5866cd79eef0ddd1de4a1f4fb9aa23340e2a7256",
+      "canvas": [
+        352,
+        576
+      ],
+      "atlas": [
+        3168,
+        3456
+      ],
+      "everyAtlasCelMatchesPNG": true,
+      "sourceDirectionAndTimingPreserved": true,
+      "fixedCropAndScale": true
+    },
+    "volt": {
+      "frames": 49,
+      "seconds": 4.041666666666666,
+      "sourceSHA256": "c7f87c59aa21c98c0a3f38f9c1e22976d3f2ab0cebdb2537b126ca5b141b0d0b",
+      "atlasSHA256": "885ce9c53436a3318b974c3a1bbd6230ab46bee7b77dca03fcce136c2ba6023d",
+      "canvas": [
+        352,
+        576
+      ],
+      "atlas": [
+        3168,
+        3456
+      ],
+      "everyAtlasCelMatchesPNG": true,
+      "sourceDirectionAndTimingPreserved": true,
+      "fixedCropAndScale": true
+    }
+  },
+  "gameBrowserOrAudioStarted": false,
+  "visualApproval": "pending user inspection; numerical seam scores do not establish a seamless loop"
+}

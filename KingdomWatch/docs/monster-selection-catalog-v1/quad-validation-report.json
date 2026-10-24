@@ -1,0 +1,39 @@
+{
+  "fourGrids": 4,
+  "quadAnimationCounts": [
+    4,
+    4,
+    3,
+    4
+  ],
+  "unchangedSourceCopies": true,
+  "animatedMonsters": 15,
+  "animationAtlases": 6,
+  "verifiedAnimationFrames": 422,
+  "animationAtlasBytes": 54276939,
+  "allFrameRectsMatchGame": true,
+  "firstFramesMatchLivePortraits": true,
+  "dataFilesMatchJSON": true,
+  "uniqueHTMLIds": 136,
+  "literalDOMReferences": 132,
+  "localStyleAndScriptFiles": 12,
+  "tabs": 3,
+  "candidateStorageKeyPreserved": true,
+  "gameInputsMatchSnapshot": true,
+  "browserRun": false,
+  "gameRun": false,
+  "javaScriptSyntaxChecked": [
+    "catalog.js",
+    "catalog-data.js",
+    "live-catalog.js",
+    "live-catalog-data.js",
+    "quad-catalog.js",
+    "quad-catalog-data.js",
+    "frame-player.js",
+    "animation-catalog-data.js"
+  ],
+  "pythonSyntaxChecked": true,
+  "resyncedFor": "monster-frost-v95",
+  "chapterOneDefaultRateRestored": true,
+  "atlasSHARecheckedAfterV96AlphaRepairs": true
+}

@@ -1,0 +1,32 @@
+{
+  "hero": "mora",
+  "frames": 49,
+  "seconds": 4.041666666666666,
+  "canvas": [
+    352,
+    576
+  ],
+  "atlas": [
+    3168,
+    3456
+  ],
+  "sourceSHA256": "e162d6c81a3936ca43e68fe04180f69a12accfb0598551375e1a33d5cb0f739c",
+  "atlasSHA256": "dac84fc24defa8a140df53f75945e36dd073e3b6bef4362fa260f3daae65902b",
+  "fixedCrop": [
+    25,
+    97,
+    698,
+    1184
+  ],
+  "fixedScale": 0.487369985141159,
+  "fixedOffset": [
+    12,
+    34
+  ],
+  "sourceDirectionAndTimingPreserved": true,
+  "atlasCelsMatchPNGs": true,
+  "minimumOpaqueMargin": 12,
+  "noReverseHoldBlendOrWarp": true,
+  "gameBrowserAudioWasmStarted": false,
+  "visualApproval": "user pending"
+}

@@ -1,0 +1,27 @@
+{
+  "frames": 52,
+  "originalFrames": 50,
+  "motionCompensatedFrames": 2,
+  "seconds": 1.7333333333333334,
+  "original49CelsUnchanged": true,
+  "atlasCelsMatch": true,
+  "minimumAlphaMargin": 14,
+  "oldAssets": 1529,
+  "oldAssetsUnchanged": 1528,
+  "changed": [
+    "assets/scripts/ui/HeroLobbyIdle.ts"
+  ],
+  "added": [
+    "assets/resources/ux/hero_lobby_idle_v103.meta",
+    "assets/resources/ux/hero_lobby_idle_v103/archer.frames.json",
+    "assets/resources/ux/hero_lobby_idle_v103/archer.frames.json.meta",
+    "assets/resources/ux/hero_lobby_idle_v103/archer.png",
+    "assets/resources/ux/hero_lobby_idle_v103/archer.png.meta"
+  ],
+  "noRemovedAssets": true,
+  "headAndIndexUnchanged": true,
+  "previewSynced": true,
+  "previewSyntaxPassed": true,
+  "gameStarted": false,
+  "deployed": false
+}

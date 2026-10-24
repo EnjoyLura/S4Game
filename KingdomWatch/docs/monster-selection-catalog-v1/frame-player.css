@@ -1,0 +1,22 @@
+.frame-player{width:100%;min-width:0}
+.motion-stage{display:grid;grid-template-columns:1fr;gap:8px;align-items:start}
+.motion-stage.is-quad{grid-template-columns:repeat(2,minmax(0,1fr))}
+.motion-cell{min-width:0;background:#eee9dc;border:1px solid #dcd6c6;border-radius:8px;overflow:hidden}
+.motion-cell canvas{display:block;width:100%;height:auto;aspect-ratio:1;max-height:53vh;object-fit:contain;background:#eee9dc}
+.motion-stage.is-quad canvas{max-height:none}
+.motion-cell-caption{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center;padding:7px 9px;font-size:11px;min-height:37px;background:#faf8ee}
+.motion-cell-caption>strong{font-weight:600}.motion-cell-caption>span{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+.motion-controls{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:7px;margin:12px 0 9px}
+.motion-controls label{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.motion-controls select{font-size:11px;padding:6px}
+.motion-progress{display:flex;align-items:center;gap:10px;margin:9px 0}
+.motion-progress input{flex:1;min-width:0;accent-color:var(--green)}
+.motion-progress output{font:11px Consolas,monospace;color:var(--muted);min-width:63px;text-align:right}
+.motion-status{font-size:11px;line-height:1.7;text-align:center;color:var(--muted)}
+.motion-frame-step{display:flex;gap:7px;justify-content:center;margin-top:8px}
+.quad-frame-player{width:100%}
+.quad-frame-player .motion-controls{justify-content:flex-start}
+.quad-view-modes{display:flex;gap:8px;padding:12px 20px;border-bottom:1px solid var(--line);background:#f6f5eb}
+.quad-view-modes button[aria-pressed=true]{background:var(--green);color:#fff;border-color:var(--green)}
+.quad-animation-label{display:inline-block;color:var(--green);font-size:11px;margin-bottom:5px}
+@media(max-width:620px){.motion-controls{gap:6px}.motion-controls .button{font-size:10px;padding:7px 9px}.motion-cell-caption{padding:6px;font-size:10px;gap:2px;min-height:42px}.motion-cell-caption>span{font-size:9px}.quad-view-modes{padding:10px 12px}.motion-stage.is-quad{gap:6px}}

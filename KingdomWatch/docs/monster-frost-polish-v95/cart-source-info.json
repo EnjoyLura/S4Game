@@ -1,0 +1,14 @@
+{
+  "file": "C:\\Users\\user\\Downloads\\游戏怪物行走视频生成 (2).mp4",
+  "bytes": 731346,
+  "sha256": "9eec33b7657bd3c7ec0c6e9629e99169b252a99dabe6e725242fb98f211827f9",
+  "fps": 24.0,
+  "frames": 97,
+  "duration": 4.06,
+  "size": [
+    720,
+    720
+  ],
+  "skipBeforeSeconds": 0.5,
+  "firstAllowedFrame": 12
+}

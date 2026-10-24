@@ -11,7 +11,7 @@ import { ArtPriority, uxFrame, warmUXArt } from './Ux';
 import { warmPickArt } from './PickArt';
 
 export const ENTRY_GATE_ART = 'battle_entry_v3/outpost_gate';
-export const THREAT_ART = ['pick_comic_v1/title_plate', 'hero_comic_v2/comic_story_v2'] as const;
+export const THREAT_ART = ['boss_warning_v1/banner', 'boss_warning_v1/crest'] as const;
 const HERO_CLIPS: Record<string, [string, string]> = {
   sniper: ['sniper_idle_natural_v2', 'sniper_attack_clean_v1'],
   pyro: ['pyro_idle_loop_v2', 'pyro_attack_user_v2'],
@@ -49,7 +49,7 @@ export function warmBattlefield(levelId: string, heroIds: readonly string[], mob
   const enemies: string[] = [...mobIds];
   if (!enemies.length) for (const wave of getChallengeDef(levelId, 0).waves) for (const group of wave.groups) enemies.push(group.mob);
   for (const atlas of new Set(enemies.map(id => enemyArtRef(id).atlas))) firstPaint.push(warmBattleAtlas(atlas, priority));
-  for (const atlas of ['chapter1_mob_walk_v81', 'chapter1_mob_walk_v84', 'forest_mob_walk_v85', 'forest_mob_walk_v87']) {
+  for (const atlas of ['chapter1_mob_walk_v81', 'chapter1_mob_walk_v84', 'chapter1_mob_walk_v94', 'chapter1_mob_walk_v95', 'chapter1_cart_walk_v95', 'forest_mob_walk_v85', 'forest_mob_walk_v87']) {
     const videoWalk = enemies.find(id => enemyArtRef(id).atlas === atlas);
     if (videoWalk) firstPaint.push(new Promise<void>(resolve => getMobAnims(() => resolve(), videoWalk, priority)));
   }

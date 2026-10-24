@@ -8,6 +8,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import shutil
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -40,7 +41,73 @@ def named_fields(body: str) -> dict:
             result[key] = match[1]
     for key in ("elite", "boss"):
         result[key] = bool(re.search(r"\b" + key + r"\s*:\s*true\b", body))
+    speed = re.search(r"\bspeed\s*:\s*([\d.]+)", body)
+    if speed:
+        result["speed"] = float(speed[1])
     return result
+
+
+def animation_payload(rows, definitions, manifests, inputs, runtime_text):
+    """Copy the actual atlases and retain their complete ordered frame rectangles."""
+    rate_rule = re.search(r"playbackRate:\s*(.*?)\s*,\s*\n\s*referenceSpeed:", runtime_text)
+    if not rate_rule:
+        raise ValueError("Cannot resolve animation playback rate")
+    slowed = set()
+    if re.fullmatch(r"\d+(?:\.\d+)?", rate_rule[1]):
+        slow_rate = default_rate = float(rate_rule[1])
+    else:
+        rule = re.fullmatch(r"([\w\s.|()]+)\?\s*([\d.]+)\s*:\s*([\d.]+)", rate_rule[1])
+        if not rule:
+            raise ValueError("Unsupported animation playback rule")
+        names = re.findall(r"(\w+)\.has\(mob\)", rule[1])
+        if not names or re.sub(r"\w+\.has\(mob\)|\|\||\s", "", rule[1]):
+            raise ValueError("Unsupported animation playback sets")
+        slow_rate, default_rate = float(rule[2]), float(rule[3])
+        for name in names:
+            declaration = re.search(r"const " + re.escape(name) + r"\s*=\s*new Set\(\[([^\]]*)\]\)", runtime_text)
+            if not declaration:
+                raise ValueError("Missing animation set: " + name)
+            slowed.update(re.findall(r"'([^']+)'", declaration[1]))
+    output = HERE / "live/animations"
+    output.mkdir(parents=True, exist_ok=True)
+    atlas_rows, clips = {}, {}
+    for row in rows:
+        if not row["animation"]:
+            continue
+        atlas, mob_id = row["atlas"], row["id"]
+        manifest = manifests[atlas]
+        if atlas not in atlas_rows:
+            source = ART / (atlas + ".png")
+            target = output / source.name
+            if not target.is_file() or digest(target) != inputs[source]:
+                shutil.copyfile(source, target)
+            if digest(target) != inputs[source]:
+                raise ValueError("Animation atlas copy differs: " + atlas)
+            with Image.open(target) as image:
+                width, height = image.size
+            atlas_rows[atlas] = dict(image=target.relative_to(HERE).as_posix(),
+                                    width=width, height=height, sha256=inputs[source], bytes=target.stat().st_size)
+        keys = sorted((key for key in manifest["frames"] if re.fullmatch(re.escape(mob_id) + r"_w\d+", key)),
+                      key=lambda key: int(key.rsplit("_w", 1)[1]))
+        if keys != [f"{mob_id}_w{i}" for i in range(len(keys))]:
+            raise ValueError("Non-contiguous walk sequence: " + mob_id)
+        rectangles = [manifest["frames"][key] for key in keys]
+        width, height = rectangles[0][2:]
+        for x, y, w, h in rectangles:
+            if (w, h) != (width, height) or x < 0 or y < 0 or x + w > atlas_rows[atlas]["width"] or y + h > atlas_rows[atlas]["height"]:
+                raise ValueError("Invalid animation rectangle: " + mob_id)
+        cycle = manifest.get("cycles", {}).get(mob_id) or 1
+        rate = slow_rate if mob_id in slowed else default_rate
+        reference_speed = manifest.get("walkSpeeds", {}).get(mob_id) or 45
+        base_speed = definitions[mob_id].get("speed", reference_speed)
+        tempo = min(1.25, max(0.75, base_speed / reference_speed))
+        if cycle <= 0 or rate <= 0:
+            raise ValueError("Invalid animation timing: " + mob_id)
+        clips[mob_id] = dict(atlas=atlas, frames=rectangles, width=width, height=height,
+                            cycleSeconds=cycle, playbackRate=rate, baseTempo=tempo,
+                            effectiveCycleSeconds=cycle / rate / tempo)
+    return dict(version=1, atlases=atlas_rows, clips=clips,
+                counts=dict(atlases=len(atlas_rows), clips=len(clips), frames=sum(len(clip["frames"]) for clip in clips.values())))
 
 
 def base_monsters(text: str) -> dict:
@@ -194,6 +261,7 @@ def main():
             phase=phase, **still,
         ))
 
+    animations = animation_payload(rows, definitions, manifests, inputs, texts["MobAnim.ts"])
     # Another art task may still be editing the same project. Publish one consistent snapshot.
     for path, before in inputs.items():
         if digest(path) != before:
@@ -208,6 +276,8 @@ def main():
     for name, body in (
         ("live-catalog.json", json.dumps(payload, ensure_ascii=False, indent=2) + "\n"),
         ("live-catalog-data.js", "window.LIVE_MONSTER_CATALOG=" + serialized + ";\n"),
+        ("animation-catalog.json", json.dumps(animations, ensure_ascii=False, indent=2) + "\n"),
+        ("animation-catalog-data.js", "window.MONSTER_ANIMATION_CATALOG=" + json.dumps(animations, ensure_ascii=False, separators=(",", ":")) + ";\n"),
     ):
         destination = HERE / name
         staging = destination.with_suffix(destination.suffix + ".tmp")

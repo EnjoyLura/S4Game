@@ -1,0 +1,27 @@
+{
+  "sourceFrames": [
+    6,
+    55
+  ],
+  "originalFrames": 50,
+  "motionCompensatedFrames": 2,
+  "frameCount": 52,
+  "seconds": 1.7333333333333334,
+  "oldDirectSeamMean": 0.006142147816717625,
+  "newBoundarySteps": [
+    0.0016529327258467674,
+    0.002028111135587096,
+    0.0020076287910342216,
+    0.0020400003995746374,
+    0.002394487615674734
+  ],
+  "atlasSize": [
+    3520,
+    3456
+  ],
+  "original49CelsByteIdentical": true,
+  "flowDisplacement99Percentile": 5.169567584991455,
+  "opencv": "5.0.0",
+  "gameStarted": false,
+  "visualApproval": "pending user inspection"
+}

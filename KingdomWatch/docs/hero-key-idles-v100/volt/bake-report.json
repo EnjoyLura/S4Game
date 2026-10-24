@@ -1,0 +1,99 @@
+{
+  "chosen": {
+    "start": 12,
+    "endExclusive": 54,
+    "frames": 42,
+    "seconds": 1.4,
+    "poseMean": 0.01325176004320383,
+    "seamMean": 0.01378138829022646,
+    "contextMean": 0.013758167624473572,
+    "velocityMean": 0.006516638211905956,
+    "upperFXMean": 0.022339168936014175,
+    "medianAdjacentMean": 0.005627090111374855,
+    "score": 0.0410794585943222
+  },
+  "atlas": [
+    3168,
+    2880
+  ],
+  "bytes": 9391534,
+  "source": {
+    "file": "C:\\Users\\user\\Documents\\Qoder\\2026-10-24\\ed0ebfd9\\vibe_videos\\wizard_idle_1080p_2s_1792850959.mp4",
+    "sha256": "d69799f489e981e591c00a069943f93e6e4b76c708a3988f2e5da84af19f8fef",
+    "bytes": 6400068,
+    "fps": 30.0,
+    "frames": 60,
+    "size": [
+      1174,
+      1762
+    ],
+    "duration": 2.02,
+    "indices": [
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53
+    ],
+    "analysisSize": [
+      360,
+      540
+    ],
+    "fixedCrop": [
+      -1,
+      8,
+      361,
+      530
+    ],
+    "fixedScale": 0.9060773480662984,
+    "fixedOffset": [
+      12,
+      91
+    ]
+  },
+  "fixedCanvas": [
+    352,
+    576
+  ],
+  "fixedTransform": true,
+  "aspectRatioPreserved": true,
+  "sourceDirectionAndTimingPreserved": true,
+  "gameStarted": false
+}

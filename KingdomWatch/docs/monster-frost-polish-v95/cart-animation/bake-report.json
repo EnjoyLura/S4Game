@@ -1,0 +1,99 @@
+{
+  "source": {
+    "file": "C:\\Users\\user\\Downloads\\游戏怪物行走视频生成 (2).mp4",
+    "bytes": 731346,
+    "sha256": "9eec33b7657bd3c7ec0c6e9629e99169b252a99dabe6e725242fb98f211827f9",
+    "fps": 24.0,
+    "frames": 97,
+    "duration": 4.06,
+    "size": [
+      720,
+      720
+    ],
+    "skipBeforeSeconds": 0.5,
+    "firstAllowedFrame": 12
+  },
+  "loops": {
+    "orc_siege_cart": {
+      "label": "兽族攻城车",
+      "sourceFrames": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "firstSeconds": 1.0833333333333333,
+      "lastSeconds": 2.0416666666666665,
+      "referenceNextFrame": 50,
+      "sourceCycleSeconds": 1.0,
+      "gameDefaultCycleSeconds": 1.0,
+      "fixedSourceUnion": [
+        20,
+        36,
+        244,
+        241
+      ],
+      "fixedTargetSize": [
+        295,
+        270
+      ],
+      "fixedOffset": [
+        12,
+        38
+      ],
+      "sourceUnionPixels": [
+        224,
+        205
+      ],
+      "oldVisibleUnionHeight": 270,
+      "minTransparentMargin": 12,
+      "metrics": {
+        "start": 26,
+        "end": 50,
+        "length": 24,
+        "seconds": 1.0,
+        "pose": 0.007570673245936632,
+        "feetPose": 0.009113958105444908,
+        "context": 0.007439818698912859,
+        "velocity": 0.003896655049175024,
+        "seam": 0.008090927265584469,
+        "seamVsMedian": 1.2130556877979688,
+        "clippedFrames": 0,
+        "score": 0.021281475201249123
+      }
+    }
+  },
+  "frames": 24,
+  "atlas": [
+    2592,
+    972
+  ],
+  "canvas": [
+    320,
+    320
+  ],
+  "runtimePlaybackRate": 1,
+  "method": "full consecutive source frames; one fixed crop, scale and placement; no reversed, synthesized, interpolated or crossfaded frames",
+  "atlasSha256": "6e82b4414f766da6a6e046962b69c4b3937d6ec12985a98ba28a363991a3b808",
+  "pngBytes": 3322890
+}

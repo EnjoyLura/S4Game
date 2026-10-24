@@ -1,0 +1,197 @@
+[
+  {
+    "id": "archer",
+    "label": "弓箭手",
+    "file": "archer-弓箭手.png",
+    "generatedSource": "C:\\Users\\user\\.codex\\generated_images\\01a168ed-30bd-77b0-be5b-c302e0e07d1b\\exec-d02cd137-785c-410c-8e22-6a8bab070c26.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "bytes": 1710247,
+    "sha256": "cd3d45434ce205247183d20f56ea9749a8a1a84040c8831ea9815ae4e8f981cd",
+    "borderTopColors": [
+      [
+        [
+          252,
+          4,
+          251
+        ],
+        2934
+      ],
+      [
+        [
+          251,
+          4,
+          250
+        ],
+        2370
+      ],
+      [
+        [
+          251,
+          4,
+          251
+        ],
+        2242
+      ]
+    ],
+    "borderExactMagentaFraction": 0.0
+  },
+  {
+    "id": "pyro",
+    "label": "火法师",
+    "file": "pyro-火法师.png",
+    "generatedSource": "C:\\Users\\user\\.codex\\generated_images\\01a168ed-30bd-77b0-be5b-c302e0e07d1b\\exec-a8e498ee-75f1-4203-a1fa-ae5fe6cf1a51.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "bytes": 1621150,
+    "sha256": "0fca0b86dd711dcb4bc32e5ab81a056e81adf9d2ce43257b07c9b314e5f45378",
+    "borderTopColors": [
+      [
+        [
+          252,
+          3,
+          250
+        ],
+        2937
+      ],
+      [
+        [
+          251,
+          3,
+          250
+        ],
+        2512
+      ],
+      [
+        [
+          252,
+          2,
+          250
+        ],
+        2421
+      ]
+    ],
+    "borderExactMagentaFraction": 0.0
+  },
+  {
+    "id": "sniper",
+    "label": "重弩手",
+    "file": "sniper-重弩手.png",
+    "generatedSource": "C:\\Users\\user\\.codex\\generated_images\\01a168ed-30bd-77b0-be5b-c302e0e07d1b\\exec-05cca165-3f05-4021-9cfc-ac22be66639b.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "bytes": 1671205,
+    "sha256": "5a604d93a0828b469aeb79fa7022ac84fe38acc319024bf59bb316d602d26a05",
+    "borderTopColors": [
+      [
+        [
+          252,
+          2,
+          251
+        ],
+        3708
+      ],
+      [
+        [
+          251,
+          2,
+          250
+        ],
+        2711
+      ],
+      [
+        [
+          252,
+          2,
+          250
+        ],
+        2565
+      ]
+    ],
+    "borderExactMagentaFraction": 0.0
+  },
+  {
+    "id": "volt",
+    "label": "雷法师",
+    "file": "volt-雷法师.png",
+    "generatedSource": "C:\\Users\\user\\.codex\\generated_images\\01a168ed-30bd-77b0-be5b-c302e0e07d1b\\exec-2ce58233-0809-45d3-a153-019dd8bb98f5.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "bytes": 1793386,
+    "sha256": "650e2c4652c1b27fb0937f86c88fc30815fced8c121cf678b8169213310fd233",
+    "borderTopColors": [
+      [
+        [
+          247,
+          3,
+          249
+        ],
+        1688
+      ],
+      [
+        [
+          248,
+          4,
+          249
+        ],
+        1624
+      ],
+      [
+        [
+          248,
+          3,
+          249
+        ],
+        1517
+      ]
+    ],
+    "borderExactMagentaFraction": 0.0
+  },
+  {
+    "id": "mora",
+    "label": "冰法师",
+    "file": "mora-冰法师.png",
+    "generatedSource": "C:\\Users\\user\\.codex\\generated_images\\01a168ed-30bd-77b0-be5b-c302e0e07d1b\\exec-f5e575ac-1c4b-4d1e-b931-8ea1a55cf161.png",
+    "size": [
+      1024,
+      1536
+    ],
+    "bytes": 1664984,
+    "sha256": "0d58fd2cf8cf9753f52e76d27bf81d19f5bf0cb1ad082912122d835332bd1db8",
+    "borderTopColors": [
+      [
+        [
+          252,
+          3,
+          251
+        ],
+        4134
+      ],
+      [
+        [
+          252,
+          3,
+          252
+        ],
+        3019
+      ],
+      [
+        [
+          252,
+          2,
+          251
+        ],
+        3000
+      ]
+    ],
+    "borderExactMagentaFraction": 0.0
+  }
+]

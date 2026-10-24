@@ -1,0 +1,38 @@
+{
+  "release": "855e43fb67acad3d",
+  "verifiedNewAssetFiles": [
+    {
+      "path": "assets/resources/import/b6/b6edeedd-2718-4279-8961-7fa8eab52beb.12537.json",
+      "status": 200,
+      "bytes": 6846,
+      "sha256": "8317b3d028b6cd25592a2d1d993520436c1d914c8a95f5b5c536b8f6577843b0",
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/ee/ee5d7853-6b4e-4db0-9775-8b0adaac63b3.c40416172c7e7767.json",
+      "status": 200,
+      "bytes": 72,
+      "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc",
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/import/ee/ee5d7853-6b4e-4db0-9775-8b0adaac63b3@f9941.5ced8.json",
+      "status": 200,
+      "bytes": 594,
+      "sha256": "774328ca462720ef1fa45021dfabe6882d7e5f4023e4cf83a51e12cd6ef78aaf",
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/native/ee/ee5d7853-6b4e-4db0-9775-8b0adaac63b3.d526a489bb2cdf59.webp",
+      "status": 200,
+      "bytes": 2649284,
+      "sha256": "d526a489bb2cdf59a99f0f3d8fe74573212f17423f190c4582b5c7105907ad6d",
+      "contentType": "image/webp",
+      "contentEncoding": null
+    }
+  ],
+  "gameOrBrowserStarted": false
+}

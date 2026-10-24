@@ -1,0 +1,97 @@
+{
+  "hero": "pyro",
+  "source": {
+    "file": "C:\\Users\\user\\Documents\\Qoder\\2026-10-24\\1ab30149\\vibe_videos\\__1792849458.mp4",
+    "sha256": "e4c21ded98ce051a5a9d3563fbdf023a498e97a18d3d5d12fa1c53e75397cea6",
+    "fps": 30.0,
+    "totalFrames": 60,
+    "indices": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52
+    ],
+    "fixedCrop": [
+      5,
+      37,
+      360,
+      609
+    ],
+    "fixedScale": 0.923943661971831,
+    "fixedOffset": [
+      12,
+      36
+    ]
+  },
+  "frames": 48,
+  "seconds": 1.6,
+  "atlas": [
+    3168,
+    3456
+  ],
+  "atlasSHA256": "705f4425bf4fe9b80a71703aee3b334e55bccf40ba9ce0ebb236e2e4eeb44b2c",
+  "continuousForwardOnly": true,
+  "fixedTransform": true,
+  "sourceAssetsBefore": 1489,
+  "sourceAssetsChanged": [
+    "assets/scripts/ui/HeroLobbyIdle.ts"
+  ],
+  "sourceAssetsAdded": [
+    "assets/resources/ux/hero_lobby_idle_v99.meta",
+    "assets/resources/ux/hero_lobby_idle_v99/pyro.frames.json",
+    "assets/resources/ux/hero_lobby_idle_v99/pyro.frames.json.meta",
+    "assets/resources/ux/hero_lobby_idle_v99/pyro.png",
+    "assets/resources/ux/hero_lobby_idle_v99/pyro.png.meta"
+  ],
+  "oldSourceAssetsUnchanged": 1488,
+  "git": {
+    "headUnchanged": true,
+    "stagedEntriesUnchanged": true
+  },
+  "gameBrowserAudioWasmStarted": false,
+  "visualApproval": "user pending; endpoint scores are not visual approval"
+}

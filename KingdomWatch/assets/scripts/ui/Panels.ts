@@ -10,7 +10,6 @@ import { MORA_ULT_HITS, moraSlowRatio, moraSlowDuration, moraFreezeChance, moraN
 import { FROST_ULT_RAIN_COUNT, HERO_Y, LO, PAL } from '../config/GameConfig';
 import { DamageRow, fmtWk } from '../battle/DamageService';
 import { HeroBase } from '../battle/Hero';
-import { FROST_ULT_HIT_GAP } from '../battle/UltimateTiming';
 import { BattleDirector } from '../battle/BattleDirector';
 import { AdService } from '../platform/AdService';
 import { loadSave, saveSave } from '../core/SaveData';
@@ -727,7 +726,7 @@ export class Panels {
       const mu = moraUltCfg(h.ultLv || 1);
       rows = [
         ['每段伤害', moraUltimateHitDamage(h).toFixed(1) + ' × ' + MORA_ULT_HITS + '段 · 全场'],
-        ['形态', FROST_ULT_RAIN_COUNT + '颗冰晶雨 · 间隔' + FROST_ULT_HIT_GAP + 's'],
+        ['形态', FROST_ULT_RAIN_COUNT + '颗冰晶雨 · 持续随机落下'],
         ['特性', (h.moraUltFreeze ? '冰封' + h.moraUltFreeze + 's→' : '') + '减速 ' + Math.round(moraSlowRatio(h, mu.slowMul) * 100)
           + '% · ' + moraSlowDuration(h, mu.slowDur + (h.ultSlowDur || 0)) + 's'],
         ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],

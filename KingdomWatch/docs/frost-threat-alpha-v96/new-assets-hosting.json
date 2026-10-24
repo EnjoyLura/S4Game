@@ -1,0 +1,230 @@
+{
+  "release": "79f84e4902c276fe",
+  "newOrUpdatedAssets": [
+    {
+      "path": "assets/resources/import/0a/0ad59ebe-0af7-40a7-bbda-56669d330e40.c40416172c7e7767.json",
+      "bytes": 72,
+      "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/import/0a/0ad59ebe-0af7-40a7-bbda-56669d330e40@f9941.1793f.json",
+      "bytes": 577,
+      "sha256": "a6da432a2f27c962e0d1116204f180cc4276a6e067fd5c5e29253b2f212cfd39",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/1b/1bdf47a1-ed57-4b89-9f99-dcfb78e0fb08.c40416172c7e7767.json",
+      "bytes": 72,
+      "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/import/1b/1bdf47a1-ed57-4b89-9f99-dcfb78e0fb08@f9941.c1f8f.json",
+      "bytes": 579,
+      "sha256": "14832ab420a34e50d4cd127171b5625f4ca72e369b47ae9a3c531507a8e249f2",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/2d/2ddb43cd-e12b-4ee8-a260-c444c00ef6ff.62b18.json",
+      "bytes": 3516,
+      "sha256": "62ba313fab6ba31e9b2394380d0f2a269313adf4eeeafc20aa3d2863a7f1dab5",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/2f/2fb3170c-2061-462b-b35f-419d3c87db44.fcc80.json",
+      "bytes": 10563,
+      "sha256": "7d2dfc61620804e9c32074aa8c51c5177f6e005abf54e36665439345e4b91ca6",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/5b/5b758d81-b416-4a22-986a-f92ba7ebe2c8.c40416172c7e7767.json",
+      "bytes": 72,
+      "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/import/5b/5b758d81-b416-4a22-986a-f92ba7ebe2c8@f9941.978cc.json",
+      "bytes": 577,
+      "sha256": "9795a65d7ce5e06b1709ff56635848a8d048562124e317f5283e81c9555e88d7",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/74/74e7dcf7-91ca-4824-ba75-4f12d2db3514.c40416172c7e7767.json",
+      "bytes": 72,
+      "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/import/74/74e7dcf7-91ca-4824-ba75-4f12d2db3514@f9941.09872.json",
+      "bytes": 594,
+      "sha256": "0f969579424d7de94cd7b1f57648201c04306eb3992554b0ee9cce7b924be302",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/98/98fece03-05a7-4b74-88db-3ec4a8ef269c.65acb.json",
+      "bytes": 3516,
+      "sha256": "870ded14c4e491fdcfc21e5f81130e7e547b6168447d7af3c1dc9bc75ca45e4b",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/b6/b6edeedd-2718-4279-8961-7fa8eab52beb.12537.json",
+      "bytes": 6846,
+      "sha256": "8317b3d028b6cd25592a2d1d993520436c1d914c8a95f5b5c536b8f6577843b0",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/ca/ca369907-d66f-4b3f-a472-58fc6621b157.a5ede.json",
+      "bytes": 3518,
+      "sha256": "55b5b9084e20444f7bbd2733b42d6ae72a4cbb9896863d25e95f81de36ae6767",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/db/db9c7fa4-1946-4621-bb8c-155927924077.c40416172c7e7767.json",
+      "bytes": 72,
+      "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/import/db/db9c7fa4-1946-4621-bb8c-155927924077@f9941.e9d69.json",
+      "bytes": 579,
+      "sha256": "f0b0f89d08c55145310d39690b64da8a67de1c31db3acda34851d8c6e8f7a59e",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/dd/dd4db260-dd0f-45c8-9894-5c0b75937657.9c78e.json",
+      "bytes": 6978,
+      "sha256": "9ad2d3638e788acc54125323df8ff694e8974bf7b7f6ea92c7318f93866ebb1c",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/ee/ee5d7853-6b4e-4db0-9775-8b0adaac63b3.c40416172c7e7767.json",
+      "bytes": 72,
+      "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/import/ee/ee5d7853-6b4e-4db0-9775-8b0adaac63b3@f9941.5ced8.json",
+      "bytes": 594,
+      "sha256": "774328ca462720ef1fa45021dfabe6882d7e5f4023e4cf83a51e12cd6ef78aaf",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/ee/eea993e5-cb23-4992-8669-44ad717b200d.de5a7.json",
+      "bytes": 3513,
+      "sha256": "63d254e37bd2dd2b32ef9f81bb7abf208b243fe1c13f93cc142b14e43b55b39a",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/f2/f29023c8-456d-4cd3-ac9d-0e70022eda5c.c40416172c7e7767.json",
+      "bytes": 72,
+      "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/import/f2/f29023c8-456d-4cd3-ac9d-0e70022eda5c@f9941.09908.json",
+      "bytes": 594,
+      "sha256": "b14f6354b349b83cd87d9f62e01c059143b0096aa2cbb86b29899c3e7aaf895e",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/native/0a/0ad59ebe-0af7-40a7-bbda-56669d330e40.098ff7c177336af1.webp",
+      "bytes": 3188332,
+      "sha256": "098ff7c177336af145380318b2b82003a57cd618333bf26300f9424cc435740f",
+      "status": 200,
+      "contentType": "image/webp",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/native/1b/1bdf47a1-ed57-4b89-9f99-dcfb78e0fb08.0cc277e5e10fd172.webp",
+      "bytes": 2455746,
+      "sha256": "0cc277e5e10fd172c658985bd97b777348c007afcca5a9b3db0dab8fee4484d9",
+      "status": 200,
+      "contentType": "image/webp",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/native/5b/5b758d81-b416-4a22-986a-f92ba7ebe2c8.ebc62aee1e5f3a90.webp",
+      "bytes": 3066092,
+      "sha256": "ebc62aee1e5f3a903aa68bbf5b64debf9c7b8a79e730e6301915bae8f6632724",
+      "status": 200,
+      "contentType": "image/webp",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/native/74/74e7dcf7-91ca-4824-ba75-4f12d2db3514.993fe5c4064cb2bf.webp",
+      "bytes": 2666958,
+      "sha256": "993fe5c4064cb2bf0596c2f85f58ef467ebbbc5141ab96ce43d63683aa296248",
+      "status": 200,
+      "contentType": "image/webp",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/native/db/db9c7fa4-1946-4621-bb8c-155927924077.e19fe45b89c3c2f6.webp",
+      "bytes": 2502132,
+      "sha256": "e19fe45b89c3c2f6319ca13e8a4364223c918f5046ca4216b9a21238a414f242",
+      "status": 200,
+      "contentType": "image/webp",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/native/ee/ee5d7853-6b4e-4db0-9775-8b0adaac63b3.629d947432a15b00.webp",
+      "bytes": 2651638,
+      "sha256": "629d947432a15b001c1baec1c783825410deb796363f8705fec8f194324fdbd0",
+      "status": 200,
+      "contentType": "image/webp",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/native/f2/f29023c8-456d-4cd3-ac9d-0e70022eda5c.127f01016fb6dd2b.webp",
+      "bytes": 4254304,
+      "sha256": "127f01016fb6dd2bfaa120d3882d77f6ae9b9714534237ff9ae8ff6881aee55a",
+      "status": 200,
+      "contentType": "image/webp",
+      "contentEncoding": null
+    }
+  ],
+  "gameOrBrowserExecuted": false
+}

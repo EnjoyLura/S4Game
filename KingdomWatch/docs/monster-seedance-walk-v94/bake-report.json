@@ -1,0 +1,244 @@
+{
+  "source": {
+    "file": "C:\\Users\\user\\Downloads\\游戏怪物行走视频生成.mp4",
+    "sha256": "2f196554f5eaf202564e054fbbfff0f5f3a466f48b2b2ec3cbbf5ef8d55be5e8",
+    "bytes": 638135,
+    "fps": 24.0,
+    "duration": 4.06,
+    "size": [
+      720,
+      720
+    ],
+    "frames": 97,
+    "skipBeforeSeconds": 1.8,
+    "firstAllowedFrame": 44
+  },
+  "loops": {
+    "goblin_worker": {
+      "label": "普通小兵",
+      "sourceFrames": [
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90
+      ],
+      "firstSeconds": 2.7083333333333335,
+      "lastSeconds": 3.75,
+      "referenceNextFrame": 91,
+      "sourceCycleSeconds": 1.0833333333333333,
+      "gameDefaultCycleSeconds": 2.1666666666666665,
+      "fixedSourceUnion": [
+        18,
+        17,
+        267,
+        265
+      ],
+      "fixedTargetSize": [
+        286,
+        285
+      ],
+      "fixedOffset": [
+        17,
+        23
+      ],
+      "sourceUnionPixels": [
+        249,
+        248
+      ],
+      "oldVisibleUnionHeight": 285,
+      "minTransparentMargin": 12,
+      "metrics": {
+        "start": 65,
+        "end": 91,
+        "length": 26,
+        "seconds": 1.0833333333333333,
+        "pose": 0.024711597710847855,
+        "feetPose": 0.035328637808561325,
+        "context": 0.02360313944518566,
+        "velocity": 0.017392825335264206,
+        "seam": 0.022047340869903564,
+        "seamVsMedian": 1.0089861546490124,
+        "clippedFrames": 0,
+        "score": 0.06897864732891322
+      }
+    },
+    "goblin_shaman": {
+      "label": "萨满",
+      "sourceFrames": [
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79
+      ],
+      "firstSeconds": 2.2083333333333335,
+      "lastSeconds": 3.2916666666666665,
+      "referenceNextFrame": 80,
+      "sourceCycleSeconds": 1.125,
+      "gameDefaultCycleSeconds": 2.25,
+      "fixedSourceUnion": [
+        7,
+        3,
+        269,
+        307
+      ],
+      "fixedTargetSize": [
+        255,
+        296
+      ],
+      "fixedOffset": [
+        32,
+        12
+      ],
+      "sourceUnionPixels": [
+        262,
+        304
+      ],
+      "oldVisibleUnionHeight": 296,
+      "minTransparentMargin": 12,
+      "metrics": {
+        "start": 53,
+        "end": 80,
+        "length": 27,
+        "seconds": 1.125,
+        "pose": 0.023863298818469048,
+        "feetPose": 0.026931380853056908,
+        "context": 0.02499672770500183,
+        "velocity": 0.012759016826748848,
+        "seam": 0.025110559538006783,
+        "seamVsMedian": 1.0799453087155262,
+        "clippedFrames": 0,
+        "score": 0.0653712784871459
+      }
+    },
+    "goblin_brute": {
+      "label": "盾兵",
+      "sourceFrames": [
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86
+      ],
+      "firstSeconds": 2.4583333333333335,
+      "lastSeconds": 3.5833333333333335,
+      "referenceNextFrame": 87,
+      "sourceCycleSeconds": 1.1666666666666667,
+      "gameDefaultCycleSeconds": 2.3333333333333335,
+      "fixedSourceUnion": [
+        10,
+        16,
+        352,
+        325
+      ],
+      "fixedTargetSize": [
+        287,
+        259
+      ],
+      "fixedOffset": [
+        16,
+        49
+      ],
+      "sourceUnionPixels": [
+        342,
+        309
+      ],
+      "oldVisibleUnionHeight": 259,
+      "minTransparentMargin": 12,
+      "metrics": {
+        "start": 59,
+        "end": 87,
+        "length": 28,
+        "seconds": 1.1666666666666667,
+        "pose": 0.024340398609638214,
+        "feetPose": 0.02819378487765789,
+        "context": 0.02489488385617733,
+        "velocity": 0.015951909124851227,
+        "seam": 0.021542059257626534,
+        "seamVsMedian": 1.07579919353931,
+        "clippedFrames": 0,
+        "score": 0.06751708369702102
+      }
+    }
+  },
+  "frames": 81,
+  "atlas": [
+    3240,
+    2916
+  ],
+  "canvas": [
+    320,
+    320
+  ],
+  "runtimePlaybackRate": 0.5,
+  "method": "full consecutive source frames; one fixed crop, scale and placement; no reversed, synthesized, interpolated or crossfaded frames",
+  "atlasSha256": "1b037554c8180122781af10ddff66509185cde7eec4405985eb5c6692c1ddcb8",
+  "pngBytes": 9657451
+}

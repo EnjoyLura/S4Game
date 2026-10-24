@@ -1,0 +1,22 @@
+{
+  "verifiedFrames": 81,
+  "allSourceFramesAfter1_8Seconds": true,
+  "allSourceRangesConsecutive": true,
+  "fixedTransformMatchesEveryFrame": true,
+  "transparentMarginsAtLeast12": true,
+  "wolfOriginalAtlasAndManifestUnchanged": true,
+  "sourceAssetsChanged": [
+    "assets/scripts/battle/MobAnim.ts",
+    "assets/scripts/config/ChapterContent.ts",
+    "assets/scripts/ui/BattleEntryWarmup.ts"
+  ],
+  "sourceAssetsAdded": [
+    "assets/resources/ux/chapter1_mob_walk_v94.frames.json",
+    "assets/resources/ux/chapter1_mob_walk_v94.frames.json.meta",
+    "assets/resources/ux/chapter1_mob_walk_v94.png",
+    "assets/resources/ux/chapter1_mob_walk_v94.png.meta"
+  ],
+  "oldSourceAssetsUnchanged": 1451,
+  "browserOrGameStarted": false,
+  "newVideoGenerated": false
+}

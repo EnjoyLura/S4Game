@@ -380,7 +380,7 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
           floating.addComponent(TrainingWeaponFloat);
           weaponCaption = mainLabel(stage, -176, -stageH / 2 + 22, '换装继承培养等级 · Lv.' + h.weaponLv, { size: 17, color: COMIC.cream, outline: COMIC.ink, outlineW: 1.5, w: 314, h: 28 });
         } else {
-          figure = heroComicFigure(stage, hid, -176, foot, stageH - 102, 318);
+          figure = heroComicFigure(stage, hid, -176, foot, stageH - 102, 318, true);
         }
         const paperH = Math.min(stageH - 20, 432);
         const statsPanel = preview(stage, 185, 16, 310, paperH, weapon ? '强化提升' : HERO_GROWTH[HERO_DEFS[hid].growthType].name + '成长', lv, maxed, comparison(cur, next), true);

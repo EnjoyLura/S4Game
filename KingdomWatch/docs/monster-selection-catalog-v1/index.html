@@ -7,10 +7,16 @@
   <title>怪物形象图鉴 · 挑选与章节编排</title>
   <link rel="stylesheet" href="catalog.css">
   <link rel="stylesheet" href="live-catalog.css">
+  <link rel="stylesheet" href="quad-catalog.css">
+  <link rel="stylesheet" href="frame-player.css">
   <script src="catalog-data.js" defer></script>
   <script src="live-catalog-data.js" defer></script>
+  <script src="quad-catalog-data.js" defer></script>
+  <script src="animation-catalog-data.js" defer></script>
   <script src="catalog.js" defer></script>
+  <script src="frame-player.js" defer></script>
   <script src="live-catalog.js" defer></script>
+  <script src="quad-catalog.js" defer></script>
 </head>
 <body id="catalogTop">
   <header class="masthead">
@@ -18,9 +24,10 @@
     <div class="top-meta"><span id="sourceCount">正在整理图集</span><span class="dot"></span><span id="monsterCount"></span></div>
   </header>
   <div class="intro"><div><h2 id="introTitle">查看游戏各章正在使用的怪物。</h2><p id="introDescription">按章节查看现用形象，也可以切到候选图鉴继续挑选。</p></div><div class="backup-actions" id="candidateBackupActions" hidden><button class="button quiet" id="importBackup">导入整理备份</button><button class="button quiet" id="exportBackup">导出整理备份</button><input type="file" accept="application/json,.json" id="importFile" hidden></div></div>
-  <nav class="catalog-views" id="catalogViews" role="tablist" aria-label="查看候选形象或游戏实际使用">
+  <nav class="catalog-views" id="catalogViews" role="tablist" aria-label="查看实际使用、候选或四宫格">
     <button id="liveTab" role="tab" aria-selected="true" aria-controls="livePanel" data-catalog-view="live">游戏实际使用 <span id="liveTabCount"></span></button>
     <button id="candidateTab" role="tab" aria-selected="false" aria-controls="candidatePanel" data-catalog-view="candidate" tabindex="-1">候选图鉴 <span id="candidateTabCount"></span></button>
+    <button id="quadTab" role="tab" aria-selected="false" aria-controls="quadPanel" data-catalog-view="quad" tabindex="-1">四宫格 <span id="quadTabCount"></span></button>
   </nav>
   <main>
   <section id="candidatePanel" class="workspace" role="tabpanel" aria-labelledby="candidateTab" hidden>
@@ -55,11 +62,28 @@
     <div id="liveEmpty" class="empty" hidden><div class="empty-mark">◇</div><h3>没有符合条件的现用怪物</h3><p>试试其他关键词，或点击「查看全部章节」。</p></div>
     <div id="liveCopyPanel" class="live-copy-panel" hidden><div class="live-copy-heading"><strong>当前实际使用清单</strong><button id="closeLiveCopy" class="text-button">收起</button></div><p id="liveCopyHint" class="muted"></p><textarea id="liveCopyText" readonly rows="10" aria-label="游戏实际使用怪物清单"></textarea><button id="saveLiveRoster" class="button small">保存清单为 TXT</button></div>
   </section>
+  <section id="quadPanel" class="live-panel quad-panel" role="tabpanel" aria-labelledby="quadTab" hidden>
+    <div class="live-filter-panel">
+      <div class="live-heading"><div><span class="eyebrow">FOUR MONSTERS / SOURCE SHEETS</span><h2>四宫格原图</h2><p class="muted">集中查看之前的组合，下载完整原图用于制作动作。</p></div><span class="quad-format">2 × 2 / PNG</span></div>
+      <div id="quadChapters" class="live-chapters" role="group" aria-label="按四宫格所属章节筛选"></div>
+      <div class="live-search-row"><label class="search-field"><span aria-hidden="true">⌕</span><input id="quadSearch" type="search" placeholder="搜索组合或怪物，如「狼人」「投石兵」「蛛母」" aria-label="搜索四宫格"></label><button id="resetQuadFilters" class="text-button">查看全部四宫格</button></div>
+      <p id="quadResults" class="live-results" aria-live="polite"></p>
+    </div>
+    <div id="quadGrid" class="quad-grid"></div>
+    <div id="quadEmpty" class="empty" hidden><div class="empty-mark">◇</div><h3>没有符合条件的四宫格</h3><p>试试其他怪物名称，或点击「查看全部四宫格」。</p></div>
+    <div id="quadCopyPanel" class="live-copy-panel" hidden><div class="live-copy-heading"><strong>四宫格组合清单</strong><button id="closeQuadCopy" class="text-button">收起</button></div><p id="quadCopyHint" class="muted"></p><textarea id="quadCopyText" readonly rows="8" aria-label="四宫格组合清单"></textarea><button id="saveQuadList" class="button small">保存清单为 TXT</button></div>
+  </section>
   </main>
-  <footer>实际使用区依据当前游戏章节配置与素材整理；候选区保留你提供的原图集与选用记录。</footer>
+  <footer>实际使用区依据当前游戏配置整理；候选区保留选用记录；四宫格区集中保存组合原图。</footer>
+  <dialog id="quadDetailDialog" class="quad-detail-dialog" aria-labelledby="quadDetailTitle">
+    <div class="dialog-top"><div><strong id="quadDetailTitle"></strong><p id="quadDetailMeta" class="muted"></p></div><button id="closeQuadDetail" class="icon-button" aria-label="关闭四宫格大图">×</button></div>
+    <div class="quad-view-modes" role="group" aria-label="查看四宫格原图或已接入动作"><button id="quadShowSource" class="button small" aria-pressed="true">四宫格原图</button><button id="quadShowMotion" class="button small" aria-pressed="false">已接入动作</button></div>
+    <div class="quad-detail-body"><div class="quad-detail-art"><img id="quadDetailImage" alt=""><div id="quadFramePlayer" class="quad-frame-player" hidden></div></div><div class="quad-detail-info"><span class="eyebrow">MONSTERS / POSITION</span><h3>组合与位置</h3><div id="quadDetailMembers" class="quad-members"></div><p id="quadDetailNote" class="quad-note"></p><p id="quadMotionSummary" class="quad-note"></p><div class="quad-detail-actions"><a id="quadDetailOpen" class="button" target="_blank" rel="noopener">打开原图 ↗</a><a id="quadDetailDownload" class="button primary" download>下载 PNG</a></div></div></div>
+    <div class="dialog-bottom"><button id="prevQuadDetail" class="button quiet">← 上一张</button><span>← → 切换四宫格 · Esc 关闭</span><button id="nextQuadDetail" class="button quiet">下一张 →</button></div>
+  </dialog>
   <dialog id="liveDetailDialog" class="detail-dialog live-detail-dialog">
     <div class="dialog-top"><span id="liveDetailIndex"></span><button class="icon-button" id="closeLiveDetail" aria-label="关闭现用怪物详情">×</button></div>
-    <div class="detail-body"><div class="detail-art live-detail-art"><img id="liveDetailImage" alt=""><div id="liveArtVariants" class="live-art-variants" role="group" aria-label="怪物形态"></div><div class="art-links"><a id="openLiveCrop" target="_blank" rel="noopener">打开独立 PNG ↗</a></div></div><div class="detail-info"><div class="eyebrow">CURRENT GAME MONSTER</div><h2 id="liveDetailName"></h2><code id="liveDetailId"></code><p id="liveDetailChapter" class="live-detail-chapter"></p><div id="liveDetailBadges" class="live-badges"></div><p id="liveDetailDescription" class="live-description"></p><ul id="liveDetailTraits" class="live-traits"></ul><p id="liveDetailAnimation" class="muted"></p></div></div>
+    <div class="detail-body"><div class="detail-art live-detail-art"><img id="liveDetailImage" alt=""><div id="liveFramePlayer" hidden></div><div id="liveArtVariants" class="live-art-variants" role="group" aria-label="怪物形态"></div><div class="art-links"><a id="openLiveCrop" target="_blank" rel="noopener">打开独立 PNG ↗</a></div></div><div class="detail-info"><div class="eyebrow">CURRENT GAME MONSTER</div><h2 id="liveDetailName"></h2><code id="liveDetailId"></code><p id="liveDetailChapter" class="live-detail-chapter"></p><div id="liveDetailBadges" class="live-badges"></div><p id="liveDetailDescription" class="live-description"></p><ul id="liveDetailTraits" class="live-traits"></ul><p id="liveDetailAnimation" class="muted"></p></div></div>
     <div class="dialog-bottom"><button id="prevLiveDetail" class="button quiet">← 上一只</button><span>游戏实际使用形象 · ← → 切换 · Esc 关闭</span><button id="nextLiveDetail" class="button quiet">下一只 →</button></div>
   </dialog>
   <dialog id="detailDialog" class="detail-dialog">

@@ -1,0 +1,24 @@
+{
+  "archer": {
+    "file": "C:/Users/user/Documents/Qoder/2026-10-24/878b0e69/vibe_videos/elf-archer-idle_1792853283.mp4",
+    "fps": 30.0,
+    "size": [
+      1174,
+      1762
+    ],
+    "frameCount": 60,
+    "duration": 2.02,
+    "sha256": "0dfec4e0e01f99f8cbb51e95448b0bdf04bb56e6a3f6cc0494631e908817112e"
+  },
+  "mora": {
+    "file": "C:/Users/user/Documents/Qoder/2026-10-24/e11a7a23/vibe_videos/ice_mage_idle_1792853320.mp4",
+    "fps": 30.0,
+    "size": [
+      1174,
+      1762
+    ],
+    "frameCount": 60,
+    "duration": 2.02,
+    "sha256": "7a8279ea8f06d4f47387326677d83427b413e7a72d5eb587742eeb5f1bcd4768"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "heroes": {
+    "archer": {
+      "frames": 37,
+      "seconds": 1.2333333333333334,
+      "firstSourceFrame": 13,
+      "lastSourceFrame": 49,
+      "atlas": [
+        2816,
+        2880
+      ],
+      "bytes": 7458459,
+      "atlasSHA256": "4e4d043794b4e1854c744ffe5f8b9711b1a83701682e9e0552e4e6929247f297",
+      "sourceSHA256": "ab7868d09e01be1c51f2788e25be166340079b74c86a0217deb5ae0a6c0fb20b",
+      "minimumAlphaMargin": 13,
+      "aspectPreserved": true,
+      "continuousForwardOnly": true,
+      "allCelsMatchPNGs": true
+    },
+    "mora": {
+      "frames": 49,
+      "seconds": 1.6333333333333333,
+      "firstSourceFrame": 7,
+      "lastSourceFrame": 55,
+      "atlas": [
+        3168,
+        3456
+      ],
+      "bytes": 9603680,
+      "atlasSHA256": "735e9c85f6a3e1bfc8d51579874104fbdff2d70b9ea358866b35cf146040045a",
+      "sourceSHA256": "d530db03d7af5c7d11f2d56238b4077467f6577330587698e291df0704801e32",
+      "minimumAlphaMargin": 14,
+      "aspectPreserved": true,
+      "continuousForwardOnly": true,
+      "allCelsMatchPNGs": true
+    }
+  },
+  "sourceAssetsBefore": 1511,
+  "sourceAssetsChanged": [
+    "assets/scripts/ui/HeroLobbyIdle.ts"
+  ],
+  "sourceAssetsAdded": [
+    "assets/resources/ux/hero_lobby_idle_v101.meta",
+    "assets/resources/ux/hero_lobby_idle_v101/archer.frames.json",
+    "assets/resources/ux/hero_lobby_idle_v101/archer.frames.json.meta",
+    "assets/resources/ux/hero_lobby_idle_v101/archer.png",
+    "assets/resources/ux/hero_lobby_idle_v101/archer.png.meta",
+    "assets/resources/ux/hero_lobby_idle_v101/mora.frames.json",
+    "assets/resources/ux/hero_lobby_idle_v101/mora.frames.json.meta",
+    "assets/resources/ux/hero_lobby_idle_v101/mora.png",
+    "assets/resources/ux/hero_lobby_idle_v101/mora.png.meta"
+  ],
+  "oldSourceAssetsUnchanged": 1510,
+  "git": {
+    "headUnchanged": true,
+    "stagedEntriesUnchanged": true
+  },
+  "gameBrowserAudioWasmStarted": false,
+  "effectLimitations": "mora staff magenta removed by sacrificing contaminated outer halo; volt remains v100; source archer is not a perfectly closed full-body loop",
+  "visualApproval": "pending user inspection; numerical endpoint scores are not visual approval"
+}

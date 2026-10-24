@@ -1,0 +1,57 @@
+{
+  "sourceAssetsBefore": 1458,
+  "sourceAssetsChanged": [
+    "assets/resources/ux/chapter1_mob_walk_v94.png",
+    "assets/scripts/battle/FrostVFX.ts",
+    "assets/scripts/battle/MobAnim.ts",
+    "assets/scripts/config/ChapterContent.ts",
+    "assets/scripts/ui/BattleEntryWarmup.ts"
+  ],
+  "sourceAssetsAdded": [
+    "assets/resources/ux/chapter1_cart_walk_v95.frames.json",
+    "assets/resources/ux/chapter1_cart_walk_v95.frames.json.meta",
+    "assets/resources/ux/chapter1_cart_walk_v95.png",
+    "assets/resources/ux/chapter1_cart_walk_v95.png.meta",
+    "assets/resources/ux/chapter1_mob_walk_v95.frames.json",
+    "assets/resources/ux/chapter1_mob_walk_v95.frames.json.meta",
+    "assets/resources/ux/chapter1_mob_walk_v95.png",
+    "assets/resources/ux/chapter1_mob_walk_v95.png.meta"
+  ],
+  "oldSourceAssetsUnchanged": 1453,
+  "newLoops": {
+    "orc_axeman": {
+      "frames": 49,
+      "sourceStart": 46,
+      "sourceLast": 94,
+      "cycleSeconds": 2.0416666666666665
+    },
+    "goblin_slinger": {
+      "frames": 43,
+      "sourceStart": 50,
+      "sourceLast": 92,
+      "cycleSeconds": 1.7916666666666667
+    },
+    "goblin_king": {
+      "frames": 39,
+      "sourceStart": 42,
+      "sourceLast": 80,
+      "cycleSeconds": 1.625
+    },
+    "orc_siege_cart": {
+      "frames": 24,
+      "sourceStart": 26,
+      "sourceLast": 49,
+      "cycleSeconds": 1.0
+    }
+  },
+  "newFramesVerified": 155,
+  "allNewSourceFramesAfterHalfSecond": true,
+  "fixedTransformsRGBAIdentical": true,
+  "transparentMarginsAtLeast12": true,
+  "maxTextureSideAtMost4096": true,
+  "approvedIceMediaAndTimingUnchanged": true,
+  "frostHeroGameplayUnchanged": true,
+  "oldWolfAtlasAndOldCartAtlasUnchanged": true,
+  "workerManifestUnchanged": true,
+  "gameBrowserAudioOrWasmStarted": false
+}

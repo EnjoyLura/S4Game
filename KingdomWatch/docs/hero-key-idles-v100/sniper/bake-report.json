@@ -1,0 +1,113 @@
+{
+  "chosen": {
+    "start": 2,
+    "endExclusive": 58,
+    "frames": 56,
+    "seconds": 1.8666666666666667,
+    "poseMean": 0.002777169458568096,
+    "seamMean": 0.0037315706722438335,
+    "contextMean": 0.002904042601585388,
+    "velocityMean": 0.001352967112325132,
+    "upperFXMean": 0.0020897502545267344,
+    "medianAdjacentMean": 0.0024647675454616547,
+    "score": 0.007058299006894231
+  },
+  "atlas": [
+    3520,
+    3456
+  ],
+  "bytes": 10620940,
+  "source": {
+    "file": "C:\\Users\\user\\Documents\\Qoder\\2026-10-24\\fd96a17e\\vibe_videos\\hooded_arbalist_idle_safe_1080p_2s_1792851224.mp4",
+    "sha256": "c778a6c3c91c34e14d373f1cd2d85b9e5b6eea5e5bae27d934db6f800b480f52",
+    "bytes": 5597805,
+    "fps": 30.0,
+    "frames": 60,
+    "size": [
+      1080,
+      1920
+    ],
+    "duration": 2.02,
+    "indices": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57
+    ],
+    "analysisSize": [
+      360,
+      640
+    ],
+    "fixedCrop": [
+      23,
+      96,
+      326,
+      547
+    ],
+    "fixedScale": 1.0825082508250825,
+    "fixedOffset": [
+      12,
+      76
+    ]
+  },
+  "fixedCanvas": [
+    352,
+    576
+  ],
+  "fixedTransform": true,
+  "aspectRatioPreserved": true,
+  "sourceDirectionAndTimingPreserved": true,
+  "gameStarted": false
+}

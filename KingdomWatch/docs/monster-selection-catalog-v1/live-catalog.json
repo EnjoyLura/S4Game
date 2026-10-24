@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-23T23:41:32+08:00",
+  "generatedAt": "2026-10-24T16:43:31+08:00",
   "chapters": [
     {
       "number": 1,
@@ -197,12 +197,12 @@
       "airborne": false,
       "description": "",
       "traits": [],
-      "atlas": "chapter1_mob_walk_v81",
-      "gameAsset": "assets/resources/ux/chapter1_mob_walk_v81.png",
-      "atlasSha256": "4b6c5238e668e62ca571b566e6bd957193a71cf76ae8c1ad091a7900da01261e",
+      "atlas": "chapter1_mob_walk_v94",
+      "gameAsset": "assets/resources/ux/chapter1_mob_walk_v94.png",
+      "atlasSha256": "628b94cdb4746d73cf804d7fde077cc77722fd32f9d81987c38cc7373ebaa484",
       "animation": {
-        "frames": 24,
-        "cycleSeconds": 1.0
+        "frames": 26,
+        "cycleSeconds": 1.0833333333333333
       },
       "phase": null,
       "image": "live/monsters/goblin_worker.png",
@@ -215,8 +215,8 @@
       ],
       "width": 320,
       "height": 320,
-      "sha256": "6dc6551b36c9631542be72975fcc1e283b0066ca60b36a6b129c75f7f9a54559",
-      "pixelSha256": "30a7510b712fda2354d5854d0bfcafb262e45186de917b78bdacb0c0575cd8e5"
+      "sha256": "26dd1cef89c4b83282b6157f8929350b59ac09216202606eec1f8a9396121210",
+      "pixelSha256": "dd80a448d221c913aa79d48e8d5e13f2cce403a38a7692625b02df303a98acb7"
     },
     {
       "id": "goblin_slinger",
@@ -229,26 +229,26 @@
       "airborne": false,
       "description": "",
       "traits": [],
-      "atlas": "chapter1_mob_walk_v84",
-      "gameAsset": "assets/resources/ux/chapter1_mob_walk_v84.png",
-      "atlasSha256": "f85c2fdf712f57f7189a1ad0e16883edb47764065c4c611d1713a59a7377dce8",
+      "atlas": "chapter1_mob_walk_v95",
+      "gameAsset": "assets/resources/ux/chapter1_mob_walk_v95.png",
+      "atlasSha256": "d99c7d27edd7192d8366b2aa0c35875b4614d4a1f346ae93f6a172a5a9fd20a6",
       "animation": {
-        "frames": 23,
-        "cycleSeconds": 0.9583333333333334
+        "frames": 43,
+        "cycleSeconds": 1.7916666666666667
       },
       "phase": null,
       "image": "live/monsters/goblin_slinger.png",
       "frame": "goblin_slinger_w0",
       "rect": [
-        972,
-        1620,
+        324,
+        1296,
         320,
         320
       ],
       "width": 320,
       "height": 320,
-      "sha256": "6dc3207ae8166259140b726f92048eefa8b4764925ac4ed59ce0c3b8e66cb186",
-      "pixelSha256": "bc83562015709b4fba9d6c220021fd4e6dc83d317833b09df8b8e792500784d3"
+      "sha256": "8649e97a90a1b15ccad0f98b3ec89e02ad4bbc89baff8d9a0a367d5cf54d06d7",
+      "pixelSha256": "6eb7489415629e903de2781c0f5baf3810e62160160921384f7f78747bc7d71b"
     },
     {
       "id": "goblin_shaman",
@@ -261,26 +261,26 @@
       "airborne": false,
       "description": "有35%法抗符盾；读条后治疗附近伤员，冰封或眩晕可打断施法。",
       "traits": [],
-      "atlas": "chapter1_mob_walk_v81",
-      "gameAsset": "assets/resources/ux/chapter1_mob_walk_v81.png",
-      "atlasSha256": "4b6c5238e668e62ca571b566e6bd957193a71cf76ae8c1ad091a7900da01261e",
+      "atlas": "chapter1_mob_walk_v94",
+      "gameAsset": "assets/resources/ux/chapter1_mob_walk_v94.png",
+      "atlasSha256": "628b94cdb4746d73cf804d7fde077cc77722fd32f9d81987c38cc7373ebaa484",
       "animation": {
-        "frames": 24,
-        "cycleSeconds": 1.0
+        "frames": 27,
+        "cycleSeconds": 1.125
       },
       "phase": null,
       "image": "live/monsters/goblin_shaman.png",
       "frame": "goblin_shaman_w0",
       "rect": [
-        1296,
+        1944,
         648,
         320,
         320
       ],
       "width": 320,
       "height": 320,
-      "sha256": "da22c0cdcf6e46cefc5311bc62c8da4df82e19e8b84efb8dbdca14cc8bf80ca0",
-      "pixelSha256": "f8bd60126dce32e47504983117bc79dd44b706e2282136b026959d92d330b068"
+      "sha256": "3652227b78c3139c82ca4b9d62b042e83bfe453af43a9944139b756cce11af19",
+      "pixelSha256": "574ff37b208d36aaf76629d7cb213b89eff9be9f2f83364dde0b1c0b61774385"
     },
     {
       "id": "wolf_rider",
@@ -295,7 +295,7 @@
       "traits": [],
       "atlas": "chapter1_mob_walk_v81",
       "gameAsset": "assets/resources/ux/chapter1_mob_walk_v81.png",
-      "atlasSha256": "4b6c5238e668e62ca571b566e6bd957193a71cf76ae8c1ad091a7900da01261e",
+      "atlasSha256": "c7b7b5af930ccd2e110cd1df70755253be59a27bb6dc6ace8d7806aa13b4e481",
       "animation": {
         "frames": 12,
         "cycleSeconds": 0.5
@@ -311,8 +311,8 @@
       ],
       "width": 320,
       "height": 320,
-      "sha256": "2b6460261f2d94fc852fd4a22fb6e71fd744b821cbb5151c7543fc7b30b56e30",
-      "pixelSha256": "c651be3c54b08f7b29ba36ef3d85c0297a7dc7555905a670e045e304ca090a94"
+      "sha256": "eef1073cccdefa7e36c231d3eb69e2d03c7d1dcb749820e2e0934c8649d917f3",
+      "pixelSha256": "61c2cb0ec446dd64d3057b76bf3907b9267800fa0c912450865a53130cf17599"
     },
     {
       "id": "orc_axeman",
@@ -325,12 +325,12 @@
       "airborne": false,
       "description": "持斧逼近防线的近战单位，成群出现时用范围伤害清理。",
       "traits": [],
-      "atlas": "chapter1_mob_walk_v84",
-      "gameAsset": "assets/resources/ux/chapter1_mob_walk_v84.png",
-      "atlasSha256": "f85c2fdf712f57f7189a1ad0e16883edb47764065c4c611d1713a59a7377dce8",
+      "atlas": "chapter1_mob_walk_v95",
+      "gameAsset": "assets/resources/ux/chapter1_mob_walk_v95.png",
+      "atlasSha256": "d99c7d27edd7192d8366b2aa0c35875b4614d4a1f346ae93f6a172a5a9fd20a6",
       "animation": {
-        "frames": 23,
-        "cycleSeconds": 0.9583333333333334
+        "frames": 49,
+        "cycleSeconds": 2.0416666666666665
       },
       "phase": null,
       "image": "live/monsters/orc_axeman.png",
@@ -343,8 +343,8 @@
       ],
       "width": 320,
       "height": 320,
-      "sha256": "084595c253d4be60a0cb2c569837ebeebace42e87ac448fc16ab72f8e06413cf",
-      "pixelSha256": "ce12be5d2c7b7ff41d19297ec1e8856580df14c2ab6abdf009d8985344c4017f"
+      "sha256": "0f819e3da4f15c53b6d138dded283737246b72310d301dd2494059f94f61b9e0",
+      "pixelSha256": "9a38b75abe61c1b2e9c406def9dba6f9af320c8e35b8a240f2bf50323379e5c7"
     },
     {
       "id": "goblin_brute",
@@ -357,26 +357,26 @@
       "airborne": false,
       "description": "重甲减少40%物理伤害；累积物理命中破甲后失去物抗，并受到3秒易伤。法术可绕过物抗。",
       "traits": [],
-      "atlas": "chapter1_mob_walk_v81",
-      "gameAsset": "assets/resources/ux/chapter1_mob_walk_v81.png",
-      "atlasSha256": "4b6c5238e668e62ca571b566e6bd957193a71cf76ae8c1ad091a7900da01261e",
+      "atlas": "chapter1_mob_walk_v94",
+      "gameAsset": "assets/resources/ux/chapter1_mob_walk_v94.png",
+      "atlasSha256": "628b94cdb4746d73cf804d7fde077cc77722fd32f9d81987c38cc7373ebaa484",
       "animation": {
-        "frames": 22,
-        "cycleSeconds": 0.9166666666666666
+        "frames": 28,
+        "cycleSeconds": 1.1666666666666667
       },
       "phase": null,
       "image": "live/monsters/goblin_brute.png",
       "frame": "goblin_brute_w0",
       "rect": [
-        2592,
-        1296,
+        972,
+        1620,
         320,
         320
       ],
       "width": 320,
       "height": 320,
-      "sha256": "349c16a53967ba4ca78e7e66668da34638ca54b519d78d5ab05ad51b18fce7c9",
-      "pixelSha256": "7143ecc9bcbff85e7a53bb51adf8d2438dde1c8a641a1ebc5b0081e1cf8160d6"
+      "sha256": "b45654afc08f53adf17bc748452740ccd2013a095dbf303c8f0340b7eed472d5",
+      "pixelSha256": "2f2b15adfa43772443371f701e5fe3fb7452788ede654b13d9a2a1986ee16737"
     },
     {
       "id": "orc_siege_cart",
@@ -389,26 +389,26 @@
       "airborne": false,
       "description": "重甲攻城车缓慢逼近防线；物抗40%，可持续物理集火破甲，或用法术绕过物抗。",
       "traits": [],
-      "atlas": "chapter1_mob_walk_v84",
-      "gameAsset": "assets/resources/ux/chapter1_mob_walk_v84.png",
-      "atlasSha256": "f85c2fdf712f57f7189a1ad0e16883edb47764065c4c611d1713a59a7377dce8",
+      "atlas": "chapter1_cart_walk_v95",
+      "gameAsset": "assets/resources/ux/chapter1_cart_walk_v95.png",
+      "atlasSha256": "6e82b4414f766da6a6e046962b69c4b3937d6ec12985a98ba28a363991a3b808",
       "animation": {
-        "frames": 30,
-        "cycleSeconds": 1.25
+        "frames": 24,
+        "cycleSeconds": 1.0
       },
       "phase": null,
       "image": "live/monsters/orc_siege_cart.png",
       "frame": "orc_siege_cart_w0",
       "rect": [
-        972,
-        648,
+        0,
+        0,
         320,
         320
       ],
       "width": 320,
       "height": 320,
-      "sha256": "55bf1ca27861a99f526636c4d1d4bd9f09bc7eccd29dfa1ec76dd018f3dadff7",
-      "pixelSha256": "777e3573e409fd838748e85d07d7b404e4bbc26b47d04b9eb99a84083f37c917"
+      "sha256": "c39522fa5913961b35125c3f2855d861113c6150cc649fc438e49205f5cbac46",
+      "pixelSha256": "68fbbf6551f1723a28a3aeda6aa735238c0603cb57470bec869afe11c2a53b2d"
     },
     {
       "id": "goblin_king",
@@ -421,26 +421,26 @@
       "airborne": false,
       "description": "铠甲减少30%物理伤害，集火可破甲；法术绕过物抗，首领仍免疫冰封。",
       "traits": [],
-      "atlas": "chapter1_mob_walk_v84",
-      "gameAsset": "assets/resources/ux/chapter1_mob_walk_v84.png",
-      "atlasSha256": "f85c2fdf712f57f7189a1ad0e16883edb47764065c4c611d1713a59a7377dce8",
+      "atlas": "chapter1_mob_walk_v95",
+      "gameAsset": "assets/resources/ux/chapter1_mob_walk_v95.png",
+      "atlasSha256": "d99c7d27edd7192d8366b2aa0c35875b4614d4a1f346ae93f6a172a5a9fd20a6",
       "animation": {
-        "frames": 23,
-        "cycleSeconds": 0.9583333333333334
+        "frames": 39,
+        "cycleSeconds": 1.625
       },
       "phase": null,
       "image": "live/monsters/goblin_king.png",
       "frame": "goblin_king_w0",
       "rect": [
-        1944,
+        2592,
         2268,
         320,
         320
       ],
       "width": 320,
       "height": 320,
-      "sha256": "f1be6f1b39d1ceabda52707f647f9c5570efa606bb680691d214bd07b3a7ae5c",
-      "pixelSha256": "8d4a2b954caab1f698628f845ef191f1e9853ad33f9a28e1f14c035d935a8b9c"
+      "sha256": "a7a64142b499347a40f6120a9bdd623cd97f8e3f03e0dc3d76f0f9191f56a330",
+      "pixelSha256": "6a8df08fbc62efc513c0399eb09bfca1736dbb2843871df4ababccf9a8380c22"
     },
     {
       "id": "forest_spider",
@@ -492,7 +492,7 @@
       ],
       "atlas": "forest_mob_walk_v87",
       "gameAsset": "assets/resources/ux/forest_mob_walk_v87.png",
-      "atlasSha256": "64e6c66f1e8a588e7f708ebc8cda7994f5cc6ce831187ea1fee76e95658be46b",
+      "atlasSha256": "24f59c021db768e3d13b9ed225e708aa626c0231bd53ef437691fe67d348555a",
       "animation": {
         "frames": 16,
         "cycleSeconds": 0.6666666666666666
@@ -561,7 +561,7 @@
       ],
       "atlas": "forest_mob_walk_v87",
       "gameAsset": "assets/resources/ux/forest_mob_walk_v87.png",
-      "atlasSha256": "64e6c66f1e8a588e7f708ebc8cda7994f5cc6ce831187ea1fee76e95658be46b",
+      "atlasSha256": "24f59c021db768e3d13b9ed225e708aa626c0231bd53ef437691fe67d348555a",
       "animation": {
         "frames": 16,
         "cycleSeconds": 0.6666666666666666
@@ -577,8 +577,8 @@
       ],
       "width": 320,
       "height": 320,
-      "sha256": "bcc308e6c6961f62143c1f2ccc229df642cd8b4ba1dc869d390149ac609eb252",
-      "pixelSha256": "8e6d4aa1f1b16562c36af2fff72c460bc42eeb121d93a06b7e81536be0b7272b"
+      "sha256": "1392ee41fa7545c103b80f4ad64c6e96080e606ea8d6af02c8ec3c940ac9d65b",
+      "pixelSha256": "74ad0e6b3554709fbd1d159260a275653d576923cf2aa30fb1e8131f52c632fc"
     },
     {
       "id": "forest_wolf",
@@ -631,7 +631,7 @@
       ],
       "atlas": "forest_mob_walk_v87",
       "gameAsset": "assets/resources/ux/forest_mob_walk_v87.png",
-      "atlasSha256": "64e6c66f1e8a588e7f708ebc8cda7994f5cc6ce831187ea1fee76e95658be46b",
+      "atlasSha256": "24f59c021db768e3d13b9ed225e708aa626c0231bd53ef437691fe67d348555a",
       "animation": {
         "frames": 19,
         "cycleSeconds": 0.7916666666666666
@@ -647,8 +647,8 @@
       ],
       "width": 320,
       "height": 320,
-      "sha256": "a4a859788bc196154e5bb8167006a1b93b1d951b86716fbb5391f52cdcfc5332",
-      "pixelSha256": "421fd6aca307a758fb078c83d1c66a39ad6470ac968892d5565a394ad6e4cfd1"
+      "sha256": "f0a7975fb93f550d5d812929018988d30f1c5bb407727ac8e0ff5c4932e87a03",
+      "pixelSha256": "5f8dced44fc3bf9a21c7720640dbe234af009ec0449c1fc9f6d4d6db1969b12e"
     },
     {
       "id": "forest_guard",
@@ -698,7 +698,7 @@
       ],
       "atlas": "forest_mob_walk_v87",
       "gameAsset": "assets/resources/ux/forest_mob_walk_v87.png",
-      "atlasSha256": "64e6c66f1e8a588e7f708ebc8cda7994f5cc6ce831187ea1fee76e95658be46b",
+      "atlasSha256": "24f59c021db768e3d13b9ed225e708aa626c0231bd53ef437691fe67d348555a",
       "animation": {
         "frames": 34,
         "cycleSeconds": 1.4166666666666667
@@ -3133,7 +3133,7 @@
   "inputs": [
     {
       "file": "assets/scripts/config/ChapterContent.ts",
-      "sha256": "61f831d626b396d945582a90422597b3355c6799313be18e89973bc9a95ad23f"
+      "sha256": "d56291c152e9572d9e1e02da9bb3dde0ec9481cb788ea3f8c69670852e2e3b20"
     },
     {
       "file": "assets/scripts/config/ChapterWaves.ts",
@@ -3181,27 +3181,43 @@
     },
     {
       "file": "assets/scripts/battle/Monster.ts",
-      "sha256": "c6b590e52ea276e198d2e9309b7a30e712272baaf8c0f5f6bf50fe635aaba710"
+      "sha256": "b845a4f1c786810a35cfd379980d744f2242e53d2cd101cfce75d678a6ab4629"
     },
     {
       "file": "assets/scripts/battle/MobAnim.ts",
-      "sha256": "62a9b5085edc75dc332dc3fff4f35dcf635ff65b8ff5109951588c11e5b2b47c"
+      "sha256": "73a5793f08e8c156c9674b3c558e434873c422219d1970d14f6909297defb260"
+    },
+    {
+      "file": "assets/resources/ux/chapter1_mob_walk_v94.png",
+      "sha256": "628b94cdb4746d73cf804d7fde077cc77722fd32f9d81987c38cc7373ebaa484"
+    },
+    {
+      "file": "assets/resources/ux/chapter1_mob_walk_v94.frames.json",
+      "sha256": "7deb054ed3a80be10d06848b38b5d4efee9cd93513270f9da01bf8b0faac7cef"
+    },
+    {
+      "file": "assets/resources/ux/chapter1_mob_walk_v95.png",
+      "sha256": "d99c7d27edd7192d8366b2aa0c35875b4614d4a1f346ae93f6a172a5a9fd20a6"
+    },
+    {
+      "file": "assets/resources/ux/chapter1_mob_walk_v95.frames.json",
+      "sha256": "d2bde763d311baf2b92ddd328a6e958929214954234ba7f6356495ff8b2b0f19"
     },
     {
       "file": "assets/resources/ux/chapter1_mob_walk_v81.png",
-      "sha256": "4b6c5238e668e62ca571b566e6bd957193a71cf76ae8c1ad091a7900da01261e"
+      "sha256": "c7b7b5af930ccd2e110cd1df70755253be59a27bb6dc6ace8d7806aa13b4e481"
     },
     {
       "file": "assets/resources/ux/chapter1_mob_walk_v81.frames.json",
       "sha256": "beba72839df74af652819d2da672bf2cd1ed59237c998f8269c64b0d71291b30"
     },
     {
-      "file": "assets/resources/ux/chapter1_mob_walk_v84.png",
-      "sha256": "f85c2fdf712f57f7189a1ad0e16883edb47764065c4c611d1713a59a7377dce8"
+      "file": "assets/resources/ux/chapter1_cart_walk_v95.png",
+      "sha256": "6e82b4414f766da6a6e046962b69c4b3937d6ec12985a98ba28a363991a3b808"
     },
     {
-      "file": "assets/resources/ux/chapter1_mob_walk_v84.frames.json",
-      "sha256": "1c3fd4db67cd0ee9c1acdf939a878b0869757125ae503e4958292c8497a7db46"
+      "file": "assets/resources/ux/chapter1_cart_walk_v95.frames.json",
+      "sha256": "7766e0c76b53cb69ab7802b19091b47309abf229af8ef2ce9cfbcc98a28f25fd"
     },
     {
       "file": "assets/resources/ux/forest_mob_walk_v85.png",
@@ -3213,11 +3229,11 @@
     },
     {
       "file": "assets/resources/ux/forest_mob_walk_v87.png",
-      "sha256": "64e6c66f1e8a588e7f708ebc8cda7994f5cc6ce831187ea1fee76e95658be46b"
+      "sha256": "24f59c021db768e3d13b9ed225e708aa626c0231bd53ef437691fe67d348555a"
     },
     {
       "file": "assets/resources/ux/forest_mob_walk_v87.frames.json",
-      "sha256": "6ba6bcb09a5136c541193e6e898d5d0ad0e52484bea5afb8c6705a22f137f8f1"
+      "sha256": "19614434e747ca13355cf76b29aa402af3c0c751af4d6a2716c2389b6df43c36"
     },
     {
       "file": "assets/resources/ux/mobs_forest_v66.png",

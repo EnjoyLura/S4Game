@@ -1,0 +1,66 @@
+{
+  "release": {
+    "schema": 1,
+    "id": "2775ab2feac8921b",
+    "base_path": "/kingdom-watch-play/",
+    "entry": "game.c64c5942274428b4.html",
+    "entry_sha256": "c64c5942274428b417e9330c6419712562a3a661f425de62a1fa600f2228b40d",
+    "entry_bytes": 22425,
+    "inventory": "hosting-files.2775ab2feac8921b.json",
+    "inventory_sha256": "2775ab2feac8921bbf253dd462a93f2e52ee413ad67f371567cd285f8d7b2c2e",
+    "inventory_bytes": 262412,
+    "runtime_cache": {
+      "protocol": 1,
+      "worker": "hosting-cache-sw.js",
+      "scope": "/kingdom-watch-play/",
+      "on_demand": true,
+      "max_bytes": 268435456
+    },
+    "requires_cross_origin_isolation": false,
+    "wasm": [
+      "cocos-js/assets/spine-CC34fKUR.wasm"
+    ],
+    "requires_webp": true,
+    "texture_mode": "mixed-webp-q95"
+  },
+  "file_count": 1505,
+  "runtime_bytes": 175578801,
+  "full_package_bytes": 175841858,
+  "budget_bytes": 200000000,
+  "validation": {
+    "explicit_file_references_checked": 441,
+    "embedded_provenance_strings_not_fetches": [],
+    "virtual_system_modules": 153,
+    "remote_url_literals": [
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/bangers/Bangers-Regular.ttf",
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-Bold.ttf",
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-ExtraBoldItalic.ttf",
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+    ],
+    "bundle_versions": {
+      "internal": "9e58a",
+      "main": "05440",
+      "resources": "91b86f188cc6dff3"
+    }
+  },
+  "art_resources": {
+    "mode": "mixed-webp-q95",
+    "manifest": "art-resources.1fcdb8b6ba4990cf.json",
+    "requiresWebP": true,
+    "imagesConverted": 399,
+    "pngImagesKept": 1,
+    "nativeBytesSaved": 332766641,
+    "bytesBeforeArtStep": 507881253,
+    "bytesAfterArtStepIncludingReport": 175523014,
+    "checks": {
+      "nativeImagesResolved": 412,
+      "webpImagesRGBAAndHashesVerified": 399,
+      "losslessImagesSourceRGBAIdentical": 237,
+      "q95ImagesDimensionsAlphaAndOutputVerified": 162,
+      "gameEngineExecuted": false
+    }
+  },
+  "all_exported_hashes_verified": true,
+  "source_web_files_modified": false
+}

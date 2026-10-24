@@ -1,0 +1,61 @@
+{
+  "heroes": {
+    "archer": {
+      "frames": 49,
+      "seconds": 1.6333333333333333,
+      "firstSourceFrame": 6,
+      "lastSourceFrame": 54,
+      "atlas": [
+        3168,
+        3456
+      ],
+      "bytes": 9812091,
+      "atlasSHA256": "44dbdcdcfd85fb624fe184f0fe23dcbba977d23ef2b9107bba1c11406fdec846",
+      "sourceSHA256": "0dfec4e0e01f99f8cbb51e95448b0bdf04bb56e6a3f6cc0494631e908817112e",
+      "minimumAlphaMargin": 14,
+      "aspectPreserved": true,
+      "continuousForwardOnly": true,
+      "allCelsMatchPNGs": true
+    },
+    "mora": {
+      "frames": 52,
+      "seconds": 1.7333333333333334,
+      "firstSourceFrame": 6,
+      "lastSourceFrame": 57,
+      "atlas": [
+        3520,
+        3456
+      ],
+      "bytes": 12264882,
+      "atlasSHA256": "be0e9fc7381a32fc7c53b18fe9f6bf16e32e86f042a1c095ff1794d055167549",
+      "sourceSHA256": "7a8279ea8f06d4f47387326677d83427b413e7a72d5eb587742eeb5f1bcd4768",
+      "minimumAlphaMargin": 13,
+      "aspectPreserved": true,
+      "continuousForwardOnly": true,
+      "allCelsMatchPNGs": true
+    }
+  },
+  "sourceAssetsBefore": 1520,
+  "sourceAssetsChanged": [
+    "assets/scripts/ui/HeroLobbyIdle.ts"
+  ],
+  "sourceAssetsAdded": [
+    "assets/resources/ux/hero_lobby_idle_v102.meta",
+    "assets/resources/ux/hero_lobby_idle_v102/archer.frames.json",
+    "assets/resources/ux/hero_lobby_idle_v102/archer.frames.json.meta",
+    "assets/resources/ux/hero_lobby_idle_v102/archer.png",
+    "assets/resources/ux/hero_lobby_idle_v102/archer.png.meta",
+    "assets/resources/ux/hero_lobby_idle_v102/mora.frames.json",
+    "assets/resources/ux/hero_lobby_idle_v102/mora.frames.json.meta",
+    "assets/resources/ux/hero_lobby_idle_v102/mora.png",
+    "assets/resources/ux/hero_lobby_idle_v102/mora.png.meta"
+  ],
+  "oldSourceAssetsUnchanged": 1519,
+  "git": {
+    "headUnchanged": true,
+    "stagedEntriesUnchanged": true
+  },
+  "gameBrowserAudioWasmStarted": false,
+  "effectLimitations": "new supplied archer and mora videos keyed at full resolution; no outer ice halo in source; volt remains v100; slight source endpoint differences remain possible",
+  "visualApproval": "pending user inspection; numerical endpoint scores are not visual approval"
+}

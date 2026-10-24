@@ -138,6 +138,7 @@ class GameAudioService {
   prepareUltimate(hero: string, seconds: number): void {
     // Decode before the meteor falls, never wait for a download at contact.
     if (hero === 'pyro' && this.ctx && this.sfxEnabled) for (const file of AUDIO_CUES.fireUlt.files) void this.buffer(file);
+    if (hero === 'mora' && this.ctx && this.sfxEnabled) for (const file of AUDIO_CUES.frostUlt.files) void this.buffer(file);
     if (this.ctx && this.scene === 'battle' && this.state === 'running') this.duck(seconds, .74);
     const rates: Record<string, number> = { archer: 1.08, sniper: .94, pyro: .9, volt: 1.12, mora: 1 };
     this.play('charge', { preparing: true, gain: .6, rate: rates[hero] || 1,

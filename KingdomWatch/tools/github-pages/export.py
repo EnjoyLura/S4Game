@@ -16,6 +16,7 @@ HERE=Path(__file__).resolve().parent
 PROJECT=HERE.parents[1]
 sys.path.insert(0, str(HERE.parent))
 from art_resources import image_records, optimize_export, validate_art, POLICY, MODES, runtime_budget
+from prune_lobby_trials import prune_lobby_trials
 WEB=PROJECT/'build/web-mobile'
 EXTENSIONS={'.html','.css','.js','.json','.wasm','.bin','.png','.jpg','.jpeg','.webp','.gif','.mp3','.wav','.ogg','.m4a','.ttf','.otf','.woff','.woff2','.txt'}
 
@@ -185,6 +186,8 @@ def export(destination,config,texture_mode=None):
     for source in runtime_files():
         relative=source.relative_to(WEB);target=destination/relative
         target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source,target)
+    lobby_trials=prune_lobby_trials(destination,PROJECT)
+    print('Lobby trial native textures omitted: '+str(lobby_trials['removedNativeCount']),flush=True)
     art=optimize_export(destination,texture_mode or POLICY['defaultMode'])
     original_html=address_runtime_code(destination,(WEB/'index.html').read_text('utf-8'),production['engineRevision'])
     if '<base ' in original_html:raise RuntimeError('Unexpected existing document base')
@@ -227,7 +230,7 @@ def export(destination,config,texture_mode=None):
     # Independently reread every exported file after writing the inventories.
     for name,record in files.items():
         if sha(destination/name)!=record['sha256']:raise RuntimeError('Export checksum changed: '+name)
-    return {'release':pointer,'file_count':len(files)+2,'runtime_bytes':total,'full_package_bytes':full_total,'budget_bytes':runtime_budget(art['mode']),'validation':links,'art_resources':art,'all_exported_hashes_verified':True,'source_web_files_modified':False}
+    return {'release':pointer,'file_count':len(files)+2,'runtime_bytes':total,'full_package_bytes':full_total,'budget_bytes':runtime_budget(art['mode']),'validation':links,'art_resources':art,'lobby_trial_omission':lobby_trials,'all_exported_hashes_verified':True,'source_web_files_modified':False}
 
 
 def validate_package(folder,config):

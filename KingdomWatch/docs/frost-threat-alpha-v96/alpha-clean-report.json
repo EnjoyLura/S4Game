@@ -1,0 +1,510 @@
+[
+  {
+    "atlas": "chapter1_mob_walk_v94",
+    "monster": "goblin_brute",
+    "regions": [
+      [
+        85,
+        180,
+        125,
+        236
+      ]
+    ],
+    "frames": [
+      {
+        "frame": "goblin_brute_w0",
+        "alphaPixelsChanged": 237,
+        "fullyCleared": 163
+      },
+      {
+        "frame": "goblin_brute_w1",
+        "alphaPixelsChanged": 205,
+        "fullyCleared": 143
+      },
+      {
+        "frame": "goblin_brute_w2",
+        "alphaPixelsChanged": 196,
+        "fullyCleared": 135
+      },
+      {
+        "frame": "goblin_brute_w3",
+        "alphaPixelsChanged": 188,
+        "fullyCleared": 129
+      },
+      {
+        "frame": "goblin_brute_w4",
+        "alphaPixelsChanged": 193,
+        "fullyCleared": 130
+      },
+      {
+        "frame": "goblin_brute_w5",
+        "alphaPixelsChanged": 218,
+        "fullyCleared": 141
+      },
+      {
+        "frame": "goblin_brute_w6",
+        "alphaPixelsChanged": 242,
+        "fullyCleared": 159
+      },
+      {
+        "frame": "goblin_brute_w7",
+        "alphaPixelsChanged": 233,
+        "fullyCleared": 160
+      },
+      {
+        "frame": "goblin_brute_w8",
+        "alphaPixelsChanged": 225,
+        "fullyCleared": 154
+      },
+      {
+        "frame": "goblin_brute_w9",
+        "alphaPixelsChanged": 222,
+        "fullyCleared": 149
+      },
+      {
+        "frame": "goblin_brute_w10",
+        "alphaPixelsChanged": 212,
+        "fullyCleared": 141
+      },
+      {
+        "frame": "goblin_brute_w11",
+        "alphaPixelsChanged": 224,
+        "fullyCleared": 146
+      },
+      {
+        "frame": "goblin_brute_w12",
+        "alphaPixelsChanged": 243,
+        "fullyCleared": 163
+      },
+      {
+        "frame": "goblin_brute_w13",
+        "alphaPixelsChanged": 259,
+        "fullyCleared": 177
+      },
+      {
+        "frame": "goblin_brute_w14",
+        "alphaPixelsChanged": 315,
+        "fullyCleared": 220
+      },
+      {
+        "frame": "goblin_brute_w15",
+        "alphaPixelsChanged": 161,
+        "fullyCleared": 67
+      },
+      {
+        "frame": "goblin_brute_w16",
+        "alphaPixelsChanged": 154,
+        "fullyCleared": 63
+      },
+      {
+        "frame": "goblin_brute_w17",
+        "alphaPixelsChanged": 155,
+        "fullyCleared": 63
+      },
+      {
+        "frame": "goblin_brute_w18",
+        "alphaPixelsChanged": 145,
+        "fullyCleared": 61
+      },
+      {
+        "frame": "goblin_brute_w19",
+        "alphaPixelsChanged": 158,
+        "fullyCleared": 71
+      },
+      {
+        "frame": "goblin_brute_w20",
+        "alphaPixelsChanged": 135,
+        "fullyCleared": 54
+      },
+      {
+        "frame": "goblin_brute_w21",
+        "alphaPixelsChanged": 141,
+        "fullyCleared": 56
+      },
+      {
+        "frame": "goblin_brute_w22",
+        "alphaPixelsChanged": 142,
+        "fullyCleared": 58
+      },
+      {
+        "frame": "goblin_brute_w23",
+        "alphaPixelsChanged": 118,
+        "fullyCleared": 45
+      },
+      {
+        "frame": "goblin_brute_w24",
+        "alphaPixelsChanged": 93,
+        "fullyCleared": 33
+      },
+      {
+        "frame": "goblin_brute_w25",
+        "alphaPixelsChanged": 291,
+        "fullyCleared": 211
+      },
+      {
+        "frame": "goblin_brute_w26",
+        "alphaPixelsChanged": 264,
+        "fullyCleared": 186
+      },
+      {
+        "frame": "goblin_brute_w27",
+        "alphaPixelsChanged": 231,
+        "fullyCleared": 155
+      }
+    ],
+    "rgbUnchanged": true,
+    "otherCelsRGBAUnchanged": true,
+    "sha256": "628b94cdb4746d73cf804d7fde077cc77722fd32f9d81987c38cc7373ebaa484"
+  },
+  {
+    "atlas": "chapter1_mob_walk_v81",
+    "monster": "wolf_rider",
+    "regions": [
+      [
+        124,
+        96,
+        151,
+        128
+      ],
+      [
+        98,
+        72,
+        115,
+        108
+      ]
+    ],
+    "frames": [
+      {
+        "frame": "wolf_rider_w0",
+        "alphaPixelsChanged": 321,
+        "fullyCleared": 179
+      },
+      {
+        "frame": "wolf_rider_w1",
+        "alphaPixelsChanged": 292,
+        "fullyCleared": 184
+      },
+      {
+        "frame": "wolf_rider_w2",
+        "alphaPixelsChanged": 322,
+        "fullyCleared": 207
+      },
+      {
+        "frame": "wolf_rider_w3",
+        "alphaPixelsChanged": 330,
+        "fullyCleared": 208
+      },
+      {
+        "frame": "wolf_rider_w4",
+        "alphaPixelsChanged": 264,
+        "fullyCleared": 161
+      },
+      {
+        "frame": "wolf_rider_w5",
+        "alphaPixelsChanged": 204,
+        "fullyCleared": 111
+      },
+      {
+        "frame": "wolf_rider_w6",
+        "alphaPixelsChanged": 143,
+        "fullyCleared": 59
+      },
+      {
+        "frame": "wolf_rider_w7",
+        "alphaPixelsChanged": 113,
+        "fullyCleared": 44
+      },
+      {
+        "frame": "wolf_rider_w8",
+        "alphaPixelsChanged": 104,
+        "fullyCleared": 38
+      },
+      {
+        "frame": "wolf_rider_w9",
+        "alphaPixelsChanged": 131,
+        "fullyCleared": 55
+      },
+      {
+        "frame": "wolf_rider_w10",
+        "alphaPixelsChanged": 132,
+        "fullyCleared": 55
+      },
+      {
+        "frame": "wolf_rider_w11",
+        "alphaPixelsChanged": 287,
+        "fullyCleared": 156
+      }
+    ],
+    "rgbUnchanged": true,
+    "otherCelsRGBAUnchanged": true,
+    "sha256": "c7b7b5af930ccd2e110cd1df70755253be59a27bb6dc6ace8d7806aa13b4e481"
+  },
+  {
+    "atlas": "chapter1_mob_walk_v95",
+    "monster": "orc_axeman",
+    "regions": [
+      [
+        91,
+        160,
+        145,
+        250
+      ],
+      [
+        201,
+        160,
+        253,
+        243
+      ]
+    ],
+    "frames": [
+      {
+        "frame": "orc_axeman_w0",
+        "alphaPixelsChanged": 773,
+        "fullyCleared": 505
+      },
+      {
+        "frame": "orc_axeman_w1",
+        "alphaPixelsChanged": 741,
+        "fullyCleared": 490
+      },
+      {
+        "frame": "orc_axeman_w2",
+        "alphaPixelsChanged": 708,
+        "fullyCleared": 444
+      },
+      {
+        "frame": "orc_axeman_w3",
+        "alphaPixelsChanged": 719,
+        "fullyCleared": 450
+      },
+      {
+        "frame": "orc_axeman_w4",
+        "alphaPixelsChanged": 653,
+        "fullyCleared": 417
+      },
+      {
+        "frame": "orc_axeman_w5",
+        "alphaPixelsChanged": 666,
+        "fullyCleared": 419
+      },
+      {
+        "frame": "orc_axeman_w6",
+        "alphaPixelsChanged": 642,
+        "fullyCleared": 411
+      },
+      {
+        "frame": "orc_axeman_w7",
+        "alphaPixelsChanged": 644,
+        "fullyCleared": 407
+      },
+      {
+        "frame": "orc_axeman_w8",
+        "alphaPixelsChanged": 671,
+        "fullyCleared": 433
+      },
+      {
+        "frame": "orc_axeman_w9",
+        "alphaPixelsChanged": 684,
+        "fullyCleared": 448
+      },
+      {
+        "frame": "orc_axeman_w10",
+        "alphaPixelsChanged": 743,
+        "fullyCleared": 488
+      },
+      {
+        "frame": "orc_axeman_w11",
+        "alphaPixelsChanged": 757,
+        "fullyCleared": 504
+      },
+      {
+        "frame": "orc_axeman_w12",
+        "alphaPixelsChanged": 800,
+        "fullyCleared": 533
+      },
+      {
+        "frame": "orc_axeman_w13",
+        "alphaPixelsChanged": 820,
+        "fullyCleared": 564
+      },
+      {
+        "frame": "orc_axeman_w14",
+        "alphaPixelsChanged": 939,
+        "fullyCleared": 656
+      },
+      {
+        "frame": "orc_axeman_w15",
+        "alphaPixelsChanged": 953,
+        "fullyCleared": 660
+      },
+      {
+        "frame": "orc_axeman_w16",
+        "alphaPixelsChanged": 958,
+        "fullyCleared": 681
+      },
+      {
+        "frame": "orc_axeman_w17",
+        "alphaPixelsChanged": 1067,
+        "fullyCleared": 757
+      },
+      {
+        "frame": "orc_axeman_w18",
+        "alphaPixelsChanged": 1148,
+        "fullyCleared": 828
+      },
+      {
+        "frame": "orc_axeman_w19",
+        "alphaPixelsChanged": 1207,
+        "fullyCleared": 860
+      },
+      {
+        "frame": "orc_axeman_w20",
+        "alphaPixelsChanged": 1294,
+        "fullyCleared": 931
+      },
+      {
+        "frame": "orc_axeman_w21",
+        "alphaPixelsChanged": 1369,
+        "fullyCleared": 1005
+      },
+      {
+        "frame": "orc_axeman_w22",
+        "alphaPixelsChanged": 1235,
+        "fullyCleared": 859
+      },
+      {
+        "frame": "orc_axeman_w23",
+        "alphaPixelsChanged": 1213,
+        "fullyCleared": 832
+      },
+      {
+        "frame": "orc_axeman_w24",
+        "alphaPixelsChanged": 1090,
+        "fullyCleared": 734
+      },
+      {
+        "frame": "orc_axeman_w25",
+        "alphaPixelsChanged": 994,
+        "fullyCleared": 634
+      },
+      {
+        "frame": "orc_axeman_w26",
+        "alphaPixelsChanged": 850,
+        "fullyCleared": 523
+      },
+      {
+        "frame": "orc_axeman_w27",
+        "alphaPixelsChanged": 857,
+        "fullyCleared": 511
+      },
+      {
+        "frame": "orc_axeman_w28",
+        "alphaPixelsChanged": 733,
+        "fullyCleared": 428
+      },
+      {
+        "frame": "orc_axeman_w29",
+        "alphaPixelsChanged": 631,
+        "fullyCleared": 362
+      },
+      {
+        "frame": "orc_axeman_w30",
+        "alphaPixelsChanged": 574,
+        "fullyCleared": 322
+      },
+      {
+        "frame": "orc_axeman_w31",
+        "alphaPixelsChanged": 557,
+        "fullyCleared": 318
+      },
+      {
+        "frame": "orc_axeman_w32",
+        "alphaPixelsChanged": 570,
+        "fullyCleared": 322
+      },
+      {
+        "frame": "orc_axeman_w33",
+        "alphaPixelsChanged": 559,
+        "fullyCleared": 316
+      },
+      {
+        "frame": "orc_axeman_w34",
+        "alphaPixelsChanged": 546,
+        "fullyCleared": 313
+      },
+      {
+        "frame": "orc_axeman_w35",
+        "alphaPixelsChanged": 549,
+        "fullyCleared": 316
+      },
+      {
+        "frame": "orc_axeman_w36",
+        "alphaPixelsChanged": 622,
+        "fullyCleared": 374
+      },
+      {
+        "frame": "orc_axeman_w37",
+        "alphaPixelsChanged": 602,
+        "fullyCleared": 370
+      },
+      {
+        "frame": "orc_axeman_w38",
+        "alphaPixelsChanged": 655,
+        "fullyCleared": 416
+      },
+      {
+        "frame": "orc_axeman_w39",
+        "alphaPixelsChanged": 636,
+        "fullyCleared": 413
+      },
+      {
+        "frame": "orc_axeman_w40",
+        "alphaPixelsChanged": 730,
+        "fullyCleared": 478
+      },
+      {
+        "frame": "orc_axeman_w41",
+        "alphaPixelsChanged": 853,
+        "fullyCleared": 559
+      },
+      {
+        "frame": "orc_axeman_w42",
+        "alphaPixelsChanged": 995,
+        "fullyCleared": 683
+      },
+      {
+        "frame": "orc_axeman_w43",
+        "alphaPixelsChanged": 1058,
+        "fullyCleared": 732
+      },
+      {
+        "frame": "orc_axeman_w44",
+        "alphaPixelsChanged": 1875,
+        "fullyCleared": 1518
+      },
+      {
+        "frame": "orc_axeman_w45",
+        "alphaPixelsChanged": 1919,
+        "fullyCleared": 1580
+      },
+      {
+        "frame": "orc_axeman_w46",
+        "alphaPixelsChanged": 1028,
+        "fullyCleared": 721
+      },
+      {
+        "frame": "orc_axeman_w47",
+        "alphaPixelsChanged": 1019,
+        "fullyCleared": 698
+      },
+      {
+        "frame": "orc_axeman_w48",
+        "alphaPixelsChanged": 914,
+        "fullyCleared": 619
+      }
+    ],
+    "rgbUnchanged": true,
+    "otherCelsRGBAUnchanged": true,
+    "sha256": "d99c7d27edd7192d8366b2aa0c35875b4614d4a1f346ae93f6a172a5a9fd20a6"
+  }
+]

@@ -1,0 +1,102 @@
+{
+  "release": "2775ab2feac8921b",
+  "newOrUpdatedAssets": [
+    {
+      "path": "assets/resources/import/2d/2d0e8606-ffea-4e84-a471-0373fa5f80a6.c40416172c7e7767.json",
+      "bytes": 72,
+      "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/import/2d/2d0e8606-ffea-4e84-a471-0373fa5f80a6@f9941.b8f90.json",
+      "bytes": 585,
+      "sha256": "eb2235dd98c22ca5e39b0aca0ae22ff63a78e929c7f35bad289be4151315a177",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/2f/2fb3170c-2061-462b-b35f-419d3c87db44.fcc80.json",
+      "bytes": 10563,
+      "sha256": "7d2dfc61620804e9c32074aa8c51c5177f6e005abf54e36665439345e4b91ca6",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/71/7140a9d0-7ada-4441-86ed-afdf647d8f3b.d1b76.json",
+      "bytes": 2141,
+      "sha256": "626ba35b4048e158da0a5b5fb9dac98f4e686a2109aba47ae0bbb7101c194d1d",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/b6/b6edeedd-2718-4279-8961-7fa8eab52beb.12537.json",
+      "bytes": 6846,
+      "sha256": "8317b3d028b6cd25592a2d1d993520436c1d914c8a95f5b5c536b8f6577843b0",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/ee/ee5d7853-6b4e-4db0-9775-8b0adaac63b3.c40416172c7e7767.json",
+      "bytes": 72,
+      "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/import/ee/ee5d7853-6b4e-4db0-9775-8b0adaac63b3@f9941.5ced8.json",
+      "bytes": 594,
+      "sha256": "774328ca462720ef1fa45021dfabe6882d7e5f4023e4cf83a51e12cd6ef78aaf",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/import/f2/f29023c8-456d-4cd3-ac9d-0e70022eda5c.c40416172c7e7767.json",
+      "bytes": 72,
+      "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/import/f2/f29023c8-456d-4cd3-ac9d-0e70022eda5c@f9941.09908.json",
+      "bytes": 594,
+      "sha256": "b14f6354b349b83cd87d9f62e01c059143b0096aa2cbb86b29899c3e7aaf895e",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "contentEncoding": "gzip"
+    },
+    {
+      "path": "assets/resources/native/2d/2d0e8606-ffea-4e84-a471-0373fa5f80a6.e99cc52bbfd06ae3.webp",
+      "bytes": 883414,
+      "sha256": "e99cc52bbfd06ae3dacf064642055ff4a055db29e7c3dacd2f86b98f873d51c9",
+      "status": 200,
+      "contentType": "image/webp",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/native/ee/ee5d7853-6b4e-4db0-9775-8b0adaac63b3.20a9ea81ca31213e.webp",
+      "bytes": 2649954,
+      "sha256": "20a9ea81ca31213ea313669fab6ca70bc3fa65ab9e44eacc9ad0f46b55d08384",
+      "status": 200,
+      "contentType": "image/webp",
+      "contentEncoding": null
+    },
+    {
+      "path": "assets/resources/native/f2/f29023c8-456d-4cd3-ac9d-0e70022eda5c.ba510077b7d7a965.webp",
+      "bytes": 4246998,
+      "sha256": "ba510077b7d7a96531461ab7f50d53314ef56d1a752f2885ccfa437bc3917735",
+      "status": 200,
+      "contentType": "image/webp",
+      "contentEncoding": null
+    }
+  ],
+  "gameOrBrowserExecuted": false
+}

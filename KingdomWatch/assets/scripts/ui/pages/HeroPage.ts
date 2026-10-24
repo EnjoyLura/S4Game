@@ -150,7 +150,7 @@ function buildHeroStage(parent: Node, ctx: PageCtx, hid: string, top: number, he
   const layout = N('heroStage', parent, 0, WY(top, height), 750, height);
   const stage = N('heroShowcase', layout, 0, 0, 750, height);
   const footY = -height / 2 + 97;
-  heroComicFigure(stage, hid, -154, footY, height - 185, 376);
+  heroComicFigure(stage, hid, -154, footY, height - 185, 376, true);
   mainLabel(stage, -162, height / 2 - 30, def.name, { size: 34, color: '#FFFDF2', outline: '#3D342A', outlineW: 2,
     font: 'body', bold: true, align: 'left', w: 326, h: 44 });
   mainLabel(stage, -162, height / 2 - 67, 'Lv.' + sv.heroes[hid].lv + ' · ' + def.job.split(' · ')[0],

@@ -1,0 +1,296 @@
+{
+  "frames": [
+    {
+      "frame": "goblin_worker_w0",
+      "alphaPixelsChanged": 203,
+      "fullyCleared": 116,
+      "changedBounds": [
+        108,
+        180,
+        128,
+        227
+      ]
+    },
+    {
+      "frame": "goblin_worker_w1",
+      "alphaPixelsChanged": 257,
+      "fullyCleared": 162,
+      "changedBounds": [
+        108,
+        182,
+        128,
+        233
+      ]
+    },
+    {
+      "frame": "goblin_worker_w2",
+      "alphaPixelsChanged": 258,
+      "fullyCleared": 168,
+      "changedBounds": [
+        108,
+        182,
+        127,
+        233
+      ]
+    },
+    {
+      "frame": "goblin_worker_w3",
+      "alphaPixelsChanged": 281,
+      "fullyCleared": 185,
+      "changedBounds": [
+        108,
+        159,
+        137,
+        232
+      ]
+    },
+    {
+      "frame": "goblin_worker_w4",
+      "alphaPixelsChanged": 241,
+      "fullyCleared": 157,
+      "changedBounds": [
+        108,
+        160,
+        135,
+        230
+      ]
+    },
+    {
+      "frame": "goblin_worker_w5",
+      "alphaPixelsChanged": 242,
+      "fullyCleared": 155,
+      "changedBounds": [
+        108,
+        160,
+        135,
+        230
+      ]
+    },
+    {
+      "frame": "goblin_worker_w6",
+      "alphaPixelsChanged": 235,
+      "fullyCleared": 150,
+      "changedBounds": [
+        108,
+        159,
+        134,
+        228
+      ]
+    },
+    {
+      "frame": "goblin_worker_w7",
+      "alphaPixelsChanged": 241,
+      "fullyCleared": 157,
+      "changedBounds": [
+        108,
+        159,
+        133,
+        228
+      ]
+    },
+    {
+      "frame": "goblin_worker_w8",
+      "alphaPixelsChanged": 123,
+      "fullyCleared": 52,
+      "changedBounds": [
+        108,
+        159,
+        132,
+        230
+      ]
+    },
+    {
+      "frame": "goblin_worker_w9",
+      "alphaPixelsChanged": 164,
+      "fullyCleared": 77,
+      "changedBounds": [
+        108,
+        181,
+        122,
+        231
+      ]
+    },
+    {
+      "frame": "goblin_worker_w10",
+      "alphaPixelsChanged": 110,
+      "fullyCleared": 46,
+      "changedBounds": [
+        109,
+        180,
+        122,
+        229
+      ]
+    },
+    {
+      "frame": "goblin_worker_w11",
+      "alphaPixelsChanged": 93,
+      "fullyCleared": 37,
+      "changedBounds": [
+        109,
+        179,
+        121,
+        229
+      ]
+    },
+    {
+      "frame": "goblin_worker_w12",
+      "alphaPixelsChanged": 109,
+      "fullyCleared": 43,
+      "changedBounds": [
+        109,
+        178,
+        121,
+        233
+      ]
+    },
+    {
+      "frame": "goblin_worker_w13",
+      "alphaPixelsChanged": 102,
+      "fullyCleared": 44,
+      "changedBounds": [
+        109,
+        178,
+        122,
+        233
+      ]
+    },
+    {
+      "frame": "goblin_worker_w14",
+      "alphaPixelsChanged": 131,
+      "fullyCleared": 58,
+      "changedBounds": [
+        108,
+        180,
+        122,
+        232
+      ]
+    },
+    {
+      "frame": "goblin_worker_w15",
+      "alphaPixelsChanged": 129,
+      "fullyCleared": 52,
+      "changedBounds": [
+        108,
+        159,
+        134,
+        232
+      ]
+    },
+    {
+      "frame": "goblin_worker_w16",
+      "alphaPixelsChanged": 153,
+      "fullyCleared": 68,
+      "changedBounds": [
+        109,
+        159,
+        134,
+        233
+      ]
+    },
+    {
+      "frame": "goblin_worker_w17",
+      "alphaPixelsChanged": 124,
+      "fullyCleared": 49,
+      "changedBounds": [
+        108,
+        161,
+        134,
+        231
+      ]
+    },
+    {
+      "frame": "goblin_worker_w18",
+      "alphaPixelsChanged": 147,
+      "fullyCleared": 63,
+      "changedBounds": [
+        108,
+        161,
+        134,
+        231
+      ]
+    },
+    {
+      "frame": "goblin_worker_w19",
+      "alphaPixelsChanged": 140,
+      "fullyCleared": 56,
+      "changedBounds": [
+        108,
+        160,
+        136,
+        233
+      ]
+    },
+    {
+      "frame": "goblin_worker_w20",
+      "alphaPixelsChanged": 299,
+      "fullyCleared": 200,
+      "changedBounds": [
+        108,
+        159,
+        136,
+        233
+      ]
+    },
+    {
+      "frame": "goblin_worker_w21",
+      "alphaPixelsChanged": 237,
+      "fullyCleared": 146,
+      "changedBounds": [
+        108,
+        182,
+        127,
+        231
+      ]
+    },
+    {
+      "frame": "goblin_worker_w22",
+      "alphaPixelsChanged": 212,
+      "fullyCleared": 125,
+      "changedBounds": [
+        108,
+        182,
+        127,
+        230
+      ]
+    },
+    {
+      "frame": "goblin_worker_w23",
+      "alphaPixelsChanged": 191,
+      "fullyCleared": 106,
+      "changedBounds": [
+        108,
+        181,
+        128,
+        227
+      ]
+    },
+    {
+      "frame": "goblin_worker_w24",
+      "alphaPixelsChanged": 191,
+      "fullyCleared": 108,
+      "changedBounds": [
+        108,
+        181,
+        128,
+        227
+      ]
+    },
+    {
+      "frame": "goblin_worker_w25",
+      "alphaPixelsChanged": 202,
+      "fullyCleared": 116,
+      "changedBounds": [
+        108,
+        181,
+        128,
+        227
+      ]
+    }
+  ],
+  "workerFrames": 26,
+  "allRGBPixelsUnchanged": true,
+  "otherCelsAndPaddingRGBAUnchanged": true,
+  "manifestTimingAndMetaUnchanged": true,
+  "removedAlphaOnly": true,
+  "atlasSha256": "eba85842b8d0a468851f535c1a3af098acb22020f07a58fdd3272e03763e14d8"
+}

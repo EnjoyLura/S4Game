@@ -1,0 +1,103 @@
+{
+  "heroes": {
+    "archer": {
+      "frames": 57,
+      "seconds": 1.9,
+      "firstSourceFrame": 1,
+      "lastSourceFrame": 57,
+      "atlas": [
+        3520,
+        3456
+      ],
+      "bytes": 11315689,
+      "atlasSHA256": "1ab034d3440a339986842676be0a189ed037599baa3a0ac99c111610c19b5c35",
+      "sourceSHA256": "ab7868d09e01be1c51f2788e25be166340079b74c86a0217deb5ae0a6c0fb20b",
+      "minimumAlphaMargin": 13,
+      "aspectPreserved": true,
+      "continuousForwardOnly": true,
+      "allCelsMatchPNGs": true
+    },
+    "sniper": {
+      "frames": 56,
+      "seconds": 1.8666666666666667,
+      "firstSourceFrame": 2,
+      "lastSourceFrame": 57,
+      "atlas": [
+        3520,
+        3456
+      ],
+      "bytes": 10620940,
+      "atlasSHA256": "497bd39b3767cba1ea89c87cbe6bdde260f4cfccf3e2225ffc4909a970789767",
+      "sourceSHA256": "c778a6c3c91c34e14d373f1cd2d85b9e5b6eea5e5bae27d934db6f800b480f52",
+      "minimumAlphaMargin": 13,
+      "aspectPreserved": true,
+      "continuousForwardOnly": true,
+      "allCelsMatchPNGs": true
+    },
+    "volt": {
+      "frames": 42,
+      "seconds": 1.4,
+      "firstSourceFrame": 12,
+      "lastSourceFrame": 53,
+      "atlas": [
+        3168,
+        2880
+      ],
+      "bytes": 9391534,
+      "atlasSHA256": "f19367f8f72bee89834f33f3fa6b76ea3da0bfa97028dd5bad681ba2f7e9de2e",
+      "sourceSHA256": "d69799f489e981e591c00a069943f93e6e4b76c708a3988f2e5da84af19f8fef",
+      "minimumAlphaMargin": 13,
+      "aspectPreserved": true,
+      "continuousForwardOnly": true,
+      "allCelsMatchPNGs": true
+    },
+    "mora": {
+      "frames": 49,
+      "seconds": 1.6333333333333333,
+      "firstSourceFrame": 7,
+      "lastSourceFrame": 55,
+      "atlas": [
+        3168,
+        3456
+      ],
+      "bytes": 9989214,
+      "atlasSHA256": "0e16ae4d18cb40b3dd9a754b071a812554aa132fe3671697bdcaa1498d271f08",
+      "sourceSHA256": "d530db03d7af5c7d11f2d56238b4077467f6577330587698e291df0704801e32",
+      "minimumAlphaMargin": 14,
+      "aspectPreserved": true,
+      "continuousForwardOnly": true,
+      "allCelsMatchPNGs": true
+    }
+  },
+  "sourceAssetsBefore": 1494,
+  "sourceAssetsChanged": [
+    "assets/scripts/ui/HeroLobbyIdle.ts"
+  ],
+  "sourceAssetsAdded": [
+    "assets/resources/ux/hero_lobby_idle_v100.meta",
+    "assets/resources/ux/hero_lobby_idle_v100/archer.frames.json",
+    "assets/resources/ux/hero_lobby_idle_v100/archer.frames.json.meta",
+    "assets/resources/ux/hero_lobby_idle_v100/archer.png",
+    "assets/resources/ux/hero_lobby_idle_v100/archer.png.meta",
+    "assets/resources/ux/hero_lobby_idle_v100/mora.frames.json",
+    "assets/resources/ux/hero_lobby_idle_v100/mora.frames.json.meta",
+    "assets/resources/ux/hero_lobby_idle_v100/mora.png",
+    "assets/resources/ux/hero_lobby_idle_v100/mora.png.meta",
+    "assets/resources/ux/hero_lobby_idle_v100/sniper.frames.json",
+    "assets/resources/ux/hero_lobby_idle_v100/sniper.frames.json.meta",
+    "assets/resources/ux/hero_lobby_idle_v100/sniper.png",
+    "assets/resources/ux/hero_lobby_idle_v100/sniper.png.meta",
+    "assets/resources/ux/hero_lobby_idle_v100/volt.frames.json",
+    "assets/resources/ux/hero_lobby_idle_v100/volt.frames.json.meta",
+    "assets/resources/ux/hero_lobby_idle_v100/volt.png",
+    "assets/resources/ux/hero_lobby_idle_v100/volt.png.meta"
+  ],
+  "oldSourceAssetsUnchanged": 1493,
+  "git": {
+    "headUnchanged": true,
+    "stagedEntriesUnchanged": true
+  },
+  "gameBrowserAudioWasmStarted": false,
+  "effectLimitations": "residual pink/purple color in staff glow; partial source edge clipping on volt; user regeneration advised for pristine effects",
+  "visualApproval": "pending user inspection; numerical endpoint scores are not visual approval"
+}

@@ -1691,7 +1691,7 @@ export class FrostHero extends HeroBase {
     this.castFrostField(mgr, projs, dmg);
   }
 
-  /** Three real contacts during one continuous storm; no threefold art/audio restart. */
+  /** Three real damage contacts; the continuous storm owns its original impact sound. */
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
     if (this.frostAreas.length || this.frostGroundVisible) {
       for (let i = this.frostAreas.length - 1; i >= 0; i--) {

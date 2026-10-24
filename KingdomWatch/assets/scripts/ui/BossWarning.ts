@@ -1,4 +1,4 @@
-/** Shared comic paper and field guide. Decorative only; never blocks input or delays combat. */
+/** Original central war pennant. Decorative only: no screen tint, input shield or combat delay. */
 import { Color, Graphics, isValid, Label, Mask, Node, Sprite, SpriteFrame, UIOpacity, UITransform } from 'cc';
 import { GameAudio } from '../core/GameAudio';
 import { WaveThreat } from '../core/EventBus';
@@ -26,6 +26,7 @@ export class BossWarning {
   private bannerFallback: Node;
   private crestFallback: Node;
   private frames: (SpriteFrame | null)[] = [null, null];
+  private boss = false;
   private pending: WaveThreat | null = null;
   private playing = false;
   private quiet = false;
@@ -39,7 +40,7 @@ export class BossWarning {
     clipped.addComponent(Mask); this.clip = clipped.getComponent(UITransform)!;
     this.bannerFallback = N('pennantFallback', clipped);
     const g = this.bannerFallback.addComponent(Graphics);
-    g.fillColor = C('#F5E8CD'); g.strokeColor = C('#765927'); g.lineWidth = 3;
+    g.fillColor = C('#772C28'); g.strokeColor = C('#BA8C43'); g.lineWidth = 3;
     g.moveTo(-353, 64); g.lineTo(353, 64); g.lineTo(329, 0); g.lineTo(353, -64);
     g.lineTo(-353, -64); g.lineTo(-329, 0); g.close(); g.fill(); g.stroke();
     this.bannerArt = this.art(clipped, 'paintedPennant');
@@ -55,10 +56,10 @@ export class BossWarning {
     this.sparks = N('crestEmbers', this.root, -232, 4).addComponent(Graphics);
     this.caption = N('threatCaption', this.root, 76, 0);
     this.captionFade = this.caption.addComponent(UIOpacity);
-    this.title = label(this.caption, 0, 14, '', { size: 34, bold: true, font: 'title', color: '#4A3214',
-      w: 420, h: 46, shrink: true }).getComponent(Label)!;
-    this.subtitle = label(this.caption, 0, -23, '', { size: 17, font: 'body', color: '#77674F',
-      w: 420, h: 26, shrink: true }).getComponent(Label)!;
+    this.title = label(this.caption, 0, 17, '', { size: 44, bold: true, font: 'body', color: '#FFF0CE',
+      w: 420, h: 64, shrink: true, outline: '#49241C', outlineW: 3 }).getComponent(Label)!;
+    this.subtitle = label(this.caption, 0, -30, '', { size: 19, font: 'body', color: '#F2D69B',
+      w: 420, h: 30, shrink: true, outline: '#49241C', outlineW: 1.5 }).getComponent(Label)!;
     this.root.active = false;
     THREAT_ART.forEach((key, i) => uxFrame(key, frame => {
       if (isValid(this.root, true)) this.frames[i] = frame;
@@ -90,17 +91,19 @@ export class BossWarning {
     if (this.pending) {
       const threat = this.pending; this.pending = null;
       this.age = 0; this.playing = true; this.quiet = reducedMotion();
+      this.boss = threat.boss;
       this.title.string = threat.boss ? '首领来袭' : '精英来袭';
       this.subtitle.string = (threat.floor ? `第 ${threat.floor} 层` : `第 ${threat.wave} 波`) + ' · ' + threat.names.join('、');
       // Commit complete art only at the start, never pop it into a warning already on screen.
       this.fit(this.bannerArt, this.frames[0], 720, 240, this.bannerFallback);
-      this.fit(this.crestArt, this.frames[1], 106, 106, this.crestFallback);
-      GameAudio.play('surge', { gain: .85, rate: .95, duration: 1.05, fadeIn: .02, lowpass: 3500 });
+      this.fit(this.crestArt, this.frames[1], 184, 184, this.crestFallback);
+      GameAudio.play('surge', { gain: threat.boss ? 1 : .85, rate: threat.boss ? .88 : .97,
+        duration: .85, fadeIn: .008, lowpass: 5000 });
     }
     if (!this.playing) { this.root.active = false; return; }
     this.root.active = true;
     this.age += Math.min(Math.max(dt, 0), .05); // Real display seconds; pause/background never consumes the warning.
-    const t = this.age, end = this.quiet ? 1.8 : 2.35, exit = smooth((t - (end - .25)) / .25);
+    const t = this.age, end = this.boss ? 2.7 : 2.2, exit = smooth((t - (end - .25)) / .25);
     if (t >= end) { this.clear(); return; }
     this.fade.opacity = Math.round(255 * (1 - exit) * (this.quiet ? smooth(t / .12) : 1));
     this.root.setPosition(0, 24 + (this.quiet ? 0 : 12 * exit), 0);
