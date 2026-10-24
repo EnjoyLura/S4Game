@@ -1,0 +1,108 @@
+{
+  "release": "504e4348305fa553",
+  "runtimeCommit": "cad03f71567a0f7d2f9d42359ede5465f9db9d19",
+  "pageBuildStatus": {
+    "build_commit": "cad03f71567a0f7d2f9d42359ede5465f9db9d19",
+    "build_error": {
+      "message": null
+    },
+    "build_status": "built",
+    "pages_status": "built"
+  },
+  "files": [
+    {
+      "file": "assets/main/index.ee0b6.js",
+      "bytes": 911853,
+      "status": 200,
+      "sha256": "matches",
+      "mime": "application/javascript"
+    },
+    {
+      "file": "assets/resources/import/43/43cb4bd3-198f-4b02-8c7a-b819287f619f.c40416172c7e7767.json",
+      "bytes": 72,
+      "status": 200,
+      "sha256": "matches",
+      "mime": "application/json"
+    },
+    {
+      "file": "assets/resources/import/43/43cb4bd3-198f-4b02-8c7a-b819287f619f@f9941.0def2.json",
+      "bytes": 573,
+      "status": 200,
+      "sha256": "matches",
+      "mime": "application/json"
+    },
+    {
+      "file": "assets/resources/import/bd/bda72bd1-472f-4efa-bc2e-3a8d594e0dfb.c40416172c7e7767.json",
+      "bytes": 72,
+      "status": 200,
+      "sha256": "matches",
+      "mime": "application/json"
+    },
+    {
+      "file": "assets/resources/import/bd/bda72bd1-472f-4efa-bc2e-3a8d594e0dfb@f9941.3785c.json",
+      "bytes": 574,
+      "status": 200,
+      "sha256": "matches",
+      "mime": "application/json"
+    },
+    {
+      "file": "assets/resources/import/c4/c41df67c-6dd0-4fce-920c-4e741e391690.c40416172c7e7767.json",
+      "bytes": 72,
+      "status": 200,
+      "sha256": "matches",
+      "mime": "application/json"
+    },
+    {
+      "file": "assets/resources/import/c4/c41df67c-6dd0-4fce-920c-4e741e391690@f9941.edc87.json",
+      "bytes": 574,
+      "status": 200,
+      "sha256": "matches",
+      "mime": "application/json"
+    },
+    {
+      "file": "assets/resources/import/ec/ecce8c83-0915-479d-857d-28226b78eb9f.c40416172c7e7767.json",
+      "bytes": 72,
+      "status": 200,
+      "sha256": "matches",
+      "mime": "application/json"
+    },
+    {
+      "file": "assets/resources/import/ec/ecce8c83-0915-479d-857d-28226b78eb9f@f9941.08b8f.json",
+      "bytes": 573,
+      "status": 200,
+      "sha256": "matches",
+      "mime": "application/json"
+    },
+    {
+      "file": "assets/resources/native/43/43cb4bd3-198f-4b02-8c7a-b819287f619f.4b5b678d2bf25d12.webp",
+      "bytes": 341512,
+      "status": 200,
+      "sha256": "matches",
+      "mime": "image/webp"
+    },
+    {
+      "file": "assets/resources/native/bd/bda72bd1-472f-4efa-bc2e-3a8d594e0dfb.2bfc0fedab2cf8f9.webp",
+      "bytes": 342466,
+      "status": 200,
+      "sha256": "matches",
+      "mime": "image/webp"
+    },
+    {
+      "file": "assets/resources/native/c4/c41df67c-6dd0-4fce-920c-4e741e391690.eb2f9e13606d9bbc.webp",
+      "bytes": 309558,
+      "status": 200,
+      "sha256": "matches",
+      "mime": "image/webp"
+    },
+    {
+      "file": "assets/resources/native/ec/ecce8c83-0915-479d-857d-28226b78eb9f.535156f4f94398d0.webp",
+      "bytes": 393822,
+      "status": 200,
+      "sha256": "matches",
+      "mime": "image/webp"
+    }
+  ],
+  "standardHTTPSamples": 19,
+  "sourcePushed": false,
+  "gameBrowserAudioOrWasmStarted": false
+}

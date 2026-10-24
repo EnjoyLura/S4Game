@@ -1,0 +1,31 @@
+{
+  "runtimeBytesSkippedAcrossFiveShowcases": 2044324,
+  "files": [
+    {
+      "hero": "archer",
+      "file": "assets/resources/native/35/35bdd906-6125-4df4-ac4e-f36d5210d654.2954eacc8da88aae.webp",
+      "bytes": 876122
+    },
+    {
+      "hero": "pyro",
+      "file": "assets/resources/native/08/0870731e-8150-41a4-819f-c422ff659f6c.3b55a56f7bf111ab.webp",
+      "bytes": 282486
+    },
+    {
+      "hero": "sniper",
+      "file": "assets/resources/native/22/22d5a589-3361-4fbe-b257-81f66c215a6f.476e0d3f61e8fc5b.webp",
+      "bytes": 260020
+    },
+    {
+      "hero": "volt",
+      "file": "assets/resources/native/60/604375e0-ee6e-42da-a5e7-0b8e4c314a3d.7db565083d486696.webp",
+      "bytes": 333968
+    },
+    {
+      "hero": "mora",
+      "file": "assets/resources/native/3e/3e9ac617-0e41-4f1b-9f39-c0884c1d97df.9a30591434165fe0.webp",
+      "bytes": 291728
+    }
+  ],
+  "stillUsedByRewardsAndFailureFallback": true
+}

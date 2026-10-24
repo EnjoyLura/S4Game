@@ -26,4 +26,3 @@ fs.writeFileSync(path.join(__dirname,'typecheck-comparison.json'),JSON.stringify
  beforeDiagnostics:before.length,currentDiagnostics:current.length,gameModulesExecuted:false},null,2)+'\n');
 console.log(JSON.stringify({beforeDiagnostics:before.length,currentDiagnostics:current.length,added},null,2));
 if(added.length)process.exitCode=1;
-
