@@ -69,6 +69,7 @@ export class Monster {
   burnT = 0;
   burnTick = 0;
   burnDps = 0;
+  private burnOwner = 'pyro';
   /** Monotonic damage-event counter for this pooled life; reapplying burn must not replay an old event. */
   burnPulse = 0;
   private burnBurst = 0;
@@ -143,6 +144,7 @@ export class Monster {
     this.atkT = def.atkInterval;
     this.healT = def.atkInterval;
     this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = this.lungeT = this.flashT = 0;
+    this.burnOwner = 'pyro';
     this.atkAnimT = 0;
     this.freezeT = this.freezeAge = this.freezeSlowAmp = this.freezeSlowDur = this.thawT = 0;
     this.slowAmp = 0.2;
@@ -418,8 +420,11 @@ export class Monster {
       this.burnTick += Math.min(dt, this.burnT);
       if (this.burnTick + 1e-8 >= 0.5) {
         this.burnTick = Math.max(0, this.burnTick - 0.5);
-        this.burnPulse++;
         this.takeDamage(this.burnDps * 0.5, false, 'burn');
+        if (this.lastDamageTaken > 0) {
+          this.burnPulse++; // A status flame represents an actual HP loss, including resisted damage.
+          this.ctx.damage?.(this.burnOwner, this.lastDamageTaken);
+        }
       }
       if (this.dead) return;
       this.burnT = Math.max(0, this.burnT - dt);
@@ -653,8 +658,9 @@ export class Monster {
     this.freezeSlowDur = Math.max(this.freezeSlowDur, postSlowDuration);
     return true;
   }
-  applyBurn(dps: number, dur: number, burst = 0, healCut = 0): void {
-    if (this.dead || dps <= 0 || dur <= 0) return;
+  applyBurn(dps: number, dur: number, burst = 0, healCut = 0, owner = 'pyro'): void {
+    if (this.dead || !Number.isFinite(dps) || !Number.isFinite(dur) || dps <= 0 || dur <= 0) return;
+    if (this.burnT <= 0 || dps > this.burnDps) this.burnOwner = owner;
     if (this.burnT <= 0) this.burnTick = 0;
     this.burnDps = this.burnT > 0 ? Math.max(this.burnDps, dps) : dps;
     this.burnBurst = this.burnT > 0 ? Math.max(this.burnBurst, burst) : burst;

@@ -679,7 +679,7 @@ export class ProjectileManager {
         o.takeDamage(sp.dmg * a.damageScale * (sp.explodeMul || 0.4), false, sp.heroId, false, 0,
           Math.atan2(o.y - m.y, o.x - m.x));
         this.dmg.add(sp.heroId, o.lastDamageTaken);
-        if (!o.dead && sp.burnSplash && sp.burnDps) o.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0);
+        if (!o.dead && sp.burnSplash && sp.burnDps) o.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0, sp.heroId);
         if (o.dead) this.killPop(sp, o.x, o.y + o.def.radius);
       }
       if (this.impacts) this.impacts.blast(m.x, m.y, sp.heroId, sp.explodeR);
@@ -691,7 +691,7 @@ export class ProjectileManager {
     if (sp.knockback) m.applyKnockback(sp.knockback);
     if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);
     if (sp.freezeChance && Math.random() < sp.freezeChance) m.applyFreeze(sp.freezeDuration || .6);
-    if (sp.burnDps) m.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0);
+    if (sp.burnDps) m.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0, sp.heroId);
     if (sp.teamVuln) m.applyVuln(sp.teamVuln, 3);
     if (sp.stun) m.stunT = Math.max(m.stunT, sp.stun);
     if (sp.shockAmp) m.applyShock(sp.shockAmp, sp.shockDur ?? 3);
@@ -765,7 +765,7 @@ export class ProjectileManager {
       const angle = Math.atan2(m.y - sp.y, m.x - sp.x);
       m.takeDamage(amount, direct && sp.crit, sp.heroId, direct && sp.ignoreRes === true, direct ? sp.resCut || 0 : 0, angle, direct);
       this.dmg.add(sp.heroId, m.lastDamageTaken);
-      if (!m.dead && sp.burnDps && (direct || sp.burnSplash)) m.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0);
+      if (!m.dead && sp.burnDps && (direct || sp.burnSplash)) m.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0, sp.heroId);
       if (direct && !m.dead) {
         if (sp.stun) m.stunT = Math.max(m.stunT, sp.stun);
         if (sp.slowRatio) m.applySlow(sp.slowRatio, sp.slowDur ?? 2);

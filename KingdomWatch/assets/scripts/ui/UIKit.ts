@@ -249,12 +249,13 @@ export function dlgConfirm(parent: Node, x: number, y: number, w: number, h: num
   return n;
 }
 
-/** 新怪物通知钮：整体美术图标（哥布林脸+红!角标一体，生图 ui_btn_notice，用户调整：不做拼装）；
- *  缺图回退程序橙圆 */
+/** A single illustrated field guide, matching the current hero/codex artwork and HUD controls. */
 export function noticeBtn(parent: Node, x: number, y: number, d: number, cb: () => void): Node {
-  const n = gcircle(parent, x, y, d / 2, CA('#D98A3E', 1));
-  artSprite(n, 0, 0, d + 4, d + 4, 'ui_btn_notice', { sliced: false, belowIdx: 0 });
-  bindButton(n, cb, { circle: true });
+  const n = gpanel(parent, x, y, d, d, CA('#151C19', .58), undefined, 0, 14);
+  n.name = 'newEnemyFieldGuide';
+  const fallback = label(n, 0, 0, '图鉴', { size: 18, color: '#FFE3A3', w: d, h: 36 });
+  artSprite(n, 0, 0, d - 10, d - 10, 'hero_comic_v2/comic_story_v2', { sliced: false, hideOnLoad: [fallback] });
+  bindButton(n, cb);
   return n;
 }
 

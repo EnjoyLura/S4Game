@@ -7,6 +7,7 @@ import { LO } from '../config/GameConfig';
 import { applyFont } from '../ui/Fonts';
 
 const MAX_ACTIVE = 30;
+const MAX_PERIODIC = 12;
 const MERGE_WINDOW = 0.075;
 type Kind = 'normal' | 'crit' | 'periodic';
 interface Motion { attack: number; settle: number; hold: number; life: number; peak: number; rest: number; kick: number; opacity: number; }
@@ -72,11 +73,23 @@ export class FloatText {
         return;
       }
     }
-    if (this.live.length >= MAX_ACTIVE || kind !== 'crit' && this.live.length >= MAX_ACTIVE - 6) return;
     if (kind === 'periodic') {
       let periodic = 0;
-      for (const t of this.live) if (t.kind === 'periodic' && ++periodic >= 6) return;
+      for (const t of this.live) if (t.kind === 'periodic' && ++periodic >= MAX_PERIODIC) return;
+      // A meteor's normal hits must not fill every slot before its real burn tick arrives.
+      // Reuse an already-settled normal number; retain the total budget and six critical slots.
+      if (this.live.length >= MAX_ACTIVE - 6) {
+        let oldest = -1;
+        for (let i = 0; i < this.live.length; i++) {
+          const t = this.live[i];
+          if (t.kind === 'normal' && t.age >= MOTION.normal.settle
+            && (oldest < 0 || t.age > this.live[oldest].age)) oldest = i;
+        }
+        if (oldest < 0) return;
+        this.pool.put(this.live.splice(oldest, 1)[0]);
+      }
     }
+    if (this.live.length >= MAX_ACTIVE || kind !== 'crit' && this.live.length >= MAX_ACTIVE - 6) return;
     const ft = this.pool.get();
     ft.kind = kind; ft.target = event.target; ft.amount = amount; ft.hits = 1;
     const motion = MOTION[kind];
@@ -85,7 +98,7 @@ export class FloatText {
     ft.label.string = text;
     ft.label.fontSize = kind === 'crit' ? 40 : kind === 'periodic' ? 21 : 27;
     ft.label.lineHeight = ft.label.fontSize * 1.35;
-    ft.label.color = this.col(kind === 'crit' ? '#FF3030' : '#FFFFFF');
+    ft.label.color = this.col(kind === 'crit' ? '#FF3030' : kind === 'periodic' ? '#FFC17D' : '#FFFFFF');
     ft.label.outlineColor = this.col(kind === 'crit' ? '#281311' : '#221D19');
     ft.label.outlineWidth = kind === 'crit' ? 3.2 : kind === 'periodic' ? 1.8 : 2.2;
     // Reserve the punch silhouette so the peak cannot crash into its neighbours.
@@ -105,12 +118,13 @@ export class FloatText {
     const bottom = -LO.half + LO.safeBottom + 190;
     let best = Infinity, bestX = x, bestY = y;
     // Try nearby lanes instead of random offsets. Prefer proximity to the hit point.
-    for (let lane = 0; lane < 9; lane++) {
+    for (let lane = 0; lane < (ft.kind === 'periodic' ? 12 : 9); lane++) {
       const row = Math.floor(lane / 3);
       const column = lane % 3;
       const offset = column === 0 ? 0 : (column === 1 ? -1 : 1) * Math.min(108, ft.width * 0.8 + 14);
       const px = Math.max(-348 + ft.width / 2, Math.min(330 - ft.width / 2, x + offset));
-      const py = Math.max(bottom, Math.min(top, y + row * 36));
+      const rowY = ft.kind === 'periodic' ? (row === 0 ? -22 : row === 1 ? -52 : row === 2 ? 26 : 56) : row * 36;
+      const py = Math.max(bottom, Math.min(top, y + rowY));
       let score = row * 1.1 + Math.abs(offset) * 0.003;
       for (const other of this.live) {
         if (other.age > other.life * 0.8) continue;
@@ -121,7 +135,7 @@ export class FloatText {
       if (score < best) { best = score; bestX = px; bestY = py; }
       if (score < 1) break;
     }
-    if (best > 180 && ft.kind !== 'crit') return false;
+    if (best > 180 && ft.kind === 'normal') return false;
     ft.baseX = ft.x = bestX; ft.baseY = ft.y = bestY;
     ft.node.setPosition(bestX, bestY, 0);
     return true;

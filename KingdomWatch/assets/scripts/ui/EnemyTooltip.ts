@@ -1,5 +1,5 @@
 /** Compact enemy sidebar. Field taps stay below loot and HUD controls. */
-import { BlockInputEvents, EventTouch, Graphics, Node, UITransform, Vec3 } from 'cc';
+import { BlockInputEvents, Camera, Canvas, EventTouch, Graphics, Node, UITransform, Vec3 } from 'cc';
 import type { Monster, MonsterManager } from '../battle/Monster';
 import { LO } from '../config/GameConfig';
 import type { MobDef } from '../config/Mobs';
@@ -40,8 +40,16 @@ export class EnemyTooltip {
     const textLayer = field.getChildByName('TextLayer');
     if (textLayer) tap.setSiblingIndex(textLayer.getSiblingIndex());
     const transform = tap.getComponent(UITransform)!;
-    const pickAt = (x: number, y: number): Selection | null => {
-      this.point.set(x, y, 0); transform.convertToNodeSpaceAR(this.point, this.local);
+    let camera: Camera | null = null;
+    for (let ancestor: Node | null = field; ancestor && !camera; ancestor = ancestor.parent)
+      camera = ancestor.getComponent(Canvas)?.cameraComponent || null;
+    const world = new Vec3();
+    const pickAt = (event: EventTouch): Selection | null => {
+      if (!camera) return null;
+      // UI locations use a bottom-left design origin; this game's camera/world is centred.
+      // Convert physical screen pixels through the actual UI camera before field-local picking.
+      const p = event.getLocation(); this.point.set(p.x, p.y, .5);
+      camera.screenToWorld(this.point, world); transform.convertToNodeSpaceAR(world, this.local);
       const m = this.pick(this.local.x, this.local.y);
       return m ? { mob: m, lifeId: m.lifeId, def: m.def, hp: m.hp, maxHp: m.maxHp, info: m.inspect() } : null;
     };
@@ -49,7 +57,7 @@ export class EnemyTooltip {
       if (this.pressed !== -1 || !this.canInspect()) return;
       this.pressed = e.getID();
       const p = e.getUILocation(); this.startX = p.x; this.startY = p.y;
-      this.pending = pickAt(p.x, p.y); // Lock the touched instance before it can move or die.
+      this.pending = pickAt(e); // Lock the touched instance before it can move or die.
     });
     tap.on(Node.EventType.TOUCH_CANCEL, (e: EventTouch) => {
       if (this.pressed === e.getID()) { this.pressed = -1; this.pending = null; }
@@ -59,7 +67,7 @@ export class EnemyTooltip {
       const captured = this.pending; this.pressed = -1; this.pending = null;
       const p = e.getUILocation();
       if (!this.canInspect() || Math.hypot(p.x - this.startX, p.y - this.startY) > DRAG_SLOP) return;
-      const target = captured || pickAt(p.x, p.y);
+      const target = captured || pickAt(e);
       if (!target || target.lifeId === this.selected?.lifeId) this.hide();
       else this.show(target);
     });

@@ -225,7 +225,7 @@ export class BattleDirector extends Component {
     for (const h of this.heroes) this.dmgSvc.register(h.id, h.name);
 
     this.hud = new HUD(uiRoot, this, field);
-    this.enemyTooltip = new EnemyTooltip(field, uiRoot, this.mgr, () => this.canUseBattleHud && !this.ultimateActive);
+    this.enemyTooltip = new EnemyTooltip(field, uiRoot, this.mgr, () => this.canUseBattleHud);
     const lootLayer = new Node('EquipmentDrops');
     lootLayer.setParent(field);
     lootLayer.setSiblingIndex(textLayer.getSiblingIndex());

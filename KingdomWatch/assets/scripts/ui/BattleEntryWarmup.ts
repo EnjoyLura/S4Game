@@ -11,7 +11,7 @@ import { ArtPriority, uxFrame, warmUXArt } from './Ux';
 import { warmPickArt } from './PickArt';
 
 export const ENTRY_GATE_ART = 'battle_entry_v3/outpost_gate';
-export const THREAT_ART = ['boss_warning_v1/banner', 'boss_warning_v1/crest'] as const;
+export const THREAT_ART = ['pick_comic_v1/title_plate', 'hero_comic_v2/comic_story_v2'] as const;
 const HERO_CLIPS: Record<string, [string, string]> = {
   sniper: ['sniper_idle_natural_v2', 'sniper_attack_clean_v1'],
   pyro: ['pyro_idle_loop_v2', 'pyro_attack_user_v2'],
@@ -40,6 +40,8 @@ export function warmBattlefield(levelId: string, heroIds: readonly string[], mob
   priority: ArtPriority = 'visible'): Promise<void> {
   const ids = heroIds.length ? [...heroIds] : ['archer', 'sniper'];
   warmEntryArt(priority); void warmBattleScene();
+  // Small reused HUD art starts before entry; neither image blocks the battlefield reveal.
+  void warmUXArt(['hero_comic_v2/comic_story_v2', 'pick_comic_v1/title_plate'], priority === 'visible' ? 'next' : priority);
   // Start card predictions now, rather than after every multi-megabyte character sheet.
   void warmPickArt(ids);
   if (levelId === '1-5' || levelId === '1-10' || mobIds.includes('goblin_king')) getMobAnims(() => {}, 'goblin_king', priority);

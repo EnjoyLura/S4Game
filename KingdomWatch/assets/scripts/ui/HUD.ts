@@ -146,9 +146,12 @@ export class HUD {
     });
     this.lvTxt.name = 'stageLevelText';
 
-    /* 预警横幅 */
-    this.banner = gpanel(top, WX(145, 460), WYN(142, 60), 460, 60, CA('#351F16', 0.75), undefined, 0, 12);
-    this.bannerTxt = label(this.banner, 0, 0, '敌军来袭！', { size: 26, color: '#FFE6A5', bold: true, w: 430, h: 44, shrink: true, outline: '#35261B', outlineW: 2 });
+    /* Match the current paper/chrome art instead of the old translucent brown slab. */
+    this.banner = comicPlate(top, WX(145, 460), WYN(142, 60), 460, 60, 'paper', { name: 'battleNoticeBanner', cut: 10 });
+    artSprite(this.banner, 0, 0, 460, 60, 'pick_comic_v1/title_plate', {
+      sliced: false, belowIdx: 0, onLoaded: () => this.banner.getComponent(Graphics)?.clear(),
+    });
+    this.bannerTxt = label(this.banner, 0, 0, '敌军来袭！', { size: 26, color: '#4A3214', font: 'title', bold: true, w: 386, h: 44, shrink: true });
     this.banner.active = false;
 
     // 左列：FPS / 倍速 / 伤害统计（FPS 与倍速按钮左缘对齐 = 设计 x24，需固定宽 + shrink 让 left 对齐生效）
@@ -168,7 +171,7 @@ export class HUD {
     sg.fill();
     bindButton(statsBtn, () => this.dir.showStats(), { enabled: () => this.dir.canUseBattleHud });
 
-    /* 新怪通知钮（GM 钮下方，参考 KR）：首遇新怪种时亮出，点击弹怪物介绍弹窗（整体美术图标：生图 ui_btn_notice） */
+    /* First-seen enemy notice uses the existing comic field-guide illustration. */
     this.newMobBtn = noticeBtn(top, WX(24, 60), WYN(480, 60), 64, () => this.dir.showNewMobIntro());
     this.newMobBtn.active = false;
 

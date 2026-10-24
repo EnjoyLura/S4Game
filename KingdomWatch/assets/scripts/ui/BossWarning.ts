@@ -1,4 +1,4 @@
-/** Original central war pennant. Decorative only: no screen tint, input shield or combat delay. */
+/** Shared comic paper and field guide. Decorative only; never blocks input or delays combat. */
 import { Color, Graphics, isValid, Label, Mask, Node, Sprite, SpriteFrame, UIOpacity, UITransform } from 'cc';
 import { GameAudio } from '../core/GameAudio';
 import { WaveThreat } from '../core/EventBus';
@@ -39,7 +39,7 @@ export class BossWarning {
     clipped.addComponent(Mask); this.clip = clipped.getComponent(UITransform)!;
     this.bannerFallback = N('pennantFallback', clipped);
     const g = this.bannerFallback.addComponent(Graphics);
-    g.fillColor = C('#772C28'); g.strokeColor = C('#BA8C43'); g.lineWidth = 3;
+    g.fillColor = C('#F5E8CD'); g.strokeColor = C('#765927'); g.lineWidth = 3;
     g.moveTo(-353, 64); g.lineTo(353, 64); g.lineTo(329, 0); g.lineTo(353, -64);
     g.lineTo(-353, -64); g.lineTo(-329, 0); g.close(); g.fill(); g.stroke();
     this.bannerArt = this.art(clipped, 'paintedPennant');
@@ -55,10 +55,10 @@ export class BossWarning {
     this.sparks = N('crestEmbers', this.root, -232, 4).addComponent(Graphics);
     this.caption = N('threatCaption', this.root, 76, 0);
     this.captionFade = this.caption.addComponent(UIOpacity);
-    this.title = label(this.caption, 0, 17, '', { size: 44, bold: true, font: 'body', color: '#FFF0CE',
-      w: 420, h: 64, shrink: true, outline: '#49241C', outlineW: 3 }).getComponent(Label)!;
-    this.subtitle = label(this.caption, 0, -30, '', { size: 19, font: 'body', color: '#F2D69B',
-      w: 420, h: 30, shrink: true, outline: '#49241C', outlineW: 1.5 }).getComponent(Label)!;
+    this.title = label(this.caption, 0, 14, '', { size: 34, bold: true, font: 'title', color: '#4A3214',
+      w: 420, h: 46, shrink: true }).getComponent(Label)!;
+    this.subtitle = label(this.caption, 0, -23, '', { size: 17, font: 'body', color: '#77674F',
+      w: 420, h: 26, shrink: true }).getComponent(Label)!;
     this.root.active = false;
     THREAT_ART.forEach((key, i) => uxFrame(key, frame => {
       if (isValid(this.root, true)) this.frames[i] = frame;
@@ -94,7 +94,7 @@ export class BossWarning {
       this.subtitle.string = (threat.floor ? `第 ${threat.floor} 层` : `第 ${threat.wave} 波`) + ' · ' + threat.names.join('、');
       // Commit complete art only at the start, never pop it into a warning already on screen.
       this.fit(this.bannerArt, this.frames[0], 720, 240, this.bannerFallback);
-      this.fit(this.crestArt, this.frames[1], 184, 184, this.crestFallback);
+      this.fit(this.crestArt, this.frames[1], 106, 106, this.crestFallback);
       GameAudio.play('surge', { gain: .85, rate: .95, duration: 1.05, fadeIn: .02, lowpass: 3500 });
     }
     if (!this.playing) { this.root.active = false; return; }

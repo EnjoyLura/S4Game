@@ -903,7 +903,7 @@ export class PyroHero extends HeroBase {
   readonly chargeMax = PYRO_CHARGE_MAX;
   readonly skillMax = 10;
   /** One entry per promised skill fireball. Full projectile capacity defers a shot instead of dropping it. */
-  private skillVolley: { t: number; spec: ProjSpec; first: boolean }[] = [];
+  private skillVolley: { t: number; spec: ProjSpec; first: boolean; last: boolean; index: number }[] = [];
   /** Fixed ground points; the projectile's actual arrival removes the warning and creates the crater. */
   private meteorQueue: { t: number; x: number; y: number; fired?: boolean; first?: boolean; last?: boolean;
     fallElapsed?: number; fallSeconds?: number }[] = [];
@@ -1019,46 +1019,53 @@ export class PyroHero extends HeroBase {
     void _dmg;
     void projs;
     if (this.skillVolley.length) { this.skillCd = .15; return; }
-    this.skillCd = this.skillCdTotal;   // 冷却缩减卡
-    const R = this.stats.skillRange;
-    const cands = mgr.list.filter(m => !m.dead && Math.hypot(m.x - this.x, m.y - HERO_Y) <= R);
-    if (!cands.length) return;
-    // 密集簇：邻域 130 内同伴最多者为中心
-    let best = cands[0], bestN = -1;
-    for (const m of cands) {
-      let n = 0;
-      for (const o of cands) if (Math.hypot(o.x - m.x, o.y - m.y) <= 130) n++;
-      if (n > bestN) { bestN = n; best = m; }
-    }
     const pc = pyroSkCfg(this.stats.skillLv);
     const shots = Math.max(1, Math.round(this.stats.skillShots || 3));
     const dmg = this.abilityDamage(pc.mul);
     const boomR = pyroBlastRadius(this.stats, 110 * (this.stats.skillRangeMul || 1));
-    this.animateAttack(true, best.x - this.x, best.y - (HERO_Y + 60));
+    const aim = this.skillAim(mgr, boomR);
+    if (!aim) return;
+    this.skillCd = this.skillCdTotal;
     for (let k = 0; k < shots; k++) {
-      const ox = best.x + (k - (shots - 1) / 2) * Math.min(28, 100 / Math.max(1, shots - 1));
-      const oy = best.y;
-      const dx = ox - this.x, dy = oy - (HERO_Y + 60);
+      const dx = aim.x - this.x, dy = aim.y - (HERO_Y + 60);
       const l = Math.hypot(dx, dy) || 1;
       const spec = this.spec({
         x: this.x, y: HERO_Y + 60, dirX: dx / l, dirY: dy / l,
         dmg, explodeR: boomR, explodeMul: pc.boomMul, burnDps: this.abilityDamage(0.2, false, 0.04),
         speed: 820, size: 11, ability: true,
       });
-      if (k === shots - 1 && this.stats.pyroFirefield) {
-        spec.groundTarget = { x: ox, y: oy };
-        spec.onGroundImpact = () => {
-          if (!this.node.isValid) return;
-          const life = (this.stats.pyroFirefield || 3) + (this.stats.pyroLinger || 0);
-          // Bound persistent skill patches without evicting an ultimate crater.
-          const fields = this.craters.filter(c => c.skill);
-          if (fields.length >= 4) this.craters.splice(this.craters.indexOf(fields[0]), 1);
-          this.craters.push({ x: ox, y: oy, t: life, life, radius: boomR, skill: true });
-          projs.fireCraters(this.craters, CRATER_R * pyroUltCfg(this.stats.ultLv).craterMul, this.warnT);
-        };
-      }
-      this.skillVolley.push({ t: k * .12, first: k === 0, spec });
+      this.skillVolley.push({ t: k * .12, first: k === 0, last: k === shots - 1, index: k, spec });
     }
+  }
+
+  /** Re-evaluate the visible cluster at each release, then commit a finite, predicted ground strike. */
+  private skillAim(mgr: MonsterManager, radius: number, index = 0): { x: number; y: number } | null {
+    const top = LO.half - LO.notchTop - 136, bottom = LINE_Y + 24;
+    const originY = HERO_Y + 60, range2 = this.stats.skillRange ** 2;
+    const points: { x: number; y: number }[] = [];
+    for (const m of mgr.list) {
+      if (m.dead || m.y < bottom || m.y > top || Math.abs(m.x) > 350
+        || (m.x - this.x) ** 2 + (m.y - HERO_Y) ** 2 > range2) continue;
+      let y = m.y;
+      for (let n = 0; n < 3; n++) y = this.projectedMeteorY(m, Math.hypot(m.x - this.x, y - originY) / 820);
+      points.push({ x: Math.max(-330, Math.min(330, m.x)), y: Math.max(bottom, Math.min(top, y)) });
+    }
+    let best: { x: number; y: number } | null = null, bestScore = -1;
+    const r2 = radius * radius;
+    for (const point of points) {
+      let score = 0;
+      for (const other of points) {
+        const d2 = (other.x - point.x) ** 2 + (other.y - point.y) ** 2;
+        if (d2 <= r2) score += 1 - .4 * d2 / r2;
+      }
+      if (score > bestScore + 1e-6 || Math.abs(score - bestScore) < 1e-6 && point.y < (best?.y ?? Infinity)) {
+        best = point; bestScore = score;
+      }
+    }
+    if (!best) return null;
+    // Small variations distinguish the volley without widening upgraded shots off the field.
+    const offset = (index % 3 - 1) * Math.min(12, radius * .1);
+    return { x: Math.max(-330, Math.min(330, best.x + offset)), y: best.y };
   }
 
   protected queuedShotDelay(): number { return this.skillVolley[0]?.t ?? Infinity; }
@@ -1096,11 +1103,25 @@ export class PyroHero extends HeroBase {
 
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
     for (const q of this.skillVolley) q.t -= dt;
-    if (this.skillVolley.length && this.skillVolley[0].t <= 0) {
+    if (this.skillVolley.length && this.skillVolley[0].t <= 0 && projs.hasCapacity) {
       const q = this.skillVolley[0];
-      if (projs.fire(q.spec)) {
+      const aim = this.skillAim(mgr, q.spec.explodeR || 110, q.index);
+      if (aim) {
+        const dx = aim.x - this.x, dy = aim.y - (HERO_Y + 60), length = Math.hypot(dx, dy) || 1;
+        q.spec.dirX = dx / length; q.spec.dirY = dy / length;
+        q.spec.groundTarget = aim;
+        if (q.last && this.stats.pyroFirefield) q.spec.onGroundImpact = () => {
+          if (!this.node.isValid) return;
+          const life = (this.stats.pyroFirefield || 3) + (this.stats.pyroLinger || 0);
+          const fields = this.craters.filter(c => c.skill);
+          if (fields.length >= 4) this.craters.splice(this.craters.indexOf(fields[0]), 1);
+          this.craters.push({ x: aim.x, y: aim.y, t: life, life, radius: q.spec.explodeR, skill: true });
+          projs.fireCraters(this.craters, CRATER_R * pyroUltCfg(this.stats.ultLv).craterMul, this.warnT);
+        };
+      }
+      if (aim && projs.fire(q.spec)) {
         this.skillVolley.shift();
-        if (q.first) Sfx.cast(this.id);
+        if (q.first) { this.animateAttack(true, q.spec.dirX, q.spec.dirY); Sfx.cast(this.id); }
         // Capacity recovery cannot collapse the remaining volley back into one overlapping burst.
         const delay = this.skillVolley.length ? Math.max(0, .12 - this.skillVolley[0].t) : 0;
         if (delay > 0) for (const next of this.skillVolley) next.t += delay;
