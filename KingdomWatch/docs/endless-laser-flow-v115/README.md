@@ -14,4 +14,6 @@
 
 最终独立GPU150帧片元检查通过。实现本地提交dac8d1f7后Creator生产构建20028ms、正常退出36，15JS及5内联脚本语法/完整SHA校验通过，506份原native字节保持；普攻虹吸及爆炸/地面shader分支逐字保持。运行版本b2ff5e7290266c5a，1569文件194036999字节，200MB内。
 
-仅做编译/静态包/纯层数数学与独立GPU片元美术检查，不启动游戏/浏览器/真实战斗/音频/WASM。实际手机节奏、方向感与性能由用户试玩确认。按长期授权发布独立GitHub Pages运行仓库，不推源码/不动CF；发布收据后补。
+已按长期授权发布独立GitHub运行仓库，运行提交74b56fd84e10d2c9c2c00dc5306a407d75e9b38e，Pages/build均built，19项标准HTTP及游戏脚本/激光Effect额外2项HTTP/SHA通过，发布中source HEAD/索引保持。收据见deployment.json、additional-http-verification.json。不推源码/不动CF。
+
+仅做编译/静态包/纯层数数学与独立GPU片元美术检查，不启动游戏/浏览器/真实战斗/音频/WASM。实际手机节奏、方向感与性能由用户试玩确认。试玩：https://enjoylura.github.io/kingdom-watch-play/?v=endless-laser-v115 。
