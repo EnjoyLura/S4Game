@@ -14,5 +14,5 @@ NewHeroArt 统一虚拟裁切与别名，界面和预热共享3张真实纹理�
 
 源实现已本地提交724d3581。Creator3.8.8构建35304ms，正常退出36，DPR/缓存准备完成。15份JS与5段内联脚本语法、全部清单/资源SHA/子路径检查通过；506份原native逐字节不变，仅新增3张图集。发布包1578文件、199251985字节（199.25MB，低于200MB），相对v116仅增加5189775字节。图标/头像核心图集无损WebP，强化卡图集Q95、alpha无损；正式源PNG保留。版本e0353647e99bc27b。没有放宽200MB预算。
 
-发布与线上散列验证结果待补。
+已发布[正式游戏](https://enjoylura.github.io/kingdom-watch-play/?v=hero-icons-v117)。独立运行仓库提交74bd9168276b62367472ec03e6e15629edd8667f，GitHub Pages构建成功、标准线上检查通过；主脚本及3张新增图集另行HTTP200/逐字节SHA校验通过（additional-http-verification.json）。发布过程源HEAD与暂存未变，没有推送源码，没有部署Cloudflare。回执见deployment.json。
 

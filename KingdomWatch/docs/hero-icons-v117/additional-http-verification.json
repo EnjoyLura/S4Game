@@ -1,0 +1,30 @@
+{
+  "release": "e0353647e99bc27b",
+  "samples": [
+    {
+      "path": "assets/main/index.86640.js",
+      "bytes": 963439,
+      "status": 200,
+      "sha256": "85ef109e82b466311822b997b3a1c20f6a63d3a487843db2dec6b9c35793d048"
+    },
+    {
+      "path": "assets/resources/native/0a/0a2d1d46-6800-4135-8b9b-4bd65dba7026.e99595733329bfcb.webp",
+      "bytes": 2395496,
+      "status": 200,
+      "sha256": "e99595733329bfcb7d048c047f0d735c20f31a2a9f92ce1ba8f5a84f7d37c9e6"
+    },
+    {
+      "path": "assets/resources/native/24/249d493c-0a11-453f-a45a-40a62bf683db.e19b339ace64fadd.webp",
+      "bytes": 1565988,
+      "status": 200,
+      "sha256": "e19b339ace64fadd7aedb3c2307578764865dc01f2c70d7fc554a66a64e8dee8"
+    },
+    {
+      "path": "assets/resources/native/2f/2f7ab2d3-fbf1-460e-b2fd-9fa2bcc70b7e.2e07a6eec01637fd.webp",
+      "bytes": 1218060,
+      "status": 200,
+      "sha256": "2e07a6eec01637fdb639c234606ac8cbb53fb8c2c3c5c70c506b9646737e9624"
+    }
+  ],
+  "gameOrBrowserStarted": false
+}
