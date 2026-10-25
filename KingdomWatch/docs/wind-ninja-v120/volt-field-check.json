@@ -1,0 +1,236 @@
+{
+  "passed": true,
+  "checkedAt": "2026-10-25T13:33:19.464Z",
+  "command": "node docs/wind-ninja-v120/check_volt_field.cjs",
+  "testScriptSha256": "85fee1f0fced73d786092d9a3cd881bdb4648b24b45e258483005d35aafcee54",
+  "sourceHashes": {
+    "assets/scripts/battle/VoltField.ts": "3e72d9c239009cf23c9a5c5016f30f76bf5fdcd733f0c0f0403bdc5935c2c346",
+    "assets/scripts/battle/VoltField.ts.meta": "4230b1c8f8f2bcdaf6b090ea08f561bacaa6e27fa8a0b4c5104ece7c9d328912",
+    "assets/scripts/battle/Hero.ts": "99cce8cd2a72a8f7a38b0723872a56b03444a0351284103021434e2f45086ea0",
+    "assets/scripts/config/WindNinjaConfig.ts": "22f5eb99ca2055862769db077a1cf548f2eb05b36da24f12b0d01aff90de05c0",
+    "assets/scripts/config/Cards.ts": "d63cb47042f22b1aefcf6cd4ea62a9d562c7b2580e6d97719be9aafcd5d02e57",
+    "assets/scripts/battle/UltimateTiming.ts": "a89773d29fde193b6c10ae0916063921ff0ce9cacddefbe99e84c87893cd87fb",
+    "assets/scripts/battle/BattleDirector.ts": "f312c4c5d7b0313ca64cea308dd5586b06afa37c0d79b685645c54703335ca4f",
+    "assets/scripts/battle/WaveManager.ts": "601490e3b4bea58159d02f9106e624edf369e9f6a47ba59a3f0141d159322d18"
+  },
+  "nodeVersion": "v24.21.0",
+  "typescriptVersion": "5.4.5",
+  "typescriptPath": "C:\\Users\\user\\AppData\\Local\\npm-cache\\_npx\\2b0c79b2deda3034\\node_modules\\typescript\\lib\\typescript.js",
+  "isolation": {
+    "gameRuntime": false,
+    "cocosEngine": false,
+    "browser": false,
+    "realCombat": false,
+    "audio": false,
+    "wasm": false,
+    "network": false,
+    "build": false,
+    "git": false,
+    "methodExtraction": "Only named VoltHero methods, pure Cards arithmetic and Volt timing; all collaborators are inert data doubles.",
+    "renderer": "Graphics command recorder; verifies geometry/palette budgets, not GPU appearance or phone performance."
+  },
+  "lifecycleReview": {
+    "battleKey": "WeakMap<Node, VoltField> keyed by battle Field; explicitly deleted on battle NODE_DESTROYED.",
+    "clock": "advanceTo takes absolute accumulated hero battle time. Equal/older timestamps are ignored, so same-start heroes cannot double-advance.",
+    "emptyBattlefield": "While running, HeroBase invokes updateQueues even without targets. advanceTo ages/prunes fields with an empty list and consumes pulse boundaries without banking contacts.",
+    "idleGap": "The next leave after all fields expire resets the next pulse to current battle time + .5; long empty gaps never replay historical pulses.",
+    "owner": "Fields require a valid active owner. Nearby refresh coalesces one footprint and retains strongest damage/credit; destruction of that retained owner releases the coalesced slot.",
+    "ultimateDeath": "Field creation precedes direct lethal damage; dead queued targets retarget or skip. A residual kill before a queued strike cannot create another field.",
+    "terminalState": "Pause/pick/win/lose stop simulation. Residual continues past strike queue/presentation only while running and does not delay victory; remaining visuals may freeze at win until battle teardown.",
+    "assumption": "All roster heroes start the same battle clock and receive the same battle dt. Dynamically inserting a hero with a zero clock mid-battle is not implemented or claimed."
+  },
+  "metrics": {
+    "renderer": {
+      "sampledFrames": 241,
+      "maxCommands": 840,
+      "additionalNodes": 1,
+      "additionalColorsDuringFrames": 0,
+      "fieldSlots": 8,
+      "floatsPerField": 84,
+      "largestFilledCircleRadius": 1.7000000000000002
+    },
+    "ultimateSchedules": [
+      {
+        "count": 15,
+        "plannedLastStrike": 3.79,
+        "actualLastStrike": 3.791666666666656,
+        "presentationDuration": 4.5,
+        "expectedFieldExpiry": 6.791666666666655
+      },
+      {
+        "count": 25,
+        "plannedLastStrike": 6.1899999999999995,
+        "actualLastStrike": 6.191666666666764,
+        "presentationDuration": 6.9,
+        "expectedFieldExpiry": 9.191666666666764
+      }
+    ],
+    "extractedMethods": [
+      "ultimateRemaining",
+      "ultShowDuration",
+      "updateQueues",
+      "thunderStrike",
+      "castUlt",
+      "renderEffects"
+    ],
+    "extractedMethodsSha256": "d6b6a06c220b8d6ebad90bd5fe380d623922c55bfb235fcf15a38b80cc3392db",
+    "cocosAudioModulesImported": 0,
+    "stubOnlySignals": {
+      "soundCalls": 43,
+      "events": 47,
+      "parentRenders": 1
+    }
+  },
+  "checkCount": 24,
+  "failures": 0,
+  "checks": [
+    {
+      "name": "shared field configuration is exactly the approved contract",
+      "passed": true
+    },
+    {
+      "name": "six half-second contacts, .2 each; inclusive expiry and actual damage credit",
+      "passed": true,
+      "evidence": {
+        "contactTimes": [
+          0.5,
+          1,
+          1.5,
+          2,
+          2.5,
+          3
+        ],
+        "coefficientSum": 1.2
+      }
+    },
+    {
+      "name": "30/60/144Hz, irregular chunks and bounded huge idle jump",
+      "passed": true
+    },
+    {
+      "name": "nearest refresh retains pulse phase; expiry extends from latest strike",
+      "passed": true
+    },
+    {
+      "name": "overlap chooses strongest once across owners, shared clock cannot double advance",
+      "passed": true
+    },
+    {
+      "name": "staggered owners share phase without adding contacts",
+      "passed": true
+    },
+    {
+      "name": "nearest refresh threshold, strongest owner and damage credit retained",
+      "passed": true
+    },
+    {
+      "name": "global eight-slot pool recycles oldest; geometry buffers remain bounded",
+      "passed": true
+    },
+    {
+      "name": "ground-only, radius inclusive, dead/inactive/invalid targets excluded",
+      "passed": true
+    },
+    {
+      "name": "pause/repeated/invalid times ignored; no presentation lifetime dependency",
+      "passed": true
+    },
+    {
+      "name": "owner destruction/inactivation stops fields; battle WeakMap entries are isolated and removed",
+      "passed": true
+    },
+    {
+      "name": "destroyed strongest owner leaves independent weaker fields active; merged-slot ownership is explicit",
+      "passed": true,
+      "evidence": {
+        "independentFootprintFallsBackToWeaker": true,
+        "coalescedFootprintOwnedByStrongestContributor": true
+      }
+    },
+    {
+      "name": "isolated renderer: one paint per frame, fixed nodes/colors/point buffers, small purple marks",
+      "passed": true,
+      "evidence": {
+        "sampledFrames": 241,
+        "maxCommands": 840,
+        "additionalNodes": 1,
+        "additionalColorsDuringFrames": 0,
+        "fieldSlots": 8,
+        "floatsPerField": 84,
+        "largestFilledCircleRadius": 1.7000000000000002
+      }
+    },
+    {
+      "name": "invalid deposits ignored",
+      "passed": true
+    },
+    {
+      "name": "empty battlefield advances expiry; later enemy receives no banked damage",
+      "passed": true
+    },
+    {
+      "name": "flying-only battlefield consumes field lifetime without contacts",
+      "passed": true
+    },
+    {
+      "name": "late second owner uses shared absolute time; no new clock/extra pulse after quiet interval",
+      "passed": true
+    },
+    {
+      "name": "actual 15/25-strike schedules: no birth bursts; residue outlives queue and presentation by remaining 3s",
+      "passed": true,
+      "evidence": [
+        {
+          "count": 15,
+          "plannedLastStrike": 3.79,
+          "actualLastStrike": 3.791666666666656,
+          "presentationDuration": 4.5,
+          "expectedFieldExpiry": 6.791666666666655
+        },
+        {
+          "count": 25,
+          "plannedLastStrike": 6.1899999999999995,
+          "actualLastStrike": 6.191666666666764,
+          "presentationDuration": 6.9,
+          "expectedFieldExpiry": 9.191666666666764
+        }
+      ]
+    },
+    {
+      "name": "actual lethal thunder leaves ground residue; dead queued references skip without phantom refresh",
+      "passed": true,
+      "evidence": {
+        "firstStrike": 0.65,
+        "lastRefreshExpiry": 3.65,
+        "actualStrikes": 1,
+        "skippedDeadQueueEntries": 14
+      }
+    },
+    {
+      "name": "residual pulse kills queued target before strike; no recursive field or thunder",
+      "passed": true
+    },
+    {
+      "name": "dead queued target retargets surviving body; airborne impact projects field to groundY",
+      "passed": true
+    },
+    {
+      "name": "no-card strike keeps original damage/control/timing and creates no field; render composes parent",
+      "passed": true
+    },
+    {
+      "name": "static integration: running empty battlefield still ticks; residual never extends victory/presentation lock",
+      "passed": true,
+      "evidence": {
+        "emptyRunningBattleTicks": true,
+        "pendingVictoryKeepsRunning": true,
+        "pausedPickWinLoseStopBattleClock": true,
+        "residualExtendsUltimateOrVictoryGate": false
+      }
+    },
+    {
+      "name": "all reviewed production sources remain byte-identical during checks",
+      "passed": true
+    }
+  ]
+}

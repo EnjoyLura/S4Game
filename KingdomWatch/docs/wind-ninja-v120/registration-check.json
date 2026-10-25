@@ -1,0 +1,306 @@
+{
+  "checkedAt": "2026-10-25T13:31:28.748Z",
+  "status": "PASS",
+  "scope": "Static AST, isolated configuration functions, memory-only saves, PNG headers/atlas bounds",
+  "excludedExecution": [
+    "engine",
+    "combat",
+    "browser",
+    "audio",
+    "WASM",
+    "build",
+    "git",
+    "deployment"
+  ],
+  "packageSizeBudgetEnforced": false,
+  "checks": [
+    {
+      "name": "all nine: definitions, save entries, compatible starters and progression",
+      "status": "PASS"
+    },
+    {
+      "name": "migration: fresh/old saves keep both new heroes locked; existing investment survives reload",
+      "status": "PASS"
+    },
+    {
+      "name": "shop: 1-4 gate, exact diamond prices, no free/duplicate grant or auto-deploy",
+      "status": "PASS"
+    },
+    {
+      "name": "factory: each route selects its own imported class with matching declared hero id (AST only)",
+      "status": "PASS"
+    },
+    {
+      "name": "new progression: shared cfg drives multipliers/milestones and cultivation without archer fallback",
+      "status": "PASS"
+    },
+    {
+      "name": "UI: nine roster/palette/skill entries, dynamic HUD rows and six-row new-hero tips (AST only)",
+      "status": "PASS"
+    },
+    {
+      "name": "art: all nine real portrait/figure/action resources; v120 front/back crops and aliases are in PNG bounds",
+      "status": "PASS"
+    },
+    {
+      "name": "cards: volt_field belongs to volt, requires ultimate, caps at one and only toggles voltField",
+      "status": "PASS"
+    },
+    {
+      "name": "cards: wind/ninja own only four common numeric cards; no unselected mechanic leaks into the pool",
+      "status": "PASS"
+    }
+  ],
+  "heroes": [
+    {
+      "id": "archer",
+      "name": "艾拉·风羽",
+      "growth": "normal",
+      "initialOwned": true,
+      "starter": "wpn_starter_bow",
+      "factory": "ArcherHero",
+      "factoryModule": "battle/Hero.ts",
+      "art": {
+        "ui_avatar_archer": "ui_avatar_archer [0, 0, 472, 472]",
+        "hero_comic_v1/comic_hero_archer_v1": "hero_comic_v1/comic_hero_archer_v1 [0, 0, 384, 384]",
+        "hero_comic_v1/comic_figure_archer_v2": "hero_comic_v1/comic_figure_archer_v2 [0, 0, 1017, 1546]",
+        "ui_icon_atk_archer": "ui_icon_atk_archer [0, 0, 470, 470]",
+        "ui_icon_skill_archer": "ui_icon_skill_archer [0, 0, 472, 472]",
+        "ui_icon_ult_archer": "ui_icon_ult_archer [0, 0, 470, 470]"
+      }
+    },
+    {
+      "id": "sniper",
+      "name": "凯尔·鹰眼",
+      "growth": "normal",
+      "initialOwned": true,
+      "starter": "wpn_starter_crossbow",
+      "factory": "SniperHero",
+      "factoryModule": "battle/Hero.ts",
+      "art": {
+        "ui_avatar_sniper": "ui_avatar_sniper [0, 0, 464, 464]",
+        "shop_comic_v1/comic_hero_sniper_v1": "shop_comic_v1/comic_hero_sniper_v1 [0, 0, 384, 384]",
+        "hero_comic_v1/comic_figure_sniper_v1": "hero_comic_v1/comic_figure_sniper_v1 [0, 0, 502, 768]",
+        "ui_icon_atk_sniper": "ui_icon_atk_sniper [0, 0, 464, 464]",
+        "ui_icon_skill_sniper": "ui_icon_skill_sniper [0, 0, 458, 458]",
+        "ui_icon_ult_sniper": "ui_icon_ult_sniper [0, 0, 458, 458]"
+      }
+    },
+    {
+      "id": "pyro",
+      "name": "焰·辉",
+      "growth": "ultimate",
+      "initialOwned": false,
+      "starter": "wpn_starter_book",
+      "factory": "PyroHero",
+      "factoryModule": "battle/Hero.ts",
+      "art": {
+        "ui_avatar_pyro": "ui_avatar_pyro [0, 0, 253, 256]",
+        "shop_comic_v1/comic_hero_pyro_v1": "shop_comic_v1/comic_hero_pyro_v1 [0, 0, 384, 384]",
+        "hero_comic_v1/comic_figure_pyro_v1": "hero_comic_v1/comic_figure_pyro_v1 [0, 0, 482, 768]",
+        "ui_icon_atk_pyro": "ui_icon_atk_pyro [0, 0, 189, 192]",
+        "ui_icon_skill_pyro": "ui_icon_skill_pyro [0, 0, 190, 192]",
+        "ui_icon_ult_pyro": "ui_icon_ult_pyro [0, 0, 189, 192]"
+      }
+    },
+    {
+      "id": "volt",
+      "name": "沃尔·雷霆",
+      "growth": "skill",
+      "initialOwned": false,
+      "starter": "wpn_starter_staff",
+      "factory": "VoltHero",
+      "factoryModule": "battle/Hero.ts",
+      "art": {
+        "ui_avatar_volt": "ui_avatar_volt [0, 0, 254, 256]",
+        "shop_comic_v1/comic_hero_volt_v1": "shop_comic_v1/comic_hero_volt_v1 [0, 0, 384, 384]",
+        "hero_comic_v1/comic_figure_volt_v1": "hero_comic_v1/comic_figure_volt_v1 [0, 0, 507, 768]",
+        "ui_icon_atk_volt": "ui_icon_atk_volt [0, 0, 190, 192]",
+        "ui_icon_skill_volt": "ui_icon_skill_volt [0, 0, 189, 192]",
+        "ui_icon_ult_volt": "ui_icon_ult_volt [0, 0, 191, 192]"
+      }
+    },
+    {
+      "id": "mora",
+      "name": "莫拉·寒霜",
+      "growth": "hybrid",
+      "initialOwned": false,
+      "starter": "wpn_starter_staff",
+      "factory": "FrostHero",
+      "factoryModule": "battle/Hero.ts",
+      "art": {
+        "ui_avatar_mora": "ui_avatar_mora [0, 0, 255, 255]",
+        "shop_comic_v1/comic_hero_mora_v1": "shop_comic_v1/comic_hero_mora_v1 [0, 0, 384, 384]",
+        "hero_comic_v1/comic_figure_mora_v1": "hero_comic_v1/comic_figure_mora_v1 [0, 0, 493, 768]",
+        "ui_icon_atk_mora": "ui_icon_atk_mora [0, 0, 236, 234]",
+        "ui_icon_skill_mora": "ui_icon_skill_mora [0, 0, 248, 248]",
+        "ui_icon_ult_mora": "ui_icon_ult_mora [0, 0, 254, 254]"
+      }
+    },
+    {
+      "id": "cannon",
+      "name": "布洛克·铜铸",
+      "growth": "hybrid",
+      "initialOwned": false,
+      "starter": "wpn_starter_cannon",
+      "factory": "CannonHero",
+      "factoryModule": "battle/NewHeroes.ts",
+      "art": {
+        "ui_avatar_cannon": "new_hero_icons_v117/icon_core [4, 4, 504, 504]",
+        "new_heroes_v105/avatar_cannon": "new_hero_icons_v117/icon_core [4, 4, 504, 504]",
+        "hero_comic_v1/comic_figure_cannon_v1": "new_heroes_v105/cannon_lobby [0, 0, 1024, 1536]",
+        "ui_icon_atk_cannon": "new_hero_icons_v117/icon_core [1028, 4, 504, 504]",
+        "ui_icon_skill_cannon": "new_hero_icons_v117/icon_core [1540, 4, 504, 504]",
+        "ui_icon_ult_cannon": "new_hero_icons_v117/icon_core [4, 516, 504, 504]"
+      }
+    },
+    {
+      "id": "siphon",
+      "name": "薇拉·绯契",
+      "growth": "normal",
+      "initialOwned": false,
+      "starter": "wpn_starter_staff",
+      "factory": "SiphonHero",
+      "factoryModule": "battle/NewHeroes.ts",
+      "art": {
+        "ui_avatar_siphon": "new_hero_icons_v117/icon_core [516, 4, 504, 504]",
+        "new_heroes_v105/avatar_siphon": "new_hero_icons_v117/icon_core [516, 4, 504, 504]",
+        "hero_comic_v1/comic_figure_siphon_v1": "new_heroes_v105/siphon_lobby [0, 0, 1024, 1536]",
+        "ui_icon_atk_siphon": "new_hero_icons_v117/icon_core [516, 516, 504, 504]",
+        "ui_icon_skill_siphon": "new_hero_icons_v117/icon_core [1028, 516, 504, 504]",
+        "ui_icon_ult_siphon": "new_hero_icons_v117/icon_core [1540, 516, 504, 504]"
+      }
+    },
+    {
+      "id": "wind",
+      "name": "赛兰·逐风",
+      "growth": "skill",
+      "initialOwned": false,
+      "starter": "wpn_starter_wristfocus",
+      "factory": "WindHero",
+      "factoryModule": "battle/WindNinjaHeroes.ts",
+      "art": {
+        "ui_avatar_wind": "wind_ninja_v120/abilities [4, 516, 248, 248]",
+        "hero_comic_v1/comic_figure_wind_v1": "wind_ninja_v120/wind_figures [0, 0, 512, 768]",
+        "ui_icon_atk_wind": "wind_ninja_v120/abilities [4, 4, 248, 248]",
+        "ui_icon_skill_wind": "wind_ninja_v120/abilities [260, 4, 248, 248]",
+        "ui_icon_ult_wind": "wind_ninja_v120/abilities [516, 4, 248, 248]"
+      },
+      "cards": [
+        "wind_attack",
+        "wind_aspd",
+        "wind_crit_rate",
+        "wind_crit_dmg"
+      ]
+    },
+    {
+      "id": "ninja",
+      "name": "胧·影刃",
+      "growth": "normal",
+      "initialOwned": false,
+      "starter": "wpn_starter_shuriken",
+      "factory": "NinjaHero",
+      "factoryModule": "battle/WindNinjaHeroes.ts",
+      "art": {
+        "ui_avatar_ninja": "wind_ninja_v120/abilities [772, 260, 248, 248]",
+        "hero_comic_v1/comic_figure_ninja_v1": "wind_ninja_v120/ninja_figures [0, 0, 512, 768]",
+        "ui_icon_atk_ninja": "wind_ninja_v120/abilities [4, 260, 248, 248]",
+        "ui_icon_skill_ninja": "wind_ninja_v120/abilities [260, 260, 248, 248]",
+        "ui_icon_ult_ninja": "wind_ninja_v120/abilities [516, 260, 248, 248]"
+      },
+      "cards": [
+        "ninja_attack",
+        "ninja_aspd",
+        "ninja_crit_rate",
+        "ninja_crit_dmg"
+      ]
+    }
+  ],
+  "sha256": {
+    "assets/scripts/config/GameConfig.ts": "c9af2a8edfee956d0d190e1db9b978ce4c1a782f37cbec2b6bd3ff579466f4fa",
+    "assets/scripts/config/WindNinjaConfig.ts": "104e814d2a552b0d53780221bcbac4cb1f6221da671461b4886f8200b6641849",
+    "assets/scripts/config/NewHeroConfig.ts": "a4a0d3557ef152dbaf47bf9197193baa900c9dd69231efa06524becbdba951c4",
+    "assets/scripts/config/Weapons.ts": "42c426abe52514a1b1edbfbe4258f1356411293fa17a55f83642785d8860d6cb",
+    "assets/scripts/config/EarlyEconomy.ts": "fc6edd0508e6e962d546c72be0eb42193e76084d232442e14cdc00fea9d9a0e9",
+    "assets/scripts/config/ChapterContent.ts": "1e863d44df627dfaad013b791e6b35f4817e8cff8f7421a3bbec2ab04ba7b77a",
+    "assets/scripts/config/Campaign.ts": "d5f5e8d37b06d6f8d15945e3bfa576d8bb05ef495308ab99be22b941333d309c",
+    "assets/scripts/config/LevelDifficulty.ts": "a077d4e058ea268c1405c01632cbdabf9d2eace5559b3af0fd3fe9e225556ec8",
+    "assets/scripts/config/Cards.ts": "d63cb47042f22b1aefcf6cd4ea62a9d562c7b2580e6d97719be9aafcd5d02e57",
+    "assets/scripts/core/SaveData.ts": "39f92f811dba208bb63be05a35cca0af1c8bfdccef4ec4a251d339e17079b384",
+    "assets/scripts/core/GameData.ts": "06b9cc2e6772bf38b588c6e3ef5076a33c4387e3cad78c107c2a8438834417fe",
+    "assets/scripts/ui/HeroComic.ts": "1ac3cfd26735a1db03e1c2e2bc3d5e71a1c9a75f7291d989b34d06b3c0dea487",
+    "assets/scripts/ui/NewHeroArt.ts": "3ce40bb2abde28240854cbbfdeb3a79ea3e1ed29d15ec101dc4e4cf6f6789f4d",
+    "assets/scripts/ui/pages/UpgradePage.ts": "459d397ad531295be224ac205de431ce9e583c4ad9dbf9108908e249e9225a98",
+    "assets/scripts/ui/GrowthFeedback.ts": "4aab1fb08ca568dc48c7c8a5bc5da3e9e9d47af00766e071f55bca95e32f0291",
+    "assets/scripts/ui/HUD.ts": "004d022729e7d4ffff81fcc125b9e9623a87b2e1c0576418d648f0e0331afadf",
+    "assets/scripts/battle/BattleDirector.ts": "f312c4c5d7b0313ca64cea308dd5586b06afa37c0d79b685645c54703335ca4f",
+    "assets/scripts/battle/Hero.ts": "99cce8cd2a72a8f7a38b0723872a56b03444a0351284103021434e2f45086ea0",
+    "assets/scripts/battle/NewHeroes.ts": "8a7b9528a9f96c6f0ecd76fcef391b3e5f9799d246d828cafa509894fb278139",
+    "assets/scripts/battle/WindNinjaHeroes.ts": "b1c430d3b3838f14225692334022ff546cac01c8345f57ba8aea2dde5354cdbe",
+    "assets/scripts/ui/TrainingLobby.ts": "c845e7d646d24ea53c30bd64f5e7b0d57e2e06e5e3d93c160ee22b5aa75e4028",
+    "assets/scripts/ui/pages/HeroPage.ts": "0867e352c656350404463a3449c547b8ccd97ab76800b2b2ad4a2dc1fbf1c636",
+    "assets/scripts/ui/Panels.ts": "94b37e6f75db3db9fe62a661775709e0c8b4418ec6b95189ffaa365222fc247b",
+    "assets/scripts/ui/ComicUI.ts": "e8adca41f26c302c2c2b595138578d9fe96b125f78aefe0071db59bbac0d8b15"
+  },
+  "typescript": "5.8.2",
+  "migration": {
+    "freshLocked": [
+      "wind",
+      "ninja"
+    ],
+    "oldLocked": [
+      "wind",
+      "ninja"
+    ],
+    "preservedOriginalHeroes": 7,
+    "reloadStable": true
+  },
+  "newArtAliases": {
+    "new_heroes_v120/wind_lobby": {
+      "source": "wind_ninja_v120/wind_figures",
+      "rect": [
+        0,
+        0,
+        512,
+        768
+      ]
+    },
+    "new_heroes_v120/wind_battle": {
+      "source": "wind_ninja_v120/wind_figures",
+      "rect": [
+        512,
+        0,
+        512,
+        768
+      ]
+    },
+    "new_heroes_v120/ninja_lobby": {
+      "source": "wind_ninja_v120/ninja_figures",
+      "rect": [
+        0,
+        0,
+        512,
+        768
+      ]
+    },
+    "new_heroes_v120/ninja_battle": {
+      "source": "wind_ninja_v120/ninja_figures",
+      "rect": [
+        512,
+        0,
+        512,
+        768
+      ]
+    }
+  },
+  "voltField": {
+    "owner": "volt",
+    "ultimatePrerequisite": "volt_unlock_ult",
+    "maxStacks": 1,
+    "isolatedToggle": true
+  },
+  "summary": {
+    "passed": 9,
+    "failed": 0
+  }
+}

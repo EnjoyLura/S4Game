@@ -15,8 +15,16 @@ import { FrostUltTarget } from './FrostUltimateVFX';
 import { BasicProjectileFlightVFX } from './BasicProjectileFlightVFX';
 import { drawCannonMissile } from './NewHeroVFX';
 import { acceptsTarget, attackLayer, TargetLayer } from '../config/Targeting';
+import { drawWindBlade, drawShuriken } from './WindNinjaVFX';
 
 export interface ProjSpec {
+  visual?: 'wind' | 'shuriken';
+  /** Actual direct contact only, never a miss or splash. */
+  onContact?: (mob: Monster) => void;
+  /** Finite straight return segment: sweep to endpoint, then recycle without a second hit pass. */
+  endPoint?: Readonly<{x:number;y:number}>;
+  /** Recall starts inside its marked victim; resolve that body's t=0 contact before overlapping neighbours. */
+  initialContactLifeId?: number;
   /** Shared by acquisition, sweep, splash and secondary shots. Undefined is resolved once at release. */
   targetLayer?: TargetLayer;
   x: number; y: number;
@@ -114,6 +122,7 @@ interface Active {
   returning: boolean;
   legLeft: number;
   returnDistance: number;
+  hitExhausted: boolean;
 }
 
 const colorCache = new Map<string, Color>();
@@ -163,7 +172,7 @@ export class ProjectileManager {
     a.pierceLeft = spec.pierce || 0;
     a.ttl = spec.ttl ?? 3.2;
     a.age = 0; a.ultContact = false;
-    a.damageScale = 1; a.returning = false; a.legLeft = a.returnDistance = 0;
+    a.damageScale = 1; a.returning = false; a.legLeft = a.returnDistance = 0; a.hitExhausted = false;
     a.fxSeed = (++this.flightSerial * .61803398875) % 1;
     a.trail.length = 0;
     a.trailMax = spec.enemy ? 0 : spec.spark || spec.heroId === 'cannon' && spec.ult ? 9
@@ -187,7 +196,7 @@ export class ProjectileManager {
 
   private makeActive(): Active {
     return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<number>(), ttl: 0, age: 0, trail: [], trailMax: 0, fxSeed: 0, ultContact: false,
-      damageScale: 1, returning: false, legLeft: 0, returnDistance: 0 };
+      damageScale: 1, returning: false, legLeft: 0, returnDistance: 0, hitExhausted: false };
   }
 
   /** 敌方远程石块：直线落向防线，触线即结算 */
@@ -273,8 +282,16 @@ export class ProjectileManager {
         continue;
       }
 
-      const startX = sp.x, startY = sp.y, stepX = a.vx * dt, stepY = a.vy * dt;
-      if (!sp.enemy) done = this.hitSweep(a, startX, startY, stepX, stepY);
+      const startX = sp.x, startY = sp.y;
+      let stepX = a.vx * dt, stepY = a.vy * dt, arrived = false;
+      if (sp.endPoint) {
+        const left=Math.hypot(sp.endPoint.x-startX,sp.endPoint.y-startY);
+        if(left<=sp.speed*dt){stepX=sp.endPoint.x-startX;stepY=sp.endPoint.y-startY;arrived=true;}
+      }
+      if (!sp.enemy && !a.hitExhausted) {
+        done = this.hitSweep(a, startX, startY, stepX, stepY);
+        if (done && sp.endPoint) { a.hitExhausted=true; done=false; }
+      }
 
       if (!done) {
         sp.x = startX + stepX;
@@ -285,7 +302,8 @@ export class ProjectileManager {
             a.trail.copyWithin(0, 2); a.trail.length -= 2;
           }
         }
-        if (sp.enemy && sp.y <= LINE_Y + 12) {
+        if (arrived) done = true;
+        else if (sp.enemy && sp.y <= LINE_Y + 12) {
           line.takeDamage(sp.dmg);
           done = true;
         // 顶界必须盖过 SPAWN_Y(LO.half+60)：大招箭雨从可视区上方出生，越界即回收会让大招整轮哑火
@@ -355,7 +373,9 @@ export class ProjectileManager {
       }
       if (count >= this.contacts.length) break;
       let index = count++;
-      while (index > 0 && this.contacts[index - 1].t > t) {
+      while (index > 0 && (this.contacts[index - 1].t > t ||
+        t===0 && this.contacts[index-1].t===0 && m.lifeId===sp.initialContactLifeId &&
+        this.contacts[index-1].mob?.lifeId!==sp.initialContactLifeId)) {
         this.contacts[index].mob = this.contacts[index - 1].mob;
         this.contacts[index].t = this.contacts[index - 1].t;
         index--;
@@ -392,6 +412,8 @@ export class ProjectileManager {
       const orb = s.heroId === 'volt' && !s.small && !s.enemy;
       const fire = s.heroId === 'pyro' && !s.enemy;
       const shard = s.heroId === 'mora' && !s.small && !s.enemy;
+      if (s.visual === 'wind') { drawWindBlade(g,s.x,s.y,a.vx,a.vy,size,a.age); continue; }
+      if (s.visual === 'shuriken') { drawShuriken(g,s.x,s.y,a.vx,a.vy,size,a.age); continue; }
       if (s.heroId === 'cannon' && s.ult && !s.enemy) {
         drawCannonMissile(g, s.x, s.y, a.vx, a.vy, size, a.age, a.fxSeed, a.trail);
         continue;
@@ -685,7 +707,9 @@ export class ProjectileManager {
     const final = this.damageFor(sp, m, a.damageScale);
     const angle = Math.atan2(a.vy, a.vx);
     const heavy = !!sp.ult || sp.heroId === 'sniper' && !!sp.ability || sp.heroId === 'pyro' && !!sp.explodeR;
+    const contactLife = m.lifeId;
     m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true, sp.resCut || 0, angle, heavy);
+    if (m.lifeId === contactLife) sp.onContact?.(m);
     if (sp.markAmp) m.applyHunterMark(sp.markAmp, sp.markDur || 5, !!sp.markIcon);
     if (sp.heroId === 'sniper' && sp.ult) {
       this.impacts?.sniperUltimateHit(m.x, m.hitY, angle);

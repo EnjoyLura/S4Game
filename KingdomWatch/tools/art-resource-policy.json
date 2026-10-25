@@ -13,8 +13,8 @@
     "protectedNamePattern": "^(ui_panel|ui_button|ui_currency|ui_icon|icon_|glyph_|btn_|hero_)",
     "protectedMaximumSide": 512
   },
-  "runtimeBudgets": {"mixed-webp-q95": 200000000, "lossless-webp": 500000000, "original-png": 500000000},
+  "runtimeBudgets": {"mixed-webp-q95": 996147200, "lossless-webp": 500000000, "original-png": 500000000},
   "limits": {"imageFileBytes": 67108864, "textureSide": 8192},
   "warnings": {"textureRGBABytes": 33554432, "largeSquareIconSide": 1024},
-  "notes": "Original PNG masters stay unchanged. Mixed mode protects UI/comic art, nine-slice panels, portraits, VFX, small and unknown images; eligible large art uses Q95 RGB only when smaller than lossless. Dimensions, alpha, ICC and animation metadata stay unchanged. The 200MB mixed-mode limit includes inventories and the release pointer. Explicit lossless-WebP and original-PNG rollback exports retain their 500MB budget."
+  "notes": "Original PNG masters stay unchanged. Mixed mode protects UI/comic art, nine-slice panels, portraits, VFX, small and unknown images; eligible large art uses Q95 RGB only when smaller than lossless. Dimensions, alpha, ICC and animation metadata stay unchanged. As requested on 2026-10-25, mixed mode has no 200MB product-size target during development; its 950MiB check only matches the publisher's existing hosting safety guard. Explicit lossless-WebP and original-PNG rollback exports retain their 500MB safety budgets."
 }

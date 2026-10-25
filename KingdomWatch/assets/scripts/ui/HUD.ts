@@ -217,6 +217,8 @@ export class HUD {
     top = N('ultContents', pressPivot, -ux, -uy);
     // 就绪特效/能量水按英雄主色（用户调整：火橘/雷紫，不再只分狙击蓝/其他绿）
     const ULT_FX: Record<string, [string, string, string]> = {
+      wind: ['#55D8C3', '#9DE9D7', '#FFF9EC'],
+      ninja: ['#4559A8', '#69DCEC', '#E2E8F0'],
       cannon: ['#D5A641', '#ECC66A', '#FFF0BF'],
       siphon: ['#963657', '#F06C9B', '#FFD2E3'],
       archer: [PAL.green, '#9FDB8C', '#D6F2C9'],

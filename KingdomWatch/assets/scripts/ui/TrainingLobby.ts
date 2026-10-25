@@ -3,6 +3,7 @@ import { Graphics, Label, Mask, Node, ScrollView, Sprite, UITransform, UIOpacity
 import { LO } from '../config/GameConfig';
 import { skillBaseMultiplier } from '../config/Cards';
 import { newHeroNormalCfg, cannonUltCfg, siphonUltCfg } from '../config/NewHeroConfig';
+import { windUltCfg, ninjaUltCfg } from '../config/WindNinjaConfig';
 import { C, CA, LabelOpts, N, setText, WY } from './UIKit';
 import { artSprite } from './Ux';
 import { COMIC, comicArt, comicButton, comicButtonControl, comicMark, comicPlate, comicSurface } from './ComicUI';
@@ -451,13 +452,16 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
         if (selected === 'skill') {
           const cur = skillBaseMultiplier(hid, lv), next = skillBaseMultiplier(hid, maxed ? lv : lv + 1);
           const pct = (v: number): string => `${Math.round(v * 10000) / 100}%`;
-          rows = [{ name: '技能伤害倍率', cur: pct(cur), next: pct(next), gain: `+${pct(next - cur)}` }];
-        } else if (hid === 'cannon' || hid === 'siphon') {
+          rows = [{ name: hid === 'wind' ? '每次切割技能倍率' : hid === 'ninja' ? '每刃回收技能倍率' : '技能伤害倍率',
+            cur: pct(cur), next: pct(next), gain: `+${pct(next - cur)}` }];
+        } else if (hid === 'cannon' || hid === 'siphon' || hid === 'wind' || hid === 'ninja') {
           const value = (level: number): number => selected === 'atk' ? newHeroNormalCfg(level).normalMul
+            : hid === 'wind' ? windUltCfg(level).mul : hid === 'ninja' ? ninjaUltCfg(level).mul
             : hid === 'cannon' ? cannonUltCfg(level).mul : siphonUltCfg(level).mul;
           const cur = value(lv), next = value(maxed ? lv : lv + 1);
           const pct = (v: number): string => `${Math.round(v * 10000) / 100}%`;
-          rows = [{ name: selected === 'atk' ? '普攻伤害倍率' : hid === 'siphon' ? '激光每秒技能倍率' : '每弹中心技能倍率',
+          rows = [{ name: selected === 'atk' ? '普攻伤害倍率' : hid === 'wind' || hid === 'ninja' ? '大招每段技能倍率'
+            : hid === 'siphon' ? '激光每秒技能倍率' : '每弹中心技能倍率',
             cur: pct(cur), next: pct(next), gain: `+${pct(next - cur)}` }];
         } else {
           const pct = (l: number): number => 100 + (l - 1) * 8;

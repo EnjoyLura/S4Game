@@ -1,0 +1,19 @@
+{
+  "mode": "built-in image_gen",
+  "jobs": [
+    {
+      "id": "wind",
+      "prompt": "Use case: stylized-concept. Production character sprite sheet for a hand-painted comic fantasy mobile tower-defense game. Reference is STYLE ONLY: clear dark contour, confident broad shaded color planes, readable chunky anatomy, warm medieval equipment; do not copy dwarf, beard, cannon or gold armor. Square transparent canvas divided into TWO EQUAL VERTICAL HALVES. LEFT: full-body front three-quarter lobby portrait. RIGHT: full-body rear three-quarter BATTLE VIEW of the EXACT SAME original hero, facing toward the upper left and casting from an open palm toward the top of the canvas, back visible. Each pose centered in its own half; same scale, head height, fixed feet baseline at 95% canvas height, full body and hands fit entirely with clear transparent margins. No cell divider, no text, no circles, no borders, no shadows painted on floor. Hero: a young adult male human wind sorcerer named Sairan, swept ash-brown hair with one muted teal streak, calm sharp face, ivory and turquoise layered short mage coat, long split coat tails flowing slightly, brown belt and leather boots, fitted leather bracers with silver wind motifs, no hat, NO STAFF OR HELD WEAPON. Both bare hands visible; relaxed casting palm glows only with a tiny pale teal wisp, not a large VFX. Main color seafoam teal, secondary ivory, dark desaturated blue shadows and subtle silver clasps. Stylish clean proportions matching supplied mobile fantasy game, entire silhouette readable at 180px. NOT realistic, not chibi, no existing franchise character, no ornate unnecessary jewelry. Truly transparent background outside character silhouettes.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/new_heroes_v105/cannon_lobby.png"
+      ]
+    },
+    {
+      "id": "ninja",
+      "prompt": "Use case: stylized-concept. Production character sprite sheet for a hand-painted comic medieval fantasy mobile tower-defense game. Reference is STYLE ONLY: confident dark outlines, broad clean shaded color planes, chunky readable equipment and anatomy; do not copy dwarf, beard, cannon or gold armor. Square transparent canvas divided into TWO EQUAL VERTICAL HALVES. LEFT: full-body front three-quarter lobby portrait. RIGHT: full-body rear three-quarter BATTLE VIEW of the EXACT SAME original hero, facing toward upper left, right hand forward in a throwing pose toward top of canvas. Each pose centered in its own half; identical body scale/head height and feet baseline at 95% canvas height, full body and hands inside with transparent margins. No dividers, text, circles, borders or painted ground shadows. Hero: original adult female shadow ninja, long black high ponytail, amber sharp eyes above a dark indigo lower-face cloth mask, fitted midnight indigo light armor and layered tunic, cyan cloth scarf flowing behind, fingerless gloves, split skirt armor panels, wrapped boots. She visibly carries small FOUR-POINT silver steel throwing shuriken at a belt pouch; her open throwing hand may hold just one small star. Main color deep indigo, secondary cool silver with restrained cyan trim. Athletic agile practical silhouette, no katana across body, no magical giant weapons, no orange clothing, no forehead logo or franchise insignia, no realistic rendering, no chibi. Entire silhouette readable at 180px, clean comic fantasy shading to match supplied game. Truly transparent outside characters.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/new_heroes_v105/cannon_lobby.png"
+      ]
+    }
+  ]
+}

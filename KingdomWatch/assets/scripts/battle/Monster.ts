@@ -562,6 +562,25 @@ export class Monster {
     return true;
   }
 
+  /** Wind displacement uses body coordinates but keeps the movement footprint and flight altitude separate. */
+  pullToward(x: number, bodyY: number, distance: number): boolean {
+    if (this.dead || this.isBoss || this.immobilized || distance <= 0) return false;
+    // Pull the resting anchor; never fold an attack's temporary lunge into the next anchor.
+    const lungeOffset = this.lungeT > 0 ? Math.sin((1 - this.lungeT / .2) * Math.PI) * 10 : 0;
+    const restY = this.lungeT > 0 ? this.holdY : this.y;
+    const dx=x-this.x,dy=bodyY-(this.hitY+lungeOffset),len=Math.hypot(dx,dy);
+    if (len<=this.def.radius*.25) return false;
+    const step=Math.min(distance*(this.def.elite ? .35 : 1),Math.max(0,len-this.def.radius*.25));
+    const nx=Math.max(-340,Math.min(340,this.x+dx/len*step));
+    const ny=Math.max(LINE_Y+this.def.radius*.5,Math.min(mobEntryY(this.def.radius)+12,restY+dy/len*step));
+    if(this.state!=='move' && ny-LINE_Y>(this.def.kind==='ranged'?(this.def.atkRange || 0):this.def.radius*.5)+8) {
+      this.state='move'; this.lungeT=this.atkAnimT=0;
+    }
+    this.holdY=ny;
+    this.baseX=nx;this.node.setPosition(nx,ny-(this.lungeT>0?lungeOffset:0),0);
+    return true;
+  }
+
   /** 易伤：坑内每帧刷新，出坑残留 dur */
   applyVuln(amp: number, dur: number): void {
     if (this.dead || amp <= 0 || dur <= 0) return;

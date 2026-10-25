@@ -1,0 +1,31 @@
+{
+  "mode": "built-in image_gen",
+  "jobs": [
+    {
+      "id": "wind_icons",
+      "cells": [
+        "ui_icon_atk_wind",
+        "ui_icon_skill_wind",
+        "ui_icon_ult_wind",
+        "ui_card_volt_field"
+      ],
+      "prompt": "Use case: stylized-concept. One production fantasy mobile tower-defense ICON SHEET: square canvas, FOUR circular FILLED painted scenes arranged precisely in a 2 by 2 grid. Each circle centered in equal quadrant, diameter96% quadrant width. Circular paintings fully opaque inside includingbackground, genuinely transparent outside circles and gutters. CIRCULAR cutedge ONLY, NO decorative external rim, metallicframe, outline ring, badgeplate, text/numbers/watermark/dividers. Match provided style reference's clear bold comic contours, broad painted shapes, vivid energy motion, readableat60px. Do not copy arrow ororange palette. TOPLEFT: a large horizontal crescent air blade, sharp pale mint cuttingedge and teal translucent-looking painted tail, emitted from open gloved fingertips atlowerleft, arcs forwardwithwindstreaks. TOPRIGHT: one deep teal spherical WIND EYE with bright aqua spiralcenter, curved wind blades orbit inward, small leaf/stone fragments drawn towardcenter, filled darkteal cloudbackground. BOTTOMLEFT: a tall MOVING TORNADO of layered turquoise spiral wind bands, narrowbottom wideupperfunnel, ivory glintsandtiny liftedleaves, strong rotation and forward force, darkteal backdrop. BOTTOMRIGHT: PURPLE LIGHTNING FIELD covering cracked stoneground, bright violet branching arcs crawl along cracks, one small concentrated electricorb hovering atcenter, lavender glintsanddarkpurple painted environment. Allscenes containedinside circularpaintings, no unrelated herocharacters, no blackemptyholes.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/ui_card_explode.png"
+      ]
+    },
+    {
+      "id": "ninja_icons",
+      "cells": [
+        "ui_icon_atk_ninja",
+        "ui_icon_skill_ninja",
+        "ui_icon_ult_ninja",
+        "ui_avatar_ninja_spare"
+      ],
+      "prompt": "Use case: stylized-concept. One fantasy mobile tower-defense ICON SHEET, FOUR circular FILLED painted scenes in precise2x2 grid. Equalquadrants, circle centered eachquadrant diameter96%width, opaque fullypainted interior, genuine transparentoutside circles andgutters. No decorative externalring/rim/frame/stroke/badge, no letters/text/numbers/watermarks/dividers. Match providedreference bold clean comicshapes, confidentoutlines, strongmotionandreadableat60px. Palette midnightindigo, coldsteel silver, cyan luminouscuttingedges. TOPLEFT: ONE clear FOUR-POINT STEEL SHURIKEN flyingdiagonallyforward, cyan directionaltrails behind, largewell-definedsteel silhouette withcenterhole painted darkindigo (nottransparent), actionpainting. TOPRIGHT: THREE fourpoint steelshuriken beingRECALLED along three curvedcyanroutes toward a ninjaglove atlowerleft, motiondirectioninward; originaltargets shown only as small darkarmored silhouettes, noface. BOTTOMLEFT: HUGE spinning horizontalspinalSHURIKEN madeofone silver fourpointthrowingstar surroundedby a brightcyanrotationaldisc andmultiplecurvedcuttingtrails, churningindigowind, strongrotation, notatall tornado. BOTTOMRIGHT: a complementary close-up originalninja maskedface, adultfemale amber eyes and blackhighponytail, midnightindigo lowerfacemask, cyanscarf, nofranchiseinsignia; thisfourthcell isoptionalportraitvariant. Allpicturesfullycontainedinsidecircles, continuouslypaintedbackdrop noemptyvoids. No orangeclothing, nofranchisecopy.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/ui_card_explode.png"
+      ]
+    }
+  ]
+}

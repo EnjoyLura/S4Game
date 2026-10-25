@@ -4,6 +4,7 @@
  */
 import { PAL } from './GameConfig';
 import { CANNON, CANNON_CARDS_CFG as CC, SIPHON, SIPHON_CARDS_CFG as SC, cannonSkillCfg, siphonSkillCfg } from './NewHeroConfig';
+import { WIND, NINJA, windSkillCfg, ninjaSkillCfg } from './WindNinjaConfig';
 
 export type Rarity = 'white' | 'blue' | 'purple' | 'gold';
 export const RARITY_COLOR: Record<Rarity, string> = { white: PAL.white, blue: PAL.blue, purple: PAL.purple, gold: PAL.gold };
@@ -97,6 +98,7 @@ export interface HeroStats {
   voltStrikeBonus?: number; // 雷暴增援：额外真实落雷数
   voltOverload?: number; // 过载麻痹：连锁命中已有感电目标的眩晕概率
   voltArc?: number; // 电弧普攻：一次额外跳跃的伤害倍率
+  voltField?: boolean; // 雷电领域：大招落雷留下持续3秒的伤害领域
   chargeEff: number;    // 装备充能效率词条：击杀充能 ×(1+eff)（累加）
   pierceChance: number; // 英雄突破：普攻贯穿概率（0~1，累加）
   defIgnore: number;    // 英雄突破：无视防御比例（0~1，累加）
@@ -252,6 +254,8 @@ export function moraUltimateHitDamage(s: HeroStats): number { return abilityDama
 /** 技能伤害项每箭／每发／每跳的倍率，供技能培养预览共用。 */
 export function skillBaseMultiplier(hid: string, level: number): number {
   switch (hid) {
+    case 'wind': return windSkillCfg(level).mul;
+    case 'ninja': return ninjaSkillCfg(level).mul;
     case 'cannon': return cannonSkillCfg(level).mul;
     case 'siphon': return siphonSkillCfg(level).mul;
     case 'sniper': return sniperSkCfg(level).mul;
@@ -340,6 +344,14 @@ export function baseCannonStats(): HeroStats {
 export function baseSiphonStats(): HeroStats {
   return { ...baseArcherStats(), atk: SIPHON.attack, skillDmg: SIPHON.skill, aspd: SIPHON.aspd,
     range: SIPHON.range, skillRange: SIPHON.skillRange, skillShots: 2 };
+}
+export function baseWindStats(): HeroStats {
+  return { ...baseArcherStats(), atk: WIND.attack, skillDmg: WIND.skill, aspd: WIND.aspd,
+    range: WIND.range, skillRange: WIND.skillRange, skillShots: 1 };
+}
+export function baseNinjaStats(): HeroStats {
+  return { ...baseArcherStats(), atk: NINJA.attack, skillDmg: NINJA.skill, aspd: NINJA.aspd,
+    range: NINJA.range, skillRange: NINJA.skillRange, skillShots: 1 };
 }
 
 export interface GlobalStats {
@@ -520,6 +532,9 @@ export const PYRO_CARDS: CardDef[] = [
 
 /* ---------- 雷电法师：连锁清群 / 感电协作 / 连续落雷 ---------- */
 export const VOLT_CARDS: CardDef[] = [
+  c({ id: 'volt_field', name: '雷电领域', rarity: 'purple', maxStacks: 1, owner: 'volt', req: 'volt_unlock_ult',
+    art: 'ui_card_volt_field', desc: '大招落雷留下雷电领域\n持续伤害3秒',
+    apply: x => { x.hero.voltField = true; } }),
   ...commonHeroCards('volt'),
   c({ id: 'volt_arc', name: '电弧普攻', rarity: 'blue', maxStacks: 1, owner: 'volt',
     art: 'ui_card_volt_shards_v2', desc: '普攻额外跳跃1次\n跳跃伤害50%',
@@ -662,8 +677,10 @@ export const SIPHON_CARDS: CardDef[] = [
   c({ id: 'siphon_skill_targets', owner: 'siphon', name: '灵魂分支', rarity: 'blue', maxStacks: 2, offerGroup: 'combat',
     art: 'ui_card_siphon_skill_targets', desc: '技能可连接目标 +1', apply: x => { x.hero.siphonSkillTargets = (x.hero.siphonSkillTargets || 0) + 1; } }),
 ];
+export const WIND_CARDS: CardDef[] = commonHeroCards('wind');
+export const NINJA_CARDS: CardDef[] = commonHeroCards('ninja');
 export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...VOLT_CARDS, ...MORA_CARDS,
-  ...CANNON_CARDS, ...SIPHON_CARDS, ...GLOBAL_CARDS];
+  ...CANNON_CARDS, ...SIPHON_CARDS, ...WIND_CARDS, ...NINJA_CARDS, ...GLOBAL_CARDS];
 
 export interface CardStacks { [cardId: string]: number; }
 
@@ -727,7 +744,7 @@ const MECHANIC_IDS = new Set(['archer_pierce', 'serial', 'fan', 'split', 'explod
   'multi_lock', 'sniper_pierce', 'extra_line', 'sniper_mark', 'pyro_shards', 'pyro_burn', 'pyro_burst', 'pyro_meteors',
   'volt_shards', 'volt_shock', 'volt_strikes', 'volt_stun', 'mora_freeze', 'mora_glacier', 'mora_team',
   'archer_knockback', 'sniper_return', 'pyro_firefield', 'pyro_antiheal', 'pyro_giant',
-  'volt_arc', 'volt_overload', 'mora_pierce', 'mora_ground',
+  'volt_arc', 'volt_overload', 'volt_field', 'mora_pierce', 'mora_ground',
   'cannon_echo', 'cannon_loader', 'cannon_knockback', 'cannon_barrage',
   'cannon_fragments', 'cannon_pierce', 'cannon_center', 'cannon_heavy', 'cannon_cluster', 'cannon_wave',
   'cannon_interrupt', 'cannon_charges', 'cannon_refund', 'cannon_ult_center', 'cannon_ult_radius', 'cannon_ult_stun',

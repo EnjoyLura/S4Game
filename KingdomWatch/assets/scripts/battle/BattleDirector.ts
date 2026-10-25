@@ -6,9 +6,10 @@ import { _decorator, Canvas, Component, director, isValid, Layers, Node } from '
 import { MobDef, MOBS, heroSlots } from '../config/Mobs';
 import { ChallengeDef, DIFFICULTIES, getChallengeDef } from '../config/LevelDifficulty';
 import { CardCtx, CardDef, CardStacks, canTakeCard, draw3, GlobalStats, M0_POOL, baseArcherStats, baseSniperStats, basePyroStats, baseVoltStats, baseMoraStats, HeroStats, archerAtkCfg, sniperAtkCfg, sniperSkCfg, voltAtkCfg, voltSkCfg, voltUltCfg, pyroAtkCfg, pyroSkCfg, pyroUltCfg, moraAtkCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
-import { baseCannonStats, baseSiphonStats } from '../config/Cards';
+import { baseCannonStats, baseSiphonStats, baseWindStats, baseNinjaStats } from '../config/Cards';
 import { newHeroNormalCfg } from '../config/NewHeroConfig';
 import { CannonHero, SiphonHero } from './NewHeroes';
+import { WindHero, NinjaHero } from './WindNinjaHeroes';
 import { expNeed, LO, PASSIVE_XP_INTERVAL, passiveXpGain, REVIVE_RATIO, starOf, ULT_INITIAL_CHARGE, SHARED_KILL_CHARGE } from '../config/GameConfig';
 import { bus, EVT, WaveThreat } from '../core/EventBus';
 import { Sfx } from '../core/Sfx';
@@ -202,13 +203,16 @@ export class BattleDirector extends Component {
     // 编队上阵（§编队）：按存档上阵顺序从左到右站位（2 人 = ±160 与旧版一致）；空编队兜底双英雄
     const slots = heroSlots(ids.length);
     this.heroes = ids.map((hid, i) => {
-      const st = hid === 'cannon' ? baseCannonStats() : hid === 'siphon' ? baseSiphonStats() : hid === 'sniper' ? baseSniperStats()
+      const st = hid === 'wind' ? baseWindStats() : hid === 'ninja' ? baseNinjaStats()
+        : hid === 'cannon' ? baseCannonStats() : hid === 'siphon' ? baseSiphonStats() : hid === 'sniper' ? baseSniperStats()
         : hid === 'pyro' ? basePyroStats()
           : hid === 'volt' ? baseVoltStats()
             : hid === 'mora' ? baseMoraStats() : baseArcherStats();
       applyHeroGrowth(st, hid);     // 英雄等级成长+阶段性突破上场（每级成长按存档等级）
       applyEquipAffixes(st, hid);   // 穿戴词条上场即生效（用户确认的词条体系）
-      return hid === 'cannon' ? new CannonHero(heroLayer, slots[i], st)
+      return hid === 'wind' ? new WindHero(heroLayer, slots[i], st)
+        : hid === 'ninja' ? new NinjaHero(heroLayer, slots[i], st)
+        : hid === 'cannon' ? new CannonHero(heroLayer, slots[i], st)
         : hid === 'siphon' ? new SiphonHero(heroLayer, slots[i], st)
         : hid === 'sniper' ? new SniperHero(heroLayer, slots[i], st)
         : hid === 'pyro' ? new PyroHero(heroLayer, slots[i], st)
@@ -986,7 +990,7 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
   s.ultBolts += bt.ultBolts;
   s.ultAutoCd = bt.ultAutoCd;
   s.atkLv = hs.atkLv; s.skillLv = hs.skillLv; s.ultLv = hs.ultLv;   // 技能升级里程碑（弓箭手类内读取）
-  if (hid === 'cannon' || hid === 'siphon') {
+  if (hid === 'cannon' || hid === 'siphon' || hid === 'wind' || hid === 'ninja') {
     s.normalMul = newHeroNormalCfg(hs.atkLv).normalMul;
     if (hs.atkLv >= 10) s.critRate = Math.min(1, s.critRate + .05);
     if (hs.atkLv >= 15) s.range = Math.round(s.range * 1.08);

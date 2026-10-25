@@ -21,7 +21,7 @@ import urllib.error
 import urllib.request
 
 from export import HERE,PROJECT,export,sha,write_json,validate_package
-from art_resources import MODES, runtime_budget
+from art_resources import MODES
 
 REPORT=PROJECT/'docs/github-pages-publishing/deployment.json'
 
@@ -128,9 +128,6 @@ def synchronize(stage,dest,prune_previous_release=False):
         if not path.resolve().is_relative_to(dest) or path.is_symlink():raise RuntimeError('Unsafe retained publication path')
     combined=sum(p.stat().st_size for p in stage.rglob('*') if p.is_file())+sum((dest/n).stat().st_size for n in retained)
     if combined>950*1048576:raise RuntimeError('Current plus previous runtime exceeds the safe Pages size budget')
-    release=json.loads((stage/'hosting-release.json').read_text('utf-8'))
-    if release.get('texture_mode')=='mixed-webp-q95' and combined>runtime_budget('mixed-webp-q95'):
-        raise RuntimeError('Current plus retained runtime exceeds 200MB; use -PrunePreviousRelease to publish only the current package')
     # Delete only previously tracked generated files, after verifying the exact
     # resolved target remains inside this independent checkout. Never recurse.
     for name in sorted(old-new-retained):

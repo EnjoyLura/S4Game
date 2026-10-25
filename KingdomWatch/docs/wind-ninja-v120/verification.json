@@ -1,0 +1,66 @@
+{
+  "checkedAt": "2026-10-25T13:30:17.328Z",
+  "status": "PASS",
+  "checks": 22,
+  "suites": [
+    "density: empty/dead/out-of-view bodies do not seed an area",
+    "density: airborne hitY, rather than ground y, governs range",
+    "density: radius scores the actual circular footprint",
+    "motion: 82px/s, exact cap and no overshoot even for a long step",
+    "motion: deterministic 500-case distance/endpoint property check",
+    "return: zero-length and diagonal paths have exact finite endpoints",
+    "kinematics: moving/slowed/hold/attack/immobilized speed contract",
+    "kinematics: 1000px range / 36px/s target meets projectile instead of missing by >22px",
+    "kinematics: both actual mirrored hand origins work for wind and ninja",
+    "kinematics: stationary/frozen and slowed targets meet at the predicted body point",
+    "kinematics: equal-speed linear case, chase, unreachable and zero-distance fallbacks",
+    "kinematics: 500 deterministic interceptions agree with target motion",
+    "drawing: wind crescent body stays horizontal under different velocity directions",
+    "drawing: 80 attached-metal cap, 8 area cap, 24 accent cap and expiry",
+    "drawing: all fields/projectiles remain finite at start, middle and fade",
+    "static source: contact callback attaches marks without another damage call",
+    "static source: actual-hand lead, finite endpoint, guarded recall retry and mark eligibility",
+    "metadata: new TypeScript UUIDs are valid and unique",
+    "static TypeScript: new modules have no diagnostics under project ES2015 settings",
+    "static Sfx release guards: one per successful normal row and committed skill/ultimate, no retry sound",
+    "static manager traversal: all three mgr.list loops use liveNode with no membership scan; persisted references retain valid",
+    "isolated liveness predicate: no membership probes, correct dead/inactive/recycled/detached rejection and preserved damage life guard"
+  ],
+  "permittedScope": "pure geometry/kinematics, static source/type checks, isolated Graphics drawing only",
+  "excludedExecution": [
+    "game engine",
+    "combat simulation",
+    "browser",
+    "audio",
+    "WASM",
+    "build",
+    "git",
+    "deployment"
+  ],
+  "typeCheck": {
+    "version": "5.8.2",
+    "noEmit": true,
+    "ownDiagnostics": 0,
+    "dependencyDiagnostics": 22
+  },
+  "sha256": {
+    "WindNinjaGeometry.ts": "8dd5e05a2d37bc76bf54b23cc3ddc72757502a2bdd5e71afcbc6972ea7c77ea5",
+    "WindNinjaVFX.ts": "69e628928d2dbf4e04d81faf9919a615e23e70055522c372e0a23882bb5da4a5",
+    "WindNinjaHeroes.ts": "b1c430d3b3838f14225692334022ff546cac01c8345f57ba8aea2dde5354cdbe"
+  },
+  "preview": {
+    "mode": "isolated Graphics commands; no engine/combat/browser/audio/WASM",
+    "age": 1.3,
+    "commands": 382,
+    "svg": "preview.svg",
+    "png": "preview.png"
+  },
+  "audioExecution": false,
+  "previewReused": "Appearance and drawing sources unchanged; existing preview retained byte-for-byte.",
+  "liveNodeCheck": {
+    "managerLoops": 3,
+    "livenessOnlyCalls": 1000,
+    "membershipProbesInLivenessCalls": 0,
+    "persistedMembershipGuard": "retained"
+  }
+}

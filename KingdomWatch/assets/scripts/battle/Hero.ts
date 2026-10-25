@@ -208,6 +208,10 @@ export abstract class HeroBase {
   protected selectNormalTarget(mgr: MonsterManager): Monster | null {
     return mgr.pickTarget(this.x, HERO_Y, this.stats.range, this.targetLayer('atk'));
   }
+  /** Some skills need their own setup (e.g. ninja shuriken marks), not merely any living target. */
+  protected canAutoSkill(mgr: MonsterManager): boolean {
+    return mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange, this.targetLayer('skill'));
+  }
   get effAtk(): number { return this.stats.atk * this.stats.atkMul; }
   /** 两项独立基础值：攻击力 × 小额系数 + 技能伤害 × 当前技能倍率。 */
   abilityDamage(skillMultiplier: number, ultimate = false, attackMultiplier?: number): number {
@@ -267,7 +271,7 @@ export abstract class HeroBase {
     if (this.skillUnlocked) {
       this.skillCd -= dt;
       if (this.skillCd <= 0 && this.ultimateWindupT <= 0) {
-        if (mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange, this.targetLayer('skill'))) {
+        if (this.canAutoSkill(mgr)) {
           this.animateAttack(true);
           this.castSkill(mgr, projs, dmg);
         } else if (this.targetLayer('skill') !== 'all') this.reportBlockedTarget(mgr, 'skill');
@@ -1370,6 +1374,9 @@ export class PyroHero extends HeroBase {
 /* ============================================================
  * 雷电法师 · 沃尔·雷霆（§4 #3：技能流·连锁/紫；线稿 hero_bolt_battle 100×120）
  * ============================================================ */
+import { VoltField } from './VoltField';
+import { VOLT_FIELD } from '../config/WindNinjaConfig';
+
 export class VoltHero extends HeroBase {
   readonly id = 'volt';
   readonly name = '沃尔·雷霆';
@@ -1377,6 +1384,8 @@ export class VoltHero extends HeroBase {
   readonly skillMax = 9;
   /** 大招·天雷灭世：排队落下的雷击（目标引用，落雷时已亡则转随机存活目标） */
   private strikeQueue: { t: number; target: Monster | null; index: number }[] = [];
+  private voltFieldTime = 0;
+  private voltFields: VoltField | null = null;
   get ultimateRemaining(): number { return Math.max(this.ultimateT, this.strikeQueue.length ? .01 : 0); }
   get ultShowDuration(): number {
     // Cocos loose super-getter lowering reads HeroBase.prototype, losing the instance id.
@@ -1518,6 +1527,9 @@ export class VoltHero extends HeroBase {
   }
 
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
+    // Residue outlives both the queue and the ultimate presentation; battle dt freezes on pause.
+    this.voltFieldTime += dt;
+    this.voltFields?.advanceTo(this.voltFieldTime, mgr);
     // 大招落雷：到点对目标位置直击（AOE 90 + 眩晕）；目标已亡则转随机存活目标
     for (let i = this.strikeQueue.length - 1; i >= 0; i--) {
       const q = this.strikeQueue[i];
@@ -1547,6 +1559,15 @@ export class VoltHero extends HeroBase {
     const uc = voltUltCfg(this.stats.ultLv);
     const dmgVal = this.abilityDamage(uc.boltMul, true);
     projs.voltThunder(t.x, t.def.airborne ? t.hitY : t.depthY, SPAWN_Y + 140, t.def.airborne ? t.groundY : t.depthY, 90 * uc.rMul, power);
+    if (this.stats.voltField === true) {
+      const battle = this.node.parent?.parent;
+      if (battle) {
+        const fields = this.voltFields || (this.voltFields = VoltField.forBattle(battle, this.voltFieldTime));
+        fields.advanceTo(this.voltFieldTime, mgr);
+        fields.leave(this.node, t.x, t.def.airborne ? t.groundY : t.depthY,
+          this.abilityDamage(VOLT_FIELD.mul, true), this.lastDmg);
+      }
+    }
     Sfx.ultimateImpact(this.id);
     bus.emit(EVT.HIT_STOP);
     for (const o of mgr.mobsInRadius(t.x, t.hitY, 90 * uc.rMul)) {   // 5级：落雷范围+20%
@@ -1561,6 +1582,11 @@ export class VoltHero extends HeroBase {
       }
     }
     void t;
+  }
+
+  renderEffects(): void {
+    super.renderEffects();
+    this.voltFields?.render();
   }
 
   /** 大招·天雷灭世：基础15道，雷暴增援最多25道；每道真实范围伤害+当前眩晕时长。 */

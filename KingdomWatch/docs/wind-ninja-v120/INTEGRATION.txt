@@ -1,0 +1,64 @@
+Wind / Ninja v120: owned implementation and isolated checks
+
+Files:
+  assets/scripts/battle/WindNinjaHeroes.ts (+meta)
+  assets/scripts/battle/WindNinjaVFX.ts (+meta)
+  assets/scripts/battle/WindNinjaGeometry.ts (+meta)
+
+Exports:
+  WindHero: wind / 赛兰·逐风
+  NinjaHero: ninja / 胧·影刃
+  drawWindBlade, drawShuriken: (g, x, y, vx, vy, size, age)
+
+Formal art:
+  new_heroes_v120/wind_battle and new_heroes_v120/ninja_battle
+  512x768 aliases, width120 height180, source foot744/768 -> world foot-76.
+  Both native images face left; rightward facing mirrors their artwork.
+  Actual hand is hero.x +/-35, HERO_Y+90. Sprite facing never moves the hero.
+
+Parent integration:
+  Instantiate these classes from the hero factory and preload both art aliases.
+  Keep the existing lastDmg, charge, resistance, projectile collision and actual-hit feedback paths.
+  GenericProjectile visual, onContact, endPoint, initialContactLifeId and hitExhausted are required.
+  endPoint clips the last ordinary sweep, then recycles at the exact original launch point.
+  Contact exhaustion stops further damage but preserves finite-path flight to that endpoint.
+  initialContactLifeId prioritizes overlapping t=0 source contacts; hit sets still deduplicate by lifeId.
+  onContact only attaches metal and never duplicates the original projectile damage.
+  Snapshot the contact life before takeDamage; do not invoke onContact on a different pooled life.
+  HeroBase.canAutoSkill is overridden so ninja spends no cooldown without in-range valid marks.
+  Monster.pullToward owns boss immunity, immobilization rejection and elite .35 attenuation.
+  ULT_TIMING supplies wind .5s and ninja .45s windups; configured active durations follow them.
+  Parent/other agents own roster, progression/milestones, cards, UI, final art/font/build/release.
+
+Behavior:
+  Both normals solve a pure interception equation from the actual mirrored hand and target.hitY.
+  Target motion stops for hold/attack/immobilization and respects active slow.
+  Ninja reservations last the estimated center-arrival time +.15s, bounded by projectile TTL.
+  Wind: horizontal crescent, configured pierce/falloff; fixed eye; independent smoothly seeking tornado.
+  Ninja: one attached shuriken per live target; original launch/impact segment retained for future work.
+  A recall atomically transfers marks into a bounded queue. Pool-full releases retry without dropping.
+  Committed recalls receive freed projectile slots before serial normal rows, avoiding queue starvation.
+  Pending metal remains visibly attached until an actual projectile slot accepts its release.
+  No auto-return card is enabled. Recall damage uses only the ordinary generic projectile sweep.
+  Ninja ultimate stays at its chosen point and hits enemies entering its real body-space area.
+  All normals/skills/ultimates accept flying targets. Dead/recycled/GM-killed lives are pruned.
+
+Reproduce (from project root):
+  node docs/wind-ninja-v120/verify.cjs
+  node docs/wind-ninja-v120/render-preview.cjs
+  node docs/wind-ninja-v120/render-preview.cjs --svg-only
+
+Runtime requirements:
+  Node, a local TypeScript compiler, and Python + Pillow for PNG.
+  Compiler resolution: WIND_NINJA_TYPESCRIPT, local typescript, then installed Cocos compiler.
+  Optional WIND_NINJA_PYTHON selects a Python executable.
+  Checks use no engine/Monster/Hero instances and simulate no combat. The cc import for VFX is
+  replaced with a finite command recorder, a color value and a drawing-only node stub.
+  TypeScript noEmit reads dependencies without running them. Dependency diagnostics are recorded
+  separately from owned-file diagnostics because other agents are editing the same project.
+
+Artifacts:
+  verification.json: timestamp, check list, source SHA256 and static diagnostics summary.
+  preview.png / preview.svg: six separately labeled effects, with reference body/hand coordinates.
+  preview-drawing.json: deterministic recorded Graphics commands used by both renderers.
+  Repeated projectile images in the sheet are sampled positions of one flight, not extra attacks.

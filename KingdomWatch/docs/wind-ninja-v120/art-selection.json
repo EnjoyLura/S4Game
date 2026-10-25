@@ -1,0 +1,38 @@
+{
+  "characters": [
+    {
+      "id": "wind",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a15ef7-7947-7cb0-82f2-df6682c99f16\\exec-4e2e501a-acf5-4481-bfdc-822d00eeb323.png"
+    },
+    {
+      "id": "ninja",
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a15ef7-7947-7cb0-82f2-df6682c99f16\\exec-6b02eba3-03cb-4236-abb4-7dd36b9f7cac.png"
+    }
+  ],
+  "icons": [
+    {
+      "id": "wind_icons",
+      "cells": [
+        "ui_icon_atk_wind",
+        "ui_icon_skill_wind",
+        "ui_icon_ult_wind",
+        "ui_card_volt_field"
+      ],
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a15ef7-7947-7cb0-82f2-df6682c99f16\\exec-f76a0484-13bf-469a-8ba0-214c21adfc40.png"
+    },
+    {
+      "id": "ninja_icons",
+      "cells": [
+        "ui_icon_atk_ninja",
+        "ui_icon_skill_ninja",
+        "ui_icon_ult_ninja",
+        "ui_avatar_ninja_spare"
+      ],
+      "path": "C:\\Users\\user\\.codex\\generated_images\\01a15ef7-7947-7cb0-82f2-df6682c99f16\\exec-313b1b17-111b-4a12-a256-2b5010ecf601.png"
+    }
+  ],
+  "windAvatar": {
+    "prompt": "Use case: stylized-concept. Make ONE mobile fantasy game HERO AVATAR. Input image is the exact original wind sorcerer's front/back identity reference; preserve his young adult male face, swept ash-brown hair and prominent seafoam teal forelock, turquoise eyes, ivory collar, turquoise and silver-trimmed short mage coat. HEAD AND SHOULDERS close-up only of FRONT VIEW identity, not two people or two poses. Same clean painted comic contours and large shaded color planes, no staff. PERFECT CIRCULAR FILLED painting centered on square canvas diameter98%, opaque painted darkteal swirlingcloud backdrop ALL THE WAY to circular cutedge. Genuinely transparent outside the circle. No external rim, metalborder, decorativecircle, frame, outline ring or vignetteborder. No text/numbers/watermark. All face/hair/shoulders inside circle; readable at60px. Circle edge is simply the cut boundary of continuously painted scene.",
+    "path": "C:\\Users\\user\\.codex\\generated_images\\01a15ef7-7947-7cb0-82f2-df6682c99f16\\exec-093c4682-41df-49c6-8d1d-03fe9ccd0f5b.png"
+  }
+}

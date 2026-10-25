@@ -1,0 +1,20 @@
+{
+  "fonts": [
+    {
+      "font": "UIBody",
+      "added": "兰剑忍拢掠涡胧赛逃靛",
+      "existingCodepointsPreserved": 1580,
+      "bytesAdded": 3168,
+      "sha256": "c78f5b5e06b6f42a388ab41f140766b65e8a14de17d58ef878934008d2c9937e"
+    },
+    {
+      "font": "UIHeading",
+      "added": "兰剑忍拢掠涡胧赛逃靛",
+      "existingCodepointsPreserved": 1580,
+      "bytesAdded": 4312,
+      "sha256": "b5881eb9e040736477a046a1a2b69bc0abd61ae17d36797963911b1152adcff7"
+    }
+  ],
+  "source": "same pinned local OFL sources; no downloads",
+  "gameStarted": false
+}

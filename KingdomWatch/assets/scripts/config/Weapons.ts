@@ -1,6 +1,6 @@
 /** Pure weapon catalog: also safe to read while migrating the save (no GameData dependency). */
-export type WeaponType = 'bow' | 'crossbow' | 'book' | 'staff' | 'cannon';
-export const WEAPON_TYPE_NAME: Record<WeaponType, string> = { bow: '弓', crossbow: '弩', book: '魔法书', staff: '法杖', cannon: '重炮' };
+export type WeaponType = 'bow' | 'crossbow' | 'book' | 'staff' | 'cannon' | 'shuriken';
+export const WEAPON_TYPE_NAME: Record<WeaponType, string> = { bow: '弓', crossbow: '弩', book: '魔法书', staff: '法杖', cannon: '重炮', shuriken: '手里剑' };
 export interface WeaponSpec {
   id: string; name: string; type: WeaponType; quality: 0 | 1 | 2 | 3; tier: number;
   focus?: string; description?: string;
@@ -11,6 +11,12 @@ export interface WeaponSpec {
 }
 const art = (name: string): string => 'weapons_v1/' + name;
 export const WEAPONS: Record<string, WeaponSpec> = {
+  wpn_starter_wristfocus: { id: 'wpn_starter_wristfocus', name: '逐风腕环', type: 'staff', quality: 0, tier: 1,
+    stats: { atk: 6, skillDmg: 10 }, price: 0, unlock: '', art: 'ui_icon_atk_wind', starter: true,
+    breakthrough: { atk: .07, skill: .09, secondary: 'chargeEff', bonus: .02 } },
+  wpn_starter_shuriken: { id: 'wpn_starter_shuriken', name: '影刃手里剑', type: 'shuriken', quality: 0, tier: 1,
+    stats: { atk: 12, skillDmg: 6 }, price: 0, unlock: '', art: 'ui_icon_atk_ninja', starter: true,
+    breakthrough: { atk: .10, skill: .06, secondary: 'critRate', bonus: .01 } },
   wpn_starter_cannon: { id: 'wpn_starter_cannon', name: '铜铸重炮', type: 'cannon', quality: 0, tier: 1,
     stats: { atk: 14, skillDmg: 6 }, price: 0, unlock: '', art: 'ui_icon_atk_cannon', starter: true,
     breakthrough: { atk: .1, skill: .08, secondary: 'critRate', bonus: .015 } },
@@ -45,13 +51,14 @@ export const WEAPONS: Record<string, WeaponSpec> = {
 export const STARTER_WEAPON: Record<string, string> = {
   cannon: 'wpn_starter_cannon', siphon: 'wpn_starter_staff',
   archer: 'wpn_starter_bow', sniper: 'wpn_starter_crossbow', pyro: 'wpn_starter_book', volt: 'wpn_starter_staff', mora: 'wpn_starter_staff',
+  wind: 'wpn_starter_wristfocus', ninja: 'wpn_starter_shuriken',
 };
 export function weaponFits(hid: string, id: string): boolean {
   const type = WEAPONS[id]?.type;
-  return hid === 'cannon' ? type === 'cannon' : hid === 'archer' ? type === 'bow' : hid === 'sniper' ? type === 'crossbow'
-    : ['pyro', 'volt', 'mora', 'siphon'].includes(hid) && (type === 'book' || type === 'staff');
+  return hid === 'ninja' ? type === 'shuriken' : hid === 'cannon' ? type === 'cannon' : hid === 'archer' ? type === 'bow' : hid === 'sniper' ? type === 'crossbow'
+    : ['pyro', 'volt', 'mora', 'siphon', 'wind'].includes(hid) && (type === 'book' || type === 'staff');
 }
 export function weaponUsers(id: string): string {
   const type = WEAPONS[id]?.type;
-  return type === 'cannon' ? '重炮工程师专用' : type === 'bow' ? '弓手专用' : type === 'crossbow' ? '重弩手专用' : '火 / 雷 / 冰 / 生命法师通用';
+  return type === 'shuriken' ? '忍者专用' : type === 'cannon' ? '重炮工程师专用' : type === 'bow' ? '弓手专用' : type === 'crossbow' ? '重弩手专用' : '火 / 雷 / 冰 / 生命 / 风系法师通用';
 }

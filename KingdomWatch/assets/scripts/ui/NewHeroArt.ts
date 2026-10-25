@@ -46,3 +46,222 @@ for (const hero of ['cannon', 'siphon']) {
 // All callers and prewarm requests resolve to the same source texture, never a second placeholder.
 for (const key of Object.keys(NEW_HERO_FRAMES)) if (!key.includes('/'))
   NEW_HERO_FRAMES['shop_comic_v1/' + key] = NEW_HERO_FRAMES[key];
+// v120 wind/ninja real atlas regions.
+Object.assign(NEW_HERO_FRAMES, {
+  "new_heroes_v120/wind_lobby": {
+    "source": "wind_ninja_v120/wind_figures",
+    "rect": [
+      0,
+      0,
+      512,
+      768
+    ]
+  },
+  "hero_comic_v1/comic_figure_wind_v1": {
+    "source": "wind_ninja_v120/wind_figures",
+    "rect": [
+      0,
+      0,
+      512,
+      768
+    ]
+  },
+  "new_heroes_v120/wind_battle": {
+    "source": "wind_ninja_v120/wind_figures",
+    "rect": [
+      512,
+      0,
+      512,
+      768
+    ]
+  },
+  "new_heroes_v120/ninja_lobby": {
+    "source": "wind_ninja_v120/ninja_figures",
+    "rect": [
+      0,
+      0,
+      512,
+      768
+    ]
+  },
+  "hero_comic_v1/comic_figure_ninja_v1": {
+    "source": "wind_ninja_v120/ninja_figures",
+    "rect": [
+      0,
+      0,
+      512,
+      768
+    ]
+  },
+  "new_heroes_v120/ninja_battle": {
+    "source": "wind_ninja_v120/ninja_figures",
+    "rect": [
+      512,
+      0,
+      512,
+      768
+    ]
+  },
+  "ui_icon_atk_wind": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      4,
+      4,
+      248,
+      248
+    ]
+  },
+  "ui_icon_skill_wind": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      260,
+      4,
+      248,
+      248
+    ]
+  },
+  "ui_icon_ult_wind": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      516,
+      4,
+      248,
+      248
+    ]
+  },
+  "ui_card_volt_field": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      772,
+      4,
+      248,
+      248
+    ]
+  },
+  "ui_icon_atk_ninja": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      4,
+      260,
+      248,
+      248
+    ]
+  },
+  "ui_icon_skill_ninja": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      260,
+      260,
+      248,
+      248
+    ]
+  },
+  "ui_icon_ult_ninja": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      516,
+      260,
+      248,
+      248
+    ]
+  },
+  "ui_avatar_ninja": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      772,
+      260,
+      248,
+      248
+    ]
+  },
+  "ui_avatar_wind": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      4,
+      516,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_atk_wind": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      4,
+      4,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_skill_wind": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      260,
+      4,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_ult_wind": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      516,
+      4,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_card_volt_field": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      772,
+      4,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_atk_ninja": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      4,
+      260,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_skill_ninja": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      260,
+      260,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_ult_ninja": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      516,
+      260,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_avatar_ninja": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      772,
+      260,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_avatar_wind": {
+    "source": "wind_ninja_v120/abilities",
+    "rect": [
+      4,
+      516,
+      248,
+      248
+    ]
+  }
+});

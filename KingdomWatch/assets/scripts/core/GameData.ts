@@ -7,6 +7,7 @@ import { loadSave, saveSave, EquipInst, HeroState } from './SaveData';
 import { DIFFICULTIES, starChestRewards } from '../config/LevelDifficulty';
 import { WEAPONS, weaponFits, weaponUsers } from '../config/Weapons';
 import { CAMPAIGN_LEVEL_IDS } from '../config/Campaign';
+import { WIND, NINJA } from '../config/WindNinjaConfig';
 export { WEAPONS, weaponFits, weaponUsers } from '../config/Weapons';
 
 /* ================= 物品定义 ================= */
@@ -252,6 +253,20 @@ export const HERO_DEFS: Record<string, HeroDef> = {
     weaponName: '绯契法杖', skillName: '灵魂分流', ultName: '生命洪流', shopPrice: 5600,
     story: '以绯晶维系生命契约的流浪术士。她锁住敌人的生命，将汲取的余能化作贯穿战场的洪流；连接越久，契约越强。',
   },
+  wind: {
+    id: 'wind', name: '赛兰·逐风', job: '风系 · 聚怪切割', avatar: 'ui_avatar_wind',
+    baseAtk: WIND.attack, baseSkillDmg: WIND.skill, growthType: 'skill', atkSpd: WIND.aspd,
+    weaponName: '逐风腕环', skillName: '风眼旋涡', ultName: '游走龙卷',
+    story: '来自象牙风塔的逐风者，以腕环引导青绿色气流。他让风眼聚拢敌群，再用游走的龙卷守住王国防线。',
+    shopPrice: 5200,
+  },
+  ninja: {
+    id: 'ninja', name: '胧·影刃', job: '忍者 · 飞刃回收', avatar: 'ui_avatar_ninja',
+    baseAtk: NINJA.attack, baseSkillDmg: NINJA.skill, growthType: 'normal', atkSpd: NINJA.aspd,
+    weaponName: '影刃手里剑', skillName: '飞刃回收', ultName: '旋刃风暴',
+    story: '靛青夜幕中的守望忍者，银刃掠过时只留一道青光。胧将投出的手里剑尽数召回，让敌人在往返刃影间无处可逃。',
+    shopPrice: 5400,
+  },
 };
 
 /* ================= 编队（二级编队界面：4 上阵位；战斗按上阵顺序从左到右站位） ================= */
@@ -479,6 +494,9 @@ export const SHOP: ShopDef[] = [
   { id: 's_hero_mora', tab: 'hero', name: '莫拉·寒霜', sub: '冰霜 · 减速控制', price: 4800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'mora' } },
   { id: 's_hero_cannon', tab: 'hero', name: '布洛克·铜铸', sub: '重炮 · 物理爆破', price: 5200, currency: 'diamond', unlock: '1-4', give: { kind: 'hero', id: 'cannon' } },
   { id: 's_hero_siphon', tab: 'hero', name: '薇拉·绯契', sub: '虹吸 · 贯穿爆发', price: 5600, currency: 'diamond', unlock: '1-4', give: { kind: 'hero', id: 'siphon' } },
+  ...['wind', 'ninja'].map(id => ({ id: 's_hero_' + id, tab: 'hero' as ShopTab, name: HERO_DEFS[id].name,
+    sub: HERO_DEFS[id].job, price: HERO_DEFS[id].shopPrice, currency: 'diamond' as const,
+    unlock: '1-4', give: { kind: 'hero' as const, id } })),
   { id: 's_hero_more', tab: 'hero', name: '新英雄', sub: '敬请期待', price: 0, currency: 'diamond', unlock: '', give: { kind: 'hero', id: '' } },
   { id: 's_helm_falcon', tab: 'equip', name: '猎鹰头盔', sub: '蓝1阶 · 头盔', price: 600, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'helm_falcon' } },
   { id: 's_acc_moon', tab: 'equip', name: '月纹坠饰', sub: '绿1阶 · 饰品', price: 300, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'acc_moon' } },

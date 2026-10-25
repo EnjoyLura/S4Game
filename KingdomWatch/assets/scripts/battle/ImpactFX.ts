@@ -17,6 +17,7 @@ interface Impact { x: number; y: number; groundY: number; life: number; max: num
 interface CombatCue { kind: string; x: number; y: number; tx: number; ty: number; radius: number; life: number; max: number; }
 
 export const HERO_FX: Record<string, string> = {
+  wind: '#9FECDD', ninja: '#86BDED',
   cannon: '#EAC15E', siphon: '#F087B0',
   archer: '#F8D886', sniper: '#ABD9F4', pyro: '#FFAD54', volt: '#D2A4FF', mora: '#A6E9F6',
 };

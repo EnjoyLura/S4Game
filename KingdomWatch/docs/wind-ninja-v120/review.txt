@@ -1,0 +1,8 @@
+v120 focused static review - pull/lunge anchor follow-up
+
+Confirmed the pullToward fix in assets/scripts/battle/Monster.ts against the lunge update and hitY getter.
+While lunging, displacement uses holdY as the resting anchor; hitY + lungeOffset restores the resting body position for direction calculation. Only the displayed position subtracts the lunge offset. Repeated pulls therefore do not accumulate the animation offset into holdY.
+Crossing attack reach switches to move, cancels the lunge, and places the node at the new resting anchor. Flight elevation remains separate.
+
+No further anchor issue found in this focused static review. Sfx and valid-loop optimization remain with Galileo and were not re-reviewed here.
+No runtime, combat, audio, engine, browser, build, or Git commands were run. Only this review note was written.
