@@ -20,4 +20,6 @@
 
 未启动游戏、浏览器、战斗场景、音频或WASM。手机的实际动效观感与性能仍需用户试玩。
 
-实现已本地提交7dea8eb9。Creator3.8.8离线构建22172ms、正常退出36；15份JS、5段内联脚本、全部文件SHA／子路径／图片透明通道／WASM头校验通过。512份原有native逐字节不变，无新增媒体；最终1588文件、200047076字节（200.05MB），比v120增加33914字节。版本e7aef84a4383b456。完整结果见 `build-record.json`、`export-report.json`、`package-static-verification.json`；部署回执交付时补充。不推送源码、不部署Cloudflare。
+实现已本地提交7dea8eb9。Creator3.8.8离线构建22172ms、正常退出36；15份JS、5段内联脚本、全部文件SHA／子路径／图片透明通道／WASM头校验通过。512份原有native逐字节不变，无新增媒体；最终1588文件、200047076字节（200.05MB），比v120增加33914字节。版本e7aef84a4383b456。完整结果见 `build-record.json`、`export-report.json`、`package-static-verification.json`。
+
+已发布 https://enjoylura.github.io/kingdom-watch-play/?v=wind-ninja-v121 ，独立运行仓库提交f122d130bbb4700f29a083b6ee6b3a209ca8ae5d。GitHub Pages构建和标准线上HTTP检查通过；额外主脚本及实际编译效果文件2份HTTP200与SHA一致，见 `additional-http-verification.json`。完整回执为 `deployment.json`；发布期间源HEAD／索引不变，保留上一版必要资源，不推送源码、不部署Cloudflare。

@@ -1,5 +1,7 @@
 # 交付要求
 
+v121发布回执已完成：独立GitHub运行仓库f122d130bbb4700f29a083b6ee6b3a209ca8ae5d，Pages构建与标准线上HTTP检查通过；额外主脚本/实际编译效果2份HTTP200与SHA匹配。发布期间源HEAD/索引不变，保留上一版必要文件；未推源码、未部署CF。详见docs/wind-ninja-v121/deployment.json及additional-http-verification.json，手机实战观感与性能待用户试玩。
+
 2026-10-25 完成[风眼、龙卷与能量旋刃v121](docs/wind-ninja-v121/README.md)，源码7dea8eb9。风刃换厚中段尖两端的圆弧能量刀刃，圆弧正中按atan2(vy,vx)朝向实际预判弹道，尾流向后；风眼宽窄旋流与细纤维、龙卷前后卷流/宽风体/顶冠/底卷尘；忍者大招纯青蓝四瓣能量旋刃，白青芯与残影，无金属面/中心金属孔。新增唯一共享fx/wind-ninja-flow程序4模式，预乘风体alpha<=.35，旋刃/风刃alpha0纯发光，边缘与零强度RGBA归零，无方板。每英雄8风场，风刃80槽仅有风英雄时战前创建，资源屏障预热，事件固定渲染路径；HeroFxShader可指定独立效果及技术索引，旧炮手/生命默认和重试隔离保留。12组集成/四向几何、独立实际GPU180帧/四方向亮弧前向检查通过，71战斗配置AST及投射物实际伤害/碰撞/时序保持，9旧类型无新增。Creator22172ms退出36，15JS+5内联/全部SHA/子路径通过，512原native逐字节不变、无新增媒体，1588文件200047076字节，仅增33914字节，版本e7aef84a4383b456。无游戏/浏览器/真实战斗/音频/WASM执行，手机待用户试玩；发布回执后补，不推源码、不部署CF。
 
 v120发布回执已完成：独立GitHub运行仓库a3e7117570ec874dc4275f550dcd49ec8b98a604，Pages构建及标准线上HTTP验证通过，额外主脚本/两字库/三图集6份HTTP200与SHA一致；发布期间源HEAD/索引不变，默认保留上一版必要文件，未推送源码、未部署CF。详见docs/wind-ninja-v120/deployment.json与additional-http-verification.json，手机实战待用户试玩。
