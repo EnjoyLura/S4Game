@@ -87,6 +87,11 @@ export interface ProjSpec {
   exclude?: Monster;
   /** Fixed ground ordnance: bypass airborne monster collisions and detonate at this exact point. */
   groundTarget?: Readonly<{ x: number; y: number }>;
+  /** Cannon-only passing contacts do not consume its committed ground explosion. */
+  groundPierce?: number;
+  groundPierceMul?: number;
+  /** A specialised blast resolver may own damage while retaining this flight/landing event. */
+  onGroundDamage?: () => void;
   onGroundImpact?: () => void;
 }
 
@@ -149,7 +154,7 @@ export class ProjectileManager {
     a.spec = spec;
     a.hit.clear();
     if (spec.exclude) a.hit.add(spec.exclude.lifeId);
-    a.pierceLeft = spec.pierce || 0;
+    a.pierceLeft = spec.groundPierce || spec.pierce || 0;
     a.ttl = spec.ttl ?? 3.2;
     a.age = 0; a.ultContact = false;
     a.damageScale = 1; a.returning = false; a.legLeft = a.returnDistance = 0;
@@ -239,9 +244,13 @@ export class ProjectileManager {
 
       if (sp.groundTarget) {
         const point = sp.groundTarget, distance = Math.hypot(point.x - sp.x, point.y - sp.y);
+        if (sp.groundPierce && a.pierceLeft > 0) {
+          const step = Math.min(distance, sp.speed * dt);
+          this.hitGroundPassing(a, sp.x, sp.y, a.vx / sp.speed * step, a.vy / sp.speed * step);
+        }
         if (distance <= sp.speed * dt) {
           sp.x = point.x; sp.y = point.y;
-          this.hitGround(a);
+          if (sp.onGroundDamage) sp.onGroundDamage(); else this.hitGround(a);
           sp.onGroundImpact?.();
           this.recycle(i, a);
         } else {
@@ -316,6 +325,26 @@ export class ProjectileManager {
       if (remaining <= 0) return false;
     }
     return false;
+  }
+
+  /** Passing cannon contacts retain the landing blast and each target's ordinary hit feedback. */
+  private hitGroundPassing(a: Active, x: number, y: number, sx: number, sy: number): void {
+    const sp=a.spec,length2=sx*sx+sy*sy;
+    if(length2<=1e-8)return;
+    while(a.pierceLeft>0){
+      let best: Monster | null=null,entry=Infinity;
+      for(const m of this.mgr.list){
+        if(m.dead || a.hit.has(m.lifeId))continue;
+        const dx=x-m.x,dy=y-m.y,r=m.def.radius+(sp.size || 10)*.35,c=dx*dx+dy*dy-r*r;
+        let t=0;
+        if(c>0){const b=dx*sx+dy*sy,d=b*b-length2*c;if(b>=0||d<0)continue;t=(-b-Math.sqrt(d))/length2;if(t<0||t>1)continue;}
+        if(t<entry){entry=t;best=m;}
+      }
+      if(!best)break;
+      a.hit.add(best.lifeId);a.pierceLeft--;
+      best.takeDamage(sp.dmg*(sp.groundPierceMul || .3),sp.crit,sp.heroId,false,sp.resCut || 0,Math.atan2(sy,sx));
+      this.dmg.add(sp.heroId,best.lastDamageTaken);
+    }
   }
 
   /** Exact segment/circle entries, in travel order. A piercing shot can hit several enemies in one step. */
@@ -396,6 +425,14 @@ export class ProjectileManager {
       // 尾迹先画（垫在弹体之下）：锥形渐隐条带 + 亮芯
       if (!decorated && !ultimateWake && a.trailMax > 0) this.drawTrail(g, s, a, size, arrow);
       if (arrow) this.drawArrow(g, s, a, size);
+      else if (s.heroId === 'cannon' && s.small && !s.enemy) {
+        const len=Math.max(1,Math.hypot(a.vx,a.vy)),dx=a.vx/len,dy=a.vy/len;
+        g.fillColor=hexc('#D9C38D');g.strokeColor=hexc('#4C463B');g.lineWidth=1.2;
+        g.moveTo(s.x+dx*size*1.8,s.y+dy*size*1.8);
+        g.lineTo(s.x-dy*size*.6,s.y+dx*size*.6);
+        g.lineTo(s.x-dx*size,s.y-dy*size);
+        g.lineTo(s.x+dy*size*.6,s.y-dx*size*.6);g.close();g.fill();g.stroke();
+      }
       else if (s.heroId === 'cannon' && !s.enemy) {
         // Brass casing and a bright rim read as a heavy shell, using the shared batch.
         g.fillColor = hexc('#3E4650'); g.strokeColor = hexc('#F5CE75'); g.lineWidth = 2.4;

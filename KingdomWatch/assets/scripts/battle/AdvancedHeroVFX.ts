@@ -263,6 +263,10 @@ export class SiphonBeamVFX {
   begin(sx: number, sy: number, heavy: boolean): void {
     this.g.clear(); this.ribbons.begin(); this.sx = sx; this.sy = sy; this.heavy = heavy;
   }
+  link(sx: number, sy: number, tx: number, ty: number, strength: number, phase: number): void {
+    const x=this.sx,y=this.sy;this.sx=sx;this.sy=sy;
+    this.beam(tx,ty,strength,phase);this.sx=x;this.sy=y;
+  }
   beam(tx: number, ty: number, strength: number, phase: number): void {
     const dx = tx - this.sx, dy = ty - this.sy, len = Math.hypot(dx, dy);
     if (len < 1) return;

@@ -6,7 +6,7 @@ import { Graphics, Label, Mask, Node, ScrollView, Sprite, sys, tween, UIOpacity,
 import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSkCfg, sniperUltCfg, voltSkCfg, voltUltCfg, pyroSkCfg, pyroUltCfg, moraSkCfg, moraUltCfg } from '../config/Cards';
 import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDuration, pyroMeteorCount, pyroMeteorDamage } from '../config/Cards';
 import { voltShockDuration, voltShockAmp, voltShockedMultiplier, voltStrikeCount } from '../config/Cards';
-import { CANNON, SIPHON_LASER, cannonSkillCfg, cannonUltCfg, siphonSkillCfg, siphonUltCfg } from '../config/NewHeroConfig';
+import { CANNON, SIPHON_LASER, cannonSkillCfg, cannonUltCfg, siphonSkillCfg, siphonLaserCfg } from '../config/NewHeroConfig';
 import { MORA_ULT_HITS, moraSlowRatio, moraSlowDuration, moraFreezeChance, moraNormalFreezeDuration, moraFieldRadius, moraFieldFreeze, moraUltimateHitDamage } from '../config/Cards';
 import { FROST_ULT_RAIN_COUNT, HERO_Y, LO, PAL } from '../config/GameConfig';
 import { DamageRow, fmtWk } from '../battle/DamageService';
@@ -606,19 +606,19 @@ export class Panels {
       if (kind === 'atk') {
         title = cannon ? '普攻 · 爆裂炮弹' : '普攻 · 生命虹吸';
         rows = cannon ? [
-          ['伤害', Math.round(hero.effAtk * h.normalMul) + ' · 中心全额'],
+          ['伤害', Math.round(hero.effAtk * h.normalMul) + (h.cannonCenter ? ' · 爆心+30%' : ' · 中心全额')],
           ['攻速', h.aspd.toFixed(2) + ' 次/秒'],
           ['爆破', '半径90 · 周围伤害70%'],
-          ['追加爆破', h.cannonEcho ? '延迟0.35秒 · 伤害40%' : '未获得'],
-          ['追加装填', h.cannonLoader ? '每4轮追加1发 · 伤害60%' : '未获得'],
+          ['弹道强化', [h.cannonPierce?'穿透+'+h.cannonPierce:'',h.cannonFragments?'破片3枚':''].filter(Boolean).join(' · ') || '无'],
+          ['追加攻击', [h.cannonEcho?'二段40%':'',h.cannonLoader?'4轮追加炮弹':'',h.cannonHeavy?'3轮减速重弹':''].filter(Boolean).join(' · ') || '无'],
           ['索敌范围', String(Math.round(h.range))],
         ] : [
           ['伤害/秒', String(Math.round(hero.effAtk * h.aspd * h.normalMul))],
           ['结算', '每0.25秒 · 持续追踪至阵亡'],
           ['虹吸增伤', '每秒+10% · 最高+50%'],
           ['索敌范围', String(Math.round(h.range))],
-          ['副光束', h.siphonTwin ? '另连1敌 · 50%普攻伤害' : '未获得'],
-          ['法抗削弱', h.siphonShred ? '锁定3秒后降低15个百分点' : '未获得'],
+          ['副光束', [h.siphonTwin?'副束1道·50%':'',h.siphonRelay?'接力1道·25%':''].filter(Boolean).join(' · ') || '未获得'],
+          ['持续强化', [h.siphonShred?'削弱法抗15%':'',h.siphonSlow?'减速'+Math.round(h.siphonSlow*100)+'%':'',h.siphonHeavyGrip?'4秒后强吸重击':''].filter(Boolean).join(' · ') || '未获得'],
         ];
         px = hero.x - 27 + 23 + 16 + w / 2;
         py = iconY + 23 + 16 + hh / 2;
@@ -629,31 +629,33 @@ export class Panels {
           ['中心伤害', String(Math.round(hero.abilityDamage(cs.mul)))],
           ['爆炸范围', '半径' + Math.round(CANNON.skillBlast * cs.radiusMul * h.skillRangeMul)],
           ['破甲', '物抗降低15个百分点 · ' + cs.shredSeconds + '秒'],
-          ['震荡冲击', h.cannonKnockback ? '击退敌人 · 首领免疫' : '未获得'],
-          ['冷却', cdTotal], ['释放', '自动锁定怪群'],
+          ['追加效果', [h.cannonCluster?'榴弹3枚':'',h.cannonWave?'震波50%':'',h.cannonCharges?'诱爆80%':''].filter(Boolean).join(' · ') || '无'],
+          ['控制', [h.cannonKnockback?'击退':'',h.cannonInterrupt?'打断·普通眩晕0.5秒':''].filter(Boolean).join(' · ') || '无'],
+          ['冷却', cdTotal+(h.cannonRefund?' · 命中7敌返还25%':'')],
         ] : [
           ['每束伤害/秒', String(Math.round(hero.abilityDamage(vs.mul)))],
-          ['分流目标', '+' + (vs.branches + (h.siphonBranches || 0)) + ' 个敌人'],
-          ['持续时间', vs.duration + ' 秒'],
-          ['目标', '主目标附近 · 分流独立锁定'],
+          ['分流目标', '+' + (vs.branches + (h.siphonBranches || 0) + (h.siphonSkillTargets || 0)) + ' 个敌人'],
+          ['持续时间', vs.duration + ' 秒'+(h.siphonExtendOnKill?' · 击杀最多延长2秒':'')],
+          ['目标', h.siphonHealCut?'受到治疗降低'+Math.round(h.siphonHealCut*100)+'%':'主目标附近 · 分流独立锁定'],
           ['冷却', cdTotal], ['释放', '自动'],
         ];
         px = hero.x + 27 + 23 + 16 + w / 2;
         py = iconY + 23 + 16 + hh / 2;
       } else {
-        const cu = cannonUltCfg(h.ultLv), vu = siphonUltCfg(h.ultLv);
+        const cu = cannonUltCfg(h.ultLv), vu = siphonLaserCfg(h.ultLv,h.siphonUltDuration || 0,h.siphonUltTicks || 0);
         title = cannon ? '大招 · 导弹轰炸' : '大招 · 生命洪流';
         rows = cannon ? [
-          ['每弹中心伤害', String(Math.round(hero.abilityDamage(cu.mul, true)))],
+          ['每弹中心伤害', String(Math.round(hero.abilityDamage(cu.mul, true)*(1+(h.cannonUltCenter || 0))))],
           ['轰炸导弹', (cu.shots + (h.cannonUltShots || 0)) + ' 发 · 错峰落下'],
-          ['爆炸范围', '半径' + Math.round(cu.radius * h.skillRangeMul)],
+          ['爆炸范围', '半径' + Math.round(cu.radius * h.skillRangeMul*(1+(h.cannonUltRadius || 0)))],
+          ['附加效果', h.cannonUltStun?'眩晕2秒 · 首领免疫':'无'],
           ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
-          ['状态', hero.ultReady ? '就绪' : '未充满·不可释放'], ['释放', '手动点击'],
+          ['释放', hero.ultReady ? '手动 · 已就绪' : '未充满·不可释放'],
         ] : [
-          ['沿线伤害/秒', String(Math.round(hero.abilityDamage(vu.mul, true)))],
+          ['沿线伤害/秒', String(Math.round(hero.abilityDamage(vu.mul, true)*SIPHON_LASER.tick/vu.interval))],
           ['激光宽度', String(Math.round((vu.halfWidth + (h.siphonBranches || 0) * 6) * 2 * h.skillRangeMul))],
-          ['持续时间', vu.duration + ' 秒'],
-          ['穿透', '沿线全部敌人 · 伤害不衰减'],
+          ['持续时间', vu.duration + ' 秒 · '+vu.ticks+'次伤害'],
+          ['穿透', h.siphonFork?'主束+2道分叉 · 分叉伤害35%':'沿线全部敌人 · 伤害不衰减'],
           ['充能', Math.floor(hero.charge) + ' / ' + goalTxt], ['释放', '手动 · 聚能' + SIPHON_LASER.windup + '秒'],
         ];
         px = WX(636, 90) - 45 - 16 - w / 2;

@@ -118,7 +118,7 @@ export class MonsterTraits {
     if (d.magicRes && (kind !== 'magic' || this.wardBroken)) return amount;
     return amount * (1 - d.guard!.reduction);
   }
-  private interruptControl(): void {
+  interruptCasting(): void {
     let interrupted = this.pendingHeal > 0 || this.pendingStrike > 0;
     if (this.pendingHeal > 0) {
       this.pendingHeal = 0;
@@ -152,7 +152,7 @@ export class MonsterTraits {
     if (o.dead) return;
     this.armorCueT = Math.max(0, this.armorCueT - dt);
     this.wardCueT = Math.max(0, this.wardCueT - dt);
-    if (motionDt < dt) this.interruptControl();
+    if (motionDt < dt) this.interruptCasting();
     this.age += motionDt;
     if (d.phase && o.hp <= o.maxHp * d.phase.threshold) this.phase = true;
     // A control effect cancels the telegraph; it cannot land a queued hit after interruption.

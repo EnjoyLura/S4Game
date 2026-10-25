@@ -162,7 +162,7 @@ export class EnemyTooltip {
     this.healthBar.set(s.hp / Math.max(1, s.maxHp));
     setText(this.physical, info.armorBroken ? '破甲' : Math.round(info.physical * 100) + '%');
     setText(this.magic, info.wardBroken ? '破盾' : Math.round(info.magic * 100) + '%');
-    const priority = ['冰封', '眩晕', '治疗读条', '冲锋蓄势', '冲锋中', '攻击蓄力', '灼烧', '感电', '减速', '易伤', '猎杀标记', '防御姿态', '狂暴'];
+    const priority = ['冰封', '眩晕', '治疗读条', '冲锋蓄势', '冲锋中', '攻击蓄力', '灼烧', '感电', '减速', '减疗', '易伤', '猎杀标记', '防御姿态', '狂暴'];
     const active = priority.filter(key => info.states.some(state => state.startsWith(key))).slice(0, 1);
     const role = (s.def.boss ? '首领 · ' : s.def.elite ? '精英 · ' : '') +
       (s.def.kind === 'heal' ? '治疗' : s.def.kind === 'ranged' ? '远程' : '近战');

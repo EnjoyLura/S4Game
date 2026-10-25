@@ -9,7 +9,9 @@ for (const hero of ['cannon', 'siphon']) {
   NEW_HERO_FRAMES['new_heroes_v105/avatar_' + hero] = { source, rect: face };
   NEW_HERO_FRAMES['hero_comic_v1/comic_figure_' + hero + '_v1'] = { source, rect: [0, 0, 1024, 1536] };
   for (const slot of ['atk', 'skill', 'ult']) NEW_HERO_FRAMES['ui_icon_' + slot + '_' + hero] = { source, rect: slot === 'ult' ? face : weapon };
-  for (const card of hero === 'cannon' ? ['echo', 'loader', 'knockback', 'barrage'] : ['twin', 'inherit', 'shred', 'extend'])
+  for (const card of hero === 'cannon' ? ['echo', 'loader', 'knockback', 'barrage', 'fragments', 'pierce', 'center',
+    'heavy', 'cluster', 'wave', 'interrupt', 'charges', 'refund', 'ult_center', 'ult_radius', 'ult_stun'] : ['twin', 'inherit', 'shred', 'extend',
+    'relay', 'slow', 'healcut', 'relay_time', 'fork', 'ult_duration', 'ult_ticks', 'heavy_grip', 'skill_targets'])
     NEW_HERO_FRAMES['ui_card_' + hero + '_' + card] = { source, rect: weapon };
 }
 // comicArt prefixes unqualified keys; both consumers share the same source pixels.

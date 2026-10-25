@@ -3,7 +3,7 @@
  * 卡效果直接改写 HeroStats / 全局 Stats；desc 只说明本次效果、触发条件与代价
  */
 import { PAL } from './GameConfig';
-import { CANNON, SIPHON, cannonSkillCfg, siphonSkillCfg } from './NewHeroConfig';
+import { CANNON, CANNON_CARDS_CFG as CC, SIPHON, SIPHON_CARDS_CFG as SC, cannonSkillCfg, siphonSkillCfg } from './NewHeroConfig';
 
 export type Rarity = 'white' | 'blue' | 'purple' | 'gold';
 export const RARITY_COLOR: Record<Rarity, string> = { white: PAL.white, blue: PAL.blue, purple: PAL.purple, gold: PAL.gold };
@@ -19,10 +19,31 @@ export interface HeroStats {
   cannonLoader?: boolean;
   cannonKnockback?: number;
   cannonUltShots?: number;
+  cannonFragments?: boolean;
+  cannonPierce?: number;
+  cannonCenter?: number;
+  cannonHeavy?: boolean;
+  cannonCluster?: boolean;
+  cannonWave?: boolean;
+  cannonCharges?: boolean;
+  cannonInterrupt?: boolean;
+  cannonRefund?: boolean;
+  cannonUltCenter?: number;
+  cannonUltRadius?: number;
+  cannonUltStun?: number;
   siphonTwin?: number;
   siphonInheritance?: number;
   siphonShred?: number;
   siphonBranches?: number;
+  siphonRelay?: number;
+  siphonSlow?: number;
+  siphonHealCut?: number;
+  siphonExtendOnKill?: boolean;
+  siphonFork?: boolean;
+  siphonUltDuration?: number;
+  siphonUltTicks?: number;
+  siphonHeavyGrip?: boolean;
+  siphonSkillTargets?: number;
   skillUnlocked: boolean; // 基础技能随上阵可用，局内卡改变构筑
   ultUnlocked: boolean;
   atk: number;          // 独立基础攻击力（含局外成长及装备）
@@ -587,6 +608,30 @@ export const CANNON_CARDS: CardDef[] = [
     art: 'ui_card_cannon_knockback', desc: '技能爆炸击退敌人\n首领免疫击退', apply: x => { x.hero.cannonKnockback = 56; } }),
   c({ id: 'cannon_barrage', owner: 'cannon', name: '饱和轰炸', rarity: 'gold', maxStacks: 2, offerGroup: 'combat',
     art: 'ui_card_cannon_barrage', desc: '大招轰炸导弹 +2', apply: x => { x.hero.cannonUltShots = (x.hero.cannonUltShots || 0) + 2; } }),
+  c({ id: 'cannon_fragments', owner: 'cannon', name: '破片炮弹', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_cannon_fragments', desc: '普攻爆炸飞出3枚破片\n每枚伤害30%', apply: x => { x.hero.cannonFragments = true; } }),
+  c({ id: 'cannon_pierce', owner: 'cannon', name: '贯穿炮弹', rarity: 'blue', maxStacks: 2, offerGroup: 'combat',
+    art: 'ui_card_cannon_pierce', desc: '普攻穿透 +1\n沿途伤害30%', apply: x => { x.hero.cannonPierce = (x.hero.cannonPierce || 0) + 1; } }),
+  c({ id: 'cannon_center', owner: 'cannon', name: '中心爆破', rarity: 'blue', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_cannon_center', desc: '普攻爆心伤害 +30%', apply: x => { x.hero.cannonCenter = CC.centerBonus; } }),
+  c({ id: 'cannon_heavy', owner: 'cannon', name: '重压炮弹', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_cannon_heavy', desc: '每3轮普攻发射重弹\n减速40%，持续2秒', apply: x => { x.hero.cannonHeavy = true; } }),
+  c({ id: 'cannon_cluster', owner: 'cannon', name: '集束榴弹', rarity: 'gold', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_cannon_cluster', desc: '技能散落3枚榴弹\n每枚伤害35%', apply: x => { x.hero.cannonCluster = true; } }),
+  c({ id: 'cannon_wave', owner: 'cannon', name: '裂地震波', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_cannon_wave', desc: '技能追加向前震波\n伤害50%', apply: x => { x.hero.cannonWave = true; } }),
+  c({ id: 'cannon_interrupt', owner: 'cannon', name: '干扰爆破', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_cannon_interrupt', desc: '技能打断敌人施法\n普通敌人眩晕0.5秒', apply: x => { x.hero.cannonInterrupt = true; } }),
+  c({ id: 'cannon_charges', owner: 'cannon', name: '诱爆装药', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_cannon_charges', desc: '技能附加4秒炸药\n普攻引爆80%技能伤害', apply: x => { x.hero.cannonCharges = true; } }),
+  c({ id: 'cannon_refund', owner: 'cannon', name: '高效回装', rarity: 'gold', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_cannon_refund', desc: '技能命中至少7名敌人\n返还25%技能冷却', apply: x => { x.hero.cannonRefund = true; } }),
+  c({ id: 'cannon_ult_center', owner: 'cannon', name: '聚焦轰炸', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_cannon_ult_center', desc: '导弹爆心伤害 +30%', apply: x => { x.hero.cannonUltCenter = CC.centerBonus; } }),
+  c({ id: 'cannon_ult_radius', owner: 'cannon', name: '广域轰炸', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_cannon_ult_radius', desc: '导弹爆炸范围 +30%', apply: x => { x.hero.cannonUltRadius = CC.missileRadiusBonus; } }),
+  c({ id: 'cannon_ult_stun', owner: 'cannon', name: '震慑轰炸', rarity: 'gold', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_cannon_ult_stun', desc: '导弹命中眩晕2秒\n首领免疫眩晕', apply: x => { x.hero.cannonUltStun = CC.missileStun; } }),
 ];
 export const SIPHON_CARDS: CardDef[] = [
   ...commonHeroCards('siphon'),
@@ -598,6 +643,24 @@ export const SIPHON_CARDS: CardDef[] = [
     art: 'ui_card_siphon_shred', desc: '持续锁定目标3秒后\n目标法抗降低15个百分点', apply: x => { x.hero.siphonShred = .15; } }),
   c({ id: 'siphon_extend', owner: 'siphon', name: '灵魂延展', rarity: 'gold', maxStacks: 2, offerGroup: 'combat',
     art: 'ui_card_siphon_extend', desc: '技能多连接1个目标\n大招激光宽度 +12', apply: x => { x.hero.siphonBranches = (x.hero.siphonBranches || 0) + 1; } }),
+  c({ id: 'siphon_relay', owner: 'siphon', name: '痛苦共鸣', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_siphon_relay', desc: '主目标再连接1名敌人\n连接伤害25%', apply: x => { x.hero.siphonRelay = 1; } }),
+  c({ id: 'siphon_slow', owner: 'siphon', name: '缚魂虹吸', rarity: 'blue', maxStacks: 2, offerGroup: 'combat',
+    art: 'ui_card_siphon_slow', desc: '持续锁定1.5秒后\n减速效果 +20%', apply: x => { x.hero.siphonSlow = (x.hero.siphonSlow || 0) + SC.slowStep; } }),
+  c({ id: 'siphon_healcut', owner: 'siphon', name: '生命枯竭', rarity: 'purple', maxStacks: 2, offerGroup: 'combat',
+    art: 'ui_card_siphon_healcut', desc: '技能连接的敌人\n受到治疗 -30%', apply: x => { x.hero.siphonHealCut = (x.hero.siphonHealCut || 0) + SC.healCutStep; } }),
+  c({ id: 'siphon_relay_time', owner: 'siphon', name: '死亡接力', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_siphon_relay_time', desc: '分流目标死亡延长0.4秒\n每次技能最多延长2秒', apply: x => { x.hero.siphonExtendOnKill = true; } }),
+  c({ id: 'siphon_fork', owner: 'siphon', name: '分叉洪流', rarity: 'gold', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_siphon_fork', desc: '大招两侧各增加1道激光\n每道伤害35%', apply: x => { x.hero.siphonFork = true; } }),
+  c({ id: 'siphon_ult_duration', owner: 'siphon', name: '洪流延续', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_siphon_ult_duration', desc: '大招持续时间 +1.5秒', apply: x => { x.hero.siphonUltDuration = SC.durationBonus; } }),
+  c({ id: 'siphon_ult_ticks', owner: 'siphon', name: '洪流脉冲', rarity: 'purple', maxStacks: 2, offerGroup: 'combat',
+    art: 'ui_card_siphon_ult_ticks', desc: '大招伤害次数 +3\n通过加快结算实现', apply: x => { x.hero.siphonUltTicks = (x.hero.siphonUltTicks || 0) + SC.extraTicks; } }),
+  c({ id: 'siphon_heavy_grip', owner: 'siphon', name: '强吸重击', rarity: 'gold', maxStacks: 1, offerGroup: 'combat',
+    art: 'ui_card_siphon_heavy_grip', desc: '连接超过4秒后每秒重击\n额外造成100%攻击力伤害', apply: x => { x.hero.siphonHeavyGrip = true; } }),
+  c({ id: 'siphon_skill_targets', owner: 'siphon', name: '灵魂分支', rarity: 'blue', maxStacks: 2, offerGroup: 'combat',
+    art: 'ui_card_siphon_skill_targets', desc: '技能可连接目标 +1', apply: x => { x.hero.siphonSkillTargets = (x.hero.siphonSkillTargets || 0) + 1; } }),
 ];
 export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...VOLT_CARDS, ...MORA_CARDS,
   ...CANNON_CARDS, ...SIPHON_CARDS, ...GLOBAL_CARDS];
@@ -666,7 +729,12 @@ const MECHANIC_IDS = new Set(['archer_pierce', 'serial', 'fan', 'split', 'explod
   'archer_knockback', 'sniper_return', 'pyro_firefield', 'pyro_antiheal', 'pyro_giant',
   'volt_arc', 'volt_overload', 'mora_pierce', 'mora_ground',
   'cannon_echo', 'cannon_loader', 'cannon_knockback', 'cannon_barrage',
+  'cannon_fragments', 'cannon_pierce', 'cannon_center', 'cannon_heavy', 'cannon_cluster', 'cannon_wave',
+  'cannon_interrupt', 'cannon_charges', 'cannon_refund', 'cannon_ult_center', 'cannon_ult_radius', 'cannon_ult_stun',
   'siphon_twin', 'siphon_inherit', 'siphon_shred', 'siphon_extend']);
+// Selected expansion mechanics keep the same combat weighting and ownership checks.
+for (const id of ['siphon_relay','siphon_slow','siphon_healcut','siphon_relay_time','siphon_fork',
+  'siphon_ult_duration','siphon_ult_ticks','siphon_heavy_grip','siphon_skill_targets']) MECHANIC_IDS.add(id);
 export function isMechanicCard(card: CardDef): boolean { return MECHANIC_IDS.has(card.id); }
 function offerGroup(card: CardDef): OfferGroup {
   return card.offerGroup ?? (card.owner === 'global' ? 'support' : isMechanicCard(card) ? 'combat' : 'stats');

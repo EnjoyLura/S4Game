@@ -1,0 +1,20 @@
+{
+  "fonts": [
+    {
+      "font": "UIBody",
+      "added": "扰枚榴痛竭药诱",
+      "existingCodepointsPreserved": 1573,
+      "bytesAdded": 2736,
+      "sha256": "6a9d629a66489d025beddeef090b4acfc8f38ac73b035923e0c3fd5d7009bcfb"
+    },
+    {
+      "font": "UIHeading",
+      "added": "扰枚榴痛竭药诱",
+      "existingCodepointsPreserved": 1573,
+      "bytesAdded": 3372,
+      "sha256": "4e02da2ce4a4596a6df21ba001b1d0db756a0a9e86dca60bfa817abf76b86bcf"
+    }
+  ],
+  "source": "same pinned local OFL sources; no downloads",
+  "gameStarted": false
+}

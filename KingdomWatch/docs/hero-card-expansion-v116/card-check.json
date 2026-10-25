@@ -1,0 +1,773 @@
+{
+  "newCards": [
+    {
+      "id": "cannon_fragments",
+      "name": "破片炮弹",
+      "desc": "普攻爆炸飞出3枚破片\n每枚伤害30%",
+      "art": "ui_card_cannon_fragments",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/cannon_lobby"
+    },
+    {
+      "id": "cannon_pierce",
+      "name": "贯穿炮弹",
+      "desc": "普攻穿透 +1\n沿途伤害30%",
+      "art": "ui_card_cannon_pierce",
+      "maxStacks": 2,
+      "source": "new_heroes_v105/cannon_lobby"
+    },
+    {
+      "id": "cannon_center",
+      "name": "中心爆破",
+      "desc": "普攻爆心伤害 +30%",
+      "art": "ui_card_cannon_center",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/cannon_lobby"
+    },
+    {
+      "id": "cannon_heavy",
+      "name": "重压炮弹",
+      "desc": "每3轮普攻发射重弹\n减速40%，持续2秒",
+      "art": "ui_card_cannon_heavy",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/cannon_lobby"
+    },
+    {
+      "id": "cannon_cluster",
+      "name": "集束榴弹",
+      "desc": "技能散落3枚榴弹\n每枚伤害35%",
+      "art": "ui_card_cannon_cluster",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/cannon_lobby"
+    },
+    {
+      "id": "cannon_wave",
+      "name": "裂地震波",
+      "desc": "技能追加向前震波\n伤害50%",
+      "art": "ui_card_cannon_wave",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/cannon_lobby"
+    },
+    {
+      "id": "cannon_interrupt",
+      "name": "干扰爆破",
+      "desc": "技能打断敌人施法\n普通敌人眩晕0.5秒",
+      "art": "ui_card_cannon_interrupt",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/cannon_lobby"
+    },
+    {
+      "id": "cannon_charges",
+      "name": "诱爆装药",
+      "desc": "技能附加4秒炸药\n普攻引爆80%技能伤害",
+      "art": "ui_card_cannon_charges",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/cannon_lobby"
+    },
+    {
+      "id": "cannon_refund",
+      "name": "高效回装",
+      "desc": "技能命中至少7名敌人\n返还25%技能冷却",
+      "art": "ui_card_cannon_refund",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/cannon_lobby"
+    },
+    {
+      "id": "cannon_ult_center",
+      "name": "聚焦轰炸",
+      "desc": "导弹爆心伤害 +30%",
+      "art": "ui_card_cannon_ult_center",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/cannon_lobby"
+    },
+    {
+      "id": "cannon_ult_radius",
+      "name": "广域轰炸",
+      "desc": "导弹爆炸范围 +30%",
+      "art": "ui_card_cannon_ult_radius",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/cannon_lobby"
+    },
+    {
+      "id": "cannon_ult_stun",
+      "name": "震慑轰炸",
+      "desc": "导弹命中眩晕2秒\n首领免疫眩晕",
+      "art": "ui_card_cannon_ult_stun",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/cannon_lobby"
+    },
+    {
+      "id": "siphon_relay",
+      "name": "痛苦共鸣",
+      "desc": "主目标再连接1名敌人\n连接伤害25%",
+      "art": "ui_card_siphon_relay",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/siphon_lobby"
+    },
+    {
+      "id": "siphon_slow",
+      "name": "缚魂虹吸",
+      "desc": "持续锁定1.5秒后\n减速效果 +20%",
+      "art": "ui_card_siphon_slow",
+      "maxStacks": 2,
+      "source": "new_heroes_v105/siphon_lobby"
+    },
+    {
+      "id": "siphon_healcut",
+      "name": "生命枯竭",
+      "desc": "技能连接的敌人\n受到治疗 -30%",
+      "art": "ui_card_siphon_healcut",
+      "maxStacks": 2,
+      "source": "new_heroes_v105/siphon_lobby"
+    },
+    {
+      "id": "siphon_relay_time",
+      "name": "死亡接力",
+      "desc": "分流目标死亡延长0.4秒\n每次技能最多延长2秒",
+      "art": "ui_card_siphon_relay_time",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/siphon_lobby"
+    },
+    {
+      "id": "siphon_fork",
+      "name": "分叉洪流",
+      "desc": "大招两侧各增加1道激光\n每道伤害35%",
+      "art": "ui_card_siphon_fork",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/siphon_lobby"
+    },
+    {
+      "id": "siphon_ult_duration",
+      "name": "洪流延续",
+      "desc": "大招持续时间 +1.5秒",
+      "art": "ui_card_siphon_ult_duration",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/siphon_lobby"
+    },
+    {
+      "id": "siphon_ult_ticks",
+      "name": "洪流脉冲",
+      "desc": "大招伤害次数 +3\n通过加快结算实现",
+      "art": "ui_card_siphon_ult_ticks",
+      "maxStacks": 2,
+      "source": "new_heroes_v105/siphon_lobby"
+    },
+    {
+      "id": "siphon_heavy_grip",
+      "name": "强吸重击",
+      "desc": "连接超过4秒后每秒重击\n额外造成100%攻击力伤害",
+      "art": "ui_card_siphon_heavy_grip",
+      "maxStacks": 1,
+      "source": "new_heroes_v105/siphon_lobby"
+    },
+    {
+      "id": "siphon_skill_targets",
+      "name": "灵魂分支",
+      "desc": "技能可连接目标 +1",
+      "art": "ui_card_siphon_skill_targets",
+      "maxStacks": 2,
+      "source": "new_heroes_v105/siphon_lobby"
+    }
+  ],
+  "cannonCards": 12,
+  "siphonCards": 9,
+  "allArtUsesExistingHeroSources": true,
+  "pureConfigApplicationsPassed": true,
+  "laserTimingCases": [
+    {
+      "level": 1,
+      "durationBonus": 0,
+      "extraTicks": 0,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 20,
+      "interval": 0.15
+    },
+    {
+      "level": 1,
+      "durationBonus": 0,
+      "extraTicks": 0,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 20,
+      "interval": 0.15
+    },
+    {
+      "level": 1,
+      "durationBonus": 0,
+      "extraTicks": 0,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 20,
+      "interval": 0.15
+    },
+    {
+      "level": 1,
+      "durationBonus": 0,
+      "extraTicks": 3,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 23,
+      "interval": 0.13043478260869565
+    },
+    {
+      "level": 1,
+      "durationBonus": 0,
+      "extraTicks": 3,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 23,
+      "interval": 0.13043478260869565
+    },
+    {
+      "level": 1,
+      "durationBonus": 0,
+      "extraTicks": 3,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 23,
+      "interval": 0.13043478260869565
+    },
+    {
+      "level": 1,
+      "durationBonus": 0,
+      "extraTicks": 6,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 26,
+      "interval": 0.11538461538461539
+    },
+    {
+      "level": 1,
+      "durationBonus": 0,
+      "extraTicks": 6,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 26,
+      "interval": 0.11538461538461539
+    },
+    {
+      "level": 1,
+      "durationBonus": 0,
+      "extraTicks": 6,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 26,
+      "interval": 0.11538461538461539
+    },
+    {
+      "level": 1,
+      "durationBonus": 1.5,
+      "extraTicks": 0,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 30,
+      "interval": 0.15
+    },
+    {
+      "level": 1,
+      "durationBonus": 1.5,
+      "extraTicks": 0,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 30,
+      "interval": 0.15
+    },
+    {
+      "level": 1,
+      "durationBonus": 1.5,
+      "extraTicks": 0,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 30,
+      "interval": 0.15
+    },
+    {
+      "level": 1,
+      "durationBonus": 1.5,
+      "extraTicks": 3,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 33,
+      "interval": 0.13636363636363635
+    },
+    {
+      "level": 1,
+      "durationBonus": 1.5,
+      "extraTicks": 3,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 33,
+      "interval": 0.13636363636363635
+    },
+    {
+      "level": 1,
+      "durationBonus": 1.5,
+      "extraTicks": 3,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 33,
+      "interval": 0.13636363636363635
+    },
+    {
+      "level": 1,
+      "durationBonus": 1.5,
+      "extraTicks": 6,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 36,
+      "interval": 0.125
+    },
+    {
+      "level": 1,
+      "durationBonus": 1.5,
+      "extraTicks": 6,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 36,
+      "interval": 0.125
+    },
+    {
+      "level": 1,
+      "durationBonus": 1.5,
+      "extraTicks": 6,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 36,
+      "interval": 0.125
+    },
+    {
+      "level": 10,
+      "durationBonus": 0,
+      "extraTicks": 0,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 22,
+      "interval": 0.15
+    },
+    {
+      "level": 10,
+      "durationBonus": 0,
+      "extraTicks": 0,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 22,
+      "interval": 0.15
+    },
+    {
+      "level": 10,
+      "durationBonus": 0,
+      "extraTicks": 0,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 22,
+      "interval": 0.15
+    },
+    {
+      "level": 10,
+      "durationBonus": 0,
+      "extraTicks": 3,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 25,
+      "interval": 0.132
+    },
+    {
+      "level": 10,
+      "durationBonus": 0,
+      "extraTicks": 3,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 25,
+      "interval": 0.132
+    },
+    {
+      "level": 10,
+      "durationBonus": 0,
+      "extraTicks": 3,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 25,
+      "interval": 0.132
+    },
+    {
+      "level": 10,
+      "durationBonus": 0,
+      "extraTicks": 6,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 28,
+      "interval": 0.11785714285714285
+    },
+    {
+      "level": 10,
+      "durationBonus": 0,
+      "extraTicks": 6,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 28,
+      "interval": 0.11785714285714285
+    },
+    {
+      "level": 10,
+      "durationBonus": 0,
+      "extraTicks": 6,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 28,
+      "interval": 0.11785714285714285
+    },
+    {
+      "level": 10,
+      "durationBonus": 1.5,
+      "extraTicks": 0,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 32,
+      "interval": 0.15
+    },
+    {
+      "level": 10,
+      "durationBonus": 1.5,
+      "extraTicks": 0,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 32,
+      "interval": 0.15
+    },
+    {
+      "level": 10,
+      "durationBonus": 1.5,
+      "extraTicks": 0,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 32,
+      "interval": 0.15
+    },
+    {
+      "level": 10,
+      "durationBonus": 1.5,
+      "extraTicks": 3,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 35,
+      "interval": 0.13714285714285715
+    },
+    {
+      "level": 10,
+      "durationBonus": 1.5,
+      "extraTicks": 3,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 35,
+      "interval": 0.13714285714285715
+    },
+    {
+      "level": 10,
+      "durationBonus": 1.5,
+      "extraTicks": 3,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 35,
+      "interval": 0.13714285714285715
+    },
+    {
+      "level": 10,
+      "durationBonus": 1.5,
+      "extraTicks": 6,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 38,
+      "interval": 0.12631578947368421
+    },
+    {
+      "level": 10,
+      "durationBonus": 1.5,
+      "extraTicks": 6,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 38,
+      "interval": 0.12631578947368421
+    },
+    {
+      "level": 10,
+      "durationBonus": 1.5,
+      "extraTicks": 6,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 38,
+      "interval": 0.12631578947368421
+    },
+    {
+      "level": 20,
+      "durationBonus": 0,
+      "extraTicks": 0,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 22,
+      "interval": 0.15
+    },
+    {
+      "level": 20,
+      "durationBonus": 0,
+      "extraTicks": 0,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 22,
+      "interval": 0.15
+    },
+    {
+      "level": 20,
+      "durationBonus": 0,
+      "extraTicks": 0,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 22,
+      "interval": 0.15
+    },
+    {
+      "level": 20,
+      "durationBonus": 0,
+      "extraTicks": 3,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 25,
+      "interval": 0.132
+    },
+    {
+      "level": 20,
+      "durationBonus": 0,
+      "extraTicks": 3,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 25,
+      "interval": 0.132
+    },
+    {
+      "level": 20,
+      "durationBonus": 0,
+      "extraTicks": 3,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 25,
+      "interval": 0.132
+    },
+    {
+      "level": 20,
+      "durationBonus": 0,
+      "extraTicks": 6,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 28,
+      "interval": 0.11785714285714285
+    },
+    {
+      "level": 20,
+      "durationBonus": 0,
+      "extraTicks": 6,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 28,
+      "interval": 0.11785714285714285
+    },
+    {
+      "level": 20,
+      "durationBonus": 0,
+      "extraTicks": 6,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 28,
+      "interval": 0.11785714285714285
+    },
+    {
+      "level": 20,
+      "durationBonus": 1.5,
+      "extraTicks": 0,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 32,
+      "interval": 0.15
+    },
+    {
+      "level": 20,
+      "durationBonus": 1.5,
+      "extraTicks": 0,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 32,
+      "interval": 0.15
+    },
+    {
+      "level": 20,
+      "durationBonus": 1.5,
+      "extraTicks": 0,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 32,
+      "interval": 0.15
+    },
+    {
+      "level": 20,
+      "durationBonus": 1.5,
+      "extraTicks": 3,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 35,
+      "interval": 0.13714285714285715
+    },
+    {
+      "level": 20,
+      "durationBonus": 1.5,
+      "extraTicks": 3,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 35,
+      "interval": 0.13714285714285715
+    },
+    {
+      "level": 20,
+      "durationBonus": 1.5,
+      "extraTicks": 3,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 35,
+      "interval": 0.13714285714285715
+    },
+    {
+      "level": 20,
+      "durationBonus": 1.5,
+      "extraTicks": 6,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 38,
+      "interval": 0.12631578947368421
+    },
+    {
+      "level": 20,
+      "durationBonus": 1.5,
+      "extraTicks": 6,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 38,
+      "interval": 0.12631578947368421
+    },
+    {
+      "level": 20,
+      "durationBonus": 1.5,
+      "extraTicks": 6,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 38,
+      "interval": 0.12631578947368421
+    }
+  ],
+  "gameModulesExecuted": false
+}

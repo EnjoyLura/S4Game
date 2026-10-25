@@ -82,6 +82,8 @@ export class Monster {
   private burnBurst = 0;
   private burnHealCutT = 0;
   private burnHealCut = 0;
+  private healingCut = 0;
+  private healingCutT = 0;
   private overloadCd = 0;
   private knockbackT = 0;
   private knockbackLeft = 0;
@@ -139,6 +141,7 @@ export class Monster {
     this.hp = def.hp;
     this.lastDamageTaken = this.burnBurst = this.burnPulse = 0;
     this.burnHealCutT = this.burnHealCut = this.overloadCd = this.knockbackT = this.knockbackLeft = 0;
+    this.healingCut = this.healingCutT = 0;
     this.state = 'move';
     this.dead = false;
     this.formation = null;
@@ -362,6 +365,7 @@ export class Monster {
     if (this.shockT > 0) states.push('感电');
     if (this.vulnT > 0) states.push('易伤' + Math.round(this.vulnAmp * 100) + '%');
     if (this.hunterMarkT > 0) states.push('猎杀标记');
+    if (this.healingCutT > 0) states.push('减疗' + Math.round(this.healingCut*100) + '%');
     if (!states.length) states.push(this.state === 'move' ? '行进中' : this.def.kind === 'melee' ? '攻击防线' : this.def.kind === 'heal' ? '治疗待命' : '远程攻击');
     return { ...this.traits.defenseInfo, states };
   }
@@ -385,6 +389,8 @@ export class Monster {
     this.overloadCd = Math.max(0, this.overloadCd - dt);
     this.burnHealCutT = Math.max(0, this.burnHealCutT - dt);
     if (this.burnHealCutT <= 0) this.burnHealCut = 0;
+    this.healingCutT=Math.max(0,this.healingCutT-dt);
+    if(this.healingCutT<=0)this.healingCut=0;
     const frozenLeft = this.freezeT;
     const motionDt = Math.max(0, dt - Math.max(this.freezeT, this.stunT, this.knockbackT));
     if (this.knockbackT > 0) {
@@ -648,6 +654,7 @@ export class Monster {
     }, this.artHeight);
     if (killerId !== 'gm') Sfx.death(killerId === 'pyro_burst' ? 'pyro' : killerId, this.freezeT > 0, !!this.def.elite || this.isBoss);
     this.flashT = this.lungeT = this.atkAnimT = 0;
+    this.healingCut = this.healingCutT = 0;
     this.freezeT = this.thawT = this.slowT = this.stunT = this.burnT = this.shockT = 0;
     this.burnHealCutT = this.burnHealCut = this.overloadCd = this.knockbackT = this.knockbackLeft = 0;
     this.footLeftWeight = this.footRightWeight = 0;
@@ -665,6 +672,13 @@ export class Monster {
     if (this.slowT <= 0) this.slowAmp = 0;
     this.slowT = Math.max(this.slowT, dur);
     this.slowAmp = Math.max(this.slowAmp, Math.min(0.9, ratio));
+  }
+  interruptCasting(): void { if (!this.dead && !this.isBoss) this.traits.interruptCasting(); }
+  applyStun(duration: number): boolean {
+    if (this.dead || this.isBoss || duration <= 0) return false;
+    this.stunT = Math.max(this.stunT, duration);
+    this.traits.interruptCasting();
+    return true;
   }
 
   /** 精英仍可冰封；Boss 免疫。重复施加延长冰封，解冻减速只在最后一次解除时启动。 */
@@ -700,9 +714,15 @@ export class Monster {
       this.magicShredT = Math.max(this.magicShredT, seconds);
     }
   }
+  applyHealingReduction(ratio: number, duration: number): void {
+    if(this.dead||ratio<=0||duration<=0)return;
+    this.healingCut=this.healingCutT>0?Math.max(this.healingCut,Math.min(1,ratio)):Math.min(1,ratio);
+    this.healingCutT=Math.max(this.healingCutT,duration);
+  }
   heal(v: number): number {
     if (this.dead) return 0;
-    const healed = Math.max(0, Math.min(v * (1 - Math.min(1, this.burnHealCutT > 0 ? this.burnHealCut : 0)), this.maxHp - this.hp));
+    const reduction=Math.max(this.burnHealCutT>0?this.burnHealCut:0,this.healingCutT>0?this.healingCut:0);
+    const healed = Math.max(0, Math.min(v * (1 - Math.min(1, reduction)), this.maxHp - this.hp));
     if (healed <= 0) return 0;
     this.hp += healed;
     this.ctx.dmgNumber(this.x, this.y + this.headTop + 12, '+' + Math.round(healed), '#80EF98', false,

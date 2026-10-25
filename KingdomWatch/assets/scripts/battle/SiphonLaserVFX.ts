@@ -13,7 +13,7 @@ export class SiphonLaserVFX {
   private cursor = 0;
   constructor(field: Node) {
     const parent = field.getChildByName('FxLayer')!;
-    this.beam = new HeroFxShader(parent, 'siphonPiercingFlood', 1, 'plasma');
+    this.beam = new HeroFxShader(parent, 'siphonPiercingFlood', 3, 'plasma');
     this.ink = N('siphonLaserContacts', parent).addComponent(Graphics);
   }
   tick(dt: number): void { for (const c of this.contacts) c.age += dt; }
@@ -21,7 +21,8 @@ export class SiphonLaserVFX {
     const at = this.cursor++ % 64, c = this.contacts[at] || (this.contacts[at] = {} as Contact);
     c.x = x; c.y = y; c.seed = lifeId; c.age = 0;
   }
-  render(x: number, y: number, angle: number, length: number, halfWidth: number, age: number, duration: number): void {
+  render(x: number, y: number, angle: number, length: number, halfWidth: number, age: number, duration: number,
+    forks?: readonly { angle: number; length: number; halfWidth: number }[]): void {
     this.beam.begin(); this.ink.clear();
     const g = this.ink, dx = Math.cos(angle), dy = Math.sin(angle);
     if (age >= 0) {
@@ -37,6 +38,13 @@ export class SiphonLaserVFX {
             g.circle(x, y, 4 + age / SIPHON_LASER.windup * 13); g.stroke();
           } else { g.moveTo(x, y); g.lineTo(x + dx * length, y + dy * length); g.stroke(); }
         }
+      }
+      if(forks&&age>=SIPHON_LASER.windup)for(const ray of forks){
+        const dx=Math.cos(ray.angle),dy=Math.sin(ray.angle);
+        const painted=this.beam.draw(x+dx*ray.length*.5,y+dy*ray.length*.5,ray.length+80,ray.halfWidth*4.4+32,
+          ray.angle*180/Math.PI,age,.73,gain*.65,3,ray.length,ray.halfWidth);
+        if(!painted){tint.set(142,61,215,Math.round(gain*190));g.strokeColor=tint;g.lineWidth=ray.halfWidth;
+          g.moveTo(x,y);g.lineTo(x+dx*ray.length,y+dy*ray.length);g.stroke();}
       }
     }
     this.beam.end();
