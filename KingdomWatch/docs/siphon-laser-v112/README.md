@@ -27,4 +27,6 @@
 
 已本地提交实现1f772812后完成Creator生产构建（17572ms，正常退出36）。原9条类型诊断保持、0新增，15个JS语法与完整包所有文件哈希/入口路径/3套材质混合校验通过；504份原native字节保持，仅两款字体各增加一个“洪”字（合计652字节）。1569文件、194030021字节（约194.03MB/185.04MiB，200MB内），运行版本a3c14e8af1cdc0dc。详见build-record.json、package-static-verification.json、export-report.json。
 
-按长期约定只发布GitHub Pages独立运行仓库，不推送源码、不部署CF。发布收据后补。
+已按长期约定发布独立运行仓库，运行提交12395f995ade81022cd06e21712e8213c62ead5b，Pages及build状态均为built。19项标准HTTP校验和激光Effect/两字体额外3项HTTP/SHA校验通过；发布期间源码HEAD/索引保持。收据见deployment.json、additional-http-verification.json。不推送源码、不部署CF。
+
+试玩地址：https://enjoylura.github.io/kingdom-watch-play/?v=siphon-laser-v112 。实际游戏与手机体验由用户试玩确认；本轮检查没有启动游戏、浏览器、战斗、音频或WASM。激光离屏美术预览laser-review.mp4保留本地，不进入运行包。

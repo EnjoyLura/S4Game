@@ -1,0 +1,24 @@
+{
+  "release": "a3c14e8af1cdc0dc",
+  "samples": [
+    {
+      "path": "assets/resources/import/e0/e00b3255-79ee-4875-932b-058c0d37b905.37cfc.json",
+      "status": 200,
+      "bytes": 29609,
+      "sha256": "4282ad931ab1c9c25c3a8ff2464bdc1e003ae6e649ac622545aaa95902ad5c17"
+    },
+    {
+      "path": "assets/resources/native/4f/4f4e0740-2005-42a2-b4f7-31b0ed0bff81.644f6/UIBody.ttf",
+      "status": 200,
+      "bytes": 491056,
+      "sha256": "399978caeead041f5c3baa2806ef690e3e0d0c7b6acd8d391633a622318e1bd4"
+    },
+    {
+      "path": "assets/resources/native/08/08934c18-5f2f-44c6-8145-d4fb15839d72.83e99/UIHeading.ttf",
+      "status": 200,
+      "bytes": 669520,
+      "sha256": "dd86f6b23dfff99fb368d1200090cabd02b0b0a28269183baca4a27b70c9078f"
+    }
+  ],
+  "gameBrowserOrWasmStarted": false
+}
