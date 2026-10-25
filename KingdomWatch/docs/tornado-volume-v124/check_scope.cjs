@@ -19,7 +19,7 @@ assert.equal(git(['ls-files','--others','--exclude-standard','assets']).trim(),'
 const shader=read(fx),oldShader=prior(fx),drawing=read(vfx),oldDrawing=prior(vfx);
 assert.equal(compact(drawing.replace(block(drawing,'flowParticles'),'')),compact(oldDrawing.replace(block(oldDrawing,'flowParticles'),'')));
 let rest=shader,oldRest=oldShader;
-for(const name of ['tornado','flowHash','flowNoise'])rest=rest.replace(block(rest,name),'');
+for(const name of ['tornado','tornadoDust','flowHash','flowNoise'])rest=rest.replace(block(rest,name),'');
 oldRest=oldRest.replace(block(oldRest,'tornado'),'');assert.equal(compact(rest),compact(oldRest));
 assert(!/\b(?:sampler2D|samplerCube)\b|\btexture\s*\(/.test(compact(shader)));
 const protectedFunctions=['windEye','windCrescent','ninjaFlow','energyShuriken','frag'];

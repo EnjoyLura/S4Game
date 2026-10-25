@@ -1,5 +1,5 @@
 {
-  "shaderSourceSha256": "47262b15594dbe7c4172f5f946657a1ec20c5e70015a266351814573a4248ecf",
+  "shaderSourceSha256": "911102ae44e7897b0bf8b85896b7b9f081c14dbebfc26f084488fedbf26139cc",
   "renderer": "AMD Radeon RX 9070 XT",
   "runtimeEffectHasNoImagesOrSamplers": true,
   "modeChecks": [
@@ -220,25 +220,25 @@
     {
       "version": "old",
       "dpr": 1,
-      "singleFieldGpuMilliseconds": 0.0166,
+      "singleFieldGpuMilliseconds": 0.0163,
       "isolatedDraws": 96
     },
     {
       "version": "new",
       "dpr": 1,
-      "singleFieldGpuMilliseconds": 0.0657,
+      "singleFieldGpuMilliseconds": 0.0681,
       "isolatedDraws": 96
     },
     {
       "version": "old",
       "dpr": 2,
-      "singleFieldGpuMilliseconds": 0.0592,
+      "singleFieldGpuMilliseconds": 0.0565,
       "isolatedDraws": 96
     },
     {
       "version": "new",
       "dpr": 2,
-      "singleFieldGpuMilliseconds": 0.1702,
+      "singleFieldGpuMilliseconds": 0.1662,
       "isolatedDraws": 96
     }
   ],
