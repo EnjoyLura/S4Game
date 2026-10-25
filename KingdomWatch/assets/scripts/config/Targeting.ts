@@ -16,3 +16,19 @@ export function targetLabel(layer: TargetLayer): string {
   return layer === 'ground' ? '仅地面' : layer === 'air' ? '仅飞行' : '地面·飞行';
 }
 
+/** Explain an acquisition failure, never an ordinary missed shot or dead/empty automatic target. */
+export function blockedTargetMessage(bodies: readonly (TargetBody & { x: number })[], layer: TargetLayer,
+  x: number, y: number, range: number, manual = false): string | null {
+  let alive = false, incompatible = false;
+  const r2 = range * range;
+  for (const body of bodies) {
+    if (body.dead) continue;
+    alive = true;
+    if ((body.x-x)**2 + (targetY(body)-y)**2 > r2) continue;
+    if (acceptsTarget(body, layer)) return null;
+    incompatible = true;
+  }
+  if (incompatible) return layer === 'ground' ? '无法对空' : '无法对地';
+  return manual ? alive ? '超出射程' : '暂无目标' : null;
+}
+

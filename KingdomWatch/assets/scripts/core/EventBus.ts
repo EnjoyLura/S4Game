@@ -40,4 +40,5 @@ export const EVT = {
   ULTIMATE_BEGIN: 'ultimate_begin', // (UltimateCue) accepted manual/automatic cast
   ULTIMATE_BEAT: 'ultimate_beat',   // (UltimateBeat) actual release/contact
   HIT_STOP: 'hit_stop',            // () 暴击/击杀微顿帧（BattleDirector 限频消费）
+  TARGET_BLOCKED: 'target_blocked', // (x, y, text) throttled hero acquisition feedback
 } as const;

@@ -262,6 +262,7 @@ export class BattleDirector extends Component {
     bus.on(EVT.WAVE_CHANGED, this.onWaveChanged, this);
     bus.on(EVT.WAVE_THREAT, this.onWaveThreat, this);
     bus.on(EVT.COMIC_POP, this.onComicPop, this);
+    bus.on(EVT.TARGET_BLOCKED, this.onTargetBlocked, this);
     bus.on(EVT.HIT_STOP, this.onHitStop, this);
     bus.on(EVT.ULTIMATE_BEGIN, this.onUltimateBegin, this);
     bus.on(EVT.ULTIMATE_BEAT, this.onUltimateBeat, this);
@@ -281,6 +282,7 @@ export class BattleDirector extends Component {
     bus.off(EVT.WAVE_CHANGED, this.onWaveChanged, this);
     bus.off(EVT.WAVE_THREAT, this.onWaveThreat, this);
     bus.off(EVT.COMIC_POP, this.onComicPop, this);
+    bus.off(EVT.TARGET_BLOCKED, this.onTargetBlocked, this);
     bus.off(EVT.HIT_STOP, this.onHitStop, this);
     bus.off(EVT.ULTIMATE_BEGIN, this.onUltimateBegin, this);
     bus.off(EVT.ULTIMATE_BEAT, this.onUltimateBeat, this);
@@ -291,6 +293,11 @@ export class BattleDirector extends Component {
   /** 漫画拟声词条（各战斗模块 emit，词表/概率/主题色在 ComicPop.POP_DEFS） */
   private onComicPop(x: unknown, y: unknown, kind: unknown): void {
     this.pops.pop(x as number, y as number, kind as string);
+  }
+
+  private onTargetBlocked(x: unknown, y: unknown, text: unknown): void {
+    if (!this.canUseBattleHud || typeof x !== 'number' || typeof y !== 'number' || typeof text !== 'string') return;
+    this.float.spawn(x, y, text, '#F5D695', false, { notice: true });
   }
 
   private onUltimateBegin(value: unknown): void {
@@ -609,7 +616,7 @@ export class BattleDirector extends Component {
   }
 
   /* ---------- 大招（手动，充能满可放；未满点图标→Tips） ---------- */
-  tryCastUlt(idx = 0): 'ok' | 'charging' | 'locked' | 'blocked' {
+  tryCastUlt(idx = 0): 'ok' | 'charging' | 'locked' | 'blocked' | 'no-target' {
     if (!this.canUseBattleHud) return 'blocked';
     const h = this.heroes[idx];
     if (!h?.ultUnlocked) return 'locked';
@@ -628,6 +635,7 @@ export class BattleDirector extends Component {
       }
       return 'ok';
     }
+    if (h.ultReady) { h.reportBlockedTarget(this.mgr, 'ult', true); return 'no-target'; }
     return 'charging';
   }
 

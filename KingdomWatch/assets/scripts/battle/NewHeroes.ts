@@ -267,11 +267,12 @@ export class SiphonHero extends HeroBase {
     const service = dmg || this.lastDmg;
     if (!service) return;
     const base = this.effAtk * this.stats.aspd * this.stats.normalMul * SIPHON.tick;
+    const normal = base * (1 + this.ramp);
     const take = (m: Monster, amount: number): number => this.takeSiphon(m,amount,false,service);
-    take(target, base * (1 + this.ramp));
+    take(target, normal);
     for (const b of this.beams) {
       if (b.mob.lifeId !== b.life || b.mob.dead) continue;
-      const amount = b.kind === 'relay' ? base*(1+this.ramp)*SC.relayMul : b.kind === 'twin' ? base * (this.stats.siphonTwin || 0)
+      const amount = b.kind === 'relay' ? normal*SC.relayMul : b.kind === 'twin' ? normal * (this.stats.siphonTwin || 0)
         : this.abilityDamage(siphonSkillCfg(this.stats.skillLv).mul) * SIPHON.tick;
       take(b.mob, amount);
     }

@@ -636,7 +636,7 @@ export const CANNON_CARDS: CardDef[] = [
 export const SIPHON_CARDS: CardDef[] = [
   ...commonHeroCards('siphon'),
   c({ id: 'siphon_twin', owner: 'siphon', name: '双重虹吸', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
-    art: 'ui_card_siphon_twin', desc: '普攻增加1条副光束\n副光束伤害50%', apply: x => { x.hero.siphonTwin = .5; } }),
+    art: 'ui_card_siphon_twin', desc: '普攻增加1条副光束\n伤害为主光束的50%', apply: x => { x.hero.siphonTwin = .5; } }),
   c({ id: 'siphon_inherit', owner: 'siphon', name: '余能继承', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
     art: 'ui_card_siphon_inherit', desc: '换目标时保留\n50%虹吸增伤', apply: x => { x.hero.siphonInheritance = .5; } }),
   c({ id: 'siphon_shred', owner: 'siphon', name: '深度汲取', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',

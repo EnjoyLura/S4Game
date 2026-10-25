@@ -1,0 +1,148 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "name": "Blocked messages distinguish incompatible targets, empty field, dead units and real range",
+      "passed": true,
+      "details": {
+        "boundaryInclusive": true,
+        "offscreenAutomaticQuiet": true
+      }
+    },
+    {
+      "name": "Actual raw beam expressions preserve twin half-ratio during ramp and inherited ramp",
+      "passed": true,
+      "details": [
+        {
+          "aspd": 0.7,
+          "ramp": 0,
+          "main": 13.44,
+          "twin": 6.72
+        },
+        {
+          "aspd": 0.7,
+          "ramp": 0.1,
+          "main": 14.784,
+          "twin": 7.392
+        },
+        {
+          "aspd": 0.7,
+          "ramp": 0.25,
+          "main": 16.8,
+          "twin": 8.4
+        },
+        {
+          "aspd": 0.7,
+          "ramp": 0.5,
+          "main": 20.16,
+          "twin": 10.08
+        },
+        {
+          "aspd": 1,
+          "ramp": 0,
+          "main": 19.2,
+          "twin": 9.6
+        },
+        {
+          "aspd": 1,
+          "ramp": 0.1,
+          "main": 21.12,
+          "twin": 10.56
+        },
+        {
+          "aspd": 1,
+          "ramp": 0.25,
+          "main": 24,
+          "twin": 12
+        },
+        {
+          "aspd": 1,
+          "ramp": 0.5,
+          "main": 28.799999999999997,
+          "twin": 14.399999999999999
+        },
+        {
+          "aspd": 2,
+          "ramp": 0,
+          "main": 38.4,
+          "twin": 19.2
+        },
+        {
+          "aspd": 2,
+          "ramp": 0.1,
+          "main": 42.24,
+          "twin": 21.12
+        },
+        {
+          "aspd": 2,
+          "ramp": 0.25,
+          "main": 48,
+          "twin": 24
+        },
+        {
+          "aspd": 2,
+          "ramp": 0.5,
+          "main": 57.599999999999994,
+          "twin": 28.799999999999997
+        }
+      ]
+    },
+    {
+      "name": "Hero hint cooldown shares one clock across slots and does not spend attacks or energy",
+      "passed": true,
+      "details": {
+        "events": [
+          [
+            "target_blocked",
+            0,
+            146,
+            "无法对空"
+          ],
+          [
+            "target_blocked",
+            0,
+            146,
+            "暂无目标"
+          ]
+        ],
+        "chargeUnchanged": true,
+        "cooldownUnchanged": true
+      }
+    },
+    {
+      "name": "Notice uses body font and recycled numeric text returns to combat font, without importing rendering",
+      "passed": true,
+      "details": {
+        "fontSwitches": [
+          "body",
+          "combat",
+          "body",
+          "body",
+          "body",
+          "body"
+        ],
+        "noticeCap": 4,
+        "readableChinese": true
+      }
+    },
+    {
+      "name": "Event lifetime and manual failure wiring are paired",
+      "passed": true,
+      "details": {
+        "teardown": true,
+        "noFailureReleaseAnimation": true
+      }
+    }
+  ],
+  "sourceHashes": {
+    "assets/scripts/config/Targeting.ts": "53f701cadbddb2ef842a9150532e34f73caf56b25329682c50094cea72f41cd8",
+    "assets/scripts/config/NewHeroConfig.ts": "a4a0d3557ef152dbaf47bf9197193baa900c9dd69231efa06524becbdba951c4",
+    "assets/scripts/battle/NewHeroes.ts": "8a7b9528a9f96c6f0ecd76fcef391b3e5f9799d246d828cafa509894fb278139",
+    "assets/scripts/battle/Hero.ts": "ea7febddcd06b4a07a76874c89da73fda1cf82d7cfbb63c22f4e10641cbbc542",
+    "assets/scripts/battle/FloatText.ts": "9fd326ebd07ef3a0370b01c2bb4b39379c7350e5387099612d65cf607004b829",
+    "assets/scripts/battle/BattleDirector.ts": "a048038dd37246daa0a980cb1a369737f567f5c35356d69a62b0eb4b50b3477d",
+    "assets/scripts/ui/HUD.ts": "e3d77734bb89958184675f42807ae66327a96a9b1505b4a87ec6cb9165e9c2f4"
+  },
+  "gameBrowserCombatAudioWasmExecuted": false,
+  "onlyActualArithmeticAndUiControlExtracted": true
+}

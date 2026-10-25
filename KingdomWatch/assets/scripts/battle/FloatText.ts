@@ -9,7 +9,7 @@ import { applyFont } from '../ui/Fonts';
 const MAX_ACTIVE = 30;
 const MAX_PERIODIC = 12;
 const MERGE_WINDOW = 0.075;
-type Kind = 'normal' | 'crit' | 'periodic' | 'heal';
+type Kind = 'normal' | 'crit' | 'periodic' | 'heal' | 'notice';
 interface Motion { attack: number; settle: number; hold: number; life: number; peak: number; rest: number; kick: number; opacity: number; }
 const MOTION: Record<Kind, Motion> = {
   // hold/exit 已按用户反馈加长（2026-10-08）：停留久一点、收尾慢一点，数字更可读
@@ -17,8 +17,9 @@ const MOTION: Record<Kind, Motion> = {
   crit: { attack: 0.032, settle: 0.105, hold: 0.50, life: 0.74, peak: 1.42, rest: 1.06, kick: 9, opacity: 255 },
   periodic: { attack: 0.025, settle: 0.07, hold: 0.24, life: 0.42, peak: 1.04, rest: 1, kick: 3, opacity: 220 },
   heal: { attack: .035, settle: .11, hold: .62, life: .9, peak: 1.16, rest: 1, kick: 5, opacity: 255 },
+  notice: { attack: .05, settle: .12, hold: .85, life: 1.15, peak: 1.05, rest: 1, kick: 3, opacity: 255 },
 };
-export interface FloatEvent { target?: object; amount?: number; periodic?: boolean; heal?: boolean; }
+export interface FloatEvent { target?: object; amount?: number; periodic?: boolean; heal?: boolean; notice?: boolean; }
 interface FText {
   node: Node; label: Label; opacity: UIOpacity;
   kind: Kind; target?: object; amount: number; hits: number;
@@ -62,7 +63,7 @@ export class FloatText {
   }
 
   spawn(x: number, y: number, text: string, color: string, big = false, event: FloatEvent = {}): void {
-    const kind: Kind = event.heal ? 'heal' : event.periodic ? 'periodic' : big ? 'crit' : 'normal';
+    const kind: Kind = event.notice ? 'notice' : event.heal ? 'heal' : event.periodic ? 'periodic' : big ? 'crit' : 'normal';
     const amount = event.amount ?? Number(text);
     if (event.target && Number.isFinite(amount)) {
       const old = this.live.find(t => t.target === event.target && t.kind === kind && t.age <= MERGE_WINDOW);
@@ -90,7 +91,8 @@ export class FloatText {
         this.pool.put(this.live.splice(oldest, 1)[0]);
       }
     }
-    if (kind === 'heal' && this.live.length >= MAX_ACTIVE - 6) {
+    if (kind === 'notice' && this.live.filter(t => t.kind === 'notice').length >= 4) return;
+    if ((kind === 'heal' || kind === 'notice') && this.live.length >= MAX_ACTIVE - 6) {
       let oldest = -1;
       for (let i=0;i<this.live.length;i++) {
         const t=this.live[i];
@@ -98,20 +100,22 @@ export class FloatText {
       }
       if (oldest>=0) this.pool.put(this.live.splice(oldest,1)[0]);
     }
-    if (this.live.length >= MAX_ACTIVE || kind !== 'crit' && kind !== 'heal' && this.live.length >= MAX_ACTIVE - 6) return;
+    if (this.live.length >= MAX_ACTIVE || kind !== 'crit' && kind !== 'heal' && kind !== 'notice' && this.live.length >= MAX_ACTIVE - 6) return;
     const ft = this.pool.get();
+    const switchFont = (ft.kind === 'notice') !== (kind === 'notice');
     ft.kind = kind; ft.target = event.target; ft.amount = amount; ft.hits = 1;
     const motion = MOTION[kind];
     ft.age = 0; ft.life = motion.life; ft.pulseT = 0;
     ft.node.active = true;
     ft.label.string = text;
-    ft.label.fontSize = kind === 'crit' ? 40 : kind === 'periodic' ? 21 : kind === 'heal' ? 25 : 27;
+    if (switchFont) applyFont(ft.label, kind === 'notice' ? 'body' : 'combat');
+    ft.label.fontSize = kind === 'notice' ? 22 : kind === 'crit' ? 40 : kind === 'periodic' ? 21 : kind === 'heal' ? 25 : 27;
     ft.label.lineHeight = ft.label.fontSize * 1.35;
-    ft.label.color = this.col(kind === 'heal' ? color : kind === 'crit' ? '#FF3030' : kind === 'periodic' ? '#FFC17D' : '#FFFFFF');
+    ft.label.color = this.col(kind === 'heal' || kind === 'notice' ? color : kind === 'crit' ? '#FF3030' : kind === 'periodic' ? '#FFC17D' : '#FFFFFF');
     ft.label.outlineColor = this.col(kind === 'heal' ? '#173C24' : kind === 'crit' ? '#281311' : '#221D19');
     ft.label.outlineWidth = kind === 'crit' ? 3.2 : kind === 'periodic' ? 1.8 : 2.2;
     // Reserve the punch silhouette so the peak cannot crash into its neighbours.
-    ft.width = this.measure(text, ft.label.fontSize) * motion.peak;
+    ft.width = (kind === 'notice' ? text.length * ft.label.fontSize + 10 : this.measure(text, ft.label.fontSize)) * motion.peak;
     ft.height = ft.label.fontSize * 1.25 * motion.peak;
     if (!this.place(ft, x, y + (kind === 'crit' ? 9 : 0))) { this.pool.put(ft); return; }
     ft.node.angle = 0;

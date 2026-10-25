@@ -27,7 +27,7 @@ import { PyroIdleAnimation } from './PyroIdleAnimation';
 import { MoraIdleAnimation } from './MoraIdleAnimation';
 import { drawSniperUltimateLock } from './SniperUltimateVFX';
 import { ULT_TIMING, ARCHER_ULT_ROW_GAP, ARCHER_ULT_ROUND_GAP, METEOR_ULT_GAP, FROST_ULT_HIT_GAP } from './UltimateTiming';
-import { attackLayer, AttackSlot, TargetLayer } from '../config/Targeting';
+import { attackLayer, AttackSlot, blockedTargetMessage, TargetLayer } from '../config/Targeting';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
@@ -59,6 +59,7 @@ export abstract class HeroBase {
   // Read the instance field directly in overrides: Cocos loose super-getter lowering binds to the prototype.
   protected ultimateT = 0;
   private ultimateWindupT = 0;
+  private targetHintCd = 0;
 
   constructor(parent: Node, x: number, stats: HeroStats) {
     this.hx = x;
@@ -196,6 +197,14 @@ export abstract class HeroBase {
 
   get x(): number { return this.hx; }
   targetLayer(slot: AttackSlot): TargetLayer { return attackLayer(this.id, slot); }
+  reportBlockedTarget(mgr: MonsterManager, slot: AttackSlot, manual = false): void {
+    if (this.targetHintCd > 0) return;
+    const range=slot==='atk'?this.stats.range:slot==='skill'?this.stats.skillRange:Infinity;
+    const text=blockedTargetMessage(mgr.list,this.targetLayer(slot),this.x,HERO_Y,range,manual) || (manual ? '暂无目标' : null);
+    if (!text) return;
+    this.targetHintCd = 4;
+    bus.emit(EVT.TARGET_BLOCKED,this.x,HERO_Y+146,text);
+  }
   protected selectNormalTarget(mgr: MonsterManager): Monster | null {
     return mgr.pickTarget(this.x, HERO_Y, this.stats.range, this.targetLayer('atk'));
   }
@@ -238,6 +247,7 @@ export abstract class HeroBase {
       }
     }
     this.tickPose(dt, mgr);
+    this.targetHintCd = Math.max(0, this.targetHintCd-dt);
     this.updateQueues(dt, mgr, projs);
     // 普攻
     this.atkT -= dt;
@@ -250,14 +260,17 @@ export abstract class HeroBase {
         this.atkT = this.attackInterval();
       } else {
         this.atkT = 0;
+        if (this.targetLayer('atk') !== 'all') this.reportBlockedTarget(mgr, 'atk');
       }
     }
     // 技能（自动：CD 好 + 技能范围内有怪）
     if (this.skillUnlocked) {
       this.skillCd -= dt;
-      if (this.skillCd <= 0 && this.ultimateWindupT <= 0 && mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange, this.targetLayer('skill'))) {
-        this.animateAttack(true);
-        this.castSkill(mgr, projs, dmg);
+      if (this.skillCd <= 0 && this.ultimateWindupT <= 0) {
+        if (mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange, this.targetLayer('skill'))) {
+          this.animateAttack(true);
+          this.castSkill(mgr, projs, dmg);
+        } else if (this.targetLayer('skill') !== 'all') this.reportBlockedTarget(mgr, 'skill');
       }
     }
     if (this.ultUnlocked && !this.ultReady)

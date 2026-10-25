@@ -79,7 +79,7 @@ export class HUD {
   }
   activateUltimate(index: number): void {
     const result = this.dir.tryCastUlt(index);
-    if (result === 'locked' || result === 'blocked') return;
+    if (result === 'locked' || result === 'blocked' || result === 'no-target') return;
     if (result === 'charging') this.dir.showTips('ult', index);
     else this.ults[index]?.energy?.release();
   }
