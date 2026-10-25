@@ -41,3 +41,9 @@ PNG/WebP源资源和动作顺序/坐标/周期/鞋底/体型保持；原文件�
 版本45d2039c950f437b，完整1569文件194020108字节，原506 native字节一致；较v110增加29045字节，低于200MB，无新图/音频/视频媒体。
 
 本地[吸取动态预览](siphon-review.mp4)与alpha-before-after.jpg只供人工查看，不进入游戏或源码媒体。GPU234帧/90载体案例/局部像素检查通过，实际Cocos动态及手机性能待用户试玩。
+
+## 发布完成
+
+- [试玩v111](https://enjoylura.github.io/kingdom-watch-play/?v=siphon-matte-v111)。
+- 运行提交b81ad525aaeecf55ec3eaa8158e551113299f9ba，Pages/build均built，19项标准HTTP校验通过；新3-technique着色器与透明清理数字JSON另2项HTTP 200/SHA一致，见new-resource-http.json。
+- 发布中source HEAD/索引保持，源码未推送、CF未部署。后续文档收据提交不改变已发布游戏。

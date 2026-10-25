@@ -1,0 +1,19 @@
+{
+  "files": [
+    {
+      "url": "https://enjoylura.github.io/kingdom-watch-play/assets/resources/import/e0/e00b3255-79ee-4875-932b-058c0d37b905.9c792.json?verify=siphon-matte-v111",
+      "status": 200,
+      "bytes": 25302,
+      "sha256": "ccf763ce159d3a44c1250f1f5bff751d30622a64db9cdd02d93a596a9d01df0c",
+      "matchesLocal": true
+    },
+    {
+      "url": "https://enjoylura.github.io/kingdom-watch-play/assets/resources/import/74/74069e37-8860-42fa-bc5c-beb7ab240f34.fac25.json?verify=siphon-matte-v111",
+      "status": 200,
+      "bytes": 24511,
+      "sha256": "579d763e0eb377142bc6fd0012431ce7d97ebe0a5e92e12a1e68f47ef9be94e7",
+      "matchesLocal": true
+    }
+  ],
+  "gameOrBrowserStarted": false
+}
