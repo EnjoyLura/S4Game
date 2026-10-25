@@ -34,6 +34,7 @@ for attrs,script in re.findall(r'<script\b([^>]*)>(.*?)</script>',html,re.S|re.I
  inline+=1
 types=json.loads((OUT/'typecheck-comparison.json').read_text('utf-8'));assert not types['added']
 geometry=json.loads((OUT/'geometry-check.json').read_text('utf-8'))
+assert geometry['passed'] and geometry['caseCount']==15
 script=next(package.glob('assets/main/index.*.js')).read_text('utf-8')
 assert all(s in script for s in ['hitY','targetLayer','groundProjectionY','mobFallback','flightLift'])
 assert checks['full_package_bytes']<=200000000

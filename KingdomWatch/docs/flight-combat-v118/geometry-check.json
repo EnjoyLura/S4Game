@@ -1,0 +1,345 @@
+{
+  "generatedAt": "2026-10-25T11:46:28.190Z",
+  "passed": true,
+  "caseCount": 15,
+  "cases": [
+    {
+      "name": "Sky-only lists cannot be acquired by ground attacks through any actual manager query",
+      "passed": true,
+      "observations": {
+        "groundQueries": 8,
+        "airControlAcquires": true
+      }
+    },
+    {
+      "name": "Cannon shell and frost skill policies differ from missiles and ordinary frost attacks",
+      "passed": true,
+      "observations": {
+        "cannonGroundShells": true,
+        "missileAcquiresSky": true,
+        "frostSkillGroundOnly": true,
+        "frostAttackAndUltimateAcquireSky": true
+      }
+    },
+    {
+      "name": "Dead high-HP bodies do not win acquisition; ground and air health selection stay separate",
+      "passed": true,
+      "observations": {
+        "allHighest": "sky",
+        "groundHighest": "ground",
+        "explicitZeroHitYRetained": true
+      }
+    },
+    {
+      "name": "Body-space splash can join different footprints while footprint-space excludes a raised body elsewhere",
+      "passed": true,
+      "observations": {
+        "skyBodyY": 72,
+        "skyFootprintY": 0,
+        "upperSplash": [
+          "sky",
+          "upperGround"
+        ]
+      }
+    },
+    {
+      "name": "Radius boundary is inclusive and an epsilon outside misses, using visible body coordinates",
+      "passed": true,
+      "observations": {
+        "offset": [
+          3,
+          4
+        ],
+        "inclusiveRadius": 5
+      }
+    },
+    {
+      "name": "Dense sky cloud cannot steal a ground-only cast from a smaller ground group",
+      "passed": true,
+      "observations": {
+        "groundCast": {
+          "x": -100,
+          "y": 0
+        },
+        "unrestrictedCast": {
+          "x": 148,
+          "y": 72
+        }
+      }
+    },
+    {
+      "name": "Sky cluster centroid refinement compares visible Y against visible Y",
+      "passed": true,
+      "observations": {
+        "centroid": {
+          "x": 0,
+          "y": 72
+        },
+        "allFootprintsNearZero": true
+      }
+    },
+    {
+      "name": "Healing read-only eligibility and bodySpace=false use footprint radius without healing execution",
+      "passed": true,
+      "observations": {
+        "healAroundBodySpaceFalseAudited": true,
+        "healingOrDamageExecuted": false
+      }
+    },
+    {
+      "name": "Closest-to-line priority uses logical Y while acquisition range uses visible body Y",
+      "passed": true,
+      "observations": {
+        "wideRangePriority": "nearFootprintSky",
+        "narrowBodyRangePriority": "fartherFootprintGround",
+        "LINE_Y": -513
+      }
+    },
+    {
+      "name": "Ground acquisition and low-HP tie break retain original semantics",
+      "passed": true,
+      "observations": {
+        "pickTarget": "wounded",
+        "equalDistanceNearestRetainsFirst": true
+      }
+    },
+    {
+      "name": "Actual Hero.lead intercepts elevated moving/slow/frozen/holding bodies without combat simulation",
+      "passed": true,
+      "observations": {
+        "independentInterceptResidualBelow": 1e-8,
+        "samples": [
+          {
+            "x": -180,
+            "mode": "moving",
+            "flightSeconds": 0.6488151701517797
+          },
+          {
+            "x": -180,
+            "mode": "slow",
+            "flightSeconds": 0.664380374355989
+          },
+          {
+            "x": -180,
+            "mode": "frozen",
+            "flightSeconds": 0.6807468887410446
+          },
+          {
+            "x": -180,
+            "mode": "holding",
+            "flightSeconds": 0.6807468887410446
+          },
+          {
+            "x": 120,
+            "mode": "moving",
+            "flightSeconds": 0.6621763973135391
+          },
+          {
+            "x": 120,
+            "mode": "slow",
+            "flightSeconds": 0.6777403031535083
+          },
+          {
+            "x": 120,
+            "mode": "frozen",
+            "flightSeconds": 0.694106384835486
+          },
+          {
+            "x": 120,
+            "mode": "holding",
+            "flightSeconds": 0.694106384835486
+          }
+        ]
+      }
+    },
+    {
+      "name": "Laser aim chooses a raised diagonal cluster and rejects a body beyond viewport even if its footprint is visible",
+      "passed": true,
+      "observations": {
+        "selectedAngle": 0.7853981633974483,
+        "raisedAimUsesBodyVisibility": true
+      }
+    },
+    {
+      "name": "Bounded laser capsule and render overscan stay independent of damage geometry",
+      "passed": true,
+      "observations": {
+        "renderedLength": 140,
+        "collisionLength": 100,
+        "exposureSeconds": 3
+      }
+    },
+    {
+      "name": "Cached hit anchor, atlas ground offsets and death projection preserve the logical footprint",
+      "passed": true,
+      "observations": {
+        "samples": 1803,
+        "unchangedClockKeepsHoverStill": true,
+        "realAtlasOffsets": true,
+        "elevatedDeathOriginAndGroundShadow": true
+      }
+    },
+    {
+      "name": "Actual depth comparator layers flyers above ground with stable footprint depth and spawn ties",
+      "passed": true,
+      "observations": {
+        "inputPermutations": 12,
+        "expectedBackToFront": [
+          "groundFar",
+          "ice",
+          "groundNear",
+          "airFarOlder",
+          "airFarNewer",
+          "airNear"
+        ],
+        "noActorModuleInstantiated": true
+      }
+    }
+  ],
+  "sourceHashes": {
+    "assets/scripts/config/Targeting.ts": "655909d312d5feb7ba092dd5300b9da8493981fdf2798575d5b67d0ef76962be",
+    "assets/scripts/battle/FlightPresentation.ts": "ba2f67dc2abb97e8a9171cd83a652c0eb363d5a4da65c06ee36b67b5fa27a1e9",
+    "assets/scripts/battle/SiphonLaser.ts": "036e479bad938134bc94222d1f8883877ec62ff28b80d60dec8ca0dd61c8baaa",
+    "assets/scripts/config/GameConfig.ts": "c9af2a8edfee956d0d190e1db9b978ce4c1a782f37cbec2b6bd3ff579466f4fa",
+    "assets/scripts/battle/Monster.ts": "4018f709d965e374b076368d1e7de87e2c8b86f8b79194395b9ab47e7d4b96a8",
+    "assets/scripts/battle/Hero.ts": "acea874eba829e41b3fd46448898ba349dc4ccd29ac9a22b1545367022b11765",
+    "assets/resources/ux/forest_mob_walk_v87.frames.json": "19614434e747ca13355cf76b29aa402af3c0c751af4d6a2716c2389b6df43c36",
+    "assets/scripts/config/ChapterContent.ts": "1e863d44df627dfaad013b791e6b35f4817e8cff8f7421a3bbec2ab04ba7b77a",
+    "assets/scripts/battle/MonsterDeath.ts": "2ae78c09ff2e2d71ad85e7f9133d3175f7f966cedbf62b773b0ab6eb8dc4874c"
+  },
+  "extractedMethodHashes": {
+    "MonsterManager.pickTarget": "d6130cef4bb48b05cf68a4cc3eab0c7cce72b50be9b6ba1d33216ee326fb1ab2",
+    "MonsterManager.anyInRange": "0cc93b459b9f003bd46feaa33f905dc17869856751955af09768e56779c5e2f1",
+    "MonsterManager.nearest": "3d356c54129b0e3000d08b477246a9f10e44d1b78c4a25821b2c18064e950d9f",
+    "MonsterManager.highestHp": "c7acdc2d5d6619cdc1693989837bdcbdad2ceb0bf75da57255d55a83912f12b7",
+    "MonsterManager.highestHpInRange": "ffd453662ea6565a034cf22937fba03a7eff1270c07976570ecf5191575f2d6a",
+    "MonsterManager.nearestToLineInRange": "000701e47457677dd86a8ff38955db84add19f257bfa4e6b9905c9c4b5019cdc",
+    "MonsterManager.mobsInRadius": "7d25508bfe011d2cd345a98266094c371f4954c85763d1695107a891b7af2d82",
+    "MonsterManager.densestArea": "4069f42f701b7006dac84cbd619f5b89be4e12d2c9dd5f11747dfa33d583e563",
+    "MonsterManager.hasHealingTarget": "697b2ce1cb0cd9807b933027dc5ab71c960638ae832ccb110d2f07d7de37d1ee",
+    "Hero.lead": "d0be17459ba1a42818297acd4b1a02203cb2fc991ffaa8e05afeb0c97ad01b8b",
+    "Monster.hitY": "5cbedae05ee092ed71ce8f350ec6e01576f2cafc5edb7a60c029a23ecc045694",
+    "Monster.artBaseY": "2aad252e14628d64f4162e66e00faceccd64902751cad5304540d2f36144b7ed",
+    "Monster.groundY": "40355c940599d23dd4e8dba8a71df9553ccb323da46ac44752c457b613023e7e",
+    "MonsterManager.sortDepth.comparator": "d43f0b27afae0915287ac4abff570a03b87f5d1b0061dbe3fed7f25dc80c2b34"
+  },
+  "executedSourceModules": [
+    "assets/scripts/config/Targeting.ts",
+    "assets/scripts/battle/FlightPresentation.ts",
+    "assets/scripts/battle/SiphonLaser.ts"
+  ],
+  "typescriptVersion": "5.8.2",
+  "isolatedReview": true,
+  "gameplay": false,
+  "damageOrHealingSimulation": false,
+  "gameOrBrowserAudioWasmStarted": false,
+  "sourceFilesWritten": false,
+  "sourceSnapshotChangedDuringRun": [],
+  "limitations": [
+    "Methods are AST-extracted pure queries and lead math; no Monster/Hero module or engine executes.",
+    "No damage, healing mutation, combat, gameplay rendering, browser, audio or WASM is exercised.",
+    "LINE_Y/HERO_Y are source default design anchors; dynamic device layout is not initialized."
+  ],
+  "visualReview": {
+    "generatedAt": "2026-10-25T11:46:33.529Z",
+    "isolatedReview": true,
+    "gameplay": false,
+    "sourceSnapshotChangedDuringRender": [],
+    "sourceHashes": {
+      "assets/scripts/config/Targeting.ts": "655909d312d5feb7ba092dd5300b9da8493981fdf2798575d5b67d0ef76962be",
+      "assets/scripts/battle/FlightPresentation.ts": "ba2f67dc2abb97e8a9171cd83a652c0eb363d5a4da65c06ee36b67b5fa27a1e9",
+      "assets/scripts/battle/SiphonLaser.ts": "036e479bad938134bc94222d1f8883877ec62ff28b80d60dec8ca0dd61c8baaa",
+      "assets/scripts/config/GameConfig.ts": "c9af2a8edfee956d0d190e1db9b978ce4c1a782f37cbec2b6bd3ff579466f4fa",
+      "assets/scripts/battle/Monster.ts": "4018f709d965e374b076368d1e7de87e2c8b86f8b79194395b9ab47e7d4b96a8",
+      "assets/scripts/battle/Hero.ts": "acea874eba829e41b3fd46448898ba349dc4ccd29ac9a22b1545367022b11765",
+      "assets/resources/ux/forest_mob_walk_v87.frames.json": "19614434e747ca13355cf76b29aa402af3c0c751af4d6a2716c2389b6df43c36",
+      "assets/scripts/config/ChapterContent.ts": "1e863d44df627dfaad013b791e6b35f4817e8cff8f7421a3bbec2ab04ba7b77a",
+      "assets/resources/ux/forest_mob_walk_v87.png": "24f59c021db768e3d13b9ed225e708aa626c0231bd53ef437691fe67d348555a",
+      "assets/resources/scenes/scene_1_2.jpg": "c6e7d01ef17484aeacd7bcaa0b73f18b6c49c285407322fbbad32962c411378f",
+      "docs/flight-combat-v118/make_review.cjs": "1a1d9bd274cd83e18fdf81d2a601f2ce8eb95a5995f39bdcd22670447798aaab"
+    },
+    "outputs": [
+      {
+        "file": "docs/flight-combat-v118/review-contact-sheet.png",
+        "bytes": 1456190,
+        "sha256": "9e1cb7b1abe2824273a4f8af70e89103fcfec91cd26ab997c51a722df262fef0"
+      },
+      {
+        "file": "docs/flight-combat-v118/review-animation.gif",
+        "bytes": 1194546,
+        "sha256": "fd3ae09a6230ca4ed89aed03d18a1e6b7393d4fbb24b9afed4894633f9bd653e"
+      }
+    ],
+    "sheet": {
+      "width": 1500,
+      "height": 1042,
+      "snapshotClock": 0.25,
+      "zooms": [
+        1,
+        3
+      ],
+      "actors": [
+        {
+          "id": "forest_eagle",
+          "radius": 18,
+          "artHeight": 69.3,
+          "groundOffset": 0.05,
+          "frame": "forest_eagle_w6",
+          "sourceRect": [
+            1944,
+            0,
+            320,
+            320
+          ],
+          "lift": 73.71448903727726,
+          "artBaseY": 58.95448903727726,
+          "shadowGroundY": -11.295
+        },
+        {
+          "id": "forest_bat",
+          "radius": 18,
+          "artHeight": 69.3,
+          "groundOffset": 0.039931,
+          "frame": "forest_bat_w6",
+          "sourceRect": [
+            648,
+            648,
+            320,
+            320
+          ],
+          "lift": 63.714489037277254,
+          "artBaseY": 48.954489037277256,
+          "shadowGroundY": -11.9927817
+        }
+      ]
+    },
+    "gif": {
+      "width": 960,
+      "height": 344,
+      "frames": 72,
+      "durationMilliseconds": 3000,
+      "averageFps": 24,
+      "zoom": 2,
+      "encodedFrameDelaysVerified": true,
+      "usesSourceCyclesAndFrameOrder": true,
+      "seamlessLoop": false
+    },
+    "background": {
+      "file": "assets/resources/scenes/scene_1_2.jpg",
+      "coverResize": [
+        750,
+        1334
+      ],
+      "cropTop": 610,
+      "centerCrop": true
+    },
+    "limitations": [
+      "Sharp atlas compositing, not gameplay rendering or visual acceptance.",
+      "Original is reconstructed using zero added lift and the previous ground-shadow geometry; no old engine screenshot.",
+      "1x preserves design scale; 2x/3x enlarge the complete geometry for inspection. Raster placement rounds to the nearest pixel.",
+      "No shaders, damage, combat, gameplay movement, device layout, depth occlusion or click interaction execute.",
+      "GIF is a nonseamless three-second sample; source wing loops and hover are sampled at their real clocks."
+    ]
+  },
+  "checkScriptSha256": "0fa5e9c855a0b62642c410ba016e5ac9c635d36c3ba85958734b193161547d87"
+}
