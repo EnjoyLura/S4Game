@@ -33,3 +33,11 @@ PNG/WebP源资源和动作顺序/坐标/周期/鞋底/体型保持；原文件�
 - audit_package.py检查完整包/文件清单SHA、原native、200MB上限与编译Effect三种混合配置。实际游戏动态由用户试玩。
 
 按长期约定本地提交，再构建校验并发布独立GitHub Pages运行包；源码不推送、CF不部署。构建与发布结果后补。
+
+## 最终构建与包校验
+
+实现已本地提交8b3ff074；随后Creator18855ms成功退出36，DPR/音频引用/美术审计/生产缓存完成。最终9条旧类型诊断保持、无新增，15JS语法/完整包/所有文件哈希通过；编译Effect三种blend为SRC_ALPHA/ONE_MINUS_SRC_ALPHA、ONE/ONE、ONE/ONE_MINUS_SRC_ALPHA。Monster/Hero/Projectile/NewHeroes四份源码对555b4300逐字一致，确认本轮不改击退或原伤害代码。
+
+版本45d2039c950f437b，完整1569文件194020108字节，原506 native字节一致；较v110增加29045字节，低于200MB，无新图/音频/视频媒体。
+
+本地[吸取动态预览](siphon-review.mp4)与alpha-before-after.jpg只供人工查看，不进入游戏或源码媒体。GPU234帧/90载体案例/局部像素检查通过，实际Cocos动态及手机性能待用户试玩。

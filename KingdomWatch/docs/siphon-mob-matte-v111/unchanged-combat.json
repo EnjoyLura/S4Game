@@ -1,0 +1,10 @@
+{
+  "baseline": "555b4300",
+  "normalizedLFSourceSha256": {
+    "Monster.ts": "1a9a0bb337f6a2f35598d7d013f7bf4cabceb1166aebdae57671073449b2d487",
+    "Hero.ts": "49fe828ae041abb8ab54a8c26647162970a17aea7b93ee83f1d22ecd9365907e",
+    "Projectile.ts": "3eb5786b696494afbad9588ffd3f9fb29ec1503eaf031a843773286e83f8dcf0",
+    "NewHeroes.ts": "af86e4bc492466bcbc0973ae575478640afcc94bbcbaf4225d6613c213d4d343"
+  },
+  "allFourSourceFilesIdentical": true
+}
