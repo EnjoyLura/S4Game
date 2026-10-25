@@ -19,4 +19,6 @@
 
 静态范围检查通过，9项既有类型诊断、无新增。离屏实际片元检查覆盖30个模式／时刻，另外四种模式24次与旧版逐像素相同；300帧实际绘图对照中的风眼与忍者保持。AMD RX9070XT最终稿单区域独立绘制中位耗时：DPR1旧0.0163ms／新0.0681ms，DPR2旧0.0565ms／新0.1662ms。这里只量到桌面GPU执行，不包含引擎、CPU、手机或满场战斗；新算法确实更重。
 
-实现与后续反馈分别本地提交429ca5e0、e624913c。最终Creator3.8.8构建19949ms、正常退出36；导出版本76d1689c2b4f9386，共1588文件、200053463字节，比v123增加5888字节。512份native资源逐字节保持，无新增游戏媒体；15份JS、5段内联脚本、完整包SHA／子路径／WASM头静态检查通过。见 `build-record.json`、`export-report.json`、`package-static-verification.json`。GPU脚本以规范LF换行读取片元代码，包审计按同样规范核对，避免Windows检出CRLF被误算为程序变化。发布回执待补。
+实现与后续反馈分别本地提交429ca5e0、e624913c。最终Creator3.8.8构建19949ms、正常退出36；导出版本76d1689c2b4f9386，共1588文件、200053463字节，比v123增加5888字节。512份native资源逐字节保持，无新增游戏媒体；15份JS、5段内联脚本、完整包SHA／子路径／WASM头静态检查通过。见 `build-record.json`、`export-report.json`、`package-static-verification.json`。GPU脚本以规范LF换行读取片元代码，包审计按同样规范核对，避免Windows检出CRLF被误算为程序变化。
+
+已发布 https://enjoylura.github.io/kingdom-watch-play/?v=tornado-volume-v124 ，独立运行仓库提交a1d6a0add2565ff75b928ec2b5330d38e6055fb2。Pages构建与标准线上HTTP检查通过，主脚本／实际编译特效额外2份HTTP200及SHA匹配。见 `deployment.json`、`additional-http-verification.json`；发布期间源码HEAD／索引保持，只推送独立运行仓库，未推送源码、未部署Cloudflare。沿用默认保留上一版必要文件和现有缓存。

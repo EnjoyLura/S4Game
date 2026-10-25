@@ -1,0 +1,18 @@
+{
+  "release": "76d1689c2b4f9386",
+  "samples": [
+    {
+      "path": "assets/main/index.b7759.js",
+      "bytes": 1012521,
+      "status": 200,
+      "sha256": "7c3263d06ed2158a91dc7c141002d97a6bb86a1d6c10a832598a55aaadd250a5"
+    },
+    {
+      "path": "assets/resources/import/c0/c0de9121-74ab-4d2e-a641-8b9ec45f3710.eff55.json",
+      "bytes": 38346,
+      "status": 200,
+      "sha256": "1f37099c0c4a120147bf10cde5c5aec094a687b8f3a4a22cd20c870e9491c189"
+    }
+  ],
+  "gameOrBrowserStarted": false
+}
