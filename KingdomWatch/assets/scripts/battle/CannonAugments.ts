@@ -18,7 +18,7 @@ export class CannonAugments {
     this.marks = N('cannonChargeMarks', field.getChildByName('FxLayer')!).addComponent(Graphics);
   }
   mark(mob: Monster, damage: number): void {
-    if (mob.dead) return;
+    if (mob.dead || mob.def.airborne) return;
     let p = this.charges.find(p => p.mob === mob && p.life === mob.lifeId);
     if (!p) { p = { mob, life: mob.lifeId, remaining: 0, damage: 0 }; this.charges.push(p); }
     p.remaining = CC.chargeSeconds; p.damage = Math.max(p.damage, damage);
@@ -42,7 +42,7 @@ export class CannonAugments {
       const p=this.waves[i],before=p.age;p.age=Math.min(CC.waveSeconds,p.age+dt);
       const from=p.y+CC.waveDistance*before/CC.waveSeconds,to=p.y+CC.waveDistance*p.age/CC.waveSeconds;
       for (const m of manager.list) {
-        if(m.dead || m.y>LO.half || p.hit.has(m.lifeId) || Math.abs(m.x-p.x)>p.width+m.def.radius ||
+        if(m.dead || m.def.airborne || m.y>LO.half || p.hit.has(m.lifeId) || Math.abs(m.x-p.x)>p.width+m.def.radius ||
           m.y<from-14-m.def.radius || m.y>to+14+m.def.radius) continue;
         p.hit.add(m.lifeId);this.deal(m,p.damage,p.critical,Math.PI/2);
       }

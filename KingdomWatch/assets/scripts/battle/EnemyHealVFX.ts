@@ -2,7 +2,7 @@
 import { Color, Graphics, Node } from 'cc';
 import { N } from '../ui/UIKit';
 export interface HealingBody {
-  x: number; y: number; lifeId: number; dead: boolean; groundY: number;
+  x: number; y: number; hitY?: number; lifeId: number; dead: boolean; groundY: number;
   node: { isValid: boolean; activeInHierarchy: boolean }; def: { radius: number };
 }
 interface Link { src: HealingBody; target: HealingBody; sourceLife: number; targetLife: number; age: number; }
@@ -31,7 +31,7 @@ export class EnemyHealVFX {
         this.links.splice(i,1); this.free.push(p); continue;
       }
       const fade=Math.min(1,p.age/.06)*Math.min(1,(.9-p.age)/.3), r=p.target.def.radius;
-      const sx=p.src.x,sy=p.src.y+p.src.def.radius*1.3,tx=p.target.x,ty=p.target.y+r*1.2;
+      const sx=p.src.x,sy=(p.src.hitY ?? p.src.y)+p.src.def.radius*1.3,tx=p.target.x,ty=(p.target.hitY ?? p.target.y)+r*1.2;
       const dx=tx-sx,dy=ty-sy,len=Math.max(1,Math.hypot(dx,dy)),bend=Math.min(16,len*.08);
       const cx=(sx+tx)*.5-dy/len*bend,cy=(sy+ty)*.5+dx/len*bend;
       for (let layer=0;layer<3;layer++) {

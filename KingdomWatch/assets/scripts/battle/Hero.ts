@@ -27,6 +27,7 @@ import { PyroIdleAnimation } from './PyroIdleAnimation';
 import { MoraIdleAnimation } from './MoraIdleAnimation';
 import { drawSniperUltimateLock } from './SniperUltimateVFX';
 import { ULT_TIMING, ARCHER_ULT_ROW_GAP, ARCHER_ULT_ROUND_GAP, METEOR_ULT_GAP, FROST_ULT_HIT_GAP } from './UltimateTiming';
+import { attackLayer, AttackSlot, TargetLayer } from '../config/Targeting';
 
 function hexc(h: string): Color { const c = new Color(); Color.fromHEX(c, h); return c; }
 
@@ -125,7 +126,7 @@ export abstract class HeroBase {
     this.attackPoseT = Math.max(this.attackPoseT, heavy ? .4 : .18);
     if (dx !== undefined && dy !== undefined) this.faceAttack(dx, dy);
     else if (this.poseTarget && !this.poseTarget.dead) {
-      this.faceAttack(this.poseTarget.x - this.x, this.poseTarget.y - HERO_Y - 60);
+      this.faceAttack(this.poseTarget.x - this.x, this.poseTarget.hitY - HERO_Y - 60);
     }
     if (this.idleArcher) {
       // Generic skill/buff cues do not fire the bow; only actual arrow rows pass a direction.
@@ -178,7 +179,7 @@ export abstract class HeroBase {
       && this.attackPoseT <= 0 && !this.motion?.attacking && !this.idleArcher?.attacking
       && !this.idleSniper?.attacking && !this.idleVolt?.attacking && !this.idlePyro?.attacking && !this.idleMora?.attacking;
     if (target && this.attackPoseT <= 0 && !this.idleArcher?.attacking && !this.idleSniper?.attacking && !this.idleVolt?.attacking && !this.idlePyro?.attacking && !this.idleMora?.attacking) {
-      this.faceAttack(target.x - this.x, target.y - HERO_Y - 60);
+      this.faceAttack(target.x - this.x, target.hitY - HERO_Y - 60);
     }
     // Read the base interval: Archer.attackInterval consumes its empowerment flag.
     const leadTime = Math.min(.16, (1 / this.stats.aspd) * .28);
@@ -194,8 +195,9 @@ export abstract class HeroBase {
   }
 
   get x(): number { return this.hx; }
+  targetLayer(slot: AttackSlot): TargetLayer { return attackLayer(this.id, slot); }
   protected selectNormalTarget(mgr: MonsterManager): Monster | null {
-    return mgr.pickTarget(this.x, HERO_Y, this.stats.range);
+    return mgr.pickTarget(this.x, HERO_Y, this.stats.range, this.targetLayer('atk'));
   }
   get effAtk(): number { return this.stats.atk * this.stats.atkMul; }
   /** 两项独立基础值：攻击力 × 小额系数 + 技能伤害 × 当前技能倍率。 */
@@ -253,7 +255,7 @@ export abstract class HeroBase {
     // 技能（自动：CD 好 + 技能范围内有怪）
     if (this.skillUnlocked) {
       this.skillCd -= dt;
-      if (this.skillCd <= 0 && this.ultimateWindupT <= 0 && mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange)) {
+      if (this.skillCd <= 0 && this.ultimateWindupT <= 0 && mgr.anyInRange(this.x, HERO_Y, this.stats.skillRange, this.targetLayer('skill'))) {
         this.animateAttack(true);
         this.castSkill(mgr, projs, dmg);
       }
@@ -297,7 +299,7 @@ export abstract class HeroBase {
     const px = this.x, py = HERO_Y + 60;
     const moving = target.state === 'move' && !target.immobilized;
     const v = moving ? target.def.speed * (target.slowT > 0 ? 1 - target.slowAmp : 1) : 0;
-    const dx = target.x - px, dy = target.y - py;
+    const dx = target.x - px, dy = target.hitY - py;
     const a = v * v - bulletSpeed * bulletSpeed;
     const dist = Math.sqrt(dx * dx + dy * dy);
     let t = dist / bulletSpeed;
@@ -310,7 +312,7 @@ export abstract class HeroBase {
         if (hit > 0) t = hit;
       }
     }
-    const ldx = target.x - px, ldy = target.y - v * t - py;
+    const ldx = target.x - px, ldy = target.hitY - v * t - py;
     const l = Math.sqrt(ldx * ldx + ldy * ldy) || 1;
     return { dirX: ldx / l, dirY: ldy / l };
   }
@@ -798,7 +800,7 @@ export class SniperHero extends HeroBase {
     L.g.clear();
     for (let i = 0; i < targets.length; i++) {
       const target = targets[i];
-      drawSniperUltimateLock(L.g, this.x, HERO_Y + 60, target.x, target.y, progress, i === 0);
+      drawSniperUltimateLock(L.g, this.x, HERO_Y + 60, target.x, target.hitY, progress, i === 0);
     }
   }
 
@@ -913,7 +915,7 @@ export class PyroHero extends HeroBase {
   /** One entry per promised skill fireball. Full projectile capacity defers a shot instead of dropping it. */
   private skillVolley: { t: number; spec: ProjSpec; first: boolean; last: boolean; index: number }[] = [];
   /** Fixed ground points; the projectile's actual arrival removes the warning and creates the crater. */
-  private meteorQueue: { t: number; x: number; y: number; fired?: boolean; first?: boolean; last?: boolean;
+  private meteorQueue: { t: number; x: number; y: number; groundY?: number; fired?: boolean; first?: boolean; last?: boolean;
     fallElapsed?: number; fallSeconds?: number }[] = [];
   /** Fixed landing shadows grow darker as the real meteor approaches; no target rings. */
   private warnT = 0;
@@ -1047,18 +1049,18 @@ export class PyroHero extends HeroBase {
   }
 
   /** Re-evaluate the visible cluster at each release, then commit a finite, predicted ground strike. */
-  private skillAim(mgr: MonsterManager, radius: number, index = 0): { x: number; y: number } | null {
+  private skillAim(mgr: MonsterManager, radius: number, index = 0): { x: number; y: number; groundY: number } | null {
     const top = LO.half - LO.notchTop - 136, bottom = LINE_Y + 24;
     const originY = HERO_Y + 60, range2 = this.stats.skillRange ** 2;
-    const points: { x: number; y: number }[] = [];
+    const points: { x: number; y: number; lift: number }[] = [];
     for (const m of mgr.list) {
-      if (m.dead || m.y < bottom || m.y > top || Math.abs(m.x) > 350
-        || (m.x - this.x) ** 2 + (m.y - HERO_Y) ** 2 > range2) continue;
-      let y = m.y;
+      if (m.dead || m.hitY < bottom || m.hitY > top || Math.abs(m.x) > 350
+        || (m.x - this.x) ** 2 + (m.hitY - HERO_Y) ** 2 > range2) continue;
+      let y = m.hitY;
       for (let n = 0; n < 3; n++) y = this.projectedMeteorY(m, Math.hypot(m.x - this.x, y - originY) / 820);
-      points.push({ x: Math.max(-330, Math.min(330, m.x)), y: Math.max(bottom, Math.min(top, y)) });
+      points.push({ x: Math.max(-330, Math.min(330, m.x)), y: Math.max(bottom, Math.min(top, y)), lift: m.hitY-m.y });
     }
-    let best: { x: number; y: number } | null = null, bestScore = -1;
+    let best: { x: number; y: number; lift: number } | null = null, bestScore = -1;
     const r2 = radius * radius;
     for (const point of points) {
       let score = 0;
@@ -1073,7 +1075,7 @@ export class PyroHero extends HeroBase {
     if (!best) return null;
     // Small variations distinguish the volley without widening upgraded shots off the field.
     const offset = (index % 3 - 1) * Math.min(12, radius * .1);
-    return { x: Math.max(-330, Math.min(330, best.x + offset)), y: best.y };
+    return { x: Math.max(-330, Math.min(330, best.x + offset)), y: best.y, groundY: best.y-best.lift };
   }
 
   protected queuedShotDelay(): number { return this.skillVolley[0]?.t ?? Infinity; }
@@ -1099,7 +1101,7 @@ export class PyroHero extends HeroBase {
           const r = radius * (.49 + band * .085);
           this.warnTint.a = Math.round((5 + (6 - band) * 1.7) * (.45 + p * .75));
           g.fillColor = this.warnTint;
-          g.ellipse(q.x, q.y, r, r * .62); g.fill();
+          g.ellipse(q.x, q.groundY ?? q.y, r, r * .62); g.fill();
         }
       }
     } else if (this.warnNode) {
@@ -1118,12 +1120,13 @@ export class PyroHero extends HeroBase {
         const dx = aim.x - this.x, dy = aim.y - (HERO_Y + 60), length = Math.hypot(dx, dy) || 1;
         q.spec.dirX = dx / length; q.spec.dirY = dy / length;
         q.spec.groundTarget = aim;
+        q.spec.groundProjectionY = aim.groundY;
         if (q.last && this.stats.pyroFirefield) q.spec.onGroundImpact = () => {
           if (!this.node.isValid) return;
           const life = (this.stats.pyroFirefield || 3) + (this.stats.pyroLinger || 0);
           const fields = this.craters.filter(c => c.skill);
           if (fields.length >= 4) this.craters.splice(this.craters.indexOf(fields[0]), 1);
-          this.craters.push({ x: aim.x, y: aim.y, t: life, life, radius: q.spec.explodeR, skill: true });
+          this.craters.push({ x: aim.x, y: aim.groundY, t: life, life, radius: q.spec.explodeR, skill: true });
           projs.fireCraters(this.craters, CRATER_R * pyroUltCfg(this.stats.ultLv).craterMul, this.warnT);
         };
       }
@@ -1153,6 +1156,7 @@ export class PyroHero extends HeroBase {
           stun: this.stats.ultStun || 0,
         });
         spec.groundTarget = { x: q.x, y: q.y };
+        spec.groundProjectionY = q.groundY;
         spec.onGroundImpact = () => {
           if (!this.node.isValid) return;
           const index = this.meteorQueue.indexOf(q);
@@ -1160,7 +1164,7 @@ export class PyroHero extends HeroBase {
           this.meteorQueue.splice(index, 1);
           this.ultimateBeat(q.x, q.y, q.last ? 1 : q.first ? .85 : .35, true);
           const life = pyroCraterDuration(this.stats);
-          this.craters.push({ x: q.x, y: q.y, t: life, life });
+          this.craters.push({ x: q.x, y: q.groundY ?? q.y, t: life, life });
           this.drawMeteorWarnings();
           projs.fireCraters(this.craters, CRATER_R * pyroUltCfg(this.stats.ultLv).craterMul, this.warnT);
         };
@@ -1180,7 +1184,7 @@ export class PyroHero extends HeroBase {
         c.t -= dt;
         if (c.t <= 0) { this.craters.splice(i, 1); continue; }
         for (const m of mgr.list) {
-          if (m.dead || Math.hypot(m.x - c.x, m.y - c.y) > (c.radius ?? crR)) continue;
+          if (m.dead || m.def.airborne || Math.hypot(m.x - c.x, m.y - c.y) > (c.radius ?? crR)) continue;
           m.applyBurn(this.abilityDamage(c.skill ? .2 : .3, !c.skill, c.skill ? .04 : .06) * pyroBurnMultiplier(this.stats),
             pyroBurnDuration(this.stats, .55), this.effAtk * (this.stats.pyroBurnBurst || 0), this.stats.pyroHealCut || 0);
           if (!c.skill) m.applyVuln(this.stats.pitVuln || CRATER_VULN, 0.6);
@@ -1275,17 +1279,17 @@ export class PyroHero extends HeroBase {
   }
 
   private projectedMeteorY(m: Monster, seconds: number): number {
-    if (m.state !== 'move') return m.y;
+    if (m.state !== 'move') return m.hitY;
     const hold = Math.max(m.freezeT, m.stunT), moving = Math.max(0, seconds - hold);
     const slowed = Math.min(moving, Math.max(0, m.slowT - hold));
     const distance = m.def.speed * (moving - slowed * m.slowAmp);
     const stop = LINE_Y + (m.def.kind === 'ranged' ? m.def.atkRange || 0 : m.def.radius * .5);
-    return Math.max(stop, m.y - distance);
+    return Math.max(stop, m.y - distance) + (m.hitY - m.y);
   }
 
   /** Greedy new coverage, then spacing; repeat a lone boss only when there is no new group to cover. */
-  private planMeteorDrops(alive: readonly Monster[], count: number, craterRadius: number): { t: number; x: number; y: number }[] {
-    const drops: { t: number; x: number; y: number }[] = [], covered = new Uint8Array(alive.length);
+  private planMeteorDrops(alive: readonly Monster[], count: number, craterRadius: number): { t: number; x: number; y: number; groundY: number }[] {
+    const drops: { t: number; x: number; y: number; groundY: number }[] = [], covered = new Uint8Array(alive.length);
     const blastRadius = pyroBlastRadius(this.stats, METEOR_BLAST_R);
     const top = SPAWN_Y + 50, r2 = blastRadius ** 2;
     const spacing = Math.max(craterRadius * 1.6, blastRadius * 1.05);
@@ -1293,10 +1297,10 @@ export class PyroHero extends HeroBase {
     for (let k = 0; k < count; k++) {
       const delay = ULT_TIMING.pyro.windup + k * METEOR_ULT_GAP;
       const predicted = alive.map(m => {
-        let y = m.y;
+        let y = m.hitY;
         // Account for both the stagger and the different fall distance to each target.
         for (let n = 0; n < 3; n++) y = this.projectedMeteorY(m, delay + (top - y) / METEOR_SPEED);
-        return { x: m.x, y };
+        return { x: m.x, y, lift: m.hitY-m.y };
       });
       const choices: { strict: Choice | null; strictFresh: Choice | null; soft: Choice | null }
         = { strict: null, strictFresh: null, soft: null };
@@ -1336,7 +1340,12 @@ export class PyroHero extends HeroBase {
       const { strictFresh, strict, soft } = choices;
       const chosen: Choice = strictFresh || (soft?.fresh ? soft : strict || soft)
         || { x: predicted[0].x, y: Math.max(LINE_Y + 12, predicted[0].y), score: 0, fresh: 0 };
-      drops.push({ t: delay, x: chosen.x, y: chosen.y });
+      let lift=0, nearest=Infinity;
+      for (const point of predicted) {
+        const d=(point.x-chosen.x)**2+(point.y-chosen.y)**2;
+        if(d<nearest){nearest=d;lift=point.lift;}
+      }
+      drops.push({ t: delay, x: chosen.x, y: chosen.y, groundY: chosen.y-lift });
       for (let j = 0; j < predicted.length; j++) {
         if ((predicted[j].x - chosen.x) ** 2 + (predicted[j].y - chosen.y) ** 2 <= r2) covered[j]++;
       }
@@ -1458,9 +1467,9 @@ export class VoltHero extends HeroBase {
   /** 连锁闪电本体（普攻概率施法复用）：从技能范围最近目标起跳，最多 skillShots 目标间跳跃 */
   private castChain(mgr: MonsterManager, projs: ProjectileManager, dmg?: DamageService): void {
     const R = this.stats.skillRange;
-    const alive = mgr.list.filter(m => !m.dead && Math.hypot(m.x - this.x, m.y - HERO_Y) <= R);
+    const alive = mgr.list.filter(m => !m.dead && Math.hypot(m.x - this.x, m.hitY - HERO_Y) <= R);
     if (!alive.length) return;
-    alive.sort((a, b) => Math.hypot(a.x - this.x, a.y - HERO_Y) - Math.hypot(b.x - this.x, b.y - HERO_Y));
+    alive.sort((a, b) => Math.hypot(a.x - this.x, a.hitY - HERO_Y) - Math.hypot(b.x - this.x, b.hitY - HERO_Y));
     const jumps = Math.max(1, Math.round(this.stats.skillShots || 5));
     const hop = 260 * (this.stats.skillRangeMul || 1);
     const sc = voltSkCfg(this.stats.skillLv);
@@ -1468,7 +1477,7 @@ export class VoltHero extends HeroBase {
     const struck = new Set<Monster>();
     let fromX = this.x, fromY = HERO_Y + 60;
     let cur = alive[0];
-    this.animateAttack(true, cur.x - this.x, cur.y - (HERO_Y + 60));
+    this.animateAttack(true, cur.x - this.x, cur.hitY - (HERO_Y + 60));
     projs.voltCast(this.x, HERO_Y + 60);
     Sfx.cast(this.id);
     for (let k = 0; k < jumps && cur; k++) {
@@ -1482,13 +1491,13 @@ export class VoltHero extends HeroBase {
       if (this.stats.voltOverload) cur.tryOverload(this.stats.voltOverload);
       const sa = voltShockAmp(this.stats);
       if (sa && !cur.dead) cur.applyShock(sa, voltShockDuration(this.stats));
-      projs.voltChain(fromX, fromY, cur.x, cur.y, k);
-      fromX = cur.x; fromY = cur.y;
+      projs.voltChain(fromX, fromY, cur.x, cur.hitY, k);
+      fromX = cur.x; fromY = cur.hitY;
       // 下一跳：距当前最近且未被打过的（无则终止）
       let next: Monster | null = null, nd = Infinity;
       for (const o of mgr.list) {
         if (o.dead || struck.has(o)) continue;
-        const d = Math.hypot(o.x - fromX, o.y - fromY);
+        const d = Math.hypot(o.x - fromX, o.hitY - fromY);
         if (d < nd && d <= hop) { nd = d; next = o; }
       }
       cur = next;
@@ -1508,10 +1517,10 @@ export class VoltHero extends HeroBase {
           if (!alive.length) continue;
           t = alive[(Math.random() * alive.length) | 0];
         }
-        this.animateAttack(true, t.x - this.x, t.y - (HERO_Y + 60));
+        this.animateAttack(true, t.x - this.x, t.hitY - (HERO_Y + 60));
         const count = voltStrikeCount(this.stats);
         this.thunderStrike(t, mgr, projs, q.index >= count - 5 ? 1.16 : 1);
-        this.ultimateBeat(t.x, t.depthY, q.index === count - 1 ? 1 : q.index === 0 ? .85 : .3, true);
+        this.ultimateBeat(t.x, t.def.airborne ? t.hitY : t.depthY, q.index === count - 1 ? 1 : q.index === 0 ? .85 : .3, true);
       }
     }
   }
@@ -1524,10 +1533,10 @@ export class VoltHero extends HeroBase {
   private thunderStrike(t: Monster, mgr: MonsterManager, projs: ProjectileManager, power = 1): void {
     const uc = voltUltCfg(this.stats.ultLv);
     const dmgVal = this.abilityDamage(uc.boltMul, true);
-    projs.voltThunder(t.x, t.y, SPAWN_Y + 140, t.depthY, 90 * uc.rMul, power);
+    projs.voltThunder(t.x, t.def.airborne ? t.hitY : t.depthY, SPAWN_Y + 140, t.def.airborne ? t.groundY : t.depthY, 90 * uc.rMul, power);
     Sfx.ultimateImpact(this.id);
     bus.emit(EVT.HIT_STOP);
-    for (const o of mgr.mobsInRadius(t.x, t.y, 90 * uc.rMul)) {   // 5级：落雷范围+20%
+    for (const o of mgr.mobsInRadius(t.x, t.hitY, 90 * uc.rMul)) {   // 5级：落雷范围+20%
       if (o.dead) continue;
       const amount = dmgVal * (o.shockT > 0 ? voltShockedMultiplier(this.stats) : 1);
       o.takeDamage(amount, false, this.id, false, 0, -Math.PI / 2, true);
@@ -1667,7 +1676,7 @@ export class FrostHero extends HeroBase {
   private castFrostField(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
     const mc = moraSkCfg(this.stats.skillLv);
     const NR = moraFieldRadius(this.stats);
-    const center = mgr.densestArea(this.x, HERO_Y, this.stats.skillRange, NR);
+    const center = mgr.densestArea(this.x, HERO_Y, this.stats.skillRange, NR, 'ground');
     if (!center) return;
     this.animateAttack(true, center.x - this.x, center.y - (HERO_Y + 60));
     const hitDmg = this.abilityDamage(mc.mul);
@@ -1679,7 +1688,7 @@ export class FrostHero extends HeroBase {
       if (this.frostAreas.length >= 4) this.frostAreas.shift();
       this.frostAreas.push({ x: center.x, y: center.y, radius: NR, t: life, life, slow: moraSlowRatio(this.stats, .5) });
     }
-    for (const m of mgr.mobsInRadius(center.x, center.y, NR)) {
+    for (const m of mgr.mobsInRadius(center.x, center.y, NR, 'ground')) {
       if (m.dead) continue;
       const crit = Math.random() < this.stats.critRate;
       const amount = hitDmg * (m.slowT > 0 || m.freezeT > 0 ? moraColdMultiplier(this.stats) : 1)
@@ -1707,7 +1716,7 @@ export class FrostHero extends HeroBase {
         area.t -= dt;
         if (area.t <= 0) { this.frostAreas.splice(i, 1); continue; }
         for (const m of mgr.list)
-          if (!m.dead && (m.x - area.x) ** 2 + (m.y - area.y) ** 2 <= area.radius ** 2) m.applySlow(area.slow, .25);
+          if (!m.dead && !m.def.airborne && (m.x - area.x) ** 2 + (m.y - area.y) ** 2 <= area.radius ** 2) m.applySlow(area.slow, .25);
       }
       projs.frostGround(this.frostAreas);
       this.frostGroundVisible = this.frostAreas.length > 0;
@@ -1717,8 +1726,8 @@ export class FrostHero extends HeroBase {
     while (this.ultimateBurstT <= 0 && this.ultimateHitsLeft > 0) {
       // Resample living enemies at each contact, including those entering during the storm.
       const alive = mgr.list.filter(m => !m.dead);
-      projs.frostUltimateBurst(alive.map(m => ({ x: m.x, y: m.depthY, radius: m.def.radius })));
-      if (alive[0]) this.animateAttack(true, alive[0].x - this.x, alive[0].y - HERO_Y - 60);
+      projs.frostUltimateBurst(alive.map(m => ({ x: m.x, y: m.def.airborne ? m.groundY : m.depthY, hitY: m.def.airborne ? m.hitY : undefined, radius: m.def.radius })));
+      if (alive[0]) this.animateAttack(true, alive[0].x - this.x, alive[0].hitY - HERO_Y - 60);
       const uc = moraUltCfg(this.stats.ultLv), base = moraUltimateHitDamage(this.stats);
       const slow = moraSlowRatio(this.stats, uc.slowMul);
       const slowDuration = moraSlowDuration(this.stats, uc.slowDur + (this.stats.ultSlowDur || 0));
@@ -1748,7 +1757,7 @@ export class FrostHero extends HeroBase {
     this.ultimateHitsLeft = MORA_ULT_HITS;
     this.ultimateBurstT = ULT_TIMING.mora.windup;
     bus.emit(EVT.CHARGE_CHANGED, 0, false);
-    projs.frostUltimate(alive.map(m => ({ x: m.x, y: m.depthY, radius: m.def.radius })));
+    projs.frostUltimate(alive.map(m => ({ x: m.x, y: m.def.airborne ? m.groundY : m.depthY, hitY: m.def.airborne ? m.hitY : undefined, radius: m.def.radius })));
     return true;
   }
 }

@@ -7,7 +7,7 @@ import { FROST_ULT_RAIN_COUNT, LINE_Y, LO, MAX_MOBS } from '../config/GameConfig
 import { drawIceCrystal } from './FrostVFX';
 import { DepthSprite, registerDepthSprite, refreshDepth } from './BattleDepth';
 
-export interface FrostUltTarget { x: number; y: number; radius: number; }
+export interface FrostUltTarget { x: number; y: number; radius: number; hitY?: number; }
 interface Atlas {
   frames: Record<string, number[]>; framePrefix: string; frameCount: number;
   cellSize: [number, number]; frameDurations: number[]; groundAnchorPixels: [number, number];
@@ -284,6 +284,13 @@ export class FrostUltimateVFX {
         this.ground.ellipse(target.x, target.y, target.radius * 0.72, target.radius * 0.22);
       }
       this.ground.fill();
+      // The footprint stays on the floor; optional body contacts belong to the sky layer.
+      this.trails.fillColor = this.tint;
+      for (const target of this.targets) {
+        if (target.hitY === undefined) continue;
+        this.trails.ellipse(target.x, target.hitY, target.radius * 0.28, target.radius * 0.2);
+        this.trails.fill();
+      }
     }
     for (let i = 0; i < HIT_CAP; i++) {
       const hit = this.hits[i], age = t - hit.start;

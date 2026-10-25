@@ -9,6 +9,7 @@ import { voltShockDuration, voltShockAmp, voltShockedMultiplier, voltStrikeCount
 import { CANNON, SIPHON_LASER, cannonSkillCfg, cannonUltCfg, siphonSkillCfg, siphonLaserCfg } from '../config/NewHeroConfig';
 import { MORA_ULT_HITS, moraSlowRatio, moraSlowDuration, moraFreezeChance, moraNormalFreezeDuration, moraFieldRadius, moraFieldFreeze, moraUltimateHitDamage } from '../config/Cards';
 import { FROST_ULT_RAIN_COUNT, HERO_Y, LO, PAL } from '../config/GameConfig';
+import { targetLabel } from '../config/Targeting';
 import { DamageRow, fmtWk } from '../battle/DamageService';
 import { HeroBase } from '../battle/Hero';
 import { BattleDirector } from '../battle/BattleDirector';
@@ -828,6 +829,7 @@ export class Panels {
 
     // 底板 0.78（用户调整：Tips 再增加一点透明度，战斗画面更可见）；点空白关闭不受影响
     const tipsPanel = gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.78), undefined, 0, 12);
+    if (hero.targetLayer(kind) === 'ground') title += ' · ' + targetLabel('ground');
     // 左右内边距 16（用户调整：原 30 过大）；左列固定 90 + 间距 12，剩余全给数值列（过长 shrink 而非压得过小）
     const pad = 16, lblW = 90, gap = 12;
     const valW = w - pad * 2 - lblW - gap;

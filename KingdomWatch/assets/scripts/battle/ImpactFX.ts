@@ -13,7 +13,7 @@ import { VoltUltimateVFX } from './VoltUltimateVFX';
 import { SniperUltimateVFX } from './SniperUltimateVFX';
 import { EnemyHealVFX, HealingBody } from './EnemyHealVFX';
 
-interface Impact { x: number; y: number; life: number; max: number; radius: number; color: string; angle: number; heavy: boolean; hero: string; kind: 'contact' | 'cast' | 'blast'; }
+interface Impact { x: number; y: number; groundY: number; life: number; max: number; radius: number; color: string; angle: number; heavy: boolean; hero: string; kind: 'contact' | 'cast' | 'blast'; }
 interface CombatCue { kind: string; x: number; y: number; tx: number; ty: number; radius: number; life: number; max: number; }
 
 export const HERO_FX: Record<string, string> = {
@@ -60,7 +60,7 @@ export class ImpactFX {
     node.setParent(parent);
     this.g = node.addComponent(Graphics);
     this.healing = new EnemyHealVFX(parent);
-    for (let i = 0; i < 32; i++) this.free.push({ x: 0, y: 0, life: 0, max: 1, radius: 1, color: '', angle: 0, heavy: false, hero: '', kind: 'contact' });
+    for (let i = 0; i < 32; i++) this.free.push({ x: 0, y: 0, groundY: 0, life: 0, max: 1, radius: 1, color: '', angle: 0, heavy: false, hero: '', kind: 'contact' });
     for (let i = 0; i < 40; i++) this.cueFree.push({ kind: '', x: 0, y: 0, tx: 0, ty: 0, radius: 1, life: 0, max: 1 });
   }
 
@@ -135,7 +135,7 @@ export class ImpactFX {
   private contact(x: number, y: number, hero: string, heavy: boolean, angle?: number): void {
     const p = this.free.pop() || this.active.shift();
     if (!p) return;
-    p.x = x; p.y = y; p.color = HERO_FX[hero] || '#EADFC2'; p.heavy = heavy; p.hero = hero; p.kind = 'contact';
+    p.x = x; p.y = y; p.groundY = y; p.color = HERO_FX[hero] || '#EADFC2'; p.heavy = heavy; p.hero = hero; p.kind = 'contact';
     p.max = p.life = heavy ? 0.22 : 0.12;
     p.radius = heavy ? 22 : 11;
     p.angle = angle ?? (hero === 'volt' || hero === 'pyro' ? -Math.PI / 2 : Math.PI / 2);
@@ -151,16 +151,16 @@ export class ImpactFX {
   }
 
   /** A local hot core and ground dust, sized below the gameplay warning circle. */
-  blast(x: number, y: number, hero: string, radius: number): void {
-    if (hero === 'pyro' && this.fire?.blast(x, y, radius)) return;
+  blast(x: number, y: number, hero: string, radius: number, groundY = y): void {
+    if (hero === 'pyro' && this.fire?.blast(x, y, radius, groundY)) return;
     this.contact(x, y, hero, true, Math.PI / 2);
     const p = this.active[this.active.length - 1];
-    if (p) { p.kind = 'blast'; p.radius = Math.min(60, radius * 0.45); p.max = p.life = 0.28; }
+    if (p) { p.kind = 'blast'; p.groundY = groundY; p.radius = Math.min(60, radius * 0.45); p.max = p.life = 0.28; }
   }
 
   /** Shared code-only role feedback. Low-priority cues never evict a break/heal already playing. */
-  combatFeedback(kind: string, x: number, y: number, radius: number, tx = x, ty = y): void {
-    if (kind === 'burnBurst') { this.blast(x, y, 'pyro', radius); return; }
+  combatFeedback(kind: string, x: number, y: number, radius: number, tx = x, ty = y, groundY = y): void {
+    if (kind === 'burnBurst') { this.blast(x, y, 'pyro', radius, groundY); return; }
     if ((kind === 'rush' || kind === 'armorHit' || kind === 'wardHit') && this.cueFree.length <= 8) return;
     const p = this.cueFree.pop();
     if (!p) return;
@@ -236,9 +236,11 @@ export class ImpactFX {
       const t = 1 - p.life / p.max, fade = 1 - t;
       const r = p.radius * (0.65 + (1 - Math.pow(fade, 3)) * 0.5);
       if (p.kind === 'blast') {
-        this.tint.set(71, 47, 26, Math.round(75 * fade));
-        this.g.strokeColor = this.tint; this.g.lineWidth = 6 * fade + 1;
-        this.g.ellipse(p.x, p.y - 6, r * 1.4, r * 0.56); this.g.stroke();
+        if (p.groundY >= p.y) {
+          this.tint.set(71, 47, 26, Math.round(75 * fade));
+          this.g.strokeColor = this.tint; this.g.lineWidth = 6 * fade + 1;
+          this.g.ellipse(p.x, p.y - 6, r * 1.4, r * 0.56); this.g.stroke();
+        }
         Color.fromHEX(this.tint, p.color); this.tint.a = Math.round(150 * fade * fade);
         this.g.fillColor = this.tint;
         this.g.ellipse(p.x, p.y, r * 0.38 * fade, r * 0.28 * fade); this.g.fill();

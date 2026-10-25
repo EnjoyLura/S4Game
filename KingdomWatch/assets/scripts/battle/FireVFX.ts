@@ -10,7 +10,7 @@ interface Residue { mark: Part; glow: Part; }
 interface Clip { part: Part; age: number; scale: number; }
 interface BurnState { lifeId: number; pulse: number; clips: Clip[]; }
 /** Read-only status view: every burn source already maintains these fields. */
-export interface BurningTarget { node: Node; lifeId: number; dead: boolean; burnT: number; burnTick: number; burnPulse: number; def: { radius: number }; }
+export interface BurningTarget { node: Node; hitY?: number; lifeId: number; dead: boolean; burnT: number; burnTick: number; burnPulse: number; def: { radius: number }; }
 interface Burst {
   root: Node; ground: Node; core: Part; flames: Part[]; smoke: Part[]; dust: Part; scorch: Part;
   fragments: Fragment[]; age: number; life: number; radius: number; angle: number; blast: boolean; heavy: boolean;
@@ -299,7 +299,11 @@ export class FireVFX {
         clip.part.node.active = true;
         state.clips.push(clip);
       }
-      for (const clip of state.clips) this.renderClip(clip);
+      for (const clip of state.clips) {
+        const lift=(target.hitY ?? target.node.position.y)-target.node.position.y;
+        clip.part.node.setPosition(0, lift + target.def.radius * .4 + (PYRO_ANCHOR_Y - PYRO_CELL / 2) * clip.scale, 0);
+        this.renderClip(clip);
+      }
       // The final damage tick keeps its natural tail even after the gameplay status expires.
       if (target.burnT <= 0 && !state.clips.length) this.burning.delete(target);
     }
@@ -309,7 +313,7 @@ export class FireVFX {
     clip.part.node.active = false; clip.part.node.setParent(this.root); this.burnFree.push(clip);
   }
 
-  blast(x: number, y: number, radius: number): boolean {
+  blast(x: number, y: number, radius: number, groundY = y): boolean {
     if (!this.loaded) return false;
     let blasts = 0;
     for (const b of this.active) if (b.blast && ++blasts >= BLAST_CAP) return true;
@@ -317,7 +321,7 @@ export class FireVFX {
     // contact instead of drawing two opaque explosions at one collision.
     const contact = this.active.find(b => !b.blast && b.age < 0.035 && Math.hypot(b.x - x, b.y - y) < 20);
     const burst = contact || this.obtain(true);
-    if (burst) this.start(burst, x, y, Math.min(66, Math.max(34, radius * 0.38 + 16)), contact?.angle ?? Math.PI / 2, true, true);
+    if (burst) this.start(burst, x, y, Math.min(66, Math.max(34, radius * 0.38 + 16)), contact?.angle ?? Math.PI / 2, true, true, groundY);
     return true;
   }
 
@@ -331,11 +335,11 @@ export class FireVFX {
     this.active.push(burst); return burst;
   }
 
-  private start(b: Burst, x: number, y: number, radius: number, angle: number, blast: boolean, heavy: boolean): void {
+  private start(b: Burst, x: number, y: number, radius: number, angle: number, blast: boolean, heavy: boolean, groundY = y): void {
     b.x = x; b.y = y; b.radius = radius; b.angle = angle; b.blast = blast; b.heavy = heavy;
     b.age = 0; b.life = blast ? 0.78 : heavy ? 0.43 : 0.32;
-    b.root.active = true; b.ground.active = blast;
-    b.root.setPosition(x, y, 0); b.ground.setPosition(x, y - 8, 0);
+    b.root.active = true; b.ground.active = blast && groundY >= y;
+    b.root.setPosition(x, y, 0); b.ground.setPosition(x, groundY - 8, 0);
     const seq = ++this.sequence;
     for (let i = 0; i < b.fragments.length; i++) {
       // Local deterministic variation never consumes the gameplay random stream.
@@ -397,7 +401,7 @@ export class FireVFX {
       this.draw(f.part, i % 2 ? 'chip' : 'ember', (i % 2 ? 16 : 12) * (1 - fragmentT * 0.30), alpha,
         f.vx * t, f.vy * t - 390 * t * t, b.angle * 180 / Math.PI - 90 + f.spin * t);
     }
-    if (b.blast) {
+    if (b.blast && b.ground.active) {
       this.draw(b.dust, 'dust', r * (2.25 + smooth(t / 0.22) * 0.45), 72 * smooth(t / 0.035) * (1 - smooth(t / 0.40)), 0, -3);
       this.draw(b.scorch, 'scorch', r * 2.1, 85 * smooth(t / 0.045) * (1 - smooth((t - 0.30) / 0.48)));
     }

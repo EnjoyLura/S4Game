@@ -100,7 +100,8 @@ export class EnemyTooltip {
     for (const m of this.manager.list) {
       if (m.dead || !m.node.isValid || !m.node.activeInHierarchy) continue;
       const halfWidth = Math.max(34, m.def.radius * 1.5);
-      const bottom = m.y - m.def.radius * .82 - 8, top = m.y + m.headTop + 12;
+      const bottom = m.def.airborne ? m.y + m.artBaseY - 8 : m.y - m.def.radius * .82 - 8;
+      const top = m.y + m.headTop + 12;
       const dx = Math.max(0, Math.abs(x - m.x) - halfWidth);
       const dy = Math.max(0, bottom - y, y - top);
       const edgeDistance = Math.hypot(dx, dy);
@@ -108,6 +109,11 @@ export class EnemyTooltip {
       // Prefer a directly touched body; near its edge choose the closest visible body.
       const center = Math.hypot(x - m.x, y - (bottom + top) / 2);
       const score = (edgeDistance > 0 ? 1000 + edgeDistance : 0) + center * .01;
+      // A directly touched flyer is drawn above an overlapping ground body.
+      if (result && edgeDistance === 0 && best < 1000 && !!m.def.airborne !== !!result.def.airborne) {
+        if (m.def.airborne) { result = m; best = score; }
+        continue;
+      }
       if (score < best || score === best && m.depthY < (result?.depthY ?? Infinity)) { result = m; best = score; }
     }
     return result;
@@ -161,7 +167,7 @@ export class EnemyTooltip {
     setText(this.magic, info.wardBroken ? '破盾' : Math.round(info.magic * 100) + '%');
     const priority = ['冰封', '眩晕', '治疗读条', '冲锋蓄势', '冲锋中', '攻击蓄力', '灼烧', '感电', '减速', '减疗', '易伤', '猎杀标记', '防御姿态', '狂暴'];
     const active = priority.filter(key => info.states.some(state => state.startsWith(key))).slice(0, 1);
-    const role = (s.def.boss ? '首领 · ' : s.def.elite ? '精英 · ' : '') +
+    const role = (s.def.boss ? '首领 · ' : s.def.elite ? '精英 · ' : '') + (s.def.airborne ? '飞行 · ' : '') +
       (s.def.kind === 'heal' ? '治疗' : s.def.kind === 'ranged' ? '远程' : '近战');
     setText(this.states, live ? role + (active.length ? '\n' + active[0] : '') : '已击败');
   }

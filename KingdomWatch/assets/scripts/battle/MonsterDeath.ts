@@ -1,6 +1,7 @@
 /** In-place fatal burst from the supplied reference. Whole bodies never fall. */
 import { Color, EffectAsset, Graphics, Layers, Material, Node, resources, Sprite, UIOpacity, UITransform, Vec4 } from 'cc';
 import { BattleSprite } from './BattleSprite';
+import { FLIGHT_SHADOW } from './FlightPresentation';
 
 export type DeathElement = 'physical' | 'fire' | 'volt' | 'frost';
 export interface FatalHit {
@@ -41,6 +42,7 @@ export class MonsterDeath {
   private shaderReady = false;
   private footX = 0;
   private footY = 0;
+  private airborne = false;
   private bodyX = 0;
   private bodyY = 0;
   private burst: Sprite;
@@ -85,13 +87,15 @@ export class MonsterDeath {
     if (this.art.node.isValid) this.art.node.active = this.art.loaded;
     this.opacity.opacity = 255;
   }
-  begin(radius: number, groundOffset: number, hit: FatalHit, height = radius * 3.85): void {
+  begin(radius: number, groundOffset: number, hit: FatalHit, height = radius * 3.85, flightLift = 0): void {
     this.active = true; this.bound = false; this.burst.node.active = false; this.age = 0;
     this.seed = (++serial * 0.61803398875) % 1 * 97;
     this.radius = height / 3.85; this.height = height;
     this.footX = this.root.position.x;
-    this.footY = this.root.position.y + this.art.node.position.y + this.height * groundOffset;
-    this.bodyX = this.footX; this.bodyY = this.footY + this.height * 0.36;
+    const bodyFootY = this.root.position.y + this.art.node.position.y + this.height * groundOffset;
+    this.airborne = flightLift > 0;
+    this.footY = bodyFootY - flightLift;
+    this.bodyX = this.footX; this.bodyY = bodyFootY + this.height * 0.36;
     this.heavy = hit.heavy || hit.elite || hit.boss;
     this.element = hit.killer === 'pyro' || hit.killer === 'burn' ? 'fire'
       : hit.killer === 'mora' || hit.frozen ? 'frost' : hit.killer === 'volt' ? 'volt' : 'physical';
@@ -158,8 +162,9 @@ export class MonsterDeath {
     if (!this.active) return;
     const shadow = 1 - smooth((this.age - this.holdAt) / this.burstDuration);
     if (shadow > 0.01) {
-      this.fill(g, 28, 23, 18, 42 * shadow);
-      g.ellipse(this.footX, this.footY, this.radius * 1.02, this.radius * 0.20); g.fill();
+      this.fill(g, 28, 23, 18, (this.airborne ? FLIGHT_SHADOW.alpha : 42) * shadow);
+      g.ellipse(this.footX, this.footY, this.radius * (this.airborne ? FLIGHT_SHADOW.width : 1.02),
+        this.radius * (this.airborne ? FLIGHT_SHADOW.height : 0.20)); g.fill();
     }
   }
   drawAir(g: Graphics): void {

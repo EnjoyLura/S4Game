@@ -182,8 +182,8 @@ export class BattleDirector extends Component {
       dmgNumber: (x: number, y: number, text: string, color: string, big?: boolean, event?: FloatEvent) =>
         this.float.spawn(x, y, text, color, big, event),
       impact: (x: number, y: number, hero: string, heavy: boolean, angle?: number) => this.impacts.hit(x, y, hero, heavy, angle),
-      combatFeedback: (kind: string, x: number, y: number, radius: number, tx?: number, ty?: number) =>
-        this.impacts.combatFeedback(kind, x, y, radius, tx, ty),
+      combatFeedback: (kind: string, x: number, y: number, radius: number, tx?: number, ty?: number, groundY?: number) =>
+        this.impacts.combatFeedback(kind, x, y, radius, tx, ty, groundY),
       healing: (source: Monster, target: Monster) => this.impacts.healLink(source, target),
       damage: (hero: string, amount: number) => this.dmgSvc.add(hero, amount),
     };
@@ -452,7 +452,7 @@ export class BattleDirector extends Component {
       if (position && this.state === 'running' && this.killBeatCooldown <= 0) {
         const p = position as DeathPosition;
         if (!this.killBeatCount) this.killBeatAge = 0;
-        this.killBeatCount++; this.killBeatX += p.x; this.killBeatY += p.y;
+        this.killBeatCount++; this.killBeatX += p.x; this.killBeatY += p.hitY ?? p.y;
         if (this.killBeatCount >= 5) {
           this.impacts.combatFeedback('groupKill', this.killBeatX / this.killBeatCount, this.killBeatY / this.killBeatCount, 52);
           bus.emit(EVT.HIT_STOP);

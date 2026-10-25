@@ -1,5 +1,6 @@
 /** Pure bounded-ray geometry. No random numbers, game state or rendering. */
-export interface LaserBody { x: number; y: number; dead: boolean; isBoss: boolean; def: { radius: number; elite?: boolean }; }
+import { targetY } from '../config/Targeting';
+export interface LaserBody { x: number; y: number; hitY?: number; dead: boolean; isBoss: boolean; def: { radius: number; elite?: boolean }; }
 export interface LaserBounds { left: number; right: number; top: number; }
 /** Overscan is only for rendering past the viewport; damage uses the unpadded bounds. */
 export function laserLength(x: number, y: number, angle: number, bounds: LaserBounds, overscan = 0): number {
@@ -19,13 +20,15 @@ export function bestLaserAngle(x: number, y: number, halfWidth: number, bodies: 
   bounds: LaserBounds, fallback = Math.PI / 2): number | null {
   let best: number | null = null, bestScore = -1, bestTurn = Infinity;
   for (const target of bodies) {
-    if (target.dead || target.y <= y + 24 || target.y > bounds.top || target.x < bounds.left || target.x > bounds.right) continue;
-    const angle = Math.max(.12, Math.min(Math.PI - .12, Math.atan2(target.y - y, target.x - x)));
+    const ty = targetY(target);
+    if (target.dead || ty <= y + 24 || ty > bounds.top || target.x < bounds.left || target.x > bounds.right) continue;
+    const angle = Math.max(.12, Math.min(Math.PI - .12, Math.atan2(ty - y, target.x - x)));
     const length = laserLength(x, y, angle, bounds);
     let score = 0;
     for (const m of bodies) {
-      if (m.dead || m.y <= y + 24 || m.y > bounds.top || m.x < bounds.left || m.x > bounds.right) continue;
-      if (laserTouches(x, y, angle, length, halfWidth, m.x, m.y, m.def.radius))
+      const my = targetY(m);
+      if (m.dead || my <= y + 24 || my > bounds.top || m.x < bounds.left || m.x > bounds.right) continue;
+      if (laserTouches(x, y, angle, length, halfWidth, m.x, my, m.def.radius))
         score += 1 + (m.isBoss ? .7 : m.def.elite ? .3 : 0);
     }
     const turn = Math.abs(angle - fallback);

@@ -16,6 +16,7 @@ import { CannonBlastVFX, SiphonBeamVFX } from './NewHeroVFX';
 import { SiphonLaserVFX } from './SiphonLaserVFX';
 import { CannonAugments } from './CannonAugments';
 import { bestLaserAngle, laserExposure, laserLength, laserTouches, turnLaser } from './SiphonLaser';
+import { acceptsTarget } from '../config/Targeting';
 
 function visual(parent: Node, node: Node, x: number, hero: string): Node {
   node.layer = parent.layer; node.setParent(parent); node.setPosition(x, HERO_Y, 0);
@@ -25,14 +26,14 @@ function visual(parent: Node, node: Node, x: number, hero: string): Node {
   return artSprite(node, 0, -76 + height * (foot / 1536 - .5), 120, height,
     'new_heroes_v105/' + hero + '_battle', { sliced: false });
 }
-function point(m: Monster, seconds: number): { x: number; y: number } {
+function point(m: Monster, seconds: number): { x: number; y: number; groundY: number } {
   const moving = m.state === 'move' && !m.immobilized;
   const dy = moving ? m.def.speed * (m.slowT > 0 ? 1 - m.slowAmp : 1) * seconds : 0;
-  return { x: Math.max(-330, Math.min(330, m.x)),
-    y: Math.max(LINE_Y + 24, Math.min(LO.half - LO.notchTop - 136, m.y - dy)) };
+  const y = Math.max(LINE_Y + 24, Math.min(LO.half - LO.notchTop - 136, m.hitY - dy));
+  return { x: Math.max(-330, Math.min(330, m.x)), y, groundY: y-(m.hitY-m.y) };
 }
 function cluster(mgr: MonsterManager, x: number, range: number, radius: number): Monster | null {
-  const candidates = mgr.list.filter(m => !m.dead && m.y < LO.half - LO.notchTop - 136
+  const candidates = mgr.list.filter(m => acceptsTarget(m, 'ground') && m.y < LO.half - LO.notchTop - 136
     && m.y >= LINE_Y && (m.x - x) ** 2 + (m.y - HERO_Y) ** 2 <= range * range);
   let best: Monster | null = null, score = -1;
   for (const m of candidates) {
@@ -43,7 +44,7 @@ function cluster(mgr: MonsterManager, x: number, range: number, radius: number):
   return best;
 }
 interface Shell {
-  delay: number; x: number; y: number; damage: number; radius: number;
+  delay: number; x: number; y: number; groundY?: number; damage: number; radius: number;
   skill: boolean; ult: boolean; echo: boolean; extra: boolean; detonate?: boolean;
   launchX?: number; launchY?: number; mini?: boolean; heavy?: boolean; flightX?: number; flightY?: number;
 }
@@ -80,7 +81,7 @@ export class CannonHero extends HeroBase {
     return Math.max(this.ultimateT, this.flyingUlt || this.shells.some(s => s.ult) ? .01 : 0);
   }
   castUlt(mgr: MonsterManager): boolean {
-    const alive = mgr.list.filter(m => !m.dead && m.y <= LO.half - LO.notchTop - 136 && m.y >= LINE_Y);
+    const alive = mgr.list.filter(m => !m.dead && m.hitY <= LO.half - LO.notchTop - 136 && m.hitY >= LINE_Y);
     if (!this.ultReady || !alive.length) return false;
     const cfg = cannonUltCfg(this.stats.ultLv), count = cfg.shots + (this.stats.cannonUltShots || 0);
     const radius=cfg.radius*this.stats.skillRangeMul*(1+(this.stats.cannonUltRadius || 0));
@@ -92,7 +93,7 @@ export class CannonHero extends HeroBase {
     while (ordered.length) {
       const target = ordered.shift()!; targets.push(target);
       for (let k = ordered.length - 1; k >= 0; k--)
-        if ((ordered[k].x - target.x) ** 2 + (ordered[k].y - target.y) ** 2 < radius ** 2) ordered.splice(k, 1);
+        if ((ordered[k].x - target.x) ** 2 + (ordered[k].hitY - target.hitY) ** 2 < radius ** 2) ordered.splice(k, 1);
     }
     for (let i = 0; i < count; i++) this.shells.push({ delay: .6 + i * .26,
       ...point(targets[i % targets.length], .8 + i * .26), damage: this.abilityDamage(cfg.mul, true),
@@ -126,7 +127,7 @@ export class CannonHero extends HeroBase {
           if (shot.ult) { this.flyingUlt = Math.max(0, this.flyingUlt - 1); this.ultimateBeat(shot.x, shot.y, .7, true); }
           this.blast(shot, shot.mini ? 'echo' : shot.ult ? 'ult' : shot.skill ? 'skill' : 'normal');
           if (shot.skill && !shot.mini) for (const m of mgr.list) {
-            if (m.dead || (m.x - shot.x) ** 2 + (m.y - shot.y) ** 2 > shot.radius ** 2) continue;
+            if (!acceptsTarget(m, 'ground') || (m.x - shot.x) ** 2 + (m.y - shot.y) ** 2 > shot.radius ** 2) continue;
             m.applyResistanceShred('physical', CANNON.shred, cannonSkillCfg(this.stats.skillLv).shredSeconds);
             if (this.stats.cannonKnockback) m.applyKnockback(this.stats.cannonKnockback);
             if(this.stats.cannonCharges)this.extras().mark(m,shot.damage*CC.chargeMul);
@@ -165,13 +166,13 @@ export class CannonHero extends HeroBase {
   private resolveBlast(shot: Shell, damage: number, critical: boolean, mgr: MonsterManager): number {
     let primary: Monster | null=null,nearest=Infinity,hits=0;
     const r2=shot.radius*shot.radius,normal=!shot.skill&&!shot.ult&&!shot.mini&&!shot.echo;
-    for(const m of mgr.list){const d2=(m.x-shot.x)**2+(m.y-shot.y)**2;if(!m.dead&&d2<=r2&&d2<nearest){primary=m;nearest=d2;}}
+    for(const m of mgr.list){const d2=(m.x-shot.x)**2+(m.hitY-shot.y)**2;if(acceptsTarget(m,shot.ult?'all':'ground')&&d2<=r2&&d2<nearest){primary=m;nearest=d2;}}
     for(const m of mgr.list){
-      const d2=(m.x-shot.x)**2+(m.y-shot.y)**2;if(m.dead||d2>r2)continue;
+      const d2=(m.x-shot.x)**2+(m.hitY-shot.y)**2;if(!acceptsTarget(m,shot.ult?'all':'ground')||d2>r2)continue;
       hits++;const direct=m===primary,center=shot.ult ? this.stats.cannonUltCenter || 0 : normal ? this.stats.cannonCenter || 0 : 0;
       const amount=damage*(direct?1:.7)*(d2<=r2*CC.centerRatio**2?1+center:1);
       const charge=normal?this.augments?.consume(m) || 0:0;
-      m.takeDamage(amount,direct&&critical,this.id,false,direct?this.stats.defIgnore:0,Math.atan2(m.y-shot.y,m.x-shot.x),direct);
+      m.takeDamage(amount,direct&&critical,this.id,false,direct?this.stats.defIgnore:0,Math.atan2(m.hitY-shot.y,m.x-shot.x),direct);
       this.lastDmg?.add(this.id,m.lastDamageTaken);
       if(normal&&shot.heavy)m.applySlow(CC.slow,CC.slowSeconds);
       if(shot.ult&&this.stats.cannonUltStun)m.applyStun(this.stats.cannonUltStun);
@@ -194,8 +195,8 @@ export class CannonHero extends HeroBase {
   }
   private detonate(shot: Shell, mgr: MonsterManager): void {
     for (const m of mgr.list) {
-      const d2=(m.x-shot.x)**2+(m.y-shot.y)**2;
-      if (m.dead || d2 > shot.radius ** 2) continue;
+      const d2=(m.x-shot.x)**2+(m.hitY-shot.y)**2;
+      if (!acceptsTarget(m,shot.ult?'all':'ground') || d2 > shot.radius ** 2) continue;
       const center=!shot.skill&&!shot.ult && d2<=shot.radius**2*CC.centerRatio**2 ? this.stats.cannonCenter || 0 : 0;
       m.takeDamage(shot.damage*(1+center), false, this.id, false, this.stats.defIgnore);
       this.lastDmg?.add(this.id, m.lastDamageTaken);
@@ -205,7 +206,7 @@ export class CannonHero extends HeroBase {
     Sfx.impact(this.id, true);
   }
   private blast(shot: Shell, kind: 'normal' | 'skill' | 'ult' | 'echo'): void {
-    this.effects().burst(shot.x, shot.y, shot.radius, kind);
+    this.effects().burst(shot.x, shot.y, shot.radius, kind, shot.groundY ?? shot.y);
   }
   private effects(): CannonBlastVFX { return this.blastFX ||= new CannonBlastVFX(this.node.parent!.parent!); }
   private extras(): CannonAugments {
@@ -274,14 +275,14 @@ export class SiphonHero extends HeroBase {
         : this.abilityDamage(siphonSkillCfg(this.stats.skillLv).mul) * SIPHON.tick;
       take(b.mob, amount);
     }
-    this.animateAttack(false, target.x - this.x, target.y - HERO_Y - 60);
+    this.animateAttack(false, target.x - this.x, target.hitY - HERO_Y - 60);
   }
   private takeSiphon(m: Monster, amount: number, heavy=false, service=this.lastDmg): number {
     if(!service||m.dead)return 0;
     const critical=Math.random()<this.stats.critRate;
     m.takeDamage(amount*(critical?this.stats.critMul:1),critical,this.id,false,this.stats.defIgnore,undefined,heavy);
     const dealt=m.lastDamageTaken;service.add(this.id,dealt);
-    if(dealt>0)this.beamFX?.hit(m.x,m.y+m.def.radius*.45,m.lifeId,heavy);
+    if(dealt>0)this.beamFX?.hit(m.x,m.hitY+m.def.radius*.45,m.lifeId,heavy);
     return dealt;
   }
   private tickGrips(dt: number, primary: Monster | null, beams: readonly Beam[]): void {
@@ -354,14 +355,14 @@ export class SiphonHero extends HeroBase {
         const angle=ray===0?this.laserAngle:Math.max(.03,Math.min(Math.PI-.03,this.laserAngle+(ray===1?-SC.forkAngle:SC.forkAngle)));
         const halfWidth=this.laserHalfWidth*(ray===0?1:SC.forkWidth),rayLength=ray===0?length:laserLength(this.laserX,this.laserY,angle,bounds);
         for (const m of mgr.list) {
-        if (m.dead || m.y > bounds.top || m.y <= this.laserY || m.x < bounds.left || m.x > bounds.right) continue;
+        if (m.dead || m.hitY > bounds.top || m.hitY <= this.laserY || m.x < bounds.left || m.x > bounds.right) continue;
         if (!laserTouches(this.laserX, this.laserY, angle, rayLength, halfWidth,
-          m.x, m.y, m.def.radius)) continue;
+          m.x, m.hitY, m.def.radius)) continue;
         const critical = Math.random() < this.stats.critRate;
         m.takeDamage(this.abilityDamage(cfg.mul, true) * SIPHON_LASER.tick * (ray===0?1:SC.forkMul) * (critical ? this.stats.critMul : 1),
           critical, this.id, false, this.stats.defIgnore, angle, true);
         this.lastDmg?.add(this.id, m.lastDamageTaken);
-        if (m.lastDamageTaken > 0) this.laserFX?.hit(m.x, m.y + m.def.radius * .45, m.lifeId);
+        if (m.lastDamageTaken > 0) this.laserFX?.hit(m.x, m.hitY + m.def.radius * .45, m.lifeId);
         }
       }
       this.ultimateBeat(this.laserX + Math.cos(this.laserAngle) * length * .55,
@@ -399,16 +400,16 @@ export class SiphonHero extends HeroBase {
       const used = new Set<Monster>([primary]);
       if(kind==='relay')for(const b of next)if(b.kind==='twin')used.add(b.mob);
       const keep = this.beams.filter(b => b.kind === kind && this.valid(b.mob, b.life, mgr) && !used.has(b.mob) &&
-        (kind!=='relay' || (b.mob.x-primary.x)**2+(b.mob.y-primary.y)**2 <= (300*this.stats.skillRangeMul)**2)).slice(0, count);
+        (kind!=='relay' || (b.mob.x-primary.x)**2+(b.mob.hitY-primary.hitY)**2 <= (300*this.stats.skillRangeMul)**2)).slice(0, count);
       for (const b of keep) { next.push(b); used.add(b.mob); }
       if (keep.length >= count) continue;
       // Sort once only when a connection needs replacement, never for full stable channels.
-      if (!nearby) nearby = mgr.list.filter(m => !m.dead).sort((a, b) => (a.x - primary.x) ** 2 + (a.y - primary.y) ** 2
-        - (b.x - primary.x) ** 2 - (b.y - primary.y) ** 2);
+      if (!nearby) nearby = mgr.list.filter(m => !m.dead).sort((a, b) => (a.x - primary.x) ** 2 + (a.hitY - primary.hitY) ** 2
+        - (b.x - primary.x) ** 2 - (b.hitY - primary.hitY) ** 2);
       for (const m of nearby) {
         if (keep.length >= count) break;
         const radius = 300 * this.stats.skillRangeMul;
-        if (m.dead || used.has(m) || (m.x - primary.x) ** 2 + (m.y - primary.y) ** 2 > radius ** 2) continue;
+        if (m.dead || used.has(m) || (m.x - primary.x) ** 2 + (m.hitY - primary.hitY) ** 2 > radius ** 2) continue;
         const b: Beam = { mob: m, life: m.lifeId, kind }; keep.push(b); next.push(b); used.add(m);
       }
     }
@@ -438,12 +439,12 @@ export class SiphonHero extends HeroBase {
       false);
     const primary = this.primary;
     if (!primary || primary.dead || primary.lifeId !== this.primaryLife) { fx.end(); return; }
-    fx.beam(primary.x, primary.y + primary.def.radius * .45, 1 + this.ramp * .4, .6);
+    fx.beam(primary.x, primary.hitY + primary.def.radius * .45, 1 + this.ramp * .4, .6);
     const drawn = new Set<Monster>([primary]);
     for (const b of this.beams) if (b.mob.lifeId === b.life && !drawn.has(b.mob)) {
       if (!b.mob.dead) {
-        if(b.kind==='relay')fx.link(primary.x,primary.y+primary.def.radius*.45,b.mob.x,b.mob.y+b.mob.def.radius*.45,.55,b.life%17);
-        else fx.beam(b.mob.x, b.mob.y + b.mob.def.radius * .45, .65, b.life % 17);
+        if(b.kind==='relay')fx.link(primary.x,primary.hitY+primary.def.radius*.45,b.mob.x,b.mob.hitY+b.mob.def.radius*.45,.55,b.life%17);
+        else fx.beam(b.mob.x, b.mob.hitY + b.mob.def.radius * .45, .65, b.life % 17);
       }
       drawn.add(b.mob);
     }

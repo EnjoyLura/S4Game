@@ -19,7 +19,7 @@ interface Piece {
 interface Fault { xy: Float32Array; count: number; }
 interface Soil { x: number; y: number; tx: number; ty: number; nx: number; ny: number; width: number; height: number; shade: number; }
 interface Blast {
-  x: number; y: number; radius: number; age: number; life: number; airLife: number; seed: number; power: number;
+  x: number; y: number; groundY: number; radius: number; age: number; life: number; airLife: number; seed: number; power: number;
   count: number; pieces: Piece[]; faults: Fault[]; soil: Soil[]; shader: boolean;
 }
 interface Landing { x: number; y: number; age: number; life: number; id: number; }
@@ -43,31 +43,33 @@ export class CannonBlastVFX {
     this.fire = new HeroFxShader(air, 'bombTurbulentFlame', CAP);
     this.air = N('bombFlyingShrapnel', air).addComponent(Graphics);
   }
-  burst(x: number, y: number, radius: number, kind: 'normal' | 'skill' | 'ult' | 'echo'): void {
+  burst(x: number, y: number, radius: number, kind: 'normal' | 'skill' | 'ult' | 'echo', groundY = y): void {
     const index = this.cursor++ % CAP;
     const b = this.slots[index] || (this.slots[index] = {
       pieces: Array.from({ length: PIECES }, () => ({} as Piece)),
       faults: Array.from({ length: 11 }, () => ({ xy: new Float32Array(16), count: 0 })),
       soil: Array.from({ length: 7 }, () => ({} as Soil)),
     } as Blast);
-    b.x = x; b.y = y; b.radius = Math.min(190, radius); b.age = 0; b.seed = ++this.sequence;
+    b.x = x; b.y = y; b.groundY = groundY; b.radius = Math.min(190, radius); b.age = 0; b.seed = ++this.sequence;
     b.power = kind === 'echo' ? .76 : kind === 'ult' ? 1.15 : 1;
     b.airLife = kind === 'ult' ? 1.42 : kind === 'echo' ? .94 : 1.22;
     b.life = kind === 'ult' ? 3.2 : kind === 'echo' ? 1.65 : 2.4;
     b.count = kind === 'ult' ? 30 : kind === 'echo' ? 14 : 22;
     // Never replace a visible event's rendering mode when an asynchronous shader finishes loading.
     b.shader = this.fire.ready && this.floor.ready;
+    const height = Math.max(0, y - groundY);
     for (let k = 0; k < b.count; k++) {
       const p = b.pieces[k], seed = b.seed * 47 + k * 13.7;
       const angle = k * 2.399963 + rand(seed) * .9, speed = b.radius * (1.0 + rand(seed + 1) * 1.9);
       p.vx = Math.cos(angle) * speed; p.vy = Math.sin(angle) * speed * .44;
       p.lift = b.radius * (.85 + rand(seed + 2) * 1.3); p.gravity = 760 + rand(seed + 3) * 310;
       p.land = 2 * p.lift / p.gravity;
+      if (height > 0) p.land = (p.lift + Math.sqrt(p.lift * p.lift + 2 * p.gravity * height)) / p.gravity;
       p.size = k < 8 ? (4.3 + rand(seed + 4) * 5.2) * b.power : 1.0 + rand(seed + 4) * 1.8;
       p.angle = rand(seed + 5) * TAU; p.spin = (rand(seed + 6) - .5) * 15;
       p.shade = rand(seed + 7); p.shape = .45 + rand(seed + 8) * .55;
     }
-    this.breakGround(b);
+    if (groundY >= y) this.breakGround(b);
     this.dirty = true;
   }
   target(x: number, y: number, seconds: number): number {
@@ -94,11 +96,12 @@ export class CannonBlastVFX {
       if (b.age >= b.life) continue;
       const r = b.radius;
       if (b.shader) {
-        this.floor.draw(b.x, b.y, r * 2.7, r * 1.35, 0, b.age, b.seed, b.power, 1, r, b.life);
+        if (b.groundY >= b.y)
+          this.floor.draw(b.x, b.y, r * 2.7, r * 1.35, 0, b.age, b.seed, b.power, 1, r, b.life);
         if (b.age < b.airLife)
           this.fire.draw(b.x, b.y + r * .38, r * 2.65, r * 2.7, 0, b.age, b.seed, b.power, 0, r, r * .38);
       } else if (b.age < b.airLife) this.fallback(b);
-      this.rupture(b);
+      if (b.groundY >= b.y) this.rupture(b);
       if (b.age < b.airLife) this.fragments(b);
     }
     this.floor.end(); this.fire.end();
@@ -183,15 +186,16 @@ export class CannonBlastVFX {
   }
   private fragments(b: Blast): void {
     const g = this.air, ground = this.ground, age = b.age;
+    const height = Math.max(0, b.y - b.groundY);
     for (let k = 0; k < b.count; k++) {
       const p = b.pieces[k], after = Math.max(0, age - p.land);
       // Exact first landing, then a smaller ballistic bounce. No frame-rate-dependent Euler drift.
       const bounce = p.lift * .24, bounceLife = 2 * bounce / p.gravity;
-      const z = age < p.land ? p.lift * age - .5 * p.gravity * age * age
+      const z = age < p.land ? height + p.lift * age - .5 * p.gravity * age * age
         : after < bounceLife ? bounce * after - .5 * p.gravity * after * after : 0;
       const travel = age <= p.land ? (1 - Math.exp(-age * 1.4)) / 1.4
         : (1 - Math.exp(-p.land * 1.4)) / 1.4 + Math.exp(-p.land * 1.4) * .4 * (1 - Math.exp(-after * 5)) / 5;
-      const x = b.x + p.vx * travel, gy = b.y + p.vy * travel, y = gy + Math.max(0, z);
+      const x = b.x + p.vx * travel, gy = b.groundY + p.vy * travel, y = gy + Math.max(0, z);
       const fade = 1 - clamp((age - b.airLife * .63) / (b.airLife * .37));
       const turningAge = Math.min(age, p.land + bounceLife);
       const a = p.angle + p.spin * turningAge, c = Math.cos(a), s = Math.sin(a);

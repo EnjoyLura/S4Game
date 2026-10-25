@@ -13,7 +13,7 @@ import { CA, label, N, setText } from '../ui/UIKit';
 import { artSprite, uxFrame } from '../ui/Ux';
 import { reducedMotion } from '../ui/UIMotion';
 
-export interface DeathPosition { x: number; y: number; radius: number; }
+export interface DeathPosition { x: number; y: number; hitY?: number; radius: number; }
 interface Drop {
   inst: EquipInst; root: Node; moving: Node; fx: Graphics; opacity: UIOpacity; hint: Node;
   x: number; y: number; fromX: number; fromY: number; color: string;
@@ -63,7 +63,7 @@ export class BattleLoot {
     artSprite(moving, 0, 0, 60, 60, gearArtKey(inst.defId), { sliced: false, hideOnLoad: [fallback] });
     const hint = label(root, 0, -43, '点击拾取', { size: 13, color: '#FFF0BE', w: 100, h: 20, outline: '#292A26', outlineW: 2 });
     const drop: Drop = { inst, root, moving, fx, opacity: root.addComponent(UIOpacity), hint, x, y,
-      fromX: position.x, fromY: position.y + position.radius * 1.1, color, age: 0, flight: 0, claimed: false, done: false };
+      fromX: position.x, fromY: (position.hitY ?? position.y) + position.radius * 1.1, color, age: 0, flight: 0, claimed: false, done: false };
     moving.setPosition(drop.fromX - x, drop.fromY - y);
     moving.setScale(.38, .38, 1);
     bindButton(root, () => this.pick(drop, true), { visual: feedback, scale: .86, sound: false,

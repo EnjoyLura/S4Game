@@ -14,8 +14,11 @@ import { LINE_Y, LO, PAL, MAX_PROJS } from '../config/GameConfig';
 import { FrostUltTarget } from './FrostUltimateVFX';
 import { BasicProjectileFlightVFX } from './BasicProjectileFlightVFX';
 import { drawCannonMissile } from './NewHeroVFX';
+import { acceptsTarget, attackLayer, TargetLayer } from '../config/Targeting';
 
 export interface ProjSpec {
+  /** Shared by acquisition, sweep, splash and secondary shots. Undefined is resolved once at release. */
+  targetLayer?: TargetLayer;
   x: number; y: number;
   /** 直线弹方向（会归一化）；发射后方向锁定（用户确认：子弹不追踪不换目标） */
   dirX?: number; dirY?: number;
@@ -87,8 +90,10 @@ export interface ProjSpec {
   exclude?: Monster;
   /** Snapshot exclusion survives deferred secondary firing and monster-node reuse. */
   excludeLifeId?: number;
-  /** Fixed ground ordnance: bypass airborne monster collisions and detonate at this exact point. */
+  /** Fixed impact point bypasses flight collisions; targetLayer still governs the eventual explosion. */
   groundTarget?: Readonly<{ x: number; y: number }>;
+  /** Airburst body position and terrain projection are separate. */
+  groundProjectionY?: number;
   /** A specialised blast resolver may own damage while retaining this flight/landing event. */
   onGroundDamage?: () => void;
   onGroundImpact?: () => void;
@@ -151,6 +156,7 @@ export class ProjectileManager {
     if (this.active.length >= MAX_PROJS) return false;
     const a = this.free.pop() || this.makeActive();
     a.spec = spec;
+    spec.targetLayer ??= attackLayer(spec.heroId, spec.ult ? 'ult' : spec.ability ? 'skill' : 'atk');
     a.hit.clear();
     if (spec.exclude) a.hit.add(spec.exclude.lifeId);
     if (spec.excludeLifeId) a.hit.add(spec.excludeLifeId);
@@ -331,8 +337,8 @@ export class ProjectileManager {
     const padding = (sp.size || 7) * .5;
     let count = 0;
     for (const m of this.mgr.list) {
-      if (m.dead) continue;
-      const mx = m.x, my = m.y, radius = m.def.radius + padding;
+      if (!acceptsTarget(m, sp.targetLayer)) continue;
+      const mx = m.x, my = m.hitY, radius = m.def.radius + padding;
       // Conservative broad phase only. Exact circle entry, ties and per-contact feedback stay below.
       const bound = radius + 1e-6;
       if (mx < minX - bound || mx > maxX + bound || my < minY - bound || my > maxY + bound) continue;
@@ -682,7 +688,7 @@ export class ProjectileManager {
     m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true, sp.resCut || 0, angle, heavy);
     if (sp.markAmp) m.applyHunterMark(sp.markAmp, sp.markDur || 5, !!sp.markIcon);
     if (sp.heroId === 'sniper' && sp.ult) {
-      this.impacts?.sniperUltimateHit(m.x, m.y, angle);
+      this.impacts?.sniperUltimateHit(m.x, m.hitY, angle);
       if (!a.ultContact) {
         a.ultContact = true;
         bus.emit(EVT.ULTIMATE_BEAT, { hero: sp.heroId, x: sp.x, y: sp.y, energy: 1, contact: true });
@@ -690,24 +696,24 @@ export class ProjectileManager {
     }
     this.dmg.add(sp.heroId, m.lastDamageTaken);
     if (this.parts) {
-      this.parts.burst(m.x, m.y, sp.color, heavy ? 5 : sp.spark ? 3 : 2, heavy ? 230 : 160, angle);
+      this.parts.burst(m.x, m.hitY, sp.color, heavy ? 5 : sp.spark ? 3 : 2, heavy ? 230 : 160, angle);
     }
     // Reserve the short time accent for heavy hits and elite finishes.
     if (heavy || sp.crit && sp.heroId === 'sniper' || m.dead && m.def.elite) bus.emit(EVT.HIT_STOP);
     if (m.dead) {
-      this.killPop(sp, m.x, m.y + m.def.radius);
+      this.killPop(sp, m.x, m.hitY + m.def.radius);
     }
     if (sp.explodeR && sp.explodeR > 0) {
-      for (const o of this.mgr.mobsInRadius(m.x, m.y, sp.explodeR)) {
+      for (const o of this.mgr.mobsInRadius(m.x, m.hitY, sp.explodeR, sp.targetLayer)) {
         if (o === m || o.dead) continue;
         o.takeDamage(sp.dmg * a.damageScale * (sp.explodeMul || 0.4), false, sp.heroId, false, 0,
-          Math.atan2(o.y - m.y, o.x - m.x));
+          Math.atan2(o.hitY - m.hitY, o.x - m.x));
         this.dmg.add(sp.heroId, o.lastDamageTaken);
         if (!o.dead && sp.burnSplash && sp.burnDps) o.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0, sp.heroId);
-        if (o.dead) this.killPop(sp, o.x, o.y + o.def.radius);
+        if (o.dead) this.killPop(sp, o.x, o.hitY + o.def.radius);
       }
-      if (this.impacts) this.impacts.blast(m.x, m.y, sp.heroId, sp.explodeR);
-      else this.boomFx(m.x, m.y, sp.explodeR);
+      if (this.impacts) this.impacts.blast(m.x, m.hitY, sp.heroId, sp.explodeR, m.y);
+      else this.boomFx(m.x, m.hitY, sp.explodeR);
     }
     if (sp.arcDamage) this.hitArc(a, m);
     // Explosions still resolve when the directly struck enemy dies.
@@ -722,20 +728,20 @@ export class ProjectileManager {
     // 分裂箭：与原弹同造型/同弹速/同词条（仅伤害减半、不再连锁分裂），
     // 只索敌目标前方（箭矢飞行方向的延伸，y 更大）的怪，绝不往回（防线方向）索敌（用户确认：往前索敌）
     if (sp.split && sp.split > 0 && !sp.small) {
-      const fronts = this.mgr.list.filter(o => !o.dead && o !== m && o.y > m.y);
+      const fronts = this.mgr.list.filter(o => acceptsTarget(o, sp.targetLayer) && o !== m && o.hitY > m.hitY);
       for (let k = 0; k < sp.split; k++) {
         const tgt = fronts.length > 0 ? fronts[(Math.random() * fronts.length) | 0] : null;
         let dx = 0, dy = 1;   // 前方无人：沿弹道方向继续向前直射（随缘）
         if (tgt) {
           dx = tgt.x - m.x;
-          dy = tgt.y - m.y;
+          dy = tgt.hitY - m.hitY;
           const ft = Math.sqrt(dx * dx + dy * dy) / sp.speed;   // 估算飞行时间
           dy -= tgt.def.speed * ft;                             // 预判：目标继续向防线行进（y 减小）
         }
         const l = Math.sqrt(dx * dx + dy * dy) || 1;
         this.fire({
           ...sp,
-          x: m.x, y: m.y,
+          x: m.x, y: m.hitY,
           dirX: dx / l, dirY: dy / l,
           dmg: sp.dmg * 0.5, crit: false,
           split: 0, small: true, exclude: m, knockback: 0, arcDamage: 0, returnDamage: 0,
@@ -749,14 +755,14 @@ export class ProjectileManager {
     const sp = a.spec;
     let target: Monster | null = null, nearest = 220 * 220;
     for (const m of this.mgr.list) {
-      if (m.dead || m === primary) continue;
-      const d2 = (m.x - primary.x) ** 2 + (m.y - primary.y) ** 2;
+      if (!acceptsTarget(m, sp.targetLayer) || m === primary) continue;
+      const d2 = (m.x - primary.x) ** 2 + (m.hitY - primary.hitY) ** 2;
       if (d2 <= nearest) { target = m; nearest = d2; }
     }
     if (!target) return;
-    this.impacts?.voltChain(primary.x, primary.y, target.x, target.y, 0);
+    this.impacts?.voltChain(primary.x, primary.hitY, target.x, target.hitY, 0);
     target.takeDamage(this.damageFor(sp, target, a.damageScale * sp.arcDamage!), sp.crit, sp.heroId,
-      sp.ignoreRes === true, sp.resCut || 0, Math.atan2(target.y - primary.y, target.x - primary.x));
+      sp.ignoreRes === true, sp.resCut || 0, Math.atan2(target.hitY - primary.hitY, target.x - primary.x));
     this.dmg.add(sp.heroId, target.lastDamageTaken);
     if (!target.dead && sp.shockAmp) target.applyShock(sp.shockAmp, sp.shockDur ?? 3);
   }
@@ -778,15 +784,15 @@ export class ProjectileManager {
     const sp = a.spec, radius = sp.explodeR || 0, r2 = radius * radius;
     let primary: Monster | null = null, nearest = Infinity;
     for (const m of this.mgr.list) {
-      if (m.dead) continue;
-      const d2 = (m.x - sp.x) ** 2 + (m.y - sp.y) ** 2;
+      if (!acceptsTarget(m, sp.targetLayer)) continue;
+      const d2 = (m.x - sp.x) ** 2 + (m.hitY - sp.y) ** 2;
       if (d2 <= r2 && d2 < nearest) { primary = m; nearest = d2; }
     }
     for (const m of this.mgr.list) {
-      if (m.dead || (m.x - sp.x) ** 2 + (m.y - sp.y) ** 2 > r2) continue;
+      if (!acceptsTarget(m, sp.targetLayer) || (m.x - sp.x) ** 2 + (m.hitY - sp.y) ** 2 > r2) continue;
       // Preserve one full-strength central hit and the existing splash multiplier for neighbours.
       const direct = m === primary, amount = direct ? this.damageFor(sp, m) : sp.dmg * (sp.explodeMul || .4);
-      const angle = Math.atan2(m.y - sp.y, m.x - sp.x);
+      const angle = Math.atan2(m.hitY - sp.y, m.x - sp.x);
       m.takeDamage(amount, direct && sp.crit, sp.heroId, direct && sp.ignoreRes === true, direct ? sp.resCut || 0 : 0, angle, direct);
       this.dmg.add(sp.heroId, m.lastDamageTaken);
       if (!m.dead && sp.burnDps && (direct || sp.burnSplash)) m.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0, sp.heroId);
@@ -797,7 +803,7 @@ export class ProjectileManager {
     }
     // Cannon's landing callback owns its layered explosion. Keep normal damage/hit-stop above/below.
     if (sp.heroId !== 'cannon' || !sp.onGroundImpact) {
-      if (this.impacts) this.impacts.blast(sp.x, sp.y, sp.heroId, radius);
+      if (this.impacts) this.impacts.blast(sp.x, sp.y, sp.heroId, radius, sp.groundProjectionY ?? sp.y);
       else this.boomFx(sp.x, sp.y, radius);
       this.parts?.burst(sp.x, sp.y, sp.color, 7, 230, Math.PI / 2);
     }

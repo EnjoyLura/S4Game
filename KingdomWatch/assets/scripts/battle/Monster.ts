@@ -15,6 +15,8 @@ import { getMobAnims, MobClip, usesVideoWalkAnimation } from './MobAnim';
 import { drawFootIce } from './FrostVFX';
 import { clearDepthSorter, DepthSprite, depthSprites, setDepthSorter } from './BattleDepth';
 import { MonsterDeath, warmMonsterDeath } from './MonsterDeath';
+import { acceptsTarget, TargetLayer } from '../config/Targeting';
+import { FLIGHT_SHADOW, flightLiftFor } from './FlightPresentation';
 
 /** 攻击序列帧一次性时长（s）：与 lunge 0.2s 前摇错开，收招略长观感更实 */
 const ATK_ANIM = 0.34;
@@ -34,7 +36,7 @@ export type MonsterHitCtx = {
   floatParent: Node;
   dmgNumber: (x: number, y: number, text: string, color: string, big?: boolean, event?: FloatEvent) => void;
   impact?: (x: number, y: number, hero: string, heavy: boolean, angle?: number) => void;
-  combatFeedback?: (kind: string, x: number, y: number, radius: number, tx?: number, ty?: number) => void;
+  combatFeedback?: (kind: string, x: number, y: number, radius: number, tx?: number, ty?: number, groundY?: number) => void;
   healing?: (source: Monster, target: Monster) => void;
   damage?: (hero: string, amount: number) => void;
 };
@@ -96,6 +98,8 @@ export class Monster {
   private freezeSlowDur = 0;
   private thawT = 0;
   private walkClock = 0;
+  /** Cached visual elevation; node.y and all ground-footprint rules remain unchanged. */
+  private flightLift = 0;
   private walking = true;
   /** 感电（沃尔·雷霆）：受雷系命中后受伤放大，持续 shockT 秒 */
   shockT = 0;
@@ -174,6 +178,7 @@ export class Monster {
     op.opacity = 255;
     this.node.layer = Layers.Enum.UI_2D;
     this.node.setParent(parent);
+    this.syncFlightPresentation();
     this.draw();
     this.buildArt();
     this.bossHpValue = -1;
@@ -246,6 +251,14 @@ export class Monster {
     if (this.flashNode) this.flashNode.active = false;
   }
 
+  private syncFlightPresentation(): void {
+    this.flightLift = flightLiftFor(this.def.airborne, this.def.id, this.def.radius, this.walkClock);
+    if (!this.def.airborne) return;
+    if (this.art) this.art.node.setPosition(0, this.artBaseY, 0);
+    if (this.g) this.g.node.setPosition(0, this.flightLift, 0);
+    if (this.flashNode) this.flashNode.setPosition(0, this.flightLift, 0);
+  }
+
   private syncArtTint(): void {
     const cold = this.freezeT > 0 ? 'frozen' : this.slowT > 0 ? 'slow' : null;
     this.art?.cold(cold);
@@ -261,6 +274,7 @@ export class Monster {
     this.groundOffset = clip.groundOffset;
     const y = this.artBaseY;
     if (this.art && this.art.node.position.y !== y) this.art.node.setPosition(0, y, 0);
+    if (this.def.airborne) { this.footLeftWeight = this.footRightWeight = 0; return; }
     const a = clip.feet[index];
     const b = clip.feet[(index + 1) % clip.feet.length];
     if (!a || !b) { this.footLeftWeight = this.footRightWeight = 0; return; }
@@ -274,9 +288,12 @@ export class Monster {
 
   private draw(): void {
     if (!this.g) {
-      this.g = this.node.addComponent(Graphics);
+      const fallback = new Node('mobFallback');
+      fallback.layer = Layers.Enum.UI_2D; fallback.setParent(this.node);
+      this.g = fallback.addComponent(Graphics);
     }
     const g = this.g;
+    g.node.setPosition(0, this.flightLift, 0);
     g.enabled = true;
     const r = this.def.radius;
     g.clear();
@@ -326,6 +343,7 @@ export class Monster {
     fg.fillColor = fc;
     fg.roundRect(-r, -r * 0.9, r * 2, r * 1.8, r * 0.45);
     fg.fill();
+    this.flashNode.setPosition(0, this.flightLift, 0);
     this.flashNode.active = false;
   }
 
@@ -337,10 +355,12 @@ export class Monster {
 
   get x(): number { return this.node.position.x; }
   get y(): number { return this.node.position.y; }
+  /** Visible hit anchor, without recomputing hover trigonometry in collision queries. */
+  get hitY(): number { return this.y + this.flightLift; }
   get artScale(): number { return MOB_ART_SCALE[this.def.id] || 1; }
   get artHeight(): number { return this.def.radius * MOB_ART_HEIGHT * this.artScale; }
-  /** Enlarge around the fixed ground plane, so feet never jump upward with the canvas. */
-  get artBaseY(): number { return -this.def.radius * .82 - (this.artHeight - this.def.radius * MOB_ART_HEIGHT) * this.groundOffset; }
+  /** Enlarge around the footprint, then raise only the artwork for airborne actors. */
+  get artBaseY(): number { return -this.def.radius * .82 - (this.artHeight - this.def.radius * MOB_ART_HEIGHT) * this.groundOffset + this.flightLift; }
   get groundY(): number { return this.y - this.def.radius * .82 + this.def.radius * MOB_ART_HEIGHT * this.groundOffset; }
   get depthY(): number { return this.y - this.def.radius * 0.82; }
   /** Borrow already prepared actor art for inspection; clicking never starts another download. */
@@ -371,6 +391,7 @@ export class Monster {
   }
 
   drawIceFeet(g: Graphics): void {
+    if (this.def.airborne) return;
     if (this.freezeT <= 0 && this.thawT <= 0) return;
     const r = this.def.radius;
     drawFootIce(g, this.x, this.groundY, r * this.artScale, this.freezeAge, this.freezeT, this.thawT);
@@ -433,9 +454,10 @@ export class Monster {
     const travel = this.state === 'move'
       ? mgr.escortTravel(this, this.def.speed * slow * this.traits.speedMultiplier() * motionDt) : 0;
     this.walking = travel > 0;
-    // Hovering video creatures keep beating their wings while attacking; control still stops motionDt.
-    this.walkClock += this.def.airborne && usesVideoWalkAnimation(this.def.id)
+    // Flyers hover while attacking too; pause and control still stop their presentation clock.
+    this.walkClock += this.def.airborne
       ? slow * motionDt : travel / Math.max(1, this.def.speed);
+    this.syncFlightPresentation();
     this.tickArt(motionDt);
     // 点燃 DoT：每 0.5s 聚合一条（§3.11）
     if (this.burnT > 0) {
@@ -494,16 +516,16 @@ export class Monster {
     line.takeDamage(damage * (poison ? 1 - poison.portion : 1));
     if (poison) mgr.addLinePoison(damage * poison.portion, poison.duration);
     this.lunge();
-    bus.emit(EVT.COMIC_POP, this.x, this.y + this.def.radius, this.def.kind === 'ranged' ? 'stoneHit' : 'meleeHit');
+    bus.emit(EVT.COMIC_POP, this.x, this.hitY + this.def.radius, this.def.kind === 'ranged' ? 'stoneHit' : 'meleeHit');
   }
 
   animateHeal(): void { this.atkAnimT = ATK_ANIM; }
 
   feedback(kind: string): void {
-    this.ctx.combatFeedback?.(kind, this.x, this.y + (kind === 'rush' ? 0 : this.def.radius * 1.2), this.def.radius);
-    if (kind === 'armorBreak') this.ctx.dmgNumber(this.x, this.y + this.def.radius * 3, '破甲', '#D4ECF4', true);
-    else if (kind === 'wardBreak') this.ctx.dmgNumber(this.x, this.y + this.def.radius * 3, '破盾', '#D5B5FF', true);
-    else if (kind === 'interrupt') this.ctx.dmgNumber(this.x, this.y + this.def.radius * 3, '打断', '#FFE29A');
+    this.ctx.combatFeedback?.(kind, this.x, this.hitY + (kind === 'rush' ? 0 : this.def.radius * 1.2), this.def.radius);
+    if (kind === 'armorBreak') this.ctx.dmgNumber(this.x, this.hitY + this.def.radius * 3, '破甲', '#D4ECF4', true);
+    else if (kind === 'wardBreak') this.ctx.dmgNumber(this.x, this.hitY + this.def.radius * 3, '破盾', '#D5B5FF', true);
+    else if (kind === 'interrupt') this.ctx.dmgNumber(this.x, this.hitY + this.def.radius * 3, '打断', '#FFE29A');
   }
 
   private lunge(): void {
@@ -557,7 +579,7 @@ export class Monster {
       this.bossHp = n.addComponent(Graphics);
     }
     this.bossHp.node.active = true;
-    if (this.bossHpValue !== this.hp) {
+    if (this.bossHpValue !== this.hp || this.def.airborne) {
       this.bossHpValue = this.hp;
       drawMobHpBar(this, this.bossHp);
     }
@@ -609,9 +631,9 @@ export class Monster {
     this.hp -= amount;
     const visualSource = killerId === 'pyro_burst' ? 'pyro' : killerId;
     if (amount > 0 && killerId !== 'burn' && killerId !== 'gm') Sfx.impact(visualSource, heavy || crit);
-    this.ctx.dmgNumber(this.x, this.y + this.def.radius * 2.6,
+    this.ctx.dmgNumber(this.x, this.hitY + this.def.radius * 2.6,
       String(Math.round(amount)), crit ? '#FF3030' : '#FFFFFF', crit, { target: this, amount, periodic: killerId === 'burn' });
-    this.ctx.impact?.(this.x, this.y + this.def.radius * 0.4, visualSource, heavy || crit || this.hp <= 0 && !!this.def.elite, impactAngle);
+    this.ctx.impact?.(this.x, this.hitY + this.def.radius * 0.4, visualSource, heavy || crit || this.hp <= 0 && !!this.def.elite, impactAngle);
     if (this.hp > 0) this.traits.recordHit(raw, kind);
     this.flash();
     if (this.hp <= 0) {
@@ -640,7 +662,7 @@ export class Monster {
   private die(killerId: string, angle: number | undefined, heavy: boolean, amount: number): void {
     this.dead = true;
     if (this.burnT > 0 && this.burnBurst > 0 && killerId !== 'pyro_burst' && killerId !== 'gm') {
-      this.mgrRef?.queueBurnBurst(this.x, this.y + this.def.radius * .4, this.burnBurst);
+      this.mgrRef?.queueBurnBurst(this.x, this.hitY + this.def.radius * .4, this.burnBurst, this.y + this.def.radius * .4);
     }
     this.traits.onDie(killerId, this.mgrRef);
     if (this.bossHp) this.bossHp.node.active = false;
@@ -651,7 +673,7 @@ export class Monster {
     this.deathMotion?.begin(this.def.radius, this.groundOffset, {
       killer: killerId === 'pyro_burst' ? 'pyro' : killerId, angle, heavy, force: Math.min(1.5, amount / this.maxHp),
       elite: !!this.def.elite, boss: this.isBoss, frozen: this.freezeT > 0,
-    }, this.artHeight);
+    }, this.artHeight, this.flightLift);
     if (killerId !== 'gm') Sfx.death(killerId === 'pyro_burst' ? 'pyro' : killerId, this.freezeT > 0, !!this.def.elite || this.isBoss);
     this.flashT = this.lungeT = this.atkAnimT = 0;
     this.healingCut = this.healingCutT = 0;
@@ -660,7 +682,7 @@ export class Monster {
     this.footLeftWeight = this.footRightWeight = 0;
     if (this.flashNode) this.flashNode.active = false;
     // Gameplay death and rewards are immediate. The remaining body is cosmetic only.
-    bus.emit(EVT.MOB_KILLED, this.def, killerId, { x: this.x, y: this.y, radius: this.def.radius });
+    bus.emit(EVT.MOB_KILLED, this.def, killerId, { x: this.x, y: this.y, hitY: this.hitY, radius: this.def.radius });
   }
 
   tickDeath(dt: number): boolean { return this.deathMotion?.tick(dt) ?? true; }
@@ -772,17 +794,17 @@ export class MonsterManager {
       g.moveTo(x-3,y+3);g.lineTo(x+2,y+5);g.stroke();
     }
   }
-  private burnBursts: { x: number; y: number; damage: number }[] = [];
-  queueBurnBurst(x: number, y: number, damage: number): void {
-    if (!this.disposed && this.burnBursts.length < 32) this.burnBursts.push({ x, y, damage });
+  private burnBursts: { x: number; y: number; damage: number; groundY: number }[] = [];
+  queueBurnBurst(x: number, y: number, damage: number, groundY = y): void {
+    if (!this.disposed && this.burnBursts.length < 32) this.burnBursts.push({ x, y, damage, groundY });
   }
   private drainBurnBursts(): void {
     // No recursive death explosions; separate deaths from area damage with a bounded queue.
     for (let i = 0; i < 8 && this.burnBursts.length; i++) {
       const burst = this.burnBursts.shift()!;
-      this.ctx.combatFeedback?.('burnBurst', burst.x, burst.y, 100);
+      this.ctx.combatFeedback?.('burnBurst', burst.x, burst.y, 100, undefined, undefined, burst.groundY);
       for (const m of this.mobsInRadius(burst.x, burst.y, 100)) {
-        m.takeDamage(burst.damage, false, 'pyro_burst', false, 0, Math.atan2(m.y - burst.y, m.x - burst.x));
+        m.takeDamage(burst.damage, false, 'pyro_burst', false, 0, Math.atan2(m.hitY - burst.y, m.x - burst.x));
         this.ctx.damage?.('pyro', m.lastDamageTaken);
       }
     }
@@ -835,12 +857,14 @@ export class MonsterManager {
   private deathAir: Graphics;
   private sepN = 0;
   private depthT = 0;
+  private depthActorCount = 0;
   private depthOrder: (Monster | DepthSprite)[] = [];
   private shadows: Graphics;
   private iceFeet: Graphics;
   private hunterMarks: Graphics;
   private disposed = false;
   private groundShadowColor = new Color(30, 24, 16, 38);
+  private flightShadowColor = new Color(30, 24, 16, FLIGHT_SHADOW.alpha);
   private footShadowColor = new Color(26, 20, 13, 100);
 
   constructor(private field: Node, private ctx: MonsterHitCtx) {
@@ -935,35 +959,35 @@ export class MonsterManager {
   }
 
   /** 索敌：范围内最靠下（最接近防线）优先，距离相同取血少（§3.0） */
-  pickTarget(hx: number, hy: number, range: number): Monster | null {
+  pickTarget(hx: number, hy: number, range: number, layer: TargetLayer = 'all'): Monster | null {
     let best: Monster | null = null;
     const r2 = range * range;
     for (const m of this.list) {
-      if (m.dead) continue;
-      const dx = m.x - hx, dy = m.y - hy;
+      if (!acceptsTarget(m, layer)) continue;
+      const dx = m.x - hx, dy = m.hitY - hy;
       if (dx * dx + dy * dy > r2) continue;
       if (!best || m.y < best.y || (m.y === best.y && m.hp < best.hp)) best = m;
     }
     return best;
   }
 
-  anyInRange(hx: number, hy: number, range: number): boolean {
+  anyInRange(hx: number, hy: number, range: number, layer: TargetLayer = 'all'): boolean {
     const r2 = range * range;
     for (const m of this.list) {
-      if (m.dead) continue;
-      const dx = m.x - hx, dy = m.y - hy;
+      if (!acceptsTarget(m, layer)) continue;
+      const dx = m.x - hx, dy = m.hitY - hy;
       if (dx * dx + dy * dy <= r2) return true;
     }
     return false;
   }
 
   /** 全场最近存活怪（追踪弹目标死亡后切换） */
-  nearest(x: number, y: number, maxDist = 900): Monster | null {
+  nearest(x: number, y: number, maxDist = 900, layer: TargetLayer = 'all'): Monster | null {
     let best: Monster | null = null;
     let bd = maxDist * maxDist;
     for (const m of this.list) {
-      if (m.dead) continue;
-      const dx = m.x - x, dy = m.y - y;
+      if (!acceptsTarget(m, layer)) continue;
+      const dx = m.x - x, dy = m.hitY - y;
       const d2 = dx * dx + dy * dy;
       if (d2 < bd) { bd = d2; best = m; }
     }
@@ -971,22 +995,22 @@ export class MonsterManager {
   }
 
   /** 全场血量最高存活怪（狙击大招锁定目标） */
-  highestHp(): Monster | null {
+  highestHp(layer: TargetLayer = 'all'): Monster | null {
     let best: Monster | null = null;
     for (const m of this.list) {
-      if (m.dead) continue;
+      if (!acceptsTarget(m, layer)) continue;
       if (!best || m.hp > best.hp) best = m;
     }
     return best;
   }
 
   /** 范围内血量最高存活怪（狙击技能·穿颅射击锁定目标） */
-  highestHpInRange(hx: number, hy: number, range: number): Monster | null {
+  highestHpInRange(hx: number, hy: number, range: number, layer: TargetLayer = 'all'): Monster | null {
     let best: Monster | null = null;
     const r2 = range * range;
     for (const m of this.list) {
-      if (m.dead) continue;
-      const dx = m.x - hx, dy = m.y - hy;
+      if (!acceptsTarget(m, layer)) continue;
+      const dx = m.x - hx, dy = m.hitY - hy;
       if (dx * dx + dy * dy > r2) continue;
       if (!best || m.hp > best.hp) best = m;
     }
@@ -994,13 +1018,13 @@ export class MonsterManager {
   }
 
   /** 范围内离防线最近的存活怪（狙击技能·穿颅射击索敌——用户调整：不再选血量最高） */
-  nearestToLineInRange(hx: number, hy: number, range: number): Monster | null {
+  nearestToLineInRange(hx: number, hy: number, range: number, layer: TargetLayer = 'all'): Monster | null {
     let best: Monster | null = null;
     let bestD = Infinity;
     const r2 = range * range;
     for (const m of this.list) {
-      if (m.dead) continue;
-      const dx = m.x - hx, dy = m.y - hy;
+      if (!acceptsTarget(m, layer)) continue;
+      const dx = m.x - hx, dy = m.hitY - hy;
       if (dx * dx + dy * dy > r2) continue;
       const dLine = Math.abs(m.y - LINE_Y);
       if (dLine < bestD) { bestD = dLine; best = m; }
@@ -1008,36 +1032,36 @@ export class MonsterManager {
     return best;
   }
 
-  mobsInRadius(x: number, y: number, r: number): Monster[] {
+  mobsInRadius(x: number, y: number, r: number, layer: TargetLayer = 'all', bodySpace = true): Monster[] {
     const out: Monster[] = [];
     const r2 = r * r;
     for (const m of this.list) {
-      if (m.dead) continue;
-      const dx = m.x - x, dy = m.y - y;
+      if (!acceptsTarget(m, layer)) continue;
+      const dx = m.x - x, dy = (bodySpace ? m.hitY : m.y) - y;
       if (dx * dx + dy * dy <= r2) out.push(m);
     }
     return out;
   }
 
   /** Count against the actual effect radius; refine each local cluster with its centroid. */
-  densestArea(hx: number, hy: number, castRange: number, radius: number): { x: number; y: number } | null {
+  densestArea(hx: number, hy: number, castRange: number, radius: number, layer: TargetLayer = 'all'): { x: number; y: number } | null {
     const range2 = castRange * castRange, radius2 = radius * radius;
     let best: { x: number; y: number } | null = null, bestCount = -1, bestDistance = Infinity;
     const consider = (x: number, y: number): void => {
       if ((x - hx) ** 2 + (y - hy) ** 2 > range2) return;
       let count = 0;
-      for (const m of this.list) if (!m.dead && (m.x - x) ** 2 + (m.y - y) ** 2 <= radius2) count++;
+      for (const m of this.list) if (acceptsTarget(m, layer) && (m.x - x) ** 2 + (m.hitY - y) ** 2 <= radius2) count++;
       const distance = (x - hx) ** 2 + (y - hy) ** 2;
       if (count > bestCount || count === bestCount && distance < bestDistance) {
         bestCount = count; bestDistance = distance; best = { x, y };
       }
     };
     for (const m of this.list) {
-      if (m.dead || (m.x - hx) ** 2 + (m.y - hy) ** 2 > range2) continue;
-      consider(m.x, m.y);
+      if (!acceptsTarget(m, layer) || (m.x - hx) ** 2 + (m.hitY - hy) ** 2 > range2) continue;
+      consider(m.x, m.hitY);
       let x = 0, y = 0, n = 0;
       for (const o of this.list) {
-        if (!o.dead && (o.x - m.x) ** 2 + (o.y - m.y) ** 2 <= radius2) { x += o.x; y += o.y; n++; }
+        if (acceptsTarget(o, layer) && (o.x - m.x) ** 2 + (o.hitY - m.hitY) ** 2 <= radius2) { x += o.x; y += o.hitY; n++; }
       }
       if (n > 1) consider(x / n, y / n);
     }
@@ -1058,7 +1082,7 @@ export class MonsterManager {
   }
 
   healAround(src: Monster, spec: Readonly<EnemyHealing>): number {
-    const wounded = this.mobsInRadius(src.x, src.y, spec.radius)
+    const wounded = this.mobsInRadius(src.x, src.y, spec.radius, 'all', false)
       .filter(m => m !== src && m.def.kind !== 'heal' && m.hp < m.maxHp && m.supportHealT <= 0);
     const front = src.formation?.id ? this.list.find(m => !m.dead && m.formation?.id === src.formation!.id && m.formation.role === 'front') : undefined;
     wounded.sort((a, b) => a === front ? -1 : b === front ? 1 : a.hp / a.maxHp - b.hp / b.maxHp);
@@ -1149,12 +1173,24 @@ export class MonsterManager {
     // 在移动与分离后同步绘制，避免 20Hz 阴影落后于角色而阶梯跳动。
     this.shadows.clear();
     this.shadows.fillColor = this.groundShadowColor;
+    let hasFlyers = false;
     for (const m of this.list) {
+      if (m.def.airborne) { hasFlyers = true; continue; }
       const r = m.def.radius;
       this.shadows.ellipse(m.x, m.groundY, r * m.artScale * 1.02, r * m.artScale * 0.20);
     }
     if (this.list.length) this.shadows.fill();
+    if (hasFlyers) {
+      this.shadows.fillColor = this.flightShadowColor;
+      for (const m of this.list) {
+        if (!m.def.airborne) continue;
+        const r = m.def.radius * m.artScale;
+        this.shadows.ellipse(m.x, m.groundY, r * FLIGHT_SHADOW.width, r * FLIGHT_SHADOW.height);
+      }
+      this.shadows.fill();
+    }
     for (const m of this.list) {
+      if (m.def.airborne) continue;
       const r = m.def.radius * m.artScale, h = m.artHeight;
       const footY = m.groundY;
       if (m.footLeftWeight > 0.02) {
@@ -1174,7 +1210,7 @@ export class MonsterManager {
     this.deathAir.clear();
     for (const m of this.dying) m.drawDeathAir(this.deathAir);
     this.depthT -= dt;
-    if (this.depthT <= 0) {
+    if (this.depthT <= 0 || this.depthActorCount !== this.list.length + this.dying.length) {
       this.depthT = 0.12;
       this.sortDepth();
     }
@@ -1185,8 +1221,8 @@ export class MonsterManager {
     this.deathAir.node.setSiblingIndex(this.field.children.length - 2);
   }
 
-  /** Falling ice is ordered by its fixed ground footprint, not its airborne
-   * screen position. Nearby bodies can naturally occlude a farther needle. */
+  /** Ground actors and falling ice retain footprint depth; flyers occupy a higher
+   * layer with the same ground-depth order and a stable spawn-order tie break. */
   private sortDepth(): void {
     if (this.disposed) return;
     if (!this.field.isValid) return;
@@ -1194,7 +1230,13 @@ export class MonsterManager {
     for (const m of this.list) this.depthOrder.push(m);
     for (const m of this.dying) this.depthOrder.push(m);
     for (const d of depthSprites(this.field)) if (d.node.isValid && d.node.active) this.depthOrder.push(d);
-    this.depthOrder.sort((a, b) => b.depthY - a.depthY);
+    this.depthActorCount = this.list.length + this.dying.length;
+    this.depthOrder.sort((a, b) => {
+      const airA = a instanceof Monster && !!a.def.airborne;
+      const airB = b instanceof Monster && !!b.def.airborne;
+      return Number(airA) - Number(airB) || b.depthY - a.depthY
+        || (airA && airB ? (a as Monster).lifeId - (b as Monster).lifeId : 0);
+    });
     this.shadows.node.setSiblingIndex(0);
     this.depthOrder.forEach((item, i) => item.node.setSiblingIndex(i + 1));
     this.iceFeet.node.setSiblingIndex(this.field.children.length - 1);

@@ -485,8 +485,8 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "exp": 14,
     "charge": 1,
     "gold": 2,
-    "description": "深林的飞行近战单位。振翅逼近防线，可被全部英雄攻击。",
-    "traits": ["飞行单位，可被全部英雄攻击", "成群出现，单体生命较低"],
+    "description": "深林的飞行近战单位。振翅逼近防线，不受地面攻击影响。",
+    "traits": ["飞行单位，不受地面攻击影响", "成群出现，单体生命较低"],
     "weak": "范围攻击覆盖敌群"
   },
   "forest_bat": {
@@ -505,8 +505,8 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "exp": 14,
     "charge": 1,
     "gold": 2,
-    "description": "深林的飞行近战单位。拍翼成群靠近防线，可被全部英雄攻击。",
-    "traits": ["飞行单位，可被全部英雄攻击", "成群出现，单体生命较低"],
+    "description": "深林的飞行近战单位。拍翼成群靠近防线，不受地面攻击影响。",
+    "traits": ["飞行单位，不受地面攻击影响", "成群出现，单体生命较低"],
     "weak": "范围攻击覆盖敌群"
   },
   "forest_wolf": {
@@ -570,9 +570,9 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "exp": 14,
     "charge": 2,
     "gold": 2,
-    "description": "深林的远程攻击单位。飞行单位，可被全部英雄攻击。",
+    "description": "深林的远程攻击单位。飞行单位，不受地面攻击影响。",
     "traits": [
-      "飞行单位，可被全部英雄攻击",
+      "飞行单位，不受地面攻击影响",
       "攻击附带3秒毒伤"
     ],
     "weak": "减速与眩晕，及时清理快攻单位"
@@ -1279,7 +1279,7 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "gold": 4,
     "description": "有35%法抗符盾。生命较高的支援单位，读条后治疗附近伤员；冰封、眩晕可打断。",
     "traits": [
-      "飞行单位，可被全部英雄攻击",
+      "飞行单位，不受地面攻击影响",
       "每4秒治疗，施法准备1.2秒",
       "回复4%生命，最多治疗3名伤员",
       "冰封、眩晕可打断，治疗者不互疗",
@@ -1402,9 +1402,9 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "charge": 2,
     "exp": 20,
     "gold": 4,
-    "description": "赤岩峡谷的快速突击单位。飞行单位，可被全部英雄攻击。",
+    "description": "赤岩峡谷的快速突击单位。飞行单位，不受地面攻击影响。",
     "traits": [
-      "飞行单位，可被全部英雄攻击",
+      "飞行单位，不受地面攻击影响",
       "每7秒短暂加速推进"
     ],
     "weak": "减速与眩晕，及时清理快攻单位"
@@ -1503,9 +1503,9 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "exp": 21,
     "charge": 2,
     "gold": 5,
-    "description": "锈铁矿区的快速突击单位。飞行单位，可被全部英雄攻击。",
+    "description": "锈铁矿区的快速突击单位。飞行单位，不受地面攻击影响。",
     "traits": [
-      "飞行单位，可被全部英雄攻击"
+      "飞行单位，不受地面攻击影响"
     ],
     "weak": "减速与眩晕，及时清理快攻单位"
   },
@@ -1775,9 +1775,9 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "charge": 2,
     "exp": 23,
     "gold": 5,
-    "description": "雷鸣高地的快速突击单位。飞行单位，可被全部英雄攻击。",
+    "description": "雷鸣高地的快速突击单位。飞行单位，不受地面攻击影响。",
     "traits": [
-      "飞行单位，可被全部英雄攻击",
+      "飞行单位，不受地面攻击影响",
       "每6秒短暂加速推进"
     ],
     "weak": "减速与眩晕，及时清理快攻单位"
@@ -1800,9 +1800,9 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "exp": 23,
     "charge": 2,
     "gold": 5,
-    "description": "有35%法抗符盾。雷鸣高地的远程攻击单位。飞行单位，可被全部英雄攻击。",
+    "description": "有35%法抗符盾。雷鸣高地的远程攻击单位。飞行单位，不受地面攻击影响。",
     "traits": [
-      "飞行单位，可被全部英雄攻击",
+      "飞行单位，不受地面攻击影响",
       "攻击前蓄力1.2秒，可用眩晕或冰封打断",
       "法抗35%，持续法术命中可破盾"
     ],
@@ -1888,9 +1888,9 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "exp": 140,
     "charge": 20,
     "gold": 104,
-    "description": "雷鸣高地的首领单位。飞行单位，可被全部英雄攻击。",
+    "description": "雷鸣高地的首领单位。飞行单位，不受地面攻击影响。",
     "traits": [
-      "飞行单位，可被全部英雄攻击",
+      "飞行单位，不受地面攻击影响",
       "攻击前蓄力2秒，可用眩晕打断",
       "生命低于45%进入强化阶段"
     ],
@@ -2070,9 +2070,9 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "exp": 24,
     "charge": 2,
     "gold": 6,
-    "description": "有35%法抗符盾。幽影墓园的远程攻击单位。飞行单位，可被全部英雄攻击。",
+    "description": "有35%法抗符盾。幽影墓园的远程攻击单位。飞行单位，不受地面攻击影响。",
     "traits": [
-      "飞行单位，可被全部英雄攻击",
+      "飞行单位，不受地面攻击影响",
       "法抗35%，持续法术命中可破盾"
     ],
     "weak": "物理输出，或法术集火破盾；冰封、眩晕仍有效",
@@ -2338,9 +2338,9 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "exp": 24,
     "charge": 2,
     "gold": 7,
-    "description": "有35%法抗符盾。熔火裂谷的远程攻击单位。飞行单位，可被全部英雄攻击。",
+    "description": "有35%法抗符盾。熔火裂谷的远程攻击单位。飞行单位，不受地面攻击影响。",
     "traits": [
-      "飞行单位，可被全部英雄攻击",
+      "飞行单位，不受地面攻击影响",
       "法抗35%，持续法术命中可破盾"
     ],
     "weak": "物理输出，或法术集火破盾；冰封、眩晕仍有效",
@@ -2485,9 +2485,9 @@ export const EXPANSION_MOBS: Readonly<Record<string, ExpandedMobDef>> = {
     "exp": 24,
     "charge": 2,
     "gold": 7,
-    "description": "有35%法抗符盾。裂隙王座的远程攻击单位。飞行单位，可被全部英雄攻击。",
+    "description": "有35%法抗符盾。裂隙王座的远程攻击单位。飞行单位，不受地面攻击影响。",
     "traits": [
-      "飞行单位，可被全部英雄攻击",
+      "飞行单位，不受地面攻击影响",
       "第一次倒下后恢复部分生命，仅复生一次",
       "法抗35%，持续法术命中可破盾"
     ],

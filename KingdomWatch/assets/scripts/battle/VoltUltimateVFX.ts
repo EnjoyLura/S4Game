@@ -4,7 +4,7 @@ import { Color, EffectAsset, gfx, Graphics, Layers, Material, Node, Rect, resour
 interface Quad { node: Node; sprite: Sprite; ui: UITransform; material: Material | null; state: Vec4; shape: Vec4; }
 interface Crack { points: Float32Array; count: number; delay: number; }
 interface Strike {
-  x: number; y: number; top: number; radius: number; age: number; seed: number; shader: boolean; power: number;
+  x: number; y: number; hitY: number; top: number; radius: number; age: number; seed: number; shader: boolean; power: number;
   sky: Quad; floor: Quad; cracks: Crack[]; spine: Float32Array; spineCount: number;
 }
 const CAP = 12, LIFE = .60, TAU = Math.PI * 2;
@@ -50,7 +50,7 @@ export class VoltUltimateVFX {
       sky.ui.setAnchorPoint(.5, 0);
       const cracks: Crack[] = [];
       for (let k = 0; k < 24; k++) cracks.push({ points: new Float32Array(16), count: 0, delay: 0 });
-      const strike: Strike = { x: 0, y: 0, top: 0, radius: 90, age: 0, seed: 0, shader: false, power: 1,
+      const strike: Strike = { x: 0, y: 0, hitY: 0, top: 0, radius: 90, age: 0, seed: 0, shader: false, power: 1,
         sky, floor, cracks, spine: new Float32Array(130), spineCount: 0 };
       this.all.push(strike); this.free.push(strike);
     }
@@ -86,12 +86,13 @@ export class VoltUltimateVFX {
     return { node, sprite, ui, material: null, state: new Vec4(), shape: new Vec4() };
   }
 
-  strike(x: number, _hitY: number, top: number, footY: number, radius: number, power = 1): void {
+  strike(x: number, hitY: number, top: number, footY: number, radius: number, power = 1): void {
     if (this.destroyed || !Number.isFinite(x + top + footY + radius)) return;
     // Under extreme repeated GM casts, recycle the oldest cosmetic event only.
     const s = this.free.pop() || this.active.shift();
     if (!s) return;
     s.x = x; s.y = footY; s.top = Math.max(top, footY + 180);
+    s.hitY = Number.isFinite(hitY) ? hitY : footY;
     s.power = Math.max(.6, Math.min(1.2, power));
     s.radius = Math.max(60, Math.min(145, radius)); s.age = 0; s.seed = ++this.serial;
     // Keep a whole event in one rendering mode, avoiding a loading-time visual pop.
@@ -182,6 +183,7 @@ export class VoltUltimateVFX {
       this.shade(s, s.floor, 1, floorStrength);
       this.drawCracks(s, Math.sqrt(floorStrength)); this.drawSparks(s);
       if (!s.shader && s.age < .31) this.fallback(s);
+      if (s.hitY > s.y) this.drawBodyContact(s);
     }
   }
   private shade(s: Strike, q: Quad, mode: number, strength: number): void {
@@ -229,6 +231,20 @@ export class VoltUltimateVFX {
       g.lineTo(x - dx * .8, y - dy * .8); g.close(); g.fill();
       this.color(g, 255, 234, 255, 245 * fade); g.lineWidth = .8;
       g.moveTo(x, y); g.lineTo(x + dx, y + dy); g.stroke();
+    }
+  }
+  private drawBodyContact(s: Strike): void {
+    if (s.age >= .18) return;
+    const g = this.sparks, t = s.age / .18, fade = Math.pow(1 - t, 2);
+    this.color(g, 255, 234, 255, 230 * fade);
+    g.circle(s.x, s.hitY, 3 * fade); g.fill();
+    this.color(g, 194, 132, 255, 220 * fade); g.lineWidth = 1.3;
+    for (let k = 0; k < 6; k++) {
+      const a = k * TAU / 6 + s.seed * 1.7, dx = Math.cos(a), dy = Math.sin(a);
+      const inner = 3 + 12 * t, outer = inner + 5 * fade;
+      g.moveTo(s.x + dx * inner, s.hitY + dy * inner);
+      g.lineTo(s.x + dx * (inner + outer) * .5 - dy * 2, s.hitY + dy * (inner + outer) * .5 + dx * 2);
+      g.lineTo(s.x + dx * outer, s.hitY + dy * outer); g.stroke();
     }
   }
   private fallback(s: Strike): void {
