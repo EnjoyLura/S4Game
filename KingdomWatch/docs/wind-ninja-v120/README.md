@@ -25,10 +25,12 @@
 不启动游戏、浏览器、真实战斗、音频或WASM。验证采用静态源码／类型检查、纯配置与几何算式检查、隔离绘图、Creator离线构建，以及发布包文件、路径和SHA检查。动效、操作手感及最终数值仍需手机试玩。
 
 - `verify.cjs`／`verification.json`：22组新英雄几何、拦截预判、数量上限、标记／回收、音效接入与线性扫描约束及隔离绘图检查。
-- `check_volt_field.cjs`／`volt-field-check.json`：13组雷电领域时序、重叠、共享时钟与销毁清理检查。
+- `check_volt_field.cjs`／`volt-field-check.json`：24组雷电领域时序、重叠、共享时钟、伤害路径与销毁清理检查。
 - `check_registration.cjs`／`registration-check.json`：9组英雄注册、存档不赠送／保留、养成、工厂、实际美术别名与强化卡限制检查。
 - `audit_types.cjs`／`typecheck-comparison.json`：与e35c10ef编译基线比较，区分既有UI诊断与新增问题。
 - `preview.png`：六种新英雄效果的隔离绘图预览，不代表已运行游戏。
 - `font-extension.json`：字体覆盖与原字形保留记录。
 
-最终构建、包体验证及部署回执在交付时补充于本目录。每次改动只在源码仓库本地提交；运行包发布独立GitHub Pages仓库，不推送源码、不部署Cloudflare。
+实现已本地提交38b8bf57。Creator3.8.8离线构建20752ms、正常退出36；15份JS和5段内联脚本语法检查、全部SHA／资源路径／WASM头／图片透明通道检查通过，类型基线9项旧诊断、无新增。507份原有native逐字节不变，两份中文字体更新版本路径，新增3张图集共698750字节；最终1587文件、200013162字节（200.01MB），比v119增加753410字节。版本a2fef3edab10f472。
+
+完整结果见 `build-record.json`、`export-report.json`、`package-static-verification.json`。GitHub Pages部署回执在交付时补充于本目录；这次采用默认保留上一版必要文件，便于已打开页面继续读取上一版资源。每次改动只在源码仓库本地提交；运行包发布独立GitHub Pages仓库，不推送源码、不部署Cloudflare。

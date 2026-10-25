@@ -13,9 +13,12 @@ current=json.loads((package/checks['release']['inventory']).read_text('utf-8'))[
 old_native=[p for p in old if '/native/' in p]
 unchanged=[p for p in old_native if current.get(p)==old[p]]
 modified=[p for p in old_native if p not in unchanged]
-new_native=[p for p in current if '/native/' in p and p not in old]
+new_native_all=[p for p in current if '/native/' in p and p not in old]
+new_fonts=[p for p in new_native_all if p.endswith(('/UIBody.ttf','/UIHeading.ttf'))]
+new_native=[p for p in new_native_all if p not in new_fonts]
 assert len(old_native)==509 and len(unchanged)==507
 assert len(modified)==2 and all(p.endswith(('/UIBody.ttf','/UIHeading.ttf')) for p in modified),modified
+assert len(new_fonts)==2 and len(new_native_all)==5
 assert len(new_native)==3 and all(p.endswith('.webp') for p in new_native),new_native
 art=json.loads((OUT/'art-manifest.json').read_text('utf-8'))
 for item in art['assets']:
@@ -40,7 +43,7 @@ script=next(package.glob('assets/main/index.*.js')).read_text('utf-8')
 assert all(s in script for s in ['赛兰·逐风','胧·影刃','volt_field','new_heroes_v120/'])
 assert checks['budget_bytes']==950*1048576
 report={'checks':checks,'baselineCommit':'e35c10ef','baselineRelease':prior['id'],
- 'existingNativeByteIdentical':len(unchanged),'modifiedFontNatives':modified,'newAtlasNatives':new_native,
+ 'existingNativeByteIdentical':len(unchanged),'modifiedFontNatives':{'old':modified,'new':new_fonts},'newAtlasNatives':new_native,
  'newAtlasBytes':sum(current[p]['bytes'] for p in new_native),
  'jsSyntaxOnly':syntax,'inlineScriptsSyntaxOnly':inline,'heroCheckGroups':heroes['checks'],
  'typeDiagnosticsBefore':types['beforeDiagnostics'],'typeDiagnosticsCurrent':types['currentDiagnostics'],
