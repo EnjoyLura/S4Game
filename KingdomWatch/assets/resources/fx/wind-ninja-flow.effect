@@ -47,7 +47,7 @@ CCProgram wind-ninja-fs %{
   in vec2 uv0;
   in vec4 color;
   // x: effect age in battle seconds, y: stable seed, z: parent opacity,
-  // w: 0 eye / 1 tornado / 2 energy shuriken / 3 local +X crescent.
+  // w: 0 eye / 1 tornado / 2 arrival field / 3 local +X crescent / 4 +Y flight.
   uniform HeroFlow {
     vec4 fxState;
     vec4 fxShape;
@@ -85,186 +85,197 @@ CCProgram wind-ninja-fs %{
     return dot(p, p) > 0.00000001 ? atan(p.y, p.x) : 0.0;
   }
 
+  // v123: analytic wind surfaces. Only one two-octave advected field per
+  // mode, outside every fixed loop. No texture, raymarch, or wall clock.
   vec4 windEye(vec2 p, float age, float seed, float aa) {
-    vec2 q = p / vec2(1.0, 0.88);
-    // Three two-octave fields: large advected billows, their warped detail,
-    // and a separately rotating back layer. No noise is sampled in raw angle.
-    vec2 advect = turn(q, -age * 0.73) * 2.7 + vec2(seed, -age * 0.36);
-    float n = mist(advect);
-    float fine = mist(advect * 1.85 + vec2(n * 1.25, 11.3 - age * 0.28));
-    float back = mist(turn(q, -age * 0.43) * 3.8 + vec2(17.2, seed - age * 0.31));
-    vec2 curl = q + vec2(n - 0.5, back - 0.5) * 0.11;
-    float r = length(curl), a = angleOf(curl);
-    float boundary = 1.0 - smoothstep(0.73, 1.09, r + (fine - 0.5) * 0.075);
-    float dome = sqrt(max(0.0, 1.0 - min(r * r, 1.0)));
-    float angularFade = smoothstep(0.045, 0.23, r);
-    float swirl = 0.5 + 0.5 * sin(a * 2.0 + r * 6.4 - age * 2.35 + seed
-      + (n - 0.5) * 2.9);
-    float counterflow = 0.5 + 0.5 * sin(a * 3.0 - r * 4.6 - age * 1.65
-      + seed + (back - 0.5) * 2.6);
-    swirl = mix(0.5, swirl, angularFade);
-    counterflow = mix(0.5, counterflow, angularFade);
-    // Broad spiral folds carry the volume; narrow highlights are secondary.
-    float folds = swirl * swirl * (0.45 + fine * 0.55);
-    float backFolds = counterflow * counterflow * (0.35 + back * 0.65);
-    float nearFace = 0.5 + 0.5 * sin(a + 0.7) * angularFade;
-    float density = boundary * (0.055 + n * 0.075 + folds * 0.12
-      + backFolds * 0.07) * (0.77 + dome * 0.23);
-    float broadBands = 0.0;
-    vec3 emission = vec3(0.005, 0.29, 0.43) * folds * boundary * (0.36 + dome * 0.34);
-    emission += vec3(0.008, 0.17, 0.32) * backFolds * boundary * 0.46;
-    // A continuous inward spiral with grouped fine fibers, rather than separated wire rings.
-    float flowPhase = a * 3.0 + log(0.18 + r) * 10.5 - age * 4.5 + seed + (n - 0.5) * 1.3;
-    float flow = 0.5 + 0.5 * cos(flowPhase);
-    float streams = flow * flow * flow * angularFade;
-    float fibers = bell(1.0 - cos(flowPhase * 4.0 + fine * 1.8), 0.16 + aa) * angularFade;
-    emission += vec3(0.008, 0.54, 0.66) * streams * (0.42 + fine * 0.44);
-    emission += vec3(0.26, 0.80, 0.90) * fibers * streams * (0.38 + nearFace * 0.22);
-    for (int i = 0; i < 4; i++) {
-      float k = float(i), head = age * (1.12 + k * 0.17) + seed + k * 2.17;
-      float ca = cos(a - head), sa = sin(a - head);
-      float arc = smoothstep(-0.52, 0.85, ca)
-        * (0.3 + 0.7 * smoothstep(-0.8, 0.65, sa)) * angularFade;
-      float track = 0.22 + k * 0.19 + sa * (0.14 + k * 0.017)
-        + sin(a * 2.0 + head * 0.6) * 0.065 + (n - 0.5) * 0.11;
-      float width = 0.11 + k * 0.018 + fine * 0.045;
-      float d = r - track;
-      float ribbon = bell(d, width) * arc;
-      float crest = bell(d + width * 0.28, width * 0.25 + aa) * arc;
-      float broken = smoothstep(0.26, 0.77, fine * 0.65 + back * 0.35);
-      broadBands += ribbon;
-      emission += vec3(0.015, 0.40, 0.59) * ribbon * (0.30 + nearFace * 0.28);
-      emission += vec3(0.38, 0.88, 1.0) * crest * broken * 0.62;
+    vec2 q = turn(p, -0.14) / vec2(1.04, 0.64);
+    float r = length(q), a = angleOf(q);
+    float n = mist(turn(q, -age * 0.85) * 3.6 + vec2(seed, -age * 0.65));
+    float coverage = 0.0;
+    vec3 light = vec3(0.0);
+    // Six finite brush sheets: unequal sweep, radius, thickness and speed.
+    // A filled, lit shoulder carries each wisp; its cut edge is secondary.
+    for (int i = 0; i < 6; i++) {
+      float k = float(i), s = hash21(vec2(k + 31.0, seed));
+      float heading = k * 1.04719755 + s * 0.46 + age * (1.1 + s * 0.25) + seed;
+      float delta = a - heading;
+      float arc = atan(sin(delta), cos(delta));
+      float u = arc / (0.90 + s * 0.35);
+      float end = smoothstep(-1.0, -0.52, u) * (1.0 - smoothstep(0.55, 1.0, u));
+      float sweep = 0.58 + s * 0.21 + u * (0.16 + s * 0.07)
+        + sin(u * 3.5 + k) * 0.055;
+      float width = (0.12 + s * 0.075) * (0.65 + 0.35 * sat(u + 0.5));
+      float d = r - sweep + (n - 0.5) * 0.11;
+      float sheet = bell(d, width + aa) * end;
+      float shoulder = bell(d + width * 0.18, width * 0.63 + aa) * end;
+      float brush = 0.65 + 0.35 * sin(r * 42.0 + u * 7.0 - age * 4.0 + n * 4.0);
+      float rim = bell(d - width * 0.53, width * 0.22 + aa) * end
+        * smoothstep(0.23, 0.68, n + 0.17 * sin(u * 14.0 + k));
+      float nearFace = 0.48 + 0.52 * sat(0.5 - q.y * 0.6);
+      float alpha = sheet * (0.14 + n * 0.08);
+      coverage += alpha * (1.0 - coverage);
+      light += vec3(0.005, 0.27, 0.38) * alpha;
+      light += vec3(0.012, 0.57, 0.69) * sheet * nearFace * (0.42 + n * 0.38);
+      light += vec3(0.10, 0.77, 0.85) * shoulder * brush * nearFace * 0.38;
+      light += vec3(0.57, 0.98, 1.0) * rim * nearFace * 0.48;
     }
-    float alpha = min(0.35, density + broadBands * boundary * 0.045);
-    vec3 pigment = mix(vec3(0.008, 0.25, 0.34), vec3(0.022, 0.47, 0.59),
-      sat(fine * 0.55 + dome * 0.25 + nearFace * 0.2));
-    emission += vec3(0.015, 0.39, 0.56) * bell(r, 0.29) * (0.08 + n * 0.12);
-    // True premultiplied colored volume + coverage-weighted emitted light.
-    return vec4(pigment * alpha + emission * boundary, alpha);
+    // A small round white-cyan orb sits inside the oblique hollow wind eye.
+    float coreR = length(p);
+    light += vec3(0.02, 0.40, 0.55) * bell(coreR, 0.27) * 0.43;
+    light += vec3(0.19, 0.88, 1.0) * bell(coreR, 0.12) * 0.92;
+    light += vec3(0.84, 1.0, 1.0) * bell(coreR, 0.058) * 1.15;
+    float bound = 1.0 - smoothstep(1.04, 1.18, r);
+    return vec4(light * bound, min(0.55, coverage) * bound);
   }
 
   vec4 tornado(vec2 q, float age, float seed, float aa) {
-    // Keep the original LOCAL base/crown and host .35r offset. This revision
-    // changes only appearance, not standalone timing, motion, or physics.
-    float height = (q.y + 1.10) / 2.48, h = sat(height);
-    vec2 advect = vec2(q.x * (3.6 - h * 1.1) + seed
-      + sin(h * 5.0 - age * 0.9) * 0.32, height * 5.4 - age * 1.04);
-    float n = mist(advect);
-    float fine = mist(advect * 1.75 + vec2(n * 1.2, 9.1 - age * 0.22));
-    float back = mist(vec2(q.x * 3.2 + 13.1, height * 4.6 - age * 0.77 + seed));
-    float vertical = smoothstep(0.0, 0.065, height)
-      * (1.0 - smoothstep(0.88, 1.0, height + (fine - 0.5) * 0.04));
-    float center = sin(h * 4.2 - age * 0.85 + seed) * (0.025 + h * 0.055)
-      + sin(h * 8.0 - age * 1.25 + seed) * h * 0.022;
-    float width = (0.105 + 0.82 * (0.72 * h + 0.28 * h * h)) * (0.94 + n * 0.12);
-    float x = (q.x - center) / width;
-    float inside = 1.0 - smoothstep(0.72, 1.16, abs(x) + (fine - 0.5) * 0.14);
-    float depth = sqrt(max(0.0, 1.0 - min(x * x, 1.0)));
-    float frontAngle = atan(clamp(x, -1.0, 1.0), max(depth, 0.0001));
-    float backAngle = atan(clamp(x, -1.0, 1.0), -max(depth, 0.0001));
-    // Wide helicoidal sheets across a full translucent chord. Two unequal
-    // pitches and advected domain warp interrupt the regular coil structure.
-    // Integer angular harmonics remain continuous at the back-surface seam.
-    float frontPhase = frontAngle * 2.0 - h * 32.3 + age * 6.3 + seed
-      + (n - 0.5) * 3.2 + sin(h * 5.0 - age * 1.15) * 0.85;
-    float backPhase = backAngle * 3.0 - h * 26.4 + age * 5.15 + seed
-      + (back - 0.5) * 2.8;
-    float frontRoll = 0.5 + 0.5 * cos(frontPhase);
-    float backRoll = 0.5 + 0.5 * cos(backPhase);
-    frontRoll = frontRoll * frontRoll * (0.42 + fine * 0.58);
-    backRoll = backRoll * backRoll * (0.35 + back * 0.65);
-    float mask = inside * vertical;
-    float bodyAlpha = min(0.33, mask * (0.07 + depth * 0.075 + n * 0.065
-      + frontRoll * 0.10 + backRoll * 0.055));
-    vec3 emission = vec3(0.015, 0.62, 0.76) * frontRoll * (0.60 + depth * 0.70);
-    emission += vec3(0.008, 0.34, 0.49) * backRoll * 0.62;
-    float filaments = bell(1.0 - cos(frontPhase * 2.0 + fine * 1.2), 0.17 + aa);
-    float breaks = smoothstep(0.3, 0.8, fine * 0.7 + n * 0.3);
-    emission += vec3(0.38, 0.91, 1.0) * filaments * (0.45 + breaks * 0.55) * (0.18 + depth * 0.52);
-    emission *= mask;
-    // The top rolls over into a broad, turbulent elliptical crown. Its interior
-    // is mist-filled, and its two broken curls never form a closed rim line.
-    vec2 crown = vec2((q.x - center * 0.5) / 0.94, (q.y - 1.035) / 0.27);
-    float crownR = length(crown), crownA = angleOf(crown);
-    float crownMask = 1.0 - smoothstep(0.57, 1.12, crownR + (fine - 0.5) * 0.12);
-    float crownAngular = smoothstep(0.04, 0.25, crownR);
-    float crownFlow = 0.5 + 0.5 * sin(crownA * 2.0 + crownR * 3.8
-      - age * 2.9 + seed + (n - 0.5) * 2.0);
-    crownFlow = mix(0.5, crownFlow, crownAngular);
-    float crownAlpha = crownMask * (0.065 + crownFlow * 0.095 + fine * 0.055);
-    float crownArc = bell(crownR - 0.58 - sin(crownA * 2.0 - age * 1.1) * 0.12, 0.24)
-      * smoothstep(-0.3, 0.85, cos(crownA - age * 1.55 - seed)) * crownAngular;
-    emission += vec3(0.012, 0.34, 0.51) * crownMask * crownFlow * (0.22 + fine * 0.22);
-    emission += vec3(0.27, 0.83, 0.96) * crownArc * crownMask * (0.32 + breaks * 0.35);
-    vec2 baseCurl = vec2(q.x / 0.43, (q.y + 1.005) / 0.12);
-    float baseR = length(baseCurl), baseA = angleOf(baseCurl);
-    float baseFlow = bell(baseR - 0.7, 0.3) * (0.4 + 0.6 * sin(baseA * 2.0 - age * 4.0) * sin(baseA * 2.0 - age * 4.0));
-    emission += vec3(0.015, 0.40, 0.52) * baseFlow * 0.65;
-    float alpha = min(0.35, bodyAlpha + crownAlpha * (1.0 - bodyAlpha));
-    vec3 pigment = mix(vec3(0.008, 0.25, 0.36), vec3(0.025, 0.46, 0.59),
-      sat(n * 0.4 + depth * 0.35 + frontRoll * 0.25));
-    vec3 light = pigment * alpha + emission;
-    // Four individually staggered rising fragments, still zero at birth/wrap.
-    for (int i = 0; i < 4; i++) {
-      float k = float(i), s = hash21(vec2(k + 2.0, seed));
-      float u = fract(age * (0.32 + s * 0.07) + s);
-      float phase = seed + k * 2.4 + age * 2.1;
-      float spread = 0.16 + 0.88 * u * u;
-      vec2 pos = vec2(sin(phase) * spread, -1.12 + u * 2.58);
-      vec2 direction = normalize(vec2(cos(phase) * spread * 1.4, 1.0));
-      vec2 d = q - pos;
-      float life = smoothstep(0.0, 0.16, u) * (1.0 - smoothstep(0.72, 1.0, u));
-      float fragment = bell(dot(d, vec2(-direction.y, direction.x)), 0.013 + aa)
-        * bell(dot(d, direction), 0.065 + u * 0.055) * life;
-      light += vec3(0.16, 0.78, 1.0) * fragment * (0.25 + s * 0.25);
+    float h = sat((q.y + 1.10) / 2.48);
+    float lean = 0.045 * sin(h * 4.7 - age * 0.9 + seed) * h;
+    float x = q.x - lean;
+    float n = mist(vec2(x * 3.4 + seed + sin(h * 4.0 - age) * 0.3,
+      h * 5.0 - age * 1.4));
+    // Analytic orthographic ray / tilted cone intersections. Depth projects
+    // into Y, so the front of a ribbon dips and its back climbs into space.
+    const float slope = 0.355;
+    const float tilt = 0.25;
+    float rayRadius = 0.115 + slope * (q.y + 1.10);
+    float coneA = 1.0 - slope * slope * tilt * tilt;
+    float discriminant = rayRadius * rayRadius - coneA * x * x;
+    float root = sqrt(max(0.0, discriminant));
+    float coneEdge = abs(x) - abs(rayRadius) / sqrt(coneA) + (n - 0.5) * 0.025;
+    float silhouette = 1.0 - smoothstep(-0.022, 0.038, coneEdge);
+    float coverage = 0.0;
+    vec3 light = vec3(0.0);
+    for (int i = 0; i < 2; i++) {
+      float front = float(i);
+      float z = (-rayRadius * slope * tilt + mix(-root, root, front)) / coneA;
+      float height = (q.y + 1.10 - tilt * z) / 2.48;
+      float v = sat(height);
+      float radius = 0.115 + 0.88 * v;
+      float theta = atan(x, mix(-1.0, 1.0, front) * max(abs(z), 0.0001));
+      float phase = theta - TAU * (2.12 * v + 0.16 * v * v)
+        + age * 5.1 + seed + sin(v * 6.0 - age * 1.3) * 0.36 + (n - 0.5) * 0.7;
+      // 42% of the cone is a finite-width winding sheet, not a thin coil.
+      float bandDistance = 1.0 - cos(phase); // Periodic even at the rear atan seam.
+      float width = 0.88 + 0.065 * sin(v * 9.0 + age * 1.1);
+      float band = bell(bandDistance, width);
+      float shoulder = bell(bandDistance + width * 0.13, width * 0.71);
+      float torn = smoothstep(0.13, 0.52, n + 0.18 * sin(phase * 3.0 + v * 27.0));
+      float edgeBand = bell(abs(bandDistance) - width * 0.73, width * 0.19 + aa)
+        * torn * band;
+      float vertical = smoothstep(0.0, 0.055, height)
+        * (1.0 - smoothstep(0.89, 1.0, height));
+      float mask = silhouette * vertical;
+      float facing = sqrt(max(0.0, 1.0 - min(x * x / (radius * radius), 1.0)));
+      float depthLight = mix(0.20, 0.70 + 0.30 * facing, front);
+      // Light packets climb continuously with the advected field.
+      float liftingLight = 0.67 + 0.33 * sin(v * 12.0 - age * 7.5 + theta * 0.6);
+      float alpha = mask * band * mix(0.10, 0.24, front) * (0.72 + n * 0.28);
+      coverage += alpha * (1.0 - coverage);
+      light += vec3(0.007, 0.34, 0.17) * alpha;
+      float fibers = 0.76 + 0.24 * sin(v * 110.0 + theta * 13.0 - age * 14.0 + n * 8.0);
+      light += vec3(0.015, 0.75, 0.32) * band * mask * depthLight * liftingLight * fibers * 0.36;
+      light += vec3(0.16, 0.94, 0.54) * shoulder * mask * depthLight * 0.25;
+      light += vec3(0.005, 0.12, 0.06) * bell(bandDistance, width * 1.75) * mask * depthLight;
+      light += vec3(0.72, 1.0, 0.84) * edgeBand * mask * depthLight * 0.80;
     }
-    return vec4(light, alpha);
+    // Open rolled lip: broken broad wisps, with the far half much dimmer.
+    vec2 crown = vec2((q.x - lean) / 0.98, (q.y - 1.10) / 0.23);
+    float cr = length(crown), ca = angleOf(crown);
+    float crownArc = smoothstep(-0.70, 0.3, cos(ca - age * 1.7 - seed));
+    float crownSheet = bell(cr - 0.77 + (n - 0.5) * 0.13, 0.23)
+      * crownArc * (0.36 + 0.64 * sat(0.5 - crown.y));
+    light += vec3(0.06, 0.67, 0.34) * crownSheet * 0.55;
+    coverage += crownSheet * 0.10 * (1.0 - coverage);
+    // Broad turbulent dust footprint, with several orbiting leaf fragments.
+    vec2 base = vec2(q.x / 0.58, (q.y + 1.02) / 0.15);
+    float dust = bell(length(base) - 0.50, 0.55) * (0.40 + n * 0.60);
+    float dustAlpha = dust * 0.13;
+    light += vec3(0.24, 0.35, 0.25) * dustAlpha;
+    coverage += dustAlpha * (1.0 - coverage);
+    for (int i = 0; i < 6; i++) {
+      float k = float(i), s = hash21(vec2(k + 9.0, seed));
+      float u = fract(age * (0.24 + s * 0.10) + s);
+      float phase = age * (3.3 + s) + seed + k * 2.39996;
+      float spread = 0.18 + u * 0.78;
+      vec2 pos = vec2(sin(phase) * spread, -1.08 + u * 2.32 + cos(phase) * 0.10);
+      vec2 leaf = turn(q - pos, phase * 0.7 + k);
+      float life = smoothstep(0.0, 0.12, u) * (1.0 - smoothstep(0.76, 1.0, u));
+      float shape = bell(abs(leaf.x) + abs(leaf.y) * 1.9, 0.043 + aa) * life;
+      float stem = bell(leaf.y, 0.004 + aa) * bell(leaf.x, 0.040) * life;
+      light += mix(vec3(0.19, 0.48, 0.045), vec3(0.72, 0.88, 0.15), s)
+        * shape * (0.40 + 0.60 * sat(cos(phase)));
+      light += vec3(0.70, 1.0, 0.49) * stem * 0.20;
+      coverage += shape * 0.16 * (1.0 - coverage);
+    }
+    return vec4(light, min(0.55, coverage));
   }
 
   float shurikenShape(vec2 q) {
     vec2 b = abs(q);
-    // Four long straight tips, with deep concave notches and sharp cutting edges.
-    return (max(b.x,b.y) + 2.6 * min(b.x,b.y) - 0.93) / 2.786;
-  }
-  vec3 energyShuriken(vec2 q, float age, float seed, float aa) {
-    float r=length(q),a=angleOf(q),spin=age*6.6+seed;
-    vec2 bladePoint=turn(q,-spin);
-    float distance=shurikenShape(bladePoint);
-    float aperture=smoothstep(0.10-aa,0.14+aa,r);
-    float body=(1.0-smoothstep(-aa,aa,distance))*aperture;
-    float edge=bell(distance,0.018+aa)*aperture;
-    float n=mist(bladePoint*9.0+vec2(seed,-age*1.4));
-    float veins=bell(sin(r*37.0-age*13.0+n*3.0),0.12+aa)*body;
-    vec3 light=vec3(0.015,0.29,0.82)*body*(0.50+n*0.30);
-    light+=vec3(0.50,0.91,1.0)*edge*0.86;
-    light+=vec3(0.13,0.63,0.95)*veins*0.18;
-    light+=vec3(0.03,0.34,0.85)*bell(distance,0.065+aa)*aperture*0.15;
-    // The hollow energy aperture remains readable; no overexposed central white hub.
-    light+=vec3(0.14,0.72,1.0)*bell(r-0.125,0.014+aa)*0.45;
-    for(int i=0;i<3;i++) {
-      float k=float(i),lag=0.11+k*0.12;
-      float d=shurikenShape(turn(q,-spin+lag));
-      float ghost=bell(d,0.02+k*0.01+aa)*aperture*(1.0-body*0.8);
-      light+=vec3(0.015,0.33,0.90)*ghost*(0.36/(1.0+k));
-    }
-    float shearPhase=a*5.0+log(0.2+r)*12.0-age*9.0+n*3.0;
-    float shear=0.5+0.5*cos(shearPhase);
-    float skirt=bell(r-0.72,0.38)*(1.0-body*0.82)*shear*shear*shear;
-    light+=vec3(0.006,0.05,0.16)*skirt*(0.45+n*0.55);
-    // Tangential wind shear and small sparks accent the spinning weapon, not replace its silhouette.
-    for(int i=0;i<8;i++) {
-      float k=float(i),u=fract(age*(0.48+0.04*mod(k,3.0))+k*0.137);
-      float theta=seed+k*2.39996+age*1.65;
-      vec2 outward=vec2(cos(theta),sin(theta)),tangent=vec2(-outward.y,outward.x);
-      vec2 offset=q-outward*(0.63+u*0.47);
-      float life=sin(u*3.14159265);
-      float spark=bell(dot(offset,outward),0.007+aa)*bell(dot(offset,tangent),0.035+u*0.065)*life;
-      light+=vec3(0.23,0.65,1.0)*spark*0.7;
-    }
-    return light*(1.0-smoothstep(1.10,1.19,r));
+    return (max(b.x, b.y) + 3.0 * min(b.x, b.y) - 0.95) / 3.16227766;
   }
 
+  vec3 ninjaFlow(vec2 p, float age, float seed, float aa, float flight) {
+    float arrival = mix(0.67 + 0.33 * smoothstep(0.0, 0.22, age), 0.67, flight);
+    vec2 q = p / arrival;
+    vec2 disc = turn(q, -0.12) / vec2(1.0, mix(0.63, 0.78, flight));
+    float r = length(disc), a = angleOf(disc);
+    float spin = age * 17.0 + seed;
+    float n = mist(turn(q, -age * 1.4) * 4.0 + vec2(seed, -age * 1.5));
+    vec2 blade = turn(disc, -spin);
+    float d = shurikenShape(blade);
+    float body = 1.0 - smoothstep(-aa, aa, d);
+    float edge = bell(d, 0.018 + aa);
+    // Thin luminous four-tip weapon, carried by a dense elliptical wind disc.
+    // The wider pressure cloak carries the area; the star is only its cutter.
+    vec3 light = vec3(0.015, 0.15, 0.47) * body * (0.40 + n * 0.35);
+    light += vec3(0.51, 0.91, 1.0) * edge * 0.86;
+    light += vec3(0.045, 0.38, 0.85) * bell(d, 0.065 + aa) * 0.24;
+    float envelopeR = length(q / vec2(1.02, 0.98));
+    float dome = sqrt(max(0.0, 1.0 - min(envelopeR * envelopeR, 1.0)));
+    float arrivalBurst = 1.0 - smoothstep(0.18, 0.68, age);
+    float cloak = bell(envelopeR - 0.79 - (n - 0.5) * 0.07, 0.21)
+      * (0.24 + 0.76 * n) * (1.0 - flight * 0.65);
+    light += vec3(0.025, 0.28, 0.64) * cloak * (0.20 + arrivalBurst * 0.70);
+    light += vec3(0.018, 0.20, 0.42) * bell(envelopeR, 0.98)
+      * (0.08 + arrivalBurst * 0.11) * dome * (1.0 - flight);
+    // Eight finite cutting sheets trail fast rotation at unequal radii.
+    // Angular lengths and thicknesses prevent detached geometric ghost stars.
+    for (int i = 0; i < 8; i++) {
+      float k = float(i), s = hash21(vec2(k + 71.0, seed));
+      float theta = spin - k * 0.49 + s * 0.33;
+      float delta = a - theta;
+      float arc = atan(sin(delta), cos(delta));
+      float tail = smoothstep(-1.70, -0.96, arc) * (1.0 - smoothstep(-0.13, 0.16, arc));
+      float sweep = 0.40 + s * 0.49 - arc * (0.05 + s * 0.03);
+      float width = 0.052 + s * 0.041;
+      float sheet = bell(r - sweep + (n - 0.5) * 0.035, width + aa) * tail;
+      float cut = bell(r - sweep - width * 0.34, width * 0.28 + aa) * tail;
+      float depth = 0.38 + 0.62 * sat(0.5 - disc.y * 0.55);
+      light += vec3(0.015, 0.42, 0.88) * sheet * depth * 0.41;
+      light += vec3(0.29, 0.86, 1.0) * cut * depth * 0.44;
+    }
+    float core = length(q);
+    light += vec3(0.025, 0.48, 1.0) * bell(core, 0.20) * 0.50;
+    light += vec3(0.40, 0.91, 1.0) * bell(core, 0.095) * 0.87;
+    light += vec3(0.83, 1.0, 1.0) * bell(core, 0.043) * 0.66;
+    // Local +Y is the host flight heading; the continuous wake trails -Y.
+    float wakeT = sat((-p.y - 0.12) / 1.42);
+    float wakeGate = smoothstep(0.0, 0.14, -p.y - 0.12)
+      * (1.0 - smoothstep(0.68, 1.0, wakeT));
+    float wakeWidth = 0.18 * (1.0 - wakeT) + 0.025;
+    float wakeX = p.x - sin(wakeT * 11.0 - age * 18.0) * 0.045 * wakeT;
+    light += vec3(0.01, 0.41, 0.88) * bell(wakeX, wakeWidth) * wakeGate * flight * 0.55;
+    light += vec3(0.28, 0.85, 1.0) * bell(wakeX, wakeWidth * 0.28 + aa)
+      * wakeGate * flight * 0.40;
+    float fieldBound = 1.0 - smoothstep(1.06, 1.20, envelopeR);
+    return light * mix(fieldBound, 1.0, flight);
+  }
+
+  vec3 energyShuriken(vec2 q, float age, float seed, float aa) {
+    return ninjaFlow(q, age, seed, aa, 0.0);
+  }
   vec3 windCrescent(vec2 q, float age, float seed, float aa) {
     // Local +X points at the enemy. A bowed convex right edge and a deeper
     // concave left edge form a strong lunate cutter with two sharp tapered tips.
@@ -315,14 +326,15 @@ CCProgram wind-ninja-fs %{
     if (fxState.w < 0.5) result = windEye(p / radius, age, seed, aa);
     else if (fxState.w < 1.5) result = tornado(p / radius, age, seed, aa);
     else if (fxState.w < 2.5) result = vec4(energyShuriken(p / radius, age, seed, aa), 0.0);
-    else result = vec4(windCrescent(p / radius, age, seed, aa), 0.0);
-    // Only the area modes have a .16s entry ramp. Projectiles can live less
+    else if (fxState.w < 3.5) result = vec4(windCrescent(p / radius, age, seed, aa), 0.0);
+    else result = vec4(ninjaFlow(p / radius, age, seed, aa, 1.0), 0.0);
+    // Host opacity supplies the entry ramp. Projectiles can live less
     // than that and must be readable immediately on their first travel frame.
-    float entry = fxState.w < 2.5 ? smoothstep(0.0, 0.16, age) : 1.0;
+    float entry = 1.0; // Host opacity already owns entry and exit, including mode 2.
     // fxShape.w is the host duration. The host owns the end fade/lifecycle.
     // fxState.z is the sole parent opacity: do not multiply mirrored color.a
     // or another duration fade. Wind alpha is ONLY shaped volume coverage.
-    // Modes 2/3 keep exact zero alpha, so ONE/ONE_MINUS_SRC_ALPHA is additive.
+    // Modes 2/3/4 keep exact zero alpha; ONE/ONE_MINUS_SRC_ALPHA is additive.
     return vec4(max(result.rgb, vec3(0.0)) * max(color.rgb, vec3(0.0)) * opacity * entry,
       result.a * opacity * entry);
   }

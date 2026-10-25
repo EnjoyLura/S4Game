@@ -82,7 +82,7 @@ abstract class WindNinjaHeroBase extends HeroBase {
   protected disposeAttachments(): void {}
   protected drawAttachments(_fx: WindNinjaVFX): void {}
   protected effects(): WindNinjaVFX {
-    return this.fx ||= new WindNinjaVFX(this.node.parent!.parent || this.node.parent!, this.id === 'wind');
+    return this.fx ||= new WindNinjaVFX(this.node.parent!.parent || this.node.parent!);
   }
   warmEffects(): void { this.effects(); }
   renderEffects(): void {
@@ -92,7 +92,10 @@ abstract class WindNinjaHeroBase extends HeroBase {
     this.drawAttachments(this.fx); this.fx.end();
   }
   protected hand(target: Monster): FieldPoint {
-    this.faceAttack(target.x - this.x, target.hitY - HERO_Y - 60);
+    return this.handAt(target.x,target.hitY);
+  }
+  protected handAt(x: number,y: number): FieldPoint {
+    this.faceAttack(x - this.x, y - HERO_Y - 60);
     return { x: this.x + this.facing * 35, y: HERO_Y + 90 };
   }
   protected normalSpec(x: number, y: number, dx: number, dy: number): ProjSpec {
@@ -385,6 +388,8 @@ export class NinjaHero extends WindNinjaHeroBase {
     if (!point) return false;
     this.lastDmg = dmg; this.charge = 0; this.beginUltimate(this.ultShowDuration);
     this.addArea('spiral', point, radius, cfg.duration, NINJA.ultTick, cfg.mul, 0, ULT_TIMING.ninja.windup);
+    const hand=this.handAt(point.x,point.y);
+    this.effects().spiralLaunch(hand.x,hand.y,point.x,point.y,ULT_TIMING.ninja.windup);
     Sfx.cast(this.id, true);
     return true;
   }

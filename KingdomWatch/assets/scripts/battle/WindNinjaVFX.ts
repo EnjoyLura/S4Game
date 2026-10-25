@@ -1,7 +1,6 @@
 /** Painted, bounded Graphics geometry. All age/phase values come from the battle clock. */
 import { Color, Graphics, Layers, Node } from 'cc';
 import { HeroFxShader } from './HeroFxShader';
-import { WindVolumeVFX } from './WindVolumeVFX';
 
 export const WIND_NINJA_FX_EFFECT = 'fx/wind-ninja-flow';
 
@@ -173,46 +172,48 @@ function flowParticles(g: Graphics, a: WindNinjaAreaView, alpha: number): void {
 }
 
 interface Accent { x: number; y: number; dx: number; dy: number; kind: 'wind' | 'shuriken'; age: number; }
+interface SpiralLaunch { x: number; y: number; tx: number; ty: number; age: number; life: number; }
 /** One batched Graphics node per hero; caps prevent pathological card/GM overdraw. */
 export class WindNinjaVFX {
   private readonly root = new Node('WindNinjaVFX');
   private readonly g: Graphics;
   private readonly flow: HeroFxShader;
-  private readonly volume: WindVolumeVFX | null;
-  private readonly areaShader = new WeakMap<WindNinjaAreaView, 'volume' | 'energy' | 'fallback'>();
+  private readonly areaShader = new WeakMap<WindNinjaAreaView, boolean>();
   private accents: Accent[] = [];
+  private launches: SpiralLaunch[] = [];
   private areas = 0;
   private marks = 0;
-  constructor(parent: Node, wind = false) {
+  constructor(parent: Node) {
     this.root.layer = Layers.Enum.UI_2D; this.root.setParent(parent);
     const textLayer = parent.getChildByName('TextLayer');
     if (textLayer) this.root.setSiblingIndex(textLayer.getSiblingIndex());
     this.g = this.root.addComponent(Graphics);
-    this.flow = new HeroFxShader(this.root, 'windNinjaEnergy', 8, 'plasma',
+    this.flow = new HeroFxShader(this.root, 'windNinjaEnergy', 12, 'plasma',
       { effect: WIND_NINJA_FX_EFFECT, technique: 0 });
-    this.volume = wind ? new WindVolumeVFX(this.root, 8) : null;
   }
   release(x: number, y: number, dx: number, dy: number, kind: 'wind' | 'shuriken'): void {
     if (this.accents.length >= 24) this.accents.shift();
     this.accents.push({ x, y, dx, dy, kind, age: 0 });
   }
+  /** Cosmetic flight during the existing ultimate windup; it never delivers damage. */
+  spiralLaunch(x: number, y: number, tx: number, ty: number, seconds: number): void {
+    if (seconds <= 0 || !Number.isFinite(x+y+tx+ty+seconds)) return;
+    if (this.launches.length >= 2) this.launches.shift();
+    this.launches.push({x,y,tx,ty,age:0,life:seconds});
+  }
   tick(dt: number): void {
+    for(let i=this.launches.length-1;i>=0;i--){this.launches[i].age+=dt;if(this.launches[i].age>=this.launches[i].life)this.launches.splice(i,1);}
     for (let i = this.accents.length - 1; i >= 0; i--) {
       this.accents[i].age += dt;
       if (this.accents[i].age >= .22) this.accents.splice(i, 1);
     }
   }
-  begin(): void { this.g.clear(); this.flow.begin(); this.volume?.begin(); this.areas = this.marks = 0; }
+  begin(): void { this.g.clear(); this.flow.begin(); this.areas = this.marks = 0; }
   area(area: WindNinjaAreaView): void {
     if (++this.areas > 8) return;
     const alpha = opacity(area);
-    if(!this.areaShader.has(area))this.areaShader.set(area,area.kind!=='spiral'&&this.volume?.ready
-      ? 'volume' : this.flow.ready ? 'energy' : 'fallback');
-    const mode = this.areaShader.get(area);
-    if (mode === 'volume') {
-      this.volume!.draw(area,alpha);
-      flowParticles(this.g,area,alpha);
-    } else if (mode === 'energy') {
+    if(!this.areaShader.has(area))this.areaShader.set(area,this.flow.ready);
+    if (this.areaShader.get(area)) {
       const tornado = area.kind === 'tornado';
       this.flow.draw(area.x, area.y+(tornado?area.radius*.35:0), area.radius*(tornado?2.6:2.5),
         area.radius*(tornado?3.3:2.5), 0, area.age, .73, alpha,
@@ -230,8 +231,15 @@ export class WindNinjaVFX {
     }
   }
   end(): void {
+    for(const launch of this.launches) {
+      const t=Math.min(1,launch.age/launch.life),p=1-Math.pow(1-t,1.2);
+      const x=launch.x+(launch.tx-launch.x)*p,y=launch.y+(launch.ty-launch.y)*p,r=18+p*27;
+      const angle=Math.atan2(launch.ty-launch.y,launch.tx-launch.x)*180/Math.PI-90;
+      const alpha=Math.min(1,t*12+.2)*Math.min(1,(1-t)*10);
+      if(!this.flow.draw(x,y,r*3.5,r*3.5,angle,launch.age,.73,alpha,4,r,launch.life))
+        drawSpiral(this.g,{kind:'spiral',x,y,radius:r,age:launch.age,duration:launch.life},alpha);
+    }
     this.flow.end();
-    this.volume?.end();
     for (const a of this.accents) {
       const alpha = 1 - a.age / .22, r = 7 + a.age * 70;
       stroke(this.g, a.kind === 'wind' ? P.mint : P.cyan, 2 * alpha + .6, alpha * .8);
@@ -239,5 +247,5 @@ export class WindNinjaVFX {
       if (a.kind === 'wind') leaf(this.g, a.x + a.dx * r, a.y + a.dy * r, 3, a.age * 10, alpha, false);
     }
   }
-  destroy(): void { this.accents.length = 0; if (this.root.isValid) this.root.destroy(); }
+  destroy(): void { this.accents.length = this.launches.length = 0; if (this.root.isValid) this.root.destroy(); }
 }
