@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "baseline": "95935c828ad7fb73829e32c41ca0574d6660fbaa",
+  "changedAssets": [
+    "KingdomWatch/assets/resources/fx/wind-ninja-flow.effect",
+    "KingdomWatch/assets/scripts/battle/WindNinjaVFX.ts"
+  ],
+  "allOtherTrackedAssetsUnchanged": true,
+  "newAssets": 0,
+  "exactShaderFunctions": {
+    "windEye": "6a5b33c564b1cec526f700fe92530ec7e1e26f7d1d688b35554a88a577e94429",
+    "windCrescent": "69efc58855a812173d70dbd3bb60aa725a25ecb69d7f9f4c4bab6eaccbbfc1e5",
+    "ninjaFlow": "78e592a21301cb3b8c0986d02fb50ed89dc1bb67592b0a5df05b92848e15f308",
+    "energyShuriken": "66eaff2fba50c2178307203374f2194615ac2f6964701e598380b9bfd360e5ae",
+    "frag": "1a5eef6c8d7502be334752fb0d3a9dca1ef94e362198e68b6656d9145f982363"
+  },
+  "allOtherVfxDrawingFunctionsAndClassUnchanged": true,
+  "actualEyeAndNinjaDrawingFramesUnchanged": 300,
+  "volumeRaySamples": 12,
+  "shaderSamplers": 0,
+  "newGameMedia": 0,
+  "gameCombatBrowserAudioOrWasmStarted": false
+}

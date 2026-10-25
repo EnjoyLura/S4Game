@@ -1,0 +1,248 @@
+{
+  "shaderSourceSha256": "47262b15594dbe7c4172f5f946657a1ec20c5e70015a266351814573a4248ecf",
+  "renderer": "AMD Radeon RX 9070 XT",
+  "runtimeEffectHasNoImagesOrSamplers": true,
+  "modeChecks": [
+    {
+      "mode": 0,
+      "age": 0,
+      "finite": true,
+      "maxAlpha": 0.33351054787635803,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 0,
+      "age": 0.08,
+      "finite": true,
+      "maxAlpha": 0.33425435423851013,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 0,
+      "age": 0.51,
+      "finite": true,
+      "maxAlpha": 0.3406205177307129,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 0,
+      "age": 1.3,
+      "finite": true,
+      "maxAlpha": 0.3240075707435608,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 0,
+      "age": 3.8,
+      "finite": true,
+      "maxAlpha": 0.33593177795410156,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 0,
+      "age": 4.99,
+      "finite": true,
+      "maxAlpha": 0.3571600019931793,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 1,
+      "age": 0,
+      "finite": true,
+      "maxAlpha": 0.7200000286102295,
+      "unchangedModeExact": false
+    },
+    {
+      "mode": 1,
+      "age": 0.08,
+      "finite": true,
+      "maxAlpha": 0.7200000286102295,
+      "unchangedModeExact": false
+    },
+    {
+      "mode": 1,
+      "age": 0.51,
+      "finite": true,
+      "maxAlpha": 0.7200000286102295,
+      "unchangedModeExact": false
+    },
+    {
+      "mode": 1,
+      "age": 1.3,
+      "finite": true,
+      "maxAlpha": 0.7200000286102295,
+      "unchangedModeExact": false
+    },
+    {
+      "mode": 1,
+      "age": 3.8,
+      "finite": true,
+      "maxAlpha": 0.7200000286102295,
+      "unchangedModeExact": false
+    },
+    {
+      "mode": 1,
+      "age": 4.99,
+      "finite": true,
+      "maxAlpha": 0.7200000286102295,
+      "unchangedModeExact": false
+    },
+    {
+      "mode": 2,
+      "age": 0,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 2,
+      "age": 0.08,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 2,
+      "age": 0.51,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 2,
+      "age": 1.3,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 2,
+      "age": 3.8,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 2,
+      "age": 4.99,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 3,
+      "age": 0,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 3,
+      "age": 0.08,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 3,
+      "age": 0.51,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 3,
+      "age": 1.3,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 3,
+      "age": 3.8,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 3,
+      "age": 4.99,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 4,
+      "age": 0,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 4,
+      "age": 0.08,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 4,
+      "age": 0.51,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 4,
+      "age": 1.3,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 4,
+      "age": 3.8,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    },
+    {
+      "mode": 4,
+      "age": 4.99,
+      "finite": true,
+      "maxAlpha": 0.0,
+      "unchangedModeExact": true
+    }
+  ],
+  "unchangedOtherModePixelComparisons": 24,
+  "artFrames": 300,
+  "gpuCost": [
+    {
+      "version": "old",
+      "dpr": 1,
+      "singleFieldGpuMilliseconds": 0.0166,
+      "isolatedDraws": 96
+    },
+    {
+      "version": "new",
+      "dpr": 1,
+      "singleFieldGpuMilliseconds": 0.0657,
+      "isolatedDraws": 96
+    },
+    {
+      "version": "old",
+      "dpr": 2,
+      "singleFieldGpuMilliseconds": 0.0592,
+      "isolatedDraws": 96
+    },
+    {
+      "version": "new",
+      "dpr": 2,
+      "singleFieldGpuMilliseconds": 0.1702,
+      "isolatedDraws": 96
+    }
+  ],
+  "costScope": "isolated desktop GPU draw only; no engine, batching, CPU cost or phone measurement",
+  "actualGameBrowserCombatAudioOrWasmStarted": false,
+  "manualPhoneVisualAndPerformanceReview": "pending user"
+}

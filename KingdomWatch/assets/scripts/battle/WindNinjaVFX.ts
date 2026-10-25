@@ -162,11 +162,14 @@ function drawSpiral(g: Graphics, a: WindNinjaAreaView, alpha: number): void {
 function flowParticles(g: Graphics, a: WindNinjaAreaView, alpha: number): void {
   if(a.kind==='spiral')return; // Pure energy blades are drawn entirely by the shader.
   for(let i=0;i<12;i++) {
-    const t=(a.age*(a.kind==='eye'?.42:.58)+i*.137)%1;
-    const theta=a.age*4.2+i*2.39996+t*3;
-    const radius=a.radius*(a.kind==='eye'?.97*(1-t):.10+.76*t);
+    const tornado=a.kind==='tornado';
+    // Match the volume's material flow: one height per six seconds, -1.5rad/s.
+    // Leaves expand with the cone; near orbits dip below the rear ones.
+    const t=(a.age*(tornado?1/6:.42)+i*.137)%1;
+    const theta=tornado?-a.age*1.5+i*2.39996:a.age*4.2+i*2.39996+t*3;
+    const radius=a.radius*(tornado?.105+.77*(.65*t+.35*Math.sqrt(t)):.97*(1-t));
     const x=a.x+Math.cos(theta)*radius;
-    const y=a.y+(a.kind==='eye'?Math.sin(theta)*radius*.8:a.radius*(-.78+2.2*t)+Math.sin(theta)*radius*.23);
+    const y=a.y+(tornado?a.radius*(-1.03+2.35*t)-Math.sin(theta)*radius*.34:Math.sin(theta)*radius*.8);
     leaf(g,x,y,2.2+i%3,theta+.6,alpha*Math.sin(t*Math.PI)*.7,i%4===0);
   }
 }

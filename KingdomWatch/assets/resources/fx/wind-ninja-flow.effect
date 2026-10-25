@@ -128,87 +128,143 @@ CCProgram wind-ninja-fs %{
     return vec4(light * bound, min(0.55, coverage) * bound);
   }
 
+  // Volume, not two painted cone faces: integrate a rotating 3D density field.
+  // Twelve fixed samples, bounded to the ray/frustum intersection. The wind's
+  // coordinates rotate AND rise; the density never jumps at a frame boundary.
+  float flowHash(vec3 p) {
+    p = fract(p * 0.1031);
+    p += dot(p, p.yxz + 33.33);
+    return fract((p.x + p.y) * p.z);
+  }
+  float flowNoise(vec3 p) {
+    vec3 cell = floor(p), f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    vec4 a = vec4(flowHash(cell), flowHash(cell + vec3(1.0, 0.0, 0.0)),
+      flowHash(cell + vec3(0.0, 1.0, 0.0)), flowHash(cell + vec3(1.0, 1.0, 0.0)));
+    vec4 b = vec4(flowHash(cell + vec3(0.0, 0.0, 1.0)), flowHash(cell + vec3(1.0, 0.0, 1.0)),
+      flowHash(cell + vec3(0.0, 1.0, 1.0)), flowHash(cell + vec3(1.0, 1.0, 1.0)));
+    vec4 c = mix(a, b, f.z);
+    return mix(mix(c.x, c.y, f.x), mix(c.z, c.w, f.x), f.y);
+  }
+
   vec4 tornado(vec2 q, float age, float seed, float aa) {
-    float h = sat((q.y + 1.10) / 2.48);
-    float lean = 0.045 * sin(h * 4.7 - age * 0.9 + seed) * h;
-    float x = q.x - lean;
-    float n = mist(vec2(x * 3.4 + seed + sin(h * 4.0 - age) * 0.3,
-      h * 5.0 - age * 1.4));
-    // Analytic orthographic ray / tilted cone intersections. Depth projects
-    // into Y, so the front of a ribbon dips and its back climbs into space.
-    const float slope = 0.355;
-    const float tilt = 0.25;
-    float rayRadius = 0.115 + slope * (q.y + 1.10);
-    float coneA = 1.0 - slope * slope * tilt * tilt;
-    float discriminant = rayRadius * rayRadius - coneA * x * x;
-    float root = sqrt(max(0.0, discriminant));
-    float coneEdge = abs(x) - abs(rayRadius) / sqrt(coneA) + (n - 0.5) * 0.025;
-    float silhouette = 1.0 - smoothstep(-0.022, 0.038, coneEdge);
-    float coverage = 0.0;
     vec3 light = vec3(0.0);
-    for (int i = 0; i < 2; i++) {
-      float front = float(i);
-      float z = (-rayRadius * slope * tilt + mix(-root, root, front)) / coneA;
-      float height = (q.y + 1.10 - tilt * z) / 2.48;
-      float v = sat(height);
-      float radius = 0.115 + 0.88 * v;
-      float theta = atan(x, mix(-1.0, 1.0, front) * max(abs(z), 0.0001));
-      float phase = theta - TAU * (2.12 * v + 0.16 * v * v)
-        + age * 5.1 + seed + sin(v * 6.0 - age * 1.3) * 0.36 + (n - 0.5) * 0.7;
-      // 42% of the cone is a finite-width winding sheet, not a thin coil.
-      float bandDistance = 1.0 - cos(phase); // Periodic even at the rear atan seam.
-      float width = 0.88 + 0.065 * sin(v * 9.0 + age * 1.1);
-      float band = bell(bandDistance, width);
-      float shoulder = bell(bandDistance + width * 0.13, width * 0.71);
-      float torn = smoothstep(0.13, 0.52, n + 0.18 * sin(phase * 3.0 + v * 27.0));
-      float edgeBand = bell(abs(bandDistance) - width * 0.73, width * 0.19 + aa)
-        * torn * band;
-      float vertical = smoothstep(0.0, 0.055, height)
-        * (1.0 - smoothstep(0.89, 1.0, height));
-      float mask = silhouette * vertical;
-      float facing = sqrt(max(0.0, 1.0 - min(x * x / (radius * radius), 1.0)));
-      float depthLight = mix(0.20, 0.70 + 0.30 * facing, front);
-      // Light packets climb continuously with the advected field.
-      float liftingLight = 0.67 + 0.33 * sin(v * 12.0 - age * 7.5 + theta * 0.6);
-      float alpha = mask * band * mix(0.10, 0.24, front) * (0.72 + n * 0.28);
-      coverage += alpha * (1.0 - coverage);
-      light += vec3(0.007, 0.34, 0.17) * alpha;
-      float fibers = 0.76 + 0.24 * sin(v * 110.0 + theta * 13.0 - age * 14.0 + n * 8.0);
-      light += vec3(0.015, 0.75, 0.32) * band * mask * depthLight * liftingLight * fibers * 0.36;
-      light += vec3(0.16, 0.94, 0.54) * shoulder * mask * depthLight * 0.25;
-      light += vec3(0.005, 0.12, 0.06) * bell(bandDistance, width * 1.75) * mask * depthLight;
-      light += vec3(0.72, 1.0, 0.84) * edgeBand * mask * depthLight * 0.80;
+    float coverage = 0.0;
+    // The footprint is low, soft, irregular and independent of the wind body.
+    vec2 ground = vec2(q.x / 0.76, (q.y + 1.03) / 0.23);
+    float gr = length(ground), ga = angleOf(ground);
+    float dustNoise = mist(turn(ground, -age * 1.6) * 3.0 + seed);
+    float dust = bell(gr - 0.56 + (dustNoise - 0.5) * 0.18, 0.55);
+    float dustFlow = 0.5 + 0.5 * sin(ga * 3.0 - age * 7.0 + gr * 9.0 + dustNoise * 3.0);
+    float dustAlpha = dust * (0.035 + 0.14 * dustFlow) * dustNoise;
+    light += vec3(0.38, 0.45, 0.30) * dustAlpha;
+    light += vec3(0.07, 0.38, 0.23) * dust * dustFlow * 0.075;
+    coverage = dustAlpha;
+
+    // Orthographic camera looks down at the ground. At each ray sample the
+    // height changes with depth, so front flow crosses below rear flow.
+    const float tilt = 0.34;
+    const float slope = 0.43;
+    float center = 0.050 * sin((q.y + 1.0) * 2.1 - age * 0.85 + seed);
+    float x = q.x - center;
+    float rad0 = 0.16 + slope * (q.y + 1.0);
+    const float k = slope * tilt;
+    const float A = 1.0 - k * k;
+    float disc = rad0 * rad0 - A * x * x;
+    if (disc > 0.0 && q.y > -1.20 && q.y < 1.62) {
+      float root = sqrt(disc);
+      float nearZ = (rad0 * k + root) / A;
+      float farZ = (rad0 * k - root) / A;
+      float stepLength = (nearZ - farZ) / 12.0;
+      for (int i = 0; i < 12; i++) {
+        float z = nearZ - (float(i) + 0.5) * stepLength;
+        float y = q.y + tilt * z;
+        float h = (y + 1.03) / 2.35;
+        float v = sat(h);
+        float vertical = smoothstep(0.0, 0.075, h) * (1.0 - smoothstep(0.88, 1.05, h));
+        float bend = 0.050 * sin(v * 5.0 - age * 0.85 + seed);
+        vec2 radial = vec2(q.x - bend, z);
+        float radius = 0.105 + 0.77 * mix(v, sqrt(max(v, 0.0)), 0.35);
+        float rr = length(radial) / max(radius, 0.01);
+        // Exact three-dimensional advection, a turntable plus upward transport.
+        // Material flow: dh/dt = 1/6, dtheta/dt = -1.5. Normalized
+        // cross-section coordinates expand naturally as the cone gets wider.
+        vec2 advected = turn(radial / max(radius, 0.01), age * 1.5);
+        vec3 fluid = vec3(advected.x * 2.9, v * 7.5 - age * 1.25, advected.y * 2.9) + seed;
+        float coarse = flowNoise(fluid);
+        // Stretched material coordinates: many thin wind fibres, with slow
+        // change along their length and fast change across their width.
+        float fine = flowNoise(vec3(advected.x * 2.1 + 7.1,
+          v * 38.0 - age * 6.333333 + 11.3, advected.y * 2.1 + 3.9));
+        float n = coarse * 0.68 + fine * 0.32;
+        float theta = angleOf(radial);
+        // Broad interpenetrating whorls have a low-density interior between
+        // them, rather than empty cone sections separated by a perfect helix.
+        float swirl = theta - v * 24.0 + age * 5.5 + (coarse - 0.5) * 1.6;
+        float fold = sin(swirl) * 0.5 + 0.5;
+        float billow = smoothstep(0.20, 0.77, n + fold * 0.27);
+        float edgeWarp = (coarse - 0.5) * 0.22 + (fine - 0.5) * 0.09;
+        float shell = smoothstep(0.12, 0.64, rr) * (1.0 - smoothstep(0.74, 1.12, rr + edgeWarp));
+        float density = shell * vertical * (0.08 + billow * (0.38 + fold * 1.8));
+        float optical = density * stepLength * 3.0;
+        float a = optical / (1.0 + optical);
+        // Self shading: back volume darker, front-facing folds and broken
+        // filament ridges mint-white. The light comes from shaped wind mass.
+        float front = sat(0.5 + z / max(radius, 0.01) * 0.5);
+        float litFold = smoothstep(0.62, 0.94, fold) * smoothstep(0.35, 0.74, fine);
+        float fiber = 0.75 + 0.25 * sin(v * 125.0 - age * 10.333333 + theta * 7.0 + coarse * 8.0);
+        vec3 shade = mix(vec3(0.025, 0.26, 0.20), vec3(0.19, 0.65, 0.44), front * 0.62 + billow * 0.30);
+        shade += vec3(0.78, 1.10, 0.84) * litFold * fiber * (0.45 + front * 0.55);
+        shade += vec3(0.05, 0.25, 0.13) * fold * 0.4;
+        light += (1.0 - coverage) * shade * a;
+        // Scattered emission makes wisps visible over dark trees without
+        // turning the whole funnel into a solid overexposed green cutout.
+        light += (1.0 - coverage) * vec3(0.22, 0.63, 0.34) * litFold * shell * vertical * stepLength * 0.65;
+        coverage += (1.0 - coverage) * a;
+      }
     }
-    // Open rolled lip: broken broad wisps, with the far half much dimmer.
-    vec2 crown = vec2((q.x - lean) / 0.98, (q.y - 1.10) / 0.23);
+    // A torn, sub-pixel-accurate skin keeps the wind edges readable at phone
+    // scale. It follows the same 3D rotation as the volume, never a screen ring.
+    // The underlying integrated mass supplies thickness between these wisps.
+    float skinR = 0.12 + 0.34 * (q.y + 1.03);
+    const float skinK = 0.34 * tilt;
+    const float skinA = 1.0 - skinK * skinK;
+    float skinD = skinR * skinR - skinA * x * x;
+    if (skinD > 0.0) {
+      float sz = (skinR * skinK + sqrt(skinD)) / skinA;
+      float sh = (q.y + tilt * sz + 1.03) / 2.35;
+      float theta = angleOf(vec2(x, sz));
+      vec2 adv = turn(vec2(x, sz) / max(0.12 + 0.799 * sh, 0.01), age * 1.5);
+      float n = flowNoise(vec3(adv.x * 2.1 + 7.1, sh * 38.0 - age * 6.333333 + 11.3, adv.y * 2.1 + 3.9));
+      float coarse = flowNoise(vec3(adv.x * 2.9, sh * 7.5 - age * 1.25, adv.y * 2.9) + seed);
+      float phase = theta - sh * 24.0 + age * 5.5 + (coarse - 0.5) * 1.6;
+      float windEdge = bell(1.0 - cos(phase - 0.60 + (n - 0.5) * 0.35), 0.16);
+      float fineEdge = bell(1.0 - cos(phase - 0.89 + (n - 0.5) * 0.20), 0.045);
+      float broken = smoothstep(0.24, 0.65, n);
+      float heightMask = smoothstep(0.02, 0.08, sh) * (1.0 - smoothstep(0.90, 1.04, sh));
+      float edgeFacing = smoothstep(0.0, 0.22, sqrt(skinD));
+      float skin = windEdge * broken * heightMask * edgeFacing;
+      light += vec3(0.34, 0.70, 0.47) * skin * 0.45;
+      light += vec3(0.65, 0.90, 0.70) * fineEdge * broken * heightMask * edgeFacing * 0.25;
+    }
+    // The crown releases finite wisps into the air. Their unequal lengths and
+    // torn tapered tips break the closed, perfectly regular funnel outline.
+    vec2 crown = vec2(q.x / 0.98, (q.y - 1.17) / 0.27);
     float cr = length(crown), ca = angleOf(crown);
-    float crownArc = smoothstep(-0.70, 0.3, cos(ca - age * 1.7 - seed));
-    float crownSheet = bell(cr - 0.77 + (n - 0.5) * 0.13, 0.23)
-      * crownArc * (0.36 + 0.64 * sat(0.5 - crown.y));
-    light += vec3(0.06, 0.67, 0.34) * crownSheet * 0.55;
-    coverage += crownSheet * 0.10 * (1.0 - coverage);
-    // Broad turbulent dust footprint, with several orbiting leaf fragments.
-    vec2 base = vec2(q.x / 0.58, (q.y + 1.02) / 0.15);
-    float dust = bell(length(base) - 0.50, 0.55) * (0.40 + n * 0.60);
-    float dustAlpha = dust * 0.13;
-    light += vec3(0.24, 0.35, 0.25) * dustAlpha;
-    coverage += dustAlpha * (1.0 - coverage);
-    for (int i = 0; i < 6; i++) {
-      float k = float(i), s = hash21(vec2(k + 9.0, seed));
-      float u = fract(age * (0.24 + s * 0.10) + s);
-      float phase = age * (3.3 + s) + seed + k * 2.39996;
-      float spread = 0.18 + u * 0.78;
-      vec2 pos = vec2(sin(phase) * spread, -1.08 + u * 2.32 + cos(phase) * 0.10);
-      vec2 leaf = turn(q - pos, phase * 0.7 + k);
-      float life = smoothstep(0.0, 0.12, u) * (1.0 - smoothstep(0.76, 1.0, u));
-      float shape = bell(abs(leaf.x) + abs(leaf.y) * 1.9, 0.043 + aa) * life;
-      float stem = bell(leaf.y, 0.004 + aa) * bell(leaf.x, 0.040) * life;
-      light += mix(vec3(0.19, 0.48, 0.045), vec3(0.72, 0.88, 0.15), s)
-        * shape * (0.40 + 0.60 * sat(cos(phase)));
-      light += vec3(0.70, 1.0, 0.49) * stem * 0.20;
-      coverage += shape * 0.16 * (1.0 - coverage);
+    float crownN = windNoise(turn(crown, age * 1.5) * 4.3 + seed);
+    for (int i = 0; i < 3; i++) {
+      float fi = float(i);
+      float delta = ca + age * 1.5 - seed - fi * 2.37;
+      float arc = atan(sin(delta), cos(delta));
+      float u = arc / (1.05 + fi * 0.11);
+      float ends = smoothstep(-1.0, -0.66, u) * (1.0 - smoothstep(0.45, 1.0, u));
+      float r = 0.66 + fi * 0.095 + u * 0.10 + (crownN - 0.5) * 0.10;
+      float w = (0.07 + fi * 0.015) * (0.75 + 0.25 * sin(u * 3.0));
+      float sheet = bell(cr - r, w + aa) * ends * (0.3 + 0.7 * crownN);
+      float facing = 0.35 + 0.65 * sat(0.5 - crown.y * 0.6);
+      light += vec3(0.16, 0.54, 0.35) * sheet * facing * 0.32;
     }
-    return vec4(light, min(0.55, coverage));
+    return vec4(light, min(0.72, coverage));
   }
 
   float shurikenShape(vec2 q) {
