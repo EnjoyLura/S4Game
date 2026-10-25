@@ -1,0 +1,69 @@
+{
+  "monsters": {
+    "goblin_shaman": {
+      "atlas": "chapter1_mob_walk_v94",
+      "framesChanged": {
+        "goblin_shaman_w0": 618,
+        "goblin_shaman_w1": 612,
+        "goblin_shaman_w2": 603,
+        "goblin_shaman_w3": 584,
+        "goblin_shaman_w4": 569,
+        "goblin_shaman_w5": 532,
+        "goblin_shaman_w6": 519,
+        "goblin_shaman_w7": 499,
+        "goblin_shaman_w8": 412,
+        "goblin_shaman_w9": 373,
+        "goblin_shaman_w10": 361,
+        "goblin_shaman_w11": 366,
+        "goblin_shaman_w12": 392,
+        "goblin_shaman_w13": 650,
+        "goblin_shaman_w14": 692,
+        "goblin_shaman_w15": 747,
+        "goblin_shaman_w16": 788,
+        "goblin_shaman_w17": 742,
+        "goblin_shaman_w18": 671,
+        "goblin_shaman_w19": 632,
+        "goblin_shaman_w20": 586,
+        "goblin_shaman_w21": 571,
+        "goblin_shaman_w22": 575,
+        "goblin_shaman_w23": 584,
+        "goblin_shaman_w24": 599,
+        "goblin_shaman_w25": 619,
+        "goblin_shaman_w26": 624
+      },
+      "clearedPixels": 15520,
+      "rectangleUploads": 1083,
+      "desktopOffscreenUploadMs": 2.825,
+      "outsidePatchRGBAByteIdentical": true,
+      "sourceSha256": "628b94cdb4746d73cf804d7fde077cc77722fd32f9d81987c38cc7373ebaa484"
+    },
+    "goblin_slinger": {
+      "atlas": "chapter1_mob_walk_v95",
+      "framesChanged": {
+        "goblin_slinger_w23": 332,
+        "goblin_slinger_w24": 320,
+        "goblin_slinger_w25": 302,
+        "goblin_slinger_w26": 296,
+        "goblin_slinger_w27": 305,
+        "goblin_slinger_w28": 304,
+        "goblin_slinger_w29": 311,
+        "goblin_slinger_w30": 329,
+        "goblin_slinger_w31": 336,
+        "goblin_slinger_w32": 362,
+        "goblin_slinger_w33": 390,
+        "goblin_slinger_w34": 443,
+        "goblin_slinger_w35": 450,
+        "goblin_slinger_w36": 483,
+        "goblin_slinger_w37": 533
+      },
+      "clearedPixels": 5496,
+      "rectangleUploads": 437,
+      "desktopOffscreenUploadMs": 0.944,
+      "outsidePatchRGBAByteIdentical": true,
+      "sourceSha256": "d99c7d27edd7192d8366b2aa0c35875b4614d4a1f346ae93f6a172a5a9fd20a6"
+    }
+  },
+  "runtimeMechanism": "sparse all-zero RGBA uploads into loaded atlas; no source image rewrite",
+  "sourceImageFilesChanged": false,
+  "gameBrowserAudioOrWasmStarted": false
+}

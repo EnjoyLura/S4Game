@@ -1,0 +1,480 @@
+{
+  "goblin_shaman": {
+    "atlas": "chapter1_mob_walk_v94",
+    "frames": [
+      {
+        "name": "goblin_shaman_w0",
+        "pixelsCleared": 618,
+        "bbox": [
+          107,
+          199,
+          128,
+          258
+        ],
+        "rectangles": 38
+      },
+      {
+        "name": "goblin_shaman_w1",
+        "pixelsCleared": 612,
+        "bbox": [
+          108,
+          200,
+          129,
+          258
+        ],
+        "rectangles": 37
+      },
+      {
+        "name": "goblin_shaman_w2",
+        "pixelsCleared": 603,
+        "bbox": [
+          108,
+          200,
+          129,
+          258
+        ],
+        "rectangles": 34
+      },
+      {
+        "name": "goblin_shaman_w3",
+        "pixelsCleared": 584,
+        "bbox": [
+          109,
+          200,
+          129,
+          258
+        ],
+        "rectangles": 34
+      },
+      {
+        "name": "goblin_shaman_w4",
+        "pixelsCleared": 569,
+        "bbox": [
+          109,
+          201,
+          130,
+          258
+        ],
+        "rectangles": 41
+      },
+      {
+        "name": "goblin_shaman_w5",
+        "pixelsCleared": 532,
+        "bbox": [
+          110,
+          201,
+          130,
+          258
+        ],
+        "rectangles": 37
+      },
+      {
+        "name": "goblin_shaman_w6",
+        "pixelsCleared": 519,
+        "bbox": [
+          111,
+          201,
+          131,
+          258
+        ],
+        "rectangles": 40
+      },
+      {
+        "name": "goblin_shaman_w7",
+        "pixelsCleared": 499,
+        "bbox": [
+          111,
+          200,
+          131,
+          258
+        ],
+        "rectangles": 39
+      },
+      {
+        "name": "goblin_shaman_w8",
+        "pixelsCleared": 412,
+        "bbox": [
+          112,
+          199,
+          131,
+          241
+        ],
+        "rectangles": 34
+      },
+      {
+        "name": "goblin_shaman_w9",
+        "pixelsCleared": 373,
+        "bbox": [
+          112,
+          198,
+          131,
+          236
+        ],
+        "rectangles": 33
+      },
+      {
+        "name": "goblin_shaman_w10",
+        "pixelsCleared": 361,
+        "bbox": [
+          112,
+          198,
+          131,
+          235
+        ],
+        "rectangles": 30
+      },
+      {
+        "name": "goblin_shaman_w11",
+        "pixelsCleared": 366,
+        "bbox": [
+          111,
+          195,
+          131,
+          233
+        ],
+        "rectangles": 35
+      },
+      {
+        "name": "goblin_shaman_w12",
+        "pixelsCleared": 392,
+        "bbox": [
+          111,
+          192,
+          131,
+          234
+        ],
+        "rectangles": 35
+      },
+      {
+        "name": "goblin_shaman_w13",
+        "pixelsCleared": 650,
+        "bbox": [
+          111,
+          188,
+          132,
+          258
+        ],
+        "rectangles": 53
+      },
+      {
+        "name": "goblin_shaman_w14",
+        "pixelsCleared": 692,
+        "bbox": [
+          110,
+          188,
+          132,
+          258
+        ],
+        "rectangles": 52
+      },
+      {
+        "name": "goblin_shaman_w15",
+        "pixelsCleared": 747,
+        "bbox": [
+          110,
+          188,
+          132,
+          258
+        ],
+        "rectangles": 51
+      },
+      {
+        "name": "goblin_shaman_w16",
+        "pixelsCleared": 788,
+        "bbox": [
+          109,
+          189,
+          131,
+          258
+        ],
+        "rectangles": 49
+      },
+      {
+        "name": "goblin_shaman_w17",
+        "pixelsCleared": 742,
+        "bbox": [
+          109,
+          191,
+          131,
+          258
+        ],
+        "rectangles": 45
+      },
+      {
+        "name": "goblin_shaman_w18",
+        "pixelsCleared": 671,
+        "bbox": [
+          109,
+          194,
+          131,
+          258
+        ],
+        "rectangles": 53
+      },
+      {
+        "name": "goblin_shaman_w19",
+        "pixelsCleared": 632,
+        "bbox": [
+          108,
+          195,
+          130,
+          258
+        ],
+        "rectangles": 52
+      },
+      {
+        "name": "goblin_shaman_w20",
+        "pixelsCleared": 586,
+        "bbox": [
+          108,
+          197,
+          130,
+          258
+        ],
+        "rectangles": 43
+      },
+      {
+        "name": "goblin_shaman_w21",
+        "pixelsCleared": 571,
+        "bbox": [
+          108,
+          200,
+          129,
+          258
+        ],
+        "rectangles": 37
+      },
+      {
+        "name": "goblin_shaman_w22",
+        "pixelsCleared": 575,
+        "bbox": [
+          108,
+          200,
+          129,
+          258
+        ],
+        "rectangles": 36
+      },
+      {
+        "name": "goblin_shaman_w23",
+        "pixelsCleared": 584,
+        "bbox": [
+          108,
+          199,
+          129,
+          258
+        ],
+        "rectangles": 43
+      },
+      {
+        "name": "goblin_shaman_w24",
+        "pixelsCleared": 599,
+        "bbox": [
+          107,
+          199,
+          128,
+          258
+        ],
+        "rectangles": 34
+      },
+      {
+        "name": "goblin_shaman_w25",
+        "pixelsCleared": 619,
+        "bbox": [
+          107,
+          199,
+          128,
+          258
+        ],
+        "rectangles": 35
+      },
+      {
+        "name": "goblin_shaman_w26",
+        "pixelsCleared": 624,
+        "bbox": [
+          107,
+          199,
+          128,
+          258
+        ],
+        "rectangles": 33
+      }
+    ],
+    "totalPixels": 15520,
+    "totalRectangles": 1083,
+    "sourceSha256": "628b94cdb4746d73cf804d7fde077cc77722fd32f9d81987c38cc7373ebaa484"
+  },
+  "goblin_slinger": {
+    "atlas": "chapter1_mob_walk_v95",
+    "frames": [
+      {
+        "name": "goblin_slinger_w23",
+        "pixelsCleared": 332,
+        "bbox": [
+          93,
+          186,
+          110,
+          228
+        ],
+        "rectangles": 30
+      },
+      {
+        "name": "goblin_slinger_w24",
+        "pixelsCleared": 320,
+        "bbox": [
+          93,
+          187,
+          110,
+          227
+        ],
+        "rectangles": 30
+      },
+      {
+        "name": "goblin_slinger_w25",
+        "pixelsCleared": 302,
+        "bbox": [
+          94,
+          188,
+          110,
+          225
+        ],
+        "rectangles": 27
+      },
+      {
+        "name": "goblin_slinger_w26",
+        "pixelsCleared": 296,
+        "bbox": [
+          94,
+          187,
+          111,
+          224
+        ],
+        "rectangles": 26
+      },
+      {
+        "name": "goblin_slinger_w27",
+        "pixelsCleared": 305,
+        "bbox": [
+          94,
+          187,
+          111,
+          224
+        ],
+        "rectangles": 27
+      },
+      {
+        "name": "goblin_slinger_w28",
+        "pixelsCleared": 304,
+        "bbox": [
+          94,
+          187,
+          111,
+          223
+        ],
+        "rectangles": 28
+      },
+      {
+        "name": "goblin_slinger_w29",
+        "pixelsCleared": 311,
+        "bbox": [
+          94,
+          186,
+          111,
+          221
+        ],
+        "rectangles": 28
+      },
+      {
+        "name": "goblin_slinger_w30",
+        "pixelsCleared": 329,
+        "bbox": [
+          93,
+          185,
+          111,
+          220
+        ],
+        "rectangles": 26
+      },
+      {
+        "name": "goblin_slinger_w31",
+        "pixelsCleared": 336,
+        "bbox": [
+          93,
+          185,
+          111,
+          219
+        ],
+        "rectangles": 24
+      },
+      {
+        "name": "goblin_slinger_w32",
+        "pixelsCleared": 362,
+        "bbox": [
+          92,
+          184,
+          111,
+          219
+        ],
+        "rectangles": 30
+      },
+      {
+        "name": "goblin_slinger_w33",
+        "pixelsCleared": 390,
+        "bbox": [
+          91,
+          183,
+          111,
+          218
+        ],
+        "rectangles": 29
+      },
+      {
+        "name": "goblin_slinger_w34",
+        "pixelsCleared": 443,
+        "bbox": [
+          89,
+          182,
+          111,
+          219
+        ],
+        "rectangles": 30
+      },
+      {
+        "name": "goblin_slinger_w35",
+        "pixelsCleared": 450,
+        "bbox": [
+          89,
+          182,
+          111,
+          219
+        ],
+        "rectangles": 31
+      },
+      {
+        "name": "goblin_slinger_w36",
+        "pixelsCleared": 483,
+        "bbox": [
+          88,
+          181,
+          111,
+          219
+        ],
+        "rectangles": 36
+      },
+      {
+        "name": "goblin_slinger_w37",
+        "pixelsCleared": 533,
+        "bbox": [
+          87,
+          181,
+          111,
+          221
+        ],
+        "rectangles": 35
+      }
+    ],
+    "totalPixels": 5496,
+    "totalRectangles": 437,
+    "sourceSha256": "d99c7d27edd7192d8366b2aa0c35875b4614d4a1f346ae93f6a172a5a9fd20a6"
+  }
+}

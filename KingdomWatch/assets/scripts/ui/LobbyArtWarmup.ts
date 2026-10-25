@@ -11,6 +11,7 @@ import { CAMPAIGN_CHAPTERS, campaignLevelOpen } from '../config/Campaign';
 import { enemyArtRef } from '../config/ChapterContent';
 import { BATTLE_COMMON_ART } from './BattleEntryWarmup';
 import { warmPickArt } from './PickArt';
+import { warmMobArmAlpha } from '../battle/MobArmAlpha';
 
 const SHOP_PREFIX = 'shop_comic_v1/';
 const shared = ['comic_coin_v1', 'comic_diamond_v1', 'comic_nav_shop_v1', 'comic_helm_falcon_v1',
@@ -58,6 +59,7 @@ export function warmCampaignPreparation(levelId: string, difficulty: number,
 
 /** Every reachable menu gets its actual catalog; larger distant scenes only download bytes. */
 export function warmLobbyNavigation(currentTab: number, chapter: number): void {
+  warmMobArmAlpha();
   const save = loadSave(), hero = save.curHero || 'archer';
   const order = [currentTab, ...[2, 1, 3, 0, 4].filter(tab => tab !== currentTab)];
   const foundations = order.map(tab => lobbyPageArt(tab, chapter));

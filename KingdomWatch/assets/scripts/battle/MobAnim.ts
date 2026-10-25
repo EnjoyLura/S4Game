@@ -4,6 +4,7 @@
  */
 import { JsonAsset, Rect, resources, Size, SpriteFrame, Vec2 } from 'cc';
 import { ArtPriority, higherArtPriority, promoteUXArt, uxFrame } from '../ui/Ux';
+import { prepareMobArmAlpha } from './MobArmAlpha';
 
 export interface MobClip {
   walk: SpriteFrame[];
@@ -71,7 +72,7 @@ export function getMobAnims(cb: (d: Loaded) => void, mobId = '', priority: ArtPr
     if (err || !asset) { finish(null); return; }
     uxFrame(id, source => {
       if (!source) { finish(null); return; }
-      finish(parse(asset.json as FrameManifest, source.texture));
+      prepareMobArmAlpha(id, source.texture, () => finish(parse(asset.json as FrameManifest, source.texture)));
     }, priorities.get(id) || priority);
   });
 }

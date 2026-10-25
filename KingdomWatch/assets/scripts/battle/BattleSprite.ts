@@ -4,6 +4,7 @@
  */
 import { Color, EffectAsset, JsonAsset, Layers, Material, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2, Vec4 } from 'cc';
 import { ArtPriority, higherArtPriority, promoteUXArt, uxFrame } from '../ui/Ux';
+import { prepareMobArmAlpha } from './MobArmAlpha';
 
 type AtlasId = string;
 interface FrameManifest { frames: Record<string, [number, number, number, number]>; }
@@ -60,25 +61,28 @@ function loadAtlas(id: AtlasId, cb: (atlas: Atlas | null) => void, priority: Art
     if (err || !asset) { finish(null); return; }
     uxFrame(id, source => {
       if (!source) { finish(null); return; }
-      const frames = new Map<string, SpriteFrame>();
-      const manifest = asset.json as FrameManifest;
-      for (const name of Object.keys(manifest.frames)) {
-        const [x, y, w, h] = manifest.frames[name];
-        const sf = new SpriteFrame();
-        sf.reset({ texture: source.texture, rect: new Rect(x, y, w, h), originalSize: new Size(w, h), offset: new Vec2() });
-        frames.set(name, sf);
-        // The continuous hero rig needs transparent breathing room at the edges.
-        // Extend the shared atlas rectangle, never rescale or recenter individual poses.
-        if (id === 'battle_heroes_v2' && name.endsWith('_attack')) {
-          const pad = 12;
-          const ready = new SpriteFrame();
-          ready.reset({ texture: source.texture, rect: new Rect(x - pad, y - pad, w + pad * 2, h + pad * 2),
-            originalSize: new Size(w + pad * 2, h + pad * 2), offset: new Vec2() });
-          ready.packable = false; // UV deformation uses this shared atlas rectangle directly.
-          frames.set(name.replace('_attack', '_combat'), ready);
+      prepareMobArmAlpha(id, source.texture, () => {
+        const frames = new Map<string, SpriteFrame>();
+        const manifest = asset.json as FrameManifest;
+        for (const name of Object.keys(manifest.frames)) {
+          const [x, y, w, h] = manifest.frames[name];
+          const sf = new SpriteFrame();
+          sf.reset({ texture: source.texture, rect: new Rect(x, y, w, h), originalSize: new Size(w, h), offset: new Vec2() });
+          if (id === 'chapter1_mob_walk_v94' || id === 'chapter1_mob_walk_v95') sf.packable = false;
+          frames.set(name, sf);
+          // The continuous hero rig needs transparent breathing room at the edges.
+          // Extend the shared atlas rectangle, never rescale or recenter individual poses.
+          if (id === 'battle_heroes_v2' && name.endsWith('_attack')) {
+            const pad = 12;
+            const ready = new SpriteFrame();
+            ready.reset({ texture: source.texture, rect: new Rect(x - pad, y - pad, w + pad * 2, h + pad * 2),
+              originalSize: new Size(w + pad * 2, h + pad * 2), offset: new Vec2() });
+            ready.packable = false; // UV deformation uses this shared atlas rectangle directly.
+            frames.set(name.replace('_attack', '_combat'), ready);
+          }
         }
-      }
-      finish({ frames });
+        finish({ frames });
+      });
     }, priorities.get(id) || priority);
   });
 }

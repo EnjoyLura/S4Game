@@ -248,7 +248,7 @@ export class SiphonBeamVFX {
   private heavy = false;
   constructor(field: Node) {
     const parent = field.getChildByName('FxLayer')!;
-    this.ribbons = new HeroFxShader(parent, 'siphonVoidStreams', 16, true);
+    this.ribbons = new HeroFxShader(parent, 'siphonVoidStreams', 16, 'plasma');
     this.g = N('siphonExtractedEssence', parent).addComponent(Graphics);
   }
   tick(dt: number): void {

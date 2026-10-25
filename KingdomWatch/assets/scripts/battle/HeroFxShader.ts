@@ -24,7 +24,7 @@ export class HeroFxShader {
   private lastUsed = 0;
   private destroyed = false;
   ready = false;
-  constructor(parent: Node, name: string, capacity: number, private readonly emissive = false) {
+  constructor(parent: Node, name: string, capacity: number, private readonly blendMode: 'alpha' | 'emission' | 'plasma' = 'alpha') {
     this.root = N(name, parent);
     this.texture = new Texture2D();
     this.texture.reset({ width: 2, height: 2, format: Texture2D.PixelFormat.RGBA8888 });
@@ -35,9 +35,10 @@ export class HeroFxShader {
     for (let i = 0; i < capacity; i++) {
       const node = N('flow' + i, this.root), ui = node.addComponent(UITransform), sprite = node.addComponent(Sprite);
       sprite.sizeMode = Sprite.SizeMode.CUSTOM; sprite.trim = false; sprite.spriteFrame = this.frame;
-      if (emissive) {
+      if (blendMode !== 'alpha') {
         const blend = sprite as unknown as { _srcBlendFactor: gfx.BlendFactor; _dstBlendFactor: gfx.BlendFactor };
-        blend._srcBlendFactor = gfx.BlendFactor.ONE; blend._dstBlendFactor = gfx.BlendFactor.ONE;
+        blend._srcBlendFactor = gfx.BlendFactor.ONE;
+        blend._dstBlendFactor = blendMode === 'emission' ? gfx.BlendFactor.ONE : gfx.BlendFactor.ONE_MINUS_SRC_ALPHA;
       }
       // Remain hidden until a real effect has a material: a white carrier is never a fallback.
       node.active = false;
@@ -46,7 +47,8 @@ export class HeroFxShader {
     void effect().then(asset => {
       if (!asset || this.destroyed || !this.root.isValid) return;
       for (const q of this.quads) {
-        const material = new Material(); material.initialize({ effectAsset: asset, technique: this.emissive ? 1 : 0 });
+        const material = new Material();
+        material.initialize({ effectAsset: asset, technique: this.blendMode === 'alpha' ? 0 : this.blendMode === 'emission' ? 1 : 2 });
         q.material = material; q.sprite.customMaterial = material;
       }
       this.ready = true;

@@ -1,0 +1,11 @@
+{
+  "cases": 90,
+  "maxCarrierBorderByte": 0,
+  "maxOutsidePlasmaAlphaByte": 0,
+  "blackVeilPixelSamples": 0,
+  "maxShapedPlasmaAlphaByte": 199,
+  "blend": "ONE / ONE_MINUS_SRC_ALPHA, premultiplied pigment + emitted light",
+  "shaderSha256": "3e7633ebfc0cf6106b853d6a82a95ffb624abc33da4ee998c6552ba5a56dee8d",
+  "scope": "actual offscreen fragment output, no engine/gameplay or phone performance claim",
+  "gameStarted": false
+}

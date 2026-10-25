@@ -7,6 +7,7 @@ import { Graphics, isValid, JsonAsset, Mask, Node, Rect, resources, ScrollView, 
 import { N } from './UIKit';
 import { trackUIArt, uiArtInView } from './UIArtReady';
 import { NEW_HERO_FRAMES } from './NewHeroArt';
+import { prepareMobArmAlpha } from '../battle/MobArmAlpha';
 
 /** id → 资源路径：'scenes/x' 原样，其余视为 ux/ 下的清单 ID */
 function resPath(id: string): string {
@@ -394,16 +395,18 @@ function lobbyAtlas(id: string, cb: (atlas: LobbyAtlas | null) => void): void {
     if (err || !asset) { finish(null); return; }
     uxFrame(id, source => {
       if (!source) { finish(null); return; }
-      const frames: LobbyAtlas = new Map();
-      const manifest = asset.json as LobbyAtlasManifest;
-      for (const key of Object.keys(manifest.frames)) {
-        const [x, y, w, h] = manifest.frames[key];
-        const frame = new SpriteFrame();
-        frame.reset({ texture: source.texture, rect: new Rect(x, y, w, h), originalSize: new Size(w, h), offset: new Vec2() });
-        frame.packable = false;
-        frames.set(key, frame);
-      }
-      finish(frames);
+      prepareMobArmAlpha(id, source.texture, () => {
+        const frames: LobbyAtlas = new Map();
+        const manifest = asset.json as LobbyAtlasManifest;
+        for (const key of Object.keys(manifest.frames)) {
+          const [x, y, w, h] = manifest.frames[key];
+          const frame = new SpriteFrame();
+          frame.reset({ texture: source.texture, rect: new Rect(x, y, w, h), originalSize: new Size(w, h), offset: new Vec2() });
+          frame.packable = false;
+          frames.set(key, frame);
+        }
+        finish(frames);
+      });
     });
   });
 }
