@@ -28,5 +28,5 @@
 
 15份JS及5段内联语法、全部资源SHA/子路径/发布清单通过；509份既有native逐字节保持，无新增媒体，章节数据仅替换23处不再成立的飞行介绍，属性数值不变。UIBody/UIHeading完整覆盖新增短文案，无需增字库。发布包1578文件199258068字节（199.26MB，低于200MB），比v117仅增加6083字节；版本5c06e565348b315d。
 
-部署与线上验证结果待补。
+已发布[正式游戏](https://enjoylura.github.io/kingdom-watch-play/?v=flight-v118)。独立GitHub运行仓库提交3b7db4e1dad75555ea5344295dea0e27719bd8dc，Pages构建成功、标准线上发布校验通过；主脚本和森林飞行图集额外HTTP200/SHA校验通过，回执见deployment.json和additional-http-verification.json。发布过程源HEAD/暂存保持，未推送源码、未部署Cloudflare。
 
