@@ -31,3 +31,9 @@
 已检查Cocos实际导出的Effect含2个technique、各1个pass，普通SRC_ALPHA/ONE_MINUS_SRC_ALPHA与吸取ONE/ONE配置正确分开，见package-static-verification.json的compiledEffect；不只检查离屏源码。
 
 本地预览：[地面破坏](bomb-review.mp4)、[移动吸取](siphon-review.mp4)，仅本地、无音轨、不进入运行包。234帧独立GPU预览及96移动/54边界诊断通过，真实引擎画面和手机性能仍待用户试玩。
+
+## 发布完成
+
+- [试玩v110](https://enjoylura.github.io/kingdom-watch-play/?v=crater-siphon-v110)。
+- 运行提交f32c06903bf30419b39547f9e8e12aa2caf5b089，Pages/build均built；19标准HTTP校验及新版Effect额外HTTP 200/SHA一致，确认线上资产包含普通/发光2个technique。
+- source HEAD/索引在发布中保持；源码未推送，CF未部署。收据文档提交不改变已发布游戏，真实手机动态与帧率仍待用户确认。
