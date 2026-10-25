@@ -1,5 +1,7 @@
 # 交付要求
 
+v122发布回执已完成：独立GitHub运行仓库ad7106ea452029b29dcec91510826db4b3fff6b6，Pages构建与标准线上检查通过；主脚本/两编译特效/两无损图集5份额外HTTP200与SHA匹配。发布期间源HEAD/索引保持，保留上一版必要资源，未推源码/未部署CF。详见docs/wind-volume-v122/deployment.json与additional-http-verification.json；实际手机动效/加载/性能待用户试玩。
+
 2026-10-25 完成[风体与尖刃手里剑v122](docs/wind-volume-v122/README.md)，源码19feec8d。用户否定v121风扇/亮线造型后，忍者大招改四角长尖/深内凹/透明小孔/白青刃边，三层几何残影与切风碎光；去中央过曝白团，后备也为尖刃。内置imagegen原创两张1024²四帧图集fx/wind_volume_v122/eye、tornado，真实alpha、每帧512与55px透明留边，固定中心/脚点；提示词、可重复准备脚本、哈希/原图出处均记录，母版原图local/art-archive忽略。WindVolumeVFX固定8槽、UX缓存共享/失败重试/迟到销毁保护、相邻帧先预乘再插值/内部UV平流、alpha<=.65，风专属战前预热，忍者不加载图集；特效置于TextLayer之前，伤害数字保持上层。148原战斗配置文件/34英雄方法受保护，9组隔离检查、森林背景+3原怪物离屏GPU180帧/四向风刃检查通过，9旧类型无新增。Creator19798ms退出36，15JS+5内联/全SHA/子路径/alpha/无损RGBA通过，512旧native不变、仅增两无损WebP1236084字节；1595文件201307485字节，版本e06e4985de95b629。无游戏/浏览器/真实战斗/音频/WASM执行，手机待用户试玩；发布回执后补，不推源码、不部署CF。
 
 v121发布回执已完成：独立GitHub运行仓库f122d130bbb4700f29a083b6ee6b3a209ca8ae5d，Pages构建与标准线上HTTP检查通过；额外主脚本/实际编译效果2份HTTP200与SHA匹配。发布期间源HEAD/索引不变，保留上一版必要文件；未推源码、未部署CF。详见docs/wind-ninja-v121/deployment.json及additional-http-verification.json，手机实战观感与性能待用户试玩。
