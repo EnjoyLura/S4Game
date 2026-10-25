@@ -247,10 +247,10 @@ export const HERO_DEFS: Record<string, HeroDef> = {
     story: '来自铜炉堡的矮人工程师。他把城门工坊里的重炮扛上防线，用精准的爆破为同伴撕开重甲。',
   },
   siphon: {
-    id: 'siphon', name: '薇拉·绯契', job: '虹吸 · 持续续航', avatar: 'ui_avatar_siphon',
+    id: 'siphon', name: '薇拉·绯契', job: '虹吸 · 贯穿爆发', avatar: 'ui_avatar_siphon',
     baseAtk: 64, baseSkillDmg: 95, growthType: 'normal', atkSpd: 1,
-    weaponName: '绯契法杖', skillName: '灵魂分流', ultName: '生命收割', shopPrice: 5600,
-    story: '以绯晶维系生命契约的流浪术士。她锁住敌人的生命，将汲取的余能送回防线；连接越久，契约越强。',
+    weaponName: '绯契法杖', skillName: '灵魂分流', ultName: '生命洪流', shopPrice: 5600,
+    story: '以绯晶维系生命契约的流浪术士。她锁住敌人的生命，将汲取的余能化作贯穿战场的洪流；连接越久，契约越强。',
   },
 };
 
@@ -478,7 +478,7 @@ export const SHOP: ShopDef[] = [
   { id: 's_hero_volt', tab: 'hero', name: '沃尔·雷霆', sub: '雷电 · 连锁控制', price: 4200, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'volt' } },
   { id: 's_hero_mora', tab: 'hero', name: '莫拉·寒霜', sub: '冰霜 · 减速控制', price: 4800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'mora' } },
   { id: 's_hero_cannon', tab: 'hero', name: '布洛克·铜铸', sub: '重炮 · 物理爆破', price: 5200, currency: 'diamond', unlock: '1-4', give: { kind: 'hero', id: 'cannon' } },
-  { id: 's_hero_siphon', tab: 'hero', name: '薇拉·绯契', sub: '虹吸 · 持续续航', price: 5600, currency: 'diamond', unlock: '1-4', give: { kind: 'hero', id: 'siphon' } },
+  { id: 's_hero_siphon', tab: 'hero', name: '薇拉·绯契', sub: '虹吸 · 贯穿爆发', price: 5600, currency: 'diamond', unlock: '1-4', give: { kind: 'hero', id: 'siphon' } },
   { id: 's_hero_more', tab: 'hero', name: '新英雄', sub: '敬请期待', price: 0, currency: 'diamond', unlock: '', give: { kind: 'hero', id: '' } },
   { id: 's_helm_falcon', tab: 'equip', name: '猎鹰头盔', sub: '蓝1阶 · 头盔', price: 600, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'helm_falcon' } },
   { id: 's_acc_moon', tab: 'equip', name: '月纹坠饰', sub: '绿1阶 · 饰品', price: 300, currency: 'gold', unlock: '1-1', give: { kind: 'equip', id: 'acc_moon' } },

@@ -1,0 +1,18 @@
+{
+  "fonts": [
+    {
+      "font": "UIBody",
+      "added": "洪",
+      "existingCodepointsPreserved": 1572,
+      "sha256": "399978caeead041f5c3baa2806ef690e3e0d0c7b6acd8d391633a622318e1bd4"
+    },
+    {
+      "font": "UIHeading",
+      "added": "洪",
+      "existingCodepointsPreserved": 1572,
+      "sha256": "dd86f6b23dfff99fb368d1200090cabd02b0b0a28269183baca4a27b70c9078f"
+    }
+  ],
+  "source": "existing pinned OFL source fonts, cached locally",
+  "gameStarted": false
+}

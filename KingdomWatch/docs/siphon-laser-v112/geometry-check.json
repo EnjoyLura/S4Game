@@ -1,0 +1,92 @@
+{
+  "contactsChecked": 1200,
+  "groupLinePiercesThreeTargets": true,
+  "emptyFieldDoesNotCast": true,
+  "turnRateBounded": true,
+  "timing": [
+    {
+      "level": 1,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 12,
+      "integratedDamageSeconds": 1.7999999999999998
+    },
+    {
+      "level": 1,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 12,
+      "integratedDamageSeconds": 1.7999999999999998
+    },
+    {
+      "level": 1,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 12,
+      "integratedDamageSeconds": 1.7999999999999998
+    },
+    {
+      "level": 10,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 14,
+      "integratedDamageSeconds": 2.1
+    },
+    {
+      "level": 10,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 14,
+      "integratedDamageSeconds": 2.1
+    },
+    {
+      "level": 10,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 14,
+      "integratedDamageSeconds": 2.1
+    },
+    {
+      "level": 20,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 14,
+      "integratedDamageSeconds": 2.1
+    },
+    {
+      "level": 20,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 14,
+      "integratedDamageSeconds": 2.1
+    },
+    {
+      "level": 20,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 14,
+      "integratedDamageSeconds": 2.1
+    }
+  ],
+  "noSiphonHealingCallsOrConfig": true,
+  "scope": "pure geometry and interval math only; game/monster/scene modules not run",
+  "gameStarted": false
+}

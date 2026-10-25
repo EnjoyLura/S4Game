@@ -208,7 +208,7 @@ export class BattleDirector extends Component {
       applyHeroGrowth(st, hid);     // 英雄等级成长+阶段性突破上场（每级成长按存档等级）
       applyEquipAffixes(st, hid);   // 穿戴词条上场即生效（用户确认的词条体系）
       return hid === 'cannon' ? new CannonHero(heroLayer, slots[i], st)
-        : hid === 'siphon' ? new SiphonHero(heroLayer, slots[i], st, this.line)
+        : hid === 'siphon' ? new SiphonHero(heroLayer, slots[i], st)
         : hid === 'sniper' ? new SniperHero(heroLayer, slots[i], st)
         : hid === 'pyro' ? new PyroHero(heroLayer, slots[i], st)
           : hid === 'volt' ? new VoltHero(heroLayer, slots[i], st)

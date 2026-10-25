@@ -457,7 +457,7 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
             : hid === 'cannon' ? cannonUltCfg(level).mul : siphonUltCfg(level).mul;
           const cur = value(lv), next = value(maxed ? lv : lv + 1);
           const pct = (v: number): string => `${Math.round(v * 10000) / 100}%`;
-          rows = [{ name: selected === 'atk' ? '普攻伤害倍率' : hid === 'siphon' ? '每束每秒技能倍率' : '每弹中心技能倍率',
+          rows = [{ name: selected === 'atk' ? '普攻伤害倍率' : hid === 'siphon' ? '激光每秒技能倍率' : '每弹中心技能倍率',
             cur: pct(cur), next: pct(next), gain: `+${pct(next - cur)}` }];
         } else {
           const pct = (l: number): number => 100 + (l - 1) * 8;

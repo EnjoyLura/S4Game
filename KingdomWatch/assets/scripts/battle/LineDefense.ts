@@ -84,14 +84,6 @@ export class LineDefense {
     this.hp = Math.min(this.maxHp, this.hp + this.maxHp * p);
   }
 
-  /** Lifesteal cannot revive a fallen or settled defense, or exceed its actual missing HP. */
-  healAmount(amount: number): number {
-    if (this.battleFinished || this.hp <= 0 || !Number.isFinite(amount) || amount <= 0) return 0;
-    const restored = Math.min(amount, this.maxHp - this.hp);
-    this.hp += restored;
-    return restored;
-  }
-
   addShield(v: number): void {
     this.shield = Math.min(this.maxHp, this.shield + v);
   }

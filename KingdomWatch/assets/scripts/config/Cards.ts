@@ -597,7 +597,7 @@ export const SIPHON_CARDS: CardDef[] = [
   c({ id: 'siphon_shred', owner: 'siphon', name: '深度汲取', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
     art: 'ui_card_siphon_shred', desc: '持续锁定目标3秒后\n目标法抗降低15个百分点', apply: x => { x.hero.siphonShred = .15; } }),
   c({ id: 'siphon_extend', owner: 'siphon', name: '灵魂延展', rarity: 'gold', maxStacks: 2, offerGroup: 'combat',
-    art: 'ui_card_siphon_extend', desc: '技能、大招\n各多连接1个目标', apply: x => { x.hero.siphonBranches = (x.hero.siphonBranches || 0) + 1; } }),
+    art: 'ui_card_siphon_extend', desc: '技能多连接1个目标\n大招激光宽度 +12', apply: x => { x.hero.siphonBranches = (x.hero.siphonBranches || 0) + 1; } }),
 ];
 export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...VOLT_CARDS, ...MORA_CARDS,
   ...CANNON_CARDS, ...SIPHON_CARDS, ...GLOBAL_CARDS];

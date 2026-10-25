@@ -242,7 +242,6 @@ export class SiphonBeamVFX {
   private pulses: DrainPulse[] = [];
   private cursor = 0;
   private clock = 0;
-  private healAge = 1;
   private sx = 0;
   private sy = 0;
   private heavy = false;
@@ -252,7 +251,7 @@ export class SiphonBeamVFX {
     this.g = N('siphonExtractedEssence', parent).addComponent(Graphics);
   }
   tick(dt: number): void {
-    this.clock += dt; this.healAge += dt;
+    this.clock += dt;
     for (const p of this.pulses) p.age += dt;
   }
   hit(x: number, y: number, lifeId: number, heavy: boolean): void {
@@ -261,7 +260,6 @@ export class SiphonBeamVFX {
     const p = this.pulses[index] || (this.pulses[index] = {} as DrainPulse);
     p.x = x; p.y = y; p.lifeId = lifeId; p.age = 0; p.born = this.clock; p.heavy = heavy;
   }
-  healed(): void { this.healAge = 0; }
   begin(sx: number, sy: number, heavy: boolean): void {
     this.g.clear(); this.ribbons.begin(); this.sx = sx; this.sy = sy; this.heavy = heavy;
   }
@@ -316,10 +314,6 @@ export class SiphonBeamVFX {
         }
       }
     }
-    if (this.healAge < .22) {
-      const fade = 1 - this.healAge / .22;
-      ink(g, 210, 135, 255, fade * .14); oval(g, this.sx, this.sy, 16, 13);
-      ink(g, 255, 222, 255, fade * .8); oval(g, this.sx, this.sy, 2 + fade * 2, 2 + fade * 2);
-    }
+
   }
 }

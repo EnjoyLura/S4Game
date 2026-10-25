@@ -1,0 +1,12 @@
+{
+  "file": "C:\\Users\\user\\Downloads\\QQ20261025-154031.mp4",
+  "bytes": 858659,
+  "sha256": "c8b5fb9e2cd052956408d5ed1e74899f939fb1c83803ed0230bd11d92e14da9e",
+  "frames": 88,
+  "fps": 30.14,
+  "size": [
+    1646,
+    970
+  ],
+  "usage": "motion/shape reference only; no video pixels copied into game"
+}

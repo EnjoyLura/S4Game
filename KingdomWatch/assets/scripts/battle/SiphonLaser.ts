@@ -1,0 +1,41 @@
+/** Pure bounded-ray geometry. No random numbers, game state or rendering. */
+export interface LaserBody { x: number; y: number; dead: boolean; isBoss: boolean; def: { radius: number; elite?: boolean }; }
+export interface LaserBounds { left: number; right: number; top: number; }
+export function laserLength(x: number, y: number, angle: number, bounds: LaserBounds): number {
+  const dx = Math.cos(angle), dy = Math.sin(angle);
+  if (dy <= 0) return 0;
+  const top = (bounds.top - y) / dy;
+  const side = dx > 1e-6 ? (bounds.right - x) / dx : dx < -1e-6 ? (bounds.left - x) / dx : Infinity;
+  return Math.max(0, Math.min(top, side));
+}
+export function laserTouches(x: number, y: number, angle: number, length: number, halfWidth: number,
+  tx: number, ty: number, radius: number): boolean {
+  const dx = Math.cos(angle), dy = Math.sin(angle), rx = tx - x, ry = ty - y;
+  const along = Math.max(0, Math.min(length, rx * dx + ry * dy));
+  return (rx - along * dx) ** 2 + (ry - along * dy) ** 2 <= (halfWidth + radius) ** 2;
+}
+export function bestLaserAngle(x: number, y: number, halfWidth: number, bodies: readonly LaserBody[],
+  bounds: LaserBounds, fallback = Math.PI / 2): number | null {
+  let best: number | null = null, bestScore = -1, bestTurn = Infinity;
+  for (const target of bodies) {
+    if (target.dead || target.y <= y + 24 || target.y > bounds.top || target.x < bounds.left || target.x > bounds.right) continue;
+    const angle = Math.max(.12, Math.min(Math.PI - .12, Math.atan2(target.y - y, target.x - x)));
+    const length = laserLength(x, y, angle, bounds);
+    let score = 0;
+    for (const m of bodies) {
+      if (m.dead || m.y <= y + 24 || m.y > bounds.top || m.x < bounds.left || m.x > bounds.right) continue;
+      if (laserTouches(x, y, angle, length, halfWidth, m.x, m.y, m.def.radius))
+        score += 1 + (m.isBoss ? .7 : m.def.elite ? .3 : 0);
+    }
+    const turn = Math.abs(angle - fallback);
+    if (score > bestScore || score === bestScore && turn < bestTurn) { best = angle; bestScore = score; bestTurn = turn; }
+  }
+  return best;
+}
+export function turnLaser(angle: number, target: number, dt: number, radiansPerSecond = .45): number {
+  const limit = Math.max(0, dt) * radiansPerSecond;
+  return angle + Math.max(-limit, Math.min(limit, target - angle));
+}
+export function laserExposure(before: number, after: number, windup: number, duration: number): number {
+  return Math.max(0, Math.min(after, windup + duration) - Math.max(before, windup));
+}

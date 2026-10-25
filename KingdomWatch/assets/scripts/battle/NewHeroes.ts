@@ -4,14 +4,15 @@ import { HeroBase } from './Hero';
 import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
-import { LineDefense } from './LineDefense';
 import { HeroStats } from '../config/Cards';
-import { CANNON, SIPHON, cannonSkillCfg, cannonUltCfg, siphonSkillCfg, siphonUltCfg } from '../config/NewHeroConfig';
+import { CANNON, SIPHON, SIPHON_LASER, cannonSkillCfg, cannonUltCfg, siphonSkillCfg, siphonUltCfg } from '../config/NewHeroConfig';
 import { HERO_Y, LINE_Y, LO } from '../config/GameConfig';
 import { artSprite } from '../ui/Ux';
 import { CA, N } from '../ui/UIKit';
 import { Sfx } from '../core/Sfx';
 import { CannonBlastVFX, SiphonBeamVFX } from './NewHeroVFX';
+import { SiphonLaserVFX } from './SiphonLaserVFX';
+import { bestLaserAngle, laserExposure, laserLength, laserTouches, turnLaser } from './SiphonLaser';
 
 function visual(parent: Node, node: Node, x: number, hero: string): Node {
   node.layer = parent.layer; node.setParent(parent); node.setPosition(x, HERO_Y, 0);
@@ -152,7 +153,7 @@ export class CannonHero extends HeroBase {
   warmEffects(): void { this.effects(); }
 }
 
-interface Beam { mob: Monster; life: number; kind: 'twin' | 'skill' | 'ult'; }
+interface Beam { mob: Monster; life: number; kind: 'twin' | 'skill'; }
 export class SiphonHero extends HeroBase {
   readonly id = 'siphon'; readonly name = '薇拉·绯契';
   readonly chargeMax = SIPHON.energy; readonly skillMax = SIPHON.cooldown;
@@ -161,14 +162,24 @@ export class SiphonHero extends HeroBase {
   private ramp = 0;
   private heldSeconds = 0;
   private skillSeconds = 0;
-  private harvestSeconds = 0;
-  private harvestDelay = 0;
+  private laserAge = -1;
+  private laserAngle = Math.PI / 2;
+  private laserGoal = Math.PI / 2;
+  private laserFacing = 1;
+  private laserX = 0;
+  private laserY = 0;
+  private laserTick = 0;
+  private laserAimT = 0;
+  private readonly laserArena = { left: -355, right: 355, top: 0 };
+  private laserFX: SiphonLaserVFX | null = null;
   private beams: Beam[] = [];
   private beamFX: SiphonBeamVFX | null = null;
-  constructor(parent: Node, x: number, stats: HeroStats, private line: LineDefense) { super(parent, x, stats); }
 
   protected buildVisual(parent: Node): void { this.staticArt = visual(parent, this.node, this.x, 'siphon'); }
-  warmEffects(): void { this.beamFX ||= new SiphonBeamVFX(this.node.parent!.parent!); }
+  warmEffects(): void {
+    this.beamFX ||= new SiphonBeamVFX(this.node.parent!.parent!);
+    this.laserFX ||= new SiphonLaserVFX(this.node.parent!.parent!);
+  }
   protected attackInterval(): number { return SIPHON.tick; }
   private valid(m: Monster | null, life: number, mgr: MonsterManager): m is Monster {
     return !!m && m.lifeId === life && !m.dead && m.node.isValid && m.node.activeInHierarchy && mgr.list.includes(m);
@@ -186,7 +197,6 @@ export class SiphonHero extends HeroBase {
   protected shoot(target: Monster, _mgr: MonsterManager, _projs: ProjectileManager, dmg?: DamageService): void {
     const service = dmg || this.lastDmg;
     if (!service) return;
-    const harvesting = this.harvestSeconds > 0 && this.harvestDelay <= 0;
     const base = this.effAtk * this.stats.aspd * this.stats.normalMul * SIPHON.tick;
     const take = (m: Monster, amount: number): number => {
       if (m.dead) return 0;
@@ -194,21 +204,16 @@ export class SiphonHero extends HeroBase {
       m.takeDamage(amount * (critical ? this.stats.critMul : 1), critical, this.id, false, this.stats.defIgnore);
       const dealt = m.lastDamageTaken;
       service.add(this.id, dealt);
-      if (dealt > 0) this.beamFX?.hit(m.x, m.y + m.def.radius * .45, m.lifeId, harvesting);
+      if (dealt > 0) this.beamFX?.hit(m.x, m.y + m.def.radius * .45, m.lifeId, false);
       return dealt;
     };
-    let actual = take(target, base * (1 + this.ramp) * (harvesting ? siphonUltCfg(this.stats.ultLv).primaryMul : 1));
+    take(target, base * (1 + this.ramp));
     for (const b of this.beams) {
       if (b.mob.lifeId !== b.life || b.mob.dead) continue;
       const amount = b.kind === 'twin' ? base * (this.stats.siphonTwin || 0)
-        : b.kind === 'skill' ? this.abilityDamage(siphonSkillCfg(this.stats.skillLv).mul) * SIPHON.tick
-          : this.abilityDamage(siphonUltCfg(this.stats.ultLv).mul, true) * SIPHON.tick;
-      actual += take(b.mob, amount);
+        : this.abilityDamage(siphonSkillCfg(this.stats.skillLv).mul) * SIPHON.tick;
+      take(b.mob, amount);
     }
-    const fraction = harvesting ? SIPHON.ultimateHealFraction : SIPHON.healFraction;
-    const cap = harvesting ? SIPHON.ultimateHealCapPerSecond : SIPHON.healCapPerSecond;
-    const healed = this.line.healAmount(Math.min(actual * fraction, this.line.maxHp * cap * SIPHON.tick));
-    if (healed > 0) this.beamFX?.healed();
     this.animateAttack(false, target.x - this.x, target.y - HERO_Y - 60);
   }
   protected castSkill(mgr: MonsterManager): void {
@@ -217,35 +222,79 @@ export class SiphonHero extends HeroBase {
     this.skillSeconds = siphonSkillCfg(this.stats.skillLv).duration;
     Sfx.cast(this.id);
   }
-  get ultShowDuration(): number { return siphonUltCfg(this.stats.ultLv).duration + .6; }
+  get ultShowDuration(): number { return SIPHON_LASER.windup + siphonUltCfg(this.stats.ultLv).duration + SIPHON_LASER.tail; }
+  private get laserHalfWidth(): number {
+    return (siphonUltCfg(this.stats.ultLv).halfWidth + (this.stats.siphonBranches || 0) * 6) * this.stats.skillRangeMul;
+  }
+  private get laserBounds() { this.laserArena.top = LO.half - LO.notchTop - 112; return this.laserArena; }
+  protected faceAttack(dx: number, dy: number): void {
+    // Keep the firing palm anchored during a sweep, even if normal attacks prefer another side.
+    if (this.laserAge >= 0) super.faceAttack(this.laserFacing, 1);
+    else super.faceAttack(dx, dy);
+  }
   castUlt(mgr: MonsterManager): boolean {
-    if (!this.ultReady || !this.selectNormalTarget(mgr)) return false;
+    if (!this.ultReady) return false;
+    const sy = HERO_Y + 51;
+    let angle = bestLaserAngle(this.x, sy, this.laserHalfWidth, mgr.list, this.laserBounds);
+    if (angle === null) return false;
+    this.laserFacing = Math.cos(angle) >= 0 ? 1 : -1;
+    this.laserX = this.x + 43.4 * this.laserFacing; this.laserY = sy;
+    angle = bestLaserAngle(this.laserX, sy, this.laserHalfWidth, mgr.list, this.laserBounds, angle) ?? angle;
+    this.laserAngle = this.laserGoal = angle;
+    this.laserAge = this.laserTick = this.laserAimT = 0;
     this.charge = 0;
-    this.harvestDelay = .6;
-    this.harvestSeconds = siphonUltCfg(this.stats.ultLv).duration;
+    this.warmEffects(); this.faceAttack(this.laserFacing, 1);
     this.beginUltimate();
     Sfx.cast(this.id, true);
     return true;
+  }
+  private tickLaser(dt: number, mgr: MonsterManager): void {
+    this.laserFX?.tick(dt);
+    if (this.laserAge < 0) return;
+    const cfg = siphonUltCfg(this.stats.ultLv), before = this.laserAge, bounds = this.laserBounds;
+    this.laserAge += dt; this.laserAimT -= dt;
+    const damageEnd = SIPHON_LASER.windup + cfg.duration;
+    if (this.laserAimT <= 0 && this.laserAge <= damageEnd) {
+      this.laserAimT = .18;
+      this.laserGoal = bestLaserAngle(this.laserX, this.laserY, this.laserHalfWidth, mgr.list,
+        bounds, this.laserAngle) ?? this.laserAngle;
+    }
+    this.laserAngle = turnLaser(this.laserAngle, this.laserGoal, dt, SIPHON_LASER.turnRate);
+    const activeDt = laserExposure(before, this.laserAge, SIPHON_LASER.windup, cfg.duration);
+    this.laserTick += activeDt;
+    const length = laserLength(this.laserX, this.laserY, this.laserAngle, bounds);
+    while (this.laserTick + 1e-8 >= SIPHON_LASER.tick) {
+      this.laserTick = Math.max(0, this.laserTick - SIPHON_LASER.tick);
+      for (const m of mgr.list) {
+        if (m.dead || m.y > bounds.top || m.y <= this.laserY || m.x < bounds.left || m.x > bounds.right) continue;
+        if (!laserTouches(this.laserX, this.laserY, this.laserAngle, length, this.laserHalfWidth,
+          m.x, m.y, m.def.radius)) continue;
+        const critical = Math.random() < this.stats.critRate;
+        m.takeDamage(this.abilityDamage(cfg.mul, true) * SIPHON_LASER.tick * (critical ? this.stats.critMul : 1),
+          critical, this.id, false, this.stats.defIgnore, this.laserAngle, true);
+        this.lastDmg?.add(this.id, m.lastDamageTaken);
+        if (m.lastDamageTaken > 0) this.laserFX?.hit(m.x, m.y + m.def.radius * .45, m.lifeId);
+      }
+      this.ultimateBeat(this.laserX + Math.cos(this.laserAngle) * length * .55,
+        this.laserY + Math.sin(this.laserAngle) * length * .55, .22, false);
+    }
+    if (this.laserAge >= damageEnd + SIPHON_LASER.tail) this.laserAge = -1;
   }
   protected updateQueues(dt: number, mgr: MonsterManager): void {
     const primary = this.selectNormalTarget(mgr);
     if (primary && !this.beamFX) this.beamFX = new SiphonBeamVFX(this.node.parent!.parent!);
     this.beamFX?.tick(dt);
     this.skillSeconds = Math.max(0, this.skillSeconds - dt);
-    const delay = this.harvestDelay;
-    this.harvestDelay = Math.max(0, delay - dt);
-    this.harvestSeconds = Math.max(0, this.harvestSeconds - Math.max(0, dt - delay));
     if (primary) {
       this.heldSeconds += dt;
       this.ramp = Math.min(SIPHON.rampMax, this.ramp + SIPHON.rampPerSecond * dt);
       if (this.stats.siphonShred && this.heldSeconds >= 3) primary.applyResistanceShred('magic', this.stats.siphonShred, .35);
     }
     const counts = { twin: this.stats.siphonTwin ? 1 : 0,
-      skill: this.skillSeconds > 0 ? siphonSkillCfg(this.stats.skillLv).branches + (this.stats.siphonBranches || 0) : 0,
-      ult: this.harvestSeconds > 0 && this.harvestDelay <= 0 ? siphonUltCfg(this.stats.ultLv).branches + (this.stats.siphonBranches || 0) : 0 };
+      skill: this.skillSeconds > 0 ? siphonSkillCfg(this.stats.skillLv).branches + (this.stats.siphonBranches || 0) : 0 };
     const next: Beam[] = [];
     let nearby: Monster[] | null = null;
-    for (const kind of ['ult', 'skill', 'twin'] as const) {
+    for (const kind of ['skill', 'twin'] as const) {
       const count = counts[kind];
       if (!primary || !count) continue;
       // Each channel owns its targets. Casting cannot evict an existing normal beam.
@@ -259,25 +308,32 @@ export class SiphonHero extends HeroBase {
         - (b.x - primary.x) ** 2 - (b.y - primary.y) ** 2);
       for (const m of nearby) {
         if (keep.length >= count) break;
-        const radius = (kind === 'ult' ? 520 : 300) * this.stats.skillRangeMul;
+        const radius = 300 * this.stats.skillRangeMul;
         if (m.dead || used.has(m) || (m.x - primary.x) ** 2 + (m.y - primary.y) ** 2 > radius ** 2) continue;
         const b: Beam = { mob: m, life: m.lifeId, kind }; keep.push(b); next.push(b); used.add(m);
       }
     }
     this.beams = next;
+    this.tickLaser(dt, mgr);
   }
   renderEffects(): void {
     const fx = this.beamFX;
+    if (this.laserFX) {
+      const cfg = siphonUltCfg(this.stats.ultLv);
+      this.laserFX.render(this.laserX, this.laserY, this.laserAngle,
+        laserLength(this.laserX, this.laserY, this.laserAngle, this.laserBounds), this.laserHalfWidth,
+        this.laserAge, cfg.duration);
+    }
     if (!fx) return;
     // Raised palm center in the 120x180 sprite, mirrored with the whole character.
     fx.begin(this.x + 43.4 * (this.staticArt?.scale.x ?? 1), HERO_Y + 51,
-      this.harvestSeconds > 0 && this.harvestDelay <= 0);
+      false);
     const primary = this.primary;
     if (!primary || primary.dead || primary.lifeId !== this.primaryLife) { fx.end(); return; }
     fx.beam(primary.x, primary.y + primary.def.radius * .45, 1 + this.ramp * .4, .6);
     const drawn = new Set<Monster>([primary]);
     for (const b of this.beams) if (b.mob.lifeId === b.life && !drawn.has(b.mob)) {
-      if (!b.mob.dead) fx.beam(b.mob.x, b.mob.y + b.mob.def.radius * .45, b.kind === 'ult' ? .85 : .65, b.life % 17);
+      if (!b.mob.dead) fx.beam(b.mob.x, b.mob.y + b.mob.def.radius * .45, .65, b.life % 17);
       drawn.add(b.mob);
     }
     fx.end();
