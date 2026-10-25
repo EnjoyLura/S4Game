@@ -1,0 +1,18 @@
+{
+  "release": "6baaa21230f2530e",
+  "samples": [
+    {
+      "path": "assets/main/index.ca871.js",
+      "bytes": 971206,
+      "status": 200,
+      "sha256": "8177e5555b1282c174b2bd72d04433b906019103f1d5c297134bca730d424948"
+    },
+    {
+      "path": "assets/resources/native/4f/4f4e0740-2005-42a2-b4f7-31b0ed0bff81.d0b38/UIBody.ttf",
+      "bytes": 493792,
+      "status": 200,
+      "sha256": "6a9d629a66489d025beddeef090b4acfc8f38ac73b035923e0c3fd5d7009bcfb"
+    }
+  ],
+  "gameOrBrowserStarted": false
+}

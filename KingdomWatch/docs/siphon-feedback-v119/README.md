@@ -18,5 +18,5 @@ SiphonHero.shoot统一计算normal=原普攻每跳基础×(1+ramp)。主线norma
 
 实现已本地提交30891245。初次构建输出记录因执行环境中断不完整，重跑构建并重新校验；最终Creator3.8.8构建22035ms，正常退出36，DPR/生产缓存准备完成。15份JS+5段内联语法、全部文件SHA/子路径/清单检查通过；509份原native逐字节不变，无新增媒体。1578文件199259752字节（199.26MB，低于200MB），比v118增加1684字节，版本6baaa21230f2530e。
 
-独立GitHub发布与线上验证结果待补。
+已发布[正式游戏](https://enjoylura.github.io/kingdom-watch-play/?v=siphon-feedback-v119)。独立运行仓库提交f44970c4722dc786e818646af635dd2f1f33ee0f，GitHub Pages构建与标准线上检查通过；主脚本与UIBody中文字体额外HTTP200/逐字节SHA通过。发布期间源HEAD和索引保持，未推送源码、未部署Cloudflare。回执deployment.json、additional-http-verification.json。
 
