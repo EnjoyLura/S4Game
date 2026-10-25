@@ -11,6 +11,7 @@ import { BasicAttackLaunchVFX } from './BasicAttackLaunchVFX';
 import { VoltVFX } from './VoltVFX';
 import { VoltUltimateVFX } from './VoltUltimateVFX';
 import { SniperUltimateVFX } from './SniperUltimateVFX';
+import { EnemyHealVFX, HealingBody } from './EnemyHealVFX';
 
 interface Impact { x: number; y: number; life: number; max: number; radius: number; color: string; angle: number; heavy: boolean; hero: string; kind: 'contact' | 'cast' | 'blast'; }
 interface CombatCue { kind: string; x: number; y: number; tx: number; ty: number; radius: number; life: number; max: number; }
@@ -37,6 +38,7 @@ export class ImpactFX {
   private volt?: VoltVFX;
   private voltUltimate?: VoltUltimateVFX;
   private sniperUltimate?: SniperUltimateVFX;
+  private healing: EnemyHealVFX;
 
   constructor(parent: Node, groundParent: Node = parent, projectileParent: Node = parent, depthParent?: Node,
     heroIds: readonly string[] = ['archer', 'sniper', 'pyro', 'volt', 'mora']) {
@@ -57,6 +59,7 @@ export class ImpactFX {
     node.layer = Layers.Enum.UI_2D;
     node.setParent(parent);
     this.g = node.addComponent(Graphics);
+    this.healing = new EnemyHealVFX(parent);
     for (let i = 0; i < 32; i++) this.free.push({ x: 0, y: 0, life: 0, max: 1, radius: 1, color: '', angle: 0, heavy: false, hero: '', kind: 'contact' });
     for (let i = 0; i < 40; i++) this.cueFree.push({ kind: '', x: 0, y: 0, tx: 0, ty: 0, radius: 1, life: 0, max: 1 });
   }
@@ -189,12 +192,13 @@ export class ImpactFX {
           g.moveTo(x, y); g.lineTo(x + (k - 1) * 4, y + 18 + 12 * fade); g.stroke();
         }
       } else {
+        const stone = p.kind === 'stoneLand';
         const magic = p.kind === 'wardBreak' || p.kind === 'wardHit';
         const breaking = p.kind === 'armorBreak' || p.kind === 'wardBreak', group = p.kind === 'groupKill';
         const interrupt = p.kind === 'interrupt';
-        this.tint.set(group || interrupt ? 250 : magic ? 206 : 202,
-          group ? 211 : interrupt ? 225 : magic ? 167 : 225,
-          group ? 132 : interrupt ? 154 : magic ? 255 : 235, Math.round(235 * fade));
+        this.tint.set(stone ? 205 : group || interrupt ? 250 : magic ? 206 : 202,
+          stone ? 179 : group ? 211 : interrupt ? 225 : magic ? 167 : 225,
+          stone ? 133 : group ? 132 : interrupt ? 154 : magic ? 255 : 235, Math.round(235 * fade));
         g.fillColor = this.tint; g.strokeColor = this.tint; g.lineWidth = 1.8;
         const count = breaking ? 6 : group ? 7 : 3;
         const spread = (breaking ? p.radius * 1.5 : group ? 52 : 14) * (t + .2);
@@ -212,7 +216,10 @@ export class ImpactFX {
     }
   }
 
+  healLink(source: HealingBody, target: HealingBody): void { this.healing.connect(source, target); }
+
   tick(dt: number): void {
+    this.healing.tick(dt);
     this.fire?.tick(dt);
     this.archer?.tick(dt);
     this.frost?.tick(dt);

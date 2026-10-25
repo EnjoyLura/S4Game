@@ -26,7 +26,7 @@ import { tutorialFocus } from '../ui/TutorialFocus';
 import { starKey, squadList, unlockCodex, advanceUnlock, equipAgg, heroState, heroStats, heroBtAgg, keepHp, keepShield } from '../core/GameData';
 import { BattleLoot, DeathPosition } from './BattleLoot';
 import { flow } from '../core/Flow';
-import { MonsterManager } from './Monster';
+import { Monster, MonsterManager } from './Monster';
 import { ArcherHero, HeroBase, SniperHero, PyroHero, VoltHero, FrostHero } from './Hero';
 import { LineDefense } from './LineDefense';
 import { WaveManager } from './WaveManager';
@@ -184,6 +184,7 @@ export class BattleDirector extends Component {
       impact: (x: number, y: number, hero: string, heavy: boolean, angle?: number) => this.impacts.hit(x, y, hero, heavy, angle),
       combatFeedback: (kind: string, x: number, y: number, radius: number, tx?: number, ty?: number) =>
         this.impacts.combatFeedback(kind, x, y, radius, tx, ty),
+      healing: (source: Monster, target: Monster) => this.impacts.healLink(source, target),
       damage: (hero: string, amount: number) => this.dmgSvc.add(hero, amount),
     };
     this.float = new FloatText(textLayer);

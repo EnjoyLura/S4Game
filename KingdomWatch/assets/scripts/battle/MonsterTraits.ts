@@ -4,6 +4,7 @@ import { LO } from '../config/GameConfig';
 import { ENEMY_HEALING } from '../config/ChapterContent';
 import { damageKindFor, DamageKind } from '../config/Mobs';
 import type { Monster, MonsterManager } from './Monster';
+import { drawEnemyBadge } from './EnemyBadge';
 
 type DefenseLine = { takeDamage: (damage: number) => void };
 
@@ -26,6 +27,8 @@ export class MonsterTraits {
   private chargeArmed = false;
   private rushCueT = 0;
   private cue: Graphics | null = null;
+  private badges: Graphics | null = null;
+  private badgeState = -1;
   private tint = new Color();
   constructor(private owner: Monster) {}
 
@@ -35,6 +38,7 @@ export class MonsterTraits {
     this.armorDamage = this.armorCueT = this.wardDamage = this.wardCueT = this.pendingHeal = this.rushCueT = 0;
     this.armorBroken = this.wardBroken = this.chargeArmed = false;
     this.cancelledRush = -1;
+    this.badgeState = -1;
     this.hide();
   }
   get enraged(): boolean { return this.phase; }
@@ -200,6 +204,25 @@ export class MonsterTraits {
     this.hide();
   }
   private hide(): void { if (this.cue) this.cue.node.active = false; }
+  private drawBadges(armor: boolean, ward: boolean, healer: boolean, rushing: boolean): void {
+    const o = this.owner, physical = armor || this.armorBroken, magic = ward || this.wardBroken;
+    if (!this.badges) {
+      const n = new Node('enemyRoleBadges'); n.layer = o.node.layer; n.setParent(this.cue!.node);
+      this.badges = n.addComponent(Graphics);
+    }
+    const g = this.badges; g.node.setPosition(0, o.headTop + 16, 0);
+    const flags = Number(physical) + Number(magic) * 2 + Number(healer) * 4 +
+      Number(this.armorBroken) * 8 + Number(this.wardBroken) * 16 + Number(rushing) * 32;
+    // Filled silhouettes have more detail; retain their paths until an actual role/state change.
+    if (flags === this.badgeState) return;
+    this.badgeState = flags; g.clear();
+    const count = Number(physical) + Number(magic) + Number(healer || rushing);
+    let x = (o.isBoss ? -o.def.radius * 1.4 - 14 : 0) - (count - 1) * 13;
+    if (physical) { drawEnemyBadge(g, this.armorBroken ? 'armorBroken' : 'armor', x, 0, .95); x += 26; }
+    if (magic) { drawEnemyBadge(g, this.wardBroken ? 'wardBroken' : 'ward', x, 0, .95); x += 26; }
+    if (healer) drawEnemyBadge(g, 'heal', x, 0, .9);
+    else if (rushing) drawEnemyBadge(g, 'rush', x, 0, .9);
+  }
   private drawCue(): void {
     const o = this.owner;
     const armor = this.physicalResistance > 0, ward = this.magicResistance > 0, healer = o.def.kind === 'heal';
@@ -210,42 +233,10 @@ export class MonsterTraits {
       this.cue = n.addComponent(Graphics);
     }
     const g = this.cue; g.node.active = true; g.clear();
-    const top = o.headTop + 6, dx = o.isBoss ? -o.def.radius * 1.4 - 13 : healer ? -11 : 0;
-    if (this.armorBroken) {
-      // Two separated shield halves and a jagged crack remain visible until death.
-      this.tint.set(239, 198, 135, 255); g.strokeColor = this.tint; g.lineWidth = 2.3;
-      g.moveTo(dx - 2, top + 15); g.lineTo(dx - 9, top + 15); g.lineTo(dx - 8, top + 6);
-      g.lineTo(dx - 3, top + 1); g.lineTo(dx - 5, top + 7); g.lineTo(dx - 1, top + 10); g.stroke();
-      g.moveTo(dx + 3, top + 13); g.lineTo(dx + 10, top + 13); g.lineTo(dx + 9, top + 4);
-      g.lineTo(dx + 4, top - 1); g.lineTo(dx + 2, top + 5); g.lineTo(dx + 6, top + 8); g.stroke();
-    } else if (armor) {
-      this.tint.set(186, 210, 224, 255); g.strokeColor = this.tint; g.lineWidth = 2;
-      g.moveTo(dx - 7, top + 14); g.lineTo(dx + 7, top + 14); g.lineTo(dx + 6, top + 4);
-      g.lineTo(dx, top); g.lineTo(dx - 6, top + 4); g.close(); g.stroke();
-      g.moveTo(dx, top + 12); g.lineTo(dx, top + 4); g.stroke();
-    } else if (this.wardBroken) {
-      this.tint.set(185, 153, 214, 255); g.strokeColor = this.tint; g.lineWidth = 2.3;
-      g.moveTo(dx - 2, top + 16); g.lineTo(dx - 9, top + 8); g.lineTo(dx - 3, top + 1); g.stroke();
-      g.moveTo(dx + 4, top + 14); g.lineTo(dx + 10, top + 7); g.lineTo(dx + 4, top - 1); g.stroke();
-    } else if (ward) {
-      this.tint.set(202, 159, 255, 255); g.strokeColor = this.tint; g.lineWidth = 2.4;
-      g.moveTo(dx, top + 16); g.lineTo(dx + 7, top + 8); g.lineTo(dx, top);
-      g.lineTo(dx - 7, top + 8); g.close(); g.stroke();
-      g.moveTo(dx - 3, top + 8); g.lineTo(dx + 3, top + 8); g.stroke();
-    }
-    if (healer) {
-      const x = armor || ward || this.armorBroken || this.wardBroken ? 11 : 0;
-      this.tint.set(136, 230, 127, 255); g.strokeColor = this.tint; g.lineWidth = 3;
-      g.moveTo(x - 6, top + 8); g.lineTo(x + 6, top + 8); g.moveTo(x, top + 2); g.lineTo(x, top + 14); g.stroke();
-    } else if (preparing || charging) {
-      this.tint.set(255, 177, 70, 255); g.strokeColor = this.tint; g.lineWidth = 3;
-      for (let i = 0; i < 2; i++) {
-        const y = top + 15 - i * 8;
-        g.moveTo(-6, y); g.lineTo(0, y - 5); g.lineTo(6, y); g.stroke();
-      }
-      if (preparing) {
-        g.lineWidth = 2; g.moveTo(-o.def.radius, -3); g.lineTo(0, -18); g.lineTo(o.def.radius, -3); g.stroke();
-      }
+    this.drawBadges(armor, ward, healer, preparing || charging);
+    if (preparing) {
+      this.tint.set(255, 177, 70, 255); g.strokeColor = this.tint;
+      g.lineWidth = 2; g.moveTo(-o.def.radius, -3); g.lineTo(0, -18); g.lineTo(o.def.radius, -3); g.stroke();
     }
     if (this.pendingHeal > 0) {
       const spec = o.def.healing || ENEMY_HEALING;

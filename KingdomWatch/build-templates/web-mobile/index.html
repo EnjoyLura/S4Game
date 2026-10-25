@@ -73,32 +73,6 @@
   <script>
     (function () {
       var seen = 0;
-      var networkBox, networkText;
-      function networkNotice(message) {
-        if (!networkBox) {
-          networkBox = document.createElement('div');
-          networkBox.id = 'kwNetworkNotice';
-          networkBox.setAttribute('role', 'status');
-          networkBox.style.cssText = 'position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);'
-            + 'z-index:99998;width:max-content;max-width:86vw;box-sizing:border-box;padding:10px 14px;border-radius:10px;'
-            + 'background:rgba(25,33,41,.94);color:#fff5d8;font:14px/1.5 system-ui,sans-serif;text-align:center;';
-          networkText = document.createElement('div');
-          networkBox.appendChild(networkText);
-          var reload = document.createElement('button');
-          reload.textContent = '重新加载';
-          reload.style.cssText = 'margin:6px 8px 0 0;padding:6px 12px;border:0;border-radius:6px;font:inherit;background:#ffd05c;color:#20333f;';
-          reload.onclick = function () { location.reload(); };
-          networkBox.appendChild(reload);
-          var close = document.createElement('button');
-          close.textContent = '关闭提示';
-          close.style.cssText = 'padding:6px 10px;border:0;border-radius:6px;font:inherit;background:#455361;color:white;';
-          close.onclick = function () { networkBox.style.display = 'none'; };
-          networkBox.appendChild(close);
-          (document.body || document.documentElement).appendChild(networkBox);
-        }
-        networkText.textContent = message;
-        networkBox.style.display = 'block';
-      }
       function networkFailure(error) {
         var target = error && error.target, resource = false;
         if (target && /^(SCRIPT|IMG|LINK)$/.test(target.tagName)) {
@@ -107,15 +81,12 @@
         var message = String(error && error.message || error);
         var download = /download failed:|load image \(.+\) failed|Error\s*#?\s*4930\b|(?:^|TypeError: )(?:Failed to fetch|NetworkError when attempting to fetch resource|Load failed)\b|Error loading https?:\/\//i.test(message);
         if (!resource && !download) return false;
-        networkNotice(navigator.onLine === false ? '网络已断开，连接恢复后将继续加载。' : '资源下载中断，正在重试；仍未恢复可重新加载。');
         return true;
       }
-      // Only known download failures use this notice. Programming exceptions,
-      // including stale-node TypeErrors, keep the original diagnostic overlay.
+      // Known transient download errors recover silently via the resource loader/cache.
+      // Actual programming exceptions still reach the diagnostic overlay below.
       window.__KW_NETWORK_FAILURE = networkFailure;
-      window.__KW_NETWORK_RECOVERED = function () { if (networkBox && navigator.onLine !== false) networkBox.style.display = 'none'; };
-      window.addEventListener('offline', function () { networkNotice('网络已断开，已加载的内容可继续使用。'); });
-      window.addEventListener('online', function () { if (networkBox && networkBox.style.display !== 'none') networkNotice('网络已恢复，正在继续加载；仍未恢复可重新加载。'); });
+      window.__KW_NETWORK_RECOVERED = function () {};
       function show(msg) {
         try {
           if (seen >= 3) return;

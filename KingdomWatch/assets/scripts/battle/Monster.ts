@@ -2,7 +2,7 @@
  * 怪物（§3.4 行为：松散虫群下行 + 正弦游动 + 自动分离；近战贴线攻击 / 远程停位投掷 / 萨满周期治疗）
  * 受击只闪红不掉速（用户确认：控制效果只属于特定 buff）；仅 BOSS 显示血条（M0 1-1 无 BOSS，钩子保留）
  */
-import { Color, Graphics, isValid, Label, Layers, Node, Tween, UIOpacity } from 'cc';
+import { Color, Graphics, isValid, Label, Layers, Node, SpriteFrame, Tween, UIOpacity } from 'cc';
 import { damageKindFor, EnemyFormation, MOBS, MOB_DMG_MUL, MOB_HP_MUL, MobDef } from '../config/Mobs';
 import { enemyArtRef, EnemyHealing } from '../config/ChapterContent';
 import { MonsterTraits } from './MonsterTraits';
@@ -35,6 +35,7 @@ export type MonsterHitCtx = {
   dmgNumber: (x: number, y: number, text: string, color: string, big?: boolean, event?: FloatEvent) => void;
   impact?: (x: number, y: number, hero: string, heavy: boolean, angle?: number) => void;
   combatFeedback?: (kind: string, x: number, y: number, radius: number, tx?: number, ty?: number) => void;
+  healing?: (source: Monster, target: Monster) => void;
   damage?: (hero: string, amount: number) => void;
 };
 
@@ -337,6 +338,8 @@ export class Monster {
   get artBaseY(): number { return -this.def.radius * .82 - (this.artHeight - this.def.radius * MOB_ART_HEIGHT) * this.groundOffset; }
   get groundY(): number { return this.y - this.def.radius * .82 + this.def.radius * MOB_ART_HEIGHT * this.groundOffset; }
   get depthY(): number { return this.y - this.def.radius * 0.82; }
+  /** Borrow already prepared actor art for inspection; clicking never starts another download. */
+  get inspectFrame(): SpriteFrame | null { return this.anims?.get(this.def.id)?.walk[0] || this.art?.sprite.spriteFrame || null; }
   /** Local top for role icons, using the same foot offset and height as the art. */
   get headTop(): number {
     const clip = this.anims?.get(this.def.id);
@@ -477,6 +480,9 @@ export class Monster {
     if (this.dead || this.immobilized) return;
     const damage = this.def.dmg * this.traits.damageMultiplier() * mgr.attackMultiplier(this);
     const poison = this.def.venom;
+    if (this.def.id === 'goblin_slinger') {
+      this.lunge(); mgr.throwStone(this, damage); return;
+    }
     line.takeDamage(damage * (poison ? 1 - poison.portion : 1));
     if (poison) mgr.addLinePoison(damage * poison.portion, poison.duration);
     this.lunge();
@@ -697,12 +703,53 @@ export class Monster {
     const healed = Math.max(0, Math.min(v * (1 - Math.min(1, this.burnHealCutT > 0 ? this.burnHealCut : 0)), this.maxHp - this.hp));
     if (healed <= 0) return 0;
     this.hp += healed;
-    this.ctx.dmgNumber(this.x, this.y + this.def.radius, '+' + Math.round(healed), '#7FB841');
+    this.ctx.dmgNumber(this.x, this.y + this.headTop + 12, '+' + Math.round(healed), '#80EF98', false,
+      { target: this, amount: healed, heal: true });
     return healed;
   }
 }
 
 export class MonsterManager {
+  private stones: { x: number; y: number; tx: number; age: number; damage: number; poison: number; poisonDuration: number }[] = [];
+  private stoneFree: MonsterManager['stones'] = [];
+  private stoneInk: Graphics;
+  private stoneTint = new Color();
+  /** Snapshot the attack at release; an airborne stone survives its thrower's death. */
+  throwStone(source: Monster, damage: number): void {
+    const p = this.stoneFree.pop() || { x:0,y:0,tx:0,age:0,damage:0,poison:0,poisonDuration:0 };
+    p.x=source.x+source.def.radius*.35; p.y=source.y+source.def.radius*1.8;
+    p.tx=Math.max(-330,Math.min(330,source.x*.94));p.age=0;
+    p.damage=damage*(source.def.venom ? 1-source.def.venom.portion : 1);
+    p.poison=damage*(source.def.venom?.portion || 0);p.poisonDuration=source.def.venom?.duration || 0;
+    this.stones.push(p);
+  }
+  private tickStones(dt: number, line: { takeDamage: (damage: number) => void }): void {
+    const g=this.stoneInk;g.clear();
+    for (let i=this.stones.length-1;i>=0;i--) {
+      const p=this.stones[i];p.age+=dt;
+      const t=Math.min(1,p.age/.52),x=p.x+(p.tx-p.x)*t,base=p.y+(LINE_Y+10-p.y)*t,y=base+84*4*t*(1-t);
+      if (t>=1) {
+        line.takeDamage(p.damage);if(p.poison>0)this.addLinePoison(p.poison,p.poisonDuration);
+        this.ctx.combatFeedback?.('stoneLand',p.tx,LINE_Y+10,12);
+        bus.emit(EVT.COMIC_POP,p.tx,LINE_Y+20,'stoneHit');
+        this.stones.splice(i,1);this.stoneFree.push(p);continue;
+      }
+      this.stoneTint.set(38,28,17,70);g.fillColor=this.stoneTint;
+      g.ellipse(x,base,6,2.5);g.fill();
+      this.stoneTint.set(214,198,160,140);g.strokeColor=this.stoneTint;g.lineWidth=1.5;
+      const vx=(p.tx-p.x)/.52,vy=(LINE_Y+10-p.y)/.52+84*4*(1-2*t)/.52;
+      const speed=Math.max(1,Math.hypot(vx,vy));g.moveTo(x-vx/speed*10,y-vy/speed*10);g.lineTo(x-vx/speed*23,y-vy/speed*23);g.stroke();
+      this.stoneTint.set(133,137,131,255);g.fillColor=this.stoneTint;
+      this.stoneTint.set(40,36,29,255);g.strokeColor=this.stoneTint;g.lineWidth=2;
+      for(let k=0;k<6;k++){
+        const a=k*Math.PI/3+p.age*8,r=k%2?7:8.5,px=x+Math.cos(a)*r,py=y+Math.sin(a)*r;
+        if(k===0)g.moveTo(px,py);else g.lineTo(px,py);
+      }
+      g.close();g.fill();g.stroke();
+      this.stoneTint.set(215,218,201,255);g.strokeColor=this.stoneTint;g.lineWidth=2;
+      g.moveTo(x-3,y+3);g.lineTo(x+2,y+5);g.stroke();
+    }
+  }
   private burnBursts: { x: number; y: number; damage: number }[] = [];
   queueBurnBurst(x: number, y: number, damage: number): void {
     if (!this.disposed && this.burnBursts.length < 32) this.burnBursts.push({ x, y, damage });
@@ -776,6 +823,9 @@ export class MonsterManager {
 
   constructor(private field: Node, private ctx: MonsterHitCtx) {
     warmMonsterDeath();
+    const stones = new Node('enemyThrownStones');stones.layer=field.layer;
+    stones.setParent(field.parent?.getChildByName('FxLayer') || field);
+    this.stoneInk=stones.addComponent(Graphics);
     const node = new Node('groupContactShadows');
     node.layer = Layers.Enum.UI_2D;
     node.setParent(field);
@@ -836,6 +886,7 @@ export class MonsterManager {
     if (this.disposed) return;
     this.disposed = true;
     this.linePoisons.length = 0;
+    this.stones.length = this.stoneFree.length = 0;
     this.burnBursts.length = 0;
     this.poisonClock = this.pendingPoisonDamage = 0;
     clearDepthSorter(this.field);
@@ -991,13 +1042,14 @@ export class MonsterManager {
       if (m.heal(Math.min(m.maxHp * spec.fraction, src.maxHp * spec.capRatio)) <= 0) continue;
       m.supportHealT = 4;
       count++;
-      this.ctx.combatFeedback?.('heal', src.x, src.y + src.def.radius, m.def.radius, m.x, m.y + m.def.radius);
+      this.ctx.healing?.(src, m);
     }
     return count;
   }
 
   tick(dt: number, line: { takeDamage: (d: number) => void }): void {
     if (this.disposed) return;
+    this.tickStones(dt,line);
     let poisonDamage = 0;
     let poisons = 0;
     for (const p of this.linePoisons) {
