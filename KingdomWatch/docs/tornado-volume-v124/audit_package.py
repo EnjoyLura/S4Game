@@ -25,7 +25,9 @@ types=json.loads((OUT/'typecheck-comparison.json').read_text('utf8'));assert not
 scope=json.loads((OUT/'code-check.json').read_text('utf8'));assert scope['status']=='PASS'
 gpu=json.loads((OUT/'gpu-review.json').read_text('utf8'))
 source=PROJECT/'assets/resources/fx/wind-ninja-flow.effect'
-assert gpu['shaderSourceSha256']==hashlib.sha256(source.read_bytes()).hexdigest()
+# Python's GLSL reader normalizes CRLF. Git's Windows checkout may restore
+# CRLF after committing; compare the exact normalized input that was compiled.
+assert gpu['shaderSourceSha256']==hashlib.sha256(source.read_text('utf8').encode('utf8')).hexdigest()
 assert gpu['runtimeEffectHasNoImagesOrSamplers'] and gpu['artFrames']==300
 effects=[p.relative_to(package).as_posix() for p in (package/'assets/resources/import').rglob('*.json') if b'wind-ninja-fs' in p.read_bytes()]
 assert len(effects)==1
@@ -33,7 +35,7 @@ compiled=(package/effects[0]).read_text('utf8')
 assert 'tornadoDust' in compiled and 'flowNoise' in compiled
 assert not re.search(r'\b(?:sampler2D|samplerCube)\b|\btexture\s*\(',compiled)
 report={'checks':checks,'baselineRelease':prior['id'],'existingNativeByteIdentical':len(native),'newMedia':0,
- 'compiledEffectFiles':effects,'runtimeEffectsHaveNoImagesOrSamplers':True,'jsSyntaxOnly':syntax,'inlineScriptsSyntaxOnly':inline,
+ 'compiledEffectFiles':effects,'runtimeEffectsHaveNoImagesOrSamplers':True,'shaderHashIsLfNormalized':True,'jsSyntaxOnly':syntax,'inlineScriptsSyntaxOnly':inline,
  'gpuArtFrames':gpu['artFrames'],'typeDiagnosticsBefore':types['beforeDiagnostics'],'typeDiagnosticsCurrent':types['currentDiagnostics'],
  'actualGameBrowserCombatAudioOrWasmStarted':False,'phoneVisualAndPerformanceReview':'pending user'}
 (OUT/'package-static-verification.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n','utf8')
