@@ -1,0 +1,18 @@
+{
+  "release": "7605dd4272a490e3",
+  "samples": [
+    {
+      "path": "game.f527514d99218d5b.html",
+      "bytes": 20222,
+      "status": 200,
+      "sha256": "f527514d99218d5b0b21e1b331828b20224867765f5aa3c6f37c63557da461c5"
+    },
+    {
+      "path": "assets/main/index.0999f.js",
+      "bytes": 941360,
+      "status": 200,
+      "sha256": "3fde258e96158c0ebfcbdd74d6b56dcbc15218f9eb2fc08d7dbe013cbd9bc243"
+    }
+  ],
+  "gameOrBrowserStarted": false
+}
