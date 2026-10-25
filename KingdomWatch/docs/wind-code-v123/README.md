@@ -23,4 +23,4 @@
 
 实现已本地提交923a1cb9。Creator3.8.8离线构建17919ms、正常退出36；15份JS、5段内联脚本、全部SHA／资源路径／图片原像素／WASM头验证通过，9项既有类型诊断、无新增。512份保留native逐字节不变，两张旧图集1236084字节已从运行包移除，无新增媒体或纹理依赖。最终1588文件、200047575字节（200.05MB），比v122减少1259910字节，版本90f3f2acbb35ce48。见 `build-record.json`、`export-report.json`、`package-static-verification.json`。
 
-发布回执交付时补充。本地提交源码，仅发布独立GitHub Pages运行仓库，不推送源码、不部署Cloudflare。
+已发布 https://enjoylura.github.io/kingdom-watch-play/?v=wind-code-v123 ，独立运行仓库提交13be239af5a268362a8cd5d1dd817ca6a53371d5。Pages构建与标准线上HTTP检查通过；额外主脚本/编译效果2份HTTP200与SHA匹配，见 `additional-http-verification.json`。本轮清理上一版运行文件，两个弃用图集native已从独立发布检出目录确认移除，`pruned_previous_release=true`。完整回执 `deployment.json`；发布期间源HEAD/索引不变。本地提交源码，仅发布独立GitHub Pages运行仓库，不推送源码、不部署Cloudflare。
