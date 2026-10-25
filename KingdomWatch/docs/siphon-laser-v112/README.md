@@ -25,4 +25,6 @@
 - make_review.cjs/render_review.py离屏绘制114帧实际片元：聚能、完整激光、收束，并保留旁边的普通/技能紫色吸取作对照；无游戏/浏览器/Cocos场景/音频/WASM启动。实际手机遮挡、手感、平衡与性能待用户试玩。
 - audit_types.cjs以176ed54c比较诊断；audit_package.py检查完整运行包/所有文件SHA、JS语法和200MB预算，除两款加字字体外的原native保持。
 
-按长期约定本地提交后构建校验并发布GitHub Pages独立运行仓库，不推送源码、不部署CF。最终构建及发布收据后补。
+已本地提交实现1f772812后完成Creator生产构建（17572ms，正常退出36）。原9条类型诊断保持、0新增，15个JS语法与完整包所有文件哈希/入口路径/3套材质混合校验通过；504份原native字节保持，仅两款字体各增加一个“洪”字（合计652字节）。1569文件、194030021字节（约194.03MB/185.04MiB，200MB内），运行版本a3c14e8af1cdc0dc。详见build-record.json、package-static-verification.json、export-report.json。
+
+按长期约定只发布GitHub Pages独立运行仓库，不推送源码、不部署CF。发布收据后补。
