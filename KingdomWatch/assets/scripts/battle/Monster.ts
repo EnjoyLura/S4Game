@@ -43,6 +43,8 @@ export class Monster {
   private static nextLifeId = 0;
   /** Stable for one spawn, so projectile deduplication/inspection survives node pooling. */
   lifeId = 0;
+  /** Endless attribution survives later floor starts; zero means an ordinary campaign spawn. */
+  endlessFloor = 0;
   private traits = new MonsterTraits(this);
   node = new Node('mob');
   def!: MobDef;
@@ -795,7 +797,7 @@ export class MonsterManager {
       const child: MobDef = { ...base, offspring: true, exp: 0, gold: 0, charge: 0,
         summon: undefined, split: undefined, revive: undefined };
       if (!this.spawn(child, { hp: Math.max(1, Math.round(base.hp * source.maxHp / parentBase.hp)),
-        dmg: Math.round(base.dmg * (parentBase.dmg > 0 ? source.def.dmg / parentBase.dmg : source.maxHp / parentBase.hp * MOB_DMG_MUL / MOB_HP_MUL)) })) break;
+        dmg: Math.round(base.dmg * (parentBase.dmg > 0 ? source.def.dmg / parentBase.dmg : source.maxHp / parentBase.hp * MOB_DMG_MUL / MOB_HP_MUL)) }, undefined, source.endlessFloor)) break;
       const mob = this.list[this.list.length - 1];
       mob.baseX = Math.max(-330, Math.min(330, source.x + (i % 2 ? 1 : -1) * (24 + 14 * i)));
       mob.node.setPosition(mob.baseX, Math.max(LINE_Y + base.radius + 24, source.y + (i % 2) * 18), 0);
@@ -845,11 +847,13 @@ export class MonsterManager {
   /** 关卡内阶梯增长（WaveManager 逐波注入）：血量/伤害相对第 1 波的倍率 */
   rampHp = 1;
   rampDmg = 1;
+  /** Floor stamped onto a new spawn, never used to re-scale enemies already on the field. */
+  spawnFloor = 0;
   /** 首次遭遇回调（图鉴解锁）：同波次新怪种只报一次（BattleDirector 注入后解锁图鉴+横幅） */
   onFirstEncounter: ((def: MobDef) => void) | null = null;
   private seen = new Set<string>();
 
-  spawn(def: MobDef, actual?: { hp: number; dmg: number }, formation?: EnemyFormation): boolean {
+  spawn(def: MobDef, actual?: { hp: number; dmg: number }, formation?: EnemyFormation, floor = this.spawnFloor): boolean {
     if (this.disposed) return false;
     if (this.aliveCount >= 60) return false; // Corpses do not consume living-enemy capacity.
     def = {
@@ -861,6 +865,7 @@ export class MonsterManager {
     const m = this.pool.pop() || new Monster();
     const x = def.boss ? 0 : formation ? Math.max(-330, Math.min(330, formation.lane + Math.random() * 36 - 18)) : Math.random() * 660 - 330;
     m.init(def, this.field, x, this.ctx, this);
+    m.endlessFloor = floor;
     if (formation?.id) {
       const groups = new Set(this.list.filter(o => !o.dead && o.formation?.id).map(o => o.formation!.id));
       const front = this.list.find(o => !o.dead && o.formation?.id === formation.id && o.formation.role === 'front');

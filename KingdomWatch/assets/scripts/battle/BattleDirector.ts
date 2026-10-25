@@ -16,6 +16,7 @@ import { GameAudio } from '../core/GameAudio';
 import { CAMPAIGN_STAGES, campaignChapter, campaignLevelOpen, campaignStage } from '../config/Campaign';
 import { endlessWave } from '../config/Endless';
 import { endlessBest, recordEndlessFloor } from '../core/EndlessProgress';
+import { clearedEndlessFloor } from './EndlessFlow';
 import { loadSave, saveSave } from '../core/SaveData';
 import { firstLevelVictory, pendingBowLesson, skipBattleTeaching, teachingBattle } from '../core/FirstJourney';
 import { pendingPyroSquadLesson, secondLevelVictory, secondTeachingBattle, skipSecondBattleTeaching } from '../core/SecondJourney';
@@ -65,7 +66,6 @@ export class BattleDirector extends Component {
   endlessChapter = 0;
   endlessFloor = 1;
   endlessCleared = 0;
-  private endlessRest = -1;
   private endlessStartingBest = 0;
   private endlessCardsComplete = false;
   get isEndless(): boolean { return this.endlessChapter > 0; }
@@ -227,6 +227,7 @@ export class BattleDirector extends Component {
     });
     this.parts = new Particles(fxLayer);
     this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts, this.impacts);
+    this.mgr.spawnFloor = this.isEndless ? this.endlessFloor : 0;
     this.waves = new WaveManager(this.levelDef, this.mgr);
     for (const h of this.heroes) this.dmgSvc.register(h.id, h.name);
 
@@ -372,7 +373,7 @@ export class BattleDirector extends Component {
     this.killBeatAge += sdt;
     this.killBeatCooldown = Math.max(0, this.killBeatCooldown - sdt);
     if (this.killBeatAge > .35) this.killBeatCount = this.killBeatX = this.killBeatY = 0;
-    if (!this.pendingWin && (!this.isEndless || this.endlessRest < 0)) this.passiveXpElapsed += sdt;
+    if (!this.pendingWin) this.passiveXpElapsed += sdt;
     const steps = sdt > 1 / 30 ? 2 : 1;
     const sub = sdt / steps;
     for (let i = 0; i < steps; i++) {
@@ -394,28 +395,19 @@ export class BattleDirector extends Component {
     }
     for (const h of this.heroes) h.renderEffects();
     if (this.state === 'running') {
-      this.waves.checkCleared();
+      if (this.isEndless) this.advanceEndlessFloors();
+      else this.waves.checkCleared();
       this.loot.tick(sdt);
     }
     // 大招演出锁倒计时；期间排队的升级三选一挂起，锁走完自动补弹
     if (this.ultShowT > 0) this.ultShowT = Math.max(0, this.ultShowT - sdt);
     if (this.ultimateActive) this.ultShowT = Math.max(this.ultShowT, 2);
     if (this.pendingWin && !this.ultimateActive && this.state === 'running') {
-      if (this.isEndless) this.completeEndlessFloor(); else this.completeVictory();
+      this.completeVictory();
     }
     // Grant after combat steps: a timed level-up must not interrupt a simulation substep.
     this.grantTimeXp();
     if (this.pickQueue > 0 && !this.pendingWin && this.ultShowT <= 0 && !this.gm.panelOpen && this.state === 'running') this.openPick();
-    if (this.isEndless && this.endlessRest >= 0 && this.state === 'running') {
-      this.endlessRest = Math.max(0, this.endlessRest - sdt);
-      if (this.endlessRest === 0 && !this.pickQueue && this.ultShowT <= 0 && !this.gm.panelOpen) {
-        this.endlessFloor++; this.endlessRest = -1;
-        this.levelDef.waves = [endlessWave(this.endlessChapter, this.endlessFloor)];
-        this.waves = new WaveManager(this.levelDef, this.mgr);
-        this.waves.start();
-        this.hud.showBanner('第' + this.endlessFloor + '层' + (this.endlessFloor % 5 === 0 ? ' · 首领层' : ' · 敌军来袭'), 2);
-      }
-    }
     this.float.tick(rawDt);
     this.pops.tick(rawDt);
     this.hud.sync(rawDt);
@@ -726,10 +718,7 @@ export class BattleDirector extends Component {
   private onAllCleared(): void {
     if (this.state !== 'running') return;
     // Drain after the combat substeps and the final ultimate have finished.
-    if (this.isEndless) {
-      if (this.endlessCleared < this.endlessFloor) this.pendingWin = true;
-      return;
-    }
+    if (this.isEndless) return;
     if (this.pendingWin) return;
     this.pendingWin = true;
     this.victoryDelayT = 2;
@@ -793,20 +782,29 @@ export class BattleDirector extends Component {
     this.panels.showWin(options);
   }
 
-  private completeEndlessFloor(): void {
-    if (!this.isEndless || this.endlessCleared >= this.endlessFloor) return;
-    this.pendingWin = false; this.endlessCleared = this.endlessFloor; this.endlessRest = 3;
-    this.bossWarning.clear();
-    // Delta payment and a per-chapter best survive leaving or refreshing between floors.
-    this.creditBattleGold(this.goldEarned);
-    recordEndlessFloor(this.endlessChapter, this.endlessCleared);
-    this.loot.collectAll();
-    this.hud.showBanner('第' + this.endlessCleared + '层通过 · 3秒后继续', 2.8);
+  private advanceEndlessFloors(): void {
+    const emitted = this.waves.spawnQueueEmpty;
+    const cleared = clearedEndlessFloor(this.endlessFloor, emitted, this.mgr.list);
+    if (cleared > this.endlessCleared) {
+      this.endlessCleared = cleared;
+      // Only actually cleared, contiguous floors grant a best; overlapping later floors cannot skip survivors.
+      this.creditBattleGold(this.goldEarned);
+      recordEndlessFloor(this.endlessChapter, cleared);
+      this.loot.collectAll();
+    }
+    if (!emitted) return;
+    // Exactly like campaign waves: release the next queue as soon as this one is emitted.
+    this.endlessFloor++;
+    this.mgr.spawnFloor = this.endlessFloor;
+    this.levelDef.waves = [endlessWave(this.endlessChapter, this.endlessFloor)];
+    this.waves = new WaveManager(this.levelDef, this.mgr);
+    this.waves.start();
+    this.hud.showBanner('第' + this.endlessFloor + '层' + (this.endlessFloor % 5 === 0 ? ' · 首领层' : ' · 敌军来袭'), 2);
   }
 
   private finishEndless(): void {
     if (!this.isEndless || this.state === 'lose' || this.state === 'win' || this.leaving) return;
-    this.state = 'lose'; this.pendingWin = false; this.endlessRest = -1;
+    this.state = 'lose'; this.pendingWin = false;
     this.bossWarning.clear(); this.ultPresentation.clear();
     this.creditBattleGold(this.goldEarned);
     const loot = this.loot.collectAll();
@@ -887,6 +885,7 @@ export class BattleDirector extends Component {
   }
 
   gmWin(): void {
+    if (this.isEndless && this.state === 'running') { this.waves.gmSkip(); return; }
     if (this.state === 'running') bus.emit(EVT.ALL_WAVES_CLEARED);
   }
 

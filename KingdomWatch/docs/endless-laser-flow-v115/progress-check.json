@@ -1,0 +1,9 @@
+{
+  "explicitBoundaryCases": 16,
+  "exhaustiveLiveFloorCombinations": 4092,
+  "laterFloorsCannotBypassEarlierSurvivors": true,
+  "emissionDoesNotGrantAClear": true,
+  "deadActorsDoNotBlock": true,
+  "scope": "pure integer/list accounting only; battle, waves and monsters not executed",
+  "gameOrBrowserStarted": false
+}

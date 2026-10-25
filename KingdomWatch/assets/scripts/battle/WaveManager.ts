@@ -24,6 +24,8 @@ export class WaveManager {
   get total(): number { return this.level.waves.length; }
   get currentSurge(): boolean { return this.level.waves[Math.min(this.idx, this.total - 1)].surge === true; }
   get hasThreat(): boolean { return !!this.threat; }
+  /** Emission completion is independent of enemies still alive from this or previous waves. */
+  get spawnQueueEmpty(): boolean { return this.queue.length === 0; }
 
   start(): void {
     this.buildQueue();

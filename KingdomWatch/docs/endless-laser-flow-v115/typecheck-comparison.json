@@ -1,0 +1,101 @@
+{
+  "baseline": "4d2d79bb",
+  "before": [
+    {
+      "file": "assets/scripts/ui/ButtonFeedback.ts",
+      "code": 2339,
+      "message": "Property 'configure' does not exist on type 'Component'."
+    },
+    {
+      "file": "assets/scripts/ui/ButtonFeedback.ts",
+      "code": 2416,
+      "message": "Property 'start' in type 'ButtonFeedback' is not assignable to the same property in base type 'Component'.\n  Type 'Vec2' is not assignable to type '() => void'.\n    Type 'Vec2' provides no match for the signature '(): void'."
+    },
+    {
+      "file": "assets/scripts/ui/ButtonFeedback.ts",
+      "code": 2769,
+      "message": "No overload matches this call.\n  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>'.\n      Types of construct signatures are incompatible.\n        Type 'new () => ButtonFeedback' is not assignable to type 'new (...args: any[]) => Component'.\n          Type 'ButtonFeedback' is not assignable to type 'Component'.\n            Property 'start' is private in type 'ButtonFeedback' but not in type 'Component'.\n  Overload 2 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.\n  Overload 3 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'."
+    },
+    {
+      "file": "assets/scripts/ui/ButtonFeedback.ts",
+      "code": 2769,
+      "message": "No overload matches this call.\n  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>'.\n  Overload 2 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.\n  Overload 3 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'."
+    },
+    {
+      "file": "assets/scripts/ui/ButtonFeedback.ts",
+      "code": 2769,
+      "message": "No overload matches this call.\n  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component>): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component>'.\n  Overload 2 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.\n  Overload 3 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'."
+    },
+    {
+      "file": "assets/scripts/ui/MilestoneSwipe.ts",
+      "code": 2339,
+      "message": "Property 'reset' does not exist on type 'Component'."
+    },
+    {
+      "file": "assets/scripts/ui/MilestoneSwipe.ts",
+      "code": 2769,
+      "message": "No overload matches this call.\n  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>): Component[]', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>'.\n  Overload 2 of 3, '(className: string): Component[]', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.\n  Overload 3 of 3, '(className: string): Component[]', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'."
+    },
+    {
+      "file": "assets/scripts/ui/Panels.ts",
+      "code": 2339,
+      "message": "Property 'reset' does not exist on type 'Component'."
+    },
+    {
+      "file": "assets/scripts/ui/Panels.ts",
+      "code": 2769,
+      "message": "No overload matches this call.\n  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>'.\n  Overload 2 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.\n  Overload 3 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'."
+    }
+  ],
+  "current": [
+    {
+      "file": "assets/scripts/ui/ButtonFeedback.ts",
+      "code": 2339,
+      "message": "Property 'configure' does not exist on type 'Component'."
+    },
+    {
+      "file": "assets/scripts/ui/ButtonFeedback.ts",
+      "code": 2416,
+      "message": "Property 'start' in type 'ButtonFeedback' is not assignable to the same property in base type 'Component'.\n  Type 'Vec2' is not assignable to type '() => void'.\n    Type 'Vec2' provides no match for the signature '(): void'."
+    },
+    {
+      "file": "assets/scripts/ui/ButtonFeedback.ts",
+      "code": 2769,
+      "message": "No overload matches this call.\n  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>'.\n      Types of construct signatures are incompatible.\n        Type 'new () => ButtonFeedback' is not assignable to type 'new (...args: any[]) => Component'.\n          Type 'ButtonFeedback' is not assignable to type 'Component'.\n            Property 'start' is private in type 'ButtonFeedback' but not in type 'Component'.\n  Overload 2 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.\n  Overload 3 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'."
+    },
+    {
+      "file": "assets/scripts/ui/ButtonFeedback.ts",
+      "code": 2769,
+      "message": "No overload matches this call.\n  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>'.\n  Overload 2 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.\n  Overload 3 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'."
+    },
+    {
+      "file": "assets/scripts/ui/ButtonFeedback.ts",
+      "code": 2769,
+      "message": "No overload matches this call.\n  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component>): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component>'.\n  Overload 2 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.\n  Overload 3 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'."
+    },
+    {
+      "file": "assets/scripts/ui/MilestoneSwipe.ts",
+      "code": 2339,
+      "message": "Property 'reset' does not exist on type 'Component'."
+    },
+    {
+      "file": "assets/scripts/ui/MilestoneSwipe.ts",
+      "code": 2769,
+      "message": "No overload matches this call.\n  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>): Component[]', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>'.\n  Overload 2 of 3, '(className: string): Component[]', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.\n  Overload 3 of 3, '(className: string): Component[]', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'."
+    },
+    {
+      "file": "assets/scripts/ui/Panels.ts",
+      "code": 2339,
+      "message": "Property 'reset' does not exist on type 'Component'."
+    },
+    {
+      "file": "assets/scripts/ui/Panels.ts",
+      "code": 2769,
+      "message": "No overload matches this call.\n  Overload 1 of 3, '(classConstructor: __types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type '__types_globals__Constructor<Component> | __types_globals__AbstractedConstructor<Component>'.\n  Overload 2 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'.\n  Overload 3 of 3, '(className: string): Component', gave the following error.\n    Argument of type 'typeof ButtonFeedback' is not assignable to parameter of type 'string'."
+    }
+  ],
+  "added": [],
+  "beforeDiagnostics": 9,
+  "currentDiagnostics": 9,
+  "gameModulesExecuted": false
+}
