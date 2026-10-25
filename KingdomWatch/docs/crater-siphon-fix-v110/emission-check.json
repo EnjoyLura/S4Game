@@ -1,0 +1,14 @@
+{
+  "baselineCommit": "c7efe6ab",
+  "newShaderSha256": "113408f12bb8f4e2210a3cb8803345c287a0251abd9b483d4d53509f0509cabc",
+  "movingBeamCases": 96,
+  "baselineDarkPixelSamples": 2450747,
+  "baselineWorstChannelDelta": -112,
+  "newDarkPixelSamples": 0,
+  "newWorstChannelDelta": 0,
+  "quadBorderCases": 54,
+  "maximumBorderChannelByte": 0,
+  "renderer": "AMD Radeon RX 9070 XT",
+  "scope": "isolated actual fragment output with declared normal/emission blend states; excludes engine and vector particles",
+  "gameBrowserAudioOrWasmStarted": false
+}

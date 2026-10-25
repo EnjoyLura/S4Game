@@ -16,9 +16,11 @@ interface Piece {
   vx: number; vy: number; lift: number; gravity: number; size: number; angle: number; spin: number;
   shade: number; shape: number; land: number;
 }
+interface Fault { xy: Float32Array; count: number; }
+interface Soil { x: number; y: number; tx: number; ty: number; nx: number; ny: number; width: number; height: number; shade: number; }
 interface Blast {
-  x: number; y: number; radius: number; age: number; life: number; seed: number; power: number;
-  count: number; pieces: Piece[]; shader: boolean;
+  x: number; y: number; radius: number; age: number; life: number; airLife: number; seed: number; power: number;
+  count: number; pieces: Piece[]; faults: Fault[]; soil: Soil[]; shader: boolean;
 }
 interface Landing { x: number; y: number; age: number; life: number; id: number; }
 
@@ -43,10 +45,15 @@ export class CannonBlastVFX {
   }
   burst(x: number, y: number, radius: number, kind: 'normal' | 'skill' | 'ult' | 'echo'): void {
     const index = this.cursor++ % CAP;
-    const b = this.slots[index] || (this.slots[index] = { pieces: Array.from({ length: PIECES }, () => ({} as Piece)) } as Blast);
+    const b = this.slots[index] || (this.slots[index] = {
+      pieces: Array.from({ length: PIECES }, () => ({} as Piece)),
+      faults: Array.from({ length: 11 }, () => ({ xy: new Float32Array(16), count: 0 })),
+      soil: Array.from({ length: 7 }, () => ({} as Soil)),
+    } as Blast);
     b.x = x; b.y = y; b.radius = Math.min(190, radius); b.age = 0; b.seed = ++this.sequence;
     b.power = kind === 'echo' ? .76 : kind === 'ult' ? 1.15 : 1;
-    b.life = kind === 'ult' ? 1.42 : kind === 'echo' ? .94 : 1.22;
+    b.airLife = kind === 'ult' ? 1.42 : kind === 'echo' ? .94 : 1.22;
+    b.life = kind === 'ult' ? 3.2 : kind === 'echo' ? 1.65 : 2.4;
     b.count = kind === 'ult' ? 30 : kind === 'echo' ? 14 : 22;
     // Never replace a visible event's rendering mode when an asynchronous shader finishes loading.
     b.shader = this.fire.ready && this.floor.ready;
@@ -60,6 +67,7 @@ export class CannonBlastVFX {
       p.angle = rand(seed + 5) * TAU; p.spin = (rand(seed + 6) - .5) * 15;
       p.shade = rand(seed + 7); p.shape = .45 + rand(seed + 8) * .55;
     }
+    this.breakGround(b);
     this.dirty = true;
   }
   target(x: number, y: number, seconds: number): number {
@@ -86,12 +94,77 @@ export class CannonBlastVFX {
       if (b.age >= b.life) continue;
       const r = b.radius;
       if (b.shader) {
-        this.floor.draw(b.x, b.y, r * 2.7, r * 1.35, 0, b.age, b.seed, b.power, 1, r);
-        this.fire.draw(b.x, b.y + r * .38, r * 2.65, r * 2.7, 0, b.age, b.seed, b.power, 0, r, r * .38);
-      } else this.fallback(b);
-      this.fragments(b);
+        this.floor.draw(b.x, b.y, r * 2.7, r * 1.35, 0, b.age, b.seed, b.power, 1, r, b.life);
+        if (b.age < b.airLife)
+          this.fire.draw(b.x, b.y + r * .38, r * 2.65, r * 2.7, 0, b.age, b.seed, b.power, 0, r, r * .38);
+      } else if (b.age < b.airLife) this.fallback(b);
+      this.rupture(b);
+      if (b.age < b.airLife) this.fragments(b);
     }
     this.floor.end(); this.fire.end();
+  }
+  private breakGround(b: Blast): void {
+    const r = b.radius;
+    for (let k = 0; k < 7; k++) {
+      const seed = b.seed * 59 + k * 17, a = k * 2.399963 + rand(seed) * .55;
+      const reach = r * (.62 + rand(seed + 1) * .25), c = Math.cos(a), s = Math.sin(a);
+      const f = b.faults[k]; f.count = 8;
+      for (let j = 0; j < 8; j++) {
+        const t = j / 7, bend = (rand(seed + j * 3.7) - .5) * r * .09 * Math.sin(t * Math.PI);
+        f.xy[j * 2] = c * reach * t - s * bend;
+        f.xy[j * 2 + 1] = (s * reach * t + c * bend) * .43;
+      }
+      if (k < 4) {
+        const fork = b.faults[7 + k], at = 3 + k % 2, fa = a + (k % 2 ? .7 : -.7);
+        fork.count = 5;
+        for (let j = 0; j < 5; j++) {
+          const t = j / 4;
+          fork.xy[j * 2] = f.xy[at * 2] + Math.cos(fa) * reach * .35 * t;
+          fork.xy[j * 2 + 1] = f.xy[at * 2 + 1] + Math.sin(fa) * reach * .35 * t * .43 + Math.sin(t * 5 + k) * t * 2;
+        }
+      }
+      const soil = b.soil[k], ca = a + .18, rr = r * (.47 + rand(seed + 4) * .12);
+      soil.x = Math.cos(ca) * rr; soil.y = Math.sin(ca) * rr * .43;
+      soil.tx = -Math.sin(ca); soil.ty = Math.cos(ca) * .43;
+      soil.nx = Math.cos(ca); soil.ny = Math.sin(ca) * .43;
+      soil.width = r * (.07 + rand(seed + 5) * .055); soil.height = r * (.025 + rand(seed + 6) * .035);
+      soil.shade = rand(seed + 7);
+    }
+  }
+  private rupture(b: Blast): void {
+    const g = this.ground, age = b.age;
+    const appear = clamp(age / .08), fade = 1 - clamp((age - b.life + .8) / .8);
+    const hot = (1 - clamp((age - .2) / 1.25)) * appear;
+    for (let k = 0; k < b.faults.length; k++) {
+      const f = b.faults[k], width = k < 7 ? 2.1 : 1.2;
+      ink(g, 43, 27, 15, .7 * fade * appear, width + 1.5); this.faultStroke(b, f, 0, 0);
+      ink(g, 190, 143, 80, .5 * fade * appear, 1); this.faultStroke(b, f, -.8, 1);
+      if (k < 5 && hot > 0) {
+        ink(g, 246, 121 + hot * 45, 40, hot * .6, .9); this.faultStroke(b, f, 0, 0);
+      }
+    }
+    // Unequal lifted clods around the cavity. Their feet stay at the landing, not on the smoke.
+    for (const s of b.soil) {
+      const x = b.x + s.x, y = b.y + s.y;
+      const w = s.width, h = s.height * appear * (1 + Math.exp(-age * 9) * .6), depth = w * .45;
+      const lx = x - s.tx * w, ly = y - s.ty * w, rx = x + s.tx * w, ry = y + s.ty * w;
+      const bx = x - s.nx * depth, by = y - s.ny * depth + h;
+      ink(g, 36, 23, 14, .26 * fade * appear); oval(g, x, y - 2, w, Math.max(1.5, w * .2));
+      ink(g, 79 + s.shade * 18, 49 + s.shade * 12, 25, .85 * fade * appear);
+      g.moveTo(lx, ly); g.lineTo(rx, ry); g.lineTo(bx + s.tx * w * .65, by + s.ty * w * .65);
+      g.lineTo(bx - s.tx * w * .8, by - s.ty * w * .8); g.close(); g.fill();
+      ink(g, 156 + s.shade * 30, 110 + s.shade * 23, 59 + s.shade * 12, .82 * fade * appear);
+      g.moveTo(lx, ly + h * .35); g.lineTo(bx, by + h * .3);
+      g.lineTo(bx + s.tx * w * .65, by + s.ty * w * .65); g.lineTo(rx, ry); g.close(); g.fill();
+      ink(g, 218, 170, 104, .55 * fade * appear, 1);
+      line(g, lx, ly + h * .35, bx, by + h * .3);
+    }
+  }
+  private faultStroke(b: Blast, f: Fault, ox: number, oy: number): void {
+    const g = this.ground;
+    g.moveTo(b.x + f.xy[0] + ox, b.y + f.xy[1] + oy);
+    for (let j = 1; j < f.count; j++) g.lineTo(b.x + f.xy[j * 2] + ox, b.y + f.xy[j * 2 + 1] + oy);
+    g.stroke();
   }
   private drawLandings(): void {
     const g = this.ground;
@@ -119,7 +192,7 @@ export class CannonBlastVFX {
       const travel = age <= p.land ? (1 - Math.exp(-age * 1.4)) / 1.4
         : (1 - Math.exp(-p.land * 1.4)) / 1.4 + Math.exp(-p.land * 1.4) * .4 * (1 - Math.exp(-after * 5)) / 5;
       const x = b.x + p.vx * travel, gy = b.y + p.vy * travel, y = gy + Math.max(0, z);
-      const fade = 1 - clamp((age - b.life * .63) / (b.life * .37));
+      const fade = 1 - clamp((age - b.airLife * .63) / (b.airLife * .37));
       const turningAge = Math.min(age, p.land + bounceLife);
       const a = p.angle + p.spin * turningAge, c = Math.cos(a), s = Math.sin(a);
       const size = p.size, side = size * (.25 + Math.abs(Math.cos(turningAge * 10 + k)) * .5) * p.shape;
@@ -175,7 +248,7 @@ export class SiphonBeamVFX {
   private heavy = false;
   constructor(field: Node) {
     const parent = field.getChildByName('FxLayer')!;
-    this.ribbons = new HeroFxShader(parent, 'siphonVoidStreams', 16);
+    this.ribbons = new HeroFxShader(parent, 'siphonVoidStreams', 16, true);
     this.g = N('siphonExtractedEssence', parent).addComponent(Graphics);
   }
   tick(dt: number): void {
@@ -196,7 +269,7 @@ export class SiphonBeamVFX {
     const dx = tx - this.sx, dy = ty - this.sy, len = Math.hypot(dx, dy);
     if (len < 1) return;
     const power = strength * (this.heavy ? 1.2 : 1);
-    if (this.ribbons.draw((this.sx + tx) * .5, (this.sy + ty) * .5, len + 72, this.heavy ? 106 : 88,
+    if (this.ribbons.draw((this.sx + tx) * .5, (this.sy + ty) * .5, len + 72, this.heavy ? 144 : 120,
       Math.atan2(dy, dx) * 180 / Math.PI, this.clock, phase, power, 2, len)) return;
     // Error-only fallback: a stable curved channel, never an untextured white rectangle.
     const g = this.g, nx = -dy / len, ny = dx / len;
@@ -223,9 +296,14 @@ export class SiphonBeamVFX {
       const fade = Math.sin(q * Math.PI), size = p.heavy ? 4 : 2.8;
       // Stretched essence and its translucent wake travel enemy -> raised palm.
       for (let layer = 0; layer < 3; layer++) {
-        ink(g, layer === 2 ? 244 : 145, layer === 2 ? 197 : 55, 255,
-          fade * (layer === 0 ? .12 : layer === 1 ? .5 : .85), size * (layer === 0 ? 4 : layer === 1 ? 1.6 : .45));
-        line(g, x - dx / len * (p.heavy ? 13 : 9), y - dy / len * (p.heavy ? 13 : 9), x, y);
+        const width = size * (layer === 0 ? 2.4 : layer === 1 ? .9 : .3), length = p.heavy ? 17 : 12;
+        const tx = x - dx / len * length, ty = y - dy / len * length;
+        ink(g, layer === 2 ? 250 : 220, layer === 2 ? 227 : 177, 255,
+          fade * (layer === 0 ? .07 : layer === 1 ? .38 : .8));
+        g.moveTo(x, y);
+        g.quadraticCurveTo(x - dx / len * length * .4 + nx * width, y - dy / len * length * .4 + ny * width, tx, ty);
+        g.quadraticCurveTo(x - dx / len * length * .4 - nx * width, y - dy / len * length * .4 - ny * width, x, y);
+        g.close(); g.fill();
       }
       if (p.age < .24) {
         const progress = p.age / .24;

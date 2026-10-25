@@ -1,5 +1,5 @@
 /** Small, bounded, art-free shader quads. Cosmetic state is supplied by the battle clock. */
-import { EffectAsset, Material, Node, Rect, resources, Size, Sprite, SpriteFrame, Texture2D, UITransform, Vec2, Vec4 } from 'cc';
+import { EffectAsset, gfx, Material, Node, Rect, resources, Size, Sprite, SpriteFrame, Texture2D, UITransform, Vec2, Vec4 } from 'cc';
 import { N } from '../ui/UIKit';
 
 export const HERO_FX_EFFECT = 'fx/hero-impact-flow';
@@ -24,7 +24,7 @@ export class HeroFxShader {
   private lastUsed = 0;
   private destroyed = false;
   ready = false;
-  constructor(parent: Node, name: string, capacity: number) {
+  constructor(parent: Node, name: string, capacity: number, private readonly emissive = false) {
     this.root = N(name, parent);
     this.texture = new Texture2D();
     this.texture.reset({ width: 2, height: 2, format: Texture2D.PixelFormat.RGBA8888 });
@@ -35,6 +35,10 @@ export class HeroFxShader {
     for (let i = 0; i < capacity; i++) {
       const node = N('flow' + i, this.root), ui = node.addComponent(UITransform), sprite = node.addComponent(Sprite);
       sprite.sizeMode = Sprite.SizeMode.CUSTOM; sprite.trim = false; sprite.spriteFrame = this.frame;
+      if (emissive) {
+        const blend = sprite as unknown as { _srcBlendFactor: gfx.BlendFactor; _dstBlendFactor: gfx.BlendFactor };
+        blend._srcBlendFactor = gfx.BlendFactor.ONE; blend._dstBlendFactor = gfx.BlendFactor.ONE;
+      }
       // Remain hidden until a real effect has a material: a white carrier is never a fallback.
       node.active = false;
       this.quads.push({ node, ui, sprite, material: null, state: new Vec4(), shape: new Vec4() });
@@ -42,7 +46,7 @@ export class HeroFxShader {
     void effect().then(asset => {
       if (!asset || this.destroyed || !this.root.isValid) return;
       for (const q of this.quads) {
-        const material = new Material(); material.initialize({ effectAsset: asset });
+        const material = new Material(); material.initialize({ effectAsset: asset, technique: this.emissive ? 1 : 0 });
         q.material = material; q.sprite.customMaterial = material;
       }
       this.ready = true;
