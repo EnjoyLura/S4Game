@@ -1,11 +1,12 @@
 /** Pure bounded-ray geometry. No random numbers, game state or rendering. */
 export interface LaserBody { x: number; y: number; dead: boolean; isBoss: boolean; def: { radius: number; elite?: boolean }; }
 export interface LaserBounds { left: number; right: number; top: number; }
-export function laserLength(x: number, y: number, angle: number, bounds: LaserBounds): number {
+/** Overscan is only for rendering past the viewport; damage uses the unpadded bounds. */
+export function laserLength(x: number, y: number, angle: number, bounds: LaserBounds, overscan = 0): number {
   const dx = Math.cos(angle), dy = Math.sin(angle);
   if (dy <= 0) return 0;
-  const top = (bounds.top - y) / dy;
-  const side = dx > 1e-6 ? (bounds.right - x) / dx : dx < -1e-6 ? (bounds.left - x) / dx : Infinity;
+  const top = (bounds.top + overscan - y) / dy;
+  const side = dx > 1e-6 ? (bounds.right + overscan - x) / dx : dx < -1e-6 ? (bounds.left - overscan - x) / dx : Infinity;
   return Math.max(0, Math.min(top, side));
 }
 export function laserTouches(x: number, y: number, angle: number, length: number, halfWidth: number,

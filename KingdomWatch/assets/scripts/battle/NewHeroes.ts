@@ -6,7 +6,7 @@ import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
 import { HeroStats } from '../config/Cards';
 import { CANNON, SIPHON, SIPHON_LASER, cannonSkillCfg, cannonUltCfg, siphonSkillCfg, siphonUltCfg } from '../config/NewHeroConfig';
-import { HERO_Y, LINE_Y, LO } from '../config/GameConfig';
+import { DESIGN_W, HERO_Y, LINE_Y, LO } from '../config/GameConfig';
 import { artSprite } from '../ui/Ux';
 import { CA, N } from '../ui/UIKit';
 import { Sfx } from '../core/Sfx';
@@ -170,7 +170,7 @@ export class SiphonHero extends HeroBase {
   private laserY = 0;
   private laserTick = 0;
   private laserAimT = 0;
-  private readonly laserArena = { left: -355, right: 355, top: 0 };
+  private readonly laserArena = { left: -DESIGN_W / 2, right: DESIGN_W / 2, top: 0 };
   private laserFX: SiphonLaserVFX | null = null;
   private beams: Beam[] = [];
   private beamFX: SiphonBeamVFX | null = null;
@@ -226,7 +226,7 @@ export class SiphonHero extends HeroBase {
   private get laserHalfWidth(): number {
     return (siphonUltCfg(this.stats.ultLv).halfWidth + (this.stats.siphonBranches || 0) * 6) * this.stats.skillRangeMul;
   }
-  private get laserBounds() { this.laserArena.top = LO.half - LO.notchTop - 112; return this.laserArena; }
+  private get laserBounds() { this.laserArena.top = LO.half; return this.laserArena; }
   protected faceAttack(dx: number, dy: number): void {
     // Keep the firing palm anchored during a sweep, even if normal attacks prefer another side.
     if (this.laserAge >= 0) super.faceAttack(this.laserFacing, 1);
@@ -321,7 +321,8 @@ export class SiphonHero extends HeroBase {
     if (this.laserFX) {
       const cfg = siphonUltCfg(this.stats.ultLv);
       this.laserFX.render(this.laserX, this.laserY, this.laserAngle,
-        laserLength(this.laserX, this.laserY, this.laserAngle, this.laserBounds), this.laserHalfWidth,
+        laserLength(this.laserX, this.laserY, this.laserAngle, this.laserBounds,
+          Math.max(SIPHON_LASER.visualOverscan, this.laserHalfWidth * 2 + 24)), this.laserHalfWidth,
         this.laserAge, cfg.duration);
     }
     if (!fx) return;

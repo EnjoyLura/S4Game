@@ -4,7 +4,7 @@ export const CANNON = { attack: 150, skill: 150, aspd: .45, range: 1100, skillRa
   cooldown: 11, energy: 75, blast: 90, skillBlast: 150, shred: .15, shredSeconds: 4 };
 export const SIPHON = { attack: 64, skill: 95, aspd: 1, range: 1000, skillRange: 950,
   cooldown: 12, energy: 62, tick: .25, rampPerSecond: .1, rampMax: .5 };
-export const SIPHON_LASER = { windup: .6, duration: 1.8, tail: .18, tick: .15, halfWidth: 28, turnRate: .45 };
+export const SIPHON_LASER = { windup: .6, duration: 3, tail: .18, tick: .15, halfWidth: 28, turnRate: .45, visualOverscan: 96 };
 export function newHeroNormalCfg(level: number): { normalMul: number } {
   return { normalMul: (1 + (level - 1) * .08) * (level >= 20 ? 1.2 : 1) };
 }

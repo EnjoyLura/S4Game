@@ -1,0 +1,12 @@
+{
+  "renderer": "AMD Radeon RX 9070 XT",
+  "version": "3.3.0 Core Profile Context 26.2.2.260209",
+  "fragmentProgram": "actual hero-impact-flow.effect, vertex projection adapted to offscreen art canvas",
+  "shaderSourceSha256": "ee7de4754d159593a1391d7de3a28d3e5feabd15c3337ad46dbdf4c19bcc7ba4",
+  "drawingSourceSha256": "ae7485f99f0877f985eeff5fdbf8736a1e44504172b777658e65e7a4393b3c1f",
+  "frames": {
+    "laser": 150
+  },
+  "gameBrowserAudioOrWasmStarted": false,
+  "engineBlendingAndPhonePerformance": "not verified"
+}

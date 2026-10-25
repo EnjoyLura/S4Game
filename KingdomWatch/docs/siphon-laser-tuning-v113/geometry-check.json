@@ -1,0 +1,90 @@
+{
+  "viewportWidthAngleCases": 540,
+  "laserClearsTopAndSideEdges": true,
+  "offscreenTargetExcluded": true,
+  "timing": [
+    {
+      "level": 1,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 20,
+      "damageSeconds": 3
+    },
+    {
+      "level": 1,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 20,
+      "damageSeconds": 3
+    },
+    {
+      "level": 1,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 20,
+      "damageSeconds": 3
+    },
+    {
+      "level": 10,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 22,
+      "damageSeconds": 3.3
+    },
+    {
+      "level": 10,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 22,
+      "damageSeconds": 3.3
+    },
+    {
+      "level": 10,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 22,
+      "damageSeconds": 3.3
+    },
+    {
+      "level": 20,
+      "cadence": [
+        0.016666666666666666
+      ],
+      "ticks": 22,
+      "damageSeconds": 3.3
+    },
+    {
+      "level": 20,
+      "cadence": [
+        0.03333333333333333
+      ],
+      "ticks": 22,
+      "damageSeconds": 3.3
+    },
+    {
+      "level": 20,
+      "cadence": [
+        0.011,
+        0.027,
+        0.043,
+        0.018
+      ],
+      "ticks": 22,
+      "damageSeconds": 3.3
+    }
+  ],
+  "scope": "pure viewport and interval math only",
+  "gameOrBrowserStarted": false
+}

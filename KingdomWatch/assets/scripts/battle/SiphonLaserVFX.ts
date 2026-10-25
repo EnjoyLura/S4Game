@@ -13,7 +13,7 @@ export class SiphonLaserVFX {
   private cursor = 0;
   constructor(field: Node) {
     const parent = field.getChildByName('FxLayer')!;
-    this.beam = new HeroFxShader(parent, 'siphonPiercingFlood', 1, 'emission');
+    this.beam = new HeroFxShader(parent, 'siphonPiercingFlood', 1, 'plasma');
     this.ink = N('siphonLaserContacts', parent).addComponent(Graphics);
   }
   tick(dt: number): void { for (const c of this.contacts) c.age += dt; }
@@ -31,7 +31,7 @@ export class SiphonLaserVFX {
         length + 80, halfWidth * 4.4 + 32, angle * 180 / Math.PI, age, .73, gain, 3, length, halfWidth);
       if (!painted) {
         for (let k = 0; k < 3; k++) {
-          tint.set(k === 2 ? 255 : 188, k === 2 ? 240 : 83, 255, Math.round(gain * (k === 0 ? 45 : 210)));
+          tint.set(k === 2 ? 180 : 116, k === 2 ? 104 : 30, k === 2 ? 239 : 190, Math.round(gain * (k === 0 ? 45 : 210)));
           g.strokeColor = tint; g.lineWidth = halfWidth * (k === 0 ? 2.5 : k === 1 ? 1.7 : .2);
           if (age < SIPHON_LASER.windup) {
             g.circle(x, y, 4 + age / SIPHON_LASER.windup * 13); g.stroke();
@@ -45,7 +45,7 @@ export class SiphonLaserVFX {
       const fade = 1 - c.age / .18;
       for (let k = 0; k < 3; k++) {
         const a = c.seed * 1.7 + k * 2.1, reach = (6 + c.age * 50) * fade;
-        tint.set(244, 192 + fade * 40, 255, Math.round(fade * 200)); g.strokeColor = tint; g.lineWidth = 1.4 * fade + .5;
+        tint.set(187, 106 + fade * 30, 242, Math.round(fade * 200)); g.strokeColor = tint; g.lineWidth = 1.4 * fade + .5;
         g.moveTo(c.x, c.y); g.lineTo(c.x + Math.cos(a) * reach, c.y + Math.sin(a) * reach); g.stroke();
       }
     }
