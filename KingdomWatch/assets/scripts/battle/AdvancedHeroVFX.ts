@@ -120,8 +120,9 @@ export class CannonBlastVFX {
         : (1 - Math.exp(-p.land * 1.4)) / 1.4 + Math.exp(-p.land * 1.4) * .4 * (1 - Math.exp(-after * 5)) / 5;
       const x = b.x + p.vx * travel, gy = b.y + p.vy * travel, y = gy + Math.max(0, z);
       const fade = 1 - clamp((age - b.life * .63) / (b.life * .37));
-      const a = p.angle + p.spin * Math.min(age, p.land + bounceLife), c = Math.cos(a), s = Math.sin(a);
-      const size = p.size, side = size * (.25 + Math.abs(Math.cos(age * 10 + k)) * .5) * p.shape;
+      const turningAge = Math.min(age, p.land + bounceLife);
+      const a = p.angle + p.spin * turningAge, c = Math.cos(a), s = Math.sin(a);
+      const size = p.size, side = size * (.25 + Math.abs(Math.cos(turningAge * 10 + k)) * .5) * p.shape;
       ink(ground, 35, 27, 24, .27 * fade / (1 + z * .014)); oval(ground, x, gy - 2, size * 1.3, size * .38);
       // A short incandescent wake changes to dark metal; the pieces remain readable after the flash.
       const hot = clamp(1 - age / (.18 + p.shade * .24));
