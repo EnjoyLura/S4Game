@@ -1,0 +1,24 @@
+{
+  "release": "735f408e33c8c7ee",
+  "samples": [
+    {
+      "path": "assets/main/index.90072.js",
+      "bytes": 960889,
+      "status": 200,
+      "sha256": "c921760b491b4ddd523fc76be087dc6663353e7effdf054897137995b77eab5d"
+    },
+    {
+      "path": "assets/resources/native/4f/4f4e0740-2005-42a2-b4f7-31b0ed0bff81.d0b38/UIBody.ttf",
+      "bytes": 493792,
+      "status": 200,
+      "sha256": "6a9d629a66489d025beddeef090b4acfc8f38ac73b035923e0c3fd5d7009bcfb"
+    },
+    {
+      "path": "assets/resources/native/08/08934c18-5f2f-44c6-8145-d4fb15839d72.c7469/UIHeading.ttf",
+      "bytes": 672892,
+      "status": 200,
+      "sha256": "4e02da2ce4a4596a6df21ba001b1d0db756a0a9e86dca60bfa817abf76b86bcf"
+    }
+  ],
+  "gameOrBrowserStarted": false
+}

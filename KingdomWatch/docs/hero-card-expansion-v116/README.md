@@ -39,4 +39,6 @@ check_cards.cjs仅运行纯卡牌/配置数据：21张独立应用及归属/图�
 
 已本地提交实现54b018e4后Creator生产构建21585ms、正常退出36；15JS及5内联脚本语法、全部文件SHA/入口路径、21卡入正式游戏脚本及两字体源/导出哈希检查通过。504份原native字节保持，仅两款字体加字；1569文件194062210字节，版本735f408e33c8c7ee，仍在200MB内。收据见build-record.json、package-static-verification.json、export-report.json。
 
-不启动游戏、浏览器、真实战斗、音频或WASM。实际组合手感、伤害平衡和手机性能待用户试玩。按长期约定发布独立GitHub运行仓库，不推源码/不动CF，发布收据后补。
+已按长期约定发布独立GitHub运行仓库，运行提交f878bf59ecd5350667ca99dde099b8afc0e32145，Pages/build均built，19项标准HTTP及游戏脚本/两字体额外3项HTTP/SHA通过，线上脚本包含全部21卡ID，发布中source HEAD/索引保持。收据见deployment.json、additional-http-verification.json。不推源码/不动CF。
+
+不启动游戏、浏览器、真实战斗、音频或WASM。实际组合手感、伤害平衡和手机性能待用户试玩。试玩：https://enjoylura.github.io/kingdom-watch-play/?v=hero-cards-v116 。
