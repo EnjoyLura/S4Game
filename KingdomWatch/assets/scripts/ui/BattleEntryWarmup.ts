@@ -25,6 +25,7 @@ export const BATTLE_COMMON_ART = ['pause_comic_v1/title_ribbon',
   'shop_comic_v1/comic_coin_v1', 'shop_comic_v1/comic_diamond_v1', 'hero_comic_v2/comic_attributes_v2',
   'pick_comic_v1/title_plate', 'hero_comic_v2/comic_story_v2', 'ult_energy_quad', ...THREAT_ART] as const;
 const FX_IMAGES: Record<string, string[]> = {
+  wind: ['fx/wind_volume_v122/eye', 'fx/wind_volume_v122/tornado'],
   archer: ['fx/archer_v1'],
   pyro: ['fx/pyro_hit', 'fx/fire_v2', 'fx/crater_mark', 'fx/crater_embers'],
   mora: ['fx/frost_domain_video_v10', 'fx/frost_ultimate_impact_v1', 'fx/frost_ultimate_rain_v1'],
@@ -33,7 +34,7 @@ const FX_MANIFESTS = new Set(['fx/archer_v1', 'fx/pyro_hit', 'fx/fire_v2', 'fx/f
 const FX_EFFECTS: Record<string, string[]> = {
   pyro: ['fx/fire-paint-v2'], volt: ['fx/volt-ultimate-procedural'], sniper: ['fx/sniper-ultimate-procedural'],
   cannon: ['fx/hero-impact-flow'], siphon: ['fx/hero-impact-flow'],
-  wind: ['fx/wind-ninja-flow'], ninja: ['fx/wind-ninja-flow'],
+  wind: ['fx/wind-ninja-flow', 'fx/wind-volume-v122'], ninja: ['fx/wind-ninja-flow'],
 };
 const fxRequests = new Map<string, Promise<void>>();
 function warmFxResource(path: string, effect: boolean): Promise<void> {

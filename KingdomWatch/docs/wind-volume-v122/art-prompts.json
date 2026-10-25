@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "version": "v122",
+  "generationMode": "built-in image_gen",
+  "intent": "new generation",
+  "referenceImages": [],
+  "nativeAlpha": true,
+  "requestedNativeSize": [
+    1536,
+    1536
+  ],
+  "actualNativeSize": [
+    1254,
+    1254
+  ],
+  "rawArchive": "local/art-archive/wind-volume-v122",
+  "sources": [
+    {
+      "id": "tornado",
+      "prompt": "Use case: stylized-concept\nAsset type: production game VFX sprite flipbook atlas, genuine transparent RGBA PNG.\nPrimary request: create a completely NEW polished stylized 3D volumetric WIND TORNADO, repeated as four coherent sequential rotation phases in a precise 2 by 2 sprite sheet. Prefer native 1536 by 1536 square output, four equal 768-square cells, intended final sheet 1024 by 1024 with four 512-square frames. No reference images.\n\nSubject: one substantial, FAT cloud-bodied upright tornado in EACH cell. Broad wide crown, large dense turbulent upper and middle body tapering smoothly down to a small lower toe. Same vertical axis, same exact size, same centered footprint, same grounded toe position, same camera and lighting in all four frames. A continuous billowing cloudy volume with overlapping broad soft white and pale-jade cloud bands, convincing FRONT/BACK DEPTH and shaded teal recesses, fibrous advected cloud filaments, narrow mint surface streaks, ragged wind-torn wispy edges, a few small airborne leaves and dust. Real soft white cloud pigment and solid sculptural cloud presence; cloud layers wrap and twist around the cone. Not empty space wrapped in glowing lines.\n\nStyle: premium polished stylized ARPG wind skill VFX, beautifully rendered 3D animated cloud sculpture with clear simple large forms suitable for a 2D cartoon game, subtle translucency only at wispy edges. Orthographic three-quarter eye-level FRONT camera shows width and depth, axis vertical. Top-left soft key light, gentle ambient fill, no ground shadow. Pale jade, teal, mint and soft white. High contrast internal layered cloud shading, restrained luminous accents, no large bloom.\n\nAnimation: reading order upper-left phase 0 degrees, upper-right phase 90 degrees, lower-left phase 180 degrees, lower-right phase 270 degrees; surface cloud advection rotates around a stationary vertical center while overall silhouette/footprint stays consistent. These are four animation phases seen from ONE FIXED camera, not four camera views, not four different shapes.\n\nLayout: exactly one tornado centered in each identical square quadrant. At final 512-cell equivalent, all visible leaves/dust/wisps stay INSIDE a 55px clear margin on EVERY side (native 768-cell equivalent margin at least 83px). Identical toe anchor around local x256 y440 in final 512-cell equivalents, widest cloud crown fits between x65 and x447, top at y65. No artwork crosses cell boundaries. Empty gutters are genuinely transparent alpha zero. Outer background truly transparent, no environment, no plane, no backdrop.\nAvoid: skinny neon wire helix, DNA, glowing spring, coil loops, stacked isolated rings, three bright contour lines, lightning, electric sparks, weapon, character, scenery, text, digits, letters, grid, cell border, frame, watermark, checkerboard painted into pixels. Deliver actual transparent background RGBA.",
+      "toolArguments": {
+        "transparent_background": true
+      },
+      "generatedPath": "C:/Users/user/.codex/generated_images/01a17381-d271-7893-a4ab-fbcd338f6fb5/exec-8bf76b71-5724-4971-9884-e2ecb4f313c0.png",
+      "archiveFile": "tornado-original.png",
+      "formalPath": "assets/resources/fx/wind_volume_v122/tornado.png",
+      "packing": {
+        "sourceGrid": [
+          2,
+          2
+        ],
+        "sourceCell": [
+          627,
+          627
+        ],
+        "uniformResample": [
+          370,
+          370
+        ],
+        "kernel": "lanczos3",
+        "registration": "Main toe at alpha >=127, lower cloud body; only packing translation, no per-frame shape scaling.",
+        "sourceRegistrationPoints": [
+          [
+            337.62857142857143,
+            589
+          ],
+          [
+            335.4594594594595,
+            589
+          ],
+          [
+            337.77777777777777,
+            584
+          ],
+          [
+            334.63157894736844,
+            584
+          ]
+        ],
+        "frameAnchor": [
+          256,
+          430
+        ]
+      }
+    },
+    {
+      "id": "eye",
+      "prompt": "Use case: stylized-concept\nAsset type: production game VFX sprite flipbook atlas, genuine transparent RGBA PNG.\nPrimary request: create a completely NEW dense WIND EYE / VORTEX cloud swirl, repeated as four coherent sequential phases of smooth inward rotation in a precise 2 by 2 sprite sheet. Prefer native 1536 by 1536 square output, four equal 768-square cells, intended final sheet 1024 by 1024 with four 512-square frames. No reference images.\n\nSubject: each cell contains ONE big recognizable dense spiraling vortex of layered wind, seen from a fixed oblique top-down orthographic view. Wide elliptical disc of turbulent white and pale-jade cloud material with teal inner shaded depth. Many broad overlapping tapered spiraling wind ribbons joined by fibrous smoke and cloud advection; continuous rich soft cloud volume between the ribbons. Strong circular inward flow, rich front/back layer overlap, organic curled wispy edge. A small dark central eye about 10 percent of vortex radius: this is genuinely TRANSPARENT/open center with shadowed teal wisps around it, not a purple/black opaque disk or black painted hole. Small natural specks of dust and a few tiny leaves are allowed. The cloud pigment stays soft white/jade with narrow mint highlights and subtly translucent ragged edges, restrained glow, no huge bloom.\n\nStyle: premium polished stylized 3D ARPG wind skill VFX, readable in a 2D cartoon game, substantial cloud body and sculptural shading. Fixed same oblique top-down camera and same horizontal ellipse/view plane in all frames, soft upper-left lighting, same perspective, same brightness, same overall footprint. A dense energetic spiral cloud, not an icon made from sparse lines.\n\nAnimation: reading order upper-left phase 0, upper-right 90, lower-left 180, lower-right 270 degrees of smoothly inward-advecting wind material. Same stationary center, same outer footprint, four texture phases seen from one unchanged oblique view, not four rotated camera angles and not four unrelated effects.\n\nLayout: exactly ONE centered vortex per square quadrant, perfectly even 2x2 grid alignment with no visible grid. Every cell retains at least 55px fully clear margin at final 512-cell equivalent (at native 768-cell equivalent at least 83px). Center local x256 y256 in final cells. Broad elliptical body about 390px wide and 315px tall within final 512 cell. No wisps cross quadrants. Gaps, empty corners and exterior must be real alpha zero with natural semitransparent edge falloff. NO ground plane or shadows beyond effect, NO background.\n\nAvoid: three bright spiral lines, thin neon line art, glowing coils, spring, DNA, concentric disconnected rings, cross shape, four spokes, lightning, opaque black/purple hole, character, weapon, environment, text, digits, grid, borders, frame, watermark, painted checkerboard. Deliver actual genuine transparent RGBA.",
+      "toolArguments": {
+        "transparent_background": true
+      },
+      "generatedPath": "C:/Users/user/.codex/generated_images/01a17381-d271-7893-a4ab-fbcd338f6fb5/exec-a7fb465e-d0b2-480e-9e87-4b6575eb0f9b.png",
+      "archiveFile": "eye-original.png",
+      "formalPath": "assets/resources/fx/wind_volume_v122/eye.png",
+      "packing": {
+        "sourceGrid": [
+          2,
+          2
+        ],
+        "sourceCell": [
+          627,
+          627
+        ],
+        "uniformResample": [
+          370,
+          370
+        ],
+        "kernel": "lanczos3",
+        "registration": "Central eye alpha <=8 centroid within the central 110x110 window; packing translation only.",
+        "sourceRegistrationPoints": [
+          [
+            321.5633672525439,
+            336.80943570767806
+          ],
+          [
+            317.3810786914235,
+            338.95932802829356
+          ],
+          [
+            322.0621414913958,
+            303.6376673040153
+          ],
+          [
+            317.4072072072072,
+            306.5891891891892
+          ]
+        ],
+        "frameAnchor": [
+          256,
+          256
+        ]
+      }
+    }
+  ],
+  "permittedProcessing": [
+    "extract four fixed equal source cells",
+    "identical uniform resample for all four phases",
+    "integer translation during alpha-preserving packing",
+    "lossless PNG compression"
+  ],
+  "noSemanticPixelEdits": true,
+  "backgroundRemoval": false,
+  "frameOrder": "row-major: upper-left, upper-right, lower-left, lower-right; intended rotation texture phases 0,90,180,270 degrees from a fixed view",
+  "review": {
+    "tornado": "Substantial pale jade/white cloud volume, shaded teal depth, wide crown and tapered toe; dense billowing flow with leaves; no neon coils.",
+    "eye": "Dense layered inward spiral cloud volume, same oblique view, small naturally transparent central eye; no sparse line spiral or cross.",
+    "limitations": "AI-generated phases retain slight cloud silhouette variation; texture blending, shader integration and runtime review belong to the parent task. Source grid margins were tighter than requested, so fixed-cell resampling and packing add >=55px truly clear margins. No source alpha masking, thresholding, matting or color edits."
+  }
+}

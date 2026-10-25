@@ -1,0 +1,1559 @@
+{
+  "schemaVersion": 1,
+  "version": "v122",
+  "mode": "built-in image_gen; two new generations; no image references",
+  "scope": "Formal wind VFX art only. Shader, integration, build, Git and deployment belong to parent task.",
+  "processing": "Four fixed 627x627 source cells, same 370x370 uniform Lanczos3 resample, integer registration packing in 512x512 cells. No color, alpha, semantic or background edits.",
+  "commands": [
+    "node docs/wind-volume-v122/prepare-art.cjs"
+  ],
+  "rawArchiveIgnoredBy": "KingdomWatch/.gitignore: /local/",
+  "toolchain": {
+    "node": "v24.21.0",
+    "sharp": "0.35.5",
+    "vips": "8.18.7"
+  },
+  "folder": {
+    "path": "assets/resources/fx/wind_volume_v122",
+    "uuid": "582adbc8-0e04-44e5-9b70-216b7d1884c6"
+  },
+  "grid": [
+    2,
+    2
+  ],
+  "atlasSize": [
+    1024,
+    1024
+  ],
+  "frameSize": [
+    512,
+    512
+  ],
+  "clearGutterPx": 55,
+  "phaseOrder": "upper-left, upper-right, lower-left, lower-right",
+  "validation": {
+    "nativeRGBA": true,
+    "sourceHashesVerifiedOnRepeat": true,
+    "formalRGBA": true,
+    "allFrameGuttersAlphaZero": true,
+    "registrationMaxErrorPx": 0.5,
+    "perPNGMaxBytes": 2000000,
+    "uniqueUUIDs": true,
+    "eyeCentersTransparent": true
+  },
+  "visualReview": {
+    "tornado": "Substantial pale jade/white cloud volume, shaded teal depth, wide crown and tapered toe; dense billowing flow with leaves; no neon coils.",
+    "eye": "Dense layered inward spiral cloud volume, same oblique view, small naturally transparent central eye; no sparse line spiral or cross.",
+    "limitations": "AI-generated phases retain slight cloud silhouette variation; texture blending, shader integration and runtime review belong to the parent task. Source grid margins were tighter than requested, so fixed-cell resampling and packing add >=55px truly clear margins. No source alpha masking, thresholding, matting or color edits."
+  },
+  "assets": [
+    {
+      "id": "tornado",
+      "path": "assets/resources/fx/wind_volume_v122/tornado.png",
+      "resourceKey": "fx/wind_volume_v122/tornado",
+      "width": 1024,
+      "height": 1024,
+      "channels": 4,
+      "alphaMode": "straight RGBA; native generated alpha preserved through standard resampling and packing",
+      "bytes": 747223,
+      "sha256": "d5dcd355a4b409875af40ca8c457a9391d3d9498dde0051448898cda07dc648c",
+      "uuids": {
+        "image": "b24a8b68-753a-4480-9f83-2754cffd5ac9",
+        "texture": "b24a8b68-753a-4480-9f83-2754cffd5ac9@6c48a",
+        "spriteFrame": "b24a8b68-753a-4480-9f83-2754cffd5ac9@f9941"
+      },
+      "source": {
+        "archivePath": "local/art-archive/wind-volume-v122/tornado-original.png",
+        "generatedPath": "C:/Users/user/.codex/generated_images/01a17381-d271-7893-a4ab-fbcd338f6fb5/exec-8bf76b71-5724-4971-9884-e2ecb4f313c0.png",
+        "width": 1254,
+        "height": 1254,
+        "channels": 4,
+        "hasNativeAlpha": true,
+        "bytes": 1999339,
+        "sha256": "ddbcdb1068429e60533c297b4214bf04337cb976b804eee432f6fbf7324becaf",
+        "alpha": {
+          "zero": 727501,
+          "semiTransparent": 845001,
+          "opaque": 14,
+          "maxAlpha": 255,
+          "zeroFraction": 0.46263503837162867,
+          "gutterNonzero": 24663,
+          "boundingBoxes": {
+            "0": {
+              "x": 0,
+              "y": 0,
+              "width": 1248,
+              "height": 1254,
+              "clearMargins": [
+                0,
+                0,
+                6,
+                0
+              ]
+            },
+            "8": {
+              "x": 28,
+              "y": 36,
+              "width": 1207,
+              "height": 1177,
+              "clearMargins": [
+                28,
+                36,
+                19,
+                41
+              ]
+            },
+            "64": {
+              "x": 29,
+              "y": 38,
+              "width": 1205,
+              "height": 1174,
+              "clearMargins": [
+                29,
+                38,
+                20,
+                42
+              ]
+            },
+            "127": {
+              "x": 30,
+              "y": 40,
+              "width": 1203,
+              "height": 1172,
+              "clearMargins": [
+                30,
+                40,
+                21,
+                42
+              ]
+            }
+          }
+        }
+      },
+      "frameSize": [
+        512,
+        512
+      ],
+      "frameAnchor": [
+        256,
+        430
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "phaseDegrees": 0,
+          "rect": [
+            0,
+            0,
+            512,
+            512
+          ],
+          "uvRectTopLeft": [
+            0,
+            0,
+            0.5,
+            0.5
+          ],
+          "uvRectBottomLeft": [
+            0,
+            0.5,
+            0.5,
+            0.5
+          ],
+          "sourceRect": [
+            0,
+            0,
+            627,
+            627
+          ],
+          "nativeAlpha": {
+            "zero": 174290,
+            "semiTransparent": 218835,
+            "opaque": 4,
+            "maxAlpha": 255,
+            "zeroFraction": 0.4433404811143416,
+            "gutterNonzero": 18419,
+            "boundingBoxes": {
+              "0": {
+                "x": 0,
+                "y": 0,
+                "width": 627,
+                "height": 623,
+                "clearMargins": [
+                  0,
+                  0,
+                  0,
+                  4
+                ]
+              },
+              "8": {
+                "x": 28,
+                "y": 36,
+                "width": 586,
+                "height": 555,
+                "clearMargins": [
+                  28,
+                  36,
+                  13,
+                  36
+                ]
+              },
+              "64": {
+                "x": 29,
+                "y": 38,
+                "width": 583,
+                "height": 552,
+                "clearMargins": [
+                  29,
+                  38,
+                  15,
+                  37
+                ]
+              },
+              "127": {
+                "x": 30,
+                "y": 40,
+                "width": 582,
+                "height": 550,
+                "clearMargins": [
+                  30,
+                  40,
+                  15,
+                  37
+                ]
+              }
+            }
+          },
+          "packingOffset": [
+            57,
+            83
+          ],
+          "uniformScale": 0.5901116427432217,
+          "frameAnchor": [
+            256,
+            430
+          ],
+          "registrationAfterPacking": [
+            256.03360674413307,
+            430.3708133971292
+          ],
+          "registrationError": [
+            0.03360674413306697,
+            0.37081339712921135
+          ],
+          "alpha": {
+            "zero": 186145,
+            "semiTransparent": 75987,
+            "opaque": 12,
+            "maxAlpha": 255,
+            "zeroFraction": 0.7100868225097656,
+            "gutterNonzero": 0,
+            "boundingBoxes": {
+              "0": {
+                "x": 57,
+                "y": 83,
+                "width": 370,
+                "height": 368,
+                "clearMargins": [
+                  57,
+                  83,
+                  85,
+                  61
+                ]
+              },
+              "8": {
+                "x": 73,
+                "y": 104,
+                "width": 346,
+                "height": 328,
+                "clearMargins": [
+                  73,
+                  104,
+                  93,
+                  80
+                ]
+              },
+              "64": {
+                "x": 74,
+                "y": 105,
+                "width": 344,
+                "height": 326,
+                "clearMargins": [
+                  74,
+                  105,
+                  94,
+                  81
+                ]
+              },
+              "127": {
+                "x": 75,
+                "y": 107,
+                "width": 343,
+                "height": 324,
+                "clearMargins": [
+                  75,
+                  107,
+                  94,
+                  81
+                ]
+              }
+            }
+          }
+        },
+        {
+          "index": 1,
+          "phaseDegrees": 90,
+          "rect": [
+            512,
+            0,
+            512,
+            512
+          ],
+          "uvRectTopLeft": [
+            0.5,
+            0,
+            0.5,
+            0.5
+          ],
+          "uvRectBottomLeft": [
+            0.5,
+            0.5,
+            0.5,
+            0.5
+          ],
+          "sourceRect": [
+            627,
+            0,
+            627,
+            627
+          ],
+          "nativeAlpha": {
+            "zero": 186347,
+            "semiTransparent": 206781,
+            "opaque": 1,
+            "maxAlpha": 255,
+            "zeroFraction": 0.47400980339786686,
+            "gutterNonzero": 11799,
+            "boundingBoxes": {
+              "0": {
+                "x": 0,
+                "y": 13,
+                "width": 615,
+                "height": 614,
+                "clearMargins": [
+                  0,
+                  13,
+                  12,
+                  0
+                ]
+              },
+              "8": {
+                "x": 22,
+                "y": 46,
+                "width": 581,
+                "height": 545,
+                "clearMargins": [
+                  22,
+                  46,
+                  24,
+                  36
+                ]
+              },
+              "64": {
+                "x": 23,
+                "y": 47,
+                "width": 579,
+                "height": 543,
+                "clearMargins": [
+                  23,
+                  47,
+                  25,
+                  37
+                ]
+              },
+              "127": {
+                "x": 24,
+                "y": 48,
+                "width": 577,
+                "height": 542,
+                "clearMargins": [
+                  24,
+                  48,
+                  26,
+                  37
+                ]
+              }
+            }
+          },
+          "packingOffset": [
+            58,
+            83
+          ],
+          "uniformScale": 0.5901116427432217,
+          "frameAnchor": [
+            256,
+            430
+          ],
+          "registrationAfterPacking": [
+            255.75358851674642,
+            430.3708133971292
+          ],
+          "registrationError": [
+            -0.2464114832535813,
+            0.37081339712921135
+          ],
+          "alpha": {
+            "zero": 190429,
+            "semiTransparent": 71712,
+            "opaque": 3,
+            "maxAlpha": 255,
+            "zeroFraction": 0.7264289855957031,
+            "gutterNonzero": 0,
+            "boundingBoxes": {
+              "0": {
+                "x": 58,
+                "y": 94,
+                "width": 363,
+                "height": 359,
+                "clearMargins": [
+                  58,
+                  94,
+                  91,
+                  59
+                ]
+              },
+              "8": {
+                "x": 71,
+                "y": 110,
+                "width": 343,
+                "height": 322,
+                "clearMargins": [
+                  71,
+                  110,
+                  98,
+                  80
+                ]
+              },
+              "64": {
+                "x": 72,
+                "y": 111,
+                "width": 341,
+                "height": 320,
+                "clearMargins": [
+                  72,
+                  111,
+                  99,
+                  81
+                ]
+              },
+              "127": {
+                "x": 72,
+                "y": 111,
+                "width": 341,
+                "height": 320,
+                "clearMargins": [
+                  72,
+                  111,
+                  99,
+                  81
+                ]
+              }
+            }
+          }
+        },
+        {
+          "index": 2,
+          "phaseDegrees": 180,
+          "rect": [
+            0,
+            512,
+            512,
+            512
+          ],
+          "uvRectTopLeft": [
+            0,
+            0.5,
+            0.5,
+            0.5
+          ],
+          "uvRectBottomLeft": [
+            0,
+            0,
+            0.5,
+            0.5
+          ],
+          "sourceRect": [
+            0,
+            627,
+            627,
+            627
+          ],
+          "nativeAlpha": {
+            "zero": 180133,
+            "semiTransparent": 212992,
+            "opaque": 4,
+            "maxAlpha": 255,
+            "zeroFraction": 0.4582032869617861,
+            "gutterNonzero": 19626,
+            "boundingBoxes": {
+              "0": {
+                "x": 0,
+                "y": 3,
+                "width": 627,
+                "height": 624,
+                "clearMargins": [
+                  0,
+                  3,
+                  0,
+                  0
+                ]
+              },
+              "8": {
+                "x": 36,
+                "y": 28,
+                "width": 591,
+                "height": 557,
+                "clearMargins": [
+                  36,
+                  28,
+                  0,
+                  42
+                ]
+              },
+              "64": {
+                "x": 36,
+                "y": 29,
+                "width": 589,
+                "height": 556,
+                "clearMargins": [
+                  36,
+                  29,
+                  2,
+                  42
+                ]
+              },
+              "127": {
+                "x": 37,
+                "y": 29,
+                "width": 581,
+                "height": 556,
+                "clearMargins": [
+                  37,
+                  29,
+                  9,
+                  42
+                ]
+              }
+            }
+          },
+          "packingOffset": [
+            57,
+            86
+          ],
+          "uniformScale": 0.5901116427432217,
+          "frameAnchor": [
+            256,
+            430
+          ],
+          "registrationAfterPacking": [
+            256.12165514797096,
+            430.4202551834131
+          ],
+          "registrationError": [
+            0.12165514797095511,
+            0.4202551834130759
+          ],
+          "alpha": {
+            "zero": 188252,
+            "semiTransparent": 73887,
+            "opaque": 5,
+            "maxAlpha": 255,
+            "zeroFraction": 0.7181243896484375,
+            "gutterNonzero": 0,
+            "boundingBoxes": {
+              "0": {
+                "x": 57,
+                "y": 89,
+                "width": 370,
+                "height": 367,
+                "clearMargins": [
+                  57,
+                  89,
+                  85,
+                  56
+                ]
+              },
+              "8": {
+                "x": 78,
+                "y": 102,
+                "width": 349,
+                "height": 330,
+                "clearMargins": [
+                  78,
+                  102,
+                  85,
+                  80
+                ]
+              },
+              "64": {
+                "x": 79,
+                "y": 103,
+                "width": 346,
+                "height": 328,
+                "clearMargins": [
+                  79,
+                  103,
+                  87,
+                  81
+                ]
+              },
+              "127": {
+                "x": 79,
+                "y": 103,
+                "width": 342,
+                "height": 328,
+                "clearMargins": [
+                  79,
+                  103,
+                  91,
+                  81
+                ]
+              }
+            }
+          }
+        },
+        {
+          "index": 3,
+          "phaseDegrees": 270,
+          "rect": [
+            512,
+            512,
+            512,
+            512
+          ],
+          "uvRectTopLeft": [
+            0.5,
+            0.5,
+            0.5,
+            0.5
+          ],
+          "uvRectBottomLeft": [
+            0.5,
+            0,
+            0.5,
+            0.5
+          ],
+          "sourceRect": [
+            627,
+            627,
+            627,
+            627
+          ],
+          "nativeAlpha": {
+            "zero": 186731,
+            "semiTransparent": 206393,
+            "opaque": 5,
+            "maxAlpha": 255,
+            "zeroFraction": 0.4749865820125201,
+            "gutterNonzero": 14195,
+            "boundingBoxes": {
+              "0": {
+                "x": 0,
+                "y": 0,
+                "width": 621,
+                "height": 627,
+                "clearMargins": [
+                  0,
+                  0,
+                  6,
+                  0
+                ]
+              },
+              "8": {
+                "x": 32,
+                "y": 34,
+                "width": 576,
+                "height": 552,
+                "clearMargins": [
+                  32,
+                  34,
+                  19,
+                  41
+                ]
+              },
+              "64": {
+                "x": 32,
+                "y": 35,
+                "width": 575,
+                "height": 550,
+                "clearMargins": [
+                  32,
+                  35,
+                  20,
+                  42
+                ]
+              },
+              "127": {
+                "x": 33,
+                "y": 35,
+                "width": 573,
+                "height": 550,
+                "clearMargins": [
+                  33,
+                  35,
+                  21,
+                  42
+                ]
+              }
+            }
+          },
+          "packingOffset": [
+            59,
+            86
+          ],
+          "uniformScale": 0.5901116427432217,
+          "frameAnchor": [
+            256,
+            430
+          ],
+          "registrationAfterPacking": [
+            256.2650465877613,
+            430.4202551834131
+          ],
+          "registrationError": [
+            0.265046587761276,
+            0.4202551834130759
+          ],
+          "alpha": {
+            "zero": 190556,
+            "semiTransparent": 71580,
+            "opaque": 8,
+            "maxAlpha": 255,
+            "zeroFraction": 0.7269134521484375,
+            "gutterNonzero": 0,
+            "boundingBoxes": {
+              "0": {
+                "x": 59,
+                "y": 86,
+                "width": 366,
+                "height": 370,
+                "clearMargins": [
+                  59,
+                  86,
+                  87,
+                  56
+                ]
+              },
+              "8": {
+                "x": 78,
+                "y": 106,
+                "width": 340,
+                "height": 326,
+                "clearMargins": [
+                  78,
+                  106,
+                  94,
+                  80
+                ]
+              },
+              "64": {
+                "x": 78,
+                "y": 107,
+                "width": 339,
+                "height": 324,
+                "clearMargins": [
+                  78,
+                  107,
+                  95,
+                  81
+                ]
+              },
+              "127": {
+                "x": 79,
+                "y": 107,
+                "width": 335,
+                "height": 324,
+                "clearMargins": [
+                  79,
+                  107,
+                  98,
+                  81
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "eye",
+      "path": "assets/resources/fx/wind_volume_v122/eye.png",
+      "resourceKey": "fx/wind_volume_v122/eye",
+      "width": 1024,
+      "height": 1024,
+      "channels": 4,
+      "alphaMode": "straight RGBA; native generated alpha preserved through standard resampling and packing",
+      "bytes": 970756,
+      "sha256": "e7971acf2b62d6e6193d37802d9ab71f39da916b8108921054e19d7dc1e0e72d",
+      "uuids": {
+        "image": "7ff67966-e212-4ffa-9217-4a54725bcc91",
+        "texture": "7ff67966-e212-4ffa-9217-4a54725bcc91@6c48a",
+        "spriteFrame": "7ff67966-e212-4ffa-9217-4a54725bcc91@f9941"
+      },
+      "source": {
+        "archivePath": "local/art-archive/wind-volume-v122/eye-original.png",
+        "generatedPath": "C:/Users/user/.codex/generated_images/01a17381-d271-7893-a4ab-fbcd338f6fb5/exec-a7fb465e-d0b2-480e-9e87-4b6575eb0f9b.png",
+        "width": 1254,
+        "height": 1254,
+        "channels": 4,
+        "hasNativeAlpha": true,
+        "bytes": 2613506,
+        "sha256": "4e7ff011dc2925d68f9495ce6e478da25f28784c40da001eebfb27186f398423",
+        "alpha": {
+          "zero": 409656,
+          "semiTransparent": 1162858,
+          "opaque": 2,
+          "maxAlpha": 255,
+          "zeroFraction": 0.2605099089611807,
+          "gutterNonzero": 69621,
+          "boundingBoxes": {
+            "0": {
+              "x": 0,
+              "y": 0,
+              "width": 1254,
+              "height": 1254,
+              "clearMargins": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            "8": {
+              "x": 11,
+              "y": 63,
+              "width": 1234,
+              "height": 1139,
+              "clearMargins": [
+                11,
+                63,
+                9,
+                52
+              ]
+            },
+            "64": {
+              "x": 14,
+              "y": 65,
+              "width": 1228,
+              "height": 1132,
+              "clearMargins": [
+                14,
+                65,
+                12,
+                57
+              ]
+            },
+            "127": {
+              "x": 16,
+              "y": 65,
+              "width": 1224,
+              "height": 1132,
+              "clearMargins": [
+                16,
+                65,
+                14,
+                57
+              ]
+            }
+          }
+        }
+      },
+      "frameSize": [
+        512,
+        512
+      ],
+      "frameAnchor": [
+        256,
+        256
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "phaseDegrees": 0,
+          "rect": [
+            0,
+            0,
+            512,
+            512
+          ],
+          "uvRectTopLeft": [
+            0,
+            0,
+            0.5,
+            0.5
+          ],
+          "uvRectBottomLeft": [
+            0,
+            0.5,
+            0.5,
+            0.5
+          ],
+          "sourceRect": [
+            0,
+            0,
+            627,
+            627
+          ],
+          "nativeAlpha": {
+            "zero": 96522,
+            "semiTransparent": 296607,
+            "opaque": 0,
+            "maxAlpha": 253,
+            "zeroFraction": 0.24552246209259557,
+            "gutterNonzero": 50440,
+            "boundingBoxes": {
+              "0": {
+                "x": 0,
+                "y": 0,
+                "width": 627,
+                "height": 627,
+                "clearMargins": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "8": {
+                "x": 11,
+                "y": 63,
+                "width": 614,
+                "height": 532,
+                "clearMargins": [
+                  11,
+                  63,
+                  2,
+                  32
+                ]
+              },
+              "64": {
+                "x": 14,
+                "y": 65,
+                "width": 607,
+                "height": 529,
+                "clearMargins": [
+                  14,
+                  65,
+                  6,
+                  33
+                ]
+              },
+              "127": {
+                "x": 16,
+                "y": 65,
+                "width": 602,
+                "height": 527,
+                "clearMargins": [
+                  16,
+                  65,
+                  9,
+                  35
+                ]
+              }
+            }
+          },
+          "packingOffset": [
+            66,
+            57
+          ],
+          "uniformScale": 0.5901116427432217,
+          "frameAnchor": [
+            256,
+            256
+          ],
+          "registrationAfterPacking": [
+            255.5533427168122,
+            255.55022521824702
+          ],
+          "registrationError": [
+            -0.44665728318778974,
+            -0.44977478175297847
+          ],
+          "alpha": {
+            "zero": 158803,
+            "semiTransparent": 103341,
+            "opaque": 0,
+            "maxAlpha": 252,
+            "zeroFraction": 0.6057853698730469,
+            "gutterNonzero": 0,
+            "boundingBoxes": {
+              "0": {
+                "x": 66,
+                "y": 57,
+                "width": 370,
+                "height": 370,
+                "clearMargins": [
+                  66,
+                  57,
+                  76,
+                  85
+                ]
+              },
+              "8": {
+                "x": 72,
+                "y": 94,
+                "width": 363,
+                "height": 314,
+                "clearMargins": [
+                  72,
+                  94,
+                  77,
+                  104
+                ]
+              },
+              "64": {
+                "x": 74,
+                "y": 95,
+                "width": 359,
+                "height": 312,
+                "clearMargins": [
+                  74,
+                  95,
+                  79,
+                  105
+                ]
+              },
+              "127": {
+                "x": 75,
+                "y": 96,
+                "width": 356,
+                "height": 311,
+                "clearMargins": [
+                  75,
+                  96,
+                  81,
+                  105
+                ]
+              }
+            }
+          },
+          "centralOpening": {
+            "radius": 6,
+            "pixels": 113,
+            "alphaLE8": 113,
+            "alphaZero": 0,
+            "meanAlpha": 1.0619469026548674,
+            "centerAlpha": 1
+          }
+        },
+        {
+          "index": 1,
+          "phaseDegrees": 90,
+          "rect": [
+            512,
+            0,
+            512,
+            512
+          ],
+          "uvRectTopLeft": [
+            0.5,
+            0,
+            0.5,
+            0.5
+          ],
+          "uvRectBottomLeft": [
+            0.5,
+            0.5,
+            0.5,
+            0.5
+          ],
+          "sourceRect": [
+            627,
+            0,
+            627,
+            627
+          ],
+          "nativeAlpha": {
+            "zero": 107451,
+            "semiTransparent": 285678,
+            "opaque": 0,
+            "maxAlpha": 254,
+            "zeroFraction": 0.273322497195577,
+            "gutterNonzero": 47368,
+            "boundingBoxes": {
+              "0": {
+                "x": 0,
+                "y": 0,
+                "width": 627,
+                "height": 627,
+                "clearMargins": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "8": {
+                "x": 8,
+                "y": 64,
+                "width": 608,
+                "height": 532,
+                "clearMargins": [
+                  8,
+                  64,
+                  11,
+                  31
+                ]
+              },
+              "64": {
+                "x": 12,
+                "y": 66,
+                "width": 602,
+                "height": 528,
+                "clearMargins": [
+                  12,
+                  66,
+                  13,
+                  33
+                ]
+              },
+              "127": {
+                "x": 17,
+                "y": 66,
+                "width": 596,
+                "height": 528,
+                "clearMargins": [
+                  17,
+                  66,
+                  14,
+                  33
+                ]
+              }
+            }
+          },
+          "packingOffset": [
+            69,
+            56
+          ],
+          "uniformScale": 0.5901116427432217,
+          "frameAnchor": [
+            256,
+            256
+          ],
+          "registrationAfterPacking": [
+            256.0853255435833,
+            255.81890170728647
+          ],
+          "registrationError": [
+            0.0853255435832807,
+            -0.1810982927135285
+          ],
+          "alpha": {
+            "zero": 162647,
+            "semiTransparent": 99497,
+            "opaque": 0,
+            "maxAlpha": 253,
+            "zeroFraction": 0.6204490661621094,
+            "gutterNonzero": 0,
+            "boundingBoxes": {
+              "0": {
+                "x": 69,
+                "y": 56,
+                "width": 370,
+                "height": 370,
+                "clearMargins": [
+                  69,
+                  56,
+                  73,
+                  86
+                ]
+              },
+              "8": {
+                "x": 74,
+                "y": 94,
+                "width": 358,
+                "height": 314,
+                "clearMargins": [
+                  74,
+                  94,
+                  80,
+                  104
+                ]
+              },
+              "64": {
+                "x": 76,
+                "y": 95,
+                "width": 355,
+                "height": 312,
+                "clearMargins": [
+                  76,
+                  95,
+                  81,
+                  105
+                ]
+              },
+              "127": {
+                "x": 79,
+                "y": 95,
+                "width": 352,
+                "height": 311,
+                "clearMargins": [
+                  79,
+                  95,
+                  81,
+                  106
+                ]
+              }
+            }
+          },
+          "centralOpening": {
+            "radius": 6,
+            "pixels": 113,
+            "alphaLE8": 113,
+            "alphaZero": 15,
+            "meanAlpha": 0.8672566371681416,
+            "centerAlpha": 1
+          }
+        },
+        {
+          "index": 2,
+          "phaseDegrees": 180,
+          "rect": [
+            0,
+            512,
+            512,
+            512
+          ],
+          "uvRectTopLeft": [
+            0,
+            0.5,
+            0.5,
+            0.5
+          ],
+          "uvRectBottomLeft": [
+            0,
+            0,
+            0.5,
+            0.5
+          ],
+          "sourceRect": [
+            0,
+            627,
+            627,
+            627
+          ],
+          "nativeAlpha": {
+            "zero": 104565,
+            "semiTransparent": 288563,
+            "opaque": 1,
+            "maxAlpha": 255,
+            "zeroFraction": 0.265981395419824,
+            "gutterNonzero": 42377,
+            "boundingBoxes": {
+              "0": {
+                "x": 0,
+                "y": 0,
+                "width": 627,
+                "height": 627,
+                "clearMargins": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "8": {
+                "x": 12,
+                "y": 36,
+                "width": 613,
+                "height": 533,
+                "clearMargins": [
+                  12,
+                  36,
+                  2,
+                  58
+                ]
+              },
+              "64": {
+                "x": 15,
+                "y": 39,
+                "width": 606,
+                "height": 522,
+                "clearMargins": [
+                  15,
+                  39,
+                  6,
+                  66
+                ]
+              },
+              "127": {
+                "x": 16,
+                "y": 41,
+                "width": 603,
+                "height": 515,
+                "clearMargins": [
+                  16,
+                  41,
+                  8,
+                  71
+                ]
+              }
+            }
+          },
+          "packingOffset": [
+            66,
+            77
+          ],
+          "uniformScale": 0.5901116427432217,
+          "frameAnchor": [
+            256,
+            256
+          ],
+          "registrationAfterPacking": [
+            255.84767520225907,
+            255.9751784728639
+          ],
+          "registrationError": [
+            -0.15232479774093122,
+            -0.024821527136111854
+          ],
+          "alpha": {
+            "zero": 161520,
+            "semiTransparent": 100624,
+            "opaque": 0,
+            "maxAlpha": 253,
+            "zeroFraction": 0.61614990234375,
+            "gutterNonzero": 0,
+            "boundingBoxes": {
+              "0": {
+                "x": 66,
+                "y": 77,
+                "width": 370,
+                "height": 370,
+                "clearMargins": [
+                  66,
+                  77,
+                  76,
+                  65
+                ]
+              },
+              "8": {
+                "x": 73,
+                "y": 98,
+                "width": 361,
+                "height": 315,
+                "clearMargins": [
+                  73,
+                  98,
+                  78,
+                  99
+                ]
+              },
+              "64": {
+                "x": 75,
+                "y": 100,
+                "width": 358,
+                "height": 308,
+                "clearMargins": [
+                  75,
+                  100,
+                  79,
+                  104
+                ]
+              },
+              "127": {
+                "x": 75,
+                "y": 101,
+                "width": 356,
+                "height": 304,
+                "clearMargins": [
+                  75,
+                  101,
+                  81,
+                  107
+                ]
+              }
+            }
+          },
+          "centralOpening": {
+            "radius": 6,
+            "pixels": 113,
+            "alphaLE8": 113,
+            "alphaZero": 0,
+            "meanAlpha": 1.1327433628318584,
+            "centerAlpha": 1
+          }
+        },
+        {
+          "index": 3,
+          "phaseDegrees": 270,
+          "rect": [
+            512,
+            512,
+            512,
+            512
+          ],
+          "uvRectTopLeft": [
+            0.5,
+            0.5,
+            0.5,
+            0.5
+          ],
+          "uvRectBottomLeft": [
+            0.5,
+            0,
+            0.5,
+            0.5
+          ],
+          "sourceRect": [
+            627,
+            627,
+            627,
+            627
+          ],
+          "nativeAlpha": {
+            "zero": 101118,
+            "semiTransparent": 292010,
+            "opaque": 1,
+            "maxAlpha": 255,
+            "zeroFraction": 0.2572132811367261,
+            "gutterNonzero": 45365,
+            "boundingBoxes": {
+              "0": {
+                "x": 0,
+                "y": 0,
+                "width": 627,
+                "height": 627,
+                "clearMargins": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "8": {
+                "x": 8,
+                "y": 44,
+                "width": 610,
+                "height": 531,
+                "clearMargins": [
+                  8,
+                  44,
+                  9,
+                  52
+                ]
+              },
+              "64": {
+                "x": 11,
+                "y": 46,
+                "width": 604,
+                "height": 524,
+                "clearMargins": [
+                  11,
+                  46,
+                  12,
+                  57
+                ]
+              },
+              "127": {
+                "x": 12,
+                "y": 48,
+                "width": 600,
+                "height": 522,
+                "clearMargins": [
+                  12,
+                  48,
+                  15,
+                  57
+                ]
+              }
+            }
+          },
+          "packingOffset": [
+            69,
+            75
+          ],
+          "uniformScale": 0.5901116427432217,
+          "frameAnchor": [
+            256,
+            256
+          ],
+          "registrationAfterPacking": [
+            256.10074428495477,
+            255.71690590111643
+          ],
+          "registrationError": [
+            0.1007442849547715,
+            -0.2830940988835664
+          ],
+          "alpha": {
+            "zero": 160381,
+            "semiTransparent": 101763,
+            "opaque": 0,
+            "maxAlpha": 252,
+            "zeroFraction": 0.6118049621582031,
+            "gutterNonzero": 0,
+            "boundingBoxes": {
+              "0": {
+                "x": 69,
+                "y": 75,
+                "width": 370,
+                "height": 370,
+                "clearMargins": [
+                  69,
+                  75,
+                  73,
+                  67
+                ]
+              },
+              "8": {
+                "x": 74,
+                "y": 101,
+                "width": 360,
+                "height": 313,
+                "clearMargins": [
+                  74,
+                  101,
+                  78,
+                  98
+                ]
+              },
+              "64": {
+                "x": 75,
+                "y": 102,
+                "width": 357,
+                "height": 310,
+                "clearMargins": [
+                  75,
+                  102,
+                  80,
+                  100
+                ]
+              },
+              "127": {
+                "x": 76,
+                "y": 103,
+                "width": 354,
+                "height": 308,
+                "clearMargins": [
+                  76,
+                  103,
+                  82,
+                  101
+                ]
+              }
+            }
+          },
+          "centralOpening": {
+            "radius": 6,
+            "pixels": 113,
+            "alphaLE8": 113,
+            "alphaZero": 0,
+            "meanAlpha": 1.008849557522124,
+            "centerAlpha": 1
+          }
+        }
+      ]
+    }
+  ]
+}

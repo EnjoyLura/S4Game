@@ -1,0 +1,69 @@
+{
+  "shaderSourceSha256": "e86b0e8ced5f08f2ff4d36d71039a4e6f13a26dd9c99cef58b3761babebb5299",
+  "volumeShaderSourceSha256": "9587d40ad5ef23760d4eb535d87060033bfa988db93ebe5dd28f654c368eb6e8",
+  "sourceArtSha256": {
+    "eye.png": "e7971acf2b62d6e6193d37802d9ab71f39da916b8108921054e19d7dc1e0e72d",
+    "tornado.png": "d5dcd355a4b409875af40ca8c457a9391d3d9498dde0051448898cda07dc648c"
+  },
+  "background": "scene_1_2.jpg (actual chapter2 forest)",
+  "previewMobs": "three existing forest sprites; compositing only, no AI or combat",
+  "renderer": "AMD Radeon RX 9070 XT",
+  "version": "3.3.0 Core Profile Context 26.2.2.260209",
+  "modeChecks": [
+    {
+      "mode": 0,
+      "litPixels": 46108,
+      "maxCoverageAlpha": 0.6499999761581421,
+      "finiteNonnegative": true,
+      "peakRGB": 0.6500000357627869
+    },
+    {
+      "mode": 1,
+      "litPixels": 29842,
+      "maxCoverageAlpha": 0.6499999761581421,
+      "finiteNonnegative": true,
+      "peakRGB": 0.6500000357627869
+    },
+    {
+      "mode": 2,
+      "litPixels": 47208,
+      "maxCoverageAlpha": 0.0,
+      "finiteNonnegative": true,
+      "peakRGB": 1.7838770151138306
+    },
+    {
+      "mode": 3,
+      "litPixels": 777,
+      "maxCoverageAlpha": 0.0,
+      "finiteNonnegative": true,
+      "peakRGB": 1.3813079595565796
+    }
+  ],
+  "crescentDirections": [
+    {
+      "degrees": 0,
+      "brightArcForwardCentroid": 14.036,
+      "hotPixels": 138
+    },
+    {
+      "degrees": 90,
+      "brightArcForwardCentroid": 14.036,
+      "hotPixels": 138
+    },
+    {
+      "degrees": 180,
+      "brightArcForwardCentroid": 14.036,
+      "hotPixels": 138
+    },
+    {
+      "degrees": 270,
+      "brightArcForwardCentroid": 14.036,
+      "hotPixels": 138
+    }
+  ],
+  "artFrames": 180,
+  "reviewWallSeconds": 16.272,
+  "drawBlend": "ONE / ONE_MINUS_SRC_ALPHA; wind coverage only, ninja/crescent alpha0 emission",
+  "actualGameBrowserCombatAudioOrWasmStarted": false,
+  "phonePerformanceAndCocosPipeline": "pending user phone review"
+}

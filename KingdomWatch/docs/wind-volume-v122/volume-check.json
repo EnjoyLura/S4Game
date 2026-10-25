@@ -1,0 +1,77 @@
+{
+  "status": "PASS",
+  "baseline": "876c8b9cf75a7e5773ae00933bb5abeef8ef26f4",
+  "scope": "isolated cosmetic modules with inert doubles and static source protection",
+  "engineExecuted": false,
+  "gameSceneExecuted": false,
+  "gitProcessExecuted": false,
+  "realTimersUsed": false,
+  "imagesRequired": false,
+  "shaderCompiled": false,
+  "tests": [
+    {
+      "name": "whole-asset first-paint barrier, UX prewarm identity and cross-instance deduplication",
+      "status": "PASS",
+      "detail": {
+        "instances": 2,
+        "materials": 16,
+        "effectDownloads": 1,
+        "actualImageDownloads": 2,
+        "retainedReferencesPerPath": 1
+      }
+    },
+    {
+      "name": "failed effect and atlas requests are evicted and deduplicated on retry",
+      "status": "PASS"
+    },
+    {
+      "name": "destroy-before-late-load and queued-parent destruction cannot create stale materials",
+      "status": "PASS"
+    },
+    {
+      "name": "fixed eight-slot pool reuses nodes/materials and begin/end hides stale slots",
+      "status": "PASS"
+    },
+    {
+      "name": "sampler changes only with mode, exact geometry/state and age-only animation",
+      "status": "PASS"
+    },
+    {
+      "name": "disposal destroys only owned carriers/materials and cancels retry; global art survives restart",
+      "status": "PASS"
+    },
+    {
+      "name": "real parent pins volume/energy/fallback per event, ninja allocates no volume, FX precedes text",
+      "status": "PASS"
+    },
+    {
+      "name": "all battle/config files protected against baseline; only effects constructor arg changes hero code",
+      "status": "PASS",
+      "detail": {
+        "contentExactProtectedFiles": 148,
+        "normalization": "CRLF to LF only",
+        "baselineInventory": 150,
+        "allowedNewFiles": [
+          "assets/scripts/battle/WindVolumeVFX.ts",
+          "assets/scripts/battle/WindVolumeVFX.ts.meta"
+        ],
+        "heroMethodsAndConstructorsProtected": 34,
+        "heroChange": "effects(): new WindNinjaVFX(existingParent, this.id === 'wind') only"
+      }
+    },
+    {
+      "name": "shader ABI, bounded sampling and premultiplied painted coverage remain intact",
+      "status": "PASS",
+      "detail": {
+        "actualGPUCompilation": "not run; parent art preview responsibility",
+        "imageAssets": "not loaded or decoded"
+      }
+    }
+  ],
+  "sourceSHA256": {
+    "assets/scripts/battle/WindVolumeVFX.ts": "6618cd78a8882497c8987cb9d519d53ebf5479ca6756b012c959eb4f1c741efa",
+    "assets/scripts/battle/WindNinjaVFX.ts": "87037a4c6c9ca83fddb1d1923975f0ed5ca7c6225853aa4d79e28f8a532c55fd",
+    "assets/scripts/battle/WindNinjaHeroes.ts": "46a69cfa9846558bfc79bb3817f944751d6752b13b3fde99d36e1459f5810797",
+    "assets/resources/fx/wind-volume-v122.effect": "9587d40ad5ef23760d4eb535d87060033bfa988db93ebe5dd28f654c368eb6e8"
+  }
+}

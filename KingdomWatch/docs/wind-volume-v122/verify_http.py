@@ -1,0 +1,19 @@
+"""Read-only deployed main/effects/atlas hashes; no browser/game execution."""
+import hashlib,json,urllib.request
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+out=Path(__file__).resolve().parent;project=out.parents[1];package=project/'build/github-pages-wind-volume-v122'
+receipt=json.loads((project/'docs/github-pages-publishing/deployment.json').read_text('utf-8'))
+assert receipt.get('complete') and receipt['online_verification']['release_matches']
+release=json.loads((package/'hosting-release.json').read_text('utf-8'));audit=json.loads((out/'package-static-verification.json').read_text('utf-8'))
+paths=[next(package.glob('assets/main/index.*.js'))]+[package/p for p in audit['compiledEffectFiles']+audit['newAtlasNatives']]
+def check(path):
+ relative=path.relative_to(package).as_posix();expected=hashlib.sha256(path.read_bytes()).hexdigest()
+ req=urllib.request.Request(receipt['url']+relative+'?verify=wind-volume-v122',headers={'Cache-Control':'no-cache'})
+ with urllib.request.urlopen(req,timeout=45) as response:
+  data=response.read();assert response.status==200 and hashlib.sha256(data).hexdigest()==expected
+ if path.suffix=='.js':assert b'wind-volume-v122' in data
+ return {'path':relative,'bytes':len(data),'status':200,'sha256':expected}
+with ThreadPoolExecutor(max_workers=2) as pool:samples=list(pool.map(check,paths))
+(out/'additional-http-verification.json').write_text(json.dumps({'release':release['id'],'samples':samples,'gameOrBrowserStarted':False},indent=2)+'\n','utf-8')
+print(json.dumps({'release':release['id'],'extraHttpShaChecks':len(samples)}))

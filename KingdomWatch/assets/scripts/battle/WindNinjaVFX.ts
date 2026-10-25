@@ -1,6 +1,7 @@
 /** Painted, bounded Graphics geometry. All age/phase values come from the battle clock. */
 import { Color, Graphics, Layers, Node } from 'cc';
 import { HeroFxShader } from './HeroFxShader';
+import { WindVolumeVFX } from './WindVolumeVFX';
 
 export const WIND_NINJA_FX_EFFECT = 'fx/wind-ninja-flow';
 
@@ -149,14 +150,15 @@ function drawTornado(g: Graphics, a: WindNinjaAreaView, alpha: number): void {
 }
 function drawSpiral(g: Graphics, a: WindNinjaAreaView, alpha: number): void {
   for (let arm=0;arm<4;arm++) {
-    const angle=a.age*8+arm*TAU/4, r=a.radius*.84;
-    for(let pass=0;pass<3;pass++) {
-      const c=pass===2?P.edge:pass===1?P.cyan:P.blue;
-      ribbon(g,a.x,a.y,r,r*.92,angle,.98,pass===2?5:pass===1?17:35,c,alpha*(pass===2?.9:pass===1?.58:.15));
-    }
+    const angle=a.age*6.6+arm*TAU/4, r=a.radius*.93, ca=Math.cos(angle),sa=Math.sin(angle);
+    const point=(x:number,y:number,first=false):void=>{
+      const xx=a.x+(ca*x-sa*y)*r,yy=a.y+(sa*x+ca*y)*r;
+      if(first)g.moveTo(xx,yy);else g.lineTo(xx,yy);
+    };
+    fill(g,P.blue,alpha*.8);stroke(g,P.cyan,2.8,alpha*.85);
+    point(.12,.06,true);point(.20,.20);point(1,0);point(.20,-.20);point(.06,-.12);g.close();g.fill();g.stroke();
+    stroke(g,P.edge,1.2,alpha*.9);point(.24,.18,true);point(.98,0);point(.24,-.18);g.stroke();
   }
-  fill(g,P.cyan,alpha*.18);g.circle(a.x,a.y,a.radius*.17);g.fill();
-  fill(g,P.edge,alpha*.9);g.circle(a.x,a.y,4);g.fill();
 }
 function flowParticles(g: Graphics, a: WindNinjaAreaView, alpha: number): void {
   if(a.kind==='spiral')return; // Pure energy blades are drawn entirely by the shader.
@@ -176,15 +178,19 @@ export class WindNinjaVFX {
   private readonly root = new Node('WindNinjaVFX');
   private readonly g: Graphics;
   private readonly flow: HeroFxShader;
-  private readonly areaShader = new WeakMap<WindNinjaAreaView, boolean>();
+  private readonly volume: WindVolumeVFX | null;
+  private readonly areaShader = new WeakMap<WindNinjaAreaView, 'volume' | 'energy' | 'fallback'>();
   private accents: Accent[] = [];
   private areas = 0;
   private marks = 0;
-  constructor(parent: Node) {
+  constructor(parent: Node, wind = false) {
     this.root.layer = Layers.Enum.UI_2D; this.root.setParent(parent);
+    const textLayer = parent.getChildByName('TextLayer');
+    if (textLayer) this.root.setSiblingIndex(textLayer.getSiblingIndex());
     this.g = this.root.addComponent(Graphics);
     this.flow = new HeroFxShader(this.root, 'windNinjaEnergy', 8, 'plasma',
       { effect: WIND_NINJA_FX_EFFECT, technique: 0 });
+    this.volume = wind ? new WindVolumeVFX(this.root, 8) : null;
   }
   release(x: number, y: number, dx: number, dy: number, kind: 'wind' | 'shuriken'): void {
     if (this.accents.length >= 24) this.accents.shift();
@@ -196,12 +202,17 @@ export class WindNinjaVFX {
       if (this.accents[i].age >= .22) this.accents.splice(i, 1);
     }
   }
-  begin(): void { this.g.clear(); this.flow.begin(); this.areas = this.marks = 0; }
+  begin(): void { this.g.clear(); this.flow.begin(); this.volume?.begin(); this.areas = this.marks = 0; }
   area(area: WindNinjaAreaView): void {
     if (++this.areas > 8) return;
     const alpha = opacity(area);
-    if(!this.areaShader.has(area))this.areaShader.set(area,this.flow.ready);
-    if (this.areaShader.get(area)) {
+    if(!this.areaShader.has(area))this.areaShader.set(area,area.kind!=='spiral'&&this.volume?.ready
+      ? 'volume' : this.flow.ready ? 'energy' : 'fallback');
+    const mode = this.areaShader.get(area);
+    if (mode === 'volume') {
+      this.volume!.draw(area,alpha);
+      flowParticles(this.g,area,alpha);
+    } else if (mode === 'energy') {
       const tornado = area.kind === 'tornado';
       this.flow.draw(area.x, area.y+(tornado?area.radius*.35:0), area.radius*(tornado?2.6:2.5),
         area.radius*(tornado?3.3:2.5), 0, area.age, .73, alpha,
@@ -220,6 +231,7 @@ export class WindNinjaVFX {
   }
   end(): void {
     this.flow.end();
+    this.volume?.end();
     for (const a of this.accents) {
       const alpha = 1 - a.age / .22, r = 7 + a.age * 70;
       stroke(this.g, a.kind === 'wind' ? P.mint : P.cyan, 2 * alpha + .6, alpha * .8);

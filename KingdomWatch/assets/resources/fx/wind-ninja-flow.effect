@@ -222,47 +222,47 @@ CCProgram wind-ninja-fs %{
     return vec4(light, alpha);
   }
 
+  float shurikenShape(vec2 q) {
+    vec2 b = abs(q);
+    // Four long straight tips, with deep concave notches and sharp cutting edges.
+    return (max(b.x,b.y) + 2.6 * min(b.x,b.y) - 0.93) / 2.786;
+  }
   vec3 energyShuriken(vec2 q, float age, float seed, float aa) {
-    float r = length(q), a = angleOf(q), spin = age * 8.4 + seed;
-    float n = mist(turn(q, -spin * 0.35) * 4.2 + vec2(seed, -age * 0.55));
-    // Four curved ENERGY lobes, joined by a small white-cyan core. No center
-    // hole, polygon facets, dark outlines, or filled full-radius disk.
-    float phase = 4.0 * (a - spin + r * 1.05 + r * r * 0.24);
-    float angular = 1.0 - cos(phase);
-    float bladeWidth = mix(0.92, 0.065, smoothstep(0.17, 0.93, r));
-    float radial = smoothstep(0.075, 0.21, r) * (1.0 - smoothstep(0.77, 0.965, r));
-    float blade = (1.0 - smoothstep(bladeWidth * 0.28, bladeWidth, angular)) * radial;
-    float vein = bell(angular, bladeWidth * 0.15 + aa) * radial;
-    float halo = bell(angular, bladeWidth + 0.28) * radial;
-    vec3 light = vec3(0.01, 0.17, 0.80) * halo * 0.3;
-    light += vec3(0.025, 0.70, 1.0) * blade * (0.38 + n * 0.34);
-    light += vec3(0.48, 0.95, 1.0) * vein * (0.42 + n * 0.22);
-    // Three dimmer rotational wake samples taper in both radius and intensity.
-    // Angular functions are integer-periodic, including across atan's seam.
-    for (int i = 0; i < 3; i++) {
-      float k = float(i), lag = 0.2 + k * 0.19;
-      float wake = bell(1.0 - cos(phase + lag * 4.0), 0.22 + k * 0.09 + aa);
-      float tail = smoothstep(0.28 + k * 0.055, 0.5 + k * 0.035, r)
-        * (1.0 - smoothstep(0.83 - k * 0.07, 1.025 - k * 0.025, r));
-      light += vec3(0.012, 0.30, 0.92) * wake * tail * (0.16 / (1.0 + k * 1.8));
+    float r=length(q),a=angleOf(q),spin=age*6.6+seed;
+    vec2 bladePoint=turn(q,-spin);
+    float distance=shurikenShape(bladePoint);
+    float aperture=smoothstep(0.10-aa,0.14+aa,r);
+    float body=(1.0-smoothstep(-aa,aa,distance))*aperture;
+    float edge=bell(distance,0.018+aa)*aperture;
+    float n=mist(bladePoint*9.0+vec2(seed,-age*1.4));
+    float veins=bell(sin(r*37.0-age*13.0+n*3.0),0.12+aa)*body;
+    vec3 light=vec3(0.015,0.29,0.82)*body*(0.50+n*0.30);
+    light+=vec3(0.50,0.91,1.0)*edge*0.86;
+    light+=vec3(0.13,0.63,0.95)*veins*0.18;
+    light+=vec3(0.03,0.34,0.85)*bell(distance,0.065+aa)*aperture*0.15;
+    // The hollow energy aperture remains readable; no overexposed central white hub.
+    light+=vec3(0.14,0.72,1.0)*bell(r-0.125,0.014+aa)*0.45;
+    for(int i=0;i<3;i++) {
+      float k=float(i),lag=0.11+k*0.12;
+      float d=shurikenShape(turn(q,-spin+lag));
+      float ghost=bell(d,0.02+k*0.01+aa)*aperture*(1.0-body*0.8);
+      light+=vec3(0.015,0.33,0.90)*ghost*(0.36/(1.0+k));
     }
-    light += vec3(0.02, 0.24, 0.7) * bell(r, 0.43) * 0.11;
-    light += vec3(0.68, 1.0, 1.0) * bell(r, 0.205) * 0.88;
-    light += vec3(0.94, 1.0, 1.0) * bell(r, 0.075 + aa) * 0.38;
-    for (int i = 0; i < 4; i++) {
-      float k = float(i), s = hash21(vec2(k + 31.0, seed));
-      float u = fract(age * (0.46 + s * 0.12) + s);
-      float t = seed + k * 2.39996 + age * 1.2;
-      vec2 outwards = vec2(cos(t), sin(t));
-      vec2 direction = outwards * 0.6 + vec2(-outwards.y, outwards.x) * 0.8;
-      vec2 d = q - outwards * (0.36 + u * 0.72);
-      float along = dot(d, direction), lengthS = 0.055 + u * 0.045;
-      float width = 0.008 + 0.012 * (1.0 - smoothstep(-lengthS, lengthS, along)) + aa;
-      float spear = bell(dot(d, vec2(-direction.y, direction.x)), width) * bell(along, lengthS);
-      spear *= smoothstep(0.0, 0.15, u) * (1.0 - smoothstep(0.65, 1.0, u));
-      light += vec3(0.30, 0.84, 1.0) * spear * 0.6;
+    float shearPhase=a*5.0+log(0.2+r)*12.0-age*9.0+n*3.0;
+    float shear=0.5+0.5*cos(shearPhase);
+    float skirt=bell(r-0.72,0.38)*(1.0-body*0.82)*shear*shear*shear;
+    light+=vec3(0.006,0.05,0.16)*skirt*(0.45+n*0.55);
+    // Tangential wind shear and small sparks accent the spinning weapon, not replace its silhouette.
+    for(int i=0;i<8;i++) {
+      float k=float(i),u=fract(age*(0.48+0.04*mod(k,3.0))+k*0.137);
+      float theta=seed+k*2.39996+age*1.65;
+      vec2 outward=vec2(cos(theta),sin(theta)),tangent=vec2(-outward.y,outward.x);
+      vec2 offset=q-outward*(0.63+u*0.47);
+      float life=sin(u*3.14159265);
+      float spark=bell(dot(offset,outward),0.007+aa)*bell(dot(offset,tangent),0.035+u*0.065)*life;
+      light+=vec3(0.23,0.65,1.0)*spark*0.7;
     }
-    return light * (1.0 - smoothstep(0.96, 1.115, r + (n - 0.5) * 0.025));
+    return light*(1.0-smoothstep(1.10,1.19,r));
   }
 
   vec3 windCrescent(vec2 q, float age, float seed, float aa) {
