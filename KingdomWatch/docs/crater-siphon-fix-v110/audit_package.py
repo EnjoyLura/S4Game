@@ -20,6 +20,18 @@ changed=subprocess.check_output(['git','diff','--name-only','c7efe6ab','--','Kin
 new_files=subprocess.check_output(['git','ls-files','--others','--exclude-standard','--','KingdomWatch/assets'],cwd=PROJECT.parent,encoding='utf-8').strip().splitlines()
 changed=sorted(set(changed+new_files))
 assert changed==['KingdomWatch/assets/resources/fx/hero-impact-flow.effect', 'KingdomWatch/assets/scripts/battle/AdvancedHeroVFX.ts', 'KingdomWatch/assets/scripts/battle/HeroFxShader.ts'],changed
+effect=next(package.rglob('e00b3255-79ee-4875-932b-058c0d37b905.*.json'))
+techniques=[]
+def visit(value):
+    if isinstance(value,dict):
+        if 'passes' in value:techniques.append(value['passes'])
+        for item in value.values():visit(item)
+    elif isinstance(value,list):
+        for item in value:visit(item)
+visit(json.loads(effect.read_text('utf-8')))
+assert len(techniques)==2 and all(len(p)==1 for p in techniques)
+blends=[p[0]['blendState']['targets'][0] for p in techniques]
+assert [(p['blendSrc'],p['blendDst']) for p in blends]==[(2,4),(1,1)],blends
 syntax=[]
 for path in sorted(package.rglob('*.js')):
     result=subprocess.run(['C:/Program Files/nodejs/node.exe','--check',str(path)],capture_output=True,text=True)
@@ -29,6 +41,7 @@ types=json.loads((OUT/'typecheck-comparison.json').read_text('utf-8-sig'))
 assert not types['added']
 report={'checks':checks,'baselineCommit':'c7efe6ab','baselineRelease':prior['id'],'sourceAssetsChanged':changed,
         'existingNativeFilesByteIdentical':len(media),'syntaxOnlyScripts':syntax,
+        'compiledEffect':{'path':effect.relative_to(package).as_posix(),'techniques':len(techniques),'blendStates':blends},
         'typeDiagnosticsBefore':types['beforeDiagnostics'],'typeDiagnosticsCurrent':types['currentDiagnostics'],
         'newTypeDiagnostics':types['added'],'gameBrowserCombatAudioOrWasmStarted':False,
         'visualInteractionReview':'user manual'}

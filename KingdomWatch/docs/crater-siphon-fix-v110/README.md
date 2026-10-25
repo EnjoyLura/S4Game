@@ -23,3 +23,11 @@
 - audit_types.cjs：c7efe6ab基线9条既有类型诊断保持、无新增。audit_package.py继续检查完整包/路径/哈希/JS语法、原native和200MB上限。
 
 不启动游戏、浏览器、战斗、音频或WASM。按长期约定先本地提交，再构建校验/发布独立GitHub Pages运行仓库；源码不推送，CF不部署。最终构建与发布收据后补。
+
+## 最终构建与静态结果
+
+实现已本地提交54fda82a，再运行Creator生产构建17886ms、成功退出36，DPR/音频引用/美术审计/缓存准备完成。9条旧类型诊断保持、15JS语法/完整包/所有清单与文件哈希通过，原506 native逐文件一致。完整1568文件193991063字节，较v109增加4168字节，仍在200MB内；运行版本baeabc04aec5b700。
+
+已检查Cocos实际导出的Effect含2个technique、各1个pass，普通SRC_ALPHA/ONE_MINUS_SRC_ALPHA与吸取ONE/ONE配置正确分开，见package-static-verification.json的compiledEffect；不只检查离屏源码。
+
+本地预览：[地面破坏](bomb-review.mp4)、[移动吸取](siphon-review.mp4)，仅本地、无音轨、不进入运行包。234帧独立GPU预览及96移动/54边界诊断通过，真实引擎画面和手机性能仍待用户试玩。

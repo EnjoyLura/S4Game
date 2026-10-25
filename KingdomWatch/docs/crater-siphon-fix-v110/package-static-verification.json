@@ -1,0 +1,127 @@
+{
+  "checks": {
+    "release": {
+      "base_path": "/kingdom-watch-play/",
+      "entry": "game.fea45c64e7da093c.html",
+      "entry_bytes": 22425,
+      "entry_sha256": "fea45c64e7da093c9d148d181eefc53a85928bf89d9b57f738f54959d17f5337",
+      "id": "baeabc04aec5b700",
+      "inventory": "hosting-files.baeabc04aec5b700.json",
+      "inventory_bytes": 273275,
+      "inventory_sha256": "baeabc04aec5b7005cd92e836e2b5c793b3d73268b7611b5a07e90315af7ab42",
+      "requires_cross_origin_isolation": false,
+      "requires_webp": true,
+      "runtime_cache": {
+        "max_bytes": 268435456,
+        "on_demand": true,
+        "protocol": 1,
+        "scope": "/kingdom-watch-play/",
+        "worker": "hosting-cache-sw.js"
+      },
+      "schema": 1,
+      "texture_mode": "mixed-webp-q95",
+      "wasm": [
+        "cocos-js/assets/spine-CC34fKUR.wasm"
+      ]
+    },
+    "file_count": 1568,
+    "runtime_bytes": 193717143,
+    "full_package_bytes": 193991063,
+    "budget_bytes": 200000000,
+    "all_exported_hashes_verified": true,
+    "links": {
+      "explicit_file_references_checked": 450,
+      "embedded_provenance_strings_not_fetches": [],
+      "virtual_system_modules": 160,
+      "remote_url_literals": [
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/bangers/Bangers-Regular.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-Bold.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-ExtraBoldItalic.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+      ],
+      "bundle_versions": {
+        "internal": "9e58a",
+        "main": "a298c",
+        "resources": "d816a2e6639619ad"
+      }
+    },
+    "wasm_memories": {
+      "cocos-js/assets/spine-CC34fKUR.wasm": [
+        {
+          "shared": false,
+          "memory64": false,
+          "minimum_pages": 512
+        }
+      ]
+    },
+    "art_resources": {
+      "nativeImagesResolved": 421,
+      "webpImagesRGBAAndHashesVerified": 408,
+      "losslessImagesSourceRGBAIdentical": 237,
+      "q95ImagesDimensionsAlphaAndOutputVerified": 171,
+      "gameEngineExecuted": false
+    },
+    "runtime_cache": {
+      "max_bytes": 268435456,
+      "on_demand": true,
+      "protocol": 1,
+      "scope": "/kingdom-watch-play/",
+      "worker": "hosting-cache-sw.js"
+    },
+    "validation": "static files, image pixels and WASM headers only",
+    "javascript_executed": false,
+    "wasm_compiled_or_instantiated": false,
+    "game_browser_or_tests_started": false
+  },
+  "baselineCommit": "c7efe6ab",
+  "baselineRelease": "f189c55e462ce3ae",
+  "sourceAssetsChanged": [
+    "KingdomWatch/assets/resources/fx/hero-impact-flow.effect",
+    "KingdomWatch/assets/scripts/battle/AdvancedHeroVFX.ts",
+    "KingdomWatch/assets/scripts/battle/HeroFxShader.ts"
+  ],
+  "existingNativeFilesByteIdentical": 506,
+  "syntaxOnlyScripts": [
+    "application.4000afec043c5638.js",
+    "assets/internal/index.9e58a.js",
+    "assets/main/index.a298c.js",
+    "assets/resources/index.d816a2e6639619ad.js",
+    "cocos-js/_virtual_cc-Bp5iGE8z.2cb74a1e8caa095a.js",
+    "cocos-js/cc.03aac.2cb74a1e8caa095a.js",
+    "cocos-js/spine-BGFFnNyc.2cb74a1e8caa095a.js",
+    "cocos-js/spine.asm-BCCB8IGt.2cb74a1e8caa095a.js",
+    "cocos-js/spine.js-CPHn08RU.2cb74a1e8caa095a.js",
+    "cocos-js/spine.wasm-BP65faBu.2cb74a1e8caa095a.js",
+    "hosting-cache-sw.js",
+    "index.cff2d05d20388621.js",
+    "src/chunks/bundle.5227e.js",
+    "src/polyfills.bundle.5adbf.js",
+    "src/system.bundle.543e6.js"
+  ],
+  "compiledEffect": {
+    "path": "assets/resources/import/e0/e00b3255-79ee-4875-932b-058c0d37b905.b450d.json",
+    "techniques": 2,
+    "blendStates": [
+      {
+        "blend": true,
+        "blendSrc": 2,
+        "blendDst": 4,
+        "blendSrcAlpha": 0,
+        "blendDstAlpha": 1
+      },
+      {
+        "blend": true,
+        "blendSrc": 1,
+        "blendDst": 1,
+        "blendSrcAlpha": 0,
+        "blendDstAlpha": 1
+      }
+    ]
+  },
+  "typeDiagnosticsBefore": 9,
+  "typeDiagnosticsCurrent": 9,
+  "newTypeDiagnostics": [],
+  "gameBrowserCombatAudioOrWasmStarted": false,
+  "visualInteractionReview": "user manual"
+}
