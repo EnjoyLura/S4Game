@@ -1,0 +1,12 @@
+{
+  "release": "7d9f93994820b81c",
+  "samples": [
+    {
+      "path": "assets/resources/import/e0/e00b3255-79ee-4875-932b-058c0d37b905.89906.json",
+      "status": 200,
+      "bytes": 30066,
+      "sha256": "8422367476b638ba323e209a4dfc009dd1300e338e14bd040112e1e630c2d2ad"
+    }
+  ],
+  "gameBrowserOrWasmStarted": false
+}
