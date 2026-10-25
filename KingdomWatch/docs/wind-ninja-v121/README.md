@@ -18,4 +18,6 @@
 - `render_gpu.py`、`gpu-review.json`：在独立离屏OpenGL上下文编译实际片元程序，绘制180帧风场预览并检查四模式数值、零强度归零、风体alpha上限、纯能量alpha0，以及四方向圆弧正中均向前。不是游戏截图或实战验证。
 - `gpu-contact-sheet.jpg`、`wind-blade-directions.jpg`、`energy-review.webp`：真实程序在原有地图上的隔离美术预览。
 
-未启动游戏、浏览器、战斗场景、音频或WASM。手机的实际动效观感与性能仍需用户试玩。构建、导出、部署回执在本目录交付时补充；不推送源码、不部署Cloudflare。
+未启动游戏、浏览器、战斗场景、音频或WASM。手机的实际动效观感与性能仍需用户试玩。
+
+实现已本地提交7dea8eb9。Creator3.8.8离线构建22172ms、正常退出36；15份JS、5段内联脚本、全部文件SHA／子路径／图片透明通道／WASM头校验通过。512份原有native逐字节不变，无新增媒体；最终1588文件、200047076字节（200.05MB），比v120增加33914字节。版本e7aef84a4383b456。完整结果见 `build-record.json`、`export-report.json`、`package-static-verification.json`；部署回执交付时补充。不推送源码、不部署Cloudflare。
