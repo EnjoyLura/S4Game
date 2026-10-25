@@ -25,4 +25,8 @@
 - `render_gpu.py` / `gpu-review.json`：离屏编译两份真实片元程序，绑定两张正式图集，在真实第二章森林背景与三张原怪物素材上绘制180帧动态预览。核对有限数值、透明覆盖上限、零强度归零、四向风刃朝向和素材SHA。数字为美术层次示意，并非实战伤害数据。
 - `gpu-contact-sheet.jpg` / `energy-review.webp`：森林背景上的隔离美术预览；`wind-blade-directions.jpg`：沿用圆弧普攻朝向检查。
 
-不启动游戏、浏览器、战斗场景、音频或WASM；手机最终观感、加载与性能待用户试玩。构建、运行包与发布回执在交付时补充于本目录；本地提交源码，仅向独立GitHub Pages仓库发布运行包，不推送源码、不部署Cloudflare。
+不启动游戏、浏览器、战斗场景、音频或WASM；手机最终观感、加载与性能待用户试玩。
+
+实现已本地提交19feec8d。Creator3.8.8离线构建19798ms、正常退出36；15份JS、5段内联脚本、全部SHA／资源路径／图片alpha与无损RGBA／WASM头检查通过，9项原类型诊断、无新增。512份原native逐字节不变，仅增2张无损WebP图集合计1236084字节；1595文件、201307485字节（201.31MB），比v121增加1260409字节。版本e06e4985de95b629。见 `build-record.json`、`export-report.json`、`package-static-verification.json`。
+
+发布回执交付时补充于本目录。本地提交源码，仅向独立GitHub Pages仓库发布运行包，不推送源码、不部署Cloudflare。
