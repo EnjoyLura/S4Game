@@ -1,0 +1,62 @@
+{
+  "shaderSourceSha256": "2016779da5782afe8757b84a78c47dc853b6484584d5e40703553076e754d5cb",
+  "renderer": "AMD Radeon RX 9070 XT",
+  "version": "3.3.0 Core Profile Context 26.2.2.260209",
+  "modeChecks": [
+    {
+      "mode": 0,
+      "litPixels": 53450,
+      "maxCoverageAlpha": 0.252993643283844,
+      "finiteNonnegative": true,
+      "peakRGB": 1.8806602954864502
+    },
+    {
+      "mode": 1,
+      "litPixels": 36689,
+      "maxCoverageAlpha": 0.3499999940395355,
+      "finiteNonnegative": true,
+      "peakRGB": 2.1038355827331543
+    },
+    {
+      "mode": 2,
+      "litPixels": 34104,
+      "maxCoverageAlpha": 0.0,
+      "finiteNonnegative": true,
+      "peakRGB": 1.617833137512207
+    },
+    {
+      "mode": 3,
+      "litPixels": 777,
+      "maxCoverageAlpha": 0.0,
+      "finiteNonnegative": true,
+      "peakRGB": 1.3813079595565796
+    }
+  ],
+  "crescentDirections": [
+    {
+      "degrees": 0,
+      "brightArcForwardCentroid": 14.036,
+      "hotPixels": 138
+    },
+    {
+      "degrees": 90,
+      "brightArcForwardCentroid": 14.036,
+      "hotPixels": 138
+    },
+    {
+      "degrees": 180,
+      "brightArcForwardCentroid": 14.036,
+      "hotPixels": 138
+    },
+    {
+      "degrees": 270,
+      "brightArcForwardCentroid": 14.036,
+      "hotPixels": 138
+    }
+  ],
+  "artFrames": 180,
+  "reviewWallSeconds": 19.434,
+  "drawBlend": "ONE / ONE_MINUS_SRC_ALPHA; wind coverage only, ninja/crescent alpha0 emission",
+  "actualGameBrowserCombatAudioOrWasmStarted": false,
+  "phonePerformanceAndCocosPipeline": "pending user phone review"
+}

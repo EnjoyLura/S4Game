@@ -4,14 +4,18 @@ import { N } from '../ui/UIKit';
 
 export const HERO_FX_EFFECT = 'fx/hero-impact-flow';
 interface Quad { node: Node; ui: UITransform; sprite: Sprite; material: Material | null; state: Vec4; shape: Vec4; }
-let request: Promise<EffectAsset | null> | null = null;
-function effect(): Promise<EffectAsset | null> {
-  if (!request) request = new Promise(resolve => {
-    resources.load(HERO_FX_EFFECT, EffectAsset, (error, asset) => {
-      if (error || !asset) { request = null; resolve(null); }
-      else { asset.addRef(); resolve(asset); } // One tiny shared effect remains valid across battle restarts.
+const requests = new Map<string, Promise<EffectAsset | null>>();
+function effect(key: string): Promise<EffectAsset | null> {
+  let request = requests.get(key);
+  if (!request) {
+    request = new Promise(resolve => {
+      resources.load(key, EffectAsset, (error, asset) => {
+        if (error || !asset) { requests.delete(key); resolve(null); }
+        else { asset.addRef(); resolve(asset); } // One tiny shared effect remains valid across battle restarts.
+      });
     });
-  });
+    requests.set(key, request);
+  }
   return request;
 }
 
@@ -24,7 +28,9 @@ export class HeroFxShader {
   private lastUsed = 0;
   private destroyed = false;
   ready = false;
-  constructor(parent: Node, name: string, capacity: number, private readonly blendMode: 'alpha' | 'emission' | 'plasma' = 'alpha') {
+  constructor(parent: Node, name: string, capacity: number, private readonly blendMode: 'alpha' | 'emission' | 'plasma' = 'alpha',
+    source: { effect: string; technique: number } = { effect: HERO_FX_EFFECT,
+      technique: blendMode === 'alpha' ? 0 : blendMode === 'emission' ? 1 : 2 }) {
     this.root = N(name, parent);
     this.texture = new Texture2D();
     this.texture.reset({ width: 2, height: 2, format: Texture2D.PixelFormat.RGBA8888 });
@@ -44,11 +50,11 @@ export class HeroFxShader {
       node.active = false;
       this.quads.push({ node, ui, sprite, material: null, state: new Vec4(), shape: new Vec4() });
     }
-    void effect().then(asset => {
+    void effect(source.effect).then(asset => {
       if (!asset || this.destroyed || !this.root.isValid) return;
       for (const q of this.quads) {
         const material = new Material();
-        material.initialize({ effectAsset: asset, technique: this.blendMode === 'alpha' ? 0 : this.blendMode === 'emission' ? 1 : 2 });
+        material.initialize({ effectAsset: asset, technique: source.technique });
         q.material = material; q.sprite.customMaterial = material;
       }
       this.ready = true;

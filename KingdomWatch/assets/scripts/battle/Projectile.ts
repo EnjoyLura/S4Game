@@ -15,7 +15,8 @@ import { FrostUltTarget } from './FrostUltimateVFX';
 import { BasicProjectileFlightVFX } from './BasicProjectileFlightVFX';
 import { drawCannonMissile } from './NewHeroVFX';
 import { acceptsTarget, attackLayer, TargetLayer } from '../config/Targeting';
-import { drawWindBlade, drawShuriken } from './WindNinjaVFX';
+import { drawWindBlade, drawShuriken, WIND_NINJA_FX_EFFECT } from './WindNinjaVFX';
+import { HeroFxShader } from './HeroFxShader';
 
 export interface ProjSpec {
   visual?: 'wind' | 'shuriken';
@@ -123,6 +124,7 @@ interface Active {
   legLeft: number;
   returnDistance: number;
   hitExhausted: boolean;
+  windShader: boolean;
 }
 
 const colorCache = new Map<string, Color>();
@@ -149,13 +151,20 @@ export class ProjectileManager {
   private g!: Graphics;
   private dirty = false;
   private basicFlight: BasicProjectileFlightVFX;
+  private windFlight: HeroFxShader | null = null;
   private flightSerial = 0;
 
   /** field 为专用弹道图层节点（英雄之上、飘字之下）；parts 为迸溅粒子层 */
-  constructor(field: Node, private mgr: MonsterManager, private dmg: DamageService, private parts?: Particles, private impacts?: ImpactFX) {
+  constructor(private field: Node, private mgr: MonsterManager, private dmg: DamageService, private parts?: Particles, private impacts?: ImpactFX) {
     field.layer = Layers.Enum.UI_2D;
     this.g = field.addComponent(Graphics);
     this.basicFlight = new BasicProjectileFlightVFX(field);
+  }
+
+  /** Only squads with wind create the cosmetic pool, before the preparation countdown ends. */
+  warmWindFlight(): void {
+    if (!this.windFlight) this.windFlight = new HeroFxShader(this.field, 'windCrescentFlight', MAX_PROJS, 'plasma',
+      { effect: WIND_NINJA_FX_EFFECT, technique: 0 });
   }
 
   get ultimateInFlight(): boolean { return this.active.some(a => !!a.spec.ult); }
@@ -172,6 +181,7 @@ export class ProjectileManager {
     a.pierceLeft = spec.pierce || 0;
     a.ttl = spec.ttl ?? 3.2;
     a.age = 0; a.ultContact = false;
+    a.windShader = spec.visual === 'wind' && !!this.windFlight?.ready;
     a.damageScale = 1; a.returning = false; a.legLeft = a.returnDistance = 0; a.hitExhausted = false;
     a.fxSeed = (++this.flightSerial * .61803398875) % 1;
     a.trail.length = 0;
@@ -196,7 +206,7 @@ export class ProjectileManager {
 
   private makeActive(): Active {
     return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<number>(), ttl: 0, age: 0, trail: [], trailMax: 0, fxSeed: 0, ultContact: false,
-      damageScale: 1, returning: false, legLeft: 0, returnDistance: 0, hitExhausted: false };
+      damageScale: 1, returning: false, legLeft: 0, returnDistance: 0, hitExhausted: false, windShader: false };
   }
 
   /** 敌方远程石块：直线落向防线，触线即结算 */
@@ -402,6 +412,7 @@ export class ProjectileManager {
     const g = this.g;
     g.clear();
     this.basicFlight.beginFrame();
+    this.windFlight?.begin();
     this.impacts?.beginProjectileFrame();
     for (let i = 0; i < this.active.length; i++) {
       const a = this.active[i];
@@ -412,7 +423,12 @@ export class ProjectileManager {
       const orb = s.heroId === 'volt' && !s.small && !s.enemy;
       const fire = s.heroId === 'pyro' && !s.enemy;
       const shard = s.heroId === 'mora' && !s.small && !s.enemy;
-      if (s.visual === 'wind') { drawWindBlade(g,s.x,s.y,a.vx,a.vy,size,a.age); continue; }
+      if (s.visual === 'wind') {
+        const rendered = a.windShader && this.windFlight?.draw(s.x,s.y,size*10,size*10,
+          Math.atan2(a.vy,a.vx)*180/Math.PI,a.age,a.fxSeed,1,3,size*3);
+        if (!rendered) drawWindBlade(g,s.x,s.y,a.vx,a.vy,size,a.age);
+        continue;
+      }
       if (s.visual === 'shuriken') { drawShuriken(g,s.x,s.y,a.vx,a.vy,size,a.age); continue; }
       if (s.heroId === 'cannon' && s.ult && !s.enemy) {
         drawCannonMissile(g, s.x, s.y, a.vx, a.vy, size, a.age, a.fxSeed, a.trail);
@@ -457,6 +473,7 @@ export class ProjectileManager {
       }
     }
     this.impacts?.endProjectileFrame();
+    this.windFlight?.end();
   }
 
   /** 锥形渐隐尾迹：越旧越窄越淡的软边条带（逐段四边形），叠一条更实的亮芯线；箭矢从箭尾接出避免盖住箭体 */

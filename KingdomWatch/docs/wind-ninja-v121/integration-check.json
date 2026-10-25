@@ -1,0 +1,218 @@
+{
+  "checkedAt": "2026-10-25T14:10:43.763Z",
+  "status": "PASS",
+  "baseline": "0a1fc689",
+  "scope": "Static AST and isolated real drawing/helper/warmup modules with inert cc doubles",
+  "excludedExecution": [
+    "engine",
+    "combat",
+    "game",
+    "browser",
+    "audio",
+    "WASM",
+    "build",
+    "git mutation",
+    "deployment"
+  ],
+  "limitations": [
+    "No GPU/rendered appearance validation; new shader internals are outside this check."
+  ],
+  "checks": [
+    {
+      "name": "combat and configuration AST unchanged from baseline",
+      "status": "PASS",
+      "evidence": {
+        "files": 71
+      }
+    },
+    {
+      "name": "Projectile combat AST identical after strictly whitelisted cosmetic additions",
+      "status": "PASS",
+      "evidence": {
+        "exactCombatMethods": [
+          "hitSweep",
+          "hitMob",
+          "tick",
+          "advanceReturning",
+          "hitGround",
+          "hitArc",
+          "damageFor",
+          "addDamage",
+          "recycle"
+        ],
+        "fireExemption": "single validated windShader assignment",
+        "rejectedMutationKinds": [
+          "damage",
+          "timing",
+          "callback",
+          "velocity math"
+        ]
+      }
+    },
+    {
+      "name": "BattleDirector AST unchanged except single wind-only warm hook",
+      "status": "PASS",
+      "evidence": {
+        "hook": "wind-only, immediately after ProjectileManager construction",
+        "allOtherLogic": "baseline AST identical"
+      }
+    },
+    {
+      "name": "legacy shuriken and metal marks retain their AST",
+      "status": "PASS"
+    },
+    {
+      "name": "energized crescent convex midpoint and every tail rotate toward all four aim directions",
+      "status": "PASS",
+      "evidence": {
+        "cardinalDirections": 4,
+        "diagonal": [
+          3,
+          4
+        ],
+        "layers": 3,
+        "tailStreaks": 5,
+        "gpuValidation": false
+      }
+    },
+    {
+      "name": "actual helper defaults, effect cache isolation, independent techniques and inactive carriers",
+      "status": "PASS",
+      "evidence": {
+        "defaultTechniques": [
+          0,
+          1,
+          2
+        ],
+        "loads": [
+          "fx/hero-impact-flow",
+          "fx/wind-ninja-flow"
+        ],
+        "sameEffectDifferentTechniques": [
+          7,
+          4
+        ]
+      }
+    },
+    {
+      "name": "failed and missing effect retry only their own cache entry",
+      "status": "PASS"
+    },
+    {
+      "name": "helper pool is fixed, reuses nodes, updates uniforms, hides unused quads and cleans up",
+      "status": "PASS"
+    },
+    {
+      "name": "destroy before async completion never allocates or reactivates material carriers",
+      "status": "PASS"
+    },
+    {
+      "name": "area renderer pins per-event mode across readiness and caps/reuses eight shader quads",
+      "status": "PASS",
+      "evidence": {
+        "shaderCapacity": 8,
+        "repeatedFrames": 30,
+        "accentCap": 24,
+        "markCap": 80,
+        "blendMode": "plasma",
+        "blendFactors": [
+          "ONE",
+          "ONE_MINUS_SRC_ALPHA"
+        ],
+        "explicitEffectTechnique": 0
+      }
+    },
+    {
+      "name": "fallback has no metallic spiral, opaque footprint circle, range ring or giant white fill",
+      "status": "PASS"
+    },
+    {
+      "name": "wind and ninja warm their effect before first-paint promise resolves",
+      "status": "PASS"
+    }
+  ],
+  "sha256": {
+    "assets/scripts/battle/AdvancedHeroVFX.ts": "7b58b577e0df6cc540a07b22fb1aceab26ca0805fe079fecccc9097643f4e260",
+    "assets/scripts/battle/ArcherIdleAnimation.ts": "c9aa25fc8dbebe1125c9fab01199c222110b591aae69e4ed4537d46242c8941e",
+    "assets/scripts/battle/ArcherNativeRig.ts": "910afa446d74316f30d8c42d8982fc75ba16db5b2138e790043a31c80b5f9738",
+    "assets/scripts/battle/ArcherRigPose.ts": "1bbcb1a9320e007a13538ee9d4564c49345d1c2199acb8d5f89db89e4a19f1da",
+    "assets/scripts/battle/ArcherVFX.ts": "25097b78b8cd8ed306d1aeb6cf4257729029b1c5d3be7d1d02ad73691f85b963",
+    "assets/scripts/battle/BasicAttackLaunchVFX.ts": "4b2d671ecdf4cb8594af877dc3788f433f6f596e85c94698221a77325bbe0ef2",
+    "assets/scripts/battle/BasicProjectileFlightVFX.ts": "0ec36e8be12a05c83505ea5d804f8a104157eac48951567fb244e4107980d241",
+    "assets/scripts/battle/BattleAmbience.ts": "643bbf99f57bb1d8992ff55bee354d6de69ff453509debc5ea0c2c94ac96077f",
+    "assets/scripts/battle/BattleDepth.ts": "a42088ceade49cb5d591c7adc71b2f24429a39c9075c97bcf54526e284142002",
+    "assets/scripts/battle/BattleLoot.ts": "5edcb5f1b77a8d421970a4e81b2e357ec694eca0efa8ae16d45fbf03db7981ae",
+    "assets/scripts/battle/BattleSprite.ts": "fab25faf39891e69add3bb1c7f8b24bdfc17f53c569814233a767d30b15fafe2",
+    "assets/scripts/battle/CannonAugments.ts": "9e6c0134afd4c5c4f2c33b34a7e73081f5df56c334cedfed4d4792c778a46cd2",
+    "assets/scripts/battle/ComicPop.ts": "58316f5d29db826c1ca275044c6ead9f9f89f5e97c69372691337ee05c820b5a",
+    "assets/scripts/battle/DamageService.ts": "468ee2f33188a5e3437915ca847ef4c864eacf967fb2cc1fac5916dceb1ffc2f",
+    "assets/scripts/battle/EndlessFlow.ts": "3a9a47f35eea75c642d540eb827cde0bb9346f8336ab1e0ece16627c0bdffa1e",
+    "assets/scripts/battle/EnemyBadge.ts": "0f7310030948e4ff78a3bdb6572e107c7a1097ca8f35abe06b8b8df96c3ffb88",
+    "assets/scripts/battle/EnemyHealVFX.ts": "b9692ed81edd7300151c323dfb8749a36e69a2f2b48be0998fa35ee629b68cac",
+    "assets/scripts/battle/FireVFX.ts": "7e8e0234d9dbba8fbafd73eb75318f2ab6f153eecd3fb6263cc23e92794bd8d3",
+    "assets/scripts/battle/FlightPresentation.ts": "ba2f67dc2abb97e8a9171cd83a652c0eb363d5a4da65c06ee36b67b5fa27a1e9",
+    "assets/scripts/battle/FloatText.ts": "9fd326ebd07ef3a0370b01c2bb4b39379c7350e5387099612d65cf607004b829",
+    "assets/scripts/battle/FrostProjectileVFX.ts": "f76cd863f8460a8daa8fdac42c1e08ba6e2936986f9fedaea8f6a36f49cd2f32",
+    "assets/scripts/battle/FrostUltimateVFX.ts": "d0d1a5370d652cf97c7c424ebc973d3c82c85640fa73e5ccb8a42e2614467798",
+    "assets/scripts/battle/FrostVFX.ts": "d584d8ef52396d3c01492badfdd4ec702ff731e2fa9532dace3fea7d60ce38bf",
+    "assets/scripts/battle/Hero.ts": "99cce8cd2a72a8f7a38b0723872a56b03444a0351284103021434e2f45086ea0",
+    "assets/scripts/battle/HeroBattleMotion.ts": "f76a7c68f43184b0a5890ebd6dc94127d1123e9025b3184859ca7d01732d3241",
+    "assets/scripts/battle/HeroSequenceAnimation.ts": "5fa85a5a4281d2367b7e94ff3cd7be3e24c5c1eba10fb3c2b1c27016dea4c7bc",
+    "assets/scripts/battle/ImpactFX.ts": "7ee84184c8e47d5571b987df84f4a49efe20bc3e45e29c29d1b023d14f6207f7",
+    "assets/scripts/battle/LineDefense.ts": "763939f8b35d95f860ebbba421d79c803b0cbc2f897d0b3d1805e81b914b08de",
+    "assets/scripts/battle/MobAnim.ts": "f1ce7b8a2962bfa4fa3de40c82bdb7843fe1de430177220c45e347fd9d9e7a1c",
+    "assets/scripts/battle/MobArmAlpha.ts": "24864817076ab7c9893a8b8affdf59f181ae2dc9447306628ea05b42e7297862",
+    "assets/scripts/battle/Monster.ts": "0eb49181ceca5ab97b96ba2cd605b6f10241c02503dd95b7b1bcc27cefa6fd1c",
+    "assets/scripts/battle/MonsterDeath.ts": "2ae78c09ff2e2d71ad85e7f9133d3175f7f966cedbf62b773b0ab6eb8dc4874c",
+    "assets/scripts/battle/MonsterTraits.ts": "c5d9982f4f69b9eda25b32443b9c85a2a595c0434a5bc2e739ed2c41b81d8100",
+    "assets/scripts/battle/MoraIdleAnimation.ts": "b1ff848ce7a46b9a178c382d2dd97c5f1525d3f1f5134291386b04e7d871b33d",
+    "assets/scripts/battle/NewHeroVFX.ts": "2145d9b1c6f84df60f15a35ac34a282cdf21bdfb15468da634c693175ee0e36c",
+    "assets/scripts/battle/NewHeroes.ts": "8a7b9528a9f96c6f0ecd76fcef391b3e5f9799d246d828cafa509894fb278139",
+    "assets/scripts/battle/Particles.ts": "4cdd321484a7875e515ff8893ffce777f18c05bd0b14d7c653051d39c9164c50",
+    "assets/scripts/battle/PyroIdleAnimation.ts": "978ce237b89b88dae6b4ada5ec091176b1197957551e95a42e97dc0295222799",
+    "assets/scripts/battle/SiphonLaser.ts": "036e479bad938134bc94222d1f8883877ec62ff28b80d60dec8ca0dd61c8baaa",
+    "assets/scripts/battle/SiphonLaserVFX.ts": "3a965d4bfe1c6f0a984eaaf4f888fd089dea47767475ac02d84953feac398066",
+    "assets/scripts/battle/SniperIdleAnimation.ts": "22455b3148c196acba94c3b5b2d40cfb2e3dad7b6e5650d172136560a9e9b35b",
+    "assets/scripts/battle/SniperUltimateVFX.ts": "541d4a302abdbc2b6d35cbfd8b6ce93156f5475506050aaebf8fc11495a0cc27",
+    "assets/scripts/battle/UltimatePresentation.ts": "c3e19feaa6d1f59af12ced02b72d05c19d1170e426ab3a604d910d03f490663c",
+    "assets/scripts/battle/UltimateTiming.ts": "a89773d29fde193b6c10ae0916063921ff0ce9cacddefbe99e84c87893cd87fb",
+    "assets/scripts/battle/VoltField.ts": "3e72d9c239009cf23c9a5c5016f30f76bf5fdcd733f0c0f0403bdc5935c2c346",
+    "assets/scripts/battle/VoltIdleAnimation.ts": "50b988aaf1ee735423a718f9a2dc098751a3d5ec81bfed47b15fa0f90da68ba0",
+    "assets/scripts/battle/VoltUltimateVFX.ts": "16cd4f86443ac3fbd42dba56adec929bb5205579a41f40979c1bcd7d40f963ca",
+    "assets/scripts/battle/VoltVFX.ts": "e4ec307c038a4ad766c2771e24c067a882fedb974a6abd558d2c365a8ef189e1",
+    "assets/scripts/battle/WaveManager.ts": "601490e3b4bea58159d02f9106e624edf369e9f6a47ba59a3f0141d159322d18",
+    "assets/scripts/battle/WindNinjaGeometry.ts": "8dd5e05a2d37bc76bf54b23cc3ddc72757502a2bdd5e71afcbc6972ea7c77ea5",
+    "assets/scripts/battle/WindNinjaHeroes.ts": "b1c430d3b3838f14225692334022ff546cac01c8345f57ba8aea2dde5354cdbe",
+    "assets/scripts/config/Campaign.ts": "d5f5e8d37b06d6f8d15945e3bfa576d8bb05ef495308ab99be22b941333d309c",
+    "assets/scripts/config/Cards.ts": "d63cb47042f22b1aefcf6cd4ea62a9d562c7b2580e6d97719be9aafcd5d02e57",
+    "assets/scripts/config/ChapterContent.ts": "1e863d44df627dfaad013b791e6b35f4817e8cff8f7421a3bbec2ab04ba7b77a",
+    "assets/scripts/config/ChapterWaves.ts": "1ccf9ee354c433a6e1b209fbc824cc9a6ac217f22ea06529e13244ef50bf04db",
+    "assets/scripts/config/EarlyEconomy.ts": "fc6edd0508e6e962d546c72be0eb42193e76084d232442e14cdc00fea9d9a0e9",
+    "assets/scripts/config/Endless.ts": "682beefc56d6ffa9ccc2ef404284f6760a1511bccfd1212fa4ed20a59619238c",
+    "assets/scripts/config/FifthLevel.ts": "c94218776e9af55f7666dd9e9cb75cbb6e0308daccf2ba90d88a0b7fb60ee4d7",
+    "assets/scripts/config/FirstLevel.ts": "d5d6eb262d3f8173d52bb60f73d5fbb3bab6889fd0f5a83380ba72e6e1159b3a",
+    "assets/scripts/config/FourthLevel.ts": "967fe5f6117ef394a348a568b1392d4ec1a9185cebbeedae62b2f3d4b7f1b049",
+    "assets/scripts/config/GameConfig.ts": "c9af2a8edfee956d0d190e1db9b978ce4c1a782f37cbec2b6bd3ff579466f4fa",
+    "assets/scripts/config/LevelDifficulty.ts": "a077d4e058ea268c1405c01632cbdabf9d2eace5559b3af0fd3fe9e225556ec8",
+    "assets/scripts/config/Mobs.ts": "a4288922d17348fda95f0d69a7d0f877224c040db2f1c8abd34e204c931e626a",
+    "assets/scripts/config/NewHeroConfig.ts": "a4a0d3557ef152dbaf47bf9197193baa900c9dd69231efa06524becbdba951c4",
+    "assets/scripts/config/SecondLevel.ts": "d3ac78299677045600684d60b33730e877eee31c2c8d452a372bbdf623e4a42b",
+    "assets/scripts/config/SeventhLevel.ts": "0e50467bace493ae4ce433de226bc4243d6f6a7282e016184f5fa1194d492e0d",
+    "assets/scripts/config/SixthLevel.ts": "d9c4bd2feca8e3478a7b2139be530ca6f3c0660f675a6aa527bc0b19ac25ca90",
+    "assets/scripts/config/Targeting.ts": "53f701cadbddb2ef842a9150532e34f73caf56b25329682c50094cea72f41cd8",
+    "assets/scripts/config/ThirdLevel.ts": "fdc5b76a6ce4e7a0b6b5fbf28920dec31e1f278550439e361e4a1be6f66798cf",
+    "assets/scripts/config/Weapons.ts": "42c426abe52514a1b1edbfbe4258f1356411293fa17a55f83642785d8860d6cb",
+    "assets/scripts/config/WindNinjaConfig.ts": "22f5eb99ca2055862769db077a1cf548f2eb05b36da24f12b0d01aff90de05c0",
+    "assets/scripts/battle/Projectile.ts": "283346394f6abc1c194ef9adb81bdee680e6c007e37a38bf1db15738362a071a",
+    "assets/scripts/battle/BattleDirector.ts": "b6f6ca1e44c80a9d45226bfccca1ab90446a3911365f96fd1d21c86d2a364c0d",
+    "assets/scripts/battle/WindNinjaVFX.ts": "3c4fa4f8b89b218e303d7818f943b2f26e444da3f40b773033806c728032953c",
+    "assets/scripts/battle/HeroFxShader.ts": "82ce721f02ac6cb5acc802113e7df71a9b6a714eb3700d635e86301d85cb3595",
+    "assets/scripts/ui/BattleEntryWarmup.ts": "a732ef2a507151471494113707b0d9c85f22a3c1eabbc508c4592a5c7d52ee83"
+  },
+  "typescript": "5.8.2",
+  "shaderAsset": {
+    "path": "assets/resources/fx/wind-ninja-flow.effect",
+    "presentAtCheck": true,
+    "requiredForThisIsolatedCheck": false
+  }
+}

@@ -33,6 +33,7 @@ const FX_MANIFESTS = new Set(['fx/archer_v1', 'fx/pyro_hit', 'fx/fire_v2', 'fx/f
 const FX_EFFECTS: Record<string, string[]> = {
   pyro: ['fx/fire-paint-v2'], volt: ['fx/volt-ultimate-procedural'], sniper: ['fx/sniper-ultimate-procedural'],
   cannon: ['fx/hero-impact-flow'], siphon: ['fx/hero-impact-flow'],
+  wind: ['fx/wind-ninja-flow'], ninja: ['fx/wind-ninja-flow'],
 };
 const fxRequests = new Map<string, Promise<void>>();
 function warmFxResource(path: string, effect: boolean): Promise<void> {

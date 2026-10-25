@@ -1,5 +1,8 @@
 /** Painted, bounded Graphics geometry. All age/phase values come from the battle clock. */
 import { Color, Graphics, Layers, Node } from 'cc';
+import { HeroFxShader } from './HeroFxShader';
+
+export const WIND_NINJA_FX_EFFECT = 'fx/wind-ninja-flow';
 
 const TAU = Math.PI * 2;
 function color(hex: string): Color { const c = new Color(); Color.fromHEX(c, hex); return c; }
@@ -47,29 +50,28 @@ function leaf(g: Graphics, x: number, y: number, r: number, a: number, alpha: nu
   g.moveTo(x - dx * r * .7, y - dy * r * .7); g.lineTo(x + dx * r * .7, y + dy * r * .7); g.stroke();
 }
 
-/** A broad HORIZONTAL crescent, independent of its diagonal flight direction. */
+/** Convex arc midpoint faces the predicted target, aligned to the actual projectile velocity. */
 export function drawWindBlade(g: Graphics, x: number, y: number, vx: number, vy: number, size: number, age: number): void {
-  const r = Math.max(3, size), w = r * 2.7, h = r * (1.02 + Math.sin(age * 19) * .04);
-  const len = Math.hypot(vx, vy) || 1, dx = vx / len, dy = vy / len;
-  for (let i = 2; i >= 1; i--) {
-    stroke(g, P.mint, 1.4, .2 / i);
-    arc(g, x - dx * r * i * 1.7, y - dy * r * i * 1.7, w * .88, h * .7, .12, Math.PI - .24, 12);
+  const r = Math.max(3,size)*3, angle=Math.atan2(vy,vx), ca=Math.cos(angle),sa=Math.sin(angle);
+  const point=(px:number,py:number,first=false):void=>{
+    const xx=x+ca*px-sa*py,yy=y+sa*px+ca*py;
+    if(first)g.moveTo(xx,yy);else g.lineTo(xx,yy);
+  };
+  for(let band=0;band<3;band++) {
+    const width=band===0?.48:band===1?.30:.075;
+    fill(g,band===0?P.teal:band===1?P.mint:P.light,band===0?.22:band===1?.82:.98);
+    for(let side=0;side<2;side++)for(let i=0;i<=24;i++) {
+      const t=side===0?i/24:1-i/24,theta=(t-.5)*2.65;
+      const px=Math.cos(theta)*r-(side?Math.sin(t*Math.PI)*r*width:0);
+      point(px,Math.sin(theta)*r,side===0&&i===0);
+    }
+    g.close();g.fill();
   }
-  fill(g, P.deep, .85); stroke(g, P.ink, 1.1, .8);
-  g.moveTo(x - w, y - h * .2);
-  g.bezierCurveTo(x - w * .62, y + h * 1.6, x + w * .62, y + h * 1.6, x + w, y - h * .2);
-  g.bezierCurveTo(x + w * .38, y + h * .65, x - w * .38, y + h * .65, x - w, y - h * .2);
-  g.close(); g.fill(); g.stroke();
-  fill(g, P.teal, .95);
-  g.moveTo(x - w * .98, y - h * .16);
-  g.bezierCurveTo(x - w * .5, y + h * 1.49, x + w * .5, y + h * 1.49, x + w * .98, y - h * .16);
-  g.bezierCurveTo(x + w * .35, y + h * .88, x - w * .35, y + h * .88, x - w * .98, y - h * .16);
-  g.close(); g.fill();
-  stroke(g, P.light, Math.max(1.2, r * .16), .98);
-  g.moveTo(x - w * .93, y + h * .02);
-  g.bezierCurveTo(x - w * .5, y + h * 1.46, x + w * .5, y + h * 1.46, x + w * .93, y + h * .02); g.stroke();
-  stroke(g, P.mint, 1, .75);
-  g.moveTo(x - w * .45, y + h * .66); g.lineTo(x + w * .4, y + h * .66); g.stroke();
+  for(let i=0;i<5;i++) {
+    const theta=(i-2)*.42, px=Math.cos(theta)*r*.85, py=Math.sin(theta)*r;
+    stroke(g,P.mint,1.6,.35);
+    point(px,py,true);point(px-r*(1.25+.22*Math.sin(age*17+i)),py*.85);g.stroke();
+  }
 }
 
 function metalStar(g: Graphics, x: number, y: number, r: number, angle: number, alpha: number, detail = false): void {
@@ -120,69 +122,51 @@ export interface WindNinjaAreaView {
 function opacity(area: WindNinjaAreaView): number {
   return Math.max(0, Math.min(1, (area.duration - area.age) / .22)) * Math.min(1, area.age / .13 + .15);
 }
-function footprint(g: Graphics, a: WindNinjaAreaView, alpha: number): void {
-  stroke(g, a.kind === 'spiral' ? P.blue : P.deep, 2, alpha * .35);
-  arc(g, a.x, a.y, a.radius, a.radius, 0, TAU, 36);
-  for (let i = 0; i < 4; i++) {
-    stroke(g, a.kind === 'spiral' ? P.cyan : P.mint, 1.5, alpha * .65);
-    arc(g, a.x, a.y, a.radius * .985, a.radius * .985, i * TAU / 4 + a.age * .45, .3, 5);
-  }
-}
+// A lightweight luminous fallback survives failed material loads; it has no metal facets or range rings.
 function drawEye(g: Graphics, a: WindNinjaAreaView, alpha: number): void {
-  footprint(g, a, alpha);
-  for (let i = 0; i < 5; i++) {
-    const r = a.radius * (.19 + i * .156), phase = a.age * (1.8 + i * .16) + i * 1.9;
-    ribbon(g, a.x, a.y, r, r * .96, phase, 4.1, 9 + i * 1.3, P.deep, alpha * .48);
-    ribbon(g, a.x, a.y, r, r * .96, phase + .08, 3.5, 5 + i, P.teal, alpha * .85);
-    stroke(g, P.mint, 1.2 + i * .1, alpha * .83);
-    arc(g, a.x, a.y, r + 3, r * .96 + 3, phase + .4, 1.65, 14);
+  for (let i = 0; i < 4; i++) {
+    const progress = (a.age * .48 + i * .25) % 1;
+    const r = a.radius * (.12 + (1-progress) * .79), phase = a.age * 3.3 + i * 2.4;
+    ribbon(g, a.x, a.y, r, r * .78, phase, 3.7, 22 * Math.sin(progress*Math.PI), P.teal, alpha * .12);
+    ribbon(g, a.x, a.y, r, r * .78, phase, 2.8, 5, P.mint, alpha * .7);
+    stroke(g, P.light, 1.5, alpha * .8);
+    arc(g,a.x,a.y,r,r*.78,phase+.12,.8,9);
   }
-  for (let i = 0; i < 10; i++) {
-    const progress = (a.age * .27 + i * .137) % 1, r = a.radius * (1 - progress) * .94;
-    const theta = i * 2.4 + a.age * 2.8 + progress * 2;
-    leaf(g, a.x + Math.cos(theta) * r, a.y + Math.sin(theta) * r,
-      2.5 + i % 3, theta + .5, alpha * Math.sin(progress * Math.PI) * .88, i % 3 === 0);
-  }
-  stroke(g, P.light, 2.1, alpha * .8);
-  arc(g, a.x, a.y, a.radius * .11, a.radius * .1, -a.age * 3, 4.4, 14);
 }
 function drawTornado(g: Graphics, a: WindNinjaAreaView, alpha: number): void {
-  footprint(g, a, alpha);
-  // Six widening bands build a readable funnel; no opaque carrier rectangle or filled disk.
-  for (let i = 5; i >= 0; i--) {
-    const t = i / 5, r = a.radius * (.24 + t * .66), cy = a.y + a.radius * (-.64 + t * 1.22);
-    const phase = a.age * (3.8 - t * .8) + i * .9;
-    ribbon(g, a.x, cy, r, r * .31, phase, TAU * .83, 10 + t * 8, P.deep, alpha * .72);
-    ribbon(g, a.x, cy + 2, r, r * .31, phase + .06, TAU * .67, 6 + t * 6, P.teal, alpha * .92);
-    stroke(g, P.mint, 2.2, alpha * .9);
-    arc(g, a.x, cy + 3, r, r * .31, phase + .4, 2.4, 14);
-    stroke(g, P.light, 1, alpha * .7);
-    arc(g, a.x, cy + 5, r, r * .31, phase + .6, .95, 8);
-  }
-  for (let i = 0; i < 12; i++) {
-    const t = (a.age * .42 + i * .0833) % 1, theta = a.age * 4.7 + i * 2.4;
-    const r = a.radius * (.24 + t * .7);
-    leaf(g, a.x + Math.cos(theta) * r, a.y - a.radius * .68 + t * a.radius * 1.45 + Math.sin(theta) * r * .28,
-      2 + i % 3, theta + .6, alpha * Math.sin(t * Math.PI), i % 3 === 0);
+  for (let filament=0;filament<5;filament++) {
+    const phase=a.age*4.8+filament*TAU/5;
+    for (let pass=0;pass<2;pass++) {
+      stroke(g,pass?P.light:P.teal,pass?1.5:9,alpha*(pass?.7:.19));
+      for(let i=0;i<=28;i++) {
+        const t=i/28, r=a.radius*(.08+.73*t), theta=phase-t*6;
+        const x=a.x+Math.cos(theta)*r,y=a.y+a.radius*(-.8+2.25*t)+Math.sin(theta)*r*.18;
+        if(i===0)g.moveTo(x,y);else g.lineTo(x,y);
+      }
+      g.stroke();
+    }
   }
 }
 function drawSpiral(g: Graphics, a: WindNinjaAreaView, alpha: number): void {
-  footprint(g, a, alpha);
-  const angle = a.age * 6.8;
-  for (let arm = 0; arm < 3; arm++) {
-    stroke(g, P.cyan, 3.2, alpha * .45);
-    for (let i = 0; i <= 26; i++) {
-      const t = i / 26, theta = angle - t * 4.8 + arm * TAU / 3, r = a.radius * (.13 + t * .82);
-      const x = a.x + Math.cos(theta) * r, y = a.y + Math.sin(theta) * r;
-      if (i === 0) g.moveTo(x, y); else g.lineTo(x, y);
+  for (let arm=0;arm<4;arm++) {
+    const angle=a.age*8+arm*TAU/4, r=a.radius*.84;
+    for(let pass=0;pass<3;pass++) {
+      const c=pass===2?P.edge:pass===1?P.cyan:P.blue;
+      ribbon(g,a.x,a.y,r,r*.92,angle,.98,pass===2?5:pass===1?17:35,c,alpha*(pass===2?.9:pass===1?.58:.15));
     }
-    g.stroke();
   }
-  metalStar(g, a.x, a.y, a.radius * .86, -angle, alpha * .86, true);
-  for (let i = 0; i < 4; i++) {
-    const phase = -angle + i * Math.PI / 2;
-    stroke(g, P.edge, 1.4, alpha * .8);
-    arc(g, a.x, a.y, a.radius * .91, a.radius * .91, phase + .1, .55, 7);
+  fill(g,P.cyan,alpha*.18);g.circle(a.x,a.y,a.radius*.17);g.fill();
+  fill(g,P.edge,alpha*.9);g.circle(a.x,a.y,4);g.fill();
+}
+function flowParticles(g: Graphics, a: WindNinjaAreaView, alpha: number): void {
+  if(a.kind==='spiral')return; // Pure energy blades are drawn entirely by the shader.
+  for(let i=0;i<12;i++) {
+    const t=(a.age*(a.kind==='eye'?.42:.58)+i*.137)%1;
+    const theta=a.age*4.2+i*2.39996+t*3;
+    const radius=a.radius*(a.kind==='eye'?.97*(1-t):.10+.76*t);
+    const x=a.x+Math.cos(theta)*radius;
+    const y=a.y+(a.kind==='eye'?Math.sin(theta)*radius*.8:a.radius*(-.78+2.2*t)+Math.sin(theta)*radius*.23);
+    leaf(g,x,y,2.2+i%3,theta+.6,alpha*Math.sin(t*Math.PI)*.7,i%4===0);
   }
 }
 
@@ -191,12 +175,16 @@ interface Accent { x: number; y: number; dx: number; dy: number; kind: 'wind' | 
 export class WindNinjaVFX {
   private readonly root = new Node('WindNinjaVFX');
   private readonly g: Graphics;
+  private readonly flow: HeroFxShader;
+  private readonly areaShader = new WeakMap<WindNinjaAreaView, boolean>();
   private accents: Accent[] = [];
   private areas = 0;
   private marks = 0;
   constructor(parent: Node) {
     this.root.layer = Layers.Enum.UI_2D; this.root.setParent(parent);
     this.g = this.root.addComponent(Graphics);
+    this.flow = new HeroFxShader(this.root, 'windNinjaEnergy', 8, 'plasma',
+      { effect: WIND_NINJA_FX_EFFECT, technique: 0 });
   }
   release(x: number, y: number, dx: number, dy: number, kind: 'wind' | 'shuriken'): void {
     if (this.accents.length >= 24) this.accents.shift();
@@ -208,11 +196,18 @@ export class WindNinjaVFX {
       if (this.accents[i].age >= .22) this.accents.splice(i, 1);
     }
   }
-  begin(): void { this.g.clear(); this.areas = this.marks = 0; }
+  begin(): void { this.g.clear(); this.flow.begin(); this.areas = this.marks = 0; }
   area(area: WindNinjaAreaView): void {
     if (++this.areas > 8) return;
     const alpha = opacity(area);
-    if (area.kind === 'eye') drawEye(this.g, area, alpha);
+    if(!this.areaShader.has(area))this.areaShader.set(area,this.flow.ready);
+    if (this.areaShader.get(area)) {
+      const tornado = area.kind === 'tornado';
+      this.flow.draw(area.x, area.y+(tornado?area.radius*.35:0), area.radius*(tornado?2.6:2.5),
+        area.radius*(tornado?3.3:2.5), 0, area.age, .73, alpha,
+        area.kind==='eye'?0:tornado?1:2, area.radius, area.duration);
+      flowParticles(this.g,area,alpha);
+    } else if (area.kind === 'eye') drawEye(this.g, area, alpha);
     else if (area.kind === 'tornado') drawTornado(this.g, area, alpha);
     else drawSpiral(this.g, area, alpha);
   }
@@ -224,6 +219,7 @@ export class WindNinjaVFX {
     }
   }
   end(): void {
+    this.flow.end();
     for (const a of this.accents) {
       const alpha = 1 - a.age / .22, r = 7 + a.age * 70;
       stroke(this.g, a.kind === 'wind' ? P.mint : P.cyan, 2 * alpha + .6, alpha * .8);
