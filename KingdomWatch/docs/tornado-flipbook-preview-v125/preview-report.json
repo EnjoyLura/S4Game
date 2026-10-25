@@ -1,0 +1,267 @@
+{
+  "previewOnly": true,
+  "tool": "built-in image_gen",
+  "selectedCandidate": 1,
+  "frameCount": 16,
+  "fps": 12,
+  "nominalLoopSeconds": 1.3333333333333333,
+  "actualWebpLoopSeconds": 1.328,
+  "actualGifLoopSeconds": 1.28,
+  "atlasPixels": [
+    1536,
+    1536
+  ],
+  "cellPixels": [
+    384,
+    384
+  ],
+  "sourcePixelsPerFrameApprox": [
+    314,
+    314
+  ],
+  "nativeDetailUpscaled": false,
+  "packing": "source gap-based rectangles, integer foot registration; original RGBA unchanged",
+  "playback": "original generated frame order, no interpolation/morph/crossfade/reversal",
+  "frameChecks": [
+    {
+      "index": 0,
+      "alphaZeroFraction": 0.4942,
+      "semiTransparentFraction": 0.5058,
+      "alphaGT64Bounds": [
+        63,
+        80,
+        303,
+        343
+      ]
+    },
+    {
+      "index": 1,
+      "alphaZeroFraction": 0.4725,
+      "semiTransparentFraction": 0.5275,
+      "alphaGT64Bounds": [
+        65,
+        84,
+        326,
+        342
+      ]
+    },
+    {
+      "index": 2,
+      "alphaZeroFraction": 0.4559,
+      "semiTransparentFraction": 0.5441,
+      "alphaGT64Bounds": [
+        49,
+        83,
+        345,
+        340
+      ]
+    },
+    {
+      "index": 3,
+      "alphaZeroFraction": 0.4673,
+      "semiTransparentFraction": 0.5327,
+      "alphaGT64Bounds": [
+        45,
+        86,
+        340,
+        341
+      ]
+    },
+    {
+      "index": 4,
+      "alphaZeroFraction": 0.4701,
+      "semiTransparentFraction": 0.5299,
+      "alphaGT64Bounds": [
+        52,
+        84,
+        344,
+        342
+      ]
+    },
+    {
+      "index": 5,
+      "alphaZeroFraction": 0.4416,
+      "semiTransparentFraction": 0.5584,
+      "alphaGT64Bounds": [
+        38,
+        86,
+        302,
+        342
+      ]
+    },
+    {
+      "index": 6,
+      "alphaZeroFraction": 0.4554,
+      "semiTransparentFraction": 0.5446,
+      "alphaGT64Bounds": [
+        43,
+        79,
+        316,
+        343
+      ]
+    },
+    {
+      "index": 7,
+      "alphaZeroFraction": 0.4938,
+      "semiTransparentFraction": 0.5062,
+      "alphaGT64Bounds": [
+        39,
+        83,
+        295,
+        341
+      ]
+    },
+    {
+      "index": 8,
+      "alphaZeroFraction": 0.4932,
+      "semiTransparentFraction": 0.5068,
+      "alphaGT64Bounds": [
+        73,
+        83,
+        307,
+        342
+      ]
+    },
+    {
+      "index": 9,
+      "alphaZeroFraction": 0.4387,
+      "semiTransparentFraction": 0.5613,
+      "alphaGT64Bounds": [
+        72,
+        84,
+        331,
+        341
+      ]
+    },
+    {
+      "index": 10,
+      "alphaZeroFraction": 0.4332,
+      "semiTransparentFraction": 0.5668,
+      "alphaGT64Bounds": [
+        45,
+        76,
+        350,
+        340
+      ]
+    },
+    {
+      "index": 11,
+      "alphaZeroFraction": 0.4458,
+      "semiTransparentFraction": 0.5542,
+      "alphaGT64Bounds": [
+        42,
+        81,
+        341,
+        341
+      ]
+    },
+    {
+      "index": 12,
+      "alphaZeroFraction": 0.4992,
+      "semiTransparentFraction": 0.5008,
+      "alphaGT64Bounds": [
+        52,
+        84,
+        345,
+        342
+      ]
+    },
+    {
+      "index": 13,
+      "alphaZeroFraction": 0.4827,
+      "semiTransparentFraction": 0.5173,
+      "alphaGT64Bounds": [
+        36,
+        95,
+        303,
+        341
+      ]
+    },
+    {
+      "index": 14,
+      "alphaZeroFraction": 0.4893,
+      "semiTransparentFraction": 0.5107,
+      "alphaGT64Bounds": [
+        42,
+        86,
+        324,
+        341
+      ]
+    },
+    {
+      "index": 15,
+      "alphaZeroFraction": 0.5142,
+      "semiTransparentFraction": 0.4858,
+      "alphaGT64Bounds": [
+        71,
+        88,
+        308,
+        342
+      ]
+    }
+  ],
+  "adjacentPremultipliedRGBA_MAE": [
+    0.07857077568769455,
+    0.08005915582180023,
+    0.06705151498317719,
+    0.07726981490850449,
+    0.0753576010465622,
+    0.07342613488435745,
+    0.0704968273639679,
+    0.07459431141614914,
+    0.07308875024318695,
+    0.08174391835927963,
+    0.07840442657470703,
+    0.07715196162462234,
+    0.07380107045173645,
+    0.06951230019330978,
+    0.06486032903194427,
+    0.03221571072936058
+  ],
+  "loopSeamMAE": 0.03221571072936058,
+  "medianAdjacentMAE": 0.07459431141614914,
+  "limitations": [
+    "Generated poses are not controlled time samples. Some similar phases repeat across rows.",
+    "Frame shape and brightness still change; a finite MAE is not a seamless-animation certificate.",
+    "Cell padding in the original generation is uneven; measured row cuts and foot alignment are preview packing, not production-ready frame layout.",
+    "Only 16 original raster poses; more coherent frames or dedicated animation would be needed before game integration."
+  ],
+  "gameAssetsModified": false,
+  "gameBrowserCombatAudioOrWasmStarted": false,
+  "gameBuildRun": false,
+  "deployed": false,
+  "artifacts": {
+    "contact-sheet.jpg": {
+      "bytes": 285294,
+      "sha256": "f646bdf53f02fe75b530f705c15364a4d83f82a50c746d32f911503bfc2b24f5"
+    },
+    "forest-background.jpg": {
+      "bytes": 83469,
+      "sha256": "a0fcbe5ef6c018cfa7d80468d4b5d74e758b9d15efd0c7dcaf85969e6af95c94"
+    },
+    "forest-composition.png": {
+      "bytes": 543773,
+      "sha256": "293301bee126dca063e5e28c58d47ad558fb7a72d2c7e409f98d58c201ded438"
+    },
+    "offscreen-preview.gif": {
+      "bytes": 3377134,
+      "sha256": "f5f2b524475de66916edc847a7b781cc5142b1ae36d4354cfbbe580b7e89645c"
+    },
+    "offscreen-preview.webp": {
+      "bytes": 784378,
+      "sha256": "5b057287b3bc46ff2814d6ffa55392008c5643c0d06505ae5024896b33aa1e30"
+    },
+    "preview-still.jpg": {
+      "bytes": 148648,
+      "sha256": "e674240e74ee0af94f70893be1098218bab0c62f35b154937eb50274ae8656b3"
+    },
+    "tornado-16frames.png": {
+      "bytes": 3395887,
+      "sha256": "4c87acef4efa506319e1f4043e8ed9564fe6f6004ff027866b21599d2a92efb5"
+    },
+    "tornado-generated.png": {
+      "bytes": 2596435,
+      "sha256": "3a6051685b8ac688eeddfc935c6bc19794276535a044561781722244d8936c50"
+    }
+  }
+}
