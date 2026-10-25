@@ -33,4 +33,6 @@
 
 实现已本地提交38b8bf57。Creator3.8.8离线构建20752ms、正常退出36；15份JS和5段内联脚本语法检查、全部SHA／资源路径／WASM头／图片透明通道检查通过，类型基线9项旧诊断、无新增。507份原有native逐字节不变，两份中文字体更新版本路径，新增3张图集共698750字节；最终1587文件、200013162字节（200.01MB），比v119增加753410字节。版本a2fef3edab10f472。
 
-完整结果见 `build-record.json`、`export-report.json`、`package-static-verification.json`。GitHub Pages部署回执在交付时补充于本目录；这次采用默认保留上一版必要文件，便于已打开页面继续读取上一版资源。每次改动只在源码仓库本地提交；运行包发布独立GitHub Pages仓库，不推送源码、不部署Cloudflare。
+完整结果见 `build-record.json`、`export-report.json`、`package-static-verification.json`。已发布到 https://enjoylura.github.io/kingdom-watch-play/?v=wind-ninja-v120 ，独立运行仓库提交a3e7117570ec874dc4275f550dcd49ec8b98a604，GitHub Pages构建与标准线上HTTP验证通过。额外核对主脚本、两份字库和三张新图集共6份线上文件，均HTTP200且SHA匹配，见 `additional-http-verification.json`；完整发布回执为 `deployment.json`。
+
+这次采用默认保留上一版必要文件，便于已打开页面继续读取上一版资源。发布期间源码HEAD与索引保持；每次游戏改动只在源码仓库本地提交，运行包发布独立GitHub Pages仓库，不推送源码、不部署Cloudflare。
