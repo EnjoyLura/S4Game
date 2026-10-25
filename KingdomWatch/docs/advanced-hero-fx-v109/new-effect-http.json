@@ -1,0 +1,11 @@
+{
+  "url": "https://enjoylura.github.io/kingdom-watch-play/assets/resources/import/e0/e00b3255-79ee-4875-932b-058c0d37b905.4cb8a.json?verify=advanced-hero-fx-v109",
+  "resourcePath": "fx/hero-impact-flow",
+  "status": 200,
+  "contentType": "application/json; charset=utf-8",
+  "bytes": 21145,
+  "expectedSha256": "ce49b5b9f5e8892663daa3bd2117be0018808d5c882aa1f5a6604f0dab941559",
+  "actualSha256": "ce49b5b9f5e8892663daa3bd2117be0018808d5c882aa1f5a6604f0dab941559",
+  "match": true,
+  "gameOrBrowserStarted": false
+}

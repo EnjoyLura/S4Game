@@ -39,3 +39,9 @@ audit_types.cjs以f7caf0a2比较编译诊断；audit_package.py静态检查完�
 游戏实现提交abe0f6da，碎片落定修正f4ea9cd0；后续记录提交只记录验证与发布。独立GPU预览通过138帧，真实Cocos画面及手机帧率仍待用户试玩。
 
 本地轻量预览：[爆炸](bomb-review.mp4)、[吸取](siphon-review.mp4)。由离屏GIF转换为H.264，合计约403KB，不进入游戏运行包。
+
+## 发布完成
+
+- [试玩v109](https://enjoylura.github.io/kingdom-watch-play/?v=advanced-hero-fx-v109)。
+- 运行提交c7108d176c51166dbabfb05684e5c5f30afe3836，Pages/build均built，19项标准HTTP校验通过。新增Effect导入文件另独立HTTP 200/SHA核对一致，见new-effect-http.json。
+- 发布过程source HEAD/索引保持；源码未推送，CF未部署。文档收据提交不改变已发布游戏。
