@@ -4,7 +4,7 @@ import type { Monster, MonsterManager } from '../battle/Monster';
 import { LO } from '../config/GameConfig';
 import type { MobDef } from '../config/Mobs';
 import { drawEnemyBadge } from '../battle/EnemyBadge';
-import { Bar, C, CA, gbar, gpanel, label, N, setText } from './UIKit';
+import { C, CA, gpanel, label, N, setText } from './UIKit';
 
 const WIDTH = 110, HEIGHT = 300, CONTENT = WIDTH - 24;
 const TAP_PADDING = 26, DRAG_SLOP = 34;
@@ -29,7 +29,6 @@ export class EnemyTooltip {
   private portrait: Sprite;
   private attack: Node;
   private health: Node;
-  private healthBar: Bar;
   private physical: Node;
   private magic: Node;
   private states: Node;
@@ -89,7 +88,6 @@ export class EnemyTooltip {
     drawEnemyBadge(icons, 'armor', -32, -43, .65);
     drawEnemyBadge(icons, 'ward', -32, -76, .65);
     this.health = label(this.root, 12, 34, '', { size: 14, color: text, w: 68, h: 24, shrink: true });
-    this.healthBar = gbar(this.root, 0, 17, CONTENT-4, 5, '#65B441');
     this.attack = label(this.root, 12, -10, '', { size: 16, color: text, w: 68, h: 24, shrink: true });
     this.physical = label(this.root, 12, -43, '', { size: 16, color: '#C9E0E9', w: 68, h: 24, shrink: true });
     this.magic = label(this.root, 12, -76, '', { size: 16, color: '#DABAF7', w: 68, h: 24, shrink: true });
@@ -159,7 +157,6 @@ export class EnemyTooltip {
     else s.hp = 0; // Retain the brief introduction after death so a quick kill remains readable.
     const info = s.info;
     setText(this.health, Math.max(0, Math.ceil(s.hp)) + '/' + Math.round(s.maxHp));
-    this.healthBar.set(s.hp / Math.max(1, s.maxHp));
     setText(this.physical, info.armorBroken ? '破甲' : Math.round(info.physical * 100) + '%');
     setText(this.magic, info.wardBroken ? '破盾' : Math.round(info.magic * 100) + '%');
     const priority = ['冰封', '眩晕', '治疗读条', '冲锋蓄势', '冲锋中', '攻击蓄力', '灼烧', '感电', '减速', '减疗', '易伤', '猎杀标记', '防御姿态', '狂暴'];

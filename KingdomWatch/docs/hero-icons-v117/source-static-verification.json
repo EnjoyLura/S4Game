@@ -1,0 +1,11 @@
+{
+  "icons": 37,
+  "atlases": 3,
+  "alphaChecked": true,
+  "virtualAliasesUniqueAndInBounds": true,
+  "fullHeroFiguresUnchanged": true,
+  "hudCircleClips": 3,
+  "tooltipHpBarRemoved": true,
+  "ordinaryHitPathUsed": true,
+  "gameBrowserCombatAudioOrWasmStarted": false
+}

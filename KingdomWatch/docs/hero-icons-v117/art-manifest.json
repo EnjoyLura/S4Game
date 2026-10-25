@@ -1,0 +1,813 @@
+{
+  "mode": "built-in image_gen",
+  "specification": "Circular filled paintings, transparent outside, no decorative outer rims. Four-grid sheet generation authorized by user.",
+  "normalization": "Sharp equal-quadrant extraction, uniform Lanczos downsampling to 504px, transparent packing only. Generated alpha preserved.",
+  "atlases": [
+    {
+      "path": "assets/resources/ux/new_hero_icons_v117/icon_core.png",
+      "uuid": "0a2d1d46-6800-4135-8b9b-4bd65dba7026",
+      "width": 2048,
+      "height": 1024,
+      "cells": 8,
+      "bytes": 4683631,
+      "sha256": "6c9c144ccdff1cdc782a0e21fdf72d684e8b07f64733bb09ab6ac2e23b1bb638"
+    },
+    {
+      "path": "assets/resources/ux/new_hero_icons_v117/cannon_cards.png",
+      "uuid": "249d493c-0a11-453f-a45a-40a62bf683db",
+      "width": 2048,
+      "height": 2048,
+      "cells": 16,
+      "bytes": 8885795,
+      "sha256": "9e7bb16f08f35f5c580ff2ef2d34a5d5b6764bb86e65784912cda08bcbda5433"
+    },
+    {
+      "path": "assets/resources/ux/new_hero_icons_v117/siphon_cards.png",
+      "uuid": "2f7ab2d3-fbf1-460e-b2fd-9fa2bcc70b7e",
+      "width": 2048,
+      "height": 2048,
+      "cells": 13,
+      "bytes": 7348698,
+      "sha256": "2f73b739f94531ec460d99ed98fbdea6bafbb296d7ea9c35b0dd4404ab5a6e1b"
+    }
+  ],
+  "icons": [
+    {
+      "key": "avatar_cannon",
+      "source": "new_hero_icons_v117/icon_core",
+      "rect": [
+        4,
+        4,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_01",
+      "sourceQuadrant": 0,
+      "sourceCrop": {
+        "left": 0,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "65aa1391393085ab3e7230ef9f2d069741adef6f07eb3e19c4d5d889c8fb1b0e",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "avatar_siphon",
+      "source": "new_hero_icons_v117/icon_core",
+      "rect": [
+        516,
+        4,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_01",
+      "sourceQuadrant": 1,
+      "sourceCrop": {
+        "left": 627,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "65aa1391393085ab3e7230ef9f2d069741adef6f07eb3e19c4d5d889c8fb1b0e",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_icon_atk_cannon",
+      "source": "new_hero_icons_v117/icon_core",
+      "rect": [
+        1028,
+        4,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_01",
+      "sourceQuadrant": 2,
+      "sourceCrop": {
+        "left": 0,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "65aa1391393085ab3e7230ef9f2d069741adef6f07eb3e19c4d5d889c8fb1b0e",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_icon_skill_cannon",
+      "source": "new_hero_icons_v117/icon_core",
+      "rect": [
+        1540,
+        4,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_01",
+      "sourceQuadrant": 3,
+      "sourceCrop": {
+        "left": 627,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "65aa1391393085ab3e7230ef9f2d069741adef6f07eb3e19c4d5d889c8fb1b0e",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_icon_ult_cannon",
+      "source": "new_hero_icons_v117/icon_core",
+      "rect": [
+        4,
+        516,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_02",
+      "sourceQuadrant": 0,
+      "sourceCrop": {
+        "left": 0,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "9f7ed350b4c73a6c81c421f8144c1e16b5662157792e1bf31b4a29bedf6d8b95",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_icon_atk_siphon",
+      "source": "new_hero_icons_v117/icon_core",
+      "rect": [
+        516,
+        516,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_02",
+      "sourceQuadrant": 1,
+      "sourceCrop": {
+        "left": 627,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "9f7ed350b4c73a6c81c421f8144c1e16b5662157792e1bf31b4a29bedf6d8b95",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_icon_skill_siphon",
+      "source": "new_hero_icons_v117/icon_core",
+      "rect": [
+        1028,
+        516,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_02",
+      "sourceQuadrant": 2,
+      "sourceCrop": {
+        "left": 0,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "9f7ed350b4c73a6c81c421f8144c1e16b5662157792e1bf31b4a29bedf6d8b95",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_icon_ult_siphon",
+      "source": "new_hero_icons_v117/icon_core",
+      "rect": [
+        1540,
+        516,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_02",
+      "sourceQuadrant": 3,
+      "sourceCrop": {
+        "left": 627,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "9f7ed350b4c73a6c81c421f8144c1e16b5662157792e1bf31b4a29bedf6d8b95",
+      "opaqueInterior": 0.9999530148786218,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_echo",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        4,
+        4,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_03",
+      "sourceQuadrant": 0,
+      "sourceCrop": {
+        "left": 0,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "71f131ebc092a9ffe4351cfbf2c511289d3b90a1c02fc41398694c53da065997",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_loader",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        516,
+        4,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_03",
+      "sourceQuadrant": 1,
+      "sourceCrop": {
+        "left": 627,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "71f131ebc092a9ffe4351cfbf2c511289d3b90a1c02fc41398694c53da065997",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_knockback",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        1028,
+        4,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_03",
+      "sourceQuadrant": 2,
+      "sourceCrop": {
+        "left": 0,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "71f131ebc092a9ffe4351cfbf2c511289d3b90a1c02fc41398694c53da065997",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_barrage",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        1540,
+        4,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_03",
+      "sourceQuadrant": 3,
+      "sourceCrop": {
+        "left": 627,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "71f131ebc092a9ffe4351cfbf2c511289d3b90a1c02fc41398694c53da065997",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_fragments",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        4,
+        516,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_04",
+      "sourceQuadrant": 0,
+      "sourceCrop": {
+        "left": 0,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "54fbbf4688c54a983762e6744db60ce61228b61dbc05c37a28c1c84e699f3927",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_pierce",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        516,
+        516,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_04",
+      "sourceQuadrant": 1,
+      "sourceCrop": {
+        "left": 627,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "54fbbf4688c54a983762e6744db60ce61228b61dbc05c37a28c1c84e699f3927",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_center",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        1028,
+        516,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_04",
+      "sourceQuadrant": 2,
+      "sourceCrop": {
+        "left": 0,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "54fbbf4688c54a983762e6744db60ce61228b61dbc05c37a28c1c84e699f3927",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_heavy",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        1540,
+        516,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_04",
+      "sourceQuadrant": 3,
+      "sourceCrop": {
+        "left": 627,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "54fbbf4688c54a983762e6744db60ce61228b61dbc05c37a28c1c84e699f3927",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_cluster",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        4,
+        1028,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_05",
+      "sourceQuadrant": 0,
+      "sourceCrop": {
+        "left": 0,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "602ba0a6a3e076b3a7fa453919b2fed08e7e427701d592ac6a132fcc02acbc1f",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_wave",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        516,
+        1028,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_05",
+      "sourceQuadrant": 1,
+      "sourceCrop": {
+        "left": 627,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "602ba0a6a3e076b3a7fa453919b2fed08e7e427701d592ac6a132fcc02acbc1f",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_interrupt",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        1028,
+        1028,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_05",
+      "sourceQuadrant": 2,
+      "sourceCrop": {
+        "left": 0,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "602ba0a6a3e076b3a7fa453919b2fed08e7e427701d592ac6a132fcc02acbc1f",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_charges",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        1540,
+        1028,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_05",
+      "sourceQuadrant": 3,
+      "sourceCrop": {
+        "left": 627,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "602ba0a6a3e076b3a7fa453919b2fed08e7e427701d592ac6a132fcc02acbc1f",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_refund",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        4,
+        1540,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_06",
+      "sourceQuadrant": 0,
+      "sourceCrop": {
+        "left": 0,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "31731fcbfd0f44ce5c3b97370ea304bd57614c9f00112b59e61dc1f1d8fc981f",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_ult_center",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        516,
+        1540,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_06",
+      "sourceQuadrant": 1,
+      "sourceCrop": {
+        "left": 627,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "31731fcbfd0f44ce5c3b97370ea304bd57614c9f00112b59e61dc1f1d8fc981f",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_ult_radius",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        1028,
+        1540,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_06",
+      "sourceQuadrant": 2,
+      "sourceCrop": {
+        "left": 0,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "31731fcbfd0f44ce5c3b97370ea304bd57614c9f00112b59e61dc1f1d8fc981f",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_cannon_ult_stun",
+      "source": "new_hero_icons_v117/cannon_cards",
+      "rect": [
+        1540,
+        1540,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_06",
+      "sourceQuadrant": 3,
+      "sourceCrop": {
+        "left": 627,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "31731fcbfd0f44ce5c3b97370ea304bd57614c9f00112b59e61dc1f1d8fc981f",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_siphon_twin",
+      "source": "new_hero_icons_v117/siphon_cards",
+      "rect": [
+        4,
+        4,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_07",
+      "sourceQuadrant": 0,
+      "sourceCrop": {
+        "left": 0,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "a7db883f482d84675a75afdd18add78a8caecea3e91469fcd8c6091e6c045fcf",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_siphon_inherit",
+      "source": "new_hero_icons_v117/siphon_cards",
+      "rect": [
+        516,
+        4,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_07",
+      "sourceQuadrant": 1,
+      "sourceCrop": {
+        "left": 627,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "a7db883f482d84675a75afdd18add78a8caecea3e91469fcd8c6091e6c045fcf",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_siphon_shred",
+      "source": "new_hero_icons_v117/siphon_cards",
+      "rect": [
+        1028,
+        4,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_07",
+      "sourceQuadrant": 2,
+      "sourceCrop": {
+        "left": 0,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "a7db883f482d84675a75afdd18add78a8caecea3e91469fcd8c6091e6c045fcf",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_siphon_extend",
+      "source": "new_hero_icons_v117/siphon_cards",
+      "rect": [
+        1540,
+        4,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_07",
+      "sourceQuadrant": 3,
+      "sourceCrop": {
+        "left": 627,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "a7db883f482d84675a75afdd18add78a8caecea3e91469fcd8c6091e6c045fcf",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_siphon_relay",
+      "source": "new_hero_icons_v117/siphon_cards",
+      "rect": [
+        4,
+        516,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_08",
+      "sourceQuadrant": 0,
+      "sourceCrop": {
+        "left": 0,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "1ad1ab75f819ea1b8ed41827f8dc258cf5706db61349cab59fc3943f61cd578c",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_siphon_slow",
+      "source": "new_hero_icons_v117/siphon_cards",
+      "rect": [
+        516,
+        516,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_08",
+      "sourceQuadrant": 1,
+      "sourceCrop": {
+        "left": 627,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "1ad1ab75f819ea1b8ed41827f8dc258cf5706db61349cab59fc3943f61cd578c",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_siphon_healcut",
+      "source": "new_hero_icons_v117/siphon_cards",
+      "rect": [
+        1028,
+        516,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_08",
+      "sourceQuadrant": 2,
+      "sourceCrop": {
+        "left": 0,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "1ad1ab75f819ea1b8ed41827f8dc258cf5706db61349cab59fc3943f61cd578c",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_siphon_relay_time",
+      "source": "new_hero_icons_v117/siphon_cards",
+      "rect": [
+        1540,
+        516,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_08",
+      "sourceQuadrant": 3,
+      "sourceCrop": {
+        "left": 627,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "1ad1ab75f819ea1b8ed41827f8dc258cf5706db61349cab59fc3943f61cd578c",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_siphon_fork",
+      "source": "new_hero_icons_v117/siphon_cards",
+      "rect": [
+        4,
+        1028,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_09",
+      "sourceQuadrant": 0,
+      "sourceCrop": {
+        "left": 0,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "66c7d7725a3c8901e7420207adc42d1f09a1109238d27ecd323f10e068e150a3",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_siphon_ult_duration",
+      "source": "new_hero_icons_v117/siphon_cards",
+      "rect": [
+        516,
+        1028,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_09",
+      "sourceQuadrant": 1,
+      "sourceCrop": {
+        "left": 627,
+        "top": 0,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "66c7d7725a3c8901e7420207adc42d1f09a1109238d27ecd323f10e068e150a3",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_siphon_ult_ticks",
+      "source": "new_hero_icons_v117/siphon_cards",
+      "rect": [
+        1028,
+        1028,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_09",
+      "sourceQuadrant": 2,
+      "sourceCrop": {
+        "left": 0,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "66c7d7725a3c8901e7420207adc42d1f09a1109238d27ecd323f10e068e150a3",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_siphon_heavy_grip",
+      "source": "new_hero_icons_v117/siphon_cards",
+      "rect": [
+        1540,
+        1028,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_09",
+      "sourceQuadrant": 3,
+      "sourceCrop": {
+        "left": 627,
+        "top": 627,
+        "width": 627,
+        "height": 627
+      },
+      "sourceSha256": "66c7d7725a3c8901e7420207adc42d1f09a1109238d27ecd323f10e068e150a3",
+      "opaqueInterior": 1,
+      "transparentCorners": 1
+    },
+    {
+      "key": "ui_card_siphon_skill_targets",
+      "source": "new_hero_icons_v117/siphon_cards",
+      "rect": [
+        4,
+        1540,
+        504,
+        504
+      ],
+      "sourceSheet": "circle_sheet_10",
+      "sourceQuadrant": 0,
+      "sourceCrop": {
+        "left": 0,
+        "top": 0,
+        "width": 1254,
+        "height": 1254
+      },
+      "sourceSha256": "673c172192ec40275b4627898203b03312bbaf372d22eefb0f6eb50ffb957847",
+      "opaqueInterior": 0.999584964761159,
+      "transparentCorners": 1
+    }
+  ]
+}

@@ -3,7 +3,7 @@ export const NEW_HERO_IDS = ['cannon', 'siphon'] as const;
 export const CANNON = { attack: 150, skill: 150, aspd: .45, range: 1100, skillRange: 1000,
   cooldown: 11, energy: 75, blast: 90, skillBlast: 150, shred: .15, shredSeconds: 4 };
 /** Selected P7/P8/P9/P10/P11/P12/P13/P14/P18 and three missile cards. */
-export const CANNON_CARDS_CFG = { fragments: 3, fragmentMul: .3, passingMul: .3, centerRatio: .35,
+export const CANNON_CARDS_CFG = { fragments: 3, fragmentMul: .3, passingMul: .3, passingSeconds: .65, centerRatio: .35,
   centerBonus: .3, heavyEvery: 3, slow: .4, slowSeconds: 2,
   clusterCount: 3, clusterMul: .35, clusterRadius: 50, clusterSpread: 72,
   waveMul: .5, waveDistance: 260, waveSeconds: .55,

@@ -45,7 +45,7 @@ function cluster(mgr: MonsterManager, x: number, range: number, radius: number):
 interface Shell {
   delay: number; x: number; y: number; damage: number; radius: number;
   skill: boolean; ult: boolean; echo: boolean; extra: boolean; detonate?: boolean;
-  launchX?: number; launchY?: number; mini?: boolean; heavy?: boolean;
+  launchX?: number; launchY?: number; mini?: boolean; heavy?: boolean; flightX?: number; flightY?: number;
 }
 
 export class CannonHero extends HeroBase {
@@ -57,7 +57,7 @@ export class CannonHero extends HeroBase {
   private flyingUlt = 0;
   private heavyCycle = 0;
   private augments: CannonAugments | null = null;
-  private fragments: ProjSpec[] = [];
+  private secondaryProjectiles: ProjSpec[] = [];
 
   protected buildVisual(parent: Node): void { this.staticArt = visual(parent, this.node, this.x, 'cannon'); }
   protected shoot(target: Monster): void {
@@ -104,7 +104,7 @@ export class CannonHero extends HeroBase {
   protected updateQueues(dt: number, mgr: MonsterManager, projs: ProjectileManager): void {
     this.blastFX?.tick(dt);
     this.augments?.tick(dt,mgr);
-    while(this.fragments.length && projs.hasCapacity){if(!projs.fire(this.fragments[0]))break;this.fragments.shift();}
+    while(this.secondaryProjectiles.length && projs.hasCapacity){if(!projs.fire(this.secondaryProjectiles[0]))break;this.secondaryProjectiles.shift();}
     for (let i = this.shells.length - 1; i >= 0; i--) {
       const shot = this.shells[i]; shot.delay -= dt;
       if (shot.delay > 0) continue;
@@ -112,13 +112,13 @@ export class CannonHero extends HeroBase {
       if (!projs.hasCapacity) continue;
       const sx = shot.launchX ?? (shot.ult ? shot.x : this.x), sy = shot.launchY ?? (shot.ult ? LO.half + 40 : HERO_Y + 60);
       const dx = shot.x - sx, dy = shot.y - sy, len = Math.hypot(dx, dy) || 1;
+      shot.flightX=dx/len;shot.flightY=Math.abs(dx)+Math.abs(dy)>1e-6?dy/len:1;
       let landing = 0,landedHits=0;
       const critical = Math.random() < this.stats.critRate;
       const spec: ProjSpec = { x: sx, y: sy, dirX: dx / len, dirY: dy / len, speed: shot.ult ? 1350 : 760,
         dmg: shot.damage * (critical ? this.stats.critMul : 1), crit: critical, color: '#D5A641', heroId: this.id,
         size: shot.mini ? 7 : shot.skill || shot.ult ? 13 : 10, explodeR: shot.radius, explodeMul: .7,
         ability: shot.skill, ult: shot.ult, groundTarget: { x: shot.x, y: shot.y }, resCut: this.stats.defIgnore,
-        groundPierce: !shot.skill && !shot.ult && !shot.mini ? this.stats.cannonPierce : 0, groundPierceMul: CC.passingMul,
         onGroundDamage: () => {if(this.node.isValid)landedHits=this.resolveBlast(shot,spec.dmg,critical,mgr);},
         onGroundImpact: () => {
           if (!this.node.isValid) return;
@@ -178,9 +178,15 @@ export class CannonHero extends HeroBase {
       if(charge>0)this.shells.push({delay:0,x:m.x,y:m.y,damage:charge,radius:CC.chargeRadius,
         skill:true,ult:false,echo:true,extra:true,mini:true,detonate:true});
     }
+    if(normal&&this.stats.cannonPierce){
+      const dx=shot.flightX || 0,dy=shot.flightY ?? 1;
+      this.secondaryProjectiles.push({x:shot.x,y:shot.y,dirX:dx,dirY:dy,speed:760,
+        dmg:damage*CC.passingMul,crit:critical,color:'#E6BD65',heroId:this.id,size:8,ttl:CC.passingSeconds,
+        pierce:this.stats.cannonPierce-1,excludeLifeId:primary?.lifeId,spark:true,resCut:this.stats.defIgnore});
+    }
     if(normal&&this.stats.cannonFragments)for(let k=0;k<CC.fragments;k++){
       const a=Math.PI/2+k*Math.PI*2/CC.fragments;
-      this.fragments.push({x:shot.x,y:shot.y,dirX:Math.cos(a),dirY:Math.sin(a),speed:650,
+      this.secondaryProjectiles.push({x:shot.x,y:shot.y,dirX:Math.cos(a),dirY:Math.sin(a),speed:650,
         dmg:damage*CC.fragmentMul,crit:critical,color:'#D9C38D',heroId:this.id,size:4,ttl:.55,small:true,resCut:this.stats.defIgnore});
     }
     if(primary)bus.emit(EVT.HIT_STOP);

@@ -611,7 +611,7 @@ export const CANNON_CARDS: CardDef[] = [
   c({ id: 'cannon_fragments', owner: 'cannon', name: '破片炮弹', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',
     art: 'ui_card_cannon_fragments', desc: '普攻爆炸飞出3枚破片\n每枚伤害30%', apply: x => { x.hero.cannonFragments = true; } }),
   c({ id: 'cannon_pierce', owner: 'cannon', name: '贯穿炮弹', rarity: 'blue', maxStacks: 2, offerGroup: 'combat',
-    art: 'ui_card_cannon_pierce', desc: '普攻穿透 +1\n沿途伤害30%', apply: x => { x.hero.cannonPierce = (x.hero.cannonPierce || 0) + 1; } }),
+    art: 'ui_card_cannon_pierce', desc: '普攻额外穿透 +1\n穿透伤害30%', apply: x => { x.hero.cannonPierce = (x.hero.cannonPierce || 0) + 1; } }),
   c({ id: 'cannon_center', owner: 'cannon', name: '中心爆破', rarity: 'blue', maxStacks: 1, offerGroup: 'combat',
     art: 'ui_card_cannon_center', desc: '普攻爆心伤害 +30%', apply: x => { x.hero.cannonCenter = CC.centerBonus; } }),
   c({ id: 'cannon_heavy', owner: 'cannon', name: '重压炮弹', rarity: 'purple', maxStacks: 1, offerGroup: 'combat',

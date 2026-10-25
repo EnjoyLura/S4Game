@@ -4,7 +4,7 @@ import { enemyArtRef } from '../config/ChapterContent';
  * + 左列(倍速/统计/FPS) + 右侧大招纵列(每英雄一钮) + 防线耐久/蓝色外层护盾 + 头顶普攻技能图标(CD环)
  * 点击普攻/技能/未充满大招图标 → 属性Tips（§3.11）
  */
-import { Graphics, Label, Layers, Node, Tween, tween, UIOpacity, UITransform, Vec3 } from 'cc';
+import { Graphics, Label, Layers, Mask, Node, Tween, tween, UIOpacity, UITransform, Vec3 } from 'cc';
 import { expNeed, LO, PAL } from '../config/GameConfig';
 import { battleSceneKey } from '../config/Campaign';
 import { gcircle, gpanel, label, noticeBtn, setText, WY, WYB, WX, Bar, CA, N } from './UIKit';
@@ -71,6 +71,12 @@ export class HUD {
   private shieldVal!: Node;
   private ults: UltUI[] = [];
   ultimateTarget(index: number): Node | null { return this.ults[index]?.btn || null; }
+  /** Artwork is clipped independently of the button/charge rings; opaque source corners cannot escape. */
+  private iconViewport(parent: Node, x: number, y: number, diameter: number): Node {
+    const clip=N('heroIconViewport',parent,x,y,diameter,diameter);
+    const mask=clip.addComponent(Mask);mask.type=Mask.Type.GRAPHICS_ELLIPSE;mask.segments=96;
+    return clip;
+  }
   activateUltimate(index: number): void {
     const result = this.dir.tryCastUlt(index);
     if (result === 'locked' || result === 'blocked') return;
@@ -230,10 +236,11 @@ export class HUD {
     const gray = gcircle(top, ux, uy, 45, CA('#3A4250', 0.9));
     gray.active = false;   // 用户调整：图标占满钮面后不再整体置灰，灰罩只走未充能扇形
     // Fetch the actual face once; a portrait is needed only when that resource fails.
-    const face = artSprite(top, ux, uy, 92, 92, 'ui_icon_ult_' + hero.id, { sliced: false,
+    const faceClip=this.iconViewport(top,ux,uy,90);
+    const face = artSprite(faceClip, 0, 0, 92, 92, 'ui_icon_ult_' + hero.id, { sliced: false,
       onFailed: () => {
         if (!top.isValid || !face.isValid) return;
-        const fallback = artSprite(top, ux, uy, 92, 92, 'ui_avatar_' + hero.id, { sliced: false });
+        const fallback = artSprite(faceClip, 0, 0, 92, 92, 'ui_avatar_' + hero.id, { sliced: false });
         fallback.setSiblingIndex(face.getSiblingIndex());
       },
     });
@@ -288,7 +295,7 @@ export class HUD {
     atkIcon.name = 'heroAtk:' + hero.id;
     const atkGlyph = label(atkIcon, 0, 0, '攻', { size: 18, color: PAL.gold, bold: true });
     // 普攻/技能图标（58 > 底板圆 56：美术圆完全盖住底板，杜绝露出黄/蓝边——用户反馈）
-    artSprite(atkIcon, 0, 0, 58, 58, 'ui_icon_atk_' + hero.id, { sliced: false, hideOnLoad: [atkGlyph] });
+    artSprite(this.iconViewport(atkIcon,0,0,56), 0, 0, 58, 58, 'ui_icon_atk_' + hero.id, { sliced: false, hideOnLoad: [atkGlyph] });
     bindButton(atkIcon, () => this.dir.showTips('atk', i), { circle: true, enabled: () => this.dir.canUseBattleHud });
     const root = new Node('heroSkill:' + hero.id);
     root.setParent(top); root.active = hero.skillUnlocked;
@@ -297,7 +304,7 @@ export class HUD {
     icon.name = 'heroSkillIcon:' + hero.id;
     const glyph = label(icon, 0, 0, '技', { size: 18, color: PAL.blue, bold: true });
     // 技能图标（同上）
-    artSprite(icon, 0, 0, 58, 58, 'ui_icon_skill_' + hero.id, { sliced: false, hideOnLoad: [glyph] });
+    artSprite(this.iconViewport(icon,0,0,56), 0, 0, 58, 58, 'ui_icon_skill_' + hero.id, { sliced: false, hideOnLoad: [glyph] });
     bindButton(icon, () => this.dir.showTips('skill', i), { circle: true, enabled: () => this.dir.canUseBattleHud });
     const gray = gcircle(top, cx, cy, 28, CA('#3A4250', 0.55));   // 冷却遮罩（用户调整：半透明，隐约透出技能图标）
     gray.active = false;

@@ -1,0 +1,283 @@
+{
+  "mode": "built-in image_gen",
+  "approvedSpecification": "circular filled icons, transparent outside, no decorative border; user-authorized four-grid generation",
+  "jobs": [
+    {
+      "id": "circle_sheet_01",
+      "cells": [
+        {
+          "key": "avatar_cannon",
+          "hero": "cannon",
+          "subject": "Head-and-shoulders portrait of the EXACT dwarf cannon engineer in the identity reference: swept orange hair, long orange beard, brass goggles on forehead, rugged confident face, brass and gunmetal armor. Preserve facial identity."
+        },
+        {
+          "key": "avatar_siphon",
+          "hero": "siphon",
+          "subject": "A head-and-shoulders portrait of the EXACT adult female life-drain mage in the character reference. Keep her dark wine-purple long hair with the prominent white forelock, pale face, violet-red eyes, ruby forehead tiara, silver-trimmed burgundy high collar. Calm determined expression. No weapon crossing the face. Full face and hair inside the central safe area."
+        },
+        {
+          "key": "ui_icon_atk_cannon",
+          "hero": "cannon",
+          "subject": "A single heavy brass-and-gunmetal cannon shell streaking diagonally forward, bright amber muzzle streak behind it, compact blast in front. The emphasis is a readable solid metal projectile, not the hero."
+        },
+        {
+          "key": "ui_icon_skill_cannon",
+          "hero": "cannon",
+          "subject": "One oversized heavy brass siege shell slamming a stone wall, steel armor plates breaking, chunky amber pressure blast and grounded stone fragments. The emphasis is an armor-breaking heavy shot."
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Create production mobile fantasy tower-defense icons. Match the supplied circular arrow icon's bold hand-painted comic style, chunky shapes, sharp readable silhouettes, saturated directional light. CRITICAL SHAPE: each illustration is a PERFECT CIRCULAR FILLED PAINTING, fully painted and opaque ALL THE WAY to the circular cut edge; ONLY OUTSIDE each disk is genuinely transparent alpha. NOT a square painting, NOT a cutout object with empty holes. NO decorative rim, frame, metal border, outline ring, circle stroke, ornamental halo or badge surround. The circular boundary is simply the cut edge of the painting, exactly like the style reference. Action shockwaves may appear inside the scene but never make an outer framing ring. No text, letters, numbers, watermarks, dividers, labels or UI. All artwork stays INSIDE its circle. Cannon art uses amber, brass, dark gunmetal and brown smoke; siphon art uses deep saturated violet, amethyst, burgundy and dark silver. Effect icons contain only their requested object/effect, never a hero portrait, person or face.\nSquare canvas, 2 by 2 grid of FOUR separate circular paintings. Four equal square quadrants. A circle centered in each quadrant, diameter 96% of that quadrant width, same scale and placement for all four. Transparent outside all four circles and in gutters. No visible square cell background. Read quadrants top-left, top-right, bottom-left, bottom-right.\nReference image 1 is STYLE AND CIRCULAR SHAPE ONLY, do not copy arrows. Extra character references only establish identities for the two portrait quadrants; do not copy the full body into effect quadrants. Portraits use fully painted colored circular backdrops, no separate rings.\nTOP LEFT: Head-and-shoulders portrait of the EXACT dwarf cannon engineer in the identity reference: swept orange hair, long orange beard, brass goggles on forehead, rugged confident face, brass and gunmetal armor. Preserve facial identity.\nTOP RIGHT: A head-and-shoulders portrait of the EXACT adult female life-drain mage in the character reference. Keep her dark wine-purple long hair with the prominent white forelock, pale face, violet-red eyes, ruby forehead tiara, silver-trimmed burgundy high collar. Calm determined expression. No weapon crossing the face. Full face and hair inside the central safe area.\nBOTTOM LEFT: A single heavy brass-and-gunmetal cannon shell streaking diagonally forward, bright amber muzzle streak behind it, compact blast in front. The emphasis is a readable solid metal projectile, not the hero.\nBOTTOM RIGHT: One oversized heavy brass siege shell slamming a stone wall, steel armor plates breaking, chunky amber pressure blast and grounded stone fragments. The emphasis is an armor-breaking heavy shot.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/ui_card_explode.png",
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/new_heroes_v105/cannon_lobby.png",
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/new_heroes_v105/siphon_lobby.png"
+      ]
+    },
+    {
+      "id": "circle_sheet_02",
+      "cells": [
+        {
+          "key": "ui_icon_ult_cannon",
+          "hero": "cannon",
+          "subject": "Three brass and gunmetal fantasy artillery missiles with distinct pointed noses and fins dive diagonally downward with bright amber fire trails toward a broad ground explosion. No guns, no character faces."
+        },
+        {
+          "key": "ui_icon_atk_siphon",
+          "hero": "siphon",
+          "subject": "One thick twisting deep-violet life-drain tether pulls a luminous amethyst soul orb toward a small ruby staff crystal at lower left. Clear inward-moving violet flow, wine-red accents and silver details, no healer green."
+        },
+        {
+          "key": "ui_icon_skill_siphon",
+          "hero": "siphon",
+          "subject": "Three separate deep-violet life-drain tethers from three violet soul orbs converge into a small ruby staff crystal at lower center. The multi-target fan silhouette must read instantly, no character portrait."
+        },
+        {
+          "key": "ui_icon_ult_siphon",
+          "hero": "siphon",
+          "subject": "A powerful thick deep-violet laser erupts outward from a ruby staff crystal at lower left toward upper right, lavender narrow core with three clear forward pressure streaks and coiling purple strands. Outgoing force, not inward life drain. Keep saturated purple, not pink-white."
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Create production mobile fantasy tower-defense icons. Match the supplied circular arrow icon's bold hand-painted comic style, chunky shapes, sharp readable silhouettes, saturated directional light. CRITICAL SHAPE: each illustration is a PERFECT CIRCULAR FILLED PAINTING, fully painted and opaque ALL THE WAY to the circular cut edge; ONLY OUTSIDE each disk is genuinely transparent alpha. NOT a square painting, NOT a cutout object with empty holes. NO decorative rim, frame, metal border, outline ring, circle stroke, ornamental halo or badge surround. The circular boundary is simply the cut edge of the painting, exactly like the style reference. Action shockwaves may appear inside the scene but never make an outer framing ring. No text, letters, numbers, watermarks, dividers, labels or UI. All artwork stays INSIDE its circle. Cannon art uses amber, brass, dark gunmetal and brown smoke; siphon art uses deep saturated violet, amethyst, burgundy and dark silver. Effect icons contain only their requested object/effect, never a hero portrait, person or face.\nSquare canvas, 2 by 2 grid of FOUR separate circular paintings. Four equal square quadrants. A circle centered in each quadrant, diameter 96% of that quadrant width, same scale and placement for all four. Transparent outside all four circles and in gutters. No visible square cell background. Read quadrants top-left, top-right, bottom-left, bottom-right.\nReference image 1 is STYLE AND CIRCULAR SHAPE ONLY, do not copy arrows. Extra character references only establish identities for the two portrait quadrants; do not copy the full body into effect quadrants. Portraits use fully painted colored circular backdrops, no separate rings.\nTOP LEFT: Three brass and gunmetal fantasy artillery missiles with distinct pointed noses and fins dive diagonally downward with bright amber fire trails toward a broad ground explosion. No guns, no character faces.\nTOP RIGHT: One thick twisting deep-violet life-drain tether pulls a luminous amethyst soul orb toward a small ruby staff crystal at lower left. Clear inward-moving violet flow, wine-red accents and silver details, no healer green.\nBOTTOM LEFT: Three separate deep-violet life-drain tethers from three violet soul orbs converge into a small ruby staff crystal at lower center. The multi-target fan silhouette must read instantly, no character portrait.\nBOTTOM RIGHT: A powerful thick deep-violet laser erupts outward from a ruby staff crystal at lower left toward upper right, lavender narrow core with three clear forward pressure streaks and coiling purple strands. Outgoing force, not inward life drain. Keep saturated purple, not pink-white.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/ui_card_explode.png"
+      ]
+    },
+    {
+      "id": "circle_sheet_03",
+      "cells": [
+        {
+          "key": "ui_card_cannon_echo",
+          "hero": "cannon",
+          "subject": "A large brass-shell explosion followed behind it by a smaller second amber aftershock ring, two clearly separated overlapping bursts over cracked earth. Echo detonation."
+        },
+        {
+          "key": "ui_card_cannon_loader",
+          "hero": "cannon",
+          "subject": "A mechanical brass ammo feeder pushes a second heavy steel shell into a fantasy cannon breech, chunky interlocking cog and two readable shells. Fast explosive reload."
+        },
+        {
+          "key": "ui_card_cannon_knockback",
+          "hero": "cannon",
+          "subject": "A heavy amber shock ring from a brass shell shoves three small dark armored silhouettes away from the blast center. Strong outward directional force and short ground skid marks, no gore."
+        },
+        {
+          "key": "ui_card_cannon_barrage",
+          "hero": "cannon",
+          "subject": "A fan of six small brass-and-gunmetal missiles rains into a broad amber explosion zone, distinct silhouettes and glowing orange trails, no numbers."
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Create production mobile fantasy tower-defense icons. Match the supplied circular arrow icon's bold hand-painted comic style, chunky shapes, sharp readable silhouettes, saturated directional light. CRITICAL SHAPE: each illustration is a PERFECT CIRCULAR FILLED PAINTING, fully painted and opaque ALL THE WAY to the circular cut edge; ONLY OUTSIDE each disk is genuinely transparent alpha. NOT a square painting, NOT a cutout object with empty holes. NO decorative rim, frame, metal border, outline ring, circle stroke, ornamental halo or badge surround. The circular boundary is simply the cut edge of the painting, exactly like the style reference. Action shockwaves may appear inside the scene but never make an outer framing ring. No text, letters, numbers, watermarks, dividers, labels or UI. All artwork stays INSIDE its circle. Cannon art uses amber, brass, dark gunmetal and brown smoke; siphon art uses deep saturated violet, amethyst, burgundy and dark silver. Effect icons contain only their requested object/effect, never a hero portrait, person or face.\nSquare canvas, 2 by 2 grid of FOUR separate circular paintings. Four equal square quadrants. A circle centered in each quadrant, diameter 96% of that quadrant width, same scale and placement for all four. Transparent outside all four circles and in gutters. No visible square cell background. Read quadrants top-left, top-right, bottom-left, bottom-right.\nReference image 1 is STYLE AND CIRCULAR SHAPE ONLY, do not copy arrows. Extra character references only establish identities for the two portrait quadrants; do not copy the full body into effect quadrants. Portraits use fully painted colored circular backdrops, no separate rings.\nTOP LEFT: A large brass-shell explosion followed behind it by a smaller second amber aftershock ring, two clearly separated overlapping bursts over cracked earth. Echo detonation.\nTOP RIGHT: A mechanical brass ammo feeder pushes a second heavy steel shell into a fantasy cannon breech, chunky interlocking cog and two readable shells. Fast explosive reload.\nBOTTOM LEFT: A heavy amber shock ring from a brass shell shoves three small dark armored silhouettes away from the blast center. Strong outward directional force and short ground skid marks, no gore.\nBOTTOM RIGHT: A fan of six small brass-and-gunmetal missiles rains into a broad amber explosion zone, distinct silhouettes and glowing orange trails, no numbers.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/ui_card_explode.png"
+      ]
+    },
+    {
+      "id": "circle_sheet_04",
+      "cells": [
+        {
+          "key": "ui_card_cannon_fragments",
+          "hero": "cannon",
+          "subject": "A brass shell bursts at the center and ejects exactly three large sharp silver metal shards outward with amber trails, clear readable triangular fragments."
+        },
+        {
+          "key": "ui_card_cannon_pierce",
+          "hero": "cannon",
+          "subject": "A heavy brass-and-steel cannon shell with a long golden forward streak visibly punches straight through two separated dark steel armor plates. Big clear penetration path, not a static cannon."
+        },
+        {
+          "key": "ui_card_cannon_center",
+          "hero": "cannon",
+          "subject": "A compact very hot amber explosion core at the center of a much wider darker gold blast ring, concentric pressure clearly focuses inward toward one central impact. No target UI text."
+        },
+        {
+          "key": "ui_card_cannon_heavy",
+          "hero": "cannon",
+          "subject": "An oversized dark steel cannonball with brass bands lands heavily, compressing and cracking the ground with a broad low amber pressure ring. Weight and slowing force."
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Create production mobile fantasy tower-defense icons. Match the supplied circular arrow icon's bold hand-painted comic style, chunky shapes, sharp readable silhouettes, saturated directional light. CRITICAL SHAPE: each illustration is a PERFECT CIRCULAR FILLED PAINTING, fully painted and opaque ALL THE WAY to the circular cut edge; ONLY OUTSIDE each disk is genuinely transparent alpha. NOT a square painting, NOT a cutout object with empty holes. NO decorative rim, frame, metal border, outline ring, circle stroke, ornamental halo or badge surround. The circular boundary is simply the cut edge of the painting, exactly like the style reference. Action shockwaves may appear inside the scene but never make an outer framing ring. No text, letters, numbers, watermarks, dividers, labels or UI. All artwork stays INSIDE its circle. Cannon art uses amber, brass, dark gunmetal and brown smoke; siphon art uses deep saturated violet, amethyst, burgundy and dark silver. Effect icons contain only their requested object/effect, never a hero portrait, person or face.\nSquare canvas, 2 by 2 grid of FOUR separate circular paintings. Four equal square quadrants. A circle centered in each quadrant, diameter 96% of that quadrant width, same scale and placement for all four. Transparent outside all four circles and in gutters. No visible square cell background. Read quadrants top-left, top-right, bottom-left, bottom-right.\nReference image 1 is STYLE AND CIRCULAR SHAPE ONLY, do not copy arrows. Extra character references only establish identities for the two portrait quadrants; do not copy the full body into effect quadrants. Portraits use fully painted colored circular backdrops, no separate rings.\nTOP LEFT: A brass shell bursts at the center and ejects exactly three large sharp silver metal shards outward with amber trails, clear readable triangular fragments.\nTOP RIGHT: A heavy brass-and-steel cannon shell with a long golden forward streak visibly punches straight through two separated dark steel armor plates. Big clear penetration path, not a static cannon.\nBOTTOM LEFT: A compact very hot amber explosion core at the center of a much wider darker gold blast ring, concentric pressure clearly focuses inward toward one central impact. No target UI text.\nBOTTOM RIGHT: An oversized dark steel cannonball with brass bands lands heavily, compressing and cracking the ground with a broad low amber pressure ring. Weight and slowing force.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/ui_card_explode.png"
+      ]
+    },
+    {
+      "id": "circle_sheet_05",
+      "cells": [
+        {
+          "key": "ui_card_cannon_cluster",
+          "hero": "cannon",
+          "subject": "Three round brass-banded dark iron mini grenades scatter outward from one amber blast, short bright fuses and small separate secondary explosions, exactly three readable grenades."
+        },
+        {
+          "key": "ui_card_cannon_wave",
+          "hero": "cannon",
+          "subject": "A bow-shaped amber ground shockwave rushes forward over cracked brown earth, lifting a row of angular stone chips. No sky, no faces, strong forward ground force."
+        },
+        {
+          "key": "ui_card_cannon_interrupt",
+          "hero": "cannon",
+          "subject": "A brass explosive shock interrupts a small violet rune staff: the staff's glowing spell ring visibly cracks apart and sparks scatter. Readable disruption symbol in gold and gunmetal, no letters."
+        },
+        {
+          "key": "ui_card_cannon_charges",
+          "hero": "cannon",
+          "subject": "A compact brass explosive charge strapped around a dark armor plate with a burning fuse, a cannon shell approaching it with an amber trail. One-shot triggered detonation."
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Create production mobile fantasy tower-defense icons. Match the supplied circular arrow icon's bold hand-painted comic style, chunky shapes, sharp readable silhouettes, saturated directional light. CRITICAL SHAPE: each illustration is a PERFECT CIRCULAR FILLED PAINTING, fully painted and opaque ALL THE WAY to the circular cut edge; ONLY OUTSIDE each disk is genuinely transparent alpha. NOT a square painting, NOT a cutout object with empty holes. NO decorative rim, frame, metal border, outline ring, circle stroke, ornamental halo or badge surround. The circular boundary is simply the cut edge of the painting, exactly like the style reference. Action shockwaves may appear inside the scene but never make an outer framing ring. No text, letters, numbers, watermarks, dividers, labels or UI. All artwork stays INSIDE its circle. Cannon art uses amber, brass, dark gunmetal and brown smoke; siphon art uses deep saturated violet, amethyst, burgundy and dark silver. Effect icons contain only their requested object/effect, never a hero portrait, person or face.\nSquare canvas, 2 by 2 grid of FOUR separate circular paintings. Four equal square quadrants. A circle centered in each quadrant, diameter 96% of that quadrant width, same scale and placement for all four. Transparent outside all four circles and in gutters. No visible square cell background. Read quadrants top-left, top-right, bottom-left, bottom-right.\nReference image 1 is STYLE AND CIRCULAR SHAPE ONLY, do not copy arrows. Extra character references only establish identities for the two portrait quadrants; do not copy the full body into effect quadrants. Portraits use fully painted colored circular backdrops, no separate rings.\nTOP LEFT: Three round brass-banded dark iron mini grenades scatter outward from one amber blast, short bright fuses and small separate secondary explosions, exactly three readable grenades.\nTOP RIGHT: A bow-shaped amber ground shockwave rushes forward over cracked brown earth, lifting a row of angular stone chips. No sky, no faces, strong forward ground force.\nBOTTOM LEFT: A brass explosive shock interrupts a small violet rune staff: the staff's glowing spell ring visibly cracks apart and sparks scatter. Readable disruption symbol in gold and gunmetal, no letters.\nBOTTOM RIGHT: A compact brass explosive charge strapped around a dark armor plate with a burning fuse, a cannon shell approaching it with an amber trail. One-shot triggered detonation.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/ui_card_explode.png"
+      ]
+    },
+    {
+      "id": "circle_sheet_06",
+      "cells": [
+        {
+          "key": "ui_card_cannon_refund",
+          "hero": "cannon",
+          "subject": "A heavy brass cannon breech being rapidly refilled with shells by a turning gear, a broad curved golden motion streak forms a partial return loop around the ammunition. No numerical cooldown text."
+        },
+        {
+          "key": "ui_card_cannon_ult_center",
+          "hero": "cannon",
+          "subject": "A single heavy brass missile strikes dead center inside two crisp amber pressure rings, an intense concentrated core surrounded by darker blast edges. Precision missile bombardment."
+        },
+        {
+          "key": "ui_card_cannon_ult_radius",
+          "hero": "cannon",
+          "subject": "A brass missile explosion expands across a very wide circular amber shockwave with large outward curved energy arcs, clear emphasis on wider area coverage."
+        },
+        {
+          "key": "ui_card_cannon_ult_stun",
+          "hero": "cannon",
+          "subject": "A brass missile explodes above a small steel helmet silhouette, three bright amber stars and a short circling shock arc show a stunned target. Fantasy combat icon, no faces or text."
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Create production mobile fantasy tower-defense icons. Match the supplied circular arrow icon's bold hand-painted comic style, chunky shapes, sharp readable silhouettes, saturated directional light. CRITICAL SHAPE: each illustration is a PERFECT CIRCULAR FILLED PAINTING, fully painted and opaque ALL THE WAY to the circular cut edge; ONLY OUTSIDE each disk is genuinely transparent alpha. NOT a square painting, NOT a cutout object with empty holes. NO decorative rim, frame, metal border, outline ring, circle stroke, ornamental halo or badge surround. The circular boundary is simply the cut edge of the painting, exactly like the style reference. Action shockwaves may appear inside the scene but never make an outer framing ring. No text, letters, numbers, watermarks, dividers, labels or UI. All artwork stays INSIDE its circle. Cannon art uses amber, brass, dark gunmetal and brown smoke; siphon art uses deep saturated violet, amethyst, burgundy and dark silver. Effect icons contain only their requested object/effect, never a hero portrait, person or face.\nSquare canvas, 2 by 2 grid of FOUR separate circular paintings. Four equal square quadrants. A circle centered in each quadrant, diameter 96% of that quadrant width, same scale and placement for all four. Transparent outside all four circles and in gutters. No visible square cell background. Read quadrants top-left, top-right, bottom-left, bottom-right.\nReference image 1 is STYLE AND CIRCULAR SHAPE ONLY, do not copy arrows. Extra character references only establish identities for the two portrait quadrants; do not copy the full body into effect quadrants. Portraits use fully painted colored circular backdrops, no separate rings.\nTOP LEFT: A heavy brass cannon breech being rapidly refilled with shells by a turning gear, a broad curved golden motion streak forms a partial return loop around the ammunition. No numerical cooldown text.\nTOP RIGHT: A single heavy brass missile strikes dead center inside two crisp amber pressure rings, an intense concentrated core surrounded by darker blast edges. Precision missile bombardment.\nBOTTOM LEFT: A brass missile explosion expands across a very wide circular amber shockwave with large outward curved energy arcs, clear emphasis on wider area coverage.\nBOTTOM RIGHT: A brass missile explodes above a small steel helmet silhouette, three bright amber stars and a short circling shock arc show a stunned target. Fantasy combat icon, no faces or text.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/ui_card_explode.png"
+      ]
+    },
+    {
+      "id": "circle_sheet_07",
+      "cells": [
+        {
+          "key": "ui_card_siphon_twin",
+          "hero": "siphon",
+          "subject": "Two distinct thick violet drain beams link two amethyst soul orbs to one ruby staff crystal, clean paired silhouette, silver and burgundy details."
+        },
+        {
+          "key": "ui_card_siphon_inherit",
+          "hero": "siphon",
+          "subject": "A fading violet soul orb hands its bright purple energy stream onward to a second intact soul orb, a ruby staff crystal holds the connection. Clear carried-over energy, no green healing."
+        },
+        {
+          "key": "ui_card_siphon_shred",
+          "hero": "siphon",
+          "subject": "A deep-violet siphon tether pulls energy out of a cracked lavender magical shield, two silver-edged rune-shield halves visibly separate and violet shards fly off. Magic-resistance shredding."
+        },
+        {
+          "key": "ui_card_siphon_extend",
+          "hero": "siphon",
+          "subject": "Three violet tethers extend outward from a ruby crystal, the central tether broadens into a powerful wider violet stream. Clear reach and additional connections, no text."
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Create production mobile fantasy tower-defense icons. Match the supplied circular arrow icon's bold hand-painted comic style, chunky shapes, sharp readable silhouettes, saturated directional light. CRITICAL SHAPE: each illustration is a PERFECT CIRCULAR FILLED PAINTING, fully painted and opaque ALL THE WAY to the circular cut edge; ONLY OUTSIDE each disk is genuinely transparent alpha. NOT a square painting, NOT a cutout object with empty holes. NO decorative rim, frame, metal border, outline ring, circle stroke, ornamental halo or badge surround. The circular boundary is simply the cut edge of the painting, exactly like the style reference. Action shockwaves may appear inside the scene but never make an outer framing ring. No text, letters, numbers, watermarks, dividers, labels or UI. All artwork stays INSIDE its circle. Cannon art uses amber, brass, dark gunmetal and brown smoke; siphon art uses deep saturated violet, amethyst, burgundy and dark silver. Effect icons contain only their requested object/effect, never a hero portrait, person or face.\nSquare canvas, 2 by 2 grid of FOUR separate circular paintings. Four equal square quadrants. A circle centered in each quadrant, diameter 96% of that quadrant width, same scale and placement for all four. Transparent outside all four circles and in gutters. No visible square cell background. Read quadrants top-left, top-right, bottom-left, bottom-right.\nReference image 1 is STYLE AND CIRCULAR SHAPE ONLY, do not copy arrows. Extra character references only establish identities for the two portrait quadrants; do not copy the full body into effect quadrants. Portraits use fully painted colored circular backdrops, no separate rings.\nTOP LEFT: Two distinct thick violet drain beams link two amethyst soul orbs to one ruby staff crystal, clean paired silhouette, silver and burgundy details.\nTOP RIGHT: A fading violet soul orb hands its bright purple energy stream onward to a second intact soul orb, a ruby staff crystal holds the connection. Clear carried-over energy, no green healing.\nBOTTOM LEFT: A deep-violet siphon tether pulls energy out of a cracked lavender magical shield, two silver-edged rune-shield halves visibly separate and violet shards fly off. Magic-resistance shredding.\nBOTTOM RIGHT: Three violet tethers extend outward from a ruby crystal, the central tether broadens into a powerful wider violet stream. Clear reach and additional connections, no text.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/ui_card_explode.png"
+      ]
+    },
+    {
+      "id": "circle_sheet_08",
+      "cells": [
+        {
+          "key": "ui_card_siphon_relay",
+          "hero": "siphon",
+          "subject": "A ruby crystal links to one large amethyst soul orb, and that primary orb branches one violet tether to one neighboring smaller orb. A clear bent three-node relay connection, not three parallel beams."
+        },
+        {
+          "key": "ui_card_siphon_slow",
+          "hero": "siphon",
+          "subject": "Deep-violet energy coils bind a pair of small dark armored boots, purple frost-like wisps and stretched motion trails emphasize slowed movement. No chains of metal, no green healing."
+        },
+        {
+          "key": "ui_card_siphon_healcut",
+          "hero": "siphon",
+          "subject": "A small green magical sprout and soft green healing glow wither under a deep-violet curse ring and siphon stream. Purple consumes the green recovery energy. Clear healing suppression, no medical logo or text."
+        },
+        {
+          "key": "ui_card_siphon_relay_time",
+          "hero": "siphon",
+          "subject": "A small violet hourglass surrounded by a soul-drain tether: a fading amethyst soul orb releases purple motes into the hourglass, extending the glowing flow. Dark silver frame and burgundy accents."
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Create production mobile fantasy tower-defense icons. Match the supplied circular arrow icon's bold hand-painted comic style, chunky shapes, sharp readable silhouettes, saturated directional light. CRITICAL SHAPE: each illustration is a PERFECT CIRCULAR FILLED PAINTING, fully painted and opaque ALL THE WAY to the circular cut edge; ONLY OUTSIDE each disk is genuinely transparent alpha. NOT a square painting, NOT a cutout object with empty holes. NO decorative rim, frame, metal border, outline ring, circle stroke, ornamental halo or badge surround. The circular boundary is simply the cut edge of the painting, exactly like the style reference. Action shockwaves may appear inside the scene but never make an outer framing ring. No text, letters, numbers, watermarks, dividers, labels or UI. All artwork stays INSIDE its circle. Cannon art uses amber, brass, dark gunmetal and brown smoke; siphon art uses deep saturated violet, amethyst, burgundy and dark silver. Effect icons contain only their requested object/effect, never a hero portrait, person or face.\nSquare canvas, 2 by 2 grid of FOUR separate circular paintings. Four equal square quadrants. A circle centered in each quadrant, diameter 96% of that quadrant width, same scale and placement for all four. Transparent outside all four circles and in gutters. No visible square cell background. Read quadrants top-left, top-right, bottom-left, bottom-right.\nReference image 1 is STYLE AND CIRCULAR SHAPE ONLY, do not copy arrows. Extra character references only establish identities for the two portrait quadrants; do not copy the full body into effect quadrants. Portraits use fully painted colored circular backdrops, no separate rings.\nTOP LEFT: A ruby crystal links to one large amethyst soul orb, and that primary orb branches one violet tether to one neighboring smaller orb. A clear bent three-node relay connection, not three parallel beams.\nTOP RIGHT: Deep-violet energy coils bind a pair of small dark armored boots, purple frost-like wisps and stretched motion trails emphasize slowed movement. No chains of metal, no green healing.\nBOTTOM LEFT: A small green magical sprout and soft green healing glow wither under a deep-violet curse ring and siphon stream. Purple consumes the green recovery energy. Clear healing suppression, no medical logo or text.\nBOTTOM RIGHT: A small violet hourglass surrounded by a soul-drain tether: a fading amethyst soul orb releases purple motes into the hourglass, extending the glowing flow. Dark silver frame and burgundy accents.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/ui_card_explode.png"
+      ]
+    },
+    {
+      "id": "circle_sheet_09",
+      "cells": [
+        {
+          "key": "ui_card_siphon_fork",
+          "hero": "siphon",
+          "subject": "One thick forward violet laser with two clearly narrower side lasers forks from a single ruby staff crystal into three separate outgoing rays. Lavender moving cores, saturated deep-purple body, no pink-white glare."
+        },
+        {
+          "key": "ui_card_siphon_ult_duration",
+          "hero": "siphon",
+          "subject": "A long continuous deep-violet energy flood curls past a dark silver hourglass with luminous purple sand, sustained power and a clear elongated stream, no numbers."
+        },
+        {
+          "key": "ui_card_siphon_ult_ticks",
+          "hero": "siphon",
+          "subject": "A thick violet beam carries three bright arrow-shaped lavender pressure packets rapidly forward in sequence. Clear rapid repeated energy impacts along one beam, no clock digits or text."
+        },
+        {
+          "key": "ui_card_siphon_heavy_grip",
+          "hero": "siphon",
+          "subject": "A large spectral deep-violet hand clenches tightly around a bright amethyst soul orb, one powerful lavender impact pulse and inward energy strands emphasize a crushing siphon strike. No gore."
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Create production mobile fantasy tower-defense icons. Match the supplied circular arrow icon's bold hand-painted comic style, chunky shapes, sharp readable silhouettes, saturated directional light. CRITICAL SHAPE: each illustration is a PERFECT CIRCULAR FILLED PAINTING, fully painted and opaque ALL THE WAY to the circular cut edge; ONLY OUTSIDE each disk is genuinely transparent alpha. NOT a square painting, NOT a cutout object with empty holes. NO decorative rim, frame, metal border, outline ring, circle stroke, ornamental halo or badge surround. The circular boundary is simply the cut edge of the painting, exactly like the style reference. Action shockwaves may appear inside the scene but never make an outer framing ring. No text, letters, numbers, watermarks, dividers, labels or UI. All artwork stays INSIDE its circle. Cannon art uses amber, brass, dark gunmetal and brown smoke; siphon art uses deep saturated violet, amethyst, burgundy and dark silver. Effect icons contain only their requested object/effect, never a hero portrait, person or face.\nSquare canvas, 2 by 2 grid of FOUR separate circular paintings. Four equal square quadrants. A circle centered in each quadrant, diameter 96% of that quadrant width, same scale and placement for all four. Transparent outside all four circles and in gutters. No visible square cell background. Read quadrants top-left, top-right, bottom-left, bottom-right.\nReference image 1 is STYLE AND CIRCULAR SHAPE ONLY, do not copy arrows. Extra character references only establish identities for the two portrait quadrants; do not copy the full body into effect quadrants. Portraits use fully painted colored circular backdrops, no separate rings.\nTOP LEFT: One thick forward violet laser with two clearly narrower side lasers forks from a single ruby staff crystal into three separate outgoing rays. Lavender moving cores, saturated deep-purple body, no pink-white glare.\nTOP RIGHT: A long continuous deep-violet energy flood curls past a dark silver hourglass with luminous purple sand, sustained power and a clear elongated stream, no numbers.\nBOTTOM LEFT: A thick violet beam carries three bright arrow-shaped lavender pressure packets rapidly forward in sequence. Clear rapid repeated energy impacts along one beam, no clock digits or text.\nBOTTOM RIGHT: A large spectral deep-violet hand clenches tightly around a bright amethyst soul orb, one powerful lavender impact pulse and inward energy strands emphasize a crushing siphon strike. No gore.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/ui_card_explode.png"
+      ]
+    },
+    {
+      "id": "circle_sheet_10",
+      "cells": [
+        {
+          "key": "ui_card_siphon_skill_targets",
+          "hero": "siphon",
+          "subject": "A fan of violet soul-drain connections links a ruby staff crystal to three large soul orbs, with one additional smaller orb glowing at the edge connected by a new strand. Extra target connection."
+        }
+      ],
+      "prompt": "Use case: stylized-concept. Create production mobile fantasy tower-defense icons. Match the supplied circular arrow icon's bold hand-painted comic style, chunky shapes, sharp readable silhouettes, saturated directional light. CRITICAL SHAPE: each illustration is a PERFECT CIRCULAR FILLED PAINTING, fully painted and opaque ALL THE WAY to the circular cut edge; ONLY OUTSIDE each disk is genuinely transparent alpha. NOT a square painting, NOT a cutout object with empty holes. NO decorative rim, frame, metal border, outline ring, circle stroke, ornamental halo or badge surround. The circular boundary is simply the cut edge of the painting, exactly like the style reference. Action shockwaves may appear inside the scene but never make an outer framing ring. No text, letters, numbers, watermarks, dividers, labels or UI. All artwork stays INSIDE its circle. Cannon art uses amber, brass, dark gunmetal and brown smoke; siphon art uses deep saturated violet, amethyst, burgundy and dark silver. Effect icons contain only their requested object/effect, never a hero portrait, person or face.\nSquare canvas containing ONE centered circular filled painting, diameter 98% of canvas, transparent outside.\nReference image 1 is STYLE AND CIRCULAR SHAPE ONLY, do not copy arrows. Extra character references only establish identities for the two portrait quadrants; do not copy the full body into effect quadrants. Portraits use fully painted colored circular backdrops, no separate rings.\nTOP LEFT: A fan of violet soul-drain connections links a ruby staff crystal to three large soul orbs, with one additional smaller orb glowing at the edge connected by a new strand. Extra target connection.",
+      "refs": [
+        "D:/AI/S4Game/KingdomWatch/assets/resources/ux/ui_card_explode.png"
+      ]
+    }
+  ]
+}

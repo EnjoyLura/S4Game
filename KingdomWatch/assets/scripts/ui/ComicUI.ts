@@ -77,14 +77,18 @@ export function comicArt(parent: Node, x: number, y: number, w: number, h: numbe
 export function comicPortrait(parent: Node, x: number, y: number, size: number, key: string,
   background = '#E7DFF0'): Node {
   const portrait = N('comicPortrait', parent, x, y, size, size);
-  const backdrop = N('portraitBackdrop', portrait, 0, 0, size, size).addComponent(Graphics);
-  backdrop.fillColor = C(background); backdrop.circle(0, 0, size / 2); backdrop.fill();
-  backdrop.strokeColor = C('#C6BCCF'); backdrop.lineWidth = 1.5; backdrop.stroke();
+  const paintedCircle = /(?:ui_avatar_|avatar_)(?:cannon|siphon)$/.test(key);
+  if (!paintedCircle) {
+    const backdrop = N('portraitBackdrop', portrait, 0, 0, size, size).addComponent(Graphics);
+    backdrop.fillColor = C(background); backdrop.circle(0, 0, size / 2); backdrop.fill();
+    backdrop.strokeColor = C('#C6BCCF'); backdrop.lineWidth = 1.5; backdrop.stroke();
+  }
   if (key) {
     const clip = N('portraitClip', portrait, 0, 0, size - 2, size - 2);
     const mask = clip.addComponent(Mask);
     mask.type = Mask.Type.GRAPHICS_ELLIPSE; mask.segments = 96;
-    comicArt(clip, 0, -size * .025, size * 1.25, size * 1.25, key);
+    const scale = paintedCircle ? 1.045 : 1.25;
+    comicArt(clip, 0, paintedCircle ? 0 : -size * .025, size * scale, size * scale, key);
   }
   return portrait;
 }
