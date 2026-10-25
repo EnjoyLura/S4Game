@@ -1,0 +1,144 @@
+{
+  "release": {
+    "schema": 1,
+    "id": "7d9f93994820b81c",
+    "base_path": "/kingdom-watch-play/",
+    "entry": "game.b231f7703418c6e4.html",
+    "entry_sha256": "b231f7703418c6e48757f73f963e81cde3cdddf856e8e28d6727cbf17a6dcfcb",
+    "entry_bytes": 22425,
+    "inventory": "hosting-files.7d9f93994820b81c.json",
+    "inventory_sha256": "7d9f93994820b81cc91fc33c563d7d78f281ec34f36654d288b2fb82824a54dd",
+    "inventory_bytes": 273444,
+    "runtime_cache": {
+      "protocol": 1,
+      "worker": "hosting-cache-sw.js",
+      "scope": "/kingdom-watch-play/",
+      "on_demand": true,
+      "max_bytes": 268435456
+    },
+    "requires_cross_origin_isolation": false,
+    "wasm": [
+      "cocos-js/assets/spine-CC34fKUR.wasm"
+    ],
+    "requires_webp": true,
+    "texture_mode": "mixed-webp-q95"
+  },
+  "file_count": 1569,
+  "runtime_bytes": 193756572,
+  "full_package_bytes": 194030661,
+  "budget_bytes": 200000000,
+  "validation": {
+    "explicit_file_references_checked": 450,
+    "embedded_provenance_strings_not_fetches": [],
+    "virtual_system_modules": 163,
+    "remote_url_literals": [
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/bangers/Bangers-Regular.ttf",
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-Bold.ttf",
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-ExtraBoldItalic.ttf",
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+      "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+    ],
+    "bundle_versions": {
+      "internal": "9e58a",
+      "main": "804af",
+      "resources": "71ad9947e95e244a"
+    }
+  },
+  "art_resources": {
+    "mode": "mixed-webp-q95",
+    "manifest": "art-resources.7ba066a7670b7ca5.json",
+    "requiresWebP": true,
+    "imagesConverted": 408,
+    "pngImagesKept": 1,
+    "nativeBytesSaved": 376412984,
+    "bytesBeforeArtStep": 569696157,
+    "bytesAfterArtStepIncludingReport": 193700785,
+    "checks": {
+      "nativeImagesResolved": 421,
+      "webpImagesRGBAAndHashesVerified": 408,
+      "losslessImagesSourceRGBAIdentical": 237,
+      "q95ImagesDimensionsAlphaAndOutputVerified": 171,
+      "gameEngineExecuted": false
+    }
+  },
+  "lobby_trial_omission": {
+    "active": [
+      "ux/hero_lobby_idle_v100/sniper",
+      "ux/hero_lobby_idle_v100/volt",
+      "ux/hero_lobby_idle_v102/mora",
+      "ux/hero_lobby_idle_v103/archer",
+      "ux/hero_lobby_idle_v99/pyro"
+    ],
+    "removedResourceAliases": 40,
+    "removedNativeCount": 10,
+    "removedNativeBytes": 99492625,
+    "removedTrialRoots": [
+      "ux/hero_lobby_idle_v100/archer",
+      "ux/hero_lobby_idle_v100/mora",
+      "ux/hero_lobby_idle_v101/archer",
+      "ux/hero_lobby_idle_v101/mora",
+      "ux/hero_lobby_idle_v102/archer",
+      "ux/hero_lobby_idle_v96/archer",
+      "ux/hero_lobby_idle_v96/mora",
+      "ux/hero_lobby_idle_v96/pyro",
+      "ux/hero_lobby_idle_v96/sniper",
+      "ux/hero_lobby_idle_v96/volt"
+    ],
+    "files": [
+      {
+        "path": "assets/resources/native/0a/0ad59ebe-0af7-40a7-bbda-56669d330e40.ede5a.png",
+        "bytes": 11033368,
+        "sha256": "217c6c02ad41f593c27b0e49d1766eadd09ac91dde2aea2f005e02675dc3377d"
+      },
+      {
+        "path": "assets/resources/native/1b/1bdf47a1-ed57-4b89-9f99-dcfb78e0fb08.2d7ff.png",
+        "bytes": 8922442,
+        "sha256": "20f812a92819f5dcc64b8bad5866cd79eef0ddd1de4a1f4fb9aa23340e2a7256"
+      },
+      {
+        "path": "assets/resources/native/22/2228125e-82ab-4ee3-8ec3-6c2f6547df4c.47862.png",
+        "bytes": 9812091,
+        "sha256": "44dbdcdcfd85fb624fe184f0fe23dcbba977d23ef2b9107bba1c11406fdec846"
+      },
+      {
+        "path": "assets/resources/native/5b/5b758d81-b416-4a22-986a-f92ba7ebe2c8.20161.png",
+        "bytes": 10997866,
+        "sha256": "885ce9c53436a3318b974c3a1bbd6230ab46bee7b77dca03fcce136c2ba6023d"
+      },
+      {
+        "path": "assets/resources/native/8d/8d9127c3-000f-43b6-be09-46bb9ebee6d7.6bc7f.png",
+        "bytes": 7458459,
+        "sha256": "4e4d043794b4e1854c744ffe5f8b9711b1a83701682e9e0552e4e6929247f297"
+      },
+      {
+        "path": "assets/resources/native/a6/a6e33788-1674-4b16-9120-78a06adbdc8a.58c18.png",
+        "bytes": 9989214,
+        "sha256": "0e16ae4d18cb40b3dd9a754b071a812554aa132fe3671697bdcaa1498d271f08"
+      },
+      {
+        "path": "assets/resources/native/ac/ac5bb395-26ef-46af-aef4-24b9b8cd50e2.e5226.png",
+        "bytes": 11603844,
+        "sha256": "dac84fc24defa8a140df53f75945e36dd073e3b6bef4362fa260f3daae65902b"
+      },
+      {
+        "path": "assets/resources/native/db/db9c7fa4-1946-4621-bb8c-155927924077.494fd.png",
+        "bytes": 8755972,
+        "sha256": "fb070700ad4b883069005b16e65c6729ee238603f2d75a13df6662c1ecf14ee9"
+      },
+      {
+        "path": "assets/resources/native/f6/f695bb98-ea06-42f0-a013-3adabdb44e05.28405.png",
+        "bytes": 9603680,
+        "sha256": "735e9c85f6a3e1bfc8d51579874104fbdff2d70b9ea358866b35cf146040045a"
+      },
+      {
+        "path": "assets/resources/native/fe/fed2511e-07ff-4517-bc64-9780e2e129a6.b6a16.png",
+        "bytes": 11315689,
+        "sha256": "1ab034d3440a339986842676be0a189ed037599baa3a0ac99c111610c19b5c35"
+      }
+    ],
+    "sourceAndNormalBuildUnchanged": true,
+    "uuidSlotsAndSerializedPacksPreserved": true
+  },
+  "all_exported_hashes_verified": true,
+  "source_web_files_modified": false
+}

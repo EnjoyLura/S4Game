@@ -1,0 +1,108 @@
+{
+  "checks": {
+    "release": {
+      "base_path": "/kingdom-watch-play/",
+      "entry": "game.b231f7703418c6e4.html",
+      "entry_bytes": 22425,
+      "entry_sha256": "b231f7703418c6e48757f73f963e81cde3cdddf856e8e28d6727cbf17a6dcfcb",
+      "id": "7d9f93994820b81c",
+      "inventory": "hosting-files.7d9f93994820b81c.json",
+      "inventory_bytes": 273444,
+      "inventory_sha256": "7d9f93994820b81cc91fc33c563d7d78f281ec34f36654d288b2fb82824a54dd",
+      "requires_cross_origin_isolation": false,
+      "requires_webp": true,
+      "runtime_cache": {
+        "max_bytes": 268435456,
+        "on_demand": true,
+        "protocol": 1,
+        "scope": "/kingdom-watch-play/",
+        "worker": "hosting-cache-sw.js"
+      },
+      "schema": 1,
+      "texture_mode": "mixed-webp-q95",
+      "wasm": [
+        "cocos-js/assets/spine-CC34fKUR.wasm"
+      ]
+    },
+    "file_count": 1569,
+    "runtime_bytes": 193756572,
+    "full_package_bytes": 194030661,
+    "budget_bytes": 200000000,
+    "all_exported_hashes_verified": true,
+    "links": {
+      "explicit_file_references_checked": 450,
+      "embedded_provenance_strings_not_fetches": [],
+      "virtual_system_modules": 163,
+      "remote_url_literals": [
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/bangers/Bangers-Regular.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-Bold.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-ExtraBoldItalic.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+      ],
+      "bundle_versions": {
+        "internal": "9e58a",
+        "main": "804af",
+        "resources": "71ad9947e95e244a"
+      }
+    },
+    "wasm_memories": {
+      "cocos-js/assets/spine-CC34fKUR.wasm": [
+        {
+          "shared": false,
+          "memory64": false,
+          "minimum_pages": 512
+        }
+      ]
+    },
+    "art_resources": {
+      "nativeImagesResolved": 421,
+      "webpImagesRGBAAndHashesVerified": 408,
+      "losslessImagesSourceRGBAIdentical": 237,
+      "q95ImagesDimensionsAlphaAndOutputVerified": 171,
+      "gameEngineExecuted": false
+    },
+    "runtime_cache": {
+      "max_bytes": 268435456,
+      "on_demand": true,
+      "protocol": 1,
+      "scope": "/kingdom-watch-play/",
+      "worker": "hosting-cache-sw.js"
+    },
+    "validation": "static files, image pixels and WASM headers only",
+    "javascript_executed": false,
+    "wasm_compiled_or_instantiated": false,
+    "game_browser_or_tests_started": false
+  },
+  "baselineCommit": "00bddbaa",
+  "baselineRelease": "a3c14e8af1cdc0dc",
+  "sourceAssetsChanged": [
+    "KingdomWatch/assets/resources/fx/hero-impact-flow.effect",
+    "KingdomWatch/assets/scripts/battle/NewHeroes.ts",
+    "KingdomWatch/assets/scripts/battle/SiphonLaser.ts",
+    "KingdomWatch/assets/scripts/battle/SiphonLaserVFX.ts",
+    "KingdomWatch/assets/scripts/battle/UltimateTiming.ts",
+    "KingdomWatch/assets/scripts/config/NewHeroConfig.ts"
+  ],
+  "allExistingNativeFilesByteIdentical": 506,
+  "scriptsSyntaxOnly": [
+    "application.b4bf8c24ac56b15d.js",
+    "assets/internal/index.9e58a.js",
+    "assets/main/index.804af.js",
+    "assets/resources/index.71ad9947e95e244a.js",
+    "cocos-js/_virtual_cc-Bp5iGE8z.2cb74a1e8caa095a.js",
+    "cocos-js/cc.03aac.2cb74a1e8caa095a.js",
+    "cocos-js/spine-BGFFnNyc.2cb74a1e8caa095a.js",
+    "cocos-js/spine.asm-BCCB8IGt.2cb74a1e8caa095a.js",
+    "cocos-js/spine.js-CPHn08RU.2cb74a1e8caa095a.js",
+    "cocos-js/spine.wasm-BP65faBu.2cb74a1e8caa095a.js",
+    "hosting-cache-sw.js",
+    "index.e7d0a69c15389848.js",
+    "src/chunks/bundle.5227e.js",
+    "src/polyfills.bundle.5adbf.js",
+    "src/system.bundle.543e6.js"
+  ],
+  "newTypeDiagnostics": [],
+  "gameBrowserCombatAudioOrWasmStarted": false,
+  "visualInteractionReview": "user manual"
+}
