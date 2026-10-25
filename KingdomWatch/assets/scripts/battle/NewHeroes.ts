@@ -149,6 +149,7 @@ export class CannonHero extends HeroBase {
   }
   private effects(): CannonBlastVFX { return this.blastFX ||= new CannonBlastVFX(this.node.parent!.parent!); }
   renderEffects(): void { this.blastFX?.render(); }
+  warmEffects(): void { this.effects(); }
 }
 
 interface Beam { mob: Monster; life: number; kind: 'twin' | 'skill' | 'ult'; }
@@ -167,6 +168,7 @@ export class SiphonHero extends HeroBase {
   constructor(parent: Node, x: number, stats: HeroStats, private line: LineDefense) { super(parent, x, stats); }
 
   protected buildVisual(parent: Node): void { this.staticArt = visual(parent, this.node, this.x, 'siphon'); }
+  warmEffects(): void { this.beamFX ||= new SiphonBeamVFX(this.node.parent!.parent!); }
   protected attackInterval(): number { return SIPHON.tick; }
   private valid(m: Monster | null, life: number, mgr: MonsterManager): m is Monster {
     return !!m && m.lifeId === life && !m.dead && m.node.isValid && m.node.activeInHierarchy && mgr.list.includes(m);
@@ -267,8 +269,8 @@ export class SiphonHero extends HeroBase {
   renderEffects(): void {
     const fx = this.beamFX;
     if (!fx) return;
-    // Crystal center in the 120x180 sprite, mirrored with the complete character artwork.
-    fx.begin(this.x - 32.5 * (this.staticArt?.scale.x ?? 1), HERO_Y + 70.4,
+    // Raised palm center in the 120x180 sprite, mirrored with the whole character.
+    fx.begin(this.x + 43.4 * (this.staticArt?.scale.x ?? 1), HERO_Y + 51,
       this.harvestSeconds > 0 && this.harvestDelay <= 0);
     const primary = this.primary;
     if (!primary || primary.dead || primary.lifeId !== this.primaryLife) { fx.end(); return; }

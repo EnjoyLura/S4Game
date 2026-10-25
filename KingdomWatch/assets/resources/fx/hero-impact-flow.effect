@@ -1,0 +1,171 @@
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: hero-flow-vs:vert
+      frag: hero-flow-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: zero
+          blendDstAlpha: one
+      rasterizerState:
+        cullMode: none
+      properties:
+        fxState: { value: [0, 1, 1, 0] }
+        fxShape: { value: [320, 320, 100, 0] }
+}%
+CCProgram hero-flow-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+  out vec2 uv0;
+  out vec4 color;
+  vec4 vert () {
+    vec4 p = vec4(a_position, 1.0);
+    #if USE_LOCAL
+      p = cc_matWorld * p;
+    #endif
+    uv0 = a_texCoord; color = a_color;
+    return cc_matViewProj * p;
+  }
+}%
+CCProgram hero-flow-fs %{
+  precision highp float;
+  in vec2 uv0;
+  in vec4 color;
+  uniform HeroFlow {
+    vec4 fxState;
+    vec4 fxShape;
+  };
+  float sat(float x) { return clamp(x, 0.0, 1.0); }
+  float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+  float noise(vec2 p) {
+    vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+      mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0)), f.x), f.y);
+  }
+  float fbm(vec2 p) {
+    float n = noise(p) * 0.57;
+    p = mat2(1.6, 1.2, -1.2, 1.6) * p + vec2(7.1, 3.7);
+    return n + noise(p) * 0.28 + noise(p * 2.03 + vec2(2.3)) * 0.15;
+  }
+  float soft(float d, float w) { return exp(-d * d / max(0.01, w * w)); }
+  vec4 explosion(vec2 p, float age, float seed, float radius, float power) {
+    // Smoke and emissive flame share one bounded quad, but have separate evolution and opacity.
+    float rise = age * radius * 0.38;
+    vec2 q = vec2(p.x, p.y - radius * 0.18 - rise);
+    float grow = 1.0 - exp(-age * 32.0);
+    vec2 turbulence = vec2(fbm(q / radius * 4.0 + vec2(seed, -age * 3.1)),
+      fbm(q / radius * 5.0 + vec2(13.7 + seed, -age * 2.4))) - vec2(0.5);
+    vec2 warped = q + turbulence * radius * (0.22 + age * 0.12);
+    float field = length(warped / (radius * vec2(0.43, 0.39) * (0.3 + grow * 0.7)));
+    float erosion = fbm(q / radius * 8.0 + vec2(seed * 2.3, -age * 4.0));
+    float fireLife = 1.0 - smoothstep(0.13, 0.54, age);
+    float flame = sat((1.0 - field) * 2.1 + (erosion - 0.52) * 2.7) * fireLife;
+    float hot = pow(sat(1.0 - field * 2.5), 2.0) * fireLife;
+    float temperature = sat((1.0 - field) * 0.72 + erosion * 0.38);
+    vec3 fire = mix(vec3(0.34, 0.035, 0.008), vec3(1.0, 0.27, 0.015), sat(flame * 1.35));
+    fire = mix(fire, vec3(1.0, 0.73, 0.12), temperature * temperature * fireLife);
+    fire = mix(fire, vec3(1.0, 0.97, 0.73), hot * (0.78 + power * 0.1));
+    // Three unequal curling tongues peel away instead of retaining a circular explosion silhouette.
+    float tongues = 0.0;
+    for (int i = 0; i < 3; i++) {
+      float k = float(i), phase = seed + k * 2.17;
+      vec2 c = vec2(sin(phase) * radius * 0.25, radius * (0.17 + age * (0.5 + k * 0.13)));
+      vec2 v = p - c;
+      float a = atan(v.y, v.x), rr = radius * (0.13 + age * 0.21 + k * 0.025);
+      float sweep = pow(max(0.0, cos(a - phase - age * 5.0)), 4.0);
+      float d = length(v * vec2(1.0, 0.8)) - rr - sin(a * 2.0 + phase) * radius * 0.025;
+      tongues += soft(d, radius * (0.026 + 0.018 * (1.0 - sat(age * 2.0)))) * sweep;
+    }
+    tongues *= (1.0 - smoothstep(0.25, 0.78, age)) * smoothstep(0.015, 0.11, age);
+    float smokeNoise = mix(erosion, turbulence.x + 0.5, 0.6);
+    float smoke = sat(1.0 - length((q + turbulence * radius * 0.36) /
+      (radius * vec2(0.5 + age * 0.2, 0.32 + age * 0.22)))) * (0.5 + smokeNoise * 0.5);
+    smoke *= smoothstep(0.08, 0.25, age) * (1.0 - smoothstep(0.5, 1.2, age)) * 0.38;
+    float flash = soft(length(p * vec2(0.8, 1.1)), radius * 0.22) * exp(-age * 38.0);
+    float flameAlpha = sat(flame * 2.0 + tongues * 0.9 + flash);
+    vec3 rgb = mix(vec3(0.14, 0.13, 0.15) + smokeNoise * 0.12, fire, flameAlpha);
+    rgb += vec3(1.0, 0.62, 0.14) * tongues + vec3(1.0, 0.95, 0.7) * flash;
+    float glow = soft(length(q), radius * 0.62) * fireLife * 0.08;
+    rgb += vec3(1.0, 0.25, 0.01) * glow;
+    return vec4(rgb, sat(flameAlpha * 0.94 + smoke + glow));
+  }
+  vec4 ground(vec2 p, float age, float seed, float radius) {
+    vec2 q = p / vec2(1.0, 0.43);
+    float r = length(q), a = atan(q.y, q.x);
+    float travel = 1.0 - exp(-age * 10.0), ring = radius * (0.12 + travel * 0.98);
+    float rough = noise(vec2(a * 5.0 + seed, r / radius * 7.0));
+    float pressure = soft(r - ring - (rough - 0.5) * radius * 0.035, 2.0 + age * 2.0);
+    pressure *= exp(-age * 6.0) * (0.45 + rough * 0.55);
+    float ash = sat(1.0 - r / (radius * 0.55)) * (0.28 + rough * 0.25) *
+      (1.0 - smoothstep(0.4, 1.3, age)) * smoothstep(0.0, 0.04, age);
+    float fissure = pow(max(0.0, sin(a * 6.0 + seed + sin(r / radius * 9.0))), 22.0);
+    fissure *= smoothstep(radius * 0.08, radius * 0.16, r) * (1.0 - smoothstep(radius * 0.25, radius * 0.52, r));
+    fissure *= (1.0 - smoothstep(0.18, 1.0, age));
+    return vec4(mix(vec3(0.14, 0.11, 0.1), vec3(1.0, 0.54, 0.09), sat(pressure + fissure)),
+      sat(ash * 0.45 + pressure * 0.58 + fissure * 0.5));
+  }
+  vec4 siphon(vec2 p, float time, float seed, float power, float lengthX) {
+    float u = p.x / max(1.0, lengthX) + 0.5, t = clamp(u, 0.0, 1.0);
+    float envelope = sin(t * 3.141593);
+    float bend = min(25.0, lengthX * 0.04) * sin(seed * 1.7 + 0.6);
+    float centre = envelope * (bend + sin(t * 8.0 + time * 2.4 + seed) * 4.5);
+    float d = p.y - centre;
+    float n = noise(vec2(t * 11.0 + time * 2.0, p.y * 0.09 + seed));
+    float within = smoothstep(-0.015, 0.025, u) * (1.0 - smoothstep(0.975, 1.015, u));
+    float bodyWidth = (4.5 + 2.5 * n) * power * (0.65 + t * 0.8);
+    float veil = soft(d, bodyWidth * 2.1) * (0.32 + n * 0.35) * within;
+    float stream = 0.38 + 0.62 * pow(0.5 + 0.5 * sin(t * 31.0 + time * 11.0 + seed), 2.0);
+    float core = soft(d + (n - 0.5) * 3.0, 1.0 * power) * (0.12 + stream * 0.58) * within;
+    float tendrils = 0.0;
+    for (int i = 0; i < 3; i++) {
+      float k = float(i), wave = sin(t * (11.0 + k * 2.0) + time * (3.5 + k * 0.37) + seed + k * 2.1);
+      float side = wave * envelope * (3.0 + k * 2.9) * power;
+      float w = (0.62 + 0.45 * noise(vec2(t * 17.0 + time * 2.7, seed + k))) * power;
+      tendrils += soft(d - side, w) * (0.45 + 0.55 * stream) * within;
+    }
+    float rim = soft(abs(d) - bodyWidth, 1.7 * power) * (0.3 + n * 0.45) * within;
+    vec3 rgb = vec3(0.028, 0.004, 0.065) + vec3(0.16, 0.02, 0.26) * veil +
+      vec3(0.4, 0.1, 0.63) * tendrils + vec3(0.35, 0.03, 0.6) * rim + vec3(0.7, 0.45, 1.0) * core;
+    float alpha = sat(veil * 1.15 + rim * 0.65 + tendrils * 0.8 + core * 0.8);
+    // Organic extraction halos at each connected endpoint; no mechanical rings or crosshairs.
+    for (int i = 0; i < 2; i++) {
+      vec2 q = p - vec2((float(i) - 0.5) * lengthX, 0.0);
+      float a = atan(q.y, q.x), r = length(q);
+      float twist = sin(a * 3.0 + r * 0.16 - time * 3.0 + seed);
+      float wisps = soft(r - (9.0 + twist * 3.0) * power, 2.0 * power) * (0.5 + 0.5 * twist);
+      float halo = soft(r, 20.0 * power) * 0.18;
+      float point = soft(r, 3.0 * power) * 0.75;
+      rgb += vec3(0.45, 0.08, 0.84) * (wisps + halo) + vec3(0.98, 0.73, 1.0) * point;
+      alpha = sat(alpha + wisps * 0.7 + halo + point);
+    }
+    return vec4(rgb, alpha);
+  }
+  vec4 frag () {
+    vec2 p = vec2(uv0.x - 0.5, 0.5 - uv0.y) * fxShape.xy;
+    vec4 result;
+    if (fxState.w < 0.5) {
+      p.y += fxShape.w;
+      result = explosion(p, fxState.x, fxState.y, fxShape.z, fxState.z);
+    } else if (fxState.w < 1.5) {
+      result = ground(p, fxState.x, fxState.y, fxShape.z);
+    } else {
+      result = siphon(p, fxState.x, fxState.y, fxState.z, fxShape.z);
+    }
+    // Prevent faint quad borders from noise or glow, including the longest beam diagonals.
+    vec2 edge = smoothstep(vec2(0.0), vec2(0.035), uv0) * (vec2(1.0) - smoothstep(vec2(0.965), vec2(1.0), uv0));
+    result.a *= edge.x * edge.y * color.a;
+    return vec4(result.rgb * color.rgb, result.a);
+  }
+}%

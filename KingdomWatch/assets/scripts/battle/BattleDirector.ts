@@ -217,6 +217,7 @@ export class BattleDirector extends Component {
     });
     // Abilities are part of the hero. Seed legacy prerequisites locally; never write them to the save.
     this.heroes.forEach(h => {
+      h.warmEffects();
       this.stacks[h.id + '_unlock_skill'] = 1;
       this.stacks[h.id + '_unlock_ult'] = 1;
       h.charge = h.chargeGoal * ULT_INITIAL_CHARGE;

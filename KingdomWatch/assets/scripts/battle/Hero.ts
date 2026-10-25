@@ -266,6 +266,8 @@ export abstract class HeroBase {
   protected updateQueues(_dt: number, _mgr: MonsterManager, _projs: ProjectileManager): void { void _dt; void _mgr; void _projs; }
   /** Optional procedural geometry: rebuild once after the final simulation step and projectile hits. */
   renderEffects(): void {}
+  /** Prepare selected heroes' procedural materials while the entry countdown is still visible. */
+  warmEffects(): void {}
   protected queuedShotDelay(): number { return Infinity; }
 
   /** 本次普攻后的攻击间隔（弓箭手强化窗口攻速 +30% 时覆写） */
