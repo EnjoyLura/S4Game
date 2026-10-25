@@ -1,7 +1,7 @@
 """Render the actual isolated fragment program in a hidden offscreen OpenGL context.
 No game engine, scene, browser, damage simulation, audio or WASM is launched.
 """
-import sys,json,re,struct
+import sys,json,re,struct,hashlib
 from pathlib import Path
 sys.path[:0]=[str(Path.home()/'AppData/Local/Temp/kw-fx-gpu-review'),str(Path.home()/'AppData/Local/Temp/kw-video-inspect-deps')]
 import moderngl
@@ -58,6 +58,6 @@ sheet.resize((1440,810),Image.Resampling.LANCZOS).save(OUT/'gpu-contact-sheet.jp
 for name,frames in allframes.items():
     frames=[im.resize((384,432),Image.Resampling.LANCZOS) for im in frames]
     frames[0].save(OUT/(name+'-review.gif'),save_all=True,append_images=frames[1:],duration=[30,30,40]*(len(frames)//3),loop=0,optimize=False)
-(OUT/'gpu-review.json').write_text(json.dumps({'renderer':ctx.info['GL_RENDERER'],'version':ctx.info['GL_VERSION'],'fragmentProgram':'actual hero-impact-flow.effect, vertex projection adapted to offscreen art canvas','frames':{k:len(v) for k,v in allframes.items()},'gameBrowserAudioOrWasmStarted':False,'engineBlendingAndPhonePerformance':'not verified'},ensure_ascii=False,indent=2)+'\n','utf-8')
+(OUT/'gpu-review.json').write_text(json.dumps({'renderer':ctx.info['GL_RENDERER'],'version':ctx.info['GL_VERSION'],'fragmentProgram':'actual hero-impact-flow.effect, vertex projection adapted to offscreen art canvas','shaderSourceSha256':hashlib.sha256(source.encode('utf-8')).hexdigest(),'drawingSourceSha256':hashlib.sha256((PROJECT/'assets/scripts/battle/AdvancedHeroVFX.ts').read_bytes()).hexdigest(),'frames':{k:len(v) for k,v in allframes.items()},'gameBrowserAudioOrWasmStarted':False,'engineBlendingAndPhonePerformance':'not verified'},ensure_ascii=False,indent=2)+'\n','utf-8')
 print(json.dumps({'gpu':ctx.info['GL_RENDERER'],'renderedArtFrames':sum(map(len,allframes.values())),'gameStarted':False}))
 ctx.release()

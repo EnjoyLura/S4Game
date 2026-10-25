@@ -7,5 +7,7 @@
     "siphon": 75
   },
   "gameBrowserAudioOrWasmStarted": false,
-  "engineBlendingAndPhonePerformance": "not verified"
+  "engineBlendingAndPhonePerformance": "not verified",
+  "shaderSourceSha256": "17074b04415cdcd27525d6b36aa7fc73c3ff61c8b86a5b3c48da623fb6b19dc2",
+  "drawingSourceSha256": "dc47362169ccd72f6208b6dd979988e8ba6e1fef3942ef060514b8dd68f6bba4"
 }
