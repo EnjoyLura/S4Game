@@ -9,3 +9,5 @@
 无新图片/序列帧/字体/音效或预热依赖。生图v125仍仅为docs试稿，未接入。检查仅执行纯几何与隔离UI特效状态、编译诊断、离线构建和文件/线上HTTP散列；不启动游戏、浏览器、真实战斗、音频或WASM。实际手感、技能可读性及手机性能由用户试玩确认。
 
 实现本地提交fc079526。2400组扫掠、12000组旋转和1600组前向移动检查及隔离特效就绪/释放/销毁检查通过；9项既有类型诊断保持，无新增。Creator3.8.8构建22843ms、正常退出36；导出版本eb55063b960fa62c，共1588文件、200055293字节，较v124增加1830字节，512份native资源逐字节保持。15份JS与5段内联脚本仅语法检查，完整包SHA/资源路径/WASM头校验通过，见同目录JSON记录。
+
+已发布 https://enjoylura.github.io/kingdom-watch-play/?v=wind-skill-v126 ，独立运行仓库提交927498be0b6989a5c8c6cee9b18842b06f720fac。GitHub Pages built，标准线上校验及额外主脚本HTTP200/SHA一致；发布期间源码HEAD/索引保持。沿用原压缩、缓存及默认保留上一版必要文件，不推送源码、不部署Cloudflare；详见deployment.json与additional-http-verification.json。
