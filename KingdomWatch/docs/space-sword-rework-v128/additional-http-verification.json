@@ -1,0 +1,38 @@
+{
+  "release": "cd2da4862ba4eb66",
+  "publicationCommit": "b7ef2d1050165cb3be49a6eebd55ca83f93ff865",
+  "samples": [
+    {
+      "path": "assets/resources/native/3e/3e4d52ce-58ed-45cd-afe9-2decc44af1e9.ee4b0dd89abd760e.webp",
+      "status": 200,
+      "bytes": 393556,
+      "sha256": "ee4b0dd89abd760e6c4ed94a5bfcf82eaa419bafaf928135ce9e357ab7f2cf8c"
+    },
+    {
+      "path": "assets/resources/native/4f/4f4e0740-2005-42a2-b4f7-31b0ed0bff81.30126/UIBody.ttf",
+      "status": 200,
+      "bytes": 499592,
+      "sha256": "688ae5d61631e197c3a08b1fbff6cfaac2ecf465b0006b1df531ad7fb61e3400"
+    },
+    {
+      "path": "assets/resources/native/08/08934c18-5f2f-44c6-8145-d4fb15839d72.b90fe/UIHeading.ttf",
+      "status": 200,
+      "bytes": 680956,
+      "sha256": "90e49d8830363e64db9e49806c8bc7ecd97461aef49549c3b87da8fdf14eeaa3"
+    },
+    {
+      "path": "assets/resources/import/2d/2dc448a9-6fe8-407e-a54b-d28da40128b0.a04e9.json",
+      "status": 200,
+      "bytes": 13225,
+      "sha256": "588e4a77b37e80ff593ab74c747ae6ee694dba65fdbaf17ab6f9b80b32896249"
+    },
+    {
+      "path": "assets/main/index.94707.js",
+      "status": 200,
+      "bytes": 1048360,
+      "sha256": "842e2d341958b50cb9eeefe6b4c7ff3b79d32b9ca9dcc8e21c2b5d4fbf821256"
+    }
+  ],
+  "allHashesMatch": true,
+  "gameOrBrowserStarted": false
+}

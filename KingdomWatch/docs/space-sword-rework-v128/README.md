@@ -19,3 +19,5 @@ UI图标通过内置 imagegen 生成，单张四宫格，保持圆形、无装�
 本地提交后构建并按持续授权仅发布独立GitHub运行包，不推送源码，不部署Cloudflare。构建与线上HTTP回执完成后追加。
 
 实现本地提交 `4eff6b29`，离屏预览提交 `0c8275ef`。Creator 3.8.8 构建23890ms、退出36，DPR/音频引用/资源审计/生产缓存准备通过。运行包1601文件、201256662字节，比v127增加419541字节；版本 `cd2da4862ba4eb66`。513个既有native媒体字节保持，2字库保留原1597码点后追加“央岳锢”，只新增1张UI图集。15份JS与5份内联脚本仅语法、全包SHA/路径/图像解码/WASM头静态检查通过；导出Shader的GLSL1/3、无采样器与ONE/ONE零alpha混合元数据一致。见 `package-static-verification.json`、`compiled-effect-verification.json`。
+
+已发布：[GitHub Pages v128](https://enjoylura.github.io/kingdom-watch-play/?v=space-sword-rework-v128)，独立运行仓库提交 `b7ef2d1050165cb3be49a6eebd55ca83f93ff865`。首次推送遭GitHub内部服务器错误，确认远端未更新后重试同一提交成功；Pages built，标准线上验证通过。追加下载新图集、2字体、主脚本和编译Shader共5份，HTTP200与SHA256均一致。发布期间源码HEAD/索引不变，仅运行仓库推送；源码仅本地提交，未部署CF。回执见 `deployment.json`、`additional-http-verification.json`。本轮没有启动游戏/浏览器/战斗/战斗模拟/音频/WASM，手机效果与平衡待用户试玩。
