@@ -9,6 +9,30 @@ deployment=json.loads((OUT/'deployment.json').read_text('utf8'))
 assert deployment['complete'] and deployment['online_verification']['release_matches']
 version=report['checks']['release']['id']
 targets=report['newMedia']+[{'path':report['mainScript'],'sha256':report['mainSha256']}]
+package=OUT.parents[1]/'build/github-pages-wind-video-v129'
+manifests=[]
+for file in (package/'assets/resources/import').rglob('*.json'):
+    raw=file.read_bytes()
+    if b'framePrefix' not in raw or not (b'tornado_' in raw or b'eye_' in raw):continue
+    data=json.loads(raw)
+    def find(value):
+        if isinstance(value,dict):
+            if value.get('framePrefix') in ['eye_','tornado_']:return value
+            for child in value.values():
+                hit=find(child)
+                if hit:return hit
+        if isinstance(value,list):
+            for child in value:
+                hit=find(child)
+                if hit:return hit
+        return None
+    clip=find(data);assert clip and clip['frameCount']==66
+    kind=clip['framePrefix'].rstrip('_')
+    source=json.loads((OUT.parents[1]/('assets/resources/fx/wind_'+kind+'_video_v129.frames.json')).read_text('utf8'))
+    assert clip==source,'Compiled clip manifest changed'
+    manifests.append({'path':file.relative_to(package).as_posix(),'sha256':hashlib.sha256(raw).hexdigest()})
+assert len(manifests)==2
+targets+=manifests
 def check(item):
     error=None
     for attempt in range(3):

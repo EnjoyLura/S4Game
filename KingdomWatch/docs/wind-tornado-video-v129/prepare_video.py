@@ -152,14 +152,14 @@ def run(source,kind):
             d.text((14,488),'固定比例与脚点；无倒放、无静止等帧',font=font,fill='#9cafac')
             sheet.paste(canvas.convert('RGB'),(panel*440,0))
         scenes.append(sheet)
-    # Alternate 22/23ms keeps this preview at exactly 1.333 sec per loop.
+    # Distributed integer milliseconds preserve the configured playback rate.
     durations=[round((i+1)*1000/(30*speed))-round(i*1000/(30*speed)) for i in range(count)]
     scenes[0].save(OUT/(kind+'-preview.webp'),save_all=True,append_images=scenes[1:],duration=durations,loop=0,quality=88,method=4)
     scenes[8].save(OUT/(kind+'-still.jpg'),quality=94)
     contact=Image.new('RGB',(960,5*205),'#19282d')
     for j,i in enumerate(range(0,count,4)):
-        cell=Image.new('RGBA',(240,205),'#19282d');small=tiles[i].resize((160,180),Image.Resampling.LANCZOS)
-        cell.alpha_composite(small,(40,0));ImageDraw.Draw(cell).text((10,182),str(i),font=font,fill='white')
+        cell=Image.new('RGBA',(240,205),'#19282d');small=tiles[i].copy();small.thumbnail((200,180),Image.Resampling.LANCZOS)
+        cell.alpha_composite(small,((240-small.width)//2,(180-small.height)//2));ImageDraw.Draw(cell).text((10,182),str(i),font=font,fill='white')
         contact.paste(cell.convert('RGB'),(j%4*240,j//4*205))
     contact.save(OUT/(kind+'-contact-sheet.jpg'),quality=92)
     arrays=[np.array(t).astype(np.float32)/255 for t in tiles]

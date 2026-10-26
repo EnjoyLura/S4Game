@@ -18,4 +18,4 @@
 
 实现已本地提交5959ad9e。Creator生产构建17654ms、退出36；运行包1609文件、210962698字节（210.96MB），版本e218f92b3e5fb163，比v128增加9706036字节。516份原有native文件原字节保持，仅新增两份无损序列图集；新图集解码RGBA逐像素相同、全部66格边缘alpha为0。15份JS与5段入口内联脚本仅语法检查、整包SHA与路径/压缩/WASM头静态校验通过，9条既有类型诊断无新增。详见package-static-verification.json、export-report.json、build-record.json。
 
-部署回执后补；按持续授权只部署独立GitHub Pages运行包，不推源码、不部署CF。
+已发布：https://enjoylura.github.io/kingdom-watch-play/?v=wind-video-v129 。独立运行仓库提交d90356a55d750a25ac576336baa1e5106ed8fcb0，Pages与build均built，标准线上检查通过；额外新两图集、两份实际编译清单、主脚本共5份HTTP200且SHA匹配，编译清单与源清单完整相同。发布期间源码HEAD/索引保持，详见deployment.json与additional-http-verification.json。按持续授权只推独立GitHub Pages运行包，未推源码、未部署CF；手机动态观感待用户。
