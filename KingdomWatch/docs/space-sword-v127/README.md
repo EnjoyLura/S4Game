@@ -43,10 +43,11 @@
 - `audit_types.cjs`：与源码基线 b40535fd 对比，既有9项诊断保持，无新增。
 - 字体补入“万伊凌宗攒芙霄”，沿用本地固定版本 OFL 字体源，共增加4820字节。
 - 遵守项目约定，未启动游戏、浏览器、真实战斗、战斗模拟、音频或WASM。隔离绘图不构成实战验证；手机观感、平衡和实际操作待用户试玩。
-- 构建、完整运行包路径／SHA／WASM静态检查及部署HTTP结果在同目录回执中补充。
+- 最终 Creator 3.8.8 构建18350ms完成、退出36；发布包1597文件、200837121字节，较v126增加781828字节。510份原生文件字节保持，2份字体扩字，新增3份美术图集。
+- 发布包全部文件SHA256、路径、WebP解码／透明度、WASM头部静态检查通过；15份JS与5段内联脚本仅语法检查通过。版本 `782ebfac2232416d`，构建及导出回执见 `build-record.json`、`export-report.json`、`package-static-verification.json`。
 
 ## 发布
 
 固定试玩地址：https://enjoylura.github.io/kingdom-watch-play/?v=space-sword-v127
 
-以 `deployment.json` 的完成状态和提交号为准，本文在构建前记录，不预先宣称线上验证通过。
+以 `deployment.json` 的完成状态和提交号为准；线上HTTP检查在部署后记录，不以本地构建代替线上验证。
