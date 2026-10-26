@@ -15,3 +15,5 @@
 复现：`verify.cjs`、`render_review.py`、`render_wind.py`、`render_tornado.py`、`audit_types.cjs`；构建后`audit_package.py`；发布后`verify_http.py`。各脚本的依赖路径与前轮沿用。只有运行包提交到独立GitHub Pages仓库，源码仅本地提交，不部署Cloudflare。构建/发布回执后补。
 
 实现提交 `4b9af6c5`。Creator 3.8.8 构建19882ms、退出36；运行包1610文件208449456字节，较v135增4715字节，版本 `6ae3b78e3f4703cc`。518份既有native逐字节保持，无新增媒体；3效果GLSL1/3、两帧清单、15JS+5内联语法及整包路径/摘要/解码静态检查通过。保留原9条类型诊断，无新增。构建日志中的脚本worker SIGTERM出现在脚本成功结束后，最终构建成功。
+
+已发布：https://enjoylura.github.io/kingdom-watch-play/?v=sword-wind-ground-v136 ，运行提交 `d5c04305f216731fa76917bc919459c3f962c1a1`，版本 `6ae3b78e3f4703cc`。首次等待窗口内Pages仍building，随后只检查状态得到built，未重复推送。标准线上验证和额外6份材质/清单/主脚本HTTP200+SHA一致。源码构建记录 `f46d5dc9`；发布中源码HEAD/索引保持，只推独立运行包，未推源码、未部署Cloudflare。
