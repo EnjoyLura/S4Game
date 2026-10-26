@@ -91,8 +91,8 @@ async function main(){
  assert.ok(torn.axisStabilization.afterCenterRange<torn.axisStabilization.beforeCenterRange*.25);
  for(const kind of ['eye','tornado']){
   const a=JSON.parse(read('docs/wind-ground-loop-v130/art-manifest-'+kind+'.json'));
-  const sources=new Set([...a.directSourceIndices,...a.overlapPairs.flatMap(p=>[p.headSource,p.tailSource])]);
-  assert.equal(sources.size,60);assert.equal(a.overlapPairs.length,12);assert.equal(a.overlapPairs[0].headWeight,0);assert.equal(a.overlapPairs.at(-1).headWeight,1);
+  const sources=new Set([...a.directSourceIndices,...a.overlapPairs.flatMap(p=>[...(p.headWeight>0?[p.headSource]:[]),...(p.headWeight<1?[p.tailSource]:[])])]);
+  assert.equal(sources.size,60);assert.equal(a.overlapPairs.length,12);assert.ok(a.overlapPairs[0].headWeight<.01);assert.ok(a.overlapPairs.at(-1).headWeight>.99);
   assert.ok(a.wrapMAE<a.medianStepMAE*1.2);
  }
  const report={status:'PASS',baseline:BASE,changedExistingAssets:changed,allGameplayAndOtherEffectsByteUnchanged:true,

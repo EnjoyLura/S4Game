@@ -58,7 +58,9 @@ def loop(tiles):
         gb=cv2.cvtColor((b[:,:,:3]*255).astype(np.uint8),cv2.COLOR_RGB2GRAY)
         flow=lambda x,y:cv2.calcOpticalFlowFarneback(x,y,None,.5,4,25,6,7,1.5,0)
         ab=flow(ga,gb);ba=flow(gb,ga);yy,xx=np.indices(ga.shape,np.float32)
-        t=k/(OVERLAP-1);t=t*t*(3-2*t)
+        # Pixel-centered weights keep every source cel's contribution nonzero,
+        # while the first/last overlap is still almost entirely its natural end.
+        t=(k+.5)/OVERLAP;t=t*t*(3-2*t)
         aa=cv2.remap(a,xx-t*ab[:,:,0],yy-t*ab[:,:,1],cv2.INTER_LINEAR,borderMode=cv2.BORDER_CONSTANT)
         bb=cv2.remap(b,xx-(1-t)*ba[:,:,0],yy-(1-t)*ba[:,:,1],cv2.INTER_LINEAR,borderMode=cv2.BORDER_CONSTANT)
         output.append(straight(aa*(1-t)+bb*t))
