@@ -18,9 +18,15 @@ import { acceptsTarget, attackLayer, TargetLayer } from '../config/Targeting';
 import { drawWindBlade, drawShuriken, WIND_NINJA_FX_EFFECT } from './WindNinjaVFX';
 import { HeroFxShader } from './HeroFxShader';
 import { sweptBladeEntry } from './WindNinjaGeometry';
+import { drawFlyingSword, drawMagicBlade, drawRiftShard } from './SpaceSwordVFX';
 
 export interface ProjSpec {
-  visual?: 'wind' | 'shuriken';
+  visual?: 'wind' | 'shuriken' | 'rift' | 'sword' | 'spaceBlade';
+  /** Only deliberately homing attacks opt in; existing arrows and bullets stay straight. */
+  homingTarget?: Monster;
+  homingLifeId?: number;
+  /** Specialised blast art, with ordinary direct/splash damage still owned by hitMob. */
+  onBlastImpact?: (mob: Monster) => void;
   /** Optional transverse contact span; ordinary projectiles retain their circular sweep. */
   lineHalfLength?: number;
   lineForwardOffset?: number;
@@ -296,6 +302,17 @@ export class ProjectileManager {
         continue;
       }
 
+      if(sp.homingTarget){
+        let target=sp.homingTarget;
+        if(target.lifeId!==sp.homingLifeId||target.dead||!target.node.isValid||this.mgr.list.indexOf(target)<0){
+          const next=this.mgr.nearest(sp.x,sp.y,1100,sp.targetLayer);
+          if(next){target=next;sp.homingTarget=next;sp.homingLifeId=next.lifeId;}
+        }
+        if(target.lifeId===sp.homingLifeId&&!target.dead&&target.node.isValid&&this.mgr.list.indexOf(target)>=0){
+          const dx=target.x-sp.x,dy=target.hitY-sp.y,len=Math.hypot(dx,dy);
+          if(len>1e-7){a.vx=dx/len*sp.speed;a.vy=dy/len*sp.speed;}
+        }else{sp.homingTarget=undefined;sp.homingLifeId=undefined;}
+      }
       const startX = sp.x, startY = sp.y;
       let stepX = a.vx * dt, stepY = a.vy * dt, arrived = false;
       if (sp.endPoint) {
@@ -437,6 +454,9 @@ export class ProjectileManager {
       const orb = s.heroId === 'volt' && !s.small && !s.enemy;
       const fire = s.heroId === 'pyro' && !s.enemy;
       const shard = s.heroId === 'mora' && !s.small && !s.enemy;
+      if(s.visual==='spaceBlade'){drawMagicBlade(g,s.x,s.y,Math.atan2(a.vy,a.vx),s.lineHalfLength||423,a.age,s.color);continue;}
+      if(s.visual==='sword'){drawFlyingSword(g,s.x,s.y,Math.atan2(a.vy,a.vx),size,a.age);continue;}
+      if(s.visual==='rift'){drawRiftShard(g,s.x,s.y,Math.atan2(a.vy,a.vx),size,a.age);continue;}
       if (s.visual === 'wind') {
         const rendered = a.windShader && this.windFlight?.draw(s.x,s.y,size*10,size*10,
           Math.atan2(a.vy,a.vx)*180/Math.PI,a.age,a.fxSeed,1,3,size*3);
@@ -767,7 +787,8 @@ export class ProjectileManager {
         if (!o.dead && sp.burnSplash && sp.burnDps) o.applyBurn(sp.burnDps, sp.burnDur ?? 3, sp.burnBurst || 0, sp.burnHealCut || 0, sp.heroId);
         if (o.dead) this.killPop(sp, o.x, o.hitY + o.def.radius);
       }
-      if (this.impacts) this.impacts.blast(m.x, m.hitY, sp.heroId, sp.explodeR, m.y);
+      if (sp.onBlastImpact) sp.onBlastImpact(m);
+      else if (this.impacts) this.impacts.blast(m.x, m.hitY, sp.heroId, sp.explodeR, m.y);
       else this.boomFx(m.x, m.hitY, sp.explodeR);
     }
     if (sp.arcDamage) this.hitArc(a, m);

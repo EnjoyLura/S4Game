@@ -1,0 +1,332 @@
+{
+  "mode": "built-in image_gen",
+  "sources": [
+    {
+      "id": "space",
+      "figureSha256": "3e8179a0df7a052231a183f01fa764836f3a9519488cb20219073c5a1496e92a",
+      "figureCrops": [
+        {
+          "left": 78,
+          "top": 26,
+          "width": 664,
+          "height": 972
+        },
+        {
+          "left": 824,
+          "top": 25,
+          "width": 631,
+          "height": 958
+        }
+      ],
+      "scale": 0.7108433734939759,
+      "iconRegions": [
+        {
+          "left": 124,
+          "top": 12,
+          "width": 524,
+          "height": 523,
+          "pixels": 214087
+        },
+        {
+          "left": 726,
+          "top": 13,
+          "width": 525,
+          "height": 522,
+          "pixels": 214522
+        },
+        {
+          "left": 113,
+          "top": 545,
+          "width": 544,
+          "height": 543,
+          "pixels": 231297
+        },
+        {
+          "left": 715,
+          "top": 547,
+          "width": 546,
+          "height": 543,
+          "pixels": 231856
+        }
+      ],
+      "iconsSha256": "e7d9432257c2b88bd3fccd06fbe33220c947ef766125daea94c226b866f66f27"
+    },
+    {
+      "id": "sword",
+      "figureSha256": "cbf89793269baa95ade27da0c9c37610c061e7fa90265618ba09ca81fefeaea6",
+      "figureCrops": [
+        {
+          "left": 54,
+          "top": 62,
+          "width": 667,
+          "height": 896
+        },
+        {
+          "left": 843,
+          "top": 91,
+          "width": 651,
+          "height": 863
+        }
+      ],
+      "scale": 0.7076461769115442,
+      "iconRegions": [
+        {
+          "left": 30,
+          "top": 18,
+          "width": 583,
+          "height": 577,
+          "pixels": 263025
+        },
+        {
+          "left": 641,
+          "top": 17,
+          "width": 584,
+          "height": 579,
+          "pixels": 265746
+        },
+        {
+          "left": 28,
+          "top": 616,
+          "width": 581,
+          "height": 581,
+          "pixels": 264401
+        },
+        {
+          "left": 639,
+          "top": 615,
+          "width": 588,
+          "height": 587,
+          "pixels": 270551
+        }
+      ],
+      "iconsSha256": "df728b4e12c24226fdccc3e82f429b5c6ac8f1d822c6aaf740b2d5005ce223e2"
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/resources/ux/space_sword_v127/space_figures.png",
+      "uuid": "48a2ef84-2cbd-4776-827e-df0500bb6dcd",
+      "width": 1024,
+      "height": 768,
+      "bytes": 904108,
+      "sha256": "28b3b78eacd00f01579235b3a45807ff994eb26e5a55545ad571485dafd25682"
+    },
+    {
+      "path": "assets/resources/ux/space_sword_v127/sword_figures.png",
+      "uuid": "56761f44-3406-42f9-90ed-fd4cfd9cec8f",
+      "width": 1024,
+      "height": 768,
+      "bytes": 1007809,
+      "sha256": "b77a3dd130f27b8042d600c07b13dcc71aa3a463df49345437a14f611ed9a842"
+    },
+    {
+      "path": "assets/resources/ux/space_sword_v127/abilities.png",
+      "uuid": "2314829e-48db-4b26-9a75-a8f5d6c4d5ee",
+      "width": 1024,
+      "height": 512,
+      "bytes": 1269273,
+      "sha256": "9e59d4585c1f882ca4b7385d3d64ec0e228488123ac12c995261b59c53d2347b"
+    }
+  ],
+  "frames": {
+    "new_heroes_v127/space_lobby": {
+      "source": "space_sword_v127/space_figures",
+      "rect": [
+        0,
+        0,
+        512,
+        768
+      ]
+    },
+    "hero_comic_v1/comic_figure_space_v1": {
+      "source": "space_sword_v127/space_figures",
+      "rect": [
+        0,
+        0,
+        512,
+        768
+      ]
+    },
+    "new_heroes_v127/space_battle": {
+      "source": "space_sword_v127/space_figures",
+      "rect": [
+        512,
+        0,
+        512,
+        768
+      ]
+    },
+    "ui_avatar_space": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        4,
+        4,
+        248,
+        248
+      ]
+    },
+    "ui_icon_atk_space": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        260,
+        4,
+        248,
+        248
+      ]
+    },
+    "ui_icon_skill_space": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        516,
+        4,
+        248,
+        248
+      ]
+    },
+    "ui_icon_ult_space": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        772,
+        4,
+        248,
+        248
+      ]
+    },
+    "new_heroes_v127/sword_lobby": {
+      "source": "space_sword_v127/sword_figures",
+      "rect": [
+        0,
+        0,
+        512,
+        768
+      ]
+    },
+    "hero_comic_v1/comic_figure_sword_v1": {
+      "source": "space_sword_v127/sword_figures",
+      "rect": [
+        0,
+        0,
+        512,
+        768
+      ]
+    },
+    "new_heroes_v127/sword_battle": {
+      "source": "space_sword_v127/sword_figures",
+      "rect": [
+        512,
+        0,
+        512,
+        768
+      ]
+    },
+    "ui_avatar_sword": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        4,
+        260,
+        248,
+        248
+      ]
+    },
+    "ui_icon_atk_sword": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        260,
+        260,
+        248,
+        248
+      ]
+    },
+    "ui_icon_skill_sword": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        516,
+        260,
+        248,
+        248
+      ]
+    },
+    "ui_icon_ult_sword": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        772,
+        260,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_avatar_space": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        4,
+        4,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_atk_space": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        260,
+        4,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_skill_space": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        516,
+        4,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_ult_space": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        772,
+        4,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_avatar_sword": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        4,
+        260,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_atk_sword": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        260,
+        260,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_skill_sword": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        516,
+        260,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_ult_sword": {
+      "source": "space_sword_v127/abilities",
+      "rect": [
+        772,
+        260,
+        248,
+        248
+      ]
+    }
+  },
+  "processing": "Complete alpha subject crop; common uniform actor scale per pair; no painting, deformation, artificial frame or VFX textures."
+}

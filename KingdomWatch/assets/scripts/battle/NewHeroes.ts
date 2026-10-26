@@ -182,8 +182,10 @@ export class CannonHero extends HeroBase {
     if(normal&&this.stats.cannonPierce){
       const dx=shot.flightX || 0,dy=shot.flightY ?? 1;
       this.secondaryProjectiles.push({x:shot.x,y:shot.y,dirX:dx,dirY:dy,speed:760,
-        dmg:damage*CC.passingMul,crit:critical,color:'#E6BD65',heroId:this.id,size:8,ttl:CC.passingSeconds,
-        pierce:this.stats.cannonPierce-1,excludeLifeId:primary?.lifeId,spark:true,resCut:this.stats.defIgnore});
+        dmg:damage*CC.passingMul,crit:critical,color:'#E6BD65',heroId:this.id,size:8,ttl:Math.hypot(LO.half*2+400,860)/760,
+        pierce:this.stats.cannonPierce-1,excludeLifeId:primary?.lifeId,spark:true,resCut:this.stats.defIgnore,
+        targetLayer:'ground',explodeR:shot.radius,explodeMul:.7,
+        onBlastImpact:m=>{if(this.node.isValid){this.effects().burst(m.x,m.hitY,shot.radius,'normal',m.y);Sfx.impact(this.id,true);}}});
     }
     if(normal&&this.stats.cannonFragments)for(let k=0;k<CC.fragments;k++){
       const a=Math.PI/2+k*Math.PI*2/CC.fragments;

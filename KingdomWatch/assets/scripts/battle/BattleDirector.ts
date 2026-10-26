@@ -1,3 +1,5 @@
+import { SpaceHero, SwordHero } from './SpaceSwordHeroes';
+import { baseSpaceStats, baseSwordStats } from '../config/Cards';
 /**
  * 战斗总控（§3.2 状态机）：PREPARE → WAVE_RUNNING ⇄ LEVEL_UP_PAUSE → VICTORY / LINE_BROKEN→失败结算(内含广告复活)
  * dt×倍速步进；暂停/三选一期间全场冻结（§3.2）
@@ -203,14 +205,16 @@ export class BattleDirector extends Component {
     // 编队上阵（§编队）：按存档上阵顺序从左到右站位（2 人 = ±160 与旧版一致）；空编队兜底双英雄
     const slots = heroSlots(ids.length);
     this.heroes = ids.map((hid, i) => {
-      const st = hid === 'wind' ? baseWindStats() : hid === 'ninja' ? baseNinjaStats()
+      const st = hid === 'space' ? baseSpaceStats() : hid === 'sword' ? baseSwordStats() : hid === 'wind' ? baseWindStats() : hid === 'ninja' ? baseNinjaStats()
         : hid === 'cannon' ? baseCannonStats() : hid === 'siphon' ? baseSiphonStats() : hid === 'sniper' ? baseSniperStats()
         : hid === 'pyro' ? basePyroStats()
           : hid === 'volt' ? baseVoltStats()
             : hid === 'mora' ? baseMoraStats() : baseArcherStats();
       applyHeroGrowth(st, hid);     // 英雄等级成长+阶段性突破上场（每级成长按存档等级）
       applyEquipAffixes(st, hid);   // 穿戴词条上场即生效（用户确认的词条体系）
-      return hid === 'wind' ? new WindHero(heroLayer, slots[i], st)
+      return hid === 'space' ? new SpaceHero(heroLayer, slots[i], st)
+        : hid === 'sword' ? new SwordHero(heroLayer, slots[i], st)
+        : hid === 'wind' ? new WindHero(heroLayer, slots[i], st)
         : hid === 'ninja' ? new NinjaHero(heroLayer, slots[i], st)
         : hid === 'cannon' ? new CannonHero(heroLayer, slots[i], st)
         : hid === 'siphon' ? new SiphonHero(heroLayer, slots[i], st)
@@ -991,7 +995,7 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
   s.ultBolts += bt.ultBolts;
   s.ultAutoCd = bt.ultAutoCd;
   s.atkLv = hs.atkLv; s.skillLv = hs.skillLv; s.ultLv = hs.ultLv;   // 技能升级里程碑（弓箭手类内读取）
-  if (hid === 'cannon' || hid === 'siphon' || hid === 'wind' || hid === 'ninja') {
+  if (['cannon', 'siphon', 'wind', 'ninja', 'space', 'sword'].includes(hid)) {
     s.normalMul = newHeroNormalCfg(hs.atkLv).normalMul;
     if (hs.atkLv >= 10) s.critRate = Math.min(1, s.critRate + .05);
     if (hs.atkLv >= 15) s.range = Math.round(s.range * 1.08);

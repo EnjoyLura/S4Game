@@ -1,3 +1,4 @@
+import { spaceUltCfg, swordUltCfg } from '../config/SpaceSwordConfig';
 /** Shared comic training views. Growth remains in GameData; battle unlocks remain run-local. */
 import { Graphics, Label, Mask, Node, ScrollView, Sprite, UITransform, UIOpacity, Vec2 } from 'cc';
 import { LO } from '../config/GameConfig';
@@ -454,13 +455,14 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
           const pct = (v: number): string => `${Math.round(v * 10000) / 100}%`;
           rows = [{ name: hid === 'wind' ? '每次切割技能倍率' : hid === 'ninja' ? '每刃回收技能倍率' : '技能伤害倍率',
             cur: pct(cur), next: pct(next), gain: `+${pct(next - cur)}` }];
-        } else if (hid === 'cannon' || hid === 'siphon' || hid === 'wind' || hid === 'ninja') {
+        } else if (['cannon','siphon','wind','ninja','space','sword'].includes(hid)) {
           const value = (level: number): number => selected === 'atk' ? newHeroNormalCfg(level).normalMul
+            : hid === 'space' ? spaceUltCfg(level).mul : hid === 'sword' ? swordUltCfg(level).mul
             : hid === 'wind' ? windUltCfg(level).mul : hid === 'ninja' ? ninjaUltCfg(level).mul
             : hid === 'cannon' ? cannonUltCfg(level).mul : siphonUltCfg(level).mul;
           const cur = value(lv), next = value(maxed ? lv : lv + 1);
           const pct = (v: number): string => `${Math.round(v * 10000) / 100}%`;
-          rows = [{ name: selected === 'atk' ? '普攻伤害倍率' : hid === 'wind' || hid === 'ninja' ? '大招每段技能倍率'
+          rows = [{ name: selected === 'atk' ? '普攻伤害倍率' : ['wind','ninja','space','sword'].includes(hid) ? '大招每段技能倍率'
             : hid === 'siphon' ? '激光每秒技能倍率' : '每弹中心技能倍率',
             cur: pct(cur), next: pct(next), gain: `+${pct(next - cur)}` }];
         } else {

@@ -1,0 +1,20 @@
+{
+  "fonts": [
+    {
+      "font": "UIBody",
+      "added": "万伊凌宗攒芙霄",
+      "existingCodepointsPreserved": 1590,
+      "bytesAdded": 2032,
+      "sha256": "50e3b83d0147e496484f92b8dd1d4b97c3e0db96f8a21cb3a62c87f6593847da"
+    },
+    {
+      "font": "UIHeading",
+      "added": "万伊凌宗攒芙霄",
+      "existingCodepointsPreserved": 1590,
+      "bytesAdded": 2788,
+      "sha256": "ad3d2da2e993e7c13fdad9158505a679503bd3ed331a18e120558a465d351297"
+    }
+  ],
+  "source": "same pinned local OFL sources; no downloads",
+  "gameStarted": false
+}

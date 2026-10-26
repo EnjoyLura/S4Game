@@ -265,3 +265,204 @@ Object.assign(NEW_HERO_FRAMES, {
     ]
   }
 });
+// v127 space/sword atlas regions.
+Object.assign(NEW_HERO_FRAMES, {
+  "new_heroes_v127/space_lobby": {
+    "source": "space_sword_v127/space_figures",
+    "rect": [
+      0,
+      0,
+      512,
+      768
+    ]
+  },
+  "hero_comic_v1/comic_figure_space_v1": {
+    "source": "space_sword_v127/space_figures",
+    "rect": [
+      0,
+      0,
+      512,
+      768
+    ]
+  },
+  "new_heroes_v127/space_battle": {
+    "source": "space_sword_v127/space_figures",
+    "rect": [
+      512,
+      0,
+      512,
+      768
+    ]
+  },
+  "ui_avatar_space": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      4,
+      4,
+      248,
+      248
+    ]
+  },
+  "ui_icon_atk_space": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      260,
+      4,
+      248,
+      248
+    ]
+  },
+  "ui_icon_skill_space": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      516,
+      4,
+      248,
+      248
+    ]
+  },
+  "ui_icon_ult_space": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      772,
+      4,
+      248,
+      248
+    ]
+  },
+  "new_heroes_v127/sword_lobby": {
+    "source": "space_sword_v127/sword_figures",
+    "rect": [
+      0,
+      0,
+      512,
+      768
+    ]
+  },
+  "hero_comic_v1/comic_figure_sword_v1": {
+    "source": "space_sword_v127/sword_figures",
+    "rect": [
+      0,
+      0,
+      512,
+      768
+    ]
+  },
+  "new_heroes_v127/sword_battle": {
+    "source": "space_sword_v127/sword_figures",
+    "rect": [
+      512,
+      0,
+      512,
+      768
+    ]
+  },
+  "ui_avatar_sword": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      4,
+      260,
+      248,
+      248
+    ]
+  },
+  "ui_icon_atk_sword": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      260,
+      260,
+      248,
+      248
+    ]
+  },
+  "ui_icon_skill_sword": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      516,
+      260,
+      248,
+      248
+    ]
+  },
+  "ui_icon_ult_sword": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      772,
+      260,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_avatar_space": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      4,
+      4,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_atk_space": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      260,
+      4,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_skill_space": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      516,
+      4,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_ult_space": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      772,
+      4,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_avatar_sword": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      4,
+      260,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_atk_sword": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      260,
+      260,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_skill_sword": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      516,
+      260,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_ult_sword": {
+    "source": "space_sword_v127/abilities",
+    "rect": [
+      772,
+      260,
+      248,
+      248
+    ]
+  }
+});

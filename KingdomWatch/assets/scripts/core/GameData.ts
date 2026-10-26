@@ -1,3 +1,4 @@
+import { SPACE, SWORD } from '../config/SpaceSwordConfig';
 import { EXPANSION_MOBS } from '../config/ChapterContent';
 /**
  * 五主界面数据层（§主界面需求清单）：物品/商店/英雄配置 + 经济公式 + 背包穿戴养成操作
@@ -260,6 +261,18 @@ export const HERO_DEFS: Record<string, HeroDef> = {
     story: '来自象牙风塔的逐风者，以腕环引导青绿色气流。他让风眼聚拢敌群，再用游走的龙卷守住王国防线。',
     shopPrice: 5200,
   },
+  space: {
+    id:'space', name:'伊芙·折界', job:'空间 · 传送切割', avatar:'ui_avatar_space',
+    baseAtk:SPACE.attack, baseSkillDmg:SPACE.skill, growthType:'skill', atkSpd:SPACE.aspd,
+    weaponName:'折界晶核', skillName:'空间放逐', ultName:'双重界刃', shopPrice:5600,
+    story:'以紫晶折叠空间的守望者，将逼近城墙的敌人送回远方，再用横贯战场的界刃切开敌阵。',
+  },
+  sword: {
+    id:'sword', name:'凌霄·御锋', job:'御剑 · 剑阵爆发', avatar:'ui_avatar_sword',
+    baseAtk:SWORD.attack, baseSkillDmg:SWORD.skill, growthType:'hybrid', atkSpd:SWORD.aspd,
+    weaponName:'青霄灵剑', skillName:'御剑追锋', ultName:'万剑归宗', shopPrice:5600,
+    story:'远行至王国边境的御剑师。飞剑命中积蓄剑意，追锋破敌，剑阵落成时万剑归一。',
+  },
   ninja: {
     id: 'ninja', name: '胧·影刃', job: '忍者 · 飞刃回收', avatar: 'ui_avatar_ninja',
     baseAtk: NINJA.attack, baseSkillDmg: NINJA.skill, growthType: 'normal', atkSpd: NINJA.aspd,
@@ -494,7 +507,7 @@ export const SHOP: ShopDef[] = [
   { id: 's_hero_mora', tab: 'hero', name: '莫拉·寒霜', sub: '冰霜 · 减速控制', price: 4800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'mora' } },
   { id: 's_hero_cannon', tab: 'hero', name: '布洛克·铜铸', sub: '重炮 · 物理爆破', price: 5200, currency: 'diamond', unlock: '1-4', give: { kind: 'hero', id: 'cannon' } },
   { id: 's_hero_siphon', tab: 'hero', name: '薇拉·绯契', sub: '虹吸 · 贯穿爆发', price: 5600, currency: 'diamond', unlock: '1-4', give: { kind: 'hero', id: 'siphon' } },
-  ...['wind', 'ninja'].map(id => ({ id: 's_hero_' + id, tab: 'hero' as ShopTab, name: HERO_DEFS[id].name,
+  ...['wind', 'ninja', 'space', 'sword'].map(id => ({ id: 's_hero_' + id, tab: 'hero' as ShopTab, name: HERO_DEFS[id].name,
     sub: HERO_DEFS[id].job, price: HERO_DEFS[id].shopPrice, currency: 'diamond' as const,
     unlock: '1-4', give: { kind: 'hero' as const, id } })),
   { id: 's_hero_more', tab: 'hero', name: '新英雄', sub: '敬请期待', price: 0, currency: 'diamond', unlock: '', give: { kind: 'hero', id: '' } },

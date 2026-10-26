@@ -715,6 +715,17 @@ export class Monster {
     this.slowT = Math.max(this.slowT, dur);
     this.slowAmp = Math.max(this.slowAmp, Math.min(0.9, ratio));
   }
+  /** Relocate the living actor's footprint, clearing its old attack/lunge anchor. Never moves toward the wall. */
+  teleportUp(destinationY: number): boolean {
+    if(this.dead||this.isBoss||!Number.isFinite(destinationY)||!this.node.isValid)return false;
+    const y=Math.max(this.y,Math.min(mobEntryY(this.def.radius),destinationY));
+    if(y<=this.y+1)return false;
+    this.traits.interruptCasting();this.lungeT=this.atkAnimT=0;this.knockbackT=0;this.knockbackLeft=0;
+    this.holdY=y;
+    this.baseX=this.x;this.state='move';this.atkT=this.def.atkInterval;
+    this.node.setPosition(this.baseX,y,0);
+    return true;
+  }
   interruptCasting(): void { if (!this.dead && !this.isBoss) this.traits.interruptCasting(); }
   applyStun(duration: number): boolean {
     if (this.dead || this.isBoss || duration <= 0) return false;

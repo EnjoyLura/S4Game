@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "pureGeometryCases": 1020,
+  "isolatedDrawingFrames": 180,
+  "maxDrawingCommands": 28,
+  "artAliasesChecked": 22,
+  "checks": [
+    "full screen blade width and continuous sweeps across five aspect ratios",
+    "monotone cultivation curves",
+    "two distinct energy requirements",
+    "weapon compatibility",
+    "factory/save/common cards/prewarm registration",
+    "teleport clears hold/lunge anchors and protects bosses",
+    "sword intent earned once per actual normal projectile hit",
+    "homing lifecycle guard and retargeting",
+    "cannon lifespan/splash/procedural burst path",
+    "pure drawing finite geometry and no image runtime dependency",
+    "formal art alpha/atlas bounds"
+  ],
+  "actualEngineGameBrowserCombatAudioOrWasmStarted": false,
+  "manualPhoneGameplay": "pending user"
+}

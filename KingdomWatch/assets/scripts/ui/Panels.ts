@@ -8,6 +8,7 @@ import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDurati
 import { voltShockDuration, voltShockAmp, voltShockedMultiplier, voltStrikeCount } from '../config/Cards';
 import { CANNON, SIPHON_LASER, cannonSkillCfg, cannonUltCfg, siphonSkillCfg, siphonLaserCfg } from '../config/NewHeroConfig';
 import { WIND, NINJA, VOLT_FIELD, windSkillCfg, windUltCfg, ninjaSkillCfg, ninjaUltCfg } from '../config/WindNinjaConfig';
+import { SPACE, SWORD, spaceSkillCfg, spaceUltCfg, swordSkillCfg, swordUltCfg } from '../config/SpaceSwordConfig';
 import { MORA_ULT_HITS, moraSlowRatio, moraSlowDuration, moraFreezeChance, moraNormalFreezeDuration, moraFieldRadius, moraFieldFreeze, moraUltimateHitDamage } from '../config/Cards';
 import { FROST_ULT_RAIN_COUNT, HERO_Y, LO, PAL } from '../config/GameConfig';
 import { targetLabel } from '../config/Targeting';
@@ -603,7 +604,35 @@ export class Panels {
     const iconY = WYB(126, 46);
     let px: number, py: number, w = 300, hh = 272, title: string;
     let rows: [string, string][];
-    if (hero.id === 'wind' || hero.id === 'ninja') {
+    if (hero.id === 'space' || hero.id === 'sword') {
+      const space=hero.id==='space',def=HERO_DEFS[hero.id];w=330;
+      if(kind==='atk'){
+        title=space?'普攻 · 裂隙晶矢':'普攻 · 飞剑';
+        rows=[['伤害',String(Math.round(hero.effAtk*h.normalMul))],['攻速',h.aspd.toFixed(2)+'次/秒'],
+          ['索敌范围',String(Math.round(h.range))],['弹速',String(space?SPACE.speed:SWORD.speed)],
+          ['暴击',Math.round(h.critRate*100)+'% / '+Math.round(h.critMul*100)+'%'],
+          ['效果',space?'空间晶矢 · 可对空':'命中积攒剑意 · 上限6']];
+      }else if(kind==='skill'){
+        title='技能 · '+def.skillName;
+        const sc=spaceSkillCfg(h.skillLv),sw=swordSkillCfg(h.skillLv);
+        rows=space?[
+          ['法术伤害',String(Math.round(hero.abilityDamage(sc.mul)))],['目标',sc.targets+'名 · 优先靠近防线'],
+          ['效果','瞬移回上方 · 首领免位移'],['减速',Math.round(sc.slow*100)+'% · '+sc.slowSeconds+'秒'],
+          ['范围',String(Math.round(h.skillRange))],['冷却',hero.skillCdTotal.toFixed(1)+'秒'],
+        ]:[['每剑物伤',String(Math.round(hero.abilityDamage(sw.mul)))],['数量',sw.swords+' + 消耗的剑意'],
+          ['效果','追踪强敌 · 目标死亡重新索敌'],['剑意上限',String(SWORD.intentCap)],
+          ['范围',String(Math.round(h.skillRange))],['冷却',hero.skillCdTotal.toFixed(1)+'秒']];
+      }else{
+        title='大招 · '+def.ultName;const sc=spaceUltCfg(h.ultLv),sw=swordUltCfg(h.ultLv);
+        rows=space?[['每刃法伤',String(Math.round(hero.abilityDamage(sc.mul,true)))],['数量','2道全屏魔法刃'],
+          ['效果','向上贯穿 · 每刃每敌命中1次'],['对空','地面与飞行'],['充能',Math.floor(hero.charge)+' / '+goalTxt],['释放','手动点击']]
+          :[['每剑物伤',String(Math.round(hero.abilityDamage(sw.mul,true)))],['落剑数量',String(sw.count)],
+            ['终结巨剑',String(Math.round(hero.abilityDamage(sw.finalMul,true)))],['范围',Math.round(sw.radius*h.skillRangeMul)+' · 可对空'],
+            ['充能',Math.floor(hero.charge)+' / '+goalTxt],['释放','手动 · 密集处剑阵']];
+      }
+      px=kind==='ult'?WX(636,90)-45-16-w/2:hero.x;
+      py=kind==='ult'?WYB(240+ultIdx*110,90):iconY+200;
+    } else if (hero.id === 'wind' || hero.id === 'ninja') {
       const wind = hero.id === 'wind', def = HERO_DEFS[hero.id];
       w = 320;
       if (kind === 'atk') {
@@ -874,7 +903,7 @@ export class Panels {
     }
     // Keep the existing six-row geometry while exposing the battle's new rules.
     if (kind === 'atk') {
-      if (hero.id !== 'siphon') rows[0][0] = ['archer', 'sniper', 'cannon', 'ninja'].includes(hero.id) ? '物理伤害' : '法术伤害';
+      if (hero.id !== 'siphon') rows[0][0] = ['archer', 'sniper', 'cannon', 'ninja', 'sword'].includes(hero.id) ? '物理伤害' : '法术伤害';
       if ((hero.id === 'archer' || hero.id === 'sniper') && h.pierce) rows[5] = ['贯穿', '额外命中 ' + h.pierce + ' 个目标'];
       if (hero.id === 'pyro' && h.pyroBurnBurst) rows[5] = ['余烬爆破', '点燃后阵亡爆炸 · 半径100'];
       if (hero.id === 'mora' && h.moraTeamVuln) rows[5] = ['冰裂印记', '全队易伤+15% · 3秒'];
