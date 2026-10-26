@@ -1,0 +1,20 @@
+{
+  "fonts": [
+    {
+      "font": "UIBody",
+      "added": "链",
+      "existingCodepointsPreserved": 1600,
+      "bytesAdded": 444,
+      "sha256": "a470f1a1ad288c0576ce9736c32c69c0d34ac9b20ba682a3d30ee97b540cf75b"
+    },
+    {
+      "font": "UIHeading",
+      "added": "链",
+      "existingCodepointsPreserved": 1600,
+      "bytesAdded": 588,
+      "sha256": "21739b6f437eabd6b15b814cc2942607bcc48972cb6c203c79914ac2debf0682"
+    }
+  ],
+  "source": "same pinned local OFL sources; no downloads",
+  "gameStarted": false
+}

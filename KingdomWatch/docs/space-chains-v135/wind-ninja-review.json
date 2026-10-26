@@ -1,0 +1,115 @@
+{
+  "status": "PASS",
+  "samples": [
+    {
+      "mode": 2,
+      "age": 0.01,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 2,
+      "age": 0.13,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 2,
+      "age": 0.45,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 2,
+      "age": 1.0,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 2,
+      "age": 1.8,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 2,
+      "age": 3.0,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 3,
+      "age": 0.01,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 3,
+      "age": 0.13,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 3,
+      "age": 0.45,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 3,
+      "age": 1.0,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 3,
+      "age": 1.8,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 3,
+      "age": 3.0,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 4,
+      "age": 0.01,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 4,
+      "age": 0.13,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 4,
+      "age": 0.45,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 4,
+      "age": 1.0,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 4,
+      "age": 1.8,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 4,
+      "age": 3.0,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    }
+  ],
+  "frames": 192,
+  "gameEngineBrowserBattleAudioWasmStarted": false
+}

@@ -3,7 +3,7 @@ export const WIND = { attack: 72, skill: 92, aspd: .9, range: 1050, skillRange: 
   bladeSpeed: 840, bladeHalfLength: 30, bladeForwardOffset: 9, bladePierce: 2, bladeFalloff: .8, eyeRadius: 165, eyeDuration: 4, eyeTick: .5, eyeMul: .35,
   eyePull: 94, tornadoRadius: 120, tornadoDuration: 5, tornadoTick: .4, tornadoMul: .55, tornadoSpeed: 82, tornadoPull: 65 };
 export const NINJA = { attack: 95, skill: 100, aspd: 1.1, range: 1000, skillRange: 1100, cooldown: 10, energy: 68,
-  speed: 1000, markCap: 80, recallSpeed: 1100, recallMul: 1.8, ultRadius: 145, ultDuration: 4, ultTick: .25, ultMul: .38 };
+  speed: 1000, markCap: 80, recallSpeed: 1100, recallMul: 1.8, ultRadius: 181.25, ultDuration: 4, ultTick: .25, ultMul: .38 };
 export const VOLT_FIELD = { duration: 3, tick: .5, radius: 95, mul: .2, maxFields: 8 };
 export function windSkillCfg(level: number) { return { mul: WIND.eyeMul*(1+(level-1)*.08)*(level>=20?1.2:1),
   radius: WIND.eyeRadius*(level>=15?1.15:1), duration: WIND.eyeDuration+(level>=10?1:0), pull: WIND.eyePull }; }

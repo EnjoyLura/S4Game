@@ -2,6 +2,7 @@
 import { Graphics, Node } from 'cc';
 import { CA, N } from '../ui/UIKit';
 import { HeroFxShader } from './HeroFxShader';
+import { drawSpaceChains, drawPortalSeal } from './SpaceBindingVFX';
 import { drawSwordFlight, swordDebris, swordCrater, swordImpactLife, SWORD_ABILITY_EFFECT } from './SwordAbilityVFX';
 export const SPACE_SWORD_EFFECT='fx/space-sword-burst';
 const TAU = Math.PI * 2;
@@ -70,18 +71,26 @@ export function drawHeavenSword(g:Graphics,x:number,y:number,angle:number,size:n
   for(let k=0;k<4;k++){const s=(k-1.5)*h*.115,head=((age*2.8+k*.19)%1)*h;
     g.strokeColor=CA('#A0FFE0',opacity*.35);g.lineWidth=1.2;g.moveTo(...pt(s,-head));g.lineTo(...pt(s,-head-h*.12));g.stroke();}
 }
-export interface SpacePrisonVisual {x:number;y:number;orbX:number;orbY:number;orb:boolean;orbRadius:number;radius:number;}
-interface Accent {x:number;y:number;age:number;duration:number;radius:number;angle:number;jade:boolean;kind:'portal'|'arrival'|'riftHit'|'cut'|'array'|'giant'|'landing'|'spacePulse';}
+export interface SpacePrisonVisual {x:number;y:number;bodyX:number;bodyY:number;groundY:number;chains:boolean;bindRadius:number;radius:number;}
+interface Accent {x:number;y:number;age:number;duration:number;radius:number;angle:number;jade:boolean;kind:'portal'|'arrival'|'riftHit'|'cut'|'array'|'giant'|'landing'|'spacePulse'|'finalWave';}
 export class SpaceSwordVFX {
   private node:Node;private g:Graphics;private accents:Accent[]=[];private clock=0;
   private volume:HeroFxShader|null=null;
+  private seal:HeroFxShader|null=null;private sealNode:Node|null=null;private sealInk:Graphics|null=null;private chainInk:Graphics|null=null;
   private swordGround:HeroFxShader|null=null;private swordAir:HeroFxShader|null=null;private groundNode:Node|null=null;
   private groundInk:Graphics|null=null;
   private prisonVisuals:readonly SpacePrisonVisual[]=[];
   private prisonAge=0;private columnStart=0;private columnDuration=0;
   constructor(parent:Node){this.node=N('spaceSwordProcedural',parent);this.g=this.node.addComponent(Graphics);
     const text=parent.getChildByName('TextLayer');if(text)this.node.setSiblingIndex(text.getSiblingIndex());}
-  warmVolume():void{this.volume ||= new HeroFxShader(this.node,'spaceSwordLight',32,'plasma',{effect:SPACE_SWORD_EFFECT,technique:0});}
+  warmVolume():void{
+    if(this.volume)return;
+    const parent=this.node.parent!,ground=parent.getChildByName('GroundFxLayer')||parent;
+    this.sealNode=N('spaceGroundSeals',ground);this.sealInk=this.sealNode.addComponent(Graphics);
+    this.seal=new HeroFxShader(this.sealNode,'spaceSealLight',16,'plasma',{effect:SPACE_SWORD_EFFECT,technique:0});
+    this.volume=new HeroFxShader(this.node,'spaceSwordLight',32,'plasma',{effect:SPACE_SWORD_EFFECT,technique:0});
+    this.chainInk=N('spaceBindingLinks',this.node).addComponent(Graphics);
+  }
   warmSword():void{
     if(this.swordGround)return;
     const parent=this.node.parent!,ground=parent.getChildByName('GroundFxLayer')||parent;
@@ -100,10 +109,21 @@ export class SpaceSwordVFX {
   }
   tick(dt:number):void{this.clock+=dt;for(let i=this.accents.length-1;i>=0;i--){this.accents[i].age+=dt;if(this.accents[i].age>=this.accents[i].duration)this.accents.splice(i,1);}}
   render():void{
-    const g=this.g;g.clear();this.groundInk?.clear();this.volume?.begin();this.swordGround?.begin();this.swordAir?.begin();
+    const g=this.g;g.clear();this.groundInk?.clear();this.sealInk?.clear();this.chainInk?.clear();this.seal?.begin();this.volume?.begin();this.swordGround?.begin();this.swordAir?.begin();
     for(const a of this.accents){const t=a.age/a.duration,fade=Math.min(1,t*8)*Math.min(1,(1-t)*5),r=a.radius;
-      if(a.kind==='portal'||a.kind==='arrival'||a.kind==='riftHit'){
-        if(this.volume?.draw(a.x,a.y,r*2.8,r*2.8,0,a.age,.7,1,a.kind==='portal'?4:a.kind==='arrival'?5:6,r,a.duration))continue;
+      if(a.kind==='portal'||a.kind==='arrival'){
+        const arrival=a.kind==='arrival';
+        if(!this.seal?.draw(a.x,a.y,r*2.5,r*1.25,0,a.age,.7,1,arrival?5:4,r,a.duration))
+          drawPortalSeal(this.sealInk||g,a.x,a.y,r,a.age,fade);
+        this.volume?.draw(a.x,a.y+r*.6,r*2.5,r*2.5,0,a.age,.7,1,arrival?9:8,r,a.duration);
+        continue;
+      }
+      if(a.kind==='riftHit'){
+        if(this.volume?.draw(a.x,a.y,r*2.8,r*2.8,0,a.age,.7,1,6,r,a.duration))continue;
+      }
+      if(a.kind==='finalWave'){
+        this.swordGround?.draw(a.x,a.y,r*2.9,r*1.45,0,a.age,.37,.65,7,r,a.duration);
+        continue;
       }
       if(a.jade&&(a.kind==='array'||a.kind==='landing'||a.kind==='cut'||a.kind==='giant')){
         const mode=a.kind==='array'?3:a.kind==='landing'?4:a.kind==='giant'?2:1;
@@ -139,7 +159,7 @@ export class SpaceSwordVFX {
         for(let k=0;k<9;k++){const th=k*TAU/9,len=r*(.35+(k%3)*.16);g.moveTo(a.x+Math.cos(th)*14,a.y+Math.sin(th)*5);
           g.lineTo(a.x+Math.cos(th)*len,a.y+Math.sin(th)*len*.4);g.stroke();}continue;
       }
-      const portal=a.kind==='portal'||a.kind==='arrival'||a.kind==='riftHit';
+      const portal=a.kind==='riftHit';
       const color=portal?'#BB63D8':'#63D2A4';
       if(a.kind==='cut'){for(let k=0;k<3;k++){g.strokeColor=CA(k?'#63D2A4':'#FFF9DA',fade*(k?.4:.9));g.lineWidth=(k?8:2)*(1-t);
         g.moveTo(a.x-r*(.3+t*.7),a.y-r*.55);g.lineTo(a.x+r*(.3+t*.7),a.y+r*.55);g.stroke();}continue;}
@@ -158,14 +178,11 @@ export class SpaceSwordVFX {
           for(let j=3;j>=1;j--){g.fillColor=CA('#BB63D8',fade*.06);g.moveTo(v.x-r*.12*j,v.y);
             g.quadraticCurveTo(v.x-r*.2,top-r,v.x,top);g.quadraticCurveTo(v.x+r*.2,top-r,v.x+r*.12*j,v.y);g.close();g.fill();}
           g.strokeColor=CA('#EFCBFF',fade*.8);g.lineWidth=2;g.moveTo(v.x,v.y);g.lineTo(v.x,top);g.stroke();}}
-      if(v.orb){const fade=Math.min(1,age*6)*Math.min(1,(this.columnStart+this.columnDuration-age)*5);
-        const drawn=this.volume?.draw(v.orbX,v.orbY,v.orbRadius*2.5,v.orbRadius*2.5,0,age,k*.71,fade,0,v.orbRadius,0);
-        if(!drawn){g.fillColor=CA('#BB63D8',fade*.07);g.circle(v.orbX,v.orbY,v.orbRadius*.84);g.fill();
-          g.strokeColor=CA('#DFA5FF',fade*.8);g.lineWidth=1.8;g.circle(v.orbX,v.orbY,v.orbRadius*.84);g.stroke();
-          g.ellipse(v.orbX,v.orbY,v.orbRadius*.84,v.orbRadius*.34);g.stroke();}}
+      if(v.chains){const fade=Math.min(1,age*6)*Math.min(1,(this.columnStart+this.columnDuration-age)*5);
+        drawSpaceChains(this.chainInk||g,v.bodyX,v.bodyY,v.groundY,v.bindRadius,age,fade);}
     }
-    this.volume?.end();
+    this.volume?.end();this.seal?.end();
     this.swordGround?.end();this.swordAir?.end();
   }
-  destroy():void{this.accents.length=0;this.prisonVisuals=[];if(this.groundNode?.isValid)this.groundNode.destroy();if(this.node.isValid)this.node.destroy();}
+  destroy():void{this.accents.length=0;this.prisonVisuals=[];if(this.groundNode?.isValid)this.groundNode.destroy();if(this.sealNode?.isValid)this.sealNode.destroy();if(this.node.isValid)this.node.destroy();}
 }

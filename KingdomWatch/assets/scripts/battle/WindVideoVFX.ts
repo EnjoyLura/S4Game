@@ -1,5 +1,6 @@
 /** Fixed-canvas user-video flipbooks. Only visual frames read area.age; no gameplay clocks. */
-import { Color, JsonAsset, Layers, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
+import { Color, Graphics, JsonAsset, Layers, Node, Rect, resources, Size, Sprite, SpriteFrame, UITransform, Vec2 } from 'cc';
+import { drawWindEyeContact } from './WindGroundVFX';
 import { ArtPriority, promoteUXArt, uxFrame } from '../ui/Ux';
 
 export type WindVideoKind = 'eye' | 'tornado';
@@ -77,6 +78,7 @@ export function windVideoFrame(age: number, fps: number, speed: number, count: n
 export class WindVideoVFX {
   private readonly root = new Node('WindVideoVFX');
   private readonly groundRoot = new Node('WindEyeGroundVFX');
+  private readonly groundInk:Graphics;
   private readonly clips = new Map<WindVideoKind, Clip>();
   private readonly selected = new WeakMap<View, Clip | null>();
   private readonly slots: Slot[] = [];
@@ -88,6 +90,7 @@ export class WindVideoVFX {
     const field = parent.parent || parent;
     const ground = field.getChildByName('GroundFxLayer');
     this.groundRoot.layer = Layers.Enum.UI_2D; this.groundRoot.setParent(ground || this.root);
+    this.groundInk=this.groundRoot.addComponent(Graphics);
     this.root.once(Node.EventType.NODE_DESTROYED, () => {
       this.disposed = true;
       for (const slot of this.slots) { if (slot.node.isValid) slot.sprite.spriteFrame = null; slot.frame = null; }
@@ -108,12 +111,13 @@ export class WindVideoVFX {
       if (clip && !this.disposed && this.root.isValid) this.clips.set(kind, clip);
     });
   }
-  begin(): void { this.used = 0; }
+  begin(): void { this.used = 0;this.groundInk.clear(); }
   area(area: View, alpha: number): boolean {
     if (this.disposed || (area.kind !== 'eye' && area.kind !== 'tornado') || this.used >= this.slots.length) return false;
     if (!this.selected.has(area)) this.selected.set(area, this.clips.get(area.kind) || null);
     // Fix the rendering choice for this cast: late network recovery never swaps a live effect.
     const clip = this.selected.get(area); if (!clip) return false;
+    if(area.kind==='eye')drawWindEyeContact(this.groundInk,area.x,area.y,area.radius,area.age,alpha);
     const slot = this.slots[this.used++], m = clip.manifest;
     const plane = area.kind === 'eye' ? this.groundRoot : this.root;
     if (slot.node.parent !== plane) slot.node.setParent(plane);

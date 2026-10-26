@@ -1,0 +1,277 @@
+{
+  "status": "PASS",
+  "samples": [
+    {
+      "mode": 1,
+      "age": 0.01,
+      "finite": true
+    },
+    {
+      "mode": 1,
+      "age": 0.18,
+      "finite": true
+    },
+    {
+      "mode": 1,
+      "age": 0.55,
+      "finite": true
+    },
+    {
+      "mode": 1,
+      "age": 0.9,
+      "finite": true
+    },
+    {
+      "mode": 1,
+      "age": 1.2,
+      "finite": true
+    },
+    {
+      "mode": 1,
+      "age": 2.8,
+      "finite": true
+    },
+    {
+      "mode": 3,
+      "age": 0.01,
+      "finite": true
+    },
+    {
+      "mode": 3,
+      "age": 0.18,
+      "finite": true
+    },
+    {
+      "mode": 3,
+      "age": 0.55,
+      "finite": true
+    },
+    {
+      "mode": 3,
+      "age": 0.9,
+      "finite": true
+    },
+    {
+      "mode": 3,
+      "age": 1.2,
+      "finite": true
+    },
+    {
+      "mode": 3,
+      "age": 2.8,
+      "finite": true
+    },
+    {
+      "mode": 4,
+      "age": 0.01,
+      "finite": true
+    },
+    {
+      "mode": 4,
+      "age": 0.18,
+      "finite": true
+    },
+    {
+      "mode": 4,
+      "age": 0.55,
+      "finite": true
+    },
+    {
+      "mode": 4,
+      "age": 0.9,
+      "finite": true
+    },
+    {
+      "mode": 4,
+      "age": 1.2,
+      "finite": true
+    },
+    {
+      "mode": 4,
+      "age": 2.8,
+      "finite": true
+    },
+    {
+      "mode": 5,
+      "age": 0.01,
+      "finite": true
+    },
+    {
+      "mode": 5,
+      "age": 0.18,
+      "finite": true
+    },
+    {
+      "mode": 5,
+      "age": 0.55,
+      "finite": true
+    },
+    {
+      "mode": 5,
+      "age": 0.9,
+      "finite": true
+    },
+    {
+      "mode": 5,
+      "age": 1.2,
+      "finite": true
+    },
+    {
+      "mode": 5,
+      "age": 2.8,
+      "finite": true
+    },
+    {
+      "mode": 6,
+      "age": 0.01,
+      "finite": true
+    },
+    {
+      "mode": 6,
+      "age": 0.18,
+      "finite": true
+    },
+    {
+      "mode": 6,
+      "age": 0.55,
+      "finite": true
+    },
+    {
+      "mode": 6,
+      "age": 0.9,
+      "finite": true
+    },
+    {
+      "mode": 6,
+      "age": 1.2,
+      "finite": true
+    },
+    {
+      "mode": 6,
+      "age": 2.8,
+      "finite": true
+    },
+    {
+      "mode": 7,
+      "age": 0.01,
+      "finite": true
+    },
+    {
+      "mode": 7,
+      "age": 0.18,
+      "finite": true
+    },
+    {
+      "mode": 7,
+      "age": 0.55,
+      "finite": true
+    },
+    {
+      "mode": 7,
+      "age": 0.9,
+      "finite": true
+    },
+    {
+      "mode": 7,
+      "age": 1.2,
+      "finite": true
+    },
+    {
+      "mode": 7,
+      "age": 2.8,
+      "finite": true
+    },
+    {
+      "mode": 8,
+      "age": 0.01,
+      "finite": true
+    },
+    {
+      "mode": 8,
+      "age": 0.18,
+      "finite": true
+    },
+    {
+      "mode": 8,
+      "age": 0.55,
+      "finite": true
+    },
+    {
+      "mode": 8,
+      "age": 0.9,
+      "finite": true
+    },
+    {
+      "mode": 8,
+      "age": 1.2,
+      "finite": true
+    },
+    {
+      "mode": 8,
+      "age": 2.8,
+      "finite": true
+    },
+    {
+      "mode": 9,
+      "age": 0.01,
+      "finite": true
+    },
+    {
+      "mode": 9,
+      "age": 0.18,
+      "finite": true
+    },
+    {
+      "mode": 9,
+      "age": 0.55,
+      "finite": true
+    },
+    {
+      "mode": 9,
+      "age": 0.9,
+      "finite": true
+    },
+    {
+      "mode": 9,
+      "age": 1.2,
+      "finite": true
+    },
+    {
+      "mode": 9,
+      "age": 2.8,
+      "finite": true
+    },
+    {
+      "mode": "swordWave",
+      "age": 0.01,
+      "finite": true
+    },
+    {
+      "mode": "swordWave",
+      "age": 0.1,
+      "finite": true
+    },
+    {
+      "mode": "swordWave",
+      "age": 0.3,
+      "finite": true
+    },
+    {
+      "mode": "swordWave",
+      "age": 0.55,
+      "finite": true
+    },
+    {
+      "mode": "swordWave",
+      "age": 0.68,
+      "finite": true
+    },
+    {
+      "mode": "swordWave",
+      "age": 0.9,
+      "finite": true
+    }
+  ],
+  "frames": 242,
+  "actualGameEngineBrowserBattleAudioWasmStarted": false
+}

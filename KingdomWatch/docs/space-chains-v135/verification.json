@@ -1,0 +1,16 @@
+{
+  "baseline": "a1939236",
+  "status": "PASS",
+  "cosmeticFrames": 242,
+  "maxChainDrawCommands": 376,
+  "maxSpaceQuads": 4,
+  "groundCapacity": 16,
+  "airCapacity": 32,
+  "ninjaRadiusCases": 20,
+  "ninjaRadiusIncrease": 0.25,
+  "ninjaAreaIncrease": 0.5625,
+  "eyeHeightScale": 0.65,
+  "groundNodeCleanup": true,
+  "lateLoadFallback": true,
+  "actualGameEngineBrowserBattleAudioOrWasmStarted": false
+}

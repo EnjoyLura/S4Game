@@ -625,7 +625,7 @@ export class Panels {
       }else{
         title='大招 · '+def.ultName;const sc=spaceUltCfg(h.ultLv),sw=swordUltCfg(h.ultLv);
         rows=space?[['每次法伤',String(Math.round(hero.abilityDamage(sc.mul,true)))],['禁锢目标',sc.targets+'名 · 首领免控'],
-          ['持续冲击',sc.duration+'秒 / '+sc.pulses+'次'],['光柱半径',Math.round(sc.radius*h.skillRangeMul)+' · 可对空'],['充能',Math.floor(hero.charge)+' / '+goalTxt],['释放','手动 · 光球禁锢后光柱冲击']]
+          ['持续冲击',sc.duration+'秒 / '+sc.pulses+'次'],['光柱半径',Math.round(sc.radius*h.skillRangeMul)+' · 可对空'],['充能',Math.floor(hero.charge)+' / '+goalTxt],['释放','手动 · 锁链禁锢后光柱冲击']]
           :[['四方剑伤',String(Math.round(hero.abilityDamage(sw.mul,true)))],['中央剑伤',String(Math.round(hero.abilityDamage(sw.finalMul,true)))],
             ['冲击半径',Math.round(sw.radius*h.skillRangeMul)+' / 中央'+Math.round(sw.finalRadius*h.skillRangeMul)],['落剑数量','四方4柄 + 中央1柄 · 可对空'],
             ['充能',Math.floor(hero.charge)+' / '+goalTxt],['释放','手动 · 四方斜落后中央重击']];

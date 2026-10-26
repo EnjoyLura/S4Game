@@ -367,7 +367,7 @@ export class Monster {
   get hitY(): number { return this.y + this.flightLift; }
   get artScale(): number { return MOB_ART_SCALE[this.def.id] || 1; }
   get artHeight(): number { return this.def.radius * MOB_ART_HEIGHT * this.artScale; }
-  get spaceOrbRadius():number {
+  get spaceBindRadius():number {
     const frame=this.inspectFrame,aspect=frame?frame.rect.width/Math.max(1,frame.rect.height):1;
     return Math.max(40,this.artHeight*.53*Math.hypot(1,aspect));
   }

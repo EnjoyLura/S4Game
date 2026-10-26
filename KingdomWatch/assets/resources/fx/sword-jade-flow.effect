@@ -169,6 +169,16 @@ CCProgram sword-jade-fs %{
     glow+=MINT*spear*rise*.8+WHITE*bell(length(p*vec2(1.0,1.4)),.18)*(1.0-smoothstep(.02,.17,age))*1.1;
     return vec4(dust*alpha+glow,alpha);
   }
+  // Only the fifth sword requests this subtle, short ground pressure front.
+  vec3 finalShockwave(vec2 p,float age){
+    vec2 q=vec2(p.x,p.y/.40);float r=length(q),a=dot(q,q)>.000001?atan(q.y,q.x):0.0;
+    float t=sat(age/.68),front=.12+1.13*(1.0-pow(1.0-t,2.0));
+    float fade=smoothstep(0.0,.035,age)*(1.0-smoothstep(.18,.68,age));
+    float breakup=.30+.70*noise(vec2(a*8.0,r*11.0-age*4.0));
+    float rim=bell(r-front,.009+.012*t)*breakup;
+    float pressure=bell(r-front+.035,.045)*(.25+.75*breakup);
+    return (MINT*rim*.30+vec3(.40,.36,.25)*pressure*.16)*fade;
+  }
   float swordCoverage(vec2 p,float variant){
     float z=.65-p.y,giant=mod(variant,2.0),aa=max(.002,1.15/max(1.0,fxShape.z));
     float w=mix(.058,.052,giant)*smoothstep(0.0,.15,z)*(1.0-.15*smoothstep(.58,.79,z));
@@ -181,7 +191,8 @@ CCProgram sword-jade-fs %{
     else if(fxState.w<2.5)energy=burst(p,age,step(1.5,fxState.w));
     else if(fxState.w<3.5)energy=array(p,age,fxShape.w);
     else if(fxState.w<4.5)energy=landing(p,age,fxShape.w);
-    else {vec4 cloud=eruption(p,age,step(5.5,fxState.w));energy=cloud.rgb;coverage=cloud.a;}
+    else if(fxState.w<6.5){vec4 cloud=eruption(p,age,step(5.5,fxState.w));energy=cloud.rgb;coverage=cloud.a;}
+    else energy=finalShockwave(p,age);
     if(fxState.w<.5)coverage=swordCoverage(p,fxShape.w);
     float edge=smoothstep(0.0,.035,min(min(uv0.x,1.0-uv0.x),min(uv0.y,1.0-uv0.y)));
     // Ground uses additive technique 0; sword/dust use premultiplied technique 1.

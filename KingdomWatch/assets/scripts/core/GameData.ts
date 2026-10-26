@@ -265,7 +265,7 @@ export const HERO_DEFS: Record<string, HeroDef> = {
     id:'space', name:'伊芙·折界', job:'空间 · 禁锢冲击', avatar:'ui_avatar_space',
     baseAtk:SPACE.attack, baseSkillDmg:SPACE.skill, growthType:'skill', atkSpd:SPACE.aspd,
     weaponName:'折界晶核', skillName:'空间放逐', ultName:'禁界光柱', shopPrice:5600,
-    story:'以紫晶折叠空间的守望者，将逼近城墙的敌人送回远方，以光球禁锢敌群，再唤起地底光柱持续冲击。',
+    story:'以紫晶折叠空间的守望者，将逼近城墙的敌人送回远方，以锁链禁锢敌群，再唤起地底光柱持续冲击。',
   },
   sword: {
     id:'sword', name:'凌霄·御锋', job:'御剑 · 剑阵爆发', avatar:'ui_avatar_sword',
