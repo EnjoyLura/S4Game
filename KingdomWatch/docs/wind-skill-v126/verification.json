@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "baseline": "d0213296",
+  "changedAssets": [
+    "KingdomWatch/assets/scripts/battle/Hero.ts",
+    "KingdomWatch/assets/scripts/battle/Monster.ts",
+    "KingdomWatch/assets/scripts/battle/NewHeroes.ts",
+    "KingdomWatch/assets/scripts/battle/Projectile.ts",
+    "KingdomWatch/assets/scripts/battle/WindNinjaGeometry.ts",
+    "KingdomWatch/assets/scripts/battle/WindNinjaHeroes.ts",
+    "KingdomWatch/assets/scripts/config/WindNinjaConfig.ts",
+    "KingdomWatch/assets/scripts/ui/HUD.ts",
+    "KingdomWatch/assets/scripts/ui/UltEnergyFx.ts"
+  ],
+  "geometryCases": 2400,
+  "rotationCases": 12000,
+  "contacts": 542,
+  "forwardMovementCases": 1600,
+  "skillCastSites": 9,
+  "sharedEnergyReadyReleaseAndDisposal": true,
+  "gameBattleBrowserAudioOrWasmExecuted": false,
+  "phoneGameplayReview": "pending user"
+}

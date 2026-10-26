@@ -75,13 +75,26 @@ export function densestBodyArea(bodies: readonly BodyPoint[], x: number, y: numb
 }
 
 /** Mutate only the independent effect position. An arbitrarily long step cannot overshoot. */
-export function moveFieldToward(point: FieldPoint, target: FieldPoint, speed: number, dt: number): number {
-  const dx = target.x - point.x, dy = target.y - point.y, distance = Math.hypot(dx, dy);
+export function moveFieldToward(point: FieldPoint, target: FieldPoint, speed: number, dt: number, forwardOnly = false): number {
+  const dx = target.x - point.x, dy = forwardOnly ? Math.max(0, target.y - point.y) : target.y - point.y;
+  const distance = Math.hypot(dx, dy);
   const travel = Math.min(distance, Math.max(0, speed) * Math.max(0, dt));
   if (distance > 0 && travel > 0) {
     point.x += dx / distance * travel; point.y += dy / distance * travel;
   }
   return travel;
+}
+
+/** Earliest circle contact with a transverse blade translated along its forward axis.
+ * The two rounded tips and the full span are swept continuously, including zero-length steps.
+ */
+export function sweptBladeEntry(along: number, across: number, travel: number, halfLength: number, radius: number): number {
+  const gap = Math.max(0, Math.abs(across) - Math.max(0, halfLength));
+  if (gap > radius) return Infinity;
+  const extent = Math.sqrt(Math.max(0, radius * radius - gap * gap));
+  if (along < -extent || along > Math.max(0, travel) + extent) return Infinity;
+  if (along <= extent) return 0;
+  return travel > 0 ? (along - extent) / travel : Infinity;
 }
 
 /** endPoint owns clipping; TTL is only a generous safety bound, never the return destination. */

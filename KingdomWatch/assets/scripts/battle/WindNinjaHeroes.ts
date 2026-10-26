@@ -48,10 +48,10 @@ function valid(m: Monster, lifeId: number, mgr: MonsterManager): boolean {
 function inRange(m: Monster, x: number, range: number): boolean {
   return (m.x - x) ** 2 + (m.hitY - HERO_Y) ** 2 <= range * range;
 }
-function cluster(mgr: MonsterManager, x: number, y: number, range: number, radius: number): FieldPoint | null {
+function cluster(mgr: MonsterManager, x: number, y: number, range: number, radius: number, minY = LINE_Y + 8): FieldPoint | null {
   return densestBodyArea(mgr.list, x, y, range, radius, {
     left: -DESIGN_W / 2 + 12, right: DESIGN_W / 2 - 12,
-    bottom: LINE_Y + 8, top: LO.half - LO.notchTop - 136,
+    bottom: Math.max(LINE_Y + 8, minY), top: LO.half - LO.notchTop - 136,
   });
 }
 
@@ -103,6 +103,8 @@ abstract class WindNinjaHeroBase extends HeroBase {
     const wind = this.id === 'wind';
     return { x, y, dirX: dx, dirY: dy, targetLayer: 'all', heroId: this.id,
       visual: wind ? 'wind' : 'shuriken', speed: wind ? WIND.bladeSpeed : NINJA.speed,
+      lineHalfLength: wind ? WIND.bladeHalfLength : undefined,
+      lineForwardOffset: wind ? WIND.bladeForwardOffset : undefined,
       size: wind ? 10 : 7, ttl: 3.2, crit: critical,
       dmg: this.effAtk * (this.stats.normalMul || 1) * (critical ? this.stats.critMul : 1),
       color: wind ? '#76DBBD' : '#BFE9EE', resCut: this.stats.defIgnore || 0,
@@ -168,19 +170,19 @@ abstract class WindNinjaHeroBase extends HeroBase {
     // Divide at damage and steering boundaries: large simulation steps retain every scheduled tick.
     while (remaining > EPS && a.age < a.duration - EPS) {
       if (a.kind === 'tornado' && a.seekIn <= EPS) {
-        const point = cluster(mgr, a.x, a.y, Infinity, a.radius);
-        if (point) a.destination = point;
+        const point = cluster(mgr, a.x, a.y, Infinity, a.radius, a.y);
+        a.destination = point || { x: a.x, y: Math.max(a.y, LO.half - LO.notchTop - 136) };
         a.seekIn = SEEK_INTERVAL;
       }
       const step = Math.min(remaining, a.duration - a.age, a.tickIn,
         a.kind === 'tornado' ? a.seekIn : Infinity);
       if (a.kind === 'tornado') {
-        moveFieldToward(a, a.destination, WIND.tornadoSpeed, step); a.seekIn -= step;
+        moveFieldToward(a, a.destination, WIND.tornadoSpeed, step, true); a.seekIn -= step;
       }
       if (a.pull > 0) for (const m of mgr.list) {
         if (!liveNode(m) || (m.x - a.x) ** 2 + (m.hitY - a.y) ** 2 > a.radius ** 2) continue;
         if (m.isBoss) m.applySlow(BOSS_WIND_SLOW, Math.max(.18, step * 2));
-        else m.pullToward(a.x, a.y, a.pull * step); // Monster owns elite .35 and immobilization rules.
+        else m.pullToward(a.x, a.y, a.pull * step, a.kind === 'tornado'); // No tornado-induced movement toward the keep.
       }
       a.age += step; a.tickIn -= step; remaining -= step;
       if (a.tickIn <= EPS) {
@@ -231,7 +233,7 @@ export class WindHero extends WindNinjaHeroBase {
     const cfg = windSkillCfg(this.stats.skillLv), radius = cfg.radius * this.stats.skillRangeMul;
     const point = cluster(mgr, this.x, HERO_Y, this.stats.skillRange, radius);
     if (!point) return;
-    this.skillCd = this.skillCdTotal;
+    this.beginSkillCooldown();
     this.addArea('eye', point, radius, cfg.duration, WIND.eyeTick, cfg.mul, cfg.pull);
     Sfx.cast(this.id);
   }
@@ -340,7 +342,7 @@ export class NinjaHero extends WindNinjaHeroBase {
       this.queuedLives.add(life); this.marks.delete(life); queued++;
     }
     if (queued > 0) {
-      this.skillCd = this.skillCdTotal;
+      this.beginSkillCooldown();
       Sfx.cast(this.id); // Committing the recall batch is one cast; pool-full retries stay silent.
     }
   }

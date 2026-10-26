@@ -563,16 +563,17 @@ export class Monster {
   }
 
   /** Wind displacement uses body coordinates but keeps the movement footprint and flight altitude separate. */
-  pullToward(x: number, bodyY: number, distance: number): boolean {
+  pullToward(x: number, bodyY: number, distance: number, forwardOnly = false): boolean {
     if (this.dead || this.isBoss || this.immobilized || distance <= 0) return false;
     // Pull the resting anchor; never fold an attack's temporary lunge into the next anchor.
     const lungeOffset = this.lungeT > 0 ? Math.sin((1 - this.lungeT / .2) * Math.PI) * 10 : 0;
     const restY = this.lungeT > 0 ? this.holdY : this.y;
-    const dx=x-this.x,dy=bodyY-(this.hitY+lungeOffset),len=Math.hypot(dx,dy);
+    const dx=x-this.x,rawY=bodyY-(this.hitY+lungeOffset),dy=forwardOnly?Math.max(0,rawY):rawY,len=Math.hypot(dx,dy);
     if (len<=this.def.radius*.25) return false;
     const step=Math.min(distance*(this.def.elite ? .35 : 1),Math.max(0,len-this.def.radius*.25));
     const nx=Math.max(-340,Math.min(340,this.x+dx/len*step));
-    const ny=Math.max(LINE_Y+this.def.radius*.5,Math.min(mobEntryY(this.def.radius)+12,restY+dy/len*step));
+    const clampedY=Math.max(LINE_Y+this.def.radius*.5,Math.min(mobEntryY(this.def.radius)+12,restY+dy/len*step));
+    const ny=forwardOnly?Math.max(restY,clampedY):clampedY;
     if(this.state!=='move' && ny-LINE_Y>(this.def.kind==='ranged'?(this.def.atkRange || 0):this.def.radius*.5)+8) {
       this.state='move'; this.lungeT=this.atkAnimT=0;
     }

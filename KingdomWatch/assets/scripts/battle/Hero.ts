@@ -42,6 +42,8 @@ export abstract class HeroBase {
   charge = 0;
   abstract readonly chargeMax: number;
   skillCd = 0;
+  /** Accepted casts only; the HUD can observe an auto-cast even if ready and release share a frame. */
+  skillCastSerial = 0;
   abstract readonly skillMax: number;
   /** Simulation-clock regeneration is independent of which hero lands the final blow. */
   private atkT = 0;
@@ -238,6 +240,10 @@ export abstract class HeroBase {
   get skillPct(): number { return this.skillUnlocked ? 1 - this.skillCd / this.skillCdTotal : 0; }
   /** 技能完整冷却（含冷却缩减卡；与施放时写入 skillCd 的算法一致） */
   get skillCdTotal(): number { return Math.max(2, this.skillMax - (this.stats.skillCdFlat || 0)); }
+  protected beginSkillCooldown(): void {
+    this.skillCd = this.skillCdTotal;
+    this.skillCastSerial++;
+  }
 
   /** 伤害统计服务（tick 每帧刷新；直伤型技能/大招用于计入统计） */
   protected lastDmg: DamageService | null = null;
@@ -572,7 +578,7 @@ export class ArcherHero extends HeroBase {
   protected castSkill(_mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): void {
     void _mgr; void _projs; void _dmg;
     const c = archerEmpCfg(this.stats.skillLv);
-    this.skillCd = this.skillCdTotal;   // 含冷却缩减（技能5级里程碑 -1s、冷却缩减卡）
+    this.beginSkillCooldown();   // 含冷却缩减（技能5级里程碑 -1s、冷却缩减卡）
     this.empowerLeft = c.arrows;
     this.empowerT = c.dur;
     // 演出：英雄身上金色环脉冲扩散，标记"箭矢已强化"
@@ -873,7 +879,7 @@ export class SniperHero extends HeroBase {
   /** 技能·穿颅射击（自动，14s CD）：4 秒窗口内锁定「离防线最近」目标连续 6 狙，每发 200% 攻击；无目标等待不取消 */
   protected castSkill(_mgr: MonsterManager, _projs: ProjectileManager, _dmg: DamageService): void {
     void _mgr; void _projs; void _dmg;
-    this.skillCd = this.skillCdTotal;   // 冷却缩减卡
+    this.beginSkillCooldown();   // 冷却缩减卡
     const sc = sniperSkCfg(this.stats.skillLv);
     this.volley = { t: 0, left: Math.max(1, Math.round(this.stats.skillShots || 6)), ttl: sc.window };   // 发数全折在 stats.skillShots（技能10级+2 与多目标锁定卡共用，面板同源）
     // 演出：英雄身上红色环脉冲扩散（与瞬击弹道线同主题）
@@ -1052,7 +1058,7 @@ export class PyroHero extends HeroBase {
     const boomR = pyroBlastRadius(this.stats, 110 * (this.stats.skillRangeMul || 1));
     const aim = this.skillAim(mgr, boomR);
     if (!aim) return;
-    this.skillCd = this.skillCdTotal;
+    this.beginSkillCooldown();
     for (let k = 0; k < shots; k++) {
       const dx = aim.x - this.x, dy = aim.y - (HERO_Y + 60);
       const l = Math.hypot(dx, dy) || 1;
@@ -1482,7 +1488,7 @@ export class VoltHero extends HeroBase {
 
   /** 技能·连锁闪电：即时结算各跳；演出共用池化雷电层与战斗时钟。 */
   protected castSkill(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
-    this.skillCd = this.skillCdTotal;   // 冷却缩减卡
+    this.beginSkillCooldown();   // 冷却缩减卡
     this.castChain(mgr, projs, dmg);
   }
 
@@ -1743,7 +1749,7 @@ export class FrostHero extends HeroBase {
 
   /** 技能·冰霜领域（自动，沿用技能冷却与升级数值） */
   protected castSkill(mgr: MonsterManager, projs: ProjectileManager, dmg: DamageService): void {
-    this.skillCd = this.skillCdTotal;   // 冷却缩减卡
+    this.beginSkillCooldown();   // 冷却缩减卡
     this.castFrostField(mgr, projs, dmg);
   }
 

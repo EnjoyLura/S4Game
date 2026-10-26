@@ -59,7 +59,15 @@ interface SkillUI {
   cdTxt: Node;
   cooling: boolean | null;
   lastCdKey: number;
+  energy: UltEnergyFx;
+  lastCastSerial: number;
 }
+
+/** Share the established ultimate palette with the smaller automatic-skill feedback. */
+const HERO_ENERGY_COLOR: Record<string, string> = {
+  wind: '#55D8C3', ninja: '#4559A8', cannon: '#D5A641', siphon: '#963657',
+  archer: PAL.green, sniper: '#1F9EFF', pyro: PAL.orange, volt: '#B96BFF', mora: '#6FCFEA',
+};
 
 export class HUD {
   private waveTxt!: Node;
@@ -317,7 +325,9 @@ export class HUD {
     pie.active = false;
     const cdTxt = label(top, cx, cy, '', { size: 19, color: '#FFF7E8', font: 'number', w: 56, h: 28, outline: '#1D2632', outlineW: 1.8 });
     cdTxt.active = false;
-    return { root, atkIcon, unlocked: hero.skillUnlocked, cx, cy, icon, glyph, gray, pie, pieG, cdTxt, cooling: null, lastCdKey: -1 };
+    const energy = new UltEnergyFx(root, cx, cy, HERO_ENERGY_COLOR[hero.id] || PAL.blue, 56);
+    return { root, atkIcon, unlocked: hero.skillUnlocked, cx, cy, icon, glyph, gray, pie, pieG, cdTxt,
+      cooling: null, lastCdKey: -1, energy, lastCastSerial: hero.skillCastSerial };
   }
 
   setWave(cur: number, total: number): void {
@@ -428,7 +438,7 @@ export class HUD {
         if (ult.uy !== uy) { ult.uy = uy; ult.root.setPosition(0, uy - ult.baseY, 0); }
         this.syncUlt(h, ult, dt);
       }
-      this.syncSkillCd(h, this.skills[i]);
+      this.syncSkillCd(h, this.skills[i], dt);
     });
   }
 
@@ -591,7 +601,7 @@ export class HUD {
 
   /* ---------- 技能图标：CD 遮罩 / 就绪过渡（每英雄） ---------- */
 
-  private syncSkillCd(hero: HeroBase, s: SkillUI): void {
+  private syncSkillCd(hero: HeroBase, s: SkillUI, dt: number): void {
     if (!s) return;
     if (s.unlocked !== hero.skillUnlocked) {
       s.unlocked = hero.skillUnlocked;
@@ -601,7 +611,14 @@ export class HUD {
     }
     if (!s.unlocked) return;
     const cdLeft = Math.max(0, hero.skillCd);
-    const cooling = cdLeft > 0.05;
+    const cooling = cdLeft > 0;
+    const cast = s.lastCastSerial !== hero.skillCastSerial;
+    s.lastCastSerial = hero.skillCastSerial;
+    if (cast) {
+      s.energy.release();
+      this.pulseSkillIcon(s, true);
+    }
+    s.energy.sync(dt, hero.skillPct, !cooling);
     if (cooling !== s.cooling) {
       const first = s.cooling === null;
       s.cooling = cooling;
@@ -646,9 +663,10 @@ export class HUD {
     s.gray.active = cooling;
     s.pie.active = cooling;
     s.cdTxt.active = cooling;
-    s.glyph.active = !cooling;
+    // The artwork loader owns the fallback glyph; readiness must not reveal it over a loaded icon.
     s.lastCdKey = -1;
-    if (!cooling && !first) {
+    if (!cooling && !first && s.energy.loaded) this.pulseSkillIcon(s, false);
+    if (!cooling && !first && !s.energy.loaded) {
       // 就绪过渡：弹跳 + 扩散环
       Tween.stopAllByTarget(s.icon);
       s.icon.setScale(1, 1, 1);
@@ -669,6 +687,17 @@ export class HUD {
       tween(burst).to(0.32, { scale: new Vec3(1.5, 1.5, 1) }).start();
       tween(bop).to(0.32, { opacity: 0 }).call(() => burst.destroy()).start();
     }
+  }
+
+  /** A brief compression/rebound confirms actual use; completion gets a lighter pop. */
+  private pulseSkillIcon(s: SkillUI, cast: boolean): void {
+    Tween.stopAllByTarget(s.icon);
+    s.icon.setScale(1, 1, 1);
+    if (cast) tween(s.icon).to(.07, { scale: new Vec3(.87, .87, 1) })
+      .to(.12, { scale: new Vec3(1.12, 1.12, 1) }, { easing: 'quadOut' })
+      .to(.16, { scale: new Vec3(1, 1, 1) }).start();
+    else tween(s.icon).to(.15, { scale: new Vec3(1.16, 1.16, 1) }, { easing: 'backOut' })
+      .to(.16, { scale: new Vec3(1, 1, 1) }).start();
   }
 
   /** Follow measured glyph width, including asynchronous font installation and digit changes. */

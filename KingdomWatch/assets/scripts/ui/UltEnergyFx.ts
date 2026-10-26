@@ -22,14 +22,18 @@ export class UltEnergyFx {
     this.sync(0, 0, false);
   }
 
-  constructor(parent: Node, x: number, y: number, tint = '#1F9EFF') {
+  constructor(parent: Node, x: number, y: number, tint = '#1F9EFF', diameter = 90) {
     this.node.layer = Layers.Enum.UI_2D;
     this.node.setParent(parent);
     this.node.setPosition(x, y, 0);
-    this.node.addComponent(UITransform).setContentSize(168, 168);
+    const size = 168 * diameter / 90;
+    this.node.addComponent(UITransform).setContentSize(size, size);
     const sprite = this.node.addComponent(Sprite);
     sprite.sizeMode = Sprite.SizeMode.CUSTOM;
     this.node.active = false;
+    this.node.once(Node.EventType.NODE_DESTROYED, () => {
+      this.loaded = false; this.material?.destroy(); this.material = null;
+    });
     resources.load('fx/ult-energy', EffectAsset, (err, effect) => {
       if (err || !effect || !this.node.isValid) return;
       uxFrame('ult_energy_quad', frame => {

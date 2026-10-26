@@ -17,9 +17,13 @@ import { drawCannonMissile } from './NewHeroVFX';
 import { acceptsTarget, attackLayer, TargetLayer } from '../config/Targeting';
 import { drawWindBlade, drawShuriken, WIND_NINJA_FX_EFFECT } from './WindNinjaVFX';
 import { HeroFxShader } from './HeroFxShader';
+import { sweptBladeEntry } from './WindNinjaGeometry';
 
 export interface ProjSpec {
   visual?: 'wind' | 'shuriken';
+  /** Optional transverse contact span; ordinary projectiles retain their circular sweep. */
+  lineHalfLength?: number;
+  lineForwardOffset?: number;
   /** Actual direct contact only, never a miss or splash. */
   onContact?: (mob: Monster) => void;
   /** Finite straight return segment: sweep to endpoint, then recycle without a second hit pass. */
@@ -360,8 +364,14 @@ export class ProjectileManager {
   /** Exact segment/circle entries, in travel order. A piercing shot can hit several enemies in one step. */
   private hitSweep(a: Active, x: number, y: number, sx: number, sy: number): boolean {
     const sp = a.spec, length2 = sx * sx + sy * sy;
-    const minX = Math.min(x, x + sx), maxX = Math.max(x, x + sx);
-    const minY = Math.min(y, y + sy), maxY = Math.max(y, y + sy);
+    const halfLength = Math.max(0, sp.lineHalfLength || 0);
+    const speed = halfLength > 0 ? Math.hypot(a.vx, a.vy) || 1 : 1;
+    const ux = a.vx / speed, uy = a.vy / speed;
+    const offset = halfLength > 0 ? sp.lineForwardOffset || 0 : 0;
+    const bx = x + ux * offset, by = y + uy * offset;
+    const halfX = Math.abs(uy) * halfLength, halfY = Math.abs(ux) * halfLength;
+    const minX = Math.min(bx, bx + sx) - halfX, maxX = Math.max(bx, bx + sx) + halfX;
+    const minY = Math.min(by, by + sy) - halfY, maxY = Math.max(by, by + sy) + halfY;
     const padding = (sp.size || 7) * .5;
     let count = 0;
     for (const m of this.mgr.list) {
@@ -374,7 +384,11 @@ export class ProjectileManager {
       const dx = x - mx, dy = y - my;
       const c = dx * dx + dy * dy - radius * radius;
       let t = 0;
-      if (c > 0) {
+      if (halfLength > 0) {
+        t = sweptBladeEntry((mx - bx) * ux + (my - by) * uy,
+          -(mx - bx) * uy + (my - by) * ux, sx * ux + sy * uy, halfLength, radius);
+        if (!Number.isFinite(t)) continue;
+      } else if (c > 0) {
         if (length2 <= 1e-8) continue;
         const b = dx * sx + dy * sy, discriminant = b * b - length2 * c;
         if (b >= 0 || discriminant < 0) continue;

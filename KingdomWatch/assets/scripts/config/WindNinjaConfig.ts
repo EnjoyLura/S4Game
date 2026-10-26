@@ -1,6 +1,6 @@
 /** First playable wind/ninja values, shared by battle, training, and tips. */
 export const WIND = { attack: 72, skill: 92, aspd: .9, range: 1050, skillRange: 950, cooldown: 12, energy: 70,
-  bladeSpeed: 840, bladePierce: 2, bladeFalloff: .8, eyeRadius: 165, eyeDuration: 4, eyeTick: .5, eyeMul: .35,
+  bladeSpeed: 840, bladeHalfLength: 30, bladeForwardOffset: 9, bladePierce: 2, bladeFalloff: .8, eyeRadius: 165, eyeDuration: 4, eyeTick: .5, eyeMul: .35,
   eyePull: 94, tornadoRadius: 120, tornadoDuration: 5, tornadoTick: .4, tornadoMul: .55, tornadoSpeed: 82, tornadoPull: 65 };
 export const NINJA = { attack: 95, skill: 100, aspd: 1.1, range: 1000, skillRange: 1100, cooldown: 10, energy: 68,
   speed: 1000, markCap: 80, recallSpeed: 1100, recallMul: 1.8, ultRadius: 145, ultDuration: 4, ultTick: .25, ultMul: .38 };

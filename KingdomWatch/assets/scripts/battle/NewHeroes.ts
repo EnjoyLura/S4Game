@@ -72,7 +72,7 @@ export class CannonHero extends HeroBase {
     const cfg = cannonSkillCfg(this.stats.skillLv), radius = CANNON.skillBlast * cfg.radiusMul * this.stats.skillRangeMul;
     const target = cluster(mgr, this.x, this.stats.skillRange, radius);
     if (!target || this.shells.length >= 48) return;
-    this.skillCd = this.skillCdTotal;
+    this.beginSkillCooldown();
     const flight = Math.hypot(target.x - this.x, target.y - HERO_Y - 60) / 760;
     this.shells.push({ delay: 0, ...point(target, flight), damage: this.abilityDamage(cfg.mul), radius,
       skill: true, ult: false, echo: false, extra: false });
@@ -303,7 +303,7 @@ export class SiphonHero extends HeroBase {
   }
   protected castSkill(mgr: MonsterManager): void {
     if (!this.selectNormalTarget(mgr)) return;
-    this.skillCd = this.skillCdTotal;
+    this.beginSkillCooldown();
     this.skillSeconds = siphonSkillCfg(this.stats.skillLv).duration;
     this.skillExtension = 0;
     Sfx.cast(this.id);
