@@ -2,6 +2,7 @@
 import { Graphics, Node } from 'cc';
 import { CA, N } from '../ui/UIKit';
 import { HeroFxShader } from './HeroFxShader';
+import { drawSwordFlight, swordDebris, SWORD_ABILITY_EFFECT } from './SwordAbilityVFX';
 export const SPACE_SWORD_EFFECT='fx/space-sword-burst';
 const TAU = Math.PI * 2;
 export function drawMagicBlade(g: Graphics, x: number, y: number, angle: number, half: number, age: number, color: string): void {
@@ -70,24 +71,45 @@ export function drawHeavenSword(g:Graphics,x:number,y:number,angle:number,size:n
     g.strokeColor=CA('#A0FFE0',opacity*.35);g.lineWidth=1.2;g.moveTo(...pt(s,-head));g.lineTo(...pt(s,-head-h*.12));g.stroke();}
 }
 export interface SpacePrisonVisual {x:number;y:number;orbX:number;orbY:number;orb:boolean;orbRadius:number;radius:number;}
-interface Accent {x:number;y:number;age:number;duration:number;radius:number;angle:number;kind:'portal'|'cut'|'array'|'giant'|'landing'|'spacePulse';}
+interface Accent {x:number;y:number;age:number;duration:number;radius:number;angle:number;jade:boolean;kind:'portal'|'cut'|'array'|'giant'|'landing'|'spacePulse';}
 export class SpaceSwordVFX {
   private node:Node;private g:Graphics;private accents:Accent[]=[];private clock=0;
   private volume:HeroFxShader|null=null;
+  private swordGround:HeroFxShader|null=null;private swordAir:HeroFxShader|null=null;private groundNode:Node|null=null;
   private prisonVisuals:readonly SpacePrisonVisual[]=[];
   private prisonAge=0;private columnStart=0;private columnDuration=0;
   constructor(parent:Node){this.node=N('spaceSwordProcedural',parent);this.g=this.node.addComponent(Graphics);
     const text=parent.getChildByName('TextLayer');if(text)this.node.setSiblingIndex(text.getSiblingIndex());}
   warmVolume():void{this.volume ||= new HeroFxShader(this.node,'spaceSwordLight',16,'emission',{effect:SPACE_SWORD_EFFECT,technique:0});}
+  warmSword():void{
+    if(this.swordGround)return;
+    const parent=this.node.parent!,ground=parent.getChildByName('GroundFxLayer')||parent;
+    this.groundNode=N('jadeSwordGround',ground);
+    this.swordGround=new HeroFxShader(this.groundNode,'jadeGroundFlow',24,'emission',{effect:SWORD_ABILITY_EFFECT,technique:0});
+    this.swordAir=new HeroFxShader(this.node,'jadeImpactFlow',8,'emission',{effect:SWORD_ABILITY_EFFECT,technique:0});
+  }
   setPrison(visuals:readonly SpacePrisonVisual[],age:number,start:number,duration:number):void{
     this.prisonVisuals=visuals;this.prisonAge=age;this.columnStart=start;this.columnDuration=duration;
   }
   add(kind:Accent['kind'],x:number,y:number,radius:number,duration=.6,angle=-Math.PI/2):void{
-    if(this.accents.length>=40)this.accents.shift();this.accents.push({kind,x,y,radius,duration,age:0,angle});
+    if(this.accents.length>=40)this.accents.shift();this.accents.push({kind,x,y,radius,duration,age:0,angle,
+      jade:!!this.swordGround?.ready&&!!this.swordAir?.ready});
   }
   tick(dt:number):void{this.clock+=dt;for(let i=this.accents.length-1;i>=0;i--){this.accents[i].age+=dt;if(this.accents[i].age>=this.accents[i].duration)this.accents.splice(i,1);}}
   render():void{
-    const g=this.g;g.clear();this.volume?.begin();for(const a of this.accents){const t=a.age/a.duration,fade=Math.min(1,t*8)*Math.min(1,(1-t)*5),r=a.radius;
+    const g=this.g;g.clear();this.volume?.begin();this.swordGround?.begin();this.swordAir?.begin();
+    for(const a of this.accents){const t=a.age/a.duration,fade=Math.min(1,t*8)*Math.min(1,(1-t)*5),r=a.radius;
+      if(a.jade&&(a.kind==='array'||a.kind==='landing'||a.kind==='cut'||a.kind==='giant')){
+        const mode=a.kind==='array'?3:a.kind==='landing'?4:a.kind==='giant'?2:1;
+        const drawn=this.swordGround?.draw(a.x,a.y,r*2.6,r*1.5,0,a.age,.37,1,mode,r,a.duration);
+        if(drawn){
+          if(mode<3){
+            swordDebris(g,a.x,a.y,r,a.age,a.kind==='giant');
+            // A short embedded afterimage disappears before the next sword lands.
+            if(a.kind==='giant'&&a.age<.22)drawSwordFlight(this.swordAir,a.x,a.y,a.angle,r*.2,a.age,.37,true,(1-a.age/.22)*.55);
+          }continue;
+        }
+      }
       if(a.kind==='landing'){
         g.strokeColor=CA('#B4FFDC',.35*(1-t));g.lineWidth=1.5;g.ellipse(a.x,a.y,r*.7,r*.28);g.stroke();continue;
       }
@@ -129,6 +151,7 @@ export class SpaceSwordVFX {
           g.ellipse(v.orbX,v.orbY,v.orbRadius*.84,v.orbRadius*.34);g.stroke();}}
     }
     this.volume?.end();
+    this.swordGround?.end();this.swordAir?.end();
   }
-  destroy():void{this.accents.length=0;this.prisonVisuals=[];if(this.node.isValid)this.node.destroy();}
+  destroy():void{this.accents.length=0;this.prisonVisuals=[];if(this.groundNode?.isValid)this.groundNode.destroy();if(this.node.isValid)this.node.destroy();}
 }

@@ -35,7 +35,7 @@ const FX_EFFECTS: Record<string, string[]> = {
   pyro: ['fx/fire-paint-v2'], volt: ['fx/volt-ultimate-procedural'], sniper: ['fx/sniper-ultimate-procedural'],
   cannon: ['fx/hero-impact-flow'], siphon: ['fx/hero-impact-flow'],
   wind: ['fx/wind-ninja-flow'], ninja: ['fx/wind-ninja-flow'],
-  space:['fx/space-sword-burst'],sword:['fx/space-sword-burst'],
+  space:['fx/space-sword-burst'],sword:['fx/sword-jade-flow'],
 };
 const fxRequests = new Map<string, Promise<void>>();
 function warmFxResource(path: string, effect: boolean): Promise<void> {

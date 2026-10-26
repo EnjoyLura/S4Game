@@ -158,7 +158,7 @@ export class SwordHero extends SpaceSwordBase {
   private intent=0;
   private orbit:Graphics|null=null;
   protected buildVisual(parent:Node):void{this.buildFigure(parent,'sword');}
-  warmEffects():void{super.warmEffects();this.effects().warmVolume();if(!this.orbit)this.orbit=N('swordIntent',this.node).addComponent(Graphics);}
+  warmEffects():void{super.warmEffects();this.effects().warmSword();if(!this.orbit)this.orbit=N('swordIntent',this.node).addComponent(Graphics);}
   protected projectileSpeed():number{return SWORD.speed;}
   protected attackSpec(target:Monster,offset=0,ability=false,mul=1,speed=0):ProjSpec{
     const spec=super.attackSpec(target,offset,ability,mul,speed);

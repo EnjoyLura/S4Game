@@ -19,6 +19,7 @@ import { drawWindBlade, drawShuriken, WIND_NINJA_FX_EFFECT } from './WindNinjaVF
 import { HeroFxShader } from './HeroFxShader';
 import { sweptBladeEntry } from './WindNinjaGeometry';
 import { drawFlyingSword, drawHeavenSword, drawMagicBlade, drawRiftShard } from './SpaceSwordVFX';
+import { drawSwordFlight, SWORD_ABILITY_EFFECT, SWORD_FLIGHT_CAP } from './SwordAbilityVFX';
 
 export interface ProjSpec {
   visual?: 'wind' | 'shuriken' | 'rift' | 'sword' | 'heavenSword' | 'spaceBlade';
@@ -135,6 +136,7 @@ interface Active {
   returnDistance: number;
   hitExhausted: boolean;
   windShader: boolean;
+  swordShader: boolean;
 }
 
 const colorCache = new Map<string, Color>();
@@ -162,6 +164,7 @@ export class ProjectileManager {
   private dirty = false;
   private basicFlight: BasicProjectileFlightVFX;
   private windFlight: HeroFxShader | null = null;
+  private swordFlight: HeroFxShader | null = null;
   private flightSerial = 0;
 
   /** field 为专用弹道图层节点（英雄之上、飘字之下）；parts 为迸溅粒子层 */
@@ -175,6 +178,11 @@ export class ProjectileManager {
   warmWindFlight(): void {
     if (!this.windFlight) this.windFlight = new HeroFxShader(this.field, 'windCrescentFlight', MAX_PROJS, 'plasma',
       { effect: WIND_NINJA_FX_EFFECT, technique: 0 });
+  }
+
+  warmSwordFlight(): void {
+    this.swordFlight ||= new HeroFxShader(this.field, 'jadeSwordFlight', SWORD_FLIGHT_CAP, 'emission',
+      { effect: SWORD_ABILITY_EFFECT, technique: 0 });
   }
 
   get ultimateInFlight(): boolean { return this.active.some(a => !!a.spec.ult); }
@@ -192,6 +200,7 @@ export class ProjectileManager {
     a.ttl = spec.ttl ?? 3.2;
     a.age = 0; a.ultContact = false;
     a.windShader = spec.visual === 'wind' && !!this.windFlight?.ready;
+    a.swordShader = !!spec.ability && (spec.visual === 'sword' || spec.visual === 'heavenSword') && !!this.swordFlight?.ready;
     a.damageScale = 1; a.returning = false; a.legLeft = a.returnDistance = 0; a.hitExhausted = false;
     a.fxSeed = (++this.flightSerial * .61803398875) % 1;
     a.trail.length = 0;
@@ -216,7 +225,7 @@ export class ProjectileManager {
 
   private makeActive(): Active {
     return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<number>(), ttl: 0, age: 0, trail: [], trailMax: 0, fxSeed: 0, ultContact: false,
-      damageScale: 1, returning: false, legLeft: 0, returnDistance: 0, hitExhausted: false, windShader: false };
+      damageScale: 1, returning: false, legLeft: 0, returnDistance: 0, hitExhausted: false, windShader: false, swordShader: false };
   }
 
   /** 敌方远程石块：直线落向防线，触线即结算 */
@@ -444,6 +453,7 @@ export class ProjectileManager {
     g.clear();
     this.basicFlight.beginFrame();
     this.windFlight?.begin();
+    this.swordFlight?.begin();
     this.impacts?.beginProjectileFrame();
     for (let i = 0; i < this.active.length; i++) {
       const a = this.active[i];
@@ -455,8 +465,12 @@ export class ProjectileManager {
       const fire = s.heroId === 'pyro' && !s.enemy;
       const shard = s.heroId === 'mora' && !s.small && !s.enemy;
       if(s.visual==='spaceBlade'){drawMagicBlade(g,s.x,s.y,Math.atan2(a.vy,a.vx),s.lineHalfLength||423,a.age,s.color);continue;}
-      if(s.visual==='sword'){drawFlyingSword(g,s.x,s.y,Math.atan2(a.vy,a.vx),size,a.age);continue;}
-      if(s.visual==='heavenSword'){drawHeavenSword(g,s.x,s.y,Math.atan2(a.vy,a.vx),size,a.age);continue;}
+      if(s.visual==='sword'||s.visual==='heavenSword'){
+        const angle=Math.atan2(a.vy,a.vx),giant=s.visual==='heavenSword';
+        if(!a.swordShader||!drawSwordFlight(this.swordFlight,s.x,s.y,angle,size,a.age,a.fxSeed,giant)){
+          if(giant)drawHeavenSword(g,s.x,s.y,angle,size,a.age);else drawFlyingSword(g,s.x,s.y,angle,size,a.age);
+        }continue;
+      }
       if(s.visual==='rift'){drawRiftShard(g,s.x,s.y,Math.atan2(a.vy,a.vx),size,a.age);continue;}
       if (s.visual === 'wind') {
         const rendered = a.windShader && this.windFlight?.draw(s.x,s.y,size*10,size*10,
@@ -509,6 +523,7 @@ export class ProjectileManager {
     }
     this.impacts?.endProjectileFrame();
     this.windFlight?.end();
+    this.swordFlight?.end();
   }
 
   /** 锥形渐隐尾迹：越旧越窄越淡的软边条带（逐段四边形），叠一条更实的亮芯线；箭矢从箭尾接出避免盖住箭体 */

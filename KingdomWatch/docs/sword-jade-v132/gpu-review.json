@@ -1,0 +1,221 @@
+{
+  "renderer": "AMD Radeon RX 9070 XT",
+  "shaderSha256": "11c4be5cd547f4d4a5e69abe3b1d25e10637c6dc43502d318df26fdc36660a0e",
+  "pureCodeNoTextures": true,
+  "samples": [
+    {
+      "mode": 0,
+      "age": 0.01,
+      "litPixels": 7376,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 0,
+      "age": 0.08,
+      "litPixels": 7451,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 0,
+      "age": 0.18,
+      "litPixels": 7369,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 0,
+      "age": 0.4,
+      "litPixels": 7411,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 0,
+      "age": 0.75,
+      "litPixels": 7459,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 0,
+      "age": 1.2,
+      "litPixels": 7423,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 1,
+      "age": 0.01,
+      "litPixels": 5197,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 1,
+      "age": 0.08,
+      "litPixels": 9379,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 1,
+      "age": 0.18,
+      "litPixels": 9475,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 1,
+      "age": 0.4,
+      "litPixels": 2441,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 1,
+      "age": 0.75,
+      "litPixels": 0,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 1,
+      "age": 1.2,
+      "litPixels": 0,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 2,
+      "age": 0.01,
+      "litPixels": 6908,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 2,
+      "age": 0.08,
+      "litPixels": 8270,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 2,
+      "age": 0.18,
+      "litPixels": 6628,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 2,
+      "age": 0.4,
+      "litPixels": 9771,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 2,
+      "age": 0.75,
+      "litPixels": 2181,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 2,
+      "age": 1.2,
+      "litPixels": 0,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 3,
+      "age": 0.01,
+      "litPixels": 0,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 3,
+      "age": 0.08,
+      "litPixels": 540,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 3,
+      "age": 0.18,
+      "litPixels": 672,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 3,
+      "age": 0.4,
+      "litPixels": 652,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 3,
+      "age": 0.75,
+      "litPixels": 682,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 3,
+      "age": 1.2,
+      "litPixels": 636,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 4,
+      "age": 0.01,
+      "litPixels": 0,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 4,
+      "age": 0.08,
+      "litPixels": 92,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 4,
+      "age": 0.18,
+      "litPixels": 92,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 4,
+      "age": 0.4,
+      "litPixels": 92,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 4,
+      "age": 0.75,
+      "litPixels": 92,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 4,
+      "age": 1.2,
+      "litPixels": 92,
+      "alpha": 0,
+      "finiteNonnegative": true
+    }
+  ],
+  "cosmeticFrames": 168,
+  "additiveAlphaZero": true,
+  "runtimeGameBrowserBattleAudioOrWasmStarted": false,
+  "phonePerformance": "pending user"
+}

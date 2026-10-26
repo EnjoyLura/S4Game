@@ -1,0 +1,16 @@
+{
+  "baseline": "6684e92c",
+  "status": "PASS",
+  "cosmeticFrames": 168,
+  "tipAnchorCases": 12,
+  "maxGround": 6,
+  "maxAir": 1,
+  "groundCapacity": 24,
+  "airCapacity": 8,
+  "flightCapacity": 24,
+  "allGameplayMethodsAndSpaceWindAssetsPreserved": true,
+  "shaderHasNoImageSampler": true,
+  "groundNodeCleanup": true,
+  "lateLoadFallback": true,
+  "actualGameEngineBrowserBattleAudioOrWasmStarted": false
+}

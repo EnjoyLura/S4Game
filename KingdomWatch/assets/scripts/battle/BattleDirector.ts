@@ -236,6 +236,7 @@ export class BattleDirector extends Component {
     this.parts = new Particles(fxLayer);
     this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts, this.impacts);
     if (this.heroes.some(h => h.id === 'wind')) this.projs.warmWindFlight();
+    if (this.heroes.some(h => h.id === 'sword')) this.projs.warmSwordFlight();
     this.mgr.spawnFloor = this.isEndless ? this.endlessFloor : 0;
     this.waves = new WaveManager(this.levelDef, this.mgr);
     for (const h of this.heroes) this.dmgSvc.register(h.id, h.name);
