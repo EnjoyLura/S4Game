@@ -28,6 +28,12 @@ for(const id of ['space','sword']){
   assert.ok(read('assets/scripts/battle/BattleDirector.ts').includes('new '+(id==='space'?'Space':'Sword')+'Hero'));
   assert.ok(read('assets/scripts/ui/BattleEntryWarmup.ts').includes("new_heroes_v127/"));
   assert.ok(read('assets/scripts/config/Cards.ts').includes("commonHeroCards('"+id+"')"));
+  const growth=ts.createSourceFile('GrowthFeedback.ts',read('assets/scripts/ui/GrowthFeedback.ts'),ts.ScriptTarget.Latest,true);
+  for(const key of ['NORMAL_CFG','ULT_DAMAGE']){
+    const decl=growth.statements.filter(ts.isVariableStatement).flatMap(s=>Array.from(s.declarationList.declarations)).find(d=>d.name.getText(growth)===key);
+    assert.ok(decl&&ts.isObjectLiteralExpression(decl.initializer)&&decl.initializer.properties.some(p=>p.name?.getText(growth)===id),'Missing growth feedback '+id+':'+key);
+  }
+  assert.ok(read('assets/scripts/ui/ComicUI.ts').includes('wind|ninja|space|sword'));
 }
 assert.ok(mob.includes('this.holdY=y;'));assert.ok(mob.includes('this.lungeT=this.atkAnimT=0'));
 assert.ok(mob.includes('this.dead||this.isBoss||!Number.isFinite(destinationY)'));

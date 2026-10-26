@@ -4,6 +4,7 @@ import { loadSave } from '../core/SaveData';
 import { archerAtkCfg, archerUltCfg, moraAtkCfg, moraUltCfg, pyroAtkCfg, pyroUltCfg, sniperAtkCfg, sniperUltCfg, voltAtkCfg, voltUltCfg, skillBaseMultiplier } from '../config/Cards';
 import { newHeroNormalCfg, cannonUltCfg, siphonUltCfg } from '../config/NewHeroConfig';
 import { windUltCfg, ninjaUltCfg } from '../config/WindNinjaConfig';
+import { spaceUltCfg, swordUltCfg } from '../config/SpaceSwordConfig';
 import { gearArtKey } from './HeroComic';
 import { GLOBAL_ROOT, toast } from './PageKit';
 import { NoticeNumberFormat, NoticeStat } from './UINotice';
@@ -16,11 +17,13 @@ interface GrowthState {
   stats: { name: string; value: number; format?: NoticeNumberFormat }[]; milestone?: string;
 }
 const NORMAL_CFG: Record<string, (lv: number) => { normalMul: number }> = {
+  space: newHeroNormalCfg, sword: newHeroNormalCfg,
   wind: newHeroNormalCfg, ninja: newHeroNormalCfg,
   cannon: newHeroNormalCfg, siphon: newHeroNormalCfg,
   archer: archerAtkCfg, sniper: sniperAtkCfg, volt: voltAtkCfg, pyro: pyroAtkCfg, mora: moraAtkCfg,
 };
 const ULT_DAMAGE: Record<string, (lv: number) => number> = {
+  space: lv => spaceUltCfg(lv).mul, sword: lv => swordUltCfg(lv).mul,
   wind: lv => windUltCfg(lv).mul, ninja: lv => ninjaUltCfg(lv).mul,
   cannon: lv => cannonUltCfg(lv).mul, siphon: lv => siphonUltCfg(lv).mul,
   archer: lv => archerUltCfg(lv).coeff, sniper: lv => sniperUltCfg(lv).boltMul,

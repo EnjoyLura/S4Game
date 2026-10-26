@@ -9,6 +9,8 @@ const COLORS: Record<MeterKind, string> = {
 
 /** Stable hero hues across both damage reports; brighter values stay legible on dark panels. */
 const DAMAGE_COLORS: Record<string, { bar: string; value: string }> = {
+  space: { bar: '#BB63D8', value: '#E7B4F5' },
+  sword: { bar: '#63D2A4', value: '#B3F3D9' },
   cannon: { bar: '#D5A641', value: '#FFE4A1' },
   siphon: { bar: '#CF628F', value: '#FFC3DC' },
   archer: { bar: '#67C878', value: '#ACEBB5' },
