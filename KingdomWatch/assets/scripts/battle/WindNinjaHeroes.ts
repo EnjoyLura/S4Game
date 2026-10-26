@@ -82,7 +82,7 @@ abstract class WindNinjaHeroBase extends HeroBase {
   protected disposeAttachments(): void {}
   protected drawAttachments(_fx: WindNinjaVFX): void {}
   protected effects(): WindNinjaVFX {
-    return this.fx ||= new WindNinjaVFX(this.node.parent!.parent || this.node.parent!);
+    return this.fx ||= new WindNinjaVFX(this.node.parent!.parent || this.node.parent!, this.id === 'wind');
   }
   warmEffects(): void { this.effects(); }
   renderEffects(): void {

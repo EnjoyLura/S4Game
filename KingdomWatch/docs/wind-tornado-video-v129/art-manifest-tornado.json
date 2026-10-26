@@ -1,0 +1,461 @@
+{
+  "source": "C:\\Users\\user\\Documents\\Qoder\\2026-10-26\\012bf20d\\vibe_videos\\green_tornado_vfx_720p_1793026071.mp4",
+  "sourceLocalArchive": "D:\\AI\\S4Game\\KingdomWatch\\local\\art-archive\\wind-tornado-video-v129\\green_tornado_vfx_720p_1793026071.mp4",
+  "sourceSha256": "e8eba7395a9469abaa4af6408ad5dafc95ffb47be65f8efa78f5a89cd0c65820",
+  "sourceBytes": 2687004,
+  "sourcePixels": [
+    720,
+    1280
+  ],
+  "sourceFPS": 30,
+  "sourceFrames": 60,
+  "sourceAudioUsed": false,
+  "frameCount": 66,
+  "originalFrameOrder": true,
+  "synthesizedBridgeFrames": 6,
+  "reverseOrFreezeFrames": false,
+  "fixedCrop": [
+    0,
+    255,
+    720,
+    1055
+  ],
+  "fixedSourceGround": [
+    360,
+    940
+  ],
+  "nativeAspectScaleXY": [
+    0.43333333333333335,
+    0.43333333333333335
+  ],
+  "atlasPixels": [
+    2560,
+    3240
+  ],
+  "atlasRGBABytes": 33177600,
+  "playbackFPS": 45.0,
+  "visualLoopSeconds": 1.4666666666666666,
+  "sourceSeamMAE": 0.07062331587076187,
+  "adjacentMAE": [
+    0.012199250049889088,
+    0.012752043083310127,
+    0.0073670619167387486,
+    0.0070071741938591,
+    0.021292803809046745,
+    0.01193272601813078,
+    0.012116432189941406,
+    0.013667096383869648,
+    0.013498852029442787,
+    0.013023135252296925,
+    0.01369425468146801,
+    0.013790036551654339,
+    0.015820512548089027,
+    0.02731502614915371,
+    0.007871334441006184,
+    0.007735555991530418,
+    0.01481040008366108,
+    0.01628921739757061,
+    0.02872825600206852,
+    0.008387020789086819,
+    0.00866745412349701,
+    0.016163134947419167,
+    0.018627064302563667,
+    0.030997512862086296,
+    0.016160819679498672,
+    0.009175900369882584,
+    0.009009220637381077,
+    0.01804090291261673,
+    0.030736135318875313,
+    0.017033668234944344,
+    0.016645541414618492,
+    0.010166779160499573,
+    0.01037156768143177,
+    0.0341908261179924,
+    0.017502466216683388,
+    0.01949862577021122,
+    0.02094518579542637,
+    0.020501377061009407,
+    0.02131831645965576,
+    0.021811924874782562,
+    0.022281464189291,
+    0.02575259655714035,
+    0.023116962984204292,
+    0.02236257679760456,
+    0.023496113717556,
+    0.023914813995361328,
+    0.030650440603494644,
+    0.03983917087316513,
+    0.013664300553500652,
+    0.0137125663459301,
+    0.02510068193078041,
+    0.02367265522480011,
+    0.0383286215364933,
+    0.0187503844499588,
+    0.010274684987962246,
+    0.009855644777417183,
+    0.018540972843766212,
+    0.019072143360972404,
+    0.01780066452920437,
+    0.013811763375997543,
+    0.012674437835812569,
+    0.012299397960305214,
+    0.012207798659801483,
+    0.012421484105288982,
+    0.012846295721828938,
+    0.01409363653510809
+  ],
+  "seamMAE": 0.01409363653510809,
+  "medianStepMAE": 0.016163134947419167,
+  "frameAlphaChecks": [
+    {
+      "frame": 0,
+      "transparentFraction": 0.6471527777777778,
+      "partialAlphaFraction": 0.2101736111111111
+    },
+    {
+      "frame": 1,
+      "transparentFraction": 0.6478298611111111,
+      "partialAlphaFraction": 0.20927951388888888
+    },
+    {
+      "frame": 2,
+      "transparentFraction": 0.6471354166666666,
+      "partialAlphaFraction": 0.20875
+    },
+    {
+      "frame": 3,
+      "transparentFraction": 0.6484809027777778,
+      "partialAlphaFraction": 0.20803819444444444
+    },
+    {
+      "frame": 4,
+      "transparentFraction": 0.6485850694444445,
+      "partialAlphaFraction": 0.20730902777777777
+    },
+    {
+      "frame": 5,
+      "transparentFraction": 0.651171875,
+      "partialAlphaFraction": 0.20520833333333333
+    },
+    {
+      "frame": 6,
+      "transparentFraction": 0.6509114583333333,
+      "partialAlphaFraction": 0.20503472222222222
+    },
+    {
+      "frame": 7,
+      "transparentFraction": 0.6530642361111111,
+      "partialAlphaFraction": 0.20280381944444445
+    },
+    {
+      "frame": 8,
+      "transparentFraction": 0.6523871527777778,
+      "partialAlphaFraction": 0.20381944444444444
+    },
+    {
+      "frame": 9,
+      "transparentFraction": 0.656484375,
+      "partialAlphaFraction": 0.20201388888888888
+    },
+    {
+      "frame": 10,
+      "transparentFraction": 0.6573697916666666,
+      "partialAlphaFraction": 0.20153645833333333
+    },
+    {
+      "frame": 11,
+      "transparentFraction": 0.6603385416666666,
+      "partialAlphaFraction": 0.20145833333333332
+    },
+    {
+      "frame": 12,
+      "transparentFraction": 0.6605295138888889,
+      "partialAlphaFraction": 0.20287326388888888
+    },
+    {
+      "frame": 13,
+      "transparentFraction": 0.6647135416666666,
+      "partialAlphaFraction": 0.20131076388888888
+    },
+    {
+      "frame": 14,
+      "transparentFraction": 0.6743055555555556,
+      "partialAlphaFraction": 0.195546875
+    },
+    {
+      "frame": 15,
+      "transparentFraction": 0.6768142361111111,
+      "partialAlphaFraction": 0.19322916666666667
+    },
+    {
+      "frame": 16,
+      "transparentFraction": 0.6769010416666666,
+      "partialAlphaFraction": 0.19313368055555555
+    },
+    {
+      "frame": 17,
+      "transparentFraction": 0.6812152777777778,
+      "partialAlphaFraction": 0.19153645833333333
+    },
+    {
+      "frame": 18,
+      "transparentFraction": 0.6809461805555556,
+      "partialAlphaFraction": 0.19413194444444445
+    },
+    {
+      "frame": 19,
+      "transparentFraction": 0.6854253472222223,
+      "partialAlphaFraction": 0.19700520833333332
+    },
+    {
+      "frame": 20,
+      "transparentFraction": 0.6858680555555555,
+      "partialAlphaFraction": 0.19713541666666667
+    },
+    {
+      "frame": 21,
+      "transparentFraction": 0.6865190972222223,
+      "partialAlphaFraction": 0.19690104166666667
+    },
+    {
+      "frame": 22,
+      "transparentFraction": 0.6859809027777778,
+      "partialAlphaFraction": 0.201484375
+    },
+    {
+      "frame": 23,
+      "transparentFraction": 0.686953125,
+      "partialAlphaFraction": 0.20235243055555555
+    },
+    {
+      "frame": 24,
+      "transparentFraction": 0.6847048611111111,
+      "partialAlphaFraction": 0.20467013888888888
+    },
+    {
+      "frame": 25,
+      "transparentFraction": 0.6820138888888889,
+      "partialAlphaFraction": 0.2037152777777778
+    },
+    {
+      "frame": 26,
+      "transparentFraction": 0.6803125,
+      "partialAlphaFraction": 0.20462673611111112
+    },
+    {
+      "frame": 27,
+      "transparentFraction": 0.6783854166666666,
+      "partialAlphaFraction": 0.2059982638888889
+    },
+    {
+      "frame": 28,
+      "transparentFraction": 0.6745225694444444,
+      "partialAlphaFraction": 0.21083333333333334
+    },
+    {
+      "frame": 29,
+      "transparentFraction": 0.6652430555555555,
+      "partialAlphaFraction": 0.222109375
+    },
+    {
+      "frame": 30,
+      "transparentFraction": 0.6633767361111111,
+      "partialAlphaFraction": 0.22133680555555554
+    },
+    {
+      "frame": 31,
+      "transparentFraction": 0.6604600694444445,
+      "partialAlphaFraction": 0.22177083333333333
+    },
+    {
+      "frame": 32,
+      "transparentFraction": 0.6577604166666666,
+      "partialAlphaFraction": 0.22322916666666667
+    },
+    {
+      "frame": 33,
+      "transparentFraction": 0.6555729166666666,
+      "partialAlphaFraction": 0.22394965277777779
+    },
+    {
+      "frame": 34,
+      "transparentFraction": 0.6407465277777777,
+      "partialAlphaFraction": 0.22803819444444445
+    },
+    {
+      "frame": 35,
+      "transparentFraction": 0.636484375,
+      "partialAlphaFraction": 0.22903645833333333
+    },
+    {
+      "frame": 36,
+      "transparentFraction": 0.6269791666666666,
+      "partialAlphaFraction": 0.23664930555555555
+    },
+    {
+      "frame": 37,
+      "transparentFraction": 0.6162152777777777,
+      "partialAlphaFraction": 0.24074652777777777
+    },
+    {
+      "frame": 38,
+      "transparentFraction": 0.6076128472222222,
+      "partialAlphaFraction": 0.24532118055555555
+    },
+    {
+      "frame": 39,
+      "transparentFraction": 0.5989583333333334,
+      "partialAlphaFraction": 0.2486892361111111
+    },
+    {
+      "frame": 40,
+      "transparentFraction": 0.5964236111111111,
+      "partialAlphaFraction": 0.24754340277777778
+    },
+    {
+      "frame": 41,
+      "transparentFraction": 0.5952951388888889,
+      "partialAlphaFraction": 0.2457638888888889
+    },
+    {
+      "frame": 42,
+      "transparentFraction": 0.5959722222222222,
+      "partialAlphaFraction": 0.24138020833333335
+    },
+    {
+      "frame": 43,
+      "transparentFraction": 0.5991840277777778,
+      "partialAlphaFraction": 0.23585069444444445
+    },
+    {
+      "frame": 44,
+      "transparentFraction": 0.6013888888888889,
+      "partialAlphaFraction": 0.23010416666666667
+    },
+    {
+      "frame": 45,
+      "transparentFraction": 0.6068836805555555,
+      "partialAlphaFraction": 0.2297482638888889
+    },
+    {
+      "frame": 46,
+      "transparentFraction": 0.6087326388888888,
+      "partialAlphaFraction": 0.2344357638888889
+    },
+    {
+      "frame": 47,
+      "transparentFraction": 0.6101215277777777,
+      "partialAlphaFraction": 0.24305555555555555
+    },
+    {
+      "frame": 48,
+      "transparentFraction": 0.6133159722222222,
+      "partialAlphaFraction": 0.25458333333333333
+    },
+    {
+      "frame": 49,
+      "transparentFraction": 0.6176996527777778,
+      "partialAlphaFraction": 0.25493055555555555
+    },
+    {
+      "frame": 50,
+      "transparentFraction": 0.6192274305555555,
+      "partialAlphaFraction": 0.2543576388888889
+    },
+    {
+      "frame": 51,
+      "transparentFraction": 0.6256597222222222,
+      "partialAlphaFraction": 0.2514409722222222
+    },
+    {
+      "frame": 52,
+      "transparentFraction": 0.6354600694444444,
+      "partialAlphaFraction": 0.24193576388888888
+    },
+    {
+      "frame": 53,
+      "transparentFraction": 0.651015625,
+      "partialAlphaFraction": 0.22972222222222222
+    },
+    {
+      "frame": 54,
+      "transparentFraction": 0.6630295138888889,
+      "partialAlphaFraction": 0.2198871527777778
+    },
+    {
+      "frame": 55,
+      "transparentFraction": 0.6687847222222222,
+      "partialAlphaFraction": 0.21758680555555557
+    },
+    {
+      "frame": 56,
+      "transparentFraction": 0.6694097222222222,
+      "partialAlphaFraction": 0.21960069444444444
+    },
+    {
+      "frame": 57,
+      "transparentFraction": 0.6782291666666667,
+      "partialAlphaFraction": 0.21318576388888888
+    },
+    {
+      "frame": 58,
+      "transparentFraction": 0.68859375,
+      "partialAlphaFraction": 0.2053125
+    },
+    {
+      "frame": 59,
+      "transparentFraction": 0.6955295138888888,
+      "partialAlphaFraction": 0.19875
+    },
+    {
+      "frame": 60,
+      "transparentFraction": 0.6370746527777778,
+      "partialAlphaFraction": 0.2683506944444444
+    },
+    {
+      "frame": 61,
+      "transparentFraction": 0.6341319444444444,
+      "partialAlphaFraction": 0.27125
+    },
+    {
+      "frame": 62,
+      "transparentFraction": 0.6319791666666666,
+      "partialAlphaFraction": 0.2734375
+    },
+    {
+      "frame": 63,
+      "transparentFraction": 0.6300954861111111,
+      "partialAlphaFraction": 0.27436631944444445
+    },
+    {
+      "frame": 64,
+      "transparentFraction": 0.628515625,
+      "partialAlphaFraction": 0.27524305555555556
+    },
+    {
+      "frame": 65,
+      "transparentFraction": 0.6275086805555555,
+      "partialAlphaFraction": 0.27469618055555556
+    }
+  ],
+  "keying": "magenta chroma + positive green/cyan/bright-core coverage + separate soft base-dust matte; despill; straight RGBA, standard blend",
+  "limitations": [
+    "Source smoke/leaf movement is baked in. Chroma key may thin magenta-contaminated wisps.",
+    "Six flow-aligned boundary frames may slightly soften moving leaves. Numerical seam metric is not visual approval."
+  ],
+  "assets": [
+    {
+      "path": "assets/resources/fx/wind_tornado_video_v129.png",
+      "bytes": 7120876,
+      "sha256": "021dc3776912b5be92c10ac42450dc78bebf73bcf1e83fc32928b70eeaf84322",
+      "uuid": "039cc491-7a57-4720-aab2-d880033d73a4"
+    },
+    {
+      "path": "assets/resources/fx/wind_tornado_video_v129.frames.json",
+      "bytes": 5315,
+      "sha256": "e0cda09457ca4de716b96e9b8d22bd6668fb965a4aac1c0f262977ab83b7ec5c",
+      "uuid": "1f8db5a0-2c09-4844-b323-d334eb0cb7cf"
+    }
+  ],
+  "gameBrowserCombatAudioOrWasmStarted": false
+}

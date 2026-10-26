@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "baseline": "a1735be0",
+  "changedExistingAssets": [
+    "assets/scripts/battle/WindNinjaHeroes.ts",
+    "assets/scripts/battle/WindNinjaVFX.ts",
+    "assets/scripts/ui/BattleEntryWarmup.ts"
+  ],
+  "gameplayPreservedExceptRenderingConstructor": true,
+  "shaderAndConfigAssetsUnchanged": true,
+  "frameCases": 600,
+  "identicalNinjaAndFallbackDrawings": 360,
+  "sharedImageDownloads": 2,
+  "sharedManifestDownloads": 2,
+  "poolLimit": 8,
+  "pauseAspectCleanupLateLoadFailureChecks": true,
+  "gameEngineBrowserCombatAudioOrWasmStarted": false
+}

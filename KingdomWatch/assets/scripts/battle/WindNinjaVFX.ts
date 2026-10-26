@@ -1,6 +1,7 @@
 /** Painted, bounded Graphics geometry. All age/phase values come from the battle clock. */
 import { Color, Graphics, Layers, Node } from 'cc';
 import { HeroFxShader } from './HeroFxShader';
+import { WindVideoVFX } from './WindVideoVFX';
 
 export const WIND_NINJA_FX_EFFECT = 'fx/wind-ninja-flow';
 
@@ -181,18 +182,20 @@ export class WindNinjaVFX {
   private readonly root = new Node('WindNinjaVFX');
   private readonly g: Graphics;
   private readonly flow: HeroFxShader;
+  private readonly video: WindVideoVFX | null;
   private readonly areaShader = new WeakMap<WindNinjaAreaView, boolean>();
   private accents: Accent[] = [];
   private launches: SpiralLaunch[] = [];
   private areas = 0;
   private marks = 0;
-  constructor(parent: Node) {
+  constructor(parent: Node, windVideo = false) {
     this.root.layer = Layers.Enum.UI_2D; this.root.setParent(parent);
     const textLayer = parent.getChildByName('TextLayer');
     if (textLayer) this.root.setSiblingIndex(textLayer.getSiblingIndex());
     this.g = this.root.addComponent(Graphics);
     this.flow = new HeroFxShader(this.root, 'windNinjaEnergy', 12, 'plasma',
       { effect: WIND_NINJA_FX_EFFECT, technique: 0 });
+    this.video = windVideo ? new WindVideoVFX(this.root) : null;
   }
   release(x: number, y: number, dx: number, dy: number, kind: 'wind' | 'shuriken'): void {
     if (this.accents.length >= 24) this.accents.shift();
@@ -211,10 +214,11 @@ export class WindNinjaVFX {
       if (this.accents[i].age >= .22) this.accents.splice(i, 1);
     }
   }
-  begin(): void { this.g.clear(); this.flow.begin(); this.areas = this.marks = 0; }
+  begin(): void { this.g.clear(); this.flow.begin(); this.video?.begin(); this.areas = this.marks = 0; }
   area(area: WindNinjaAreaView): void {
     if (++this.areas > 8) return;
     const alpha = opacity(area);
+    if (this.video?.area(area, alpha)) return;
     if(!this.areaShader.has(area))this.areaShader.set(area,this.flow.ready);
     if (this.areaShader.get(area)) {
       const tornado = area.kind === 'tornado';
@@ -243,6 +247,7 @@ export class WindNinjaVFX {
         drawSpiral(this.g,{kind:'spiral',x,y,radius:r,age:launch.age,duration:launch.life},alpha);
     }
     this.flow.end();
+    this.video?.end();
     for (const a of this.accents) {
       const alpha = 1 - a.age / .22, r = 7 + a.age * 70;
       stroke(this.g, a.kind === 'wind' ? P.mint : P.cyan, 2 * alpha + .6, alpha * .8);
