@@ -26,4 +26,6 @@
 
 实现提交 `18f4594e` 后完成 Creator 3.8.8 正式构建，19522ms、退出36。包版本 `4b8157a621b0297a`，1610文件、208424287字节，较 v130 增22379字节；518份既有 native 资源全部原字节，无新增媒体。新 Shader 的 GLSL1/3、无纹理依赖、ONE/ONE零alpha发光元数据正确；整包校验、15份 JS 与5段内联脚本静态语法检查通过。
 
-按持续授权仅部署独立 GitHub Pages 运行仓库，线上回执随后补齐；不推源码，不部署 Cloudflare。
+已发布：[试玩 v132](https://enjoylura.github.io/kingdom-watch-play/?v=sword-jade-v132)。运行仓库提交 `bbdcaa4221cc1f4abfbd49a1c6cce9ef37d231b4`，Pages/build 均 built；标准线上验证和额外新 Shader/主脚本两份 HTTP200+SHA256 一致。发布期间源码 HEAD/索引保持，只推独立运行包，不推源码、不部署 Cloudflare。
+
+构建/包核验：`build-record.json`、`export-report.json`、`compiled-effect-verification.json`、`package-static-verification.json`。部署/线上核验：`deployment.json`、`additional-http-verification.json`。未启动游戏/浏览器/真实战斗/战斗模拟/音频/WASM；最终手机动态质量与性能待用户人工检查。
