@@ -68,5 +68,9 @@ result={'checks':checks,'sourceBaseline':BASE,'baselineRelease':old_release['id'
     'gameBrowserBattleAudioOrWasmStarted':False}
 (OUT/'package-static-verification.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n','utf8')
 (OUT/'build-record.json').write_text((ROOT/'build/web-mobile/build-record.json').read_text('utf-8-sig'),'utf8')
+console=OUT/'export-console.txt'
+raw=console.read_text('utf-8-sig')
+(OUT/'export-report.json').write_text(json.dumps(json.loads(raw[raw.index('{'):]),ensure_ascii=False,indent=2)+'\n','utf8')
+console.unlink()
 print(json.dumps({'release':checks['release']['id'],'files':checks['file_count'],'bytes':checks['full_package_bytes'],
     'unchangedNative':len(native),'compiledEyeMatchesApprovedPreview':True,'jsSyntax':len(syntax),'inlineSyntax':inline}))
