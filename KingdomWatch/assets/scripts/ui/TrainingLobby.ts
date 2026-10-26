@@ -453,7 +453,7 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
         if (selected === 'skill') {
           const cur = skillBaseMultiplier(hid, lv), next = skillBaseMultiplier(hid, maxed ? lv : lv + 1);
           const pct = (v: number): string => `${Math.round(v * 10000) / 100}%`;
-          rows = [{ name: hid === 'wind' ? '每次切割技能倍率' : hid === 'ninja' ? '每刃回收技能倍率' : '技能伤害倍率',
+          rows = [{ name: hid === 'wind' ? '每次切割技能倍率' : hid === 'ninja' ? '每刃回收技能倍率' : hid === 'sword' ? '剑雨每剑技能倍率' : '技能伤害倍率',
             cur: pct(cur), next: pct(next), gain: `+${pct(next - cur)}` }];
         } else if (['cannon','siphon','wind','ninja','space','sword'].includes(hid)) {
           const value = (level: number): number => selected === 'atk' ? newHeroNormalCfg(level).normalMul
@@ -462,7 +462,7 @@ export function buildTrainingLobby(ctx: PageCtx, data: TrainingData): void {
             : hid === 'cannon' ? cannonUltCfg(level).mul : siphonUltCfg(level).mul;
           const cur = value(lv), next = value(maxed ? lv : lv + 1);
           const pct = (v: number): string => `${Math.round(v * 10000) / 100}%`;
-          rows = [{ name: selected === 'atk' ? '普攻伤害倍率' : ['wind','ninja','space','sword'].includes(hid) ? '大招每段技能倍率'
+          rows = [{ name: selected === 'atk' ? '普攻伤害倍率' : hid === 'space' ? '光柱每次技能倍率' : hid === 'sword' ? '四方天剑技能倍率' : ['wind','ninja'].includes(hid) ? '大招每段技能倍率'
             : hid === 'siphon' ? '激光每秒技能倍率' : '每弹中心技能倍率',
             cur: pct(cur), next: pct(next), gain: `+${pct(next - cur)}` }];
         } else {

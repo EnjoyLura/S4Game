@@ -619,16 +619,16 @@ export class Panels {
           ['法术伤害',String(Math.round(hero.abilityDamage(sc.mul)))],['目标',sc.targets+'名 · 优先靠近防线'],
           ['效果','瞬移回上方 · 首领免位移'],['减速',Math.round(sc.slow*100)+'% · '+sc.slowSeconds+'秒'],
           ['范围',String(Math.round(h.skillRange))],['冷却',hero.skillCdTotal.toFixed(1)+'秒'],
-        ]:[['每剑物伤',String(Math.round(hero.abilityDamage(sw.mul)))],['数量',sw.swords+' + 消耗的剑意'],
-          ['效果','追踪强敌 · 目标死亡重新索敌'],['剑意上限',String(SWORD.intentCap)],
-          ['范围',String(Math.round(h.skillRange))],['冷却',hero.skillCdTotal.toFixed(1)+'秒']];
+        ]:[['每剑物伤',String(Math.round(hero.abilityDamage(sw.mul)))],['数量',sw.count+' + 剑意（最多6）'],
+          ['终结剑伤',String(Math.round(hero.abilityDamage(sw.finalMul)))],['剑阵半径',Math.round(sw.radius*h.skillRangeMul)+' · 可对空'],
+          ['效果','密集处剑雨 · 消耗全部剑意'],['冷却',hero.skillCdTotal.toFixed(1)+'秒']];
       }else{
         title='大招 · '+def.ultName;const sc=spaceUltCfg(h.ultLv),sw=swordUltCfg(h.ultLv);
-        rows=space?[['每刃法伤',String(Math.round(hero.abilityDamage(sc.mul,true)))],['数量','2道全屏魔法刃'],
-          ['效果','向上贯穿 · 每刃每敌命中1次'],['对空','地面与飞行'],['充能',Math.floor(hero.charge)+' / '+goalTxt],['释放','手动点击']]
-          :[['每剑物伤',String(Math.round(hero.abilityDamage(sw.mul,true)))],['落剑数量',String(sw.count)],
-            ['终结巨剑',String(Math.round(hero.abilityDamage(sw.finalMul,true)))],['范围',Math.round(sw.radius*h.skillRangeMul)+' · 可对空'],
-            ['充能',Math.floor(hero.charge)+' / '+goalTxt],['释放','手动 · 密集处剑阵']];
+        rows=space?[['每次法伤',String(Math.round(hero.abilityDamage(sc.mul,true)))],['禁锢目标',sc.targets+'名 · 首领免控'],
+          ['持续冲击',sc.duration+'秒 / '+sc.pulses+'次'],['光柱半径',Math.round(sc.radius*h.skillRangeMul)+' · 可对空'],['充能',Math.floor(hero.charge)+' / '+goalTxt],['释放','手动 · 光球禁锢后光柱冲击']]
+          :[['四方剑伤',String(Math.round(hero.abilityDamage(sw.mul,true)))],['中央剑伤',String(Math.round(hero.abilityDamage(sw.finalMul,true)))],
+            ['冲击半径',Math.round(sw.radius*h.skillRangeMul)+' / 中央'+Math.round(sw.finalRadius*h.skillRangeMul)],['落剑数量','四方4柄 + 中央1柄 · 可对空'],
+            ['充能',Math.floor(hero.charge)+' / '+goalTxt],['释放','手动 · 四方斜落后中央重击']];
       }
       px=kind==='ult'?WX(636,90)-45-16-w/2:hero.x;
       py=kind==='ult'?WYB(240+ultIdx*110,90):iconY+200;

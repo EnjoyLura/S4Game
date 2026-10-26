@@ -1,0 +1,116 @@
+{
+  "mode": "built-in image_gen; UI icons only",
+  "source": "C:/Users/user/.codex/generated_images/01a15ef7-7947-7cb0-82f2-df6682c99f16/exec-09382bdc-6d39-4a87-a90b-a5c22d46f7c7.png",
+  "sourceSha256": "ffe5c943bc495281c3d3a68d2127758e4f7c7a64837fc8ae34c8f2186b18c028",
+  "regions": [
+    {
+      "left": 29,
+      "top": 22,
+      "width": 575,
+      "height": 571
+    },
+    {
+      "left": 647,
+      "top": 22,
+      "width": 579,
+      "height": 572
+    },
+    {
+      "left": 24,
+      "top": 612,
+      "width": 584,
+      "height": 582
+    },
+    {
+      "left": 639,
+      "top": 610,
+      "width": 598,
+      "height": 585
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/resources/ux/space_sword_v128/icons.png",
+      "uuid": "3e4d52ce-58ed-45cd-afe9-2decc44af1e9",
+      "width": 512,
+      "height": 512,
+      "bytes": 613458,
+      "sha256": "a0d39fff6e12d4047c308aa15a20208a1c178467cc0db47f17a268444b9e1802"
+    }
+  ],
+  "frames": {
+    "ui_icon_skill_space": {
+      "source": "space_sword_v128/icons",
+      "rect": [
+        4,
+        4,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_skill_space": {
+      "source": "space_sword_v128/icons",
+      "rect": [
+        4,
+        4,
+        248,
+        248
+      ]
+    },
+    "ui_icon_ult_space": {
+      "source": "space_sword_v128/icons",
+      "rect": [
+        260,
+        4,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_ult_space": {
+      "source": "space_sword_v128/icons",
+      "rect": [
+        260,
+        4,
+        248,
+        248
+      ]
+    },
+    "ui_icon_skill_sword": {
+      "source": "space_sword_v128/icons",
+      "rect": [
+        4,
+        260,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_skill_sword": {
+      "source": "space_sword_v128/icons",
+      "rect": [
+        4,
+        260,
+        248,
+        248
+      ]
+    },
+    "ui_icon_ult_sword": {
+      "source": "space_sword_v128/icons",
+      "rect": [
+        260,
+        260,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_ult_sword": {
+      "source": "space_sword_v128/icons",
+      "rect": [
+        260,
+        260,
+        248,
+        248
+      ]
+    }
+  },
+  "processing": "Complete alpha subjects, uniform scaling, 4px gutters; no painting or ring. No effect textures."
+}

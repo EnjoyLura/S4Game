@@ -18,10 +18,10 @@ import { acceptsTarget, attackLayer, TargetLayer } from '../config/Targeting';
 import { drawWindBlade, drawShuriken, WIND_NINJA_FX_EFFECT } from './WindNinjaVFX';
 import { HeroFxShader } from './HeroFxShader';
 import { sweptBladeEntry } from './WindNinjaGeometry';
-import { drawFlyingSword, drawMagicBlade, drawRiftShard } from './SpaceSwordVFX';
+import { drawFlyingSword, drawHeavenSword, drawMagicBlade, drawRiftShard } from './SpaceSwordVFX';
 
 export interface ProjSpec {
-  visual?: 'wind' | 'shuriken' | 'rift' | 'sword' | 'spaceBlade';
+  visual?: 'wind' | 'shuriken' | 'rift' | 'sword' | 'heavenSword' | 'spaceBlade';
   /** Only deliberately homing attacks opt in; existing arrows and bullets stay straight. */
   homingTarget?: Monster;
   homingLifeId?: number;
@@ -456,6 +456,7 @@ export class ProjectileManager {
       const shard = s.heroId === 'mora' && !s.small && !s.enemy;
       if(s.visual==='spaceBlade'){drawMagicBlade(g,s.x,s.y,Math.atan2(a.vy,a.vx),s.lineHalfLength||423,a.age,s.color);continue;}
       if(s.visual==='sword'){drawFlyingSword(g,s.x,s.y,Math.atan2(a.vy,a.vx),size,a.age);continue;}
+      if(s.visual==='heavenSword'){drawHeavenSword(g,s.x,s.y,Math.atan2(a.vy,a.vx),size,a.age);continue;}
       if(s.visual==='rift'){drawRiftShard(g,s.x,s.y,Math.atan2(a.vy,a.vx),size,a.age);continue;}
       if (s.visual === 'wind') {
         const rendered = a.windShader && this.windFlight?.draw(s.x,s.y,size*10,size*10,

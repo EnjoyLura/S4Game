@@ -1,0 +1,95 @@
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: space-sword-vs:vert
+      frag: space-sword-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: one
+          blendDst: one
+          blendSrcAlpha: zero
+          blendDstAlpha: one
+      rasterizerState:
+        cullMode: none
+      properties:
+        fxState: { value: [0, 1, 1, 0] }
+        fxShape: { value: [250, 250, 100, 3] }
+}%
+CCProgram space-sword-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+  out vec2 uv0;
+  out vec4 color;
+  vec4 vert () {
+    vec4 p=vec4(a_position,1.0);
+    #if USE_LOCAL
+      p=cc_matWorld*p;
+    #endif
+    uv0=a_texCoord;color=a_color;return cc_matViewProj*p;
+  }
+}%
+CCProgram space-sword-fs %{
+  precision highp float;
+  in vec2 uv0;
+  in vec4 color;
+  uniform HeroFlow { vec4 fxState; vec4 fxShape; };
+  const float TAU=6.28318530718;
+  float sat(float x){return clamp(x,0.0,1.0);}
+  float bell(float d,float w){float a=sat(1.0-d*d/max(w*w,0.00001));return a*a*(3.0-2.0*a);}
+  float hash21(vec2 p){vec3 q=fract(vec3(p.x,p.y,p.x)*0.1031);q+=dot(q,q.yzx+33.33);return fract((q.x+q.y)*q.z);}
+  float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);
+    return mix(mix(hash21(i),hash21(i+vec2(1,0)),f.x),mix(hash21(i+vec2(0,1)),hash21(i+vec2(1)),f.x),f.y);}
+  vec3 prison(vec2 p,float age,float seed){
+    float r=length(p),fade=smoothstep(0.0,.2,age),a=dot(p,p)>.000001?atan(p.y,p.x):0.0;
+    float z=sqrt(max(0.0,1.0-r*r)),rim=bell(r-.83,.085);
+    float bands=bell(p.y*.84+p.x*.44*sin(age*1.8+seed),.033)*sat(1.0-r*r);
+    float upper=bell(p.y+.22*sin(a*2.0-age*2.4),.026)*sat(1.0-r*r);
+    float facets=bell(sin(a*6.0+age*.8+z*2.0),.12)*bell(r-.69,.28);
+    float shell=bell(r,.97)*(.022+z*.025),glow=bell(r-.84,.20)*.085;
+    return (vec3(.59,.20,.81)*(rim*.38+facets*.08+shell+glow)+vec3(.91,.69,1.0)*(bands+upper)*.18)*fade;
+  }
+  vec3 column(vec2 p,float age,float duration,float seed){
+    float y=p.y+fxShape.y*.36/max(1.0,fxShape.z);
+    float rise=sat(age/.16),fade=smoothstep(0.0,.11,age)*(1.0-smoothstep(duration-.22,duration,age));
+    float vertical=smoothstep(-.08,.12,y)*(1.0-smoothstep(2.60*rise,3.1*rise+.001,y));
+    float n=noise(vec2(p.x*3.2-y*.7+seed,y*2.0-age*6.0));
+    float bend=sin(y*3.7-age*7.0+seed)*.035;
+    float width=.68+.17*bell(y,.8)+.12*n;
+    float body=bell(p.x-bend,width)*vertical;
+    float mist=bell(p.x,width*1.8)*vertical*(.08+n*.05);
+    float core=bell(p.x-bend,width*.25)*vertical;
+    float streak=bell(sin(p.x*34.0+n*1.8),.19)*body;
+    float advect=.35+.65*bell(fract(y*.74-age*3.5+seed)-.5,.24);
+    float pulse=.78+.22*cos(TAU*(age-.15)/.3);
+    float base=bell(length(vec2(p.x,y/.30))-.78,.08)*.32;
+    return (vec3(.61,.23,.84)*(body*.48+mist+base)+vec3(.93,.72,1.0)*(core*.85+streak*advect*.33))*fade*pulse;
+  }
+  vec3 impact(vec2 p,float age){
+    p.y/=.44;float r=length(p),a=dot(p,p)>.000001?atan(p.y,p.x):0.0;
+    float life=sat(1.0-age/.85),wave=bell(r-(.15+age*1.6),.045)*life;
+    float second=bell(r-(.08+age*.9),.026)*life*.5;
+    float rays=bell(sin(a*9.0+r*2.5),.08)*bell(r,.98)*life*life;
+    float center=bell(r,.4)*bell(age,.18);
+    return vec3(.30,.83,.62)*(wave+second+rays*.24)+vec3(1.0,.91,.62)*center*.65;
+  }
+  vec4 frag(){
+    float r=max(1.0,fxShape.z),age=max(0.0,fxState.x);
+    vec2 p=vec2(uv0.x-.5,.5-uv0.y)*fxShape.xy/r;vec3 energy;
+    if(fxState.w<.5)energy=prison(p,age,fxState.y);
+    else if(fxState.w<1.5)energy=column(p,age,fxShape.w,fxState.y);
+    else energy=impact(p,age);
+    // Pure emission: alpha is always zero, so a carrier can never darken the ground.
+    float edge=smoothstep(0.0,.035,min(min(uv0.x,1.0-uv0.x),min(uv0.y,1.0-uv0.y)));
+    return vec4(max(vec3(0.0),energy)*max(0.0,fxState.z)*edge*color.a,0.0);
+  }
+}%

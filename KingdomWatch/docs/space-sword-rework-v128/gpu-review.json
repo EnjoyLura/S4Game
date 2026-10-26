@@ -1,0 +1,137 @@
+{
+  "renderer": "AMD Radeon RX 9070 XT",
+  "shaderSha256": "d649a7951d584fae8620bb66c34ae03d2fd1545097e682a8c7b12ccb95c4791c",
+  "pureCodeNoTextures": true,
+  "samples": [
+    {
+      "mode": 0,
+      "age": 0.01,
+      "litPixels": 0,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 0,
+      "age": 0.15,
+      "litPixels": 27460,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 0,
+      "age": 0.55,
+      "litPixels": 30618,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 0,
+      "age": 1.2,
+      "litPixels": 30739,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 0,
+      "age": 2.5,
+      "litPixels": 30640,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 0,
+      "age": 3,
+      "litPixels": 30658,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 1,
+      "age": 0.01,
+      "litPixels": 0,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 1,
+      "age": 0.15,
+      "litPixels": 70608,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 1,
+      "age": 0.55,
+      "litPixels": 70839,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 1,
+      "age": 1.2,
+      "litPixels": 66147,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 1,
+      "age": 2.5,
+      "litPixels": 73121,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 1,
+      "age": 3,
+      "litPixels": 0,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 2,
+      "age": 0.01,
+      "litPixels": 2518,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 2,
+      "age": 0.15,
+      "litPixels": 3122,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 2,
+      "age": 0.55,
+      "litPixels": 3310,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 2,
+      "age": 1.2,
+      "litPixels": 0,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 2,
+      "age": 2.5,
+      "litPixels": 0,
+      "alpha": 0,
+      "finiteNonnegative": true
+    },
+    {
+      "mode": 2,
+      "age": 3,
+      "litPixels": 0,
+      "alpha": 0,
+      "finiteNonnegative": true
+    }
+  ],
+  "cosmeticFrames": 180,
+  "additiveAlphaZero": true,
+  "runtimeGameBrowserBattleAudioOrWasmStarted": false,
+  "phonePerformance": "pending user"
+}

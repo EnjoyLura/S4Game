@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "placementCases": 1200,
+  "purePulseTimelineCases": 100,
+  "isolatedDrawingFrames": 240,
+  "cosmeticPreviewFrames": 180,
+  "maxShaderQuads": 16,
+  "uiAliases": 8,
+  "checks": [
+    "level 1-20 monotonic damage and milestones",
+    "exactly five ordered impacts, first four diagonal, last vertical, landing clamped across aspect ratios",
+    "pulse schedule independent of step partitions",
+    "separate bind control and life guards statically checked",
+    "overlapping columns one spell damage path",
+    "original four-target teleport and six intent cap preserved",
+    "actual drawing geometry finite, bounded and alpha-safe",
+    "formal UI atlas alpha/8 aliases",
+    "pure shader has no image sampler"
+  ],
+  "actualEngineGameBrowserCombatAudioOrWasmStarted": false,
+  "phoneGameplay": "pending user"
+}

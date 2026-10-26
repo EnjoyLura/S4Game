@@ -262,16 +262,16 @@ export const HERO_DEFS: Record<string, HeroDef> = {
     shopPrice: 5200,
   },
   space: {
-    id:'space', name:'伊芙·折界', job:'空间 · 传送切割', avatar:'ui_avatar_space',
+    id:'space', name:'伊芙·折界', job:'空间 · 禁锢冲击', avatar:'ui_avatar_space',
     baseAtk:SPACE.attack, baseSkillDmg:SPACE.skill, growthType:'skill', atkSpd:SPACE.aspd,
-    weaponName:'折界晶核', skillName:'空间放逐', ultName:'双重界刃', shopPrice:5600,
-    story:'以紫晶折叠空间的守望者，将逼近城墙的敌人送回远方，再用横贯战场的界刃切开敌阵。',
+    weaponName:'折界晶核', skillName:'空间放逐', ultName:'禁界光柱', shopPrice:5600,
+    story:'以紫晶折叠空间的守望者，将逼近城墙的敌人送回远方，以光球禁锢敌群，再唤起地底光柱持续冲击。',
   },
   sword: {
     id:'sword', name:'凌霄·御锋', job:'御剑 · 剑阵爆发', avatar:'ui_avatar_sword',
     baseAtk:SWORD.attack, baseSkillDmg:SWORD.skill, growthType:'hybrid', atkSpd:SWORD.aspd,
-    weaponName:'青霄灵剑', skillName:'御剑追锋', ultName:'万剑归宗', shopPrice:5600,
-    story:'远行至王国边境的御剑师。飞剑命中积蓄剑意，追锋破敌，剑阵落成时万剑归一。',
+    weaponName:'青霄灵剑', skillName:'万剑归宗', ultName:'五岳天剑', shopPrice:5600,
+    story:'远行至王国边境的御剑师。飞剑命中积蓄剑意，化作漫天剑雨；四方天剑破阵后，中央巨剑震击敌群。',
   },
   ninja: {
     id: 'ninja', name: '胧·影刃', job: '忍者 · 飞刃回收', avatar: 'ui_avatar_ninja',

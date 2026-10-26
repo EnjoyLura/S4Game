@@ -91,6 +91,8 @@ export class Monster {
   private knockbackLeft = 0;
   /** 眩晕硬直（预留：真正的眩晕类 buff 才会写入；受击不再写） */
   stunT = 0;
+  /** Spatial prison is independent of freeze/stun visuals and preserves existing longer controls. */
+  spaceBindT = 0;
   /** 冰封与雷系眩晕独立；解冻时才启动后续减速。 */
   freezeT = 0;
   private freezeAge = 0;
@@ -157,7 +159,7 @@ export class Monster {
     this.footLeftWeight = this.footRightWeight = 0;
     this.atkT = def.atkInterval;
     this.healT = def.atkInterval;
-    this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = this.lungeT = this.flashT = 0;
+    this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = this.spaceBindT = this.lungeT = this.flashT = 0;
     this.burnOwner = 'pyro';
     this.physicalShred = this.magicShred = this.physicalShredT = this.magicShredT = 0;
     this.atkAnimT = 0;
@@ -372,7 +374,7 @@ export class Monster {
     return this.artBaseY + this.artHeight * ratio;
   }
   get isBoss(): boolean { return !!this.def.boss || this.def.id === 'goblin_king'; }
-  get immobilized(): boolean { return this.freezeT > 0 || this.stunT > 0 || this.knockbackT > 0; }
+  get immobilized(): boolean { return this.freezeT > 0 || this.stunT > 0 || this.spaceBindT > 0 || this.knockbackT > 0; }
   /** Read-only view of this living instance, rather than its original codex stats. */
   inspect(): { physical: number; magic: number; armorBroken: boolean; wardBroken: boolean; states: string[] } {
     const states = this.traits.activeStates;
@@ -380,6 +382,7 @@ export class Monster {
     if (this.magicShredT > 0) states.push('法抗削弱' + Math.round(this.magicShred * 100) + '%');
     if (this.freezeT > 0) states.push('冰封');
     if (this.stunT > 0) states.push('眩晕');
+    if (this.spaceBindT > 0) states.push('空间禁锢');
     if (this.burnT > 0) states.push(this.burnHealCutT > 0 ? '灼烧·治疗降低50%' : '灼烧');
     if (this.slowT > 0) states.push('减速' + Math.round(this.slowAmp * 100) + '%');
     if (this.shockT > 0) states.push('感电');
@@ -413,7 +416,7 @@ export class Monster {
     this.healingCutT=Math.max(0,this.healingCutT-dt);
     if(this.healingCutT<=0)this.healingCut=0;
     const frozenLeft = this.freezeT;
-    const motionDt = Math.max(0, dt - Math.max(this.freezeT, this.stunT, this.knockbackT));
+    const motionDt = Math.max(0, dt - Math.max(this.freezeT, this.stunT, this.spaceBindT, this.knockbackT));
     if (this.knockbackT > 0) {
       const step = this.knockbackLeft * Math.min(1, dt / this.knockbackT);
       this.node.setPosition(this.baseX, Math.min(mobEntryY(this.def.radius) + 12, this.y + step), 0);
@@ -432,6 +435,7 @@ export class Monster {
       if (this.hunterMarkT <= 0) { this.hunterMarkAmp = 0; this.hunterMarkVisual = false; }
     }
     if (this.stunT > 0) this.stunT = Math.max(0, this.stunT - dt);
+    if (this.spaceBindT > 0) this.spaceBindT = Math.max(0, this.spaceBindT - dt);
     if (frozenLeft > 0) {
       this.freezeAge += Math.min(dt, frozenLeft);
       this.freezeT = Math.max(0, frozenLeft - dt);
@@ -552,7 +556,7 @@ export class Monster {
 
   /** A card-owned displacement; ordinary hits still cause no movement or control. */
   applyKnockback(distance: number): boolean {
-    if (this.dead || this.isBoss || distance <= 0) return false;
+    if (this.dead || this.isBoss || this.spaceBindT > 0 || distance <= 0) return false;
     const travel = Math.min(distance * (this.def.elite ? .4 : 1), mobEntryY(this.def.radius) + 12 - this.y);
     if (travel <= 0) return false;
     this.knockbackLeft = Math.max(this.knockbackLeft, travel);
@@ -697,7 +701,7 @@ export class Monster {
     if (killerId !== 'gm') Sfx.death(killerId === 'pyro_burst' ? 'pyro' : killerId, this.freezeT > 0, !!this.def.elite || this.isBoss);
     this.flashT = this.lungeT = this.atkAnimT = 0;
     this.healingCut = this.healingCutT = 0;
-    this.freezeT = this.thawT = this.slowT = this.stunT = this.burnT = this.shockT = 0;
+    this.freezeT = this.thawT = this.slowT = this.stunT = this.spaceBindT = this.burnT = this.shockT = 0;
     this.burnHealCutT = this.burnHealCut = this.overloadCd = this.knockbackT = this.knockbackLeft = 0;
     this.footLeftWeight = this.footRightWeight = 0;
     if (this.flashNode) this.flashNode.active = false;
@@ -727,6 +731,12 @@ export class Monster {
     return true;
   }
   interruptCasting(): void { if (!this.dead && !this.isBoss) this.traits.interruptCasting(); }
+  applySpaceBind(duration:number): boolean {
+    if(this.dead||this.isBoss||!Number.isFinite(duration)||duration<=0)return false;
+    this.spaceBindT=Math.max(this.spaceBindT,duration);
+    this.traits.interruptCasting();this.lungeT=this.atkAnimT=0;this.holdY=this.y;
+    this.knockbackT=this.knockbackLeft=0;return true;
+  }
   applyStun(duration: number): boolean {
     if (this.dead || this.isBoss || duration <= 0) return false;
     this.stunT = Math.max(this.stunT, duration);

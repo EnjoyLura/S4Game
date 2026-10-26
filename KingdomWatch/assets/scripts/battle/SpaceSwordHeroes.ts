@@ -11,11 +11,15 @@ import { ULT_TIMING } from './UltimateTiming';
 import { Sfx } from '../core/Sfx';
 import { artSprite } from '../ui/Ux';
 import { CA, N } from '../ui/UIKit';
-import { SpaceSwordVFX, drawFlyingSword } from './SpaceSwordVFX';
+import { SpacePrisonVisual, SpaceSwordVFX, drawFlyingSword } from './SpaceSwordVFX';
 import { densestBodyArea, interceptDirection } from './WindNinjaGeometry';
+import { heavenSwordPlan, spacePulseAt, swordRainPlan } from './SpaceSwordPlans';
 
-interface Pending { delay:number; kind:'normal'|'skill'|'blade'|'rain';
-  x?:number;y?:number;target?:Monster;life?:number;final?:boolean; }
+interface Pending { delay:number; kind:'normal'|'rain'|'heaven';
+  x?:number;y?:number;startX?:number;startY?:number;seconds?:number;final?:boolean; }
+interface Captive {mob:Monster;life:number;x:number;y:number;hitY:number;bound:boolean;orbRadius:number;}
+interface Prison {age:number;start:number;next:number;damage:number;radius:number;
+  cfg:ReturnType<typeof spaceUltCfg>;captures:Captive[];}
 const live=(m:Monster)=>!m.dead&&m.node.isValid&&m.node.activeInHierarchy;
 const EPS=1e-7;
 abstract class SpaceSwordBase extends HeroBase {
@@ -80,16 +84,20 @@ abstract class SpaceSwordBase extends HeroBase {
       this.pending.splice(k,1);
     }
   }
-  protected dense(mgr:MonsterManager,radius:number):{x:number;y:number}|null{
-    return densestBodyArea(mgr.list,this.x,HERO_Y,Infinity,radius,{left:-DESIGN_W/2+24,right:DESIGN_W/2-24,
+  protected dense(mgr:MonsterManager,radius:number,range=Infinity):{x:number;y:number}|null{
+    return densestBodyArea(mgr.list,this.x,HERO_Y,range,radius,{left:-DESIGN_W/2+24,right:DESIGN_W/2-24,
       bottom:LINE_Y+60,top:LO.half-LO.notchTop-145});
   }
 }
 
 export class SpaceHero extends SpaceSwordBase {
   readonly id='space';readonly name='伊芙·折界';readonly chargeMax=SPACE.energy;readonly skillMax=SPACE.cooldown;
+  private prison:Prison|null=null;
+  private prisonVisuals:SpacePrisonVisual[]=[];
   protected buildVisual(parent:Node):void{this.buildFigure(parent,'space');}
   protected projectileSpeed():number{return SPACE.speed;}
+  warmEffects():void{super.warmEffects();this.effects().warmVolume();}
+  protected canAutoSkill(mgr:MonsterManager):boolean{return !this.prison&&super.canAutoSkill(mgr);}
   protected castSkill(mgr:MonsterManager,_projs:ProjectileManager,dmg:DamageService):void{
     const cfg=spaceSkillCfg(this.stats.skillLv),r2=this.stats.skillRange**2;
     const targets=mgr.list.filter(m=>live(m)&&(m.x-this.x)**2+(m.hitY-HERO_Y)**2<=r2)
@@ -109,22 +117,39 @@ export class SpaceHero extends SpaceSwordBase {
     }
     Sfx.cast(this.id);
   }
-  castUlt(mgr:MonsterManager,_projs:ProjectileManager,_dmg:DamageService):boolean{
-    if(!this.ultReady||!mgr.list.some(live)||this.pending.length>92)return false;
-    const cfg=spaceUltCfg(this.stats.ultLv),windup=ULT_TIMING.space.windup;
-    this.charge=0;
-    this.beginUltimate(windup+cfg.gap+(LO.half-HERO_Y+180)/cfg.speed);
-    for(let k=0;k<2;k++)this.pending.push({kind:'blade',delay:windup+k*cfg.gap});
-    Sfx.cast(this.id,true);return true;
+  castUlt(mgr:MonsterManager,_projs:ProjectileManager,dmg:DamageService):boolean{
+    if(!this.ultReady||this.prison)return false;
+    const cfg=spaceUltCfg(this.stats.ultLv),start=ULT_TIMING.space.windup+cfg.orbDelay;
+    const targets=mgr.list.filter(m=>live(m)&&m.hitY>LINE_Y+20&&m.hitY<LO.half-LO.notchTop-90)
+      .sort((a,b)=>a.y-b.y).slice(0,cfg.targets);
+    if(!targets.length)return false;
+    this.lastDmg=dmg;this.charge=0;
+    const captures=targets.map(m=>({mob:m,life:m.lifeId,x:m.x,y:m.y,hitY:m.hitY,
+      bound:m.applySpaceBind(start+cfg.duration),orbRadius:Math.max(37,Math.min(96,m.def.radius*1.8))}));
+    this.prison={age:0,start,next:0,captures,cfg,damage:this.abilityDamage(cfg.mul,true),radius:cfg.radius*this.stats.skillRangeMul};
+    this.beginUltimate(start+cfg.duration+.2);Sfx.cast(this.id,true);return true;
   }
-  protected release(p:Pending,_mgr:MonsterManager,projs:ProjectileManager):boolean{
-    if(p.kind!=='blade')return true;
-    const cfg=spaceUltCfg(this.stats.ultLv),y=LINE_Y+45,top=LO.half+100;
-    return projs.fire({x:0,y,dirX:0,dirY:1,speed:cfg.speed,dmg:this.abilityDamage(cfg.mul,true),crit:false,
-      heroId:this.id,color:'#BB63D8',visual:'spaceBlade',size:18,lineHalfLength:cfg.halfLength,
-      lineForwardOffset:0,pierce:1000000,ttl:(top-y)/cfg.speed+.3,endPoint:{x:0,y:top},
-      targetLayer:'all',ult:true,ability:true,resCut:this.stats.defIgnore,
-      slowRatio:cfg.slow,slowDur:cfg.slowSeconds,onContact:m=>this.ultimateBeat(m.x,m.hitY,.3,false)});
+  protected release(_p:Pending,_mgr:MonsterManager,_projs:ProjectileManager):boolean{return true;}
+  protected updateQueues(dt:number,mgr:MonsterManager,projs:ProjectileManager):void{
+    super.updateQueues(dt,mgr,projs);const p=this.prison;if(!p)return;p.age+=dt;
+    while(p.next<p.cfg.pulses&&spacePulseAt(p.next,p.start,p.cfg.duration,p.cfg.pulses)<=p.age+EPS){
+      // Overlapping columns are one spell: one damage event per living actor per pulse.
+      for(const m of mgr.list){if(!live(m)||!p.captures.some(c=>(m.x-c.x)**2+(m.hitY-c.hitY)**2<=p.radius**2))continue;
+        m.takeDamage(p.damage,false,this.id,false,this.stats.defIgnore,Math.PI/2,p.next===0);
+        this.lastDmg?.add(this.id,m.lastDamageTaken);}
+      for(const c of p.captures)this.effects().add('spacePulse',c.x,c.y,p.radius,.3);
+      if(p.next===0||p.next===5)Sfx.impact(this.id,true);
+      this.ultimateBeat(p.captures[0].x,p.captures[0].hitY,p.next===0?.7:.12,false);p.next++;
+    }
+    if(p.age>=p.start+p.cfg.duration)this.prison=null;
+  }
+  renderEffects():void{
+    const p=this.prison;this.prisonVisuals.length=0;
+    if(p)for(const c of p.captures){const valid=c.life===c.mob.lifeId&&live(c.mob);
+      this.prisonVisuals.push({x:c.x,y:c.y,orbX:valid?c.mob.x:c.x,orbY:valid?c.mob.hitY+c.mob.def.radius*.45:c.hitY,
+        orb:valid&&c.bound,orbRadius:c.orbRadius,radius:p.radius});}
+    this.effects().setPrison(this.prisonVisuals,p?.age||0,p?.start||0,p?.cfg.duration||0);
+    super.renderEffects();
   }
 }
 
@@ -133,61 +158,52 @@ export class SwordHero extends SpaceSwordBase {
   private intent=0;
   private orbit:Graphics|null=null;
   protected buildVisual(parent:Node):void{this.buildFigure(parent,'sword');}
-  warmEffects():void{super.warmEffects();if(!this.orbit)this.orbit=N('swordIntent',this.node).addComponent(Graphics);}
+  warmEffects():void{super.warmEffects();this.effects().warmVolume();if(!this.orbit)this.orbit=N('swordIntent',this.node).addComponent(Graphics);}
   protected projectileSpeed():number{return SWORD.speed;}
   protected attackSpec(target:Monster,offset=0,ability=false,mul=1,speed=0):ProjSpec{
     const spec=super.attackSpec(target,offset,ability,mul,speed);
     // Intent belongs to the hero. Only a real basic hit, once per projectile, earns it.
     let earned=false;
     if(!ability)spec.onContact=()=>{if(!earned&&this.node.isValid){earned=true;this.intent=Math.min(SWORD.intentCap,this.intent+1);}};
-    if(ability){spec.homingTarget=target;spec.homingLifeId=target.lifeId;}
     return spec;
   }
-  private strongest(mgr:MonsterManager):Monster|null{
-    let best:Monster|null=null;
-    for(const m of mgr.list){if(!live(m)||(m.x-this.x)**2+(m.hitY-HERO_Y)**2>this.stats.skillRange**2)continue;
-      if(!best||Number(m.isBoss)>Number(best.isBoss)||m.isBoss===best.isBoss&&Number(!!m.def.elite)>Number(!!best.def.elite)
-        ||m.isBoss===best.isBoss&&!!m.def.elite===!!best.def.elite&&m.hp>best.hp)best=m;}
-    return best;
-  }
   protected castSkill(mgr:MonsterManager,_projs:ProjectileManager,_dmg:DamageService):void{
-    const t=this.strongest(mgr);if(!t||this.pending.length>80)return;
-    const cfg=swordSkillCfg(this.stats.skillLv),count=cfg.swords+this.intent;
+    const cfg=swordSkillCfg(this.stats.skillLv),radius=cfg.radius*this.stats.skillRangeMul;
+    const p=this.dense(mgr,radius,this.stats.skillRange),count=cfg.count+this.intent;
+    if(!p||this.pending.length+count+1>96)return;
     this.intent=0;this.beginSkillCooldown();
-    for(let k=0;k<count;k++)this.pending.push({kind:'skill',delay:k*.09,target:t,life:t.lifeId});
+    this.effects().add('array',p.x,p.y,radius,.18+count*SWORD.rainGap+.8);
+    for(const shot of swordRainPlan(p.x,p.y,count,radius))this.pending.push({...shot,kind:'rain',delay:.18+shot.delay});
     Sfx.cast(this.id);
   }
-  castUlt(mgr:MonsterManager,_projs:ProjectileManager,_dmg:DamageService):boolean{
-    const cfg=swordUltCfg(this.stats.ultLv),p=this.dense(mgr,cfg.radius);
-    if(!this.ultReady||!p||this.pending.length+cfg.count+1>96)return false;
+  castUlt(mgr:MonsterManager,_projs:ProjectileManager,dmg:DamageService):boolean{
+    const cfg=swordUltCfg(this.stats.ultLv),radius=cfg.radius*this.stats.skillRangeMul,p=this.dense(mgr,radius);
+    if(!this.ultReady||!p||this.pending.length+5>96)return false;
     const windup=ULT_TIMING.sword.windup;
-    this.charge=0;this.beginUltimate(windup+cfg.count*SWORD.rainGap+1);
-    this.effects().add('array',p.x,p.y,cfg.radius,windup+cfg.count*SWORD.rainGap+.9);
-    for(let k=0;k<cfg.count;k++){
-      const a=k*2.399963,r=Math.sqrt((k+.5)/cfg.count)*cfg.radius*.78;
-      this.pending.push({kind:'rain',delay:windup+k*SWORD.rainGap,x:p.x+Math.cos(a)*r,y:p.y+Math.sin(a)*r*.65});
-    }
-    this.pending.push({kind:'rain',delay:windup+cfg.count*SWORD.rainGap+.12,x:p.x,y:p.y,final:true});
+    this.lastDmg=dmg;this.charge=0;this.beginUltimate(windup+4*SWORD.heavenGap+SWORD.heavenPause+.52+.9);
+    this.effects().add('array',p.x,p.y,cfg.finalRadius*this.stats.skillRangeMul,windup+2.8);
+    for(const shot of heavenSwordPlan(p.x,p.y,radius,{left:-DESIGN_W/2+60,right:DESIGN_W/2-60,
+      bottom:LINE_Y+65,top:LO.half-LO.notchTop-155}))this.pending.push({...shot,kind:'heaven',delay:windup+shot.delay});
     Sfx.cast(this.id,true);return true;
   }
   protected release(p:Pending,mgr:MonsterManager,projs:ProjectileManager):boolean{
-    if(p.kind==='skill'){
-      const t=p.target&&p.target.lifeId===p.life&&live(p.target)&&mgr.list.indexOf(p.target)>=0?p.target:this.strongest(mgr);
-      if(!t)return true;
-      const cfg=swordSkillCfg(this.stats.skillLv);
-      return projs.fire(this.attackSpec(t,0,true,cfg.mul,cfg.speed));
-    }
-    if(p.kind!=='rain')return true;
-    const cfg=swordUltCfg(this.stats.ultLv),x=Math.max(-335,Math.min(335,p.x!)),y=Math.max(LINE_Y+35,Math.min(LO.half-150,p.y!));
-    const radius=(p.final?cfg.radius:62)*this.stats.skillRangeMul,amount=this.abilityDamage(p.final?cfg.finalMul:cfg.mul,true);
-    return projs.fire({x:x+45,y:LO.half+65,dirX:-45,dirY:y-LO.half-65,speed:p.final?1300:1550,
-      dmg:amount,crit:false,heroId:this.id,color:'#63D2A4',visual:'sword',size:p.final?23:9,ult:true,ability:true,
+    if(p.kind!=='rain'&&p.kind!=='heaven')return true;
+    const ult=p.kind==='heaven',cfg=ult?swordUltCfg(this.stats.ultLv):swordSkillCfg(this.stats.skillLv);
+    const x=Math.max(-335,Math.min(335,p.x!)),y=Math.max(LINE_Y+35,Math.min(LO.half-LO.notchTop-150,p.y!));
+    const radius=(ult?(p.final?swordUltCfg(this.stats.ultLv).finalRadius:cfg.radius):(p.final?cfg.radius:62))*this.stats.skillRangeMul;
+    const amount=this.abilityDamage(p.final?cfg.finalMul:cfg.mul,ult);
+    const sx=ult?p.startX!:x+45,sy=ult?p.startY!:LO.half+65,seconds=ult?p.seconds!:(p.final?.52:.42);
+    const angle=Math.atan2(y-sy,x-sx),fired=projs.fire({x:sx,y:sy,dirX:x-sx,dirY:y-sy,speed:Math.hypot(x-sx,y-sy)/seconds,
+      dmg:amount,crit:false,heroId:this.id,color:'#63D2A4',visual:ult?'heavenSword':'sword',size:ult?(p.final?64:48):(p.final?23:9),ult,ability:true,
       groundTarget:{x,y},targetLayer:'all',onGroundDamage:()=>{
         if(!this.node.isValid)return;
         for(const m of mgr.list){if(!live(m)||(m.x-x)**2+(m.hitY-y)**2>radius**2)continue;
-          m.takeDamage(amount,false,this.id,false,this.stats.defIgnore,-Math.PI/2,!!p.final);this.lastDmg?.add(this.id,m.lastDamageTaken);}
-      },onGroundImpact:()=>{if(!this.node.isValid)return;this.effects().add('cut',x,y,p.final?radius:60);
-        this.ultimateBeat(x,y,p.final?1:.25,!!p.final);Sfx.impact(this.id,!!p.final);}});
+          m.takeDamage(amount,false,this.id,false,this.stats.defIgnore,angle,!!p.final||ult);this.lastDmg?.add(this.id,m.lastDamageTaken);}
+      },onGroundImpact:()=>{if(!this.node.isValid)return;
+        this.effects().add(ult?'giant':'cut',x,y,ult?radius:(p.final?radius:60),ult?.9:.6,angle);
+        if(ult)this.ultimateBeat(x,y,p.final?1.5:.6,!!p.final);Sfx.impact(this.id,ult||!!p.final);}});
+    if(fired&&ult)this.effects().add('landing',x,y,radius,seconds,angle);
+    return fired;
   }
   renderEffects():void{
     super.renderEffects();

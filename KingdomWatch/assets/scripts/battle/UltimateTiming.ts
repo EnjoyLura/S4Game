@@ -1,8 +1,8 @@
 /** One battle-clock contract for cast queues, presentation and panel protection. */
 import { SIPHON_LASER } from '../config/NewHeroConfig';
 export const ULT_TIMING: Record<string, { windup: number; duration: number }> = {
-  space: {windup:.6, duration:4},
-  sword: {windup:.55, duration:4.5},
+  space: {windup:.6, duration:4.15},
+  sword: {windup:.65, duration:3.47},
   wind: { windup: .5, duration: 5.5 },
   ninja: { windup: .45, duration: 4.45 },
   cannon: { windup: .6, duration: 4.5 },

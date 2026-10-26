@@ -466,3 +466,78 @@ Object.assign(NEW_HERO_FRAMES, {
     ]
   }
 });
+// v128 revised space/sword UI abilities.
+Object.assign(NEW_HERO_FRAMES, {
+  "ui_icon_skill_space": {
+    "source": "space_sword_v128/icons",
+    "rect": [
+      4,
+      4,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_skill_space": {
+    "source": "space_sword_v128/icons",
+    "rect": [
+      4,
+      4,
+      248,
+      248
+    ]
+  },
+  "ui_icon_ult_space": {
+    "source": "space_sword_v128/icons",
+    "rect": [
+      260,
+      4,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_ult_space": {
+    "source": "space_sword_v128/icons",
+    "rect": [
+      260,
+      4,
+      248,
+      248
+    ]
+  },
+  "ui_icon_skill_sword": {
+    "source": "space_sword_v128/icons",
+    "rect": [
+      4,
+      260,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_skill_sword": {
+    "source": "space_sword_v128/icons",
+    "rect": [
+      4,
+      260,
+      248,
+      248
+    ]
+  },
+  "ui_icon_ult_sword": {
+    "source": "space_sword_v128/icons",
+    "rect": [
+      260,
+      260,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_ult_sword": {
+    "source": "space_sword_v128/icons",
+    "rect": [
+      260,
+      260,
+      248,
+      248
+    ]
+  }
+});
