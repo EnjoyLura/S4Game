@@ -1,0 +1,213 @@
+{
+  "source": "D:\\AI\\S4Game\\KingdomWatch\\local\\art-archive\\wind-tornado-video-v129\\green_vortex_vfx_720p_1793026637.mp4",
+  "sourceSha256": "6bf23651055a718eef45debb4c5d2bbdc4a7dec85ff48b6c9038aff6ed4b5567",
+  "sourceFrames": 60,
+  "frameCount": 48,
+  "allSourceFramesContribute": true,
+  "directSourceIndices": [
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "overlapPairs": [
+    {
+      "output": 36,
+      "tailSource": 48,
+      "headSource": 0,
+      "headWeight": 0.0
+    },
+    {
+      "output": 37,
+      "tailSource": 49,
+      "headSource": 1,
+      "headWeight": 0.023290758827948913
+    },
+    {
+      "output": 38,
+      "tailSource": 50,
+      "headSource": 2,
+      "headWeight": 0.08715251690458302
+    },
+    {
+      "output": 39,
+      "tailSource": 51,
+      "headSource": 3,
+      "headWeight": 0.18256949661908337
+    },
+    {
+      "output": 40,
+      "tailSource": 52,
+      "headSource": 4,
+      "headWeight": 0.3005259203606311
+    },
+    {
+      "output": 41,
+      "tailSource": 53,
+      "headSource": 5,
+      "headWeight": 0.43200601051840715
+    },
+    {
+      "output": 42,
+      "tailSource": 54,
+      "headSource": 6,
+      "headWeight": 0.5679939894815927
+    },
+    {
+      "output": 43,
+      "tailSource": 55,
+      "headSource": 7,
+      "headWeight": 0.6994740796393689
+    },
+    {
+      "output": 44,
+      "tailSource": 56,
+      "headSource": 8,
+      "headWeight": 0.8174305033809166
+    },
+    {
+      "output": 45,
+      "tailSource": 57,
+      "headSource": 9,
+      "headWeight": 0.9128474830954171
+    },
+    {
+      "output": 46,
+      "tailSource": 58,
+      "headSource": 10,
+      "headWeight": 0.976709241172051
+    },
+    {
+      "output": 47,
+      "tailSource": 59,
+      "headSource": 11,
+      "headWeight": 1.0
+    }
+  ],
+  "reverseFreezeOrStillEndpointBridge": false,
+  "axisStabilization": null,
+  "projection": {
+    "cellSize": [
+      384,
+      224
+    ],
+    "groundAnchor": [
+      0.5,
+      0.5167207792207793
+    ],
+    "visualWidthPerRadius": 2.7,
+    "displayHeightScale": 0.58,
+    "displayOffsetY": -18
+  },
+  "playbackSpeed": 2,
+  "playbackFPS": 60,
+  "loopSeconds": 0.8,
+  "atlasPixels": [
+    3072,
+    1344
+  ],
+  "atlasRGBABytes": 16515072,
+  "adjacentPremultipliedMAE": [
+    0.023350629955530167,
+    0.04041551426053047,
+    0.012542737647891045,
+    0.011942530982196331,
+    0.02333221770823002,
+    0.02331511303782463,
+    0.040758319199085236,
+    0.012296267785131931,
+    0.012675966136157513,
+    0.023153457790613174,
+    0.023224564269185066,
+    0.039313241839408875,
+    0.022264912724494934,
+    0.0113952262327075,
+    0.011361532844603062,
+    0.020979827269911766,
+    0.03728524222970009,
+    0.020743034780025482,
+    0.020130697637796402,
+    0.010771267116069794,
+    0.01116870902478695,
+    0.03696129843592644,
+    0.021397095173597336,
+    0.020843585953116417,
+    0.02061745896935463,
+    0.019091326743364334,
+    0.02027507685124874,
+    0.02028541825711727,
+    0.02063087373971939,
+    0.021745536476373672,
+    0.020554319024086,
+    0.021918801590800285,
+    0.02188667468726635,
+    0.02230808511376381,
+    0.02251754142343998,
+    0.0350823849439621,
+    0.011891472153365612,
+    0.013730463571846485,
+    0.02379712462425232,
+    0.025795437395572662,
+    0.03657867759466171,
+    0.02461492456495762,
+    0.024365024641156197,
+    0.026085779070854187,
+    0.027945393696427345,
+    0.02578752301633358,
+    0.024395812302827835,
+    0.022666294127702713
+  ],
+  "wrapMAE": 0.022666294127702713,
+  "medianStepMAE": 0.02209185715764761,
+  "assets": [
+    {
+      "path": "assets/resources/fx/wind_eye_video_v129.png",
+      "bytes": 3363484,
+      "sha256": "d2d68d3024b14b94f2f572f986b0259e9059dbc3870677db0ef81a0cd147ed8e",
+      "uuid": "0f53b622-1981-4eaf-8e79-ece14a1f79aa"
+    },
+    {
+      "path": "assets/resources/fx/wind_eye_video_v129.frames.json",
+      "bytes": 3773,
+      "sha256": "c737e333d71e539f9954dd418af6e1848d07b12f0ac58101bdcbb47dca8e27be",
+      "uuid": "0f719e2e-8ed5-40b4-8019-d56e084ec843"
+    }
+  ],
+  "limitations": [
+    "Optical-flow overlap is a synthesized loop, not a native closed source video. Fine leaves can soften in overlap.",
+    "The cone axis is stabilized; natural rotating wind lobes retain their asymmetric outline."
+  ],
+  "gameEngineBrowserCombatAudioOrWasmStarted": false
+}

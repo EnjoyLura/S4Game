@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "baseline": "bd0944ba",
+  "changedExistingAssets": [
+    "assets/resources/fx/wind_eye_video_v129.frames.json",
+    "assets/resources/fx/wind_eye_video_v129.png",
+    "assets/resources/fx/wind_eye_video_v129.png.meta",
+    "assets/resources/fx/wind_tornado_video_v129.frames.json",
+    "assets/resources/fx/wind_tornado_video_v129.png",
+    "assets/resources/fx/wind_tornado_video_v129.png.meta",
+    "assets/scripts/battle/WindVideoVFX.ts"
+  ],
+  "allGameplayAndOtherEffectsByteUnchanged": true,
+  "shaderAndConfigAssetsUnchanged": true,
+  "frameCases": 600,
+  "identicalNinjaAndFallbackDrawings": 360,
+  "sharedImageDownloads": 2,
+  "sharedManifestDownloads": 2,
+  "poolLimit": 8,
+  "pauseAspectCleanupLateLoadFailureChecks": true,
+  "groundBelowMonsters": true,
+  "groundProjectionHeight": 0.58,
+  "tornadoAxisRangeBefore": 27.476468195695276,
+  "tornadoAxisRangeAfter": 4.915725896579261,
+  "movingLoopOverlapFrames": 12,
+  "all60SourceFramesContribute": true,
+  "gameEngineBrowserCombatAudioOrWasmStarted": false
+}

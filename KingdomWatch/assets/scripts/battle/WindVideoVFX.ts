@@ -9,6 +9,7 @@ export const WIND_VIDEO_RESOURCES: Record<WindVideoKind, string> = {
 interface ClipManifest {
   schema: number; framePrefix: string; frameCount: number; fps: number; playbackSpeed: number;
   cellSize: [number, number]; groundAnchor: [number, number]; visualWidthPerRadius: number;
+  displayHeightScale?: number; displayOffsetY?: number;
   frames: Record<string, [number, number, number, number]>;
 }
 interface Clip { manifest: ClipManifest; frames: SpriteFrame[]; }
@@ -23,7 +24,9 @@ function validManifest(m: ClipManifest, source: SpriteFrame): boolean {
     || !Number.isFinite(m.visualWidthPerRadius) || m.visualWidthPerRadius <= 0 || m.visualWidthPerRadius > 5
     || !Array.isArray(m.cellSize) || m.cellSize.length !== 2 || !m.cellSize.every(n => Number.isFinite(n) && n > 0)
     || !Array.isArray(m.groundAnchor) || m.groundAnchor.length !== 2
-    || !m.groundAnchor.every(n => Number.isFinite(n) && n >= 0 && n <= 1) || !m.frames) return false;
+    || !m.groundAnchor.every(n => Number.isFinite(n) && n >= 0 && n <= 1)
+    || (m.displayHeightScale !== undefined && (!Number.isFinite(m.displayHeightScale) || m.displayHeightScale < .2 || m.displayHeightScale > 2))
+    || (m.displayOffsetY !== undefined && (!Number.isFinite(m.displayOffsetY) || Math.abs(m.displayOffsetY) > 100)) || !m.frames) return false;
   for (let i = 0; i < m.frameCount; i++) {
     const r = m.frames[m.framePrefix + i];
     if (!Array.isArray(r) || r.length !== 4 || !r.every(Number.isFinite) || r[0] < 0 || r[1] < 0
@@ -73,6 +76,7 @@ export function windVideoFrame(age: number, fps: number, speed: number, count: n
 
 export class WindVideoVFX {
   private readonly root = new Node('WindVideoVFX');
+  private readonly groundRoot = new Node('WindEyeGroundVFX');
   private readonly clips = new Map<WindVideoKind, Clip>();
   private readonly selected = new WeakMap<View, Clip | null>();
   private readonly slots: Slot[] = [];
@@ -81,13 +85,20 @@ export class WindVideoVFX {
   private disposed = false;
   constructor(parent: Node) {
     this.root.layer = Layers.Enum.UI_2D; this.root.setParent(parent);
+    const field = parent.parent || parent;
+    const ground = field.getChildByName('GroundFxLayer');
+    this.groundRoot.layer = Layers.Enum.UI_2D; this.groundRoot.setParent(ground || this.root);
     this.root.once(Node.EventType.NODE_DESTROYED, () => {
       this.disposed = true;
-      for (const slot of this.slots) { slot.sprite.spriteFrame = null; slot.frame = null; }
+      for (const slot of this.slots) { if (slot.node.isValid) slot.sprite.spriteFrame = null; slot.frame = null; }
       this.slots.length = 0; this.clips.clear();
+      // The eye lives below MobLayer, outside this root's normal child hierarchy.
+      if (this.groundRoot.isValid) this.groundRoot.destroy();
     });
     for (let i = 0; i < 8; i++) {
       const node = new Node('windVideo' + i); node.layer = Layers.Enum.UI_2D; node.setParent(this.root);
+      // Source cone sway is corrected offline; neither slot follows projectile facing.
+      node.setRotationFromEuler(0, 0, 0);
       const ui = node.addComponent(UITransform), sprite = node.addComponent(Sprite);
       sprite.sizeMode = Sprite.SizeMode.CUSTOM; sprite.trim = false;
       // Straight RGBA: default SRC_ALPHA / ONE_MINUS_SRC_ALPHA, never additive.
@@ -104,13 +115,15 @@ export class WindVideoVFX {
     // Fix the rendering choice for this cast: late network recovery never swaps a live effect.
     const clip = this.selected.get(area); if (!clip) return false;
     const slot = this.slots[this.used++], m = clip.manifest;
+    const plane = area.kind === 'eye' ? this.groundRoot : this.root;
+    if (slot.node.parent !== plane) slot.node.setParent(plane);
     const frame = clip.frames[windVideoFrame(area.age, m.fps, m.playbackSpeed, m.frameCount)];
     if (slot.frame !== frame) { slot.sprite.spriteFrame = frame; slot.frame = frame; }
     const width = Math.max(1, area.radius) * m.visualWidthPerRadius;
     slot.ui.setAnchorPoint(...m.groundAnchor);
-    slot.ui.setContentSize(width, width * m.cellSize[1] / m.cellSize[0]);
+    slot.ui.setContentSize(width, width * m.cellSize[1] / m.cellSize[0] * (m.displayHeightScale ?? 1));
     this.tint.a = Math.round(255 * Math.max(0, Math.min(1, alpha))); slot.sprite.color = this.tint;
-    slot.node.setPosition(area.x, area.y, 0); slot.node.active = true;
+    slot.node.setPosition(area.x, area.y + (m.displayOffsetY ?? 0), 0); slot.node.active = true;
     return true;
   }
   end(): void { for (let i = this.used; i < this.slots.length; i++) this.slots[i].node.active = false; }
