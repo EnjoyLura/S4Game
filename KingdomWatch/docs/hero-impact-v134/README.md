@@ -30,4 +30,6 @@
 
 飞剑24槽、御剑地面24槽/空中32槽、空间表现32槽/晶矢24槽，预热/复用/失败回退沿用现有方式。
 
-实现提交 `a917bbbe`。Creator3.8.8 正式构建17632ms、退出36；包版本 `22e060d3f2865701`，1610文件208437496字节，较v133本地包增13211字节。518份既有native媒体原字节，无新增媒体；三个Shader的GLSL1/GLSL3、无采样依赖和预乘混合元数据通过，风眼/龙卷编译清单与源完整一致；15份JS、5段内联脚本和整包路径/散列静态校验通过。独立GitHub Pages运行包发布回执后补，不推源码、不部署Cloudflare。
+实现提交 `a917bbbe`。Creator3.8.8 正式构建17632ms、退出36；包版本 `22e060d3f2865701`，1610文件208437496字节，较v133本地包增13211字节。518份既有native媒体原字节，无新增媒体；三个Shader的GLSL1/GLSL3、无采样依赖和预乘混合元数据通过，风眼/龙卷编译清单与源完整一致；15份JS、5段内联脚本和整包路径/散列静态校验通过。
+
+已发布：[试玩v134](https://enjoylura.github.io/kingdom-watch-play/?v=hero-impact-v134)。独立运行仓库提交 `341598ae69c4f73fa13b7dcca96079821af81711`，Pages/build均built；标准线上验证与3份Shader/2份清单/主脚本共6份额外HTTP200+SHA一致。发布期间源码HEAD/索引保持，只推运行包、不推源码、不部署Cloudflare。`deployment.json`、`additional-http-verification.json`保留回执；手机实战观感/性能待用户。
