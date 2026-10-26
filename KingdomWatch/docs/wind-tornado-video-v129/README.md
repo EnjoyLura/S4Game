@@ -16,4 +16,6 @@
 
 离屏动图：[风眼](eye-preview.webp) / [龙卷](tornado-preview.webp)。图片合成预览采用原地图静态素材，未启动引擎；用于检查抠图和循环，不代表真机性能验收。
 
-构建、运行包与发布结果后续补入本目录；按持续授权本地提交源码并只部署独立GitHub Pages运行包，不推源码、不部署CF。
+实现已本地提交5959ad9e。Creator生产构建17654ms、退出36；运行包1609文件、210962698字节（210.96MB），版本e218f92b3e5fb163，比v128增加9706036字节。516份原有native文件原字节保持，仅新增两份无损序列图集；新图集解码RGBA逐像素相同、全部66格边缘alpha为0。15份JS与5段入口内联脚本仅语法检查、整包SHA与路径/压缩/WASM头静态校验通过，9条既有类型诊断无新增。详见package-static-verification.json、export-report.json、build-record.json。
+
+部署回执后补；按持续授权只部署独立GitHub Pages运行包，不推源码、不部署CF。
