@@ -1,0 +1,30 @@
+{
+  "mode": "built-in image_gen",
+  "purpose": "I2V starting frame reference only, no game integration or video task submission",
+  "userReference": "C:/Users/user/AppData/Local/Temp/codex-clipboard-c6fff7c5-235d-4a66-8f52-8e2e3d9f429d.gif",
+  "prompts": [
+    "Use case: stylized-concept.\nAsset type: a SINGLE clean image-to-video starting-frame reference for a fantasy tower-defense tornado spell, not a sprite sheet or an infographic.\nPrimary request: one fully formed emerald-and-mint magical wind tornado, captured during its steady sustained phase, on a perfectly uniform pure black RGB 0,0,0 background.\nSubject and silhouette: a standing compact conical vortex, broad swirling upper mouth and narrow grounded lower funnel, a visibly three-dimensional continuous body of turbulent air. The lower funnel and all wind must connect naturally to the ground contact point. Rounded perspective rings are only implicit flow inside the volume, never separate solid hoops. The core is partially transparent dark green. Several broad mint-white luminous pressure fronts blend into the misty wind volume, with fine winding filaments, broken wisps, soft turbulent edges and layered depth. The upper opening is loose and airy, not a hard rim. Strongest mint-white highlights are at the lower-middle cutting flow, medium green sides, darker partially transparent interior. No solid object inside.\nGround contact: a low wide gray-taupe dust whirl with soft ragged edges and fine dust granules, attached precisely below the narrow funnel; a small handful of tiny olive/gold leaf fragments caught near the lower third, much smaller than the vortex. The dust must remain gray-brown, never green slime or black smoke. No painted floor.\nStyle: polished hand-painted stylized real-time game VFX with luminous volume, natural turbulent gas and soft emission; match a colorful western fantasy tower-defense game. Crisp flowing bright accents and softer transparent mist, restrained bloom, readable at small size.\nCamera: completely fixed three-quarter game view, orthographic-like, looking down about 25 degrees toward the ground plane, see elliptical top mouth and base dust, no extreme perspective.\nComposition: portrait 2:3 canvas, a SINGLE complete tornado centered horizontally; entire luminous aura, upper wisps, leaves and dust inside the frame. Occupy about 70% of image height and at most 65% of width, at least 15% clean black padding on every side. Ground contact at x50%, y80% of the canvas. No tilt, no sideways travel.\nConstraints: this must be ONE still frame suitable as the first frame of a sustained looping video, not multiple phases, not a concept sheet. Absolutely no person, enemy, UI, text, logo, watermark, checkerboard, grid, scene, floor tiles, platform, cast shadow or ground plane. Avoid flat ribbons, fabric straps, paper streamers, metal coils, stacked rings, wireframe, neon outlines, hard clipping, overexposed white blobs, photorealistic storm cloud. Keep the black background exactly black.",
+    "Edit the supplied tornado reference into a lighter, more game-like I2V reference. Preserve the emerald/mint palette, grounded narrow funnel, wide upper mouth, fixed elevated three-quarter game view, and low gray-brown dust swirl. Do NOT add a scene.\nONE targeted refinement: the current air is too smoky and the subject too large. Make the entire effect including glow and dust about 20% smaller within the SAME portrait canvas, centered, with fully black clean margins of at least 15% on left/right, top/bottom. Ground contact centered near y78%. A single complete effect, no clipping.\nMake the wind body visibly AIRIER, with transparent black gaps, a few irregular broad translucent wind fronts blending into fine wind filaments. Remove most thick cottony cloud clumps from the top and side edges. The wind reads as rapidly rotating magical air with an open center, not dense smoke, green fire, cotton, cloth, solid ribbons or stacked metal hoops. Preserve the tapered volume and depth; bright mint-white cutting accents gather in the lower-middle third. Top is soft airy broken wisps, no thick cloud cap and no uniform solid ring. Keep a modest handful of tiny golden-olive leaf flecks, not large leaves. A little low taupe dust at ground contact, not a large dust pedestal.\nPure RGB(0,0,0) background throughout, no floor, shadow, grid, transparency checkerboard, platform, text, borders or watermark. This is ONE mature sustained-phase still for use as the first frame of a looping game VFX video. High-quality stylized fantasy spell rendering with clean readable lighting."
+  ],
+  "generated": [
+    "C:/Users/user/.codex/generated_images/01a15ef7-7947-7cb0-82f2-df6682c99f16/exec-9bb01b69-d2c5-4db0-910f-acbeb0a12c30.png",
+    "C:/Users/user/.codex/generated_images/01a15ef7-7947-7cb0-82f2-df6682c99f16/exec-a7bcf581-91af-418c-ae0c-68896d1d7e6d.png"
+  ],
+  "selected": 1,
+  "saved": "tornado-i2v-reference-v2.png",
+  "videoPrompt": "video-loop-zh.txt",
+  "processing": "Unmodified copy of selected generated PNG; no editing, resizing, matting or runtime usage",
+  "output": {
+    "width": 1024,
+    "height": 1536,
+    "channels": 3,
+    "hasAlpha": false,
+    "bytes": 1258136,
+    "sha256": "a91b4a8d998a7223c89c1c89912b9bdafb2fcbe8a18258ac310a0d9dab52a162",
+    "copyMatchesGeneratedBytes": true,
+    "outerEdgeRgbMax": 1
+  },
+  "gameAssetsChanged": false,
+  "aiVideoTaskSubmitted": false,
+  "runtimeBuildOrDeploy": false
+}
