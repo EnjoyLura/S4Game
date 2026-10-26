@@ -17,3 +17,5 @@
 复现：`node docs/space-chains-v135/verify.cjs`；Python `render_review.py`、`render_wind_ninja.py`；类型 `audit_types.cjs`；构建后 `audit_package.py`；部署后 `verify_http.py`。仅向独立 GitHub Pages 仓库发布运行包，不推送源码，不部署 Cloudflare。构建与发布回执在完成后追加。
 
 实现提交 `befa5360`。Creator 3.8.8 构建成功，19899ms、退出码36；运行包1610文件、208444741字节，较v134增7245字节，版本 `689afae411551700`。516份既有非字体native逐字节保持，仅两字体补链字；3效果GLSL1/3与两份帧清单、15JS+5内联语法、整包路径/SHA/静态解码校验通过。构建日志有既有UIKit/Ux循环依赖提示及脚本完成后的worker SIGTERM清理信息；最终构建/静态产物检查均通过。
+
+已发布：https://enjoylura.github.io/kingdom-watch-play/?v=space-chains-v135 。运行提交 `55aa1d8d0c762a5331ffbe88f8484b53dc850d51`，版本 `689afae411551700`，Pages/build均built，标准线上验证及效果/帧清单/两字体/主脚本额外8份HTTP200+SHA一致。发布中源码HEAD/索引保持；只推独立运行包，不推源码，不部署Cloudflare。源码构建记录 `bf0909e9`。

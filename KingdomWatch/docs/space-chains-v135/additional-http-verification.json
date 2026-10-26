@@ -1,0 +1,56 @@
+{
+  "release": "689afae411551700",
+  "publicationCommit": "55aa1d8d0c762a5331ffbe88f8484b53dc850d51",
+  "samples": [
+    {
+      "path": "assets/resources/import/84/841e2cef-3a3b-4570-bfe2-9a11cf023e7b.56708.json",
+      "status": 200,
+      "bytes": 23493,
+      "sha256": "92c96df4a81d47674f37358ab9f5515b7543eb1fe56ced63ad584ed3deda9c41"
+    },
+    {
+      "path": "assets/resources/import/2d/2dc448a9-6fe8-407e-a54b-d28da40128b0.536d3.json",
+      "status": 200,
+      "bytes": 19649,
+      "sha256": "11c384f2e9e5bf92baf68c29581116bb842fdcab7823fb4db2ca988cbdb1b357"
+    },
+    {
+      "path": "assets/resources/import/c0/c0de9121-74ab-4d2e-a641-8b9ec45f3710.ea6df.json",
+      "status": 200,
+      "bytes": 39124,
+      "sha256": "04c19bd32a8f0b3eede495bc355109a0cab47ea0ef8725ce6a86ceb64c9627aa"
+    },
+    {
+      "path": "assets/resources/import/1f/1f8db5a0-2c09-4844-b323-d334eb0cb7cf.3a396.json",
+      "status": 200,
+      "bytes": 1837,
+      "sha256": "ba17db7d32d4f92fa2eb201a314e47073ac9af1b42309ab97a4d819c25a2f74a"
+    },
+    {
+      "path": "assets/resources/import/0f/0f719e2e-8ed5-40b4-8019-d56e084ec843.03c13.json",
+      "status": 200,
+      "bytes": 1624,
+      "sha256": "30ba286a2ecaeb25c5560c0f2e543272208ccb6ea3525becc928a4c28901d9db"
+    },
+    {
+      "path": "assets/resources/native/08/08934c18-5f2f-44c6-8145-d4fb15839d72.5a69e/UIHeading.ttf",
+      "status": 200,
+      "bytes": 681544,
+      "sha256": "21739b6f437eabd6b15b814cc2942607bcc48972cb6c203c79914ac2debf0682"
+    },
+    {
+      "path": "assets/resources/native/4f/4f4e0740-2005-42a2-b4f7-31b0ed0bff81.7f4eb/UIBody.ttf",
+      "status": 200,
+      "bytes": 500036,
+      "sha256": "a470f1a1ad288c0576ce9736c32c69c0d34ac9b20ba682a3d30ee97b540cf75b"
+    },
+    {
+      "path": "assets/main/index.38379.js",
+      "status": 200,
+      "bytes": 1064292,
+      "sha256": "04014f03a82e1f0bc7f4ce4aa3d6e352d736dfe056d2afbdb6a8007740bcdf41"
+    }
+  ],
+  "allHashesMatch": true,
+  "gameOrBrowserStarted": false
+}
