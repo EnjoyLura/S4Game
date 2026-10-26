@@ -1,0 +1,14 @@
+{
+  "path": "assets/resources/import/84/841e2cef-3a3b-4570-bfe2-9a11cf023e7b.7ee93.json",
+  "sha256": "2db31b363fdf565d75ed6a6ab7c489f25d3a2430699f1347071d8e96e51e0176",
+  "shaderPrograms": 1,
+  "noTextureDependencies": true,
+  "blend": {
+    "blend": true,
+    "blendSrc": 1,
+    "blendDst": 1,
+    "blendSrcAlpha": 0,
+    "blendDstAlpha": 1
+  },
+  "actualGameStarted": false
+}

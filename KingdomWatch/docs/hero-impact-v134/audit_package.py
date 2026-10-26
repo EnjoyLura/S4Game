@@ -40,12 +40,22 @@ for name in ['space-sword-burst','wind-ninja-flow']:
     blend2=passes[0]['passes'][0]['blendState']['targets'][0]
     assert blend2['blendSrc']==1 and blend2['blendDst']==4
     compiled.append({'path':file.relative_to(package).as_posix(),'sha256':hashlib.sha256(file.read_bytes()).hexdigest(),'blend':blend2})
+def manifest_in(value):
+    if isinstance(value,dict):
+        if 'visualWidthPerRadius' in value:return value
+        for child in value.values():
+            found=manifest_in(child)
+            if found:return found
+    elif isinstance(value,list):
+        for child in value:
+            found=manifest_in(child)
+            if found:return found
+    return None
 for kind in ['tornado','eye']:
     source=ROOT/('assets/resources/fx/wind_'+kind+'_video_v129.frames.json')
     uid=json.loads(Path(str(source)+'.meta').read_text())['uuid']
     file=next((package/'assets/resources/import').rglob('*'+uid[:8]+'*.json'));text=file.read_text()
-    sourceData=json.loads(source.read_text());assert str(sourceData['visualWidthPerRadius']) in text
-    assert str(sourceData['displayHeightScale']) in text
+    sourceData=json.loads(source.read_text());assert manifest_in(json.loads(text))==sourceData
     compiled.append({'path':file.relative_to(package).as_posix(),'sha256':hashlib.sha256(file.read_bytes()).hexdigest(),'source':source.relative_to(ROOT).as_posix()})
 (OUT/'changed-runtime-files.json').write_text(json.dumps(compiled,indent=2)+'\n')
 node='C:/Program Files/nodejs/node.exe';syntax=[]
