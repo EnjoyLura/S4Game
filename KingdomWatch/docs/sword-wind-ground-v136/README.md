@@ -13,3 +13,5 @@
 预览：[技能落剑](skill-swords-review.webp) · [巨剑落地](final-sword-review.webp) · [传送等待](space-transit-review.webp) · [风刃](wind-blade-review.webp) · [风刃放大流动](wind-blade-close-review.webp) · [风眼](wind-eye-review.webp) · [透视对比](eye-ground-comparison.jpg) · [龙卷转向对比](tornado-steering-review.webp) · [接触表](contact-sheet.jpg)。离屏验证不等于手机效果或用户认可，实际游戏由用户试玩。
 
 复现：`verify.cjs`、`render_review.py`、`render_wind.py`、`render_tornado.py`、`audit_types.cjs`；构建后`audit_package.py`；发布后`verify_http.py`。各脚本的依赖路径与前轮沿用。只有运行包提交到独立GitHub Pages仓库，源码仅本地提交，不部署Cloudflare。构建/发布回执后补。
+
+实现提交 `4b9af6c5`。Creator 3.8.8 构建19882ms、退出36；运行包1610文件208449456字节，较v135增4715字节，版本 `6ae3b78e3f4703cc`。518份既有native逐字节保持，无新增媒体；3效果GLSL1/3、两帧清单、15JS+5内联语法及整包路径/摘要/解码静态检查通过。保留原9条类型诊断，无新增。构建日志中的脚本worker SIGTERM出现在脚本成功结束后，最终构建成功。
