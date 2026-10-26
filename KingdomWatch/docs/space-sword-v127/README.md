@@ -50,4 +50,6 @@
 
 固定试玩地址：https://enjoylura.github.io/kingdom-watch-play/?v=space-sword-v127
 
-以 `deployment.json` 的完成状态和提交号为准；线上HTTP检查在部署后记录，不以本地构建代替线上验证。
+已发布：独立运行仓库提交 `99022282faf0308a51f5225c1fb786319c585ca7`，版本 `782ebfac2232416d`。GitHub Pages 状态 built，标准线上检查通过；额外下载新3图集、2字体和主脚本共6份，均HTTP200且SHA256吻合，见 `additional-http-verification.json`。发布期间源码HEAD与索引保持，未推源码、未部署CF。
+
+源码实现本地提交 `b842ce95`、`8be67c39`，构建记录提交 `64479b26`。实际手机战斗与手感未由本轮自动测试覆盖。
