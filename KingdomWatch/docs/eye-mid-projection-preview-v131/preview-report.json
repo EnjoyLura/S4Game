@@ -1,0 +1,68 @@
+{
+  "previewOnly": true,
+  "baselineSourceCommit": "523eb10e8ea003fdeae398ba22892900a080ed3c",
+  "gameAssetFilesUnchanged": 1635,
+  "gameAssetsShaIdentical": true,
+  "atlas": {
+    "path": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\fx\\wind_eye_video_v129.png",
+    "sha256": "c65034e4cff7b6cb7799da5cebc78d294ff8c0dc37e62b2c627f7744c03baa08"
+  },
+  "manifest": {
+    "path": "D:\\AI\\S4Game\\KingdomWatch\\assets\\resources\\fx\\wind_eye_video_v129.frames.json",
+    "sha256": "c737e333d71e539f9954dd418af6e1848d07b12f0ac58101bdcbb47dca8e27be"
+  },
+  "variants": [
+    {
+      "label": "当前版本",
+      "height": 0.58,
+      "offsetY": -18
+    },
+    {
+      "label": "折中方案 · 待确认",
+      "height": 0.8,
+      "offsetY": -9
+    },
+    {
+      "label": "原版厚度参考",
+      "height": 1.0,
+      "offsetY": 0
+    }
+  ],
+  "selectedForProposalPreviewOnly": {
+    "label": "折中方案 · 待确认",
+    "height": 0.8,
+    "offsetY": -9
+  },
+  "groundLayerBelowMonster": true,
+  "playbackFPS": 60,
+  "playbackSpeed": 2,
+  "frameCount": 48,
+  "loopMilliseconds": 800,
+  "sourceArtFrameSequenceAlphaColorsAndWidthUnchanged": true,
+  "originalReferenceMeaning": "height=1 uses the current v130 frames, timing and ground layer; only the old thickness is shown",
+  "gameEngineBrowserCombatAudioOrWasmStarted": false,
+  "gameBuildRun": false,
+  "deployed": false,
+  "artifacts": {
+    "comparison-still.jpg": {
+      "bytes": 170598,
+      "sha256": "e4fe85c7dd6b9d23fd91f56dd9b52444be456790f478d2523eb73bca1e1368b0"
+    },
+    "comparison.webp": {
+      "bytes": 1975026,
+      "sha256": "b11ed38cb32d232b6c26bb998c84a394d1373e67a51b2055daa769c8d3e3b43e"
+    },
+    "proposal-contact.jpg": {
+      "bytes": 202726,
+      "sha256": "1c07ba0b42c051594c6634f3c412f005d55c1b5a8c2dbc261ad65973354480f7"
+    },
+    "proposal-still.jpg": {
+      "bytes": 106230,
+      "sha256": "07a574c7fb25d7a098cc0782f6f1759b35e694f5686b6b7d105c37c07b36c852"
+    },
+    "proposal.webp": {
+      "bytes": 1087336,
+      "sha256": "85525535ed3ef5f7b24933f89156aaf0ba4025546a72f54688cb326fa05e0e56"
+    }
+  }
+}
