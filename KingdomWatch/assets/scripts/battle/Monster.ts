@@ -17,6 +17,7 @@ import { clearDepthSorter, DepthSprite, depthSprites, setDepthSorter } from './B
 import { MonsterDeath, warmMonsterDeath } from './MonsterDeath';
 import { acceptsTarget, TargetLayer } from '../config/Targeting';
 import { FLIGHT_SHADOW, flightLiftFor } from './FlightPresentation';
+import { SPACE_TRANSIT, spaceTransitOpacity } from './SpacePresentation';
 
 /** 攻击序列帧一次性时长（s）：与 lunge 0.2s 前摇错开，收招略长观感更实 */
 const ATK_ANIM = 0.34;
@@ -93,6 +94,10 @@ export class Monster {
   stunT = 0;
   /** Spatial prison is independent of freeze/stun visuals and preserves existing longer controls. */
   spaceBindT = 0;
+  private transitAge = -1;
+  private transitY = 0;
+  private transitMoved = false;
+  private transitOpacity: UIOpacity | null = null;
   /** 冰封与雷系眩晕独立；解冻时才启动后续减速。 */
   freezeT = 0;
   private freezeAge = 0;
@@ -160,6 +165,7 @@ export class Monster {
     this.atkT = def.atkInterval;
     this.healT = def.atkInterval;
     this.slowT = this.burnT = this.burnTick = this.burnDps = this.stunT = this.spaceBindT = this.lungeT = this.flashT = 0;
+    this.clearSpaceTransit();
     this.burnOwner = 'pyro';
     this.physicalShred = this.magicShred = this.physicalShredT = this.magicShredT = 0;
     this.atkAnimT = 0;
@@ -361,6 +367,10 @@ export class Monster {
   get hitY(): number { return this.y + this.flightLift; }
   get artScale(): number { return MOB_ART_SCALE[this.def.id] || 1; }
   get artHeight(): number { return this.def.radius * MOB_ART_HEIGHT * this.artScale; }
+  get spaceOrbRadius():number {
+    const frame=this.inspectFrame,aspect=frame?frame.rect.width/Math.max(1,frame.rect.height):1;
+    return Math.max(40,this.artHeight*.53*Math.hypot(1,aspect));
+  }
   /** Enlarge around the footprint, then raise only the artwork for airborne actors. */
   get artBaseY(): number { return -this.def.radius * .82 - (this.artHeight - this.def.radius * MOB_ART_HEIGHT) * this.groundOffset + this.flightLift; }
   get groundY(): number { return this.y - this.def.radius * .82 + this.def.radius * MOB_ART_HEIGHT * this.groundOffset; }
@@ -436,6 +446,7 @@ export class Monster {
     }
     if (this.stunT > 0) this.stunT = Math.max(0, this.stunT - dt);
     if (this.spaceBindT > 0) this.spaceBindT = Math.max(0, this.spaceBindT - dt);
+    this.tickSpaceTransit(dt);
     if (frozenLeft > 0) {
       this.freezeAge += Math.min(dt, frozenLeft);
       this.freezeT = Math.max(0, frozenLeft - dt);
@@ -685,6 +696,7 @@ export class Monster {
 
   private die(killerId: string, angle: number | undefined, heavy: boolean, amount: number): void {
     this.dead = true;
+    this.clearSpaceTransit();
     if (this.burnT > 0 && this.burnBurst > 0 && killerId !== 'pyro_burst' && killerId !== 'gm') {
       this.mgrRef?.queueBurnBurst(this.x, this.hitY + this.def.radius * .4, this.burnBurst, this.y + this.def.radius * .4);
     }
@@ -730,10 +742,31 @@ export class Monster {
     this.node.setPosition(this.baseX,y,0);
     return true;
   }
+  /** Fade out, stay absent, then reform. Relocation happens once at the fade-out boundary. */
+  beginSpaceTeleport(destinationY:number):boolean {
+    if(this.dead||this.isBoss||!this.node.isValid||!Number.isFinite(destinationY)||destinationY<=this.y+1)return false;
+    this.transitY=Math.min(mobEntryY(this.def.radius),destinationY);this.transitAge=0;this.transitMoved=false;
+    this.transitOpacity=this.node.getComponent(UIOpacity)||this.node.addComponent(UIOpacity);
+    this.transitOpacity.opacity=255;return true;
+  }
+  private clearSpaceTransit():void {
+    this.transitAge=-1;this.transitMoved=false;
+    if(this.transitOpacity?.isValid)this.transitOpacity.opacity=255;
+  }
+  private tickSpaceTransit(dt:number):void {
+    if(this.transitAge<0)return;
+    this.transitAge+=dt;
+    if(!this.transitMoved&&this.transitAge>=SPACE_TRANSIT.vanish){
+      this.transitMoved=true;
+      if(!this.teleportUp(this.transitY)){this.clearSpaceTransit();return;}
+    }
+    if(this.transitOpacity)this.transitOpacity.opacity=Math.round(255*spaceTransitOpacity(this.transitAge));
+    if(this.transitAge>=SPACE_TRANSIT.end)this.clearSpaceTransit();
+  }
   interruptCasting(): void { if (!this.dead && !this.isBoss) this.traits.interruptCasting(); }
   applySpaceBind(duration:number): boolean {
     if(this.dead||this.isBoss||!Number.isFinite(duration)||duration<=0)return false;
-    this.spaceBindT=Math.max(this.spaceBindT,duration);
+    this.clearSpaceTransit();this.spaceBindT=Math.max(this.spaceBindT,duration);
     this.traits.interruptCasting();this.lungeT=this.atkAnimT=0;this.holdY=this.y;
     this.knockbackT=this.knockbackLeft=0;return true;
   }

@@ -97,6 +97,10 @@ export class SpaceHero extends SpaceSwordBase {
   protected buildVisual(parent:Node):void{this.buildFigure(parent,'space');}
   protected projectileSpeed():number{return SPACE.speed;}
   warmEffects():void{super.warmEffects();this.effects().warmVolume();}
+  protected attackSpec(target:Monster,offset=0,ability=false,mul=1,speed=0):ProjSpec{
+    const spec=super.attackSpec(target,offset,ability,mul,speed);
+    spec.onContact=m=>this.effects().add('riftHit',m.x,m.hitY,30,.38);return spec;
+  }
   protected canAutoSkill(mgr:MonsterManager):boolean{return !this.prison&&super.canAutoSkill(mgr);}
   protected castSkill(mgr:MonsterManager,_projs:ProjectileManager,dmg:DamageService):void{
     const cfg=spaceSkillCfg(this.stats.skillLv),r2=this.stats.skillRange**2;
@@ -105,13 +109,14 @@ export class SpaceHero extends SpaceSwordBase {
     if(!targets.length)return;
     this.beginSkillCooldown();
     for(let k=0;k<targets.length;k++){
-      const m=targets[k],x=m.x,y=m.hitY;
-      this.effects().add('portal',x,y,Math.max(27,m.def.radius*1.15));
+      const m=targets[k],x=m.x,y=m.y+m.artBaseY+m.artHeight*.5,visualRadius=m.spaceOrbRadius;
+      this.effects().add('portal',x,y,visualRadius,.85);
       m.takeDamage(this.abilityDamage(cfg.mul),false,this.id,false,this.stats.defIgnore);
       dmg.add(this.id,m.lastDamageTaken);
       if(!m.dead){
         const top=LO.half-LO.notchTop-178-m.def.radius;
-        if(m.teleportUp(top-(k%2)*36))this.effects().add('portal',m.x,m.hitY,Math.max(27,m.def.radius*1.15),.75);
+        const destination=top-(k%2)*36;
+        if(m.beginSpaceTeleport(destination))this.effects().add('arrival',m.x,destination+m.artBaseY+m.artHeight*.5,visualRadius,1.5);
         m.applySlow(cfg.slow,cfg.slowSeconds);
       }
     }
@@ -125,7 +130,7 @@ export class SpaceHero extends SpaceSwordBase {
     if(!targets.length)return false;
     this.lastDmg=dmg;this.charge=0;
     const captures=targets.map(m=>({mob:m,life:m.lifeId,x:m.x,y:m.y,hitY:m.hitY,
-      bound:m.applySpaceBind(start+cfg.duration),orbRadius:Math.max(37,Math.min(96,m.def.radius*1.8))}));
+      bound:m.applySpaceBind(start+cfg.duration),orbRadius:m.spaceOrbRadius}));
     this.prison={age:0,start,next:0,captures,cfg,damage:this.abilityDamage(cfg.mul,true),radius:cfg.radius*this.stats.skillRangeMul};
     this.beginUltimate(start+cfg.duration+.2);Sfx.cast(this.id,true);return true;
   }
@@ -146,8 +151,8 @@ export class SpaceHero extends SpaceSwordBase {
   renderEffects():void{
     const p=this.prison;this.prisonVisuals.length=0;
     if(p)for(const c of p.captures){const valid=c.life===c.mob.lifeId&&live(c.mob);
-      this.prisonVisuals.push({x:c.x,y:c.y,orbX:valid?c.mob.x:c.x,orbY:valid?c.mob.hitY+c.mob.def.radius*.45:c.hitY,
-        orb:valid&&c.bound,orbRadius:c.orbRadius,radius:p.radius});}
+      this.prisonVisuals.push({x:c.x,y:c.y,orbX:valid?c.mob.x:c.x,orbY:valid?c.mob.y+c.mob.artBaseY+c.mob.artHeight*.5:c.hitY,
+        orb:valid,orbRadius:c.orbRadius,radius:p.radius});}
     this.effects().setPrison(this.prisonVisuals,p?.age||0,p?.start||0,p?.cfg.duration||0);
     super.renderEffects();
   }

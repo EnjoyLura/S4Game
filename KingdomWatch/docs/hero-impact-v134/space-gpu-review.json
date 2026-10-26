@@ -1,0 +1,259 @@
+{
+  "shaderSha256": "ce6a8c03c0e48a21dfd212537bab6edc5a8d62aabf0bade6016bd67cbe2ffc76",
+  "samples": [
+    {
+      "mode": 0,
+      "age": 0.01,
+      "alphaMax": 0.005506697576493025,
+      "finite": true
+    },
+    {
+      "mode": 0,
+      "age": 0.18,
+      "alphaMax": 0.8787704110145569,
+      "finite": true
+    },
+    {
+      "mode": 0,
+      "age": 0.55,
+      "alphaMax": 1.0,
+      "finite": true
+    },
+    {
+      "mode": 0,
+      "age": 0.9,
+      "alphaMax": 1.0,
+      "finite": true
+    },
+    {
+      "mode": 0,
+      "age": 1.2,
+      "alphaMax": 1.0,
+      "finite": true
+    },
+    {
+      "mode": 0,
+      "age": 2.8,
+      "alphaMax": 1.0,
+      "finite": true
+    },
+    {
+      "mode": 1,
+      "age": 0.01,
+      "alphaMax": 0.006865556351840496,
+      "finite": true
+    },
+    {
+      "mode": 1,
+      "age": 0.18,
+      "alphaMax": 0.22634489834308624,
+      "finite": true
+    },
+    {
+      "mode": 1,
+      "age": 0.55,
+      "alphaMax": 0.2278190404176712,
+      "finite": true
+    },
+    {
+      "mode": 1,
+      "age": 0.9,
+      "alphaMax": 0.22926963865756989,
+      "finite": true
+    },
+    {
+      "mode": 1,
+      "age": 1.2,
+      "alphaMax": 0.2297014445066452,
+      "finite": true
+    },
+    {
+      "mode": 1,
+      "age": 2.8,
+      "alphaMax": 0.17988654971122742,
+      "finite": true
+    },
+    {
+      "mode": 3,
+      "age": 0.01,
+      "alphaMax": 0.699999988079071,
+      "finite": true
+    },
+    {
+      "mode": 3,
+      "age": 0.18,
+      "alphaMax": 0.699999988079071,
+      "finite": true
+    },
+    {
+      "mode": 3,
+      "age": 0.55,
+      "alphaMax": 0.699999988079071,
+      "finite": true
+    },
+    {
+      "mode": 3,
+      "age": 0.9,
+      "alphaMax": 0.699999988079071,
+      "finite": true
+    },
+    {
+      "mode": 3,
+      "age": 1.2,
+      "alphaMax": 0.699999988079071,
+      "finite": true
+    },
+    {
+      "mode": 3,
+      "age": 2.8,
+      "alphaMax": 0.699999988079071,
+      "finite": true
+    },
+    {
+      "mode": 4,
+      "age": 0.01,
+      "alphaMax": 0.800000011920929,
+      "finite": true
+    },
+    {
+      "mode": 4,
+      "age": 0.18,
+      "alphaMax": 0.800000011920929,
+      "finite": true
+    },
+    {
+      "mode": 4,
+      "age": 0.55,
+      "alphaMax": 0.7556851506233215,
+      "finite": true
+    },
+    {
+      "mode": 4,
+      "age": 0.9,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 4,
+      "age": 1.2,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 4,
+      "age": 2.8,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 5,
+      "age": 0.01,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 5,
+      "age": 0.18,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 5,
+      "age": 0.55,
+      "alphaMax": 0.3253908157348633,
+      "finite": true
+    },
+    {
+      "mode": 5,
+      "age": 0.9,
+      "alphaMax": 0.800000011920929,
+      "finite": true
+    },
+    {
+      "mode": 5,
+      "age": 1.2,
+      "alphaMax": 0.6749998927116394,
+      "finite": true
+    },
+    {
+      "mode": 5,
+      "age": 2.8,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 6,
+      "age": 0.01,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 6,
+      "age": 0.18,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 6,
+      "age": 0.55,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 6,
+      "age": 0.9,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 6,
+      "age": 1.2,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 6,
+      "age": 2.8,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 7,
+      "age": 0.01,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 7,
+      "age": 0.18,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 7,
+      "age": 0.55,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 7,
+      "age": 0.9,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 7,
+      "age": 1.2,
+      "alphaMax": 0.0,
+      "finite": true
+    },
+    {
+      "mode": 7,
+      "age": 2.8,
+      "alphaMax": 0.0,
+      "finite": true
+    }
+  ],
+  "frames": 324,
+  "actualGameEngineBrowserBattleAudioWasmStarted": false
+}

@@ -1,0 +1,119 @@
+{
+  "shaderSha256": "2128c8a064c2dc09d4cd48ab5228ca2d750952dfe04e952918054288454acbe3",
+  "samples": [
+    {
+      "mode": 2,
+      "age": 0.01,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 2,
+      "age": 0.13,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 2,
+      "age": 0.45,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 2,
+      "age": 1.0,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 2,
+      "age": 1.8,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 2,
+      "age": 3.0,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 3,
+      "age": 0.01,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 3,
+      "age": 0.13,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 3,
+      "age": 0.45,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 3,
+      "age": 1.0,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 3,
+      "age": 1.8,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 3,
+      "age": 3.0,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 4,
+      "age": 0.01,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 4,
+      "age": 0.13,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 4,
+      "age": 0.45,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 4,
+      "age": 1.0,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 4,
+      "age": 1.8,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    },
+    {
+      "mode": 4,
+      "age": 3.0,
+      "finiteNonnegative": true,
+      "zeroAlpha": true
+    }
+  ],
+  "ninjaAndWindFrames": 192,
+  "tornadoFrames": 64,
+  "tornadoSizeFactor": 1.3939393939393938,
+  "tornadoAtlasSha256": "bee1d76f59531ed5386040a69b5720effc8d815a0f2ebd0ae4ab364d5ed6d63e",
+  "sameAspectRatioAndAnchor": true,
+  "gameEngineBrowserBattleAudioWasmStarted": false
+}

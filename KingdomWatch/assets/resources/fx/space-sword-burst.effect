@@ -10,7 +10,7 @@ CCEffect %{
         targets:
         - blend: true
           blendSrc: one
-          blendDst: one
+          blendDst: one_minus_src_alpha
           blendSrcAlpha: zero
           blendDstAlpha: one
       rasterizerState:
@@ -49,47 +49,100 @@ CCProgram space-sword-fs %{
   float hash21(vec2 p){vec3 q=fract(vec3(p.x,p.y,p.x)*0.1031);q+=dot(q,q.yzx+33.33);return fract((q.x+q.y)*q.z);}
   float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);
     return mix(mix(hash21(i),hash21(i+vec2(1,0)),f.x),mix(hash21(i+vec2(0,1)),hash21(i+vec2(1)),f.x),f.y);}
-  vec3 prison(vec2 p,float age,float seed){
-    float r=length(p),fade=smoothstep(0.0,.2,age),a=dot(p,p)>.000001?atan(p.y,p.x):0.0;
-    float z=sqrt(max(0.0,1.0-r*r)),rim=bell(r-.83,.085);
-    float bands=bell(p.y*.84+p.x*.44*sin(age*1.8+seed),.033)*sat(1.0-r*r);
-    float upper=bell(p.y+.22*sin(a*2.0-age*2.4),.026)*sat(1.0-r*r);
-    float facets=bell(sin(a*6.0+age*.8+z*2.0),.12)*bell(r-.69,.28);
-    float shell=bell(r,.97)*(.022+z*.025),glow=bell(r-.84,.20)*.085;
-    return (vec3(.59,.20,.81)*(rim*.38+facets*.08+shell+glow)+vec3(.91,.69,1.0)*(bands+upper)*.18)*fade;
+  vec4 prison(vec2 p,float age,float seed){
+    float r=length(p),fade=smoothstep(0.0,.23,age),a=dot(p,p)>.000001?atan(p.y,p.x):0.0;
+    float inside=1.0-smoothstep(.94,1.0,r),z=sqrt(max(0.0,1.0-r*r));
+    float fresnel=pow(1.0-z,2.3),rim=bell(r-.955,.025);
+    float rotation=age*.45+seed*.25,c=cos(rotation),s=sin(rotation);
+    // Rotating sphere coordinates keep the outline stable and turn surface material slowly.
+    vec3 surface=vec3(c*p.x+s*z,p.y,-s*p.x+c*z);
+    float shimmer=noise(vec2(surface.x*4.0+surface.z*2.0,surface.y*4.0+seed));
+    float alpha=inside*fade;
+    float lighting=sat(.52+surface.x*.18+surface.y*.24+z*.32);
+    vec3 shell=mix(vec3(.27,.07,.56),vec3(.72,.40,1.0),lighting)*alpha;
+    float longitude=bell(sin(surface.x*7.0+surface.z*3.0+seed),.10)*inside;
+    float latitude=bell(surface.y+.21*sin(surface.x*3.0+surface.z*2.0),.027)*inside;
+    float highlight=bell(length((p-vec2(-.30+sin(rotation)*.10,.36))/vec2(.32,.27)),1.0)*.45;
+    vec3 light=vec3(.66,.35,1.0)*(rim*.65+fresnel*inside*.08+longitude*.10+shimmer*inside*.10);
+    light+=vec3(.93,.78,1.0)*(latitude*.22+highlight+bell(r-.985,.085)*.20);
+    return vec4(shell+light*fade,alpha);
   }
-  vec3 column(vec2 p,float age,float duration,float seed){
-    float y=p.y+fxShape.y*.36/max(1.0,fxShape.z);
-    float rise=sat(age/.16),fade=smoothstep(0.0,.11,age)*(1.0-smoothstep(duration-.22,duration,age));
-    float vertical=smoothstep(-.08,.12,y)*(1.0-smoothstep(2.60*rise,3.1*rise+.001,y));
-    float n=noise(vec2(p.x*3.2-y*.7+seed,y*2.0-age*6.0));
-    float bend=sin(y*3.7-age*7.0+seed)*.035;
-    float width=.68+.17*bell(y,.8)+.12*n;
+  vec4 column(vec2 p,float age,float duration,float seed){
+    float y=p.y+fxShape.y*.36/max(1.0,fxShape.z),rise=sat(age/.24);
+    float fade=smoothstep(0.0,.07,age)*(1.0-smoothstep(duration-.28,duration,age));
+    float height=3.1*rise,cap=1.0-smoothstep(height-.25,height+.08,y);
+    float vertical=smoothstep(-.08,.04,y)*cap;
+    float n=noise(vec2(p.x*6.0+sin(y*2.0+seed),y*3.0-age*8.0));
+    float bend=sin(y*2.7-age*4.0+seed)*.025,width=.59+.17*n+.25*bell(y,.5);
     float body=bell(p.x-bend,width)*vertical;
-    float mist=bell(p.x,width*1.8)*vertical*(.08+n*.05);
-    float core=bell(p.x-bend,width*.25)*vertical;
-    float streak=bell(sin(p.x*34.0+n*1.8),.19)*body;
-    float advect=.35+.65*bell(fract(y*.74-age*3.5+seed)-.5,.24);
-    float pulse=.78+.22*cos(TAU*(age-.15)/.3);
-    float base=bell(length(vec2(p.x,y/.30))-.78,.08)*.32;
-    return (vec3(.61,.23,.84)*(body*.48+mist+base)+vec3(.93,.72,1.0)*(core*.85+streak*advect*.33))*fade*pulse;
+    float core=bell(p.x-bend,width*.30)*vertical;
+    float haze=bell(p.x,width*1.8)*vertical*(.04+n*.05);
+    float density=body*(.13+.10*n)*fade;
+    vec3 light=vec3(.36,.09,.72)*(body*.72+haze)+vec3(.74,.38,1.0)*core*.95;
+    for(int i=0;i<7;i++){
+      float f=float(i),s=hash21(vec2(f+12.0,seed));
+      float xx=(s-.5)*.73+sin(y*(2.0+s)-age*(3.0+s)+f)*.025;
+      float stream=bell(p.x-xx,.012+s*.016)*vertical;
+      float packet=.22+.78*bell(fract(y*(.6+s*.5)-age*(2.3+s)+f*.17)-.5,.30);
+      light+=vec3(.90,.72,1.0)*stream*packet*(.4+s*.6);
+    }
+    float surge=bell(fract(y*.64-age*3.0+seed)-.5,.12)*body;
+    float sheath=bell(abs(p.x-bend)-width*.72,.045)*vertical*(.3+.7*n);
+    light+=vec3(.72,.35,1.0)*surge*.32+vec3(.72,.58,1.0)*sheath*.24;
+    float start=1.0-smoothstep(.04,.32,age),tip=bell(y-height+.07,.17)*bell(p.x,.55);
+    float base=bell(length(vec2(p.x,y/.27)),.78);
+    light+=vec3(.95,.80,1.0)*(base*(.50+start*.75)+tip*start*.55);
+    // Several tapered root jets erupt from the ground instead of a flat luminous rectangle.
+    float flare=bell(p.x,.12+.7*sat(y))*bell(y-.24,.42)*start;
+    light+=vec3(.68,.34,1.0)*flare*.8;
+    return vec4((vec3(.18,.03,.35)*density+light*fade),density);
+  }
+  vec4 crystal(vec2 p,float age,float seed){
+    float ax=abs(p.x),width=.24*(1.0-sat(ax/.72));
+    float body=(1.0-smoothstep(width-.015,width+.025,abs(p.y)))*(1.0-smoothstep(.62,.74,ax));
+    float edge=bell(abs(p.y)-width,.018)*body;
+    float ridge=bell(p.y,.018)*body;
+    float alpha=body*.7;
+    vec3 light=mix(vec3(.21,.055,.45),vec3(.50,.18,.76),sat(p.y*4.0+.5))*body;
+    light+=vec3(.91,.69,1.0)*(edge*.75+ridge*.62);
+    float t=sat((-p.x+.15)/1.65),gate=smoothstep(0.0,.25,-p.x)*(1.0-smoothstep(.55,1.0,t));
+    float n=noise(vec2(p.x*9.0+age*16.0,p.y*14.0+seed));
+    light+=vec3(.58,.16,1.0)*bell(p.y,.12+.10*(1.0-t))*gate*(.15+n*.35);
+    light+=vec3(.91,.65,1.0)*bell(p.y+sin(t*11.0-age*12.0)*.035,.018)*gate*.50;
+    return vec4(light,alpha);
+  }
+  vec4 transit(vec2 p,float age,bool arrival){
+    float phase=arrival?sat((age-.55)/.75):1.0-sat(age/.55);
+    float gate=arrival?smoothstep(.48,.64,age)*(1.0-smoothstep(1.1,1.5,age)):1.0-smoothstep(.5,.85,age);
+    float scale=.18+.80*phase;vec2 q=p/max(.1,scale);
+    vec4 sphere=prison(q,.5,.7);sphere*=gate*.8;
+    float slit=bell(p.x,.028+.14*phase)*bell(p.y,.8)*gate;
+    float warp=bell(length(q)-.98,.055)*gate;
+    vec3 light=vec3(.90,.57,1.0)*slit*.75+vec3(.61,.23,1.0)*warp*.5;
+    for(int i=0;i<8;i++){
+      float f=float(i),a=f*2.399963+age*2.0,r=.20+.7*phase;
+      vec2 c=vec2(cos(a),sin(a))*r;
+      float sparkle=bell(abs(p.x-c.x)+abs(p.y-c.y),.04)*gate;
+      light+=vec3(.92,.73,1.0)*sparkle*.75;
+    }
+    return vec4(sphere.rgb+light,sphere.a);
   }
   vec3 impact(vec2 p,float age){
-    p.y/=.44;float r=length(p),a=dot(p,p)>.000001?atan(p.y,p.x):0.0;
-    float life=sat(1.0-age/.85),wave=bell(r-(.15+age*1.6),.045)*life;
-    float second=bell(r-(.08+age*.9),.026)*life*.5;
-    float rays=bell(sin(a*9.0+r*2.5),.08)*bell(r,.98)*life*life;
-    float center=bell(r,.4)*bell(age,.18);
-    return vec3(.30,.83,.62)*(wave+second+rays*.24)+vec3(1.0,.91,.62)*center*.65;
+    float fade=1.0-smoothstep(.03,.38,age),r=length(p),a=dot(p,p)>.000001?atan(p.y,p.x):0.0;
+    float burst=bell(sin(a*5.0+r*2.0),.13)*bell(r,.7)*fade;
+    return vec3(.80,.44,1.0)*burst+vec3(.98,.84,1.0)*bell(r,.25)*fade;
   }
   vec4 frag(){
     float r=max(1.0,fxShape.z),age=max(0.0,fxState.x);
-    vec2 p=vec2(uv0.x-.5,.5-uv0.y)*fxShape.xy/r;vec3 energy;
-    if(fxState.w<.5)energy=prison(p,age,fxState.y);
-    else if(fxState.w<1.5)energy=column(p,age,fxShape.w,fxState.y);
-    else energy=impact(p,age);
-    // Pure emission: alpha is always zero, so a carrier can never darken the ground.
+    vec2 p=vec2(uv0.x-.5,.5-uv0.y)*fxShape.xy/r;vec4 result;
+    if(fxState.w<.5)result=prison(p,age,fxState.y);
+    else if(fxState.w<1.5)result=column(p,age,fxShape.w,fxState.y);
+    else if(fxState.w<2.5)result=vec4(impact(p,age),0.0);
+    else if(fxState.w<3.5)result=crystal(p,age,fxState.y);
+    else if(fxState.w<5.5)result=transit(p,age,fxState.w>4.5);
+    else if(fxState.w<6.5)result=vec4(impact(p,age),0.0);
+    else result=vec4(impact(vec2(p.x,p.y/.35),age)*.3,0.0);
     float edge=smoothstep(0.0,.035,min(min(uv0.x,1.0-uv0.x),min(uv0.y,1.0-uv0.y)));
-    return vec4(max(vec3(0.0),energy)*max(0.0,fxState.z)*edge*color.a,0.0);
+    return vec4(max(vec3(0.0),result.rgb),sat(result.a))*max(0.0,fxState.z)*edge*color.a;
   }
 }%

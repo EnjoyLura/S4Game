@@ -18,6 +18,24 @@ CCEffect %{
       properties:
         fxState: { value: [0, 1, 1, 0] }
         fxShape: { value: [250, 250, 100, 1] }
+  - passes:
+    - vert: sword-jade-vs:vert
+      frag: sword-jade-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: one
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: zero
+          blendDstAlpha: one
+      rasterizerState:
+        cullMode: none
+      properties:
+        fxState: { value: [0, 1, 1, 0] }
+        fxShape: { value: [250, 250, 100, 1] }
 }%
 CCProgram sword-jade-vs %{
   precision highp float;
@@ -57,7 +75,8 @@ CCProgram sword-jade-fs %{
   float line(vec2 p,vec2 a,vec2 b,float w){return bell(segment(p,a,b),w);}
   // A narrow double-edged jian, two bevels, hollow fuller, swept bronze guard.
   // Only its rim is white. Animated energy runs TOWARDS the tip, never sideways.
-  vec3 sword(vec2 p,float age,float seed,float giant){
+  vec3 sword(vec2 p,float age,float seed,float variant){
+    float giant=mod(variant,2.0),planted=step(1.5,variant);
     float z=.65-p.y,x=p.x,ax=abs(x),aa=max(.002,1.15/max(1.0,fxShape.z));
     float halfWidth=mix(.058,.052,giant)*smoothstep(0.0,.15,z)*(1.0-.15*smoothstep(.58,.79,z));
     float blade=smoothstep(-aa,aa,z)*(1.0-smoothstep(.765,.78,z))*(1.0-smoothstep(halfWidth-aa,halfWidth+aa,ax));
@@ -79,7 +98,7 @@ CCProgram sword-jade-fs %{
     float gem=bell(abs(x)+abs(z-.805)-.023,.005);
     float pommel=bell(abs(x)*.75+abs(z-1.02)-.028,.009);
     result+=GOLD*(guard*.62+wrap*.28+pommel*.75)+MINT*(guardInner*.3+grip*.24+gem*.45);
-    float tail=smoothstep(.12,.36,z)*(1.0-smoothstep(1.15,1.9,z));
+    float tail=smoothstep(.12,.36,z)*(1.0-smoothstep(1.15,1.9,z))*(1.0-planted*.85);
     float n=noise(vec2(x*27.0,z*9.0+age*13.0+seed));
     float wide=.025+.075*sat(z-.24),wake=bell(x+sin(z*12.0+age*8.0+seed)*.012,wide)*tail;
     float jet=bell(x,.018+.013*z)*tail*(.3+.7*bell(fract(z*2.3+age*6.0)-.5,.23));
@@ -88,59 +107,85 @@ CCProgram sword-jade-fs %{
       float f=float(i),t=fract(age*2.5+f*.193+seed),zz=mix(1.7,.03,t);
       float side=(mod(f,2.0)*2.0-1.0)*(.075+.015*f);
       float streak=bell(x-side,.003)*bell(z-zz,.07)*(1.0-t)*.32;
-      result+=MINT*streak;
+      result+=MINT*streak*(1.0-planted);
     }
     return result;
   }
-  // Ground pressure: broken wavefront, bright fissures and a short vertical jet.
+  // Unequal radial pressure tongues; no circular ring or uniformly spaced spokes.
   vec3 burst(vec2 p,float age,float giant){
     vec2 q=vec2(p.x,p.y/.40);float r=length(q),a=dot(q,q)>.000001?atan(q.y,q.x):0.0;
-    float life=mix(.46,.88,giant),t=sat(age/life),fade=1.0-smoothstep(.2,1.0,t);
-    float early=1.0-smoothstep(.015,.15,age);
-    float core=bell(length(vec2(p.x,p.y*1.7)),mix(.18,.27,giant))*early;
-    float front=.10+1.05*(1.0-pow(1.0-t,2.6));
-    float broken=smoothstep(.28,.72,noise(vec2(a*8.0,r*8.0-age*6.0)));
-    float wave=bell(r-front,.018+.025*t)*fade*(.06+broken*.72);
-    float pressure=bell(r-front+.035,.08)*fade*.09;
-    float rays=bell(sin(a*7.0+r*4.0),.045)*bell(r-.25,.75)*fade*fade;
-    float crack=bell(sin(a*11.0+sin(r*16.0)*.35),.055)*smoothstep(.10,.2,r)*(1.0-smoothstep(.3,.72,r));
-    float crackGlow=crack*(1.0-smoothstep(.08,.65,age));
-    float jetY=max(0.0,p.y),jet=bell(p.x,.05+.025*jetY)*(1.0-smoothstep(.0,.85,p.y))*smoothstep(-.03,.02,p.y)
-      *(1.0-smoothstep(.03,.20,age));
-    float sparks=0.0;
-    for(int i=0;i<8;i++){
-      float f=float(i),th=f*2.399963,tt=sat(age*2.4),rr=(.18+.6*tt)*(.65+fract(f*.37)*.5);
-      vec2 c=vec2(cos(th)*rr,sin(th)*rr*.34+sin(tt*3.14159)*(.17+fract(f*.43)*.17));
-      sparks+=line(p,c,c+vec2(cos(th)*.04,.07),.008)*(1.0-tt);
+    float t=sat(age/mix(.75,1.15,giant)),fade=1.0-smoothstep(.05,1.0,t);
+    float flash=1.0-smoothstep(.025,.19,age),n=noise(q*13.0-vec2(age*5.0));
+    vec3 result=WHITE*bell(length(p*vec2(1.0,1.7)),.24)*flash*1.6;
+    for(int i=0;i<9;i++){
+      float f=float(i),s=hash21(vec2(f,7.1)),theta=f*2.399963;
+      float da=atan(sin(a-theta),cos(a-theta));
+      float tip=(.30+s*.52)*(1.0-exp(-age*12.0));
+      float tongue=bell(da,.08+.11*s)*smoothstep(.05,.17,r)*(1.0-smoothstep(tip*.60,tip+.02,r));
+      float grain=.40+.60*noise(vec2(r*23.0-age*5.0,da*14.0+f));
+      result+=mix(JADE,MINT,s)*tongue*grain*fade*(.65+.45*giant);
+      float fracture=bell(da+sin(r*23.0+f)*.025,.009)*smoothstep(.04,.13,r)*(1.0-smoothstep(.3+s*.17,.5+s*.18,r));
+      result+=GOLD*fracture*(1.0-smoothstep(.25,1.1,age))*.65;
     }
-    return WHITE*(core*.95+jet*.45)+MINT*(wave*.55+rays*.18+crackGlow*.48+sparks*.45)+JADE*pressure;
+    result+=JADE*bell(r,.5)*n*fade*.15;
+    return result;
   }
   // A quiet underfoot seal, broken arcs rather than a large empty neon hoop.
   vec3 array(vec2 p,float age,float duration){
     p.y/=.52;float r=length(p),a=dot(p,p)>.000001?atan(p.y,p.x):0.0;
     float fade=smoothstep(0.0,.14,age)*(1.0-smoothstep(duration-.3,duration,age));
-    float section=smoothstep(.42,.64,sin(a*6.0-age*.5));
-    float rim=bell(r-.85,.005)*section*.14+bell(r-.78,.005)*section*.07;
     float center=bell(r,.7)*.008;
-    float runes=bell(sin(a*12.0),.05)*bell(r-.72,.06)*.19;
+    float runes=bell(sin(a*5.0),.09)*bell(r-.62,.12)*.26;
     float infall=bell(fract(r*2.4+age*1.5)-.5,.045)*bell(sin(a*9.0-r*2.0),.075)*bell(r,.85)*.09;
-    return (JADE*(rim+center+infall)+MINT*runes)*fade;
+    return (JADE*(center+infall)+MINT*runes)*fade;
   }
   vec3 landing(vec2 p,float age,float seconds){
     p.y/=.4;float r=length(p),a=dot(p,p)>.000001?atan(p.y,p.x):0.0;
     float f=smoothstep(0.0,.06,age)*(1.0-smoothstep(seconds-.08,seconds,age));
-    float dash=smoothstep(.84,.98,sin(a*4.0));
-    return MINT*(bell(r-.34,.008)*dash*.25+bell(p.x,.004)*bell(p.y,.12)*.12)*f;
+    float glyph=bell(abs(p.x)+abs(p.y)*.7-.13,.009)*.35;
+    return MINT*(glyph+bell(p.x,.009)*bell(p.y,.23)*.24)*f;
+  }
+  // Gray ochre dust has real coverage; narrow teal/gold splinters rise through it.
+  vec4 eruption(vec2 p,float age,float giant){
+    p.y+=.18;float t=sat(age/mix(.82,1.4,giant)),fade=1.0-smoothstep(.30,1.0,t);
+    float expand=1.0-exp(-age*6.5),density=0.0;vec3 glow=vec3(0.0);
+    for(int i=0;i<9;i++){
+      float f=float(i),s=hash21(vec2(f,21.0)),theta=f*2.399963;
+      float rr=(.16+.55*expand)*(.65+s*.4);
+      vec2 c=vec2(cos(theta)*rr,sin(theta)*rr*.28+.10+sin(t*2.5)*(.06+s*.07));
+      vec2 d=(p-c)/vec2(.12+.12*expand,.065+.075*expand);
+      float n=noise(d*2.6+vec2(-age*2.5,f));
+      density+=bell(length(d)+(.5-n)*.5,1.0)*(.38+s*.25);
+      float u=sat(age/(.42+s*.18)),travel=sin(u*1.5708);
+      vec2 head=vec2(cos(theta)*(.10+.42*travel),sin(theta)*.10+.62*travel*(.6+s*.6)-u*u*.36);
+      float shard=line(p,head,head-vec2(cos(theta)*.07,.13)*(1.0-u),.008)*(1.0-u);
+      glow+=mix(MINT,GOLD,s)*shard*1.5;
+    }
+    float alpha=sat(density)*fade*smoothstep(0.0,.045,age)*mix(.46,.58,giant);
+    float n=noise(p*17.0+vec2(age,0));
+    vec3 dust=mix(vec3(.25,.235,.19),vec3(.63,.58,.45),n);
+    float rise=1.0-smoothstep(.05,.33,age);
+    float spear=bell(p.x,.025+.09*max(p.y,0.0))*smoothstep(-.04,.02,p.y)*(1.0-smoothstep(.25,.78,p.y));
+    glow+=MINT*spear*rise*.8+WHITE*bell(length(p*vec2(1.0,1.4)),.18)*(1.0-smoothstep(.02,.17,age))*1.1;
+    return vec4(dust*alpha+glow,alpha);
+  }
+  float swordCoverage(vec2 p,float variant){
+    float z=.65-p.y,giant=mod(variant,2.0),aa=max(.002,1.15/max(1.0,fxShape.z));
+    float w=mix(.058,.052,giant)*smoothstep(0.0,.15,z)*(1.0-.15*smoothstep(.58,.79,z));
+    return smoothstep(0.0,.018,z)*(1.0-smoothstep(.765,.78,z))*(1.0-smoothstep(w-aa,w+aa,abs(p.x)))*.76;
   }
   vec4 frag(){
     float r=max(1.0,fxShape.z),age=max(0.0,fxState.x);
-    vec2 p=vec2(uv0.x-.5,.5-uv0.y)*fxShape.xy/r;vec3 energy;
+    vec2 p=vec2(uv0.x-.5,.5-uv0.y)*fxShape.xy/r;vec3 energy;float coverage=0.0;
     if(fxState.w<.5)energy=sword(p,age,fxState.y,fxShape.w);
     else if(fxState.w<2.5)energy=burst(p,age,step(1.5,fxState.w));
     else if(fxState.w<3.5)energy=array(p,age,fxShape.w);
-    else energy=landing(p,age,fxShape.w);
+    else if(fxState.w<4.5)energy=landing(p,age,fxShape.w);
+    else {vec4 cloud=eruption(p,age,step(5.5,fxState.w));energy=cloud.rgb;coverage=cloud.a;}
+    if(fxState.w<.5)coverage=swordCoverage(p,fxShape.w);
     float edge=smoothstep(0.0,.035,min(min(uv0.x,1.0-uv0.x),min(uv0.y,1.0-uv0.y)));
-    // Emission only; even large soft quads cannot lay a dark rectangle over terrain.
-    return vec4(max(vec3(0.0),energy)*max(0.0,fxState.z)*edge*color.a,0.0);
+    // Ground uses additive technique 0; sword/dust use premultiplied technique 1.
+    float opacity=max(0.0,fxState.z)*edge*color.a;
+    return vec4(max(vec3(0.0),energy)*opacity,coverage*opacity);
   }
 }%

@@ -300,98 +300,90 @@ CCProgram wind-ninja-fs %{
   }
 
   vec3 ninjaFlow(vec2 p, float age, float seed, float aa, float flight) {
-    float arrival = mix(0.67 + 0.33 * smoothstep(0.0, 0.22, age), 0.67, flight);
-    vec2 q = p / arrival;
-    vec2 disc = turn(q, -0.12) / vec2(1.0, mix(0.63, 0.78, flight));
-    float r = length(disc), a = angleOf(disc);
-    float spin = age * 17.0 + seed;
-    float n = mist(turn(q, -age * 1.4) * 4.0 + vec2(seed, -age * 1.5));
-    vec2 blade = turn(disc, -spin);
-    float d = shurikenShape(blade);
-    float body = 1.0 - smoothstep(-aa, aa, d);
-    float edge = bell(d, 0.018 + aa);
-    // Thin luminous four-tip weapon, carried by a dense elliptical wind disc.
-    // The wider pressure cloak carries the area; the star is only its cutter.
-    vec3 light = vec3(0.015, 0.15, 0.47) * body * (0.40 + n * 0.35);
-    light += vec3(0.51, 0.91, 1.0) * edge * 0.86;
-    light += vec3(0.045, 0.38, 0.85) * bell(d, 0.065 + aa) * 0.24;
-    float envelopeR = length(q / vec2(1.02, 0.98));
-    float dome = sqrt(max(0.0, 1.0 - min(envelopeR * envelopeR, 1.0)));
-    float arrivalBurst = 1.0 - smoothstep(0.18, 0.68, age);
-    float cloak = bell(envelopeR - 0.79 - (n - 0.5) * 0.07, 0.21)
-      * (0.24 + 0.76 * n) * (1.0 - flight * 0.65);
-    light += vec3(0.025, 0.28, 0.64) * cloak * (0.20 + arrivalBurst * 0.70);
-    light += vec3(0.018, 0.20, 0.42) * bell(envelopeR, 0.98)
-      * (0.08 + arrivalBurst * 0.11) * dome * (1.0 - flight);
-    // Eight finite cutting sheets trail fast rotation at unequal radii.
-    // Angular lengths and thicknesses prevent detached geometric ghost stars.
-    for (int i = 0; i < 8; i++) {
-      float k = float(i), s = hash21(vec2(k + 71.0, seed));
-      float theta = spin - k * 0.49 + s * 0.33;
-      float delta = a - theta;
-      float arc = atan(sin(delta), cos(delta));
-      float tail = smoothstep(-1.70, -0.96, arc) * (1.0 - smoothstep(-0.13, 0.16, arc));
-      float sweep = 0.40 + s * 0.49 - arc * (0.05 + s * 0.03);
-      float width = 0.052 + s * 0.041;
-      float sheet = bell(r - sweep + (n - 0.5) * 0.035, width + aa) * tail;
-      float cut = bell(r - sweep - width * 0.34, width * 0.28 + aa) * tail;
-      float depth = 0.38 + 0.62 * sat(0.5 - disc.y * 0.55);
-      light += vec3(0.015, 0.42, 0.88) * sheet * depth * 0.41;
-      light += vec3(0.29, 0.86, 1.0) * cut * depth * 0.44;
+    float arrival=mix(.72+.28*smoothstep(0.0,.20,age),.67,flight);
+    vec2 q=p/arrival,disc=turn(q,-.12)/vec2(1.0,mix(.70,.78,flight));
+    float r=length(disc),a=angleOf(disc),spin=age*17.0+seed;
+    vec2 blade=turn(disc,-spin);
+    float d=shurikenShape(blade),body=1.0-smoothstep(-aa,aa,d);
+    float edge=bell(d,.013+aa),soft=bell(d,.045+aa);
+    float n=mist(turn(disc,-age*1.7)*5.5+seed);
+    float ribs=bell(min(abs(blade.x),abs(blade.y)),.025+aa)*body;
+    // Four straight, sharp luminous points remain readable inside their circular motion.
+    vec3 light=mix(vec3(.14,.64,1.0),vec3(.72,.97,1.0),.45+.25*n)*body;
+    light+=vec3(.67,.96,1.0)*edge*.55+vec3(.025,.47,1.0)*soft*.35;
+    light+=vec3(.40,.82,1.0)*ribs*.28;
+    for(int i=0;i<4;i++){
+      float f=float(i),theta=spin+f*1.57079633;
+      float delta=a-theta,arc=atan(sin(delta),cos(delta));
+      float u=sat(-arc/1.35),gate=smoothstep(-1.35,-1.10,arc)*(1.0-smoothstep(-.015,.06,arc));
+      float radius=.95-u*.21,width=(.035+.035*u)*(1.0-u*.6);
+      float nTrail=mist(vec2(r*12.0-age*3.0,arc*4.0+f+seed));
+      float tail=bell(r-radius,width+aa)*gate*(1.0-u)*(.45+.55*nTrail);
+      float rim=bell(r-radius-width*.30,.009+aa)*gate*(1.0-u);
+      float near=.62+.38*sat(.5-disc.y);
+      light+=vec3(.025,.44,1.0)*tail*near*.9+vec3(.60,.95,1.0)*rim*near*.65;
+      // Short shutter streak on the cutting edge, not another full ghost star.
+      float old=shurikenShape(turn(disc,-spin+.10+f*.035));
+      light+=vec3(.055,.39,.94)*bell(old,.012+aa)*(.085-f*.012);
     }
-    float core = length(q);
-    light += vec3(0.025, 0.48, 1.0) * bell(core, 0.20) * 0.50;
-    light += vec3(0.40, 0.91, 1.0) * bell(core, 0.095) * 0.87;
-    light += vec3(0.83, 1.0, 1.0) * bell(core, 0.043) * 0.66;
-    // Local +Y is the host flight heading; the continuous wake trails -Y.
-    float wakeT = sat((-p.y - 0.12) / 1.42);
-    float wakeGate = smoothstep(0.0, 0.14, -p.y - 0.12)
-      * (1.0 - smoothstep(0.68, 1.0, wakeT));
-    float wakeWidth = 0.18 * (1.0 - wakeT) + 0.025;
-    float wakeX = p.x - sin(wakeT * 11.0 - age * 18.0) * 0.045 * wakeT;
-    light += vec3(0.01, 0.41, 0.88) * bell(wakeX, wakeWidth) * wakeGate * flight * 0.55;
-    light += vec3(0.28, 0.85, 1.0) * bell(wakeX, wakeWidth * 0.28 + aa)
-      * wakeGate * flight * 0.40;
-    float fieldBound = 1.0 - smoothstep(1.06, 1.20, envelopeR);
-    return light * mix(fieldBound, 1.0, flight);
+    // Separate pressure wisps at unequal radii, with broken ends and visible gaps.
+    for(int i=0;i<7;i++){
+      float f=float(i),s=hash21(vec2(f+89.0,seed)),theta=age*(6.0+s*3.0)+f*2.399963;
+      float delta=a-theta,arc=atan(sin(delta),cos(delta));
+      float u=(arc+.8)/1.1,gate=smoothstep(0.0,.25,u)*(1.0-smoothstep(.55,1.0,u));
+      float rr=.98+s*.14+arc*.05;
+      float cut=bell(r-rr,.009+aa)*gate*(.35+.65*s);
+      float haze=bell(r-rr,.045)*gate*.09;
+      light+=vec3(.18,.68,1.0)*cut*.60+vec3(.015,.35,.8)*haze;
+    }
+    for(int i=0;i<10;i++){
+      float f=float(i),u=fract(age*(.65+fract(f*.37)*.3)+f*.173);
+      float th=age*4.0+f*2.399963,rr=.68+u*.46;
+      vec2 head=vec2(cos(th),sin(th))*rr;
+      vec2 tangent=vec2(-sin(th),cos(th));
+      vec2 dd=disc-head;
+      float spark=bell(dot(dd,tangent),.025+.025*(1.0-u))*bell(dot(dd,head/max(rr,.01)),.006+aa);
+      spark*=sin(u*3.141593);
+      light+=vec3(.50,.90,1.0)*spark*.75;
+    }
+    float core=length(disc),pulse=.90+.10*sin(age*23.0);
+    light+=vec3(.02,.39,1.0)*bell(core,.24)*.45;
+    light+=vec3(.33,.85,1.0)*bell(core,.10)*pulse+.8*vec3(.83,1.0,1.0)*bell(core,.045);
+    float wakeT=sat((-p.y-.12)/1.42),wakeGate=smoothstep(0.0,.14,-p.y-.12)*(1.0-smoothstep(.68,1.0,wakeT));
+    float wakeWidth=.18*(1.0-wakeT)+.025,wakeX=p.x-sin(wakeT*11.0-age*18.0)*.045*wakeT;
+    light+=vec3(.01,.41,.88)*bell(wakeX,wakeWidth)*wakeGate*flight*.55;
+    light+=vec3(.28,.85,1.0)*bell(wakeX,wakeWidth*.28+aa)*wakeGate*flight*.4;
+    return light*mix(1.0-smoothstep(1.15,1.23,r),1.0,flight);
   }
 
   vec3 energyShuriken(vec2 q, float age, float seed, float aa) {
     return ninjaFlow(q, age, seed, aa, 0.0);
   }
   vec3 windCrescent(vec2 q, float age, float seed, float aa) {
-    // Local +X points at the enemy. A bowed convex right edge and a deeper
-    // concave left edge form a strong lunate cutter with two sharp tapered tips.
-    float y = q.y / 1.03, y2 = y * y;
-    float span = 1.0 - smoothstep(0.86, 1.0, abs(y));
-    float arch = sqrt(max(0.0, 1.0 - min(y2, 1.0)));
-    float front = -0.13 + arch * 0.71;
-    float thickness = 0.36 * arch * arch;
-    float d = front - q.x;
-    float n = mist(vec2(q.x * 4.0 - age * 2.0 + seed, q.y * 3.4));
-    float body = smoothstep(-aa, 0.035 + aa, d)
-      * (1.0 - smoothstep(thickness * 0.5 + aa, thickness + aa * 2.0, d));
-    body *= arch * span;
-    float edge = bell(d - 0.014, 0.025 + aa) * arch * span;
-    float outerGlow = bell(d, 0.10 + aa) * arch * span;
-    vec3 light = vec3(0.025, 0.51, 0.34) * body * (0.5 + n * 0.36);
-    light += vec3(0.19, 0.83, 0.58) * outerGlow * 0.27;
-    light += vec3(0.73, 1.0, 0.88) * edge * 0.9;
-    // Narrow streaks stream behind the concave opening in -X; staggered moving
-    // packets have zero coverage at their wrap, rather than flashing hash cells.
-    for (int i = 0; i < 4; i++) {
-      float k = float(i), s = hash21(vec2(k + 57.0, seed));
-      float u = fract(age * (1.15 + s * 0.25) + s);
-      float lane = (k - 1.5) * 0.42;
-      float x = -0.10 - u * 1.12;
-      float sweep = lane * (0.72 + u * 0.28) + sin(u * 3.0 + seed + k) * 0.065;
-      vec2 dTrail = q - vec2(x, sweep);
-      float taper = 1.0 - u;
-      float streak = bell(dTrail.y, 0.016 + taper * 0.018 + aa)
-        * bell(dTrail.x, 0.09 + taper * 0.17);
-      streak *= smoothstep(0.0, 0.13, u) * (1.0 - smoothstep(0.65, 1.0, u));
-      light += vec3(0.12, 0.68, 0.46) * streak * 0.5;
+    // Convex midpoint faces local +X (actual projectile heading). Sharp tips trail behind it.
+    float y=q.y/1.04,arch=sqrt(max(0.0,1.0-min(y*y,1.0)));
+    float span=1.0-smoothstep(.91,1.0,abs(y));
+    float front=-.32+.92*arch,thickness=.29*pow(arch,1.35),d=front-q.x;
+    float body=smoothstep(-aa,.012+aa,d)*(1.0-smoothstep(thickness*.66+aa,thickness+aa,d))*span;
+    float n=mist(vec2(q.x*6.0-age*4.5+seed,q.y*5.0));
+    float edge=bell(d-.009,.018+aa)*span*pow(arch,.4);
+    float seam=bell(d-thickness*.66,.014+aa)*body;
+    vec3 light=vec3(.025,.57,.32)*body*(.55+.40*n);
+    light+=vec3(.69,1.0,.85)*edge*1.15+vec3(.19,.91,.57)*seam*.42;
+    light+=vec3(.06,.67,.38)*bell(d,.075+aa)*span*.30;
+    // Unequal wisps peel from the curved edge, break up and drift into the wake.
+    for(int i=0;i<7;i++){
+      float f=float(i),s=hash21(vec2(f+34.0,seed)),lane=(s-.5)*1.6;
+      float root=-.32+.92*sqrt(max(0.0,1.0-lane*lane))-.16;
+      float len=.40+s*.87,t=sat((root-q.x)/len);
+      float yy=lane*(1.0-.26*t)+sin(t*5.0-age*(5.0+s*4.0)+f)*(.018+.075*t);
+      float gate=smoothstep(0.0,.09,root-q.x)*(1.0-smoothstep(.32+s*.25,1.0,t));
+      float turbulence=mist(vec2(q.x*9.0+age*7.0,yy*11.0+f));
+      float streak=bell(q.y-yy,.014+.022*s+.022*(1.0-t)+aa)*gate*(.18+.82*turbulence);
+      light+=vec3(.12,.74,.46)*streak*(.26+s*.28);
     }
+    // A faint second shear at the trailing edge adds thickness without a second blade.
+    light+=vec3(.06,.46,.28)*bell(d-thickness-.045,.024+aa)*span*arch*.22;
     return light;
   }
 

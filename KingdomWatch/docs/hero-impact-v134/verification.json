@@ -1,0 +1,17 @@
+{
+  "baseline": "d80042b0",
+  "status": "PASS",
+  "cosmeticFrames": 292,
+  "spaceCosmeticFrames": 324,
+  "tipAnchorCases": 12,
+  "maxGround": 8,
+  "maxAir": 14,
+  "groundCapacity": 24,
+  "airCapacity": 32,
+  "flightCapacity": 24,
+  "swordAndWindGameplayAndEyePreserved": true,
+  "shaderHasNoImageSampler": true,
+  "groundNodeCleanup": true,
+  "lateLoadFallback": true,
+  "actualGameEngineBrowserBattleAudioOrWasmStarted": false
+}
