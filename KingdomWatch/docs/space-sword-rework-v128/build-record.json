@@ -1,0 +1,13 @@
+{
+  "exitCode": 36,
+  "log": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-space-sword-rework-v128-out.log",
+  "stderr": "C:\\Users\\user\\AppData\\Local\\Temp\\kw-space-sword-rework-v128-err.log",
+  "creator": "3.8.8",
+  "platform": "web-mobile",
+  "debug": false,
+  "md5Cache": true,
+  "dprPatch": "completed",
+  "artAudit": "build/art-source-audit.json",
+  "preparation": "tools/prepare-web-release.py",
+  "gameplayValidation": "user manual"
+}

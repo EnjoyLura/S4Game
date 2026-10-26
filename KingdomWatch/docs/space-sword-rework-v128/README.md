@@ -17,3 +17,5 @@ UI图标通过内置 imagegen 生成，单张四宫格，保持圆形、无装�
 离线验证：1200组选点/边界与五剑顺序、100组纯脉冲时序、240帧独立绘图和16槽上限、8个图标别名通过。实际GLSL离屏GPU编译、18组非负/有限/零alpha/零强度检查和180帧纯表现合成通过；不执行英雄、怪物、投射物或战斗模拟。类型诊断9条既有问题、无新增。预览见 `procedural-contact-sheet.jpg`、`prison-review.webp`、`heaven-review.webp`；手机动态观感和战斗平衡待用户试玩。
 
 本地提交后构建并按持续授权仅发布独立GitHub运行包，不推送源码，不部署Cloudflare。构建与线上HTTP回执完成后追加。
+
+实现本地提交 `4eff6b29`，离屏预览提交 `0c8275ef`。Creator 3.8.8 构建23890ms、退出36，DPR/音频引用/资源审计/生产缓存准备通过。运行包1601文件、201256662字节，比v127增加419541字节；版本 `cd2da4862ba4eb66`。513个既有native媒体字节保持，2字库保留原1597码点后追加“央岳锢”，只新增1张UI图集。15份JS与5份内联脚本仅语法、全包SHA/路径/图像解码/WASM头静态检查通过；导出Shader的GLSL1/3、无采样器与ONE/ONE零alpha混合元数据一致。见 `package-static-verification.json`、`compiled-effect-verification.json`。

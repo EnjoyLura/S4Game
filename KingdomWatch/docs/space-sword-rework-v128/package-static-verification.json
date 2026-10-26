@@ -1,0 +1,123 @@
+{
+  "checks": {
+    "release": {
+      "base_path": "/kingdom-watch-play/",
+      "entry": "game.c19effe55c087485.html",
+      "entry_bytes": 20222,
+      "entry_sha256": "c19effe55c087485ffff02aeb00f9933120e4431774cb5f618564d2972ab145f",
+      "id": "cd2da4862ba4eb66",
+      "inventory": "hosting-files.cd2da4862ba4eb66.json",
+      "inventory_bytes": 279096,
+      "inventory_sha256": "cd2da4862ba4eb662809b0bfabe6e9b1806baf26801717109f52f886c4610fb1",
+      "requires_cross_origin_isolation": false,
+      "requires_webp": true,
+      "runtime_cache": {
+        "max_bytes": 268435456,
+        "on_demand": true,
+        "protocol": 1,
+        "scope": "/kingdom-watch-play/",
+        "worker": "hosting-cache-sw.js"
+      },
+      "schema": 1,
+      "texture_mode": "mixed-webp-q95",
+      "wasm": [
+        "cocos-js/assets/spine-CC34fKUR.wasm"
+      ]
+    },
+    "file_count": 1601,
+    "runtime_bytes": 200976921,
+    "full_package_bytes": 201256662,
+    "budget_bytes": 996147200,
+    "all_exported_hashes_verified": true,
+    "links": {
+      "explicit_file_references_checked": 460,
+      "embedded_provenance_strings_not_fetches": [],
+      "virtual_system_modules": 178,
+      "remote_url_literals": [
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/bangers/Bangers-Regular.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-Bold.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-ExtraBoldItalic.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+      ],
+      "bundle_versions": {
+        "internal": "9e58a",
+        "main": "94707",
+        "resources": "e8989ba082e7a651"
+      }
+    },
+    "wasm_memories": {
+      "cocos-js/assets/spine-CC34fKUR.wasm": [
+        {
+          "shared": false,
+          "memory64": false,
+          "minimum_pages": 512
+        }
+      ]
+    },
+    "art_resources": {
+      "nativeImagesResolved": 431,
+      "webpImagesRGBAAndHashesVerified": 418,
+      "losslessImagesSourceRGBAIdentical": 239,
+      "q95ImagesDimensionsAlphaAndOutputVerified": 179,
+      "gameEngineExecuted": false
+    },
+    "runtime_cache": {
+      "max_bytes": 268435456,
+      "on_demand": true,
+      "protocol": 1,
+      "scope": "/kingdom-watch-play/",
+      "worker": "hosting-cache-sw.js"
+    },
+    "validation": "static files, image pixels and WASM headers only",
+    "javascript_executed": false,
+    "wasm_compiled_or_instantiated": false,
+    "game_browser_or_tests_started": false
+  },
+  "baselineRelease": "782ebfac2232416d",
+  "existingNativeByteIdentical": 513,
+  "extendedFonts": [
+    {
+      "path": "assets/resources/native/4f/4f4e0740-2005-42a2-b4f7-31b0ed0bff81.30126/UIBody.ttf",
+      "bytes": 499592,
+      "sha256": "688ae5d61631e197c3a08b1fbff6cfaac2ecf465b0006b1df531ad7fb61e3400"
+    },
+    {
+      "path": "assets/resources/native/08/08934c18-5f2f-44c6-8145-d4fb15839d72.b90fe/UIHeading.ttf",
+      "bytes": 680956,
+      "sha256": "90e49d8830363e64db9e49806c8bc7ecd97461aef49549c3b87da8fdf14eeaa3"
+    }
+  ],
+  "newMedia": [
+    {
+      "path": "assets/resources/native/3e/3e4d52ce-58ed-45cd-afe9-2decc44af1e9.ee4b0dd89abd760e.webp",
+      "bytes": 393556,
+      "sha256": "ee4b0dd89abd760e6c4ed94a5bfcf82eaa419bafaf928135ce9e357ab7f2cf8c",
+      "source": "assets/resources/ux/space_sword_v128/icons.png"
+    }
+  ],
+  "jsSyntaxOnly": [
+    "application.280b6809c5aea856.js",
+    "assets/internal/index.9e58a.js",
+    "assets/main/index.94707.js",
+    "assets/resources/index.e8989ba082e7a651.js",
+    "cocos-js/_virtual_cc-Bp5iGE8z.2cb74a1e8caa095a.js",
+    "cocos-js/cc.03aac.2cb74a1e8caa095a.js",
+    "cocos-js/spine-BGFFnNyc.2cb74a1e8caa095a.js",
+    "cocos-js/spine.asm-BCCB8IGt.2cb74a1e8caa095a.js",
+    "cocos-js/spine.js-CPHn08RU.2cb74a1e8caa095a.js",
+    "cocos-js/spine.wasm-BP65faBu.2cb74a1e8caa095a.js",
+    "hosting-cache-sw.js",
+    "index.262f20d230061d29.js",
+    "src/chunks/bundle.5227e.js",
+    "src/polyfills.bundle.5adbf.js",
+    "src/system.bundle.543e6.js"
+  ],
+  "inlineScriptsSyntaxOnly": 5,
+  "mainScript": "assets/main/index.94707.js",
+  "mainSha256": "842e2d341958b50cb9eeefe6b4c7ff3b79d32b9ca9dcc8e21c2b5d4fbf821256",
+  "typeDiagnosticsBefore": 9,
+  "typeDiagnosticsCurrent": 9,
+  "actualGameBrowserCombatAudioOrWasmStarted": false,
+  "phoneGameplayReview": "pending user"
+}

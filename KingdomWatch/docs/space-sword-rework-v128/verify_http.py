@@ -8,7 +8,8 @@ report=json.loads((OUT/'package-static-verification.json').read_text('utf8'))
 deployment=json.loads((OUT/'deployment.json').read_text('utf8'))
 assert deployment['complete'] and deployment['online_verification']['release_matches']
 version=report['checks']['release']['id']
-targets=report['newMedia']+report['extendedFonts']+[
+shader=json.loads((OUT/'compiled-effect-verification.json').read_text('utf8'))
+targets=report['newMedia']+report['extendedFonts']+[shader]+[
     {'path':report['mainScript'],'sha256':report['mainSha256']}]
 
 def check(item):
