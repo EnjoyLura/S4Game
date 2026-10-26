@@ -17,7 +17,8 @@ import { ULT_TIMING } from './UltimateTiming';
 import { artSprite } from '../ui/Ux';
 import { CA, N } from '../ui/UIKit';
 import { WindNinjaVFX, WindNinjaAreaView } from './WindNinjaVFX';
-import { bodyDownSpeed, densestBodyArea, finiteReturnPath, interceptDirection, moveFieldToward, FieldPoint } from './WindNinjaGeometry';
+import { bodyDownSpeed, densestBodyArea, finiteReturnPath, interceptDirection, FieldPoint } from './WindNinjaGeometry';
+import { stableWindTarget, moveWindField } from './WindFieldMotion';
 
 const EPS = 1e-7, AREA_CAP = 8, SEEK_INTERVAL = .25;
 const BOSS_WIND_SLOW = .25;
@@ -25,7 +26,7 @@ const BOSS_WIND_SLOW = .25;
 type RecallProjectile = ProjSpec & { initialContactLifeId?: number };
 interface Area extends WindNinjaAreaView {
   delay: number; tickIn: number; interval: number; mul: number; pull: number;
-  seekIn: number; destination: FieldPoint;
+  seekIn: number; destination: FieldPoint;velocity:FieldPoint;
 }
 interface NormalRow { delay: number; }
 
@@ -159,7 +160,7 @@ abstract class WindNinjaHeroBase extends HeroBase {
   protected addArea(kind: Area['kind'], point: FieldPoint, radius: number, duration: number,
     interval: number, mul: number, pull: number, delay = 0): void {
     this.areas.push({ kind, x: point.x, y: point.y, radius, duration, age: 0,
-      delay, interval, tickIn: interval, mul, pull, seekIn: 0, destination: { ...point } });
+      delay, interval, tickIn: interval, mul, pull, seekIn: 0, destination: { ...point },velocity:{x:0,y:0} });
     this.effects();
   }
   private advanceArea(a: Area, dt: number, mgr: MonsterManager): void {
@@ -171,13 +172,14 @@ abstract class WindNinjaHeroBase extends HeroBase {
     while (remaining > EPS && a.age < a.duration - EPS) {
       if (a.kind === 'tornado' && a.seekIn <= EPS) {
         const point = cluster(mgr, a.x, a.y, Infinity, a.radius, a.y);
-        a.destination = point || { x: a.x, y: Math.max(a.y, LO.half - LO.notchTop - 136) };
+        a.destination = stableWindTarget(mgr.list,a,a.destination,
+          point || { x: a.x, y: Math.max(a.y, LO.half - LO.notchTop - 136) },a.radius);
         a.seekIn = SEEK_INTERVAL;
       }
       const step = Math.min(remaining, a.duration - a.age, a.tickIn,
         a.kind === 'tornado' ? a.seekIn : Infinity);
       if (a.kind === 'tornado') {
-        moveFieldToward(a, a.destination, WIND.tornadoSpeed, step, true); a.seekIn -= step;
+        moveWindField(a,a.velocity,a.destination,WIND.tornadoSpeed,step); a.seekIn -= step;
       }
       if (a.pull > 0) for (const m of mgr.list) {
         if (!liveNode(m) || (m.x - a.x) ** 2 + (m.hitY - a.y) ** 2 > a.radius ** 2) continue;

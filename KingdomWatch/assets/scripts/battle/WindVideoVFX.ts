@@ -11,6 +11,7 @@ interface ClipManifest {
   schema: number; framePrefix: string; frameCount: number; fps: number; playbackSpeed: number;
   cellSize: [number, number]; groundAnchor: [number, number]; visualWidthPerRadius: number;
   displayHeightScale?: number; displayOffsetY?: number;
+  flipY?:boolean;
   frames: Record<string, [number, number, number, number]>;
 }
 interface Clip { manifest: ClipManifest; frames: SpriteFrame[]; }
@@ -27,7 +28,8 @@ function validManifest(m: ClipManifest, source: SpriteFrame): boolean {
     || !Array.isArray(m.groundAnchor) || m.groundAnchor.length !== 2
     || !m.groundAnchor.every(n => Number.isFinite(n) && n >= 0 && n <= 1)
     || (m.displayHeightScale !== undefined && (!Number.isFinite(m.displayHeightScale) || m.displayHeightScale < .2 || m.displayHeightScale > 2))
-    || (m.displayOffsetY !== undefined && (!Number.isFinite(m.displayOffsetY) || Math.abs(m.displayOffsetY) > 100)) || !m.frames) return false;
+    || (m.displayOffsetY !== undefined && (!Number.isFinite(m.displayOffsetY) || Math.abs(m.displayOffsetY) > 100))
+    || (m.flipY !== undefined && typeof m.flipY !== 'boolean') || !m.frames) return false;
   for (let i = 0; i < m.frameCount; i++) {
     const r = m.frames[m.framePrefix + i];
     if (!Array.isArray(r) || r.length !== 4 || !r.every(Number.isFinite) || r[0] < 0 || r[1] < 0
@@ -124,7 +126,9 @@ export class WindVideoVFX {
     const frame = clip.frames[windVideoFrame(area.age, m.fps, m.playbackSpeed, m.frameCount)];
     if (slot.frame !== frame) { slot.sprite.spriteFrame = frame; slot.frame = frame; }
     const width = Math.max(1, area.radius) * m.visualWidthPerRadius;
-    slot.ui.setAnchorPoint(...m.groundAnchor);
+    // Mirror the perspective, not the frame order; complement the anchor to retain the same center.
+    slot.node.setScale(1,m.flipY?-1:1,1);
+    slot.ui.setAnchorPoint(m.groundAnchor[0],m.flipY?1-m.groundAnchor[1]:m.groundAnchor[1]);
     slot.ui.setContentSize(width, width * m.cellSize[1] / m.cellSize[0] * (m.displayHeightScale ?? 1));
     this.tint.a = Math.round(255 * Math.max(0, Math.min(1, alpha))); slot.sprite.color = this.tint;
     slot.node.setPosition(area.x, area.y + (m.displayOffsetY ?? 0), 0); slot.node.active = true;

@@ -1,0 +1,20 @@
+{
+  "baseline": "24cc600",
+  "status": "PASS",
+  "cosmeticFrames": 224,
+  "tipAnchorCases": 60,
+  "motionCases": 1440,
+  "maxSpeed": 81.94886592648693,
+  "maxAcceleration": 705.520832741805,
+  "teleportTimeline": {
+    "vanish": 0.35,
+    "portalEnd": 0.85,
+    "releaseDelay": 1.5,
+    "hiddenUntil": 2.35,
+    "end": 2.85,
+    "arrivalEnd": 3.2
+  },
+  "eyePerspectiveFlipped": true,
+  "existingDamageSchedulesPreserved": true,
+  "gameEngineBrowserBattleAudioOrWasmStarted": false
+}

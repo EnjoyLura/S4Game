@@ -371,22 +371,25 @@ CCProgram wind-ninja-fs %{
     vec3 light=vec3(.025,.57,.32)*body*(.55+.40*n);
     light+=vec3(.69,1.0,.85)*edge*1.15+vec3(.19,.91,.57)*seam*.42;
     light+=vec3(.06,.67,.38)*bell(d,.075+aa)*span*.30;
-    // Dense fine filaments: longest behind the midpoint, short at the two tips.
-    // Unequal spacing, length jitter and advected breaks avoid parallel comb teeth.
-    for(int i=0;i<29;i++){
-      float f=float(i),s=hash21(vec2(f+34.0,seed)),lane=-.94+(f+.85*(s-.5))*1.88/28.0;
-      float root=-.32+.92*sqrt(max(0.0,1.0-lane*lane))-.16;
-      float envelope=pow(max(0.0,1.0-lane*lane),1.35);
-      float len=.24+1.70*envelope*(.76+.24*s),t=sat((root-q.x)/len);
-      float yy=lane*(1.0-.22*t)+sin(t*(4.0+s*5.0)-age*(6.0+s*3.0)+f)*(.008+.055*t)*sin(t*3.141593);
-      float gate=smoothstep(0.0,.055,root-q.x)*(1.0-smoothstep(.43+s*.21,1.0,t));
-      float breakup=.48+.52*smoothstep(-.7,.65,sin(t*(4.0+s*8.0)+age*(5.0+s*4.0)+f*3.7));
-      float streak=bell(q.y-yy,.006+.007*s+.38*aa)*gate*breakup;
-      light+=mix(vec3(.10,.62,.36),vec3(.54,.93,.70),s)*streak*(.24+.20*envelope);
-    }
+    // Advection carries short energy packets away from the blade: no anchored hair-like lanes.
     float wake=sat((.42-q.x)/1.95),wakeSpan=pow(max(0.0,1.0-y*y),1.35);
-    float veil=smoothstep(.0,.24,.42-q.x)*(1.0-smoothstep(wakeSpan*.45,wakeSpan+.001,wake));
-    light+=vec3(.07,.45,.25)*veil*span*(.18+.25*n);
+    float veil=smoothstep(.0,.22,.42-q.x)*(1.0-smoothstep(wakeSpan*.35,wakeSpan+.001,wake));
+    float flow=mist(vec2(q.x*8.0+age*17.0,q.y*9.0+sin(q.x*3.0+age*4.0)));
+    light+=vec3(.08,.49,.28)*veil*span*(.12+.30*flow);
+    for(int i=0;i<32;i++){
+      float f=float(i),s=hash21(vec2(f+34.0,seed)),cycle=age*(2.4+s*2.0)+f*.391;
+      float t=fract(cycle),jitter=hash21(vec2(f+seed,floor(cycle)))-.5;
+      float lane=clamp(-.91+f*1.82/31.0+jitter*.06,-.94,.94);
+      float envelope=pow(max(0.0,1.0-lane*lane),1.35),len=.28+1.64*envelope;
+      float root=-.32+.92*sqrt(max(0.0,1.0-lane*lane))-.12;
+      float head=root-t*len,packet=.18+(.28+s*.20)*envelope,u=(q.x-head)/packet;
+      float yy=lane*(1.0-.28*t)+sin(t*6.0+f)*.055*sin(t*3.141593)+sin(u*3.141593)*(.025+s*.025)*sin(f);
+      float life=sin(t*3.141593),piece=smoothstep(-.04,.04,u)*(1.0-smoothstep(.25,1.0,u));
+      float width=(.014+.022*s)*max(.20,sin(sat(u)*3.141593));
+      float streak=bell(q.y-yy,width+.35*aa)*piece*life;
+      light+=mix(vec3(.12,.65,.38),vec3(.57,.96,.76),s)*streak*(.38+.26*envelope);
+      light+=vec3(.05,.41,.24)*bell(q.y-yy,width+.04)*piece*life*.17;
+    }
     // A faint second shear at the trailing edge adds thickness without a second blade.
     light+=vec3(.06,.46,.28)*bell(d-thickness-.045,.024+aa)*span*arch*.22;
     return light;

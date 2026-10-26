@@ -128,6 +128,8 @@ CCProgram sword-jade-fs %{
       result+=GOLD*fracture*(1.0-smoothstep(.25,1.1,age))*.65;
     }
     result+=JADE*bell(r,.5)*n*fade*.15;
+    // Suppress the narrow foreground ray that otherwise reads as a second exposed sword tip.
+    result*=1.0-.82*(1.0-smoothstep(.06,.18,abs(q.x)))*(1.0-smoothstep(-.10,0.0,p.y));
     return result;
   }
   // A quiet underfoot seal, broken arcs rather than a large empty neon hoop.
@@ -167,6 +169,8 @@ CCProgram sword-jade-fs %{
     float rise=1.0-smoothstep(.05,.33,age);
     float spear=bell(p.x,.025+.09*max(p.y,0.0))*smoothstep(-.04,.02,p.y)*(1.0-smoothstep(.25,.78,p.y));
     glow+=MINT*spear*rise*.8+WHITE*bell(length(p*vec2(1.0,1.4)),.18)*(1.0-smoothstep(.02,.17,age))*1.1;
+    // Upward jets must not draw a second luminous point underneath the buried blade.
+    glow*=smoothstep(-.012,.02,p.y);
     return vec4(dust*alpha+glow,alpha);
   }
   // Only the fifth sword requests this subtle, short ground pressure front.
@@ -184,6 +188,11 @@ CCProgram sword-jade-fs %{
     float w=mix(.058,.052,giant)*smoothstep(0.0,.15,z)*(1.0-.15*smoothstep(.58,.79,z));
     return smoothstep(0.0,.018,z)*(1.0-smoothstep(.765,.78,z))*(1.0-smoothstep(w-aa,w+aa,abs(p.x)))*.76;
   }
+  float plantedCut(vec2 p,float age,float variant){
+    float planted=step(1.5,variant),giant=mod(variant,2.0);
+    float t=sat(age/.12),buried=mix(.075,.085,giant)*t*t*(3.0-2.0*t);
+    return mix(1.0,smoothstep(buried-.004,buried+.004,.65-p.y),planted);
+  }
   vec4 frag(){
     float r=max(1.0,fxShape.z),age=max(0.0,fxState.x);
     vec2 p=vec2(uv0.x-.5,.5-uv0.y)*fxShape.xy/r;vec3 energy;float coverage=0.0;
@@ -193,7 +202,7 @@ CCProgram sword-jade-fs %{
     else if(fxState.w<4.5)energy=landing(p,age,fxShape.w);
     else if(fxState.w<6.5){vec4 cloud=eruption(p,age,step(5.5,fxState.w));energy=cloud.rgb;coverage=cloud.a;}
     else energy=finalShockwave(p,age);
-    if(fxState.w<.5)coverage=swordCoverage(p,fxShape.w);
+    if(fxState.w<.5){float cut=plantedCut(p,age,fxShape.w);coverage=swordCoverage(p,fxShape.w)*cut;energy*=cut;}
     float edge=smoothstep(0.0,.035,min(min(uv0.x,1.0-uv0.x),min(uv0.y,1.0-uv0.y)));
     // Ground uses additive technique 0; sword/dust use premultiplied technique 1.
     float opacity=max(0.0,fxState.z)*edge*color.a;

@@ -3,7 +3,8 @@ import { Graphics, Node } from 'cc';
 import { CA, N } from '../ui/UIKit';
 import { HeroFxShader } from './HeroFxShader';
 import { drawSpaceChains, drawPortalSeal } from './SpaceBindingVFX';
-import { drawSwordFlight, swordDebris, swordCrater, swordImpactLife, SWORD_ABILITY_EFFECT } from './SwordAbilityVFX';
+import { drawSwordFlight, swordDebris, swordCrater, swordImpactLife, swordEmbedDepth, swordSoilLip, SWORD_ABILITY_EFFECT } from './SwordAbilityVFX';
+import { SPACE_TRANSIT } from './SpacePresentation';
 export const SPACE_SWORD_EFFECT='fx/space-sword-burst';
 const TAU = Math.PI * 2;
 export function drawMagicBlade(g: Graphics, x: number, y: number, angle: number, half: number, age: number, color: string): void {
@@ -79,6 +80,7 @@ export class SpaceSwordVFX {
   private seal:HeroFxShader|null=null;private sealNode:Node|null=null;private sealInk:Graphics|null=null;private chainInk:Graphics|null=null;
   private swordGround:HeroFxShader|null=null;private swordAir:HeroFxShader|null=null;private groundNode:Node|null=null;
   private groundInk:Graphics|null=null;
+  private soilFront:Graphics|null=null;
   private prisonVisuals:readonly SpacePrisonVisual[]=[];
   private prisonAge=0;private columnStart=0;private columnDuration=0;
   constructor(parent:Node){this.node=N('spaceSwordProcedural',parent);this.g=this.node.addComponent(Graphics);
@@ -98,6 +100,7 @@ export class SpaceSwordVFX {
     this.groundInk=this.groundNode.addComponent(Graphics);
     this.swordGround=new HeroFxShader(this.groundNode,'jadeGroundFlow',24,'emission',{effect:SWORD_ABILITY_EFFECT,technique:0});
     this.swordAir=new HeroFxShader(this.node,'jadeImpactFlow',32,'plasma',{effect:SWORD_ABILITY_EFFECT,technique:1});
+    this.soilFront=N('swordSoilFront',this.node).addComponent(Graphics);
   }
   setPrison(visuals:readonly SpacePrisonVisual[],age:number,start:number,duration:number):void{
     this.prisonVisuals=visuals;this.prisonAge=age;this.columnStart=start;this.columnDuration=duration;
@@ -109,13 +112,16 @@ export class SpaceSwordVFX {
   }
   tick(dt:number):void{this.clock+=dt;for(let i=this.accents.length-1;i>=0;i--){this.accents[i].age+=dt;if(this.accents[i].age>=this.accents[i].duration)this.accents.splice(i,1);}}
   render():void{
-    const g=this.g;g.clear();this.groundInk?.clear();this.sealInk?.clear();this.chainInk?.clear();this.seal?.begin();this.volume?.begin();this.swordGround?.begin();this.swordAir?.begin();
+    const g=this.g;g.clear();this.groundInk?.clear();this.soilFront?.clear();this.sealInk?.clear();this.chainInk?.clear();this.seal?.begin();this.volume?.begin();this.swordGround?.begin();this.swordAir?.begin();
     for(const a of this.accents){const t=a.age/a.duration,fade=Math.min(1,t*8)*Math.min(1,(1-t)*5),r=a.radius;
       if(a.kind==='portal'||a.kind==='arrival'){
         const arrival=a.kind==='arrival';
-        if(!this.seal?.draw(a.x,a.y,r*2.5,r*1.25,0,a.age,.7,1,arrival?5:4,r,a.duration))
-          drawPortalSeal(this.sealInk||g,a.x,a.y,r,a.age,fade);
-        this.volume?.draw(a.x,a.y+r*.6,r*2.5,r*2.5,0,a.age,.7,1,arrival?9:8,r,a.duration);
+        const localAge=a.age-(arrival?SPACE_TRANSIT.hiddenUntil:0);
+        if(localAge<0)continue;
+        const localFade=Math.min(1,localAge*12)*Math.min(1,Math.max(0,(.85-localAge)*5));
+        if(!this.seal?.draw(a.x,a.y,r*2.5,r*1.25,0,localAge,.7,1,arrival?5:4,r,.85))
+          drawPortalSeal(this.sealInk||g,a.x,a.y,r,localAge,localFade);
+        this.volume?.draw(a.x,a.y+r*.6,r*2.5,r*2.5,0,localAge,.7,1,arrival?9:8,r,.85);
         continue;
       }
       if(a.kind==='riftHit'){
@@ -132,13 +138,14 @@ export class SpaceSwordVFX {
           if(mode<3){
             const giant=a.kind==='giant',hold=giant?.82:r>100?.55:.38;
             const opacity=1-Math.max(0,Math.min(1,(a.age-hold)/(a.duration-hold)));
-            const sink=(giant?12:4)*Math.min(1,a.age/.07);
+            const size=giant?r*.2:r>100?23:9,sink=swordEmbedDepth(size,a.age,giant);
             if(this.groundInk)swordCrater(this.groundInk,a.x,a.y,r,a.age,giant);
             swordDebris(g,a.x,a.y,r,a.age,giant);
             drawSwordFlight(this.swordAir,a.x+Math.cos(a.angle)*sink,a.y+Math.sin(a.angle)*sink,a.angle,
-              giant?r*.2:r>100?23:9,a.age,.37,giant,opacity,true);
+              size,a.age,.37,giant,opacity,true);
             // Turbulent dust and rising energy share one bounded premultiplied carrier.
             this.swordAir?.draw(a.x,a.y+r*.18,r*2.6,r*1.8,0,a.age,.37,1,giant?6:5,r,a.duration);
+            if(this.soilFront)swordSoilLip(this.soilFront,a.x,a.y,r,a.age,giant,opacity);
           }continue;
         }
       }

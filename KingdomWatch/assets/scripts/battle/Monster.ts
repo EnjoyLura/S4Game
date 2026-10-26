@@ -384,7 +384,8 @@ export class Monster {
     return this.artBaseY + this.artHeight * ratio;
   }
   get isBoss(): boolean { return !!this.def.boss || this.def.id === 'goblin_king'; }
-  get immobilized(): boolean { return this.freezeT > 0 || this.stunT > 0 || this.spaceBindT > 0 || this.knockbackT > 0; }
+  get spaceTransitHidden():boolean { return this.transitAge>=SPACE_TRANSIT.vanish&&this.transitAge<SPACE_TRANSIT.hiddenUntil; }
+  get immobilized(): boolean { return this.freezeT > 0 || this.stunT > 0 || this.spaceBindT > 0 || this.knockbackT > 0 || this.transitAge >= 0; }
   /** Read-only view of this living instance, rather than its original codex stats. */
   inspect(): { physical: number; magic: number; armorBroken: boolean; wardBroken: boolean; states: string[] } {
     const states = this.traits.activeStates;
@@ -404,7 +405,7 @@ export class Monster {
   }
 
   drawIceFeet(g: Graphics): void {
-    if (this.def.airborne) return;
+    if (this.def.airborne || this.spaceTransitHidden) return;
     if (this.freezeT <= 0 && this.thawT <= 0) return;
     const r = this.def.radius;
     drawFootIce(g, this.x, this.groundY, r * this.artScale, this.freezeAge, this.freezeT, this.thawT);
@@ -426,7 +427,8 @@ export class Monster {
     this.healingCutT=Math.max(0,this.healingCutT-dt);
     if(this.healingCutT<=0)this.healingCut=0;
     const frozenLeft = this.freezeT;
-    const motionDt = Math.max(0, dt - Math.max(this.freezeT, this.stunT, this.spaceBindT, this.knockbackT));
+    const transitLeft=this.transitAge>=0?Math.max(0,SPACE_TRANSIT.end-this.transitAge):0;
+    const motionDt = Math.max(0, dt - Math.max(this.freezeT, this.stunT, this.spaceBindT, this.knockbackT, transitLeft));
     if (this.knockbackT > 0) {
       const step = this.knockbackLeft * Math.min(1, dt / this.knockbackT);
       this.node.setPosition(this.baseX, Math.min(mobEntryY(this.def.radius) + 12, this.y + step), 0);
@@ -633,7 +635,7 @@ export class Monster {
 
   /** One shared Graphics layer draws marks above the complete current monster frame. */
   drawHunterMark(g: Graphics): void {
-    if (this.dead || this.hunterMarkT <= 0 || !this.hunterMarkVisual) return;
+    if (this.dead || this.spaceTransitHidden || this.hunterMarkT <= 0 || !this.hunterMarkVisual) return;
     const x = this.x, y = this.y + this.artBaseY + this.artHeight + 19;
     const r = 11 + 4 * Math.exp(-this.hunterMarkAge * 18);
     const alpha = Math.round(255 * Math.min(1, this.hunterMarkT / .2));
@@ -744,8 +746,9 @@ export class Monster {
   }
   /** Fade out, stay absent, then reform. Relocation happens once at the fade-out boundary. */
   beginSpaceTeleport(destinationY:number):boolean {
-    if(this.dead||this.isBoss||!this.node.isValid||!Number.isFinite(destinationY)||destinationY<=this.y+1)return false;
+    if(this.dead||this.isBoss||this.transitAge>=0||!this.node.isValid||!Number.isFinite(destinationY)||destinationY<=this.y+1)return false;
     this.transitY=Math.min(mobEntryY(this.def.radius),destinationY);this.transitAge=0;this.transitMoved=false;
+    this.traits.interruptCasting();this.lungeT=this.atkAnimT=0;this.knockbackT=this.knockbackLeft=0;
     this.transitOpacity=this.node.getComponent(UIOpacity)||this.node.addComponent(UIOpacity);
     this.transitOpacity.opacity=255;return true;
   }
@@ -765,7 +768,7 @@ export class Monster {
   }
   interruptCasting(): void { if (!this.dead && !this.isBoss) this.traits.interruptCasting(); }
   applySpaceBind(duration:number): boolean {
-    if(this.dead||this.isBoss||!Number.isFinite(duration)||duration<=0)return false;
+    if(this.dead||this.isBoss||this.transitAge>=0||!Number.isFinite(duration)||duration<=0)return false;
     this.clearSpaceTransit();this.spaceBindT=Math.max(this.spaceBindT,duration);
     this.traits.interruptCasting();this.lungeT=this.atkAnimT=0;this.holdY=this.y;
     this.knockbackT=this.knockbackLeft=0;return true;
@@ -1249,6 +1252,7 @@ export class MonsterManager {
     this.shadows.fillColor = this.groundShadowColor;
     let hasFlyers = false;
     for (const m of this.list) {
+      if(m.spaceTransitHidden)continue;
       if (m.def.airborne) { hasFlyers = true; continue; }
       const r = m.def.radius;
       this.shadows.ellipse(m.x, m.groundY, r * m.artScale * 1.02, r * m.artScale * 0.20);
@@ -1257,14 +1261,14 @@ export class MonsterManager {
     if (hasFlyers) {
       this.shadows.fillColor = this.flightShadowColor;
       for (const m of this.list) {
-        if (!m.def.airborne) continue;
+        if (!m.def.airborne || m.spaceTransitHidden) continue;
         const r = m.def.radius * m.artScale;
         this.shadows.ellipse(m.x, m.groundY, r * FLIGHT_SHADOW.width, r * FLIGHT_SHADOW.height);
       }
       this.shadows.fill();
     }
     for (const m of this.list) {
-      if (m.def.airborne) continue;
+      if (m.def.airborne || m.spaceTransitHidden) continue;
       const r = m.def.radius * m.artScale, h = m.artHeight;
       const footY = m.groundY;
       if (m.footLeftWeight > 0.02) {

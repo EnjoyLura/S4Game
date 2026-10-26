@@ -94,7 +94,7 @@ CCProgram space-sword-fs %{
     return vec4(light,alpha);
   }
   float transitGate(float age,bool arrival){
-    return arrival?smoothstep(.48,.62,age)*(1.0-smoothstep(1.12,1.5,age)):smoothstep(0.0,.08,age)*(1.0-smoothstep(.5,.85,age));
+    return smoothstep(0.0,.08,age)*(1.0-smoothstep(.5,.85,age));
   }
   vec4 transitSeal(vec2 p,float age,bool arrival){
     vec2 q=vec2(p.x,p.y/.36);float r=length(q),a=dot(q,q)>.000001?atan(q.y,q.x):0.0;
@@ -110,7 +110,7 @@ CCProgram space-sword-fs %{
   vec4 transitFlame(vec2 p,float age,bool arrival){
     p.y+=.60;float gate=transitGate(age,arrival),y=p.y;
     float rise=smoothstep(-.04,.05,y)*(1.0-smoothstep(.58,1.45,y));
-    float rush=arrival?1.0-smoothstep(.65,1.3,age):smoothstep(0.0,.35,age);
+    float rush=arrival?1.0-smoothstep(.10,.65,age):smoothstep(0.0,.35,age);
     float baseWidth=.18+.13*rush,width=max(.015,baseWidth*(1.0-y/.95));
     float n=noise(vec2(p.x*14.0,y*8.0-age*14.0));
     float jet=bell(p.x+(n-.5)*.06*(1.0+y),width)*rise;

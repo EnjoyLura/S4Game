@@ -14,6 +14,7 @@ import { CA, N } from '../ui/UIKit';
 import { SpacePrisonVisual, SpaceSwordVFX, drawFlyingSword } from './SpaceSwordVFX';
 import { densestBodyArea, interceptDirection } from './WindNinjaGeometry';
 import { heavenSwordPlan, spacePulseAt, swordRainPlan } from './SpaceSwordPlans';
+import { SPACE_TRANSIT } from './SpacePresentation';
 
 interface Pending { delay:number; kind:'normal'|'rain'|'heaven';
   x?:number;y?:number;startX?:number;startY?:number;seconds?:number;final?:boolean; }
@@ -110,13 +111,13 @@ export class SpaceHero extends SpaceSwordBase {
     this.beginSkillCooldown();
     for(let k=0;k<targets.length;k++){
       const m=targets[k],x=m.x,y=m.groundY,visualRadius=Math.max(36,m.spaceBindRadius*.8);
-      this.effects().add('portal',x,y,visualRadius,.85);
+      this.effects().add('portal',x,y,visualRadius,SPACE_TRANSIT.portalEnd);
       m.takeDamage(this.abilityDamage(cfg.mul),false,this.id,false,this.stats.defIgnore);
       dmg.add(this.id,m.lastDamageTaken);
       if(!m.dead){
         const top=LO.half-LO.notchTop-178-m.def.radius;
         const destination=top-(k%2)*36;
-        if(m.beginSpaceTeleport(destination))this.effects().add('arrival',m.x,destination+(m.groundY-m.y),visualRadius,1.5);
+        if(m.beginSpaceTeleport(destination))this.effects().add('arrival',m.x,destination+(m.groundY-m.y),visualRadius,SPACE_TRANSIT.arrivalEnd);
         m.applySlow(cfg.slow,cfg.slowSeconds);
       }
     }

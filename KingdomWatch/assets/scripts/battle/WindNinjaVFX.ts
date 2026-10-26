@@ -68,10 +68,12 @@ export function drawWindBlade(g: Graphics, x: number, y: number, vx: number, vy:
     }
     g.close();g.fill();
   }
-  for(let i=0;i<5;i++) {
-    const theta=(i-2)*.42, px=Math.cos(theta)*r*.85, py=Math.sin(theta)*r;
-    stroke(g,P.mint,1.6,.35);
-    point(px,py,true);point(px-r*(1.25+.22*Math.sin(age*17+i)),py*.85);g.stroke();
+  for(let i=0;i<18;i++) {
+    const lane=(i-8.5)/9,t=(age*(2.8+(i%4)*.4)+i*.391)%1,length=r*(.28+1.6*(1-lane*lane));
+    const px=Math.sqrt(Math.max(0,1-lane*lane))*r*.85-t*length,py=lane*r*(1-t*.28)+Math.sin(t*6+i)*r*.04;
+    const packet=r*(.10+.18*(1-lane*lane)),width=r*.022;
+    fill(g,P.mint,Math.sin(t*Math.PI)*.4);point(px,py,true);point(px+packet*.35,py+width);
+    point(px+packet,py);point(px+packet*.35,py-width);g.close();g.fill();
   }
 }
 
