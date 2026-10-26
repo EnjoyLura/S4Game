@@ -20,4 +20,6 @@
 
 离屏图像合成：[技能风眼](eye-preview.webp)、[大招龙卷](tornado-preview.webp)。风眼预览中怪物在风眼上层，显示目标遮挡；不是实际游戏截图或性能验收。
 
-完成本地提交后，按长期授权构建并仅部署独立GitHub Pages运行仓库；不推源码、不触发CF。构建和线上收据后补。
+本地实现81799033，接缝权重细化5d5461c7。最终Creator17666ms、退出36，生产运行包1609文件208401908字节（208.40MB），版本12c04809da92ab9c，比v129减少2560790字节。516份其他native原字节保持，仅替换两张风场图集；新图集无损导出逐像素相同，48格边界透明检查通过。全部文件SHA/子路径/解码与WASM头静态验证、15份JS+5段内联仅语法检查通过，详见package-static-verification.json、export-report.json与build-record.json。
+
+按长期授权仅部署独立GitHub Pages运行仓库；不推源码、不触发CF。线上收据后补。
