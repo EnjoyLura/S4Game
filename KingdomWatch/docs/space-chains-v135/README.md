@@ -15,3 +15,5 @@
 预览：[空间大招](space-ult-review.webp) · [传送](space-transit-review.webp) · [最后一剑](final-sword-review.webp) · [风刃](wind-blade-review.webp) · [贴地风眼](wind-eye-review.webp) · [忍者](ninja-review.webp) · [风眼前后对比](eye-ground-comparison.jpg) · [接触表](contact-sheet.jpg)。手机实际观感和性能由用户试玩确认，离屏通过不等于用户认可。
 
 复现：`node docs/space-chains-v135/verify.cjs`；Python `render_review.py`、`render_wind_ninja.py`；类型 `audit_types.cjs`；构建后 `audit_package.py`；部署后 `verify_http.py`。仅向独立 GitHub Pages 仓库发布运行包，不推送源码，不部署 Cloudflare。构建与发布回执在完成后追加。
+
+实现提交 `befa5360`。Creator 3.8.8 构建成功，19899ms、退出码36；运行包1610文件、208444741字节，较v134增7245字节，版本 `689afae411551700`。516份既有非字体native逐字节保持，仅两字体补链字；3效果GLSL1/3与两份帧清单、15JS+5内联语法、整包路径/SHA/静态解码校验通过。构建日志有既有UIKit/Ux循环依赖提示及脚本完成后的worker SIGTERM清理信息；最终构建/静态产物检查均通过。

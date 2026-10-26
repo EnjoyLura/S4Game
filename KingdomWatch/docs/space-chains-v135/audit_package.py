@@ -15,8 +15,11 @@ fontPaths=[p for p in native if any(uid in p for uid in fontUids)]
 assert len(fontPaths)==2
 unchanged=[p for p in native if p not in fontPaths]
 assert all(current.get(p)==old[p] for p in unchanged),'Existing non-font media changed'
-assert all(current[p]!=old[p] for p in fontPaths)
-assert set(p for p in current if '/native/' in p)==set(native),'Unexpected new media'
+newFontPaths=[p for p in current if '/native/' in p and any(uid in p for uid in fontUids)]
+assert len(newFontPaths)==2 and set(newFontPaths)!=set(fontPaths)
+assert set(p for p in current if '/native/' in p)==set(unchanged)|set(newFontPaths),'Unexpected new media'
+for f in newFontPaths:
+    assert (package/f).read_bytes()==(ROOT/'assets/resources/fonts'/Path(f).name).read_bytes()
 uuid=json.loads((ROOT/'assets/resources/fx/sword-jade-flow.effect.meta').read_text('utf8'))['uuid']
 effect=next((package/'assets/resources/import').rglob('*'+uuid[:8]+'*.json'))
 data=json.loads(effect.read_text('utf8'));shaders=data[5][0][2];techniques=data[5][0][3]
@@ -62,6 +65,7 @@ for kind in ['tornado','eye']:
     file=next((package/'assets/resources/import').rglob('*'+uid[:8]+'*.json'));text=file.read_text()
     sourceData=json.loads(source.read_text());assert manifest_in(json.loads(text))==sourceData
     compiled.append({'path':file.relative_to(package).as_posix(),'sha256':hashlib.sha256(file.read_bytes()).hexdigest(),'source':source.relative_to(ROOT).as_posix()})
+compiled.extend({'path':p,'sha256':hashlib.sha256((package/p).read_bytes()).hexdigest()} for p in newFontPaths)
 (OUT/'changed-runtime-files.json').write_text(json.dumps(compiled,indent=2)+'\n')
 node='C:/Program Files/nodejs/node.exe';syntax=[]
 for file in sorted(package.rglob('*.js')):
@@ -78,7 +82,7 @@ scope=json.loads((OUT/'verification.json').read_text('utf8'));assert scope['stat
 main=next(package.glob('assets/main/index.*.js'));text=main.read_text('utf8')
 for marker in ['fx/sword-jade-flow','warmSwordFlight','jadeSwordGround','spaceGroundSeals','spaceBindingLinks','finalWave']:
     assert marker in text,marker
-result={'checks':checks,'baselineRelease':prior['id'],'existingNativeByteIdentical':len(unchanged),'extendedFonts':fontPaths,'newMedia':[],
+result={'checks':checks,'baselineRelease':prior['id'],'existingNativeByteIdentical':len(unchanged),'extendedFonts':newFontPaths,'newMedia':[],
     'jsSyntaxOnly':syntax,'inlineScriptsSyntaxOnly':inline,'mainScript':main.relative_to(package).as_posix(),
     'mainSha256':hashlib.sha256(main.read_bytes()).hexdigest(),'typeDiagnosticsBefore':types['beforeDiagnostics'],
     'typeDiagnosticsCurrent':types['currentDiagnostics'],'gameEngineBrowserCombatAudioOrWasmStarted':False,'phoneReview':'pending user'}
