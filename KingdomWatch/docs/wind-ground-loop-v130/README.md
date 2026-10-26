@@ -22,4 +22,4 @@
 
 本地实现81799033，接缝权重细化5d5461c7。最终Creator17666ms、退出36，生产运行包1609文件208401908字节（208.40MB），版本12c04809da92ab9c，比v129减少2560790字节。516份其他native原字节保持，仅替换两张风场图集；新图集无损导出逐像素相同，48格边界透明检查通过。全部文件SHA/子路径/解码与WASM头静态验证、15份JS+5段内联仅语法检查通过，详见package-static-verification.json、export-report.json与build-record.json。
 
-按长期授权仅部署独立GitHub Pages运行仓库；不推源码、不触发CF。线上收据后补。
+已发布：[试玩v130](https://enjoylura.github.io/kingdom-watch-play/?v=wind-ground-loop-v130)。独立运行提交8d2a2665319e2f4021249907028ec25fe42c4827，Pages/build均built、标准线上检查通过；两张实际图集/两份编译帧清单/主脚本共5份HTTP200且SHA与本地匹配，编译清单完整等同源清单。见deployment.json、additional-http-verification.json。发布期间源HEAD/索引保持；按长期授权仅推独立GitHub Pages运行仓库，未推源码、未触发CF。
