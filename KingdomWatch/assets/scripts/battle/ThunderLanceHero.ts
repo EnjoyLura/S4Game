@@ -95,7 +95,7 @@ export class ThunderLanceHero extends HeroBase {
     const resCut=this.stats.defIgnore,seed=(++this.serial*.61803398875)%1;
     const flight=lanceFlightPlan(sx,sy,x,y,p.kind),angle=lanceFlightPose(flight,flight.seconds).angle;
     const fired=projs.fire({x:sx,y:sy,dirX:flight.vx,dirY:flight.vy,speed:Math.hypot(flight.vx,flight.vy),
-      dmg:damage,crit,heroId:this.id,color:'#FFD34F',visual:giant?'greatLance':'lance',size:giant?35:9,ult:giant,ability:!normal,
+      dmg:damage,crit,heroId:this.id,color:'#FFD34F',visual:giant?'greatLance':'lance',size:giant?40:12,ult:giant,ability:!normal,
       lanceFlight:{...flight,seed},
       groundTarget:{x,y},targetLayer:'all',onGroundDamage:()=>{if(this.node.isValid)this.strike(mgr,x,y,radius,damage,crit,resCut,giant);},
       onGroundImpact:()=>{if(!this.node.isValid)return;

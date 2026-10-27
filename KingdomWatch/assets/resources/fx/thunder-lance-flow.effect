@@ -52,6 +52,9 @@ CCProgram thunder-lance-fs %{
   float jag(float p){float i=floor(p);return mix(hash(i),hash(i+1.),fract(p));}
   float trunk(float y,float seed){return ((jag((y+.5)*19.+seed)-.5)*.024+(jag((y+.5)*8.+seed+73.)-.5)*.016)*sin(clamp(y+.5,0.,1.)*3.14159265);}
   float branchSegment(vec2 p,vec2 a,vec2 b){vec2 d=b-a;return length(p-a-d*clamp(dot(p-a,d)/max(.000001,dot(d,d)),0.,1.));}
+  float hash2(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+  float valueNoise2(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash2(i),hash2(i+vec2(1.,0.)),f.x),mix(hash2(i+vec2(0.,1.)),hash2(i+1.),f.x),f.y);}
+  float fog(vec2 p){return valueNoise2(p)*.65+valueNoise2(p*2.13+17.2)*.25+valueNoise2(p*4.47-9.3)*.1;}
   vec4 frag(){
     vec2 q=(vec2(uv0.x,.999999-uv0.y)-.5)*fxShape.xy/max(fxShape.z,1.);
     float time=fxState.x,seed=fxState.y*37.,power=fxState.z,mode=fxState.w;
@@ -59,17 +62,25 @@ CCProgram thunder-lance-fs %{
     if(mode<.5){
       float y=q.y,mask=smoothstep(-.53,-.49,y)*(1.-smoothstep(.496,.506,y));
       float path=trunk(y,seed),d=q.x-path;
-      // Slender javelin: continuous shaft and a long pointed energy tip dominate the silhouette.
-      float width=(.014+.003*jag(y*31.+seed))*(1.-smoothstep(.22,.505,y)*.85);
-      width+=.016*smoothstep(.12,.18,y)*(1.-smoothstep(.18,.49,y));
+      // A solid energy weapon with a broad shoulder and taper, not a single needle line.
+      float width=(.034+.006*jag(y*18.+seed))*(1.-smoothstep(.18,.505,y)*.91);
+      width+=.038*smoothstep(.04,.15,y)*(1.-smoothstep(.16,.49,y));
       float charge=.82+.18*sin(y*47.-time*31.+seed),shaft=line(d,width)*mask;
-      rgb=(YELLOW*shaft*.9+CORE*line(d,width*.38)*mask*1.25)*charge;
-      alpha=shaft*.83;
-      rgb+=GOLD*line(d,.055)*mask*.25;
-      // Five short asymmetric discharge branches, subordinate to the javelin body.
-      for(int i=0;i<5;i++){
-        float fi=float(i),rootY=-.39+fi*.15+(hash(fi+seed)-.5)*.05;
-        float side=mod(fi,2.)<.5?-1.:1.,reach=(.035+hash(fi*11.+seed)*.05)*side;
+      rgb=(GOLD*shaft*.7+YELLOW*line(d,width*.70)*.7+CORE*line(d-width*.13,width*.30)*mask)*mask*charge;
+      alpha=shaft*.91;
+      rgb+=GOLD*line(d,.095)*mask*.30;
+      // Uneven angular electrical strands hug the shaft, adding mass without long antlers.
+      for(int j=0;j<3;j++){
+        float fj=float(j),phase=y*(17.+fj*4.)-time*(5.+fj)+seed+fj*13.;
+        float coil=((jag(phase)-.5)*.78+(jag(phase*3.17+7.)-.5)*.22)*(.12+fj*.018);
+        float envelope=smoothstep(-.48,-.31,y)*(1.-smoothstep(.28,.46,y));
+        float filament=line(d-coil,.0045+fj*.001)*envelope;
+        rgb+=(YELLOW*.6+CORE*.48)*filament;
+        rgb+=GOLD*line(d-coil,.019)*envelope*.13;
+      }
+      for(int i=0;i<3;i++){
+        float fi=float(i),rootY=-.31+fi*.23+(hash(fi+seed)-.5)*.07;
+        float side=mod(fi,2.)<.5?-1.:1.,reach=(.065+hash(fi*11.+seed)*.05)*side;
         vec2 root=vec2(trunk(rootY,seed),rootY);
         vec2 knee=root+vec2(reach*.42,.025+hash(fi+27.)*.02);
         vec2 joint=root+vec2(reach*.68,.03+hash(fi+51.)*.025);
@@ -85,40 +96,75 @@ CCProgram thunder-lance-fs %{
         }
       }
       float trail=smoothstep(-.82,-.62,y)*(1.-smoothstep(-.5,-.32,y));
-      rgb+=GOLD*line(q.x+sin(y*37.+time*27.)*.02,.045)*trail*.25;
+      rgb+=GOLD*line(q.x+sin(y*37.+time*27.)*.02,.07)*trail*.36;
+      rgb+=CORE*line(y+.17,.035)*line(d,.09)*(.18+.12*sin(time*11.+seed));
       // The submerged section is clipped, including its bloom, before the foreground soil lip.
       if(fxShape.w>0.00001){float visible=1.-smoothstep(.5-fxShape.w-.003,.5-fxShape.w+.002,y);rgb*=visible;alpha*=visible;}
     }else if(mode>3.5){
       // Compressed flash -> expanding lobed thunder blast -> branching after-arcs.
       float t=fxShape.w,r=length(q),a=atan(q.y,q.x),expand=.08+.7*(1.-pow(1.-sat(t*2.3),2.));
-      float lobe=noise(a*7.+seed)*.10+noise(a*19.-time*6.)*.045;
+      float lobe=(fog(q*7.+seed)-.5)*.24;
       float cloud=1.-smoothstep(expand-.12,expand+.04,r+lobe);
       float hot=line(r,.09+t*.25)*pow(1.-t,3.);
       float skin=line(r+lobe-expand,.025)*(1.-t)*(1.-t);
       rgb=GOLD*cloud*.32*(1.-t)+YELLOW*skin*.9+CORE*(hot*2.+cloud*pow(1.-t,7.)*1.2);
-      float branch=pow(1.-abs(sin(a*13.+noise(r*26.+seed)*2.7)),24.);
-      rgb+=mix(GOLD,CORE,.5)*branch*smoothstep(.1,.25,r)*(1.-smoothstep(.35+t*.65,.6+t*.4,r))*(1.-t);
+      float vapor=fog(q*6.-vec2(time*.7,time*1.4)+seed);
+      rgb+=GOLD*vapor*cloud*(1.-t)*.42;
+      alpha=cloud*vapor*(1.-t)*.24;
+      for(int k=0;k<7;k++){
+        float fk=float(k),angle=hash(seed+fk*13.)*TAU,reach=.45+hash(fk+seed+19.)*.45;
+        vec2 dir=vec2(cos(angle),sin(angle)),side=vec2(-dir.y,dir.x);
+        vec2 root=dir*(.12+t*.22),bend=dir*(reach*.6+t*.13)+side*(hash(fk+23.)-.5)*.27;
+        vec2 tip=dir*(reach+t*.22)+side*(hash(fk+31.)-.5)*.20;
+        vec2 knee=mix(root,bend,.44)+side*(hash(fk+seed+43.)-.5)*.13;
+        vec2 joint=mix(bend,tip,.56)+side*(hash(fk+seed+57.)-.5)*.10;
+        float bolt=min(min(branchSegment(q,root,knee),branchSegment(q,knee,bend)),
+          min(branchSegment(q,bend,joint),branchSegment(q,joint,tip)));
+        if(k<2)bolt=min(bolt,branchSegment(q,bend,bend+dir*.13+side*.16));
+        rgb+=(CORE*.85+YELLOW*.4)*line(bolt,.005)*pow(1.-t,2.5);
+      }
+      for(int k=0;k<10;k++){
+        float fk=float(k),angle=hash(seed+fk*19.+3.)*TAU;
+        vec2 dir=vec2(cos(angle),sin(angle));
+        float speed=.4+hash(fk+seed+23.)*.75;
+        vec2 spark=q-dir*(.07+sqrt(sat(t))*speed)-vec2(0.,t*.16);
+        float d=branchSegment(spark,-dir*.014,dir*.014);
+        rgb+=(CORE+YELLOW*.4)*line(d,.008)*pow(1.-t,1.3);
+      }
       rgb+=YELLOW*line(q.y,.008)*line(q.x,.8)*pow(1.-t,5.)*.8;
     }else{
       vec2 p=vec2(q.x,q.y/.58);float r=length(p),a=atan(p.y,p.x),t=fxShape.w;
-      float spokes=abs(sin(a*9.+noise(r*14.+seed)*2.));
-      float jag=abs(sin(a*17.+r*39.+floor(time*20.)*.7));
+      vec2 direction=p/max(.001,r);
+      float terrain=fog(p*5.3+seed),drift=fog(p*7.+vec2(time*.3,-time*.22)+seed);
       if(mode<1.5){
-        float lines=pow(1.-spokes,18.)*(1.-smoothstep(.23,.88,r))*smoothstep(.06,.13,r);
-        float hot=line(r,.14)*(.45+.2*sin(time*11.));
-        rgb=GOLD*(lines*.65+hot*.3)+YELLOW*lines*.38+CORE*hot*.6;
-        rgb+=GOLD*pow(1.-jag,30.)*(1.-smoothstep(.3,.8,r))*.12;
+        // A low, shifting electric haze; independent ground branches are drawn in code.
+        float pool=(1.-smoothstep(.12,.70,r+(terrain-.5)*.35));
+        float hot=line(r,.12)*(.38+.12*sin(time*9.+seed));
+        rgb=GOLD*pool*drift*.20+YELLOW*hot*.28+CORE*hot*.20;
+        float veins=line(terrain-.54,.015)*smoothstep(.48,.63,drift)*(1.-smoothstep(.22,.8,r));
+        rgb+=YELLOW*veins*.22;
       }else if(mode<2.5){
-        float radius=.1+.91*(1.-pow(1.-t,2.)),d=r-radius;
-        float warp=(noise(a*11.+seed+time*4.)-.5)*.05;
-        float broken=.35+.65*noise(a*15.+seed+floor(time*17.));
-        float rim=line(d+warp,.012)*(1.-t)*broken;
-        float pressure=line(d+.035,.065)*(1.-t)*.2;
-        rgb=CORE*rim*1.3+GOLD*pressure+YELLOW*rim*.4;
-        rgb+=GOLD*pow(1.-jag,24.)*line(d,.09)*(1.-t)*.6;
+        float radius=.08+.91*(1.-pow(1.-sat(t),1.6));
+        float lobes=(valueNoise2(direction*3.7+seed)-.5)*.25,warp=(valueNoise2(p*22.+seed)-.5)*.045;
+        float d=r-radius-lobes;
+        // Broad gaps, independently advancing lobes and a soft pressure front replace the closed ring.
+        float gaps=smoothstep(.45,.62,valueNoise2(direction*5.7+seed+9.));
+        float shards=line(d+warp,.012)*gaps*(1.-t);
+        float pressure=line(d+.07,.10)*(.25+.75*terrain)*(1.-t)*.20;
+        rgb=CORE*shards*.95+YELLOW*shards*.45+GOLD*pressure;
+        float echo=line(d+.13,.024)*smoothstep(.56,.70,valueNoise2(direction*8.3-seed))*(1.-t)*.5;
+        rgb+=YELLOW*echo;
+        for(int k=0;k<5;k++){
+          float fk=float(k),angle=hash(seed+fk*17.)*TAU;
+          vec2 dir=vec2(cos(angle),sin(angle)),side=vec2(-dir.y,dir.x);
+          vec2 root=dir*(radius*.78),mid=dir*(radius+.02)+side*(hash(fk+seed)-.5)*.16;
+          vec2 tip=dir*(radius+.12)+side*(hash(fk+seed+7.)-.5)*.26;
+          float tear=min(branchSegment(p,root,mid),branchSegment(p,mid,tip));
+          rgb+=YELLOW*line(tear,.007)*pow(1.-t,1.6)*.55;
+        }
       }else{
-        float spin=pow(abs(sin(a*3.+time*2.)),10.);
-        rgb=YELLOW*line(r-.72,.009)*spin*.5+GOLD*line(r,.15)*(.2+.25*t);
+        float fragments=line(terrain-.52,.016)*smoothstep(.48,.65,drift)*(1.-smoothstep(.35,.82,r));
+        rgb=YELLOW*fragments*.28+GOLD*line(r,.18)*(.2+.25*t);
       }
       rgb*=1.-smoothstep(1.05,1.19,r);
     }

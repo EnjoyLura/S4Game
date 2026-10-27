@@ -1,0 +1,217 @@
+{
+  "status": "PASS",
+  "samples": [
+    {
+      "mode": 0,
+      "age": 0,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 0,
+      "age": 0.02,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 0,
+      "age": 0.1,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 0,
+      "age": 0.3,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 0,
+      "age": 0.6,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 0,
+      "age": 0.98,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 0,
+      "age": 1,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 1,
+      "age": 0,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 1,
+      "age": 0.02,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 1,
+      "age": 0.1,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 1,
+      "age": 0.3,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 1,
+      "age": 0.6,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 1,
+      "age": 0.98,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 1,
+      "age": 1,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 2,
+      "age": 0,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 2,
+      "age": 0.02,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 2,
+      "age": 0.1,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 2,
+      "age": 0.3,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 2,
+      "age": 0.6,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 2,
+      "age": 0.98,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 2,
+      "age": 1,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 3,
+      "age": 0,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 3,
+      "age": 0.02,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 3,
+      "age": 0.1,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 3,
+      "age": 0.3,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 3,
+      "age": 0.6,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 3,
+      "age": 0.98,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 3,
+      "age": 1,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 4,
+      "age": 0,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 4,
+      "age": 0.02,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 4,
+      "age": 0.1,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 4,
+      "age": 0.3,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 4,
+      "age": 0.6,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 4,
+      "age": 0.98,
+      "finite": true,
+      "zeroPowerInvisible": true
+    },
+    {
+      "mode": 4,
+      "age": 1,
+      "finite": true,
+      "zeroPowerInvisible": true
+    }
+  ],
+  "cosmeticFrames": 312,
+  "gameEngineBrowserBattleAudioOrWasmStarted": false
+}

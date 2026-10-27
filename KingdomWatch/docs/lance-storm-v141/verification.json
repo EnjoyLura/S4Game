@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "trajectoryCases": 775,
+  "poseSamples": 186775,
+  "maxAngleStepRadians": 0.07438135989807115,
+  "minDescentFraction": 0.3416666666666667,
+  "tipAnchors": 32,
+  "cosmeticFrames": 312,
+  "fallbackGeometry": true,
+  "oldHeroImplementationsAndTooltipFixPreserved": true,
+  "gameEngineBrowserBattleAudioOrWasmStarted": false
+}

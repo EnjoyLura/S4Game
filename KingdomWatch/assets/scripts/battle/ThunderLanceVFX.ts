@@ -2,11 +2,38 @@
 import { Graphics,Node } from 'cc';
 import { CA,N } from '../ui/UIKit';
 import { HeroFxShader } from './HeroFxShader';
-import { swordCrater,swordDebris,swordSoilLip } from './SwordAbilityVFX';
+import { swordDebris,swordSoilLip } from './SwordAbilityVFX';
 export const LANCE_EFFECT='fx/thunder-lance-flow';
 export interface LanceVisual {x:number;y:number;radius:number;age:number;seconds:number;giant:boolean;seed:number;angle:number;phase?:number;}
 interface Accent {kind:'impact'|'wave'|'mark'|'recall'|'explosion';x:number;y:number;r:number;age:number;life:number;seed:number;giant:boolean;tx:number;ty:number;}
 interface Arc {x:number;y:number;tx:number;ty:number;age:number;heavy:boolean;seed:number;}
+const hash=(v:number)=>{const a=Math.sin(v*127.1)*43758.5453;return a-Math.floor(a);};
+/** Local scorch and irregular crawling arcs; no radial star or full circular outline. */
+export function lanceGround(g:Graphics,x:number,y:number,r:number,age:number,seed:number,giant:boolean,opacity:number):void{
+  const fade=Math.min(1,age*18)*opacity,s=seed*97;
+  for(let k=0;k<3;k++){
+    g.fillColor=CA(k?'#493B25':'#292821',fade*(k?.15:.28));
+    g.ellipse(x+(hash(s+k)-.5)*r*.17,y+(hash(s+k+7)-.5)*r*.06,r*(.08+hash(k+s+19)*.08),r*(.025+hash(k+s+29)*.025));g.fill();
+  }
+  for(let k=0;k<(giant?7:3);k++){
+    const phase=(age*(1.15+hash(s+k)) + hash(s+k+11))%1,alpha=Math.sin(Math.PI*phase)**2*opacity;
+    const epoch=Math.floor(age*(1.15+hash(s+k))+hash(s+k+11)),n=s+k*37+epoch*13;
+    const angle=hash(n)*Math.PI*2,turn=(hash(n+3)-.5)*1.6;
+    const start=.08+hash(n+5)*.28,end=.48+hash(n+7)*.48;
+    for(let layer=0;layer<2;layer++){
+      g.strokeColor=CA(layer?'#FFF2AB':'#F1AE36',alpha*(layer?.75:.18));g.lineWidth=layer?(giant?1.6:1.05):(giant?6:3.7);
+      const points:number[][]=[];
+      for(let j=0;j<=18;j++){
+        const t=j/18,a=angle+turn*t+Math.sin(t*9+n)*.13+(hash(n+j+21)-.5)*.16,d=r*(start+(end-start)*t);
+        const px=x+Math.cos(a)*d,py=y+Math.sin(a)*d*.47;points.push([px,py]);
+        if(j===0)g.moveTo(px,py);else g.lineTo(px,py);
+      }g.stroke();
+      if(k%3===0){const p=points[11];g.moveTo(p[0],p[1]);
+        for(let j=1;j<=6;j++){const a=angle+1.2+(hash(n+j+81)-.5)*.5;
+          g.lineTo(p[0]+Math.cos(a)*r*j*.035,p[1]+Math.sin(a)*r*j*.018);}g.stroke();}
+    }
+  }
+}
 export function drawLanceFlight(shader:HeroFxShader|null,g:Graphics,x:number,y:number,angle:number,size:number,age:number,seed:number,
   opacity=1,planted=false,phase=0):void{
   const length=size*8,ux=Math.cos(angle),uy=Math.sin(angle),bury=planted?length*.095*Math.min(1,age/.12):0;
@@ -24,7 +51,7 @@ export function drawLanceFlight(shader:HeroFxShader|null,g:Graphics,x:number,y:n
     const a=point(u,v),b=point(uu,vv);g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke();
   };
   for(let layer=0;layer<3;layer++){
-    g.strokeColor=CA(layer===2?'#FFFFE3':layer===1?'#FFD543':'#E5A41C',opacity*(layer===0?.22:1));g.lineWidth=size*(layer===0?1.4:layer===1?.38:.12);
+    g.strokeColor=CA(layer===2?'#FFFFE3':layer===1?'#FFD543':'#E5A41C',opacity*(layer===0?.3:1));g.lineWidth=size*(layer===0?2.3:layer===1?.9:.35);
     for(let k=0;k<24;k++)segment(k/24,spine(k/24),(k+1)/24,spine((k+1)/24));
     for(let k=0;k<5;k++){const t=.11+k*.15,side=k%2?1:-1,v=spine(t),reach=(.035+hash(k+seed)*.05)*side;
       segment(t,v,t+.03,v+reach*.45);segment(t+.03,v+reach*.45,t+.085,reach);
@@ -32,7 +59,7 @@ export function drawLanceFlight(shader:HeroFxShader|null,g:Graphics,x:number,y:n
     }
   }
   // Tapered point is part of the same lightning body, not a separate metallic spearhead.
-  g.fillColor=CA('#FFF9C7',opacity);const a=point(Math.min(limit,1),0),b=point(.73,.025),c=point(.73,-.025);
+  g.fillColor=CA('#FFF9C7',opacity);const a=point(Math.min(limit,1),0),b=point(.67,.06),c=point(.67,-.06);
   g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineTo(c[0],c[1]);g.close();g.fill();
 }
 export class ThunderLanceVFX {
@@ -54,9 +81,9 @@ export class ThunderLanceVFX {
     this.add('impact',x,y,r,giant?1.15:.55,giant,seed);
     if(giant){this.wave(x,y,r,seed);this.add('explosion',x,y,r,.72,true,seed);}
   }
-  wave(x:number,y:number,r:number,seed:number):void{this.add('wave',x,y,r,.65,true,seed);}
+  wave(x:number,y:number,r:number,seed:number):void{this.add('wave',x,y,r,.78,true,seed);}
   mark(x:number,y:number,r:number,life:number):void{this.add('mark',x,y,r,life);}
-  recall(f:LanceVisual,x:number,y:number,seconds:number):void{this.add('recall',f.x,f.y,9,seconds,false,f.seed,x,y);}
+  recall(f:LanceVisual,x:number,y:number,seconds:number):void{this.add('recall',f.x,f.y,12,seconds,false,f.seed,x,y);}
   arc(x:number,y:number,tx:number,ty:number,heavy:boolean):void{
     if(this.arcs.length>=96)this.arcs.shift();this.arcs.push({x,y,tx,ty,age:0,heavy,seed:++this.serial});
   }
@@ -66,9 +93,9 @@ export class ThunderLanceVFX {
   }
   render(fields:readonly LanceVisual[]):void{
     this.g.clear();this.dirt.clear();this.front.clear();this.spears.begin();this.ground.begin();
-    for(const f of fields){const fade=Math.min(1,(f.seconds-f.age)*3),size=f.giant?35:9;
-      this.ground.draw(f.x,f.y,f.radius*2.4,f.radius*1.4,0,f.age,f.seed,fade*(f.giant?.75:.32),1,f.radius,0);
-      swordCrater(this.dirt,f.x,f.y,f.radius,Math.min(f.age,.35),f.giant);
+    for(const f of fields){const fade=Math.min(1,(f.seconds-f.age)*3),size=f.giant?40:12;
+      this.ground.draw(f.x,f.y,f.radius*2.4,f.radius*1.4,0,f.age,f.seed,fade*(f.giant?.68:.26),1,f.radius,0);
+      lanceGround(this.dirt,f.x,f.y,f.radius,f.age,f.seed,f.giant,fade);
       drawLanceFlight(this.spears,this.g,f.x,f.y,f.angle,size,f.age,f.seed,fade,true,f.phase||0);
       swordSoilLip(this.front,f.x,f.y,f.giant?f.radius:65,f.age,f.giant,fade);
     }
@@ -83,8 +110,7 @@ export class ThunderLanceVFX {
       }else{
         const wave=a.kind==='wave';
         const drawn=this.ground.draw(a.x,a.y,a.r*2.4,a.r*1.4,0,a.age,a.seed,wave?1:(1-t)*(a.giant?1:.8),wave?2:1,a.r,t);
-        if(!drawn){this.dirt.strokeColor=CA('#FFE66A',(1-t)*.6);this.dirt.lineWidth=2;
-          this.dirt.ellipse(a.x,a.y,a.r*(wave?t:.35),a.r*(wave?t:.35)*.48);this.dirt.stroke();}
+        if(!drawn)lanceGround(this.dirt,a.x,a.y,a.r*(.3+t*.7),a.age,a.seed,a.giant,1-t);
         if(!wave)swordDebris(this.front,a.x,a.y,a.r,a.age,a.giant);
       }
     }
