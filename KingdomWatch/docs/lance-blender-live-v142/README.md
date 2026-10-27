@@ -40,4 +40,6 @@ node audit_types.cjs
 
 实现本地提交 `8a77749a`。Cocos Creator 3.8.8 正式构建 18484ms、退出 36，DPR 修补与资源审计通过；导出版本 `dce6e27300eb9987`，1647 文件、214498961 字节。524 个既有 native 资源原字节保持，新增 4 张无损图集，全部 RGBA 与源图逐像素相同；图集/帧清单注册、透明边缘、15 份 JS 与 5 段内联脚本语法检查通过。回执见 `build-record.json`、`package-static-verification.json` 与 `changed-runtime-files.json`。
 
-GitHub Pages 回执在发布完成后补充。仅推送独立运行仓库，不推送源码、不部署 Cloudflare。
+已发布：[v142 游戏入口](https://enjoylura.github.io/kingdom-watch-play/?v=lance-blender-live-v142)。运行仓库提交 `60f9a5fd48637790b204fd893f4e9e2ff06ce655`，Pages 与构建状态均为 built，线上版本为 `dce6e27300eb9987`。标准发布验证及额外 9 个文件（四张图集、四个图像导入描述、主脚本）HTTP 200 与 SHA256 全部一致；回执 `deployment.json`、`additional-http-verification.json`。
+
+首次直连 GitHub TLS 超时后，使用本机已运行的 `127.0.0.1:7897` 代理完成发布，未改系统设置。发布期间源码 HEAD `a1f39067` 与索引保持不变；仅推送独立运行仓库，不推送源码、不部署 Cloudflare。游戏/浏览器/战斗/音频/WASM 均未启动，手机实际观感和手感由用户验收。
