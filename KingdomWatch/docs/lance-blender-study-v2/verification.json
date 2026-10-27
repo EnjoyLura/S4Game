@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "scope": "independent art artifacts only",
+  "transparentFrames": 192,
+  "size": [
+    1280,
+    1280
+  ],
+  "allBordersTransparent": true,
+  "finalFrameClear": true,
+  "videos": {
+    "golden-thunder-lance.mp4": {
+      "frames": 192,
+      "fps": 24.0,
+      "seconds": 8.0,
+      "size": [
+        1280,
+        1280
+      ]
+    },
+    "game-context.mp4": {
+      "frames": 192,
+      "fps": 24.0,
+      "seconds": 8.0,
+      "size": [
+        1280,
+        1280
+      ]
+    },
+    "impact-comparison.mp4": {
+      "frames": 144,
+      "fps": 24.0,
+      "seconds": 6.0,
+      "size": [
+        1280,
+        720
+      ]
+    }
+  },
+  "hashes": {
+    "build_scene.py": "5779ccb95eb3c8d814130596bb5dc1f0d559a9ca2ad556ed3882a1352603b9b8",
+    "impact_revision.py": "4defd173a922ddc50f42f1ec28ca853cdaf07fc11c0e9d3ae0fad925a471486e",
+    "compose_preview.py": "7471b8e0701f5b289fe02702ed81a9d9f0a7b05fe1afef971be5cd01f4c3c8a3",
+    "golden-thunder-lance.blend": "aede3400c7396c15493ca956da22cd32593cb1390bb0c036c5985f3f77c822f4",
+    "golden-thunder-lance.mp4": "a7bbbdcded07b432a56939b82ac743e650c727b412c2325e4c7dc50f3fd6021f",
+    "game-context.mp4": "1fe4ca96f597a6af74255887685918c2a105710f0766a8a5c0fe4cb6682870ee",
+    "golden-thunder-lance.gif": "c1288d18be3cd1d8399e8b76f568ad6d6aea7d592ab9de0159f279e70b7966bc",
+    "contact-sheet.jpg": "b0b28323a75d005db2a9b64307cfd340aa027726223bdf13b72af172463ce348",
+    "impact-comparison.mp4": "1078a206fba71bf3dc13e6a6c26ced69d52e0c84c8d3412b6cf3f3ebbb378d63"
+  },
+  "gameStarted": false,
+  "gameIntegrated": false,
+  "deployed": false,
+  "lastFrame": {
+    "frame": "frame_0192.png",
+    "bbox": null,
+    "visiblePixels": 0
+  }
+}
