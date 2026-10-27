@@ -26,4 +26,6 @@
 
 实现提交 `6da139bb`。Creator 22406ms、退出 36（成功完成）；运行包 1631 文件、210267957 字节，版本 `43d9a545bb664e1c`。524 个原 native 媒体全部字节相同，无新增媒体；15 个 JS 与 5 个内联脚本语法、编译后的 GLSL1/GLSL3 和整包哈希校验通过。
 
-遵循持续授权：本地提交后构建并发布独立 GitHub Pages 运行仓库，不推源码，不部署 Cloudflare。发布回执后补。
+已发布：[v140](https://enjoylura.github.io/kingdom-watch-play/?v=lance-tips-v140)。构建记录提交 `435ffbe9`，运行仓库提交 `5ef9abb7a17e729094d6dd660a4262aa54d5d388`。Pages 与对应 build 均 built，标准线上验证通过，额外脚本/雷枪特效两文件 HTTP 200 与 SHA256 匹配。回执 [deployment.json](deployment.json)、[additional-http-verification.json](additional-http-verification.json)。
+
+遵循持续授权只推送独立 GitHub Pages 运行包，不推源码、不部署 Cloudflare。发布中源码 HEAD/索引保持。未启动游戏或浏览器，手机实战待用户验收。

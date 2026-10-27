@@ -1,5 +1,7 @@
 # 交付要求
 
+v140已发布：https://enjoylura.github.io/kingdom-watch-play/?v=lance-tips-v140 ，运行提交5ef9abb7a17e729094d6dd660a4262aa54d5d388、版本43d9a545bb664e1c。实现6da139bb、构建记录435ffbe9；Creator22406ms退出36，1631文件210267957字节，524旧native原字节、无新增媒体，9旧类型无新增。Pages/build built，标准验证与额外脚本/雷枪特效2文件HTTP200+SHA通过，发布中源码HEAD/索引保持。只推运行包，不推源码/不部署CF；无游戏/浏览器/战斗/音频/WASM执行，手机待用户；回执docs/lance-tips-v140。
+
 2026-10-27 完成[雷电标枪与新英雄tip修复v140](docs/lance-tips-v140/README.md)：按追加反馈减少分叉，修长金色标枪主体与五处短电弧；位置/速度/落地同一重力抛物线，枪尖连续入土，保留末切线角与电流相位。雷枪/魔法弓/镰刀法师说明面板补统一图标定位，修复范围圈可见但tip坐标NaN。实际UI方法108例与旧九入口失败复现、81弹道19521姿态/32锚点/228离屏帧/35GPU检查，9旧类型无新增；无游戏/浏览器/战斗/音频/WASM执行。按持续授权本地提交后构建并只发布独立GitHub运行包，不推源码/不部署CF；手机待用户，回执后补。
 
 v139已发布：https://enjoylura.github.io/kingdom-watch-play/?v=scythe-v139 ，运行提交bedb4a02afd61841617e9731bcc50d6d2aff466a、版本fe903915890852ae。实现e4756b42、构建记录ba97cd60；Creator18033ms退出36，1631文件210264091字节，520旧非字体native原字节，新增2图集及2字库补字，9旧类型无新增。Pages/build built，标准验证及额外6文件HTTP200+SHA通过，发布中源码HEAD/索引保持；只推运行包，不推源码/不部署CF。无游戏/浏览器/战斗/音频/WASM执行，手机待用户；回执docs/scythe-v139。

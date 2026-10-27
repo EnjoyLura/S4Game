@@ -1,0 +1,20 @@
+{
+  "release": "43d9a545bb664e1c",
+  "publicationCommit": "5ef9abb7a17e729094d6dd660a4262aa54d5d388",
+  "samples": [
+    {
+      "path": "assets/resources/import/e1/e109cc8d-de62-4940-92cc-012fba101de2.ecb9d.json",
+      "status": 200,
+      "bytes": 16640,
+      "sha256": "9b3c2ae1b0192e868239bc9c64bd56529cf791ec251ecc853ae7b4f1bd72a3b4"
+    },
+    {
+      "path": "assets/main/index.4902a.js",
+      "status": 200,
+      "bytes": 1124695,
+      "sha256": "46e4afd825e0ad15ae82c42c49b5722e228cb0591b8769a34bcf205749d94623"
+    }
+  ],
+  "allHashesMatch": true,
+  "gameOrBrowserStarted": false
+}
