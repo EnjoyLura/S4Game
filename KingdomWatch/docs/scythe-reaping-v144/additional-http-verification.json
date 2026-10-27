@@ -1,0 +1,68 @@
+{
+  "release": "5ce864ba9d0af970",
+  "publicationCommit": "3e75f3f4352e04bcba35df5ae7ac0c9c38ba27f5",
+  "samples": [
+    {
+      "path": "assets/resources/native/fa/faccdc12-5820-5bc2-aac8-9c7d1a509156.59772f231ae6252b.webp",
+      "status": 200,
+      "bytes": 517944,
+      "sha256": "59772f231ae6252bcb69289f1f67371adf992de9b419d50e2c7cba8607790ea4"
+    },
+    {
+      "path": "assets/resources/import/fa/faccdc12-5820-5bc2-aac8-9c7d1a509156.c40416172c7e7767.json",
+      "status": 200,
+      "bytes": 72,
+      "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc"
+    },
+    {
+      "path": "assets/resources/native/aa/aa0d15b1-d0de-5758-8ddb-b5545aba7695.6b97291c555d926b.webp",
+      "status": 200,
+      "bytes": 1246150,
+      "sha256": "6b97291c555d926bf146a7b506fe737ad3838144a0427cee03973803f6917fff"
+    },
+    {
+      "path": "assets/resources/import/aa/aa0d15b1-d0de-5758-8ddb-b5545aba7695.c40416172c7e7767.json",
+      "status": 200,
+      "bytes": 72,
+      "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc"
+    },
+    {
+      "path": "assets/resources/native/4b/4b7d3151-82e4-53ad-9d09-8957f0ed56c0.f79ab2e94dcc62d8.webp",
+      "status": 200,
+      "bytes": 357270,
+      "sha256": "f79ab2e94dcc62d88a9efd391cd5349ee6b2d62eb17a83ee978e7fcb79159eb4"
+    },
+    {
+      "path": "assets/resources/import/4b/4b7d3151-82e4-53ad-9d09-8957f0ed56c0.c40416172c7e7767.json",
+      "status": 200,
+      "bytes": 72,
+      "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc"
+    },
+    {
+      "path": "assets/main/index.93874.js",
+      "status": 200,
+      "bytes": 1139884,
+      "sha256": "59319f9f41cecff2d1fd0589c83efd30b29a31341381982578880db652aa8615"
+    },
+    {
+      "path": "assets/resources/import/47/470db7d6-782a-4b0d-9082-8b8ae08bb7d3.82f73.json",
+      "status": 200,
+      "bytes": 18219,
+      "sha256": "50c111080c2eb30a82845db0e9351c77ddbfd7225ad246cf38342319f163437f"
+    },
+    {
+      "path": "assets/resources/native/08/08934c18-5f2f-44c6-8145-d4fb15839d72.30b7a/UIHeading.ttf",
+      "status": 200,
+      "bytes": 685596,
+      "sha256": "2cbb46f38af82764bddce7ba63734654924ac508a1d435e0836a161de7eabd0e"
+    },
+    {
+      "path": "assets/resources/native/4f/4f4e0740-2005-42a2-b4f7-31b0ed0bff81.1fb15/UIBody.ttf",
+      "status": 200,
+      "bytes": 503144,
+      "sha256": "5802bfc8ad284c31556c53f88973bdb21dfc42d18f66517c731987c1dae9b462"
+    }
+  ],
+  "allHashesMatch": true,
+  "gameOrBrowserStarted": false
+}

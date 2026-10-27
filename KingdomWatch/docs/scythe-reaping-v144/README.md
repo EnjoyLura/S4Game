@@ -26,4 +26,8 @@
 
 本地预览：`normal-review.mp4`、`skill-review.mp4`、`ultimate-review.mp4` 与 `contact-sheet.jpg`。这些是静态战场离屏检查，不能代替实际手机战斗验收。本次镰刀视觉仍待用户评价，不把雷枪标杆认可转移给镰刀。
 
-构建、图集无损像素、旧媒体字节保持、着色器与脚本语法、线上文件哈希分别记录于同目录 JSON。仅发布独立 GitHub Pages 运行包，不推送源码、不发布 Cloudflare。发布回执完成后补充。
+构建、图集无损像素、旧媒体字节保持、着色器与脚本语法、线上文件哈希分别记录于同目录 JSON。仅发布独立 GitHub Pages 运行包，不推送源码、不发布 Cloudflare。发布回执见 `deployment.json` 与 `additional-http-verification.json`。
+
+## 发布
+
+v144 已发布：https://enjoylura.github.io/kingdom-watch-play/?v=scythe-reaping-v144 ，运行提交 3e75f3f4352e04bcba35df5ae7ac0c9c38ba27f5，版本 5ce864ba9d0af970。实现 c58700c8、构建记录 54d0fda3；Creator 25071ms/退出36，1659文件218230731字节；526旧非字体native原字节保持，新增3图集逐像素无损，两字库仅补绞字。15脚本/5内联语法、9旧类型无新增；Pages/build built，标准与额外10文件HTTP200+SHA通过。只推运行包，不推源码、不部署CF；无游戏/浏览器/真实战斗/音频/WASM执行，手机视觉待用户。回执 docs/scythe-reaping-v144。
