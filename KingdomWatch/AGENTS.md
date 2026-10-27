@@ -1,5 +1,7 @@
 # 交付要求
 
+v139已发布：https://enjoylura.github.io/kingdom-watch-play/?v=scythe-v139 ，运行提交bedb4a02afd61841617e9731bcc50d6d2aff466a、版本fe903915890852ae。实现e4756b42、构建记录ba97cd60；Creator18033ms退出36，1631文件210264091字节，520旧非字体native原字节，新增2图集及2字库补字，9旧类型无新增。Pages/build built，标准验证及额外6文件HTTP200+SHA通过，发布中源码HEAD/索引保持；只推运行包，不推源码/不部署CF。无游戏/浏览器/战斗/音频/WASM执行，手机待用户；回执docs/scythe-v139。
+
 2026-10-27 新增[镰刀法师v139](docs/scythe-v139/README.md)：艾登·烬镰，普攻赤焰圆弧光刃（弧形连续碰撞、穿透2），技能甩镰至敌群旋转4秒后回收，大招三道横向全屏巨刃依次向前贯穿。纯代码赤橙特效、原创正背立绘和四图标，补齐商店/编队/存档/武器/养成/说明。离屏244帧、35GPU样本、纯配置几何与旧实现对比通过，9旧类型无新增；未启动游戏/浏览器/战斗/音频/WASM。按持续授权本地提交后构建并仅发布独立GitHub运行包，不推源码/不部署CF；手机待用户，发布回执后补。
 
 v138已发布：https://enjoylura.github.io/kingdom-watch-play/?v=magic-bow-v138 ，运行提交ba78e67dc5d2ac1ff9cb302f86ab6f4a01da6a3d、版本a69804f6b9885ba3。实现774abeff、构建记录50554d13；Creator18446ms退出36，1624文件209721398字节，518旧非字体native原字节，新增2图集与2字库补字，原9类型无新增。Pages/build built、标准验证与额外6文件HTTP200+SHA通过，发布中源码HEAD/索引保持。仅推运行包、不推源码/不部署CF；未启动游戏/浏览器/战斗/音频/WASM，手机待用户。回执docs/magic-bow-v138。

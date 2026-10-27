@@ -33,4 +33,6 @@
 
 实现提交：`e4756b42`。Creator 18033ms，退出 36（该构建器的成功完成值）；仅既有默认压缩参数提示和 UIKit/Ux 循环依赖提示。运行包 1631 文件、210264091 字节，版本 `fe903915890852ae`；520 个旧非字体 native 文件原字节保留，新增 2 图集，仅 2 字库补字。15 个 JS 与 5 个内联脚本语法、编译后的 GLSL1/GLSL3 及整包清单与哈希检查通过。
 
-按持续授权：本地提交后构建，发布独立 GitHub Pages 运行包；不推送源码，不部署 Cloudflare。发布回执完成后追加。
+已发布：[打开 v139](https://enjoylura.github.io/kingdom-watch-play/?v=scythe-v139)。构建记录提交 `ba97cd60`；独立运行仓库提交 `bedb4a02afd61841617e9731bcc50d6d2aff466a`。Pages 与对应 build 均为 built，标准线上检查通过，额外 6 个文件 HTTP 200 与 SHA256 全部匹配（脚本、特效、两个图集、两字体）。回执见 [deployment.json](deployment.json)、[additional-http-verification.json](additional-http-verification.json)。
+
+按持续授权只发布独立 GitHub Pages 运行包，未推送源码、未部署 Cloudflare。发布期间源码 HEAD 与索引保持。未启动游戏或浏览器，手机实战待用户验收。
