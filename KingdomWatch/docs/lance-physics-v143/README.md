@@ -36,4 +36,6 @@ node audit_types.cjs
 
 `revise_scene.py` 在 v2 源场景的内存副本上改造，`electric-lance-v143.blend` 保存新电芯循环和放大雷暴。正式图集沿用 `thunder_lance_*_v142` 的资源地址/UUID，内容随构建 hash 更新：替换 body/impact，ground/wave 图片复用并更新显示比例清单。此前制作与发布记录保留。
 
-本地提交、正式构建及独立 GitHub Pages 发布回执在完成后记录；不推源码仓库。
+实现本地提交 `bdcf09c3`。Creator 3.8.8 正式构建 18468ms、退出36，DPR 修补和资源审计通过。导出版本 `ce62dacd2a195d01`，1647 文件、216088544 字节；526 个既有 native 文件原字节保持，仅 body/impact 两张图集被替换，四张雷枪图集均无损、与源 RGBA 逐像素一致。15 个 JS 与 5 段内联脚本语法检查通过，类型原9无新增。见 `build-record.json`、`package-static-verification.json`。
+
+独立 GitHub Pages 发布回执在完成后记录；不推源码仓库。
