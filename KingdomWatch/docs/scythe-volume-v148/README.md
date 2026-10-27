@@ -19,3 +19,7 @@
 `render_review.py` 直接绘制实际GLSL、正式图集与记录的三轴变换，在静态战场素材上合成；9种模式63个GPU有限值/零强度透明检查。`make_previews.py` 生成动态GIF，30/40/30ms交替保留正确时长。预览见 `skill-review.gif` / `ultimate-review.gif`，完整MP4和接触表同目录。
 
 贴防线选敌回归：288次实际施放回调、300组普通集群保持；TypeScript仍为原有9条诊断，无新增。没有启动游戏、浏览器、真实战斗、音频或WASM；离屏渲染不等于手机实战验收。构建、包体和发布回执完成后补入本目录。
+
+## 发布
+
+v148 已发布：https://enjoylura.github.io/kingdom-watch-play/?v=scythe-volume-v148 ，运行提交9f328404dac9fd23f3562dc4503a33457a4317f8，版本aad4da6498a80417。实现923c27bf、构建记录9a402104；Creator19499ms/退出36，1671文件224769742字节；533旧native原字节保持，新增旋涡图集逐像素无损；原9类型无新增，15脚本/5内联语法通过。Pages/build built，标准验证与额外4文件HTTP200+SHA通过，发布期间源码HEAD/索引保持。只推运行包，不推源码/不部署CF；未启动游戏/浏览器/真实战斗/音频/WASM，v148视觉待用户。
