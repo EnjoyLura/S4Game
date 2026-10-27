@@ -35,6 +35,7 @@ const FX_EFFECTS: Record<string, string[]> = {
   pyro: ['fx/fire-paint-v2'], volt: ['fx/volt-ultimate-procedural'], sniper: ['fx/sniper-ultimate-procedural'],
   cannon: ['fx/hero-impact-flow'], siphon: ['fx/hero-impact-flow'],
   wind: ['fx/wind-ninja-flow'], ninja: ['fx/wind-ninja-flow'],
+  lance:['fx/thunder-lance-flow'],
   space:['fx/space-sword-burst'],sword:['fx/sword-jade-flow'],
 };
 const fxRequests = new Map<string, Promise<void>>();
@@ -92,6 +93,7 @@ export function warmBattlefield(levelId: string, heroIds: readonly string[], mob
     if (videoWalk) firstPaint.push(new Promise<void>(resolve => getMobAnims(() => resolve(), videoWalk, priority)));
   }
   for (const id of ids) {
+    if (id === 'lance') firstPaint.push(imageReady('new_heroes_v137/lance_battle', priority));
     if (id === 'space' || id === 'sword') firstPaint.push(imageReady('new_heroes_v127/' + id + '_battle', priority));
     if (id === 'wind' || id === 'ninja') firstPaint.push(imageReady('new_heroes_v120/' + id + '_battle', priority));
     if (id === 'cannon' || id === 'siphon') firstPaint.push(imageReady('new_heroes_v105/' + id + '_battle', priority));

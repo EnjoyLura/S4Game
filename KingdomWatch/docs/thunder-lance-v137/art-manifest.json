@@ -1,0 +1,175 @@
+{
+  "mode": "built-in image_gen",
+  "sources": [
+    {
+      "id": "lance",
+      "figureSha256": "065a237b175f0e754a9a8f8adc3e10e1d78c545639158c075f4dcf5512679d22",
+      "figureCrops": [
+        {
+          "left": 16,
+          "top": 67,
+          "width": 718,
+          "height": 870
+        },
+        {
+          "left": 820,
+          "top": 71,
+          "width": 698,
+          "height": 876
+        }
+      ],
+      "scale": 0.6573816155988857,
+      "iconRegions": [
+        {
+          "left": 33,
+          "top": 30,
+          "width": 587,
+          "height": 578,
+          "pixels": 266120
+        },
+        {
+          "left": 636,
+          "top": 30,
+          "width": 587,
+          "height": 578,
+          "pixels": 269150
+        },
+        {
+          "left": 25,
+          "top": 626,
+          "width": 590,
+          "height": 580,
+          "pixels": 268858
+        },
+        {
+          "left": 630,
+          "top": 626,
+          "width": 595,
+          "height": 579,
+          "pixels": 270172
+        }
+      ],
+      "iconsSha256": "aed9dd52f830db56e22f2050787c041984a7e4e90939374025244620aa5199b3"
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/resources/ux/thunder_lance_v137/lance_figures.png",
+      "uuid": "ab69f1a9-1d78-4424-9be4-a4b66cacb083",
+      "width": 1024,
+      "height": 768,
+      "bytes": 794522,
+      "sha256": "0a40da71ebd51deb79153fd1019f6666ee13df11aa1d469ee80b216c61a0663c"
+    },
+    {
+      "path": "assets/resources/ux/thunder_lance_v137/abilities.png",
+      "uuid": "32e93984-882a-4182-a632-a7b678b68015",
+      "width": 512,
+      "height": 512,
+      "bytes": 611931,
+      "sha256": "870f6bcbbd0a23f3b53f717b96ba3c4052b0098b7311e5e64c1bc373a7813f14"
+    }
+  ],
+  "frames": {
+    "new_heroes_v137/lance_lobby": {
+      "source": "thunder_lance_v137/lance_figures",
+      "rect": [
+        0,
+        0,
+        512,
+        768
+      ]
+    },
+    "hero_comic_v1/comic_figure_lance_v1": {
+      "source": "thunder_lance_v137/lance_figures",
+      "rect": [
+        0,
+        0,
+        512,
+        768
+      ]
+    },
+    "new_heroes_v137/lance_battle": {
+      "source": "thunder_lance_v137/lance_figures",
+      "rect": [
+        512,
+        0,
+        512,
+        768
+      ]
+    },
+    "ui_avatar_lance": {
+      "source": "thunder_lance_v137/abilities",
+      "rect": [
+        4,
+        4,
+        248,
+        248
+      ]
+    },
+    "ui_icon_atk_lance": {
+      "source": "thunder_lance_v137/abilities",
+      "rect": [
+        260,
+        4,
+        248,
+        248
+      ]
+    },
+    "ui_icon_skill_lance": {
+      "source": "thunder_lance_v137/abilities",
+      "rect": [
+        4,
+        260,
+        248,
+        248
+      ]
+    },
+    "ui_icon_ult_lance": {
+      "source": "thunder_lance_v137/abilities",
+      "rect": [
+        260,
+        260,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_avatar_lance": {
+      "source": "thunder_lance_v137/abilities",
+      "rect": [
+        4,
+        4,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_atk_lance": {
+      "source": "thunder_lance_v137/abilities",
+      "rect": [
+        260,
+        4,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_skill_lance": {
+      "source": "thunder_lance_v137/abilities",
+      "rect": [
+        4,
+        260,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_ult_lance": {
+      "source": "thunder_lance_v137/abilities",
+      "rect": [
+        260,
+        260,
+        248,
+        248
+      ]
+    }
+  },
+  "processing": "Complete alpha subject crop; common uniform actor scale per pair; no painting, deformation, artificial frame or VFX textures."
+}

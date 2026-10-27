@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "pureScheduleCases": 72,
+  "trainingLevels": 20,
+  "rainCountCases": 620,
+  "tipAnchors": 24,
+  "cosmeticFrames": 264,
+  "buffersBounded": true,
+  "fallbackGeometry": true,
+  "gameEngineBrowserBattleAudioOrWasmStarted": false
+}

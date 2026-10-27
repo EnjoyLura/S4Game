@@ -65,6 +65,7 @@ interface SkillUI {
 
 /** Share the established ultimate palette with the smaller automatic-skill feedback. */
 const HERO_ENERGY_COLOR: Record<string, string> = {
+  lance:'#FFD34F',
   space:'#BB63D8', sword:'#63D2A4',
   wind: '#55D8C3', ninja: '#4559A8', cannon: '#D5A641', siphon: '#963657',
   archer: PAL.green, sniper: '#1F9EFF', pyro: PAL.orange, volt: '#B96BFF', mora: '#6FCFEA',
@@ -226,6 +227,7 @@ export class HUD {
     top = N('ultContents', pressPivot, -ux, -uy);
     // 就绪特效/能量水按英雄主色（用户调整：火橘/雷紫，不再只分狙击蓝/其他绿）
     const ULT_FX: Record<string, [string, string, string]> = {
+      lance:['#DCA329','#FFD958','#FFF9CE'],
       space:['#BB63D8','#DFA7F0','#FFF0FF'],
       sword:['#63D2A4','#B2E7CD','#FFF6D6'],
       wind: ['#55D8C3', '#9DE9D7', '#FFF9EC'],

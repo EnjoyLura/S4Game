@@ -1,0 +1,116 @@
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: thunder-lance-vs:vert
+      frag: thunder-lance-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: one
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: zero
+          blendDstAlpha: one
+      rasterizerState:
+        cullMode: none
+      properties:
+        fxState: { value: [0, 1, 1, 0] }
+        fxShape: { value: [250, 250, 100, 0] }
+}%
+CCProgram thunder-lance-vs %{
+  precision highp float;
+  #include <builtin/uniforms/cc-global>
+  #if USE_LOCAL
+    #include <builtin/uniforms/cc-local>
+  #endif
+  in vec3 a_position;
+  in vec2 a_texCoord;
+  in vec4 a_color;
+  out vec2 uv0;
+  out vec4 color;
+  vec4 vert () {
+    vec4 p=vec4(a_position,1.0);
+    #if USE_LOCAL
+      p=cc_matWorld*p;
+    #endif
+    uv0=a_texCoord;color=a_color;return cc_matViewProj*p;
+  }
+}%
+CCProgram thunder-lance-fs %{
+  precision highp float;
+  in vec2 uv0;
+  in vec4 color;
+  uniform LanceFlow { vec4 fxState; vec4 fxShape; };
+  const float TAU=6.28318530718;
+  const vec3 GOLD=vec3(1.,.57,.055),YELLOW=vec3(1.,.86,.25),CORE=vec3(1.,.99,.84);
+  float sat(float v){return clamp(v,0.,1.);}
+  float hash(float v){return fract(sin(v*127.1)*43758.5453);}
+  float noise(float p){float i=floor(p),f=fract(p);return mix(hash(i),hash(i+1.),f*f*(3.-2.*f));}
+  float line(float d,float w){return exp(-d*d/max(w*w,.000001));}
+  vec4 frag(){
+    vec2 q=(vec2(uv0.x,.999999-uv0.y)-.5)*fxShape.xy/max(fxShape.z,1.);
+    float time=fxState.x,seed=fxState.y*37.,power=fxState.z,mode=fxState.w;
+    vec3 rgb=vec3(0.);float alpha=0.;
+    if(mode<.5){
+      float y=q.y,mask=smoothstep(-.56,-.43,y)*(1.-smoothstep(.495,.507,y));
+      float blade=sat((y-.22)/.28),width=mix(.026,.003,blade);
+      if(y>.22)width=.082*(1.-blade)+.003;
+      float shaft=line(abs(q.x),width),core=line(abs(q.x),width*.32);
+      float grain=.85+.15*sin(y*92.-time*40.);
+      rgb=(GOLD*shaft*.75+CORE*core*1.4)*mask*grain;
+      alpha=shaft*mask*.84;
+      rgb+=YELLOW*line(q.x,.095)*mask*.18;
+      float clock=floor(time*26.)+seed;
+      for(int i=0;i<3;i++){
+        float fi=float(i),n=(noise(y*30.+clock+fi*57.)-.5)*.10;
+        float path=n+sin(y*19.+clock*.7+fi*2.1)*.045;
+        float bolt=line(q.x-path,.006)*mask;
+        rgb+=mix(GOLD,CORE,.6)*bolt*(.4+.3*hash(clock+fi));
+        float branch=abs(q.x)-abs(y-(hash(clock+fi*19.)-.5)*.8)*.6;
+        float branching=line(branch,.005)*(1.-smoothstep(.11,.23,abs(q.x)))*smoothstep(.04,.08,abs(q.x));
+        rgb+=YELLOW*branching*mask*.75;
+      }
+      float trail=smoothstep(-.82,-.62,y)*(1.-smoothstep(-.5,-.32,y));
+      rgb+=GOLD*line(q.x+sin(y*37.+time*27.)*.02,.045)*trail*.25;
+      // The submerged section is clipped, including its bloom, before the foreground soil lip.
+      if(fxShape.w>0.00001){float visible=1.-smoothstep(.5-fxShape.w-.003,.5-fxShape.w+.002,y);rgb*=visible;alpha*=visible;}
+    }else if(mode>3.5){
+      // Compressed flash -> expanding lobed thunder blast -> branching after-arcs.
+      float t=fxShape.w,r=length(q),a=atan(q.y,q.x),expand=.08+.7*(1.-pow(1.-sat(t*2.3),2.));
+      float lobe=noise(a*7.+seed)*.10+noise(a*19.-time*6.)*.045;
+      float cloud=1.-smoothstep(expand-.12,expand+.04,r+lobe);
+      float hot=line(r,.09+t*.25)*pow(1.-t,3.);
+      float skin=line(r+lobe-expand,.025)*(1.-t)*(1.-t);
+      rgb=GOLD*cloud*.32*(1.-t)+YELLOW*skin*.9+CORE*(hot*2.+cloud*pow(1.-t,7.)*1.2);
+      float branch=pow(1.-abs(sin(a*13.+noise(r*26.+seed)*2.7)),24.);
+      rgb+=mix(GOLD,CORE,.5)*branch*smoothstep(.1,.25,r)*(1.-smoothstep(.35+t*.65,.6+t*.4,r))*(1.-t);
+      rgb+=YELLOW*line(q.y,.008)*line(q.x,.8)*pow(1.-t,5.)*.8;
+    }else{
+      vec2 p=vec2(q.x,q.y/.58);float r=length(p),a=atan(p.y,p.x),t=fxShape.w;
+      float spokes=abs(sin(a*9.+noise(r*14.+seed)*2.));
+      float jag=abs(sin(a*17.+r*39.+floor(time*20.)*.7));
+      if(mode<1.5){
+        float lines=pow(1.-spokes,18.)*(1.-smoothstep(.23,.88,r))*smoothstep(.06,.13,r);
+        float hot=line(r,.14)*(.45+.2*sin(time*11.));
+        rgb=GOLD*(lines*.65+hot*.3)+YELLOW*lines*.38+CORE*hot*.6;
+        rgb+=GOLD*pow(1.-jag,30.)*(1.-smoothstep(.3,.8,r))*.12;
+      }else if(mode<2.5){
+        float radius=.1+.91*(1.-pow(1.-t,2.)),d=r-radius;
+        float warp=(noise(a*11.+seed+time*4.)-.5)*.05;
+        float broken=.35+.65*noise(a*15.+seed+floor(time*17.));
+        float rim=line(d+warp,.012)*(1.-t)*broken;
+        float pressure=line(d+.035,.065)*(1.-t)*.2;
+        rgb=CORE*rim*1.3+GOLD*pressure+YELLOW*rim*.4;
+        rgb+=GOLD*pow(1.-jag,24.)*line(d,.09)*(1.-t)*.6;
+      }else{
+        float spin=pow(abs(sin(a*3.+time*2.)),10.);
+        rgb=YELLOW*line(r-.72,.009)*spin*.5+GOLD*line(r,.15)*(.2+.25*t);
+      }
+      rgb*=1.-smoothstep(1.05,1.19,r);
+    }
+    float edge=smoothstep(0.,.025,uv0.x)*smoothstep(0.,.025,uv0.y)*smoothstep(0.,.025,1.-uv0.x)*smoothstep(0.,.025,1.-uv0.y);
+    return vec4(rgb*power*edge,alpha*power*edge)*color;
+  }
+}%

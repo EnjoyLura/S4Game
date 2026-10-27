@@ -1,3 +1,4 @@
+import { lanceUltCfg } from '../config/ThunderLanceConfig';
 /** Capture real values around existing save operations; presentation never estimates growth. */
 import { EQUIPS, EquipKind, HERO_DEFS, OpResult, PCT_STATS, STAT_NAME, StatKey, equipStat, heroBtList, heroStats, keepHp, keepShield, wornInst, equippedWeapon, weaponBtList } from '../core/GameData';
 import { loadSave } from '../core/SaveData';
@@ -17,12 +18,14 @@ interface GrowthState {
   stats: { name: string; value: number; format?: NoticeNumberFormat }[]; milestone?: string;
 }
 const NORMAL_CFG: Record<string, (lv: number) => { normalMul: number }> = {
+  lance: newHeroNormalCfg,
   space: newHeroNormalCfg, sword: newHeroNormalCfg,
   wind: newHeroNormalCfg, ninja: newHeroNormalCfg,
   cannon: newHeroNormalCfg, siphon: newHeroNormalCfg,
   archer: archerAtkCfg, sniper: sniperAtkCfg, volt: voltAtkCfg, pyro: pyroAtkCfg, mora: moraAtkCfg,
 };
 const ULT_DAMAGE: Record<string, (lv: number) => number> = {
+  lance: lv => lanceUltCfg(lv).mul,
   space: lv => spaceUltCfg(lv).mul, sword: lv => swordUltCfg(lv).mul,
   wind: lv => windUltCfg(lv).mul, ninja: lv => ninjaUltCfg(lv).mul,
   cannon: lv => cannonUltCfg(lv).mul, siphon: lv => siphonUltCfg(lv).mul,

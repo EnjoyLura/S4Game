@@ -1,3 +1,4 @@
+import { drawLanceFlight,LANCE_EFFECT } from './ThunderLanceVFX';
 /**
  * 弹道（§3.5：可见追踪弹、目标死亡切换目标；子弹道直线随缘命中；对象池强制）
  * 追踪主弹命中前锁定目标；直线弹（齐射/分裂/大招箭/敌方石块）带 ttl 与碰撞去重
@@ -22,7 +23,9 @@ import { drawFlyingSword, drawHeavenSword, drawMagicBlade, drawRiftShard, SPACE_
 import { drawSwordFlight, SWORD_ABILITY_EFFECT, SWORD_FLIGHT_CAP } from './SwordAbilityVFX';
 
 export interface ProjSpec {
-  visual?: 'wind' | 'shuriken' | 'rift' | 'sword' | 'heavenSword' | 'spaceBlade';
+  visual?: 'wind' | 'shuriken' | 'rift' | 'sword' | 'heavenSword' | 'spaceBlade' | 'lance' | 'greatLance';
+  /** Cosmetic ballistic elevation; shared ground-target arrival still owns the one impact. */
+  lanceFlight?: {seconds:number;height:number};
   /** Only deliberately homing attacks opt in; existing arrows and bullets stay straight. */
   homingTarget?: Monster;
   homingLifeId?: number;
@@ -137,6 +140,7 @@ interface Active {
   hitExhausted: boolean;
   windShader: boolean;
   swordShader: boolean;
+  lanceShader: boolean;
   spaceShader: boolean;
 }
 
@@ -165,6 +169,7 @@ export class ProjectileManager {
   private dirty = false;
   private basicFlight: BasicProjectileFlightVFX;
   private windFlight: HeroFxShader | null = null;
+  private lanceFlight: HeroFxShader | null = null;
   private swordFlight: HeroFxShader | null = null;
   private spaceFlight: HeroFxShader | null = null;
   private flightSerial = 0;
@@ -182,6 +187,7 @@ export class ProjectileManager {
       { effect: WIND_NINJA_FX_EFFECT, technique: 0 });
   }
 
+  warmLanceFlight():void{this.lanceFlight ||=new HeroFxShader(this.field,'goldenLanceFlight',32,'plasma',{effect:LANCE_EFFECT,technique:0});}
   warmSwordFlight(): void {
     this.swordFlight ||= new HeroFxShader(this.field, 'jadeSwordFlight', SWORD_FLIGHT_CAP, 'plasma',
       { effect: SWORD_ABILITY_EFFECT, technique: 1 });
@@ -205,6 +211,7 @@ export class ProjectileManager {
     a.ttl = spec.ttl ?? 3.2;
     a.age = 0; a.ultContact = false;
     a.windShader = spec.visual === 'wind' && !!this.windFlight?.ready;
+    a.lanceShader = (spec.visual==='lance'||spec.visual==='greatLance') && !!this.lanceFlight?.ready;
     a.swordShader = (spec.visual === 'sword' || spec.visual === 'heavenSword') && !!this.swordFlight?.ready;
     a.spaceShader = spec.visual === 'rift' && !!this.spaceFlight?.ready;
     a.damageScale = 1; a.returning = false; a.legLeft = a.returnDistance = 0; a.hitExhausted = false;
@@ -231,7 +238,7 @@ export class ProjectileManager {
 
   private makeActive(): Active {
     return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<number>(), ttl: 0, age: 0, trail: [], trailMax: 0, fxSeed: 0, ultContact: false,
-      damageScale: 1, returning: false, legLeft: 0, returnDistance: 0, hitExhausted: false, windShader: false, swordShader: false, spaceShader: false };
+      damageScale: 1, returning: false, legLeft: 0, returnDistance: 0, hitExhausted: false, windShader: false, swordShader: false, lanceShader: false, spaceShader: false };
   }
 
   /** 敌方远程石块：直线落向防线，触线即结算 */
@@ -459,6 +466,7 @@ export class ProjectileManager {
     g.clear();
     this.basicFlight.beginFrame();
     this.windFlight?.begin();
+    this.lanceFlight?.begin();
     this.swordFlight?.begin();
     this.spaceFlight?.begin();
     this.impacts?.beginProjectileFrame();
@@ -471,6 +479,11 @@ export class ProjectileManager {
       const orb = s.heroId === 'volt' && !s.small && !s.enemy;
       const fire = s.heroId === 'pyro' && !s.enemy;
       const shard = s.heroId === 'mora' && !s.small && !s.enemy;
+      if(s.visual==='lance'||s.visual==='greatLance'){
+        const arc=s.lanceFlight,t=arc?Math.min(1,a.age/Math.max(.001,arc.seconds)):0;
+        const height=arc?4*arc.height*t*(1-t):0,vy=a.vy+(arc?4*arc.height*(1-2*t)/Math.max(.001,arc.seconds):0);
+        drawLanceFlight(a.lanceShader?this.lanceFlight:null,g,s.x,s.y+height,Math.atan2(vy,a.vx),size,a.age,a.fxSeed);continue;
+      }
       if(s.visual==='spaceBlade'){drawMagicBlade(g,s.x,s.y,Math.atan2(a.vy,a.vx),s.lineHalfLength||423,a.age,s.color);continue;}
       if(s.visual==='sword'||s.visual==='heavenSword'){
         const angle=Math.atan2(a.vy,a.vx),giant=s.visual==='heavenSword';
@@ -533,6 +546,7 @@ export class ProjectileManager {
     }
     this.impacts?.endProjectileFrame();
     this.windFlight?.end();
+    this.lanceFlight?.end();
     this.swordFlight?.end();
     this.spaceFlight?.end();
   }

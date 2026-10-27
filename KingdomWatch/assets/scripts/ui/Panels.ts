@@ -1,3 +1,4 @@
+import { LANCE,lanceSkillCfg,lanceUltCfg } from '../config/ThunderLanceConfig';
 /**
  * 弹窗面板（UX 线稿 ②~⑤⑧）：三选一 / 暂停 / 胜利结算 / 失败结算(含广告复活) / 伤害统计 / 属性Tips
  * 弹窗内容块均以屏幕垂直中心为重心；三选一期间全场冻结由 BattleDirector 状态控制
@@ -604,7 +605,24 @@ export class Panels {
     const iconY = WYB(126, 46);
     let px: number, py: number, w = 300, hh = 272, title: string;
     let rows: [string, string][];
-    if (hero.id === 'space' || hero.id === 'sword') {
+    if (hero.id === 'lance') {
+      w=350;const sc=lanceSkillCfg(h.skillLv),uc=lanceUltCfg(h.ultLv);
+      if(kind==='atk'){
+        title='普攻 · 插地雷枪';const hit=hero.effAtk*h.normalMul;
+        rows=[['落地法伤',String(Math.round(hit))],['电击法伤',String(Math.round(hit*LANCE.tickMul))+' / '+LANCE.interval+'秒'],
+          ['雷域持续',LANCE.seconds+'秒'],['雷域半径',String(LANCE.radius)],['攻速',h.aspd.toFixed(2)+'次/秒'],['效果','插地放电 · 可对空']];
+      }else if(kind==='skill'){
+        title='技能 · 回雷枪雨';rows=[['每枪法伤',String(Math.round(hero.abilityDamage(sc.mul)))],
+          ['电击法伤',String(Math.round(hero.abilityDamage(sc.tickMul)))+' / '+sc.interval+'秒'],
+          ['枪雨数量',sc.count+'柄 + 回收数量 · 上限'+sc.maxCount],['雷域持续',sc.seconds+'秒'],
+          ['冷却',hero.skillCdTotal.toFixed(1)+'秒'],['效果','回收普通雷枪 · 保留大招巨枪']];
+      }else{
+        title='大招 · 天罚巨枪';rows=[['落地爆炸',String(Math.round(hero.abilityDamage(uc.mul,true)))+'法伤'],
+          ['电冲击波',String(Math.round(hero.abilityDamage(uc.pulseMul,true)))+'法伤 / 秒'],
+          ['巨枪持续',uc.seconds+'秒'],['伤害半径',String(Math.round(uc.radius*h.skillRangeMul))],
+          ['充能需求',Math.round(hero.chargeGoal)+'能量'],['效果','密集处爆炸 · 持续电冲击波']];
+      }
+    } else if (hero.id === 'space' || hero.id === 'sword') {
       const space=hero.id==='space',def=HERO_DEFS[hero.id];w=330;
       if(kind==='atk'){
         title=space?'普攻 · 裂隙晶矢':'普攻 · 飞剑';

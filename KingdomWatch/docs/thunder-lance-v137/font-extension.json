@@ -1,0 +1,20 @@
+{
+  "fonts": [
+    {
+      "font": "UIBody",
+      "added": "恩罚",
+      "existingCodepointsPreserved": 1601,
+      "bytesAdded": 576,
+      "sha256": "36cb07cbf4dc872f27020912ba128582a03c49fe696f33ef7f7214750e4f60c3"
+    },
+    {
+      "font": "UIHeading",
+      "added": "恩罚",
+      "existingCodepointsPreserved": 1601,
+      "bytesAdded": 820,
+      "sha256": "2db656fefc2192eafbe35a22c657e9f623b4505b3ab3d70a0ea8bda007ab2bf4"
+    }
+  ],
+  "source": "same pinned local OFL sources; no downloads",
+  "gameStarted": false
+}

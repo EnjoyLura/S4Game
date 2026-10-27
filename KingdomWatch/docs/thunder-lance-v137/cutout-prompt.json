@@ -1,0 +1,5 @@
+{
+  "mode": "built-in image_gen",
+  "prompt": "Edit this two-view character sheet for actual game sprite use. Preserve BOTH full-body characters, their costume, faces, weapons and two-view arrangement. REMOVE ALL background and ambient glow haze: make every area outside the two character silhouettes and their held weapons truly transparent alpha=0. In particular remove the brown/black/gold cloudy backplate, background lighting and broad bloom throughout the canvas. Keep only tight bright electricity within 8 pixels of the spear and hand. The left front view and right back view MUST be isolated from each other with a completely empty transparent gutter at least 100 pixels wide. Add at least 35 pixels transparent outer padding on every side, keeping the complete spear points, fingers and boots. Scale both characters uniformly slightly smaller if needed, do not clip any part. No ground shadow, no floor, no text, no decoration. Output an RGBA transparent sprite sheet. Original character details and color unchanged.",
+  "selected": "exec-ffe6dc15-15c3-4cbd-9661-a768126f147d.png"
+}

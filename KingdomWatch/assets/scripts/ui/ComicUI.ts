@@ -77,7 +77,7 @@ export function comicArt(parent: Node, x: number, y: number, w: number, h: numbe
 export function comicPortrait(parent: Node, x: number, y: number, size: number, key: string,
   background = '#E7DFF0'): Node {
   const portrait = N('comicPortrait', parent, x, y, size, size);
-  const paintedCircle = /(?:ui_avatar_|avatar_)(?:cannon|siphon|wind|ninja|space|sword)$/.test(key);
+  const paintedCircle = /(?:ui_avatar_|avatar_)(?:cannon|siphon|wind|ninja|space|sword|lance)$/.test(key);
   if (!paintedCircle) {
     const backdrop = N('portraitBackdrop', portrait, 0, 0, size, size).addComponent(Graphics);
     backdrop.fillColor = C(background); backdrop.circle(0, 0, size / 2); backdrop.fill();

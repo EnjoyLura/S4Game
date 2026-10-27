@@ -1,3 +1,5 @@
+import { ThunderLanceHero } from './ThunderLanceHero';
+import { baseLanceStats } from '../config/Cards';
 import { SpaceHero, SwordHero } from './SpaceSwordHeroes';
 import { baseSpaceStats, baseSwordStats } from '../config/Cards';
 /**
@@ -205,14 +207,14 @@ export class BattleDirector extends Component {
     // 编队上阵（§编队）：按存档上阵顺序从左到右站位（2 人 = ±160 与旧版一致）；空编队兜底双英雄
     const slots = heroSlots(ids.length);
     this.heroes = ids.map((hid, i) => {
-      const st = hid === 'space' ? baseSpaceStats() : hid === 'sword' ? baseSwordStats() : hid === 'wind' ? baseWindStats() : hid === 'ninja' ? baseNinjaStats()
+      const st = hid === 'lance' ? baseLanceStats() : hid === 'space' ? baseSpaceStats() : hid === 'sword' ? baseSwordStats() : hid === 'wind' ? baseWindStats() : hid === 'ninja' ? baseNinjaStats()
         : hid === 'cannon' ? baseCannonStats() : hid === 'siphon' ? baseSiphonStats() : hid === 'sniper' ? baseSniperStats()
         : hid === 'pyro' ? basePyroStats()
           : hid === 'volt' ? baseVoltStats()
             : hid === 'mora' ? baseMoraStats() : baseArcherStats();
       applyHeroGrowth(st, hid);     // 英雄等级成长+阶段性突破上场（每级成长按存档等级）
       applyEquipAffixes(st, hid);   // 穿戴词条上场即生效（用户确认的词条体系）
-      return hid === 'space' ? new SpaceHero(heroLayer, slots[i], st)
+      return hid === 'lance' ? new ThunderLanceHero(heroLayer, slots[i], st) : hid === 'space' ? new SpaceHero(heroLayer, slots[i], st)
         : hid === 'sword' ? new SwordHero(heroLayer, slots[i], st)
         : hid === 'wind' ? new WindHero(heroLayer, slots[i], st)
         : hid === 'ninja' ? new NinjaHero(heroLayer, slots[i], st)
@@ -237,6 +239,7 @@ export class BattleDirector extends Component {
     this.projs = new ProjectileManager(projLayer, this.mgr, this.dmgSvc, this.parts, this.impacts);
     if (this.heroes.some(h => h.id === 'wind')) this.projs.warmWindFlight();
     if (this.heroes.some(h => h.id === 'sword')) this.projs.warmSwordFlight();
+    if (this.heroes.some(h => h.id === 'lance')) this.projs.warmLanceFlight();
     if (this.heroes.some(h => h.id === 'space')) this.projs.warmSpaceFlight();
     this.mgr.spawnFloor = this.isEndless ? this.endlessFloor : 0;
     this.waves = new WaveManager(this.levelDef, this.mgr);
@@ -997,7 +1000,7 @@ function applyHeroGrowth(s: HeroStats, hid: string): void {
   s.ultBolts += bt.ultBolts;
   s.ultAutoCd = bt.ultAutoCd;
   s.atkLv = hs.atkLv; s.skillLv = hs.skillLv; s.ultLv = hs.ultLv;   // 技能升级里程碑（弓箭手类内读取）
-  if (['cannon', 'siphon', 'wind', 'ninja', 'space', 'sword'].includes(hid)) {
+  if (['cannon', 'siphon', 'wind', 'ninja', 'space', 'sword', 'lance'].includes(hid)) {
     s.normalMul = newHeroNormalCfg(hs.atkLv).normalMul;
     if (hs.atkLv >= 10) s.critRate = Math.min(1, s.critRate + .05);
     if (hs.atkLv >= 15) s.range = Math.round(s.range * 1.08);
