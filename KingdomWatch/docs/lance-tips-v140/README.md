@@ -24,4 +24,6 @@
 
 预览：[雷电标枪](ultimate-0.85.png)、[抛物线动画](ultimate-review.webp)、[说明文字合成](tips-contact-sheet.png)。说明图使用固定输入数值和实际方法输出，仅用于位置/内容检查。
 
-遵循持续授权：本地提交后构建并发布独立 GitHub Pages 运行仓库，不推源码，不部署 Cloudflare。构建与发布回执后补。
+实现提交 `6da139bb`。Creator 22406ms、退出 36（成功完成）；运行包 1631 文件、210267957 字节，版本 `43d9a545bb664e1c`。524 个原 native 媒体全部字节相同，无新增媒体；15 个 JS 与 5 个内联脚本语法、编译后的 GLSL1/GLSL3 和整包哈希校验通过。
+
+遵循持续授权：本地提交后构建并发布独立 GitHub Pages 运行仓库，不推源码，不部署 Cloudflare。发布回执后补。
