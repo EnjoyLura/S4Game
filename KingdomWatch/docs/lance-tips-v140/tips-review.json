@@ -1,0 +1,1784 @@
+[
+  {
+    "id": "lance",
+    "kind": "atk",
+    "half": 667,
+    "panel": {
+      "x": 97,
+      "y": -343,
+      "w": 350,
+      "h": 272
+    },
+    "labels": [
+      {
+        "x": 119,
+        "y": -248,
+        "text": "普攻 · 插地雷枪",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -291,
+        "text": "法术伤害",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -291,
+        "text": "80",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -317,
+        "text": "电击法伤",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -317,
+        "text": "18 / 0.75秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -343,
+        "text": "雷域持续",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -343,
+        "text": "4.5秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -369,
+        "text": "雷域半径",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -369,
+        "text": "90",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -395,
+        "text": "攻速",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -395,
+        "text": "1.00次/秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -421,
+        "text": "效果",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -421,
+        "text": "插地放电 · 可对空",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 97,
+        "y": -459,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  },
+  {
+    "id": "lance",
+    "kind": "skill",
+    "half": 667,
+    "panel": {
+      "x": 151,
+      "y": -343,
+      "w": 350,
+      "h": 272
+    },
+    "labels": [
+      {
+        "x": 173,
+        "y": -248,
+        "text": "技能 · 回雷枪雨",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -291,
+        "text": "每枪法伤",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -291,
+        "text": "65",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -317,
+        "text": "电击法伤",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -317,
+        "text": "16 / 0.8秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -343,
+        "text": "枪雨数量",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -343,
+        "text": "6柄 + 回收数量 · 上限14",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -369,
+        "text": "雷域持续",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -369,
+        "text": "4秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -395,
+        "text": "冷却",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -395,
+        "text": "12.0秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -421,
+        "text": "效果",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -421,
+        "text": "回收普通雷枪 · 保留大招巨枪",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 151,
+        "y": -459,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  },
+  {
+    "id": "lance",
+    "kind": "ult",
+    "half": 667,
+    "panel": {
+      "x": 70,
+      "y": -52,
+      "w": 350,
+      "h": 272
+    },
+    "labels": [
+      {
+        "x": 92,
+        "y": 43,
+        "text": "大招 · 天罚巨枪",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": 0,
+        "text": "落地爆炸",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": 0,
+        "text": "550法伤",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -26,
+        "text": "电冲击波",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -26,
+        "text": "65法伤 / 秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -52,
+        "text": "巨枪持续",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -52,
+        "text": "6秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -78,
+        "text": "伤害半径",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -78,
+        "text": "250",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -104,
+        "text": "充能需求",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -104,
+        "text": "80能量",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -130,
+        "text": "效果",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -130,
+        "text": "密集处爆炸 · 持续电冲击波",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 70,
+        "y": -168,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  },
+  {
+    "id": "arcane",
+    "kind": "atk",
+    "half": 667,
+    "panel": {
+      "x": 97,
+      "y": -343,
+      "w": 350,
+      "h": 272
+    },
+    "labels": [
+      {
+        "x": 119,
+        "y": -248,
+        "text": "普攻 · 星辉魔箭",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -291,
+        "text": "法术伤害",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -291,
+        "text": "80",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -317,
+        "text": "攻速",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -317,
+        "text": "1.00次/秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -343,
+        "text": "索敌范围",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -343,
+        "text": "1100",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -369,
+        "text": "弹速",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -369,
+        "text": "1250",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -395,
+        "text": "暴击率",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -395,
+        "text": "10%",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -421,
+        "text": "效果",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -421,
+        "text": "魔法箭矢 · 可对空",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 97,
+        "y": -459,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  },
+  {
+    "id": "arcane",
+    "kind": "skill",
+    "half": 667,
+    "panel": {
+      "x": 151,
+      "y": -343,
+      "w": 350,
+      "h": 272
+    },
+    "labels": [
+      {
+        "x": 173,
+        "y": -248,
+        "text": "技能 · 奥术爆裂箭",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -291,
+        "text": "爆炸法伤",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -291,
+        "text": "260",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -317,
+        "text": "爆炸半径",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -317,
+        "text": "150",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -343,
+        "text": "冷却",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -343,
+        "text": "12.0秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -369,
+        "text": "施法范围",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -369,
+        "text": "1150",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -395,
+        "text": "目标",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -395,
+        "text": "敌群最密集处",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -421,
+        "text": "效果",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -421,
+        "text": "发射一支魔箭 · 命中爆炸",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 151,
+        "y": -459,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  },
+  {
+    "id": "arcane",
+    "kind": "ult",
+    "half": 667,
+    "panel": {
+      "x": 70,
+      "y": -52,
+      "w": 350,
+      "h": 272
+    },
+    "labels": [
+      {
+        "x": 92,
+        "y": 43,
+        "text": "大招 · 星陨巨箭",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": 0,
+        "text": "落地冲击",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": 0,
+        "text": "340法伤",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -26,
+        "text": "第二段爆炸",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -26,
+        "text": "480法伤",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -52,
+        "text": "冲击 / 爆炸半径",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -52,
+        "text": "175 / 275",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -78,
+        "text": "两段间隔",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -78,
+        "text": "0.3秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -104,
+        "text": "充能需求",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -104,
+        "text": "80能量",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -130,
+        "text": "效果",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -130,
+        "text": "升空后落下 · 冲击后再爆炸",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 70,
+        "y": -168,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  },
+  {
+    "id": "scythe",
+    "kind": "atk",
+    "half": 667,
+    "panel": {
+      "x": 97,
+      "y": -343,
+      "w": 350,
+      "h": 272
+    },
+    "labels": [
+      {
+        "x": 119,
+        "y": -248,
+        "text": "普攻 · 赤焰弧刃",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -291,
+        "text": "法术伤害",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -291,
+        "text": "80",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -317,
+        "text": "攻速",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -317,
+        "text": "1.00次/秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -343,
+        "text": "刃身宽度",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -343,
+        "text": "86",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -369,
+        "text": "索敌范围",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -369,
+        "text": "1100",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -395,
+        "text": "基础穿透",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -395,
+        "text": "命中后可再穿透2个敌人",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -421,
+        "text": "效果",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -421,
+        "text": "圆弧光刃 · 可对空",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 97,
+        "y": -459,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  },
+  {
+    "id": "scythe",
+    "kind": "skill",
+    "half": 667,
+    "panel": {
+      "x": 151,
+      "y": -343,
+      "w": 350,
+      "h": 272
+    },
+    "labels": [
+      {
+        "x": 173,
+        "y": -248,
+        "text": "技能 · 回旋猎镰",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -291,
+        "text": "每次切割",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -291,
+        "text": "48法伤",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -317,
+        "text": "切割半径",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -317,
+        "text": "155",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -343,
+        "text": "持续时间",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -343,
+        "text": "4秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -369,
+        "text": "伤害间隔",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -369,
+        "text": "0.4秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -395,
+        "text": "冷却",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -395,
+        "text": "12.0秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -421,
+        "text": "效果",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -421,
+        "text": "甩出长镰旋转切割 · 最后回收",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 151,
+        "y": -459,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  },
+  {
+    "id": "scythe",
+    "kind": "ult",
+    "half": 667,
+    "panel": {
+      "x": 70,
+      "y": -52,
+      "w": 350,
+      "h": 272
+    },
+    "labels": [
+      {
+        "x": 92,
+        "y": 43,
+        "text": "大招 · 三重断界",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": 0,
+        "text": "每道镰刃",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": 0,
+        "text": "270法伤",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -26,
+        "text": "数量",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -26,
+        "text": "三道",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -52,
+        "text": "范围",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -52,
+        "text": "横向全屏 · 向前贯穿",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -78,
+        "text": "出手间隔",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -78,
+        "text": "0.34秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -104,
+        "text": "充能需求",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -104,
+        "text": "80能量",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -130,
+        "text": "效果",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -130,
+        "text": "每道巨刃对同一敌人命中一次",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 70,
+        "y": -168,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  }
+]

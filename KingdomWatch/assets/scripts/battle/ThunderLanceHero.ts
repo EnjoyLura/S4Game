@@ -11,7 +11,7 @@ import { Sfx } from '../core/Sfx';
 import { artSprite } from '../ui/Ux';
 import { CA,N } from '../ui/UIKit';
 import { densestBodyArea } from './WindNinjaGeometry';
-import { lanceDuePulses,lanceRainPlan,lanceRecallCount } from './ThunderLancePlans';
+import { lanceDuePulses,lanceRainPlan,lanceRecallCount,lanceFlightPlan,lanceFlightPose } from './ThunderLancePlans';
 import { LanceVisual,ThunderLanceVFX } from './ThunderLanceVFX';
 
 interface Field extends LanceVisual {damage:number;crit:boolean;interval:number;next:number;resCut:number;}
@@ -46,7 +46,8 @@ export class ThunderLanceHero extends HeroBase {
   private normal(target:Monster,mgr:MonsterManager,projs:ProjectileManager):void{
     const sx=this.x+this.facing*26,sy=HERO_Y+95;
     const speed=target.state==='move'&&!target.immobilized?target.def.speed*(target.slowT>0?1-target.slowAmp:1):0;
-    const travel=Math.hypot(target.x-sx,target.groundY-sy)/LANCE.speed;
+    let travel=lanceFlightPlan(sx,sy,target.x,target.groundY,'normal').seconds;
+    for(let i=0;i<3;i++)travel=lanceFlightPlan(sx,sy,target.x,Math.max(LINE_Y+25,target.groundY-speed*travel),'normal').seconds;
     for(let k=0;k<Math.min(12,1+(this.stats.fan||0))&&projs.hasCapacity;k++){
       const side=k?Math.ceil(k/2)*(k%2?1:-1)*36:0;
       this.launch({kind:'normal',delay:0,x:target.x+side,y:Math.max(LINE_Y+25,target.groundY-speed*travel)},mgr,projs);
@@ -68,9 +69,10 @@ export class ThunderLanceHero extends HeroBase {
     const cfg=lanceUltCfg(this.stats.ultLv),p=this.dense(mgr,cfg.radius*this.stats.skillRangeMul);
     if(!this.ultReady||!p||this.pending.length>=96)return false;
     this.lastDmg=dmg;this.charge=0;const windup=ULT_TIMING.lance.windup;
-    this.beginUltimate(windup+.65+cfg.seconds+.3);
+    const flight=lanceFlightPlan(this.x+this.facing*26,HERO_Y+95,p.x,p.y,'great').seconds;
+    this.beginUltimate(windup+flight+cfg.seconds+.3);
     this.pending.push({kind:'great',delay:windup,...p});
-    this.effects().mark(p.x,p.y,cfg.radius*this.stats.skillRangeMul,windup+.65);Sfx.cast(this.id,true);return true;
+    this.effects().mark(p.x,p.y,cfg.radius*this.stats.skillRangeMul,windup+flight);Sfx.cast(this.id,true);return true;
   }
   private strike(mgr:MonsterManager,x:number,y:number,radius:number,damage:number,crit:boolean,resCut:number,heavy=false):void{
     for(const m of mgr.list){if(!live(m)||(m.x-x)**2+(m.groundY-y)**2>radius*radius)continue;
@@ -91,15 +93,14 @@ export class ThunderLanceHero extends HeroBase {
     const radius=(giant?ult.radius:LANCE.radius)*(normal?1:this.stats.skillRangeMul);
     const seconds=giant?ult.seconds:normal?LANCE.seconds:cfg.seconds,interval=giant?ult.interval:normal?LANCE.interval:cfg.interval;
     const resCut=this.stats.defIgnore,seed=(++this.serial*.61803398875)%1;
-    const angle=-Math.PI/2+(seed-.5)*.36;
-    const flightSeconds=normal?Math.hypot(x-sx,y-sy)/LANCE.speed:giant?.65:.38;
-    const fired=projs.fire({x:sx,y:sy,dirX:x-sx,dirY:y-sy,speed:Math.hypot(x-sx,y-sy)/Math.max(.001,flightSeconds),
+    const flight=lanceFlightPlan(sx,sy,x,y,p.kind),angle=lanceFlightPose(flight,flight.seconds).angle;
+    const fired=projs.fire({x:sx,y:sy,dirX:flight.vx,dirY:flight.vy,speed:Math.hypot(flight.vx,flight.vy),
       dmg:damage,crit,heroId:this.id,color:'#FFD34F',visual:giant?'greatLance':'lance',size:giant?35:9,ult:giant,ability:!normal,
-      lanceFlight:normal||giant?{seconds:flightSeconds,height:Math.max(giant?260:75,(y-sy)/4+(giant?120:40))}:undefined,
+      lanceFlight:{...flight,seed},
       groundTarget:{x,y},targetLayer:'all',onGroundDamage:()=>{if(this.node.isValid)this.strike(mgr,x,y,radius,damage,crit,resCut,giant);},
       onGroundImpact:()=>{if(!this.node.isValid)return;
         if(this.fields.filter(f=>!f.giant).length>=LANCE.fieldCap&&!giant){const k=this.fields.findIndex(f=>!f.giant);this.fields.splice(k,1);}
-        this.fields.push({x,y,radius,giant,age:0,seconds,interval,next:0,damage:tickDamage,crit,resCut,seed,angle});
+        this.fields.push({x,y,radius,giant,age:0,seconds,interval,next:0,damage:tickDamage,crit,resCut,seed,angle,phase:flight.seconds});
         this.effects().impact(x,y,radius,giant,seed);if(giant)this.ultimateBeat(x,y,1.35,true);Sfx.impact(this.id,giant);
       }});
     if(fired){this.animateAttack(giant,x-sx,y-sy);if(normal)Sfx.shoot(this.id);}return fired;

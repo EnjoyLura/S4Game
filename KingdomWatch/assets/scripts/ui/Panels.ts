@@ -1,6 +1,7 @@
 import { SCYTHE,SCYTHE_TIMING,scytheSkillCfg,scytheUltCfg } from '../config/ScytheConfig';
 import { MAGIC_BOW, MAGIC_BOW_TIMING, magicBowSkillCfg,magicBowUltCfg } from '../config/MagicBowConfig';
 import { LANCE,lanceSkillCfg,lanceUltCfg } from '../config/ThunderLanceConfig';
+import { battleTipPlacement } from './BattleTipLayout';
 /**
  * 弹窗面板（UX 线稿 ②~⑤⑧）：三选一 / 暂停 / 胜利结算 / 失败结算(含广告复活) / 伤害统计 / 属性Tips
  * 弹窗内容块均以屏幕垂直中心为重心；三选一期间全场冻结由 BattleDirector 状态控制
@@ -605,7 +606,7 @@ export class Panels {
     const goalTxt = String(Math.round(hero.chargeGoal * 10) / 10);
     const shockTxt = voltShockAmp(h) > 0 ? '感电+' + Math.round(voltShockAmp(h) * 100) + '% · ' + voltShockDuration(h) + 's' : '';
     const iconY = WYB(126, 46);
-    let px: number, py: number, w = 300, hh = 272, title: string;
+    let px: number | undefined, py: number | undefined, w = 300, hh = 272, title: string;
     let rows: [string, string][];
     if (hero.id === 'scythe') {
       w=350;const sc=scytheSkillCfg(h.skillLv),uc=scytheUltCfg(h.ultLv);
@@ -959,9 +960,9 @@ export class Panels {
       const charge = rows.find(row => row[0] === '充能');
       if (charge) charge[1] = Math.floor(hero.charge) + ' / ' + goalTxt + ' · ' + Math.floor(hero.charge / hero.chargeGoal * 100) + '%';
     }
-    // 面板整体收敛进可视区
-    px = Math.max(-375 + w / 2 + 8, Math.min(375 - w / 2 - 8, px));
-    py = Math.max(-LO.half + hh / 2 + 8, Math.min(LO.half - hh / 2 - 8, py));
+    // Content-only hero branches use the shared icon anchor; never clamp undefined into NaN.
+    const tipPosition=battleTipPlacement(kind,hero.x,w,hh,iconY,WX(636,90),WYB(240+ultIdx*110,90),LO.half,px,py);
+    px=tipPosition.x;py=tipPosition.y;
 
     // 底板 0.78（用户调整：Tips 再增加一点透明度，战斗画面更可见）；点空白关闭不受影响
     const tipsPanel = gpanel(this.modalRoot, px, py, w, hh, CA('#14181E', 0.78), undefined, 0, 12);

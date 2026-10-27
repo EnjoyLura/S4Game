@@ -2,6 +2,7 @@ import { drawScytheBlade,SCYTHE_EFFECT } from './ScytheVFX';
 import { scytheBladeEntry } from './ScythePlans';
 import { drawMagicArrow,MAGIC_BOW_EFFECT } from './MagicBowVFX';
 import { drawLanceFlight,LANCE_EFFECT } from './ThunderLanceVFX';
+import { LanceFlightPlan,lanceFlightPose } from './ThunderLancePlans';
 /**
  * 弹道（§3.5：可见追踪弹、目标死亡切换目标；子弹道直线随缘命中；对象池强制）
  * 追踪主弹命中前锁定目标；直线弹（齐射/分裂/大招箭/敌方石块）带 ttl 与碰撞去重
@@ -27,8 +28,8 @@ import { drawSwordFlight, SWORD_ABILITY_EFFECT, SWORD_FLIGHT_CAP } from './Sword
 
 export interface ProjSpec {
   visual?: 'wind' | 'shuriken' | 'rift' | 'sword' | 'heavenSword' | 'spaceBlade' | 'lance' | 'greatLance' | 'magicArrow' | 'scytheBlade';
-  /** Cosmetic ballistic elevation; shared ground-target arrival still owns the one impact. */
-  lanceFlight?: {seconds:number;height:number};
+  /** Exact ballistic position, tangent and landing pose share the same launch snapshot. */
+  lanceFlight?: LanceFlightPlan & {seed:number};
   /** Only deliberately homing attacks opt in; existing arrows and bullets stay straight. */
   homingTarget?: Monster;
   homingLifeId?: number;
@@ -311,6 +312,14 @@ export class ProjectileManager {
       let done = false;
 
       if (sp.groundTarget) {
+        if(sp.lanceFlight){
+          const pose=lanceFlightPose(sp.lanceFlight,a.age);sp.x=pose.x;sp.y=pose.y;a.vx=pose.vx;a.vy=pose.vy;
+          if(pose.arrived){
+            if(sp.onGroundDamage)sp.onGroundDamage();else this.hitGround(a);
+            sp.onGroundImpact?.();this.recycle(i,a);
+          }
+          continue;
+        }
         const point = sp.groundTarget, distance = Math.hypot(point.x - sp.x, point.y - sp.y);
         if (distance <= sp.speed * dt) {
           sp.x = point.x; sp.y = point.y;
@@ -497,9 +506,8 @@ export class ProjectileManager {
       if(s.visual==='scytheBlade'){drawScytheBlade(a.scytheShader?this.scytheFlight:null,g,s.x,s.y,Math.atan2(a.vy,a.vx),s.lineHalfLength||43,a.age,a.fxSeed);continue;}
       if(s.visual==='magicArrow'){drawMagicArrow(a.magicBowShader?this.magicBowFlight:null,g,s.x,s.y,Math.atan2(a.vy,a.vx),size,a.age,a.fxSeed);continue;}
       if(s.visual==='lance'||s.visual==='greatLance'){
-        const arc=s.lanceFlight,t=arc?Math.min(1,a.age/Math.max(.001,arc.seconds)):0;
-        const height=arc?4*arc.height*t*(1-t):0,vy=a.vy+(arc?4*arc.height*(1-2*t)/Math.max(.001,arc.seconds):0);
-        drawLanceFlight(a.lanceShader?this.lanceFlight:null,g,s.x,s.y+height,Math.atan2(vy,a.vx),size,a.age,a.fxSeed);continue;
+        const angle=s.lanceFlight?lanceFlightPose(s.lanceFlight,a.age).angle:Math.atan2(a.vy,a.vx);
+        drawLanceFlight(a.lanceShader?this.lanceFlight:null,g,s.x,s.y,angle,size,a.age,s.lanceFlight?.seed??a.fxSeed);continue;
       }
       if(s.visual==='spaceBlade'){drawMagicBlade(g,s.x,s.y,Math.atan2(a.vy,a.vx),s.lineHalfLength||423,a.age,s.color);continue;}
       if(s.visual==='sword'||s.visual==='heavenSword'){

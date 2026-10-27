@@ -4,20 +4,36 @@ import { CA,N } from '../ui/UIKit';
 import { HeroFxShader } from './HeroFxShader';
 import { swordCrater,swordDebris,swordSoilLip } from './SwordAbilityVFX';
 export const LANCE_EFFECT='fx/thunder-lance-flow';
-export interface LanceVisual {x:number;y:number;radius:number;age:number;seconds:number;giant:boolean;seed:number;angle:number;}
+export interface LanceVisual {x:number;y:number;radius:number;age:number;seconds:number;giant:boolean;seed:number;angle:number;phase?:number;}
 interface Accent {kind:'impact'|'wave'|'mark'|'recall'|'explosion';x:number;y:number;r:number;age:number;life:number;seed:number;giant:boolean;tx:number;ty:number;}
 interface Arc {x:number;y:number;tx:number;ty:number;age:number;heavy:boolean;seed:number;}
 export function drawLanceFlight(shader:HeroFxShader|null,g:Graphics,x:number,y:number,angle:number,size:number,age:number,seed:number,
-  opacity=1,planted=false):void{
+  opacity=1,planted=false,phase=0):void{
   const length=size*8,ux=Math.cos(angle),uy=Math.sin(angle),bury=planted?length*.095*Math.min(1,age/.12):0;
   const tipX=x+ux*bury,tipY=y+uy*bury;
   if(shader?.draw(tipX-ux*length*.5,tipY-uy*length*.5,length*.9,length*1.7,angle*180/Math.PI-90,
-    age,seed,opacity,0,length,planted?bury/length:0))return;
-  const px=-uy,py=ux,tailX=x-ux*length,tailY=y-uy*length;
-  for(let j=0;j<3;j++){g.strokeColor=CA(j===2?'#FFFFE3':j===1?'#FFD543':'#E5A41C',opacity*(j===0?.24:1));g.lineWidth=size*(j===0?1.7:j===1?.43:.15);
-    g.moveTo(tailX,tailY);g.lineTo(x,y);g.stroke();}
-  g.fillColor=CA('#FFF9BC',opacity);g.moveTo(x,y);g.lineTo(x-ux*size*2.5+px*size*.4,y-uy*size*2.5+py*size*.4);
-  g.lineTo(x-ux*size*2.5-px*size*.4,y-uy*size*2.5-py*size*.4);g.close();g.fill();
+    age+phase,seed,opacity,0,length,planted?bury/length:0))return;
+  const px=-uy,py=ux,hash=(v:number)=>{const a=Math.sin(v*127.1)*43758.5453;return a-Math.floor(a);};
+  const spine=(t:number)=>Math.sin(t*Math.PI)*((hash(Math.floor(t*18)+seed*37)-.5)*.025);
+  const point=(u:number,v:number)=>[tipX-ux*length*(1-u)+px*length*v,tipY-uy*length*(1-u)+py*length*v];
+  const limit=1-bury/length;
+  const segment=(u:number,v:number,uu:number,vv:number)=>{
+    if(u>limit&&uu>limit)return;
+    if(uu>limit){vv=v+(vv-v)*(limit-u)/(uu-u);uu=limit;}
+    if(u>limit){v=vv+(v-vv)*(limit-uu)/(u-uu);u=limit;}
+    const a=point(u,v),b=point(uu,vv);g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke();
+  };
+  for(let layer=0;layer<3;layer++){
+    g.strokeColor=CA(layer===2?'#FFFFE3':layer===1?'#FFD543':'#E5A41C',opacity*(layer===0?.22:1));g.lineWidth=size*(layer===0?1.4:layer===1?.38:.12);
+    for(let k=0;k<24;k++)segment(k/24,spine(k/24),(k+1)/24,spine((k+1)/24));
+    for(let k=0;k<5;k++){const t=.11+k*.15,side=k%2?1:-1,v=spine(t),reach=(.035+hash(k+seed)*.05)*side;
+      segment(t,v,t+.03,v+reach*.45);segment(t+.03,v+reach*.45,t+.085,reach);
+      if(k===0)segment(t+.03,v+reach*.45,t+.01,reach*.8);
+    }
+  }
+  // Tapered point is part of the same lightning body, not a separate metallic spearhead.
+  g.fillColor=CA('#FFF9C7',opacity);const a=point(Math.min(limit,1),0),b=point(.73,.025),c=point(.73,-.025);
+  g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineTo(c[0],c[1]);g.close();g.fill();
 }
 export class ThunderLanceVFX {
   private air:Node;private floor:Node;private g:Graphics;private dirt:Graphics;private front:Graphics;
@@ -53,7 +69,7 @@ export class ThunderLanceVFX {
     for(const f of fields){const fade=Math.min(1,(f.seconds-f.age)*3),size=f.giant?35:9;
       this.ground.draw(f.x,f.y,f.radius*2.4,f.radius*1.4,0,f.age,f.seed,fade*(f.giant?.75:.32),1,f.radius,0);
       swordCrater(this.dirt,f.x,f.y,f.radius,Math.min(f.age,.35),f.giant);
-      drawLanceFlight(this.spears,this.g,f.x,f.y,f.angle,size,f.age,f.seed,fade,true);
+      drawLanceFlight(this.spears,this.g,f.x,f.y,f.angle,size,f.age,f.seed,fade,true,f.phase||0);
       swordSoilLip(this.front,f.x,f.y,f.giant?f.radius:65,f.age,f.giant,fade);
     }
     for(const a of this.accents){const t=a.age/a.life;

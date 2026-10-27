@@ -49,28 +49,40 @@ CCProgram thunder-lance-fs %{
   float hash(float v){return fract(sin(v*127.1)*43758.5453);}
   float noise(float p){float i=floor(p),f=fract(p);return mix(hash(i),hash(i+1.),f*f*(3.-2.*f));}
   float line(float d,float w){return exp(-d*d/max(w*w,.000001));}
+  float jag(float p){float i=floor(p);return mix(hash(i),hash(i+1.),fract(p));}
+  float trunk(float y,float seed){return ((jag((y+.5)*19.+seed)-.5)*.024+(jag((y+.5)*8.+seed+73.)-.5)*.016)*sin(clamp(y+.5,0.,1.)*3.14159265);}
+  float branchSegment(vec2 p,vec2 a,vec2 b){vec2 d=b-a;return length(p-a-d*clamp(dot(p-a,d)/max(.000001,dot(d,d)),0.,1.));}
   vec4 frag(){
     vec2 q=(vec2(uv0.x,.999999-uv0.y)-.5)*fxShape.xy/max(fxShape.z,1.);
     float time=fxState.x,seed=fxState.y*37.,power=fxState.z,mode=fxState.w;
     vec3 rgb=vec3(0.);float alpha=0.;
     if(mode<.5){
-      float y=q.y,mask=smoothstep(-.56,-.43,y)*(1.-smoothstep(.495,.507,y));
-      float blade=sat((y-.22)/.28),width=mix(.026,.003,blade);
-      if(y>.22)width=.082*(1.-blade)+.003;
-      float shaft=line(abs(q.x),width),core=line(abs(q.x),width*.32);
-      float grain=.85+.15*sin(y*92.-time*40.);
-      rgb=(GOLD*shaft*.75+CORE*core*1.4)*mask*grain;
-      alpha=shaft*mask*.84;
-      rgb+=YELLOW*line(q.x,.095)*mask*.18;
-      float clock=floor(time*26.)+seed;
-      for(int i=0;i<3;i++){
-        float fi=float(i),n=(noise(y*30.+clock+fi*57.)-.5)*.10;
-        float path=n+sin(y*19.+clock*.7+fi*2.1)*.045;
-        float bolt=line(q.x-path,.006)*mask;
-        rgb+=mix(GOLD,CORE,.6)*bolt*(.4+.3*hash(clock+fi));
-        float branch=abs(q.x)-abs(y-(hash(clock+fi*19.)-.5)*.8)*.6;
-        float branching=line(branch,.005)*(1.-smoothstep(.11,.23,abs(q.x)))*smoothstep(.04,.08,abs(q.x));
-        rgb+=YELLOW*branching*mask*.75;
+      float y=q.y,mask=smoothstep(-.53,-.49,y)*(1.-smoothstep(.496,.506,y));
+      float path=trunk(y,seed),d=q.x-path;
+      // Slender javelin: continuous shaft and a long pointed energy tip dominate the silhouette.
+      float width=(.014+.003*jag(y*31.+seed))*(1.-smoothstep(.22,.505,y)*.85);
+      width+=.016*smoothstep(.12,.18,y)*(1.-smoothstep(.18,.49,y));
+      float charge=.82+.18*sin(y*47.-time*31.+seed),shaft=line(d,width)*mask;
+      rgb=(YELLOW*shaft*.9+CORE*line(d,width*.38)*mask*1.25)*charge;
+      alpha=shaft*.83;
+      rgb+=GOLD*line(d,.055)*mask*.25;
+      // Five short asymmetric discharge branches, subordinate to the javelin body.
+      for(int i=0;i<5;i++){
+        float fi=float(i),rootY=-.39+fi*.15+(hash(fi+seed)-.5)*.05;
+        float side=mod(fi,2.)<.5?-1.:1.,reach=(.035+hash(fi*11.+seed)*.05)*side;
+        vec2 root=vec2(trunk(rootY,seed),rootY);
+        vec2 knee=root+vec2(reach*.42,.025+hash(fi+27.)*.02);
+        vec2 joint=root+vec2(reach*.68,.03+hash(fi+51.)*.025);
+        vec2 tip=root+vec2(reach,.07+hash(fi+83.)*.035);
+        float branch=min(branchSegment(q,root,knee),min(branchSegment(q,knee,joint),branchSegment(q,joint,tip)));
+        float taper=1.-sat(length(q-root)/.13)*.7,pulse=.52+.28*sin(time*23.-fi*2.3);
+        rgb+=(YELLOW*line(branch,.0035)+CORE*line(branch,.0013)*.65)*taper*pulse;
+        rgb+=GOLD*line(branch,.012)*taper*.12;
+        if(fi<.5){
+          vec2 fork=knee+vec2(reach*.3,-.02);
+          float twig=branchSegment(q,knee,fork);
+          rgb+=YELLOW*line(twig,.003)*pulse*.65;
+        }
       }
       float trail=smoothstep(-.82,-.62,y)*(1.-smoothstep(-.5,-.32,y));
       rgb+=GOLD*line(q.x+sin(y*37.+time*27.)*.02,.045)*trail*.25;
