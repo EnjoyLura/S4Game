@@ -1,0 +1,89 @@
+{
+  "damageRadius": 250,
+  "measurement": "72 angular bins, actual drawn straight-alpha pixels > .08 and RGB > .5",
+  "peak": {
+    "age": 0.30000000000000004,
+    "allDirectionsMinRadiusRatio": 1.0578196594196325,
+    "medianRadiusRatio": 1.46019905667925,
+    "maxRadiusRatio": 2.1724193700343974,
+    "burstOnlyMinRadiusRatio": 1.0578196594196325,
+    "coveredAngleBinsOf72": 72
+  },
+  "samples": [
+    {
+      "age": 0.10000000000000009,
+      "allDirectionsMinRadiusRatio": 0.7180332709827797,
+      "medianRadiusRatio": 1.2799157775320675,
+      "maxRadiusRatio": 2.1854454795575418,
+      "burstOnlyMinRadiusRatio": 0.7180332709827797,
+      "coveredAngleBinsOf72": 46
+    },
+    {
+      "age": 0.1333333333333333,
+      "allDirectionsMinRadiusRatio": 0.8525699497002583,
+      "medianRadiusRatio": 1.2853263431353232,
+      "maxRadiusRatio": 2.1854454795575418,
+      "burstOnlyMinRadiusRatio": 0.8525699497002583,
+      "coveredAngleBinsOf72": 55
+    },
+    {
+      "age": 0.19999999999999996,
+      "allDirectionsMinRadiusRatio": 0.974418297118907,
+      "medianRadiusRatio": 1.3592037298334438,
+      "maxRadiusRatio": 2.1854454795575418,
+      "burstOnlyMinRadiusRatio": 0.974418297118907,
+      "coveredAngleBinsOf72": 70
+    },
+    {
+      "age": 0.25,
+      "allDirectionsMinRadiusRatio": 1.0293363375909712,
+      "medianRadiusRatio": 1.4275023837911505,
+      "maxRadiusRatio": 2.1854454795575418,
+      "burstOnlyMinRadiusRatio": 1.0293363375909712,
+      "coveredAngleBinsOf72": 72
+    },
+    {
+      "age": 0.30000000000000004,
+      "allDirectionsMinRadiusRatio": 1.0578196594196325,
+      "medianRadiusRatio": 1.46019905667925,
+      "maxRadiusRatio": 2.1724193700343974,
+      "burstOnlyMinRadiusRatio": 1.0578196594196325,
+      "coveredAngleBinsOf72": 72
+    },
+    {
+      "age": 0.40000000000000013,
+      "allDirectionsMinRadiusRatio": 1.0214362110547839,
+      "medianRadiusRatio": 1.4718276008678197,
+      "maxRadiusRatio": 2.016560830388757,
+      "burstOnlyMinRadiusRatio": 1.0214362110547839,
+      "coveredAngleBinsOf72": 72
+    },
+    {
+      "age": 0.4833333333333334,
+      "allDirectionsMinRadiusRatio": 0.7246536993167323,
+      "medianRadiusRatio": 1.4476437225524805,
+      "maxRadiusRatio": 2.014961916594494,
+      "burstOnlyMinRadiusRatio": 0.5138131170929012,
+      "coveredAngleBinsOf72": 52
+    },
+    {
+      "age": 0.6333333333333333,
+      "allDirectionsMinRadiusRatio": 0.7280677579350611,
+      "medianRadiusRatio": 0.9927241087829554,
+      "maxRadiusRatio": 1.1830446616770671,
+      "burstOnlyMinRadiusRatio": 0.6195875388279161,
+      "coveredAngleBinsOf72": 29
+    },
+    {
+      "age": 0.8,
+      "allDirectionsMinRadiusRatio": 0.0,
+      "medianRadiusRatio": 0.3427420410658589,
+      "maxRadiusRatio": 0.9947993331040745,
+      "burstOnlyMinRadiusRatio": 0.0,
+      "coveredAngleBinsOf72": 0
+    }
+  ],
+  "centerMotionMinMeanPixelDelta": 25.37070655822754,
+  "centerMotionMeanPixelDelta": 30.97885513305664,
+  "gameStarted": false
+}

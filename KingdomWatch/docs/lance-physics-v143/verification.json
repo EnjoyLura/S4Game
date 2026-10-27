@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "actualAtlasAndVfxCode": true,
+  "fixedPoolCapacity": 32,
+  "noPerFrameNodes": true,
+  "simulationClockOnly": true,
+  "buriedTipCropped": true,
+  "normalAndGiantUseBlenderArt": true,
+  "emptyAfterExpiry": true,
+  "allLancePassesBelowMonsters": true,
+  "flightFallbackAlsoBelowMonsters": true,
+  "flightLayerDestroyedWithProjectileLayer": true,
+  "unchangedCombatSources": [
+    "assets/scripts/config/ThunderLanceConfig.ts"
+  ],
+  "gameEngineBrowserCombatAudioOrWasmStarted": false,
+  "visualAcceptance": "pending user"
+}

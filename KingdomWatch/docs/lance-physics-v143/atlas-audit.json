@@ -1,0 +1,36 @@
+{
+  "body": {
+    "size": [
+      1568,
+      3096
+    ],
+    "frames": 48,
+    "bytes": 3918612,
+    "sha256": "df4f422dd2e67a8ec47d21f2e6d0698402befbe6691acf9df6e70c3d50091a72",
+    "minVisiblePixels": 37874,
+    "maxVisiblePixels": 49450,
+    "anchor": [
+      0.5,
+      0.059624701738357544
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  },
+  "impact": {
+    "size": [
+      3096,
+      2064
+    ],
+    "frames": 24,
+    "bytes": 2589499,
+    "sha256": "dd3555fc621535ca9ce2a372f66ea658950efa4b909ec9d56f327eba0e4cb73b",
+    "minVisiblePixels": 0,
+    "maxVisiblePixels": 83848,
+    "anchor": [
+      0.5,
+      0.42531540989875793
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  }
+}

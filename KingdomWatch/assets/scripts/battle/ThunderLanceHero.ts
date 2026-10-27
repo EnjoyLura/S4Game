@@ -93,14 +93,14 @@ export class ThunderLanceHero extends HeroBase {
     const radius=(giant?ult.radius:LANCE.radius)*(normal?1:this.stats.skillRangeMul);
     const seconds=giant?ult.seconds:normal?LANCE.seconds:cfg.seconds,interval=giant?ult.interval:normal?LANCE.interval:cfg.interval;
     const resCut=this.stats.defIgnore,seed=(++this.serial*.61803398875)%1;
-    const flight=lanceFlightPlan(sx,sy,x,y,p.kind),angle=lanceFlightPose(flight,flight.seconds).angle;
+    const flight=lanceFlightPlan(sx,sy,x,y,p.kind),landing=lanceFlightPose(flight,flight.seconds),angle=landing.angle;
     const fired=projs.fire({x:sx,y:sy,dirX:flight.vx,dirY:flight.vy,speed:Math.hypot(flight.vx,flight.vy),
       dmg:damage,crit,heroId:this.id,color:'#FFD34F',visual:giant?'greatLance':'lance',size:giant?40:12,ult:giant,ability:!normal,
       lanceFlight:{...flight,seed},
       groundTarget:{x,y},targetLayer:'all',onGroundDamage:()=>{if(this.node.isValid)this.strike(mgr,x,y,radius,damage,crit,resCut,giant);},
       onGroundImpact:()=>{if(!this.node.isValid)return;
         if(this.fields.filter(f=>!f.giant).length>=LANCE.fieldCap&&!giant){const k=this.fields.findIndex(f=>!f.giant);this.fields.splice(k,1);}
-        this.fields.push({x,y,radius,giant,age:0,seconds,interval,next:0,damage:tickDamage,crit,resCut,seed,angle,phase:flight.seconds});
+        this.fields.push({x,y,radius,giant,age:0,seconds,interval,next:0,damage:tickDamage,crit,resCut,seed,angle,phase:flight.seconds,lengthScale:landing.lengthScale});
         this.effects().impact(x,y,radius,giant,seed);if(giant)this.ultimateBeat(x,y,1.35,true);Sfx.impact(this.id,giant);
       }});
     if(fired){this.animateAttack(giant,x-sx,y-sy);if(normal)Sfx.shoot(this.id);}return fired;

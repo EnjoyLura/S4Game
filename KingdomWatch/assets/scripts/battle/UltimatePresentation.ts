@@ -104,7 +104,7 @@ export class UltimatePresentation {
     for (const b of this.beats) this.afterglow(b);
   }
   private gather(c: Cast): void {
-    const g = this.air, p = clamp(c.age / c.windup);
+    const g = c.hero === 'lance' ? this.floor : this.air, p = clamp(c.age / c.windup);
     const light = smooth(0, .14, c.age) * (1 - smooth(c.windup, c.windup + .4, c.age));
     const x = c.x, y = c.y, span = 70 - p * 37;
     // Soft local core, with a readable outer colour and a small warm/cool inner point.

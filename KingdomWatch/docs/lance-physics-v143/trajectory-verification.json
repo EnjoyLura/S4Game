@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "baseline": "6fbe9cfc",
+  "previousStraightAheadLateralPixels": 145.55911500000002,
+  "currentStraightAheadLateralPixels": 0,
+  "cases": 336,
+  "samples": 168336,
+  "maxAccelerationError": 8.394636097364128e-10,
+  "maxShaftStep": 11.323370397638104,
+  "endpointExact": true,
+  "constantGravity": true,
+  "monotonicHorizontalMotion": true,
+  "continuousProjectedShaft": true,
+  "gameEngineBrowserBattleAudioOrWasmStarted": false
+}

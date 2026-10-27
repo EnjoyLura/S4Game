@@ -8,7 +8,7 @@ export const lanceClipPath = (kind:LanceClipKind):string => 'fx/thunder_lance_'+
 interface Manifest {
   schema:number;kind:LanceClipKind;frameCount:number;fps:number;cellSize:[number,number];
   anchor:[number,number];loop:boolean;alpha:string;frames:[number,number,number,number][];
-  bodyLengthPixels?:number;visualWidthPerRadius?:number;
+  bodyLengthPixels?:number;visualWidthPerRadius?:number;displayHeightScale?:number;
 }
 interface Clip {m:Manifest;frames:SpriteFrame[];buried:Map<number,SpriteFrame>;}
 interface Slot {node:Node;sprite:Sprite;ui:UITransform;frame:SpriteFrame|null;}
@@ -21,6 +21,7 @@ function valid(m:Manifest,source:SpriteFrame,kind:LanceClipKind):boolean {
     &&Number.isInteger(m.frameCount)&&m.frameCount>0&&m.frameCount<=64&&finite(m.fps)&&m.fps>0&&m.fps<=60
     &&Array.isArray(m.cellSize)&&m.cellSize.length===2&&m.cellSize.every(n=>finite(n)&&n>0&&n<=1024)
     &&Array.isArray(m.anchor)&&m.anchor.length===2&&m.anchor.every(n=>finite(n)&&n>=0&&n<=1)
+    &&(m.displayHeightScale===undefined||finite(m.displayHeightScale)&&m.displayHeightScale>=.5&&m.displayHeightScale<=2.5)
     &&(kind==='body'?finite(m.bodyLengthPixels!)&&m.bodyLengthPixels!>0&&m.bodyLengthPixels!<=m.cellSize[1]
       :finite(m.visualWidthPerRadius!)&&m.visualWidthPerRadius!>0&&m.visualWidthPerRadius!<=4)
     &&Array.isArray(m.frames)&&m.frames.length===m.frameCount&&m.frames.every(r=>Array.isArray(r)&&r.length===4
@@ -106,16 +107,16 @@ export class ThunderLanceAtlas {
     this.tint.a=Math.round(255*Math.min(1,alpha));slot.sprite.color=this.tint;slot.node.active=true;
     return true;
   }
-  spear(x:number,y:number,angle:number,size:number,age:number,seed:number,alpha=1,planted=false,phase=0):boolean {
+  spear(x:number,y:number,angle:number,size:number,age:number,seed:number,alpha=1,planted=false,phase=0,projection=1):boolean {
     const clip=clips.get('body');if(!clip)return false;
     const m=clip.m,scale=size*8/m.bodyLengthPixels!;
     const index=lanceAtlasFrame(age+phase+seed*.6,m.fps,m.frameCount,true);
     if(planted){
       const level=Math.min(16,Math.round(lanceInsertion(age)/.11*16));
       const frame=clip.buried.get(level*m.frameCount+index)!;
-      return this.draw(clip,index,x,y,m.cellSize[0]*scale,frame.rect.height*scale,.5,0,angle*180/Math.PI+90,alpha,level);
+      return this.draw(clip,index,x,y,m.cellSize[0]*scale,Math.max(.01,frame.rect.height*scale*projection),.5,0,angle*180/Math.PI+90,alpha,level);
     }
-    return this.draw(clip,index,x,y,m.cellSize[0]*scale,m.cellSize[1]*scale,m.anchor[0],m.anchor[1],angle*180/Math.PI+90,alpha);
+    return this.draw(clip,index,x,y,m.cellSize[0]*scale,Math.max(.01,m.cellSize[1]*scale*projection),m.anchor[0],m.anchor[1],angle*180/Math.PI+90,alpha);
   }
   pass(kind:Exclude<LanceClipKind,'body'>,x:number,y:number,radius:number,age:number,alpha=1,seed=0):boolean {
     const clip=clips.get(kind);if(!clip)return false;
@@ -123,7 +124,7 @@ export class ThunderLanceAtlas {
     if(!m.loop&&age>=m.frameCount/m.fps)return true; // finished art stays finished, never replays
     const index=lanceAtlasFrame(age+(m.loop?seed*.8:0),m.fps,m.frameCount,m.loop);
     const width=radius*m.visualWidthPerRadius!;
-    return this.draw(clip,index,x,y,width,width*m.cellSize[1]/m.cellSize[0],m.anchor[0],m.anchor[1],0,alpha);
+    return this.draw(clip,index,x,y,width,width*m.cellSize[1]/m.cellSize[0]*(m.displayHeightScale??1),m.anchor[0],m.anchor[1],0,alpha);
   }
   end():void{for(let i=this.used;i<this.slots.length;i++)this.slots[i].node.active=false;}
 }

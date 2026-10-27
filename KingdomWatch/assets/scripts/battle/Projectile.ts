@@ -181,6 +181,8 @@ export class ProjectileManager {
   private magicBowFlight: HeroFxShader | null = null;
   private lanceFlight: HeroFxShader | null = null;
   private lanceArt: ThunderLanceAtlas | null = null;
+  private lanceRoot: Node | null = null;
+  private lanceFallback: Graphics | null = null;
   private swordFlight: HeroFxShader | null = null;
   private spaceFlight: HeroFxShader | null = null;
   private flightSerial = 0;
@@ -201,8 +203,15 @@ export class ProjectileManager {
   warmScytheFlight():void{this.scytheFlight ||=new HeroFxShader(this.field,'scytheBladeFlight',40,'plasma',{effect:SCYTHE_EFFECT,technique:0});}
   warmMagicBowFlight():void{this.magicBowFlight ||=new HeroFxShader(this.field,'magicArrowFlight',32,'plasma',{effect:MAGIC_BOW_EFFECT,technique:0});}
   warmLanceFlight():void{
-    this.lanceFlight ||=new HeroFxShader(this.field,'goldenLanceFlight',32,'plasma',{effect:LANCE_EFFECT,technique:0});
-    this.lanceArt ||=new ThunderLanceAtlas(this.field,'blenderLanceFlight',32);
+    if(!this.lanceRoot){
+      this.lanceRoot=new Node('lanceFlightBelowMobs');this.lanceRoot.layer=Layers.Enum.UI_2D;
+      this.lanceRoot.setParent(this.field.parent?.getChildByName('GroundFxLayer')||this.field);
+      this.lanceFallback=this.lanceRoot.addComponent(Graphics);
+      this.field.once(Node.EventType.NODE_DESTROYED,()=>{if(this.lanceRoot?.isValid)this.lanceRoot.destroy();
+        this.lanceRoot=null;this.lanceFallback=null;this.lanceArt=null;this.lanceFlight=null;});
+    }
+    this.lanceFlight ||=new HeroFxShader(this.lanceRoot,'goldenLanceFlight',32,'plasma',{effect:LANCE_EFFECT,technique:0});
+    this.lanceArt ||=new ThunderLanceAtlas(this.lanceRoot,'blenderLanceFlight',32);
   }
   warmSwordFlight(): void {
     this.swordFlight ||= new HeroFxShader(this.field, 'jadeSwordFlight', SWORD_FLIGHT_CAP, 'plasma',
@@ -493,6 +502,7 @@ export class ProjectileManager {
   private render(): void {
     const g = this.g;
     g.clear();
+    this.lanceFallback?.clear();
     this.basicFlight.beginFrame();
     this.windFlight?.begin();
     this.scytheFlight?.begin();
@@ -514,9 +524,9 @@ export class ProjectileManager {
       if(s.visual==='scytheBlade'){drawScytheBlade(a.scytheShader?this.scytheFlight:null,g,s.x,s.y,Math.atan2(a.vy,a.vx),s.lineHalfLength||43,a.age,a.fxSeed);continue;}
       if(s.visual==='magicArrow'){drawMagicArrow(a.magicBowShader?this.magicBowFlight:null,g,s.x,s.y,Math.atan2(a.vy,a.vx),size,a.age,a.fxSeed);continue;}
       if(s.visual==='lance'||s.visual==='greatLance'){
-        const angle=s.lanceFlight?lanceFlightPose(s.lanceFlight,a.age).angle:Math.atan2(a.vy,a.vx);
-        if(a.lanceAtlas&&this.lanceArt?.spear(s.x,s.y,angle,size,a.age,s.lanceFlight?.seed??a.fxSeed))continue;
-        drawLanceFlight(a.lanceShader?this.lanceFlight:null,g,s.x,s.y,angle,size,a.age,s.lanceFlight?.seed??a.fxSeed);continue;
+        const pose=s.lanceFlight?lanceFlightPose(s.lanceFlight,a.age):null,angle=pose?pose.angle:Math.atan2(a.vy,a.vx);
+        if(a.lanceAtlas&&this.lanceArt?.spear(s.x,s.y,angle,size,a.age,s.lanceFlight?.seed??a.fxSeed,1,false,0,pose?.lengthScale??1))continue;
+        drawLanceFlight(a.lanceShader?this.lanceFlight:null,this.lanceFallback||g,s.x,s.y,angle,size,a.age,s.lanceFlight?.seed??a.fxSeed,1,false,0,pose?.lengthScale??1);continue;
       }
       if(s.visual==='spaceBlade'){drawMagicBlade(g,s.x,s.y,Math.atan2(a.vy,a.vx),s.lineHalfLength||423,a.age,s.color);continue;}
       if(s.visual==='sword'||s.visual==='heavenSword'){

@@ -5,7 +5,7 @@ import { HeroFxShader } from './HeroFxShader';
 import { swordDebris,swordSoilLip } from './SwordAbilityVFX';
 import { ThunderLanceAtlas } from './ThunderLanceAtlas';
 export const LANCE_EFFECT='fx/thunder-lance-flow';
-export interface LanceVisual {x:number;y:number;radius:number;age:number;seconds:number;giant:boolean;seed:number;angle:number;phase?:number;}
+export interface LanceVisual {x:number;y:number;radius:number;age:number;seconds:number;giant:boolean;seed:number;angle:number;phase?:number;lengthScale?:number;}
 interface Accent {kind:'impact'|'wave'|'mark'|'recall'|'explosion';x:number;y:number;r:number;age:number;life:number;seed:number;giant:boolean;tx:number;ty:number;}
 interface Arc {x:number;y:number;tx:number;ty:number;age:number;heavy:boolean;seed:number;}
 const hash=(v:number)=>{const a=Math.sin(v*127.1)*43758.5453;return a-Math.floor(a);};
@@ -36,8 +36,8 @@ export function lanceGround(g:Graphics,x:number,y:number,r:number,age:number,see
   }
 }
 export function drawLanceFlight(shader:HeroFxShader|null,g:Graphics,x:number,y:number,angle:number,size:number,age:number,seed:number,
-  opacity=1,planted=false,phase=0):void{
-  const length=size*8,ux=Math.cos(angle),uy=Math.sin(angle),bury=planted?length*.095*Math.min(1,age/.12):0;
+  opacity=1,planted=false,phase=0,projection=1):void{
+  const length=Math.max(.01,size*8*projection),ux=Math.cos(angle),uy=Math.sin(angle),bury=planted?length*.095*Math.min(1,age/.12):0;
   const tipX=x+ux*bury,tipY=y+uy*bury;
   if(shader?.draw(tipX-ux*length*.5,tipY-uy*length*.5,length*.9,length*1.7,angle*180/Math.PI-90,
     age+phase,seed,opacity,0,length,planted?bury/length:0))return;
@@ -68,13 +68,14 @@ export class ThunderLanceVFX {
   private spears:HeroFxShader;private ground:HeroFxShader;private accents:Accent[]=[];private arcs:Arc[]=[];private serial=0;
   private bodyArt:ThunderLanceAtlas;private floorArt:ThunderLanceAtlas;private burstArt:ThunderLanceAtlas;
   constructor(parent:Node){
-    this.air=N('thunderLance',parent);const text=parent.getChildByName('TextLayer');if(text)this.air.setSiblingIndex(text.getSiblingIndex());
     this.floor=N('thunderLanceGround',parent.getChildByName('GroundFxLayer')||parent);
     this.dirt=N('earth',this.floor).addComponent(Graphics);
     this.ground=new HeroFxShader(this.floor,'electricGround',64,'plasma',{effect:LANCE_EFFECT,technique:0});
+    this.floorArt=new ThunderLanceAtlas(this.floor,'blenderSurfacePasses',64);
+    // All lance passes, including the shaft and blast, are below MobLayer.
+    this.air=N('thunderLance',this.floor);
     this.g=N('arcsAndFallback',this.air).addComponent(Graphics);
     this.spears=new HeroFxShader(this.air,'plantedAndRecall',52,'plasma',{effect:LANCE_EFFECT,technique:0});
-    this.floorArt=new ThunderLanceAtlas(this.floor,'blenderSurfacePasses',64);
     this.burstArt=new ThunderLanceAtlas(this.air,'blenderThunderDetonation',20);
     this.bodyArt=new ThunderLanceAtlas(this.air,'blenderPlantedAndRecall',52);
     this.front=N('buriedTipsAndDebris',this.air).addComponent(Graphics);
@@ -104,8 +105,8 @@ export class ThunderLanceVFX {
       if(!art||!this.floorArt.pass('ground',f.x,f.y,f.radius,f.age,fade*(f.giant?1:.48),f.seed))
         this.ground.draw(f.x,f.y,f.radius*2.4,f.radius*1.4,0,f.age,f.seed,fade*(f.giant?.68:.26),1,f.radius,0);
       lanceGround(this.dirt,f.x,f.y,f.radius,f.age,f.seed,f.giant,fade);
-      if(!art||!this.bodyArt.spear(f.x,f.y,f.angle,size,f.age,f.seed,fade,true,f.phase||0))
-        drawLanceFlight(this.spears,this.g,f.x,f.y,f.angle,size,f.age,f.seed,fade,true,f.phase||0);
+      if(!art||!this.bodyArt.spear(f.x,f.y,f.angle,size,f.age,f.seed,fade,true,f.phase||0,f.lengthScale??1))
+        drawLanceFlight(this.spears,this.g,f.x,f.y,f.angle,size,f.age,f.seed,fade,true,f.phase||0,f.lengthScale??1);
       swordSoilLip(this.front,f.x,f.y,f.giant?f.radius:65,f.age,f.giant,fade);
     }
     for(const a of this.accents){const t=a.age/a.life;
@@ -116,13 +117,13 @@ export class ThunderLanceVFX {
         if(!art||!this.bodyArt.spear(x,y,angle,a.r,a.age,a.seed,1-t*.45))
           drawLanceFlight(this.spears,this.g,x,y,angle,a.r,a.age,a.seed,1-t*.45);
       }else if(a.kind==='explosion'){
-        if(!art||!this.burstArt.pass('impact',a.x,a.y,a.r,a.age))
-          this.spears.draw(a.x,a.y+a.r*.15,a.r*2.4,a.r*2.0,0,a.age,a.seed,1,4,a.r,t);
+        if(!art||!this.burstArt.pass('impact',a.x,a.y,a.r*1.2,a.age))
+          this.spears.draw(a.x,a.y+a.r*.15,a.r*3.5,a.r*2.8,0,a.age,a.seed,1,4,a.r*1.5,t);
       }else if(a.kind==='mark'){
         this.ground.draw(a.x,a.y,a.r*2.4,a.r*1.4,0,a.age,a.seed,.4*(1-t*.5),3,a.r,t);
       }else{
         const wave=a.kind==='wave';
-        const baked=art&&(wave?this.floorArt.pass('wave',a.x,a.y,a.r,a.age)
+        const baked=art&&(wave?this.floorArt.pass('wave',a.x,a.y,a.r*1.18,a.age)
           :a.giant||this.burstArt.pass('impact',a.x,a.y,a.r*.62,a.age*1.45,1-t*.55));
         const drawn=baked||this.ground.draw(a.x,a.y,a.r*2.4,a.r*1.4,0,a.age,a.seed,wave?1:(1-t)*(a.giant?1:.8),wave?2:1,a.r,t);
         if(!drawn)lanceGround(this.dirt,a.x,a.y,a.r*(.3+t*.7),a.age,a.seed,a.giant,1-t);
@@ -136,5 +137,5 @@ export class ThunderLanceVFX {
     }
     this.spears.end();this.ground.end();this.bodyArt.end();this.floorArt.end();this.burstArt.end();
   }
-  destroy():void{this.accents.length=0;this.arcs.length=0;if(this.floor.isValid)this.floor.destroy();if(this.air.isValid)this.air.destroy();}
+  destroy():void{this.accents.length=0;this.arcs.length=0;if(this.floor.isValid)this.floor.destroy();}
 }
