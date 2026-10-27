@@ -40,6 +40,7 @@ def image_meta(name,size):
     meta=copy.deepcopy(TEMPLATE)
     uid=str(uuid.uuid5(uuid.NAMESPACE_URL,'kingdom-watch/fx/'+name))
     meta['uuid']=uid
+    meta['userData']['redirect']=uid+'@6c48a'
     for key,sub in meta['subMetas'].items():
         sub['uuid']=uid+'@'+key;sub['displayName']=name
         data=sub['userData']
@@ -47,9 +48,9 @@ def image_meta(name,size):
         else:
             w,h=size
             data.update(width=w,height=h,rawWidth=w,rawHeight=h,imageUuidOrDatabaseUri=uid+'@6c48a',packable=False)
-            data['vertices']={'rawPosition':[-w/2,-h/2,0,w/2,-h/2,0,-w/2,h/2,0,w/2,h/2,0],
+            data['vertices']={'rawPosition':[-w//2,-h//2,0,w//2,-h//2,0,-w//2,h//2,0,w//2,h//2,0],
                 'indexes':[0,1,2,2,1,3],'uv':[0,h,w,h,0,0,w,0],
-                'nuv':[0,0,1,0,0,1,1,1],'minPos':[-w/2,-h/2,0],'maxPos':[w/2,h/2,0]}
+                'nuv':[0,0,1,0,0,1,1,1],'minPos':[-w//2,-h//2,0],'maxPos':[w//2,h//2,0]}
     return meta
 
 for kind in ('body','impact','wave','ground'):

@@ -38,4 +38,6 @@ node audit_types.cjs
 
 `ultimate-placement.mp4`、`contact-sheet.jpg` 来自真实渲染调用的离屏合成：静态森林、静态怪物、正式纹理及标准混合，不运行游戏、浏览器、真实战斗、音频或 WASM；图片未包含旧代码绘制的土沿和连锁电弧。此记录不等同于用户实战认可。
 
-构建与 GitHub Pages 运行包验证回执在发布完成后补充。仅推送独立运行仓库，不推送源码、不部署 Cloudflare。
+实现本地提交 `8a77749a`。Cocos Creator 3.8.8 正式构建 18484ms、退出 36，DPR 修补与资源审计通过；导出版本 `dce6e27300eb9987`，1647 文件、214498961 字节。524 个既有 native 资源原字节保持，新增 4 张无损图集，全部 RGBA 与源图逐像素相同；图集/帧清单注册、透明边缘、15 份 JS 与 5 段内联脚本语法检查通过。回执见 `build-record.json`、`package-static-verification.json` 与 `changed-runtime-files.json`。
+
+GitHub Pages 回执在发布完成后补充。仅推送独立运行仓库，不推送源码、不部署 Cloudflare。
