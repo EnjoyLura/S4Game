@@ -1,0 +1,70 @@
+{
+  "blade": {
+    "size": [
+      1944,
+      1944
+    ],
+    "frames": 32,
+    "bytes": 1144157,
+    "sha256": "aa72b9ff99320f369ad59687e4e8c7e0e8680133e4c524c1456d241df70e33ed",
+    "minVisiblePixels": 25674,
+    "maxVisiblePixels": 26106,
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  },
+  "spin": {
+    "size": [
+      2712,
+      1944
+    ],
+    "frames": 32,
+    "bytes": 2397130,
+    "sha256": "7b95bb83319bd8c1cb526dfff2ee4f0a09129b7f1716ef3fdd2be64eb889a2ab",
+    "minVisiblePixels": 49083,
+    "maxVisiblePixels": 55040,
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  },
+  "slash": {
+    "size": [
+      3096,
+      392
+    ],
+    "frames": 12,
+    "bytes": 172923,
+    "sha256": "766f2c84eb19ac89819edc01661022b0aee4a26c1096642a55cdec09b2c3379d",
+    "minVisiblePixels": 0,
+    "maxVisiblePixels": 18095,
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  },
+  "finish": {
+    "size": [
+      3096,
+      1552
+    ],
+    "frames": 24,
+    "bytes": 570212,
+    "sha256": "26d2232278db74bb18de12452690c6229792eb5a5ef93289d3eb1dd5545358c9",
+    "minVisiblePixels": 0,
+    "maxVisiblePixels": 32660,
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  }
+}

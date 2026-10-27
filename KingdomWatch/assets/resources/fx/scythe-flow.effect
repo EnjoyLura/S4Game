@@ -50,48 +50,29 @@ CCProgram scythe-fs %{
   float age=fxState.x,seed=fxState.y*37.,mode=fxState.w,t=fxShape.w;
   vec3 rgb=vec3(0.);float alpha=0.;
   if(mode<.5){
-   float x=q.x,edge=-.30*x*x,side=1.-smoothstep(.91,1.035,abs(x));
-   float width=.055*sqrt(max(0.,1.-x*x))+.004,d=q.y-edge;
-   float solid=smoothstep(-width-.006,-width+.005,d)*(1.-smoothstep(-.004,.005,d))*side;
-   float core=bell(d+.006,.008)*side;
-   rgb=ORANGE*solid*.95+WHITE*core*.95+ORANGE*bell(d,.032)*side*.55+RED*bell(d+.02,.09)*side*.25;
-   alpha=solid*.74;
-   // Uneven, advecting streaks: center longer, tips shorter, no static evenly spaced hairs.
-   for(int k=0;k<22;k++){
-    float i=float(k),sx=-.93+i*.088+sin(i*17.1)*.025,span=.18+.6*pow(max(0.,1.-sx*sx),1.8);
-    float phase=fract(age*(2.4+hash(i)*1.7)+hash(i+seed));
-    float cy=-.3*sx*sx-.025-phase*span;
-    float curl=sx+sin(q.y*17.-age*18.+i*2.3)*.012*(.2+phase);
-    float streak=bell(x-curl,.004+hash(i+3.)*.005)*bell(q.y-cy,.025+hash(i)*.075)*(1.-phase)*side;
-    rgb+=(GOLD*.6+ORANGE*.5)*streak*.65;
-   }
-   float tail=-d,env=smoothstep(0.,.08,tail)*(1.-smoothstep(.12,max(.2,.8*(1.-min(.9,x*x))),tail))*side;
-   float wisps=pow(sat(sin(x*48.+noise(q.y*12.-age*5.+seed)*5.)),5.);
-   rgb+=(RED*.22+ORANGE*.1)*wisps*env;
+   float x=q.x,env=sqrt(max(0.,1.-x*x)),edge=.72*(env-1.),tail=edge-q.y;
+   float teeth=.72+.19*sin((x+1.)*15.5-age*8.)+.13*sin((x+1.)*29.5-age*16.+1.4);
+   float u=tail/max(.02,env*teeth),side=1.-smoothstep(.97,1.01,abs(x));
+   float body=smoothstep(-.01,.015,tail)*(1.-smoothstep(.70,1.,u))*side;
+   float warp=u+noise(x*13.-age*5.+seed)*.12;
+   vec3 flame=mix(GOLD,ORANGE,smoothstep(.04,.18,warp));flame=mix(flame,RED*.55,smoothstep(.18,.30,warp));
+   flame=mix(flame,vec3(.002,0.,.001),smoothstep(.30,.45,warp));
+   alpha=body*.94;rgb=flame*body+WHITE*bell(tail,.008)*side+ORANGE*bell(tail,.027)*side*.5;
   }else if(mode<1.5){
-   vec2 p=rot(q,-age*10.);
-   float shaft=min(segment(p,vec2(-.38,-.74),vec2(-.21,.65)),segment(p,vec2(-.21,.65),vec2(-.49,.65)));
-   vec2 b=p-vec2(-.15,-.1);float r=length(b),a=atan(b.y,b.x);
-   float gate=smoothstep(-.34,-.25,a)*(1.-smoothstep(1.98,2.04,a));
-   float taper=sat((a+.3)/2.3),width=.018+.13*taper;
-   float blade=smoothstep(.82-width-.005,.82-width+.005,r)*(1.-smoothstep(.815,.827,r))*gate;
-   float edge=bell(r-.82,.009)*gate,handle=1.-smoothstep(.014,.024,shaft);
-   float grip=handle*smoothstep(-.5,-.3,p.y)*(1.-smoothstep(.08,.2,p.y));
-   alpha=max(blade*.96,handle*.92);
-   rgb=ORANGE*blade*.8+WHITE*edge+GOLD*bell(shaft,.006)*.55+vec3(.18,.08,.04)*handle;
-   rgb+=RED*bell(r-.82,.055)*gate*.55+ORANGE*grip*(.2+.15*sin(p.y*125.));
-   // A short angular wake follows the single hook; the long shaft stays legible.
-   float qr=length(q),qa=atan(q.y,q.x);
-   for(int k=0;k<4;k++){
-    float i=float(k),phase=qa-age*10.-i*.32,arc=pow(sat(cos(phase)),7.);
-    float rr=.86+i*.065+.018*sin(qa*6.-age*7.+i);
-    rgb+=(ORANGE*.65+RED*.35)*bell(qr-rr,.012+i*.009)*arc*(.38-i*.075);
+   // Twin handleless sickles with continuous coiled wake, inspired by ninja spiral structure.
+   vec2 p=q/vec2(1.,.88);float r=length(p),a=atan(p.y,p.x),spin=age*42.4+seed;
+   alpha=(1.-smoothstep(.55,.91,r))*.66;rgb=vec3(.01,0.,.002)*alpha;
+   for(int k=0;k<2;k++){
+    float angle=a-spin-float(k)*3.14159,arc=atan(sin(angle),cos(angle));
+    float gate=smoothstep(-2.7,-2.3,arc)*(1.-smoothstep(-.04,.1,arc)),u=sat(-arc/2.7);
+    float rr=.90-u*.16,width=.03+.08*u;
+    rgb+=RED*bell(r-rr,width)*gate*(1.-u*.7)+WHITE*bell(r-rr,.009)*gate*(1.-u)*.65;
    }
-   for(int k=0;k<9;k++){
-    float i=float(k),a0=age*(3.+hash(i))+i*2.39996,rr=.85+fract(age*.8+i*.31)*.38;
-    vec2 dotp=q-vec2(cos(a0),sin(a0))*rr;
-    rgb+=GOLD*bell(length(dotp),.009+hash(i)*.006)*.6;
+   for(int k=0;k<8;k++){
+    float i=float(k),arc=a-spin*.7-i*.7854,coil=.14+.11*mod(arc+12.56,6.2832);
+    rgb+=RED*bell(r-coil,.032)*.26+ORANGE*bell(r-(.94+.015*i),.006)*pow(sat(sin(arc)),4.)*.25;
    }
+   rgb+=RED*bell(r,.18)*.35+ORANGE*bell(r,.055)*(.7+.2*sin(age*25.));
   }else if(mode<2.5){
    float r=length(q),a=atan(q.y,q.x),fade=pow(1.-sat(t),2.);
    rgb=WHITE*bell(r,.12)*(1.-t)*1.2+ORANGE*bell(r-.05-t*.55,.025)*fade*.55;
@@ -110,29 +91,43 @@ CCProgram scythe-fs %{
    rgb=WHITE*bell(r-radius,.012)*gate*fade+ORANGE*bell(r-radius+.04,.06)*gate*fade*.8;
    rgb+=RED*bell(r-radius+.12,.15)*gate*fade*.35;
   }else if(mode<5.5){
-   // Dark-red energy rises at the locked region. No crossed charge, solid disc or full bright ring.
-   float r=length(q),a=atan(q.y,q.x),rise=smoothstep(0.,.48,age),fade=1.-smoothstep(.82,1.,t);
-   float radius=mix(.62,1.,rise),inside=1.-smoothstep(radius-.12,radius+.06,r);
-   float n=noise(a*5.+r*14.-age*2.+seed),veins=pow(sat(sin(r*30.+n*5.-age*4.)),7.);
-   alpha=inside*(.12+.10*n)*rise*fade;
-   rgb=vec3(.065,.002,.008)*inside*rise*fade+RED*veins*inside*.10*rise*fade;
+   // Dense dark-red footprint below actors, irregular rim mist and lifted embers.
+   float r=length(q),a=atan(q.y,q.x),rise=smoothstep(0.,.38,age),fade=1.-smoothstep(.84,1.,t);
+   float n=noise(a*4.+r*12.-age*1.7+seed),radius=mix(.76,1.,rise);
+   float inside=1.-smoothstep(radius-.12,radius+.035+.025*n,r);
+   alpha=inside*(.61+.10*n)*rise*fade;
+   rgb=vec3(.041,.001,.007)*alpha+RED*pow(sat(sin(r*25.+n*6.-age*4.)),8.)*inside*.025*rise*fade;
    float gaps=pow(sat(sin(a*5.+seed)+.35*sin(a*13.-age*2.)),3.);
-   rgb+=ORANGE*bell(r-radius,.012)*gaps*.55*rise*fade;
+   rgb+=RED*bell(r-radius,.028)*gaps*.3*rise*fade;
    for(int k=0;k<20;k++){
     float i=float(k),theta=i*2.39996+seed,rr=radius*(.88+.10*hash(i+seed));
     vec2 base=vec2(cos(theta),sin(theta))*rr;
-    float h=fract(age*1.1+hash(i+5.)),height=.07+.22*h;
-    float flick=sin(h*3.14159)*(1.-h);
-    vec2 v=q-base;float tip=bell(v.y-height*.5,height*.6)*bell(v.x-sin(v.y*28.+i)*.008,.004);
-    rgb+=ORANGE*tip*flick*rise*fade*.58;
+    float h=fract(age*.9+hash(i+5.)),height=.08+.25*h,flick=sin(h*3.14159)*(1.-h)*rise*fade;
+    vec2 v=q-base;float bend=sin(v.y*19.+i-age*3.)*.02;
+    float smoke=bell(v.y-height*.5,height*.55)*bell(v.x-bend,.025+.015*h);
+    rgb+=RED*smoke*flick*.16;alpha+=smoke*flick*.05;
+    rgb+=ORANGE*bell(v.y-height*.8,.007)*bell(v.x-bend,.003)*flick*.45;
    }
-  }else{
-   // Final convergence: a contracting, torn corona and a brief central flash.
+  }else if(mode<6.5){
    float r=length(q),a=atan(q.y,q.x),fade=pow(1.-sat(t),2.);
    float radius=mix(1.05,.05,sat(t*1.8));
    float gaps=pow(sat(sin(a*7.+seed)+.3*sin(a*17.-age*5.)),3.);
-   rgb=RED*bell(r-radius,.045)*gaps*fade*.8+WHITE*bell(r,.045+t*.1)*exp(-t*15.)*1.3;
-   rgb+=ORANGE*bell(r,.14)*exp(-t*9.)*.7;
+   rgb=RED*bell(r-radius,.045)*gaps*fade*.6+WHITE*bell(r,.045+t*.1)*exp(-t*18.)*1.8;
+   rgb+=ORANGE*bell(r,.14)*exp(-t*10.)*.9;
+  }else{
+   // Each slash owns a short-lived moving wake: ash, crimson vapor and sparse hot sparks.
+   float fade=pow(1.-sat(t),1.5),n=noise(q.x*13.-age*12.+seed);
+   float smoke=bell(q.y-sin(q.x*7.+seed-age*8.)*.028-age*.10,.04+age*.1)*(1.-smoothstep(.65,1.2,abs(q.x)));
+   alpha=smoke*fade*.13;rgb=RED*smoke*(.08+.09*n)*fade;
+   for(int k=0;k<12;k++){
+    float i=float(k),s=hash(i*17.+seed),side=mod(i,2.)*2.-1.;
+    vec2 origin=vec2((s*2.-1.)*.94,.0),velocity=vec2((hash(i+7.+seed)-.5)*.7,side*(.15+.5*hash(i+3.+seed)));
+    vec2 d=q-origin-velocity*age;
+    float ember=bell(d.x,.007+.016*s)*bell(d.y,.003+.004*s)*fade;
+    rgb+=mix(RED,ORANGE,s)*ember*(.45+s);
+    float shred=bell(d.x+age*.06,.018)*bell(d.y,.005)*fade;
+    alpha+=shred*.15;rgb+=RED*shred*.07;
+   }
   }
   float bounds=(1.-smoothstep(.94,1.,abs(uv0.x-.5)*2.))*(1.-smoothstep(.94,1.,abs(uv0.y-.5)*2.));
   float power=max(0.,fxState.z)*bounds;

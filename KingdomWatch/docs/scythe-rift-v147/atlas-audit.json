@@ -1,0 +1,36 @@
+{
+  "blade": {
+    "size": [
+      1944,
+      1944
+    ],
+    "frames": 32,
+    "bytes": 881830,
+    "sha256": "a8b4ed705162336ed177cdc469211b600d3d4174b691492e4bdb370fa02c33ef",
+    "minVisiblePixels": 26306,
+    "maxVisiblePixels": 26432,
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  },
+  "spin": {
+    "size": [
+      2328,
+      2328
+    ],
+    "frames": 32,
+    "bytes": 4460925,
+    "sha256": "1b51691c6811ee050a9c9109d2056f207c61c389505dd8163bbdcb3dddc8f02d",
+    "minVisiblePixels": 75793,
+    "maxVisiblePixels": 77700,
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  }
+}

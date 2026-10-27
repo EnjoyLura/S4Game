@@ -1,0 +1,9 @@
+{
+  "actualCosmeticClasses": true,
+  "recordedFrames": 650,
+  "gpuSamples": 49,
+  "spriteBlend": "SRC_ALPHA / ONE_MINUS_SRC_ALPHA",
+  "shaderBlend": "ONE / ONE_MINUS_SRC_ALPHA",
+  "battleStarted": false,
+  "visualAcceptance": "pending user"
+}

@@ -3,9 +3,9 @@ import { Color,JsonAsset,Layers,Node,Rect,resources,Size,Sprite,SpriteFrame,UITr
 import { ArtPriority,promoteUXArt,uxFrame } from '../ui/Ux';
 export type ScytheClipKind='blade'|'spin'|'slash';
 const kinds:readonly ScytheClipKind[]=['blade','spin','slash'];
-export const scytheClipPath=(kind:ScytheClipKind)=>'fx/scythe_'+kind+'_v144';
+export const scytheClipPath=(kind:ScytheClipKind)=>'fx/scythe_'+kind+(kind==='slash'?'_v144':'_v147');
 interface Manifest {schema:number;kind:ScytheClipKind;frameCount:number;fps:number;cellSize:[number,number];anchor:[number,number];loop:boolean;alpha:string;widthPerRadius:number;frames:[number,number,number,number][];}
-interface Clip {m:Manifest;frames:SpriteFrame[];}
+interface Clip {m:Manifest;frames:SpriteFrame[];back:SpriteFrame[];front:SpriteFrame[];}
 interface Slot {node:Node;sprite:Sprite;ui:UITransform;frame:SpriteFrame|null;}
 const clips=new Map<ScytheClipKind,Clip>(),jobs=new Map<ScytheClipKind,Promise<void>>();
 function valid(m:Manifest,source:SpriteFrame,kind:ScytheClipKind):boolean{
@@ -25,7 +25,9 @@ function load(kind:ScytheClipKind,priority:ArtPriority):Promise<void>{
   if(!source||!m||!valid(m,source,kind))return;source.packable=false;
   const frames=m.frames.map(([x,y,w,h])=>{const frame=new SpriteFrame();frame.reset({texture:source.texture,
    rect:new Rect(source.rect.x+x,source.rect.y+y,w,h),originalSize:new Size(w,h),offset:new Vec2()});frame.packable=false;return frame;});
-  clips.set(kind,{m,frames});
+  const half=(lower:boolean)=>kind==='spin'?m.frames.map(([x,y,w,h])=>{const frame=new SpriteFrame();frame.reset({texture:source.texture,
+   rect:new Rect(source.rect.x+x,source.rect.y+y+(lower?h/2:0),w,h/2),originalSize:new Size(w,h/2),offset:new Vec2()});frame.packable=false;return frame;}):[];
+  clips.set(kind,{m,frames,back:half(false),front:half(true)});
  });jobs.set(kind,job);void job.then(()=>{if(!clips.has(kind)&&jobs.get(kind)===job)jobs.delete(kind);});return job;
 }
 export function warmScytheAtlas(priority:ArtPriority='next'):Promise<void>{return Promise.all(kinds.map(k=>load(k,priority))).then(()=>{});}
@@ -46,13 +48,15 @@ export class ScytheAtlas {
  }
  choose(owner:object):boolean{if(!this.choices.has(owner))this.choices.set(owner,scytheAtlasReady());return this.choices.get(owner)!;}
  begin():void{this.used=0;}
- draw(kind:ScytheClipKind,x:number,y:number,radius:number,age:number,angle=0,alpha=1,seed=0):boolean{
+ draw(kind:ScytheClipKind,x:number,y:number,radius:number,age:number,angle=0,alpha=1,seed=0,slice:'full'|'back'|'front'='full',heightScale=1):boolean{
   const clip=clips.get(kind);if(!clip||this.disposed||this.used>=this.slots.length)return false;
   const m=clip.m;if(alpha<=0||!m.loop&&age>=m.frameCount/m.fps)return true;
-  const index=scytheAtlasFrame(age+(m.loop?seed*m.frameCount/m.fps:0),m.fps,m.frameCount,m.loop),frame=clip.frames[index],slot=this.slots[this.used++];
+  const index=scytheAtlasFrame(age+(m.loop?seed*m.frameCount/m.fps:0),m.fps,m.frameCount,m.loop),split=kind==='spin'&&slice!=='full';
+  const frame=split?clip[slice as 'back'|'front'][index]:clip.frames[index],slot=this.slots[this.used++];
   if(slot.frame!==frame){slot.sprite.spriteFrame=frame;slot.frame=frame;}
-  const width=radius*m.widthPerRadius;slot.ui.setContentSize(width,width*m.cellSize[1]/m.cellSize[0]);slot.ui.setAnchorPoint(m.anchor[0],m.anchor[1]);
-  slot.node.setPosition(x,y,0);slot.node.setRotationFromEuler(0,0,angle*180/Math.PI);this.tint.a=Math.round(255*Math.max(0,Math.min(1,alpha)));slot.sprite.color=this.tint;slot.node.active=true;return true;
+  const width=radius*m.widthPerRadius,height=width*m.cellSize[1]/m.cellSize[0]*heightScale,offset=split?height*(slice==='back'?.25:-.25):0;
+  slot.ui.setContentSize(width,height*(split?.5:1));slot.ui.setAnchorPoint(m.anchor[0],m.anchor[1]);
+  slot.node.setPosition(x-Math.sin(angle)*offset,y+Math.cos(angle)*offset,0);slot.node.setRotationFromEuler(0,0,angle*180/Math.PI);this.tint.a=Math.round(255*Math.max(0,Math.min(1,alpha)));slot.sprite.color=this.tint;slot.node.active=true;return true;
  }
  end():void{for(let i=this.used;i<this.slots.length;i++)this.slots[i].node.active=false;}
 }

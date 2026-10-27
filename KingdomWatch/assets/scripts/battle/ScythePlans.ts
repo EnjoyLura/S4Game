@@ -24,7 +24,7 @@ export function scytheReapCut(index:number,seed:number,radius:number,final=false
 export function scytheInDomain(x:number,y:number,cx:number,cy:number,radius:number):boolean{
  return (x-cx)**2+(y-cy)**2<=radius*radius;
 }
-/** Sweep the visible parabola (24 capsule segments), including curved tips and zero-length steps.
+/** Sweep the visible crescent (24 capsule segments), including curved tips and zero-length steps.
  * Axes are forward / transverse. Returns earliest time in [0,1], or Infinity. */
 export function scytheBladeEntry(forward:number,lateral:number,travel:number,half:number,radius:number):number{
  if(half<=0||radius<0||travel<0)return Infinity;
@@ -33,7 +33,7 @@ export function scytheBladeEntry(forward:number,lateral:number,travel:number,hal
   const b=x*vx,disc=b*b-travel*travel*c;if(travel<=1e-8||b>=0||disc<0)return Infinity;
   const t=(-b-Math.sqrt(disc))/(travel*travel);return t>=0&&t<=1?t:Infinity;};
  for(let k=0;k<24;k++){
-  const ay=(k/12-1)*half,by=((k+1)/12-1)*half,ax=-.3*ay*ay/half,bx=-.3*by*by/half;
+  const ay=(k/12-1)*half,by=((k+1)/12-1)*half,ax=.72*(Math.sqrt(Math.max(0,1-(ay/half)**2))-1)*half,bx=.72*(Math.sqrt(Math.max(0,1-(by/half)**2))-1)*half;
   const dx=bx-ax,dy=by-ay,len=Math.hypot(dx,dy),ux=dx/len,uy=dy/len,nx=-uy,ny=ux;
   const px=forward-ax,py=lateral-ay,along=px*ux+py*uy,dist=px*nx+py*ny;
   if(along>=0&&along<=len&&Math.abs(dist)<=radius)return 0;

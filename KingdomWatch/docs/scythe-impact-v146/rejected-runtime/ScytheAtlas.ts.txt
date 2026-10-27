@@ -1,0 +1,62 @@
+/** Blender red scythe elements: fixed canvases, shared textures, standard straight-alpha sprites. */
+import { Color,JsonAsset,Layers,Node,Rect,resources,Size,Sprite,SpriteFrame,UITransform,Vec2 } from 'cc';
+import { ArtPriority,promoteUXArt,uxFrame } from '../ui/Ux';
+export type ScytheClipKind='blade'|'spin'|'slash'|'finish';
+const kinds:readonly ScytheClipKind[]=['blade','spin','slash','finish'];
+export const scytheClipPath=(kind:ScytheClipKind)=>'fx/scythe_'+kind+'_v146';
+interface Manifest {schema:number;kind:ScytheClipKind;frameCount:number;fps:number;cellSize:[number,number];anchor:[number,number];loop:boolean;alpha:string;widthPerRadius:number;frames:[number,number,number,number][];}
+interface Clip {m:Manifest;frames:SpriteFrame[];back:SpriteFrame[];front:SpriteFrame[];}
+interface Slot {node:Node;sprite:Sprite;ui:UITransform;frame:SpriteFrame|null;}
+const clips=new Map<ScytheClipKind,Clip>(),jobs=new Map<ScytheClipKind,Promise<void>>();
+function valid(m:Manifest,source:SpriteFrame,kind:ScytheClipKind):boolean{
+ return m?.schema===1&&m.kind===kind&&m.alpha==='straight'&&typeof m.loop==='boolean'
+  &&Number.isInteger(m.frameCount)&&m.frameCount>0&&m.frameCount<=64&&Number.isFinite(m.fps)&&m.fps>0&&m.fps<=120
+  &&Array.isArray(m.cellSize)&&m.cellSize.length===2&&m.cellSize.every(n=>Number.isFinite(n)&&n>0&&n<=1024)
+  &&Array.isArray(m.anchor)&&m.anchor.length===2&&m.anchor.every(n=>Number.isFinite(n)&&n>=0&&n<=1)
+  &&Number.isFinite(m.widthPerRadius)&&m.widthPerRadius>0&&m.widthPerRadius<=4
+  &&Array.isArray(m.frames)&&m.frames.length===m.frameCount&&m.frames.every(r=>Array.isArray(r)&&r.length===4&&r.every(Number.isFinite)
+   &&r[0]>=0&&r[1]>=0&&r[2]===m.cellSize[0]&&r[3]===m.cellSize[1]&&r[0]+r[2]<=source.rect.width&&r[1]+r[3]<=source.rect.height);
+}
+function load(kind:ScytheClipKind,priority:ArtPriority):Promise<void>{
+ const path=scytheClipPath(kind),hit=jobs.get(kind);if(hit){promoteUXArt(path,priority);return hit;}
+ const image=new Promise<SpriteFrame|null>(resolve=>uxFrame(path,resolve,priority));
+ const manifest=new Promise<Manifest|null>(resolve=>resources.load(path+'.frames',JsonAsset,(error,asset)=>resolve(!error&&asset?asset.json as Manifest:null)));
+ const job=Promise.all([image,manifest]).then(([source,m])=>{
+  if(!source||!m||!valid(m,source,kind))return;source.packable=false;
+  const frames=m.frames.map(([x,y,w,h])=>{const frame=new SpriteFrame();frame.reset({texture:source.texture,
+   rect:new Rect(source.rect.x+x,source.rect.y+y,w,h),originalSize:new Size(w,h),offset:new Vec2()});frame.packable=false;return frame;});
+  const half=(lower:boolean)=>kind==='spin'?m.frames.map(([x,y,w,h])=>{const frame=new SpriteFrame();frame.reset({texture:source.texture,
+   rect:new Rect(source.rect.x+x,source.rect.y+y+(lower?h/2:0),w,h/2),originalSize:new Size(w,h/2),offset:new Vec2()});frame.packable=false;return frame;}):[];
+  clips.set(kind,{m,frames,back:half(false),front:half(true)});
+ });jobs.set(kind,job);void job.then(()=>{if(!clips.has(kind)&&jobs.get(kind)===job)jobs.delete(kind);});return job;
+}
+export function warmScytheAtlas(priority:ArtPriority='next'):Promise<void>{return Promise.all(kinds.map(k=>load(k,priority))).then(()=>{});}
+export function scytheAtlasReady():boolean{return kinds.every(k=>clips.has(k));}
+export function scytheAtlasFrame(age:number,fps:number,count:number,loop:boolean):number{
+ const i=Math.floor(Math.max(0,Number.isFinite(age)?age:0)*fps+1e-7);return loop?i%count:Math.min(count-1,i);
+}
+export class ScytheAtlas {
+ private readonly root:Node;private readonly slots:Slot[]=[];private readonly tint=new Color(255,255,255,255);
+ private readonly choices=new WeakMap<object,boolean>();private used=0;private disposed=false;
+ constructor(parent:Node,name:string,capacity:number){
+  this.root=new Node(name);this.root.layer=Layers.Enum.UI_2D;this.root.setParent(parent);
+  for(let i=0;i<capacity;i++){const node=new Node('scytheElement'+i);node.layer=Layers.Enum.UI_2D;node.setParent(this.root);
+   const ui=node.addComponent(UITransform),sprite=node.addComponent(Sprite);sprite.sizeMode=Sprite.SizeMode.CUSTOM;sprite.trim=false;node.active=false;
+   this.slots.push({node,ui,sprite,frame:null});}
+  this.root.once(Node.EventType.NODE_DESTROYED,()=>{this.disposed=true;for(const s of this.slots){if(s.node.isValid)s.sprite.spriteFrame=null;s.frame=null;}this.slots.length=0;});
+  void warmScytheAtlas('visible');
+ }
+ choose(owner:object):boolean{if(!this.choices.has(owner))this.choices.set(owner,scytheAtlasReady());return this.choices.get(owner)!;}
+ begin():void{this.used=0;}
+ draw(kind:ScytheClipKind,x:number,y:number,radius:number,age:number,angle=0,alpha=1,seed=0,slice:'full'|'back'|'front'='full'):boolean{
+  const clip=clips.get(kind);if(!clip||this.disposed||this.used>=this.slots.length)return false;
+  const m=clip.m;if(alpha<=0||!m.loop&&age>=m.frameCount/m.fps)return true;
+  const index=scytheAtlasFrame(age+(m.loop?seed*m.frameCount/m.fps:0),m.fps,m.frameCount,m.loop),split=kind==='spin'&&slice!=='full';
+  const frame=split?clip[slice as 'back'|'front'][index]:clip.frames[index],slot=this.slots[this.used++];
+  if(slot.frame!==frame){slot.sprite.spriteFrame=frame;slot.frame=frame;}
+  const width=radius*m.widthPerRadius,height=width*m.cellSize[1]/m.cellSize[0],offset=split?height*(slice==='back'?.25:-.25):0;
+  slot.ui.setContentSize(width,height*(split?.5:1));slot.ui.setAnchorPoint(m.anchor[0],m.anchor[1]);
+  slot.node.setPosition(x-Math.sin(angle)*offset,y+Math.cos(angle)*offset,0);slot.node.setRotationFromEuler(0,0,angle*180/Math.PI);this.tint.a=Math.round(255*Math.max(0,Math.min(1,alpha)));slot.sprite.color=this.tint;slot.node.active=true;return true;
+ }
+ end():void{for(let i=this.used;i<this.slots.length;i++)this.slots[i].node.active=false;}
+}
