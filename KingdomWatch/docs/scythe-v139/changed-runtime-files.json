@@ -1,0 +1,31 @@
+[
+  {
+    "path": "assets/resources/import/47/470db7d6-782a-4b0d-9082-8b8ae08bb7d3.82793.json",
+    "sha256": "34c2995dc17682894658dbb9c599d217679599925942dfe35de0f714661ed5d5",
+    "shaderPrograms": 1,
+    "noTextureDependencies": true,
+    "blend": {
+      "blend": true,
+      "blendSrc": 1,
+      "blendDst": 4,
+      "blendSrcAlpha": 0,
+      "blendDstAlpha": 1
+    }
+  },
+  {
+    "path": "assets/resources/native/08/08934c18-5f2f-44c6-8145-d4fb15839d72.44d77/UIHeading.ttf",
+    "sha256": "e1c12b27d403711adbeece635912a89957b9a2d93ed18c9e3fc6e4bc9cb0efd2"
+  },
+  {
+    "path": "assets/resources/native/47/47b6abb5-324a-4b8d-9989-04d8238ba957.091ceabbea22ef02.webp",
+    "sha256": "091ceabbea22ef02439e8af8640480f477dda0d71846c744bc48c12860755d6a"
+  },
+  {
+    "path": "assets/resources/native/4f/4f4e0740-2005-42a2-b4f7-31b0ed0bff81.fe12d/UIBody.ttf",
+    "sha256": "30405a91ef4284b9ddeb205820245bb91c1436522de911162d0d9e93eccaadd6"
+  },
+  {
+    "path": "assets/resources/native/fd/fda2dc8c-6ef0-4363-b5a3-184721a768ff.132af4d2d475d487.webp",
+    "sha256": "132af4d2d475d487554698ad01627913e8b63988d02416d31fe56662b0a77c1e"
+  }
+]
