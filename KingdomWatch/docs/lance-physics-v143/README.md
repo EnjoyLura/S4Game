@@ -38,4 +38,4 @@ node audit_types.cjs
 
 实现本地提交 `bdcf09c3`。Creator 3.8.8 正式构建 18468ms、退出36，DPR 修补和资源审计通过。导出版本 `ce62dacd2a195d01`，1647 文件、216088544 字节；526 个既有 native 文件原字节保持，仅 body/impact 两张图集被替换，四张雷枪图集均无损、与源 RGBA 逐像素一致。15 个 JS 与 5 段内联脚本语法检查通过，类型原9无新增。见 `build-record.json`、`package-static-verification.json`。
 
-独立 GitHub Pages 发布回执在完成后记录；不推源码仓库。
+已发布：[v143 游戏入口](https://enjoylura.github.io/kingdom-watch-play/?v=lance-physics-v143)。运行提交 `e959ee0bad1fa889ea68d8370c63c91c13a898d2`，线上版本 `ce62dacd2a195d01`，Pages/build 均 built。标准验证与额外 9 文件（四图集、四图像导入、主脚本）HTTP200+SHA256 全部通过，见 `deployment.json`、`additional-http-verification.json`。发布时源码 HEAD `5d4d3d26` 与索引保持，只推独立运行仓库，不推源码、不部署 Cloudflare。手机实际视觉验收待用户。
