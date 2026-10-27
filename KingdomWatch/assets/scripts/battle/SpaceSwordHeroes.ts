@@ -86,7 +86,7 @@ abstract class SpaceSwordBase extends HeroBase {
     }
   }
   protected dense(mgr:MonsterManager,radius:number,range=Infinity):{x:number;y:number}|null{
-    return densestBodyArea(mgr.list,this.x,HERO_Y,range,radius,{left:-DESIGN_W/2+24,right:DESIGN_W/2-24,
+    return densestBodyArea(mgr.list.filter(live),this.x,HERO_Y,range,radius,{left:-DESIGN_W/2+24,right:DESIGN_W/2-24,
       bottom:LINE_Y+60,top:LO.half-LO.notchTop-145});
   }
 }

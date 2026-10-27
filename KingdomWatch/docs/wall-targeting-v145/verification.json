@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "baseline": "d6829713",
+  "oldFailedEntrances": 8,
+  "actualCastCallbacks": 288,
+  "damageFootprintsCoverTarget": 288,
+  "viewports": 3,
+  "ordinaryClustersUnchanged": 300,
+  "boundaryAndRangeChecks": true,
+  "deadAndEmptyDoNotConsume": true,
+  "tornadoForwardOnlyPreserved": true,
+  "gameEngineBattleBrowserAudioWasmStarted": false
+}

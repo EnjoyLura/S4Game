@@ -45,14 +45,16 @@ export function interceptDirection(x: number, y: number, targetX: number, target
     flightTime: time, impactX, impactY, reachable };
 }
 
-/** Count the real circular footprint, then refine each seed with its local centroid. */
+/** Bounds constrain effect centers. Bodies below the lower edge remain eligible when
+ * the actual circular footprint can reach them (including enemies attacking the wall). */
 export function densestBodyArea(bodies: readonly BodyPoint[], x: number, y: number,
   castRange: number, radius: number, bounds: BodyBounds): FieldPoint | null {
   const r2 = radius * radius, range2 = castRange * castRange;
   let best: FieldPoint | null = null, score = 0, nearest = Infinity;
   const visible = (m: BodyPoint): boolean => !m.dead && Number.isFinite(m.x) && Number.isFinite(m.hitY)
-    && m.x >= bounds.left && m.x <= bounds.right && m.hitY >= bounds.bottom && m.hitY <= bounds.top;
+    && m.x >= bounds.left && m.x <= bounds.right && m.hitY >= bounds.bottom - radius && m.hitY <= bounds.top;
   const consider = (cx: number, cy: number): void => {
+    cy = Math.max(bounds.bottom, cy);
     if (cx < bounds.left || cx > bounds.right || cy < bounds.bottom || cy > bounds.top) return;
     const distance = (cx - x) ** 2 + (cy - y) ** 2;
     if (distance > range2) return;

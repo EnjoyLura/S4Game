@@ -50,7 +50,9 @@ function inRange(m: Monster, x: number, range: number): boolean {
   return (m.x - x) ** 2 + (m.hitY - HERO_Y) ** 2 <= range * range;
 }
 function cluster(mgr: MonsterManager, x: number, y: number, range: number, radius: number, minY = LINE_Y + 8): FieldPoint | null {
-  return densestBodyArea(mgr.list, x, y, range, radius, {
+  // Initial casts may cover wall attackers; an existing tornado still seeks only ahead.
+  const candidates = mgr.list.filter(m => liveNode(m) && (minY <= LINE_Y + 8 || m.hitY >= minY));
+  return densestBodyArea(candidates, x, y, range, radius, {
     left: -DESIGN_W / 2 + 12, right: DESIGN_W / 2 - 12,
     bottom: Math.max(LINE_Y + 8, minY), top: LO.half - LO.notchTop - 136,
   });
