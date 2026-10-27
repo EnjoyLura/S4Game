@@ -4,6 +4,7 @@ import { CA,N } from '../ui/UIKit';
 import { HeroFxShader } from './HeroFxShader';
 import { ScytheAtlas } from './ScytheAtlas';
 import { SCYTHE_TIMING as T } from '../config/ScytheConfig';
+import { scytheRiftBasis,scytheRiftVolume,SpatialRift } from './ScytheRiftVolume';
 export const SCYTHE_EFFECT='fx/scythe-flow';
 interface Accent {x:number;y:number;r:number;age:number;life:number;mode:number;seed:number;}
 export interface ScytheReapVisual {x:number;y:number;radius:number;age:number;duration:number;hits:number;seed:number;}
@@ -23,6 +24,7 @@ export function drawScytheBlade(shader:HeroFxShader|null,g:Graphics,x:number,y:n
 export class ScytheVFX {
  private air:Node;private front:Node;private ink:Graphics;private shader:HeroFxShader;private accents:Accent[]=[];private serial=0;
  private atlas:ScytheAtlas;private frontAtlas:ScytheAtlas;private frontShader:HeroFxShader;private domain:HeroFxShader;
+ private readonly riftVolumes=new WeakMap<object,readonly SpatialRift[]>();
  constructor(parent:Node){this.air=N('scytheVFX',parent.getChildByName('GroundFxLayer')||parent);
   this.domain=new HeroFxShader(this.air,'scytheRisingDomain',3,'plasma',{effect:SCYTHE_EFFECT,technique:0});
   this.ink=N('scytheInk',this.air).addComponent(Graphics);this.shader=new HeroFxShader(this.air,'scytheFire',48,'plasma',{effect:SCYTHE_EFFECT,technique:0});
@@ -38,6 +40,9 @@ export class ScytheVFX {
  begin():void{this.ink.clear();this.shader.begin();this.domain.begin();this.atlas.begin();this.frontShader.begin();this.frontAtlas.begin();}
  spin(x:number,y:number,r:number,age:number,seed:number,opacity:number,owner:object):void{
   if(opacity<=0)return;
+  // Detached wake lives beyond the sprite silhouette and drifts at its own speed.
+  this.shader.draw(x,y,r*4.2,r*3.9,0,age,seed,opacity,8,r,0);
+  this.frontShader.draw(x,y,r*4.2,r*3.9,0,age,seed,opacity,8,r,1);
   if(this.atlas.choose(owner)){this.atlas.draw('spin',x,y,r,age*1.8,0,opacity,seed,'back');
    if(this.frontAtlas.draw('spin',x,y,r,age*1.8,0,opacity,seed,'front'))return;}
   if(this.shader.draw(x,y,r*2.8,r*2.8,0,age,seed,opacity,1,r,0))return;
@@ -60,30 +65,25 @@ export class ScytheVFX {
     const x=r.x+Math.cos(a)*reach,y=r.y+Math.sin(a)*reach;this.ink.moveTo(x,y);this.ink.lineTo(x+Math.sin(k)*6,y+lift*r.radius*.18);this.ink.stroke();}
   }
   const art=this.atlas.choose(r);
-  const hash=(v:number)=>{const n=Math.sin(v*127.1+r.seed*311.7)*43758.5453;return n-Math.floor(n);};
-  const finalBirth=T.reapStart+(r.hits-1)*T.reapGap;
-  for(let i=0;i<r.hits;i++){
-   const final=i===r.hits-1;if(!final&&r.age>=finalBirth-.045)continue;
-   for(let j=0;j<3;j++){
-    const key=i*17+j*7,delay=j*(final?.045:.055)+(!j?0:hash(key+2)*.018);
-    const age=r.age-T.reapStart-i*T.reapGap-delay,life=final?(j?.27:.36):.145+hash(key+3)*.065;
-    if(age<0||age>life+.16)continue;
-    const depth=hash(key+11),angle=final&&!j?.35+hash(key+8)*.6:hash(key+5)*Math.PI*2;
-    const offset=(hash(key+19)-.5)*r.radius*(final?.15:.78);
-    const reach=r.radius*(final?(j?.96:1.22):.78+hash(key+23)*.36);
-    const sweep=(Math.min(1,age/life)-.5)*r.radius*.10;
-    const x=r.x-Math.sin(angle)*(offset+sweep),y=r.y+Math.cos(angle)*(offset+sweep)+r.radius*(depth*.23-.03);
-    const near=final||depth>.42,atlas=near?this.frontAtlas:this.atlas,atmosphere=near?this.frontShader:this.shader;
-    atmosphere.draw(x,y,reach*2.6,reach*.84,angle*180/Math.PI,age,hash(key+31),final?1.2:.85,7,reach,Math.min(1,age/(life+.16)));
-    if(age<=life){
-     // Preserve the approved original rift texture, exposing it quickly then tearing it away.
-     const clipAge=final&&!j?(age<.025?age*6:age<.075?.15+(age-.025):.2+(age-.075)/(.36-.075)*.4):age/life*.6;
-     if(art&&atlas.draw('slash',x,y,reach,clipAge,angle,1,0,'full',final&&!j?1.45:.65+depth*.70))continue;
-     const length=reach*Math.min(1,age/.025),fade=Math.max(0,1-age/life);
-     for(let band=0;band<3;band++){this.ink.strokeColor=CA(band===2?'#FFE2C0':band?'#FF2538':'#59071B',fade*(band===0?.6:1));
-      this.ink.lineWidth=(band===0?13:band===1?5:1.4)*(final?1.4:1);
-      this.ink.moveTo(x-Math.cos(angle)*length,y-Math.sin(angle)*length);this.ink.lineTo(x+Math.cos(angle)*length,y+Math.sin(angle)*length);this.ink.stroke();}
-    }
+  const finalBirth=T.reapStart+8*T.reapGap;
+  let cuts=this.riftVolumes.get(r);if(!cuts){cuts=scytheRiftVolume(r.seed);this.riftVolumes.set(r,cuts);}
+  // Visual births are wholly independent of r.hits and the nine damage callbacks.
+  for(const cut of cuts){
+   const age=r.age-cut.birth;if(age<0||age>cut.life+.14||!cut.final&&r.age>=finalBirth-.035)continue;
+   const reach=r.radius*cut.reach,basis=scytheRiftBasis(cut.pitch,cut.yaw,cut.roll);
+   const projection=Math.hypot(basis.xx,basis.xy),angle=Math.atan2(basis.xy,basis.xx);
+   const sweep=(Math.min(1,age/cut.life)-.5)*r.radius*.055;
+   const x=r.x+cut.x*r.radius+basis.yx*sweep;
+   const y=r.y+(cut.groundY+cut.lift)*r.radius+basis.yy*sweep;
+   const atlas=cut.near?this.frontAtlas:this.atlas,atmosphere=cut.near?this.frontShader:this.shader;
+   atmosphere.draw(x,y,reach*2.6*projection,reach*.68,angle*180/Math.PI,age,cut.seed,cut.final?1.1:.6,7,reach,Math.min(1,age/(cut.life+.14)));
+   if(age<=cut.life){
+    const clipAge=age<.025?age*5.6:.14+(age-.025)/(cut.life-.025)*.46;
+    if(art&&atlas.draw('slash',x,y,reach,clipAge,cut.roll*Math.PI/180,1,0,'full',cut.thickness,cut.pitch,cut.yaw))continue;
+    const length=reach*Math.min(1,age/.025),fade=Math.max(0,1-age/cut.life);
+    for(let band=0;band<3;band++){this.ink.strokeColor=CA(band===2?'#FFE2C0':band?'#FF2538':'#59071B',fade*(band===0?.6:1));
+     this.ink.lineWidth=(band===0?13:band===1?5:1.4)*(cut.final?1.4:1);
+     this.ink.moveTo(x-basis.xx*length,y-basis.xy*length);this.ink.lineTo(x+basis.xx*length,y+basis.xy*length);this.ink.stroke();}
    }
   }
   const impactAge=r.age-finalBirth;

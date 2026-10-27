@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "damage": {
+    "actualCallbacks": true,
+    "pulses": 9,
+    "finalMultiplier": 2,
+    "totalBaseMultiplier": 8.1,
+    "outsideNotHit": true,
+    "boundaryHit": true,
+    "coarseStepCatchup": true,
+    "pauseStable": true,
+    "independentOfProjectileCapacity": true
+  },
+  "visualRifts": 72,
+  "independentSeedsChecked": 200,
+  "maximumConcurrent": 19,
+  "actualCocosMathComparisons": 14400,
+  "threeAxisProjectionVerified": true,
+  "levelsChecked": 20,
+  "cosmeticFrames": 650,
+  "firstSlashAt": 0.62,
+  "windupHasNoCrossedSlashes": true,
+  "fixedProjectilePool": 40,
+  "noPerFrameNodes": true,
+  "fallbackFinite": true,
+  "splitDepthRendering": true,
+  "originalRiftTexturePreserved": true,
+  "arcColliderMatches25Samples": true,
+  "lanceArtPhysicsAndDamageUnchanged": true,
+  "lanceLayerKeptAboveMonsters": true,
+  "gameEngineBrowserRealBattleAudioOrWasmStarted": false
+}

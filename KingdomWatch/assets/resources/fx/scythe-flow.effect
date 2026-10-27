@@ -114,20 +114,39 @@ CCProgram scythe-fs %{
    float gaps=pow(sat(sin(a*7.+seed)+.3*sin(a*17.-age*5.)),3.);
    rgb=RED*bell(r-radius,.045)*gaps*fade*.6+WHITE*bell(r,.045+t*.1)*exp(-t*18.)*1.8;
    rgb+=ORANGE*bell(r,.14)*exp(-t*10.)*.9;
-  }else{
+  }else if(mode<7.5){
    // Each slash owns a short-lived moving wake: ash, crimson vapor and sparse hot sparks.
    float fade=pow(1.-sat(t),1.5),n=noise(q.x*13.-age*12.+seed);
    float smoke=bell(q.y-sin(q.x*7.+seed-age*8.)*.028-age*.10,.04+age*.1)*(1.-smoothstep(.65,1.2,abs(q.x)));
    alpha=smoke*fade*.13;rgb=RED*smoke*(.08+.09*n)*fade;
-   for(int k=0;k<12;k++){
+   for(int k=0;k<18;k++){
     float i=float(k),s=hash(i*17.+seed),side=mod(i,2.)*2.-1.;
     vec2 origin=vec2((s*2.-1.)*.94,.0),velocity=vec2((hash(i+7.+seed)-.5)*.7,side*(.15+.5*hash(i+3.+seed)));
     vec2 d=q-origin-velocity*age;
     float ember=bell(d.x,.007+.016*s)*bell(d.y,.003+.004*s)*fade;
-    rgb+=mix(RED,ORANGE,s)*ember*(.45+s);
+    rgb+=mix(ORANGE,GOLD,s)*ember*(.65+s);
     float shred=bell(d.x+age*.06,.018)*bell(d.y,.005)*fade;
-    alpha+=shred*.15;rgb+=RED*shred*.07;
+    alpha+=shred*.40;rgb+=RED*shred*.12;
    }
+  }
+  else{
+   // Detached tangential wakes dissolve the silhouette; no complete luminous ring.
+   vec2 p=q/vec2(1.,.68);float r=length(p),a=atan(p.y,p.x);
+   float layer=t<.5?smoothstep(-.04,.04,q.y):1.-smoothstep(-.04,.04,q.y);
+   for(int k=0;k<18;k++){
+    float i=float(k),h=hash(i+seed),u=fract(age*(.75+h*.55)+h);
+    float theta=i*2.39996+age*(2.4+h*1.7),rr=.72+u*(.65+h*.22);
+    float da=atan(sin(a-theta),cos(a-theta));
+    float tail=sat(-da/(.25+h*.55)),gate=smoothstep(-.7-h*.3,-.45-h*.2,da)*(1.-smoothstep(-.04,.06,da));
+    float curve=rr-tail*.15,fade=sin(u*3.14159)*(1.-u)*gate;
+    float mist=bell(r-curve,.035+.08*tail)*fade;
+    alpha+=mist*.16;rgb+=RED*mist*.13;
+    rgb+=ORANGE*bell(r-curve,.005+h*.005)*fade*(.32+h*.40);
+    vec2 center=vec2(cos(theta),sin(theta))*rr,d=p-center;
+    float spark=bell(dot(d,vec2(-sin(theta),cos(theta))),.014+.035*h)*bell(dot(d,vec2(cos(theta),sin(theta))),.004);
+    rgb+=GOLD*spark*sin(u*3.14159)*(.12+.25*h);
+   }
+   rgb*=layer;alpha*=layer;
   }
   float bounds=(1.-smoothstep(.94,1.,abs(uv0.x-.5)*2.))*(1.-smoothstep(.94,1.,abs(uv0.y-.5)*2.));
   float power=max(0.,fxState.z)*bounds;
