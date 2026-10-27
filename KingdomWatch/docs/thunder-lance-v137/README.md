@@ -14,4 +14,4 @@
 
 预览：[落地爆炸与持续放电](ultimate-review.webp) · [普通雷枪](normal-review.webp) · [回收与落枪](recall-rain-review.webp) · [接触表](contact-sheet.jpg) · [角色](figure-preview.jpg) · [图标](icons-preview.jpg)。
 
-构建/发布结果后补。按持续授权本地Git提交后只部署独立GitHub Pages运行包，不推源码、不部署Cloudflare。
+实现提交 5494f92a。Creator 3.8.8 构建22820ms、退出36；运行包1617文件209118351字节（较v136增加668895字节），版本 4338564972672f38。516份非字体旧native逐字节保持；仅两张新图集、两份补字字体进入新增/替换媒体。Shader GLSL1/3无纹理依赖、预乘混合元数据、15JS+5内联语法与整包摘要/解码检查通过，9旧类型无新增。首次审计只因编译器移除注释而失败，检查改为实际爆炸分支代码后通过；无游戏代码改动。发布回执后补。按持续授权本地Git提交后只部署独立GitHub Pages运行包，不推源码、不部署Cloudflare。

@@ -21,7 +21,7 @@ assert shaders and len(techniques)==1
 for shader in shaders:
  assert not shader['samplerTextures'] and not shader['textures'] and not shader['samplers']
  for gl in ['glsl3','glsl1']:
-  frag=shader[gl]['frag'];assert 'thunder-lance' in shader['name'] and 'vec4 frag' in frag and 'Compressed flash' in frag
+  frag=shader[gl]['frag'];assert 'thunder-lance' in shader['name'] and 'vec4 frag' in frag and 'mode>3.5' in frag and 'float cloud=' in frag
 blend=techniques[0]['passes'][0]['blendState']['targets'][0]
 assert blend['blend'] and blend['blendSrc']==1 and blend['blendDst']==4 and blend['blendSrcAlpha']==0 and blend['blendDstAlpha']==1
 def item(file):return {'path':file.relative_to(package).as_posix(),'sha256':hashlib.sha256(file.read_bytes()).hexdigest()}
