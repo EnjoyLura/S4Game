@@ -1,0 +1,14 @@
+{
+  "release": "2f5089dc8a80a617",
+  "publicationCommit": "802e1dfbf42ee87fa418b620eddb5b27810653d6",
+  "samples": [
+    {
+      "path": "assets/main/index.cebdc.js",
+      "status": 200,
+      "bytes": 1139983,
+      "sha256": "78a8bd07d34a367149cf983ab74c2106bd41383984884c60c63c41f8cebcbe98"
+    }
+  ],
+  "allHashesMatch": true,
+  "gameOrBrowserStarted": false
+}

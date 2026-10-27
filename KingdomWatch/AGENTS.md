@@ -1,5 +1,7 @@
 # 交付要求
 
+v145 已发布：https://enjoylura.github.io/kingdom-watch-play/?v=wall-targeting-v145 ，运行提交802e1dfbf42ee87fa418b620eddb5b27810653d6，版本2f5089dc8a80a617。实现7030298b、构建记录4b725366；Creator23301ms/退出36，1659文件218230830字节；531原native字节保持，无新增媒体，9旧类型无新增。Pages/build built，标准验证及实际修改主脚本HTTP200+SHA通过，发布期间源码HEAD/索引保持。只推运行包，不推源码/不部署CF；未启动游戏/浏览器/真实战斗/音频/WASM，手机待用户。
+
 2026-10-28 修复 [贴防线目标无法施放 v145](docs/wall-targeting-v145/README.md)：范围选敌不再把落点下边界当作目标下边界；允许真实圆形范围能覆盖的贴墙敌人参与选点，中心仍限制在原战场落点区域。雷枪/魔法弓/镰刀/剑客共八个技能与大招入口恢复；保留施法距离、伤害、冷却、素材和雷枪上层要求，龙卷追踪继续只向前。288次实际施放回调、旧八入口失败复现、300普通区域不变检查；不运行游戏/浏览器/真实战斗/音频/WASM，手机由用户体验。按持续授权本地提交、构建并仅发布独立GitHub运行包，回执后补。
 
 v144 已发布：https://enjoylura.github.io/kingdom-watch-play/?v=scythe-reaping-v144 ，运行提交 3e75f3f4352e04bcba35df5ae7ac0c9c38ba27f5，版本 5ce864ba9d0af970。实现 c58700c8、构建记录 54d0fda3；Creator 25071ms/退出36，1659文件218230731字节；526旧非字体native原字节保持，新增3图集逐像素无损，两字库仅补绞字。15脚本/5内联语法、9旧类型无新增；Pages/build built，标准与额外10文件HTTP200+SHA通过。只推运行包，不推源码、不部署CF；无游戏/浏览器/真实战斗/音频/WASM执行，手机视觉待用户。回执 docs/scythe-reaping-v144。

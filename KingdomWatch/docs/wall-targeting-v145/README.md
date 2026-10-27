@@ -22,4 +22,8 @@
 
 构建和线上字节校验保存在本目录。531个原 native 资源应保持字节一致，不新增媒体。实战由用户在手机上人工确认。
 
-按持续授权本地提交并仅发布独立 GitHub Pages 运行包，不推源码、不部署 Cloudflare；发布回执完成后补充。
+按持续授权本地提交并仅发布独立 GitHub Pages 运行包，不推源码、不部署 Cloudflare；发布回执见同目录 deployment.json。
+
+## 发布
+
+v145 已发布：https://enjoylura.github.io/kingdom-watch-play/?v=wall-targeting-v145 ，运行提交802e1dfbf42ee87fa418b620eddb5b27810653d6，版本2f5089dc8a80a617。实现7030298b、构建记录4b725366；Creator23301ms/退出36，1659文件218230830字节；531原native字节保持，无新增媒体，9旧类型无新增。Pages/build built，标准验证及实际修改主脚本HTTP200+SHA通过，发布期间源码HEAD/索引保持。只推运行包，不推源码/不部署CF；未启动游戏/浏览器/真实战斗/音频/WASM，手机待用户。
