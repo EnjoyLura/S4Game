@@ -20,4 +20,8 @@
 
 静态场景动态预览：`normal-review.mp4`、`skill-review.gif`、`ultimate-review.gif`（另存完整MP4），接触表 `contact-sheet.jpg`。没有启动游戏、浏览器、真实战斗、音频或WASM。视觉与手机实战待用户评价。
 
-v145 的288次贴防线施放和300组普通选点回归通过；TypeScript 仅原有9条诊断，无新增。构建及线上校验回执完成后补充。仅本地提交源码，只发布独立 GitHub Pages 运行包，不推源码、不部署 Cloudflare。
+v145 的288次贴防线施放和300组普通选点回归通过；TypeScript 仅原有9条诊断，无新增。构建及线上校验回执见同目录 JSON。仅本地提交源码，只发布独立 GitHub Pages 运行包，不推源码、不部署 Cloudflare。
+
+## 发布
+
+v147 已发布：https://enjoylura.github.io/kingdom-watch-play/?v=scythe-rift-v147 ，运行提交f5934fdeed6cee0215f6e9b0efa139c187f1e179，版本05bfde520d546906。实现b8e87851、构建记录0eec5ead；Creator20386ms/退出36，1667文件222522157字节；531旧native原字节保持，两新图集逐像素无损，原裂隙未变；9旧类型无新增，15脚本/5内联语法通过。Pages/build built，标准与额外6文件HTTP200+SHA通过，发布期间源码HEAD/索引保持。只推运行包，不推源码/不部署CF；未启动游戏/浏览器/真实战斗/音频/WASM，v147视觉待用户。v146否定试作未发布。
