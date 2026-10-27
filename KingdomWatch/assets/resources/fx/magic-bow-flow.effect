@@ -1,0 +1,104 @@
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: magic-bow-vs:vert
+      frag: magic-bow-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: one
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: zero
+          blendDstAlpha: one
+      rasterizerState:
+        cullMode: none
+      properties:
+        fxState: { value: [0, 1, 1, 0] }
+        fxShape: { value: [250, 250, 100, 0] }
+}%
+CCProgram magic-bow-vs %{
+ precision highp float;
+ #include <builtin/uniforms/cc-global>
+ #if USE_LOCAL
+  #include <builtin/uniforms/cc-local>
+ #endif
+ in vec3 a_position;in vec2 a_texCoord;in vec4 a_color;
+ out vec2 uv0;out vec4 color;
+ vec4 vert(){vec4 p=vec4(a_position,1.);
+  #if USE_LOCAL
+   p=cc_matWorld*p;
+  #endif
+  uv0=a_texCoord;color=a_color;return cc_matViewProj*p;
+ }
+}%
+CCProgram magic-bow-fs %{
+ precision highp float;
+ in vec2 uv0;in vec4 color;
+ uniform BowFlow {vec4 fxState;vec4 fxShape;};
+ const vec3 BLUE=vec3(.12,.36,1.),AZURE=vec3(.28,.76,1.),WHITE=vec3(.88,.97,1.);
+ float sat(float a){return clamp(a,0.,1.);}
+ float bell(float d,float w){return exp(-d*d/max(w*w,.000001));}
+ float hash(float a){return fract(sin(a*127.1)*43758.5453);}
+ float noise(float x){float i=floor(x),f=fract(x);return mix(hash(i),hash(i+1.),f*f*(3.-2.*f));}
+ vec4 frag(){
+  vec2 q=(vec2(uv0.x,1.-uv0.y)-.5)*fxShape.xy/max(1.,fxShape.z);
+  float age=fxState.x,seed=fxState.y*47.,mode=fxState.w,t=fxShape.w;
+  vec3 rgb=vec3(0.);float alpha=0.;
+  if(mode<.5){
+   float x=abs(q.x),y=q.y;
+   float shaft=bell(x,.012)*smoothstep(-.48,-.43,y)*(1.-smoothstep(.32,.35,y));
+   float headWidth=max(0.,(.5-y)*.55),head=step(.25,y)*step(y,.5)*(1.-smoothstep(headWidth-.004,headWidth+.004,x));
+   head*=smoothstep(.235,.28,y+abs(q.x)*.4);
+   float bevel=bell(x-headWidth*.7,.006)*head;
+   float fletchWidth=max(0.,.085-abs(y+.37)*.8);
+   float feathers=(1.-smoothstep(fletchWidth-.003,fletchWidth+.003,x))*step(-.48,y)*step(y,-.26);
+   feathers*=smoothstep(.014,.025,x)*(.62+.38*smoothstep(-.2,.45,sin((y+x*.8)*135.)));
+   float body=max(shaft,max(head,feathers*.8));alpha=body*.9;
+   rgb=AZURE*body*.8+WHITE*(shaft+head*bell(q.x,.018)+bevel*.8+feathers*.35);
+   rgb+=BLUE*bell(q.x,.075)*smoothstep(-.55,-.4,y)*(1.-smoothstep(.45,.58,y))*.5;
+   float tail=smoothstep(-1.,-.87,y)*(1.-smoothstep(-.43,-.3,y));
+   for(int k=0;k<7;k++){
+    float i=float(k),side=(i-3.)*.014,phase=fract(age*(1.8+i*.17)+i*.147+seed*.01);
+    float cy=-.4-phase*.53,span=.045+hash(i+seed)*.08;
+    float curl=side+sin(y*23.+age*15.+i)*.013;
+    rgb+=AZURE*bell(q.x-curl,.004+hash(i)*.002)*bell(y-cy,span)*tail*(1.-phase)*.8;
+   }
+   // Arrow-point clipping and foreground soil agree on the exact impact anchor.
+   if(t>0.00001){float clip=1.-smoothstep(.5-t-.002,.5-t+.002,y);rgb*=clip;alpha*=clip;}
+  }else if(mode<1.5){
+   vec2 p=vec2(q.x,q.y/.56);float r=length(p),a=atan(p.y,p.x),spread=.08+.99*(1.-pow(1.-sat(t),2.));
+   float warped=r-spread+(noise(a*15.+seed)-.5)*.025;
+   float rim=bell(warped,.012)*(1.-t),wake=bell(warped+.035,.055)*(1.-t)*.23;
+   float fracture=pow(1.-abs(sin(a*11.+noise(r*23.+seed)*2.)),22.);
+   rgb=WHITE*rim*.65+AZURE*(wake+rim*.4)+BLUE*fracture*(1.-smoothstep(.25,.85,r))*(1.-t)*.5;
+  }else if(mode<2.5){
+   float r=length(q),a=atan(q.y,q.x),grow=.10+.63*(1.-pow(1.-sat(t*2.),2.));
+   float turbulence=(noise(a*9.+seed+age*3.)-.5)*.1;
+   float cloud=1.-smoothstep(grow-.16,grow+.10,r+turbulence);
+   float shell=bell(r+turbulence-grow,.035),flash=bell(r,.10+t*.17)*pow(1.-t,4.);
+   rgb=WHITE*(flash*2.+cloud*pow(1.-t,6.))+AZURE*shell*pow(1.-t,2.)*.45+BLUE*cloud*(1.-t)*.35;
+   for(int k=0;k<14;k++){
+    float i=float(k),a0=i*2.399963+seed;vec2 dir=vec2(cos(a0),sin(a0));
+    float along=dot(q,dir),across=dot(q,vec2(-dir.y,dir.x));
+    float front=.18+t*(.6+hash(i+seed)*.4),len=.08+.12*(1.-t);
+    rgb+=AZURE*bell(across,.004+hash(i)*.003)*bell(along-front,len)*(1.-t)*.7;
+   }
+  }else if(mode<3.5){
+   float r=length(q),a=atan(q.y,q.x),core=bell(r,.10+.09*t);
+   rgb=WHITE*core*(.3+t*.7)+AZURE*bell(r,.25)*.2;
+   for(int k=0;k<8;k++){
+    float i=float(k),phase=fract(age*1.8+i*.123),rr=.15+(1.-phase)*.78,aa=i*2.399963+age*.9;
+    vec2 p=vec2(cos(aa),sin(aa))*rr;rgb+=AZURE*bell(length(q-p),.018)*(phase)*.8;
+   }
+  }else{
+   vec2 p=vec2(q.x,q.y/.56);float r=length(p),a=atan(p.y,p.x);
+   float ticks=pow(abs(sin(a*8.+.2)),32.),arcs=smoothstep(.2,.7,abs(sin(a*3.+age)));
+   rgb=AZURE*(bell(r-.72,.006)*arcs*.45+bell(r-.77,.025)*ticks*.4)+BLUE*bell(r,.3)*.05;
+  }
+  float edge=smoothstep(0.,.025,uv0.x)*smoothstep(0.,.025,uv0.y)*smoothstep(0.,.025,1.-uv0.x)*smoothstep(0.,.025,1.-uv0.y);
+  return vec4(rgb*fxState.z*edge,alpha*fxState.z*edge)*color;
+ }
+}%

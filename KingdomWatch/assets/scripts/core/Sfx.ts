@@ -3,10 +3,10 @@ import { GameAudio } from './GameAudio';
 import { SfxName } from './AudioCatalog';
 export type { SfxName } from './AudioCatalog';
 
-const SHOTS: Record<string, SfxName> = { lance:'thunder', space:'skill', sword:'skill', wind: 'bow', ninja: 'crossbow', cannon: 'snipe', siphon: 'skill', archer: 'bow', sniper: 'crossbow', pyro: 'fire', volt: 'thunder', mora: 'frost' };
-const ULTIMATES: Record<string, SfxName> = { lance:'thunderUlt', space:'ult', sword:'ult', wind: 'bowUlt', ninja: 'ult', cannon: 'fireUlt', siphon: 'ult', archer: 'bowUlt', sniper: 'snipe', pyro: 'fireUlt', volt: 'thunderUlt', mora: 'frostUlt' };
-const SKILLS: Record<string, SfxName> = { lance:'thunderSkill', space:'skill', sword:'skill', wind: 'skill', ninja: 'pierce', cannon: 'fireHeavy', siphon: 'skill', archer: 'skill', sniper: 'snipe', pyro: 'fireSkill', volt: 'thunderSkill', mora: 'frostSkill' };
-const HEAVY_HITS: Record<string, SfxName> = { lance:'thunderHeavy', space:'pierceHeavy', sword:'pierceHeavy', wind: 'crit', ninja: 'pierceHeavy', cannon: 'fireHeavy', siphon: 'crit', archer: 'crit', sniper: 'pierceHeavy', pyro: 'fireHeavy', volt: 'thunderHeavy', mora: 'frostHeavy' };
+const SHOTS: Record<string, SfxName> = { arcane:'bow', lance:'thunder', space:'skill', sword:'skill', wind: 'bow', ninja: 'crossbow', cannon: 'snipe', siphon: 'skill', archer: 'bow', sniper: 'crossbow', pyro: 'fire', volt: 'thunder', mora: 'frost' };
+const ULTIMATES: Record<string, SfxName> = { arcane:'bowUlt', lance:'thunderUlt', space:'ult', sword:'ult', wind: 'bowUlt', ninja: 'ult', cannon: 'fireUlt', siphon: 'ult', archer: 'bowUlt', sniper: 'snipe', pyro: 'fireUlt', volt: 'thunderUlt', mora: 'frostUlt' };
+const SKILLS: Record<string, SfxName> = { arcane:'skill', lance:'thunderSkill', space:'skill', sword:'skill', wind: 'skill', ninja: 'pierce', cannon: 'fireHeavy', siphon: 'skill', archer: 'skill', sniper: 'snipe', pyro: 'fireSkill', volt: 'thunderSkill', mora: 'frostSkill' };
+const HEAVY_HITS: Record<string, SfxName> = { arcane:'pierceHeavy', lance:'thunderHeavy', space:'pierceHeavy', sword:'pierceHeavy', wind: 'crit', ninja: 'pierceHeavy', cannon: 'fireHeavy', siphon: 'crit', archer: 'crit', sniper: 'pierceHeavy', pyro: 'fireHeavy', volt: 'thunderHeavy', mora: 'frostHeavy' };
 
 export const Sfx = {
   prepareUltimate(heroId: string, seconds: number): void { GameAudio.prepareUltimate(heroId, seconds); },

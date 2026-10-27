@@ -1,3 +1,4 @@
+import { MAGIC_BOW } from '../config/MagicBowConfig';
 import { LANCE } from '../config/ThunderLanceConfig';
 import { SPACE, SWORD } from '../config/SpaceSwordConfig';
 import { EXPANSION_MOBS } from '../config/ChapterContent';
@@ -262,6 +263,12 @@ export const HERO_DEFS: Record<string, HeroDef> = {
     story: '来自象牙风塔的逐风者，以腕环引导青绿色气流。他让风眼聚拢敌群，再用游走的龙卷守住王国防线。',
     shopPrice: 5200,
   },
+  arcane: {
+    id:'arcane',name:'希琳·星弦',job:'魔法弓 · 两段爆发',avatar:'ui_avatar_arcane',
+    baseAtk:MAGIC_BOW.attack,baseSkillDmg:MAGIC_BOW.skill,growthType:'hybrid',atkSpd:MAGIC_BOW.aspd,
+    weaponName:'星辉魔弓',skillName:'奥术爆裂箭',ultName:'星陨巨箭',shopPrice:5600,
+    story:'以银弓引动星光的魔法射手。蓝色箭矢击穿敌阵，巨箭直上云霄，坠地冲击后再爆发奥术能量。',
+  },
   lance: {
     id:'lance',name:'雷恩·逐霆',job:'雷枪 · 持续雷域',avatar:'ui_avatar_lance',
     baseAtk:LANCE.attack,baseSkillDmg:LANCE.skill,growthType:'hybrid',atkSpd:LANCE.aspd,
@@ -514,7 +521,7 @@ export const SHOP: ShopDef[] = [
   { id: 's_hero_mora', tab: 'hero', name: '莫拉·寒霜', sub: '冰霜 · 减速控制', price: 4800, currency: 'diamond', unlock: '1-3', give: { kind: 'hero', id: 'mora' } },
   { id: 's_hero_cannon', tab: 'hero', name: '布洛克·铜铸', sub: '重炮 · 物理爆破', price: 5200, currency: 'diamond', unlock: '1-4', give: { kind: 'hero', id: 'cannon' } },
   { id: 's_hero_siphon', tab: 'hero', name: '薇拉·绯契', sub: '虹吸 · 贯穿爆发', price: 5600, currency: 'diamond', unlock: '1-4', give: { kind: 'hero', id: 'siphon' } },
-  ...['wind', 'ninja', 'space', 'sword', 'lance'].map(id => ({ id: 's_hero_' + id, tab: 'hero' as ShopTab, name: HERO_DEFS[id].name,
+  ...['wind', 'ninja', 'space', 'sword', 'lance', 'arcane'].map(id => ({ id: 's_hero_' + id, tab: 'hero' as ShopTab, name: HERO_DEFS[id].name,
     sub: HERO_DEFS[id].job, price: HERO_DEFS[id].shopPrice, currency: 'diamond' as const,
     unlock: '1-4', give: { kind: 'hero' as const, id } })),
   { id: 's_hero_more', tab: 'hero', name: '新英雄', sub: '敬请期待', price: 0, currency: 'diamond', unlock: '', give: { kind: 'hero', id: '' } },

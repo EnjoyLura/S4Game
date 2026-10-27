@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "timeline": {
+    "launch": 0.55,
+    "sky": 1.05,
+    "fall": 1.23,
+    "impact": 1.79,
+    "blast": 2.09,
+    "end": 2.7399999999999998
+  },
+  "twoDamageStagesDistinct": true,
+  "trainingLevels": 20,
+  "tipAnchors": 12,
+  "cosmeticFrames": 164,
+  "buffersBounded": true,
+  "fallbackGeometry": true,
+  "oldHeroImplementationsPreserved": true,
+  "gameEngineBrowserBattleAudioOrWasmStarted": false
+}

@@ -9,7 +9,7 @@ import { expandedLevel } from './ChapterWaves';
 export type DamageKind = 'physical' | 'magic' | 'true';
 export function damageKindFor(source: string): DamageKind {
   if (source === 'gm') return 'true';
-  return source === 'lance' || source === 'space' || source === 'wind' || source === 'siphon' || source === 'pyro' || source === 'volt' || source === 'mora' || source === 'burn' || source === 'pyro_burst'
+  return source === 'arcane' || source === 'lance' || source === 'space' || source === 'wind' || source === 'siphon' || source === 'pyro' || source === 'volt' || source === 'mora' || source === 'burn' || source === 'pyro_burst'
     ? 'magic' : 'physical';
 }
 

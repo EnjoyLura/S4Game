@@ -643,3 +643,105 @@ Object.assign(NEW_HERO_FRAMES, {
     ]
   }
 });
+// v138 magic bow atlas regions.
+Object.assign(NEW_HERO_FRAMES, {
+  "new_heroes_v138/arcane_lobby": {
+    "source": "magic_bow_v138/arcane_figures",
+    "rect": [
+      0,
+      0,
+      512,
+      768
+    ]
+  },
+  "hero_comic_v1/comic_figure_arcane_v1": {
+    "source": "magic_bow_v138/arcane_figures",
+    "rect": [
+      0,
+      0,
+      512,
+      768
+    ]
+  },
+  "new_heroes_v138/arcane_battle": {
+    "source": "magic_bow_v138/arcane_figures",
+    "rect": [
+      512,
+      0,
+      512,
+      768
+    ]
+  },
+  "ui_avatar_arcane": {
+    "source": "magic_bow_v138/abilities",
+    "rect": [
+      4,
+      4,
+      248,
+      248
+    ]
+  },
+  "ui_icon_atk_arcane": {
+    "source": "magic_bow_v138/abilities",
+    "rect": [
+      260,
+      4,
+      248,
+      248
+    ]
+  },
+  "ui_icon_skill_arcane": {
+    "source": "magic_bow_v138/abilities",
+    "rect": [
+      4,
+      260,
+      248,
+      248
+    ]
+  },
+  "ui_icon_ult_arcane": {
+    "source": "magic_bow_v138/abilities",
+    "rect": [
+      260,
+      260,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_avatar_arcane": {
+    "source": "magic_bow_v138/abilities",
+    "rect": [
+      4,
+      4,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_atk_arcane": {
+    "source": "magic_bow_v138/abilities",
+    "rect": [
+      260,
+      4,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_skill_arcane": {
+    "source": "magic_bow_v138/abilities",
+    "rect": [
+      4,
+      260,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_ult_arcane": {
+    "source": "magic_bow_v138/abilities",
+    "rect": [
+      260,
+      260,
+      248,
+      248
+    ]
+  }
+});

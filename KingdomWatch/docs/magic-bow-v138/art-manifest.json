@@ -1,0 +1,175 @@
+{
+  "mode": "built-in image_gen",
+  "sources": [
+    {
+      "id": "arcane",
+      "figureSha256": "9749b219ace963b9126f59f637ed93536bae6654aadcef6f9f5c762de3a80cd8",
+      "figureCrops": [
+        {
+          "left": 18,
+          "top": 12,
+          "width": 677,
+          "height": 974
+        },
+        {
+          "left": 973,
+          "top": 12,
+          "width": 548,
+          "height": 980
+        }
+      ],
+      "scale": 0.6971935007385525,
+      "iconRegions": [
+        {
+          "left": 226,
+          "top": 21,
+          "width": 478,
+          "height": 470,
+          "pixels": 176343
+        },
+        {
+          "left": 831,
+          "top": 21,
+          "width": 479,
+          "height": 470,
+          "pixels": 176420
+        },
+        {
+          "left": 226,
+          "top": 520,
+          "width": 478,
+          "height": 470,
+          "pixels": 175590
+        },
+        {
+          "left": 827,
+          "top": 520,
+          "width": 483,
+          "height": 470,
+          "pixels": 178236
+        }
+      ],
+      "iconsSha256": "211e353348f8b49af3ac612dd2187ad38e8ee7c36b9b394c4efacda97d5dd88d"
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/resources/ux/magic_bow_v138/arcane_figures.png",
+      "uuid": "8c967595-7811-409b-a422-ae8f81921472",
+      "width": 1024,
+      "height": 768,
+      "bytes": 713950,
+      "sha256": "fc1417ff15399982bc67cc0c3f13ba1ce1b5774ce7b0fc6da7088b23048e0ed9"
+    },
+    {
+      "path": "assets/resources/ux/magic_bow_v138/abilities.png",
+      "uuid": "fb36b62b-24f5-43cd-97ed-23b5104c9e77",
+      "width": 512,
+      "height": 512,
+      "bytes": 602572,
+      "sha256": "d9fb03e9bb8a9571a85378c8608e9bf88f121dfecfe5df12c4b6c959545ea84b"
+    }
+  ],
+  "frames": {
+    "new_heroes_v138/arcane_lobby": {
+      "source": "magic_bow_v138/arcane_figures",
+      "rect": [
+        0,
+        0,
+        512,
+        768
+      ]
+    },
+    "hero_comic_v1/comic_figure_arcane_v1": {
+      "source": "magic_bow_v138/arcane_figures",
+      "rect": [
+        0,
+        0,
+        512,
+        768
+      ]
+    },
+    "new_heroes_v138/arcane_battle": {
+      "source": "magic_bow_v138/arcane_figures",
+      "rect": [
+        512,
+        0,
+        512,
+        768
+      ]
+    },
+    "ui_avatar_arcane": {
+      "source": "magic_bow_v138/abilities",
+      "rect": [
+        4,
+        4,
+        248,
+        248
+      ]
+    },
+    "ui_icon_atk_arcane": {
+      "source": "magic_bow_v138/abilities",
+      "rect": [
+        260,
+        4,
+        248,
+        248
+      ]
+    },
+    "ui_icon_skill_arcane": {
+      "source": "magic_bow_v138/abilities",
+      "rect": [
+        4,
+        260,
+        248,
+        248
+      ]
+    },
+    "ui_icon_ult_arcane": {
+      "source": "magic_bow_v138/abilities",
+      "rect": [
+        260,
+        260,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_avatar_arcane": {
+      "source": "magic_bow_v138/abilities",
+      "rect": [
+        4,
+        4,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_atk_arcane": {
+      "source": "magic_bow_v138/abilities",
+      "rect": [
+        260,
+        4,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_skill_arcane": {
+      "source": "magic_bow_v138/abilities",
+      "rect": [
+        4,
+        260,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_ult_arcane": {
+      "source": "magic_bow_v138/abilities",
+      "rect": [
+        260,
+        260,
+        248,
+        248
+      ]
+    }
+  },
+  "processing": "Complete alpha subject crop; common uniform actor scale per pair; no painting, deformation, artificial frame or VFX textures."
+}

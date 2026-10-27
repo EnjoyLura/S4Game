@@ -1,3 +1,4 @@
+import { MAGIC_BOW,magicBowSkillCfg } from './MagicBowConfig';
 import { LANCE,lanceSkillCfg } from './ThunderLanceConfig';
 import { SPACE, SWORD, spaceSkillCfg, swordSkillCfg } from './SpaceSwordConfig';
 /**
@@ -256,6 +257,7 @@ export function moraUltimateHitDamage(s: HeroStats): number { return abilityDama
 /** 技能伤害项每箭／每发／每跳的倍率，供技能培养预览共用。 */
 export function skillBaseMultiplier(hid: string, level: number): number {
   switch (hid) {
+    case 'arcane': return magicBowSkillCfg(level).mul;
     case 'lance': return lanceSkillCfg(level).mul;
     case 'space': return spaceSkillCfg(level).mul;
     case 'sword': return swordSkillCfg(level).mul;
@@ -359,6 +361,7 @@ export function baseNinjaStats(): HeroStats {
     range: NINJA.range, skillRange: NINJA.skillRange, skillShots: 1 };
 }
 
+export function baseMagicBowStats(): HeroStats {return {...baseArcherStats(),atk:MAGIC_BOW.attack,skillDmg:MAGIC_BOW.skill,aspd:MAGIC_BOW.aspd,range:MAGIC_BOW.range,skillRange:MAGIC_BOW.skillRange};}
 export function baseLanceStats(): HeroStats {return {...baseArcherStats(),atk:LANCE.attack,skillDmg:LANCE.skill,aspd:LANCE.aspd,range:LANCE.range,skillRange:LANCE.skillRange};}
 export function baseSpaceStats(): HeroStats {
   return {...baseArcherStats(), atk:SPACE.attack, skillDmg:SPACE.skill, aspd:SPACE.aspd,
@@ -691,13 +694,14 @@ export const SIPHON_CARDS: CardDef[] = [
   c({ id: 'siphon_skill_targets', owner: 'siphon', name: '灵魂分支', rarity: 'blue', maxStacks: 2, offerGroup: 'combat',
     art: 'ui_card_siphon_skill_targets', desc: '技能可连接目标 +1', apply: x => { x.hero.siphonSkillTargets = (x.hero.siphonSkillTargets || 0) + 1; } }),
 ];
+export const MAGIC_BOW_CARDS: CardDef[] = commonHeroCards('arcane');
 export const LANCE_CARDS: CardDef[] = commonHeroCards('lance');
 export const SPACE_CARDS: CardDef[] = commonHeroCards('space');
 export const SWORD_CARDS: CardDef[] = commonHeroCards('sword');
 export const WIND_CARDS: CardDef[] = commonHeroCards('wind');
 export const NINJA_CARDS: CardDef[] = commonHeroCards('ninja');
 export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...VOLT_CARDS, ...MORA_CARDS,
-  ...CANNON_CARDS, ...SIPHON_CARDS, ...WIND_CARDS, ...NINJA_CARDS, ...SPACE_CARDS, ...SWORD_CARDS, ...LANCE_CARDS, ...GLOBAL_CARDS];
+  ...CANNON_CARDS, ...SIPHON_CARDS, ...WIND_CARDS, ...NINJA_CARDS, ...SPACE_CARDS, ...SWORD_CARDS, ...LANCE_CARDS, ...MAGIC_BOW_CARDS, ...GLOBAL_CARDS];
 
 export interface CardStacks { [cardId: string]: number; }
 

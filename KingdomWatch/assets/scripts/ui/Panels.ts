@@ -1,3 +1,4 @@
+import { MAGIC_BOW, MAGIC_BOW_TIMING, magicBowSkillCfg,magicBowUltCfg } from '../config/MagicBowConfig';
 import { LANCE,lanceSkillCfg,lanceUltCfg } from '../config/ThunderLanceConfig';
 /**
  * 弹窗面板（UX 线稿 ②~⑤⑧）：三选一 / 暂停 / 胜利结算 / 失败结算(含广告复活) / 伤害统计 / 属性Tips
@@ -605,7 +606,22 @@ export class Panels {
     const iconY = WYB(126, 46);
     let px: number, py: number, w = 300, hh = 272, title: string;
     let rows: [string, string][];
-    if (hero.id === 'lance') {
+    if (hero.id === 'arcane') {
+      w=350;const sc=magicBowSkillCfg(h.skillLv),uc=magicBowUltCfg(h.ultLv);
+      if(kind==='atk'){
+        title='普攻 · 星辉魔箭';rows=[['法术伤害',String(Math.round(hero.effAtk*h.normalMul))],['攻速',h.aspd.toFixed(2)+'次/秒'],
+          ['索敌范围',String(Math.round(h.range))],['弹速',String(MAGIC_BOW.speed)],['暴击率',Math.round(h.critRate*100)+'%'],['效果','魔法箭矢 · 可对空']];
+      }else if(kind==='skill'){
+        title='技能 · 奥术爆裂箭';rows=[['爆炸法伤',String(Math.round(hero.abilityDamage(sc.mul)))],
+          ['爆炸半径',String(Math.round(sc.radius*h.skillRangeMul))],['冷却',hero.skillCdTotal.toFixed(1)+'秒'],
+          ['施法范围',String(Math.round(h.skillRange))],['目标','敌群最密集处'],['效果','发射一支魔箭 · 命中爆炸']];
+      }else{
+        title='大招 · 星陨巨箭';rows=[['落地冲击',String(Math.round(hero.abilityDamage(uc.mul,true)))+'法伤'],
+          ['第二段爆炸',String(Math.round(hero.abilityDamage(uc.blastMul,true)))+'法伤'],
+          ['冲击 / 爆炸半径',Math.round(uc.impactRadius*h.skillRangeMul)+' / '+Math.round(uc.radius*h.skillRangeMul)],
+          ['两段间隔',MAGIC_BOW_TIMING.detonation+'秒'],['充能需求',Math.round(hero.chargeGoal)+'能量'],['效果','升空后落下 · 冲击后再爆炸']];
+      }
+    } else if (hero.id === 'lance') {
       w=350;const sc=lanceSkillCfg(h.skillLv),uc=lanceUltCfg(h.ultLv);
       if(kind==='atk'){
         title='普攻 · 插地雷枪';const hit=hero.effAtk*h.normalMul;

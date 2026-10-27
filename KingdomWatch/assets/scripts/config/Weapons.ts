@@ -1,6 +1,6 @@
 /** Pure weapon catalog: also safe to read while migrating the save (no GameData dependency). */
-export type WeaponType = 'bow' | 'crossbow' | 'book' | 'staff' | 'cannon' | 'shuriken' | 'sword' | 'spear';
-export const WEAPON_TYPE_NAME: Record<WeaponType, string> = { bow: '弓', crossbow: '弩', book: '魔法书', staff: '法杖', cannon: '重炮', shuriken: '手里剑', sword:'灵剑',spear:'雷枪' };
+export type WeaponType = 'bow' | 'crossbow' | 'book' | 'staff' | 'cannon' | 'shuriken' | 'sword' | 'spear' | 'magicBow';
+export const WEAPON_TYPE_NAME: Record<WeaponType, string> = { bow: '弓', crossbow: '弩', book: '魔法书', staff: '法杖', cannon: '重炮', shuriken: '手里剑', sword:'灵剑',spear:'雷枪',magicBow:'魔法弓' };
 export interface WeaponSpec {
   id: string; name: string; type: WeaponType; quality: 0 | 1 | 2 | 3; tier: number;
   focus?: string; description?: string;
@@ -11,6 +11,9 @@ export interface WeaponSpec {
 }
 const art = (name: string): string => 'weapons_v1/' + name;
 export const WEAPONS: Record<string, WeaponSpec> = {
+  wpn_starter_arcane: {id:'wpn_starter_arcane',name:'星辉魔弓',type:'magicBow',quality:0,tier:1,
+    stats:{atk:10,skillDmg:10},price:0,unlock:'',art:'ui_icon_atk_arcane',starter:true,
+    breakthrough:{atk:.08,skill:.08,secondary:'chargeEff',bonus:.02}},
   wpn_starter_lance: {id:'wpn_starter_lance',name:'逐霆雷枪',type:'spear',quality:0,tier:1,
     stats:{atk:10,skillDmg:10},price:0,unlock:'',art:'ui_icon_atk_lance',starter:true,
     breakthrough:{atk:.08,skill:.08,secondary:'chargeEff',bonus:.02}},
@@ -60,16 +63,17 @@ export const WEAPONS: Record<string, WeaponSpec> = {
 export const STARTER_WEAPON: Record<string, string> = {
   cannon: 'wpn_starter_cannon', siphon: 'wpn_starter_staff',
   archer: 'wpn_starter_bow', sniper: 'wpn_starter_crossbow', pyro: 'wpn_starter_book', volt: 'wpn_starter_staff', mora: 'wpn_starter_staff',
+  arcane:'wpn_starter_arcane',
   lance:'wpn_starter_lance',
   space:'wpn_starter_space',sword:'wpn_starter_sword',
   wind: 'wpn_starter_wristfocus', ninja: 'wpn_starter_shuriken',
 };
 export function weaponFits(hid: string, id: string): boolean {
   const type = WEAPONS[id]?.type;
-  return hid === 'lance' ? type === 'spear' : hid === 'sword' ? type === 'sword' : hid === 'ninja' ? type === 'shuriken' : hid === 'cannon' ? type === 'cannon' : hid === 'archer' ? type === 'bow' : hid === 'sniper' ? type === 'crossbow'
+  return hid === 'arcane' ? type === 'magicBow' : hid === 'lance' ? type === 'spear' : hid === 'sword' ? type === 'sword' : hid === 'ninja' ? type === 'shuriken' : hid === 'cannon' ? type === 'cannon' : hid === 'archer' ? type === 'bow' : hid === 'sniper' ? type === 'crossbow'
     : ['pyro', 'volt', 'mora', 'siphon', 'wind', 'space'].includes(hid) && (type === 'book' || type === 'staff');
 }
 export function weaponUsers(id: string): string {
   const type = WEAPONS[id]?.type;
-  return type === 'spear' ? '雷枪专用' : type === 'sword' ? '御剑师专用' : type === 'shuriken' ? '忍者专用' : type === 'cannon' ? '重炮工程师专用' : type === 'bow' ? '弓手专用' : type === 'crossbow' ? '重弩手专用' : '火 / 雷 / 冰 / 生命 / 风 / 空间法师通用';
+  return type === 'magicBow' ? '魔法弓手专用' : type === 'spear' ? '雷枪专用' : type === 'sword' ? '御剑师专用' : type === 'shuriken' ? '忍者专用' : type === 'cannon' ? '重炮工程师专用' : type === 'bow' ? '弓手专用' : type === 'crossbow' ? '重弩手专用' : '火 / 雷 / 冰 / 生命 / 风 / 空间法师通用';
 }

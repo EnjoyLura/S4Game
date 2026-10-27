@@ -7,6 +7,7 @@ import { EQUIPS, EquipKind, HERO_DEFS } from '../core/GameData';
 import { HeroLobbyIdle, supportsHeroLobbyIdle } from './HeroLobbyIdle';
 
 export const HERO_PASTEL: Record<string, string> = {
+  arcane:'#D7E9FF',
   lance:'#FFF0BD',
   space:'#EED6F5', sword:'#DEF1DE',
   wind: '#E4F4EB', ninja: '#DEE3F3',
@@ -30,7 +31,7 @@ export const EMPTY_GEAR: Record<EquipKind, string> = {
 };
 /** Shared with picker prewarming, including the shop prefix applied by comicArt. */
 export function heroPortraitKey(id: string): string {
-  if (['wind','ninja','space','sword','lance'].includes(id)) return 'ui_avatar_' + id;
+  if (['wind','ninja','space','sword','lance','arcane'].includes(id)) return 'ui_avatar_' + id;
   if (id === 'cannon' || id === 'siphon') return 'new_heroes_v105/avatar_' + id;
   return id === 'archer' ? 'hero_comic_v1/comic_hero_archer_v1' : 'shop_comic_v1/comic_hero_' + id + '_v1';
 }
@@ -72,7 +73,7 @@ export function heroComicFigure(parent: Node, id: string, x: number, footY: numb
   ground.fillColor = CA(COMIC.ink, .24); ground.ellipse(0, -2, Math.min(72, height * .17), 8); ground.fill();
   const key = heroFigureKey(id);
   // Final wind/ninja frames: 512×768, feet at y=744 leave a 24px bottom margin.
-  const footMargin = ['wind','ninja','space','sword','lance'].includes(id) ? 24 / 768
+  const footMargin = ['wind','ninja','space','sword','lance','arcane'].includes(id) ? 24 / 768
     : id === 'cannon' ? 81 / 1536 : id === 'siphon' ? 30 / 1536 : id === 'archer' ? 14 / 1546 : 16 / 768;
   const still = N('heroStillFallback', figure);
   const loadStill = (): void => { artSprite(still, 0, height / 2, maxWidth, height, key, {

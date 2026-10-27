@@ -1,0 +1,20 @@
+{
+  "fonts": [
+    {
+      "font": "UIBody",
+      "added": "奥希琳",
+      "existingCodepointsPreserved": 1603,
+      "bytesAdded": 880,
+      "sha256": "1c68be37c3d52dc3144c3b3f150ea811976d5b839c4a324042eac53866814e7e"
+    },
+    {
+      "font": "UIHeading",
+      "added": "奥希琳",
+      "existingCodepointsPreserved": 1603,
+      "bytesAdded": 1192,
+      "sha256": "cb8eb1170b5ffb1eb44e3dff52477981ab57e919ea00c492f15e60dba550f72f"
+    }
+  ],
+  "source": "same pinned local OFL sources; no downloads",
+  "gameStarted": false
+}
