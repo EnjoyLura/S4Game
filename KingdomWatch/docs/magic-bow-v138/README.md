@@ -14,4 +14,4 @@
 
 预览：[完整大招过程](ultimate-review.webp) · [技能](skill-review.webp) · [普攻](normal-review.webp) · [接触表](contact-sheet.jpg) · [角色](figure-preview.jpg) · [图标](icons-preview.jpg)。
 
-实现提交 774abeff。Creator 3.8.8 构建18446ms、退出36；运行包1624文件209721398字节（较v137增加603047字节），版本 69804f6b9885ba3。518份非字体旧native逐字节保持，新增2图集与2份字体补字；GLSL1/3预乘混合元数据、15JS+5内联语法、整包摘要/解码检查通过。原9类型诊断无新增。发布回执后补。按持续授权本地提交、构建，再仅部署独立GitHub Pages运行包；不推源码、不部署Cloudflare。
+实现提交 774abeff。Creator 3.8.8 构建18446ms、退出36；运行包1624文件209721398字节（较v137增加603047字节），版本 69804f6b9885ba3。518份非字体旧native逐字节保持，新增2图集与2份字体补字；GLSL1/3预乘混合元数据、15JS+5内联语法、整包摘要/解码检查通过。原9类型诊断无新增。已发布：[v138试玩](https://enjoylura.github.io/kingdom-watch-play/?v=magic-bow-v138)。运行提交 a78e67dc5d2ac1ff9cb302f86ab6f4a01da6a3d，Pages/build均built，标准HTTP验证与额外6份新图集/字库/材质/主脚本HTTP200+SHA一致。构建记录提交 50554d13；发布期间源码HEAD/索引保持。按持续授权本地提交、构建，再仅部署独立GitHub Pages运行包；不推源码、不部署Cloudflare。
