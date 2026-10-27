@@ -22,4 +22,6 @@
 
 实现提交 `3be8b98f`。Creator 18841ms、退出 36（构建成功）；运行包 1631 文件、210274468 字节，版本 `592266336e0e929c`。524 个原 native 媒体全部字节相同，没有新增媒体。15 个 JS、5 个内联脚本语法、编译后的 GLSL1/GLSL3 与整包清单校验通过，类型仍为既有 9 项、无新增。
 
-按持续授权本地提交，构建并发布独立 GitHub Pages 运行仓库；不推送源码仓库，不部署 Cloudflare。发布回执完成后补充于此。
+已发布：[v141](https://enjoylura.github.io/kingdom-watch-play/?v=lance-storm-v141)。构建记录提交 `08ab5e7f`，运行仓库提交 `a414abc7a9509994cf55f2cc12b242b6511b9572`。Pages 与对应 build 均 built，标准线上验证通过，额外脚本/雷枪特效两文件 HTTP 200 与 SHA256 匹配。回执 [deployment.json](deployment.json)、[additional-http-verification.json](additional-http-verification.json)。
+
+按持续授权只推送独立 GitHub Pages 运行包，不推送源码仓库、不部署 Cloudflare。发布期间源码 HEAD 和索引保持。没有启动游戏或浏览器，手机实战待用户验收。工作区另有 `docs/lance-blender-study-v1/` 的并行未跟踪内容，本次未修改或提交。

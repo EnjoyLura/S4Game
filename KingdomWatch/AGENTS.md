@@ -1,5 +1,7 @@
 # 交付要求
 
+v141已发布：https://enjoylura.github.io/kingdom-watch-play/?v=lance-storm-v141 ，运行提交a414abc7a9509994cf55f2cc12b242b6511b9572、版本592266336e0e929c。实现3be8b98f、构建记录08ab5e7f；Creator18841ms退出36，1631文件210274468字节，524旧native原字节、无新增媒体，9旧类型无新增。Pages/build built，标准验证与额外脚本/雷枪特效2文件HTTP200+SHA通过，发布中源码HEAD/索引保持。只推运行包，不推源码/不部署CF；无游戏/浏览器/战斗/音频/WASM执行，手机待用户。回执docs/lance-storm-v141；并行未跟踪docs/lance-blender-study-v1本次未动。
+
 2026-10-27 完成[雷枪特效与投掷轨迹v141](docs/lance-storm-v141/README.md)：保留金黄色，加厚收尖主体、三股贴身游动电流与少量短弧；不规则爬行放电/破碎冲击波/落地闪爆火花取代规则放射地纹和亮圈。普通/巨枪位置朝向共用宽缓投影曲线，极近/正前目标避免最高点急转，入土保留切线角和电流相位，枪雨维持下落加速。775几何案例186775采样、32锚点、312离屏帧/35GPU检查通过；旧英雄/数值/tip保持，类型原9无新增。未启动游戏/浏览器/战斗/音频/WASM；手机待用户。按持续授权提交、构建并仅发布独立GitHub运行包，不推源码/不部署CF，回执后补。
 
 v140已发布：https://enjoylura.github.io/kingdom-watch-play/?v=lance-tips-v140 ，运行提交5ef9abb7a17e729094d6dd660a4262aa54d5d388、版本43d9a545bb664e1c。实现6da139bb、构建记录435ffbe9；Creator22406ms退出36，1631文件210267957字节，524旧native原字节、无新增媒体，9旧类型无新增。Pages/build built，标准验证与额外脚本/雷枪特效2文件HTTP200+SHA通过，发布中源码HEAD/索引保持。只推运行包，不推源码/不部署CF；无游戏/浏览器/战斗/音频/WASM执行，手机待用户；回执docs/lance-tips-v140。
