@@ -3,6 +3,7 @@ import { Graphics,Node } from 'cc';
 import { CA,N } from '../ui/UIKit';
 import { HeroFxShader } from './HeroFxShader';
 import { swordDebris,swordSoilLip } from './SwordAbilityVFX';
+import { ThunderLanceAtlas } from './ThunderLanceAtlas';
 export const LANCE_EFFECT='fx/thunder-lance-flow';
 export interface LanceVisual {x:number;y:number;radius:number;age:number;seconds:number;giant:boolean;seed:number;angle:number;phase?:number;}
 interface Accent {kind:'impact'|'wave'|'mark'|'recall'|'explosion';x:number;y:number;r:number;age:number;life:number;seed:number;giant:boolean;tx:number;ty:number;}
@@ -65,6 +66,7 @@ export function drawLanceFlight(shader:HeroFxShader|null,g:Graphics,x:number,y:n
 export class ThunderLanceVFX {
   private air:Node;private floor:Node;private g:Graphics;private dirt:Graphics;private front:Graphics;
   private spears:HeroFxShader;private ground:HeroFxShader;private accents:Accent[]=[];private arcs:Arc[]=[];private serial=0;
+  private bodyArt:ThunderLanceAtlas;private floorArt:ThunderLanceAtlas;private burstArt:ThunderLanceAtlas;
   constructor(parent:Node){
     this.air=N('thunderLance',parent);const text=parent.getChildByName('TextLayer');if(text)this.air.setSiblingIndex(text.getSiblingIndex());
     this.floor=N('thunderLanceGround',parent.getChildByName('GroundFxLayer')||parent);
@@ -72,6 +74,9 @@ export class ThunderLanceVFX {
     this.ground=new HeroFxShader(this.floor,'electricGround',64,'plasma',{effect:LANCE_EFFECT,technique:0});
     this.g=N('arcsAndFallback',this.air).addComponent(Graphics);
     this.spears=new HeroFxShader(this.air,'plantedAndRecall',52,'plasma',{effect:LANCE_EFFECT,technique:0});
+    this.floorArt=new ThunderLanceAtlas(this.floor,'blenderSurfacePasses',64);
+    this.burstArt=new ThunderLanceAtlas(this.air,'blenderThunderDetonation',20);
+    this.bodyArt=new ThunderLanceAtlas(this.air,'blenderPlantedAndRecall',52);
     this.front=N('buriedTipsAndDebris',this.air).addComponent(Graphics);
   }
   private add(kind:Accent['kind'],x:number,y:number,r:number,life:number,giant=false,seed=0,tx=0,ty=0):void{
@@ -79,9 +84,9 @@ export class ThunderLanceVFX {
   }
   impact(x:number,y:number,r:number,giant:boolean,seed:number):void{
     this.add('impact',x,y,r,giant?1.15:.55,giant,seed);
-    if(giant){this.wave(x,y,r,seed);this.add('explosion',x,y,r,.72,true,seed);}
+    if(giant){this.wave(x,y,r,seed);this.add('explosion',x,y,r,.8,true,seed);}
   }
-  wave(x:number,y:number,r:number,seed:number):void{this.add('wave',x,y,r,.78,true,seed);}
+  wave(x:number,y:number,r:number,seed:number):void{this.add('wave',x,y,r,.94,true,seed);}
   mark(x:number,y:number,r:number,life:number):void{this.add('mark',x,y,r,life);}
   recall(f:LanceVisual,x:number,y:number,seconds:number):void{this.add('recall',f.x,f.y,12,seconds,false,f.seed,x,y);}
   arc(x:number,y:number,tx:number,ty:number,heavy:boolean):void{
@@ -93,25 +98,35 @@ export class ThunderLanceVFX {
   }
   render(fields:readonly LanceVisual[]):void{
     this.g.clear();this.dirt.clear();this.front.clear();this.spears.begin();this.ground.begin();
+    this.bodyArt.begin();this.floorArt.begin();this.burstArt.begin();
     for(const f of fields){const fade=Math.min(1,(f.seconds-f.age)*3),size=f.giant?40:12;
-      this.ground.draw(f.x,f.y,f.radius*2.4,f.radius*1.4,0,f.age,f.seed,fade*(f.giant?.68:.26),1,f.radius,0);
+      const art=this.bodyArt.choose(f);
+      if(!art||!this.floorArt.pass('ground',f.x,f.y,f.radius,f.age,fade*(f.giant?1:.48),f.seed))
+        this.ground.draw(f.x,f.y,f.radius*2.4,f.radius*1.4,0,f.age,f.seed,fade*(f.giant?.68:.26),1,f.radius,0);
       lanceGround(this.dirt,f.x,f.y,f.radius,f.age,f.seed,f.giant,fade);
-      drawLanceFlight(this.spears,this.g,f.x,f.y,f.angle,size,f.age,f.seed,fade,true,f.phase||0);
+      if(!art||!this.bodyArt.spear(f.x,f.y,f.angle,size,f.age,f.seed,fade,true,f.phase||0))
+        drawLanceFlight(this.spears,this.g,f.x,f.y,f.angle,size,f.age,f.seed,fade,true,f.phase||0);
       swordSoilLip(this.front,f.x,f.y,f.giant?f.radius:65,f.age,f.giant,fade);
     }
     for(const a of this.accents){const t=a.age/a.life;
+      const art=this.bodyArt.choose(a);
       if(a.kind==='recall'){
         const u=t*t*(3-2*t),x=a.x+(a.tx-a.x)*u,y=a.y+(a.ty-a.y)*u+Math.sin(t*Math.PI)*90;
-        drawLanceFlight(this.spears,this.g,x,y,Math.atan2(a.ty-a.y+Math.cos(t*Math.PI)*140,a.tx-a.x),a.r,a.age,a.seed,1-t*.45);
+        const angle=Math.atan2(a.ty-a.y+Math.cos(t*Math.PI)*140,a.tx-a.x);
+        if(!art||!this.bodyArt.spear(x,y,angle,a.r,a.age,a.seed,1-t*.45))
+          drawLanceFlight(this.spears,this.g,x,y,angle,a.r,a.age,a.seed,1-t*.45);
       }else if(a.kind==='explosion'){
-        this.spears.draw(a.x,a.y+a.r*.15,a.r*2.4,a.r*2.0,0,a.age,a.seed,1,4,a.r,t);
+        if(!art||!this.burstArt.pass('impact',a.x,a.y,a.r,a.age))
+          this.spears.draw(a.x,a.y+a.r*.15,a.r*2.4,a.r*2.0,0,a.age,a.seed,1,4,a.r,t);
       }else if(a.kind==='mark'){
         this.ground.draw(a.x,a.y,a.r*2.4,a.r*1.4,0,a.age,a.seed,.4*(1-t*.5),3,a.r,t);
       }else{
         const wave=a.kind==='wave';
-        const drawn=this.ground.draw(a.x,a.y,a.r*2.4,a.r*1.4,0,a.age,a.seed,wave?1:(1-t)*(a.giant?1:.8),wave?2:1,a.r,t);
+        const baked=art&&(wave?this.floorArt.pass('wave',a.x,a.y,a.r,a.age)
+          :a.giant||this.burstArt.pass('impact',a.x,a.y,a.r*.62,a.age*1.45,1-t*.55));
+        const drawn=baked||this.ground.draw(a.x,a.y,a.r*2.4,a.r*1.4,0,a.age,a.seed,wave?1:(1-t)*(a.giant?1:.8),wave?2:1,a.r,t);
         if(!drawn)lanceGround(this.dirt,a.x,a.y,a.r*(.3+t*.7),a.age,a.seed,a.giant,1-t);
-        if(!wave)swordDebris(this.front,a.x,a.y,a.r,a.age,a.giant);
+        if(!wave&&!baked)swordDebris(this.front,a.x,a.y,a.r,a.age,a.giant);
       }
     }
     for(const a of this.arcs){const fade=1-a.age/.18,dx=a.tx-a.x,dy=a.ty-a.y,len=Math.hypot(dx,dy)||1;
@@ -119,7 +134,7 @@ export class ThunderLanceVFX {
         this.g.moveTo(a.x,a.y);for(let i=1;i<=9;i++){const t=i/9,w=i===9?0:Math.sin(i*17.3+a.seed+Math.floor(a.age*40))*Math.min(15,len*.16);
           this.g.lineTo(a.x+dx*t-dy/len*w,a.y+dy*t+dx/len*w);}this.g.stroke();}
     }
-    this.spears.end();this.ground.end();
+    this.spears.end();this.ground.end();this.bodyArt.end();this.floorArt.end();this.burstArt.end();
   }
   destroy():void{this.accents.length=0;this.arcs.length=0;if(this.floor.isValid)this.floor.destroy();if(this.air.isValid)this.air.destroy();}
 }

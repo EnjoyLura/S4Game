@@ -11,6 +11,7 @@ import { ArtPriority, uxFrame, warmUXArt } from './Ux';
 import { warmPickArt } from './PickArt';
 import { warmGameFonts } from './Fonts';
 import { warmWindVideo } from '../battle/WindVideoVFX';
+import { warmLanceAtlas } from '../battle/ThunderLanceAtlas';
 
 export const ENTRY_GATE_ART = 'battle_entry_v3/outpost_gate';
 export const THREAT_ART = ['boss_warning_v1/banner', 'boss_warning_v1/crest'] as const;
@@ -53,6 +54,7 @@ function warmBattleEffects(heroIds: readonly string[], priority: ArtPriority): P
   const images = Array.from(new Set(heroIds.flatMap(id => FX_IMAGES[id] || [])));
   const jobs = [warmUXArt(images, priority)];
   if (heroIds.includes('wind')) jobs.push(warmWindVideo(priority));
+  if (heroIds.includes('lance')) jobs.push(warmLanceAtlas(priority));
   for (const path of images) if (FX_MANIFESTS.has(path)) jobs.push(warmFxResource(path + '.frames', false));
   const effects = ['fx/basic-launch-procedural', 'fx/mob-cold', 'fx/mob-death', 'fx/ult-energy',
     ...heroIds.flatMap(id => FX_EFFECTS[id] || [])];

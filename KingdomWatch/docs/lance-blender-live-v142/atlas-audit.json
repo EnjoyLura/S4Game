@@ -1,0 +1,70 @@
+{
+  "body": {
+    "size": [
+      1568,
+      3096
+    ],
+    "frames": 48,
+    "bytes": 3408118,
+    "sha256": "7334f598fd3ee32215e39b97210eca905fce3cef96dfd01848e5ddf587c9203b",
+    "minVisiblePixels": 38108,
+    "maxVisiblePixels": 49864,
+    "anchor": [
+      0.5,
+      0.059624701738357544
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  },
+  "impact": {
+    "size": [
+      2328,
+      1552
+    ],
+    "frames": 24,
+    "bytes": 1141787,
+    "sha256": "dbcb4db3eca8d0356250aa2e1232e702444a298af1ddb82c7e05a2bd254fe4c9",
+    "minVisiblePixels": 0,
+    "maxVisiblePixels": 36662,
+    "anchor": [
+      0.5,
+      0.3818281590938568
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  },
+  "wave": {
+    "size": [
+      2716,
+      1040
+    ],
+    "frames": 28,
+    "bytes": 594842,
+    "sha256": "7431b846f508fdd21b7512a74e4ac640faa45698eadeed998307e2c6a7fdf65d",
+    "minVisiblePixels": 0,
+    "maxVisiblePixels": 22879,
+    "anchor": [
+      0.49999988079071045,
+      0.5000001788139343
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  },
+  "ground": {
+    "size": [
+      3104,
+      1300
+    ],
+    "frames": 40,
+    "bytes": 817210,
+    "sha256": "7a1c45cb72e632f7db0018856730758e49f9e8733b4e9c73d0f48a1722dec7c8",
+    "minVisiblePixels": 8167,
+    "maxVisiblePixels": 13854,
+    "anchor": [
+      0.49999988079071045,
+      0.5000001788139343
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  }
+}

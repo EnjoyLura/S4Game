@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "actualAtlasAndVfxCode": true,
+  "fixedPoolCapacity": 32,
+  "noPerFrameNodes": true,
+  "simulationClockOnly": true,
+  "buriedTipCropped": true,
+  "normalAndGiantUseBlenderArt": true,
+  "emptyAfterExpiry": true,
+  "unchangedCombatSources": [
+    "assets/scripts/battle/ThunderLanceHero.ts",
+    "assets/scripts/battle/ThunderLancePlans.ts",
+    "assets/scripts/config/ThunderLanceConfig.ts"
+  ],
+  "gameEngineBrowserCombatAudioOrWasmStarted": false,
+  "visualAcceptance": "pending user"
+}
