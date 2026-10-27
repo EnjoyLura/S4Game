@@ -267,8 +267,8 @@ export const HERO_DEFS: Record<string, HeroDef> = {
   scythe: {
     id:'scythe',name:'艾登·烬镰',job:'镰刀法师 · 横扫敌阵',avatar:'ui_avatar_scythe',
     baseAtk:SCYTHE.attack,baseSkillDmg:SCYTHE.skill,growthType:'hybrid',atkSpd:SCYTHE.aspd,
-    weaponName:'赤焰长镰',skillName:'回旋猎镰',ultName:'三重断界',shopPrice:5600,
-    story:'以赤焰长镰切开战场的法师。弧光掠过敌群，飞镰旋舞收割，三重巨刃横贯整片战场。',
+    weaponName:'赤焰长镰',skillName:'回旋猎镰',ultName:'赤狱绞杀',shopPrice:5600,
+    story:'以赤焰长镰切开战场的法师。镰刃撕开敌阵，飞镰高速旋舞，暗红领域升起后多向绞杀，最后一击收束。',
   },
   arcane: {
     id:'arcane',name:'希琳·星弦',job:'魔法弓 · 两段爆发',avatar:'ui_avatar_arcane',

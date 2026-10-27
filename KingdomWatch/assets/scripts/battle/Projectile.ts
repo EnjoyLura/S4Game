@@ -1,4 +1,5 @@
 import { drawScytheBlade,SCYTHE_EFFECT } from './ScytheVFX';
+import { ScytheAtlas,scytheAtlasReady } from './ScytheAtlas';
 import { scytheBladeEntry } from './ScythePlans';
 import { drawMagicArrow,MAGIC_BOW_EFFECT } from './MagicBowVFX';
 import { drawLanceFlight,LANCE_EFFECT } from './ThunderLanceVFX';
@@ -149,6 +150,7 @@ interface Active {
   lanceAtlas: boolean;
   magicBowShader: boolean;
   scytheShader: boolean;
+  scytheAtlas: boolean;
   spaceShader: boolean;
 }
 
@@ -178,6 +180,7 @@ export class ProjectileManager {
   private basicFlight: BasicProjectileFlightVFX;
   private windFlight: HeroFxShader | null = null;
   private scytheFlight: HeroFxShader | null = null;
+  private scytheArt: ScytheAtlas | null = null;
   private magicBowFlight: HeroFxShader | null = null;
   private lanceFlight: HeroFxShader | null = null;
   private lanceArt: ThunderLanceAtlas | null = null;
@@ -200,12 +203,15 @@ export class ProjectileManager {
       { effect: WIND_NINJA_FX_EFFECT, technique: 0 });
   }
 
-  warmScytheFlight():void{this.scytheFlight ||=new HeroFxShader(this.field,'scytheBladeFlight',40,'plasma',{effect:SCYTHE_EFFECT,technique:0});}
+  warmScytheFlight():void{
+    this.scytheFlight ||=new HeroFxShader(this.field,'scytheBladeFlight',40,'plasma',{effect:SCYTHE_EFFECT,technique:0});
+    this.scytheArt ||=new ScytheAtlas(this.field,'scytheBlenderProjectiles',40);
+  }
   warmMagicBowFlight():void{this.magicBowFlight ||=new HeroFxShader(this.field,'magicArrowFlight',32,'plasma',{effect:MAGIC_BOW_EFFECT,technique:0});}
   warmLanceFlight():void{
     if(!this.lanceRoot){
-      this.lanceRoot=new Node('lanceFlightBelowMobs');this.lanceRoot.layer=Layers.Enum.UI_2D;
-      this.lanceRoot.setParent(this.field.parent?.getChildByName('GroundFxLayer')||this.field);
+      this.lanceRoot=new Node('lanceFlightAboveMobs');this.lanceRoot.layer=Layers.Enum.UI_2D;
+      this.lanceRoot.setParent(this.field);
       this.lanceFallback=this.lanceRoot.addComponent(Graphics);
       this.field.once(Node.EventType.NODE_DESTROYED,()=>{if(this.lanceRoot?.isValid)this.lanceRoot.destroy();
         this.lanceRoot=null;this.lanceFallback=null;this.lanceArt=null;this.lanceFlight=null;});
@@ -237,6 +243,7 @@ export class ProjectileManager {
     a.age = 0; a.ultContact = false;
     a.windShader = spec.visual === 'wind' && !!this.windFlight?.ready;
     a.scytheShader = spec.visual==='scytheBlade' && !!this.scytheFlight?.ready;
+    a.scytheAtlas = spec.visual==='scytheBlade' && !!this.scytheArt && scytheAtlasReady();
     a.magicBowShader = spec.visual==='magicArrow' && !!this.magicBowFlight?.ready;
     a.lanceShader = (spec.visual==='lance'||spec.visual==='greatLance') && !!this.lanceFlight?.ready;
     a.lanceAtlas = (spec.visual==='lance'||spec.visual==='greatLance') && !!this.lanceArt && lanceAtlasReady();
@@ -266,7 +273,7 @@ export class ProjectileManager {
 
   private makeActive(): Active {
     return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<number>(), ttl: 0, age: 0, trail: [], trailMax: 0, fxSeed: 0, ultContact: false,
-      damageScale: 1, returning: false, legLeft: 0, returnDistance: 0, hitExhausted: false, windShader: false, swordShader: false, lanceShader: false, lanceAtlas: false, magicBowShader: false, scytheShader: false, spaceShader: false };
+      damageScale: 1, returning: false, legLeft: 0, returnDistance: 0, hitExhausted: false, windShader: false, swordShader: false, lanceShader: false, lanceAtlas: false, magicBowShader: false, scytheShader: false, scytheAtlas: false, spaceShader: false };
   }
 
   /** 敌方远程石块：直线落向防线，触线即结算 */
@@ -506,6 +513,7 @@ export class ProjectileManager {
     this.basicFlight.beginFrame();
     this.windFlight?.begin();
     this.scytheFlight?.begin();
+    this.scytheArt?.begin();
     this.magicBowFlight?.begin();
     this.lanceFlight?.begin();
     this.lanceArt?.begin();
@@ -521,7 +529,11 @@ export class ProjectileManager {
       const orb = s.heroId === 'volt' && !s.small && !s.enemy;
       const fire = s.heroId === 'pyro' && !s.enemy;
       const shard = s.heroId === 'mora' && !s.small && !s.enemy;
-      if(s.visual==='scytheBlade'){drawScytheBlade(a.scytheShader?this.scytheFlight:null,g,s.x,s.y,Math.atan2(a.vy,a.vx),s.lineHalfLength||43,a.age,a.fxSeed);continue;}
+      if(s.visual==='scytheBlade'){
+        const angle=Math.atan2(a.vy,a.vx),radius=s.lineHalfLength||43;
+        if(a.scytheAtlas&&this.scytheArt?.draw('blade',s.x,s.y,radius,a.age,angle-Math.PI/2,1,a.fxSeed))continue;
+        drawScytheBlade(a.scytheShader?this.scytheFlight:null,g,s.x,s.y,angle,radius,a.age,a.fxSeed);continue;
+      }
       if(s.visual==='magicArrow'){drawMagicArrow(a.magicBowShader?this.magicBowFlight:null,g,s.x,s.y,Math.atan2(a.vy,a.vx),size,a.age,a.fxSeed);continue;}
       if(s.visual==='lance'||s.visual==='greatLance'){
         const pose=s.lanceFlight?lanceFlightPose(s.lanceFlight,a.age):null,angle=pose?pose.angle:Math.atan2(a.vy,a.vx);
@@ -591,6 +603,7 @@ export class ProjectileManager {
     this.impacts?.endProjectileFrame();
     this.windFlight?.end();
     this.scytheFlight?.end();
+    this.scytheArt?.end();
     this.magicBowFlight?.end();
     this.lanceFlight?.end();
     this.lanceArt?.end();

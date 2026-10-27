@@ -1,0 +1,53 @@
+{
+  "blade": {
+    "size": [
+      2080,
+      1040
+    ],
+    "frames": 32,
+    "bytes": 667889,
+    "sha256": "6a572cbb819e867a3e071060e8ed3dc561f50017c6f48b41245a11de9ebafdf1",
+    "minVisiblePixels": 18599,
+    "maxVisiblePixels": 19278,
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  },
+  "spin": {
+    "size": [
+      3104,
+      1552
+    ],
+    "frames": 32,
+    "bytes": 1660440,
+    "sha256": "00068c27122b37aabb8727dff4e794c7cbe80b493bd6b258d1d7d1912c725ecb",
+    "minVisiblePixels": 41170,
+    "maxVisiblePixels": 41527,
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  },
+  "slash": {
+    "size": [
+      2576,
+      820
+    ],
+    "frames": 18,
+    "bytes": 428490,
+    "sha256": "6e23e90756edefce830ab8f8b4a1ebc8edbc2a9602bc38ba0cf16150654e82f1",
+    "minVisiblePixels": 0,
+    "maxVisiblePixels": 22807,
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "alpha": "straight",
+    "gutter": 2
+  }
+}

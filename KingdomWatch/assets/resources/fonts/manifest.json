@@ -1,23 +1,23 @@
 {
   "revision": "7085eb89a950e85db5b166b7a58d414544b4140c",
-  "glyphsRequested": 1616,
+  "glyphsRequested": 1617,
   "fonts": [
     {
       "file": "UIBody.ttf",
       "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
       "sourceSha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
-      "sha256": "30405a91ef4284b9ddeb205820245bb91c1436522de911162d0d9e93eccaadd6",
-      "bytes": 502732,
-      "glyphs": 1610,
+      "sha256": "5802bfc8ad284c31556c53f88973bdb21dfc42d18f66517c731987c1dae9b462",
+      "bytes": 503144,
+      "glyphs": 1611,
       "weight": 500
     },
     {
       "file": "UIHeading.ttf",
       "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf",
       "sourceSha256": "050080d9255a86808f2945bffac582b31ef32bc36411ce29563b4961670c66f9",
-      "sha256": "e1c12b27d403711adbeece635912a89957b9a2d93ed18c9e3fc6e4bc9cb0efd2",
-      "bytes": 685124,
-      "glyphs": 1610,
+      "sha256": "2cbb46f38af82764bddce7ba63734654924ac508a1d435e0836a161de7eabd0e",
+      "bytes": 685596,
+      "glyphs": 1611,
       "weight": 750
     },
     {

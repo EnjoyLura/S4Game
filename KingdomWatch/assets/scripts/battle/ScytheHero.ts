@@ -6,20 +6,22 @@ import { DamageService } from './DamageService';
 import { HeroStats } from '../config/Cards';
 import { DESIGN_W,HERO_Y,LINE_Y,LO } from '../config/GameConfig';
 import { SCYTHE as B,SCYTHE_TIMING as T,scytheSkillCfg,scytheUltCfg } from '../config/ScytheConfig';
-import { scythePose,scythePulseCount,scytheWavePlan } from './ScythePlans';
+import { scythePose,scythePulseCount,scytheReapPulseCount,scytheInDomain } from './ScythePlans';
 import { Sfx } from '../core/Sfx';
 import { artSprite } from '../ui/Ux';
 import { CA,N } from '../ui/UIKit';
 import { bodyDownSpeed,densestBodyArea,interceptDirection } from './WindNinjaGeometry';
 import { ScytheVFX } from './ScytheVFX';
 interface Spin {x:number;y:number;sx:number;sy:number;age:number;duration:number;radius:number;damage:number;resCut:number;pulses:number;seed:number;}
-interface Pending {kind:'normal'|'wave';delay:number;damage?:number;resCut?:number;index?:number;}
+interface Pending {kind:'normal';delay:number;}
+interface Reap {x:number;y:number;radius:number;age:number;duration:number;damage:number;resCut:number;hits:number;finalMul:number;pulses:number;seed:number;}
 const live=(m:Monster)=>!m.dead&&m.node.isValid&&m.node.activeInHierarchy;
 export class ScytheHero extends HeroBase {
  readonly id='scythe';readonly name='艾登·烬镰';readonly chargeMax=B.energy;readonly skillMax=B.cooldown;
  private fx:ScytheVFX|null=null;private pending:Pending[]=[];private spins:Spin[]=[];private facing=1;private serial=0;
+ private reap:Reap|null=null;
  constructor(parent:Node,x:number,stats:HeroStats){super(parent,x,stats);
-  this.node.once(Node.EventType.NODE_DESTROYED,()=>{this.pending.length=0;this.spins.length=0;this.fx?.destroy();this.fx=null;});}
+  this.node.once(Node.EventType.NODE_DESTROYED,()=>{this.pending.length=0;this.spins.length=0;this.reap=null;this.fx?.destroy();this.fx=null;});}
  protected buildVisual(parent:Node):void{
   this.node.layer=parent.layer;this.node.setParent(parent);this.node.setPosition(this.x,HERO_Y,0);
   const g=N('heroContactShadow',this.node).addComponent(Graphics);g.fillColor=CA('#29202A',.28);g.ellipse(0,-74,27,7);g.fill();
@@ -30,10 +32,9 @@ export class ScytheHero extends HeroBase {
   this.facing=dx>0?1:-1;this.staticArt?.setScale(this.facing>0?1:-1,1,1);}
  private effects():ScytheVFX{return this.fx ||=new ScytheVFX(this.node.parent!.parent||this.node.parent!);}
  warmEffects():void{this.effects();}
- renderEffects():void{const fx=this.effects();fx.begin();for(const s of this.spins){const p=scythePose(s.age,s.duration,s.sx,s.sy,s.x,s.y);fx.spin(p.x,p.y,s.radius,s.age,s.seed,p.opacity);}fx.end();}
- private wavePlan(){return scytheWavePlan(LINE_Y+35,LO.half+150,DESIGN_W);}
- get ultShowDuration():number{const p=this.wavePlan();return p.releases[2]+p.ttl+.25;}
- get ultimateRemaining():number{return Math.max(this.ultimateT,this.pending.some(p=>p.kind==='wave')?.1:0);}
+ renderEffects():void{const fx=this.effects();fx.begin();for(const s of this.spins){const p=scythePose(s.age,s.duration,s.sx,s.sy,s.x,s.y);fx.spin(p.x,p.y,s.radius,s.age,s.seed,p.opacity,s);}if(this.reap)fx.reaping(this.reap);fx.end();}
+ get ultShowDuration():number{return scytheUltCfg(this.stats.ultLv).duration;}
+ get ultimateRemaining():number{return Math.max(this.ultimateT,this.reap?this.reap.duration-this.reap.age:0);}
  protected queuedShotDelay():number{return this.pending.reduce((n,p)=>Math.min(n,p.delay),Infinity);}
  protected shoot(target:Monster,_mgr:MonsterManager,projs:ProjectileManager):void{
   this.normal(target,projs);for(let k=1;k<=Math.min(24,this.stats.serial||0)&&this.pending.length<56;k++)this.pending.push({kind:'normal',delay:k*.12});
@@ -60,34 +61,37 @@ export class ScytheHero extends HeroBase {
   this.beginSkillCooldown();this.effects().swing(sx,sy,80,.32);Sfx.cast(this.id);
  }
  castUlt(mgr:MonsterManager,_projs:ProjectileManager,dmg:DamageService):boolean{
-  if(!this.ultReady||!mgr.list.some(live)||this.pending.length>56)return false;
-  const c=scytheUltCfg(this.stats.ultLv);this.lastDmg=dmg;this.charge=0;this.beginUltimate();
-  this.wavePlan().releases.forEach((delay,index)=>this.pending.push({kind:'wave',delay,index,damage:this.abilityDamage(c.mul,true),resCut:this.stats.defIgnore}));
-  this.effects().charge(this.x,HERO_Y+85,88,T.windup);Sfx.cast(this.id,true);return true;
+  if(!this.ultReady||this.reap)return false;
+  const c=scytheUltCfg(this.stats.ultLv),radius=c.radius*this.stats.skillRangeMul;
+  const p=densestBodyArea(mgr.list.filter(live),this.x,HERO_Y,Infinity,radius,
+   {left:-DESIGN_W/2+28,right:DESIGN_W/2-28,bottom:LINE_Y+50,top:LO.half-LO.notchTop-155});if(!p)return false;
+  this.lastDmg=dmg;this.charge=0;this.beginUltimate(c.duration);
+  this.reap={...p,radius,age:0,duration:c.duration,damage:this.abilityDamage(c.mul,true),resCut:this.stats.defIgnore,
+   hits:c.hits,finalMul:c.finalMul,pulses:0,seed:(++this.serial*.618)%1};
+  this.animateAttack(true,p.x-this.x,p.y-HERO_Y);Sfx.cast(this.id,true);return true;
  }
  protected updateQueues(dt:number,mgr:MonsterManager,projs:ProjectileManager):void{
   this.fx?.tick(dt);
+  if(this.reap){const r=this.reap;r.age+=dt;const due=scytheReapPulseCount(r.age,r.hits);
+   while(r.pulses<due){const last=r.pulses===r.hits-1;r.pulses++;
+    for(const m of mgr.list){if(!live(m)||!scytheInDomain(m.x,m.hitY,r.x,r.y,r.radius))continue;
+     m.takeDamage(r.damage*(last?r.finalMul:1),false,this.id,false,r.resCut,Math.atan2(m.hitY-r.y,m.x-r.x),last);
+     this.lastDmg?.add(this.id,m.lastDamageTaken);if(last||r.pulses%3===1)this.effects().hit(m.x,m.hitY,last?38:21);
+    }
+    if(last){this.ultimateBeat(r.x,r.y,1.2,true);Sfx.impact(this.id,true);}
+    else if(r.pulses%3===1)Sfx.shoot(this.id);
+   }if(r.age>=r.duration)this.reap=null;
+  }
   for(let i=this.spins.length-1;i>=0;i--){const s=this.spins[i];s.age+=dt;const due=scythePulseCount(s.age,s.duration);
    while(s.pulses<due){s.pulses++;for(const m of mgr.list){if(!live(m)||(m.x-s.x)**2+(m.hitY-s.y)**2>(s.radius+m.def.radius*.4)**2)continue;
     m.takeDamage(s.damage,false,this.id,false,s.resCut,Math.atan2(m.hitY-s.y,m.x-s.x));this.lastDmg?.add(this.id,m.lastDamageTaken);
     if(s.pulses%2===1)this.effects().hit(m.x,m.hitY,20);
    }}if(s.age>=scythePose(s.age,s.duration,s.sx,s.sy,s.x,s.y).end)this.spins.splice(i,1);
   }
-  // Decrement together; newly delayed projectiles retain the three-wave cadence even at pool capacity.
+  // Ordinary serial shots retain the existing projectile capacity gate.
   for(const p of this.pending)p.delay-=dt;
   for(let i=0;i<this.pending.length;){const p=this.pending[i];if(p.delay>1e-7||!projs.hasCapacity){i++;continue;}
-   if(p.kind==='normal'){const target=this.selectNormalTarget(mgr);if(target)this.normal(target,projs);}
-   else{
-    const plan=this.wavePlan(),late=Math.max(0,-p.delay);
-    const fired=projs.fire({x:0,y:LINE_Y+35,dirX:0,dirY:1,speed:T.waveSpeed,dmg:p.damage!,crit:false,heroId:this.id,
-     color:'#FF7136',visual:'scytheBlade',size:24,lineHalfLength:plan.halfLength,pierce:9999,ttl:plan.ttl,
-     resCut:p.resCut,targetLayer:'all',ult:true,ability:true,
-     onContact:m=>{if(this.node.isValid)this.effects().hit(m.x,m.hitY,44);}});
-    if(!fired){i++;continue;}
-    for(let j=i+1;j<this.pending.length;j++)if(this.pending[j].kind==='wave')this.pending[j].delay+=late;
-    this.ultimateT=Math.max(this.ultimateT,plan.ttl+.25);this.animateAttack(true,0,1);
-    this.effects().swing(this.x,HERO_Y+85,145,.42);this.ultimateBeat(this.x,HERO_Y+100,.35+p.index!*.12,false);Sfx.shoot(this.id);
-   }this.pending.splice(i,1);
+   const target=this.selectNormalTarget(mgr);if(target)this.normal(target,projs);this.pending.splice(i,1);
   }
  }
 }

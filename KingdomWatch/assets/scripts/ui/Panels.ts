@@ -618,8 +618,8 @@ export class Panels {
           ['切割半径',String(Math.round(sc.radius*h.skillRangeMul))],['持续时间',sc.duration+'秒'],['伤害间隔',SCYTHE_TIMING.tick+'秒'],
           ['冷却',hero.skillCdTotal.toFixed(1)+'秒'],['效果','甩出长镰旋转切割 · 最后回收']];
       }else{
-        title='大招 · 三重断界';rows=[['每道镰刃',String(Math.round(hero.abilityDamage(uc.mul,true)))+'法伤'],['数量','三道'],
-          ['范围','横向全屏 · 向前贯穿'],['出手间隔',SCYTHE_TIMING.gap+'秒'],['充能需求',Math.round(hero.chargeGoal)+'能量'],['效果','每道巨刃对同一敌人命中一次']];
+        title='大招 · 赤狱绞杀';rows=[['每次绞杀',String(Math.round(hero.abilityDamage(uc.mul,true)))+'法伤'],['切割次数',uc.hits+'次 · 最后一击'+uc.finalMul+'倍'],
+          ['绞杀半径',String(Math.round(uc.radius*h.skillRangeMul))],['切割间隔',SCYTHE_TIMING.reapGap+'秒'],['充能需求',Math.round(hero.chargeGoal)+'能量'],['效果','区域升起 · 多向切割 · 最后一击收束']];
       }
     } else if (hero.id === 'arcane') {
       w=350;const sc=magicBowSkillCfg(h.skillLv),uc=magicBowUltCfg(h.ultLv);

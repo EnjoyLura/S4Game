@@ -12,9 +12,17 @@ export function scythePulseCount(age:number,duration:number){
  const activeAge=age-T.skillWindup-T.throw;
  return activeAge<-1e-7?0:Math.min(Math.ceil(duration/T.tick),Math.floor((activeAge+1e-7)/T.tick)+1);
 }
-export function scytheWavePlan(bottom:number,top:number,width:number){
- return {halfLength:width*.5+36,ttl:Math.max(1,(top-bottom+180)/T.waveSpeed),
-  releases:[T.windup,T.windup+T.gap,T.windup+2*T.gap]};
+export function scytheReapPulseCount(age:number,hits:number):number{
+ return age<T.reapStart-1e-7?0:Math.min(hits,Math.floor((age-T.reapStart+1e-7)/T.reapGap)+1);
+}
+/** Each cut shares the damaging domain's center; different chords carve through it in rapid succession. */
+export function scytheReapCut(index:number,seed:number,radius:number,final=false){
+ const angle=(index*2.3999632297+seed*1.7)%(Math.PI*2),offset=final?0:Math.sin(index*7.13+seed)*radius*.32;
+ return {angle,x:-Math.sin(angle)*offset,y:Math.cos(angle)*offset,
+  halfLength:Math.sqrt(radius*radius-offset*offset)*(final?1.13:1.06)};
+}
+export function scytheInDomain(x:number,y:number,cx:number,cy:number,radius:number):boolean{
+ return (x-cx)**2+(y-cy)**2<=radius*radius;
 }
 /** Sweep the visible parabola (24 capsule segments), including curved tips and zero-length steps.
  * Axes are forward / transverse. Returns earliest time in [0,1], or Infinity. */

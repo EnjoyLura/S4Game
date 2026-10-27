@@ -104,7 +104,8 @@ export class UltimatePresentation {
     for (const b of this.beats) this.afterglow(b);
   }
   private gather(c: Cast): void {
-    const g = c.hero === 'lance' ? this.floor : this.air, p = clamp(c.age / c.windup);
+    if (c.hero === 'scythe') return; // Its windup is the rising target domain, not a second charge at the hero.
+    const g = this.air, p = clamp(c.age / c.windup);
     const light = smooth(0, .14, c.age) * (1 - smooth(c.windup, c.windup + .4, c.age));
     const x = c.x, y = c.y, span = 70 - p * 37;
     // Soft local core, with a readable outer colour and a small warm/cool inner point.
@@ -153,7 +154,7 @@ export class UltimatePresentation {
     }
   }
   private afterglow(b: Beat): void {
-    const g = b.contact ? this.floor : this.air, t = b.age / .8;
+    const g = b.contact && b.hero !== 'lance' ? this.floor : this.air, t = b.age / .8;
     const fade = (1 - smooth(.06, .8, b.age)) * Math.min(1, b.energy);
     if (b.hero === 'sniper' && b.contact) {
       const dx = b.x - b.sx, dy = b.y - b.sy, length = Math.hypot(dx, dy) || 1;

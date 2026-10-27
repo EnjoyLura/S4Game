@@ -38,7 +38,7 @@ CCProgram scythe-fs %{
  precision highp float;
  in vec2 uv0;in vec4 color;
  uniform ScytheFlow {vec4 fxState;vec4 fxShape;};
- const vec3 RED=vec3(1.,.065,.018),ORANGE=vec3(1.,.32,.035),GOLD=vec3(1.,.76,.24),WHITE=vec3(1.,.96,.73);
+ const vec3 RED=vec3(.78,.006,.025),ORANGE=vec3(1.,.045,.055),GOLD=vec3(1.,.22,.08),WHITE=vec3(1.,.83,.63);
  float sat(float x){return clamp(x,0.,1.);}
  float bell(float d,float w){return exp(-d*d/max(.000001,w*w));}
  float hash(float x){return fract(sin(x*127.1)*43758.5453);}
@@ -104,11 +104,35 @@ CCProgram scythe-fs %{
    float r=length(q),a=atan(q.y,q.x),radius=.8*(1.-t)+.1;
    rgb=RED*bell(r,radius*.5)*.25+GOLD*bell(r,.07)*(.3+t);
    rgb+=ORANGE*bell(r-radius,.015)*pow(sat(cos(a*3.+age*12.)),4.)*.8;
-  }else{
+  }else if(mode<4.5){
    vec2 p=rot(q,-t*5.+.7);float r=length(p),a=atan(p.y,p.x),gate=pow(sat(cos(a)),2.);
    float radius=.65+.25*t,fade=1.-sat(t);
    rgb=WHITE*bell(r-radius,.012)*gate*fade+ORANGE*bell(r-radius+.04,.06)*gate*fade*.8;
    rgb+=RED*bell(r-radius+.12,.15)*gate*fade*.35;
+  }else if(mode<5.5){
+   // Dark-red energy rises at the locked region. No crossed charge, solid disc or full bright ring.
+   float r=length(q),a=atan(q.y,q.x),rise=smoothstep(0.,.48,age),fade=1.-smoothstep(.82,1.,t);
+   float radius=mix(.62,1.,rise),inside=1.-smoothstep(radius-.12,radius+.06,r);
+   float n=noise(a*5.+r*14.-age*2.+seed),veins=pow(sat(sin(r*30.+n*5.-age*4.)),7.);
+   alpha=inside*(.12+.10*n)*rise*fade;
+   rgb=vec3(.065,.002,.008)*inside*rise*fade+RED*veins*inside*.10*rise*fade;
+   float gaps=pow(sat(sin(a*5.+seed)+.35*sin(a*13.-age*2.)),3.);
+   rgb+=ORANGE*bell(r-radius,.012)*gaps*.55*rise*fade;
+   for(int k=0;k<20;k++){
+    float i=float(k),theta=i*2.39996+seed,rr=radius*(.88+.10*hash(i+seed));
+    vec2 base=vec2(cos(theta),sin(theta))*rr;
+    float h=fract(age*1.1+hash(i+5.)),height=.07+.22*h;
+    float flick=sin(h*3.14159)*(1.-h);
+    vec2 v=q-base;float tip=bell(v.y-height*.5,height*.6)*bell(v.x-sin(v.y*28.+i)*.008,.004);
+    rgb+=ORANGE*tip*flick*rise*fade*.58;
+   }
+  }else{
+   // Final convergence: a contracting, torn corona and a brief central flash.
+   float r=length(q),a=atan(q.y,q.x),fade=pow(1.-sat(t),2.);
+   float radius=mix(1.05,.05,sat(t*1.8));
+   float gaps=pow(sat(sin(a*7.+seed)+.3*sin(a*17.-age*5.)),3.);
+   rgb=RED*bell(r-radius,.045)*gaps*fade*.8+WHITE*bell(r,.045+t*.1)*exp(-t*15.)*1.3;
+   rgb+=ORANGE*bell(r,.14)*exp(-t*9.)*.7;
   }
   float bounds=(1.-smoothstep(.94,1.,abs(uv0.x-.5)*2.))*(1.-smoothstep(.94,1.,abs(uv0.y-.5)*2.));
   float power=max(0.,fxState.z)*bounds;

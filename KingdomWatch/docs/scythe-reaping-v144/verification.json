@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "damage": {
+    "actualCallbacks": true,
+    "pulses": 9,
+    "finalMultiplier": 2,
+    "totalBaseMultiplier": 8.1,
+    "outsideNotHit": true,
+    "boundaryHit": true,
+    "coarseStepCatchup": true,
+    "pauseStable": true,
+    "independentOfProjectileCapacity": true
+  },
+  "levelsChecked": 20,
+  "cosmeticFrames": 650,
+  "firstSlashAt": 0.62,
+  "windupHasNoCrossedSlashes": true,
+  "fixedProjectilePool": 40,
+  "noPerFrameNodes": true,
+  "fallbackFinite": true,
+  "belowMonsters": true,
+  "lanceArtPhysicsAndDamageUnchanged": true,
+  "lanceLayerUpdatedAboveMonsters": true,
+  "gameEngineBrowserRealBattleAudioOrWasmStarted": false
+}

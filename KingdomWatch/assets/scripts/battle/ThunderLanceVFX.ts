@@ -68,11 +68,11 @@ export class ThunderLanceVFX {
   private spears:HeroFxShader;private ground:HeroFxShader;private accents:Accent[]=[];private arcs:Arc[]=[];private serial=0;
   private bodyArt:ThunderLanceAtlas;private floorArt:ThunderLanceAtlas;private burstArt:ThunderLanceAtlas;
   constructor(parent:Node){
-    this.floor=N('thunderLanceGround',parent.getChildByName('GroundFxLayer')||parent);
+    this.floor=N('thunderLanceGround',parent.getChildByName('FxLayer')||parent);
     this.dirt=N('earth',this.floor).addComponent(Graphics);
     this.ground=new HeroFxShader(this.floor,'electricGround',64,'plasma',{effect:LANCE_EFFECT,technique:0});
     this.floorArt=new ThunderLanceAtlas(this.floor,'blenderSurfacePasses',64);
-    // All lance passes, including the shaft and blast, are below MobLayer.
+    // User-approved ordering: every lance pass renders above MobLayer.
     this.air=N('thunderLance',this.floor);
     this.g=N('arcsAndFallback',this.air).addComponent(Graphics);
     this.spears=new HeroFxShader(this.air,'plantedAndRecall',52,'plasma',{effect:LANCE_EFFECT,technique:0});
