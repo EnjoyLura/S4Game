@@ -1,3 +1,4 @@
+import { SCYTHE,SCYTHE_TIMING,scytheSkillCfg,scytheUltCfg } from '../config/ScytheConfig';
 import { MAGIC_BOW, MAGIC_BOW_TIMING, magicBowSkillCfg,magicBowUltCfg } from '../config/MagicBowConfig';
 import { LANCE,lanceSkillCfg,lanceUltCfg } from '../config/ThunderLanceConfig';
 /**
@@ -606,7 +607,20 @@ export class Panels {
     const iconY = WYB(126, 46);
     let px: number, py: number, w = 300, hh = 272, title: string;
     let rows: [string, string][];
-    if (hero.id === 'arcane') {
+    if (hero.id === 'scythe') {
+      w=350;const sc=scytheSkillCfg(h.skillLv),uc=scytheUltCfg(h.ultLv);
+      if(kind==='atk'){
+        title='普攻 · 赤焰弧刃';rows=[['法术伤害',String(Math.round(hero.effAtk*h.normalMul))],['攻速',h.aspd.toFixed(2)+'次/秒'],
+          ['刃身宽度',String(SCYTHE.halfLength*2)],['索敌范围',String(Math.round(h.range))],['基础穿透','命中后可再穿透2个敌人'],['效果','圆弧光刃 · 可对空']];
+      }else if(kind==='skill'){
+        title='技能 · 回旋猎镰';rows=[['每次切割',String(Math.round(hero.abilityDamage(sc.mul)))+'法伤'],
+          ['切割半径',String(Math.round(sc.radius*h.skillRangeMul))],['持续时间',sc.duration+'秒'],['伤害间隔',SCYTHE_TIMING.tick+'秒'],
+          ['冷却',hero.skillCdTotal.toFixed(1)+'秒'],['效果','甩出长镰旋转切割 · 最后回收']];
+      }else{
+        title='大招 · 三重断界';rows=[['每道镰刃',String(Math.round(hero.abilityDamage(uc.mul,true)))+'法伤'],['数量','三道'],
+          ['范围','横向全屏 · 向前贯穿'],['出手间隔',SCYTHE_TIMING.gap+'秒'],['充能需求',Math.round(hero.chargeGoal)+'能量'],['效果','每道巨刃对同一敌人命中一次']];
+      }
+    } else if (hero.id === 'arcane') {
       w=350;const sc=magicBowSkillCfg(h.skillLv),uc=magicBowUltCfg(h.ultLv);
       if(kind==='atk'){
         title='普攻 · 星辉魔箭';rows=[['法术伤害',String(Math.round(hero.effAtk*h.normalMul))],['攻速',h.aspd.toFixed(2)+'次/秒'],

@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "wave": {
+    "halfLength": 411,
+    "ttl": 1.8390243902439025,
+    "releases": [
+      0.48,
+      0.8200000000000001,
+      1.1600000000000001
+    ]
+  },
+  "pulses": 10,
+  "poseSamples": 361,
+  "sweepChecks": 36,
+  "sampledCases": 24,
+  "trainingLevels": 20,
+  "cosmeticFrames": 244,
+  "buffersBounded": true,
+  "fallbackGeometry": true,
+  "oldHeroImplementationsPreserved": true,
+  "gameEngineBrowserBattleAudioOrWasmStarted": false
+}

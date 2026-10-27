@@ -1,3 +1,4 @@
+import { scytheUltCfg } from '../config/ScytheConfig';
 import { magicBowUltCfg } from '../config/MagicBowConfig';
 import { lanceUltCfg } from '../config/ThunderLanceConfig';
 /** Capture real values around existing save operations; presentation never estimates growth. */
@@ -19,6 +20,7 @@ interface GrowthState {
   stats: { name: string; value: number; format?: NoticeNumberFormat }[]; milestone?: string;
 }
 const NORMAL_CFG: Record<string, (lv: number) => { normalMul: number }> = {
+  scythe: newHeroNormalCfg,
   arcane: newHeroNormalCfg,
   lance: newHeroNormalCfg,
   space: newHeroNormalCfg, sword: newHeroNormalCfg,
@@ -27,6 +29,7 @@ const NORMAL_CFG: Record<string, (lv: number) => { normalMul: number }> = {
   archer: archerAtkCfg, sniper: sniperAtkCfg, volt: voltAtkCfg, pyro: pyroAtkCfg, mora: moraAtkCfg,
 };
 const ULT_DAMAGE: Record<string, (lv: number) => number> = {
+  scythe: lv => scytheUltCfg(lv).mul,
   arcane: lv => magicBowUltCfg(lv).mul,
   lance: lv => lanceUltCfg(lv).mul,
   space: lv => spaceUltCfg(lv).mul, sword: lv => swordUltCfg(lv).mul,

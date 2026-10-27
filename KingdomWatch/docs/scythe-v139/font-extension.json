@@ -1,0 +1,20 @@
+{
+  "fonts": [
+    {
+      "font": "UIBody",
+      "added": "刀甩舞镰",
+      "existingCodepointsPreserved": 1606,
+      "bytesAdded": 1240,
+      "sha256": "30405a91ef4284b9ddeb205820245bb91c1436522de911162d0d9e93eccaadd6"
+    },
+    {
+      "font": "UIHeading",
+      "added": "刀甩舞镰",
+      "existingCodepointsPreserved": 1606,
+      "bytesAdded": 1568,
+      "sha256": "e1c12b27d403711adbeece635912a89957b9a2d93ed18c9e3fc6e4bc9cb0efd2"
+    }
+  ],
+  "source": "same pinned local OFL sources; no downloads",
+  "gameStarted": false
+}

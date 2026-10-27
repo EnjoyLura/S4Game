@@ -1,3 +1,5 @@
+import { drawScytheBlade,SCYTHE_EFFECT } from './ScytheVFX';
+import { scytheBladeEntry } from './ScythePlans';
 import { drawMagicArrow,MAGIC_BOW_EFFECT } from './MagicBowVFX';
 import { drawLanceFlight,LANCE_EFFECT } from './ThunderLanceVFX';
 /**
@@ -24,7 +26,7 @@ import { drawFlyingSword, drawHeavenSword, drawMagicBlade, drawRiftShard, SPACE_
 import { drawSwordFlight, SWORD_ABILITY_EFFECT, SWORD_FLIGHT_CAP } from './SwordAbilityVFX';
 
 export interface ProjSpec {
-  visual?: 'wind' | 'shuriken' | 'rift' | 'sword' | 'heavenSword' | 'spaceBlade' | 'lance' | 'greatLance' | 'magicArrow';
+  visual?: 'wind' | 'shuriken' | 'rift' | 'sword' | 'heavenSword' | 'spaceBlade' | 'lance' | 'greatLance' | 'magicArrow' | 'scytheBlade';
   /** Cosmetic ballistic elevation; shared ground-target arrival still owns the one impact. */
   lanceFlight?: {seconds:number;height:number};
   /** Only deliberately homing attacks opt in; existing arrows and bullets stay straight. */
@@ -143,6 +145,7 @@ interface Active {
   swordShader: boolean;
   lanceShader: boolean;
   magicBowShader: boolean;
+  scytheShader: boolean;
   spaceShader: boolean;
 }
 
@@ -171,6 +174,7 @@ export class ProjectileManager {
   private dirty = false;
   private basicFlight: BasicProjectileFlightVFX;
   private windFlight: HeroFxShader | null = null;
+  private scytheFlight: HeroFxShader | null = null;
   private magicBowFlight: HeroFxShader | null = null;
   private lanceFlight: HeroFxShader | null = null;
   private swordFlight: HeroFxShader | null = null;
@@ -190,6 +194,7 @@ export class ProjectileManager {
       { effect: WIND_NINJA_FX_EFFECT, technique: 0 });
   }
 
+  warmScytheFlight():void{this.scytheFlight ||=new HeroFxShader(this.field,'scytheBladeFlight',40,'plasma',{effect:SCYTHE_EFFECT,technique:0});}
   warmMagicBowFlight():void{this.magicBowFlight ||=new HeroFxShader(this.field,'magicArrowFlight',32,'plasma',{effect:MAGIC_BOW_EFFECT,technique:0});}
   warmLanceFlight():void{this.lanceFlight ||=new HeroFxShader(this.field,'goldenLanceFlight',32,'plasma',{effect:LANCE_EFFECT,technique:0});}
   warmSwordFlight(): void {
@@ -215,6 +220,7 @@ export class ProjectileManager {
     a.ttl = spec.ttl ?? 3.2;
     a.age = 0; a.ultContact = false;
     a.windShader = spec.visual === 'wind' && !!this.windFlight?.ready;
+    a.scytheShader = spec.visual==='scytheBlade' && !!this.scytheFlight?.ready;
     a.magicBowShader = spec.visual==='magicArrow' && !!this.magicBowFlight?.ready;
     a.lanceShader = (spec.visual==='lance'||spec.visual==='greatLance') && !!this.lanceFlight?.ready;
     a.swordShader = (spec.visual === 'sword' || spec.visual === 'heavenSword') && !!this.swordFlight?.ready;
@@ -243,7 +249,7 @@ export class ProjectileManager {
 
   private makeActive(): Active {
     return { spec: null as unknown as ProjSpec, vx: 0, vy: 0, pierceLeft: 0, hit: new Set<number>(), ttl: 0, age: 0, trail: [], trailMax: 0, fxSeed: 0, ultContact: false,
-      damageScale: 1, returning: false, legLeft: 0, returnDistance: 0, hitExhausted: false, windShader: false, swordShader: false, lanceShader: false, magicBowShader: false, spaceShader: false };
+      damageScale: 1, returning: false, legLeft: 0, returnDistance: 0, hitExhausted: false, windShader: false, swordShader: false, lanceShader: false, magicBowShader: false, scytheShader: false, spaceShader: false };
   }
 
   /** 敌方远程石块：直线落向防线，触线即结算 */
@@ -365,7 +371,7 @@ export class ProjectileManager {
           line.takeDamage(sp.dmg);
           done = true;
         // 顶界必须盖过 SPAWN_Y(LO.half+60)：大招箭雨从可视区上方出生，越界即回收会让大招整轮哑火
-        } else if (a.ttl <= 0 || sp.y > LO.half + 120 || sp.y < -720 || sp.x < -430 || sp.x > 430) {
+        } else if (a.ttl <= 0 || sp.y > LO.half + 120 + (sp.visual==='scytheBlade'?(sp.lineHalfLength||0)*.3:0) || sp.y < -720 || sp.x < -430 || sp.x > 430) {
           done = true;
         }
       }
@@ -414,8 +420,9 @@ export class ProjectileManager {
     const offset = halfLength > 0 ? sp.lineForwardOffset || 0 : 0;
     const bx = x + ux * offset, by = y + uy * offset;
     const halfX = Math.abs(uy) * halfLength, halfY = Math.abs(ux) * halfLength;
-    const minX = Math.min(bx, bx + sx) - halfX, maxX = Math.max(bx, bx + sx) + halfX;
-    const minY = Math.min(by, by + sy) - halfY, maxY = Math.max(by, by + sy) + halfY;
+    const curveBack = sp.visual === 'scytheBlade' ? halfLength * .3 : 0;
+    const minX = Math.min(bx, bx + sx) - halfX - Math.max(0,ux*curveBack), maxX = Math.max(bx, bx + sx) + halfX + Math.max(0,-ux*curveBack);
+    const minY = Math.min(by, by + sy) - halfY - Math.max(0,uy*curveBack), maxY = Math.max(by, by + sy) + halfY + Math.max(0,-uy*curveBack);
     const padding = (sp.size || 7) * .5;
     let count = 0;
     for (const m of this.mgr.list) {
@@ -429,7 +436,8 @@ export class ProjectileManager {
       const c = dx * dx + dy * dy - radius * radius;
       let t = 0;
       if (halfLength > 0) {
-        t = sweptBladeEntry((mx - bx) * ux + (my - by) * uy,
+        const entry = sp.visual === 'scytheBlade' ? scytheBladeEntry : sweptBladeEntry;
+        t = entry((mx - bx) * ux + (my - by) * uy,
           -(mx - bx) * uy + (my - by) * ux, sx * ux + sy * uy, halfLength, radius);
         if (!Number.isFinite(t)) continue;
       } else if (c > 0) {
@@ -471,6 +479,7 @@ export class ProjectileManager {
     g.clear();
     this.basicFlight.beginFrame();
     this.windFlight?.begin();
+    this.scytheFlight?.begin();
     this.magicBowFlight?.begin();
     this.lanceFlight?.begin();
     this.swordFlight?.begin();
@@ -485,6 +494,7 @@ export class ProjectileManager {
       const orb = s.heroId === 'volt' && !s.small && !s.enemy;
       const fire = s.heroId === 'pyro' && !s.enemy;
       const shard = s.heroId === 'mora' && !s.small && !s.enemy;
+      if(s.visual==='scytheBlade'){drawScytheBlade(a.scytheShader?this.scytheFlight:null,g,s.x,s.y,Math.atan2(a.vy,a.vx),s.lineHalfLength||43,a.age,a.fxSeed);continue;}
       if(s.visual==='magicArrow'){drawMagicArrow(a.magicBowShader?this.magicBowFlight:null,g,s.x,s.y,Math.atan2(a.vy,a.vx),size,a.age,a.fxSeed);continue;}
       if(s.visual==='lance'||s.visual==='greatLance'){
         const arc=s.lanceFlight,t=arc?Math.min(1,a.age/Math.max(.001,arc.seconds)):0;
@@ -553,6 +563,7 @@ export class ProjectileManager {
     }
     this.impacts?.endProjectileFrame();
     this.windFlight?.end();
+    this.scytheFlight?.end();
     this.magicBowFlight?.end();
     this.lanceFlight?.end();
     this.swordFlight?.end();

@@ -1,0 +1,117 @@
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: scythe-vs:vert
+      frag: scythe-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: one
+          blendDst: one_minus_src_alpha
+          blendSrcAlpha: zero
+          blendDstAlpha: one
+      rasterizerState:
+        cullMode: none
+      properties:
+        fxState: { value: [0, 1, 1, 0] }
+        fxShape: { value: [250, 250, 100, 0] }
+}%
+CCProgram scythe-vs %{
+ precision highp float;
+ #include <builtin/uniforms/cc-global>
+ #if USE_LOCAL
+  #include <builtin/uniforms/cc-local>
+ #endif
+ in vec3 a_position;in vec2 a_texCoord;in vec4 a_color;
+ out vec2 uv0;out vec4 color;
+ vec4 vert(){vec4 p=vec4(a_position,1.);
+  #if USE_LOCAL
+   p=cc_matWorld*p;
+  #endif
+  uv0=a_texCoord;color=a_color;return cc_matViewProj*p;
+ }
+}%
+CCProgram scythe-fs %{
+ precision highp float;
+ in vec2 uv0;in vec4 color;
+ uniform ScytheFlow {vec4 fxState;vec4 fxShape;};
+ const vec3 RED=vec3(1.,.065,.018),ORANGE=vec3(1.,.32,.035),GOLD=vec3(1.,.76,.24),WHITE=vec3(1.,.96,.73);
+ float sat(float x){return clamp(x,0.,1.);}
+ float bell(float d,float w){return exp(-d*d/max(.000001,w*w));}
+ float hash(float x){return fract(sin(x*127.1)*43758.5453);}
+ float noise(float x){float i=floor(x),f=fract(x);return mix(hash(i),hash(i+1.),f*f*(3.-2.*f));}
+ vec2 rot(vec2 p,float a){float c=cos(a),s=sin(a);return vec2(c*p.x-s*p.y,s*p.x+c*p.y);}
+ float segment(vec2 p,vec2 a,vec2 b){vec2 d=b-a;return length(p-a-d*clamp(dot(p-a,d)/dot(d,d),0.,1.));}
+ vec4 frag(){
+  vec2 q=(vec2(uv0.x,1.-uv0.y)-.5)*fxShape.xy/max(1.,fxShape.z);
+  float age=fxState.x,seed=fxState.y*37.,mode=fxState.w,t=fxShape.w;
+  vec3 rgb=vec3(0.);float alpha=0.;
+  if(mode<.5){
+   float x=q.x,edge=-.30*x*x,side=1.-smoothstep(.91,1.035,abs(x));
+   float width=.055*sqrt(max(0.,1.-x*x))+.004,d=q.y-edge;
+   float solid=smoothstep(-width-.006,-width+.005,d)*(1.-smoothstep(-.004,.005,d))*side;
+   float core=bell(d+.006,.008)*side;
+   rgb=ORANGE*solid*.95+WHITE*core*.95+ORANGE*bell(d,.032)*side*.55+RED*bell(d+.02,.09)*side*.25;
+   alpha=solid*.74;
+   // Uneven, advecting streaks: center longer, tips shorter, no static evenly spaced hairs.
+   for(int k=0;k<22;k++){
+    float i=float(k),sx=-.93+i*.088+sin(i*17.1)*.025,span=.18+.6*pow(max(0.,1.-sx*sx),1.8);
+    float phase=fract(age*(2.4+hash(i)*1.7)+hash(i+seed));
+    float cy=-.3*sx*sx-.025-phase*span;
+    float curl=sx+sin(q.y*17.-age*18.+i*2.3)*.012*(.2+phase);
+    float streak=bell(x-curl,.004+hash(i+3.)*.005)*bell(q.y-cy,.025+hash(i)*.075)*(1.-phase)*side;
+    rgb+=(GOLD*.6+ORANGE*.5)*streak*.65;
+   }
+   float tail=-d,env=smoothstep(0.,.08,tail)*(1.-smoothstep(.12,max(.2,.8*(1.-min(.9,x*x))),tail))*side;
+   float wisps=pow(sat(sin(x*48.+noise(q.y*12.-age*5.+seed)*5.)),5.);
+   rgb+=(RED*.22+ORANGE*.1)*wisps*env;
+  }else if(mode<1.5){
+   vec2 p=rot(q,-age*10.);
+   float shaft=min(segment(p,vec2(-.38,-.74),vec2(-.21,.65)),segment(p,vec2(-.21,.65),vec2(-.49,.65)));
+   vec2 b=p-vec2(-.15,-.1);float r=length(b),a=atan(b.y,b.x);
+   float gate=smoothstep(-.34,-.25,a)*(1.-smoothstep(1.98,2.04,a));
+   float taper=sat((a+.3)/2.3),width=.018+.13*taper;
+   float blade=smoothstep(.82-width-.005,.82-width+.005,r)*(1.-smoothstep(.815,.827,r))*gate;
+   float edge=bell(r-.82,.009)*gate,handle=1.-smoothstep(.014,.024,shaft);
+   float grip=handle*smoothstep(-.5,-.3,p.y)*(1.-smoothstep(.08,.2,p.y));
+   alpha=max(blade*.96,handle*.92);
+   rgb=ORANGE*blade*.8+WHITE*edge+GOLD*bell(shaft,.006)*.55+vec3(.18,.08,.04)*handle;
+   rgb+=RED*bell(r-.82,.055)*gate*.55+ORANGE*grip*(.2+.15*sin(p.y*125.));
+   // A short angular wake follows the single hook; the long shaft stays legible.
+   float qr=length(q),qa=atan(q.y,q.x);
+   for(int k=0;k<4;k++){
+    float i=float(k),phase=qa-age*10.-i*.32,arc=pow(sat(cos(phase)),7.);
+    float rr=.86+i*.065+.018*sin(qa*6.-age*7.+i);
+    rgb+=(ORANGE*.65+RED*.35)*bell(qr-rr,.012+i*.009)*arc*(.38-i*.075);
+   }
+   for(int k=0;k<9;k++){
+    float i=float(k),a0=age*(3.+hash(i))+i*2.39996,rr=.85+fract(age*.8+i*.31)*.38;
+    vec2 dotp=q-vec2(cos(a0),sin(a0))*rr;
+    rgb+=GOLD*bell(length(dotp),.009+hash(i)*.006)*.6;
+   }
+  }else if(mode<2.5){
+   float r=length(q),a=atan(q.y,q.x),fade=pow(1.-sat(t),2.);
+   rgb=WHITE*bell(r,.12)*(1.-t)*1.2+ORANGE*bell(r-.05-t*.55,.025)*fade*.55;
+   for(int k=0;k<7;k++){
+    float i=float(k),a0=i*2.39996+seed;vec2 dir=vec2(cos(a0),sin(a0));
+    float along=dot(q,dir),crossed=dot(q,vec2(-dir.y,dir.x));
+    rgb+=GOLD*bell(crossed,.012)*bell(along-(.12+t*.8),.08)*fade;
+   }
+  }else if(mode<3.5){
+   float r=length(q),a=atan(q.y,q.x),radius=.8*(1.-t)+.1;
+   rgb=RED*bell(r,radius*.5)*.25+GOLD*bell(r,.07)*(.3+t);
+   rgb+=ORANGE*bell(r-radius,.015)*pow(sat(cos(a*3.+age*12.)),4.)*.8;
+  }else{
+   vec2 p=rot(q,-t*5.+.7);float r=length(p),a=atan(p.y,p.x),gate=pow(sat(cos(a)),2.);
+   float radius=.65+.25*t,fade=1.-sat(t);
+   rgb=WHITE*bell(r-radius,.012)*gate*fade+ORANGE*bell(r-radius+.04,.06)*gate*fade*.8;
+   rgb+=RED*bell(r-radius+.12,.15)*gate*fade*.35;
+  }
+  float bounds=(1.-smoothstep(.94,1.,abs(uv0.x-.5)*2.))*(1.-smoothstep(.94,1.,abs(uv0.y-.5)*2.));
+  float power=max(0.,fxState.z)*bounds;
+  return vec4(max(rgb,vec3(0.))*power*color.rgb,sat(alpha*power)*color.a);
+ }
+}%

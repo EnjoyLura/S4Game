@@ -22,7 +22,7 @@ export function pickCardArt(card: CardDef): string {
 
 /** Mage cards share a filled circular viewport. Clip only the icon subtree. */
 export function pickCardIcon(parent: Node, x: number, y: number, size: number, card: CardDef, hideOnLoad: Node[] = []): Node {
-  if (!['pyro', 'volt', 'mora', 'cannon', 'siphon', 'wind', 'ninja', 'space', 'sword', 'lance', 'arcane'].includes(card.owner)) return artSprite(parent, x, y, size, size, pickCardArt(card), { sliced: false, hideOnLoad });
+  if (!['pyro', 'volt', 'mora', 'cannon', 'siphon', 'wind', 'ninja', 'space', 'sword', 'lance', 'arcane', 'scythe'].includes(card.owner)) return artSprite(parent, x, y, size, size, pickCardArt(card), { sliced: false, hideOnLoad });
   const clip = N(card.owner + 'CardIcon', parent, x, y, size, size);
   const mask = clip.addComponent(Mask); mask.type = Mask.Type.GRAPHICS_ELLIPSE; mask.segments = 96;
   const backing = N('pyroIconBacking', clip).addComponent(Graphics);

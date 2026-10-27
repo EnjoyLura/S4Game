@@ -745,3 +745,105 @@ Object.assign(NEW_HERO_FRAMES, {
     ]
   }
 });
+// v139 scythe atlas regions.
+Object.assign(NEW_HERO_FRAMES, {
+  "new_heroes_v139/scythe_lobby": {
+    "source": "scythe_v139/scythe_figures",
+    "rect": [
+      0,
+      0,
+      512,
+      768
+    ]
+  },
+  "hero_comic_v1/comic_figure_scythe_v1": {
+    "source": "scythe_v139/scythe_figures",
+    "rect": [
+      0,
+      0,
+      512,
+      768
+    ]
+  },
+  "new_heroes_v139/scythe_battle": {
+    "source": "scythe_v139/scythe_figures",
+    "rect": [
+      512,
+      0,
+      512,
+      768
+    ]
+  },
+  "ui_avatar_scythe": {
+    "source": "scythe_v139/abilities",
+    "rect": [
+      4,
+      4,
+      248,
+      248
+    ]
+  },
+  "ui_icon_atk_scythe": {
+    "source": "scythe_v139/abilities",
+    "rect": [
+      260,
+      4,
+      248,
+      248
+    ]
+  },
+  "ui_icon_skill_scythe": {
+    "source": "scythe_v139/abilities",
+    "rect": [
+      4,
+      260,
+      248,
+      248
+    ]
+  },
+  "ui_icon_ult_scythe": {
+    "source": "scythe_v139/abilities",
+    "rect": [
+      260,
+      260,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_avatar_scythe": {
+    "source": "scythe_v139/abilities",
+    "rect": [
+      4,
+      4,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_atk_scythe": {
+    "source": "scythe_v139/abilities",
+    "rect": [
+      260,
+      4,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_skill_scythe": {
+    "source": "scythe_v139/abilities",
+    "rect": [
+      4,
+      260,
+      248,
+      248
+    ]
+  },
+  "shop_comic_v1/ui_icon_ult_scythe": {
+    "source": "scythe_v139/abilities",
+    "rect": [
+      260,
+      260,
+      248,
+      248
+    ]
+  }
+});

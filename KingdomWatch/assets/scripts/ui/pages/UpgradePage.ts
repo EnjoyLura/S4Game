@@ -1,3 +1,4 @@
+import { scytheMilestones } from '../../config/ScytheConfig';
 import { magicBowMilestones } from '../../config/MagicBowConfig';
 import { lanceMilestones } from '../../config/ThunderLanceConfig';
 import { spaceSwordMilestones } from '../../config/SpaceSwordConfig';
@@ -140,7 +141,7 @@ const SKILL_GENERIC: Record<'atk' | 'skill' | 'ult', string> = {
   ult: '大招伤害 +15%',
 };
 const skillMilestones = (hid: string, slot: 'atk' | 'skill' | 'ult'): { lv: number; txt: string }[] =>
-  hid === 'arcane' ? magicBowMilestones(slot) : hid === 'lance' ? lanceMilestones(slot) : hid === 'space' || hid === 'sword' ? spaceSwordMilestones(hid,slot)
+  hid === 'scythe' ? scytheMilestones(slot) : hid === 'arcane' ? magicBowMilestones(slot) : hid === 'lance' ? lanceMilestones(slot) : hid === 'space' || hid === 'sword' ? spaceSwordMilestones(hid,slot)
     : hid === 'wind' || hid === 'ninja' ? windNinjaMilestones(hid, slot)
     : hid === 'cannon' || hid === 'siphon' ? newHeroMilestones(hid, slot)
     : hid === 'archer' ? SKILL_MS_ARCHER[slot]

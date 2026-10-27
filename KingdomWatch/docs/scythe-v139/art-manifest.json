@@ -1,0 +1,175 @@
+{
+  "mode": "built-in image_gen",
+  "sources": [
+    {
+      "id": "scythe",
+      "figureSha256": "8b5ac38aac649c99fa9a320b401f3f5141970339e3aa62ef92f278bdde3dcedb",
+      "figureCrops": [
+        {
+          "left": 19,
+          "top": 10,
+          "width": 888,
+          "height": 865
+        },
+        {
+          "left": 985,
+          "top": 54,
+          "width": 772,
+          "height": 799
+        }
+      ],
+      "scale": 0.5315315315315315,
+      "iconRegions": [
+        {
+          "left": 47,
+          "top": 26,
+          "width": 579,
+          "height": 573,
+          "pixels": 260418
+        },
+        {
+          "left": 651,
+          "top": 25,
+          "width": 576,
+          "height": 573,
+          "pixels": 258403
+        },
+        {
+          "left": 47,
+          "top": 615,
+          "width": 581,
+          "height": 572,
+          "pixels": 260213
+        },
+        {
+          "left": 651,
+          "top": 614,
+          "width": 576,
+          "height": 570,
+          "pixels": 257806
+        }
+      ],
+      "iconsSha256": "5ebb6d8c422983311a1d1ff178797830c3875c60e6156cf423fa7e116537f0f1"
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/resources/ux/scythe_v139/scythe_figures.png",
+      "uuid": "47b6abb5-324a-4b8d-9989-04d8238ba957",
+      "width": 1024,
+      "height": 768,
+      "bytes": 521023,
+      "sha256": "3364b822b4e2e4be3f2c6753dd7481367da86b37fa39eb3074b3fb797c19474a"
+    },
+    {
+      "path": "assets/resources/ux/scythe_v139/abilities.png",
+      "uuid": "fda2dc8c-6ef0-4363-b5a3-184721a768ff",
+      "width": 512,
+      "height": 512,
+      "bytes": 523916,
+      "sha256": "174ed6c491051912ac8e9fe536ad0581103b4bf6f897c5e4edc85a32a5e65c1c"
+    }
+  ],
+  "frames": {
+    "new_heroes_v139/scythe_lobby": {
+      "source": "scythe_v139/scythe_figures",
+      "rect": [
+        0,
+        0,
+        512,
+        768
+      ]
+    },
+    "hero_comic_v1/comic_figure_scythe_v1": {
+      "source": "scythe_v139/scythe_figures",
+      "rect": [
+        0,
+        0,
+        512,
+        768
+      ]
+    },
+    "new_heroes_v139/scythe_battle": {
+      "source": "scythe_v139/scythe_figures",
+      "rect": [
+        512,
+        0,
+        512,
+        768
+      ]
+    },
+    "ui_avatar_scythe": {
+      "source": "scythe_v139/abilities",
+      "rect": [
+        4,
+        4,
+        248,
+        248
+      ]
+    },
+    "ui_icon_atk_scythe": {
+      "source": "scythe_v139/abilities",
+      "rect": [
+        260,
+        4,
+        248,
+        248
+      ]
+    },
+    "ui_icon_skill_scythe": {
+      "source": "scythe_v139/abilities",
+      "rect": [
+        4,
+        260,
+        248,
+        248
+      ]
+    },
+    "ui_icon_ult_scythe": {
+      "source": "scythe_v139/abilities",
+      "rect": [
+        260,
+        260,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_avatar_scythe": {
+      "source": "scythe_v139/abilities",
+      "rect": [
+        4,
+        4,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_atk_scythe": {
+      "source": "scythe_v139/abilities",
+      "rect": [
+        260,
+        4,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_skill_scythe": {
+      "source": "scythe_v139/abilities",
+      "rect": [
+        4,
+        260,
+        248,
+        248
+      ]
+    },
+    "shop_comic_v1/ui_icon_ult_scythe": {
+      "source": "scythe_v139/abilities",
+      "rect": [
+        260,
+        260,
+        248,
+        248
+      ]
+    }
+  },
+  "processing": "Complete alpha subject crop; common uniform actor scale per pair; no painting, deformation, artificial frame or VFX textures."
+}

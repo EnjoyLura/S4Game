@@ -164,7 +164,7 @@ export function loadSave(): SaveData {
   }
   // 老档/缺英雄补默认（未拥有的英雄 hero 状态也建好，商店解锁只翻 owned）
   if (!sv.heroes) sv.heroes = {};
-  for (const hid of ['archer', 'sniper', 'pyro', 'volt', 'mora', 'cannon', 'siphon', 'wind', 'ninja', 'space', 'sword', 'lance', 'arcane']) {
+  for (const hid of ['archer', 'sniper', 'pyro', 'volt', 'mora', 'cannon', 'siphon', 'wind', 'ninja', 'space', 'sword', 'lance', 'arcane', 'scythe']) {
     if (!sv.heroes[hid]) {
       sv.heroes[hid] = { owned: hid === 'archer', lv: 1, weaponLv: 1, atkLv: 1, skillLv: 1, ultLv: 1, worn: {} };
     }
