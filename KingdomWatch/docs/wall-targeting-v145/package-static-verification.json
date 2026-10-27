@@ -1,0 +1,105 @@
+{
+  "checks": {
+    "release": {
+      "base_path": "/kingdom-watch-play/",
+      "entry": "game.bbe4851d155e974c.html",
+      "entry_bytes": 20222,
+      "entry_sha256": "bbe4851d155e974cc99c51eb53333d0b6d854b39cf2a158a1562213bda40a113",
+      "id": "2f5089dc8a80a617",
+      "inventory": "hosting-files.2f5089dc8a80a617.json",
+      "inventory_bytes": 289249,
+      "inventory_sha256": "2f5089dc8a80a617dcbb03e21361b49347e13ce517ee519cb623f2f46dba156f",
+      "requires_cross_origin_isolation": false,
+      "requires_webp": true,
+      "runtime_cache": {
+        "max_bytes": 268435456,
+        "on_demand": true,
+        "protocol": 1,
+        "scope": "/kingdom-watch-play/",
+        "worker": "hosting-cache-sw.js"
+      },
+      "schema": 1,
+      "texture_mode": "mixed-webp-q95",
+      "wasm": [
+        "cocos-js/assets/spine-CC34fKUR.wasm"
+      ]
+    },
+    "file_count": 1659,
+    "runtime_bytes": 217940936,
+    "full_package_bytes": 218230830,
+    "budget_bytes": 996147200,
+    "all_exported_hashes_verified": true,
+    "links": {
+      "explicit_file_references_checked": 475,
+      "embedded_provenance_strings_not_fetches": [],
+      "virtual_system_modules": 199,
+      "remote_url_literals": [
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/bangers/Bangers-Regular.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-Bold.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/barlowcondensed/BarlowCondensed-ExtraBoldItalic.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+        "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+      ],
+      "bundle_versions": {
+        "internal": "9e58a",
+        "main": "cebdc",
+        "resources": "84a4e2e5ed65985b"
+      }
+    },
+    "wasm_memories": {
+      "cocos-js/assets/spine-CC34fKUR.wasm": [
+        {
+          "shared": false,
+          "memory64": false,
+          "minimum_pages": 512
+        }
+      ]
+    },
+    "art_resources": {
+      "nativeImagesResolved": 446,
+      "webpImagesRGBAAndHashesVerified": 433,
+      "losslessImagesSourceRGBAIdentical": 251,
+      "q95ImagesDimensionsAlphaAndOutputVerified": 182,
+      "gameEngineExecuted": false
+    },
+    "runtime_cache": {
+      "max_bytes": 268435456,
+      "on_demand": true,
+      "protocol": 1,
+      "scope": "/kingdom-watch-play/",
+      "worker": "hosting-cache-sw.js"
+    },
+    "validation": "static files, image pixels and WASM headers only",
+    "javascript_executed": false,
+    "wasm_compiled_or_instantiated": false,
+    "game_browser_or_tests_started": false
+  },
+  "baselineRelease": "5ce864ba9d0af970",
+  "existingNativeByteIdentical": 531,
+  "replacedNative": [],
+  "newMedia": [],
+  "jsSyntaxOnly": [
+    "application.edbaf03b2fabdd99.js",
+    "assets/internal/index.9e58a.js",
+    "assets/main/index.cebdc.js",
+    "assets/resources/index.84a4e2e5ed65985b.js",
+    "cocos-js/_virtual_cc-Bp5iGE8z.2cb74a1e8caa095a.js",
+    "cocos-js/cc.03aac.2cb74a1e8caa095a.js",
+    "cocos-js/spine-BGFFnNyc.2cb74a1e8caa095a.js",
+    "cocos-js/spine.asm-BCCB8IGt.2cb74a1e8caa095a.js",
+    "cocos-js/spine.js-CPHn08RU.2cb74a1e8caa095a.js",
+    "cocos-js/spine.wasm-BP65faBu.2cb74a1e8caa095a.js",
+    "hosting-cache-sw.js",
+    "index.003906dbe617b0a3.js",
+    "src/chunks/bundle.5227e.js",
+    "src/polyfills.bundle.5adbf.js",
+    "src/system.bundle.543e6.js"
+  ],
+  "inlineScriptsSyntaxOnly": 5,
+  "mainScript": "assets/main/index.cebdc.js",
+  "mainSha256": "78a8bd07d34a367149cf983ab74c2106bd41383984884c60c63c41f8cebcbe98",
+  "typeDiagnosticsBefore": 9,
+  "typeDiagnosticsCurrent": 9,
+  "gameEngineBrowserCombatAudioOrWasmStarted": false,
+  "phoneReview": "pending user"
+}
