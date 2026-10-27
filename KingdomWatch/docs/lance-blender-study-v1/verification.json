@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "scope": "independent art artifacts only",
+  "transparentFrames": 192,
+  "size": [
+    1280,
+    1280
+  ],
+  "allBordersTransparent": true,
+  "finalFrameClear": true,
+  "videos": {
+    "golden-thunder-lance.mp4": {
+      "frames": 192,
+      "fps": 24.0,
+      "seconds": 8.0,
+      "size": [
+        1280,
+        1280
+      ]
+    },
+    "game-context.mp4": {
+      "frames": 192,
+      "fps": 24.0,
+      "seconds": 8.0,
+      "size": [
+        1280,
+        1280
+      ]
+    }
+  },
+  "hashes": {
+    "build_scene.py": "835c3518cae8aad7dc80dd8cda60057b2d6446912aa2a30746136fade8f1d204",
+    "compose_preview.py": "1e23231dc06b2e3db2879553dcce4cd03c1c58b8de340ecf3c59022acd65034f",
+    "golden-thunder-lance.blend": "25feb0a565059014d05e7b32a5b6fb29ab51fb4fb91339e78cd4ef44cde38ecd",
+    "golden-thunder-lance.mp4": "e996916a571ab5e677c4a244649fed255ff1a7dacb9ced11aa8d00a3b499ce45",
+    "game-context.mp4": "e621340da518cc83d2766f35c4030a1d39325c84f5751f02e272142c15847030",
+    "golden-thunder-lance.gif": "dcf0fbbca60736e8251eadba54913d53a23f95e0eb99181afb3f0d0ff1aec222",
+    "contact-sheet.jpg": "628d22a57f28440559c71e15ac0721de527d6ef188007ef15efe277a7256de54"
+  },
+  "gameStarted": false,
+  "gameIntegrated": false,
+  "deployed": false,
+  "lastFrame": {
+    "frame": "frame_0192.png",
+    "bbox": null,
+    "visiblePixels": 0
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "blender": "5.2.3 LTS",
+  "engine": "BLENDER_EEVEE",
+  "fps": 24,
+  "frames": 192,
+  "resolution": 1280,
+  "objects": 1457,
+  "impact": 1.5,
+  "reference": "C:/Users/user/Downloads/QQ20261027-222518.mp4",
+  "gameIntegration": false,
+  "published": false
+}

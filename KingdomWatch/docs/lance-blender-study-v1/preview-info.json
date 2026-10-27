@@ -1,0 +1,10 @@
+{
+  "frames": 192,
+  "fps": 24,
+  "seconds": 8,
+  "resolution": 1280,
+  "render": "Blender EEVEE",
+  "post": "fixed background, localized ground light, multiscale bloom",
+  "gamePreview": "Offline static art composition; no engine execution",
+  "audio": false
+}
