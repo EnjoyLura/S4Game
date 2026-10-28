@@ -8,7 +8,7 @@ import { SPACE, SWORD, spaceSkillCfg, swordSkillCfg } from './SpaceSwordConfig';
  */
 import { PAL } from './GameConfig';
 import { CANNON, CANNON_CARDS_CFG as CC, SIPHON, SIPHON_CARDS_CFG as SC, cannonSkillCfg, siphonSkillCfg } from './NewHeroConfig';
-import { WIND, NINJA, windSkillCfg, ninjaSkillCfg } from './WindNinjaConfig';
+import { WIND, NINJA, WindCardStats, windSkillCfg, ninjaSkillCfg } from './WindNinjaConfig';
 
 export type Rarity = 'white' | 'blue' | 'purple' | 'gold';
 export const RARITY_COLOR: Record<Rarity, string> = { white: PAL.white, blue: PAL.blue, purple: PAL.purple, gold: PAL.gold };
@@ -19,7 +19,7 @@ type OfferGroup = 'stats' | 'combat' | 'support';
 const OFFER_GROUP_WEIGHT: Record<OfferGroup, number> = { stats: 0.1, combat: 3, support: 1 };
 
 /** 英雄战斗属性（卡牌改写目标；M0 弓箭手） */
-export interface HeroStats {
+export interface HeroStats extends WindCardStats {
   cannonEcho?: number;
   cannonLoader?: boolean;
   cannonKnockback?: number;
@@ -702,7 +702,35 @@ export const MAGIC_BOW_CARDS: CardDef[] = commonHeroCards('arcane');
 export const LANCE_CARDS: CardDef[] = commonHeroCards('lance');
 export const SPACE_CARDS: CardDef[] = commonHeroCards('space');
 export const SWORD_CARDS: CardDef[] = commonHeroCards('sword');
-export const WIND_CARDS: CardDef[] = commonHeroCards('wind');
+export const WIND_CARDS: CardDef[] = [
+  ...commonHeroCards('wind'),
+  c({id:'wind_wide',owner:'wind',name:'宽刃疾风',rarity:'blue',maxStacks:2,offerGroup:'combat',art:'ui_icon_atk_wind',
+    desc:'普攻风刃长度 +25%\n同步扩大伤害判定',apply:x=>{x.hero.windBladeWidth=(x.hero.windBladeWidth||0)+.25;}}),
+  c({id:'wind_pierce',owner:'wind',name:'贯穿长风',rarity:'blue',maxStacks:2,offerGroup:'combat',art:'ui_icon_atk_wind',
+    desc:'普攻额外穿透 +1',apply:x=>{x.hero.windBladePierce=(x.hero.windBladePierce||0)+1;}}),
+  c({id:'wind_mark',owner:'wind',name:'风痕易伤',rarity:'purple',maxStacks:1,offerGroup:'combat',art:'ui_icon_atk_wind',
+    desc:'普攻命中留下2秒风痕\n目标受到伤害 +20%',apply:x=>{x.hero.windMark=true;}}),
+  c({id:'wind_eye_radius',owner:'wind',name:'广域风眼',rarity:'blue',maxStacks:2,offerGroup:'combat',art:'ui_icon_skill_wind',req:'wind_unlock_skill',
+    desc:'技能风眼半径 +20%',apply:x=>{x.hero.windEyeRadius=(x.hero.windEyeRadius||0)+.2;}}),
+  c({id:'wind_eye_duration',owner:'wind',name:'旋流不息',rarity:'purple',maxStacks:2,offerGroup:'combat',art:'ui_icon_skill_wind',req:'wind_unlock_skill',
+    desc:'技能风眼持续时间 +1秒',apply:x=>{x.hero.windEyeDuration=(x.hero.windEyeDuration||0)+1;}}),
+  c({id:'wind_eye_slow',owner:'wind',name:'余风束缚',rarity:'purple',maxStacks:3,offerGroup:'combat',art:'ui_icon_skill_wind',req:'wind_unlock_skill',
+    desc:'技能结束时圈内敌人减速40%\n首层2秒，后续每层 +1秒',apply:x=>{x.hero.windEyeSlow=(x.hero.windEyeSlow||0)+1;}}),
+  c({id:'wind_eye_shred',owner:'wind',name:'蚀甲风域',rarity:'purple',maxStacks:1,offerGroup:'combat',art:'ui_icon_skill_wind',req:'wind_unlock_skill',
+    desc:'风眼内敌人物抗、法抗\n各降低30个百分点',apply:x=>{x.hero.windEyeShred=true;}}),
+  c({id:'wind_eye_move',owner:'wind',name:'逆流风眼',rarity:'purple',maxStacks:1,offerGroup:'combat',art:'ui_icon_skill_wind',req:'wind_unlock_skill',
+    desc:'技能风眼缓慢向敌人来路移动\n每秒向屏幕上方移动36',apply:x=>{x.hero.windEyeMove=true;}}),
+  c({id:'wind_ult_radius',owner:'wind',name:'巨型飓风',rarity:'purple',maxStacks:2,offerGroup:'combat',art:'ui_icon_ult_wind',req:'wind_unlock_ult',
+    desc:'龙卷伤害、吸引半径 +20%\n同步放大特效',apply:x=>{x.hero.windUltRadius=(x.hero.windUltRadius||0)+.2;}}),
+  c({id:'wind_ult_duration',owner:'wind',name:'长驱风暴',rarity:'purple',maxStacks:2,offerGroup:'combat',art:'ui_icon_ult_wind',req:'wind_unlock_ult',
+    desc:'龙卷持续时间 +1.5秒',apply:x=>{x.hero.windUltDuration=(x.hero.windUltDuration||0)+1.5;}}),
+  c({id:'wind_ult_pulse',owner:'wind',name:'狂风脉冲',rarity:'purple',maxStacks:1,offerGroup:'combat',art:'ui_icon_ult_wind',req:'wind_unlock_ult',
+    desc:'龙卷每0.3秒造成一次伤害\n单次伤害不变',apply:x=>{x.hero.windUltPulse=true;}}),
+  c({id:'wind_ult_blades',owner:'wind',name:'风暴吐息',rarity:'purple',maxStacks:1,offerGroup:'combat',art:'ui_icon_ult_wind',req:'wind_unlock_ult',
+    desc:'龙卷每0.8秒射出两道小风刃\n每道40%普攻伤害',apply:x=>{x.hero.windUltBlades=true;}}),
+  c({id:'wind_ult_twin',owner:'wind',name:'双生飓风',rarity:'gold',maxStacks:1,offerGroup:'combat',art:'ui_icon_ult_wind',req:'wind_unlock_ult',
+    desc:'同时召唤两道龙卷风\n每道65%伤害、85%半径',apply:x=>{x.hero.windUltTwin=true;}}),
+];
 export const NINJA_CARDS: CardDef[] = commonHeroCards('ninja');
 export const M0_POOL: CardDef[] = [...ARCHER_CARDS, ...SNIPER_CARDS, ...PYRO_CARDS, ...VOLT_CARDS, ...MORA_CARDS,
   ...CANNON_CARDS, ...SIPHON_CARDS, ...WIND_CARDS, ...NINJA_CARDS, ...SPACE_CARDS, ...SWORD_CARDS, ...LANCE_CARDS, ...MAGIC_BOW_CARDS, ...SCYTHE_CARDS, ...GLOBAL_CARDS];
@@ -722,6 +750,13 @@ export function cardComboHint(card: CardDef, stacks: Readonly<CardStacks>, team:
   const has = (id: string): boolean => (stacks[id] || 0) > 0;
   const owner = team.find(hero => hero.id === card.owner)?.stats;
   switch (card.id) {
+    case 'wind_wide': case 'wind_pierce': return has('wind_mark')?'联动：更多敌人附带风痕':'扩大普攻覆盖';
+    case 'wind_mark': return '全队共享易伤 · 同类取最高';
+    case 'wind_eye_shred': return has('wind_eye_duration')?'联动：延长圈内破抗时间':'仅圈内生效 · 离开恢复';
+    case 'wind_eye_slow': return '首层2秒 · 叠层只延长时间';
+    case 'wind_eye_move': return '向敌人来路移动 · 不后退';
+    case 'wind_ult_twin': return has('wind_ult_blades')?'联动：两道龙卷各自吐息':'优先分开覆盖敌群';
+    case 'wind_ult_blades': return '小风刃不触发风痕或击杀充能';
     case 'serial': return has('fan') ? '联动：齐射同步多排' : '';
     case 'fan': return has('serial') ? '联动：连射同步多列' : '';
     case 'archer_pierce': return has('serial') || has('fan') ? '联动：弹幕逐箭贯穿' : '';
@@ -777,6 +812,7 @@ const MECHANIC_IDS = new Set(['archer_pierce', 'serial', 'fan', 'split', 'explod
 // Selected expansion mechanics keep the same combat weighting and ownership checks.
 for (const id of ['siphon_relay','siphon_slow','siphon_healcut','siphon_relay_time','siphon_fork',
   'siphon_ult_duration','siphon_ult_ticks','siphon_heavy_grip','siphon_skill_targets']) MECHANIC_IDS.add(id);
+for(const card of WIND_CARDS)if(card.offerGroup==='combat')MECHANIC_IDS.add(card.id);
 export function isMechanicCard(card: CardDef): boolean { return MECHANIC_IDS.has(card.id); }
 function offerGroup(card: CardDef): OfferGroup {
   return card.offerGroup ?? (card.owner === 'global' ? 'support' : isMechanicCard(card) ? 'combat' : 'stats');

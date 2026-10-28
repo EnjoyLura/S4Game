@@ -115,6 +115,8 @@ export interface ProjSpec {
   ult?: boolean;
   /** 技能/大招弹（强化箭矢/箭雨/连狙窗口等）：击杀弹 60% 词条；普攻击杀不弹（用户确认） */
   ability?: boolean;
+  /** Secondary storm blades cannot feed another ultimate; XP/loot still resolve normally. */
+  noKillCharge?: boolean;
   /** 生成即免疫碰撞的目标（分裂小弹的来源怪：分裂箭不打目标本体，用户确认） */
   exclude?: Monster;
   /** Snapshot exclusion survives deferred secondary firing and monster-node reuse. */
@@ -860,7 +862,7 @@ export class ProjectileManager {
     const angle = Math.atan2(a.vy, a.vx);
     const heavy = !!sp.ult || sp.heroId === 'sniper' && !!sp.ability || sp.heroId === 'pyro' && !!sp.explodeR;
     const contactLife = m.lifeId;
-    m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true, sp.resCut || 0, angle, heavy);
+    m.takeDamage(final, sp.crit, sp.heroId, sp.ignoreRes === true, sp.resCut || 0, angle, heavy,!!sp.noKillCharge);
     if (m.lifeId === contactLife) sp.onContact?.(m);
     if (sp.markAmp) m.applyHunterMark(sp.markAmp, sp.markDur || 5, !!sp.markIcon);
     if (sp.heroId === 'sniper' && sp.ult) {

@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "actualShowTipsCases": 72,
+  "baseAndFullBuilds": true,
+  "viewHeights": [
+    1000,
+    1334,
+    1700
+  ],
+  "panelsInBoundsAndAllLabelsFinite": true,
+  "markActualPathsRendered": true,
+  "gameEngineBrowserCombatAudioOrWasmStarted": false
+}

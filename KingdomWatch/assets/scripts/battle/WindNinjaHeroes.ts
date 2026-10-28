@@ -9,7 +9,8 @@ import { Monster, MonsterManager } from './Monster';
 import { ProjectileManager, ProjSpec } from './Projectile';
 import { DamageService } from './DamageService';
 import { HeroStats } from '../config/Cards';
-import { WIND, NINJA, windSkillCfg, windUltCfg, ninjaSkillCfg, ninjaUltCfg } from '../config/WindNinjaConfig';
+import { WIND, NINJA,WIND_CARDS_CFG,windNormalCfg, windSkillCfg, windUltCfg, ninjaSkillCfg, ninjaUltCfg } from '../config/WindNinjaConfig';
+import { registerWindEyes,removeWindEyes } from './WindEyeAura';
 import { DESIGN_W, HERO_Y, LINE_Y, LO, MAX_PROJS } from '../config/GameConfig';
 import { AttackSlot, TargetLayer } from '../config/Targeting';
 import { Sfx } from '../core/Sfx';
@@ -27,6 +28,7 @@ type RecallProjectile = ProjSpec & { initialContactLifeId?: number };
 interface Area extends WindNinjaAreaView {
   delay: number; tickIn: number; interval: number; mul: number; pull: number;
   seekIn: number; destination: FieldPoint;velocity:FieldPoint;
+  damageScale:number;breathIn:number;breathInterval:number;moveSpeed:number;endSlow:number;partner?:Area;
 }
 interface NormalRow { delay: number; }
 
@@ -49,9 +51,10 @@ function valid(m: Monster, lifeId: number, mgr: MonsterManager): boolean {
 function inRange(m: Monster, x: number, range: number): boolean {
   return (m.x - x) ** 2 + (m.hitY - HERO_Y) ** 2 <= range * range;
 }
-function cluster(mgr: MonsterManager, x: number, y: number, range: number, radius: number, minY = LINE_Y + 8): FieldPoint | null {
+function cluster(mgr: MonsterManager, x: number, y: number, range: number, radius: number, minY = LINE_Y + 8,avoid?:Area): FieldPoint | null {
   // Initial casts may cover wall attackers; an existing tornado still seeks only ahead.
-  const candidates = mgr.list.filter(m => liveNode(m) && (minY <= LINE_Y + 8 || m.hitY >= minY));
+  const candidates = mgr.list.filter(m => liveNode(m) && (minY <= LINE_Y + 8 || m.hitY >= minY)
+    &&(!avoid||(m.x-avoid.x)**2+(m.hitY-avoid.y)**2>(avoid.radius*.85)**2));
   return densestBodyArea(candidates, x, y, range, radius, {
     left: -DESIGN_W / 2 + 12, right: DESIGN_W / 2 - 12,
     bottom: Math.max(LINE_Y + 8, minY), top: LO.half - LO.notchTop - 136,
@@ -104,16 +107,18 @@ abstract class WindNinjaHeroBase extends HeroBase {
   protected normalSpec(x: number, y: number, dx: number, dy: number): ProjSpec {
     const critical = Math.random() < this.stats.critRate;
     const wind = this.id === 'wind';
+    const blade=windNormalCfg(this.stats);
     return { x, y, dirX: dx, dirY: dy, targetLayer: 'all', heroId: this.id,
       visual: wind ? 'wind' : 'shuriken', speed: wind ? WIND.bladeSpeed : NINJA.speed,
-      lineHalfLength: wind ? WIND.bladeHalfLength : undefined,
-      lineForwardOffset: wind ? WIND.bladeForwardOffset : undefined,
-      size: wind ? 10 : 7, ttl: 3.2, crit: critical,
+      lineHalfLength: wind ? blade.halfLength : undefined,
+      lineForwardOffset: wind ? blade.forwardOffset : undefined,
+      size: wind ? blade.size : 7, ttl: 3.2, crit: critical,
       dmg: this.effAtk * (this.stats.normalMul || 1) * (critical ? this.stats.critMul : 1),
       color: wind ? '#76DBBD' : '#BFE9EE', resCut: this.stats.defIgnore || 0,
-      pierce: (wind ? WIND.bladePierce : 0) + (this.stats.pierce || 0)
+      pierce: (wind ? blade.pierce : 0) + (this.stats.pierce || 0)
         + (Math.random() < (this.stats.pierceChance || 0) ? 1 : 0),
       pierceDamage: wind ? WIND.bladeFalloff : undefined,
+      onContact:wind&&this.stats.windMark?m=>m.applyWindMark():undefined,
       split: this.stats.split || 0, explodeR: this.stats.explodeR || 0, explodeMul: this.stats.explodeMul,
       slowRatio: this.stats.slowOnHit || 0, slowDur: this.stats.slowDur || 2,
       burnDps: this.stats.burnOnHit ? this.effAtk * this.stats.burnOnHit * (this.stats.burnMul || 1) : 0,
@@ -155,17 +160,20 @@ abstract class WindNinjaHeroBase extends HeroBase {
       if (target) this.releaseRow(target, mgr, projs);
     }
     for (let i = this.areas.length - 1; i >= 0; i--) {
-      const area = this.areas[i]; this.advanceArea(area, dt, mgr);
+      const area = this.areas[i]; this.advanceArea(area, dt, mgr,projs);
       if (area.age >= area.duration - EPS) this.areas.splice(i, 1);
     }
   }
   protected addArea(kind: Area['kind'], point: FieldPoint, radius: number, duration: number,
-    interval: number, mul: number, pull: number, delay = 0): void {
-    this.areas.push({ kind, x: point.x, y: point.y, radius, duration, age: 0,
-      delay, interval, tickIn: interval, mul, pull, seekIn: 0, destination: { ...point },velocity:{x:0,y:0} });
-    this.effects();
+    interval: number, mul: number, pull: number, delay = 0): Area {
+    const area:Area={ kind, x: point.x, y: point.y, radius, duration, age: 0,
+      delay, interval, tickIn: interval, mul, pull, seekIn: 0, destination: { ...point },velocity:{x:0,y:0},
+      damageScale:1,breathIn:Infinity,breathInterval:Infinity,moveSpeed:0,endSlow:0 };
+    this.areas.push(area);this.effects();return area;
   }
-  private advanceArea(a: Area, dt: number, mgr: MonsterManager): void {
+  protected emitAreaBlades(a:Area,_mgr:MonsterManager,_projs:ProjectileManager):void {a.breathIn=Infinity;}
+  protected finishArea(_a:Area,_mgr:MonsterManager,_after:number):void {}
+  private advanceArea(a: Area, dt: number, mgr: MonsterManager,projs:ProjectileManager): void {
     let remaining = Math.max(0, dt);
     if (a.delay > 0) {
       const wait = Math.min(remaining, a.delay); a.delay -= wait; remaining -= wait;
@@ -173,29 +181,34 @@ abstract class WindNinjaHeroBase extends HeroBase {
     // Divide at damage and steering boundaries: large simulation steps retain every scheduled tick.
     while (remaining > EPS && a.age < a.duration - EPS) {
       if (a.kind === 'tornado' && a.seekIn <= EPS) {
-        const point = cluster(mgr, a.x, a.y, Infinity, a.radius, a.y);
-        a.destination = stableWindTarget(mgr.list,a,a.destination,
+        const avoid=a.partner&&a.partner.age<a.partner.duration?a.partner:undefined;
+        const point = cluster(mgr, a.x, a.y, Infinity, a.radius, a.y,avoid);
+        const bodies=avoid?mgr.list.filter(m=>(m.x-avoid.x)**2+(m.hitY-avoid.y)**2>(avoid.radius*.85)**2):mgr.list;
+        a.destination = stableWindTarget(bodies,a,a.destination,
           point || { x: a.x, y: Math.max(a.y, LO.half - LO.notchTop - 136) },a.radius);
         a.seekIn = SEEK_INTERVAL;
       }
-      const step = Math.min(remaining, a.duration - a.age, a.tickIn,
+      const step = Math.min(remaining, a.duration - a.age, a.tickIn,a.breathIn,
         a.kind === 'tornado' ? a.seekIn : Infinity);
       if (a.kind === 'tornado') {
         moveWindField(a,a.velocity,a.destination,WIND.tornadoSpeed,step); a.seekIn -= step;
       }
+      if(a.kind==='eye'&&a.moveSpeed>0)a.y=Math.max(a.y,Math.min(LO.half-LO.notchTop-136,a.y+a.moveSpeed*step));
       if (a.pull > 0) for (const m of mgr.list) {
         if (!liveNode(m) || (m.x - a.x) ** 2 + (m.hitY - a.y) ** 2 > a.radius ** 2) continue;
         if (m.isBoss) m.applySlow(BOSS_WIND_SLOW, Math.max(.18, step * 2));
-        else m.pullToward(a.x, a.y, a.pull * step, a.kind === 'tornado'); // No tornado-induced movement toward the keep.
+        else m.pullToward(a.x, a.y, a.pull * step, a.kind === 'tornado'||a.moveSpeed>0);
       }
-      a.age += step; a.tickIn -= step; remaining -= step;
+      a.age += step; a.tickIn -= step; a.breathIn-=step;remaining -= step;
       if (a.tickIn <= EPS) {
         this.damageArea(a, mgr); a.tickIn = a.interval;
       }
+      if(a.breathIn<=EPS)this.emitAreaBlades(a,mgr,projs);
     }
+    if(a.age>=a.duration-EPS)this.finishArea(a,mgr,remaining);
   }
   private damageArea(a: Area, mgr: MonsterManager): void {
-    const ultimate = a.kind !== 'eye', amount = this.abilityDamage(a.mul, ultimate);
+    const ultimate = a.kind !== 'eye', amount = this.abilityDamage(a.mul, ultimate)*a.damageScale;
     let hit = false;
     for (const m of mgr.list) {
       const life = m.lifeId;
@@ -217,6 +230,8 @@ abstract class WindNinjaHeroBase extends HeroBase {
 export class WindHero extends WindNinjaHeroBase {
   readonly id = 'wind'; readonly name = '赛兰·逐风';
   readonly chargeMax = WIND.energy; readonly skillMax = WIND.cooldown;
+  private auraManager:MonsterManager|null=null;
+  protected disposeAttachments():void {if(this.auraManager)removeWindEyes(this.auraManager,this);this.auraManager=null;}
   protected buildVisual(parent: Node): void { this.staticArt = visual(parent, this.node, this.x, 'wind'); }
   protected releaseNormal(target: Monster, _mgr: MonsterManager, projs: ProjectileManager, offset: number): boolean {
     const hand = this.hand(target);
@@ -228,28 +243,58 @@ export class WindHero extends WindNinjaHeroBase {
     this.effects().release(hand.x, hand.y, dx, dy, 'wind'); return true;
   }
   protected canAutoSkill(mgr: MonsterManager): boolean {
-    const cfg = windSkillCfg(this.stats.skillLv);
+    const cfg = windSkillCfg(this.stats.skillLv,this.stats);
     return this.areas.length < AREA_CAP && !!cluster(mgr, this.x, HERO_Y, this.stats.skillRange,
       cfg.radius * this.stats.skillRangeMul);
   }
   protected castSkill(mgr: MonsterManager): void {
     if (this.areas.length >= AREA_CAP) return;
-    const cfg = windSkillCfg(this.stats.skillLv), radius = cfg.radius * this.stats.skillRangeMul;
+    const cfg = windSkillCfg(this.stats.skillLv,this.stats), radius = cfg.radius * this.stats.skillRangeMul;
     const point = cluster(mgr, this.x, HERO_Y, this.stats.skillRange, radius);
     if (!point) return;
     this.beginSkillCooldown();
-    this.addArea('eye', point, radius, cfg.duration, WIND.eyeTick, cfg.mul, cfg.pull);
+    if(this.auraManager&&this.auraManager!==mgr)removeWindEyes(this.auraManager,this);
+    this.auraManager=mgr;registerWindEyes(mgr,this,this.areas,()=>this.node.isValid&&this.stats.windEyeShred?WIND_CARDS_CFG.eyeShred:0);
+    const area=this.addArea('eye', point, radius, cfg.duration, WIND.eyeTick, cfg.mul, cfg.pull);
+    area.moveSpeed=cfg.moveSpeed;area.endSlow=cfg.slowSeconds;
     Sfx.cast(this.id);
   }
-  get ultShowDuration(): number { return ULT_TIMING.wind.windup + windUltCfg(this.stats.ultLv).duration; }
+  protected finishArea(a:Area,mgr:MonsterManager,after:number):void {
+    if(a.kind!=='eye'||a.endSlow<=after)return;
+    for(const m of mgr.list)if(liveNode(m)&&(m.x-a.x)**2+(m.hitY-a.y)**2<=a.radius*a.radius)
+      m.applySlow(WIND_CARDS_CFG.eyeSlow,a.endSlow-after);
+  }
+  protected emitAreaBlades(a:Area,mgr:MonsterManager,projs:ProjectileManager):void {
+    a.breathIn=a.breathInterval;
+    const targets=mgr.list.filter(m=>liveNode(m)&&m.hitY>=a.y).sort((m,n)=>
+      (m.x-a.x)**2+(m.hitY-a.y)**2-((n.x-a.x)**2+(n.hitY-a.y)**2));
+    if(!targets.length)return;
+    for(let k=0;k<2&&projs.hasCapacity;k++){
+      const target=targets[k%targets.length],side=k?1:-1,x=a.x+side*9,y=a.y+12;
+      const angle=Math.atan2(Math.max(20,target.hitY-y),target.x-x)+side*.05;
+      const scale=WIND_CARDS_CFG.breathScale,critical=Math.random()<this.stats.critRate;
+      projs.fire({x,y,dirX:Math.cos(angle),dirY:Math.max(.08,Math.sin(angle)),speed:WIND.bladeSpeed,heroId:this.id,
+        visual:'wind',color:'#A2F5D3',targetLayer:'all',size:10*scale,lineHalfLength:WIND.bladeHalfLength*scale,
+        lineForwardOffset:WIND.bladeForwardOffset*scale,ttl:3.2,pierce:0,small:true,ability:true,ult:true,noKillCharge:true,
+        dmg:this.effAtk*this.stats.normalMul*WIND_CARDS_CFG.breathMul*a.damageScale*(critical?this.stats.critMul:1),crit:critical,
+        resCut:this.stats.defIgnore||0,...this.targetBonuses()});
+    }
+  }
+  get ultShowDuration(): number { return ULT_TIMING.wind.windup + windUltCfg(this.stats.ultLv,this.stats).duration; }
   castUlt(mgr: MonsterManager, _projs: ProjectileManager, dmg: DamageService): boolean {
-    if (!this.ultReady || this.areas.length >= AREA_CAP) return false;
-    const cfg = windUltCfg(this.stats.ultLv), radius = cfg.radius * this.stats.skillRangeMul;
+    const cfg = windUltCfg(this.stats.ultLv,this.stats), radius = cfg.radius * this.stats.skillRangeMul;
+    if (!this.ultReady || this.areas.length+cfg.count > AREA_CAP) return false;
     const point = cluster(mgr, this.x, HERO_Y, Infinity, radius);
     if (!point) return false;
     this.lastDmg = dmg; this.charge = 0; this.beginUltimate(this.ultShowDuration);
-    this.addArea('tornado', point, radius, cfg.duration, WIND.tornadoTick, cfg.mul, WIND.tornadoPull,
-      ULT_TIMING.wind.windup);
+    const first=this.addArea('tornado', point, radius, cfg.duration, cfg.interval, cfg.mul, WIND.tornadoPull,ULT_TIMING.wind.windup);
+    const set=(a:Area)=>{a.damageScale=cfg.damageScale;a.breathIn=a.breathInterval=cfg.breathInterval;};set(first);
+    if(cfg.count===2){
+      const secondPoint=cluster(mgr,this.x,HERO_Y,Infinity,radius,LINE_Y+8,first)||
+        {x:Math.max(-DESIGN_W/2+12,Math.min(DESIGN_W/2-12,point.x+(point.x>=0?-1:1)*radius*1.4)),y:point.y};
+      const second=this.addArea('tornado',secondPoint,radius,cfg.duration,cfg.interval,cfg.mul,WIND.tornadoPull,ULT_TIMING.wind.windup);
+      set(second);first.partner=second;second.partner=first;
+    }
     Sfx.cast(this.id, true);
     return true;
   }

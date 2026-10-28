@@ -1,0 +1,1427 @@
+[
+  {
+    "build": "base",
+    "kind": "atk",
+    "panel": {
+      "x": 97,
+      "y": -330,
+      "w": 350,
+      "h": 298
+    },
+    "labels": [
+      {
+        "x": 119,
+        "y": -222,
+        "text": "普攻 · 贯穿风刃",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -265,
+        "text": "法术伤害",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -265,
+        "text": "72",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -291,
+        "text": "攻速",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -291,
+        "text": "0.90 次/秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -317,
+        "text": "索敌范围",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -317,
+        "text": "1050",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -343,
+        "text": "弹速",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -343,
+        "text": "840",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -369,
+        "text": "暴击",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -369,
+        "text": "5% / 150%",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -395,
+        "text": "贯穿",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -395,
+        "text": "额外2目标 · 后续×0.8",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -421,
+        "text": "风刃长度",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -421,
+        "text": "60",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 97,
+        "y": -459,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  },
+  {
+    "build": "base",
+    "kind": "skill",
+    "panel": {
+      "x": 151,
+      "y": -343,
+      "w": 350,
+      "h": 272
+    },
+    "labels": [
+      {
+        "x": 173,
+        "y": -248,
+        "text": "技能 · 风眼旋涡",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -291,
+        "text": "每次切割",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -291,
+        "text": "60",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -317,
+        "text": "持续时间",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -317,
+        "text": "5秒 · 每0.5秒伤害",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -343,
+        "text": "风眼范围",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -343,
+        "text": "半径165",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -369,
+        "text": "牵引速度",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -369,
+        "text": "94 /秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -395,
+        "text": "索敌范围",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -395,
+        "text": "950",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -421,
+        "text": "冷却",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -421,
+        "text": "12 秒 · 自动",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 151,
+        "y": -459,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  },
+  {
+    "build": "base",
+    "kind": "ult",
+    "panel": {
+      "x": 70,
+      "y": -52,
+      "w": 350,
+      "h": 298
+    },
+    "labels": [
+      {
+        "x": 92,
+        "y": 56,
+        "text": "大招 · 游走龙卷",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": 13,
+        "text": "每段伤害",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": 13,
+        "text": "95 /每道",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -13,
+        "text": "持续时间",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -13,
+        "text": "6秒 · 每0.4秒伤害",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -39,
+        "text": "龙卷范围",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -39,
+        "text": "半径138",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -65,
+        "text": "移速 / 牵引",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -65,
+        "text": "82 / 65",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -91,
+        "text": "充能",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -91,
+        "text": "20 / 70 · 28%",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -117,
+        "text": "释放",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -117,
+        "text": "未充满·不可释放",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -143,
+        "text": "龙卷数量",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -143,
+        "text": "1道 · 只向前推进",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 70,
+        "y": -181,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  },
+  {
+    "build": "full",
+    "kind": "atk",
+    "panel": {
+      "x": 97,
+      "y": -317,
+      "w": 350,
+      "h": 324
+    },
+    "labels": [
+      {
+        "x": 119,
+        "y": -196,
+        "text": "普攻 · 贯穿风刃",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -239,
+        "text": "法术伤害",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -239,
+        "text": "72",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -265,
+        "text": "攻速",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -265,
+        "text": "0.90 次/秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -291,
+        "text": "索敌范围",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -291,
+        "text": "1050",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -317,
+        "text": "弹速",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -317,
+        "text": "840",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -343,
+        "text": "暴击",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -343,
+        "text": "5% / 150%",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -369,
+        "text": "贯穿",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -369,
+        "text": "额外4目标 · 后续×0.8",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -395,
+        "text": "风刃长度",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -395,
+        "text": "90",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -17,
+        "y": -421,
+        "text": "风痕",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 148,
+        "y": -421,
+        "text": "受伤+20% · 2秒 · 刷新",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 97,
+        "y": -459,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  },
+  {
+    "build": "full",
+    "kind": "skill",
+    "panel": {
+      "x": 151,
+      "y": -304,
+      "w": 350,
+      "h": 350
+    },
+    "labels": [
+      {
+        "x": 173,
+        "y": -170,
+        "text": "技能 · 风眼旋涡",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -213,
+        "text": "每次切割",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -213,
+        "text": "60",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -239,
+        "text": "持续时间",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -239,
+        "text": "7秒 · 每0.5秒伤害",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -265,
+        "text": "风眼范围",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -265,
+        "text": "半径231",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -291,
+        "text": "牵引速度",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -291,
+        "text": "94 /秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -317,
+        "text": "索敌范围",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -317,
+        "text": "950",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -343,
+        "text": "冷却",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -343,
+        "text": "12 秒 · 自动",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -369,
+        "text": "风眼移动",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -369,
+        "text": "向上 36/秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -395,
+        "text": "领域削弱",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -395,
+        "text": "双抗-30个百分点 · 仅圈内",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 37,
+        "y": -421,
+        "text": "结束减速",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 202,
+        "y": -421,
+        "text": "圈内40% · 4秒",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 151,
+        "y": -459,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  },
+  {
+    "build": "full",
+    "kind": "ult",
+    "panel": {
+      "x": 70,
+      "y": -52,
+      "w": 350,
+      "h": 324
+    },
+    "labels": [
+      {
+        "x": 92,
+        "y": 69,
+        "text": "大招 · 游走龙卷",
+        "style": {
+          "size": 18,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "left",
+          "w": 274,
+          "h": 26,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": 26,
+        "text": "每段伤害",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": 26,
+        "text": "61 /每道",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": 0,
+        "text": "持续时间",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": 0,
+        "text": "9秒 · 每0.3秒伤害",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -26,
+        "text": "龙卷范围",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -26,
+        "text": "半径164",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -52,
+        "text": "移速 / 牵引",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -52,
+        "text": "82 / 65",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -78,
+        "text": "充能",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -78,
+        "text": "20 / 70 · 28%",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -104,
+        "text": "释放",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -104,
+        "text": "未充满·不可释放",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -130,
+        "text": "龙卷数量",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -130,
+        "text": "2道 · 只向前推进",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": -44,
+        "y": -156,
+        "text": "风暴吐息",
+        "style": {
+          "size": 15,
+          "color": "#CFD6DD",
+          "align": "left",
+          "w": 90,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 121,
+        "y": -156,
+        "text": "每0.8秒两刃 · 26%普攻",
+        "style": {
+          "size": 15,
+          "color": "#FFFFFF",
+          "bold": true,
+          "align": "right",
+          "w": 216,
+          "h": 24,
+          "shrink": true
+        }
+      },
+      {
+        "x": 70,
+        "y": -194,
+        "text": "点击空白处关闭",
+        "style": {
+          "size": 12,
+          "color": "#888888"
+        }
+      }
+    ]
+  }
+]

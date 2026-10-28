@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "cards": 13,
+  "totalWindCards": 17,
+  "checks": 77,
+  "levels": [
+    1,
+    5,
+    10,
+    15,
+    20
+  ],
+  "slowDurations": [
+    2,
+    3,
+    4
+  ],
+  "pulseHits": 16,
+  "breathBlades": 12,
+  "largeAndSmallStepsAgree": true,
+  "liveAuraExitExpiryAndOverlap": true,
+  "markTeamDamageAndIndependentExpiry": true,
+  "secondaryNoChargeKeepsGoldXpLoot": true,
+  "twinClusterAndCapacity": true,
+  "ninjaAndOtherHeroesPreserved": true,
+  "gameEngineRealBattleBrowserAudioOrWasmStarted": false
+}

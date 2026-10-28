@@ -1,0 +1,142 @@
+[
+  {
+    "id": "wind_wide",
+    "owner": "wind",
+    "name": "宽刃疾风",
+    "rarity": "blue",
+    "maxStacks": 2,
+    "offerGroup": "combat",
+    "art": "ui_icon_atk_wind",
+    "desc": "普攻风刃长度 +25%\n同步扩大伤害判定"
+  },
+  {
+    "id": "wind_pierce",
+    "owner": "wind",
+    "name": "贯穿长风",
+    "rarity": "blue",
+    "maxStacks": 2,
+    "offerGroup": "combat",
+    "art": "ui_icon_atk_wind",
+    "desc": "普攻额外穿透 +1"
+  },
+  {
+    "id": "wind_mark",
+    "owner": "wind",
+    "name": "风痕易伤",
+    "rarity": "purple",
+    "maxStacks": 1,
+    "offerGroup": "combat",
+    "art": "ui_icon_atk_wind",
+    "desc": "普攻命中留下2秒风痕\n目标受到伤害 +20%"
+  },
+  {
+    "id": "wind_eye_radius",
+    "owner": "wind",
+    "name": "广域风眼",
+    "rarity": "blue",
+    "maxStacks": 2,
+    "offerGroup": "combat",
+    "art": "ui_icon_skill_wind",
+    "req": "wind_unlock_skill",
+    "desc": "技能风眼半径 +20%"
+  },
+  {
+    "id": "wind_eye_duration",
+    "owner": "wind",
+    "name": "旋流不息",
+    "rarity": "purple",
+    "maxStacks": 2,
+    "offerGroup": "combat",
+    "art": "ui_icon_skill_wind",
+    "req": "wind_unlock_skill",
+    "desc": "技能风眼持续时间 +1秒"
+  },
+  {
+    "id": "wind_eye_slow",
+    "owner": "wind",
+    "name": "余风束缚",
+    "rarity": "purple",
+    "maxStacks": 3,
+    "offerGroup": "combat",
+    "art": "ui_icon_skill_wind",
+    "req": "wind_unlock_skill",
+    "desc": "技能结束时圈内敌人减速40%\n首层2秒，后续每层 +1秒"
+  },
+  {
+    "id": "wind_eye_shred",
+    "owner": "wind",
+    "name": "蚀甲风域",
+    "rarity": "purple",
+    "maxStacks": 1,
+    "offerGroup": "combat",
+    "art": "ui_icon_skill_wind",
+    "req": "wind_unlock_skill",
+    "desc": "风眼内敌人物抗、法抗\n各降低30个百分点"
+  },
+  {
+    "id": "wind_eye_move",
+    "owner": "wind",
+    "name": "逆流风眼",
+    "rarity": "purple",
+    "maxStacks": 1,
+    "offerGroup": "combat",
+    "art": "ui_icon_skill_wind",
+    "req": "wind_unlock_skill",
+    "desc": "技能风眼缓慢向敌人来路移动\n每秒向屏幕上方移动36"
+  },
+  {
+    "id": "wind_ult_radius",
+    "owner": "wind",
+    "name": "巨型飓风",
+    "rarity": "purple",
+    "maxStacks": 2,
+    "offerGroup": "combat",
+    "art": "ui_icon_ult_wind",
+    "req": "wind_unlock_ult",
+    "desc": "龙卷伤害、吸引半径 +20%\n同步放大特效"
+  },
+  {
+    "id": "wind_ult_duration",
+    "owner": "wind",
+    "name": "长驱风暴",
+    "rarity": "purple",
+    "maxStacks": 2,
+    "offerGroup": "combat",
+    "art": "ui_icon_ult_wind",
+    "req": "wind_unlock_ult",
+    "desc": "龙卷持续时间 +1.5秒"
+  },
+  {
+    "id": "wind_ult_pulse",
+    "owner": "wind",
+    "name": "狂风脉冲",
+    "rarity": "purple",
+    "maxStacks": 1,
+    "offerGroup": "combat",
+    "art": "ui_icon_ult_wind",
+    "req": "wind_unlock_ult",
+    "desc": "龙卷每0.3秒造成一次伤害\n单次伤害不变"
+  },
+  {
+    "id": "wind_ult_blades",
+    "owner": "wind",
+    "name": "风暴吐息",
+    "rarity": "purple",
+    "maxStacks": 1,
+    "offerGroup": "combat",
+    "art": "ui_icon_ult_wind",
+    "req": "wind_unlock_ult",
+    "desc": "龙卷每0.8秒射出两道小风刃\n每道40%普攻伤害"
+  },
+  {
+    "id": "wind_ult_twin",
+    "owner": "wind",
+    "name": "双生飓风",
+    "rarity": "gold",
+    "maxStacks": 1,
+    "offerGroup": "combat",
+    "art": "ui_icon_ult_wind",
+    "req": "wind_unlock_ult",
+    "desc": "同时召唤两道龙卷风\n每道65%伤害、85%半径"
+  }
+]

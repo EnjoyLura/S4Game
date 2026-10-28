@@ -42,8 +42,8 @@ export class MonsterTraits {
     this.hide();
   }
   get enraged(): boolean { return this.phase; }
-  get physicalResistance(): number { return this.armorBroken ? 0 : Math.max(0, (this.owner.def.physRes || 0) - this.owner.physicalShred); }
-  get magicResistance(): number { return this.wardBroken ? 0 : Math.max(0, (this.owner.def.magicRes || 0) - this.owner.magicShred); }
+  get physicalResistance(): number { return this.armorBroken ? 0 : Math.max(0, (this.owner.def.physRes || 0) - this.owner.physicalShred-this.owner.windEyeShred); }
+  get magicResistance(): number { return this.wardBroken ? 0 : Math.max(0, (this.owner.def.magicRes || 0) - this.owner.magicShred-this.owner.windEyeShred); }
   get defenseInfo(): { physical: number; magic: number; armorBroken: boolean; wardBroken: boolean } {
     return {
       physical: 1 - this.incomingDamage(1 - this.physicalResistance, 'archer'),

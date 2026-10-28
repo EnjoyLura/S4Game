@@ -11,7 +11,7 @@ import { CardDef, CardStacks, RARITY_COLOR, archerEmpCfg, archerUltCfg, sniperSk
 import { pyroBlastRadius, pyroBurnMultiplier, pyroBurnDuration, pyroCraterDuration, pyroMeteorCount, pyroMeteorDamage } from '../config/Cards';
 import { voltShockDuration, voltShockAmp, voltShockedMultiplier, voltStrikeCount } from '../config/Cards';
 import { CANNON, SIPHON_LASER, cannonSkillCfg, cannonUltCfg, siphonSkillCfg, siphonLaserCfg } from '../config/NewHeroConfig';
-import { WIND, NINJA, VOLT_FIELD, windSkillCfg, windUltCfg, ninjaSkillCfg, ninjaUltCfg } from '../config/WindNinjaConfig';
+import { WIND, NINJA, VOLT_FIELD,windNormalCfg, windSkillCfg, windUltCfg, ninjaSkillCfg, ninjaUltCfg } from '../config/WindNinjaConfig';
 import { SPACE, SWORD, spaceSkillCfg, spaceUltCfg, swordSkillCfg, swordUltCfg } from '../config/SpaceSwordConfig';
 import { MORA_ULT_HITS, moraSlowRatio, moraSlowDuration, moraFreezeChance, moraNormalFreezeDuration, moraFieldRadius, moraFieldFreeze, moraUltimateHitDamage } from '../config/Cards';
 import { FROST_ULT_RAIN_COUNT, HERO_Y, LO, PAL } from '../config/GameConfig';
@@ -682,8 +682,8 @@ export class Panels {
       px=kind==='ult'?WX(636,90)-45-16-w/2:hero.x;
       py=kind==='ult'?WYB(240+ultIdx*110,90):iconY+200;
     } else if (hero.id === 'wind' || hero.id === 'ninja') {
-      const wind = hero.id === 'wind', def = HERO_DEFS[hero.id];
-      w = 320;
+      const wind = hero.id === 'wind', def = HERO_DEFS[hero.id],blade=windNormalCfg(h);
+      w = wind?350:320;
       if (kind === 'atk') {
         title = wind ? '普攻 · 贯穿风刃' : '普攻 · 影刃投掷';
         rows = [
@@ -692,13 +692,13 @@ export class Panels {
           ['索敌范围', String(Math.round(h.range))],
           ['弹速', String(wind ? WIND.bladeSpeed : NINJA.speed)],
           ['暴击', Math.round(h.critRate * 100) + '% / ' + Math.round(h.critMul * 100) + '%'],
-          wind ? ['贯穿', '额外' + (WIND.bladePierce + h.pierce) + '目标 · 后续×' + WIND.bladeFalloff]
+          wind ? ['贯穿', '额外' + (blade.pierce + h.pierce) + '目标 · 后续×' + WIND.bladeFalloff]
             : ['飞刃', '留场待回收 · 上限' + NINJA.markCap + '枚'],
         ];
         px = hero.x - 27 + 23 + 16 + w / 2;
         py = iconY + 23 + 16 + hh / 2;
       } else if (kind === 'skill') {
-        const ws = windSkillCfg(h.skillLv), ns = ninjaSkillCfg(h.skillLv);
+        const ws = windSkillCfg(h.skillLv,h), ns = ninjaSkillCfg(h.skillLv);
         title = '技能 · ' + def.skillName;
         rows = wind ? [
           ['每次切割', String(Math.round(hero.abilityDamage(ws.mul)))],
@@ -718,11 +718,11 @@ export class Panels {
         px = hero.x + 27 + 23 + 16 + w / 2;
         py = iconY + 23 + 16 + hh / 2;
       } else {
-        const wu = windUltCfg(h.ultLv), nu = ninjaUltCfg(h.ultLv);
+        const wu = windUltCfg(h.ultLv,h), nu = ninjaUltCfg(h.ultLv);
         title = '大招 · ' + def.ultName;
         rows = wind ? [
-          ['每段伤害', String(Math.round(hero.abilityDamage(wu.mul, true)))],
-          ['持续时间', wu.duration + '秒 · 每' + WIND.tornadoTick + '秒伤害'],
+          ['每段伤害', String(Math.round(hero.abilityDamage(wu.mul, true)*wu.damageScale))+' /每道'],
+          ['持续时间', wu.duration + '秒 · 每' + wu.interval + '秒伤害'],
           ['龙卷范围', '半径' + Math.round(wu.radius * h.skillRangeMul)],
           ['移速 / 牵引', WIND.tornadoSpeed + ' / ' + WIND.tornadoPull],
           ['充能', Math.floor(hero.charge) + ' / ' + goalTxt],
@@ -959,6 +959,21 @@ export class Panels {
     } else if (kind === 'ult') {
       const charge = rows.find(row => row[0] === '充能');
       if (charge) charge[1] = Math.floor(hero.charge) + ' / ' + goalTxt + ' · ' + Math.floor(hero.charge / hero.chargeGoal * 100) + '%';
+    }
+    if(hero.id==='wind'){
+      if(kind==='atk'){
+        rows.push(['风刃长度',String(Math.round(windNormalCfg(h).halfLength*2))]);
+        if(h.windMark)rows.push(['风痕','受伤+20% · 2秒 · 刷新']);
+      }else if(kind==='skill'){
+        const ws=windSkillCfg(h.skillLv,h);
+        if(ws.moveSpeed)rows.push(['风眼移动','向上 '+ws.moveSpeed+'/秒']);
+        if(ws.shred)rows.push(['领域削弱','双抗-30个百分点 · 仅圈内']);
+        if(ws.slowSeconds)rows.push(['结束减速','圈内40% · '+ws.slowSeconds+'秒']);
+      }else{
+        const wu=windUltCfg(h.ultLv,h);rows.push(['龙卷数量',wu.count+'道 · 只向前推进']);
+        if(h.windUltBlades)rows.push(['风暴吐息','每0.8秒两刃 · '+Math.round(40*wu.damageScale)+'%普攻']);
+      }
+      hh=116+rows.length*26;px=py=undefined;
     }
     // Content-only hero branches use the shared icon anchor; never clamp undefined into NaN.
     const tipPosition=battleTipPlacement(kind,hero.x,w,hh,iconY,WX(636,90),WYB(240+ultIdx*110,90),LO.half,px,py);

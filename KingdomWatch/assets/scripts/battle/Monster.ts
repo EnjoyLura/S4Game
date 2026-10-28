@@ -1,3 +1,5 @@
+import { windEyeShredAt,removeWindEyes } from './WindEyeAura';
+import { drawWindMark } from './WindMarkVFX';
 /**
  * 怪物（§3.4 行为：松散虫群下行 + 正弦游动 + 自动分离；近战贴线攻击 / 远程停位投掷 / 萨满周期治疗）
  * 受击只闪红不掉速（用户确认：控制效果只属于特定 buff）；仅 BOSS 显示血条（M0 1-1 无 BOSS，钩子保留）
@@ -114,6 +116,8 @@ export class Monster {
   /** 易伤（焰法陨石坑）：站在坑内受伤放大，出坑后短暂残留 */
   vulnT = 0;
   vulnAmp = 0;
+  windMarkT = 0;
+  private windMarkAge = 0;
   /** 猎杀标记独立计时；同类易伤取高，不能让火坑续长红色准星。 */
   hunterMarkT = 0;
   hunterMarkAmp = 0;
@@ -173,6 +177,7 @@ export class Monster {
     this.slowAmp = 0.2;
     this.shockT = this.shockAmp = 0;
     this.vulnT = this.vulnAmp = 0;
+    this.windMarkT = this.windMarkAge = 0;
     this.hunterMarkT = this.hunterMarkAmp = this.hunterMarkAge = 0;
     this.hunterMarkVisual = false;
     this.baseX = x;
@@ -386,6 +391,7 @@ export class Monster {
   get isBoss(): boolean { return !!this.def.boss || this.def.id === 'goblin_king'; }
   get spaceTransitHidden():boolean { return this.transitAge>=SPACE_TRANSIT.vanish&&this.transitAge<SPACE_TRANSIT.hiddenUntil; }
   get immobilized(): boolean { return this.freezeT > 0 || this.stunT > 0 || this.spaceBindT > 0 || this.knockbackT > 0 || this.transitAge >= 0; }
+  get windEyeShred():number {return this.dead||this.spaceTransitHidden?0:windEyeShredAt(this.mgrRef,this.x,this.hitY);}
   /** Read-only view of this living instance, rather than its original codex stats. */
   inspect(): { physical: number; magic: number; armorBroken: boolean; wardBroken: boolean; states: string[] } {
     const states = this.traits.activeStates;
@@ -399,6 +405,8 @@ export class Monster {
     if (this.shockT > 0) states.push('感电');
     if (this.vulnT > 0) states.push('易伤' + Math.round(this.vulnAmp * 100) + '%');
     if (this.hunterMarkT > 0) states.push('猎杀标记');
+    if (this.windMarkT > 0) states.push('风痕·受伤+20%');
+    if (this.windEyeShred > 0) states.push('风眼·双抗-30%');
     if (this.healingCutT > 0) states.push('减疗' + Math.round(this.healingCut*100) + '%');
     if (!states.length) states.push(this.state === 'move' ? '行进中' : this.def.kind === 'melee' ? '攻击防线' : this.def.kind === 'heal' ? '治疗待命' : '远程攻击');
     return { ...this.traits.defenseInfo, states };
@@ -441,6 +449,7 @@ export class Monster {
     if (this.shockT > 0) this.shockT = Math.max(0, this.shockT - dt);
     if (this.shockT <= 0) this.shockAmp = 0;
     if (this.vulnT > 0) this.vulnT = Math.max(0, this.vulnT - dt);
+    if(this.windMarkT>0){this.windMarkAge+=dt;this.windMarkT=Math.max(0,this.windMarkT-dt);}
     if (this.hunterMarkT > 0) {
       this.hunterMarkAge += dt;
       this.hunterMarkT = Math.max(0, this.hunterMarkT - dt);
@@ -605,6 +614,14 @@ export class Monster {
     this.vulnAmp = this.vulnT > 0 ? Math.max(this.vulnAmp, amp) : amp;
     this.vulnT = Math.max(this.vulnT, dur);
   }
+  applyWindMark():void {
+    if(this.dead)return;if(this.windMarkT<=0)this.windMarkAge=0;
+    this.windMarkT=2;this.mgrRef?.refreshHunterMarks();
+  }
+  drawWindMark(g:Graphics):void {
+    if(this.dead||this.spaceTransitHidden||this.windMarkT<=0)return;
+    drawWindMark(g,this.x+(this.hunterMarkVisual?26:0),this.y+this.artBaseY+this.artHeight+19,this.windMarkT,this.windMarkAge);
+  }
 
   private updateBossHp(): void {
     if (!this.isBoss || this.dead) {
@@ -652,7 +669,7 @@ export class Monster {
     g.circle(x, y, 1.8); g.fill();
   }
 
-  takeDamage(amount: number, crit: boolean, killerId: string, ignoreRes = false, resCut = 0, impactAngle?: number, heavy = false): boolean {
+  takeDamage(amount: number, crit: boolean, killerId: string, ignoreRes = false, resCut = 0, impactAngle?: number, heavy = false,noKillCharge=false): boolean {
     this.lastDamageTaken = 0;
     if (this.dead || !Number.isFinite(amount) || amount <= 0) return false;
     const raw = amount, kind = damageKindFor(killerId);
@@ -661,7 +678,7 @@ export class Monster {
       amount *= 1 - Math.max(0, Math.min(.95, resistance)) * (1 - Math.max(0, Math.min(1, resCut)));
     }
     if (this.shockT > 0) amount *= 1 + this.shockAmp;
-    const vulnerability = Math.max(this.vulnT > 0 ? this.vulnAmp : 0, this.hunterMarkT > 0 ? this.hunterMarkAmp : 0);
+    const vulnerability = Math.max(this.vulnT > 0 ? this.vulnAmp : 0, this.hunterMarkT > 0 ? this.hunterMarkAmp : 0,this.windMarkT>0?.2:0);
     if (vulnerability > 0) amount *= 1 + vulnerability;
     amount = this.traits.incomingDamage(amount, killerId);
     this.lastDamageTaken = Math.min(this.hp, amount);
@@ -675,7 +692,7 @@ export class Monster {
     this.flash();
     if (this.hp <= 0) {
       if (this.traits.onLethal(killerId)) return false;
-      this.die(killerId, impactAngle, heavy || crit, amount);
+      this.die(killerId, impactAngle, heavy || crit, amount,noKillCharge);
       return true;
     }
     return false;
@@ -696,7 +713,7 @@ export class Monster {
     }
   }
 
-  private die(killerId: string, angle: number | undefined, heavy: boolean, amount: number): void {
+  private die(killerId: string, angle: number | undefined, heavy: boolean, amount: number,noKillCharge=false): void {
     this.dead = true;
     this.clearSpaceTransit();
     if (this.burnT > 0 && this.burnBurst > 0 && killerId !== 'pyro_burst' && killerId !== 'gm') {
@@ -704,7 +721,8 @@ export class Monster {
     }
     this.traits.onDie(killerId, this.mgrRef);
     if (this.bossHp) this.bossHp.node.active = false;
-    const marked = this.hunterMarkVisual;
+    const marked = this.hunterMarkVisual||this.windMarkT>0;
+    this.windMarkT=this.windMarkAge=0;
     this.hunterMarkT = this.hunterMarkAmp = this.hunterMarkAge = 0;
     this.hunterMarkVisual = false;
     if (marked) this.mgrRef?.refreshHunterMarks();
@@ -720,7 +738,7 @@ export class Monster {
     this.footLeftWeight = this.footRightWeight = 0;
     if (this.flashNode) this.flashNode.active = false;
     // Gameplay death and rewards are immediate. The remaining body is cosmetic only.
-    bus.emit(EVT.MOB_KILLED, this.def, killerId, { x: this.x, y: this.y, hitY: this.hitY, radius: this.def.radius });
+    bus.emit(EVT.MOB_KILLED, this.def, killerId, { x: this.x, y: this.y, hitY: this.hitY, radius: this.def.radius,noKillCharge });
   }
 
   tickDeath(dt: number): boolean { return this.deathMotion?.tick(dt) ?? true; }
@@ -1011,6 +1029,7 @@ export class MonsterManager {
   destroy(): void {
     if (this.disposed) return;
     this.disposed = true;
+    removeWindEyes(this);
     this.linePoisons.length = 0;
     this.stones.length = this.stoneFree.length = 0;
     this.burnBursts.length = 0;
@@ -1026,7 +1045,7 @@ export class MonsterManager {
   refreshHunterMarks(): void {
     if (this.disposed || !isValid(this.hunterMarks, true)) return;
     this.hunterMarks.clear();
-    for (const m of this.list) m.drawHunterMark(this.hunterMarks);
+    for (const m of this.list) {m.drawHunterMark(this.hunterMarks);m.drawWindMark(this.hunterMarks);}
   }
 
   get aliveCount(): number {

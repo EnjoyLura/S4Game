@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "cachedPinnedOflSourcesOnly": true,
+  "fonts": [
+    {
+      "file": "UIBody.ttf",
+      "added": "吐飓",
+      "priorGlyphs": 1611,
+      "glyphs": 1613,
+      "oldCharactersPreserved": true,
+      "beforeSha256": "5802bfc8ad284c31556c53f88973bdb21dfc42d18f66517c731987c1dae9b462",
+      "sha256": "b035b2c64e556343b559e8b37127ea0276942f5a2667b75d70f151b7d5c79e7e",
+      "bytes": 503608
+    },
+    {
+      "file": "UIHeading.ttf",
+      "added": "吐飓",
+      "priorGlyphs": 1611,
+      "glyphs": 1613,
+      "oldCharactersPreserved": true,
+      "beforeSha256": "2cbb46f38af82764bddce7ba63734654924ac508a1d435e0836a161de7eabd0e",
+      "sha256": "2399ba09d8d3069a011ffe738afaef3d389dd1a9358ae381355b51d33013652f",
+      "bytes": 686220
+    }
+  ]
+}

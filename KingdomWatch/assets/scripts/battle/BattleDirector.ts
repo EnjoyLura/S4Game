@@ -475,7 +475,8 @@ export class BattleDirector extends Component {
     if (killerId !== 'gm' && position && this.state === 'running') this.loot.onKill(d, position as DeathPosition);
     if (killerId !== 'gm') {
       const share = d.charge * SHARED_KILL_CHARGE / Math.max(1, this.heroes.length);
-      for (const hero of this.heroes) hero.chargeKill(share * (1 + (hero.stats.chargeEff || 0)));
+      if(!(position as {noKillCharge?:boolean}|null)?.noKillCharge)
+        for (const hero of this.heroes) hero.chargeKill(share * (1 + (hero.stats.chargeEff || 0)));
       if (position && this.state === 'running' && this.killBeatCooldown <= 0) {
         const p = position as DeathPosition;
         if (!this.killBeatCount) this.killBeatAge = 0;
