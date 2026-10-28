@@ -14,7 +14,7 @@ assert all(current.get(p)==old[p] for p in native),'Existing native bytes change
 assert set(p for p in current if '/native/' in p)==set(native),'Unexpected new media'
 def item(file):return {'path':file.relative_to(package).as_posix(),'sha256':hashlib.sha256(file.read_bytes()).hexdigest()}
 main=next(package.glob('assets/main/index.*.js'));text=main.read_text('utf8');engine=next(package.glob('cocos-js/_virtual_cc-*.js')).read_text('utf8')
-assert re.search(r'get handlers\s*\(',engine),'Pinned downloader getter missing'
+assert 'key:"handlers",get:function(){return this._downloaders}' in engine,'Pinned downloader getter missing'
 for marker in ['installDownloadRecovery','drawDeadline','(timeout)','wind_eye_move','wind_ult_twin','wind_mark','scytheRiftVolume']:
  assert marker in text,marker
 worker=package/'hosting-cache-sw.js';worker_text=worker.read_text('utf8')
@@ -24,7 +24,7 @@ targets=[item(main),item(worker)]
 config=json.loads(next((package/'assets/resources').glob('config.*.json')).read_text('utf8'))
 records={r['uuid']:r for r in image_records(package)};art_samples=[]
 for _,v in config['paths'].items():
- if v[0] in ['ux/comic_coin_v1/spriteFrame','ux/comic_nav_map_v1/spriteFrame'] or v[0].startswith('scenes/bg_campaign_') and v[0].endswith('/spriteFrame'):
+ if v[0] in ['ux/shop_comic_v1/comic_coin_v1/spriteFrame','ux/shop_comic_v1/comic_nav_map_v1/spriteFrame','scenes/bg_campaign_outpost_v1/spriteFrame']:
   uuid=decode_uuid(config['uuids'][int(_)]).split('@')[0]
   record=records[uuid];art_samples.append(v[0]);targets.extend([item(record['native']),item(record['import'])])
 assert len(art_samples)>=2,art_samples

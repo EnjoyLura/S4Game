@@ -1,9 +1,9 @@
 {
-  "importer": "typescript",
   "ver": "4.0.24",
-  "userData": {},
+  "importer": "typescript",
+  "imported": true,
+  "uuid": "4d97021c-b046-480c-94c1-97e8eec3b288",
   "files": [],
   "subMetas": {},
-  "uuid": "4d97021c-b046-480c-94c1-97e8eec3b288",
-  "imported": true
+  "userData": {}
 }

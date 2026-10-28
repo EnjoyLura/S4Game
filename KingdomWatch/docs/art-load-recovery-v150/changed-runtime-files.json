@@ -1,0 +1,34 @@
+[
+  {
+    "path": "assets/main/index.bcd4d.js",
+    "sha256": "b65d6aada00ff35e0365fe196c77fc72c5139953715f92708f6e4d458ce6a7c2"
+  },
+  {
+    "path": "hosting-cache-sw.js",
+    "sha256": "33d6262d0b7e4185450c582ce18afaef45dc30b6ed1279864a2193ef17a022a6"
+  },
+  {
+    "path": "assets/resources/native/10/10a04670-0048-4b8b-92d1-7483c0caa390.dd462d95a4ba11ce.webp",
+    "sha256": "dd462d95a4ba11ce3886f6889c9568d2bff43012d84c23c3e46f907877cd1140"
+  },
+  {
+    "path": "assets/resources/import/10/10a04670-0048-4b8b-92d1-7483c0caa390.c40416172c7e7767.json",
+    "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc"
+  },
+  {
+    "path": "assets/resources/native/69/693ed11b-12bb-4887-b783-945f8230fc9c.33c1e15f65a61277.webp",
+    "sha256": "33c1e15f65a6127733a021fbf3def61e8605eca628ab8762b94a068870147adf"
+  },
+  {
+    "path": "assets/resources/import/69/693ed11b-12bb-4887-b783-945f8230fc9c.c40416172c7e7767.json",
+    "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc"
+  },
+  {
+    "path": "assets/resources/native/91/9133df24-ef54-4ca3-825a-f72bfeba6975.3926e233729dabf0.webp",
+    "sha256": "3926e233729dabf080759d51ed9b30ec15beed68824d9ce702a8749e25c77508"
+  },
+  {
+    "path": "assets/resources/import/91/9133df24-ef54-4ca3-825a-f72bfeba6975.c40416172c7e7767.json",
+    "sha256": "c40416172c7e776789e11674f794e97799d5be21db6d4f2c46e1ee6c64ce90fc"
+  }
+]
