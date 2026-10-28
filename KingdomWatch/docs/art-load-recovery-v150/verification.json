@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "downloadNeverReturnsReproduced": true,
+  "engineSlotReleasedAfterTimeout": true,
+  "lateCallbackIgnored": true,
+  "synchronousThrowSettled": true,
+  "drawEventNormalMissingReplacedCancelled": true,
+  "workerHeadersAndBodyTimeout": true,
+  "workerRetryAndPendingCleanup": true,
+  "integrityCheckPreserved": true,
+  "successfulRequestAfterStall": true,
+  "gameEngineBrowserCombatAudioOrWasmStarted": false
+}

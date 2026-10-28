@@ -151,19 +151,41 @@ async function store(record, path, response) {
     } catch (_) { storageCooldown = Date.now() + 60000; }
   });
 }
+async function fetchComplete(request, record) {
+  const abort = new AbortController();
+  let timer;
+  const deadline = new Promise(function(_, reject) {
+    timer = setTimeout(function() {
+      abort.abort(); reject(new TypeError('download failed: resource request timed out'));
+    }, 20000);
+  });
+  try {
+    return await Promise.race([(async function() {
+      const response = await fetch(new Request(request, {signal: abort.signal}));
+      if (response.status !== 200 || response.type !== 'basic' || response.headers.has('Content-Range')) return {response: response};
+      // Bound the body as well as headers; half-open responses otherwise pin `pending` forever.
+      const bytes = await response.clone().arrayBuffer();
+      const valid = !record || bytes.byteLength === record.bytes && await sha(bytes) === record.sha256;
+      return {response: response, valid: valid};
+    })(), deadline]);
+  } finally { clearTimeout(timer); }
+}
 async function download(request, record, path, clientId) {
+  let failure;
   for (let attempt = 0; attempt < 2; attempt++) {
     observe(clientId, 'httpFetches');
     if (attempt) observe(clientId, 'integrityRetries');
-    const response = await fetch(attempt ? new Request(request, {cache: 'reload'}) : request);
-    if (response.status !== 200 || response.type !== 'basic' || response.headers.has('Content-Range')) return {response: response};
-    const bytes = await response.clone().arrayBuffer();
-    if (bytes.byteLength === record.bytes && await sha(bytes) === record.sha256) {
-      observe(clientId, 'verifiedFetchBytes', bytes.byteLength);
-      return {response: response, write: store(record, path, response.clone()).catch(function() {})};
-    }
+    try {
+      const result = await fetchComplete(attempt ? new Request(request, {cache: 'reload'}) : request, record);
+      if (result.valid === undefined) return result;
+      if (result.valid) {
+        observe(clientId, 'verifiedFetchBytes', record.bytes);
+        return {response: result.response, write: store(record, path, result.response.clone()).catch(function() {})};
+      }
+      failure = new TypeError('游戏资源版本校验失败，请重新打开游戏');
+    } catch (error) { failure = error; }
   }
-  throw new TypeError('游戏资源版本校验失败，请重新打开游戏');
+  throw failure;
 }
 async function resource(event, path) {
   const record = await optional((async function() {
@@ -176,7 +198,7 @@ async function resource(event, path) {
   })(), 500);
   if (!record) {
     observe(event.clientId, 'untrackedFetches'); observe(event.clientId, 'httpFetches');
-    return {response: await fetch(event.request)};
+    return await fetchComplete(event.request, null);
   }
   const key = contentKey(record, path);
   const cached = await optional((async function() {

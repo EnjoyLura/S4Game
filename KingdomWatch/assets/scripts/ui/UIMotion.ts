@@ -32,6 +32,7 @@ export class UIMotion extends Component {
   private waitingForArt = false;
   private redrawVersion = 0;
   private drawReady: (() => void) | null = null;
+  private drawDeadline: ReturnType<typeof setTimeout> | undefined;
   private surfaceReady: (() => void) | null = null;
 
   private capture(): void {
@@ -111,7 +112,7 @@ export class UIMotion extends Component {
     build();
     whenUIArtReady(this.node, () => {
       if (!isValid(this.node, true) || version !== this.redrawVersion) return;
-      this.afterDraw(() => {
+      this.afterDraw(drawn => {
         if (!isValid(this.node, true) || version !== this.redrawVersion) return;
         this.waitingForArt = false;
         const finish = (): void => {
@@ -121,7 +122,7 @@ export class UIMotion extends Component {
         };
         if (this.outgoing && isValid(this.outgoing, true)) {
           this.node.setSiblingIndex(this.outgoing.getSiblingIndex());
-          if (direction) { this.present('page', direction, finish); return; }
+          if (direction && drawn) { this.present('page', direction, finish); return; }
         }
         finish();
       });
@@ -130,13 +131,19 @@ export class UIMotion extends Component {
 
   private cancelDraw(): void {
     if (this.drawReady) director.off(Director.EVENT_AFTER_DRAW, this.drawReady);
+    if(this.drawDeadline!==undefined)clearTimeout(this.drawDeadline);
+    this.drawDeadline=undefined;
     this.drawReady = null;
   }
 
-  private afterDraw(done: () => void): void {
+  private afterDraw(done: (drawn:boolean) => void): void {
     this.cancelDraw();
-    this.drawReady = (): void => { this.drawReady = null; done(); };
+    const settle=(drawn:boolean):void=>{if(this.drawReady!==finish)return;this.cancelDraw();done(drawn);};
+    const finish=():void=>settle(true);
+    this.drawReady=finish;
     director.once(Director.EVENT_AFTER_DRAW, this.drawReady);
+    // A suspended/failed draw must not leave a retained-page input shield forever.
+    this.drawDeadline=setTimeout(()=>settle(false),750);
   }
 
   private clearOutgoing(): void {

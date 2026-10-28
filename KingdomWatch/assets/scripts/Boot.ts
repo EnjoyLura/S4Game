@@ -21,6 +21,7 @@ import { warmBattlefield, warmEntryArt } from './ui/BattleEntryWarmup';
 import { loadSave, saveSave } from './core/SaveData';
 import { deferUIWarmup } from './ui/IdleWarmup';
 import { installRenderDiagnostics } from './core/RenderDiagnostics';
+import { installDownloadRecovery } from './core/ResourceDownloadRecovery';
 
 function hexc(hex: string): Color {
   const c = new Color();
@@ -60,6 +61,7 @@ function buildCanvas(scene: Node): Node {
 }
 
 function onSceneLaunched(): void {
+  installDownloadRecovery();
   // 竖版游戏：手机竖屏走 Fit-Width；桌面横屏窗口走 Fit-Height 露出完整竖版栏（可视区按窗口比例自适应）
   const vis = view.getVisibleSize();
   const policy = vis.width > vis.height ? ResolutionPolicy.FIXED_HEIGHT : ResolutionPolicy.FIXED_WIDTH;
