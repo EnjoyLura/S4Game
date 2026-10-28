@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "scope": "independent Blender visual study; game not integrated, built, deployed or started",
+  "frames": 240,
+  "size": [
+    1280,
+    720
+  ],
+  "fps": 24,
+  "seconds": 10,
+  "lastFrameMean": 0.18195,
+  "impactMarks": 5,
+  "videos": {
+    "five-peaks-heavenfall.mp4": {
+      "frames": 240,
+      "fps": 24.0,
+      "seconds": 10.0,
+      "size": [
+        1280,
+        720
+      ]
+    }
+  },
+  "previewFrames": {
+    "gif": 120,
+    "webp": 120
+  },
+  "gameStarted": false,
+  "gameIntegrated": false,
+  "gameBuilt": false,
+  "deployed": false,
+  "hashes": {
+    "build_scene.py": "bb683491bb9f89d3316cb9fa65dcaaaf9d00cf46c978b0f312cab38f41da54c8",
+    "compose_preview.py": "5262a5218620d1f9efb6c8ccc434ece20feba137891ac0d0561359eaf0e49a1f",
+    "five-peaks-heavenfall.blend": "5e98bba85255cd351dd30d4f1a342e9d9a5b0824e71da508dcd4e9dde3be1fdc",
+    "five-peaks-heavenfall.mp4": "7f8f6ec033b86760115d0784f21466349aeaf4a611b818e0a4e9a8f2f52ec3e7",
+    "five-peaks-heavenfall.gif": "93df84a0e1b82e025129ad30c30e46b9493a0e6cb7ff7af90777384a7d95eeae",
+    "five-peaks-heavenfall.webp": "7b0c0a128253331b7f7847be13114dc9710f784e69ab9a1f2bc6f46404f833d8",
+    "contact-sheet.jpg": "8aafc72db55136dc8227128cf7923cfc3409bbed0e2cb45cead4379560760f38",
+    "impact-marks.json": "465e225cb43b0456aec4da2bba9aa617694b846148c77528eb778e092bfc7faa"
+  }
+}
